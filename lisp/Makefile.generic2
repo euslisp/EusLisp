@@ -145,7 +145,7 @@ eus:	$(BINDIR)/eus
 MAKEDATE:	$(EUSDIR)$(LIBDIR)/MAKEDATE
 
 MKDIR:
-	mkdir -p $(BINDIR) $(OBJDIR) $(ADLIBDIR)
+	mkdir -p $(EUSDIR)/$(ARCH) $(BINDIR) $(OBJDIR) $(ADLIBDIR)
 	(cd $(EUSDIR); test -e include || ln -s lisp/c include)
 
 all:
@@ -198,7 +198,7 @@ $(ADLIBDIR)/$(LIBEUSGL):	$(GLCOBJECTS) $(GLOBJECTS)
 
 $(EUSDIR)$(LIBDIR)/MAKEDATE:	FORCE
 	(cd ../$(LIBDIR);  echo \"`date`\" >MAKEDATE ; \
-	 cd $(EUSDIR)/lisp; tool/makedate >$(CDIR)/makedate.c)
+	 cd $(EUSDIR)/lisp; sh tool/makedate >$(CDIR)/makedate.c)
 
 FORCE:
 
@@ -271,7 +271,7 @@ $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 	($(CC) -o $(BINDIR)/eusgl $(LDFLAGS)  \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
-		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
 		$(MAPOPTION) \
 		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(GLLIB) $(XLIB) $(RAWLIB)\
 		>$(ADLIBDIR)/eusmap ;)
