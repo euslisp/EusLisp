@@ -1221,6 +1221,8 @@
 	 (file.o (if o o (merge-pathnames ".o" file)))
 	 (file.so (if o (merge-pathnames ".so" o)
 			(merge-pathnames ".so" file)))
+	 (file.dll (if o (merge-pathnames ".dll" o)
+		         (merge-pathnames ".dll" file)))
 	 (cpack *package*))
       (when (null (probe-file file))
 	 (setq file (merge-pathnames ".l" file))
@@ -1336,6 +1338,16 @@
 				" "
 				(namestring file.o))
 			"")
+		   (if (memq :cygwin *features*)
+			(concatenate string
+				"; gcc -shared -falign-functions=4 --export-all-symbols --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc -o "
+				(namestring file.dll) " "
+				(namestring file.o) " "
+				"-L" *eusdir* (unix:getenv "ARCHDIR")
+				"/lib "
+				"-leusgl "
+				"-lm -lpthread -lcygipc "
+				))
 		))
       (when cc
          (warn "~A" cccom)
