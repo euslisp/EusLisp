@@ -86,7 +86,9 @@ extern int errno;
 extern int sys_nerr;
 /*extern char *sys_errlist[];*/
 extern char *tzname[2];
+#if !Cygwin /* extern timezone */
 extern time_t timezone, altzone;	/*long*/
+#endif
 extern int daylight;
 
 extern pointer eussigvec[NSIG];
@@ -339,7 +341,7 @@ register pointer argv[];
 { ckarg(2);
   return(makeint(kill(ckintval(argv[0]),ckintval(argv[1]))));}
 
-#if Solaris2 || Linux || IRIX || IRIX6
+#if Solaris2 || Linux || IRIX || IRIX6 || Cygwin
 pointer SIGNAL(ctx,n,argv)
 register context *ctx;
 int n;
@@ -356,7 +358,7 @@ pointer argv[];
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(integer_t)eusint; eussigvec[s]=a;}
   sv.sa_handler= (void (*)())f;
-#if Linux 
+#if Linux  || Cygwin
 
 #if LIB6
   for (i=0; i< _SIGSET_NWORDS; i++)   sv.sa_mask.__val[i]=0; 
@@ -587,7 +589,7 @@ pointer *argv;
   stat=execvp(exeargv[0],(char **)exeargv);
   return(makeint(-errno));}	  
 
-#if !Solaris2
+#if !Solaris2 && !Cygwin
 static pointer SETPRIORITY(ctx,n,argv)
 register context *ctx;
 int n;
@@ -716,6 +718,7 @@ pointer argv[];
   if (close(ckintval(argv[0]))==0) return(T); else return(makeint(errno));}
 
 
+#if !Cygwin /* Cygwin does not have lockf */
 pointer LOCKF(ctx,n,argv)
 register context *ctx;
 int n;
@@ -732,6 +735,7 @@ pointer argv[];
   else size=0;
   result=lockf(fd,func,size);
   return(makeint(result));}
+#endif
 
 pointer FCNTL(ctx,n,argv)
 register context *ctx;
@@ -871,6 +875,7 @@ register pointer argv[];
     return(makeint(-errno));
   else return(T);  }
 
+#if !Cygwin /* Cygwin does not have IOC_INOUT */
 pointer IOCTL_WR(ctx,n,argv)
 register context *ctx;
 /* (UNIX:IOCTL_WR stream x y buffer [size]) */
@@ -899,6 +904,7 @@ register pointer argv[];
 #endif
     return(makeint(-errno)) ;
   else return(T);  }
+#endif /*Cygwin*/
 
 #endif /*vxworks*/
 
@@ -1164,6 +1170,12 @@ pointer argv[];
   qid=msgget(key,IPC_CREAT | (mode & 0777));
   return(makeint(qid));}
 
+#if Cygwin
+#undef MSGGET
+#undef MSGSND
+#undef MSGRCV
+#undef MSGCTL
+#endif
 pointer MSGRCV(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1702,6 +1714,7 @@ pointer *argv;
   if (host==NULL) return(makeint(-errno));
   else return(makestring(host->h_name, strlen(host->h_name)));}
 
+#if !Cygwin /* Cygwin does not hvae getnetbyname */ 
 pointer GETNETBYNAME(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1712,6 +1725,7 @@ register pointer *argv;
   if (np==NULL) return(makeint(-errno));
   return(cons(ctx,makeint(np->n_net),
 	      cons(ctx,makeint(np->n_addrtype),NIL)));}
+#endif
   
 pointer GETPROTOBYNAME(ctx,n,argv)
 register context *ctx;
@@ -1961,13 +1975,17 @@ pointer mod;
   defun(ctx,"SETGID",mod,SETGID);
   defun(ctx,"MKNOD",mod,MKNOD);
   defun(ctx,"MKDIR",mod,MKDIR);
+#if !Cygwin /* Cygwin does not have LOCKF */
   defun(ctx,"LOCKF",mod,LOCKF);
+#endif
   defun(ctx,"FCNTL",mod,FCNTL);
 #if !Solaris2
   defun(ctx,"IOCTL_",mod,IOCTL_);
   defun(ctx,"IOCTL_R",mod,IOCTL_R);
   defun(ctx,"IOCTL_W",mod,IOCTL_W);
+#if !Cygwin /* Cygwin does not have IOCTL_WR */
   defun(ctx,"IOCTL_WR",mod,IOCTL_WR);
+#endif
 #endif
   defun(ctx,"DUP",mod,DUP);
   defun(ctx,"DUP2",mod,DUP2);
@@ -1999,7 +2017,9 @@ pointer mod;
   defun(ctx,"GETHOSTNAME",mod,GETHOSTNAME);
   defun(ctx,"GETHOSTBYNAME",mod,GETHOSTBYNAME);
   defun(ctx,"GETHOSTBYADDR",mod,GETHOSTBYADDR);
+#if !Cygwin /* Cygwin does not have GETNETBYNMAE */
   defun(ctx,"GETNETBYNAME",mod,GETNETBYNAME);
+#endif
   defun(ctx,"GETPROTOBYNAME",mod,GETPROTOBYNAME);
   defun(ctx,"GETSERVBYNAME",mod,GETSERVBYNAME);
 /* Append by I.Hara for IPC */
@@ -2011,7 +2031,7 @@ pointer mod;
   defun(ctx,"VFORK",mod,VFORK);
 #endif
   defun(ctx,"EXEC",mod,EXEC);
-#if !Solaris2
+#if !Solaris2 && !Cygwin
   defun(ctx,"GETPRIORITY",mod,GETPRIORITY);
   defun(ctx,"SETPRIORITY",mod,SETPRIORITY);
 #endif

@@ -624,6 +624,9 @@ pointer args[];
     } numbox;
   double f;
   
+  if (code->c.fcode.entry2 != NIL) {
+    ifunc = (((int)ifunc)&0xffff0000) | ((((int)(code->c.fcode.entry2))>>2)&0x0000ffff);    /* kanehiro's patch 2000.12.13 */
+  }
   ffunc=(double (*)())ifunc;
   while (iscons(paramtypes)) {
     p=ccar(paramtypes); paramtypes=ccdr(paramtypes);
@@ -648,6 +651,16 @@ pointer args[];
       if (elmtypeof(lisparg)==ELM_FOREIGN)
 	cargv[i++]=lisparg->c.ivec.iv[0];
       else cargv[i++]=(integer_t)(lisparg->c.str.chars);}
+#if 1    /* begin kanehiro's patch 2000.12.13 */
+    else if (isbignum(lisparg)){
+      if (bigsize(lisparg)==1){
+	integer_t *xv = bigvec(lisparg);
+	cargv[i++]=(integer_t)xv[0];
+      }else{
+	printf("bignum size!=1\n");
+      }
+    }
+#endif    /* end of kanehiro's patch 2000.12.13 */
     else cargv[i++]=(integer_t)(lisparg->c.obj.iv);}
   /**/
   if (resulttype==K_FLOAT) {
@@ -851,7 +864,7 @@ int noarg;
     fn=func;
     if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_ILLFUNC);
     subr=(pointer (*)())((integer_t)(fn->c.code.entry) & ~3 /*0xfffffffc ????*/);
-#if !Solaris2 && !SunOS4_1 && !Linux && !IRIX && !IRIX6 && !alpha
+#if !Solaris2 && !SunOS4_1 && !Linux && !IRIX && !IRIX6 && !alpha && !Cygwin
     if ((char *)subr>maxmemory) {
 	prinx(ctx,clofunc, STDOUT);
 	error(E_USER,(pointer)"garbage closure, fatal bug!"); }

@@ -249,6 +249,8 @@
   (setq *OS-VERSION* "IRIX6")
 #+:alpha
   (setq *OS-VERSION* "alpha")
+#+:cygwin
+  (setq *OS-VERSION* "Cygwin")
 
 ; llib objects
 (system:alloc 80000)

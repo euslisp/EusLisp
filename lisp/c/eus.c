@@ -743,7 +743,11 @@ static void initclasses()
 		  "TYPE","ENTRY");
   C_CODE=speval(CODE);
 /*14*/
+#if 0
   FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,2,"PARAMTYPES","RESULTTYPE");
+#else    /* kanehiro's patch 2000.12.13 */
+  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,3,"ENTRY2","PARAMTYPES","RESULTTYPE");
+#endif
   C_FCODE=speval(FCODE);
 /*15*/
 #if (WORD_SIZE == 64)
@@ -880,6 +884,9 @@ static void initfeatures()
 #endif
 #if alpha
   p=cons(ctx,intern(ctx,"ALPHA",5,keywordpkg),p);
+#endif
+#if Cygwin
+  p=cons(ctx,intern(ctx,"CYGWIN",6,keywordpkg),p);
 #endif
 #if THREADED
   p=cons(ctx,intern(ctx,"THREAD",6,keywordpkg),p);

@@ -1,0 +1,155 @@
+# makefile for EusLisp on cygwin
+# RCSid="@(#)$Id$"
+#	Copyright (1988) Toshihiro MATSUI, Electrotechnical Laboratory
+#	1989/Oct
+#	1990/Sep Second Tape Distribution
+#	KOBJECTS --- eus kernel objects written in C
+#	NOKOBJECTS-- eus kernel, but cannot be optimized with -O option
+#	CLIBOBJECTS- functions written in C, not members of kernel
+#	LOBJECTS --- functions coded in EUSLISP; must be compiled with euscomp
+#	GEOOBJECTS-- geometric modeling functions and classes
+#	XOBJECTS---- Xwindow interface
+#	XTKOBJECTS---- Xwindow interface
+#	IMGOBJECTS--- image processing
+#	MTOBJECTS--- multithread functions
+#
+#########################################################################
+# Customizable section begins
+#########################################################################
+
+cygwin-all: 
+	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
+	 make -f $(MAKEFILE) $(MFLAGS) eus1; \
+         make -f $(MAKEFILE) $(MFLAGS) eus2; \
+         make -f $(MAKEFILE) $(MFLAGS) eusg; \
+         make -f $(MAKEFILE) $(MFLAGS) eusx; \
+         make -f $(MAKEFILE) $(MFLAGS) eusgl)
+
+ARCH=Cygwin
+EUSDIR=/home/administrator/prog/eus
+include Makefile.generic1
+
+THREAD= -DTHREADED -DPTHREAD
+MFLAGS=
+XVERSION=X_V11R6_1
+
+
+#
+# Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
+#
+# for Cygwin
+
+CPU_OPTIMIZE=-mcpu=i486
+# Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
+MACHINE=i486
+DEBUG= -g
+
+# If you use libc.so.5, remove -DLIB6 option.
+# In order to include thread library, libc.so.6 is preferrable.
+
+CFLAGS=-D$(MACHINE) -DCygwin -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+	-DUSE_STDARG -falign-functions=4 \
+        $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
+	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/lisp/c
+
+# Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
+# /usr/ucb/cc cannot compile because of its incapability of recognizing
+# prototype declarations.
+CC=gcc
+
+#
+# L I B R A R I E S
+# Three kinds of libraries are needed to build eus.
+# 1. RAWLIB: unix libraries needed to make eus0-eus2
+# 2. XLIB: X window libraries
+#    When you use a window toolkit, you may need to override the 'read'
+#    function in libc.a with a specific window library such as libXview.a.
+# 3. EUSLIB: euslisp functions that cannot be linked in eus because of
+#    'GLOBAL OFFSET TABLE OVERFLOW', that are xwindow interface functions.
+# You may add any optional user-supplied library in EUSLIB.
+# On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
+
+# Cygwin
+RAWLIB=-lm -lpthread -lcygipc
+XLIB=-L/usr/X11R6/lib -lX11
+
+# specify directories where euslisp's libraries are located.
+EUSLIB= -L$(ADLIBDIR)
+GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext
+
+# POSIX Thread 
+THREADDEP=mthread_posix.c
+
+
+# If you don't like optimization, comment out the next line.
+OFLAGS=-O
+
+# link-editor's default flags ?-rdynamic 
+#SOFLAGS= -shared --allow-shlib-undefined --warn-unresolved-symbols --unresolved-symbols=ignore-all --warn-once --enable-extra-pe-debug --enable-auto-import
+SOFLAGS= -shared --export-all-symbols --unresolved-symbols=ignore-all
+LDFLAGS= -Xlinker --export-all-symbols
+MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
+MAPOPTION=  $(OBJDIR)/par.o
+
+#################################################################
+# end of the customizable section
+################################################################
+
+include Makefile.generic2
+
+$(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(GEOOBJECTS) $(GEOCOBJECTS)  \
+		$(IMGCOBJECTS) $(IMGOBJECTS)
+	($(CC) -o $(BINDIR)/eusg $(LDFLAGS)  \
+	 	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(LCOBJECTS) $(MTCOBJECTS) $(MTOBJECTS) \
+		$(GEOOBJECTS) $(GEOCOBJECTS) \
+		$(IMGCOBJECTS) $(IMGOBJECTS) \
+		$(COMPOBJECTS) $(EUSLIB) $(RAWLIB) ; \
+	cd $(BINDIR); rm -f euscomp; ln -s eusg euscomp)
+
+$(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(COMPOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) 
+	($(CC) -o $(BINDIR)/eusx $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
+		$(LOBJECTS)   $(LCOBJECTS) $(COMPOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(GEOOBJECTS) $(GEOCOBJECTS) \
+		$(IMGCOBJECTS) $(IMGOBJECTS) \
+		$(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) \
+		$(XLIB)  $(RAWLIB);)
+
+$(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(LCOBJECTS) $(COMPOBJECTS) \
+		$(LIBEUSGEO) $(LIBEUSX) $(LIBEUSGL) 
+	($(CC) -o $(BINDIR)/eusgl $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
+		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(MAPOPTION) $(GEOOBJECTS) $(GEOCOBJECTS) \
+		$(IMGCOBJECTS) $(IMGOBJECTS) \
+		$(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) \
+		$(GLCOBJECTS) $(GLOBJECTS) \
+		$(XLIB) $(GLLIB) $(RAWLIB)\
+		>$(ADLIBDIR)/eusmap ;)
+
+$(ADLIBDIR)/$(LIBEUSGEO):
+	@echo ";; Do not compile $(LIBEUSGEO) for Cygwin"
+
+$(ADLIBDIR)/$(LIBEUSX):
+	@echo ";; Do not compile $(LIBEUSX) for Cygwin"
+
+$(ADLIBDIR)/$(LIBEUSGL):
+	@echo ";; Do not compile $(LIBEUSX) for Cygwin"
+
+$(BINDIR)/eus:
+	@echo ";; Do not compile eus for Cygwin"
+
+	
+
+
+
+
+
+

@@ -5,7 +5,7 @@
 ;;;	1988-May-20
 ;;;	(c) Toshihiro Matsui, Electrotechnical Laboratory
 
-(list "@(#)$Id: loader.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+(list "@(#)$Id$")
 
 (eval-when (load eval)
 
@@ -109,6 +109,7 @@
 	      ((member :mips *features*) (list #x62 #x1))
 	      ((member :Solaris2 *features*) (list #x7f #\E #\L #\F))
 	      ((member :linux *features*) (list #x7f #\E #\L #\F))
+ 	      ((member :cygwin *features*) (list #x4d #x5a #x90 #x00))
 ; alpha is little endian
 	      ((member :alpha *features*) (list #x83 #x1 #x1))
 	      (t ;  :sunos4 , other sun

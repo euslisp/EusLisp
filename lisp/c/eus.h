@@ -44,6 +44,12 @@ typedef float float_t;
 #include <varargs.h>
 #endif
 
+#if Cygwin
+#define T	LISPT
+#define READ	LISPREAD
+#define cfree	free
+#endif
+
 #if vxworks
 #include <vxWorks.h>
 #include <stdioLib.h>
@@ -224,6 +230,7 @@ struct fcode {		/*foreign function code*/
     pointer quotevec;
     pointer subrtype;
     pointer entry;
+  pointer entry2;    /* kanehiro's patch 2000.12.13 */
     pointer paramtypes;
     pointer resulttype;};
 

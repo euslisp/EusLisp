@@ -3,7 +3,7 @@
 ;;
 
 (in-package "LISP")
-(list "@(#)$Id: constants.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
+(list "@(#)$Id$")
 (export '(short-float-epsilon single-float-epsilon long-float-epsilon
 	*keyword-package* *system-package* *user-package* *lisp-package*
 	pi pi/2 2pi -pi -pi/2 -2pi
@@ -23,7 +23,7 @@
 ;; (export '(unix eus common ieee-floating-point sparc m68020))
 
 (nconc *features* '(:unix :eus :common))
-#+(or :sun :mips :linux)
+#+(or :sun :mips :linux :cygwin)
 (nconc *features* '(:ieee-floating-point))
 #+:sun4
 (nconc *features* '(:sparc))
@@ -96,6 +96,8 @@
 (defconstant internal-time-units-per-second 100)
 #+:irix6
 (defconstant internal-time-units-per-second 100)
+#+:cygwin
+(defconstant internal-time-units-per-second 1000)
 
 
 (defconstant unix::sighup 1)
