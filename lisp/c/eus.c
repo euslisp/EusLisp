@@ -725,11 +725,7 @@ static void initclasses()
 		  "TYPE","ENTRY");
   C_CODE=speval(CODE);
 /*14*/
-#if 0
-  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,2,"PARAMTYPES","RESULTTYPE");
-#else    /* kanehiro's patch 2000.12.13 */
-  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,3,"ENTRY2","PARAMTYPES","RESULTTYPE");
-#endif
+  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,3,"ENTRY2","PARAMTYPES","RESULTTYPE"); /* kanehiro's patch 2000.12.13 */
   C_FCODE=speval(FCODE);
 /*15*/
 #if (WORD_SIZE == 64)
