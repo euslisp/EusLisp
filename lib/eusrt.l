@@ -111,7 +111,8 @@
 (pushnew (format nil "~a/~a/lib/" *EUSDIR* 
 		   (cond ((member :solaris2 *features*) "SunOS5")
 			 ((member :IRIX *features*) "IRIX")
-			 ((member :Linux *features*) "Linux")))
+			 ((member :Linux *features*) "Linux")
+			 ((member :Cygwin *features*) "Cygwin")))
 	 *load-path* 
 	 :test #'equal )
 
