@@ -32,6 +32,7 @@
 (defparameter *space* 0)
 (defparameter *do-cc* t)
 (defparameter *pic* t)
+(defparameter *kernel* nil)
 ;(defparameter *cc* (if (member :gcc *features*) "gcc" "cc"))
 (defparameter *cc* 
   (cond ((member :gcc *features*) "gcc")
@@ -1283,7 +1284,7 @@
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
 		   	 ((memq :linux *features*)  " -Di386 -DLinux -w")
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
-			 ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DX_V11R6_1 -falign-functions=4 ")
+			 ((memq :cygwin *features*) (format nil " -DCygwin ~A -D_REENTRANT -DX_V11R6_1 -falign-functions=4 " (if *kernel* "-DKERNEL" "")))
 			 ((memq :i386  *features*) " -Di386")
 			 (t (warn "cpu type is not properly set")))
 		   (cond ((memq :sunos4 *features*) " -DSunOS4 -Bstatic")
@@ -1338,14 +1339,15 @@
 				" "
 				(namestring file.o))
 			"")
-		   (if (memq :cygwin *features*)
+		   (if (and (memq :cygwin *features*)
+			    (not *kernel*))
 			(concatenate string
 				"; gcc -shared -falign-functions=4 --export-all-symbols --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc -o "
 				(namestring file.dll) " "
 				(namestring file.o) " "
-				"-L" *eusdir* (unix:getenv "ARCHDIR")
-				"/lib "
-				"-leusgl "
+				*eusdir* (unix:getenv "ARCHDIR")
+				"/bin/"
+				"eusgl.a "
 				"-lm -lpthread -lcygipc "
 				))
 		))
