@@ -581,7 +581,7 @@ pointer argv[];
   defoglforeign(ctx,"glGenTexturesEXT");
   defoglforeign(ctx,"glBindTextureEXT");
 #endif
-#if (GL_EXT_polygon_offset && !Linux)
+#if 0 /* GL_EXT_polygon_offset */
   defoglforeign(ctx,"glPolygonOffsetEXT");
   defoglforeign(ctx,"glPolygonOffsetEXTfv");
 #endif
