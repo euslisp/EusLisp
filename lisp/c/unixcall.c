@@ -60,8 +60,7 @@ static char *rcsid="@(#)$Id$";
 #define IOC_VOID 0
 #endif
 
-#if Solaris2 || Linux || alpha
-#include <errno.h>
+#if Solaris2 || Linux || alpha || Cygwin
 #include <dirent.h>
 #else
 extern int errno;
@@ -79,7 +78,7 @@ extern int errno;
 #include <sys/msg.h>
 #endif
 
-#if system5 || Linux
+#if system5 || Linux || Cygwin
 #include <sys/utsname.h>
 #endif
 
@@ -358,7 +357,7 @@ pointer argv[];
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(integer_t)eusint; eussigvec[s]=a;}
   sv.sa_handler= (void (*)())f;
-#if Linux  || Cygwin
+#if Linux || Cygwin
 
 #if LIB6
   for (i=0; i< _SIGSET_NWORDS; i++)   sv.sa_mask.__val[i]=0; 
@@ -526,7 +525,7 @@ pointer argv[];
 
 #endif /*!vxworks*/
 
-#if system5 || Linux
+#if system5 || Linux || Cygwin
 pointer UNAME(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1044,7 +1043,7 @@ pointer *argv;
   return(a);}
 #endif /* !vxworks*/
 
-#if Solaris2 || linux || alpha
+#if Solaris2 || linux || alpha || Cygwin
 /*
   Usage: (unix::directory "directory_name")
   Return: a reverse list of file names in "directory_name" dir.
@@ -1170,12 +1169,6 @@ pointer argv[];
   qid=msgget(key,IPC_CREAT | (mode & 0777));
   return(makeint(qid));}
 
-#if Cygwin
-#undef MSGGET
-#undef MSGSND
-#undef MSGRCV
-#undef MSGCTL
-#endif
 pointer MSGRCV(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1264,7 +1257,7 @@ int n;
 pointer argv[];
 { char buf[256];
   ckarg(0);
-#if Solaris2 || Linux
+#if Solaris2 || Linux || Cygwin
   getcwd(buf,256);
 #else
   getwd(buf);
@@ -1641,7 +1634,7 @@ int n; pointer argv[];
 { return(makeint(valloc(ckintval(argv[0]))));}
 #endif
 
-#if sun3 || sun4 || news || alpha || Linux
+#if sun3 || sun4 || news || alpha || Linux || Cygwin
 
 pointer MMAP(ctx,n,argv)
 register context *ctx;
@@ -2042,7 +2035,7 @@ pointer mod;
 #if sun3 || sun4 || vax || mips || i386 || alpha
   defun(ctx,"PUTENV",mod,PUTENV);
 #endif
-#if sun3 || sun4 && !Solaris2 || Linux || alpha
+#if sun3 || sun4 && !Solaris2 || Linux || alpha || Cygwin
   defun(ctx,"USLEEP",mod,USLEEP);
 #endif
 
@@ -2056,13 +2049,13 @@ pointer mod;
 #if sun3 || sun4 || news || alpha
   defun(ctx,"VALLOC",mod,VALLOC);
 #endif
-#if sun3 || sun4 || news || alpha || Linux
+#if sun3 || sun4 || news || alpha || Linux || Cygwin
   defun(ctx,"MMAP",mod,MMAP);
   defun(ctx,"MUNMAP",mod,MUNMAP);
 /*  defun(ctx,"VADVISE",mod,VADVISE); */
 #endif
 
-#if system5 || Linux
+#if system5 || Linux || Cygwin
   defun(ctx,"UNAME",mod,UNAME);
 #endif
 
