@@ -224,6 +224,8 @@
 			(do-load path))
 		      ((probe-file (setq oname (merge-pathnames ".so" path)))
 		       (do-load oname))
+		      ((probe-file (setq oname (merge-pathnames ".dll" path)))
+		       (do-load oname))
 		      ((probe-file (setq oname (merge-pathnames ".o" path)))
 		       (do-load oname))
 		      ((probe-file (setq lname (merge-pathnames ".l" path)))
