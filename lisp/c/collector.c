@@ -100,7 +100,9 @@ void do_mark_a_little(register pointer p)
 
   /* these checks aren't normally needed, 
      since this is not conservative collector */
+#ifndef Cygwin
   if((int)p < (int)_end) goto markloop;
+#endif
 
   if(maxmemory < (char *)p) goto markloop;
   if((char *)p < minmemory) goto markloop;

@@ -4,18 +4,16 @@
  */
 
 #include <stdio.h>
-#include <varargs.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include "rgc_utils.h"
 
-int debug_printf(va_alist)
-va_dcl
+int debug_printf(char *fmt, ...)
 {
   va_list args;
-  char *fmt, buf[128];
+  char buf[128];
 
-  va_start(args);
-  fmt = va_arg(args, char *);
+  va_start(args, fmt);
   vsprintf(buf, fmt, args);
   va_end(args);
   fprintf(stderr, "[ %s ]\n", buf);
