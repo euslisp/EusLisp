@@ -90,12 +90,9 @@
 	    ((numberp trans) (setq transparency trans))
 	    (t (error "number expected for colormaterial :transparency"))))
  (:opengl ()
+   (format t "~A ~A ~A ~A ~A~%" ambient diffuse specular emission shininess)
       (glMaterialfv GL_FRONT_AND_BACK GL_AMBIENT ambient)
-#-:linux
       (glMaterialfv GL_FRONT_AND_BACK GL_DIFFUSE diffuse)
-#+:linux
-      (glMaterialfv GL_FRONT_AND_BACK GL_DIFFUSE 
-		    (if (= (length diffuse) 3) (concatenate float-vector diffuse #f(1)) diffuse))
       (glMaterialfv GL_FRONT_AND_BACK GL_SPECULAR specular)
       (glMaterialfv GL_FRONT_AND_BACK GL_EMISSION emission)
       (glMaterialfv GL_FRONT_AND_BACK GL_SHININESS (float-vector shininess))
