@@ -253,7 +253,7 @@ void glDepthRangefv(clamp)
   glDepthRange((GLclampd)clamp[0], (GLclampd)clamp[1]);
 }
 
-#if (GL_EXT_polygon_offset && !Linux)
+#if 0 /* GL_EXT_polygon_offset */
 void glPolygonOffsetEXTfv(v)
   float_t v[2];
 {
