@@ -419,8 +419,10 @@ root_alloc_small(ctx, req)
 #endif
     }
   }
+#if RGC
   if(freeheap < (double)totalheap * 0.3 && gc_phase == PHASE_NOGC)
     notify_gc();
+#endif
 #if THREADED
   mutex_unlock(&alloc_lock); 
 #ifdef SIGB
@@ -489,11 +491,13 @@ int e,cid;
 #endif
     }
 
+#if RGC
   //  mutex_lock(&gc_state_lock);
   if(gc_phase >= PHASE_MARK) /* PHASE_MARK or PHASE_SWEEP */
       markon(b);
   //  mutex_unlock(&gc_state_lock);
   //  fprintf(stderr, "tag=%x\n", b->h.bix&0xff);
+#endif
 
   b->h.elmtype=e;
   b->h.cix=cid;
@@ -557,7 +561,7 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #endif /* Linux */
 #endif /* Solaris2 */
 
-#if 0
+#if !RGC
 pointer mark_root, marking, marking2;
 
 static mark(p)
@@ -622,7 +626,8 @@ register pointer *oldsp;
   gcsp= &gcstack[top];
   cfree(oldstack);
 }
-#endif
+
+#else
 
 pnewgcstack(cid, oldsp)
      register int cid;
@@ -648,6 +653,8 @@ pnewgcstack(cid, oldsp)
 /*
  * the next functions must be implemented to support explicit GC call.
  */
+#endif
+
 int markall(){};
 void sweepall(){};
 int gc(){};
