@@ -28,10 +28,10 @@ char *xentry;
   lname[i]=0;
 #if Cygwin /* dlopen libGL.dll and libGLU.dll */
   integer_t dlhandle;
-  dlhandle=(integer_t)dlopen("libGL.dll", RTLD_LAZY);
-  entry=(integer_t)dlsym(dlhandle, xentry);
+  dlhandle=(integer_t)dlopen("cygGL-1.dll", RTLD_LAZY);
+  entry=(integer_t)dlsym((integer_t)dlhandle, xentry);
   if ( !entry ) {
-    dlhandle=(integer_t)dlopen("libGLU.dll", RTLD_LAZY);
+    dlhandle=(integer_t)dlopen("cygGLU-1.dll", RTLD_LAZY);
     entry=(integer_t)dlsym(dlhandle, xentry);}
   if ( !entry ) {
     dlhandle=(integer_t)dlopen(0, RTLD_LAZY);
