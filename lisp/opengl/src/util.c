@@ -1,5 +1,5 @@
 /*
- * $Header: /home/cvs/euslisp/opengl/src/util.c,v 1.1.1.1 2003/11/20 07:46:33 eus Exp $
+ * $Header$
  */
 
 #include <GL/gl.h>
@@ -253,7 +253,7 @@ void glDepthRangefv(clamp)
   glDepthRange((GLclampd)clamp[0], (GLclampd)clamp[1]);
 }
 
-#if GL_EXT_polygon_offset
+#if (GL_EXT_polygon_offset && !Linux)
 void glPolygonOffsetEXTfv(v)
   float_t v[2];
 {
