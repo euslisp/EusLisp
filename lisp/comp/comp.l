@@ -1294,7 +1294,7 @@
 		   (if (memq :gcc *features*) " -DGCC " )
 		   (if (memq :thread *features*) " -DTHREADED" )
 		   (if (memq :pthread *features*) " -DPTHREAD" )
-		   (if (memq :rgc *features*) " -DRGC -D__USE_POLLING" )
+		   (if (memq :rgc *features*) " -DRGC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD" )
 		   (if pic
 		       (cond ((memq :SunOS4.1 *features*) " -fpic")
 			     ((memq :cygwin *features*) "")

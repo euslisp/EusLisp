@@ -1,37 +1,24 @@
 /* 
  * 2003-
  * collector.c : R.Hanai
- * parallel root scanning, concurrent snapshot collector 
- * with return barrier for eulisp
+ * parallel root scanning, concurrent snapshot garbage collector 
+ * with return barrier
  *
- * memo
- * BUGS: newpgcstack(), gc request from mutators.
- * NEED IMPROVEMENT: 
+ * memos
+ * BUGS: 
+ * FIXED: copyobj in leo.c
+ * TODO:
  *       memory barrier instructions
- *       heap expansion
+ *       heap expansion function
  *       write-barriers (copyobj() etc.)
  *         => remove checks when read/write the mark-bitmap.
- *       collector-thread controll
- *       allocator's(heap management) pausing times
- *       polling / scanning other threads' stacks
+ *       allocator's(heap management) pausing times => BIBOP
+ *       polling / how to scan stacks of suspending threads
  *       mutexes => real-time locks
- *       make thr_self() faster
+ *       make thr_self() faster => caching
  *       
- *       lock and unlock in insert_local_roots have no need
- *
- *       <how to start GC cycles>
- *       <write barrier>
- *       collector mutator
- *       signal => in handler (set gcreq_flag)
- *                 -> return and scan_my_roots() after assignment
- *       scan_global_roots()
- *
- *       <return barrier>
- *       may be OK if returns as follows
- *       recover sp -> recover bp -> check_return_barrier 
- *
- *       <stack manipulation>
- *       pop is OK, 1 useless object may be took as alive
+ *       mark stack overflow
+ *       parallel marking (scaling)
  *
  *       <problematic functions>
  *       bindspecial: increment stack collectively
@@ -44,9 +31,16 @@
 #include "rgc_utils.h"
 #include "xccmem.h"
 
+
 #ifdef __ART_LINUX
 #include <linux/art_task.h>
 #endif
+
+char *minmemory=(char *)1000000;
+extern pointer K_DISPOSE;
+#define MAXDISPOSE 256
+static pointer dispose[MAXDISPOSE];
+static int gcmerge, dispose_count;
 
 extern struct {
   char using;
@@ -57,8 +51,8 @@ extern struct {
 struct _gc_data gc_data;
 barrier_t startup_barrier;
 
-//#define GCDEBUG
-#undef GCDEBUG
+#define GCDEBUG
+//#undef GCDEBUG
 #ifdef GCDEBUG
 static int white_cells, black_cells, free_cells;
 #endif
@@ -67,156 +61,224 @@ static int white_cells, black_cells, free_cells;
 static int gctime = 0;
 int allocd_words = 0;
 #endif
-unsigned gs, ge;
 
 static void do_scan_roots();
 static void init_sync_data();
-static void insert_local_roots(int);
 
-#define gcpush(v) (*lgcsp++=((pointer)v))
-#define gcpop() (*--lgcsp)
-
-extern char *minmemory;
-
-void do_mark_a_little(register pointer p)
-{
-  extern _end();
-  register int i, s;
-  register bpointer bp;
-  register pointer p2;
-  register pointer *lgcsp = collector_stack;
-  register pointer *gcstack = collector_stack;
-
-  goto start_mark;
-
- markloop:
-  if(lgcsp <= gcstack) return;
-  p = gcpop();
-
- start_mark:
-  /* p may be an immediate */
-  if(!ispointer(p)) goto markloop;
-  //if(!ispointer(p) || !p){ p = gcpop(); goto markloop; }
-
-  /* these checks aren't normally needed, 
-     since this is not conservative collector */
-#ifndef Cygwin
-  if((int)p < (int)_end) goto markloop;
-#endif
-
-  if(maxmemory < (char *)p) goto markloop;
-  if((char *)p < minmemory) goto markloop;
-
-  /* Here, p is a pointer to a live object */
-  bp = bpointerof(p);
-
-  if(blacked(bp)) goto markloop; /* already marked */
-
-  markon(bp); /* mark it first to avoid endless marking */
-
-  if(pisclosure(p)){
-    /*
-      if (p->c.clo.env1>minmemory && p->c.clo.env1<maxmemory)
-      fprintf(stderr, "Mark: closure %x's env1 points into heap %x\n", 
-      p, p->c.clo.env1);
-      if (p->c.clo.env2>minmemory && p->c.clo.env2<maxmemory)
-      fprintf(stderr, "Mark: closure %x's env2 points into heap %x\n", 
-      p, p->c.clo.env2);
-    */
-    goto markloop; /* avoid marking contents of closure */
-  }
-  if(bp->h.elmtype == ELM_FIXED){ /* contents are all pointers */
-    s = buddysize[bp->h.bix & TAGMASK] - 1;
-
-    if(s > 300){
-      printf ("do_mark: too big object s=%d, header=%x at %x\n", s, bp->h,
-	      bp);
-      goto markloop;
-    }
-    while(lgcsp + s > collector_stacklimit){
-      pnewgcstack(lgcsp);
-      gcstack = collector_stack;
-      lgcsp = collector_sp;
-    }
-    for(i = 0; i < s; i++){
-      p2 = p->c.obj.iv[i];
-      if(ispointer(p2))
-	gcpush(p2);
-    }
-    goto markloop;
-  }
-  else if(bp->h.elmtype == ELM_POINTER){ /* varing number of pointers */
-    s = buddysize[bp->h.bix & TAGMASK] - 2;
-    while (lgcsp + s > collector_stacklimit){
-      pnewgcstack(lgcsp);
-      gcstack = collector_stack;
-      lgcsp = collector_sp; /* 961003 kagami */
-    }
-    for(i = 0; i < s; i++){
-      p2 = p->c.vec.v[i];
-      if(ispointer(p2))
-	gcpush(p2);
-    }
-    goto markloop;
-  }
-  else{ 
-    goto markloop;
-  }
+#define gcpush(v, off) \
+{ \
+  lgcsp->addr = (pointer)v; \
+  lgcsp->offset = off; \
+  lgcsp++; \
 }
 
-void pmark()
+static pnewgcstack(oldsp)
+     register ms_entry *oldsp;
 {
-  register int i, pcount = 0;
-  register context *ctx;
-  register pointer p;
+  register ms_entry *oldstack, *stk, *newstack, *newgcsp;
+  long top, oldsize, newsize;
 
-  for(i = 0; i < MAXTHREAD; i++)
-    if(euscontexts[i]){
-      ctx = euscontexts[i];
-      while(ctx->gsp > ctx->gcstack){
-	p = pgcpop();
-	do_mark_a_little(p);
-      }
-    }
-  
-  mutex_lock(&pstack_lock);
-#ifdef NOTICE_CHECK
-  pstack_max = psp - pstack;
-#endif
-  while(psp > pstack){
-#ifdef COLLECTCACHE
-#define COLCACHE 10
-    int i, ii;
-    pointer array[COLCACHE];
-    for(i = 0; i < COLCACHE; i++){
-      array[i] = pointerpop();
-      if(psp > pstack)
-	continue;
-      break;
-    }
-    pcount = pcount + COLCACHE;
-    mutex_unlock(&pstack_lock);
-    for(ii = 0; ii < i; ii++){
-      do_mark_a_little(array[ii]);
-    }
-    mutex_lock(&pstack_lock);
-#else
-    p = pointerpop();
-    pcount++;
-    mutex_unlock(&pstack_lock);
-    do_mark_a_little(p);
-    mutex_lock(&pstack_lock);
-#endif
+  oldstack=stk=collector_stack;
+  oldsize=collector_stacklimit-oldstack;
+  newsize=oldsize*2;
+  top=oldsp-collector_stack;
+  //  newgcsp=newstack=(pointer *)malloc(newsize * sizeof(pointer)+16);
+  newgcsp=newstack=(ms_entry *)malloc(newsize * sizeof(ms_entry)+16);
+  fprintf(stderr, "\n;; extending pgcstack 0x%x[%d] --> 0x%x[%d] top=%x\n",
+	  oldstack, oldsize, newstack, newsize, top);
+  while (stk<oldsp) *newgcsp++= *stk++;
+  collector_stack=newstack;
+  collector_stacklimit= &(collector_stack[newsize-10]);
+  collector_sp = &(collector_stack[top]);
+  cfree(oldstack);
+}
+
+static call_disposers()
+{ int i;
+ context *ctx=current_ctx;
+ pointer p,a,curclass;
+ /*if (debug) fprintf(stderr, ";; disposal call=%d\n", dispose_count);*/
+ for (i=0; i<dispose_count; i++) {
+   p=dispose[i];
+   p->nodispose=0;
+   a=(pointer)findmethod(ctx,K_DISPOSE,classof(p), &curclass); 
+   if (debug) fprintf(stderr, ";; (send %x :dispose)\n", p);
+   if (a!=NIL) csend(ctx,p,K_DISPOSE,0);
+ }}
+
+static struct _marking_state {
+  int is_checking_pstack;
+  int cur_mut_num;
+} marking_state;
+
+
+struct _sweeping_state sweeping_state;
+
+static int mark_a_little()
+{
+  extern _end();
+  register ms_entry *lgcsp = collector_sp;
+  register ms_entry *gcstack = collector_stack;
+  register int credit = M_UNIT;
+  unsigned int offset;
+  register pointer p, p2;
+  register bpointer bp;
+  register int i, s;
+  context *ctx;
+  numunion nu;
+
+ markloop:
+  if(credit <= 0){ 
+    /* write back the value of lgcsp */
+    collector_sp = lgcsp;
+    return 1; /* still marking work is left */
   }
-  mutex_unlock(&pstack_lock);
+  if(lgcsp > gcstack){
+    /* mark from mark stack */
+//    lgcsp -= (sizeof(ms_entry)/sizeof(pointer));
+    lgcsp--;
+    p = lgcsp->addr;
+    offset = lgcsp->offset;
 
-#ifdef NOTICE_CHECK_EXP
-  /* NOTICE_CHECK Log output */
-  fprintf (stderr, "pstack_max:%d\n", pstack_max);
-  fprintf (stderr, "pstack_hitcount:%d:%d\n", pstack_count,
-	   pstack_totalcount);
-  /*  fprintf(stderr,"pstack_ave:%f\n",pstack_ave); */
+  start_mark:
+    if(offset == 0){
+//      if(!ispointer(p)) goto markloop;  /* p may be an immediate */
+      if(!ispointer(p) || !p) goto markloop;
+
+      ASSERT((unsigned)p >= mingcheap);
+      ASSERT((unsigned)p < maxgcheap);
+
+      /* these checks aren't normally needed, 
+         since this is not a conservative collector */
+//      if((int)p < (int)_end) goto markloop;
+//
+      if(maxmemory < (char *)p) goto markloop;
+//      if((char *)p < minmemory) goto markloop;
+    }
+
+    /* here, p is a pointer to a live object */
+    bp = bpointerof(p);
+
+    if(marked(bp)) goto markloop; /* already marked */
+//    if(blacked(bp)) goto markloop; /* already marked */
+
+    markon(bp); /* mark it first to avoid endless marking */
+
+    if(pisclosure(p)){
+      /*
+        if (p->c.clo.env1>minmemory && p->c.clo.env1<maxmemory)
+        fprintf(stderr, "Mark: closure %x's env1 points into heap %x\n", 
+        p, p->c.clo.env1);
+        if (p->c.clo.env2>minmemory && p->c.clo.env2<maxmemory)
+        fprintf(stderr, "Mark: closure %x's env2 points into heap %x\n", 
+        p, p->c.clo.env2);
+      */
+      goto markloop; /* avoid marking contents of closure */
+    }
+    if(bp->h.elmtype == ELM_FIXED){ /* contents are all pointers */
+      s = buddysize[bp->h.bix & TAGMASK] - 1;
+
+      if(s > 300){
+        fprintf (stderr, "do_mark: too big object s=%d, header=%x at %x\n", 
+		s, bp->h, bp);
+        goto markloop;
+      }
+      while(lgcsp + s > collector_stacklimit){
+        pnewgcstack(lgcsp);
+        gcstack = collector_stack;
+        lgcsp = collector_sp;
+      }
+      credit -= s;
+      for(i = 0; i < s; i++){
+        p2 = p->c.obj.iv[i];
+        if(ispointer(p2)) 
+          gcpush(p2, 0);
+      }
+      goto markloop;
+    } else if (bp->h.elmtype == ELM_POINTER) { /* varing number of pointers */
+      s = buddysize[bp->h.bix & TAGMASK] - 2;
+      while (lgcsp + s > collector_stacklimit) {
+        pnewgcstack(lgcsp);
+        gcstack = collector_stack;
+        lgcsp = collector_sp; /* 961003 kagami */
+      }
+      credit -= s;
+      for (i = 0; i < s; i++) {
+        p2 = p->c.vec.v[i];
+        if (ispointer(p2))
+          gcpush(p2, 0);
+      }
+      goto markloop;
+    } 
+
+    goto markloop;
+
+  } else {
+
+  /* get another root */
+  next_root:
+    if (!marking_state.is_checking_pstack) {
+      for (i = marking_state.cur_mut_num; i < MAXTHREAD; i++) {
+        ctx = euscontexts[i];
+        if (ctx) {
+          if (ctx->gsp > ctx->gcstack) {
+            p = *--(ctx->gsp);
+
+            ASSERT((unsigned)p >= mingcheap);
+            ASSERT((unsigned)p < maxgcheap);
+
+            offset = 0;
+            marking_state.cur_mut_num = i;
+            goto start_mark;
+          }
+        }
+      }
+      marking_state.is_checking_pstack = 1;
+      goto next_root;
+    } else {
+      mutex_lock(&pstack_lock);
+      if(psp > pstack){
+#ifdef COLLECTCACHE /* this is not yet correctly implemented */
+#define COLCACHE 10
+        int i, ii;
+        pointer array[COLCACHE];
+        for(i = 0; i < COLCACHE; i++){
+          array[i] = pointerpop();
+          if(psp > pstack)
+        continue;
+          break;
+        }
+        pcount = pcount + COLCACHE;
+        mutex_unlock(&pstack_lock);
+        for(ii = 0; ii < i; ii++){
+//          mark_a_little(array[ii], 0);
+        }
+        mutex_lock(&pstack_lock);
+#else
+        p = pointerpop();
+        offset = 0;
+        mutex_unlock(&pstack_lock);
+        goto start_mark;
 #endif
+      }
+      mutex_unlock(&pstack_lock);
+    }
+  }
+
+  /* marking finished, now we prepare for following sweeping */
+  DPRINT("before sweeping: free rate = %lf", (double)freeheap / totalheap);
+  gcmerge = totalheap * min(1.0, fltval(speval(GCMARGIN)))
+    * max(0.1, fltval(speval(GCMERGE))); 
+  /* default: GCMERGIN=0.25, GCMERGE=0.2 
+     ==> no merge if heap occupancy rate is over 95% */
+  dispose_count = 0; /* <= Is this O.K.? */
+
+  sweeping_state.chp = chunklist;
+  sweeping_state.p = &chunklist->rootcell;
+  sweeping_state.tail = 
+    (bpointer)((int)sweeping_state.p + (buddysize[sweeping_state.chp->chunkbix] << 2));
+  gc_phase = PHASE_SWEEP; 
+  return 0; 
 }
 
 int reclaim(bpointer p)
@@ -241,14 +303,16 @@ int reclaim(bpointer p)
   rbix = p->h.bix & TAGMASK;
 
   mutex_lock(&alloc_lock);
+  rw_rdlock(&gc_lock);
 
   p->b.nextbcell = buddy[rbix].bp;
   buddy[rbix].bp = p;
   buddy[rbix].count++;
 
   freeheap += buddysize[rbix];
-  sweepheap += buddysize[rbix];
+  //  sweepheap += buddysize[rbix];
 
+  rw_unlock(&gc_lock);
   mutex_unlock(&alloc_lock);
   return 0;
 }
@@ -260,47 +324,71 @@ static bpointer mergecell(register bpointer p, int cbix)
   register bpointer np, p2;
 
   np = nextbuddy(p);
-  while(p->h.b == 0 && ((int) (p->h.bix & TAGMASK)) < cbix)
-    {
-      //      if(colored(np))
-      if(blacked(np) || np->h.cix == -1) return np;
+  while (p->h.b == 0 && ((int) (p->h.bix & TAGMASK)) < cbix) {
+//     if (colored(np)) return np;
+//    if (marked(np)) return np;
+    if (marked(np) || np->h.cix == -1) return np;
+    if (np->h.nodispose == 1) return np;
 
-      if(np->h.nodispose == 1) return np;
-
-      p2 = mergecell(np, cbix);	/* merge neighbor cell */
-      if(np->h.b == 1){	/* can be merged */
-	p->h.b = p->h.m; /* merge them into bigger cell */
-	p->h.m = np->h.m;
-	p->h.bix++;
-	np = p2;
+    p2 = mergecell(np, cbix); /* merge neighbor cell */
+    if (np->h.b == 1) { /* can be merged */
+	  p->h.b = p->h.m; /* merge them into bigger cell */
+      p->h.m = np->h.m;
+      p->h.bix++;
+      np = p2;
 #ifdef GCDEBUG
-	white_cells++;
+      white_cells++;
 #endif
-      }else{
-	reclaim(np);
-	return p2;
-      }
+    } else {
+	  reclaim(np);
+      return p2;
     }
+  }
   return np;
 }
 
-static void sweep(register struct chunk *cp, register int gcmerge)
+/*
+ * suppose that { sweeping_state.p, 
+ *                sweeping_state.chp,
+ *                sweeping_state.tail } are correctly set.
+ */
+static int sweep_a_little(int gcmerge)
 {
-  register int s;
+  register struct chunk *chp;
+  register int credit = S_UNIT;
   register bpointer p, np, tail;
+  
+  /* restore the state of sweeper */
+  chp = sweeping_state.chp;
+  p = sweeping_state.p;
+  tail = sweeping_state.tail;
+  
+  if (p == NULL) {
+    goto next_chunk;
+  }
+  //ASSERT( tail && chp );
 
-  s = buddysize[cp->chunkbix];
-  p = &cp->rootcell;
-  tail = (bpointer)((int)p + (s << 2));
-  while(p < tail){
-    if(p->h.cix == -1){ /* free object */
+cont_sweep:
+  /* continue sweeping */
+  while (p < tail) {
+    if (credit <= 0) {
+      sweeping_state.p = p;
+      sweeping_state.tail = tail;
+      return 1;
+    }
+//#ifndef __USE_MARK_BITMAP
+//    sweeping_state.p = p;
+//#endif
+    credit--;
+    if (p->h.cix == -1) { /* free object */
 #ifdef GCDEBUG
       free_cells++;
 #endif
       p = nextbuddy(p);
       continue;
     }
-    if(blacked(p)){ /* (possibly) live object */
+    if (marked(p)) { /* (possibly) live object */
+//    if (blacked(p)) { /* (possibly) live object */
 #ifdef GCDEBUG
       black_cells++;
 #endif
@@ -308,47 +396,40 @@ static void sweep(register struct chunk *cp, register int gcmerge)
       p = nextbuddy(p);
       continue;
     }
-    if(gcmerge > freeheap){ /* reclaim and no merge */
+    if (p->h.nodispose == 1) {
+      if(dispose_count >= MAXDISPOSE)
+	fprintf(stderr, "no more space for disposal processing\n");
+      else
+	dispose[dispose_count++] = makepointer(p);
+      p = nextbuddy(p);
+    }
+    if (gcmerge > freeheap) { /* reclaim and no merge */
 #ifdef GCDEBUG
       white_cells++;
 #endif
       np = nextbuddy(p);
       reclaim(p);
       p = np;
-    }else{ /* reclaim and merge *//* update free buddy list */
-      np = mergecell(p, cp->chunkbix);
+    } else { /* reclaim and merge *//* update free buddy list */
+      np = mergecell(p, chp->chunkbix);
       reclaim(p);
       p = np;
     }
   }
-}
-
-void psweep(){
-  context *ctx;
-  register struct chunk *chp;
-  register int i, gcmerge;
-  numunion nu;
-
-  ctx = euscontexts[thr_self ()];
-  gcmerge = totalheap * min(1.0, fltval(speval(GCMARGIN)))
-    * max(0.1, fltval(speval(GCMERGE))); 
-  /* default: GCMERGIN=0.25, GCMERGE=0.2 
-     ==> no merge if heap occupancy rate is over 95% */
-
-#ifdef GCDEBUG
-  white_cells = black_cells = free_cells = 0;
-#endif
-
- i = 0; 
-  for(chp = chunklist; chp != 0; chp = chp->nextchunk){
-    sweep(chp, gcmerge);
-    i++;
+  
+next_chunk:
+  chp = sweeping_state.chp->nextchunk;
+  if (chp == NULL) {
+    DPRINT("sweeping finished: free rate = %lf", (double)freeheap / totalheap);
+    DPRINT("white: %d black: %d free: %d", white_cells, black_cells, free_cells);
+    gc_phase = PHASE_EPILOGUE;
+    return 0; /* sweeping finished */
   }
+  sweeping_state.chp = chp;
+  p = &chp->rootcell;
+  tail = (bpointer)((int)p + (buddysize[chp->chunkbix] << 2));
+  goto cont_sweep;
 
-#ifdef GCDEBUG
-  fprintf(stderr, "white = %d, black = %d, free = %d\n", 
-	  white_cells, black_cells, free_cells);
-#endif
 }
 
 #ifdef __USE_SIGNAL
@@ -360,7 +441,7 @@ static void send_root_insertion_signals()
   for (i = 0; i < MAXTHREAD; i++)
     if (!pthread_equal(thread_table[i].tid, self) && euscontexts[i]) {
       if (pthread_kill(thread_table[i].tid, SIGUSR1) != 0) {
-	    perror("pthread_kill");
+	perror("pthread_kill");
       }
     }
 }
@@ -368,26 +449,33 @@ static void send_root_insertion_signals()
 
 void init_rgc(){
   void collect();
-  thread_t gc_thread;
+  unsigned int gc_thread;
+
   active_mutator_num = 1;
   gc_region_sync = 0;
   startup_barrier = barrier_init(2); /* mainthread and collector thread */
   gc_phase = PHASE_NOGC;
+  ri_core_phase = 0;
+  mut_stat_phase = 0x2;
   gc_wakeup_cnt = gc_cmp_cnt = 0;
 #ifdef __USE_POLLING
   gc_request_flag = 0;
 #endif
   init_sync_data();
-
   initmemory_rgc(); /* initialize object heap. define in "eus.c" */
+#ifdef __USE_MARK_BITMAP
   allocate_bit_table(); /* allocate mark bit table */
+  clear_bit_table();
+#endif
 
   collector_stack = collector_sp = 
-    (pointer *)malloc(sizeof(pointer) * DEFAULT_MAX_RGCSTACK);
+    (ms_entry *)malloc(sizeof(ms_entry) * DEFAULT_MAX_RGCSTACK);
   collector_stacklimit = collector_stack + DEFAULT_MAX_RGCSTACK - 10;
- 
+   
+#ifdef __GC_SEPARATE_THREAD
   thr_create(0, 0, collect, 0, 0, &gc_thread);
   barrier_wait(startup_barrier);
+#endif
 }
 
 static void scan_global_roots()
@@ -398,6 +486,9 @@ static void scan_global_roots()
   for(i = 0; i < MAXCLASS; i++){
     if(ispointer(classtab[i].def)){
       pointerpush (classtab[i].def);
+//      ASSERT((unsigned)(classtab[i].def == 0) || 
+//      (unsigned)(classtab[i].def) >= mingcheap);
+//      ASSERT((unsigned)(classtab[i].def) < maxgcheap);
     }
   }
 }
@@ -412,46 +503,69 @@ static void scan_local_roots(int i)
   pgcpush(ctx->specials);
   
   q = bpointerof(ctx->lastalloc);
-  /* garbage might be pushed 
-   * if lastalloc doesn't correctly point to the start address of an object */
-  if(q && ispointer(q)) pgcpush(ctx->lastalloc);
+  if (q && ispointer(q)) {
+      pgcpush(ctx->lastalloc);
+      ASSERT((unsigned)q >= mingcheap);
+      ASSERT((unsigned)q < maxgcheap);
+  }
 
 #ifdef __RETURN_BARRIER
   {
     pointer *frame_base, *p;
 
-    //DPRINT2("start scanning current frame: %d ",i);
+    //DPRINT("start scanning current frame: %d ",i);
     mutex_lock(&ctx->rbar.lock); /* <-- this lock wouldn't be needed */
 
-    if(ctx->callfp != NULL) 
+    if (ctx->callfp != NULL) 
       frame_base = (pointer *)ctx->callfp;
     else 
       frame_base = ctx->stack;
 
-    for(p = ctx->vsp - 1; p >= frame_base; p--){
-      if((((int)(*p) & 3) == 0) 
-	 && ((ctx->stack > (pointer *)*p) 
-	     || ((pointer *)*p > ctx->stacklimit)))
-	pgcpush(*p);    
+    for (p = ctx->vsp - 1; p >= frame_base; p--) {
+        /*
+         * stack frame can contain
+         * 1, immediates
+         * 2, references to the words in this LISP stack (static links, dynamic links)
+         * 3, this would be a bug: references to the words in a native stack.
+         *    (jmp_buf in blockframe and catchframe. 
+         *    See "makeblock", "eussetjmp", "funlambda", "mkcatchframe")  
+         */
+      if (*p == NULL) continue;
+      if (((int)(*p) & 3)) continue; 
+      if ((ctx->stack <= (pointer *)*p) && ((pointer *)*p <= ctx->stacklimit)) 
+        continue;
+      if ((pointer *)*p >= (pointer *)maxgcheap) continue;
+      if ((pointer *)*p < (pointer *)mingcheap) continue;
+
+	  pgcpush(*p);    
+      ASSERT((unsigned)(*p) >= mingcheap);
+      ASSERT((unsigned)(*p) < maxgcheap);
     }
 
-    if(frame_base == ctx->stack){
+    if (frame_base == ctx->stack) {
       ctx->rbar.pointer = NULL;
-    }else 
+    } else {
       ctx->rbar.pointer = frame_base;
+    }
     mutex_unlock(&ctx->rbar.lock); /* <-- this lock wouldn't be needed */
-    //DPRINT1("scanning current frame completed");
+    //DPRINT("scanning current frame completed");
   }
 
 #else /* original snapshot gc */
 
   /* push roots in thread's stack */
-  for(p = ctx->vsp - 1; p >= ctx->stack; p--){
-    // for(p = ctx->stack; p < ctx->vsp; p++){
-    if((((int)(*p) & 3)==0) 
-       && ((ctx->stack>(pointer *)*p) 
-	   || ((pointer *)*p>ctx->stacklimit)))
-      pgcpush(*p);
+  for (p = ctx->vsp - 1; p >= ctx->stack; p--) {
+    // for(p = ctx->stack; p < ctx->vsp; p++) {
+    if (*p == NULL) continue;
+    if (((int)(*p) & 3)) continue; 
+    if ((ctx->stack <= (pointer *)*p) && ((pointer *)*p <= ctx->stacklimit)) 
+      continue;
+    if ((pointer *)*p >= (pointer *)maxgcheap) continue;
+    if ((pointer *)*p < (pointer *)mingcheap) continue;
+
+	pgcpush(*p);    
+    ASSERT((unsigned)(*p) >= mingcheap);
+    ASSERT((unsigned)(*p) < maxgcheap);
   }
 #endif 
 }
@@ -490,8 +604,8 @@ static void scan_remaining_roots()
 
   local_root_count = 0;
 
-  for(i = 0; i < MAXTHREAD; i++){
-    if (euscontexts[i] && euscontexts[i]->rbar.pointer){
+  for (i = 0; i < MAXTHREAD; i++) {
+    if (euscontexts[i] && euscontexts[i]->rbar.pointer) {
       idx[local_root_count] = i;
       local_root_count++;
     }
@@ -499,158 +613,232 @@ static void scan_remaining_roots()
 
   inserted_root_count = local_root_count;
   
-  do{
-    for(i = 0; i < local_root_count; i++){
+  do {
+    for (i = 0; i < local_root_count; i++) {
       context *ctx;
       register pointer *p;
       int counter, tid;
 
       tid = idx[i];
       ctx = euscontexts[tid];
-      if((ctx)->rbar.pointer == NULL) continue;
+      if ((ctx)->rbar.pointer == NULL) continue;
       
       mutex_lock(&((ctx)->rbar.lock));
-      //DPRINT2("scheduler inserting thread : %d's local roots", i);
+      //DPRINT("scheduler inserting thread : %d's local roots", i);
       p = (ctx)->rbar.pointer - 1;
       counter = INSERT_UNIT;
 
-      while(1){
-	if(p < ctx->stack) break;
-	if((((int)(*p) & 3) == 0)
-	   && ((ctx->stack > (pointer *)*p)
-	       || ((pointer *)*p > ctx->stacklimit)))
-	  pgcpush(*p);
-	p--;
-	counter--;
-	if(counter == 0) break;
+      while (1) {
+        if (p < ctx->stack) break;
+        if ((((int)(*p) & 3) == 0)
+            && ((ctx->stack > (pointer *)*p) || ((pointer *)*p > ctx->stacklimit))
+            && (((pointer *)*p >= (pointer *)mingcheap && (pointer *)*p < (pointer *)maxgcheap))) {
+	      pgcpush(*p);
+      ASSERT((unsigned)(*p) >= mingcheap);
+      ASSERT((unsigned)(*p) < maxgcheap);
+        }
+    	p--;
+        counter--;
+    	if(counter == 0) break;
       }
       (ctx)->rbar.pointer = p + 1;
 	  
-      if(p < ctx->stack){
+      if (p < ctx->stack) {
 	(ctx)->rbar.pointer = NULL;
 	inserted_root_count--;
       }
       mutex_unlock(&(ctx)->rbar.lock);
     }
   }
-  while(inserted_root_count != 0);
+  while (inserted_root_count != 0);
 }
 #endif /* __RETURN_BARRIER */
 
 
+/*
+ * suppose that we don't have collector_lock
+ */
 void notify_gc()
 {
   int id, phase, c;
-
-  // suppose that we have alloc_lock
+//  unlock_collector;
   /* reset synchronization variables */
   lock_collector;
-//  DPRINT1("gc started.\n");
+  if (gc_phase != PHASE_NOGC) {
+    unlock_collector;
+    return;
+  }
+  
+  gc_phase = PHASE_PROLOGUE;
   gc_point_sync = 0;
   phase = ri_core_phase;
+  mut_stat_phase = mut_stat_phase ^ 0x2;
 #ifdef __USE_POLLING
-  for(id = 0; id < MAXTHREAD; id++){
-    if(thread_table[id].using){
-      mutex_lock(&mut_stat_table[id].lock);    
-      mut_stat_table[id].stat |= 0x2; /* set 'need_scan' flag */
-      if(mut_stat_table[id].stat & 0x1){ /* 'suspended'? */
-        do{
-          c = gc_point_sync;
-        }while(cas_int(gc_point_sync, c, c + 1));
-      }
-      mutex_unlock(&mut_stat_table[id].lock);    
-    }
-  }
+  //  for(id = 0; id < MAXTHREAD; id++){
+  //    if(thread_table[id].using){
+  //      mutex_lock(&mut_stat_table[id].lock);    
+  //      mut_stat_table[id].stat |= 0x2; /* set 'need_scan' flag */
+  //      if(mut_stat_table[id].stat & 0x1){ /* 'suspended'? */
+  //        do{
+  //          c = gc_point_sync;
+  //        }while(cas_int(gc_point_sync, c, c + 1));
+  //      }
+  //      mutex_unlock(&mut_stat_table[id].lock);    
+  //    }
+  //  }
 #endif
 #ifdef __USE_SIGNAL
   send_root_insertion_signals();
 #else /* __USE_POLLING */
   gc_request_flag = 1;
 #endif
+  marking_state.is_checking_pstack = 0;
+  marking_state.cur_mut_num = 0;
   unlock_collector;
-  do{
+  
+  do {
     c = gc_point_sync;
-  }while(cas_int(gc_point_sync, c, c + 1));
+  } while(cas_int(gc_point_sync, c, c + 1));
 
-  if(gc_point_sync + gc_region_sync < active_mutator_num){
+  if (gc_point_sync + gc_region_sync < active_mutator_num) {
     sched_yield(); // nanosleep(0) might be better
-  }else{
+  } else {
     lock_collector;
-    if(phase == ri_core_phase){
+    if (phase == ri_core_phase) {
       do_scan_roots(); 
     }
     unlock_collector;
   }
   
   /* wait until root scanning(core) is finished */
-  mutex_lock(&ri_end_lock); 
-  while(ri_core_phase == phase) 
-    cond_wait(&ri_end_cv, &ri_end_lock); 
-  mutex_unlock(&ri_end_lock);
+  lock_collector;
+  while (phase == ri_core_phase) 
+    cond_wait(&ri_end_cv, &collector_lock); 
+  unlock_collector;
 }
 
 
-/* suppose we have collector lock */
+/* suppose that we have collector lock */
 static void do_scan_roots()
 { 
   int tid;
 
-//  gs = current_utime();
+  //  gs = current_utime();
   scan_global_roots();
-  for(tid = 0; tid < MAXTHREAD; tid++){
-    if(euscontexts[tid]){
-      scan_local_roots(tid);
+
+  /* write barriers get activated */
+  /* objects are allocated as black after here */
+  gc_phase = PHASE_ROOT_CORE; 
+  for (tid = 0; tid < MAXTHREAD; tid++) {
+    if (euscontexts[tid]) {
       mutex_lock(&mut_stat_table[tid].lock);
-      mut_stat_table[tid].stat = 0x0; /* 'running' */
+      scan_local_roots(tid);
+      //      mut_stat_table[tid].stat = 0x0; /* 'running' */
+      mut_stat_table[tid].stat = 
+        (mut_stat_table[tid].stat ^ 0x2) & 0xfffffffd; /* 'running' */
       mutex_unlock(&mut_stat_table[tid].lock);
     }
   }
-//  ge = current_utime();
-//  fprintf(stderr, "stopped: %d\n", ge - gs);
+  //  ge = current_utime();
+  //  fprintf(stderr, "stopped: %d\n", ge - gs);
 
   gc_request_flag = 0;
-  gc_phase = PHASE_MARK; /* write barriers get activated */
   ri_core_phase = 1 - ri_core_phase; /* release other mutator threads */
+  gc_phase = PHASE_ROOT_REM; 
   cond_broadcast(&ri_end_cv);
   gc_wakeup_cnt++; /* now, we release collector threads */
   cond_broadcast(&gc_wakeup_cv);
+  DPRINT("do_scan_roots finished: free rate = %lf", (double)freeheap / totalheap);
 }
 
 
 static void wait_until_next_gc_cycle()
 {
   /*
-  numunion nu;
-  int thr;
-  double threshold;
-  static long used;
+    numunion nu;
+    int thr;
+    double threshold;
+    static long used;
 
-  used += pastfree + newheap + sweepheap - freeheap;
-  newheap = 0;
-  threshold = max(DEFAULT_GC_THRESHOLD, fltval(speval(GCMARGIN)));
-  thr = (int)((double)totalheap * threshold);
-  used = freeheap;
-  while(freeheap > thr && gc_counter >= gc_request_counter){
+    used += pastfree + newheap + sweepheap - freeheap;
+    newheap = 0;
+    threshold = max(DEFAULT_GC_THRESHOLD, fltval(speval(GCMARGIN)));
+    thr = (int)((double)totalheap * threshold);
+    used = freeheap;
+    while(freeheap > thr && gc_counter >= gc_request_counter){
     nanosleep(&treq, NULL); // take a rest
-  }
-  used = used - freeheap;
-  pastfree = freeheap;
+    }
+    used = used - freeheap;
+    pastfree = freeheap;
   */
 
   /*
-  mutex_lock(&gc_state_lock);
-  while(gc_counter >= gc_request_counter){
+    mutex_lock(&gc_state_lock);
+    while(gc_counter >= gc_request_counter){
     cond_wait(&wake_up_gc_thread_cv, &gc_state_lock);
-  }
-  mutex_unlock(&gc_state_lock);
+    }
+    mutex_unlock(&gc_state_lock);
   */
 }
 
+//#define myctx (euscontexts[thr_self()])
+//static long rgc_marktime, rgc_sweeptime;
+
+static int do_gc_epilogue()
+{
+#ifdef __USE_MARK_BITMAP
+    clear_bit_table();
+#endif
+    if (gc_cmp_cnt < gc_wakeup_cnt)
+      gc_cmp_cnt++;
+    gc_phase = PHASE_NOGC;
+
+    if (debug) {
+      fprintf(stderr, " free/total=%d/%d\n",
+          freeheap, totalheap);
+//      fprintf(stderr, " mark=%d sweep%d\n", rgc_marktime, rgc_sweeptime);
+    }
+/* GC thread doesn't have its own context.
+    if (speval(QGCHOOK) != NIL) {
+      pointer gchook=speval(QGCHOOK);
+      vpush(makeint(freeheap)); vpush(makeint(totalheap));
+      ufuncall(ctx,gchook,gchook,(pointer)(ctx->vsp-2),ctx->bindfp,2);
+      ctx->vsp -= 2;
+    }
+    breakck;
+*/
+
+    DPRINT("epilogue finished: free rate = %lf", (double)freeheap / totalheap);
+    return 0;
+}
+
+void do_a_little_gc_work()
+{
+  switch (gc_phase) {
+    case PHASE_ROOT_REM:
+#ifdef __RETURN_BARRIER
+      scan_remaining_roots();
+#endif
+      gc_phase = PHASE_MARK;
+      break;
+    case PHASE_MARK:
+      mark_a_little();
+    break;
+    case PHASE_SWEEP:
+      sweep_a_little(gcmerge);
+    break;
+    case PHASE_EPILOGUE:
+      do_gc_epilogue();
+    default: 
+      ;
+  }
+}
 
 void collect()
 {
   int i;
   unsigned s, e;
+
 #ifdef __PROFILE_GC
   int tmp_free;
   struct tms buf1, buf2;
@@ -660,79 +848,39 @@ void collect()
   /* synchronize with mainthread */
   barrier_wait(startup_barrier);
 
-  /* initialize data used by collector */
-//  init_collector();
-
-#ifdef __USE_MARK_BITMAP
-  clear_bit_table();
-#endif
-
 #ifdef __PROFILE_GC
-//  times(&buf1);
+  //  times(&buf1);
 #endif
+
   /* gc main loop */
-  for(;;){ 
+  for (;;) { 
 
-    //sweepheap = 0;
-    // mutex_lock(&qthread_lock); /* delay thread creation *//* needed? */
-
+    /* gc thread waits until the core of root scanning is finished. */
     lock_collector;
-    while(gc_cmp_cnt == gc_wakeup_cnt){
+    while (gc_cmp_cnt == gc_wakeup_cnt) {
       cond_wait(&gc_wakeup_cv, &collector_lock);
     }
+
+    while (gc_phase != PHASE_NOGC) {
+      do_a_little_gc_work();
+      unlock_collector;
+      lock_collector;
+    };
     unlock_collector;
-#ifdef __USE_POLLING
-    /* push roots of all threads in gc-regions */
-    /* this can be done lazily, maybe */
-//    scan_suspending_thread_roots(); /* this is done by "do_scan_roots()" */
-#endif
-
-#ifdef __RETURN_BARRIER
-    scan_remaining_roots();
-#endif
-    //mutex_unlock(&qthread_lock); /* delay thread creation */
-
-    /* mark phase */
-    pmark();
-
-    lock_collector;
-    gc_phase = PHASE_SWEEP; 
-    unlock_collector;
-
-    /* sweep phase */
-    psweep();
-
-    /* gc epilogue */
-#ifdef __USE_MARK_BITMAP
-    clear_bit_table();
-#endif
-
-    lock_collector;
-    gc_phase = PHASE_NOGC;
-    if(gc_cmp_cnt < gc_wakeup_cnt)
-    gc_cmp_cnt++;
-    unlock_collector;
-
+      
 #ifdef __PROFILE_GC
-//    times(&buf2);
-//    gctime = buf2.tms_utime+buf2.tms_stime-buf1.tms_utime-buf1.tms_stime;
-//    fprintf(stderr, "gc thread time = %d\n", gctime*1000/HZ);
-//    fprintf(stderr, "freeheap=%d\n", freeheap*4);
-//    tmp_free = freeheap;
+    //    times(&buf2);
+    //    gctime = buf2.tms_utime+buf2.tms_stime-buf1.tms_utime-buf1.tms_stime;
+    //    fprintf(stderr, "gc thread time = %d\n", gctime*1000/HZ);
+    //    fprintf(stderr, "freeheap=%d\n", freeheap*4);
+    //    tmp_free = freeheap;
 #endif
 
-#ifdef __ALWAYS_COLLECTING
-    /* go on to the next gc cycle */
-#else
-//    wait_until_next_gc_cycle();
-#endif
-
-//    DPRINT3("took %d micro, not gc consump_rate %f", 
-//            e-s, (float)(tmp_free-freeheap)/(e-s));
+    //    DPRINT("took %d micro, not gc consump_rate %f", 
+    //            e-s, (float)(tmp_free-freeheap)/(e-s));
   }
   
   /* never come here */
-
 }
 
 
@@ -741,7 +889,7 @@ static int change_collector_thread_sched_policy(int t_sect_length)
 {
 #ifdef __ART_LINUX
   if(art_enter(ART_PRIO_MAX, ART_TASK_PERIODIC, t_sect_length) == -1){
-    DPRINT1("collector error: art_enter");
+    DPRINT("collector error: art_enter");
     return -1;    
   }
 #else /* LINUX */
@@ -752,7 +900,7 @@ static int restore_collector_thread_sched_policy()
 {
 #ifdef __ART_LINUX
   if(art_exit() == -1){
-    DPRINT1("collector error: art_exit");
+    DPRINT("collector error: art_exit");
     return -1;    
   }
 #else /* LINUX */
@@ -764,26 +912,44 @@ static int restore_collector_thread_sched_policy()
 #ifdef __USE_POLLING
 void enter_gc_region(int id)
 {
-  int c;
+  int c, phase;
   mutex_lock(&mut_stat_table[id].lock);    
-  mut_stat_table[id].stat |= 0x1; /* set 'suspended' flag */
-  if(mut_stat_table[id].stat & 0x2){ /* 'need_scan'? */
-    do{
-      c = gc_region_sync;
-    }while(cas_int(gc_region_sync, c, c + 1));
-  }
+  //  mut_stat_table[id].stat |= 0x1; /* set 'suspended' flag */
+  //  if(mut_stat_table[id].stat & 0x2){ /* 'need_scan'? */
+  do {
+    c = gc_region_sync;
+  } while (cas_int(gc_region_sync, c, c + 1));
   mutex_unlock(&mut_stat_table[id].lock);    
+
+  if (gc_request_flag) {
+    phase = ri_core_phase;
+    if (gc_point_sync + gc_region_sync == active_mutator_num) {
+      lock_collector;
+      if (phase == ri_core_phase)
+        do_scan_roots(); 
+      unlock_collector;
+    }
+  }
+  //  }
 }
 
 void exit_gc_region(int id)
 {
+  int c;
+ try_exit:
   mutex_lock(&mut_stat_table[id].lock);
-  if(mut_stat_table[id].stat & 0x2){ /* 'need_scan'? */
-    mut_stat_table[id].stat = 0x4; /* set 'scanning' and clear 'need_scan' */
+  if (mut_stat_table[id].stat & 0x2 == mut_stat_phase) { /* 'need_scan'? */
+    //    mut_stat_table[id].stat = 0x4; /* set 'scanning' and clear 'need_scan' */
+    //    mutex_unlock(&mut_stat_table[id].lock);
+    //    insert_my_roots();
     mutex_unlock(&mut_stat_table[id].lock);
-//    insert_my_roots();
-  }else{
-    mut_stat_table[id].stat &= 0x0; /* clear 'suspended' flag */
+    sched_yield(); /* this wouldn't go well on ART-Linux */
+    goto try_exit;
+  } else {
+    //    mut_stat_table[id].stat &= 0x0; /* clear 'suspended' flag */
+    do {
+      c = gc_region_sync;
+    } while (cas_int(gc_region_sync, c, c - 1));
     mutex_unlock(&mut_stat_table[id].lock);
   }
 }
@@ -797,10 +963,9 @@ static void init_sync_data()
   mutex_init(&pstack_lock, NULL);
   mutex_init(&collector_lock, NULL);
   cond_init(&gc_wakeup_cv, NULL);
-  mutex_init(&ri_end_lock, NULL);
   cond_init(&ri_end_cv, NULL);
   mutex_init(&gc_state_lock, NULL);
-  for(i = 0; i < MAXTHREAD; i++){
+  for (i = 0; i < MAXTHREAD; i++) {
     mutex_init(&mut_stat_table[i].lock, NULL);
   }
 }
@@ -809,47 +974,31 @@ static void init_sync_data()
   mutator interface routines
 *********************************************************/
 
-void request_gc(){
-  notify_gc();
-}
-
-
-/* wait until this gc cycle ends */
-void wait_until_gc_cycle_ends(){
-#if 0
-  mutex_lock(&gc_state_lock);
-  while(gc_counter < gc_request_counter){
-    cond_wait(&gc_end_cv, &gc_state_lock);
-  }
-  mutex_unlock(&gc_state_lock);
-#endif
-}
-
 #ifdef __USE_POLLING
 void scan_roots()
 {
   int c;
-  int myid = thr_self();
+  //  int myid = thr_self();
   int phase = ri_core_phase;
 
-  do{
+  do {
     c = gc_point_sync;
-  }while(cas_int(gc_point_sync, c, c + 1));
+  } while (cas_int(gc_point_sync, c, c + 1));
 
-  if(gc_point_sync + gc_region_sync < active_mutator_num){
+  if (gc_point_sync + gc_region_sync < active_mutator_num) {
     sched_yield(); // nanosleep(0) might be better
-  }else{
+  } else {
     lock_collector;
-    if(phase == ri_core_phase)
+    if (phase == ri_core_phase)
       do_scan_roots(); 
     unlock_collector;
   }
   
   /* wait until root scanning(core) is finished */
-  mutex_lock(&ri_end_lock); \
-  while(ri_core_phase == phase) \
-    cond_wait(&ri_end_cv, &ri_end_lock); \
-  mutex_unlock(&ri_end_lock);
+  lock_collector;
+  while (phase == ri_core_phase)
+    cond_wait(&ri_end_cv, &collector_lock);
+  unlock_collector;
   
   return;
 }
@@ -857,7 +1006,7 @@ void scan_roots()
 /* function-version polling code */
 int check_gc_request()
 {
-  if(!gc_request_flag) 
+  if (!gc_request_flag) 
     return 0;
   scan_roots();
   return 1;
@@ -872,16 +1021,17 @@ int check_gc_request()
 void sighandler(int x)
 {
   int idx;
-  DPRINT1("start root insersion");
+  DPRINT("start root insersion");
   notify_ri_start();
   idx = thr_self();
-  insert_local_roots(thr_self());
+  scan_local_roots(thr_self());
   barrier_wait(end_ri_barrier);
-  DPRINT1("mutator restart");
+  DPRINT("mutator restart");
 }
 #endif
 
-
+/* MAXSTACK 65536 */
+#define PMAXSTACK (MAXSTACK*110)
 pointer pstack[PMAXSTACK];
 volatile pointer *psp = pstack;
 pointer *pstacklimit = pstack + PMAXSTACK;
@@ -890,10 +1040,11 @@ mutex_t pstack_lock;
 /***********************************************************
     barrier-synchronization functions
 ***********************************************************/
+
 barrier_t barrier_init(int n_clients)
 {
-  barrier_t barrier = (barrier_t) malloc(sizeof(struct barrier_struct));
-  if(barrier != NULL){
+  barrier_t barrier = (barrier_t)malloc(sizeof(struct barrier_struct));
+  if (barrier != NULL) {
     barrier->n_clients = n_clients;
     barrier->n_waiting = 0;
     barrier->phase = 0;
@@ -923,12 +1074,12 @@ void barrier_wait(barrier_t barrier)
   mutex_lock(&barrier->lock);
   my_phase = barrier->phase;
   barrier->n_waiting++;
-  if(barrier->n_waiting == barrier->n_clients){
+  if (barrier->n_waiting == barrier->n_clients) {
     barrier->n_waiting = 0;
     barrier->phase = 1 - my_phase;
     cond_broadcast(&barrier->wait_cv);
   }
-  while(barrier->phase == my_phase){
+  while (barrier->phase == my_phase) {
     cond_wait(&barrier->wait_cv, &barrier->lock);
   }
   mutex_unlock(&barrier->lock);
@@ -938,17 +1089,18 @@ void barrier_wait(barrier_t barrier)
   other functions
 ***********************************************************/
 
-unsigned int allocate_heap(unsigned int req_words)
+
+unsigned int do_allocate_heap(unsigned int req_words)
 {
   int i, k; 
   unsigned int rem_words = req_words;
 
-  while(buddysize[MAXBUDDY-1] <= rem_words){
+  while (buddysize[MAXBUDDY-1] <= rem_words) {
     k = newchunk(MAXBUDDY-1);
     rem_words -= buddysize[k];
   }
-  for(i = MAXBUDDY - 2; i >= 20/* or DEFAULTCHUNKINDEX */; i--){
-    if(buddysize[i] < rem_words){
+  for (i = MAXBUDDY - 2; i >= 20/* or DEFAULTCHUNKINDEX */; i--) {
+    if (buddysize[i] < rem_words){
       k = newchunk(i);
       rem_words -= buddysize[k];
     }
@@ -956,36 +1108,54 @@ unsigned int allocate_heap(unsigned int req_words)
   return req_words - rem_words;
 }
 
+unsigned int allocate_heap()
+{ /*
+   * k  buddy[k]
+   * 22 85971 word 343884 byte
+   * 23 139104 word 556416 byte
+   * 24 225075 word 900300 byte
+   * 25 364179 word 1456716 byte
+   * 26 589254 word 2357016 byte
+   * 27 953433 word 3813732 byte
+   * 28 1542687 word 6170748 byte
+   * 29 2496120 word 9984480 byte
+   * 30 4038807 word 16155228 byte
+   */
+    return do_allocate_heap(INITIAL_HEAP_SIZE * 1000);
+}
+
 extern long long values[];
 
 pointer RGCCOUNT(register context *ctx, int n, pointer argv[])
 {
-    ckarg(0);
-    return makeint(gc_counter);
+  ckarg(0);
+  return makeint(gc_cmp_cnt);
 }
 
 pointer RGC_MUTTIME(register context *ctx, int n, pointer argv[])
 {
-    struct tms buf;
-    ckarg(0);
-    times(&buf);
-    return makeint((buf.tms_utime + buf.tms_stime) * 1000/HZ );
+  struct tms buf;
+  ckarg(0);
+  times(&buf);
+  return makeint((buf.tms_utime + buf.tms_stime) * 1000/HZ );
 }
 
 #ifdef __PROFILE_GC
 pointer RGCALLOCATED(register context *ctx, int n, pointer argv[])
 {
-    ckarg(0);
-    return makeint(allocd_words);
+  ckarg(0);
+  return makeint(allocd_words);
 }
 #endif
 
 void rgcfunc(register context *ctx, pointer mod)
 {
-    pointer p = Spevalof(PACKAGE);
-    pointer_update(Spevalof(PACKAGE), syspkg);
-    defun(ctx, "RGCCOUNT", mod, RGCCOUNT);
-    defun(ctx, "RGCTIME", mod, RGC_MUTTIME);
-    defun(ctx, "RGCALLOCATED", mod, RGCALLOCATED);
-    pointer_update(Spevalof(PACKAGE), p);
+  pointer p = Spevalof(PACKAGE);
+  pointer_update(Spevalof(PACKAGE), syspkg);
+  defun(ctx, "RGCCOUNT", mod, RGCCOUNT);
+  defun(ctx, "RGCTIME", mod, RGC_MUTTIME);
+#ifdef __PROFILE_GC
+  defun(ctx, "RGCALLOCATED", mod, RGCALLOCATED);
+#endif
+  pointer_update(Spevalof(PACKAGE), p);
 }

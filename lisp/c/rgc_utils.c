@@ -21,10 +21,12 @@ int debug_printf(char *fmt, ...)
   return 0;
 }
 
+/* a dummy function for break points */
+void hoge(){}
 
 #define __USE_RDTSC
 #ifdef __USE_RDTSC
-#define CPU_CLOCK 1600 /* 1.6GHz -> microsec */
+#define CPU_CLOCK 1700 /* 1.7GHz -> microsec */
 
 typedef union {
   unsigned long long val;
@@ -107,5 +109,10 @@ void papi_print_counters(){
   fprintf(stderr, "PAPI: %lf, %lf\n", (double)values[0], (double)values[1]);
 }
 
+
+
+/*
+ * live object maps for debbuging
+ */
 
 #endif
