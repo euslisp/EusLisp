@@ -424,7 +424,7 @@ char *xentry;
    entry=(integer_t)dlsym(dlhandle, xentry);
 #else
   entry=(integer_t)dlsym((void *)((integer_t)(sysmod->c.ldmod.handle) & ~3), xentry);
-#endif  
+#endif
   if (entry){
     xsym=intern(ctx,lname, len-1, xpkg);
     fc=makeobject(C_FCODE);
