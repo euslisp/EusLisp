@@ -49,10 +49,17 @@ pointer argv[];
   ss=ckintval(argv[0]);
   while (buddysize[i]<ss) i++;
   if (i>=MAXBUDDY) error(E_ALLOCATION);
-#ifdef RGC /* and #ifndef __HEAP_EXPANDABLE */
-  /* now, heap isn't expandable under RGC. */
+#if defined(RGC) && !defined(__HEAP_EXPANDABLE)
+  /* heap isn't expandable */
 #else
+#if defined(RGC)
+  lock_collector;
+  DPRINT("ALLOC: newchunk");
+#endif
   i=newchunk(i);
+#if defined(RGC)
+  unlock_collector;
+#endif
 #endif
   if (i==ERR) error(E_ALLOCATION);
   else return(makeint(buddysize[i]));}
@@ -103,7 +110,7 @@ register pointer p;
 #endif
 #if Solaris2
   if ((integer_t)p<(integer_t)_end) return(NULL);
-#elif sun3 || sun4 || news || (i386 && !Cygwin) || alpha || mips
+#elif sun3 || sun4 || news || (i386 && !Cygwin) || alpha || mips /* Cygwin does not have edata */
   if ((integer_t)p<(integer_t)edata) return(NULL);
 #endif
 #if sun4 || vax || i386 

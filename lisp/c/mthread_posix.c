@@ -64,9 +64,11 @@ static void thr_cleanup( struct thr_arg *arg )
 static void thr_startup( struct thr_arg *arg )
 {
     //if (debug) printf( "thr_startup:tid=%d\n", arg->tid ); 
-    /* this line cases SEGMENTATION FAULT, but why? */
+    /* this line causes SEGMENTATION FAULT, but why? R.Hanai */
 
     pthread_cleanup_push( thr_cleanup, arg );
+    if( !thread_table[arg->tid].tid ) 
+      thread_table[arg->tid].tid = pthread_self(); /* R.Hanai */
 
 /*  Linuxthread is not supported */
 #if !Linux && !Cygwin

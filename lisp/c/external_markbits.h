@@ -10,8 +10,8 @@
 #define blacked(p) blacked_ex(p)
 #define marked(p) marked_ex(p)
 #define markon(p) markon_ex(p)
-#define markoff(p) markoff_ex(p)/* we do nothing. */
-#endif /* __USE_MARK_BITMAP */
+#define markoff(p) markoff_ex(p)
+#endif 
 
 #define colored_ex(p) read_bit((unsigned int)p)
 #define blacked_ex(p) read_bit((unsigned int)p)
@@ -22,7 +22,8 @@
 //#define set_bit(p) (bit_table[(p - hmin)>>2] = 1)
 //#define read_bit(p) (bit_table[(p - hmin)>>2])
 
-unsigned int hmin, hmax;
+extern unsigned int mingcheap, maxgcheap;
+extern unsigned int hmin, hmax;
 void set_heap_range(unsigned int max, unsigned int min);
 void allocate_bit_table();
 __inline__ void set_bit(unsigned int addr);

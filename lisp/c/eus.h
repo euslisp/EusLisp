@@ -156,9 +156,6 @@ typedef struct cell *pointer;
 #include "external_markbits.h"
 #include "time.h"
 #include "collector.h"
-
-#define DEFAULT_MAX_RGCSTACK 16384
-#define PMAXSTACK (MAXSTACK*110)
 #else
 #define GC_POINT
 #define GC_REGION(cmp_statement) cmp_statement
@@ -694,9 +691,11 @@ extern int export_all;
 #ifdef RGC
 #define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error(E_DUMMY5,(pointer)(err)))
 #define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error(E_DUMMY5,(pointer)(err)))
+#define alloc rgc_alloc
 #else
 #define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error(E_DUMMY3,(pointer)(err)))
 #define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error(E_DUMMY3,(pointer)(err)))
+#define alloc gc_alloc
 #endif
 #define ccar(p) ((p)->c.cons.car)
 #define ccdr(p) ((p)->c.cons.cdr)
@@ -734,6 +733,8 @@ extern int export_all;
 #define nextbuddy(p) ((bpointer)((integer_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
 #else
 #define nextbuddy(p) ((bpointer)((integer_t)(p)+(buddysize[p->h.bix]*sizeof(pointer))))
+#endif
+#ifndef __USE_MARK_BITMAP
 #define marked(p)  (p->h.mark)
 #define markon(p)  p->h.mark=1
 #define markoff(p) p->h.mark=0
@@ -852,44 +853,7 @@ extern int export_all;
 #define stackck if (ctx->vsp>ctx->stacklimit) error(E_STACKOVER)
 #define debug (speval(QDEBUG)!=NIL)
 
-#ifdef RGC
-
-#define pgpush(v) (*ctx->gsp++=((pointer)v))
-#define pgcpush(v) (ctx->gsp<ctx->gcstacklimit?pgpush(v):error(E_GCSTACKOVER))
-#define pgcpop() (*(--(ctx->gsp)))
-#define ppush(v) (*psp++ = ((pointer)v))
-#define pointerpush(v) (psp<pstacklimit?ppush(v):(pointer)error(E_PSTACKOVER))
-#define pointerpop() (*(--psp))
-
-/* write barrier code */
-#ifdef __USE_POLLING
-#define take_care(p){ if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(p); mutex_unlock(&pstack_lock);} }
-//#define take_care(p){ if((((unsigned)p)<hmin||((unsigned)p>=hmax))&&(p)!=0&&ispointer(p))hoge();if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(p); mutex_unlock(&pstack_lock);} }
-/* 
- * l must not have side effects, 
- * since it is evaluated more than once 
- * (r is evaluated once.)
- */
-#define pointer_update(l,r) { if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(l); mutex_unlock(&pstack_lock);} (l)=(r); }
-//#define pointer_update(l,r) { if((((unsigned)(l))<hmin||((unsigned)(l)>=hmax))&&(l)!=0&&ispointer(l))hoge();if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(l); mutex_unlock(&pstack_lock);}(l)=(r); }
-#define noticeCollector(p1,p2) { if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock);pointerpush(p1);pointerpush(p2);mutex_unlock(&pstack_lock);} }
-#define noticeCollector1(p1) take_care(p1)
-#endif /* _USE_POLLING */
-
-#ifdef __USE_SIGNAL 
-/* this is not safe, since signals might cut in 
- * the execution of write barriers. */
-#define take_care(p){ if((((unsigned)p)<hmin||((unsigned)p>=hmax))&&(p)!=0&&ispointer(p))hoge();if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(p); mutex_unlock(&pstack_lock);} }
-/* 
- * l must not have side effects, 
- * since they are evaluated more than once 
- * (r is evaluated once.)
- */
-#define pointer_update(l,r) { if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(l); mutex_unlock(&pstack_lock);} (l)=(r); }
-#endif /* __USE_SIGNAL */
-
-#else /* RGC */
-
+#ifndef RGC
 #define pointer_update(l,r) { (l)=(r); }
 #define take_care(p)
 

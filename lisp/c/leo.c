@@ -576,7 +576,15 @@ register pointer org;
 
   if (ctx->vsp>ctx->stacklimit)
     { fprintf(stderr,"cannot copy\n"); euslongjmp(cpyjmp,ERR);}
+#ifdef RGC /* R.Hanai */
+  if (etype == ELM_FIXED || etype == ELM_POINTER) {
+    pointer_update(org->c.obj.iv[1],makeint(cpx));
+  } else {
+    org->c.obj.iv[1] = makeint(cpx);
+  }
+#else
   pointer_update(org->c.obj.iv[1],makeint(cpx));
+#endif
   vpush(clone);
   vpush(x);
   cpx += 2;

@@ -478,28 +478,9 @@ void initmemory_rgc()
   buddysize[MAXBUDDY]= 0x7fffffff;	/*cell size limit*/
 #endif
 
-  /*allocate enough memory for initialization*/
-/*
- * k  buddy[k]
- * 23 139104 byte
- * 24 225075 byte
- * 25 364179 byte
- * 26 589254 byte
- * 27 953433 byte
- * 28 1542687 byte
- * 29 2496120 byte
- * 30 4038807 byte
- */
-//  newchunk(25);
-//  newchunk(24);
   {
     unsigned int tmp;
-//    tmp = allocate_heap(520 * 1000); // 2M
-//    tmp = allocate_heap(1250 * 1000); // 5M
-//    tmp = allocate_heap(2500 * 1000); // 10M
-//    tmp = allocate_heap(5000 * 1000); // 20M
-//    tmp = allocate_heap(12600 * 1000); // 50M
-    tmp = allocate_heap(25200 * 1000); // 100M
+    tmp = allocate_heap();
     fprintf(stderr, "allocate_heap: %d bytes\n", tmp*4);
   }
 
@@ -1197,7 +1178,9 @@ register context *ctx;
   signal(SIGCHLD, (void (*)())eusint);
   signal(SIGFPE,  (void (*)())eusint);
   signal(SIGPIPE, (void (*)())eusint);
+#ifdef RGC
 //  signal(SIGSEGV, (void (*)())eusint); /* for debugging. R.Hanai */
+#endif
   signal(SIGBUS,  (void (*)())eusint);
 
   toplevel(ctx,mainargc,mainargv);
@@ -1235,7 +1218,6 @@ char *argv[];
   /* following two lines are just to speed up frequent sbreak at the beginning
      of the execution. These lines may be deleted without any harm.*/
   m=(unsigned char *)malloc(1*1024*1024);
-//  m=(unsigned char *)malloc(4*1024*1024); /* RGC */
   cfree(m);
 
 #if vxworks
