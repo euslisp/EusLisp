@@ -18,13 +18,13 @@
 #########################################################################
 
 cygwin-all: 
-	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
-	 make -f $(MAKEFILE) $(MFLAGS) eus1; \
-         make -f $(MAKEFILE) $(MFLAGS) eus2; \
-         make -f $(MAKEFILE) $(MFLAGS) eusg; \
-         make -f $(MAKEFILE) $(MFLAGS) eusx; \
-         make -f $(MAKEFILE) $(MFLAGS) eusgl;\
-         make -f $(MAKEFILE) $(MFLAGS) eus)
+	(make -f Makefile.Cygwin eus0; \
+	 make -f Makefile.Cygwin eus1; \
+         make -f Makefile.Cygwin eus2; \
+         make -f Makefile.Cygwin eusg; \
+         make -f Makefile.Cygwin eusx; \
+         make -f Makefile.Cygwin eusgl;\
+         make -f Makefile.Cygwin eus)
 
 ARCH=Cygwin
 include Makefile.generic1
@@ -96,7 +96,7 @@ MAPOPTION=  $(OBJDIR)/par.o
 # end of the customizable section
 ################################################################
 
-include Makefile.rgc
+#include Makefile.rgc
 include Makefile.generic2
 
 libeusgl.dll:	$(ADLIBDIR)/libeusgl.dll
