@@ -1,5 +1,5 @@
 ;;; -*- lisp -*-
-;;; $Header: /home/cvs/euslisp/opengl/src/glview.l,v 1.1.1.1 2003/11/20 07:46:33 eus Exp $
+;;; $Header$
 ;;; glview.l -- openGL eus
 
 (unless (find-package "GL")
@@ -91,7 +91,11 @@
 	    (t (error "number expected for colormaterial :transparency"))))
  (:opengl ()
       (glMaterialfv GL_FRONT_AND_BACK GL_AMBIENT ambient)
+#-:linux
       (glMaterialfv GL_FRONT_AND_BACK GL_DIFFUSE diffuse)
+#+:linux
+      (glMaterialfv GL_FRONT_AND_BACK GL_DIFFUSE 
+		    (if (= (length diffuse) 3) (concatenate float-vector diffuse #f(1)) diffuse))
       (glMaterialfv GL_FRONT_AND_BACK GL_SPECULAR specular)
       (glMaterialfv GL_FRONT_AND_BACK GL_EMISSION emission)
       (glMaterialfv GL_FRONT_AND_BACK GL_SHININESS (float-vector shininess))
@@ -509,4 +513,4 @@
 
 
 
-(provide :glview "@(#)$Id: glview.l,v 1.1.1.1 2003/11/20 07:46:33 eus Exp $")
+(provide :glview "@(#)$Id$")
