@@ -496,9 +496,10 @@ void initmemory_rgc()
     unsigned int tmp;
 //    tmp = allocate_heap(520 * 1000); // 2M
 //    tmp = allocate_heap(1250 * 1000); // 5M
-    tmp = allocate_heap(2500 * 1000); // 10M
+//    tmp = allocate_heap(2500 * 1000); // 10M
 //    tmp = allocate_heap(5000 * 1000); // 20M
 //    tmp = allocate_heap(12600 * 1000); // 50M
+    tmp = allocate_heap(25200 * 1000); // 100M
     fprintf(stderr, "allocate_heap: %d bytes\n", tmp*4);
   }
 
