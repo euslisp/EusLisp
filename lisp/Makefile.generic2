@@ -144,6 +144,10 @@ eus:	$(BINDIR)/eus
 
 MAKEDATE:	$(EUSDIR)$(LIBDIR)/MAKEDATE
 
+MKDIR:
+	mkdir -p $(BINDIR) $(OBJDIR) $(ADLIBDIR)
+	(cd $(EUSDIR); test -e include || ln -s lisp/c include)
+
 all:
 	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
 	 make -f $(MAKEFILE) $(MFLAGS) eus1; \
@@ -158,7 +162,7 @@ all:
 # eusg is loaded with geometric functions.
 # eusx also has xwindow interface.
 
-eus0:	MAKEDATE $(BINDIR)/eus0
+eus0:	MKDIR MAKEDATE $(BINDIR)/eus0
 
 eus1:	$(BINDIR)/eus1
 
@@ -248,7 +252,8 @@ $(BINDIR)/eus:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
 		$(MTCOBJECTS) $(MTOBJECTS) \
 		$(MAPOPTION) \
-		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB) ; \
+		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB) \
+		>$(ADLIBDIR)/eusmap ; \
 	cd $(BINDIR); rm -f euscomp eusx; \
 	ln -s eus euscomp; ln -s eus eusx; )
 
@@ -269,7 +274,7 @@ $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(MTCOBJECTS) $(MTOBJECTS) \
 		$(MAPOPTION) \
 		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(GLLIB) $(XLIB) $(RAWLIB)\
-		)
+		>$(ADLIBDIR)/eusmap ;)
 
 $(BINDIR)/raweus.so:	$(NOKOBJECTS) $(KOBJECTS)  $(LOBJECTS) \
 		$(COMPOBJECTS) \
@@ -348,11 +353,8 @@ install:
 	 cp $(BINDIR)/eusx $(PUBBINDIR);\
 	 ln -s $(PUBBINDIR)/eus $(PUBBINDIR)/euscomp)
 clean:
-	-rm -f $(OBJDIR)/* \
-		$(ADLIBDIR)/libeus* \
-		$(BINDIR)/* $(LDIR)/constants.l.[co]\
-		$(LDIR)/eusstart.l.[co] \
-		$(COMPDIR)/builtins.l.[co] so_locations
+	-rm -f $(OBJDIR)/* $(ADLIBDIR)/libeus* $(BINDIR)/* $(LDIR)/constants.l.[co]\
+		$(LDIR)/eusstart.l.[co] $(COMPDIR)/builtins.l.[co] so_locations
 	-sh tool/clean-ch.sh
 	
 eustag : 

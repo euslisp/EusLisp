@@ -1,5 +1,5 @@
 # makefile for EusLisp on sun4 with SunOS (Solaris)
-# RCSid="@(#)$Id: Makefile.Linux.thread,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $"
+# RCSid="@(#)$Id$"
 #	Copyright (1988) Toshihiro MATSUI, Electrotechnical Laboratory
 #	1989/Oct
 #	1990/Sep Second Tape Distribution
@@ -63,11 +63,11 @@ CC=cc
 
 # Linux
 RAWLIB=-ldl -lm -lpthread
-XLIB= -L/usr/X11R6.1/lib -lX11
+XLIB= -L/usr/X11R6/lib -lX11
 
 # specify directories where euslisp's libraries are located.
 EUSLIB= -Xlinker -R$(ADLIBDIR):$(EUSDIR)/lib/Linux -L$(ADLIBDIR) 
-GLLIB= -L$(ADLIBDIR) -ltk -lGLU -lGL -lXext -leusgl
+GLLIB= -L$(ADLIBDIR) -ltk8.0 -lGLU -lGL -lXext -leusgl
 
 # POSIX Thread 
 THREADDEP=mthread_posix.c

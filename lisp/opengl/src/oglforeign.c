@@ -1,4 +1,4 @@
-/* $Header: /home/cvs/euslisp/opengl/src/oglforeign.c,v 1.1.1.1 2003/11/20 07:46:33 eus Exp $ */
+/* $Header$ */
 
 /* OpenGL function entries -- based on xwindow/xforeign.c */
 
@@ -566,7 +566,7 @@ pointer argv[];
   defoglforeign(ctx,"glGenTexturesEXT");
   defoglforeign(ctx,"glBindTextureEXT");
 #endif
-#if GL_EXT_polygon_offset
+#if (GL_EXT_polygon_offset && !Linux)
   defoglforeign(ctx,"glPolygonOffsetEXT");
   defoglforeign(ctx,"glPolygonOffsetEXTfv");
 #endif
