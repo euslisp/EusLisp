@@ -5,12 +5,15 @@
 .*	1988-Feb	boxing and unboxing recoded by macros
 /****************************************************************/
 
-static char *rcsid="@(#)$Id: arith.c,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 #include <math.h>
 #if alpha
 #include <limits.h>
+#endif
+#if Cygwin
+#include <stdlib.h>
 #endif
 
 extern pointer RANDSTATE;

@@ -1229,7 +1229,7 @@
       (warn "compiling file: ~A~%" (namestring file))
       (setq ins (open file))
       (setq *defun-list* nil)
-      (when *multipass-optimize*
+      (when (and *multipass-optimize* (not (memq :cygwin *features*)))
 	(while t
 	  (setq form (read ins nil '$eof$))
 	  (if (eq form '$eof$) (return nil))
@@ -1281,6 +1281,7 @@
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
 		   	 ((memq :linux *features*)  " -Di386 -DLinux -w")
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
+			 ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DUSE_STDARG -DX_V11R6_1 -falign-functions=4 -w")
 			 ((memq :i386  *features*) " -Di386")
 			 (t (warn "cpu type is not properly set")))
 		   (cond ((memq :sunos4 *features*) " -DSunOS4 -Bstatic")
@@ -1293,6 +1294,7 @@
 		   (if (memq :rgc *features*) " -DRGC -D__USE_POLLING" )
 		   (if pic
 		       (cond ((memq :SunOS4.1 *features*) " -fpic")
+			     ((memq :cygwin *features*) "")
 			     ((memq :Gcc *features*) " -fpic ")
 			     ((memq :Solaris2 *features*) " -K pic")
 			     ((memq :linux *features*) " -fpic")

@@ -57,6 +57,10 @@ char *minmemory=(char *)0x1000000; /* T.IWAI 1->2 */
 volatile long sweepheap = 0;
 volatile long newheap = 0;
 volatile long pastfree = 0;
+#else
+#if Cygwin
+char *minmemory=(char *)0xffffffff;
+#endif
 #endif
 
 char *maxmemory=(char *)0x100000;
@@ -86,6 +90,9 @@ register int k;
   if (QDEBUG && debug) fprintf(stderr,";; newchunk: k=%d\n",k);
   s=buddysize[k];
   cp=(struct chunk *)((long)malloc((s+2)*sizeof(pointer)+(sizeof(pointer)-1)) & ~(sizeof(pointer)-1));
+#if Cygwin
+  if (minmemory > (char *)cp) minmemory = (char *)cp;
+#endif
   maxmemory=(char *)sbrk(0);
   if (QDEBUG && debug) fprintf(stderr,";; maxmemory=0x%x\n",maxmemory);
   if (cp==NULL) return(ERR);	/*can't allocate new memory*/
@@ -365,6 +372,9 @@ newchunk(k)
 #ifdef __USE_MARK_BITMAP
  set_heap_range((unsigned int)cp, 
 		(unsigned int)cp+ (s+2)*sizeof(pointer)+(sizeof(pointer)-1));
+#endif
+#if Cygwin
+ if (minmemory > (char *)cp) minmemory = (char *)cp;
 #endif
  maxmemory=(char *)sbrk(0);
  if (QDEBUG && debug) fprintf(stderr,";; maxmemory=0x%x\n",maxmemory);
@@ -825,6 +835,8 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #else /* Solaris2 */
 #if Linux
 #define out_of_heap(p) ((int)p<(int)_end || (pointer)maxmemory <p)
+#elif Cygwin
+#define out_of_heap(p) ((int)p<(pointer)minmemory || (pointer)maxmemory <p)
 #else /*Linux */
 #if alpha
 #if THREADED

@@ -69,7 +69,7 @@ static void thr_startup( struct thr_arg *arg )
     pthread_cleanup_push( thr_cleanup, arg );
 
 /*  Linuxthread is not supported */
-#if !Linux
+#if !Linux && !Cygwin
     pthread_setcancel( CANCEL_ON );
     pthread_setasynccancel( CANCEL_ON );
 #endif

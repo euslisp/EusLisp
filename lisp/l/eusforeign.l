@@ -5,7 +5,7 @@
 ;;;;
 (in-package "LISP")
 (eval-when (load eval)
-#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (export '(read-symbol-table foreign-module))
 
 (export '(load-foreign defforeign make-foreign-code defvoidforeigns
@@ -17,7 +17,7 @@
        (system::find-entry symname self)))
 
 
-#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)   
+#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)   
 (defun read-symbol-table (objfile &optional (offset 0))
   (let* ((nm)
 	 (line nil)
@@ -42,11 +42,11 @@
     (close nm)
     htab))
 
-#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (defclass foreign-module :super compiled-code
 			 :slots (symbol-table object-file))
 
-#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (defmethod foreign-module
  (:code-alignment (symfile)
     (if (not (equal object-file symfile))
@@ -98,7 +98,7 @@
       ))
    )
 
-#+(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#+(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (defmethod foreign-code
  (:init (ent &optional param (result :integer))
     (setq codevector 0
@@ -109,7 +109,7 @@
 	  type 0)	; function
     self))
 
-#+(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#+(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (defun make-foreign-code (fentry &optional param (result :integer)
 					(fmod (sys::sysmod)))
 	 (cond ((numberp fentry))
@@ -120,7 +120,7 @@
 
 ;;;
 
-#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (defun load-foreign (file &key  (symbol-input (namestring *symbol-input*))
 				(symbol-output "")
 			        (ld-option "")    (symbol-file file))
@@ -129,14 +129,14 @@
 					:ld-option ld-option
 					:symbol-file symbol-file))
 
-#+(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#+(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (defun load-foreign (file)   (load file :entry ""))
 
-#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (defmacro defforeign (name fmod label param result)
    `(send ,fmod :defforeign ',name ,label ',param ',result))
 
-#+(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha)
+#+(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
 (defmacro defforeign  (name fmod label param result)
    `(setf (symbol-function ',name)
 	  (make-foreign-code ,label ',param ',result ,fmod)))
@@ -149,39 +149,39 @@
 ;(eval-when (compile)
 ;  (defclass foreign-pod :super symbol :slots (podcode paramtypes resulttype)))
 
-(defun byte-string (&rest bytes)
-   (make-array (length bytes) :element-type :char :initial-contents bytes))
-
 (defmethod foreign-pod
  (:pod-address () (+ 8 (sys:address podcode)))
  (:init (param result func)
     (let ((self-address (sys:address self)))
-#+:sun3
-      (progn
+      (cond
+	((memq :sun3 *features*)
 	 (inc self-address 2)
-	 (setq podcode (byte-string
-	        #x4E #x56 #x00 #x00			;linkw #0,a6
-		#x48 #x6E #x00 #x08			;pea a6@(8)
-		#x2F #x3C (ldb self-address 24 8)
-		      (ldb self-address 16 8)
-		      (ldb self-address 8 8)
-		      (ldb self-address 0 8)	;movl #self,sp@-
-		#x4E #xB9 (ldb *calleus* 24 8)
-		      (ldb *calleus* 16 8)
-		      (ldb *calleus* 8 8)
-		      (ldb *calleus* 0 8)	;jsr _calleus
-		#x50 #x8F				;addql 8,sp
-		#x2d #x40 #x00 #x08			;movl d0,a6@(8)
-		#xf2 #x2e #x44 #x00 #x00 #x08	;fmoves a6@(8),fp0
-		#x4E #x5E				;unlk a6
-		#x4E #x75				;rts
-		)))
-#+:sun4
+	 (setq podcode (make-string #x36))
+	 (replace  podcode 
+	      (list #x4E #x56 #x00 #x00			;linkw #0,a6
+		    #x48 #x6E #x00 #x08			;pea a6@(8)
+		    #x2F #x3C (ldb self-address 24 8)
+			      (ldb self-address 16 8)
+			      (ldb self-address 8 8)
+			      (ldb self-address 0 8)	;movl #self,sp@-
+		    #x4E #xB9 (ldb *calleus* 24 8)
+			      (ldb *calleus* 16 8)
+			      (ldb *calleus* 8 8)
+			      (ldb *calleus* 0 8)	;jsr _calleus
+		    #x50 #x8F				;addql 8,sp
+		    #x2d #x40 #x00 #x08			;movl d0,a6@(8)
+		    #xf2 #x2e #x44 #x00 #x00 #x08	;fmoves a6@(8),fp0
+		    #x4E #x5E				;unlk a6
+		    #x4E #x75				;rts
+		    )))
+	((memq :sun4 *features*)
+	 (setq podcode (make-string #x48))	;18 long words
 	 (let ( (self-address-high (ldb self-address 10 22))
 		(self-address-low (ldb self-address 0 10))
 		(calleus (ash (- *calleus* (+ (sys:address podcode) 8 44))
 			      -2)))
-	   (setq podcode (byte-string	;18 long words
+	     (replace  podcode
+		(list
 		 #x03 #x3F #xFF #xFF	;sethi
 		 #x82 #x00 #x63 #xA0	;add
 		 #x9D #xE3 #x80 #x01	;save
@@ -204,37 +204,8 @@
 		 #xc1 #x07 #xa0 #x44	;ldf
 		 #x81 #xC7 #xE0 #x08	;ret
 		 #x81 #xE8 #x00 #x00	;restore
-		)))
-#+:i386
-	(let ((calleus-offset 0))
-	   (setq podcode (byte-string
-		;; #x83 #xec #x08
-		#x8d #x54 #x24 #x04
-		#x52
-		#x68  (ldb self-address 0 8)
-		(ldb self-address 8 8) 
-		(ldb self-address 16 8)
-		(ldb self-address 24 8) 
-		#xe8 0 0 0 0
-		#x5a #x5a #xc3))
-		;;  10 0000 8D542404              leal    4(%esp), %edx
-		;;  11 0004 52                    pushl   %edx
-		;;  12 0005 68785634              pushl   $0x12345678
-		;;  12      12
-		;;  13 000a E8745634              call    calleus (relative)
-		;;  13      12
-		;;  14 000f 5A                    popl    %edx
-		;;  15 0010 5A                    popl    %edx
-		;;  16 0011 C3                    ret
-	   (setq calleus-offset (- *calleus* (+ (sys:address podcode) 8 15)))
-	   (replace podcode
-		    (list
-			(ldb calleus-offset 0 8) (ldb calleus-offset 8 8)
-			(ldb calleus-offset 16 8)  (ldb calleus-offset 24 8))
-		    :start1 11)
-	   podcode)
-#-(or :sun3 :sun4 :i386)
-	 (error "not yet implemented for this processor")
+		))))
+	(t (error "not yet implemented for this processor")))
       (cond 
 	 ((listp func)
 	   (if (eq (car func) 'lisp:lambda-closure)
@@ -494,4 +465,4 @@
       (sys:poke addr (+ (* 2 lisp::sizeof-*) (sys:address fstr)) :long)
       fstr))
 
-(provide :eusforeign "@(#)$Id: eusforeign.l,v 1.2 2004/12/16 13:47:03 cvseus Exp $")
+(provide :eusforeign "@(#)$Id$")

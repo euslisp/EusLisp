@@ -78,7 +78,7 @@ IMGCOBJECTS=$(OBJDIR)/RGBHLS.o $(OBJDIR)/convolve.o \
 		$(OBJDIR)/pixword.o $(OBJDIR)/image_correlation.o 
 IMGOBJECTS=$(OBJDIR)/pbmfile.o $(OBJDIR)/piximage.o
 # window objects
-XCOBJECTS= $(OBJDIR)/xforeign.o
+XCOBJECTS= $(OBJDIR)/xforeign.c.o
 XOBJECTS= $(OBJDIR)/Xdecl.o \
 	  $(OBJDIR)/Xeus.o \
 	  $(OBJDIR)/Xevent.o \
@@ -94,7 +94,7 @@ XTKOBJECTS=$(OBJDIR)/Xpanel.o \
 	   $(OBJDIR)/Xapplwin.o
 
 # gl related objects
-GLCOBJECTS= $(OBJDIR)/oglforeign.o $(OBJDIR)/util.o $(OBJDIR)/eglfunc.o
+GLCOBJECTS= $(OBJDIR)/oglforeign.c.o $(OBJDIR)/util.o $(OBJDIR)/eglfunc.o
 GLOBJECTS= $(OBJDIR)/glconst.o \
 	 $(OBJDIR)/gldecl.o \
 	 $(OBJDIR)/glforeign.o \
@@ -472,7 +472,7 @@ $(OBJDIR)/pixword.o:	$(IMGDIR)/pixword.c
 $(OBJDIR)/pbmfile.o:	$(IMGDIR)/pbmfile.l
 $(OBJDIR)/piximage.o:	$(IMGDIR)/piximage.l
 # xwindow objects
-$(OBJDIR)/xforeign.o:	$(XWINDOWDIR)/xforeign.c
+$(OBJDIR)/xforeign.c.o:	$(XWINDOWDIR)/xforeign.c.c
 $(OBJDIR)/Xdecl.o:	$(XWINDOWDIR)/Xdecl.l
 $(OBJDIR)/Xeus.o:	$(XWINDOWDIR)/Xeus.l
 $(OBJDIR)/Xevent.o:	$(XWINDOWDIR)/Xevent.l
@@ -487,7 +487,7 @@ $(OBJDIR)/Xcanvas.o:	$(XWINDOWDIR)/Xcanvas.l
 $(OBJDIR)/Xtop.o:	$(XWINDOWDIR)/Xtop.l
 $(OBJDIR)/Xapplwin.o:	$(XWINDOWDIR)/Xapplwin.l
 # openGL objects
-$(OBJDIR)/oglforeign.o: $(GLDIR)/oglforeign.c
+$(OBJDIR)/oglforeign.c.o: $(GLDIR)/oglforeign.c.c
 $(OBJDIR)/eglfunc.o: $(GLDIR)/eglfunc.c
 $(OBJDIR)/util.o: 	$(GLDIR)/util.c
 $(OBJDIR)/glconst.o:	$(GLDIR)/glconst.l

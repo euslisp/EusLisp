@@ -22,6 +22,7 @@
 	    ((member :Windows95 *features*) "../../../Win95/obj/")
 	    ((member :WindowsNT *features*) "../../../WinNT/obj/")
 	    ((member :alpha *features*) "../../../Alpha/obj/")
+	    ((member :cygwin *features*) "../../../Cygwin/obj/")
 	    ))
 
 (progn 

@@ -100,7 +100,9 @@ register pointer s;
       if (debug) {
 	printf(";; read; stat=%d errno=%d, intsig=%d\n", c, errno, ctx->intsig);}
       breakck;
+#if !Cygwin /* if ( c < 0 ) goto tryfread; */
       if (c<0) goto tryfread;
+#endif
       if (c<=0) return(EOF);
       s->c.stream.tail=makeint(c);
       return(0);} } 

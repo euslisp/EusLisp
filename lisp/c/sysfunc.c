@@ -103,7 +103,7 @@ register pointer p;
 #endif
 #if Solaris2
   if ((integer_t)p<(integer_t)_end) return(NULL);
-#elif sun3 || sun4 || news || i386 || alpha || mips
+#elif sun3 || sun4 || news || (i386 && !Cygwin) || alpha || mips
   if ((integer_t)p<(integer_t)edata) return(NULL);
 #endif
 #if sun4 || vax || i386 
