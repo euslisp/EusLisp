@@ -153,6 +153,9 @@ typedef struct cell *pointer;
 
 #define DEFAULT_MAX_RGCSTACK 16384
 #define PMAXSTACK (MAXSTACK*110)
+#else
+#define GC_POINT
+#define GC_REGION(cmp_statement) cmp_statement
 #endif
 
 struct cellheader {
