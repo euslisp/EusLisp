@@ -637,6 +637,9 @@ pointer args[];
       if (elmtypeof(lisparg)==ELM_FOREIGN) cargv[i++]=lisparg->c.ivec.iv[0];
       else  cargv[i++]=(integer_t)(lisparg->c.str.chars);}
     else if (p==K_FLOAT) {
+      numbox.f=ckfltval(lisparg);
+      cargv[i++]=(int)numbox.i.i1; }
+    else if (p==K_DOUBLE) {
       numbox.d=ckfltval(lisparg);
       cargv[i++]=numbox.i.i1; cargv[i++]=numbox.i.i2;}
     else error(E_USER,(pointer)"unknown type specifier");}
