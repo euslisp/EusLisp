@@ -54,7 +54,7 @@ pointer argv[];
 #else
 #if defined(RGC)
   lock_collector;
-  DPRINT("ALLOC: newchunk");
+  DPRINT1("ALLOC: newchunk");
 #endif
   i=newchunk(i);
 #if defined(RGC)

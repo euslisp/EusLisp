@@ -28,6 +28,35 @@ void hoge(){}
 #ifdef __USE_RDTSC
 #define CPU_CLOCK 1700 /* 1.7GHz -> microsec */
 
+static int cpu_clock;
+
+int read_cpuinfo()
+{
+#define BUF_SIZE 100
+  FILE *fp;
+  char buf[BUF_SIZE];
+  int i;
+  if ((fp = fopen("/proc/cpuinfo", "r")) == NULL) {
+    fprintf(stderr, "Can't open /proc/cpuinfo\n");
+    return -1;
+  }
+  while(fgets(buf, BUF_SIZE, fp) != NULL) {
+    if (strncmp(buf, "cpu MHz", 7) )
+      continue;
+    for (i = 0; i < BUF_SIZE; i++) {
+      if (buf[i] == ':') break;
+    }
+    if (i != BUF_SIZE) {
+      sscanf(&buf[i+1], "%d", &cpu_clock);
+      if (cpu_clock <= 0)
+        return -1;
+      else
+        fprintf(stderr, "CPU CLOCK is %d\n", cpu_clock);
+    }
+  }
+  return cpu_clock;
+}
+
 typedef union {
   unsigned long long val;
   struct {
@@ -45,13 +74,13 @@ __asm__ __volatile__("rdtsc"\
 
 static time_stamp_t now, start;
 
-void reset_utime(){
+static void reset_utime(){
     start.val = 0ULL;
 }
 
 unsigned current_utime(void){
     rdtsc(now);
-    return (now.val - start.val)/CPU_CLOCK;
+    return (now.val - start.val)/cpu_clock;
 }
 
 #else /* __USE_RDTSC */
@@ -107,12 +136,22 @@ void papi_print_counters(){
   PAPI_read_counters(values, 2);
   //  PAPI_accum_counters(values, 2);
   fprintf(stderr, "PAPI: %lf, %lf\n", (double)values[0], (double)values[1]);
+
+#endif
+
+void init_utils()
+{
+  if (read_cpuinfo() < 0) {
+    cpu_clock = CPU_CLOCK;
+  }
+  reset_utime();
+
+#ifdef __PAPI
+  papi_init();
+#endif
 }
-
-
 
 /*
  * live object maps for debbuging
  */
 
-#endif

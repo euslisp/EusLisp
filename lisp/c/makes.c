@@ -363,6 +363,9 @@ pointer classobj;
   classobj->c.cls.cix=makeint(newcix);
   classtab[newcix].def=classobj;
   classtab[newcix].subcix=newcix; 
+#ifdef RGC
+  rgc_add_to_classtable(classobj);
+#endif
   nextcix++; }
 
 pointer makeclass(ctx,name,superobj,vars,types,forwards,tag,metaclass)
@@ -852,6 +855,9 @@ int bs_size;
   cntx->gcstack = stk;
   cntx->gsp = stk;
   cntx->gcstacklimit = stk+bs_size*2-64;
+#ifdef __GC_ALLOC_DRIVEN
+  cntx->my_gc_pri = 2;
+#endif
 #endif
   cntx->intsig=0;
 #ifdef __RETURN_BARRIER

@@ -11,14 +11,14 @@
  *       memory barrier instructions
  *       heap expansion function
  *       write-barriers (copyobj() etc.)
- *         => remove checks when read/write the mark-bitmap.
- *       allocator's(heap management) pausing times => BIBOP
+ *       memory management (BIBOP/Lazy Buddy/etc.)
  *       polling / how to scan stacks of suspending threads
  *       mutexes => real-time locks
- *       make thr_self() faster => caching
+ *       make thr_self() faster => caching ids.
+ *       scan large objects incrementally.
  *       
  *       mark stack overflow
- *       parallel marking (scaling)
+ *       parallel marking (scalability)
  *
  *       <problematic functions>
  *       bindspecial: increment stack collectively
@@ -84,7 +84,7 @@ static pnewgcstack(oldsp)
   top=oldsp-collector_stack;
   //  newgcsp=newstack=(pointer *)malloc(newsize * sizeof(pointer)+16);
   newgcsp=newstack=(ms_entry *)malloc(newsize * sizeof(ms_entry)+16);
-  fprintf(stderr, "\n;; extending pgcstack 0x%x[%d] --> 0x%x[%d] top=%x\n",
+  fprintf(stderr, "\n\x1b[1;31m;; extending pgcstack 0x%x[%d] --> 0x%x[%d] top=%x\x1b[0m\n",
 	  oldstack, oldsize, newstack, newsize, top);
   while (stk<oldsp) *newgcsp++= *stk++;
   collector_stack=newstack;
@@ -111,26 +111,45 @@ static struct _marking_state {
   int cur_mut_num;
 } marking_state;
 
-
 struct _sweeping_state sweeping_state;
 
-static int mark_a_little()
+static inline void go_on_to_sweep_phase()
+{
+  numunion nu;
+  DPRINT2("mark->sweep: free rate = %lf", (double)freeheap / totalheap);
+  gcmerge = totalheap * min(1.0, fltval(speval(GCMARGIN)))
+    * max(0.1, fltval(speval(GCMERGE))); 
+  /* default: GCMERGIN=0.25, GCMERGE=0.2 
+     ==> no merge if heap occupancy rate is over 95% */
+  dispose_count = 0; /* <= Is this O.K.? */
+
+  sweeping_state.chp = chunklist;
+  sweeping_state.p = &chunklist->rootcell;
+  sweeping_state.tail = 
+    (bpointer)((int)sweeping_state.p + (buddysize[sweeping_state.chp->chunkbix] << 2));
+  gc_phase = PHASE_SWEEP; 
+}
+
+long marked_words = 0;
+
+static int mark_a_little(int m_unit)
 {
   extern _end();
   register ms_entry *lgcsp = collector_sp;
   register ms_entry *gcstack = collector_stack;
-  register int credit = M_UNIT;
+  register int credit = m_unit;
   unsigned int offset;
   register pointer p, p2;
   register bpointer bp;
   register int i, s;
   context *ctx;
-  numunion nu;
 
  markloop:
   if(credit <= 0){ 
     /* write back the value of lgcsp */
+  //fprintf(stderr, "GC stack size = %d\n", lgcsp - gcstack);
     collector_sp = lgcsp;
+    marked_words -= m_unit - credit;
     return 1; /* still marking work is left */
   }
   if(lgcsp > gcstack){
@@ -181,14 +200,14 @@ static int mark_a_little()
       if(s > 300){
         fprintf (stderr, "do_mark: too big object s=%d, header=%x at %x\n", 
 		s, bp->h, bp);
-        goto markloop;
+        //goto markloop;
       }
       while(lgcsp + s > collector_stacklimit){
         pnewgcstack(lgcsp);
         gcstack = collector_stack;
         lgcsp = collector_sp;
       }
-      credit -= s;
+      credit -= (s + 1);
       for(i = 0; i < s; i++){
         p2 = p->c.obj.iv[i];
         if(ispointer(p2)) 
@@ -202,7 +221,7 @@ static int mark_a_little()
         gcstack = collector_stack;
         lgcsp = collector_sp; /* 961003 kagami */
       }
-      credit -= s;
+      credit -= (s + 2);
       for (i = 0; i < s; i++) {
         p2 = p->c.vec.v[i];
         if (ispointer(p2))
@@ -211,12 +230,14 @@ static int mark_a_little()
       goto markloop;
     } 
 
+    credit -= buddysize[bp->h.bix & TAGMASK];
     goto markloop;
 
   } else {
 
   /* get another root */
   next_root:
+    credit--;
     if (!marking_state.is_checking_pstack) {
       for (i = marking_state.cur_mut_num; i < MAXTHREAD; i++) {
         ctx = euscontexts[i];
@@ -229,6 +250,15 @@ static int mark_a_little()
 
             offset = 0;
             marking_state.cur_mut_num = i;
+/*
+  if(credit <= 0){ 
+    // write back the value of lgcsp
+    gcpush(p, 0);
+    collector_sp = lgcsp;
+    marked_words -= m_unit - credit;
+    return 1; // still marking work is left
+  }
+          */
             goto start_mark;
           }
         }
@@ -237,13 +267,13 @@ static int mark_a_little()
       goto next_root;
     } else {
       mutex_lock(&pstack_lock);
-      if(psp > pstack){
+      if(psp > pstack) {
 #ifdef COLLECTCACHE /* this is not yet correctly implemented */
 #define COLCACHE 10
         int i, ii;
         pointer array[COLCACHE];
-        for(i = 0; i < COLCACHE; i++){
-          array[i] = pointerpop();
+        for (i = 0; i < COLCACHE; i++) {
+          pointerpop(array[i]);
           if(psp > pstack)
         continue;
           break;
@@ -255,9 +285,18 @@ static int mark_a_little()
         }
         mutex_lock(&pstack_lock);
 #else
-        p = pointerpop();
+        pointerpop(p);
         offset = 0;
         mutex_unlock(&pstack_lock);
+/*
+  if (credit <= 0) { 
+    // write back the value of lgcsp
+    gcpush(p, 0);
+    collector_sp = lgcsp;
+    marked_words -= m_unit - credit;
+    return 1; // still marking work is left
+  }
+  */
         goto start_mark;
 #endif
       }
@@ -266,20 +305,10 @@ static int mark_a_little()
   }
 
   /* marking finished, now we prepare for following sweeping */
-  DPRINT("before sweeping: free rate = %lf", (double)freeheap / totalheap);
-  gcmerge = totalheap * min(1.0, fltval(speval(GCMARGIN)))
-    * max(0.1, fltval(speval(GCMERGE))); 
-  /* default: GCMERGIN=0.25, GCMERGE=0.2 
-     ==> no merge if heap occupancy rate is over 95% */
-  dispose_count = 0; /* <= Is this O.K.? */
-
-  sweeping_state.chp = chunklist;
-  sweeping_state.p = &chunklist->rootcell;
-  sweeping_state.tail = 
-    (bpointer)((int)sweeping_state.p + (buddysize[sweeping_state.chp->chunkbix] << 2));
-  gc_phase = PHASE_SWEEP; 
+  go_on_to_sweep_phase();
   return 0; 
 }
+
 
 int reclaim(bpointer p)
 {
@@ -317,6 +346,8 @@ int reclaim(bpointer p)
   return 0;
 }
 
+static int rgc_credit = 0;
+
 /* the cell pointed by 'p' must not be marked */
 /* mergecell kindly returns next uncollectable cell address */
 static bpointer mergecell(register bpointer p, int cbix)
@@ -327,11 +358,12 @@ static bpointer mergecell(register bpointer p, int cbix)
   while (p->h.b == 0 && ((int) (p->h.bix & TAGMASK)) < cbix) {
 //     if (colored(np)) return np;
 //    if (marked(np)) return np;
+    rgc_credit--;
     if (marked(np) || np->h.cix == -1) return np;
     if (np->h.nodispose == 1) return np;
 
     p2 = mergecell(np, cbix); /* merge neighbor cell */
-    if (np->h.b == 1) { /* can be merged */
+    if (np->h.b == 1 && rgc_credit >= 0) { /* can be merged */
 	  p->h.b = p->h.m; /* merge them into bigger cell */
       p->h.m = np->h.m;
       p->h.bix++;
@@ -352,12 +384,12 @@ static bpointer mergecell(register bpointer p, int cbix)
  *                sweeping_state.chp,
  *                sweeping_state.tail } are correctly set.
  */
-static int sweep_a_little(int gcmerge)
+static int sweep_a_little(int gcmerge, int s_unit)
 {
   register struct chunk *chp;
-  register int credit = S_UNIT;
   register bpointer p, np, tail;
   
+  rgc_credit = s_unit;
   /* restore the state of sweeper */
   chp = sweeping_state.chp;
   p = sweeping_state.p;
@@ -371,7 +403,7 @@ static int sweep_a_little(int gcmerge)
 cont_sweep:
   /* continue sweeping */
   while (p < tail) {
-    if (credit <= 0) {
+    if (rgc_credit <= 0) {
       sweeping_state.p = p;
       sweeping_state.tail = tail;
       return 1;
@@ -379,7 +411,7 @@ cont_sweep:
 //#ifndef __USE_MARK_BITMAP
 //    sweeping_state.p = p;
 //#endif
-    credit--;
+    rgc_credit--;
     if (p->h.cix == -1) { /* free object */
 #ifdef GCDEBUG
       free_cells++;
@@ -420,8 +452,8 @@ cont_sweep:
 next_chunk:
   chp = sweeping_state.chp->nextchunk;
   if (chp == NULL) {
-    DPRINT("sweeping finished: free rate = %lf", (double)freeheap / totalheap);
-    DPRINT("white: %d black: %d free: %d", white_cells, black_cells, free_cells);
+    DPRINT2("sweeping finished: free rate = %lf", (double)freeheap / totalheap);
+    DPRINT2("white: %d black: %d free: %d", white_cells, black_cells, free_cells);
     gc_phase = PHASE_EPILOGUE;
     return 0; /* sweeping finished */
   }
@@ -463,6 +495,7 @@ void init_rgc(){
 #endif
   init_sync_data();
   initmemory_rgc(); /* initialize object heap. define in "eus.c" */
+  init_utils();
 #ifdef __USE_MARK_BITMAP
   allocate_bit_table(); /* allocate mark bit table */
   clear_bit_table();
@@ -478,11 +511,30 @@ void init_rgc(){
 #endif
 }
 
+static pointer rgc_classtable = NULL;
+
+void rgc_add_to_classtable(pointer newclass) {
+  static int clsidx = 0;
+  int i;
+  /* allocate class table for marking */
+  if (rgc_classtable == NULL) {
+    rgc_classtable = 
+      rgc_alloc((MAXCLASS + 1), ELM_POINTER, vectorcp.cix, MAXCLASS + 1);
+    rgc_classtable->c.vec.size = makeint(MAXCLASS);
+    for (i = 0; i < MAXCLASS; i++)
+      rgc_classtable->c.vec.v[i] = NIL;
+  }
+  rgc_classtable->c.vec.v[clsidx++] = newclass;
+}
+
 static void scan_global_roots()
 {
   int i;
   pointerpush(sysobj);
   pointerpush(pkglist);
+  /* minimize scanning time for class table */
+  pointerpush(rgc_classtable);
+  /*
   for(i = 0; i < MAXCLASS; i++){
     if(ispointer(classtab[i].def)){
       pointerpush (classtab[i].def);
@@ -491,6 +543,7 @@ static void scan_global_roots()
 //      ASSERT((unsigned)(classtab[i].def) < maxgcheap);
     }
   }
+  */
 }
 
 static void scan_local_roots(int i)
@@ -513,7 +566,7 @@ static void scan_local_roots(int i)
   {
     pointer *frame_base, *p;
 
-    //DPRINT("start scanning current frame: %d ",i);
+    //DPRINT3("start scanning current frame: %d ",i);
     mutex_lock(&ctx->rbar.lock); /* <-- this lock wouldn't be needed */
 
     if (ctx->callfp != NULL) 
@@ -548,7 +601,7 @@ static void scan_local_roots(int i)
       ctx->rbar.pointer = frame_base;
     }
     mutex_unlock(&ctx->rbar.lock); /* <-- this lock wouldn't be needed */
-    //DPRINT("scanning current frame completed");
+    //DPRINT3("scanning current frame completed");
   }
 
 #else /* original snapshot gc */
@@ -624,7 +677,7 @@ static void scan_remaining_roots()
       if ((ctx)->rbar.pointer == NULL) continue;
       
       mutex_lock(&((ctx)->rbar.lock));
-      //DPRINT("scheduler inserting thread : %d's local roots", i);
+      //DPRINT3("scheduler inserting thread : %d's local roots", i);
       p = (ctx)->rbar.pointer - 1;
       counter = INSERT_UNIT;
 
@@ -654,21 +707,25 @@ static void scan_remaining_roots()
 }
 #endif /* __RETURN_BARRIER */
 
-
+unsigned int gs[MAXTHREAD];
 /*
  * suppose that we don't have collector_lock
  */
 void notify_gc()
 {
   int id, phase, c;
+  unsigned int s, e;
 //  unlock_collector;
   /* reset synchronization variables */
-  lock_collector;
-  if (gc_phase != PHASE_NOGC) {
+//  lock_collector;
+/*  if (gc_phase != PHASE_NOGC) {
     unlock_collector;
     return;
   }
-  
+*/
+  id = thr_self(); 
+//  gs[id] = current_utime();
+
   gc_phase = PHASE_PROLOGUE;
   gc_point_sync = 0;
   phase = ri_core_phase;
@@ -694,6 +751,7 @@ void notify_gc()
 #endif
   marking_state.is_checking_pstack = 0;
   marking_state.cur_mut_num = 0;
+  marked_words = 0;
   unlock_collector;
   
   do {
@@ -714,7 +772,9 @@ void notify_gc()
   lock_collector;
   while (phase == ri_core_phase) 
     cond_wait(&ri_end_cv, &collector_lock); 
-  unlock_collector;
+//  unlock_collector;
+//  e = current_utime();
+//  if(id == 0)fprintf(stderr, " (%d:%d) ", e - gs[id], id);
 }
 
 
@@ -722,8 +782,9 @@ void notify_gc()
 static void do_scan_roots()
 { 
   int tid;
+  unsigned int s, e;
 
-  //  gs = current_utime();
+    //s = current_utime();
   scan_global_roots();
 
   /* write barriers get activated */
@@ -739,8 +800,8 @@ static void do_scan_roots()
       mutex_unlock(&mut_stat_table[tid].lock);
     }
   }
-  //  ge = current_utime();
-  //  fprintf(stderr, "stopped: %d\n", ge - gs);
+    //e = current_utime();
+    //fprintf(stderr, "stopped: %d\n", e - s);
 
   gc_request_flag = 0;
   ri_core_phase = 1 - ri_core_phase; /* release other mutator threads */
@@ -748,7 +809,7 @@ static void do_scan_roots()
   cond_broadcast(&ri_end_cv);
   gc_wakeup_cnt++; /* now, we release collector threads */
   cond_broadcast(&gc_wakeup_cv);
-  DPRINT("do_scan_roots finished: free rate = %lf", (double)freeheap / totalheap);
+  DPRINT2("root scan finished: free rate = %lf", (double)freeheap / totalheap);
 }
 
 
@@ -786,6 +847,14 @@ static void wait_until_next_gc_cycle()
 
 static int do_gc_epilogue()
 {
+  /*
+    if (gc_net_free < 0.8) { // hard external fragmentation
+      DPRINT1("\x1b[1;31mexpand heap(do_gc_epilogue, free/total=%d/%d)\x1b[0m",
+	      freeheap, totalheap);
+      newchunk(DEFAULT_EXPAND_SIZE_IDX);
+      //do_allocate_heap(totalheap * (0.9 - gc_net_free));
+    }
+  */
 #ifdef __USE_MARK_BITMAP
     clear_bit_table();
 #endif
@@ -808,12 +877,14 @@ static int do_gc_epilogue()
     breakck;
 */
 
-    DPRINT("epilogue finished: free rate = %lf", (double)freeheap / totalheap);
+    DPRINT2("GC cycle finished: free rate = %lf", (double)freeheap / totalheap);
     return 0;
 }
 
-void do_a_little_gc_work()
+void do_a_little_gc_work(int m_unit, int s_unit)
 {
+  unsigned int s, e;
+//  s = current_utime();
   switch (gc_phase) {
     case PHASE_ROOT_REM:
 #ifdef __RETURN_BARRIER
@@ -822,16 +893,19 @@ void do_a_little_gc_work()
       gc_phase = PHASE_MARK;
       break;
     case PHASE_MARK:
-      mark_a_little();
+      mark_a_little(m_unit);
     break;
     case PHASE_SWEEP:
-      sweep_a_little(gcmerge);
+      sweep_a_little(gcmerge, s_unit);
     break;
     case PHASE_EPILOGUE:
       do_gc_epilogue();
     default: 
       ;
   }
+//  e = current_utime();
+//  if(e-s > 100) printf("<<%d, %d::%d, %d>>\n", e-s, gc_phase,
+//      rgc_credit, marking_state.is_checking_pstack);
 }
 
 void collect()
@@ -841,7 +915,6 @@ void collect()
 
 #ifdef __PROFILE_GC
   int tmp_free;
-  struct tms buf1, buf2;
   reset_utime(); /* for rdtsc */
 #endif
 
@@ -862,8 +935,10 @@ void collect()
     }
 
     while (gc_phase != PHASE_NOGC) {
-      do_a_little_gc_work();
+     // printf(".");fflush(stdout);
+      do_a_little_gc_work(M_UNIT, S_UNIT);
       unlock_collector;
+      //usleep(0);
       lock_collector;
     };
     unlock_collector;
@@ -876,7 +951,7 @@ void collect()
     //    tmp_free = freeheap;
 #endif
 
-    //    DPRINT("took %d micro, not gc consump_rate %f", 
+    //    DPRINT3("took %d micro, not gc consump_rate %f", 
     //            e-s, (float)(tmp_free-freeheap)/(e-s));
   }
   
@@ -889,7 +964,7 @@ static int change_collector_thread_sched_policy(int t_sect_length)
 {
 #ifdef __ART_LINUX
   if(art_enter(ART_PRIO_MAX, ART_TASK_PERIODIC, t_sect_length) == -1){
-    DPRINT("collector error: art_enter");
+    DPRINT2("collector error: art_enter");
     return -1;    
   }
 #else /* LINUX */
@@ -900,7 +975,7 @@ static int restore_collector_thread_sched_policy()
 {
 #ifdef __ART_LINUX
   if(art_exit() == -1){
-    DPRINT("collector error: art_exit");
+    DPRINT2("collector error: art_exit");
     return -1;    
   }
 #else /* LINUX */
@@ -956,6 +1031,7 @@ void exit_gc_region(int id)
 
 #endif /* __USE_POLLING */
 
+int ps_sem = 1;
 /* initialize data for syncronization */
 static void init_sync_data()
 {
@@ -978,8 +1054,12 @@ static void init_sync_data()
 void scan_roots()
 {
   int c;
-  //  int myid = thr_self();
+  unsigned int e;
+  int myid = thr_self();
   int phase = ri_core_phase;
+
+  myid = thr_self();
+  //gs[myid] = current_utime();
 
   do {
     c = gc_point_sync;
@@ -999,6 +1079,8 @@ void scan_roots()
   while (phase == ri_core_phase)
     cond_wait(&ri_end_cv, &collector_lock);
   unlock_collector;
+  //e = current_utime();
+  //if(myid == 0)fprintf(stderr, " (%d:%d) ", e-gs[myid], myid);
   
   return;
 }
@@ -1021,17 +1103,17 @@ int check_gc_request()
 void sighandler(int x)
 {
   int idx;
-  DPRINT("start root insersion");
+  DPRINT2("start root scanning");
   notify_ri_start();
   idx = thr_self();
   scan_local_roots(thr_self());
   barrier_wait(end_ri_barrier);
-  DPRINT("mutator restart");
+  DPRINT2("mutators restart");
 }
 #endif
 
 /* MAXSTACK 65536 */
-#define PMAXSTACK (MAXSTACK*110)
+#define PMAXSTACK (MAXSTACK * 110)
 pointer pstack[PMAXSTACK];
 volatile pointer *psp = pstack;
 pointer *pstacklimit = pstack + PMAXSTACK;
@@ -1132,7 +1214,7 @@ pointer RGCCOUNT(register context *ctx, int n, pointer argv[])
   return makeint(gc_cmp_cnt);
 }
 
-pointer RGC_MUTTIME(register context *ctx, int n, pointer argv[])
+pointer RGC_GCTIME(register context *ctx, int n, pointer argv[])
 {
   struct tms buf;
   ckarg(0);
@@ -1153,7 +1235,7 @@ void rgcfunc(register context *ctx, pointer mod)
   pointer p = Spevalof(PACKAGE);
   pointer_update(Spevalof(PACKAGE), syspkg);
   defun(ctx, "RGCCOUNT", mod, RGCCOUNT);
-  defun(ctx, "RGCTIME", mod, RGC_MUTTIME);
+  defun(ctx, "RGCTIME", mod, RGC_GCTIME);
 #ifdef __PROFILE_GC
   defun(ctx, "RGCALLOCATED", mod, RGCALLOCATED);
 #endif

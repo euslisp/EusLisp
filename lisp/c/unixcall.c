@@ -107,7 +107,7 @@ pointer argv[];
   register pointer t;
   long et;
   ckarg(0);
-  et=times(&buffer);
+  GC_REGION(et=times(&buffer););
   t=cons(ctx,makeint(buffer.tms_cstime),NIL);
   t=cons(ctx,makeint(buffer.tms_cutime),t);
   t=cons(ctx,makeint(buffer.tms_stime),t);
@@ -121,7 +121,7 @@ int n;
 pointer argv[];
 { struct tms buffer;
   ckarg(0);
-  times(&buffer);
+  GC_REGION(times(&buffer););
   return(makeint(buffer.tms_utime+buffer.tms_stime));}
 
 pointer LOCALTIME(ctx,n,argv)
@@ -417,7 +417,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { int completion=0, stat;
-  stat = wait(&completion);
+  GC_REGION(stat = wait(&completion););
   return(cons(ctx,makeint(stat),
 	 cons(ctx,makeint(completion),NIL)));}
 
@@ -1311,7 +1311,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { ckarg(1);
-  sleep(ckintval(argv[0]));
+  GC_REGION(sleep(ckintval(argv[0])););
   return(T);}
 
 #if sun3 || sun4 && !Solaris2 || Linux || alpha || Cygwin
@@ -1320,7 +1320,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { ckarg(1);
-  usleep(ckintval(argv[0]));
+  GC_REGION(usleep(ckintval(argv[0])););
   return(T);}
 #endif
 

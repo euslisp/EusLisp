@@ -9,10 +9,15 @@
 /*
  * debugging tools
  */
-#ifdef __DEBUG
-#define DPRINT debug_printf
-#else 
-#define DPRINT
+#if (__DBG_LV == 1)
+#define DPRINT1 debug_printf
+#define DPRINT2 debug_printf
+#elif (__DBG_LV == 2)
+#define DPRINT1 
+#define DPRINT2 debug_printf
+#else
+#define DPRINT1 
+#define DPRINT2
 #endif
 
 //#define NDEBUG
@@ -28,10 +33,7 @@
 
 
 /* performance evaluation tools */
-#ifdef __USE_RDTSC
-void reset_utime();
-#endif
-
+void init_utils();
 unsigned current_utime();
 
 #ifdef __PAPI
