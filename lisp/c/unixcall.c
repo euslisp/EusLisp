@@ -463,7 +463,7 @@ pointer GETPGRP(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-#if system5 | Linux
+#if system5 | Linux | Cygwin
 { ckarg(0);
   return(makeint(getpgrp()));}
 #else
@@ -474,7 +474,7 @@ pointer argv[];
 #endif
 
 pointer SETPGRP(context *ctx, int n, pointer *argv)
-#if system5 | Linux
+#if system5 | Linux | Cygwin
 { ckarg(0);
   return(makeint(setpgrp()));}
 #else
