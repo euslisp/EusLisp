@@ -1,0 +1,34 @@
+#	Makefile for Snapshot with Return-barrier GC
+#	R.Hanai
+#
+#	Compile options:
+#
+#	COLLECTCACHE
+#
+#	__USE_MARK_BITMAP:  mark bits are prepared on byte map, not in object headers.
+#	(__HEAP_EXPANDABLE can't be used.)
+#	__HEAP_EXPANDABLE:  make heap expandable to lower heap occupancy rate.
+#	__RETURN_BARRIER:   scan stacks incrementally.
+#	__USE_SIGNAL:       use signal to notify mutators of the start of new gc cycle.
+#	__USE_POLLING:      (__USE_SIGNAL or __USE_POLLING must be specified.)
+#	__ADVANCED_COLLECTOR_CONTROL: not used
+#
+
+RGCFLAGS= -DRGC -D__USE_POLLING -D__USE_MARK_BITMAP -D__PROFILE_GC -D__RETURN_BARRIER
+RGCFLAGS2= -DGCC -D__EXTENSIONS__
+CFLAGS+=$(RGCFLAGS) $(RGSFLAGS2)
+
+#CC=gcc 
+O2FLAGS=-O2 # for xccmem.h
+
+RGCOBJECTS= $(OBJDIR)/collector.o $(OBJDIR)/rgc_utils.o $(OBJDIR)/external_markbits.o
+$(RGCOBJECTS):	$(CDIR)/eus.h $(CDIR)/rgc_utils.h $(CDIR)/collector.h
+	(cd $(CDIR); \
+	 $(CC) -c -o $(OBJDIR)/$(*F).o $(O2FLAGS) $(CFLAGS) $(RGCFLAGS) $(RGCFLAGS2) $(*F).c)
+
+# dependency
+$(OBJDIR)/collector.o:	$(CDIR)/collector.c
+$(OBJDIR)/rgc_utils.o:	$(CDIR)/rgc_utils.c
+$(OBJDIR)/external_markbits.o:	$(CDIR)/external_markbits.c
+
+#MTCOBJECTS+=$(RGCOBJECTS)
