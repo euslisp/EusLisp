@@ -48,6 +48,9 @@ extern pointer QPARAGC;
 extern pointer K_DISPOSE;
 
 char *maxmemory=(char *)0x100000;
+#if Cygwin
+char *minmemory=(char *)0xffffffff;
+#endif
 long freeheap=0,totalheap=0;	/*size of heap left and allocated*/
 struct chunk *chunklist=NULL;
 /* timers */
