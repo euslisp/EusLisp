@@ -1,0 +1,88 @@
+Snapshot Return-Barrier GC -  R.Hanai 2004/5/18
+
+
+<主なコンパイルオプション>
+__USE_POLLING: GCを開始するための同期にスレッドを用いる。必ず指定する。
+
+__GC_SEPARATE_THREAD: GCの処理を別スレッドで行う。
+__GC_ALLOC_DRIVEN: GCの処理をメモリ要求時に行う。GCスレッドは生成されない。
+    __GC_SEPARATE_THREADか__GC_ALLOC_DRIVENのどちらかを指定する。
+
+__USE_MARK_BITMAP: マークビットとしてビットマップを使用する。
+指定しなければ、オブジェクトのヘッダにあるマークビットを使う。
+元々、バグ回避のために導入したが、バグを追及した結果、オブジェクトヘッダにある
+マークビットを使っても問題なくなった。性能的な違いは未調査。
+
+__HEAP_EXPANDABLE: ヒープを拡張可能にする。これを使用するときには、
+__USE_MARK_BITMAPを指定してはいけない。テストが不十分なので、拡張時に
+トラブルがあるかもしれない。
+
+__RETURN_BARRIER: スタックのスキャンをインクリメンタルに行う。
+より小さい停止時間を追及する場合に指定する。
+
+
+<典型的なオプション指定例>
+ヒープを拡張可能にしたい場合：
+RGCFLAGS= -D__RGC -D__PROFILE_GC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD
+
+拡張可能にする必要がない場合：(どちらかというとこちらの方が安定していると思われる)
+RGCFLAGS= -D__RGC -D__PROFILE_GC -D__USE_POLLING -D__USE_MARK_BITMAP -D__GC_SEPARATE_THREAD -D__RETURN_BARRIER
+
+最後の -D_RETURN_BARRIER リターンバリアを使いたいかどうかによる。
+ただし、今のところ -D__HEAP_EXPANDABLE と -D__RETURN_BARRIER を両方指定すると
+上手く動かないので注意。
+
+
+<その他>
+初期ヒープサイズは collector.h にある INITIAL_HEAP_SIZE で指定。
+GCを開始するタイミングは今のところ、単純に、空き領域のサイズが
+ヒープサイズの一定割合を下まわったとき。この割合は DEFAULT_GC_THRESHOLD
+で指定。
+
+ヒープの拡張についても、今は、空きがない場合に固定サイズの chunk をシステムから
+とってくるだけ。このサイズはDEFAULT_EXPAND_SIZE_INDEXで指定。
+
+(gc) 今のところ、明示的にGCを行わせる関数は使えません。
+
+
+<GCの内部情報の表示>
+
+今までと同じように、
+eus 起動後に (setq *debug* t) とすると、
+GC終了時の、ヒープのサイズと空き領域のサイズが表示される。
+
+また、コンパイルオプションに __DEBUG を指定するとGCの各フェーズのもう少し詳細な
+情報が出力される。
+
+GCHOOKで任意のLisp関数を実行できるようにしようと考えたが、GCを別スレッドで
+行っている場合、GCを行ったスレッドがLispのコンテキストを持っていないため、
+元の eus のように実装することはできない。
+したがって、この機能はまだサポートしていない。
+
+
+<主な変更個所>
+Makefile => Makefile.Linux.rgc をインクルードするように修正
+c/eus.h => 少し変更(#ifdef RGC) 
+c/eus.c => 少し変更(#ifdef RGC)
+c/memory.c => 少し変更(#ifdef RGC)
+
+その他のいくつかのファイルに共通する変更
+ライトバリア： 特定の代入文 l = r  =>  pointer_update(l,r) と変更
+ポーリング：GC_POINT; を挿入
+イベント待ち箇所：複文  =>  GC_REGION(複文) と変更
+
+comp/comp.l ライトバリアコードを挿入するように，変更
+(キーワード：noticeCollector,#+:rgc,#-rgc)
+
+以下のファイルを追加
+
+Makefile.Linux.rgc
+c/collector.h
+c/collector.c => GC本体
+c/rgc_mem.c => 元のmemory.cの一部の関数を修正個所が多くなるのでコピーし、修正した。
+c/rgc_util.h 
+c/rgc_util.c => 主に，デバッグ，性能測定用ツール群
+c/external_markbits.h
+c/external_markbits.c => マーク用ビットマップ
+c/xccmem.h => GCCのasm文を用いた，共有メモリ命令記述マクロ
+
