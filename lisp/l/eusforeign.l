@@ -2,7 +2,8 @@
 ;;;;	Foreign language interface
 ;;;;	1987-SEP-25
 ;;;;	Copyright Toshihiro MATSUI
-;;;;
+;;;;	2004-Dec-17 i386 interface is added by T. Matsui
+
 (in-package "LISP")
 (eval-when (load eval)
 #-(or :solaris2 :linux :irix :irix6 :sunos4.1 :alpha :cygwin)
@@ -149,39 +150,39 @@
 ;(eval-when (compile)
 ;  (defclass foreign-pod :super symbol :slots (podcode paramtypes resulttype)))
 
+(defun byte-string (&rest bytes)
+   (make-array (length bytes) :element-type :char :initial-contents bytes))
+
 (defmethod foreign-pod
  (:pod-address () (+ 8 (sys:address podcode)))
  (:init (param result func)
     (let ((self-address (sys:address self)))
-      (cond
-	((memq :sun3 *features*)
+#+:sun3
+      (progn
 	 (inc self-address 2)
-	 (setq podcode (make-string #x36))
-	 (replace  podcode 
-	      (list #x4E #x56 #x00 #x00			;linkw #0,a6
-		    #x48 #x6E #x00 #x08			;pea a6@(8)
-		    #x2F #x3C (ldb self-address 24 8)
-			      (ldb self-address 16 8)
-			      (ldb self-address 8 8)
-			      (ldb self-address 0 8)	;movl #self,sp@-
-		    #x4E #xB9 (ldb *calleus* 24 8)
-			      (ldb *calleus* 16 8)
-			      (ldb *calleus* 8 8)
-			      (ldb *calleus* 0 8)	;jsr _calleus
-		    #x50 #x8F				;addql 8,sp
-		    #x2d #x40 #x00 #x08			;movl d0,a6@(8)
-		    #xf2 #x2e #x44 #x00 #x00 #x08	;fmoves a6@(8),fp0
-		    #x4E #x5E				;unlk a6
-		    #x4E #x75				;rts
-		    )))
-	((memq :sun4 *features*)
-	 (setq podcode (make-string #x48))	;18 long words
+	 (setq podcode (byte-string
+	        #x4E #x56 #x00 #x00			;linkw #0,a6
+		#x48 #x6E #x00 #x08			;pea a6@(8)
+		#x2F #x3C (ldb self-address 24 8)
+		      (ldb self-address 16 8)
+		      (ldb self-address 8 8)
+		      (ldb self-address 0 8)	;movl #self,sp@-
+		#x4E #xB9 (ldb *calleus* 24 8)
+		      (ldb *calleus* 16 8)
+		      (ldb *calleus* 8 8)
+		      (ldb *calleus* 0 8)	;jsr _calleus
+		#x50 #x8F				;addql 8,sp
+		#x2d #x40 #x00 #x08			;movl d0,a6@(8)
+		#xf2 #x2e #x44 #x00 #x00 #x08	;fmoves a6@(8),fp0
+		#x4E #x5E				;unlk a6
+		#x4E #x75				;rts
+		)))
+#+:sun4
 	 (let ( (self-address-high (ldb self-address 10 22))
 		(self-address-low (ldb self-address 0 10))
 		(calleus (ash (- *calleus* (+ (sys:address podcode) 8 44))
 			      -2)))
-	     (replace  podcode
-		(list
+	   (setq podcode (byte-string	;18 long words
 		 #x03 #x3F #xFF #xFF	;sethi
 		 #x82 #x00 #x63 #xA0	;add
 		 #x9D #xE3 #x80 #x01	;save
@@ -204,8 +205,40 @@
 		 #xc1 #x07 #xa0 #x44	;ldf
 		 #x81 #xC7 #xE0 #x08	;ret
 		 #x81 #xE8 #x00 #x00	;restore
-		))))
-	(t (error "not yet implemented for this processor")))
+		)))
+#+:i386
+	(let ((calleus-offset 0))
+	   (setq podcode (byte-string
+		;; #x83 #xec #x08
+		#x8d #x54 #x24 #x04
+		#x52
+		#x68  (ldb self-address 0 8)
+		(ldb self-address 8 8) 
+		(ldb self-address 16 8)
+		(ldb self-address 24 8) 
+		#xe8 0 0 0 0
+		#x89 #x44 #x24 #x04
+		#xd9 #x44 #x24 #x04
+		#x5a #x5a #xc3))
+	;;  10 0000 8D542404              leal    4(%esp), %edx
+	;;  11 0004 52                    pushl   %edx
+	;;  12 0005 68785634              pushl   self
+	;;  12      12
+	;;  13 000a E8745634              call    calleus (relative)
+	;;  13      12
+	;;  14 000f 89442404              movl    %eax,4(%esp)
+	;;  15 0013 D9442404              flds    4(%esp)
+	;;  16 0017 83C408                addl    $8,%esp
+	;;  17 001a C3                    ret
+	   (setq calleus-offset (- *calleus* (+ (sys:address podcode) 8 15)))
+	   (replace podcode
+		    (list
+			(ldb calleus-offset 0 8) (ldb calleus-offset 8 8)
+			(ldb calleus-offset 16 8)  (ldb calleus-offset 24 8))
+		    :start1 11)
+	   podcode)
+#-(or :sun3 :sun4 :i386)
+	 (error "not yet implemented for this processor")
       (cond 
 	 ((listp func)
 	   (if (eq (car func) 'lisp:lambda-closure)

@@ -204,7 +204,13 @@ struct bindframe *lex,*declscope;
       else error(E_MULTIDECL);
     p=p->lexblink;}
   /*not found in declare scope*/
-  if (var->c.sym.vtype>= V_SPECIAL /* V_GLOBAL */) {
+  if (var->c.sym.vtype>= /* V_SPECIAL */  V_GLOBAL ) {
+	/* For defun-c-callable in eusforeign.l to create a foreign-pod,
+		global value of SYMBOL must be replaced with FOREIGN-POD
+		by let binding.  Since SYMBOL is V_GLOBAL, special binding
+		(global binding) must be made for V_GLOBAL.  Proclaiming
+		symbol as SPECIAL is no use, since INTERN does not refer
+		thread local binding. */		
     bindspecial(ctx,var,val);
     return(ctx->bindfp);}
   return(fastbind(ctx,var,val,lex));}
@@ -638,7 +644,7 @@ pointer args[];
       else  cargv[i++]=(integer_t)(lisparg->c.str.chars);}
     else if (p==K_FLOAT) {
       numbox.f=ckfltval(lisparg);
-      cargv[i++]=(int)numbox.i.i1; }
+      cargv[i++]=(int)numbox.i.i1;}
     else if (p==K_DOUBLE) {
       numbox.d=ckfltval(lisparg);
       cargv[i++]=numbox.i.i1; cargv[i++]=numbox.i.i2;}
@@ -649,6 +655,7 @@ pointer args[];
     if (isint(lisparg)) cargv[i++]=intval(lisparg);
     else if (isflt(lisparg)) {
       numbox.d=ckfltval(lisparg);	/* i advances independently */
+      numbox.f=ckfltval(lisparg);
       cargv[i++]=numbox.i.i1; cargv[i++]=numbox.i.i2;}
     else if (isvector(lisparg)) {
       if (elmtypeof(lisparg)==ELM_FOREIGN)
