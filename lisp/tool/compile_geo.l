@@ -2,6 +2,7 @@
 ;;;  
 ;;;
 (setq user::*NOWDIR* (unix:getenv "PWD"))
+(setq compiler::*kernel* t)
 
 ;;; change directory to "geo"
 (unix:chdir *EUSDIR*)
