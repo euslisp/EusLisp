@@ -1128,7 +1128,7 @@ atomic_write_long_long((loc), (v))
 #define release_lock(loc) xcc_release_lock(&(loc))
 
 #define RWLOCK_INITIALIZER xcc_RWLOCK_INITIALIZER
-#define rwlock_t xcc_rwlock_t
+// #define rwlock_t xcc_rwlock_t /* R.Hanai */
 #define try_rlock(loc) xcc_try_rlock(&(loc))
 #define spin_rlock(loc) xcc_spin_rlock(&(loc))
 #define release_rlock(loc) xcc_release_rlock(&(loc))

@@ -528,6 +528,9 @@ typedef struct {
 #else
 	long	extra[10];	/* 32 long words */
 #endif
+#ifdef __GC_ALLOC_DRIVEN
+    int my_gc_pri;
+#endif
         }
 	context;
 

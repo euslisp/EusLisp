@@ -7,23 +7,48 @@
 #define __COLLECTOR_H
 
 #include "rgc_utils.h"
+#include "xccmem.h"
+
+/**
+ * Configuration parameters for RGC
+ * INITIAL_HEAP_SIZE: 
+ * DEFAULT_EXPAND_SIZE_IDX: heap is expanded by this size at a time.
+ * REAL_TIME_ALLOC_LIMIT_IDX: real-time allocation are guranteed
+ *                            up to this size of memory requests.
+ * DEFAULT_GC_THRESHOLD: when heap vacancy rate is below this, 
+ *                       the next gc cycle starts.
+ * R_UNIT: not yet used.
+ * M_UNIT:
+ * S_UNIT:
+ */
 
 //#define INITIAL_HEAP_SIZE 520   //  2M
+//#define INITIAL_HEAP_SIZE 800   //  3M
 //#define INITIAL_HEAP_SIZE 1250  //  5M
 //#define INITIAL_HEAP_SIZE 1800  //
-//#define INITIAL_HEAP_SIZE 2500  // 10M
-#define INITIAL_HEAP_SIZE 5000  // 20M
+#define INITIAL_HEAP_SIZE 2500  // 10M
+//#define INITIAL_HEAP_SIZE 5000  // 20M
 //#define INITIAL_HEAP_SIZE 12600 // 50M
 //#define INITIAL_HEAP_SIZE 25200 // 100M
 
-#define DEFAULT_EXPAND_SIZE_INDEX 22 /* about 344 KB */
-#define DEFAULT_GC_THRESHOLD 0.3
-#define DEFAULT_MAX_RGCSTACK 16384
-#define R_UNIT 0
-#define M_UNIT 800
-#define S_UNIT 1600
-//#define M_UNIT 10000000
-//#define S_UNIT 10000000
+#define DEFAULT_MAX_RGCSTACK 32768 /* 16384 */
+
+#define DEFAULT_EXPAND_SIZE_IDX 24 /* about ??? KB */
+
+#define DEFAULT_GC_THRESHOLD 0.25
+
+#define REALTIME_ALLOC_LIMIT_IDX 12 /* 1131 words */
+/* 12:699, 13:1131, 14:1830, 15:2961, 16:4791.. */
+
+#define GC_ACTIVATE_CUSHION 15 /* 10...20 */
+
+#define M_UNIT 8000 /* 4000 */
+#define S_UNIT 256  /* 128, 256, 512 */
+#define AM_UNIT (M_UNIT)
+#define AS_UNIT (S_UNIT)
+
+#define GC_GRANULARITY 2 /* 2, 4 */
+
 
 extern char *minmemory;
 
@@ -48,6 +73,7 @@ typedef	pthread_cond_t cond_t;
 /* 
  * collector state
  *
+ * Don't edit:
  * the next inequality must be satisfied: 
  * PHASE_ROOT_* > PHASE_MARK > PHASE_SWEEP > PHASE_*
  *           write barrier <=|
@@ -104,7 +130,9 @@ typedef struct {
   }\
 }
 
-/* old version code */
+/* 
+ * old version code 
+ */
 /*
 #define check_return_barrier(ctx) \
 { \
@@ -178,8 +206,8 @@ struct _gc_data {
   int active_mutator_num;
   int gc_counter;
   int gc_point_sync;
-  int gc_region_sync;
-  int ri_core_phase;
+  volatile int gc_region_sync;
+  volatile int ri_core_phase;
   int mut_stat_phase;
 #ifdef __USE_POLLING
   volatile int gc_request_flag;
@@ -191,7 +219,7 @@ struct _gc_data {
   cond_t gc_wakeup_cv;
   int gc_wakeup_cnt;
   int gc_cmp_cnt;
-
+  int gc_net_free;
 };
 
 extern struct _gc_data gc_data;
@@ -218,6 +246,7 @@ extern struct _gc_data gc_data;
 #define gc_wakeup_cv gc_data.gc_wakeup_cv
 #define gc_wakeup_cnt gc_data.gc_wakeup_cnt
 #define gc_cmp_cnt gc_data.gc_cmp_cnt
+#define gc_net_free gc_data.gc_net_free
 
 #define lock_collector mutex_lock(&collector_lock)
 #define unlock_collector mutex_unlock(&collector_lock)
@@ -233,11 +262,12 @@ extern pointer *pstacklimit;
 extern int allocd_words;
 #endif
 
-
 #ifdef __USE_POLLING
 
 #define GC_POINT _check_gc_request()
-#define _check_gc_request() {if(gc_request_flag) scan_roots();}
+#define _check_gc_request() { \
+  if (gc_request_flag) scan_roots(); \
+}
 /* <= memory barrier instructions may be needed */
 #define ENTER_GC_SAFE_REGION(id) enter_gc_region(id)
 #define EXIT_GC_SAFE_REGION(id) exit_gc_region(id)
@@ -256,12 +286,39 @@ extern int allocd_words;
 
 #endif
 
-#define pgpush(v) (*ctx->gsp++=((pointer)v))
-#define pgcpush(v) (ctx->gsp<ctx->gcstacklimit?pgpush(v):error(E_GCSTACKOVER))
-#define pgcpop() (*(--(ctx->gsp)))
-#define ppush(v) (*psp++ = ((pointer)v))
-#define pointerpush(v) (psp<pstacklimit?ppush(v):(pointer)error(E_PSTACKOVER))
-#define pointerpop() (*(--psp))
+#define pgpush(v) ( *ctx->gsp++ = ((pointer)v) )
+#define pgcpush(v) ( ctx->gsp < ctx->gcstacklimit ? \
+    pgpush(v) : error(E_GCSTACKOVER) )
+#define pgcpop() ( *(--(ctx->gsp)) )
+#define ppush(v) ( *psp++ = ((pointer)v) ) 
+
+extern int ps_sem;
+#define busy_sema_wait(k) { \
+  int i; \
+  do { \
+    while ((i = read_volatile_int(k)) <= 0); \
+  } while (cas_int(k, i, i - 1)); \
+  start_access_after_write(); \
+}
+#define busy_sema_post(k) { \
+  int i; \
+  finish_access_before_read(); \
+  do { \
+    i = read_volatile_int(k); \
+  } while (cas_int(k, i, i + 1)); \
+}
+
+#define pointerpush(v) { \
+  busy_sema_wait(ps_sem); \
+  psp < pstacklimit ? ppush(v) : (pointer)error(E_PSTACKOVER); \
+  busy_sema_post(ps_sem); \
+}
+#define pointerpop(lv) { \
+  busy_sema_wait(ps_sem); \
+  lv = *(--psp); \
+  busy_sema_post(ps_sem); \
+}
+
 /*
 #define pgcpush(v, off) \
 { \
@@ -297,26 +354,26 @@ extern int allocd_words;
 #define take_care(p) \
 { \
   if(gc_phase >= PHASE_MARK){ \
-    mutex_lock(&pstack_lock); \
+    mutex_lock(&pstack_lock);  \
     ASSERT((p) == NULL || !ispointer(p) || \
-      ((unsigned)(p)>=mingcheap && ((unsigned)(p)<maxgcheap))); \
+      ((unsigned)(p) >= mingcheap && ((unsigned)(p) < maxgcheap))); \
     pointerpush(p); \
     mutex_unlock(&pstack_lock); \
   } \
 }
 /* 
- * l must not have side effects, 
- * since it is evaluated more than once.
- * r may have side effects, since it is evaluated only once.
+ * 'l' must not have side effects, 
+ * because it is evaluated more than once.
+ * 'r' may have side effects, because it is evaluated only once.
  */
 #define pointer_update(l, r) \
 { \
   if(gc_phase >= PHASE_MARK){ \
-    mutex_lock(&pstack_lock); \
+    mutex_lock(&pstack_lock);  \
     ASSERT((l) == NULL || !ispointer(l) || \
-      ((unsigned)(l)>=mingcheap && ((unsigned)(l)<maxgcheap))); \
+      ((unsigned)(l) >= mingcheap && ((unsigned)(l) < maxgcheap))); \
     pointerpush(l); \
-    mutex_unlock(&pstack_lock); \
+    mutex_unlock(&pstack_lock);  \
   } \
   (l)=(r); \
 }
@@ -325,9 +382,9 @@ extern int allocd_words;
 { \
   if (gc_phase >= PHASE_MARK) { \
     ASSERT((p1) == NULL || !ispointer(p1) || \
-      ((unsigned)(p1)>=mingcheap && ((unsigned)(p1)<maxgcheap))); \
+      ((unsigned)(p1) >= mingcheap && ((unsigned)(p1) < maxgcheap))); \
     ASSERT((p2) == NULL || !ispointer(p2) || \
-      ((unsigned)(p2)>=mingcheap && ((unsigned)(p2)<maxgcheap))); \
+      ((unsigned)(p2) >= mingcheap && ((unsigned)(p2) < maxgcheap))); \
     mutex_lock(&pstack_lock); \
     pointerpush(p1); \
     pointerpush(p2); \
@@ -341,18 +398,19 @@ extern int allocd_words;
 /* this is not safe, since signals might cut in 
  * the execution of write barriers. */
 #define take_care(p){ \
-  if((((unsigned)p)<mingcheap||((unsigned)p>=maxgcheap))&&(p)!=0&&ispointer(p)) \
+  if((((unsigned)p) < mingcheap || ((unsigned)p >= maxgcheap)) \
+      && (p) != 0 && ispointer(p)) \
     hoge(); \
-  if(gc_phase>=PHASE_MARK){ \
+  if(gc_phase >= PHASE_MARK){ \
     mutex_lock(&pstack_lock); \
     pointerpush(p); \
     mutex_unlock(&pstack_lock); \
   } \
 }
 /* 
- * l must not have side effects, 
+ * 'l' must not have side effects, 
  * since they are evaluated more than once 
- * (r is evaluated once.)
+ * ('r' is evaluated once.)
  */
 #endif /* __USE_SIGNAL */
 
