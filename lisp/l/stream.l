@@ -47,14 +47,11 @@
 ;
 (eval-when (load eval)
 (defmethod stream
- (:reset (&optional set)
-    (setq count 0
-	  tail (if set (length buffer) 0))
-    self)
+ (:reset () (setq count 0 tail 0) self)
  (:discard (&optional (n 1))
 	(setq count (max tail (+ count n))))
  (:count () count)
- (:tail (&optional set) (if set (setq tail (length buffer))) tail)
+ (:tail () tail)
  (:chars-left () (- tail count))
  (:tail-string () (subseq buffer count tail))
  (:buffer (&optional start size)
@@ -95,7 +92,7 @@
 	(defconstant F_SETOWN 6)
 	(defconstant O_NONBLOCK #o4))
 
-#-(or :Solaris2 :linux :irix :irix6 :alpha)
+#-(or :Solaris2 :linux :irix :irix6 :alpha :cygwin)
 (progn	(defconstant FASYNC #x40)
 	(defconstant F_GETFL 3)
 	(defconstant F_SETFL 4)
@@ -686,5 +683,5 @@
  )
 
 ;; provide is not yet defined here.
-;; (provide :stream "@(#)$Id: stream.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+;; (provide :stream "@(#)$Id$")
 
