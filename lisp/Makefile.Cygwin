@@ -87,7 +87,7 @@ OFLAGS=-O
 # link-editor's default flags ?-rdynamic 
 #SOFLAGS= -shared --allow-shlib-undefined --warn-unresolved-symbols --unresolved-symbols=ignore-all --warn-once --enable-extra-pe-debug --enable-auto-import
 SOFLAGS= -shared --export-all-symbols --unresolved-symbols=ignore-all
-LDFLAGS= -Xlinker --export-all-symbols
+LDFLAGS= -Xlinker --export-all-symbols --Xlinker
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 MAPOPTION=  $(OBJDIR)/par.o
 
@@ -97,6 +97,8 @@ MAPOPTION=  $(OBJDIR)/par.o
 
 include Makefile.Linux.rgc
 include Makefile.generic2
+
+libeusgl.dll:	$(ADLIBDIR)/libeusgl.dll
 
 $(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(GEOOBJECTS) $(GEOCOBJECTS)  \
 		$(IMGCOBJECTS) $(IMGOBJECTS)
@@ -124,7 +126,7 @@ $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS) $(COMPOBJECTS) \
 		$(LIBEUSGEO) $(LIBEUSX) $(LIBEUSGL) 
-	($(CC) -o $(BINDIR)/eusgl $(LDFLAGS)  \
+	(sh tool/cygwinexe.sh -o $(BINDIR)/eusgl.exe \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
@@ -142,10 +144,11 @@ $(ADLIBDIR)/$(LIBEUSX):
 	@echo ";; Do not compile $(LIBEUSX) for Cygwin"
 
 $(ADLIBDIR)/$(LIBEUSGL):
-	@echo ";; Do not compile $(LIBEUSX) for Cygwin"
-
+	@echo ";; Do not compile $(LIBEUSGL) for Cygwin"
+ 
 $(BINDIR)/eus:
-	@echo ";; Do not compile eus for Cygwin"
+	@echo ";; Do not compile eus for Cygwin, Just symlink"
+	(cd $(BINDIR); rm eus.exe; ln -s eusgl.exe eus.exe)
 
 	
 
