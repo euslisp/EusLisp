@@ -1,8 +1,9 @@
 /* Example for EusLisp foreign language interface
 /* last maintained: 2004-Dec-16 by Toshihiro Matsui, DHRC, AIST
 /* C program named cfunc.c
+/*
 /* Compile this program with the following command line on Linux
-/* % cc -c cfunc.c; ld -o cfunc.so -shared cfunc.o
+/* % cc -c -falign-functions=4 cfunc.c; ld -o cfunc.so -shared cfunc.o
 */
 
 static int (*g)();      /* variable to store Lisp function entry */
@@ -49,8 +50,8 @@ double callfltfunc(double dx)
 (defforeign callfltfunc m "callfltfunc" (:float) :float)
 
 ;; call them
-(sync 1.0)      --> 0.841471
-(print (toupper "abc123"))  --> "ABC123"
+(sync 1.0)     ;; --> 0.841471
+(print (toupper "abc123"))  ;;--> "ABC123"
 
 ;; define a test function which is callable from C.
 (defun-c-callable LISP-INTFUNC ((a :integer)) :integer
@@ -63,7 +64,7 @@ double callfltfunc(double dx)
 ;;  call it from C
 ;;setlfunc remembers the entry address of Lisp TEST function.
 (setlfunc (pod-address 'LISP-INTFUNC))
-(callfunc 12)  --> 144
+(callfunc 12)  ;; --> 144
 (setlffunc (pod-address 'LISP-FLTFUNC))
 (callfltfunc 2.0) 
 ********************************/
