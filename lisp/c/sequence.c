@@ -8,7 +8,7 @@
 /*	1988-July	REPLACE,REMOVE,POSITION,FIND,DELETE
 /*			are made compatible with CommonLisp
 /****************************************************************/
-static char *rcsid="@(#)$Id: sequence.c,v 1.1.1.1 2003/11/20 07:46:25 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
@@ -75,7 +75,7 @@ register int index;
   switch(elmtypeof(vec)) {
     case ELM_INT:   vec->c.ivec.iv[index]=coerceintval(val); return;
     case ELM_FLOAT: vec->c.fvec.fv[index]=ckfltval(val);  return;
-    case ELM_POINTER: vec->c.vec.v[index]=val;  return;
+    case ELM_POINTER: pointer_update(vec->c.vec.v[index],val);  return;
     case ELM_CHAR: case ELM_BYTE:
 		    vec->c.str.chars[index]=coerceintval(val); return;
     case ELM_BIT:   if (coerceintval(val) & 1) 
@@ -221,7 +221,7 @@ pointer argv[];
       case ELM_CHAR: case ELM_BYTE:
 	    for (i=0; i<k; s++,i++) r->c.str.chars[k-i-1]=p[s];
 	    break;
-      default: for (i=0; i<k; s++,i++) r->c.vec.v[k-i-1]=a->c.vec.v[s];
+      default: for (i=0; i<k; s++,i++) pointer_update(r->c.vec.v[k-i-1],a->c.vec.v[s]);
 	       break;}
   return(r);}
    
@@ -238,7 +238,7 @@ pointer argv[];
     i=0; r=a;
     while (islist(r)) { ckpush(ccar(r)); r=ccdr(r); i++;}
     r=a;
-    while (i>0) { ccar(r)=vpop(); r=ccdr(r); i--;}
+    while (i>0) { pointer_update(ccar(r),vpop()); r=ccdr(r); i--;}
     return(a);}
   else if (isarray(a)) {
     if (a->c.ary.rank>makeint(1)) error(E_NOSEQ);
@@ -267,7 +267,7 @@ pointer argv[];
     default:
 	vp=a->c.vec.v;
 	for(i=0; i<kk; i++, s++) {
-	   r=vp[s]; vp[s]=vp[k-i-1]; vp[k-i-1]=r;} 
+	   r=vp[s]; pointer_update(vp[s],vp[k-i-1]); vp[k-i-1]=r;} 
         break; }
     return(a);}
     
@@ -326,8 +326,8 @@ pointer resulttype;
       vpush(r);
       x=(pointer)makeobject(resulttype);
       r=vpop();
-      x->c.cons.car=vpop();
-      x->c.cons.cdr=r;
+      pointer_update(x->c.cons.car,vpop());
+      pointer_update(x->c.cons.cdr,r);
       r=x;}
     return(r);}
   else {
@@ -339,7 +339,7 @@ pointer resulttype;
 			  x=vpop();
 			  r->c.fvec.fv[n]=ckfltval(x);}
 		        return(r);
-      case ELM_POINTER: while (--n>=0) r->c.vec.v[n]=vpop();
+      case ELM_POINTER: while (--n>=0) pointer_update(r->c.vec.v[n],vpop());
 		        return(r);
       case ELM_CHAR: case ELM_BYTE:
 			while (--n>=0) r->c.str.chars[n]=coerceintval(vpop());
@@ -393,7 +393,7 @@ pointer argv[];
     while (i++<start && islist(seq)) seq=ccdr(seq);
     while (start<end) {
       if (!iscons(seq)) break;
-      ccar(seq)=item; seq=ccdr(seq);
+      pointer_update(ccar(seq),item); seq=ccdr(seq);
       start++;}
     return(argv[0]); }
   else if (isvector(seq)) end=min(end,vecsize(seq));
@@ -797,7 +797,7 @@ pointer argv[];
     else testresult=(olditem==testelement);
     if (testresult) {
       count--;
-      if (iscons(seq)) ccar(seq)=newitem;
+      if (iscons(seq)) {pointer_update(ccar(seq),newitem);}
       else if (isvector(seq)) fastvset(seq,start,newitem);
       else error(E_SEQINDEX); }
     if (iscons(seq)) seq=ccdr(seq);
@@ -866,7 +866,7 @@ general_replace:
 			  src=vpop();
 			  dest->c.fvec.fv[--de]=ckfltval(src);}
 			break;
-    case ELM_POINTER: while (count-->0) dest->c.vec.v[--de]=vpop();
+    case ELM_POINTER: while (count-->0) {--de;pointer_update(dest->c.vec.v[de],vpop());}
 			break;
     case ELM_CHAR: case ELM_BYTE: case ELM_FOREIGN:
 			while (count-->0) p[--de]=coerceintval(vpop());
@@ -933,7 +933,7 @@ pointer argv[];
     COMPTYPE=ELM_FIXED;
     qsort(xsp,n,sizeof(pointer),(int (*)())compar);
     work=seq;
-    for (i=0; i<n; i++) { ccar(work)= *xsp++; work=ccdr(work);}
+    for (i=0; i<n; i++) { pointer_update(ccar(work),*xsp++); work=ccdr(work);}
     ctx->vsp-=n;}
   else if (isvector(seq)) {
     COMPTYPE=elmtypeof(seq);
@@ -993,7 +993,7 @@ register pointer argv[];
   if (islist(a)) {
     if (i<0) error(E_SEQINDEX);
     while (i-->0 && islist(a)) a=ccdr(a);
-    if (islist(a)) return(ccar(a)=argv[2]);
+    if (islist(a)) {pointer_update(ccar(a),argv[2]);return(argv[2]);}
     else error(E_SEQINDEX);}
   else { vset(a,i,argv[2]); return(argv[2]);}}
 

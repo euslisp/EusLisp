@@ -62,7 +62,29 @@ extern int extended_div(unsigned int /*d*/, unsigned int /*h*/, long int /*l*/, 
 extern int extended_mul(integer_t /*d*/, integer_t /*q*/, integer_t /*r*/, integer_t */*hp*/, integer_t */*lp*/);
 extern int extended_div(integer_t /*d*/, integer_t /*h*/, integer_t /*l*/, integer_t */*qp*/, integer_t */*rp*/);
 #endif
-
+extern pointer stretch_big(pointer /*x*/, integer_t /*i*/);
+extern pointer copy_big(pointer /*x*/);
+extern int big_zerop(pointer /*x*/);
+extern integer_t big_sign(pointer /*x*/);
+extern int big_compare(pointer /*x*/, pointer /*y*/);
+extern int complement_big(pointer /*x*/);
+extern pointer big_minus(pointer /*x*/);
+extern int add_int_big(integer_t /*c*/, pointer /*x*/);
+extern int sub_int_big(integer_t /*c*/, pointer /*x*/);
+extern int mul_int_big(integer_t /*c*/, pointer /*x*/);
+extern integer_t div_int_big(integer_t /*c*/, pointer /*x*/);
+extern pointer big_plus(pointer /*x*/, pointer /*y*/);
+extern pointer big_times(pointer /*x*/, pointer /*y*/);
+extern int sub_int_big_big(integer_t /*c*/, pointer /*x*/, pointer /*y*/);
+extern integer_t get_standardizing_factor_and_normalize(pointer /*x*/);
+extern integer_t div_big_big(pointer /*x*/, pointer /*y*/);
+extern pointer big_quotient_remainder_auxiliary(pointer /*x*/, pointer /*y*/, int /*i*/);
+extern int big_quotient_remainder(pointer /*x0*/, pointer /*y0*/, pointer */*qp*/, pointer */*rp*/);
+extern int big_length(pointer /*x*/);
+extern pointer normalize_big(pointer /*x*/);
+extern pointer normalize_bignum(pointer /*x*/);
+extern float_t big_to_float(pointer /*x*/);
+/* big2.c */
 /* calleus.c */
 extern integer_t calleus(pointer /*fsym*/, integer_t /*cargv*/*, int /*a2*/, int /*a3*/, int /*a4*/, int /*a5*/, int /*a6*/, int /*a7*/, int /*a8*/);
 extern int foreign(context */*ctx*/, pointer /*mod*/);
@@ -322,7 +344,7 @@ extern pointer compfun(context */*ctx*/, pointer /*sym*/, pointer /*mod*/, point
 extern pointer compmacro(context */*ctx*/, pointer /*sym*/, pointer /*mod*/, pointer (*/*entry*/)(), pointer /*doc*/);
 extern struct blockframe *makeblock(context */*ctx*/, pointer /*kind*/, pointer /*name*/, jmp_buf */*jbuf*/, struct blockframe */*link*/);
 extern struct fletframe *makeflet(context */*ctx*/, pointer /*nm*/, pointer /*def*/, struct fletframe */*scp*/, struct fletframe */*link*/);
-extern void mkcatchframe(context */*ctx*/, pointer /*lab*/, jmp_buf /*jbuf*/);extern int allocate_stack(context */*ctx*/, int /*n*/);
+extern void mkcatchframe(context */*ctx*/, pointer /*lab*/, jmp_buf */*jbuf*/);extern int allocate_stack(context */*ctx*/, int /*n*/);
 extern context *makelispcontext(int /*bs_size*/);
 extern void deletecontext(int /*id*/, context */*ctx*/);
 

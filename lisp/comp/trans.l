@@ -54,6 +54,10 @@
    (while c (princ (pop c) cfile))
    (princ "*/" cfile)
    (terpri cfile))
+#+:rgc
+ (:nonpop ()
+   (if push push
+     (format nil "local[~d]" (1- pushcount))))
  (:pop ()
    (if push (prog1 push (setq push nil))
 	    (progn (dec pushcount) (format nil "local[~d]" pushcount))))
@@ -192,6 +196,12 @@
  (:store-local (offset level)
     (send self :store (format nil "~A[~d]" (send self :getbase level nil) offset)))
  (:store-obj (var level)
+#+:rgc	     
+	     (let ((p1 (send self :getbase level 'arg))
+		   (p2 var))
+	       (send self :store (format nil "noticeCollector1(~A[0]->c.obj.iv[~d]);~%	~A[0]->c.obj.iv[~d]"
+					 p1 p2 p1 p2)))
+#-:rgc	     
     (send self :store (format nil "~A[0]->c.obj.iv[~d]"
 				(send self :getbase level 'arg) var)))
  (:store-global (var)
@@ -209,10 +219,21 @@
 			   (send self :pop) index)))
  (:store-ovaf (var)
     (send self :store
+	#+:rgc		    
+	(let ((p1 (send self :pop))
+	      (p2 (send self :quote-entry var)))
+	  (format nil "noticeCollector1(*(ovafptr(~A,fqv[~A])));~%	*(ovafptr(~A,fqv[~A]))"
+		  p1 p2 p1 p2))
+	#-:rgc
 	       (format nil "*(ovafptr(~A,fqv[~A]))"
 			(send self :pop) (send self :quote-entry var))))
  (:store-indexed-ov (index)
     (send self :store "w")
+    #+:rgc
+    (send self :store
+	  (format nil "noticeCollector1(w->c.obj.iv[~d]);~%	w->c.obj.iv[~d]"
+		  index index))
+    #-:rgc
     (send self :store (format nil "w->c.obj.iv[~d]"  index)))
  (:call (sym n)
     (let ((entry))
@@ -341,6 +362,8 @@
     (format cfile "	{ register integer_t i; register pointer v;~%")
     (format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
 						 (send self :pop))
+#+:rgc
+    (format cfile "	  noticeCollector(v->c.vec.v[i], w);~%")
     (format cfile "	  v->c.vec.v[i]=w;}~%")
     (send self :push "w"))
  (:char ()
@@ -387,7 +410,10 @@
 	(character (format cfile "	  v->c.str.chars[i]=intval(w);}~%"))
 	(integer   (format cfile "	  v->c.ivec.iv[i]=intval(w);}~%"))
 	(float     (format cfile "	  v->c.fvec.fv[i]=fltval(w);}~%"))
-	(pointer   (format cfile "	  v->c.vec.v[i]=w;}~%"))
+	(pointer   
+	 #+:rgc
+		   (format cfile "	  noticeCollector(v->c.vec.v[i], w);~%")
+		   (format cfile "	  v->c.vec.v[i]=w;}~%"))
 	(T  (send self :error "unknown vector element type")))
     (send self :push "w"))
  (:nullx ()
@@ -597,6 +623,8 @@
     (format cfile "/* ~a :  entry=~a */~%" (namestring cname) entry)
     (format cfile "/* compiled by ~a */~%" (lisp:lisp-implementation-version))
     (format cfile "#include \"eus.h\"~%")	;should specify -I opt.
+    #+:rgc
+    (format cfile "#include \"collector.h\"~%")
     (format cfile "#include \"~A\"~%" (namestring hname))
 #-:alpha
     (format cfile "#pragma init (register_~a)~%" entry)
@@ -606,6 +634,9 @@
     (cond
        ((> *optimize* 2)
 	(format cfile "#define loadglobal(s) s->c.sym.speval~%")
+	#+:rgc
+	(format cfile "#define storeglobal(s,val) {noticeCollector(s->c.sym.speval,(val)); s->c.sym.speval=(val)~%")
+	#-:rgc
 	(format cfile "#define storeglobal(s,val) s->c.sym.speval=(val)~%"))
        (t (format cfile "extern pointer loadglobal(),storeglobal();~%")))
     (format cfile "static pointer module,*qv,codevec,quotevec;~%")
@@ -671,4 +702,4 @@ register context *ctx; int n; pointer *argv; pointer env;~%" entry)
 ) ;eval-when
 
 
-(provide :trans "$Id: trans.l,v 1.1.1.1 2003/11/20 07:46:28 eus Exp $")
+(provide :trans "$Id$")

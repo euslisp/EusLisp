@@ -6,14 +6,12 @@
 /*	1987-May	labeled expression #n= and #n#
 /*	1988-July	multiple escape |...|
 /****************************************************************/
-static char *rcsid="@(#)$Id: reader.c,v 1.1.1.1 2003/11/20 07:46:25 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include <ctype.h>
 #include <fcntl.h>
 #include <signal.h>
-#include <string.h>
 #include "eus.h"
-
 #if !alpha
 #define FALSE (0)
 #define TRUE (1)
@@ -238,11 +236,11 @@ int labx;
 
   if (findlabel(labx)!=NIL)  error(E_READLABEL,makeint(labx));	/*already defined*/
   newlab=(pointer)makelabref(makeint(labx),UNBOUND,oblabels->c.lab.next);
-  oblabels->c.lab.next=newlab;
+  pointer_update(oblabels->c.lab.next,newlab);
   result=read1(ctx,f);
 
   /*solve references*/
-  newlab->c.lab.value=result;
+  pointer_update(newlab->c.lab.value,result);
   unsol=newlab->c.lab.unsolved;
   while (unsol!=NIL) {
 #if sun3 || (!alpha && system5) || sanyo
@@ -252,13 +250,13 @@ int labx;
     unsolp=(pointer *)((integer_t)unsol & ~3);/*???? */
 #endif
     unsol= *unsolp;
-    *unsolp=result; }
+    pointer_update(*unsolp,result); }
   return(result);}
 
 static addunsolved(labp,addr)
 pointer labp;
 pointer *addr;
-{ *addr=labp->c.lab.unsolved;
+{ pointer_update(*addr,labp->c.lab.unsolved);
 #if sun3 ||( !alpha && system5 ) || sanyo
   labp->c.lab.unsolved=(pointer)addr;
 #endif
@@ -298,11 +296,11 @@ register int size;
       element=read1(ctx,f);
       if (islabref(element)) {	/*refer to undefined labeled obj*/
 	addunsolved(element,&result->c.vec.v[i]); }
-      else result->c.vec.v[i]=element;
+      else pointer_update(result->c.vec.v[i],element);
       i++;
       ch=nextch(ctx,f);}
     if (ch==')') 
-      while (i<size) result->c.vec.v[i++]=element;
+      while (i<size) {pointer_update(result->c.vec.v[i],element);i++;}
     else {
       while (ch!=')' && ch!=EOF) ch=nextch(ctx,f);
       error(E_READ); }
@@ -319,7 +317,7 @@ register int size;
       i--;
       element=vpop();
       if (islabref(element)) addunsolved(element,&result->c.vec.v[i]);
-      else result->c.vec.v[i]=element; }
+      else pointer_update(result->c.vec.v[i],element); }
     return(result); } }
 
 static pointer readivector(ctx,s)
@@ -438,7 +436,7 @@ register pointer s;	/*input stream*/
     if (slotp!=NULL) {
       if (islabref(elem)) {	/*refer to undefined labeled obj*/
 	addunsolved(elem,slotp); }
-      else *slotp=elem; }
+      else pointer_update(*slotp,elem); }
     ch=nextch(ctx,s);
     }
   vpop();
@@ -1003,9 +1001,9 @@ register pointer f,recursivep;
   while (ch==')') ch=nextch(ctx,f);
   unreadch(f,ch);
   if (recursivep==NIL) {
-    oblabels->c.lab.next=NIL;
+    pointer_update(oblabels->c.lab.next,NIL);
     val=read1(ctx,f);
-    oblabels->c.lab.next=NIL;}
+    pointer_update(oblabels->c.lab.next,NIL);}
   else val=read1(ctx,f);	/*if called recursively, keep #n= scope*/
   if (val==UNBOUND) return(NIL);
   return(val);}
@@ -1044,7 +1042,7 @@ register context *ctx;
 
   /* make default readtable */
   rdtable=(pointer)makereadtable(ctx);
-  Spevalof(QREADTABLE)=rdtable;
+  pointer_update(Spevalof(QREADTABLE),rdtable);
   for (i=0; i<256; i++) {
     rdtable->c.rdtab.syntax->c.str.chars[i]=(int)chartype[i];
     rdtable->c.rdtab.macro->c.vec.v[i]=charmacro[i];

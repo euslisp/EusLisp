@@ -2,9 +2,10 @@
 /* make eulisp objects 
 /*	Copyright Toshihiro MATSUI, ETL, 1987
 /****************************************************************/
-static char *rcsid="@(#)$Id: makes.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #if Solaris2
+#include <errno.h>
 #include <synch.h>
 #include <thread.h>
 #endif
@@ -77,8 +78,7 @@ register pointer s;
  ((class)? \
     alloc(vecsize(speval(class)->c.cls.vars), ELM_FIXED, \
 	  intval(speval(class)->c.cls.cix), \
-	  /*wordsizeof(struct builtin)*/ \
-	  vecsize(speval(class)->c.cls.vars)) : \
+	  wordsizeof(struct builtin)): \
     alloc(wordsizeof(struct builtin), ELM_FIXED, cid, \
 	  wordsizeof(struct builtin)))
 
@@ -131,6 +131,9 @@ register int n;
 { register pointer r=NIL, *fsp=ctx->vsp;
   while (n-->0) r=cons(ctx,*--fsp,r);
   ctx->vsp=fsp;
+#ifdef SAFETY
+  take_care(r);
+#endif
   return(r);}
 
 pointer makebuffer(size)
@@ -387,7 +390,7 @@ int tag;
   if (tag) {	/*vector type class*/
     class->c.vcls.elmtype=makeint(tag);
     class->c.vcls.size=makeint(-1);}
-  name->c.sym.speval=class;
+  pointer_update(name->c.sym.speval,class);
 /*  name->c.sym.vtype=V_SPECIAL;  */
   name->c.sym.vtype=V_GLOBAL; 
   enterclass(class);	/*determine cix and fill it in the cix slot*/
@@ -605,7 +608,7 @@ pointer (*f)();
 
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
-  sym->c.sym.spefunc=makecode(mod,f,SUBR_FUNCTION);
+  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_FUNCTION));
 #ifdef DEFUN_DEBUG
   printf( "0x%lx\n", sym->c.sym.spefunc->c.code.entry );
 #endif
@@ -618,7 +621,7 @@ pointer mod,pkg;
 pointer (*f)();
 { pointer sym;
   sym=intern(ctx,name,strlen(name),pkg);
-  sym->c.sym.spefunc=makecode(mod,f,SUBR_FUNCTION);
+  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_FUNCTION));
   return(sym);}
 
 pointer defmacro(ctx,name,mod,f)
@@ -629,7 +632,7 @@ pointer (*f)();
 { register pointer sym,pkg;
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
-  sym->c.sym.spefunc=makecode(mod,f,SUBR_MACRO);
+  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_MACRO));
   return(sym);}
 
 #if Solaris2
@@ -665,7 +668,7 @@ pointer (*f)();
 { register pointer sym,pkg;
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
-  sym->c.sym.spefunc=makecode(mod,f,SUBR_SPECIAL);
+  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_SPECIAL));
   return(sym);}
 
 pointer defconst(ctx,name,val,pkg)
@@ -676,7 +679,7 @@ pointer val,pkg;
   vpush(val);
   sym=intern(ctx,name,strlen(name),pkg);
   sym->c.sym.vtype=V_CONSTANT;
-  sym->c.sym.speval=vpop();
+  pointer_update(sym->c.sym.speval,vpop());
   return(sym);}
 
 pointer defvar(ctx,name,val,pkg)
@@ -688,7 +691,7 @@ pointer val,pkg;
   vpush(val);
   sym=intern(ctx,name,strlen(name),pkg);
   sym->c.sym.vtype=V_GLOBAL;
-  sym->c.sym.speval=vpop();
+  pointer_update(sym->c.sym.speval,vpop());
   return(sym);}
 
 pointer deflocal(ctx,name,val,pkg)
@@ -704,8 +707,8 @@ pointer val,pkg;
   /*sym->c.sym.speval=vpop();*/
   /* put the same value in the global symbol-value
 	and in the thread's special binding table */
-  ctx->specials->c.vec.v[x]=vpop();
-  sym->c.sym.speval=val;
+  pointer_update(ctx->specials->c.vec.v[x],vpop());
+  pointer_update(sym->c.sym.speval,val);
   return(sym);}
 
 pointer defkeyword(ctx,name)
@@ -725,7 +728,7 @@ pointer compfun(ctx,sym,mod,entry,doc)
 register context *ctx;
 register pointer sym,mod,doc;
 pointer (*entry)();
-{ sym->c.sym.spefunc=makecode(mod,entry,SUBR_FUNCTION);
+{ pointer_update(sym->c.sym.spefunc,makecode(mod,entry,SUBR_FUNCTION));
   if (doc!=NIL) putprop(ctx,sym,doc,K_FUNCTION_DOCUMENTATION); 
   return(sym);}
 
@@ -733,7 +736,7 @@ pointer compmacro(ctx,sym,mod,entry,doc)
 register context *ctx;
 register pointer sym,mod,doc;
 pointer (* entry)();
-{ sym->c.sym.spefunc=makecode(mod,entry,SUBR_MACRO);
+{ pointer_update(sym->c.sym.spefunc,makecode(mod,entry,SUBR_MACRO));
   if (doc!=NIL) putprop(ctx,sym, doc, K_FUNCTION_DOCUMENTATION); 
   return(sym);}
 
@@ -779,7 +782,7 @@ struct fletframe *scp,*link;
 void mkcatchframe(ctx,lab,jbuf)
 context *ctx;
 pointer lab;
-jmp_buf jbuf;
+jmp_buf *jbuf;
 { struct catchframe *cfp;
   cfp=(struct catchframe *)ctx->vsp;
   cfp->nextcatch=ctx->catchfp;
@@ -844,7 +847,17 @@ int bs_size;
   cntx->alloc_small_count=0;
   cntx->special_bind_count=0;
   cntx->threadobj=NIL;
+#ifdef RGC
+  stk = (pointer *)malloc(sizeof(pointer) * bs_size * 2);
+  cntx->gcstack = stk;
+  cntx->gsp = stk;
+  cntx->gcstacklimit = stk+bs_size*2-64;
+#endif
   cntx->intsig=0;
+#ifdef __RETURN_BARRIER
+  cntx->rbar.pointer = NULL;
+  mutex_init(&cntx->rbar.lock, NULL);
+#endif
 
  /* create a special variable table for this thread and link to specials slot*/
   if (C_VECTOR) {

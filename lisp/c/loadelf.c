@@ -6,13 +6,16 @@
 /*
 /*	(c) T.Matsui, 1986
 /****************************************************************/
-static char *rcsid="@(#)$Id: loadelf.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include <signal.h>
 #include <ctype.h>
 #include <sys/file.h>
 #include <fcntl.h>
 #include <dlfcn.h>
+#if i86pc
+#include <link.h>
+#endif
 
 #if alpha
 #undef MAX
@@ -243,13 +246,16 @@ char *strings[];
     k=strlen((char *)strings[i]);
     qstring=makestring(strings[i], k);
     /*prinx(ctx,qstring, STDOUT); terpri(STDOUT); */
-    qstream->c.stream.buffer=qstring;
+    pointer_update(qstream->c.stream.buffer,qstring);
     qstream->c.stream.count=makeint(0);
     qstream->c.stream.tail=makeint(k);
-    qvec->c.vec.v[i]=reader(ctx,qstream, NIL);}
+    pointer_update(qvec->c.vec.v[i],reader(ctx,qstream, NIL));}
   vpop();
   vpop();
   /* prinx(ctx,qvec, STDOUT); */
+#ifdef SAFETY
+  take_care(qvec);
+#endif
   return(qvec);}
 
 pointer eval_c_strings(ctx,size, strings)
@@ -347,7 +353,7 @@ pointer *argv;
 /*    if (initfunc==NULL) fprintf(stderr, ";; entry not found\n");*/
   }
   mod=makemodule(ctx,0);
-  mod->c.ldmod.objname=argv[0];
+  pointer_update(mod->c.ldmod.objname,argv[0]);
   mod->c.ldmod.handle=makeint(dlhandle>>2);
   vpush(mod);
 
@@ -375,7 +381,7 @@ loadsave(ctx,mod)
 register context *ctx;
 pointer mod;
 { pointer p=Spevalof(PACKAGE);
-  Spevalof(PACKAGE)=syspkg;
+  pointer_update(Spevalof(PACKAGE),syspkg);
   defun(ctx,"SRCLOAD",mod,SRCLOAD);
 #if Solaris2 && !GCC
   defun(ctx,"LIST-MODULE-INITIALIZERS",mod,list_module_initializers);
@@ -387,6 +393,6 @@ pointer mod;
   defun(ctx,"BINLOAD",mod,BINLOAD);
   defun(ctx,"UNBINLOAD",mod,UNBINLOAD);
   defun(ctx,"SAVE",mod,SAVE); 
-  Spevalof(PACKAGE)=p;}
+  pointer_update(Spevalof(PACKAGE),p);}
 
 

@@ -8,7 +8,7 @@
 /*	Copyright: Toshihiro Matsui, Electrotechnical Laboratory
 /*	Original: 1986-May
 /*	*/
-static char *rcsid="@(#)$Id: leo.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
@@ -108,18 +108,18 @@ register pointer meth,class,doc;
     else {
       medoc2=assq(class,ccdr(medoc));
       if (medoc2==NIL)
-	medoc->c.cons.cdr=cons(ctx,cons(ctx,class,doc),ccdr(medoc));
-      else medoc2->c.cons.cdr=doc; } }
+      {pointer_update(medoc->c.cons.cdr,cons(ctx,cons(ctx,class,doc),ccdr(medoc)));}
+      else pointer_update(medoc2->c.cons.cdr,doc); } }
 /* */
-  if (methods==NIL) class->c.cls.methods=cons(ctx,meth,NIL);
-  else if (ccar(ccar(methods))==selector) ccar(methods)=meth;
+  if (methods==NIL) {pointer_update(class->c.cls.methods,cons(ctx,meth,NIL));}
+  else if (ccar(ccar(methods))==selector) {pointer_update(ccar(methods),meth);}
   else {
     while(ccdr(methods)!=NIL) {
       methods=ccdr(methods);
       if (ccar(ccar(methods))==selector) {
 	ccar(methods)=meth;
 	goto purgecache; } }
-    ccdr(methods)=cons(ctx,meth,NIL); }
+    pointer_update(ccdr(methods),cons(ctx,meth,NIL)); }
   /*nullify method cache for this selctor*/
 purgecache:
   vpop();
@@ -127,7 +127,7 @@ purgecache:
     if (ctx=euscontexts[j])
       for (i=0; i<MAXMETHCACHE; i++) 
         if (ctx->methcache[i].selector==selector)
-          ctx->methcache[i].selector=NIL; }
+          pointer_update(ctx->methcache[i].selector,NIL); }
   }
   
 void addcmethod(ctx,mod,cfunc,sel,class,doc)
@@ -170,10 +170,28 @@ pointer argv[];
     s=intval(a->c.vcls.size);
     if (s<0) { ckarg(2); s=ckintval(argv[1]);}
     else ckarg(1);
-    return(makevector(a,s));}
+#ifdef SAFETY
+    {
+      pointer tmp = makevector(a,s);
+      take_care(tmp);
+      return(tmp);
+    }
+#else
+    return(makevector(a,s));
+#endif
+  }
   else if (isclass(a)) {
     ckarg(1);
-    return(makeobject(a));}
+#ifdef SAFETY
+    {
+      pointer tmp = makeobject(a);
+      take_care(tmp);
+      return(tmp);
+    }
+#else
+    return(makeobject(a));
+#endif
+  }
   else error(E_NOCLASS,a);}
 
 
@@ -203,10 +221,10 @@ register pointer sel,search, *curclass;
     while (islist(meths))	/*find the method in this class*/
       if (ccar(ccar(meths))==sel) {
 	if (trycache) {
-	    mt->selector=sel;
-	    mt->class=search;
-	    mt->ownerclass=klass;
-	    mt->method=ccar(meths);
+	    pointer_update(mt->selector,sel);
+	    pointer_update(mt->class,search);
+	    pointer_update(mt->ownerclass,klass);
+	    pointer_update(mt->method,ccar(meths));
 	  }
         *curclass = klass; return(ccar(meths));}
       else meths=ccdr(meths);
@@ -337,6 +355,9 @@ register pointer argv[];
     unbindspecial(ctx,sbfpsave+1);
     }
   ctx->vsp=spsave;
+#ifdef SAFETY
+  take_care(result);
+#endif
   return(result);}
 
 pointer SENDMESSAGE(ctx,n,argv)
@@ -374,6 +395,9 @@ pointer argv[];
     /* while (sbfpsave<ctx->sbindfp) unbindx(ctx,1); */
     unbindspecial(ctx,sbfpsave+1);
     ctx->vsp=spsave;}
+#ifdef SAFETY
+  take_care(result);
+#endif
   return(result);}
 
 pointer CLONE(ctx,n,argv)
@@ -400,6 +424,9 @@ pointer argv[];
       n=vecsize(klass->c.cls.vars);
       x=makeobject(klass);}
     for (i=0; i<n; i++) x->c.obj.iv[i]=a->c.obj.iv[i];
+#ifdef SAFETY
+    take_care(x);
+#endif
     return(x);}
   else error(E_INSTANTIATE);}
 
@@ -411,9 +438,21 @@ pointer argv[];
   register int i;
   if (n==1) {
     trycache=(argv[0]!=NIL);
-    for (i=0; i<MAXMETHCACHE; i++)
-       ctx->methcache[i].selector=ctx->methcache[i].class=NIL;}
-  return(cons(ctx,makeint(mchit),cons(ctx,makeint(mcmiss),NIL)));}
+    for (i=0; i<MAXMETHCACHE; i++) {
+       pointer_update(ctx->methcache[i].class,NIL);
+       pointer_update(ctx->methcache[i].selector,NIL);
+    }
+  }
+#ifdef SAFETY
+  {
+    pointer tmp = cons(ctx,makeint(mchit),cons(ctx,makeint(mcmiss),NIL));
+    take_care(tmp);
+    return(tmp);
+  }
+#else
+  return(cons(ctx,makeint(mchit),cons(ctx,makeint(mcmiss),NIL)));
+#endif
+}
 
 pointer FINDMETHOD(ctx,n,argv)
 register context *ctx;
@@ -426,6 +465,9 @@ pointer argv[];
   if (isnum(a)) error(E_NOOBJECT);
   a=findmethod(ctx,argv[1],classof(a), &curclass);
   if (a!=NIL)  a=cons(ctx,curclass,cons(ctx,a,NIL));
+#ifdef SAFETY
+  take_care(a);
+#endif
   return(a);}
 
 int getslotindex(obj,klass,varid)
@@ -472,7 +514,8 @@ register int n;
 register pointer argv[];
 { ckarg(4);	/* (setslot obj class index newval) */
   n=getslotindex(argv[0],argv[1],argv[2]);
-  return(argv[0]->c.obj.iv[n]=argv[3]);}
+  pointer_update(argv[0]->c.obj.iv[n],argv[3]);
+  return(argv[3]);}
 
 /* test methods*/
 pointer CONSCAR(ctx,n,argv)
@@ -480,7 +523,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer self=argv[0];
-  if (n>=3) self->c.cons.car=argv[2];
+  if (n>=3) pointer_update(self->c.cons.car,argv[2]);
   return(self->c.cons.car);}
 
 pointer CONSCDR(ctx,n,argv)
@@ -488,7 +531,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer self=argv[0];
-  if (n>=3) self->c.cons.cdr=argv[2];
+  if (n>=3) pointer_update(self->c.cons.cdr,argv[2]);
   return(self->c.cons.cdr);}
 
 /****************************************************************/
@@ -512,6 +555,7 @@ register pointer org;
   int etype;
 
   if (isnum(org) || issymbol(org) || isclass(org)) return(org);
+  /* eus_rbar *//* if ((org==0) || isnum(org) || issymbol(org) || isclass(org)) return(org); */
   x=org->c.obj.iv[1];
   if (p_marked(org)) return(cpvec[intval(x)]);
   p_mark_on(org);
@@ -532,7 +576,7 @@ register pointer org;
 
   if (ctx->vsp>ctx->stacklimit)
     { fprintf(stderr,"cannot copy\n"); euslongjmp(cpyjmp,ERR);}
-  org->c.obj.iv[1]=makeint(cpx);
+  pointer_update(org->c.obj.iv[1],makeint(cpx));
   vpush(clone);
   vpush(x);
   cpx += 2;
@@ -550,6 +594,9 @@ register pointer org;
 	    clone->c.vec.v[0]=x; /*copyobj(ctx,x) fails */
 	    for (i=1; i<s; i++) clone->c.ivec.iv[i]=org->c.ivec.iv[i];
 	    break;}
+#ifdef SAFETY
+  take_care(clone);
+#endif
   return(clone);}
 
 copyunmark(obj)
@@ -560,7 +607,7 @@ register pointer obj;
   if (isnum(obj) || pissymbol(obj) || pisclass(obj)) return;
   x=obj->c.obj.iv[1];
   if (p_marked(obj)) {
-    obj->c.obj.iv[1]=cpvec[intval(x)+1];
+    pointer_update(obj->c.obj.iv[1],cpvec[intval(x)+1]);
     p_mark_off(obj);
     if (pisvector(obj)) {
       if (elmtypeof(obj)<ELM_POINTER) return;
@@ -653,7 +700,7 @@ pointer argv[];
   if (isnum(src) || isnum(dest)) return(src);
   nsrc=objsize(src); ndest=objsize(dest);
   n=min(nsrc,ndest);
-  while (n-->0) dest->c.obj.iv[n]=src->c.obj.iv[n];
+  while (n-->0) pointer_update(dest->c.obj.iv[n],src->c.obj.iv[n]);
   return(dest);}
 
 leo(ctx,mod)

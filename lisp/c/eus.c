@@ -6,7 +6,7 @@
 /*	1994 June:	multi thread
 /*	1996 January:	handles SIGSEGV, SIGBUS
 /****************************************************************/
-static char *rcsid="@(#) $Id: eus.c,v 1.1.1.1 2003/11/20 07:46:23 eus Exp $";
+static char *rcsid="@(#) $Id$";
 
 #include "eus.h"
 
@@ -19,10 +19,6 @@ static char *rcsid="@(#) $Id: eus.c,v 1.1.1.1 2003/11/20 07:46:23 eus Exp $";
 #include <thread.h>
 #elif SunOS4_1
 #include <lwp/stackdep.h>
-#endif
-
-#if !THREADED
-unsigned int thr_self() { return(1);}
 #endif
 
 
@@ -47,7 +43,6 @@ extern pointer *gcstack, *gcsp, *gcsplimit;
 
 /* System internal objects are connected to sysobj list
 /* to protect from being garbage-collected */
-
 pointer sysobj;
 
 /* context */
@@ -426,7 +421,7 @@ va_dcl
     forwardvector->c.vec.v[i]=super->c.cls.forwards->c.vec.v[i];}
   for (i=0; i<n; i++) {
     vname=va_arg(ap,byte *);
-    varvector->c.vec.v[i+svcount]=intern(ctx,(char *)vname,strlen((char *)vname),lisppkg);
+    varvector->c.vec.v[i+svcount]=intern(ctx,(char *)vname,strlen(vname),lisppkg);
     export(varvector->c.vec.v[i+svcount], lisppkg);  
     typevector->c.vec.v[i+svcount]=T;
     forwardvector->c.vec.v[i+svcount]=NIL;}
@@ -466,6 +461,53 @@ static void initmemory()
   gcsp=gcstack;
   gcsplimit= &gcstack[DEFAULT_MAX_GCSTACK -10];
   }
+
+#ifdef RGC
+void initmemory_rgc()
+{ register int i;
+  buddysize[0]=3; buddy[0].count=0; buddy[0].bp=0;
+  buddysize[1]=3; buddy[1].count=0; buddy[1].bp=0;
+  for (i=2; i<MAXBUDDY; i++) {
+    buddy[i].count=0;
+    buddysize[i]=buddysize[i-2]+buddysize[i-1];	/*fibonacci*/
+    buddy[i].bp=0;}		/*no cells are connected*/
+  buddy[MAXBUDDY].bp=(bpointer)(-1);	/*sentinel for alloc*/
+#if (WORD_SIZE == 64)
+  buddysize[MAXBUDDY]= 0x7fffffffffffffff;	/*cell size limit*/
+#else
+  buddysize[MAXBUDDY]= 0x7fffffff;	/*cell size limit*/
+#endif
+
+  /*allocate enough memory for initialization*/
+/*
+ * k  buddy[k]
+ * 23 139104 byte
+ * 24 225075 byte
+ * 25 364179 byte
+ * 26 589254 byte
+ * 27 953433 byte
+ * 28 1542687 byte
+ * 29 2496120 byte
+ * 30 4038807 byte
+ */
+//  newchunk(25);
+//  newchunk(24);
+  {
+    unsigned int tmp;
+//    tmp = allocate_heap(520 * 1000); // 2M
+//    tmp = allocate_heap(1250 * 1000); // 5M
+    tmp = allocate_heap(2500 * 1000); // 10M
+//    tmp = allocate_heap(5000 * 1000); // 20M
+//    tmp = allocate_heap(12600 * 1000); // 50M
+    fprintf(stderr, "allocate_heap: %d bytes\n", tmp*4);
+  }
+
+  gcstack=(pointer *)malloc(DEFAULT_MAX_GCSTACK * sizeof(pointer));
+  gcsp=gcstack;
+  gcsplimit= &gcstack[DEFAULT_MAX_GCSTACK -10];
+
+}
+#endif
 
 static void initclassid()
 { 
@@ -848,6 +890,9 @@ static void initfeatures()
 #if X_V11R6_1
   p=cons(ctx,intern(ctx,"X11R6.1",7,keywordpkg),p);
 #endif
+#if RGC
+  p=cons(ctx,intern(ctx,"RGC",3,keywordpkg),p);
+#endif
 
   defvar(ctx,"*FEATURES*",p,lisppkg);
 
@@ -1073,14 +1118,19 @@ register context *ctx;
 int mainargc;
 char *mainargv[32];
 
+#if !THREADED
+unsigned int thr_self() { return(1);}
+#endif
 
-void mainthread(ctx)
+static void mainthread(ctx)
 register context *ctx;
 { 
   euscontexts[thr_self()]=ctx;
 
   /*initialize system*/
+#ifndef RGC
   initmemory();
+#endif
   initclassid();
 
   {
@@ -1124,6 +1174,9 @@ register context *ctx;
 
   initreader(ctx);
   sysfunc(ctx,sysmod);
+#ifdef RGC
+  rgcfunc(ctx,sysmod);
+#endif
   eusioctl(ctx,sysmod);
   Spevalof(PACKAGE)=userpkg; 
 
@@ -1136,7 +1189,7 @@ register context *ctx;
   signal(SIGCHLD, (void (*)())eusint);
   signal(SIGFPE,  (void (*)())eusint);
   signal(SIGPIPE, (void (*)())eusint);
-  signal(SIGSEGV, (void (*)())eusint);
+//  signal(SIGSEGV, (void (*)())eusint); /* for debugging. R.Hanai */
   signal(SIGBUS,  (void (*)())eusint);
 
   toplevel(ctx,mainargc,mainargv);
@@ -1174,6 +1227,7 @@ char *argv[];
   /* following two lines are just to speed up frequent sbreak at the beginning
      of the execution. These lines may be deleted without any harm.*/
   m=(unsigned char *)malloc(1*1024*1024);
+//  m=(unsigned char *)malloc(4*1024*1024); /* RGC */
   cfree(m);
 
 #if vxworks
@@ -1199,6 +1253,9 @@ char *argv[];
 #else
 #if SunOS4_1 || alpha || PTHREAD
   mthread_init( mainctx );
+#ifdef RGC
+  init_rgc();
+#endif
 #endif
   mainthread(mainctx);
 #endif	/* Solaris2 */
@@ -1213,3 +1270,4 @@ char *argv[];
 
   exit(stat);
   }
+

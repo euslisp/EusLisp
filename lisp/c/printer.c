@@ -3,7 +3,7 @@
 /* Copyright(c) 1986, Toshihiro MATSUI, Electrotechnical Laboratory
 /*
 /****************************************************************/
-static char *rcsid="@(#)$Id: printer.c,v 1.1.1.1 2003/11/20 07:46:25 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include <ctype.h>
 #include "eus.h"
@@ -327,7 +327,7 @@ register pointer p;
   else {	/*already p_marked ->shared object*/
     s_mark_on(p);
     ckpush(p->c.obj.iv[0]);	/*save first element*/
-    p->c.obj.iv[0]=makeint(++ix);
+    pointer_update(p->c.obj.iv[0],makeint(++ix));
     } }
   
 static int getprlength(ctx)
@@ -588,7 +588,7 @@ register pointer p;
   if (!s_marked(p) && !p_marked(p)) return;
   if (s_marked(p))
     if (p_marked(p)) fprintf(stderr,"smarked?\n");
-    else p->c.obj.iv[0]=ixvec[intval(p->c.obj.iv[0])];
+    else pointer_update(p->c.obj.iv[0],ixvec[intval(p->c.obj.iv[0])]);
   s_mark_off(p); p_mark_off(p);
   if (pissymbol(p)) return;
   else if (pisvector(p)) {

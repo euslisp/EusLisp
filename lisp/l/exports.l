@@ -1,6 +1,6 @@
 ;;; exports.l
 
-(list "@(#)$Id: exports.l,v 1.2 2003/12/29 04:20:59 cvseus Exp $")
+(list "@(#)$Id$")
 
 (lisp::progn
 	(lisp::setq lisp::*package* (lisp::find-package "LISP"))
@@ -127,9 +127,8 @@
 	  ACCEPT  SENDTO  RECVFROM  GETPEERNAME))
 
 ;; not supported by vxworks
-  (lisp:export '(  PTIMES  RUNTIME  LOCALTIME  ASCTIME GMTIME
-	  GETITIMER SETITIMER
-	  GETRUSAGE  GETPAGESIZE ALARM))
+  (lisp:export '(  PTIMES  RUNTIME  LOCALTIME  ASCTIME  GETITIMER
+	  SETITIMER  GETRUSAGE  GETPAGESIZE ALARM))
 
   (lisp:export '(  WAIT  FORK  GETPPID  GETPGRP  SETPGRP  GETUID
 	  GETEUID  GETGID  GETEGID  SETUID  SETGID  MKNOD  FCNTL

@@ -4,7 +4,7 @@
 /*	Copyright(C) Toshihiro Matsui, Electrotechnical Laboratory
 /*	all rights reserved.
 /****************************************************************/
-static char *rcsid="@(#)$Id: lists.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
@@ -144,7 +144,7 @@ register int n;
 register pointer argv[];
 { register pointer a=argv[0];
   ckarg(2);
-  if (islist(a)) ccar(a)=argv[1];
+  if (islist(a)) {pointer_update(ccar(a),argv[1]);}
   else error(E_NOLIST);
   return(a);}
 
@@ -154,7 +154,7 @@ register int n;
 register pointer argv[];
 { register pointer a=argv[0];
   ckarg(2);
-  if (islist(a)) ccar(a)=argv[1];
+  if (islist(a)) {pointer_update(ccar(a),argv[1]);}
   else error(E_NOLIST);
   return(argv[1]);}
 
@@ -164,7 +164,7 @@ register int n;
 register pointer argv[];
 { register pointer a=argv[0];
   ckarg(2);
-  if (islist(a)) ccdr(a)=argv[1];
+  if (islist(a)) {pointer_update(ccdr(a),argv[1]);}
   else error(E_NOLIST);
   return(a);}
 
@@ -174,7 +174,7 @@ register int n;
 register pointer argv[];
 { register pointer a=argv[0];
   ckarg(2);
-  if (islist(a)) ccdr(a)=argv[1];
+  if (islist(a)) {pointer_update(ccdr(a),argv[1]);}
   else error(E_NOLIST);
   return(argv[1]);}
 
@@ -223,7 +223,7 @@ nconc1:
     c=argv[n];
     if (islist(c)) {
       while (islist(ccdr(c))) { breakck; c=ccdr(c);}
-      ccdr(c)=a;
+      pointer_update(ccdr(c),a);
       a=argv[n];}
     }
   return(a);}
@@ -251,7 +251,7 @@ register pointer argv[];
 pointer nsubst(x,y,z)
 register pointer x,y, *z;
 { register pointer zz= *z;
-  if (y==zz) *z=x;
+  if (y==zz) pointer_update(*z,x);
   if (iscons(zz)) {
     nsubst(x,y,&(zz->c.cons.car));
     nsubst(x,y,&(zz->c.cons.cdr));} }
@@ -401,7 +401,7 @@ pointer argv[];
   while (iscons(a)) { ckpush(a); a=ccdr(a); count++;}
   n=min(count,n);
   b= *(ctx->vsp - n - 1);
-  ccdr(b)=NIL;
+  pointer_update(ccdr(b),NIL);
   return(argv[0]);}
 
 

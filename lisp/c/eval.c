@@ -5,10 +5,9 @@
 /*	Copyright Toshihiro Matsui, ETL Umezono Sakuramura
 /*	0298-54-5459
 *****************************************************************/
-static char *rcsid="@(#)$Id: eval.c,v 1.2 2004/12/16 13:45:55 cvseus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
-
 #define FALSE 0
 #define TRUE 1
 
@@ -47,6 +46,7 @@ register pointer sym;
       else return(val); }
     else return(val);}
   if (sym->c.sym.vtype==V_CONSTANT) return(sym->c.sym.speval);
+  GC_POINT;
   while (bf!=NULL) {
     var=bf->sym;
     val=bf->val;
@@ -73,22 +73,22 @@ register pointer sym,val;
   int vt;
   if (sym->c.sym.vtype>=V_SPECIAL) {
     vt=intval(sym->c.sym.vtype);
-    ctx->specials->c.vec.v[vt]=val;
+    pointer_update(ctx->specials->c.vec.v[vt],val);
     return(val);}
   while (bf!=NULL) {
     var=bf->sym;
     if (sym==var) {
       if (bf->val==UNBOUND) goto setspecial;
-      return(bf->val=val);}
+      pointer_update(bf->val,val); return(val);}
     else if (var->cix==vectorcp.cix) {
       vaddr=getobjv(sym,var,bf->val);
-      if (vaddr) return(*vaddr=val);}
-    bf=bf->lexblink;}
+      if (vaddr) {pointer_update(*vaddr,val); return(val);}}
+    bf=bf->lexblink; GC_POINT;}
   /* no local var found. try global binding */
   if (sym->c.sym.vtype==V_CONSTANT) error(E_SETCONST,sym);
   if (sym->c.sym.vtype==V_GLOBAL) goto setspecial;
   setspecial:
-  sym->c.sym.speval=val;  /* global val*/
+  pointer_update(sym->c.sym.speval,val);  /* global val*/
   return(val);
   }
 
@@ -114,7 +114,7 @@ pointer s;
 
 pointer setfunc(sym,func)
 register pointer sym,func;
-{ sym->c.sym.spefunc=func;}
+{ pointer_update(sym->c.sym.spefunc,func);}
 
 pointer *ovafptr(o,v)
 register pointer o,v;
@@ -132,6 +132,7 @@ register context *ctx;
 pointer sym,newval;
 { register struct specialbindframe *sbf=(struct specialbindframe *)(ctx->vsp);
   int vt;
+  GC_POINT;
   vt=intval(sym->c.sym.vtype);
   ctx->vsp += (sizeof(struct specialbindframe)/sizeof(pointer));
   sbf->sblink=ctx->sbindfp;
@@ -155,8 +156,8 @@ register int count;
   while (count-- >0) {
     s=sbfp->sym;
     /***/
-   if (s->c.sym.vtype==V_GLOBAL) speval(s)=sbfp->oldval;
-   else Spevalof(s)=sbfp->oldval; 
+   if (s->c.sym.vtype==V_GLOBAL) {pointer_update(speval(s),sbfp->oldval);}
+   else pointer_update(Spevalof(s),sbfp->oldval); 
     sbfp=sbfp->sblink;}
   ctx->sbindfp=sbfp;}
 
@@ -169,8 +170,8 @@ register struct specialbindframe *limit;
     while (limit<=sbfp) {	/* < is harmful to unwind in eus.c */
       s=sbfp->sym;
       /***/
-      if (s->c.sym.vtype==V_GLOBAL) speval(s)=sbfp->oldval;
-      else Spevalof(s)=sbfp->oldval;
+      if (s->c.sym.vtype==V_GLOBAL) {pointer_update(speval(s),sbfp->oldval);}
+      else pointer_update(Spevalof(s),sbfp->oldval);
       sbfp=sbfp->sblink;
       ctx->special_bind_count--;}
     ctx->sbindfp=sbfp;}}
@@ -203,13 +204,7 @@ struct bindframe *lex,*declscope;
       else error(E_MULTIDECL);
     p=p->lexblink;}
   /*not found in declare scope*/
-  if (var->c.sym.vtype>= /* V_SPECIAL */  V_GLOBAL ) {
-	/* For defun-c-callable in eusforeign.l to create a foreign-pod,
-		global value of SYMBOL must be replaced with FOREIGN-POD
-		by let binding.  Since SYMBOL is V_GLOBAL, special binding
-		(global binding) must be made for V_GLOBAL.  Proclaiming
-		symbol as SPECIAL is no use, since INTERN does not refer
-		thread local binding. */		
+  if (var->c.sym.vtype>= V_SPECIAL /* V_GLOBAL */) {
     bindspecial(ctx,var,val);
     return(ctx->bindfp);}
   return(fastbind(ctx,var,val,lex));}
@@ -241,7 +236,12 @@ int noarg,allowotherkeys;
   if (noarg<=0) return(suppliedbits);
   if (noarg & 1) error(E_KEYPARAM);
   keysize=vecsize(keyvec);
-  for (i=0; i<keysize; i++) results[i]=NIL;
+  for (i=0; i<keysize; i++) {
+#ifdef SAFETY
+      take_care(results[i]);
+#endif
+      results[i]=NIL;
+  }
   while (n<noarg) {
     akeyvar=actuals[n++];
     if (!issymbol(akeyvar)) error(E_KEYPARAM);
@@ -253,7 +253,7 @@ int noarg,allowotherkeys;
     if (i<keysize) {	/*keyword found*/
       bitpos = 1<<i;
       if ((suppliedbits & bitpos) ==0) {	/*already supplied-->ignore*/
-        results[i]=actuals[n];
+        pointer_update(results[i],actuals[n]);
         suppliedbits |= bitpos;} }
     else if (!allowotherkeys) error(E_NOKEYPARAM,akeyvar);
     n++;} 
@@ -355,7 +355,7 @@ int noarg;
       decl=ccar(body);
       if (!iscons(decl) || (ccar(decl)!=QDECLARE)) break;
       env=declare(ctx,ccdr(decl),env);
-      body=ccdr(body);}
+      body=ccdr(body); GC_POINT;}
 
     /* make a new bind frame */
     while (iscons(formal)) {
@@ -381,7 +381,7 @@ bindopt:
       else if (iscons(fvar)) {
         initform=ccdr(fvar);
         fvar=ccar(fvar);
-        if (iscons(initform)) aval=eval(ctx,ccar(initform));
+        if (iscons(initform)) {GC_POINT;aval=eval(ctx,ccar(initform));}
         else aval=NIL;}
       else aval=NIL;
       env=vbind(ctx,fvar,aval,env,bf);
@@ -415,20 +415,26 @@ bindaux:
       if (iscons(fvar)) {
         initform=ccdr(fvar);
         fvar=ccar(fvar);
-        if (iscons(initform)) aval=eval(ctx,ccar(initform));
+        if (iscons(initform)) {GC_POINT;aval=eval(ctx,ccar(initform));}
         else aval=NIL;}
       else aval=NIL;
       env=vbind(ctx,fvar,aval,env,bf); }
 evbody:
+    GC_POINT;
     /*create block around lambda*/
     myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,fn,(jmp_buf *)funjmp,NULL);
     /*evaluate body*/
-    if ((result=(pointer)eussetjmp(funjmp))==0) result=progn(ctx,body);
+    if ((result=(pointer)eussetjmp(funjmp))==0) {GC_POINT;result=progn(ctx,body);}
     else if (result==(pointer)1) result=makeint(0);
     /*end of body evaluation: clean up stack frames*/
     ctx->blkfp=myblock->dynklink;
     ctx->bindfp=bf;
     ctx->vsp=vspsave;
+
+#ifdef __RETURN_BARRIER
+    check_return_barrier(ctx);
+    /* check return barrier */
+#endif
 /*    unbindspecial(ctx,(struct specialbindframe *)ctx->vsp); */
     unbindspecial(ctx,sbfps+1);
     return(result);}
@@ -749,6 +755,7 @@ register int noarg;
   register pointer *argp=ctx->vsp;
   register int n=0;
   register integer_t addr;
+  pointer tmp;
   addr=(integer_t)(func->c.code.entry);
   addr &= ~3;  /*0xfffffffc; ???? */
   subr=(pointer (*)())(addr);
@@ -756,11 +763,12 @@ register int noarg;
   printf( "funcode:func = " ); hoge_print( func );
   printf( "funcode:args = " ); hoge_print( args );
 #endif
+  GC_POINT;
   switch((integer_t)(func->c.code.subrtype)) {	/*func,macro or special form*//* ???? */
       case (integer_t)SUBR_FUNCTION:/* ???? */
 	      if (noarg<0) {
 		while (piscons(args)) {
-		  vpush(eval(ctx,ccar(args))); args=ccdr(args); n++;}
+		  vpush(eval(ctx,ccar(args))); args=ccdr(args); n++; GC_POINT;}
 	        if (pisfcode(func))	/*foreign function?*/
 		  return(call_foreign((integer_t (*)())subr,func,n,argp));
 		else return((*subr)(ctx,n,argp));}
@@ -771,7 +779,10 @@ register int noarg;
       case (integer_t)SUBR_MACRO:/* ???? */
 	      if (noarg>=0) error(E_ILLFUNC);
 	      while (iscons(args)) { vpush(ccar(args)); args=ccdr(args); n++;}
-	      return(eval(ctx,(*subr)(ctx,n,argp)));
+          GC_POINT;
+          tmp = (*subr)(ctx,n,argp);
+          GC_POINT;
+	      return(eval(ctx,tmp));
       case (integer_t)SUBR_SPECIAL: /* ???? */
 	      if (noarg>=0) error(E_ILLFUNC);
 	      else return((*subr)(ctx,args));
@@ -794,6 +805,7 @@ int noarg;
   register int n=0,i;
   register pointer (*subr)();
   struct fletframe *oldfletfp=ctx->fletfp;
+  GC_POINT;
   /* evalhook */
   if (Spevalof(QEVALHOOK)!=NIL &&  ehbypass==0) {
       hook=Spevalof(QEVALHOOK);
@@ -806,9 +818,14 @@ int noarg;
 	while (--i>=0) aval=cons(ctx,argp[i],aval);
 	vpush(cons(ctx,fn,aval));}
       vpush(env);
+      GC_POINT;
       result=ufuncall(ctx,form,hook,(pointer)(ctx->vsp-2),env,2);	/*apply evalhook function*/
       ctx->vsp=(pointer *)vf;
       unbindspecial(ctx,sbfps+1);
+#ifdef __RETURN_BARRIER
+      check_return_barrier(ctx);
+      /* check return barrier */
+#endif
       return(result);}
   else ehbypass=0;
 
@@ -841,20 +858,28 @@ int noarg;
 #endif
     if (noarg<0) {
 	while (iscons(args)) {
-	  vpush(eval(ctx,ccar(args))); args=ccdr(args); n++;}
+	  vpush(eval(ctx,ccar(args))); args=ccdr(args); n++; GC_POINT;}
 	result=(*subr)(ctx,n,argp,func);}	/*call func with env*/
       else result=(*subr)(ctx,noarg,args,func);
     /*recover call frame and stack pointer*/
     ctx->vsp=(pointer *)vf;
     ctx->callfp= vf->vlink;
     ctx->fletfp=oldfletfp;
+#ifdef __RETURN_BARRIER
+    check_return_barrier(ctx);
+    /* check return barrier */
+#endif
     return(result);}
 
   else if (piscode(func)) {	/*call subr*/
+    GC_POINT;
     result=funcode(ctx,func,args,noarg);
     ctx->vsp=(pointer *)vf;
     ctx->callfp= vf->vlink;
     ctx->fletfp=oldfletfp;
+#ifdef __RETURN_BARRIER
+    check_return_barrier(ctx);
+#endif
     return(result);}
   else if (piscons(func)) {
     ftype=ccar(func);
@@ -878,16 +903,22 @@ int noarg;
       while (iscons(args)) {
 	aval=ccar(args);
 	args=ccdr(args);
-	if (ftype!=MACRO) aval=eval(ctx,aval);
+	if (ftype!=MACRO) {GC_POINT;aval=eval(ctx,aval);}
 	vpush(aval); noarg++;}}
     else {
       argp=(pointer *)args;
       if (ftype==MACRO) error(E_ILLFUNC);}
+    GC_POINT;
     result=funlambda(ctx,fn,formal,func,argp,env,noarg);
     ctx->vsp=(pointer *)vf;
     ctx->callfp=vf->vlink;
+    GC_POINT;
     if (ftype==MACRO) result=eval(ctx,result);
     ctx->fletfp=oldfletfp;
+#ifdef __RETURN_BARRIER
+    check_return_barrier(ctx);
+    /* check return barrier */
+#endif
     return(result);}
   else error(E_ILLFUNC);
   }
@@ -910,13 +941,20 @@ register pointer form;
       hoge_print(form);
   }
 #endif
+  GC_POINT;
   if (isnum(form)) p = form;
   else if (pissymbol(form)) p = getval(ctx,form);
   else if (!piscons(form)) p = form;
   else {
     c=ccdr(form);
     if (c!=NIL && issymbol(c)) p = (*ovafptr(eval(ctx,ccar(form)),c));
-    else p = ufuncall(ctx,form,ccar(form),c,NULL,-1);}
+    else {
+      p = ufuncall(ctx,form,ccar(form),c,NULL,-1);
+#ifdef SAFETY
+      take_care(p);
+#endif
+    }
+  }
 
 #ifdef EVAL_DEBUG
   if( evaldebug ) {
@@ -932,6 +970,7 @@ register context *ctx;
 register pointer form;
 pointer env;
 { register pointer c;
+  GC_POINT;
   if (isnum(form)) return(form);
   else if (pissymbol(form)) return(getval(ctx,form));
   else if (!piscons(form)) return(form);
@@ -946,6 +985,7 @@ register context *ctx;
 register pointer forms;
 { register pointer result=NIL;
   while (iscons(forms)) {
+    GC_POINT;
     result=eval(ctx,ccar(forms)); forms=ccdr(forms);}
   return(result);}
 
@@ -970,6 +1010,7 @@ pointer csend(context *ctx, ...)
   spsave=ctx->vsp;
   vpush(rec); vpush(sel);
   while (i++ < cnt) vpush(va_arg(ap,pointer));
+  GC_POINT;
   res=(pointer)SEND(ctx,cnt+2, spsave);
   ctx->vsp=spsave;
   return(res);}
@@ -992,8 +1033,12 @@ va_dcl
   spsave=ctx->vsp;
   vpush(rec); vpush(sel);
   while (i++ < cnt) vpush(va_arg(ap,pointer));
+  GC_POINT;
   res=(pointer)SEND(ctx,cnt+2, spsave);
   ctx->vsp=spsave;
+#ifdef SAFETY
+  take_care(res);
+#endif
   return(res);}
 #endif
 
