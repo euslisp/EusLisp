@@ -109,7 +109,7 @@
 	      ((member :mips *features*) (list #x62 #x1))
 	      ((member :Solaris2 *features*) (list #x7f #\E #\L #\F))
 	      ((member :linux *features*) (list #x7f #\E #\L #\F))
- 	      ((member :cygwin *features*) (list #x4d #x5a #x90 #x00))
+	      ((member :cygwin *features*) (list #x4d #x5a #x90 #x00))
 ; alpha is little endian
 	      ((member :alpha *features*) (list #x83 #x1 #x1))
 	      (t ;  :sunos4 , other sun
@@ -222,9 +222,9 @@
 	        (cond ((member (probe-file path)
 			  '(:file :character :fifo :socket))
 			(do-load path))
-		      ((probe-file (setq oname (merge-pathnames ".so" path)))
-		       (do-load oname))
 		      ((probe-file (setq oname (merge-pathnames ".dll" path)))
+		       (do-load oname))
+		      ((probe-file (setq oname (merge-pathnames ".so" path)))
 		       (do-load oname))
 		      ((probe-file (setq oname (merge-pathnames ".o" path)))
 		       (do-load oname))

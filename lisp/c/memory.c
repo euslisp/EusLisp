@@ -404,10 +404,10 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #else /* Solaris2 */
 #if Linux
 #define out_of_heap(p) ((int)p<(int)_end || (pointer)maxmemory <p)
-#elif Cygwin
+#else /* Linux */
+#if Cygwin /* Cygwin does not have _end */
 #define out_of_heap(p) ((int)p<(int)minmemory || (pointer)maxmemory <p)
-#else
-
+#else /* Cygwin */
 #if alpha
 #if THREADED
 #define out_of_heap(p) ((long)p<4 || bottom_addr<(long)p)
@@ -426,6 +426,7 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #endif /* SunOS4_1 */
 #endif /* alpha */
 #endif /* Linux */
+#endif /* Cygwin */
 #endif /* Solaris2 */
 
 
