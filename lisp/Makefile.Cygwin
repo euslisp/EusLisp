@@ -48,7 +48,7 @@ DEBUG= -g
 # In order to include thread library, libc.so.6 is preferrable.
 
 CFLAGS=-D$(MACHINE) -DCygwin -D_REENTRANT -DVERSION=\"$(VERSION)\" \
-	-DUSE_STDARG -falign-functions=4 \
+	-DGCC -DKERNEL -falign-functions=4 \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/lisp/c
 
@@ -86,8 +86,9 @@ OFLAGS=-O
 
 # link-editor's default flags ?-rdynamic 
 #SOFLAGS= -shared --allow-shlib-undefined --warn-unresolved-symbols --unresolved-symbols=ignore-all --warn-once --enable-extra-pe-debug --enable-auto-import
-SOFLAGS= -shared --export-all-symbols --unresolved-symbols=ignore-all
-LDFLAGS= -Xlinker --export-all-symbols --Xlinker
+SOFLAGS= -shared --export-all-symbols --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc
+LDFLAGS= -Wl,--out-implib=$(ADLIBDIR)/$(@F).dll.a -Wl,--export-all-symbols -Wl,--enable-auto-import -Wl,--enable-runtime-pseudo-reloc
+
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 MAPOPTION=  $(OBJDIR)/par.o
 
@@ -126,7 +127,7 @@ $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS) $(COMPOBJECTS) \
 		$(LIBEUSGEO) $(LIBEUSX) $(LIBEUSGL) 
-	(sh tool/cygwinexe.sh -o $(BINDIR)/eusgl.exe \
+	($(CC) $(LDFLAGS) -o $(BINDIR)/eusgl.exe \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \

@@ -1281,7 +1281,7 @@
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
 		   	 ((memq :linux *features*)  " -Di386 -DLinux -w")
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
-			 ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DUSE_STDARG -DX_V11R6_1 -falign-functions=4 -w")
+			 ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DX_V11R6_1 -falign-functions=4 ")
 			 ((memq :i386  *features*) " -Di386")
 			 (t (warn "cpu type is not properly set")))
 		   (cond ((memq :sunos4 *features*) " -DSunOS4 -Bstatic")
