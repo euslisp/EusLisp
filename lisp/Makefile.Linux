@@ -1,5 +1,5 @@
 # makefile for EusLisp on sun4 with SunOS (Solaris)
-# RCSid="@(#)$Id: Makefile.Linux,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $"
+# RCSid="@(#)$Id$"
 #	Copyright (1988) Toshihiro MATSUI, Electrotechnical Laboratory
 #	1989/Oct
 #	1990/Sep Second Tape Distribution
@@ -24,9 +24,10 @@ include Makefile.generic1
 # Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
 #
 # for Linux
-#CPU_OPTIMIZE=-m486
-CPU_OPTIMIZE='-march=i586'
- 
+
+CPU_OPTIMIZE=-m486
+CPU_OPTIMIZE=-mcpu=Pentium3
+
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
 MACHINE=i486
 
@@ -41,9 +42,8 @@ OFLAGS=-O
 #        $(CPU_OPTIMIZE) -DGCC \
 #	 -I$(EUSDIR)/include 
 CFLAGS=-D$(MACHINE) -DLinux  -D_REENTRANT -DVERSION=\"$(VERSION)\" \
-	-DLIB6  $(CPU_OPTIMIZE) -DGCC  -falign-functions=4 \
+	-DLIB6  $(CPU_OPTIMIZE) -DGCC -falign-functions=4 \
 	-I$(EUSDIR)/include 
-# -falign-functions=4
 PIC= -fpic
 
 # Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
@@ -83,7 +83,7 @@ SOFLAGS= -shared
 LDFLAGS= -rdynamic
 MTOBJECTS=
 MTCOBJECTS=
-MAPOPTION=-Xlinker -Map -Xlinker $(ADLIBDIR)/eusmap 
+MAPOPTION=
 
 #################################################################
 # end of the customizable section
