@@ -7,7 +7,7 @@
  */
 
 /* thread function for POSIX Thread */
-static struct {
+struct {
     int using;
     thread_t tid;
 } thread_table[MAXTHREAD];
@@ -63,7 +63,8 @@ static void thr_cleanup( struct thr_arg *arg )
 
 static void thr_startup( struct thr_arg *arg )
 {
-    if (debug) printf( "thr_startup:tid=%d\n", arg->tid );
+    //if (debug) printf( "thr_startup:tid=%d\n", arg->tid ); 
+    /* this line cases SEGMENTATION FAULT, but why? */
 
     pthread_cleanup_push( thr_cleanup, arg );
 

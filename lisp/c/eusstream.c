@@ -6,18 +6,16 @@
 /*	1987-Mar	extension of string output stream
 /*	1987-May	filestream, socketstream,...
 /****************************************************************/
-static char *rcsid="@(#)$Id: eusstream.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include <ctype.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <sys/types.h>
-
 #if system5
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #endif
-
 #include "eus.h"
 
 extern int errno;
@@ -61,7 +59,7 @@ pointer s;
     if (fd>=0) stat=close(fd);
     else stat= -1;
 /*    if (debug) fprintf(stderr,"closestream fd=%d stat=%d\n",fd,(stat?errno:0)); */
-    s->c.stream.direction=NIL;
+    pointer_update(s->c.stream.direction,NIL);
     return(stat);}
   return(0);}
 
@@ -97,8 +95,8 @@ register pointer s;
       else return(0);}
     else {
       tryfread:
-      c=read(intval(s->c.fstream.fd), strbuf,
-	     intval((s->c.stream.buffer)->c.str.length));
+      GC_REGION(c=read(intval(s->c.fstream.fd), strbuf,
+	     intval((s->c.stream.buffer)->c.str.length)););
       if (debug) {
 	printf(";; read; stat=%d errno=%d, intsig=%d\n", c, errno, ctx->intsig);}
       breakck;
@@ -193,7 +191,7 @@ register pointer s;
       extstr=makebuffer(cnt*2);
       memcpy(extstr->c.str.chars, bstr->c.str.chars, cnt);
       /* substituted bcopy(bstr->c.str.chars,extstr->c.str.chars,cnt);*/
-      s->c.stream.buffer=extstr;
+      pointer_update(s->c.stream.buffer,extstr);
       s->c.stream.tail=makeint(cnt*2-1);}
     return(0); }
   else if (csend(euscontexts[thr_self()], s,K_FLUSH,0)==NIL) return(-1); else return(0);

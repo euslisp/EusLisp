@@ -3,7 +3,7 @@
 /*	1986-Aug
 /*	T.Matsui, ETL 
 /****************************************************************/
-static char *rcsid="@(#)$Id: sysfunc.c,v 1.1.1.1 2003/11/20 07:46:25 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
@@ -49,7 +49,11 @@ pointer argv[];
   ss=ckintval(argv[0]);
   while (buddysize[i]<ss) i++;
   if (i>=MAXBUDDY) error(E_ALLOCATION);
+#ifdef RGC /* and #ifndef __HEAP_EXPANDABLE */
+  /* now, heap isn't expandable under RGC. */
+#else
   i=newchunk(i);
+#endif
   if (i==ERR) error(E_ALLOCATION);
   else return(makeint(buddysize[i]));}
 
@@ -68,7 +72,9 @@ pointer argv[];
 pointer DISPOSE_HOOK(ctx,n,argv)
 context *ctx;
 pointer argv[];
-{ pointer p;
+{ 
+#ifndef RGC
+  pointer p;
   ckarg2(1,2);
   p=argv[0];
   if (!ispointer(p)) error(E_NOOBJECT);
@@ -78,6 +84,7 @@ pointer argv[];
       p->nodispose=((argv[1]==NIL)?0:1); 
       return(argv[1]); }
     }
+#endif
   }
 
 #if Solaris2
@@ -107,7 +114,11 @@ register pointer p;
   if (marked(bp)) return(0);	/*already marked*/
   markon(bp);	/*mark it first to avoid endless marking*/
   if (bp->h.elmtype==ELM_FIXED) {	/*contents are all pointers*/
+#ifdef RGC
+    s=buddysize[bp->h.bix&TAGMASK]-1;
+#else
     s=buddysize[bp->h.bix]-1;
+#endif
     while (s>0) {
       p=bp->b.c[--s];
       if (ispointer(p)) xmark(ctx,p);}}
@@ -135,7 +146,11 @@ register pointer p;
     markoff(bp);
     reclaim(bp);
     if (bp->h.elmtype==ELM_FIXED) {	/*contents are all pointers*/
+#ifdef RGC
+      s=buddysize[bp->h.bix&TAGMASK]-1;
+#else
       s=buddysize[bp->h.bix]-1;
+#endif
       r=s;
       while (s>0) {
         p=bp->b.c[--s];
@@ -150,6 +165,7 @@ register pointer p;
     return(r);}
   else return(0); }
 
+#ifndef RGC
 pointer RECLAIM(ctx,n,argv)
 register context *ctx;
 int n;
@@ -167,7 +183,12 @@ pointer argv[];
 #if THREADED
   mutex_unlock(&alloc_lock);
 #endif
-  return(makeint(buddysize[bp->h.bix]-1));}
+#ifdef RGC
+  return(makeint(buddysize[bp->h.bix&TAGMASK]-1));
+#else
+  return(makeint(buddysize[bp->h.bix]-1));
+#endif
+}
 
 pointer RECLTREE(ctx,n,argv)
 register context *ctx;
@@ -188,6 +209,23 @@ pointer argv[];
 #endif
   return(makeint(n));}
 
+#else /* RGC */
+pointer RECLAIM(ctx,n,argv)
+register context *ctx;
+int n;
+pointer argv[];
+{
+
+}
+
+pointer RECLTREE(ctx,n,argv)
+register context *ctx;
+int n;
+pointer argv[];
+{
+
+}
+#endif /* RGC */
 
 static int cell_count, object_size, cell_size, count_symbol;
 
@@ -293,7 +331,11 @@ pointer *argv;
     p= &cp->rootcell;
     tail=(bpointer)((integer_t)p+(s<<WORDSHIFT));/* ???? */
     while (p<tail) {
+#ifdef RGC
+      i=p->h.bix&TAGMASK;
+#else
       i=p->h.bix;
+#endif
       tcount[i]++;
       p=(bpointer)((integer_t)p+(buddysize[i]<<WORDSHIFT));}/* ???? */
     cp=cp->nextchunk;}
@@ -360,10 +402,20 @@ pointer argv[];
 	  fprintf(stderr,"bad cid %d at 0x%x, bix=%d\n",i,b,b->h.bix);
         else {
 	  counts[i]++;
-	  sizes[i]+=buddysize[b->h.bix]; }}
+#ifdef RGC
+	  sizes[i]+=buddysize[b->h.bix&TAGMASK]; 
+#else
+	  sizes[i]+=buddysize[b->h.bix]; 
+#endif
+        }}
       else {
 	holecount++;
-	holesize+=buddysize[b->h.bix];}
+#ifdef RGC
+	holesize+=buddysize[b->h.bix&TAGMASK];
+#else
+	holesize+=buddysize[b->h.bix];
+#endif
+      }
       b=nextbuddy(b);} }
   sweepall();
 #if THREADED
@@ -706,7 +758,7 @@ register context *ctx;
 pointer mod;
 { pointer pkgname,pkgnick,p=Spevalof(PACKAGE);
 
-  Spevalof(PACKAGE)=syspkg;
+  pointer_update(Spevalof(PACKAGE),syspkg);
 
   defun(ctx,"SBCOUNT",mod,SBCOUNT);
   defun(ctx,"GC",mod,GEESEE);
@@ -738,5 +790,5 @@ pointer mod;
   defun(ctx,"THREAD-SPECIALS", mod, THREAD_SPECIALS);
   defun(ctx,"DISPOSE-HOOK", mod, DISPOSE_HOOK);
 
-/* restore package*/  Spevalof(PACKAGE)=p;
+/* restore package*/  pointer_update(Spevalof(PACKAGE),p);
 }

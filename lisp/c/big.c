@@ -15,7 +15,7 @@
 
 */
 
-static char *rcsid="@(#)$Id: big.c,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $";
+static char *rcsid="@(#)$Id$";
 #include "eus.h"
 
 #define	ltz(x)	((x)<0)
@@ -363,7 +363,7 @@ integer_t i;
   newv=makevector(C_INTVECTOR, vlen+1);
   for (j=0; j<vlen; j++) newv->c.ivec.iv[j]=bn->c.ivec.iv[j];
   newv->c.ivec.iv[vlen]=i;
-  x->c.bgnm.bv=newv;
+  pointer_update(x->c.bgnm.bv, newv);
   return(newv);
   }
 
@@ -378,6 +378,9 @@ pointer x;
   xv=bigvec(x);
   yv=bigvec(y);
   for (i=0; i<size; i++) yv[i]=xv[i];
+#ifdef SAFETY
+  take_care(y);
+#endif
   return(y);
   }
 
@@ -520,6 +523,9 @@ pointer x;
     yv=bigvec(y);
     }
   else	yv[i] = -(xv[i]);
+#ifdef SAFETY
+  take_care(y);
+#endif
   return(y);
 
 ONE:
@@ -529,6 +535,9 @@ ONE:
 	yv[i] = (~xv[i]) & MASK;
 	}
   yv[i] = ~xv[i];
+#ifdef SAFETY
+  take_care(y);
+#endif
   return(y);
 }
 
@@ -598,7 +607,11 @@ mul_int_big(c, x)
 integer_t c;
 pointer x;
 { int size, i=0;
+#if Solaris2 && sun4
+  unsigned int *xv, h=0;
+#else
   integer_t *xv, h=0;
+#endif
 
   size=bigsize(x); xv=bigvec(x);
   while (i<size) {
@@ -619,7 +632,11 @@ integer_t div_int_big(c, x)
 integer_t c;
 pointer x;
 { int i, size;
+#if Solaris2 && sun4
+  unsigned int *xv, r;
+#else
   integer_t *xv, r;
+#endif
   if (c == 0) error(E_USER,(pointer)"divide by zero in bignum div");
   size=bigsize(x); xv=bigvec(x);
   /* divide from MSB */ 
@@ -688,7 +705,11 @@ pointer x, y;
   integer_t *xv, *yv, *zv;
   int i, j, k, m;
   pointer z;
+#if Solaris2 && sun4
+  unsigned int hi, lo;
+#else
   integer_t hi, lo;
+#endif
   
   xsize=bigsize(x); ysize=bigsize(y);
   zsize=xsize+ysize;
@@ -715,6 +736,9 @@ pointer x, y;
         }
       }
     }
+#ifdef SAFETY
+  take_care(z);
+#endif
   return(z);}
 
 /*
@@ -731,7 +755,11 @@ pointer x, y;
 { int i, j;
   int xsize, ysize;
   integer_t *xv, *yv;
+#if Solaris2 && sun4
+  unsigned int hi, lo;
+#else
   integer_t hi, lo;
+#endif
 
   xsize=bigsize(x); ysize=bigsize(y);
   xv=bigvec(x); yv=bigvec(y);
@@ -796,7 +824,11 @@ integer_t div_big_big(x, y)
 pointer  x, y;
 { int xsize, ysize, zsize;
   integer_t *xv, *yv, *zv;
+#if Solaris2 && sun4
+  unsigned int  q,r; /*quotient, remainder*/
+#else
   integer_t  q,r; /*quotient, remainder*/
+#endif
 
  
   xsize=bigsize(x); ysize=bigsize(y);
@@ -840,6 +872,9 @@ int i;
 	else {
 		qq = makebig(1);
 		bigvec(qq)[0] = i;
+#ifdef SAFETY
+        take_care(qq);
+#endif
 		return(qq);
 	}
     }
@@ -847,6 +882,9 @@ int i;
   qq=makebig(i);
 
   /********************????????????????????????**************/
+#ifdef SAFETY
+  take_care(qq);
+#endif
   
   return(qq);}
 

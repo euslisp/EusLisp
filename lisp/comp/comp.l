@@ -38,7 +38,7 @@
 	((member :alpha *features*) "cc -ieee_with_inexact" )
 	(t "cc")))
 
-(defvar comp nil "$Id: comp.l,v 1.1.1.1 2003/11/20 07:46:28 eus Exp $")
+(defvar comp nil "$Id$")
 (defvar trans)
 (defvar *multipass-optimize* t)
 
@@ -1279,8 +1279,7 @@
 		   	 ((memq :vax *features*)  " -Dvax -J")
 		   	 ((memq :news *features*)  " -Dnews")
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
-		   	 ((memq :linux *features*)
-				" -Di386 -DLinux -falign-functions=4 -w")
+		   	 ((memq :linux *features*)  " -Di386 -DLinux -w")
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
 			 ((memq :i386  *features*) " -Di386")
 			 (t (warn "cpu type is not properly set")))
@@ -1291,6 +1290,7 @@
 		   (if (memq :gcc *features*) " -DGCC " )
 		   (if (memq :thread *features*) " -DTHREADED" )
 		   (if (memq :pthread *features*) " -DPTHREAD" )
+		   (if (memq :rgc *features*) " -DRGC -D__USE_POLLING" )
 		   (if pic
 		       (cond ((memq :SunOS4.1 *features*) " -fpic")
 			     ((memq :Gcc *features*) " -fpic ")
@@ -1470,4 +1470,4 @@
 	    (exit 0)))
 )
 
-(provide :comp "@(#)$Id: comp.l,v 1.1.1.1 2003/11/20 07:46:28 eus Exp $")
+(provide :comp "@(#)$Id$")

@@ -7,7 +7,7 @@
 /*	minilist to list up rest arguments
 /*	Copyright(c) Toshihiro MATSUI, Electrotechnical Laboratory,1988.
 /****************************************************************/
-static char *rcsid="@(#)$Id: compsub.c,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
@@ -42,8 +42,8 @@ register pointer s,v;
   else if (vt>=V_SPECIAL) {
     ctx=euscontexts[thr_self()];
     x=intval(vt);
-    spevalof(s,x)=v;}
-  else s->c.sym.speval=v;
+    pointer_update(spevalof(s,x), v);}
+  else pointer_update(s->c.sym.speval, v);
   return(v);}
 
 pointer xcar(p)

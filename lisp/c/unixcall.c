@@ -10,7 +10,7 @@
 /*	Copyright(c) 1988 MATSUI Toshihiro, Electrotechnical Laboratory.
 /****************************************************************/
 
-static char *rcsid="@(#)$Id: unixcall.c,v 1.2 2003/12/29 04:19:35 cvseus Exp $";
+static char *rcsid="@(#)$Id$";
 
 /* SunOS's gettimeofday used to accept only one argument.
 #ifdef Solaris2
@@ -61,6 +61,7 @@ static char *rcsid="@(#)$Id: unixcall.c,v 1.2 2003/12/29 04:19:35 cvseus Exp $";
 #endif
 
 #if Solaris2 || Linux || alpha
+#include <errno.h>
 #include <dirent.h>
 #else
 extern int errno;
@@ -121,7 +122,9 @@ pointer argv[];
   times(&buffer);
   return(makeint(buffer.tms_utime+buffer.tms_stime));}
 
-pointer LOCALTIME(context *ctx, int n, pointer argv[])
+pointer LOCALTIME(ctx,n,argv)
+register context *ctx;
+pointer argv[];
 { long clock;
   struct tm *tms;
   pointer timevec;
@@ -178,26 +181,6 @@ register pointer argv[];
   else error(E_NOINTVECTOR);
   at=asctime(tms);
   return(makestring(at,strlen(at)));}
-
-pointer GMTIME(context *ctx, int n, pointer *argv)
-{ time_t timesecs;
-  struct tm *stime;
-  /* pointer result; */
-  ckarg(1);
-  timesecs=bigintval(argv[0]);
-  stime=gmtime(&timesecs);
-  vpush(makeint(stime->tm_sec));
-  vpush(makeint(stime->tm_min));
-  vpush(makeint(stime->tm_hour));
-  vpush(makeint(stime->tm_mday));
-  vpush(makeint(stime->tm_mon));
-  vpush(makeint(stime->tm_year));
-  vpush(makeint(stime->tm_wday));
-  vpush(makeint(stime->tm_yday));
-  vpush((stime->tm_isdst)?T:NIL);
-  /* cfree(stime); */
-  return(stacknlist(ctx,9));
-  }
 
 #if !Solaris2
 pointer GETRUSAGE(ctx,n,argv)
@@ -689,7 +672,7 @@ pointer argv[];
     else size=strlength(buf);
     if (n==4) offset=ckintval(argv[3]);}
   else error(E_STREAM);
-  size=read(fd, &bufp[offset],size);
+  GC_REGION(size=read(fd, &bufp[offset],size););
   count=makeint(size);
   if (isstream(strm)) {
     strm->c.stream.count=0; strm->c.stream.tail=count;}
@@ -1342,12 +1325,12 @@ register context *ctx;
 register int n;
 pointer argv[];
 { char *errstr;
-  int  errno_save;
   ckarg(1);
   n=ckintval(argv[0]);
-  errno_save=errno;
-  errstr=strerror(n);
-  if (errno==errno_save)  return(makestring(errstr, strlen(errstr))); 
+  if (0<=n && n<sys_nerr) {
+    errstr=strerror(n);
+    /* return(makestring(sys_errlist[n],strlen(sys_errlist[n]))); */
+    return(makestring(errstr, strlen(errstr))); }
   else error(E_ARRAYINDEX);}
 
 pointer PAUSE(ctx,n,argv)
@@ -1568,13 +1551,13 @@ register pointer argv[];
 
   timeout=ckfltval(argv[3]);
   if (timeout==0.0)
-    i=select(width, readfds, writefds, exceptfds,0);
+  {GC_REGION(i=select(width, readfds, writefds, exceptfds,0););}
   else {
     to.tv_sec=timeout;
     timeout=timeout-to.tv_sec;
     timeout=timeout*1000000;
     to.tv_usec=timeout;
-    i=select(width, readfds, writefds, exceptfds,&to);}
+    GC_REGION(i=select(width, readfds, writefds, exceptfds,&to);)}
   if (i<0) return(makeint(-errno));
   else return(makeint(i)); }
 
@@ -1599,13 +1582,13 @@ pointer argv[];
   width = width+1;
      
   timeout=ckfltval(argv[1]);
-  if (timeout==0.0) n=select(width, fdvec, 0, 0, 0);
+  if (timeout==0.0) {GC_REGION(n=select(width, fdvec, 0, 0, 0););}
   else {
     to.tv_sec=timeout;
     timeout=timeout-to.tv_sec;
     timeout=timeout*1000000;
     to.tv_usec=timeout;
-    n=select(width, fdvec, 0, 0, &to);}
+    GC_REGION(n=select(width, fdvec, 0, 0, &to););}
   if (n<0) return(makeint(-errno));
   if (isint(argv[0])) {
     /*fds=fdvec-> __fds_bits[0];*/
@@ -1945,7 +1928,6 @@ pointer mod;
   defun(ctx,"RUNTIME",mod,RUNTIME);
   defun(ctx,"LOCALTIME",mod,LOCALTIME);
   defun(ctx,"ASCTIME",mod,ASCTIME);
-  defun(ctx,"GMTIME",mod,GMTIME);
   defun(ctx,"GETITIMER",mod,GETITIMER);
   defun(ctx,"SETITIMER",mod,SETITIMER);
 
@@ -2078,5 +2060,5 @@ pointer mod;
 #endif
 
 #endif
-/* restore package*/  Spevalof(PACKAGE)=p;
+/* restore package*/  pointer_update(Spevalof(PACKAGE),p);
 }

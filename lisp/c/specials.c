@@ -10,7 +10,7 @@
 /*	1986-Dec	let*
 /*	1987-Mar	special binding declaration
 *****************************************************************/
-static char *rcsid="@(#)$Id: specials.c,v 1.1.1.1 2003/11/20 07:46:25 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 extern pointer MACRO,LAMBDA,LAMCLOSURE;
@@ -105,6 +105,9 @@ register pointer argv[];
   a=(pointer)ufuncall(ctx,(ctx->callfp?ctx->callfp->form:NIL),
 			fun,(pointer)spsave,NULL,argc);
   ctx->vsp=spsave;
+#ifdef SAFETY
+  take_care(a);
+#endif
   return(a);}
 
 pointer FUNCALL(ctx,n,argv)
@@ -124,7 +127,7 @@ register pointer argv[];
 #endif
   if (issymbol(fun)) {
     if (fun->c.sym.spefunc==UNBOUND) error(E_UNDEF,fun);}
-  Spevalof(QEVALHOOK)=NIL;
+  pointer_update(Spevalof(QEVALHOOK),NIL);
   return((pointer)ufuncall(ctx,ctx->callfp->form,fun,(pointer)&argv[1],NULL,n-1));}
 
 pointer FUNCTION_CLOSURE(ctx,arg)
@@ -165,12 +168,13 @@ register pointer argv[];
   if (iscode(mac)) {
     if (mac->c.code.subrtype!=(pointer)SUBR_MACRO) return(argv[0]);
     expander=makecode(mac,(pointer (*)())mac->c.code.entry,SUBR_FUNCTION);
-    expander->c.code.entry=mac->c.code.entry;}
+    pointer_update(expander->c.code.entry,mac->c.code.entry);}
   else if (carof(mac,E_NOLIST)==MACRO) expander=cons(ctx,LAMBDA,ccdr(mac));
   else return(argv[0]);
   vpush(expander);
   argp=ctx->vsp; 
   while (islist(args)) { vpush(ccar(args)); args=ccdr(args); noarg++;}
+  GC_POINT;
   mac=ufuncall(ctx,ctx->callfp->form,expander,(pointer)argp,NULL,noarg);
   /* ???? ctx->lastalloc=mac; ????*/
   ctx->vsp=argp-1;
@@ -203,6 +207,7 @@ register pointer *argv;
       argv[i]=ccdr(a);
       i++;}
     i--;
+    GC_POINT;
     ufuncall(ctx,ctx->callfp->form,argv[0],(pointer)(ctx->vsp - i),NULL,i);
     ctx->vsp -= i;}
   return(argv[1]);}
@@ -233,10 +238,12 @@ register pointer *argv;
       argv[i]=ccdr(a);
       i++;}
     i--;
+    GC_POINT;
     r=ufuncall(ctx,ctx->callfp->form,argv[0],(pointer)(ctx->vsp - i),NULL,i);
     ctx->vsp -=i;
     vpush(r);
     rcount++;}
+    GC_POINT;
   r=(pointer)stacknlist(ctx,rcount);
   return(r);}
 
@@ -265,10 +272,12 @@ register pointer *argv;
       argv[i]=ccdr(a);
       i++;}
     i--;
+    GC_POINT;
     r=ufuncall(ctx,ctx->callfp->form,argv[0],(pointer)(ctx->vsp -i),NULL,i);
     ctx->vsp -=i;
     vpush(r);
     rcount++;}
+    GC_POINT;
   a=(pointer)NCONC(ctx,rcount,spsave);
   ctx->vsp=spsave;
   return(a);}
@@ -286,11 +295,12 @@ register pointer arg;
   while (iscons(arg)) {
     var=ccar(arg); arg=ccdr(arg);
     if (!islist(arg)) error(E_MISMATCHARG);
+    GC_POINT;
     val=eval(ctx,ccar(arg)); arg=ccdr(arg);
     if (issymbol(var)) setval(ctx,var,val);
     else if (islist(var) && issymbol(ccdr(var)) && ccdr(var)!=NIL) {
       vpush(val);
-      p=(pointer *)ovafptr(eval(ctx,ccar(var)),ccdr(var)); *p=vpop();}
+      p=(pointer *)ovafptr(eval(ctx,ccar(var)),ccdr(var)); pointer_update(*p,vpop());}
     else error(E_NOSYMBOL,var);}
   return(val);}
 
@@ -308,6 +318,7 @@ register pointer arg;
 #ifdef SPEC_DEBUG
   printf( "IF:" ); hoge_print( arg );
 #endif
+  GC_POINT;
   if (eval(ctx,ccar(arg))!=NIL) return(eval(ctx,ccar(rest)));
   else {
     rest=ccdr(rest);
@@ -351,7 +362,7 @@ pointer arg;
   myblock=(struct blockframe *)
 		makeblock(ctx,BLOCKFRAME,NIL,(jmp_buf *)whilejmp,ctx->blkfp); /* ???? */
   if ((result=(pointer)eussetjmp(whilejmp))==0) {
-    while (eval(ctx,cond)!=NIL) progn(ctx,body);
+    while (eval(ctx,cond)!=NIL) {GC_POINT;progn(ctx,body);}
     result=NIL;}
   else if ((integer_t)result==1) result=makeint(0);
   ctx->blkfp=myblock->dynklink;
@@ -370,6 +381,7 @@ pointer arg;
   while (islist(arg)) {
     clause=ccar(arg);
     if (!islist(clause)) error(E_NOLIST);
+    GC_POINT;
     cond=eval(ctx,ccar(clause));
     if (cond!=NIL) if (islist(ccdr(clause))) return(progn(ctx,ccdr(clause)));
 		   else return(cond);
@@ -404,6 +416,7 @@ pointer args;
     env=declare(ctx,ccdr(decl),env);	/*add special decl. to current env*/
     body=ccdr(body);}
 
+  GC_POINT;
   /*evaluate variable initializers*/
   vlistsave=vlist;
   vinits=ctx->vsp;
@@ -416,6 +429,7 @@ pointer args;
     else init=NIL;
     vpush(init); vcount++;}
   /*update bindings at once*/
+  GC_POINT;
   vlist=vlistsave;
   while (i<vcount)  {
     var=ccar(vlist); vlist=ccdr(vlist);
@@ -440,6 +454,7 @@ pointer args;
   printf( "SEQLET:" );	hoge_print(args);
 #endif
 
+  GC_POINT;
   vlist=carof(args,E_MISMATCHARG);
   body=ccdr(args);
   env=bf;	/*inherit lexical variable scope*/
@@ -453,6 +468,7 @@ pointer args;
 
   /*bind let* variables*/
   while (islist(vlist)) {
+    GC_POINT;
     var=ccar(vlist); vlist=ccdr(vlist);
     if (islist(var)) {
       init=ccdr(var); var=ccar(var);
@@ -492,6 +508,9 @@ pointer arg;
   ctx->fletfp=ctx->catchfp->ff;
   ctx->vsp=(pointer *)ctx->catchfp;
   ctx->catchfp=(struct catchframe *)*ctx->vsp;
+#ifdef __RETURN_BARRIER
+  check_return_barrier(ctx);
+#endif
   return(val);}
 
 throw(ctx,tag,result)
@@ -516,7 +535,10 @@ register pointer arg;
   tag=carof(arg,E_MISMATCHARG);
   arg=ccdr(arg);
   result=carof(arg,E_MISMATCHARG);
-  tag=eval(ctx,tag); result=eval(ctx,result);
+  GC_POINT;
+  tag=eval(ctx,tag); 
+  GC_POINT;
+  result=eval(ctx,result);
   throw(ctx,tag,result);
   error(E_NOCATCHER,tag);}
 
@@ -529,6 +551,7 @@ register pointer arg;
 #ifdef SPEC_DEBUG
   printf( "FLET:" ); hoge_print(arg);
 #endif
+  GC_POINT;
   fns=ccar(arg);
   while (iscons(fns)) {
     fn=ccar(fns); fns=ccdr(fns);
@@ -546,6 +569,7 @@ register pointer arg;
 #ifdef SPEC_DEBUG
   printf( "LABELS:" ); hoge_print(arg);
 #endif
+  GC_POINT;
   fns=ccar(arg);
   while (iscons(fns)) {
     fn=ccar(fns); fns=ccdr(fns);
@@ -593,6 +617,7 @@ pointer *argv;
 #endif
   if (n==3) env=argv[2]; else env=NULL;
   form=argv[0];
+  GC_POINT;
   if (islist(form)) {
     ehbypass=1;
     bindspecial(ctx,QEVALHOOK,argv[1]);
@@ -613,6 +638,7 @@ register pointer arg;		/*must be called via ufuncall*/
   printf( "BLOCK:" ); hoge_print(arg);
 #endif
 
+  GC_POINT;
   name=carof(arg,E_MISMATCHARG); arg=ccdr(arg);
   if (!issymbol(name)) error(E_NOSYMBOL);
   myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,name,(jmp_buf *)blkjmp,ctx->blkfp); /* ???? */
@@ -631,6 +657,7 @@ pointer arg;
 #ifdef SPEC_DEBUG
   printf( "RETFROM:" ); hoge_print(arg);
 #endif
+  GC_POINT;
   name=carof(arg,E_MISMATCHARG); arg=ccdr(arg);
   while (ctx->blkfp!=NULL) 
     if (ctx->blkfp->kind==BLOCKFRAME && ctx->blkfp->name==name) {
@@ -664,6 +691,7 @@ pointer arg;
 #ifdef SPEC_DEBUG
   printf( "UNWINDPROTECT:" );	hoge_print(arg);
 #endif
+  GC_POINT;
   protform=ccar(arg);
   if (islist(arg)) cleanupform=ccdr(arg); else cleanupform=NIL;
   cleaner=cons(ctx,NIL,cleanupform);
@@ -675,6 +703,7 @@ pointer arg;
   /*bug...blocks and special variable bindings are not saved*/
   vpush(ctx->protfp); vpush(cleaner);
   ctx->protfp=(struct protectframe *)spsave;
+  GC_POINT;
   result=eval(ctx,protform);
   ctx->vsp=spsave;
   ctx->protfp=oldprotfp;
@@ -693,6 +722,7 @@ pointer arg;
 #ifdef SPEC_DEBUG
   printf( "TAGBODY:" ); hoge_print(arg);
 #endif
+  GC_POINT;
   p=forms=arg;
   while (iscons(p)) {
     if (!iscons(ccar(p))) golist=cons(ctx,p,golist);
@@ -706,6 +736,7 @@ repeat:
     ctx->vsp=tagspsave;
     ctx->bindfp=bfpsave;
     while (iscons(forms)) {
+      GC_POINT;
       p=ccar(forms);
       if (iscons(p)) eval(ctx,p);
       forms=ccdr(forms);} }
@@ -727,6 +758,7 @@ pointer arg;
 	(body=(pointer)assq(tag,ctx->blkfp->name))!=NIL) {
       unwind(ctx,(pointer *)ctx->blkfp);
       euslongjmp(ctx->blkfp->jbp,body);}/* ???? */
+      /* euslongjmp(*(ctx->blkfp->jbp),body);} *//* ??? eus_rbar */
     ctx->blkfp=ctx->blkfp->lexklink;}
   error(E_USER,(pointer)"go tag not found");}
 
@@ -753,6 +785,7 @@ pointer arg;
   typeid=carof(arg,E_MISMATCHARG); arg=ccdr(arg);
   form=carof(arg,E_MISMATCHARG);
   if (islist(ccdr(arg))) error(E_MISMATCHARG);
+  GC_POINT;
   result=eval(ctx,form);
   if (typeid==QINTEGER || typeid==QFIXNUM)
     if (!isint(result)) error(E_NOINT);
@@ -776,6 +809,7 @@ register pointer arg;
   printf( "AND:" ); hoge_print( arg );
 #endif
   while (islist(arg)) {
+    GC_POINT;
     if ((r=eval(ctx,ccar(arg)))==NIL) return(r);
     arg=ccdr(arg); }
   return(r);}
@@ -788,6 +822,7 @@ register pointer arg;
   printf( "OR:" );	hoge_print( arg );
 #endif
   while (islist(arg)) {
+    GC_POINT;
     if ((r=eval(ctx,ccar(arg)))!=NIL) return(r);
     arg=ccdr(arg);    }
   return(NIL);}
@@ -805,6 +840,7 @@ pointer argv[];
       hoge_print_sub( argv[i] );}
   printf( "\n" );
 #endif
+  GC_POINT;
   while (i<n) {
     decl=argv[i++];
     if (!islist(decl)) error(E_DECLFORM);
@@ -990,7 +1026,7 @@ pointer *argv;
 #ifdef SPEC_DEBUG
   printf( "MAKEUNBOUND:" ); hoge_print( argv[0] );
 #endif
-  argv[0]->c.sym.speval=UNBOUND;
+  pointer_update(argv[0]->c.sym.speval,UNBOUND);
   return(T);}
 
 set_special(ctx, var, val)
@@ -1000,10 +1036,10 @@ pointer var, val;
   int x;
   vt=var->c.sym.vtype;
   if (vt==V_CONSTANT) error(E_SETCONST);
-  else if (vt==V_VARIABLE || vt==V_GLOBAL) speval(var)=val;
+  else if (vt==V_VARIABLE || vt==V_GLOBAL) {pointer_update(speval(var),val);}
   else {
     x=intval(vt);
-    ctx->specials->c.vec.v[x]=val;} }
+    pointer_update(ctx->specials->c.vec.v[x],val);} }
 
 pointer SETSPECIAL(ctx,n,argv)
 context *ctx;
@@ -1029,7 +1065,7 @@ pointer arg;
 #endif
   funcname=carof(arg,E_MISMATCHARG);
   arg=ccdr(arg);
-  if (issymbol(funcname)) funcname->c.sym.spefunc=cons(ctx,LAMBDA,arg);
+  if (issymbol(funcname)) {pointer_update(funcname->c.sym.spefunc,cons(ctx,LAMBDA,arg));}
   else error(E_NOSYMBOL);
   putprop(ctx,funcname,
 	 (isstring(ccar(ccdr(arg))))?(ccar(ccdr(arg))):(ccar(arg)),
@@ -1045,7 +1081,7 @@ pointer arg;
 #endif
   macname=carof(arg,E_MISMATCHARG);
   arg=ccdr(arg);
-  if (issymbol(macname)) macname->c.sym.spefunc=cons(ctx,MACRO,arg);
+  if (issymbol(macname)) {pointer_update(macname->c.sym.spefunc,cons(ctx,MACRO,arg));}
   else error(E_NOSYMBOL);
   return(macname);}
 
@@ -1180,11 +1216,11 @@ register pointer sym,val,attr;
 { register pointer p;
   p=sym->c.sym.plist;
   while (iscons(p))
-    if (ccar(ccar(p))==attr) { ccdr(ccar(p))=val; return(val);}
+    if (ccar(ccar(p))==attr) { pointer_update(ccdr(ccar(p)),val); return(val);}
     else p=ccdr(p);
   /* no such a property; create it */
   p=cons(ctx,attr,val);
-  sym->c.sym.plist=cons(ctx,p,sym->c.sym.plist);
+  pointer_update(sym->c.sym.plist,cons(ctx,p,sym->c.sym.plist));
   return(val);}
 
 pointer PUTPROP(ctx,n,argv)	/*(putprop sym val attr)*/

@@ -1,6 +1,6 @@
 /****************************************************************/
 /* eus.h	Etl, Umezono, Sakura-mura Lisp
-/*	@(#)$Id: eus.h,v 1.1.1.1 2003/11/20 07:46:23 eus Exp $
+/*	@(#)$Id$
 /*	Copyright(c)1988, Toshihiro Matsui, Electrotechnical Laboratory,
 /*	all rights reserved, all wrongs left.
 /*	created on:	1986-May
@@ -29,7 +29,6 @@ typedef float float_t;
 #if GCC || Solaris2 || IRIX || Linux || IRIX6
 #define USE_STDARG
 #include <stdlib.h>
-#include <errno.h>
 #endif
 
 #if alpha
@@ -71,7 +70,6 @@ extern integer_t setjmp_val;
 #endif
 
 #include <setjmp.h>
-#include <string.h>
 
 #define ERR (-1)
 #define	STOPPER	((pointer)0L)	/*impossible pointer object*/
@@ -127,7 +125,7 @@ extern integer_t setjmp_val;
 #define MAXTHRBUDDY	6	/*small free cells cached thread-locally*/
 #define MAXSTACK	65536	/*can be expanded by sys:newstack*/
 #define SYMBOLHASH	60	/*initial obvector size in package*/
-#define MAXCLASS	256		/* by M.Inaba from 64 */
+#define MAXCLASS	4096	/* by M.Inaba from 64 */
 #define KEYWORDPARAMETERLIMIT 32	/*determined by bits in a long word*/
 #define ARRAYRANKLIMIT	7	/*minimal requirement for CommonLisp*/
 #define MAXTHREAD	64	/*maximum number of threads*/
@@ -148,6 +146,15 @@ typedef unsigned char byte;
 typedef unsigned short word;	/*seldom used*/
 typedef struct cell *pointer;
 
+#ifdef RGC
+#include "external_markbits.h"
+#include "time.h"
+#include "collector.h"
+
+#define DEFAULT_MAX_RGCSTACK 16384
+#define PMAXSTACK (MAXSTACK*110)
+#endif
+
 struct cellheader {
   unsigned mark:1;	/* GC mark*/
   unsigned b:1;		/* buddy: indicates the side in which its buddy should be found */
@@ -156,8 +163,12 @@ struct cellheader {
   unsigned pmark:1;	/* print mark*/
   unsigned elmtype:3;
   unsigned nodispose:1;
+#ifdef RGC
+  unsigned bix:7;
+#else
   unsigned extra:1;
   unsigned bix:6;		/*5 bits are enough*/
+#endif
   short	   cix;};	/*8 bits may be enough*/
 
 /****************************************************************/
@@ -349,8 +360,12 @@ typedef
     unsigned pmark:1;
     unsigned elmtype:3;
     unsigned nodispose:1;
+#ifdef RGC
+    unsigned bix:7;
+#else
     unsigned extra:1;
     unsigned bix:6;
+#endif
 #endif
     short cix;
     union cellunion {
@@ -480,6 +495,9 @@ struct methdef {
 
 typedef struct {
 	pointer	*stack, *vsp,*stacklimit;
+#ifdef RGC
+    pointer *gcstack, *gsp, *gcstacklimit;
+#endif
 	struct	callframe	*callfp;
 	struct	catchframe	*catchfp;
 	struct	bindframe	*bindfp;
@@ -498,7 +516,11 @@ typedef struct {
 	int	slashflag;
 	pointer specials;
         int     intsig;
+#ifdef __RETURN_BARRIER
+    rbar_t rbar;  /* some extra words are needed? */
+#else
 	long	extra[10];	/* 32 long words */
+#endif
         }
 	context;
 
@@ -659,8 +681,13 @@ extern int export_all;
 /* macro definition for euslisp
 /****************************************************************/
 
+#ifdef RGC
+#define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error(E_DUMMY5,(pointer)(err)))
+#define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error(E_DUMMY5,(pointer)(err)))
+#else
 #define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error(E_DUMMY3,(pointer)(err)))
 #define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error(E_DUMMY3,(pointer)(err)))
+#endif
 #define ccar(p) ((p)->c.cons.car)
 #define ccdr(p) ((p)->c.cons.cdr)
 #define cixof(p) ((p)->cix)
@@ -693,10 +720,14 @@ extern int export_all;
 #define ispointer(p) (!((integer_t)(p) & 3))
 #define makeint(v) ((pointer)((((integer_t)(v))<<2)+2))
 #define bpointerof(p) ((bpointer)((integer_t)(p)))
+#ifdef RGC
+#define nextbuddy(p) ((bpointer)((integer_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
+#else
 #define nextbuddy(p) ((bpointer)((integer_t)(p)+(buddysize[p->h.bix]*sizeof(pointer))))
 #define marked(p)  (p->h.mark)
 #define markon(p)  p->h.mark=1
 #define markoff(p) p->h.mark=0
+#endif
 #endif
 
 #define intval(p) (((integer_t)(p))>>2)
@@ -711,7 +742,11 @@ extern int export_all;
  (pointer)((((y)^((y)>>1))&(integer_t)3<<WORD_SIZE-3)?makebig1(y):makeint(y))
 
 #define elmtypeof(p) (bpointerof(p)->h.elmtype)
+#ifdef RGC
+#define bixof(p) (bpointerof(p)->h.bix & TAGMASK)
+#else
 #define bixof(p) (bpointerof(p)->h.bix)
+#endif
 
 #if sun3 || sun4 || system5 || apollo || news || sanyo || vxworks || mips || NEXT || i386 || i486 || i586
 #define fltval(p) (nu.ival=((integer_t)(p) & ~3), nu.fval)
@@ -807,6 +842,49 @@ extern int export_all;
 #define stackck if (ctx->vsp>ctx->stacklimit) error(E_STACKOVER)
 #define debug (speval(QDEBUG)!=NIL)
 
+#ifdef RGC
+
+#define pgpush(v) (*ctx->gsp++=((pointer)v))
+#define pgcpush(v) (ctx->gsp<ctx->gcstacklimit?pgpush(v):error(E_GCSTACKOVER))
+#define pgcpop() (*(--(ctx->gsp)))
+#define ppush(v) (*psp++ = ((pointer)v))
+#define pointerpush(v) (psp<pstacklimit?ppush(v):(pointer)error(E_PSTACKOVER))
+#define pointerpop() (*(--psp))
+
+/* write barrier code */
+#ifdef __USE_POLLING
+#define take_care(p){ if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(p); mutex_unlock(&pstack_lock);} }
+//#define take_care(p){ if((((unsigned)p)<hmin||((unsigned)p>=hmax))&&(p)!=0&&ispointer(p))hoge();if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(p); mutex_unlock(&pstack_lock);} }
+/* 
+ * l must not have side effects, 
+ * since it is evaluated more than once 
+ * (r is evaluated once.)
+ */
+#define pointer_update(l,r) { if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(l); mutex_unlock(&pstack_lock);} (l)=(r); }
+//#define pointer_update(l,r) { if((((unsigned)(l))<hmin||((unsigned)(l)>=hmax))&&(l)!=0&&ispointer(l))hoge();if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(l); mutex_unlock(&pstack_lock);}(l)=(r); }
+#define noticeCollector(p1,p2) { if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock);pointerpush(p1);pointerpush(p2);mutex_unlock(&pstack_lock);} }
+#define noticeCollector1(p1) take_care(p1)
+#endif /* _USE_POLLING */
+
+#ifdef __USE_SIGNAL 
+/* this is not safe, since signals might cut in 
+ * the execution of write barriers. */
+#define take_care(p){ if((((unsigned)p)<hmin||((unsigned)p>=hmax))&&(p)!=0&&ispointer(p))hoge();if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(p); mutex_unlock(&pstack_lock);} }
+/* 
+ * l must not have side effects, 
+ * since they are evaluated more than once 
+ * (r is evaluated once.)
+ */
+#define pointer_update(l,r) { if(gc_phase==PHASE_MARK){mutex_lock(&pstack_lock); pointerpush(l); mutex_unlock(&pstack_lock);} (l)=(r); }
+#endif /* __USE_SIGNAL */
+
+#else /* RGC */
+
+#define pointer_update(l,r) { (l)=(r); }
+#define take_care(p)
+
+#endif
+
 
 /****************************************************************/
 /* error code definition
@@ -818,8 +896,13 @@ enum errorcode {
   E_NORMAL,		/*0*/
   E_STACKOVER,		/*stack overflow*/
   E_ALLOCATION,
+#ifdef RGC
+  E_GCSTACKOVER,
+  E_PSTACKOVER,
+#else
   E_DUMMY3,
   E_DUMMY4,
+#endif
   E_DUMMY5,
   E_DUMMY6,
   E_DUMMY7,
@@ -903,6 +986,10 @@ enum errorcode {
 
 /* function prototypes */
 
+/*eval*/
+#if alpha || IRIX6 || Solaris2 || Linux
+#include "eus_proto.h"
+#else
 extern pointer eval(context *, pointer);
 extern pointer eval2(context *, pointer, pointer);
 extern pointer ufuncall(context *, pointer, pointer, pointer,
@@ -963,6 +1050,7 @@ extern pointer defvar(context *, char *, pointer, pointer);
 extern pointer deflocal(context *, char *, pointer, pointer);
 extern pointer defconst(context *, char *, pointer, pointer);
 extern pointer stacknlist(context *, int);
+#endif
 
 #if Solaris2 || SunOS4_1 || alpha
 extern pointer makethreadport(context *);

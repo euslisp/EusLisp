@@ -10,15 +10,16 @@
 /*	1988-Jan	matrix is represented by 2D array,
 /*			not by an vector of vectors
 /**************************************************************/
-static char *rcsid="@(#)$Id: matrix.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "math.h"
 #include "eus.h"
 
 extern double sin(), cos(), sqrt(), atan2();
 extern pointer makefvector(),defkeyword();
+extern pointer makematrix();
 
-static pointer K_X,K_Y,K_Z;
+static pointer K_X,K_Y,K_Z,MK_X,MK_Y,MK_Z;
 
 /* #define PI 3.1415926536 */
 
@@ -30,28 +31,33 @@ int n;
 register pointer *argv;
 { register int i,s;
   register pointer result;
+  register int isf,isi,iss;
 
   ckarg2(2,3);
+  if (!((isf=isfltvector(argv[0])) && isfltvector(argv[1])) &&
+      !((isi=isintvector(argv[0])) && isintvector(argv[1])) &&
+      !((iss=isstring(argv[0]))    && isstring(argv[1])))
+    error(E_TYPEMISMATCH);
   s=ckvsize(argv[0],argv[1]);
   if (n==3) {
     result=argv[2];
     if (s!=vecsize(result)) error(E_FLOATVECTOR);}
   else result=makevector(classof(argv[0]), s);
-  if (isfltvector(argv[0]) && isfltvector(argv[1])) {
+  if (isf) {
     register float_t *a,*b,*r;
     if (!isfltvector(result))  error(E_FLOATVECTOR);
     a=argv[0]->c.fvec.fv; b=argv[1]->c.fvec.fv;
     r=result->c.fvec.fv;
     for(i=0; i<s; i++) r[i]= a[i] + b[i];
     return(result);}
-  else if (isintvector(argv[0]) && isintvector(argv[1])) {
+  else if (isi) {
     register integer_t *ia, *ib, *ir;
     if (!isintvector(result))  error(E_NOINTVECTOR);
     ia=argv[0]->c.ivec.iv; ib=argv[1]->c.ivec.iv;
     ir=result->c.ivec.iv;
     for(i=0; i<s; i++) ir[i]= ia[i] + ib[i];
     return(result);}
-  else if (isstring(argv[0]) && isstring(argv[1])) {
+  else if (iss) {
     register unsigned char *ba, *bb, *br;
     ba=argv[0]->c.str.chars;
     bb=argv[1]->c.str.chars;
@@ -91,43 +97,52 @@ register pointer *argv;
   register integer_t *ia, *ib, *ir;
   register pointer result;
   register float_t *a,*b,*r;
+  register int isi,isf,iss;
 
   ckarg2(1,3);  
+  if (!(isi=isintvector(argv[0])) && !(isf=isfltvector(argv[0])) &&
+      !(iss=isstring   (argv[0])))
+    error(E_NOVECTOR);
   s=vecsize(argv[0]);
   if (n==1) {	/*negate float vector*/
     result=makevector(classof(argv[0]),s);
-    if (isintvector(argv[0])) {
+    if (isi) {
       ia=argv[0]->c.ivec.iv;
       for (i=0; i<s; i++) result->c.fvec.fv[i]= -ia[i];
       return(result);}
-    else if (isfltvector(argv[0])) {
+    else if (isf) {
       a=argv[0]->c.fvec.fv;
       for (i=0; i<s; i++) result->c.fvec.fv[i]= -a[i];
       return(result);}
-    else error(E_NOSEQ);}
+    else error(E_NOVECTOR);}
 
   /* argc>=2 */
+  if (!(isintvector(argv[1])&&isi) &&
+      !(isfltvector(argv[1])&&isf) &&
+      !(isstring(argv[1])   &&iss))
+    error(E_TYPEMISMATCH);
   s=ckvsize(argv[0],argv[1]);
   if (n==3) {
     result=argv[2];
-    if (!isfltvector(result) && !isintvector(result) && !isstring(result) )
-	 error(E_FLOATVECTOR);
+    if (!(isf&&isfltvector(result)) && !(isi&&isintvector(result)) &&
+	!(iss&&isstring(result)) )
+	 error(E_TYPEMISMATCH);
     if (vecsize(result)!=s) error(E_VECINDEX);}
   else  result=makevector(classof(argv[0]),s);
 
-  if (isfltvector(argv[0]) && isfltvector(argv[1])) {
+  if (isf) {
     a=argv[0]->c.fvec.fv;
     b=argv[1]->c.fvec.fv;
     r=result->c.fvec.fv;
     for(i=0; i<s; i++) r[i]=a[i]-b[i];
     return(result);}
-  else if (isintvector(argv[0]) && isintvector(argv[1])) {
+  else if (isi) {
     ia=argv[0]->c.ivec.iv;
     ib=argv[1]->c.ivec.iv;
     ir=result->c.ivec.iv;
     for(i=0; i<s; i++) ir[i]=ia[i]-ib[i];
     return(result);}
-  else if (isstring(argv[0]) && isstring(argv[1])) {
+  else if (iss) {
     register unsigned char *ba, *bb, *br;
     ba=argv[0]->c.str.chars;
     bb=argv[1]->c.str.chars;
@@ -145,22 +160,31 @@ register pointer *argv;
   register pointer result;
   register float_t *a,*b,*r;
   register float_t x;
+  register int isi,isf,iss;
 
   register int ix;
 
   ckarg2(2,3);  
+  if (!(isi=isintvector(argv[0])) && !(isf=isfltvector(argv[0])) &&
+      !(iss=isstring   (argv[0])))
+    error(E_NOVECTOR);
   s=vecsize(argv[0]);
 
   /* argc>=2 */
+  if (!(isintvector(argv[1])&&isi) &&
+      !(isfltvector(argv[1])&&isf) &&
+      !(isstring(argv[1])   &&iss))
+    error(E_TYPEMISMATCH);
   s=ckvsize(argv[0],argv[1]);
   if (n==3) {
     result=argv[2];
-    if (!isfltvector(result) && !isintvector(result) && !isstring(result) )
-	 error(E_FLOATVECTOR);
+    if (!(isf&&isfltvector(result)) && !(isi&&isintvector(result)) &&
+	!(iss&&isstring(result)) )
+	 error(E_TYPEMISMATCH);
     if (vecsize(result)!=s) error(E_VECINDEX);}
   else  result=makevector(classof(argv[0]),s);
 
-  if (isfltvector(argv[0]) && isfltvector(argv[1])) {
+  if (isf) {
     a=argv[0]->c.fvec.fv;
     b=argv[1]->c.fvec.fv;
     r=result->c.fvec.fv;
@@ -169,7 +193,7 @@ register pointer *argv;
        if (x<0) x= -x;
        r[i]=x;}
     return(result);}
-  else if (isintvector(argv[0]) && isintvector(argv[1])) {
+  else if (isi) {
     ia=argv[0]->c.ivec.iv;
     ib=argv[1]->c.ivec.iv;
     ir=result->c.ivec.iv;
@@ -178,7 +202,7 @@ register pointer *argv;
       if (ix<0) ix= -ix;
       ir[i]=ix;}
     return(result);}
-  else if (isstring(argv[0]) && isstring(argv[1])) {
+  else if (iss) {
     register unsigned char *ba, *bb, *br;
     ba=argv[0]->c.str.chars;
     bb=argv[1]->c.str.chars;
@@ -198,14 +222,18 @@ register pointer *argv;
   register long i,s;
   register integer_t *ia, *ib; register long isum=0;
   float_t sum=0.0;
+  register int isf,isi;
   numunion nu;
   ckarg(2);
+  if (!((isf=isfltvector(argv[0])) && isfltvector(argv[1])) &&
+      !((isi=isintvector(argv[0])) && isintvector(argv[1])))
+    error(E_TYPEMISMATCH);
   s=ckvsize(argv[0],argv[1]);
-  if (isfltvector(argv[0]) && isfltvector(argv[1])) {
+  if (isf) {
     a= (argv[0]->c.fvec.fv); b= (argv[1]->c.fvec.fv);
     for (i=0; i<s; i++) sum+= a[i] * b[i];
     return(makeflt(sum));}
-  if (isintvector(argv[0]) && isintvector(argv[1])) {
+  if (isi) {
     ia= (argv[0]->c.ivec.iv); ib= (argv[1]->c.ivec.iv);
     for (i=0; i<s; i++) isum+= ia[i] * ib[i];
     return(makeint(isum));}
@@ -232,7 +260,7 @@ pointer *argv;
     for (i=0; i<s; i++) sum+=ia[i]*ia[i];
     sum=sqrt(sum);
     return(makeflt(sum));}
-  else error(E_NOSEQ);
+  else error(E_FLOATVECTOR);
   }
 
 pointer VNORM2(ctx,n,argv)
@@ -288,14 +316,18 @@ pointer argv[];
   register float_t *a, *b;
   register int s;
   float_t d,dist=0.0;
+  register int isf,isi;
   numunion nu;
   ckarg(2);
+  if (!((isf=isfltvector(argv[0])) && isfltvector(argv[1])) &&
+      !((isi=isintvector(argv[0])) && isintvector(argv[1])))
+    error(E_TYPEMISMATCH);
   s=ckvsize(argv[0],argv[1]);
-  if (isfltvector(argv[0]) && isfltvector(argv[1])) {
+  if (isf) {
     a=argv[0]->c.fvec.fv; b=argv[1]->c.fvec.fv;
     while (--s>=0) { d=a[s]-b[s]; dist+= d*d;}
     return(makeflt(sqrt(dist)));}
-  else if (isintvector(argv[0]) && isintvector(argv[1])) {
+  else if (isi) {
     register integer_t *ia, *ib;
     register long id, idist=0;
     ia=argv[0]->c.ivec.iv; ib=argv[1]->c.ivec.iv;
@@ -312,14 +344,18 @@ pointer argv[];
   register float_t *a, *b;
   register int s;
   float_t d,dist=0.0;
+  register int isf,isi;
   numunion nu;
   ckarg(2);
+  if (!((isf=isfltvector(argv[0])) && isfltvector(argv[1])) &&
+      !((isi=isintvector(argv[0])) && isintvector(argv[1])))
+    error(E_TYPEMISMATCH);
   s=ckvsize(argv[0],argv[1]);
-  if (isfltvector(argv[0]) && isfltvector(argv[1])) {
+  if (isf) {
     a=argv[0]->c.fvec.fv; b=argv[1]->c.fvec.fv;
     while (--s>=0) { d=a[s]-b[s]; dist+= d*d;}
     return(makeflt(dist));}
-  else if (isintvector(argv[0]) && isintvector(argv[1])) {
+  else if (isi) {
     register integer_t *ia, *ib;
     register long id, idist=0;
     ia=argv[0]->c.ivec.iv; ib=argv[1]->c.ivec.iv;
@@ -342,6 +378,7 @@ pointer argv[];
   s=ckvsize(argv[0],argv[1]);
   if (n==3) {
     result=argv[2]; 
+    if (!isfltvector(result)) error(E_FLOATVECTOR);
     if (vecsize(result)!=s) error(E_VECINDEX);
     }
   else result=makefvector(s);
@@ -358,7 +395,7 @@ register pointer *argv;
 {
   register float_t *fv1,*fv2,*rfv;
   register pointer result;
-  register int i,s;
+  register int s;
 
   ckarg2(2,3);
   if (!isfltvector(argv[0]) || !isfltvector(argv[1])) error(E_FLOATVECTOR);
@@ -366,6 +403,7 @@ register pointer *argv;
   if (s!=3) error(E_VECINDEX);
   if (n==3) {
     result=argv[2]; 
+    if (!isfltvector(result)) error(E_FLOATVECTOR);
     if (vecsize(result)!=3) error(E_VECINDEX);
     }
   else result=makefvector(3);
@@ -406,21 +444,26 @@ pointer argv[];
   pointer result;
   register float_t *a,*r;
   register int s,i;
+  register int isf,isi;
   numunion nu;
 
   ckarg2(2,3);
   scale=ckfltval(argv[0]);
+  if (!(isf=isfltvector(argv[1])) && !(isi=isintvector(argv[1])))
+    error(E_FLOATVECTOR);
   s=vecsize(argv[1]);
   if (n==3) {
     result=argv[2];
+    if (!isvector(result)) error(E_NOVECTOR);
+    if (elmtypeof(result)!=elmtypeof(argv[1])) error(E_TYPEMISMATCH);
     if (s!=vecsize(result)) error(E_VECINDEX);}
   else result=makevector(classof(argv[1]), s);
-  if (isfltvector(argv[1])) {
+  if (isf) {
     a=argv[1]->c.fvec.fv;
     r=result->c.fvec.fv;
     for (i=0; i<s; i++) r[i]=scale*(a[i]);
     return(result);}
-  else if (isintvector(argv[1])) {
+  else if (isi) {
     register integer_t *ia, *ir;
     ia=argv[1]->c.ivec.iv;
     ir=result->c.ivec.iv;
@@ -435,23 +478,33 @@ register pointer argv[];
 { int i,vsize;
   double ratio, ratio2;
   pointer p1,p2,result;
+  register int isf,isi;
   numunion nu;
 
   ckarg2(3,4);
   ratio=ckfltval(argv[0]); ratio2=1.0-ratio;
   p1=argv[1]; p2=argv[2];
+  if (!((isf=isfltvector(p1))&&isfltvector(p2)) &&
+      !((isi=isintvector(p1))&&isintvector(p2)))
+    error(E_TYPEMISMATCH);
   vsize=ckvsize(p1,p2);  
   if (n==4) {
     result=argv[3];
+    if (!(isf&&isfltvector(result))&&!(isi&&isintvector(result)))
+      error(E_TYPEMISMATCH);
     if (vsize!=vecsize(result)) error(E_VECINDEX);}
   else result=makevector(classof(p1), vsize);
-  if (isfltvector(p1) && isfltvector(p2)) {
+  if (isf) {
+    register float_t *r,*pp1,*pp2;
+    r=result->c.fvec.fv; pp1=p1->c.fvec.fv; pp2=p2->c.fvec.fv;
     for (i=0; i<vsize; i++) 
-      result->c.fvec.fv[i]=p1->c.fvec.fv[i]*ratio2 + p2->c.fvec.fv[i]*ratio;
+      r[i]=pp1[i]*ratio2 + pp2[i]*ratio;
     return(result);}
-  else if (isintvector(p1) && isintvector(p2)) {
+  else if (isi) {
+    register integer_t *r,*pp1,*pp2;
+    r=result->c.ivec.iv; pp1=p1->c.ivec.iv; pp2=p2->c.ivec.iv;
     for (i=0; i<vsize; i++) 
-      result->c.ivec.iv[i]=p1->c.ivec.iv[i]*ratio2 + p2->c.ivec.iv[i]*ratio;
+      r[i]=pp1[i]*ratio2 + pp2[i]*ratio;
     return(result);}
   else error(E_FLOATVECTOR);}
 
@@ -479,9 +532,11 @@ int n;
 pointer argv[];
 { register pointer r;
   register int i;
+  register float_t *fv;
   numunion nu;
   r=makefvector(n);
-  for (i=0; i<n; i++) r->c.fvec.fv[i]=ckfltval(argv[i]);
+  fv=r->c.fvec.fv;
+  for (i=0; i<n; i++) fv[i]=ckfltval(argv[i]);
   return(r);
   }
 
@@ -493,14 +548,19 @@ int n;
 pointer argv[];
 { register int i,s;
   register pointer a,b;
+  register int isf,isi;
   ckarg(2);
   a=argv[0]; b=argv[1];
+  if (!((isf=isfltvector(a))&&isfltvector(b)) &&
+      !((isi=isintvector(a))&&isintvector(b))) error(E_FLOATVECTOR);
   s=ckvsize(a,b);
-  if (isfltvector(a) && isfltvector(b)) {
-    for (i=0; i<s; i++) if (a->c.fvec.fv[i] > b->c.fvec.fv[i]) return(NIL);
+  if (isf) {
+    register float_t *av=a->c.fvec.fv, *bv=b->c.fvec.fv;
+    for (i=0; i<s; i++) if (av[i] > bv[i]) return(NIL);
     return(T);}
-  else if (isintvector(a) && isintvector(b)) {
-    for (i=0; i<s; i++) if (a->c.ivec.iv[i] > b->c.ivec.iv[i]) return(NIL);
+  else if (isi) {
+    register integer_t *av=a->c.ivec.iv, *bv=b->c.ivec.iv;
+    for (i=0; i<s; i++) if (av[i] > bv[i]) return(NIL);
     return(T);}
   else  error(E_FLOATVECTOR);}
 
@@ -511,14 +571,19 @@ pointer argv[];
 /*every element of argv[0] is greater than corresponding elem of arg[1]*/
 { register int i,s;
   register pointer a,b;
+  register int isf,isi;
   ckarg(2);	
   a=argv[0]; b=argv[1];
+  if (!((isf=isfltvector(a))&&isfltvector(b)) &&
+      !((isi=isintvector(a))&&isintvector(b))) error(E_FLOATVECTOR);
   s=ckvsize(a,b);
-  if (isfltvector(a) && isfltvector(b)) {
-    for (i=0; i<s; i++) if (a->c.fvec.fv[i] < b->c.fvec.fv[i]) return(NIL);
+  if (isf) {
+    register float_t *av=a->c.fvec.fv, *bv=b->c.fvec.fv;
+    for (i=0; i<s; i++) if (av[i] < bv[i]) return(NIL);
     return(T);}
-  else if (isintvector(a) && isintvector(b)) {
-    for (i=0; i<s; i++) if (a->c.ivec.iv[i] < b->c.ivec.iv[i]) return(NIL);
+  else if (isi) {
+    register integer_t *av=a->c.ivec.iv, *bv=b->c.ivec.iv;
+    for (i=0; i<s; i++) if (av[i] < bv[i]) return(NIL);
     return(T);}
   else  error(E_FLOATVECTOR);}
 
@@ -573,25 +638,26 @@ register context *ctx;
 int n;
 pointer argv[];
 { register int i,j,s;
-  pointer a,r;
+  pointer r;
   register pointer v;
   register float_t *vf,*rf;
   register integer_t *irf, *ivf;
+  register int isf,isi;
 
   v=argv[0];
-  if (!isfltvector(v) && !isintvector(v)) error(E_FLOATVECTOR);
+  if (!(isf=isfltvector(v)) && !(isi=isintvector(v))) error(E_FLOATVECTOR);
   s=vecsize(v);
   r=makevector(classof(v),s);
   rf=r->c.fvec.fv;
   for (i=0; i<s; i++) r->c.fvec.fv[i]=v->c.fvec.fv[i];
-  if (isfltvector(v)) {
+  if (isf) {
     for (i=1; i<n; i++) {
       v=argv[i];
       if (!isfltvector(v)) error(E_FLOATVECTOR);
       if (vecsize(v)!=s) error(E_VECINDEX);
       vf=v->c.fvec.fv;
       for (j=0; j<s; j++) if (vf[j]<rf[j]) rf[j]=vf[j]; } }
-  else if (isintvector(v)) {
+  else if (isi) {
     irf=r->c.ivec.iv;
     for (i=1; i<n; i++) {
       v=argv[i];
@@ -607,25 +673,26 @@ register context *ctx;
 int n;
 pointer argv[];
 { register int i,j,s;
-  pointer a,r;
+  pointer r;
   register pointer v;
   register float_t *vf,*rf;
   register integer_t *irf, *ivf;
+  register int isf,isi;
 
   v=argv[0];
-  if (!isfltvector(v) && !isintvector(v)) error(E_FLOATVECTOR);
+  if (!(isf=isfltvector(v)) && !(isi=isintvector(v))) error(E_FLOATVECTOR);
   s=vecsize(v);
   r=makevector(classof(v),s);
   rf=r->c.fvec.fv;
   for (i=0; i<s; i++) r->c.fvec.fv[i]=v->c.fvec.fv[i];
-  if (isfltvector(v)) {
+  if (isf) {
     for (i=1; i<n; i++) {
       v=argv[i];
       if (!isfltvector(v)) error(E_FLOATVECTOR);
       if (vecsize(v)!=s) error(E_VECINDEX);
       vf=v->c.fvec.fv;
       for (j=0; j<s; j++) if (vf[j]>rf[j]) rf[j]=vf[j]; } }
-  else if (isintvector(v)) {
+  else if (isi) {
     irf=r->c.ivec.iv;
     for (i=1; i<n; i++) {
       v=argv[i];
@@ -771,15 +838,15 @@ pointer ROTVEC(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ register pointer vec,result,a,rv,mv;
+{ register pointer vec,result,a;
   double theta,c,s1,s2;
-  float_t *m1,*m2,f1,f2;
-  register int i,j,k1,k2,k3,size;
+  float_t f1,f2;
+  register int k1,k2,k3,size;
   numunion nu;
 
   ckarg2(3,4);
   vec=argv[0];
-  if (!isfltvector(vec)) error(E_NOVECTOR);
+  if (!isfltvector(vec)) error(E_FLOATVECTOR);
   size=vecsize(vec);
   theta=ckfltval(argv[1]);
   c=cos(theta); s1=sin(theta);
@@ -791,7 +858,7 @@ pointer argv[];
   else error(E_ROTAXIS);
   if (n==4) {
     result=argv[3];
-    if (!isfltvector(result)) error(E_NOVECTOR); }
+    if (!isfltvector(result)) error(E_FLOATVECTOR); }
   else result=makefvector(size);
   f1=vec->c.fvec.fv[k1];
   f2=vec->c.fvec.fv[k2];
@@ -811,7 +878,7 @@ pointer argv[];
 static copymat(dest,src,size)
 pointer dest,src;
 register int size;
-{ register int i,j;
+{ register int i;
   register float_t *rv=dest->c.ary.entity->c.fvec.fv;
   register float_t *mv=src->c.ary.entity->c.fvec.fv;
   size=size*size;
@@ -849,14 +916,26 @@ pointer argv[];
     k1=1; k2=2;
     if (worldp) { s2=s1; s1= -s1;}
     else s2= -s1;}
+  else if (a==MK_X) {
+    k1=1; k2=2;
+    if (worldp) s2= -s1;
+    else { s2=s1; s1= -s1;}}
   else if (a==K_Y || a==makeint(1)) {
     k1=0; k2=2;
     if (worldp) s2= -s1;
     else { s2=s1; s1= -s1;}}
+  else if (a==MK_Y) {
+    k1=0; k2=2;
+    if (worldp) { s2=s1; s1= -s1;}
+    else s2= -s1;}
   else if (a==K_Z || a==makeint(2)) {
     k1=0; k2=1;
     if (worldp) { s2=s1; s1= -s1;}
     else s2= -s1;}
+  else if (a==MK_Z) {
+    k1=0; k2=1;
+    if (worldp) s2= -s1;
+    else { s2=s1; s1= -s1;}}
   else if (a==NIL) { /* 2dimensional m.i */
     float_t m0,m1,m2,m3;
     m0=c*m[0]-s1*m[2];  m1=c*m[1]-s1*m[3];
@@ -934,10 +1013,16 @@ pointer *argv;
     for (size=0; size<9; size++) rm[size]=0.0;
     if (a==makeint(0) || a==K_X) {
       rm[0]=1.0; rm[4]=cs; rm[5]= -sn; rm[7]=sn; rm[8]=cs;}
+    else if (a==MK_X) {
+      rm[0]=1.0; rm[4]=cs; rm[5]= sn; rm[7]=-sn; rm[8]=cs;}
     else if (a==makeint(1) || a==K_Y) {
       rm[0]=cs; rm[2]=sn; rm[4]=1.0; rm[6]= -sn; rm[8]=cs;}
+    else if (a==MK_Y) {
+      rm[0]=cs; rm[2]=-sn; rm[4]=1.0; rm[6]= sn; rm[8]=cs;}
     else if (a==makeint(2) || a==K_Z) {
       rm[0]=cs; rm[1]= -sn; rm[3]=sn; rm[4]=cs; rm[8]=1.0;}
+    else if (a==MK_Z) {
+      rm[0]=cs; rm[1]= sn; rm[3]=-sn; rm[4]=cs; rm[8]=1.0;}
     else error(E_NOVECTOR);
     return(result);} }
 
@@ -949,7 +1034,7 @@ pointer argv[];
   int size;
   float_t *m,*krv,kx,ky,kz;
   float_t th,t1,t2,t3;
-  float_t cs,cs2,vers,sn,sn2,norm;
+  float_t cs,cs2,vers,sn2,norm;
   pointer kr;
   numunion nu;
 
@@ -1120,7 +1205,7 @@ register int s;
 int p[];
 {
   register int i,j,k,l;
-  float_t *fv1,*fv2,al,bl;
+  float_t al,bl;
 
   for (i=0; i<s; i++) p[i]=i;
   for (k=0; k<s; k++) {
@@ -1149,7 +1234,7 @@ int n;
 pointer argv[];
 /* (LU-DECOMPOSE mat [result]) */
 { pointer a,result,pv;
-  int s,stat,ss;
+  int s,stat;
 
   ckarg2(1,2);
   a=argv[0];
@@ -1163,7 +1248,7 @@ pointer argv[];
     if (s!=colsize(result)) error(E_VECSIZE);
     copymat(result,a,s); }
   pv=makevector(C_VECTOR,s);
-  stat=decompose(result->c.ary.entity->c.fvec.fv,s,pv->c.vec.v);
+  stat=decompose(result->c.ary.entity->c.fvec.fv,s,(int*)pv->c.vec.v);
   while (--s>=0) pv->c.vec.v[s]=makeint((integer_t)pv->c.vec.v[s]);
   if (stat<0) return(NIL);
   else return(pv);}
@@ -1235,6 +1320,9 @@ register pointer mod;
   K_X=defkeyword(ctx,"X");
   K_Y=defkeyword(ctx,"Y");
   K_Z=defkeyword(ctx,"Z");
+  MK_X=defkeyword(ctx,"-X");
+  MK_Y=defkeyword(ctx,"-Y");
+  MK_Z=defkeyword(ctx,"-Z");
 
   defun(ctx,"V+",mod,VPLUS);
   defun(ctx,"V++",mod,VPLUSPLUS);

@@ -3,7 +3,7 @@
 /*	June 8,1994 (c) Toshihiro Matsui, Electrotechnical Laboratory
 /*      added SunOS 4.1.x routine by H.Nakagaki at 29-Jun-1995
 /*****************************************************************/
-static char *rcsid="@(#)$Id: mthread.c,v 1.1.1.1 2003/11/20 07:46:25 eus Exp $";
+static char *rcsid="@(#)$Id$";
 #if THREADED
 
 #include "eus.h"
@@ -30,7 +30,7 @@ mutex_t	p_mark_lock;
 
 pointer get_free_thread()
 { register pointer port;
-  sema_wait(&free_thread_sem);
+  GC_REGION(sema_wait(&free_thread_sem););
   mutex_lock(&free_thread_lock);
     port=ccar(free_threads);
     free_threads=ccdr(free_threads);
@@ -62,7 +62,7 @@ pointer port;
 thread_loop:
   sema_post(&free_thread_sem);
   port->c.thrp.idle=T;
-  sema_wait((sema_t *)(port->c.thrp.reqsem->c.ivec.iv));
+  GC_REGION(sema_wait((sema_t *)(port->c.thrp.reqsem->c.ivec.iv)););
   port->c.thrp.idle=NIL;
   /*copy special bindings from the requester*/
   myspecs= ctx->specials;
@@ -89,7 +89,7 @@ thread_loop:
   port->c.thrp.result=val;
   if (port->c.thrp.wait!=NIL) {
     sema_post((sema_t *)port->c.thrp.donesem->c.ivec.iv);
-    sema_wait((sema_t *)port->c.thrp.reqsem->c.ivec.iv);
+    GC_REGION(sema_wait((sema_t *)port->c.thrp.reqsem->c.ivec.iv););
 	/*wait for result-transfer ack*/
     }
   /* chain self in the free_thread list */
@@ -121,7 +121,10 @@ pointer argv[];
     newctx=(context *)makelispcontext(stack_size);
     newport=makethreadport(newctx);
     ckpush(newport);
-    mutex_lock(&qthread_lock);
+    GC_REGION(mutex_lock(&qthread_lock););
+#ifdef RGC
+    active_mutator_num++;
+#endif
     speval(QTHREADS)=cons(ctx, newport, speval(QTHREADS));
     mutex_unlock(&qthread_lock);
 #if alpha || PTHREAD
@@ -164,7 +167,7 @@ pointer argv[];
   /*wait for the target start running*/
   /*the requester should wait for the copying thread-local special variables
     to be copied*/
-  sema_wait((sema_t *)port->c.thrp.runsem->c.ivec.iv);
+  GC_REGION(sema_wait((sema_t *)port->c.thrp.runsem->c.ivec.iv););
   return(port);}
 
 pointer AFUNCALL_NO_WAIT(ctx, n, argv)
@@ -184,7 +187,7 @@ pointer argv[];
   /*wait for the target start running*/
   /*the requester should wait for the copying thread-local special variables
     to be copied*/
-  sema_wait((sema_t *)port->c.thrp.runsem->c.ivec.iv);
+  GC_REGION(sema_wait((sema_t *)port->c.thrp.runsem->c.ivec.iv););
   return(port);}
 
 pointer WAIT_AFUNCALL(ctx,n,argv)
@@ -197,7 +200,7 @@ pointer argv[];
   if (port->c.thrp.wait!=NIL &&
 	(/* port->c.thrp.idle==NIL */ 1 || 
 	 port->c.thrp.reqsem->c.ivec.iv[0]>0)) {
-    sema_wait((sema_t *)port->c.thrp.donesem->c.ivec.iv);
+    GC_REGION(sema_wait((sema_t *)port->c.thrp.donesem->c.ivec.iv););
     result=port->c.thrp.result;
     sema_post((sema_t *)port->c.thrp.reqsem->c.ivec.iv);	/*ack result transfer*/
     return(result);}
@@ -325,7 +328,7 @@ context *ctx;
 int n;
 pointer argv[];
 { if (!isintvector(argv[0])) error(E_NOINTVECTOR);
-  sema_wait((sema_t *)argv[0]->c.ivec.iv);
+  GC_REGION(sema_wait((sema_t *)argv[0]->c.ivec.iv););
   return(T);}
 
 pointer SEMA_TRYWAIT(ctx,n,argv)

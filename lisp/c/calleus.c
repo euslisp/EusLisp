@@ -23,7 +23,7 @@
 /*	1988-MAR-12 removed restriction on the number of args and types
 /*		    implementation on SUN4
 /****************************************************************/
-static char *rcsid="@(#)$Id: calleus.c,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $";
+static char *rcsid="@(#)$Id$";
 #include "eus.h"
 
 struct foreignpod {
@@ -117,11 +117,11 @@ pointer mod;
   pointer FOREIGN,C_FOREIGN;
 
   pkgsave=Spevalof(PACKAGE);
-  Spevalof(PACKAGE)=lisppkg;
+  pointer_update(Spevalof(PACKAGE), lisppkg);
   FOREIGN=basicclass("FOREIGN-POD",C_SYMBOL,&foreignpodcp,
 	  	     3,"PODCODE","PARAMTYPES","RESULTTYPE");
   C_FOREIGN=Spevalof(FOREIGN);
   i=(integer_t)calleus;
   defvar(ctx,"*CALLEUS*",makeint(i),lisppkg);
-  Spevalof(PACKAGE)=pkgsave;
+  pointer_update(Spevalof(PACKAGE), pkgsave);
   }

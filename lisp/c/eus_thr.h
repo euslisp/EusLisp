@@ -66,6 +66,7 @@ typedef cv_t  cond_t;
 /* Alpha specific part */
 
 #if alpha || PTHREAD
+#ifndef __COLLECTOR_H /* R.Hanai */
 typedef	pthread_t	thread_t;
 typedef	pthread_mutex_t	mutex_t;
 typedef	pthread_cond_t	cond_t;
@@ -77,6 +78,7 @@ typedef	pthread_cond_t	cond_t;
 #define	cond_wait	pthread_cond_wait
 #define	cond_signal	pthread_cond_signal
 #define	cond_broadcast	pthread_cond_broadcast
+#endif
 #endif	/* alpha */
 
 

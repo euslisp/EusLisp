@@ -2,7 +2,7 @@
 /* lisp I/O functions
 /*	Copyright Toshihiro MATSUI, ETL, 1987 
 /****************************************************************/
-static char *rcsid="@(#)$Id: lispio.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 #include <ctype.h>
@@ -192,9 +192,9 @@ pointer argv[];
 
   current_syntax=Spevalof(QREADTABLE)->c.rdtab.syntax->c.str.chars;
   if (recursivep==NIL) {
-    oblabels->c.lab.next=NIL;
+    pointer_update(oblabels->c.lab.next,NIL);
     result=read_delimited_list(ctx,strm,delim_char,token);
-    oblabels->c.lab.next=NIL;}
+    pointer_update(oblabels->c.lab.next,NIL);}
   else result=read_delimited_list(ctx,strm,delim_char,token); /*preserve #n= scope*/
   return(result);}
 
@@ -346,7 +346,7 @@ pointer argv[];
   if (n==4) rdtable=argv[3];
   else rdtable=Spevalof(QREADTABLE);
   if (!isreadtable(rdtable)) error(E_USER,(pointer)"readtable expected");
-  rdtable->c.rdtab.macro->c.vec.v[ch]=argv[1];
+  pointer_update(rdtable->c.rdtab.macro->c.vec.v[ch],argv[1]);
   if (argv[1]==NIL) rdtable->c.rdtab.syntax->c.str.chars[ch]=(byte)chartype[ch];
   else if (nontermp==NIL) rdtable->c.rdtab.syntax->c.str.chars[ch]=(int)ch_termmacro;
   else rdtable->c.rdtab.syntax->c.str.chars[ch]=(int)ch_nontermacro;
@@ -375,7 +375,7 @@ register pointer argv[];
   if (n==4) rdtable=argv[3];
   else rdtable=Spevalof(QREADTABLE);
   if (!isreadtable(rdtable)) error(E_USER,(pointer)"readtable expected");
-  rdtable->c.rdtab.dispatch->c.vec.v[ch]=/*(pointer (*)())*/argv[2];
+  pointer_update(rdtable->c.rdtab.dispatch->c.vec.v[ch],/*(pointer (*)())*/argv[2]);
   return(T);}
 
 pointer GETDISPMACRO(ctx,n,argv)
@@ -562,9 +562,9 @@ lispio(ctx,mod)
 register context *ctx;
 pointer mod;
 {
-  Spevalof(PACKAGE)=syspkg;
+  pointer_update(Spevalof(PACKAGE),syspkg);
   defun(ctx,"OPENFILE",mod,OPENFILE);
-  Spevalof(PACKAGE)=lisppkg;
+  pointer_update(Spevalof(PACKAGE),lisppkg);
 /*  defun(ctx,"OPEN",mod,OPEN); */
   defun(ctx,"CLOSE",mod,CLOSE);
   defun(ctx,"READ",mod,READ);

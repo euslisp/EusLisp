@@ -5,7 +5,7 @@
 /*	1996-Jan  Bignum return
 /*	Copyright Toshihiro MATSUI,Electrotechinical Laboratory,1988.
 /****************************************************************/
-static char *rcsid="@(#)$Id: vectorarray.c,v 1.1.1.1 2003/11/20 07:46:26 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "../c/eus.h"
 
@@ -17,6 +17,9 @@ register pointer argv[];
   register int i;
   v=makevector(C_VECTOR,n);
   for (i=0; i<n; i++) v->c.vec.v[i]=argv[i];
+#ifdef SAFETY
+  take_care(v);
+#endif
   return(v);}
 
 pointer MKINTVECTOR(ctx,n,argv)
@@ -27,6 +30,9 @@ register pointer argv[];
   register int i;
   v=makevector(C_INTVECTOR,n);
   for (i=0; i<n; i++) v->c.ivec.iv[i]=bigintval(argv[i]);
+#ifdef SAFETY
+  take_care(v);
+#endif
   return(v);}
 
 pointer vref(a,n)
@@ -94,7 +100,8 @@ pointer newval;
 		((byte *)(a->c.ivec.iv[0]))[n]=ckintval(newval);
 		return(newval);
 	case ELM_POINTER:
-		return(a->c.vec.v[n]=newval);} }
+        pointer_update(a->c.vec.v[n],newval);
+		return(newval);} }
 
 pointer SVSET(ctx,n,argv)
 register context *ctx;
@@ -107,11 +114,12 @@ register pointer argv[];
   if (isvector(a)) {
     if (elmtypeof(a)==ELM_POINTER) {
       if (vecsize(a)<=n) error(E_ARRAYINDEX);
-      return(a->c.vec.v[n]=newval);}
+      pointer_update(a->c.vec.v[n],newval);
+      return(newval);}
     else error(E_NOVECTOR);}
   else if (isnum(a)) error(E_NOVECTOR);
   else if (objsize(a)<=n) error(E_ARRAYINDEX);
-  a->c.obj.iv[n]=newval;
+  pointer_update(a->c.obj.iv[n],newval);
   return(newval);}
 
 
@@ -228,9 +236,9 @@ pointer argv[];
       case ELM_BIT: n=(vsize+WORD_SIZE-1)/WORD_SIZE; break;
       case ELM_CHAR: case ELM_BYTE: n=(vsize+sizeof(integer_t))/sizeof(integer_t); break;
       default: n=vsize;}
-    for (i=0; i<n; i++) new->c.vec.v[i]=entity->c.vec.v[i];
+    for (i=0; i<n; i++) pointer_update(new->c.vec.v[i],entity->c.vec.v[i]);
     entity=new;
-    a->c.ary.entity=entity;
+    pointer_update(a->c.ary.entity,entity);
     a->c.ary.dim[0]=makeint(fp*2);}
   vset(entity,fp,argv[0]);
   a->c.ary.fillpointer=makeint(fp+1);

@@ -3,7 +3,7 @@
 	1994/Jul/24
 	(c) 1994 Nakagaki, H., KEPCO
 */
-static char *rcsid="@(#)$Id: helpsub.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 #include "eus.h"
 
 #pragma init (init_object_module)
@@ -39,7 +39,7 @@ int fd;
 
   if ((bp == -1) || (bp == BUFSIZE)){
     bp=0;
-    read(fd, &buf[0], BUFSIZE);
+    GC_REGION(read(fd, &buf[0], BUFSIZE););
   }
   c=buf[bp];
   bp++;
