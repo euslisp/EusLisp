@@ -343,7 +343,7 @@
 	(export '(compile comfile compile-file gc alloc runtime))
 	(setf (symbol-function 'exit) (symbol-function 'unix::exit))    
 ;;
-(when (substringp "P" (string-upcase *program-name*))
+;(when (substringp "P" (string-upcase *program-name*))
 	(in-package "SYSTEM")
 	(system::exec-module-init "par" "l/par.l")
 ;;
@@ -354,7 +354,7 @@
 		  unix:thr-self unix:thr-setprio unix:thr-getprio unix:thr-create
 		  unix:thr-continue unix:thr-kill unix:thr-suspend
 		  unix:thr-sigsetmask))
-	) ;; eusp
+;	) ;; eusp
 
 (setq *debug* nil)
 
