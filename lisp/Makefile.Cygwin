@@ -23,7 +23,8 @@ cygwin-all:
          make -f $(MAKEFILE) $(MFLAGS) eus2; \
          make -f $(MAKEFILE) $(MFLAGS) eusg; \
          make -f $(MAKEFILE) $(MFLAGS) eusx; \
-         make -f $(MAKEFILE) $(MFLAGS) eusgl)
+         make -f $(MAKEFILE) $(MFLAGS) eusgl;\
+         make -f $(MAKEFILE) $(MFLAGS) eus)
 
 ARCH=Cygwin
 EUSDIR=/home/administrator/prog/eus
@@ -75,7 +76,7 @@ XLIB=-L/usr/X11R6/lib -lX11
 
 # specify directories where euslisp's libraries are located.
 EUSLIB= -L$(ADLIBDIR)
-GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext
+GLLIB=-L/usr/X11R6/lib -lGLU -lGL -lXext
 
 # POSIX Thread 
 THREADDEP=mthread_posix.c
@@ -87,7 +88,7 @@ OFLAGS=-O
 # link-editor's default flags ?-rdynamic 
 #SOFLAGS= -shared --allow-shlib-undefined --warn-unresolved-symbols --unresolved-symbols=ignore-all --warn-once --enable-extra-pe-debug --enable-auto-import
 SOFLAGS= -shared --export-all-symbols --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc
-LDFLAGS= -Wl,--out-implib=$(ADLIBDIR)/$(@F).dll.a -Wl,--export-all-symbols -Wl,--enable-auto-import -Wl,--enable-runtime-pseudo-reloc
+LDFLAGS= -Wl,--out-implib=$(BINDIR)/$(@F).a -Wl,--export-all-symbols -Wl,--enable-auto-import
 
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 MAPOPTION=  $(OBJDIR)/par.o
@@ -125,7 +126,7 @@ $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(XLIB)  $(RAWLIB);)
 
 $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
-		$(LCOBJECTS) $(COMPOBJECTS) \
+		$(LCOBJECTS) $(COMPOBJECTS) $(MAPOPTION) \
 		$(LIBEUSGEO) $(LIBEUSX) $(LIBEUSGL) 
 	($(CC) $(LDFLAGS) -o $(BINDIR)/eusgl.exe \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
