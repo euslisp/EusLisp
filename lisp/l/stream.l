@@ -92,7 +92,7 @@
 	(defconstant F_SETOWN 6)
 	(defconstant O_NONBLOCK #o4))
 
-#-(or :Solaris2 :linux :irix :irix6 :alpha :cygwin)
+#-(or :Solaris2 :linux :irix :irix6 :alpha)
 (progn	(defconstant FASYNC #x40)
 	(defconstant F_GETFL 3)
 	(defconstant F_SETFL 4)
