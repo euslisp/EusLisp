@@ -652,7 +652,7 @@ extern pointer GCMERGE,GCMARGIN;
 extern pointer K_IN,K_OUT,K_IO;	/*direction keyword*/
 extern pointer K_FLUSH,K_FILL,K_FILE,K_STRING;
 extern pointer K_NOMETHOD,K_BIT,K_BYTE,K_CHAR,K_SHORT,K_LONG,K_INTEGER,K_POINTER;
-extern pointer K_FLOAT,K_DOUBLE,K_FOREIGN, K_FOREIGN_STRING;
+extern pointer K_FLOAT32,K_FLOAT,K_DOUBLE,K_FOREIGN, K_FOREIGN_STRING;
 extern pointer K_DOWNCASE,K_UPCASE, K_PRESERVE, K_INVERT, K_CAPITALIZE;
 
 /*class management*/
