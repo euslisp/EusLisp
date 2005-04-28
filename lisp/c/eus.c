@@ -607,6 +607,7 @@ static void initsymbols()
   K_LONG=defkeyword(ctx,"LONG");
   K_INTEGER=defkeyword(ctx,"INTEGER");
   K_POINTER=defkeyword(ctx,"POINTER");
+  K_FLOAT32=defkeyword(ctx,"FLOAT32");  
   K_FLOAT=defkeyword(ctx,"FLOAT");
   K_DOUBLE=defkeyword(ctx,"DOUBLE");
   K_FOREIGN=defkeyword(ctx,"FOREIGN");
