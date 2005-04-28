@@ -16,8 +16,8 @@ static char *rcsid="@(#)$Id$";
 extern int errno;
 extern enum ch_type chartype[256];
 extern pointer QREADTABLE,QTERMIO, oblabels;
-extern byte *current_syntax;
-extern int written_count;
+extern byte *current_syntax[MAXTHREAD];
+extern int written_count[MAXTHREAD];
 extern pointer read_delimited_list(context*,pointer,int,char *);
 
 pointer OPENFILE(ctx,n,argv)
@@ -190,7 +190,7 @@ pointer argv[];
   strm=getinstream(ctx,n-1,argv[1]);
   if (n==3) recursivep=argv[2];
 
-  current_syntax=Spevalof(QREADTABLE)->c.rdtab.syntax->c.str.chars;
+  current_syntax[thr_self()]=Spevalof(QREADTABLE)->c.rdtab.syntax->c.str.chars;
   if (recursivep==NIL) {
     pointer_update(oblabels->c.lab.next,NIL);
     result=read_delimited_list(ctx,strm,delim_char,token);
@@ -444,7 +444,7 @@ pointer argv[];
     if (dest->c.stream.direction!=K_OUT) error(E_IODIRECTION);}
   vpush(dest);
 
-  written_count=0;
+  written_count[thr_self()]=0;
   while (cx<cmax) {
     cch=nextcch();
     if (cch=='~') {     /*tilda*/
@@ -466,15 +466,15 @@ pointer argv[];
       switch(cch) {
 	case 'A':	/*Ascii*/
 	  ctx->slashflag=1;
-	  written_count=0;
+	  written_count[thr_self()]=0;
 	  prinx(ctx,(pointer)nextfarg(),dest);
-	  while (param[0]>written_count) writech(dest,' ');
+	  while (param[0]>written_count[thr_self()]) writech(dest,' ');
 	  ctx->slashflag=0;
 	  break;
 	case 'S':	/*S-expression*/
-	  written_count=0;
+	  written_count[thr_self()]=0;
 	  prinx(ctx,nextfarg(),dest);
-	  while (param[0]>written_count) writech(dest,' ');
+	  while (param[0]>written_count[thr_self()]) writech(dest,' ');
 	  break;
 	case 'D':	/*Decimal*/
 	  a=nextfarg();
