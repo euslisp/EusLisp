@@ -19,8 +19,8 @@ static char *rcsid="@(#)$Id$";
 #include "eus.h"
 
 extern int errno;
-int ch=' ';		/*current character*/
-int written_count=0;
+int ch[MAXTHREAD];		/*current character*/
+int written_count[MAXTHREAD];
 
 /****************************************************************/
 /* open and close stream primitives
@@ -125,14 +125,14 @@ register pointer s;
 #if 0
 	fprintf(stderr, "EOF "); 
 #endif
-	return(ch=EOF);}
+	return(ch[thr_self()]=EOF);}
     c=0;}
-  ch=strbuf[c++];
+  ch[thr_self()]=strbuf[c++];
   s->c.stream.count=makeint(c);
 #if 0
-  fprintf(stderr, "%x",ch);
+  fprintf(stderr, "%x",ch[thr_self()]);
 #endif
-  return(ch);}
+  return(ch[thr_self()]);}
 
 int unreadch(s,ch)
 register pointer s;
@@ -211,7 +211,7 @@ register byte ch;
     if (flushstream(s)<0) return(-1);
     c=intval(s->c.stream.count);
     strbuf=(s->c.stream.buffer)->c.str.chars;} 
-  strbuf[c++]=ch; s->c.stream.count=makeint(c); written_count++; }
+  strbuf[c++]=ch; s->c.stream.count=makeint(c); written_count[thr_self()]++; }
     
 int writestr(s,mes,len)    /* write string */
 register pointer s;	/*stream*/
@@ -234,6 +234,6 @@ register int len;
     /* substituted bcopy(&mes[i],&strbuf[bcount],count); */
     i+=count; len-=count; bcount+=count;
     s->c.stream.count=makeint(bcount);}
-  written_count+=i;
+  written_count[thr_self()]+=i;
   }
 

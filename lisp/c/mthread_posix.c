@@ -61,6 +61,8 @@ static void thr_cleanup( struct thr_arg *arg )
     free(arg);
 }
 
+static int thr_create_lock=0;
+
 static void thr_startup( struct thr_arg *arg )
 {
     //if (debug) printf( "thr_startup:tid=%d\n", arg->tid ); 
@@ -75,6 +77,7 @@ static void thr_startup( struct thr_arg *arg )
     pthread_setcancel( CANCEL_ON );
     pthread_setasynccancel( CANCEL_ON );
 #endif
+    while(thr_create_lock) usleep(1000);
     (arg->func)( arg->args );
 
     pthread_cleanup_pop( 1 );
@@ -99,10 +102,12 @@ int thr_create(void *base, size_t size, void (*func)(), void *args, long flags, 
     arg->tid = i;
     arg->func = func;
     arg->args = args;
+    thr_create_lock=1;
     stat = pthread_create( &thread_table[i].tid, NULL, thr_startup, arg );
     if( stat == 0 )
       thread_table[i].using = 1;
     *tid = i;
+    thr_create_lock=0;
     return( stat );
 }
 
