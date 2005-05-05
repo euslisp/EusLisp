@@ -577,6 +577,11 @@ pointer argv[];
   defoglforeign(ctx,"alloctessinfo");
   defoglforeign(ctx,"tess_vertex_cb");
   defoglforeign(ctx,"glDepthRangefv");
+
+  /* kanehiro's glu patch 2000.12.13 */
+  defoglforeign(ctx,"gluTessBeginContour");
+  defoglforeign(ctx,"gluTessEndContour");
+
 #if GL_EXT_texture_object
   defoglforeign(ctx,"glGenTexturesEXT");
   defoglforeign(ctx,"glBindTextureEXT");
