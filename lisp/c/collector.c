@@ -36,7 +36,9 @@
 #include <linux/art_task.h>
 #endif
 
+#if Linux
 char *minmemory=(char *)1000000;
+#endif
 extern pointer K_DISPOSE;
 #define MAXDISPOSE 256
 static pointer dispose[MAXDISPOSE];
