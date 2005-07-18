@@ -32,8 +32,8 @@ typedef int xcc_SItype __attribute__ ((mode (SI)));
 typedef int xcc_HItype __attribute__ ((mode (HI)));
 typedef int xcc_QItype __attribute__ ((mode (QI)));
 
-typedef int xcc_SFtype __attribute__ ((mode (SF)));
-typedef int xcc_DFtype __attribute__ ((mode (DF)));
+typedef float xcc_SFtype __attribute__ ((mode (SF)));
+typedef float xcc_DFtype __attribute__ ((mode (DF)));
 
 #define FORCE_TYPE(TP,x) \
 ({ union { TP x1; typeof(x) x2; } _u ; _u.x2 = (x); _u.x1; })
