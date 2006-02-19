@@ -30,7 +30,16 @@ XVERSION=X_V11R6_1
 #
 # for Linux
 
-CPU_OPTIMIZE=-m486
+GCC_VERSION=`gcc -dumpversion | sed s/\\..\*//`
+ifeq ($(GCC_VERSION), 2)
+ CPU_OPTIMIZE=-m486
+ ALIGN_FUNCTIONS="-malign-functions=4"
+else
+ CPU_OPTIMIZE=-mcpu=i486
+ ALIGN_FUNCTIONS=-falign-functions=4
+ GCC3=-DGCC3
+endif
+
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
 MACHINE=i486
 DEBUG= # -g
@@ -39,9 +48,9 @@ DEBUG= # -g
 # In order to include thread library, libc.so.6 is preferrable.
 
 CFLAGS=-D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" \
-	-DLIB6 \
+	-DLIB6 $(ALIGN_FUNCTIONS) \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
-	-DGCC -malign-functions=4 \
+	-DGCC $(GCC3) \
 	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/include
 
 # Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.

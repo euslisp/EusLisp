@@ -843,6 +843,9 @@ static void initfeatures()
 #if GCC
   p=cons(ctx,intern(ctx,"GCC",3,keywordpkg),p);
 #endif
+#if GCC3
+  p=cons(ctx,intern(ctx,"GCC3",4,keywordpkg),p);
+#endif
 #if i386
   p=cons(ctx,intern(ctx,"I386",4,keywordpkg),p);
 #endif
