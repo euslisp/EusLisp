@@ -1282,6 +1282,8 @@
 		   	 ((memq :vax *features*)  " -Dvax -J")
 		   	 ((memq :news *features*)  " -Dnews")
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
+		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
+				" -Di386 -DLinux -w -falign-functions=4 -DGCC3 ")
 		   	 ((memq :linux *features*) 
 				" -Di386 -DLinux -w -malign-functions=4 ")
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
