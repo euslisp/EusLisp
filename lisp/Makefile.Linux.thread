@@ -30,7 +30,7 @@ XVERSION=X_V11R6_1
 #
 # for Linux
 
-GCC_VERSION=`gcc -dumpversion | sed s/\\..\*//`
+GCC_VERSION=$(shell gcc -dumpversion | sed s/\\..\*//)
 ifeq ($(GCC_VERSION), 2)
  CPU_OPTIMIZE=-m486
  ALIGN_FUNCTIONS="-malign-functions=4"
