@@ -304,6 +304,26 @@ pointer argv[];
   if (entry==NULL) return(NIL);
   else return(makeint((integer_t)entry>>2));}
 
+pointer FIND_ENTRY2(ctx,n,argv)
+register context *ctx;
+int n;
+pointer argv[];
+{ pointer entry, mod, e=NIL;
+  char *entry_string;
+  extern pointer sysmod;
+
+  ckarg2(1,2);
+  if (n==2) mod=argv[1];
+  else mod=sysmod;
+  if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
+  entry_string=(char *)get_string(argv[0]);
+  entry=(pointer)dlsym((void *)((integer_t)(mod->c.ldmod.handle) & ~3), entry_string);
+  if (entry==NULL) return(NIL);
+  else {
+    e=cons(ctx,makeint((integer_t)entry),e);
+    e=cons(ctx,makeint((integer_t)entry>>2),e);
+    return(e);}}
+
 extern pointer sysmod;
 
 pointer SYSMOD()
@@ -389,6 +409,7 @@ pointer mod;
   defun(ctx,"LIST-MODULE-INITIALIZERS",mod,list_module_initializers2);
 #endif
   defun(ctx,"FIND-ENTRY", mod, FIND_ENTRY);
+  defun(ctx,"FIND-ENTRY2", mod, FIND_ENTRY2);
   defun(ctx,"SYSMOD", mod, SYSMOD);
   defun(ctx,"BINLOAD",mod,BINLOAD);
   defun(ctx,"UNBINLOAD",mod,UNBINLOAD);

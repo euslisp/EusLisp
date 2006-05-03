@@ -104,7 +104,8 @@
  (:init (ent &optional param (result :integer))
     (setq codevector 0
 	  quotevector nil
-	  entry ent
+	  entry (if (consp ent) (car ent) ent)
+	  entry2 (if (consp ent) (cadr ent))
 	  paramtypes param
 	  resulttype result
 	  type 0)	; function
@@ -115,7 +116,7 @@
 					(fmod (sys::sysmod)))
 	 (cond ((numberp fentry))
 	       ((system::find-entry fentry fmod)
-		(setq fentry (system::find-entry fentry fmod)))
+		(setq fentry (system::find-entry2 fentry fmod)))
 	       (t (error "no such foreign entry ~s" fentry)))
    (instance foreign-code :init fentry param result))
 
