@@ -291,7 +291,7 @@ pthread_suspend (pthread_t target_thread)
  */
 int 
 //thd_continue (pthread_t target_thread)
-pthread_resume (pthread_t target_thread)
+pthread_continue (pthread_t target_thread)
 {
     int status;
     int i = 0;
@@ -344,7 +344,7 @@ int thr_suspend( int tid ) {
 }
 
 int thr_continue( int tid ) {
-  return pthread_resume ( thread_table[tid].tid );
+  return pthread_continue ( thread_table[tid].tid );
 }
 
 
