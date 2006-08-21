@@ -708,7 +708,7 @@ void sweepall()
 
   }
 
-#if (Solaris2 || SunOS4_1) && THREADED
+#if THREADED
 suspend_all_threads()
 { register int i, self, stat;
   
@@ -755,7 +755,7 @@ gc()
   gccount++;
   times(&tbuf1);
 
-#if (Solaris2 || SunOS4_1) && THREADED
+#if THREADED
 /*  mutex_lock(&alloc_lock);  is not needed since gc is assumed to be called
     from alloc_small or alloc_big and they have already locked alloc_lock.*/
   mutex_lock(&mark_lock);
@@ -770,16 +770,18 @@ gc()
   sweepall();
   times(&tbuf3);
   sweeptime+=(tbuf3.tms_utime-tbuf2.tms_utime);
-  if (debug) {
-    fprintf(stderr," free/total=%d/%d stack=%d ",
-		freeheap,totalheap,myctx->vsp - myctx->stack);
-    fprintf(stderr," mark=%d sweep=%d\n", marktime,sweeptime);}
-#if (Solaris2 || SunOS4_1) && THREADED
+
+#if THREADED
   resume_all_threads();
   rw_unlock(&gc_lock);
   mutex_unlock(&mark_lock);
 /*  mutex_unlock(&alloc_lock); */
 #endif
+  if (debug) {
+    fprintf(stderr," free/total=%d/%d stack=%d ",
+		freeheap,totalheap,myctx->vsp - myctx->stack);
+    fprintf(stderr," mark=%d sweep=%d\n", marktime,sweeptime);
+  }
   if (speval(QGCHOOK)!=NIL) {
     pointer gchook=speval(QGCHOOK);
     vpush(makeint(freeheap)); vpush(makeint(totalheap));

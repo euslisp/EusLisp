@@ -111,12 +111,242 @@ int thr_create(void *base, size_t size, void (*func)(), void *args, long flags, 
     return( stat );
 }
 
+#if Linux
+#include <signal.h>
 /*
    thr_suspend() and thr_continue() are not implemented.
    these routines are only defined to avoid prototype definition error.
  */
-int thr_suspend( int tid ) { return -1; }
-int thr_continue( int tid ) { return -1; }
+pthread_mutex_t susp_the_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t susp_mut = PTHREAD_MUTEX_INITIALIZER;
+volatile int susp_sentinel = 0;
+pthread_once_t susp_once = PTHREAD_ONCE_INIT;
+pthread_t *susp_array = NULL, susp_null_pthread = {0};
+int susp_bottom = 0;
+int susp_inited = 0;
+
+/*
+ * Handle SIGUSR1 in the target thread, to suspend it until
+ * receiving SIGUSR2 (resume).
+ */
+void
+suspend_signal_handler (int sig)
+{
+    sigset_t signal_set;
+
+    /*
+     * Block all signals except SIGUSR2 while suspended.
+     */
+    sigfillset (&signal_set);
+    sigdelset (&signal_set, SIGUSR2);
+    susp_sentinel = 1;
+    sigsuspend (&signal_set);
+
+    /*
+     * Once I'm here, I've been resumed, and the resume signal
+     * handler has been run to completion.
+     */
+    return;
+}
+
+/*
+ * Handle SIGUSR2 in the target thread, to resume it. Note that
+ * the signal handler does nothing. It exists only because we need
+ * to cause sigsuspend() to return.
+ */
+void
+resume_signal_handler (int sig)
+{
+    return;
+}
+
+/*
+ * Dynamically initialize the "suspend package" when first used
+ * (called by pthread_once).
+ */
+void
+suspend_init_routine (void)
+{
+    int status;
+    struct sigaction sigusr1, sigusr2;
+
+    /*
+     * Allocate the suspended threads array. This array is used
+     * to guarentee idempotency
+     */
+    susp_bottom = 10;
+    susp_array = (pthread_t*) calloc (susp_bottom, sizeof (pthread_t));
+
+    /*
+     * Install the signal handlers for suspend/resume.
+     */
+    sigusr1.sa_flags = 0;
+    sigusr1.sa_handler = suspend_signal_handler;
+
+    sigemptyset (&sigusr1.sa_mask);
+    sigusr2.sa_flags = 0;
+    sigusr2.sa_handler = resume_signal_handler;
+    sigusr2.sa_mask = sigusr1.sa_mask;
+
+    status = sigaction (SIGUSR1, &sigusr1, NULL);
+    if (status == -1)
+      {fprintf (stderr, "Installing suspend handler: %s\n", strerror(errno)); abort();}
+    
+    status = sigaction (SIGUSR2, &sigusr2, NULL);
+    if (status == -1)
+      {fprintf (stderr, "Installing resume handler : %s\n", strerror(errno)); abort(); }
+    
+    susp_inited = 1;
+    return;
+}
+
+/*
+ * Suspend a thread by sending it a signal (SIGUSR1), which will
+ * block the thread until another signal (SIGUSR2) arrives.
+ *
+ * Multiple calls to thd_suspend for a single thread have no
+ * additional effect on the thread -- a single thd_continue
+ * call will cause it to resume execution.
+ */
+int 
+//thd_suspend (pthread_t target_thread)
+pthread_suspend (pthread_t target_thread)
+{
+    int status;
+    int i = 0;
+
+    /*
+     * The first call to thd_suspend will initialize the
+     * package.
+     */
+    status = pthread_once (&susp_once, suspend_init_routine);
+    if (status != 0)
+        return status;
+
+    /* 
+     * Serialize access to suspend, makes life easier
+     */
+    status = pthread_mutex_lock (&susp_mut);
+    if (status != 0)
+        return status;
+
+    /*
+     * Threads that are suspended are added to the target_array;
+     * a request to suspend a thread already listed in the array
+     * is ignored. Sending a second SIGUSR1 would cause the
+     * thread to re-suspend itself as soon as it is resumed.
+     */
+    while (i < susp_bottom) 
+        if (susp_array[i++] == target_thread) {
+            status = pthread_mutex_unlock (&susp_mut);
+            return status;
+        }
+
+    /*
+     * Ok, we really need to suspend this thread. So, lets find
+     * the location in the array that we'll use. If we run off
+     * the end, realloc the array for more space.
+     */
+    i = 0;
+    while (susp_array[i] != 0)
+        i++;
+
+    if (i == susp_bottom) {
+        susp_array = (pthread_t*) realloc (
+            susp_array, (++susp_bottom * sizeof (pthread_t)));
+        if (susp_array == NULL) {
+            pthread_mutex_unlock (&susp_mut);
+            return errno;
+        }
+
+        susp_array[susp_bottom] = susp_null_pthread;   /* Clear new entry */
+    }
+
+    /*
+     * Clear the sentinel and signal the thread to suspend.
+     */
+    susp_sentinel = 0;
+    status = pthread_kill (target_thread, SIGUSR1);
+    if (status != 0) {
+        pthread_mutex_unlock (&susp_mut);
+        return status;
+    }
+
+    /*
+     * Wait for the sentinel to change.
+     */
+    while (susp_sentinel == 0)
+        sched_yield ();
+    
+    susp_array[i] = target_thread;
+
+    status = pthread_mutex_unlock (&susp_mut);
+    return status;
+}
+
+/*
+ * Resume a suspended thread by sending it SIGUSR2 to break
+ * it out of the sigsuspend() in which it's waiting. If the
+ * target thread isn't suspended, return with success.
+ */
+int 
+//thd_continue (pthread_t target_thread)
+pthread_resume (pthread_t target_thread)
+{
+    int status;
+    int i = 0;
+    /* 
+     * Serialize access to suspend, makes life easier
+     */
+    status = pthread_mutex_lock (&susp_mut);
+    if (status != 0)
+        return status;
+
+    /*
+     * If we haven't been initialized, then the thread must be "resumed"
+     * it couldn't have been suspended!
+     */
+    if (!susp_inited) {
+        status = pthread_mutex_unlock (&susp_mut);
+        return status;
+    }
+
+    /*
+     * Make sure the thread is in the suspend array. If not, it
+     * hasn't been suspended (or it has already been resumed) and
+     * we can just carry on.
+     */
+    while (susp_array[i] != target_thread && i < susp_bottom) 
+        i++;
+
+    if (i >= susp_bottom) {
+        pthread_mutex_unlock (&susp_mut);
+        return 0;
+    }
+
+    /*
+     * Signal the thread to continue, and remove the thread from
+     * the suspended array.
+     */
+    status = pthread_kill (target_thread, SIGUSR2);
+    if (status != 0) {
+        pthread_mutex_unlock (&susp_mut);
+        return status;
+    }
+
+    susp_array[i] = 0;               /* Clear array element */
+    status = pthread_mutex_unlock (&susp_mut);
+    return status;
+}
+#endif
+int thr_suspend( int tid ) { 
+  return pthread_suspend ( thread_table[tid].tid );
+}
+
+int thr_continue( int tid ) {
+  return pthread_resume ( thread_table[tid].tid );
+}
+
 
 int thr_kill( int tid, int sig )
 /* sig is not used */
