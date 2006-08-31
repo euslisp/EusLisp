@@ -83,8 +83,11 @@ register int k;
 #endif
 #if Cygwin
   if (minmemory > (char *)cp) minmemory = (char *)cp;
-#endif
+  if (maxmemory < (char *)sbrk(0)) maxmemory = (char *)sbrk(0);
+  if (maxmemory < (char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1)) maxmemory = ((char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1));
+#else
   maxmemory=(char *)sbrk(0);
+#endif
   if (QDEBUG && debug) fprintf(stderr,";; maxmemory=0x%x\n",maxmemory);
   if (cp==NULL) return(ERR);	/*can't allocate new memory*/
 #if alpha
@@ -406,10 +409,10 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #define out_of_heap(p) ((int)p<(int)_end || (pointer)0x20000000<p)
 #else /* Solaris2 */
 #if Linux
-#define out_of_heap(p) ((int)p<(int)_end || (pointer)maxmemory <p)
+#define out_of_heap(p) ((unsigned int)p<(unsigned int)_end || (pointer)maxmemory <p)
 #else /* Linux */
 #if Cygwin /* Cygwin does not have _end */
-#define out_of_heap(p) ((int)p<(int)minmemory || (pointer)maxmemory <p)
+#define out_of_heap(p) ((unsigned int)p<(unsigned int)minmemory || (pointer)maxmemory <p)
 #else /* Cygwin */
 #if alpha
 #if THREADED
