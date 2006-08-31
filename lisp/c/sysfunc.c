@@ -576,7 +576,7 @@ pointer argv[];
 { integer_t p;/* ???? */
   ckarg(1);
   p=(integer_t)bpointerof(argv[0]);/* ???? */
-  return(makeint(p));}
+  return(mkbigint(p));}
 
 pointer PEEK(ctx,n,argv)
 register context *ctx;
