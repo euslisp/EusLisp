@@ -85,6 +85,9 @@ register int k;
   if (minmemory > (char *)cp) minmemory = (char *)cp;
   if (maxmemory < (char *)sbrk(0)) maxmemory = (char *)sbrk(0);
   if (maxmemory < (char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1)) maxmemory = ((char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1));
+#elif Linux
+  if (maxmemory < (char *)sbrk(0)) maxmemory = (char *)sbrk(0);
+  if (maxmemory < (char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1)) maxmemory = ((char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1));
 #else
   maxmemory=(char *)sbrk(0);
 #endif
