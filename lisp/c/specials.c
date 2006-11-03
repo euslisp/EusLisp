@@ -654,15 +654,20 @@ pointer RETFROM(ctx,arg)	/*special-form*/
 register context *ctx;
 pointer arg;
 { pointer name,result;
+ struct blockframe *blkfp_old, *blkfp_new; 
 #ifdef SPEC_DEBUG
   printf( "RETFROM:" ); hoge_print(arg);
 #endif
   GC_POINT;
   name=carof(arg,E_MISMATCHARG); arg=ccdr(arg);
+  blkfp_old = ctx->blkfp;
   while (ctx->blkfp!=NULL) 
     if (ctx->blkfp->kind==BLOCKFRAME && ctx->blkfp->name==name) {
+      blkfp_new = ctx->blkfp;
+      ctx->blkfp = blkfp_old;
       if (islist(arg)) result=eval(ctx,ccar(arg)); else result=NIL;
       if (result==makeint(0)) result=(pointer)1;
+      ctx->blkfp = blkfp_new;
       unwind(ctx,(pointer *)ctx->blkfp);
       euslongjmp(*ctx->blkfp->jbp,result);}
     else ctx->blkfp=ctx->blkfp->lexklink;
