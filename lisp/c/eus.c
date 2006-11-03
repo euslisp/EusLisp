@@ -277,7 +277,7 @@ register pointer *p;
 	/*unwind specially bound variables*/
   unbindspecial(ctx,(struct specialbindframe *)p);
   /*unwind block frames*/
-  while (ctx->blkfp>(struct blockframe *)p) ctx->blkfp=ctx->blkfp->lexklink;
+  while (ctx->blkfp>(struct blockframe *)p) ctx->blkfp=ctx->blkfp->dynklink;
   /*unwind catch frames*/
   while (ctx->catchfp>(struct catchframe *)p) ctx->catchfp=ctx->catchfp->nextcatch;
   /*unwind flet frames*/
