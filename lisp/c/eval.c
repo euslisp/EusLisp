@@ -827,7 +827,7 @@ int noarg;
   struct specialbindframe *sbfps=ctx->sbindfp;
   register int n=0,i;
   register pointer (*subr)();
-  struct fletframe *oldfletfp=ctx->fletfp;
+  struct fletframe *oldfletfp=ctx->fletfp, *fenv;
   GC_POINT;
   /* evalhook */
   if (Spevalof(QEVALHOOK)!=NIL &&  ehbypass==0) {
@@ -915,7 +915,8 @@ int noarg;
       if (env < (struct bindframe *)ctx->stack ||
 	  (struct bindframe *)ctx->stacklimit < env) env=0;
       func=ccdr(func);
-      ctx->fletfp=(struct fletframe *)intval(ccar(func));
+      /* ctx->fletfp=(struct fletframe *)intval(ccar(func)); */
+      fenv=(struct fletframe *)intval(ccar(func)); 
       func=ccdr(func);}
     else if (ftype!=LAMBDA && ftype!=MACRO) error(E_LAMBDA);
     else env=NULL /*0 ????*/; 
@@ -932,6 +933,7 @@ int noarg;
       argp=(pointer *)args;
       if (ftype==MACRO) error(E_ILLFUNC);}
     GC_POINT;
+    if (ftype==LAMCLOSURE) { ctx->fletfp=fenv; }
     result=funlambda(ctx,fn,formal,func,argp,env,noarg);
     ctx->vsp=(pointer *)vf;
     ctx->callfp=vf->vlink;
