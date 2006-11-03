@@ -575,7 +575,8 @@ register pointer org;
     clone=(pointer)makeobject(klass);}
 
   if (ctx->vsp>ctx->stacklimit)
-    { fprintf(stderr,"cannot copy\n"); euslongjmp(cpyjmp,ERR);}
+    { p_mark_off(org);
+      fprintf(stderr,"cannot copy\n"); euslongjmp(cpyjmp,ERR);}
 #ifdef RGC /* R.Hanai */
   if (etype == ELM_FIXED || etype == ELM_POINTER) {
     pointer_update(org->c.obj.iv[1],makeint(cpx));
