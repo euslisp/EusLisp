@@ -121,8 +121,9 @@ pthread_mutex_t susp_the_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t susp_mut = PTHREAD_MUTEX_INITIALIZER;
 volatile int susp_sentinel = 0;
 pthread_once_t susp_once = PTHREAD_ONCE_INIT;
-pthread_t *susp_array = NULL, susp_null_pthread = {0};
-int susp_bottom = 0;
+pthread_t susp_null_pthread = {0};
+pthread_t *susp_array[MAXTHREAD]; 
+int susp_bottom = MAXTHREAD;
 int susp_inited = 0;
 
 /*
@@ -174,8 +175,8 @@ suspend_init_routine (void)
      * Allocate the suspended threads array. This array is used
      * to guarentee idempotency
      */
-    susp_bottom = 10;
-    susp_array = (pthread_t*) calloc (susp_bottom, sizeof (pthread_t));
+    //susp_bottom = 10;
+//    susp_array = (pthread_t*) calloc (susp_bottom, sizeof (pthread_t));
 
     /*
      * Install the signal handlers for suspend/resume.
@@ -252,14 +253,14 @@ pthread_suspend (pthread_t target_thread)
         i++;
 
     if (i == susp_bottom) {
-        susp_array = (pthread_t*) realloc (
-            susp_array, (++susp_bottom * sizeof (pthread_t)));
-        if (susp_array == NULL) {
+//        susp_array = (pthread_t*) realloc (
+//            susp_array, (++susp_bottom * sizeof (pthread_t)));
+//        if (susp_array == NULL) {
             pthread_mutex_unlock (&susp_mut);
             return errno;
-        }
+//        }
 
-        susp_array[susp_bottom] = susp_null_pthread;   /* Clear new entry */
+//        susp_array[susp_bottom] = susp_null_pthread;   /* Clear new entry */
     }
 
     /*
