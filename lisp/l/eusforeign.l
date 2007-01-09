@@ -218,9 +218,17 @@
 		(ldb self-address 16 8)
 		(ldb self-address 24 8) 
 		#xe8 0 0 0 0
-		#x89 #x44 #x24 #x04
-		#xd9 #x44 #x24 #x04
-		#x5a #x5a #xc3))
+		;;	#x89 #x44 #x24 #x04
+		;;	#xd9 #x44 #x24 #x04
+		#x5a #x5a #xc3
+		#x90 #x90 #x90 #x90 ;;NOP
+		#x90 #x90 #x90 #x90))
+	   (if (eq :float result)
+	       (replace podcode
+			(list #x89 #x44 #x24 #x04 
+			      #xd9 #x44 #x24 #x04
+			      #x5a #x5a #xc3)
+			:start1 15))
 	;;  10 0000 8D542404              leal    4(%esp), %edx
 	;;  11 0004 52                    pushl   %edx
 	;;  12 0005 68785634              pushl   self
@@ -245,7 +253,13 @@
 	   (if (eq (car func) 'lisp:lambda-closure)
 	       (setq func (append '(lisp:lambda) (nthcdr 4 func)))))
 	 ((derivedp func closure)
-	       (setq func (func . code))))
+	       (setq func
+		 (let* ((cfunc (instantiate compiled-code)))
+		   (setq (cfunc . type) 0
+			 (cfunc . codevector) (func . codevector)
+			 (cfunc . quotevector) (func . quotevector)
+			 (cfunc . entry) (func . entry))
+		   cfunc))))
       (setq function func)
       (setq paramtypes param
 	    resulttype result)
