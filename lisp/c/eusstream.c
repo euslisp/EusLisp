@@ -161,12 +161,13 @@ register pointer s;
   register pointer lsave,bstr,extstr;
   context *ctx=euscontexts[thr_self()];
 
-  fno=intval(s->c.fstream.fd);
+//   fno=intval(s->c.fstream.fd);	// only when isfilestream(s). moved to inside of if(pisfilestream(s))
   bstr=s->c.stream.buffer;
   cnt=intval(s->c.stream.count);
   blen=intval(bstr->c.str.length);
   if (cnt<=0) return(0);	/*no buffer: cannot write*/
   if (pisfilestream(s)) {
+    fno=intval(s->c.fstream.fd); // moved by ikuo
     if (isint(s->c.fstream.fname)) {
       lsave=bstr->c.str.length;
       bstr->c.str.length=(pointer)mypid;
