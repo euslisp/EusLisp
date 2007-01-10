@@ -1180,6 +1180,8 @@ register context *ctx;
   signal(SIGPIPE, (void (*)())eusint);
 #ifdef RGC
 //  signal(SIGSEGV, (void (*)())eusint); /* for debugging. R.Hanai */
+#else
+  signal(SIGSEGV, (void (*)())eusint);
 #endif
   signal(SIGBUS,  (void (*)())eusint);
 
@@ -1217,7 +1219,7 @@ char *argv[];
 
   /* following two lines are just to speed up frequent sbreak at the beginning
      of the execution. These lines may be deleted without any harm.*/
-  m=(unsigned char *)malloc(1*1024*1024);
+  m=(unsigned char *)malloc(4*1024*1024);
   cfree(m);
 
 #if vxworks
@@ -1261,3 +1263,25 @@ char *argv[];
   exit(stat);
   }
 
+
+// test by ikuo
+pointer makeint(integer_t v) {
+  if (v>(int)MAXPOSFIXNUM || v<(int)MINNEGFIXNUM) {
+//     if (debug) printf("makeint(%x)\n", v);
+    if (v&0x3) {
+//       printf("v=%x!!! (should be bignum)\n", v);
+      return(mkbigint(v));
+    }
+    return (v|0x3); }
+  else return((pointer)((v<<2)+2));
+}
+integer_t intval(pointer p) {
+  integer_t i=(integer_t)p;
+  if ((i&0x3)==0x3) {
+//     if (debug) printf("intval(%x)==%x\n", i, i&~0x3);
+    return (i&~0x3); }
+  else if (isbignum(p)) {
+    printf("p=%x(bignum)\n", p);
+    return (bigintval(p)); }
+  else return (((integer_t)i)>>2);
+}

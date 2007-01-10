@@ -82,20 +82,20 @@ extern integer_t setjmp_val;
 #define	UNBOUND	((pointer)0L)
 
 /* dynamic value type */
-#define V_CONSTANT	makeint(0)
-#define V_VARIABLE	makeint(1)
-#define V_GLOBAL	makeint(2)
-#define V_SPECIAL	makeint(3)
+#define V_CONSTANT	((0<<2)+2) // makeint(0)
+#define V_VARIABLE	((1<<2)+2) // makeint(1)
+#define V_GLOBAL	((2<<2)+2) // makeint(2)
+#define V_SPECIAL	((3<<2)+2) // makeint(3)
 
 /* function types*/
-#define SUBR_FUNCTION	makeint(0)
-#define SUBR_MACRO	makeint(1)
-#define SUBR_SPECIAL	makeint(2)
-#define SUBR_ENTRY	makeint(3)
+#define SUBR_FUNCTION	((0<<2)+2) // makeint(0)
+#define SUBR_MACRO	((1<<2)+2) // makeint(1)
+#define SUBR_SPECIAL	((2<<2)+2) // makeint(2)
+#define SUBR_ENTRY	((3<<2)+2) // makeint(3)
 
 /* stack frame types (lots more)*/
-#define BLOCKFRAME	makeint(0)
-#define TAGBODYFRAME	makeint(1)
+#define BLOCKFRAME	((0<<2)+2) // makeint(0)
+#define TAGBODYFRAME	((1<<2)+2) // makeint(1)
 
 /*vector element types*/
 #define ELM_FIXED	0
@@ -726,11 +726,15 @@ extern int export_all;
 #if vax || sun4 || news || mips || i386 || i486 || i586 || alpha
 
 #define makepointer(bp) ((pointer)((integer_t)(bp)))
-#define isint(p) (((integer_t)(p) & 3)==2)
+// #define isint(p) (((integer_t)(p) & 3)==2) // org
+#define	isint(p)	( (((integer_t)(p)&3)==2) || (((integer_t)(p)&0x3)==0x3) )
 #define isflt(p) (((integer_t)(p) & 3)==1)
-#define isnum(p) (((integer_t)(p) & 3))
+#define isnum(p) (((integer_t)(p) & 3)) // org
+// #define isnum(p) ((isint(p))||(isflt(p))) // test by ikuo
 #define ispointer(p) (!((integer_t)(p) & 3))
-#define makeint(v) ((pointer)((((integer_t)(v))<<2)+2))
+// #define makeint(v) ((pointer)((((integer_t)(v))<<2)+2)) // org
+extern pointer makeint(integer_t v);
+
 #define bpointerof(p) ((bpointer)((integer_t)(p)))
 #ifdef RGC
 #define nextbuddy(p) ((bpointer)((integer_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
@@ -744,7 +748,8 @@ extern int export_all;
 #endif
 #endif
 
-#define intval(p) (((integer_t)(p))>>2)
+// #define intval(p) (((integer_t)(p))>>2) // org
+extern integer_t intval(pointer p);
 #define ckintval(p) (isint(p)?intval(p):(integer_t)error(E_NOINT))
 #define bigintval(x) (isint(x)?intval(x):\
    (isbignum(x)?\
