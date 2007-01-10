@@ -631,7 +631,7 @@ pointer args[];
   double f;
   
   if (code->c.fcode.entry2 != NIL) {
-    ifunc = (((int)ifunc)&0xffff0000) | ((((int)(code->c.fcode.entry2))>>2)&0x0000ffff);    /* kanehiro's patch 2000.12.13 */
+    ifunc = (((int)ifunc)&0xffff0000) | (intval(code->c.fcode.entry2)&0x0000ffff);    /* kanehiro's patch 2000.12.13 */
   }
   ffunc=(double (*)())ifunc;
   while (iscons(paramtypes)) {
