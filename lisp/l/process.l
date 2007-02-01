@@ -151,9 +151,9 @@
 ;; slower but more complete "directory"
 ;;
 
-#+(or :linux :solaris2)
+#+(or :linux :solaris2 :cygwin :alpha)
    (setf (symbol-function 'directory) (symbol-function 'unix::readdir))
-#-(or :linux :solaris2)
+#-(or :linux :solaris2 :cygwin :alpha)
  (defun directory (&optional (dir "."))
    (let ((fnlist) (ls) (eof (cons nil nil)) (fn))
       (setq ls (piped-fork "ls" "-a" dir))
@@ -207,6 +207,6 @@
     (list   ptystream pipe)))
 
 
-(provide :process "@(#)$Id: process.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+(provide :process "@(#)$Id$")
 
 
