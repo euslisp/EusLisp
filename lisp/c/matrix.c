@@ -753,16 +753,16 @@ register pointer argv[];
   row1=rowsize(argv[0]);	row2=rowsize(argv[1]);
   column1=colsize(argv[0]); 	column2=colsize(argv[1]);
   if (column1!=row2) error(E_VECINDEX);
-  if (column1>256){
-    fv = (float_t *)malloc(sizeof(float_t) * column1);
-    //error(E_VECINDEX);
-  }
   if (n==3) {
     rm=argv[2];
     if (!ismatrix(rm)) error(E_NOVECTOR);
     if (row1!=colsize(rm) || column2!=rowsize(rm)) error(E_VECINDEX);
     }
   else rm=makematrix(ctx,row1,column2);
+  if (column1>256){
+    fv = (float_t *)malloc(sizeof(float_t) * column1);
+    //error(E_VECINDEX);
+  }
   fm=rm->c.ary.entity->c.fvec.fv;
   if (fm2!=fm) 
     for (i=0; i<row1; i++) {
