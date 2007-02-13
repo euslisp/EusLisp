@@ -743,8 +743,8 @@ register pointer argv[];
 { pointer rm;
   register int k,i,j,ii,jj,row1,column1,row2,column2;
   register float_t *fm1,*fm2,*fm;
-  float_t fv[256],x;
-
+  float_t *fv,x,fvv[256];
+  fv = fvv;
 
   ckarg2(2,3);
   if (!ismatrix(argv[0]) || !ismatrix(argv[1])) error(E_NOVECTOR);
@@ -753,7 +753,10 @@ register pointer argv[];
   row1=rowsize(argv[0]);	row2=rowsize(argv[1]);
   column1=colsize(argv[0]); 	column2=colsize(argv[1]);
   if (column1!=row2) error(E_VECINDEX);
-  if (column1>256) error(E_VECINDEX);
+  if (column1>256){
+    fv = (float_t *)malloc(sizeof(float_t) * column1);
+    //error(E_VECINDEX);
+  }
   if (n==3) {
     rm=argv[2];
     if (!ismatrix(rm)) error(E_NOVECTOR);
@@ -782,6 +785,7 @@ register pointer argv[];
         fv[j]=x;}
       jj=0;
       for (j=0; j<row1; j++, jj+=column2) fm[i+jj]=fv[j];}
+  if (column1>256) free(fv);
   return(rm);}
 
 pointer TRANSFORM(ctx,n,argv)
@@ -790,8 +794,9 @@ int n;
 register pointer argv[];
 { register pointer result;
   register float_t *m,*v,x;
-  float fv[256];
+  float_t *fv,fvv[256];
   register int i,j,ii,s,s2;
+  fv = fvv;
 
   ckarg2(2,3);
   if (ismatrix(argv[0]) && isfltvector(argv[1])) {
@@ -811,7 +816,10 @@ register pointer argv[];
     if (!isfltvector(result)) error(E_NOVECTOR);
     if (s2!=vecsize(result)) error(E_VECINDEX);}
   else result=makefvector(s2);
-  if (s2>256) error(E_VECINDEX);
+  if (s2>256){
+    fv = (float_t *)malloc(sizeof(float_t) * s2);
+    // error(E_VECINDEX);
+  }
 
   if (isfltvector(argv[0])) {	/* vec*mat */
     for (i=0; i<s2; i++) {
@@ -824,6 +832,7 @@ register pointer argv[];
       for (j=0; j<s; j++) x+=m[ii+j]*v[j];
       fv[i]=x;} }
   for (i=0; i<s2; i++) result->c.fvec.fv[i]=fv[i];
+  if (s2>256) free(fv);
   return(result);
   }
 
