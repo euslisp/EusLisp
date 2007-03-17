@@ -667,7 +667,7 @@ pointer args[];
 	integer_t *xv = bigvec(lisparg);
 	cargv[i++]=(integer_t)xv[0];
       }else{
-	printf("bignum size!=1\n");
+	fprintf(stderr, "bignum size!=1\n");
       }
     }
 #endif    /* end of kanehiro's patch 2000.12.13 */
