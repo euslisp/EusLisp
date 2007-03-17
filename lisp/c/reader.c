@@ -262,7 +262,7 @@ pointer *addr;
 #endif
 #if sun4 || vax || news || mips || alpha || i386
   { int i;
-    i=intval(addr);
+    i=(((integer_t)addr)>>2);
     labp->c.lab.unsolved=makeint(i);}
 #endif
 }
