@@ -1277,11 +1277,13 @@ pointer makeint(integer_t v) {
 }
 integer_t intval(pointer p) {
   integer_t i=(integer_t)p;
-  if ((i&0x3)==0x3) {
-//     if (debug) printf("intval(%x)==%x\n", i, i&~0x3);
+  if (p==NULL) {
+    fprintf(stderr,"p=null\n");
+    return 0;}
+  else if ((i&0x3)==0x3) {
     return (i&~0x3); }
   else if (isbignum(p)) {
-    printf("p=%x(bignum)\n", p);
+    fprintf(stderr, "p=%x(bignum)->%d\n", p);
     return (bigintval(p)); }
   else return (((integer_t)i)>>2);
 }
