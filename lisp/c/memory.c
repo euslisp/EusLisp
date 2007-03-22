@@ -753,7 +753,7 @@ gc()
 
 gc()
 { struct tms tbuf1,tbuf2,tbuf3;
-  int i;
+  int i, r;
   context *ctx=euscontexts[thr_self()];
 
   if (debug)  fprintf(stderr,"\n;; gc: thread=%d ",thr_self());
@@ -764,7 +764,11 @@ gc()
 #if THREADED
 /*  mutex_lock(&alloc_lock);  is not needed since gc is assumed to be called
     from alloc_small or alloc_big and they have already locked alloc_lock.*/
-  mutex_lock(&mark_lock);
+  r = mutex_trylock(&mark_lock);
+  if ( r != 0 ) {
+    if (debug) fprintf(stderr, ";; gc:mutex_lock %d ", r);
+    return;
+  }
   rw_wrlock(&gc_lock);
   suspend_all_threads();
 #endif
