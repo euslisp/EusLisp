@@ -476,6 +476,12 @@ void mthread_init( context *mainctx )
 {
     int i;
     pthread_t tid;
+    pthread_mutexattr_t attr;
+#ifdef Cygwin
+    int attr_default = PTHREAD_MUTEX_DEFAULT;
+#else
+    int attr_default = PTHREAD_MUTEX_FAST_NP;
+#endif
 
     for( i = 0; i < MAXTHREAD; i++ )
       thread_table[i].using = 0;
@@ -483,11 +489,14 @@ void mthread_init( context *mainctx )
     thread_table[0].tid = pthread_self();
     thread_table[0].using = 1;
 
-    pthread_mutex_init(&mark_lock, PTHREAD_MUTEX_INITIALIZER);
-    pthread_mutex_init(&alloc_lock,PTHREAD_MUTEX_INITIALIZER);
-    pthread_mutex_init(&free_thread_lock, PTHREAD_MUTEX_INITIALIZER);
-    pthread_mutex_init(&qthread_lock,PTHREAD_MUTEX_INITIALIZER);
-    pthread_mutex_init(&qsort_lock,PTHREAD_MUTEX_INITIALIZER);
+    pthread_mutexattr_init(&attr);
+    pthread_mutexattr_settype(&attr, attr_default);
+    pthread_mutex_init(&mark_lock, &attr);
+    pthread_mutex_init(&alloc_lock, &attr);
+    pthread_mutex_init(&free_thread_lock, &attr);
+    pthread_mutex_init(&qthread_lock, &attr)
+    pthread_mutex_init(&qsort_lock, &attr)
+    
     sema_init(&free_thread_sem, 0, 0, 0);
     rwlock_init(&gc_lock, 0, 0);
 }
