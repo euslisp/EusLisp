@@ -729,8 +729,7 @@ extern int export_all;
 // #define isint(p) (((integer_t)(p) & 3)==2) // org
 #define	isint(p)	( (((integer_t)(p)&3)==2) || (((integer_t)(p)&0x3)==0x3) )
 #define isflt(p) (((integer_t)(p) & 3)==1)
-#define isnum(p) (((integer_t)(p) & 3)) // org
-// #define isnum(p) ((isint(p))||(isflt(p))) // test by ikuo
+#define isnum(p) (((integer_t)(p) & 3))
 #define ispointer(p) (!((integer_t)(p) & 3))
 // #define makeint(v) ((pointer)((((integer_t)(v))<<2)+2)) // org
 extern pointer makeint(integer_t v);

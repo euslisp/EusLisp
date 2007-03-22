@@ -1267,9 +1267,9 @@ char *argv[];
 // test by ikuo
 pointer makeint(integer_t v) {
   if (v>(int)MAXPOSFIXNUM || v<(int)MINNEGFIXNUM) {
-//     if (debug) printf("makeint(%x)\n", v);
+    //    fprintf(stderr, "makeint(%x)\n", v);
     if (v&0x3) {
-//       printf("v=%x!!! (should be bignum)\n", v);
+      //      fprintf(stderr, "v=%x(bignum)\n", v);
       return(mkbigint(v));
     }
     return (v|0x3); }
@@ -1280,6 +1280,9 @@ integer_t intval(pointer p) {
   if (p==NULL) {
     fprintf(stderr,"p=null\n");
     return 0;}
+  else if ((i&0x3)==0x0) {
+    fprintf(stderr,"p=pointer?(%x)\n", p);
+    return (i); }
   else if ((i&0x3)==0x3) {
     return (i&~0x3); }
   else if (isbignum(p)) {
