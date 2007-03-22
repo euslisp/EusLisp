@@ -136,7 +136,7 @@ extern int sema_trywait(sema_t *);
 extern mutex_t  mark_lock;
 extern char     *mark_locking;
 extern int      mark_lock_thread;
-extern mutex_t  p_mark_lock;
+//extern mutex_t  p_mark_lock;
 extern rwlock_t gc_lock;
 
 extern mutex_t  alloc_lock;

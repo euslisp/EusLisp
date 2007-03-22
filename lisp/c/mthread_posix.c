@@ -483,11 +483,11 @@ void mthread_init( context *mainctx )
     thread_table[0].tid = pthread_self();
     thread_table[0].using = 1;
 
-    pthread_mutex_init(&p_mark_lock, NULL);
-    pthread_mutex_init(&alloc_lock,NULL);
-    pthread_mutex_init(&free_thread_lock, NULL);
-    pthread_mutex_init(&qthread_lock,NULL);
-    pthread_mutex_init(&qsort_lock,NULL);
+    pthread_mutex_init(&mark_lock, PTHREAD_MUTEX_INITIALIZER);
+    pthread_mutex_init(&alloc_lock,PTHREAD_MUTEX_INITIALIZER);
+    pthread_mutex_init(&free_thread_lock, PTHREAD_MUTEX_INITIALIZER);
+    pthread_mutex_init(&qthread_lock,PTHREAD_MUTEX_INITIALIZER);
+    pthread_mutex_init(&qsort_lock,PTHREAD_MUTEX_INITIALIZER);
     sema_init(&free_thread_sem, 0, 0, 0);
     rwlock_init(&gc_lock, 0, 0);
 }

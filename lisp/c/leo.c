@@ -634,10 +634,9 @@ int n;
 pointer argv[];
 { pointer a=argv[0],b;
   pointer *spsave=ctx->vsp;
-
   ckarg(1);
 #if THREADED
-  mutex_lock(&p_mark_lock);
+  mutex_lock(&mark_lock);
 #endif
   cpx=0;
   cpvec= ctx->vsp;
@@ -645,7 +644,7 @@ pointer argv[];
   copyunmark(a);
   ctx->vsp=spsave;
 #if THREADED
-  mutex_unlock(&p_mark_lock);
+  mutex_unlock(&mark_lock);
 #endif
   ctx->vsp=spsave;
   if (b==(pointer)ERR) error(E_USER,(pointer)"too big to copy");
