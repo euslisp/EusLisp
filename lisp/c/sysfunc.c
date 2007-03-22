@@ -285,13 +285,13 @@ pointer argv[];
   if (n==2) count_symbol=(argv[1]!=NIL); else count_symbol=0;
   cell_count=object_size=cell_size=0;
 #if THREADED
-  mutex_lock(&p_mark_lock);
+  mutex_lock(&mark_lock);
   mark_locking="OBJSIZE";
 #endif
   objsize1(a);
   objsize2(a);
 #if THREADED
-  mutex_unlock(&p_mark_lock);
+  mutex_unlock(&mark_lock);
 #endif
   return(cons(ctx,makeint(cell_count),
 	      cons(ctx,makeint(object_size),

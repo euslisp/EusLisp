@@ -25,7 +25,6 @@ mutex_t qsort_lock;
 mutex_t mark_lock;
 char *mark_locking;
 int mark_lock_thread;
-mutex_t	p_mark_lock;
 
 
 pointer get_free_thread()

@@ -612,14 +612,14 @@ register pointer obj,stream;
   if (Spevalof(PRCIRCLE)!=NIL) {
     ixvec=ctx->vsp; ix=0; vpush(0);
 #if THREADED
-    mutex_lock(&p_mark_lock);
+    mutex_lock(&mark_lock);
     mark_locking="prinx";
 #endif
     printmark(ctx,obj);
     prin1(ctx,obj,stream,iprlevel);
     printunmark(obj);
 #if THREADED
-    mutex_unlock(&p_mark_lock);
+    mutex_unlock(&mark_lock);
 #endif
     }
   else prin1(ctx,obj,stream,iprlevel);
