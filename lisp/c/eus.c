@@ -1263,8 +1263,6 @@ char *argv[];
   exit(stat);
   }
 
-
-// test by ikuo
 pointer makeint(integer_t v) {
   if (v>(int)MAXPOSFIXNUM || v<(int)MINNEGFIXNUM) {
     //    fprintf(stderr, "makeint(%x)\n", v);
@@ -1280,13 +1278,12 @@ integer_t intval(pointer p) {
   if (p==NULL) {
     fprintf(stderr,"p=null\n");
     return 0;}
-  else if ((i&0x3)==0x0) {
-    fprintf(stderr,"p=pointer?(%x)\n", p);
-    return (i); }
   else if ((i&0x3)==0x3) {
     return (i&~0x3); }
   else if (isbignum(p)) {
-    fprintf(stderr, "p=%x(bignum)->%d\n", p);
     return (bigintval(p)); }
+  else if ((i&0x3)==0x0) {
+    fprintf(stderr,"p=pointer?(%x)\n", p);
+    return (i); }
   else return (((integer_t)i)>>2);
 }
