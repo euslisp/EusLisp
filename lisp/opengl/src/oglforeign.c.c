@@ -582,11 +582,6 @@ pointer argv[];
   defoglforeign(ctx,"gluTessBeginContour");
   defoglforeign(ctx,"gluTessEndContour");
 
-  defoglforeign(ctx,"gluTessBeginPolygon");
-  defoglforeign(ctx,"gluTessEndPolygon");
-  defoglforeign(ctx,"gluTessBeginContour");
-  defoglforeign(ctx,"gluTessEndContour");
-
 #if GL_EXT_texture_object
   defoglforeign(ctx,"glGenTexturesEXT");
   defoglforeign(ctx,"glBindTextureEXT");
