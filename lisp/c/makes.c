@@ -638,7 +638,7 @@ pointer (*f)();
   pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_MACRO));
   return(sym);}
 
-#if Solaris2
+#if Solaris2 || PTHREAD
 int next_special_index=3;
 static mutex_t spex_lock;
 
