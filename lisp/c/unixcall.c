@@ -1638,7 +1638,7 @@ int n; pointer argv[];
 pointer FREE(ctx,n,argv)
 register context *ctx;
 int n; pointer argv[];
-{ free((void *)ckintval(argv[0]));
+{ free((void *)bigintval(argv[0]));
   return(makeint(1));}
 
 #if sun3 || sun4 || news || alpha
