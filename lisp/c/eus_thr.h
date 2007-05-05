@@ -72,6 +72,7 @@ typedef	pthread_mutex_t	mutex_t;
 typedef	pthread_cond_t	cond_t;
 #define thr_exit(x)	pthread_exit(x)
 #define thr_join(x,y,z)	pthread_join(x,z)
+#define	mutex_init(x,y,z)	pthread_mutex_init(x,y)
 #define	mutex_lock	pthread_mutex_lock
 #define	mutex_trylock	pthread_mutex_trylock
 #define	mutex_unlock	pthread_mutex_unlock
