@@ -223,7 +223,12 @@ pointer argv[];
 #if alpha 
   pthread_mutex_init((mutex_t *)m->c.ivec.iv,pthread_mutexattr_default);
 #elif  PTHREAD
-  pthread_mutex_init((mutex_t *)m->c.ivec.iv, NULL);
+  {
+    pthread_mutexattr_t attr;
+    pthread_mutexattr_init(&attr);
+    if (n==1 && isint(argv[0]))  pthread_mutexattr_settype(&attr, intval(argv[0]));
+    pthread_mutex_init((mutex_t *)m->c.ivec.iv, &attr);
+  }
 #else
   mutex_init((mutex_t *)m->c.ivec.iv,USYNC_THREAD,0);
 #endif
@@ -259,6 +264,19 @@ register pointer argv[];
   if (!isintvector(argv[0])) error(E_NOINTVECTOR);
   mutex_unlock((mutex_t *)argv[0]->c.ivec.iv);
   return(T);}
+
+pointer MUTEX_SET_ATTR(ctx,n,argv)
+     register context *ctx;
+     int n;
+     pointer argv[];
+{ ckarg(2);
+  if (!isintvector(argv[0])) error(E_NOINTVECTOR);
+  if (!isint(argv[1])) error(E_NOINT);
+  fprintf(stderr, "=>>> %d\n", intval(argv[1]));
+  //pthread_mutexattr_settype((mutex_t *)argv[0]->c.ivec.iv, intval(argv[1]));
+ pthread_mutexattr_settype((mutex_t *)argv[0]->c.ivec.iv, PTHREAD_MUTEX_RECURSIVE_NP);
+  return(T);
+}
 
 /* condition variable */
 
@@ -549,6 +567,12 @@ pointer mod;
   defunpkg(ctx,"MUTEX-LOCK",mod, MUTEX_LOCK,syspkg);
   defunpkg(ctx,"MUTEX-UNLOCK",mod, MUTEX_UNLOCK,syspkg);
   defunpkg(ctx,"MUTEX-TRYLOCK",mod, MUTEX_TRYLOCK,syspkg);
+  defunpkg(ctx,"MUTEX-SET-ATTR",mod,MUTEX_SET_ATTR,syspkg);
+#if PTHREAD
+  defvar(ctx,"*PTHREAD-MUTEX-FAST",makeint(PTHREAD_MUTEX_ADAPTIVE_NP),syspkg);
+  defvar(ctx,"*PTHREAD-MUTEX-RECURSIVE*",makeint(PTHREAD_MUTEX_RECURSIVE_NP),syspkg);
+  defvar(ctx,"*PTHREAD-MUTEX-ERRORCHECK*",makeint(PTHREAD_MUTEX_ERRORCHECK_NP),syspkg);
+#endif
 
   defunpkg(ctx,"MAKE-COND",mod,MAKE_COND,syspkg);
   defunpkg(ctx,"COND-WAIT",mod, COND_WAIT,syspkg);
