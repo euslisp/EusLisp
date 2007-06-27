@@ -219,7 +219,6 @@ int n;
 pointer argv[];
 { register pointer m;
   m=makevector(C_INTVECTOR, (sizeof(mutex_t)+sizeof(integer_t)-1)/sizeof(integer_t));
-  m=makevector(C_INTVECTOR, (sizeof(mutex_t)+3)/sizeof(long));
 #if alpha 
   pthread_mutex_init((mutex_t *)m->c.ivec.iv,pthread_mutexattr_default);
 #elif  PTHREAD
