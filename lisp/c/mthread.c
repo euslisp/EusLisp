@@ -487,7 +487,7 @@ int n;
 pointer argv[];
 { int tid;
   ckarg(1);
-#if alpha || PTHREAD
+#if alpha
   fprintf(stderr,"thr_suspend is not implemented.\n" );
   return(NIL);
 #else
@@ -505,7 +505,7 @@ int n;
 pointer argv[];
 { int tid;
   ckarg(1);
-#if alpha || PTHREAD
+#if alpha
   fprintf(stderr,"thr_continue is not implemented.\n");
   return(NIL);
 #else
