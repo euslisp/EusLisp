@@ -345,7 +345,7 @@ int n;
 pointer argv[];
 { register integer_t x,y;
   ckarg(2);
-  x=ckintval(argv[0]); y=ckintval(argv[1]);
+  x=bigintval(argv[0]); y=bigintval(argv[1]);
   return(makeint(x % y));}
 
 pointer SUB1(ctx,n,argv)
