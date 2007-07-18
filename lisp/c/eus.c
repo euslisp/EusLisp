@@ -666,8 +666,9 @@ static void initsymbols()
 }
 
 static void initclasses()
-{ extern pointer oblabels;	/*eusio.c*/
+{ extern pointer oblabels[MAXTHREAD];	/*eusio.c*/
   register context *ctx=mainctx;
+  int i;
 
   /* basic classes */
 /*0*/
@@ -779,8 +780,10 @@ static void initclasses()
   BIGNUM=basicclass("BIGNUM", C_EXTNUM, &bignumcp, 2, "SIZE", "BV");
   C_BIGNUM=speval(BIGNUM);
 
-  oblabels=(pointer)makelabref(makeint(-1),UNBOUND,NIL);
-  sysobj=cons(ctx,oblabels,sysobj);
+  for (i=0;i<MAXTHREAD;i++) {
+    oblabels[i]=(pointer)makelabref(makeint(-1),UNBOUND,NIL);
+    sysobj=cons(ctx,oblabels[i],sysobj);
+  }
 }
 
 static void initfeatures()

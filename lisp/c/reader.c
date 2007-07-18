@@ -22,7 +22,7 @@ static char *rcsid="@(#)$Id$";
 #define to_upper(c) (islower(c) ? ((c)-'a'+'A') : (c))
 #define to_lower(c) (isupper(c) ? ((c)-'A'+'a') : (c))
 
-#define syntaxtype(ch) ((enum ch_type)(current_syntax[ch]))
+#define syntaxtype(ch) ((enum ch_type)(current_syntax[thr_self()][ch]))
 
 extern pointer FEATURES,READBASE,QREADTABLE;
 extern pointer QNOT, QAND, QOR;	/*eval_read_cond, Jan/1995*/
@@ -36,8 +36,8 @@ extern pointer normalize_bignum();
 
 /* the following two global variables are hazardous to multi-threads */
 /* These should be eliminated in the next release. */
-byte *current_syntax;
-pointer oblabels;	/*keep labeled-objects in read*/
+byte *current_syntax[MAXTHREAD];
+pointer oblabels[MAXTHREAD];	/*keep labeled-objects in read*/
 
 /****************************************************************/
 /* character type table
@@ -222,7 +222,7 @@ static pointer findlabel(labx)
 int labx;
 { register pointer obj,labid;
   labid=makeint(labx);
-  obj=oblabels->c.lab.next;
+  obj=oblabels[thr_self()]->c.lab.next;
   while (obj!=NIL) {
     if (obj->c.lab.label==labid) return(obj);
     else obj=obj->c.lab.next; }
@@ -235,8 +235,8 @@ int labx;
 { pointer  unsol, *unsolp, result,newlab;
 
   if (findlabel(labx)!=NIL)  error(E_READLABEL,makeint(labx));	/*already defined*/
-  newlab=(pointer)makelabref(makeint(labx),UNBOUND,oblabels->c.lab.next);
-  pointer_update(oblabels->c.lab.next,newlab);
+  newlab=(pointer)makelabref(makeint(labx),UNBOUND,oblabels[thr_self()]->c.lab.next);
+  pointer_update(oblabels[thr_self()]->c.lab.next,newlab);
   result=read1(ctx,f);
 
   /*solve references*/
@@ -995,15 +995,15 @@ register context *ctx;
 register pointer f,recursivep;
 { register pointer val;
   Char ch;
-  current_syntax=Spevalof(QREADTABLE)->c.rdtab.syntax->c.str.chars;
+  current_syntax[thr_self()]=Spevalof(QREADTABLE)->c.rdtab.syntax->c.str.chars;
   ch=nextch(ctx,f);
   if (ch==EOF) return((pointer)EOF);
   while (ch==')') ch=nextch(ctx,f);
   unreadch(f,ch);
   if (recursivep==NIL) {
-    pointer_update(oblabels->c.lab.next,NIL);
+    pointer_update(oblabels[thr_self()]->c.lab.next,NIL);
     val=read1(ctx,f);
-    pointer_update(oblabels->c.lab.next,NIL);}
+    pointer_update(oblabels[thr_self()]->c.lab.next,NIL);}
   else val=read1(ctx,f);	/*if called recursively, keep #n= scope*/
   if (val==UNBOUND) return(NIL);
   return(val);}
