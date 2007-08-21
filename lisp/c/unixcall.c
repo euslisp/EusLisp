@@ -40,6 +40,7 @@ static char *rcsid="@(#)$Id$";
 #include <netdb.h>
 #include <sys/mman.h>
 #include <string.h>
+#include <unistd.h>		/* for lseek */
 #endif
 
 /*SONY/news doesn't have message queu ipc facilities*/
@@ -1087,7 +1088,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { pointer strm,fd;
-  int whence;
+  int whence, ret;
   ckarg2(2,3);
   if (n==3) whence=ckintval(argv[2]); else whence=0;
   strm=argv[0];
@@ -1097,7 +1098,9 @@ pointer *argv;
      if (isint(strm->c.fstream.fname)) error(E_STREAM);}
   else fd=strm;
   if (!isint(fd)) error(E_STREAM);
-  return(makeint(lseek(intval(fd),ckintval(argv[1]),whence)));  }
+  ret=lseek(intval(fd),ckintval(argv[1]),whence);
+  if (ret==-1) perror("lseek");
+  return(makeint(ret));  }
 
 #if !vxworks
 /*change current working directory*/
