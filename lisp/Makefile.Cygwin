@@ -42,7 +42,7 @@ XVERSION=X_V11R6_1
 CPU_OPTIMIZE=-mcpu=i486
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
 MACHINE=i486
-DEBUG= # -g
+DEBUG= -g
 
 # If you use libc.so.5, remove -DLIB6 option.
 # In order to include thread library, libc.so.6 is preferrable.
@@ -70,7 +70,7 @@ CC=gcc
 # On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
 
 # Cygwin
-RAWLIB=-lm -lpthread -lcygipc
+RAWLIB=-lm -lpthread
 XLIB=-L/usr/X11R6/lib -lX11
 
 # specify directories where euslisp's libraries are located.
@@ -109,7 +109,7 @@ $(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(GEOOBJECTS) $(GEOCOBJECTS)  \
 		$(GEOOBJECTS) $(GEOCOBJECTS) \
 		$(IMGCOBJECTS) $(IMGOBJECTS) \
 		$(COMPOBJECTS) $(EUSLIB) $(RAWLIB) ; \
-	cd $(BINDIR); rm -f euscomp; ln -s eusg euscomp)
+	cd $(BINDIR); rm -f euscomp; ln -sf eusg euscomp)
 
 $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(COMPOBJECTS) \
@@ -146,12 +146,12 @@ $(ADLIBDIR)/$(LIBEUSX):
 
 $(ADLIBDIR)/$(LIBEUSGL):
 	@echo ";; Do not compile $(LIBEUSGL) for Cygwin"
- 
+
 $(BINDIR)/eus:
 	@echo ";; Do not compile eus for Cygwin, Just symlink"
-	(cd $(BINDIR); rm eus.exe; ln -s eusgl.exe eus.exe)
+	(cd $(BINDIR); rm -f eus.exe; ln -sf eusgl.exe eus.exe)
 
-	
+
 
 
 
