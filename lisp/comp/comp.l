@@ -35,7 +35,7 @@
 (defparameter *kernel* nil)
 ;(defparameter *cc* (if (member :gcc *features*) "gcc" "cc"))
 (defparameter *cc* 
-  (cond ((member :gcc *features*) "gcc")
+  (cond ((member :gcc *features*) "gcc -g")
 	((member :alpha *features*) "cc -ieee_with_inexact" )
 	(t "cc")))
 
@@ -1194,7 +1194,7 @@
  (:compile-file (file &key
 		 (cc-option "")
 		 (optimize *optimize*)
-		 (c-optimize 1)
+		 (c-optimize 2)
 		 (safety *safety*)
 		 (cc *do-cc*)	;nil skips c-compilation
 		 (pic *pic*)	;t forces position independent code 
@@ -1205,10 +1205,7 @@
 	    (> c-optimize 0)
 	    ;; (not (member :gcc *features*))
 	    )
-	(setq *coptflags*
-	  (if (memq :cygwin *features*)
-	      (format nil " -O1")
-	    (format nil " -O2")))	; c-optimize
+	(setq *coptflags* (format nil " -O~A" c-optimize))
 	(setq *coptflags* ""))
    (setq *optimize* optimize
 	 *safety* safety
@@ -1235,7 +1232,7 @@
       (warn "compiling file: ~A~%" (namestring file))
       (setq ins (open file))
       (setq *defun-list* nil)
-      (when (and *multipass-optimize* (not (memq :cygwin *features*)))
+      (when *multipass-optimize*
 	(while t
 	  (setq form (read ins nil '$eof$))
 	  (if (eq form '$eof$) (return nil))
@@ -1348,13 +1345,13 @@
 		   (if (and (memq :cygwin *features*)
 			    (not *kernel*))
 			(concatenate string
-				"; gcc -shared -falign-functions=4 --export-all-symbols --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc -o "
+				"; gcc -shared -g -falign-functions=4 --export-all-symbols --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc -o "
 				(namestring file.dll) " "
 				(namestring file.o) " "
 				*eusdir* (unix:getenv "ARCHDIR")
 				"/bin/"
 				"eusgl.a "
-				"-lm -lpthread -lcygipc "
+				"-lm -lpthread "
 				))
 		))
       (when cc
