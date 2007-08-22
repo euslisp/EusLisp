@@ -146,7 +146,7 @@ MAKEDATE:	$(EUSDIR)$(LIBDIR)/MAKEDATE
 
 MKDIR:
 	mkdir -p $(EUSDIR)/$(ARCH) $(BINDIR) $(OBJDIR) $(ADLIBDIR)
-	(cd $(EUSDIR); test -e include || ln -s lisp/c include)
+	(cd $(EUSDIR); test -e include || ln -sf lisp/c include)
 
 all:
 	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
@@ -207,7 +207,7 @@ $(BINDIR)/eus0:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(MTCOBJECTS) $(RGCOBJECT
 	($(CC) -o $(BINDIR)/eus0 $(LDFLAGS) $(NOKOBJECTS) $(KOBJECTS) \
 		$(KSOBJECTS) $(LCOBJECTS) $(MTCOBJECTS) $(RGCOBJECTS) \
 		 $(RAWLIB) ; \
-	cd $(BINDIR); rm -f euscomp; ln -s eus0 euscomp)
+	cd $(BINDIR); rm -f euscomp; ln -sf eus0 euscomp)
 
 $(BINDIR)/eus1:	 $(BINDIR)/eus0 $(GCCLS) \
 		$(LOBJECTS) $(LCOBJECTS) 
@@ -215,7 +215,7 @@ $(BINDIR)/eus1:	 $(BINDIR)/eus0 $(GCCLS) \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(MTCOBJECTS) $(RGCOBJECTS) \
 		$(LOBJECTS)  $(LCOBJECTS) \
 		$(RAWLIB) ; \
-	cd $(BINDIR); rm -f euscomp; ln -s eus1 euscomp)
+	cd $(BINDIR); rm -f euscomp; ln -sf eus1 euscomp)
 
 $(BINDIR)/eus2:	 $(BINDIR)/eus1 $(COMPOBJECTS)
 	($(CC) -o $(BINDIR)/eus2 $(LDFLAGS)  \
@@ -223,14 +223,14 @@ $(BINDIR)/eus2:	 $(BINDIR)/eus1 $(COMPOBJECTS)
 		$(MTCOBJECTS) $(RGCOBJECTS) \
 		$(LOBJECTS)  $(LCOBJECTS) $(COMPOBJECTS) \
 		$(RAWLIB) ; \
-	cd $(BINDIR); rm -f euscomp; ln -s eus2 euscomp)
+	cd $(BINDIR); rm -f euscomp; ln -sf eus2 euscomp)
 
 $(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(LIBEUSGEO)  
 	($(CC) -o $(BINDIR)/eusg $(LDFLAGS)  \
 	 	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS) $(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
 		$(COMPOBJECTS) $(EUSLIB) $(GEOLIB) $(RAWLIB) ; \
-	cd $(BINDIR); rm -f euscomp; ln -s eusg euscomp)
+	cd $(BINDIR); rm -f euscomp; ln -sf eusg euscomp)
 
 $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(COMPOBJECTS) \
@@ -255,7 +255,7 @@ $(BINDIR)/eus:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB) \
 		>$(ADLIBDIR)/eusmap ; \
 	cd $(BINDIR); rm -f euscomp eusx; \
-	ln -s eus euscomp; ln -s eus eusx; )
+	ln -sf eus euscomp; ln -sf eus eusx; )
 
 $(BINDIR)/eusxv:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(MTCOBJECTS) $(MTOBJECTS) \
@@ -351,12 +351,12 @@ install:
 	(rm -f $(PUBBINDIR)/eus $(PUBBINDIR)/eusx $(PUBBINDIR)/euscomp;\
 	 cp $(BINDIR)/eus $(PUBBINDIR);\
 	 cp $(BINDIR)/eusx $(PUBBINDIR);\
-	 ln -s $(PUBBINDIR)/eus $(PUBBINDIR)/euscomp)
+	 ln -sf $(PUBBINDIR)/eus $(PUBBINDIR)/euscomp)
 clean:
 	-rm -f $(OBJDIR)/* $(ADLIBDIR)/libeus* $(BINDIR)/* $(LDIR)/constants.l.[co]\
 		$(LDIR)/eusstart.l.[co] $(COMPDIR)/builtins.l.[co] so_locations
 	-sh tool/clean-ch.sh
-	
+
 eustag : 
 	$(BINDIR)/eustags \
 	$(EUSDIR)/$(LDIR)/readmacro.l \
