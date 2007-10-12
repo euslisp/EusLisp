@@ -116,7 +116,10 @@
                      (AND (SETQ SEXP (CDR SEXP)) (princ " " FILE)))
                   (T (TERPRI FILE)
                      (SPACES PLTN FILE)
-                     (SETQ PLTN. PLTN))))
+                     (SETQ PLTN. PLTN)
+                     (pprint1 (CAR SEXP) FILE pltn. platen)
+                     (AND (SETQ SEXP (CDR SEXP)) (princ " " FILE))
+		     )))
             (PRINc ")" FILE)))))
 )
 
@@ -158,4 +161,4 @@
 )
 
 
-(provide :pprint "@(#)$Id: pprint.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+(provide :pprint "@(#)$Id$")
