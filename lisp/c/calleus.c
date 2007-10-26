@@ -101,6 +101,7 @@ register integer_t cargv[];	/*arguments vector passed from C function*/
     else error(E_USER,(pointer)"unknown param type spec");
     argc++;}
   result=ufuncall(ctx,fsym,fsym,(pointer)argv,NULL,argc);
+  ctx->vsp = argv;
   if (resulttype==K_STRING) return((integer_t)(result->c.str.chars));
   else if (resulttype==K_FLOAT) {
     f=fltval(result);
