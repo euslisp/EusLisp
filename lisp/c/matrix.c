@@ -99,16 +99,12 @@ register pointer *argv;
   register float_t *a,*b,*r;
   register int isi,isf,iss;
 
-  /*
   ckarg2(1,3);  
-  if (!(isi=isintvector(argv[0])) && !(isf=isfltvector(argv[0])) &&
-      !(iss=isstring   (argv[0])))
-      error(E_NOVECTOR);*/
   isi=isintvector(argv[0]);
   isf=isfltvector(argv[0]);
   iss=isstring   (argv[0]);
-  if (!isi && !isf && iss) error(E_NOVECTOR); 
-
+  if (!isi && !isf && !iss)
+    error(E_NOVECTOR);
   s=vecsize(argv[0]);
   if (n==1) {	/*negate float vector*/
     result=makevector(classof(argv[0]),s);
