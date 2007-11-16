@@ -3,7 +3,7 @@
 ;;;;	
 ;;;;	Copyright(c) Toshihiro MATSUI, ETL, 1993
 ;;;;
-(list "@(#)$Id: Xtext.l,v 1.1.1.1 2003/11/20 07:46:36 eus Exp $")
+(list "@(#)$Id$")
 
 (in-package "X")
 (require :xdecl   "Xdecl.l")
@@ -329,12 +329,14 @@
           (send self :refresh-line (+ i start) 0))
        (setq win-row rowsave win-col colsave)))
  (:refresh-in-line (row scol ecol)
+    (unless (< row (length expbuf)) (return-from :refresh-in-line nil))
     (send self :xy row scol)
     (let ((line (aref expbuf row)))
        (setq ecol (min ecol (length line)))
        (send self :image-string x y line scol ecol)))
  (:refresh-lines (lines srow)
     (dotimes (i lines)
+        (unless (< (+ srow i) (length expbuf)) (return))
 	(send self :xy (+ srow i) 0)
         (send self :image-string x y (aref expbuf (+ srow i)))))
  (:refresh-area (startrow startcol endrow endcol)
