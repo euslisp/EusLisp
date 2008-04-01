@@ -85,7 +85,8 @@ extern int errno;
 
 extern int sys_nerr;
 /*extern char *sys_errlist[];*/
-extern char *tzname[2];
+#include <time.h>
+//extern char *tzname[2];
 #if !Cygwin /* extern timezone */
 extern time_t timezone, altzone;	/*long*/
 #endif
@@ -132,10 +133,11 @@ pointer argv[];
   pointer timevec;
   pointer *tv;
   pointer tz0, tz1, tz;
+  struct tm res;
 
   if (n==1) clock=coerceintval(argv[0]);
   else clock=time(0);
-  tms=localtime((time_t *)&clock);
+  tms=localtime_r((time_t *)&clock,&res); /* localtime-->localtime_r */
   timevec=makevector(C_VECTOR,10);
   vpush(timevec);
   tz0=makestring(tzname[0],strlen(tzname[0]));
@@ -162,10 +164,12 @@ pointer ASCTIME(ctx,n,argv)
 register context *ctx;
 int n;
 register pointer argv[];
-{ char *at;
+{ char *atp;
   struct tm tms1, *tms;
   pointer a=argv[0];
   int i;
+#define	ASCTIME_STRLEN	30	/* at lease 26 chars */
+  char at[ASCTIME_STRLEN];
 
   ckarg(1);
   if (isintvector(argv[0])) tms=(struct tm *)a->c.ivec.iv;
@@ -181,8 +185,12 @@ register pointer argv[];
     tms1.tm_isdst=(a->c.vec.v[8]==NIL)?0:1;
     tms= &tms1; }
   else error(E_NOINTVECTOR);
-  at=asctime(tms);
-  return(makestring(at,strlen(at)));}
+#if defined(__USE_POSIX) || Cygwin || Linux
+  atp=asctime_r(tms,at);	/* asctime --> asctime_r */
+#else
+  atp=asctime_r(tms,at,ASCTIME_STRLEN);	/* asctime --> asctime_r */
+#endif
+  return(makestring(atp,strlen(atp)));}
 
 #if !Solaris2
 pointer GETRUSAGE(ctx,n,argv)
@@ -548,6 +556,7 @@ pointer *argv;
 /* process creation and deletion 
 /****************************************************************/
 #if !vxworks
+#if !Solaris2 || !THREADED
 pointer FORK(ctx,n,argv)
 register context *ctx;
 int n;
@@ -555,6 +564,41 @@ pointer *argv;
 { ckarg(0);
   return(makeint(fork()));
   }
+#else
+/*  for the problem of calling fork(2) in MT   *
+ *  Jan. 10 2003 by ikuo@jsk.t.u-tokyo.ac.jp   */
+static int ctxid_in_child;
+static void *prepare(void) {
+  int i, me=thr_self();
+  /* preserve current context */
+  ctxid_in_child=me;
+  /* suspend all threads except self */
+  for (i=0; i<MAXTHREAD; i++) {
+    if (euscontexts[i]!=0 && i!=me &&
+	euscontexts[i]->threadobj->c.thrp.suspend==NIL) {
+      thr_suspend(i);
+      euscontexts[i]->threadobj->c.thrp.suspend=T; } }
+}
+static void *parent(void) {
+  /* continue all suspended threads */
+  int i, me=thr_self();
+  for (i=0; i<MAXTHREAD; i++) {
+    if (euscontexts[i]!=0 && i!=me) {
+      euscontexts[i]->threadobj->c.thrp.suspend=NIL;
+      thr_continue(i); } }
+}
+static void *child(void) {
+  /* do not continue suspended threads */
+  int me=thr_self();
+  /* copy current context (tid changed in child) */
+  euscontexts[me] = euscontexts[ctxid_in_child];
+}
+pointer FORK(register context *ctx, int n, pointer *argv)
+{ckarg(0);
+ pthread_atfork (prepare, parent, child);
+ return(makeint(fork()));
+}
+#endif /* endof Solaris || THREADED */
 
 #if Solaris2
 pointer FORK1(ctx,n,argv)
@@ -589,7 +633,30 @@ pointer *argv;
   stat=execvp(exeargv[0],(char **)exeargv);
   return(makeint(-errno));}	  
 
-#if !Solaris2 && !Cygwin
+#if Cygwin
+#include "process.h"
+#include <windows.h>
+pointer SPAWN(register context *ctx, int n, pointer *argv)
+{
+    byte *spawnargv[512];
+    int i=0,stat;
+    if (n>512) error(E_MISMATCHARG);
+    while(i<n) {
+	spawnargv[i]=Getstring(argv[i])->c.str.chars;
+	i++;}
+    spawnargv[i]=0;
+    stat=spawnvp(_P_NOWAIT, spawnargv[0], (const char * const *)spawnargv);
+    return(makeint(-errno));}
+
+pointer SWITCHTOTHREAD(register context *ctx, int n, pointer *argv)
+{
+  int ret=SwitchToThread();
+  return(makeint(ret));
+  return 0;
+}
+#endif
+
+#if !Solaris2
 static pointer SETPRIORITY(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1435,10 +1502,10 @@ int n;
 pointer argv[];
 { int ns,len,s;
   pointer sockname;
-#if vxworks
+#if vxworks || Cygwin || Linux || Solaris2
   struct sockaddr sockun;
 #else 
-  struct sockaddr_un sockun;
+  struct sockaddr_un sockun;	// ??? why not sockaddr or sockaddr_in ???
 #endif
 
   ckarg(1);
@@ -1739,7 +1806,7 @@ register pointer *argv;
   return(cons(ctx,makeint(np->n_net),
 	      cons(ctx,makeint(np->n_addrtype),NIL)));}
 #endif
-  
+
 pointer GETPROTOBYNAME(ctx,n,argv)
 register context *ctx;
 int n;
@@ -2044,6 +2111,10 @@ pointer mod;
   defun(ctx,"VFORK",mod,VFORK);
 #endif
   defun(ctx,"EXEC",mod,EXEC);
+#if Cygwin
+  defun(ctx,"SPAWN", mod, SPAWN);
+  defun(ctx,"SWITCHTOTHREAD", mod, SWITCHTOTHREAD);
+#endif
 #if !Solaris2 && !Cygwin
   defun(ctx,"GETPRIORITY",mod,GETPRIORITY);
   defun(ctx,"SETPRIORITY",mod,SETPRIORITY);
