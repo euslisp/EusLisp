@@ -186,7 +186,7 @@
 			(eval-dynamic input local-bindings))
 		   ((boundp input) (eval input))
 		   (t '*unbound*)))
-	 (if ttyp (print result repstream)))
+	 (print result repstream))
 	((or (null (streamp input)) (listp input))
 ;;	 (if *history* (add-history (format nil "~s" input)))
 	 (setq - input)
@@ -349,5 +349,5 @@
 (defun reset (&optional (n 0)) (throw n nil))
 )
 
-(provide :toplevel "@(#)$Id: toplevel.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+(provide :toplevel "@(#)$Id$")
 
