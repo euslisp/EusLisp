@@ -1,0 +1,32 @@
+HOST_EUSDIR=$(shell printenv EUSDIR)
+HOST_ARCHDIR=$(shell printenv ARCHDIR)
+EUSDIR=$(shell pwd)/..
+ARCHDIR=LinuxSH4
+
+all : $(EUSDIR)/$(ARCHDIR)/bin/gccls $(EUSDIR)/$(ARCHDIR)/bin/euscompsh4
+	make -f Makefile.LinuxSH4.2 eus0
+	cd $(EUSDIR)/$(ARCHDIR)/bin;  rm -f euscomp; ln -sf euscomp-sh4 euscomp; cd $(EUSDIR)/lisp
+	make -f Makefile.LinuxSH4.2 eus1
+	cd $(EUSDIR)/$(ARCHDIR)/bin;  rm -f euscomp; ln -sf euscomp-sh4 euscomp; cd $(EUSDIR)/lisp
+	make -f Makefile.LinuxSH4.2 eus2
+	cd $(EUSDIR)/$(ARCHDIR)/bin;  rm -f euscomp; ln -sf euscomp-sh4 euscomp; cd $(EUSDIR)/lisp
+	make -f Makefile.LinuxSH4.2 eusg
+	cd $(EUSDIR)/$(ARCHDIR)/bin;  rm -f euscomp; ln -sf euscomp-sh4 euscomp; cd $(EUSDIR)/lisp
+	cd $(EUSDIR)/$(ARCHDIR)/bin;  ln -sf eus1 eus;
+
+$(EUSDIR)/$(ARCHDIR)/bin/euscompsh4:
+	(cd $(EUSDIR)/$(ARCHDIR)/bin; \
+	echo '#!/bin/sh' > euscomp-sh4; \
+	echo 'EUSDIR='$(EUSDIR) >> euscomp-sh4; \
+	echo 'ARCHDIR='$(ARCHDIR) >> euscomp-sh4; \
+	echo $(HOST_EUSDIR)/$(HOST_ARCHDIR)/bin/eus1 "\"(progn (setq comp::*cc* \\\"sh4-linux-gcc -g\\\")(push :sh4 comp::*features*))\"" >> euscomp-sh4; \
+	chmod 755 euscomp-sh4; \
+	)
+
+clean: $(EUSDIR)/$(ARCHDIR)/bin/gccls
+	make -f Makefile.LinuxSH4.2  clean
+
+$(EUSDIR)/$(ARCHDIR)/bin/gccls:
+	make -f Makefile.LinuxSH4.2 CC=cc MKDIR $(EUSDIR)/$(ARCHDIR)/bin/gccls
+	
+
