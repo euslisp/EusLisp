@@ -885,6 +885,9 @@ static void initfeatures()
 #if RGC
   p=cons(ctx,intern(ctx,"RGC",3,keywordpkg),p);
 #endif
+#if SH4
+  p=cons(ctx,intern(ctx,"SH4",3,keywordpkg),p);
+#endif
 
   defvar(ctx,"*FEATURES*",p,lisppkg);
 

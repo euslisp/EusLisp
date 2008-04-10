@@ -246,6 +246,40 @@
 			(ldb calleus-offset 16 8)  (ldb calleus-offset 24 8))
 		    :start1 11)
 	   podcode)
+#+:sh4 
+(progn
+	(setq podcode (byte-string
+		       #xe6 #x2f;;	e6 2f       	mov.l	r14,@-r15
+		       #x22 #x4f;;	22 4f       	sts.l	pr,@-r15
+		       #x05 #xd1;;	05 d1       	mov.l	40043c <bb+0x1c>,r1	! 0x4003e0
+		       #xfc #x7f;;	fc 7f       	add	#-4,r15
+		       #xf3 #x6e;;	f3 6e       	mov	r15,r14
+		       #x42 #x2e;;	42 2e       	mov.l	r4,@r14
+		       #x04 #xd4;;	04 d4       	mov.l	400440 <bb+0x20>,r4	! 0x12345678
+		       #x0b #x41;;	0b 41       	jsr	@r1
+		       #xe3 #x65;;	e3 65       	mov	r14,r5
+		       #x04 #x7e;;	04 7e       	add	#4,r14
+		       #xe3 #x6f;;	e3 6f       	mov	r14,r15
+		       #x26 #x4f;;	26 4f       	lds.l	@r15+,pr
+		       #x0b #x00;;	0b 00       	rts	
+		       #xf6 #x6e;;	f6 6e       	mov.l	@r15+,r14
+		       ;;#xe0 #x03;;	e0 03       	.word 0x03e0
+		       ;;#x40 #x00;;	40 00       	.word 0x0040
+		       (ldb *calleus* 0 8)
+		       (ldb *calleus* 8 8)
+		       (ldb *calleus* 16 8)
+		       (ldb *calleus* 24 8)
+		       ;;#x78 #x56;;	78 56       	mov.l	@(32,r7),r6
+		       ;;#x34 #x12;;	34 12       	mov.l	r3,@(16,r2)
+		       (ldb self-address 0 8)
+		       (ldb self-address 8 8) 
+		       (ldb self-address 16 8)
+		       (ldb self-address 24 8) 
+		       #x09 #x00;;	09 00       	nop	
+		       #x09 #x00;;	09 00       	nop	
+		       #x09 #x00;;	09 00       	nop
+		       )
+	      ))
 #-(or :sun3 :sun4 :i386)
 	 (error "not yet implemented for this processor")
       (cond 
