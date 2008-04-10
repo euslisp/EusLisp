@@ -35,7 +35,10 @@
 (defparameter *kernel* nil)
 ;(defparameter *cc* (if (member :gcc *features*) "gcc" "cc"))
 (defparameter *cc* 
-  (cond ((member :gcc *features*) "gcc -g")
+  (cond ((member :sh4 *features*)
+	 "sh4-linux-gcc -g")
+	((member :gcc *features*)
+	   "gcc -g")
 	((member :alpha *features*) "cc -ieee_with_inexact" )
 	(t "cc")))
 
@@ -1330,7 +1333,10 @@
 			)
 		   (if (and (memq :linux *features*)  pic)
 			(concatenate string
-				"; ld -shared -o "
+				     (if (memq :sh4 *features*)
+				"; sh4-linux-gcc -shared -o "
+ 				"; ld -shared -o "
+				)
 				(namestring file.so)
 				" "
 				(namestring file.o))
