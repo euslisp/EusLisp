@@ -633,29 +633,6 @@ pointer *argv;
   stat=execvp(exeargv[0],(char **)exeargv);
   return(makeint(-errno));}	  
 
-#if Cygwin
-#include "process.h"
-#include <windows.h>
-pointer SPAWN(register context *ctx, int n, pointer *argv)
-{
-    byte *spawnargv[512];
-    int i=0,stat;
-    if (n>512) error(E_MISMATCHARG);
-    while(i<n) {
-	spawnargv[i]=Getstring(argv[i])->c.str.chars;
-	i++;}
-    spawnargv[i]=0;
-    stat=spawnvp(_P_NOWAIT, spawnargv[0], (const char * const *)spawnargv);
-    return(makeint(-errno));}
-
-pointer SWITCHTOTHREAD(register context *ctx, int n, pointer *argv)
-{
-  int ret=SwitchToThread();
-  return(makeint(ret));
-  return 0;
-}
-#endif
-
 #if !Solaris2
 static pointer SETPRIORITY(ctx,n,argv)
 register context *ctx;
@@ -2111,10 +2088,6 @@ pointer mod;
   defun(ctx,"VFORK",mod,VFORK);
 #endif
   defun(ctx,"EXEC",mod,EXEC);
-#if Cygwin
-  defun(ctx,"SPAWN", mod, SPAWN);
-  defun(ctx,"SWITCHTOTHREAD", mod, SWITCHTOTHREAD);
-#endif
 #if !Solaris2 && !Cygwin
   defun(ctx,"GETPRIORITY",mod,GETPRIORITY);
   defun(ctx,"SETPRIORITY",mod,SETPRIORITY);
