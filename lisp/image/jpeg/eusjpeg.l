@@ -15,7 +15,8 @@
 (export '(jpeg-compress jpeg-decompress 
 	  read-jpeg-file write-jpeg-file))
 
-(let ((m (load-foreign "jpegmemcd.so")))
+(let ((m 
+       (load-foreign (format nil "~A/~A/lib/jpegmemcd.dll" *eusdir* (unix:getenv "ARCHDIR")))))
   (defforeign jpeg_header m "JPEG_header" () :integer)
   (defforeign jpeg_decompress m "JPEG_decompress" () :integer)
   (defforeign jpeg_compress m "JPEG_compress" () :integer))
@@ -64,7 +65,7 @@
 	 (components-return (integer-vector 0))
 	 (image-return (integer-vector 0))
 	 decomp-image-address decomp-image-string
-	 total-size)
+	 total-size width height result-image)
       ;; identify the jpeg output image size
       (setq total-size
 	    (jpeg_header jpeg-image (length jpeg-image)
@@ -106,6 +107,6 @@
       (list xwins pictures)     )
    )
 
-(provide :jpeg "#(@)$Id: eusjpeg.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
+(provide :jpeg "#(@)$Id$")
 
 

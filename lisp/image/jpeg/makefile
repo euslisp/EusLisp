@@ -1,16 +1,21 @@
 # jpeg compression/decompression for euslisp
 # copyright (c) 1997, Toshihiro Matsui, Electrotechnical Laboratory
 
-JPEGLIBDIR=/usr/local/jpeg/jpeg-6a
-CFLAGS= -Kpic -I$(JPEGLIBDIR)
+OS = $(shell /bin/uname | sed s/-.*//)
+ifeq ($(OS), Linux)
+ LSFX = so
+else
+ LSFX = dll
+endif
 
-jpegmemcd.so:	jpegmemcd.o jmemsrc.o jmemdst.o
-	cc -o jpegmemcd.so -G  jpegmemcd.o jmemsrc.o jmemdst.o -L$(JPEGLIBDIR) -R$(JPEGLIBDIR) -ljpeg
+$(EUSDIR)/$(ARCHDIR)/lib/jpegmemcd.$(LSFX):	jpegmemcd.o jmemsrc.o jmemdst.o
+	gcc -shared -o jpegmemcd.$(LSFX) jpegmemcd.o jmemsrc.o jmemdst.o -ljpeg
+	cp jpegmemcd.$(LSFX) $(EUSDIR)/$(ARCHDIR)/lib
 jpegmemcd.o:	jpegmemcd.c
-	cc -c -O  jpegmemcd.c $(CFLAGS)
+	gcc -c -O  jpegmemcd.c $(CFLAGS)
 jmemsrc.o:	jmemsrc.c
-	cc -c -O  jmemsrc.c $(CFLAGS)
+	gcc -c -O  jmemsrc.c $(CFLAGS)
 jmemdst.o:	jmemdst.c
-	cc -c -O  jmemdst.c $(CFLAGS)
+	gcc -c -O  jmemdst.c $(CFLAGS)
 
 

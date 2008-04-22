@@ -4,9 +4,9 @@
  * Copyright (C) 1994-1996, Toshihiro Matsui, Electrotechnical Laboratory
  */
 
-#include "jinclude.h"
-#include "jpeglib.h"
-#include "jerror.h"
+#include <stdio.h>
+#include <jpeglib.h>
+#include <jerror.h>
 
 /* Expanded data destination object for stdio output */
 
@@ -23,8 +23,6 @@ typedef my_destination_mgr * my_dest_ptr;
  * before any data is actually written.
  */
 
-
-extern char *progname;
 
 METHODDEF(void)
 init_destination (j_compress_ptr cinfo)
@@ -64,8 +62,8 @@ empty_output_buffer (j_compress_ptr cinfo)
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
 
   
-  fprintf(stderr, "%s: jpeg compression buffer overflow >%d\n",
-		progname, *dest->data_count_ptr);
+  fprintf(stderr, " : jpeg compression buffer overflow >%d\n",
+	  *dest->data_count_ptr);
 
   dest->pub.next_output_byte = dest->buffer;
   dest->pub.free_in_buffer = *dest->data_count_ptr;
@@ -105,7 +103,7 @@ jpeg_memio_dest (j_compress_ptr cinfo, JOCTET *jpegimgbuf, long *size)
   if (cinfo->dest == NULL) {	/* first time for this JPEG object? */
     cinfo->dest = (struct jpeg_destination_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  SIZEOF(my_destination_mgr));
+				  sizeof(my_destination_mgr));
   }
 
   dest = (my_dest_ptr) cinfo->dest;

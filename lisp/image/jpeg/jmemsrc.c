@@ -4,9 +4,9 @@
  * Copyright (C) 1997, Toshihiro Matsui, Electrotechnical Laboratory
  */
 
-#include "jinclude.h"
-#include "jpeglib.h"
-#include "jerror.h"
+#include <stdio.h>
+#include <jpeglib.h>
+#include <jerror.h>
 
 /* Expanded data source object for stdio input */
 
@@ -162,7 +162,7 @@ jpeg_memio_src (j_decompress_ptr cinfo, JOCTET *buf, long size)
   if (cinfo->src == NULL) {	/* first time for this JPEG object? */
     cinfo->src = (struct jpeg_source_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  SIZEOF(my_source_mgr));
+				  sizeof(my_source_mgr));
     src = (my_src_ptr) cinfo->src;
   }
 
