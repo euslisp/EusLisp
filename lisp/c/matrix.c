@@ -758,7 +758,7 @@ register pointer argv[];
   if (n==3) {
     rm=argv[2];
     if (!ismatrix(rm)) error(E_NOVECTOR);
-    if (row1!=colsize(rm) || column2!=rowsize(rm)) error(E_VECINDEX);
+    if (row1!=rowsize(rm) || column2!=colsize(rm)) error(E_VECINDEX);
     }
   else rm=makematrix(ctx,row1,column2);
   if (column1>256){
