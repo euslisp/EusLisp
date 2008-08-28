@@ -761,8 +761,8 @@ register pointer argv[];
     if (row1!=rowsize(rm) || column2!=colsize(rm)) error(E_VECINDEX);
     }
   else rm=makematrix(ctx,row1,column2);
-  if (column1>256){
-    fv = (float_t *)malloc(sizeof(float_t) * column1);
+  if (row1>256 || column2>256){
+    fv = (float_t *)malloc(sizeof(float_t) * ((row1>column2)?row1:column2));
     //error(E_VECINDEX);
   }
   fm=rm->c.ary.entity->c.fvec.fv;
@@ -787,7 +787,7 @@ register pointer argv[];
         fv[j]=x;}
       jj=0;
       for (j=0; j<row1; j++, jj+=column2) fm[i+jj]=fv[j];}
-  if (column1>256) free(fv);
+  if (fv!=fvv) free(fv);
   return(rm);}
 
 pointer TRANSFORM(ctx,n,argv)
