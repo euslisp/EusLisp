@@ -119,6 +119,8 @@
 (setq *load-verbose* nil)
 (defparameter *user* (unix:getenv "USER"))
 
+(if (probe-file (format nil "~A/lib/irtext.l" *eusdir*))
+    (load (format nil "~A/lib/irtext.l" *eusdir*)))
 (if (probe-file (format nil "~A/lib/eusext.l" *eusdir*))
     (load (format nil "~A/lib/eusext.l" *eusdir*)))
 
