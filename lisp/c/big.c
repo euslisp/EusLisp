@@ -924,7 +924,7 @@ pointer normalize_big(pointer x)
   positive = gez(xv[size-1]);
   for (i=size-1; i>=0; i--) {
     if (positive && xv[i]==0) newsize--;
-    else if (!positive && xv[i]== -1) newsize--;
+    else if (!positive && xv[i]==-1 && size!=1) newsize--;
     else break;}
   if (newsize != size) {
     x->c.bgnm.bv->c.ivec.length=makeint(newsize);
