@@ -1,7 +1,7 @@
 ;; Xkeypanel.l
 ;; (c)1996 Toshihiro Matsui, Electrotechnical Laboratory
 ;;
-(list "@(#)$Id: Xkeypanel.l,v 1.1.1.1 2003/11/20 07:46:35 eus Exp $")
+(list "@(#)$Id$")
 (in-package "X")
 
 (defclass number-display :super CharacterWindow :slots (value value-string))
@@ -129,7 +129,7 @@
 		 self :quit)
     (send self :clear-value)
     self)
-
+)
 
 
 (defclass calculator :super panel
