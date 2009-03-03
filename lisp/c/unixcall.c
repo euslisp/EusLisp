@@ -1611,9 +1611,6 @@ register pointer argv[];
     if (exceptfds && FD_ISSET(i, exceptfds)) width=i;}
   width = width + 1;
 
-#if Linux && THREADED
-  mutex_lock(&mark_lock);
-#endif
   timeout=ckfltval(argv[3]);
   if (timeout==0.0)
   {GC_REGION(i=select(width, readfds, writefds, exceptfds,0););}
@@ -1623,10 +1620,6 @@ register pointer argv[];
     timeout=timeout*1000000;
     to.tv_usec=timeout;
     GC_REGION(i=select(width, readfds, writefds, exceptfds,&to);)}
-#if Linux && THREADED
-  mutex_unlock(&mark_lock);
-  usleep(0);
-#endif
   if (i<0) return(makeint(-errno));
   else return(makeint(i)); }
 
@@ -1650,9 +1643,6 @@ pointer argv[];
   for (i=0; i<size; i++) if (FD_ISSET(i, fdvec)) width=i;
   width = width+1;
      
-#if Linux && THREADED
-  mutex_lock(&mark_lock);
-#endif
   timeout=ckfltval(argv[1]);
   if (timeout==0.0) {GC_REGION(n=select(width, fdvec, 0, 0, 0););}
   else {
@@ -1662,10 +1652,6 @@ pointer argv[];
     to.tv_usec=timeout;
     GC_REGION(n=select(width, fdvec, 0, 0, &to););}
   if (n<0) return(makeint(-errno));
-#if Linux && THREADED
-  mutex_unlock(&mark_lock);
-  usleep(0);
-#endif
   if (isint(argv[0])) {
     /*fds=fdvec-> __fds_bits[0];*/
     /* fds_bits should be __fds_bits on some operating systems */
