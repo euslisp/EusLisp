@@ -352,7 +352,7 @@ printf(" =%x:%x\n",*qp,*rp);fflush(stdout);
 /*  and put 'i' in the MSB word.
 */
 
-static pointer stretch_big(x, i)
+inline pointer stretch_big(x, i)
 pointer x;
 integer_t i;
 { pointer bn=x->c.bgnm.bv;
@@ -778,7 +778,7 @@ pointer x, y;
 	i.e. the most significant bit of that digit will be set.
 */
 
-static integer_t get_standardizing_factor_and_normalize(x)
+inline integer_t get_standardizing_factor_and_normalize(x)
 pointer x;
 { int size, s, newsize;
   integer_t *xv, i, j;
@@ -836,7 +836,7 @@ pointer  x, y;
     sub_int_big_big(1, x, y); }
   return(q); }
 
-static pointer big_quotient_remainder_auxiliary(x, y, i)
+inline pointer big_quotient_remainder_auxiliary(x, y, i)
 pointer x, y;
 int i;
 { pointer q, qq;
