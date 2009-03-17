@@ -1117,7 +1117,7 @@ char *mainargv[32];
 unsigned int thr_self() { return(1);}
 #endif
 
-static void mainthread(ctx)
+inline void mainthread(ctx)
 register context *ctx;
 { 
   euscontexts[thr_self()]=ctx;
