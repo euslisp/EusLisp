@@ -109,7 +109,7 @@ pointer argv[];
   terpri(strm);
   return(NIL);}
 
-static int prsize;
+static int prsize[MAXTHREAD];
 
 void prntsize(s,lim)
 register pointer s;
@@ -117,49 +117,49 @@ int lim;
 { char buf[16];
   register int i,n,etype;
   numunion nu;
-  if (prsize>=lim) return;
-  else if (isint(s)) { sprintf(buf,"%d",intval(s)); prsize+=strlen(buf);}
-  else if (isflt(s)) prsize+=7;
+  if (prsize[thr_self()]>=lim) return;
+  else if (isint(s)) { sprintf(buf,"%d",intval(s)); prsize[thr_self()]+=strlen(buf);}
+  else if (isflt(s)) prsize[thr_self()]+=7;
   else if (piscons(s)) {
     if (ccar(s)==QUOTE && islist(ccdr(s)) && ccdr(ccdr(s))==NIL) {
-      prsize++; prntsize(ccar(ccdr(s)),lim);}  /* ???? */
+      prsize[thr_self()]++; prntsize(ccar(ccdr(s)),lim);}  /* ???? */
     else {
-      prsize+=2;
+      prsize[thr_self()]+=2;
       while (islist(s)) {
         prntsize(ccar(s),lim);
-        if (prsize>lim) return;
+        if (prsize[thr_self()]>lim) return;
         s=ccdr(s);
-        if (s!=NIL) prsize++;}
-      if (s!=NIL) { prntsize(s,lim); prsize+=2;}}}
-  else if (pisstring(s)) prsize+=strlength(s);
-  else if (pissymbol(s)) prsize+=strlength(s->c.sym.pname);
+        if (s!=NIL) prsize[thr_self()]++;}
+      if (s!=NIL) { prntsize(s,lim); prsize[thr_self()]+=2;}}}
+  else if (pisstring(s)) prsize[thr_self()]+=strlength(s);
+  else if (pissymbol(s)) prsize[thr_self()]+=strlength(s->c.sym.pname);
   else if (pisvector(s)) {
     n=vecsize(s); i=0; etype=elmtypeof(s);
     switch(etype) {
-      case ELM_BIT: case ELM_CHAR: case ELM_FOREIGN: prsize+=2+n; break;
-      case ELM_BYTE: prsize+=20; break;	/*detarame*/
-      case ELM_FLOAT: case ELM_INT: prsize++;
+      case ELM_BIT: case ELM_CHAR: case ELM_FOREIGN: prsize[thr_self()]+=2+n; break;
+      case ELM_BYTE: prsize[thr_self()]+=20; break;	/*detarame*/
+      case ELM_FLOAT: case ELM_INT: prsize[thr_self()]++;
       case ELM_POINTER:
-	    prsize+=3;
+	    prsize[thr_self()]+=3;
 	    while (i<n) {
 	      if (etype==ELM_FLOAT) prntsize(makeflt(s->c.fvec.fv[i]),lim);
 	      else if (etype==ELM_INT) prntsize(makeint(s->c.ivec.iv[i]),lim);
 	      else prntsize(s->c.vec.v[i],lim);
-	      if (prsize>lim) return;
-	      prsize++; i++;}
+	      if (prsize[thr_self()]>lim) return;
+	      prsize[thr_self()]++; i++;}
 	    break;} }
-  else prsize+=vecsize(classof(s)->c.cls.name)+12;}
+  else prsize[thr_self()]+=strlength(classof(s)->c.cls.name->c.sym.pname)+12;}
 
 pointer PRNTSIZE(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
 { int lim;
-  prsize=0;
+  prsize[thr_self()]=0;
   ckarg2(1,2);
   if (n==2) lim=ckintval(argv[1]); else lim=256;
   prntsize(argv[0],lim);
-  return(makeint(prsize));}
+  return(makeint(prsize[thr_self()]));}
 
 pointer READ(ctx,n,argv)
 register context *ctx;
