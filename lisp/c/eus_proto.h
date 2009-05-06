@@ -1,3 +1,6 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
 /* arith.c */
 extern pointer NUMEQUAL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer GREATERP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -696,3 +699,6 @@ extern int vectorarray(context */*ctx*/, pointer /*mod*/);
 /* setjmp.c */
 extern pointer psetjmp(jmp_buf);
 extern void plongjmp(jmp_buf,pointer);
+#ifdef __cplusplus
+}
+#endif
