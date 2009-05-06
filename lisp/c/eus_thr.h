@@ -38,6 +38,9 @@ struct thread_arg {
  *  MT-library specific parts
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /* SunOS4.1.x specific part */
 
 #if SunOS4_1
@@ -145,3 +148,6 @@ extern mutex_t  free_thread_lock;
 extern mutex_t  qthread_lock;
 extern mutex_t  qsort_lock;
 extern sema_t   free_thread_sem;
+#ifdef __cplusplus
+}
+#endif

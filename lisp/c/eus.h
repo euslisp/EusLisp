@@ -732,7 +732,13 @@ extern int export_all;
 #define isnum(p) (((integer_t)(p) & 3))
 #define ispointer(p) (!((integer_t)(p) & 3))
 // #define makeint(v) ((pointer)((((integer_t)(v))<<2)+2)) // org
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern pointer makeint(integer_t v);
+#ifdef __cplusplus
+}
+#endif
 
 #define bpointerof(p) ((bpointer)((integer_t)(p)))
 #ifdef RGC
@@ -748,7 +754,13 @@ extern pointer makeint(integer_t v);
 #endif
 
 // #define intval(p) (((integer_t)(p))>>2) // org
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern integer_t intval(pointer p);
+#ifdef __cplusplus
+}
+#endif
 #define ckintval(p) (isint(p)?intval(p):(integer_t)error(E_NOINT))
 #define bigintval(x) (isint(x)?intval(x):\
    (isbignum(x)?\
@@ -967,6 +979,9 @@ enum errorcode {
 
 /* function prototypes */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /*eval*/
 #if alpha || IRIX6 || Solaris2 || Linux
 #include "eus_proto.h"
@@ -1048,8 +1063,6 @@ extern pointer makeflt();
 #endif
 
 #if !alpha && !IRIX6
-extern float_t ratio2flt();
-
 /*io*/
 extern pointer reader(context *, pointer, pointer);
 extern pointer prinx(context *, pointer, pointer);
@@ -1057,7 +1070,6 @@ extern pointer prinx(context *, pointer, pointer);
 /*for compiled code*/
 extern pointer makeclosure(pointer,pointer,pointer(*)(),pointer, pointer*, pointer*);
 extern pointer fcall();
-extern pointer minilist();
 extern pointer xcar(pointer), xcdr(pointer), xcadr(pointer);
 extern pointer *ovafptr(pointer,pointer);
 #endif
@@ -1075,4 +1087,7 @@ extern mutex_t  free_thread_lock;
 extern mutex_t  qthread_lock;
 extern mutex_t  qsort_lock;
 extern sema_t   free_thread_sem;
+#endif
+#ifdef __cplusplus
+}
 #endif
