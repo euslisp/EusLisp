@@ -983,7 +983,7 @@ enum errorcode {
 extern "C" {
 #endif
 /*eval*/
-#if alpha || IRIX6 || Solaris2 || Linux
+#if alpha || IRIX6 || Solaris2 || Linux || Cygwin
 #include "eus_proto.h"
 #else
 extern pointer eval(context *, pointer);
