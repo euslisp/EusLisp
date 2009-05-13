@@ -324,11 +324,11 @@ pointer *argv;
   bytes=argv[0];
   if (islist(bytes)) 
     while (islist(bytes)) {
-      buf.i=ckintval(ccar(bytes));
+      buf.i=bigintval(ccar(bytes));
       writestr(strm,buf.b,4);
       bytes=ccdr(bytes);}
   else {
-    buf.i=ckintval(bytes);
+    buf.i=bigintval(bytes);
     writestr(strm,buf.b,4);}
   return(argv[0]);}
 
