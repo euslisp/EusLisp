@@ -56,6 +56,7 @@ register pointer sym;
     else if (var->cix==vectorcp.cix) {
       vaddr=getobjv(sym,var,val);
       if (vaddr) return(*vaddr);}
+    if (bf==bf->lexblink) break;
     bf=bf->lexblink;}
   /*get special value from the symbol cell*/
   /*if (sym->c.sym.vtype==V_GLOBAL) goto getspecial;*/
@@ -202,6 +203,7 @@ struct bindframe *lex,*declscope;
     if (p->sym==var) 
       if (p->val==UNBOUND) { bindspecial(ctx,var,val); return(ctx->bindfp);}
       else error(E_MULTIDECL);
+    if (p==p->lexblink) break;
     p=p->lexblink;}
   /*not found in declare scope*/
   if (var->c.sym.vtype>= /* V_SPECIAL */  V_GLOBAL ) {
