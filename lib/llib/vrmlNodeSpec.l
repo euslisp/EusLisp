@@ -7,6 +7,7 @@
 
 (defparameter *nodeTypes* nil)
 (defparameter *fieldTypes* nil)
+(defparameter *pointScale* 1000.0)
 
 (defclass vrml-object :super propertied-object)
 (defmethod vrml-object 
@@ -50,7 +51,7 @@
 		   (collect-and-merge ',decls 'eventOut)
 		   (append (collect-and-merge ',decls 'field)
 			   (cdr (collect-and-merge ',decls 'exposedField))) ) )
-	(defvrmlclass ',nodeId))
+	(send ',nodeId :global (defvrmlclass ',nodeId) ',nodeId))
 )
 
 (defun make-vrml-node (nodeType)
@@ -310,10 +311,11 @@
 
 (defun vrml-indexedfaceset-to-body (vobj)	;vrml-to-eus body
    (let* ((points
-	     (coerce (send (send vobj :get-field 'coord) :get-field 'point) vector))
+	     (coerce (mapcar #'(lambda (p) (scale *pointScale* p p)) (send (send vobj :get-field 'coord) :get-field 'point)) vector))
 	  (coordindices (send vobj :get-field 'coordindex))
 	  (normals
-	     (coerce (send (send vobj :get-field 'normal) :get-field 'vector) vector))
+	   (if (not (eq 'NULL (send vobj :get-field 'normal)))
+	     (coerce (send (send vobj :get-field 'normal) :get-field 'vector) vector)))
 	  (normalindices (send vobj :get-field 'normalindex))
 	  (edges (make-array (length points)))
 	  (created-edges) (created-faces) (eusbody)
