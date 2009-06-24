@@ -232,10 +232,12 @@ register pointer argv[];
   /* (sec usec timezone daylight) */
   /* timezone is seconds west to the GMT */
   gettimeofday(&tm, 0);
+  vpush(p);
   p=cons(ctx, makeint(daylight), NIL);
   p=cons(ctx, makeint(timezone),p);
   p=cons(ctx, mkbigint(tm.tv_usec), p);
   p=cons(ctx, mkbigint(tm.tv_sec), p);
+  vpops(p);
   return(p);}
 
 pointer GETITIMER(ctx,n,argv)
