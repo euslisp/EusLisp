@@ -237,7 +237,7 @@ register pointer argv[];
   p=cons(ctx, makeint(tm.tv_usec), p);
   vpush(p);
   p=cons(ctx, mkbigint(tm.tv_sec), p);
-  vpops(p);
+  vpop();
   return(p);}
 
 pointer GETITIMER(ctx,n,argv)
