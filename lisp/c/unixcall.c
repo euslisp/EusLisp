@@ -234,8 +234,8 @@ register pointer argv[];
   gettimeofday(&tm, 0);
   p=cons(ctx, makeint(daylight), NIL);
   p=cons(ctx, makeint(timezone),p);
+  p=cons(ctx, makeint(tm.tv_usec), p);
   vpush(p);
-  p=cons(ctx, mkbigint(tm.tv_usec), p);
   p=cons(ctx, mkbigint(tm.tv_sec), p);
   vpops(p);
   return(p);}
