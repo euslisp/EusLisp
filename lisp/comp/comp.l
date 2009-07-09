@@ -276,7 +276,7 @@
 	  ((proclaimed-global-p var)
 	   (send idtable :enter-special result))	;Jan, 96
 	  (t
-	   (format t "~%~C[34;7m~S~C[0;34m is assumed to be global~C[0m~%"
+	   (format t ";~%~C[34;7m~S~C[0;34m is assumed to be global~C[0m~%"
 			#x1b var #x1b #x1b)
 	   (send idtable :enter result)) )
 	result))
@@ -996,7 +996,7 @@
 	(nreverse key-names)
 	(nreverse key-vars)
 	(nreverse key-inits)
-	;(format t "key-names length=~d ~s~%" (length key-names)  key-names)
+	;(format t ";key-names length=~d ~s~%" (length key-names)  key-names)
 	(if (>= (length key-names) 32)
 	    (send self :error "Too many keyword parameters>32 ~s" key-names))
         ) )
@@ -1065,7 +1065,7 @@
  (:lambda-block (name arglist bodies cname)
    (let ((ctime (unix:runtime))
 	 blklabel)
-     (if *verbose*   (format t "~C[7;35m~S~C[0m" #x1b	name #x1b))
+     (if *verbose*   (format t ";~C[7;35m~S~C[0m" #x1b	name #x1b))
      (finish-output)
      (setq blklabel (send self :enter-block name))
      (send trans :enter cname name)
@@ -1073,7 +1073,7 @@
      (send trans :label blklabel)
      (send trans :return)
      (send self :leave-block)
-     (if *verbose* (format t " ~3,3F sec~%" (* 0.01667 (- (unix:runtime) ctime))))
+     (if *verbose* (format t "; ~3,3F sec~%" (* 0.01667 (- (unix:runtime) ctime))))
      cname ))
    )   ;defmethod
 ) 	;eval-when
@@ -1139,7 +1139,7 @@
  (:add-closure (clo) (setq function-closures (cons clo function-closures)))
  (:closure-level (increment)  (inc closure-level increment))
  (:compile-a-closure (entry def)
-   (if *debug* (format t "closure: ~s~%" def))
+   (if *debug* (format t ";closure: ~s~%" def))
    (let* ((param (cadr def)) (bodies (cddr def)))
       (setq function-closures nil)
       (send trans :declare-forward-function entry)
@@ -1452,7 +1452,7 @@
       (cond ((< l 1) (apply #'eustop argv))
 	    ((< l 2)
 	      (format t
-	"euscomp [-c] [-V] [-O] [-On] [-Sn] [-X form] [-P pkg] [-D feature] file1 file2 ...~%")
+	";euscomp [-c] [-V] [-O] [-On] [-Sn] [-X form] [-P pkg] [-D feature] file1 file2 ...~%")
 	      (exit 1) )
 	    (t
 	      (while (< i l)

@@ -80,7 +80,7 @@
 		(send self :rectangle 2)
 		(if display-window (send self :window-rectangle 7))
 		(setq correlation (car cor)))
-	   (t (format t "lost-1 ~A ~%" self)	;; track failed
+	   (t (format t ";lost-1 ~A ~%" self)	;; track failed
 	      ;; do not update pattern if track failed.
 	      ;; (if update (send self :grab x-pos y-pos))
 	      nil))
@@ -118,7 +118,7 @@
 			     (max 0 (+ y-pos window-margin ))))
 		(if display-window (send self :window-rectangle 7))
 		(car cor))
-	   (t (format t "lost-2 ~A ~%" self)
+	   (t (format t ";lost-2 ~A ~%" self)
 	      nil)
 	)
     ) )
