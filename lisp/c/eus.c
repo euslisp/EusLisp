@@ -1289,7 +1289,7 @@ integer_t intval(pointer p) {
   else if (isbignum(p)) {
     return (bigintval(p)); }
   else if ((i&0x3)==0x0) {
-    fprintf(stderr,"p=pointer?(%x)\n", p);
+    fprintf(stderr,";p=pointer?(%x)\n", p);
     return (i); }
   else return (((integer_t)i)>>2);
 }
