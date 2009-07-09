@@ -84,7 +84,7 @@ hue: 0..360, lightness 0..1, saturation 0..1"
 
 (defmethod viewsurface
   (:drawline-primitive (x1 y1 x2 y2 &optional color)
-     (format t "line: ~s ~s --> ~s ~s~%" x1 y2 x2 y2))
+     (format t ";; line: ~s ~s --> ~s ~s~%" x1 y2 x2 y2))
   (:draw-line (v1 v2 &optional color)
      (send self :drawline-primitive
 	    (aref v1 0) (aref v1 1)
@@ -94,7 +94,7 @@ hue: 0..360, lightness 0..1, saturation 0..1"
 	(0 "solid line")
 	(1 "dashed line")))
   (:line-width (x)
-     (format t "line-width= ~d~%" x))
+     (format t ";; line-width= ~d~%" x))
   (:nomethod (&rest msg)
      (warn "unrecognized message ~s sent to ~S~%" msg self))
   (:set-erase-mode ())
@@ -142,7 +142,7 @@ hue: 0..360, lightness 0..1, saturation 0..1"
   ;            y1 (round y1)
   ;            x2 (round x2)
   ;            y2 (round y2))
-  (if *debug* (format t "tektro-showline: ~s ~s ~s ~s~%" x1 y1 x2 y2))
+  (if *debug* (format t ";; tektro-showline: ~s ~s ~s ~s~%" x1 y1 x2 y2))
   (setf (aref *tektro-plot-buffer* 1) (+ 32 (/ y1 32)))
   (setf (aref *tektro-plot-buffer* 2) (+ 96 (mod y1 32)))
   (setf (aref *tektro-plot-buffer* 3) (+ 32 (/ x1 32)))
@@ -163,4 +163,4 @@ hue: 0..360, lightness 0..1, saturation 0..1"
 (defun default-viewsurface (&rest args)
    (send-lexpr (instantiate tektro-viewsurface) :init args))
 
-(provide :viewsurface "@(#)$Id: viewsurface.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
+(provide :viewsurface "@(#)$Id$")

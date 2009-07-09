@@ -228,7 +228,7 @@
 			 erasey (- (/ (send self :height) 16)   n)))
 	  (t (setq srcy 0 desty (abs n) erasey 0)))
     (setq n (min (/ (send self :height) 16) (abs n)))
-    (format t ":scroll n=~s srcy=~s desty=~s erasey=~s~%"
+    (format t "; :scroll n=~s srcy=~s desty=~s erasey=~s~%"
 		n srcy desty erasey)
     (send pixwin :Copy-from  pixwin
 		:source-x 2 :source-y (+ 2 (* srcy 12))
@@ -244,4 +244,4 @@
 
 
 
-(provide :Xcanvas "@(#)$Id: Xcanvas.l,v 1.1.1.1 2003/11/20 07:46:34 eus Exp $")
+(provide :Xcanvas "@(#)$Id$")

@@ -133,7 +133,7 @@
 		   (dotimes(i (length method-list))
 			   (setf name (aref method-list i))
 			   (if (stringp name)
-			       (format t "~a~%              " name))))
+			       (format t ";~a~%              " name))))
 	    (format hs "~a is not class.~%" class)))))
 
 (defun help-usage(hs)
@@ -173,4 +173,4 @@
 (in-package "USER")
 (use-package "HELP")
 
-(provide :eushelp "@(#)$Id: eushelp.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+(provide :eushelp "@(#)$Id$")

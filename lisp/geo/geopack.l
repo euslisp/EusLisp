@@ -809,7 +809,7 @@ Normal must be given if the sign of the angle is needed."
 	(if (eps-in-range 0.0 param 1.0)
 	    (list param (send eg :point param))
 	    (if (or (= 0.0 param) (= 1.0 param))
-		(format t "intersect-border~%" )))))
+		(format t ";; intersect-border~%" )))))
   (:foot (point)
     ; projection of point onto this plane
     (let ((numerator %(v.(normal point) + distance))  )
@@ -972,7 +972,7 @@ Normal must be given if the sign of the angle is needed."
 		    (return-from :insidep ':border))
 		(setq theta (+ theta th))
 		(setq v2 v1))
-	     ;; (if *debug* (format t "theta=~s~%" theta))
+	     ;; (if *debug* (format t ";; theta=~s~%" theta))
 	     (if (> (the float (abs theta)) pi) ':inside ':outside) ))))
  (:intersect-point-vector (point vnorm)	;intersection with semi-line
     (declare (float-vector point vnorm))
@@ -1337,4 +1337,4 @@ Normal must be given if the sign of the angle is needed."
 (defun make-polygon (&rest points)
    (instance polygon :init :vertices points))
 
-(provide :geopack "@(#)$Id: geopack.l,v 1.1.1.1 2003/11/20 07:46:28 eus Exp $")
+(provide :geopack "@(#)$Id$")

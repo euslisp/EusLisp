@@ -264,13 +264,13 @@ edge2 and all the edges forming face1"
   (dolist (e1 edges1)
      (setq p (non-coplanar-fe-relation face2 e1 tolerance))
      (when (eq p :intersect)
-	(format t "~s and ~s intersected~%" face2 e1)
+	(format t ";; ~s and ~s intersected~%" face2 e1)
 	(return-from ff-relation (list :intersect)))
      (if p (push p flag2)))
   (dolist (e2 edges2)
      (setq p (non-coplanar-fe-relation face1 e2 tolerance))
      (when (eq p :intersect)
-	(format t "~s and ~s intersected~%" face1 e2)
+	(format t ";; ~s and ~s intersected~%" face1 e2)
 	(return-from ff-relation (list :intersect)))
      (if p (push p flag2)))
   (cond ((every #'(lambda (x) (eq x :contact)) flag2)
@@ -353,5 +353,5 @@ edge2 and all the edges forming face1"
 			    (mapcar #'copy-vertices (send f :holes))))
 ))
 
-(provide :bodyrel "@(#)$Id: bodyrel.l,v 1.1.1.1 2003/11/20 07:46:28 eus Exp $")
+(provide :bodyrel "@(#)$Id$")
 

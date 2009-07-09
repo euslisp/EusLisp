@@ -179,10 +179,10 @@
 	    (v- (car vk) p v)
 	    (setq va (v. v a) vn (v. v n))
 	    (setq cot  (- (/ va vn)))
-;	  (format t "cot=~s v=~s vk=~s d=~s/~s~%" cot v (car vk) va vn)
+;	  (format t ";; cot=~s v=~s vk=~s d=~s/~s~%" cot v (car vk) va vn)
 #+:ieee-floating-point
 	    (when (eq cot *nan*)
-	        (format t "cot=~s v=~s vk=~s d=~s/~s~%" cot v (car vk) va vn)
+	        (format t ";; cot=~s v=~s vk=~s d=~s/~s~%" cot v (car vk) va vn)
 		(return-from gift-wrapping :nan))
 	    (when (and ;(not (eql vn 0.0))
 		(not (< cot *-inf*)) (>= cot maxcot))
@@ -239,7 +239,7 @@ vertices= list of (#f(x y z) edge1 edge2 ...)"
 		 (setq inner-points (cons p inner-points))))
 	  (when inner-points
 		(dolist (ip inner-points)
-		   (format t "inner points ~s found~%" ip)
+		   (format t ";; inner points ~s found~%" ip)
 		   (push (car ip) *bad-vertices*)
 		   (when (null (cdr ip))	; check for colinearity is needed
                       (setq *vertices* (delete ip *vertices* :count 1))	)))
@@ -247,7 +247,7 @@ vertices= list of (#f(x y z) edge1 edge2 ...)"
 	  (setq hull-vertices
 		(mapcan #'(lambda (p) (list (assq p coplanars))) hull-points)))
 	 (t (setq hull-vertices (list p1 p2 p3))))
-;	 (format t "hull-verts=~s~%" (mapcar #'car hull-vertices))
+;	 (format t ";; hull-verts=~s~%" (mapcar #'car hull-vertices))
       (make-face-from-vertices hull-vertices)
 	))
 
@@ -268,7 +268,7 @@ vertices= list of (#f(x y z) edge1 edge2 ...)"
       (setq cot2 *maxcot*)
       ; two points p1,p2 have been determined
 	(if *debug*
-	   (format t "initial-hull p1=~s  p2=~s  cot=~s~%"
+	   (format t ";; initial-hull p1=~s  p2=~s  cot=~s~%"
 		   (car p1) (car p2) cot2))
       (setq v  (v- (car p2) (car p1)))
       (setf (aref n 1) (aref v 2)
@@ -290,7 +290,7 @@ vertices= list of (#f(x y z) edge1 edge2 ...)"
 	    (setq v p2 p2 p3 p3 v))
       (when (< (aref (triangle-normal (car p1) (car p2) (car p3)) 2) 0.0)
           (error "bad initial-hull"))
-	  (if *debug* (format t "p3=~s~%" p3))
+	  (if *debug* (format t ";; p3=~s~%" p3))
       (make-face-from-coplanar-vertices p1 p2 p3 s)
       )   )
 
@@ -338,7 +338,7 @@ Create a body of convex-hull from a list of vertices"
 					   (send aface :normal)
 					   (send e :binormal aface)
 					   *vertices*))
-;		   (format t "p1=~s~%p2=~s~%p3=~s~%" p1 p2 p3)
+;		   (format t ";; p1=~s~%p2=~s~%p3=~s~%" p1 p2 p3)
 		   (if (< (v. (v* (send aface :normal)
 				   (triangle-normal (car p1) (car p2) (car p3)))
 			       (v- (car p2) (car p1)))
@@ -710,4 +710,4 @@ hedron is an icosahedron or a gdome of lower level"
        (send casc :assoc ca  where)
        ca))
 
-(provide :primt "@(#)$Id: primt.l,v 1.1.1.1 2003/11/20 07:46:29 eus Exp $")
+(provide :primt "@(#)$Id$")
