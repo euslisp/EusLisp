@@ -29,8 +29,8 @@
 		:border-width 2)
     self)
  (:men (&rest mesg) (print mesg))
- (:choice (obj c) (format t "choice: ~S ~d~%" obj c))
- (:slider (obj val) (format t "slider: ~S ~s~%" obj val))
- (:joy (obj x y) (format t "joy: ~S ~s ~s~%" obj x y))
+ (:choice (obj c) (format t ";choice: ~S ~d~%" obj c))
+ (:slider (obj val) (format t ";slider: ~S ~s~%" obj val))
+ (:joy (obj x y) (format t ";joy: ~S ~s ~s~%" obj x y))
  )
 

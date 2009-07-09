@@ -87,7 +87,7 @@
 (defun apropos (strng &optional pack)
   (setq strng (string strng))
   (flet ((print-symbol-apropos (sym)
-	  (format t "~S~A~A~A~%"
+	  (format t ";; ~S~A~A~A~%"
 		sym
 		(if (fboundp sym)
 		    (if (special-form-p sym)
@@ -189,7 +189,7 @@
       (setq nettime (unix:runtime))
       (while (> c2 0) (setq  c2 (1- c2)))
       (setq overhead (- (unix:runtime) nettime))
-      (format t "~7,3f milisec~%" 
+      (format t ";; ~7,3f milisec~%" 
 	(/ (* (/ 1000.0 internal-time-units-per-second)
 	      (- nettime start overhead)) ,count)
             )))
@@ -228,7 +228,7 @@
      (spaces *tracelevel*)
      (print form)
      (while stay
-       (format t "s~s: " *tracelevel*) (finish-output)
+       (format t ";; s~s: " *tracelevel*) (finish-output)
        (setq input (let ((*package* *keyword-package*)) (read)))
        (case input
 	  ((:pp :pprint) (pprint form))
@@ -236,19 +236,19 @@
 	  ((:go :g)
 	      (setq val (eval form env))
 	      (print form)
-	      (format t " ==> ~S~%" val)
+	      (format t ";; ==> ~S~%" val)
 	      (setq stay nil))
 	  ((:s :step)
 	      (setq val (evalhook form #'step-hook env))
-	      (format t "~S ==> ~S~%" form val)
+	      (format t ";; ~S ==> ~S~%" form val)
 	      (setq stay nil))
 	  ((:q :quit) (throw 'step-exit 'quit))
 	  ((:?)
-	      (format t "s   -- single step~%")
-	      (format t "g   -- execute this form without stepping~%")
-	      (format t "p,pp-- print current form~%")
-	      (format t "q   -- quit stepping~%")
-	      (format t "e form-- evaluate form~%"))
+	      (format t ";; s   -- single step~%")
+	      (format t ";; g   -- execute this form without stepping~%")
+	      (format t ";; p,pp-- print current form~%")
+	      (format t ";; q   -- quit stepping~%")
+	      (format t ";; e form-- evaluate form~%"))
 	  (:e   (setq input (read))
 	        (cond ((symbolp input) (print (eval-dynamic input)))
 		    (t 
@@ -259,7 +259,7 @@
 					 "step evaluation error ~A~%" x)
 				    (throw 'step-error nil))))
 	                    (print (eval input)))))))
-	  (t (format t "e?"))))
+	  (t (format t ";; e?"))))
      (dec *tracelevel*)
      val))
 
@@ -276,11 +276,11 @@
 (eval-when (load eval)
 (defun tracex (name arglist)
    (let (result evaluated-arguments (*tracelevel* (1+ *tracelevel*)))
-     (format t "~%~d: --> ~s ~s"
+     (format t ";; ~%~d: --> ~s ~s"
 	       *tracelevel* name arglist)
      (setq result
 	 (apply (get name 'traced-function) arglist))
-     (format t "~%~d: ~s <-- ~s"    *tracelevel* result name)
+     (format t ";; ~%~d: ~s <-- ~s"    *tracelevel* result name)
      (and (equal *tracelevel* 1) (terpri))
      result))
 
@@ -317,7 +317,7 @@
 (defun inspect1 (obj &optional prompt)
  (flet
      ((read-command (prompt)
-	   (format t "~a* " prompt)
+	   (format t ";; ~a* " prompt)
 	   (finish-output t)
 	   (read *standard-input* nil 'q)))
    (do* ((command (read-command prompt) (read-command prompt))
@@ -352,13 +352,14 @@
 		   (setf (slot obj (class obj) command) temp))))
 	((#\h #\?)
 	   (format t
-	"	p  --describe object
-	v  --print variable names
-	i <var> --inspect var
-	s <var> <value> -- set value to var
-	<var> --describe var
-	u  --back to parent object
-	q  --quit inspection~%"))
+";;	p  --describe object
+;;	v  --print variable names
+;;	i <var> --inspect var
+;;	s <var> <value> -- set value to var
+;;	<var> --describe var
+;;	u  --back to parent object
+;;	q  --quit inspection~%"
+))
         (t (cond
 	     ((find command varnames)
 	       (describe (slot obj (class obj) command)))
@@ -446,7 +447,7 @@
 		(push note notes))))
      (nreverse notes)
      (dolist (note notes)
-	(format t "~A:~A~%" (cadr note) (caddr note)))
+	(format t ";; ~A:~A~%" (cadr note) (caddr note)))
    nil))
 )
 |#
@@ -588,9 +589,9 @@ finds method-class pair which include name as substring of the method name"
 	 (methods (mapcar #'car methods-list))
 	 (unique-methods (remove-duplicates methods)))
     (format t "
-	~d methods defined in ~D classes
-	~d unique method names
-	~d compiled, ~d not compiled~%"
+;;	~d methods defined in ~D classes
+;;	~d unique method names
+;;	~d compiled, ~d not compiled~%"
 	(length methods-list) (length classes)
 	(length unique-methods)
 	(count-if #'compiled-function-p methods-bodies)
@@ -674,8 +675,8 @@ finds method-class pair which include name as substring of the method name"
 (defvar *server-streams* nil)
 
 (defun install-remote-function (s)
-   (format t "installing remote function ~s~%" s)
-   (format t "remote-function= ~s~%" *remote-function*)
+   (format t ";; installing remote function ~s~%" s)
+   (format t ";; remote-function= ~s~%" *remote-function*)
    (let ((ns (make-server-socket-stream s)))
         (push ns *server-streams*)
         (def-async ns *remote-function*))) 
@@ -720,4 +721,4 @@ finds method-class pair which include name as substring of the method name"
 |#
 
 
-(provide :eusdebug "@(#)$Id: eusdebug.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+(provide :eusdebug "@(#)$Id$")

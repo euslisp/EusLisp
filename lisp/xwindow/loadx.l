@@ -1,5 +1,5 @@
 ;;; -*- lisp -*-
-;;; $Header: /home/cvs/euslisp/xwindow/loadx.l,v 1.1.1.1 2003/11/20 07:46:36 eus Exp $
+;;; $Header$
 
 (defparameter *xlib*   "/usr/lib/X11/libX11.so.4.10")
 (setq XLIB (load-foreign *xlib*))
@@ -16,7 +16,7 @@
 		  X::LIBEUSX (list "convolve" "piximage" "pbmfile")))
        (modnames))
   (dolist (m modinits)
-    (format t "~a " (first m))
+    (format t ";~a " (first m))
     (finish-output *standard-output*)
     (funcall (second m) (second m))
     (push (first m) modnames))

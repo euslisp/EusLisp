@@ -94,7 +94,7 @@
   "line (string) is edited and returned"
   (let* ((linelist (coerce line cons)) result
 	 (ch) (end (length line)) (index end) func)
-    (format t "~%~a" line)
+    (format t "; ~%~a" line)
     (tty-raw)
     (cursor-pos end)
     (finish-output)
@@ -173,4 +173,4 @@
 ;(defun toplevel-prompt (strm) 
 ;   (format strm "~d.~a " (1+ *history-sequence*) *prompt-string*))
 
-(provide :history "@(#)$Id: history.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+(provide :history "@(#)$Id$")

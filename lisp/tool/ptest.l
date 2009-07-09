@@ -3,7 +3,7 @@
 
 (defun classid ()
   (dolist (c (sys:list-all-classes))
-    (format t "~s ~d~%" (send c :name) (send c :cid))))
+    (format t ";~s ~d~%" (send c :name) (send c :cid))))
 
 (defmacro ptest (concurrency try_count func &rest args)
    (let ((gtime (gensym)) (gtime1 (gensym)) (gtime2 (gensym))
@@ -35,7 +35,7 @@
 	  (setq ,rtime2 (runtime))
 	  (incf ,rtime (- ,rtime2 ,rtime1))
 	  )
-        (format t "~d ~d ~f ~f ~f ~f~%"
+        (format t ";~d ~d ~f ~f ~f ~f~%"
 	   (1+ con) (thr-getconcurrency)
 	   (/ ,etime ,try_count)
 	   (* 0.01 (/ (float ,rtime) ,try_count))

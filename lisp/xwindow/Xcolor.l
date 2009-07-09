@@ -18,13 +18,13 @@
 	   (setq vistype (+ i 3))
 	   (setq stat
 		   (x::matchVisualInfo x:*display* screen d vistype visinfo))
-	   (format t "~d bit ~a " d
+	   (format t "; ~d bit ~a " d
 		 (case vistype (3 'pseudo) (4 'true) (5 'direct)))
-	   (cond ((eql stat 0) (format t "No~%"))
+	   (cond ((eql stat 0) (format t "; No~%"))
 		 (t
 		      (setq vis (sys:peek visinfo 0 :long)
 			    visid (sys:peek visinfo 4 :long))
-		      (format t "visual=0x~x visual_id=~d ~a~%" vis visid
+		      (format t "; visual=0x~x visual_id=~d ~a~%" vis visid
 			(if (eql vis x:*visual*) 'default "")) 
 		 ))))
   ))

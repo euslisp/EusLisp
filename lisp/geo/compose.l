@@ -295,7 +295,7 @@
 	      (t (push newface newfaces) ) )))
       (when holes
 	 (if *debug*
-	     (format t "faces=~s~%holes=~s~%" newfaces holes))
+	     (format t ";; faces=~s~%holes=~s~%" newfaces holes))
 	 (dolist (circuit holes)
 	    (block enter-hole
 	       (dolist (f newfaces)
@@ -382,7 +382,7 @@
 		  (setq colinear-int (find-colinear-int con))
 		  (if (= (length colinear-int) 1)
 		      (progn
-			(format t "testing edge-edge contact~%")
+			(format t ";; testing edge-edge contact~%")
 			(setq colinear-int (car colinear-int))
 		        (cond ((and (eps= (first (fourth colinear-int)) 0.0)
 			            (eps= (second (fourth colinear-int)) 1.0)
@@ -517,7 +517,7 @@
 		; do nothing
 		)
 	      ((null (member e2 face1edges))
-		;; (format t "no duplicated edges ~s~%" e2)
+		;; (format t ";; no duplicated edges ~s~%" e2)
 		(delete e2 face2edges)
 		(nconc face1edges (list e2))
 		(send e2 :replace-face face2 face1)
@@ -636,7 +636,7 @@
      (setq ctime3 (runtime))
 
      (setq i1 intersects1 i2 intersects2)
-;;;      (format t "intersections in i1 and i2~%")     (break "1: ")
+;;;      (format t ";; intersections in i1 and i2~%")     (break "1: ")
 
      ;; make-edge-segments is the most time consuming function
      (setq segments1 (make-edge-segments intersects1 body2 side))
@@ -645,7 +645,7 @@
      ;;  (org-edge new-edge segmenting-face1 segmenting-face2)
      (setq ctime4 (runtime))
 
-     ;;(format t "make-edge-segments finished~%")    (break "2: ")
+     ;;(format t ";; make-edge-segments finished~%")    (break "2: ")
 
      (setq intersects1 (sort-edges-by-face (intersecting-segments segments1))
 	   intersects2 (sort-edges-by-face (intersecting-segments segments2)))
@@ -660,7 +660,7 @@
 	   *seg2* segments2)
      (setq *se1* crossing-edges1
 	   *se2* crossing-edges2)
-     (when *debug* (format t "crossing edges~%")    (break "3: "))
+     (when *debug* (format t ";; crossing edges~%")    (break "3: "))
 
      (setq segments1
 	   (merge-segments segments1 (car crossing-edges1) (cadr crossing-edges2))
@@ -672,11 +672,11 @@
      (if (derivedp body2 body)
 	 (setq contacts (contacting-faces body1 body2)) )
      (when contacts
-	(format t "~d face-to-face contact(s) found.~%" (length contacts))
-        (if *debug* (break "con: "))
-	(dolist (con contacts)
-	   (setq segments2 (merge-contacting-faces
-		(car con) (cadr con) segments1 segments2)) )	
+       (format *error-output* ";;~d face-to-face contact(s) found.~%" (length contacts))
+       (if *debug* (break "con: "))
+       (dolist (con contacts)
+	 (setq segments2 (merge-contacting-faces
+			  (car con) (cadr con) segments1 segments2)) )	
 	)
 
      (setq segments1 (delete-if-not #'cdr segments1))
@@ -686,7 +686,7 @@
      (setq aligneds (aligned-faces (mapcar #'car segments1)
 				   (mapcar #'car segments2)))
      (when aligneds
-	(format t "~d face-to-face alignment(s) found.~%" (length aligneds))
+	(format *error-output* ";;~d face-to-face alignment(s) found.~%" (length aligneds))
 	(dolist (algn aligneds)
 	   (merge-aligned-faces
 		(car algn) (cadr algn) segments1 segments2))
@@ -694,22 +694,22 @@
 
      (setq *faces* nil)
      (when *debug*
-	(format t "merging finished, start constructing faces~%")
+	(format t ";; merging finished, start constructing faces~%")
 	(break "5: ") )
     
      (dolist (s segments1)
-	(if *debug* (format t "~d " (length *faces*)))
+	(if *debug* (format t ";; ~d " (length *faces*)))
         (push (construct-faces s) *faces*) )
 
      (dolist (s segments2)
-	(if *debug* (format t "~d " (length *faces*)))
+	(if *debug* (format t ";; ~d " (length *faces*)))
         (push (construct-faces s) *faces*))
 
      (setq *faces* (flatten (nreverse *faces*)))
 
      (setq ctime7 (runtime))
      (if *debug*
-	(format t "~f ~f ~f ~f ~f ~f ~f~%"
+	(format t ";; ~f ~f ~f ~f ~f ~f ~f~%"
 		(* 0.0167 (- ctime1 ctime0))
 		(* 0.0167 (- ctime2 ctime1))
 		(* 0.0167 (- ctime3 ctime2))
@@ -829,4 +829,4 @@
    (let* ((body2 (instance semi-space :init (pln . normal) (pln . distance))))
       (compose-body body1 body2 ':inside)))
  
-(provide :compose "@(#)$Id: compose.l,v 1.1.1.1 2003/11/20 07:46:28 eus Exp $")
+(provide :compose "@(#)$Id$")

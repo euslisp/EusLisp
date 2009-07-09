@@ -213,7 +213,7 @@ instead of 12th of motoinNotify events."
      (logtest (if alt (XEvent-alt-state e) (Xevent-state e)) #x700) )
 
 (defun print-event (event)
-    (format t "#~d ~a ~A ~A stat=~s ~d key=~d time=~6,1f~%"
+    (format t ";#~d ~a ~A ~A stat=~s ~d key=~d time=~6,1f~%"
                 (XEvent-serial event)
                 (event-type event)
                 (send (event-window event) :name)
@@ -266,7 +266,7 @@ instead of 12th of motoinNotify events."
 (defparameter charbuf (make-string 3))
 
 (defmethod xwindow
- (:event-notify-print (type event) (format t "event ~s ~s~%" type event))
+ (:event-notify-print (type event) (format t ";event ~s ~s~%" type event))
  (:event-notify-dispatch (type event)    (send self type event))
  (:event-notify (type event)
     (cond (event-forward (send event-forward :event-notify type event))
@@ -463,5 +463,5 @@ instead of 12th of motoinNotify events."
 	      (t (incf repwin-timeout)))
 	)) )
 
-(provide :Xevent "@(#)$Id: Xevent.l,v 1.1.1.1 2003/11/20 07:46:34 eus Exp $")
+(provide :Xevent "@(#)$Id$")
 

@@ -82,7 +82,7 @@
 	;; Matsui is not very sure whether the child process should exit here.
 	(unix::exit 1))
     (let ((io (instantiate io-stream)) in out)
-      (if *debug* (format t "child_pid=~D~%" pid))
+      (if *debug* (format t ";; child_pid=~D~%" pid))
       (setf (get io :pid) pid)
       (setq in (p2 . instream)
 	    out (p1 . outstream))
@@ -111,7 +111,7 @@
 	    (unix:system exec)
 	    (apply #'unix:exec exec args)) )
       (let ((io (instantiate io-stream)) in out)
-        (if *debug* (format t "child_pid=~D~%" pid))
+        (if *debug* (format t ";; child_pid=~D~%" pid))
         (setf (get io :pid) pid)
         (setq in (p2 . instream)
               out (p1 . outstream))
@@ -140,7 +140,7 @@
 		 (unix:system exec)
 		 (apply #'unix:exec exec args))
 	     (error "exec") (exit 1))
-            (t (if *debug* (format t "child_pid=~D~%" pid))))
+            (t (if *debug* (format t ";; child_pid=~D~%" pid))))
       (setq ios (instance io-stream :init
 			(send stdout :instream) (send stdin :outstream)))
 ;      (if (io-stream-p stdin) (close (send stdin :instream)))
