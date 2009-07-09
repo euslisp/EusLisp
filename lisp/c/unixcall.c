@@ -1412,9 +1412,11 @@ pointer argv[];
   if (isiostream(a)) a=a->c.iostream.in;
   if (isfilestream(a)) fd=intval(a->c.fstream.fd);
   else fd=ckintval(a);
+  /*
 #if Cygwin
   if (getenv("EMACS") && (strcmp (getenv("EMACS"), "t")) == 0 ) return(T); 
 #endif
+  */
   if (isatty(fd)) return(T); else return(NIL);}
 
 
