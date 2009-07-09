@@ -5,7 +5,7 @@
 ;; This file should be loaded into the system package.
 ;;
 
-(list "@(#)$Id: cyclic.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
+(list "@(#)$Id$")
 (export '(itimer start-timer stop-timer deftimer behavior real-time
 	  *itimers* *itimer-tick* *itimer-count* ))
 
@@ -103,7 +103,7 @@
 
 (defun timer-func (timer)
    (send timer :thread-waiting)
-   (format t "timer-func finished ~s~%" timer) )
+   (format t ";timer-func finished ~s~%" timer) )
       
 
 (defun itimer-handler ()	;run by an independent thread

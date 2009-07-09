@@ -1,5 +1,5 @@
 (defun tmain-end (&rest args)
-   (format t "signal ~s~%" args)
+   (format t ";signal ~s~%" args)
    (throw :end 1))
 
 (defun tmain (n)

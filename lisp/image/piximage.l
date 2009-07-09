@@ -513,7 +513,7 @@
       (while (not (eql (ash greenmsb greenshift) greenmask)) (decf greenshift))
       (while (not (eql (ash bluemsb blueshift) bluemask)) (decf blueshift))
       ;;
-	(format t "red=~d ~d  green=~d ~d  blue=~d ~d~%"
+	(format t ";red=~d ~d  green=~d ~d  blue=~d ~d~%"
 		redshift redmsb greenshift greenmsb blueshift bluemsb)
       (setq j 0)
       (dotimes (i (length img8vec))
@@ -530,7 +530,7 @@
 
 (defun color-24to6 (img24 width height
 			&optional (img6 (make-string (* width height))))
-   ;; (format t "color-24to6: w=~d h=~d~%" width height)
+   ;; (format t ";color-24to6: w=~d h=~d~%" width height)
    (let ((j 0) pix redpix greenpix bluepix)
      (declare (integer j pix redpix greenpix bluepix))
      (dotimes (i (* width height))
@@ -973,7 +973,7 @@
 ;;
 
 
-(provide :piximage "#(@)$Id: piximage.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
+(provide :piximage "#(@)$Id$")
 
 
 
