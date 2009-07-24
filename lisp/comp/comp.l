@@ -214,7 +214,25 @@
 
 (eval-when (load eval)
 (defmethod compiler
- (:genlabel (head) (string (gensym head)))
+ (:genlabel (head &optional (suffix ""))
+   (concatenate string (string (gensym head)) suffix))
+ (:gencname-tail 
+  (&rest lnames)
+  (labels ((cchar-p (c) 
+                    (or (and (<= #\a c) (<= c #\z)) 
+                        (and (<= #\A c) (<= c #\Z)) 
+                        (and (<= #\0 c) (<= c #\9)) 
+                        (= c #\_)))
+           (replace-to-cchars 
+            (lnames)
+            (let ((lnamestr (reduce 
+                             #'(lambda (u v) (format nil "~a~a" u v)) 
+                             lnames :initial-value "")))
+              (coerce 
+               (mapcar 
+                #'(lambda (c) (if (cchar-p c) c #\_)) 
+                (coerce lnamestr cons)) string))))
+          (replace-to-cchars lnames)))
  (:progn (bodies)
     (if bodies
       (while bodies
@@ -1082,8 +1100,10 @@
 (defmethod compiler
  (:def-user-entry (form)
    (if (eq (car form) 'defun)
-     (let ((name (cadr form))
-	   (cname (send self :genlabel "F")))
+     (let* ((name (cadr form))
+            (cname (send self :genlabel "F"
+                         (send self :gencname-tail name)
+                        )))
        (putprop name cname 'user-function-entry)
        (push name *defun-list*))))
  (:defun (fun-macro name arglist bodies)
@@ -1119,7 +1139,8 @@
 	       selector (car method)
 	       param (cons 'self (cons 'class (cadr method)))
 	       bodies (cddr method) )
-         (setq entry (send self :genlabel "M"))
+         (setq entry (send self :genlabel "M"
+                           (send self :gencname-tail myclass selector)))
 	 (setq doc 
 	       (if (and (stringp (car bodies))  (cdr bodies))
 		   (pop bodies)
