@@ -56,6 +56,8 @@
      (let* ((eof (cons nil nil))    (token)
 	    (maxval (read-pbm-token f eof))
 	    (size (* width height))   )
+	(if (/= maxval 255)
+	    (error "unknown pgm file format maxval=~A" maxval))
 	(dotimes (i size)
 	   (setq token  (read-pbm-token f eof))
 	   (if (eql token eof) (error "unexpected EOF"))
@@ -69,6 +71,8 @@
 	  (size (* width height)) (read-length)
 	  (eof (cons nil nil))
 	  (maxval (read-pbm-token f eof))   )
+	(if (/= maxval 255)
+	    (error "unknown pgm file format maxval=~A" maxval))
 	(setq img (make-string size))
 	(read-char f)
 	(replace img (setq img1 (send (send f :instream) :tail-string)))
@@ -96,6 +100,8 @@
 	  (maxval (read-pbm-token f eof))
 	  img sbuf
 	  offset (buflen (* 512 3))  rdlen)
+	(if (/= maxval 255)
+	    (error "unknown ppm file format maxval=~A" maxval))
 	(read-char f)
 	(replace rgb (setq sbuf (send (send f :instream) :tail-string)))
 	(setq offset (length sbuf))
@@ -115,6 +121,8 @@
      (let* (rgbimg (eof (cons nil nil))  (token)
 	    (maxval (read-pbm-token f eof))
 	    (size (* width height))  (ii) )
+	(if (/= maxval 255)
+	    (error "unknown ppm file format maxval=~A" maxval))
 	(dotimes (i size)
 	   (setq ii (* i 3))
 	   ;; red
@@ -235,5 +243,5 @@
       img))
 |#
 
-(provide :pbmfile "#(@)$Id: pbmfile.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
+(provide :pbmfile "#(@)$Id$")
 
