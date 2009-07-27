@@ -3,9 +3,11 @@
 /*	1987-Dec-17
 /*	Copyright(c) Toshihiro MATSUI, ETL, 1988.
 /****************************************************************/
-static char *rcsid="@(#)$Id: charstring.c,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $";
+static char *rcsid="@(#)$Id$";
 #include <ctype.h>
 #include "eus.h"
+
+extern byte *get_string();
 
 pointer EUSCHAR(ctx,n,argv)
 register context *ctx;
@@ -132,15 +134,12 @@ register pointer argv[];
 /* S T R I N G  compare
 /****************************************************************/
 
-
-#define eusstrcmp(a,b) strcmp((char *)(a), (char *)(b))
-
 pointer STR_LT(ctx,n,argv)
 register context *ctx;
 int n;
 register pointer argv[];
 { ckarg(2);
-  if (eusstrcmp(get_string(argv[0]),get_string(argv[1]))<0) return(T);
+  if (strcmp(get_string(argv[0]),get_string(argv[1]))<0) return(T);
   else return(NIL);}
 
 pointer STR_LE(ctx,n,argv)
@@ -148,7 +147,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { ckarg(2);
-  if (eusstrcmp(get_string(argv[0]),get_string(argv[1]))<=0) return(T);
+  if (strcmp(get_string(argv[0]),get_string(argv[1]))<=0) return(T);
   else return(NIL);}
 
 pointer STR_EQ(ctx,n,argv)
@@ -156,7 +155,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { ckarg(2);
-  if (eusstrcmp(get_string(argv[0]),get_string(argv[1]))==0) return(T); 
+  if (strcmp(get_string(argv[0]),get_string(argv[1]))==0) return(T); 
   else return(NIL);}
 
 pointer STR_GT(ctx,n,argv)
@@ -164,7 +163,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { ckarg(2);
-  if (eusstrcmp(get_string(argv[0]),get_string(argv[1]))>0) return(T);
+  if (strcmp(get_string(argv[0]),get_string(argv[1]))>0) return(T);
   else return(NIL);}
 
 pointer STR_GE(ctx,n,argv)
@@ -172,12 +171,12 @@ register context *ctx;
 int n;
 register pointer argv[];
 { ckarg(2);
-  if (eusstrcmp(get_string(argv[0]),get_string(argv[1]))>=0) return(T);
+  if (strcmp(get_string(argv[0]),get_string(argv[1]))>=0) return(T);
   else return(NIL);}
 
 /* initializers */
 
-charstring(ctx,mod)
+void charstring(ctx,mod)
 register context *ctx;
 register pointer mod;
 {

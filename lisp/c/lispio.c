@@ -558,7 +558,7 @@ register pointer *argv;
   return(argv[0]);}
 
 
-lispio(ctx,mod)
+void lispio(ctx,mod)
 register context *ctx;
 pointer mod;
 {

@@ -1954,7 +1954,7 @@ register pointer argv[];
 
 
 /* initialization of unixcall functions*/
-unixcall(ctx,mod)
+void unixcall(ctx,mod)
 register context *ctx;
 pointer mod;
 { pointer p=Spevalof(PACKAGE);

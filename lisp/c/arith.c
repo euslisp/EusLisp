@@ -21,7 +21,7 @@ extern int gcd();
 extern pointer makeratio();
 
 extern pointer copy_big(), big_plus(), big_minus();
-extern         sub_int_big(), add_int_big();
+extern void    sub_int_big(), add_int_big();
 extern pointer add_big_big(), big_times();
 extern pointer makebig(), makebig1(), makebig2(), extend_big(pointer,int);
 extern pointer normalize_bignum();
@@ -1397,7 +1397,7 @@ register pointer argv[];
   }
 
 
-arith(ctx,mod)
+void arith(ctx,mod)
 register context *ctx;
 pointer mod;
 {

@@ -608,7 +608,7 @@ register pointer org;
 #endif
   return(clone);}
 
-copyunmark(obj)
+void copyunmark(obj)
 register pointer obj;
 { pointer x,klass;
   register int i,s;
@@ -711,7 +711,7 @@ pointer argv[];
   while (n-->0) pointer_update(dest->c.obj.iv[n],src->c.obj.iv[n]);
   return(dest);}
 
-leo(ctx,mod)
+void leo(ctx,mod)
 register context *ctx;
 pointer mod;
 {

@@ -421,7 +421,7 @@ register pointer argv[];
   while (i<(s+WORD_SIZE-1)/WORD_SIZE) { rbv[i]= ~bv1[i]; i++;}
   return(result);}
 
-vectorarray(ctx,mod)
+void vectorarray(ctx,mod)
 register context *ctx;
 pointer mod;
 {

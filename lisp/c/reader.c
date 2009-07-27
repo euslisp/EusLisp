@@ -31,7 +31,7 @@ static pointer read1(context *, pointer);
 static pointer read2(context *, pointer, int, int, int, char*, int);
 extern pointer makelabref();
 
-extern mul_int_big();
+extern void mul_int_big();
 extern pointer normalize_bignum();
 
 /* the following two global variables are hazardous to multi-threads */
@@ -1008,7 +1008,7 @@ register pointer f,recursivep;
   if (val==UNBOUND) return(NIL);
   return(val);}
 
-initreader(ctx)
+void initreader(ctx)
 register context *ctx;
 { register pointer rdtable;
   register int i;

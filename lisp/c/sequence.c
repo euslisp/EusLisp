@@ -67,7 +67,7 @@ register int index;
       case ELM_BIT:   return(makeint((pl[index/32] & (1<<((integer_t)index%32)))?1:0));
       case ELM_POINTER: return(vec->c.vec.v[index]);} }
 
-pointer fastvset(vec,index,val)
+void fastvset(vec,index,val)
 register pointer vec,val;
 register int index;
 { register byte *p;
@@ -100,7 +100,8 @@ int n;
 pointer argv[];
 { register pointer a=argv[0],r;
   register int s,e,i=0,count;
-  pointer fastvref(),fastvset();
+  pointer fastvref();
+  void fastvset();
   ckarg2(2,3);
   s=ckintval(argv[1]);
   if (n==3) {
@@ -998,7 +999,7 @@ register pointer argv[];
   else { vset(a,i,argv[2]); return(argv[2]);}}
 
 
-sequence(ctx,mod)
+void sequence(ctx,mod)
 register context *ctx;
 pointer mod;
 {
