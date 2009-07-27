@@ -68,7 +68,7 @@ static void thr_startup( struct thr_arg *arg )
     //if (debug) printf( "thr_startup:tid=%d\n", arg->tid ); 
     /* this line causes SEGMENTATION FAULT, but why? R.Hanai */
 
-    pthread_cleanup_push( thr_cleanup, arg );
+  pthread_cleanup_push((void(*)(void *))thr_cleanup, arg );
     if( !thread_table[arg->tid].tid ) 
       thread_table[arg->tid].tid = pthread_self(); /* R.Hanai */
 
@@ -83,7 +83,7 @@ static void thr_startup( struct thr_arg *arg )
     pthread_cleanup_pop( 1 );
 }
 
-int thr_create(void *base, size_t size, void (*func)(), void *args, long flags, int *tid )
+int thr_create(void *base, size_t size, void (*func)(void *), void *args, long flags, int *tid )
 /* base is not used */
 /* size is not implemented */
 /* flags is not used */
@@ -103,7 +103,7 @@ int thr_create(void *base, size_t size, void (*func)(), void *args, long flags, 
     arg->func = func;
     arg->args = args;
     thr_create_lock=1;
-    stat = pthread_create( &thread_table[i].tid, NULL, thr_startup, arg );
+    stat = pthread_create( &thread_table[i].tid, NULL, (void*(*)(void *))thr_startup, arg );
     if( stat == 0 )
       thread_table[i].using = 1;
     *tid = i;
@@ -122,7 +122,7 @@ pthread_mutex_t susp_mut = PTHREAD_MUTEX_INITIALIZER;
 volatile int susp_sentinel = 0;
 pthread_once_t susp_once = PTHREAD_ONCE_INIT;
 pthread_t susp_null_pthread = {0};
-pthread_t *susp_array[MAXTHREAD]; 
+pthread_t susp_array[MAXTHREAD]; 
 int susp_bottom = MAXTHREAD;
 int susp_inited = 0;
 
