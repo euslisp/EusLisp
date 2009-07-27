@@ -499,12 +499,12 @@ pointer args[];
       else error(E_USER,(pointer)"illegal foreign string"); }
     else if (iscons(resulttype)) {
 	/* (:string [10]) (:foreign-string [20]) */
-      if (ccar(resulttype)=K_STRING) {
+      if (ccar(resulttype)==K_STRING) {
         resulttype=ccdr(resulttype);
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)i);
 	return(makestring((char *)i, j)); }
-      else if (ccar(resulttype)=K_FOREIGN_STRING) {
+      else if (ccar(resulttype)==K_FOREIGN_STRING) {
         resulttype=ccdr(resulttype);
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)i);
