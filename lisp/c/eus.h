@@ -29,6 +29,8 @@ typedef float float_t;
 #if GCC || Solaris2 || IRIX || Linux || IRIX6
 #define USE_STDARG
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #endif
 
 #if alpha
