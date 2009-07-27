@@ -84,20 +84,20 @@ extern integer_t setjmp_val;
 #define	UNBOUND	((pointer)0L)
 
 /* dynamic value type */
-#define V_CONSTANT	((0<<2)+2) // makeint(0)
-#define V_VARIABLE	((1<<2)+2) // makeint(1)
-#define V_GLOBAL	((2<<2)+2) // makeint(2)
-#define V_SPECIAL	((3<<2)+2) // makeint(3)
+#define V_CONSTANT	((pointer)((0<<2)+2)) // makeint(0)
+#define V_VARIABLE	((pointer)((1<<2)+2)) // makeint(1)
+#define V_GLOBAL	((pointer)((2<<2)+2)) // makeint(2)
+#define V_SPECIAL	((pointer)((3<<2)+2)) // makeint(3)
 
 /* function types*/
-#define SUBR_FUNCTION	((0<<2)+2) // makeint(0)
-#define SUBR_MACRO	((1<<2)+2) // makeint(1)
-#define SUBR_SPECIAL	((2<<2)+2) // makeint(2)
-#define SUBR_ENTRY	((3<<2)+2) // makeint(3)
+#define SUBR_FUNCTION	((pointer)((0<<2)+2)) // makeint(0)
+#define SUBR_MACRO	((pointer)((1<<2)+2)) // makeint(1)
+#define SUBR_SPECIAL	((pointer)((2<<2)+2)) // makeint(2)
+#define SUBR_ENTRY	((pointer)((3<<2)+2)) // makeint(3)
 
 /* stack frame types (lots more)*/
-#define BLOCKFRAME	((0<<2)+2) // makeint(0)
-#define TAGBODYFRAME	((1<<2)+2) // makeint(1)
+#define BLOCKFRAME	((pointer)((0<<2)+2)) // makeint(0)
+#define TAGBODYFRAME	((pointer)((1<<2)+2)) // makeint(1)
 
 /*vector element types*/
 #define ELM_FIXED	0
