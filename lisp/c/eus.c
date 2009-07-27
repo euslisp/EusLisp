@@ -1276,7 +1276,7 @@ pointer makeint(integer_t v) {
       //      fprintf(stderr, "v=%x(bignum)\n", v);
       return(mkbigint(v));
     }
-    return (v|0x3); }
+    return ((pointer)(v|0x3)); }
   else return((pointer)((v<<2)+2));
 }
 integer_t intval(pointer p) {
