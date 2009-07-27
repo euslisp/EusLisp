@@ -118,7 +118,7 @@ pointer argv[];
   else c_stack_size=stack_size*sizeof(pointer);
   for (i=0; i<count; i++) {
     newctx=(context *)makelispcontext(stack_size);
-    newport=makethreadport(newctx);
+    newport=(pointer)makethreadport(newctx);
     ckpush(newport);
     GC_REGION(mutex_lock(&qthread_lock););
 #ifdef RGC
@@ -457,7 +457,7 @@ pointer argv[];
   ta->newctx=newctx;
   ta->func=func;
   ta->arg=arg;
-  stat=thr_create(0, stack_size, (void *(*)(void *))newthread,
+  stat=thr_create(0, stack_size, (void (*)(void *))newthread,
 		  ta,0,&thread_id);
   if (stat) result=makeint(-errno);
   else 
