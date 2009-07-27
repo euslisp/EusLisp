@@ -451,7 +451,7 @@ pointer argv[];
   else stack_size=1024*64;
 
   newctx=(context *)makelispcontext(stack_size);
-  fprintf(stderr,"creater newcontext=%x\n", newctx);
+  fprintf(stderr,"creater newcontext=%p\n", newctx);
   ta=(struct thread_arg *)malloc(sizeof(struct thread_arg));
   ta->form=ctx->callfp->form;
   ta->newctx=newctx;

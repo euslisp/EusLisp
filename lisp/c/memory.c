@@ -91,7 +91,7 @@ register int k;
 #else
   maxmemory=(char *)sbrk(0);
 #endif
-  if (QDEBUG && debug) fprintf(stderr,";; maxmemory=0x%x\n",maxmemory);
+  if (QDEBUG && debug) fprintf(stderr,";; maxmemory=%p\n",maxmemory);
   if (cp==NULL) return(ERR);	/*can't allocate new memory*/
 #if alpha
   if( chunklist == NULL ) {
@@ -496,7 +496,7 @@ register pointer *oldsp;
   newsize=oldsize*2;
   top=oldsp-gcstack;
   newgcsp=newstack=(pointer *)malloc(newsize * sizeof(pointer)+16);
-  fprintf(stderr, "\n;; extending gcstack 0x%x[%d] --> 0x%x[%d] top=%x\n",
+  fprintf(stderr, "\n;; extending gcstack %p[%d] --> p%x[%d] top=%x\n",
 		oldstack, oldsize, newstack, newsize, top);
   while (stk<oldsp) *newgcsp++= *stk++;
   gcstack=newstack;
@@ -688,7 +688,7 @@ call_disposers()
     p=dispose[i];
     p->nodispose=0;
     a=(pointer)findmethod(ctx,K_DISPOSE,classof(p), &curclass); 
-    if (debug) fprintf(stderr, ";; (send %x :dispose)\n", p);
+    if (debug) fprintf(stderr, ";; (send %p :dispose)\n", p);
     if (a!=NIL) csend(ctx,p,K_DISPOSE,0);
     }}
 
@@ -788,9 +788,9 @@ gc()
 /*  mutex_unlock(&alloc_lock); */
 #endif
   if (debug) {
-    fprintf(stderr," free/total=%d/%d stack=%d ",
+    fprintf(stderr," free/total=%ld/%ld stack=%d ",
 		freeheap,totalheap,myctx->vsp - myctx->stack);
-    fprintf(stderr," mark=%d sweep=%d\n", marktime,sweeptime);
+    fprintf(stderr," mark=%ld sweep=%ld\n", marktime,sweeptime);
   }
   if (speval(QGCHOOK)!=NIL) {
     pointer gchook=speval(QGCHOOK);

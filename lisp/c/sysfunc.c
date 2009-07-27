@@ -406,7 +406,7 @@ pointer argv[];
       if (marked(b)) {
 	i=b->h.cix;
 	if (i<0 || i>=MAXCLASS)
-	  fprintf(stderr,"bad cid %d at 0x%x, bix=%d\n",i,b,b->h.bix);
+	  fprintf(stderr,"bad cid %d at %p, bix=%d\n",i,b,b->h.bix);
         else {
 	  counts[i]++;
 #ifdef RGC
