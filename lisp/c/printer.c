@@ -93,7 +93,7 @@ register pointer f;
   symprefix(sym,f);
   pnm=sym->c.sym.pname;
   if (!isstring(pnm)) {
-    printf("printsym: illegal pname %x\n",pnm);
+    printf("printsym: illegal pname %p\n",pnm);
     return(sym);}
   l=vecsize(pnm);
   s=pnm->c.str.chars;

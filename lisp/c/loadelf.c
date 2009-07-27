@@ -100,7 +100,7 @@ register context *ctx;
   pointer (*initfunc)(context *, int, pointer *);
   pointer mod;
   for (i=0; i< module_count; i++) {
-    printf("executing init: %s at %x...",
+    printf("executing init: %s at %p...",
 	 module_initializers[i].module_name,
 	 module_initializers[i].entry_func);
     fflush(stdout);

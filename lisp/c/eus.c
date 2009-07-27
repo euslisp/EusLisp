@@ -913,7 +913,7 @@ integer_t addr;
 
   ctx = euscontexts[thr_self()];
   if (debug) {
-    fprintf(stderr, ";; eusint: sig=%d, %d; thr=%d ctx=%x\n",
+    fprintf(stderr, ";; eusint: sig=%d, %d; thr=%d ctx=%p\n",
 		s,code,thr_self(), ctx);}
   if (ctx==NULL) ctx=mainctx;
   ctx->intsig=s;
@@ -1289,7 +1289,7 @@ integer_t intval(pointer p) {
   else if (isbignum(p)) {
     return (bigintval(p)); }
   else if ((i&0x3)==0x0) {
-    fprintf(stderr,";p=pointer?(%x)\n", p);
+    fprintf(stderr,";p=pointer?(%p)\n", p);
     return (i); }
   else return (((integer_t)i)>>2);
 }
