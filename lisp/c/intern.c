@@ -110,12 +110,12 @@ pointer pkg;	/*destination package*/
   register int i,size;
   int hash,newhash;
 
-  if (sym=findsymbol((byte *)id,l,pkg->c.pkg.intsymvector,&hash)) return(sym);
+  if ((sym=findsymbol((byte *)id,l,pkg->c.pkg.intsymvector,&hash))) return(sym);
   uselist=pkg->c.pkg.use;
   while (islist(uselist)) { /*search in external symbols in inherited packages*/
     use=ccar(uselist);
     uselist=ccdr(uselist);
-    if (sym=findsymbol((byte *)id,l,use->c.pkg.symvector,&newhash)) return(sym);}
+    if ((sym=findsymbol((byte *)id,l,use->c.pkg.symvector,&newhash))) return(sym);}
   /*create the symbol and insert it in the package*/
   symvec=pkg->c.pkg.intsymvector;
   size=vecsize(symvec);

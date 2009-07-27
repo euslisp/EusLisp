@@ -214,7 +214,7 @@ register pointer namestr,nicks,uses;
   nicks=stackrawlist(ctx,i);	/*list up package nicknames*/
   i=0;
   while (islist(uses)) {
-    if (p=findpkg(ccar(uses))) { vpush(p); i++; uses=ccdr(uses);}
+    if ((p=findpkg(ccar(uses)))) { vpush(p); i++; uses=ccdr(uses);}
     else error(E_PKGNAME,ccar(uses));}
   uses=stackrawlist(ctx,i);
   pkg=allocobj(PKGCLASS,package, packagecp.cix);

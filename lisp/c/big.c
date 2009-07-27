@@ -944,7 +944,7 @@ pointer x;
   if (bs==0) return(makeint(0));
   else if (bs==1) {
     y=x->c.bgnm.bv->c.ivec.iv[0];
-    msb3= (y >> WORD_SIZE-3) & 0x7;
+    msb3= (y >> (WORD_SIZE-3)) & 0x7;
     if (msb3==0 || msb3==7)    return(makeint(y));}
   return(x);}
 

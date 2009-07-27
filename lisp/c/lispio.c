@@ -26,7 +26,7 @@ int n;
 register pointer argv[];
 { pointer s;
   extern pointer openfile();
-  s=openfile(ctx,get_string(argv[0]), ckintval(argv[1]),
+  s=openfile(ctx,(char*)get_string(argv[0]), ckintval(argv[1]),
 	     ckintval(argv[2]),ckintval(argv[3]));
   if (s==0) return(makeint(errno));
   return(s);}

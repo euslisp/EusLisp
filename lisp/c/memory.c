@@ -533,7 +533,7 @@ void markall()
   mark(pkglist);	/*mark all packages*/
   for (i=0; i<MAXTHREAD; i++) {
     /*mark everything reachable from stacks in euscontexts*/
-    if (ctx=euscontexts[i]) {
+    if ((ctx=euscontexts[i])) {
       mark_ctx=ctx; mark_state=3;
 #ifdef MARK_DEBUG
       printf( "markall:%d: mark(threadobj %d)\n", count, i );
