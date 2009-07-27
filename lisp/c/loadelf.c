@@ -83,7 +83,7 @@ struct {
   module_initializers[MAX_SYSTEM_MODULES];
 
 
-add_module_initializer(name, entry)
+void add_module_initializer(name, entry)
 char *name;
 pointer (*entry)();
 { 
@@ -94,7 +94,7 @@ pointer (*entry)();
   module_count++;}
 
 /* exec_module_initializers is no longer called */
-exec_module_initializers(ctx)
+void exec_module_initializers(ctx)
 register context *ctx;
 { int i, addr;
   pointer (*initfunc)(context *, int, pointer *);
@@ -397,7 +397,7 @@ pointer argv[];
 { error(E_USER,(pointer)"SAVE is not supported on Solaris");}
 
 
-loadsave(ctx,mod)
+void loadsave(ctx,mod)
 register context *ctx;
 pointer mod;
 { pointer p=Spevalof(PACKAGE);

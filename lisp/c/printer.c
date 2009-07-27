@@ -271,7 +271,7 @@ int base, field1,field2;
   vpop();
   }
 
-printnum(ctx, nump, strm, base, field1, field2)
+void printnum(ctx, nump, strm, base, field1, field2)
 context *ctx;
 pointer nump, strm;
 int base;

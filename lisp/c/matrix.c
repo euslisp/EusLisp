@@ -1324,7 +1324,7 @@ pointer argv[];
   for (i=0; i<s; i++) val*=av[intval(p->c.vec.v[i])*s+i];
   return(makeflt(1.0/val));}
 
-matrix(ctx,mod)
+void matrix(ctx,mod)
 register context *ctx;
 register pointer mod;
 {

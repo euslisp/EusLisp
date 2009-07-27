@@ -25,7 +25,7 @@ extern pointer makebig();
 
 #if (WORD_SIZE == 64)
 
-extended_mul(d, q, r, hp, lp)
+void extended_mul(d, q, r, hp, lp)
 integer_t d, q, r;
 integer_t *hp, *lp;
 {
@@ -78,7 +78,7 @@ integer_t *hp, *lp;
 
 }
 
-extended_div(d, h, l, qp, rp)
+void extended_div(d, h, l, qp, rp)
 integer_t d, h, l;
 integer_t *qp, *rp;
 {
@@ -115,7 +115,7 @@ integer_t *qp, *rp;
 #else   /* WORD_SIZE==32 */
 #if (!Solaris2 || !sun4)
 
-extended_mul(d, q, r, hp, lp)
+void extended_mul(d, q, r, hp, lp)
 integer_t d, q, r;
 integer_t *hp, *lp;/* ???? */
 {
@@ -168,7 +168,7 @@ integer_t *hp, *lp;/* ???? */
 
 }
 
-extended_div(d, h, l, qp, rp)
+void extended_div(d, h, l, qp, rp)
 integer_t d, h, l;
 integer_t *qp, *rp;
 {
@@ -404,7 +404,7 @@ pointer extend_big(pointer b, int newsize)
 	Big_zerop(x) answers if bignum x is zero or not.
 	X may be any bignum.
 */
-big_zerop(x)
+integer_t big_zerop(x)
 pointer x;
 { register integer_t *xv;
   register int i, size;
@@ -471,7 +471,7 @@ register pointer x, y;
 	the 2's complement of bignum x.
 	X may be any bignum.
 */
-complement_big(x)
+void complement_big(x)
 pointer x;
 {
   int size, i=0;
@@ -548,7 +548,7 @@ ONE:
 	I should be non-negative.
 	X may be any bignum.
 */
-add_int_big(c, x)
+void add_int_big(c, x)
 integer_t c;
 pointer x;
 { register int size, i=0;
@@ -578,7 +578,7 @@ pointer x;
 	c should be non-negative.
 	X may be any bignum.
 */
-sub_int_big(c, x)
+void sub_int_big(c, x)
 integer_t c;
 pointer x;
 { register int size, i=0;
@@ -603,7 +603,7 @@ pointer x;
 	I should be non-negative.
 	X should be non-negative.
 */
-mul_int_big(c, x)
+void mul_int_big(c, x)
 integer_t c;
 pointer x;
 { int size, i=0;
@@ -737,7 +737,7 @@ pointer x, y;
 		y <= c*x.
 */
 
-sub_int_big_big(c, x, y)
+void sub_int_big_big(c, x, y)
 integer_t c;
 pointer x, y;
 { int i, j;
@@ -881,7 +881,7 @@ int i;
 	X0 should be a positive bignum.
 	Y0 should be a non-negative bignum.
 */
-big_quotient_remainder(x0, y0, qp, rp)
+void big_quotient_remainder(x0, y0, qp, rp)
 pointer x0, y0, *qp, *rp;
 {
 	context *ctx=euscontexts[thr_self()];

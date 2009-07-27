@@ -297,7 +297,7 @@ pointer (*f)();
 /*	for DEFCLASS and INSTANTIATE
 */
 
-bumpcix(m,n)
+void bumpcix(m,n)
 int m,n;
 { pointer super;
   if (classtab[m].subcix<n) {
@@ -305,7 +305,7 @@ int m,n;
     super=classtab[m].def->c.cls.super;
     if (isclass(super)) bumpcix(intval(super->c.cls.cix),n);}}
 
-recixobj(newcix)
+void recixobj(newcix)
 register int newcix;
 { register struct chunk *cp;
   register bpointer p,tail;
@@ -329,14 +329,14 @@ register int newcix;
       p=nextbuddy(p);}
     }  }
 
-resetcix(class,p)
+void resetcix(class,p)
 pointer class;
 cixpair *p;
 { if (class) {
     p->cix=intval(class->c.cls.cix);
     p->sub=classtab[p->cix].subcix;} }
 
-enterclass(classobj)
+void enterclass(classobj)
 pointer classobj;
 { pointer super;
   register int i,newcix,temp,supercix;
@@ -803,7 +803,7 @@ jmp_buf *jbuf;
 /****************************************************************/
 extern context *mainctx;
 
-allocate_stack(ctx,n)
+void allocate_stack(ctx,n)
 context *ctx;
 register int n;
 { register int i;

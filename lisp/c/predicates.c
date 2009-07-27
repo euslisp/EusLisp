@@ -2,7 +2,7 @@
 /* predicates.c
 /*	1986-Jul 6, Copyright(C), T.Matsui
 *****************************************************************/
-static char *rcsid="@(#)$Id: predicates.c,v 1.1.1.1 2003/11/20 07:46:25 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
@@ -211,7 +211,7 @@ register pointer argv[];
   if (result==UNBOUND) error(E_CIRCULAR);
   else return(result);}
 
-predicates(ctx,mod)
+void predicates(ctx,mod)
 register context *ctx;
 register pointer mod;
 { /* preds*/

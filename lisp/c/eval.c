@@ -113,7 +113,7 @@ pointer s;
   else return(f);}
 
 
-pointer setfunc(sym,func)
+void setfunc(sym,func)
 register pointer sym,func;
 { pointer_update(sym->c.sym.spefunc,func);}
 
@@ -147,7 +147,7 @@ pointer sym,newval;
   ctx->special_bind_count++;}
 
 /* called by compiled code */
-unbindx(ctx,count)
+void unbindx(ctx,count)
 register context *ctx;
 register int count;
 { register pointer s;

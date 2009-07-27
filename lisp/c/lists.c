@@ -406,7 +406,7 @@ pointer argv[];
 
 
 
-lists(ctx,mod)
+void lists(ctx,mod)
 register context *ctx;
 register pointer mod;
 { defun(ctx,"CAR",mod,CAR);

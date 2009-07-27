@@ -760,7 +760,7 @@ pointer argv[];
   else return(p);}
 
 
-sysfunc(ctx,mod)
+void sysfunc(ctx,mod)
 register context *ctx;
 pointer mod;
 { pointer pkgname,pkgnick,p=Spevalof(PACKAGE);

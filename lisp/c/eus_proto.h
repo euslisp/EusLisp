@@ -56,33 +56,33 @@ extern pointer ASH(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer LDB(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer DPB(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer RANDOM(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int arith(context */*ctx*/, pointer /*mod*/);
+extern void arith(context */*ctx*/, pointer /*mod*/);
 /* big.c */
 #if Solaris2 && sun4
-extern int extended_mul(unsigned int /*d*/, unsigned int /*q*/, unsigned int /*r*/, unsigned int */*hp*/, unsigned int */*lp*/);
-extern int extended_div(unsigned int /*d*/, unsigned int /*h*/, long int /*l*/, unsigned int */*qp*/, unsigned int */*rp*/);
+extern void extended_mul(unsigned int /*d*/, unsigned int /*q*/, unsigned int /*r*/, unsigned int */*hp*/, unsigned int */*lp*/);
+extern void extended_div(unsigned int /*d*/, unsigned int /*h*/, long int /*l*/, unsigned int */*qp*/, unsigned int */*rp*/);
 #else
-extern int extended_mul(integer_t /*d*/, integer_t /*q*/, integer_t /*r*/, integer_t */*hp*/, integer_t */*lp*/);
-extern int extended_div(integer_t /*d*/, integer_t /*h*/, integer_t /*l*/, integer_t */*qp*/, integer_t */*rp*/);
+extern void extended_mul(integer_t /*d*/, integer_t /*q*/, integer_t /*r*/, integer_t */*hp*/, integer_t */*lp*/);
+extern void extended_div(integer_t /*d*/, integer_t /*h*/, integer_t /*l*/, integer_t */*qp*/, integer_t */*rp*/);
 #endif
 extern pointer stretch_big(pointer /*x*/, integer_t /*i*/);
 extern pointer copy_big(pointer /*x*/);
-extern int big_zerop(pointer /*x*/);
+extern integer_t big_zerop(pointer /*x*/);
 extern integer_t big_sign(pointer /*x*/);
 extern int big_compare(pointer /*x*/, pointer /*y*/);
-extern int complement_big(pointer /*x*/);
+extern void complement_big(pointer /*x*/);
 extern pointer big_minus(pointer /*x*/);
-extern int add_int_big(integer_t /*c*/, pointer /*x*/);
-extern int sub_int_big(integer_t /*c*/, pointer /*x*/);
-extern int mul_int_big(integer_t /*c*/, pointer /*x*/);
+extern void add_int_big(integer_t /*c*/, pointer /*x*/);
+extern void sub_int_big(integer_t /*c*/, pointer /*x*/);
+extern void mul_int_big(integer_t /*c*/, pointer /*x*/);
 extern integer_t div_int_big(integer_t /*c*/, pointer /*x*/);
 extern pointer big_plus(pointer /*x*/, pointer /*y*/);
 extern pointer big_times(pointer /*x*/, pointer /*y*/);
-extern int sub_int_big_big(integer_t /*c*/, pointer /*x*/, pointer /*y*/);
+extern void sub_int_big_big(integer_t /*c*/, pointer /*x*/, pointer /*y*/);
 extern integer_t get_standardizing_factor_and_normalize(pointer /*x*/);
 extern integer_t div_big_big(pointer /*x*/, pointer /*y*/);
 extern pointer big_quotient_remainder_auxiliary(pointer /*x*/, pointer /*y*/, int /*i*/);
-extern int big_quotient_remainder(pointer /*x0*/, pointer /*y0*/, pointer */*qp*/, pointer */*rp*/);
+extern void big_quotient_remainder(pointer /*x0*/, pointer /*y0*/, pointer */*qp*/, pointer */*rp*/);
 extern int big_length(pointer /*x*/);
 extern pointer normalize_big(pointer /*x*/);
 extern pointer normalize_bignum(pointer /*x*/);
@@ -90,7 +90,7 @@ extern float_t big_to_float(pointer /*x*/);
 /* big2.c */
 /* calleus.c */
 extern integer_t calleus(pointer /*fsym*/, integer_t /*cargv*/*, int /*a2*/, int /*a3*/, int /*a4*/, int /*a5*/, int /*a6*/, int /*a7*/, int /*a8*/);
-extern int foreign(context */*ctx*/, pointer /*mod*/);
+extern void foreign(context */*ctx*/, pointer /*mod*/);
 /* charstring.c */
 extern pointer CHAR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SETCHAR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -108,7 +108,7 @@ extern pointer STR_LE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer STR_EQ(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer STR_GT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer STR_GE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int charstring(context */*ctx*/, pointer /*mod*/);
+extern void charstring(context */*ctx*/, pointer /*mod*/);
 /* compsub.c */
 extern int maerror(void);
 extern pointer loadglobal(pointer /*s*/);
@@ -145,7 +145,7 @@ extern pointer IOCTL_TCSETAF(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer IOCTL_TCSETAW(int /*n*/, pointer /*argv*/*);
 extern pointer TCGETATTR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer TCSETATTR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int eusioctl(context */*ctx*/, pointer /*mod*/);
+extern void eusioctl(context */*ctx*/, pointer /*mod*/);
 /* eusstart.dmy.c */
 extern void eusstart(context */*ctx*/);
 /* eusstream.c */
@@ -162,10 +162,10 @@ extern pointer getval(context */*ctx*/, pointer /*sym*/);
 extern pointer setval(context */*ctx*/, pointer /*sym*/, pointer /*val*/);
 extern pointer getfunc(context */*ctx*/, pointer /*f*/);
 extern pointer get_sym_func(pointer /*s*/);
-extern pointer setfunc(pointer /*sym*/, pointer /*func*/);
+extern void setfunc(pointer /*sym*/, pointer /*func*/);
 extern pointer *ovafptr(pointer /*o*/, pointer /*v*/);
 extern void bindspecial(context */*ctx*/, pointer /*sym*/, pointer /*newval*/);
-extern int unbindx(context */*ctx*/, int /*count*/);
+extern void unbindx(context */*ctx*/, int /*count*/);
 extern void unbindspecial(context */*ctx*/, struct specialbindframe */*limit*/);
 extern struct bindframe *fastbind(context */*ctx*/, pointer /*var*/, pointer /*val*/, struct bindframe */*lex*/);
 extern struct bindframe *vbind(context */*ctx*/, pointer /*var*/, pointer /*val*/, struct bindframe */*lex*/, struct bindframe */*declscope*/);
@@ -214,11 +214,11 @@ extern pointer SETSLOT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer CONSCAR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer CONSCDR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer copyobj(context */*ctx*/, pointer /*org*/);
-extern int copyunmark(pointer /*obj*/);
+extern void copyunmark(pointer /*obj*/);
 extern pointer COPYOBJ(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BECOME(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer REPLACEOBJECT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int leo(context */*ctx*/, pointer /*mod*/);
+extern void leo(context */*ctx*/, pointer /*mod*/);
 /* lispio.c */
 extern pointer OPENFILE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer CLOSE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -248,7 +248,7 @@ extern pointer RESETREADTABLE(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer XFORMAT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SIGERROR(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer INSTALL_ERRHANDLER(context */*ctx*/, int /*n*/, pointer */*argv*/);
-extern int lispio(context */*ctx*/, pointer /*mod*/);
+extern void lispio(context */*ctx*/, pointer /*mod*/);
 /* lists.c */
 extern pointer CAR(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer CDR(context */*ctx*/, int /*n*/, pointer */*argv*/);
@@ -282,11 +282,11 @@ extern pointer ASSOC(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SUPERASSOC(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BUTLAST(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer NBUTLAST(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int lists(context */*ctx*/, pointer /*mod*/);
+extern void lists(context */*ctx*/, pointer /*mod*/);
 /* loadelf.c */
 extern pointer SRCLOAD(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int add_module_initializer(char */*name*/, pointer (*/*entry*/)());
-extern int exec_module_initializers(context */*ctx*/);
+extern void add_module_initializer(char */*name*/, pointer (*/*entry*/)());
+extern void exec_module_initializers(context */*ctx*/);
 extern pointer list_module_initializers(context */*ctx*/, pointer /*initnames*/);
 extern pointer list_module_initializers2(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer build_quote_vector(context */*ctx*/, int /*size*/, char */*strings*/*);
@@ -296,7 +296,7 @@ extern pointer SYSMOD(void);
 extern pointer UNBINLOAD(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer BINLOAD(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer SAVE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int loadsave(context */*ctx*/, pointer /*mod*/);
+extern void loadsave(context */*ctx*/, pointer /*mod*/);
 /* makedate.c */
 /* makes.c */
 extern pointer Getstring(pointer /*s*/);
@@ -316,10 +316,10 @@ extern pointer mkstream(context */*ctx*/, pointer /*dir*/, pointer /*string*/);
 extern pointer mkfilestream(context */*ctx*/, pointer /*dir*/, pointer /*string*/, int /*fno*/, pointer /*fname*/);
 extern pointer mkiostream(context */*ctx*/, pointer /*in*/, pointer /*out*/);
 extern pointer makecode(pointer /*mod*/, pointer (*/*f*/)(), pointer /*ftype*/);
-extern int bumpcix(int /*m*/, int /*n*/);
-extern int recixobj(int /*newcix*/);
-extern int resetcix(pointer /*class*/, cixpair */*p*/);
-extern int enterclass(pointer /*classobj*/);
+extern void bumpcix(int /*m*/, int /*n*/);
+extern void recixobj(int /*newcix*/);
+extern void resetcix(pointer /*class*/, cixpair */*p*/);
+extern void enterclass(pointer /*classobj*/);
 extern pointer makeclass(context */*ctx*/, pointer /*name*/, pointer /*superobj*/, pointer /*vars*/, pointer /*types*/, pointer /*forwards*/, int /*tag*/, pointer /*metaclass*/);
 extern pointer makeobject(pointer /*class*/);
 extern pointer makevector(pointer /*vclass*/, int /*size*/);
@@ -347,7 +347,7 @@ extern pointer compfun(context */*ctx*/, pointer /*sym*/, pointer /*mod*/, point
 extern pointer compmacro(context */*ctx*/, pointer /*sym*/, pointer /*mod*/, pointer (*/*entry*/)(), pointer /*doc*/);
 extern struct blockframe *makeblock(context */*ctx*/, pointer /*kind*/, pointer /*name*/, jmp_buf */*jbuf*/, struct blockframe */*link*/);
 extern struct fletframe *makeflet(context */*ctx*/, pointer /*nm*/, pointer /*def*/, struct fletframe */*scp*/, struct fletframe */*link*/);
-extern void mkcatchframe(context */*ctx*/, pointer /*lab*/, jmp_buf */*jbuf*/);extern int allocate_stack(context */*ctx*/, int /*n*/);
+extern void mkcatchframe(context */*ctx*/, pointer /*lab*/, jmp_buf */*jbuf*/);extern void allocate_stack(context */*ctx*/, int /*n*/);
 extern context *makelispcontext(int /*bs_size*/);
 extern void deletecontext(int /*id*/, context */*ctx*/);
 
@@ -385,21 +385,22 @@ extern pointer INV_EULER(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer LU_DECOMPOSE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer LU_SOLVE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer LU_DETERMINANT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int matrix(context */*ctx*/, pointer /*mod*/);
+extern void matrix(context */*ctx*/, pointer /*mod*/);
 /* memory.c */
 extern int newchunk(int /*k*/);
 extern bpointer root_alloc_big(context */*ctx*/, int /*req*/);
-extern int root_alloc_small(context */*ctx*/, int /*req*/);
+extern void root_alloc_small(context */*ctx*/, int /*req*/);
 extern pointer alloc(int /*s*/, int /*e*/, int /*cid*/, int /*nils*/);
-extern int mark(pointer /*p*/);
-extern int newgcstack(pointer */*oldsp*/);
-extern int markall(void);
-extern int reclaim(bpointer /*p*/);
+extern void mark(pointer /*p*/);
+extern void newgcstack(pointer */*oldsp*/);
+extern void markall(void);
+extern void reclaim(bpointer /*p*/);
 extern void sweepall(void);
-extern int gc(void);
+extern void gc(void);
 #ifdef STACK_DEBUG
 extern pointer p_print(pointer /*v*/, context */*ctx*/);
 #endif
+#if 0
 /* memory.mutex.c */
 extern int newchunk(int /*k*/);
 extern bpointer root_alloc_big(context */*ctx*/, int /*req*/);
@@ -422,6 +423,7 @@ extern int markall(void);
 extern int reclaim(bpointer /*p*/);
 extern void sweepall(void);
 extern int gc(void);
+#endif
 /* mthread.c */
 /* paragc.c */
 /* predicates.c */
@@ -443,10 +445,10 @@ extern pointer superequal(pointer /*x*/, pointer /*y*/);
 extern pointer equal(pointer /*x*/, pointer /*y*/);
 extern pointer EQUAL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SUPEREQUAL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int predicates(context */*ctx*/, pointer /*mod*/);
+extern void predicates(context */*ctx*/, pointer /*mod*/);
 /* printer.c */
 extern void printint(context */*ctx*/, integer_t /*num*/, pointer /*f*/, int /*base*/, int /*field1*/, int /*field2*/);
-extern int printnum(context */*ctx*/, pointer /*nump*/, pointer /*strm*/, int /*base*/, int /*field1*/, int /*field2*/);
+extern void printnum(context */*ctx*/, pointer /*nump*/, pointer /*strm*/, int /*base*/, int /*field1*/, int /*field2*/);
 extern pointer prinx(context */*ctx*/, pointer /*obj*/, pointer /*stream*/);
 extern void terpri(pointer /*f*/);
 /* pthreads.c */
@@ -465,13 +467,13 @@ extern int is_digit(int /*ch*/, int /*base*/);
 extern pointer read_delimited_list(context */*ctx*/, pointer /*f*/, int /*delim_char*/, char /*token*/*);
 extern int gcd(int /*u*/, int /*v*/);
 extern pointer reader(context */*ctx*/, pointer /*f*/, pointer /*recursivep*/);
-extern int initreader(context */*ctx*/);
+extern void initreader(context */*ctx*/);
 /* sequence.c */
 extern pointer call1(context */*ctx*/, pointer /*func*/, pointer /*arg*/);
 extern pointer call2(context */*ctx*/, pointer /*func*/, pointer /*arg1*/, pointer /*arg2*/);
 extern int coerceintval(pointer /*x*/);
 extern pointer fastvref(pointer /*vec*/, int /*index*/);
-extern pointer fastvset(pointer /*vec*/, int /*index*/, pointer /*val*/);
+extern void fastvset(pointer /*vec*/, int /*index*/, pointer /*val*/);
 extern pointer IDENTITY(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SUBSEQ(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer COPYSEQ(context */*ctx*/, int /*n*/, pointer */*argv*/);
@@ -497,7 +499,7 @@ extern pointer SORT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer LENGTH(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer ELT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SETELT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int sequence(context */*ctx*/, pointer /*mod*/);
+extern void sequence(context */*ctx*/, pointer /*mod*/);
 /* specials.c */
 extern pointer quote(context */*ctx*/, pointer /*arg*/);
 extern pointer EVAL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -518,7 +520,7 @@ extern pointer COND(context */*ctx*/, pointer /*arg*/);
 extern pointer PARLET(context */*ctx*/, pointer /*args*/);
 extern pointer SEQLET(context */*ctx*/, pointer /*args*/);
 extern pointer CATCH(context */*ctx*/, pointer /*arg*/);
-extern int throw(context */*ctx*/, pointer /*tag*/, pointer /*result*/);
+extern void throw(context */*ctx*/, pointer /*tag*/, pointer /*result*/);
 extern pointer THROW(context */*ctx*/, pointer /*arg*/);
 extern pointer FLET(context */*ctx*/, pointer /*arg*/);
 extern pointer LABELS(context */*ctx*/, pointer /*arg*/);
@@ -545,7 +547,7 @@ extern pointer SYMVALUE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SETFUNC(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer SYMFUNC(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer MAKUNBOUND(context */*ctx*/, int /*n*/, pointer */*argv*/);
-extern int set_special(context */*ctx*/, pointer /*var*/, pointer /*val*/);
+extern void set_special(context */*ctx*/, pointer /*var*/, pointer /*val*/);
 extern pointer SETSPECIAL(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer DEFUN(context */*ctx*/, pointer /*arg*/);
 extern pointer DEFMACRO(context */*ctx*/, pointer /*arg*/);
@@ -557,7 +559,7 @@ extern pointer GETPROP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer EXPORT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer putprop(context */*ctx*/, pointer /*sym*/, pointer /*val*/, pointer /*attr*/);
 extern pointer PUTPROP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern pointer specials(context */*ctx*/, pointer /*mod*/);
+extern void specials(context */*ctx*/, pointer /*mod*/);
 /* sysfunc.c */
 extern pointer GEESEE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SBCOUNT(context */*ctx*/, int /*n*/, pointer */*argv*/);
@@ -589,7 +591,7 @@ extern pointer LISTALLCLASSES(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer EXPORTALL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer NEXT_SPECIAL_INDEX(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer THREAD_SPECIALS(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int sysfunc(context */*ctx*/, pointer /*mod*/);
+extern void sysfunc(context */*ctx*/, pointer /*mod*/);
 /* unixcall.c */
 extern pointer PTIMES(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer RUNTIME(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -670,7 +672,7 @@ extern pointer GETHOSTBYADDR(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer GETNETBYNAME(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer GETPROTOBYNAME(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer GETSERVBYNAME(context */*ctx*/, int /*n*/, pointer */*argv*/);
-extern int unixcall(context */*ctx*/, pointer /*mod*/);
+extern void unixcall(context */*ctx*/, pointer /*mod*/);
 /* vectorarray.c */
 extern pointer MKVECTOR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer MKINTVECTOR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -695,7 +697,7 @@ extern pointer BITEQV(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BITNAND(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BITNOR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BITNOT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern int vectorarray(context */*ctx*/, pointer /*mod*/);
+extern void vectorarray(context */*ctx*/, pointer /*mod*/);
 /* setjmp.c */
 extern pointer psetjmp(jmp_buf);
 extern void plongjmp(jmp_buf,pointer);

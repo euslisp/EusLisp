@@ -513,7 +513,7 @@ pointer arg;
 #endif
   return(val);}
 
-throw(ctx,tag,result)
+void throw(ctx,tag,result)
 register context *ctx;
 register pointer tag,result;
 { register struct catchframe *cfp=ctx->catchfp;
@@ -1034,7 +1034,7 @@ pointer *argv;
   pointer_update(argv[0]->c.sym.speval,UNBOUND);
   return(T);}
 
-set_special(ctx, var, val)
+void set_special(ctx, var, val)
 context *ctx;
 pointer var, val;
 { pointer vt;
@@ -1264,7 +1264,7 @@ register pointer argv[];
 /****************************************************************/
 /* initialize
 /****************************************************************/
-pointer specials(ctx,mod)
+void specials(ctx,mod)
 register context *ctx;
 pointer mod;
 {

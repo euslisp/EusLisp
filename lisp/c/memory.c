@@ -255,7 +255,7 @@ register int req;	/*index to buddy: must be greater than 0*/
 #endif
   return(b);}
 
-root_alloc_small(ctx, req)
+void root_alloc_small(ctx, req)
 register context *ctx;
 register int req;	/*index to buddy: must be greater than 0*/
 { register int i, j, k,kk;
@@ -441,7 +441,7 @@ pointer *gcstack, *gcsplimit, *gcsp;
 
 pointer mark_root, marking, marking2;
 
-mark(p)
+void mark(p)
 register pointer p;
 { register int i,s;
   register bpointer bp;
@@ -486,7 +486,7 @@ markagain:
   }
 
 
-newgcstack(oldsp)
+void newgcstack(oldsp)
 register pointer *oldsp;
 { register pointer *oldstack, *stk, *newstack, *newgcsp;
   long top, oldsize, newsize;
@@ -510,7 +510,7 @@ context *mark_ctx;
 long mark_stack_root;
 long mark_buddy_q;
 
-markall()
+void markall()
 { register pointer *p,*spsave;
   register int i,j;
   register context *ctx;
@@ -582,7 +582,7 @@ markall()
   }
 
 #ifndef RGC
-reclaim(p)
+void reclaim(p)
 register bpointer p;
 { register int rbix,stat;
   register pointer s;
@@ -738,7 +738,7 @@ resume_all_threads()
 #endif
 
 #if vxworks
-gc()
+void gc()
 { if (debug)  fprintf(stderr,"\n;; gc:");
   breakck;
   gccount++;
@@ -751,7 +751,7 @@ gc()
   breakck;  }
 #else 
 
-gc()
+void gc()
 { struct tms tbuf1,tbuf2,tbuf3;
   int i, r;
   context *ctx=euscontexts[thr_self()];

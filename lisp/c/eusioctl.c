@@ -4,7 +4,7 @@
 /*   1988Mar23
 /*   Copyright(c)1988 Toshihiro MATSUI, Electrotechnical Laboratory
 /****************************************************************/
-static char *rcsid="@(#)$Id: eusioctl.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 #include <ctype.h>
 #include <sys/termios.h>
 #include <termio.h>
@@ -241,7 +241,7 @@ pointer argv[];
   stat=tcsetattr(getfd(argv[0]),optact,(struct termios *)buf->c.str.chars);
   if (stat<0) return(makeint(-errno)); else return(buf);}
 
-eusioctl(ctx,mod)
+void eusioctl(ctx,mod)
 register context *ctx;
 register pointer mod;
 {

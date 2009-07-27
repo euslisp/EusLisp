@@ -110,7 +110,7 @@ register integer_t cargv[];	/*arguments vector passed from C function*/
     return(nu.ival); }
   else return(intval(result)); }
 
-foreign(ctx,mod)
+void foreign(ctx,mod)
 register context *ctx;
 pointer mod;
 { pointer pkgsave;
