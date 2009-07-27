@@ -1294,4 +1294,5 @@ integer_t intval(pointer p) {
   else return (((integer_t)i)>>2);
 }
 
-integer_t hide_ptr (pointer p) { return (integer_t t)p; }
+integer_t hide_ptr (pointer p) { return (integer_t)p; }
+
