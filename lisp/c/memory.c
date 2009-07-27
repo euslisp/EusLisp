@@ -496,7 +496,7 @@ register pointer *oldsp;
   newsize=oldsize*2;
   top=oldsp-gcstack;
   newgcsp=newstack=(pointer *)malloc(newsize * sizeof(pointer)+16);
-  fprintf(stderr, "\n;; extending gcstack %p[%d] --> p%x[%d] top=%x\n",
+  fprintf(stderr, "\n;; extending gcstack %p[%ld] --> %p[%ld] top=%lx\n",
 		oldstack, oldsize, newstack, newsize, top);
   while (stk<oldsp) *newgcsp++= *stk++;
   gcstack=newstack;
