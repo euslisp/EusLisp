@@ -767,11 +767,11 @@ extern integer_t intval(pointer p);
 #define bigintval(x) (isint(x)?intval(x):\
    (isbignum(x)?\
 	((vecsize((x)->c.bgnm.bv)>=2)?\
-	 (((x)->c.bgnm.bv->c.ivec.iv[1]<<WORD_SIZE-1) | ((x)->c.bgnm.bv->c.ivec.iv[0])):\
+	 (((x)->c.bgnm.bv->c.ivec.iv[1]<<(WORD_SIZE-1)) | ((x)->c.bgnm.bv->c.ivec.iv[0])): \
          ((x)->c.bgnm.bv->c.ivec.iv[0])):\
 	(integer_t)error(E_NOINT)) )
 #define mkbigint(y) \
- (pointer)((((y)^((y)>>1))&(integer_t)3<<WORD_SIZE-3)?makebig1(y):makeint(y))
+  (pointer)((((y)^((y)>>1))&(integer_t)3<<(WORD_SIZE-3))?makebig1(y):makeint(y))
 
 #define elmtypeof(p) (bpointerof(p)->h.elmtype)
 #ifdef RGC

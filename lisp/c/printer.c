@@ -106,7 +106,7 @@ register pointer f;
       else if (Spevalof(QREADTABLE)->c.rdtab.macro->c.vec.v[c] != NIL) 
 	{escape=1; break;};
       if (!is_digit(c,base)) alldigits=0;}
-    if (escape=(escape | alldigits)) writech(f,'|');}
+    if ((escape=(escape | alldigits))) writech(f,'|');}
   while (l>0) {
     i=0;
     if (!ctx->slashflag) {

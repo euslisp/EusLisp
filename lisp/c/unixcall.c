@@ -1344,7 +1344,7 @@ pointer ENVIRON(context *ctx, int n, pointer argv[])
   char  *b;
   int  count=0;
   ckarg(0);
-  while (b=environ[count++]) {
+  while ((b=environ[count++])) {
     vpush(makestring(b, strlen(b)));}
   return(stacknlist(ctx, count-1)); }
 

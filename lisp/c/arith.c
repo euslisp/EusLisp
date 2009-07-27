@@ -238,7 +238,7 @@ INTGE:
       if ((integer_t)left < (integer_t)right) return(NIL); }
     else if (isflt(left)) { fright=intval(right); goto FLTGE2;}
     else if (isbignum(left)) {
-      if (sign=big_sign(left)<0) return(NIL);
+      if ((sign=big_sign(left))<0) return(NIL);
       right=left; goto BIGGE; }
     if (!isint(left)) error(E_NONUMBER);
     right=left;}
@@ -302,7 +302,7 @@ INTLE:
       if ((integer_t)left > (integer_t)right) return(NIL); }
     else if (isflt(left)) { fright=intval(right); goto FLTLE2;}
     else if (isbignum(left)) {
-      if (sign=big_sign(left)>0) return(NIL);
+      if ((sign=big_sign(left))>0) return(NIL);
       right=left; goto BIGLE; }
     if (!isint(left)) error(E_NONUMBER);
     right=left;}
@@ -518,7 +518,7 @@ register pointer argv[];
     if (isint(a)) {
       j=intval(a);
       is+=j;
-      if (((is >> 1) ^ is)&((integer_t)1<<WORD_SIZE-3)) { /* fixnum overflow */
+      if (((is >> 1) ^ is)&((integer_t)1<<(WORD_SIZE-3))) { /* fixnum overflow */
 	b=makebig1(is); goto bigplus;} }
     else if (isflt(a)) { fs=is; goto fplus;}
     else if (pisratio(a)) { rs=makeratio(is,1);  goto rplus;}
@@ -603,7 +603,7 @@ IMINUS:
     a=argv[i++];
     if (isint(a)) {
       is -= intval(a);
-      if (((is >> 1) ^ is)&((integer_t)1<<WORD_SIZE-3)) { /* fixnum overflow */
+      if (((is >> 1) ^ is)&((integer_t)1<<(WORD_SIZE-3))) { /* fixnum overflow */
 	b=makebig1(is); goto BIGMINUS;} }
     else if (isflt(a)) { fs=is; goto FMINUS1;}
     else if (pisratio(a)) { rs=makeratio(is,1); goto RMINUS1;}
@@ -698,7 +698,7 @@ ITIMES1:
       if (is<0) { sign= -1; is = -is;}
       if (s<0) { sign= -sign; s = -s;}
       extended_mul(is, s, 0, &hi, &lo);
-      if( hi !=0 || (lo & ((integer_t)7 << WORD_SIZE-3))!=0) { /*overflow -->bignum */
+      if( hi !=0 || (lo & ((integer_t)7 << (WORD_SIZE-3)))!=0) { /*overflow -->bignum */
 	b=makebig2(hi, lo & MASK);
 	vpush(b);
 	if (sign<0) complement_big(b);

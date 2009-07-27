@@ -124,7 +124,7 @@ register pointer meth,class,doc;
 purgecache:
   vpop();
   for (j=0; j<MAXTHREAD; j++) {
-    if (ctx=euscontexts[j])
+    if ((ctx=euscontexts[j]))
       for (i=0; i<MAXMETHCACHE; i++) 
         if (ctx->methcache[i].selector==selector)
           pointer_update(ctx->methcache[i].selector,NIL); }
