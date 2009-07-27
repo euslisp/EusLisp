@@ -351,7 +351,7 @@ pointer *argv;
   writestr(outs,(byte *)cbuf,strlen(cbuf));
   
   for(i=1; i<MAXBUDDY; i++) {
-    sprintf(cbuf,"%4d %7d %5d  %6d  %8d  %8d %10d\n",
+    sprintf(cbuf,"%4d %7ld %5d  %6d  %8ld  %8ld %10ld\n",
 	    i,buddysize[i],fcount[i],tcount[i], tcount[i]*buddysize[i],
 	    alloccount[i],alloccount[i]*buddysize[i]);
     writestr(outs,(byte *)cbuf,strlen(cbuf)); }
@@ -452,7 +452,7 @@ pointer *argv; /* unused argument */
   strm=Spevalof(QTERMIO);
   strm=strm->c.iostream.out;
   for (i=0; i<MAXBUDDY; i++) {
-    sprintf(buf, "%3d %10d * %6d = %10d\n",
+    sprintf(buf, "%3d %10ld * %6d = %10ld\n",
 	 i, buddysize[i], buddy[i].count, buddysize[i]*buddy[i].count);
     writestr(strm,(byte *)buf,strlen(buf));
     }
