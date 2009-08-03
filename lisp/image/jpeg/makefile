@@ -8,14 +8,19 @@ else
  LSFX = dll
 endif
 
+CC = gcc
+ifeq ($(shell /bin/uname -m), x86_64)
+CC += -m32
+endif
+
 $(EUSDIR)/$(ARCHDIR)/lib/jpegmemcd.$(LSFX):	jpegmemcd.o jmemsrc.o jmemdst.o
-	gcc -shared -o jpegmemcd.$(LSFX) jpegmemcd.o jmemsrc.o jmemdst.o -ljpeg
+	$(CC) -shared -o jpegmemcd.$(LSFX) jpegmemcd.o jmemsrc.o jmemdst.o -ljpeg
 	cp jpegmemcd.$(LSFX) $(EUSDIR)/$(ARCHDIR)/lib
 jpegmemcd.o:	jpegmemcd.c
-	gcc -c -O  jpegmemcd.c $(CFLAGS)
+	$(CC) -c -O  jpegmemcd.c $(CFLAGS)
 jmemsrc.o:	jmemsrc.c
-	gcc -c -O  jmemsrc.c $(CFLAGS)
+	$(CC) -c -O  jmemsrc.c $(CFLAGS)
 jmemdst.o:	jmemdst.c
-	gcc -c -O  jmemdst.c $(CFLAGS)
+	$(CC) -c -O  jmemdst.c $(CFLAGS)
 
 
