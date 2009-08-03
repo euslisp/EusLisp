@@ -858,6 +858,9 @@ static void initfeatures()
 #if Linux_ppc
   p=cons(ctx,intern(ctx,"PPC",3,keywordpkg),p);
 #endif
+#if USE_MULTI_LIB
+  p=cons(ctx,intern(ctx,"IA32",4,keywordpkg),p);
+#endif
 #if ELF
   p=cons(ctx,intern(ctx,"ELF",3,keywordpkg),p);
 #endif

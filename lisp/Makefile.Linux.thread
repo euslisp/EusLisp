@@ -58,7 +58,7 @@ CFLAGS=$(WFLAGS) -D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" \
 # /usr/ucb/cc cannot compile because of its incapability of recognizing
 # prototype declarations.
 CC=cc
-# CC=gcc
+LD=ld
 
 #
 # L I B R A R I E S
@@ -84,6 +84,10 @@ GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
 THREADDEP=mthread_posix.c
 #THREADDEP=pthreads.c
 
+ifeq ($(shell /bin/uname -m), x86_64)
+CC += -m32 -DUSE_MULTI_LIB
+LD += -melf_i386
+endif
 
 # If you don't like optimization, comment out the next line.
 OFLAGS=-O2

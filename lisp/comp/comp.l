@@ -37,6 +37,8 @@
 (defparameter *cc* 
   (cond ((member :sh4 *features*)
 	 "sh4-linux-gcc -g")
+	((member :ia32 *features*) 
+	 "gcc -g -m32")
 	((member :gcc *features*)
 	   "gcc -g")
 	((member :alpha *features*) "cc -ieee_with_inexact" )
@@ -1354,10 +1356,13 @@
 			)
 		   (if (and (memq :linux *features*)  pic)
 			(concatenate string
-				     (if (memq :sh4 *features*)
-				"; sh4-linux-gcc -shared -o "
- 				"; ld -shared -o "
-				)
+				     (cond 
+				      ((memq :sh4 *features*)
+				       "; sh4-linux-gcc -shared -o ")
+				      ((memq :ia32 *features*)
+				       "; ld -melf_i386 -shared -o ")
+				      (t
+				       "; ld -shared -o "))
 				(namestring file.so)
 				" "
 				(namestring file.o))
