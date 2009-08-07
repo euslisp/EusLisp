@@ -945,6 +945,11 @@ integer_t addr;
     sigfatal:
 
     if (speval(FATALERROR) != NIL) exit(s);
+    if (ctx->callfp) {
+      fprintf(stderr,";; in ");
+      prinx(ctx,ctx->callfp->form,ERROUT);
+      flushstream(ERROUT);
+      fprintf(stderr,"\n");}
     fprintf(stderr,";; You are still in a signal handerl.\n;;Try reset or throw to upper level as soon as possible.\n");
     fprintf(stderr,";; code=%d x=%x addr=%x\n",code,x,addr);
     reploop(mainctx, "Fatal: ");
@@ -1104,7 +1109,7 @@ register context *ctx;
   if (eusrt==NULL)  sprintf(fname,"%s/lib/eusrt.l", eusdir);
   else strcpy(fname, eusrt);
   if (isatty(0)!=0) {
-    printf("configuring by \"%s\"\n", fname); }
+    fprintf(stderr, "configuring by \"%s\"\n", fname); }
   mkcatchframe(ctx,makeint(0), topjbuf);
   argv=makestring(fname, strlen(fname));
   vpush(argv);
