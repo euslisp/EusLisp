@@ -140,6 +140,15 @@ DOC=$(DOCDIR)/arith.tex $(DOCDIR)/controls.tex $(DOCDIR)/evaluation.tex \
 # make dependency
 #
 
+all:
+	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
+	 make -f $(MAKEFILE) $(MFLAGS) eus1; \
+         make -f $(MAKEFILE) $(MFLAGS) eus2; \
+         make -f $(MAKEFILE) $(MFLAGS) eusg; \
+         make -f $(MAKEFILE) $(MFLAGS) eusx; \
+         make -f $(MAKEFILE) $(MFLAGS) eusgl; \
+         make -f $(MAKEFILE) $(MFLAGS) eus)
+
 eus:	$(BINDIR)/eus
 
 MAKEDATE:	$(EUSDIR)$(LIBDIR)/MAKEDATE
@@ -147,13 +156,6 @@ MAKEDATE:	$(EUSDIR)$(LIBDIR)/MAKEDATE
 MKDIR:
 	mkdir -p $(EUSDIR)/$(ARCH) $(BINDIR) $(OBJDIR) $(ADLIBDIR)
 	(cd $(EUSDIR); test -e include || ln -sf lisp/c include)
-
-all:
-	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
-	 make -f $(MAKEFILE) $(MFLAGS) eus1; \
-         make -f $(MAKEFILE) $(MFLAGS) eus2; \
-         make -f $(MAKEFILE) $(MFLAGS) eusg; \
-         make -f $(MAKEFILE) $(MFLAGS) eus)
 
 # eus0=lowest level eus --- made only from c routines
 # and loads .l source when starts up
@@ -353,6 +355,7 @@ install:
 	 cp $(BINDIR)/eusx $(PUBBINDIR);\
 	 ln -sf $(PUBBINDIR)/eus $(PUBBINDIR)/euscomp)
 clean:
+	-rm -fr $(EUSDIR)/data/* 
 	-rm -f $(OBJDIR)/* $(ADLIBDIR)/libeus* $(BINDIR)/* $(LDIR)/constants.l.[co]\
 		$(LDIR)/eusstart.l.[co] $(COMPDIR)/builtins.l.[co] so_locations
 	-sh tool/clean-ch.sh
