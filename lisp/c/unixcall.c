@@ -83,8 +83,6 @@ extern int errno;
 #include <sys/utsname.h>
 #endif
 
-extern int sys_nerr;
-/*extern char *sys_errlist[];*/
 #include <time.h>
 //extern char *tzname[2];
 #if !Cygwin /* extern timezone */
@@ -1385,12 +1383,12 @@ pointer SYSERRLIST(ctx,n,argv)
 register context *ctx;
 register int n;
 pointer argv[];
-{ char *errstr;
+{ int i;
+  char errstr[256];
   ckarg(1);
   n=ckintval(argv[0]);
-  if (0<=n && n<sys_nerr) {
-    errstr=strerror(n);
-    /* return(makestring(sys_errlist[n],strlen(sys_errlist[n]))); */
+  i = strerror_r(n, errstr, 256);
+  if ( i > 0 ) {
     return(makestring(errstr, strlen(errstr))); }
   else error(E_ARRAYINDEX);}
 
