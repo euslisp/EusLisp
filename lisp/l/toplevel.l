@@ -113,7 +113,7 @@
 	 (t 
 	   (if (fboundp 'unix:ualarm)
 	       (unix:ualarm 0 0)
-	       (unix:alarm 0 0))
+	       (unix:alarm 0))
 	  (warning-message 1 "signal ~s ~s~%" sig code)
 	  (let* ((*replevel* (1+ *replevel*))
 		 (*reptype* "S"))
