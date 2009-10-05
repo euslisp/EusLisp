@@ -438,7 +438,7 @@ int n; pointer argv[];
   return(makeint(alarm(ckintval(argv[0]))));}
 
 
-#if sun3 || sun4 || news || sanyo  || alpha
+#if sun3 || sun4 || news || sanyo  || alpha || i386
 #if !Solaris2
 pointer UALARM(ctx,n,argv)
 register context *ctx;
