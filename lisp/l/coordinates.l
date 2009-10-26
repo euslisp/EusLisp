@@ -535,7 +535,7 @@
 	 ((or (memq wrt '(:parent parent)) (eq wrt parent)) v)
 	 (t
 	  (if (coordinates-p wrt)
-	      (setq v (setq v (transform (send wrt :worldrot) v))))
+	      (setq v (transform (send wrt :worldrot) v)))
 	  (if parent
 	      (transform (transpose (send parent :worldrot)) v)
 	      v))))
@@ -605,4 +605,4 @@
 	   (car (rotation-angle (send c :worldrot)))))
 
 (provide :coordinates 
-	"@(#)$Id: coordinates.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
+	"@(#)$Id$")
