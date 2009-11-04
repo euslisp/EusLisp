@@ -312,7 +312,7 @@
 (defun vector-y (p) (aref (the float-vector p) 1))
 (defun vector-z (p) (aref (the float-vector p) 2))
 (defun v= (a b)
-  (fzerop (distance a b)))
+  (zerop (distance a b)))
 
 (defun euler-matrix (az ay az2)
 "EULER-MATRIX (az ay az2) creates a rotation matrix which has been
@@ -333,4 +333,4 @@ These angles can be extracted by the RPY-ANGLE function."
      (rotate-matrix r az :z t r)
      r) )
 
-(provide :array "@(#)$Id: array.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
+(provide :array "@(#)$Id$")
