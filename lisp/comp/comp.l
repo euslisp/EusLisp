@@ -296,7 +296,7 @@
 	  ((proclaimed-global-p var)
 	   (send idtable :enter-special result))	;Jan, 96
 	  (t
-	   (format t ";~%~C[34;7m~S~C[0;34m is assumed to be global~C[0m~%"
+	   (format *error-output* "; ~C[34;7m~S~C[0;34m is assumed to be global~C[0m~%"
 			#x1b var #x1b #x1b)
 	   (send idtable :enter result)) )
 	result))
