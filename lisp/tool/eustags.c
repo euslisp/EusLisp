@@ -199,8 +199,8 @@ NODE	*head;			/* the head of the sorted binary tree	*/
 
 char *savestr();
 char *savenstr ();
-char *rindex();
-char *index();
+// char *rindex();
+//char *index();
 char *concat ();
 void initbuffer ();
 long readline ();
@@ -1607,9 +1607,9 @@ savenstr(cp, len)
 
 char *
 rindex(sp, c)
-     register char *sp, c;
+     char *sp, c;
 {
-  register char *r;
+  char *r;
 
   r = NULL;
   do
