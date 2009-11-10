@@ -1959,6 +1959,9 @@ pointer mod;
 
   Spevalof(PACKAGE)=unixpkg;
 
+#ifdef Cygwin
+  tzset();
+#endif
 /* common to unix and to vxworks */
   defun(ctx,"SIGADDSET",mod,SIGADDSET);
   defun(ctx,"SIGDELSET",mod,SIGDELSET);
