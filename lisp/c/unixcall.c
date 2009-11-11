@@ -138,6 +138,14 @@ pointer argv[];
   tms=localtime_r((time_t *)&clock,&res); /* localtime-->localtime_r */
   timevec=makevector(C_VECTOR,10);
   vpush(timevec);
+
+#ifdef Cygwin
+  if (getenv("TZ")==NULL) {
+    tzname[0]="UTC";
+    tzname[1]="UTC";
+  }
+#endif
+
   tz0=makestring(tzname[0],strlen(tzname[0]));
   vpush(tz0);
   tz1=makestring(tzname[1],strlen(tzname[1]));
@@ -1959,9 +1967,6 @@ pointer mod;
 
   Spevalof(PACKAGE)=unixpkg;
 
-#ifdef Cygwin
-  tzset();
-#endif
 /* common to unix and to vxworks */
   defun(ctx,"SIGADDSET",mod,SIGADDSET);
   defun(ctx,"SIGDELSET",mod,SIGDELSET);
