@@ -2,7 +2,7 @@ all: eustags
 
 eustags:
 	gcc -o eustags eustags.c
-	cp eustags $(EUSDIR)/$(ARCHDIR)/bin
+	mv -f eustags /usr/local/bin
 
 sockstd:
 	cc -o sockstd sockstd.c -lsocket -lnsl
