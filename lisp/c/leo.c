@@ -208,7 +208,7 @@ register pointer sel,search, *curclass;
   register int h;
 
   if (trycache) {
-    h=(((integer_t)sel+(integer_t)klass)>>3) & (MAXMETHCACHE-1);/* ???? */
+    h=(((eusinteger_t)sel+(eusinteger_t)klass)>>3) & (MAXMETHCACHE-1);/* ???? */
     mt= &ctx->methcache[h];
     if (mt->selector==sel && mt->class==search) {
       /* hit! */
@@ -415,7 +415,7 @@ pointer argv[];
       s=vecsize(a);
       switch(etype) {
 	case ELM_BIT: n=(s+WORD_SIZE-1)/WORD_SIZE; break;
-	case ELM_CHAR: case ELM_BYTE: n=(s+sizeof(integer_t))/sizeof(integer_t); break;
+	case ELM_CHAR: case ELM_BYTE: n=(s+sizeof(eusinteger_t))/sizeof(eusinteger_t); break;
 	default: n=s; break;}
       n++;
       x=makevector(klass,s);
@@ -567,7 +567,7 @@ register pointer org;
     elmtypeof(clone)=etype;
     switch(etype) {
       case ELM_BIT: s=(s+WORD_SIZE-1)/WORD_SIZE; break;
-      case ELM_BYTE: case ELM_CHAR: s=(s+sizeof(integer_t))/sizeof(integer_t); break;
+      case ELM_BYTE: case ELM_CHAR: s=(s+sizeof(eusinteger_t))/sizeof(eusinteger_t); break;
 	case ELM_FOREIGN: s=1; break; }}
   else {
     etype=ELM_FIXED;
@@ -673,7 +673,7 @@ register pointer argv[];
 		  switch(e2) {
 		    case ELM_CHAR: case ELM_BYTE: break;
 		    case ELM_BIT: n*=8; break;
-		    default: n=(n+sizeof(integer_t)-1)/sizeof(integer_t); break;} break;
+		    default: n=(n+sizeof(eusinteger_t)-1)/sizeof(eusinteger_t); break;} break;
     default:	  switch(e2) {
 		    case ELM_CHAR: case ELM_BYTE: n*=sizeof(pointer); break;
 		    case ELM_BIT: n*=WORD_SIZE; break;

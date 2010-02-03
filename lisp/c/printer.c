@@ -149,7 +149,7 @@ register pointer f;
 
 void printint(ctx,num,f,base, field1, field2)	/*print fixnum*/
 context *ctx;
-register integer_t num;
+register eusinteger_t num;
 register pointer f;
 int base, field1, field2;
 { char work[65];	/*enough for 64 binary digits + sign*/
@@ -232,10 +232,10 @@ context *ctx;
 pointer big,f;
 int base, field1,field2;
 { pointer bv,p;
-  integer_t *b, d; long digits=0;
+  eusinteger_t *b, d; long digits=0;
   int i, x, sign;
   int downcase;
-  extern integer_t big_sign(), div_int_big();
+  extern eusinteger_t big_sign(), div_int_big();
 
   downcase=(Spevalof(PRCASE)==K_DOWNCASE);
   sign=big_sign(big);
@@ -392,7 +392,7 @@ int prlevel;
 	    writestr(f,(byte *)"#v(",3);
 	    printsym(ctx,classof(vec)->c.cls.name,f);
 	    writech(f,' ');
-	    printint(ctx,(integer_t)vec->c.vec.size,f,intval(Spevalof(PRINTBASE)),0,0);
+	    printint(ctx,(eusinteger_t)vec->c.vec.size,f,intval(Spevalof(PRINTBASE)),0,0);
 	    writech(f,' ');}
 	  while (i<n && prlength>0) {
 	    prin1(ctx,vec->c.vec.v[i++],f,prlevel);
@@ -552,7 +552,7 @@ register int prlevel;
   /*pointed object*/
 #if vax || sun4 || news || mips || i386 || alpha
   if ((x<(pointer)(ctx->stack)) && ((pointer)(ctx->stacklimit)<x)){
-	printint(ctx,(integer_t)x,f,intval(Spevalof(PRINTBASE)),0,0); return;}
+	printint(ctx,(eusinteger_t)x,f,intval(Spevalof(PRINTBASE)),0,0); return;}
 #endif
   if (pissymbol(x)) { printsym(ctx,x,f); return;}
   else if (pisratio(x)) {

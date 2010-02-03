@@ -21,23 +21,23 @@ pointer defoglforeign(ctx,xentry)
 register context *ctx;
 char *xentry;
 { pointer fc, xsym;
-  integer_t entry; int i, len;
+  eusinteger_t entry; int i, len;
   char lname[100];
   len=strlen(xentry);
   for (i=0; i<len; i++) lname[i]=toupper(xentry[i]);
   lname[i]=0;
 #if Cygwin /* dlopen libGL.dll and libGLU.dll */
-  integer_t dlhandle;
-  dlhandle=(integer_t)dlopen("cygGL-1.dll", RTLD_LAZY);
-  entry=(integer_t)dlsym((integer_t)dlhandle, xentry);
+  eusinteger_t dlhandle;
+  dlhandle=(eusinteger_t)dlopen("cygGL-1.dll", RTLD_LAZY);
+  entry=(eusinteger_t)dlsym((eusinteger_t)dlhandle, xentry);
   if ( !entry ) {
-    dlhandle=(integer_t)dlopen("cygGLU-1.dll", RTLD_LAZY);
-    entry=(integer_t)dlsym(dlhandle, xentry);}
+    dlhandle=(eusinteger_t)dlopen("cygGLU-1.dll", RTLD_LAZY);
+    entry=(eusinteger_t)dlsym(dlhandle, xentry);}
   if ( !entry ) {
-    dlhandle=(integer_t)dlopen(0, RTLD_LAZY);
-    entry=(integer_t)dlsym(dlhandle, xentry);}
+    dlhandle=(eusinteger_t)dlopen(0, RTLD_LAZY);
+    entry=(eusinteger_t)dlsym(dlhandle, xentry);}
 #else
-  entry=(integer_t)dlsym((void *)((integer_t)(sysmod->c.ldmod.handle) & ~3), xentry);
+  entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3), xentry);
 #endif
   if (!entry) {
     fprintf(stderr, "defoglforeign: dlsym() failed for %s\n", xentry);

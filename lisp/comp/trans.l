@@ -267,10 +267,10 @@
 (defmethod translator
  (:1- () 
     (send self :push
-	       (format nil "(pointer)((integer_t)(~A)-4)" (send self :pop))))
+	       (format nil "(pointer)((eusinteger_t)(~A)-4)" (send self :pop))))
  (:1+ () 
     (send self :push
-	       (format nil "(pointer)((integer_t)(~A)+4)" (send self :pop))))
+	       (format nil "(pointer)((eusinteger_t)(~A)+4)" (send self :pop))))
  (:check-cons-nil ()  ; check if stack-top is cons or nil.
     (if (equal push "w")
 	(send self :pop)
@@ -353,13 +353,13 @@
     (send self :reset-vsp)
     (send self :push (format nil "cons(ctx,~A,w)" (send self :pop))))
  (:svref ()		; reference to a simple general vector element
-    (format cfile "	{ register integer_t i=intval(~A);~%" (send self :pop))
+    (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
 	(format cfile "	  w=(~A->c.vec.v[i]);}~%" vec))
     (send self :push "w"))
  (:svset ()		; store to a simple general vector
     (send self :store "w")	;value
-    (format cfile "	{ register integer_t i; register pointer v;~%")
+    (format cfile "	{ register eusinteger_t i; register pointer v;~%")
     (format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
 						 (send self :pop))
 #+:rgc
@@ -367,32 +367,32 @@
     (format cfile "	  v->c.vec.v[i]=w;}~%")
     (send self :push "w"))
  (:char ()
-    (format cfile "	{ register integer_t i=intval(~A);~%" (send self :pop))
+    (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
 	(format cfile "	  w=makeint(~A->c.str.chars[i]);}~%" vec))
     (send self :push "w"))
  (:setchar ()
     (send self :store "w")	;value
-    (format cfile "	{ register integer_t i; register pointer v;~%")
+    (format cfile "	{ register eusinteger_t i; register pointer v;~%")
     (format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
 						 (send self :pop))
     (format cfile "	  v->c.str.chars[i]=intval(w);}~%")
     (send self :push "w"))
  (:bit ()
-    (format cfile "	{ register integer_t i=intval(~A);~%" (send self :pop))
+    (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
 	(format cfile "	  w=makeint(~A->c.str.chars[i/8]&(1<<(i&7))?1:0);}~%" vec))
     (send self :push "w"))
  (:setbit ()
     (send self :store "w")	;value
-    (format cfile "	{ register integer_t i; register byte *v;~%")
+    (format cfile "	{ register eusinteger_t i; register byte *v;~%")
     (format cfile "	  i=intval(~A); v=~A->c.str.chars;~%" (send self :pop)
 						 (send self :pop))
-    (format cfile "	  if (((integer_t)w)&4) v[i/8]|=(1<<(intval(i)&7));~%")
+    (format cfile "	  if (((eusinteger_t)w)&4) v[i/8]|=(1<<(intval(i)&7));~%")
     (format cfile "	  else v[i/8]&= ~~(1<<(intval(i)&7));}~%")
     (send self :push "w"))
  (:vref (type)		; reference to a simple vector element
-    (format cfile "	{ register integer_t i=intval(~A);~%" (send self :pop))
+    (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
       (case type
 	  (character (format cfile "	  w=makeint(~A->c.str.chars[i]);}~%" vec))
@@ -403,7 +403,7 @@
       (send self :push "w")))
  (:vset (type)		; store to a vector element whose type is apparent
     (send self :store "w")	;value
-    (format cfile "	{ register integer_t i; register pointer v;~%")
+    (format cfile "	{ register eusinteger_t i; register pointer v;~%")
     (format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
 						 (send self :pop))
     (case type
@@ -448,14 +448,14 @@
 	   (send self :store "w")
 	   (when (memq op '(+ -))
 	      (format cfile
-		 "#if sun4 || vax || mips || i386 || alpha~%	w=(pointer)((integer_t)w-2);~%#endif~%"))
+		 "#if sun4 || vax || mips || i386 || alpha~%	w=(pointer)((eusinteger_t)w-2);~%#endif~%"))
 	   (send self :push
-		 (format nil "(pointer)((integer_t)~A ~A (integer_t)w)"
+		 (format nil "(pointer)((eusinteger_t)~A ~A (eusinteger_t)w)"
 			 (send self :pop) 
 			 (cdr (assq op '((+ . "+") (- . "-") (logand . "&")
 						(logior . "|")))))))
 	  (t
-	    (format cfile "	{ integer_t i,j;~%")
+	    (format cfile "	{ eusinteger_t i,j;~%")
 	    (format cfile 
 		"		j=intval(~A); i=intval(~A);~%"
 		(send self :pop) (send self :pop))
@@ -477,7 +477,7 @@
 	  ((eq comparator '=) (send self :if-eq lab))
 	  ((eq type 'int)
 	    (send self :store "w")
-	    (format cfile "	if ((integer_t)~A ~A (integer_t)w) goto ~A;~%"
+	    (format cfile "	if ((eusinteger_t)~A ~A (eusinteger_t)w) goto ~A;~%"
 			   (send self :pop) comparator lab))
 	  ((eq type 'float)
 	    (format cfile "	{ double left,right;~%")

@@ -24,7 +24,7 @@ static char *rcsid="@(#)$Id$";
 #endif
 
 #if 0 /* moved to eus.h */
-#define nextbuddy(p) ((bpointer)((integer_t)p+(buddysize[p->h.bix]*sizeof(pointer))))
+#define nextbuddy(p) ((bpointer)((eusinteger_t)p+(buddysize[p->h.bix]*sizeof(pointer))))
 #define marked(p)  (p->h.mark)
 #define markon(p)  p->h.mark=1
 #define markoff(p) p->h.mark=0
@@ -41,7 +41,7 @@ extern edata(),_end();
 #endif
 
 #if alpha
-static integer_t top_addr, bottom_addr;
+static eusinteger_t top_addr, bottom_addr;
 #endif
 
 extern pointer QPARAGC;
@@ -66,7 +66,7 @@ newchunk(k)
 register int k;
 { register int s;
   register struct chunk *cp;  
-  integer_t tail;
+  eusinteger_t tail;
 #if defined(BIX_DEBUG) || defined(DEBUG_COUNT)
   static int count = 0;
 
@@ -95,11 +95,11 @@ register int k;
   if (cp==NULL) return(ERR);	/*can't allocate new memory*/
 #if alpha
   if( chunklist == NULL ) {
-    top_addr = (integer_t)cp;
+    top_addr = (eusinteger_t)cp;
 /*printf( "first topaddr = 0x%lx\n", top_addr );*/
 }
-  if( (integer_t)cp < top_addr ) {
-    top_addr = (integer_t)chunklist;
+  if( (eusinteger_t)cp < top_addr ) {
+    top_addr = (eusinteger_t)chunklist;
 /*printf( "topaddr = 0x%lx\n", top_addr );*/
 }
 #endif
@@ -135,7 +135,7 @@ register int k;
   cp->rootcell.b.nextbcell = buddy[k].bp;
 #endif
 #if alpha
-  tail = (integer_t)cp + (s+2)*sizeof(pointer);
+  tail = (eusinteger_t)cp + (s+2)*sizeof(pointer);
   if( tail > bottom_addr ) {
     bottom_addr = tail;
 /*printf( "bottom_addr = 0x%lx\n", bottom_addr );*/
@@ -545,7 +545,7 @@ void markall()
       /* mark from thread's stack */
       for (p=ctx->stack; p<ctx->vsp; p++) {
 	mark_state=(long)p;
-	if ((((integer_t)(*p) & 3)==0) && 
+	if ((((eusinteger_t)(*p) & 3)==0) && 
 	    ((ctx->stack>(pointer *)*p) || ((pointer *)*p>ctx->stacklimit)))
 		{ mark(*p); } ;}
       mark_state=0x10000;
@@ -591,10 +591,10 @@ register bpointer p;
     if (!isint(s->c.fstream.fname) && s->c.fstream.direction!=NIL) {
       if (s->c.fstream.fd==makeint(0) || s->c.fstream.fd==makeint(1)) {
 	fprintf(stderr,";; gc! bogus stream at %x fd=%d\n",
-		(integer_t)s,intval(s->c.fstream.fd));}
+		(eusinteger_t)s,intval(s->c.fstream.fd));}
       else if ((closestream(s)==0) && debug)
         fprintf(stderr,";; gc: dangling stream(address=%x fd=%d) is closed\n",
-	        (integer_t)s,intval(s->c.fstream.fd)); } }
+	        (eusinteger_t)s,intval(s->c.fstream.fd)); } }
   p->h.cix= -1;
   rbix=p->h.bix;
   p->b.nextbcell=buddy[rbix].bp;
@@ -647,7 +647,7 @@ register int gcmerge;
 #endif
   s=buddysize[cp->chunkbix];
   p= &cp->rootcell;
-  tail=(bpointer)((integer_t)p+(s<<WORDSHIFT));/* ???? */
+  tail=(bpointer)((eusinteger_t)p+(s<<WORDSHIFT));/* ???? */
 #ifdef SWEEP_DEBUG
   printf( "sweep:%d:top=0x%lx, tail=0x%lx\n", count, p, tail );
 #endif

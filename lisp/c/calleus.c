@@ -56,17 +56,17 @@ cixpair foreignpodcp;
 #define isforeignpod(p) (ispointer(p) && pisforeignpod(p))
 
 
-integer_t
+eusinteger_t
 calleus(fsym,cargv,a2,a3,a4,a5,a6,a7,a8)
 register pointer fsym;	/*foreign-symbol*/
-register integer_t cargv[];	/*arguments vector passed from C function*/
+register eusinteger_t cargv[];	/*arguments vector passed from C function*/
 { register pointer param,resulttype,p,result;
   double *dp;
   float f;
   context *ctx;
   pointer *argv;
   struct foreignpod *fs;
-  integer_t c;
+  eusinteger_t c;
   int i=0,argc=0,j;
   numunion nu;
 
@@ -102,7 +102,7 @@ register integer_t cargv[];	/*arguments vector passed from C function*/
     argc++;}
   result=ufuncall(ctx,fsym,fsym,(pointer)argv,NULL,argc);
   ctx->vsp = argv;
-  if (resulttype==K_STRING) return((integer_t)(result->c.str.chars));
+  if (resulttype==K_STRING) return((eusinteger_t)(result->c.str.chars));
   else if (resulttype==K_FLOAT) {
     f=fltval(result);
     nu.fval=f;
@@ -114,7 +114,7 @@ void foreign(ctx,mod)
 register context *ctx;
 pointer mod;
 { pointer pkgsave;
-  integer_t i;/* ???? */
+  eusinteger_t i;/* ???? */
   pointer FOREIGN,C_FOREIGN;
 
   pkgsave=Spevalof(PACKAGE);
@@ -122,7 +122,7 @@ pointer mod;
   FOREIGN=basicclass("FOREIGN-POD",C_SYMBOL,&foreignpodcp,
 	  	     3,"PODCODE","PARAMTYPES","RESULTTYPE");
   C_FOREIGN=Spevalof(FOREIGN);
-  i=(integer_t)calleus;
+  i=(eusinteger_t)calleus;
   defvar(ctx,"*CALLEUS*",makeint(i),lisppkg);
   pointer_update(Spevalof(PACKAGE), pkgsave);
   }

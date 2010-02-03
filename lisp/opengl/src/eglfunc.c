@@ -1,4 +1,4 @@
-/* $Header: /home/cvs/euslisp/opengl/src/eglfunc.c,v 1.1.1.1 2003/11/20 07:46:32 eus Exp $ */
+/* $Header$ */
 
 #include "eus.h"
 
@@ -12,7 +12,7 @@ pointer EGLGETSTRING(ctx, n, argv)
   pointer *argv;
 { 
   char *str;
-  integer_t i;
+  eusinteger_t i;
   ckarg(1);
   i = ckintval(argv[0]);
   str = (char *) glGetString(i);

@@ -109,7 +109,7 @@ register context *ctx;
     vpush(mod);
     breakck;
     if (initfunc) { 
-      addr = (integer_t)initfunc;
+      addr = (eusinteger_t)initfunc;
       addr= addr>>2;
       mod->c.ldmod.entry=makeint(addr);
       mod->c.ldmod.subrtype=SUBR_ENTRY;
@@ -151,7 +151,7 @@ pointer list_module_initializers(ctx, initnames)
 context *ctx;
 pointer initnames;
 { int i;
-  integer_t addr;
+  eusinteger_t addr;
   pointer (*initfunc)(int, pointer *);
   pointer mod, modname, p;
   void *dlhandle;
@@ -172,7 +172,7 @@ pointer initnames;
       /* printf(" ok\n"); */
       modname=ccar(initnames);
       vpush(modname);
-      addr= (integer_t)initfunc; addr >>=2;/* ???? */
+      addr= (eusinteger_t)initfunc; addr >>=2;/* ???? */
       mod=makemodule(ctx,0);
       mod->c.ldmod.codevec=makeint(0);
       mod->c.ldmod.entry=makeint(addr);
@@ -193,7 +193,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { int i;
-  integer_t addr;
+  eusinteger_t addr;
   pointer (*initfunc)(int, pointer *);
   pointer mod, modname, initnames, p;
   void *dlhandle;
@@ -202,7 +202,7 @@ pointer *argv;
   ckarg(2);
   if (!isldmod(argv[0])) error(E_USER,(pointer)"not a LOAD-MODULE");
   if (!iscons(argv[1])) error(E_NOLIST);
-  dlhandle=(void *)((integer_t)(argv[0]->c.ldmod.handle) & ~3);
+  dlhandle=(void *)((eusinteger_t)(argv[0]->c.ldmod.handle) & ~3);
   initnames=argv[1];
   module_count=0;
   if (dlhandle==NULL) error(E_USER,(pointer)"This module was not loaded");
@@ -216,7 +216,7 @@ pointer *argv;
     if (initfunc) {
       modname=ccar(initnames);
       vpush(modname);
-      addr= (integer_t)initfunc; addr >>=2;/* ???? */
+      addr= (eusinteger_t)initfunc; addr >>=2;/* ???? */
       mod=makemodule(ctx,0);
       mod->c.ldmod.codevec=makeint(0);
       mod->c.ldmod.entry=makeint(addr);
@@ -300,9 +300,9 @@ pointer argv[];
   else mod=sysmod;
   if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
   entry_string=(char *)get_string(argv[0]);
-  entry=(pointer)dlsym((void *)((integer_t)(mod->c.ldmod.handle) & ~3), entry_string);
+  entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3), entry_string);
   if (entry==NULL) return(NIL);
-  else return(makeint((integer_t)entry>>2));}
+  else return(makeint((eusinteger_t)entry>>2));}
 
 pointer FIND_ENTRY2(ctx,n,argv)
 register context *ctx;
@@ -317,11 +317,11 @@ pointer argv[];
   else mod=sysmod;
   if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
   entry_string=(char *)get_string(argv[0]);
-  entry=(pointer)dlsym((void *)((integer_t)(mod->c.ldmod.handle) & ~3), entry_string);
+  entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3), entry_string);
   if (entry==NULL) return(NIL);
   else {
-    e=cons(ctx,makeint((integer_t)entry),e);
-    e=cons(ctx,makeint((integer_t)entry>>2),e);
+    e=cons(ctx,makeint((eusinteger_t)entry),e);
+    e=cons(ctx,makeint((eusinteger_t)entry>>2),e);
     return(e);}}
 
 extern pointer sysmod;
@@ -337,7 +337,7 @@ pointer *argv;
   register int stat;
   ckarg(1);
   if (!isldmod(mod)) error(E_USER,(pointer)"not a compiled-module");
-  stat=dlclose((void *)((integer_t)(mod->c.ldmod.handle) & ~3));
+  stat=dlclose((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3));
   if (stat) return(makeint(-errno));
   else return(T);}
 
@@ -352,7 +352,7 @@ pointer *argv;
   byte *loadaddress;
   pointer (*initfunc)(context *, int, pointer *);
   int data_align=0;
-  integer_t dlhandle, addr;
+  eusinteger_t dlhandle, addr;
 
   ckarg2(1,2);
   binfn= (char *)get_string(argv[0]);
@@ -361,7 +361,7 @@ pointer *argv;
     else entry=(char *)get_string(argv[1]);}
   else entry=NULL;
 
-  dlhandle=(integer_t)dlopen(binfn, RTLD_LAZY);/* ???? */
+  dlhandle=(eusinteger_t)dlopen(binfn, RTLD_LAZY);/* ???? */
   if (dlhandle == 0) {
     fprintf(stderr,"BINLOAD cannot dlopen: %s\n", dlerror());
     return(NIL);}
@@ -380,7 +380,7 @@ pointer *argv;
   /*call initializer*/
   breakck;
   if (initfunc) { 
-    addr=(integer_t)initfunc; addr >>=2;/* ???? */
+    addr=(eusinteger_t)initfunc; addr >>=2;/* ???? */
     mod->c.ldmod.codevec=makeint(0);
     mod->c.ldmod.entry=makeint(addr);
     mod->c.ldmod.subrtype=SUBR_FUNCTION;

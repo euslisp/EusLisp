@@ -28,10 +28,10 @@ static char *rcsid="@(#) $Id$";
 
 /*variables*/
 /* process id and program name*/
-integer_t mypid;
+eusinteger_t mypid;
 char *progname;
 #if (WORD_SIZE == 64)
-integer_t setjmp_val;
+eusinteger_t setjmp_val;
 #endif
 
 /* heap management */
@@ -897,7 +897,7 @@ static void initfeatures()
   /*system function module*/
   sysmod=makemodule(ctx,0);
   sysmod->c.ldmod.codevec=makeint(0);
-  sysmod->c.ldmod.handle=makeint((integer_t)dlopen(0, RTLD_LAZY)>>2);
+  sysmod->c.ldmod.handle=makeint((eusinteger_t)dlopen(0, RTLD_LAZY)>>2);
   sysobj=cons(ctx,sysmod, sysobj);
   }
 
@@ -910,7 +910,7 @@ extern long gcing;
 void eusint(s,code,x,addr)
 register int s;
 int code,x;
-integer_t addr;
+eusinteger_t addr;
 { int stat;
   context *ctx;
 
@@ -984,7 +984,7 @@ char *prompt;
   Spevalof(QSTDIN)=STDIN;
   Spevalof(QERROUT)=ERROUT;
   if ((val=(pointer)eussetjmp(brkjmp))==0) val=reploop(ctx,prompt);
-  else if ((integer_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
+  else if ((eusinteger_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
   ctx->callfp=ctx->catchfp->cf;
   ctx->bindfp=ctx->catchfp->bf;
   ctx->vsp=(pointer *)ctx->catchfp;
@@ -1277,7 +1277,7 @@ char *argv[];
   exit(stat);
   }
 
-pointer makeint(integer_t v) {
+pointer makeint(eusinteger_t v) {
   if (v>(int)MAXPOSFIXNUM || v<(int)MINNEGFIXNUM) {
     //    fprintf(stderr, "makeint(%x)\n", v);
     if (v&0x3) {
@@ -1287,8 +1287,8 @@ pointer makeint(integer_t v) {
     return ((pointer)(v|0x3)); }
   else return((pointer)((v<<2)+2));
 }
-integer_t intval(pointer p) {
-  integer_t i=(integer_t)p;
+eusinteger_t intval(pointer p) {
+  eusinteger_t i=(eusinteger_t)p;
   if (p==NULL) {
     fprintf(stderr,"p=null\n");
     return 0;}
@@ -1299,8 +1299,8 @@ integer_t intval(pointer p) {
   else if ((i&0x3)==0x0) {
     fprintf(stderr,";p=pointer?(%p)\n", p);
     return (i); }
-  else return (((integer_t)i)>>2);
+  else return (((eusinteger_t)i)>>2);
 }
 
-integer_t hide_ptr (pointer p) { return (integer_t)p; }
+eusinteger_t hide_ptr (pointer p) { return (eusinteger_t)p; }
 

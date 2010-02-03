@@ -50,7 +50,7 @@ pointer port;
   tid=thr_self();
 
   if (tid>=MAXTHREAD) thr_exit(0); 
-  ctx=(context *)((integer_t)port->c.thrp.contex & ~2L);
+  ctx=(context *)((eusinteger_t)port->c.thrp.contex & ~2L);
   euscontexts[tid]=ctx;
 /*  fprintf(stderr, "new thread %d port=%x ctx=%x\n", tid, port, ctx); */
   mkcatchframe(ctx, makeint(0), thjmp);
@@ -224,7 +224,7 @@ context *ctx;
 int n;
 pointer argv[];
 { register pointer m;
-  m=makevector(C_INTVECTOR, (sizeof(mutex_t)+sizeof(integer_t)-1)/sizeof(integer_t));
+  m=makevector(C_INTVECTOR, (sizeof(mutex_t)+sizeof(eusinteger_t)-1)/sizeof(eusinteger_t));
 #if alpha 
   pthread_mutex_init((mutex_t *)m->c.ivec.iv,pthread_mutexattr_default);
 #elif  PTHREAD
@@ -284,7 +284,7 @@ pointer argv[];
 #if SunOS4_1
   ckarg(1);
 #endif
-  m=makevector(C_INTVECTOR, (sizeof(cond_t)+sizeof(integer_t)-1)/sizeof(integer_t));
+  m=makevector(C_INTVECTOR, (sizeof(cond_t)+sizeof(eusinteger_t)-1)/sizeof(eusinteger_t));
 #if alpha 
   pthread_cond_init((cond_t*)m->c.ivec.iv, pthread_condattr_default);
 #elif PTHREAD
@@ -324,7 +324,7 @@ context *ctx;
 int n;
 pointer argv[];
 { pointer s;
-  s=makevector(C_INTVECTOR, (sizeof(sema_t)+sizeof(integer_t)-1)/sizeof(integer_t));
+  s=makevector(C_INTVECTOR, (sizeof(sema_t)+sizeof(eusinteger_t)-1)/sizeof(eusinteger_t));
   sema_init((sema_t *)s->c.ivec.iv, 0, USYNC_THREAD, 0);
   return(s);}
 
@@ -519,7 +519,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { int how, stat;
-  integer_t *oset;
+  eusinteger_t *oset;
 
   ckarg2(2,3);
   how=ckintval(argv[0]);

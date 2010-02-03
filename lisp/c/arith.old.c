@@ -5,7 +5,7 @@
 .*	1988-Feb	boxing and unboxing recoded by macros
 /****************************************************************/
 
-static char *rcsid="@(#)$Id: arith.old.c,v 1.1.1.1 2003/11/20 07:46:26 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 #include <math.h>
@@ -22,9 +22,9 @@ extern         sub_int_big(), add_int_big();
 extern pointer add_big_big(), big_times();
 extern pointer makebig(), makebig1(), makebig2(), extend_big(pointer,int);
 extern pointer normalize_bignum();
-extern float_t big_to_float(pointer);
-extern pointer float_to_big(float);
-extern integer_t big_sign(pointer);
+extern eusfloat_t big_to_float(pointer);
+extern pointer eusfloat_to_big(float);
+extern eusinteger_t big_sign(pointer);
 
 /****************************************************************/
 /* number predicates
@@ -33,7 +33,7 @@ pointer NUMEQUAL(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register float_t fx,fy;
+{ register eusfloat_t fx,fy;
   register pointer a,x;
   numunion nu;
 
@@ -66,7 +66,7 @@ flteqnum:
       if (fx!=fy) return(NIL);}
     return(T); }
   else if (pisbignum(x)) 
-    { integer_t *xv, *av;
+    { eusinteger_t *xv, *av;
       int size,i;
       xv=bigvec(x); size=bigsize(x);
       while (--n >=0) {
@@ -84,9 +84,9 @@ register context *ctx;
 register int n;
 register pointer argv[];
 { register pointer left,right;
-  register float_t fleft,fright;
-  integer_t ival;
-  integer_t sign;
+  register eusfloat_t fleft,fright;
+  eusinteger_t ival;
+  eusinteger_t sign;
   int comparison;
   numunion nu;
 
@@ -103,7 +103,7 @@ INTGT:
   while (--n>=0) {
     left=argv[n];
     if (isint(left)) {
-      if ((integer_t)left <= (integer_t)right) return(NIL); }
+      if ((eusinteger_t)left <= (eusinteger_t)right) return(NIL); }
     else if (isflt(left)) { fright=intval(right); goto fltgt2;}
     else if (isbignum(left)) {
       if (big_sign(left)<0) return(NIL); 
@@ -148,9 +148,9 @@ register context *ctx;
 register int n;
 register pointer argv[];
 { register pointer left,right;
-  register float_t fleft,fright;
-  integer_t ival;
-  integer_t sign;
+  register eusfloat_t fleft,fright;
+  eusinteger_t ival;
+  eusinteger_t sign;
   int comparison;
   numunion nu;
 
@@ -167,7 +167,7 @@ INTLT:
   while (--n>=0) {
     left=argv[n];
     if (isint(left)) {
-      if ((integer_t)left >= (integer_t)right) return(NIL); }
+      if ((eusinteger_t)left >= (eusinteger_t)right) return(NIL); }
     else if (isflt(left)) { fright=intval(right); goto FLTLT2;}
     else if (isbignum(left)) {
       if (big_sign(left)>0) return(NIL); 
@@ -212,9 +212,9 @@ register context *ctx;
 register int n;
 register pointer argv[];
 { register pointer left,right;
-  register float_t fleft,fright;
-  integer_t ival;
-  integer_t sign;
+  register eusfloat_t fleft,fright;
+  eusinteger_t ival;
+  eusinteger_t sign;
   int comparison;
   numunion nu;
 
@@ -231,7 +231,7 @@ INTGE:
   while (--n>=0) {
     left=argv[n];
     if (isint(left)) {
-      if ((integer_t)left < (integer_t)right) return(NIL); }
+      if ((eusinteger_t)left < (eusinteger_t)right) return(NIL); }
     else if (isflt(left)) { fright=intval(right); goto FLTGE2;}
     else if (isbignum(left)) {
       if (sign=big_sign(left)<0) return(NIL);
@@ -276,9 +276,9 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer left,right;
-  register float_t fleft,fright;
-  integer_t ival;
-  integer_t sign;
+  register eusfloat_t fleft,fright;
+  eusinteger_t ival;
+  eusinteger_t sign;
   int comparison;
   numunion nu;
 
@@ -295,7 +295,7 @@ INTLE:
   while (--n>=0) {
     left=argv[n];
     if (isint(left)) {
-      if ((integer_t)left > (integer_t)right) return(NIL); }
+      if ((eusinteger_t)left > (eusinteger_t)right) return(NIL); }
     else if (isflt(left)) { fright=intval(right); goto FLTLE2;}
     else if (isbignum(left)) {
       if (sign=big_sign(left)>0) return(NIL);
@@ -339,7 +339,7 @@ pointer MOD(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ register integer_t x,y;
+{ register eusinteger_t x,y;
   ckarg(2);
   x=ckintval(argv[0]); y=ckintval(argv[1]);
   return(makeint(x % y));}
@@ -349,12 +349,12 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer a=argv[0];
-  float_t x;
+  eusfloat_t x;
   numunion nu;
 
   ckarg(1);
   if (a==makeint(MINNEGFIXNUM)) { return(makebig1(MINNEGFIXNUM-1));}
-  if (isint(a)) return((pointer)((integer_t)a-4));
+  if (isint(a)) return((pointer)((eusinteger_t)a-4));
   else if (isflt(a)) {
     x=fltval(a);
     return(makeflt(x-1.0)); }
@@ -374,7 +374,7 @@ pointer argv[];
 
   ckarg(1);
   if (a==makeint(MAXPOSFIXNUM)) { return(makebig1(MAXPOSFIXNUM+1));}
-  if (isint(a)) return((pointer)((integer_t)a+4));
+  if (isint(a)) return((pointer)((eusinteger_t)a+4));
   else if (isflt(a)) {
     x=fltval(a);
     return(makeflt(x+1.0)); }
@@ -388,7 +388,7 @@ pointer argv[];
 pointer ratio_plus(x,y)
 pointer x,y;
 {
-  register integer_t x_num, x_den, y_num, y_den, z_num, z_den, d1,d2,t;
+  register eusinteger_t x_num, x_den, y_num, y_den, z_num, z_den, d1,d2,t;
 
   x_num = intval(x->c.ratio.numerator);
   x_den = intval(x->c.ratio.denominator);
@@ -412,7 +412,7 @@ pointer x,y;
 pointer ratio_minus(x,y)
 pointer x,y;
 {
-  register integer_t x_num,x_den,y_num,y_den,z_num,z_den,d1,d2,t;
+  register eusinteger_t x_num,x_den,y_num,y_den,z_num,z_den,d1,d2,t;
 
   x_num = intval(x->c.ratio.numerator);
   x_den = intval(x->c.ratio.denominator);
@@ -434,7 +434,7 @@ pointer x,y;
 pointer ratio_times(x,y)
 pointer x,y;
 {
-  register integer_t x_num,x_den,y_num,y_den,z_num,z_den,d1,d2;
+  register eusinteger_t x_num,x_den,y_num,y_den,z_num,z_den,d1,d2;
 
   x_num = intval(x->c.ratio.numerator);
   x_den = intval(x->c.ratio.denominator);
@@ -452,7 +452,7 @@ pointer x,y;
 pointer ratio_divide(x,y)
 pointer x,y;
 {
-  register integer_t x_num,x_den,y_num,y_den,z_num,z_den,d1,d2;
+  register eusinteger_t x_num,x_den,y_num,y_den,z_num,z_den,d1,d2;
   register int sign;
 
   x_num = intval(x->c.ratio.numerator);
@@ -472,13 +472,13 @@ pointer x,y;
 }
 
 pointer int2ratio(i)
-integer_t i;
+eusinteger_t i;
 { return(makeratio(i,1));}
 
-float_t ratio2flt(r)
+eusfloat_t ratio2flt(r)
 pointer r;
 { pointer p,q;
-  float_t num, den;
+  eusfloat_t num, den;
   p=r->c.ratio.numerator;
   q=r->c.ratio.denominator;
   if (isint(p)) num=intval(p);
@@ -502,8 +502,8 @@ pointer PLUS(ctx,n,argv)
 register context *ctx;
 register int  n;
 register pointer argv[];
-{ float_t fs;
-  register integer_t is=0,j;
+{ eusfloat_t fs;
+  register eusinteger_t is=0,j;
   register int i=0;
   register pointer a, r, rs;
   pointer b;
@@ -514,7 +514,7 @@ register pointer argv[];
     if (isint(a)) {
       j=intval(a);
       is+=j;
-      if (((is >> 1) ^ is)&((integer_t)1<<WORD_SIZE-3)) { /* fixnum overflow */
+      if (((is >> 1) ^ is)&((eusinteger_t)1<<WORD_SIZE-3)) { /* fixnum overflow */
 	b=makebig1(is); goto bigplus;} }
     else if (isflt(a)) { fs=is; goto fplus;}
     else if (pisratio(a)) { rs=makeratio(is,1);  goto rplus;}
@@ -565,7 +565,7 @@ register context *ctx;
 register int  n;
 register pointer argv[];
 { float fs;
-  register integer_t is,ia;
+  register eusinteger_t is,ia;
   register int i;
   register pointer a=argv[0], rs, b, z;
   numunion nu;
@@ -599,7 +599,7 @@ IMINUS:
     a=argv[i++];
     if (isint(a)) {
       is -= intval(a);
-      if (((is >> 1) ^ is)&((integer_t)1<<WORD_SIZE-3)) { /* fixnum overflow */
+      if (((is >> 1) ^ is)&((eusinteger_t)1<<WORD_SIZE-3)) { /* fixnum overflow */
 	b=makebig1(is); goto BIGMINUS;} }
     else if (isflt(a)) { fs=is; goto FMINUS1;}
     else if (pisratio(a)) { rs=makeratio(is,1); goto RMINUS1;}
@@ -663,12 +663,12 @@ pointer TIMES(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register float_t fs;
-  register integer_t is,s;
+{ register eusfloat_t fs;
+  register eusinteger_t is,s;
   register int i;
-  register integer_t sign=1;
+  register eusinteger_t sign=1;
   register pointer a, rs, b;
-  integer_t hi, lo;
+  eusinteger_t hi, lo;
   numunion nu;
 
 /*  fprintf(stderr, "TIMES ");
@@ -694,7 +694,7 @@ ITIMES1:
       if (is<0) { sign= -1; is = -is;}
       if (s<0) { sign= -sign; s = -s;}
       extended_mul(is, s, 0, &hi, &lo);
-      if( hi !=0 || (lo & ((integer_t)7 << WORD_SIZE-3))!=0) { /*overflow -->bignum */
+      if( hi !=0 || (lo & ((eusinteger_t)7 << WORD_SIZE-3))!=0) { /*overflow -->bignum */
 	b=makebig2(hi, lo & MASK);
 	vpush(b);
 	if (sign<0) complement_big(b);
@@ -773,7 +773,7 @@ register context *ctx;
 register int  n;
 pointer argv[];
 { register float fs;
-  register integer_t is;
+  register eusinteger_t is;
   register int i=1;
   register pointer a, rs;
   numunion nu;
@@ -952,7 +952,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { register pointer a, b;
-  float_t fa;
+  eusfloat_t fa;
   numunion nu;
   ckarg(1);
   a=argv[0];
@@ -972,15 +972,15 @@ register context *ctx;
 int n;
 register pointer argv[];
 { register pointer a=argv[0];
-  float_t f;
-  register integer_t x;
+  eusfloat_t f;
+  register eusinteger_t x;
   numunion nu;
   ckarg(1);
   if (isint(a)) return(a);
   else {
     f=ckfltval(a);
     f=(double)rint(f);
-    return(float_to_big(f));}
+    return(eusfloat_to_big(f));}
   }
 
 pointer FLOOR(ctx,n,argv)
@@ -988,24 +988,24 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer a=argv[0];
-  float_t f;
-  register integer_t x;
+  eusfloat_t f;
+  register eusinteger_t x;
   numunion nu;
   ckarg(1);
   if (isint(a)) return(a);
   else {
-    f=floor(ckfltval(a)); return(float_to_big(f));} }
+    f=floor(ckfltval(a)); return(eusfloat_to_big(f));} }
 
 pointer CEILING(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
 { register pointer a=argv[0];
-  float_t f;
+  eusfloat_t f;
   numunion nu;
   ckarg(1);
   if (isint(a)) return(a);
-  else { f=ckfltval(a); f=ceil(f); return(float_to_big(f));}
+  else { f=ckfltval(a); f=ceil(f); return(eusfloat_to_big(f));}
   }
 
 pointer TRUNCATE(ctx,n,argv)
@@ -1013,20 +1013,20 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer a=argv[0];
-  float_t f;
-  register integer_t x;
+  eusfloat_t f;
+  register eusinteger_t x;
   numunion nu;
   ckarg(1);
   if (isint(a)) return(a);
   else if (isbignum(a)) return(a);
-  else { f=ckfltval(a); return(float_to_big(f));}
+  else { f=ckfltval(a); return(eusfloat_to_big(f));}
   }
 
 pointer FREXP(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];
-{ float_t  f,z;
+{ eusfloat_t  f,z;
   int exp;
   pointer p;
   numunion nu;
@@ -1043,7 +1043,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer a;
-  float_t f;
+  eusfloat_t f;
   numunion nu;
   ckarg(1);
   a=argv[0];
@@ -1057,7 +1057,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer x;
-  integer_t i;
+  eusinteger_t i;
   ckarg(1);
   x=argv[0];
   if (!isflt(x)) error(E_NONUMBER);
@@ -1068,19 +1068,19 @@ pointer MAX(ctx,n,argv)
 register context *ctx;
 register int  n;
 pointer argv[];
-{ float_t fs,fm;
+{ eusfloat_t fs,fm;
   register i=1;
-  register integer_t is;
+  register eusinteger_t is;
   register pointer a=argv[0];
   numunion nu;
   if (n<1) error(E_MISMATCHARG);
   if (n==1) return(a);
-  if (isint(a)) is=(integer_t)a;
+  if (isint(a)) is=(eusinteger_t)a;
   else { fs=fltval(a); goto fmax;}
   while (i<n) {
     a=argv[i];
     if (isflt(a)) { fs=intval(is); goto fmax;}
-    if (isint(a)) { if (is<(integer_t)a) is=(integer_t)a;}
+    if (isint(a)) { if (is<(eusinteger_t)a) is=(eusinteger_t)a;}
     else error(E_NONUMBER);
     i++;}
   return((pointer)is);
@@ -1095,19 +1095,19 @@ pointer MIN(ctx,n,argv)
 register context *ctx;
 register int  n;
 register pointer argv[];
-{ float_t fs,fm;
+{ eusfloat_t fs,fm;
   register int i=1;
-  register integer_t is;
+  register eusinteger_t is;
   register pointer a=argv[0];
   numunion nu;
   if (n<1) error(E_MISMATCHARG);
   if (n==1) return(a);
-  if (isint(a)) is=(integer_t)a;
+  if (isint(a)) is=(eusinteger_t)a;
   else { fs=fltval(a); goto fmin;}
   while (i<n) {
     a=argv[i];
     if (isflt(a)) { fs=intval(is); goto fmin;}
-    if (isint(a)) { if (is>(integer_t)a) is=(integer_t)a;}
+    if (isint(a)) { if (is>(eusinteger_t)a) is=(eusinteger_t)a;}
     else error(E_NONUMBER);
     i++;}
   return((pointer)is);
@@ -1123,7 +1123,7 @@ fmin:
 /****************************************************************/
 pointer LOGAND(context *ctx, int n, pointer argv[])
 { int i=1,j,k,rsize,psize;
-  integer_t *rbv, *bbv, *pbv;
+  eusinteger_t *rbv, *bbv, *pbv;
   pointer b,p,r=argv[0];
 
   if (isbignum(r)) {
@@ -1172,7 +1172,7 @@ pointer LOGIOR(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register integer_t result=0;
+{ register eusinteger_t result=0;
   register int i=0;
   pointer p;
   while (i<n) {
@@ -1188,7 +1188,7 @@ pointer LOGXOR(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register integer_t result=0;
+{ register eusinteger_t result=0;
   register int i=0;
   while (i<n) 
     if (!isint(argv[i])) error(E_NOINT);
@@ -1199,7 +1199,7 @@ pointer LOGEQV(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register integer_t result=0;
+{ register eusinteger_t result=0;
   register int i=0;
   while (n>0) {
     if (!isint(argv[--n])) error(E_NOINT);
@@ -1210,7 +1210,7 @@ pointer LOGNAND(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register integer_t result= ~0;
+{ register eusinteger_t result= ~0;
   register int i=0;
   while (i<n) 
     if (!isint(argv[i])) error(E_NOINT);
@@ -1221,7 +1221,7 @@ pointer LOGNOR(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register integer_t result=0;
+{ register eusinteger_t result=0;
   register int i=0;
   while (i<n) 
     if (!isint(argv[i])) error(E_NOINT);
@@ -1232,7 +1232,7 @@ pointer LOGNOT(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ integer_t i;
+{ eusinteger_t i;
   ckarg(1);
   if (!isint(argv[0])) error(E_NOINT);
   else {
@@ -1246,14 +1246,14 @@ register pointer argv[];
 { ckarg(2);
   if (!isint(argv[0])) error(E_NOINT);
   if (!isint(argv[1])) error(E_NOINT);
-  if ((integer_t)argv[0] & (integer_t)argv[1] & (integer_t)~3) return(T);
+  if ((eusinteger_t)argv[0] & (eusinteger_t)argv[1] & (eusinteger_t)~3) return(T);
   else return(NIL);}
 
 pointer LOGBITP(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register integer_t index,val;
+{ register eusinteger_t index,val;
   ckarg(2);
   index=ckintval(argv[0]);
   val=ckintval(argv[1]);
@@ -1264,9 +1264,9 @@ pointer ASH(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register integer_t count,val;
+{ register eusinteger_t count,val;
   register int firstone;
-  register integer_t sign;
+  register eusinteger_t sign;
   pointer a,b;
   ckarg(2);
   count=ckintval(argv[1]);
@@ -1288,7 +1288,7 @@ register pointer argv[];
   /*shift b by count bits*/
   { int size=bigsize(a);
     int i, j, k;
-    integer_t x, *av, *bv;
+    eusinteger_t x, *av, *bv;
     pointer b=makebig(size+(count+(WORD_SIZE-1))/(WORD_SIZE-1));
     vpush(b);
     av=bigvec(a); bv=bigvec(b);    
@@ -1314,7 +1314,7 @@ pointer LDB(ctx,n,argv)	/*(LDB 'val 'pos 'width)*/
 register context *ctx;
 register int n;			/*no byte specifier in euslisp*/
 register pointer argv[];
-{ register integer_t pos,width=8;
+{ register eusinteger_t pos,width=8;
 #if (WORD_SIZE == 64)
   register unsigned long val;
 #else
@@ -1330,7 +1330,7 @@ pointer DPB(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ register integer_t pos,width=8;
+{ register eusinteger_t pos,width=8;
 #if (WORD_SIZE == 64)
   register unsigned long val,target,mask=~0;
 #else
@@ -1353,8 +1353,8 @@ register context *ctx;
 int n;
 register pointer argv[];
 { pointer a=argv[0],state;
-  integer_t imax,irandval;
-  float_t fmax,frandval;
+  eusinteger_t imax,irandval;
+  eusfloat_t fmax,frandval;
   double randval;
   double erand48();
 #if news || sanyo

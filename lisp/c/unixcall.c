@@ -362,7 +362,7 @@ pointer SIGNAL(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ register int s,i;integer_t f;
+{ register int s,i;eusinteger_t f;
   struct sigaction sv;
   register pointer a=argv[1],oldval;
   extern void eusint();	
@@ -372,7 +372,7 @@ pointer argv[];
   oldval=eussigvec[s];
   if (n==1) return(oldval);
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
-  else { f=(integer_t)eusint; eussigvec[s]=a;}
+  else { f=(eusinteger_t)eusint; eussigvec[s]=a;}
   sv.sa_handler= (void (*)())f;
 #if Linux || Cygwin
 
@@ -402,7 +402,7 @@ pointer SIGNAL(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ register int s;integer_t f;
+{ register int s;eusinteger_t f;
   struct sigvec sv;
   register pointer a=argv[1],oldval;
   extern void eusint();
@@ -412,7 +412,7 @@ pointer argv[];
   oldval=eussigvec[s];
   if (n==1) return(oldval);
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
-  else { f=(integer_t)eusint; eussigvec[s]=a;}/* ???? */
+  else { f=(eusinteger_t)eusint; eussigvec[s]=a;}/* ???? */
   sv.sv_handler=(void (*)())f;
   sv.sv_mask=0;	/*sigmask(s)???;*/
 /*news doesn't have system5 compatible signal handling option*/
@@ -808,7 +808,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { register pointer strm;
-  integer_t ctlarg;
+  eusinteger_t ctlarg;
   int request;
   int fd;
   ckarg(3);
@@ -821,7 +821,7 @@ register pointer argv[];
   if (isint(argv[1]))  request=ckintval(argv[1]);
   else if (isflt(argv[1])) error(E_NOINT);
   else request=argv[1]->c.ivec.iv[0];
-  if (isstring(argv[2])) ctlarg=(integer_t)(argv[2]->c.str.chars);/* ???? */
+  if (isstring(argv[2])) ctlarg=(eusinteger_t)(argv[2]->c.str.chars);/* ???? */
   else ctlarg=ckintval(argv[2]);
   return(makeint(ioctl(fd,request,ctlarg)));
   }
@@ -853,7 +853,7 @@ int n;
 register pointer argv[];
 { register pointer strm;
   int size=0,x,y,fd;
-  integer_t addr;
+  eusinteger_t addr;
   ckarg(3);
   strm=argv[0];
   if (isiostream(strm)) strm=strm->c.iostream.out;
@@ -877,7 +877,7 @@ int n;
 register pointer argv[];
 { register pointer strm;
   int size,x,y,fd;
-  integer_t addr;
+  eusinteger_t addr;
   ckarg2(4,5);
   strm=argv[0];
   if (isiostream(strm)) strm=strm->c.iostream.out;
@@ -886,7 +886,7 @@ register pointer argv[];
   if (isint(strm->c.fstream.fname)) error(E_STREAM);
   x=ckintval(argv[1]); y=ckintval(argv[2]);
   if (isstring(argv[3]) || isintvector(argv[3]))
-	addr=(integer_t)(argv[3]->c.str.chars);/* ???? */
+	addr=(eusinteger_t)(argv[3]->c.str.chars);/* ???? */
   else error(E_NOSTRING);
   if (n==5) size=ckintval(argv[4]);
   else size=bytesize(argv[3]);
@@ -906,7 +906,7 @@ int n;
 register pointer argv[];
 { register pointer strm;
   int size,x,y,fd;
-  integer_t addr;
+  eusinteger_t addr;
   ckarg2(4,5);
   strm=argv[0];
   if (isiostream(strm)) strm=strm->c.iostream.out;
@@ -915,7 +915,7 @@ register pointer argv[];
   if (isint(strm->c.fstream.fname)) error(E_STREAM);
   x=ckintval(argv[1]); y=ckintval(argv[2]);
   if (isstring(argv[3]) || isintvector(argv[3]))
-	addr=(integer_t)(argv[3]->c.str.chars);/* ???? */
+	addr=(eusinteger_t)(argv[3]->c.str.chars);/* ???? */
   else error(E_NOSTRING);
   if (n==5) size=ckintval(argv[4]);
   else size=bytesize(argv[3]);
@@ -936,7 +936,7 @@ int n;
 register pointer argv[];
 { register pointer strm=argv[0];
   int size,x,y,fd;
-  integer_t addr;
+  eusinteger_t addr;
 
   ckarg2(4,5);
   if (isiostream(strm)) strm=strm->c.iostream.out;
@@ -945,7 +945,7 @@ register pointer argv[];
   if (isint(strm->c.fstream.fname)) error(E_STREAM);
   x=ckintval(argv[1]); y=ckintval(argv[2]);
   if (isstring(argv[3]) || isintvector(argv[3]))
-	addr=(integer_t)(argv[3]->c.str.chars);
+	addr=(eusinteger_t)(argv[3]->c.str.chars);
   else error(E_NOSTRING);
   if (n==5) size=ckintval(argv[4]);
   else size=bytesize(argv[3]);
@@ -1238,11 +1238,11 @@ pointer *argv;
   if (n==4) if (argv[3]==NIL) flag=0; else flag=IPC_NOWAIT;
   else flag=0;
   lsave=buf->c.str.length;
-  buf->c.str.length=(pointer)(integer_t)mtype;/* ???? */
+  buf->c.str.length=(pointer)(eusinteger_t)mtype;/* ???? */
   rcv_again:
   stat=msgrcv(qid,&buf->c.str.length,intval(lsave),mtype,flag);
   if (stat<0) { breakck; goto rcv_again;}
-  mtype=(int)(integer_t)(buf->c.str.length);/* ???? */
+  mtype=(int)(eusinteger_t)(buf->c.str.length);/* ???? */
   buf->c.str.length=lsave;
   if (stat<0) return(makeint(-errno));
   else return(cons(ctx,makeint(mtype),cons(ctx,makeint(stat),NIL)));}
@@ -1265,7 +1265,7 @@ pointer *argv;
   if (n>=4) mtype=ckintval(argv[3]); else mtype=mypid;
   if (n==5) if (argv[4]==NIL) flag=0; else flag=IPC_NOWAIT;
   else flag=0;
-  buf->c.str.length=(pointer)(integer_t)mtype;
+  buf->c.str.length=(pointer)(eusinteger_t)mtype;
   stat=msgsnd(qid,(struct msgbuf *)&buf->c.str.length,msize,flag);
   buf->c.str.length=lsave;
   if (stat<0) return(makeint(-errno));
@@ -1295,11 +1295,11 @@ register context *ctx;
 int n;
 register pointer argv[];
 { int stat;
-  integer_t s;
+  eusinteger_t s;
 /*  extern int eusint(); */
   extern void eusint();	/* ???? */
 
-  s=(integer_t)signal(SIGCHLD,SIG_DFL);/* ???? */
+  s=(eusinteger_t)signal(SIGCHLD,SIG_DFL);/* ???? */
   if (n==0) stat=system("csh");
   else if (isstring(argv[0])) stat=system((char *)argv[0]->c.str.chars);
   else { signal(SIGCHLD,(void (*)())s); error(E_NOSTRING);}
@@ -1342,7 +1342,7 @@ pointer argv[];
   b= (char *)malloc(vecsize(a)+1);
   strcpy(b, (char *)a->c.str.chars);
   putenv(b);
-  return(makeint((integer_t)b));}
+  return(makeint((eusinteger_t)b));}
 #endif
 
 pointer ENVIRON(context *ctx, int n, pointer argv[])
@@ -1579,7 +1579,7 @@ pointer argv[];
 
 #if !vxworks 
 
-integer_t *checkbitvec(pointer a, long *size)
+eusinteger_t *checkbitvec(pointer a, long *size)
 { if (a==NIL) { *size=0; return(0);}
   if (!isvector(a)) error(E_NOVECTOR);
   switch(elmtypeof(a)) {
@@ -1587,7 +1587,7 @@ integer_t *checkbitvec(pointer a, long *size)
   case ELM_INT: *size=vecsize(a) * WORD_SIZE; return(a->c.ivec.iv);
   case ELM_BYTE: case ELM_CHAR:
 		*size=vecsize(a) * 8; return(a->c.ivec.iv);
-  case ELM_FOREIGN: *size=vecsize(a) * 8; return((integer_t *)a->c.foreign.chars);
+  case ELM_FOREIGN: *size=vecsize(a) * 8; return((eusinteger_t *)a->c.foreign.chars);
   default: error(E_USER,(pointer)"bit-vector expected");
   }
 }
@@ -1704,7 +1704,7 @@ pointer MMAP(ctx,n,argv)
 register context *ctx;
 int n; register pointer argv[];
 { int fd;
-  integer_t offset,result,len;
+  eusinteger_t offset,result,len;
   pointer strm;
   ckarg(6);
   strm=argv[4];
@@ -1715,7 +1715,7 @@ int n; register pointer argv[];
   if (isintvector(argv[5])) 
     offset=((argv[5]->c.ivec.iv[0])<<16) + argv[5]->c.ivec.iv[1];
   else offset=ckintval(argv[5]);
-  result=(integer_t)mmap((caddr_t)ckintval(argv[0]), len,
+  result=(eusinteger_t)mmap((caddr_t)ckintval(argv[0]), len,
 		ckintval(argv[2]), ckintval(argv[3]), fd, offset);
   if (result== -1) return(makeint(-errno));
   else return((pointer)make_foreign_string(result, len));}

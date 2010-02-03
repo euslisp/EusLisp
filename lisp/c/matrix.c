@@ -23,7 +23,7 @@ static pointer K_X,K_Y,K_Z,MK_X,MK_Y,MK_Z;
 
 /* #define PI 3.1415926536 */
 
-#define ckvsize(a,b) ((a->c.vec.size==b->c.vec.size)?vecsize(a):(int)(integer_t)error(E_VECINDEX))
+#define ckvsize(a,b) ((a->c.vec.size==b->c.vec.size)?vecsize(a):(int)(eusinteger_t)error(E_VECINDEX))
 
 pointer VPLUS(ctx,n,argv)
 register context *ctx;
@@ -44,14 +44,14 @@ register pointer *argv;
     if (s!=vecsize(result)) error(E_FLOATVECTOR);}
   else result=makevector(classof(argv[0]), s);
   if (isf) {
-    register float_t *a,*b,*r;
+    register eusfloat_t *a,*b,*r;
     if (!isfltvector(result))  error(E_FLOATVECTOR);
     a=argv[0]->c.fvec.fv; b=argv[1]->c.fvec.fv;
     r=result->c.fvec.fv;
     for(i=0; i<s; i++) r[i]= a[i] + b[i];
     return(result);}
   else if (isi) {
-    register integer_t *ia, *ib, *ir;
+    register eusinteger_t *ia, *ib, *ir;
     if (!isintvector(result))  error(E_NOINTVECTOR);
     ia=argv[0]->c.ivec.iv; ib=argv[1]->c.ivec.iv;
     ir=result->c.ivec.iv;
@@ -73,7 +73,7 @@ int n;
 register pointer *argv;
 { register int i,s;
   register pointer p,result;
-  float_t *a,*r;
+  eusfloat_t *a,*r;
 
   if (n==1) return(argv[0]);
   if (!isfltvector(argv[0])) error(E_FLOATVECTOR);
@@ -94,9 +94,9 @@ register context *ctx;
 int n;
 register pointer *argv;
 { register int i,s;
-  register integer_t *ia, *ib, *ir;
+  register eusinteger_t *ia, *ib, *ir;
   register pointer result;
-  register float_t *a,*b,*r;
+  register eusfloat_t *a,*b,*r;
   register int isi,isf,iss;
 
   ckarg2(1,3);  
@@ -158,10 +158,10 @@ register context *ctx;
 int n;
 register pointer *argv;
 { register int i,s;
-  register integer_t *ia, *ib, *ir;
+  register eusinteger_t *ia, *ib, *ir;
   register pointer result;
-  register float_t *a,*b,*r;
-  register float_t x;
+  register eusfloat_t *a,*b,*r;
+  register eusfloat_t x;
   register int isi,isf,iss;
 
   register int ix;
@@ -220,10 +220,10 @@ pointer VINNERPRODUCT(ctx,n,argv)
 register context *ctx;
 int n;
 register pointer *argv;
-{ register float_t *a,*b;
+{ register eusfloat_t *a,*b;
   register long i,s;
-  register integer_t *ia, *ib; register long isum=0;
-  float_t sum=0.0;
+  register eusinteger_t *ia, *ib; register long isum=0;
+  eusfloat_t sum=0.0;
   register int isf,isi;
   numunion nu;
   ckarg(2);
@@ -246,7 +246,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { register int i,s;
-  register float_t *a,sum=0.0;
+  register eusfloat_t *a,sum=0.0;
   numunion nu;
   ckarg(1);
   if (!isvector(argv[0])) error(E_NOVECTOR);
@@ -257,7 +257,7 @@ pointer *argv;
     sum=sqrt(sum);
     return(makeflt(sum));}
   else if (elmtypeof(argv[0])==ELM_INT) {
-    integer_t *ia;
+    eusinteger_t *ia;
     ia=argv[0]->c.ivec.iv;
     for (i=0; i<s; i++) sum+=ia[i]*ia[i];
     sum=sqrt(sum);
@@ -270,7 +270,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { register int i,s;
-  register float_t *a,sum=0.0;
+  register eusfloat_t *a,sum=0.0;
   numunion nu;
   ckarg(1);
   if (!isvector(argv[0])) error(E_NOVECTOR);
@@ -281,7 +281,7 @@ pointer *argv;
     /* sum=sqrt(sum); no square root */
     return(makeflt(sum));}
   else if (elmtypeof(argv[0])==ELM_INT) {
-    integer_t *ia;
+    eusinteger_t *ia;
     ia=argv[0]->c.ivec.iv;
     for (i=0; i<s; i++) sum+=ia[i]*ia[i];
     return(makeflt(sum));}
@@ -292,7 +292,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { register pointer result;
-  register float_t *a,*r,sum=0.0;
+  register eusfloat_t *a,*r,sum=0.0;
   register int i,s;
 
   ckarg2(1,2);
@@ -315,9 +315,9 @@ register context *ctx;
 int n;
 pointer argv[];
 {
-  register float_t *a, *b;
+  register eusfloat_t *a, *b;
   register int s;
-  float_t d,dist=0.0;
+  eusfloat_t d,dist=0.0;
   register int isf,isi;
   numunion nu;
   ckarg(2);
@@ -330,7 +330,7 @@ pointer argv[];
     while (--s>=0) { d=a[s]-b[s]; dist+= d*d;}
     return(makeflt(sqrt(dist)));}
   else if (isi) {
-    register integer_t *ia, *ib;
+    register eusinteger_t *ia, *ib;
     register long id, idist=0;
     ia=argv[0]->c.ivec.iv; ib=argv[1]->c.ivec.iv;
     while (--s>=0) { id= ia[s]-ib[s]; idist+= id * id;}
@@ -343,9 +343,9 @@ register context *ctx;
 int n;
 pointer argv[];
 {
-  register float_t *a, *b;
+  register eusfloat_t *a, *b;
   register int s;
-  float_t d,dist=0.0;
+  eusfloat_t d,dist=0.0;
   register int isf,isi;
   numunion nu;
   ckarg(2);
@@ -358,7 +358,7 @@ pointer argv[];
     while (--s>=0) { d=a[s]-b[s]; dist+= d*d;}
     return(makeflt(dist));}
   else if (isi) {
-    register integer_t *ia, *ib;
+    register eusinteger_t *ia, *ib;
     register long id, idist=0;
     ia=argv[0]->c.ivec.iv; ib=argv[1]->c.ivec.iv;
     while (--s>=0) { id= ia[s]-ib[s]; idist+= id * id;}
@@ -371,10 +371,10 @@ register context *ctx;
 int n;
 pointer argv[];
 {
-  register float_t *a, *b, *r;
+  register eusfloat_t *a, *b, *r;
   register int i,s;
   pointer result;
-  float_t norm=0.0;
+  eusfloat_t norm=0.0;
   ckarg2(2,3);
   if (!isfltvector(argv[0]) || !isfltvector(argv[1])) error(E_FLOATVECTOR);
   s=ckvsize(argv[0],argv[1]);
@@ -395,7 +395,7 @@ register context *ctx;
 int n;
 register pointer *argv;
 {
-  register float_t *fv1,*fv2,*rfv;
+  register eusfloat_t *fv1,*fv2,*rfv;
   register pointer result;
   register int s;
 
@@ -421,8 +421,8 @@ register context *ctx;
 int n;
 pointer argv[];
 {
-  register float_t *va,*vb,*vc;
-  float_t val;
+  register eusfloat_t *va,*vb,*vc;
+  eusfloat_t val;
   numunion nu;
   ckarg(3);
   if (!isfltvector(argv[0]) || !isfltvector(argv[1]) || !isfltvector(argv[2]))
@@ -442,9 +442,9 @@ register context *ctx;
 int n;
 pointer argv[];
 {
-  float_t scale;
+  eusfloat_t scale;
   pointer result;
-  register float_t *a,*r;
+  register eusfloat_t *a,*r;
   register int s,i;
   register int isf,isi;
   numunion nu;
@@ -466,7 +466,7 @@ pointer argv[];
     for (i=0; i<s; i++) r[i]=scale*(a[i]);
     return(result);}
   else if (isi) {
-    register integer_t *ia, *ir;
+    register eusinteger_t *ia, *ir;
     ia=argv[1]->c.ivec.iv;
     ir=result->c.ivec.iv;
     for (i=0; i<s; i++) ir[i]=scale*(ia[i]);
@@ -497,13 +497,13 @@ register pointer argv[];
     if (vsize!=vecsize(result)) error(E_VECINDEX);}
   else result=makevector(classof(p1), vsize);
   if (isf) {
-    register float_t *r,*pp1,*pp2;
+    register eusfloat_t *r,*pp1,*pp2;
     r=result->c.fvec.fv; pp1=p1->c.fvec.fv; pp2=p2->c.fvec.fv;
     for (i=0; i<vsize; i++) 
       r[i]=pp1[i]*ratio2 + pp2[i]*ratio;
     return(result);}
   else if (isi) {
-    register integer_t *r,*pp1,*pp2;
+    register eusinteger_t *r,*pp1,*pp2;
     r=result->c.ivec.iv; pp1=p1->c.ivec.iv; pp2=p2->c.ivec.iv;
     for (i=0; i<vsize; i++) 
       r[i]=pp1[i]*ratio2 + pp2[i]*ratio;
@@ -534,7 +534,7 @@ int n;
 pointer argv[];
 { register pointer r;
   register int i;
-  register float_t *fv;
+  register eusfloat_t *fv;
   numunion nu;
   r=makefvector(n);
   fv=r->c.fvec.fv;
@@ -557,11 +557,11 @@ pointer argv[];
       !((isi=isintvector(a))&&isintvector(b))) error(E_FLOATVECTOR);
   s=ckvsize(a,b);
   if (isf) {
-    register float_t *av=a->c.fvec.fv, *bv=b->c.fvec.fv;
+    register eusfloat_t *av=a->c.fvec.fv, *bv=b->c.fvec.fv;
     for (i=0; i<s; i++) if (av[i] > bv[i]) return(NIL);
     return(T);}
   else if (isi) {
-    register integer_t *av=a->c.ivec.iv, *bv=b->c.ivec.iv;
+    register eusinteger_t *av=a->c.ivec.iv, *bv=b->c.ivec.iv;
     for (i=0; i<s; i++) if (av[i] > bv[i]) return(NIL);
     return(T);}
   else  error(E_FLOATVECTOR);}
@@ -580,11 +580,11 @@ pointer argv[];
       !((isi=isintvector(a))&&isintvector(b))) error(E_FLOATVECTOR);
   s=ckvsize(a,b);
   if (isf) {
-    register float_t *av=a->c.fvec.fv, *bv=b->c.fvec.fv;
+    register eusfloat_t *av=a->c.fvec.fv, *bv=b->c.fvec.fv;
     for (i=0; i<s; i++) if (av[i] < bv[i]) return(NIL);
     return(T);}
   else if (isi) {
-    register integer_t *av=a->c.ivec.iv, *bv=b->c.ivec.iv;
+    register eusinteger_t *av=a->c.ivec.iv, *bv=b->c.ivec.iv;
     for (i=0; i<s; i++) if (av[i] < bv[i]) return(NIL);
     return(T);}
   else  error(E_FLOATVECTOR);}
@@ -594,11 +594,11 @@ register context *ctx;
 int n;
 pointer argv[];
 {
-  float_t dx,dy,dz,err=0.0,diameter;
+  eusfloat_t dx,dy,dz,err=0.0,diameter;
   register int i;
   register pointer a;
   pointer v;
-  register float_t *f;
+  register eusfloat_t *f;
   register pointer vmin,vmax;
   numunion nu;
 
@@ -642,8 +642,8 @@ pointer argv[];
 { register int i,j,s;
   pointer r;
   register pointer v;
-  register float_t *vf,*rf;
-  register integer_t *irf, *ivf;
+  register eusfloat_t *vf,*rf;
+  register eusinteger_t *irf, *ivf;
   register int isf,isi;
 
   v=argv[0];
@@ -677,8 +677,8 @@ pointer argv[];
 { register int i,j,s;
   pointer r;
   register pointer v;
-  register float_t *vf,*rf;
-  register integer_t *irf, *ivf;
+  register eusfloat_t *vf,*rf;
+  register eusinteger_t *irf, *ivf;
   register int isf,isi;
 
   v=argv[0];
@@ -744,8 +744,8 @@ int n;
 register pointer argv[];
 { pointer rm;
   register int k,i,j,ii,jj,row1,column1,row2,column2;
-  register float_t *fm1,*fm2,*fm;
-  float_t *fv,x,fvv[256];
+  register eusfloat_t *fm1,*fm2,*fm;
+  eusfloat_t *fv,x,fvv[256];
   fv = fvv;
 
   ckarg2(2,3);
@@ -762,7 +762,7 @@ register pointer argv[];
     }
   else rm=makematrix(ctx,row1,column2);
   if (row1>256 || column2>256){
-    fv = (float_t *)malloc(sizeof(float_t) * ((row1>column2)?row1:column2));
+    fv = (eusfloat_t *)malloc(sizeof(eusfloat_t) * ((row1>column2)?row1:column2));
     //error(E_VECINDEX);
   }
   fm=rm->c.ary.entity->c.fvec.fv;
@@ -795,8 +795,8 @@ register context *ctx;
 int n;
 register pointer argv[];
 { register pointer result;
-  register float_t *m,*v,x;
-  float_t *fv,fvv[256];
+  register eusfloat_t *m,*v,x;
+  eusfloat_t *fv,fvv[256];
   register int i,j,ii,s,s2;
   fv = fvv;
 
@@ -819,7 +819,7 @@ register pointer argv[];
     if (s2!=vecsize(result)) error(E_VECINDEX);}
   else result=makefvector(s2);
   if (s2>256){
-    fv = (float_t *)malloc(sizeof(float_t) * s2);
+    fv = (eusfloat_t *)malloc(sizeof(eusfloat_t) * s2);
     // error(E_VECINDEX);
   }
 
@@ -851,7 +851,7 @@ int n;
 pointer argv[];
 { register pointer vec,result,a;
   double theta,c,s1,s2;
-  float_t f1,f2;
+  eusfloat_t f1,f2;
   register int k1,k2,k3,size;
   numunion nu;
 
@@ -890,8 +890,8 @@ static copymat(dest,src,size)
 pointer dest,src;
 register int size;
 { register int i;
-  register float_t *rv=dest->c.ary.entity->c.fvec.fv;
-  register float_t *mv=src->c.ary.entity->c.fvec.fv;
+  register eusfloat_t *rv=dest->c.ary.entity->c.fvec.fv;
+  register eusfloat_t *mv=src->c.ary.entity->c.fvec.fv;
   size=size*size;
   for (i=0; i<size; i++) rv[i]=mv[i]; }
 
@@ -901,8 +901,8 @@ int n;			/* rot theata axis worldp result */
 pointer argv[];
 { register pointer mat,result,a;
   double theta,c,s1,s2;
-  float_t *m1,*m2,f1,f2;
-  register float_t *rm,*m;
+  eusfloat_t *m1,*m2,f1,f2;
+  register eusfloat_t *rm,*m;
   register int i,size,k1,k2,worldp=0,ss;
   numunion nu;
 
@@ -948,7 +948,7 @@ pointer argv[];
     if (worldp) s2= -s1;
     else { s2=s1; s1= -s1;}}
   else if (a==NIL) { /* 2dimensional m.i */
-    float_t m0,m1,m2,m3;
+    eusfloat_t m0,m1,m2,m3;
     m0=c*m[0]-s1*m[2];  m1=c*m[1]-s1*m[3];
     m2=s1*m[0]+c*m[2];  m3=s1*m[1]+c*m[3];
     rm[0]=m0; rm[1]=m1; rm[2]=m2; rm[3]=m3;
@@ -978,7 +978,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { register pointer a,result;
-  register float_t *rm;
+  register eusfloat_t *rm;
   register int size;
   double x, y, z, s;
   double cs, sn, vers, xv, yv,zv, xyv, yzv, zxv, xs, ys, zs, norm;
@@ -1043,9 +1043,9 @@ int n;
 pointer argv[];
 { pointer r=argv[0];
   int size;
-  float_t *m,*krv,kx,ky,kz;
-  float_t th,t1,t2,t3;
-  float_t cs,cs2,vers,sn2,norm;
+  eusfloat_t *m,*krv,kx,ky,kz;
+  eusfloat_t th,t1,t2,t3;
+  eusfloat_t cs,cs2,vers,sn2,norm;
   pointer kr;
   numunion nu;
 
@@ -1106,7 +1106,7 @@ pointer TRANSPOSE(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ register float_t *rm,*m,x;
+{ register eusfloat_t *rm,*m,x;
   pointer mat,result;
   register int i,j,row,column;
 
@@ -1138,8 +1138,8 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer mat;
-  float_t a, b, c, sa, ca;
-  register float_t *mv;
+  eusfloat_t a, b, c, sa, ca;
+  register eusfloat_t *mv;
   pointer result,result2;
   numunion nu;
 
@@ -1170,8 +1170,8 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer mat;
-  float_t a, b, c, sa, ca;
-  register float_t *mv;
+  eusfloat_t a, b, c, sa, ca;
+  register eusfloat_t *mv;
   pointer result,result2;
   numunion nu;
 
@@ -1211,12 +1211,12 @@ pointer argv[];
 #define EPS (1.0E-10)
 
 static int decompose(a,s,p)
-register float_t *a;
+register eusfloat_t *a;
 register int s;
 int p[];
 {
   register int i,j,k,l;
-  float_t al,bl;
+  eusfloat_t al,bl;
 
   for (i=0; i<s; i++) p[i]=i;
   for (k=0; k<s; k++) {
@@ -1260,16 +1260,16 @@ pointer argv[];
     copymat(result,a,s); }
   pv=makevector(C_VECTOR,s);
   stat=decompose(result->c.ary.entity->c.fvec.fv,s,(int*)pv->c.vec.v);
-  while (--s>=0) pv->c.vec.v[s]=makeint((integer_t)pv->c.vec.v[s]);
+  while (--s>=0) pv->c.vec.v[s]=makeint((eusinteger_t)pv->c.vec.v[s]);
   if (stat<0) return(NIL);
   else return(pv);}
 
 static solve(a,pv,s,b,x)
-register float_t *a;
+register eusfloat_t *a;
 pointer b,x,pv;
 int s;
 { register int i,j;
-  float_t t;
+  eusfloat_t t;
   register pointer *p;
   p=pv->c.vec.v;
 
@@ -1311,9 +1311,9 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer a,p;
-  register float_t *av;
+  register eusfloat_t *av;
   register int i,s;
-  float_t val=1.0;
+  eusfloat_t val=1.0;
   numunion nu;
   ckarg(2);
   a=argv[0]; p=argv[1];

@@ -2,7 +2,7 @@
 /* make eulisp objects 
 /*	Copyright Toshihiro MATSUI, ETL, 1987
 /****************************************************************/
-static char *rcsid="@(#)$Id: makes.new.c,v 1.1.1.1 2003/11/20 07:46:27 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #if Solaris2
 #include <errno.h>
@@ -13,7 +13,7 @@ static char *rcsid="@(#)$Id: makes.new.c,v 1.1.1.1 2003/11/20 07:46:27 eus Exp $
 #include "eus.h"
 
 #if 0 /* move to eus.h */
-#define nextbuddy(p) ((bpointer)((integer_t)p+(buddysize[p->h.bix]*sizeof(pointer))))
+#define nextbuddy(p) ((bpointer)((eusinteger_t)p+(buddysize[p->h.bix]*sizeof(pointer))))
 #endif
 
 extern pointer LAMCLOSURE, K_FUNCTION_DOCUMENTATION;
@@ -136,7 +136,7 @@ register int n;
 pointer makebuffer(size)
 register int size;
 { register pointer p;
-  p = alloc((size+2*sizeof(integer_t))>>WORDSHIFT, ELM_CHAR, stringcp.cix, (size+2*sizeof(integer_t))>>WORDSHIFT);
+  p = alloc((size+2*sizeof(eusinteger_t))>>WORDSHIFT, ELM_CHAR, stringcp.cix, (size+2*sizeof(eusinteger_t))>>WORDSHIFT);
   p->c.str.length=makeint(size);
   return(p);}
 
@@ -144,13 +144,13 @@ pointer makestring(s,l)
 register char *s;
 register int l;
 { register pointer p;
-  p=alloc((l+2*sizeof(integer_t))>>WORDSHIFT, ELM_CHAR, stringcp.cix, (l+2*sizeof(integer_t))>>WORDSHIFT );
+  p=alloc((l+2*sizeof(eusinteger_t))>>WORDSHIFT, ELM_CHAR, stringcp.cix, (l+2*sizeof(eusinteger_t))>>WORDSHIFT );
   p->c.str.length=makeint(l);
   p->c.ivec.iv[l/sizeof(long)]=0;	/*terminator*/
   memcpy((void *)p->c.str.chars, (void *)s, l);
   return(p);}
 
-pointer make_foreign_string(integer_t addr, int size)
+pointer make_foreign_string(eusinteger_t addr, int size)
 { register pointer p;
   p=alloc(2, ELM_FOREIGN, stringcp.cix, 2);
   p->c.str.length=makeint(size);
@@ -280,12 +280,12 @@ register pointer mod,ftype;
 pointer (*f)();
 /*actually, f is a pointer to a function returning a pointer*/
 { register pointer cd;
-  integer_t fentaddr;
+  eusinteger_t fentaddr;
   cd=allocobj(CODE, code, codecp.cix);
   cd->c.code.codevec=mod->c.code.codevec;
   cd->c.code.quotevec=mod->c.code.quotevec;
   cd->c.code.subrtype=ftype;
-  fentaddr= (integer_t)f>>2;
+  fentaddr= (eusinteger_t)f>>2;
   cd->c.code.entry=makeint(fentaddr);
   return(cd);}
 
@@ -316,7 +316,7 @@ register int newcix;
   for (cp=chunklist; cp!=0; cp=cp->nextchunk) {
     s=buddysize[cp->chunkbix];
     p= &cp->rootcell;
-    tail=(bpointer)((integer_t)p+(s<<WORDSHIFT));
+    tail=(bpointer)((eusinteger_t)p+(s<<WORDSHIFT));
     while (p<tail) {
       if (p->h.cix>=newcix) p->h.cix++;
 #ifdef BIX_DEBUG
@@ -414,7 +414,7 @@ register int size;
   switch(etype) {
     case ELM_BIT: n=(size+WORD_SIZE-1)/WORD_SIZE; init=0; break;
     case ELM_CHAR:
-    case ELM_BYTE: n=(size+sizeof(integer_t))/sizeof(integer_t); init=0; break;
+    case ELM_BYTE: n=(size+sizeof(eusinteger_t))/sizeof(eusinteger_t); init=0; break;
     case ELM_FLOAT: n=size; init=(pointer)0; break;
     case ELM_INT: n=size; init=0; break;
     case ELM_FOREIGN: n=1; init=0; break;
@@ -498,7 +498,7 @@ pointer (*f)();
   clo->c.clo.codevec=code;
   clo->c.clo.quotevec=quote;
   clo->c.clo.subrtype=SUBR_FUNCTION;
-  clo->c.clo.entry=makeint((integer_t)f>>2);
+  clo->c.clo.entry=makeint((eusinteger_t)f>>2);
   clo->c.clo.env0=e0;
   clo->c.clo.env1=e1; /*makeint((int)e1>>2);*/
   clo->c.clo.env2=e2; /*makeint((int)e2>>2);*/
@@ -911,7 +911,7 @@ context *ctx;
   sema_init(sem, 0, USYNC_THREAD, 0);
   thrport->c.thrp.donesem=makeint(sem); */
 
-  thrport->c.thrp.contex=makeint((integer_t)ctx>>2);
+  thrport->c.thrp.contex=makeint((eusinteger_t)ctx>>2);
   thrport->c.thrp.func=NIL;
   thrport->c.thrp.args=NIL;
   thrport->c.thrp.result=NIL;
