@@ -16,12 +16,12 @@
 #endif
 
 #if (WORD_SIZE == 64)
-typedef long integer_t;
-typedef double float_t;
+typedef long eusinteger_t;
+typedef double eusfloat_t;
 #define WORDSHIFT 3
 #else
-typedef int integer_t;
-typedef float float_t;
+typedef int eusinteger_t;
+typedef float eusfloat_t;
 #define WORDSHIFT 2
 #endif
 #define wordsizeof(type) (sizeof(type)>>WORDSHIFT)
@@ -63,16 +63,16 @@ typedef float float_t;
 #endif
 
 #if (WORD_SIZE == 64)
-extern integer_t setjmp_val;
-#define eussetjmp(buf) (_setjmp(buf)?setjmp_val:(integer_t)0)
-#define euslongjmp(buf,val) (setjmp_val=(integer_t)(val),_longjmp(buf,1))
+extern eusinteger_t setjmp_val;
+#define eussetjmp(buf) (_setjmp(buf)?setjmp_val:(eusinteger_t)0)
+#define euslongjmp(buf,val) (setjmp_val=(eusinteger_t)(val),_longjmp(buf,1))
 #else
 #if (Solaris2 || vxworks)
-#define eussetjmp(buf) (integer_t)setjmp(buf)
+#define eussetjmp(buf) (eusinteger_t)setjmp(buf)
 #define euslongjmp(buf,val) longjmp(buf,(int)(val))
 #include <synch.h>
 #else
-#define eussetjmp(buf) (integer_t)_setjmp(buf)
+#define eussetjmp(buf) (eusinteger_t)_setjmp(buf)
 #define euslongjmp(buf,val) _longjmp(buf,(int)(val))
 #endif
 #endif
@@ -283,11 +283,11 @@ struct vector {
 
 struct intvector {
     pointer length;
-    integer_t iv[1];};
+    eusinteger_t iv[1];};
 
 struct floatvector {
     pointer length;
-    float_t fv[1];};
+    eusfloat_t fv[1];};
 
 struct arrayheader {
   pointer plist;
@@ -408,8 +408,8 @@ typedef
 
 typedef 
   union numunion {
-    float_t   fval;
-    integer_t ival;
+    eusfloat_t   fval;
+    eusinteger_t ival;
 #if vax
     struct {short low,high;} sval;
 #endif
@@ -565,7 +565,7 @@ struct built_in_cid {
 /*	1987-Apr
 /****************************************************************/
 /* process id and program name*/
-extern integer_t mypid;
+extern eusinteger_t mypid;
 extern char *progname;
 
 /* heap management */
@@ -716,37 +716,37 @@ extern int export_all;
 #define superof(p) ((p)->c.cls.super)
 
 #if sun3 || apollo || (system5 && !alpha && !mips) || sanyo || vxworks || NEXT
-#define makepointer(bp) ((pointer)((integer_t)(bp) | 2))
-#define isint(p) (!((integer_t)(p) & 3))
-#define isflt(p) (((integer_t)(p) & 3)==1)
-#define isnum(p) (((integer_t)(p) & 2)==0)
-#define ispointer(p) ((integer_t)(p) & 2)
-#define makeint(v) ((pointer)(((integer_t)v)<<2))
-#define bpointerof(p) ((bpointer)((integer_t)(p)-2))
+#define makepointer(bp) ((pointer)((eusinteger_t)(bp) | 2))
+#define isint(p) (!((eusinteger_t)(p) & 3))
+#define isflt(p) (((eusinteger_t)(p) & 3)==1)
+#define isnum(p) (((eusinteger_t)(p) & 2)==0)
+#define ispointer(p) ((eusinteger_t)(p) & 2)
+#define makeint(v) ((pointer)(((eusinteger_t)v)<<2))
+#define bpointerof(p) ((bpointer)((eusinteger_t)(p)-2))
 #endif
 
 #if vax || sun4 || news || mips || i386 || i486 || i586 || alpha
 
-#define makepointer(bp) ((pointer)((integer_t)(bp)))
-// #define isint(p) (((integer_t)(p) & 3)==2) // org
-#define	isint(p)	( (((integer_t)(p)&3)==2) || (((integer_t)(p)&0x3)==0x3) )
-#define isflt(p) (((integer_t)(p) & 3)==1)
-#define isnum(p) (((integer_t)(p) & 3))
-#define ispointer(p) (!((integer_t)(p) & 3))
-// #define makeint(v) ((pointer)((((integer_t)(v))<<2)+2)) // org
+#define makepointer(bp) ((pointer)((eusinteger_t)(bp)))
+// #define isint(p) (((eusinteger_t)(p) & 3)==2) // org
+#define	isint(p)	( (((eusinteger_t)(p)&3)==2) || (((eusinteger_t)(p)&0x3)==0x3) )
+#define isflt(p) (((eusinteger_t)(p) & 3)==1)
+#define isnum(p) (((eusinteger_t)(p) & 3))
+#define ispointer(p) (!((eusinteger_t)(p) & 3))
+// #define makeint(v) ((pointer)((((eusinteger_t)(v))<<2)+2)) // org
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern pointer makeint(integer_t v);
+extern pointer makeint(eusinteger_t v);
 #ifdef __cplusplus
 }
 #endif
 
-#define bpointerof(p) ((bpointer)((integer_t)(p)))
+#define bpointerof(p) ((bpointer)((eusinteger_t)(p)))
 #ifdef RGC
-#define nextbuddy(p) ((bpointer)((integer_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
+#define nextbuddy(p) ((bpointer)((eusinteger_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
 #else
-#define nextbuddy(p) ((bpointer)((integer_t)(p)+(buddysize[p->h.bix]*sizeof(pointer))))
+#define nextbuddy(p) ((bpointer)((eusinteger_t)(p)+(buddysize[p->h.bix]*sizeof(pointer))))
 #endif
 #ifndef __USE_MARK_BITMAP
 #define marked(p)  (p->h.mark)
@@ -755,23 +755,23 @@ extern pointer makeint(integer_t v);
 #endif
 #endif
 
-// #define intval(p) (((integer_t)(p))>>2) // org
+// #define intval(p) (((eusinteger_t)(p))>>2) // org
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern integer_t intval(pointer p);
+extern eusinteger_t intval(pointer p);
 #ifdef __cplusplus
 }
 #endif
-#define ckintval(p) (isint(p)?intval(p):(integer_t)error(E_NOINT))
+#define ckintval(p) (isint(p)?intval(p):(eusinteger_t)error(E_NOINT))
 #define bigintval(x) (isint(x)?intval(x):\
    (isbignum(x)?\
 	((vecsize((x)->c.bgnm.bv)>=2)?\
 	 (((x)->c.bgnm.bv->c.ivec.iv[1]<<(WORD_SIZE-1)) | ((x)->c.bgnm.bv->c.ivec.iv[0])): \
          ((x)->c.bgnm.bv->c.ivec.iv[0])):\
-	(integer_t)error(E_NOINT)) )
+	(eusinteger_t)error(E_NOINT)) )
 #define mkbigint(y) \
-  (pointer)((((y)^((y)>>1))&(integer_t)3<<(WORD_SIZE-3))?makebig1(y):makeint(y))
+  (pointer)((((y)^((y)>>1))&(eusinteger_t)3<<(WORD_SIZE-3))?makebig1(y):makeint(y))
 
 #define elmtypeof(p) (bpointerof(p)->h.elmtype)
 #ifdef RGC
@@ -781,8 +781,8 @@ extern integer_t intval(pointer p);
 #endif
 
 #if sun3 || sun4 || system5 || apollo || news || sanyo || vxworks || mips || NEXT || i386 || i486 || i586
-#define fltval(p) (nu.ival=((integer_t)(p) & ~3), nu.fval)
-#define makeflt(f) (nu.fval=(float_t)(f), (pointer)((nu.ival & ~3) | 1))
+#define fltval(p) (nu.ival=((eusinteger_t)(p) & ~3), nu.fval)
+#define makeflt(f) (nu.fval=(eusfloat_t)(f), (pointer)((nu.ival & ~3) | 1))
 
 /*#if GCC
 #define makeflt(f) (nu.fval=(f), (pointer)((nu.ival & (~2)) | 1)) 
@@ -793,7 +793,7 @@ extern integer_t intval(pointer p);
 	(isint(p)?intval(p):\
 	(pisbignum(p)?big_to_float(p):\
 	(pisratio(p)?ratio2flt(p):\
-	(integer_t)error(E_NONUMBER)))))
+	(eusinteger_t)error(E_NONUMBER)))))
 #endif
 
 /*predicates to test object type*/
@@ -1035,8 +1035,8 @@ extern pointer mkfilestream(context *, pointer,pointer,int,pointer);
 extern pointer mkiostream(context *, pointer,pointer);
 extern pointer makemodule(context *, int);
 extern pointer makebig1(long);
-extern pointer float_to_big(float);
-extern float_t big_to_float(pointer);
+extern pointer eusfloat_to_big(float);
+extern eusfloat_t big_to_float(pointer);
 extern pointer defun(context *, char *, pointer, pointer(*)());
 extern pointer defmacro(context *, char *, pointer, pointer(*)());
 extern pointer defspecial(context *, char *, pointer, pointer(*)());

@@ -247,7 +247,7 @@ int labx;
     unsolp=(pointer *)unsol;
 #endif
 #if sun4 || vax || news || mips || alpha || i386
-    unsolp=(pointer *)((integer_t)unsol & ~3);/*???? */
+    unsolp=(pointer *)((eusinteger_t)unsol & ~3);/*???? */
 #endif
     unsol= *unsolp;
     pointer_update(*unsolp,result); }
@@ -262,7 +262,7 @@ pointer *addr;
 #endif
 #if sun4 || vax || news || mips || alpha || i386
   { int i;
-    i=(((integer_t)addr)>>2);
+    i=(((eusinteger_t)addr)>>2);
     labp->c.lab.unsolved=makeint(i);}
 #endif
 }
@@ -473,17 +473,17 @@ register int val,subchar;
 static pointer read_sharp_hex(ctx,f,val,subchar)
 register context *ctx;
 register pointer f;
-integer_t val;
+eusinteger_t val;
 int subchar;
 { register int i=0,j,x,c,p,q;
   pointer b;
-  integer_t *bv;
+  eusinteger_t *bv;
   char ch, buf[WORD_SIZE];
 
   ch=readch(f);
   while (i<WORD_SIZE && isxdigit(ch)) { buf[i++] = ch; ch=readch(f);}
   unreadch(f,ch); buf[i]=0;
-  if (i<sizeof(integer_t)*2) { sscanf(buf,"%lx",&val);  return(makeint(val));}
+  if (i<sizeof(eusinteger_t)*2) { sscanf(buf,"%lx",&val);  return(makeint(val));}
   else {
     b= (pointer)makebig((i*4+WORD_SIZE-1)/(WORD_SIZE-1));
     bv=bigvec(b);
@@ -502,7 +502,7 @@ int subchar;
 static pointer read_sharp_octal(ctx,f,val,subchar)
 register context *ctx;
 pointer f;
-integer_t val;
+eusinteger_t val;
 int subchar;
 { register int i=0;
   char buf[WORD_SIZE/2], ch;
@@ -1013,32 +1013,32 @@ register context *ctx;
 { register pointer rdtable;
   register int i;
 
-  charmacro['(']=makeint((integer_t)readlist);
-  charmacro[')']=makeint((integer_t)readrparen);
-  charmacro['#']=makeint((integer_t)readsharp);
-  charmacro['\'']=makeint((integer_t)readquote);
-  charmacro['"']=makeint((integer_t)readstring);
-  charmacro[';']=makeint((integer_t)readcomment);
+  charmacro['(']=makeint((eusinteger_t)readlist);
+  charmacro[')']=makeint((eusinteger_t)readrparen);
+  charmacro['#']=makeint((eusinteger_t)readsharp);
+  charmacro['\'']=makeint((eusinteger_t)readquote);
+  charmacro['"']=makeint((eusinteger_t)readstring);
+  charmacro[';']=makeint((eusinteger_t)readcomment);
 
-  sharpmacro['\\']=makeint((integer_t)read_sharp_char);
-  sharpmacro['\'']=makeint((integer_t)read_sharp_function);
-  sharpmacro[':']=makeint((integer_t)read_uninterned_symbol);
-  sharpmacro[',']=makeint((integer_t)read_sharp_eval);
-  sharpmacro['.']=makeint((integer_t)read_sharp_eval);
-  sharpmacro['|']=makeint((integer_t)read_sharp_comment);
-  sharpmacro['+']=makeint((integer_t)read_cond_plus);
-  sharpmacro['-']=makeint((integer_t)read_cond_minus);
-  sharpmacro['#']=makeint((integer_t)readlabref);
-  sharpmacro['=']=makeint((integer_t)readlabdef);
-  sharpmacro['(']=makeint((integer_t)readvector);
-  sharpmacro['<']=makeint((integer_t)read_sharp_object);
-  sharpmacro['X']=makeint((integer_t)read_sharp_hex);
-  sharpmacro['O']=makeint((integer_t)read_sharp_octal);
-  sharpmacro['S']=makeint((integer_t)readstructure);
-  sharpmacro['F']=makeint((integer_t)readfvector);
-  sharpmacro['I']=makeint((integer_t)readivector);
-  sharpmacro['J']=makeint((integer_t)readobject);
-  sharpmacro['V']=makeint((integer_t)readobject);
+  sharpmacro['\\']=makeint((eusinteger_t)read_sharp_char);
+  sharpmacro['\'']=makeint((eusinteger_t)read_sharp_function);
+  sharpmacro[':']=makeint((eusinteger_t)read_uninterned_symbol);
+  sharpmacro[',']=makeint((eusinteger_t)read_sharp_eval);
+  sharpmacro['.']=makeint((eusinteger_t)read_sharp_eval);
+  sharpmacro['|']=makeint((eusinteger_t)read_sharp_comment);
+  sharpmacro['+']=makeint((eusinteger_t)read_cond_plus);
+  sharpmacro['-']=makeint((eusinteger_t)read_cond_minus);
+  sharpmacro['#']=makeint((eusinteger_t)readlabref);
+  sharpmacro['=']=makeint((eusinteger_t)readlabdef);
+  sharpmacro['(']=makeint((eusinteger_t)readvector);
+  sharpmacro['<']=makeint((eusinteger_t)read_sharp_object);
+  sharpmacro['X']=makeint((eusinteger_t)read_sharp_hex);
+  sharpmacro['O']=makeint((eusinteger_t)read_sharp_octal);
+  sharpmacro['S']=makeint((eusinteger_t)readstructure);
+  sharpmacro['F']=makeint((eusinteger_t)readfvector);
+  sharpmacro['I']=makeint((eusinteger_t)readivector);
+  sharpmacro['J']=makeint((eusinteger_t)readobject);
+  sharpmacro['V']=makeint((eusinteger_t)readobject);
 
   /* make default readtable */
   rdtable=(pointer)makereadtable(ctx);

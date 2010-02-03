@@ -20,9 +20,9 @@ register context *ctx;
 int n;
 register pointer argv[];
 {
-  float_t cz,u,v;
-  float_t a1x,a1y,b1x,b1y;
-  register float_t ax,ay,bx,by,abx,aby;
+  eusfloat_t cz,u,v;
+  eusfloat_t a1x,a1y,b1x,b1y;
+  register eusfloat_t ax,ay,bx,by,abx,aby;
   int range_check;
   pointer up,vp;  
   numunion nu;
@@ -68,14 +68,14 @@ register pointer argv[];
 
 
 
-static float_t determinant3(a,b,c)
-float_t *a, *b, *c;
+static eusfloat_t determinant3(a,b,c)
+eusfloat_t *a, *b, *c;
 { return(a[0] * b[1] * c[2] - a[2] * b[1] * c[0] +
 	 a[1] * b[2] * c[0] - a[1] * b[0] * c[2] +
 	 a[2] * b[0] * c[1] - a[0] * b[2] * c[1]);}
 
-static float_t *crossproduct(a,b,r)
-register float_t *a, *b, *r;
+static eusfloat_t *crossproduct(a,b,r)
+register eusfloat_t *a, *b, *r;
 { r[0]=a[1] * b[2] - a[2] * b[1];
   r[1]=a[2] * b[0] - a[0] * b[2];
   r[2]=a[0] * b[1] - a[1] * b[0];
@@ -86,11 +86,11 @@ pointer LINEINTERSECTION3(ctx,n,argv)
 register context *ctx;
 int n;
 register pointer argv[];
-{ register float_t *fv;
-  float_t tolerance;
-  float_t cz,u,v;
-  float_t *p1, v1[3], *p2, v2[3], p2p1[3];
-  float_t cross[3], cross2;
+{ register eusfloat_t *fv;
+  eusfloat_t tolerance;
+  eusfloat_t cz,u,v;
+  eusfloat_t *p1, v1[3], *p2, v2[3], p2p1[3];
+  eusfloat_t cross[3], cross2;
   numunion nu;
 
   ckarg2(4,5);
@@ -138,7 +138,7 @@ pointer argv[];
 {
   pointer v1, v2;
   pointer work;
-  float_t x1,y1,z1, x2,y2,z2, x,y,z, temp;
+  eusfloat_t x1,y1,z1, x2,y2,z2, x,y,z, temp;
   int c1, c2, c;
   numunion nu;
 
@@ -179,7 +179,7 @@ pointer argv[];
 }
 
 static windowcoords(x,y,z,w,wc)
-float_t x,y,z,w,wc[];
+eusfloat_t x,y,z,w,wc[];
 { register int i,c,code;
   wc[0]=w+x; wc[1]=w-x; wc[2]=w+y; wc[3]=w-y; wc[4]=z; wc[5]=w-z;
   code=0; c=1; i=0;
@@ -193,10 +193,10 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer v1,v2,work;
-  float_t v[4];
-  float_t x1,y1,z1,w1, x2,y2,z2,w2, dx,dy,dz,dw, t1,t2,tt;
+  eusfloat_t v[4];
+  eusfloat_t x1,y1,z1,w1, x2,y2,z2,w2, dx,dy,dz,dw, t1,t2,tt;
   register int i,c1,c2;
-  float_t wc1[6],wc2[6];
+  eusfloat_t wc1[6],wc2[6];
 
   ckarg(2);
   v1=argv[0]; v2=argv[1];
@@ -239,7 +239,7 @@ register int n;
 pointer argv[];
 { register pointer a=argv[0],r;
   register int size;
-  float_t w;
+  eusfloat_t w;
   ckarg2(1,2);
   if (!isfltvector(a)) error(E_FLOATVECTOR,NULL);
   size=vecsize(a);
@@ -257,7 +257,7 @@ int n;
 pointer argv[];
 { register pointer a=argv[0],r;
   register int i,size;
-  float_t w;
+  eusfloat_t w;
   numunion nu;
 
   ckarg2(1,2);

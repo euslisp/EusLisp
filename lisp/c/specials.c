@@ -364,7 +364,7 @@ pointer arg;
   if ((result=(pointer)eussetjmp(whilejmp))==0) {
     while (eval(ctx,cond)!=NIL) {GC_POINT;progn(ctx,body);}
     result=NIL;}
-  else if ((integer_t)result==1) result=makeint(0);
+  else if ((eusinteger_t)result==1) result=makeint(0);
   ctx->blkfp=myblock->dynklink;
   ctx->vsp=spsave;
   ctx->bindfp=bfp;
@@ -502,7 +502,7 @@ pointer arg;
   body=ccdr(arg);
   mkcatchframe(ctx,tag,catchbuf);
   if ((val=(pointer)eussetjmp(catchbuf))==0) val=progn(ctx,body);
-  else if ((integer_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
+  else if ((eusinteger_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
   ctx->callfp=ctx->catchfp->cf;
   ctx->bindfp=ctx->catchfp->bf;
   ctx->fletfp=ctx->catchfp->ff;
@@ -643,7 +643,7 @@ register pointer arg;		/*must be called via ufuncall*/
   if (!issymbol(name)) error(E_NOSYMBOL);
   myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,name,(jmp_buf *)blkjmp,ctx->blkfp); /* ???? */
   if ((result=(pointer)eussetjmp(blkjmp))==0) result=progn(ctx,arg);
-  else if ((integer_t)result==1) result=makeint(0);
+  else if ((eusinteger_t)result==1) result=makeint(0);
   ctx->blkfp=myblock->dynklink;
   /*restorations of bindfp and callfp are caller's responsibility???*/
   ctx->bindfp=bfp;
@@ -918,10 +918,10 @@ pointer *argv;
   pkg=makepkg(ctx,name,nick,use);	/*pkg is protected from gc in pkglist*/
   return(pkg);}
 
-integer_t sxhash(x)
+eusinteger_t sxhash(x)
 pointer x;
 { 
-  integer_t h=0;
+  eusinteger_t h=0;
   int s,i;
   numunion nu;
 
@@ -942,7 +942,7 @@ pointer x;
         for (i=0; i<s; i++) h += sxhash(x->c.vec.v[i]);
 	return(h);}
     for (i=0; i<s; i++) h += x->c.ivec.iv[i]; } 
-  else {  h=(integer_t)x >> 2;}
+  else {  h=(eusinteger_t)x >> 2;}
   return(h);}  
 
 
@@ -951,8 +951,8 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer h;
-  integer_t m;
-  if (n==1) m=(integer_t)1  << (WORD_SIZE-3);
+  eusinteger_t m;
+  if (n==1) m=(eusinteger_t)1  << (WORD_SIZE-3);
   else if (n==2) m=ckintval(argv[1]);
   else error(E_MISMATCHARG);
 #ifdef SPEC_DEBUG

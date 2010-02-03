@@ -124,7 +124,7 @@ register pointer argv[];
 pointer superequal(x,y)	/* mutex_lock before call */
 register pointer x,y;
 { register int i,n,xe;
-  register integer_t *cx,*cy;
+  register eusinteger_t *cx,*cy;
   bpointer bx,by;
   pointer result;
   if (x==y) return(T);
@@ -154,15 +154,15 @@ register pointer x,y;
       cx=x->c.ivec.iv; cy=y->c.ivec.iv;
       switch(xe) {
 	case ELM_BIT: n=(n+WORD_SIZE-1)/WORD_SIZE; break;
-	case ELM_CHAR: case ELM_BYTE: n=(n+sizeof(integer_t)-1)/sizeof(integer_t); break;
-	case ELM_FOREIGN: cx=(integer_t *)(cx[0]); cy=(integer_t *)(cy[0]); break;}
+	case ELM_CHAR: case ELM_BYTE: n=(n+sizeof(eusinteger_t)-1)/sizeof(eusinteger_t); break;
+	case ELM_FOREIGN: cx=(eusinteger_t *)(cx[0]); cy=(eusinteger_t *)(cy[0]); break;}
       for (i=0; i<n; i++) if (cx[i]!=cy[i]) return(NIL);
       return(T);}  }
 
 pointer equal(x,y)
 register pointer x,y;
 { register int i,n,xe;
-  register integer_t *cx,*cy;
+  register eusinteger_t *cx,*cy;
   if (x==y) return(T);
   if (isnum(x) || isnum(y)) return(NIL);
   if (x->cix != y->cix) return(NIL);	/*different class*/
@@ -182,8 +182,8 @@ register pointer x,y;
     cx=x->c.ivec.iv; cy=y->c.ivec.iv;
     switch(xe) {
       case ELM_BIT: n=(n+WORD_SIZE-1)/WORD_SIZE; break;
-      case ELM_CHAR: case ELM_BYTE: n=(n+sizeof(integer_t)-1)/sizeof(integer_t); break;
-      case ELM_FOREIGN: cx=(integer_t *)(cx[0]); cy=(integer_t *)(cy[0]); break;}
+      case ELM_CHAR: case ELM_BYTE: n=(n+sizeof(eusinteger_t)-1)/sizeof(eusinteger_t); break;
+      case ELM_FOREIGN: cx=(eusinteger_t *)(cx[0]); cy=(eusinteger_t *)(cy[0]); break;}
     for (i=0; i<n; i++) if (cx[i]!=cy[i]) return(NIL);
     return(T);}  }
 

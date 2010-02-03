@@ -67,7 +67,7 @@ pointer argv[];
 pointer NEWSTACK(ctx,n,argv)
 context *ctx;
 pointer argv[];
-{ integer_t newsize;
+{ eusinteger_t newsize;
   if (n==0) return(makeint((ctx->stacklimit+100-ctx->stack)));
   else {
     newsize=ckintval(argv[0]);
@@ -109,15 +109,15 @@ register pointer p;
   if (p<(pointer)0x100000) return(NULL);
 #endif
 #if Solaris2
-  if ((integer_t)p<(integer_t)_end) return(NULL);
+  if ((eusinteger_t)p<(eusinteger_t)_end) return(NULL);
 #elif sun3 || sun4 || news || (i386 && !Cygwin) || alpha || mips /* Cygwin does not have edata */
-  if ((integer_t)p<(integer_t)edata) return(NULL);
+  if ((eusinteger_t)p<(eusinteger_t)edata) return(NULL);
 #endif
 #if sun4 || vax || i386 
   if ((&ctx->stack[0]<=p) && (p<= &ctx->stack[MAXSTACK])) return(NULL);
 #endif
   if (issymbol(p)) return(NULL);
-  bp=(bpointer)((integer_t)p & ~3);
+  bp=(bpointer)((eusinteger_t)p & ~3);
   if (marked(bp)) return(0);	/*already marked*/
   markon(bp);	/*mark it first to avoid endless marking*/
   if (bp->h.elmtype==ELM_FIXED) {	/*contents are all pointers*/
@@ -148,7 +148,7 @@ register pointer p;
 #if sun
   if (p<(pointer)0x10000) return(NULL);
 #endif
-  bp=(bpointer)((integer_t)p & ~3/*0xfffffffc*/);/* ???? */
+  bp=(bpointer)((eusinteger_t)p & ~3/*0xfffffffc*/);/* ???? */
   if (marked(bp)) {
     markoff(bp);
     reclaim(bp);
@@ -252,7 +252,7 @@ pointer x;
 		break;
     case ELM_BIT: object_size+=1+(s+WORD_SIZE-1)/WORD_SIZE; break;
     case ELM_BYTE: case ELM_CHAR:
-      object_size += 1+(s+sizeof(integer_t))/sizeof(integer_t); break;
+      object_size += 1+(s+sizeof(eusinteger_t))/sizeof(eusinteger_t); break;
     case ELM_POINTER: object_size+=1+s; 
 		for (i=0; i<s; i++) objsize1(x->c.vec.v[i]);
 		break;
@@ -330,13 +330,13 @@ pointer *argv;
   for (i=1; i<MAXBUDDY; i++) {
     s=0;
     bp=buddy[i].bp;
-    while (0 < (integer_t)bp) { s++; bp=bp->b.nextbcell;}
+    while (0 < (eusinteger_t)bp) { s++; bp=bp->b.nextbcell;}
     fcount[i]=s; tcount[i]=0;}
   cp=chunklist;
   while (cp) {
     s=buddysize[cp->chunkbix];
     p= &cp->rootcell;
-    tail=(bpointer)((integer_t)p+(s<<WORDSHIFT));/* ???? */
+    tail=(bpointer)((eusinteger_t)p+(s<<WORDSHIFT));/* ???? */
     while (p<tail) {
 #ifdef RGC
       i=p->h.bix&TAGMASK;
@@ -344,7 +344,7 @@ pointer *argv;
       i=p->h.bix;
 #endif
       tcount[i]++;
-      p=(bpointer)((integer_t)p+(buddysize[i]<<WORDSHIFT));}/* ???? */
+      p=(bpointer)((eusinteger_t)p+(buddysize[i]<<WORDSHIFT));}/* ???? */
     cp=cp->nextchunk;}
 
   sprintf(cbuf,"buddy   size  free   total   total-size  wanted   wanted-size\n");
@@ -401,7 +401,7 @@ pointer argv[];
   for (chp=chunklist; chp!=0; chp=chp->nextchunk) {
     s=buddysize[chp->chunkbix];
     b= &chp->rootcell;
-    tail=(bpointer)((integer_t)b+(s<<WORDSHIFT));/* ???? */
+    tail=(bpointer)((eusinteger_t)b+(s<<WORDSHIFT));/* ???? */
     while (b<tail) {
       if (marked(b)) {
 	i=b->h.cix;
@@ -496,7 +496,7 @@ pointer argv[];
   for (chp=chunklist; chp!=0; chp=chp->nextchunk) {
     s=buddysize[chp->chunkbix];
     b= &chp->rootcell;
-    tail=(bpointer)((integer_t)b+(s<<WORDSHIFT));/* ???? */
+    tail=(bpointer)((eusinteger_t)b+(s<<WORDSHIFT));/* ???? */
     while (b<tail) {
       if (marked(b)) {
 	objcid=b->h.cix;
@@ -533,7 +533,7 @@ pointer argv[];
   for (chp=chunklist; chp!=0; chp=chp->nextchunk) {
     bsize=buddysize[chp->chunkbix];
     b= &chp->rootcell;
-    tail=(bpointer)((integer_t)b+(bsize<<WORDSHIFT));/* ???? */
+    tail=(bpointer)((eusinteger_t)b+(bsize<<WORDSHIFT));/* ???? */
     while (b<tail) {
       if (marked(b)) {
 	  p=makepointer(b);
@@ -573,9 +573,9 @@ pointer ADDRESS(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ integer_t p;/* ???? */
+{ eusinteger_t p;/* ???? */
   ckarg(1);
-  p=(integer_t)bpointerof(argv[0]);/* ???? */
+  p=(eusinteger_t)bpointerof(argv[0]);/* ???? */
   return(mkbigint(p));}
 
 pointer PEEK(ctx,n,argv)
@@ -622,7 +622,7 @@ pointer argv[];
   if (size==K_SHORT) return(makeint(u->s));
   if (size==K_FLOAT) return(makeflt(u->f));
   if (size==K_DOUBLE) return(makeflt(u->d));
-  if (size==K_POINTER) return(mkbigint((integer_t)(u->p))); /* ???? */
+  if (size==K_POINTER) return(mkbigint((eusinteger_t)(u->p))); /* ???? */
   else error(E_USER,(pointer)"unknown access mode");}
 
 pointer POKE(ctx,n,argv)
@@ -637,7 +637,7 @@ pointer argv[];
     float f;
     double d;
     void *p;} *u;
-  integer_t x;
+  eusinteger_t x;
   int etype;
   pointer p,size,val;
   numunion nu;

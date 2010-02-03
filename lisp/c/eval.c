@@ -183,7 +183,7 @@ register pointer var,val;
 struct bindframe *lex;
 { register struct bindframe *bf;
   bf=(struct bindframe *)(ctx->vsp);
-  ctx->vsp += sizeof(struct bindframe)/sizeof(integer_t);
+  ctx->vsp += sizeof(struct bindframe)/sizeof(eusinteger_t);
   bf->lexblink=lex;
   bf->dynblink=ctx->bindfp;
   bf->sym=var;
@@ -451,11 +451,11 @@ evbody:
 
 #include <alloca.h>
 
-extern long   i_call_foreign(integer_t (*)(),int,numunion *);
-extern double f_call_foreign(integer_t (*)(),int,numunion *);
+extern long   i_call_foreign(eusinteger_t (*)(),int,numunion *);
+extern double f_call_foreign(eusinteger_t (*)(),int,numunion *);
 
 pointer call_foreign(func,code,n,args)
-integer_t (*func)();
+eusinteger_t (*func)();
 pointer code;
 int n;
 pointer args[];
@@ -463,7 +463,7 @@ pointer args[];
   pointer resulttype=code->c.fcode.resulttype;
   pointer p,lisparg;
   numunion nu,*cargv;
-  integer_t i=0;
+  eusinteger_t i=0;
   double f;
 
   cargv=(numunion *)alloca(n*sizeof(numunion));
@@ -476,7 +476,7 @@ pointer args[];
     else if (p==K_STRING)
       if (elmtypeof(lisparg)==ELM_FOREIGN)
         cargv[i++].ival=lisparg->c.ivec.iv[0];
-      else cargv[i++].ival=(integer_t)(lisparg->c.str.chars);
+      else cargv[i++].ival=(eusinteger_t)(lisparg->c.str.chars);
     else error(E_USER,(pointer)"unknown type specifier");}
   /* &rest arguments?  */
   while (i<n) {	/* i is the counter for the actual arguments*/
@@ -486,8 +486,8 @@ pointer args[];
     else if (isvector(lisparg)) {
       if (elmtypeof(lisparg)==ELM_FOREIGN)
 	cargv[i++].ival=lisparg->c.ivec.iv[0];
-      else cargv[i++].ival=(integer_t)(lisparg->c.str.chars);}
-    else cargv[i++].ival=(integer_t)(lisparg->c.obj.iv);}
+      else cargv[i++].ival=(eusinteger_t)(lisparg->c.str.chars);}
+    else cargv[i++].ival=(eusinteger_t)(lisparg->c.obj.iv);}
   /**/
   if (resulttype==K_FLOAT) return(makeflt(f_call_foreign(func,n,cargv)));
   else {
@@ -519,11 +519,11 @@ pointer args[];
 
 #include <alloca.h>
 
-extern int    i_call_foreign(integer_t (*)(),int,int *);
-extern double f_call_foreign(integer_t (*)(),int,int *);
+extern int    i_call_foreign(eusinteger_t (*)(),int,int *);
+extern double f_call_foreign(eusinteger_t (*)(),int,int *);
 
 pointer call_foreign(func,code,n,args)
-integer_t (*func)();
+eusinteger_t (*func)();
 pointer code;
 int n;
 pointer args[];
@@ -531,7 +531,7 @@ pointer args[];
   pointer resulttype=code->c.fcode.resulttype;
   pointer p,lisparg;
   numunion nu,*cargs;
-  integer_t i=0;
+  eusinteger_t i=0;
   unsigned int *offset,*isfloat,m=0;
   int *cargv;
   union {
@@ -556,7 +556,7 @@ pointer args[];
     else if (p==K_STRING) {
       if (elmtypeof(lisparg)==ELM_FOREIGN)
         cargs[i].ival=lisparg->c.ivec.iv[0];
-      else cargs[i].ival=(integer_t)(lisparg->c.str.chars);
+      else cargs[i].ival=(eusinteger_t)(lisparg->c.str.chars);
       offset[i++]=m++;}
     else error(E_USER,(pointer)"unknown type specifier");}
   /* &rest arguments?  */
@@ -571,10 +571,10 @@ pointer args[];
     else if (isvector(lisparg)) {
       if (elmtypeof(lisparg)==ELM_FOREIGN)
 	cargs[i].ival=lisparg->c.ivec.iv[0];
-      else cargs[i].ival=(integer_t)(lisparg->c.str.chars);
+      else cargs[i].ival=(eusinteger_t)(lisparg->c.str.chars);
       offset[i++]=m++;}
     else {
-      cargs[i++].ival=(integer_t)(lisparg->c.obj.iv);
+      cargs[i++].ival=(eusinteger_t)(lisparg->c.obj.iv);
       offset[i++]=m++;}}
   cargv=(int *)alloca(m*sizeof(int));
   for (i=0; i<n; ++i) {
@@ -612,7 +612,7 @@ pointer args[];
 /* not IRIS */
 
 pointer call_foreign(ifunc,code,n,args)
-integer_t (*ifunc)(); /* ???? */
+eusinteger_t (*ifunc)(); /* ???? */
 pointer code;
 int n;
 pointer args[];
@@ -620,10 +620,10 @@ pointer args[];
   pointer paramtypes=code->c.fcode.paramtypes;
   pointer resulttype=code->c.fcode.resulttype;
   pointer p,lisparg;
-  integer_t cargv[100];
+  eusinteger_t cargv[100];
   numunion nu;
-  integer_t i=0; /*C argument counter*//* ???? */
-  integer_t j=0; /*lisp argument counter*//* ???? */
+  eusinteger_t i=0; /*C argument counter*//* ???? */
+  eusinteger_t j=0; /*lisp argument counter*//* ???? */
   union {
     double d;
     float f;
@@ -643,7 +643,7 @@ pointer args[];
       cargv[i++]=isint(lisparg)?intval(lisparg):bigintval(lisparg);
     else if (p==K_STRING) {
       if (elmtypeof(lisparg)==ELM_FOREIGN) cargv[i++]=lisparg->c.ivec.iv[0];
-      else  cargv[i++]=(integer_t)(lisparg->c.str.chars);}
+      else  cargv[i++]=(eusinteger_t)(lisparg->c.str.chars);}
     else if (p==K_FLOAT32) {
       numbox.f=ckfltval(lisparg);
       cargv[i++]=(int)numbox.i.i1;}
@@ -662,18 +662,18 @@ pointer args[];
     else if (isvector(lisparg)) {
       if (elmtypeof(lisparg)==ELM_FOREIGN)
 	cargv[i++]=lisparg->c.ivec.iv[0];
-      else cargv[i++]=(integer_t)(lisparg->c.str.chars);}
+      else cargv[i++]=(eusinteger_t)(lisparg->c.str.chars);}
 #if 1    /* begin kanehiro's patch 2000.12.13 */
     else if (isbignum(lisparg)){
       if (bigsize(lisparg)==1){
-	integer_t *xv = bigvec(lisparg);
-	cargv[i++]=(integer_t)xv[0];
+	eusinteger_t *xv = bigvec(lisparg);
+	cargv[i++]=(eusinteger_t)xv[0];
       }else{
 	fprintf(stderr, "bignum size!=1\n");
       }
     }
 #endif    /* end of kanehiro's patch 2000.12.13 */
-    else cargv[i++]=(integer_t)(lisparg->c.obj.iv);}
+    else cargv[i++]=(eusinteger_t)(lisparg->c.obj.iv);}
   /**/
   if (resulttype==K_FLOAT) {
     if (i<=8) 
@@ -779,9 +779,9 @@ register int noarg;
 { register pointer (*subr)();
   register pointer *argp=ctx->vsp;
   register int n=0;
-  register integer_t addr;
+  register eusinteger_t addr;
   pointer tmp;
-  addr=(integer_t)(func->c.code.entry);
+  addr=(eusinteger_t)(func->c.code.entry);
   addr &= ~3;  /*0xfffffffc; ???? */
   subr=(pointer (*)())(addr);
 #ifdef FUNCODE_DEBUG
@@ -789,26 +789,26 @@ register int noarg;
   printf( "funcode:args = " ); hoge_print( args );
 #endif
   GC_POINT;
-  switch((integer_t)(func->c.code.subrtype)) {	/*func,macro or special form*//* ???? */
-      case (integer_t)SUBR_FUNCTION:/* ???? */
+  switch((eusinteger_t)(func->c.code.subrtype)) {	/*func,macro or special form*//* ???? */
+      case (eusinteger_t)SUBR_FUNCTION:/* ???? */
 	      if (noarg<0) {
 		while (piscons(args)) {
 		  vpush(eval(ctx,ccar(args))); args=ccdr(args); n++; GC_POINT;}
 	        if (pisfcode(func))	/*foreign function?*/
-		  return(call_foreign((integer_t (*)())subr,func,n,argp));
+		  return(call_foreign((eusinteger_t (*)())subr,func,n,argp));
 		else return((*subr)(ctx,n,argp));}
 	      else if (pisfcode(func))
-		return(call_foreign((integer_t (*)())subr,func,noarg,(pointer *)args));
+		return(call_foreign((eusinteger_t (*)())subr,func,noarg,(pointer *)args));
 	      else return((*subr)(ctx,noarg,args,0));
 	      break;
-      case (integer_t)SUBR_MACRO:/* ???? */
+      case (eusinteger_t)SUBR_MACRO:/* ???? */
 	      if (noarg>=0) error(E_ILLFUNC);
 	      while (iscons(args)) { vpush(ccar(args)); args=ccdr(args); n++;}
           GC_POINT;
           tmp = (*subr)(ctx,n,argp);
           GC_POINT;
 	      return(eval(ctx,tmp));
-      case (integer_t)SUBR_SPECIAL: /* ???? */
+      case (eusinteger_t)SUBR_SPECIAL: /* ???? */
 	      if (noarg>=0) error(E_ILLFUNC);
 	      else return((*subr)(ctx,args));
 /*      case (int)SUBR_ENTRY:
@@ -875,7 +875,7 @@ int noarg;
     clofunc=func;
     fn=func;
     if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_ILLFUNC);
-    subr=(pointer (*)())((integer_t)(fn->c.code.entry) & ~3 /*0xfffffffc ????*/);
+    subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3 /*0xfffffffc ????*/);
 #if !Solaris2 && !SunOS4_1 && !Linux && !IRIX && !IRIX6 && !alpha && !Cygwin
     if ((char *)subr>maxmemory) {
 	prinx(ctx,clofunc, STDOUT);

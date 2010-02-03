@@ -41,7 +41,7 @@ extern void glFrustumfv (/* GLfloat v[6] */);
 extern void gluOrtho2Dfv (/* GLfloat v[4] */);
 extern void glPointSizefv (/* GLfloat v[1] */);
 extern void glClearIndexfv (/* GLfloat v[1] */);
-extern integer_t alloctessinfo (/* GLfloat vert[3], GLint tp, GLfloat tcoord[2], GLint np, GLfloat ncoord[2] */);
+extern eusinteger_t alloctessinfo (/* GLfloat vert[3], GLint tp, GLfloat tcoord[2], GLint np, GLfloat ncoord[2] */);
 extern void tess_vertex_cb (/* struct tessinfo *i */);
 extern void glDepthRangefv (/* GLfloat clamp[2] */);
 extern void glPolygonOffsetEXTfv (/* GLfloat v[2] */);

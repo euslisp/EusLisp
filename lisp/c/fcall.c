@@ -4,7 +4,7 @@
 /*	1987-Dec-23
 /*	Copyright Toshihiro MATSUI
 /****************************************************************/
-static char *rcsid="@(#)$Id: fcall.c,v 1.1.1.1 2003/11/20 07:46:24 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include "../c/eus.h"
 
@@ -17,14 +17,14 @@ register context *ctx;
 int n;
 pointer *argv,sym;
 pointer (**fslot)();
-{ integer_t x;
+{ eusinteger_t x;
   pointer fn;
   pointer (*subr)();
 
   fn=getfunc(ctx,sym);
 
   if (ispointer(fn) && (fn->cix==codecp.cix)) {
-    x= (integer_t)(fn->c.code.entry); x &= ~3;
+    x= (eusinteger_t)(fn->c.code.entry); x &= ~3;
     subr=(pointer (*)())(x);
     *fslot= subr;
     return((*subr)(ctx,n,argv));

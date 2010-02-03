@@ -298,7 +298,7 @@ register pointer argv[];
 { register pointer item=argv[0],list=argv[1];
   pointer key=argv[2],test=argv[3],testnot=argv[4];
   register pointer target;
-  integer_t result;
+  eusinteger_t result;
   ckarg(5);
   while (islist(list)) {
     target=ccar(list);
@@ -355,7 +355,7 @@ register pointer argv[];
 { register pointer item=argv[0],alist=argv[1];
   pointer key=argv[2],test=argv[3],testnot=argv[4];
   register pointer temp,target;
-  register integer_t compare;
+  register eusinteger_t compare;
   ckarg(5);
   while (islist(alist)) {
     target=ccar(alist);

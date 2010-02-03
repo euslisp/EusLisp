@@ -54,7 +54,7 @@ pointer fastvref(vec,index)
 register pointer vec;
 register int index;
 { register byte *p=vec->c.str.chars;
-  integer_t *pl=vec->c.ivec.iv;
+  eusinteger_t *pl=vec->c.ivec.iv;
   long ival;
   numunion nu;
 
@@ -64,7 +64,7 @@ register int index;
       case ELM_INT:  ival=vec->c.ivec.iv[index];
 		     return(mkbigint(ival));
       case ELM_FLOAT: return(makeflt(vec->c.fvec.fv[index]));
-      case ELM_BIT:   return(makeint((pl[index/32] & (1<<((integer_t)index%32)))?1:0));
+      case ELM_BIT:   return(makeint((pl[index/32] & (1<<((eusinteger_t)index%32)))?1:0));
       case ELM_POINTER: return(vec->c.vec.v[index]);} }
 
 void fastvset(vec,index,val)
@@ -303,7 +303,7 @@ register int offset,count;
 		     return(len); 
       case ELM_FLOAT: while (i<len) ckpush(makeflt(a->c.fvec.fv[offset+i++]));
 		      return(len);
-      case ELM_BIT: { integer_t m, b;
+      case ELM_BIT: { eusinteger_t m, b;
 		      while (i<len) {
 			m= 1<<((offset+i)%32);
 			b=a->c.ivec.iv[(offset+i)/32] & m;
@@ -843,7 +843,7 @@ pointer argv[];
       (destelmt==ELM_BYTE || destelmt==ELM_CHAR || destelmt==ELM_FOREIGN)) {
     /*speed up for  simple cases:  calculate byte count*/
     if (srcelmt!=ELM_BYTE && srcelmt!=ELM_CHAR && srcelmt!=ELM_FOREIGN)
-  	{ count*=sizeof(integer_t); ss*=sizeof(integer_t); ds*=sizeof(integer_t);}
+  	{ count*=sizeof(eusinteger_t); ss*=sizeof(eusinteger_t); ds*=sizeof(eusinteger_t);}
     if (srcelmt==ELM_FOREIGN) p=src->c.foreign.chars + ss;
     else p= &(src->c.str.chars[ss]);
     if (destelmt==ELM_FOREIGN) p2=dest->c.foreign.chars + ds;
@@ -940,7 +940,7 @@ pointer argv[];
     COMPTYPE=elmtypeof(seq);
     if (COMPTYPE==ELM_CHAR || COMPTYPE==ELM_BYTE) width=1;
     else if (COMPTYPE==ELM_BIT || COMPTYPE==ELM_FOREIGN) error(E_NOVECTOR);
-    else width=sizeof(integer_t);
+    else width=sizeof(eusinteger_t);
     qsort(seq->c.vec.v,vecsize(seq),width,(int (*)())compar);}
 #if THREADED
   mutex_unlock(&qsort_lock);

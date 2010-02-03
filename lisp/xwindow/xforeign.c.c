@@ -413,19 +413,19 @@ pointer defxforeign(ctx,xentry)
 register context *ctx;
 char *xentry;
 { pointer fc, xsym;
-  integer_t entry; int i, len;
+  eusinteger_t entry; int i, len;
   char lname[100];
   len=strlen(xentry);
   for (i=0; i<len-1; i++) lname[i]=toupper(xentry[i+1]);
   lname[i]=0;
 #if Cygwin /* dlopen libX11.dll */
-   integer_t dlhandle;
-   dlhandle=(integer_t)dlopen("/usr/bin/cygX11-6.dll", RTLD_LAZY);
+   eusinteger_t dlhandle;
+   dlhandle=(eusinteger_t)dlopen("/usr/bin/cygX11-6.dll", RTLD_LAZY);
    if( dlhandle==0 )
-     dlhandle=(integer_t)dlopen("libX11.dll", RTLD_LAZY);
-   entry=(integer_t)dlsym(dlhandle, xentry);
+     dlhandle=(eusinteger_t)dlopen("libX11.dll", RTLD_LAZY);
+   entry=(eusinteger_t)dlsym(dlhandle, xentry);
 #else
-  entry=(integer_t)dlsym((void *)((integer_t)(sysmod->c.ldmod.handle) & ~3), xentry);
+  entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3), xentry);
 #endif
   if (entry){
     xsym=intern(ctx,lname, len-1, xpkg);

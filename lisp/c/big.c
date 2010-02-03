@@ -26,11 +26,11 @@ extern pointer makebig();
 #if (WORD_SIZE == 64)
 
 void extended_mul(d, q, r, hp, lp)
-integer_t d, q, r;
-integer_t *hp, *lp;
+eusinteger_t d, q, r;
+eusinteger_t *hp, *lp;
 {
-	integer_t ld, hd, lq, hq, m, lm, hm, lr;
-        integer_t hz, lz;
+	eusinteger_t ld, hd, lq, hq, m, lm, hm, lr;
+        eusinteger_t hz, lz;
 
 
 	ld = (d  & 0x00000000ffffffff);
@@ -79,10 +79,10 @@ integer_t *hp, *lp;
 }
 
 void extended_div(d, h, l, qp, rp)
-integer_t d, h, l;
-integer_t *qp, *rp;
+eusinteger_t d, h, l;
+eusinteger_t *qp, *rp;
 {
-	integer_t lh, ld, ll, ans;
+	eusinteger_t lh, ld, ll, ans;
 	int i;
 
 	ld = d;
@@ -116,8 +116,8 @@ integer_t *qp, *rp;
 #if (!Solaris2 || !sun4)
 
 void extended_mul(d, q, r, hp, lp)
-integer_t d, q, r;
-integer_t *hp, *lp;/* ???? */
+eusinteger_t d, q, r;
+eusinteger_t *hp, *lp;/* ???? */
 {
 	long int  ld, hd, lq, hq, m, lm, hm, lr;
         int hz, lz;
@@ -169,8 +169,8 @@ integer_t *hp, *lp;/* ???? */
 }
 
 void extended_div(d, h, l, qp, rp)
-integer_t d, h, l;
-integer_t *qp, *rp;
+eusinteger_t d, h, l;
+eusinteger_t *qp, *rp;
 {
 	long int lh, ld, ll;
 	int i,ans;
@@ -354,7 +354,7 @@ printf(" =%x:%x\n",*qp,*rp);fflush(stdout);
 
 inline pointer stretch_big(x, i)
 pointer x;
-integer_t i;
+eusinteger_t i;
 { pointer bn=x->c.bgnm.bv;
   int vlen=vecsize(bn);
   pointer newv, oldv;
@@ -371,7 +371,7 @@ pointer copy_big(x)
 pointer x;
 { pointer y;
   register int size, i;
-  register integer_t *xv, *yv;
+  register eusinteger_t *xv, *yv;
 
   size=bigsize(x);
   y=makebig(size);
@@ -390,7 +390,7 @@ pointer x;
 */
 pointer extend_big(pointer b, int newsize)
 { pointer nb;
-  integer_t *bv, *nbv;
+  eusinteger_t *bv, *nbv;
   int i,bsize;
   nb=makebig(newsize);
   bv=bigvec(b); nbv=bigvec(nb); bsize=bigsize(b);
@@ -404,9 +404,9 @@ pointer extend_big(pointer b, int newsize)
 	Big_zerop(x) answers if bignum x is zero or not.
 	X may be any bignum.
 */
-integer_t big_zerop(x)
+eusinteger_t big_zerop(x)
 pointer x;
-{ register integer_t *xv;
+{ register eusinteger_t *xv;
   register int i, size;
   xv=bigvec(x); size=bigsize(x);
   for (i=0; i<size; i++)  if (xv[i] != 0) return(0);
@@ -419,7 +419,7 @@ pointer x;
 		something >= 0	if x > 0.
 	X may be any bignum.
 */
-integer_t big_sign(x)
+eusinteger_t big_sign(x)
 pointer x;
 { pointer y;
   y=x->c.bgnm.bv;
@@ -435,9 +435,9 @@ pointer x;
 
 int big_compare(x, y)
 register pointer x, y;
-{ register integer_t *xv, *yv;
+{ register eusinteger_t *xv, *yv;
   register int xsize,ysize,i,j=0;
-  integer_t xsign, ysign;
+  eusinteger_t xsign, ysign;
   xv=bigvec(x); yv=bigvec(y);
   xsize=bigsize(x); ysize=bigsize(y);
 
@@ -475,7 +475,7 @@ void complement_big(x)
 pointer x;
 {
   int size, i=0;
-  integer_t *xv;
+  eusinteger_t *xv;
   size=bigsize(x); xv=bigvec(x);
 
   while (i != size-1) {
@@ -506,7 +506,7 @@ ONE:
 pointer big_minus(x)
 pointer x;
 { int size, i;
-  integer_t *xv, *yv;
+  eusinteger_t *xv, *yv;
   pointer y;
 
   size=bigsize(x); xv=bigvec(x);
@@ -549,10 +549,10 @@ ONE:
 	X may be any bignum.
 */
 void add_int_big(c, x)
-integer_t c;
+eusinteger_t c;
 pointer x;
 { register int size, i=0;
-  register integer_t *xv;
+  register eusinteger_t *xv;
 
   size=bigsize(x); xv=bigvec(x);
   while (i<size-1) {
@@ -579,10 +579,10 @@ pointer x;
 	X may be any bignum.
 */
 void sub_int_big(c, x)
-integer_t c;
+eusinteger_t c;
 pointer x;
 { register int size, i=0;
-  register integer_t *xv;
+  register eusinteger_t *xv;
   size=bigsize(x); xv=bigvec(x);
   while (i<size-1) {
     xv[i] -= c;
@@ -604,10 +604,10 @@ pointer x;
 	X should be non-negative.
 */
 void mul_int_big(c, x)
-integer_t c;
+eusinteger_t c;
 pointer x;
 { int size, i=0;
-  integer_t *xv, h=0;
+  eusinteger_t *xv, h=0;
 
   size=bigsize(x); xv=bigvec(x);
   while (i<size) {
@@ -624,11 +624,11 @@ pointer x;
 	c should be positive.
 	X should be non-negative.
 */
-integer_t div_int_big(c, x)
-integer_t c;
+eusinteger_t div_int_big(c, x)
+eusinteger_t c;
 pointer x;
 { int i, size;
-  integer_t *xv, r;
+  eusinteger_t *xv, r;
   if (c == 0) error(E_USER,(pointer)"divide by zero in bignum div");
   size=bigsize(x); xv=bigvec(x);
   /* divide from MSB */ 
@@ -648,7 +648,7 @@ pointer big_plus(x, y)
 pointer x, y;
 { pointer z;
   int i, xsize, ysize;
-  integer_t c, zlast, *xv, *yv, *zv;
+  eusinteger_t c, zlast, *xv, *yv, *zv;
 
   xsize=bigsize(x); ysize=bigsize(y);
   if (xsize<ysize) { /*exchange x and y so that x is bigger than y */
@@ -694,10 +694,10 @@ pointer x, y;
 pointer big_times(x, y)
 pointer x, y;
 { int xsize, ysize, zsize;
-  integer_t *xv, *yv, *zv;
+  eusinteger_t *xv, *yv, *zv;
   int i, j, k, m;
   pointer z;
-  integer_t hi, lo;
+  eusinteger_t hi, lo;
   
   xsize=bigsize(x); ysize=bigsize(y);
   zsize=xsize+ysize;
@@ -738,12 +738,12 @@ pointer x, y;
 */
 
 void sub_int_big_big(c, x, y)
-integer_t c;
+eusinteger_t c;
 pointer x, y;
 { int i, j;
   int xsize, ysize;
-  integer_t *xv, *yv;
-  integer_t hi, lo;
+  eusinteger_t *xv, *yv;
+  eusinteger_t hi, lo;
 
   xsize=bigsize(x); ysize=bigsize(y);
   xv=bigvec(x); yv=bigvec(y);
@@ -778,10 +778,10 @@ pointer x, y;
 	i.e. the most significant bit of that digit will be set.
 */
 
-inline integer_t get_standardizing_factor_and_normalize(x)
+inline eusinteger_t get_standardizing_factor_and_normalize(x)
 pointer x;
 { int size, s, newsize;
-  integer_t *xv, i, j;
+  eusinteger_t *xv, i, j;
 
   size=bigsize(x); xv=bigvec(x);
   s=size-1;
@@ -804,11 +804,11 @@ pointer x;
 	Div_big_big(x0, y0) returns the quotient of the division,
 	which must be less than 2**31.
 */
-integer_t div_big_big(x, y)
+eusinteger_t div_big_big(x, y)
 pointer  x, y;
 { int xsize, ysize, zsize;
-  integer_t *xv, *yv, *zv;
-  integer_t  q,r; /*quotient, remainder*/
+  eusinteger_t *xv, *yv, *zv;
+  eusinteger_t  q,r; /*quotient, remainder*/
 
  
   xsize=bigsize(x); ysize=bigsize(y);
@@ -841,7 +841,7 @@ pointer x, y;
 int i;
 { pointer q, qq;
   int xsize, ysize;
-  integer_t *xv, *yv;
+  eusinteger_t *xv, *yv;
 
   xsize=bigsize(x); ysize=bigsize(y);
 
@@ -886,7 +886,7 @@ pointer x0, y0, *qp, *rp;
 {
 	context *ctx=euscontexts[thr_self()];
 	pointer x, y;
-	integer_t i;
+	eusinteger_t i;
 	int l, m;
 
 	x = copy_big(x0);
@@ -917,7 +917,7 @@ pointer x;
 
 pointer normalize_big(pointer x)
 { int  size, i, newsize, positive;
-  integer_t  *xv;
+  eusinteger_t  *xv;
 
   size=bigsize(x); xv=bigvec(x);
   newsize=size;
@@ -934,7 +934,7 @@ pointer normalize_big(pointer x)
 
 pointer normalize_bignum(x)
 pointer x;
-{ integer_t y, msb3;
+{ eusinteger_t y, msb3;
   int bs;
 
   if (!isbignum(x)) return(x);
@@ -948,9 +948,9 @@ pointer x;
     if (msb3==0 || msb3==7)    return(makeint(y));}
   return(x);}
 
-float_t big_to_float(pointer x)
+eusfloat_t big_to_float(pointer x)
 { int size, i;
-  integer_t *xv;
+  eusinteger_t *xv;
   double d, e;
   size=bigsize(x); xv=bigvec(x);
 
@@ -962,10 +962,10 @@ float_t big_to_float(pointer x)
   return(d);
 }
 
-pointer float_to_big(float f)
+pointer eusfloat_to_big(float f)
 { int i, j, exp, bsize, iz;
   pointer b;
-  integer_t *bv;
+  eusinteger_t *bv;
   double sign, z;
   extern double frexp(double, int *);
   extern double ldexp(double, int);

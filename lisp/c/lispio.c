@@ -226,7 +226,7 @@ register context *ctx;
 register int n;
 register pointer argv[];
 { pointer strm,eoferrorp=T,eofvalue=NIL;
-  register integer_t result;
+  register eusinteger_t result;
   ckarg2(0,3);
   strm=getinstream(ctx,n,argv[0]);
   if (n>=2) eoferrorp=argv[1];
@@ -254,7 +254,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer strm,eoferrorp=T,eofvalue=NIL;
-  integer_t result;
+  eusinteger_t result;
   ckarg2(0,3);
   strm=getinstream(ctx,n,argv[0]);
   if (n>=2) eoferrorp=argv[1];
@@ -406,7 +406,7 @@ pointer *argv; /* unused argument */
 /*	T.Matsui
 */
 
-#define nextcch() ((cx>=cmax)?(byte)((integer_t)error(E_FORMATSTRING)):cstr[cx++])
+#define nextcch() ((cx>=cmax)?(byte)((eusinteger_t)error(E_FORMATSTRING)):cstr[cx++])
 
 #define nextfarg() ((fargx>=fargc)?(pointer)error(E_MISMATCHARG):fargv[fargx++])
 

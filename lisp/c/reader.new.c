@@ -6,7 +6,7 @@
 /*	1987-May	labeled expression #n= and #n#
 /*	1988-July	multiple escape |...|
 /****************************************************************/
-static char *rcsid="@(#)$Id: reader.new.c,v 1.1.1.1 2003/11/20 07:46:27 eus Exp $";
+static char *rcsid="@(#)$Id$";
 
 #include <ctype.h>
 #include <fcntl.h>
@@ -247,7 +247,7 @@ int labx;
     unsolp=(pointer *)unsol;
 #endif
 #if sun4 || vax || news || mips || alpha || i386
-    unsolp=(pointer *)((integer_t)unsol & ~3);/*???? */
+    unsolp=(pointer *)((eusinteger_t)unsol & ~3);/*???? */
 #endif
     unsol= *unsolp;
     *unsolp=result; }
@@ -473,17 +473,17 @@ register int val,subchar;
 static pointer read_sharp_hex(ctx,f,val,subchar)
 register context *ctx;
 register pointer f;
-integer_t val;
+eusinteger_t val;
 int subchar;
 { register int i=0,j,x,c,p,q;
   pointer b;
-  integer_t *bv;
+  eusinteger_t *bv;
   char ch, buf[WORD_SIZE];
 
   ch=readch(f);
   while (i<WORD_SIZE && isxdigit(ch)) { buf[i++] = ch; ch=readch(f);}
   unreadch(f,ch); buf[i]=0;
-  if (i<sizeof(integer_t)*2) { sscanf(buf,"%lx",&val);  return(makeint(val));}
+  if (i<sizeof(eusinteger_t)*2) { sscanf(buf,"%lx",&val);  return(makeint(val));}
   else {
     b= (pointer)makebig((i*4+WORD_SIZE-1)/(WORD_SIZE-1));
     bv=bigvec(b);
@@ -502,7 +502,7 @@ int subchar;
 static pointer read_sharp_octal(ctx,f,val,subchar)
 register context *ctx;
 pointer f;
-integer_t val;
+eusinteger_t val;
 int subchar;
 { register int i=0;
   char buf[WORD_SIZE/2], ch;
