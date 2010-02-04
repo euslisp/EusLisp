@@ -154,7 +154,7 @@
 (defmethod glviewsurface
   (:create (&rest args
 	    &key (x 0) (y 0) (size 256) ((:width w) size) ((:height h) size)
-		 (title (string (gensym "GL")))
+		 ((:glcon shared-glcon) 0) (title (string (gensym "GL")))
 		 &allow-other-keys)
 	   ;; (format t "x y w h -> ~a ~a ~a ~a~%" x y w h)
 	   ;; (if posx (setf x posx))
@@ -167,7 +167,7 @@
 	   (setq visualinfo
               (glXChooseVisual x::*display* (x::DefaultScreen x::*display*)
                                 *attributelist*))
-           (setq glcon (glXCreateContext x::*display* visualinfo 0 GL_TRUE))
+           (setq glcon (glXCreateContext x::*display* visualinfo shared-glcon GL_TRUE))
 	   (send-super* :create
                         :depth (sys:peek (+ visualinfo 12) :long)
                         :visual (sys:peek visualinfo :long)
