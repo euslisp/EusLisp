@@ -6,7 +6,9 @@
 \usepackage[dvipdfm]{graphicx,color,epsfig}
 \let\epsfile=\epsfig
 \usepackage[dvipdfm,bookmarks=true,bookmarksnumbered=true,bookmarkstype=toc]{hyperref}
-\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
+\ifnum 42146=\euc"A4A2 \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}\else
+\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}\fi
+
 %%%
 
 
