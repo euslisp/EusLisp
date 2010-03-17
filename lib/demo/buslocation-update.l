@@ -13,7 +13,7 @@
 (require :pgsql "pgsql")
 
 ;;
-;; "Ìó1»ş´Ö27Ê¬" ¤È¤¤¤¦Ê¸»úÎóÉ½¸½¤ò87¤È¤¤¤¦À°¿ô¤Ë¤¹¤ë¡£
+;; "ç´„1æ™‚é–“27åˆ†" ã¨ã„ã†æ–‡å­—åˆ—è¡¨ç¾ã‚’87ã¨ã„ã†æ•´æ•°ã«ã™ã‚‹ã€‚
 ;;
 (defun minutes-from-japanese-timestring (time-string)
  (let ((match) (start) (end) (hour) (minute))
@@ -54,19 +54,19 @@ create table tsukuba_bus (
 
 (defun update-bus-location ()
   (let (now db)
-	(setq hour-pattern "Ìó.*»ş´Ö")
-	(setq minute-pattern "»ş´Ö.*Ê¬")
+	(setq hour-pattern "ç´„.*æ™‚é–“")
+	(setq minute-pattern "æ™‚é–“.*åˆ†")
 
 	(setq bus-location-html (read-http *ibaraki-bus-location-url*))
 	(setq bus-location-body (cadr bus-location-html))
 
 	(setq work (nthcdr 100 bus-location-body))
 
-	;;(defun html-marked-items (html-list &optional (mark "¢£") (mark-end 'br)
+	;;(defun html-marked-items (html-list &optional (mark "â– ") (mark-end 'br)
 	;;				(end '/table)) ... )
 
-	(setq up (html-marked-items work "¤Ä¤¯¤ĞÀş¡¡¾å¤ê" '/tr '/body))
-	(setq down (html-marked-items work "¤Ä¤¯¤ĞÀş¡¡²¼¤ê" '/tr '/body))
+	(setq up (html-marked-items work "ã¤ãã°ç·šã€€ä¸Šã‚Š" '/tr '/body))
+	(setq down (html-marked-items work "ã¤ãã°ç·šã€€ä¸‹ã‚Š" '/tr '/body))
 
 	(setq uptime-string (nth 2 (caar up)))
 	(setq downtime-string (nth 2 (caar down)))

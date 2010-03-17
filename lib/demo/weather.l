@@ -106,35 +106,35 @@ UPDATE table SET column = expression [, ...]
 		(string-left-trim '(#\space)  (nthcdr 4 (second report)))))
       (setq abab abstract)
 	;; 
-      (setq today (string-match "º£Æü" abstract 0))
+      (setq today (string-match "ä»Šæ—¥" abstract 0))
       (unless today 
-	    (setq today (string-match "º£Ìë" abstract 0)) )
+	    (setq today (string-match "ä»Šå¤œ" abstract 0)) )
       ;; (format t "today=~s~%" today)
       (setq x (string-match "("   abstract today)) ;)
-      (unless x (setq x string-match "¡Ê" abstract today))
+      (unless x (setq x string-match "ï¼ˆ" abstract today))
       (setq today
 	    (string-trim '(#\space)
 	    	(subseq abstract (+ today 4) x)))
 	;;
-      (setq tomorrow (string-match "ÌÀÆü" abstract x))
+      (setq tomorrow (string-match "æ˜æ—¥" abstract x))
       ;; (format t "tomorrow=~s~%" tomorrow)
       (setq x (string-match "(" abstract tomorrow))
-      (unless x (setq x string-match "¡Ê" abstract tomorrow))
+      (unless x (setq x string-match "ï¼ˆ" abstract tomorrow))
       (setq tomorrow 
 		(string-trim '(#\space)
 			(subseq abstract (+ tomorrow 4) x)))
 	;;
-      (setq max-temp (string-match #|"ÆüÃæ¤ÎºÇ¹â"|# "ºÇ¹â" abstract x))
+      (setq max-temp (string-match #|"æ—¥ä¸­ã®æœ€é«˜"|# "æœ€é«˜" abstract x))
       (setq x (string-match "(" abstract max-temp))
-      (unless x (setq x string-match "¡Ê" abstract max-temp))
+      (unless x (setq x string-match "ï¼ˆ" abstract max-temp))
       (setq max-temp
 	    (remove #\space (subseq abstract (+ max-temp 10) x) :count 100) )
       (setq max-temp (euc-number (euc-string-trim euc-space max-temp)))
 	;;
-      (setq min-temp (string-match "Ä«¤ÎºÇÄã" abstract 0))
+      (setq min-temp (string-match "æœã®æœ€ä½" abstract 0))
       (when min-temp 
 	      (setq x (string-match "(" abstract min-temp))
-	      (unless x (setq x string-match "¡Ê" abstract min-temp))
+	      (unless x (setq x string-match "ï¼ˆ" abstract min-temp))
 	      (setq min-temp
 		    (remove #\space (subseq abstract (+ min-temp 8) x)
 			 :count 100) )
@@ -150,7 +150,7 @@ UPDATE table SET column = expression [, ...]
 	    (remove-if-not #'stringp (second report)))
       (while (cddr report)
 	 (setq rep (pop report))
-	 (if (string-match "³µ¶·" rep)
+	 (if (string-match "æ¦‚æ³" rep)
 	     (return-from wni-report (third report)))))
   )
 

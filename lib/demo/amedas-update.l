@@ -35,15 +35,15 @@
 	"http://www.jma.go.jp/JMA_HP/jp/radar/color/japan/record/radar-~a00.gif"
 	now-string))
 
-;; ¤Ò¤Ş¤ï¤êÁ´µåÀÖ³°
+;; ã²ã¾ã‚ã‚Šå…¨çƒèµ¤å¤–
 (defparameter *jma-gmsball-jpg-url* (format nil
 	"http://www.jma.go.jp/JMA_HP/jp/gms/ball/record/gmsball-~a.jpg"
 	now-string)
-;; ¤Ò¤Ş¤ï¤êÆüËÜÀÖ³°
+;; ã²ã¾ã‚ã‚Šæ—¥æœ¬èµ¤å¤–
 (defparameter *jma-gmsasia-jpg-url* (format nil
 	"http://www.jma.go.jp/JMA_HP/jp/gms/asia/record/gmsasia-~a.jpg"
 	now-string)
-;; ¤Ò¤Ş¤ï¤êÆüËÜ¿å¾øµ¤
+;; ã²ã¾ã‚ã‚Šæ—¥æœ¬æ°´è’¸æ°—
 (defparameter *jma-gmsvapor-jpg-url* (format nil
 	"http://www.jma.go.jp/JMA_HP/jp/gms/vapor/record/gmsvapor-~a.jpg"
 	now-string)

@@ -59,9 +59,9 @@
 
 (defun min-to-hourmin-string (min)
    (cond ((not (numberp min)) "")
-	 ((< min 60) (format nil "~aÊ¬" min))
+	 ((< min 60) (format nil "~aåˆ†" min))
 	 ((not (integerp min)) "N/A")
-	 (t (format nil "~d»ş´Ö~dÊ¬" (/ min 60) (mod min 60)))) )
+	 (t (format nil "~dæ™‚é–“~dåˆ†" (/ min 60) (mod min 60)))) )
 
 (defun average-time-records (records)
    (list
@@ -146,18 +146,18 @@
 	 (month (xqval 'month *forms*))
 	 (day (xqval 'day *forms*)))
 
-     (gen "<h2>ºòÆü¡¢ËÜÆü¤ÎÀ¸¤Î¥Ç¡¼¥¿</h2>")
+     (gen "<h2>æ˜¨æ—¥ã€æœ¬æ—¥ã®ç”Ÿã®ãƒ‡ãƒ¼ã‚¿</h2>")
      ;; (gen "~a~%" *forms*)
      (gen-action *action* 'post)
      (gen "~a~%"
 	(html-table (list
-	   (list "ËÜÆü¡¢ºòÆü¤Î30Ê¬Ê¿¶Ñ"
+	   (list "æœ¬æ—¥ã€æ˜¨æ—¥ã®30åˆ†å¹³å‡"
 		(input-form 'submit 'command 'average 50 ))
-	   (list "Ç¯" (input-form 'label 'year  (string (send now :year))  5))
-	   (list "·î" (input-form 'label 'month (string (send now :month))  5))
-	   (list "Æü" (input-form 'label 'day  (string (send now :day))  5))
-	   (list "À¸¥Ç¡¼¥¿É½¼¨" (input-form 'submit 'command 'raw 50 )) 	
-	   (list "½µ´ÖÅ·µ¤É½¼¨" (input-form 'submit 'command 'weather 50 )) 	
+	   (list "å¹´" (input-form 'label 'year  (string (send now :year))  5))
+	   (list "æœˆ" (input-form 'label 'month (string (send now :month))  5))
+	   (list "æ—¥" (input-form 'label 'day  (string (send now :day))  5))
+	   (list "ç”Ÿãƒ‡ãƒ¼ã‚¿è¡¨ç¤º" (input-form 'submit 'command 'raw 50 )) 	
+	   (list "é€±é–“å¤©æ°—è¡¨ç¤º" (input-form 'submit 'command 'weather 50 )) 	
 	   )))
      (gen "</form>")
 
@@ -171,17 +171,17 @@
 				    (digits-string (send (second r) :minutes) 2))
 				(fourth r) (fifth r) (sixth r) (seventh r))) 
 			trip-data)
-		:heading '(date time ¾å¤ê Ê¬ ²¼¤ê Ê¬)
+		:heading '(date time ä¸Šã‚Š åˆ† ä¸‹ã‚Š åˆ†)
 		:table-option "border=1"))      )
 	(t (setq date (instance calendar-time :make
-		:year year
+		:year (send now :year)
 		:month month
 		:day day))
 	   (gen "date=~a~%" (send date :iso-date-string))
 	   (setq trip-data (get-db-day-data date t))	;absolute date
 	   (gen  (html-table 
 		(append
-		  (list (list "Å·µ¤" "" (get-weather date)))
+		  (list (list "å¤©æ°—" "" (get-weather date)))
 		  (mapcar #'(lambda (r) (list 
 				(send (first r) :iso-date-string) 
 				(format nil "~2a:~2a"
@@ -189,7 +189,7 @@
 				    (digits-string (send (second r) :minutes) 2))
 				(fourth r) (fifth r) (sixth r) (seventh r))) 
 			trip-data))
-		:heading '(date time ¾å¤ê Ê¬ ²¼¤ê Ê¬)
+		:heading '(date time ä¸Šã‚Š åˆ† ä¸‹ã‚Š åˆ†)
 		:table-option "border=1"))      )
    )))
 
@@ -260,14 +260,14 @@
      (gen "~a~%"
 	(html-table (list 
 	    (list
-		"10Ê¬¤ª¤­¤Î½êÍ×»ş´ÖÀ¸¥Ç¡¼¥¿"
-		(input-form 'submit 'command 'raw  80 "À¸¥Ç¡¼¥¿" ))
+		"10åˆ†ãŠãã®æ‰€è¦æ™‚é–“ç”Ÿãƒ‡ãƒ¼ã‚¿"
+		(input-form 'submit 'command 'raw  80 "ç”Ÿãƒ‡ãƒ¼ã‚¿" ))
 	    (list
-		"30Ê¬¤´¤È¤ÎÅşÃå½êÍ×»ş´Ö"
-		(input-form 'submit 'command 'average  80 "¥È¥é¥Õ¥£¥Ã¥¯" ))
+		"30åˆ†ã”ã¨ã®åˆ°ç€æ‰€è¦æ™‚é–“"
+		(input-form 'submit 'command 'average  80 "ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯" ))
 	    (list
-		"°ì½µ´Ö¤ÎÅ·µ¤"
-		(input-form 'submit 'command 'weather  80 "Å·µ¤" ))
+		"ä¸€é€±é–“ã®å¤©æ°—"
+		(input-form 'submit 'command 'weather  80 "å¤©æ°—" ))
 	    )))
      (gen "iso date: ~a~%" (send date :iso-date-string))
      (gen "</form>")
@@ -277,7 +277,7 @@
 		where recdate=date '~a' and road='metro-route6'
 		order by rectime"
 	(send date :iso-date-string)) ))
-     (gen "<h3>¼óÅÔ¹âÂ®6¹æ</h3>")	
+     (gen "<h3>é¦–éƒ½é«˜é€Ÿ6å·</h3>")	
      (gen "~a~%" (html-table tradata :border 1))
      ;;
      (setq tradata (send db :exec (format nil
@@ -285,7 +285,7 @@
 		where recdate=date '~a' and road='metro-coast'
 		order by rectime"
 	(send date :iso-date-string)) ))
-     (gen "<h3>¼óÅÔ¹âÂ®ÏÑ´ßÀş</h3>")
+     (gen "<h3>é¦–éƒ½é«˜é€Ÿæ¹¾å²¸ç·š</h3>")
      (gen "~a~%" (html-table tradata :border 1))
      ;;
      (setq tradata (send db :exec (format nil
@@ -293,7 +293,7 @@
 		where recdate=date '~a' and road='joban-tokyo'
 		order by rectime"
 	(send date :iso-date-string)) ))
-     (gen "<h3>¾ïÈ×Æ»ÅìµşÉôÊ¬</h3>")
+     (gen "<h3>å¸¸ç›¤é“æ±äº¬éƒ¨åˆ†</h3>")
      (gen "~a~%" (html-table tradata :border 1)) 
      ;;
      (setq tradata (send db :exec (format nil
@@ -301,7 +301,7 @@
 		where recdate=date '~a' and road='joban-ibaraki'
 		order by rectime"
 	(send date :iso-date-string)) ))
-     (gen "<h3>¾ïÈ×Æ»°ñ¾ë¸©ÉôÊ¬</h3>")
+     (gen "<h3>å¸¸ç›¤é“èŒ¨åŸçœŒéƒ¨åˆ†</h3>")
      (gen "~a~%" (html-table tradata :border 1)) 
     ))
 
@@ -330,7 +330,7 @@
 
 
 ;;
-;; º£Æü ºòÆü °ìºòÆü £±½µ´ÖÁ° £²½µ´ÖÁ° °ì·îÁ° ·îÊ¿¶Ñ Ç¯Ê¿¶Ñ
+;; ä»Šæ—¥ æ˜¨æ—¥ ä¸€æ˜¨æ—¥ ï¼‘é€±é–“å‰ ï¼’é€±é–“å‰ ä¸€æœˆå‰ æœˆå¹³å‡ å¹´å¹³å‡
 ;;
 
 (defun generate-minutes-table ()
@@ -356,17 +356,16 @@
      (gen "~a~%"
 	(html-table (list 
 	    (list
-		"10Ê¬¤ª¤­¤Î½êÍ×»ş´ÖÀ¸¥Ç¡¼¥¿"
-		(input-form 'submit 'command 'raw  80 "À¸¥Ç¡¼¥¿" ))
+		"10åˆ†ãŠãã®æ‰€è¦æ™‚é–“ç”Ÿãƒ‡ãƒ¼ã‚¿"
+		(input-form 'submit 'command 'raw  80 "ç”Ÿãƒ‡ãƒ¼ã‚¿" ))
 	    (list
-		"º£Æü¤Î´ØÏ¢¸òÄÌ¾ğÊó"
-		(input-form 'submit 'command 'traffic  80 "¥È¥é¥Õ¥£¥Ã¥¯" ))
+		"ä»Šæ—¥ã®é–¢é€£äº¤é€šæƒ…å ±"
+		(input-form 'submit 'command 'traffic  80 "ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯" ))
 	    (list
-		"°ì½µ´Ö¤Î¾å¤ê½êÍ×»ş´Ö"
+		"ä¸€é€±é–“ã®ä¸Šã‚Šæ‰€è¦æ™‚é–“"
 		(input-form 'submit 'command 'week-time  80 "week-time" ))
 	)))
      (gen "</form>")
-     (gen "<a href=/bus/statistics.html>2003Ç¯¤Î·îÊÌ¡¢ÍËÆüÊÌÊ¿¶Ñ½êÍ×»ş´Ö</a></br>")
      ;;
      (setq trip-today (get-db-day-data 0))
      (setq trip-yesterday (get-db-day-data -1))
@@ -403,24 +402,24 @@
 			(mapcar #'second minutes-week-ago)))
      ;;
      ;;
-     (gen "<h2>¾å¤ê (¤Ä¤¯¤Ğ¢ªÅìµş)</h2>
-¥Ç¡¼¥¿(¿ô»ú)¤ò¥¯¥ê¥Ã¥¯¤¹¤ë¤È¤½¤Î¤È¤­¤Î¼óÅÔ¹â£¶¹æÀş¤Î¸òÄÌ¾ğÊó¤¬¤ï¤«¤ê¤Ş¤¹.<br>Ã±°Ì¡§Ê¬<br>~%")
+     (gen "<h2>ä¸Šã‚Š (ã¤ãã°â†’æ±äº¬)</h2>
+ãƒ‡ãƒ¼ã‚¿(æ•°å­—)ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ãã®ã¨ãã®é¦–éƒ½é«˜ï¼–å·ç·šã®äº¤é€šæƒ…å ±ãŒã‚ã‹ã‚Šã¾ã™.<br>å˜ä½ï¼šåˆ†<br>~%")
      (gen (html-table
 		(mapcar #'cons
-		    (append '("Å·µ¤<br>µ¤²¹<br>¹ß¿å³ÎÎ¨") 30min-list)
+		    (append '("å¤©æ°—<br>æ°—æ¸©<br>é™æ°´ç¢ºç‡") 30min-list)
 		     up-minutes)	
 		:heading 
-		   (list "ÅşÃå»ş¹ï" 
-			(format nil "~dÆü(~a)"
+		   (list "åˆ°ç€æ™‚åˆ»" 
+			(format nil "~dæ—¥(~a)"
 			   (send now :day)
 			   (send now :weekday-string :jp))
-			(format nil "~dÆü(~a)" 
+			(format nil "~dæ—¥(~a)" 
 			   (send yesterday :day)
 			   (send yesterday :weekday-string :jp))
-			(format nil "~dÆü(~a)" 
+			(format nil "~dæ—¥(~a)" 
 			   (send the-day-before :day)
 			   (send the-day-before :weekday-string :jp))
-                        (format nil "°ì½µÁ° ~dÆü(~a)"
+                        (format nil "ä¸€é€±å‰ ~dæ—¥(~a)"
 			   (send (send now :offset-day -7) :day)
 			   (send (send now :offset-day -7) :weekday-string :jp))
 			)
@@ -430,20 +429,20 @@
 		))
 
      (gen "~%<hr>~%")
-     (gen "<h2>²¼¤ê (Åìµş¢ª¤Ä¤¯¤Ğ)</h2>~%")
+     (gen "<h2>ä¸‹ã‚Š (æ±äº¬â†’ã¤ãã°)</h2>~%")
      (gen (html-table
 		(mapcar #'cons 30min-list down-minutes)	
 		:heading
-		   (list "ÅşÃå»ş¹ï" 
-			(format nil "~dÆü(~a)"
+		   (list "åˆ°ç€æ™‚åˆ»" 
+			(format nil "~dæ—¥(~a)"
 			   (send now :day) (send now :weekday-string :jp))
-			(format nil "~dÆü(~a)" 
+			(format nil "~dæ—¥(~a)" 
 			   (send yesterday :day)
 			   (send yesterday :weekday-string :jp))
-			(format nil "~dÆü(~a)" 
+			(format nil "~dæ—¥(~a)" 
 			   (send the-day-before :day)
 			   (send the-day-before :weekday-string :jp))
-	                (format nil "°ì½µÁ° ~dÆü(~a)"
+	                (format nil "ä¸€é€±å‰ ~dæ—¥(~a)"
 			   (send (send now :offset-day -7) :day)
 			   (send (send now :offset-day -7) :weekday-string :jp))
 			)
@@ -476,7 +475,7 @@
      (goback-button)
      (dolist (name-oid (mapcar #'list
 		'(weather temp precip snow)
-		'("Å·µ¤Ê¬ÉÛ" "µ¤²¹Ê¬ÉÛ" "¹ß¿åÎÌÊ¬ÉÛ" "ÀÑÀãÎÌÊ¬ÉÛ")
+		'("å¤©æ°—åˆ†å¸ƒ" "æ°—æ¸©åˆ†å¸ƒ" "é™æ°´é‡åˆ†å¸ƒ" "ç©é›ªé‡åˆ†å¸ƒ")
 		loids))
 	(setq oid (third name-oid))
 	(setq base-name
@@ -520,14 +519,14 @@
    (html-header :title "Tsukuba bus trip time"
 		:charset :euc
 		:stylesheet "http://matsui.jpn.ph/matsui.css"
-		:keywords "¹âÂ®¥Ğ¥¹, ¤Ä¤¯¤Ğ¹æ, ¾¾°æ, ½êÍ×»ş´Ö, »ö¸Î,Å·µ¤,¥Ç¡¼¥¿¥Ù¡¼¥¹,EusLisp"
+		:keywords "é«˜é€Ÿãƒã‚¹, ã¤ãã°å·, æ¾äº•, æ‰€è¦æ™‚é–“, äº‹æ•…,å¤©æ°—,ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹,EusLisp"
 		)
    ;;
    ;; (gen "<br>command=~a<br>~%" *db-command*)
 
    (gen "<center><h1>
-	<a href=/bus/tsukubago.html>¹âÂ®¥Ğ¥¹ ¤Ä¤¯¤Ğ¹æ ½êÍ×»ş´Ö
-<font size=2>»È¤¤Êı</font></a></h1>" )
+	<a href=/bus/tsukubago.html>é«˜é€Ÿãƒã‚¹ ã¤ãã°å· æ‰€è¦æ™‚é–“
+<font size=2>ä½¿ã„æ–¹</font></a></h1>" )
    (gen (send now :iso-string))
    (case *db-command*
 	(raw (generate-raw-table))

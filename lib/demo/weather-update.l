@@ -1,17 +1,17 @@
 ;;;; 
-;;;; TOKYO-FM ¥ß¥¨¥ë¥é¥¸¥ª Å·µ¤¾ğÊó
+;;;; TOKYO-FM ãƒŸã‚¨ãƒ«ãƒ©ã‚¸ã‚ª å¤©æ°—æƒ…å ±
 ;;;;
 ;;;	January, 2003 (c) Toshihiro Matsui
 ;;;
-;;;	¡ãÅìµş¡ä¡Êº£Æü¡Ë À²¤Î¤ÁÆŞ¤ê [À²¢ªÆŞ]
-;;;	¡ãÅìµş¡ä¡ÊÌÀÆü¡Ë ±«¤«Àã
-;;;	¡ãÅìµş¡ä ±«¤Ş¤¿¤ÏÀã¤Î³ÎÎ¨ ¸á¸å £°¡ó º£Ìë £±£°¡ó
-;;;	¡ãÅìµş¡ä¤ÎÍ½ÁÛµ¤²¹¡Êº£Æü¡Ë ºÇ¹â £¸ÅÙ
+;;;	ï¼œæ±äº¬ï¼ï¼ˆä»Šæ—¥ï¼‰ æ™´ã®ã¡æ›‡ã‚Š [æ™´â†’æ›‡]
+;;;	ï¼œæ±äº¬ï¼ï¼ˆæ˜æ—¥ï¼‰ é›¨ã‹é›ª
+;;;	ï¼œæ±äº¬ï¼ é›¨ã¾ãŸã¯é›ªã®ç¢ºç‡ åˆå¾Œ ï¼ï¼… ä»Šå¤œ ï¼‘ï¼ï¼…
+;;;	ï¼œæ±äº¬ï¼ã®äºˆæƒ³æ°—æ¸©ï¼ˆä»Šæ—¥ï¼‰ æœ€é«˜ ï¼˜åº¦
 ;;;
-;;;	¡ãÅìµş¡ä¡Êº£Ìë¡Ë ±«¤Î¤ÁÀ² [±«¢ªÀ²]
-;;;	¡ãÅìµş¡ä¡ÊÌÀÆü¡Ë ¤Ï¤ì [À²]
-;;;	¡ãÅìµş¡ä Àã¤Ş¤¿¤Ï±«¤Î³ÎÎ¨ º£Ìë £µ£°¡ó ¿¼Ìë £°¡ó
-;;;	¡ãÅìµş¡ä¤ÎÍ½ÁÛµ¤²¹¡ÊÌÀÆü¡Ë ºÇÄã £³ÅÙ ºÇ¹â £¹ÅÙ  
+;;;	ï¼œæ±äº¬ï¼ï¼ˆä»Šå¤œï¼‰ é›¨ã®ã¡æ™´ [é›¨â†’æ™´]
+;;;	ï¼œæ±äº¬ï¼ï¼ˆæ˜æ—¥ï¼‰ ã¯ã‚Œ [æ™´]
+;;;	ï¼œæ±äº¬ï¼ é›ªã¾ãŸã¯é›¨ã®ç¢ºç‡ ä»Šå¤œ ï¼•ï¼ï¼… æ·±å¤œ ï¼ï¼…
+;;;	ï¼œæ±äº¬ï¼ã®äºˆæƒ³æ°—æ¸©ï¼ˆæ˜æ—¥ï¼‰ æœ€ä½ ï¼“åº¦ æœ€é«˜ ï¼™åº¦  
 ;;;
 
 (require :http "http")
@@ -20,19 +20,19 @@
 (require :pgsql "pgsql")
 
 
-;; Å·µ¤Ê¬ÉÛ
+;; å¤©æ°—åˆ†å¸ƒ
 (defparameter *jma-weather-gif-url*
 	"http://www.jma.go.jp/JMA_HP/jp/mesh20/japan-cond-1.gif")
 ;;
-;; µ¤²¹Ê¬ÉÛ
+;; æ°—æ¸©åˆ†å¸ƒ
 (defparameter *jma-temp-gif-url*
 	"http://www.jma.go.jp/JMA_HP/jp/mesh20/japan-temp-1.gif")
 ;;
-;; ¹ß¿åÎÌÊ¬ÉÛ
+;; é™æ°´é‡åˆ†å¸ƒ
 (defparameter *jma-precip-gif-url*
 	"http://www.jma.go.jp/JMA_HP/jp/mesh20/japan-rain-1.gif")
 ;;
-;; ¹ßÀãÎÌ
+;; é™é›ªé‡
 (defparameter *jma-snow-gif-url*
 	"http://www.jma.go.jp/JMA_HP/jp/mesh20/japan-snow-1.gif")
 
@@ -63,14 +63,14 @@ create table weather_report (
 	tokyo-weather tokyo-temp wet-probability
 	gif weather-oid temp-oid precip-oid snow-oid
 	)
-	(setq tokyo-pattern "¡ãÅìµş¡ä")
-	(setq temp-pattern "¡ãÅìµş¡ä¤ÎÍ½ÁÛµ¤²¹")
-	(setq wet-probability-pattern "¡ãÅìµş¡ä Àã¤Ş¤¿¤Ï±«¤Î³ÎÎ¨ ")
+	(setq tokyo-pattern "ï¼œæ±äº¬ï¼")
+	(setq temp-pattern "ï¼œæ±äº¬ï¼ã®äºˆæƒ³æ°—æ¸©")
+	(setq wet-probability-pattern "ï¼œæ±äº¬ï¼ é›ªã¾ãŸã¯é›¨ã®ç¢ºç‡ ")
 	;;
-	;; (setq today-pattern "¡ãÅìµş¡ä¡Êº£Æü¡Ë  ")
-	;; (setq tonight-pattern "¡ãÅìµş¡ä¡Êº£Ìë¡Ë ")
-	;; (setq today-temp-pattern "¡ãÅìµş¡ä¤ÎÍ½ÁÛµ¤²¹¡Êº£Æü¡Ë  ")
-	;; (setq tomorrow-temp-pattern "¡ãÅìµş¡ä¤ÎÍ½ÁÛµ¤²¹¡ÊÌÀÆü¡Ë ")
+	;; (setq today-pattern "ï¼œæ±äº¬ï¼ï¼ˆä»Šæ—¥ï¼‰  ")
+	;; (setq tonight-pattern "ï¼œæ±äº¬ï¼ï¼ˆä»Šå¤œï¼‰ ")
+	;; (setq today-temp-pattern "ï¼œæ±äº¬ï¼ã®äºˆæƒ³æ°—æ¸©ï¼ˆä»Šæ—¥ï¼‰  ")
+	;; (setq tomorrow-temp-pattern "ï¼œæ±äº¬ï¼ã®äºˆæƒ³æ°—æ¸©ï¼ˆæ˜æ—¥ï¼‰ ")
 	;
 	(setq weather-html (read-http *tokyo-fm-weather-url*))
 	(setq weather-body (cadr weather-html))
@@ -92,7 +92,7 @@ create table weather_report (
 	(setq now (instance calendar-time :now))
 	(setq db (instance pq:pgsql :init :dbname "t.matsui"))
 	;;
-	;; read gifs from JMA (µ¤¾İÄ£) and insert them into large objects
+	;; read gifs from JMA (æ°—è±¡åº) and insert them into large objects
 	(setq gif (read-http *jma-weather-gif-url*))
 	(setq weather-oid (send db :lo-put (cadr gif)))
 	(setq gif (read-http *jma-temp-gif-url*))

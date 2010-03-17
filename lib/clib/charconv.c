@@ -5,7 +5,7 @@ Character code conversion using iconv library.
 % cc -c -fpic -Di486 -DLinux charconv.c -I/usr/local/eus/include
 % ld  -o charconv.so -shared charconv.o
 eus$ (load "charconv.so")
-eus$ (iconv "euc-jp" "Shift-jis" "ææ∞Ê")
+eus$ (iconv "euc-jp" "Shift-jis" "Êùæ‰∫ï")
 
 */
 

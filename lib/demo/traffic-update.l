@@ -38,12 +38,12 @@ create table traffic_status (
   (let (now db split-html
 	route6-pattern route-coast-pattern
 	)
-	(setq route6-pattern "£¶¹æ")
-	(setq route-coast-pattern "¹âÂ®ÏÑ´ßÀş")
-	(setq route-joban-pattern "¾ïÈØÆ»")
-	(setq regulation-pattern "¡ü¼ç¤Êµ¬À©¾ğÊó")
-	(setq triptime-pattern "¡ü¼ç¤ÊÎ¹¹Ô»ş´Ö")
-	(setq closed-entry-pattern "¡üÆş¸ıÊÄº¿")
+	(setq route6-pattern "ï¼–å·")
+	(setq route-coast-pattern "é«˜é€Ÿæ¹¾å²¸ç·š")
+	(setq route-joban-pattern "å¸¸ç£é“")
+	(setq regulation-pattern "â—ä¸»ãªè¦åˆ¶æƒ…å ±")
+	(setq triptime-pattern "â—ä¸»ãªæ—…è¡Œæ™‚é–“")
+	(setq closed-entry-pattern "â—å…¥å£é–‰é–")
 	;
 	;;
 	;
@@ -81,7 +81,7 @@ create table traffic_status (
 		(html-marked-items ibaraki-highway-body
 			triptime-pattern '/table '/body)))
 	;;
-	;; ¼óÅÔ¹âÂ®£¶¹æÀş(¸şÅç,»°¶¿) 
+	;; é¦–éƒ½é«˜é€Ÿï¼–å·ç·š(å‘å³¶,ä¸‰éƒ·) 
 	;;
         (setq route6-regulation-info
 		(concatenate-strings (car 
@@ -96,7 +96,7 @@ create table traffic_status (
 			(html-marked-items metro-closed-entry-body
 				route6-pattern '/tr '/body t))))
 	;;
-	;; ¼óÅÔ¹âÂ®ÏÑ´ßÀş
+	;; é¦–éƒ½é«˜é€Ÿæ¹¾å²¸ç·š
 	(setq coast-regulation-info
 		(concatenate-strings (car 
 			(html-marked-items metro-regulation-body
@@ -109,7 +109,7 @@ create table traffic_status (
 		(concatenate-strings (car 
 			(html-marked-items metro-closed-entry-body
 				route-coast-pattern '/tr '/body t))))
-	;; ¹âÂ®¾ïÈ×Æ»,°ñ¾ëÉô
+	;; é«˜é€Ÿå¸¸ç›¤é“,èŒ¨åŸéƒ¨
 	(setq ibaraki-regulation-info
 		(concatenate-strings (car 
 			(html-marked-items ibaraki-regulation-body
@@ -118,7 +118,7 @@ create table traffic_status (
 		(concatenate-strings (car 
 			(html-marked-items ibaraki-triptime-body
 				route-joban-pattern '/tr '/body t))))
-	;; ¹âÂ®¾ïÈ×Æ»,ÅìµşÉô
+	;; é«˜é€Ÿå¸¸ç›¤é“,æ±äº¬éƒ¨
 	(setq tokyo-regulation-info
 		(concatenate-strings (car 
 			(html-marked-items tokyo-regulation-body
@@ -134,7 +134,7 @@ create table traffic_status (
 	(setq now (instance calendar-time :now))
 	(setq db (instance pq:pgsql :init :dbname "t.matsui"))
 	;;
-	;; ¼óÅÔ¹âÂ®£¶¹æ¥ß¥µ¤È¤»¤ó
+	;; é¦–éƒ½é«˜é€Ÿï¼–å·ãƒŸã‚µã¨ã›ã‚“
 	(dolist (info route6-regulation-info)
 	    (pq:insert-record2 db 'traffic_status
 		'(recdate rectime weekday road infotype traffic_status)
@@ -162,7 +162,7 @@ create table traffic_status (
 			'metro-route6
 			'closed-entry
 			info)) )
-	;;;;; ÏÑ´ßÀş
+	;;;;; æ¹¾å²¸ç·š
 	;;
 	(dolist (info coast-regulation-info)
 	    (pq:insert-record2 db 'traffic_status

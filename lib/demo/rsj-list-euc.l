@@ -27,8 +27,8 @@
 
 (defun jtable-name (tname)
    (case tname 
-	(trustees "$BM};v(J")
-        (techaward "$B<BMQ2=5;=Q>^A*9M0Q0w2q(J")
+	(trustees "理事")
+        (techaward "実用化技術賞選考委員会")
 	;; add more depending on tables
 	))
 
@@ -40,16 +40,16 @@
 (defun rsj-list (table)
    ;; entry to the member list
    (let ((rsj-list))
- 	(format *cgi-out* "<h1>RSJ~a$BL>Jm(J ( $B0lMw(J ) </h1><br>~%"
+ 	(format *cgi-out* "<h1>RSJ~a名簿 ( 一覧 ) </h1><br>~%"
 		 (jtable-name table))
 	(format *cgi-out*
-		"$B8D?M$N>\:Y%G!<%?$r8+$?$j!"%G!<%?$r99?7!&:o=|$9$k$K$O!"3F9T$N(J
-		$B@hF,$N?t;z(J(ID)$B$r%/%j%C%/$7$F2<$5$$!#(J<br><p>~%")
+		"個人の詳細データを見たり、データを更新・削除するには、各行の
+		先頭の数字(ID)をクリックして下さい。<br><p>~%")
 	(format *cgi-out*
 "<form action=\"rsj-list.cgi\" method=get>
-<input type=submit name=command value=create> $B?75,%l%3!<%I:n@.(J<br>
-<input type=submit name=command value=mail> $BA*Br$7$??M$?$A$K(JEmail$BAw?.(J<br>
-<input type=submit name=command value=mail-all> $BA40w$K(JEmail$BAw?.(J<br>
+<input type=submit name=command value=create> 新規レコード作成<br>
+<input type=submit name=command value=mail> 選択した人たちにEmail送信<br>
+<input type=submit name=command value=mail-all> 全員にEmail送信<br>
 <input type=hidden name=table value=~a>
 ~%" table)
 	(setq rsj-list
@@ -94,9 +94,9 @@ not yet implemented<br>
 			home_phone, home_address, update_date, remarks
 			from ~a where id=~s" table n))))
       (format *cgi-out*
-"<h2>RSJ~a$B%a%s%P!<$N>\:Y>pJs(J </h2><br>
-$BFbMF$rJQ99$9$k$H$-$O(Jchange button$B$r2!$7$F2<$5$$!#(J
-$B$3$N%l%3!<%I$r:o=|$9$k$K$O(Jdelete button$B$r2!$7$F2<$5$$!#(J<br>
+"<h2>RSJ~aメンバーの詳細情報 </h2><br>
+内容を変更するときはchange buttonを押して下さい。
+このレコードを削除するにはdelete buttonを押して下さい。<br>
 <form action=\"rsj-list.cgi\" method=GET>
 <input type=submit name=command value=change>
 <input type=submit name=command value=delete>
@@ -124,8 +124,8 @@ not yet implemented<br>
   ;; provide input forms for n-th record
   ;; [change] button in the detail display brings here.
   ;; 
-  (format *cgi-out* "<h2>RSJ~a$B%a%s%P!<%l%3!<%I$NJQ99(J</h2><br>
-$B@5$7$$%G!<%?$rF~NO$7!"(Jupdate$B%\%?%s$r2!$7$F2<$5$$!#(J</h2>~%"
+  (format *cgi-out* "<h2>RSJ~aメンバーレコードの変更</h2><br>
+正しいデータを入力し、updateボタンを押して下さい。</h2>~%"
 	(jtable-name table))
   (let ((detail (car
 	    (pq:query db nil
@@ -172,7 +172,7 @@ not yet implemented<br>
 		(qval 'home_address args) (qval 'remarks args)
 		(send (now) :iso-date-string)
 		id ) )
-   (format *cgi-out* "<h2>$B?75,(Jmember$B$rEPO?$7$^$7$?!#(Jid=~s</h2>~%" id)
+   (format *cgi-out* "<h2>新規memberを登録しました。id=~s</h2>~%" id)
    (rsj-detail table id)	;; display the detail again
    )
 
@@ -187,14 +187,14 @@ not yet implemented<br>
   ;; provide input forms for n-th record
   ;; create button in the list window brings here.
   ;;
-  (format *cgi-out* "<h1>RSJ~a$B?75,%a%s%P!<EPO?(J</h1><br>
-$B%G!<%?$rF~NO$7!"(Jinsert$B%\%?%s$r2!$7$F2<$5$$!#(J
-$BH>3Q%+%J$O;H$o$J$$$h$&$K$*4j$$$7$^$9!#(JID$B$O<+F0E*$K3d$jEv$F$i$l$^$9!#(J</h2>~%"
+  (format *cgi-out* "<h1>RSJ~a新規メンバー登録</h1><br>
+データを入力し、insertボタンを押して下さい。
+半角カナは使わないようにお願いします。IDは自動的に割り当てられます。</h2>~%"
 	(jtable-name table))
   (let ()
      (format *cgi-out*
 "<form action=\"rsj-list.cgi\" method=GET>
-<input type=submit name=command value=insert>$BEPO?(J<br>
+<input type=submit name=command value=insert>登録<br>
 <input type=reset name=command  value=clear>
 <input type=hidden name=table  value=~a>
 ~%<hr>~%" table)
@@ -244,7 +244,7 @@ not yet implemented<br>
 	   (pq:query db nil "select name from ~a where id=~a" table id))))
      (pq:query db nil "delete from trustees where id='~a'" id )
      (rsj-list table)
-     (format *cgi-out* "~a $B$5$s$N%l%3!<%I(J(id=~a)$B$r:o=|$7$^$7$?!#(J<br>~%"
+     (format *cgi-out* "~a さんのレコード(id=~a)を削除しました。<br>~%"
 	name id))
     )
 
@@ -276,7 +276,7 @@ not yet implemented<br>
 		 (if b "," "")))
 	   (terpri out)))
      (unix:system (format nil "tar cf - ~a | gzip >~a.tar.gz" fname fname))
-     (format *cgi-out* "$B#R#S#J(J~a$BL>Jm$N%@%&%s%m!<%I(J<br>
+     (format *cgi-out* "ＲＳＪ~a名簿のダウンロード<br>
 <a href=\"http://choku2.etl.go.jp/rsj/rsj-~a.csv.tar.gz\"> download csv.tar.gz</a><br>
 <a href=\"http://choku2.etl.go.jp/rsj/rsj-~a.csv\"> download .csv</a><br>
 ~%"	(jtable-name table) table table) )

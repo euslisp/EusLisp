@@ -27,8 +27,8 @@
 
 (defun jtable-name (tname)
    (case tname 
-	(trustees "Íı»ö")
-        (techaward "¼ÂÍÑ²½µ»½Ñ¾ŞÁª¹Í°Ñ°÷²ñ")
+	(trustees "ç†äº‹")
+        (techaward "å®Ÿç”¨åŒ–æŠ€è¡“è³é¸è€ƒå§”å“¡ä¼š")
 	;; add more depending on tables
 	))
 
@@ -40,16 +40,16 @@
 (defun rsj-list (table)
    ;; entry to the member list
    (let ((rsj-list))
- 	(format *cgi-out* "<h1>RSJ~aÌ¾Êí ( °ìÍ÷ ) </h1><br>~%"
+ 	(format *cgi-out* "<h1>RSJ~aåç°¿ ( ä¸€è¦§ ) </h1><br>~%"
 		 (jtable-name table))
 	(format *cgi-out*
-		"¸Ä¿Í¤Î¾ÜºÙ¥Ç¡¼¥¿¤ò¸«¤¿¤ê¡¢¥Ç¡¼¥¿¤ò¹¹¿·¡¦ºï½ü¤¹¤ë¤Ë¤Ï¡¢³Æ¹Ô¤Î
-		ÀèÆ¬¤Î¿ô»ú(ID)¤ò¥¯¥ê¥Ã¥¯¤·¤Æ²¼¤µ¤¤¡£<br><p>~%")
+		"å€‹äººã®è©³ç´°ãƒ‡ãƒ¼ã‚¿ã‚’è¦‹ãŸã‚Šã€ãƒ‡ãƒ¼ã‚¿ã‚’æ›´æ–°ãƒ»å‰Šé™¤ã™ã‚‹ã«ã¯ã€å„è¡Œã®
+		å…ˆé ­ã®æ•°å­—(ID)ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ä¸‹ã•ã„ã€‚<br><p>~%")
 	(format *cgi-out*
 "<form action=\"rsj-list.cgi\" method=get>
-<input type=submit name=command value=create> ¿·µ¬¥ì¥³¡¼¥ÉºîÀ®<br>
-<input type=submit name=command value=mail> ÁªÂò¤·¤¿¿Í¤¿¤Á¤ËEmailÁ÷¿®<br>
-<input type=submit name=command value=mail-all> Á´°÷¤ËEmailÁ÷¿®<br>
+<input type=submit name=command value=create> æ–°è¦ãƒ¬ã‚³ãƒ¼ãƒ‰ä½œæˆ<br>
+<input type=submit name=command value=mail> é¸æŠã—ãŸäººãŸã¡ã«Emailé€ä¿¡<br>
+<input type=submit name=command value=mail-all> å…¨å“¡ã«Emailé€ä¿¡<br>
 <input type=hidden name=table value=~a>
 ~%" table)
 	(setq rsj-list
@@ -94,9 +94,9 @@ not yet implemented<br>
 			home_phone, home_address, update_date, remarks
 			from ~a where id=~s" table n))))
       (format *cgi-out*
-"<h2>RSJ~a¥á¥ó¥Ğ¡¼¤Î¾ÜºÙ¾ğÊó </h2><br>
-ÆâÍÆ¤òÊÑ¹¹¤¹¤ë¤È¤­¤Ïchange button¤ò²¡¤·¤Æ²¼¤µ¤¤¡£
-¤³¤Î¥ì¥³¡¼¥É¤òºï½ü¤¹¤ë¤Ë¤Ïdelete button¤ò²¡¤·¤Æ²¼¤µ¤¤¡£<br>
+"<h2>RSJ~aãƒ¡ãƒ³ãƒãƒ¼ã®è©³ç´°æƒ…å ± </h2><br>
+å†…å®¹ã‚’å¤‰æ›´ã™ã‚‹ã¨ãã¯change buttonã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚
+ã“ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚’å‰Šé™¤ã™ã‚‹ã«ã¯delete buttonã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚<br>
 <form action=\"rsj-list.cgi\" method=GET>
 <input type=submit name=command value=change>
 <input type=submit name=command value=delete>
@@ -124,8 +124,8 @@ not yet implemented<br>
   ;; provide input forms for n-th record
   ;; [change] button in the detail display brings here.
   ;; 
-  (format *cgi-out* "<h2>RSJ~a¥á¥ó¥Ğ¡¼¥ì¥³¡¼¥É¤ÎÊÑ¹¹</h2><br>
-Àµ¤·¤¤¥Ç¡¼¥¿¤òÆşÎÏ¤·¡¢update¥Ü¥¿¥ó¤ò²¡¤·¤Æ²¼¤µ¤¤¡£</h2>~%"
+  (format *cgi-out* "<h2>RSJ~aãƒ¡ãƒ³ãƒãƒ¼ãƒ¬ã‚³ãƒ¼ãƒ‰ã®å¤‰æ›´</h2><br>
+æ­£ã—ã„ãƒ‡ãƒ¼ã‚¿ã‚’å…¥åŠ›ã—ã€updateãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚</h2>~%"
 	(jtable-name table))
   (let ((detail (car
 	    (pq:query db nil
@@ -188,14 +188,14 @@ not yet implemented<br>
   ;; provide input forms for n-th record
   ;; create button in the list window brings here.
   ;;
-  (format *cgi-out* "<h1>RSJ~a¿·µ¬¥á¥ó¥Ğ¡¼ÅĞÏ¿</h1><br>
-¥Ç¡¼¥¿¤òÆşÎÏ¤·¡¢insert¥Ü¥¿¥ó¤ò²¡¤·¤Æ²¼¤µ¤¤¡£
-È¾³Ñ¥«¥Ê¤Ï»È¤ï¤Ê¤¤¤è¤¦¤Ë¤ª´ê¤¤¤·¤Ş¤¹¡£ID¤Ï¼«Æ°Åª¤Ë³ä¤êÅö¤Æ¤é¤ì¤Ş¤¹¡£</h2>~%"
+  (format *cgi-out* "<h1>RSJ~aæ–°è¦ãƒ¡ãƒ³ãƒãƒ¼ç™»éŒ²</h1><br>
+ãƒ‡ãƒ¼ã‚¿ã‚’å…¥åŠ›ã—ã€insertãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚
+åŠè§’ã‚«ãƒŠã¯ä½¿ã‚ãªã„ã‚ˆã†ã«ãŠé¡˜ã„ã—ã¾ã™ã€‚IDã¯è‡ªå‹•çš„ã«å‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¾ã™ã€‚</h2>~%"
 	(jtable-name table))
   (let ()
      (format *cgi-out*
 "<form action=\"rsj-list.cgi\" method=GET>
-<input type=submit name=command value=insert>ÅĞÏ¿<br>
+<input type=submit name=command value=insert>ç™»éŒ²<br>
 <input type=reset name=command  value=clear>
 <input type=hidden name=table  value=~a>
 ~%<hr>~%" table)
@@ -233,7 +233,7 @@ not yet implemented<br>
 		(qval 'home_address args) (qval 'remarks args)
 		(send (now) :iso-date-string)
 		))
-     (format *cgi-out* "<h2>¿·µ¬member¤òÅĞÏ¿¤·¤Ş¤·¤¿¡£id=~s</h2>~%" id)
+     (format *cgi-out* "<h2>æ–°è¦memberã‚’ç™»éŒ²ã—ã¾ã—ãŸã€‚id=~s</h2>~%" id)
      (rsj-detail table id)
    ))
 
@@ -246,7 +246,7 @@ not yet implemented<br>
 	   (pq:query db nil "select name from ~a where id=~a" table id))))
      (pq:query db nil "delete from trustees where id='~a'" id )
      (rsj-list table)
-     (format *cgi-out* "~a ¤µ¤ó¤Î¥ì¥³¡¼¥É(id=~a)¤òºï½ü¤·¤Ş¤·¤¿¡£<br>~%"
+     (format *cgi-out* "~a ã•ã‚“ã®ãƒ¬ã‚³ãƒ¼ãƒ‰(id=~a)ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚<br>~%"
 	name id))
     )
 
@@ -278,7 +278,7 @@ not yet implemented<br>
 		 (if b "," "")))
 	   (terpri out)))
      (unix:system (format nil "tar cf - ~a | gzip >~a.tar.gz" fname fname))
-     (format *cgi-out* "£Ò£Ó£Ê~aÌ¾Êí¤Î¥À¥¦¥ó¥í¡¼¥É<br>
+     (format *cgi-out* "ï¼²ï¼³ï¼ª~aåç°¿ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰<br>
 <a href=\"http://choku2.etl.go.jp/rsj/rsj-~a.csv.tar.gz\"> download csv.tar.gz</a><br>
 <a href=\"http://choku2.etl.go.jp/rsj/rsj-~a.csv\"> download .csv</a><br>
 ~%"	(jtable-name table) table table) )

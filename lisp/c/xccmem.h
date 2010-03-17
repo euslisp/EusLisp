@@ -44,7 +44,7 @@ typedef float xcc_DFtype __attribute__ ((mode (DF)));
 
 #ifdef __i386__
 
-/* lock add $0,(%esp) §»§…§√§¡§¨¬Æ§§? */
+/* lock add $0,(%esp) „Å®„Å©„Å£„Å°„ÅåÈÄü„ÅÑ? */
 #define xcc_slbar_VOID() do{\
   xcc_SItype _tmp1, _tmp2;\
   __asm__("xchgl %1,%0": "=m"(_tmp1), "=r"(_tmp2) :: "memory");\
@@ -134,7 +134,7 @@ __xcc_atomic_swap_DI(xcc_DItype *loc, xcc_DItype val){
   return val;
 }
 
-/* lock …¨Õ◊?? */
+/* lock ÂøÖË¶Å?? */
 #define xcc_atomic_swap_SI(loc,v) __xcc_atomic_swap_SI((loc),(v))
 extern __inline__ xcc_SItype
 __xcc_atomic_swap_SI(xcc_SItype *loc, xcc_SItype val){ 
