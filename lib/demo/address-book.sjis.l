@@ -53,8 +53,8 @@
 
 (defun jtable-name (tname)
    (case tname 
-	(trustees "—–")
-        (techaward "À—p‰»‹ZpÜ‘IlˆÏˆõ‰ï")
+	(trustees "ç†äº‹")
+        (techaward "å®Ÿç”¨åŒ–æŠ€è¡“è³é¸è€ƒå§”å“¡ä¼š")
 	;; add more if you have more address tables
 	))
 
@@ -102,16 +102,16 @@
 		(delimit-list
 		    (mapcar
 			#'(lambda (x) (format nil "id=~a" x)) ids) " or ")))
- 	(gen "<h1>RSJ~a–¼•ë (ˆê——) </h1><br>~%" (jtable-name table))
-	(gen "ŒÂl‚ÌÚ×ƒf[ƒ^‚ğŒ©‚½‚èAƒf[ƒ^‚ğXVEíœ‚·‚é‚É‚ÍAŠes‚Ì
-		æ“ª‚Ì”š(id)‚ğƒNƒŠƒbƒN‚µ‚Ä‰º‚³‚¢B<br>~%")
+ 	(gen "<h1>RSJ~aåç°¿ (ä¸€è¦§) </h1><br>~%" (jtable-name table))
+	(gen "å€‹äººã®è©³ç´°ãƒ‡ãƒ¼ã‚¿ã‚’è¦‹ãŸã‚Šã€ãƒ‡ãƒ¼ã‚¿ã‚’æ›´æ–°ãƒ»å‰Šé™¤ã™ã‚‹ã«ã¯ã€å„è¡Œã®
+		å…ˆé ­ã®æ•°å­—(id)ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ä¸‹ã•ã„ã€‚<br>~%")
 	(gen
 "<form action=\"address-book.cgi\" method=post>
 <table>
-<tr><td><input type=submit name=command value=create> V‹KƒŒƒR[ƒhì¬</td>
-<td><input type=submit name=command value=list>‘SƒŠƒXƒg</td></tr>
-<tr><td><input type=submit name=command value=mail> ‘I‘ğ‚µ‚½l‚½‚¿‚ÉEmail‘—M</td>
-<td><input type=submit name=command value=mail-all> ‘Sˆõ‚ÉEmail‘—M</td></tr>
+<tr><td><input type=submit name=command value=create> æ–°è¦ãƒ¬ã‚³ãƒ¼ãƒ‰ä½œæˆ</td>
+<td><input type=submit name=command value=list>å…¨ãƒªã‚¹ãƒˆ</td></tr>
+<tr><td><input type=submit name=command value=mail> é¸æŠã—ãŸäººãŸã¡ã«Emailé€ä¿¡</td>
+<td><input type=submit name=command value=mail-all> å…¨å“¡ã«Emailé€ä¿¡</td></tr>
 </table><br>
 <input type=hidden name=table value=~a>~%" table)
 	(when ids
@@ -158,9 +158,9 @@
 			home_phone, home_address, update_date, remarks
 			from ~a where id=~s" table n))))
       (format *cgi-out*
-"<h2>RSJ~aƒƒ“ƒo[‚ÌÚ×î•ñ </h2><br>
-“à—e‚ğ•ÏX‚·‚é‚Æ‚«‚Íchange button‚ğ‰Ÿ‚µ‚Ä‰º‚³‚¢B
-‚±‚ÌƒŒƒR[ƒh‚ğíœ‚·‚é‚É‚Ídelete button‚ğ‰Ÿ‚µ‚Ä‰º‚³‚¢B<br>
+"<h2>RSJ~aãƒ¡ãƒ³ãƒãƒ¼ã®è©³ç´°æƒ…å ± </h2><br>
+å†…å®¹ã‚’å¤‰æ›´ã™ã‚‹ã¨ãã¯change buttonã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚
+ã“ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚’å‰Šé™¤ã™ã‚‹ã«ã¯delete buttonã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚<br>
 <form action=\"address-book.cgi\" method=post>
 <table><tr>
 <td><input type=submit name=command value=change></td>
@@ -209,8 +209,8 @@
   ;; provide input forms for n-th record
   ;; [change] button in the detail display brings here.
   ;; 
-  (format *cgi-out* "<h2>RSJ~aƒƒ“ƒo[ƒŒƒR[ƒh‚Ì•ÏX</h2><br>
-³‚µ‚¢ƒf[ƒ^‚ğ“ü—Í‚µAupdateƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‰º‚³‚¢B</h2>~%"
+  (format *cgi-out* "<h2>RSJ~aãƒ¡ãƒ³ãƒãƒ¼ãƒ¬ã‚³ãƒ¼ãƒ‰ã®å¤‰æ›´</h2><br>
+æ­£ã—ã„ãƒ‡ãƒ¼ã‚¿ã‚’å…¥åŠ›ã—ã€updateãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚</h2>~%"
 	(jtable-name table))
   (let ((detail (car
 	    (pq:query db nil
@@ -262,14 +262,14 @@
   ;; provide input forms for n-th record
   ;; create button in the list window brings here.
   ;;
-  (gen "<h1>RSJ~aV‹Kƒƒ“ƒo[“o˜^</h1><br>
-ƒf[ƒ^‚ğ“ü—Í‚µAinsertƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‰º‚³‚¢B
-”¼ŠpƒJƒi‚Íg‚í‚È‚¢‚æ‚¤‚É‚¨Šè‚¢‚µ‚Ü‚·BID‚Í©“®“I‚ÉŠ„‚è“–‚Ä‚ç‚ê‚Ü‚·B</h2>~%"
+  (gen "<h1>RSJ~aæ–°è¦ãƒ¡ãƒ³ãƒãƒ¼ç™»éŒ²</h1><br>
+ãƒ‡ãƒ¼ã‚¿ã‚’å…¥åŠ›ã—ã€insertãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚
+åŠè§’ã‚«ãƒŠã¯ä½¿ã‚ãªã„ã‚ˆã†ã«ãŠé¡˜ã„ã—ã¾ã™ã€‚IDã¯è‡ªå‹•çš„ã«å‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¾ã™ã€‚</h2>~%"
 	(jtable-name table))
   (let ()
      (gen
 "<form action=\"address-book.cgi\" method=post>
-<input type=submit name=command value=insert>“o˜^<br>
+<input type=submit name=command value=insert>ç™»éŒ²<br>
 <input type=reset name=command  value=clear>
 <input type=hidden name=table  value=~a>
 ~%<hr>~%" table)
@@ -300,7 +300,7 @@
 		(qval 'home_address args) (qval 'remarks args)
 		(send (now) :iso-date-string)
 		))
-     (gen "<h2>V‹Kmember‚ğ“o˜^‚µ‚Ü‚µ‚½Bid=~s</h2>~%" id)
+     (gen "<h2>æ–°è¦memberã‚’ç™»éŒ²ã—ã¾ã—ãŸã€‚id=~s</h2>~%" id)
      (rsj-detail table id)
    ))
 
@@ -312,8 +312,8 @@
    (let ((name (caar
 	   (pq:query db nil "select name from ~a where id=~a" table id))))
      (gen
-	 "<h1>~a‚Ì–¼•ë‚©‚ç~a‚³‚ñ(id=~a)‚Ì
-ƒŒƒR[ƒh‚ğíœ‚µ‚Ä‚æ‚ë‚µ‚¢‚Å‚·‚©?<br></h1>" (jtable-name table) name id)
+	 "<h1>~aã®åç°¿ã‹ã‚‰~aã•ã‚“(id=~a)ã®
+ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚’å‰Šé™¤ã—ã¦ã‚ˆã‚ã—ã„ã§ã™ã‹?<br></h1>" (jtable-name table) name id)
      (gen "<form action=\"address-book.cgi\" method=GET>
 	<input type=submit name=command value=do-delete>
 	<input type=HIDDEN name=arg value=~a> 
@@ -326,7 +326,7 @@
 	   (pq:query db nil "select name from ~a where id=~a" table id))))
      (pq:query db nil "delete from trustees where id='~a'" id )
      (rsj-list table t)
-     (format *cgi-out* "~a ‚³‚ñ‚ÌƒŒƒR[ƒh(id=~a)‚ğíœ‚µ‚Ü‚µ‚½B<br>~%"
+     (format *cgi-out* "~a ã•ã‚“ã®ãƒ¬ã‚³ãƒ¼ãƒ‰(id=~a)ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚<br>~%"
 	name id))
     )
 
@@ -396,7 +396,7 @@
 		   (if b "," "")))
 	   (terpri out)))
      (unix:system (format nil "tar cf - ~a | gzip >~a.tar.gz" fname fname))
-     (gen "<h1>‚q‚r‚i~a–¼•ë‚Ìƒ_ƒEƒ“ƒ[ƒh</h1><br>
+     (gen "<h1>ï¼²ï¼³ï¼ª~aåç°¿ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰</h1><br>
 <a href=\"http://lys.matsui.jp/rsj/rsj-~a.csv.tar.gz\"> <li>download csv.tar.gz</a><br>
 <a href=\"http://lys.matsui.jp/rsj/rsj-~a.csv\"> <li>download .csv</a><br>
 ~%"	(jtable-name table) table table) )
@@ -411,7 +411,7 @@
       (setq email-addresses (mapcar #'car email-name))
       (setq email-addresses  (delimit-list email-addresses ", "))
       (gen
-	 "<h1>Email‘—M</h1><br>‰º‚Ìs‚ğƒNƒŠƒbƒN‚·‚é‚ÆA~a ‚³‚ñ‚ÉEmail‚ğ‘—M‚µ‚Ü‚·B<br>~%"
+	 "<h1>Emailé€ä¿¡</h1><br>ä¸‹ã®è¡Œã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€~a ã•ã‚“ã«Emailã‚’é€ä¿¡ã—ã¾ã™ã€‚<br>~%"
 	 (euc2sjis (delimit-list names ", ")))
       (gen "<a href=\"mailto:~a\"> ~a</a><br>~%"
 	 email-addresses email-addresses)))

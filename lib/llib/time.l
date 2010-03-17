@@ -16,8 +16,6 @@
 
 ;; This modules should be read in the Lisp-package.
 
-(IN-PACKAGE :LISP)
-
 (export '(leap-year-p
 		secs-since-1970
 		seconds
@@ -120,11 +118,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass interval-time :super propertied-object
-	:slots (total-seconds 
-		seconds	micros	
-		days
-		(hours :type :integer)
-		(minutes :type :integer) ))
+	:slots (total-seconds seconds micros days hours minutes))
 
 ;; :init takes "seconds" as the argument,
 ;; whereas :make takes "month", "day", "hour" ... etc.
@@ -303,12 +297,10 @@
    ;; Dec 28, 2003 was displayed as Jan -3, 2004 !
    ;; use of (unix::gmtime (gettimeofday)) is suggested.
    ;; correction by tzone is needed.
-   ;; (declare (integer secs micro) )
    (setq timezone tzone
 	 dst daylight)
    (decf secs timezone)
-   (let ((leaps 0))
-      (declare (integer leaps))
+   (let ((leaps))
       (setq micros	micro
 	    total-seconds secs
 	    seconds 	secs 	;(+ (float secs) (* 0.000001 micros))
@@ -318,9 +310,9 @@
 	    weekday	(mod (+ days 4) 7)
 	    leaps	(/ days (+ 365 365 365 366)) 
 	    years	(*  4 leaps)
-	    months 	0)
-;;       (print (list years months days hours))
-       (setq  days (- days (* leaps (+ 365 365 365 366))) )
+	    days	(- days (* leaps (+ 365 365 365 366)))
+	    months 	0
+	    )
        (when (>= days 365)  (decf days 365) (incf years))
        (when (>= days 365)  (decf days 365) (incf years))
        (when (>= days 366)  (decf days 366) (incf years))
@@ -328,7 +320,7 @@
 	     minutes (/ seconds 60)
 	     seconds (- seconds (* minutes 60))) 
        (setq years (+ years 1970))
-;;       (print (list years months days hours))
+       ;; (print (list years months days hours))
        (setf (aref *month-days* 1)
 	     (if (leap-year-p years) 29 28))
        (incf days)	;; day begins from one
@@ -441,10 +433,10 @@
  (:weekday-string (&optional (lang :english) (long nil))
     (let (weekday-name)
        (setq weekday-name (nth weekday
-		'(( "Sunday" "Sun" "ÆüÍË" "Æü") ("Monday" "Mon" "·îÍË" "·î")
-		  ("Tuesday" "Tue" "²ĞÍË" "²Ğ") ("Wednesday" "Wed" "¿åÍË" "¿å")
-		  ("Thursday" "Thu" "ÌÚÍË" "ÌÚ") ("Friday" "Fri" "¶âÍË" "¶â")
-		  ("Saturday" "Sat" "ÅÚÍË" "ÅÚ")) ))
+		'(( "Sunday" "Sun" "æ—¥æ›œ" "æ—¥") ("Monday" "Mon" "æœˆæ›œ" "æœˆ")
+		  ("Tuesday" "Tue" "ç«æ›œ" "ç«") ("Wednesday" "Wed" "æ°´æ›œ" "æ°´")
+		  ("Thursday" "Thu" "æœ¨æ›œ" "æœ¨") ("Friday" "Fri" "é‡‘æ›œ" "é‡‘")
+		  ("Saturday" "Sat" "åœŸæ›œ" "åœŸ")) ))
        (case lang
 	 ((japanese :japanese :jp jp)
 	  (if long (third weekday-name) (fourth weekday-name)))
@@ -482,5 +474,5 @@
 
 ;----------------------------------------------------------------
 
-(provide :time "@(#)$Id: time.l,v 1.16 2001/02/04 05:59:27 matsui Exp $")
+(provide :time "@(#)$Id$")
 

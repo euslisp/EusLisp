@@ -17,17 +17,17 @@ Subject: camera-calibration
 Status: R
 
   >>Almost all the user's files were lost.
-$@$=$l$O$4=%=}MM$G$9!#$3$A$i$G$b(Jbackup$@$r?4$,$1$F$$$k$N$G$9$,!"J?OB$,B3$$(J
-$@$F$$$k$H$D$$$*$m$=$+$K$J$C$F$7$^$$$^$9!#(J
-$@El5~Bg3X9)3X7O8&5f2J(J $@5!3#9)3X@l96(J $@0f>e!&0pMU8&5f<<=$;N(J2$@G/$N(J $@F#0f@?$G$9!#(J
-$@0pMU@h@8$+$i!"(Jcalibration$@$N%W%m%0%i%`$rAw$k$h$&$K$$$o$l$^$7$?!#(J
-($@$3$l$rAw$C$?$H$3$mJV$C$F$-$^$7$?!#(J)
-$@Aw$k%U%!%$%k$O!"%G!<%?%U%!%$%k!"(JNewton-Raphson$@K!$K$h$k<}B+7W;;$N%W%m%0(J
-$@%i%`(J(raphson.l)$@!"$3$l$r@~7A2=$7$?$b$N(J(linraphs.l)$@!"$N(J3$@$D$G$9!#(J
-$@%W%m%0%i%`$O$+$J$jD9$$$N$G$9$,!"(J"kokokara" $@$H(J "kokomade" $@$K$O$5$^$l$?(J
-$@ItJ,$G$9!#(J 
+それはご愁傷様です。こちらでもbackupを心がけているのですが、平和が続い
+ているとついおろそかになってしまいます。
+東京大学工学系研究科 機械工学専攻 井上・稲葉研究室修士2年の 藤井誠です。
+稲葉先生から、calibrationのプログラムを送るようにいわれました。
+(これを送ったところ返ってきました。)
+送るファイルは、データファイル、Newton-Raphson法による収束計算のプログ
+ラム(raphson.l)、これを線形化したもの(linraphs.l)、の3つです。
+プログラムはかなり長いのですが、"kokokara" と "kokomade" にはさまれた
+部分です。 
 
-$@!<!<!<!<!<!<!<!<%G!<%?%U%!%$%k(J cwcalibyrs.dats $@$3$3$+$i(J kokokara $@!<!<!<!<(J
+ーーーーーーーーデータファイル cwcalibyrs.dats ここから kokokara ーーーー
 #s (segment2segment-calib-sample
     xyz #f(9.05437 -21.5794 -.6449555)
     otherxyz #f(9.05434 29.4207 -.644985)
@@ -58,8 +58,8 @@ Status: R
     xyz #f(9.05434 29.4207 50.3550)
     uv #f(196.000 91.0000))
 
-$@!<!<!<!<!<!<!<!<%G!<%?%U%!%$%k(J cwcalibyrs.dats $@$3$3$^$G(J kokomade $@!<!<!<!<(J
-$@!<!<!<!<!<!<!<!<(Jraphson.l $@$3$3$+$i(J kokokara $@!<!<!<!<(J
+ーーーーーーーーデータファイル cwcalibyrs.dats ここまで kokomade ーーーー
+ーーーーーーーーraphson.l ここから kokokara ーーーー
 ;;;; raphson.l
 ;;; fitting process with Newton-Raphson method to minimize square
 ;;; root error.
@@ -1034,9 +1034,9 @@ Status: R
 (eval-when (load eval)
 	   (format t "...Done~%"))
 
-$@!<!<!<!<!<!<!<!<(Jraphson.l $@$3$3$^$G(J kokomade$@!<!<!<!<(J
+ーーーーーーーーraphson.l ここまで kokomadeーーーー
 
-$@!<!<!<!<!<!<!<!<(Jlinraphs.l $@$3$3$+$i(J kokokara $@!<!<!<!<(J
+ーーーーーーーーlinraphs.l ここから kokokara ーーーー
 ;;;; linraphs.l
 ;;;  fitting process with LINearized newton-RAPHSon method.
 ;;;  H1.1.25  *MeR*
@@ -1464,21 +1464,21 @@ Status: R
 (eval-when (load eval)
 	   (format t "...Done~%"))
 
-$@!<!<!<!<!<!<!<!<(Jlinraphs.l $@$3$3$^$G(J kokomade$@!<!<!<!<(J
+ーーーーーーーーlinraphs.l ここまで kokomadeーーーー
 
-$@;H$$J}$O!"(Jraphson.l($@??LLL\$K(Jsin,cos$@$N7W;;$r$9$k(J)$@$^$?$O(Jlinraphs.l($@@~7A(J
-$@2=$7$F$$$k$N$G9bB.(J)
-$@$N$I$A$i$+$r%m!<%I$7$F!"(J
+使い方は、raphson.l(真面目にsin,cosの計算をする)またはlinraphs.l(線形
+化しているので高速)
+のどちらかをロードして、
 (setq *camera* (instance camera-calib-coord-raphson :init "cwcalibyrs.dats"))
-$@$J$I$H$d$j$^$9!#$3$N$H$-$K(JGanapathy$@$NJ}K!$K$h$j(J,$@%+%a%i%Q%i%a%?$H$7$F<+(J
-$@F0E*$K=i4|CM$,F~$j$^$9!#$3$N$"$H(J
-(send *camera* :raphson) ;;;;;;raphson,linraphs $@$K6&DL(J
-$@$H$9$l$P(Jrot,pos$@$r(J1$@%9%F%C%W$@$199?7$7$^$9!#FbIt%Q%i%a%?(Juv0,rk$@$O$=$N$^$^(J
-$@$G$9!#<}B+$9$k$^$G$N%9%F%C%W$r0l5$$K$d$j$?$$;~$O(J
-(send *camera* :converge) $@$G$9!#(J
+などとやります。このときにGanapathyの方法により,カメラパラメタとして自
+動的に初期値が入ります。このあと
+(send *camera* :raphson) ;;;;;;raphson,linraphs に共通
+とすればrot,posを1ステップだけ更新します。内部パラメタuv0,rkはそのまま
+です。収束するまでのステップを一気にやりたい時は
+(send *camera* :converge) です。
 
-$@$J$K$+$*5$$E$-$NE@$,$"$j$^$7$?$iO"Mm$7$F$$$?$@$1$^$;$s$+!#(J
+なにかお気づきの点がありましたら連絡していただけませんか。
 
-$@El5~Bg3X9)3X7O8&5f2J(J $@5!3#9)3X@l96(J
-$@0f>e!&0pMU8&5f<<(J(jsk) $@=$;N(J2$@G/(J $@F#0f@?(J
+東京大学工学系研究科 機械工学専攻
+井上・稲葉研究室(jsk) 修士2年 藤井誠
 

@@ -1,25 +1,25 @@
-; $B0pMU$G$9!#(J
+; 稲葉です。
 ; 
-; $B%&%#%s%I%&%Y!<%9$N(Jinspector(winspect.l)$B$r$*Aw$j$7$^$9!#(J
+; ウィンドウベースのinspector(winspect.l)をお送りします。
 ; 
-; destroy,hide,update,redisplay$B$J$I$N%\%?%s$r$D$1$^$7$?!#(J
-; destroy$B$O;R$I$b$^$G;&$7$^$9!#(J
-; hide$B$O$=$N%&%#%s%I%&$@$18+$($J$$$h$&$K$7$^$9!#(J
-; update$B$OJQ?t$NCM$rJQ$($?$"$H$K:FI=<($9$k$?$a$N$b$N$G$9!#(J
-; redisplay$B$O(Jhide$B$7$?$b$N$r$b$&0lEYa4$i$;$^$9!#(J
+; destroy,hide,update,redisplayなどのボタンをつけました。
+; destroyは子どもまで殺します。
+; hideはそのウィンドウだけ見えないようにします。
+; updateは変数の値を変えたあとに再表示するためのものです。
+; redisplayはhideしたものをもう一度甦らせます。
 ; 
-; $B;H$$J}$H$7$F$O!"$"$kJQ?t(Ja$B$r(J(winspect a)$B$7$?$"$H!"I=<($5$l$F$$$kItJ,$G(J
-; $B$5$i$K(Jinspect$B$7$?$$$H$3$m$r%^%&%9$G<($7$?8e!"(Jinspect$B%\%?%s$r2!$7$F=g<!(J
-; $B$?$I$C$F$$$f$-!"1|?<$/$K$"$k=|$$$F$_$?$$MWAG$NCM$rI=<($9$k%&%#%s%I%&$r(J
-; $BMQ0U$7$^$9!#GA$$$F$_$?$$2U=j$,J#?t$"$l$P$=$l$i$bI=<($5$;$^$9!#(J
-; $B$=$7$F!"$=$l$i0J30$r(Jhide$B%\%?%s$G8+$($J$/$7$^$9!#$*$*85$N?F$b>C$7$F9=$$(J
-; $B$^$;$s!#(Jwinspect-redisplay$B$G$9$Y$F$,a4$k$+$i$G$9!#(J
+; 使い方としては、ある変数aを(winspect a)したあと、表示されている部分で
+; さらにinspectしたいところをマウスで示した後、inspectボタンを押して順次
+; たどっていゆき、奥深くにある除いてみたい要素の値を表示するウィンドウを
+; 用意します。覗いてみたい箇所が複数あればそれらも表示させます。
+; そして、それら以外をhideボタンで見えなくします。おお元の親も消して構い
+; ません。winspect-redisplayですべてが甦るからです。
 ; 
-; $B<!$K!"%"%W%j%1!<%7%g%s%W%m%0%i%`$N$J$+$G!"$N$>$$$F$$$k2U=j$,$I$N$h$&$K(J
-; $BJQ2=$9$k$+$r8+$k$K$O!"%"%W%j%1!<%7%g%s$N$J$+$NGA$-$?$$$H$3$m$K!"(J
-; (winspect)$B$rA^F~$7$F!"%"%W%j%1!<%7%g%s%W%m%0%i%`$rAv$i$;$^$9!#(J
-; $B$=$&$9$k$H!"(J(winspect)$B$,8F$P$l$k$?$S$K!"%&%#%s%I%&$NI=<($,%"%C%W%G!<%H(J
-; $B$5$l$^$9$+$i!"$I$N$h$&$K$J$C$F$$$k$+$rD4$Y$k$3$H$,MF0W$K$J$j$^$9!#(J
+; 次に、アプリケーションプログラムのなかで、のぞいている箇所がどのように
+; 変化するかを見るには、アプリケーションのなかの覗きたいところに、
+; (winspect)を挿入して、アプリケーションプログラムを走らせます。
+; そうすると、(winspect)が呼ばれるたびに、ウィンドウの表示がアップデート
+; されますから、どのようになっているかを調べることが容易になります。
 ;
 ;;;
 ;;;		Window-based Inspecter 1990.2.2
