@@ -763,7 +763,7 @@ extern eusinteger_t intval(pointer p);
 #ifdef __cplusplus
 }
 #endif
-#define ckintval(p) (isint(p)?intval(p):(eusinteger_t)error(E_NOINT))
+#define ckintval(p) ((isint(p)||(isbignum(p)&&(vecsize((p)->c.bgnm.bv)==1)))?intval(p):(eusinteger_t)error(E_NOINT))
 #define bigintval(x) (isint(x)?intval(x):\
    (isbignum(x)?\
 	((vecsize((x)->c.bgnm.bv)>=2)?\
