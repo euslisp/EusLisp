@@ -199,6 +199,7 @@ register pointer argv[];
   return(makestring(atp,strlen(atp)));}
 
 #if !Solaris2
+#include <sys/resource.h>
 pointer GETRUSAGE(ctx,n,argv)
 register context *ctx;
 int n; pointer argv[];
@@ -428,6 +429,7 @@ pointer argv[];
 
 #if !vxworks
 
+#include <sys/wait.h>
 pointer WAIT(ctx,n,argv)
 register context *ctx;
 int n;
@@ -444,7 +446,7 @@ int n; pointer argv[];
   return(makeint(alarm(ckintval(argv[0]))));}
 
 
-#if sun3 || sun4 || news || sanyo  || alpha || i386
+#if sun3 || sun4 || news || sanyo  || alpha || i386 || x86_64
 #if !Solaris2
 pointer UALARM(ctx,n,argv)
 register context *ctx;
@@ -618,7 +620,7 @@ pointer *argv;
   }
 #endif
 
-#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha
+#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64
 pointer VFORK(ctx,n,argv)
 register context *ctx;
 int n;
@@ -789,6 +791,7 @@ pointer argv[];
   return(makeint(result));}
 #endif
 
+#include <fcntl.h>
 pointer FCNTL(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1329,7 +1332,7 @@ pointer *argv;
   if (envval) return(makestring(envval,strlen(envval)));
   else return(NIL);}
 
-#if sun3 || sun4 || vax || mips || i386 || alpha
+#if sun3 || sun4 || vax || mips || i386 || alpha || x86_64
 pointer PUTENV(ctx,n,argv)
 register context *ctx;
 int n;
@@ -2013,7 +2016,7 @@ pointer mod;
   defun(ctx,"GETTIMEOFDAY",mod,GETTIMEOFDAY);
   defun(ctx,"ALARM",mod,ALARM);
 
-#if sun3 || sun4 || news || sanyo || alpha
+#if sun3 || sun4 || news || sanyo || alpha || x86_64 /* why i386 does not exist? */
 #if !Solaris2
   defun(ctx,"UALARM",mod,UALARM);
 #endif
@@ -2087,7 +2090,7 @@ pointer mod;
   defun(ctx,"NTOHS",mod,N2HS);
 #endif
 
-#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha
+#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64
   defun(ctx,"VFORK",mod,VFORK);
 #endif
   defun(ctx,"EXEC",mod,EXEC);
@@ -2096,7 +2099,7 @@ pointer mod;
   defun(ctx,"SETPRIORITY",mod,SETPRIORITY);
 #endif
 
-#if sun3 || sun4 || vax || mips || i386 || alpha
+#if sun3 || sun4 || vax || mips || i386 || alpha || x86_64
   defun(ctx,"PUTENV",mod,PUTENV);
 #endif
 #if sun3 || sun4 && !Solaris2 || Linux || alpha || Cygwin

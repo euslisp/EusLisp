@@ -322,7 +322,7 @@
   printf("(defconstant GL_MAX_TEXTURE_STACK_DEPTH %d)\n", GL_MAX_TEXTURE_STACK_DEPTH);
   printf("(defconstant GL_MAX_ATTRIB_STACK_DEPTH %d)\n", GL_MAX_ATTRIB_STACK_DEPTH);
   printf("(defconstant GL_MAX_NAME_STACK_DEPTH %d)\n", GL_MAX_NAME_STACK_DEPTH);
-  printf("(defconstant GL_MAX_DISPLAYLISTS %d)\n", GL_MAX_DISPLAYLISTS);
+  //printf("(defconstant GL_MAX_DISPLAYLISTS %d)\n", GL_MAX_DISPLAYLISTS);
   printf("(defconstant GL_MAX_LIST_NESTING %d)\n", GL_MAX_LIST_NESTING);
   printf("(defconstant GL_MAX_LIGHTS %d)\n", GL_MAX_LIGHTS);
   printf("(defconstant GL_MAX_CLIP_PLANES %d)\n", GL_MAX_CLIP_PLANES);

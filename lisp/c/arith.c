@@ -1336,7 +1336,7 @@ int n;
 pointer argv[];
 { register eusinteger_t pos,width=8;
 #if (WORD_SIZE == 64)
-  register unsigned long val,target,mask=~0;
+  register unsigned long val,target,mask=~0L;
 #else
   register unsigned int val,target,mask=~0;
 #endif

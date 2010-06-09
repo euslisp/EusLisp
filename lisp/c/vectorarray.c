@@ -48,9 +48,21 @@ register int n;
     case ELM_BYTE:  return(makeint(a->c.str.chars[n]));
     case ELM_FLOAT: return(makeflt(a->c.fvec.fv[n]));
     case ELM_INT:  x=a->c.ivec.iv[n];  return(mkbigint(x));
+#if (WORD_SIZE == 64)
+    /*
+			hanai: 32 was hard coded.
+			This size must be equal to that of eusinteger_t.
+			Constant 1 must be written as 1L.
+			Otherwise 1 << 32 becomes 1, meaning 0x00000001.
+			*/
+    case ELM_BIT:  x=1L<<(n % 64); 
+	            if (a->c.ivec.iv[n/64] & x) return(makeint(1));
+		    else return(makeint(0));
+#else
     case ELM_BIT:  x=1<<(n % 32); 
 	            if (a->c.ivec.iv[n/32] & x) return(makeint(1));
 		    else return(makeint(0));
+#endif
     case ELM_FOREIGN: return(makeint(((byte *)(a->c.ivec.iv[0]))[n]));
     case ELM_POINTER:
     default: return(a->c.vec.v[n]);}}
@@ -84,11 +96,19 @@ pointer newval;
 
   if (n<0 || vecsize(a)<=n) error(E_ARRAYINDEX);
   switch(elmtypeof(a)) {
+#if (WORD_SIZE == 64)
+	case ELM_BIT:
+		x=1L<<(n % 64);
+		y=(ckintval(newval) & 1L)<<(n % 64);
+		a->c.ivec.iv[n/64]=(a->c.ivec.iv[n/64] & (~ x)) | y;
+	        return(newval);
+#else
 	case ELM_BIT:
 		x=1<<(n % 32);
 		y=(ckintval(newval) & 1)<<(n % 32);
 		a->c.ivec.iv[n/32]=a->c.ivec.iv[n/32] & (~ x) | y;
 	        return(newval);
+#endif
 	case ELM_BYTE: case ELM_CHAR:
 		a->c.str.chars[n]=ckintval(newval); return(newval);
 	case ELM_INT:
@@ -267,10 +287,17 @@ pointer argv[];
   eusinteger_t x;
   ckarg(2);
   n=ckintval(argv[1]);
+#if (WORD_SIZE == 64)
+  if (isbitvector(a)) {
+    if (n<0 || vecsize(a)<=n) error(E_ARRAYINDEX);
+    x=(a->c.ivec.iv[n/64]) & (1L<<(n % 64));
+    return(makeint(x?1L:0L));}
+#else
   if (isbitvector(a)) {
     if (n<0 || vecsize(a)<=n) error(E_ARRAYINDEX);
     x=(a->c.ivec.iv[n/32]) & (1<<(n % 32));
     return(makeint(x?1:0));}
+#endif
   else error(E_BITVECTOR);}
 
 pointer SETBIT(ctx,n,argv)
@@ -282,11 +309,19 @@ pointer argv[];
   ckarg(3);
   n=ckintval(argv[1]);
   val=ckintval(argv[2]) & 1;
+#if (WORD_SIZE == 64)
+  if (isbitvector(a)) {
+    if (n<0 || vecsize(a)<=n) error(E_ARRAYINDEX);
+    if (val) a->c.ivec.iv[n/64]|=  (1L<<(n%64));
+    else     a->c.ivec.iv[n/64]&= ~(1L<<(n%64));
+    return(makeint(val));}
+#else
   if (isbitvector(a)) {
     if (n<0 || vecsize(a)<=n) error(E_ARRAYINDEX);
     if (val) a->c.ivec.iv[n/32]|=  (1<<(n%32));
     else     a->c.ivec.iv[n/32]&= ~(1<<(n%32));
     return(makeint(val));}
+#endif
   else error(E_BITVECTOR);}
 
 pointer BITAND(ctx,n,argv)

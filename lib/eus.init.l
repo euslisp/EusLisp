@@ -56,4 +56,4 @@
 	"glxconst" "glxforeign"
 ;	"auxconst" "auxforeign"
 	"eglforeign" "eglfunc" 
-	"glutil" "gltexture" "glprim" "gleus" "glview")
+	"glutil" "gltexture" "glprim" "gleus" "glview" "fstringdouble")

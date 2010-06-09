@@ -27,7 +27,7 @@ static char *rcsid="@(#)$Id$";
 #include "eus.h"
 
 struct foreignpod {
-#if vax || sun4 || news || mips || i386 || alpha
+#if vax || sun4 || news || mips || i386 || alpha || x86_64
     unsigned mark:1;
     unsigned b:1;
     unsigned m:1;
@@ -55,7 +55,117 @@ cixpair foreignpodcp;
 			    		  ((p)->cix)<=foreignpodcp.sub)
 #define isforeignpod(p) (ispointer(p) && pisforeignpod(p))
 
+#if x86_64
+// Linux, x64
+/* development version of euscall written by Y.Kakiuchi */
+union NUMCONVBUF {
+  eusfloat_t fval;
+  eusinteger_t ival;
+  int i32val;
+  float f32val;
+};
 
+eusinteger_t
+calleus(fsym,cargv)
+register pointer fsym;	    /*foreign-symbol*/
+register eusinteger_t cargv[]; /*arguments vector passed from C function*/
+// cargv[0-5] integer, pointer
+// cargv[6-13] float, double
+// skip cargv[14](stack pointer), cargv[15] (stack alignment)
+// cargv[16.. ] integer, pointer, float, double
+// using TYPE
+// byte, char, short, long, integer, pointer, int32
+// float32, float, double,
+{ register pointer param,resulttype,p,result;
+  eusfloat_t f;
+  float f32;
+  context *ctx;
+  pointer *argv;
+  struct foreignpod *fs;
+  eusinteger_t c;
+  int argc=0 /* ,j */;
+  eusinteger_t *iargv = cargv;
+  eusinteger_t *fargv = &(cargv[6]);
+  eusinteger_t *vargv = &(cargv[16]);
+  int icount = 0, fcount = 0, vcount = 0;
+  //numunion nu;
+  union NUMCONVBUF nu;
+  
+#if 0
+  printf("calleus : fsym.cix = %lX (%lX,%lX)\n", fsym->cix, fsym, &(fsym->cix));
+#endif    
+  ctx=euscontexts[thr_self()];
+  argv=ctx->vsp;
+  fs=(struct foreignpod *)fsym;
+#if 0
+  printf("calleus : fsym.paramtypes = %lX (%lX,%lX)\n",
+         fs->paramtypes, (long *)fs, &(fs->paramtypes));
+  printf("calleus : fsym.resulttype = %lX (%lX,%lX)\n",
+         fs->resulttype, (long *)fs, &(fs->resulttype)); 
+#endif
+  if (!isforeignpod(fsym)) error(E_USER,(pointer)"not a foreign pod");
+  param=fs->paramtypes;
+  resulttype=fs->resulttype;
+  while (islist(param)) {
+    p=ccar(param); param=ccdr(param);
+    if (p==K_INTEGER) {
+      if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+      vpush(makeint(c));
+#if 0
+    } else if (p==K_INT32) {
+      if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+      vpush(makeint(c & 0x00000000FFFFFFFF));
+#endif
+    } else if (p==K_FLOAT) {
+      if(fcount < 8)  c = fargv[fcount++]; else c = vargv[vcount++];
+      nu.ival = c;
+      vpush(makeflt(nu.fval));
+    } else if (p==K_FLOAT32) {
+      if(fcount < 8)  c = fargv[fcount++]; else c = vargv[vcount++];
+      nu.ival = c & 0x00000000FFFFFFFF;
+      f = nu.f32val;
+      vpush(makeflt(f));
+    } else if (islist(p)) {
+      if (ccar(p)!=K_STRING) error(E_USER,(pointer)":string key expected");
+      p=ccdr(p);
+      if (p==NIL) {
+        if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+	vpush(makestring((char *)c,strlen((char *)c)));
+      } else {
+	p=ccar(p); //c=ckintval(p);
+        if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+        vpush(makestring((char *)c, ckintval(p)));
+      }
+    } else if (p==K_STRING)  {
+      if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+      c -= 2*sizeof(pointer);
+      vpush((pointer)c);
+    } else error(E_USER,(pointer)"unknown param type spec");
+    argc++;
+  }
+#if 0
+  // check argv
+  printf("argc = %d\n", argc);
+  for(int i=0;i<argc;i++) {
+    printf("argv[%d] = %lX\n", argv[i]);
+  }
+#endif
+  result=ufuncall(ctx,fsym,fsym,(pointer)argv,NULL,argc);
+  ctx->vsp = argv;
+  if (resulttype==K_STRING) return((eusinteger_t)(result->c.str.chars));
+  else if (resulttype==K_FLOAT) {
+    f=fltval(result);
+    nu.fval=f;
+    printf("calleus float-result=%f\n",f);
+    return(nu.ival); 
+  } else if (resulttype==K_FLOAT32) {
+    f=fltval(result);
+    f32 = f;
+    nu.f32val = f32;
+    return((eusinteger_t)nu.i32val);
+  } else return(intval(result));
+}
+#else // #if x86_64
 eusinteger_t
 calleus(fsym,cargv,a2,a3,a4,a5,a6,a7,a8)
 register pointer fsym;	/*foreign-symbol*/
@@ -109,6 +219,7 @@ register eusinteger_t cargv[];	/*arguments vector passed from C function*/
     printf("calleus float-result=%f\n",f);
     return(nu.ival); }
   else return(intval(result)); }
+#endif // x86_64
 
 void foreign(ctx,mod)
 register context *ctx;

@@ -986,7 +986,7 @@
   (defforeign CreateColormap Xlib "_XCreateColormap" () :integer)
   (defforeign CreateFontCursor Xlib "_XCreateFontCursor" () :integer)
   (defforeign CreateFontSet Xlib "_XCreateFontSet" () :integer)
-  (defforeign CreateGC Xlib "_XCreateGC" () :integer)
+  (defforeign CreateGC Xlib "_XCreateGC" () :long)
   (defforeign CreateGlyphCursor Xlib "_XCreateGlyphCursor" () :integer)
   (defforeign CreateIC Xlib "_XCreateIC" () :integer)
   (defforeign CreateImage Xlib "_XCreateImage" () :integer)

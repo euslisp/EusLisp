@@ -1,5 +1,5 @@
 ;;; -*- lisp -*-
-;;; $Header: /home/cvs/euslisp/opengl/src/glforeign.l,v 1.1.1.1 2003/11/20 07:46:32 eus Exp $
+;;; $Header$
 ;;; glforeign.l -- gl foreign function declarations (derived from /usr/include/GL/gl.h)
 
 (provide :glforeign)
@@ -317,6 +317,58 @@
           glVertex4sv
           glViewport))
 
+#+:x86_64
+(let (glm glu)
+  (if (probe-file "/usr/lib/libGL.so")
+      (setq glm (load-foreign "/usr/lib/libGL.so"))
+    (warn ";; libGL.so not found, x64"))
+  (if (probe-file "/usr/lib/libGLU.so")
+      (setq glu (load-foreign "/usr/lib/libGLU.so"))
+    (warn ";; libGLU.so not found, x64"))
+  (when glm
+    ;; fv -> dv
+    (defforeign glcolor3fv glm "glColor3dv" () :integer)
+    (defforeign glcolor4fv glm "glColor4dv" () :integer)
+    (defforeign glnormal3fv glm "glNormal3dv" () :integer)
+    (defforeign glvertex2fv glm "glVertex2dv" () :integer)
+    (defforeign glvertex3fv glm "glVertex3dv" () :integer)
+    (defforeign gltexcoord2fv glm "glTexCoord2dv" () :integer)
+    (defforeign gltexgenfv glm "glTexGendv" () :integer)
+    (defforeign glgetfloatv glm "glGetDoublev" () :integer)
+    (defforeign glmultmatrixf glm "glMultMatrixd" () :integer)
+    ;; for wrap
+    (defforeign wrap-glMaterialfv glm "glMaterialfv" () :integer)
+    (defforeign wrap-glLightfv glm "glLightfv" () :integer)
+    (defforeign wrap-glGetMaterialfv glm "glGetMaterialfv" () :integer)
+    ;; fv -> '' in util.c
+    ;;(defforeign glorthofv glm "glOrtho" () :integer)
+    ;;(defforeign glClearColorfv glm "glClearColor" () :integer)
+    )
+  #|
+  (when glu
+    ;; fv -> '' in util.c
+    ;;(defforeign gluLookAtfv glu "gluLookat" () :integer)
+    ;;(defforeign gluPerspectivefv glu "gluPerspective" () :integer)
+    )
+  |#
+  ;; wrap for converting double* -> float*
+  )
+#+:x86_64
+(defun glMaterialfv (face pname fv)
+  (let ((tmp (double2fstring fv)))
+    (wrap-glMaterialfv face pname tmp)
+    ))
+#+:x86_64
+(defun glGetMaterialfv (face pname fv)
+  (let ((tmp (double2fstring fv)) ret)
+    (setq ret (wrap-glMaterialfv face pname tmp))
+    (fstring2double tmp fv)
+    ret))
+#+:x86_64
+(defun glLightfv (light pname fv)
+  (let ((tmp (double2fstring fv)))
+    (wrap-glLightfv light pname tmp)
+    ))
 #|
 (defforeign glAccum GL "glAccum" (:integer :float) :integer)
 (defforeign glAlphaFunc GL "glAlphaFunc" (:integer :float) :integer)

@@ -202,7 +202,11 @@ pointer *argv;
   ckarg(2);
   if (!isldmod(argv[0])) error(E_USER,(pointer)"not a LOAD-MODULE");
   if (!iscons(argv[1])) error(E_NOLIST);
+#if x86_64
+  dlhandle=(void *)((eusinteger_t)(argv[0]->c.ldmod.handle) & ~3L);
+#else
   dlhandle=(void *)((eusinteger_t)(argv[0]->c.ldmod.handle) & ~3);
+#endif
   initnames=argv[1];
   module_count=0;
   if (dlhandle==NULL) error(E_USER,(pointer)"This module was not loaded");
@@ -300,7 +304,11 @@ pointer argv[];
   else mod=sysmod;
   if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
   entry_string=(char *)get_string(argv[0]);
+#if x86_64
+  entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L), entry_string);
+#else
   entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3), entry_string);
+#endif
   if (entry==NULL) return(NIL);
   else return(makeint((eusinteger_t)entry>>2));}
 
@@ -317,7 +325,11 @@ pointer argv[];
   else mod=sysmod;
   if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
   entry_string=(char *)get_string(argv[0]);
+#if x86_64
+  entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L), entry_string);
+#else
   entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3), entry_string);
+#endif
   if (entry==NULL) return(NIL);
   else {
     e=cons(ctx,makeint((eusinteger_t)entry),e);
@@ -337,7 +349,11 @@ pointer *argv;
   register int stat;
   ckarg(1);
   if (!isldmod(mod)) error(E_USER,(pointer)"not a compiled-module");
+#if x86_64
+  stat=dlclose((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L));
+#else
   stat=dlclose((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3));
+#endif
   if (stat) return(makeint(-errno));
   else return(T);}
 

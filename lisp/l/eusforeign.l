@@ -155,7 +155,12 @@
    (make-array (length bytes) :element-type :char :initial-contents bytes))
 
 (defmethod foreign-pod
- (:pod-address () (+ 8 (sys:address podcode)))
+ (:pod-address () 
+#-:x86_64
+	(+ 8 (sys:address podcode))
+#+:x86_64
+	(+ 16 (sys:address podcode))
+	)
  (:init (param result func)
     (let ((self-address (sys:address self)))
 #+:sun3
@@ -246,6 +251,125 @@
 			(ldb calleus-offset 16 8)  (ldb calleus-offset 24 8))
 		    :start1 11)
 	   podcode)
+#|
+#+:x86_64
+	(let ((calleus-offset 0))
+	   (setq podcode (byte-string
+		#x55
+		#x48 #x89 #xe5
+		#x48 #x83 #xec #x08
+		#x48 #x89 #x7d #xf8
+		#x48 #x8d #x75 #xf8
+		#x48 #xbf ;;#x00 #x00 #x00 #x00
+		     (ldb self-address 0 8)
+		     (ldb self-address 8 8)
+		     (ldb self-address 16 8)
+		     (ldb self-address 24 8)
+		     (ldb self-address 32 8)
+		     (ldb self-address 40 8)
+		     (ldb self-address 48 8)
+		     (ldb self-address 56 8)
+		#xe8 #x00 #x00 #x00 #x00
+		#xc9
+		#xc3
+		))
+	;;  10 0000 8D542404              leal    4(%esp), %edx
+	;;  11 0004 52                    pushl   %edx
+	;;  12 0005 68785634              pushl   self
+	;;  12      12
+	;;  13 000a E8745634              call    calleus (relative)
+	;;  13      12
+	;;  14 000f 89442404              movl    %eax,4(%esp)
+	;;  15 0013 D9442404              flds    4(%esp)
+	;;  16 0017 83C408                addl    $8,%esp
+	;;  17 001a C3                    ret
+	   (setq calleus-offset (- *calleus* (+ (sys:address podcode) 16 27 4)))
+	   (replace podcode
+		    (list
+			(ldb calleus-offset 0 8) (ldb calleus-offset 8 8)
+			(ldb calleus-offset 16 8)  (ldb calleus-offset 24 8))
+		    :start1 27)
+		(format t "PODCODE ADDR: ~x~%" (+ 16 (sys:address podcode)))
+	   podcode)
+|#
+#+:x86_64
+	(let ((calleus-offset 0))
+	   (setq podcode (byte-string
+                #x48 #x83 #xec #x78
+                #x48 #x89 #x3c #x24
+                #x48 #x89 #x74 #x24 #x08
+                #x48 #x89 #x54 #x24 #x10
+                #x48 #x89 #x4c #x24 #x18
+                #x4c #x89 #x44 #x24 #x20
+                #x4c #x89 #x4c #x24 #x28
+                #xf2 #x0f #x11 #x44 #x24 #x30
+                #xf2 #x0f #x11 #x4c #x24 #x38
+                #xf2 #x0f #x11 #x54 #x24 #x40
+                #xf2 #x0f #x11 #x5c #x24 #x48
+                #xf2 #x0f #x11 #x64 #x24 #x50
+                #xf2 #x0f #x11 #x6c #x24 #x58
+                #xf2 #x0f #x11 #x74 #x24 #x60
+                #xf2 #x0f #x11 #x7c #x24 #x68
+		#x48 #xbf ;;#x00 #x00 #x00 #x00 ;; mov $addr, %rdi
+		     (ldb self-address 0 8)
+		     (ldb self-address 8 8)
+		     (ldb self-address 16 8)
+		     (ldb self-address 24 8)
+		     (ldb self-address 32 8)
+		     (ldb self-address 40 8)
+		     (ldb self-address 48 8)
+		     (ldb self-address 56 8)
+                #x48 #x89 #xe6
+                #xb8 #x00 #x00 #x00 #x00
+                #xe8 #x00 #x00 #x00 #x00
+                #x48 #x83 #xc4 #x78
+		#xc3                     ;; retq
+                #x90 #x90 #x90 #x90
+                #x90 #x90 #x90 #x90 #x90
+		))
+           (if (or (eq :float result) (eq :float32 result))
+	       (replace podcode
+			(list #x48 #x89 #x04 #x24
+                              #xf2 #x0f #x10 #x04 #x24
+                              #x48 #x83 #xc4 #x78
+                              #xc3) :start1 104))
+;; /* development version of pod-code for x86_64 written by Y.Kakiuchi */
+;; 000:  48 83 ec 78             sub    $0x78,%rsp
+;; 004:  48 89 3c 24             mov    %rdi,(%rsp)
+;; 008:  48 89 74 24 08          mov    %rsi,0x8(%rsp)
+;; 00d:  48 89 54 24 10          mov    %rdx,0x10(%rsp)
+;  012:  48 89 4c 24 18          mov    %rcx,0x18(%rsp)
+;; 017:  4c 89 44 24 20          mov    %r8,0x20(%rsp)
+;; 01c:  4c 89 4c 24 28          mov    %r9,0x28(%rsp)
+;; 021:  f2 0f 11 44 24 30       movsd  %xmm0,0x30(%rsp)
+;; 027:  f2 0f 11 4c 24 38       movsd  %xmm1,0x38(%rsp)
+;; 02d:  f2 0f 11 54 24 40       movsd  %xmm2,0x40(%rsp)
+;; 033:  f2 0f 11 5c 24 48       movsd  %xmm3,0x48(%rsp)
+;; 039:  f2 0f 11 64 24 50       movsd  %xmm4,0x50(%rsp)
+;; 03f:  f2 0f 11 6c 24 58       movsd  %xmm5,0x58(%rsp)
+;; 045:  f2 0f 11 74 24 60       movsd  %xmm6,0x60(%rsp)
+;; 04b:  f2 0f 11 7c 24 68       movsd  %xmm7,0x68(%rsp)
+;; 051:  48 bf 77 ef cd ab 77    mov    $0xabcdef77abcdef77,%rdi
+;; 058:  ef cd ab
+;; 05b:  48 89 e6                mov    %rsp,%rsi
+;; 05e:  b8 00 00 00 00          mov    $0x0,%eax
+;; 063:  e8 a0 01 00 00          callq  4007b8 <calleus>
+;;; return integer
+;; 068:  48 83 c4 78             add    $0x78,%rsp
+;; 06c:  c3                      retq
+;;; return float
+;; 068:  48 89 04 24             mov    %rax,(%rsp)
+;; 06c:  f2 0f 10 04 24          movsd  (%rsp),%xmm0
+;; 071:  48 83 c4 78             add    $0x78,%rsp
+;; 075:  c3                      retq
+	   (setq calleus-offset (- *calleus* (+ (sys:address podcode) 16 100 4)))
+	   (replace podcode
+		    (list
+			(ldb calleus-offset 0 8) (ldb calleus-offset 8 8)
+			(ldb calleus-offset 16 8)  (ldb calleus-offset 24 8))
+		    :start1 100)
+           (if *debug* (format t "PODCODE ADDR: ~x~%" (+ 16 (sys:address podcode))))
+	   podcode)
 #+:sh4 
 (progn
 	(setq podcode (byte-string
@@ -280,7 +404,7 @@
 		       #x09 #x00;;	09 00       	nop
 		       )
 	      ))
-#-(or :sun3 :sun4 :i386)
+#-(or :sun3 :sun4 :i386 :x86_64)
 	 (error "not yet implemented for this processor")
       (cond 
 	 ((listp func)

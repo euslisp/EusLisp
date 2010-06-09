@@ -17,6 +17,7 @@ static char *rcsid="@(#)$Id$";
 #include <sys/msg.h>
 #endif
 #include "eus.h"
+#include <sys/msg.h>
 
 extern int errno;
 int ch[MAXTHREAD];		/*current character*/
@@ -87,7 +88,7 @@ register pointer s;
 #if system5 || Solaris2
       if (c<0) { breakck; goto tryqread;}
 #endif
-#if sun3 || sun4 || vax || apollo || news || sanyo || mips || i386 || alpha
+#if sun3 || sun4 || vax || apollo || news || sanyo || mips || i386 || alpha || x86_64
       breakck;
 #endif
       s->c.stream.buffer->c.str.length=lsave;

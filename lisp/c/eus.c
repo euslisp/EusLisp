@@ -891,6 +891,9 @@ static void initfeatures()
 #if SH4
   p=cons(ctx,intern(ctx,"SH4",3,keywordpkg),p);
 #endif
+#if x86_64
+  p=cons(ctx,intern(ctx,"X86_64",6,keywordpkg),p);
+#endif
 
   defvar(ctx,"*FEATURES*",p,lisppkg);
 
@@ -906,6 +909,7 @@ static void initfeatures()
 /****************************************************************/
 
 extern long gcing;
+#include <wait.h>
 
 void eusint(s,code,x,addr)
 register int s;
@@ -1277,6 +1281,31 @@ char *argv[];
   exit(stat);
   }
 
+#if (WORD_SIZE == 64)
+pointer makeint(eusinteger_t v) {
+  if (v>(eusinteger_t)MAXPOSFIXNUM || v<(eusinteger_t)MINNEGFIXNUM) {
+    if (v&0x7L) {
+      return(mkbigint(v));
+    }
+    return ((pointer)(v|0x3L)); }
+  else return((pointer)((v<<2)+2));
+}
+eusinteger_t intval(pointer p) {
+  eusinteger_t i=(eusinteger_t)p;
+  if (p==NULL) {
+    fprintf(stderr,"p=null\n");
+    raise(SIGSEGV);
+    return 0;}
+  else if ((i&0x3L)==0x3L) {
+    return (i&~0x3L); }
+  else if (isbignum(p)) {
+    return (bigintval(p)); }
+  else if ((i&0x7)==0x0L) {
+    fprintf(stderr,";p=pointer?(%p)\n", p);
+    return (i); }
+  else return (((eusinteger_t)i)>>2);
+}
+#else
 pointer makeint(eusinteger_t v) {
   if (v>(int)MAXPOSFIXNUM || v<(int)MINNEGFIXNUM) {
     //    fprintf(stderr, "makeint(%x)\n", v);
@@ -1301,6 +1330,6 @@ eusinteger_t intval(pointer p) {
     return (i); }
   else return (((eusinteger_t)i)>>2);
 }
+#endif
 
 eusinteger_t hide_ptr (pointer p) { return (eusinteger_t)p; }
-

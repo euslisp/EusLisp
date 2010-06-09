@@ -31,7 +31,7 @@
 (nconc *features* '(:m68020))
 ;
 
-#+(or :alpha :irix6)
+#+(or :alpha :irix6 :x86_64)
 (progn
   (defconstant sizeof-* 8)
   (defconstant sizeof-long 8)
@@ -40,7 +40,7 @@
   (defconstant sizeof-char 1)
   (defconstant sizeof-float 4)
   (defconstant sizeof-double 8))
-#-(or :alpha :irix6)
+#-(or :alpha :irix6 :x86_64)
 (progn
   (defconstant sizeof-* 4)
   (defconstant sizeof-long 4)

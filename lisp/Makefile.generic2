@@ -108,6 +108,7 @@ GLOBJECTS= $(OBJDIR)/glconst.o \
 	 $(OBJDIR)/gleus.o \
 	 $(OBJDIR)/gltexture.o \
 	 $(OBJDIR)/glview.o \
+	 $(OBJDIR)/fstringdouble.o \
 	 $(OBJDIR)/toiv.o
 
 #	 $(OBJDIR)/auxconst.o 
@@ -425,6 +426,9 @@ $(OBJDIR)/big.o:	$(CDIR)/big.c
 $(OBJDIR)/fcall.o:	$(CDIR)/fcall.c
 $(OBJDIR)/helpsub.o:	$(CDIR)/helpsub.c
 $(OBJDIR)/floatdouble.o:	$(CDIR)/floatdouble.c
+$(OBJDIR)/fstringdouble.o:	$(EUSDIR)/lib/clib/fstringdouble.c
+	$(CC) -c $(CFLAGS) -o $@ $(OFLAGS) $<
+
 $(OBJDIR)/call_foreign.o:	$(CDIR)/call_foreign.$(ARCH).s
 # lisp objects
 $(OBJDIR)/constants.l.o: $(LDIR)/constants.l
