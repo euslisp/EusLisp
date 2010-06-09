@@ -5,7 +5,7 @@
 ;;
 ;; 	character types
 ;;
-(list "@(#)$Id: string.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
+(list "@(#)$Id$")
 
 (in-package "LISP")
 (export '(true-string string make-string string-left-trim
@@ -136,10 +136,10 @@
      (if (numberp val)
 	 (sys:poke val self pos type)
 	 (let ((offset (cdr (assoc type
-#-(or :alpha :irix6)
+#-(or :alpha :irix6 :x86_64)
 		 '((:short . 2) (:long . 4) (:byte . 1) (:char . 1)
 		   (:int . 4) (:integer . 4) (:float . 4) (:double . 8))
-#+(or :alpha :irix6)
+#+(or :alpha :irix6 :x86_64)
 		 '((:short . 2) (:long . 8) (:byte . 1) (:char . 1)
 		   (:int . 4) (:integer . 4) (:float . 4) (:double . 8))
 		 ))))

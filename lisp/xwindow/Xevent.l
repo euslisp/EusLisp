@@ -107,12 +107,14 @@
     (same-screen	:integer)	;14
     (focus		:integer)	;15
     (alt-state		:integer)	;16
-#-(or :alpha :irix6)
+#-(or :alpha :irix6 :x86_64)
     (pad		:char 28)	;xevent is required to hold 24 longs
 #+:irix6
     (pad		:char 84)
 #+:alpha
     (pad		:char 88)
+#+:x86_64
+    (pad		:char 100)      ;xevent is required to hold xx longs at x86-64
 )
 
 (defparameter event (instantiate XEvent))
@@ -432,11 +434,11 @@ instead of 12th of motoinNotify events."
   (defun window-main-thread ()
      (sys::thread-no-wait #'window-main-thread2)))
 
-#-(or :alpha :irix6)
+#-(or :alpha :irix6 :x86_64)
 (defun display-fd (&optional (disp *display*))
    (if disp
        (sys:peek (+ disp 8) :long)))
-#+(or :alpha :irix6)
+#+(or :alpha :irix6 :x86_64)
 (defun display-fd (&optional (disp *display*))
    (if disp
        (sys:peek (+ disp 16) :integer)))

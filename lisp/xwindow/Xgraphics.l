@@ -185,9 +185,9 @@
 	      (setq id (LoadQueryFont *display* font))
 	      (if (= id 0)
 		  (prog1 0 (warn "can't load font ~S" font))
-#-(or :alpha :irix6)
+#-(or :alpha :irix6 :x86_64)
 		  (sys:peek (+ id 4) :long)
-#+(or :alpha :irix6)
+#+(or :alpha :irix6 :x86_64)
 		  (sys:peek (+ id 8) :long)
 ))))
    
@@ -200,9 +200,9 @@
 		    direction font_ascent font_descent overall)
   (integer-vector (c-int font_ascent)
 		  (c-int font_descent)
-#-(or :i386 :alpha)
+#-(or :i386 :alpha :x86_64)
 		%(overall [ 4 ] * 256 + overall [ 5 ])
-#+(or :i386 :alpha)
+#+(or :i386 :alpha :x86_64)
 		%(overall [ 5 ] * 256 + overall [ 4 ])
 		)))
 	#| return = (ascent descent width) |#
@@ -253,7 +253,7 @@
 (defparameter *blue-mask* #x00ff0000)
 
 
-#-(or :alpha :irix6)
+#-(or :alpha :irix6 :x86_64)
 (defun set-ximage (ximage data width height
 		   &optional (visual *visual*)
 			 (depth (visual-depth visual))
@@ -275,7 +275,7 @@
        (sys:poke *blue-mask*  ximage 48 :long)
     ximage)
 
-#+(or :alpha :irix6)
+#+(or :alpha :irix6 :x86_64)
 (defun set-ximage (ximage data width height visual)
     (let* ((depth (visual-depth visual))
 	   (bitunit (case depth (8 8) (16 16) (15 16) (t 32)))) 
@@ -331,9 +331,9 @@
  (:gc () gcid)
  (:copy ()
    (let ((newgc (instance gcontext :create)))
-#-(or :alpha :irix6)
+#-(or :alpha :irix6 :x86_64)
      (CopyGC *display* gcid #xffffffff (send newgc :gc))
-#+(or :alpha :irix6)
+#+(or :alpha :irix6 :x86_64)
      (CopyGC *display* gcid #xffffffffffffffff (send newgc :gc))
      newgc))
  (:function-to-value (f)
@@ -483,5 +483,5 @@ cmap is defaulted to x:*color-map*."
 		nil) ) )
    )
 
-(provide :Xgraphics  "@(#)$Id: Xgraphics.l,v 1.1.1.1 2003/11/20 07:46:35 eus Exp $")
+(provide :Xgraphics  "@(#)$Id$")
 

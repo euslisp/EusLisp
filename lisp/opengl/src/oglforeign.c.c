@@ -37,7 +37,11 @@ char *xentry;
     dlhandle=(eusinteger_t)dlopen(0, RTLD_LAZY);
     entry=(eusinteger_t)dlsym(dlhandle, xentry);}
 #else
+#if x86_64
+  entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3L), xentry);
+#else
   entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3), xentry);
+#endif
 #endif
   if (!entry) {
     fprintf(stderr, "defoglforeign: dlsym() failed for %s\n", xentry);
@@ -82,7 +86,9 @@ pointer argv[];
   defoglforeign(ctx,"glColor3d");
   defoglforeign(ctx,"glColor3dv");
   defoglforeign(ctx,"glColor3f");
+#ifndef x86_64
   defoglforeign(ctx,"glColor3fv");
+#endif
   defoglforeign(ctx,"glColor3i");
   defoglforeign(ctx,"glColor3iv");
   defoglforeign(ctx,"glColor3s");
@@ -98,7 +104,9 @@ pointer argv[];
   defoglforeign(ctx,"glColor4d");
   defoglforeign(ctx,"glColor4dv");
   defoglforeign(ctx,"glColor4f");
+#ifndef x86_64
   defoglforeign(ctx,"glColor4fv");
+#endif
   defoglforeign(ctx,"glColor4i");
   defoglforeign(ctx,"glColor4iv");
   defoglforeign(ctx,"glColor4s");
@@ -151,14 +159,18 @@ pointer argv[];
   defoglforeign(ctx,"glGetClipPlane");
   defoglforeign(ctx,"glGetDoublev");
   defoglforeign(ctx,"glGetError");
+#ifndef x86_64
   defoglforeign(ctx,"glGetFloatv");
+#endif
   defoglforeign(ctx,"glGetIntegerv");
   defoglforeign(ctx,"glGetLightfv");
   defoglforeign(ctx,"glGetLightiv");
   defoglforeign(ctx,"glGetMapdv");
   defoglforeign(ctx,"glGetMapfv");
   defoglforeign(ctx,"glGetMapiv");
+#ifndef x86_64
   defoglforeign(ctx,"glGetMaterialfv");
+#endif
   defoglforeign(ctx,"glGetMaterialiv");
   defoglforeign(ctx,"glGetPixelMapfv");
   defoglforeign(ctx,"glGetPixelMapuiv");
@@ -193,7 +205,9 @@ pointer argv[];
   defoglforeign(ctx,"glLightModeli");
   defoglforeign(ctx,"glLightModeliv");
   defoglforeign(ctx,"glLightf");
+#ifndef x86_64
   defoglforeign(ctx,"glLightfv");
+#endif
   defoglforeign(ctx,"glLighti");
   defoglforeign(ctx,"glLightiv");
   defoglforeign(ctx,"glLineStipple");
@@ -213,19 +227,25 @@ pointer argv[];
   defoglforeign(ctx,"glMapGrid2d");
   defoglforeign(ctx,"glMapGrid2f");
   defoglforeign(ctx,"glMaterialf");
+#ifndef x86_64
   defoglforeign(ctx,"glMaterialfv");
+#endif
   defoglforeign(ctx,"glMateriali");
   defoglforeign(ctx,"glMaterialiv");
   defoglforeign(ctx,"glMatrixMode");
   defoglforeign(ctx,"glMultMatrixd");
+#ifndef x86_64
   defoglforeign(ctx,"glMultMatrixf");
+#endif
   defoglforeign(ctx,"glNewList");
   defoglforeign(ctx,"glNormal3b");
   defoglforeign(ctx,"glNormal3bv");
   defoglforeign(ctx,"glNormal3d");
   defoglforeign(ctx,"glNormal3dv");
   defoglforeign(ctx,"glNormal3f");
+#ifndef x86_64
   defoglforeign(ctx,"glNormal3fv");
+#endif
   defoglforeign(ctx,"glNormal3i");
   defoglforeign(ctx,"glNormal3iv");
   defoglforeign(ctx,"glNormal3s");
@@ -347,7 +367,9 @@ pointer argv[];
   defoglforeign(ctx,"glVertex2d");
   defoglforeign(ctx,"glVertex2dv");
   defoglforeign(ctx,"glVertex2f");
+#ifndef x86_64
   defoglforeign(ctx,"glVertex2fv");
+#endif
   defoglforeign(ctx,"glVertex2i");
   defoglforeign(ctx,"glVertex2iv");
   defoglforeign(ctx,"glVertex2s");
@@ -355,7 +377,9 @@ pointer argv[];
   defoglforeign(ctx,"glVertex3d");
   defoglforeign(ctx,"glVertex3dv");
   defoglforeign(ctx,"glVertex3f");
+#ifndef x86_64
   defoglforeign(ctx,"glVertex3fv");
+#endif
   defoglforeign(ctx,"glVertex3i");
   defoglforeign(ctx,"glVertex3iv");
   defoglforeign(ctx,"glVertex3s");

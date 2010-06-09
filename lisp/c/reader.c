@@ -248,6 +248,8 @@ int labx;
 #endif
 #if sun4 || vax || news || mips || alpha || i386
     unsolp=(pointer *)((eusinteger_t)unsol & ~3);/*???? */
+#elif x86_64
+    unsolp=(pointer *)((eusinteger_t)unsol & ~3L);/*???? */
 #endif
     unsol= *unsolp;
     pointer_update(*unsolp,result); }
@@ -260,7 +262,7 @@ pointer *addr;
 #if sun3 ||( !alpha && system5 ) || sanyo
   labp->c.lab.unsolved=(pointer)addr;
 #endif
-#if sun4 || vax || news || mips || alpha || i386
+#if sun4 || vax || news || mips || alpha || i386 || x86_64
   { int i;
     i=(((eusinteger_t)addr)>>2);
     labp->c.lab.unsolved=makeint(i);}

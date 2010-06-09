@@ -10,17 +10,19 @@ endif
 
 CC = gcc
 ifeq ($(shell /bin/uname -m), x86_64)
+ifneq ($(ARCHDIR), Linux64)
 CC += -m32
+endif
 endif
 
 $(EUSDIR)/$(ARCHDIR)/lib/jpegmemcd.$(LSFX):	jpegmemcd.o jmemsrc.o jmemdst.o
 	$(CC) -shared -o jpegmemcd.$(LSFX) jpegmemcd.o jmemsrc.o jmemdst.o -ljpeg
 	cp jpegmemcd.$(LSFX) $(EUSDIR)/$(ARCHDIR)/lib
 jpegmemcd.o:	jpegmemcd.c
-	$(CC) -c -O  jpegmemcd.c $(CFLAGS)
+	$(CC) -c -O  jpegmemcd.c $(CFLAGS) -fPIC
 jmemsrc.o:	jmemsrc.c
-	$(CC) -c -O  jmemsrc.c $(CFLAGS)
+	$(CC) -c -O  jmemsrc.c $(CFLAGS) -fPIC
 jmemdst.o:	jmemdst.c
-	$(CC) -c -O  jmemdst.c $(CFLAGS)
+	$(CC) -c -O  jmemdst.c $(CFLAGS) -fPIC
 
 

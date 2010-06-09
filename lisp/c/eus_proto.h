@@ -39,7 +39,7 @@ extern pointer ROUND(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer FLOOR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer CEILING(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer TRUNCATE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern pointer FLOAT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer EUSFLOAT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer DECFLOAT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer MAX(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer MIN(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -57,6 +57,7 @@ extern pointer LDB(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer DPB(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer RANDOM(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern void arith(context */*ctx*/, pointer /*mod*/);
+extern pointer FREXP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 /* big.c */
 #if Solaris2 && sun4
 extern void extended_mul(unsigned int /*d*/, unsigned int /*q*/, unsigned int /*r*/, unsigned int */*hp*/, unsigned int */*lp*/);
@@ -89,10 +90,14 @@ extern pointer normalize_bignum(pointer /*x*/);
 extern eusfloat_t big_to_float(pointer /*x*/);
 /* big2.c */
 /* calleus.c */
+#if x86_64
+extern eusinteger_t calleus(pointer /*fsym*/, eusinteger_t /*cargv*/*);
+#else
 extern eusinteger_t calleus(pointer /*fsym*/, eusinteger_t /*cargv*/*, int /*a2*/, int /*a3*/, int /*a4*/, int /*a5*/, int /*a6*/, int /*a7*/, int /*a8*/);
+#endif
 extern void foreign(context */*ctx*/, pointer /*mod*/);
 /* charstring.c */
-extern pointer CHAR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer EUSCHAR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SETCHAR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer UPCASEP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer LOWCASEP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -145,6 +150,10 @@ extern pointer IOCTL_TCSETAF(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer IOCTL_TCSETAW(int /*n*/, pointer /*argv*/*);
 extern pointer TCGETATTR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer TCSETATTR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer IOCTL_TCGETS(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer IOCTL_TCSETS(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer IOCTL_TCSETSW(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer IOCTL_TCSETSF(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern void eusioctl(context */*ctx*/, pointer /*mod*/);
 /* eusstart.dmy.c */
 extern void eusstart(context */*ctx*/);
@@ -292,6 +301,7 @@ extern pointer list_module_initializers2(context */*ctx*/, int /*n*/, pointer */
 extern pointer build_quote_vector(context */*ctx*/, int /*size*/, char */*strings*/*);
 extern pointer eval_c_strings(context */*ctx*/, int /*size*/, const char */*strings*/*);
 extern pointer FIND_ENTRY(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer FIND_ENTRY2(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SYSMOD(void);
 extern pointer UNBINLOAD(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer BINLOAD(context */*ctx*/, int /*n*/, pointer */*argv*/);
@@ -425,6 +435,30 @@ extern void sweepall(void);
 extern int gc(void);
 #endif
 /* mthread.c */
+extern pointer COND_SIGNAL(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer COND_WAIT(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer FREE_THREADS(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MAKE_COND(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MAKE_MUTEX_LOCK(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MAKE_SEMAPHORE(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MUTEX_LOCK(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MUTEX_TRYLOCK(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MUTEX_UNLOCK(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer SEMA_POST(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer SEMA_TRYWAIT(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer SEMA_WAIT(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THREAD_SELF(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_CONTINUE(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_CREATE(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_GETCONCURRENCY(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_GETPRIO(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_KILL(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_SELF(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_SETCONCURRENCY(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_SETPRIO(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_SIGSETMASK(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer THR_SUSPEND(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer WAIT_AFUNCALL(context */*ctx*/, int /*n*/, pointer */*argv*/);
 /* paragc.c */
 /* predicates.c */
 extern pointer ATOM(context */*ctx*/, int /*n*/, pointer */*argv*/);
@@ -544,6 +578,7 @@ extern pointer MAKEPACKAGE(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern eusinteger_t sxhash(pointer /*x*/);
 extern pointer SXHASH(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SYMVALUE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer SYMBNDVALUE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SETFUNC(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer SYMFUNC(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer MAKUNBOUND(context */*ctx*/, int /*n*/, pointer */*argv*/);
@@ -566,6 +601,7 @@ extern pointer SBCOUNT(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer GCTIME(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer ALLOC(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer NEWSTACK(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer DISPOSE_HOOK(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern int xmark(context */*ctx*/, pointer /*p*/);
 extern int xcollect(context */*ctx*/, pointer /*p*/);
 extern pointer RECLAIM(context */*ctx*/, int /*n*/, pointer /*argv*/*);
@@ -672,6 +708,25 @@ extern pointer GETHOSTBYADDR(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer GETNETBYNAME(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer GETPROTOBYNAME(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer GETSERVBYNAME(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer ENVIRON(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer ERRNO(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer H2NS(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer N2HS(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer LOCKF(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MKDIR(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer RMDIR(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MMAP(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MUNMAP(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer PUTENV(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer RECVFROM(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer SENDTO(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer SIGADDSET(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer SIGDELSET(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer SIGPROCMASK(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer UALARM(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer UNAME(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer USLEEP(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer VFORK(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern void unixcall(context */*ctx*/, pointer /*mod*/);
 /* vectorarray.c */
 extern pointer MKVECTOR(context */*ctx*/, int /*n*/, pointer /*argv*/*);

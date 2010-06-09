@@ -9,7 +9,7 @@
 /****************************************************************/
 
 
-#if (alpha || IRIX6)
+#if (alpha || IRIX6 || x86_64)
 #define WORD_SIZE 64
 #else
 #define WORD_SIZE 32
@@ -361,7 +361,7 @@ struct bignum {
 /****************************************************************/
 typedef 
   struct cell {
-#if vax || sun4 || news || mips || i386 || i486 || i586 || alpha
+#if vax || sun4 || news || mips || i386 || i486 || i586 || alpha || x86_64
     unsigned mark:1;
     unsigned b:1;
     unsigned m:1;
@@ -725,7 +725,7 @@ extern int export_all;
 #define bpointerof(p) ((bpointer)((eusinteger_t)(p)-2))
 #endif
 
-#if vax || sun4 || news || mips || i386 || i486 || i586 || alpha
+#if vax || sun4 || news || mips || i386 || i486 || i586 || alpha || x86_64
 
 #define makepointer(bp) ((pointer)((eusinteger_t)(bp)))
 // #define isint(p) (((eusinteger_t)(p) & 3)==2) // org
@@ -780,9 +780,14 @@ extern eusinteger_t intval(pointer p);
 #define bixof(p) (bpointerof(p)->h.bix)
 #endif
 
-#if sun3 || sun4 || system5 || apollo || news || sanyo || vxworks || mips || NEXT || i386 || i486 || i586
+#if sun3 || sun4 || system5 || apollo || news || sanyo || vxworks || mips || NEXT || i386 || i486 || i586 || x86_64
+#if x86_64
+#define fltval(p) (nu.ival=((eusinteger_t)(p) & ~3L), nu.fval)
+#define makeflt(f) (nu.fval=(eusfloat_t)(f), (pointer)((nu.ival & ~3L) | 1L))
+#else
 #define fltval(p) (nu.ival=((eusinteger_t)(p) & ~3), nu.fval)
 #define makeflt(f) (nu.fval=(eusfloat_t)(f), (pointer)((nu.ival & ~3) | 1))
+#endif
 
 /*#if GCC
 #define makeflt(f) (nu.fval=(f), (pointer)((nu.ival & (~2)) | 1)) 
@@ -1092,4 +1097,8 @@ extern sema_t   free_thread_sem;
 #endif
 #ifdef __cplusplus
 }
+#endif
+
+#if x86_64
+eusinteger_t hide_ptr (pointer p);
 #endif

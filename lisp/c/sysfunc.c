@@ -117,7 +117,11 @@ register pointer p;
   if ((&ctx->stack[0]<=p) && (p<= &ctx->stack[MAXSTACK])) return(NULL);
 #endif
   if (issymbol(p)) return(NULL);
+#if x86_64
+  bp=(bpointer)((eusinteger_t)p & ~3L);
+#else
   bp=(bpointer)((eusinteger_t)p & ~3);
+#endif
   if (marked(bp)) return(0);	/*already marked*/
   markon(bp);	/*mark it first to avoid endless marking*/
   if (bp->h.elmtype==ELM_FIXED) {	/*contents are all pointers*/
@@ -148,7 +152,11 @@ register pointer p;
 #if sun
   if (p<(pointer)0x10000) return(NULL);
 #endif
+#if x86_64
+  bp=(bpointer)((eusinteger_t)p & ~3L/*0xfffffffc*/);/* ???? */
+#else
   bp=(bpointer)((eusinteger_t)p & ~3/*0xfffffffc*/);/* ???? */
+#endif
   if (marked(bp)) {
     markoff(bp);
     reclaim(bp);

@@ -339,7 +339,16 @@ int e,cid;
       printf( "alloc:%d:nils(=%d) > s(=%d)!!\n", count, nils, s );
   }
 #endif
+#if (WORD_SIZE) == 64
+#ifdef x86_64
+  /* On Linux64, below line would work better */
+  ss=max(3,s+1);
+#else
+  ss=max(3,s+2);   /* why? R.Hanai */
+#endif
+#else
   ss=max(3,s+1);	 /*one more word for the allocation information*/
+#endif
   while (buddysize[req]<ss) req++;
 #ifdef DEBUG
   printf( "alloc:%d:s=%d, e=%d, cid=%d, nils=%d\n",
@@ -412,7 +421,11 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #define out_of_heap(p) ((int)p<(int)_end || (pointer)0x20000000<p)
 #else /* Solaris2 */
 #if Linux
+#if x86_64
+#define out_of_heap(p) ((unsigned long)p<(unsigned long)_end || (pointer)maxmemory <p)
+#else
 #define out_of_heap(p) ((unsigned int)p<(unsigned int)_end || (pointer)maxmemory <p)
+#endif
 #else /* Linux */
 #if Cygwin /* Cygwin does not have _end */
 #define out_of_heap(p) ((unsigned int)p<(unsigned int)minmemory || (pointer)maxmemory <p)
@@ -592,6 +605,22 @@ register bpointer p;
       if (s->c.fstream.fd==makeint(0) || s->c.fstream.fd==makeint(1)) {
 	fprintf(stderr,";; gc! bogus stream at %x fd=%d\n",
 		(eusinteger_t)s,intval(s->c.fstream.fd));}
+#if x86_64
+      else if (s->c.fstream.fd == 0) {
+        // Sometimes, s->c.fstream.fd is 0.
+        // c.fstream.fd should be eus integer which least 2bits is 10.
+        // So, the condition that s->c.fstream.fd is 0 is obviously bug.
+        fprintf(stderr, ";; closing fstream was failed, %.16X, %d\n", s, s->cix);
+      }
+      else if ((s->c.stream.buffer == NULL) ||
+               ((unsigned long)(s->c.stream.buffer) & 0x7L) != 0x0L ||
+               s->c.stream.buffer->cix == -1) {
+        // stream buffer already reclaimed?????
+        // very dirty code for avoiding segmentation falut.
+        // there are some bugs before here.
+        fprintf(stderr, ";; bad stream buffer, %.16X\n", s->c.stream.buffer);
+      }
+#endif
       else if ((closestream(s)==0) && debug)
         fprintf(stderr,";; gc: dangling stream(address=%x fd=%d) is closed\n",
 	        (eusinteger_t)s,intval(s->c.fstream.fd)); } }
@@ -789,7 +818,7 @@ void gc()
 #endif
   if (debug) {
     fprintf(stderr," free/total=%ld/%ld stack=%d ",
-		freeheap,totalheap,myctx->vsp - myctx->stack);
+            freeheap,totalheap,(int)(myctx->vsp - myctx->stack));
     fprintf(stderr," mark=%ld sweep=%ld\n", marktime,sweeptime);
   }
   if (speval(QGCHOOK)!=NIL) {
