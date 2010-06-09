@@ -340,12 +340,7 @@ int e,cid;
   }
 #endif
 #if (WORD_SIZE) == 64
-#ifdef x86_64
-  /* On Linux64, below line would work better */
-  ss=max(3,s+1);
-#else
   ss=max(3,s+2);   /* why? R.Hanai */
-#endif
 #else
   ss=max(3,s+1);	 /*one more word for the allocation information*/
 #endif
