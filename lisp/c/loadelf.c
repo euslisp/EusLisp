@@ -96,7 +96,7 @@ pointer (*entry)();
 /* exec_module_initializers is no longer called */
 void exec_module_initializers(ctx)
 register context *ctx;
-{ int i, addr;
+{ eusinteger_t i, addr;
   pointer (*initfunc)(context *, int, pointer *);
   pointer mod;
   for (i=0; i< module_count; i++) {
