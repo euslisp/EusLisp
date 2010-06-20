@@ -341,7 +341,7 @@ static pointer printvector(ctx,vec,f,leng,prlevel)
 register context *ctx;
 register pointer vec,f,leng;
 int prlevel;
-{ register int n,i=0,eltype,x,prlength=getprlength(ctx);
+{ register eusinteger_t n,i=0,eltype,x,prlength=getprlength(ctx);
   pointer sizesave;
 
   eltype=elmtypeof(vec);
@@ -351,10 +351,10 @@ int prlevel;
 	  writestr(f,(byte *)"#*",2);
 	  x=1;
 	  while (i<n) {
-	    writech(f,(vec->c.ivec.iv[i/32] & x)?'1':'0');
+	    writech(f,(vec->c.ivec.iv[i/WORD_SIZE] & x)?'1':'0');
 	    i++;
 	    x= x<<1;
-	    if (i % 32==0) x=1;}
+	    if (i % WORD_SIZE==0) x=1;}
 	  break;
     case ELM_BYTE:
 	  writestr(f,(byte *)"#<bytecode ",11);
@@ -407,9 +407,15 @@ register pointer f,vec;
 int prlevel,index;
 { switch(elmtypeof(vec)) {
     case ELM_BIT:
-	  { int bitmask;
+	  { eusinteger_t bitmask;
+#if (WORD_SIZE == 64)
+      	    bitmask=1L << (index % 64);
+	    writech(f,(vec->c.ivec.iv[index/64] & bitmask)?'1':'0');
+#else
 	    bitmask=1 << (index % 32);
-	    writech(f,(vec->c.str.chars[index/32] & bitmask)?'1':'0'); }
+	    writech(f,(vec->c.str.chars[index/32] & bitmask)?'1':'0');
+#endif
+          }
 	  break;
     case ELM_BYTE: case ELM_CHAR:
 	  printint(ctx,vec->c.str.chars[index],f,intval(Spevalof(PRINTBASE)),

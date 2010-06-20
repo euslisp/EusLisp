@@ -339,11 +339,7 @@ int e,cid;
       printf( "alloc:%d:nils(=%d) > s(=%d)!!\n", count, nils, s );
   }
 #endif
-#if (WORD_SIZE) == 64
-  ss=max(3,s+2);   /* why? R.Hanai */
-#else
   ss=max(3,s+1);	 /*one more word for the allocation information*/
-#endif
   while (buddysize[req]<ss) req++;
 #ifdef DEBUG
   printf( "alloc:%d:s=%d, e=%d, cid=%d, nils=%d\n",
@@ -553,7 +549,11 @@ void markall()
       /* mark from thread's stack */
       for (p=ctx->stack; p<ctx->vsp; p++) {
 	mark_state=(long)p;
+#ifdef x86_64
+	if ((((eusinteger_t)(*p) & 7L)==0L) && 
+#else
 	if ((((eusinteger_t)(*p) & 3)==0) && 
+#endif
 	    ((ctx->stack>(pointer *)*p) || ((pointer *)*p>ctx->stacklimit)))
 		{ mark(*p); } ;}
       mark_state=0x10000;

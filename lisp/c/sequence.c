@@ -12,10 +12,17 @@ static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
+#if (WORD_SIZE == 64)
+#define bitref(vec,index) (((vec)->c.ivec.iv[(index)/64] >> ((index)%64)) & 1L)
+#define bitset(vec,index,val) \
+	(val?((vec)->c.ivec.iv[(index)/64] |= (1L<<((index)%64))): \
+	     ((vec)->c.ivec.iv[(index)/64] &= ~(1L<<((index)%64))))
+#else
 #define bitref(vec,index) (((vec)->c.ivec.iv[(index)/32] >> ((index)%32)) & 1)
 #define bitset(vec,index,val) \
 	(val?((vec)->c.ivec.iv[(index)/32] |= (1<<((index)%32))): \
 	     ((vec)->c.ivec.iv[(index)/32] &= ~(1<<((index)%32))))
+#endif
 
 extern pointer QEQ;
 pointer QIDENTITY;
@@ -64,7 +71,11 @@ register int index;
       case ELM_INT:  ival=vec->c.ivec.iv[index];
 		     return(mkbigint(ival));
       case ELM_FLOAT: return(makeflt(vec->c.fvec.fv[index]));
+#if (WORD_SIZE == 64)
+      case ELM_BIT:   return(makeint((pl[index/64] & (1L<<((eusinteger_t)index%64)))?1L:0L));
+#else
       case ELM_BIT:   return(makeint((pl[index/32] & (1<<((eusinteger_t)index%32)))?1:0));
+#endif
       case ELM_POINTER: return(vec->c.vec.v[index]);} }
 
 void fastvset(vec,index,val)
@@ -78,9 +89,15 @@ register int index;
     case ELM_POINTER: pointer_update(vec->c.vec.v[index],val);  return;
     case ELM_CHAR: case ELM_BYTE:
 		    vec->c.str.chars[index]=coerceintval(val); return;
+#if (WORD_SIZE == 64)
+    case ELM_BIT:   if (coerceintval(val) & 1L) 
+			vec->c.ivec.iv[index/64] |= 1L << (index%64);
+		    else vec->c.ivec.iv[index/64] &= ~(1L<<index%64);
+#else
     case ELM_BIT:   if (coerceintval(val) & 1) 
 			vec->c.ivec.iv[index/32] |= 1 << (index%32);
 		    else vec->c.ivec.iv[index/32] &= ~(1<<index%32);
+#endif
 		    return;
     case ELM_FOREIGN: p=vec->c.foreign.chars;
 		      p[index]=coerceintval(val); return;} }
@@ -99,7 +116,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer a=argv[0],r;
-  register int s,e,i=0,count;
+  register eusinteger_t s,e,i=0,count;
   pointer fastvref();
   void fastvset();
   ckarg2(2,3);
@@ -200,7 +217,7 @@ int n;
 pointer argv[];
 { register pointer a=argv[0],r=NIL;
   register byte *p;
-  register int i,k,s,e;
+  register eusinteger_t i,k,s,e;
   ckarg(1);
   if (a==NIL) return(NIL);
   else if (islist(a)) {
@@ -231,7 +248,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer a=argv[0],r=NIL, *vp;
-  register int i,k,s,kk,x,y;
+  register eusinteger_t i,k,s,kk,x,y;
   register byte *cp;
   ckarg(1);
   if (a==NIL) return(NIL);
@@ -255,10 +272,18 @@ pointer argv[];
 	for(i=0; i<kk; i++, s++) {
 	  x=bitref(a,s);
 	  y=bitref(a,k-i-1);
+#if (WORD_SIZE == 64)
+          if (y) a->c.ivec.iv[s/64] |= (1L<<(s%64));
+	  else a->c.ivec.iv[s/64] &= ~(1L<<(s%64));
+          if (x) a->c.ivec.iv[(k-i-1)/64] |= (1L<<((k-i-1)%64));
+	  else a->c.ivec.iv[(k-i-1)/64] &= ~(1L<<((k-i-1)%64));
+#else
           if (y) a->c.ivec.iv[s/32] |= (1<<(s%32));
 	  else a->c.ivec.iv[s/32] &= ~(1<<(s%32));
           if (x) a->c.ivec.iv[(k-i-1)/32] |= (1<<((k-i-1)%32));
-	  else a->c.ivec.iv[(k-i-1)/32] &= ~(1<<((k-i-1)%32));}
+	  else a->c.ivec.iv[(k-i-1)/32] &= ~(1<<((k-i-1)%32));
+#endif
+        }
 	break;
     case ELM_FOREIGN: cp=a->c.foreign.chars;
     case ELM_CHAR: case ELM_BYTE:
@@ -305,8 +330,13 @@ register int offset,count;
 		      return(len);
       case ELM_BIT: { eusinteger_t m, b;
 		      while (i<len) {
+#if (WORD_SIZE == 64)
+			m= 1L<<((offset+i)%64);
+			b=a->c.ivec.iv[(offset+i)/64] & m;
+#else
 			m= 1<<((offset+i)%32);
 			b=a->c.ivec.iv[(offset+i)/32] & m;
+#endif
 			ckpush(makeint(b?1:0));
 			i++;}
 		      return(len);}
@@ -346,7 +376,11 @@ pointer resulttype;
 			while (--n>=0) r->c.str.chars[n]=coerceintval(vpop());
 		        return(r);
       case ELM_BIT:	while (--n>=0)
+#if (WORD_SIZE == 64)
+			  r->c.ivec.iv[n/64]|=(coerceintval(vpop()) & 1L)<<(n%64);
+#else
 			  r->c.ivec.iv[n/32]|=(coerceintval(vpop()) & 1)<<(n%32);
+#endif
 		        return(r);
       case ELM_FOREIGN: error(E_USER,(pointer)"cannot coerce to foreign string"); } } } 
 
@@ -364,7 +398,7 @@ pointer COERCE(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register int offset,count,len,i;
+{ register eusinteger_t offset,count,len,i;
   register pointer a=argv[0];
   ckarg(2);
   if (!isclass(argv[1])) error(E_NOCLASS,argv[1]);
@@ -383,8 +417,8 @@ register int n;
 pointer argv[];
 { /* (Fill seq item :start :end) */
   register pointer seq=argv[0], item=argv[1];
-  register int i=0,start,end, val, count;
-  float fval;
+  register eusinteger_t i=0,start,end, val, count;
+  eusfloat_t fval;
   byte *bp;
   numunion nu;
 
@@ -418,6 +452,15 @@ pointer argv[];
 		while (start<end) bp[start++]=val;
 		break;
     case ELM_BIT:
+#if (WORD_SIZE == 64)
+		while (((start % 64) != 0) && (start<end))
+		  fastvset(seq,start++,item);
+		count = (end-start)/64;
+		val= (coerceintval(item)==0L)?0L:~0L;
+		for (i=0; i<count; i++) 
+		  seq->c.ivec.iv[start/64+i]=val;	/*all zero or all one*/
+		start = start + count*64;
+#else
 		while (((start % 32) != 0) && (start<end))
 		  fastvset(seq,start++,item);
 		count = (end-start)/32;
@@ -425,6 +468,7 @@ pointer argv[];
 		for (i=0; i<count; i++) 
 		  seq->c.ivec.iv[start/32+i]=val;	/*all zero or all one*/
 		start = start + count*32;
+#endif
 		while (start<end) fastvset(seq, start++, item);
 		break;
     case ELM_FOREIGN:
@@ -441,7 +485,7 @@ register int n;
 pointer argv[];
 { /* (MAP result-type function &rest seq) */
   register pointer func=argv[1], argseq,r;
-  register int argc,rcount=0,offset;
+  register eusinteger_t argc,rcount=0,offset;
 
   if (n<3) error(E_MISMATCHARG);
   while (1) {
@@ -477,7 +521,7 @@ register pointer *argv;
 { register pointer item=argv[0],seq=argv[1],element;
   pointer test=argv[2],testnot=argv[3],key=argv[4];
   pointer iftest=argv[5],ifnottest=argv[6];
-  register int start,end,i=0;
+  register eusinteger_t start,end,i=0;
   
   ckarg(9);
   start=ckintval(argv[7]); end=ckintval(argv[8]);
@@ -516,7 +560,7 @@ register pointer *argv;
 { register pointer item=argv[0],seq=argv[1],element,testelement;
   pointer test=argv[2],testnot=argv[3],key=argv[4];
   pointer iftest=argv[5],ifnottest=argv[6];
-  register int start,end,i=0;
+  register eusinteger_t start,end,i=0;
   
   ckarg(9);
   start=ckintval(argv[7]); end=ckintval(argv[8]);
@@ -557,7 +601,7 @@ register pointer *argv;
 { register pointer item=argv[0],seq=argv[1],element,testelement;
   pointer test=argv[2],testnot=argv[3],key=argv[4];
   pointer iftest=argv[5],ifnottest=argv[6];
-  register int start,end,i=0;
+  register eusinteger_t start,end,i=0;
   
   ckarg(9);
   start=ckintval(argv[7]); end=ckintval(argv[8]);
@@ -598,7 +642,7 @@ register pointer argv[];
 { pointer item=argv[0],seq=argv[1],test=argv[2],testnot=argv[3],key=argv[4];
   pointer iftest=argv[5],ifnottest=argv[6];
   register pointer element,testelement;
-  int start,end,count,i,testresult,pushcount;
+  eusinteger_t start,end,count,i,testresult,pushcount;
 
   ckarg(10);
   start=ckintval(argv[7]); end=ckintval(argv[8]); count=ckintval(argv[9]);
@@ -637,7 +681,7 @@ int n;
 pointer argv[];
 { pointer seq=argv[0],test=argv[1],testnot=argv[2],key=argv[3];
   register pointer element,testelement,seq2,element2;
-  register int i,start,end,testresult,pushcount;
+  register eusinteger_t i,start,end,testresult,pushcount;
 
   ckarg(6);
   start=ckintval(argv[4]); end=ckintval(argv[5]);
@@ -680,7 +724,7 @@ pointer argv[];
 { pointer item=argv[0],seq=argv[1],test=argv[2],testnot=argv[3],key=argv[4];
   pointer iftest=argv[5],ifnottest=argv[6];
   register pointer element,testelement,result=seq,lastseq;
-  int start,end,count,i,testresult,first,lastindex;
+  eusinteger_t start,end,count,i,testresult,first,lastindex;
 
   ckarg(10);
   start=ckintval(argv[7]); end=ckintval(argv[8]); count=ckintval(argv[9]);
@@ -731,7 +775,7 @@ register pointer argv[];
   pointer test=argv[3],testnot=argv[4],key=argv[5];
   pointer iftest=argv[6],ifnottest=argv[7];
   register pointer element,testelement;
-  register int i,start,end,count,testresult,pushcount;
+  register eusinteger_t i,start,end,count,testresult,pushcount;
 
   ckarg(11);
   start=ckintval(argv[8]); end=ckintval(argv[9]); count=ckintval(argv[10]);
@@ -773,7 +817,7 @@ pointer argv[];
   pointer test=argv[3],testnot=argv[4],key=argv[5];
   pointer iftest=argv[6],ifnottest=argv[7];
   register pointer element,testelement;
-  register int i,start,end,count,testresult;
+  register eusinteger_t i,start,end,count,testresult;
 
   ckarg(11);
   start=ckintval(argv[8]); end=ckintval(argv[9]); count=ckintval(argv[10]);
@@ -816,7 +860,7 @@ pointer argv[];
   register pointer src,dest;
   register byte *p, *p2;
   int srcelmt,destelmt;
-  int ss,ds,se,de;
+  eusinteger_t ss,ds,se,de;
   numunion nu;
 
   ckarg2(2,6);
@@ -833,10 +877,17 @@ pointer argv[];
   srcelmt=elmtypeof(src);
   destelmt=elmtypeof(dest);
   if (srcelmt==ELM_BIT) {
+#if (WORD_SIZE == 64)
+    if (destelmt==ELM_BIT && ss==0 && ds==0 && ((count%64) == 0)) {
+      /*copy word by word*/
+      for (i=0; i<count/64; i++) dest->c.ivec.iv[i] = src->c.ivec.iv[i]; 
+      return(argv[0]);}
+#else
     if (destelmt==ELM_BIT && ss==0 && ds==0 && ((count%32) == 0)) {
       /*copy word by word*/
       for (i=0; i<count/32; i++) dest->c.ivec.iv[i] = src->c.ivec.iv[i]; 
       return(argv[0]);}
+#endif
     else goto general_replace;}
   if (srcelmt==destelmt ||
       (srcelmt==ELM_BYTE || srcelmt==ELM_CHAR || srcelmt==ELM_FOREIGN) &&
@@ -874,9 +925,16 @@ general_replace:
 			break;
     case ELM_BIT:	while (count-->0) {
 			  de--;
+#if (WORD_SIZE == 64)
+			  if (coerceintval(vpop()) & 1L)
+			    dest->c.ivec.iv[de/64] |= 1L << (de%64);
+			  else dest->c.ivec.iv[de/64] &= ~(1L << (de%64));
+#else
 			  if (coerceintval(vpop()) & 1)
 			    dest->c.ivec.iv[de/32] |= 1 << (de%32);
-			  else dest->c.ivec.iv[de/32] &= ~(1 << (de%32));}
+			  else dest->c.ivec.iv[de/32] &= ~(1 << (de%32));
+#endif
+                        }
 		        break; }
   return(argv[0]);}
 
@@ -892,7 +950,7 @@ context *qsortctx;
 int compar(x,y)
 pointer *x, *y;
 { pointer xx,yy,result;
-  float *fx,*fy;
+  eusfloat_t *fx,*fy;
   numunion nu;
 
   switch (COMPTYPE) {
@@ -900,7 +958,7 @@ pointer *x, *y;
 		xx= makeint(*(char *)x); yy= makeint(*(char *)y); break;
     case ELM_INT: xx=makeint(*x); yy=makeint(*y); break;
     case ELM_FLOAT:
-		fx=(float *)x; fy=(float *)y;
+		fx=(eusfloat_t *)x; fy=(eusfloat_t *)y;
 		xx=makeflt(*fx); yy=makeflt(*fy); break;
     default: xx= *x; yy= *y;}
   if (COMPKEY) {
@@ -972,7 +1030,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer a=argv[0];
-  register int i=ckintval(argv[1]);
+  register eusinteger_t i=ckintval(argv[1]);
   ckarg(2);
   if (islist(a)) {
     if (i<0) error(E_SEQINDEX);
@@ -989,7 +1047,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { register pointer a=argv[0];		/* (setelt seq index val) */
-  register int i=ckintval(argv[1]);
+  register eusinteger_t i=ckintval(argv[1]);
   ckarg(3);
   if (islist(a)) {
     if (i<0) error(E_SEQINDEX);
