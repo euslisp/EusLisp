@@ -361,7 +361,7 @@
 #+:x86_64
 (defun glGetMaterialfv (face pname fv)
   (let ((tmp (double2fstring fv)) ret)
-    (setq ret (wrap-glMaterialfv face pname tmp))
+    (setq ret (wrap-glGetMaterialfv face pname tmp))
     (fstring2double tmp fv)
     ret))
 #+:x86_64

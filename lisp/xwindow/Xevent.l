@@ -114,7 +114,7 @@
 #+:alpha
     (pad		:char 88)
 #+:x86_64
-    (pad		:char 100)      ;xevent is required to hold xx longs at x86-64
+    (pad		:char 92)      ;xevent is required to hold xx longs at x86-64
 )
 
 (defparameter event (instantiate XEvent))
@@ -179,8 +179,16 @@
 (defun event-root-pos (e)
     (integer-vector (XEvent-x-root e) (XEvent-y-root e)))
 
+#-:x86_64
 (defun event-width (e) (XEvent-x e))
+#-:x86_64
 (defun event-height (e) (XEvent-y e))
+#+:x86_64
+(defun event-width (e) (sys::peek ;; for width of XConfigureEvent
+                        (+ (sys::address e) 16 (* 4 14)) :integer))
+#+:x86_64
+(defun event-height (e) (sys::peek  ;; for height of XConfigureEvent
+                         (+ (sys::address e) 16 (* 4 15)) :integer))
 
 (defun event-time (e) (XEvent-time e))
 
