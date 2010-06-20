@@ -168,8 +168,14 @@
               (glXChooseVisual x::*display* (x::DefaultScreen x::*display*)
                                 *attributelist*))
            (setq glcon (glXCreateContext x::*display* visualinfo shared-glcon GL_TRUE))
+#-:x86_64
 	   (send-super* :create
                         :depth (sys:peek (+ visualinfo 12) :long)
+                        :visual (sys:peek visualinfo :long)
+                        :title title args)
+#+:x86_64
+	   (send-super* :create
+                        :depth (sys:peek (+ visualinfo 20) :integer)
                         :visual (sys:peek visualinfo :long)
                         :title title args)
 
@@ -244,10 +250,10 @@
 		emission (colormaterial-emission ambient)
 		shininess (colormaterial-shininess ambient)
 		ambient (colormaterial-ambient ambient)))
-      (glMaterialfv GL_FRONT_AND_BACK GL_DIFFUSE ambient)
+      (glMaterialfv GL_FRONT_AND_BACK GL_AMBIENT ambient)
       (glMaterialfv GL_FRONT_AND_BACK GL_DIFFUSE diffuse)
       (glMaterialfv GL_FRONT_AND_BACK GL_SPECULAR specular)
-      (glMaterialfv GL_FRONT_AND_BACK GL_SPECULAR emission)
+      (glMaterialfv GL_FRONT_AND_BACK GL_EMISSION emission)
       (glMaterialfv GL_FRONT_AND_BACK GL_SHININESS (float-vector shininess))
       )
   (:color (color-vector)
