@@ -58,7 +58,10 @@
  
     ;; create an X colormap since probably not using default visual
     (setq vi-visual (sys:peek vi :long))
+#-:x86_64
     (setq vi-depth (sys:peek (+ vi 12) :long))
+#+:x86_64
+    (setq vi-depth (sys:peek (+ vi 20) :integer))
     (setq cmap (x::CreateColormap dpy (x::DefaultRootWindow dpy)
 				  vi-visual 0))
     (setq swa (instance x::SetWindowAttributes))
@@ -74,6 +77,7 @@
 				 #x2808 swa))
 ;;;    XSetStandardProperties(dpy, glwin, "xogl", "xogl", None, argv,  
 ;;;                                argc, NULL); 
+    ;;(x::SetStandardProperties dpy glwin "xogl" "xogl" 0 0 0 0)
  
     (glXMakeCurrent dpy glwin cx)
  
@@ -86,9 +90,9 @@
     ;; Animation loop
     (while t 
       (setq key (make-string 3))
-      (while (x::Pending dpy)
+      (while (/= (x::Pending dpy) 0)
         (x::NextEvent dpy event)
-	(drawScene)
+	;;(drawScene)
 	(print (x::event-type event))
         (case (x::event-type event)
 	  (:KeyPress
@@ -107,6 +111,18 @@
       (drawScene)
       )
     ))
+;; for event debug
+(defun p-event (ev)
+  (dotimes (i (/ (length ev) 4))
+    (format t "~8,8X~A"
+            (sys::peek (+ (sys::address ev)
+#-:x86_64
+(+ 8 (* 4 i))
+#+:x86_64
+(+ 16 (* 4 i))
+                          ) :integer)
+            (if (= (mod (+ i 1) 8) 0) (format nil "~%") " "))
+    ))
  
 ;; OpenGL code
 (defun resize (width height)
@@ -116,7 +132,8 @@
   
     (glMatrixMode GL_PROJECTION)
     (glLoadIdentity)
-    (gluPerspective 45.0 aspect 3.0 7.0 )
+    ;;(gluPerspective 45.0 aspect 3.0 7.0 )
+    (gluPerspectivefv (float-vector 45.0 aspect 3.0 7.0 ))
     (glMatrixMode GL_MODELVIEW)
     ))
  
@@ -137,8 +154,8 @@
  
     (glNewList CYLINDER GL_COMPILE)
     (glPushMatrix)
-    (glRotatef 90.0 1.0 0.0 0.0)
-    (glTranslatef 0.0 0.0 -1.0)
+    (glRotated 90.0 1.0 0.0 0.0)
+    (glTranslated 0.0 0.0 -1.0)
     (setq quadObj (gluNewQuadric))
     (gluQuadricDrawStyle quadObj GLU_FILL)
     (gluQuadricNormals quadObj GLU_SMOOTH)
@@ -149,14 +166,14 @@
  
 (defun initializeGL (width height)
   (let (maxObjectSize aspect near_plane far_plane)
-    (glClearIndex (float BLACK_INDEX))
+    (glClearIndexfv (float-vector BLACK_INDEX))
     (glClearDepth 1.0) 
  
     (glEnable GL_DEPTH_TEST)
  
     (glMatrixMode GL_PROJECTION)
     (setq aspect (/ (float width) height))
-    (gluPerspective 45.0 aspect 3.0 7.0)
+    (gluPerspectivefv (float-vector 45.0 aspect 3.0 7.0))
     (glMatrixMode GL_MODELVIEW)
  
     (setq near_plane 3.0
@@ -198,8 +215,8 @@
  
   (glIndexi GREEN_INDEX)
   (glPushMatrix)
-  (glTranslatef 0.8 -0.65 0.0) 
-  (glRotatef 30.0 1.0 0.5 1.0)
+  (glTranslated 0.8 -0.65 0.0) 
+  (glRotated 30.0 1.0 0.5 1.0)
   (glCallList CYLINDER)
   (glPopMatrix)
  
