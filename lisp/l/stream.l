@@ -153,8 +153,9 @@
 	(if (and (not (stringp buf)) (< (length buf) n-bytes))
 	    (error "buffer string is too short for :read-bytes"))
         (when (plusp (setq uread-length (send self :chars-left)))
-	   (replace buf (send self :tail-string))
-	   (send self :discard)
+	   (replace buf (send self :tail-string) :end1 n-bytes)
+	   (setq uread-length (min n-bytes uread-length))
+	   (incf count uread-length)
 	   (incf offset uread-length))
 	(while (< offset n-bytes)
 	   (setq uread-length
