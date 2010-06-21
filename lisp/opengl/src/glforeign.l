@@ -318,56 +318,50 @@
           glViewport))
 
 #+:x86_64
-(let (glm glu)
-  (if (probe-file "/usr/lib/libGL.so")
-      (setq glm (load-foreign "/usr/lib/libGL.so"))
-    (warn ";; libGL.so not found, x64"))
-  (if (probe-file "/usr/lib/libGLU.so")
-      (setq glu (load-foreign "/usr/lib/libGLU.so"))
-    (warn ";; libGLU.so not found, x64"))
-  (when glm
-    ;; fv -> dv
-    (defforeign glcolor3fv glm "glColor3dv" () :integer)
-    (defforeign glcolor4fv glm "glColor4dv" () :integer)
-    (defforeign glnormal3fv glm "glNormal3dv" () :integer)
-    (defforeign glvertex2fv glm "glVertex2dv" () :integer)
-    (defforeign glvertex3fv glm "glVertex3dv" () :integer)
-    (defforeign gltexcoord2fv glm "glTexCoord2dv" () :integer)
-    (defforeign gltexgenfv glm "glTexGendv" () :integer)
-    (defforeign glgetfloatv glm "glGetDoublev" () :integer)
-    (defforeign glmultmatrixf glm "glMultMatrixd" () :integer)
-    ;; for wrap
-    (defforeign wrap-glMaterialfv glm "glMaterialfv" () :integer)
-    (defforeign wrap-glLightfv glm "glLightfv" () :integer)
-    (defforeign wrap-glGetMaterialfv glm "glGetMaterialfv" () :integer)
-    ;; fv -> '' in util.c
-    ;;(defforeign glorthofv glm "glOrtho" () :integer)
-    ;;(defforeign glClearColorfv glm "glClearColor" () :integer)
-    )
-  #|
-  (when glu
-    ;; fv -> '' in util.c
-    ;;(defforeign gluLookAtfv glu "gluLookat" () :integer)
-    ;;(defforeign gluPerspectivefv glu "gluPerspective" () :integer)
-    )
-  |#
-  ;; wrap for converting double* -> float*
+(defmacro set-function-fv-as-dv (funcfv funcdv)
+  `(progn
+     (setf (symbol-function ',(read-from-string
+                              (format nil "~a-org" funcfv)))
+           (symbol-function ',funcfv))
+     (setf (symbol-function ',funcfv)
+           (symbol-function ',funcdv))
+     ))
+#+:x86_64
+(eval-when (load)
+  ;; func_fv has to work as func_dv in x86_64
+  (set-function-fv-as-dv glColor3fv glColor3dv)
+  (set-function-fv-as-dv glcolor3fv glcolor3dv)
+  (set-function-fv-as-dv glcolor4fv glcolor4dv)
+  (set-function-fv-as-dv glnormal3fv glnormal3dv)
+  (set-function-fv-as-dv glvertex2fv glvertex2dv)
+  (set-function-fv-as-dv glvertex3fv glvertex3dv)
+  (set-function-fv-as-dv gltexcoord2fv gltexcoord2dv)
+  (set-function-fv-as-dv gltexgenfv glTexGendv)
+  (set-function-fv-as-dv glgetfloatv glGetDoublev)
+  (set-function-fv-as-dv glmultmatrixf glMultMatrixd)
+  ;; define wrapped functions later
+  (setf (symbol-function 'glLightfv-org)
+        (symbol-function 'glLightfv))
+  (setf (symbol-function 'glGetMaterialfv-org)
+        (symbol-function 'glGetMaterialfv))
+  (setf (symbol-function 'glMaterialfv-org)
+        (symbol-function 'glMaterialfv))
   )
 #+:x86_64
 (defun glMaterialfv (face pname fv)
   (let ((tmp (double2fstring fv)))
-    (wrap-glMaterialfv face pname tmp)
+    (glMaterialfv-org face pname tmp)
     ))
 #+:x86_64
 (defun glGetMaterialfv (face pname fv)
   (let ((tmp (double2fstring fv)) ret)
-    (setq ret (wrap-glGetMaterialfv face pname tmp))
+    (setq ret (glGetMaterialfv-org face pname tmp))
     (fstring2double tmp fv)
     ret))
 #+:x86_64
 (defun glLightfv (light pname fv)
   (let ((tmp (double2fstring fv)))
-    (wrap-glLightfv light pname tmp)
+    (glLightfv-org light pname tmp)
     ))
 #|
 (defforeign glAccum GL "glAccum" (:integer :float) :integer)
