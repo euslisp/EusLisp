@@ -1,5 +1,5 @@
 ;;; -*- lisp -*-
-;;; $Header: /home/cvs/euslisp/opengl/src/glxforeign.l,v 1.1.1.1 2003/11/20 07:46:33 eus Exp $
+;;; $Header$
 ;;; glxforeign.l
 
 (provide :glxforeign)
@@ -27,7 +27,14 @@
 	  glXUseXFont
 	  glXWaitGL
 	  glXWaitX))
-
+#+:x86_64
+(eval-when (load)
+  (setf (symbol-function 'glxchoosevisual-for-wrap)
+        (symbol-function 'glxchoosevisual))
+  (defun glxchoosevisual (display screen attr)
+    (funcall #'glxchoosevisual-for-wrap
+             display screen (user::lvector2integer-bytestring attr)))
+  )
 #|
 (defforeign glXChooseVisual GLX "glXChooseVisual" (:string :integer :string) :integer)
 (defforeign glXCopyContext GLX "glXCopyContext" (:string :string :string :integer) :integer)

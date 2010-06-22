@@ -42,8 +42,6 @@
 	   (sys::exec-module-init "glprim" "opengl/src/glprim.l")
 	   (sys::exec-module-init "gleus" "opengl/src/gleus.l")
 	   (sys::exec-module-init "glview" "lisp/opengl/src/glview.l")
-#+:x86_64
-           (sys::exec-module-init "fstringdouble")
            (sys::exec-module-init "toiv" "lisp/opengl/src/toiv.l")
            )
    (in-package "USER")
