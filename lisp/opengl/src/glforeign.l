@@ -349,18 +349,18 @@
   )
 #+:x86_64
 (defun glMaterialfv (face pname fv)
-  (let ((tmp (double2fstring fv)))
+  (let ((tmp (user::dvector2float-bytestring fv)))
     (glMaterialfv-org face pname tmp)
     ))
 #+:x86_64
 (defun glGetMaterialfv (face pname fv)
-  (let ((tmp (double2fstring fv)) ret)
+  (let ((tmp (user::dvector2float-bytestring fv)) ret)
     (setq ret (glGetMaterialfv-org face pname tmp))
-    (fstring2double tmp fv)
+    (user::float-bytestring2dvector tmp fv)
     ret))
 #+:x86_64
 (defun glLightfv (light pname fv)
-  (let ((tmp (double2fstring fv)))
+  (let ((tmp (user::dvector2float-bytestring fv)))
     (glLightfv-org light pname tmp)
     ))
 #|

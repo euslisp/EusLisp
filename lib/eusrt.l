@@ -107,6 +107,7 @@
    (load (format nil "~a/lib/eusglrt.l" *eusdir*)))
 
 (in-package "USER")
+(sys::exec-module-init "fstringdouble")
 (import 'x::xflush)
 (pushnew (format nil "~a/~a/lib/" *EUSDIR* 
 		   (cond ((member :solaris2 *features*) "SunOS5")
