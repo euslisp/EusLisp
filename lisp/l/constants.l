@@ -39,7 +39,8 @@
   (defconstant sizeof-short 2)
   (defconstant sizeof-char 1)
   (defconstant sizeof-float 4)
-  (defconstant sizeof-double 8))
+  (defconstant sizeof-double 8)
+  (defconstant sizeof-header-offset 16))
 #-(or :alpha :irix6 :x86_64)
 (progn
   (defconstant sizeof-* 4)
@@ -48,7 +49,8 @@
   (defconstant sizeof-short 2)
   (defconstant sizeof-char 1)
   (defconstant sizeof-float 4)
-  (defconstant sizeof-double 8))
+  (defconstant sizeof-double 8)
+  (defconstant sizeof-header-offset 8))
 
 (defconstant array-rank-limit 7)
 (defconstant array-dimension-limit #x1fffffff)

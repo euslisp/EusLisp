@@ -1,5 +1,5 @@
 ;;; -*- lisp -*-
-;;; $Header: /home/cvs/euslisp/opengl/src/glconst.l,v 1.1.1.1 2003/11/20 07:46:32 eus Exp $
+;;; $Header$
 ;;; glconst.l -- constant definitions (derived from /usr/include/GL/gl.h)
 
 (eval-when (compile eval)
@@ -989,6 +989,7 @@
 (defconstant GL_2_BYTES                           #x1407)
 (defconstant GL_3_BYTES                           #x1408)
 (defconstant GL_4_BYTES                           #x1409)
+(defconstant GL_DOUBLE                            #x140A)
 
 ;;;  LogicOp 
 (defconstant GL_CLEAR                             #x1500)
@@ -1234,6 +1235,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(provide :glconst "@(#)$Id: glconst.l,v 1.1.1.1 2003/11/20 07:46:32 eus Exp $")
+(provide :glconst "@(#)$Id$")
 
 
