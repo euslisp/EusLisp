@@ -228,7 +228,11 @@
 			bitunit 	; bitmap_mad 32?
 			(* width (/ bitunit 8)	; bytes_per_line 'width'?
 		)))
-      (make-foreign-string addr 64)))
+      #-:x86_64
+      (make-foreign-string addr 64)
+      #+:x86_64
+      (make-foreign-string addr 88)
+      ))
 
 ;; ximage structure
 ;; 0	int width, height;	size of image in pixels
@@ -275,7 +279,30 @@
        (sys:poke *blue-mask*  ximage 48 :long)
     ximage)
 
-#+(or :alpha :irix6 :x86_64)
+#+:x86_64
+(defun set-ximage (ximage data width height
+		   &optional (visual *visual*)
+			 (depth (visual-depth visual))
+			 (bitunit depth))
+       (sys:poke width ximage 0  :integer)
+       (sys:poke height ximage 4  :integer)
+       (sys:poke 2 ximage 12 :integer)       ;Zpixmap
+       (sys:poke (+ (sys:address data) lisp::sizeof-header-offset)
+                 ximage 16 :long)            ;data
+       (sys:poke Endian ximage 24 :integer)  ;byte_order
+       (sys:poke bitunit ximage 28 :integer) ;bitmap_unit
+       (sys:poke Endian ximage 32 :integer)  ;bitmap_bit_order
+       (sys:poke bitunit ximage 36 :integer) ;bitmap_pad
+       (sys:poke depth ximage 40 :integer)   ;depth
+       (sys:poke (* width (/ bitunit 8))
+		 ximage 44 :integer)         ;bytes_per_line
+       (sys:poke depth ximage 48 :integer)   ;bits_per_pixel
+       (sys:poke *red-mask*   ximage 56 :long)
+       (sys:poke *green-mask* ximage 64 :long)
+       (sys:poke *blue-mask*  ximage 72 :long)
+    ximage)
+
+#+(or :alpha :irix6)
 (defun set-ximage (ximage data width height visual)
     (let* ((depth (visual-depth visual))
 	   (bitunit (case depth (8 8) (16 16) (15 16) (t 32)))) 
