@@ -12,17 +12,24 @@ CC = gcc
 ifeq ($(shell /bin/uname -m), x86_64)
 ifneq ($(ARCHDIR), Linux64)
 CC += -m32
+else
+CC += -fPIC
 endif
 endif
+ARCH=$(ARCHDIR)
+LIBDIR=$(EUSDIR)/$(ARCH)/lib
+OBJDIR=$(EUSDIR)/$(ARCH)/obj
+OBJFILES= $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o
+$(LIBDIR)/jpegmemcd.$(LSFX):	$(OBJFILES)
+	$(CC) -shared -o jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
+	mv jpegmemcd.$(LSFX) $(EUSDIR)/$(ARCHDIR)/lib
 
-$(EUSDIR)/$(ARCHDIR)/lib/jpegmemcd.$(LSFX):	jpegmemcd.o jmemsrc.o jmemdst.o
-	$(CC) -shared -o jpegmemcd.$(LSFX) jpegmemcd.o jmemsrc.o jmemdst.o -ljpeg
-	cp jpegmemcd.$(LSFX) $(EUSDIR)/$(ARCHDIR)/lib
-jpegmemcd.o:	jpegmemcd.c
-	$(CC) -c -O  jpegmemcd.c $(CFLAGS) -fPIC
-jmemsrc.o:	jmemsrc.c
-	$(CC) -c -O  jmemsrc.c $(CFLAGS) -fPIC
-jmemdst.o:	jmemdst.c
-	$(CC) -c -O  jmemdst.c $(CFLAGS) -fPIC
-
+$(OBJDIR)/jpegmemcd.o:	jpegmemcd.c
+	$(CC) -c -o $@ $^
+$(OBJDIR)/jmemsrc.o:	jmemsrc.c
+	$(CC) -c -o $@ $^
+$(OBJDIR)/jmemdst.o:	jmemdst.c
+	$(CC) -c -o $@ $^
+clean:
+	rm -f $(OBJFILES) $(LIBDIR)/jpegmemcd.$(LSFX)
 
