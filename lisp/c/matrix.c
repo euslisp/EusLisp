@@ -1213,7 +1213,7 @@ pointer argv[];
 static int decompose(a,s,p)
 register eusfloat_t *a;
 register int s;
-int p[];
+eusinteger_t p[];
 {
   register int i,j,k,l;
   eusfloat_t al,bl;
@@ -1259,7 +1259,7 @@ pointer argv[];
     if (s!=colsize(result)) error(E_VECSIZE);
     copymat(result,a,s); }
   pv=makevector(C_VECTOR,s);
-  stat=decompose(result->c.ary.entity->c.fvec.fv,s,(int*)pv->c.vec.v);
+  stat=decompose(result->c.ary.entity->c.fvec.fv,s,(eusinteger_t *)pv->c.vec.v);
   while (--s>=0) pv->c.vec.v[s]=makeint((eusinteger_t)pv->c.vec.v[s]);
   if (stat<0) return(NIL);
   else return(pv);}
