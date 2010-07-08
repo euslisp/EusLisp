@@ -70,8 +70,14 @@
 (defconstant *user-package* (find-package "USER"))
 (defconstant *lisp-package* (find-package "LISP"))
 (defconstant *unix-package* (find-package "UNIX"))
+#-:x86_64
 (defconstant pi 3.14159265)
+#+:x86_64
+(defconstant pi 3.14159265358979323846)
+#-:x86_64
 (defconstant pi/2 (/ pi 2))
+#+:x86_64
+(defconstant pi/2 1.57079632679489661923)
 (defconstant 2pi (* pi 2))
 (defconstant -pi (- pi))
 (defconstant -pi/2 (- pi/2))
