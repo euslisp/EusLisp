@@ -421,7 +421,7 @@ pointer argv[];
   register int i,j,px,l;
   int param[10],par;
   char buf[256];
-  float fval;
+  eusfloat_t fval;
   byte *cstr,cch;
   int  cx,cmax;
   pointer *fargv, varg;

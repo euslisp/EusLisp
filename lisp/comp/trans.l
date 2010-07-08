@@ -172,7 +172,10 @@
  (:load-int (x) (send self :push (format nil "makeint(~d)" x)))
 #+:x86_64
  (:load-int (x) (send self :push (format nil "makeint((eusinteger_t)~dL)" x)))
+#-:x86_64
  (:load-float (x) (send self :push (format nil "makeflt(~8,8e)" x)))
+#+:x86_64
+ (:load-float (x) (send self :push (format nil "makeflt(~22,22e)" x)))
 )
 
 (defmethod translator
