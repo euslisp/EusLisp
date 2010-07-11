@@ -373,7 +373,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { register pointer a=argv[0];
-  float x;
+  eusfloat_t x;
   numunion nu;
 
   ckarg(1);
@@ -568,7 +568,7 @@ pointer MINUS(ctx,n,argv)
 register context *ctx;
 register int  n;
 register pointer argv[];
-{ float fs;
+{ eusfloat_t fs;
   register eusinteger_t is,ia;
   register int i;
   register pointer a=argv[0], rs, b, z;
@@ -776,7 +776,7 @@ pointer QUOTIENT(ctx, n,argv)
 register context *ctx;
 register int  n;
 pointer argv[];
-{ register float fs;
+{ register eusfloat_t fs;
   register eusinteger_t is;
   register int i=1;
   register pointer a, rs;

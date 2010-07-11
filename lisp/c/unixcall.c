@@ -205,7 +205,7 @@ register context *ctx;
 int n; pointer argv[];
 { register int who,i;
   long rusage[18];
-  float utime,stime;
+  eusfloat_t utime,stime;
   register pointer r=NIL;
   numunion nu;
 
@@ -233,7 +233,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { struct timeval /*{long tv_sec, tv_usec;}*/ tm;
-  float ftime;
+  eusfloat_t ftime;
   pointer p;
 
   /* (sec usec timezone daylight) */
@@ -253,7 +253,7 @@ int n;
 register pointer argv[];
 { int stat;
   struct itimerval tmval;
-  float interval,value;
+  eusfloat_t interval,value;
   numunion nu;
   ckarg(1);
   stat=getitimer(ckintval(argv[0]), &tmval);
@@ -270,7 +270,7 @@ register pointer argv[];
 { int stat;
   pointer result=NIL;
   struct itimerval tmval,oldtmval;
-  float interval,value;
+  eusfloat_t interval,value;
   numunion nu;
 
   ckarg(3);
@@ -1602,7 +1602,7 @@ register pointer argv[];
 { register pointer a=argv[0];
   long i, maxwidth, width,size0, size1, size2;
   fd_set *readfds, *writefds, *exceptfds;
-  float timeout;
+  eusfloat_t timeout;
   struct timeval to;
   numunion nu;
 
@@ -1641,7 +1641,7 @@ register context *ctx;
 int n;
 pointer argv[];
 { struct timeval to;
-  float timeout;
+  eusfloat_t timeout;
   long i, size, width, fds;
   fd_set *fdvec;
   numunion nu;
