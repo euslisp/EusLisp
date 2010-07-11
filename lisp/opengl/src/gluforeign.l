@@ -1,5 +1,5 @@
 ;;; -*- lisp -*-
-;;; $Header: /home/cvs/euslisp/opengl/src/gluforeign.l,v 1.1.1.1 2003/11/20 07:46:32 eus Exp $
+;;; $Header$
 ;;; gluforeign.l -- libGLU foreign code definitions
 
 (provide :gluforeign)
@@ -69,7 +69,35 @@
           gluGetNurbsProperty
           gluNurbsCallback
           ))
-
+#+:x86_64
+(eval-when (load)
+  ;; define wrapped functions later
+  (setf (symbol-function 'gluNurbsProperty-org)
+        (symbol-function 'gluNurbsProperty))
+  (setf (symbol-function 'gluNurbsProperty)
+        (symbol-function 'gluNurbsPropertyd))
+  ;;
+  (setf (symbol-function 'gluNurbsCurve-org)
+        (symbol-function 'gluNurbsCurve))
+  ;;
+  (setf (symbol-function 'gluNurbsSurface-org)
+        (symbol-function 'gluNurbsSurface))
+  )
+#+:x86_64
+(defun gluNurbsCurve (nobj nknots knot stride ctlarray order type)
+  (let ((fknot (user::dvector2float-bytestring knot))
+        (fctlarray (user::dvector2float-bytestring ctlarray)))
+    (gluNurbsCurve-org nobj nknots fknot stride fctlarray order type)
+    ))
+#+:x86_64
+(defun gluNurbsSurface (nurb sknotcount sknots tknotCount tknots
+                             sstride tstride control sorder torder type)
+  (let ((fsknots (user::dvector2float-bytestring sknots))
+        (ftknots (user::dvector2float-bytestring tknots))
+        (fcontrol (user::dvector2float-bytestring control)))
+    (gluNurbsSurface-org nurb sknotcount fsknots tknotCount ftknots
+                         sstride tstride fcontrol sorder torder type)
+    ))
 #|
 (defforeign gluErrorString GLU "gluErrorString" (:integer) :integer)
 

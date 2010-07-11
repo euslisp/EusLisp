@@ -260,3 +260,12 @@ void glPolygonOffsetEXTfv(v)
   glPolygonOffsetEXT((GLfloat)v[0], (GLfloat)v[1]);
 }
 #endif
+
+#if x86_64
+void glPointSized (double d) {
+  glPointSize((float)d);
+}
+void gluNurbsPropertyd(GLUnurbs* nurb, GLenum property, double value) {
+  gluNurbsProperty(nurb, property, (GLfloat)value);
+}
+#endif
