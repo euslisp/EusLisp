@@ -326,7 +326,7 @@ int n;
 pointer *argv;
 {
   int fcount[MAXBUDDY],tcount[MAXBUDDY];
-  float loss[MAXBUDDY];
+  eusfloat_t loss[MAXBUDDY];
   register int i,j;
   int s;
   bpointer bp,p,tail;

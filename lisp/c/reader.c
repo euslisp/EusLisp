@@ -354,7 +354,7 @@ register context *ctx;
 register pointer s;
 { register int i=0,x;
   register pointer elm;
-  float f;
+  eusfloat_t f;
   Char ch;
   numunion nu;
 
