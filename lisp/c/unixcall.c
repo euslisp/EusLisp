@@ -1985,6 +1985,7 @@ pointer mod;
   defun(ctx,"KILL",mod,KILL);
   defun(ctx,"SIGNAL",mod,SIGNAL);
   defun(ctx,"EXIT",mod,EXIT);
+  defun(ctx,"_EXIT",mod,_EXIT);
   defun(ctx,"GETPID",mod,GETPID);
   defun(ctx,"UREAD",mod,UNIXREAD);
   defun(ctx,"WRITE",mod,UNIXWRITE);
