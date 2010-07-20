@@ -686,6 +686,14 @@ on SunOS 4.1. So we use thr_exit function on SunOS 4.1.
 #endif
 }
 
+pointer _EXIT(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ pointer exithook=speval(QEXITHOOK);
+  if (n==0) exit(0);
+  else _exit(ckintval(argv[0]));
+}
 
 /****************************************************************/
 /* unix raw I/O and file systems

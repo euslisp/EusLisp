@@ -80,7 +80,8 @@
 			      (throw :eusexit nil)) )  )
 		  )
 	;; Matsui is not very sure whether the child process should exit here.
-	(unix::exit 1))
+        ;; Okada suppose we should use _exit not exit.
+	(unix::_exit 1))
     (let ((io (instantiate io-stream)) in out)
       (if *debug* (format t ";; child_pid=~D~%" pid))
       (setf (get io :pid) pid)
