@@ -433,7 +433,7 @@ pointer argv[];
   defoglforeign(ctx,"glXUseXFont");
   defoglforeign(ctx,"glXWaitGL");
   defoglforeign(ctx,"glXWaitX");
-#ifndef Cygwin  /* Cygwin does not have tkInitDisplayMode, etc... */
+#if !Cygwin && !Linux /* Cygwin does not have tkInitDisplayMode, etc... */
   /*defoglforeign(ctx,"tkInitDisplay");*/
   defoglforeign(ctx,"tkInitDisplayMode");
   /*defoglforeign(ctx,"tkInitDisplayModePolicy");*/
