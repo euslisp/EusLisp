@@ -909,7 +909,7 @@ static void initfeatures()
 /****************************************************************/
 
 extern long gcing;
-#include <wait.h>
+#include <sys/wait.h>
 
 void eusint(s,code,x,addr)
 register int s;
