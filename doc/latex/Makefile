@@ -5,8 +5,8 @@ manual:	arith.tex contact.tex controls.tex evaluation.tex generals.tex \
 	preface.tex sequences.tex  symbols.tex sysfunc.tex \
 	types.tex voronoi.tex xtoolkit.tex xwindow.tex 
 	(latex manual ; makeindex manual.idx; latex manual; \
-		dvi2ps manual.dvi >manual.ps)
+		dvipdfm manual.dvi >manual.pdf)
 manual2:
-	latex manual ; dvips -o manual.ps manual.dvi
+	latex manual ; dvips -o manual.ps manual.pdf
 #	latex manual ; dvi2ps manual.dvi >manual.ps
 
