@@ -1,7 +1,11 @@
 (unless (boundp '*testmod*)
   (setq *testmod* (load-foreign "test_foreign.so"))
   (defforeign float-test *testmod* "float_test" (:integer :float32 :float32 :float32 :float32) :integer)
+  (defforeign float2-test *testmod* "float_test" (:integer :double :double :double :double) :integer)
+  (defforeign float3-test *testmod* "float_test" () :integer)
   (defforeign double-test *testmod* "double_test" (:integer :double :double :double :double) :integer)
+  (defforeign double2-test *testmod* "double_test" (:integer :float32 :float32 :float32 :float32) :integer)
+  (defforeign double3-test *testmod* "double_test" () :integer)
   (defforeign iv-test *testmod* "iv_test" () :integer)
   (defforeign lv-test *testmod* "lv_test" () :integer)
   (defforeign fv-test *testmod* "fv_test" () :integer)
@@ -24,6 +28,7 @@
   (defforeign call-ifunc *testmod* "call_ifunc" () :integer)
   (defforeign call-ffunc *testmod* "call_ffunc" () :float)
   )
+
 
 (format t "~%multiple arguments passing~%")
 (format t "expected result~%") 
@@ -50,6 +55,10 @@
 (format t "0: 4.000000e-01 ..~%")
 (format t "exec in eus64~%")
 (float-test 0 0.1 0.2 0.3 0.4)
+(format t "~%float2-test~%")
+(float2-test 0 0.1 0.2 0.3 0.4)
+(format t "~%float3-test~%")
+(float3-test 0 0.1 0.2 0.3 0.4)
 
 (format t "~%double-test~%")
 (format t "expected result~%")
@@ -59,6 +68,10 @@
 (format t "1: 4.000000e-01 ..~%")
 (format t "exec in eus64~%")
 (double-test 1 0.1 0.2 0.3 0.4)
+(format t "~%double2-test~%")
+(double2-test 1 0.1 0.2 0.3 0.4)
+(format t "~%double3-test~%")
+(double3-test 1 0.1 0.2 0.3 0.4)
 
 (setq iv (integer-vector 0 100 10000 1000000 100000000 10000000000))
 #|
