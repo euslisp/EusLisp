@@ -25,8 +25,7 @@ include Makefile.generic1
 #
 # for Linux
 
-CPU_OPTIMIZE=-m486
-CPU_OPTIMIZE=-mcpu=Pentium3
+CPU_OPTIMIZE=-march=i586
 
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
 MACHINE=i486
@@ -83,7 +82,7 @@ SOFLAGS= -shared
 LDFLAGS= -rdynamic
 MTOBJECTS=
 MTCOBJECTS=
-MAPOPTION=
+MAPOPTION=-Xlinker -Map -Xlinker $(ADLIBDIR)/eusmap 
 
 #################################################################
 # end of the customizable section

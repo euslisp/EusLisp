@@ -78,7 +78,8 @@ register pointer s;
  ((class)? \
     alloc(vecsize(speval(class)->c.cls.vars), ELM_FIXED, \
 	  intval(speval(class)->c.cls.cix), \
-	  wordsizeof(struct builtin)): \
+	  /*wordsizeof(struct builtin)*/ \
+	  vecsize(speval(class)->c.cls.vars)) : \
     alloc(wordsizeof(struct builtin), ELM_FIXED, cid, \
 	  wordsizeof(struct builtin)))
 
