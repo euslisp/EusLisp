@@ -6,13 +6,13 @@ int float_test(int n, float f1, float f2, float f3, float f4) {
 
   //printf("float_test in c\n");
   ui = *((unsigned int *)(&f1));
-  printf("%d: %6.6e %X\n", n, f1, ui);
+  printf("%d: %8.8e %X\n", n, f1, ui);
   ui = *((unsigned int *)(&f2));
-  printf("%d: %6.6e %X\n", n, f2, ui);
+  printf("%d: %8.8e %X\n", n, f2, ui);
   ui = *((unsigned int *)(&f3));
-  printf("%d: %6.6e %X\n", n, f3, ui);
+  printf("%d: %8.8e %X\n", n, f3, ui);
   ui = *((unsigned int *)(&f4));
-  printf("%d: %6.6e %X\n", n, f4, ui);
+  printf("%d: %8.8e %X\n", n, f4, ui);
 
   return -1;
 }
@@ -22,13 +22,13 @@ int double_test(long n, double d1, double d2, double d3, double d4) {
 
   //printf("double_test in c\n");
   ul = *((unsigned long *)(&d1));
-  printf("%ld: %6.6e %lX\n", n, d1, ul);
+  printf("%ld: %16.16e %lX\n", n, d1, ul);
   ul = *((unsigned long *)(&d2));
-  printf("%ld: %6.6e %lX\n", n, d2, ul);
+  printf("%ld: %16.16e %lX\n", n, d2, ul);
   ul = *((unsigned long *)(&d3));
-  printf("%ld: %6.6e %lX\n", n, d3, ul);
+  printf("%ld: %16.16e %lX\n", n, d3, ul);
   ul = *((unsigned long *)(&d4));
-  printf("%ld: %6.6e %lX\n", n, d4, ul);
+  printf("%ld: %16.16e %lX\n", n, d4, ul);
 
   return -1;
 }
