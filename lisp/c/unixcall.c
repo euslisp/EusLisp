@@ -62,6 +62,7 @@ static char *rcsid="@(#)$Id$";
 #endif
 
 #if Solaris2 || Linux || alpha || Cygwin
+#include <errno.h>
 #include <dirent.h>
 #else
 extern int errno;
@@ -1403,12 +1404,13 @@ register context *ctx;
 register int n;
 pointer argv[];
 { int i;
-  char errstr[256];
+  char *errstr;
+  int  errno_save;
   ckarg(1);
   n=ckintval(argv[0]);
-  i = strerror_r(n, errstr, 256);
-  if ( i > 0 ) {
-    return(makestring(errstr, strlen(errstr))); }
+  errno_save=errno;
+  errstr=strerror(n);
+  if (errno==errno_save) return(makestring(errstr, strlen(errstr)));
   else error(E_ARRAYINDEX);}
 
 pointer PAUSE(ctx,n,argv)

@@ -47,11 +47,14 @@
 ;
 (eval-when (load eval)
 (defmethod stream
- (:reset () (setq count 0 tail 0) self)
+ (:reset (&optional set)
+    (setq count 0
+	  tail (if set (length buffer) 0))
+    self)
  (:discard (&optional (n 1))
 	(setq count (max tail (+ count n))))
  (:count () count)
- (:tail () tail)
+ (:tail (&optional set) (if set (setq tail (length buffer))) tail)
  (:chars-left () (- tail count))
  (:tail-string () (subseq buffer count tail))
  (:buffer (&optional start size)

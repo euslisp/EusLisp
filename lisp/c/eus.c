@@ -21,6 +21,10 @@ static char *rcsid="@(#) $Id$";
 #include <lwp/stackdep.h>
 #endif
 
+#if !THREADED
+unsigned int thr_self() { return(1);}
+#endif
+
 
 #if Linux
 #define M_MMAP_MAX (-4)
@@ -43,6 +47,7 @@ extern pointer *gcstack, *gcsp, *gcsplimit;
 
 /* System internal objects are connected to sysobj list
 /* to protect from being garbage-collected */
+
 pointer sysobj;
 
 /* context */
@@ -421,7 +426,7 @@ va_dcl
     forwardvector->c.vec.v[i]=super->c.cls.forwards->c.vec.v[i];}
   for (i=0; i<n; i++) {
     vname=va_arg(ap,byte *);
-    varvector->c.vec.v[i+svcount]=intern(ctx,(char *)vname,strlen(vname),lisppkg);
+    varvector->c.vec.v[i+svcount]=intern(ctx,(char *)vname,strlen((char *)vname),lisppkg);
     export(varvector->c.vec.v[i+svcount], lisppkg);  
     typevector->c.vec.v[i+svcount]=T;
     forwardvector->c.vec.v[i+svcount]=NIL;}
@@ -1125,11 +1130,8 @@ register context *ctx;
 int mainargc;
 char *mainargv[32];
 
-#if !THREADED
-unsigned int thr_self() { return(1);}
-#endif
 
-inline void mainthread(ctx)
+void mainthread(ctx)
 register context *ctx;
 { 
   euscontexts[thr_self()]=ctx;

@@ -11,7 +11,9 @@ static char *rcsid="@(#)$Id$";
 #include <ctype.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <string.h>
 #include "eus.h"
+
 #if !alpha
 #define FALSE (0)
 #define TRUE (1)

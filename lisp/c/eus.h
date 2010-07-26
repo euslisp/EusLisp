@@ -78,6 +78,7 @@ extern eusinteger_t setjmp_val;
 #endif
 
 #include <setjmp.h>
+#include <string.h>
 
 #define ERR (-1)
 #define	STOPPER	((pointer)0L)	/*impossible pointer object*/
