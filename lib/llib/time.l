@@ -16,6 +16,8 @@
 
 ;; This modules should be read in the Lisp-package.
 
+(IN-PACKAGE :LISP)
+
 (export '(leap-year-p
 		secs-since-1970
 		seconds
@@ -118,7 +120,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass interval-time :super propertied-object
-	:slots (total-seconds seconds micros days hours minutes))
+	:slots (total-seconds 
+		seconds	micros	
+		days
+		(hours :type :integer)
+		(minutes :type :integer) ))
 
 ;; :init takes "seconds" as the argument,
 ;; whereas :make takes "month", "day", "hour" ... etc.
@@ -297,10 +303,12 @@
    ;; Dec 28, 2003 was displayed as Jan -3, 2004 !
    ;; use of (unix::gmtime (gettimeofday)) is suggested.
    ;; correction by tzone is needed.
+   ;; (declare (integer secs micro) )
    (setq timezone tzone
 	 dst daylight)
    (decf secs timezone)
-   (let ((leaps))
+   (let ((leaps 0))
+      (declare (integer leaps))
       (setq micros	micro
 	    total-seconds secs
 	    seconds 	secs 	;(+ (float secs) (* 0.000001 micros))
@@ -310,9 +318,9 @@
 	    weekday	(mod (+ days 4) 7)
 	    leaps	(/ days (+ 365 365 365 366)) 
 	    years	(*  4 leaps)
-	    days	(- days (* leaps (+ 365 365 365 366)))
-	    months 	0
-	    )
+	    months 	0)
+;;       (print (list years months days hours))
+       (setq  days (- days (* leaps (+ 365 365 365 366))) )
        (when (>= days 365)  (decf days 365) (incf years))
        (when (>= days 365)  (decf days 365) (incf years))
        (when (>= days 366)  (decf days 366) (incf years))
@@ -320,7 +328,7 @@
 	     minutes (/ seconds 60)
 	     seconds (- seconds (* minutes 60))) 
        (setq years (+ years 1970))
-       ;; (print (list years months days hours))
+;;       (print (list years months days hours))
        (setf (aref *month-days* 1)
 	     (if (leap-year-p years) 29 28))
        (incf days)	;; day begins from one

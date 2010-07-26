@@ -32,7 +32,7 @@
 ;;; programs written in SJIS code cannot be read as expected.  READ-LINE
 ;;; is free from this problem.
 
-
+(require :TIME "time" :package :LISP)
 
 (export '(romkan kana-date kana-time))
 

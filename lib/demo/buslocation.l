@@ -174,7 +174,7 @@
 		:heading '(date time 上り 分 下り 分)
 		:table-option "border=1"))      )
 	(t (setq date (instance calendar-time :make
-		:year (send now :year)
+		:year year
 		:month month
 		:day day))
 	   (gen "date=~a~%" (send date :iso-date-string))
@@ -366,6 +366,7 @@
 		(input-form 'submit 'command 'week-time  80 "week-time" ))
 	)))
      (gen "</form>")
+     (gen "<a href=/bus/statistics.html>2003年の月別、曜日別平均所要時間</a></br>")
      ;;
      (setq trip-today (get-db-day-data 0))
      (setq trip-yesterday (get-db-day-data -1))
