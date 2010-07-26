@@ -4,7 +4,7 @@
 ;;;
 ;;; Loading this file creates the PQ package, which defines foreign
 ;;; functions into libpq.so and the pgsql class.  "libpq.so" is assumed
-;;; to be found at "/usr/local/pgsql/lib/libpq.so".
+;;; under "/usr/local/pgsql/lib/".
 ;;;
 ;;; General notes on the use of Postgres:
 ;;; You must be registered as a valid postgres user. Use 'createuser' command.
@@ -21,7 +21,7 @@
 ;;; Synchronous data transfer:
 ;;;	There are the synchronous and asynchronous interface in libpq.so.
 ;;;	Synchronous transfer is easier.  You just send SQL commands by
-;;;	:exec method of the pgsql object.
+;;;	:exec method of the pgsql object, and a result is returned.
 ;;;	(send db :exec "select typname,oid from pg_type order by oid")
 ;;;	will give you a list of all data types defined in your database.
 ;;; Asynchronouse database access:
@@ -42,8 +42,8 @@
 ;;;	When we get data from a table, we can also retrieve the oid (object id)
 ;;;	attributed to each field.  By looking up pg_type table with the oid,
 ;;;	we can know the datatype name, such as integer, character, date, etc.
-;;;	However, there is no symbol!  We can use the 'name' type instead, 
-;;;	but still there is incoherency to use as lisp symbol type, since
+;;;	But postgresql has no symbols!  We can use the 'name' type instead, 
+;;;	but still there is incoherency to use it as lisp symbol type, since
 ;;;	there is no escapes (vertical bar and backslash) and lower-case to
 ;;;	upcase conversion.  I mean if we use the 'intern' function to
 ;;;	change the 'name' object to symbol, it becomes a symbol with the
@@ -52,7 +52,7 @@
 ;;;	So I defined input and output function for Postgres in 'symbol_io.c'.
 ;;;	There is also a Makefile for it.  Make symbol_io.so and copy it
 ;;;	to /usr/local/pgsql/lib.  Invoke psql, and type "\i symbol_io.sql",
-;;;	which will make postgres to load the lisp_symbol_io functions, and
+;;;	which makes postgres to load the lisp_symbol_io functions, and
 ;;;	and define the symbol type.
 ;;;	Call make-type-hashtab function once before any other database retrieval
 ;;;	for the faster type look-up.
@@ -85,25 +85,15 @@
 	table-pkey
 	tables
 	select update-record insert-record insert-record2
-	delimit-list
-	record-count
-        init-pgsql))
+	delimit-list delete-record
+	record-count))
 
 ;****************************************************************
 ; libpq.so foreign functions
 ;****************************************************************
 
-(defun init-pgsql nil
-#+:linuxa
-(setq *libpq*
-      (cond
-       ((probe-file "/usr/lib/libpq.so.3")
-        (load "/usr/lib/libpq.so.3"))
-       ((probe-file "/usr/lib/libpq.so.4")
-        (load "/usr/lib/libpq.so.4")
-        )
-       (t
-        (load "/usr/lib/libpq.so"))))
+#+:linux
+(setq *libpq* (load "/usr/lib/libpq.so"))
 #+:cygwin
 (setq *libpq* (load "/usr/bin/cygpq.dll"))
 
@@ -172,7 +162,8 @@
 (defforeign lo_read *libpq* "lo_read" (:string :integer :string :integer) :integer)
 (defforeign lo_lseek *libpq* "lo_lseek" (:string :integer :integer :integer) :integer)
 (defforeign lo_close *libpq* "lo_close" (:string :integer) :integer)
-)
+(defforeign lo_unlink *libpq* "lo_unlink" (:string :integer) :integer)
+
 ;; mode bits for lo_creat, lo_open
 ;; #define INV_WRITE               0x00020000
 ;; #define INV_READ                0x00040000
@@ -499,6 +490,13 @@
  (:lo-lseek (fd offset &optional (whence SEEK_SET))
      (lo_lseek connection fd offset whence))
  (:lo-close (fd) (lo_close connection fd))
+ (:lo-unlink (loid) (lo_unlink connection loid))
+ (:lo-test (loid &optional (mode (logior INV_READ INV_WRITE)) &aux f)
+     (pqexec connection "begin")
+     (unwind-protect
+	(setq f (>= (lo_open connection loid mode) 0))
+	(pqexec connection "end"))
+     f)
  ;;;;;;
  (:lo-put (datum &optional (oid nil))
     (let ((loid) (lofd))
