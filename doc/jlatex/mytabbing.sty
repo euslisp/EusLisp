@@ -1,0 +1,14 @@
+\def\emtabbing{\lineskip \z@\let\>\@emrtab\let\<\@ltab\let\=\@emsettab
+     \let\+\@tabplus\let\-\@tabminus\let\`\@tabrj\let\'\@tablab
+     \let\\=\@tabcr
+     \global\@hightab\@firsttab
+     \global\@nxttabmar\@firsttab
+     \dimen\@firsttab\@totalleftmargin
+     \global\@tabpush0 \global\@rjfieldfalse
+     \trivlist \item[]\if@minipage\else\vskip\parskip\fi
+     \setbox\@tabfbox\hbox{\rlap{\indent\hskip\@totalleftmargin
+       \the\everypar}}\def\@itemfudge{\box\@tabfbox}\@startline\ignorespaces}
+
+\def\endemtabbing{\@stopline\ifnum\@tabpush > 0 \@badpoptabs \fi\endtrivlist}
+\def\@emsettab{\@settab\em}
+\def\@emrtab{\@rtab\em}

@@ -1,0 +1,59 @@
+Here is a simple explanation how to use my EusLisp and its solid modeler.
+
+--------------------------------
+How to run EusLisp:
+
+1. Set DISPLAY environment variable to your xserver.
+
+   % setenv DISPLAY grebe:0.0
+
+   Be sure that the machine your are running EusLisp is authorized
+   to connect to your xserver. If not, add the machine to the xhost list.
+
+2. Run EusLisp by name of eusx.
+   All the EusLisp files are located in flamingo:/u2/geom/matsui/eus,
+   and Executables under eus/bin. Among several executables, bin/eusx,
+   which has Xlib interface, is the one you should run.
+
+   % cd /u2/geom/matsui/eus
+   % bin/eusx
+
+   Then you will see a message like below:
+	connected to Xserver DISPLAY=aslap:0
+	EusLisp 7.13 with Xlib created on Tue Sep 24 12:58:38 1991
+
+   The toplevel of "eusx" interprets both lisp expressions and unix commands.
+   No shell escape is required. Try, say, "ls" or "pwd". The toplevel
+   also automatically provides outhermost parenthesises. You may type
+   "list 'a 'b" instead of "(list 'a 'b)".
+
+3. How to create 3D objects and display them
+   eus$ (load "demo/view")   ; will open a graphics window.
+   eus$ (setq a (make-cube 500 400 300))
+   eus$ (draw a)	;draw the cube
+   eus$ (setq b (make-cylinder 100 400))
+   eus$ (draw b)
+   eus$ (setq a+b (body+ a b))	;union of two objects
+   eus$ (cls)		;clear the graphics window
+   eus$ (hid a+b)	;hidden-line eliminated drawing
+
+   To see model engine parts, load "robot/enya/enyaview.l"
+
+   eusx$ cd robot/enya
+   eusx$ load "enyaview"
+
+   It will take about one minute to read model structure defined
+   in enya.Brep. 
+
+   Eventually, all the engine parts will be drawn in the window.
+   To get the hidden-line-eliminated image, type (cls) and (hid enyas).
+
+
+The reference manual is available from me. It's about 130 pages.
+
+-----------------------------------
+
+I am very glad if you let me know how to run your assembly planner.
+Which machine and which lisp should I use? I tried lucid on dabchick,
+and loaded "grasp-init.cl" or "grasp-system.cl", but it was in vain.
+

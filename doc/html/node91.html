@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Context Separation</TITLE>
+<META NAME="description" CONTENT="Context Separation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3143" HREF="node92.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3141" HREF="node89.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3135" HREF="node90.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3145" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3146" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3144" HREF="node92.html">Memory Management</A>
+<B>Up:</B> <A NAME="tex2html3142" HREF="node89.html">Design of Multithread EusLisp</A>
+<B> Previous:</B> <A NAME="tex2html3136" HREF="node90.html"> Multithread in Solaris </A>
+<BR> <P>
+<H3><A NAME="SECTION04021200000000000000">Context Separation</A></H3>
+<P>
+MT-Eus allocates private stacks and contexts  to each threads
+so that they can run independently of each other. Objects
+such as symbols and conses are allocated in the shared heap
+memory as in sequential EusLisp.
+Therefore, thread-private data such as block labels,
+catch tags, and local variables 
+are protected from other threads, whereas  values (objects) 
+pointed by global variables are visible to all threads allowing
+information exchange among threads.
+<P>
+<P><A NAME="12725">&#160;</A><A NAME="threadmodel">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure12722" SRC="img37.gif"  > <BR>
+<STRONG>Figure 5:</STRONG> Solaris operating system's thread model<BR>
+<P>
+<P>
+A context consists of a C-stack, a binding-stack and frame 
+pointers that chain lexical blocks such as <TT>lambda, block, catch,
+let, flet</TT>, and so on,  and is established when a new thread
+is created. Since more than one context can be active at
+the same time on a real multi-processor machine, we cannot
+hold a single pointer to the current context in a global variable.
+Rather we have to add one more argument to every internal
+function to transfer the context pointer  from the topmost eval
+to the memory manager at the bottom.
+<P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

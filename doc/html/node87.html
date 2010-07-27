@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Foreign Language Interface</TITLE>
+<META NAME="description" CONTENT="Foreign Language Interface">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3078" HREF="node88.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3076" HREF="node74.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3072" HREF="node86.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3080" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3081" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3079" HREF="node88.html">Multithread</A>
+<B>Up:</B> <A NAME="tex2html3077" HREF="node74.html">System Functions</A>
+<B> Previous:</B> <A NAME="tex2html3073" HREF="node86.html">Adding Lisp Functions Coded </A>
+<BR> <P>
+<H2><A NAME="SECTION04015000000000000000">Foreign Language Interface</A></H2>
+<P>
+Functions written in C without concern about linking with EusLisp
+can be loaded onto EusLisp, too.
+These functions are called foreign functions.
+Such programs are loaded by
+<B>load-foreign</B> macro which returns an instance of <B>foreign-module</B>.
+External symbol definitions in the object file is registered
+in the module object.
+<B>Defforeign</B> is used to make entries to  C functions
+to be called from EusLisp.
+<B>Defun-c-callable</B> defines lisp functions callable from C.
+C-callable functions have special code piece called <EM>pod-code</EM>
+for converting parameters and transferring control to the corresponding
+EusLisp function.
+<B>Pod-address</B> returns the address of this code piece which
+should be informed to C functions.
+<P>
+Here is an example of C program and its interface functions to EusLisp.
+<PRE>/* C program named cfunc.c*/
+
+static int (*g)();	/* variable to store Lisp function entry */
+
+double sync(x)
+double x;
+{ extern double sin();
+  return(sin(x)/x);}
+
+char *upperstring(s)
+char *s;
+{ char *ss=s;
+  while (*s) { if (islower(*s)) *s=toupper(*s); s++;}
+  return(ss);}
+
+int setlfunc(f)      /* remember the argument in g just to see */
+int (*f)();          /* how Lisp function can be called from C */
+{ g=f;}
+
+int callfunc(x)      /* apply the Lisp function saved in g to the arg.*/
+int x;
+{ return((*g)(x));}
+
+;;;; Example program for EusLisp's foreign language interface
+;;;; make foreign-module
+(setq m (load-foreign &quot;cfunc.o&quot;))
+
+;; define foreign functions so that they can be callable from lisp
+(defforeign sync m &quot;sync&quot; (:float) :float)
+(defforeign toupper m &quot;upperstring&quot; (:string) :string)
+(defforeign setlfunc m &quot;setlfunc&quot; (:integer) :integer)
+(defforeign callfunc m &quot;callfunc&quot; (:integer) :integer)
+
+;; call them
+(sync 1.0)	--&gt; 0.841471
+(print (toupper &quot;abc123&quot;))  --&gt; &quot;ABC123&quot;
+
+;; define a test function which is callable from C.
+(defun-c-callable TEST ((a :integer)) :integer
+      (format t &quot;TEST is called, arg=~s~%&quot; a)
+      (* a a))    ;; return the square of the arg
+;;  call it from C
+;;setlfunc remembers the entry address of Lisp TEST function.
+(setlfunc (pod-address (intern &quot;TEST&quot;)))
+(callfunc 12)  --&gt; TEST is called, arg=12  144</PRE>
+<P>
+Data representations in EusLisp are converted to those of C in the following
+manners:
+EusLisp's 30-bits integer (including character)
+is sign-extended and passed to a C function via stack.
+30-bit float is extended to double and passed via stack.
+As for string, integer-vector and float-vector,
+only the address of the first element is passed on the stack,
+and the entire array remains uncopied.
+A string always has a null code at the end.
+EusLisp does not know how to pass arrays of more than one dimension.
+Every array of more than one dimension has one dimensional vector
+that holds all the elements linearly.
+This vector is obtained by <B>array-entity</B> macro.
+Also, note that a two-dimensional matrix should be transposed
+if it is sent to the FORTRAN subroutines, since rows and columns
+are ordered oppositely in FORTRAN.
+<P>
+Since EusLisp's representation of floating-point numbers is always single
+precision, conversion is required when you pass a vector of double precision
+floating point numbers.
+The conversion functions,
+<B>double2float</B> and <B>float2double</B> are provided for this purpose
+in clib/double.c.
+For an instance, if you have a 3x3 float-matrix and wish to pass it to a C
+function named CF as a matrix of double, use the following forms.
+<PRE>     (setq mat (make-matrix 3 3))
+     (CF (float2double (array-entity mat)))</PRE>
+<P>
+Struct in C can be defined by the <B>defcstruct</B> macro.
+<B>Defcstruct</B> accepts struct-name followed by 
+field definition forms.
+<P>
+<PRE>     (defcstruct &lt;struct-name&gt;
+        {(&lt;field&gt; &lt;type&gt; [*] [size])}*)</PRE>
+For example, following struct definition is represented by the next defcstruct.
+<PRE>     /* C definition */
+     struct example {
+        char  a[2];
+        short b;
+        long  *c;
+        float *d[2];};
+
+     /* equivalent EusLisp definition */
+     (defcstruct example
+        (a :char 2)
+        (b :short)
+        (c :long *)
+        (d :float * 2))</PRE>
+<P>
+<A NAME=12576>&#160;</A>
+<B>load-foreign</B> <EM>objfile &amp;key symbol-input symbol-output (symbol-file objfile) ld-option) </EM>[macro] 
+<UL><LI> loads an object module written in languages other than EusLisp.
+In Solaris2, <B>load-foreign</B> just calls <B>load</B> with a null string
+as its <EM>:entry parameter.
+A compiled-code object is returned.
+This result is necessary to make entries to the functions in the module by
+<B>defforeign</B> called later on.
+Libraries can be specified in <EM>ld-option</EM>.
+However, the symbols defined in the libraries cannot be captured
+in the default symbol-output file.
+In order to allow EusLisp to call functions defined in the libraries,
+<EM>symbol-output</EM> and <EM>symbol-file</EM> must be given explicitly.
+(These arguments are not needed if you are not going to call the library
+functions directly from EusLisp, i.e. if you are  referring them only from
+functions in <EM>objfile</EM>).
+<B>Load-foreign</B> links <EM>objfile</EM> with libraries specified and global
+symbols in EusLisp which is in core, and writes the linked object in
+<EM>symbol-output</EM>.
+Then, symbols in <EM>symbol-file</EM> are searched and listed in the
+foreign-module. Since <EM>symbol-file</EM> is defaulted to be <EM>objfile</EM>,
+only the symbols defined in <EM>objfile</EM> are  recognized if <EM>symbol-file</EM>
+is not given. To find all the global entries both in <EM>objfile</EM> and
+libraries, the linked (merged) symbol table resulted from the first link
+process of load-foreign must be examined.
+For this reason, an identical file name must be given both to <EM>symbol-output</EM>
+and to <EM>symbol-file</EM>.
+<P>
+As shown below, the intermediate symbol file can be removed
+by <B>unix:unlink</B>.
+However, if you are loading more than one foreign modules both of which 
+refer to the same library, and if you want to avoid loading
+the library duplicatedly, you have to use <EM>symbol-input</EM> argument.
+Suppose you have loaded all the functions in &quot;linpack.a&quot; in the above
+example and you are going to load another file &quot;linapp.o&quot; that calls functions
+in &quot;linpack.a&quot;.
+The following call of load-foreign should be issued before you
+unlink &quot;euslinpack&quot;.
+<TT>(load-foreign &quot;linapp.o&quot; :symbol-input &quot;euslinpack&quot;)</TT>
+See <TT>*eusdir*/llib/linpack.l</TT> for more complete examples of
+<B>load-foreign</B> and <B>defforeign</B>.
+<P>
+</UL>
+<BLOCKQUOTE> <PRE>(setq linpack-module
+    (load-foreign &quot;/usr/local/eus/clib/linpackref.o&quot;
+        :ld-option  &quot;-L/usr/local/lib -llinpack -lF77 -lm -lc&quot;
+        :symbol-output &quot;euslinpack&quot;
+        :symbol-file &quot;euslinpack&quot;
+        ))
+(unix:unlink &quot;euslinpack&quot;)</PRE>
+</BLOCKQUOTE>
+<P>
+<A NAME=12611>&#160;</A>
+<B>defforeign</B> <EM>funcname module cname paramspec resulttype </EM>[macro] 
+<UL><LI> makes a function entry in a foreign language module.
+<EM>funcname is a symbol to be created in EusLisp.
+<EM>module</EM> is  a compiled-code object returned by <B>load-foreign</B>.
+<EM>cname</EM> is the name of the C-function defined in the foreign program.
+It is a string like &quot;_myfunc&quot;. 
+<EM>paramspec</EM> is a list of parameter type specifications
+which is used for the data type conversion and coercion when arguments are
+passed from EusLisp to the C function.
+<EM>Paramspec</EM> can be NIL if no data conversion or type check is required.
+One of <B>:integer, :float , :string</B>, or <EM>(:string n)</EM> must be
+given to <EM>resulttype</EM>.
+<B>:Integer</B> means that the c function returns one of char, short or
+int (long) and <B>:float</B> should be specified both for float and double.
+<B>:String</B> means the C function returns a pointer to a string,
+and EusLisp should add a long-word header to the  string to reform it into
+EusLisp string. The length of the string is found by <EM>strlen</EM>.
+Note that the writing a header just before the string may cause
+a disastrous result.
+On the other hand, <B>(:string n)</B> is safer but slower because
+a EusLisp string of length <B>n</B> is newly created and the contents of
+C string is copied there.
+<TT>(:string 4)</TT> should be used for a C function that returns a pointer
+to an integer.
+Fortran users should note that every argument to a Fortran function or a
+subroutine is passed by call-by-reference.
+Therefore, even a simple integer or float type argument must be  put
+in a integer-vector or a float-vector before it is passed to Fortran.
+</UL>
+<A NAME=12637>&#160;</A>
+<B>defun-c-callable</B> <EM>funcname paramspec resulttype . body </EM>[macro] 
+<UL><LI> defines a EusLisp function that can be called from foreign language code.
+<EM>funcname is a symbol for which a EusLisp function is defined.
+<EM>paramspec</EM> is a list of type specifiers as in <B>defforeign</B>.
+Unlike <B>defforeign</B>'s paramspec, <B>defun-c-callable</B>'s paramspec
+cannot be omitted unless the function does not receive any argument.
+<EM>:integer</EM> should be used for all of int, short and char types
+and <EM>:float</EM> for both of float and double.
+<EM>resulttype</EM> is the type of the Lisp function.
+<EM>resulttype</EM> can be omitted unless you need type check or type coercion from integer
+to float.
+<EM>body</EM> is lisp expressions that are executed when this function is
+called from C.
+The function defined by <B>defun-c-callable</B> can be called from Lisp
+expressions, too.
+<B>Defun-c-callable</B> returns <EM>funcname</EM>.
+It looks like a symbol, but it is not, but an instance of <A NAME=12661>&#160;</A><B>f</B>oreign-pod
+which is a subclass of symbol.
+</UL>
+<A NAME=12663>&#160;</A>
+<B>pod-address</B> <EM>funcname </EM>[function] 
+<UL><LI> returns the address of a foreign-to-EusLisp interface code of the
+c-callable Lisp function <EM>funcname defined by <B>defun-c-callable</B>.
+This is used to inform a foreign language program of the
+location of a Lisp function.
+</UL>
+<A NAME=12675>&#160;</A>
+<B>array-entity</B> <EM>array-of-more-than-one-dimension </EM>[macro] 
+<UL><LI> returns one-dimensional vector which holds all the elements of
+a multi-dimensional array.
+This is needed to pass a multi-dimensional or general array to a foreign function,
+although a simple vector can be passed directly.
+</UL>
+<A NAME=12685>&#160;</A>
+<B>float2double</B> <EM>float-vector [doublevector] </EM>[function] 
+<UL><LI> converts a float-vector to double precision representation.
+The result is of type float-vector but the length is twice as much as the
+first argument.
+</UL>
+<A NAME=12695>&#160;</A>
+<B>double2float</B> <EM>doublevector [float-vector] </EM>[function] 
+<UL><LI> A vector of double precision numbers is converted to single precision
+float-vector.
+</UL>
+<P>
+</EM></EM></EM></EM><HR><A NAME="tex2html3078" HREF="node88.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3076" HREF="node74.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3072" HREF="node86.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3080" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3081" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3079" HREF="node88.html">Multithread</A>
+<B>Up:</B> <A NAME="tex2html3077" HREF="node74.html">System Functions</A>
+<B> Previous:</B> <A NAME="tex2html3073" HREF="node86.html">Adding Lisp Functions Coded </A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

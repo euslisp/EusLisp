@@ -1,0 +1,165 @@
+\documentstyle[art10,titlepage,makeidx,twoside,EPSF/epsf,mytabbing]{j-article}
+\flushbottom
+\makeindex
+\pagestyle{myheadings}
+\oddsidemargin=0cm
+\evensidemargin=0cm
+
+% A4 size
+\textwidth=16.5cm
+\textheight=24.6cm
+\topmargin=-0.8cm
+\oddsidemargin= 0.5cm
+\evensidemargin=0.5cm
+
+% Letter size
+%\topmargin=0.5cm
+%\textwidth=17.6cm
+%\textheight=23cm
+%\oddsidemargin= 0.2cm
+%\evensidemargin=0.2cm
+
+\parindent=10pt
+\parskip=1mm
+%\baselineskip 14pt
+
+\setcounter{totalnumber}{3}
+\renewcommand{\topfraction}{0.99}       % 85% of a page (from page
+                                        % top)
+                                        % can be occupied by tbl / fig
+                                        %
+\renewcommand{\bottomfraction}{0.99}    % 85% of a page (from page
+                                        % bottom)
+                                        % can be occupied by tbl / fig
+\renewcommand{\textfraction}{0.0}      % text shoud occupy 15% or
+                                        % more in
+                                        % a page
+%\renewcommand{\floatpagefraction}{0.99} % 70% or more shoud occupy in
+                                        % a
+                                        % a float page
+
+
+\jintercharskip=0pt plus3.0pt minus1pt%
+
+\begin{document}
+
+\newcommand{\ptext}[1]
+{\tt \begin{quote} \begin{tabbing} #1 \end{tabbing} \end{quote} \rm}
+
+\newcommand{\desclist}[1]{
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item #1
+\end{list}
+\vspace{3mm}}
+
+\newcommand{\functiondescription}[4]{
+\index{#1}
+{\bf #1} \em #2 \rm \hfill [#3] 
+%\if#4 \vspace{3mm} \\ \else \desclist{#4} \fi
+%\ifx#4 \vspace{3mm} \\ \else \desclist{#4} \fi
+ \desclist{\hspace{0mm}#4}
+}
+
+\newcommand{\bfx}[1]{\index{#1}{\bf #1}}
+\newcommand{\emx}[1]{\index{#1}{\em #1}}
+
+\newcommand{\longdescription}[3]{
+\index{#1}
+\begin{emtabbing}
+{\bf #1} 
+\it #2
+\rm
+\end{emtabbing}
+\desclist{#3}
+}
+
+\newcommand{\funcdesc}[3]{\functiondescription{#1}{#2}{関数}{#3}}
+\newcommand{\macrodesc}[3]{\functiondescription{#1}{#2}{マクロ}{#3}}
+\newcommand{\specialdesc}[3]{\functiondescription{#1}{#2}{特殊}{#3}}
+\newcommand{\methoddesc}[3]{\functiondescription{#1}{#2}{メソッド}{#3}}
+\newcommand{\vardesc}[2]{\functiondescription{#1}{}{変数}{#2}}
+
+\newcommand{\fundesc}[2]{\functiondescription{#1}{#2}{関数}{\hspace{0mm}}}
+\newcommand{\macdesc}[2]{\functiondescription{#1}{#2}{マクロ}{\hspace{0mm}}}
+\newcommand{\spedesc}[2]{\functiondescription{#1}{#2}{特殊}{\hspace{0mm}}}
+\newcommand{\metdesc}[2]{\functiondescription{#1}{#2}{メソッド}{\hspace{0mm}}}
+
+\newcommand{\constdesc}[2]{\functiondescription{#1}{}{定数}{#2}}
+
+\newcommand{\classdesc}[4]{	%class, super slots description
+\vspace{2mm} 
+\index{#1}
+{\Large {\bf #1 }} \hfill [クラス]  %super
+\begin{tabbing}
+\hspace{30mm} :super \hspace{5mm} \= {\bf #2} \\
+\hspace{30mm} :slots \> #3 
+\end{tabbing}
+\vspace{4mm}
+\desclist{#4}}
+
+\newenvironment{refdesc}{
+ \vspace{5mm} \parindent=0mm \topsep=0mm \parskip=0mm \leftmargin=10mm}{
+             \parindent=10mm \topsep=3mm \parskip=1mm \leftmargin=0mm }
+
+
+\date{}
+\title{{\Huge \bf EusLisp} \\
+{\large \bf version 8.02} \\
+{\LARGE \bf リファレンスマニュアル} \\
+{\large -マルチスレッドとXToolKitの実現-} \\
+\vspace{10mm}
+%ETL-RM-87-06E \\
+{\large ETL-TR-95-19} \\
+{\large 1995年6月} \\ }
+
+\author{
+通商産業省　工業技術院 \\
+電子技術総合研究所 知能システム部 \\
+{\large 松井 俊浩, 原 功, 中垣 博文(九州電力)} \\
+matsui@etl.go.jp, hara@etl.go.jp, nakagaki@etl.go.jp\\
+〒305 茨城県つくば市梅園1-1-4 }
+
+\thispagestyle{empty}
+\maketitle
+\pagenumbering{roman}
+\tableofcontents
+% \listoffigures
+% \listoftables
+\bibliographystyle{plain}
+\newpage
+\pagenumbering{arabic}
+\part{EusLisp 基本}
+\markboth{EusLisp version 8.00 リファレンスマニュアル (Part I)}{はじめに}
+\input{jintro}
+\input{jgenerals}
+\input{jcontrols}
+\input{jobjects}
+%\input{predicates}
+\input{jarith}
+\input{jsymbols}
+\input{jsequences}
+\input{jio}
+\input{jevaluation}
+\newpage
+\part{EusLisp 拡張}
+\markboth{EusLisp version 8.00 リファレンスマニュアル (Part II)}{システム関数}
+\input{jsysfunc}
+\input{jvxw}
+\input{jmthread}
+\input{jmatrix}
+\input{jgeometry}
+\input{jcontact}
+\input{jvoronoi}
+\input{jgraphics}
+\input{jxwindow}
+\input{jxtoolkit}
+\input{jimage}
+\input{jmanipulator}
+\input{jmars-pre}
+%
+\cleardoublepage
+\markboth{Euslisp version 8.00 リファレンスマニュアル}{Index}
+\footnotesize
+\printindex
+\end{document}
+

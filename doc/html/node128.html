@@ -1,0 +1,436 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Xwindow</TITLE>
+<META NAME="description" CONTENT="Xwindow">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3605" HREF="node129.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3603" HREF="node126.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3597" HREF="node127.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3607" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3608" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3606" HREF="node129.html">Graphic Context</A>
+<B>Up:</B> <A NAME="tex2html3604" HREF="node126.html">Xwindow Interface</A>
+<B> Previous:</B> <A NAME="tex2html3598" HREF="node127.html">Xlib global variables and </A>
+<BR> <P>
+<H2><A NAME="SECTION04062000000000000000">Xwindow</A></H2>
+<P>
+<A NAME=20810>&#160;</A>
+<B>Xobject </B> [class]  <PRE><TT> :super B<>geometry:viewsurface</B>
+<P>
+:slots
+<P>
+</TT></PRE>
+<UL><LI> 
+The common super class for all the Xwindow related classes.
+Currently, no slots variables and methods are defined.
+</UL>
+<A NAME=20828>&#160;</A>
+<B>Xdrawable </B> [class]  <PRE><TT> :super B<>Xobject</B>
+<P>
+:slots 		 (drawable  ; drawable  ID
+<P>
+ 		 gcon 		  ; this drawable's default graphic context object
+<P>
+		 bg-color 		 ; background color
+<P>
+		 width height 		 ; horizontal and vertical dimensions in dots
+<P>
+</TT></PRE>
+<UL><LI> <B>Xdrawable</B> defines rectangular regions where graphics objects such as
+lines and strings can be drawn.
+<B>Xdrawable</B> is an abstract class to define
+common methods for xwindow and xpixmap,
+and instantiation of this class has no effect.
+</UL>
+<A NAME=20848>&#160;</A>
+<B>:init</B> <EM>id </EM>[method] 
+<UL><LI> <EM>Id is set to the <EM>drawable</EM> slot as the ID of this drawable.
+A new GC (graphic context) is created and set to <EM>gcon</EM> as 
+the default GC of this drawable object.
+</UL>
+<A NAME=20861>&#160;</A>
+<B>:drawable</B> <EM></EM>[method] 
+<UL><LI> returns drawable id.
+</UL>
+<A NAME=20871>&#160;</A>
+<B>:flush</B> <EM></EM>[method] 
+<UL><LI> flushes commands retained in the Xlib's buffer.
+</UL>
+<A NAME=20881>&#160;</A>
+<B>:geometry</B> <EM></EM>[method] 
+<UL><LI> returns the list of seven geometric attributes,
+<EM>root-window-id, x-position, y-position,
+width, height, border-width and <EM>visual's depth.
+</UL>
+<A NAME=20893>&#160;</A>
+<B>:height</B> <EM></EM>[method] 
+<UL><LI> returns the height (dots in y direction) of this drawable.
+</UL>
+<A NAME=20903>&#160;</A>
+<B>:width</B> <EM></EM>[method] 
+<UL><LI> returns width (dots in x direction) of this drawable.
+</UL>
+<A NAME=20913>&#160;</A>
+<B>:gc</B> <EM>&amp;rest newgc </EM>[method] 
+<UL><LI> If no <EM>newgc is given, the current gc object is returned.
+If <EM>newgc is an instance of gcontext,
+it is set to the gc of this drawable.
+Otherwise, <EM>newgc is regarded as a message and  sent to
+the current gc.
+</UL>
+<A NAME=20926>&#160;</A>
+<B>:pos</B> <EM></EM>[method] 
+<UL><LI> returns an integer vector representing 
+the position of this drawable.
+The position is always defined relative to the 
+parent window, and windows created as direct subwindows of the root
+window under the intervention of the window manager return the constant
+coordinates in their surrounding title window regardless to their
+true position in the root.
+</UL>
+<A NAME=20936>&#160;</A>
+<B>:x</B> <EM></EM>[method] 
+<UL><LI> returns the <EM>x coordinate of this drawable relatively to
+the parent window.
+</UL>
+<A NAME=20947>&#160;</A>
+<B>:y</B> <EM></EM>[method] 
+<UL><LI> returns the <EM>y coordinate of this drawable relatively to
+the parent window.
+</UL>
+<A NAME=20958>&#160;</A>
+<B>:copy-from</B> <EM>drw </EM>[method] 
+<UL><LI> <EM>Drw is another drawable object (xwindow or pixmap).
+The contents of <EM>drw is copied to this drawable.
+</UL>
+<P><A NAME="20290">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure19802" SRC="img65.gif"  > <BR>
+<STRONG>Figure 14:</STRONG> drawing primitives<A NAME="xdraw">&#160;</A><BR>
+<P>
+<P>
+<A NAME=20970>&#160;</A>
+<B>:point</B> <EM>x y &amp;optional (gc gccon) </EM>[method] 
+<UL><LI> draws a point at (<I>x</I>, <I>y</I>) with optional <EM>gc.
+</UL>
+<A NAME=20981>&#160;</A>
+<B>:line</B> <EM>x1 y1 x2 y2 &amp;optional (gc gcon) </EM>[method] 
+<UL><LI> draw a line from <EM>(x1, y1) to <EM>(x2, y2)
+with optional <EM>gc</EM>. <EM>x1, y1, x2,</EM> and<EM>y2</EM> must be integers.
+</UL>
+<A NAME=20996>&#160;</A>
+<B>:rectangle</B> <EM>x y width height &amp;optional (gc gcon) </EM>[method] 
+<UL><LI> draws a rectangle whose center is located at <EM>(x, y)
+and size is specified by <EM>width</EM> and <EM>height</EM>.
+</UL>
+<A NAME=21009>&#160;</A>
+<B>:arc</B> <EM>x y width height angle1 angle2 &amp;optional (gc gcon) </EM>[method] 
+<UL><LI> draws an elliptic arc whose center is <EM>(x, y) and starting angle at 
+<EM>angle1</EM> and ending angle at <EM>angle2</EM>.
+Angles should be given by radian.
+</UL>
+<A NAME=21022>&#160;</A>
+<B>:fill-rectangle</B> <EM>x y width height &amp;optional (gc gcon) </EM>[method] 
+<UL><LI> fills in a rectangular region.
+</UL>
+<A NAME=21032>&#160;</A>
+<B>:fill-arc</B> <EM>x y width height angle1 angle2 &amp;optional (gc gcon) </EM>[method] 
+<UL><LI> fills in an arc.
+<P>
+</UL>
+<A NAME=21042>&#160;</A>
+<B>:string</B> <EM>x y str &amp;optional (gc gcon) </EM>[method] 
+<UL><LI> displays the string <EM>str starting at <EM>(x, y). The background is
+not filled.
+</UL>
+<A NAME=21054>&#160;</A>
+<B>:image-string</B> <EM>x y str &amp;optional (gc gcon) </EM>[method] 
+<UL><LI> displays an imagestring of <EM>str. Imagestring fills background.
+</UL>
+<A NAME=21065>&#160;</A>
+<B>:getimage</B> <EM>&amp;key x y width height (mask #ffffffff) (format 2) </EM>[method] 
+<UL><LI> gets ximage from the server and returns the pixel data in a string.
+The pixel data sent from the server is once stored in Xlib's ximage structure,
+then copied to the string row by row.
+The ximage structure is automatically destroyed.
+The image string obtained by <TT>:getimage</TT> can be used to make
+a <TT>pixel-image</TT>, which can be written to a file in the pbm formats
+as described in section <A HREF="node146.html#PBMfile">18.6</A>.
+</UL>
+<A NAME=21078>&#160;</A>
+<B>:putimage</B> <EM>image &amp;key src-x src-y dst-x dst-y width height ((:gc g) gc) </EM>[method] 
+<UL><LI> puts <EM>image to the specified location in this drawable.
+<EM>image is a string or a address pointing to an ximage structure.
+</UL>
+<A NAME=21090>&#160;</A>
+<B>:draw-line</B> <EM>from to </EM>[method] 
+<UL><LI> is same as <B>:line</B> method,
+and provided for the compatibility with other viewsurface classes.
+</UL>
+<A NAME=21101>&#160;</A>
+<B>:line-width</B> <EM>&amp;optional dots </EM>[method] 
+<UL><LI> sets line-width of this drawable's
+default GC. Use of the <TT>:gc :line-width</TT> message is recommended.
+</UL>
+<A NAME=21112>&#160;</A>
+<B>:line-style</B> <EM>&amp;optional dash </EM>[method] 
+<UL><LI> sets line-style of this drawable's
+default GC. Use of the <TT>:gc :line-style</TT> is preferable.
+</UL>
+<A NAME=21123>&#160;</A>
+<B>:color</B> <EM>&amp;optional c </EM>[method] 
+<UL><LI> sets color of this drawable.
+</UL>
+<A NAME=21133>&#160;</A>
+<B>:clear</B> <EM></EM>[method] 
+<UL><LI> clears full screen. this method calls <TT>:clear-area</TT>
+</UL>
+<A NAME=21144>&#160;</A>
+<B>:clear-area</B> <EM>&amp;key :x  :y :width :height :gc </EM>[method] 
+<UL><LI> clears a rectangle using the <TT>:fill-rectangle</TT> method.
+</UL>
+<A NAME=21156>&#160;</A>
+<B>Xpixmap </B> [class]  <PRE><TT> :super B<>Xdrawable</B>
+<P>
+:slots
+<P>
+</TT></PRE>
+<UL><LI> Pixmap is a drawable that is often used
+as a picture buffer or a background pattern.
+Unlike xwindow, pixmap itself is not visible until it is copied to xwindow
+or pixmap does not generate any event.
+</UL>
+<A NAME=21173>&#160;</A>
+<B>:init</B> <EM>id </EM>[method] 
+<UL><LI> initializes this pixmap.
+</UL>
+<A NAME=21183>&#160;</A>
+<B>:create</B> <EM>&amp;key (width 500) (height 500) (depth 1) (gc *defaultgc*) </EM>[method] 
+<UL><LI> creates a <EM>width x <EM>height pixmap with <EM>gc as its
+default GC.
+</UL>
+<A NAME=21196>&#160;</A>
+<B>:create-from-bitmap-file</B> <EM>fname </EM>[method] 
+<UL><LI> creates a pixmap from a bitmap file.
+</UL>
+<A NAME=21206>&#160;</A>
+<B>:write-to-bitmap-file</B> <EM>fname </EM>[method] 
+<UL><LI> writes the contents of this pixmap into a bitmap file,
+which can be read back to create a pixmap by <B>:create-from-bitmap-file</B>
+method.
+</UL>
+<A NAME=21217>&#160;</A>
+<B>:destroy</B> <EM></EM>[method] 
+<UL><LI> destroys this pixmap and frees X resources.
+</UL>
+<A NAME=21228>&#160;</A>
+<B>Xwindow </B> [class]  <PRE><TT> :super B<>Xdrawable</B>
+<P>
+:slots 		 (parent subwindows backing-pixmap event-forward)
+<P>
+</TT></PRE>
+<UL><LI> <B>Xwindow</B> defines visible rectangular regions of the screen.
+It is inherited not only by <A NAME=21250>&#160;</A><B>t</B>ext-window and <B>canvas</B> where
+any graphics objects can be drawn, but also by many <B>panel-items</B>
+and <B>scroll-bars</B>, which look like graphics objects rather than windows.
+</UL>
+<A NAME=21252>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing21253" SRC="img66.gif"  > <P>
+<UL><LI> creates and initializes a xwindow.
+When <EM>parent is given, this window is created as a subwindow
+of <EM>parent, and is registered in the <EM>subwindows list of
+the <EM>parent.
+<EM>X, y, size, width, height and <EM>border-width determine
+the location and the dimensions of this window.
+<EM>Save-under and <EM>backing-store control the Xserver's behaviors
+taken upon when the window is re-mapped. <EM>Save-under is either
+T or NIL, while <EM>backing-store</EM> is either <TT>:notUseful, :WhenMapped</TT>,
+or <EM>:Always</EM>.
+When <EM>backing-pixmap</EM> is T, a pixmap of the same size as this window
+is created by EusLisp, and maintained as a backing-store in case
+the Xserver does not have the capability of backing-store.
+<EM>Border</EM> and <EM>background</EM> specify the <EM>border_pixel</EM>
+and <EM>background_pixel</EM> attributes, respectively.
+<EM>Map</EM> should be set NIL, if this window should not appear
+immediately after its creation, as is the case many small windows 
+are created as panel-buttons in a <B>panel</B>.
+<EM>Title</EM> is the window title which appears in the title bar of 
+the window.
+<EM>Name</EM> is the name of the window stored in the property-list
+of this xwindow object and printed by the printer.
+X's events reported to this window are determined by 
+<EM>Event-mask</EM>, that is, either an integer representing a bit-coded event-mask
+or a list of the following symbols:
+<TT>:key, :button, :enterLeave, :motion</TT> and <TT>:configure</TT>.
+If more precise control is needed, the following symbols for each event
+can be specified: <EM>:keyPress, :keyRelease, :ButtonPress, :ButtonRelease,
+:EnterWindow, :LeaveWindow, :PointerMotion, :PointerMotionHint, 
+:ButtonMotion, :KeyMapState, :Exposure, :VisibilityChange, :StructureNotify,
+:ResezeRedirect, :SubstructureNotify, :SubstructureRedirect,
+:FocusChange, :PropertyChange, :ColormapChange</EM> and <TT>:OwnerGrabButton</TT>.
+<TT>:Key</TT> enables both <TT>:keyPress</TT> and <TT>:KeyRelease</TT>, and
+<TT>:button</TT> enables both <TT>:ButtonPress</TT> and <TT>:ButtonRelease</TT>.
+When an event is sent from the server, <A NAME=21297>&#160;</A><B>w</B>indow-main-loop analyzes
+the event structure and send the <TT>:KeyPress, :KeyRelease, :buttonPress,
+:ButtonRelease, :EnterNotify, :LeaveNotify, :MotionNotify, :ConfigureNotify</TT>
+message to the window where the event occurred.
+</UL>
+<A NAME=21299>&#160;</A>
+<B>:map</B> <EM></EM>[method] 
+<UL><LI> makes this xwindow and all the subwindows visible.
+</UL>
+<A NAME=21309>&#160;</A>
+<B>:unmap</B> <EM></EM>[method] 
+<UL><LI> makes this xwindow and all the subwindows invisible.
+</UL>
+<A NAME=21319>&#160;</A>
+<B>:selectinput</B> <EM>event-mask </EM>[method] 
+<UL><LI> <EM>Event-mask is either an integer or a list of eventmask symbols.
+Each event corresponding to the bit turned-on or 
+enumerated in the <EM>event-mask list
+becomes to be reported to this window.
+</UL>
+<A NAME=21331>&#160;</A>
+<B>:destroy</B> <EM></EM>[method] 
+<UL><LI> destroys this xwindow and frees X resource.
+The corresponding entries in <TT>*xwindows*</TT> and <TT>*xwindow-hash-tab*</TT>
+are also deleted so that this window object could be garbage-collected.
+All subwindows are also deleted by sending <TT>:destroy</TT>.
+This window is dissociated from the subwindow list of the parent window.
+The <EM>drawable ID is set to NIL.
+</UL>
+<A NAME=21345>&#160;</A>
+<B>:parent</B> <EM></EM>[method] 
+<UL><LI> returns the parent window object.
+</UL>
+<A NAME=21355>&#160;</A>
+<B>:subwindows</B> <EM></EM>[method] 
+<UL><LI> returns the list of all the subwindows.
+The subwindow most recently created comes first in the list.
+Only the direct subwindows of this window are listed and
+subwindows of the subwindows are not.
+</UL>
+<A NAME=21365>&#160;</A>
+<B>:associate</B> <EM>child </EM>[method] 
+<UL><LI> register the <EM>child window
+as a subwindow of this window.
+</UL>
+<A NAME=21376>&#160;</A>
+<B>:dissociate</B> <EM>child </EM>[method] 
+<UL><LI> removes the <EM>child window
+of the <EM>subwindows list.
+</UL>
+<A NAME=21388>&#160;</A>
+<B>:title</B> <EM>title </EM>[method] 
+<UL><LI> changes the title of this window.
+Though the title is in the Xserver, it is maintained and displayed by
+the window manager.
+</UL>
+<A NAME=21398>&#160;</A>
+<B>:attributes</B> <EM></EM>[method] 
+<UL><LI> returns an integer-vector representing
+the attributes of this window.
+</UL>
+<A NAME=21408>&#160;</A>
+<B>:visual</B> <EM></EM>[method] 
+<UL><LI> returns the visual resource id for this window.
+</UL>
+<A NAME=21418>&#160;</A>
+<B>:screen</B> <EM></EM>[method] 
+<UL><LI> returns the screen resource id for this window.
+</UL>
+<A NAME=21428>&#160;</A>
+<B>:root</B> <EM></EM>[method] 
+<UL><LI> returns the root window id.
+</UL>
+<A NAME=21438>&#160;</A>
+<B>:location</B> <EM></EM>[method] 
+<UL><LI> returns a two dimensional integer-vector describing the x and y coordinates
+of this window.
+</UL>
+<A NAME=21448>&#160;</A>
+<B>:depth</B> <EM></EM>[method] 
+<UL><LI> returns the depth (number of color planes) of this window.
+</UL>
+<A NAME=21458>&#160;</A>
+<B>:size</B> <EM></EM>[method] 
+<UL><LI> returns the size (width and height) of this window.
+</UL>
+<A NAME=21468>&#160;</A>
+<B>:colormap</B> <EM></EM>[method] 
+<UL><LI> returns colormap resource id for this window.
+</UL>
+<A NAME=21478>&#160;</A>
+<B>:move</B> <EM>newx newy </EM>[method] 
+<UL><LI> changes the location of this window to <EM>(newx, newy).
+The coordinates are given relative to the parent window.
+</UL>
+<A NAME=21489>&#160;</A>
+<B>:resize</B> <EM>width height </EM>[method] 
+<UL><LI> changes the size of this window.
+Probably because the size parameters are cached in the Xlib on the client side,
+<TT>:geometry</TT> message immediately after <TT>:resize</TT> may return wrong (old)
+result.
+</UL>
+<A NAME=21501>&#160;</A>
+<B>:raise</B> <EM></EM>[method] 
+<UL><LI> brings this window upfront.
+</UL>
+<A NAME=21511>&#160;</A>
+<B>:lower</B> <EM></EM>[method] 
+<UL><LI> pushes this window to the back.
+</UL>
+<A NAME=21521>&#160;</A>
+<B>:background</B> <EM>pixel </EM>[method] 
+<UL><LI> changes the background pixel value (the
+index in the color map) to <EM>pixel.
+The <EM>pixel value is also stored in the <EM>bg-color slot.
+<TT>:Clear</TT> operation is performed to fill the current background
+with the specified <EM>pixel.
+</UL>
+<A NAME=21536>&#160;</A>
+<B>:background-pixmap</B> <EM>pixmap </EM>[method] 
+<UL><LI> changes the background with given pixmap.
+</UL>
+<A NAME=21546>&#160;</A>
+<B>:border</B> <EM>pixel </EM>[method] 
+<UL><LI> sets the color of the border to <EM>pixel.
+</UL>
+<A NAME=21557>&#160;</A>
+<B>:set-colormap</B> <EM>cmap </EM>[method] 
+<UL><LI> sets colormap.
+</UL>
+<A NAME=21567>&#160;</A>
+<B>:clear</B> <EM></EM>[method] 
+<UL><LI> clears the entire xwindow.
+</UL>
+<A NAME=21577>&#160;</A>
+<B>:clear-area</B> <EM>&amp;key :x :y :width :height </EM>[method] 
+<UL><LI> clears the specified rectangular area of this xwindow.
+</UL>
+<A NAME=21587>&#160;</A>
+<B>make-xwindow</B> <EM>&amp;rest args </EM>[function] 
+<UL><LI> makes x-window.
+</UL>
+<A NAME=21597>&#160;</A>
+<B>init-xwindow</B> <EM>&amp;optional (display (getenv &quot;DISPLAY&quot;)) </EM>[function] 
+<UL><LI> is the first function to call when eusx start up.
+<TT>Init-xwindow</TT> connects to the Xserver specified by <EM>display,
+and initializes default variables described in the section <A HREF="node127.html#xvariables">16.1</A>.
+<TT>Init-xwindow</TT> also loads default fonts and sets them to
+global variables, such as font-courb12, lucidasans-bold-12, etc.
+This font loading causes the delay at the start-up time.
+Reduction of the number of fonts loaded or specifying the exact
+font-names without using the wild-card character &quot;*&quot; will shorten the delay.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3605" HREF="node129.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3603" HREF="node126.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3597" HREF="node127.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3607" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3608" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3606" HREF="node129.html">Graphic Context</A>
+<B>Up:</B> <A NAME="tex2html3604" HREF="node126.html">Xwindow Interface</A>
+<B> Previous:</B> <A NAME="tex2html3598" HREF="node127.html">Xlib global variables and </A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

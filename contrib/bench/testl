@@ -1,0 +1,10 @@
+(defclass ahoclass :slots (a b c))
+
+(defmethod ahoclass
+ (:set (n) (setq a n))
+ (:inc (n) (incf a) (print a) (if (> n 0) (send self :inc (1- n)))))
+
+(setq aho1 (instantiate ahoclass) aho2 (instantiate ahoclass))
+
+(setq a (open "fib.l"))
+

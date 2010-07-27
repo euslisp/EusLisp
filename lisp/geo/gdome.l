@@ -1,0 +1,52 @@
+(list "@(#)$Id: gdome.l,v 1.1.1.1 2003/11/20 07:46:28 eus Exp $")
+(defun open-radials (obstacles gdome min-dist)
+   (declare  (body obstacles gdome))
+   (let ((ofaces)
+	 (radiant (send gdome :worldpos)) 
+	 (gvector) (intersect) (results) (dist))
+     (dolist (obstacle obstacles)
+	(dolist (f (body-faces obstacle))
+	   (if (> (send f :distance radiant) 0.0) (push f ofaces))))
+     (dolist (gf (body-faces gdome))
+	(setf gvector  (v- (apply #'v++ (cdr (face-vertices gf)))
+			(scale 3 radiant)))
+	(normalize-vector gvector gvector)
+	(push gf results)
+	(dolist (of ofaces)
+	   (setf intersect (send of :intersect-point-vector radiant gvector))
+	   (when (equal (car intersect) ':inside)
+		(setq dist 
+		(when (<  (distance (cadr intersect) radiant) min-dist)
+		   ;an obstacle exists in this direction
+	           (pop results)
+		   (return nil))))))
+     results    ))
+
+(defun adjacent-faces (f)
+  (let (pf nf flist)
+     (dolist (e (send f :edges))
+        (setf pf (send e :pface) nf (send e :nface))
+	(push (if (eq pf f) nf pf) flist) )
+     flist))
+
+(defun mark-distance (facets)	
+  (let ((glist) (afaces) g1 g2 gx)
+    (dolist (g facets)
+       (if (every #'(lambda (x) (member x facets))  (adjacent-faces g))
+	   (push g gx)
+	   (push g g1)))
+    (setq *g1* (print g1))
+    (setq glist (list g1))
+    (while gx
+       (dolist (g g1)
+          (dolist (a  (adjacent-faces g))
+	     (when (and (not (member a g1)) (not (member a g2)) (member a gx))
+	         (push a g2)
+	         (setq gx (delete a gx)))) )
+       (push g2 glist)
+       (setq g1 g2 g2 nil))
+    glist))
+
+
+
+

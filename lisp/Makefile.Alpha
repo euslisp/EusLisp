@@ -1,0 +1,189 @@
+# makefile for EusLisp on alpha with OSF1
+#RCSid="@(#)$Id: Makefile.Alpha,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $"
+#	Copyright (1988) Toshihiro MATSUI, Electrotechnical Laboratory
+
+#########################################################################
+# Customizable section begins
+#########################################################################
+
+# Environment variable MACHINE should be set to alpha
+MACHINE=alpha
+ARCH=Alpha
+
+include Makefile.generic1
+
+THREAD= -DTHREADED
+MFLAGS=-r
+
+#
+# Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
+#
+#CFLAGS=-D$(MACHINE) -Dbsd4_2
+# For SunOS4.1, add "-DSunOS4_1" in the following CFLAGS definition.
+CFLAGS=$(COPTS) -D$(MACHINE) -Dsystem5 -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+        -I/usr/include/X11 -I$(EUSDIR)/include $(DEBUGFLAGS) $(THREAD)
+# add -DSolaris2  -D_REENTRANT 
+#CFLAGS=-D$(MACHINE) -DSolaris2  -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+#	-xcg92 -xstrconst \
+#	-I/usr/include -I/usr/include/X11 -I$(EUSDIR)/include
+# Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
+# /usr/ucb/cc cannot compile because of its incapability of recognizing
+# prototype declarations.
+CC=cc
+COPTS=-ieee_with_inexact
+#CC=gcc
+LD=ld
+
+#XVERSION=X_V11R2
+#XVERSION=X_V11R3
+XVERSION=X_V11R4
+
+#
+# L I B R A R I E S
+# Three kinds of libraries are needed to build eus.
+# 1. RAWLIB: unix libraries needed to make eus0-eus2
+# 2. XLIB: X window libraries
+#    When you use a window toolkit, you may need to override the 'read'
+#    function in libc.a with a specific window library such as libXview.a.
+# 3. EUSLIB: euslisp functions that cannot be linked in eus because of
+#    'GLOBAL OFFSET TABLE OVERFLOW', that are xwindow interface functions.
+# You may add any optional user-supplied library in EUSLIB.
+# On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
+
+# Solaris2
+# RAWLIB=-lsocket -ldl -lnsl -lelf -lthread -lm
+#
+# 4.1.3
+#RAWLIB=-llwp -ldl -lm
+
+# Alpha
+RAWLIB=-lm -threads
+
+# Solaris2
+#XLIB=-L/usr/openwin/lib -lxview -lolgx -lX11 
+#XLIB= -L/usr/openwin/lib -lX11 
+#
+# 4.1.3
+#XLIB=-L/usr/lib/X11 -lX11 
+#
+# Alpha
+XLIB=-lX11
+
+# Solaris2
+#LIBEUSX=libeusx.so
+#EUSLIB=-R$(ADLIBDIR):/usr/local/lib:/usr/openwin/lib \
+# -L$(ADLIBDIR) -L/usr/local/lib  -leusx
+#IMGLIB=-leusimg
+#EDGELIB=-leusedge
+
+# for openGL or MESA
+GLINCLUDE=-I/usr/local/Mesa-1.2.6/include/
+
+#LIBEUSGL=libeusgl.so.0.0
+#MESALIB=-L$(ADLIBDIR) -laux -ltk -lGLU -lGL -lXext
+#GLLIB=-L$(ADLIBDIR) -leusgl
+
+# 4.1.3
+#LIBEUSX=libeusx.so.0.0
+#EUSLIB=-L$(ADLIBDIR) -L/usr/local/lib -leusx
+#IMGLIB=-leusimg
+#EDGELIB=-leusedge
+
+# Alpha
+EUSLIB=-L$(ADLIBDIR) -Wl,-rpath,$(ADLIBDIR) -L/usr/local/lib
+
+# Solaris2
+#THREADDEP=mthread_none.c
+
+# 4.1.3
+#THREADDEP=mthread_sunos4.c
+
+# Alpha
+THREADDEP=mthread_alpha.c
+
+
+# If you don't like optimization, comment out the next line.
+OFLAGS=-O
+# link-editor's default flags
+#LDFLAGS= -dy -Bdynamic 
+#Alpha
+SOFLAGS=-shared -update_registry so_locations -expect_unresolved '*' -g0 -O1
+LDFLAGS=
+MAPOPTION=
+MTCOBJECTS=  $(OBJDIR)/mthread.o $(OBJDIR)/$(THREADDEP:.c=.o)
+MTOBJECTS=  $(OBJDIR)/par.o 
+
+#################################################################
+# end of the customizable section
+################################################################
+
+include Makefile.generic2
+
+# lisp objects
+$(LDIR)/constants.l:
+$(LDIR)/eusstart.l  :
+$(LDIR)/readmacro.l:
+$(LDIR)/common.l:
+$(LDIR)/pprint.l:
+$(LDIR)/stream.l:
+$(LDIR)/loader.l:
+$(LDIR)/eusdebug.l:
+$(LDIR)/process.l:
+$(LDIR)/packsym.l:
+$(LDIR)/object.l:
+$(LDIR)/coordinates.l:
+$(LDIR)/string.l:
+$(LDIR)/array.l:
+$(LDIR)/hashtab.l:
+$(LDIR)/eusforeign.l:
+$(LDIR)/mathtran.l:
+$(LDIR)/toplevel.l:
+$(LDIR)/tty.l:
+$(LDIR)/history.l:
+$(LDIR)/par.l:
+$(LDIR)/cyclic.l:
+$(LDIR)/eushelp.l:
+$(COMPDIR)/trans.l:
+$(COMPDIR)/comp.l:
+$(COMPDIR)/builtins.l:
+# geometric computation objects
+$(GEODIR)/geoclasses.l:
+$(GEODIR)/geopack.l:
+$(GEODIR)/geobody.l:
+$(GEODIR)/primt.l:
+$(GEODIR)/compose.l:
+$(GEODIR)/hid.l:
+$(GEODIR)/viewing.l:
+$(GEODIR)/viewsurface.l:
+$(GEODIR)/viewport.l:
+$(GEODIR)/polygon.l:
+$(GEODIR)/shadow.l:
+$(GEODIR)/bodyrel.l:
+$(IMGDIR)/pbmfile.l:
+$(IMGDIR)/piximage.l:
+# xwindow objects
+$(XWINDOWDIR)/Xdecl.l:
+$(XWINDOWDIR)/Xeus.l:
+$(XWINDOWDIR)/Xevent.l:
+$(XWINDOWDIR)/Xgraphics.l:
+$(XWINDOWDIR)/Xpanel.l:
+$(XWINDOWDIR)/Xtext.l:
+$(XWINDOWDIR)/Xitem.l:
+$(XWINDOWDIR)/Xmenu.l:
+$(XWINDOWDIR)/Xscroll.l:
+$(XWINDOWDIR)/Xcanvas.l:
+$(XWINDOWDIR)/Xtop.l:
+$(XWINDOWDIR)/Xapplwin.l:
+# openGL objects
+$(GLDIR)/glconst.l:
+$(GLDIR)/gldecl.l:
+$(GLDIR)/glforeign.l:
+$(GLDIR)/glxconst.l:
+$(GLDIR)/glxforeign.l:
+$(GLDIR)/gluconst.l:
+$(GLDIR)/gluforeign.l:
+$(GLDIR)/auxconst.l:
+$(GLDIR)/auxforeign.l:
+$(GLDIR)/glutil.l:
+$(GLDIR)/glprim.l:
+$(GLDIR)/glview.l:

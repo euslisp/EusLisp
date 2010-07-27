@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Pathnames</TITLE>
+<META NAME="description" CONTENT="Pathnames">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2667" HREF="node62.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2665" HREF="node52.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2659" HREF="node60.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2669" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2670" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2668" HREF="node62.html">File System Interface</A>
+<B>Up:</B> <A NAME="tex2html2666" HREF="node52.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html2660" HREF="node60.html">Asynchronous Input/Output</A>
+<BR> <P>
+<A NAME="Pathnames">&#160;</A><H2><A NAME="SECTION03086000000000000000">Pathnames</A></H2>
+<P>
+Pathnames give the way to analyze and compose file names OS-independently.
+A typical path name is assumed to be consisted of following components:
+host:device/directory1/.../directory-n/name.type.version.
+Since EusLisp only runs on Unix, host, device and version fields are ignored.
+The <B>pathname</B> function decomposes a string into a list of directory
+components, name and type, and returns a pathname object, which
+is printed as a string prefixed by <TT>#P</TT>.
+<P>
+<A NAME=8627>&#160;</A>
+<B>pathnamep</B> <EM>name </EM>[function] 
+<UL><LI> returns T if <EM>name is a pathname.
+</UL>
+<A NAME=8638>&#160;</A>
+<B>pathname</B> <EM>name </EM>[function] 
+<UL><LI> <EM>name is pathname or string.
+<EM>name</EM> is converted to pathname.
+To indicate the last name is a directory name, don't forget to suffix with &quot;/&quot;.
+The inverse conversion is performed by <EM>namestring</EM>.
+</UL>
+<A NAME=8651>&#160;</A>
+<B>pathname-directory</B> <EM>path </EM>[function] 
+<UL><LI> returns a list of directory names of <EM>path.
+Root directory (/) is represented by :ROOT.
+<EM>path</EM> can be either of string or pathname.
+</UL>
+<A NAME=8663>&#160;</A>
+<B>pathname-name</B> <EM>path </EM>[function] 
+<UL><LI> returns the file-name portion of <EM>path.
+<EM>path</EM> can be either of string or pathname.
+</UL>
+<A NAME=8675>&#160;</A>
+<B>pathname-type</B> <EM>path </EM>[function] 
+<UL><LI> extracts the file-type portion out of <EM>path.
+<EM>path</EM> can be either of string or pathname.
+</UL>
+<A NAME=8687>&#160;</A>
+<B>make-pathname</B> <EM>&amp;key host device directory name type version
+defaults </EM>[function] 
+<UL><LI> makes a new pathname from <EM>directory, <EM>name</EM> and <EM>type</EM>.
+On unix, other parameters are ignored.
+</UL>
+<A NAME=8700>&#160;</A>
+<B>merge-pathnames</B> <EM>name
+&amp;optional (defaults *default-pathname-defaults*)) </EM>[function] 
+<UL><LI> </UL>
+<A NAME=8711>&#160;</A>
+<B>namestring</B> <EM>path </EM>[function] 
+<UL><LI> returns string representation of <EM>path.
+</UL>
+<A NAME=8722>&#160;</A>
+<B>parse-namestring</B> <EM>name </EM>[function] 
+<UL><LI> </UL>
+<A NAME=8733>&#160;</A>
+<B>truename</B> <EM>path </EM>[function] 
+<UL><LI> tries to find the absolute pathname for the file named <EM>path.
+</UL>
+<P>
+</EM></EM></EM></EM></EM></EM></EM></EM><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

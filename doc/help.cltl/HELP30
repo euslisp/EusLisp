@@ -1,0 +1,43 @@
+(decf function-documentation "
+Syntax: (decf place [form])
+Decrements the value of PLACE by the value of FORM.  FORM defaults to 1.")
+(define-modify-macro function-documentation "
+Syntax: (define-modify-macro symbol lambda-list function-name [doc])
+Defines a read-modify-write macro like INCF.  The defined macro will expand
+a form (SYMBOL place form1 ... formn) into a form that in effect SETFs the
+value of (FUNCTION-NAME place arg1 ... argm) into PLACE, where ARG1 ... ARGm
+are parameters in LAMBDA-LIST which are bound to FORM1 ... FORMn.  For
+example, INCF could be defined as
+	(define-modify-macro incf (&optional (x 1)) +)
+The doc-string DOC, if supplied, is saved as a FUNCTION doc and can be
+retrieved by (DOCUMENTATION 'SYMBOL 'FUNCTION).")
+(find-if-not function-documentation "
+Args: (test sequence
+       &key (key #'identity) (start 0) (end (length sequence)) (from-end nil))
+Returns the index of the first element in SEQUENCE that does not satisfy TEST.
+Returns NIL if no such element exists.")
+(float-precision function-documentation "
+Args: (float)
+Returns the number of effective radix-B digits in the representation of the
+significand of FLOAT, where B is the base number used in the representation
+of FLOAT.")
+(incf function-documentation "
+Syntax: (incf place [form])
+Increments the value of PLACE by the value of FORM.  FORM defaults to 1.")
+(*print-case* variable-documentation "
+Specifies how to print ordinary symbols.  Possible values are:
+	:UPCASE		in upper case
+	:DOWNCASE	in lower case
+	:CAPITALIZE	the first character in upper case, the rest in lower
+The initial value is :UPCASE.")
+(remf function-documentation "
+Syntax: (remf place form)
+Removes the property specified by FORM from the property list stored in PLACE.
+Returns T if the property list had the specified property; NIL otherwise.")
+(standard-char-p function-documentation "
+Args: (char)
+Returns T if CHAR is a standard-char; NIL otherwise.")
+(output-stream-string function-documentation "
+Args: (string-output-stream)
+KCL specific.
+Returns the string that is the destination of STRING-OUTPUT-STREAM.")

@@ -1,0 +1,47 @@
+How to tune EusLisp Memory Manager	89/Sep/19	T.Matsui
+
+1. Garbage Collector
+  The garbage collector of EusLisp can be invoked explicitly by (sys:gc).
+  A list of two integer values is returned. The first value indicates the
+  number of free words and the second the tatal allocated words.  The second
+  is always bigger than the first.  The unit is word, i.e. four bytes.
+
+2. Implicit Memory Allocation
+  In normal execution, memory is automatically acquired from UNIX when GC
+  cannot collect enough free memory. If you set *debug* to T before you start
+  a long job, you may see messages like "newchunk=15", which informs you
+  a new chunk of memory with the size of fibonacci(15) is allocated.  Thus,
+  the ratio of free memory to total heap is always kept constant. The ratio
+  is controled by sys:*gc-margin* parameter.  By default, it is set to 0.25,
+  that is, 25% of free memory is prepared. This is rather a small value
+  comparing with other Lisps. For example, all the Lisps employing copying
+  GC have at least twice as much memory as they are actually using.
+  This value is determined so that eus executable file never consumes many
+  unnecessary blocks in a disk.  If you set a larger value to sys:*gc-margin*,
+  more memory will be allocated at the next GC, and better computation time
+  will be resulted for a memory consuming job. You may set the parameter
+  in ~/.eusrc file.
+
+3. Explicit Memory Allocation
+  Sys:alloc function may be called if you need more memory right now.
+  It has an effect to postpone the next GC at later time.
+  The unit is also 4bytes, and (sys:alloc 25000) will allocate 100KB of
+  extra memory.  Note that every memory allocated either implicitely or 
+  explicitly can never be released; all the allocated chunks of memory
+  continue to be attached to the process even they become unnecessary.
+
+4. Cell Merging
+  EusLisp manages only one heap memory for all the data structures such as
+  cons, vector, string, symbol, compiled-code, etc. as long as they are
+  allocated through EusLisp's primitives (unix:malloc allocates memory
+  outside of the EusLisp heap).  During the execution, many garbage conses
+  are scattered in the heap, and GC tries to merge them to form bigger
+  cells.  However, this effort is usually quite in vain since the bigger
+  cell will be split to get conses again.  So, EusLisp provide a way to
+  suppress this merging by sys:*gc-merge* parameter.  *gc-merge* has the
+  default value 0.3, which means 30% of free memory is kept unmerged, i.e.,
+  the area is specially assigned to conses.  If your program does many
+  conses and a few other instantiation, a larger value of *gc-merge* like 0.5
+  will yield better result.  The frequency of consing will be reported by
+  sys:memory-report function.  Note that a too large value of *gc-merge*
+  like 0.8 is harmful.

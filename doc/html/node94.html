@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Thread Creation and Thread Pool</TITLE>
+<META NAME="description" CONTENT="Thread Creation and Thread Pool">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3183" HREF="node95.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3181" HREF="node93.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3175" HREF="node93.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3185" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3186" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3184" HREF="node95.html">Parallel Execution of Threads</A>
+<B>Up:</B> <A NAME="tex2html3182" HREF="node93.html">Asynchronous and Parallel Programming </A>
+<B> Previous:</B> <A NAME="tex2html3176" HREF="node93.html">Asynchronous and Parallel Programming </A>
+<BR> <P>
+<H3><A NAME="SECTION04022100000000000000">Thread Creation and Thread Pool</A></H3>
+<P>
+In order for Solaris to execute a program in parallel on many
+processors, the program needs to be written as a collection
+of functions, each of which is executed by a thread dynamically
+created in a process.  Although the time required for thread
+creation is faster than process creation, it takes a few
+mili-seconds for EusLisp to start off a thread after allocating
+stacks and setting a page attribute for detecting stack-overflow.
+Since this delay, which should be compared to a function invocation,
+is intolerable, sufficient number of threads are created by
+the <TT>make-thread</TT> function beforehand and put in 
+the system's thread pool,
+eliminating the need for system calls at evaluation time.
+Each thread in the thread pool is represented by a thread object,
+as depicted in Fig.<A HREF="node94.html#threadobj">7</A>,
+consisted of thread-id, several semaphores for synchronization,
+and slots for argument and evaluation result transfer.
+<P>
+<P><A NAME="12922">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure12745" SRC="img39.gif"  > <BR>
+<STRONG>Figure 7:</STRONG> <A NAME="threadobj">&#160;</A>Thread-object for transferring control and data between threads (left) and the collection of threads put in the thread-pool.<BR>
+<P><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,429 @@
+\section{視野変換と投射変換}
+
+\subsection{基本概念}
+
+物体は階層的に接続された物体固有の座標系（モデル座標系）で定義される。
+これを線画としてスクリーンに表示するためには、次の様な座標変換と
+クリッピング処理を必要とする。
+
+% picture = screen.tex
+\begin{figure}[h]
+\begin{picture}( 388, 337)
+\large\tt
+\put( 135.9,  68.5){ビューポート変換,ビューポートクリッピング(viewport)}
+\put( 135.9, 135.9){投影変換(projection, perspective-viewing)}
+\put(  51.6,  34.7){スクリーン座標系}
+\thicklines
+\put(  33.7,  16.9){\framebox( 168.6,  33.7){}}
+\put( 118.0,  84.3){\vector( 0,-1){  33.7}}
+\put(  51.6, 102.2){正規化デバイス座標系}
+\put(  33.7,  84.3){\framebox( 168.6,  33.7){}}
+\put( 118.0, 151.8){\vector( 0,-1){  33.7}}
+\put(  51.6, 169.6){視点座標系}
+\put(  51.6, 237.1){ワールド座標系}
+\put(  51.6, 304.5){モデル座標系}
+\put(  33.7, 151.8){\framebox( 168.6,  33.7){}}
+\put(  33.7, 219.2){\framebox( 168.6,  33.7){}}
+\put(  33.7, 286.7){\framebox( 168.6,  33.7){}}
+\put( 118.0, 219.2){\vector( 0,-1){  33.7}}
+\put( 135.9, 203.4){視野変換(viewing)}
+\put( 118.0, 286.7){\vector( 0,-1){  33.7}}
+\put( 135.9, 270.8){モデリング変換}
+\end{picture}
+\end{figure}
+幸い、body中のvertices,normal等はワールド座標系での値を保持しており、
+モデリング変換は既に完了している。視野変換は、クラスviewingが、
+透視変換はクラスparallel-viewingまたはperspective-viewingが処理する。
+ビューポート変換およびビューポートクリッピングはクラスviewportが処理する。
+こうして得られた描画プリミティブから実際のハードウエアを用いた描画を行なう
+のがクラスviewsurfaceであるが、これは機器依存であり、現在はテクトロ4010型
+のハードウエア用のtektro-viewsuface、X11用のxwindow、sunview、及びxview用の
+canvas-viewsurfaceがviewsurfaceのサブクラスとして定義されている。
+表示のためには、これらのviewing、viewport、viewsurfaceのインスタンスを作成し、
+順を追って変換を施す必要がある。その管理を行なうのがクラスviewerである。
+\newcommand{\sstack}[1]{\fbox{\shortstack{#1}}}
+\newcommand{\treeroot}[2]{\tree \sstack{#1}#2 \endtree}
+\newcommand{\branch}[2]{\subtree \sstack{#1}#2 \endsubtree}
+\newcommand{\LEAF}[1]{\leaf{\sstack{#1}}}
+\begin{figure}
+\begin{center}
+\begin{minipage}[t]{16cm}
+\treeroot{object}
+{\branch{propertied-object}
+	{\branch{coordinates}
+		{\branch{cascaded-coords}
+			{\branch{viewing} {\LEAF{parallel}
+					   \LEAF{perspective}}
+		 	 \LEAF{viewport}}}
+ \branch{viewsurface}{\LEAF{tektro-viewsurface}
+		      \LEAF{sunview}
+		      \LEAF{xview}}}}
+\end{minipage}
+\end{center}
+\caption{オブジェクトの階層構造}
+\end{figure}
+% \vfill
+% \clearpage
+\subsection{関数とクラス}
+
+\begin{description}
+\item[draw {\em \&optional viewer \&rest things}]\hfill\\
+thingsを描く。*viewer*にクラスviewerのインスタンスをセットしておくこと。
+\item[hid {\em \&optional viewer \&rest things}]\hfill\\
+thingsを隠線処理を施して描く。
+\item[hidd {\em \&optional viewer \&rest things}]\hfill\\
+hidと同様であるが、隠されたエッジセグメント、不可視エッジを破線で描画する。
+２つのグローバル変数\ $*ignore-approximated-edges*$\ と
+\ $*draw-invisible-edges*$\ によって動作が制御される。
+\item[cls]\hfill\\
+画面clear。
+\item[erase {\em thing}]\hfill\\
+thingを消す。 
+\item[draw-axis {\em scale thing}] thingの座標系を描く。Z軸には矢印が付く。
+scaleはなくても良いが、あるときは座標系が大きくなる。defaultは、10.0。
+\item[draw-arrow {\em p1 p2}] ワールド座標で表された始点p1から終点p2へ
+向く矢印を描く。 
+\item[showline {\em x1 y1 x2 y2}]\hfill\\
+テクトロ端末に線分を表示する関数。
+x1,y1,x2,y2 は、必ず0〜1023の範囲の整数でなければならない。
+\item[homo2normal {\em v \&optional result}]\hfill\\
+v を同次座標と考え、通常座標に変換する。v の次元は任意。v の次元（元の数）
+をn とすると、結果はn-1元のフロートベクタ。
+$v=(v_{1},v_{2},\cdots,v_{n})$,\ 
+$result=(\frac{v_{1}}{v_{n}},\frac{v_{2}}{v_{n}},\cdots,\frac{v_{n-1}}{v_{n}})$
+もし、resultの指定があれば、結果はそこに入る。resultがn 次元以上であれば、
+$v_{n}$\ 以降の要素は\ $1.0$\ になる。
+\item[homegenize {\em v}]\hfill\\
+$v$\ を通常座標と考え、同次座標に変換する。
+\item[homo-viewport-clip {\em v1 v2}]\hfill\\
+NDCでの3次元通常フロートベクタ、あるいは3次元同次フロートベクタ（4元）。
+v1,v2 で表される線分をclipする。
+\end{description}
+\vfill
+\pagebreak
+{\jLarge viewing}
+\\ [0.5cm]
+
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] cascaded-coordsのサブクラスとして視野座標系を定義するクラス。
+従って、cascaded-coordsの全メソッドが利用できる。例えば、viewingに
+:transform-vectorを送れば、視野座標系における座標がワールドでの表現に
+変換される。しかし、これは一般にviewingに要求される変換の逆である。
+描画のためには、ワールドでの座標表現が視点での表現に逆変換されねばならない。
+この逆変換を記憶しているのが、viewcoordsスロットである。
+viewcoordsは、viewingのworldcoordsの逆変換に、右手系と左手系に変換する行列
+を掛けたものである。すなわち、viewcoordsではスクリーン右方向がx軸、
+スクリーン左方向がy軸、スクリーンの奥に向かう軸がz軸となる。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[cascaded-coords] (rot\ pos\ parent\ descendants\ worldcoords\ 
+manager\ changed)
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item [viewcoords] ワールド座標系で表した座標値から視野座標系で表した座標値
+への座標変換 
+\end{description}
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:viewpoint ()] 視野座標系の原点位置をワールドにおける表現として返す。
+\item[:view-direction ()] 視線方向の単位ベクトル（視点座標系のz軸）。
+\item[:view-up ()] 視線の方向、スクリーンの上方向を表すベクタを返す。
+\item[:look {\em (from to)}] fromからtoを見つめるように座標系を定める。
+\item[:makeviewcoords {\em (ax ay az p)}]
+euler 角ax,ay,azと原点位置p を指定して視野座標系を定める。
+\item[:init] {\em \&key (:viewpoint \#f(1.0 1.0 1.0)) 
+(:target \#f(0.0 0.0 0.0))(:view-direction  nil) 
+(:view-up   \#f(0.0 0.0 1.0)) \&allow-other-keys} \\
+視野座標系を初期化する。
+\end{description}
+
+\end{description}
+\vfill
+\pagebreak
+{\jLarge projection}
+\\ [0.5cm]
+
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 投影法を定めるクラス。これは、parallel-viewingおよび
+perspective-viewing の共通部分を抽出したabstrace-classであり、このクラスの
+インスタンス作ることは無意味である。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[viewing] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[screenx] 投影面のx寸法
+\item[screeny] 投影面のy寸法
+\item[hither] 前方クリップ面
+\item[yon] 後方クリップ面
+\item[projection-matrix] 投影変換マトリクス\ $4\times4$。
+ワールド座標系で表された４元同次座標を
+正規化デバイス座標系で表された４元同次座標に変換する。
+\end{description}
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:projection ()] projection-matrix を返す。
+\item[:newprojection (pmat)]
+projection-matrix を書き換える場合は必ずこのメソッドを経由する。
+\item[:project (vec)] 3次元同次ベクタvec を投影変換する。
+\item[:project3 (vec)]
+3次元通常ベクタを同次座標に拡張し、投影変換する。結果は4元の同次座標。
+\item[:view (vec)]
+ワールドで表現された3次元ベクタに視野変換、投影変換をかける。
+結果は、正規化デバイス座標系で表された４元の同次座標。
+\item[:screen (\&optional sx sy)] 
+スクリーンサイズを取り出す、あるいは変更する。
+\item[:hither (\&optional h)]
+\item[:yon  (\&optional y)]
+前方クリップ面(hither)までの距離、後方クリップ面までの距離を取り出す、
+あるいは設定する。
+\item[:init] {\em \&key  (:hither  100.0) (:yon    1000.0) (:screen-x 100.0)
+(:screen-y 100.0) \&allow-other-keys} \\ 投影法を初期化する。
+\end{description}
+\end{description}
+\vfill
+\pagebreak
+{\jLarge parallel-viewing}
+\\ [0.5cm]
+
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 平行投影マトリクスを作成するクラス。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[projection] (screenx screeny hither yon projection-matrix)
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:make-projection ()]\hspace{1cm} 
+\end{description}
+\end{description}
+\vspace{2.0cm}
+{\jLarge perspective-viewing}
+\\ [0.5cm]
+
+\begin{description}
+\item[{\jlarge \bf description}] 透視投影マトリクスを作成するクラス
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[projection] (screenx screeny hither yon projection-matrix)
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[viewdistance] 視点・スクリーン間の距離
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:make-projection ()] ワールド座標系で表された４元同次座標を
+正規化デバイス座標系で表された４元同次座標に変換する、
+透視投影マトリクスを作成する。
+\item[:viewdistance (\&optional vd)]
+viewdistanceを取り出す、あるいは設定する。viewdistanceを大きくすると視点
+からスクリーンを見込む角度（視野角）が小さくなり表示は大きくなる。
+\item[:zoom (scale)]
+現在のスクリーンの寸法を1/scale 倍する。たとえばscale=2.0 とすれば、ス
+クリーンサイズは半分になり、視野角も半分になるので倍の大きさの表示が得
+られる。
+\item[:init (\&key (:viewdistance 100.0) \&allow-other-keys)]
+透視投影を初期化する。
+\end{description}
+\end{description}
+% picture = fig-perspective.tex
+\begin{figure}[h]
+\setlength{\unitlength}{0.0125in}
+\begin{picture}(547,455)(35,350)
+\thicklines
+\multiput( 80,580)(9.00000,-3.00000){41}{\makebox(0.4444,0.6667){\tenrm .}}
+\multiput(320,580)(-3.12500,-9.37500){9}{\makebox(0.4444,0.6667){\tenrm .}}
+\multiput( 80,580)(9.30233,2.32558){44}{\makebox(0.4444,0.6667){\tenrm .}}
+\put( 80,580){\vector( 0, 1){160}}
+\multiput(480,680)(0.00000,-8.00000){13}{\line( 0,-1){  4.000}}
+\put( 80,580){\vector(-1,-3){ 40}}
+\put(520,800){\line(-1,-3){ 80}}
+\put(440,560){\line( 0,-1){200}}
+\put(520,800){\line( 0,-1){200}}
+\put(520,600){\line(-1,-3){ 80}}
+\put(400,660){\line( 1, 3){ 30}}
+\put(370,570){\line( 1, 3){ 30}}
+\put(370,570){\line( 0,-1){165}}
+\put(430,750){\line( 0,-1){165}}
+\put(370,407){\line( 1, 3){ 30}}
+\put(401,497){\line( 1, 3){ 30}}
+\multiput(400,660)(0.00000,-8.42105){10}{\line( 0,-1){  4.211}}
+\put(320,640){\line( 1, 3){ 25}}
+\put(295,566){\line( 1, 3){ 25}}
+\put(295,565){\line( 0,-1){115}}
+\put(345,715){\line( 0,-1){115}}
+\put(295,451){\line( 1, 3){ 25}}
+\put(319,524){\line( 1, 3){ 25}}
+\multiput(320,640)(0.00000,-8.00000){8}{\line( 0,-1){  4.000}}
+\put( 80,580){\vector( 1, 0){480}}
+\put(430,750){\line( 2, 1){ 90}}
+\put(430,585){\line( 6, 1){ 90}}
+\put(370,405){\line( 5,-3){ 75}}
+\put(370,570){\line( 6,-1){ 60}}
+\put( 75,750){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt Yv}}}
+\put( 35,440){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt Xv}}}
+\put(185,570){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt viewdistance}}}
+\put(240,500){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt screenx}}}
+\put(275,650){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt screeny}}}
+\put(570,575){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt Zv}}}
+\put(385,570){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt hither}}}
+\put(470,570){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt yon}}}
+\put( 50,575){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\twltt pos}}}
+\end{picture}
+\end{figure}
+\vfill
+\clearpage
+{\jLarge viewport}
+\\ [0.5cm]
+
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] グラフィックスデバイスのスクリーン上にビューポートを定義するクラス。
+ビューポート内には-1.0〜1.0 の範囲の座標 \\
+(NDC: normalized-device-coordinates) が定義される。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[object] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[xcenter] 矩形の中心のx座標
+\item[ycenter] 矩形の中心のy座標
+\item[width] 幅の1/2
+\item[height] 高さの1/2
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:xcenter {\em \&optional x}]
+スロット値を読み出す、あるいは変更する。
+\item[:ycenter {\em \&optional y}]
+スロット値を読み出す、あるいは変更する。
+\item[:height {\em \&optional h}]
+スロット値を読み出す、あるいは変更する。
+\item[:width {\em \&optional w}]
+スロット値を読み出す、あるいは変更する。
+\item[:init] {\em \&key (xcenter 100) (ycenter 100) (width 100) (height 100)}
+初期値を設定する。管面で左上が\ $(0,0)$\ の原点であるようなデバイスに対しては、
+heightを負の値にすることで左下を原点にすることが出来る。
+\item[:NDC-point-to-screen {\em p}]
+NDCで定義された点Pをスクリーン座標値に変換する。
+\item[:NDC-line-to-screen {\em P1 P2 \&optional (do-clip T)}]
+NDC中の線分P1,P2をスクリーン座標値に変換する。また、do-clipならばクリップする。
+\end{description}
+
+\end{description}
+
+\vfill
+\pagebreak
+% \begin{verbatim}
+% draw-vertex   (avertex viewing viewport)
+% draw-vertices (vertices viewing viewport)
+% draw-edge  (anedge viewing viewport)
+% draw-edges (edges viewing viewport)
+% draw-face  (aface viewing viewport)
+% draw-faces (faces viewing viewport)
+% draw-body   (abody viewing viewport)
+% draw-bodies (bodies viewing viewport)
+% \end{verbatim}
+% \vfill
+% \pagebreak
+{\jLarge viewer}
+\\ [0.5cm]
+
+\begin{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[object] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[eye] 視野変換を表す。viewingのインスタンス。
+\item[port] ビューポート変換、ビューポートクリッピングを表す。
+viewportのインスタンス。
+\item[surface] ハードウェアへの描画を行なうviewsurfaceのインスタンス。
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:init {\em \&key viewport viewing viewsurface}]
+スロット変数を初期化する。
+\item[:viewing {\em \&optional msg}]
+スロット値を取り出す。msgがあるとき、スロットオブジェクトにその
+メッセージを送る。
+\begin{verbatim}
+(send myviewer :viewing :viewpoint)
+\end{verbatim}
+\item[:viewport {\em \&optional msg}]
+スロット値を取り出す。msgがあるとき、スロットオブジェクトにその
+メッセージを送る。
+\item[:viewsurface {\em \&optional msg}]
+スロット値を取り出す。msgがあるとき、スロットオブジェクトにその
+メッセージを送る。
+\item[:draw-line-NDC {\em p1 p2 \&optional (do-clip t)}]
+NDCで表された線分p1,p2を描画する。do-clipがnilでなければclip処理を行なう。
+\item[:draw-line {\em p1 p2 \&optional (do-clip t)}] 
+ワールド座標で表された\ $p1$\ から\ $p2$\ へ線分を描画する。
+do-clipがnilでなければclip処理を行なう。
+\item[:draw-arrow {\em p1 p2 \&optional (do-clip t)}]
+ワールド座標で表された\ $p1$\ から\ $p2$\ へ矢印を描画する。
+do-clipがnilでなければclip処理を行なう。
+\item[:draw-axis {\em coords \&optional (size 1.0)}]
+座標系coordsの座標軸を表示する。z軸には矢印が付けられる。
+\item[:draw {\em thing \&optional info}]
+thingは、body, face, edge, edge-image, floatvector, coordinatesまたは、
+それらのリスト。thingを描く。bodyに対しては、bodyの各面のうち、視点側を
+向いている面だけを描く。faceの場合、向こう向きであっても必ず描画する。
+\end{description}
+\vfill
+\pagebreak
+\item[{\jlarge \bf example}]\hspace{1cm}
+\begin{verbatim}
+(defvar *viewers* nil)
+
+(setq *viewer* (view :size 500
+		     :title (format nil "EusViewer~d" (length *viewers*))
+		     :x 100 :y 100
+		     :viewpoint #f(1000 1000 500)
+		     :target #f(0 0 0)
+		     :hither 100.0
+		     :yon 5000.0
+		     :screen 1.0
+		     :viewdistance 3.0))
+(setq *viewsurface* (send *viewer* :viewsurface))
+(setq *viewport* (send *viewer* :viewport))
+(setq *viewing* (send *viewer* :viewing))
+\end{verbatim}
+\end{description}

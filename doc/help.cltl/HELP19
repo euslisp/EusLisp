@@ -1,0 +1,76 @@
+(apply function-documentation "
+Args: (function arg &rest more-args)
+Calls FUNCTION with all ARGs except the last and all elements of the last ARG
+as the arguments to FUNCTION.  Returns all values that FUNCTION returns.")
+(by function-documentation "
+Args: ()
+KCL specific.
+Exits from KCL.  Equivalent to BYE.")
+(byte-size function-documentation "
+Args: (byte)
+Returns the size part (in KCL, the car part) of the byte specifier BYTE.")
+(check-type function-documentation "
+Syntax: (check-type place typespec [string-form])
+Signals a continuable error, if the value of PLACE is not of the specified
+type.  Before continuing, receives a new value of PLACE from the user and
+checks the type again.  Repeats this process until the value of PLACE becomes
+of the specified type.  STRING-FORM, if given, is evaluated only once and the
+value is used to indicate the expected type in the error message.")
+(defstruct function-documentation "
+Syntax: (defstruct
+         {name | (name {:conc-name | (:conc-name prefix-string) |
+                        :constructor | (:constructor symbol [lambda-list]) |
+                        :copier | (:copier symbol) |
+                        :predicate | (:predicate symbol) |
+                        (:include symbol) |
+                        (:print-function function) |
+                        (:type {vector | (vector type) | list}) |
+                        :named |
+                        (:initial-offset number)}*)}
+         [doc]
+         {slot-name |
+          (slot-name [default-value-form] {:type type | :read-only flag}*) }*
+         )
+Defines a structure named by NAME.  The doc-string DOC, if supplied, is saved
+as a STRUCTURE doc and can be retrieved by (documentation 'NAME 'structure).")
+(do function-documentation "
+Syntax: (do ({(var [init [step]])}*) (test {result}*)
+          {decl}* {tag | statement}*)
+Establishes a NIL block, binds each VAR to the value of the corresponding INIT
+(which defaults to NIL), and then executes STATEMENTs repeatedly until TEST is
+satisfied.  After each iteration, evaluates STEP and assigns the value to the
+corresponding VAR.  No assignment occurs for those VARs to which STEP is not
+given.  When TEST is satisfied, evaluates RESULTs as a PROGN and returns all
+values of the last RESULT.  Performs variable bindings and assignments in
+parallel, just as LET and PSETQ do.")
+(imagpart function-documentation "
+Args: (number)
+Returns the imagpart of NUMBER if it is a complex.  Otherwise, returns zero of
+the same type as NUMBER.")
+(import function-documentation "
+Args: (symbol &optional (package *package*))
+Registers SYMBOL to PACKAGE as an internal symbol.  Does nothing if SYMBOL is
+already registered in PACKAGE.  SYMBOL may be a list of symbols.")
+(inspect function-documentation "
+Args: (x)
+Shows the information about X interactively.  See the KCL Report for the
+inspect commands, or type '?' to the inspector.")
+(locally function-documentation "
+Syntax: (locally {decl}* {form}*)
+Gives DECLs locally while evaluating FORMs, and returns all values of the last
+FORM.  Returns NIL if no FORM is given.")
+(realpart function-documentation "
+Args: (number)
+Returns the realpart of NUMBER if it is a complex.  Otherwise, returns NUMBER.")
+(short-site-name function-documentation "
+Args: ()
+Returns, as a string, the location of the machine on which KCL runs.")
+(string-not-lessp function-documentation "
+Args: (string1 string2
+       &key (start1 0) (end1 (length string1))
+            (start2 0) (end2 (length string2)))
+Similar to STRING>=, but ignores cases.")
+(unexport function-documentation "
+Args: (symbol &optional (package *package*))
+Undoes the registration of SYMBOL as an external symbol of PACKAGE and makes
+SYMBOL internal to PACKAGE.  SYMBOL may be a list of symbols.")

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Top-level Interaction</TITLE>
+<META NAME="description" CONTENT="Top-level Interaction">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2720" HREF="node66.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2718" HREF="node63.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2712" HREF="node64.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2722" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2723" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2721" HREF="node66.html">Compilation</A>
+<B>Up:</B> <A NAME="tex2html2719" HREF="node63.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html2713" HREF="node64.html">Evaluators</A>
+<BR> <P>
+<H2><A NAME="SECTION03092000000000000000">Top-level Interaction</A></H2>
+<P>
+EusLisp's standard top-level read-eval-print loop is controlled by <B>eustop</B>.
+When EusLisp is invoked,
+<B>eustop</B> tries to load the file named <TT>&quot;.eusrc&quot;</TT> in your home directory
+or the file specified by the <TT>EUSRC</TT> environment variable.
+Then EusLisp loads files specified in its argument list.
+After these loading, <B>eustop</B> enters normal interactive session.
+<P>
+When <B>*standard-input*</B> is connected to user's tty,
+<B>eustop</B> prints prompt set in <B>*prompt-string*</B> defaulted to
+<TT>&quot;eus$ &quot;</TT>, and inputs commands from <B>*terminal-io*</B> stream.
+If the input is parenthesized, it is taken as a lisp form and
+is evaluated by <B>eval</B>.
+Else if the first symbol of the input line has function definition,
+the line is automatically parenthesized and evaluated.
+If no function definition is found,
+then its special value is examined and the value is printed.
+If the symbol is unbound,
+the line is regarded as UNIX command and passed to sh (Bourn's shell).
+If sh cannot find corresponding unix command,
+``command unrecognized&quot; message is printed.
+Thus, <B>eustop</B> works both as a lisp interpreter and as a unix shell.
+If you do not wish to execute the input as UNIX command,
+you may escape the form by preceeding a comma ',' at the begining of the line.
+This is also useful to see the dynamic value binding when
+an error occured in the interpretive execution.
+Since EusLisp adopts lexical scope,
+we cannot examine the value of local variables outside of the scope
+unless they are declared special.
+<P>
+Each line input is remembered in <B>*history*</B> vector with a sequence
+number.
+You can recall a specific input by <B>!</B> function
+as if you were in csh.
+The difference from csh's history is, you need at least one white space
+between the exclamaition mark and the sequence number since <B>!</B>
+is a function, and you can edit the line interactively with control keys,
+as in emacs.
+<P>
+<code>^</code>D (EOF) terminates EusLisp normally.
+To return abnormal termination code to upper level (usually a csh),
+use <B>exit</B> with an appropriate condition code.
+<P>
+<B>eustop</B> sets a signal handler only for SIGINT and SIGPIPE,
+and other signals are not caught.
+Thus, signals such as SIGTERM or SIGQUIT cause EusLisp to terminate.
+In order to catch these signals to avoid termination,
+use <B>unix:signal</B> function to set user-defined signal handlers.
+<P>
+<A NAME=9629>&#160;</A>
+<B>-</B> <EM></EM>[variable] 
+<UL><LI> current input.
+</UL>
+<A NAME=9639>&#160;</A>
+<B>+</B> <EM></EM>[variable] 
+<UL><LI> previous input.
+</UL>
+<A NAME=9649>&#160;</A>
+<B>++</B> <EM></EM>[variable] 
+<UL><LI> old input.
+</UL>
+<A NAME=9659>&#160;</A>
+<B>+++</B> <EM></EM>[variable] 
+<UL><LI> ancient input.
+</UL>
+<A NAME=9669>&#160;</A>
+<B>*</B> <EM></EM>[variable] 
+<UL><LI> previous result.
+</UL>
+<A NAME=9679>&#160;</A>
+<B>**</B> <EM></EM>[variable] 
+<UL><LI> old result.
+</UL>
+<A NAME=9689>&#160;</A>
+<B>***</B> <EM></EM>[variable] 
+<UL><LI> ancient result.
+</UL>
+<A NAME=9699>&#160;</A>
+<B>*prompt-string*</B> <EM></EM>[variable] 
+<UL><LI> prompt string used by
+<B>eustop</B>.
+</UL>
+<A NAME=9710>&#160;</A>
+<B>*program-name*</B> <EM></EM>[variable] 
+<UL><LI> the command that invoked this EusLisp, possibly eus, eusx, eusxview
+or user-saved euslisp.
+</UL>
+<A NAME=9720>&#160;</A>
+<B>eustop</B> <EM>&amp;rest argv </EM>[function] 
+<UL><LI> is the default toplevel loop.
+</UL>
+<A NAME=9730>&#160;</A>
+<B>eussig</B> <EM>sig code </EM>[function] 
+<UL><LI> is the default signal hander for SIGPIPE.
+<B>eussig</B> prints signal number upon its arrival and enters
+another toplevel loop.
+</UL>
+<A NAME=9741>&#160;</A>
+<B>sigint-handler</B> <EM>sig code </EM>[function] 
+<UL><LI> is the default signal handler for SIGINT (control-C).
+It enters a new top level session.
+</UL>
+<A NAME=9751>&#160;</A>
+<B>euserror</B> <EM>code message &amp;rest arg </EM>[function] 
+<UL><LI> the default error handler that 
+prints <EM>message and enters a new error session.
+</UL>
+<A NAME=9762>&#160;</A>
+<B>reset</B> <EM></EM>[function] 
+<UL><LI> quits error loop and goes back to the outermost eustop session.
+</UL>
+<A NAME=9772>&#160;</A>
+<B>exit</B> <EM>&amp;optional termination-code </EM>[function] 
+<UL><LI> terminates EusLisp process and returns <EM>termination-code (0..255)
+as the process status code (0..255).
+</UL>
+<A NAME=9783>&#160;</A>
+<B>h</B> <EM></EM>[function] 
+<UL><LI> prints all the inputs remembered in <B>*history*</B> vector 
+with associated sequence numbers.
+</UL>
+<A NAME=9794>&#160;</A>
+<B>!</B> <EM>&amp;optional (seq 0) </EM>[function] 
+<UL><LI> recalls the input line associated with the sequence number <EM>seq.
+When <EM>seq is 0, the most recent command is recalled, and
+if <EM>seq is negative, the line is specified relatively to the
+current input.
+The recalled line is printed and the cursor is located at the end of the line.
+You can go backward by control-H (backspace) or control-B,
+go forward by control-F or control-K,
+go to the beginning of line by control-A, to the end of line by control-L.
+control-C cancels the line editing. control-M (carriage-return) 
+or control-J (line-feed)
+finishes  editing the line and starts evaluation of the edited line.
+If <EM>seq is not a number and is a symbol or a string,
+the history list is searched toward old input,
+and a command line which include the symbol or a string as a substring
+is returned.
+</UL>
+<A NAME=9808>&#160;</A>
+<B>new-history</B> <EM>depth </EM>[function] 
+<UL><LI> initializes <B>*history*</B> vector to have <EM>depth length.
+<EM>Depth input lines are remembered.
+All the input lines recorded in the current <B>*history*</B> are discarded.
+</UL>
+<P>
+</EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2720" HREF="node66.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2718" HREF="node63.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2712" HREF="node64.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2722" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2723" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2721" HREF="node66.html">Compilation</A>
+<B>Up:</B> <A NAME="tex2html2719" HREF="node63.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html2713" HREF="node64.html">Evaluators</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

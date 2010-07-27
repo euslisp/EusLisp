@@ -1,0 +1,1097 @@
+\section{System Functions}
+\markright{\arabic{section}. System Functions}
+
+\subsection{Memory Management}
+The design of  memory management scheme affects much to the flexibility and
+efficiency of object-oriented languages.
+EusLisp allocates memory to any sort of objects
+in a unified manner based on the {\em Fibonacci buddy method}.
+In this method, each of large memory pools called chunks is split into
+small cells which are unequally sized but aligned at Fibonacci numbers.
+A memory chunk is a homogeneous data container for any types of
+objects such as {\tt symbol, cons, string, float-vector}, etc.
+as long as their sizes fit in the chunk.
+A chunk has no special attributes,
+like static, dynamic, relocatable, alternate, etc.
+EusLisp's heap memory is the collection of chunks, and 
+the heap can extend dynamically by getting new chunks from UNIX.
+%In other words, there is no need to estimate the total amount of memory
+%before EusLisp is invoked.
+The expansion occurs either automatically on the fly
+or on user's explicit demand by calling {\bf system:alloc} function.
+When it is managed automatically, free memory size is kept
+about 25\% of total heap size. % by default,
+This ratio can be changed by setting a value between 0.1 and 0.9 to
+the {\bf sys:*gc-margin*} parameter.
+
+When all the heap memory is exhausted, mark-and-sweep type garbage collection
+runs.
+Cells accessible from the root (packages, classes and stacks) remain at the
+same place where they were.
+Other inaccessible cells are reclaimed and linked to the free-lists.
+No copying or compactification occurs during GC.
+When a garbage cell is reclaimed, its neighbor is examined
+whether it is also free,
+and they are merged together to form a larger cell if possible.
+This merging, however, is sometimes meaningless,
+since {\tt cons}, which is the most frequently called memory allocator,
+requests the merged cell to be divided to the smallest cell.
+Therefore, EusLisp allows to leave a particular amount of heap unmerged to speed up cons.
+This ratio is determined by {\bf sys:*gc-merge*} parameter,
+which is set to 0.3 by default.
+With the larger {\bf sys:*gc-merge*}, the greater portion of  heap is left unmerged.
+This improves the performance of consing,
+since buddy-cell splitting rarely occurs when conses are requested.
+This is also true for every allocation of relatively small cells,
+like three dimensional float-vectors.
+
+{\bf SYS:GC} invokes garbage collector explicitly, returning a list of two integers,
+numbers of free words and total words (not bytes) allocated in the heap.
+{\bf SYS:*GC-HOOK*} is a variable to hold a function that is called upon the
+completion of a GC.  The hook function should receive two arguments
+representing the sizes of the free heap and the total heap.
+
+If "fatal error: stack overflow" is reported during  execution,
+and you are convinced that the error is not caused by a infinite loop
+or recursion, 
+you can expand the size of the Lisp stack by {\bf sys:newstack}.
+{\bf reset} should be performed before {\bf sys:newstack},
+since it discards everything in the current stack such as
+special bindings and clean-up forms of {\em unwind-protect}.
+After a new stack is allocated, execution starts over from the point
+of printing the opening message.
+The default stack size is 65Kword.
+The Lisp stack is different from the system stack.
+The former is allocated in the heap, while the latter is allocated in
+the stack segment by the operating system.
+If you get "segmentation fault" error, it might be caused by the shortage
+of the system stack.
+You can increase the system stack size by the {\tt limit} csh command.
+
+{\bf Sys:reclaim} and {\bf sys:reclaim-tree} function put cells occupied by objects
+back to the memory manager, so that they can be reused later without
+invoking garbage collection.
+You must be assured that there remains no reference to the cell.
+
+{\bf memory-report} and {\bf room} function display statistics on 
+memory usage sorted by cell sizes and classes respectively.
+
+%A user who tries to use {\bf address} and {\bf peek, poke} functions must be
+%familiar with the structure of EusLisp data objects.
+{\bf address} returns the byte address of the object and is useful
+as a hash function when used with hash-table, since this address is
+unique in the process.
+
+{\bf Peek} and {\bf poke} are the functions to read/write data directly
+from/to a memory location.
+The type of access should be either of
+{\bf :char, :byte, :short, :long, :integer, :float} and {\bf :double}.
+For an instance, {\tt (SYS:PEEK (+ 2 (SYS:ADDRESS '(a b))) :short)}
+returns class id of a cons cell, normally 1.
+
+There are  several functions prefixed with 'list-all-'.
+These functions returns the list of a system resource or environment,
+and are useful for dynamic debugging.
+
+\begin{refdesc}
+
+\funcdesc{sys:gc}{}{
+starts garbage collection, and returns a list of the numbers
+of free words and total words allocated.}
+
+\functiondescription{sys:*gc-hook*}{}{variable}{
+Defines a function that is called upon the completion of a GC.}
+
+\funcdesc{sys:gctime}{}{
+returns a list of three integers: the count of gc invoked,
+the time elapsed for marking cells (in 1/60 sec. unit),
+and the time elapsed for reclamation (unmarking and merging).}
+
+\funcdesc{sys:alloc}{size}{
+allocates at least {\em size} words of memory in the heap,
+and returns the number of words really allocated.}
+
+\funcdesc{sys:newstack}{size}{
+relinquishes the current stack,
+and allocates a new stack of {\em size} words.}
+
+\functiondescription{sys:*gc-merge*}{}{variable}{
+is a memory management parameter.
+{\bf *gc-merge*} is the ratio the ratio of heap memory  which is
+left unmerged at GC.
+This unmerged area will soon filled with smallest cells whose size is
+the same as a cons.
+The default value is 0.3.
+The larger values, like 0.4, which specifies 40\% of free heap should be
+unmerged, favors for consing but do harm to instantiating
+bigger cells like float-vectors, edges, faces, etc.}
+
+\functiondescription{sys:*gc-margin*}{}{variable}{
+is a memory management parameter.
+{\bf *gc-margin} determines the ratio of
+free heap size versus the total heap.
+Memory is acquired from UNIX so that the free space does not go 
+below this ratio. The default value 0.25 means that 25\% of free space is
+maintained at every GC.}
+
+\funcdesc{sys:reclaim}{object}{
+relinquishes {\em object} as a garbage.
+It must be guaranteed that it is no longer referenced from any other objects.}
+
+\funcdesc{sys:reclaim-tree}{object}{
+reclaims all the objects except symbols traversable from {\em object}.}
+
+\funcdesc{sys:btrace}{num}{
+prints the back-trace information of {\em num} depth on the Lisp stack.}
+
+\funcdesc{sys:memory-report}{\&optional strm}{
+prints a table of memory usage report sorted by cell sizes
+to the {\it strm} stream.}
+
+\funcdesc{sys:room}{output-stream}{
+outputs memory allocation information ordered by classes.}
+
+\funcdesc{sys:address}{object}{
+returns the address of {\it object} in the process memory space.
+%This information is useful when it is sent to a user-coded C function.
+}
+
+\funcdesc{sys:peek}{[vector] address type}{
+reads data at the memory location specified by {\em address}
+and returns it as an integer.
+{\em type} is one of {\bf :char, :byte, :short, :long, :integer, :float},
+and {\bf :double}.
+If no {\em vector} is given,
+the address is taken in the unix's process space.
+For example, since the a.out header is located at {\tt \#x2000} on SunOS4,
+{\tt (sys:peek \#x2000 :short)} returns the magic number (usually {\tt \#o403}).
+Solaris2 locates the ELF header at {\tt \#10000},
+and {\tt (sys:peek \#x10000 :long)} returns {\tt \#xff454c46} whose
+string representation is "ELF".
+
+If {\em vector}, which can be a foreign-string,
+is specified, address is recognized as an offset
+from the vector's origin.
+{\tt (sys:peek "123456" 2 :short)} returns short word
+representation of "34", namely \#x3334 (13108).
+
+Be careful about the address alignment:
+reading short, integer, long, float, double word
+at odd address may cause bus error by most CPU architectures.}
+
+\funcdesc{sys:poke}{value [vector] address value type}{
+writes {\it value} at the location specified by {\it address}.
+Special care should be taken since
+you can write to anywhere in the process memory space.
+Writing to outside the process space surely causes segmentation fault.
+Writing short, integer, long, float, double word
+at odd address causes bus error.}
+
+\funcdesc{sys:list-all-chunks}{}{
+list up all allocated heap chunks. Not useful for other than the implementor.}
+
+\funcdesc{sys:object-size}{obj}{
+counts the number of cells and words accessible from {\em obj}.
+All the objects reference-able from obj are traversed,
+and a list of three numbers is returned:
+the number of cells, 
+the number of words logically allocated to these objects
+(i.e. accessible from users),
+and the number of words
+physically allocated including headers and extra slots for memory management.
+Traversing stops at symbols, i.e. objects referenced from a symbol such as
+property-list or print-name string are not counted.}
+
+\end{refdesc}
+
+\newpage
+\subsection{Unix System Calls}
+
+EusLisp assorts functions which directly correspond to
+the system calls and library functions of UNIX operating system.
+For further detail of these functions, consult UNIX system interface
+reference (2).
+These low-level functions defined in {\tt *unix-package*} are sometimes dangerous.
+Use higher level functions defined in other packages if possible.
+For example, use IPC facilities described in the section \ref{IPC}
+instead of {\tt unix:socket, unix:bind, unix:connect}, and so on.
+
+\subsubsection{Times}
+\begin{refdesc}
+\funcdesc{unix:ptimes}{}{
+a list of five elements, elapsed time, system time, user time,
+subprocess's system time, subprocess's user time, is returned.
+Unit is always one sixtieth second.
+This function is obsolete and use of {\bf unix:getrusage} is recommended.}
+
+\funcdesc{unix:runtime}{}{
+Sum of the process's system and user time is returned.
+Unit is 1/60 second.}
+
+\funcdesc{unix:localtime}{}{
+Current time and date is returned in an integer vector.
+Elements are second, minute, hour, day-of-a-month, year, weekday.}
+
+\funcdesc{unix:asctime}{ tm\_intvector}{
+Converts localtime represented with an integer-vector into a string notation.\\
+{\tt (unix:asctime (unix:localtime))} returns a string representation of
+the current real time.}
+
+\end{refdesc}
+
+\subsubsection{Process}
+\begin{refdesc}
+\funcdesc{unix:getpid}{}{
+returns the process id (16bit integer) of this process.}
+
+\funcdesc{unix:getppid}{}{
+returns the process id of the parent process.}
+
+\funcdesc{unix:getpgrp}{integer}{
+returns the process group id.}
+
+\funcdesc{unix:setpgrp}{integer}{
+sets a new process group id.}
+
+\funcdesc{unix:getuid}{}
+{gets user id of this process.}
+
+\funcdesc{unix:geteuid}{}{
+returns the effective user id of this process.}
+
+\funcdesc{unix:getgid}{}{
+returns the group id of this process.}
+
+\funcdesc{unix:getegid}{}{
+returns the effective group id of this process.}
+
+\funcdesc{unix:setuid}{integer}{
+sets effective user id of this process.}
+
+\funcdesc{unix:setgid}{integer}{
+sets the effective group id of this process.}
+
+
+\funcdesc{unix:fork}{}{
+creates another EusLisp. 0 is returned to the subprocess and the pid of
+the forked process is returned to the parent process.
+Use {\bf system:piped-fork} described in section \ref{UnixProcess}
+to make a process connected via pipes.}
+
+\funcdesc{unix:vfork}{}{
+forks another EusLisp, and suspends the parent process from execution
+until the new EusLisp process terminates.}
+
+\funcdesc{unix:exec}{path}{
+replaces executing EusLisp with another program.}
+
+\funcdesc{unix:wait}{}{
+waits for the completion of one of subprocesses.}
+
+\funcdesc{unix:exit}{code}{
+terminates execution and returns {\em code} as its completion status.
+Zero means normal termination.}
+
+\functiondescription{sys:*exit-hook*}{}{variable}{
+Defines a function that is called just before the process is exited.}
+
+\funcdesc{unix:getpriority}{which who}{
+returns the highest priority (nice value) enjoyed by this process.
+{\em Which} is one of 0(process), 1(process-group) or 2(user).}
+
+\funcdesc{unix:setpriority}{which who priority}{
+sets priority 
+of the resource determined by {\em which} and {\em who}.
+{\em which} is one of 0(process), 1(process-group) or 2(user).
+{\em who}  is  interpreted relative to {\em which}
+(a process identifier
+for $which=0$, process group  identifier  for  $which=1$,
+and  a  user ID for $which=2$.
+A zero value of who denotes
+the current process, process group, or user.
+To lower the priority  (nice value) of your EusLisp process,
+{\tt (unix:setpriority 0 0 10)} will sets the nice value to 10.
+Bigger nice value makes your process get less favored.}
+
+\funcdesc{unix:getrusage}{who}{
+returns list of system resource usage information about {\em who} process.
+Elements are ordered as follows:
+More comprehensive display is obtained by {\bf lisp:rusage}.}
+{\small
+\begin{verbatim}
+    float ru_utime (sec.) /* user time used */
+    float ru_stime (sec.) /* system time used */
+    int  ru_maxrss;       /* maximum resident set size */
+    int  ru_ixrss;        /* currently 0 */
+    int  ru_idrss;        /* integral resident set size */
+    int  ru_isrss;        /* currently 0 */
+    int  ru_minflt;       /* page faults without physical I/O */
+    int  ru_majflt;       /* page faults with physical I/O */
+    int  ru_nswap;        /* number of swaps */
+    int  ru_inblock;      /* block input operations */
+    int  ru_oublock;      /* block output operations */
+    int  ru_msgsnd;       /* messages sent */
+    int  ru_msgrcv;       /* messages received */
+    int  ru_nsignals;     /* signals received */
+    int  ru_nvcsw;        /* voluntary context switches */
+    int  ru_nivcsw;       /* involuntary context switches */
+\end{verbatim}
+}
+
+\funcdesc{unix:system}{[command]}{
+executes {\em command} in a sub shell.
+{\em command} must be recognizable by Bourn-shell.}
+
+\funcdesc{unix:getenv}{env-var}{
+gets the value for the environment variable {\em env-var}.}
+
+\funcdesc{unix:putenv}{env}{
+adds {\em env} in the process's environment variable list.
+{\em env} is a string which equates var to value
+like {\tt "VARIABLE=value"}.}
+
+\funcdesc{unix:sleep}{time}{
+suspends execution of this process for {\em time} seconds.}
+
+\funcdesc{unix:usleep}{time}{
+suspends execution of this process for {\em time} micro-seconds
+({\bf u} represents micro).
+{\bf Usleep} is not available on Solaris2 or other Sys5 based systems.}
+
+\end{refdesc}
+
+\subsubsection{File Systems and I/O}
+\begin{refdesc}
+
+\funcdesc{unix:uread}{stream [buffer] [size]}{
+reads {\em size} bytes from {\em stream}.
+{\em stream} may either be a stream object or an integer representing fd.
+If {\em buffer} is given, the input is stored there.
+Otherwise, input goes to the buffer-string in  {\em stream}.
+Therefore, if {\em stream} is fd, {\em buffer} must be given.
+{\bf unix:uread} never allocates a new string buffer.
+{\bf unix:uread} returns the byte count actually read.}
+
+\funcdesc{unix:write}{stream string \&optional size}{
+writes {\em size} bytes of {\em string} to {\em stream}.
+If {\em size} is omitted, the full length of {\em string} is output.}
+
+\fundesc{unix:fcntl}{stream command argument}
+\fundesc{unix:ioctl}{stream command buffer}
+\fundesc{unix:ioctl\_}{stream command1 command2}
+\fundesc{unix:ioctl\_R}{stream command1 command2 buffer [size]}
+\fundesc{unix:ioctl\_W}{stream command1 command2 buffer [size]}
+\fundesc{unix:ioctl\_WR}{stream command1 command2 buffer [size]}
+\funcdesc{unix:close}{fd}{
+close a file specifying its file descriptor {\em fd}.}
+\funcdesc{unix:dup}{fd}{
+returns the duplicated file descriptor for {\em fd}.}
+\funcdesc{unix:pipe}{}{creates a pipe.
+An io-stream for this pipe is returned.}
+\funcdesc{unix:lseek}{stream position [whence 0]}{
+sets the file pointer for {\em stream} at {\em position} counted
+from {\em whence}.}
+
+\funcdesc{unix:link}{path1 path2}{makes a hard link.}
+
+\funcdesc{unix:unlink}{path}{removes a hard link to the file specified by {\em path}.
+If no reference to the file lefts, it is deleted.}
+
+\funcdesc{unix:mknod}{path mode}{makes inode in a file system.
+{\em path} must be a string, not a pathname object.}
+\funcdesc{unix:access}{path mode}{
+checks the access rights to {\em path}.}
+\funcdesc{unix:stat}{path}{
+gets inode information of {\em path} and
+returns a list of integers  described below.}
+{\small
+\begin{verbatim}
+  st_ctime	; file last status change time
+  st_mtime	; file last modify time
+  st_atime	; file last access time
+  st_size	; total size of file, in bytes
+  st_gid	; group ID of owne
+  st_uid	; user ID of owner
+  st_nlink	; number of hard links to the file
+  st_rdev	; the device identifier (special files only)
+  st_dev	; device file resides on
+  st_ino	; the file serial number
+  st_mode	; file mode
+\end{verbatim}
+}
+\funcdesc{unix:chdir}{path}{changes the current working directory to {\em path}.}
+\funcdesc{unix:getwd}{}{gets current working directory.}
+
+\funcdesc{unix:chmod}{path integer}{
+changes access mode (permission) for {\em path}.}
+\funcdesc{unix:chown}{path integer}{
+changes the owner of the file {\em path}.}
+
+\funcdesc{unix:isatty}{(stream $|$ fd)}{
+returns T if {\em stream} is connected to a tty-type
+device (a serial port or a pseudo tty) .}
+
+\funcdesc{unix:msgget}{key mode}{
+creates or allocates a message queue which is addressed by {\em key}.}
+\fundesc{unix:msgsnd}{qid buf [mtype [flag]]}
+\fundesc{unix:msgrcv}{qid buf [size [mtype [flag]]]}
+
+\funcdesc{unix:socket}{domain type \&optional proto}{creates a socket
+whose name is defined in {\it domain} and whose abstract type is {\em type}.
+{\em type} should be one of 1 (SOCK\_STREAM),
+2 (SOCK\_DGRAM), 3 (SOCK\_RAW), 4 (SOCK\_RDM) and 5 (SOCK\_SEQPACKET).}
+\funcdesc{unix:bind}{socket name}{
+associates {\em name} to {\em socket}.
+{\em name} should be a unix path-name if the socket is defined in unix-domain.}
+\funcdesc{unix:connect}{socket addr}{
+connects {\em socket} to another socket specified by {\em addr}.}
+\funcdesc{unix:listen}{socket \&optional backlog}{
+begins to accept connection request on {\em socket}.
+{\em backlog} specifies the length of the queue waiting for the establishment
+of connection.}
+\funcdesc{unix:accept}{socket}{accepts the connection request on {\em socket}
+and returns a file-descriptor on which messages can be exchanged
+bidirectionally.}
+\funcdesc{unix:recvfrom}{socket \&optional mesg from flag}{
+receives a datagram message from {\em socket}.
+The socket must be assigned a name by {\bf unix:bind}.
+{\em mesg} is a string in which the incoming message will be stored.
+If {\em mesg} is given, {\bf recvfrom} returns the number of bytes received.
+If it is omitted, a new string is created for the storage of the message
+and returned.}
+\funcdesc{unix:sendto}{socket addr mesg \&optional len flag}{
+sends a datagram message to another socket specified by {\em addr}.
+{\em Socket} must be a datagram-type socket which has no name assigned.
+{\em Mesg} is a string to be sent and {\em len} is the length of
+the message counting from the beginning of the string.
+If omitted, whole string is sent.
+}
+
+\funcdesc{unix:getservbyname}{servicename}{
+returns the service number (integer) for {\em servicename} registered
+in {\tt /etc/services} or in NIS database.}
+
+\funcdesc{unix:gethostbyname}{hostname}{
+returns the list  of ip address of {\em hostname} and its address type
+(currently always AF\_INET==2).}
+
+\funcdesc{unix:syserrlist}{errno}{
+returns a string describing the error information for the error code
+{\em errno}.}
+
+\end{refdesc}
+
+
+\subsubsection{Signals}
+
+\begin{refdesc}
+\funcdesc{unix:signal}{signal func [option]}{
+installs the signal handler {\em func} for {\em signal}.
+In BSD4.2 systems, signals caught during system call processing
+cause the system call to be retried.
+This means that if the process is issuing a read system call,
+signals are ignored.
+If {\em option=2} is specified,
+signals are handled in the system-5 manner,
+which causes the system call to fail. }
+
+\funcdesc{unix:kill}{pid signal}{
+sends a signal to a process named by {\em pid}.}
+
+\funcdesc{unix:pause}{}{
+suspends execution of this process until a signal arrives.}
+
+\funcdesc{unix:alarm}{time}{
+sends an alarm clock signal (SIGALRM 14) after {\em time} seconds.
+Calling {\bf unix:alarm} with {\em time}=0 resets the alarm clock.}
+
+\funcdesc{unix:ualarm}{time}{
+same as {\bf unix:alarm} except that the unit of {\em time} is micro seconds.
+{\bf ualarm} is not available on Solaris2 or on other Sys5 based systems.}
+
+\funcdesc{unix:getitimer}{timer}{
+One Unix process is attached with three interval timers, i.e.,
+a real-time timer that decrements as the real time passes,
+a virtual-timer that decrements as the process executes in the user space,
+and a prof-timer that decrements as the kernel executes on behalf of
+the user process.
+{\em timer} is either  0 ({\tt ITIMER\_REAL}), 1 ({\tt ITIMER\_VIRTUAL}),
+or 2({\tt ITIMER\_PROF}).
+A list of two elements is returned,  the value of the timer in second
+and the interval. Both are floating-point numbers.}
+
+\funcdesc{unix:setitimer}{timer value interval}{
+sets {\em value} and {\em interval} in {\em timer}.
+{\em timer} is eiterh  0 ({\tt ITIMER\_REAL}), 1 ({\tt ITIMER\_VIRTUAL}),
+or 2({\tt ITIMER\_PROF}).
+{\tt ITIMER\_REAL} delivers SIGALRM when {\em value} expires.
+{\tt ITIMER\_VIRTUAL} delivers SIGVTALRM, and 
+{\tt ITIMER\_PROF} delivers SIGPROF.}
+
+\funcdesc{unix:select}{inlist outlist exceptlist timeout}{
+{\em inlist, outlist} and {\em exceptlist} are bitvectors
+indicating file descriptors whose I/O events should be tested.
+For example, if {\em inlist}=\#b0110, {\em outlist}=\#b100,
+and {\em exceptlist}=NIL,
+then whether it is possible to read on fd=1 or 2, or to write on fd=2
+is tested.
+{\em Timeout} specifies seconds for which {\bf select} is allowed to
+wait.
+Immediately after
+incoming data appear on one of the ports specified in {\em inlist},
+or writing become available on one of the ports specified in {\em outlist},
+or exceptional condition arises in one of the ports specified in
+{\em exceptlist},
+{\bf select} returns the number of ports that are available for I/O
+operation, setting ones for the possible port s
+in each of {\em inlist, outlist and exceptlist}.}
+
+\funcdesc{unix:select-read-fd}{read-fdset timeout}{
+I/O selection is usually meaningful only for input operation.
+{\bf unix:select-read-fd} is a short-hand for
+{\tt select fdset nil nil timeout}.
+{\em Read-fdset} is not a bit-vector,
+ but an integer that specifies the reading fd set.}
+
+\end{refdesc}
+
+\subsubsection{Multithread}
+There is no way to create bound threads. Therefore only one signal stack
+and one interval timer are available in a EusLisp process.
+On Solaris2, the main top-level runs in a separated thread.
+
+\begin{refdesc}
+\funcdesc{unix:thr-self}{}{returns the id (integer) of the thread currently
+running.}
+
+\funcdesc{unix:thr-getprio}{id}{returns the execution priority of the thread
+specified by {\em id}.}
+\funcdesc{unix:thr-setprio}{id newprio}{sets the execution priority of
+the thread specified by {\em id} to {\em newprio}.
+The smaller numerical value of {\em newprio} means the higher priority.
+In other words,
+a thread with a numerically greater {\em newprio} gets less access to CPU.
+Users cannot raise the execution priority higher than
+the process's nice value, which is usually 0.}
+
+\funcdesc{unix:thr-getconcurrency}{}{
+returns the concurrency value (integer) which represents the number
+of threads that can run concurrently.}
+\funcdesc{unix:thr-setconcurrency}{concurrency}{
+The concurrency value is the number of LWP in the process.
+If the concurrency is 1, which is the default, many threads you created
+are assigned to one LWP in turn even though all of them are runnable.
+If the program is running on a multi-processor machine and you want
+to utilize more than one CPU at the same time,
+you should set a value bigger than one to {\em concurrency}.
+Note that a big concurrency value let the operating system consume
+more resource. Usually {\em concurrency} should be smaller than or
+equal to the number of processors.}
+
+\funcdesc{unix:thr-create}{func arg-list \&optional (size 64*1024)}{
+creates a new thread with {\em size} words of Lisp stack and
+{\em size} bytes of C stack,
+and let it apply {\em func} to {\em arg-list}.
+The thread cannot return any results to the caller.
+Use of this function is discouraged.}
+
+\end{refdesc}
+
+\subsubsection{Low-Level Memory Management}
+\begin{refdesc}
+\funcdesc{unix:malloc}{integer}{
+allocates memory outside EusLisp memory space.}
+\funcdesc{unix:free}{integer}{
+deallocates a  memory block allocated by {\em unix:malloc}.}
+\fundesc{unix:valloc}{integer}
+\fundesc{unix:mmap}{address length protection share stream offset}
+\fundesc{unix:munmap}{address length}
+\fundesc{unix:vadvise}{integer}
+
+\end{refdesc}
+
+\subsubsection{IOCTL}
+Although Unix controls terminal device by a set of commands (second argument) to 
+{\tt ioctl}, EusLisp provides them in the forms of function to eliminate
+to reference the include files and or'ing argument with the command codes.
+For the detail, refer to the {\em termio} manual pages of Unix.
+
+There are two sets of terminal io-controls: TIOC* and TC*.
+Be careful about the availability of these functions on your operating system.
+Basically, BSD supports TIOC* io-controls and Sys5 supports TC*.
+\begin{description}
+\item{SunOS 4.1} Both TIOC* and TC*
+\item{Solaris2} only TC*
+\item{mips, ultrix?} only TIOC*
+\end{description}
+
+\begin{refdesc}
+
+\funcdesc{unix:tiocgetp}{stream [sgttybuf]}{gets parameters.}
+\funcdesc{unix:tiocsetp}{stream sgttybuf}{sets parameters.}
+\fundesc{unix:tiocsetn}{stream [sgttybuf]}
+\fundesc{unix:tiocgetd}{stream [sgttybuf]}
+\funcdesc{unix:tiocflush}{stream}{flushes output buffer}
+\funcdesc{unix:tiocgpgrp}{stream integer}{gets process group id.}
+\funcdesc{unix:tiocspgrp}{stream integer}{sets process group id.}
+\fundesc{unix:tiocoutq}{stream integer}
+\fundesc{unix:fionread}{stream integer}
+\fundesc{unix:tiocsetc}{stream buf}
+\fundesc{unix:tioclbis}{stream buf}
+\fundesc{unix:tioclbic}{stream buf}
+\fundesc{unix:tioclset}{stream buf}
+\fundesc{unix:tioclget}{stream buf}
+
+\funcdesc{unix:tcseta}{stream buffer}{sets terminal parameters immediately.}
+\funcdesc{unix:tcsets}{stream buffer}{sets terminal parameters.}
+\funcdesc{unix:tcsetsw}{stream buffer}{sets terminal parameters after all
+characters queued for output have been transmitted.}
+\funcdesc{unix:tcsetsf}{stream buffer}{sets terminal parameters after all
+characters queued for output have been transmitted and all characters
+queued for input are discarded.}
+\fundesc{unix:tiocsetc}{stream buffer}
+\fundesc{unix:tcsetaf}{stream buffer}
+\fundesc{unix:tcsetaw}{stream buffer}
+\fundesc{unix:tcgeta}{stream buffer}
+\fundesc{unix:tcgets}{stream buffer}
+\fundesc{unix:tcgetattr}{stream buffer}
+\fundesc{unix:tcsetattr}{stream buffer}
+\end{refdesc}
+
+\subsubsection{Keyed Indexed Files}
+Recent Unix provides with the {\em dbm} or {\em ndbm} library
+for the management of keyed index files.
+Making use of this library, you can build a data base  that is composed
+of many pairs  of key and datum association.
+Following functions are defined in clib/ndbm.c.
+On Sun, it should be compiled by {\tt cc -c -Dsun4 -Bstatic},
+and loaded into EusLisp by {\tt (load "clib/ndbm" :ld-option "-lc")}.
+
+\begin{refdesc}
+\funcdesc{dbm-open}{dbname mode flag}{
+{\bf Dbm-open} must be called first to create a data base file,
+and to begin read/write operations to the data base.
+{\em Dbname} is the name of the data base.
+Actually, ndbm manager creates two files which have suffixes {\tt ".pag"}
+and {\tt ".dir"}.
+{\em Mode} specifies file-open mode; 0 for read-only access, 1 for write-only,
+and 2 for read-write; also \#x200 should be {\em or}ed when you create
+the file  at the first time.
+{\em Flag} gives access permission that is changed by chmod.
+\#o666 or \#o664 is good for {\em flag}.
+{\bf Dbm-open} returns an integer that identifies the data base in the process.
+This value is used by other dbm functions to identify the data base.
+In other words, you can open several data bases at the same time.}
+
+\funcdesc{dbm-store}{db key datum mode}{
+stores {\em key-datum} association in {\em db}.
+{\em Db} is an integer to identify the data base.
+{\em Key and datum} are strings.
+{\em Mode} is 0 (insert) or 1 (replace).}
+
+\funcdesc{dbm-fetch}{db key}{
+retrieves datum that is associated with {\em key} in {\em db}.}
+
+\end{refdesc}
+
+\newpage
+\subsection{\label{UnixProcess}Unix Processes}
+
+In order to launch unix commands from EusLisp,
+use the {\bf unix:system} function.
+{\bf Piped-fork} creates a subprocess whose standard input and standard output
+are connected to EusLisp's bidirectional stream through pipes.
+{\bf Piped-fork} returns the stream.
+Following is a function to count the number of lines contained in a file
+by using {\tt "wc"}.
+\begin{verbatim}
+(defun count-lines (file) (read (piped-fork "wc" file)))
+\end{verbatim}
+
+The next example creates eus process on another workstation identified by "etlic0"
+and provides a port for distributed computation.
+
+\begin{verbatim}
+(setq ic0eus (piped-fork "rsh" "etlic0" "eus"))
+(format ic0eus "(list 1 2 3)~%")
+(read ic0eus) --> (1 2 3)
+\end{verbatim}
+
+For source code editing, you can call {\tt ez} from the EusLisp.
+The screen editor ez communicates with EusLisp through message-queues.
+If you have an ez process already running in parallel with the EusLisp,
+{\bf ez} restarts ez and it gains the terminal control. 
+By issuing esc-P or esc-M commands in ez,
+texts are sent back and evaluated by EusLisp.
+This is useful for the debugging since entire file does not need to be
+loaded when you add a little modification to the file.
+Similar function is available on emacs by M-X run-lisp command.
+
+\begin{refdesc}
+\funcdesc{cd}{\&optional (dir (unix:getenv "HOME"))}{
+changes the current working directory.}
+
+\funcdesc{ez}{\&optional key}{
+enters display editor ez, and reads Lisp forms from it, and evaluates
+them.}
+
+\funcdesc{piped-fork}{\&optional (exec) \&rest args}{
+forks a process, and makes a two-way stream between the current EusLisp and the
+subprocess. Exec is the file name of a unix command and args are arguments
+to the command.  If exec (string) includes one or more space, it is
+assumed a shell command, and executed by /bin/sh calling the unix:system function.
+If no exec is given, another euslisp is created as the subprocess.}
+
+\funcdesc{xfork}{exec \&key (stdin *standard-input*) (stdout *standard-output*) \\
+(stderr *error-output*) (args nil)}{
+forks a process, replaces its stdin, stdout, and stderr streams to specified ones,
+and exec's "exec" with the args arguments.
+piped-fork is roughly equivalent to
+\verb+ (xfork exec :stdin (unix:pipe) :stdout (unix:pipe))+
+Though xfork returns an io-stream to stdin and stdout with their
+directions reversed,
+it is not always useful unless they are pipes. 
+The name of this function, xfork (cross-fork), comes from this reversed io-stream,
+namely, the io-stream's input comes from the stdout of the subprocess and the output
+comes from the stdin. }
+
+
+\funcdesc{rusage}{}{prints resource usage of this process.}
+\end{refdesc}
+
+\newpage
+
+\subsection{Adding Lisp Functions Coded in C}
+
+Programs that heavily refer to C include files or frequently access arrays
+perform better or are more clearly described
+if written in C or other languages rather than in EusLisp.
+EusLisp provides the way to link programs coded in C.
+
+If you want to define EusLisp function written in C,
+each EusLisp-callable C-function must be coded to accept three arguments:
+the context pointer, the number of arguments and the pointer to the Lisp
+argument block.
+These arguments must be named as {\tt ctx, n} and {\tt argv},
+since the macros in {\tt c/eus.h} assume these names.
+The C program must include {\tt *eusdir*/c/eus.h}.
+The programmer should be familiar with the types and macros
+described there.
+The entry function should be named by the basename of the source file.
+
+A sample code for C function AVERAGE which computes the arithmetic
+average of arbitrary number of floats is shown below.
+In this example, you can see how to get float values from arguments,
+how to make the pointer of a float,
+how to set a pointer in the special variable AVERAGE,
+and how to define a function and a symbol in the entry function {\tt ave}.
+Compile this program by {\tt 'cc -c -Dsun4 -DSolaris2 -K pic'}.
+{\tt -Dsun4} and {\tt -DSolaris2} are needed
+to chose proper definitions in {\tt c/eus.h}.
+{\tt -K pic} is needed to let the c compiler generate position independent
+code necessary for the loadable shared object. 
+Then the resulted '.o' file can be loaded into EusLisp.
+More complete examples can be found in {\tt *eusdir*/clib/*.c},
+which are defined and loaded in the same manner described here.
+
+\begin{verbatim}
+/* ave.c */
+/* (average &rest numbers) */
+#include "/usr/local/eus/c/eus.h"
+static pointer AVESYM;
+pointer AVERAGE(ctx,n,argv)
+context *ctx;
+int n;
+pointer argv[];
+{ register int i;
+  float sum=0.0, a, av;
+  pointer result;
+  numunion nu;
+  for (i=0; i<n; i++) {
+    a=ckfltval(argv[i]);
+    sum += a;} /*get floating value from args*/
+  av=sum/n;
+  result=makeflt(av);
+  AVESYM->c.sym.speval=result;  /*kindly set the result in symbol*/
+  return(result);}
+
+ave(ctx,n,argv)
+context *ctx;
+int n;
+pointer argv[];
+{ char *p;
+  p="AVERAGE";
+  defun(ctx,p,argv[0],AVERAGE);
+  AVESYM=intern(ctx,p,strlen(p),userpkg); /* make a new symbol*/
+  }     
+
+\end{verbatim}
+
+\subsection{Foreign Language Interface}
+
+Functions written in C without concern about linking with EusLisp
+can be loaded onto EusLisp, too.
+These functions are called foreign functions.
+Such programs are loaded by
+{\bf load-foreign} macro which returns an instance of {\bf foreign-module}.
+External symbol definitions in the object file is registered
+in the module object.
+{\bf Defforeign} is used to make entries to  C functions
+to be called from EusLisp.
+{\bf Defun-c-callable} defines lisp functions callable from C.
+C-callable functions have special code piece called {\em pod-code}
+for converting parameters and transferring control to the corresponding
+EusLisp function.
+{\bf Pod-address} returns the address of this code piece which
+should be informed to C functions.
+
+Here is an example of C program and its interface functions to EusLisp.
+\begin{verbatim}
+/* C program named cfunc.c*/
+
+static int (*g)();	/* variable to store Lisp function entry */
+
+double sync(x)
+double x;
+{ extern double sin();
+  return(sin(x)/x);}
+
+char *upperstring(s)
+char *s;
+{ char *ss=s;
+  while (*s) { if (islower(*s)) *s=toupper(*s); s++;}
+  return(ss);}
+
+int setlfunc(f)      /* remember the argument in g just to see */
+int (*f)();          /* how Lisp function can be called from C */
+{ g=f;}
+
+int callfunc(x)      /* apply the Lisp function saved in g to the arg.*/
+int x;
+{ return((*g)(x));}
+
+;;;; Example program for EusLisp's foreign language interface
+;;;; make foreign-module
+(setq m (load-foreign "cfunc.o"))
+
+;; define foreign functions so that they can be callable from lisp
+(defforeign sync m "sync" (:float) :float)
+(defforeign toupper m "upperstring" (:string) :string)
+(defforeign setlfunc m "setlfunc" (:integer) :integer)
+(defforeign callfunc m "callfunc" (:integer) :integer)
+
+;; call them
+(sync 1.0)	--> 0.841471
+(print (toupper "abc123"))  --> "ABC123"
+
+;; define a test function which is callable from C.
+(defun-c-callable TEST ((a :integer)) :integer
+      (format t "TEST is called, arg=~s~%" a)
+      (* a a))    ;; return the square of the arg
+;;  call it from C
+;;setlfunc remembers the entry address of Lisp TEST function.
+(setlfunc (pod-address (intern "TEST")))
+(callfunc 12)  --> TEST is called, arg=12  144
+\end{verbatim}
+  
+Data representations in EusLisp are converted to those of C in the following
+manners:
+EusLisp's 30-bits integer (including character)
+is sign-extended and passed to a C function via stack.
+30-bit float is extended to double and passed via stack.
+As for string, integer-vector and float-vector,
+only the address of the first element is passed on the stack,
+and the entire array remains uncopied.
+The string can either be a normal string or a foreign-string.
+A string may contain null codes, though it is guaranteed
+that the string also has a null code at the end.
+EusLisp does not know how to pass arrays of more than one dimension.
+Every array of more than one dimension has correspoiding one dimensional
+vector that holds the entire elements linearly.
+This vector is obtained by the {\bf array-entity} macro.
+Also, note that a two-dimensional matrix should be transposed
+if it is sent to the FORTRAN subroutines, since rows and columns
+are ordered oppositely in FORTRAN.
+
+Since EusLisp's representation of floating-point numbers is always single
+precision, conversion is required when you pass a vector of double precision
+floating point numbers.
+For this purpose, the conversion functions,
+{\bf double2float} and {\bf float2double} are provided
+by {\tt clib/double.c}.
+For an instance, if you have a 3x3 float-matrix and want to pass it to a C
+function named cfun as a matrix of double, use the following forms.
+\begin{verbatim}
+     (setq mat (make-matrix 3 3))
+     (cfun (float2double (array-entity mat)))
+\end{verbatim}
+
+Struct in C can be defined by the {\bf defcstruct} macro.
+{\bf Defcstruct} accepts struct-name followed by 
+field definition forms.
+
+\begin{verbatim}
+     (defcstruct <struct-name>
+        {(<field> <type> [*] [size])}*)
+\end{verbatim}
+For example, following struct definition is represented by the next defcstruct.
+\begin{verbatim}
+     /* C definition */
+     struct example {
+        char  a[2];
+        short b;
+        long  *c;
+        float *d[2];};
+
+     /* equivalent EusLisp definition */
+     (defcstruct example
+        (a :char 2)
+        (b :short)
+        (c :long *)
+        (d :float * 2))
+\end{verbatim}
+
+\begin{refdesc}
+
+\macrodesc{load-foreign}{objfile \&key symbol-input symbol-output (symbol-file objfile) ld-option)}
+{loads an object module written in languages other than EusLisp.
+In Solaris2, {\bf load-foreign} just calls {\bf load} with a null string
+as its {\em :entry} parameter.
+A compiled-code object is returned.
+This result is necessary to make entries to the functions in the module by
+{\bf defforeign} called later on.
+Libraries can be specified in {\em ld-option}.
+However, the symbols defined in the libraries cannot be captured
+in the default symbol-output file.
+In order to allow EusLisp to call functions defined in the libraries,
+{\em symbol-output} and {\em symbol-file} must be given explicitly.
+(These arguments are not needed if you are not going to call the library
+functions directly from EusLisp, i.e. if you are  referring them only from
+functions in {\em objfile}).
+{\bf Load-foreign} links {\em objfile} with libraries specified and global
+symbols in EusLisp which is in core, and writes the linked object in
+{\em symbol-output}.
+Then, symbols in {\em symbol-file} are searched and listed in the
+foreign-module. Since {\em symbol-file} is defaulted to be {\em objfile},
+only the symbols defined in {\em objfile} are  recognized if {\em symbol-file}
+is not given. To find all the global entries both in {\em objfile} and
+libraries, the linked (merged) symbol table resulted from the first link
+process of load-foreign must be examined.
+For this reason, an identical file name must be given both to {\em symbol-output}
+and to {\em symbol-file}.
+
+As shown below, the intermediate symbol file can be removed
+by {\bf unix:unlink}.
+However, if you are loading more than one foreign modules both of which 
+refer to the same library, and if you want to avoid loading
+the library duplicatedly, you have to use {\em symbol-input} argument.
+Suppose you have loaded all the functions in "linpack.a" in the above
+example and you are going to load another file "linapp.o" that calls functions
+in "linpack.a".
+The following call of load-foreign should be issued before you
+unlink "euslinpack".
+{\tt (load-foreign "linapp.o" :symbol-input "euslinpack")}
+See {\tt *eusdir*/llib/linpack.l} for more complete examples of
+{\bf load-foreign} and {\bf defforeign}.
+}
+\begin{quote}
+\begin{verbatim}
+(setq linpack-module
+    (load-foreign "/usr/local/eus/clib/linpackref.o"
+        :ld-option  "-L/usr/local/lib -llinpack -lF77 -lm -lc"
+        :symbol-output "euslinpack"
+        :symbol-file "euslinpack"
+        ))
+(unix:unlink "euslinpack")
+\end{verbatim}
+\end{quote}
+
+\macrodesc{defforeign}{funcname module cname paramspec resulttype}{
+makes a function entry in a foreign language module.
+{\em funcname} is a symbol to be created in EusLisp.
+{\em module} is  a compiled-code object returned by {\bf load-foreign}.
+{\em cname} is the name of the C-function defined in the foreign program.
+It is a string like "\_myfunc". 
+%Note that Sun's cc unconditionally prefixes the function name with  "\_".
+{\em paramspec} is a list of parameter type specifications
+which is used for the data type conversion and coercion when arguments are
+passed from EusLisp to the C function.
+{\em Paramspec} can be NIL if no data conversion or type check is required.
+One of {\bf :integer, :float , :string}, or {\em (:string n)} must be
+given to {\em resulttype}.
+{\bf :Integer} means that the c function returns either char, short or
+int (long).
+{\bf :Float} should be specified both for float and double.
+{\bf :String} means the C function returns a pointer to a string,
+and EusLisp should add a long-word header to the  string to accomodate it
+as a EusLisp string.
+The length of the string is found by {\em strlen}.
+Note that the writing a header just before the string may cause
+a disastrous result.
+On the other hand, {\bf (:string n)} is safer but slower because
+a EusLisp string of length {\bf n} is newly created and the contents of
+C string is copied there.
+{\tt (:string 4)} should be used for a C function that returns a pointer
+to an integer.  The resulted integer value of the result can be obtained by
+{\tt (sys:peek result :long)}, where result is a variable set to the
+result of the C function.
+You may also specify {\tt (:foreign-string [n])} for C functions
+that return a string or a struct.
+The result is a foreign-string whose content is held somewhere outside
+EusLisp control.
+If the result string is null-terminated and the length of the string
+is known by strlen, you don't need to specify the length [n].
+However, if the result contains null codes, which is usual for structs,
+the length of the foreign-string should be explicitly given.
+Whether you should use (:string n) or (:foreign-string n) is not
+only the matter of speed, but the matter of structure sharing.
+The difference is whether the result is copied or not.
+
+Fortran users should note that every argument to a Fortran function or a
+subroutine is passed by call-by-reference.
+Therefore, even a simple integer or float type argument must be  put
+in a integer-vector or a float-vector before it is passed to Fortran.}
+
+\macrodesc{defun-c-callable}{funcname paramspec resulttype . body}{
+defines a EusLisp function that can be called from foreign language code.
+{\em funcname} is a symbol for which a EusLisp function is defined.
+{\em paramspec} is a list of type specifiers as in {\bf defforeign}.
+Unlike {\bf defforeign}'s paramspec, {\bf defun-c-callable}'s paramspec
+cannot be omitted unless the function does not receive any argument.
+{\em :integer} should be used for all of int, short and char types
+and {\em :float} for both of float and double.
+{\em resulttype} is the type of the Lisp function.
+{\em resulttype} can be omitted unless you need type check or type coercion from integer
+to float.
+{\em body} is lisp expressions that are executed when this function is
+called from C.
+The function defined by {\bf defun-c-callable} can be called from Lisp
+expressions, too.
+{\bf Defun-c-callable} returns {\em funcname}.
+It looks like a symbol, but it is not, but an instance of {\bfx foreign-pod}
+which is a subclass of symbol.}
+
+
+\funcdesc{pod-address}{funcname}{
+returns the address of a foreign-to-EusLisp interface code of the
+c-callable Lisp function {\em funcname} defined by {\bf defun-c-callable}.
+This is used to inform a foreign language program of the
+location of a Lisp function.}
+
+\macrodesc{array-entity}{array-of-more-than-one-dimension}{
+returns one-dimensional vector which holds all the elements of
+a multi-dimensional array.
+This is needed to pass a multi-dimensional or general array to a foreign function,
+although a simple vector can be passed directly.}
+
+\funcdesc{float2double}{float-vector [doublevector]}{
+converts a float-vector to double precision representation.
+The result is of type float-vector but the length is twice as much as the
+first argument.}
+
+\funcdesc{double2float}{doublevector [float-vector]}{
+A vector of double precision numbers is converted to single precision
+float-vector.}
+
+\end{refdesc}
+

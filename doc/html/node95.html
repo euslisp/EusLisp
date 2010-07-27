@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Parallel Execution of Threads</TITLE>
+<META NAME="description" CONTENT="Parallel Execution of Threads">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3195" HREF="node96.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3193" HREF="node93.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3187" HREF="node94.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3197" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3198" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3196" HREF="node96.html">Synchronization primitives</A>
+<B>Up:</B> <A NAME="tex2html3194" HREF="node93.html">Asynchronous and Parallel Programming </A>
+<B> Previous:</B> <A NAME="tex2html3188" HREF="node94.html">Thread Creation and Thread </A>
+<BR> <P>
+<H3><A NAME="SECTION04022200000000000000">Parallel Execution of Threads</A></H3>
+<P>
+For the allocation of parallel computation to threads, the thread function
+is used.
+Thread takes one free thread out of the thread pool,
+transfers arguments via shared memory, wakes up the thread by signaling
+the semaphore as indicated in fig. <A HREF="node94.html#threadobj">7</A>,
+and returns a thread object to the caller without blocking.
+The woken-up thread begins evaluation of
+the argument running in parallel to the calling thread.
+The caller uses
+<TT>wait-thread</TT> to receive the evaluation result from the forked thread.
+The <TT>plist</TT> macro is a more convenient form to describe parallel 
+evaluation of arguments.
+<TT>Plist</TT> attaches threads to evaluate each argument
+and lists up results after waiting for all threads to finish evaluation.
+<P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

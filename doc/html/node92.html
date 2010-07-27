@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Memory Management</TITLE>
+<META NAME="description" CONTENT="Memory Management">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3153" HREF="node93.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3151" HREF="node89.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3147" HREF="node91.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3155" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3156" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3154" HREF="node93.html">Asynchronous and Parallel Programming </A>
+<B>Up:</B> <A NAME="tex2html3152" HREF="node89.html">Design of Multithread EusLisp</A>
+<B> Previous:</B> <A NAME="tex2html3148" HREF="node91.html">Context Separation</A>
+<BR> <P>
+<H3><A NAME="SECTION04021300000000000000">Memory Management</A></H3>
+<P>
+EusLisp adopts a Fibonacci buddy memory management scheme in a
+single heap for every type of object. 
+After running programs having
+different memory request characteristics, we have been convinced that
+Fibonacci buddy can allocate objects of various sizes equally fast,
+garbage-collects quickly without copying , and exhibits high memory
+utilization (the internal loss is 10 to 15% and the
+external loss is negligible).
+For multithreading, the second point, i.e., non-copying GC, is very
+important.
+If addresses of objects were changed by copying-GC, pointers in the
+stack and CPU registers of all thread contexts would have to be
+redirected to new locations, which is impossible or very difficult.
+<P>
+All memory allocation requests are handled by the <TT>alloc</TT> function at the
+lowest level.
+<TT>Alloc</TT> does mutex-locking because it manipulates the global
+database of free lists.
+Since we cannot predict when a garbage
+collection begins and which thread causes it, every thread must prepare
+for sporadic GCs.  All pointers to living objects have to be arranged
+to be accessible by the GC anytime to prevent them from being reclaimed
+as garbage.  This is done by storing the pointers to the most recently
+allocated objects in fixed slots of each context, instead of trusting
+they are maintained on the stacks.
+<P>
+Fig. <A HREF="node92.html#parathreads">6</A> illustrates flow of threads requesting memory and forked inside
+GC to process marking and sweeping in parallel.
+Note that threads that do not request memory or manipulate pointers
+can run in parallel with the GC,
+improving real-time response of the low-level tasks such as signal
+processing and image acquisition.
+<P>
+<P><A NAME="12737">&#160;</A><A NAME="parathreads">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure12734" SRC="img38.gif"  > <BR>
+<STRONG>Figure 6:</STRONG> Parallel threads requesting memory and GC running in parallel<BR>
+<P><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

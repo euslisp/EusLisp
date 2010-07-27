@@ -1,0 +1,785 @@
+/****************************************************************/
+/* eus.h	Etl, Umezono, Sakura-mura Lisp
+/*	
+/*	Copyright(c)1988, Toshihiro Matsui, Electrotechnical Laboratory,
+/*	all rights reserved, all wrongs left.
+/*	created on:	1986-May
+/*	needed to be included by all euslisp kernel (.c) files and
+/*	user functions compiled by euscomp.
+/****************************************************************/
+
+#if vxworks
+#include <vxWorks.h>
+#include <stdioLib.h>
+#define errno errnoGet()
+#define _setjmp(buf) setjmp(buf)
+#define _longjmp(buf,val) longjmp(buf,val)
+#else
+#include <stdio.h>
+#define min(x,y) ((x<y)?x:y)
+#define max(x,y) ((x<y)?y:x)
+#endif
+
+#if Solaris2
+#define _setjmp(buf) setjmp(buf)
+#define _longjmp(buf,val) longjmp(buf,val)
+#include <synch.h>
+#endif
+
+#include <setjmp.h>
+
+#define ERR (-1)
+#define STOPPER makepointer(0)	/*impossible pointer object*/
+#define UNBOUND	makepointer(0)
+
+/* dynamic value type */
+#define V_CONSTANT	makeint(0)
+#define V_VARIABLE	makeint(1)
+#define V_SPECIAL	makeint(2)
+
+/* function types*/
+#define SUBR_FUNCTION	makeint(0)
+#define SUBR_MACRO	makeint(1)
+#define SUBR_SPECIAL	makeint(2)
+#define SUBR_ENTRY	makeint(3)
+
+/* stack frame types (lots more)*/
+#define BLOCKFRAME	makeint(0)
+#define TAGBODYFRAME	makeint(1)
+
+/*vector element types*/
+#define ELM_FIXED	0
+#define ELM_BIT		1
+#define ELM_CHAR	2
+#define ELM_BYTE	3
+#define ELM_INT		4
+#define ELM_FLOAT	5
+#define ELM_FOREIGN	6
+#define ELM_POINTER	7
+
+/****************************************************************/
+/* configuration constants					*/
+/****************************************************************/
+
+#define DEFAULTCHUNKINDEX	16	/*fib2(12)=754*/
+#define MAXBUDDY	30	/*fib(30) is big enough*/
+#define MAXSTACK	16384	/*can be expanded by sys:newstack*/
+#define SYMBOLHASH	60	/*initial obvector size in package*/
+#define MAXCLASS	256		/* by M.Inaba from 64 */
+#define KEYWORDPARAMETERLIMIT 32	/*determined by bits in a long word*/
+#define ARRAYRANKLIMIT	7	/*minimal requirement for CommonLisp*/
+#define MAXTHREAD	64	/*maximum number of threads*/
+
+/* type definitions:
+	bix is buddy index,
+	and cix is class index, which is sometimes refered as cid */
+
+typedef unsigned char byte;
+typedef unsigned short word;	/*seldom used*/
+typedef struct cell *pointer;
+
+struct cellheader {
+  unsigned mark:1;	/* GC mark*/
+  unsigned b:1;		/* buddy: indicates the side in which its buddy should be found */
+  unsigned m:1;		/* memory: records b or m of parent cell when it's split*/
+  unsigned smark:1;	/* shared mark*/
+  unsigned pmark:1;	/* print mark*/
+  unsigned elmtype:3;
+  byte	   bix;		/*5 bits are enough*/
+  short	   cix;};	/*8 bits may be enough*/
+
+/****************************************************************/
+/* struct definition for lisp object cell
+/****************************************************************/
+struct cons {
+    pointer car,	/*cons is made of a car and a cdr*/
+	    cdr;};	/*what a familiar structure!*/
+
+struct propertied_object {
+    pointer plist;};
+
+struct symbol {
+    pointer plist,	/*inherited from prop_obj*/
+	    speval,
+	    vtype,	/*const,var,special*/
+	    spefunc,
+	    pname,
+	    homepkg;};
+
+struct string {		/*resembles with vector*/
+    pointer length;	/*boxed*/
+    byte chars[1];};	/*long word aligned*/
+
+struct package {
+    pointer plist;
+    pointer names;	/*package name at car, nicknames in cdr*/
+    pointer use;	/*spreaded use-package list*/
+    pointer symvector;	/*hashed obvector*/
+    pointer symcount;	/*number of interned symbols in this package*/
+    pointer intsymvector;
+    pointer intsymcount;
+    pointer shadows;
+    pointer used_by;
+    };
+
+struct code {
+    pointer codevec;
+    pointer quotevec;
+    pointer subrtype;	/*function,macro,special*/
+    pointer entry;	/*offset from beginning of codevector*/
+    };
+
+struct fcode {		/*foreign function code*/
+    pointer codevec;
+    pointer quotevec;
+    pointer subrtype;
+    pointer entry;
+    pointer paramtypes;
+    pointer resulttype;};
+
+struct ldmodule {	/*foreign language object module*/
+    pointer codevec;
+    pointer quotevec;
+    pointer subrtype;	/*function,macro,special*/
+    pointer entry;
+    pointer symtab;
+    pointer objname;
+    pointer handle;};	/* dl's handle */
+
+struct closure {
+    pointer codevec;
+    pointer quotevec;
+    pointer subrtype;	/*function,macro,special*/
+    pointer entry;	/*offset from beginning of codevector*/
+    pointer *env1;	/*argument pointer:	argv*/
+    pointer *env2;};	/*local variable frame:	local*/
+
+struct stream {
+    pointer plist;
+    pointer direction;
+    pointer buffer;
+    pointer count;
+    pointer tail;};
+
+struct filestream {
+    pointer plist;
+    pointer direction;
+    pointer buffer;
+    pointer count;
+    pointer tail;
+    pointer fd;
+    pointer fname;};
+
+struct iostream {
+    pointer plist;
+    pointer in,out;};
+
+struct labref {		/*used for reading labeled forms: #n#,#n=*/
+    pointer label;
+    pointer value;
+    pointer unsolved;
+    pointer next; };
+
+struct vector {
+    pointer size;
+    pointer v[1];};
+
+struct intvector {
+    pointer length;
+    long iv[1];};
+
+struct floatvector {
+    pointer length;
+    float fv[1];};
+
+struct arrayheader {
+  pointer plist;
+  pointer entity,
+	  rank,
+	  fillpointer,
+	  offset,
+	  dim[ARRAYRANKLIMIT];};
+
+/* structs for object oriented programming */
+struct object {
+  pointer iv[2];};	/*instance variables*/
+
+struct class {
+  pointer plist;
+  pointer name;		/*class name symbol*/
+  pointer super;	/*super class*/
+  pointer cix;
+  pointer vars;		/*var names including inherited ones*/
+  pointer types;
+  pointer forwards;
+  pointer methods;	/*method list*/
+  };
+
+struct vecclass {	/*vector class*/
+  pointer plist;
+  pointer name;
+  pointer super;
+  pointer cix;
+  pointer vars;
+  pointer types;
+  pointer forwards;
+  pointer methods;
+  pointer elmtype;
+  pointer size;};
+
+struct readtable {
+  pointer plist;
+  pointer syntax;
+  pointer macro;
+  pointer dispatch;};
+
+struct threadport {
+  pointer plist;
+  pointer id;
+  pointer requester;
+  pointer reqsem;
+  pointer donesem;
+  pointer func;
+  pointer args;
+  pointer result;
+  pointer contex;
+  pointer idle;};
+
+/****************************************************************/
+typedef 
+  struct cell {
+#if vax || sun4 || news || mips
+    unsigned mark:1;
+    unsigned b:1;
+    unsigned m:1;
+    unsigned smark:1;
+    unsigned pmark:1;
+    unsigned elmtype:3;
+    byte     bix;
+#endif
+    short cix;
+    union cellunion {
+      struct cons cons;
+      struct symbol sym;
+      struct string str;
+      struct package pkg;
+      struct stream stream;
+      struct filestream fstream;
+      struct iostream iostream;
+      struct code code;
+      struct fcode fcode;
+      struct ldmodule ldmod;
+      struct closure clo;
+      struct labref lab;
+      struct arrayheader ary;
+      struct vector vec;
+      struct floatvector fvec;
+      struct intvector ivec;
+      struct object obj;
+      struct class cls;
+      struct vecclass vcls;
+      struct readtable rdtab;
+      struct threadport thrp;
+      } c;
+    } cell;
+
+typedef 
+  union numunion {
+    float fval;
+    int   ival;
+    struct { short low,high;} sval;
+    struct { signed sival:30; unsigned tag:2;} tval;
+    } numunion;
+
+/* buddy cell */
+struct bcell {
+    struct cellheader h;
+    union {
+      struct bcell *nextbcell;
+      struct cell  *c[2];} b;} bcell;
+
+typedef struct bcell *bpointer;
+
+struct chunk {
+  struct chunk *nextchunk;
+  int chunkbix;
+  struct bcell rootcell;};
+
+typedef struct {
+	short cix;
+	short sub;} cixpair;
+
+enum ch_type {
+	ch_illegal,
+	ch_white,
+	ch_comment,
+	ch_macro,
+	ch_constituent,
+	ch_sglescape,
+	ch_multiescape,
+	ch_termmacro,
+	ch_nontermacro};
+
+enum ch_attr {
+	alphabetic,package_marker,illegal,alphadigit};
+
+
+/****************************************************************/
+/* stack frames and context
+/****************************************************************/
+struct callframe {
+  struct  callframe *vlink;
+  pointer form;
+  };
+
+struct bindframe {	/*to achieve lexical binding in the interpreter*/
+  struct  bindframe *dynblink, *lexblink;	/*links to upper level*/
+  pointer sym;		/*symbol*/
+  pointer val;};	/*bound value*/
+
+struct specialbindframe {	/*special value binding frame*/
+  struct  specialbindframe *sblink;
+  pointer sym;		/*pointer to the symbol word(dynval or dynfunc)*/
+  pointer oldval;};
+
+struct blockframe {
+  pointer kind;
+  struct  blockframe *dynklink,*lexklink;
+  pointer name;
+  jmp_buf *jbp;};
+
+struct catchframe {
+  struct  catchframe *nextcatch;
+  pointer label;
+  struct  bindframe *bf;	/*bind frame save*/
+  struct  callframe *cf;	/*call frame save*/
+  struct  fletframe *ff;
+  jmp_buf *jbp;
+  };
+
+struct protectframe {
+  struct protectframe *protlink;
+  pointer cleaner;	/*cleanup form closure*/
+  };
+
+struct  fletframe {
+  pointer name;
+  pointer fclosure;
+  struct  fletframe *scope;
+  struct  fletframe *lexlink;
+  struct  fletframe *dynlink;};
+
+typedef struct {
+	pointer	*stack, *vsp,*stacklimit;
+	struct	callframe	*callfp;
+	struct	catchframe	*catchfp;
+	struct	bindframe	*bindfp;
+	struct	specialbindframe *sbindfp;
+	struct	blockframe	*blkfp;
+	struct	protectframe	*protfp;
+	struct  fletframe	*fletfp, *newfletfp;
+	pointer lastalloc;}
+	context;
+
+/****************************************************************
+/* memory and class management structures
+/****************************************************************/
+struct buddybase {
+  int size;
+  bpointer bp;}  buddy[MAXBUDDY+1];
+
+struct class_desc {	/* per- class descripter */
+  short cix;
+  short subcix;
+  pointer def; };
+
+struct built_in_cid {
+  pointer cls;
+  cixpair *cp; };
+
+
+/****************************************************************/
+/* global variables for eus
+/*	date:	1986-Apr
+/*	1987-Apr
+/****************************************************************/
+/* process id and program name*/
+extern int mypid;
+extern char *progname;
+
+/* heap management */
+/* every free cell is linked to the buddybase structure*/
+extern struct buddybase buddy[MAXBUDDY+1];
+extern struct chunk *chunklist;
+extern char *maxmemory;
+extern long freeheap, totalheap;	/*size of heap left and allocated*/
+
+/* memory management timers for performance evaluation */
+extern long gccount,marktime,sweeptime;
+extern long alloccount[MAXBUDDY];
+
+/* System internal objects are connected to sysobj list
+/* to protect from garbage-collection */
+extern pointer sysobj;
+extern pointer lastalloc;
+
+/* thread contexts */
+context *contexts[MAXTHREAD];
+
+/****************************************************************/
+/* system defined (built-in) class index
+/*	modified to accept  dynamic type extension (1987-Jan)
+/****************************************************************/
+
+extern cixpair objectcp;
+extern cixpair conscp;
+extern cixpair propobjcp;
+extern cixpair symbolcp;
+extern cixpair packagecp;
+extern cixpair streamcp;
+extern cixpair filestreamcp;
+extern cixpair iostreamcp;
+extern cixpair metaclasscp;
+extern cixpair vecclasscp;
+extern cixpair codecp;
+extern cixpair fcodecp;
+/*cixpair modulecp; */
+extern cixpair ldmodulecp;
+extern cixpair closurecp;
+extern cixpair labrefcp;
+extern cixpair threadcp;
+extern cixpair arraycp;
+extern cixpair readtablecp;
+extern cixpair vectorcp;
+extern cixpair fltvectorcp;
+extern cixpair intvectorcp;
+extern cixpair stringcp;
+extern cixpair bitvectorcp;
+
+extern struct built_in_cid  builtinclass[64];
+extern int nextbclass;
+
+
+/*symbol management*/
+extern pointer pkglist,lisppkg,keywordpkg,userpkg,syspkg,unixpkg,xpkg;
+extern pointer NIL,PACKAGE,T,QUOTE;
+extern pointer FUNCTION;
+extern pointer QDECLARE,QSPECIAL;
+extern pointer SELF,CLASS;
+extern pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
+extern pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
+extern pointer TOPLEVEL,QEVALHOOK,ERRHANDLER;
+extern pointer QUNBOUND,QDEBUG;
+extern pointer QTHREADS;
+
+/*memory management parameters*/
+extern pointer GCMERGE,GCMARGIN;
+
+/* keywords */
+extern pointer K_IN,K_OUT,K_IO;	/*direction keyword*/
+extern pointer K_FLUSH,K_FILL,K_FILE,K_STRING;
+extern pointer K_NOMETHOD,K_BIT,K_BYTE,K_CHAR,K_SHORT,K_LONG,K_INTEGER;
+extern pointer K_FLOAT,K_DOUBLE,K_FOREIGN;
+extern pointer K_DOWNCASE,K_UPCASE;
+
+/*class management*/
+extern struct class_desc classtab[MAXCLASS];
+extern int nextcix;
+
+/*class cells*/
+extern pointer C_CONS, C_OBJECT, C_SYMBOL, C_PACKAGE;
+extern pointer C_STREAM, C_FILESTREAM, C_IOSTREAM, C_CODE, C_FCODE;
+extern pointer C_LDMOD;
+extern pointer C_VECTOR, C_METACLASS, C_CLOSURE, C_LABREF;
+extern pointer C_THREAD;
+extern pointer C_VCLASS, C_FLTVECTOR, C_INTVECTOR, C_STRING, C_BITVECTOR;
+extern pointer C_FOREIGNCODE,C_ARRAY,C_READTABLE;
+
+/*class names*/
+extern pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
+	CODE, FCODE,LDMODULE, PKGCLASS,METACLASS,CLOSURE,LABREF;
+extern pointer THREAD;
+extern pointer VECTOR,VECCLASS,FLTVECTOR,INTVECTOR,OBJECT,READTABLE;
+extern pointer FOREIGNCODE,ARRAY,BITVECTOR;
+
+/*toplevel & evaluation control*/
+extern int intsig,intcode;
+extern int ehbypass;
+
+/*reader variables*/
+extern pointer charmacro[256];
+extern pointer sharpmacro[256];
+extern int export_all;
+
+/****************************************************************/
+/* macro definition for euslisp
+/****************************************************************/
+
+#define carof(p,err) (islist(p)?(p)->c.cons.car:error(err))
+#define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:error(err))
+#define ccar(p) ((p)->c.cons.car)
+#define ccdr(p) ((p)->c.cons.cdr)
+#define cixof(p) ((p)->cix)
+#define classof(p) (classtab[(p)->cix].def)
+#define subcixof(p) (classtab[(p)->cix].subcix)
+#define spevalof(p) ((p)->c.sym.speval)
+#define superof(p) ((p)->c.cls.super)
+
+#if sun3 || apollo || system5 || sanyo || vxworks || NEXT
+#define makepointer(bp) ((pointer)((int)(bp) | 2))
+#define isint(p) (!((int)(p) & 3))
+#define isflt(p) (((int)(p) & 3)==1)
+#define isnum(p) (((int)(p) & 2)==0)
+#define ispointer(p) ((int)(p) & 2)
+#define makeint(v) ((pointer)(((int)v)<<2))
+#define bpointerof(p) ((bpointer)((int)(p)-2))
+#endif
+
+#if vax || sun4 || news || mips
+#define makepointer(bp) ((pointer)(bp))
+#define isint(p) (((int)(p) & 3)==2)
+#define isflt(p) (((int)(p) & 3)==1)
+#define isnum(p) (((int)(p) & 3))
+#define ispointer(p) (!((int)(p) & 3))
+#define makeint(v) ((pointer)((((int)v)<<2)+2))
+#define bpointerof(p) ((bpointer)(p))
+#endif
+
+#define intval(p) (((int)(p))>>2)
+#define ckintval(p) (isint(p)?intval(p):(int)error(E_NOINT))
+#define elmtypeof(p) (bpointerof(p)->h.elmtype)
+#define bixof(p) (bpointerof(p)->h.bix)
+
+#if sun3 || sun4 || system5 || apollo || news || sanyo || vxworks || mips || NEXT
+#define fltval(p) (nu.ival=(int)p & 0xfffffffc, nu.fval)
+/*#define makeflt(f) (nu.fval=(f), (pointer)((nu.ival & (~2)) | 1)) */
+#define makeflt(f) (nu.fval=(f),nu.tval.tag=1,(pointer)(nu.ival))
+#define ckfltval(p) (isflt(p)?fltval(p):(isint(p)?intval(p):(int)error(E_NONUMBER)))
+#endif
+
+/*predicates to test object type*/
+#define pislist(p)  (p->cix<=conscp.sub)
+#define piscons(p)  (p->cix<=conscp.sub)
+#define pispropobj(p) (propobjcp.cix<=(p)->cix && (p)->cix<=propobjcp.sub)
+#define ispropobj(p) (ispointer(p) && pispropobj(p))
+#define pissymbol(p) (symbolcp.cix<=(p)->cix && (p)->cix<=symbolcp.sub)
+#define issymbol(p) (ispointer(p) && pissymbol(p))
+#define pisstring(p)  (stringcp.cix<=(p)->cix && (p)->cix<=stringcp.sub)
+#define isstring(p) (ispointer(p) && pisstring(p))
+#define islist(p) (ispointer(p) && pislist(p))
+#define iscons(p) (ispointer(p) && piscons(p))
+#define piscode(p) (codecp.cix<=(p)->cix && (p)->cix<=codecp.sub)
+#define iscode(p) (ispointer(p) && piscode(p))
+#define pisfcode(p) (fcodecp.cix<=(p)->cix && (p)->cix<=fcodecp.sub)
+#define isfcode(p) (ispointer(p) && pisfcode(p))
+#define pisldmod(p) (ldmodulecp.cix<=(p)->cix && (p)->cix<=ldmodulecp.sub)
+#define isldmod(p) (ispointer(p) && pisldmod(p))
+#define pisstream(p) (streamcp.cix<=(p)->cix && (p)->cix<=streamcp.sub)
+#define isstream(p) (ispointer(p) && pisstream(p))
+#define pisfilestream(p) (filestreamcp.cix<=(p)->cix && (p)->cix<=filestreamcp.sub)
+#define isfilestream(p) (ispointer(p) && pisfilestream(p))
+#define pisiostream(p) (iostreamcp.cix<=(p)->cix && (p)->cix<=iostreamcp.sub)
+#define isiostream(p) (ispointer(p) && pisiostream(p))
+#define pisreadtable(p) (readtablecp.cix<=((p)->cix) && ((p)->cix)<=readtablecp.sub)
+#define isreadtable(p) (ispointer(p) && pisreadtable(p))
+#define pisarray(p) (arraycp.cix<=((p)->cix) && ((p)->cix)<=arraycp.sub)
+#define isarray(p) (ispointer(p) && pisarray(p))
+#define pisvector(p) (elmtypeof(p))
+#define isvector(p) (ispointer(p) && pisvector(p))
+#define isfltvector(p) (ispointer(p) && (elmtypeof(p)==ELM_FLOAT))
+#define isptrvector(p) (ispointer(p) && (elmtypeof(p)==ELM_POINTER))
+#define isintvector(p) (ispointer(p) && (elmtypeof(p)==ELM_INT))
+#define pisclass(p) (metaclasscp.cix<=(p)->cix && (p)->cix<=metaclasscp.sub)
+#define isclass(p) (ispointer(p) && pisclass(p))
+#define pisvecclass(p) (vecclasscp.cix<=(p)->cix && (p)->cix<=vecclasscp.sub)
+#define isvecclass(p) (ispointer(p) && pisvecclass(p))
+#define pispackage(p) (packagecp.cix<=(p)->cix && (p)->cix<=packagecp.sub)
+#define ispackage(p) (ispointer(p) && pispackage(p))
+#define pisclosure(p) (closurecp.cix<=(p)->cix && (p)->cix<=closurecp.sub)
+#define isclosure(p) (ispointer(p) && pisclosure(p))
+#define pislabref(p) (labrefcp.cix<=(p)->cix && (p)->cix<=labrefcp.sub)
+#define islabref(p) (ispointer(p) && pislabref(p))
+
+#define strlength(p) (intval((p)->c.str.length))
+#define vecsize(p) (intval((p)->c.vec.size))
+#define objsize(p) (vecsize(classof(p)->c.cls.vars))
+
+#define vpush(v) (*ctx->vsp++=((pointer)v))
+#define ckpush(v) (ctx->vsp<ctx->stacklimit?vpush(v):error(E_STACKOVER))
+#define vpop() (*(--(ctx->vsp)))
+
+#define ckarg(req) if (n!=(req)) error(E_MISMATCHARG)
+#define ckarg2(req1,req2) if ((n<(req1))||((req2)<n)) error(E_MISMATCHARG)
+
+#define breakck if (intsig) sigbreak()
+#define stackck if (ctx->vsp>ctx->stacklimit) error(E_STACKOVER)
+#define debug (spevalof(QDEBUG)!=NIL)
+
+/****************************************************************/
+/* error code definition
+/*	1986-Jun-17
+/****************************************************************/
+
+enum errorcode {
+  E_NORMAL,		/*0*/
+  E_STACKOVER,		/*stack overflow*/
+  E_ALLOCATION,
+  E_DUMMY3,
+  E_DUMMY4,
+  E_DUMMY5,
+  E_DUMMY6,
+  E_DUMMY7,
+  E_DUMMY8,
+  E_DUMMY9,
+  E_DUMMY10,
+  E_SETCONST,		/*11 attempt to set to constant*/
+  E_UNBOUND,
+  E_UNDEF,
+  E_MISMATCHARG,
+  E_ILLFUNC,
+  E_ILLCH,
+  E_READ,
+  E_WRITE,
+  E_LONGSTRING,		/*19: string too long*/
+  E_NOSYMBOL,		/*20: symbol expected*/
+  E_NOLIST,		/*list expected*/
+  E_LAMBDA,		/*illegal lambda form*/
+  E_PARAMETER,		/*illegal lambda parameter syntax*/  
+  E_NOCATCHER,		/*no catch block */
+  E_NOBLOCK,		/*no block to return*/
+  E_STREAM,		/*stream expected*/
+  E_IODIRECTION,	/*io stream direction keyword*/
+  E_NOINT,		/*integer value expected*/
+  E_NOSTRING,		/*string expected*/
+  E_OPENFILE,		/*30: error in open*/
+  E_EOF,		/*EOF encountered*/
+  E_NONUMBER,		/*number expected*/
+  E_CLASSOVER,		/*class table overflow*/
+  E_NOCLASS,		/*class expected*/
+  E_NOVECTOR,		/*vector expected*/
+  E_VECSIZE,		/*error of vector size*/
+  E_DUPOBJVAR,		/*duplicated object variable name*/
+  E_INSTANTIATE,	/*38: cannot make an instance*/
+  E_ARRAYINDEX,
+  E_NOMETHOD,		/*40*/
+  E_CIRCULAR,
+  E_SHARPMACRO,		/*unknown sharp macro*/
+  E_ALIST,		/*list expected for an element of an alist*/
+  E_NOMACRO,		/*macro expected*/
+  E_NOPACKAGE,		/*no such package */
+  E_PKGNAME,		/*the package already exists*/
+  E_NOOBJ,		/*invalid form*/
+  E_NOOBJVAR,		/*48: not an object variable*/
+  E_NOSEQ,		/*sequence(list,string,vector) expected*/
+  E_STARTEND,		/*illegal subsequence index*/
+  E_NOSUPER,		/*no superclass*/
+  E_FORMATSTRING,	/*invalid format string character*/
+  E_FLOATVECTOR,	/*float vector expected*/
+  E_CHARRANGE,		/*0..255*/
+  E_VECINDEX,		/*vector index mismatch*/
+  E_NOOBJECT,		/*other than numbers expected*/
+  E_TYPEMISMATCH,	/*the: type mismatch*/
+  E_DECLARE,		/*illegal declaration*/
+  E_DECLFORM,		/*invalid declaration form*/
+  E_NOVARIABLE,		/*constant is used in let or lambda*/
+  E_ROTAXIS,		/*illegal rotation axis spec*/
+  E_MULTIDECL,
+  E_READLABEL,		/*illegal #n= or #n# label*/
+  E_READFVECTOR,	/*error of #f( expression*/
+  E_READOBJECT,		/*error in #V or #J format*/
+  E_SOCKET,		/*error of socket address*/
+  E_NOARRAY,		/*array expected*/
+  E_ARRAYDIMENSION,	/*array dimension mismatch*/
+  E_KEYPARAM,		/*keyword parameter*/
+  E_NOKEYPARAM,		/*no such keyword*/
+  E_NOINTVECTOR,	/*integer vector expected*/
+  E_SEQINDEX,		/*sequence index out of range*/
+  E_BITVECTOR,		/*not a bit vector*/
+  E_EXTSYMBOL,		/*no such external symbol*/
+  E_SYMBOLCONFLICT,	/*symbol conflict in a package*/
+  };
+
+/* function prototypes */
+
+/*system*/
+extern pointer error(),alloc(),halloc();
+
+/*eval*/
+extern pointer eval(context *, pointer);
+extern pointer eval2(context *, pointer, pointer);
+extern pointer ufuncall(context *, pointer, pointer, pointer,
+			 struct bindframe *, int);
+extern pointer progn(context *, pointer);
+extern pointer csend();
+extern pointer getval(context *, pointer);
+extern pointer setval(context *, pointer, pointer);
+extern pointer getfunc(context *, pointer);
+extern struct  bindframe *declare(context *, pointer, struct bindframe *);
+extern struct  bindframe *vbind(context *, pointer, pointer,
+				 struct bindframe *, struct bindframe*);
+extern struct  bindframe *fastbind(context *, pointer, pointer,
+				struct bindframe *);
+extern void bindspecial(context *, pointer, pointer);
+extern void unbindspecial(context *, struct specialbindframe *);
+extern struct bindframe *bindkeyparams(context *, pointer, pointer *,
+			int, struct bindframe *, struct bindframe *);
+
+extern pointer Getstring();
+extern pointer findpkg();
+extern pointer memq();
+
+/*allocater*/
+extern pointer makebuffer(int);
+extern pointer makevector(pointer, int);
+extern pointer makeclass(context *, pointer, pointer, pointer,pointer, pointer,
+			int, pointer);
+extern pointer makecode(pointer, pointer(*)(), pointer);
+extern pointer makematrix(context *, int, int);
+extern pointer makeobject(pointer);
+extern pointer rawcons(context *, pointer, pointer);
+extern pointer cons(context *, pointer, pointer);
+extern pointer makestring(char *, int);
+extern pointer makesymbol(context *, char *, int, pointer);
+extern pointer intern(context *, char *, int, pointer);
+extern pointer makepkg(context *, pointer, pointer, pointer);
+extern pointer mkstream(context *, pointer, pointer);
+extern pointer mkfilestream(context *, pointer,pointer,int,pointer);
+extern pointer mkiostream(context *, pointer,pointer);
+extern pointer makemodule(context *, int);
+extern pointer defun(context *, char *, pointer, pointer(*)());
+extern pointer defmacro(context *, char *, pointer, pointer(*)());
+extern pointer defspecial(context *, char *, pointer, pointer(*)());
+extern pointer defunpkg(context *, char *, pointer, pointer(*)(),pointer);
+extern void addcmethod(context *, pointer, pointer (*)(),
+				 pointer, pointer, pointer);
+extern pointer defkeyword(context *, char *);
+extern pointer defvar(context *, char *, pointer, pointer);
+extern pointer defconst(context *, char *, pointer, pointer);
+extern pointer stacknlist(context *, int);
+
+/*boxing,unboxing*/
+#if vax
+extern float fltval(),ckfltval();
+extern pointer makeflt();
+#endif
+
+/*io*/
+extern pointer reader(context *, pointer, pointer);
+extern pointer prinx(context *, pointer, pointer);
+
+/*for compiled code*/
+extern pointer makeclosure(pointer,pointer,int,pointer*, pointer*);
+extern pointer fcall();
+extern pointer minilist();
+extern pointer xcar(pointer), xcdr(pointer), xcadr(pointer);
+extern pointer *ovafptr(pointer,pointer);
+
+#if Solaris2
+/* mutex locks*/
+extern mutex_t mark_lock;
+extern char *mark_locking;
+extern int mark_lock_thread;
+extern mutex_t p_mark_lock;
+#endif
+
+

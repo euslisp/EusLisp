@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>File Systems and I/O</TITLE>
+<META NAME="description" CONTENT="File Systems and I/O">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2986" HREF="node80.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2984" HREF="node76.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2978" HREF="node78.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2988" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2989" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2987" HREF="node80.html">Signals</A>
+<B>Up:</B> <A NAME="tex2html2985" HREF="node76.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html2979" HREF="node78.html">Process</A>
+<BR> <P>
+<H3><A NAME="SECTION04012300000000000000">File Systems and I/O</A></H3>
+<P>
+<A NAME=11548>&#160;</A>
+<B>unix:uread</B> <EM>stream [buffer] [size] </EM>[function] 
+<UL><LI> reads <EM>size bytes from <EM>stream</EM>.
+<EM>stream</EM> may either be a stream object or an integer representing fd.
+If <EM>buffer</EM> is given, the input is stored there.
+Otherwise, input goes to the buffer-string in  <EM>stream</EM>.
+Therefore, if <EM>stream</EM> is fd, <EM>buffer</EM> must be given.
+<B>unix:uread</B> never allocates a new string buffer.
+<B>unix:uread</B> returns the byte count actually read.
+</UL>
+<A NAME=11567>&#160;</A>
+<B>unix:write</B> <EM>stream string &amp;optional size </EM>[function] 
+<UL><LI> writes <EM>size bytes of <EM>string</EM> to <EM>stream</EM>.
+If <EM>size</EM> is omitted, the full length of <EM>string</EM> is output.
+</UL>
+<A NAME=11582>&#160;</A>
+<B>unix:fcntl</B> <EM>stream command argument </EM>[function] 
+<UL><LI> </UL>
+<A NAME=11593>&#160;</A>
+<B>unix:ioctl</B> <EM>stream command buffer </EM>[function] 
+<UL><LI> </UL>
+<A NAME=11604>&#160;</A>
+<B>unix:ioctl_</B> <EM>stream command1 command2 </EM>[function] 
+<UL><LI> </UL>
+<A NAME=11615>&#160;</A>
+<B>unix:ioctl_R</B> <EM>stream command1 command2 buffer [size] </EM>[function] 
+<UL><LI> </UL>
+<A NAME=11626>&#160;</A>
+<B>unix:ioctl_W</B> <EM>stream command1 command2 buffer [size] </EM>[function] 
+<UL><LI> </UL>
+<A NAME=11637>&#160;</A>
+<B>unix:ioctl_WR</B> <EM>stream command1 command2 buffer [size] </EM>[function] 
+<UL><LI> </UL>
+<A NAME=11648>&#160;</A>
+<B>unix:close</B> <EM>fd </EM>[function] 
+<UL><LI> close a file specifying its file descriptor <EM>fd.
+</UL>
+<A NAME=11659>&#160;</A>
+<B>unix:dup</B> <EM>fd </EM>[function] 
+<UL><LI> returns the duplicated file descriptor for <EM>fd.
+</UL>
+<A NAME=11670>&#160;</A>
+<B>unix:pipe</B> <EM></EM>[function] 
+<UL><LI> creates a pipe.
+An io-stream for this pipe is returned.
+</UL>
+<A NAME=11680>&#160;</A>
+<B>unix:lseek</B> <EM>stream position [whence 0] </EM>[function] 
+<UL><LI> sets the file pointer for <EM>stream at <EM>position counted
+from <EM>whence.
+</UL>
+<A NAME=11693>&#160;</A>
+<B>unix:link</B> <EM>path1 path2 </EM>[function] 
+<UL><LI> makes a hard link.
+</UL>
+<A NAME=11703>&#160;</A>
+<B>unix:unlink</B> <EM>path </EM>[function] 
+<UL><LI> removes a hard link to the file specified by <EM>path.
+If no reference to the file lefts, it is deleted.
+</UL>
+<A NAME=11714>&#160;</A>
+<B>unix:mknod</B> <EM>path mode </EM>[function] 
+<UL><LI> makes inode in a file system.
+<EM>path must be a string, not a pathname object.
+</UL>
+<A NAME=11725>&#160;</A>
+<B>unix:access</B> <EM>path mode </EM>[function] 
+<UL><LI> checks the access rights to <EM>path.
+</UL>
+<A NAME=11736>&#160;</A>
+<B>unix:stat</B> <EM>path </EM>[function] 
+<UL><LI> gets inode information of <EM>path and
+returns a list of integers  described below.
+</UL>
+
+<PRE>  st_ctime	; file last status change time
+  st_mtime	; file last modify time
+  st_atime	; file last access time
+  st_size	; total size of file, in bytes
+  st_gid	; group ID of owne
+  st_uid	; user ID of owner
+  st_nlink	; number of hard links to the file
+  st_rdev	; the device identifier (special files only)
+  st_dev	; device file resides on
+  st_ino	; the file serial number
+  st_mode	; file mode</PRE>
+
+<A NAME=11747>&#160;</A>
+<B>unix:chdir</B> <EM>path </EM>[function] 
+<UL><LI> changes the current working directory to <EM>path.
+</UL>
+<A NAME=11758>&#160;</A>
+<B>unix:getwd</B> <EM></EM>[function] 
+<UL><LI> gets current working directory.
+</UL>
+<A NAME=11768>&#160;</A>
+<B>unix:chmod</B> <EM>path integer </EM>[function] 
+<UL><LI> changes access mode (permission) for <EM>path.
+</UL>
+<A NAME=11779>&#160;</A>
+<B>unix:chown</B> <EM>path integer </EM>[function] 
+<UL><LI> changes the owner of the file <EM>path.
+</UL>
+<A NAME=11790>&#160;</A>
+<B>unix:isatty</B> <EM>(stream | fd) </EM>[function] 
+<UL><LI> returns T if <EM>stream is connected to a tty-type
+device (a serial port or a pseudo tty) .
+</UL>
+<A NAME=11801>&#160;</A>
+<B>unix:msgget</B> <EM>key mode </EM>[function] 
+<UL><LI> creates or allocates a message queue which is addressed by <EM>key.
+</UL>
+<A NAME=11812>&#160;</A>
+<B>unix:msgsnd</B> <EM>qid buf [mtype [flag]] </EM>[function] 
+<UL><LI> </UL>
+<A NAME=11823>&#160;</A>
+<B>unix:msgrcv</B> <EM>qid buf [size [mtype [flag]]] </EM>[function] 
+<UL><LI> </UL>
+<A NAME=11834>&#160;</A>
+<B>unix:socket</B> <EM>domain type &amp;optional proto </EM>[function] 
+<UL><LI> creates a socket
+whose name is defined in <I>domain</I> and whose abstract type is <EM>type.
+<EM>type should be one of 1 (SOCK_STREAM),
+2 (SOCK_DGRAM), 3 (SOCK_RAW), 4 (SOCK_RDM) and 5 (SOCK_SEQPACKET).
+</UL>
+<A NAME=11847>&#160;</A>
+<B>unix:bind</B> <EM>socket name </EM>[function] 
+<UL><LI> associates <EM>name to <EM>socket.
+<EM>name should be a unix path-name if the socket is defined in unix-domain.
+</UL>
+<A NAME=11860>&#160;</A>
+<B>unix:connect</B> <EM>socket addr </EM>[function] 
+<UL><LI> connects <EM>socket to another socket specified by <EM>addr.
+</UL>
+<A NAME=11872>&#160;</A>
+<B>unix:listen</B> <EM>socket &amp;optional backlog </EM>[function] 
+<UL><LI> begins to accept connection request on <EM>socket.
+<EM>backlog specifies the length of the queue waiting for the establishment
+of connection.
+</UL>
+<A NAME=11884>&#160;</A>
+<B>unix:accept</B> <EM>socket </EM>[function] 
+<UL><LI> accepts the connection request on <EM>socket
+and returns a file-descriptor on which messages can be exchanged
+bidirectionally.
+</UL>
+<A NAME=11895>&#160;</A>
+<B>unix:recvfrom</B> <EM>socket &amp;optional mesg from flag </EM>[function] 
+<UL><LI> receives a datagram message from <EM>socket.
+The socket must be assigned a name by <B>unix:bind</B>.
+<EM>mesg is a string in which the incoming message will be stored.
+If <EM>mesg is given, <B>recvfrom</B> returns the number of bytes received.
+If it is omitted, a new string is created for the storage of the message
+and returned.
+</UL>
+<A NAME=11910>&#160;</A>
+<B>unix:sendto</B> <EM>socket addr mesg &amp;optional len flag </EM>[function] 
+<UL><LI> sends a datagram message to another socket specified by <EM>addr.
+<EM>Socket must be a datagram-type socket which has no name assigned.
+<EM>Mesg is a string to be sent and <EM>len</EM> is the length of
+the message counting from the beginning of the string.
+If omitted, whole string is sent.
+<P>
+</UL>
+<A NAME=11924>&#160;</A>
+<B>unix:getservbyname</B> <EM>servicename </EM>[function] 
+<UL><LI> returns the service number (integer) for <EM>servicename registered
+in <TT>/etc/services</TT> or in NIS database.
+</UL>
+<A NAME=11936>&#160;</A>
+<B>unix:gethostbyname</B> <EM>hostname </EM>[function] 
+<UL><LI> returns the list  of ip address of <EM>hostname and its address type
+(currently always AF_INET==2).
+</UL>
+<A NAME=11947>&#160;</A>
+<B>unix:syserrlist</B> <EM>errno </EM>[function] 
+<UL><LI> returns a string describing the error information for the error code
+<EM>errno.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2986" HREF="node80.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2984" HREF="node76.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2978" HREF="node78.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2988" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2989" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2987" HREF="node80.html">Signals</A>
+<B>Up:</B> <A NAME="tex2html2985" HREF="node76.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html2979" HREF="node78.html">Process</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

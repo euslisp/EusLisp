@@ -1,0 +1,94 @@
+(- function-documentation "
+Args: (number &rest more-numbers)
+Returns the first arg subtracted by the rest of args.  With one arg, returns
+- NUMBER.")
+(- variable-documentation "
+The top-level form KCL is currently evaluating.")
+(break function-documentation "
+Args: (&optional (format-string nil) &rest args)
+Enters a break loop.  The execution of the program can be resumed by typing
+:RESUME at the break loop.  Type :HELP to see the break-loop commands list.
+If FORMAT-STRING is non-NIL, it is used as the format string to be output to
+*ERROR-OUTPUT* before entering the break loop.  ARGs are arguments to the
+format string.")
+(defconstant function-documentation "
+Syntax: (defconstant symbol form [doc])
+Declares that the global variable named by SYMBOL is a constant with the value
+of FORM as its constant value.  The doc-string DOC, if supplied, is saved as a
+VARIABLE doc and can be retrieved by (DOCUMENTATION 'SYMBOL 'VARIABLE).")
+(floatp function-documentation "
+Args: (x)
+Returns T if X is a float; NIL otherwise.")
+(graphic-char-p function-documentation "
+Args: (char)
+Returns T if CHAR is a printing character, i.e., a standard character other
+than #\\Newline.  Returns NIL otherwise.")
+(logbitp function-documentation "
+Args: (bit-position integer)
+Returns T if the specified bit of INTEGER is 1; NIL otherwise.  BIT-POSITION
+must be a non-negative integer, with 0 representing the least significant bit.")
+(loop function-documentation "
+Syntax: (loop {form}*)
+Establishes a NIL block and executes FORMs repeatedly.  The loop is normally
+terminated by a non-local exit.
+The MIT-style extended version of LOOP, which is upper compatible with this
+LOOP, is available:  Load loop.lsp or its object file (loop.o or loop.fasl) in
+the \"lsp\" subdirectory of your KCL system directory and then see the doc of
+LOOP again.")
+(packagep function-documentation "
+Args: (x)
+Returns T if X is a package object; NIL otherwise.")
+(pop function-documentation "
+Syntax: (pop place)
+Gets the cdr of the value stored in PLACE and makes it the new value of PLACE.
+Returns the car of the old value in PLACE.")
+(read-preserving-whitespace function-documentation "
+Args: (&optional (stream *standard-input*)
+                 (eof-error-p t) (eof-value nil) (recursive-p nil))
+Reads an object from STREAM and returns the object.  Unlike READ, always
+leaves the character next to the object's representation.")
+(readtablep function-documentation "
+Args: (x)
+Returns T if X is a readtable object; NIL otherwise.")
+(remprop function-documentation "
+Args: (symbol indicator)
+Removes the specified property from the property list associated with SYMBOL.
+Returns T if the property list had the specified property; NIL otherwise.")
+(rename-file function-documentation "
+Args: (filespec new-filespec)
+Renames the file specified by FILESPEC as specified by NEW-FILESPEC.  Returns
+as three values the new pathname, the old full pathname, and the new full
+pathname.  FILESPEC and NEW-FILESPEC may be a symbol, a string, a pathname, or
+a file stream.")
+(sleep function-documentation "
+Args: (n)
+Suspends execution for N seconds.  N may be any non-negative, non-complex
+number.")
+(step function-documentation "
+Syntax: (step form)
+Evaluates FORM in the Stepper mode and returns all its values.  See KCL Report
+for Stepper mode commands.")
+(string-not-equal function-documentation "
+Args: (string1 string2
+       &key (start1 0) (end1 (length string1))
+            (start2 0) (end2 (length string2)))
+Returns NIL if the strings are character-wise CHAR-EQUAL.  Otherwise, returns
+the number of characters in the longest common prefix of the strings.")
+(subtypep function-documentation "
+Args: (type1 type2)
+Returns T if TYPE1 is a subtype of TYPE2; NIL otherwise.  If this is not
+determined, then returns NIL as the first and second values.  Otherwise, the
+second value is T.")
+(unuse-package function-documentation "
+Args: (package-spec &optional (package *package*))
+Causes PACKAGE not to use packages specified by PACKAGE-SPEC.  PACKAGE-SPEC
+may be a package object, a string, a symbol, or a list consisting of package
+objects, strings, and, symbols.")
+(values-list function-documentation "
+Args: (list)
+Returns all elements of LIST as multiple values, the N-th element of LIST
+being the N-th value.")
+(*ignore-eof-on-terminal-io* variable-documentation "
+KCL specific.
+If the value of this variable is non-NIL, KCL ignores the EOF-character
+(usually ^D) on the terminal.  The initial value is NIL.")

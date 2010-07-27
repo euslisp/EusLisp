@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>X Event</TITLE>
+<META NAME="description" CONTENT="X Event">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3659" HREF="node133.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3657" HREF="node131.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3651" HREF="node131.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3661" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3662" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3660" HREF="node133.html">Panel</A>
+<B>Up:</B> <A NAME="tex2html3658" HREF="node131.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html3652" HREF="node131.html">XToolKit</A>
+<BR> <P>
+<H2><A NAME="SECTION04071000000000000000">X Event</A></H2>
+<P>
+In the current implementation, 
+an event structure is received in a fixed event buffer (an integer-vector
+of 25 elements)
+and the same buffer is reused on all events.
+The event structure has to be copied when more than one events need to
+be referenced at the same time.
+<P>
+<TT>Window-main-loop</TT> is the function which captures all events sent
+from the X server and delivers them to each window where the event happened.
+<P>
+<A NAME=22920>&#160;</A>
+<B>event</B> <EM></EM>[variable] 
+<UL><LI> a 25-element integer-vector holding the most recent
+event structure.
+</UL>
+<A NAME=22930>&#160;</A>
+<B>next-event</B> <EM></EM>[function] 
+<UL><LI> stores the event structure in <TT>event</TT> and returns it
+if there is at least one pending event,
+NIL if there is no pending event.
+</UL>
+<A NAME=22941>&#160;</A>
+<B>event-type</B> <EM>event </EM>[function] 
+<UL><LI> returns the keyword symbol representing the event-type in the <EM>event
+structure. The event-type keywords are:
+<TT>:KeyPress</TT> (2),
+<TT>:KeyRelease</TT> (3),
+<TT>:ButtonPress</TT> (4),
+<TT>:ButtonRelease</TT> (5),
+<TT>:MotionNotify</TT> (6),
+<TT>:EnterNotify</TT> (7),
+<TT>:LeaveNotify</TT> (8),
+<TT>:FocusIn</TT> (9),
+<TT>:FocusOut</TT> (0),
+<TT>:KeymapNotify</TT> (1),
+<TT>:Expose</TT> (12),
+<TT>:GraphicsExpose</TT> (13),
+<TT>:NoExpose</TT> (14),
+<TT>:VisibilityNotify</TT> (15),
+<TT>:CreateNotify</TT> (16),
+<TT>:DestroyNotify</TT> (17),
+<TT>:UnmapNotify</TT> (18),
+<TT>:MapNotify</TT> (19),
+<TT>:MapRequest</TT> (20),
+<TT>:ConfigureNotify</TT> (22),
+<TT>:ConfigureRequest</TT> (23),
+<TT>:GravityNotify</TT> (24),
+<TT>:ResizeRequest</TT> (25),
+<TT>:CirculateNotify</TT> (26),
+<TT>:CirculateRequest</TT> (27),
+<TT>:PropertyNotify</TT> (28),
+<TT>:SelectionClear</TT> (29),
+<TT>:SelectionRequest</TT> (30),
+<TT>:SelectionNotify</TT> (31),
+<TT>:ColormapNotify</TT> (32),
+<TT>:ClientMessage</TT> (33),
+<TT>:MappingNotify</TT> (34),
+<TT>:LASTEvent</TT> (35).
+</UL>
+<A NAME=22985>&#160;</A>
+<B>event-window</B> <EM>event </EM>[function] 
+<UL><LI> returns the window object where the <EM>event occurred.
+</UL>
+<A NAME=22996>&#160;</A>
+<B>event-x</B> <EM>event </EM>[function] 
+<UL><LI> extracts the <EM>x coordinate,
+(i.e., the horizontal position of the mouse pointer relatively in the window)
+out of the <EM>event.
+</UL>
+<A NAME=23008>&#160;</A>
+<B>event-y</B> <EM>event </EM>[function] 
+<UL><LI> extracts the <EM>x coordinate,
+(i.e., the vertical position of the mouse pointer relatively in the window)
+out of the <EM>event.
+</UL>
+<A NAME=23020>&#160;</A>
+<B>event-width</B> <EM>event </EM>[function] 
+<UL><LI> returns the eighth element of the <EM>event structure
+which represents the width parameter at the <TT>:configureNotify</TT> event.
+</UL>
+<A NAME=23032>&#160;</A>
+<B>event-height</B> <EM>event </EM>[function] 
+<UL><LI> returns the ninth element of the <EM>event structure
+which represents the height parameter at the <TT>:configureNotify</TT> event.
+</UL>
+<A NAME=23044>&#160;</A>
+<B>event-state</B> <EM>event </EM>[function] 
+<UL><LI> returns a list of keywords representing the mouse button 
+and modifier key state.
+Keywords are: <TT>:shift, :control, :meta, :left, :middle</TT> and <TT>:right</TT>.
+For example, if left mouse button is pressed while shift key is down,
+<TT>(:shift :left)</TT> is returned.
+</UL>
+<A NAME=23057>&#160;</A>
+<B>display-events</B> <EM></EM>[function] 
+<UL><LI> displays all xwindow events captured by
+<TT>x:nextevent</TT>. Control-C is the only way to terminate this function.
+</UL>
+<A NAME=23068>&#160;</A>
+<B>window-main-loop</B> <EM>&amp;rest forms </EM>[macro] 
+<UL><LI> receives Xevents and delivers them to window objects where the event
+occurred.
+According to the event-type, methods in the window's class named 
+<TT>:KeyPress, :KeyRelease, :ButtonPress,
+:ButtonRelease, :MotionNotify,
+:EnterNotify, :LeaveNotify</TT> and <TT>:ConfigureNotify</TT> 
+are invoked with <EM>event as the argument.
+If <EM>forms is given,
+evaluates them each time event arrival is checked.
+</UL>
+<A NAME=23082>&#160;</A>
+<B>window-main-thread</B> <EM></EM>[function] 
+<UL><LI> Do the same thing as <TT>window-main-loop</TT> in a different thread.
+<TT>Window-main-thread</TT> is only available on Solaris2.
+<TT>Window-main-thread</TT> installs an error handler which
+does not enter a read-eval-print loop.
+After printing the error information, the event
+processing continues.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3659" HREF="node133.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3657" HREF="node131.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3651" HREF="node131.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3661" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3662" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3660" HREF="node133.html">Panel</A>
+<B>Up:</B> <A NAME="tex2html3658" HREF="node131.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html3652" HREF="node131.html">XToolKit</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

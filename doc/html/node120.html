@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Viewing</TITLE>
+<META NAME="description" CONTENT="Viewing">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3507" HREF="node121.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3505" HREF="node119.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3499" HREF="node119.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3509" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3510" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3508" HREF="node121.html">Projection</A>
+<B>Up:</B> <A NAME="tex2html3506" HREF="node119.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html3500" HREF="node119.html">Viewing and Graphics</A>
+<BR> <P>
+<H2><A NAME="SECTION04051000000000000000">Viewing</A></H2>
+<P>
+A viewing object manages viewing coordinate system
+whose origin is located at the position of a virtual camera,
+<EM>-z</EM> axis is oriented to the objects observed, and xy-plane is the
+projection screen.
+Since viewing inherits class cascaded-coords,
+it accepts coordinates transformation message
+such as <B>:translate, :rotate</B> and <B>:transform</B>.
+Also, it can be attached to another object derived from cascaded-coords,
+allowing the simulation of the camera-on-mobile-object system.
+The main purpose of viewing is to transform vectors represented in the world
+to the camera coordinates system.
+The transformation is taken in the opposite direction against usual coordinate
+transformation where vectors in the local coordinates are transformed into the
+representation in the world.
+Therefore, viewing holds the inversed left-handed transformation in
+the viewcoords slot, which is usually referred as the viewing coordinate system.
+<P>
+<P><A NAME="18085">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure18081" SRC="img60.gif"  > <BR>
+<STRONG>Figure 13:</STRONG> viewing coords and projection planes<BR>
+<P>
+<P>
+<A NAME=18558>&#160;</A>
+<B>viewing </B> [class]  <PRE><TT> :super B<>cascaded-coords</B>
+<P>
+:slots 		 (viewcoords)
+<P>
+</TT></PRE>
+<UL><LI> defines the viewing transformation.
+</UL>
+<A NAME=18575>&#160;</A>
+<B>:viewpoint</B> <EM></EM>[method] 
+<UL><LI> returns the position vector of the origin of this viewing.
+</UL>
+<A NAME=18585>&#160;</A>
+<B>:view-direction</B> <EM></EM>[method] 
+<UL><LI> returns the vector from the origin of the viewing to the center of screen.
+This is the z-axis direction of the viewing coordinates.
+</UL>
+<A NAME=18595>&#160;</A>
+<B>:view-up</B> <EM></EM>[method] 
+<UL><LI> returns y-axis vector of this viewing represented in the world coords.
+Y-axis is the upward direction in the viewport.
+</UL>
+<A NAME=18605>&#160;</A>
+<B>:view-right</B> <EM></EM>[method] 
+<UL><LI> returns x-axis vector of this viewing represented in the world coords.
+X-axis is in horizontal direction to the right in the viewport.
+</UL>
+<A NAME=18615>&#160;</A>
+<B>:look</B> <EM>from &amp;optional (to #f(0 0 0)) </EM>[method] 
+<UL><LI> <B>:look</B> conveniently sets the viewing coords as the eye is located
+at <EM>from and looking at <EM>to point.
+</UL>
+<A NAME=18628>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing18629" SRC="img61.gif"  > <P>
+<UL><LI> 
+Since viewing inherits cascaded-coords, all the <EM>:init parameters
+such as <EM>:pos, <EM>:rot, <EM>:Euler</EM>, <EM>:rpy</EM>, etc. can be
+used to specify the location and the orientation of the viewing coordinates.
+However, viewing's <EM>:init</EM> provides easier way to determine the
+rotation.
+If only <EM>:target</EM> is given, view-line (-z axis) is determined to
+pass the viewpoint and <EM>:target</EM> point, and the <EM>:view-right</EM>
+vector is determined so that the x-axis is parallel to the xy-plane of the
+world coordinates.
+You may specify <EM>:view-direction</EM> instead of <EM>:target</EM> to get the
+same effect.
+If you give <EM>:view-up</EM> or <EM>:view-right</EM> parameter in addition to
+<EM>:target</EM> or <EM>:view-direction</EM>,
+you can determine all the three rotation parameters by yourself.
+</UL>
+</EM></EM></EM></EM></EM><HR><A NAME="tex2html3507" HREF="node121.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3505" HREF="node119.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3499" HREF="node119.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3509" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3510" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3508" HREF="node121.html">Projection</A>
+<B>Up:</B> <A NAME="tex2html3506" HREF="node119.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html3500" HREF="node119.html">Viewing and Graphics</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

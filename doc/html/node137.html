@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Panel Items</TITLE>
+<META NAME="description" CONTENT="Panel Items">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3720" HREF="node138.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3718" HREF="node131.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3712" HREF="node136.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3722" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3723" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3721" HREF="node138.html">Canvas</A>
+<B>Up:</B> <A NAME="tex2html3719" HREF="node131.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html3713" HREF="node136.html">Text View Panel</A>
+<BR> <P>
+<H2><A NAME="SECTION04073000000000000000">Panel Items</A></H2>
+<P>
+<A NAME=23361>&#160;</A>
+<B>panel-item </B> [class]  <PRE><TT> :super B<>xwindow</B>
+<P>
+:slots 		 (pos notify-object notify-method
+<P>
+		fontid label labeldots)
+<P>
+</TT></PRE>
+<UL><LI> 
+<B>Panel-item</B> is an abstract class for all kinds of panel-item windows
+to invoke <EM>notify-object</EM>'s  <EM>notify-method</EM> when item-specific
+event occurs.
+<P>
+</UL>
+<A NAME=23381>&#160;</A>
+<B>:notify</B> <EM>&amp;rest args </EM>[method] 
+<UL><LI> invokes <EM>notify-object's  <EM>notify-method</EM>.
+Responsive events and arguments passed to <EM>notify-method</EM>
+are item specific:
+<DL ><DT><STRONG>button-item</STRONG>
+<DD> The button is pressed and released
+in the same button-item;
+the argument is the button-item object.
+<DT><STRONG>menu-button-item</STRONG>
+<DD> A menu item is selected;
+the argument is the menu-button-item object.
+<DT><STRONG>choice-item</STRONG>
+<DD> A new choice button is selected; the arguments are
+the choice-item object and the index number of the choice.
+<DT><STRONG>text-item</STRONG>
+<DD> A newline or return is entered; the arguments are
+the text-item object and the entire line (string).
+<DT><STRONG>slider-item</STRONG>
+<DD> The slider nob is grabbed and moved; the arguments are
+the slider-item object and the new value.
+<DT><STRONG>joystick-item</STRONG>
+<DD> The joystick is grabbed and moved; the arguments are
+the slider-item object, the new x and y values.
+<P>
+ </DL></UL>
+<A NAME=23396>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23397" SRC="img78.gif"  > <P>
+<UL><LI> 
+creates a panel-item.
+As panel-item is an abstract class,
+this method should only be called by the subclasses
+via <TT>send-super</TT>.
+</UL>
+<A NAME=23409>&#160;</A>
+<B>button-item </B> [class]  <PRE><TT> :super B<>panel-item</B>
+<P>
+:slots
+<P>
+</TT></PRE>
+<UL><LI> 
+<B>button-item</B> is the simplest panel-item.
+Button-item has a rectangular box and a label string in it.
+When clicked, button-item invokes <EM>notify-object</EM>'s <EM>notify-method</EM>
+with the panel-item object as the only argument.
+<P>
+</UL>
+<A NAME=23429>&#160;</A>
+<B>:draw-label</B> <EM>&amp;optional (state :top) (color bg-color) (border 2) (offset) </EM>[method] 
+<UL><LI> draws button-item's label.
+</UL>
+<A NAME=23439>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23440" SRC="img79.gif"  > <P>
+<UL><LI> 
+creates a button-item.
+If button's width and height are not given,
+the sizes are automatically set to accomodate the label string
+drawn with the given font.
+Though the border-width is defaulted to 0,
+pseudo 3D representation embosses the button.
+The background color and font are defaulted to the ones defined for
+the parent window, i.e. a panel.
+</UL>
+<A NAME=23450>&#160;</A>
+<B>:ButtonPress</B> <EM>event </EM>[method] 
+<UL><LI> changes the background color to gray, as if the button.
+</UL>
+<A NAME=23460>&#160;</A>
+<B>:ButtonRelease</B> <EM>event </EM>[method] 
+<UL><LI> changes <EM>event's background color to normal.
+</UL>
+<A NAME=23472>&#160;</A>
+<B>menu-button-item </B> [class]  <PRE><TT> :super B<>button-item</B>
+<P>
+:slots 		 (items item-dots item-labels
+<P>
+		charwidth charheight
+<P>
+		menu-window window-pos high-light)
+<P>
+</TT></PRE>
+<UL><LI> 
+defines a pulldown menu.
+Though a <TT>menu-button-item</TT> looks like a <TT>button-item</TT>,
+the <TT>menu-button-item</TT> activates associated <TT>menu-panel</TT>
+below the button when it is pressed,
+instead of sending an immediate message to the <EM>notify-object.
+The actual message is sent when the mouse button is released on
+one of the menu items.
+<P>
+</UL>
+<A NAME=23494>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23495" SRC="img80.gif"  > <P>
+<UL><LI> 
+creates a pulldown menu button.
+<EM>Receiver and <EM>method</EM> arguments has no effect.
+</UL>
+<A NAME=23507>&#160;</A>
+<B>:ButtonPress</B> <EM>event </EM>[method] 
+<UL><LI> reverses the appearance of the pulldown-menu
+and exposes the associated menu-panel below the button.
+</UL>
+<A NAME=23517>&#160;</A>
+<B>:ButtonRelease</B> <EM>event </EM>[method] 
+<UL><LI> unmaps the <TT>menu-panel</TT> below this button
+and reverts the appearance of the button.
+</UL>
+<A NAME=23529>&#160;</A>
+<B>bitmap-button-item </B> [class]  <PRE><TT> :super B<>button-item</B>
+<P>
+:slots 		 
+(pixmap-id bitmap-width bitmap-height)
+<P>
+</TT></PRE>
+<UL><LI> 
+Though <TT>bitmap-button-item</TT>'s function is similar to
+the <TT>button-item</TT>, its appearance is different.
+Instead of drawing a simple label string on the button, as is the
+case for <TT>button-item</TT>,
+<TT>bitmap-button-item</TT> is drawn by a pixmap which is loaded
+from a bitmap-file when the button is created.
+</UL>
+<A NAME=23550>&#160;</A>
+<B>:draw-label</B> <EM>&amp;optional (state :flat) (color bg-color) (border 2) </EM>[method] 
+<UL><LI> draws a bitmap/pixmap on the button.
+<P>
+</UL>
+<A NAME=23560>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23561" SRC="img81.gif"  > <P>
+<UL><LI> 
+creates bitmap-button-item.
+The first argument, <EM>bitmap-file  replaces the <EM>label argument
+of <TT>button-item</TT>.
+</UL>
+<A NAME=23574>&#160;</A>
+<B>:draw-label</B> <EM>&amp;optional (state :flat) (color bg-color) (border 2) </EM>[method] 
+<UL><LI> draw a bitmap/pixmap on the button.
+<P>
+</UL>
+<A NAME=23584>&#160;</A>
+<B>:create-bitmap-from-file</B> <EM>fname </EM>[method] 
+<UL><LI> creates pixmap from the bitmap file named <EM>fname, 
+and stores its id in <EM>pixmap-id.
+</UL>
+<A NAME=23597>&#160;</A>
+<B>choice-item </B> [class]  <PRE><TT> :super B<>button-item</B>
+<P>
+:slots 		 
+ (choice-list active-choice transient-choice
+<P>
+                		choice-dots choice-pos button-size)
+<P>
+</TT></PRE>
+<UL><LI> 
+<TT>choice-item</TT> is a set of round choice buttons.
+One choice is always active, and only one choice can become active at
+the same time.
+<TT>choice-item</TT> provides the similar function as radio-buttons.
+</UL>
+<A NAME=23616>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23617" SRC="img82.gif"  > <P>
+<UL><LI> 
+create a choice-item-button. Each choice button is a circle of
+radius <EM>button-size.
+When a new choice is selected, <EM>notify-object</EM>'s <EM>notify-method</EM>
+is invoked with the choice-item object and the index of the choice selected.
+<P>
+</UL>
+<A NAME=23630>&#160;</A>
+<B>:value</B> <EM>&amp;optional (new-choice) (invocation) </EM>[method] 
+<UL><LI> If <EM>new-choice is given, it is set as the current active choice,
+and the corresponding circle is filled black.
+If <EM>invocation</EM> is also specified, <EM>notify-object</EM>'s <EM>notify-method</EM>
+is invoked.
+<TT>:Value</TT> returns the current (or new) choice index.
+</UL>
+<A NAME=23645>&#160;</A>
+<B>:draw-active-button</B> <EM>&amp;optional
+(old-choice active-choice) (new-choice active-choice) </EM>[method] 
+<UL><LI> draw active button.
+<P>
+</UL>
+<A NAME=23655>&#160;</A>
+<B>:buttonPress</B> <EM>event </EM>[method] 
+<UL><LI> If the mouse button is pressed on any of the choice buttons,
+its index is recorded in <EM>transient-choice.
+No further action is taken until the mouse button is released.
+</UL>
+<A NAME=23666>&#160;</A>
+<B>:buttonRelease</B> <EM>event </EM>[method] 
+<UL><LI> If the mouse button is released on the same button which is already pressed,
+the <EM>active-choice is updated and
+<EM>notify-object's <EM>notify-method</EM> is invoked.
+<P>
+</UL>
+<A NAME=23680>&#160;</A>
+<B>slider-item </B> [class]  <PRE><TT> :super B<>panel-item</B>
+<P>
+:slots 		 
+(min-value max-value value
+<P>
+                		minlabel maxlabel valueformat
+<P>
+                		bar-x bar-y bar-width bar-height valuedots label-base
+<P>
+                		nob-x nob-moving
+<P>
+                		charwidth)
+<P>
+</TT></PRE>
+<UL><LI> 
+While <TT>choice-item</TT> is used to select a discrete value,
+<TT>slider-item</TT> is used for the continuous value in the range
+between <EM>min-value</EM> and <EM>max-value</EM>.
+Each moment the value is changed, <EM>notify-object</EM>'s <EM>notify-method</EM>
+is invoked with the slider-item object and the new value as the arguments.
+</UL>
+<A NAME=23703>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23704" SRC="img83.gif"  > <P>
+<UL><LI> 
+creates slider-item.
+The sliding knob is displayed as a small black rectangle on a bar.
+The left end represents the <EM>min</EM> value and the right end <EM>max</EM> value.
+The length of the bar stretches for the <EM>span</EM> dots.
+The current value is displayed to the right of the slider-item label
+in the <EM>value-format</EM>.
+</UL>
+<A NAME=23718>&#160;</A>
+<B>:value</B> <EM>&amp;optional newval invocation </EM>[method] 
+<UL><LI> If <EM>newval is given, it is set as the current value,
+and the knob is slided to the corresponding location.
+If <EM>invocation</EM> is also specified non nil,
+<EM>notify-object</EM>'s <EM>notify-method</EM> is invoked.
+<TT>:Value</TT> returns the current (or new) value.
+</UL>
+<A NAME=23734>&#160;</A>
+<B>joystick-item </B> [class]  <PRE><TT> :super B<>panel-item</B>
+<P>
+:slots 		 
+ (stick-size min-x min-y max-x max-y
+<P>
+                		center-x center-y stick-x stick-y
+<P>
+                		value-x value-y
+<P>
+                		stick-return stick-grabbed
+<P>
+                		fraction-x fraction-y)
+<P>
+</TT></PRE>
+<UL><LI> 
+<TT>joystick-item</TT> can be regarded as the two-dimensional slider-item.
+Two continuous values can be specified by the moving black circle
+on the coaxial chart that looks like a web (Fig. <A HREF="node137.html#panelitem">18</A>).
+</UL>
+<A NAME=23753>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23754" SRC="img84.gif"  > <P>
+<UL><LI> 
+<EM>Stick-size</EM> is the radius of the stick's black circle.
+The sizes of the circles in the coaxial chart are determined
+according to the width and height of the joystick-item window.
+If <EM>return</EM> is non-NIL, 
+the joystick returns to the origin when the mouse button is released.
+Otherwise, the joystick remains at the released position.
+</UL>
+<A NAME=23766>&#160;</A>
+<B>:value</B> <EM>&amp;optional (newx) (newy) (invocation) </EM>[method] 
+<UL><LI> If both <EM>newx and <EM>newy</EM> are given, they are
+set as the current values,
+and the joystick moves to the corresponding location
+on the coaxial chart.
+If <EM>invocation</EM> is also specified non nil,
+<EM>notify-object</EM>'s <EM>notify-method</EM> is invoked
+with the joystick-item object and x and y values as the arguments.
+<TT>:Value</TT> returns the list of current (or new) values.
+</UL>
+The following short program shows how to use panel-items 
+described above, and Fig. <A HREF="node137.html#panelitem">18</A> depicts how they
+appear in a panel.
+<P>
+<PRE>(in-package &quot;X&quot;)
+(defclass testPanel :super panel
+        :slots (quit joy choi sli))
+(defmethod testPanel
+ (:create (&amp;rest args)
+    (send-super* :create :width 210 :height 180 
+                 :font font-courb12 args)
+    (send-super :create-item button-item &quot;quit&quot; self :quit :font font-courb14)
+    (send-super :create-item choice-item &quot;choice&quot; self :choice
+                :choices '(&quot; A &quot; &quot; B &quot; &quot; C &quot;)
+                :font font-courb12)
+    (send-super :create-item slider-item &quot;slider&quot; self :slider
+                :span 90)
+    (send-super :create-item joystick-item &quot;joy&quot; self :joy)
+    self)
+ (:choice (obj c) (format t &quot;choice: ~S ~d~%&quot; obj c))
+ (:slider (obj val) (format t &quot;slider: ~S ~s~%&quot; obj val))
+ (:joy (obj x y) (format t &quot;joy: ~S ~s ~s~%&quot; obj x y)) )
+(instance testPanel :create)
+(window-main-thread)</PRE>
+<P>
+<P><A NAME="22881">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure22628" SRC="img85.gif"  > <BR>
+<STRONG>Figure 18:</STRONG> Panel items created in a panel<A NAME="panelitem">&#160;</A><BR>
+<P>
+<P>
+<A NAME=23783>&#160;</A>
+<B>text-item </B> [class]  <PRE><TT> :super B<>panel-item</B>
+<P>
+:slots 		 (textwin)
+<P>
+</TT></PRE>
+<UL><LI> 
+<TT>Text-item</TT> is used to display or to input one short line of text,
+such as a file name.
+A <TT>text-item</TT> has a label string followed by
+a small textwindow on the right.
+When the pointer is put in the textwindow, key input is enabled
+and the characters typed are buffered.
+Line editing is available in the textwindow: 
+<TT>control-F</TT> and <TT>control-B</TT> to move forward/backward by one character,
+<TT>del</TT> to delete the character on the left of the cursor,
+<TT>control-D</TT> to delete the character on the cursor, and
+any graphical character to insert it at the cursor position.
+Clicking a mouse button moves the cursor to the clicked character.
+Hitting an enter (newline) key causes the buffered text to be sent to
+the <EM>notify-object</EM>'s <EM>notify-method</EM>.
+</UL>
+<A NAME=23808>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23809" SRC="img86.gif"  > <P>
+<UL><LI> 
+creates text-item.
+Though the linebuffer of the textwindow may have unlimited length,
+visible portion is restricted to the <EM>columns</EM> characters.
+</UL>
+<A NAME=23820>&#160;</A>
+<B>:getstring</B> <EM></EM>[method] 
+<UL><LI> returns the string in the key buffer.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3720" HREF="node138.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3718" HREF="node131.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3712" HREF="node136.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3722" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3723" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3721" HREF="node138.html">Canvas</A>
+<B>Up:</B> <A NAME="tex2html3719" HREF="node131.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html3713" HREF="node136.html">Text View Panel</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

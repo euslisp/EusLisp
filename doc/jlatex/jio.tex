@@ -1,0 +1,749 @@
+\section{ストリームと入出力}
+\markright{\arabic{section}. ストリームと入出力}
+
+\subsection{ストリーム}
+
+定義済みストリームは次のものであり、
+echo-streamとconcatenated-streamは利用できない。
+
+\begin{description}
+\item[*standard-input*] 標準入力 stdin fd=0 
+\item[*standard-output*] 標準出力 stdout fd=1 
+\item[*error-output*] 標準エラー出力 stderr fd=2 bufsize=1
+\item[*terminal-io*] {\bf *standard-input*}と{\bf *standard-output*}
+で作られる入出力ストリーム
+\end{description}
+
+\begin{refdesc}
+
+\funcdesc{streamp}{object}{
+{\em object}が{\bf stream}, {\bf io-stream}かそのサブクラスから
+作られているときTを返す。}
+\funcdesc{input-stream-p}{object}{
+{\em object}がストリームで読み込み可能であれば、Tを返す。}
+\funcdesc{output-stream-p}{object}{
+{\em object}がストリームで書き込み可能であれば、Tを返す。}
+\funcdesc{io-stream-p}{object}{
+{\em object}が読み書き可能なストリームであれば、Tを返す。}
+
+\longdescription{open}
+{path \&key \= :direction :input \` [関数]\\
+%{path \&key \= :direction :input \hspace{98mm} [関数]\\
+ \> :if-exists :new-version \\
+ \> :if-does-not-exist \\
+ \> :permission \#o644 \\
+ \> :buffer-size 512\\}{
+{\bf open}は、{\em path}で指定されたファイルと結合されるストリームを作る。
+{\em path}は、文字列かパス名でよい。
+{\em :direction}は、{\tt :input, :output}または{\tt :io}のどれか
+1つでなければならない。
+いくつかのopenオプション{\tt :append, :new-version, :overwrite, :error}
+とNILが{\em :if-exists}のパラメータとして許される。
+しかしながら、このパラメータは{\em :direction}が{\tt :input}のとき無視される。
+{\em :if-does-not-exist}には、
+{\tt :error, :create}かNILのどれか1つをとる。
+{\tt :new-version}, {\tt :rename}と{\tt :supersede}は認識されない。
+デフォルトとして、{\em :direction}が
+{\tt :output}か{\tt :io}でファイルが存在するとき、そのファイルに上書きする。
+{\tt :input}において、ファイルがないとき、エラーが報告される。
+ファイルの存在を知るために、{\bf probe-file}を使うことができる。
+{\em :buffer-size}のデフォルト値は512バイト、
+{\em :permission}のデフォルト値は{\tt \#O644}である。
+SunOS4は、同時に60ファイルのオープンを許可している。
+}
+
+\macrodesc{with-open-file}{(svar path . open-options) \&rest forms}{
+{\em path}という名のファイルが、{\em open-options}でオープンされ、
+そのストリームは{\em svar}にバインドされる。
+それから{\em forms}が評価される。
+ストリームは、{\em forms}の評価が終るかまたは
+{\bf throw}, {\bf return-from}やエラーで脱出したとき、自動的にクローズされる。
+{\bf with-open-file}は、{\bf unwind-protect}によって{\bf close}とその内部書式を
+一緒にして定義されるマクロである。
+}
+
+\funcdesc{close}{stream}{
+{\em stream}がクローズされ、成功したらTを返す。
+{\em stream}が既にクローズされていた場合、NILが返される。
+ストリームは、そのストリームオブジェクトが参照するものがないなら、GCによって
+自動的にクローズされる。}
+
+% \fundesc{reset-stream}{s}
+
+\funcdesc{make-string-input-stream}{string}{
+{\em string}から入力ストリームを作る。}
+
+\funcdesc{make-string-output-stream}{size}{
+{\em size}長さの文字列のために出力ストリームを作る。
+その長さは自動的に拡張される。そのため、{\em size}は初期化時に配置する
+文字列のための補助情報である。}
+
+\funcdesc{get-output-stream-string}{string-stream}{
+{\em string-stream}に文字列を出力する。}
+
+\funcdesc{make-broadcast-stream}{\&rest output-streams}{
+広報(broadcast)ストリームを作り、このストリームに書かれたメッセージはすべての
+{\em output-streams}へ転送される。}
+
+\end{refdesc}
+\newpage
+
+%
+% R E A D E R
+%
+
+\subsection{リーダ(reader)}
+
+リーダのグローバル変数は：
+
+\begin{description}
+\item[*read-base*] 読み込時の基数；デフォルトは10
+\item[*readtable*] reader構文を決定するカレント読み込みテーブル
+\end{description}
+
+Readerのデフォルトマクロ文字は：
+\begin{tabbing}
+{\bf (} \hspace{10mm} \=  リスト読み込み \\
+{\bf "} \>  文字列読み込み \\
+{\bf '} \>  引用符表現読み込み \\
+{\bf \#} \>  マクロ変換 \\
+{\bf ;} \>  コメント\\
+{\bf `} \>  back-quote \\
+{\bf ,} \>  list-time eval \\
+{\bf @} \>  追加 \\
+{\bf \%} \>  C言語表記の数式読み込み \\
+\end{tabbing}
+
+エスケープ文字：
+
+\begin{tabbing}
+{\bf $\backslash$} \hspace{10mm} \=  単一文字エスケープ\\
+{\bf $|...|$} \>  多重文字エスケープ\\
+\end{tabbing}
+
+エスケープされていないsymbolが読まれると、
+全ての構成される文字はデフォルトで大文字に変換され、
+そして大文字のsymbolは内部に蓄えられる。
+例えば、'abcと'ABCは同じsymbolとみなされる。
+エスケープは、それらを区別するのに必要である。
+'$|$ABC$|$, 'ABCと'abcは同一であるが、
+'$|$abc$|$と'abcは違うsymbolである。
+デフォルトとして、大文字のsymbolを入力したときでさえ、
+そのsymbolを表示するときは
+EusLispのプリンタが内部の大文字表現から小文字に変換する。
+この変換は、プリンタによって実行されている。
+この変換は、
+{\tt :UPCASE}を{\bf *print-case*}に設定することにより、禁止される。
+
+10.は整数の10として読まれ、実数の10.0ではない。
+':'がパッケージマーカーとして予約されているので、
+'$|g:pcube|$のようにsymbolを構成するものとして使うとき、エスケープ化しなければ
+ならない。
+この制限は、文字':'の構文により強制されないが、
+アルファベット順やletterの意味を決定する属性により強制される。
+その文字の属性は、リーダから堅く結ばれる(hardwired)。
+したがって、{\bf copy-readtable}で新しいreadtableを作ったり、
+{\bf set-syntax-from-char}で文字のための構文的意味を組み直したりすることにより、
+ある文字の構文を変更可能であるが、
+その属性はどのようにしても変更することができない。
+その一方で、数字はいつも数字であり、アルファベットはアルファベットで、
+数値を表現するために'{\tt \#\$\%@}'の様な文字を使用することはできない。
+
+{\bf \%}は、EusLispで拡張read-macro文字となっている。
+挿入記述により書かれた数式の前に\%を付けることにより、
+その数式はlisp用の式に変換される。
+具体例を上げると、
+{\tt \%(1 + 2 * 3 / 4.0)}は
+{\tt (+ 1 (/ (* 2 3) 4.0))}に変換され、結果は{\tt 2.5}となる。
+Cの様な関数呼出や行列参照も、lisp形式に変換される。
+従って、{\tt \%(sin(x) + a[1])}は
+{\tt  (+ (sin x) (aref a 1))}として評価される。
+1つ以上の引数を持つ関数や2次元以上の行列は、
+{\tt func(a b c ...)}や{\tt ary[1 2 3 ...]}のように記述し、
+{\tt func(a,b,c)}や{\tt ary[1][2][3]}のように書かない。
+相対表現や割り当てもまた、正しく扱われる。
+それで、{\tt \%(a $<$ b)}は{\tt ($<$ a b)}に変換され、
+{\tt \%(a[0] = b[0] * c[0])}は 
+{\tt (setf (aref a 0) (* (aref b 0) (aref c 0)))}として得られる。
+単純な最適化は、重複した関数呼出や行列参照をなくすことである。
+{\tt \%(sin(x) + cos(x) / sin(x))}は
+{\tt (let* ((temp (sin x))) (+ temp (/ (cos x) temp)))}のように変換される。
+
+マクロ変換は\verb+#+文字が前に付いている。
+数値(integer)引数は、\verb+#+とマクロ変換文字の間に与えられる。
+これは、どの数字(0 .. 9)もマクロ変換文字として定義できないことを意味する。
+リーダの標準のマクロ変換文字は次の通り：
+\begin{description}
+\item[{\tt \#nA(..)}] 行列
+\item[{\tt \#B}] 2進数
+\item[{\tt \#D}] [度]から[ラジアン]への変換; \#D180 = 3.14
+\item[{\tt \#F(...)}] 実数ベクトル
+\item[{\tt \#nF((..))}] 実数行列; \#2F((..) (..)) is matrix
+\item[{\tt \#I(...)}] 整数ベクトル
+\item[{\tt \#nI((...))}] 整数行列
+\item[{\tt \#J(...)}] 一般オブジェクト \#J(myclass ....); 古い定義
+\item[{\tt \#O}] 8進数
+\item[{\tt \#P}] パス名
+\item[{\tt \#R}] [ラジアン]から[度]への変換; \#R3.14 = 180.0
+\item[{\tt \#S(classname slotname1 val1 slotname2 val2 ...)}] 構造体 (あらゆるオブジェクト)
+\item[{\tt \#V(...)}] ベクトル \#V(vectorclass ...)
+\item[{\tt \#X}] 16進数
+\item[{\tt \#(...)}] ベクトル
+\item[{\tt \#n\#}] ラベル参照
+\item[{\tt \#n=}] ラベル定義
+\item[{\tt \#'}] 関数; コンパイルコードあるいはlambda-closure
+\item[{\tt \#$\backslash$}] 文字
+\item[{\tt \#,}] 読み込み時に評価
+\item[{\tt \#+}] 条件読みだし(positive)
+\item[{\tt \#-}] 条件読みだし(negative)
+\item[{\tt \#*}] ビットベクトル
+\item[{\tt \#:}] 収容されてないsymbol
+\item[{\tt \#$|$...$|$\#}] コメント; 入れ子可能
+\end{description}
+
+いくつかのリーダ関数は、{\em eof-error-p, eof-value}や
+{\em recursive-p}のパラメータを持っている。
+最初の2つのパラメータは、リーダがend-of-fileに出会ったときの動作を制御する。
+{\em eof-error-p}のデフォルトは、Tである。これは、eof時のエラーの原因となる。
+eofの発生を知りたかったり、snatch controlにシステムエラーを渡したくないなら、
+{\em eof-error-p}にNILを指定すること。
+それで、読み込みの最中にeofが現れたとき、リーダはエラーループに入る代りに
+{\em eof-value}を返す。
+{\em eof-value}のデフォルトは、NILである。
+そのため、実際にNILが読まれたのかeofが現れたのか判別できない。
+それらを判別するためには、ストリームに決して現れない値を与えること。
+そのような特殊データオブジェクトを作るには、{\bf cons}か{\bf gensym}を
+使用すること。
+
+{\em recursive-p}は、read-macro関数にしばしば使用される。
+それは、リーダを再帰的に呼び出す。
+{\em recursive-p}のnon-NIL値は、読み込み処理がどこかで始まっていて、
+{\tt \#n=}や{\tt \#n\#}によってラベル付けされる書式の読み込みのために
+内部テーブルを初期化
+すべきでないことをリーダに告げている。
+
+\begin{refdesc}
+
+\funcdesc{read}{\&optional stream (eof-error-p t) (eof-value nil) recursive-p}{
+s表現を1つ読み込む。}
+
+\funcdesc{read-delimited-list}{delim-char \&optional stream recursive-p}{
+{\em delim-char}で終了するs表現を読み込む。
+これは、コンマで区切られたリストや
+{\tt \#$\backslash$]}のような特殊文字で終る数列を読むために役立つ。}
+
+\funcdesc{read-line}{\&optional stream (eof-error-p t) (eof-value nil)}{
+{\tt \#$\backslash$newline}(改行)で終了する1行を読み込む。
+返された文字列には、最後の改行文字を含まない。}
+
+\funcdesc{read-char}{\&optional stream (eof-error-p t) (eof-value nil)}{
+1文字読み込み、その整数表現を返す。}
+
+\funcdesc{read-from-string}{string \&optional (eof-error-p t) (eof-value nil)}{
+{\em string}からs表現を読み込む。
+最初のs表現のみ読み込むことができる。
+もし、複数のs表現を持つ{\em string}からの連続読み込み処理が必要であるならば、
+{\bf make-string-input-stream}で作られるstring-streamを用いること。}
+
+\funcdesc{unread-char}{char \&optional stream}{
+{\em stream}に{\em char}を戻す。
+1文字を越えて連続に戻すことはできない。}
+
+\funcdesc{peek-char}{\&optional stream (eof-error-p t) (eof-value nil)}{
+{\em stream}から1文字を読み込むが、{\em stream}のバッファからその文字を削除しない。
+これは{\bf read-char}に続いて{\bf unread-char}を実行したものと
+同じである。}
+
+\funcdesc{y-or-n-p}{\&optional format-string \&rest args}{
+{\em format-string}と{\em args}を画面に表示して、``yかnか''を尋ねる。
+答えが``y''または``n''で始まらない場合、質問を繰り返す。
+yならTそしてnならNILを返す。 それ以外は起こらない。}
+
+\funcdesc{yes-or-no-p}{\&optional stream}{
+{\em format-string}と{\em args}を画面に表示して、``yesかnoか''を尋ねる。
+答えが``yes''または``no''でない場合、質問を繰り返す。
+yesならTそしてnoならNILを返す。 それ以外は起こらない。}
+
+\end{refdesc}
+
+以下に示すreadtableの操作関数の中で、readtableのデフォルト値は
+グローバル変数{\bf *readtable*}の値である。
+
+\begin{refdesc}
+
+\funcdesc{readtable-p}{x}{
+{\em x}がreadtableなら、Tを返す。}
+\funcdesc{copy-readtable}{\&optional from-readtable to-readtable}{
+{\em to-readtable}が書かれていなければ、新しいreadtableを作る。
+{\em from-readtable}のすべての情報が{\em to-readtable}に移される。
+含まれる情報は、syntax table, read-macro tableと
+dispatch-macro tableでそれぞれ256個の要素を持つ。}
+
+\funcdesc{set-syntax-from-char}
+{from-char to-char [from-readtable to-readtable]}
+{{\em from-readtable}の中の{\em from-char}のsyntaxとread-macro定義を
+{\em to-readtable}の中の{\em to-char}にコピーする。}
+
+\funcdesc{set-macro-character}{char func [non-teminating-p readtable]}{
+{\em char}のread-macro関数として{\em func}を定義する。}
+\funcdesc{get-macro-character}{char [readtable]}{
+{\em char}のread-macro関数を返す。}
+\funcdesc{set-dispatch-macro-character}{dispchar char func [readtable]}{
+{\em dispchar}と{\em char}の組み合せの
+dispatch read-macro関数として{\em func}を定義する。}
+\funcdesc{get-dispatch-macro-character}{dispchar char [readtable]}{
+{\em dispchar}と{\em char}の組み合せの
+dispatch read-macro関数を返す。}
+\end{refdesc}
+
+%
+% P R I N T E R
+%
+
+\newpage
+
+\subsection{プリンタ(printer)}
+
+以下に示すものは、プリンタの行動を制御するための特殊変数である。
+
+\begin{description}
+
+\item[*print-case*] この定数が{\tt :downcase}なら、
+全てのsymbolは小文字で印刷される。
+しかし、symbolは内部的に大文字で表現されたままである。
+\item[*print-circle*] 再帰的参照を残したオブジェクトを印刷する。
+\item[*print-object*] 全てのオブジェクトの詳細を印刷する。
+\item[*print-structure*] {\tt \#}書式を使ってオブジェクトを印刷する。
+\item[*print-level*] 数列の印刷可能深さ
+\item[*print-length*] 数列の印刷可能長さ
+\item[*print-escape*] 現在使用されていない。
+\item[*print-pretty*] 現在使用されていない。
+\item[*print-base*] 印刷時の基数；デフォルトは10進数
+\end{description}
+
+再帰的参照を持つオブジェクトを印刷するためには、
+再度読み戻しが必要なため、
+{\bf *print-circle*}と
+{\bf *print-structure*}を両方Tに設定し、オブジェクトを印刷すること。
+ユーザーが定義するほとんどのオブジェクトは再読み込み可能な書式に
+表示されるが、
+クラス, オブジェクトモジュールやパッケージをその方法でdumpすることはできない。
+なぜなら、クラスとオブジェクトモジュールは再配置不可能な実行コードを含み、
+パッケージの再読みだしは、構成されるsymbol中に影響があるからである。
+
+\begin{refdesc}
+
+\funcdesc{print}{obj \&optional stream}{
+{\bf prin1}に続いて{\bf terpri}を行う。}
+
+\funcdesc{prin1}{obj \&optional stream}{
+書式に沿ってs表現を1つ出力する。その出力は、
+{\bf read}によって再度読み戻しが可能である。
+書式には、スラッシュ（エスケープ）や引用符を含んでいる。}
+
+\funcdesc{princ}{obj \&optional stream}{
+エスケープ（escape）や引用符（quote）の追加(add)がないことを除いて、
+{\bf print}と同じである。
+{\bf princ}によるオブジェクト表示は、読み戻しできない。
+例えば、{\tt (princ 'abc)}の出力は、{\tt (princ "abc")}の出力と
+同じであるため、リーダはそれらを区別することができない。} 
+
+\funcdesc{terpri}{\&optional stream}{
+{\tt \#$\backslash$newline}(改行)を出力して、
+{\em stream}を空にする。}
+
+\funcdesc{finish-output}{\&optional stream}{
+出力{\em stream}を空にする。}
+
+\fundesc{princ-to-string}{x \&optional (l 16)}
+\funcdesc{prin1-to-string}{x \&optional (l 16)}
+{文字列への出力ストリームを作り、{\em x}を書き込む。そして、
+{\bf get-output-stream-string}を実行する。}
+
+\funcdesc{format}{stream format-string \&rest args}{
+$\sim$A(ascii), $\sim$S(S-表現), $\sim$D(10進数),
+$\sim$X(16進数), $\sim$O(8進数), $\sim$C(文字), $\sim$F(実数表現), $\sim$E(指数表現),
+$\sim$G(general float), $\sim$V(dynamic number parameter), $\sim$T(タブ)
+ と$\sim$\% (改行)のフォーマット識別子のみ認識する。
+}
+\begin{verbatim}
+       (format t "~s ~s ~a ~a ~10,3f~%" "abc" 'a#b "abc" 'a#b 1.2)
+       --->  "abc" |A#B| abc a#b     1.200
+\end{verbatim}
+
+\funcdesc{pprint}{obj \&optional (stream *standard-output*) (tab 0) (platen 75)}
+{{\em obj}の最後の空白を除いたものを整形表示する。.}
+
+\funcdesc{print-functions}{file \&rest fns}{
+{\em file}に{\em fns}の関数定義の"defun"書式を書き出す。}
+
+\fundesc{write-byte}{integer stream}
+\fundesc{write-word}{integer stream}
+\funcdesc{write-long}{integer stream}{
+{\em integer}を1, 2または4バイトにして書く。}
+
+\funcdesc{spaces}{n \&optional stream}{
+空白を{\em n}回出力する。}
+%\fundesc{warning}{color format \&rest mesg}
+
+\macrodesc{pf}{func \&optional stream *standard-output*)}{
+関数{\em func}を整形表示する。コンパイルされた関数は、印刷できない。}
+
+\funcdesc{pp-method}{class selector \&optional (stream *standard-output*)}
+{{\em class}クラスの中に定義された{\em selector}メソッドを整形表示する。}
+\funcdesc{tprint}{obj tab \&optional (indent 0) (platen 79) (cpos 0)}
+{表形式で{\em obj}を印刷する。}
+
+\funcdesc{print-size}{obj}{
+印刷のときの{\em obj}の大体の長さを返す。}
+
+
+\end{refdesc}
+
+\newpage
+
+\subsection{プロセス間通信とネットワーク\label{IPC}}
+
+EusLispは、4種類のIPC機能（
+{\bf 共有メモリ, メッセージキュー, FIFO}や{\bf ソケット}）を備えている。
+\footnote{UNIXにおける伝統的なプロセス間通信機構であるパイプは、
+'fork'との組み合せでいつも使用されている。
+EusLispは、\ref{UnixProcess}節で説明する{\bf piped-fork}関数を備えている。}
+一般的に、この命令により性能が悪くなる。
+% SunOS implements pipe by using ソケット in unix domain.
+もし、マルチスレッド機能を使用するならば、
+\ref{mthread}節に記述されている同期関数も通信手段として
+用いることができる。
+これらの機能のうちで使用できるものは、Unixのバージョンや構成に依存する。
+
+\subsubsection{共有メモリ}
+Euslispは、System5のshmemではなく、SunOSのmmapによって共有メモリを提供する。
+共有メモリは、{\bf map-file}関数によって配置される。
+{\bf map-file}は、EusLispのプロセスメモリ空間内にファイルを配置し、
+{\bf foreign-string}のインスタンスを返す。
+データはこのforeign-stringに対する文字列関数を用いることにより
+書き込みと読みだしができる。
+共有メモリは、システム依存のページ境界に配置されるので、 
+配置アドレスを指定すべきではない。
+{\bf :share}のキーパラメータがNILに設定されているかまたは
+{\bf :private}がTに設定されているファイルを配置することは、
+ファイルをプライベート(排他的)にアクセスすべきであることを意味する。
+しかし、メモリの共有化の目的から外れるため、
+{\bf :share}のデフォルト値はTである。
+2人のユーザーでファイルが共有されるとき、読み書きの許可は
+両方のユーザーに正確に設定されなければならない。
+残念なことにSunOSは、ネットワークを通して異なったワークステーション間の
+ファイルの共有ををサポートしていない。
+
+64バイト長のファイルを2つのEusLispで共有するプログラム例を下に示す。
+
+\begin{verbatim}
+;; 64バイトのファイルを作る
+(with-open-file (f "afile" :direction :output)  (princ (make-string 64) f))
+;; 配置する
+(setq shared-string1 (map-file "afile" :direction :io))
+;;
+;; 他のプロセスの中で
+(setq shared-string2 (map-file "afile" :direction :io))
+\end{verbatim}
+
+その後、{\tt shared-string1}に書かれたデータは
+すぐに{\tt shared-string2}へ現れる。
+foreign stringへの書き込みは、
+{\bf replace}か{\bf setf}に{\bf aref}を組み合せることにより可能である。
+
+\begin{refdesc}
+\funcdesc{map-file}{filename \&key (:direction  :input) :length (:offset 0) (:share t)
+(:address 0)}{
+{\em filename}という名のファイルをメモリ空間に配置する。
+{\em filename}は、ローカルファイル、NFSでマウントされたリモートファイル、
+または{\tt /dev}の中のメモリデバイスのどれでも可能である。
+この関数の結果として{\bf foreign-string}が返される。その要素は、{\bf aref}によってアクセス可能である。{\tt map-file}によって{\em :direction=:input}という条件で
+配置されたforeign-stringにデータを書き込むことは、segmentation faultの原因となる。}
+\end{refdesc}
+
+\subsubsection{メッセージキューとFIFO}
+メッセージキューは、{\bf make-msgq-input-stream}か{\bf make-msgq-output-stream}で
+作られる。
+それぞれファイルストリームのインスタンスを返す。
+そのストリームは、ファイルに接続された他のストリームと同じように、
+読みだしや書き込み処理が許可されている。
+メッセージキューのストリームの{\tt fname}は、作られるときに、keyから設定する。
+
+FIFOに対するストリームを作るために、
+最初に{\bf unix:mknod}関数で、
+2番目の引数を{\em mode}={\tt \#o10000}に設定した上で
+FIFOノードを作り、ノーマルファイルとしてオープンする。
+メッセージキューとFIFOは、機械の上でローカルに作られ、
+機械内での通信チャンネルとしてのみ与えられる。
+
+メッセージキューとFIFOは、自分のプロセスが終了した後でさえも
+システムから削除されない。
+削除するためには、{\bf unix:msgctl}か{\bf ipcrm}コマンドが必要である。
+
+\begin{refdesc}
+\funcdesc{make-msgq-input-stream}{key \&optional (buffer-size 128)}{
+{\em key}で示すメッセージキューに繋がる入力ファイルストリームを返す。}
+
+\funcdesc{make-msgq-output-stream}{key \&optional (buffer-size 128)}{
+{\em key}で示すメッセージキューに繋がる出力ファイルストリームを返す。}
+
+\end{refdesc}
+
+\subsubsection{ソケット}
+ソケットは、他の通信手段に比べて多才な機能を持っている。
+なぜなら、UNIX領域の狭いホスト内とインターネット領域の
+広いネットーワーク内の両方で機能することができるためである。
+通信指向のソケット(SOCK\_STREAM)と接続されない
+ソケット(SOCK\_DGRAM)の2つがサポートされている。
+両方ともまず{\bf make-socket-address}関数で
+ソケットアドレスのオブジェクトを作らなければならない。
+{\bf make-socket-address}は、{\tt socket-address}のインスタンスを返す。
+UNIX領域では、ソケットアドレスにUNIXファイルシステム内のパス名を
+入れる。
+インターネット内では、ソケットアドレスに
+ホスト名とポート番号と必要ならプロトコル番号を結合
+したものを入れる。
+もし、ポート番号が{\tt /etc/services}に定義されていれば、
+service名によって指定されたsymbolを通して参照される。
+{\bf unix:getservbyname}関数がsymbol化されたservice名からポート番号を
+引き出すために使用される。
+1024より小さいポート番号は、rootユーザーのために予約されている。
+特権のないユーザーは、1024より大きなポート番号を個人的なソケットとして
+使用することを推奨する。
+
+接続されたストリームは、両方向通信チャンネルとして供給されるが、
+接続確定処理は、入力・出力で別々である。
+片方がサーバーとして参照され、もう一方がクライアントとして参照される。
+サーバーとなった端(service access point)は、最初に確定される。
+これは、{\bf make-socket-port}関数により作成される。
+この関数は、{\tt socket-port}のインスタンスを返す。
+ソケットポートのオブジェクトは、{\bf make-server-socket-stream}によって
+１つまたは複数のクライアントからの接続を受けるために使用される。
+{\bf make-server-socket-stream}への呼び出しは、クライアントからの
+接続要求が実際に起こるまで実行待ち状態となる。
+クライアントは、ソケットアドレスを指定することによって
+{\bf make-client-socket-stream}でソケットストリーム
+を複数作ることができる。
+
+\begin{verbatim}
+;;; an example of IPC through a socket stream:
+;;; server side
+(setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2000))
+(setq sport  (make-socket-port saddr))
+(setq sstream (make-server-socket-stream sport))
+;;;
+;;; client side
+(setq caddr (make-socket-address :domain af_inet :host "etlic2" :port 2000))
+(setq cstream (make-client-socket-stream caddr))
+\end{verbatim}
+
+データベースや移動ロボットの環境シミュレータのようなアプリケーション
+では、1つのサーバーと複数のクライアント間の
+{\em multiple connection service}（多重接続サービス）が要求される。
+この型のサーバーは、{\bf open-server}関数によりプログラム
+することができる。
+カレントホスト名と与えられたポート番号から
+{\bf open-server}は、接続要求にしたがってソケットポート(service access point)
+を作る。
+このポートは非同期なので、
+{\bf open-server}は遮断されず、直ちに返信する。
+その後、接続要求はそれぞれEuslispのメインループを中断し、
+ソケットストリーム が非同期に作成される。
+このソケットストリームも非同期モードで働く。
+{\bf open-server}の2番目の引き数にある非同期入力処理は、
+新しいデータがこのストリームに現れたときはいつでも呼び出される。
+30以上の接続が可能であるため、同時に多くのクライアントがサーバーの
+データにアクセスすることができる。
+
+\begin{verbatim}
+;; server side
+(defun server-func (s) 
+   (case (read s) ...    ;do appropriate jobs according to inputs
+(open-server 3000 #'server-func)
+... do other jobs in parallel
+;; client-1 through client-N
+(setq s (connect-server "etlmmd" 3000))
+(format s "..." ...) (finish-output s)	;issue a command to the server
+(read s)                                ;receive response
+\end{verbatim}
+
+確実な通信チャンネルとして供給される{\it 接続指向} ストリームと対照的に
+{\it 非接続} ソケットは、不確実な通信チャンネルである。
+メッセージがなくなったり、重複したり、故障したりする可能性がある。
+しかしながら、{\it 非接続} ソケットは、それぞれの接続にファイルディスクリプタを
+割り当てる必要が無いし、
+また、データやバッファのオーバーフローの読み込みをしないレシーバーでさえ
+送信処理を中断することができないという利点がある。
+
+非接続ソケットを作るためには、以下の命令を使用する。
+メッセージは{\bf unix:sendto}と{\bf unix:recvfrom}によって変換される。
+\begin{verbatim}
+;;; receiver side
+(setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2001))
+(setq sock   (make-dgram-socket saddr))
+(unix:recvfrom sock)
+;;;
+;;; client side
+(setq caddr (make-socket-address :domain af_inet :host "etlic2" :port 2001))
+(setq sock (unix:socket (send caddr :domain) 2 0))
+(unix:sendto sock caddr "this is a message")
+;;;
+;;; how to use echo service which is registered in /etc/services.
+(setq caddr (make-socket-address :domain af_inet :host "etlic2"
+                                 :port (car (unix:getservbyname "echo"))))
+(setq echosock (unix:socket (send caddr :domain) 2 0))
+(unix:sendto echosock caddr "this is a message")
+(unix:recvfrom echosock)  --> "this is a messge"
+\end{verbatim}
+
+
+\begin{refdesc}
+
+\funcdesc{make-socket-address}{\&key :domain :pathname :host :port :proto :service}{
+ソケットアドレスのオブジェクトを作る。}
+
+\funcdesc{make-socket-port}{sockaddr}{サーバー側のソケットポートを作る。
+この関数は、クライアントとの接続を確立するために使用される。}
+
+\funcdesc{make-server-socket-stream}{sockport \&optional (size 100)}{
+クライアントからの接続要求を受けて、双方向ストリームを返す。}
+
+\funcdesc{make-client-socket-stream}{sockaddr \&optional (size 100)}{
+サーバーのポートと接続をし、双方向ストリームを返す。}
+
+\funcdesc{open-server}{port remote-func}{
+インターネット領域内でホスト名と{\em port}で指定されるソケットポートを
+準備し、非同期に接続要求を待つ。
+接続が要求されたとき、それを受け新しいソケットストリームがオープンされる。
+ソケットポートにメッセージが到着したとき、{\em remote-func}は、
+ソケットポートを引き数として呼び出される。}
+
+\funcdesc{connect-server}{host port}{
+{\bf make-socket-address}と{\bf make-client-socket-stream}を連続的に呼び出しを
+行うための関数である。
+{\em host}と{\em port}で指定されるソケットストリームを返す。このソケットストリーム
+は、クライアントがサーバーと通信を行うためのものである。
+ポートは、インターネット領域内用に作られる。}
+
+\end{refdesc}
+
+\subsection{非同期入出力}
+
+\begin{refdesc}
+
+\funcdesc{select-stream}{stream-list timeout}{
+{\em stream-list}の中で、入力処理が準備されているストリームを見つけリストで返す。
+もし、{\em timeout}秒が経つまでにどのストリームも準備が出来ないときは、
+NILを返す。
+{\bf select-stream}は、入力ストリームのリストからアクティブなストリーム
+を選ぶときに役立つ。そのストリームでは、入力処理が非同期で可能となる。
+{\em timeout}は、選択処理が失敗するまでの時間を示す。
+これは、実数でもよい。
+もし、{\em timeout}の指定がないときは、最低１つのストリームから入力が到着するまで
+{\bf select-stream}は続けられる。
+もし、{\em timeout}が指定されどのストリームからも入力が現れなかったならば、
+{\bf select-stream}は失敗しNILを返す。}
+
+\macrodesc{def-async}{stream function}{
+{\em stream}にデータが到着したときに呼び出される{\em function}
+を定義する。{\em stream}は、ファイルストリームかソケットストリームのどちらかである。
+ファイルストリームにデータが来たとき又はソケットポートに接続要求が現れたとき、
+そのストリームを引き数として{\em function}が呼び出される。
+このマクロは、SIGIO ハンドラーとして装備され、ユーザーから与えられる
+実際の入力処理を実行するための{\em function}に置き換えられる。
+そして、{\em stream}が読み込み可能となったとき、非同期にSIGIOを発する
+ために{\em stream}に関して{\bf unix:fnctl}が使用される。}
+
+\end{refdesc}
+
+\newpage
+
+\subsection{\label{Pathnames}パス名}
+
+パス名は、OSに依存しないようにファイル名を解析あるいは構成する方法として
+与えられるものである。
+典型的なパス名は、次のような構成で成り立っていると仮定されている。
+host:device/directory1/.../directory-n/name.type.version。
+Euslispは、UNIXの上で動作している限り、ホスト・デバイス・バージョンを無視する。
+{\bf pathname}関数は、文字列をディレクトリ要素・名前・型に分解し、パス名
+オブジェクトを返す。そのパス名は、{\tt \#P}を先頭につけた文字列として表示される。
+
+
+\begin{refdesc}
+
+\funcdesc{pathnamep}{name}{
+もし{\em name}がパス名ならば、Tを返す。}
+
+\funcdesc{pathname}{name}{
+{\em name}はパス名または文字列で、パス名に変換される。
+最後の名前がディレクトリ名を示すために{\em name}の最後に"/"をつけることを
+忘れないこと。
+逆変換は{\bf namestring}で実現される。}
+
+\funcdesc{pathname-directory}{path}{
+{\em path}からディレクトリ名のリストを返す。
+"/"ディレクトリは:ROOTと表現される。
+{\em path}は、文字列あるいはパス名である。}
+
+\funcdesc{pathname-name}{path}{
+{\em path}からファイル名の部分を返す。
+{\em path}は、文字列あるいはパス名である。}
+
+\funcdesc{pathname-type}{path}{
+{\em path}からファイルの型の部分を取り出す。
+{\em path}は、文字列あるいはパス名である。}
+
+\funcdesc{make-pathname}{\&key :host :device :directory :name :type :version
+defaults}{
+{\em directiory},{\em name}と{\em type}から新しいパス名を作る。
+UNIX上では、他のパラメータは無視される。}
+
+\fundesc{merge-pathnames}{name
+\&optional (defaults *default-pathname-defaults*)}
+\funcdesc{namestring}{path}{
+{\em path}の文字列表現を返す。}
+\fundesc{parse-namestring}{name}
+\funcdesc{truename}{path}{
+{\em path}で名前付けされているファイルの絶対パス名を見つける。}
+\end{refdesc}
+\newpage
+
+\subsection{ファイルシステムインターフェース}
+\begin{refdesc}
+
+\funcdesc{probe-file}{path}{
+{\em path}という名のファイルがあるかどうかをチェックする。}
+\funcdesc{file-size}{path}{
+{\em path}という名のファイルのサイズをバイト数で返す。}
+\funcdesc{directory-p}{path}{
+{\em path}がディレクトリならば、Tを返す。
+そうでなかったとき（{\em path}が存在しなかったときを含める）
+はNILを返す。}
+\funcdesc{find-executable}{file}{U
+{\em file}という名のUNIXコマンドを探し、フルパス名で返す。
+{\bf find-executable}は、自分のpath-listから実行できるファイルを探す
+UNIXのwhichコマンドとほとんど同じ関数である。}
+
+\funcdesc{file-write-date}{file}{
+{\em file}が最後に変更された日時を整数表現で返す。
+{\tt (unix:asctime (unix:localtime (file-write-date {\em file})))}
+で文字列表現が得られる。}
+
+\funcdesc{file-newer}{new old}{
+もし、{\em new}ファイルが{\em old}ファイルよりも最近に変更されているならば、
+Tを返す。}
+
+\funcdesc{object-file-p}{file}{
+もし、{\em file}がヘッダー内のファイルのmagic numberを見ることにより
+オブジェクトファイルであったならば、Tを返す。}
+
+\funcdesc{directory}{\&optional (path ".")}{
+{\em path}の中の全てのファイルのリストを作る。}
+
+\funcdesc{dir}{\&optional (dir ".")}{
+{\em dir}で指定されたディレクトリ内のファイル名を表示する。 }
+
+\end{refdesc}
+
+\newpage

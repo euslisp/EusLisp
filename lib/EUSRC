@@ -1,0 +1,20 @@
+;; Sample of an .eusrc file.
+;; Copy this file to your home directory and customize as you like.
+
+;; When EusLisp starts, it first tries to locate the eusrc file
+;; named by 'EUSRC' environment variable.  If it is found, the  file
+;; is loaded.  Otherwise, '.eusrc' file in the user's home directory
+;; is loaded.
+;; Also, if there is a .eusrc file in the current working directory,
+;; it is loaded.  Note that if eus starts in the user's home directory,
+;; .eusrc file is loaded twice. 
+
+
+(setq *load-path*
+	(list	"./"
+		*eusdir*
+		(format nil "~Allib/" *eusdir*)
+		(format nil "~Ademo/" *eusdir*)))
+
+(defparameter *user* (unix:getenv "USER"))
+

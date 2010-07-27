@@ -1,0 +1,38 @@
+稲葉さんから、vaxではbody/が動かないとのレポートを頂きました。
+
+> それで，以下のようなテストをしたところbody/が失敗することがわかりまし
+> た．これは，そちらで作られたeusgeoでも失敗しています．
+> sunでは成功しているようです．sunで#NaNがあらわれているかどうかは
+> チェックしていません．
+
+> eusgeo$   (setq c1 (make-cube 100 100 50))
+> #<body #X167548 face=6 edge=12>
+> eusgeo$   (setq pl1+ (instance plane :init (normalize-vector #f(0 1 0.4))
+					     (float-vector 0 0 0)))
+> #<plane #X1663e4>
+> eusgeo$ (body/ c1 pl1+)
+> Floating exception
+> tansei<b39568> 
+
+エラーは、QUOTIENTで起こっていました。そう、0による除算です。
+同じ処理をsunでやっても大丈夫なのは、sunはzeroによる除算を許
+しているからです。これはきっとieee-floating-pointの仕様なの
+だと思います。つまり、sunでは、
+(/ 1.0 0.0) --> +Infinity
+(/ 0.0 0.0) --> Nan
+になります。vaxは両方ともcore dumpします。これはvaxよりsunの
+方が優位ですね。decのmipsを使ったワークステーションは大丈夫な
+んでしょうね。さし当たって、geopack.lのplaneの:intersection
+メソッドを、npnnの絶対値が小さい時は:parallelを返すようにし
+たらbody/は動くようになりました。ううむ。いたるところで
+#-ieee-floating-point ...という条件リードをいれておかなければ
+ならないようだ。
+
+sunがいいと言っても、整数はどちらもやっぱり
+(/ 1 0)  --> core dump
+となるのはあたりまえです。このシグナルを捕まえるのはちょっと厄
+介ですね。sigsegとかsigbusとかもそうですが、これらは再実行でき
+ないエラーですからね。EusLispではシグナルを捕まえてもいったんは
+なして、都合のいい処理の切れ目(funcallの前など)で検査するように
+してますから。どんなLispもたいていそうだと思います。
+

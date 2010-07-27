@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Process</TITLE>
+<META NAME="description" CONTENT="Process">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2974" HREF="node79.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2972" HREF="node76.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2966" HREF="node77.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2976" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2977" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2975" HREF="node79.html">File Systems and I/O</A>
+<B>Up:</B> <A NAME="tex2html2973" HREF="node76.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html2967" HREF="node77.html">Times</A>
+<BR> <P>
+<H3><A NAME="SECTION04012200000000000000">Process</A></H3>
+<P>
+<A NAME=11296>&#160;</A>
+<B>unix:getpid</B> <EM></EM>[function] 
+<UL><LI> returns the process id (16bit integer) of this process.
+</UL>
+<A NAME=11306>&#160;</A>
+<B>unix:getppid</B> <EM></EM>[function] 
+<UL><LI> returns the process id of the parent process.
+</UL>
+<A NAME=11316>&#160;</A>
+<B>unix:getpgrp</B> <EM>integer </EM>[function] 
+<UL><LI> returns the process group id.
+</UL>
+<A NAME=11326>&#160;</A>
+<B>unix:setpgrp</B> <EM>integer </EM>[function] 
+<UL><LI> sets a new process group id.
+</UL>
+<A NAME=11336>&#160;</A>
+<B>unix:getuid</B> <EM></EM>[function] 
+<UL><LI> gets user id of this process.
+</UL>
+<A NAME=11346>&#160;</A>
+<B>unix:geteuid</B> <EM></EM>[function] 
+<UL><LI> returns the effective user id of this process.
+</UL>
+<A NAME=11356>&#160;</A>
+<B>unix:getgid</B> <EM></EM>[function] 
+<UL><LI> returns the group id of this process.
+</UL>
+<A NAME=11366>&#160;</A>
+<B>unix:getegid</B> <EM></EM>[function] 
+<UL><LI> returns the effective group id of this process.
+</UL>
+<A NAME=11376>&#160;</A>
+<B>unix:setuid</B> <EM>integer </EM>[function] 
+<UL><LI> sets effective user id of this process.
+</UL>
+<A NAME=11386>&#160;</A>
+<B>unix:setgid</B> <EM>integer </EM>[function] 
+<UL><LI> sets the effective group id of this process.
+</UL>
+<A NAME=11396>&#160;</A>
+<B>unix:fork</B> <EM></EM>[function] 
+<UL><LI> creates another EusLisp. 0 is returned to the subprocess and the pid of
+the forked process is returned to the parent process.
+Use <B>system:piped-fork</B> described in section <A HREF="node85.html#UnixProcess">11.3</A>
+to make a process connected via pipes.
+</UL>
+<A NAME=11408>&#160;</A>
+<B>unix:vfork</B> <EM></EM>[function] 
+<UL><LI> forks another EusLisp, and suspends the parent process from execution
+until the new EusLisp process terminates.
+</UL>
+<A NAME=11418>&#160;</A>
+<B>unix:exec</B> <EM>path </EM>[function] 
+<UL><LI> replaces executing EusLisp with another program.
+</UL>
+<A NAME=11428>&#160;</A>
+<B>unix:wait</B> <EM></EM>[function] 
+<UL><LI> waits for the completion of one of subprocesses.
+</UL>
+<A NAME=11438>&#160;</A>
+<B>unix:exit</B> <EM>code </EM>[function] 
+<UL><LI> terminates execution and returns <EM>code as its completion status.
+Zero means normal termination.
+</UL>
+<A NAME=11449>&#160;</A>
+<B>unix:getpriority</B> <EM>which who </EM>[function] 
+<UL><LI> returns the highest priority (nice value) enjoyed by this process.
+<EM>Which is one of 0(process), 1(process-group) or 2(user).
+</UL>
+<A NAME=11460>&#160;</A>
+<B>unix:setpriority</B> <EM>which who priority </EM>[function] 
+<UL><LI> sets priority 
+of the resource determined by <EM>which and <EM>who.
+<EM>which is one of 0(process), 1(process-group) or 2(user).
+<EM>who  is  interpreted relative to <EM>which
+(a process identifier
+for <I>which</I>=0, process group  identifier  for  <I>which</I>=1,
+and  a  user ID for <I>which</I>=2.
+A zero value of who denotes
+the current process, process group, or user.
+To lower the priority  (nice value) of your EusLisp process,
+<TT>(unix:setpriority 0 0 10)</TT> will sets the nice value to 10.
+Bigger nice value makes your process get less favored.
+</UL>
+<A NAME=11476>&#160;</A>
+<B>unix:getrusage</B> <EM>who </EM>[function] 
+<UL><LI> returns list of system resource usage information about <EM>who process.
+Elements are ordered as follows:
+More comprehensive display is obtained by <B>lisp:rusage</B>.
+</UL>
+
+<PRE>    float ru_utime (sec.) /* user time used */
+    float ru_stime (sec.) /* system time used */
+    int  ru_maxrss;       /* maximum resident set size */
+    int  ru_ixrss;        /* currently 0 */
+    int  ru_idrss;        /* integral resident set size */
+    int  ru_isrss;        /* currently 0 */
+    int  ru_minflt;       /* page faults without physical I/O */
+    int  ru_majflt;       /* page faults with physical I/O */
+    int  ru_nswap;        /* number of swaps */
+    int  ru_inblock;      /* block input operations */
+    int  ru_oublock;      /* block output operations */
+    int  ru_msgsnd;       /* messages sent */
+    int  ru_msgrcv;       /* messages received */
+    int  ru_nsignals;     /* signals received */
+    int  ru_nvcsw;        /* voluntary context switches */
+    int  ru_nivcsw;       /* involuntary context switches */</PRE>
+
+<P>
+<A NAME=11488>&#160;</A>
+<B>unix:system</B> <EM>[command] </EM>[function] 
+<UL><LI> executes <EM>command in a sub shell.
+<EM>command must be recognizable by Bourn-shell.
+</UL>
+<A NAME=11500>&#160;</A>
+<B>unix:getenv</B> <EM>env-var </EM>[function] 
+<UL><LI> gets the value for the environment variable <EM>env-var.
+</UL>
+<A NAME=11511>&#160;</A>
+<B>unix:putenv</B> <EM>env </EM>[function] 
+<UL><LI> adds <EM>env in the process's environment variable list.
+<EM>env is a string which equates var to value
+like <TT>&quot;VARIABLE=value&quot;</TT>.
+</UL>
+<A NAME=11524>&#160;</A>
+<B>unix:sleep</B> <EM>time </EM>[function] 
+<UL><LI> suspends execution of this process for <EM>time seconds.
+</UL>
+<A NAME=11535>&#160;</A>
+<B>unix:usleep</B> <EM>time </EM>[function] 
+<UL><LI> suspends execution of this process for <EM>time micro-seconds
+(<B>u</B> represents micro).
+<B>Usleep</B> is not available on Solaris2 or other Sys5 based systems.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2974" HREF="node79.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2972" HREF="node76.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2966" HREF="node77.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2976" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2977" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2975" HREF="node79.html">File Systems and I/O</A>
+<B>Up:</B> <A NAME="tex2html2973" HREF="node76.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html2967" HREF="node77.html">Times</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

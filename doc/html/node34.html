@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Instance Management</TITLE>
+<META NAME="description" CONTENT="Instance Management">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2327" HREF="node35.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2325" HREF="node31.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2319" HREF="node33.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2329" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2330" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2328" HREF="node35.html">Basic Classes</A>
+<B>Up:</B> <A NAME="tex2html2326" HREF="node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html2320" HREF="node33.html">Message Sending</A>
+<BR> <P>
+<H2><A NAME="SECTION03043000000000000000">Instance Management</A></H2>
+<P>
+<A NAME=2285>&#160;</A>
+<B>instantiate</B> <EM>class &amp;optional size </EM>[function] 
+<UL><LI> the lowest primitive to create a new object from a class.
+If the class is a vector-class, <EM>size should be supplied.
+</UL>
+<A NAME=2296>&#160;</A>
+<B>instance</B> <EM>class &amp;rest message </EM>[macro] 
+<UL><LI> An instance is created, and the message is sent to it.
+</UL>
+<A NAME=2306>&#160;</A>
+<B>make-instance</B> <EM>class &amp;rest var-val-pairs </EM>[function] 
+<UL><LI> creates an instance of <EM>class and sets its slot variables
+according to <EM>var-val-pairs.
+For example, <TT>(make-instance cons :car 1 :cdr 2)</TT>
+is equivalent to <TT>(cons 1 2)</TT>.
+</UL>
+<A NAME=2320>&#160;</A>
+<B>copy-object</B> <EM>object </EM>[function] 
+<UL><LI> <B>copy-object</B> function is used to copy objects keeping the referencing
+topologies even they have recursive references.
+<B>Copy-object</B> copies any objects accessible from <EM>object
+except symbols and packages, which are untouched to keep the uniqueness
+of symbols.
+<B>copy-object</B> traverses all the references in an object twice:
+once to create new objects and to mark original objects that they have
+already copied, and again to remove marks.
+This two-step process makes copy-object work slower than copy-seq.
+If what you wish to copy is definitely a sequence,
+use of <B>copy-seq</B> or <B>copy-tree</B> is recommended.
+</UL>
+<A NAME=2336>&#160;</A>
+<B>become</B> <EM>object class </EM>[function] 
+<UL><LI> changes the class of <EM>object to <EM>class</EM>.
+The slot structure of both the old class and the new class must be
+consistent. Usually, this can be safely used only for changing
+class between binary vectors, for example from an integer-vector
+to a bit-vector.
+</UL>
+<A NAME=2348>&#160;</A>
+<B>replace-object</B> <EM>dest src </EM>[function] 
+<UL><LI> dest must be an instance of the subclass of src.
+</UL>
+<A NAME=2358>&#160;</A>
+<B>class</B> <EM>object </EM>[function] 
+<UL><LI> returns the class object of <EM>object.
+To get the name of the class, send :name message to the class object.
+</UL>
+<A NAME=2369>&#160;</A>
+<B>derivedp</B> <EM>object class </EM>[function] 
+<UL><LI> <B>derivedp</B> checks if an object is instantiated from <EM>class
+or <EM>class's subclasses.
+<B>subclassp</B> and <B>derivedp</B> functions do not search in class hierarchy:
+type check always finishes within a constant time.
+</UL>
+<A NAME=2384>&#160;</A>
+<B>slot</B> <EM>object class (index | slot-name) </EM>[function] 
+<UL><LI> Returns the named or indexed slot value.
+</UL>
+<A NAME=2394>&#160;</A>
+<B>setslot</B> <EM>object class (index | slot-name) value </EM>[function] 
+<UL><LI> <B>Setslot</B> is a internal function and users should not use it.
+Use, instead, combination of <B>setf</B> and <B>slot</B>.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2327" HREF="node35.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2325" HREF="node31.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2319" HREF="node33.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2329" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2330" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2328" HREF="node35.html">Basic Classes</A>
+<B>Up:</B> <A NAME="tex2html2326" HREF="node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html2320" HREF="node33.html">Message Sending</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

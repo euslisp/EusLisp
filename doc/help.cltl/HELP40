@@ -1,0 +1,98 @@
+(1- function-documentation "
+Args: (integer)
+Returns NUMBER minus one.")
+(aref function-documentation "
+Args: (array &rest indices)
+Returns the element of ARRAY specified by INDICES.")
+(array-rank function-documentation "
+Args: (array)
+Returns the rank of ARRAY.")
+(concatenate function-documentation "
+Args: (type &rest sequences)
+Returns a new sequence of the specified type, consisting of all elements of
+SEQUENCEs.")
+(defsetf function-documentation "
+Syntax: (defsetf symbol update-fun [doc] )
+	or
+	(defsetf symbol lambda-list (store-var) {decl | doc}* {form}*)
+Defines an expansion
+	(setf (SYMBOL arg1 ... argn) value)
+	=> (UPDATE-FUN arg1 ... argn value)
+	   or
+	   (let* ((temp1 ARG1) ... (tempn ARGn) (temp0 value)) rest)
+where REST is the value of the last FORM with parameters in LAMBDA-LIST bound
+to the symbols TEMP1 ... TEMPn and with STORE-VAR bound to the symbol TEMP0.
+The doc-string DOC, if supplied, is saved as a SETF doc and can be retrieved
+by (documentation 'SYMBOL 'setf).")
+(getf function-documentation "
+Args: (plist property &optional (default nil))
+Searches PLIST for a property that is EQ to PROPERTY.  If one is found,
+returns the value of the property.  If not, returns DEFAULT.
+The SETF form
+	(setf (getf place property-form) value-form)
+replaces the property value of the plist stored in PLACE, or adds a new
+property if the plist does not have the property yet.")
+(integerp function-documentation "
+Args: (x)
+Returns T if X is an integer; NIL otherwise.")
+(make-pathname function-documentation "
+Args: (&key (defaults (parse-namestring \"\"
+                        (pathname-host *default-pathname-defaults*)))
+            (host (pathname-host defaults))
+            (device (pathname-device defaults))
+            (directory (pathname-directory defaults))
+            (name (pathname-name defaults))
+            (type (pathname-type defaults))
+            (version (pathname-version defaults)))
+Creates a pathname object with the slot values specified by HOST, DEVICE,
+DIRECTORY, NAME, TYPE, and VERSION.")
+(numberp function-documentation "
+Args: (x)
+Returns T if X is a number; NIL otherwise.")
+(rotatef function-documentation "
+Syntax: (rotatef {place}*)
+Saves the values of PLACEs, and then assigns to each PLACE the saved value of
+the PLACE to its right.  The rightmost PLACE gets the value of the leftmost
+PLACE.  Returns NIL.")
+(setf function-documentation "
+Syntax: (setf {place form}*)
+Evaluates each FORM and assigns the value to the corresponding PLACE in order.
+Returns the value of the last FORM.
+Each PLACE may be any one of the following:
+  * A symbol that names a variable.
+  * A function call form whose first element is the name of the following
+    functions:
+	nth	elt	subseq	rest	first ... tenth
+	c?r	c??r	c???r	c????r
+	aref	svref	char	schar	bit	sbit	fill-pointer
+	get	getf	documentation	symbol-value	symbol-function
+	symbol-plist	macro-function	gethash
+	char-bit	ldb	mask-field
+	apply
+    where '?' stands for either 'a' or 'd'.
+  * the form (THE type place) with PLACE being a place recognized by SETF.
+  * a macro call which expands to a place recognized by SETF.
+  * any form for which a DEFSETF or DEFINE-SETF-METHOD declaration has been
+    made.")
+(shiftf function-documentation "
+Syntax: (shiftf {place}+ form)
+Saves the values of PLACE and FORM, and then assigns the value of each PLACE
+to the PLACE on its left.  The rightmost PLACE gets the value of FORM.
+Returns the original value of the leftmost PLACE.")
+(signed-byte type-documentation "
+As a type specifier, (SIGNED-BYTE n) specifies those integers that can be
+represented with N bits in 2's complement representation.")
+(string< function-documentation "
+Args: (string1 string2
+       &key (start1 0) (end1 (length string1))
+            (start2 0) (end2 (length string2)))
+If STRING1 comes before STRING2 in lexicographic order, then returns the
+number of characters in the longest common prefix of the strings.  Otherwise,
+returns NIL.")
+(vectorp function-documentation "
+Args: (x)
+Returns T if X is a vector; NIL otherwise.")
+(fixnump function-documentation "
+Args: (x)
+KCL specific.
+Returns T if the X is a fixnum; NIL otherwise.")

@@ -1,0 +1,75 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; remote inspector
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar *remote-port*)
+
+(defun remote-error (code msg1 form &optional (msg2))
+      (format *error-output* "~A remote error: ~A" *program-name* msg1)
+      (if msg2 (format *error-output* " ~A" msg2))
+      (if form (format *error-output* " in ~s" form))
+      (terpri *error-output*)
+      (throw 'reval nil))
+
+(defun reval (s)	;remote eval
+      (let* ((*standard-input* (send s :instream))
+	     (*standard-output* (send s :outstream))
+	     (*error-output* *standard-output*)
+	     (*error-handler* 'remote-error))
+        (catch 'reval
+	   (print (eval (read s)) s))))
+
+(defvar *server-streams* nil)
+
+(defun remote-port ()
+  (let* ((port 2048) (sp)
+	 (sa (make-socket-address
+			:domain af_inet 
+			:host (unix:gethostname)
+			:port port)) )
+    (setq *remote-port* nil)
+    (dotimes (i 1024)
+	(setq sp (make-socket-port sa))
+	(when (derivedp sp socket-port)
+	   (warn "listening on ~d~%" (send sa :port))
+	   (setq *remote-port* sp)
+	   (return t))
+	(send sa :next-port)
+	(send sa :port))
+    (unless *remote-port*  (warn "all ports engaged"))
+    (eval (macroexpand '(def-async *remote-port* (s)
+	 (let ((ns (make-server-socket-stream s)))
+	     (push ns *server-streams*)
+	     (def-async ns reval))) ))
+))
+
+;;;
+;; client side
+(defvar *jackstream*)
+(defvar *jackbuf* (make-string 16384))
+(defvar ack nil)
+(defun from-remote (s)
+   (let (len)
+      (setq len (unix:uread (send s :infd) *jackbuf*))
+      (unix:write *standard-output* *jackbuf* len)
+      (setq ack t)))
+
+(defun openjack (host port)
+  (let ((sa (make-socket-address :domain af_inet :host host :port port))
+	(exp))
+    (setq *jackstream* (make-client-socket-stream sa))
+    (unless (io-stream-p *jackstream*) (return-from eusjack *jackstream*))
+    (def-async *jackstream*  from-remote)
+    ) )
+
+(defun eusjack ()
+    (while t
+	(format *standard-output* "remote> ")
+	(finish-output *standard-output*)
+	(setq exp (read))
+	(if (eq exp '.) (return-from eusjack nil))
+	(setq ack nil)
+	(print exp *jackstream*)
+	(while (null ack) (unix:usleep 100000))
+    )
+
+

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>EusLisp's Object-Oriented Programming</TITLE>
+<META NAME="description" CONTENT="EusLisp's Object-Oriented Programming">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html1894" HREF="node5.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html1892" HREF="node3.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html1886" HREF="node3.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html1896" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html1897" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html1895" HREF="node5.html">Features</A>
+<B>Up:</B> <A NAME="tex2html1893" HREF="node3.html">Introduction</A>
+<B> Previous:</B> <A NAME="tex2html1887" HREF="node3.html">Introduction</A>
+<BR> <P>
+<H2><A NAME="SECTION02011000000000000000">EusLisp's Object-Oriented Programming</A></H2>
+<P>
+Unlike other Lisp-based object-oriented programming languages like
+CLOS [<A HREF="node11.html#CLOSKeene">4</A>],
+EusLisp is a Lisp system built on the basis of object-orientation.
+In the former approach, Lisp is used as an
+implementation language for the object-oriented programming,
+and there is apparent distinction between system defined objects
+and user defined objects, since system data types do not have 
+corresponding classes.
+On the other hand, every data structure in EusLisp except number is 
+represented by an object, and there is no inherent difference between
+built-in data types, such as <TT>cons</TT> and <TT>symbols</TT>,
+and user defined classes.
+This implies that even the system built-in data types
+can be extended (inherited) by user-defined classes.
+Also, when a user defines his own class as a subclass of a built-in class,
+he can use built-in methods and functions for the new class,
+and the amount of description for a new program can be reduced.
+For example, you may extend the <TT>cons</TT> class to have extra field other
+than <TT>car</TT> and <TT>cdr</TT> to define queues, trees, stacks, etc.
+Even for these instances, built-in functions for
+built-in cons are also applicable without any loss of efficiency,
+since those functions recognize type hierarchy in a constant time.
+Thus, EusLisp makes all the system built-in facilities open to programmers
+in the form of extensible data types.
+This uniformity is also beneficial to the implementation of EusLisp,
+because, after defining a few kernel functions
+such as <B>defclass</B>, <B>send</B>, and <B>instantiate</B>,
+in the implementation language,
+most of house-keeping functions to access the internal structure of built-in
+data types can be coded in EusLisp itself.
+This has much improved the reliability and maintainability of EusLisp.
+<P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

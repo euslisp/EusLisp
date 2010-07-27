@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Iteration</TITLE>
+<META NAME="description" CONTENT="Iteration">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2265" HREF="node30.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2263" HREF="node24.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2257" HREF="node28.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2267" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2268" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2266" HREF="node30.html">Predicates</A>
+<B>Up:</B> <A NAME="tex2html2264" HREF="node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html2258" HREF="node28.html">Blocks and Exits</A>
+<BR> <P>
+<H2><A NAME="SECTION03035000000000000000">Iteration</A></H2>
+<P>
+<A NAME=1496>&#160;</A>
+<B>while</B> <EM>test {form}* </EM>[special] 
+<UL><LI> While <EM>test is evaluated to non-nil,
+<EM>form</EM>s are evaluated repeatedly.
+<B>While</B> special form automatically establishes a block by name of nil
+around <EM>form</EM>s, and <B>return</B> can be used to exit from the loop.
+</UL>
+<A NAME=1511>&#160;</A>
+<B>tagbody</B> <EM>{tag | statement}* </EM>[special] 
+<UL><LI> <EM>tags are labels for <B>go</B>.
+You can use <B>go</B> only in <B>tagbody</B>.
+</UL>
+<A NAME=1525>&#160;</A>
+<B>go</B> <EM>tag </EM>[special] 
+<UL><LI> transfers control to the form just after <EM>tag
+which appears in a lexically scoped <B>tagbody</B>.
+<B>Go</B> to the tag in a different <B>tagbody</B>
+across the lexical scope is inhibited.
+</UL>
+<A NAME=1539>&#160;</A>
+<B>prog</B> <EM>({var | (var [init])}*) {tag | statement}* </EM>[macro] 
+<UL><LI> <B>prog</B> is a macro, which expands as follows:
+<TT><BLOCKQUOTE> <PRE><TT> (block nil 
+    (let <EM>var
+	(tagbody
+		<EM>tag | statement</EM>)))  
+</TT></PRE></BLOCKQUOTE> </TT></EM>
+<P>
+</UL>
+<A NAME=1559>&#160;</A>
+<B>do</B> <EM>({(var init [next])}*) (endtest [result]){declare} {form}
+* </EM></TT>[macro] 
+<UL><LI> <EM>vars are local variables.
+To each <EM>var, <EM>init</EM> is evaluated in parallel and assigned.
+Next, <EM>endtest</EM> is evaluated and if it is true, <B>do</B> returns
+<EM>result</EM> (defaulted to NIL).
+If <EM>endtest</EM> returns NIL, each <EM>form</EM> is evaluated sequentially.
+After the evaluation of forms, <EM>next</EM> is evaluated and the value is
+reassigned to each <EM>var</EM>, and the next iteration starts.
+</UL>
+<A NAME=1579>&#160;</A>
+<B>do*</B> <EM>({var init [next]}*) (endtest [result]){declare} {form}* </EM></TT>[macro] 
+<UL><LI> <B>do*</B> is same as <B>do</B> except that the evaluation of <EM>init
+and <EM>next</EM>, and their assignment to <EM>var</EM> occur sequentially.
+</UL>
+<A NAME=1594>&#160;</A>
+<B>dotimes</B> <EM>(var count [result]) {forms}* </EM></TT>[macro] 
+<UL><LI> evaluates <EM>forms <EM>count</EM> times.
+<EM>count</EM> is evaluated only once.
+In each evaluation, <EM>var</EM> increments from integer zero to
+<EM>count</EM> minus one.
+</UL>
+<A NAME=1609>&#160;</A>
+<B>dolist</B> <EM>(var list [result]) {forms}* </EM></TT>[macro] 
+<UL><LI> Each element of <EM>list is  sequentially bound to <EM>var</EM>,
+and <EM>forms</EM> are evaluated for each binding.
+<B>Dolist</B> runs faster than other iteration constructs
+such as <B>mapcar</B> and recursive functions,
+since <B>dolist</B> does not have to create a function closure or to apply it,
+and no new parameter binding is needed.
+</UL>
+<A NAME=1625>&#160;</A>
+<B>until</B> <EM>condition {forms}* </EM></TT>[macro] 
+<UL><LI> evaluates forms until <EM>condition holds.
+</UL>
+<A NAME=1636>&#160;</A>
+<B>loop</B> <EM>{forms}* </EM></TT>[macro] 
+<UL><LI> evaluates <EM>forms forever.
+To terminate execution, <B>return-from, throw</B> or <B>go</B> needed to be
+evaluated in <EM>forms</EM>.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2265" HREF="node30.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2263" HREF="node24.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2257" HREF="node28.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2267" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2268" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2266" HREF="node30.html">Predicates</A>
+<B>Up:</B> <A NAME="tex2html2264" HREF="node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html2258" HREF="node28.html">Blocks and Exits</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

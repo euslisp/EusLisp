@@ -1,0 +1,257 @@
+\section{Control Structures}
+\markright{\arabic{section}. Control Structures}
+\subsection{Conditionals}
+
+Although {\bf and, or} and {\bf cond} are advised to be macros by Common Lisp,
+they are implemented as special forms in EusLisp to improve
+the interpreting performance.
+
+\begin{refdesc}
+\specialdesc{and}{\{form\}*}{
+{\em Form}s are evaluated from left to right until NIL appears.
+If all forms are evaluated to non-NIL, the last value is returned.}
+
+\specialdesc{or}{\{form\}*}{
+{\em Form}s are evaluated from left to right until non-NIL appears,
+and the value is returned. If all forms are evaluated to NIL, 
+NIL is returned.}
+
+\specialdesc{if}{test then [else]}{
+{\bf if} can only have single {\it then} and {\it else} forms.
+To allow multiple {\em then} or {\em else} forms,
+they must be grouped by {\bf progn}.}
+
+\macrodesc{when}{test forms}{
+Unlike {\bf if},
+{\bf when} and {\bf unless} allow you to write multiple {\em forms}
+which are executed when {\em test} holds ({\bf when}) or
+does not {\em unless}.
+On the other hand, these macros
+cannot have the {\em else} forms.}
+
+\macrodesc{unless}{test forms}{
+is equivalent to {\tt(when (not {\em test}) . {\em forms})}.}
+
+\specialdesc{cond}{{(test \{form\}*)}*}{
+Arbitrary number of  cond-clauses can follow {\bf cond}.
+In each clause, the first form, that is {\em test}, is evaluated.
+If it is non-nil, the rest of the forms in that clause are evaluated sequentially,
+and the last value is returned. 
+If no forms are given after the {\em test}, the value of the {\em test} is returned.
+When the {\em test} fails, next clause is tried until a {\em test} which is evaluated
+to non-nil is found or all clauses are exhausted.
+In the latter case, {\bf cond} returns NIL.}
+
+\macrodesc{case}{key \{(\{label $|$ (\{lab\}*) \{form\}*)\}*}{
+For the clause whose {\em label} matches with {\em key},
+{\em form}s are evaluated and the last value is returned.
+Equality between {\em key} and {\em label} is tested with {\bf eq}
+or {\bf memq}, not with {\bf equal}.}
+
+\end{refdesc}
+
+\subsection{Sequencing and Lets}
+
+\begin{refdesc}
+\funcdesc{prog1}{form1 \&rest forms}{
+{\em form1} and {\em forms} are evaluated sequentially, 
+and the value returned by {\em form1} is returned as the value of {\bf prog1}.}
+
+\specialdesc{progn}{\{form\}*}{
+{\em Form}s are evaluated sequentially, and the value of the rightmost form
+is returned.
+{\bf Progn} is a special form because it has a special meaning when it
+appeared at top level in a file.
+When such a form is compiled, all inner forms are regarded as they appear
+at top level.
+This is useful for a macro which expands to a series of
+{\bf defun}s or {\bf defmethod}s, which must appear at top level.}
+
+\macrodesc{setf}{\{access-form value\}*}{
+assigns {\em value} to a generalized-variable {\em access-form}.}
+
+\specialdesc{let}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
+introduces local variables.
+All {\em value}s are evaluated and assigned to {\em var}s in parallel, i.e.,
+{\tt (let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))} produces
+(2 1).}
+
+\specialdesc{let*}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
+introduces local variables.
+All {\em value}s are evaluated sequentially, and assigned to {\em var}s
+i.e.,
+{\tt (let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))} produces
+(2 2).}
+\end{refdesc}
+
+\subsection{Local Functions}
+\begin{refdesc}
+\specialdesc{flet}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
+defines local functions.}
+
+\specialdesc{labels}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
+defines locally scoped functions. 
+The difference between {\em flet} and {\em labels} is,
+the local functions defined by {\em flet} cannot reference
+each other or recursively, whereas {\em labels} allows such mutual references.}
+\end{refdesc}
+
+\subsection{Blocks and Exits}
+\begin{refdesc}
+\specialdesc{block}{tag \{form\}*}{
+makes a lexical block from which you can exit by {\bf return-from}.
+{\em Tag} is lexically scoped and is not evaluated.}
+
+\specialdesc{return-from}{tag value}{
+exits the block labeled by {\em tag}.
+{\bf return-from} can be used to exit from a function or a method which
+automatically establishes block labeled by its function or method name
+surrounding the entire body.}
+
+\macrodesc{return}{value}{
+{\tt  (return x)} is equivalent to {\tt (return-from nil x)}. This is
+convenient to use in conjunction with {\bf loop, while, do, dolist,}
+and {\bf dotimes} which implicitly establish blocks labeled NIL.}
+
+\specialdesc{catch}{ tag \{form\}*}{
+establishes a dynamic block from which you can exit and return a value
+by {\bf throw}. {\em Tag} is evaluated.
+The list of all visible catch tags can be obtained by {\tt
+sys:list-all-catchers}.}
+
+\specialdesc{throw}{tag value}{
+exits and returns {\em value} from a catch block.
+{\em tag} and {\em value} are evaluated.}
+
+\specialdesc{unwind-protect}{protected-form \{cleanup-form\}*}{
+After the evaluation of {\em protected-form} finishes,
+{\em cleanup-form} is evaluated.
+You may make a block or a catch block outside the {\tt unwind-protect}.
+Even {\bf return-from} or {\bf throw} is executed in {\em protected-form}
+to escape from such blocks, {\em cleanup-form} is assured to be evaluated.
+Also, if you had an error while executing {\em protected-form},
+{\em cleanup-form} would always be executed by {\em reset}.}
+
+\end{refdesc}
+
+\subsection{Iteration}
+
+\begin{refdesc}
+
+\specialdesc{while}{test \{form\}*}{
+While {\em test} is evaluated to non-nil,
+{\em form}s are evaluated repeatedly.
+{\bf While} special form automatically establishes a block by name of nil
+around {\em form}s, and {\bf return} can be used to exit from the loop.}
+
+\specialdesc{tagbody}{\{tag $|$ statement\}*}{
+{\em tag}s are labels for {\bf go}.
+You can use {\bf go} only in {\bf tagbody}.}
+
+\specialdesc{go}{tag}{
+transfers control to the form just after {\em tag}
+which appears in a lexically scoped {\bf tagbody}.
+{\bf Go} to the tag in a different {\bf tagbody}
+across the lexical scope is inhibited.}
+
+\macrodesc{prog}{(\{var $|$ (var [init])\}*) \{tag $|$ statement\}*}{
+{\bf prog} is a macro, which expands as follows:
+\ptext{
+(block nil 
+    (let {\em var}
+	(tagbody
+		{\em tag $|$ statement})))}
+}
+
+\macrodesc{do}{(\{(var init [next])\}*) (endtest [result])\{declare\} \{form\}
+*}
+{{\em var}s are local variables.
+To each {\em var}, {\em init} is evaluated in parallel and assigned.
+Next, {\em endtest} is evaluated and if it is true, {\bf do} returns
+{\em result} (defaulted to NIL).
+If {\em endtest} returns NIL, each {\em form} is evaluated sequentially.
+After the evaluation of forms, {\em next} is evaluated and the value is
+reassigned to each {\em var}, and the next iteration starts.}
+
+\macrodesc{do*}{(\{var init [next]\}*) (endtest [result])\{declare\} \{form\}*}
+{{\bf do*} is same as {\bf do} except that the evaluation of {\em init}
+and {\em next}, and their assignment to {\em var} occur sequentially.}
+
+\macrodesc{dotimes}{(var count [result]) \{forms\}*}{
+evaluates {\em forms} {\em count} times.
+{\em count} is evaluated only once.
+In each evaluation, {\em var} increments from integer zero to
+{\em count} minus one.}
+
+\macrodesc{dolist}{(var list [result]) \{forms\}*}{
+Each element of {\em list} is  sequentially bound to {\em var},
+and {\em forms} are evaluated for each binding.
+{\bf Dolist} runs faster than other iteration constructs
+such as {\bf mapcar} and recursive functions,
+since {\bf dolist} does not have to create a function closure or to apply it,
+and no new parameter binding is needed.}
+
+\macrodesc{until}{condition \{forms\}*}{
+evaluates forms until {\em condition} holds.}
+
+\macrodesc{loop}{\{forms\}*}{
+evaluates {\em forms} forever.
+To terminate execution, {\bf return-from, throw} or {\bf go} needed to be
+evaluated in {\em forms}.}
+
+\subsection{Predicates}
+
+{\bf Typep} and {\bf subtypep} of Common Lisp are not provided, and should be
+simulated by {\bf subclassp} and {\bf derivedp}.
+
+\begin{refdesc}
+
+\funcdesc{eq}{obj1 obj2}{returns T,
+if {\em obj1} and {\em obj2} are pointers to the same object,
+or the same numbers.
+Examples: {\tt (eq 'a 'a)} is T, {\tt (eq 1 1)} is T,
+{\tt (eq 1. 1.0)} is nil, {\tt (eq "a" "a")} is nil.}
+\funcdesc{eql}{obj1 obj2}{
+{\bf Eq} and {\bf eql} are identical since all the numbers in EusLisp are represented as
+immediate values.}
+\funcdesc{equal}{obj1 obj2}{
+Checks the equality of any structured objects, such as strings, vectors or
+matrices, as long as they do not have recursive references.
+If there is recursive reference in {\em obj1} or {\em obj2},
+{\bf equal} loops infinitely.}
+\funcdesc{superequal}{obj1 obj2}{
+Slow but robust {\bf equal}, since {\bf superequal} checks circular reference.}
+
+\funcdesc{null}{object}{T if {\em object} is nil.
+Equivalent to (eq {\em object} nil).}
+\funcdesc{not}{object}{
+{\bf not} is identical to {\bf null}.}
+\funcdesc{atom}{object}{
+returns NIL only if object is a cons.
+{\tt (atom nil) = (atom '()) = T)}.
+Note that {\bf atom} returns T for vectors, strings, read-table, hash-table, 
+etc., no matter what complex objects they are.}
+\funcdesc{every}{pred \&rest args}{
+returns T if all {\em args} return T for {\em pred}.
+{\bf Every} is used to test whether {\em pred} holds for every {\em args}.}
+\funcdesc{some}{pred \&rest args}{
+returns T if at least one of {\em args} return T for {\em pred}.
+{\bf Some} is used to test whether {\em pred} holds for any of {\em args}.}
+\end{refdesc}
+\funcdesc{functionp}{object}{
+T if {\em object} is a function object that can be given to
+{\bf apply} and {\bf funcall}.
+Note that macros cannot be {\em apply}'ed or {\em funcall}'ed.
+{\bf Functionp} returns T, if {\em object} is
+either a compiled-code with type=0, a symbol that has function definition,
+a lambda-form, or a lambda-closure.
+Examples: (functionp 'car) = T, (functionp 'do) = NIL} 
+\funcdesc{compiled-function-p}{object}{
+T if {\em object} is an instance of compiled-code.
+In order to know the compiled-code is a function or a macro,
+send {\tt :type} message to the object, and {\tt function} or {\tt macro}
+is returned.}
+
+\end{refdesc}
+
+\newpage

@@ -1,0 +1,136 @@
+(char-font function-documentation "
+Args: (char)
+Returns the font attribute of CHAR.  Returns always 0 in KCL, since KCL
+characters have no font attributes.")
+(copy-alist function-documentation "
+Args: (alist)
+Returns a new list consisting of copies of all pairs in ALIST.")
+(copy-list function-documentation "
+Args: (list)
+Returns a new list consisting of all elements in LIST.")
+(defentry function-documentation "
+Syntax: (defentry symbol ({arg-type}*) (value-type function-name))
+KCL specific.
+The compiler defines a Lisp function named by SYMBOL whose body consists of a
+calling sequence to the C language function named by FUNCTION-NAME.  The
+interpreter ignores this form.  ARG-TYPEs are argument types of the C function
+and VALUE-TYPE is the return type of the C function.  Symbols OBJECT, INT,
+CHAR, FLOAT, DOUBLE are allowed for these types.")
+(describe function-documentation "
+Args: (x)
+Prints information about X to the standard output.")
+(digit-char-p function-documentation "
+Args: (char &optional (n 10))
+If CHAR represents a digit in radix N, then returns an integer represented by
+that digit.  Otherwise, returns NIL.")
+(dolist function-documentation "
+Syntax: (dolist (var form [result])
+          {decl}* {tag | statement}*)
+Establishes a NIL block and executes STATEMENTs once for each member of the
+list value of FORM, with VAR bound to the member.  Then evaluates RESULT
+(which defaults to NIL) and returns all values.")
+(dribble function-documentation "
+Args: (&optional filespec)
+If FILESPEC is given, starts recording the interaction to the specified file.
+FILESPEC may be a symbol, a string, a pathname, or a file stream.  If FILESPEC
+is not given, ends the recording.")
+(first function-documentation "
+Args: (x)
+Equivalent to CAR.")
+(get-output-stream-string function-documentation "
+Args: (string-output-stream)
+Returns as a string all outputs to STRING-OUTPUT-STREAM since the last call of
+GET-OUTPUT-STREAM-STRING for the same stream.")
+(hash-table type-documentation "
+A hash-table is a table used to map from objects to objects efficiently by the
+hashing technique.  A hash-table is notated as
+	#<hash-table n>
+where N is actually a number that identifies the hash-table.")
+(ldb-test function-documentation "
+Args: (bytespec integer)
+Returns T if at least one bit of the specified byte is 1; NIL otherwise.")
+(logcount function-documentation "
+Args: (integer)
+If INTEGER is negative, returns the number of 0 bits.  Otherwise, returns the
+number of 1 bits.")
+(logtest function-documentation "
+Args: (integer1 integer2)
+Equivalent to (NOT (ZEROP (LOGAND INTEGER1 INTEGER2))).")
+(maplist function-documentation "
+Args: (function list &rest more-lists)
+Creates and returns a list of K elements, with the N-th element being the
+value of applying FUNCTION to the N-th cdrs of the given LISTs, where K is the
+maximum length of the given LISTs.")
+(merge function-documentation "
+Args: (type sequence1 sequence2 test &key (key #'identity))
+Merges two sequences in the way specified by TEST and returns the result as a
+sequence of TYPE.  Both SEQUENCEs may be destroyed.  If both SEQUENCE1 and
+SEQUENCE2 are sorted in the sense of TEST, then the result is also sorted in
+the sense of TEST.")
+(most-positive-single-float variable-documentation "
+Same as MOST-POSITIVE-LONG-FLOAT.")
+(nbutlast function-documentation "
+Args: (list &optional (n 1))
+Destructive BUTLAST.  LIST may be destroyed.")
+(nsubst function-documentation "
+Args: (new old tree &key (key #'identity) (test #'eql) test-not)
+Destructive SUBST.  TREE may be destroyed.")
+(package type-documentation "
+A package object serves as a name space of symbols.  A package is notated as
+#<s package> where S is actually the name of the package.  KCL provides five
+built-in packages:
+	lisp	 standard symbols of Common Lisp.
+	user	 the package that the user uses by default.
+	keyword	 keyword symbols.
+	system	 system internal symbols.  Has nicknames SYS and SI.
+	compiler system internal symbols for the KCL compiler.")
+(pprint function-documentation "
+Args: (object &optional (stream *standard-output*))
+Pretty-prints OBJECT.  Returns no values.  Equivalent to
+	(PROGN (WRITE OBJECT :STREAM STREAM :PRETTY T :ESCAPE T)
+	       (VALUES))
+The SI:PRETTY-PRINT-FORMAT property N (which must be a non-negative integer)
+of a symbol SYMBOL controls the pretty-printing of form
+	(SYMBOL f1 ... fN fN+1 ... fM)
+in such a way that the subforms fN+1, ..., fM are regarded as the 'body' of
+the entire form.  For instance, the property value of 2 is initially given to
+the symbol DO.")
+(probe-file function-documentation "
+Args: (filespec)
+Returns the full pathname of the specified file if it exists.  Returns NIL
+otherwise.  FILESPEC may be a symbol, a string, a pathname, or a file stream.")
+(*random-state* variable-documentation "
+The default random-state object used by RANDOM.")
+(readtable type-documentation "
+A readtable defines the syntax used to read objects.
+Each readtable object remembers the syntactic class of each character.  The
+following syntactic classes are supported.  The characters in parenthesis
+below are those standard characters that belong to each syntactic class as
+defined in the standard readtable.
+	white-space (space and newline)
+	single-escape ( \\ )
+	multiple-escape ( | )
+	macro-character ( \"  #  '  (  )  ,  ;  ` )
+	constituent (the others)
+For each macro-character, the readtable remembers the definition of the
+associated read macro and the non-terminating-p flag.  In the standard
+readtable, only single-quote is non-terminating.  Dispatch macro characters
+are classified to macro-characters.  A readtable is notated as
+	#<readtable n>
+where N is actually a number that identifies the readtable.")
+(save function-documentation "
+Args: (filespec)
+KCL specific.
+Saves the current KCL core image into a program file specified by PATHNAME.
+FILESPEC may be a symbol, a string, a pathname, or a file stream.  This
+function depends on the version of KCL.  See KCL Report for details.")
+(set-exclusive-or function-documentation "
+Args: (list1 list2 &key (key #'identity) (test #'eql) test-not)
+Returns, as a list, those elements of LIST1 that are not elements of LIST2 and
+those elements of LIST2 that are not elements of LIST1.")
+(substitute-if-not function-documentation "
+Args: (new test sequence
+       &key (key #'identity) (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Returns a copy of SEQUENCE with all elements that do not satisfy TEST replaced
+by NEW.  The original SEQUENCE is not destroyed.")

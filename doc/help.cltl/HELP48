@@ -1,0 +1,111 @@
+(+ function-documentation "
+Args: (&rest numbers)
+Returns the sum of the args.  With no args, returns 0.")
+(+ variable-documentation "
+The last top-level form.")
+(cis function-documentation "
+Args: (radians)
+Returns a complex number whose realpart and imagpart are the values of (COS
+RADIANS) and (SIN RADIANS) respectively.")
+(eval-when function-documentation "
+Syntax: (eval-when ({situation}*) {form}*)
+Specifies when to evaluate FORMs.  Each SITUATION must be one of the following
+symbols.
+	COMPILE	(compile-time)
+	LOAD	(load-time of the fasl file)
+	EVAL	(load-time of the source file)")
+(function type-documentation "
+A function object specifies a function to be invoked by function-calling
+functions such as FUNCALL or APPLY.  A function is either:
+	1. a compiled function
+	2. a list of one of the following form
+		(lambda lambda-list . body)
+		(lambda-block block-name lambda-list . body)
+		(lambda-closure env1 env2 env3 lambda-list . body)
+		(lambda-block-closure env1 env2 env3 block-name lambda-list
+		                      . body)
+	   where ENV1, ENV2, and ENV3 respectively represent the variable
+	   environment, the function/macro environment, and the block/tagbody
+	   environment at the time of the function creation.
+	3. a symbol that names a global function.")
+(function function-documentation "
+Syntax: (function x) or #'x
+If X is a lambda expression, creates and returns a lexical closure of X in the
+current lexical environment.  If X is a symbol that names a function, returns
+that function definition.")
+(make-synonym-stream function-documentation "
+Args: (symbol)
+Creates and returns a synonym stream to SYMBOL.  Inputs from this stream are
+obtained from, and outputs to this stream are sent to the stream that is the
+value of the global variable named SYMBOL.  A synonym stream is notated as
+	#<synonym stream to s>
+where S is a symbol.")
+(mapcon function-documentation "
+Args: (function list &rest more-lists)
+For each N (0 <= N < K), applies FUNCTION to the N-th cdrs of the given LISTs,
+where K is the maximum length of the given LISTs.  Nconcs the values, one for
+each call to FUNCTION, and returns the result.")
+(open function-documentation "
+Args: (filespec &key (direction :input) element-type
+                     if-exists if-does-not-exist)
+Opens the specified file and returns a file stream to/from the file.  FILESPEC
+may be a symbol, a string, a pathname, or a file stream.  DIRECTION may be
+:INPUT, :OUTPUT, :IO, or :PROBE.  ELEMENT-TYPE is simply ignored in KCL.  IF-
+EXISTS specifies what to do when DIRECTION is either :OUTPUT or :IO and the
+specified file exists already.  It may be :ERROR (the default), :NEW-VERSION,
+:RENAME, :RENAME-AND-DELETE, :OVERWRITE, :APPEND, :SUPERSEDE, or NIL.  IF-
+DOES-NOT-EXIST specifies what to do when the specified file does not exists.
+It may be :ERROR (the default when DIRECTION is :INPUT), :CREATE (the default
+when DIRECTION is either :OUTPUT or :IO), or NIL.
+File streams are notated in one of the following ways:
+	#<input stream f>
+	#<output stream f>
+	#<io stream f>
+	#<probe stream f>
+where F is the file name.")
+(pathname-host function-documentation "
+Args: (filespec)
+Returns the host slot of the pathname specified by FILESPEC.  FILESPEC may be
+a symbol, a string, a pathname, or a file stream.")
+(position-if-not function-documentation "
+Args: (test sequence
+       &key (key #'identity) (start 0) (end (length sequence)) (from-end nil))
+Returns the index to the first element in SEQUENCE that does not satisfy TEST.
+Returns NIL if no such element exists.")
+(return-from function-documentation "
+Syntax: (return-from symbol [result])
+Terminates execution of the lexically surrounding block named SYMBOL and
+returns all values of RESULT (which defaults to NIL) as the values of the
+terminated block.")
+(set-difference function-documentation "
+Args: (list1 list2 &key (key #'identity) (test #'eql) test-not)
+Returns, as a list, those elements of LIST1 that are not elements of LIST2.")
+(simple-bit-vector-p function-documentation "
+Args: (x)
+Returns T if X is a simple-bit-vector; NIL otherwise.")
+(sublis function-documentation "
+Args: (alist tree &key (key #'identity) (test #'eql) test-not)
+Substitutes subtrees of TREE by using ALIST and returns the result.  The
+original TREE is not destroyed.")
+(union function-documentation "
+Args: (list1 list2 &key (key #'identity) (test #'eql) test-not)
+Returns, as a list, the union of elements in LIST1 and in LIST2.")
+(unless function-documentation "
+Syntax: (unless test {form}*)
+If TEST evaluates to NIL, then evaluates FORMs and returns all values of the
+last FORM.  If not, simply returns NIL.")
+(when function-documentation "
+Syntax: (when test {form}*)
+If TEST evaluates to non-NIL, then evaluates FORMs and returns all values of
+the last FORM.  If not, simply returns NIL.")
+(frs-bds function-documentation "
+Args: (n)
+KCL specific.
+Returns the bind stack index of the N-th entity in the frame stack.")
+(save-system function-documentation "
+Args: (pathname)
+KCL specific.
+Saves the current KCL core image into the specified program file.  This
+function differs from SAVE in that the contiguous and relocatable areas are
+made permanent in the saved image.  Usually the standard image of KCL
+interpreter/compiler is saved by this function.")

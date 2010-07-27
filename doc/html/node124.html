@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Drawings</TITLE>
+<META NAME="description" CONTENT="Drawings">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3555" HREF="node125.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3553" HREF="node119.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3547" HREF="node123.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3557" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3558" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3556" HREF="node125.html">Animation</A>
+<B>Up:</B> <A NAME="tex2html3554" HREF="node119.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html3548" HREF="node123.html">Viewer</A>
+<BR> <P>
+<A NAME="Drawings">&#160;</A><H2><A NAME="SECTION04055000000000000000">Drawings</A></H2>
+<P>
+<A NAME=19382>&#160;</A>
+<B>draw</B> <EM>[viewer] &amp;rest thing </EM>[function] 
+<UL><LI> draws <EM>things in <EM>viewer</EM>.
+<EM>Thing</EM> can be any of coordinates, body, face, edge, float-vector,
+list of two float-vectors.
+If you are running <TT>eusx</TT>, 
+<TT>(progn (view) (draw (make-cube 10 20 30)))</TT>
+ draws a cube in a xwindow.
+</UL>
+<A NAME=19397>&#160;</A>
+<B>draw-axis</B> <EM>[viewer] [size] &amp;rest thing </EM>[function] 
+<UL><LI> draws coordinate-axes of <EM>things in <EM>viewer</EM> with <EM>size</EM>
+as the length of each coordinates-axis.
+<EM>Thing</EM> can be any object derived from coordinates.
+</UL>
+<A NAME=19411>&#160;</A>
+<B>draw-arrow</B> <EM>p1 p2 </EM>[function] 
+<UL><LI> draws an arrow pointing from p1 to p2 in <TT>*viewer*</TT>.
+</UL>
+<A NAME=19422>&#160;</A>
+<B>hid</B> <EM>[viewer] &amp;rest thing  </EM>[function] 
+<UL><LI> draws hidden-line eliminated image in <EM>viewer.
+<EM>Thing can be of face or body.
+</UL>
+<A NAME=19434>&#160;</A>
+<B>hidd</B> <EM>[viewer] &amp;rest thing  </EM>[function] 
+<UL><LI> is same as <B>hid</B>, except that <B>hidd</B> draws hidden lines
+with dashed-lines.
+</UL>
+<A NAME=19446>&#160;</A>
+<B>hid2</B> <EM>body-list viewing </EM>[function] 
+<UL><LI> Generate hidden-line eliminated image represented by edge-image objects.
+The result is bound to <B>*hid*</B>.
+</UL>
+<A NAME=19457>&#160;</A>
+<B>render</B> <EM>&amp;key bodies faces (viewer *viewer*) (lights *light-sources*)<BR> 
+(colormap *render-colormap*) (y 1.0) </EM>[function] 
+<UL><LI> does ray-tracing for <EM>bodies and <EM>faces and generates
+hidden-surface removed images.
+viewing, viewport, and viewsurface are taken from <EM>viewer.
+<EM>lights</EM> is a list of <TT>light-source</TT> objects.
+<EM>colormap</EM> is xwindow's colormap object.
+Each of bodies and faces must have color attribute assigned.
+This can be done by sending <TT>:color</TT> message with the name of
+color LUT defined in the <EM>colormap</EM>.
+Currently this function works only in Xlib environment.
+See examples in <TT>demo/renderdemo.l</TT>.
+</UL>
+<A NAME=19476>&#160;</A>
+<B>make-light-source</B> <EM>pos &amp;optional (intensity 1.0) </EM>[function] 
+<UL><LI> make a light-source object located at <EM>pos.
+<EM>intensity</EM> is magnifying ratio which multiplies default light
+intensity. In order to determine the intensity more precisely,
+use <TT>:intensity</TT> method of a light-source.
+</UL>
+<A NAME=19489>&#160;</A>
+<B>tektro</B> <EM>file &amp;rest forms </EM>[macro] 
+<UL><LI> opens file for <TT>*tektro-port*</TT> stream, and evaluates forms.
+This is used in order to redirect the output of tektro drawings to a file.
+</UL>
+<A NAME=19500>&#160;</A>
+<B>kdraw</B> <EM>file &amp;rest forms </EM>[macro] 
+<UL><LI> <B>Kdraw</B> is a macro to produce a [ik]draw-readable postscript file.
+<B>Kdraw</B> opens <EM>file in <TT>:output</TT> mode,
+makes a kdraw-viewsurface and a viewport with which <TT>*viewer*</TT> is replaced,
+and evaluates <EM>forms.
+Each of <EM>forms</EM> is a call to any of drawing functions like <TT>draw</TT> or <TT>hid</TT>.
+Drawing messages from these forms are redirected to a <TT>kdraw-viewsurface</TT>, 
+which transforms the messages into postscript representations
+that <TT>idraw</TT> or <TT>kdraw</TT> can recognize, and stores them in <EM>file</EM>.
+When  <TT>idraw</TT> or <TT>kdraw</TT> is invoked and <EM>file</EM> is opened,
+you see the identical figure you drew in a EusViewer window.
+The figure can be modified by <TT>idraw</TT>'s facilities,
+and the final drawing can be incorporated into a LaTeXdocument
+using the <TT>epsfile</TT> environment.
+</UL>
+<A NAME=19528>&#160;</A>
+<B>pictdraw</B> <EM>file &amp;rest forms </EM>[macro] 
+<UL><LI> <B>Pictdraw</B> is a macro to produce picture files for Macintosh
+in PICT format. 
+<B>Pictdraw</B> opens <EM>file in <TT>:output</TT> mode,
+makes a pictdraw-viewsurface and a viewport with which <TT>*viewer*</TT> is replaced,
+and evaluates <EM>forms</EM>.
+Each of <EM>forms</EM> is a call to any of drawing functions like <TT>draw</TT> or <TT>hid</TT>.
+Drawing messages from these forms are redirected to a <TT>kdraw-viewsurface</TT>, 
+which transforms the messages into PICT format
+that <TT>macdraw</TT> or <TT>teachtext</TT> of Macintosh can recognize,
+and stores them in <EM>file</EM>.
+<P>
+</UL>
+<A NAME=19551>&#160;</A>
+<B>hls2rgb</B> <EM>hue lightness saturation &amp;optional (range 255) </EM>[function] 
+<UL><LI> Color representation in HLS (Hue, Lightness, and Saturation)
+is converted to RGB representation.
+HLS is often referred to as HSL.
+<EM>Hue represents a color around a rainbow circle (from 0 to 360).
+0 for red, 45 for yellow, 120 for green, 240 for blue, 270 for magenta, 
+and 360 again for red, etc.
+<EM>Lightness</EM> is a value between 0.0 and 1.0, representing
+from black to white.
+The color of lightness value of 0 is always black regardless to
+the hue and saturation, and the lightness value 1.0 is always white.
+<EM>Saturation</EM> is a value between 0.0 and 1.0, and represents the
+strength of the color. 
+The greater the saturation value, the divider the color,
+and small saturation values generate weak, dull tone colors.
+<EM>Range</EM> limits the RGB values.
+If you are using a color display which can assign 8bit value to each of
+red, green and blue, <EM>range</EM> should be 255.
+If you use Xwindow, which virtually assigns 16bits integers to RGB,
+you should specify <EM>range</EM> to 65535.
+Note the difference between HSV and HLS.
+In HLS, vivid (rainbow) colors are defined with lightness=0.5.
+</UL>
+<A NAME=19567>&#160;</A>
+<B>rgb2hls</B> <EM>red green blue &amp;optional (range 255) </EM>[function] 
+<UL><LI> RGB representation of a color is converted into the corresponding
+representation in HLS.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3555" HREF="node125.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3553" HREF="node119.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3547" HREF="node123.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3557" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3558" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3556" HREF="node125.html">Animation</A>
+<B>Up:</B> <A NAME="tex2html3554" HREF="node119.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html3548" HREF="node123.html">Viewer</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

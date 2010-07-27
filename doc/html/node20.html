@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Generalized Variables</TITLE>
+<META NAME="description" CONTENT="Generalized Variables">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2153" HREF="node21.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2151" HREF="node17.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2145" HREF="node19.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2155" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2156" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2154" HREF="node21.html">Special Forms</A>
+<B>Up:</B> <A NAME="tex2html2152" HREF="node17.html">Forms and Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html2146" HREF="node19.html">Scoping</A>
+<BR> <P>
+<H2><A NAME="SECTION03023000000000000000">Generalized Variables</A></H2>
+<P>
+Generally, any values or attributes are represented in slots of objects
+(or in stack frames).
+To retrieve and alter the value of a slot,
+two primitive operations, <EM>access</EM> and <EM>update</EM>, must be provided.
+Instead of defining two distinct primitives for every slot of objects,
+EusLisp, like Common Lisp, provides uniform update operations
+based on the generalized variable concept.
+In this concept, a common form is recognized  either as a value access form
+or as a slot location specifier.
+Thus, you only need to remember accessing form for each slot and
+update is achieved by <B>setf</B> macro used in conjunction with the access form.
+For example, <TT>(car x)</TT> can be used to replace the value
+in the car slot of <TT>x</TT> when used with <B>setf</B> as in <TT>(setf (car 
+'(a b) 'c)</TT>,
+as well as to take the car value out of the list.
+<P>
+This method is also applicable to all the user defined objects.
+When a class or a structure is defined, the access and update forms
+for each slot are automatically defined.
+Each of those forms is defined as a macro whose name is the concatenation of
+the class name and slot name.
+For example, car of a cons can be addressed by <TT>(cons-car '(a b c))</TT>.
+<P>
+<PRE>(defclass person :super object :slots (name age))
+(defclass programmer :super person :slots (language machine))
+(setq x (instantiate programmer))
+(setf (programmer-name x) &quot;MATSUI&quot;
+      (person-age x) 30)
+(incf (programmer-age x))
+(programmer-age x)   --&gt; 31
+(setf (programmer-language x) 'EUSLISP
+      (programmer-machine x) 'SUN4)</PRE>
+<P>
+Array elements can be accessed in the same manner.
+<P>
+<PRE>(setq a (make-array '(3 3) :element-type :float))
+(setf (aref a 0 0) 1.0 (aref a 1 1) 1.0 (aref a 2 2) 1.0)
+a --&gt; #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))
+
+(setq b (instantiate bit-vector 10))  --&gt; #*0000000000
+(setf (bit b 5) 1)
+b --&gt; #*0000010000</PRE>
+<P>
+In order to define special setf methods for particular objects,
+<B>defsetf</B> macro is provided.
+<P>
+<PRE>(defsetf symbol-value set)
+(defsetf get (sym prop) (val) `(putprop ,sym ,val ,prop))</PRE>
+<P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

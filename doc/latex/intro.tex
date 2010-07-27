@@ -1,0 +1,396 @@
+\section{Introduction}
+\markright{\arabic{section}. Introduction}
+% EusLispは、知能ロボットの研究を目的とした言語で、Common Lispと
+% 対象指向型プログラミングに基礎を置いている。ロボットの研究では、
+% センサデータの処理、環境認識、障害物回避動作計画、作業計画などが
+% 重要なテーマとして取り上げられるが、これらに共通するのは、ロボットと
+% 外界の3次元幾何モデルである。EusLispを開発する動機となったのは、
+% 記号処理システムから簡単に使えて拡張性の高いソリッドモデラーへの
+% 要求である。いくつかの既存のソリッドモデラーを調べてわかったことは、
+% その実現にとって最も重要な機能は、数値演算ではなくモデル要素の
+% トポロジーを表現、管理するためのリスト処理能力であった。もちろん、
+% 幾何演算も重要ではあるが、ベクタ、マトリクスを操作する関数を組み込めば
+% 十分であることがわかった。
+% こうして、ソリッドモデラーはLispの上に実現されるべきであると言う
+% 基本方針が得られた。さらに、ソリッドモデラーは、3次元物体モデルを
+% 定義し、動きをシミュレートし、物体の相互関係を表現し、グラフィックス
+% 表示する機能を提供するが、先に述べた各種のロボット問題と結合されなけ
+% れば意味がない。また、ロボットを完成されたシステムとして実現するには、
+% これらのロボット問題を解くモジュールが効果的に統合されなければならない。
+% EusLispは、この統合の枠組をオブジェクト指向に求めた。オブジェクト指向は、
+% モジュラープログラミングを促進し、継承機能により既存の機能を段階的に
+% 拡張することが容易になる。実際、上記のソリッドモデラーは、物体、面、
+% 稜線などの物理的実体の振舞いをクラスに定義し、ロボット問題に依存する
+% 機能は、これらをサブクラスに拡張することで効率よく発展させられる。
+% これは、ソフトウェア資源の再利用にもつながる。
+% こうしてEusLispは、対象指向とCommonLispをベースとして3次元幾何モデラー
+% を実現し、複数ロボットの協調動作に必要なタスク間通信機能、マンマシン
+% インタフェースに重要なウィンドウ、グラフィックス、複合的プログラミングに
+% 必要な他言語インタフェース等を備え、さまざまなロボット問題への適用を
+% 可能にしたプログラミングシステムとして構築された。この他、メモリ管理にも
+% 工夫を凝らし、メモリ容量以外に生じる領域の大きさに関する制約を極力
+% 排除し、ごみ集めが効率的に行なわれ、ユーザがメモリ管理に関するパラ
+% メータを操作する必要がないように努めた。
+% このreference manualは、EusLisp BasicsとExtensionsに分かれ、
+% 前者がCommon Lispの機能とオブジェクト指向型プログラミングを、後者が
+% 幾何モデル、ロボットモデル、ウィンドウ、画像処理など、よりロボット
+% 応用に近い部分を扱っている。
+
+
+EusLisp is an integrated programming system 
+for the research on intelligent robots
+based on Common Lisp and Object-Oriented programming.
+The principal subjects
+in the field of robotics research are  sensory data processing,
+visual environment recognition, collision avoiding motion planning,
+and task planning.
+In either problem, three dimensional shape models of robots and
+environment play crucial roles.
+A motivation to the development of EusLisp was a demand for an extensible
+solid modeler that can easily be made use of from higher level symbolic
+processing system.
+Investigations into traditional solid modelers proved that the vital
+requirement for their implementation language was the list processing
+capability to represent and manage topology among model components.
+Numerical computation power was also important, but locality of geometric
+computation suggested the provision of vector/matrix functions as
+built-ins would greatly ease programming.
+
+Thus the primary decision to build a solid modeler in a Lisp
+equipped with a geometric computation package was obtained.
+Although a solid modeler provides facilities to define shapes of 3D
+objects, to simulate their behaviors, and to display them graphically,
+its applications are limited until it is incorporated in robot modules
+mentioned above. These modules also need to be tightly interconnected
+to achieve fully integrated robot systems.
+EusLisp sought for the framework of this integration
+in object-oriented programming (OOP).
+While OOP promotes modular programming, it facilitates incremental
+extension of existing functions by using inheritance of classes.
+In fact, components in the solid modeler, such as bodies, faces, and edges,
+can orderly be inplemented by extending one of the most basic class
+{\em coordinates}.
+These components may have further subclasses to provide individual functions
+for particular robot applications.
+
+Based upon these considerations, EusLisp has been developped as an
+object-oriented Lisp which implements an extensible solid modeler\cite{Eus7}.
+Other features include intertask communication needed for the cooperative
+task coordination, graphics facilities on X-window for 
+visual user interface, and foreign language interface to support
+mixed language programming.
+
+In the implementation of the language, two performance-effective techniques
+were invented in type discrimination and memory management
+\cite{Eus4,Eus5,Eus6}.
+The new type discrimination method guarantees 
+constant-time discrimination between
+types in tree structured hiearchy without regard to the depth of trees.
+Heap memory is managed in Fibonacci buddy method, which improves
+memory efficiency without sacrificing runtime or garbage-collection
+performance.
+
+This reference manual describes EusLisp version 7.27 in two parts,
+{\em  EusLisp Basics and EusLisp Extensions}.
+The first part describes Common Lisp features and object-oriented 
+programming. Since a number of literatures are available on both topics,
+the first part is rather indifferent except EusLisp's specific
+features as described in {\em Interprocess Communication and Network},
+{\em Toplevel Interaction}, {\em Disk Save}, etc.
+Beginners of EusLisp are advised to get familiar with
+Common Lisp and object oriented programming in other ways
+\cite{CLtL,CLOS:Keene}.
+The second part deals with features more related with robot applications,
+such as
+{\em Geometric Modelling}, {\em Image Processing}, {\em Manipulator Model}
+and so on.
+Unfortunately, 
+the descriptions in this part may become incomplete or inaccurate
+because of EusLisp's rapid evolution.
+The update information is available via euslisp mailing list
+as mentioned in section \ref{License}.
+
+\subsection{EusLisp's Object-Oriented Programming}
+Unlike other Lisp-based object-oriented programming languages like
+CLOS \cite{CLOS:Keene},
+EusLisp is a Lisp system built on the basis of object-orientation.
+In the former approach, Lisp is used as an
+implementation language for the object-oriented programming,
+and there is apparent distinction between system defined objects
+and user defined objects, since system data types do not have 
+corresponding classes.
+On the other hand, every data structure in EusLisp except number is 
+represented by an object, and there is no inherent difference between
+built-in data types, such as {\tt cons} and {\tt symbols},
+and user defined classes.
+This implies that even the system built-in data types
+can be extended (inherited) by user-defined classes.
+Also, when a user defines his own class as a subclass of a built-in class,
+he can use built-in methods and functions for the new class,
+and the amount of description for a new program can be reduced.
+For example, you may extend the {\tt cons} class to have extra field other
+than {\tt car} and {\tt cdr} to define queues, trees, stacks, etc.
+Even for these instances, built-in functions for
+built-in cons are also applicable without any loss of efficiency,
+since those functions recognize type hierarchy in a constant time.
+Thus, EusLisp makes all the system built-in facilities open to programmers
+in the form of extensible data types.
+This uniformity is also beneficial to the implementation of EusLisp,
+because, after defining a few kernel functions
+such as {\bf defclass}, {\bf send}, and {\bf instantiate},
+in the implementation language,
+most of house-keeping functions to access the internal structure of built-in
+data types can be coded in EusLisp itself.
+This has much improved the reliability and maintainability of EusLisp.
+
+\subsection{Features}
+
+\begin{description}
+\item [object-oriented programming]
+EusLisp provides single-inheritance Object-Oriented programming.
+All data types except numbers are represented by objects whose
+behaviors are defined in their classes.
+\item [Common Lisp] EusLisp follows the specifications of Common Lisp
+described in \cite{CLtL} and \cite{CLtL2}
+as long as they are consistent with EusLisp's goal and object-orientation.
+See next subsection for incompatibilities.
+\item [compiler]
+EusLisp's compiler can boost the execution  5 to 30 
+times as fast as the interpreted execution.
+The compiler keeps the same semantics as the interpreter.
+\item[memory management] Fibonacci buddy method,
+which is memory efficient, GC efficient, and robust,
+is used for the memory management.
+EusLisp can run on machines with relatively modest amount of memory.
+Users are free from the optimization of page allocation for each
+type of data.
+\item [geometric primitives]
+Since numbers are always represented as immediate data,
+no garbage is generated by numeric computation.
+A number of geometric functions for arbitrary-sized  vectors and matrices
+are provided as built-in functions.
+\item [geometric modeler]
+Solid models can be defined from primitive bodies using CSG set operations.
+Mass properties, interference checking, contact detection, and so on,
+are available.
+\item [graphics]
+Hidden-line eliminated drawing and hidden-surface eliminated rendering
+are available.
+Postscript output to idraw can be generated.
+\item [image processing]
+Edge based image processing facility is provided.
+\item [manipulator model]
+6 D.O.F.s robot manipulator can easily be modeled.
+\item [Xwindow interface]
+Three levels of Xwindow interface, the Xlib foreign functions, 
+the Xlib classes and the original XToolKit classes are provided.
+\item [foreign-language interface]
+Functions written in C or other languages can be linked into EusLisp.
+Bidirectional call between EusLisp and other language are supported.
+Functions in libraries like LINPACK become available through this interface.
+Call-back functions in X toolkits can be defined in Lisp.
+\item [unix binding]
+Most of unix system calls and unix library functions are assorted as Lisp
+functions. Signal handling and asynchronous I/O are also possible.
+\item [multithread] multithread programming, which enables multiple
+contexts sharing global data, is available on Solaris 2 operating system.
+Multithread facilitates asynchronous programming and improves real-time
+response\cite{MTEus1,MTEus2}.
+If EusLisp runs on multi-processor machines, it can utilize 
+parallel processors' higher computating power.
+%\item[disk save]
+%EusLisp process image can be saved in a disk file to ease initial loading
+%or to produce a complete application.
+\end{description}
+
+\subsection{Compatibility with Common Lisp}
+
+Common Lisp has become the well-documented and widely-available standard Lisp
+\cite{CLtL,CLtL2}.
+Although EusLisp has introduced lots of Common Lisp features
+such as variable scoping rules, packages, sequences, generalized variables,
+blocks, structures, keyword parameters, etc.,
+incompatibilities still remain.
+Here is a list of missing features:
+
+\begin{enumerate}
+\item multiple values:
+      multiple-value-call,multiple-value-prog1, etc.
+\item some of data types:
+      complex number, bignum, ratio, character and deftype
+\item some of special forms:
+      progv, compiler-let,macrolet
+\end{enumerate}
+
+Following features are incomplete:
+\begin{enumerate}
+\setcounter{enumi}{3}
+\item  closure -- only valid for dynamic extent
+%\item  package --  no shadowing-list
+\item  declare,proclaim -- inline and ignore are unrecognized
+\end{enumerate}
+
+\subsection{Revision History}
+\begin{description}
+\item[1986] The first version of EusLisp ran on Unix-System5/Ustation-E20.
+Fibonacci buddy memory management, simple compiler generating M68020
+assembly code, and vector/matrix functions were tested.
+\item[1987] The new fast type checking method is implemented.
+The foreign language interface and the SunView interface were incorporated.
+\item[1988] The compiler was changed to generate C programs as
+intermediate code. Since the compiler became processor independent,
+EusLisp was ported on Ultrix/VAX8800 and on SunOS3.5/Sun3 and /Sun4 .
+IPC facility using socket streams was added.
+The solid modeler was implemented.
+Lots of Common Lisp features such as keyword parameters, 
+labeled print format to handle recursive data objects,
+generic sequence functions,
+readtables, tagbody, go, flet, and labels special forms, etc.,
+were added.
+\item[1989] The Xlib interface was introduced.
+\% read macro to read C-like mathematical expressions was made.
+manipulator class is defined.
+\item[1990] The XView interface was written by M.Inaba.
+Ray tracer was written.
+Solid modeler was modified to keep CSG operation history.
+Asynchronous I/O was added.
+\item[1991] The motion constraint program was written by H.Hirukawa.
+Ported to DEC station.
+Coordinates class changed to handle both 2D and 3D coordinate systems.
+Body composition functions were enhanced to handle contacting objects.
+CSG operation for contacting objects.
+The package system became compatible with Common Lisp.
+\item[1992]
+{\bf Face+} and {\bf face*} for union and intersection of two coplanar faces
+were added.
+Image processing facility was added. The first completed reference manual
+was printed and delivered.
+\item[1993] EusLisp was stable.
+\item[1994] Ported to Solaris 2. Multi-context implementation using
+Solaris's multithread facility. XToolKit is built. Multi robot simulator,
+MARS was written by Dr. Kuniyoshi. EusLisp organized session at RSJ 94,
+in Fukuoka.
+\item[1995] The second version of the reference manual is published.
+\end{description}
+
+\subsection{Installation}
+The installation procedure is described in {\tt README}.
+The installation directory, which is assumed to be {\tt "/usr/local/eus/"},
+should be set to the global variable 
+{\tt *eusdir*}, since this location is referenced
+by {\bf load} and the compiler.
+
+Subdirectories in  {\tt *eusdir*} are described in table \ref{Directories}.
+Among these, 
+{\tt c/, l/, comp/, geo/, clib/,} and {\tt xwindow} contain essential
+files to make eus and eusx. Others are optional libraries, demonstration
+programs and contributions from users.
+
+\begin{table}
+\begin{center}
+{\footnotesize
+\begin{tabular}{|l | l|}\hline 
+FILES &  this document \\
+README &  a brief guide to lisence, installation and sample run\\
+VERSION &  EUSLisp version number\\
+bin &  executables (eus, euscomp and eusx) \\
+c/ &  EusLisp kernel written in C\\
+l/ &  kernel functions written in EusLisp\\
+comp/ &  EusLisp compiler written in EusLisp\\
+clib/ &  library functions written in C\\
+doc/ &  documentation (latex and jlatex sources and memos)\\
+geo/ &  geometric and graphic programs\\
+lib/ & shared libraries (.so) and start-up files\\
+llib/ &  Lisp library \\
+llib2/ &  secondary Lisp library developed at UTYO\\
+xwindow/ &  X11 interface\\
+makefile@ &  symbolic link to one of makefile.sun[34]os[34],.vax, etc.\\
+pprolog/ &  tiny prolog interpreter\\
+xview/ &  xview tool kit interface\\
+tool/ & \\
+vxworks/ & interface with VxWorks real-time OS\\
+robot/ & robot models and simulators\\
+vision/ &  image processing programs\\
+contact/ & motion constraint solver by H.Hirukawa
+\cite{Hirukawa:1991a,Hirukawa:1991b,Hirukawa:1991c}\\
+demo/ &  demonstrative programs\\
+bench/ &  benchmark programs\\ \hline
+\end{tabular}
+}
+\end{center}
+\caption{\label{Directories}Directories in {\tt *eusdir*}}
+\end{table}
+
+\subsection{\label{License}License}
+EusLisp can be obtained with its source code via ftp from
+etlport.etl.go.jp (192.31.197.99).
+Those who use EusLisp must observe  following articles
+and submit a copy of license agreement (doc/LICENCE) to the author.
+\begin{quote}
+\begin{tabbing}
+Toshihiro MATSUI \hspace{50mm} \= \\
+Intelligent Systems Division, \>  \\
+Electrotechnical Laboratory  \>  \\
+1-1-4 Umezono,
+Tsukuba, Ibaraki 3058568, JAPAN. \> email: matsui@etl.go.jp \\
+\end{tabbing}
+\end{quote}
+
+Users are registered in the euslisp mailing list (euslisp@etl.go.jp),
+where information for Q\&A, bug fix, and upgrade information is circulated.
+This information has been accumulated in {\tt *eusdir*/doc/mails}.
+
+\begin{enumerate}
+\item The copyright of EusLisp belongs to
+the author (Toshihiro Matsui) and Electrotechnical Laboratory.
+The user must get agreement of use from the author.
+\item Licensee may use EusLisp for any purpose other than military purpose.
+\item EusLisp can be obtained freely from Elecrotechnical Laboratory
+via ftp.
+\item EusLisp may be copied or sold as long as articles described here
+are observed. When it is sold, the seller must inform the customers
+that the original EusLisp is free.
+\item When licensees publicize their researches or studies which used EusLisp,
+the use of EusLisp must be cited with appropriate bibliography.
+\item Licensees may add changes to the source code of EusLisp.
+The resulted program is still EusLisp as long as the
+change does not exceed 50\% of codes,
+and these articles must be observed for unchanged part.
+\item The copyright of programs developped in EusLisp belongs to the
+developper. However, he cannot extend his copyright over the main body
+of EusLisp.
+\item Neither the author nor ETL provides warranty.
+\end{enumerate}
+
+\subsection{Demonstrations}
+Demonstration programs are found in {\tt demo} subdirectory.
+{\tt cd} to {\tt *eusdir*} and run eusx.
+\begin{description}
+\item[Robot Animation] \index{animation}
+Load {\tt demo/animdemo.l} from eusx.
+Smooth animation of eta3 manipulator will be shown after a
+precomputation of approximately 20 minutes.
+\item[Ray-Tracing] \index{ray-tracing}
+If you have 8-bit pseudo color display,
+a ray-tracing image can be generated by loading
+{\tt demo/renderdemo.l}.
+Make sure {\tt geo/render.l} has already been compiled.
+\item[Edge Vision]
+Loading {\tt demo/edgedemo.l}, a sample gray-scale image is displayed.
+You give parameters for choosing the gradient operator and 
+edge thresholds.
+Edges are found in a few second and overlayed on the original image.
+\end{description}
+
+\begin{figure}
+% \epsfile{file=fig/eta3colavo.ps,width=150mm}
+\mbox{
+\epsfxsize=15cm
+\epsfbox{fig/eta3colavo.ps}
+}
+\caption{Animation of Collision Avoidance Path Planning}
+\end{figure}
+
+\bibliography{/usr/users/matsui/biblio/lang,/usr/users/matsui/biblio/hirukawa}
+
+\newpage

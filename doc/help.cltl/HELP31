@@ -1,0 +1,57 @@
+(eql function-documentation "
+Args: (x y)
+Returns T if the args satisfy one of the following conditions.
+	1. identical
+	2. are numbers of the same type with the same value
+	3. are characters that represent the same character
+Returns NIL otherwise.")
+(fill function-documentation "
+Args: (sequence item &key (start 0) (end (length sequence)))
+Replaces the specified elements of SEQUENCE with ITEM.")
+(ldb function-documentation "
+Args: (bytespec integer)
+Extracts a byte from INTEGER at the specified byte position, right-justifies
+the byte, and returns the result as an integer.")
+(null type-documentation "
+The type to which only NIL belongs.")
+(null function-documentation "
+Args: (x)
+Returns T if X is NIL; NIL otherwise.")
+(pathname-version function-documentation "
+Args: (filespec)
+Returns the version slot of the pathname specified by FILESPEC.  FILESPEC may
+be a symbol, a string, a pathname, or a file stream.")
+(prin1-to-string function-documentation "
+Args: (object)
+PRIN1s OBJECT to a new string and returns the result.  Equivalent to
+(WRITE-TO-STRING OBJECT :ESCAPE T).")
+(princ-to-string function-documentation "
+Args: (object)
+PRINCs OBJECT to a new string and returns the result.  Equivalent to
+(WRITE-TO-STRING OBJECT :ESCAPE NIL).")
+(set-char-bit function-documentation "
+Args: (char bit-name flag)
+Returns a character with the same code and attributes as CHAR except the bit
+specified by BIT-NAME is on (if FLAG is non-NIL) or off.  In KCL, this
+function always signals an error since no BIT-NAME is supported.")
+(string-greaterp function-documentation "
+Args: (string1 string2
+       &key (start1 0) (end1 (length string1))
+            (start2 0) (end2 (length string2)))
+Similar to STRING>, but ignores cases.")
+(symbol-plist function-documentation "
+Args: (symbol)
+Returns the property list of SYMBOL.")
+(write-string function-documentation "
+Args: (string &optional (stream *standard-output*)
+              &key (start 0) (end (length string)))
+Outputs STRING to STREAM.  Returns STRING.")
+(yes-or-no-p function-documentation "
+Args: (&optional (format-string nil) &rest args)
+Asks the user an YES-or-NO question.  Does FRESH-LINE, prints a message as if
+FORMAT-STRING and ARGs were given to FORMAT, and then prints \"(Y or N)\" is
+printed.  If FORMAT-STRING is NIL, however, no prompt will appear.")
+(displaced-array-p function-documentation "
+Args (array)
+KCL specific.
+Returns T if the ARRAY is displaced to another array; NIL otherwise.")

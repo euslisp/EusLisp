@@ -1,0 +1,234 @@
+\documentstyle[jart12]{jarticle}
+\pagestyle{plain}
+\oddsidemargin=0cm
+\evensidemargin=0cm
+\textwidth=17.5cm
+\textheight=24cm
+
+\begin{document}
+
+\jintercharskip=0pt plus 6pt minus 1pt
+
+\newenvironment{xlist}[0]{\begin{list}{・}{
+\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm\parskip=1mm\parsep=0.2mm
+\itemsep=0.3mm}}{\end{list}}
+
+\section{接触物体の合成}
+
+\subsection{アルゴリズムの概要}
+2つの物体をbody1, body2とする。
+合成の計算は、次のように進展する。
+\begin{enumerate}
+\item 交差の登録(insert-intersections)
+\item 交差によって区切られた線分からedgeを生成(make-edge-segments)
+\item 交差を面の上でつないで相貫線を生成(make-crossing-edges)
+\item 線分を面ごとにソート
+\item 接触している面の発見(find-contacting-faces)
+\item 重なっている面の発見(find-aligned-faces)
+\item 接触している面の併合(merge-contacting-faces)
+\item 重なっている面の併合(merge-aligned-faces)
+\item 共通の面に由来する線分のリストから閉路を見つけ、面、穴を作る
+(construct-faces)
+\item 面からbodyの生成
+\end{enumerate}
+
+\subsubsection{insert-intersections}
+
+body1のすべてのエッジとbody2のすべての面の交差をintersect1に、
+body2のすべてのエッジとbody1のすべての面の交差をintersects2に記録する。
+intersects[12]の各要素は、以下のようなリスト。
+  (edge	(param1 point1 [face1])
+	(param2 point2 [face2])
+	. . .)
+
+エッジが面とほとんど平行な場合は、交差がないものとみなす。
+平行性は、エッジの端点と面とのplane-distanceを*coplanar-threshold*
+と比較して検査する。
+
+一つのエッジが、その上の一つの点の近傍で二つ以上の面と交差すると
+判定される場合がある。たとえば、円柱の上に円錐が乗っている場合、
+円柱の側面の軸方向のエッジは、その端点において、円錐の底面および
+側面の両方と交差すると判定される可能性がある。これを一つの面に
+絞る方法はいくつか考えられるが、ここでは、最も直角に近い角度で
+交差する面を選び、他を捨てる。
+
+エッジの端点、すなわちparam=0 or 1の点は、たとえ交差がなくても
+intersectsに記録される。これは、エッジセグメントを取り出す作業を
+簡単にするため。また、intlistの各要素は、parameterが0から1に向かって
+小さい順にソートされる。
+
+
+\subsubsection{make-edge-segments}
+
+intersects[12]中の各要素について、エッジのセグメントを切り出す。
+パラメータで区切られたセグメントの中点を求め、それが相手物体の
+内部(inside)か、面上(border)か、外部(outside)かを判定する。
+unionを取る場合は、insideと判定されたセグメントを捨て、border, outside
+のセグメントをedgeオブジェクトとして生成する。結果は、segments[12]
+にリストされる。edgeオブジェクトのpface, nfaceスロットには、便宜的に
+元のエッジのpface, nfaceをコピーしておく。これは、後に面の回りに
+沿ってエッジをトラバースしてサーキット(closed-region)を形成するため。
+
+\subsubsection{body :insidep}
+
+点が物体の内部にあるか外部にあるかの判定には、bodyの:insidepメソッドを
+用いる。:insidepは、物体が凸物体か凹物体かで異なるアルゴリズムを
+実行する。凸の場合、点と物体を構成する各面との符合つき距離を計算する。
+距離が、正で*coplanar-threshold*以上であれば、外部である。距離が
+*coplanar-threshold*の範囲内でほとんどゼロであり、その面の内部にあれば
+borderと判定する。エッジ上にあるか、面上にあるかは判定しない。
+凹の場合、まず、点と面との距離を計算し、*coplanar-threshold*の範囲内で
+接触していればborderと判定する。次に、点からランダムな方向に直線を投射し、
+各面との交差を列挙する。交差の数が奇数であれば内部、偶数であれば外部と
+判定する。
+
+\subsubsection{face :insidep}
+
+面の内外判定は、face, closed-regionの:insidepメソッドが行なう。convexpが
+Tの場合、triangle関数を用いて、点がエッジの同じ側面にあうことを調べる。
+triangleは、3つの点が作る三角形の符合付面積の2倍を返す。この値が、
+エッジの長さに比べて(*epsilon*の範囲内で)ほとんどゼロである場合、
+borderと判定する。凹の場合、点から面の各エッジを見込む角度を、vector-angle
+関数を用いて計算し、その総和を取る。内点ではこの総和が2piになり、
+外点ではゼロになる。あるエッジについて見込み角がpiに近い場合、
+borderと判定する。
+
+\subsubsection{make-crossing-edges}
+intfaces1, intfaces2, firstの三つを引数として受けとる。
+intfaces1は、body1のエッジについてbody2の面との交差をbody1の面毎にリストしたもの、
+intfaces2は、body2のエッジについてbody1の面との交差をbody2の面毎にリストしたものである。
+intfaces1の一つの要素は、次のような内容のリスト。
+
+\begin{verbatim}
+  (face1
+      (original-edge11
+          created-edge111
+             crossing-face-p
+             crossing-face-n
+             location (inside/outside/border)
+             parameter11a
+             parameter11b)
+      . . .)
+\end{verbatim}
+
+body1の面$face1_i$とbody2の面$face2_j$の交差をvlist1, vlist2にリストする。
+intfaces1の一つの要素$intfaces1_i$を取り出すと、
+$face1_i$のエッジに関する記述が得られる。
+そのcrossing-face-p, crossing-face-nに現れるfaceの集合を$f2s$とする。
+$f2s$の要素を$face2_j, j=1...k$ とする。
+$f2s$が、$face_i$が交差する面の一部であって、$face1_i$のエッジは
+$face2_j$と交差しないが、$face2_j$のエッジが$face1_i$と交差する場合がある。
+そこで、intfaces2をスキャンして、crossing-face-p, crossing-face-nに
+$face1_i$が現れる面$face2_j, j=k+1...n$を集める。
+こうして、$face1_i$と交差する面$face2_j, (j=1...n)$が見つけられる。
+これらの交差のうち、
+(1) 交差がエッジの端点で起こっている
+(parameterが*epsilon*の範囲内で0.0か1.0)もの、
+(2) 交差が相手の面のエッジの端点で起こっているもの(:on-vertex)、
+は捨てる。
+
+交差は、面とエッジの組合せについて計算される。
+$face1_i$と$face_j$のすべての組合せについて、$face1_i$のエッジと
+$face_j$の交差を$vlist1$に、$face1_i$と$face_j$のエッジの交差を
+$vlist2$に記録する。
+これらの二つの面の交差は、一直線上に並ぶ。この直線の上で、
+$vlist1, vlist2$の要素$v$をソートする。
+$face1, face2$の法線ベクトルの外積
+$face1_{normal} \times face2_{normal} = n$ を取ると、
+これは交線の方向に一致する。
+$v \cdot n$の順にソートし、$vlist$とする。
+
+$vlist$から、二つずつ点を取りだし、そのペアでエッジを作る。
+ただし、
+(1) 二つの点が非常に近接している時(距離が*epsilon*以下)、
+(2) 生成されるエッジが、相手面のエッジと重なる場合(:on-edge)
+(3) make-crossing-edgesが2回目に呼ばれる場合で、端点がvlist2に含まれる場合、
+はエッジを作らない。
+(3)の条件は、make-crossing-edgesは2回呼ばれるが、1回めに作った
+エッジを重複して作らないようにするための条件である。
+
+生成したエッジは、元になったfaceである
+$face1_i$と$face_j$と共にリストする。
+
+
+\subsubsection{merge-segments}
+以上で、ボディを再構成するのに十分な線分が求められた。
+これらを、もとの面毎にソートし、
+$
+   ((face_1 edge_{11} edge_{12} ... edge_{1i}) \\
+    (face_2 edge_{21} edge_{22} ... edge_{2j}) \\
+    ...) \\
+$
+
+という形式のリストを作る。$edge_{ij}$は、そのpfaceかnfaceとして
+必ず$face_i$を持つ。
+
+\subsubsection{contacting-faces}
+$body1$の上に$body2$を置いた時、$body1$のtop面と$body2$のbottom面はcontact
+(接)する。contacting-facesは、そのような面の組合せを見つける。
+contacting-facesは、各面の組合せについて、faceの:contactpメソッドを
+実行する。
+二つの面を$f1, f2$とすると、:contactpは、次のようにして接触を判定する。 \\
+$f1_{normal} \cdot f2_{normal} \approx -1.0 \wedge $
+$f1_{distance} \approx f2_{distance}  \wedge $
+($f1$のエッジ$e1_i$と$f2$のエッジ$e2_j$との交差が少なくとも一つある、または 
+    $f1$のすべての頂点が$f2$の内部にある、または
+    $f2$のすべての頂点が$f1$の内部にある)
+
+
+ここで、$face1$と$face2$が接していると判定されたとする。
+$face1$を構成するエッジを$e1_i \in edges1, (i=1...m)$、
+$face2$を構成するエッジを$e2_j \in edges2, (j=1...n)$とする。
+また、これらのエッジのそれぞれのもう片側の面を、$fx1_i, fx2_j$とする。
+$e1_i \in edges1$と等価なエッジ$e2_j \in edges2$を探す。
+等価なエッジとは、その端点がほとんど等しいものである。
+もし、$e2_j$があるとすると、これは$fx1_i$と$fx2_j$で共有されるエッジであり、
+一方は不要である。
+そこで、$e2_j$を$edges2$からdeleteし、代わりに$e1_i$を$edges2$に加える。
+$e1_i$は、pfaceあるいはnfaceに$face1$を持つエッジであるが、これを$fx2_j$
+と置換する。
+さらに、$fx1_i, fx2_j$の法線ベクトルを比較し、ほとんど等しい場合、
+$e1_i$をも消去する。
+法線ベクトルが等しい場合というのは、直方体の上に、辺を合わせて
+もう一つの直方体を載せた場合に相当する。
+等しくない場合とは、たとえば直方体の上に四角錐を載せた場合に相当する。
+
+両方のエッジを消去した場合、さらに2種類の作業が必要である。
+まず、$fx1_i$の全エッジのpfaceまたはnfaceとしての$face1$への
+参照は、すべて$face2$への参照に置き換える。
+次に、$e1_i$の端点に集まっている他の2本の
+エッジが共直線(colinear)で、両者を接続してやる必要がある場合がある。
+一方を消去し、もう一方のpvertあるいはnvertを延長する。
+
+共有エッジを持たない場合、$e1_i$が$face2$に内包されるのであれば、
+$e1_i$を$edges1$からdeleteする。
+$e1_i$のpfaceかnfaceの$face1$を$face2$に置換する。
+$e1_i$を$edges2$に加える。
+
+
+共有エッジを持たず、$e1_i$が$face2$の外部にある場合、
+何もしない。
+
+変更を受けた面のエッジは、近くにあっても、eqでない頂点座標を
+参照するようになっている可能性がある。
+そこで、unify-vertexを呼んで、非常に近接した2点は共通の頂点で
+置き換え、共通の頂点がエッジの間で共有されるようにする。
+
+\subsubsection{merge-aligned-faces}
+aligned-facesとは、二つの面が同一平面上(coplanar)にあり、
+法線の向きが同じものをいう。
+たとえば、ふたつの直方体を重ね、側面を合わせた場合にここで言う
+aligned-facesが生ずる。
+ただし、下の直方体の上面(top)と上の直方体の底面(bottom)
+が接している場合は、merge-contacting-facesで処理されるので、
+merge-aligned-facesが扱うのは、上の直方体が下の直方体に食い込んでいて
+contacting-facesがない場合である。
+
+このような二つのaligned-facesは、基本的に併合して一つにまとめなければ
+ならない。
+具体的な処理は、merge-contacting-facesとよく似ているが、
+。
+
+
+
+\end{document}

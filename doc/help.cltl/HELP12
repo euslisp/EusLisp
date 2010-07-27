@@ -1,0 +1,55 @@
+(asinh function-documentation "
+Args: (number)
+Returns the hyperbolic arc sine of NUMBER.")
+(assoc function-documentation "
+Args: (item alist &key (test #'eql) test-not)
+Returns the first pair in ALIST whose car is equal (in the sense of TEST) to
+ITEM.  Returns NIL if no such pair exists. No test and test-not functions
+can be specified in euslisp.")
+(char-super-bit variable-documentation "
+The bit position indicating a super character.  0 in KCL.")
+(clrhash function-documentation "
+Args: (hash-table)
+Removes all entries of HASH-TABLE and returns HASH-TABLE.")
+(*debug-io* variable-documentation "
+The stream used by the KCL debugger.  The initial value is a synonym stream to
+*TERMINAL-IO*.")
+(do* function-documentation "
+Syntax: (do* ({(var [init [step]])}*) (test {result}*)
+          {decl}* {tag | statement}*)
+Similar to DO, but performs variable bindings and assignments in serial, just
+as LET* and SETQ do.")
+(*print-circle* variable-documentation "
+Specifies whether the KCL printer should take care of circular lists.")
+(*print-pretty* variable-documentation "
+Specifies whether the KCL printer should pretty-print.  See PPRINT for more
+information about pretty-printing.")
+(push function-documentation "
+Syntax: (push form place)
+Evaluates FORM, conses the value of FORM to the value stored in PLACE, and
+makes it the new value of PLACE.  Returns the new value of PLACE.")
+(*read-default-float-format* variable-documentation "
+The default float format the KCL reader uses when reading floats.  Must be one
+of the symbols SHORT-FLOAT, SINGLE-FLOAT, DOUBLE-FLOAT, and LONG-FLOAT.")
+(short-float-negative-epsilon variable-documentation "
+The smallest positive short-float E that satisfies
+	(not (= (float 1 e) (- (float 1 e) e))).")
+(sinh function-documentation "
+Args: (number)
+Returns the hyperbolic sine of NUMBER.")
+(upper-case-p function-documentation "
+Args: (char)
+Returns T if CHAR is an upper-case character; NIL otherwise.")
+(universal-error-handler function-documentation "
+Args: (error-name continuable-p function-name
+       continue-format-string error-format-string
+       &rest args)
+KCL specific.
+Starts the error handler of KCL.
+When an error is detected, KCL calls this function with the specified
+arguments.  To change the error handler of KCL, redefine this function.
+ERROR-NAME is the name of the error.  CONTINUABLE-P is T for a continuable
+error and NIL for a fatal error.  FUNCTION-NAME is the name of the function
+that caused the error.  CONTINUE-FORMAT-STRING and ERROR-FORMAT-STRING are the
+format strings of the error message.  ARGS are the arguments to the format
+strings.")

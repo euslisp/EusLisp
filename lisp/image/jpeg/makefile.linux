@@ -1,0 +1,23 @@
+# jpeg compression/decompression for euslisp
+# copyright (c) 1997, Toshihiro Matsui, Electrotechnical Laboratory
+# Basically, the jpeg library assumes the image data is stored in disks
+# or obtained from a stream like a pipe or a device. Here, jpegmemcd,
+# jpegmemsrc, and jpegmemdst enable in-core image compression/decompression,
+# i.e. the compressed image is taken from an image-vector in EusLisp.
+
+JPEGLIBDIR=/usr/lib/
+JPEGINCLUDE=/usr/local/include
+
+CFLAGS= -fpic -shared -I$(JPEGINCLUDE)
+
+jpegmemcd.so:	jpegmemcd.o jmemsrc.o jmemdst.o
+	cc -o jpegmemcd.so $(CFLAGS) jpegmemcd.o jmemsrc.o jmemdst.o \
+		-L$(JPEGLIBDIR) -ljpeg
+jpegmemcd.o:	jpegmemcd.c
+	cc -c -O  $(CFLAGS) jpegmemcd.c
+jmemsrc.o:	jmemsrc.c
+	cc -c -O  jmemsrc.c $(CFLAGS)
+jmemdst.o:	jmemdst.c
+	cc -c -O  jmemdst.c $(CFLAGS)
+
+

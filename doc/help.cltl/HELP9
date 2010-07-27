@@ -1,0 +1,74 @@
+(char-code function-documentation "
+Args: (char)
+Returns the character code of CHAR as a fixnum.")
+(close function-documentation "
+Args: (stream &key (abort nil))
+Closes STREAM.  Returns NIL if STREAM is closed successfully; non-NIL
+otherwise.  A non-NIL value of ABORT indicates an abnormal termination but KCL
+ignores it.")
+(expt function-documentation "
+Args: (number1 number2)
+Returns NUMBER1 raised to the power NUMBER2.")
+(float type-documentation "
+A float (floating-point number) represents a real number or its approximation.
+KCL supports two formats for floats.  One format is called SHORT-FLOAT and the
+other format is called SINGLE-FLOAT, DOUBLE-FLOAT, or LONG-FLOAT.  Precisions
+and exponent sizes of floats depends on the version of KCL.  See the KCL
+Report at your hand for details.
+The following syntax is used to notate a float.
+	[+ | -] {digit}* . {digit}+ [exp]
+	[+ | -] {digit}+ [. {digit}*}] exp
+where DIGIT is a decimal digit (0,..,9) and EXP is
+	marker [+ | -] {digit}+
+with one of the following marker.
+	e or E	the default float format
+	s or S	short-float
+	f or F	single-float
+	d or D	double-float
+	l or L	long-float
+The default float format is single-float normally, but may be any other float
+format.  See *READ-DEFAULT-FLOAT-FORMAT*.")
+(float function-documentation "
+Args: (number &optional float)
+With one arg, converts NUMBER to a single-float.  With two args, converts
+NUMBER to a float of the same float format as FLOAT.")
+(fmakunbound function-documentation "
+Args: (symbol)
+Removes the global function definition associated with SYMBOL.  Returns SYMBOL.")
+(format function-documentation "
+Args: (destination format-string &rest args)
+Outputs ARGs to DESTINATION in the format specified by FORMAT-STRING.  FORMAT-
+STRING is a string consisting of characters to output and format directives
+which begin with '~'.  Outputs to DESTINATION if it is a stream and to the
+standard output if DESTINATION is T.  If DESTINATION is NIL, does not output
+actually but returns the output as a string.  Here are some format directives:
+	~A	PRINCs one arg
+	~S	PRIN1s one arg
+	~D	Prints one integer in decimal
+	~B	Prints one integer in binary
+	~O	Prints one integer in octal
+	~X	Prints one integer in hexa
+	~%	Does TERPRI
+	~&	Does FRESH-LINE
+	~|	Outputs #\\Page
+	~~	Outputs '~'")
+(fresh-line function-documentation "
+Args: (&optional (stream *standard-output*))
+Outputs a newline character only if the current position of STREAM is not at
+the beginning of a line.  Returns T if it outputs a newline; NIL otherwise.")
+(least-negative-short-float variable-documentation "
+The negative short-float with the smallest absolute value.")
+(logandc1 function-documentation "
+Args: (integer1 integer2)
+Equivalent to (LOGAND (LOGNOT INTEGER1) INTEGER2).")
+(long-float type-documentation "
+A long-float is a long-precision floating point number.")
+(macroexpand function-documentation "
+Args: (form &optional (env nil))
+If FORM is a macro form, then expands it repeatedly until the result is not a
+macro any more, and returns the result as the first value and T as the second
+value.  Otherwise, returns FORM and NIL as two values.")
+(reverse function-documentation "
+Args: (sequence)
+Returns a new sequence containing the same elements as SEQUENCE but in the
+reverse order.")

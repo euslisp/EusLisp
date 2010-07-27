@@ -1,0 +1,149 @@
+\section{オブジェクト指向型プログラミング機能}
+
+\subsection{オブジェクト指向}
+EUSLISP のデータには数値とオブジェクトがある。
+数値（整数、浮動小数）は1ワードで表されるプリミティブなデータであるのに対し、
+オブジェクトは何ワードかで構成される構造をもち、それらを記録するためにメモリ
+領域が割り当てられている。従って、数値をいくら作ってもメモリは消費しないが、
+オブジェクトは作成される度にメモリが割り当てられ、GCを引き起こす。ユーザの
+定義するデータ構造がオブジェクトであるのと同様、cons, symbol, string, vector 
+などもオブジェクトである。
+
+\subsection{クラス定義とメタクラス}
+
+オブジェクトの構造はdefclass,defstructマクロによって定義される。
+
+\begin{verbatim}
+    (defclass クラス名  :super         スーパクラス名
+                        :slots         スロットのリスト
+                        :metaclass     メタクラス名
+                        :element-type  要素型
+                        :size          要素数）
+
+    (defstruct （クラス名  クラスオプション）
+                スロット　．．．）
+\end{verbatim}
+defclass,defstructは共にクラスオブジェクト（後述）を作成し、クラス名シンボルの
+値にセットする。
+defclassはEUSLISP に独自の形式であり、defstruct はCommonLispとの互換性を
+ねらった形式である。オブジェクトにはレコード型とベクタ型の2種類がある。
+レコード型はスロットの数が固定であり、各々のスロットはスロット名
+（オブジェクト変数名）によってアクセスされる。
+ベクタ型はスロットの数が可変にでき、スロットにはインデクスによって
+アクセスする。
+ベクタ型のクラスを作成するには、:superに既存のベクタ型クラス（通常はvector) 
+を指定する。
+ベクタ型のクラス定義に限り:element-type,:size の指定が可能である。
+:element-type には、:bit, :char, :byte, :integer, :float, :foreign,T がある。
+デフォルトはT である。
+クラスはただ1つのスーパクラスを持てる。
+スーパクラスのデフォルトはobjectクラスである。クラスはスーパクラスから
+スロット変数定義、メソッド定義を受け継ぐ。
+
+\begin{verbatim}
+    (defclass person :super object	；この指定はなくてもよい
+                     :slots (name age))
+    (defclass programmer:super person
+                     :slots (language experience grade))
+\end{verbatim}
+クラスオブジェクトは、レコード型の場合クラスmetaclass のインスタンス、
+ベクタ型の場合クラスvectorclass のインスタンスとして作成される。
+vectorclass はmetaclassのサブクラスである。
+metaclass,vectorclass はEUSLISP の標準のメタクラスオブジェクトであり、
+これらは複数のクラスオブジェクトのクラス（メタクラス）になっている。
+metaclass は、name, super, cix(class-id), vars, types, forwards, methods
+のスロットを持ち、インスタンスのオブジェクト変数名やインスタンスメソッド
+が定義される。クラスのオブジェクト変数やクラスメソッドは、
+メタクラスに定義されねばならない。
+しかし、metaclass,vectorclass は多くのクラスで共有されているので、これらに
+クラスメソッドを登録することは多くのクラスに同時に影響を与えてしまう。
+ユーザ固有のクラスだけに通用するのクラスメソッドを登録するには、
+そのクラス固有のメタクラスオブジェクトを作成する必要がある。
+そのためには、まずdefclassで:superにmetaclass またはvectorclassを指定して
+メタクラスオブジェクトを作成し、それを目的とするクラスのdefclassの:metaclass
+パラメータに指定する。
+
+\begin{verbatim}
+  (defclass person-metaclass :super metaclass :slots (groups))
+  (defclass person :metaclass person-metaclass
+                   :slots (name age))
+\end{verbatim}
+
+\subsection{メソッド定義とメッセージセンド}
+
+メソッドはdefmethod 特殊形式で定義する。
+
+\begin{verbatim}
+　(defmethod person
+     (:tick () (inc age))
+     (:init (n a) (setq name n age a) self))
+  (defmethod programmer
+    (:tick ()
+        (send-super :tick)
+        (inc experience)
+        (setq grade (second (find experience
+                        '((2 novice) (4 senior) (6 hacker) (8 wiz　..
+                        :key #'first  :test #'<))))
+    (:init (n a)
+        (setq experience 0 grade 'novice)
+        (send-super :init)))
+  (defclassmethod person
+    (:group (name person)
+        (nconc (assoc name group) (list person))))
+\end{verbatim}
+メソッドの中では自分のオブジェクトの中のスロット変数にアクセスできる。
+その他にclass とselfという変数が自動的に束縛されている。
+class は今実行中のメソッドが登録されているクラスを表す
+（必ずしもそのオブジェクト自身のクラスではないことに注意）。
+またselfは自分自身を表す変数であり、send self によって自分自身のメソッドを起動
+したり、リタン値として用いる。
+スーパクラスにメッセージを送るにはsend-superマクロを用いる。
+Smalltalk80 のようにsuper という変数があるわけではないことに注意。
+
+\subsection{インスタンス作成}
+
+インスタンスを作るにはinstantiate 関数あるいはinstanceマクロを用いる。
+instanceはインスタンスを作った後、すぐにメッセージを送る。
+
+\begin{verbatim}
+    (instantiate cons)  →  (nil . nil)  ;equivalent to (cons nil nil)
+    (setq matsui (instance programmer :init 'matsui 31))
+\end{verbatim}
+EUSLISP に基本的に備わったクラスはすべてinstantiate によって
+新たなインスタンスを作成できるが、metaclass とpackage はカーネル内部の表に
+登録する作業が必要なためそのままでは機能しない。これはsymbolも同様で、
+新たなシンボルオブジェクトをpackageにinternする操作が必要になる。
+オブジェクトに仕事を依頼するには、sendによってメッセージを送ってメソッドを
+起動する。メソッドはlambdaリストと同様な引数を受け付ける。
+
+\begin{verbatim}
+    (send matsui :tick)
+\end{verbatim}
+
+\subsection{スロット変数へのアクセス}
+
+オブジェクトの内部状態を見るには、本来そのためのメソッドをユーザが定義する
+べきである。しかし、CommonLispのstructure 的な使用を許すため、
+defclassの時点でスロットアクセスマクロが自動的に生成される。
+アクセスマクロにはsetfメソッドも定義されている。
+
+\begin{verbatim}
+    (programmer-age matsui)   →　31
+    (programmer-grade matsui) →　novice
+    (send matsui :tick)
+    (programmer-grade matsui) →　senior
+    (setf (programmer-age matsui) #x20)
+\end{verbatim}
+デバッグ段階でオブジェクトの内部状態を知りたい時はdescribe,inspectを用いると
+よい。また、シーケンスのcopy-seq,replaceに対応してcopy-object,replace-object
+関数がある。
+ただし、copy-seqがshalow-copy であるのに対し、copy-object は再帰的な相互参
+照を保ったdeep-copy を行なう。
+オブジェクトは変数につなぎとめておかないとGCによって消滅する。
+インスタンスの作成管理をたとえばクラスメソッドで行なうこともできるが、
+この場合は不要になったインスタンスが回収されないという問題が残る。
+生きているインスタンスをすべて集める関数としてsys:list-all-instancesがある。
+
+
+
+

@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Look-Up Tables (LUT)</TITLE>
+<META NAME="description" CONTENT="Look-Up Tables (LUT)">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3772" HREF="node142.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3770" HREF="node140.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3764" HREF="node140.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3774" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3775" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3773" HREF="node142.html">Pixel-Image</A>
+<B>Up:</B> <A NAME="tex2html3771" HREF="node140.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html3765" HREF="node140.html">Image Processing</A>
+<BR> <P>
+<H2><A NAME="SECTION04081000000000000000">Look-Up Tables (LUT)</A></H2>
+<P>
+An LUT is a vector for the translation of pixel data.
+<P>
+<A NAME=24917>&#160;</A>
+<B>make-equilevel-lut</B> <EM>levels &amp;optional (size 256) </EM>[function] 
+<UL><LI> returns a one-dimensional integer-vector that linearly maps values between
+0 and <EM>size into values between 0 and <EM>levels</EM>.
+For example, <TT>(make-equilevel-lut 3 12)</TT> returns
+<TT>#i(0 0 0 0 1 1 1 1 2 2 2 2)</TT>.
+</UL>
+<A NAME=24931>&#160;</A>
+<B>look-up</B> <EM>src dest lut </EM>[function] 
+<UL><LI> translates values stored in <EM>src vector into <EM>dest</EM> vector
+using <EM>lut</EM>. If <EM>dest</EM> is nil, a vector of the same class and
+size as <EM>src</EM> is created.
+For example, <TT>(look-up #i(1 2 3) nil #(10 20 30 40 50))</TT>
+returns <TT>#i(20 30 40)</TT>.
+</UL>
+<A NAME=24948>&#160;</A>
+<B>look-up2</B> <EM>src dest lut1 lut2 </EM>[function] 
+<UL><LI> <EM>Src and <EM>dest</EM> are integer-vector or byte-vector (string) of the same
+size.
+<TT>:Look-up2</TT> translates <EM>src</EM> into <EM>dest</EM> looking-up <EM>lut1</EM> and <EM>lut2</EM>
+successively.
+</UL>
+<A NAME=24965>&#160;</A>
+<B>look-up*</B> <EM>src dest luts </EM>[function] 
+<UL><LI> <EM>luts is a list of look-up tables.
+<EM>src</EM> is translated into <EM>dest</EM> successively looking up look-up tables
+given in <EM>luts</EM>.
+</UL>
+<A NAME=24979>&#160;</A>
+<B>concatenate-lut</B> <EM>lut1 lut2 &amp;optional (size 256) </EM>[function] 
+<UL><LI> concatenates two look-up tables <EM>lut1 and <EM>lut2</EM>,
+and returns a new look-up table which performs the same translation
+as <EM>lut1</EM> and <EM>lut2</EM> are looked-up successively.
+</UL>
+<A NAME=24993>&#160;</A>
+<B>*x-gray32-lut*</B> <EM></EM>[variable] 
+<UL><LI> LUT to translate 32-level gray-scale into
+the pixel values in the default color map <TT>x:*colormap*</TT>.
+<TT>(aref *x-gray32-lut* n)</TT> returns the pixel value for nth gray-level
+out of 32 levels.
+</UL>
+<A NAME=25005>&#160;</A>
+<B>*x-gray16-lut*</B> <EM></EM>[variable] 
+<UL><LI> LUT to translate 16-level gray-scale pixel
+into the index of x's default color map  <TT>x:*colormap*</TT>.
+</UL>
+<A NAME=25016>&#160;</A>
+<B>*x-color-lut*</B> <EM></EM>[variable] 
+<UL><LI> LUT for several vivid colors defined in 
+<TT>x:*color-map*</TT>.
+Registered colors are &quot;black&quot;, &quot;red&quot;, &quot;green&quot;, &quot;lightblue&quot;, &quot;yellow&quot;,
+&quot;orange&quot;, &quot;blue&quot;, &quot;magenta&quot;, &quot;white&quot;.
+</UL>
+<A NAME=25027>&#160;</A>
+<B>*256to8*</B> <EM></EM>[variable] 
+<UL><LI> -entry LUT to translate integers in range of 0..255
+into 0..7. The levels are linearly mapped.
+</UL>
+<A NAME=25037>&#160;</A>
+<B>*256to16*</B> <EM></EM>[variable] 
+<UL><LI> -entry LUT to translate integers in range of 0..255
+into 0..15. The levels are linearly mapped.
+</UL>
+<A NAME=25047>&#160;</A>
+<B>*256to32*</B> <EM></EM>[variable] 
+<UL><LI> -entry LUT to translate integers in range of 0..255
+into 0..31. The levels are linearly mapped.
+</UL>
+<A NAME=25057>&#160;</A>
+<B>*gray32*</B> <EM></EM>[variable] 
+<UL><LI> -entry LUT to translate the raw gray-scale pixels 
+into X's color map indices.
+This is made by concatenating two LUTs, <TT>*256to32*</TT> and
+<TT>*x-gray32-lut*</TT>.
+An Xwindow display-able pixel-image with 32 gray-levels 
+can be obtained by translating
+the 256-level raw image by <B>*gray32*</B>.
+</UL>
+<A NAME=25070>&#160;</A>
+<B>*rainbow32*</B> <EM></EM>[variable] 
+<UL><LI> -entry LUT to translate 256-level
+hue values into into X's rainbow color map indices.
+This is made by concatenating two LUTs, <TT>*256to32*</TT> and
+<TT>*x-rainbow32-lut*</TT>.
+</UL>
+</EM></EM></EM></EM></EM><HR><A NAME="tex2html3772" HREF="node142.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3770" HREF="node140.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3764" HREF="node140.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3774" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3775" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3773" HREF="node142.html">Pixel-Image</A>
+<B>Up:</B> <A NAME="tex2html3771" HREF="node140.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html3765" HREF="node140.html">Image Processing</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

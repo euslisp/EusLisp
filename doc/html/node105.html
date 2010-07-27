@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Matrix and Transformation</TITLE>
+<META NAME="description" CONTENT="Matrix and Transformation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3316" HREF="node106.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3314" HREF="node103.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3308" HREF="node104.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3318" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3319" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3317" HREF="node106.html">LU decomposition</A>
+<B>Up:</B> <A NAME="tex2html3315" HREF="node103.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html3309" HREF="node104.html">Float-vectors</A>
+<BR> <P>
+<H2><A NAME="SECTION04032000000000000000">Matrix and Transformation</A></H2>
+<P>
+A matrix is a two-dimensional array whose elements are all floats.
+In most functions a matrix can be of any size,
+but the <B>v*, v.*</B>, <B>Euler-angle</B> and <B>rpy-angle</B> functions
+can only handle three dimensional matrices.
+<B>Transform, m*</B> and <B>transpose</B> do not restrict
+the matrices to be square,
+and they operate on general n*m size matrices.
+<P>
+Functions that can accept result parameter
+places the computed result there, and no heap is wasted.
+All matrix functions are intended for the transformation in the normal
+coordinate systems, and not in the homogeneous coordinates.
+<P>
+The <B>rpy-angle</B> function decomposes a rotation matrix into three components
+of rotation angles around z, y and x axes of the world coordinates.
+The <B>Euler-angle</B> function is similar to <B>rpy-angle</B> but
+decomposes into rotation angles around local z, y and again z axes.
+Both of these functions return two solutions since angles can be
+taken in the opposite directions.
+<P>
+<PRE>; Mat is a 3X3 rotation matrix.
+(setq rots (rpy-angle mat))
+(setq r (unit-matrix 3))
+(rotate-matrix r (car rots) :x t r)
+(rotate-matrix r (cadr rots) :y t r)
+(rotate-matrix r (caddr rots) :z t r)
+;--&gt; resulted r is equivalent to mat</PRE>
+<P>
+To keep track of pairs of a position and a orientation in 3D space, use
+the <B>coordinates</B> and <B>cascaded-coords</B> classes
+detailed in the section <A HREF="node107.html#Coordinates">13.4</A>.
+<P>
+<A NAME=14016>&#160;</A>
+<B>matrix</B> <EM>&amp;rest elements </EM>[function] 
+<UL><LI> makes a new matrix from <EM>elements.
+Row x Col = (number of elements) x (length of the 1st element).
+Each of <EM>elements</EM> can be of any type of sequence.
+Each sequence is lined up as a row vector in the matrix.
+</UL>
+<A NAME=14028>&#160;</A>
+<B>make-matrix</B> <EM>rowsize columnsize &amp;optional init </EM>[function] 
+<UL><LI> makes a matrix of  <IMG  ALIGN=MIDDLE ALT="tex2html_wrap_inline28320" SRC="img45.gif"  > .
+</UL>
+<A NAME=14038>&#160;</A>
+<B>matrixp</B> <EM>obj </EM>[function] 
+<UL><LI> T if <EM>obj is a matrix, i.e. <EM>obj is a two dimensional array
+and its elements are floats.
+</UL>
+<A NAME=14050>&#160;</A>
+<B>matrix-row</B> <EM>mat row-index </EM>[function] 
+<UL><LI> extracts a row vector out of matrix <EM>mat.
+<B>matrix-row</B> is also used to set a vector in a particular row
+of a matrix using in conjunction with <B>setf</B>.
+</UL>
+<A NAME=14063>&#160;</A>
+<B>matrix-column</B> <EM>mat column-index </EM>[function] 
+<UL><LI> extracts a column vector out of <EM>mat.
+<B>matrix-column</B> is also used to set a vector in a particular
+column of a matrix using in conjunction with <B>setf</B>.
+</UL>
+<A NAME=14076>&#160;</A>
+<B>m*</B> <EM>matrix1 matrix2 &amp;optional result </EM>[function] 
+<UL><LI> concatenates <EM>matrix1 and <EM>matrix2</EM>.
+</UL>
+<A NAME=14088>&#160;</A>
+<B>transpose</B> <EM>matrix &amp;optional result </EM>[function] 
+<UL><LI> transposes <EM>matrix, i.e. columns of <EM>matrix</EM> are exchanged with
+<EM>rows</EM>.
+</UL>
+<A NAME=14101>&#160;</A>
+<B>unit-matrix</B> <EM>dim </EM>[function] 
+<UL><LI> makes an identity matrix of <EM>dim  <IMG  ALIGN=MIDDLE ALT="tex2html_wrap_inline28322" SRC="img46.gif"  >  <EM>dim</EM>.
+</UL>
+<A NAME=14113>&#160;</A>
+<B>replace-matrix</B> <EM>dest src </EM>[function] 
+<UL><LI> replaces all the elements of dest matrix with ones of src matrix.
+</UL>
+<A NAME=14123>&#160;</A>
+<B>scale-matrix</B> <EM>scalar mat </EM>[function] 
+<UL><LI> multiplies <EM>scaler to all the elements of <EM>mat.
+</UL>
+<A NAME=14135>&#160;</A>
+<B>copy-matrix</B> <EM>matrix </EM>[function] 
+<UL><LI> makes a copy of <EM>matrix.
+</UL>
+<A NAME=14146>&#160;</A>
+<B>transform</B> <EM>matrix fltvector &amp;optional result </EM>[function] 
+<UL><LI> multiplies <EM>matrix to <EM>fltvector</EM> from the left.
+</UL>
+<A NAME=14158>&#160;</A>
+<B>transform</B> <EM>fltvector matrix &amp;optional result </EM>[function] 
+<UL><LI> multiplies <EM>matrix to <EM>fltvector</EM> from the right.
+</UL>
+<A NAME=14170>&#160;</A>
+<B>rotate-matrix</B> <EM>matrix theta axis &amp;optional world-p result </EM>[function] 
+<UL><LI> multiplies a rotation matrix from the left (when world-p is non-nil)
+or from the right (when world-p is nil).
+When a matrix is rotated by <B>rotate-matrix</B>,
+the rotation axis <B>:x, :y, :z</B> or 0,1,2
+may be taken either in the world coordinates or in the local coordinates.
+If <EM>world-p is specified nil, it means rotation along the
+axis in the local coordinate system and the rotation matrix is multiplied
+from the right.
+Else if worldp is non-nil, the rotation is made in the
+world coordinates and the rotation matrix is multiplied from the left.
+If NIL is given to <EM>axis</EM>, <EM>matrix</EM> should be two dimensional and
+the rotation is taken in 2D space where <EM>world-p</EM> does not make sense.
+</UL>
+<A NAME=14186>&#160;</A>
+<B>rotation-matrix</B> <EM>theta axis &amp;optional result </EM>[function] 
+<UL><LI> makes a 2D or 3D rotation matrix around <EM>axis which can be any of
+:x, :y, :z, 0, 1, 2, a 3D float-vector or NIL.
+When you make a 2D rotation matrix, axis should be NIL.
+</UL>
+<A NAME=14197>&#160;</A>
+<B>rotation-angle</B> <EM>rotation-matrix </EM>[function] 
+<UL><LI> extracts a equivalent rotation axis and angle from <EM>rotation-matrix
+and a list of float and float-vector is returned.
+NIL is returned when <EM>rotation-matrix</EM> is a unit-matrix.
+Also if the rotation angle is too small, the result may have errors.
+When <EM>rotation-matrix</EM> is 2D,  the single angle value is returned.
+</UL>
+<A NAME=14210>&#160;</A>
+<B>rpy-matrix</B> <EM>ang-z ang-y ang-x </EM>[function] 
+<UL><LI> makes a rotation matrix defined by roll-pitch-yaw angles.
+First, a unit-matrix is rotated by ang-x radian along X-axis.
+Next, ang-y around Y-axis and finally ang-z around Z-axis.
+All the rotation axes are taken in the world coordinates.
+</UL>
+<A NAME=14220>&#160;</A>
+<B>rpy-angle</B> <EM>matrix </EM>[function] 
+<UL><LI> extracts two triplets of roll-pitch-yaw angles of <EM>matrix.
+</UL>
+<A NAME=14231>&#160;</A>
+<B>Euler-matrix</B> <EM>ang-z ang-y ang2-z </EM>[function] 
+<UL><LI> makes a rotation matrix defined by three Euler angles.
+First, a unit-matrix is rotated <EM>ang-z around Z-axis, next, <EM>ang-y
+around Y-axis and finally <EM>ang2-z</EM> again around Z-axis.
+All the rotation axes are taken in the local coordinates.
+</UL>
+<A NAME=14244>&#160;</A>
+<B>Euler-angle</B> <EM>matrix </EM>[function] 
+<UL><LI> extracts two tuples of Euler angles.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3316" HREF="node106.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3314" HREF="node103.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3308" HREF="node104.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3318" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3319" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3317" HREF="node106.html">LU decomposition</A>
+<B>Up:</B> <A NAME="tex2html3315" HREF="node103.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html3309" HREF="node104.html">Float-vectors</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

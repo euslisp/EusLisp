@@ -1,0 +1,12 @@
+# make compressed tar file of euslisp sources
+cd /usr/share/src/eus
+mv eus.tar.Z ../eus2
+mv sun3bin ../eus2
+mv sun4bin ../eus2
+tar cvf - . | compress >/tmp/eus.tar.Z.$$
+cp /tmp/eus.tar.Z.$$ ./eus.tar.Z
+rm /tmp/eus.tar.Z.$$
+mv ../eus2/sun3bin .
+mv ../eus2/sun4bin .
+
+

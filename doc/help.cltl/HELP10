@@ -1,0 +1,56 @@
+(block function-documentation "
+Syntax: (block name {form}*)
+Establishes a block named by NAME, evaluates FORMs in order, and returns all
+values of the last FORM.  Returns NIL if no FORMs are given.
+The scope of the established block is the body (i.e. the FORMs) of the BLOCK
+form.  If (return-from name value-form) is evaluated within the scope, the
+execution of the BLOCK form terminates immediately and all values of
+VALUE-FORM will be returned as the values of the terminated BLOCK form.")
+(delete-if function-documentation "
+Args: (test sequence
+       &key (key #'identity) (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Destructive REMOVE-IF.  SEQUENCE may be destroyed")
+(do-external-symbols function-documentation "
+Syntax: (do-external-symbols (var [package [result]])
+          {decl}* {tag | statement}*)
+Establishes a NIL block and executes STATEMENTs once for each external symbol
+in PACKAGE (which defaults to the current package), with VAR bound to the
+variable.  Then evaluates RESULT (which defaults to NIL) and returns all
+values.")
+(equalp function-documentation "
+Args: (x y)
+Returns T if the args satisfy one of the following conditions.
+	1. EQUAL
+	2. are characters that satisfy CHARACTER-EQUAL
+	3. are numbers that satisfy =
+	4. are conses with EQUALP cars and EQUALP cdrs
+	5. are arrays of the same dimensions and element-wise EQUALP
+Returns NIL otherwise.")
+(find-if function-documentation "
+Args: (test sequence
+       &key (key #'identity) (start 0) (end (length sequence)) (from-end nil))
+Returns the index of the first element in SEQUENCE that satisfies TEST.
+Returns NIL if no such element exists.")
+(least-negative-long-float variable-documentation "
+The negative long-float with the smallest absolute value.")
+(logandc2 function-documentation "
+Args: (integer1 integer2)
+Equivalent to (LOGAND INTEGER1 (LOGNOT INTEGER2)).")
+(most-negative-double-float variable-documentation "
+Same as MOST-NEGATIVE-LONG-FLOAT.")
+(nsubst-if function-documentation "
+Args: (new test tree &key (key #'identity))
+Destructive SUBST-IF.  TREE may be destroyed.")
+(rassoc-if function-documentation "
+Args: (test alist)
+Returns the first pair in ALIST whose cdr satisfies TEST.  Returns NIL if no
+such pair exists.")
+(scale-float function-documentation "
+Args: (float integer)
+Returns the value of (* FLOAT (expt (float-radix FLOAT) INTEGER)).")
+(short-float type-documentation "
+A short-float is a short-precision floating point number.")
+(stringp function-documentation "
+Args: (x)
+Returns T if X is a string object; NIL otherwise.")

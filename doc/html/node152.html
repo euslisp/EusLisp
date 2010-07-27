@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>System Overview</TITLE>
+<META NAME="description" CONTENT="System Overview">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3900" HREF="node153.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3898" HREF="node150.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3894" HREF="node151.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3902" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3903" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3901" HREF="node153.html">Index</A>
+<B>Up:</B> <A NAME="tex2html3899" HREF="node150.html"> MARS: A Multiple </A>
+<B> Previous:</B> <A NAME="tex2html3895" HREF="node151.html">How to Start</A>
+<BR> <P>
+<H2><A NAME="SECTION040102000000000000000">System Overview</A></H2>
+<P>
+<P><A NAME="26791">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure26734" SRC="img103.gif"  > <BR>
+<STRONG>Figure 21:</STRONG> <A NAME="MARSOverview">&#160;</A> MARS window display example (left).
+And overall program structure (right).<BR>
+<P>
+<P>
+When you start up MARS, you will see the main window as shown in
+Fig.&nbsp;<A HREF="node152.html#MARSOverview">21</A>(left). The MARS system adopts a modular
+architecture as in Fig.&nbsp;<A HREF="node152.html#MARSOverview">21</A>(right). It consists of
+a physcial simulation module, robot control modules, a graphical user
+interface module (GUI), and a user defined global control loop.
+<P>
+<B>Physical Simulation:</B>
+Our current physical simulation module handles four types of objects,
+<B>wall</B> (static obstacles), <B>block</B> (passive objects), <B>
+robot-body</B> (active objects), and <B>magic-block</B> (special
+reward-giving objects for learning experiments).
+<P>
+<P><A NAME="26792">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure26751" SRC="img104.gif"  > <BR>
+<STRONG>Figure 22:</STRONG> <A NAME="figrobotst">&#160;</A> Internal structure of a robot object
+(left). And an example behavior-based robot configuration (right).<BR>
+<P>
+<P>
+<B>Robot Models:</B>
+There is a clear interface between the physical simulation module and
+robot control modules. Any number of <B>robot</B> models can be
+generated and simulated in (pseudo-)parallel.
+Each <B>robot</B> consists of a pair of modules,
+a <B>robot-body</B> and a <B>robot-brain</B>.
+A <B>robot-body</B> defines physical properties of a robot and a <B>
+robot-brain</B> defines how the robot behaves.
+<P>
+<B>Sensor Models:</B>
+A user can choose and attach any number of sensors to any place of a
+<B>robot-body</B>. Currently available sensor models are as follows:
+<B>distance</B> (odometry), <B>angle</B> (rotation), <B>touch</B>, <B>
+infrared</B>, <B>radar</B> (sonar), <B>eye</B> (object-name-sensor).
+Noise or uncertainty is not considered in the current version.
+<P>
+<B>Robot Brains:</B>
+A <B>robot-brain</B> is a user defined module for processing the
+simulated sensor data and generating action commands.
+It must accept sensor data and output action commands. In addition, it
+must be written as a re-entrant program, time-sliced by a <B>:step</B>
+message sent by the global control loop.
+As long as these constraints are met, a user can adopt any cognitive
+architecture. The system provides an example behavior-based type
+architecture as a default.
+<P>
+<B>GUI:</B>
+The <B>MARS</B> main window has a menu-bar with several buttons for
+controlling the system. Also, the system has a built-in graphical
+editor for creating/modifying the physical environment.
+You can save/load a physical environment definition together with
+agent definitions to/from a file.
+<P>
+<B>Network Extension:</B>
+A <B>robot-brain</B> can be configured to be connected to external
+process via an asychronous socket connection. In this case, a user can
+use an arbitrary language (C, Prolog, Scheme, Perl, etc...) to write
+the <B>remote-brain</B>. Thanks to the asynchronous connection, a user
+do not have to mind about time slicing at all.
+<P>
+<B>Facility for Learning Experiments:</B>
+<B>MARS</B> provides several special functionalities for robot learning
+experiments: reward-giving objects, reward sensors (send reward values
+to each robot), and a reward-logger (accumulates a system-wide reward
+statistics.)
+<P>
+<HR><A NAME="tex2html3900" HREF="node153.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3898" HREF="node150.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3894" HREF="node151.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3902" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3903" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3901" HREF="node153.html">Index</A>
+<B>Up:</B> <A NAME="tex2html3899" HREF="node150.html"> MARS: A Multiple </A>
+<B> Previous:</B> <A NAME="tex2html3895" HREF="node151.html">How to Start</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

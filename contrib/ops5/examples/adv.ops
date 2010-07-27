@@ -1,0 +1,97 @@
+;;; retyped from copy of:
+;;;     FILE: sys$user:[gdw]adv.ops;
+;;;     LastEditDate = Fri Aug 24 02:09:51 1984     GDW
+
+
+(literalize place
+    name
+    visits
+    north        ;move results
+    south
+    east
+    west
+    in
+    out
+    up
+    down
+    magic_word
+    magic_verb
+    magic_result
+    description)
+
+(literalize object
+    name
+    weight
+    size
+    value
+    location)
+
+(literalize action
+    verb
+    object
+    indirect-object)
+
+(literalize player at)
+
+(literalize move to from)
+
+
+(p go
+    (player ^at <at>)
+    (action ^verb GO ^object <direction>)
+    (place ^name <at>)
+    -->
+    (modify 2 ^verb nil ^object nil)
+    (bind <litdir> (litval <direction>))
+    (bind <to> (substr 3 <litdir> <litdir>))
+    (make move ^to <to> ^from <at>)
+)
+
+(p nil-move
+    (move ^to { <litdir> NIL } ^from <at>)
+    (place ^name <at>)
+    -->
+    (remove 1)
+    (write (crlf) |sorry, You can't go that way|)
+)
+
+(p good-move
+    (move ^to { <to> <> NIL } ^from <at>)
+    (place ^name <to>)
+    (player ^at <> <to>)
+    -->
+    (remove 1)
+    (write (crlf) ok)
+    (modify 3 ^at <to>)
+    (make consequence show)
+)
+
+(p show-move
+    (consequence show)
+    (player ^at <at>)
+    (place ^name <at> ^description <description>)
+    -->
+    (remove 1)
+    (write (crlf) <description>)
+)
+
+(p start
+    (ready)
+    -->
+    (make place ^name start ^east by-house
+        ^description "you are at the end of the road")
+    (make place ^name by-house ^west start ^east in-house ^in in-house
+        ^description "you are outside a small house")
+    (make place ^name in-house ^east by-house ^west store-room
+        ^magic_word xyzzy ^magic_verb go ^magic_result cellar
+        ^description "you are in a house which has obviously been used as a distillery")
+    (make player ^at start)
+    (make action)
+)
+
+(P GET-ACTION
+    (action ^verb nil)
+    -->
+    (write (crlf) |Well? |)
+    (modify 1 ^verb (acceptline))
+)

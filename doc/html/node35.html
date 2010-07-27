@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Basic Classes</TITLE>
+<META NAME="description" CONTENT="Basic Classes">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2337" HREF="node36.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2335" HREF="node31.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2331" HREF="node34.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2339" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2340" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2338" HREF="node36.html">Arithmetic Functions</A>
+<B>Up:</B> <A NAME="tex2html2336" HREF="node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html2332" HREF="node34.html">Instance Management</A>
+<BR> <P>
+<H2><A NAME="SECTION03044000000000000000">Basic Classes</A></H2>
+<P>
+<A NAME=2408>&#160;</A>
+<B>object </B> [class]  <PRE><TT> :super B<></B>
+<P>
+:slots
+<P>
+</TT></PRE>
+<UL><LI> Object is the most basic class that is located at the top of class hierarchy.
+Since it defines no slot variables, it is no use to make an instance of
+<B>object</B>.
+</UL>
+<A NAME=2426>&#160;</A>
+<B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[method] 
+<UL><LI> prints the object in the standard re-readable object format,
+that is, the class name and the address, enclosed by angle brackets and
+preceded by a pound sign.
+Any subclasses of <B>object</B> can use this method to print itself with
+more comprehensive information  by using
+<B>send-super</B> macro specifying <EM>mesg string.
+An object is re-readable if it begins with #&lt;,
+followed by its class name, correct address, any lisp-readable information,
+and <code>&gt;</code>.
+Since every data object except numbers inherits <B>object</B>,
+you can get print forms in this notation, even for symbols or strings.
+Specifying this notation, you can catch data objects that you forgot
+to <B>setq</B> to a symbol, as long as there happened no garbage collection
+after it is printed.
+</UL>
+<A NAME=2441>&#160;</A>
+<B>:slots</B> <EM></EM>[method] 
+<UL><LI> returns the list of variable-name and value pair of all the slots of the
+object.
+You can get the value of a specific slot by applying <B>assoc</B> to this
+list, although you cannot alter them.
+</UL>
+<A NAME=2453>&#160;</A>
+<B>propertied-object </B> [class]  <PRE><TT> :super B<>object</B>
+<P>
+:slots 		 plist
+<P>
+</TT></PRE>
+<UL><LI> defines objects that have property list.
+Unlike other Common Lisp, 
+EusLisp allows any objects that inherit propertied-object to have property
+lists, even if they are not symbols.
+</UL>
+<A NAME=2470>&#160;</A>
+<B>:plist</B> <EM>&amp;optional plist </EM>[method] 
+<UL><LI> if <EM>plist is specified, it is set to the plist slot of this object.
+Previous plist, if there had been one, is lost.
+Legal plist should be of the form of
+<code>((indicator1 . value1) (indicator2 . value2) ...)</code>.
+Each <code>indicator</code> can be any lisp form that are tested its equality
+with the <B>eq</B> function.
+When a symbol is used for an indicator, use of keyword is recommended
+to ensure the equality check will be performed interpacakge-widely.
+<B>:plist</B> returns the current plist.
+</UL>
+<A NAME=2483>&#160;</A>
+<B>:get</B> <EM>indicator </EM>[method] 
+<UL><LI> returns the value associated with <EM>indicator in the property list.
+<code>(send x :get :y) == (cdr (assoc :y (send x :plist)))</code>.
+</UL>
+<A NAME=2494>&#160;</A>
+<B>:put</B> <EM>indicator value </EM>[method] 
+<UL><LI> associates <EM>value to <EM>indicator in the plist.
+</UL>
+<A NAME=2506>&#160;</A>
+<B>:remprop</B> <EM>indicator </EM>[method] 
+<UL><LI> removes <EM>indicator and value pair from the plist.
+Further attempt to <EM>:get</EM> the value returns nil.
+</UL>
+<A NAME=2518>&#160;</A>
+<B>:name</B> <EM>&amp;optional name </EM>[method] 
+<UL><LI> defines and retrieves the <TT>:name</TT> property in the plist.
+This property is used for printing.
+</UL>
+<A NAME=2529>&#160;</A>
+<B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[method] 
+<UL><LI> prints the object in the re-readable form.
+If the object has <B>:name</B> property, it is printed after
+the address of the object.
+</UL>
+<A NAME=2541>&#160;</A>
+<B>metaclass </B> [class]  <PRE><TT> :super B<>propertied-object</B>
+<P>
+:slots 		 name super cix vars types forwards methods
+<P>
+</TT></PRE>
+<UL><LI> Metaclass defines classes. Classes that have own class variables
+should be defined with <B>metaclass</B> as their superclass.
+</UL>
+<A NAME=2559>&#160;</A>
+<B>:new</B> <EM></EM>[method] 
+<UL><LI> creates an instance of this class and returns it
+after filling all the slots with NIL.
+</UL>
+<A NAME=2569>&#160;</A>
+<B>:super</B> <EM></EM>[method] 
+<UL><LI> returns the super class object of this class.
+You cannot alter superclass once defclassed.
+</UL>
+<A NAME=2579>&#160;</A>
+<B>:methods</B> <EM></EM>[method] 
+<UL><LI> returns a list of all the methods defined in this class.
+The list is composed of lists each of which describes the name of
+the method, parameters, and body.
+</UL>
+<A NAME=2589>&#160;</A>
+<B>:method</B> <EM>name </EM>[method] 
+<UL><LI> returns the method definition associated with <EM>name.
+If not found, NIL is returned.
+</UL>
+<A NAME=2600>&#160;</A>
+<B>:method-names</B> <EM>subname </EM>[method] 
+<UL><LI> returns a list of all the method names each of which contains
+<EM>subname in its method name.
+Methods are searched only in this class.
+</UL>
+<A NAME=2611>&#160;</A>
+<B>:all-methods</B> <EM></EM>[method] 
+<UL><LI> returns a list of all methods that are defined in this class and
+its all the super classes.
+In other words, an instance of this class can execute each of these
+methods.
+</UL>
+<A NAME=2621>&#160;</A>
+<B>:all-method-names</B> <EM>subname </EM>[method] 
+<UL><LI> returns a list of all the method names each of which matches with
+<EM>subname.
+The search is made from  this class up to <B>object</B>.
+</UL>
+<A NAME=2633>&#160;</A>
+<B>:slots</B> <EM></EM>[method] 
+<UL><LI> returns the slot-name vector.
+</UL>
+<A NAME=2643>&#160;</A>
+<B>:name</B> <EM></EM>[method] 
+<UL><LI> returns the name symbol of this class.
+</UL>
+<A NAME=2653>&#160;</A>
+<B>:cid</B> <EM></EM>[method] 
+<UL><LI> returns an integer that is assigned to every
+instance of this class to identify its class.
+This is an index to the system-internal class table, and is changed
+when a new subclass is defined under this class.
+</UL>
+<A NAME=2663>&#160;</A>
+<B>:subclasses</B> <EM></EM>[method] 
+<UL><LI> returns a list of the direct subclass of this class.
+</UL>
+<A NAME=2673>&#160;</A>
+<B>:hierarchy</B> <EM></EM>[method] 
+<UL><LI> returns a list of all the subclasses defined under this class.
+You can also call the <B>class-hierarchy</B> function to get a comprehensive
+listing of all the class hierarchy.
+</UL>
+<A NAME=2684>&#160;</A>
+<B>find-method</B> <EM>object selector </EM>[function] 
+<UL><LI> searches for the method identified by <EM>selector in <EM>object's
+class and its super classes. This function is useful when object's
+class is uncertain and you want to know whether the object can handle
+the message without causing nomethod error.
+</UL>
+<P>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2337" HREF="node36.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2335" HREF="node31.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2331" HREF="node34.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2339" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2340" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2338" HREF="node36.html">Arithmetic Functions</A>
+<B>Up:</B> <A NAME="tex2html2336" HREF="node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html2332" HREF="node34.html">Instance Management</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

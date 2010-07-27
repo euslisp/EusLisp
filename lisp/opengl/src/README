@@ -1,0 +1,73 @@
+# -*- indented-text -*-
+# $Header: /home/cvs/euslisp/opengl/src/README,v 1.1.1.1 2003/11/20 07:46:32 eus Exp $
+#
+# README
+#
+
+● 起動方法
+
+% setenv LD_LIBRARY_PATH /usr/local/eus/opengl/lib:$LD_LIBRARY_PATH
+
+% eusgl
+...
+eusgl$ (load "/usr/local/eus/opengl/src/test.l")
+eusgl$ (gldraw eta3)
+
+で絵が出ます。
+
+（gldraw = cls + draw + ダブルバッファスワップ です）
+
+● ファイル
+	/usr/local/eus/opengl/src/*.[lc]	<- プログラム本体
+	/usr/local/eus/opengl/lib/*.so	<- aux ライブラリ（OpenGL のもの）
+になります。
+
+/usr/local/eus/opengl/src/:
+
+		gl.l			libGL ローダ
+		glconst.l		libGL 定数定義
+		glforeign.l		libGL 外部関数定義
+
+		glu.l			libGLU ローダ
+		gluconst.l		libGLU 定数定義
+		gluforeign.l		libGLU 外部関数定義
+
+		glx.l			libGLX ローダ
+		glxconst.l		libGLX 定数定義
+		glxforeign.l		libGLX 外部関数定義
+
+		tk.l			libtk ローダ
+		tkconst.l		libtk 定数定義
+		tkforeign.l		libtk 外部関数定義
+
+		aux.l			libaux ローダ
+		auxconst.l		libaux 定数定義
+		auxforeign.l		libaux 外部関数定義
+
+		glutil.l		util.so インターフェース
+		gldecl.l		glviewsurface 宣言
+		glview.l		glviewsurface, :draw-one メソッド定義
+
+		loadgl.l		GL 関係ライブラリローダ
+
+		make-util.irix		util.so 生成シェルスクリプト
+		make-util.solaris2	util.so 生成シェルスクリプト（solaris2）
+		util.c			util.so ソース
+
+		test.l			テストプログラム（eta3）
+
+/usr/local/eus/opengl/book/:
+	
+		OpenGL Programming Guide のサンプル・ソースコードです。
+		拡張子 .lisp のものはこのサンプルの lisp への直訳版です。
+
+
+/usr/local/eus/opengl/book/:
+		OpenGL を使って、eta3 の絵を出す C のプログラムがこのサンプルの一つを
+		改造して作ってあります。
+
+		/usr/local/eus/opengl/book/eta3
+
+		で起動します。
+		キーボードの '[a-gA-G12←→↑↓]' を使って各関節の動作、視点の移動がで
+		きます。パーフォーマンス評価の参考になると思います。

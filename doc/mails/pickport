@@ -1,0 +1,222 @@
+Received: from etlcom.etl.junet by etlic2.etl.junet (3.2/6.3Junet-1.0)
+	id AA11600; Mon, 20 Mar 89 17:40:28 JST
+Received: from titcca.cc.titech.junet by etlcom.etl.junet (3.2/6.3Junet-1.0)
+	id AA18873; Mon, 20 Mar 89 17:40:19 JST
+Received: from ccut.cc.u-tokyo.junet (ccutrd) by titcca.cc.titech.junet (4.12/6.3Junet-1.0)
+	id AA16237; Mon, 20 Mar 89 17:36:08 jst
+Received: by ccut.cc.u-tokyo.junet (5.51/6.3Junet-1.0/CSNET-JUNET)
+	id AA09808; Mon, 20 Mar 89 17:37:38 JST
+Received: from centaurus.jsk.u-tokyo.junet (centaurus.ARPA) by jsk.jsk.u-tokyo.junet (1.00/6.3Junet-1.0)
+	id AA00295; Mon, 20 Mar 89 17:38:06 jst
+Received: by centaurus.jsk.u-tokyo.junet (3.2/6.3Junet-1.0)
+	id AA02104; Mon, 20 Mar 89 17:38:46 JST
+Date: Mon, 20 Mar 89 17:38:46 JST
+From: inaba@jsk.u-tokyo.junet
+Return-Path: <inaba@jsk.u-tokyo.junet>
+Message-Id: <8903200838.AA02104@centaurus.jsk.u-tokyo.junet>
+To: matsui@etl.junet
+Subject: pickport.l
+Status: R
+
+
+メイルどうもありがとうございました。
+
+メイルをいただいてからpickport.lのマニュアルを簡単に書いてみました。
+texにはなっていません。
+
+なかにはいらないものもいくつかあることに気がつきましたが、こちらでは、
+現在、pickview,coordview,対話型model-maker,vision関係のアプリケーション
+に使っています。
+
+pick何とかというのがほとんどで、この定義が良いかどうかわかりません。
+
+この簡単な説明をもとにeusに組み込むかどうかそちらで判断してください。
+
+
+稲葉
+
+--------------------pickport.doc----------------------
+
+関数
+2dvector-to-3dvector vector
+
+edge-imageのメソッド
+:draw viewport
+	viewportにedge-imageを表示する。
+:2dlnsegs
+	edge-imageの線分要素を2dlnsegのリストにして返す。
+
+edgeのメソッド
+:project vector
+	lineへ:footを送った時と同じ、投影点の座標を返す。
+:distance vector
+	エッジ上の点との最短距離を返す。
+
+faceのメソッド
+
+3dlineはある点と方向ベクタからなるクラスで、空間の無限長さの直線を表現する。
+
+:crossp-with-3dline 3dline
+	3dlineがfaceと交差すれば、その交点を返す。交差しなければ、nil
+	を返す。
+
+:nearest-edge-from-3dline 3dline
+	faceが持つedgeの中で、3dlineと最も距離が近いものを返す。
+
+:nearest-edge-from-3dvector vector
+	faceが持つedgeの中で、vectorと最も距離が近いものを返す。
+
+viewerのメソッド
+:clear surface へ:clearを送る。
+:refresh surface へ:refresh を送る。
+:draw-box-cursor vector &optional base
+	base座標系における原点とvectorを直方体の対角線となるように、
+	直方体を表示する。baseの規定値はワールド座標系である。
+:project-to-screen vector
+	vectorをsurfaceへ投影後の座標値を返す。
+:hid bodies
+	bodyのリストを与えてそれらを表示する。
+:setup-by-camera-coord
+   (camera &key
+	   (width (send self :viewport :width))
+	   (height (send self :viewport :height))
+	   )
+	カメラキャリブレーションされたcamera-coordを与えれば、
+	それにあったviewerに初期設定する。
+
+model-pickportクラス
+	  :super viewer
+	  :slots (objects edge-images)
+	objectsは対象となるbodyのリストである。	
+	edge-imagesはobjectsを表示した時のedge-imagesを
+	保存している変数である。
+
+:init (&key (:objects obj))
+
+:objects (&optional objs)
+	objsがあればそれをobjectへ設定し、なければobjectsを返す。
+
+:erase-objects (&optional (o objects))
+:draw-objects (&optional (o objects))
+:hid-objects (&optional (o objects))
+:erase-hid-objects
+	objectsの、稜線すべて消去、稜線すべて表示、可視線のみ表示、
+	可視線のみ消去、する。
+:2dlnsegs (&optional bodies)
+	bodiesがあればその可視線を2dlnsegのリストで表現する。
+	なければ、edge-imagesを2dlnsegのリストで表現する。
+:edge-images (&optional bodies)
+	bodiesがあればその可視線を2dlnsegのリストで表現する。
+	なければ、edge-imagesを返す。
+
+:draw-edge-images (&optional (es edge-images))
+	edge-imagesを表示する。
+
+:pick-coordinates pos
+	objectsの中で、surface上の点posの一番近くに見えるcoordinatesを
+	返す。posは２次元のvectorである。
+
+:pick-object pos
+	objectsの中で、surface上の点posの一番近くに見えるobjectを
+	返す。posは２次元のvectorである。
+
+:pick-face pos
+	objectsのfaceの中で、surface上の点posの一番近くに見えるfaceを
+	返す。posは２次元のvectorである。
+
+:pick-edge pos
+	objectsのedgeの中で、surface上の点posの一番近くに見えるedgeを
+	返す。posは２次元のvectorである。
+
+:pick-edge-image pos
+	objectsのedge-imageの中で、surface上の点posの一番近くに見える
+	edge-imageを返す。posは２次元のvectorである。
+
+:pick-2dlnseg pos
+	objectsの投影図中の2dlnsegの中で、surface上の点posの一番近くに見える
+	2dlnsegを返す。posは２次元のvectorである。
+
+:pick-junction
+	objectsの投影図中の接続点の中で、surface上の点posの一番近くに見える
+	接続点を返す。pos、および、接続点は２次元のvectorである。
+	
+:pick-vertex
+	objectsの投影図中の頂点の中で、surface上の点posの一番近くに見える
+	頂点を返す。頂点は３次元であり、posは２次元のvectorである。
+
+
+image-pickportクラス
+	  :super viewer
+	  :slots (polylines)
+	polylinesは対象となるpolylineのリストである。	
+
+:init (&key ((:polylines lines)))
+
+:polylines (&optional polys)
+	polysがあれば、それをpolylinesとする。なければ、polylinesを返す。
+
+:nearest-segment pos
+	polylinesの中で、surface上の点posの一番近くにある
+	2dlnsegを返す。
+
+:nearest-polyline pos
+	polylinesの中で、surface上の点posの一番近くにある
+	polylineを返す。
+
+:dividing-polylines (&optional (par *linearity-thd*))
+	polylineの始点と終点を結んだ直線の長さと、その直線とpolyline
+	上の点が一番はなれる点との長さの逆比をlinearityと呼ぶ。
+	polylinesをpar以下のlinearityとなるように再分割した結果を
+	返す。	
+:divide-polylines
+	:dividing-polylinesの結果をオブジェクト変数に置き換える。
+
+:dividing-segments  (&optional (par *linearity-thd*))
+	:dividing-polylinesと同様であるが、結果を2dlnsegのリストとして
+	返すのみ。
+
+:longest-line
+	polylinesの中から、最も長いpolylineを返す。
+:longer-line thd
+	polylinesの中から、thdより長いpolylineを返す。
+
+:sort-polylines  (&key (lines polylines) (func :length))
+	polylinesをソートする。
+
+:segments
+	polylinesを2dlnsegに展開したものを返す。
+
+:sort-segments (&key (lines (send self :segments)) (key :length))
+	2dlnsegを長い順にソートした結果を返す。
+
+
+
+以下は、viewerに対して与えられた対象（例えばojbectsなど）を
+screen-posを手がかりに選び出す関数群
+
+pick-object objects screen-pos &optional (aviewer *viewer*)
+
+pick-object-point objects screen-pos &optional (aviewer *viewer*)
+
+pick-object-face objects screen-pos &optional (aviewer *viewer*)
+
+pick-object-edge objects screen-pos &optional (aviewer *viewer*)
+
+pick-object-edge-image objects screen-pos &optional (aviewer *viewer*)
+
+pick-face faces screen-pos &optional (aviewer *viewer*)
+
+pick-edge-image edge-images screen-pos &optional (aviewer *viewer*)
+
+pick-edge-image-aux edge-images screen-pos &optional (aviewer *viewer*)
+
+pick-2dlnseg 2dlns screen-pos &optional (aviewer *viewer*)
+
+pick-edge edges screen-pos &optional (aviewer *viewer*)
+
+pick-coordinates coordlist screen-pos &optional (aviewer *viewer*)
+
+pick-vector vlist screen-pos &optional (aviewer *viewer*)
+
+
+

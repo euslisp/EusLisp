@@ -1,0 +1,71 @@
+\documentstyle[jart12]{jarticle}
+\pagestyle{plain}
+\oddsidemargin=0.5cm
+\evensidemargin=0.5cm
+\textwidth=16cm
+\textheight=24cm
+
+\begin{document}
+\hspace{80mm}様
+
+\vspace{1cm}
+
+前略、EusLispに関するお問い合わせを頂きありがとうございます。
+テープをお送りします。テープには、ソース、sun4実行形式、sun3実行形式
+が、QIC24フォーマットのtar形式で記録してあります。
+次の手順で読み出して下さい。
+
+\begin{verbatim}
+% cd /usr/share/src; mkdir eus ; cd eus
+% tar xvf /dev/nrst8 
+% cd /usr/local ; mkdir eus; cd eus; mkdir bin; cd bin
+% tar xvf /dev/nrst8
+% mt -f /dev/rst8 rewind
+\end{verbatim}
+
+ディレクトリ名は、変更しても結構ですが、その場合は、
+makefile, mkcommoneusの中のディレクトリ名を書き換えて下さい。
+また、実行形式についても、次にようにして内部のディレクトリ名を
+書き換えて下さい。
+
+\begin{verbatim}
+% cd /youreusdir/bin
+% eus
+EusLisp  6.866 created on Thu May 17 14:43:15 1990
+eus$ *eusdir*
+"/usr/local/eus/"
+eus$ setq *eusdir* "/youreusdir/"
+"/youreusdir/"
+eus$ save "eus2"
+t
+eus$ ^D
+% mv eus2 eus
+\end{verbatim}
+
+ディレクトリ内のリンクの張り方、ソースからのmakeの仕方、サンプルラン
+についてはREADMEに解説してあります。
+ドキュメントはdoc/latex, doc/ptroffに英語版、doc/jumanに日本語版があります。
+ただし、どちらもまだ完全ではありません。
+
+mailing-listで情報交換を図っています。
+不明な点に関する質問や有用なプログラムの発表は、
+euslisp@etl.go.jpに投稿されますようお願い申し上げます。
+
+
+
+\vspace{1cm}
+
+305 茨城県 つくば市 梅園 1-1-4
+
+電子技術総合研究所
+
+知能システム部 自律システム研究室
+
+松井俊浩
+
+0298-58-5977
+
+0298-58-5971(fax)
+
+\end{document}
+

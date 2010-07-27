@@ -1,0 +1,74 @@
+デバッグ用の関数にｉｎｓｐｅｃｔというのがあるのをご存知です
+か。CommonLispでは、inspectの詳細はインプリメンテーションに依
+存することになっているのでちょっと解説します。
+何か、グローバル変数に、オブジェクトが代入されているとします。
+プロンプトの関係で、かならずグローバル変数でないといけません。
+例として、Cという変数にcascaded-coords のインスタンスがはいっ
+ているとしましょう。
+(setq c (make-cascoords))
+そこで、
+
+(inspect c)
+とすると、 C* というプロンプトが現れます。
+
+? コマンドによってコマンドの種類がわかるはずです。
+C* ?
+        p  --describe object
+        v  --print variable names
+        i <var> --inspect var
+        s <var> <value> -- set value to var
+        <var> --describe var
+        u  --back to parent object
+        q  --quit inspection
+C* 
+
+pコマンドでそのオブジェクト自身、今の場合はCがdescribeされます。
+C* p
+rot=#2f((1.00000 0.0 0.0) (0.0 1.00000 0.0) (0.0 0.0 1.00000))
+pos=#f(0.0 0.0 0.0)
+parent=nil
+descendants=nil
+worldcoords=#<coordinates #Xa84b0>
+manager=#<cascaded-coords #Xa800c>
+changed=t
+
+vコマンドによってどんなスロット変数があるかがわかります。
+#(rot pos parent descendants worldcoords manager changed)
+
+worldcoordsの値を詳しく知りたければ、worldcoordsと入力します。
+C* worldcoords
+rot=#2f((1.00000 0.0 0.0) (0.0 1.00000 0.0) (0.0 0.0 1.00000))
+pos=#f(0.0 0.0 0.0)
+
+i スロット によって、そのスロット変数のインスペクトを再帰的に
+実行します。1つ下のレベルに入るわけです。どこにいるかわかるよ
+うにプロンプトが変化します。上に戻るには u コマンドを使います。
+
+スロットの値を置き換えるには s コマンドを用います（これは電総
+研の最新版でしか動きません）。たとえばposの値を変えたければ、
+
+C* s pos #f(5 6 7)
+C* p
+rot=#2f((1.00000 0.0 0.0) (0.0 1.00000 0.0) (0.0 0.0 1.00000))
+pos=#f(5.00000 6.00000 7.00000)
+parent=nil
+descendants=nil
+worldcoords=#<coordinates #Xa84b0>
+manager=#<cascaded-coords #Xa800c>
+changed=t
+
+となります。配列の場合も大丈夫です。
+C* i pos	;posスロットを再帰的にinspectします。
+C.POS* p
+#f(5.00000 6.00000 7.00000)
+C.POS* s 1 123	;これは1番目の要素を変更するという意味です。
+C.POS* p
+#f(5.00000 123.000 7.00000)
+
+という具合です。リストではどんなことが起こるかはだいたい想像
+できると思います。それから、これでLispの関数のエディットがで
+きるってことはわかりますよね。
+
+
+
+

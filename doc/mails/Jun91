@@ -1,0 +1,1781 @@
+From matsui@etl.go.jp Wed Apr 17 16:49:54 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA15723; Wed, 17 Apr 91 16:49:52 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA24720; Wed, 17 Apr 91 16:52:05 JST
+Received: by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA15715; Wed, 17 Apr 91 16:48:40 JST
+Date: Wed, 17 Apr 91 16:48:40 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9104170748.AA15715@etlmmd.etl.go.jp>
+To: wakita@etl.go.jp
+Subject: Re:  question for interactive programming
+Cc: euslisp@etl.go.jp
+Status: R
+
+>eusのインタプリタの中でプログラムをロードした後で、ユーザが定義した全ての
+>クラスとその上下関係、
+
+class-hierarchyという関数があります。(class-hierarchy coordinates) と
+すれば、coordinates のサブクラスが階層的にプリントされます。
+
+> すでに生成されているオブジェクトの内容、
+
+describeするのではないかな。inspectでもいいけど。
+
+> クラス中で定義されたメソッド、
+
+(send クラス :methods)で クラスに定義された全メソッドのリストが得られます。
+(methods) とすればすべてのメソッド、(methods "line")とすれば、"line"を
+メソッド名の一部に含む全メソッドとそれが定義されているクラスのリストが
+得られます。
+
+> 関数などを、インタプリタの中からインタラクティブに随時
+>取り出すにはどうしたら良いでしょうか。
+
+(functions) は全関数のリスト、(functions "print")は,"print"を
+名前(シンボル)に含む全関数のリスト、
+(functions "print" (fing-package "WAKITA")) はWAKITAパッケージに
+定義されたprintを含む全関数のリスト。
+同様に、variables, constantsがあります。
+マニュアルの63ページ、debugging aidsに簡単に説明してあります。
+
+>デバッグなどのために、プログラムをステップ実行するにはどうしたら
+>良いでしょうか。
+
+(step (fib 5)) などとします。コンパイルしてあるとだめかもしれない。
+sで次のステップを実行します。
+
+こんなもの、私は使いません(できが悪いだけか)。
+
+>マニュアルの何ページに乗っているということもお教え下さい。
+>今手元には Sep-'９０ の版があります。
+>
+>Ｏ~Ｏ   脇田優仁＠電総研
+>   '     wakita@etl.go.jp
+>  ＾    「こんなかんじでよろしいでしょうか。」
+
+こんな関数はないと思ってたでしょ。
+ずっと隠してたから。
+脇田さんも何か出してよ。
+
+
+From matsui@etl.go.jp Wed Apr 17 16:53:25 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA15740; Wed, 17 Apr 91 16:53:23 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA24901; Wed, 17 Apr 91 16:56:17 JST
+Received: by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA15734; Wed, 17 Apr 91 16:52:52 JST
+Date: Wed, 17 Apr 91 16:52:52 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9104170752.AA15734@etlmmd.etl.go.jp>
+To: wakita@etl.go.jp
+Subject: Re: Returned mail: Service unavailable
+Cc: euslisp@etl.go.jp
+Status: R
+
+>メーリングリストにお手紙を出したらこういうエラーのリターンが帰って来ました。
+>メーリングリストの管理者にもいってると思いますが（実わメーリングリストの
+>仕組みを良く知らない）、一応お伝えしておきます。
+>
+>In message <9104170708.AB23272@etlpost.etl.go.jp> on 04/17/91
+>you Mail Delivery Subsystem <MAILER-DAEMON@etl.go.jp> wrote:
+> |   ----- Transcript of session follows -----
+> |>>> RCPT To:<kimura@kangaroo.me.tohoku.ac.jp>
+> |<<< 554 <kimura@kangaroo.me.tohoku.ac.jp>... Never heard of domain kangaroo in domain me . tohoku . ac . jp
+> |554 <kimura@kangaroo.me.tohoku.ac.jp>... Service unavailable
+> |   ----- Unsent message follows -----
+>       後は僕が出した奴
+
+mailing-listは、そこに送ると登録してあるユーザ全員に一斉同報される
+しくみです。euslisp@etlには3、40人ほど登録されています。
+
+こういうエラーメイルが返って来るのは、kumuraさんのメイルアドレスが
+変わったためです。変更の連絡がなければ、いずれ削除します。
+
+
+
+
+
+From matsui@etl.go.jp Wed Apr 17 21:11:43 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA15950; Wed, 17 Apr 91 21:11:41 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA07919; Wed, 17 Apr 91 21:14:38 JST
+Received: by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA15947; Wed, 17 Apr 91 21:11:14 JST
+Date: Wed, 17 Apr 91 21:11:14 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9104171211.AA15947@etlmmd.etl.go.jp>
+To: terasaki@marr.tsukuba.sanyo.co.jp
+Subject: Re:  question for interactive programming
+Cc: euslisp@etl.go.jp
+Status: R
+
+>From terasaki@marr.tsukuba.sanyo.co.jp Wed Apr 17 19:54:13 1991
+>Mat> こんな関数はないと思ってたでしょ。
+>Mat> ずっと隠してたから。
+
+>うん、こういう情報はうれしいですね。
+>脇田さん、どうもありがとうございました。
+
+では、もう少し続きを。
+
+(method-list &optional (file t) &rest classes)
+例えば、(method-list t body) でbodyのメソッドがわかります。
+(method-list)とすると、全メソッドがクラス名と共に出ます。
+長過ぎて困る時は、(more (method-list))とします。moreは標準出力に
+プリントされる物をページ毎に見せてくれるマクロで、unixのコマンドでは
+ありません。
+(pprint (send body :all-method-names)) は、bodyからobjectに至る
+クラスで定義されたメソッドをプリントします。メソッド名のoverloadを
+調べたりするのに使えますな。
+
+しょうもない関数で、(check-methods) なんてのもあります。
+
+プロセスの情報は、(rusage)で出ます。
+
+(bell 5) とか。
+
+(yes-or-no-p "anata ha aho?") というのは知ってる? (y-or-n-p)もあります。
+これはCommon Lispの仕様。
+
+>                                 寺崎  肇＠筑波研究所．三洋電機
+>                                  terasaki@tsukuba.sanyo.co.jp
+>
+>P.S. vision は、もう少し待ってね。
+
+はい。
+
+
+From terasaki@marr.tsukuba.sanyo.co.jp Thu Apr 18 13:22:44 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA16556; Thu, 18 Apr 91 13:22:42 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA21223; Thu, 18 Apr 91 13:25:39 JST
+Received: by etlcv3.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA15370; Thu, 18 Apr 91 13:26:04 JST
+Received: by tacho.tsukuba.sanyo.co.jp (5.57/6.4J.5-tkb2) id AA12998; Thu, 18 Apr 91 13:00:44 +0900
+Received: from marr.tsukuba.sanyo.co.jp by terra.tsukuba.sanyo.co.jp (4.0/6.4J.5-tkb2) id AA23290; Thu, 18 Apr 91 12:58:49 JST
+Received: by marr.tsukuba.sanyo.co.jp (4.0/6.4J.5-tkb1) id AA13996; Thu, 18 Apr 91 12:58:44 JST
+Date: Thu, 18 Apr 91 12:58:44 JST
+From: terasaki@marr.tsukuba.sanyo.co.jp (Hajime Terasaki)
+Return-Path: <terasaki@marr.tsukuba.sanyo.co.jp>
+Message-Id: <9104180358.AA13996@marr.tsukuba.sanyo.co.jp>
+To: matsui@etl.go.jp
+Cc: euslisp@etl.go.jp
+In-Reply-To: MATSUI's message of Wed, 17 Apr 91 21:11:14 JST <9104171211.AA15947@etlmmd.etl.go.jp>
+Subject:  question for interactive programming
+Status: R
+
+寺崎＠三洋電機です。
+
+>>>>> On Wed, 17 Apr 91 21:11:14 JST, matsui@etl.go.jp (MATSUI) said:
+Mat> では、もう少し続きを。
+
+わくわく。
+
+Mat> 例えば、(method-list t body) でbodyのメソッドがわかります。
+Mat> 長過ぎて困る時は、(more (method-list))とします。moreは標準出力に
+Mat> (pprint (send body :all-method-names)) は、bodyからobjectに至る
+Mat> しょうもない関数で、(check-methods) なんてのもあります。
+Mat> プロセスの情報は、(rusage)で出ます。
+
+全部知らなかった。情けない！;-<
+
+Mat> (bell 5) とか。
+
+げげ、これもあったんですか？今まで、
+(unix:system "xbells 5")
+で、やってました。
+
+Mat> (yes-or-no-p "anata ha aho?") というのは知ってる? (y-or-n-p)もあります。
+Mat> これはCommon Lispの仕様。
+
+これも、知らなかった。
+便利な機能を知れて良かった！！！
+
+                                 寺崎  肇＠筑波研究所．三洋電機
+                                  terasaki@tsukuba.sanyo.co.jp
+
+From suzuki@graco.c.u-tokyo.ac.jp Thu Apr 18 14:05:57 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA16649; Thu, 18 Apr 91 14:05:56 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA23507; Thu, 18 Apr 91 14:09:18 JST
+Received: from spook.graco.c.u-tokyo.ac.jp by etlpost.etl.go.jp (5.65+1.4W/2.7W)
+	id AA27454; Thu, 18 Apr 91 14:07:26 JST
+Received: from shari.graco.c.u-tokyo.ac.jp by spook.graco.c.u-tokyo.ac.jp (5.61+++/2.7W-utc1.7graco)
+	id AA07101; Thu, 18 Apr 91 14:10:03 +0900
+Received: by shari.graco.c.u-tokyo.ac.jp (4.0/6.4J.6-graco-slave-1)
+	id AA04089; Thu, 18 Apr 91 14:09:17 JST
+Date: Thu, 18 Apr 91 14:09:17 JST
+From: suzuki@graco.c.u-tokyo.ac.jp (SUZUKI hiromasa)
+Return-Path: <suzuki@graco.c.u-tokyo.ac.jp>
+Message-Id: <9104180509.AA04089@shari.graco.c.u-tokyo.ac.jp>
+To: matsui@etl.go.jp
+In-Reply-To: MATSUI's message of Thu, 18 Apr 91 13:45:22 JST <9104180445.AA16597@etlmmd.etl.go.jp>
+Subject:  eus.tar.Z
+Status: R
+
+
+松井さん
+
+   >>新しいのを作っておきました。
+
+ありがとうございました。
+
+   >>>	鈴木宏正                                                  ＠ｍ〜
+   >>
+   >>ひょっとして、情報処理のグラフィクスとCAD研究会の連絡委員をなさってる
+   >>のではありませんか?
+
+ひょっとしました。わたしもそんな気がしたのですが、あの研究会は最近CGや
+画像処理関係の方が多いので、もしかしたら違うんじゃないかと思っていたの
+です。
+
+ごあいさつが遅れましたが、今後ともよろしくお願いします。
+
+私は工学部精密の木村研と一緒に研究しています。もともと幾何モデリングや
+そのCADへの応用なんかやっています。特に幾何制約に関しては興味を持って
+いて、設計の立場から考えています。
+
+その中でも最近幾何公差(部品形状の加工誤差などの許容範囲)の問題を学生が
+研究していて、立体モデルが誤差をもった時の(面がノミナルな位置から少し
+だけずれること)接触状態を計算しようとしています。松井さんも連名の比留
+川さんのロボット学会なんかの論文を読ませていただき、論文の内容とともに
+euslispに興味を持ちました。
+ #euslispについては、以前稲葉先生からちょっとだけ聞いていました。
+
+研究では主にLispを使っているのですが、Lispの上の良いモデラーがなく、私
+もGEOMAPのサブセットをFlavorで作ったり、いろいろと苦労してきました。今
+はCで書かれたソリッドモデラーをLispから読んだり、SymbolicsのS Geometry
+というモデラーを使ったり、アドホックに作ったりしています。
+
+euslispも試用させていただきます。makeできましたら、登録いたします。
+
+	鈴木宏正                                                  ＠ｍ〜
+	----------------------------------------------------------------
+	Hiromasa Suzuki		Internet: suzuki@graco.c.u-tokyo.ac.jp
+	東京大学教養学部情報・図形科学教室
+	電話 03-3467-1171 内線 226 留守番 03-3467-6367 FAX 03-3465-2896
+	----------------------------------------------------------------
+
+From Yutaka.Ohsawa@IUS3.IUS.CS.CMU.EDU Fri Apr 19 01:55:35 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA23461; Fri, 19 Apr 91 01:55:34 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA10353; Fri, 19 Apr 91 01:58:55 JST
+Received: from IUS3.IUS.CS.CMU.EDU by etlpost.etl.go.jp (5.65+1.4W/2.7W)
+	id AA29426; Fri, 19 Apr 91 01:57:05 JST
+Return-Path: <Yutaka.Ohsawa@IUS3.IUS.CS.CMU.EDU>
+Message-Id: <9104181657.AA29426@etlpost.etl.go.jp>
+From: Yutaka Ohsawa <ohsawa@IUS3.IUS.CS.CMU.EDU>
+Date: Thu, 18 Apr 91 12:59:41 EDT
+To: matsui@etl.go.jp
+In-Reply-To: MATSUI's message of Thu, 18 Apr 91 14:13:59 JST <9104180513.AA16676@etlmmd.etl.go.jp>
+Subject:  About EusLisp
+Status: R
+
+松井さん、早速のご返事ありがとうございました。
+日本に帰りましてからFTPで頂き、使わせていただきます。
+LICENCE の件も、そのとき必ずお送りいたします。
+
+   >>VANTAGEの使い心地はどうですか?
+
+ビジョン目的で使用するには大変使いがっての良いシステムです。
+ただ自由曲面等はサポートしていないので、この部分は自分で拡張
+して使っています。また信頼できるLISPの処理系が別途必要です。
+
+   >>はい、8月から10月の間にStanfordに渡り、一年滞在する予定でいます。
+
+私は１０月までＣＭＵに滞在しております。その間にピッツバーグに
+お越しの節はぜひご連絡ください。
+--
+Yutaka Ohsawa @CMU
+
+From kimura@nakano.mech.tohoku.ac.jp Fri Apr 19 06:05:10 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA23493; Fri, 19 Apr 91 06:05:09 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA15166; Fri, 19 Apr 91 06:08:33 JST
+Received: from koudai.cs.titech.ac.jp by etlpost.etl.go.jp (5.65+1.4W/2.7W)
+	id AA29725; Fri, 19 Apr 91 06:06:45 JST
+Received: by koudai.cs.titech.ac.jp (1.5W/koudai); Fri, 19 Apr 91 05:33:46 JST
+Received: from mechinfo.me.tohoku.ac.jp by hirose.gw.tohoku.ac.jp (4.1/6.4J.6-Apr10)
+	id AA21459; Thu, 18 Apr 91 23:03:53 JST
+Received: from opossum.nakano.mech.tohoku.ac.jp by mechinfo.me.tohoku.ac.jp (4.0/6.4J.6) id AA19105; Thu, 18 Apr 91 23:02:55 JST
+Received: by opossum.nakano.mech.tohoku.ac.jp (4.1/6.4J.6) id AA24235; Thu, 18 Apr 91 23:01:11 JST
+Date: Thu, 18 Apr 91 23:01:11 JST
+From: kimura@nakano.mech.tohoku.ac.jp (Hiroshi Kimura)
+Return-Path: <kimura@nakano.mech.tohoku.ac.jp>
+Message-Id: <9104181401.AA24235@opossum.nakano.mech.tohoku.ac.jp>
+To: inaba@jsk.t.u-tokyo.ac.jp
+Cc: matsui@etl.go.jp
+In-Reply-To: Masayuki Inaba's message of Thu, 18 Apr 91 10:20:25 JST <9104180120.AA00975@grus.jsk.t.u-tokyo.ac.jp>
+Subject: Returned mail: Service unavailable
+Status: R
+
+   >>	>>こういうエラーメイルが返って来るのは、kumuraさんのメイルアドレスが
+   >>	>>変わったためです。変更の連絡がなければ、いずれ削除します。
+   >>	>>
+   >>
+   >>alias kimura kimura@nakano.me.tohoku.ac.jp
+御迷惑をおかけして済みません。4月に東北大の機械系三学科が
+
+	機械知能工学科、機械電子工学科、機械航空工学科
+
+というように改組になったのを機会に、ドメイン名を変更している過程で、エ
+ラーが生じたようです。
+
+これからは、
+
+	kimura@nakano.mech.tohoku.ac.jp
+
+となります。変更して頂ければ幸いです。しかし、まだ正式ではないので、内
+山先生にmechドメインで送るとエラーが生じます。
+
+   >>
+   >>先日、ロボットシンポジウムに参加されるRoth教授のことでkangaroo宛に
+   >>送ったらば帰ってきたので、これで大丈夫ではないかと。
+内山先生からの返事は届きましたか。
+
+>Roth 先生の特別講演は５月９日の 13:00-14:40 となってます．その日 
+>17:30-19:30 の予定で学会の懇親会を企画してますので，できたら Roth 先生
+>を招待したいのですが，もう一泊できませんでしょうか．Roth 先生の予定が
+>厳しいようでしたら，無理にお引き留めはいたしませんが．．．また，８日の
+>研究室見学はもちろん大歓迎です．
+
+   >>ね、木村君。新婚生活はいかがですか。
+単身赴任は悲しいものがあります。:-<
+------
+木村 浩  東北大学工学部機械知能工学科 中野研
+JUNET:kimura@nakano.mech.tohoku.ac.jp  TEL:(022)222-1800 (ext.4151)
+                                       FAX:(022)267-4403
+
+
+From matsui@etl.go.jp Fri Apr 19 16:21:46 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA24554; Fri, 19 Apr 91 16:21:44 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA00744; Fri, 19 Apr 91 16:24:52 JST
+Received: by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA24551; Fri, 19 Apr 91 16:21:20 JST
+Date: Fri, 19 Apr 91 16:21:20 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9104190721.AA24551@etlmmd.etl.go.jp>
+To: wakita@etl.go.jp
+Subject: Re:  function output to file
+Cc: euslisp@etl.go.jp
+Status: R
+
+>From wakita@etl.go.jp Fri Apr 19 16:16:35 1991
+>eusのインタプリタの中で、関数を実行した出力結果を、ファイルをひとつ
+>オープンしてその中に流し込んでやるにはどうしたら良いでしょうか。
+>cshのredirect (>) みたいなものを考えているんですが。
+
+大域変数 *standard-output* に出力ストリームをバインドしてやるか
+(*standard-output* は、special 変数です。letを使ってバインドしてやれば
+letから出た後もとに戻ります)、broadcast-streamを使うんだね。
+
+
+
+From matsui@etl.go.jp Mon Apr 22 14:12:56 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA25874; Mon, 22 Apr 91 14:12:53 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA26049; Mon, 22 Apr 91 14:15:19 JST
+Received: by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA25860; Mon, 22 Apr 91 14:11:34 JST
+Date: Mon, 22 Apr 91 14:11:34 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9104220511.AA25860@etlmmd.etl.go.jp>
+To: suzuki@graco.c.u-tokyo.ac.jp
+Subject: Re:  EusLisp installed.
+Cc: euslisp@etl.go.jp
+Status: R
+
+>From suzuki@graco.c.u-tokyo.ac.jp Sat Apr 20 14:03:21 1991
+
+>makeする際に気がついたことをいくつか下にお知らせします。
+
+>それから、eusxviewもつくり、eus/xview/demoのファイルをロードして見たの
+>ですが、動作が今一つ安定しません。環境はSS1, 24MB, OS4.0.3 X11R4, twm
+>を使っています。何かサジェスチョンがあったら教えて下さい。
+
+demoプログラムがどの程度正しく動くか、保証の限りではありません。
+特にxviewのプログラムは、稲葉さんの管理下にあり、私にもよくわかりません。
+ただ、私もxviewを使っていますが、最初のウィンドウを表示するのに
+空のニューラインを打ち込む必要がある他、満足しています。
+鈴木さんとは、cpuがsun4/330,osが4.1.1でopenwinを使っている点が違います。
+
+>またdocの下にいろいろなドキュメントが入っていますが、ディスク不足のた
+>め、ハードコピーを取ってファイルを消去したいと考えています。取り合えず
+>doc/latexとdoc/jlatexはプリントアウトしたのですが、、、
+
+この二つが主なドキュメントです。あと、mailsの下には、今までのeuslisp
+メイリングリストで話題になったことが入れられています。役に立つ情報も
+あるかと思います。
+
+>なるべくお手数をかけないようにいたしますが、今後ともよろしくお願い申し
+>上げます。
+>	鈴木宏正                                                  ＠ｍ〜
+>	----------------------------------------------------------------
+>	Hiromasa Suzuki		Internet: suzuki@graco.c.u-tokyo.ac.jp
+>	東京大学教養学部情報・図形科学教室
+>	電話 03-3467-1171 内線 226 留守番 03-3467-6367 FAX 03-3465-2896
+>	----------------------------------------------------------------
+
+こちらこそ、早速レポートを頂きありがとうございます。
+メイリングリストに加えさせて頂きました。
+
+>-----------------------------------------------------------------------
+>●READMEファイル
+>○SRCDIR
+>% cd /usr/share/src; mkdir eus ; setenv $SRCDIR $PWD
+>これは、もしかして
+>% cd /usr/share/src; mkdir eus ; cd eus; setenv  SRCDIR $PWD
+>                                 ^^^^^^^        ^
+>ではないでしょうか。
+>
+>○lndir
+>% mkdir /usr/local/eus
+>% /usr/share/src/eus/lndir /usr/share/src/eus /usr/local/eus 
+>これは、
+>% /usr/share/src/eus/tool/lndir /usr/share/src/eus /usr/local/eus 
+
+ご指摘の通りです。直しておきます。
+
+>○SunOs 4.0/ X11R4
+>;********************* I M P O R T A N T *************************
+>のところの記述では、SunOS 4.0.3とR3を想定していますが、makefileを
+>みるとSunOS 4.1とR4に対するものになっています。
+
+はい、readmeを書いた時点ではまだR3だったのですが、今はR4になってます。
+インタフェースする上では、両者の互換性はよくとれていて、問題ないと
+思います。
+
+>
+>●makefile
+>○rm -f
+>$(BINDIR)/inteus:	$(BINDIR)/raweus $(CLIBDIR)/sysfunc.o
+>	(mkinteus; rm $(BINDIR)/euscomp ; ln -s inteus $(BINDIR)/euscomp)
+>                   ^^^
+>                   rm -f 
+>○make all
+>all:
+>	(make raweus; make inteus ; make commoneus; make eus)
+>READMEと整合するには、
+>all:
+>	(make raweus; make inteus ; make commoneus; make eus; make eusx; make install)
+
+そうですね。ありがとうございます。
+
+
+From terasaki@marr.tsukuba.sanyo.co.jp Tue Apr 23 14:20:16 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA28250; Tue, 23 Apr 91 14:20:15 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA29273; Tue, 23 Apr 91 14:23:59 JST
+Received: by etlcv3.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA17980; Tue, 23 Apr 91 14:24:29 JST
+Received: by tacho.tsukuba.sanyo.co.jp (5.57/6.4J.5-tkb2) id AA14967; Tue, 23 Apr 91 13:41:40 +0900
+Received: from marr.tsukuba.sanyo.co.jp by terra.tsukuba.sanyo.co.jp (4.0/6.4J.5-tkb2) id AA16467; Tue, 23 Apr 91 13:39:33 JST
+Received: by marr.tsukuba.sanyo.co.jp (4.0/6.4J.5-tkb1) id AA17990; Tue, 23 Apr 91 13:39:33 JST
+Date: Tue, 23 Apr 91 13:39:33 JST
+From: terasaki@marr.tsukuba.sanyo.co.jp (Hajime Terasaki)
+Return-Path: <terasaki@marr.tsukuba.sanyo.co.jp>
+Message-Id: <9104230439.AA17990@marr.tsukuba.sanyo.co.jp>
+To: matsui@etl.go.jp
+In-Reply-To: MATSUI's message of Tue, 23 Apr 91 08:55:05 JST <9104222355.AA27128@etlmmd.etl.go.jp>
+Subject:  vision step2
+Status: R
+
+寺崎です。
+
+>>>>> On Tue, 23 Apr 91 08:55:05 JST, matsui@etl.go.jp (MATSUI) said:
+Mat> いつまで、ということはないのです。必要がないのでしたら
+Mat> やるまでもないことですし。
+
+その辺りが、まだ、具体的にアイデアがないので、、、
+「やってみれば、何か思いつくかな」と思っているのです。
+こちらでは、ステレオまですべてやれば、
+いろいろ面白いことが自由に出来るようになりますので、
+いずれは、ステレオまで、やりたいのですが、
+優先度と言う意味では、まだ、そこまでいかない。
+他にやることがあるのです。というより、今パニック状態！！！
+でも、そろそろ、考えなくてはいけないので、
+これを機会に、やり出したいな、とは思っているのです。
+
+Mat> このプログラムは、開発当事者がサンヨーにいらっしゃいますし、
+Mat> 実際に応用、実験をなさっているので、私より速く完成するのでは、
+Mat> と思っていましたが、
+
+そうなんですか？
+なるほど。実際の作業をまだ理解していないので何とも言えません。
+でも、かなりの量を書き直すのでしょう？
+具体的には、c でプログラムするのですか？
+それとも、euslisp でプログラムするのですか？
+class は、どうやって作るのですか？
+それって、簡単なんですか？
+それが、簡単なら、松井さんの言うように、
+こちらの方が、早いかもしれません。
+
+>人手など諸般の事情のためすぐには無理という結論に達しました。
+>なんとか、押し込もうと考えたのですが、、、
+
+これは、１ヵ月ぐらいかかるという仮定のもとでです。
+
+Mat> 新人教育を兼ねて、ということであれば、一月では終らないかも
+Mat> しれませんね。
+
+そのとおりです。
+
+Mat> せかすつもりはありません。
+Mat> Stepがあって、Eusがあって、統合できればいろいろ都合が良いですね、
+Mat> ということですから。ただ、もし、こちらで急にこれが必要になれば
+Mat> 勝手に完成させてしまうかもしれない。
+
+はい、それは、もちろんかまいません。
+もちろん、配布していただけるのでしょ？（厚かましいですね）
+
+>松井さんの海外行きは、いつ頃からでした？
+Mat> 8月の終りがいいと思っています。
+>それまでに、私が、内容を聞いておきましょう。
+Mat> いいですよ。あまり覚えてないけど。
+
+では、今度いった時にでも、教えて下さい。
+次回は、多分、連休明けになると思います。
+メイルでもいいですが。
+
+                                 寺崎  肇＠筑波研究所．三洋電機
+                                  terasaki@tsukuba.sanyo.co.jp
+
+From inaba@jsk.t.u-tokyo.ac.jp Wed Apr 24 10:23:40 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA29483; Wed, 24 Apr 91 10:23:38 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA20514; Wed, 24 Apr 91 10:27:02 JST
+Received: from mech.t.u-tokyo.ac.jp by etlpost.etl.go.jp (5.65+1.4W/2.7W)
+	id AA14720; Wed, 24 Apr 91 10:25:19 JST
+Received: from grus.jsk.t.u-tokyo.ac.jp by mech.t.u-tokyo.ac.jp (4.1/6.4J.6-MX)
+	id AA11183; Wed, 24 Apr 91 10:26:49 JST
+Received: by grus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA04759; Wed, 24 Apr 91 10:26:12 JST
+Date: Wed, 24 Apr 91 10:26:12 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9104240126.AA04759@grus.jsk.t.u-tokyo.ac.jp>
+To: matsui@etl.go.jp
+Cc: suzuki@graco.c.u-tokyo.ac.jp, euslisp@etl.go.jp
+In-Reply-To: MATSUI's message of Wed, 24 Apr 91 08:54:39 JST <9104232354.AA29385@etlmmd.etl.go.jp>
+Subject:  EusLisp
+Status: R
+
+
+   >>>恐れ入りますが、lecture1.tex, lecture2.tex, lecture3.texもコピーして下
+   >>>さい。lecture.texが\includeしていますので。
+   >>
+   >>見当たりませんねえ。稲葉先生、どうしたんでしょうねえ。
+
+etlportの様子を眺めてみました。
+lecture.texは講義資料のオリジナルだったのです。消してください。
+
+lec4.texがその資料をUserManualへ組み込む際に便利なように
+用意したドキュメントで、資料の内容をすべて含んでいます。
+
+lec4.texのなかで
+manual1,manual2,manual3,manual4
+がincludeされています。
+manual1,manual2は、比留川さんらのユーザマニュアルそのままです。
+内容は当時のものですから、現在のjlatexのマニュアルと置き換えるべき
+ものです。
+manual3,manual4は私が書いたもので、Sunview,Xwindow用インタフェースの
+話と、window.lというプログラム例の説明です。
+
+
+近いうちに内容をUpdateできればいいなと思っています。
+
+稲葉
+
+From suzuki@graco.c.u-tokyo.ac.jp Wed May  8 11:21:25 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA00317; Wed, 8 May 91 11:21:09 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA03557; Wed, 8 May 91 11:25:13 JST
+Received: from spook.graco.c.u-tokyo.ac.jp by etlpost.etl.go.jp (5.65+1.4W/2.7W)
+	id AA17495; Wed, 8 May 91 11:23:25 JST
+Received: from shari.graco.c.u-tokyo.ac.jp by spook.graco.c.u-tokyo.ac.jp (5.61+++/2.7W-utc1.7graco)
+	id AA23386; Wed, 8 May 91 11:26:12 +0900
+Received: by shari.graco.c.u-tokyo.ac.jp (4.0/6.4J.6-graco-slave-1)
+	id AA00905; Wed, 8 May 91 11:25:21 JST
+Date: Wed, 8 May 91 11:25:21 JST
+From: suzuki@graco.c.u-tokyo.ac.jp (SUZUKI Hiromasa)
+Return-Path: <suzuki@graco.c.u-tokyo.ac.jp>
+Message-Id: <9105080225.AA00905@shari.graco.c.u-tokyo.ac.jp>
+To: inaba@jsk.t.u-tokyo.ac.jp
+Cc: euslisp@etl.go.jp
+In-Reply-To: Masayuki Inaba's message of Mon, 6 May 91 16:12:47 JST <9105060712.AA03027@grus.jsk.t.u-tokyo.ac.jp>
+Subject: EusLisp
+Status: R
+
+
+鈴木です。
+
+   >>Date: Mon, 6 May 91 16:12:47 JST
+   >>From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+   >>
+     中略。
+   >>絵がでないという解決策はまだわからないのですが、
+     中略。
+   >>Sun4/390(SunOS 4.0.3)でeusxviewを走らせて、pickview.l
+   >>をNeXTで使ったところ、絵が出ません。menuはでるんですが。
+   >>症状は同じようです。
+
+連休の最中にご検討いただき、ありがとうございます。同じ症状がでて内心ほっ
+としております。
+
+前にも言ったように、Xwindowのxwindow-viewsurfaceというやつを使って、
+pickview.lのボタンのついているウィンドウとは別のウィンドウを開き、そこ
+に立体を表示させ、mouseのイベントをとって、pick-portのプログラムに
+mouseの位置を渡してピックができるようになりました。とりあえず今やって
+みたいことには十分です。お騒がせしました。
+
+   >>NeXTの新しいのはM68040を使っていて、スピードはSparc1くらいで使っていて
+   >>もいらいらしなくてすむという感じです。M68030版は、３年生の計算機演習に
+   >>使っていますが、非難がでてますね。教官からも。
+
+NeXTのあたらしいやつでは、確かACLもMathematicaもバンドルされなくなった
+んでしたよね。#どうも商売のしかたがずるいような気がする:-<
+
+	鈴木宏正                                                  ＠ｍ〜
+	----------------------------------------------------------------
+	Hiromasa Suzuki		Internet: suzuki@graco.c.u-tokyo.ac.jp
+	東京大学教養学部情報・図形科学教室
+	電話 03-3467-1171 内線 226 留守番 03-3467-6367 FAX 03-3465-2896
+	----------------------------------------------------------------
+
+From tmorita@lucy.stars.flab.fujitsu.co.jp Fri May 17 16:51:56 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA15866; Fri, 17 May 91 16:51:54 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA24946; Fri, 17 May 91 16:50:58 JST
+Received: from fwide.fujitsu.co.jp by etlpost.etl.go.jp (5.65+1.4W/2.7W)
+	id AA21050; Fri, 17 May 91 16:49:19 JST
+Received: from fgw.fujitsu.co.jp ([133.160.32.2]) by fwide.fujitsu.co.jp (4.0/2.7W-fujitsu/1.1)
+	id AA21795; Fri, 17 May 91 16:54:29 JST
+Received: from lucy_g by fgw.fujitsu.co.jp (5.65/6.4J.6)
+	id AA25486; Fri, 17 May 91 16:56:37 +0900
+Received: by lucy.stars.flab.fujitsu.co.jp (3.2/6.4J.6-luna-1.2)
+	id AA01564; Fri, 17 May 91 16:53:48+0900
+Date: Fri, 17 May 91 16:53:48+0900
+From: tmorita@lucy.stars.flab.fujitsu.co.jp (Toshihiko Morita)
+Return-Path: <tmorita@lucy.stars.flab.fujitsu.co.jp>
+Message-Id: <9105170653.AA01564@lucy.stars.flab.fujitsu.co.jp>
+To: euslisp@etl.go.jp
+Subject: eusxview: color and double-buffer
+Status: R
+
+富士通研の森田です。
+
+eusxviewでカラーとダブルバッファを使えるようにしてみました。
+急いで作ったのでまだ不備が多いのですが、皆さんが改良してくれるのを
+期待して投稿します。
+
+まずカラーについては、staticなカラーマップを利用しています。
+dynamicなものも作ってみたのですが、自分の定義がうまく反映されないので
+挫折しました。でも、dynamicだと、カーソルがウインドウを出入りする度に
+カラーマップが切り替わり煩わしいので、staticでいいやと思っています。
+staticなカラーマップをセットするには、あらかじめXViewの
+colormap segmentを作っておいて、sunview-canvasを:initする時、
+それを与えてやります。
+
+次にダブルバッファですが、XViewではpixrectがサポートされていないので、
+server image object を作る必要があります。これを作れば、
+pw_rop, pw_vector等が使えるので、ダブルバッファを実現できます。
+あまり高速ではないのですが、一応なめらかに動くので、まあいいだろうと
+思っています。
+
+以下に、カラーとダブルバッファを利用するための変更箇所を順に示し、
+最後に簡単なテストプログラムを添付します。
+なお環境は, SS1, SunOS 4.0.3, X11R4 です。ただし、Sun4-260, SunOS 4.1 
+でも動いています。
+また、申し訳ありませんが、XViewのversionは最新のものではありません。
+即ちversion1.Xです。
+
+                                  -----------------------------------
+                                	富士通研究所   宇宙メカ）２研
+ 					森田 俊彦
+					tmorita@flab.fujitsu.co.jp
+
+
+%%%%%%%%%%%%%%%% カラー %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+--------------------makexviewconst.c の変更--------------------------
+■ makexviewconst.c に以下の定義を付け加えます。
+#include <xview/cms.h>
+#include <xview/svrimage.h>
+
+  pr_const("WIN_CMS_NAME",WIN_CMS_NAME          );
+  pr_const("WIN_CMS_DATA",WIN_CMS_DATA          );
+  pr_const("XV_STATIC_CMS",XV_STATIC_CMS                );
+  pr_const("XV_DYNAMIC_CMS",XV_DYNAMIC_CMS              );
+  pr_const("SERVER_IMAGE_DEPTH",SERVER_IMAGE_DEPTH          );
+  pr_const("SERVER_IMAGE_COLORMAP",SERVER_IMAGE_COLORMAP          );
+
+--------------------cms.l の作成-----------------------------------
+■ 以下のような定義を行なう cms.l という新しいファイルを作成します。
+これはXViewのカラーマップをつくるものです。defstructで
+書いてしまいましたが, もっとスマートな書き方があると思います。
+
+(defcstruct xv_cms	; definition of xv_cmsdata
+  (type 	:integer)
+  (size		:short)	
+  (index	:short)
+  (rgb_count	:short)
+  (tmp		:short)	;; boundary adaptation is made automatically
+  (red		:long)
+  (green	:long)
+  (blue		:long))
+
+(defmethod xv_cms
+  (:set-simple-colors ()
+	(setf (xv_cms-red self) 
+	  (string-body-address (coerce '(0 255 255 0 0 0 255 255) string)))
+	(setf (xv_cms-green self) 
+	  (string-body-address (coerce '(0 0 255 255 255 0 0 255) string)))
+	(setf (xv_cms-blue self) 
+	  (string-body-address (coerce '(0 0 0 0 255 255 255 255) string)))
+	(setf (xv_cms-size self) 8)
+	(setf (xv_cms-index self) 0)
+	(setf (xv_cms-rgb_count self) 8))
+  (:set-render-colors (&optional (len 128))
+	(let 	((Rbuf (make-string len))
+		 (Gbuf (make-string len))
+		 (Bbuf (make-string len)))
+	  (send self :store Rbuf Gbuf Bbuf 0 255 255 255)
+	  (send self :store Rbuf Gbuf Bbuf 1 255   0   0)
+	  (send self :store Rbuf Gbuf Bbuf 2 255 255   0)
+	  (send self :store Rbuf Gbuf Bbuf 3   0 255   0)
+	  (send self :store Rbuf Gbuf Bbuf 4   0 255 255)
+	  (send self :store Rbuf Gbuf Bbuf 5   0   0 255)
+	  (send self :store Rbuf Gbuf Bbuf 6 255   0 255)
+	  (send self :store Rbuf Gbuf Bbuf 7   0   0   0)
+	  (send self :store-hls-group Rbuf Gbuf Bbuf 16 16 0 0.2 0.8 0.5)  ;R
+          (send self :store-hls-group Rbuf Gbuf Bbuf 32 16 45 0.3 0.7 0.6) ;Y
+          (send self :store-hls-group Rbuf Gbuf Bbuf 48 16 120 0.3 0.7 0.6);G
+          (send self :store-hls-group Rbuf Gbuf Bbuf 64 16 180 0.3 0.7 0.6);S
+          (send self :store-hls-group Rbuf Gbuf Bbuf 80 16 240 0.3 0.7 0.6);B
+          (send self :store-hls-group Rbuf Gbuf Bbuf 96 16 270 0.3 0.7 0.6);M
+          (send self :store-hls-group Rbuf Gbuf Bbuf 112 16 240 0.3 0.7 0.1)
+	  (setf (xv_cms-red self)   (string-body-address Rbuf))
+	  (setf (xv_cms-green self) (string-body-address Gbuf))
+	  (setf (xv_cms-blue self)  (string-body-address Bbuf))
+	  (setf (xv_cms-size self) len)
+	  (setf (xv_cms-index self) 0)
+	  (setf (xv_cms-rgb_count self) len)))
+  (:store (R G B i rval gval bval)
+	(setf (aref R i) rval)
+	(setf (aref G i) gval)
+	(setf (aref B i) bval))
+  (:store-hls-group (R G B pix cnt hue low-lightness high-lightness saturation)
+    (let (rgb (lightness low-lightness)
+          (linc (/ (- high-lightness low-lightness) (float cnt))))
+      (dotimes (i cnt)
+        (setq rgb (hls2rgb hue lightness saturation 256))
+;;        (send self :store pix (first rgb) (second rgb) (third rgb))
+        (send self :store R G B pix (first rgb) (second rgb) (third rgb))
+        (incf pix)
+        (incf lightness linc)) ) )
+  (:init (&optional (type :render))
+	 (setf (xv_cms-type self) xv_static_cms)
+	 (case type
+	       ((:simple) (send self :set-simple-colors))
+	       ((:render) (send self :set-render-colors)))
+	self))
+
+(defconstant *white* 	0)
+(defconstant *red* 	1)
+(defconstant *yellow* 	2)
+(defconstant *green* 	3)
+(defconstant *cyan* 	4)
+(defconstant *blue* 	5)
+(defconstant *magenta* 	6)
+(defconstant *black* 	7)
+
+--------------------xviewclass.l の変更------------------------
+■ sunview-canvas の :init の中の window_create_canvas の引数を変更し,
+カラーマップを与えるようにします。
+(defmethod sunview-canvas
+  ....
+  (:init (....
+        (setq system-cadr
+               (window_create_canvas (send parent :cadr)
+                        win_dynamic_visual false
+                        win_cms_name (format nil "cms~s-simple" (unix:getpid))
+                        win_cms_data (string-body-address
+                                        (instance xv_cms :init))))
+
+■ canvas-viewsurface の :init の中にある次の2行をコメントアウトします。
+(defmethod canvas-viewsurface
+  ....
+  (:init (....
+    ....
+;;;   (send canvas :cmsname (format nil "viewsurface~s" (unix:getpid)))
+;;;;   (send self :set-cmap-type cmap-type)
+
+--------------------makefile の変更------------------------
+■ 上記の cms.l を makefile に登録します。
+XVIEWOBJECTS= $(XVIEWDIR)/xviewclass.o $(XVIEWDIR)/cms.o
+
+--------------------mkeusxview の変更------------------------
+■ cms.l をロードする命令を mkeusxview に追加します。
+(load "xview/cms.o" :verbose t)
+
+
+%%%%%%%%%%%%%%%% ダブルバッファ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+--------------------xview.c の変更------------------------
+■ xview.c にサーバーイメージを生成する関数を追加します。
+pointer WINDOW_CREATE_IMAGE(n,argv)
+     int n;
+     register pointer argv[];
+{
+  return(call_xv_create(SERVER_IMAGE,n,argv));
+}
+
+init_xview(mod)
+     pointer mod;
+{
+   ......
+    defun("WINDOW_CREATE_IMAGE",mod,WINDOW_CREATE_IMAGE);
+}
+
+--------------------xviewclass.l の変更------------------------
+■ canvas-viewsurface の :init にある
+   (setq back-pixwindow pixwindow)
+あるいは
+   (setq back-pixwindow
+         (mem_create
+          (send canvas :width)
+          (send canvas :height)
+          (case cmap-type ((:mono :monoral) 1) (t 8))))
+を以下のように変更します。
+   (setq back-pixwindow
+        (window_get
+           (window_create_image 0
+                xv_width  (send canvas :width)
+                xv_height (send canvas :height)
+                server_image_depth 8    ;adhoc
+                server_image_colormap (send canvas :cmsname))
+           win_pixwin))
+
+■ canvas-viewsurface の :clear の中にある
+     (pw_writebackground pixwindow 0 0 width height pix_clr)
+あるいは
+;;;     (pr_rop pixwin 0 0 width height pix_src 0 0 0)
+を次のように変えます。
+     (pw_rop pixwin 0 0 width height pix_clr 0 0 0)
+
+■ canvas-viewsurface の :flush の
+         (pw_batch_off pixwindow)
+は何故だか忘れましたけれどコメントアウトします。
+
+また :flush の最後に
+         (xv_sync (send frame :cadr))
+を挿入します。xv_syncは Cの XFlush(..)をコールする自前の関数ですが,
+同じものがもともとあるみたいなので皆さんはそっちを使ってください。
+syncをしないといくらダブルバッファをやっても動きが連続しません。
+
+■ canvas-viewsurface の :drawline-primitve の中の
+   (if buffer-mode
+       (pr_vector back-pixwindow x0 y0 x1 y1 rasterop c)
+     (pw_vector pixwindow x0 y0 x1 y1 rasterop c)))
+は, 次のように変えます。即ち, pr_ を pw_ に変えます。
+   (if buffer-mode
+       (pw_vector back-pixwindow x0 y0 x1 y1 rasterop c)
+     (pw_vector pixwindow x0 y0 x1 y1 rasterop c)))
+
+■ canvas-viewsurface の :drawtext-primitie においても
+   (pr_text pixwin x0 y0 rasterop font
+            (string-body-address textstring)))
+を
+   (pw_text pixwin x0 y0 rasterop font
+            (string-body-address textstring)))
+と変更します。
+
+
+%%%%%%%%%%%%%%%%%%% テストプログラム %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+(defclass demowindow :super sunview-frame
+		     :slots (canvas vw vport))
+
+(defmethod demowindow
+ (:init (&key parent (size 600))
+    (send-super :init parent :title "demowindow"
+			     :x 680 :y 20
+			     :width size)
+    ;;;;;; canvas
+    (setq canvas
+	  (send self :create-subwindow sunview-canvas
+		:x 0 :height size ; :width size
+		:title "canvas"))
+    (send self :show t)
+    (let ((vs
+	   (instance canvas-viewsurface :init
+			:canvas canvas
+			:buffer-mode t))
+          (eye
+	     (instance perspective-viewing
+		       :init :screen-x 5 :screen-y 5
+			     :viewdistance 30
+			     :pos #f(1000 2000 1000)
+			     :target #f(0 0 0)))
+         (vp
+	     (instance viewport :init
+		    :width (/ size 2) :height (- (/ size 2))
+		    :xcenter (/ size 2) :ycenter (/ size 2))))
+      (setq vw 
+	(instance viewer :init :viewport vp :viewing eye :viewsurface vs))
+      (setq vport vp))
+    self))
+
+(defun view (&optional (size 512))
+  (setq *window* (instance demowindow :init :size size))
+  (setq *viewer* (demowindow-vw *window*))
+  (setq *viewing* (viewer-eye *viewer*))
+  (setq *can* (demowindow-canvas *window*)) ;color operation
+  (setq *vs* (send *viewer* :viewsurface))
+  (setq *pw* (send *can* :pixwin))
+)
+
+;-------------------------
+;primitive color test
+(defun ctest ()
+	(dotimes (x 128)
+		(send *vs* :color x)
+		(send *vs* :drawline-primitive (* 2 x) 0 (* 2 x) 256)
+		(send *vs* :drawline-primitive (1+ (* 2 x)) 0 (1+ (* 2 x)) 256))
+	(send *viewer* :flush))
+
+(defun color-draw (thing color &optional(view *viewer*))
+  (send (send view :viewsurface) :color color)
+  (send *viewer* :draw thing)
+  (send (send view :viewsurface) :color *black*))
+
+(defun rotate (a times &optional (itv 0.05))
+  (dotimes (i times)
+	(send *vs* :clear)
+	(send a :rotate itv :z)
+	(draw a)))
+
+(setq dode (make-dodecahedron 300))
+(send dode :color *red*)
+(setq b0 (make-cube 300 300 300 :color *blue*))
+(setq b1 (make-cube 600 600 30 :color *green*))
+
+(view 256)
+(format t "~%Try (ctest) and (rotate dode 100)~%")
+
+%%%%%%%%%%%%%%%%%%% 以上 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+From inaba@jsk.t.u-tokyo.ac.jp Tue May 28 18:50:02 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA03615; Tue, 28 May 91 18:50:00 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA01392; Tue, 28 May 91 18:51:54 JST
+Received: from mech.t.u-tokyo.ac.jp by etlpost (5.65+1.4W/2.7W)
+	id AA11215; Tue, 28 May 91 09:58:21 JST
+Received: from grus.jsk.t.u-tokyo.ac.jp by mech.t.u-tokyo.ac.jp (4.1/6.4J.6-MX)
+	id AA08584; Tue, 28 May 91 18:51:54 JST
+Received: by grus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA11794; Tue, 28 May 91 18:49:03 JST
+Date: Tue, 28 May 91 18:49:03 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9105280949.AA11794@grus.jsk.t.u-tokyo.ac.jp>
+To: euslisp@etl.go.jp
+Subject: trouble on  pickview.l
+Status: R
+
+
+
+稲葉です。
+
+こちらの教育用に利用しているeus環境をアップデートしたところpickview.l
+の図形が出なくなりました。鈴木さんのトラブルと同じものかと思います。
+
+表示されない理由は、viewingのprojection-matrixの要素が数でなくなってい
+るからでした。
+
+eusview$ load "pickview.l
+(pickmenu) ;; main of pickview.l
+t
+eusview$ (pickmenu)
+(96 0 3)
+#<pickmenu #X4764b4>
+eusview$ 
+eusview$ (22 1 2)
+
+eusview$ (describe (apickport . eye))
+plist=nil
+rot=#2f((-0.514496 -0.213633 0.830455)
+        (0.857493 -0.12818 0.498273)
+        (0.0 0.968468 0.249136))
+pos=#f(500.0 300.0 150.0)
+parent=nil
+descendants=nil
+worldcoords=#<coordinates #x4735b0 pos=#f(500.0 300.0 150.0)>
+manager=#<perspective-viewing #x473868 pos=#f(500.0 300.0 150.0)>
+changed=nil
+viewcoords=#<coordinates #x4734c0 pos=#f(-7.438660e-05 -3.099442e-05 602.08)>
+screenx=10.0
+screeny=10.0
+hither=100.0
+yon=10000.0
+projection-matrix=#2f((0.1 0.0 0.0 0.0)
+                      (0.0 0.1 0.0 0.0)
+                      (NaN NaN NaN NaN)
+                      (0.0 0.0 0.025 0.0))
+viewdistance=40
+nil
+eusview$ 
+
+というぐあいです。
+
+viewing.lまわりは以前と変わっていないようにも思いますが、変ですね。
+
+鈴木さんのところではそうなっていませんか。
+
+
+From matsui@etl.go.jp Wed May 29 21:14:41 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA05064; Wed, 29 May 91 21:14:40 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA04304; Wed, 29 May 91 21:16:26 JST
+Received: by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA05058; Wed, 29 May 91 21:14:06 JST
+Date: Wed, 29 May 91 21:14:06 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9105291214.AA05058@etlmmd.etl.go.jp>
+To: euslisp@etl.go.jp
+Subject: float/int
+Status: R
+
+>From suzuki@graco.c.u-tokyo.ac.jp Wed May 29 20:33:52 1991
+>   >>どうしてそうなるかはもうすこし時間が必要です。
+>
+>何となく奥が深そうですね。
+
+いえ、全く奥はありません。
+viewdistanceにfloatを要求しているということです。
+
+一般に、Lispは、実行時に型の判別をしますので、必要に応じてintから
+floatに変換されます。少なくともinterpreterで動かしている時、これは
+間違いないのですが、型宣言付きでコンパイルしたコードは、始めから
+floatが来たと信じており、型判別・型変換を実行時には行いません。
+llibの下の幾何モデルプログラムは、性能向上のため、ほとんどが
+型宣言付きでコンパイルされています。それで、viewdistanceも
+integerを勝手にfloatと解釈して計算したので結果がNaNになったと
+いうことです。
+
+今、とりあえず、viewdistanceを受け取った時、まず(float viewdistance)
+するようにしておきましたが、実際は、viewdistanceなんてほとんど
+参照しないから、型宣言しないでおけばよかったですね。
+失礼しました。
+
+>
+># 松井さんがスタンフォードに行く前に何とか:-)
+># 松井さん、.forwardはちゃんと設定していって下さいね:-)
+
+ええ、あちらからもetlのマシンにはログインできます。
+比留川さんなどは、Sandersonにメイルを送っては、remoteでfingerして
+mailを読んだか確かめています。気の短いやっちゃな。
+
+>ところで、pickmenuではスライダーで視点を変えられるようですが、どのくら
+>いの実行速度でスライダーが動くのが正しいのでしょうか? 私のSS1では、マ
+>ウスをいくらゆっくり動かしても、スライダーはトラッキングしてくれません。
+>マウスを止めると、しばらくして値が急に変わります。例えばNeXTではスムー
+>ズに動くのでしょうか? インストールが間違っているかもしれないので、念の
+>ためにお尋ねします。
+
+イベント関数をごく簡単なものにして試してみてはいかがですか。
+
+MATSUI Toshihiro, matsui@etl.go.jp, Electrotechnical Laboratory
+
+From inaba@jsk.t.u-tokyo.ac.jp Wed May 29 21:42:30 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA05324; Wed, 29 May 91 21:42:29 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA04989; Wed, 29 May 91 21:44:28 JST
+Received: from mech.t.u-tokyo.ac.jp by etlpost (5.65+1.4W/2.7W)
+	id AA18295; Wed, 29 May 91 12:50:56 JST
+Received: from grus.jsk.t.u-tokyo.ac.jp by mech.t.u-tokyo.ac.jp (4.1/6.4J.6-MX)
+	id AA22837; Wed, 29 May 91 21:44:24 JST
+Received: by grus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA12454; Wed, 29 May 91 21:41:47 JST
+Date: Wed, 29 May 91 21:41:47 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9105291241.AA12454@grus.jsk.t.u-tokyo.ac.jp>
+To: matsui@etl.go.jp
+Cc: euslisp@etl.go.jp
+In-Reply-To: MATSUI's message of Wed, 29 May 91 21:14:06 JST <9105291214.AA05058@etlmmd.etl.go.jp>
+Subject: float/int
+Status: R
+
+
+   >>viewdistanceにfloatを要求しているということです。
+
+geoclasses.lがちがっていたんですね。
+viewing.lは変わっていないし、変だと思ってたんですが、
+
+   >>ええ、あちらからもetlのマシンにはログインできます。
+
+便利になりましたね。
+どこがお金を払っているのか気になります。
+
+稲葉
+
+From hirukawa@etl.go.jp Wed May 29 21:33:16 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA05216; Wed, 29 May 91 21:33:15 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA04815; Wed, 29 May 91 21:35:04 JST
+Received: by honami.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA02614; Wed, 29 May 91 21:38:11 JST
+Date: Wed, 29 May 91 21:38:11 JST
+From: hirukawa@etl.go.jp (Hirohisa Hirukawa)
+Return-Path: <hirukawa@etl.go.jp>
+Message-Id: <9105291238.AA02614@honami.etl.go.jp>
+To: euslisp@etl.go.jp, matsui@etl.go.jp
+Subject: Re:  float/int
+Status: R
+
+> ええ、あちらからもetlのマシンにはログインできます。
+> 比留川さんなどは、Sandersonにメイルを送っては、remoteでfingerして
+> mailを読んだか確かめています。気の短いやっちゃな。
+
+すいませんね。
+
+飛行機やホテルの予約の期日が迫っていて、
+旅行代理店に催促されているのですよ。
+
+ちなみに、finger の使い方は、
+
+finger e-mail:adress
+
+です。例えば、
+
+minsky@ai.mit.edu
+
+とかやります。お試しあれ。
+
+
+ひるかわ＠短気
+
+
+From matsui@etl.go.jp Fri May 31 11:15:30 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA06567; Fri, 31 May 91 11:15:28 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA21189; Fri, 31 May 91 11:16:50 JST
+Received: by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA06559; Fri, 31 May 91 11:14:21 JST
+Date: Fri, 31 May 91 11:14:21 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9105310214.AA06559@etlmmd.etl.go.jp>
+To: suzuki@graco.c.u-tokyo.ac.jp
+Subject: Re:  float/int
+Cc: euslisp@etl.go.jp
+Status: R
+
+>From suzuki@graco.c.u-tokyo.ac.jp Thu May 30 11:43:21 1991
+
+>私はLispはあまり詳しくないので、ついでにちょっと質問。型宣言することと、
+>optimizeすることはイコールでないと思うのですが。もちろんdeclareされて
+>いないとoptimizeできないんしょうけど。
+>型宣言付きでコンパイルすると、optimizationのレベルがsafetyでなくなると
+>いうことでしょうか。
+
+そうですね。型宣言＝optimizeではありませんが、
+デフォルトではsafety=0, optimize=2になってまして、
+これで型宣言があると、型検査が行われません。
+まあ、たいていは、コンパイルすると言うのはスピードアップのため
+ですから、これでよろしいかと思います。
+
+>ところで前にSLUG (Symbolics Lisp Users Group)の集まりに出た時に聞いた
+>話しですが、Symbolicsで開発されたアプリケーションを売るのに、36XXとか
+>XLとかでは高過ぎるので、その実行環境だけを386のPC上に作ったものがあり
+
+PCは安いのはいいのですが、画面が狭いのと、unixにすればいいものを
+OS2だのMSWINDOWだの言ってるのがバカらしくてついていけません。
+
+>ます。名前は忘れてしまいました(最近ちともの忘れが…)。専用のコンパイラー
+>を使うのですが、結構性能が出るらしく、そのプログラミングの秘密をいくつ
+>か紹介していたのですが、一番簡単で効くのは、徹底した型宣言だそうです。
+
+これは音田君に聞かせて上げたい。
+
+>ところが、いつまでたってもログインしないので、電話をしてみたら、『ずっ
+>と前からオフィスにいるよ』と言われたんだそうです。そこで村井先生は、
+>『計算機の研究者でも、計算機に向かわないで仕事ができるひとがいる』と、
+>ハタと気がついたんだそうです。
+
+先日、カナダのHaywardが来た時、「近くに計算幾何学の教授がいるが、
+使うのは紙と鉛筆ばかりで、計算機はちっとも使わない」と皮肉って
+いました。正しい研究者の姿ではありますが。
+
+>御自分は、自宅にもWSがあってSLIPを引いているとのことですから、46時中計
+>算機を使って仕事されているんでしょうね。自宅にWSを置くことは、家にいる
+>時間が長くなるので、家族(奥様)にはまあまあだったそうです。その他ISDNを
+>引く時の電話局との交渉の話しとか、いろいろと面白い話しを聞かせていただ
+>きました。
+
+WSって、なかなか電源を落す気にはなれないから、
+家庭で使うとすると、相当な電気代になるのではないかしら。
+
+0.3KW x 24h x 30=216KWh= ￥5000
+
+ううむ、現在の使用料が倍になる勘定だ。
+お金はいいけど、資源がね。という意味では研究所で使うのも
+同じですね。気を付けよう。screenblankは、全く電気の節約には
+なっていないのでしょう?
+
+>その時に『大変便利になってありがたく思っています』と村井先生に言ったら、
+>『どんどん使ってくれた方が研究になる』とおっしゃってました。詳しくは聞
+>きませんでしたが、WIDEプロジェクトの研究費、つまり村井先生の研究費から
+>出ているのではないか、と想像しているのですが。(回線費は年間数千万円の
+>上の方と聞いています。)
+
+参加企業が支払う供託金から支出されているのでしょうね。
+感謝、感謝。
+
+From yuki@in4s2.in.kobe-u.ac.jp Tue Jun  4 23:36:46 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA11476; Tue, 4 Jun 91 23:36:45 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA07893; Tue, 4 Jun 91 23:39:17 JST
+Received: from creamy.ics.osaka-u.ac.jp by etlpost (5.65+1.4W/2.7W)
+	id AA10996; Tue, 4 Jun 91 14:45:52 JST
+Received: by creamy.ics.osaka-u.ac.jp (5.64/6.4J.6-creamy-ip.6.8) id AA17051; Tue, 4 Jun 91 23:39:00 +0900
+Received: by ouicss.ics.osaka-u.ac.jp (SVMAIL 1.4/6.4J)
+	id AA05889; Tue, 4 Jun 91 23:35:17 JST
+Received: by icluna.kobe-u.ac.jp (5.51/6.4J.6)
+	id AA04783; Tue, 4 Jun 91 18:34:44 JST
+Received: from in4s2.in.kobe-u.ac.jp by in1a.in.kobe-u.ac.jp (4.0/6.4J.6)
+	id AA29749; Tue, 4 Jun 91 18:34:27 JST
+Received: by in4s2.in.kobe-u.ac.jp (4.1/6.4J.6)
+	id AA00986; Tue, 4 Jun 91 18:34:29 JST
+Date: Tue, 4 Jun 91 18:34:29 JST
+From: yuki@in4s2.in.kobe-u.ac.jp (Yuuki Inoue)
+Return-Path: <yuki@in4s2.in.kobe-u.ac.jp>
+Message-Id: <9106040934.AA00986@in4s2.in.kobe-u.ac.jp>
+To: matsui@etl.go.jp
+Status: R
+
+
+神戸大の井上です。
+
+>Date: Tue, 4 Jun 91 17:32:42 JST
+>From: matsui@etl.go.jp (Toshihiro Matsui)
+>Return-Path: <matsui@etl.go.jp>
+>Message-Id: <9106040832.AA05237@honami.etl.go.jp>
+                                 ~~~~~~
+>To: euslisp@etl.go.jp
+>Subject: test
+
+honamiは、いかがですか？！  こんな名前のついた計算機は珍しいでしょうね。
+
+SunOS 4.1.1ですが、euslispはうまくコンパイルできるのでしょうか？
+
+話は変わりますがこのたび神戸大学もまだ完全ではないもののWide経由のイン
+ターネットワークを利用できる組織になりました。(前は学術センタのネット
+で極めて遅いものでした。）
+
+そこで、先日anonimous ftpを用いてpumaのデータ（pma.Brep)をコピーさせて
+頂きました。まだ、euslisp自体のバージョンを１年前から上げていないので
+require, provide を用いたプログラムは通りませんが、モデルの使い方は、
+わかりましたので、早速利用させて頂いております。どうもありがとうございます。
+
+どうも、お邪魔しました。
+
+    ＿＿＿＿＿＿＿＿
+  ／                ＼
+  ■▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽▽■
+  □                                                            □
+  □  井 上  雄 紀                神戸大学大学院自然科学研究科  □
+  □                                                            □
+  □  yuki@scitec.kobe-u.ac.jp    Tel. 078-881-1212 / ext.2733  □
+  □                                                            □
+  ■△△△△△△△△△△△△△△△△△△△△△△△△△△△△△△■
+
+
+
+
+From euslisp-request@etl.go.jp Wed Jun  5 11:16:22 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA11920; Wed, 5 Jun 91 11:16:20 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA19414; Wed, 5 Jun 91 11:18:43 JST
+Reply-To: euslisp@etl.go.jp
+Errors-To: euslisp-request@etl.go.jp
+Sender: euslisp-request@etl.go.jp
+X-Seqno: 1
+Date: Wed, 5 Jun 91 11:19:18+0900
+From: tmorita@lucy.stars.flab.fujitsu.co.jp (Toshihiko Morita)
+Return-Path: <tmorita@lucy.stars.flab.fujitsu.co.jp>
+Message-Id: <9106050119.AA00843@lucy.stars.flab.fujitsu.co.jp>
+To: euslisp@etl.go.jp
+Subject: color and double-buffering
+Status: R
+
+富士通研の森田です。
+
+eusxviewでカラーとダブルバッファを使えるように試みてみました。
+環境は, SS1, SunOS 4.0.3, X11R4 です。ただし、Sun4-260, SunOS 4.1 
+でも動いています。
+また、XViewもちょっと古いです。即ちversion2ではありません。
+
+まずカラーについては、staticなカラーマップを利用しています。
+dynamicなものも作ってみたのですが、自分の定義がうまく反映されないので
+挫折しました。でも、dynamicだと、カーソルがウインドウを出入りする度に
+カラーマップが切り替わり煩わしいので、staticでいいやと思っています。
+staticなカラーマップをセットするには、あらかじめXViewの
+colormap segmentを作っておいて、sunview-canvasを:initする時、
+それを与えてやります。
+
+次にダブルバッファですが、XViewではpixrectがサポートされていないので、
+server image object を作る必要があります。これを作れば、
+pw_rop, pw_vector等が使えるので、ダブルバッファを実現できます。
+あまり高速ではないのですが、一応なめらかに動くので、まあいいだろうと
+思っています。
+
+以下に、カラーとダブルバッファを利用するための変更箇所を順に示し、
+最後に簡単なテストプログラムを添付します。
+急いで作ったのでまだ不備が多いのですが、皆さんが改良してくれるのを
+期待して投稿しました。
+
+                                  -----------------------------------
+                                	富士通研究所
+ 					森田 俊彦
+					tmorita@flab.fujitsu.co.jp
+
+
+%%%%%%%%%%%%%%%% カラー %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+--------------------makexviewconst.c の変更--------------------------
+■ makexviewconst.c に以下の定義を付け加えます。
+#include <xview/cms.h>
+#include <xview/svrimage.h>
+
+  pr_const("WIN_CMS_NAME",WIN_CMS_NAME          );
+  pr_const("WIN_CMS_DATA",WIN_CMS_DATA          );
+  pr_const("XV_STATIC_CMS",XV_STATIC_CMS                );
+  pr_const("XV_DYNAMIC_CMS",XV_DYNAMIC_CMS              );
+  pr_const("SERVER_IMAGE_DEPTH",SERVER_IMAGE_DEPTH          );
+  pr_const("SERVER_IMAGE_COLORMAP",SERVER_IMAGE_COLORMAP          );
+
+--------------------cms.l の作成-----------------------------------
+■ 以下のような定義を行なう cms.l という新しいファイルを作成します。
+これはXViewのカラーマップをつくるものです。defstructで
+書いてしまいましたが, もっとスマートな書き方があると思います。
+
+(defcstruct xv_cms	; definition of xv_cmsdata
+  (type 	:integer)
+  (size		:short)	
+  (index	:short)
+  (rgb_count	:short)
+  (tmp		:short)	;; boundary adaptation is made automatically
+  (red		:long)
+  (green	:long)
+  (blue		:long))
+
+(defmethod xv_cms
+  (:set-simple-colors ()
+	(setf (xv_cms-red self) 
+	  (string-body-address (coerce '(0 255 255 0 0 0 255 255) string)))
+	(setf (xv_cms-green self) 
+	  (string-body-address (coerce '(0 0 255 255 255 0 0 255) string)))
+	(setf (xv_cms-blue self) 
+	  (string-body-address (coerce '(0 0 0 0 255 255 255 255) string)))
+	(setf (xv_cms-size self) 8)
+	(setf (xv_cms-index self) 0)
+	(setf (xv_cms-rgb_count self) 8))
+  (:set-render-colors (&optional (len 128))
+	(let 	((Rbuf (make-string len))
+		 (Gbuf (make-string len))
+		 (Bbuf (make-string len)))
+	  (send self :store Rbuf Gbuf Bbuf 0 255 255 255)
+	  (send self :store Rbuf Gbuf Bbuf 1 255   0   0)
+	  (send self :store Rbuf Gbuf Bbuf 2 255 255   0)
+	  (send self :store Rbuf Gbuf Bbuf 3   0 255   0)
+	  (send self :store Rbuf Gbuf Bbuf 4   0 255 255)
+	  (send self :store Rbuf Gbuf Bbuf 5   0   0 255)
+	  (send self :store Rbuf Gbuf Bbuf 6 255   0 255)
+	  (send self :store Rbuf Gbuf Bbuf 7   0   0   0)
+	  (send self :store-hls-group Rbuf Gbuf Bbuf 16 16 0 0.2 0.8 0.5)  ;R
+          (send self :store-hls-group Rbuf Gbuf Bbuf 32 16 45 0.3 0.7 0.6) ;Y
+          (send self :store-hls-group Rbuf Gbuf Bbuf 48 16 120 0.3 0.7 0.6);G
+          (send self :store-hls-group Rbuf Gbuf Bbuf 64 16 180 0.3 0.7 0.6);S
+          (send self :store-hls-group Rbuf Gbuf Bbuf 80 16 240 0.3 0.7 0.6);B
+          (send self :store-hls-group Rbuf Gbuf Bbuf 96 16 270 0.3 0.7 0.6);M
+          (send self :store-hls-group Rbuf Gbuf Bbuf 112 16 240 0.3 0.7 0.1)
+	  (setf (xv_cms-red self)   (string-body-address Rbuf))
+	  (setf (xv_cms-green self) (string-body-address Gbuf))
+	  (setf (xv_cms-blue self)  (string-body-address Bbuf))
+	  (setf (xv_cms-size self) len)
+	  (setf (xv_cms-index self) 0)
+	  (setf (xv_cms-rgb_count self) len)))
+  (:store (R G B i rval gval bval)
+	(setf (aref R i) rval)
+	(setf (aref G i) gval)
+	(setf (aref B i) bval))
+  (:store-hls-group (R G B pix cnt hue low-lightness high-lightness saturation)
+    (let (rgb (lightness low-lightness)
+          (linc (/ (- high-lightness low-lightness) (float cnt))))
+      (dotimes (i cnt)
+        (setq rgb (hls2rgb hue lightness saturation 256))
+;;        (send self :store pix (first rgb) (second rgb) (third rgb))
+        (send self :store R G B pix (first rgb) (second rgb) (third rgb))
+        (incf pix)
+        (incf lightness linc)) ) )
+  (:init (&optional (type :render))
+	 (setf (xv_cms-type self) xv_static_cms)
+	 (case type
+	       ((:simple) (send self :set-simple-colors))
+	       ((:render) (send self :set-render-colors)))
+	self))
+
+(defconstant *white* 	0)
+(defconstant *red* 	1)
+(defconstant *yellow* 	2)
+(defconstant *green* 	3)
+(defconstant *cyan* 	4)
+(defconstant *blue* 	5)
+(defconstant *magenta* 	6)
+(defconstant *black* 	7)
+
+--------------------xviewclass.l の変更------------------------
+■ sunview-canvas の :init の中の window_create_canvas の引数を変更し,
+カラーマップを与えるようにします。
+(defmethod sunview-canvas
+  ....
+  (:init (....
+        (setq system-cadr
+               (window_create_canvas (send parent :cadr)
+                        win_dynamic_visual false
+                        win_cms_name (format nil "cms~s-simple" (unix:getpid))
+                        win_cms_data (string-body-address
+                                        (instance xv_cms :init))))
+
+■ canvas-viewsurface の :init の中にある次の2行をコメントアウトします。
+(defmethod canvas-viewsurface
+  ....
+  (:init (....
+    ....
+;;;   (send canvas :cmsname (format nil "viewsurface~s" (unix:getpid)))
+;;;;   (send self :set-cmap-type cmap-type)
+
+--------------------makefile の変更------------------------
+■ 上記の cms.l を makefile に登録します。
+XVIEWOBJECTS= $(XVIEWDIR)/xviewclass.o $(XVIEWDIR)/cms.o
+
+--------------------mkeusxview の変更------------------------
+■ cms.l をロードする命令を mkeusxview に追加します。
+(load "xview/cms.o" :verbose t)
+
+
+%%%%%%%%%%%%%%%% ダブルバッファ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+--------------------xview.c の変更------------------------
+■ xview.c にサーバーイメージを生成する関数を追加します。
+pointer WINDOW_CREATE_IMAGE(n,argv)
+     int n;
+     register pointer argv[];
+{
+  return(call_xv_create(SERVER_IMAGE,n,argv));
+}
+
+init_xview(mod)
+     pointer mod;
+{
+   ......
+    defun("WINDOW_CREATE_IMAGE",mod,WINDOW_CREATE_IMAGE);
+}
+
+--------------------xviewclass.l の変更------------------------
+■ canvas-viewsurface の :init にある
+   (setq back-pixwindow pixwindow)
+あるいは
+   (setq back-pixwindow
+         (mem_create
+          (send canvas :width)
+          (send canvas :height)
+          (case cmap-type ((:mono :monoral) 1) (t 8))))
+を以下のように変更します。
+   (setq back-pixwindow
+        (window_get
+           (window_create_image 0
+                xv_width  (send canvas :width)
+                xv_height (send canvas :height)
+                server_image_depth 8    ;adhoc
+                server_image_colormap (send canvas :cmsname))
+           win_pixwin))
+
+■ canvas-viewsurface の :clear の中にある
+     (pw_writebackground pixwindow 0 0 width height pix_clr)
+あるいは
+;;;     (pr_rop pixwin 0 0 width height pix_src 0 0 0)
+を次のように変えます。
+     (pw_rop pixwin 0 0 width height pix_clr 0 0 0)
+
+■ canvas-viewsurface の :flush の
+         (pw_batch_off pixwindow)
+は何故だか忘れましたけれどコメントアウトします。
+
+また :flush の最後に
+         (xv_sync (send frame :cadr))
+を挿入します。xv_syncは Cの XFlush(..)をコールする自前の関数ですが,
+同じものがもともとあるみたいなので皆さんはそっちを使ってください。
+syncをしないといくらダブルバッファをやっても動きが連続しません。
+
+■ canvas-viewsurface の :drawline-primitve の中の
+   (if buffer-mode
+       (pr_vector back-pixwindow x0 y0 x1 y1 rasterop c)
+     (pw_vector pixwindow x0 y0 x1 y1 rasterop c)))
+は, 次のように変えます。即ち, pr_ を pw_ に変えます。
+   (if buffer-mode
+       (pw_vector back-pixwindow x0 y0 x1 y1 rasterop c)
+     (pw_vector pixwindow x0 y0 x1 y1 rasterop c)))
+
+■ canvas-viewsurface の :drawtext-primitie においても
+   (pr_text pixwin x0 y0 rasterop font
+            (string-body-address textstring)))
+を
+   (pw_text pixwin x0 y0 rasterop font
+            (string-body-address textstring)))
+と変更します。
+
+
+%%%%%%%%%%%%%%%%%%% テストプログラム %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+(defclass demowindow :super sunview-frame
+		     :slots (canvas vw vport))
+
+(defmethod demowindow
+ (:init (&key parent (size 600))
+    (send-super :init parent :title "demowindow"
+			     :x 680 :y 20
+			     :width size)
+    ;;;;;; canvas
+    (setq canvas
+	  (send self :create-subwindow sunview-canvas
+		:x 0 :height size ; :width size
+		:title "canvas"))
+    (send self :show t)
+    (let ((vs
+	   (instance canvas-viewsurface :init
+			:canvas canvas
+			:buffer-mode t))
+          (eye
+	     (instance perspective-viewing
+		       :init :screen-x 5 :screen-y 5
+			     :viewdistance 30
+			     :pos #f(1000 2000 1000)
+			     :target #f(0 0 0)))
+         (vp
+	     (instance viewport :init
+		    :width (/ size 2) :height (- (/ size 2))
+		    :xcenter (/ size 2) :ycenter (/ size 2))))
+      (setq vw 
+	(instance viewer :init :viewport vp :viewing eye :viewsurface vs))
+      (setq vport vp))
+    self))
+
+(defun view (&optional (size 512))
+  (setq *window* (instance demowindow :init :size size))
+  (setq *viewer* (demowindow-vw *window*))
+  (setq *viewing* (viewer-eye *viewer*))
+  (setq *can* (demowindow-canvas *window*)) ;color operation
+  (setq *vs* (send *viewer* :viewsurface))
+  (setq *pw* (send *can* :pixwin))
+)
+
+;-------------------------
+;primitive color test
+(defun ctest ()
+	(dotimes (x 128)
+		(send *vs* :color x)
+		(send *vs* :drawline-primitive (* 2 x) 0 (* 2 x) 256)
+		(send *vs* :drawline-primitive (1+ (* 2 x)) 0 (1+ (* 2 x)) 256))
+	(send *viewer* :flush))
+
+(defun color-draw (thing color &optional(view *viewer*))
+  (send (send view :viewsurface) :color color)
+  (send *viewer* :draw thing)
+  (send (send view :viewsurface) :color *black*))
+
+(defun rotate (a times &optional (itv 0.05))
+  (dotimes (i times)
+	(send *vs* :clear)
+	(send a :rotate itv :z)
+	(draw a)))
+
+(setq dode (make-dodecahedron 300))
+(send dode :color *red*)
+(setq b0 (make-cube 300 300 300 :color *blue*))
+(setq b1 (make-cube 600 600 30 :color *green*))
+
+(view 256)
+(format t "~%Try (ctest) and (rotate dode 100)~%")
+
+%%%%%%%%%%%%%%%%%%% 以上 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+From matsui@etl.go.jp Mon Jun 10 11:41:37 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA03345; Mon, 10 Jun 91 11:41:36 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA02971; Mon, 10 Jun 91 11:44:25 JST
+Reply-To: euslisp@etl.go.jp
+Errors-To: euslisp-request@etl.go.jp
+Sender: euslisp-request@etl.go.jp
+X-Seqno: 5
+Date: Mon, 10 Jun 91 11:41:19 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9106100241.AA03342@etlmmd.etl.go.jp>
+To: euslisp@etl.go.jp
+Subject: Re:  setting *load-path* in .eusrc
+Status: RO
+
+>From kuniyosh@etl.go.jp Mon Jun 10 11:37:36 1991
+
+>*load-path*がファイルから設定できないのはいやなので、上のletをやめにし
+>て、グローバルのリストに追加／削除をやるようにするとか、別の方法をとる
+>のが良いと思いますが、いかがでしょう。
+
+そうなんですよ。どうしようかなあと迷っていたところです。
+*load-path* を、グローバルなのと、一時的なのと2種類用意して、
+そのunionをサーチするのかなあ、などと思っています。今しばらく
+お待ち下さい。その方向でのよいアイデアがあればお伺いしたいと
+思います。
+
+
+From kuniyosh@etl.go.jp Mon Jun 10 13:35:32 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA03638; Mon, 10 Jun 91 13:35:31 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA06110; Mon, 10 Jun 91 13:38:05 JST
+Reply-To: euslisp@etl.go.jp
+Errors-To: euslisp-request@etl.go.jp
+Sender: euslisp-request@etl.go.jp
+X-Seqno: 6
+Date: Mon, 10 Jun 91 13:38:18 JST
+From: kuniyosh@etl.go.jp (Yasuo Kuniyoshi)
+Return-Path: <kuniyosh@etl.go.jp>
+Message-Id: <9106100438.AA02374@asact.etl.go.jp>
+To: euslisp@etl.go.jp
+In-Reply-To: MATSUI's message of Mon, 10 Jun 91 11:41:19 JST <9106100241.AA03342@etlmmd.etl.go.jp>
+Subject: Re:  setting *load-path* in .eusrc
+Status: R
+
+   >*load-path* を、グローバルなのと、一時的なのと2種類用意して、
+   >そのunionをサーチするのかなあ、などと思っています。今しばらく
+ロード中にエラーで止まった時などに副作用が残るのもどうかと思うので、
+僕の案（グローバルに直接追加／削除）は駄目ですね。
+松井さんの案で基本的に良いと思います。「一時的なの」はspecialにする
+必要があるでしょう。そうすれば、
+(load "/xxx/foo.l")
+in /xxx/foo.l>
+(load "foo2.l") ;foo2.l is in /xxx/
+(load "/yyy/bar.l")
+in /yyy/bar.l>
+(load "baz.l") ;baz.l is in /yyy/
+のような入れ子になった場合でもうまくいくでしょう。
+
+なお、現在のインプリメンテーションだと、ただconsしてるので、
+*load-path*は１時的にかなりダブッた内容になることがあります。
+そうするとprobe-fileを無駄に繰り返すことになるのでよくないですね。
+松井案ではこの点も改良されるでしょう。
+==============================================================
+國吉康夫＠自律システム研究室.知能システム部.電子技術総合研究所
+E-mail: kuniyosh@etl.go.jp tel: 0298-58-5180 fax: 0298-58-5971
+P-mail: 〒305 つくば市梅園1-1-4
+
+
+
+From matsui@etl.go.jp Mon Jun 10 13:51:33 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA03805; Mon, 10 Jun 91 13:51:32 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA06754; Mon, 10 Jun 91 13:54:19 JST
+Reply-To: euslisp@etl.go.jp
+Errors-To: euslisp-request@etl.go.jp
+Sender: euslisp-request@etl.go.jp
+X-Seqno: 7
+Date: Mon, 10 Jun 91 13:51:07 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9106100451.AA03798@etlmmd.etl.go.jp>
+To: euslisp@etl.go.jp
+Subject: Re:  setting *load-path* in .eusrc
+Status: R
+
+>From kuniyosh@etl.go.jp Mon Jun 10 13:35:32 1991
+
+>なお、現在のインプリメンテーションだと、ただconsしてるので、
+>*load-path*は１時的にかなりダブッた内容になることがあります。
+>そうするとprobe-fileを無駄に繰り返すことになるのでよくないですね。
+>松井案ではこの点も改良されるでしょう。
+
+というわけで、*loader-current-directory*というspecial変数を追加しました。
+*load-path*には、ユーザがloadされるファイルの中でセットできます。
+loaderがファイルを見つけると、そのディレクトリ*loader-current-directory*
+に追加します。loadは、*loader-current-directory*と*load-path*のユニオン
+をサーチします。
+
+etlmmd:/usr/local/binにeusとeusxをmakeして入れておきましたので、
+國吉さん、テストをお願いします。
+
+MATSUI Toshihiro, matsui@etl.go.jp, Electrotechnical Laboratory
+
+From matsui@etl.go.jp Sat Jun 22 11:59:35 1991
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.1/6.4J.6-ETL.SLAVE)
+	id AA17953; Sat, 22 Jun 91 11:59:34 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA25443; Sat, 22 Jun 91 12:03:06 JST
+Reply-To: euslisp@etl.go.jp
+Errors-To: euslisp-request@etl.go.jp
+Sender: euslisp-request@etl.go.jp
+X-Seqno: 15
+Date: Sat, 22 Jun 91 11:59:16 JST
+From: matsui@etl.go.jp (MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9106220259.AA17950@etlmmd.etl.go.jp>
+To: euslisp@etl.go.jp
+Subject: documentation
+Status: R
+
+New documentation feature:
+
+As you know, you can insert a documentation string in each function,
+method, or global variable declaration. This is a Common-Lisp spec.
+However, in many cases when we use documentation for a function,
+it is usually an explanation of arguments. In an extream case,
+the parameter list is duplicated in the documentation string. How stupid!
+So I decided to give a default documentation string to each func def.
+Of course the default is the parameter list itself. Try defining a
+function and getting its documentation.
+MATSUI Toshihiro, matsui@etl.go.jp, Electrotechnical Laboratory
+

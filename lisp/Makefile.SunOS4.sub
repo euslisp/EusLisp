@@ -1,0 +1,499 @@
+# Makefile.generic
+#	makefile for EusLisp
+#	common part for every archtecture and operating system
+#
+# object files needed to make euslisp kernel
+#	KOBJECTS --- eus kernel objects written in C
+#	NOKOBJECTS-- eus kernel, but cannot be optimized with -O option
+#	CLIBOBJECTS- functions written in C, not members of kernel
+#	LOBJECTS --- functions coded in EUSLISP; must be compiled with euscomp
+#	GEOOBJECTS-- geometric modeling functions and classes
+#	XOBJECTS---- Xwindow interface
+#	XTKOBJECTS---- Xwindow interface
+#	IMGOBJECTS--- image processing
+#	MTOBJECTS--- multithread functions
+#
+
+VERSION=8.16
+
+LIBEUSX=libeusx.so.0.0
+LIBEUSGEO=libeusgeo.so.0.0
+
+IMGLIB=-leusimg
+GEOLIB=-leusgeo
+EDGELIB=-leusedge
+EUSXLIB=-leusx
+LIBEUSGL=libeusgl.so.0.0
+
+KOBJECTS= $(OBJDIR)/memory.o	$(OBJDIR)/makes.o	\
+	  $(OBJDIR)/eval.o	$(OBJDIR)/leo.o		\
+	  $(OBJDIR)/eusstream.o   $(OBJDIR)/reader.o	\
+	  $(OBJDIR)/printer.o 	$(OBJDIR)/intern.o	\
+	  $(OBJDIR)/sequence.o      \
+	  $(OBJDIR)/lists.o       $(OBJDIR)/predicates.o \
+	  $(OBJDIR)/specials.o	$(OBJDIR)/lispio.o	\
+	  $(OBJDIR)/vectorarray.o	$(OBJDIR)/arith.o		\
+	  $(OBJDIR)/matrix.o	\
+	  $(OBJDIR)/calleus.o	$(OBJDIR)/charstring.o	\
+	  $(OBJDIR)/unixcall.o \
+	  $(OBJDIR)/sysfunc.o \
+	  $(OBJDIR)/eusioctl.o \
+	  $(OBJDIR)/compsub.o	$(OBJDIR)/eus.o \
+	  $(OBJDIR)/loadelf.o  \
+	  $(OBJDIR)/makedate.o \
+	  $(OBJDIR)/big.o \
+	  $(OBJDIR)/helpsub.o
+NOKOBJECTS= $(OBJDIR)/fcall.o
+GCCLS= $(BINDIR)/gccls
+LCOBJECTS=$(OBJDIR)/constants.l.o  $(OBJDIR)/eusstart.l.o  
+DMYOBJECTS=$(OBJDIR)/eusstart.dmy.o
+LOBJECTS= $(OBJDIR)/readmacro.o\
+	  $(OBJDIR)/common.o	$(OBJDIR)/pprint.o\
+	  $(OBJDIR)/stream.o	$(OBJDIR)/loader.o \
+	  $(OBJDIR)/eusdebug.o	$(OBJDIR)/process.o\
+	  $(OBJDIR)/packsym.o	$(OBJDIR)/object.o \
+	  $(OBJDIR)/coordinates.o \
+	  $(OBJDIR)/string.o	$(OBJDIR)/array.o \
+	  $(OBJDIR)/hashtab.o \
+	  $(OBJDIR)/eusforeign.o	$(OBJDIR)/mathtran.o \
+	  $(OBJDIR)/toplevel.o \
+	  $(OBJDIR)/tty.o $(OBJDIR)/history.o \
+	  $(OBJDIR)/eushelp.o
+COMPOBJECTS= $(OBJDIR)/trans.o \
+	     $(OBJDIR)/comp.o \
+	     $(OBJDIR)/builtins.l.o 
+# geometric computation objects
+GEOCOBJECTS= $(OBJDIR)/intersection.o 
+GEOOBJECTS= $(OBJDIR)/geoclasses.o  \
+	    $(OBJDIR)/geopack.o $(OBJDIR)/geobody.o \
+	    $(OBJDIR)/primt.o \
+	    $(OBJDIR)/compose.o \
+	    $(OBJDIR)/hid.o \
+	    $(OBJDIR)/viewing.o \
+	    $(OBJDIR)/viewsurface.o \
+	    $(OBJDIR)/viewport.o \
+	    $(OBJDIR)/polygon.o  \
+	    $(OBJDIR)/shadow.o  \
+	    $(OBJDIR)/bodyrel.o  
+IMGCOBJECTS=$(OBJDIR)/RGBHLS.o $(OBJDIR)/convolve.o $(OBJDIR)/pixword.o
+IMGOBJECTS=$(OBJDIR)/pbmfile.o $(OBJDIR)/piximage.o
+# window objects
+XCOBJECTS= $(OBJDIR)/xforeign.o
+XOBJECTS= $(OBJDIR)/Xdecl.o \
+	  $(OBJDIR)/Xeus.o \
+	  $(OBJDIR)/Xevent.o \
+	  $(OBJDIR)/Xgraphics.o 
+XTKOBJECTS=$(OBJDIR)/Xpanel.o \
+	   $(OBJDIR)/Xtext.o \
+	   $(OBJDIR)/Xitem.o \
+	   $(OBJDIR)/Xmenu.o \
+	   $(OBJDIR)/Xscroll.o \
+	   $(OBJDIR)/Xcanvas.o \
+	   $(OBJDIR)/Xtop.o  \
+	   $(OBJDIR)/Xapplwin.o
+
+# gl related objects
+GLCOBJECTS= $(OBJDIR)/oglforeign.o $(OBJDIR)/util.o $(OBJDIR)/eglfunc.o
+GLOBJECTS= $(OBJDIR)/glconst.o \
+	 $(OBJDIR)/gldecl.o \
+	 $(OBJDIR)/glforeign.o \
+	 $(OBJDIR)/glxconst.o \
+	 $(OBJDIR)/glxforeign.o \
+	 $(OBJDIR)/gluconst.o \
+	 $(OBJDIR)/gluforeign.o \
+	 $(OBJDIR)/eglforeign.o \
+	 $(OBJDIR)/glutil.o \
+	 $(OBJDIR)/glprim.o \
+	 $(OBJDIR)/gleus.o \
+	 $(OBJDIR)/gltexture.o \
+	 $(OBJDIR)/glview.o
+
+#	 $(OBJDIR)/auxconst.o 
+#	 $(OBJDIR)/auxforeign.o 
+
+# vision
+VISIONOBJECTS= $(OBJDIR)/piximage.o \
+		$(OBJDIR)/pbmfile.o \
+		$(OBJDIR)/convolve.o \
+		$(OBJDIR)/eusedge.so \
+		$(OBJDIR)/edgeobj.o
+
+DOC=$(DOCDIR)/arith.tex $(DOCDIR)/controls.tex $(DOCDIR)/evaluation.tex \
+	$(DOCDIR)/geometry.tex $(DOCDIR)/graphics.tex $(DOCDIR)/intro.tex \
+	$(DOCDIR)/io.tex $(DOCDIR)/manual.tex $(DOCDIR)/matrix.tex \
+	$(DOCDIR)/objects.tex $(DOCDIR)/predicates.tex \
+	$(DOCDIR)/sequences.tex \
+	$(DOCDIR)/symbols.tex $(DOCDIR)/sysfunc.tex $(DOCDIR)/xwindow.tex 
+#
+# make rules
+#
+.SUFFIXES:
+.SUFFIXES:	.h .l .c .s .o
+.h.l:
+.l.o:
+.c.o:	
+.s.o:
+
+#
+# make dependency
+#
+
+eus:	$(BINDIR)/eus
+
+MAKEDATE:	$(EUSDIR)$(LIBDIR)/MAKEDATE
+
+all:
+	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
+	 make -f $(MAKEFILE) $(MFLAGS) eus1; \
+         make -f $(MAKEFILE) $(MFLAGS) eus2; \
+         make -f $(MAKEFILE) $(MFLAGS) eusg; \
+         make -f $(MAKEFILE) $(MFLAGS) eus)
+
+# eus0=lowest level eus --- made only from c routines
+# and loads .l source when starts up
+# eus1 has basic compiled common lisp functions described in lisp.
+# eus2 adds compiled compiler.
+# eusg is loaded with geometric functions.
+# eusx also has xwindow interface.
+
+eus0:	MAKEDATE $(BINDIR)/eus0
+
+eus1:	$(BINDIR)/eus1
+
+eus2:	$(BINDIR)/eus2
+
+eusg:	$(BINDIR)/eusg
+
+eusx:	MAKEDATE $(BINDIR)/eusx
+
+eus:	MAKEDATE $(BINDIR)/eus
+
+eusxv:	$(BINDIR)/eusxv
+
+eusgl:   MAKEDATE $(BINDIR)/eusgl
+
+raweus.so:	$(BINDIR)/raweus.so
+
+$(LIBEUSX):	$(ADLIBDIR)/$(LIBEUSX)
+$(LIBEUSGEO):	$(ADLIBDIR)/$(LIBEUSGEO)
+$(LIBEUSGL):	$(ADLIBDIR)/$(LIBEUSGL)
+
+$(ADLIBDIR)/$(LIBEUSX):		$(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) \
+		$(IMGCOBJECTS) $(IMGOBJECTS)
+	( $(LD)  $(SOFLAGS)  -o $(ADLIBDIR)/$(LIBEUSX) \
+		$(XCOBJECTS) $(XOBJECTS) $(XTKOBJECTS) \
+		$(IMGCOBJECTS) $(IMGOBJECTS))
+$(ADLIBDIR)/$(LIBEUSGEO):	$(GEOOBJECTS) $(GEOCOBJECTS)  \
+		$(IMGCOBJECTS) $(IMGOBJECTS)
+	( $(LD)  $(SOFLAGS)  -o $(ADLIBDIR)/$(LIBEUSGEO) \
+		$(GEOOBJECTS) $(GEOCOBJECTS) \
+		$(IMGCOBJECTS) $(IMGOBJECTS))
+$(ADLIBDIR)/$(LIBEUSGL):	$(GLCOBJECTS) $(GLOBJECTS)
+	( $(LD) $(SOFLAGS) -o $(ADLIBDIR)/$(LIBEUSGL) \
+		$(GLCOBJECTS) $(GLOBJECTS))
+
+$(EUSDIR)$(LIBDIR)/MAKEDATE:	FORCE
+	(cd ../$(LIBDIR);  echo \"`date`\" >MAKEDATE ; \
+	 cd $(EUSDIR)/lisp; tool/makedate >$(CDIR)/makedate.c)
+
+FORCE:
+
+$(BINDIR)/eus0:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(MTCOBJECTS) \
+		$(GCCLS) $(LCOBJECTS)
+	($(CC) -o $(BINDIR)/eus0 $(LDFLAGS) $(NOKOBJECTS) $(KOBJECTS) \
+		$(KSOBJECTS) $(LCOBJECTS) $(MTCOBJECTS) \
+		 $(RAWLIB) ; \
+	cd $(BINDIR); rm -f euscomp; ln -s eus0 euscomp)
+
+$(BINDIR)/eus1:	 $(BINDIR)/eus0 $(GCCLS) \
+		$(LOBJECTS) $(LCOBJECTS) 
+	($(CC) -o $(BINDIR)/eus1 $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(MTCOBJECTS)  \
+		$(LOBJECTS)  $(LCOBJECTS) \
+		$(RAWLIB) ; \
+	cd $(BINDIR); rm -f euscomp; ln -s eus1 euscomp)
+
+$(BINDIR)/eus2:	 $(BINDIR)/eus1 $(COMPOBJECTS)
+	($(CC) -o $(BINDIR)/eus2 $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
+		$(MTCOBJECTS)  \
+		$(LOBJECTS)  $(LCOBJECTS) $(COMPOBJECTS) \
+		$(RAWLIB) ; \
+	cd $(BINDIR); rm -f euscomp; ln -s eus2 euscomp)
+
+$(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(LIBEUSGEO)  
+	($(CC) -o $(BINDIR)/eusg $(LDFLAGS)  \
+	 	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(LCOBJECTS) $(MTCOBJECTS) $(MTOBJECTS) \
+		$(COMPOBJECTS) $(EUSLIB) $(GEOLIB) $(RAWLIB) ; \
+	cd $(BINDIR); rm -f euscomp; ln -s eusg euscomp)
+
+$(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(COMPOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(XCOBJECTS) \
+		$(LIBEUSGEO) $(LIBEUSX)
+	($(CC) -o $(BINDIR)/eusx $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
+		$(LOBJECTS)   $(LCOBJECTS) $(COMPOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB);)
+
+$(BINDIR)/eus:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(LCOBJECTS)  $(COMPOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(LIBEUSGEO) $(LIBEUSX) 
+	($(CC) -o $(BINDIR)/eus $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
+		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(MAPOPTION) \
+		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB) \
+		>$(ADLIBDIR)/eusmap ; \
+	cd $(BINDIR); rm -f euscomp eusx; \
+	ln -s eus euscomp; ln -s eus eusx; )
+
+$(BINDIR)/eusxv:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(LIBEUSGEO) $(LIBEUSX)
+	($(CC) -o $(BINDIR)/eusxv $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
+		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
+		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(IMGLIB) $(EDGELIB) $(XLIB) $(RAWLIB))
+
+$(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(LCOBJECTS) $(COMPOBJECTS)  \
+		$(LIBEUSGEO) $(LIBEUSX) $(LIBEUSGL) 
+	($(CC) -o $(BINDIR)/eusgl $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
+		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
+		$(MTCOBJECTS) $(MTOBJECTS) \
+		$(MAPOPTION) \
+		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(GLLIB) $(XLIB) $(RAWLIB)\
+		>$(ADLIBDIR)/eusmap ;)
+
+$(BINDIR)/raweus.so:	$(NOKOBJECTS) $(KOBJECTS)  $(LOBJECTS) \
+		$(COMPOBJECTS) \
+		$(LIBEUSGEO) $(LIBEUSX) 
+	($(CC)  -o $(BINDIR)/raweus.so  $(LDFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) \
+		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
+		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB))
+
+$(KOBJECTS) $(DMYOBJECTS) $(MTCOBJECTS):	$(CDIR)/eus.h
+	(cd $(CDIR); \
+	 $(CC) -c $(CFLAGS) -o $@ $(OFLAGS) $(@F:.o=.c))
+$(NOKOBJECTS):	$(CDIR)/eus.h
+	(cd $(CDIR); \
+	 $(CC) -c $(CFLAGS) -o $@ $(@F:.o=.c))
+$(KSOBJECTS):
+	(cd $(CDIR); \
+	 $(CC) -c -o $@ $(OFLAGS) $(@F:.o=.s))
+$(MTOBJECTS):
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l)
+#	(cd $(LDIR); \
+#	 $(CC) -c $(CFLAGS) -o $@  $(OFLAGS) $(@F:.o=.c))
+$(GEOCOBJECTS):
+	(cd $(GEODIR); \
+	 $(CC) -c $(CFLAGS) -o $@  $(OFLAGS) $(@F:.o=.c))
+$(XCOBJECTS):
+	(cd $(XWINDOWDIR); \
+	 $(CC) -c -o $@ $(CFLAGS) $(OFLAGS) $(@F:.o=.c))
+$(GLCOBJECTS):
+	(cd $(GLDIR); \
+	 $(CC) -c -o $@ $(CFLAGS) $(OFLAGS) $(GLINCLUDE) $(@F:.o=.c))
+$(GCCLS): 
+	(cd $(TOOLDIR); \
+	$(CC) -o $(BINDIR)/gccls gccls.c ;\
+	cd $(EUSDIR) )
+$(LCOBJECTS):
+	(cd $(LDIR); $(BINDIR)/gccls constants.l; \
+        $(CC) -c -o $(OBJDIR)/constants.l.o $(CFLAGS) constants.l.c; \
+	 $(BINDIR)/gccls eusstart.l; \
+        $(CC) -c $(CFLAGS) -o $(OBJDIR)/eusstart.l.o eusstart.l.c)
+$(LOBJECTS):
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l)
+$(COMPOBJECTS):	$(GCCLS)
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_comp.l ; \
+	cd $(COMPDIR); $(BINDIR)/gccls builtins.l; \
+	$(CC) -c $(CFLAGS) -o $(OBJDIR)/builtins.l.o -O builtins.l.c )
+$(GEOOBJECTS):
+	(echo compiling geoobjects; \
+	$(BINDIR)/euscomp <$(TOOLDIR)/compile_geo.l)
+$(XOBJECTS):
+	(cd $(XWINDOWDIR); $(BINDIR)/euscomp <../$(TOOLDIR)/compile_xwindow.l)
+$(XTKOBJECTS):
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_xwindow.l)
+$(GLOBJECTS):
+	($(BINDIR)/eusx <$(TOOLDIR)/compile_gl.l)
+$(XWINDOWDIR)/Xlibfuncs.o:	$(XWINDOWDIR)/Xlibfuncs.c
+	(cd $(XWINDOWDIR) ; \
+	 $(CC) -c $(CFLAGS) -o $(OBJDIR)/Xlibfuncs.o $(OFLAGS) Xlibfuncs.c)
+$(IMGOBJECTS):
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_image.l)
+$(IMGCOBJECTS):
+	(cd $(IMGDIR); \
+	 $(CC) -c -o $@ $(CFLAGS) $(OFLAGS) $(@F:.o=.c))
+
+doc:	doc/latex/manual.ps
+
+doc/latex/manual.ps:	doc/latex/manual.dvi
+	(cd doc/latex; \
+	 dvi2ps -r manual.dvi | psnup -4 >manual4.ps ; \
+	 dvi2ps manual.dvi >manual.ps)
+doc/latex/manual.dvi:	$(DOC)
+	(cd doc/latex; jlatex manual ; makeindex manual.idx ; jlatex manual)
+
+install:
+	(rm -f $(PUBBINDIR)/eus $(PUBBINDIR)/eusx $(PUBBINDIR)/euscomp;\
+	 cp $(BINDIR)/eus $(PUBBINDIR);\
+	 cp $(BINDIR)/eusx $(PUBBINDIR);\
+	 ln -s $(PUBBINDIR)/eus $(PUBBINDIR)/euscomp)
+clean:
+	-rm -f $(OBJDIR)/* $(ADLIBDIR)/* $(BINDIR)/* $(LDIR)/constants.l.[co]\
+		$(LDIR)/eusstart.l.[co] $(COMPDIR)/builtins.l.[co] so_locations
+	-sh tool/clean-ch.sh
+	
+eustag : 
+	$(BINDIR)/eustags \
+	$(EUSDIR)/$(LDIR)/readmacro.l \
+	$(EUSDIR)/$(LDIR)/common.l \
+	$(EUSDIR)/$(LDIR)/pprint.l \
+	$(EUSDIR)/$(LDIR)/stream.l \
+	$(EUSDIR)/$(LDIR)/loader.l \
+	$(EUSDIR)/$(LDIR)/debug.l \
+	$(EUSDIR)/$(LDIR)/process.l \
+	$(EUSDIR)/$(LDIR)/packsym.l \
+	$(EUSDIR)/$(LDIR)/coordinates.l \
+	$(EUSDIR)/$(LDIR)/string.l \
+	$(EUSDIR)/$(LDIR)/array.l \
+	$(EUSDIR)/$(LDIR)/toplevel.l \
+	$(EUSDIR)/$(LDIR)/hashtab.l \
+	$(EUSDIR)/$(LDIR)/eusforeign.l \
+	$(EUSDIR)/$(LDIR)/mathtran.l \
+	$(EUSDIR)/$(GEODIR)/geopack.l \
+	$(EUSDIR)/$(GEODIR)/geobody.l \
+	$(EUSDIR)/$(GEODIR)/primt.l \
+	$(EUSDIR)/$(GEODIR)/compose.l \
+	$(EUSDIR)/$(GEODIR)/hid.l \
+	$(EUSDIR)/$(GEODIR)/viewing.l \
+	$(EUSDIR)/$(GEODIR)/viewsurface.l \
+	$(EUSDIR)/$(GEODIR)/viewport.l \
+	$(EUSDIR)/$(LLIB2DIR)/pickport.l \
+	$(EUSDIR)/$(LLIB2DIR)/local.l \
+	$(EUSDIR)/$(OBJARITHDIR)/algebra.l \
+	$(EUSDIR)/$(OBJARITHDIR)/2dgeo.l \
+	$(EUSDIR)/$(OBJARITHDIR)/3dgeo.l \
+	$(EUSDIR)/$(OBJARITHDIR)/ocalib.l 
+
+
+# dependency all files
+$(OBJDIR)/memory.o:	$(CDIR)/memory.c
+$(OBJDIR)/makes.o:	$(CDIR)/makes.c
+$(OBJDIR)/eval.o:	$(CDIR)/eval.c
+$(OBJDIR)/leo.o:	$(CDIR)/leo.c
+$(OBJDIR)/eusstream.o:	$(CDIR)/eusstream.c
+$(OBJDIR)/reader.o:	$(CDIR)/reader.c
+$(OBJDIR)/printer.o:	$(CDIR)/printer.c
+$(OBJDIR)/intern.o:	$(CDIR)/intern.c
+$(OBJDIR)/sequence.o:	$(CDIR)/sequence.c
+$(OBJDIR)/lists.o:	$(CDIR)/lists.c
+$(OBJDIR)/predicates.o: $(CDIR)/predicates.c
+$(OBJDIR)/specials.o:	$(CDIR)/specials.c
+$(OBJDIR)/lispio.o:	$(CDIR)/lispio.c
+$(OBJDIR)/vectorarray.o: $(CDIR)/vectorarray.c
+$(OBJDIR)/arith.o:	$(CDIR)/arith.c
+$(OBJDIR)/matrix.o:	$(CDIR)/matrix.c
+$(OBJDIR)/calleus.o:	$(CDIR)/calleus.c
+$(OBJDIR)/charstring.o: $(CDIR)/charstring.c
+$(OBJDIR)/unixcall.o:	$(CDIR)/unixcall.c
+$(OBJDIR)/sysfunc.o:	$(CDIR)/sysfunc.c
+$(OBJDIR)/eusioctl.o:	$(CDIR)/eusioctl.c
+$(OBJDIR)/compsub.o:	$(CDIR)/compsub.c
+$(OBJDIR)/eus.o:	$(CDIR)/eus.c
+$(OBJDIR)/loadelf.o:	$(CDIR)/loadelf.c
+$(OBJDIR)/mthread.o:	$(CDIR)/mthread.c
+$(OBJDIR)/mthread_sunos4.o:	$(CDIR)/mthread_sunos4.c
+$(OBJDIR)/makedate.o:	$(CDIR)/makedate.c
+$(OBJDIR)/big.o:	$(CDIR)/big.c
+$(OBJDIR)/fcall.o:	$(CDIR)/fcall.c
+$(OBJDIR)/helpsub.o:	$(CDIR)/helpsub.c
+$(OBJDIR)/floatdouble.o:	$(CDIR)/floatdouble.c
+# lisp objects
+#$(OBJDIR)/constants.l.o: $(LDIR)/constants.l
+#$(OBJDIR)/eusstart.l.o:	$(LDIR)/eusstart.l  
+#$(OBJDIR)/eusstart.dmy.o: $(CDIR)/eusstart.dmy.c
+$(OBJDIR)/readmacro.o:	$(LDIR)/readmacro.l
+$(OBJDIR)/common.o:	$(LDIR)/common.l
+$(OBJDIR)/pprint.o:	$(LDIR)/pprint.l
+$(OBJDIR)/stream.o:	$(LDIR)/stream.l
+$(OBJDIR)/loader.o:	$(LDIR)/loader.l
+$(OBJDIR)/eusdebug.o:	$(LDIR)/eusdebug.l
+$(OBJDIR)/process.o:	$(LDIR)/process.l
+$(OBJDIR)/packsym.o:	$(LDIR)/packsym.l
+$(OBJDIR)/object.o:	$(LDIR)/object.l
+$(OBJDIR)/coordinates.o: $(LDIR)/coordinates.l
+$(OBJDIR)/string.o:	$(LDIR)/string.l
+$(OBJDIR)/array.o:	$(LDIR)/array.l
+$(OBJDIR)/hashtab.o:	$(LDIR)/hashtab.l
+$(OBJDIR)/eusforeign.o:	$(LDIR)/eusforeign.l
+$(OBJDIR)/mathtran.o:	$(LDIR)/mathtran.l
+$(OBJDIR)/toplevel.o:	$(LDIR)/toplevel.l
+$(OBJDIR)/tty.o:	$(LDIR)/tty.l
+$(OBJDIR)/history.o:	$(LDIR)/history.l
+$(OBJDIR)/par.o:	$(LDIR)/par.l
+$(OBJDIR)/cyclic.o:	$(LDIR)/cyclic.l
+$(OBJDIR)/eushelp.o:	$(LDIR)/eushelp.l
+$(OBJDIR)/trans.o:	$(COMPDIR)/trans.l
+$(OBJDIR)/comp.o:	$(COMPDIR)/comp.l
+
+#$(OBJDIR)/builtins.l.o:	$(COMPDIR)/builtins.l
+# geometric computation objects
+$(OBJDIR)/intersection.o: $(GEODIR)/intersection.c 
+$(OBJDIR)/geoclasses.o:	$(GEODIR)/geoclasses.l
+$(OBJDIR)/geopack.o:	$(GEODIR)/geopack.l
+$(OBJDIR)/geobody.o:	$(GEODIR)/geobody.l
+$(OBJDIR)/primt.o:	$(GEODIR)/primt.l
+$(OBJDIR)/compose.o:	$(GEODIR)/compose.l
+$(OBJDIR)/hid.o:	$(GEODIR)/hid.l
+$(OBJDIR)/viewing.o:	$(GEODIR)/viewing.l
+$(OBJDIR)/viewsurface.o: $(GEODIR)/viewsurface.l
+$(OBJDIR)/viewport.o:	$(GEODIR)/viewport.l
+$(OBJDIR)/polygon.o:	$(GEODIR)/polygon.l
+$(OBJDIR)/shadow.o:	$(GEODIR)/shadow.l
+$(OBJDIR)/bodyrel.o:	$(GEODIR)/bodyrel.l
+$(OBJDIR)/RGBHLS.o:	$(IMGDIR)/RGBHLS.c
+$(OBJDIR)/convolve.o:	$(IMGDIR)/convolve.c
+$(OBJDIR)/pixword.o:	$(IMGDIR)/pixword.c
+$(OBJDIR)/pbmfile.o:	$(IMGDIR)/pbmfile.l
+$(OBJDIR)/piximage.o:	$(IMGDIR)/piximage.l
+# xwindow objects
+$(OBJDIR)/xforeign.o:	$(XWINDOWDIR)/xforeign.c
+$(OBJDIR)/Xdecl.o:	$(XWINDOWDIR)/Xdecl.l
+$(OBJDIR)/Xeus.o:	$(XWINDOWDIR)/Xeus.l
+$(OBJDIR)/Xevent.o:	$(XWINDOWDIR)/Xevent.l
+$(OBJDIR)/Xgraphics.o:	$(XWINDOWDIR)/Xgraphics.l
+$(OBJDIR)/Xpanel.o:	$(XWINDOWDIR)/Xpanel.l
+$(OBJDIR)/Xtext.o:	$(XWINDOWDIR)/Xtext.l
+$(OBJDIR)/Xitem.o:	$(XWINDOWDIR)/Xitem.l
+$(OBJDIR)/Xmenu.o:	$(XWINDOWDIR)/Xmenu.l
+$(OBJDIR)/Xscroll.o:	$(XWINDOWDIR)/Xscroll.l
+$(OBJDIR)/Xcanvas.o:	$(XWINDOWDIR)/Xcanvas.l
+$(OBJDIR)/Xtop.o:	$(XWINDOWDIR)/Xtop.l
+$(OBJDIR)/Xapplwin.o:	$(XWINDOWDIR)/Xapplwin.l
+# openGL objects
+$(OBJDIR)/oglforeign.o: $(GLDIR)/oglforeign.c
+$(OBJDIR)/eglfunc.o: $(GLDIR)/eglfunc.c
+$(OBJDIR)/util.o: 	$(GLDIR)/util.c
+$(OBJDIR)/glconst.o:	$(GLDIR)/glconst.l
+$(OBJDIR)/gldecl.o:	$(GLDIR)/gldecl.l
+$(OBJDIR)/glforeign.o:	$(GLDIR)/glforeign.l
+$(OBJDIR)/glxconst.o:	$(GLDIR)/glxconst.l
+$(OBJDIR)/glxforeign.o:	$(GLDIR)/glxforeign.l
+$(OBJDIR)/gluconst.o:	$(GLDIR)/gluconst.l
+$(OBJDIR)/gluforeign.o:	$(GLDIR)/gluforeign.l
+$(OBJDIR)/auxconst.o:	$(GLDIR)/auxconst.l
+$(OBJDIR)/auxforeign.o:	$(GLDIR)/auxforeign.l
+$(OBJDIR)/glutil.o:	$(GLDIR)/glutil.l
+$(OBJDIR)/glprim.o:	$(GLDIR)/glprim.l
+$(OBJDIR)/glview.o:	$(GLDIR)/glview.l

@@ -1,0 +1,348 @@
+\section{Object Oriented Programming}
+\markright{\arabic{section}. Object-Oriented Programming}
+
+The structures and behaviors of objects are described in
+classes, which are defined by
+{\bf defclass} macro and {\bf defmethod} special form.
+{\bf defclass} defines the name of the class, its super class, and
+slot variable names, optionally with their types and message forwarding.
+{\bf defmethod} defines methods which will invoked when
+corresponding messages are sent.
+Class definition is assigned to the symbol's special value.
+You may think of {\bf class} as 
+the counter part of Common Lisp's {\bf structure}.
+Slot accessing functions and {\bf setf} methods are automatically defined
+for each slot by {\bf defclass}.
+
+Most classes are instantiated from the built-in class {\bf metaclass}.
+Class {\bf vector-class}, which is a subclass of {\bf metaclass},
+is a metaclass for vectors.
+If you need to use class-variables and class-methods,
+you may make your own metaclass by subclassing {\bf metaclass},
+and the metaclass name should be given to {\bf defclass} with
+{\tt :metaclass} keyword.
+
+Vectors are different from other record-like objects
+because an instance of the vector can have arbitrary number of elements,
+while record-like objects have fixed number of slots.
+EusLisp's object is either a record-like object or a vector, not both
+at the same time.
+
+Vectors whose elements are typed or the number of elements are
+unchangeable can also be defined by {\bf defclass}.
+In the following example,
+class {\tt intvec5} which has five integer elements is defined.
+Automatic type check and conversion are performed when the elements are
+accessed by the interpreter.
+When compiled with proper declaration, faster accessing code is produced.
+
+\begin{verbatim}
+(defclass intvec5 :super vector :element-type :integer :size 5)
+(setq x (instantiate intvec5))  --> #i(0 0 0 0 0)
+\end{verbatim}
+
+When a message is sent to an object, 
+the corresponding method is searched for, first in its class,
+and next in its superclasses toward {\bf object},
+until all superclasses are exhausted.
+If the method is undefined, forward list is searched.
+This forwarding mechanism is introduced to simulate multiple inheritance.
+If the search fails again, a method named {\tt :nomethod} is searched,
+and the method is invoked with a list of all the arguments.
+In the following example, the messages {\tt :telephone} and {\tt :mail} are
+sent to {\tt secretary} slot object which is typed {\tt person},
+and {\tt :go-home} message is sent to {\tt chauffeur} slot.
+
+\begin{verbatim}
+(defclass president :super object
+                    :slots ((name :type string)
+                            (age  :type :integer)
+                            (secretary  :type person
+                                        :forward (:telephone :mail))
+                            (chauffeur  :forward (:go-home))))
+\end{verbatim}
+
+In a method, two more local variables,
+{\bf class} and {\bf self}, become accessible.
+You should not change either of these variables.
+If you do that, the ones supplied by the system are hidden,
+and {\bf send-super} and {\bf send self} are confused.
+
+
+\subsection{Classes and Methods}
+
+\begin{refdesc}
+
+\longdescription{defclass}
+{classname \&key \= :super object \` [macro] \\
+\> :slots (\{var $|$ (var [:type type] [:forward selectors])\}*) \\
+\> :metaclass metaclass \\
+\> :element-type t \\
+\> :size -1\\}
+{creates or redefine a class.
+When a class is redefined to have different superclass or slot variables,
+old objects instantiated from the previous class definition will 
+behave unexpectedly, since method definitions assume the new slots
+disposition.}
+
+\specialdesc{defmethod}{classname \{(selector lambda-list . body)\}*}{
+defines one or more methods of {\em classname}. Each {\em selector}
+must be a keyword symbol.}
+
+\macdesc{defclassmethod}{classname \{(selector lambda-list . body)\}*}
+
+\funcdesc{classp}{object}{T if {\em object} is a class object, that is,
+an instance of class {\bf metaclass} or its subclasses.}
+
+\funcdesc{subclassp}{class super}{
+Checks {\em class} is a subclass of {\em super}.}
+
+\funcdesc{vector-class-p}{x}{T if {\em x} is an instance of {\bf vector-class}.}
+
+\funcdesc{delete-method}{class method-name}{
+The method definition is removed from the specified class.}
+
+\funcdesc{class-hierarchy}{class}{
+prints inheritance hierarchy below {\em class}.}
+
+\funcdesc{system:list-all-classes}{}{
+lists up all the classes defined so far.}
+
+\funcdesc{system:find-method}{object selector}{
+tries to find a method specified by {\em selector} in the class of {\em object}
+and in its superclass.
+This is used to know whether {\em object} can respond to {\em selector}.}
+
+\funcdesc{system:method-cache}{[flag]}{
+Interrogates the hit ratio of the method cache,
+and returns a list of two numbers, hit and miss.
+If {\em flag} is NIL, method caching is disabled.
+If non-nil flag is given, method cache is purged and caching is enabled.}
+
+\end{refdesc}
+
+\subsection{Message Sending}
+\begin{refdesc}
+
+\funcdesc{send}{object selector \{arg\}*}{
+send a message consisting of {\em selector} and {\em arg} to {\em object}.
+{\em object} can be anything but number.
+{\em selector} must be evaluated to be a keyword.}
+
+\funcdesc{send-message}{target search selector \{arg\}*}{
+Low level primitive to implement {\bf send-super}.}
+
+\macrodesc{send*}{object selector \&rest msg-list}{
+{\bf send*} applies {\bf send-message} to a list of arguments.
+The relation between {\bf send} and {\bf send*} is like the one
+between {\bf funcall} and {\bf apply}, or {\bf list} and {\bf list*}.}
+
+\funcdesc{send-all}{receivers selector \&rest mesg}{
+sends the same message to all the receivers, and collects the result
+in a list.}
+
+\macrodesc{send-super}{selector \&rest msgs}{
+sends {\em msgs} to self, but
+begins method searching at the superclass of the class
+where the method currently being executed is defined.
+It is an error to {\em send-super} outside a method (i.e. in a function).}
+
+\macrodesc{send-super*}{selector \&rest msg-list}{
+{\bf send-super*} is apply version of send-super.}
+
+\end{refdesc}
+
+\subsection{Instance Management}
+
+\begin{refdesc}
+
+\funcdesc{instantiate}{class \&optional size}{
+the lowest primitive to create a new object from a class.
+If the class is a vector-class, {\em size} should be supplied.}
+
+\macrodesc{instance}{class \&rest message}{
+An instance is created, and the message is sent to it.}
+
+\funcdesc{make-instance}{class \&rest var-val-pairs}{
+creates an instance of {\em class} and sets its slot variables
+according to {\em var-val-pairs}.
+For example, {\tt (make-instance cons :car 1 :cdr 2)}
+is equivalent to {\tt (cons 1 2)}.}
+
+\funcdesc{copy-object}{object}{
+{\bf copy-object} function is used to copy objects keeping the referencing
+topologies even they have recursive references.
+{\bf Copy-object} copies any objects accessible from {\em object}
+except symbols and packages, which are untouched to keep the uniqueness
+of symbols.
+{\bf copy-object} traverses all the references in an object twice:
+once to create new objects and to mark original objects that they have
+already copied, and again to remove marks.
+This two-step process makes copy-object work slower than copy-seq.
+If what you wish to copy is definitely a sequence,
+use of {\bf copy-seq} or {\bf copy-tree} is recommended.}
+
+\funcdesc{become}{object class}{
+changes the class of {\em object} to {\em class}.
+The slot structure of both the old class and the new class must be
+consistent. Usually, this can be safely used only for changing
+class between binary vectors, for example from an integer-vector
+to a bit-vector.}
+
+\funcdesc{replace-object}{dest src}{
+dest must be an instance of the subclass of src.}
+
+\funcdesc{class}{object}{
+returns the class object of {\em object}.
+To get the name of the class, send :name message to the class object.}
+
+\funcdesc{derivedp}{object class}{
+{\bf derivedp} checks if an object is instantiated from {\em class}
+or {\em class}'s subclasses.
+{\bf subclassp} and {\bf derivedp} functions do not search in class hierarchy:
+type check always finishes within a constant time.}
+
+\funcdesc{slot}{object class (index $|$ slot-name)}{
+Returns the named or indexed slot value.}
+
+\funcdesc{setslot}{object class (index $|$ slot-name) value}{
+{\bf Setslot} is a internal function and users should not use it.
+Use, instead, combination of {\bf setf} and {\bf slot}.}
+
+\end{refdesc}
+
+\subsection{Basic Classes}
+
+\begin{refdesc}
+\classdesc{object}{}
+{}
+{Object is the most basic class that is located at the top of class hierarchy.
+Since it defines no slot variables, it is no use to make an instance of
+{\bf object}.}
+
+\methoddesc{:prin1}{\&optional stream \&rest mesg}{
+prints the object in the standard re-readable object format,
+that is, the class name and the address, enclosed by angle brackets and
+preceded by a pound sign.
+Any subclasses of {\bf object} can use this method to print itself with
+more comprehensive information  by using
+{\bf send-super} macro specifying {\em mesg} string.
+An object is re-readable if it begins with \#$<$,
+followed by its class name, correct address, any lisp-readable information,
+and \verb+>+.
+Since every data object except numbers inherits {\bf object},
+you can get print forms in this notation, even for symbols or strings.
+Specifying this notation, you can catch data objects that you forgot
+to {\bf setq} to a symbol, as long as there happened no garbage collection
+after it is printed.}
+
+\methoddesc{:slots}{}{
+returns the list of variable-name and value pair of all the slots of the
+object.
+You can get the value of a specific slot by applying {\bf assoc} to this
+list, although you cannot alter them.}
+
+\classdesc{propertied-object}{object}
+{plist}
+{defines objects that have property list.
+Unlike other Common Lisp, 
+EusLisp allows any objects that inherit propertied-object to have property
+lists, even if they are not symbols.}
+
+\methoddesc{:plist}{\&optional plist}{
+if {\em plist} is specified, it is set to the plist slot of this object.
+Previous plist, if there had been one, is lost.
+Legal plist should be of the form of
+\verb+((indicator1 . value1) (indicator2 . value2) ...)+.
+Each \verb+indicator+ can be any lisp form that are tested its equality
+with the {\bf eq} function.
+When a symbol is used for an indicator, use of keyword is recommended
+to ensure the equality check will be performed interpacakge-widely.
+{\bf :plist} returns the current plist.}
+
+\methoddesc{:get}{indicator}{
+returns the value associated with {\em indicator} in the property list.
+\verb+(send x :get :y) == (cdr (assoc :y (send x :plist)))+.}
+
+\methoddesc{:put}{indicator value}{
+associates {\em value} to {\em indicator} in the plist.}
+
+\methoddesc{:remprop}{indicator}{
+removes {\em indicator} and value pair from the plist.
+Further attempt to {\em :get} the value returns nil.}
+
+\methoddesc{:name}{\&optional name}{
+defines and retrieves the {\tt :name} property in the plist.
+This property is used for printing.}
+
+\methoddesc{:prin1}{\&optional stream \&rest mesg}{
+prints the object in the re-readable form.
+If the object has {\bf :name} property, it is printed after
+the address of the object.}
+
+\methoddesc{:slots}{}{
+returns a list of variable and value pairs of this object.}
+
+\methoddesc{:methods}{}{
+returns a list of all method names defined for this object.
+In other words, this object can accept method calls listed by :methods. }
+
+\methoddesc{:get-val}{variable-name}{
+returns the value of the slot designated by {\it variable-name}.
+If the object does not have the variable-name slot, an error is reported.}
+
+\methoddesc{:set-val}{variable-name value}{
+sets {\it value} in the variable-name slot of this object.
+If the object does not have the variable-name slot, an error is reported.}
+
+\classdesc{metaclass}{propertied-object}
+{name super cix vars types forwards methods}
+{Metaclass defines classes. Classes that have own class variables
+should be defined with {\bf metaclass} as their superclass.}
+\methoddesc{:new}{}
+{creates an instance of this class and returns it
+after filling all the slots with NIL.}
+\methoddesc{:super}{}{
+returns the super class object of this class.
+You cannot alter superclass once defclassed.}
+\methoddesc{:methods}{}{
+returns a list of all the methods defined in this class.
+The list is composed of lists each of which describes the name of
+the method, parameters, and body.}
+\methoddesc{:method}{name}{
+returns the method definition associated with {\em name}.
+If not found, NIL is returned.}
+\methoddesc{:method-names}{subname}{
+returns a list of all the method names each of which contains
+{\em subname} in its method name.
+Methods are searched only in this class.}
+\methoddesc{:all-methods}{}{
+returns a list of all methods that are defined in this class and
+its all the super classes.
+In other words, an instance of this class can execute each of these
+methods.}
+\methoddesc{:all-method-names}{subname}{
+returns a list of all the method names each of which matches with
+{\em subname}.
+The search is made from  this class up to {\bf object}.}
+\methoddesc{:slots}{}{
+returns the slot-name vector.}
+\methoddesc{:name}{}{returns the name symbol of this class.}
+\methoddesc{:cid}{}{
+returns an integer that is assigned to every
+instance of this class to identify its class.
+This is an index to the system-internal class table, and is changed
+when a new subclass is defined under this class.}
+\methoddesc{:subclasses}{}{
+returns a list of the direct subclass of this class.}
+\methoddesc{:hierarchy}{}{
+returns a list of all the subclasses defined under this class.
+You can also call the {\bf class-hierarchy} function to get a comprehensive
+listing of all the class hierarchy.}
+\funcdesc{find-method}{object selector}{
+searches for the method identified by {\em selector} in {\em object}'s
+class and its super classes. This function is useful when object's
+class is uncertain and you want to know whether the object can handle
+the message without causing nomethod error.}
+\end{refdesc}
+\newpage

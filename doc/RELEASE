@@ -1,0 +1,63 @@
+EusLisp 8.16 release note
+				1996/July/1
+				Toshihiro Matsui
+				Electrotechnical Laboratory
+
+* OpenGL and Mesa interface
+	eusgl can use both opengl libraries and euslisp original X toolkits
+	at the same time. A good example can be seen in lib/demo/tss96.l.
+	To see this demo, load "lib/demo/tss96.l", (tss), and (demo).
+	Note that you need to install Mesa if you run eusgl on non-SGI
+	machines. 
+
+	Mesa does not allow holes in a face. Triangulation program is
+	available from Hara.
+
+* VRML
+	Brep representaion of bodies are converted to VRML format.
+
+* Xwindow toolkit
+	Cleaner and more efficient toolkit is provided. tss96.l is also
+	a good example for modern Xtoolkit usage.
+
+* Inclusion of 2d polygon modules
+	Face+ and face- are available.
+
+* Faceset
+	The body class has the faceset class as its superclass.
+	This structure is analogous to SGI and VRML.
+
+* Compiler
+	Car, cdr, etc., are compiled in-line for faster list manipulation.
+
+* Multi platforms
+	EusLisp is available on SunOS4, SunOS5, Alpha/OSF1, SGI, Linux
+	and Win95.
+
+* Bug fixes
+	Reading very long strings, GC during addmethod, signals to threads
+	are fixed.
+
+* Libraries
+	Geometric functions are stored in libeusgeo.so to avoid explosion
+	of the global offset table.
+
+* Contributions
+	Hirukawa's contact analyzer is available.
+
+-------------------------
+
+EusLisp Release 8.23			1999.Oct.23 matsui@etl.go.jp
+
+* putimage to xwindows of 16/24/32 bpp 
+* JPEG compression/decompression
+* pop3 interface
+* unix:select recognizes up to 256 file descriptors
+* maximum object size is upgraded to 1.2GB from 10MB
+* DDA for generation of lines and ellipsis is added.
+* Linux low level I/O primitives, IOPERM, OUTB, and INB.
+* the time class
+* Hiragana to Roman-ji conversion.
+* unix:mkdir and unix:rmdir are added.
+* class, method and function information by PFUNCS, CHECK-METHOD,
+  CLASS-HIERARCHY.

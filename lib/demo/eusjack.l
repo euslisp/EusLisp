@@ -1,0 +1,28 @@
+(defvar *jackstream*)
+(defvar *jackbuf* (make-string 16384))
+(defvar ack nil)
+(defun from-remote (s)
+   (let (len)
+      (setq len (unix:uread (send s :infd) *jackbuf*))
+      (unix:write *standard-output* *jackbuf* len)
+      (setq ack t)))
+
+(defun openjack (host port)
+  (let ((sa (make-socket-address :domain af_inet :host host :port port))
+	(exp))
+    (setq *jackstream* (make-client-socket-stream sa))
+    (unless (io-stream-p *jackstream*) (return-from eusjack *jackstream*))
+    (def-async *jackstream*  from-remote)
+    ) )
+
+(defun eusjack ()
+    (while t
+	(format *standard-output* "remote> ")
+	(finish-output *standard-output*)
+	(setq exp (read))
+	(if (eq exp '.) (return-from eusjack nil))
+	(setq ack nil)
+	(print exp *jackstream*)
+	(while (null ack) (unix:usleep 100000))
+    )
+

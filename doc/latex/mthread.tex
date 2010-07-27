@@ -1,0 +1,457 @@
+\newpage
+\section{Multithread\label{mthread}}
+\markright{\arabic{section}. Multithread}
+
+The multithread is the concurrent and asynchronous programming facility
+on the Solaris operating system. 
+Asynchronous programming is required for programs to respond to
+external events via multiple sensors occurring independently of
+the program's state.
+Parallel programming is effective to improve performance of
+computation bound processing such as image processing and interference
+checking in path planning.
+
+\subsection{Design of Multithread EusLisp}
+\subsubsection{ Multithread in Solaris 2 operating system}
+Multithread EusLisp (MT-Eus) runs on the Solaris 2 operating system
+with one or more processors.  Solaris's threads are units for allocating
+CPU in a traditional UNIX process, having shared memory and different
+contexts. %{\cite Solaris-thread}.
+The thread library provided by the Solaris OS allocates each
+thread to a single LWP (light weight process), which is a kernel
+resource.
+The Unix kernel schedules the allocation of  LWPs to one or more
+physical CPUs based on thread priorities assigned to each thread. 
+Fig.\ref{threadmodel} depicts the relations between threads, LWPs, and CPUs.
+Two major changes in the design of the contexts and the memory management
+of EusLisp have been made to upgrade it to multithread capabilities.
+
+\subsubsection{Context Separation}
+MT-Eus allocates private stacks and contexts  to each threads
+so that they can run independently of each other. Objects
+such as symbols and conses are allocated in the shared heap
+memory as in sequential EusLisp.
+Therefore, thread-private data such as block labels,
+catch tags, and local variables 
+are protected from other threads, whereas  values (objects) 
+pointed by global variables are visible to all threads allowing
+information exchange among threads.
+
+\begin{figure}[b]
+\begin{center}
+%\epsfile{file=fig/threadfig.ps,width=130mm}
+\mbox{
+\epsfxsize=10cm
+\epsfbox{fig/threadfig.ps}
+}
+
+\caption{Solaris operating system's thread model}\label{threadmodel}
+\end{center}
+\end{figure}
+
+A context consists of a C-stack, a binding-stack and frame 
+pointers that chain lexical blocks such as {\tt lambda, block, catch,
+let, flet}, and so on,  and is established when a new thread
+is created. Since more than one context can be active at
+the same time on a real multi-processor machine, we cannot
+hold a single pointer to the current context in a global variable.
+Rather we have to add one more argument to every internal
+function to transfer the context pointer  from the topmost eval
+to the memory manager at the bottom.
+
+\subsubsection{Memory Management}
+EusLisp adopts a Fibonacci buddy memory management scheme in a
+single heap for every type of object. 
+After running programs having
+different memory request characteristics, we have been convinced that
+Fibonacci buddy can allocate objects of various sizes equally fast,
+garbage-collects quickly without copying , and exhibits high memory
+utilization (the internal loss is 10 to 15\% and the
+external loss is negligible).
+For multithreading, the second point, i.e., non-copying GC, is very
+important.
+If addresses of objects were changed by copying-GC, pointers in the
+stack and CPU registers of all thread contexts would have to be
+redirected to new locations, which is impossible or very difficult. 
+
+All memory allocation requests are handled by the {\tt alloc} function at the
+lowest level.
+{\tt Alloc} does mutex-locking because it manipulates the global
+database of free lists.
+Since we cannot predict when a garbage
+collection begins and which thread causes it, every thread must prepare
+for sporadic GCs.  All pointers to living objects have to be arranged
+to be accessible by the GC anytime to prevent them from being reclaimed
+as garbage.  This is done by storing the pointers to the most recently
+allocated objects in fixed slots of each context, instead of trusting
+they are maintained on the stacks.
+
+Fig. \ref{parathreads} illustrates flow of threads requesting memory and forked inside
+GC to process marking and sweeping in parallel.
+Note that threads that do not request memory or manipulate pointers
+can run in parallel with the GC,
+improving real-time response of the low-level tasks such as signal
+processing and image acquisition.
+
+\begin{figure}
+\begin{center}
+%\epsfile{file=fig/parathreads.ps,width=120mm}
+\mbox{
+\epsfsize=10cm
+\epsfbox{fig/parathreads.ps}
+}
+\caption{Parallel threads requesting memory and GC running in parallel}\label{parathreads}
+\end{center}
+\end{figure}
+
+\subsection{Asynchronous and Parallel Programming Constructs}
+\subsubsection{Thread Creation and Thread Pool}
+In order for Solaris to execute a program in parallel on many
+processors, the program needs to be written as a collection
+of functions, each of which is executed by a thread dynamically
+created in a process.  Although the time required for thread
+creation is faster than process creation, it takes a few
+mili-seconds for EusLisp to start off a thread after allocating
+stacks and setting a page attribute for detecting stack-overflow.
+Since this delay, which should be compared to a function invocation,
+is intolerable, sufficient number of threads are created by
+the {\tt make-thread} function beforehand and put in 
+the system's thread pool,
+eliminating the need for system calls at evaluation time.
+Each thread in the thread pool is represented by a thread object,
+as depicted in Fig.\ref{threadobj},
+consisted of thread-id, several semaphores for synchronization,
+and slots for argument and evaluation result transfer.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{c c}
+%\epsfile{file=fig/threadobj.ps,width=7.5cm} &
+\mbox{
+\epsfsize=10cm
+\epsfbox{fig/threadobj.ps}
+}
+%\epsfile{file=fig/threadpool.ps,width=7.5cm} \\
+\mbox{
+\epsfsize=10cm
+\epsfbox{fig/threadpool.ps}
+}
+\end{tabular}
+\end{center}
+\caption{\label{threadobj}Thread-object for transferring control and data between threads (left) and the collection of threads put in the thread-pool.}
+\end{figure}
+
+\subsubsection{Parallel Execution of Threads}
+For the allocation of parallel computation to threads, the thread function
+is used.
+Thread takes one free thread out of the thread pool,
+transfers arguments via shared memory, wakes up the thread by signaling
+the semaphore as indicated in fig. \ref{threadobj},
+and returns a thread object to the caller without blocking.
+The woken-up thread begins evaluation of
+the argument running in parallel to the calling thread.
+The caller uses
+{\tt wait-thread} to receive the evaluation result from the forked thread.
+The {\tt plist} macro is a more convenient form to describe parallel 
+evaluation of arguments.
+{\tt Plist} attaches threads to evaluate each argument
+and lists up results after waiting for all threads to finish evaluation.
+
+\subsubsection{Synchronization primitives}
+MT-Eus has three kinds of synchronization primitives,
+namely {\em mutex locks, condition variables}, and {\em semaphores}.
+Mutex locks  are used to serialize accesses to shared variables
+between threads.
+Condition variables allow a thread to wait for a condition to become
+true in a mutex-locked section by temporarily releasing and re-acquiring 
+the lock.
+Semaphores are used to inform occurrences of events, or to control
+sharing of finite resources.
+These synchronization primitives cause voluntary context switching,
+while the Solaris kernel generates involuntary task switching
+on a time-sliced scheduling basis.
+
+\begin{figure}
+\begin{center}
+%\epsfile{file=fig/synchports.ps,width=130mm}
+\mbox{
+\epsfsize=10cm
+\epsfbox{fig/synchports.ps}
+}
+\caption{Barrier synchronization and synchronozed memory port}
+\label{synchports}
+\end{center}
+\end{figure}
+
+\subsubsection{Barrier synchronization}
+{\em Barrier-synch} is a mechanism for more than two threads to synchronize
+at the same time (Fig. \ref{synchports}).
+For this purpose, an instance of the barrier class
+is created and threads that participate in
+the synchronization register themselves in the object.
+Then, each thread sends the {\tt :wait} message to the barrier object,
+and the thread is blocked.
+When the last thread registered in the object sends its
+{\tt :wait} message, the waits are released and all waiting
+threads get a return value of T.
+Barrier-sync plays an important role of global clocking in a
+multi-robot simulation.
+
+\subsubsection{Synchronized memory port}
+Synchronized memory port is a kind of stream to exchange data
+between threads (Fig. \ref{synchports}).
+Since all threads in a process share the
+heap memory, if one thread binds an object to a global variable,
+it  instantly becomes visible to other threads.
+However, shared memory lacks capability to send events that the
+global data is updated. Synchronized memory port ensures this 
+synchronization for accessing a shared object. A synchronized
+memory port object consists of one buffer slot and two semaphores
+used for synchronizing  read and write.
+
+\subsubsection{Timers}
+Real-time programs often require functions to execute at
+predetermined timing or to repeat in particular intervals.
+Sequential EusLisp could run user' functions triggered by
+signals generated periodically by Unix's interval timers.
+This preemption can cause deadlock in MT-Eus,
+because interruption may occur within a mutex-ed block.
+Therefore, control must be transferred at secured points
+such as at the beginning of {\tt eval}.
+To avoid delays caused by the above synchronization,
+MT-Eus also provides signal-notification via semaphores.
+In other words, the signal function takes either a function or
+a semaphore that is called or posted upon the signal arrival.
+Since the semaphore is posted at the lowest level, latency
+for synchronization is minimal.
+
+The following a example image processing program
+coded by using the multithread facilities.
+Image input thread and filtering
+threads are created. samp-image takes image data periodically
+by waiting for samp-sem to be posted every 33msec.
+Two threads synchronize via read-and-write of a thread-port.
+Filter-image employs two more threads for parallel computation
+of filtering.
+
+\begin{quote}
+\begin{verbatim}
+(make-threads 8)
+(defun samp-image (p)
+   (let ((samp-sem (make-semaphore)))
+        (periodic-sema-post 0.03 samp-sem)
+        (loop (sema-wait samp-sem)
+              (send p :write (read-image))))
+(defun filter-image (p)
+  (let (img)
+       (loop (setf img (send p :read))
+             (plist (filter-up-half img)
+                    (filter-low-half img)))))
+(setf port (make-thread-port))
+(setf sampler (thread #'samp-image port))
+(setf filter (thread #'filter-image port))
+\end{verbatim}
+\end{quote}
+
+\subsection{Measured Parallel Gains}
+
+Table. \ref{paragain} shows the parallel execution performance
+measured on a Cray Supserserver configured with 32 CPUs.
+Linear parallel gain was obtained for the compiled Fibonacci function,
+because there is no shared memory access and  the program code
+is small enough to be fully loaded onto the cache memory of
+each processor.
+Contrally, when the same program was interpreted, linearly
+high performance could not be attained, since memory access
+scatters. Further, some programs that frequently refer to 
+shared memory and request memory allocation cannot exhibit better
+performance than a single processor execution.
+This can be understood as the result of frequent  cache memory
+purging.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|r|r|r|r|c|}  \hline
+processors & 1 & 2 & 4 & 8 & GC (ratio) \\ \hline
+(a) compiled Fibonacci & 1.0 & 2.0 & 4.0 & 7.8 & 0 \\ \hline
+(b) interpreted Fibonacci & 1.0 & 1.7 & 2.7 & 4.4 & 0 \\ \hline
+(c) copy-seq & 1.0 & 1.3 & 0.76 & 0.71 & 0.15 \\ \hline
+(d) make-cube & 1.0 & 0.91 & 0.40 & 0.39 &  0.15 \\ \hline
+(e) interference-check & 1.0 & 0.88 & 0.55 & 0.34 & 0.21 \\ \hline
+\end{tabular} \\
+\caption{\label{paragain}Parallel gains of programs executed on multi-processors}
+\end{center}
+\end{table}
+
+\subsection{Thread creation}
+A thread is a unit for assigning computation, usually evaluation
+of a lisp form.
+Threads in EusLisp are represented by instances of
+the {\bf thread} class.
+This object is actually a control port of a thread 
+to pass arguments and result, and let it start evaluation,
+rather than the thread's entity representing the context.
+
+\begin{refdesc}
+
+\funcdesc{sys:make-thread}{num \&optional (lsize 32*1024) (csize lsize)}{
+creates {\em num} threads with {\em lsize} words of Lisp stack
+and {\em csize} words of C stack, and put them in the system's
+thread pool.
+All the threads in the thread pool is bound to sys:*threads*,
+which is extended each time {\bf make-thread} is called.
+By the {\bf thread} function, a computation is assigned to one
+of free threads in the thread pool.
+Therefore it is not a good idea to change stack sizes
+from thread to thread,
+since you cannot control which thread is assigned to a specific
+computation.}
+
+\vardesc{sys:*threads*}{
+returns the list of all the threads created by {\bf make-threads}.}
+
+\funcdesc{sys::free-threads}{}{
+returns the list of threads in the
+free thread pool.
+If the result is NIL, new commitment of a task to a thread
+is blocked until any currently running threads finish evaluation
+or new threads are created by {\bf make-thread} in the free thread pool.}
+
+\funcdesc{sys:thread}{func \&rest args}{
+picks up one free thread from the thread pool, and assigns it
+for evaluation of {\em (func . args)}.
+{\bf Sys:thread} can be regarded as asynchronous {\bf funcall},
+since {\bf sys:thread} applies {\em func} to the spread list
+of {\em args} but it does not accept the result of the
+function application.
+Rather, {\bf sys:thread} returns the thread object assigned to
+the funcall, so that the real result can be obtained later
+by {\bf sys:wait-thread}.}
+\begin{quote}
+\begin{verbatim}
+(defun compute-pi (digits) ...)
+(setq trd (sys:thread \#'compute-pi 1000)) ;assign compute-pi to a thread
+...  ;; other computation 
+(sys:wait-thread trd) ;get the result of (compute-pi 1000)
+\end{verbatim}
+\end{quote}
+
+\funcdesc{sys:thread-no-wait}{func \&rest args}{
+assigns computation to one of free threads.
+The thread is reclaimed in the free thread pool when
+it finishes evaluation without being {\bf wait-thread}'ed.}
+
+\funcdesc{sys:wait-thread}{thread}{
+waits for {\em thread} to finish evaluation of funcall given
+by the {\bf sys:thread} function, and retrieves the result
+and returns it.
+{\bf Sys:wait-thread} is mandatory if the thread is assigned
+evaluation by {\bf sys:thread} because the thread is not returned
+to the free thread pool until it finishes transferring the result.}
+ 
+\macrodesc{sys:plist}{\&rest forms}{evaluates {\em forms} by different
+threads in parallel and waits for the completion of all evaluation,
+and the list of results is returned.
+{\bf Sys:plist} may be regarded as {\em parallel-list} except that
+each form listed must be a function call.}
+
+
+\end{refdesc}
+
+\subsection{Synchronization}
+
+Among Solaris operating systems four synchronization primitives for
+multithread programs, EusLisp provides mutex locks, conditional variables,
+and semaphores. Reader-writer lock is not available now.
+
+Based on these primitives, higher level synchronization mechanisms,
+such as synchronized memory port and barrier synchronization, are realized.
+
+\begin{refdesc}
+\funcdesc{sys:make-mutex-lock}{}{
+makes a mutex-lock and returns it. A mutex-lock is represented by an
+integer-vector of six elements.}
+\funcdesc{sys:mutex-lock}{mlock}{
+locks the mutex lock {\em mlock}.
+If the {\em mlock} is already locked by another thread,
+{\em mutex-lock} waits for the lock to be released.}
+
+\funcdesc{sys:mutex-unlock}{mlock}{
+releases {\em mlock} and let one of other threads waiting for this
+lock resume running.}
+
+\macrodesc{sys:mutex}{mlock \&rest forms}{
+Mutex-lock and mutex-unlock have to be used as a pair.
+{\bf Mutex} is a macro that brackets a critical section.
+{\em Mlock} is locked
+before evaluating {\em forms} are evaluated,
+and the lock is released when the evaluation finishes.
+This macro expands to the following progn form.
+Note that {\bf unwind-protect} is used to ensure unlocking
+even an error occurs during the evaluation of {\em forms}.
+}
+\begin{quote}
+\begin{verbatim}
+  (progn
+      (sys:mutex-lock mlock)
+      (unwind-protect
+          (progn . forms)
+          (sys:mutex-unlock mlock)))
+\end{verbatim}
+\end{quote}
+
+\funcdesc{sys:make-cond}{}{makes a condition variable object
+which is an integer vector of four elements.
+The returned condition variable is in unlocked state.}
+
+\funcdesc{sys:cond-wait}{condvar mlock}{
+waits for {\em condvar} to be signaled.
+If {\em condvar} has already been acquired by another thread,
+it releases {\em mlock} and waits for {\em condvar} to be signaled.}
+\funcdesc{sys:cond-signal}{condvar}{signals the {\em condvar} condition variable.}
+\funcdesc{sys:make-semaphore}{}{makes a semaphore object
+which is represented by an integer vector of twelve elements.}
+\funcdesc{sys:sema-post}{sem}{ signals {\em sem}.}
+\funcdesc{sys:sema-wait}{sem}{waits for the {\em sem} semaphore to be posted.}
+
+\classdesc{sys:barrier-synch}{propertied-object}{
+threads n-threads count barrier-cond threads-lock count-lock}
+{represents a structure for barrier-synchronization. Threads waiting
+for the synchronization are put in {\em threads} which is mutually excluded
+by {\em threads-lock}.
+When a {\bf barrier-synch} object is created,
+{\em count} is initialized to zero.
+Synchronizing threads are put in the {\em threads} list by sending {\tt :add}
+message.
+Sending {\tt :wait} to this barrier-sync object causes {\em count} to be
+incremented, and the sending thread is put in the wait state.
+When all the threads in {\em threads} send the {\tt :wait} message,
+the waits are unblocked and all threads resume execution.
+The synchronization is implemented by the combination of
+the {\em count-lock} mutex-lock and the {\em barrier-cond}
+condition-variable.}
+
+\methoddesc{:init}{}{initializes this barrier-synch object. Two mutex-lock
+and one condition-variable are created.}
+\methoddesc{:add}{thr}{adds the {\em thr} thread in the {\em threads} list.}
+\methoddesc{:remove}{thr}{removes the {\em thr} thread of the {\em threads} list.}
+\methoddesc{:wait}{}{waits for all threads in the {\em threads} list
+to issue {\tt :wait}.}
+
+\classdesc{sys:synch-memory-port}{propertied-object}{
+sema-in sema-out buf empty lock}{
+realizes the one-directional synchronized memory port,
+which synchronizes for two threads
+to transfer datum via this object.
+Control transfer is implemented by using semaphores.}
+
+\methoddesc{:read}{}{reads datum buffered in this synch-memory-port.
+If it has not been written yet, the :read blocks.}
+\methoddesc{:write}{datum}{writes {\em datum} in the buffer.
+Since only one word of buffer is available,
+if another datum has already been written and not yet read out,
+:write waits for the datum to be transferred by :read.}
+\methoddesc{:init}{}{initializes this synch-memory-port
+where two semaphores  are created and :write is made acceptable.}
+
+\end{refdesc}

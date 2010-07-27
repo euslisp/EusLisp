@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Message Queues and FIFOs</TITLE>
+<META NAME="description" CONTENT="Message Queues and FIFOs">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2633" HREF="node59.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2631" HREF="node56.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2625" HREF="node57.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2635" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2636" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2634" HREF="node59.html">Sockets</A>
+<B>Up:</B> <A NAME="tex2html2632" HREF="node56.html">InterProcess Communication and Network</A>
+<B> Previous:</B> <A NAME="tex2html2626" HREF="node57.html">Shared Memory</A>
+<BR> <P>
+<H3><A NAME="SECTION03084200000000000000">Message Queues and FIFOs</A></H3>
+<P>
+A message-queue is created by <B>make-msgq-input-stream</B> or <B>make-msgq-output-stream</B>.
+Each of these returns an instance of file-stream, which can then
+accept read and print operations like other streams connected to files.
+The <TT>fname</TT> slot of message-queue stream is set to the key when it is
+created.
+<P>
+To make a stream to FIFO,
+you first create a FIFO node with <B>unix:mknod</B> function
+by setting its second argument <EM>mode</EM>=#o10000,
+and you open it as a normal file.
+Message-queues and FIFOs are created locally on a machine and
+only provide communication channels within the machine.
+<P>
+Note that message-queues and FIFOs are not removed from the system
+even after the owner process terminates.
+Explicit use of <B>unix:msgctl</B> or <B>ipcrm</B> command
+is needed to delete them.
+<P>
+<A NAME=8508>&#160;</A>
+<B>make-msgq-input-stream</B> <EM>key &amp;optional (buffer-size 128) </EM>[function] 
+<UL><LI> returns an input file-stream which is connected to a message-queue
+identified by <EM>key.
+</UL>
+<A NAME=8519>&#160;</A>
+<B>make-msgq-output-stream</B> <EM>key &amp;optional (buffer-size 128) </EM>[function] 
+<UL><LI> returns an output file-stream which is connected to a message-queue
+identified by <EM>key.
+</UL>
+</EM></EM><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

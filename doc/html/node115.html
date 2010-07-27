@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Body Composition</TITLE>
+<META NAME="description" CONTENT="Body Composition">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3443" HREF="node116.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3441" HREF="node109.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3435" HREF="node114.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3445" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3446" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3444" HREF="node116.html">Coordinates-axes</A>
+<B>Up:</B> <A NAME="tex2html3442" HREF="node109.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html3436" HREF="node114.html">Primitive Body Creation</A>
+<BR> <P>
+<A NAME="BodyComposition">&#160;</A><H2><A NAME="SECTION04046000000000000000">Body Composition</A></H2>
+<P>
+<A NAME=17808>&#160;</A>
+<B>face+</B> <EM>face1 face2 </EM>[function] 
+<UL><LI> </UL>
+<A NAME=17819>&#160;</A>
+<B>face*</B> <EM>face1 face2 </EM>[function] 
+<UL><LI> <EM>face1 and <EM>face2 are coplanar faces in 3D space.
+<B>face+</B> composes union of these faces and returns a face object.
+If there is no intersection, original two faces are returned.
+<B>face*</B> returns intersection of these faces.
+If there is no intersection, NIL is returned.
+</UL>
+<A NAME=17833>&#160;</A>
+<B>cut-body</B> <EM>body cutting-plane </EM>[function] 
+<UL><LI> Cuts a body by the <EM>cutting-plane
+and returns a list of faces made at the cross-section.
+</UL>
+<A NAME=17844>&#160;</A>
+<B>body+</B> <EM>body1 body2 &amp;rest more-bodies </EM>[function] 
+<UL><LI> </UL>
+<A NAME=17855>&#160;</A>
+<B>body-</B> <EM>body1 body2 </EM>[function] 
+<UL><LI> </UL>
+<A NAME=17866>&#160;</A>
+<B>body*</B> <EM>body1 body2 </EM>[function] 
+<UL><LI> Computes join, difference or intersection of two or more bodies.
+Each body is copied before each <B>body+, body-</B> and <B>body*</B> operation,
+and original bodies are unchanged.
+The new coordinates of the resulted body is located and oriented
+at the same location and orientation as the world coordinates.
+Even when two bodies are touching face by face,
+these functions are expected to work correctly
+if threshold parameters
+<TT>*coplanar-threshold*, *contact-threshold*,</TT> and <TT>*parallel-threshold*</TT>
+are properly set.
+However, if a vertex of a body is in contact with an edge or a face
+of the other body, any composition operation fails.
+</UL>
+<A NAME=17880>&#160;</A>
+<B>body/</B> <EM>body plane </EM>[function] 
+<UL><LI> Cut the body by a plane which is an instance of class plane
+(made by <B>make-plane</B>).
+A newly created body is returned.
+</UL>
+<A NAME=17891>&#160;</A>
+<B>body-interference</B> <EM>&amp;rest bodies </EM>[function] 
+<UL><LI> Checks interference between each one-to-one combination in <EM>bodies.
+Returns a list of two bodies  that are intersecting.
+<P>
+</UL>
+</EM></EM></EM></EM><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

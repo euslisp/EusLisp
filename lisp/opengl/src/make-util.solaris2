@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -x
+
+cc -c -I../include util.c
+
+# when under TGS-OpenGL
+# ld -G -o util.so util.o -L$HOME/src/TGS-OpenGL/lib -laux -lGLU -lGL -L/usr/openwin/lib -ldga -lXt -lXext -lXau -lX11 -lXext -lsocket -lm
+
+# when under Mesa
+/usr/ucb/ld -G -o util.so util.o -L$HOME/src/Mesa-sunos5/lib -laux -lGLU -lGL -L/usr/openwin/lib -ldga -lXt -lXext -lXau -lX11 -lXext -lsocket -lm

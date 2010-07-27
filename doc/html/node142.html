@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Pixel-Image</TITLE>
+<META NAME="description" CONTENT="Pixel-Image">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3784" HREF="node143.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3782" HREF="node140.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3776" HREF="node141.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3786" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3787" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3785" HREF="node143.html">Color-Pixel-Image</A>
+<B>Up:</B> <A NAME="tex2html3783" HREF="node140.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html3777" HREF="node141.html">Look-Up Tables (LUT)</A>
+<BR> <P>
+<H2><A NAME="SECTION04082000000000000000">Pixel-Image</A></H2>
+<P>
+A single plane of 
+image data is represented by  <B>pixel-image</B> object.
+<B>pixel-image</B> is a two-dimensional array of bytes.
+The interpretation of each byte is application dependent.
+Although it is most commonly used to represent brightness of a pixel,
+it may be used to represent edge intensity, gradient direction,
+color component intensity, bar graph, or whatever.
+<P>
+<A NAME=25083>&#160;</A>
+<B>pixel-image </B> [class]  <PRE><TT> :super B<>array</B>
+<P>
+:slots 		 xpicture display-lut histogram
+<P>
+		brightness-distribution0
+<P>
+		brightness-distribution1
+<P>
+		brightness-covariance
+<P>
+</TT></PRE>
+<UL><LI> 
+<TT>Pixel-image</TT> is the two dimensional array with displaying facility
+in xwindows. The pixel conversion is performed by <EM>display-lut</EM> and
+the resulted image is stored in <EM>xpicture</EM>.
+Major axis is taken vertically. The pixel of <TT>img</TT> at <TT>(x, y)</TT>
+should be accessed by <TT>(aref img y x)</TT>.
+</UL>
+<A NAME=25106>&#160;</A>
+<B>:width</B> <EM></EM>[method] 
+<UL><LI> returns the horizontal size of a pixel-image,
+which is the second dimension.
+</UL>
+<A NAME=25116>&#160;</A>
+<B>:height</B> <EM></EM>[method] 
+<UL><LI> returns the vertical size of a pixel-image.
+</UL>
+<A NAME=25126>&#160;</A>
+<B>:size</B> <EM></EM>[method] 
+<UL><LI> is equivalent to array-total-size.
+</UL>
+<A NAME=25136>&#160;</A>
+<B>:transpose</B> <EM>
+&amp;optional (result (instance (class self) :init dim0 dim1)) </EM>[method] 
+<UL><LI> exchanges x and y coordinates.
+</UL>
+<A NAME=25146>&#160;</A>
+<B>:map-picture</B> <EM>lut &amp;optional (result (send self :duplicate)) </EM>[method] 
+<UL><LI> This pixel-image is translated by the <EM>lut and stored in <EM>result.
+<P>
+</UL>
+<A NAME=25158>&#160;</A>
+<B>:map</B> <EM>fn &amp;optional (result (send self :duplicate)) </EM>[method] 
+<UL><LI> applies function <EM>fn to all the pixels in the image,
+and put the result in the <EM>result pixel-image.
+</UL>
+<A NAME=25170>&#160;</A>
+<B>:brightest-pixel</B> <EM></EM>[method] 
+<UL><LI> finds the brightest pixel value in this image.
+</UL>
+<A NAME=25180>&#160;</A>
+<B>:darkest-pixel</B> <EM></EM>[method] 
+<UL><LI> finds the darkest pixel value in this image.
+</UL>
+<A NAME=25190>&#160;</A>
+<B>:average-pixel</B> <EM></EM>[method] 
+<UL><LI> calculates the average intensity of all 
+the pixels in this image.
+</UL>
+<A NAME=25200>&#160;</A>
+<B>:halve</B> <EM>&amp;optional simage </EM>[method] 
+<UL><LI> returns pixel-image that is shrunk into half-size image.
+</UL>
+<A NAME=25210>&#160;</A>
+<B>:subimage</B> <EM>x y subwidth subheight </EM>[method] 
+<UL><LI> cuts out a <EM>subwidth x <EM>subheight rectangular region
+with its top-left corner at <EM>(x,y) of this image.
+The origin of the image is taken at the top-left corner.
+<TT>:Subimage</TT> returns a  new pixel-image object.
+<P>
+</UL>
+<A NAME=25224>&#160;</A>
+<B>:xpicture</B> <EM>&amp;optional lut </EM>[method] 
+<UL><LI> translates this image using the look-up table <EM>lut
+and sets translated pixel-image object to <EM>xpicture.
+</UL>
+<A NAME=25236>&#160;</A>
+<B>:display-lut</B> <EM>&amp;optional newlut </EM>[method] 
+<UL><LI> sets look-up table <EM>newlut as display-lut.Then 
+translates this image using this look-up table
+and sets translated pixel-image object as xpicture.
+</UL>
+<A NAME=25247>&#160;</A>
+<B>:display</B> <EM>(xwin geometry:*viewsurface*) </EM>[method] 
+<UL><LI> displays this pixel-image in the <EM>xwin xwindow by using <TT>:putimage</TT>.
+Each pixel value is referred as a index in x's color map.
+To get a desired appearance, this pixel-image must have been translated
+by proper LUTs.
+</UL>
+<A NAME=25259>&#160;</A>
+<B>:duplicate</B> <EM></EM>[method] 
+<UL><LI> makes an instance of the same class
+as this image object with the same width and height.
+The pixel data are not copied.
+</UL>
+<A NAME=25269>&#160;</A>
+<B>:copy-from</B> <EM>src </EM>[method] 
+<UL><LI> copies pixel data from another
+image object specified by <EM>src. <EM>src must be of the
+same dimension as this image.
+</UL>
+<A NAME=25281>&#160;</A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[method] 
+<UL><LI> prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</UL>
+<A NAME=25291>&#160;</A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[method] 
+<UL><LI> prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</UL>
+<A NAME=25301>&#160;</A>
+<B>:grin1</B> <EM>strm &amp;rest msg </EM>[method] 
+<UL><LI> prints this image-pixel object with its name and dimensions.
+</UL>
+<A NAME=25311>&#160;</A>
+<B>:init</B> <EM>w h &amp;optional imgvec </EM>[method] 
+<UL><LI> initializes a pixel-image object to have <EM>w width and <EM>h height.
+<P>
+</UL>
+<A NAME=25323>&#160;</A>
+<B>:amplify</B> <EM>rate &amp;optional (result (send self :duplicate) </EM>[method] 
+<UL><LI> multiplies <EM>rate to each pixel value.
+</UL>
+<A NAME=25334>&#160;</A>
+<B>:compress-gray-scale</B> <EM>levels &amp;optional result  &amp;aux pict2 </EM>[method] 
+<UL><LI> translates this image into range of 0..<EM>levels
+and returns translated pixel-image object.
+</UL>
+<A NAME=25345>&#160;</A>
+<B>:lut</B> <EM>lut1 &amp;optional (result (send self :duplicate)) </EM>[method] 
+<UL><LI> translates this image using the look-up table <EM>lut1
+and returns translated pixel-image object.
+</UL>
+<A NAME=25356>&#160;</A>
+<B>:lut2</B> <EM>lut1 lut2 &amp;optional (result (send self :duplicate)) </EM>[method] 
+<UL><LI> translates this image using a look-up table that concatenated <EM>lut1 
+and <EM>lut1. And returns translated pixel-image object.
+</UL>
+<A NAME=25368>&#160;</A>
+<B>:histogram</B> <EM></EM>[method] 
+<UL><LI> counts the occurrence of each pixel value in this image and returns 
+an integer-vector representing the histogram.
+</UL>
+<A NAME=25378>&#160;</A>
+<B>:brightness-distribution</B> <EM></EM>[method] 
+<UL><LI> returns brightness-distribution.
+</UL>
+<A NAME=25388>&#160;</A>
+<B>:optimum-threshold</B> <EM></EM>[method] 
+<UL><LI> returns levels that is maximum of this image's brightness-distribution.
+</UL>
+<A NAME=25398>&#160;</A>
+<B>:project-x</B> <EM></EM>[method] 
+<UL><LI> adds all pixel values of the same x coordinate
+and returns a vector of these values.
+</UL>
+<A NAME=25408>&#160;</A>
+<B>:project-y</B> <EM></EM>[method] 
+<UL><LI> adds all pixel values of the same y coordinate
+and returns a vector of these values.
+</UL>
+<A NAME=25418>&#160;</A>
+<B>:digitize</B> <EM>threshold &amp;optional (val0 0) (val1 255) result </EM>[method] 
+<UL><LI> translates this image into 2 levels image <EM>val0 and <EM>val1
+using <EM>threshold.
+</UL>
+<A NAME=25431>&#160;</A>
+<B>:and</B> <EM>img2 </EM>[method] 
+<UL><LI> bit-and operates between this image and <EM>img2,
+ and returns operated pixel-image.
+</UL>
+<A NAME=25442>&#160;</A>
+<B>:plot</B> <EM>min max &amp;optional color viewsurface </EM>[method] 
+<UL><LI> plots pixels having values between <EM>min and <EM>max inclusively
+with <EM>color (gc) on <EM>viewsurface.
+</UL>
+<A NAME=25456>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing25457" SRC="img89.gif"  > <P>
+<UL><LI> 
+detects edge of this image. And displays this edge on this image.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3784" HREF="node143.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3782" HREF="node140.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3776" HREF="node141.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3786" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3787" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3785" HREF="node143.html">Color-Pixel-Image</A>
+<B>Up:</B> <A NAME="tex2html3783" HREF="node140.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html3777" HREF="node141.html">Look-Up Tables (LUT)</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

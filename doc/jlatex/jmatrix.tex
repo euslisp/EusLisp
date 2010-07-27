@@ -1,0 +1,525 @@
+\section{幾何学関数}
+\markright{\arabic{section}. 幾何学関数}
+
+\subsection{実数ベクトル(float-vector)}
+
+float-vectorは、要素が実数である1次元ベクトルである。
+float-vectorは、どんなサイズでも良い。
+{\em result}が引き数リストで指定されているとき、
+その{\em result}はfloat-vectorであるべきである。
+
+\begin{refdesc}
+
+\funcdesc{float-vector}{\&rest numbers}{
+{\em numbers}を要素とするfloat-vectorを新しく作る。
+{\tt (float-vector 1 2 3)}と{\tt \#F(1 2 3)}の違いに注意すること。
+前者は、呼ばれたときはいつでもベクトルが生成されるが、
+後者は読み込まれたときのみ生成される。}
+
+\funcdesc{float-vectorp}{obj}{
+{\em obj}がfloat-vectorであるならば、Tを返す。}
+
+\funcdesc{v+}{fltvec1 fltvec2 \&optional result}{
+2つのfloat-vectorを加える。}
+
+\funcdesc{v-}{fltvec1 \&optional fltvec2  result}{
+2つのfloat-vectorを差し引く。もし、{\em fltvec2}が省略されているならば、
+{\em fltvec1}の符号が反転される。}
+
+\funcdesc{v.}{fltvec1 fltvec2}{2つのfloat-vectorの内積を計算する。}
+
+\funcdesc{v*}{fltvec1 fltvec2 \&optional result}{
+2つのfloat-vectorの外積を計算する。}
+
+\funcdesc{v.*}{fltvec1 fltvec2 fltvec3}{
+スカラー3重積を計算する。{\tt (v.* A B C)=(V. A (V* B C))=(V. (V* A B) C)}}
+
+\funcdesc{v$<$}{fltvec1 fltvec2}{
+もし、{\em fltvec1}の要素が{\em fltvec2}の対応する要素よりすべて小さいとき、
+Tを返す。}
+
+\funcdesc{v$>$}{fltvec1 fltvec2}{
+もし、{\em fltvec1}の要素が{\em fltvec2}の対応する要素よりすべて大きいとき、
+Tを返す。}
+
+\funcdesc{vmin}{\&rest fltvec}{
+{\em fltvec}の中のそれぞれの次元における最小値を捜し、
+その値でfloat-vectorを新しく作る。{\bf vmin}と{\bf vmax}は、
+頂点の座標から最小のminimal-boxを見つけるために使用される。}
+
+\funcdesc{vmax}{\&rest fltvec}{
+{\em fltvec}の中のそれぞれの次元における最大値を捜し、
+その値でfloat-vectorを新しく作る。}
+
+\funcdesc{minimal-box}{v-list minvec maxvec [err]}{
+与えられた{\em v-list}に対して{\tt minimal bounding box}を計算し、
+その結果を{\em minvec}と{\em maxvec}に蓄積する。
+もし、実数{\em err}が指定されているならば、{\tt minimal box}はその比率によって
+成長する。すなわち、もし{\em err}が0.01のとき、{\em minvec}のそれぞれの
+要素は{\em minvec}と{\em maxvec}との距離の1\%減少する。
+そして、{\em maxvec}のそれぞれの要素は1\%増加する。
+{\bf minimal-box}は、{\em minvec}と{\em maxvec}との距離を返す。}
+
+\funcdesc{scale}{number fltvec \&optional result}{
+{\em fltvec}のすべての要素をスカラー{\em number}倍する。}
+
+\funcdesc{norm}{fltvec}{{\em fltvec}のノルムを求める。{\tt $\Vert fltvec\Vert$}}
+\funcdesc{norm2}{fltvec}{{\em fltvec}のノルムの２乗を求める。
+{\tt $\Vert fltvec\Vert^2$=(v. fltvec fltvec)}}
+\funcdesc{normalize-vector}{fltvec \&optional result}{
+{\em fltvec}のノルムが1.0となるように正規化する。}
+\funcdesc{distance}{fltvec1 fltvec2}{
+2つのfloat-vectorの距離を返す。$|fltvec-fltvec2|$}
+\funcdesc{distance2}{fltvec1 fltvec2}{
+2つのfloat-vectorの距離の2乗を返す。$|fltvec-fltvec2|^2$}
+
+\funcdesc{homo2normal}{homovec \&optional normalvec}{
+同次ベクトル{\em homovec}を正規表現に変換する。}
+
+\funcdesc{homogenize}{normalvec \&optional homovec}{
+正規ベクトル{\em normalvec}を同次表現に変換する。}
+
+\funcdesc{midpoint}{p p1 p2 \&optional result}{
+{\em p}は実数で、{\em p1,p2}は同次元のfloat-vectorである。
+{\em p1$-$p2}を$p:(1-p)$の比率で等分した点$(1-p)\cdot p1 + p\cdot p2$
+を返す。}
+
+\funcdesc{rotate-vector}{fltvec theta axis \&optional result}{
+2次元あるいは3次元の{\em fltvec}を{\em axis}回りに{\em theta}ラジアン
+回転する。
+{\em axis}は、{\em :x, :y, :z, 0, 1, 2}, または NILの内の一つである。
+{\em axis}がNILのとき、{\em fltvec}は2次元として扱われる。
+3次元空間の任意の軸の回りにベクトルを回転するためには、
+{\bf rotation-matrix}で回転行列を作り、そのベクトルにかければよい。}
+
+\end{refdesc}
+
+\subsection{行列と変換}
+
+行列は、要素がすべて実数の2次元の配列である。
+ほとんどの関数において行列はどんなサイズでもよいが、
+{\bf v*, v.*, euler-angle, rpy-angle}関数では3次元の行列のみ
+扱うことができる。
+{\bf transform, m*}と{\bf transpose}は、行列を正方行列に限定せず、
+一般のn*m行列に対して処理を行う。
+
+{\em result}パラメータを受けた関数は、計算結果をそこに置く。
+そのため、ヒープは使用しない。
+すべての行列関数は、正規座標系における変換を考慮しており、
+同次座標系は考慮していない。
+
+{\bf rpy-angle}関数は、回転行列をワールド座標系におけるz,y,x軸回りの
+3つの回転角に分解する。
+{\bf euler-angle}関数は{\bf rpy-angle}と同様に分解するが、
+回転軸がローカル座標系のz,y,z軸となっている。
+角度が反対方向にも得られるため、これらの関数は2つの解を返す。
+
+\begin{verbatim}
+; Mat is a 3X3 rotation matrix.
+(setq rots (rpy-angle mat))
+(setq r (unit-matrix 3))
+(rotate-matrix r (car rots) :x t r)
+(rotate-matrix r (cadr rots) :y t r)
+(rotate-matrix r (caddr rots) :z t r)
+;--> resulted r is equivalent to mat
+\end{verbatim}
+
+3次元空間の位置と方向の組みを保つために、\ref{Coordinates}節に記載されている
+{\bf coordinates}と{\bf cascaded-coords}クラスを使用すること。
+
+\begin{refdesc}
+\funcdesc{matrix}{\&rest elements}{
+{\em elements}から行列を新しく作る。
+{\tt Row x Col = (elementsの数) x (最初のelementの長さ)}
+{\em elements}は、どの型の列でもよい。
+それぞれの列は行列の行ベクトルとしてならべられる。}
+
+\funcdesc{make-matrix}{rowsize columnsize \&optional init}{
+$rowsize \times columnsize$の大きさの行列を作る。}
+
+\funcdesc{matrixp}{obj}{
+もし、{\em obj}が行列のとき、すなわち、{\em obj}が2次元の配列で
+その要素が実数であるとき、Tを返す。}
+
+\funcdesc{matrix-row}{mat row-index}{
+行列{\em mat}から{\em row-index}で示される行ベクトルを抽出する。
+{\bf matrix-row}は、{\bf setf}を使用することにより
+行列の特定の行にベクトルを設定することにも使用される。}
+\funcdesc{matrix-column}{mat column-index}{
+行列{\em mat}から{\em coloumn-index}で示される列ベクトルを抽出する。
+{\bf matrix-column}は、{\bf setf}を使用することにより
+行列の特定の列にベクトルを設定することにも使用される。}
+\funcdesc{m*}{matrix1 matrix2 \&optional result}{
+{\em matrix1}と{\em matrix2}の積を返す。}
+\funcdesc{transpose}{matrix \&optional result}{
+{\em matrix}の転置行列を返す。すなわち、{\em matrix}の列と行を入れ替える。}
+\funcdesc{unit-matrix}{dim}{
+{\em dim} $\times$ {\em dim}の単位行列を作る。}
+\funcdesc{replace-matrix}{dest src}{
+行列{\em dest}のすべての要素を同一な行列{\em src}で置き換える。}
+
+\funcdesc{scale-matrix}{scalar mat}{
+{\em mat}のすべての要素に{\em scaler}を掛ける。}
+
+\funcdesc{copy-matrix}{matrix}{
+{\em matrix}のコピーを作る。}
+
+\funcdesc{transform}{matrix fltvector \&optional result}{
+行列{\em matrix}をベクトル{\em fltvector}の左から掛ける。}
+\funcdesc{transform}{fltvector matrix \&optional result}{
+行列{\em matrix}をベクトル{\em fltvector}の右から掛ける。}
+
+\funcdesc{rotate-matrix}{matrix theta axis \&optional world-p result}{
+{\bf rotate-matrix}で行列{\em matrix}を回転させるとき、
+回転軸（{\bf :x, :y, :z}または0,1,2）はワールド座標系あるいは
+ローカル座標系のどちらかを与えられる。
+もし、{\em world-p}にNILが指定されているとき、
+ローカル座標系の軸に沿った回転を意味し、回転行列を左から掛ける。
+もし、{\em world-p}がnon-NILのとき、
+ワールド座標系に対する回転行列を作り、回転行列を右から掛ける。
+もし、{\em axis}にNILが与えられたとき、行列{\em matrix}は2次元と仮定され、
+{\em world-p}の如何にかかわらず2次元空間の回転が与えられる。}
+
+
+\funcdesc{rotation-matrix}{theta axis \&optional result}{
+{\em axis}軸回りの2次元あるいは3次元の回転行列を作る。
+軸は:x,:y,:z,0,1,2,3次元ベクトルあるいはNILのどれかである。
+2次元回転行列を作るとき、{\em axis}はNILでなければならない。}
+
+\funcdesc{rotation-angle}{rotation-matrix}{
+{\em rotation-matrix}から等価な回転軸と角度を抽出し、
+実数とfloat-vectorのリストを返す。
+{\em rotation-matrix}が単位行列のとき、NILが返される。
+また、回転角が小さいとき、結果がエラーとなる。
+{\em rotation-matrix}が2次元のとき、1つの角度値が返される。}
+
+\funcdesc{rpy-matrix}{ang-z ang-y ang-x}{
+ロール、ピッチ、ヨー角で定義される回転行列を作る。
+最初に、単位行列をx軸回りに{\em ang-x}ラジアン回転させる。
+次に、y軸回りに{\em ang-y}ラジアン、最後にｚ軸回りに{\em ang-z}
+ラジアン回転させる。
+すべての回転軸はワールド座標系で与えられる。}
+
+\funcdesc{rpy-angle}{matrix}{
+{\em matrix}の2組のロール、ピッチ、ヨー角を抽出する。}
+
+\funcdesc{Euler-matrix}{ang-z ang-y ang2-z}{
+3つのオイラー角で定義される回転行列を作る。
+最初に単位行列をz軸回りに{\em ang-z}回転させ、次にy軸回りに{\em ang-y}
+回転させ、最後にz軸回りに{\em ang2-z}回転させる。
+すべての回転軸はローカル座標系で与えられる。}
+
+\funcdesc{Euler-angle}{matrix}{
+{\em matrix}から2組のオイラー角を抽出する。}
+
+%\funcdesc{set-matrix-row}{mat row-index values}{
+%puts values in the {\em row-index}th row of matrix {\em mat}.}
+
+%\funcdesc{set-matrix-column}{mat column-index values}{
+%put values in the {\em column-index}th column of of matrix {\em mat}.}
+\end{refdesc}
+
+\subsection{LU分解}
+{\bf lu-decompose}と{\bf lu-solve}は、線形の連立方程式を
+解くために用意されている。
+最初に、{\bf lu-decompose}は行列を下三角行列を上三角行列に分解する。
+もし、行列が特異値なら、{\bf lu-decompose}はNILを返す。
+そうでなければ、{\bf lu-solve}に与えるべき順列ベクトルを返す。
+{\bf lu-solve}は、与えられた定数ベクトルの解をLU行列で計算する。
+この手法は、同じ係数行列と異なった定数ベクトルのたくさんの組に対して
+解を求めたいときに効果的である。
+%These functions are coded in C, and they computes a solution
+%for a 3*3 matrix within 3 milli-sec on sun3.
+{\bf simultaneous-equation}は、1つの解だけを求めたいときにもっとも
+手軽な関数である。
+{\bf lu-determinant}は、LU分解された行列の行列式を計算する。
+{\bf inverse-matrix}関数は、{\bf lu-decompose}を1回と{\bf lu-solve}をn回
+使って逆行列を求める。
+3*3行列での計算時間は約4msである。
+
+\begin{refdesc}
+
+\funcdesc{lu-decompose}{matrix \&optional result}{
+{\em matrix}にLU分解を実行する。}
+
+\funcdesc{lu-solve}{lu-mat perm-vector bvector [result]}{
+LU分解された1次連立方程式を解く。
+{\em perm-vector}は、{\bf lu-decompose}で返された結果でなければならない。}
+
+\funcdesc{lu-determinant}{lu-mat perm-vector}{
+LU分解された行列の行列式を求める。}
+
+\funcdesc{simultaneous-equation}{mat vec}{
+係数が{\em mat}で、定数が{\em vec}で記述される1次連立方程式を解く。}
+
+\funcdesc{inverse-matrix}{mat}{
+正方行列{\em mat}の逆行列を求める。}
+
+\funcdesc{pseudo-inverse}{mat}{
+特異値分解を用いて擬似逆行列を求める。}
+
+\end{refdesc}
+
+\newpage
+
+\subsection{\label{Coordinates}座標系}
+
+座標系と座標変換は、{\bf coordinates}クラスで表現される。
+4*4の同次行列表現の代わりに、
+Euslisp内で座標系は、高速性と一般性のために
+3*3の回転行列と3次元位置ベクトルの組で表現される。
+
+\begin{refdesc}
+
+\classdesc{coordinates}{propertied-object}
+{(pos :type float-vector \\
+\>  rot :type array)}
+{位置ベクトルと3x3の回転行列の組みで座標系を定義する。}
+
+\funcdesc{coordinates-p}{obj}{
+{\em obj}が{\bf coordinates}クラスかまたはそのサブクラスのインスタンス
+のとき、Tを返す。}
+
+\methoddesc{:rot}{}{
+この座標系の3x3回転行列を返す。}
+
+\methoddesc{:pos}{}{
+この座標系の3次元位置ベクトルを返す。}
+
+\methoddesc{:newcoords}{newrot newpos}{
+{\em newrot}と{\em newpos}でこの座標系を更新する。
+この座標系の状態が変化するときはいつでも、このメソッドを用いて新しい
+回転行列と位置ベクトルに更新するべきである。
+このメッセージはイベントを伝えて他の{\bf :update}メソッドを呼び出す。}
+
+\methoddesc{:replace-coords}{newrot newpos}{
+{\em :newcoords}メソッドを呼び出さずに{\tt rot}と{\tt pos}スロットを変更する。}
+\metdesc{:coords}{}
+
+\methoddesc{:copy-coords}{\&optional dest}{
+もし{\em dest}が与えられなかったとき、{\bf :copy-coords}は同じ{\tt rot}と{\tt pos}
+スロットを持つ座標系オブジェクトを作る。
+もし、{\em dest}が与えられたとき、{\em dest}座標系にこの座標系のrotとposを
+コピーする。}
+
+\methoddesc{:reset-coords}{}{
+この座標系の回転行列を単位行列にし、位置ベクトルをすべてゼロにする。}
+
+\metdesc{:worldpos}{}
+\metdesc{:worldrot}{}
+\methoddesc{:worldcoords}{}{
+このオブジェクトのワールド座標系における位置ベクトル・回転行列・座標系
+を計算する。
+その座標系は、いつもワールド座標系で表現されていると仮定され、
+これらのメソッドは簡単に{\tt pos}と{\tt rot}と{\tt self}を返すことができる。
+これらのメソッドは{\bf cascaded-coords}クラスと互換性がとられている。
+{\bf cascaded-coords}ではワールド座標系での表現と仮定していない。}
+
+\methoddesc{:copy-worldcoords}{\&optional dest}{
+最初に、ワールド座標系が計算され、{\em dest}にコピーされる。
+もし、{\em dest}が指定されてないとき、新たに{\bf coordinates}
+オブジェクトを作る。}
+
+\methoddesc{:rotate-vector}{vec}{
+この座標系の回転行列によって{\em vec}を回転させる。すなわち、
+この座標系で表現される方向ベクトルをワールド座標系における表現
+に変換する。
+この座標系の位置は、回転に影響を与えない。}
+
+\methoddesc{:transform-vector}{vec}{
+この座標系で表現される{\em vec}をワールド座標系の表現に変換する。}
+
+\methoddesc{:inverse-transform-vector}{vec}{
+ワールド座標系における{\em vec}をローカル座標系の表現に逆変換する。}
+
+\methoddesc{:transform}{ trans \&optional (wrt :local)}{
+{\em wrt}座標系で表現される{\em trans}によってこの座標系を変換する。
+{\em trans}は座標系の型でなければならないし、{\em wrt}は
+{\tt :local, :parent, :world}のキーワードあるいは{\bf coordinates}の
+インスタンスでなければならない。
+もし{\em wrt}が{\tt :local}のとき、{\em trans}をこの座標系の右
+から適用する。もし{\em wrt}が{\tt :world, :parent}のとき、
+{\em trans}を左から掛ける。
+もし{\em wrt}が{\bf coordinates}の型であるとき、{\em wrt}座標系で表現される
+{\em trans}は最初にワールド座標系の表現に変換され、左から掛ける。}
+
+\methoddesc{:move-to}{trans \&optional (wrt :local)}{
+{\em wrt}で表現される{\em trans}でこの座標系の{\tt rot}と{\tt pos}
+を置き換える。}
+
+\methoddesc{:translate}{ p \&optional (wrt :local)}{
+このオブジェクトの位置を{\em wrt}座標系で相対的に変更する。}
+
+\methoddesc{:locate}{ p \&optional (wrt :local)}{
+この座標系の位置を{\em wrt}座標系で絶対的に変更する。
+もし、{\em wrt}が{\tt :local}のとき、{\bf :translate}と同一な
+効果を生む。}
+
+\methoddesc{:rotate}{ theta axis \&optional (wrt :local)}{
+{\em axis}軸回りに{\em theta}ラジアンだけ相対的にこの座標系を回転させる。
+{\em axis}は、軸キーワード({\tt :x, :y, :z})あるいは任意の{\tt float-vector}
+である。
+{\em axis}は{\em wrt}座標系で表現されていると考える。
+よって、もし{\em wrt}が{\tt :local}で{\em axis}が{\tt :z}であるとき、
+座標系はローカル座標系のz軸回りに回転される。
+もし{\em wrt}が{\tt :world, :parent}であるとき、ワールド座標系のz軸回りに
+回転される。
+言い換えると、もし{\em wrt}が{\tt :local}のとき、
+回転行列はこの座標系の右から掛けられる。
+そして、もし{\em wrt}が{\tt :world}あるいは{\tt :parent}のとき、
+回転行列は左から掛けられる。
+{\em wrt}が{\tt :world}あるいは{\tt :parent}でさえ、
+この座標系の{\tt pos}ベクトルは変化しない。
+本当にワールド座標系の軸回りに回転するためには、
+回転を表現する{\bf coordinates}クラスのインスタンスを
+{\bf :transform}メソッドに与えなければならない。}
+
+\methoddesc{:orient}{ theta axis \&optional (wrt :local)}{
+{\tt rot}を強制的に変更する。{\bf :rotate}メソッドの絶対値版である。}
+
+\methoddesc{:inverse-transformation}{}{
+この座標系の逆変換を持つ座標系を新しく作る。}
+
+\methoddesc{:transformation}{ coords (wrt :local)}{
+この座標系と引き数で与えられる{\em coords}との間の変換を作る。
+もし、{\em wrt}が{\tt :local}であるとき、ローカル座標系で表現される。
+すなわち、もしこの{\bf :transformation}の結果を{\bf :transform}の引き数として
+{\em wrt}={\tt :local}と一緒に
+与えたとき、この座標系は{\em coords}と同一な座標系に変換される。}
+
+\methoddesc{:Euler}{ az1 ay az2}{
+オイラー角({\em az1, ay, az2})で表現される回転行列を{\tt rot}に
+設定する。}
+
+\methoddesc{:roll-pitch-yaw}{roll pitch yaw}{
+ロール・ピッチ・ヨー角で表現される回転行列を{\tt rot}に設定する。}
+
+\methoddesc{:4x4}{\&optional mat44}{
+もし、{\em mat44}として4x4行列が与えられるとき、3x3回転行列と3次元位置ベクトル
+の座標表現に変換される。
+もし、{\em mat44}が与えられないとき、この座標系の表現を
+4x4の同次行列表現に変換して返す。}
+
+\longdescription{:init}{\&key \= :pos \hspace{8mm} \= \#f(0 0 0)
+ \` [メソッド] \\
+% \hspace{95mm} [メソッド] \\
+ \> :rot \> \#2f((1 0 0) (0 1 0) (0 0 1)) \\
+ \> :rpy \> roll pitch yaw \\
+ \> :Euler \> az ay az2 \\
+ \> :axis \>  rotation-axis \\
+ \> :angle \> rotation-angle \\
+ \> :4X4   \> 4x4 matrix \\
+ \> :coords \> another coordinates \\
+ \> :properties \>  a list of (ind . value) pair \\
+ \> :name \> name property \\}{
+この{\bf coordinates}オブジェクトを初期化し、{\tt rot}と{\tt pos}を設定する。
+それぞれのキーワードの意味は、以下に示す通りである。
+\begin{description}
+\item[:dimension] 2あるいは3 (デフォルトは 3)
+\item[:pos] 位置ベクトルを指定する (デフォルトは \#f(0 0 0))
+\item[:rot] 回転行列を指定する (デフォルトは単位行列)
+\item[:Euler] オイラー角として3つの要素の列を与える
+\item[:rpy] ロール・ピッチ・ヨー角として3つの要素の列を与える
+\item[:axis] 回転軸 ({\tt :x,:y,:z} あるいは任意の{\tt float-vector})
+\item[:angle] 回転角 ({\em :axis}と一緒に使用)
+\item[:wrt] 回転軸を示す座標系 (デフォルトは {\tt :local})
+\item[:4X4] 4X4 行列({\tt pos}と{\tt rot}を同時に指定)
+\item[:coords] {\em coords}から{\tt rot}と{\tt pos}をコピーする
+\item[:name] {\tt :name}値を設定する。
+\end{description}
+{\em :angle}は{\em :axis}と組みで唯一使用することができる。
+その軸は{\em :wrt}座標系で決定される。
+{\em :wrt}と関係なしに{\em :Euler}はローカル座標系で定義されるオイラー角
+（{\em az1, ay}と{\em az2}）をいつも指定する。
+また、{\em :rpy}はワールド座標系の{\em z}, {\em y}と{\em x}軸回りの角度
+を指定する。
+{\em :rot, :Euler, :rpy, :axis, :4X4}の中から２つ以上を連続で指定することは
+できない。しかしながら、指定してもエラーは返さない。
+{\em axis}と{\em :angle}パラメータには列を指定することができる。
+その意味は、与えられた軸回りの回転を連続的に処理する。
+属性とその値の組みのリストを{\em :properties}の引き数として
+与えることができる。これらの組みは、この座標系の{\tt plist}にコピーされる。}
+
+\subsection{連結座標系}
+
+\classdesc{cascaded-coords}{coordinates}
+{(parent descendants worldcoords manager changed)}
+{連結された座標系を定義する。{\bf cascaded-coords}は、
+しばしば{\bf cascoords}と略す。}
+
+\methoddesc{:inheritance}{ }{
+この{\bf cascaded-coords}の子孫をすべて記述した継承treeリストを返す。
+もし、{\tt a}と{\tt b}がこの座標系の直下の子孫で{\tt c}が{\tt a}の
+子孫であるとき、{\tt ((a (c)) (b))}を返す。}
+
+\methoddesc{:assoc}{childcoords \&optional relative-coords}{
+{\em childcoords}は、この座標系の子孫として関係している。
+もし、{\em childcoords}が既に他の{\bf cascaded-coords}に{\bf assoc}されて
+いるとき、{\em childcoords}はそれぞれの{\bf cascaded-coords}が1つの親しか
+持っていないなら{\bf dessoc}される。
+ワールド座標系における{\em childcoords}の方向あるいは位置は変更されない。}
+
+\methoddesc{:dissoc}{childcoords}{
+この座標系の子孫リストから{\em childcoords}を外す。
+ワールド座標系における{\em childcoords}の方向あるいは位置は変更されない。}
+
+\methoddesc{:changed}{}{
+この座標系の親座標系が変更されていることを通知する。
+また、もっとあとでワールド座標系が要求されたとき、ワールド座標系を再計算する
+必要がある。}
+
+\methoddesc{:update}{ }{
+現在のワールド座標系を再計算するために{\bf :worldcoords}メソッド
+を呼び出す。}
+
+\methoddesc{:worldcoords}{}{
+ルートの座標系からこの座標系までの全ての座標系を連結させることにより、
+この座標系をワールド座標系で表現した{\bf coordinates}オブジェクトで返す。
+その結果は、このオブジェクトが持ち、後に再利用される。
+よって、この結果の座標系を変更すべきでない。}
+
+\methoddesc{:worldpos}{}{
+ワールド座標系で表現したこの座標系の{\tt rot}を返す。}
+
+\methoddesc{:worldrot}{}{
+ワールド座標系で表現したこの座標系の{\tt pos}を返す。}
+
+\methoddesc{:transform-vector}{vec}{
+{\em vec}をこのローカル座標系での表現とみなして、ワールド座標系での
+表現に変換する。}
+
+\methoddesc{:inverse-transform-vector}{vec}{
+ワールド座標系で表現される{\em vec}をこのローカル座標系の表現に逆変換する。}
+
+\methoddesc{:inverse-transformation}{}{
+この座標系の逆変換を表現する{\bf coordinates}のインスタンスを作る。}
+
+\metdesc{:transform}{trans  \&optional (wrt :local)}
+\metdesc{:translate}{fltvec \&optional (wrt :local)}
+\metdesc{:locate}{fltvec \&optional (wrt :local)}
+\metdesc{:rotate}{theta axis \&optional (wrt :local)}
+\methoddesc{:orient}{theta axis \&optional (wrt :local)}{
+{\bf coordinates}クラスの記述を参照すること。}
+
+\fundesc{make-coords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
+
+\fundesc{make-cascoords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
+\fundesc{coords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
+\funcdesc{cascoords}{\&key :pos :rot :rpy :Euler :angle :axis
+:4X4 :coords :name}{
+これらの関数は、すべて{\bf coordinates}あるいは{\bf cascaded-coords}を
+新しく作る。
+キーワードパラメータについては、{\bf coordinates}クラスの{\bf :init}メソッドを
+見ること。}
+\funcdesc{transform-coords}{coords1 coords2 \&optional (coords3 (coords))}{
+{\em coords1}が{\em coords2}に左から適用（乗算）される。
+その積は{\em coords3}に蓄積される。}
+\funcdesc{transform-coords*}{\&rest coords}{
+{\em coords}にリスト表現されている変換を連結させる。
+連結された変換で表現される{\bf coordinates}のインスタンスを返す。}
+\funcdesc{wrt}{coords vec}{
+{\em vec}を{\em coords}における表現に変換する。
+その結果は{\tt  (send {\em coords} :trans\-form-\-vec\-tor {\em vec})}と同一である。}
+\end{refdesc}
+
+\newpage

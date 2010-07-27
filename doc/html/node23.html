@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Functions</TITLE>
+<META NAME="description" CONTENT="Functions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2187" HREF="node24.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2185" HREF="node17.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2181" HREF="node22.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2189" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2190" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2188" HREF="node24.html">Control Structures</A>
+<B>Up:</B> <A NAME="tex2html2186" HREF="node17.html">Forms and Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html2182" HREF="node22.html">Macros</A>
+<BR> <P>
+<H2><A NAME="SECTION03026000000000000000">Functions</A></H2>
+<P>
+A function is expressed by a lambda form which is merely a list
+whose first element is <B>lambda</B>.
+If a lambda form is defined for a symbol using <B>defun</B>, it can be referred
+as a global function name.
+Lambda form takes following syntax.
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (lambda (&#175;{var}*
+<P>
+		  [&amp;optional {var | (var [initform])}*]
+<P>
+		  [&amp;rest form]
+<P>
+		  [&amp;key &#175;{var | (var [initform]) | ((keyword var) [initform])}*
+<P>
+		 		 [&amp;allow-other-keys]]
+<P>
+		  [&amp;aux {var | (var [initform])}*])
+<P>
+ {declaration}*
+<P>
+ {form}*)
+<P>
+</TT></PRE></BLOCKQUOTE> </TT>
+<P>
+There is no function type such as EXPR, LEXPR, FEXPR, etc.:
+arguments to a function are always evaluated before its application,
+and the number of acceptable arguments is determined by lambda-list.
+Lambda-list specifies the sequence of parameters to the lambda form.
+Each of <B>&amp;optional, &amp;rest, &amp;key </B> and <B>&amp;aux</B> has special
+meaning in lambda-lists, and these symbols cannot be used as variable
+names.
+Supplied-p variables for &amp;optional or &amp;key parameters are not supported.
+<P>
+Since a lambda form is indistinguishable from normal list data,
+<B>function</B> special form must be used to inform the interpreter and
+compiler the form is intended to be a function.
+<A NAME="tex2html32" HREF="footnode.html#599"><IMG  ALIGN=BOTTOM ALT="gif" SRC="./icons/foot_motif.gif"></A>
+<B>Function</B> is also important to freeze the environment onto the function,
+so that all the lexical variables can be accessible in the function
+even the function is passed to another function of different lexical scope.
+The following program does not work either interpretedly nor after compiled,
+since <TT>sum from the <TT>let</TT> is invisible  inside lambda form.
+<P>
+<PRE>(let ((x '(1 2 3)) (sum 0))
+  (mapc '(lambda (x) (setq sum (+ sum x))) x))</PRE>
+<P>
+To get the expected result, it should be written as follows:
+<PRE>(let ((x '(1 2 3)) (sum 0))
+   (mapc #'(lambda (x) (setq sum (+ sum x))) x ))</PRE>
+<P>
+#' is the abbreviated notation of <B>function</B>,
+i.e. <TT>#'(lambda (x) x)</TT> is equivalent to
+<TT>(function (lambda (x) x))</TT>.
+Here is another example of what is called a funarg problem:
+<P>
+<PRE>(defun mapvector (f v)
+    (do ((i 0 (1+ i)))
+       ((&gt;= i (length v)))
+       (funcall f (aref v i))))
+(defun vector-sum (v)
+    (let ((i 0))
+       (mapvector #'(lambda (x) (setq i (+ i x))) v)
+       i))
+(vector-sum #(1 2 3 4)) --&gt; 10</PRE>
+<P>
+EusLisp's closure cannot have indefinite extent:
+i.e. a closure can only survive as long as its outer extent is in effect.
+This means that a closure cannot be used for programming of ``generators&quot;.
+The following program does not work.
+<P>
+<PRE>(proclaim '(special gen))
+(let ((index 0))
+   (setq gen #'(lambda () (setq index (1+ index)))))
+(funcall gen)</PRE>
+<P>
+However, the same purpose is accomplished by object oriented programming,
+because an object can hold its own static variables:
+<PRE>(defclass generator object (index))
+(defmethod generator
+ (:next () (setq index (1+ index)))
+ (:init (&amp;optional (start 0)) (setq index start) self))
+(defvar gen (instance generator :init 0))
+(send gen :next)</PRE>
+<P>
+</TT><HR><A NAME="tex2html2187" HREF="node24.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2185" HREF="node17.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2181" HREF="node22.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2189" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2190" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2188" HREF="node24.html">Control Structures</A>
+<B>Up:</B> <A NAME="tex2html2186" HREF="node17.html">Forms and Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html2182" HREF="node22.html">Macros</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

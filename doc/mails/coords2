@@ -1,0 +1,19 @@
+change of COORDINATES (2)	Jun/17 Matsui
+
+:copy-coords and :inverse-transformation methods have been extended
+to accept optional result argument. If no argument is given to these
+methods, a new instance of coordinates which has the identical value
+with self, or which has the inverse-transformation to self, is created.
+If another instance of coordinates is given, the resulted copy or inverse
+is stored there.
+
+(setq a (make-coords :pos #f(10 20 30) :rpy '(0.1 0.2 0.3)))
+(setq b (make-coords))
+(send a :copy-coords b)
+(eq a b)  --> NIL (different objects, of course)
+(equal a b)  --> T (but contents are identical)
+
+; (send a :copy-coords b) has the same effect as (send b :replace-coords a)
+
+(send a :inverse-transformation b)
+(equal (send a :inverse-transformation) b)  --> T

@@ -1,0 +1,81 @@
+(apropos function-documentation "
+Args: (string &optional (package nil))
+Prints those symbols whose print-names contain STRING as substring.  If
+PACKAGE is non-NIL, then only the specified PACKAGE is searched.")
+(clear-output function-documentation "
+Args: (&optional (stream *standard-output*))
+Clears the output buffer of STREAM and returns NIL.  Contents of the buffer
+are discarded.")
+(decode-float function-documentation "
+Args: (float)
+Returns the significand F, the exponent E, and the sign S of FLOAT.  These
+values satisfy
+	1/B <= F < 1
+and			 E
+	FLOAT = S * F * B
+where B is the radix used to represent FLOAT.  S and F are floats of the same
+float format as FLOAT, and E is an integer.")
+(defun function-documentation "
+Syntax: (defun name lambda-list {decl | doc}* {form}*)
+Defines a global function named by NAME.
+The complete syntax of a lambda-list is:
+	({var}*
+	 [&optional {var | (var [init [svar]])}*]
+	 [&rest var]
+	 [&key {var | ({var | (keyword var)} [init [svar]])}*
+	       [&allow-other-keys]]
+	 [&aux {var | (var [init])}*])
+The doc-string DOC, if supplied, is saved as a FUNCTION doc and can be
+retrieved by (documentation 'NAME 'function).")
+(denominator function-documentation "
+Args: (rational)
+Returns the denominator of RATIONAL as a positive integer, if RATIONAL is a
+ratio.  Returns RATIONAL if it is an integer.")
+(do-all-symbols function-documentation "
+Syntax: (do-all-symbols (var [result]) {decl}* {tag | statement}*)
+Establishes a NIL block and executes STATEMENTs once for each symbol in each
+package, with VAR bound to the symbol.  Then evaluates RESULT (which defaults
+to NIL) and returns all values.")
+(double-float-epsilon variable-documentation "
+Same as LONG-FLOAT-EPSILON.")
+(file-author function-documentation "
+Args: (filespec)
+Returns the author of the specified file, as a string.  Returns NIL if the
+author is unknown.  FILESPEC may be a symbol, a string, a pathname, or a file
+stream.")
+(force-output function-documentation "
+Args: (&optional (stream *standard-output*))
+Sends the contents of the output buffer for STREAM to the destination.
+Returns NIL without waiting until the buffer becomes empty.")
+(gcd function-documentation "
+Args: (&rest integers)
+Returns the greatest common divisor of the args.")
+(lambda-list-keywords variable-documentation "
+List of all lambda-list keywords, including
+	&optional	&rest		&key
+	&allow-other-keys		&aux
+	&whole		&environment	&body")
+(lisp-implementation-version function-documentation "
+Args: ()
+Returns the version of your KCL as a string.")
+(multiple-value-setq function-documentation "
+Syntax: (multiple-value-setq {var}* form)
+Evaluates FORM and binds the N-th VAR to the N-th value of FORM or, if FORM
+returns less than N values, to NIL.  Returns the first value of FORM or, if
+FORM returns no value, NIL.")
+(pathname-name function-documentation "
+Args: (filespec)
+Returns the name slot of the pathname specified by FILESPEC.  FILESPEC may be
+a symbol, a string, a pathname, or a file stream.")
+(copy-stream function-documentation "
+Args: (from-stream to-stream)
+KCL specific.
+Copies the contents of FROM-STREAM to TO-STREAM until EOS is reached.")
+(ihs-fun function-documentation "
+Args: (n)
+KCL specific.
+Returns the function value of the N-th entity in the invocation history stack.")
+(string-concatenate function-documentation "
+Args: (&rest strings)
+KCL specific.
+Concatenates STRINGs and returns the result.")

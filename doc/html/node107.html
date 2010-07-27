@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Coordinates</TITLE>
+<META NAME="description" CONTENT="Coordinates">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3340" HREF="node108.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3338" HREF="node103.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3332" HREF="node106.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3342" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3343" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3341" HREF="node108.html">CascadedCoords</A>
+<B>Up:</B> <A NAME="tex2html3339" HREF="node103.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html3333" HREF="node106.html">LU decomposition</A>
+<BR> <P>
+<A NAME="Coordinates">&#160;</A><H2><A NAME="SECTION04034000000000000000">Coordinates</A></H2>
+<P>
+Coordinate systems and their transformations are represented by
+the <B>coordinates</B> class.
+Instead of 4*4 (homogeneous) matrix representation,
+coordinate system in EusLisp is represented by a combination of
+a 3*3 rotation matrix and a 3D position vector
+mainly for speed and generality.
+<P>
+<A NAME=14321>&#160;</A>
+<B>coordinates </B> [class]  <PRE><TT> :super B<>propertied-object</B>
+<P>
+:slots 		 (pos :type float-vector
+<P>
+		  rot :type array)
+<P>
+</TT></PRE>
+<UL><LI> defines a coordinate system with a pair of a position vector and a 3x3
+rotation matrix.
+</UL>
+<A NAME=14338>&#160;</A>
+<B>coordinates-p</B> <EM>obj </EM>[function] 
+<UL><LI> returns T when obj is an instance of coordinates class or its subclasses.
+</UL>
+<A NAME=14348>&#160;</A>
+<B>:rot</B> <EM></EM>[method] 
+<UL><LI> returns the 3X3 rotation matrix of this coords.
+</UL>
+<A NAME=14358>&#160;</A>
+<B>:pos</B> <EM></EM>[method] 
+<UL><LI> returns the 3-D position vector of this coords.
+</UL>
+<A NAME=14368>&#160;</A>
+<B>:newcoords</B> <EM>newrot newpos </EM>[method] 
+<UL><LI> updates the coords with newrot and newpos. Whenever a condition that changes
+the state of this coords occurs,
+this method should be called with the new rotation
+matrix and the position vector.
+This message may invoke another :update method to propagate the event.
+</UL>
+<A NAME=14378>&#160;</A>
+<B>:replace-coords</B> <EM>newrot newpos </EM>[method] 
+<UL><LI> changes the rot and pos slots to be updated without calling newcoords method.
+</UL>
+<A NAME=14388>&#160;</A>
+<B>:coords</B> <EM></EM>[method] 
+<UL><LI> </UL>
+<A NAME=14399>&#160;</A>
+<B>:copy-coords</B> <EM>&amp;optional dest </EM>[method] 
+<UL><LI> If dest is not given, :copy-coords makes another coordinates object
+which has the same rot and pos slots. If dest is given, rot and pos of
+this coordinates is copied to the dest coordinates.
+</UL>
+<A NAME=14409>&#160;</A>
+<B>:reset-coords</B> <EM></EM>[method] 
+<UL><LI> forces the rotation matrix of this coords to be identity matrix, and pos
+vector to be all zero.
+</UL>
+<A NAME=14419>&#160;</A>
+<B>:worldpos</B> <EM></EM>[method] 
+<UL><LI> </UL>
+<A NAME=14430>&#160;</A>
+<B>:worldrot</B> <EM></EM>[method] 
+<UL><LI> </UL>
+<A NAME=14441>&#160;</A>
+<B>:worldcoords</B> <EM></EM>[method] 
+<UL><LI> Computes the position vector, the rotation matrix and the coordinates
+of this object represented in the world coordinates. The coordinates class
+is always assumed to be represented in world, these method can simply return
+pos, rot and self.  These methods are provided for the compatibility with
+cascaded-coords class which cannot be assumed to be represented in world.
+</UL>
+<A NAME=14451>&#160;</A>
+<B>:copy-worldcoords</B> <EM>&amp;optional dest </EM>[method] 
+<UL><LI> First, worldcoords is computed, and it is copied to dest. If no dest
+is specified, a coordinates object to store the result is newly created.
+</UL>
+<A NAME=14461>&#160;</A>
+<B>:rotate-vector</B> <EM>vec </EM>[method] 
+<UL><LI> A vector is rotated by the rotation of this coords, i.e., an orientation
+vector represented in this coords is converted to the representation
+in the world.
+The position of this coords does not affect rotation.
+</UL>
+<A NAME=14471>&#160;</A>
+<B>:transform-vector</B> <EM>vec </EM>[method] 
+<UL><LI> A vector in this local coords is transformed to the representation in the world.
+</UL>
+<A NAME=14481>&#160;</A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[method] 
+<UL><LI> A vector in the world is inversely transformed to the representation in this
+local coordinate system.
+</UL>
+<A NAME=14491>&#160;</A>
+<B>:transform</B> <EM>trans &amp;optional (wrt :local) </EM>[method] 
+<UL><LI> Transform this coords by the trans represented in wrt coords.
+Trans must be of type coordinates, and wrt must be one of keywords
+<TT>:local, :parent, :world</TT> or an instance of coordinates.
+If wrt is <TT>:local</TT>, the trans is applied from the right to this coords,
+and if wrt is <TT>:world</TT> or <TT>:parent</TT>,
+the trans is multiplied from the left.
+Else, if wrt is of type coordinates, the trans represented in the wrt
+coords is first transformed to the representation in the world, and  it
+is applied from the left.
+</UL>
+<A NAME=14505>&#160;</A>
+<B>:move-to</B> <EM>trans &amp;optional (wrt :local) </EM>[method] 
+<UL><LI> Replaces the rot and pos of the coords with trans represented in wrt.
+</UL>
+<A NAME=14515>&#160;</A>
+<B>:translate</B> <EM>p &amp;optional (wrt :local) </EM>[method] 
+<UL><LI> changes the position of this object
+relatively with respective to wrt coords.
+</UL>
+<A NAME=14525>&#160;</A>
+<B>:locate</B> <EM>p &amp;optional (wrt :local) </EM>[method] 
+<UL><LI> Changes the location of this coords with the parameter represented in wrt.
+If wrt is <TT>:local</TT>, then the effect is identical to 
+<B>:translate</B> with <EM>wrt=<TT>:local</TT>.
+</UL>
+<A NAME=14539>&#160;</A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method] 
+<UL><LI> Rotates this coords relatively by <EM>theta radian around the <EM>axis.
+<EM>Axis is one of axis-keywords (<TT>:x, :y</TT> and <TT>:z</TT>) or an arbitrary float-vector.
+<EM>Axis is considered to be represented in the <EM>wrt coords.
+Thus, if <EM>wrt=<TT>:local</TT> and <EM>axis=<TT>:z</TT>,
+the coordinates is rotated around the z
+axis of this local coords, and <EM>wrt=<TT>:world</TT> or <TT>:parent</TT>,
+the coords is rotated around the z axis of world coords.
+In other words, if <EM>wrt=<TT>:local</TT>,
+a rotation matrix is multiplied from the right of this coords,
+and if <EM>wrt=<TT>:world</TT> or <TT>:parent</TT>,
+a rotation matrix is multiplied from the left.
+Note that even <EM>wrt is either <TT>:world</TT> or <TT>:parent</TT>,
+the <EM>pos vector of this coordinates does not change.
+For the true rotation around the world axis,
+an instance of coordinates class representing the
+rotation should be given to <B>:transform</B> method.
+</UL>
+<A NAME=14573>&#160;</A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method] 
+<UL><LI> forces setting rot.
+This is an absolute version of :<B>rotate</B> method.
+</UL>
+<A NAME=14584>&#160;</A>
+<B>:inverse-transformation</B> <EM></EM>[method] 
+<UL><LI> makes a new coords that is inverse to self.
+</UL>
+<A NAME=14594>&#160;</A>
+<B>:transformation</B> <EM>coords (wrt :local) </EM>[method] 
+<UL><LI> makes the transformation (an instance of coordinates) between this coords
+and the coords given as the argument.
+If <EM>wrt=<TT>:local</TT>,
+the result is represented in local coords,
+i.e., if the resulted transformation is given
+as an argument to :transform with <EM>wrt=<TT>:local</TT>,
+this coords is transformed
+to be identical with the coords.
+</UL>
+<A NAME=14608>&#160;</A>
+<B>:Euler</B> <EM>az1 ay az2 </EM>[method] 
+<UL><LI> sets rot with Euler angles, that are,
+rotation angles around z (<EM>az1,
+y (<EM>ay) and again z <EM>az2 axis of
+this local coordinates system.
+</UL>
+<A NAME=14621>&#160;</A>
+<B>:roll-pitch-yaw</B> <EM>roll pitch yaw </EM>[method] 
+<UL><LI> sets rot with roll-pitch-yaw angles:
+rotation angles around x (<EM>yaw), y (<EM>pitch) and z (<EM>roll)
+axes of the world coordinate system.
+</UL>
+<A NAME=14634>&#160;</A>
+<B>:4x4</B> <EM>&amp;optional mat44 </EM>[method] 
+<UL><LI> If a matrix of 4x4 is given as <EM>mat44,
+it is converted to coordinates representation with a 3x3 rotation matrix and
+a 3D position vector.
+If <EM>mat44 is not given, this coordinates is converted to 4x4
+matrix representation.
+</UL>
+<A NAME=14646>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing14647" SRC="img47.gif"  > <P>
+<UL><LI> 
+initializes this coordinates object and sets rot and pos.
+The meaning of each keyword follows:
+<DL ><DT><STRONG>:dimension</STRONG>
+<DD> 2 or 3 (default is 3)
+<DT><STRONG>:pos</STRONG>
+<DD> specifies a position vector (defaulted to #f(0 0 0))
+<DT><STRONG>:rot</STRONG>
+<DD> specifies a rotation matrix (defaulted to a unit-matrix)
+<DT><STRONG>:Euler</STRONG>
+<DD> gives a sequence of three elements for Euler angles
+<DT><STRONG>:rpy</STRONG>
+<DD> gives a sequence of three elements for roll-pitch-yaw
+<DT><STRONG>:axis</STRONG>
+<DD> rotation axis (:x,:y,:z or an arbitrary float-vector)
+<DT><STRONG>:angle</STRONG>
+<DD> rotation angle (used with :axis)
+<DT><STRONG>:wrt</STRONG>
+<DD> where the rotation axis is taken (default is :local)
+<DT><STRONG>:4X4</STRONG>
+<DD> 4X4 matrix is used to specify both pos and rot
+<DT><STRONG>:coords</STRONG>
+<DD> copies pos and rot from coords
+<DT><STRONG>:name</STRONG>
+<DD> set :name property
+<P>
+ </DL>
+<TT>:Angle</TT> can only be used in conjunction with the <TT>:axis</TT>
+that is determined in the <TT>:wrt</TT> coordinates.
+Without regard to <TT>:wrt</TT>, <TT>:Euler</TT> always specifies
+the Euler angles, <EM>az1, ay and <EM>az2, 
+defined in the local coordinates,
+and <TT>:rpy</TT> specifies the angles around
+<EM>z, <EM>y</EM> and <EM>x</EM> axes of the world coordinates.
+Two or more of <TT>:rot, :Euler, :rpy, :axis</TT> and <TT>:4X4</TT>
+cannot be specified simultaneously, although no error is reported.
+Sequences can be supplied to the <TT>:axis</TT> and <TT>:angle</TT> parameters,
+which mean successive rotations around the given axes.
+List of pairs of an attribute and its value can be given as <TT>:properties</TT>
+argument. These pairs are copied in the plist of this coordinates.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3340" HREF="node108.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3338" HREF="node103.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3332" HREF="node106.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3342" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3343" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3341" HREF="node108.html">CascadedCoords</A>
+<B>Up:</B> <A NAME="tex2html3339" HREF="node103.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html3333" HREF="node106.html">LU decomposition</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

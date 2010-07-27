@@ -1,0 +1,33 @@
+# -*- indented-text -*-
+# $Header: /home/cvs/euslisp/opengl/src/ChangeLog,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $
+#
+
+========================
+Tue Feb 20 16:12:41 1996
+------------------------
+** IMPACT requires glFinish() to wrap call to glTexImage2D()
+   -- bug of IMPACT ??
+
+               glprim.l:
+	       ;; -*- NOTE -*- 
+	       ;; the following pair of (glfinish) surrounding
+	       ;; glTexImage2D is needed
+	       ;; it causes IMPACT graphics subsystems to HANG on some occasion.
+	       ;; (maybe a bug of IMPACT.)
+	       ;; also when there is multiple programs doing this call,
+	       ;; it seems that also has to be mut-excluded.
+	       ;; -- kenji konaka
+	       (glFinish)
+	       (glTexImage2D GL_TEXTURE_2D 
+	       ...)
+	       (glFinish)
+
+========================
+Mon Feb 26 20:26:26 1996
+------------------------
+** added gl:make-cube-with-texture 
+
+========================
+Thu Apr 25 20:48:16 1996
+------------------------
+** added support for texture object extension

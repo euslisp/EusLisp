@@ -1,0 +1,724 @@
+\section{Sequences, Arrays and Tables}
+\markright{\arabic{section}. Sequences, Arrays and Tables}
+
+\subsection{General Sequences}
+
+Vectors (one dimensional arrays) and lists are generic sequences.
+A string is a sequence, since it is a vector of characters.
+
+For the specification of result type in
+{\bf map, concatenate} and {\bf coerce},
+use class name symbol, such as {\tt cons, string, integer-vector, float-vector},
+etc. without quotes, 
+since the class object is bound to the symbol.
+
+\begin{refdesc}
+
+\funcdesc{elt}{sequence pos}{
+{\bf elt} is the most general function to get and put (in conjunction with
+{\bf setf}) value at the specific position {\em pos} in {\em sequence}.
+{\em Sequence} may be a list, or a vector of arbitrary
+object, bit, char, integer, or float.
+{\bf Elt} cannot be applied to a multi-dimensional array.}
+
+\funcdesc{length}{sequence}{
+returns the length of {\em sequence}.
+For vectors, {\bf length} finishes in constant time, but
+time proportional to the length is required for a list.
+{\bf Length} never terminates if {\em sequence} is a circular list.
+Use {\bfx list-length}, instead.
+If {\em sequence} is an array with a fill-pointer, {\bf length}
+returns the fill-pointer, not the entire size of the array entity.
+Use {\bf array-total-size} to know the entire size of those arrays.}
+
+\funcdesc{subseq}{sequence start [end]}{
+makes a copy of the subsequence from {\em start}th through  ({\em end}-1)th inclusively
+out of {\em sequence}.
+{\em end} is defaulted to the length of {\em sequence}.}
+
+\funcdesc{copy-seq}{sequence}{
+does shallow-copying of {\em sequence}, that is, 
+only the top-level references in {\em sequence} are copied.
+Use {\bf copy-tree} to copy a nested list,
+or {\bf copy-object} for deep-copying of a sequence
+containing recursive references.}
+
+\funcdesc{reverse}{sequence}{
+reverse the order of  {\em sequence} and returns a new sequence of the
+same type as {\em sequence}.}
+
+\funcdesc{nreverse}{sequence}{
+{\bf Nreverse} is the destructive version of {\bf reverse}.
+{\bf Nreverse} does not allocate memory, while {\bf reverse} does.}
+
+\funcdesc{concatenate}{result-type {sequence*}}{
+concatenates all {\em sequence}s.
+Each {\em sequence} may be of any sequence type.
+Unlike {\bf append}, all the sequences including the last one are copied.
+{\em Result-type} should be a class such as cons, string,
+vector, float-vector etc.}
+
+\funcdesc{coerce}{sequence result-type}{
+changes the type of {\em sequence}.
+For examples, {\tt (coerce '(a b c) vector) = \#(a b c)}  and 
+{\tt (coerce "ABC" cons) = (a b c)}.
+A new sequence of type {\em result-type} is created, and each element of
+{\em sequence} is copied to it.
+{\em result-type} should be one of vector, integer-vector, float-vector,
+bit-vector, string, cons or other user-defined classes inheriting 
+one of these.
+Note that {\em sequence} is copied even if its type equals to {\em result-type}.}
+
+\funcdesc{map}{result-type function seq \&rest more-seqs}{
+{\em function} is applied to a list of arguments taken from {\em seq}
+and {\em more-seqs} orderly, and the result is accumulated in a sequence
+of type {\em result-type}.}
+
+\funcdesc{fill}{sequence item \&key (:start 0) (:end (length sequence))}{
+fills {\em item} from {\em start}th through ({\em end}-1)th in {\em sequence}.
+}
+
+\funcdesc{replace}{dest source \&key :start1 :end1 :start2 :end2}{
+elements in {\em dest} sequence indexed between {\em start1} and {\em end1}
+are replaced with elements in {\em source} indexed between 
+{\em start2} and {\em end2}.
+{\em start1} and {\em start2} are defaulted to zero, and
+{\em end1} and {\em end2} to the length of each sequence.
+If the one of subsequences is longer than the other,
+its end is truncated to match with the shorter subsequence.}
+
+\funcdesc{sort}{sequence compare \&optional key}{
+{\em sequence} is destructively sorted using Unix's quick-sort subroutine.
+{\em key} is not a keyword parameter.
+Be careful with the sorting of a sequence which have same elements.
+For example, {\tt (sort '(1 1) \#'>)} fails because comparisons
+between 1 and 1 in both direction fail.
+To avoid this problem, use functions like \#'$>=$ or \#'$<=$ for comparison.}
+
+\funcdesc{merge}{result-type seq1 seq2 pred \&key (key \#'identity)}{
+two sequences {\em seq1} and {\em seq2} are merged to form a single
+sequence of {\em result-type} whose elements 
+satisfy the comparison specified by {\em pred}.}
+
+\funcdesc{merge-list}{list1 list2 pred key}{
+merges two lists. Unlike {\bf merge} no general sequences are allowed 
+for the arguments, but {\bf merge-list} runs faster than {\bf merge}.}
+
+\end{refdesc}
+
+Following functions consist of one basic function and its variants
+suffixed by -if and -if-not.
+The basic form takes at least the item and sequence arguments,
+and compares item with each element in the sequence,
+and do some processing,
+such as finding the index,
+counting the number of appearances, removing the item, etc.
+Variant forms take predicate and sequence arguments,
+applies the predicate to each element of sequence, and do something
+if the predicate returns non-nil (-if version), or nil (-if-not version).
+
+\begin{refdesc}
+
+\funcdesc{position}{item seq \&key :start :end :test :test-not :key (:count 1)}{
+finds {\em count}th appearance of {\em item} in {\em seq} and returns
+its index.
+The search begins from the {\em start}th element, ignoring elements before it.
+By default, the search is performed by {\bf eql}, which can be altered
+by the {\em test} or {\em test-not} parameter.}
+
+\fundesc{position-if}{predicate seq \&key :start :end :key}
+
+\fundesc{position-if-not}{predicate seq \&key :start :end :key}
+
+\funcdesc{find}{item seq \&key :start :end :test :test-not :key (:count 1)}{
+finds {\em count}th element between the {\em start}th element
+and the {\em end}th element in {\em seq}.
+The element found, which is eql to {\em item} if no {\em test} or
+{\em test-not} other than \#'eql is specified, is returned.}
+
+\funcdesc{find-if}{predicate seq \&key :start :end :key (:count 1)}{
+finds {\em count}th element in {\em seq} for which {\em pred}
+returns non nil.}
+\fundesc{find-if-not}{predicate seq \&key :start :end :key}
+
+\funcdesc{count}{item seq \&key :start :end :test :test-not :key}{
+counts the number of {\em item}s which appear between the {\em start}th element
+and the {\em end}th element in {\em seq}.}
+
+\funcdesc{count-if}{predicate seq \&key :start :end :key}{
+count the number of elements in {\em seq} for which {\em pred} returns
+non nil.}
+\fundesc{count-if-not}{predicate seq \&key :start :end :key}
+
+\funcdesc{remove}{item seq \&key :start :end :test :test-not :key :count}{
+creates a new sequence which has eliminated {\em count} (defaulted to infinity)
+occurrences of of {\em item}(s) between the {\em start}th element
+and the {\em end}th element in {\em seq}.
+If you are sure that there is only one occurrence of {\em item},
+{\em count=1} should be specified to avoid meaningless scan over the whole
+sequence.}
+
+\fundesc{remove-if}{predicate seq \&key :start :end :key :count}
+\fundesc{remove-if-not}{predicate seq \&key :start :end :key :count}
+\funcdesc{remove-duplicates}{seq \&key :start :end :key :test :test-not :count}{
+removes duplicated items in {\em seq} and creates a new sequence.}
+
+\funcdesc{delete}{item seq \&key :start :end :test :test-not :key :count}{
+is same with {\bf remove} except that {\bf delete} modifies {\em seq}
+destructively and does not create a new sequence.
+If you are sure that there is only one occurrence of {\em item},
+{\em count=1} should be specified to avoid meaningless scan over the whole
+sequence.}
+
+\fundesc{delete-if}{predicate seq \&key :start :end :key :count}
+\funcdesc{delete-if-not}{predicate seq \&key :start :end :key :count}{
+{\em count} for {\em remove}s and {\em delete}s is defaulted to 1,000,000.
+If you have a long sequence and you want to delete an element which
+appears only once, :count should be specified as 1.}
+
+\funcdesc{substitute}{newitem olditem seq
+ \&key :start :end :test :test-not :key :count}{
+returns a new sequence which has 
+substituted the {\em count} occurrence(s)
+of {\em olditem} in {\em seq} with {\em newitem}.
+By default, all the {\em olditems} are substituted.}
+
+\fundesc{substitute-if}{newitem predicate seq \&key :start :end :key :count}
+\fundesc{substitute-if-not}{newitem predicate seq \&key :start :end :key :count}
+
+\funcdesc{nsubstitute}{newitem olditem seq \&key :start :end :test :test-not :key :count}
+{substitute the {\em count} occurrences of {\em olditem} in {\em seq} with {\em newitem}
+destructively. By default, all the {\em olditem}s are substituted.}
+\fundesc{nsubstitute-if}{newitem predicate seq \&key :start :end :key :count}
+\fundesc{nsubstitute-if-not}{newitem predicate seq \&key :start :end :key :count}
+
+\end{refdesc}
+
+\newpage
+
+\subsection{Lists}
+
+\begin{refdesc}
+\funcdesc{listp}{object}{
+returns T if object is an instance of cons or NIL.}
+\funcdesc{consp}{object}{
+equivalent to (not (atom object)). (consp '()) is nil.}
+\funcdesc{car}{list}{
+returns the first element in {\em list}. {\bf car} of NIL is NIL.
+{\bf car} of atom is error.}
+\funcdesc{cdr}{list}{returns the list which removed the first element
+of {\em list}. {\bf cdr} of NIL is NIL.
+{\bf cdr} of atom is error.}
+\fundesc{cadr}{list}
+\fundesc{cddr}{list}
+\fundesc{cdar}{list}
+\fundesc{caar}{list}
+\fundesc{caddr}{list}
+\fundesc{caadr}{list}
+\fundesc{caaar}{list}
+\fundesc{cdadr}{list}
+\fundesc{cdadr}{list}
+\fundesc{cdaar}{list}
+\fundesc{cdddr}{list}
+\fundesc{cdddr}{list}
+\fundesc{cddar}{list}
+\funcdesc{first}{list}{retrieves the first element in {\em list}.
+{\bfx second, third, fourth, fifth, sixth, seventh, eighth} are also 
+available.}
+\funcdesc{nth}{count list}{
+returns the {\em count}-th element in {\em list}.
+Note that {\tt (nth 1 list)} is equivalent to {\tt (second list)},
+and to {\tt (elt list 1)}.}
+
+\funcdesc{nthcdr}{count list}{
+applies {\bf cdr} {\em count} times to {\em list}.}
+
+\funcdesc{last}{list}{
+the last cons is returned, not the last element.}
+
+\funcdesc{butlast}{list \&optional (n 1)}
+{ returns a list which does not contain the last {\em n} elements.}
+
+\funcdesc{cons}{car cdr}{
+makes a new cons whose car is {\em car} and cdr is {\em cdr}.}
+
+\funcdesc{list}{\{element\}*}{makes a list of {\em element}s.}
+
+\funcdesc{list*}{\{element\}*}{
+makes a list of {\em element}s, but the last element is consed in cdr:
+for example, {\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}.}
+
+\funcdesc{list-length}{list}{
+returns the length of the {\em list}. {\em List} can be circular.}
+
+\funcdesc{make-list}{size \&key (initial-element nil)}{
+makes a list whose length is {\em size} and elements are {\em initial-element}.}
+
+\funcdesc{rplaca}{cons a}{
+replace the car of {\em cons} with a.
+Use of {\bf setf} to {\bf car} is recommended.}
+
+\funcdesc{rplacd}{cons d}{
+replace the cdr of {\em cons} with d.
+Use of {\bf setf} to {\bf cdr} is recommended.}
+
+\funcdesc{memq}{item list}{
+resembles {\bf member}, but test is always done by {\bf eq}.}
+
+\funcdesc{member}{item list \&key :key (:test \#'eq) :test-not}
+{The {\em list} is searched for an element that satisfies the {\em test}.
+If none is found, NIL is returned; otherwise, the tail of {\em list} beginning
+with the first element that satisfied the test is returned. The {\em list}
+is searched on the top level only.}
+
+\fundesc{assq}{item alist }
+\funcdesc{assoc}{item alist \&key :key (:test \#'eq) :test-not}
+{ searches the association list {\em alist}. The value returned is the
+first pair in the {\em alist} such that the {\em car} of the pair satisfies
+the {\em test}, or NIL if there is no such pair in the {\em alist}.}
+
+\funcdesc{rassoc}{item alist}{
+returns the first pair in {\em alist} whose cdr is equal to {\em item}.}
+
+\funcdesc{pairlis}{l1 l2 \&optional alist}{
+makes a list of pairs consing corresponding elements in {\em l1} and {\em l2}.
+If {\em alist} is given, it is concatenated at the tail of the pair list
+made from {\em l1} and {\em l2}.}
+
+\funcdesc{acons}{key val alist}{
+add the {\em key val} pair to {\em alist}, that is,
+{\tt (cons (cons key val) alist)}.}
+
+\funcdesc{append}{\{list\}*}{
+appends {\em list} to form a new list.
+All the elements in {\em list}, except the last list, are copied.}
+
+\funcdesc{nconc}{\{list\}*}{
+concatenates {\em list} destructively by replacing the last cdr of each
+{\em list}.}
+
+\funcdesc{subst}{new old tree}{
+substitutes every {\em old} in {\em tree} with {\em new}.}
+
+\funcdesc{flatten}{complex-list}{
+{\em Complex-list} composed of atoms and lists of any depth
+is transformed into a single level linear list which have all the elements
+in {\em complex-list} at the top level.
+For example, {\tt (flatten '(a (b (c d) e))) = (a b c d e)}}
+
+\macrodesc{push}{item place}{
+pushes item into a stack (list) bound to {\em place}.}
+
+\macrodesc{pop}{stack}{
+removes the first item from {\em stack} and returns it.
+If {\em stack} is empty (nil), nil is returned.}
+
+\macrodesc{pushnew}{item place \&key test test-not key}{
+pushes {\em item} in the {\em place} list
+if {\em item} is not a member of {\em place}.
+The {\em test}, {\em test-not} and {\em key} arguments are
+passed to the member function.}
+
+\funcdesc{adjoin}{item list}{
+The item is added at the head of the list if it is not included
+in the list.}
+
+\funcdesc{union}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
+returns union set of two lists.}
+\funcdesc{subsetp}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}
+{tests if {\em list1} is a subset of {\em list2}, i.e. if each element
+of {\em list1} is a member of {\em list2}.}
+
+\funcdesc{intersection}{list1 list2
+ \&key (test \#'eq) (test-not) (key \#'identity)}{
+returns the intersection of two sets, {\em list1} and {\em list2}.}
+
+\funcdesc{set-difference}{list1 list2
+\&key (test \#'eq) (test-not) (key \#'identity)}{
+returns the list whose elements are only contained in {\em list1}
+and not in {\em list2}.}
+\funcdesc{set-exclusive-or}{list1 list2
+ \&key (test \#'eq) (test-not) (key \#'identity)}{
+returns the list of elements that appear only either in {\em list1} or {\em list2}.}
+\funcdesc{list-insert}{item pos list}{
+Insert {\em item} as the {\em pos}'th element in {\em list} destructively.
+If {\em pos} is bigger than the length of {\em list}, {\em item} is
+nconc'ed at the tail.
+For example, {\tt (list-insert 'x 2 '(a b c d)) = (a b x c d)}}
+
+\funcdesc{copy-tree}{tree}{
+returns the copy of {\em tree} which may be a nested list
+but cannot have circular reference. Circular lists can be copied by
+{\bf copy-object}.
+Actually, {\bf copy-tree} is simply coded as {\tt (subst t t tree)}.}
+
+\funcdesc{mapc}{func arg-list \&rest more-arg-lists}{
+applies {\em func} to a list of N-th elements in {\em arg-list} and each of
+{\em more-arg-lists}.
+The results of application are ignored and {\em arg-list} is returned.}
+
+\funcdesc{mapcar}{func \&rest arg-list}{
+maps {\em func} to each element of {\em arg-list},
+and makes a list from all the results.
+Before using {\bf mapcar}, try {\bf dolist}.}
+
+\funcdesc{mapcan}{func arg-list \&rest more-arg-lists}
+{maps {\em func} to each element of {\em arg-list},
+and makes a list from all the results by {\bf nconc}.
+{\bf Mapcan} is suitable for filtering (selecting) elements
+in {\em arg-list}, since nconc does nothing with NIL.}
+
+\end{refdesc}
+\newpage
+
+\subsection{Vectors and Arrays}
+
+Up to seven dimensional arrays are allowed.
+A one-dimensional array is called vector.
+Vectors and lists are grouped as sequence.
+If the elements of an array is of any type, the array is said to be general.
+If an array does not have fill-pointer, is not displaced to
+another array, or is adjustable, the array is said to be simple.
+
+Every array element can be recalled by {\bf aref} and set by {\bf setf} in
+conjunction with aref.
+But for simple vectors, there are simpler and faster access functions:
+{\bf svref} for simple general vectors, {\bf char} and {\bf schar} for
+simple character vectors (string), {\bf bit} and {\bf sbit} for
+simple bit vectors.  When these functions are compiled,
+the access is expanded in-line and no type check and boundary check are 
+performed.
+
+Since a vector is also an object,
+it can be made by instantiating some vector-class.
+There are five kinds of built-in vector-classes;
+vector, string, float-vector, integer-vector and bit-vector.
+In order to ease instantiation of vectors, the function make-array
+is provided.
+Element-type should be one of {\bf :integer, :bit, :character, :float, :foreign}
+or user-defined vector class.
+{\bf :initial-element} and {\bf :initial-contents} key word arguments are
+available to set initial values of the array you make.
+
+\begin{refdesc}
+
+\constdesc{array-rank-limit}{7}
+\constdesc{array-dimension-limit}{\#x1fffffff, logically, but stricter
+limit is imposed by the physical or virtual memory size of the system.}
+
+\funcdesc{vectorp}{object}{
+An array is not a vector even if it is one dimensional.
+T is returned for vectors, integer-vectors, float-vectors, strings,
+bit-vectors or other user-defined vectors.}
+\funcdesc{vector}{\&rest elements}{
+makes a simple vector from {\em elements}.}
+
+\longdescription{make-array}{
+dims \&key \= (element-type vector) \` [function] \\
+\> (initial-contents nil) \\
+\> (initial-element nil) \\
+\> (fill-pointer nil)  \\
+\> (displaced-to nil) \\
+\> (displaced-index-offset 0) \\
+\> (adjustable nil)}
+{makes a vector or array. 
+{\em dims} is either an integer or a list.
+If {\em dims} is an integer, a simple-vector is created.}
+
+\funcdesc{svref}{vector pos}{
+returns {\em pos}th element of {\em vector}.
+{\em Vector} must be a simple general vector.}
+
+\funcdesc{aref}{vector \&rest (indices)}{
+returns the element indexed by {\em indices}.
+{\bf Aref} is not very efficient
+because it needs to dispatch according to the type of {\em vector}.
+Type declarations should be given to improve the speed of compiled code
+whenever possible.}
+
+\funcdesc{vector-push}{val array}{
+store {\em val} at the {\em fill-pointer}th slot in {\em array}.
+{\em array} must have a {\em fill-pointer}.
+After val is stored,
+the fill-pointer is advanced by one to point to the next location.
+If it exceeds the array boundary, an error is reported.}
+
+\funcdesc{vector-push-extend}{val array}{
+Similar to  {\bf vector-push} except that
+the size of the array is automatically extended
+when {\em array}'s fill-pointer reaches  the end.}
+
+\funcdesc{arrayp}{obj}
+{T if {\em obj} is an instance of array or vector.}
+
+\funcdesc{array-total-size}{array}{returns the total number of elements
+of {\em array}.}
+\fundesc{fill-pointer}{array}
+\fundesc{array-rank}{array}
+\funcdesc{array-dimensions}{array}{
+returns a list of array-dimensions.}
+
+\funcdesc{array-dimension}{array axis}{
+Axis starts from 0. {\bf array-dimension} returns the {\em axis}th
+dimension of {\em array}.}
+
+\funcdesc{bit}{bitvec index}{
+returns the {\em index}th element of {\em bitvec}.
+Use {\bf setf} and {\bf bit} to change an element of a bit-vector.}
+\fundesc{bit-and}{bits1 bits2 \&optional result}
+\fundesc{bit-ior}{bits1 bits2 \&optional result}
+\fundesc{bit-xor}{bits1 bits2 \&optional result}
+\fundesc{bit-eqv}{bits1 bits2 \&optional result}
+\fundesc{bit-nand}{bits1 bits2 \&optional result}
+\fundesc{bit-nor}{bits1 bits2 \&optional result}
+\funcdesc{bit-not}{bits1 \&optional result}{
+For bit vectors {\em bits1} and {\em bits2} of the same length,
+their boolean and, inclusive-or,
+exclusive-or, equivalence, not-and, not-or and not are returned, respectively.}
+
+\end{refdesc}
+
+\newpage
+
+\subsection{Characters and Strings}
+
+There is no character type in EusLisp;
+a character is represented by an integer.
+In order to handle strings representing file names,
+use {\bf pathname}s described in \ref{Pathnames}.
+
+\begin{refdesc}
+
+\funcdesc{digit-char-p}{ch}{
+T if {\em ch} is \#$\backslash$0 through \#$\backslash$9.}
+
+\funcdesc{alpha-char-p}{ch}{
+T if {\em ch} is \#$\backslash$A through \#$\backslash$Z or
+\#$\backslash$a through \#$\backslash$z.}
+
+\funcdesc{upper-case-p}{ch}{
+T if {\em ch} is \#$\backslash$A through \#$\backslash$Z.}
+
+\funcdesc{lower-case-p}{ch}{
+T if {\em ch} is  \#$\backslash$a through \#$\backslash$z.}
+
+\funcdesc{alphanumeric-p}{ch}{
+T if {\em ch} is  \#$\backslash$0 through \#$\backslash$9,
+\#$\backslash$A through \#$\backslash$Z
+or \#$\backslash$a through \#$\backslash$z.}
+
+\funcdesc{char-upcase}{ch}{
+convert the case of {\em ch} to upper.}
+
+\funcdesc{char-downcase}{ch}{
+convert the case of {\em ch} to lower.}
+
+\funcdesc{char}{string index}{
+returns {\em index}th character in {\em string}.}
+
+\funcdesc{schar}{string index}{
+extracts a character from {\em string}. Use {\bf schar} only if the
+type of {\em string} is definitely known and no type check is required.}
+
+\funcdesc{stringp}{object}{
+{\em string} is a vector of bytes (integers less than 256).}
+
+\funcdesc{string-upcase}{str \&key start end}{
+converts {\em str} to upper case string and returns a new string.}
+
+\funcdesc{string-downcase}{str \&key start end}{
+converts {\em str} to lower case string and returns a new string.}
+
+\funcdesc{nstring-upcase}{str}{
+converts {\em str} to upper case string destructively.}
+
+\funcdesc{nstring-downcase}{str \&key start end}{
+converts {\em str} to lower case string destructively.}
+
+\funcdesc{string=}{str1 str2 \&key start1 end1 start2 end2}{
+T if {\em str1} is equal to {\em str2}.
+{\em string=} is case sensitive.}
+
+\funcdesc{string-equal}{str1 str2 \&key start1 end1 start2 end2}{
+tests equality of {\em str1} and {\em str2}.
+{\bf string-equal} is not case sensitive.}
+
+\funcdesc{string}{object}{
+gets string notation of {\em object}. If {\em object} is a string, the {\em object}
+is returned. If {\em object} is a symbol, its pname is copied and returned.
+Note that (equal (string 'a) (symbol-pname 'a))==T, but
+(eq (string 'a) (symbol-pname 'a))==NIL.
+If object is number its string representation is returned
+(this is incompatible with Common Lisp).
+In order to get string representation for more complex objects,
+use {\bf format} with NIL in the first argument.}
+
+\fundesc{string$<$}{str1 str2}
+\fundesc{string$<=$}{str1 str2}
+\fundesc{string$>$}{str1 str2}
+\fundesc{string$>=$}{str1 str2}
+
+\fundesc{string-left-trim}{bag str}
+\funcdesc{string-right-trim}{bag str}{
+{\em str} is scanned from the left(or right),
+and its elements are removed if
+it is included in the {\em bag} list.
+Once a character other than the ones in the {\em bag} is found,
+further scan is aborted and the rest of {\em str}
+is returned.}
+
+\funcdesc{string-trim}{bag str}{
+{\em Bag} is a sequence of character codes.
+A new copy of {\em str} which does not contain characters specified in {\em bag}
+in its both end is made and returned.}
+
+\funcdesc{substringp}{sub string}{
+T if string {\em sub} is contained in {\em string} as a substring.
+Not case sensitive.}
+
+\end{refdesc}
+
+\subsection{Foreign Strings}
+A foreign-string is a kind of byte-vector whose entity is held somewhere
+outside EusLisp's heap.
+While a normal string is represented by a sequence of bytes and its length,
+a foreign-string holds the length and the address of the string entity.
+Although foreign-string is a string,
+some string and  sequence functions cannot be applicable.
+Only {\bf length}, {\bf aref}, {\bf replace}, {\bf subseq} and {\bf copy-seq}
+recognize the foreign-string, 
+and application of other functions may cause a crash.
+
+A foreign-string may refer to a part of I/O space usually
+taken in /dev/a??d?? special file where ?? is either 32 or 16.
+In case the device attached in one of these I/O space only responds
+to byte access, {\bf replace} always copies element byte by byte,
+which is relatively slow when a large chunk of memory is accessed
+consecutively.
+
+\begin{refdesc}
+\funcdesc{make-foreign-string}{address length}{
+makes an instance of foreign-string located at {\em address} 
+and spanning for {\em length} bytes.
+For example, {\tt (make-foreign-string (unix:malloc 32) 32)}
+makes a reference to a 32-byte memory located outside EusLisp's heap.}
+
+\end{refdesc}
+\newpage
+
+\subsection{Hash Tables}
+
+Hash-table is a class to search for the value associated with a key,
+as accomplished by {\bf assoc}.
+For a relatively large problem,
+hash-table performs better than assoc, since time required for searching remains constant even
+the number of key-value pairs increases.
+Roughly speaking, hash-table should be used in search spaces with
+more than 100 elements, and assoc in smaller spaces.
+
+Hash-tables automatically expands if the number of elements
+in the table exceeds rehash-size.
+By default, expansion occurs when a half of the table is filled.
+{\bf sxhash} function returns a hash value which is independent
+of memory address of an object, and hash values for {\bf equal} objects
+are always the same.
+So, hash tables can be re-loadable since they use sxhash as their default
+hashing functions.
+While sxhash is robust and safe,
+it is relatively slow because it scans all the elements 
+in a sequence or a tree.
+For faster hashing, you may choose another hash function appropriate
+for your application.
+To change the hash function, send {\tt :hash-function} message
+to the hash-table.
+In simple cases, it is useful to change hash function from \#'{\bf sxhash}
+to \#'{\bf sys:address}.
+This is possible because the addresses of any objects
+never change in a EusLisp process.
+
+\begin{refdesc}
+
+\funcdesc{sxhash}{obj}{
+calculates the hash value for {\em obj}.
+Two objects which are {\bf equal} are guaranteed to yield
+the same hash value.
+For a symbol, hash value for its pname is returned.
+For numbers, their integer representations are returned.
+For a list, sum of hash values for all its elements is returned.
+For a string, shifted sum of each character code is returned.
+For any other objects, {\bf sxhash} is recursively called to calculate
+the hash value of each slot, and the sum of them is returned.}
+
+\funcdesc{make-hash-table}{\&key (size 30) (test \#'eq) (rehash-size 2.0)}{
+creates a hash table and returns it.}
+
+
+\funcdesc{gethash}{key htab}{
+gets the value that corresponds to {\em key} in {\em htab}.
+{\bf Gethash} is also used to set a value to key by combining with {\bf setf}.
+When a new entry is entered in a hash table, and the number of filled slots
+in the table exceeds 1/rehash-size, then the hash table is automatically
+expanded to twice larger size.}
+
+\funcdesc{remhash}{key htab}{
+removes a hash entry designated by {\em key} in {\em htab}.}
+
+\funcdesc{maphash}{function htab }{
+maps {\em function} to all the elements of {\em htab}.}
+
+\funcdesc{hash-table-p}{x}{T if {\em x} is an instance of class hash-table.}
+
+\classdesc{hash-table}{object}
+{(key value count \\
+\> hash-function test-function \\
+\> rehash-size empty deleted)}{
+defines hash table.
+{\em Key} and {\em value} are simple-vectors of the same {\em size}.
+{\em Count} is the number of filled slots in {\em key} and {\em value}.
+{\em Hash-function} is defaulted to {\bf sxhash} and
+{\em test-function} to {\bf eq}.
+{\em Empty} and {\em deleted} are uninterned symbols to indicate
+slots are empty or deleted in the {\em key} vector.}
+
+\methoddesc{:hash-function}{newhash}{
+changes the hash function of this hash table to {\em newhash}.
+{\em Newhash} must be a function with one argument and returns an integer.
+One of candidates for {\em newhash} is {\bf system:address}.}
+
+\end{refdesc}
+
+\subsection{Queue}
+
+A queue is a data structure that allows insertion and retrieval of data
+in the FIFO manner, i.e. the first-in first-out order.
+Since the queue class is defined by extending the cons class,
+ordinary list functions can be applied to a queue.
+For example, caar retrieves the next element to be dequeued,
+and cadr gets the element that is queued most recently.
+
+\begin{refdesc}
+
+\classdesc{queue}{cons}{(car cdr)}{
+defines queue (FIFO) objects.}
+
+\methoddesc{:init}{}{
+initializes the queue to have no elements.}
+
+\methoddesc{:enqueue}{val}{
+puts val in the queue as the most recent element.}
+
+\methoddesc{:dequeue}{\&optional (error-p nil)}{
+retrieves the oldest value in the queue, and removes it of the queue.
+If the queue is empty, it reports an error when error-p is non-nil,
+or returns NIL otherwise.}
+
+\methoddesc{:empty?}{}{returns T if the queue is empty.}
+\methoddesc{:length}{}{returns the length of the queue.}
+
+\end{refdesc}
+
+
+
+
+\newpage
+

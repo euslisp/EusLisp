@@ -1,0 +1,77 @@
+Received: from etlcom.etl.junet by etlic2.etl.junet (3.2/6.3Junet-1.0)
+	id AA17401; Tue, 25 Apr 89 20:57:24 JST
+Received: from etlic2.etl.junet by etlcom.etl.junet (3.2/6.3Junet-1.0)
+	id AA18658; Tue, 25 Apr 89 20:58:03 JST
+Received: by etlic2.etl.junet (3.2/6.3Junet-1.0)
+	id AA17397; Tue, 25 Apr 89 20:57:16 JST
+Date: Tue, 25 Apr 89 20:57:16 JST
+From: matsui@etlic2.etl.junet (Toshihiro MATSUI)
+Return-Path: <matsui@etlic2.etl.junet>
+Message-Id: <8904251157.AA17397@etlic2.etl.junet>
+To: @etlic2.etl.junet
+Subject: #< reader's bug
+Cc: euslisp@etlcom.etl.junet
+Status: R
+
+寺崎さんから質問が来ました。
+
+> 以前は、以下のような使い方をしても、ちゃんと動いていたと思うのですが、
+> この間いただいてきたバージョンでは、動かなくなりました。
+> 
+> GTS marr> eusx_new
+> euslisp version 4.15 created on Wed Feb 22 20:44:44 JST 1989
+> eusx$ load "/usr/local/eus_new/demo/x.l"
+> nil
+> eusx$ setq cub1 (make-cube 1 2 3)
+> #<body #X1a6f48 face=6 edge=12>
+> eusx$ draw cub1
+> t
+> eusx$ draw #<body #X1a6f48 face=6 edge=12>
+> eusx_new error: object expected in (apply #'eustop args)
+> E1-eusx$
+> 
+> なぜでしょうか？？？
+
+(draw cub1)は動く。
+cub1 は #<body #X1a6f48 face=6 edge=12>である。しかし、
+(draw #<body #X1a6f48 face=6 edge=12>) は動かない。
+
+このエラーは、reader が、#<body #X1a6f48 face=6 edge=12>を正しく読み
+込めないために起こっています。CommonLispでは、#< をエラーにするよう
+さだめており、その意味では正しいのですが、EusLispは、便宜的に#<を読
+めるようにしていました。ただ、これは、いつも正しく動く機能ではありま
+せん。ゴミ集めで回収されてしまったオブジェクトはもう、復活しません。
+それどころか、危険ですらあります。わかって使ってもらうのはいいのです
+が、あまりお勧めはしません。
+
+とにかく、この虫(?)は、#<クラス名 #Xアドレス> のアドレス部の値が以前
+と違ってしまっているのが原因です。このオブジェクトのプリント法は、
+l/common.lの中でクラスobjectの:prin1メソッドとして定義してあります。
+以前はオフセットがかかったポインタ値をそのままプリントしていたのですが、
+今はsystem:address関数が返す、オフセットのかかってないアドレスがプリント
+されているためです。sun3では、ポインタに2のオフセットがかかっています。
+sun4にはオフセットがかかっていないので正しく動いており、私は虫がないと
+信じていました。この辺の事情はややこしいのであまり追求しない
+で下さい:-)。
+
+パッチです。
+c/reader.c の中のread_sharp_object関数の定義を次のコードと交換して
+makeして下さい。
+
+pointer read_sharp_object(f)	/* #< */
+pointer f;
+{ register pointer element,result,obj;
+  register int val;
+  element=read1(f);
+  if (!issymbol(element)) error(E_NOSYMBOL);  /*class name*/
+  element=spevalof(element);
+  if (!isclass(element)) error(E_NOCLASS,element);
+  obj=read1(f); val=ckintval(obj);
+  result=makepointer(val);
+  if (classof(result)!=element) error(E_TYPEMISMATCH);
+  while (readch(f)!='>') ;
+  return(result);}
+
+
+
+[32~

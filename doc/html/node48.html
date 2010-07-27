@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Vectors and Arrays</TITLE>
+<META NAME="description" CONTENT="Vectors and Arrays">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2502" HREF="node49.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2500" HREF="node45.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2494" HREF="node47.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2504" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2505" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2503" HREF="node49.html">Characters and Strings</A>
+<B>Up:</B> <A NAME="tex2html2501" HREF="node45.html">SequencesArrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html2495" HREF="node47.html">Lists</A>
+<BR> <P>
+<H2><A NAME="SECTION03073000000000000000">Vectors and Arrays</A></H2>
+<P>
+Up to seven dimensional arrays are allowed.
+A one-dimensional array is called vector.
+Vectors and lists are grouped as sequence.
+If the elements of an array is of any type, the array is said to be general.
+If an array does not have fill-pointer, is not displaced to
+another array, or is adjustable, the array is said to be simple.
+<P>
+Every array element can be recalled by <B>aref</B> and set by <B>setf</B> in
+conjunction with aref.
+But for simple vectors, there are simpler and faster access functions:
+<B>svref</B> for simple general vectors, <B>char</B> and <B>schar</B> for
+simple character vectors (string), <B>bit</B> and <B>sbit</B> for
+simple bit vectors.  When these functions are compiled,
+the access is expanded in-line and no type check and boundary check are 
+performed.
+<P>
+Since a vector is also an object,
+it can be made by instantiating some vector-class.
+There are five kinds of built-in vector-classes;
+vector, string, float-vector, integer-vector and bit-vector.
+In order to ease instantiation of vectors, the function make-array
+is provided.
+Element-type should be one of <B>:integer, :bit, :character, :float, :foreign</B>
+or user-defined vector class.
+<B>:initial-element</B> and <B>:initial-contents</B> key word arguments are
+available to set initial values of the array you make.
+<P>
+<A NAME=6714>&#160;</A>
+<B>array-rank-limit</B> <EM></EM>[constant] 
+<UL><LI> </UL>
+<A NAME=6724>&#160;</A>
+<B>array-dimension-limit</B> <EM></EM>[constant] 
+<UL><LI> #x1fffffff, logically, but stricter
+limit is imposed by the physical or virtual memory size of the system.
+</UL>
+<A NAME=6734>&#160;</A>
+<B>vectorp</B> <EM>object </EM>[function] 
+<UL><LI> An array is not a vector even if it is one dimensional.
+T is returned for vectors, integer-vectors, float-vectors, strings,
+bit-vectors or other user-defined vectors.
+</UL>
+<A NAME=6744>&#160;</A>
+<B>vector</B> <EM>&amp;rest elements </EM>[function] 
+<UL><LI> makes a simple vector from <EM>elements.
+</UL>
+<A NAME=6755>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing6756" SRC="img27.gif"  > <P>
+<UL><LI> makes a vector or array. 
+<EM>dims is either an integer or a list.
+If <EM>dims is an integer, a simple-vector is created.
+</UL>
+<A NAME=6768>&#160;</A>
+<B>svref</B> <EM>vector pos </EM>[function] 
+<UL><LI> returns <EM>posth element of <EM>vector.
+<EM>Vector</EM> must be a simple general vector.
+</UL>
+<A NAME=6781>&#160;</A>
+<B>aref</B> <EM>vector &amp;rest (indices) </EM>[function] 
+<UL><LI> returns the element indexed by <EM>indices.
+<B>Aref</B> is not very efficient
+because it needs to dispatch according to the type of <EM>vector</EM>.
+Type declarations should be given to improve the speed of compiled code
+whenever possible.
+</UL>
+<A NAME=6794>&#160;</A>
+<B>vector-push</B> <EM>val array </EM>[function] 
+<UL><LI> store <EM>val at the <EM>fill-pointer</EM>th slot in <EM>array</EM>.
+<EM>array</EM> must have a <EM>fill-pointer</EM>.
+After val is stored,
+the fill-pointer is advanced by one to point to the next location.
+If it exceeds the array boundary, an error is reported.
+</UL>
+<A NAME=6809>&#160;</A>
+<B>vector-push-extend</B> <EM>val array </EM>[function] 
+<UL><LI> Similar to  <B>vector-push</B> except that
+the size of the array is automatically extended
+when <EM>array's fill-pointer reaches  the end.
+</UL>
+<A NAME=6821>&#160;</A>
+<B>arrayp</B> <EM>obj </EM>[function] 
+<UL><LI> T if <EM>obj is an instance of array or vector.
+</UL>
+<A NAME=6832>&#160;</A>
+<B>array-total-size</B> <EM>array </EM>[function] 
+<UL><LI> returns the total number of elements
+of <EM>array.
+</UL>
+<A NAME=6843>&#160;</A>
+<B>fill-pointer</B> <EM>array </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6854>&#160;</A>
+<B>array-rank</B> <EM>array </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6865>&#160;</A>
+<B>array-dimensions</B> <EM>array </EM>[function] 
+<UL><LI> returns a list of array-dimensions.
+</UL>
+<A NAME=6875>&#160;</A>
+<B>array-dimension</B> <EM>array axis </EM>[function] 
+<UL><LI> Axis starts from 0. <B>array-dimension</B> returns the <EM>axisth
+dimension of <EM>array.
+</UL>
+<A NAME=6888>&#160;</A>
+<B>bit</B> <EM>bitvec index </EM>[function] 
+<UL><LI> returns the <EM>indexth element of <EM>bitvec.
+Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
+</UL>
+<A NAME=6902>&#160;</A>
+<B>bit-and</B> <EM>bits1 bits2 &amp;optional result </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6913>&#160;</A>
+<B>bit-ior</B> <EM>bits1 bits2 &amp;optional result </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6924>&#160;</A>
+<B>bit-xor</B> <EM>bits1 bits2 &amp;optional result </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6935>&#160;</A>
+<B>bit-eqv</B> <EM>bits1 bits2 &amp;optional result </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6946>&#160;</A>
+<B>bit-nand</B> <EM>bits1 bits2 &amp;optional result </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6957>&#160;</A>
+<B>bit-nor</B> <EM>bits1 bits2 &amp;optional result </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6968>&#160;</A>
+<B>bit-not</B> <EM>bits1 &amp;optional result </EM>[function] 
+<UL><LI> For bit vectors <EM>bits1 and <EM>bits2 of the same length,
+their boolean and, inclusive-or,
+exclusive-or, equivalence, not-and, not-or and not are returned, respectively.
+</UL>
+<P>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2502" HREF="node49.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2500" HREF="node45.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2494" HREF="node47.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2504" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2505" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2503" HREF="node49.html">Characters and Strings</A>
+<B>Up:</B> <A NAME="tex2html2501" HREF="node45.html">SequencesArrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html2495" HREF="node47.html">Lists</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

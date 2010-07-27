@@ -1,0 +1,107 @@
+\subsection{Voronoi Diagram of Polygons}
+
+\begin{refdesc}
+
+\hfill {\em Author: Philippe PIGNON, ETL Guest Researcher}
+
+The program is written in COMMON LISP. I used the method of Fortune, 
+ "A sweepline algorithm for Voronoi diagrams", in Proceedings of
+the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.
+I adapted it to the polygonal case. This is a sample file with short
+explanations
+This program was written under Electrotechnical EUSLISP environment,
+so graphic connections are provided for it. 
+However, you can use it with any COMMON-LISP; you'll then have to write your
+own display functions to replace those given in utilities.l file (see below)
+
+{\bf PURPOSE:} Computation of the voronoi diagram of a set of polygons.
+Please read the above quoted reference to understand the vocabulary and
+method used. No explanations about the program itself  will be given here.
+
+{\bf INPUT:} A list of polygons coordinates plus an enclosing frame.
+\begin{verbatim}
+DATA= (
+       (x11 y11 x12 y12 x13 y13 ...) first polygon,
+                                     counterclocwise enumeration of vertices
+       (x21 y21 x22 y22 x23 y23 ...) second polygon
+               ... 
+       (xn1 yn1 xn2 yn2 xn3 yn3 ...) nth polygon
+	     
+       (xf1 yf1 xf2 yf2 xf3 yf3 xf4 yf4) enclosing frame
+      )
+\end{verbatim}
+Enclosing frame can occur anywhere in data, and should be clockwise enumerated
+for outside-inside marking consistency (see below). Polygons must be simple,
+non intersecting. Aligned or flat edges are not accepted. 
+Neither are isolated points or segments.
+
+{\bf OUTPUT:} *diagram*: a list of doubly connected edges list
+(cf utilities.l file). Each edge is a symbol, with  property list
+including the following fields:
+\begin{verbatim}
+(start <pointer to a vertex>)
+       (end <pointer to a vertex>)
+       (pred <pointer to an edge>)
+       (succ <pointer to an edge>)
+       (left <pointer to a site>)
+       (right <pointer to a site>)
+       (type <:endpoint or :point-point or :segment-segment or :point-segment>)
+       (outflag <t or nil>)
+\end{verbatim}
+A $vertex$ is a symbol whose property list contains the field "pos".
+This field itself contains a cons $(x y)$, (real) planar coordinates
+of the vertex.
+$Pred$ and $succ$ field give counterclockwise predecessor and successor
+according to the dcel formalism (see Shamos and Preparata,
+Computational Geometry: An introduction, 1985, pp 15-17).
+A $site$ is also a symbol, whose property list also contains relevant
+information.
+Sites describe original input data; they can be of type
+:point (a polygon vertex) or segment (a polygon edge).
+
+$Type$ is the gender of the bisector, determined by the type of the sites
+it separates.
+By convention, outside is the right side of a start-end edge.
+The voronoi diagram computes ouside as well as inside bisectors.
+Sort on outflag to keep the ones you want.
+
+\funcdesc{pv}{data}{
+Compute the Voronoi diagram of polygons from the $data$ with the above format.}
+
+{\bf SAMPLE:}
+In order to run the program on a short  sample, 
+please perform the following steps:
+\\
+0- Copy the following files in your environment:
+\\
+\begin{tabular}{ll}
+utilities.l & Geometric utility functions, plus EUSX graphic functions\\
+polygonalvoronoi.l & The program.\\
+testdata.l & Demonstration data, with the above format.  
+\end{tabular}
+\\
+1- If you do not use EUS, edit the utilities.l file and
+modify the "compatibility package" according to the instructions.
+\\
+2- Compile and/or load the following 3 files:
+\\
+\begin{tabular}{ll}
+utilities.l\\
+polygonalvoronoi.l\\
+testdata.l & This file contains demonstration data,with the above format
+\end{tabular}
+\\
+3- (pv demoworld)  run the program on demonstration data. 
+The global variable *diagram* contains the bisectors of the voronoi diagram.
+
+Under EUSX only (eus with XWindow interface), do the following
+to display the resulting diagram:
+\begin{verbatim}
+       (make-display)          ;;Initializes the *display* window object
+       (dps demoworld *thick*) ;; Shows original data in thick lines
+       (dbs *diagram*)         ;; Shows the result
+\end{verbatim}
+
+\end{refdesc}
+
+\newpage

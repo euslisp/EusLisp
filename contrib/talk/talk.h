@@ -1,0 +1,42 @@
+static pointer uwp74();
+static pointer uwp84();
+static pointer (*ftab[5])();
+
+#define QUOTE_STRINGS_SIZE 35
+const static char *quote_strings[QUOTE_STRINGS_SIZE]={
+    ":element-type",
+    ":integer",
+    "make-array",
+    "string-downcase",
+    "(32 9)",
+    "member",
+    "\"talk-db\"",
+    "*db*",
+    ":direction",
+    ":output",
+    "open",
+    "\"talk-db\"",
+    "\"Welcome to eus talk. Type bye to finish.~%\"",
+    "\"Hello\"",
+    "\"--> ~a~%<-- \"",
+    "*line*",
+    "\"bye\"",
+    "string-equal",
+    ":special",
+    "(special *db*)",
+    "(special *line*)",
+    "freq",
+    "\"(str)\"",
+    "hamming",
+    "\"(v1 v2)\"",
+    "write-database",
+    "\"(&optional (fname \\\"talk-db\\\") (a *db*))\"",
+    "read-database",
+    "\"(&optional (fname \\\"talk-db\\\"))\"",
+    "answer",
+    "\"(frq)\"",
+    "remember",
+    "\"(q a)\"",
+    "talk",
+    "\"nil\"",
+  };

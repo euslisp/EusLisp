@@ -1,0 +1,258 @@
+#VRML V2.0 utf8 CosmoWorlds V1.0
+
+# Fusuma with viewpoint canceling
+
+Viewpoint {
+    position 0 1 4
+    #position -2.24544 1.25362 3.1961
+    #orientation -0.133839 -0.991 -0.00308054 0.513585
+}
+
+WorldInfo {
+    title "fusuma.wrl"
+}
+
+Background {
+    skyColor 0.428030 0.405299 0.607547
+}
+
+NavigationInfo {
+    type "WALK"
+    speed 1
+}
+
+Group {
+  children	[
+    DEF YUKA Transform {
+      children	Shape {
+	appearance	Appearance {
+	  material	DEF _0 Material {
+	  }
+	  texture	ImageTexture {
+	    url	"tatami.gif"
+	  }
+	  textureTransform	TextureTransform {
+	    translation	0 0
+	    rotation	1.5708
+	    scale	0.68487 5
+	    center	0.5 0.5
+	  }
+	}
+	geometry Box {
+          size 10 0.1 10
+        }
+      }
+      translation	0 0 0
+      #scale	5 0.05 5
+    }
+    DEF RAIL_BOTTOM Transform {
+      children [
+	Transform {
+	  children	Shape {
+	    appearance	Appearance {
+	      material	USE _0
+	      texture	ImageTexture {
+	        url	"wood.gif"
+	      }
+	    }
+	    geometry	Box {
+              size 3.6 0.05 0.17
+	    }
+	  }
+	  translation	0 0.07371 0.1645
+	  #scale	1.8 0.025 0.085
+	}
+	Transform {
+	  children	Shape {
+	    appearance	Appearance {
+	      material	USE _0
+	      texture	ImageTexture {
+		url	"wood.gif"
+	      }
+	    }
+	    geometry	Box {
+	      #size	0.2 0.2 0.2
+	      size	3.6 0.1 0.1
+	    }
+          }
+	  translation	0 0.1 0.3
+	  #scale	18 0.5 0.5
+	}
+	Transform {
+	  children	Shape {
+	    appearance	Appearance {
+	      material	Material {
+	      }
+	      texture	ImageTexture {
+		url	"wood.gif"
+	      }
+	    }
+	    geometry	Box {
+              size 3.6 0.1 0.1
+	    }
+	  }
+	  translation	0 0.1 0.032611
+	  #scale	1.8 0.05 0.05
+	}
+      ]
+    }
+    DEF RAIL_TOP Transform {
+      children [
+	Transform {
+	  children	Shape {
+	    appearance	Appearance {
+	      material	DEF _2 Material {
+	      }
+	      texture	ImageTexture {
+		url	"wood.gif"
+	      }
+	    }
+	    geometry	Box {
+              size 3.6 0.05, 0.17
+	    }
+	  }
+	  translation	0 1.91656 0.1645
+	  #scale	1.8 0.025 0.085
+	}
+	Transform {
+	  children	Shape {
+	    appearance	Appearance {
+	      material	USE _2
+	      texture	ImageTexture {
+		url	"wood.gif"
+	      }
+	    }
+	    geometry	Box {
+	      #size	0.2 0.2 0.2
+	      size	3.6 0.1 0.1
+	    }
+          }
+	  translation	-0.00127703 1.89147 0.299495
+	  #scale	18 0.5 0.5
+	}
+	Transform {	
+	  children	Shape {
+	    appearance	Appearance {
+	      material	USE _2
+	      texture	ImageTexture {
+		url	"wood.gif"
+	      }
+	    }
+	    geometry	Box {
+	      size 3.6 0.1 0.1
+            }
+	  }
+	  translation	0.00268009 1.891 0.0306586
+	  #scale	1.8 0.05 0.05
+	}
+      ]
+    }
+
+
+DEF FUSUMA_RIGHT_V1 Transform {
+  children [
+    DEF FUSUMA_RIGHT_SENSOR PlaneSensor {
+      autoOffset FALSE
+    }
+    DEF FUSUMA_RIGHT_V2 Transform {
+      children [
+        DEF FUSUMA_RIGHT Transform {
+          children [
+            Shape {
+              appearance Appearance {
+                material DEF _1 Material {
+                }
+                texture  ImageTexture {
+                  url "fuji.1.r.gif"
+                }
+              }
+              geometry Box {
+                size 0.9 1.8 0.15
+              }
+            }
+          ]
+          translation 0.526531 1.0124 0.163637
+          #scale       0.45 0.9 0.075
+        }	# FUSUMA_RIGHT
+      ]
+    }		# FUSUMA_RIGHT_V2
+  ]
+}		# FUSUMA_RIGHT_V1
+
+
+DEF FUSUMA_LEFT_V1 Transform {
+  children [
+    DEF FUSUMA_LEFT_SENSOR PlaneSensor {
+      autoOffset FALSE
+    }
+    DEF FUSUMA_LEFT_V2 Transform {
+      children [
+
+    DEF FUSUMA_LEFT Transform {
+      children [
+      Shape {
+	appearance	Appearance {
+	  material	USE _1
+	  texture	ImageTexture {
+	    url	"fuji.1.l.gif"
+	  }
+	}
+	geometry	Box {
+          size 0.9 1.8 0.15
+	}
+      }
+      ]
+      translation	-0.492213 1.00348 0.166347
+      #scale	0.45 0.9 0.075
+    }
+
+      ]
+    }		# FUSUMA_LEFT_V2
+  ]
+}		# FUSUMA_LEFT_V1
+
+
+
+  ]
+}
+
+DEF PROX ProximitySensor {
+    center 0 0 0
+    size 1000000 1000000 1000000
+}
+
+DEF SCRIPT Script {
+    url "MoveObject.class"
+
+    eventIn SFVec3f viewPosition
+    eventIn SFRotation viewOrientation
+    eventOut SFVec3f viewPositionCancel
+    eventOut SFRotation viewOrientationCancel
+
+    eventIn SFBool dragging
+
+    eventIn SFVec3f e_fusuma_right
+    eventOut SFVec3f e_fusuma_rightTr
+    eventOut SFRotation e_fusuma_rightRt
+
+    eventIn SFVec3f e_fusuma_left
+    eventOut SFVec3f e_fusuma_leftTr
+    eventOut SFRotation e_fusuma_leftRt
+}
+
+ROUTE PROX.orientation_changed TO SCRIPT.viewOrientation
+ROUTE PROX.position_changed TO SCRIPT.viewPosition
+
+ROUTE PROX.orientation_changed TO FUSUMA_RIGHT_V1.set_rotation
+ROUTE SCRIPT.viewOrientationCancel TO FUSUMA_RIGHT_V2.set_rotation
+ROUTE FUSUMA_RIGHT_SENSOR.isActive TO SCRIPT.dragging
+ROUTE FUSUMA_RIGHT_SENSOR.translation_changed TO SCRIPT.e_fusuma_right
+ROUTE SCRIPT.e_fusuma_rightTr TO FUSUMA_RIGHT.set_translation
+ROUTE SCRIPT.e_fusuma_rightRt TO FUSUMA_RIGHT.set_rotation
+
+ROUTE PROX.orientation_changed TO FUSUMA_LEFT_V1.set_rotation
+ROUTE SCRIPT.viewOrientationCancel TO FUSUMA_LEFT_V2.set_rotation
+ROUTE FUSUMA_LEFT_SENSOR.isActive TO SCRIPT.dragging
+ROUTE FUSUMA_LEFT_SENSOR.translation_changed TO SCRIPT.e_fusuma_left
+ROUTE SCRIPT.e_fusuma_leftTr TO FUSUMA_LEFT.set_translation
+ROUTE SCRIPT.e_fusuma_leftRt TO FUSUMA_LEFT.set_rotation

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Foreign Strings</TITLE>
+<META NAME="description" CONTENT="Foreign Strings">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2526" HREF="node51.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2524" HREF="node45.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2518" HREF="node49.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2528" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2529" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2527" HREF="node51.html">Hash Tables</A>
+<B>Up:</B> <A NAME="tex2html2525" HREF="node45.html">SequencesArrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html2519" HREF="node49.html">Characters and Strings</A>
+<BR> <P>
+<H2><A NAME="SECTION03075000000000000000">Foreign Strings</A></H2>
+<P>
+A foreign-string is a kind of byte-vector whose entity is held somewhere
+outside EusLisp's heap.
+While a normal string is represented by a sequence of bytes and its length,
+a foreign-string holds the length and the address of the string entity.
+Although foreign-string is a string,
+some string and  sequence functions cannot be applicable.
+Only <B>length</B>, <B>aref</B>, <B>replace</B>, <B>subseq</B> and <B>copy-seq</B>
+recognize the foreign-string, 
+and application of other functions may cause a crash.
+<P>
+A foreign-string may refer to a part of I/O space usually
+taken in /dev/a??d?? special file where ?? is either 32 or 16.
+In case the device attached in one of these I/O space only responds
+to byte access, <B>replace</B> always copies element byte by byte,
+which is relatively slow when a large chunk of memory is accessed
+consecutively.
+<P>
+<A NAME=7272>&#160;</A>
+<B>make-foreign-string</B> <EM>address length </EM>[function] 
+<UL><LI> makes an instance of foreign-string located at <EM>address 
+and spanning for <EM>length</EM> bytes.
+For example, <TT>(make-foreign-string (unix:malloc 32) 32)</TT>
+makes a reference to a 32-byte memory located outside EusLisp's heap.
+</UL>
+<P>
+</EM><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

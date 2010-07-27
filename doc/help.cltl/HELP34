@@ -1,0 +1,92 @@
+(array-total-size-limit variable-documentation "
+The upper bound of the total number of elements of an array.")
+(case function-documentation "
+Syntax: (case keyform {({key | ({key}*)} {form}*)}*)
+Evaluates KEYFORM and searches a KEY that is EQL to the value of KEYFORM.  If
+found, then evaluates FORMs in order that follow the KEY (or the key list that
+contains the KEY) and returns all values of the last FORM.  Returns NIL if no
+such key is found.  The symbols T and OTHERWISE may be used at the place of a
+key list to specify the default case.")
+(ccase function-documentation "
+Syntax: (ccase place {({key | ({key}*)} {form}*)}*)
+Searches a KEY that is EQL to the value of PLACE.  If found, then evaluates
+FORMs in order that follow the KEY (or the key list that contains the KEY) and
+returns all values of the last FORM.  If no such KEY is found, signals a
+continuable error.  Before continuing, receives a new value of PLACE from
+user and searches a KEY again.  Repeats this process until the value of PLACE
+becomes EQL to one of the KEYs.")
+(ctypecase function-documentation "
+Syntax: (ctypecase place {(type {form}*)}*)
+Searches a TYPE to which the value of PLACE belongs.  If found, then evaluates
+FORMs that follow the TYPE and returns all values of the last FORM.  If no
+such TYPE is found, signals a continuable error.  Before continuing, receives
+a new value of PLACE from the user and searches an appropriate TYPE again.
+Repeats this process until the value of PLACE becomes of one of the TYPEs.")
+(ecase function-documentation "
+Syntax: (ecase keyform {({key | ({key}*)} {form}*)}*)
+Evaluates KEYFORM and tries to find the KEY that is EQL to the value of
+KEYFORM.  If found, then evaluates FORMs that follow the KEY (or the key list
+that contains the KEY) and returns all values of the last FORM.  If not,
+signals an error.")
+(etypecase function-documentation "
+Syntax: (etypecase keyform {(type {form}*)}*)
+Evaluates KEYFORM and searches a TYPE to which the value of KEYFORM belongs.
+If found, then evaluates FORMs that follow the TYPE and returns all values of
+the last FORM.  If not, signals an error.")
+(go function-documentation "
+Syntax: (go tag)
+Jumps to TAG.  See TAGBODY.")
+(identity function-documentation "
+Args: (x)
+Returns X.")
+(logorc1 function-documentation "
+Args: (integer1 integer2)
+Equivalent to (LOGIOR (LOGNOT INTEGER1) INTEGER2).")
+(multiple-value-prog1 function-documentation "
+Syntax: (multiple-value-prog1 first-form {form}*)
+Evaluates FIRST-FORM, saves all values it returns, and then evaluates FORMs.
+Returns all the saved values of FIRST-FORM.")
+(nreverse function-documentation "
+Args: (sequence)
+Destructive REVERSE.  The arg may be destroyed.")
+(phase function-documentation "
+Args: (number)
+Returns the angle part (in radians) of the polar representation of NUMBER.
+Returns zero for non-complex numbers.")
+(provide function-documentation "
+Args: (module-name)
+Declares the start of a program module.  Usually used at the beginning of a
+program file.  MODULE-NAME may be a string or a symbol.  If it is a string, it
+is pushed onto *MODULES*.  If it is a symbol, its print name is pushed.  See
+REQUIRE.")
+(random-state-p function-documentation "
+Args: (x)
+Returns T if X is a random-state object; NIL otherwise.")
+(read-line function-documentation "
+Args: (&optional (stream *standard-input*)
+                 (eof-error-p t) (eof-value nil) (recursive-p nil))
+Reads a line of characters from STREAM and returns them as a string.  The
+newline character at the end of the line will be discarded.")
+(remove-duplicates function-documentation "
+Args: (sequence
+       &key (key #'identity) (test #'eql) test-not
+            (start 0) (end (length sequence)) (from-end nil))
+Returns a copy of SEQUENCE without duplicated elements.")
+(set-syntax-from-char function-documentation "
+Args: (to-char from-char
+       &optional (to-readtable *readtable*) (from-readtable nil))
+Replaces the information for TO-CHAR in TO-READTABLE with the information for
+FROM-CHAR in FROM-READTABLE.  If FROM-READTABLE is NIL, then the standard
+readtable is used.  TO-CHAR belongs to the same syntactic class as FROM-CHAR,
+and if FROM-CHAR is a macro character, TO-CHAR inherits the read macro and
+non-terminating-p flag of FROM-CHAR.  See READTABLE.")
+(typecase function-documentation "
+Syntax: (typecase keyform {(type {form}*)}*)
+Evaluates KEYFORM and searches a TYPE to which the value of KEYFORM belongs.
+If found, then evaluates FORMs that follow the TYPE and returns all values of
+the last FORM.  If not, simply returns NIL.  The symbols T and OTHERWISE may
+be used as a TYPE to specify the default case.")
+(write-line function-documentation "
+Args: (string &optional (stream *standard-output*)
+              &key (start 0) (end (length string)))
+Outputs STRING and a newline character to STREAM.  Returns STRING.")

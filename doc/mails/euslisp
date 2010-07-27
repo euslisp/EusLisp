@@ -1,0 +1,2603 @@
+From inaba@jsk.u-tokyo.junet Tue Jul 11 16:03:07 1989
+Received: from etlcom.etl.junet by etlic2.etl.junet (3.2/6.3Junet-1.0)
+	id AA17956; Tue, 11 Jul 89 16:03:03 JST
+Received: by etlcom.etl.junet (5.51/6.3Junet-1.0)
+	id AA00587; Tue, 11 Jul 89 16:04:19 JST
+Received: from ccutrd by titcca.cc.titech.junet (5.61/6.4J.1)
+	id AA17186; Tue, 11 Jul 89 16:00:35 +0900
+Received: from jsk by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut1.30)
+	id AA23542; Tue, 11 Jul 89 16:07:49 +0900
+Received: from grus.jsk.u-tokyo.junet (grus.ARPA) by jsk.jsk.u-tokyo.junet (1.00/6.3Junet-1.0)
+	id AA00209; Wed, 12 Jul 89 01:02:43 jst
+Received: by grus.jsk.u-tokyo.junet (3.2/6.3Junet-1.0)
+	id AA27117; Tue, 11 Jul 89 16:09:04 JST
+Date: Tue, 11 Jul 89 16:09:04 JST
+From: inaba@jsk.u-tokyo.junet (Masayuki Inaba)
+Return-Path: <inaba@jsk.u-tokyo.junet>
+Message-Id: <8907110709.AA27117@grus.jsk.u-tokyo.junet>
+To: matsui@etlic2.etl.junet
+In-Reply-To: Toshihiro MATSUI's message of Tue, 11 Jul 89 13:46:48 JST <8907110446.AA16835@etlic2.etl.junet>
+Subject: viewsurface
+Status: RO
+
+   >>Date: Tue, 11 Jul 89 13:46:48 JST
+   >>From: matsui@etlic2.etl.junet (Toshihiro MATSUI)
+   >>
+   >>According to your definition of viewport, scaling information
+   >>is included in rot matrix. For example, if you have a viewport
+   >>of 300*300, rot is #2f((300 0 0) (0 300 0) (0 0 1)). Then, if
+   >>you try to :translate it by #f(1 1 0), the rot is applied to this
+   >>vector, and the viewport moves #f(300 300 0).  I think this
+   >>is inconvenient.
+
+It looks like inconvinient. But, #f(1 1 0), you mentioned above,
+should be assumed as a local vector in the coordinates which is
+defined by #2f((300 0 0) (0 300 0) ( 0 0 1)).
+When we want to move the local coordinates 'Viewport' to
+#f(300 300 0) in the viewsurface coordinates,
+it is ok by using
+(send viewport :translate #f(300 300 0) 'world), isn't it?
+
+   >>Scaling parameter should be held independently, shouldn't it?
+
+I'm not sure, but I am afraid the redundancy makes some bad effects.
+
+From fujii@jsk.t.u-tokyo.ac.jp Sat Feb  3 14:48:19 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA02967; Sat, 3 Feb 90 05:48:18 GMT
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA20716; Sat, 3 Feb 90 14:47:59 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA24500; Sat, 3 Feb 90 14:47:07 +0900
+Received: from jsk by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.23)
+	id AA10435; Sat, 3 Feb 90 14:47:18 +0900
+Received: from centaurus.jsk.t.u-tokyo.ac.j by pegasus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA00192; Sat, 3 Feb 90 14:43:41 JST
+Received: by centaurus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA00262; Sat, 3 Feb 90 14:07:16 JST
+Date: Sat, 3 Feb 90 14:07:16 JST
+From: fujii@jsk.t.u-tokyo.ac.jp (Fujii Makoto)
+Return-Path: <fujii>
+Message-Id: <9002030507.AA00262@centaurus.jsk.t.u-tokyo.ac.jp>
+To: euslisp@etl.go.jp
+Subject: Bug? in geopack
+Status: RO
+
+東大 の 藤井です。
+最近めっきりこのメイリングリストも投稿が少なくなりましたね。
+安定して使われている証拠でしょうか。
+ところで、geopack.lの closed-regionに対するメソッドで、
+
+ (:init (&key ((:vertices ver)) ((:edges edg))
+	      ((:normal nor)) ((:distance dis)))
+    ;prepare edges and vertices
+    (cond 
+	(edg
+         (setq edges edg)
+	 (when (null ver)
+             (dolist (e edg)  (push (send e :nvertex (send self :face)) ver))
+	     (nreverse ver)
+	     (setq vertices (cons (send (car edg) :pvertex (send self :face))
+			          ver))))
+        (ver	;no edges given; vertices are used to make new edges
+	 (setq vertices (append (last ver) ver))
+	 (while ver
+	   (push (instance *edge-class* :init
+				:pvertex (pop ver)
+	;;;;			:nvertex (if ver (car ver) (car vertices))
+	;;;;	この上の行はまちがいで、              ここを^^^ 
+				:nvertex (if ver (car ver) (cadr vertices))
+	;;					    こうした ^^^^ 
+	;;      らいいんでしょうね。
+				:pface self)
+		 edges))
+	 (nreverse edges))) 
+    (if nor (setq normal nor) (send self :reset-normal))
+    (if dis (setq distance dis))
+    (setq model-normal (copy-seq normal)
+	  model-distance distance)
+    ; compute convexp
+    (let ((verts (append vertices (list (cadr vertices)))))
+       (setq convexp t)
+       (while (cddr verts)
+	  (when (< (triangle (pop verts) (car verts) (cadr verts) normal) 0.0)
+	      (setq convexp nil verts nil))))
+    self)
+ )
+もっとも、手作りでclosed-regionやfaceを作るんでないかぎり、問題ないと
+思うのですが。(ふつうはmake-cubeとかで作りますもんね。)
+ 話は変わるのですが、propertied-objectって便利ですね。なんでも
+propertied-object にしておけば、あとで機能拡張するときにサブクラスをつ
+くらなくてもしのげそう。
+
+             藤井   誠  Fujii Makoto
+           東京大学工学系研究科 機械工学専攻
+           井上・稲葉研究室 修士2年 
+           fujii@jsk.t.u-tokyo.ac.jp
+
+
+From inaba@jsk.t.u-tokyo.ac.jp Sat Feb  3 19:52:42 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA03057; Sat, 3 Feb 90 10:52:41 GMT
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA26591; Sat, 3 Feb 90 19:52:29 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA00686; Sat, 3 Feb 90 19:51:51 +0900
+Received: from cetus by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.23)
+	id AA19119; Sat, 3 Feb 90 19:52:02 +0900
+Received: from grus.jsk.t.u-tokyo.ac.jp (grus.ARPA) by cetus.jsk.t.u-tokyo.ac.jp (1.00/6.4J.6)
+	id AA00593; Sun, 4 Feb 90 04:52:46 jst
+Received: by grus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA20926; Sat, 3 Feb 90 20:03:45 JST
+Date: Sat, 3 Feb 90 20:03:45 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9002031103.AA20926@grus.jsk.t.u-tokyo.ac.jp>
+To: matsui@etl.go.jp
+Subject: inspect.l
+Status: RO
+
+
+昨日は遅くまでお世話になりありがとうございました。
+slotの値を書き換える機能と、マクロにすることで、
+最初に与えられる変数名の値がユーザプログラムの中で置換えられたら
+(winspect)と無引数で呼ぶことでウィンドウの表示がその値で置き換えられる
+ような機能をつけました。この二つ目の機能をネストされたウィンドウ
+に対しても実行されるように、親からのリンクをすべて持たせています。
+
+Xviewの方では、昨日帰りがけにお話した理由で、ウィンドウ初期化が
+できないので、ウィンドウが出たあとUpdateボタンを押さないと表示が
+なされません。
+
+試してみてください。
+
+-------------------------winspect.l------------------------
+;;;
+;;;		Window-based Inspecter 1990.2.2
+;;;					by M.Inaba and T.Matsui
+;;;	(winspect variable)
+;;;	or
+;;;	(winspect) -> update the display like "Update" button
+;;;
+;;;    Usage:
+;;;(1) Interactive inspecting
+;;;	eusview$ (setq a (make-cube 10 20 30))
+;;;	eusview$ (winspect a)
+;;;
+;;;	Select slot's line by mouse in textsw.
+;;;	Push Inspect button
+;;;	then a inspect window will be displayed under the window.
+;;;
+;;;(2) Value monitoring
+;;;	The name of global variable 'a is memorized. If you update
+;;;	the value of a, such as
+;;;	eusview$ (setq a (make-cube 100 100 100))
+;;;	and call winspect again like
+;;;	eusview$ (winspect)
+;;;	then the display in all of the inspect windows updated.
+;;;
+;;;(3) Slot value editing function
+;;;	Select slot in a textsw, for example 'pos' of 'a'.
+;;;	Set a form in the text item like, '#f(100 100 100).
+;;;	then the value of (a . pos) is changed to #f(100 100 100).
+;;;
+;;;
+(format t "(winspect variable)~%")
+;;;
+(defvar *winspect-window*)
+(defmacro winspect (&optional sym)
+  `(cond
+    ((null ,sym)
+     (send *winspect-window* :button-update))
+    (t
+     (setq *winspect-window*
+	   (instance class-inspect :init ',sym)))))
+
+(defun truncate-string (str len)
+   (if (> (length str) len) (subseq str 0 len) str))
+
+(defun inspect2 (obj &optional (line-length 60))
+  (let ( ;(*print-structure* t) (*print-circle* t)
+	(*print-length* 10)
+	klass rlist len)
+    (cond ((numberp obj) obj)
+	  ((vectorp obj)
+	   (dotimes (i (length obj))
+		    (push (list i (truncate-string
+				   (prin1-to-string (aref obj i))
+				   line-length))
+			  rlist)) )
+	  ((consp obj)
+	   (setq len (length obj))
+	   (dotimes (i len)
+		    (push (list i (truncate-string
+				   (prin1-to-string (pop obj))
+				   line-length)) rlist)))
+	  (t	;not a vector
+	   (setq vars (metaclass-vars (setq klass  (class obj))))
+	   (dotimes (i (length vars))
+		    (push (list (svref vars i)
+				(truncate-string
+				 (prin1-to-string (slot obj klass i))
+				 line-length))
+			  rlist))))
+    (nreverse rlist)))
+;;;
+(defclass class-inspect :super sunview-frame
+  :slots (textsw panel
+		 parent-index
+		 target-object
+		 slot-value-list
+		 children))
+(defmethod class-inspect
+  (:select-slot-name
+   (&optional (i (send textsw :insertion-point)))
+   (let ((contents (send textsw :get-contents)))
+     (while (and (>= i 0) (< i (length contents)))
+       (if (memq
+	    (elt contents i)
+	    '(13 10))
+	   (return-from :select-slot-name
+			(read-from-string (subseq contents i) nil "")))
+       (if (<= i 0)
+	   (return-from :select-slot-name
+			(car slot-value-list)))
+       (setq i (1- i)))))
+  (:button-inspect
+   (&optional item event)
+   (setq item (send self :select-slot-name))
+   (print item)
+   (setq item (assoc item slot-value-list))
+   (print item)
+   (if (null item) (return-from :button-inspect nil))
+   (push
+    (instance class-inspect :init
+	      (list self (car item))
+	      (float-vector (send self :x)
+			    (+ 2 (send self :y) (send self :height))))
+    children))
+  (:text-set
+   (&optional value item event)
+   (let ((v (eval (read-from-string value)))
+	 slot)
+     (setq item (send self :select-slot-name))
+     (print item)
+     (setq item (assoc item slot-value-list))
+     (print item)
+     (print target-object)
+     (cond
+      ((null item))
+      ((and (numberp (setq slot (car item)))
+	    (or (vectorp target-object)
+		(consp target-object)))
+       (setf (elt target-object slot) v))
+      (t (setslot target-object (class target-object) slot v)))))
+  (:describe-obj
+   (obj)
+   (send self :title (format nil "~s" parent-index))
+   (send textsw :delete 0 (send textsw :last-point))
+   (setq slot-value-list (inspect2 obj))
+   (dolist (x slot-value-list)
+	   (send textsw :insert (string (car x)))
+	   (send textsw :insert "	=	")
+	   (send textsw :insert (cadr x))
+	   (send textsw :insert "
+"))
+   (send textsw :insertion-point 0)
+   (send textsw :first 0))
+  (:button-update
+   (&optional item event)
+   (send self :describe-obj
+	 (send self :target-object parent-index))
+   (dolist (c children) (send c :button-update))
+   )
+  (:target-object
+   (&optional (index parent-index)) ; index = object, symbol, (parent slot)
+   (cond
+    ((symbolp index) (setq target-object (symbol-value index)))
+    ((atom index) index)
+    (t
+     (let ((par-object (send (car index) :target-object))
+	   (slot (cadr index)))
+       (cond
+	((and (numberp slot)
+	      (or (vectorp par-object)
+		  (consp par-object)))
+	 (setq target-object (elt par-object slot)))
+	(t (setq target-object
+		 (slot par-object (class par-object) slot))))))))
+  (:parent-index
+   (&optional inx)
+   (if inx (setq parent-index inx) parent-index))
+  (:init
+   (par &optional (pos #f(350 0)))
+   (setq parent-index par)
+   (send-super :init nil
+	       :title
+	       (format nil "~s" parent-index)
+	       :x (elt pos 0) :y (elt pos 1) :width 700)
+   #+xview
+   (setq panel (instance sunview-panel :init self
+			 :font "lucidasans-bold-12"))
+   #+sunview
+   (setq panel (instance sunview-panel :init self
+			 :col-max 2 :width 700
+			 :font
+			 "/usr/lib/fonts/fixedwidthfonts/screen.b.12"))
+   (send panel :create-button :button-inspect :title "Inspect")
+   (send panel :create-button :button-update :title "Update" :item-col 1)
+   (send panel :create-text :text-set :title "Change slot value:"
+	 :item-col 0 :length 60)
+   (send panel :fit-height)
+   #+xview
+   (setq textsw (instance sunview-textsw :init self))
+   #+sunview
+   (setq textsw (send self :create-subwindow sunview-textsw
+		      :x 0 :below panel :width 700))
+   #+sunview
+   (send self :button-update)
+   #+sunview
+   (send textsw :height (* 16 (length slot-value-list)))
+   (send self :show t)
+   self)
+  )
+
+
+
+From matsui@etl.go.jp Thu Feb 15 12:05:33 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA15815; Thu, 15 Feb 90 03:05:32 GMT
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA25041; Thu, 15 Feb 90 12:06:20 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA15812; Thu, 15 Feb 90 12:05:03 JST
+Date: Thu, 15 Feb 90 12:05:03 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9002150305.AA15812@etlmmd.etl.go.jp>
+To: euslisp-etl@etlcom.etl.go.jp
+Subject: File locations
+Status: RO
+
+The source files of euslisp are located in etlic2:/usr/share/src/eus
+directory.  Symbolic links to these source files and binary files are
+located in meister:/usr/local/eus and etlic2:/usr/local/eus. Also,
+executables such as eus, eusx, and eusxview are placed under 
+etlic2:/usr/local/bin and meister:/usr/local/bin. Only these files are
+maintained (up to date). 
+
+From inaba@jsk.t.u-tokyo.ac.jp Mon Feb 19 19:37:03 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA21950; Mon, 19 Feb 90 10:37:01 GMT
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA04435; Mon, 19 Feb 90 19:38:01 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA18846; Mon, 19 Feb 90 19:37:15 +0900
+Received: from jsk by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.31)
+	id AA29475; Mon, 19 Feb 90 19:37:39 +0900
+Received: from phoenics.jsk.t.u-tokyo.ac.jp by pegasus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA20197; Mon, 19 Feb 90 19:33:38 JST
+Received: by phoenics.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA15978; Mon, 19 Feb 90 19:37:09 JST
+Date: Mon, 19 Feb 90 19:37:09 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9002191037.AA15978@phoenics.jsk.t.u-tokyo.ac.jp>
+To: euslisp@etl.go.jp (Toshihiro MATSUI)
+In-Reply-To: matsui@etl.go.jp's message of 19 Feb 90 01:30:46 GM
+Subject: document
+Status: RO
+
+
+松井さんWrites:
+
+   >>どんどんよくなりますね。xviewを使う時のviewerとかはどうなるのですか。
+   >>canvasを持ったウィンドウの定義の例を1つもらえませんか。今の、demo/x.l
+   >>のxview版があればこちらでは当面十分です。
+
+はい、今までeusxで使っていたプログラムの中で、viewsurfaceを作っている
+ところを以下のように変更します。つまり、xwindowというクラスではなくて、
+canvas-viewsurfaceというクラスを使います。
+#+xlib
+(setq *viewsurface* (instance xwindow :create
+				:x 100 :y 100 :width 500 :height 500
+				:title "eusx"
+				:border-width 3
+				:background 0))
+#-xlib
+(setq *viewsurface* (instance canvas-viewsurface :init
+			      :x 100 :y 100 :width 500 :height 500
+			      :title "eusx"
+			      ))
+
+たとえば、このようにxlibをオプショナルとして使って変更するといいでしょ
+う。これにより、eusview, eusxviewの両方で今まで使っていたプログラムが
+走ります。（もちろん、viewsurfaceクラスになくてxwindowにしかないメソッ
+ドを使ったものは、各自再定義しておかなければだめですけれども。たとえば、
+Arcを使っているものなどですね。）
+
+   >>CommonLispと同じです。簡単です。defun、defmethod, defclass、defvar,
+   >>defconstant, defparameter で使います。
+   >>(defun hebereke (arg) "yopparai" (list arg))
+   >>(defmethod symbol
+   >>  (:prefix (arg)
+   >>	     "make a new symbol with prefix"
+   >>	     (intern (concatenate string (string arg) pname))))
+   >>(defvar *xyz* #f(0 0 0) "temporary location")
+
+   >>あるので、(documentation 'hebereke)とすると"yopparai"が得られます。
+
+symbolの:prefixメソッドのdocumentationをとってくる方法は、
+(documentation symbol :prefix)
+とするのかな？
+
+browserを拡張して、documentationを対話的に作ってゆくものを作るとありが
+たいですかね？ ファイルの検索はeustagsでできているから、それをtextswに
+表示すれば、そのファイルをエディットするモードに入りますね。その表示画
+面上で編集をし、マウスでポップアップメニューを出して、セーブを選べばソー
+スファイルに登録できますね。lやllibなどシステムの関数もブラウズした際
+にちょっとコメントをつけるとソースが置き換わる訳です。一人で全部をいれ
+なくとも使っている人が適宜気がついたところで入れてゆくというのにいいか
+もしれませんね。誰が書いたドキュメンテーションかをその中にいれておくの
+もいいですね。あとで検索する時に使えます。
+
+検索といえば、Smalltalkで行なっているようにcategoryのようなものを
+documentationの中にいれるような形を考えるといいかもしれませんね。フォー
+マットを決めるわけです。そのフォーマットに従った形のdocumentation
+stringを作るものをこのbrowserに組み込めばいいわけです。そうすれば、
+browseする際もそのフォーマットを知っていて検索もできますし。
+たとえば、
+Category: 
+Documentation:
+というtext-itemなどを用意しておけばよさそうですね。
+
+
+稲葉
+
+
+From michel@etlsc6.etl.go.jp Tue Feb 20 21:00:48 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA23927; Tue, 20 Feb 90 12:00:48 GMT
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA28483; Tue, 20 Feb 90 21:02:12 JST
+Received: by etlsc6.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA12613; Tue, 20 Feb 90 21:01:59 JST
+Date: Tue, 20 Feb 90 21:01:59 JST
+From: michel@etlsc6.etl.go.jp (Michel Pasquier)
+Return-Path: <michel@etlsc6.etl.go.jp>
+Message-Id: <9002201201.AA12613@etlsc6.etl.go.jp>
+To: matsui@etl.go.jp
+Subject: Re:  eus on etlsc6
+Status: RO
+
+Well, I AM logged on etlsc6 (which has been upgraded to os 4.3). 
+Probably /local will come later since, as I said, the installation
+seems not to be completed.
+Uh, things are not very simple these days. All the sources of eus
+I can access are in /tmp_mnt/net/meister/usr/local/eus BUT the
+executables files are in /usr/local/bin. aka /net/etlic0/local/bin.
+  
+Also I thought that euslisp (the original version) was located on
+etlmmd, then there is also the file server etlfs and now it should
+be on meister... maita maita.            
+
+-Michel.
+
+ps: I will mount meister:usr on etlsc6: to be able to access
+/tmp_mnt/net/meister/usr/local/bin/eusx. Oh, well...
+
+From inaba@jsk.t.u-tokyo.ac.jp Thu Feb 22 20:43:53 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA27490; Thu, 22 Feb 90 11:43:51 GMT
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA24465; Thu, 22 Feb 90 20:43:19 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA01061; Thu, 22 Feb 90 20:41:44 +0900
+Received: from jsk by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.31)
+	id AA16584; Thu, 22 Feb 90 20:42:08 +0900
+Received: by pegasus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA25969; Thu, 22 Feb 90 20:38:01 JST
+Date: Thu, 22 Feb 90 20:38:01 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9002221138.AA25969@pegasus.jsk.t.u-tokyo.ac.jp>
+To: matsui@etl.go.jp
+Cc: euslisp@jsk.t.u-tokyo.ac.jp
+Subject: winspect.l
+Status: RO
+
+
+稲葉です。
+
+ウィンドウベースのinspector(winspect.l)をお送りします。
+
+destroy,hide,update,redisplayなどのボタンをつけました。
+destroyは子どもまで殺します。
+hideはそのウィンドウだけ見えないようにします。
+updateは変数の値を変えたあとに再表示するためのものです。
+redisplayはhideしたものをもう一度甦らせます。
+
+使い方としては、ある変数aを(winspect a)したあと、表示されている部分で
+さらにinspectしたいところをマウスで示した後、inspectボタンを押して順次
+たどっていゆき、奥深くにある除いてみたい要素の値を表示するウィンドウを
+用意します。覗いてみたい箇所が複数あればそれらも表示させます。
+そして、それら以外をhideボタンで見えなくします。おお元の親も消して構い
+ません。winspect-redisplayですべてが甦るからです。
+
+次に、アプリケーションプログラムのなかで、のぞいている箇所がどのように
+変化するかを見るには、アプリケーションのなかの覗きたいところに、
+(winspect)を挿入して、アプリケーションプログラムを走らせます。
+そうすると、(winspect)が呼ばれるたびに、ウィンドウの表示がアップデート
+されますから、どのようになっているかを調べることが容易になります。
+
+;;;
+;;;		Window-based Inspecter 1990.2.2
+;;;					by M.Inaba and T.Matsui
+;;;
+;;;	(winspect variable)
+;;;	or
+;;;	(winspect) -> update the display like "Update" button
+;;;
+;;;	(winspect-redisplay)
+;;;	(winspect-destroy)
+;;;
+;;;    Usage:
+;;;(1) Interactive inspecting
+;;;	eusview$ (setq a (make-cube 10 20 30))
+;;;	eusview$ (winspect a)
+;;;	Select slot's line by mouse in textsw.
+;;;	Push "Inspect" button.
+;;;
+;;;(2) Value monitoring
+;;;	The name of global variable 'a is memorized. If you update
+;;;	the value of a, such as
+;;;	eusview$ (setq a (make-cube 100 100 100))
+;;;	and call winspect again like
+;;;	eusview$ (winspect)
+;;;	then the display in all of the inspect windows updated.
+;;;
+;;;(3) Slot value editing function
+;;;	Select slot in a textsw, for example 'pos' of 'a'.
+;;;	Set a form in the text item like, '#f(100 100 100).
+;;;	then the value of (a . pos) is changed to #f(100 100 100).
+;;;
+;;;(4) Window destroy
+;;;	Select "Destroy" button for destroying self and its children.
+;;;	Send-all *winspect-windows* :destroy or
+;;;	Call (winspect-destroy) for destroying all.
+;;;
+;;;(5) Window display control
+;;;	Select "Hide" button for shadowing the window.
+;;;	Select "Redisplay" button for redisplaying it and its children.
+;;;
+(format t "(winspect variable)~%")
+;;;
+(defvar *winspect-windows*)
+(defmacro winspect (&optional sym)
+  `(cond
+    ((null ,sym)
+     (send-all *winspect-windows* :button-update))
+    (t
+     (push 
+      (instance class-inspect :init ',sym)
+      *winspect-windows*))))
+(defmacro winspect-destroy (&optional sym)
+  `(let
+       (w)
+     (cond
+      ((null ,sym)
+       (send-all *winspect-windows* :destroy))
+      ((setq w (remove-winspect ',sym))
+       (send w :dstroy)))))
+(defmacro winspect-redisplay (&optional sym)
+  `(let
+       (w)
+     (cond
+      ((null ,sym)
+       (send-all *winspect-windows* :button-redisplay))
+      ((setq w (find-winspect ',sym))
+       (send w :button-redisplay)))))
+(defun find-winspect (sym)
+  (dolist (w *winspect-windows* nil)
+	  (when (equal sym (w . parent-index))
+		(return-from find-winspect w))))
+(defun remove-winspect (sym)
+  (when (setq sym (find-winspect sym))
+	(setq *winspect-windows* (remove sym *winspect-windows*))
+	sym))
+(defun truncate-string (str len)
+   (if (> (length str) len) (subseq str 0 len) str))
+
+(defun inspect2 (obj &optional (line-length 50))
+  (let ( ;(*print-structure* t) (*print-circle* t)
+	(*print-length* 10)
+	klass rlist len)
+    (cond ((numberp obj) obj)
+	  ((vectorp obj)
+	   (dotimes (i (length obj))
+		    (push (list i (truncate-string
+				   (prin1-to-string (aref obj i))
+				   line-length))
+			  rlist)) )
+	  ((consp obj)
+	   (setq len (length obj))
+	   (dotimes (i len)
+		    (push (list i (truncate-string
+				   (prin1-to-string (pop obj))
+				   line-length)) rlist)))
+	  (t	;not a vector
+	   (setq vars (metaclass-vars (setq klass  (class obj))))
+	   (dotimes (i (length vars))
+		    (push (list (svref vars i)
+				(truncate-string
+				 (prin1-to-string (slot obj klass i))
+				 line-length))
+			  rlist))))
+    (nreverse rlist)))
+;;;
+(defclass class-inspect :super sunview-frame
+  :slots (textsw panel
+		 parent-index
+		 target-object
+		 slot-value-list
+		 children
+		 hidden-flag
+		 textsw-first-line
+		 textsw-insertion-point))
+(defmethod class-inspect
+  (:select-slot-and-value
+   (&optional (i (send textsw :insertion-point)))
+   (let ((contents (send textsw :get-contents)))
+     (while (and (>= i 0) (< i (length contents)))
+       (if (memq
+	    (elt contents i)
+	    '(13 10))
+	   (return-from :select-slot-and-value
+			(assoc
+			 (read-from-string (subseq contents i) nil "")
+			 slot-value-list)))
+       (if (<= i 0)
+	   (return-from :select-slot-and-value
+			(elt slot-value-list 0)))
+       (setq i (1- i)))))
+  (:button-inspect
+   (&optional item event)
+   (let ((slot-value (send self :select-slot-and-value))
+	 ins)
+;;;     (print slot-value)
+     (if (null slot-value) (return-from :button-inspect nil))
+     (setq ins
+	   (instance class-inspect :init
+		     (list self (car slot-value))
+		     (float-vector (send self :x)
+				   (+ 2 (send self :y) (send self :height)))))
+     (push ins children)
+     ))
+  (:text-set
+   (&optional value item event)
+   (let ((v (eval (read-from-string value)))
+	 (slot-value (send self :select-slot-and-value))
+	 slot)
+     (print slot-value)
+     (print target-object)
+     (cond
+      ((null slot-value))
+      ((and (numberp (setq slot (car slot-value)))
+	    (or (vectorp target-object)
+		(consp target-object)))
+       (setf (elt target-object slot) v))
+      (t (setslot target-object (class target-object) slot v)))))
+  (:window-title
+   ()
+   (cond
+    ((null parent-index))
+    ((symbolp parent-index) parent-index)
+    (t (cons (send (car parent-index) :window-title) (cdr parent-index)))))
+  (:describe-obj
+   (obj)
+   (when (not hidden-flag)
+	 (send self :title (format nil "~s" (send self :window-title)))
+	 (setq textsw-first-line (send textsw :first-line))
+	 (setq textsw-insertion-point (send textsw :insertion-point))
+	 (send textsw :reset)
+	 (setq slot-value-list (inspect2 obj))
+	 (send textsw :show nil)
+	 (dolist (x slot-value-list)
+		 (send textsw :insert (string (car x)))
+		 (send textsw :insert "	=	")
+		 (send textsw :insert (cadr x))
+		 (send textsw :insert "
+"))
+	 (send textsw :insertion-point textsw-insertion-point)
+	 (send textsw :first-line 0)
+	 (send textsw :scroll textsw-first-line)
+	 (send textsw :show t)))
+  (:button-update
+   (&optional item event)
+   (send self :describe-obj
+	 (send self :target-object parent-index))
+   #+xview
+   (send textsw :height (* 16 (length slot-value-list)))
+   #+xview
+   (send self :fit)
+   (send-all children :button-update)
+   )
+  (:button-destroy
+   (&optional item event)
+   (send self :destroy))
+  (:button-hide
+   (&optional item event)
+   (send self :show nil)
+   (setq hidden-flag t)
+   )
+  (:button-redisplay
+   (&optional item event)
+   (send self :show t)
+   (setq hidden-flag nil)
+   (send-all children :button-redisplay)
+   )
+  (:target-object
+   (&optional (index parent-index)) ; index = object, symbol, (parent slot)
+   (cond
+    ((symbolp index) (setq target-object (symbol-value index)))
+    ((atom index) index)
+    (t
+     (let ((par-object (send (car index) :target-object))
+	   (slot (cadr index)))
+       (cond
+	((and (numberp slot)
+	      (or (vectorp par-object)
+		  (consp par-object)))
+	 (setq target-object (elt par-object slot)))
+	(t (setq target-object
+		 (slot par-object (class par-object) slot))))))))
+  (:parent-index
+   (&optional inx)
+   (if inx (setq parent-index inx) parent-index))
+  (:remove-child (c)
+		  (setq children (remove c children)))
+  (:destroy ()
+	    (send-all children :destroy)
+	    (setq children nil)
+	    (cond
+	     ((symbolp parent-index)
+	      (remove-winspect parent-index))
+	     (t
+	      (send (car parent-index) :remove-child self)))
+	    ;;;	    (send textsw :erase 0 (send textsw :length))
+	    (send textsw :reset)
+	    (send-super :destroy)
+	    )
+  (:init
+   (par &optional (pos #f(350 0)))
+   (setq parent-index par)
+   (send-super :init nil
+	       :title
+	       (format nil "~s" (send self :window-title))
+	       :x (elt pos 0) :y (elt pos 1) :width 700)
+   #+xview
+   (setq panel (instance sunview-panel :init self
+			 :col-max 5 :width 800
+			 :scrollbar nil
+			 :item-size 16
+			 :font "lucidasans-bold-12"))
+   #+sunview
+   (setq panel (instance sunview-panel :init self
+			 :col-max 5 :width 800
+			 :scrollbar nil
+			 :item-size 16
+			 :font
+			 "/usr/lib/fonts/fixedwidthfonts/screen.b.12"))
+   (send panel :create-button :button-inspect :title "Inspect")
+   (send panel :create-button :button-update :title "Update" :item-col 1)
+   (send panel :create-button :button-destroy
+	 :title "Destroy" :item-col 2)
+   (send panel :create-button :button-hide
+	 :title "Hide" :item-col 3)
+   (send panel :create-button :button-redisplay
+	 :title "Redisplay" :item-col 4)
+   (send panel :create-text :text-set :title "Change slot value:"
+	 :item-col 0 :length 60)
+   (send panel :fit-height)
+   #+xview
+   (setq textsw (instance sunview-textsw :init self
+			  :x 0 :below panel :width 800))
+   #+sunview
+   (setq textsw (send self :create-subwindow sunview-textsw
+		      :x 0 :below panel :width 800))
+   #+sunview
+   (send self :button-update)
+   #+sunview
+   (send textsw :height (* 16 (length slot-value-list)))
+   (send self :show t)
+   self)
+  )
+
+
+
+From inaba@jsk.t.u-tokyo.ac.jp Sat Feb 24 14:14:49 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA29870; Sat, 24 Feb 90 05:14:48 GMT
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA08519; Sat, 24 Feb 90 14:16:18 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA28902; Sat, 24 Feb 90 14:15:35 +0900
+Received: from cetus by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.31)
+	id AA04166; Sat, 24 Feb 90 14:15:59 +0900
+Received: from grus.jsk.t.u-tokyo.ac.jp (grus.ARPA) by cetus.jsk.t.u-tokyo.ac.jp (1.00/6.4J.6)
+	id AA00984; Sat, 24 Feb 90 23:02:24 jst
+Received: by grus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA18775; Sat, 24 Feb 90 14:28:21 JST
+Date: Sat, 24 Feb 90 14:28:21 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9002240528.AA18775@grus.jsk.t.u-tokyo.ac.jp>
+To: matsui@etl.go.jp
+Cc: sek@etl.go.jp
+In-Reply-To: Toshihiro MATSUI's message of Sat, 24 Feb 90 10:44:43 JST <9002240144.AA29483@etlmmd.etl.go.jp>
+Subject: xview on sparc/GX
+Status: RO
+
+
+   >>sparcのxviewでeusxviewが動かないと言っていましたが、sparcは関係なくて、
+   >>カラーのxviewではeusxviewが動かないということのようです。
+   >>cmapのセットに行ってくたばっているようです。
+   >>そこで、xviewclass.lのsunview-canvasの:initで、:set-cmap-type
+   >>を呼ぶのをやめたところ、なんとか、ウィンドウが正常に表示されるように
+   >>なりました。
+
+調べてみたところ、そうですね。winspect.lのウィンドウはなんなくでるので
+x.lで試してみたところ、一瞬でて死んでしまいますね。
+いわれるとおり、canvas-viewsurface:initで、cmap-type :monoのデフォルト
+なくしたらうまくゆきました。カラーマップ等の取り扱いについてはよく理解
+していないので、ここらへんのコーディングはあやふやです。
+sunviewではカラーがでているので、そちらのコーディングを変更せずにxview
+で使っているのでこんなふうになっています。
+
+
+   >>xflushを呼ぶタイミングにも問題があるようですね。
+
+そうですか。sunviewでは手前でダブルバッファを行なっているのですが、
+xviewでは２枚目のpixrectを扱う方法がわからず挫折したままです。
+xviewclass.lではxflushは使っていませんが、xflushをあらわに呼ぶような
+アプリケーションがそちらにあるのですね。
+
+カラーのSparcが最近来たので少し改良してみましょう。
+
+では、また。
+
+稲葉
+
+From matsui@etl.go.jp Mon Feb 26 16:04:26 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA01621; Mon, 26 Feb 90 07:04:25 GMT
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA13839; Mon, 26 Feb 90 16:06:03 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA01618; Mon, 26 Feb 90 16:04:08 JST
+Date: Mon, 26 Feb 90 16:04:08 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9002260704.AA01618@etlmmd.etl.go.jp>
+To: onda@etl.go.jp
+Subject: Re:  typep
+Cc: euslisp@etl.go.jp
+Status: RO
+
+onda@etl.go.jp writes:
+> EusLispには、どういうtypeがあるのでしょうか？
+
+:bit, :character, :byte, :integer, :floatとクラス名です。:fixnum
+もあったかなあ。忘れた。
+make-arrayの:typeでは、これらの型指定子は実際に確保される領域の
+大きさを左右しますから極めて重要です。defclassのスロット宣言に
+書く場合は、コンパイラの最適化を可能にする(速度が違う)というだけ
+で、semanticsが変わることはない(はずです)。
+
+CommonLispの 'list の代わりには cons を指定します。
+
+Eus:	(coerce #(1 2 3) cons)	--> (1 2 3)
+Common:	(coerce #(1 2 3) 'list) --> (1 2 3)
+
+type specifierのquoteに注意。
+
+同様に(coerce #(1 2 3) float-vector) --> #f(1 2 3)
+です。
+
+typepはありません。deftypeもありません。それに一番近そうなのは
+derivedpです。
+
+
+
+From tada@jsk.t.u-tokyo.ac.jp Wed Mar 28 20:59:49 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA00266; Wed, 28 Mar 90 20:59:49 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA04207; Wed, 28 Mar 90 13:47:16 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA10651; Wed, 28 Mar 90 13:45:49 +0900
+Received: from jsk by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.39)
+	id AA17960; Wed, 28 Mar 90 13:46:27 +0900
+Received: by pegasus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA00461; Wed, 28 Mar 90 13:41:32 JST
+Date: Wed, 28 Mar 90 13:41:32 JST
+From: tada@jsk.t.u-tokyo.ac.jp (Tomoyuki Tada)
+Return-Path: <tada@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9003280441.AA00461@pegasus.jsk.t.u-tokyo.ac.jp>
+To: euslisp@etl.go.jp
+Subject: socket-address
+Status: RO
+
+井上研の多田と申します。
+プロセス間通信をするプログラムの中で、socket-address を使うところがあ
+るのですが、
+eusxview$ (make-socket-address :domain af_inet :host "perseus" :service "chopsticks")
+eusxview error: mismatch argument in (instantiate socket-address 16)
+E1-eusxview$ 
+のようなエラーが出ます。
+少し調べたのですが、leo.c の中の INSTANTIATE の定義において
+    s=intval(a->c.vcls.size);
+    if (s<0) { ckarg(2); s=ckintval(argv[1]);}
+    else ckarg(1);
+という部分がありました。ところが、socket-address を desicribe すると、
+size がなくて引数を１個しかとれないようなのです。
+どのようにすればうまくいくのか教えて下さい。
+
+多田智之 tada@jsk.t.u-tokyo.ac.jp
+
+From tarsun@utnl.gen.u-tokyo.ac.jp Wed Apr  4 00:32:01 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA10565; Wed, 4 Apr 90 00:31:59 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA25617; Wed, 4 Apr 90 01:47:40 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA11632; Wed, 4 Apr 90 01:46:56 +0900
+Received: from zodiac by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.47)
+	id AA10991; Wed, 4 Apr 90 01:47:45 +0900
+Received: from jung.gen.u-tokyo.ac.jp by zodiac.gen.u-tokyo.ac.jp (4.0/6.4J.5)
+	id AA07608; Wed, 4 Apr 90 01:48:43 JST
+Received: by jung.gen.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA03248; Wed, 4 Apr 90 01:48:24 JST
+From: tarsun@utnl.gen.u-tokyo.ac.jp (Tazawa 'TarSUN' Takashi)
+Return-Path: <tarsun@utnl.gen.u-tokyo.ac.jp>
+Message-Id: <9004031648.AA03248@jung.gen.u-tokyo.ac.jp>
+To: matsui@etl.junet
+Cc: tarsun@jung.gen.u-tokyo.ac.jp
+Subject: I want to use Euslisp
+Date: Wed, 04 Apr 90 01:48:23 +0900
+Status: RO
+
+ 
+  始めまして、お忙しい所いきなりmailをして申し訳ありません、
+田澤＠東大．原子力という者です。
+  私、現在ロボット関連の研究をしているのですが、ある時（実は
+去年の秋頃公務員試験に受かったのをいい事に研究の参考にしようと
+ETLを見学した時に）ETLではロボットの研究にETLで開発したLispを
+使っているという事を知り、何となく関心を持っていたのです。
+  その後電総研ニュース等でそれが優秀なLispであるという噂を聞き
+および、是非とも手に入れて研究に用いたい、と思ったのでした。
+  東大では稲葉先生が利用なさっているようで、大型計算機センター
+にも置いてあったのですが、研究室にあるワークステーションが
+SPARC Station 1(SunOS4.0.3)である事から、それに対応した物が
+欲しいと思ったのです。(大型計算機センターにあったsun4os4用の
+バイナリ(6.607)は、eusはちゃんと動きますがeusviewはdemoを動かそう
+とするとcore dumpしてしまうのです。）
+  私としては、これから本格的に使いたいので、正式にLICENSEを取り、
+また、最新バージョンのものをいただきたいと思っております。特に、
+X11R4対応のeusxが気にかかる所です。
+  という事で、もしそちらでよろしければ直接電総研にＭＴを持って
+取りに行ってもいいと思っております。あるいは稲葉先生の所でも
+構いませんが…(一応今でも電総研志望なのでもう一度見学したい
+気もあったりします:-)。如何なものでしょうか？ご迷惑かも知れません
+が、もう私もＭ２で焦っているもので…。何卒よろしくお願い致します。
+
+                                東京大学工学部附属原子力工学研究施設
+                                  d34139@tansei.cc.u-tokyo.ac.jp
+                                  tarsun@jung.gen.u-tokyo.ac.jp
+                                                             田澤 孝
+
+From tarsun@utnl.gen.u-tokyo.ac.jp Wed Apr  4 15:41:37 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA10886; Wed, 4 Apr 90 15:41:36 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA13667; Wed, 4 Apr 90 15:41:38 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA11478; Wed, 4 Apr 90 15:40:52 +0900
+Received: from zodiac by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.47)
+	id AA14031; Wed, 4 Apr 90 15:41:30 +0900
+Received: from jung.gen.u-tokyo.ac.jp by zodiac.gen.u-tokyo.ac.jp (4.0/6.4J.5)
+	id AA07916; Wed, 4 Apr 90 15:42:23 JST
+Received: by jung.gen.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA03939; Wed, 4 Apr 90 15:42:03 JST
+From: tarsun@utnl.gen.u-tokyo.ac.jp (Tazawa 'TarSUN' Takashi)
+Return-Path: <tarsun@utnl.gen.u-tokyo.ac.jp>
+Message-Id: <9004040642.AA03939@jung.gen.u-tokyo.ac.jp>
+To: matsui@etl.go.jp (Toshihiro MATSUI)
+Cc: tarsun@utnl.gen.u-tokyo.ac.jp
+Subject: Re: I want to use Euslisp 
+In-Reply-To: Your message of Wed, 04 Apr 90 00:46:15 +0900.
+             <9004031546.AA10581@etlmmd.etl.go.jp> 
+Date: Wed, 04 Apr 90 15:42:02 +0900
+Status: RO
+
+
+  どうも、素早い回答有難うございます、田澤＠東大です。しかし
+以前、電総研は企業に比べて金がない分人間が頑張るんだ、みたいな
+話しをどこかで聞いたような気がするのですが、本当に夜遅くまで
+研究なさっているのですね。凄いなあ。
+
+> 1.私自身はsunviewをほとんど使っていないので、core dumpする件は
+> よくわかりません。稲葉さんのところでは、sunviewを使っている学生が
+> いると思います。
+
+  わかりました。稲葉先生の所に聞いてみようと思います。
+
+> 2.私供は、主にX11R4で使っています。とは言っても、Xlib止まりで、
+> toolkitに関しては、やはり稲葉さんのところのXviewが強力です。
+
+  おお！もうX11R4対応になっていたのですか。それは素晴らしい。
+是非とも手に入れたいと思います。
+
+> 3.稲葉さんのところには、ほとんど常に、最新の版が行っています。
+> だから、急ぐのであれば、そこでコピーさせてもらうのがよいと思います。
+> ただし、稲葉さんは今ヨーロッパに行って不在なので、誰か学生さんに
+> お願いすることになるでしょう。国吉さんか、石綿さんが詳しいかと思います。
+
+  はぁ、わかりました。しかしあそこの研究室では稲葉先生以外だと
+交流があるのが井上先生だけになってしまうのでちょっと恐い(^_^;)
+ですけれども、何とかコンタクトを取りたいと思います。
+
+> licenseに関しては、ほとんどfree softwareですが、利用者と利用状況を
+> 把握したいので、一応許諾書にサインしてもらっています。インストールして
+> READMEを読めばわかると思います。
+
+  ええと、ちょっと読んだのですが、プリントアウトしてそちらにお送り
+すれば良いわけですよね？まぁ。もしかしたら直接持って行く事に
+なるかも知れませんが…。
+
+> 4.見学にいらっしゃるのであれば、こちらでコピーしても結構です。
+> エネルギー関係の研究室を希望しているのでしょうか? 
+
+  うう、やはり原子力工学科だとこう思われてしまいますか…。一応
+私としてはロボットか、そのビジョン関係を考えているのですが、、、。
+以前に見学した時も行動知能研究室にお伺いしたんですけれども。
+もっとも、その時はまだ良くわからなくて何となく見た、というだけ
+に終ってしまったような気がしたりします。私としてはそろそろ就職
+活動を考えねばならないので、早い所電総研に私の食い込む余地がある
+かどうか知りたいと思っています。だから４月中にはまた長谷川さん（以前
+案内していただいたので）か高瀬さんにお電話でもしてもう一度お話しを
+聞こうと思っていたのです。それがいつ頃になるかは正確にはわかりません
+が、比較的早い時期に行けるのであれば、その時にでもＭＴを持って伺う
+かも知れません。その際には予めmailでお知らせします。
+
+> せいぜいご活用下さい。
+
+  はい、活用したいと思っております。
+
+＃夢は陽電子ロボット
+
+                                東京大学工学部附属原子力工学研究施設
+                                  d34139@tansei.cc.u-tokyo.ac.jp
+                                  tarsun@jung.gen.u-tokyo.ac.jp
+                                                             田澤 孝
+
+From speters@etlic0.etl.go.jp Mon Apr  9 11:16:38 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA15872; Mon, 9 Apr 90 11:16:37 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA14635; Mon, 9 Apr 90 10:05:35 JST
+Received: by etlic0.etl.go.jp (3.2/6.4J.6-ETL.SLAVE)
+	id AA01638; Mon, 9 Apr 90 09:57:09 JST
+Date: Mon, 9 Apr 90 09:57:09 JST
+From: speters@etlic0.etl.go.jp (Stephen F. Peters)
+Return-Path: <speters@etlic0.etl.go.jp>
+Message-Id: <9004090057.AA01638@etlic0.etl.go.jp>
+To: euslisp@etl.go.jp
+Subject: instance variable access
+Status: RO
+
+;;;
+;;; I wrote the following general-purpose methods which I find useful and
+;;; suit my coding style and am sending them along on the chance that others
+;;; may also find them useful.
+;;;
+;;; I expect that many of you may already have coded such methods yourselves,
+;;; but for those of you who haven't, and those new to EUSLISP who are used 
+;;; Symbolics Flavors, these may be handy.  Feel free to send me any 
+;;; comments.
+;;;                                  Steve Peters
+;;;                                  speters@etl.go.jp
+;;;
+
+;;;
+;;; EASY INSTANCE VARIABLE ACCESS METHODS
+;;;
+
+;;;
+;;; The following classes contain useful methods for access of instance
+;;; variables in EUSLISP.  This code can be used as-is to add :get and
+;;; :set methods to objects built upon the class "object."  Add these
+;;; classes in the class inheritance tree between above the sub-tree you
+;;; wish to inherit them, remembering to change the super class name in
+;;; the defclass declaration as appropriate.
+;;;
+;;; Use of these classes give global get and set access similar to that of
+;;; Symbolics LISP, though the syntax of ust differs from Symbolics LISP.
+;;;
+;;; These classes have the disadvantage that they do not provide selective
+;;; access, but have the advantage of obviating having to write special
+;;; access code for each variable.
+;;;
+;;; These classes could be used as pseudo-mixin classes via the message
+;;; forwarding facilities of EUSLISP, allowing clean code and selective
+;;; access, but at the expense of degraded performance for the most basic
+;;; operations.
+;;;
+
+
+
+;;;
+;;; use the following classes in place of object (adapt for other classes)
+;;;
+
+(defclass gettable-object
+  :super object)
+(defmethod gettable-object
+  ;; (send <object> :get <slotname>)
+  (:get (slot-name) (slot self (class self) slot-name)))
+
+(defclass settable-object
+  :super gettable-object)
+(defmethod settable-object
+  ;; (send <object> :set <slotname> <newvalue>)
+  (:set (slot-name new-value) (setslot self (class self) slot-name new-value)))
+
+
+
+;;;
+;;; the following is an example using the above :set and :get methods
+;;;
+
+(defclass data-object
+  :super settable-object
+  :slots (var-1
+	  var-2))
+
+(setq example-obj-1 (instantiate data-object))
+
+(format t "the value of slot var-1 in example-obj-1 is now ~A~%"
+	(send example-obj-1 :get 'var-1))
+
+(send example-obj-1 :set 'var-1 25.73)
+
+(format t "the value of slot var-1 in example-obj-1 is now ~A~%"
+	(send example-obj-1 :get 'var-1))
+
+
+
+From matsui@etl.go.jp Thu May 17 14:35:22 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA26739; Thu, 17 May 90 14:35:21 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA22911; Thu, 17 May 90 14:34:20 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA26735; Thu, 17 May 90 14:34:22 JST
+Date: Thu, 17 May 90 14:34:22 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9005170534.AA26735@etlmmd.etl.go.jp>
+To: inaba@jsk.t.u-tokyo.ac.jp
+Subject: Re:  euslisp mail list
+Cc: euslisp@etl.go.jp
+Status: R
+
+> euslispメイルリストには海外のものもはいってきているかと思っていますが、
+> 今のままだと日本語の質問なども外国へ行くのですよね。？
+
+どき。こちらのmail-listには、海外のeuslisp userの名前は入っていませんが
+(というのは、正式に利用許諾書が返送されてないのでmail addressさえわからない)
+utyoのmail listには入っているのですか ?
+
+> さて、こちらのmakefile, mkeusview, mkeusvisionというのを変更し、今まで
+> のeusview, eusvisionなどはシェルスクリプトになり、DISPLAY変数により
+> eussview,eussvision（Sunview用）eusxview,eusxview（Xview用）を自動選択
+> するようにしました。
+
+種類が増えてくると、いちいちimage saveしているのも気兼ねするように
+なりますね。結構ディスク食いますから。.eusrcでロードするようにしたら
+どうですか。
+
+> また、eusviewには、browse.l, winspect.lを組み込みにしておこうと思って
+> います。ただ、browse.lはまだまだ改良の余地がありますが。
+
+OpenWindowはどうなんでしょう。
+
+> eusvisionというのは、うちの研究室の大学院生が作ったモデルベーストプロ
+> グラムのパッケージがごちゃごちゃと入っているものです。整理できていない
+> ので、新しい修士一年が勉強するためにそれを整理する予定です。
+
+> ハードウェアに依存していない部分なので、将来的にはたくさんのユーザにとっ
+> ても重宝でしょう。ただ、現在のeusvisionは非常にサイズが大きくて7.8MB程
+> 度になっています。
+
+何ができるのでしょう? line-segment-finderからも独立しているのですか?
+
+
+From matsui@etl.go.jp Thu May 17 15:04:07 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA26808; Thu, 17 May 90 15:04:06 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA23367; Thu, 17 May 90 15:03:48 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA26805; Thu, 17 May 90 15:03:47 JST
+Date: Thu, 17 May 90 15:03:47 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9005170603.AA26805@etlmmd.etl.go.jp>
+To: terasaki@marr.tsukuba.sanyo.co.jp
+Subject: Re:  rotation-angle bug ???
+Cc: euslisp@etl.go.jp
+Status: R
+
+> 皆さん、お久しぶりです。
+> 三洋電機の寺崎です。
+
+頑張ってますね。
+
+> 私は、「バグだ！！！」と思っても、すぐにメイリングリストに投稿せずに、
+> ２〜３日、ほっておくことにしています。
+> すると、不思議にも、バグでなくなることが、ほとんどですから。
+> 今回も、数日置いておきましたが、バグでなくならないようなので、
+> 投稿します。ちがってたら、ごめんなさいね。
+
+そんな、もったいない。みんなけっこう同じような問題で悩んでいるのですよ。
+そこでひっかかった、という情報だけでも有用だと思いますし、まして解決
+できたのなら言うことないと思います。(個人的に聞きに来られるよりは、
+euslisp@etlに投稿して頂けるとありがたいです)
+
+> １．バグ発見！？？？
+> 
+>     eusx$ rotation-angle #2f((1.60660e-12 1.00000 -1.79264e-06)
+> 			     (1.00000 1.60660e-12 -1.79264e-06)
+> 			     (1.79264e-06 1.79264e-06 -1.00000))
+>     (3.14159 #f(0.707107 -0.707107 0.0))
+>    の値がおかしそう。実際これをrotation-matrixに食わせると、
+> 
+>     eusx$ rotation-matrix 3.14159 #f(0.707107 -0.707107 0.0)
+>     #2f((1.60660e-12 -1.00000 -1.79264e-06)
+> 	(-1.00000 1.60660e-12 -1.79264e-06)
+> 	(1.79264e-06 1.79264e-06 -1.00000))
+> となり、上のrotation-angleの引数のマトリクスと違います。
+> 
+
+ははん、そうだったのか。MMDのデモでハンドが変な方向に回ることがあるのは
+このバグのせいかもしれません。
+
+寺崎さんは、この後バグを適当に回避するプログラムを添付してくれたのですが、
+抜本的な解決にはならないので、matrix.cの以下のパッチを送ります。
+
+
+----------------------------------------------------------------------
+
+pointer ROTANGLE(n,argv)	/*equivalent rotation axis and angle*/
+int n;
+pointer argv[];
+{ pointer r=argv[0];
+  int size;
+  float *m,*krv,kx,ky,kz;
+  float th,t1,t2,t3;
+  float cs,cs2,vers,sn,sn2,norm;
+  pointer kr;
+
+  ckarg(1);
+  if (!ismatrix(r)) error(E_NOVECTOR);
+  size=colsize(r);
+  kr=makefvector(3);	/*axis vector*/
+  krv=kr->c.fvec.fv;
+  m=r->c.ary.entity->c.fvec.fv;
+  t1=m[size+size+1]-m[size+2];
+  t2=m[2]	   -m[size+size];
+  t3=m[size]	   -m[1];
+  cs2=m[0]+m[size+1]+m[size+size+2]-1.0;
+  cs=cs2/2;
+  vers=1-cs;
+  sn2=sqrt(t1*t1 + t2*t2 + t3*t3);
+  th=atan2(sn2,cs2);
+  if (th<1e-10) return(NIL);
+  else if (th<2.6) {
+    kx=(m[size+size+1]-m[size+2])/sn2;
+    ky=(m[2]-m[size+size])/sn2;
+    kz=(m[size]-m[1])/sn2;
+    }
+  else {
+    kx=sqrt((m[0]-cs)/vers);
+    if (m[size+size+1]-m[size+2]<0) kx= -kx;
+    ky=sqrt((m[size+1]-cs)/vers);
+    if (m[2]-m[size+size]<0) ky= -ky;
+    kz=sqrt((m[size+size+2]-cs)/vers);
+    if (m[size]-m[1]<0) kz= -kz;
+    }
+  /*ここが違う*/
+  if ((abs(kx) > abs(ky)) && (abs(kx) > abs(kz))) {
+    ky=(m[size]+m[1])/(2*kx*vers); kz=(m[2]+m[size+size])/(2*kx*vers);}
+  if ((abs(ky) > abs(kx)) && (abs(ky) > abs(kz))) {
+    kx=(m[size]+m[1])/(2*ky*vers); kz=(m[size+2]+m[size+size+1])/(2*ky*vers);}
+  else {
+    kx=(m[2]+m[size+size])/(2*kz*vers);
+    ky=(m[size+2]+m[size+size+1])/(2*kz*vers);}
+  /*ここまでが違う*/
+  norm=sqrt(kx*kx + ky*ky + kz*kz);
+  krv[0]=kx/norm; krv[1]=ky/norm; krv[2]=kz/norm;
+  return(cons(makeflt(th),cons(kr,NIL)));}
+
+>     誤差をどのようにして小さくするのかが、わからない。
+>     なにか、良い指針なり、文献があるのでしょうか？
+
+> ところで、eus の関数の解法は、どこから、得られたものなのでしょうか？
+> 参考文献はあるのでしょうか？
+
+R.Paulの"Robot Manipulators: Mathematics, Programming and Control"
+を参考にしています。Roll-Pitch-Yaw, Euler角などもPaulの定義に従っています。
+今回のバグは、等価回転角を求めるところで、Paulの本にはちゃんと解説が
+出ていたのですが、たいした誤差にはなるまいとたかをくくったのがいけな
+かったようです。実際、本には、
+「以上でKrの最大要素のみを定めた。他の二つの要素は1.73の非対角要素の
+適当な和を取ることにより得られる次式から計算する方がより正確である」
+                                                    ^^^^^^^^^^^^^
+と書いてあって、まさか符合が反転するほどの誤差にはならないと思っていた
+のでした。いけませんね。 
+
+ほら、もっと速くバグの具体例を送って頂ければ、自分でmatrix.cに手を入れる
+必要はなかったでしょ。
+
+From matsui@etl.go.jp Thu May 17 15:50:23 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA26865; Thu, 17 May 90 15:50:22 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA24187; Thu, 17 May 90 15:49:45 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA26862; Thu, 17 May 90 15:49:46 JST
+Date: Thu, 17 May 90 15:49:46 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9005170649.AA26862@etlmmd.etl.go.jp>
+To: inaba@jsk.t.u-tokyo.ac.jp
+Subject: Re:  euslisp mail list
+Cc: euslisp@etl.go.jp
+Status: R
+
+Dr.inaba wrote:
+
+> 女性の学生さんがEusで組立てシステムのグラフィックス表示を
+> 行なっていて、その人がマニュアルがないのかといって困っていましたから、
+> ちょっと時間がかかるようになるかもしれませんね。
+
+ptroffの、関数羅列マニュアルでは不足なのでしょうか。
+latexに直した方がよいとか思うと、ptroffのソースに手を入れるのも
+苦痛です。
+
+> 今のところロードするファイルがたくさんあって非常に時間がかかります。
+
+ldが遅いんだよね。
+
+> Loweがやっていたようなことはできます。
+> LSFから独立で、line-segmentを作って与えればよいようになっています。
+
+装置座標系からも独立させてあるでしょうね。
+
+> ところで、VxworksでEusが動いたということでしたが、どうですか？
+> こちらでは至急NeXTのeusを作りたいので興味があります。
+
+ええ、インタプリタは動いて、eusでコンパイルしたプログラムのロードも可能です。
+問題はimage-saveができないことです。vxworks(に限らずリアルタイムOS)は、MMU
+を使わずに実メモリ、絶対アドレスで動いていますから、現状をディスクに保存した
+としても、次回ロードするアドレスが同じでなければ正しく動きません。これは
+無理な注文です。だから、毎回、mkeusと同じ手間をかけて、raweusから
+common, ....geopack等をロードしなければなりません。raweus+α位を別にリンク
+しておいてvxworks専用に使うことも考えられますが、今回は別の解決を図りました。
+それは、vxworksではダイナミックロードが可能であり、あとから関数を追加できる
+ことを利用して、Cの関数をvxworksにロードし、ネットワークを通じた通信で
+hostのeusから引数と共にその関数を起動するものです。通信はバイナリで行って
+いますので、関数起動は十分に高速です。
+
+NeXTでも, ld -Aが可能、image-saveができる(a.outが公開されている)、
+data セグメントの配列が命令として実行できる、などの条件を満たせば
+移植はできると思います。
+
+matsui@etl.go.jp
+
+
+From inaba@jsk.t.u-tokyo.ac.jp Thu May 17 18:04:11 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA27038; Thu, 17 May 90 18:04:09 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA26154; Thu, 17 May 90 18:03:46 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA03462; Thu, 17 May 90 18:03:22 +0900
+Received: from grus by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.66)
+	id AA27861; Thu, 17 May 90 18:03:37 +0900
+Received: by grus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA06003; Thu, 17 May 90 18:18:14 JST
+Date: Thu, 17 May 90 18:18:14 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9005170918.AA06003@grus.jsk.t.u-tokyo.ac.jp>
+To: matsui@etl.go.jp
+Cc: euslisp@etl.go.jp
+In-Reply-To: Toshihiro MATSUI's message of Thu, 17 May 90 15:49:46 JST <9005170649.AA26862@etlmmd.etl.go.jp>
+Subject:  euslisp mail list
+Status: R
+
+
+   >>latexに直した方がよいとか思うと、ptroffのソースに手を入れるのも
+   >>苦痛です。
+ここのところは、roff2tex変換プログラムに期待したいところです。
+
+   >>装置座標系からも独立させてあるでしょうね。
+
+おっ。なっていないだろうな、グラフィックスのようには。
+256*256左上原点右と下へ伸びる座標系だと思いますね、きっと。
+
+いっそのこと２次元線分というよりは、三次元の二つの方向ベクタで始点、終点を
+表現するようにしたほうがいいかもしれないですね。
+
+稲葉
+
+From inaba@jsk.t.u-tokyo.ac.jp Sat May 19 15:58:29 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA29979; Sat, 19 May 90 15:58:28 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA27995; Sat, 19 May 90 15:58:15 JST
+Received: from ccutrd.cc.u-tokyo.ac.jp by titcca.cc.titech.ac.jp (5.61/6.4titcca)
+	id AA07626; Sat, 19 May 90 15:57:51 +0900
+Received: from grus by ccut.cc.u-tokyo.ac.jp (5.61/6.4J.6-ut2.66)
+	id AA09847; Sat, 19 May 90 15:58:09 +0900
+Received: by grus.jsk.t.u-tokyo.ac.jp (4.0/6.4J.6)
+	id AA13792; Sat, 19 May 90 16:12:48 JST
+Date: Sat, 19 May 90 16:12:48 JST
+From: inaba@jsk.t.u-tokyo.ac.jp (Masayuki Inaba)
+Return-Path: <inaba@jsk.t.u-tokyo.ac.jp>
+Message-Id: <9005190712.AA13792@grus.jsk.t.u-tokyo.ac.jp>
+To: euslisp@etl.go.jp
+Subject: xview
+Status: R
+
+
+
+xview directoryをなくして、xviewのプログラムをsunlibへ移しました。
+
+xview/demoにあったデモプログラムは sunlib/demoにあります。
+
+XviewとSunview用のEusアプリケーションを同じように使えるように努力して
+いるのですが、eventの取り扱いなどがすこし違うためにウィンドウの
+初期化ルーチンでトラブルが起こることがあります。
+
+たとえば、サブウィンドウSを持っているウィンドウWを作るときに、Wの:init
+ルーチンの中でSを作ったあとそのSのサイズをとってきたりするような場合で
+す。
+
+時としてSの実体が作られるのがマウスイベントをうけとった後でないとだめ
+であったりします。つまりWの実体ができて:showしたあとでないとだめだった
+りするわけです。そうすると,Sのサイズをとってきたりする段階ではまだSの
+実体ができていないために、Bus errorなどをおこしたりします。
+
+
+From terasaki@marr.tsukuba.sanyo.co.jp Wed May 23 12:48:40 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA04170; Wed, 23 May 90 12:48:39 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA21523; Wed, 23 May 90 10:25:44 JST
+Received: by etlcv3.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA21946; Wed, 23 May 90 10:24:19 JST
+Received: by tacho.tsukuba.sanyo.co.jp (5.57/6.4J.5-tkb2) id AA10339; Wed, 23 May 90 10:21:45+0900
+Received: from marr.tsukuba.sanyo.co.jp by terra.tsukuba.sanyo.co.jp (4.0/6.4J.5-tkb2) id AA04256; Wed, 23 May 90 10:20:43 JST
+Received: by marr.tsukuba.sanyo.co.jp (4.0/6.4J.5-tkb1) id AA05797; Wed, 23 May 90 10:21:18 JST
+Date: Wed, 23 May 90 10:21:18 JST
+From: terasaki@marr.tsukuba.sanyo.co.jp (Hajime Terasaki)
+Return-Path: <terasaki@marr.tsukuba.sanyo.co.jp>
+Message-Id: <9005230121.AA05797@marr.tsukuba.sanyo.co.jp>
+To: matsui@etl.go.jp
+In-Reply-To: Toshihiro MATSUI's message of Tue, 22 May 90 22:41:38 JST <9005221341.AA03140@etlmmd.etl.go.jp>
+Subject:  euslisp for vax
+Status: R
+
+   >>Date: Tue, 22 May 90 22:41:38 JST
+   >>From: matsui@etl.go.jp (Toshihiro MATSUI)
+   >>ううむ。これはわかりませんね。
+   >>setjmp.h が2回includeされているのが1つの
+   >>問題のようですが、これはきっと ultrix のinclude fileの
+   >>構成の問題だと思います。こちらのvax8800では、途中までは
+   >>これでうまくいきます。
+
+わかりました。euslisp for vax はしばらくペンディングにします。
+時間が、できたら、挑戦することにします。
+どうも、ありがとうございました。
+
+とりあえず、euslisp for sun4os4 を作ることにします。
+
+                                 寺崎  肇＠筑波研究所．三洋電機
+                                  terasaki@tsukuba.sanyo.co.jp
+                                          JJ1IEA,SKYLINE
+
+From matsui@etl.go.jp Mon May 28 13:12:22 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA00427; Mon, 28 May 90 13:12:21 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA06024; Mon, 28 May 90 13:11:57 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA00421; Mon, 28 May 90 13:11:47 JST
+Date: Mon, 28 May 90 13:11:47 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9005280411.AA00421@etlmmd.etl.go.jp>
+To: miya@jsk.t.u-tokyo.ac.jp
+Subject: Re:  foreign-string
+Cc: euslisp@etl.go.jp
+Status: R
+
+> 東大、井上・稲葉研修士２年の宮澤です。
+> EusLispのforeign-stringに関することで質問があり、メイル致しました。
+> 実はストリングデータをcanvas-viewsurfaceに表示するメソッドを用いて
+> 濃淡画像(512x432x1byte)をSunViewに表示しようとしているのですが、画
+> 像ファイルの内容の実体をEusLispのストリングに読み込むのではなく、
+> foreign-stringのように、ファイルの中身をそのままあたかもストリングであ
+> るかのように扱うことが出来ないかと考えています。
+> そのようなことは出来るのでしょうか？
+
+1. How to access the contents of a file as a foreign-string:
+(map-file "file-name" :direction :io
+		      :length <length>
+		      :offset <offset>)
+--> #<foreign-string ...>
+Please refer to the source code in l/loader.l
+
+2. How to make a foreign-string at a known location:
+(make-foreing-string <location> <length>)
+Ex.
+eus$ (setq a (unix:malloc 10))
+388800
+eus$ (setq b (make-foreign-string a 10))
+#u""
+
+
+From matsui@etl.go.jp Mon May 28 13:16:26 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA00444; Mon, 28 May 90 13:16:24 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA06112; Mon, 28 May 90 13:16:18 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA00437; Mon, 28 May 90 13:16:08 JST
+Date: Mon, 28 May 90 13:16:08 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9005280416.AA00437@etlmmd.etl.go.jp>
+To: yuki@gradura.scitec.kobe-u.ac.jp
+Subject: Re:  new version euslisp tape
+Cc: euslisp@etl.go.jp
+Status: R
+
+井上@神戸大学さん:
+
+>   とりあえずわかっていることは、最近のeusはvxworks用に一部手が入って
+> そのため、ファイルの位置も変わってしまったり、mkcommoneus mkinteus
+> などの初期設定のファイルがバージョンがずれてしまっているみたいです。
+
+はい、vxworksのパッチが当たってるのをそのまま送ってしまいました。
+とりあえず、makefile, mkinteus, mkcommoneusを送ります。
+だめならまた考えます。
+
+-------------------makefile--------------
+# makefile for eus system on sun3,4 with sunOS3,4
+#	Copyright (1988) Toshihiro MATSUI, Electrotechnical Laboratory
+#	1989/Oct
+#	KOBJECTS --- eus kernel objects written in C
+#	NOKOBJECTS-- eus kernel, but cannot be optimized with -O option
+#	CLIBOBJECTS- functions written in C, not members of kernel
+#	LOBJECTS --- functions coded in EUSLISP; must be compiled with euscomp
+#	GEOOBJECTS-- geometric modeling functions and classes
+#	XOBJECTS---- Xwindow interface
+#	ARITHOBJECTS
+#
+EUSFLAGS=-O
+#
+# This makefile is valid only for sun3 and sun4.
+# An environment variable, MACHINE should be defined outside.
+# Since ultrix's make cannot inherit variables from environment,
+# remove comment marks(#) at the beginning of next two lines, if you want to
+# make eus on vaxex.
+#
+# MACHINE=vax
+# EUSFLAGS=
+#
+# In addition, vax needs -J option to compile comp.c and common.c.
+#
+#########################################################################
+# IMPORTANT! IMPRTANT! IMPORTANT! IMPOTENT! !IMPORTANT! IMPORTANT!
+#########################################################################
+#
+# Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
+#
+#CFLAGS=-D$(MACHINE) -Dbsd4_2
+#CFLAGS=-D$(MACHINE) -DSunOS4 -Dbsd4_2 -Bstatic -I/usr/share/include \
+#	-I/usr/share/include/X11 -I/usr/share/include/X11/xview
+CFLAGS=-D$(MACHINE) -DSunOS4 -Dbsd4_2 -Bstatic -I/usr/include \
+	-I/usr/include/X11 -I/usr/include/X11/xview
+#XVERSION=X_V11R2
+#XVERSION=X_V11R3
+XVERSION=X_V11R4
+#
+# When you use window system, you need to override libc.a with a certain
+# window library.
+SUNVIEWLIB= -lsunwindow -lm
+XVIEWLIB=  -lxview -lX11 -lm
+RAWLIB=${SUNVIEWLIB}
+#RAWLIB=${XVIEWLIB}
+#
+# If you don't like optimization, comment out the next line.
+OFLAGS=-O
+#
+# public directories
+EUSDIR=/usr/local/eus
+PUBBINDIR=/usr/local/bin
+#
+# directories under EUSDIR
+BINDIR=bin
+CDIR=c
+LDIR=l
+CLIBDIR=clib
+LLIBDIR=llib
+COMPDIR=comp
+#
+# Window Systems
+SUNLIBDIR=sunlib
+XVIEWDIR=xview
+XWINDOWDIR=xwindow
+#
+# UTYO extension directories
+LLIB2DIR=llib2
+OBJARITHDIR=objarith
+M68INCLUDE=/usr/share/src/m68/include
+MWINDIR=mwin
+ARMSDIR=arms
+2DSEARCHDIR=vision/matching/2dsearch
+3DSEARCHDIR=vision/matching/3dsearch
+CALIBDIR=vision/matching/calib
+#
+# object files needed to make euslisp kernel
+KOBJECTS= $(CDIR)/memory.o	$(CDIR)/makes.o	\
+	  $(CDIR)/eval.o	$(CDIR)/leo.o		\
+	  $(CDIR)/eusstream.o   $(CDIR)/reader.o	\
+	  $(CDIR)/printer.o 	$(CDIR)/intern.o	\
+	  $(CDIR)/loadsave.o    $(CDIR)/sequence.o      \
+	  $(CDIR)/lists.o \
+	  $(CDIR)/specials.o	$(CDIR)/lispio.o	\
+	  $(CDIR)/vectorarray.o	$(CDIR)/arith.o		\
+	  $(CDIR)/matrix.o	\
+	  $(CDIR)/calleus.o	$(CDIR)/charstring.o	\
+	  $(CDIR)/compsub.o	$(CDIR)/eus.o
+NOKOBJECTS= $(CDIR)/fcall.o
+LOBJECTS= $(LDIR)/readmacro.o\
+	  $(LDIR)/common.o	$(LDIR)/pprint.o\
+	  $(LDIR)/stream.o	$(LDIR)/loader.o \
+	  $(LDIR)/debug.o	$(LDIR)/process.o\
+	  $(LDIR)/packsym.o	$(LDIR)/coordinates.o \
+	  $(LDIR)/string.o	$(LDIR)/array.o \
+	  $(LDIR)/toplevel.o	$(LDIR)/hashtab.o \
+	  $(LDIR)/foreign.o	$(LDIR)/mathtran.o
+COBJECTS= $(CLIBDIR)/sysfunc.o \
+	  $(CLIBDIR)/unixcall.o \
+	  $(CLIBDIR)/clip.o \
+	  $(CLIBDIR)/intersection.o
+COMPOBJECTS= $(COMPDIR)/trans.o \
+	     $(COMPDIR)/comp.o
+# geometric computation objects
+GEOOBJECTS= $(LLIBDIR)/geopack.o \
+	    $(LLIBDIR)/primt.o \
+	    $(LLIBDIR)/compose.o \
+	    $(LLIBDIR)/hid.o \
+	    $(LLIBDIR)/viewing.o \
+	    $(LLIBDIR)/viewsurface.o \
+	    $(LLIBDIR)/viewport.o
+# window system objects
+SUNVIEWCOBJECTS=  $(SUNLIBDIR)/transargv.o \
+		$(SUNLIBDIR)/sunview.o
+SUNVIEWOBJECTS=  $(SUNLIBDIR)/sunviewclass.o
+XOBJECTS= $(XWINDOWDIR)/Xlibfuncs.o \
+	  $(XWINDOWDIR)/Xeus.o
+XVIEWCOBJECTS=  $(XVIEWDIR)/transargv.o \
+		$(XVIEWDIR)/xview.o
+XVIEWOBJECTS= $(XVIEWDIR)/xviewclass.o
+#
+# UTYO extension objects
+#
+ARITHOBJECTS= $(OBJARITHDIR)/algebra.o \
+	     $(OBJARITHDIR)/2dgeo.o \
+	     $(OBJARITHDIR)/3dgeo.o \
+	     $(OBJARITHDIR)/ocalib.o
+MWIN_COBJECTS=\
+	${MWINDIR}/c/mbprim.o \
+	${MWINDIR}/c/lsffunc.o \
+	${MWINDIR}/c/llsf.o \
+	${MWINDIR}/c/ltransprim.o \
+	${MWINDIR}/c/transfunc.o
+MWIN_OBJECTS=\
+	${MWINDIR}/lsfbasic.o \
+	${MWINDIR}/visionclasses.l \
+	${MWINDIR}/visionclass.o \
+	${MWINDIR}/histogram.o \
+	${MWINDIR}/mbbasic.o \
+	${MWINDIR}/mwinaux.o \
+	${MWINDIR}/mbmwinprim.o \
+	${MWINDIR}/mwinbasic.o \
+	${MWINDIR}/mbtransprim.o
+MWIN_CONST_FILES=\
+	${MWINDIR}/constants/attnstat.l \
+	${MWINDIR}/constants/boardcmd.l \
+	${MWINDIR}/constants/boardstat.l \
+	${MWINDIR}/constants/comram.l \
+	${MWINDIR}/constants/diftype.l \
+	${MWINDIR}/constants/esccmd.l \
+	${MWINDIR}/constants/featype.l \
+	${MWINDIR}/constants/mwin_ctl.l \
+	${MWINDIR}/constants/rmvtype.l \
+	${MWINDIR}/constants/trktype.l \
+	${MWINDIR}/constants/version.l \
+	${MWINDIR}/constants/werrno.l \
+	${MWINDIR}/constants/wgptype.l \
+	${MWINDIR}/constants/wincmd.l \
+	${MWINDIR}/constants/winstat.l
+ARM_OBJECTS=\
+	${ARMSDIR}/dca/dcaprim.o \
+	${ARMSDIR}/dca/paraprim.o
+RVISION_SPECIALS=  ${MWINDIR}/rlsf.o ${MWINDIR}/rmwin.o
+2DSEARCHOBJECTS= $(2DSEARCHDIR)/geoaux.o	$(2DSEARCHDIR)/lineness.o \
+		 $(2DSEARCHDIR)/todraw.o 	$(2DSEARCHDIR)/search.o \
+		 $(2DSEARCHDIR)/searchmatch.o
+3DSEARCHOBJECTS= $(3DSEARCHDIR)/searchaux.o
+CALIBOBJECTS= 	 $(CALIBDIR)/raphson.o	$(CALIBDIR)/vec-matrix.o \
+		 $(CALIBDIR)/para4poss.o \
+		 $(CALIBDIR)/paravcalc.o   $(CALIBDIR)/calibclassfull.o \
+		 $(CALIBDIR)/cameraaux.o
+MATCHINGOBJECTS= $(2DSEARCHOBJECTS) $(3DSEARCHOBJECTS) $(CALIBOBJECTS)
+JSKOBJECTS= $(LLIB2DIR)/pickport.o \
+	    $(LLIB2DIR)/local.o 
+# Is jskfuncs necessary?
+#	    $(LLIB2DIR)/jskfuncs.o \
+#
+# end of UTYO extension
+
+#
+# make rules
+#
+.SUFFIXES:
+.SUFFIXES:	.h .l .c .o
+.h.l:
+.l.o:
+.c.o:	
+
+#
+# make dependency
+#
+
+eus:	$(BINDIR)/eus
+
+eusview: $(BINDIR)/eusview
+
+eusxview: $(BINDIR)/eusxview
+
+eusx:	$(BINDIR)/eusx
+
+raweus:	$(BINDIR)/raweus
+	
+inteus:	$(BINDIR)/inteus
+	
+commoneus:	$(BINDIR)/commoneus
+
+raweusvx:	$(BINDIR)/raweusvx
+
+$(BINDIR)/commoneus:	$(BINDIR)/raweus $(COBJECTS) $(LOBJECTS) $(COMPOBJECTS)
+	(mkcommoneus;\
+	 rm -f $(BINDIR)/euscomp ; ln -s commoneus $(BINDIR)/euscomp)
+$(BINDIR)/inteus:	$(BINDIR)/raweus $(CLIBDIR)/sysfunc.o
+	(mkinteus; ln -s inteus $(BINDIR)/euscomp)
+$(BINDIR)/eus:	$(BINDIR)/commoneus $(GEOOBJECTS) 
+	(mkeus; rm -f $(BINDIR)/euscomp ; ln -s eus $(BINDIR)/euscomp)
+
+$(BINDIR)/eusview:	$(BINDIR)/eus $(ARITHOBJECTS) $(JSKOBJECTS) \
+		$(SUNLIBDIR)/sunviewconst.l \
+		$(SUNVIEWCOBJECTS) $(SUNVIEWOBJECTS)
+	mkeusview
+$(BINDIR)/eusxview:	$(BINDIR)/eus $(ARITHOBJECTS) $(JSKOBJECTS) \
+		$(XVIEWDIR)/xviewconst.l \
+		$(XVIEWCOBJECTS) $(XVIEWOBJECTS)
+	mkeusxview
+
+$(BINDIR)/raweus:	$(NOKOBJECTS) $(KOBJECTS)
+	 cc -o $(BINDIR)/raweus $(CFLAGS) $(OFLAGS)  \
+		$(NOKOBJECTS) $(KOBJECTS) ${RAWLIB}
+#$(BINDIR)/raweus:	$(NOKOBJECTS) $(KOBJECTS)
+#	 cc -o $(BINDIR)/raweus $(CFLAGS) $(OFLAGS)  \
+#		$(NOKOBJECTS) $(KOBJECTS) \
+#	       -lsunwindow -lm
+
+#
+# VxWorks
+#
+$(BINDIR)/raweusvx:	$(NOKOBJECTS) $(KOBJECTS) c/vxworks.o
+	ld -r -o $(BINDIR)/raweusvx  \
+		$(NOKOBJECTS) $(KOBJECTS) c/vxworks.o
+c/vxworks.o:	c/vxworks.c
+	(cd c; cc -c -Bstatic vxworks.c)
+$(KOBJECTS):
+	(cd $(CDIR); \
+	 cc -c $(CFLAGS) $(OFLAGS) $(*F).c)
+$(NOKOBJECTS):
+	(cd $(CDIR); \
+	 cc -c $(CFLAGS) $(*F).c)
+$(COBJECTS):
+	(cd $(CLIBDIR); \
+	 cc -c $(CFLAGS) $(OFLAGS) $(*F).c)
+$(LOBJECTS):
+	(cd $(LDIR); \
+	 ../bin/euscomp -O $(*F).l)
+$(COMPOBJECTS):
+	(cd $(COMPDIR); \
+	 ../bin/euscomp -O $(*F).l)
+$(GEOOBJECTS):
+	(cd $(LLIBDIR);\
+	 ../bin/euscomp -O $(*F).l)
+$(JSKOBJECTS):
+	(cd $(LLIB2DIR);\
+	 ../bin/euscomp $(*F).l)
+$(ARITHOBJECTS):
+	(cd $(OBJARITHDIR);\
+	 ../bin/euscomp $(*F).l)
+$(SUNVIEWCOBJECTS):
+	(cd $(SUNLIBDIR); \
+	 cc -c $(CFLAGS) $(OFLAGS) $(*F).c)
+$(SUNVIEWOBJECTS):
+	(cd $(SUNLIBDIR);\
+	 ../bin/euscomp $(*F).l)
+$(XVIEWCOBJECTS):
+	(cd $(XVIEWDIR); \
+	 cc -c $(CFLAGS) $(*F).c)
+$(XVIEWOBJECTS):
+	(cd $(XVIEWDIR);\
+	 ../bin/euscomp $(*F).l)
+$(MWIN_COBJECTS):
+	(cd $(MWINDIR)/c; \
+	 cc -c -DSUN $(CFLAGS) $(OFLAGS) -I$(M68INCLUDE) $(*F).c)
+$(MWIN_OBJECTS):
+	(cd $(MWINDIR);\
+	 ../bin/euscomp $(*F).l)
+$(ARM_OBJECTS):
+	(cd $(ARMSDIR)/dca;\
+	 ../bin/euscomp -O $(*F).l)
+$(RVISION_SPECIALS):
+	(cd $(MWINDIR);\
+	 ../bin/euscomp -V -O -O3 $(*F).l)
+#$(VIEW_OBJECTS):
+#	(cd $(MWINDIR)/demo;\
+#	 ../bin/euscomp -V -O -O3 $(*F).l)
+$(2DSEARCHOBJECTS):
+	(cd $(2DSEARCHDIR);\
+	 ../bin/euscomp -O $(*F).l)
+$(3DSEARCHOBJECTS):
+	(cd $(3DSEARCHDIR);\
+	 ../bin/euscomp -O $(*F).l)
+$(CALIBOBJECTS):
+	(cd $(CALIBDIR);\
+	 ../bin/euscomp -O $(*F).l)
+$(BINDIR)/eusx:	$(BINDIR)/eus $(XOBJECTS)
+	mkeusx
+$(XWINDOWDIR)/Xlibfuncs.o:	$(XWINDOWDIR)/Xlibfuncs.c
+	(cd $(XWINDOWDIR) ; \
+	 cc -c $(CFLAGS) $(OFLAGS) Xlibfuncs.c)
+$(XWINDOWDIR)/Xeus.o:	$(XWINDOWDIR)/Xeus.l
+	(cd $(XWINDOWDIR) ; \
+	 ../bin/euscomp Xeus.l)
+
+doc:	doc/ptroff/eus.doc
+	(cd doc/ptroff; tbl eus.doc | ptroff -me -t  >eus.doc.ps)
+install:
+	(rm -f $(PUBBINDIR)/eus $(PUBBINDIR)/eusx $(PUBBINDIR)/euscomp;\
+	 cp $(BINDIR)/eus $(PUBBINDIR);\
+	 cp $(BINDIR)/eusx $(PUBBINDIR);\
+	 ln -s $(PUBBINDIR)/eus $(PUBBINDIR)/euscomp)
+clean:
+	rm -f $(LDIR)/*.[ochq] $(LLIBDIR)/*.[ochq] $(COMPDIR)/*.[ochq]
+binclean:
+	rm -f $(BINDIR)/raweus $(BINDIR)/inteus \
+		$(BINDIR)/commoneus $(BINDIR)/euscomp $(BINDIR)/eus
+all:
+	(make raweus; make inteus ; make commoneus; make eus)
+
+sunviewclean:
+	rm -f $(ARITHOBJECTS) $(JSKOBJECTS) \
+		$(SUNVIEWCOBJECTS) $(SUNVIEWOBJECTS)
+xviewclean:
+	rm -f $(ARITHOBJECTS) $(JSKOBJECTS) \
+		$(XVIEWCOBJECTS) $(XVIEWOBJECTS)
+
+visionclean:
+	rm -f $(MWIN_COBJECTS) $(MWIN_OBJECTS) $(ARM_OBJECTS) \
+		$(RVISION_SPECIALS) $(2DSEARCHOBJECTS) $(3DSEARCHOBJECTS) \
+		$(CALIBOBJECTS) $(MATCHINGOBJECTS)
+eustag : 
+	$(BINDIR)/eustags \
+	$(EUSDIR)/$(LDIR)/readmacro.l \
+	$(EUSDIR)/$(LDIR)/common.l \
+	$(EUSDIR)/$(LDIR)/pprint.l \
+	$(EUSDIR)/$(LDIR)/stream.l \
+	$(EUSDIR)/$(LDIR)/loader.l \
+	$(EUSDIR)/$(LDIR)/debug.l \
+	$(EUSDIR)/$(LDIR)/process.l \
+	$(EUSDIR)/$(LDIR)/packsym.l \
+	$(EUSDIR)/$(LDIR)/coordinates.l \
+	$(EUSDIR)/$(LDIR)/string.l \
+	$(EUSDIR)/$(LDIR)/array.l \
+	$(EUSDIR)/$(LDIR)/toplevel.l \
+	$(EUSDIR)/$(LDIR)/hashtab.l \
+	$(EUSDIR)/$(LDIR)/foreign.l \
+	$(EUSDIR)/$(LDIR)/mathtran.l \
+	$(EUSDIR)/$(LLIBDIR)/geopack.l \
+	$(EUSDIR)/$(LLIBDIR)/primt.l \
+	$(EUSDIR)/$(LLIBDIR)/compose.l \
+	$(EUSDIR)/$(LLIBDIR)/hid.l \
+	$(EUSDIR)/$(LLIBDIR)/viewing.l \
+	$(EUSDIR)/$(LLIBDIR)/viewsurface.l \
+	$(EUSDIR)/$(LLIBDIR)/viewport.l \
+	$(EUSDIR)/$(LLIB2DIR)/pickport.l \
+	$(EUSDIR)/$(LLIB2DIR)/local.l \
+	$(EUSDIR)/$(OBJARITHDIR)/algebra.l \
+	$(EUSDIR)/$(OBJARITHDIR)/2dgeo.l \
+	$(EUSDIR)/$(OBJARITHDIR)/3dgeo.l \
+	$(EUSDIR)/$(OBJARITHDIR)/ocalib.l \
+	$(EUSDIR)/$(SUNLIBDIR)/sunviewclass.l 
+
+#
+# contrib from UTYO
+#
+
+$(MWIN_CONST_FILES):
+	(cd $(MWINDIR)/constants; \
+	/usr/local/bin/ctocl $(*F).h > $(*F).l)
+
+visionview: $(BINDIR)/visionview
+
+$(BINDIR)/visionview:  \
+		${MWIN_CONST_FILES} \
+		${MWIN_COBJECTS} ${MWIN_OBJECTS} \
+		${VIEW_OBJECTS} ${MATCHINGOBJECTS} \
+		${ARM_OBJECTS}
+	mkvisionview
+
+visionxview: $(BINDIR)/visionxview
+
+$(BINDIR)/visionxview:	\
+		$(MWIN_CONST_FILES) \
+		${MWIN_COBJECTS} ${MWIN_OBJECTS} \
+		${VIEW_OBJECTS} ${MATCHINGOBJECTS} \
+		$(ARM_OBJECTS)
+	mkvisionxview
+
+rvisionview: $(BINDIR)/rvisionview
+
+$(BINDIR)/rvisionview:	\
+		$(MWIN_CONST_FILES) \
+		${MWIN_COBJECTS} ${MWIN_OBJECTS} \
+		${VIEW_OBJECTS} ${MATCHINGOBJECTS} \
+		${RVISION_SPECIALS} $(ARM_OBJECTS)
+	mkrvisionview
+
+rvisionxview: $(BINDIR)/rvisionxview
+$(BINDIR)/rvisionxview:  \
+		$(MWIN_CONST_FILES) \
+		${MWIN_COBJECTS} ${MWIN_OBJECTS} \
+		${VIEW_OBJECTS} ${MATCHINGOBJECTS} \
+		${RVISION_SPECIALS} $(ARM_OBJECTS)
+	mkrvisionxview
+
+vserver: $(BINDIR)/vserver
+$(BINDIR)/vserver: \
+		$(MWIN_CONST_FILES) \
+		${MWIN_COBJECTS} ${MWIN_OBJECTS}
+	mkvserver
+
+mksunviewconst: $(SUNLIBDIR)/makesunviewconst
+
+$(SUNLIBDIR)/sunviewconst.l: $(SUNLIBDIR)/mksunviewconst
+	(cd $(SUNLIBDIR); \
+	mksunviewconst  > sunviewconst.l)
+$(SUNLIBDIR)/mksunviewconst: $(SUNLIBDIR)/makesunviewconst.c
+	(cd $(SUNLIBDIR); \
+	cc makesunviewconst.c -o mksunviewconst \
+	-lsuntool -lsunwindow -lpixrect)
+
+$(XVIEWDIR)/xviewconst.l: $(XVIEWDIR)/makexviewconst.c
+	(cd $(XVIEWDIR); \
+	cc $(CFLAGS) makexviewconst.c -o mkxviewconst \
+		-lxview -lX11; \
+	mkxviewconst  > xviewconst.l)
+
+#
+
+-------------------mkinteus------------------------
+#
+bin/raweus <<EOF
+(setq ((find-package 'system) . use) (list (find-package 'lisp)))
+(setq *debug* t)
+; clib objects
+; if this fails, sys:binload defined in c/loadsave.c is wrong.
+        (system:makepackage "UNIX" '("OS"))
+	(lisp:setq lisp:*package* (lisp:find-package "SYSTEM"))
+	(progn 
+		(system:binload "clib/sysfunc.o"   ""   "_eusmain")
+		"sysfunc.o ok")
+	(lisp:setq lisp:*package* (lisp:find-package "UNIX"))
+	(lisp:progn (system:binload
+			"clib/unixcall.o"
+			""		;no quote file
+			"_unixcall"	;entry
+			"bin/raweus"	;symbol-input
+			"/tmp/raweus.a.out"	;symbol-output (reused)
+			"-lc -lm")
+		"unixcall")
+	(lisp:setq lisp:*package* (lisp:find-package "LISP"))
+	(lisp:list-all-packages)
+	(lisp:setq *package* (lisp:find-package 'lisp))
+; llib objects
+	(system:alloc 30000)
+	"alloc ok"
+	(system:alloc 50000)
+	(system:srcload "l/readmacro.l")
+	"readmacro.l ok"
+	(system:srcload "l/packsym.l")
+	"packsym.l ok"
+	(system:srcload "l/common.l")
+	"common.l ok"
+	(system:srcload "l/constants.l")
+	"constants.l ok"
+	(system:srcload "l/stream.l")
+	"stream.l ok"
+	(system:srcload "l/string.l")
+	"string.l ok"
+	(system:srcload "l/loader.l")
+	(setq *symbol-input* (find-executable *program-name*))
+	(setq *eusdir* (pathname (concatenate string (unix:getwd) "/")))
+	"loader.l ok"
+	(load-files "l/pprint.l"
+		    "l/debug.l"
+		    "l/process.l"
+		    "l/hashtab.l"
+		    "l/foreign.l"
+		    "l/array.l"
+		    "l/mathtran.l")
+	(lisp:in-package 'user)
+; dummy entry for the toplevel
+	(defun lisp:lisp-implementation-version () "new")
+; load the compiler
+	(in-package "COMPILER" :nicknames '("COMP"))
+	(load "comp/builtins.l")
+	(load "comp/trans.l")
+	(load "comp/comp.l")
+	(lisp:in-package 'user)
+	(import 'comp:compile)
+	(import 'comp:compile-file)
+	(import 'comp:comfile)
+(print "compiler ok")
+; toplevel needs package 'compiler
+ 	(load "l/toplevel.l")
+	"toplevel.l ok"
+; lisp-implementation-version
+	(eval (list 'defun 'lisp:lisp-implementation-version '()
+	    (let ((date (subseq (unix:asctime (unix:localtime)) 0 24))
+		  version)
+		(with-open-file (f "VERSION")  (setq version (read f)))
+		(incf version 0.001)
+		(with-open-file (f "VERSION" :direction :output)
+		  (format f "~6,3F~%" version ))
+	        (format nil "interpreted euslisp version ~6,3f created on ~A"
+			version date)) ) )
+;
+;	(setq *debug* nil)
+        (system:gc)
+	(save "bin/inteus"   "" 'eustop)
+
+EOF
+
+-----------------mkcommoneus-------------------------
+#
+#echo $1
+bin/raweus <<EOF
+; setup error handler
+        (system:makepackage "UNIX" '("OS"))
+	(defun system:error-handler (&rest mes)
+	   (format t "~s~%error occured during boot strapping, bye!~%" mes)
+	   (unix:exit 1))
+	(setq lisp:*error-handler* 'system:error-handler)
+	(setq ((find-package "SYSTEM") . use)
+	      (list (find-package "LISP")))
+	(setq *debug* t)
+; clib objects
+	(setq lisp:*package* (lisp:find-package "SYSTEM"))
+	(progn (system:binload "clib/sysfunc.o" "" "_eusmain") "sysfunc")
+	(lisp:setq lisp:*package* (lisp:find-package "UNIX"))
+	(lisp:progn (system:binload
+			"clib/unixcall.o"
+			""		;no quote file
+			"_unixcall"	;entry
+			"bin/raweus"	;symbol-input
+			"/usr/tmp/raweus.a.out"	;symbol-output (reused)
+			"-lc -lm")
+		"unixcall")
+	(lisp:setq lisp:*package* (lisp:find-package "LISP"))
+	(lisp:list-all-packages)
+	(proclaim
+	    '(special *machine* *os-version* *eusdir* *package*
+		      *eus-help-directory*))
+;
+; set up environmental global variables
+;
+	(setq lisp:*MACHINE* "$MACHINE")
+	(setq lisp:*OS-VERSION* "$OS_VERSION")
+	(setq lisp:*EUSDIR* "/usr/local/eus/")
+	(setq lisp:*EUS-HELP-DIRECTORY*
+	      (concatenate string lisp:*EUSDIR* "doc/help/"))
+	(setq lisp:*symbol-input*    "/usr/tmp/raweus.a.out")
+; llib objects
+	(system:alloc 30000)
+	(system:alloc 50000)
+	(progn (system:binload "l/readmacro.o" "l/readmacro.q" "_eusmain")
+	       "readmacro")
+;;;;;	(system:srcload "l/readmacro.l") ;;;;;;
+	(progn (system:binload "l/packsym.o" "l/packsym.q" "_eusmain")
+	       "packsym")
+	(system:binload "l/common.o" "l/common.q" "_eusmain")
+	(system:srcload "l/constants.l")
+	(system:binload "l/stream.o" "l/stream.q" "_eusmain" *symbol-input*)
+	(system:binload "l/string.o" "l/string.q" "_eusmain" *symbol-input*)
+	(system:binload "l/loader.o" "l/loader.q" "_eusmain" *symbol-input*)
+; hfoo!  Now 'load' is defined!
+	(setq *debug* nil)
+	(format t "Loader has been loaded.~%")
+	(load-files "l/pprint"
+		    "l/debug"
+		    "l/process"
+		    "l/hashtab"
+		    "l/foreign"
+		    "l/array")
+	(in-package "USER")
+	(save "bin/smalleus" "bin/raweus")
+	(in-package "LISP")
+	(load-files "l/coordinates"
+		    "l/mathtran")
+;;
+;; basic eus has been built
+;;
+;;; dummy entry for the toplevel
+	(defun lisp:lisp-implementation-version () "new")
+	(setq lisp:euserror nil)
+;; load the compiler
+	(format t ";;; Loading compiler modules.~%")
+	(in-package "COMPILER" :nicknames '("COMP"))
+	(load-files "comp/builtins.l"
+		    "comp/trans"
+		    "comp/comp")
+	(lisp:in-package 'lisp)
+	(import 'comp:compile)
+	(import 'comp:compile-file)
+	(import 'comp:comfile)
+; 'toplevel' needs package 'compiler
+ 	(load "l/toplevel")	;;???  :symbol-output *symbol-input*)
+; lisp-implementation-version
+	(eval (list 'defun 'lisp:lisp-implementation-version '()
+	    (let ((date (subseq (unix:asctime (unix:localtime)) 0 24))
+		  version)
+		(with-open-file (f "VERSION")  (setq version (read f)))
+		(incf version 0.001)
+		(with-open-file (f "VERSION" :direction :output)
+		  (format f "~6,3F~%" version ))
+	        (format nil "EusLisp ~6,3f created on ~A"
+			version date)) ) )
+;;
+;; common eus has been built
+;;
+(in-package "USER")
+(setq *debug* nil)
+
+(save "bin/commoneus"
+	"bin/raweus"
+	'eustop)
+
+EOF
+
+
+
+From matsui@etl.go.jp Wed May 30 08:52:39 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA04099; Wed, 30 May 90 08:52:37 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA07178; Wed, 30 May 90 08:52:39 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA04096; Wed, 30 May 90 08:52:21 JST
+Date: Wed, 30 May 90 08:52:21 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9005292352.AA04096@etlmmd.etl.go.jp>
+To: yuki@grad304d.scitec.kobe-u.ac.jp
+Subject: Re:  euslisp makefile
+Cc: euslisp@etl.go.jp
+Status: R
+
+>  神戸大学の井上です。eusxは無事作成できました。どうも、ありがとう
+>ございました。やはりmkcommon,makefilの問題でした。
+
+めでたし、めでたしですね。こちらでは、何か変更を加えても、inteusから
+作り直すことはめったにしないので、makefile回りにバグが残ったままテープを
+配布してしまうことがあります。ご迷惑をおかけしました。
+
+>  それで、また、別の質問なのですが、これまで、euslispは、BSD系の
+>計算機では、動作しているようですが、オブジェクトの構造がことなる
+>SystemV系統の計算機（こちらにはMIPS R2000を使ったU-stationがある
+>ので）では、まだ、動作していないのでしょうか。きっとload/save関連
+>の所では変更が必要だと思いますが、もっと移植に問題ある所というのが
+>あるのでしょうか。べつに、移植しょうという訳ではないので、もしコメ
+>ントがありましたら、メイルをお願いします。（簡単なら検討してしまい
+>そうで。。。。。）
+
+移植、やってくれますか？ 情報はいろいろ提供できると思います。
+移植の上でまず検討しなければならない問題は、doc/PORTに書かれています。
+UNIXの違いだけでなく、CPUアーキテクチャの違いもきいてきます。
+確か、MIPSにはKCLは移植できてるはずなので、link, image-save
+に関してはクリヤできると思いますし、いざとなればコードを借りてくると言う
+荒技もあり得ると思います。健闘を祈ります。
+
+松井
+
+From matsui@etl.go.jp Thu May 31 17:38:37 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA05791; Thu, 31 May 90 17:38:36 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA01550; Thu, 31 May 90 17:38:45 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA05786; Thu, 31 May 90 17:38:25 JST
+Date: Thu, 31 May 90 17:38:25 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9005310838.AA05786@etlmmd.etl.go.jp>
+To: euslisp@etl.go.jp
+Subject: float and double vector conversion
+Status: R
+
+EusLisp's float-vector is always single precision.
+When a C program requests array of double, data type conversion is needed.
+Thus, FLOAT2DOUBLE and DOUBLE2FLOAT are defined in clib/double.c.
+They accept one or two arguments: the first is converted and stored in the
+second arg. If the second arg is omitted, a new float-vector is created.
+Enjoy.
+matsui@etl
+
+From matsui@etl.go.jp Fri Jun  1 20:50:47 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA07998; Fri, 1 Jun 90 20:50:46 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA24301; Fri, 1 Jun 90 20:50:59 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA07993; Fri, 1 Jun 90 20:50:35 JST
+Date: Fri, 1 Jun 90 20:50:35 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9006011150.AA07993@etlmmd.etl.go.jp>
+To: euslisp@etl.go.jp
+Subject: class hierarchy
+Status: R
+
+New methods definition for metaclass follows.
+Replace it with the old code in l/common.l.
+
+(defmethod metaclass 
+ (:new () (instantiate self))
+ (:super () super)
+ (:methods () methods)
+ (:method (selector) (assoc selector methods))
+ (:slots () vars)
+ (:name () name)
+ (:cid () cix)
+ (:cix () cix)
+ (:sub ()
+    (let (r)
+       (dolist (a (system:list-all-classes))
+	  (if (eql (send a :super) self) (push a r)) )
+       r))
+ (:hierarchy ()
+    (let (h)
+	(dolist (s (send self :sub))
+	   (push (send s :hierarchy) h))
+        (cons self (nreverse h))))
+ (:print-hierarchy (&optional (strm t))
+    (labels
+	((print-hierarchy (h depth)
+	    (spaces depth strm)
+	    (print (send (car h) :name) strm)
+	    (dolist (s (cdr h))
+		(print-hierarchy s (+ depth 5)))))
+	(print-hierarchy (send self :hierarchy) 0) ))
+ (:prin1 (strm)
+     (send-super :prin1 strm (metaclass-name self))))
+
+
+(send object :print-hierarchy) outputs indented print of all
+the classes according to their inheritance structure.
+
+By the way, the mail address mizoro@rdc.toshiba.co.jp does not
+reach to Dr.Mizoguchi. Does anyone know his current address?
+MATSUI Toshihiro, matsui@etl.go.jp, Electrotechnical Laboratory
+
+From matsui@etl.go.jp Mon Jun 11 10:17:03 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA02404; Mon, 11 Jun 90 10:17:02 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA00962; Mon, 11 Jun 90 10:17:15 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA02401; Mon, 11 Jun 90 10:16:15 JST
+Date: Mon, 11 Jun 90 10:16:15 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9006110116.AA02401@etlmmd.etl.go.jp>
+To: tshibata@jsk.t.u-tokyo.ac.jp
+Subject: Re:  Q about Euscomp
+Cc: euslisp@etl.go.jp
+Status: R
+
+東大、柴田さん
+
+>ラメッコの毎日です。具体的には、線分抽出に関するＬＩＳＰで書かれた関数
+>をＣで書き下す、というような事をしています。ＬＩＳＰ自体の勉強にもなっ
+>てとても面白いです。
+>  そこで、インスタンシエイトもＣでできないものかと思っていろいろソース
+>を覗いたのですが、pointer fqv[] の情報が分からないのです。どこにクラス
+>の、そしてどこにメソッドの情報が納まっているのか・・というか、euscomp
+>がどのようにfqvをセットしているのかを、ぜひ教えて下さい。
+
+コンパイルされたコードがロードされると、その最後にコンパイラが
+付け加えるeusmainという関数が実行されます。eusmainには、modという
+引数が渡されますが、これはクラスcompiled-codeのインスタンスで、
+プログラムのコード(インストラクション列)の入ったバイトベクタと
+そのプログラム中で参照するlisp定数のベクタ(quote-vector)を要素に
+持ちます。eusmainの先頭で変数qvにquote-vectorのアドレスがセットされます。
+quote-vectorへの参照は非常に頻繁に生ずるので、各関数中ではqvの値を
+レジスタ変数fqv(fast-quote-vector)にキャッシュしています。
+
+クラスの情報は、そのクラス名シンボルのspecial-valueにバインドされます。
+だから、lispのトップレベルで、objectとか、(symbol-value 'cons)とか
+やればそのクラスオブジェクトが取り出せます。あるインスタンスから、
+そのクラスが何であるかを知るには、関数classを使います。(class '(a b))
+はconsクラスを返します。クラスオブジェクトというのは、通常はクラス
+metaclassのインスタンスです。クラスmetaclassも実はオブジェクトですが、
+そのクラスはmetametaclassではなくて、自分自身すなわちクラスmetaclassです。
+
+このクラスオブジェクトの中に、スーパクラスやら、スロット変数、メソッドの
+リストやらが入っています。sendすると、このメソッドリストをサーチするわけね。
+だけど、毎回サーチするんでは遅いから、よくアクセスされるメソッドはハッシュ
+表に登録してスピードアップしてるわけ。
+
+だけど、fqvの話しとメソッド定義のありかの話しは別だと思うんだけど。
+それにユーザがfqvにアクセスするプログラムを書くと言うのは異常です。
+実行のしくみを知りたいと言うのなら、まあいいんですけど、もう一度、
+何をやりたいのか順を追って書いてもらえませんか。
+
+>  これから、動いている物体の線分ベースのリアルタイム認識というテーマに
+>挑戦して行きたいと思います。
+
+プログラムができたら投稿して下さい。
+
+松井@etl.go.jp
+
+
+From matsui@etl.go.jp Mon Jun 11 22:44:06 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA03146; Mon, 11 Jun 90 22:44:05 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA15209; Mon, 11 Jun 90 22:44:05 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA03142; Mon, 11 Jun 90 22:43:07 JST
+Date: Mon, 11 Jun 90 22:43:07 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9006111343.AA03142@etlmmd.etl.go.jp>
+To: tshibata@jsk.t.u-tokyo.ac.jp
+Subject: Re:  Re Re: Q about Euscomp
+Cc: euslisp@etl.go.jp
+Status: R
+
+>の認識」です。そのために障害となっていることは、
+>
+>１．ＬＳＦから線分リストを読み出すのに時間がかかる。
+
+今計ってみたら、250本ほどセグメントがある場合、sparcで60msecほどでした。
+それで、lsfのメモリにアクセスしてラインセグメントの情報をつくり出す部分を
+次ぎのようにCで書いて見ましたが、予想通り、たいした改善は得られませんでした。
+
+-----------------------------------------------------------
+
+#include "../c/eus.h"
+
+/*
+(defun lstm-line(page i)
+  (declare (integer i))
+  (let ((cp (+ i (* 2048 page) #x4000)))
+    (declare (integer cp))
+    ;(bank 7)	;lstm
+    (list (logand #xff (aref lsf-proc cp))
+          (logand #xff (aref lsf-proc (+ cp #x2000)))
+          (float-vector (aref lsf-proc (+ cp #x4000))
+		        (aref lsf-proc (+ cp #x6000)))
+          (float-vector (aref lsf-proc (+ cp #x8000))
+	 	        (aref lsf-proc (+ cp #xa000))))) )
+*/
+
+extern pointer makefvector();
+
+static pointer LSTMLINE(n,argv)
+int n;
+pointer *argv;
+{ int cp;
+  unsigned char *lsf=(unsigned char *)(argv[0]->c.ivec.iv[0]);
+  int page=ckintval(argv[1]), i=ckintval(argv[2]);
+  pointer spoint,epoint,result;
+
+  ckarg(3);
+  cp = 2048 * page + 0x4000 + i;
+
+  vpush(makeint(lsf[cp]));
+  vpush(makeint(lsf[cp+0x2000]));
+  spoint=makefvector(2);
+  spoint->c.fvec.fv[0]=lsf[cp+0x4000];
+  spoint->c.fvec.fv[1]=lsf[cp+0x6000];
+  vpush(spoint);
+  epoint=makefvector(2);
+  epoint->c.fvec.fv[0]=lsf[cp+0x8000];
+  epoint->c.fvec.fv[1]=lsf[cp+0xa000];
+  vpush(epoint);
+  result=(pointer)stacknlist(4);
+  return(result);}
+
+eusmain(mod)
+pointer mod;
+{ defun("LSTM_LINE",mod,LSTMLINE);
+  }
+
+------------------------------------------------------------
+
+これは、配列アクセスの速度より、実際にfloat-vector, consなどをinstantiate
+する時間の問題だと思います。250セグメントの場合ですと、総数約2500のinstantiate
+が行われ、総量として9000ワードほどのメモリが割り付けられます。
+1回のinstantiate(cではmallocに相当)に約20microsecかかるとすると、
+2500*20microsec=50milisecとなり、ほとんどがinstantiateで費やされている
+ことがわかります。実際には20microsecより多少速いと思いますが、10micro以下
+は厳しい値です。EusLispのメモリ割り付けの速度は、consはkclよりほんの
+少し悪く、vectorは相当速いはずです。世の標準には達していると思う。
+cでmallocを使ったとしたら、やっぱりこのくらいの速度だと思います。
+だから、この場合、Cで書くことの意味はほとんどない。
+
+ちなみに、リストやベクタになったオブジェクトの総量は、sys:object-size
+という関数でわかります。たとえば、(sys:object-size '(1 #(1 2 3) 4))
+は、(4 10 15)というリストを返します。これは、consが3個、ベクタが1個で
+オブジェクト数は4、consにはcar,cdrがあり、ベクタは3要素+lengthなので
+ワード数は3*2+(3+1)=10、メモリ管理の都合上、若干の無駄(internal loss)
+が生じて、全部では15ワード割り付けられたことを意味します。相互参照、
+再帰構造も正しくカウントするはずです。ただし、シンボルまで行くとあとは
+たどらないので、property-listの中まではカウントしない。それをやることも
+できるようにはなっていますが、そうするとシステム中の全オブジェクトをカウント
+することになってしまいますから。
+
+>２．線分リストからエッジ・面情報を取り出すのに時間がかかる。
+>３．モデルマッチングに時間がかかる。
+
+これはどうやってもすぐには終らない問題でしょう。安易にCで書くよりは
+アルゴリズム、データ構造を工夫するほうが世のためになるでしょう。
+それに、lsfのハードが2つ、ワークステーションに1つ、計3個並列に動ける
+プロセッサがあることを利用していますか。たとえばカメラでサンプリング
+している間にline-segment情報を読み出せるはずです。
+
+>ということです。
+>
+>  そこで、とりあえず１．を実現したわけですが（２〜３倍程度の高速化）、
+
+これは、もとのlispのプログラムがとても遅かったのですね。ETLではほとんど
+変わりませんでした。
+
+>それもＬＳＦのメモリ（ＬＳＴＭ）から値を取り出して、フローとベクタのリ
+>ストにするところまでです。で、この関数（lsf:read-polylines)のトップレ
+>ベルループでインスタンシエイトを含んだループを回しているので、インスタ
+>ンシエイトも一気にＣでできないかなと思ったわけです。そこで、僕なりに調
+>
+>べてみたところ(lsfbasic.c中に)
+>	local[4]= loadglobal(fqv[79]);                      
+>	vsp=local+5;				            
+>	w=(pointer)INSTANTIATE(1,local+4); /*instantiate*/  
+>	local[4]= w;					    
+>	local[5]= fqv[3];				    
+>	local[6]= local[2];				    	
+>	vsp=local+7;
+>        w=(pointer)SEND(3,local+4); /*send*/
+>        local[4]= w;
+>
+>        （これはＬＩＳＰでは (instance 2dpolyline :init poss) の部分で
+>す。）
+>こういう記述があったものですから、きっとfqv[]にクラスやメソッドの情報
+>があると思ったのです。
+
+ここで、fqv[79]の中身は2dpolylineというシンボルです。loadglobalでその
+値を取ってくるので、local[4]には、2dpolylineのクラスオブジェクトが入ります。
+
+>  Ｃのレベルでインスタンスする方法をわかりやすく教えていただけないもの
+>でしょうか、または、やめた方がいいのでしょうか？？
+
+c/makes.cに、makeobject(class),makevector(vclass,size)という関数があります。
+これらが一番generalなinstantiate関数です。あと、makes.cにはオブジェクトを
+作る関数がいろいろあるので調べて下さい。
+
+>  僕は、なるべく早くに２．まで一気にＣの関数でやれるようになったらいい
+>なと思っています。
+
+Cはlisp特有の処理を含まないようなlow-levelなところ、あるいはその
+cのコードを他のcのプログラムで使えるような場面に限って使うべきだと
+思います。
+
+あわてて書いたので意味不明瞭のところもあると思いますが、また、いずれ。
+
+
+From matsui@etl.go.jp Wed Jun 20 22:03:59 1990
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA19608; Wed, 20 Jun 90 22:03:58 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA04547; Wed, 20 Jun 90 22:05:13 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA19605; Wed, 20 Jun 90 22:03:42 JST
+Date: Wed, 20 Jun 90 22:03:42 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <9006201303.AA19605@etlmmd.etl.go.jp>
+To: euslisp@etl.go.jp
+Subject: new feature of hid
+Status: R
+
+EusLisp update news			1990Jun20   MATSUI T., ETL
+
+summary: Hidden lines can be drawn with dashed-lines by the HIDD function.
+
+Arguments are same as HID.
+(HIDD &optional viewer &rest things)
+
+In HID operation, edges are categorized into five groups:
+	(1) visible contour edges
+	(2) visible approximated edges
+	(3) invisible contour edges
+	(4) invisible non-approximated edges
+	(5) invisible approximated edges
+
+Approximated edges are edges which are generated by approximation
+of curved surface, like side strips of a cylinder.
+
+HID always draws only group (1), visible contour edges.
+HIDD always draws group (1) and (3), and can draw edges in groups
+(2), (4) and (5) under the control of two global variables,
+*IGNORE-APPROXIMATED-EDGES* and *DRAW-INVISIBLE-EDGES*.
+
+*IGNORE-APPROXIMATED-EDGES*	*DRAW-INVISIBLE-EDGES*
+	NIL				NIL	   -->(1),(2),(3)
+	NIL				T	   -->(1),(2),(3),(4),(5)
+	T				NIL	   -->(1),    (3),
+	T				T 	   -->(1),    (3),(4)
+
+By default, *IGNORE-APPROXIMATED-EDGES* is T and
+*DRAW-INVISIBLE-EDGES* is NIL.
+
+For this feature, Xeus.l is also edited to allow dashed-line drawing.
+I don't know how to draw it on tektro-viewsurface.
+
+--
+MATSUI Toshihiro, matsui@etl.go.jp, Electrotechnical Laboratory
+

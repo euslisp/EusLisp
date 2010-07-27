@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Class Hierarchy</TITLE>
+<META NAME="description" CONTENT="Class Hierarchy">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2089" HREF="node16.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2087" HREF="node12.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2081" HREF="node14.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2091" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2092" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2090" HREF="node16.html">Type Specifier</A>
+<B>Up:</B> <A NAME="tex2html2088" HREF="node12.html">Data Types</A>
+<B> Previous:</B> <A NAME="tex2html2082" HREF="node14.html">Objects</A>
+<BR> <P>
+<H2><A NAME="SECTION03013000000000000000">Class Hierarchy</A></H2>
+<P>
+The data structure of objects are defined by classes,
+and their behaviors are defined by methods in the classes.
+In EusLisp, a few dozens of classes have already been 
+defined in tree structured
+hierarchy as depicted in fig. <A HREF="node15.html#ClassHierarchy">4</A>.
+You can browse the real inheritance structure by the 
+<B>class-hierarchy</B> function.
+The class 'object' at the leftmost is the ultimate super-class of
+all the classes in EusLisp.
+User-defined classes can inherit any of these built-in classes.
+<P>
+<P><A NAME="610">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure418" SRC="img7.gif"  > <BR>
+<STRONG>Figure 4:</STRONG> <A NAME="ClassHierarchy">&#160;</A>Hierarchy of Predefined Classes<BR>
+<P>
+<P>
+A class is defined the <B>defclass</B> macro or by the <B>defstruct</B> macro.
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass class-name &amp;key :super class
+<P>
+ 		 :slots 		 ()
+<P>
+ 		 :metaclass 		 metaclass
+<P>
+ 		 :element-type 		 t
+<P>
+ 		 :size  -1
+   )
+<P>
+(defstruct struct-name slots...)
+<P>
+(defstruct (struct-name [struct-options ...])
+<P>
+(slot-name1 [slot-option...])
+<P>
+(slot-name2 [slot-option...])
+<P>
+)
+<P>
+</TT></PRE></BLOCKQUOTE> </TT>
+<P>
+Methods are defined by the <B>defmethod</B> special form.
+<B>Defmethod</B> can appear any times for a particular class.
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defmethod class-name
+<P>
+ (:method-name1 (parameter...) . body1)
+<P>
+ (:method-name2 (parameter...) . body2)
+<P>
+ ...)
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+Field definitions for most of built-in classes are found in
+<TT>*eusdir*/c/eus.h header file.
+<TT>(describe)</TT> <EM>class</EM>) gives the description
+of all the slots in <EM>class</EM>, namely, super class, slot names,
+slot types, method list, and so on.
+Definitions of built-in classes follow.
+Note that the superclass of class <B>object</B> is NIL
+since it has no super class.
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>object</B> :super <B>NIL</B> :slots ())
+<P>
+</TT></PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>cons</B> :super <B>object</B> :slots (car cdr))
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>propertied-object</B> :super <B>object</B>
+<P>
+ :slots (plist)) ;property list
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>symbol</B> :super <B>propertied-object</B>
+<P>
+:slots (value ;specially bound value
+<P>
+ 		      vtype 		                ;const(0),var(1),special(2)
+<P>
+ 		      function 		             ;global func def
+<P>
+ 		      pname               		  ;print name string
+<P>
+ 		      homepkg)) 		            ;home package
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>foreign-pod</B> :super <B>symbol</B>
+<P>
+:slots (podcode ;entry code
+<P>
+ 		      paramtypes 		      ;type of arguments
+<P>
+ 		      resulttype))
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>package</B> :super <B>propertied-object</B>
+<P>
+:slots (names ;list of package name and nicknames
+<P>
+		                   uses 		  ;spread use-package list
+<P>
+		                   symvector 		 ;hashed obvector
+<P>
+		                   symcount 		  ;number of interned symbols
+<P>
+		                   intsymvector 		 ;hashed obvector of internal symbols
+<P>
+		                   intsymcount 		  ;number of interned internal symbols
+<P>
+		                   shadows 		 ;shadowed symbols
+<P>
+		                   used-by)) 		  ;packages using this package
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>stream</B> :super <B>propertied-object</B> :slots (direction ;:input or :output, nil if closed
+<P>
+  		                   buffer  		  ;buffer string
+<P>
+  		                   count 		 ;current character index
+<P>
+  		                   tail)) 		  ;last character index
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>file-stream</B> :super <B>stream</B>
+<P>
+:slots (fd ;file descriptor (integer)
+<P>
+ 		                    fname))		 ;file name str; qid for msgq
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>broadcast-stream</B> :super <B>stream</B>
+<P>
+:slots (destinations)) ;streams to which output is delivered  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>io-stream</B> :super <B>propertied-object</B>
+<P>
+		        :slots (instream outstream))  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>socket-stream</B> :super <B>io-stream</B>
+<P>
+		        :slots (address)) ; socket address  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>read-table</B>  :super <B>propertied-object</B>
+<P>
+:slots (syntax ; byte vector representing character types
+<P>
+				 ; 0:illegal, 1:white, 2:comment, 3:macro
+<P>
+				 ; 4:constituent, 5:single_escape
+<P>
+				 ; 6:multi_escape, 7:term_macro, 8:nonterm_macro
+<P>
+		 macro 		 ;character macro expansion function
+<P>
+		 dispatch-macro))
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>array</B> :super <B>propertied-object</B>
+<P>
+:slots (entity ;simple vector storing array entity
+<P>
+ 		           rank  		 ;number of dimensions: 0-7
+<P>
+ 		           fillpointer 		    ;pointer to push next element
+<P>
+ 		           offset      		    ;offset for displaced array
+<P>
+ 		           dim0,dim1,dim2,dim3,dim4,dim5,dim6))  ;dimensions
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>metaclass</B> :super <B>propertied-object</B>
+<P>
+:slots   (name  ;class name symbol
+<P>
+ 		           super   		   ;super class
+<P>
+ 		           cix  		      ;class id
+<P>
+ 		           vars  		     ;var name vector including inherited vars
+<P>
+ 		           types  		    ;type vector of object variables
+<P>
+ 		           forwards 		  ;components to which messages are forwarded
+<P>
+ 		           methods))  		  ;method list
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>vectorclass</B> :super <B>metaclass</B>
+<P>
+:slots (element-type  ;vector element type 0-7
+<P>
+ 		                 size)) 		  ;vector size; 0 if unspecified
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>cstructclass</B> :super <B>vectorclass</B>
+<P>
+:slots (slotlist))  ;cstruct slot descriptors
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>vector</B> :super <B>object</B> :slots (size))  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>float-vector</B> :super <B>vector</B> :element-type :float)  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>string</B> :super <B>vector</B> :element-type :char)  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>hash-table</B> :super <B>propertied-object</B>
+<P>
+:slots   (lisp::key ;hashed key vector
+<P>
+		 value 		 ; value vector
+<P>
+		 size 		 ; the size of the hash table
+<P>
+		 count 		 ; number of elements entered in the table
+<P>
+		 lisp::hash-function
+<P>
+		 lisp::test-function
+<P>
+		 lisp::rehash-size
+<P>
+		 lisp::empty  lisp::deleted 		)
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>pathname</B> :super <B>propertied-object</B>
+<P>
+:slots   (lisp::host device ; not used
+<P>
+		 directory 		 ; list of directories
+<P>
+		 name 		 ; file name before the last &quot;.&quot;
+<P>
+		 type 		 ; type field after the last &quot;.&quot;
+<P>
+		 lisp::version) 		 ; not used
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>label-reference</B> ;for reading #n=, #n# objects
+<P>
+:super <B>object</B>
+<P>
+		   :slots (label value unsolved next))
+<P>
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>compiled-code</B> :super <B>object</B>
+<P>
+:slots   (codevector
+<P>
+ 		          quotevector
+<P>
+ 		          type ;0=func, 1=macro, 2=special
+<P>
+ 		          entry))  		  ;entry offset   
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>closure</B> :super <B>compiled-code</B>
+<P>
+		              :slots (env1 env2));environment  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>foreign-code</B>  :super <B>compiled-code</B>
+<P>
+:slots   (paramtypes  ;list of parameter types
+<P>
+ 		              resulttype)) 		 ;function result type  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+<TT><BLOCKQUOTE> <PRE><TT> (defclass <B>load-module</B>  :super <B>compiled-code</B>
+<P>
+ :slots  (symbol-table ;hashtable of symbols defined
+<P>
+ 		         object-file 		 ;name of the object file loaded, needed for unloading
+<P>
+ 		         handle 		 ;file handle returned by ''dlopen''  
+</PRE></BLOCKQUOTE> </TT>
+<P>
+</TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT></TT><HR><A NAME="tex2html2089" HREF="node16.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2087" HREF="node12.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2081" HREF="node14.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2091" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2092" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2090" HREF="node16.html">Type Specifier</A>
+<B>Up:</B> <A NAME="tex2html2088" HREF="node12.html">Data Types</A>
+<B> Previous:</B> <A NAME="tex2html2082" HREF="node14.html">Objects</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

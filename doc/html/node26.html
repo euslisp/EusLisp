@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Sequencing and Lets</TITLE>
+<META NAME="description" CONTENT="Sequencing and Lets">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2229" HREF="node27.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2227" HREF="node24.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2221" HREF="node25.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2231" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2232" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2230" HREF="node27.html">Local Functions</A>
+<B>Up:</B> <A NAME="tex2html2228" HREF="node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html2222" HREF="node25.html">Conditionals</A>
+<BR> <P>
+<H2><A NAME="SECTION03032000000000000000">Sequencing and Lets</A></H2>
+<P>
+<A NAME=1322>&#160;</A>
+<B>prog1</B> <EM>form1 &amp;rest forms </EM>[function] 
+<UL><LI> <EM>form1 and <EM>forms</EM> are evaluated sequentially, 
+and the value returned by <EM>form1</EM> is returned as the value of <B>prog1</B>.
+</UL>
+<A NAME=1336>&#160;</A>
+<B>progn</B> <EM>{form}* </EM>[special] 
+<UL><LI> <EM>Forms are evaluated sequentially, and the value of the rightmost form
+is returned.
+<B>Progn</B> is a special form because it has a special meaning when it
+appeared at top level in a file.
+When such a form is compiled, all inner forms are regarded as they appear
+at top level.
+This is useful for a macro which expands to a series of
+<B>defun</B>s or <B>defmethod</B>s, which must appear at top level.
+</UL>
+<A NAME=1350>&#160;</A>
+<B>setf</B> <EM>{access-form value}* </EM>[macro] 
+<UL><LI> assigns <EM>value to a generalized-variable <EM>access-form</EM>.
+</UL>
+<A NAME=1362>&#160;</A>
+<B>let</B> <EM>({var | (var [value])}*) {declare}* {form}* </EM>[special] 
+<UL><LI> introduces local variables.
+All <EM>values are evaluated and assigned to <EM>var</EM>s in parallel, i.e.,
+<TT>(let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))</TT> produces
+(2 1).
+</UL>
+<A NAME=1375>&#160;</A>
+<B>let*</B> <EM>({var | (var [value])}*) {declare}* {form}* </EM>[special] 
+<UL><LI> introduces local variables.
+All <EM>values are evaluated sequentially, and assigned to <EM>var</EM>s
+i.e.,
+<TT>(let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))</TT> produces
+(2 2).
+</UL>
+</EM></EM></EM></EM></EM><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

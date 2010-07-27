@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Text View Panel</TITLE>
+<META NAME="description" CONTENT="Text View Panel">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3708" HREF="node137.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3706" HREF="node133.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3702" HREF="node135.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3710" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3711" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3709" HREF="node137.html">Panel Items</A>
+<B>Up:</B> <A NAME="tex2html3707" HREF="node133.html">Panel</A>
+<B> Previous:</B> <A NAME="tex2html3703" HREF="node135.html">File Panel</A>
+<BR> <P>
+<H3><A NAME="SECTION04072300000000000000">Text View Panel</A></H3>
+<P>
+TextViewPanel is an application window class to display text files
+(Fig. <A HREF="node136.html#textviewpanel">17</A>).
+The program text is shown to demonstrate how 
+one of the simplest application windows is described.
+In the <TT>:create</TT> method, the quit button and find button,
+and a text-item to feed the string to be searched for in the file
+are created.
+The view-window is a ScrollTextWindow that displays the file
+with the vertical and horizontal scroll-bars.
+The TextViewPanel captures <TT>:ConfigureNotify</TT> event
+to resize the view-window when the outermost title window is resized
+by the window manager.
+<P>
+<P><A NAME="22858">&#160;</A> <IMG  ALIGN=BOTTOM ALT="figure22477" SRC="img77.gif"  > <BR>
+<STRONG>Figure 17:</STRONG> TextViewPanel window<A NAME="textviewpanel">&#160;</A><BR>
+<P>
+<P>
+<PRE>(defclass TextViewPanel :super panel
+        :slots (quit-button find-button find-text view-window))
+
+(defmethod TextViewPanel
+ (:create (file &amp;rest args &amp;key (width 400) &amp;allow-other-keys)
+    (send-super* :create :width width args)
+    (setq quit-button
+          (send self :create-item panel-button &quot;quit&quot; self :quit))
+    (setq find-button
+          (send self :create-item panel-button &quot;find&quot; self :find))
+    (setq find-text
+          (send self :create-item text-item &quot;find: &quot; self :find))
+    (setq view-window
+            (send self :locate-item
+                (instance ScrollTextWindow :create
+                   :width (setq width (- (send self :width) 10))
+                   :height (- (setq height (send self :height)) 38)
+                   :scroll-bar t :horizontal-scroll-bar t
+                   :map nil      :parent self)))
+    (send view-window :read-file file))
+ (:quit (event)  (send self :destroy))
+ (:find (event)
+    (let ((findstr (send find-text :value)) (found)
+          (nlines (send view-window :nlines)))
+        (do ((i 0 (1+ i)))
+            ((or (&gt;= i nlines) found))
+           (if (substringp findstr (send view-window :line i)) (setq found i)))
+        (when found
+           (send view-window :display-selection found)
+           (send view-window :locate found))))
+ (:resize (w h)
+    (setq width w height h)
+    (send view-window :resize (- w 10) (- h 38)))
+ (:configureNotify (event)
+   (let ((newwidth (send self :width))
+         (newheight (send self :height)))
+        (when (or (/= newwidth width) (/= newheight height))
+          (send self :resize newwidth newheight)))  ) )</PRE>
+<P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

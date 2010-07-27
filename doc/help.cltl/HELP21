@@ -1,0 +1,41 @@
+(>= function-documentation "
+Args: (number &rest more-numbers)
+Returns T if the args are in non-increasing order; NIL otherwise.")
+(char>= function-documentation "
+Args: (char &rest more-chars)
+Returns T if the character codes of CHARs are in non-increasing order; NIL
+otherwise.")
+(fill-pointer function-documentation "
+Args: (vector)
+Returns the fill-pointer of VECTOR as an integer.  VECTOR must have a fill-
+pointer.")
+(long-float-negative-epsilon variable-documentation "
+The smallest positive long-float E that satisfies
+	(not (= (float 1 E) (- (float 1 E) E)))")
+(macro-function function-documentation "
+Args: (symbol)
+Returns the expansion function of the global macro named SYMBOL.  Returns NIL
+if no such macro exists.  The expansion function receives a macro form and an
+environment, and returns the expanded form.")
+(random-state type-documentation "
+A random-state object stores information used to generate random numbers.  A
+random-state is notated as '#$' followed by a certain number.")
+(short-float-epsilon variable-documentation "
+The smallest positive short-float E that satisfies
+	(not (= (float 1 e) (+ (float 1 e) e))).")
+(string/= function-documentation "
+Args: (string1 string2
+       &key (start1 0) (end1 (length string1))
+            (start2 0) (end2 (length string2)))
+Returns NIL if the strings are character-wise CHAR=.  Otherwise, returns the
+number of characters in the longest common prefix of the strings.")
+(*default-time-zone* variable-documentation "
+KCL specific.
+The default time zone.  The initial value is -9, the time zone of Japan.")
+(top-level function-documentation "
+Args: ()
+KCL specific.
+The top-level loop of KCL.
+When KCL is invoked, it evaluates (FUNCALL 'SI:TOP-LEVEL).  To change the top-
+level of KCL, redefine SI:TOP-LEVEL and save the core image into a program
+file.  When the saved image is invoked, it will start the redefined top-level.")

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Hash Tables</TITLE>
+<META NAME="description" CONTENT="Hash Tables">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2536" HREF="node52.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2534" HREF="node45.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2530" HREF="node50.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2538" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2539" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2537" HREF="node52.html">Streams and Input/Output</A>
+<B>Up:</B> <A NAME="tex2html2535" HREF="node45.html">SequencesArrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html2531" HREF="node50.html">Foreign Strings</A>
+<BR> <P>
+<H2><A NAME="SECTION03076000000000000000">Hash Tables</A></H2>
+<P>
+Hash-table is a class to search for the value associated with a key,
+as accomplished by <B>assoc</B>.
+For a relatively large problem,
+hash-table performs better than assoc, since time required for searching remains constant even
+the number of key-value pairs increases.
+Roughly speaking, hash-table should be used in search spaces with
+more than 100 elements, and assoc in smaller spaces.
+<P>
+Hash-tables automatically expands if the number of elements
+in the table exceeds rehash-size.
+By default, expansion occurs when a half of the table is filled.
+<B>sxhash</B> function returns a hash value which is independent
+of memory address of an object, and hash values for <B>equal</B> objects
+are always the same.
+So, hash tables can be re-loadable since they use sxhash as their default
+hashing functions.
+While sxhash is robust and safe,
+it is relatively slow because it scans all the elements 
+in a sequence or a tree.
+For faster hashing, you may choose another hash function appropriate
+for your application.
+To change the hash function, send <TT>:hash-function</TT> message
+to the hash-table.
+In simple cases, it is useful to change hash function from #'<B>sxhash</B>
+to #'<B>sys:address</B>.
+This is possible because the addresses of any objects
+never change in a EusLisp process.
+<P>
+<A NAME=7285>&#160;</A>
+<B>sxhash</B> <EM>obj </EM>[function] 
+<UL><LI> calculates the hash value for <EM>obj.
+Two objects which are <B>equal</B> are guaranteed to yield
+the same hash value.
+For a symbol, hash value for its pname is returned.
+For numbers, their integer representations are returned.
+For a list, sum of hash values for all its elements is returned.
+For a string, shifted sum of each character code is returned.
+For any other objects, <B>sxhash</B> is recursively called to calculate
+the hash value of each slot, and the sum of them is returned.
+</UL>
+<A NAME=7298>&#160;</A>
+<B>make-hash-table</B> <EM>&amp;key (size 30) (test #'eq) (rehash-size 2.0) </EM>[function] 
+<UL><LI> creates a hash table and returns it.
+</UL>
+<A NAME=7308>&#160;</A>
+<B>gethash</B> <EM>key htab </EM>[function] 
+<UL><LI> gets the value that corresponds to <EM>key in <EM>htab.
+<B>Gethash</B> is also used to set a value to key by combining with <B>setf</B>.
+When a new entry is entered in a hash table, and the number of filled slots
+in the table exceeds 1/rehash-size, then the hash table is automatically
+expanded to twice larger size.
+</UL>
+<A NAME=7322>&#160;</A>
+<B>remhash</B> <EM>key htab </EM>[function] 
+<UL><LI> removes a hash entry designated by <EM>key in <EM>htab</EM>.
+</UL>
+<A NAME=7334>&#160;</A>
+<B>maphash</B> <EM>function htab  </EM>[function] 
+<UL><LI> maps <EM>function to all the elements of <EM>htab</EM>.
+</UL>
+<A NAME=7346>&#160;</A>
+<B>hash-table-p</B> <EM>x </EM>[function] 
+<UL><LI> T if <EM>x is an instance of class hash-table.
+</UL>
+<A NAME=7358>&#160;</A>
+<B>hash-table </B> [class]  <PRE><TT> :super B<>object</B>
+<P>
+:slots 		 (key value count
+<P>
+		 hash-function test-function
+<P>
+		 rehash-size empty deleted)
+<P>
+</TT></PRE>
+<UL><LI> 
+defines hash table.
+<EM>Key</EM> and <EM>value</EM> are simple-vectors of the same <EM>size</EM>.
+<EM>Count</EM> is the number of filled slots in <EM>key</EM> and <EM>value</EM>.
+<EM>Hash-function</EM> is defaulted to <B>sxhash</B> and
+<EM>test-function</EM> to <B>eq</B>.
+<EM>Empty</EM> and <EM>deleted</EM> are uninterned symbols to indicate
+slots are empty or deleted in the <EM>key</EM> vector.
+</UL>
+<A NAME=7388>&#160;</A>
+<B>:hash-function</B> <EM>newhash </EM>[method] 
+<UL><LI> changes the hash function of this hash table to <EM>newhash.
+<EM>Newhash</EM> must be a function with one argument and returns an integer.
+One of candidates for <EM>newhash</EM> is <B>system:address</B>.
+</UL>
+<P>
+</EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2536" HREF="node52.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2534" HREF="node45.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2530" HREF="node50.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2538" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2539" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2537" HREF="node52.html">Streams and Input/Output</A>
+<B>Up:</B> <A NAME="tex2html2535" HREF="node45.html">SequencesArrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html2531" HREF="node50.html">Foreign Strings</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Float-vectors</TITLE>
+<META NAME="description" CONTENT="Float-vectors">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3304" HREF="node105.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3302" HREF="node103.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3296" HREF="node103.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3306" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3307" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3305" HREF="node105.html">Matrix and Transformation</A>
+<B>Up:</B> <A NAME="tex2html3303" HREF="node103.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html3297" HREF="node103.html">Geometric Functions</A>
+<BR> <P>
+<H2><A NAME="SECTION04031000000000000000">Float-vectors</A></H2>
+<P>
+A float-vector is a simple vector whose elements are specialized to
+floating point numbers.
+A float-vector can be of any size.
+When <EM>result</EM> is specified in an argument list,
+it should be a float-vector that holds the result.
+<P>
+<A NAME=13768>&#160;</A>
+<B>float-vector</B> <EM>&amp;rest numbers </EM>[function] 
+<UL><LI> makes a new float-vector whose elements are <EM>numbers.
+Note the difference between <TT>(float-vector 1 2 3)</TT> and <TT>#F(1 2 3)</TT>.
+While the former create a vector each time it is called, the latter
+does when it is read.
+</UL>
+<A NAME=13781>&#160;</A>
+<B>float-vector-p</B> <EM>obj </EM>[function] 
+<UL><LI> returns T if <EM>obj is a float-vector.
+</UL>
+<A NAME=13792>&#160;</A>
+<B>v+</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[function] 
+<UL><LI> adds two float-vectors.
+</UL>
+<A NAME=13802>&#160;</A>
+<B>v-</B> <EM>fltvec1 &amp;optional fltvec2  result </EM>[function] 
+<UL><LI> subtract float-vectors. If fltvec2 is omitted, fltvec1 is negated.
+</UL>
+<A NAME=13812>&#160;</A>
+<B>v.</B> <EM>fltvec1 fltvec2 </EM>[function] 
+<UL><LI> computes the inner product of two float-vectors.
+</UL>
+<A NAME=13822>&#160;</A>
+<B>v*</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[function] 
+<UL><LI> computes the outer product of two float-vectors.
+</UL>
+<A NAME=13832>&#160;</A>
+<B>v.*</B> <EM>fltvec1 fltvec2 fltvec3 </EM>[function] 
+<UL><LI> computes the scaler triple product [A,B,C]=(V. A (V* B C))=(V. (V* A B) C).
+</UL>
+<A NAME=13842>&#160;</A>
+<B>v&lt;</B> <EM>fltvec1 fltvec2 </EM>[function] 
+<UL><LI> returns T if every element of fltvec1 is smaller  than
+the corresponding element of fltvec2.
+</UL>
+<A NAME=13852>&#160;</A>
+<B>v&gt;</B> <EM>fltvec1 fltvec2 </EM>[function] 
+<UL><LI> returns T if every element of fltvec1 is larger than
+the corresponding element of fltvec2.
+</UL>
+<A NAME=13862>&#160;</A>
+<B>vmin</B> <EM>&amp;rest fltvec </EM>[function] 
+<UL><LI> finds the smallest values for each dimension in <EM>fltvec,
+and makes a float-vector from the values.
+<B>Vmin</B> and <B>vmax</B> are used to find the minimal bounding box
+from coordinates of vertices.
+</UL>
+<A NAME=13875>&#160;</A>
+<B>vmax</B> <EM>&amp;rest fltvec </EM>[function] 
+<UL><LI> finds the greatest values for each dimension in <EM>fltvec,
+and makes a float-vector from the values.
+</UL>
+<A NAME=13886>&#160;</A>
+<B>minimal-box</B> <EM>v-list minvec maxvec [err] </EM>[function] 
+<UL><LI> computes the minimal bounding box for a given vertex-list,
+and stores results in <EM>minvec and <EM>maxvec.
+If a floating number err is specified, the minimal box is grown
+by the ratio, i.e. if the err is 0.01, each element of minvec is decreased
+by 1% of the distance between minvec and maxvec,
+and each element of maxvec is increased by 1%.
+<B>Minimal-box</B> returns the distance between minvec and maxvec.
+</UL>
+<A NAME=13899>&#160;</A>
+<B>scale</B> <EM>number fltvec &amp;optional result </EM>[function] 
+<UL><LI> the scaler <EM>number is multiplied to the every element of fltvec.
+</UL>
+<A NAME=13910>&#160;</A>
+<B>norm</B> <EM>fltvec </EM>[function] 
+<UL><LI> |<I>fltvec</I>|</UL>
+<A NAME=13920>&#160;</A>
+<B>norm2</B> <EM>fltvec </EM>[function] 
+<UL><LI>  <IMG  ALIGN=MIDDLE ALT="tex2html_wrap_inline28310" SRC="img43.gif"  > </UL>
+<A NAME=13931>&#160;</A>
+<B>normalize-vector</B> <EM>fltvec [result] </EM>[function] 
+<UL><LI> normalizes <EM>fltvec to have the norm 1.0.
+</UL>
+<A NAME=13942>&#160;</A>
+<B>distance</B> <EM>fltvec1 fltvec2 </EM>[function] 
+<UL><LI> returns the distance |<I>fltvec</I>-<I>fltvec</I>2| between two float-vectors.
+</UL>
+<A NAME=13952>&#160;</A>
+<B>distance2</B> <EM>fltvec1 fltvec2 </EM>[function] 
+<UL><LI>  <IMG  ALIGN=MIDDLE ALT="tex2html_wrap_inline28314" SRC="img44.gif"  > </UL>
+<A NAME=13962>&#160;</A>
+<B>homo2normal</B> <EM>homovec &amp;optional normalvec </EM>[function] 
+<UL><LI> A homogeneous vector <EM>homovec is converted to its normal representation.
+</UL>
+<A NAME=13973>&#160;</A>
+<B>homogenize</B> <EM>normalvec &amp;optional homovec </EM>[function] 
+<UL><LI> A normal vector <EM>normalvec is converted to its homogenous representation.
+</UL>
+<A NAME=13984>&#160;</A>
+<B>midpoint</B> <EM>p p1 p2 &amp;optional result </EM>[function] 
+<UL><LI> <EM>P is float, and <EM>p1 and <EM>p2 are float-vectors of the same
+dimension.
+A point (1-<I>p</I>) <I>p</I>1 + <I>p p</I>2, which is the point
+that breaks <EM>p1-p2 by the ratio <I>p</I>:(1-<I>p</I>), is returned.
+</UL>
+<A NAME=13998>&#160;</A>
+<B>rotate-vector</B> <EM>fltvec theta axis &amp;optional result </EM>[function] 
+<UL><LI> rotates 2D or 3D <EM>fltvec by <EM>theta radian around <EM>axis.
+<EM>Axis can be one of <EM>:x, :y, :z, 0, 1, 2 or NIL.
+When <EM>axis is NIL, <EM>fltvec is taken to be two dimensional.
+To rotate a vector around an arbitrary axis in 3D space, 
+make a rotation matrix by the <B>rotation-matrix</B> function and
+multiply it to the vector.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3304" HREF="node105.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3302" HREF="node103.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3296" HREF="node103.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3306" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3307" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3305" HREF="node105.html">Matrix and Transformation</A>
+<B>Up:</B> <A NAME="tex2html3303" HREF="node103.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html3297" HREF="node103.html">Geometric Functions</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

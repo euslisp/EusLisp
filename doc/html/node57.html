@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Shared Memory</TITLE>
+<META NAME="description" CONTENT="Shared Memory">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2621" HREF="node58.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2619" HREF="node56.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2613" HREF="node56.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2623" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2624" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2622" HREF="node58.html">Message Queues and FIFOs</A>
+<B>Up:</B> <A NAME="tex2html2620" HREF="node56.html">InterProcess Communication and Network</A>
+<B> Previous:</B> <A NAME="tex2html2614" HREF="node56.html">InterProcess Communication and Network</A>
+<BR> <P>
+<H3><A NAME="SECTION03084100000000000000">Shared Memory</A></H3>
+<P>
+EusLisp supports the shared memory provided by SunOS's mmap,
+not by System5's shmem.
+Shared memory is allocated by the <B>map-file</B> function.
+<B>Map-file</B> maps a file into the EusLisp process memory space
+and an instance of <B>foreign-string</B> is returned.
+Data can be written and retrieved using string functions on this
+foreign-string.
+Since shared memory is allocated at system-dependent page boundary, 
+you should not specify the map address.
+Mapping a file with the <B>:share</B> keyparameter set to NIL
+or <B>:private</B> set to T
+means the file should be accessed privately (exclusively).
+Since this is not useful for the purpose of memory sharing,
+the default value of <B>:share</B> key is T.
+When a file is shared between two users, the read/write permission
+must be properly set for both users.
+Unfortunately, SunOS does not support file sharing through networks 
+between different workstations.
+<P>
+Example programs to share a file of 64 byte length between two
+euslisp are shown below.
+<P>
+<PRE>;; Create a file of 64 bytes
+(with-open-file (f &quot;afile&quot; :direction :output)  (princ (make-string 64) f))
+;; Map it
+(setq shared-string1 (map-file &quot;afile&quot; :direction :io))
+;;
+;; In another process
+(setq shared-string2 (map-file &quot;afile&quot; :direction :io))</PRE>
+<P>
+Then, data written to <TT>shared-string1</TT>
+immediately appears in <TT>shared-string2</TT>, and vice versa.
+Writing to a foreign string can be made by 
+<B>replace</B> or <B>setf</B> in conjunction with <B>aref</B>.
+<P>
+<A NAME=8489>&#160;</A>
+<B>map-file</B> <EM>filename &amp;key (direction :input) length (offset 0) (share t)
+(address 0) </EM>[function] 
+<UL><LI> maps the file named <EM>filename to memory space.
+<EM>Filename</EM> can be either of a local file, an NFS-mounted remote file,
+or a memory device in <TT>/dev</TT>.
+A <A NAME=8506>&#160;</A><B>f</B>oreign-string, whose elements can be accessed by <B>aref</B>,
+is returned.
+Writing data into a foreign-string mapped by <TT>map-file</TT> with 
+<EM>direction=:input</EM> will result a segmentation fault.
+</UL>
+</EM><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

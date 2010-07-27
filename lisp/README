@@ -1,0 +1,417 @@
+;;;;
+;;;; README for EusLisp
+;;;;	a brief note for licensing, installation and sample run.
+;;;	Copyright (c) 1987,   Toshihiro Matsui, Electrotechnical Laboratory
+;;;
+;;;		revised Sep/1988, Apr/1989, Nov/1989,
+;;;		Jun/1990	FTP distribution
+;;;		Sep/1990	SunOS4.1
+;;;		Jan/1995	Solaris 2.3
+;;;		Jun/1995	merging sources both for Solaris1.x and 2.X
+;;;		Jul/1995	port on Linux/i386 and SGI/IRIX
+;;;		Aug/1995	CDROM distibution by RSJ
+;;;		Feb/1996	source management by cvs, generic makefile
+;;;		July/1996	Release 8.16
+;;;		July/1997	Release 8.18; i386*Solaris2*gcc
+;;;		Feb/1998	Release 8.19; JPEG/32bit color
+;;;		Oct/1999	Release 8.23  color
+;;;		Mar/2000	Release 8.25  postgres, http, time
+;;;
+
+;;; COPYRIGHT AND  DISTRIBUTION
+
+Toshihiro MATSUI and Electrotechnical Laboratories (ETL), Agency of
+Industrial Science and Technologies (AIST), possess the copyright
+of EusLisp. At the date of March 2000, EusLisp is free to copy or
+to modify as long as the purposes of the use is not for military
+or not for profit.  This software is under development, at the date of 
+March, 2000. The Japanese goverment or AIST reserves the right
+to claim the proprietary of the final version of EusLisp after
+the development completes.  The author understands the Japanese
+government allows free distribution of this software, since the
+development will be helped by the reports and feedbacks from users.
+
+Users are allowed to copy and modify the software, and are advised
+to share the modifications and improvements with other users.
+The copyright notices of all source files provided may not be deleted.
+Detailed licensing procedure is described in doc/LICENCE, and new users
+should read the file, fill necessary forms, and return a copy back to the
+auther.
+
+Toshihiro MATSUI,
+Intelligent Systems Division,
+Electrotechinical Laboratory,
+Tsukuba, Ibaraki 3058568, JAPAN
+phone: 0298-61-5977
+fax:   0298-61-5301
+mail-to: matsui@etl.go.jp  euslisp@etl.go.jp
+http://www.etl.go.jp/~matsui/eus/euslisp.html
+
+(in Japanese)
+¢©305-8568 °ñ¾ë¸©¤Ä¤¯¤Ð»ÔÇß±à1-1-4
+ÅÅ»Òµ»½ÑÁí¹ç¸¦µæ½ê
+ÃÎÇ½¥·¥¹¥Æ¥àÉô
+¾¾°æ½Ó¹À
+
+
+;;;
+;;; Euslisp Installation Guide
+;;;
+
+First, make a directory for EusLisp. /usr/local/eus is recommended.
+If you use a different directory, set it to the EUSDIR environment variable.
+Hereafter, this working directory is referred to as EUSDIR.
+This directory is to hold subdirectories for binaries (objects,
+libraries, and executables) for every different architectures
+as well as source files.
+
+Make directory for your machine archtecture in EUSDIR. The directory name
+should be one or any of followings:
+SunOS4 -- SunOS 4.1 or Solaris 1.x
+SunOS5 -- SunOS 5.3, 5.4, 5.5, or Solaris 2.x (cpu may either be sparc or i386)
+Linux  -- Linux 1.2.13 or later (ELF is needed)
+Alpha  -- OSF1 V3.0 
+Win95  -- Windows95
+IRIX   -- IRIX5/SGI 32bit version
+IRIX6  -- IRIX6/SGI 64bit version
+Ultrasparc should use SunOS5 since it is compatible with 32bit versions.
+
+In the architecture dependent directory, make directoris for obj, bin and lib.
+If you are going to make euslisp for Solaris 2.5,
+% cd /usr/local/eus; mkdir SunOS5 SunOS5/obj SunOS5/lib SunOS5/bin
+and all the intermediate and final executables are generated in SunOS5/bin.
+
+Second, copy files via ftp from "ci.etl.go.jp" (192.50.77.18).
+Login name is "anonymous" and password should be your email address.
+Change directory to pub/eus and get eus-818.tar.gz. Use gunzip and tar
+commands to obtain source files.
+
+;;
+;; Directory and environment set-up
+;;
+
+;********************* I M P O R T A N T *************************
+Next, set up environment variable and modify makefile.
+1. Set the environment variable "MACHINE" to what you are making eus for.
+   Choose one of sun3, sun4, vax, news, mips, i386.
+   For example,   % setenv MACHINE sun4
+   If you are making eus for sun3, select a proper FLOAT_OPTION.
+   For example,   % setenv FLOAT_OPTION f68881
+   "mips" assumes SGI/IRIX. "i386" assumes Linux on PC/AT.
+   In these cases, proper makefile should be chosen.
+2. Set the environment variable "EUSDIR" to the directory where
+   you will run make. You might want to uncomment the line in the makefile
+   where EUSDIR is set.
+3. Create a symbolic link from Makefile.xxx to Makefile, where xxx is
+   appropriate machine archtecture name. Note that Makefile.xxx describes
+   only machine dependent part of make procedures and most of common parts
+   are described in Makefile.generic1 and Makefile.generic2. The 'make' command
+   is assumed to have the include capability. If not, try to use gnu make.
+4. Your Xwindow's version is supposed to be higher than or equal to X11R4.
+   Make sure you have "libX11.so" in /usr/lib. If not, change the XLIB
+   variable in the makefile to point to the correct library. You can use
+   "/usr/openwin/lib/libX11.so" instead.
+5. PUBBINDIR variables in the makefile.
+   PUBBINDIR is the public directory to store executables. It should be
+   the directory where your PATH list references. For example, /usr/local/bin.
+6. Remove or rename ~/.eusrc, if you have one, to avoid unexpected side effects
+   during make.
+7. In Solaris-2, use of Sparc C compiler is recommended.
+   You may try to use gcc, in which case change $(CC) in the makefile to gcc.
+   /usr/ucb/cc cannot compile euslisp.
+8. Make sure you have sufficient amount of /var/tmp for C compilation.
+   When lisp programs are compiled with optimazation turned on, 
+   approximately 20MB of free disk space is needed.
+   If you do not have such big space on /var/tmp, you can change TMPDIR
+   environment variable to a bigger partition. For example,
+   % setenv TMPDIR /tmp
+
+% setenv EUSDIR /usr/local/eus
+% cd $EUSDIR
+% setenv MACHINE sun4
+% setenv TMPDIR /tmp
+
+;************************* end ***************************************
+
+;;
+;; intermediate products and variations of euslisp
+;;
+
+The ultimate goal of these make procedures is to make bin/eus and bin/eusgl
+and locate them and their symbolic links in PUBBINDIR.
+To ease the troubleshooting and regeneration of eus, however, 
+the make procedure is split into several stages, which creates
+intermediate products in $EUSDIR/$ARCH/bin directory after each make.
+
+1. "eus0" which consists of only C-coded subprograms.
+2. "eus1" is loaded with compiled lisp programs under the "l" directory.
+3. "eus2" is eus1 + compiled compiler
+4. "eusg" is eus2 + compiled geometric packages
+5. "eus"  is eusg + xwindow, but does not connect to Xserver.
+6. "eusx" is a symbolic link to "eus", and tries to connect to Xserver.
+7. "elsgl" is eus + xwindow + OpenGL or Mesa interface.
+8. "libeusgeo.so" is the library consisted of geometric modules.
+9. "libeusx.so" is the library made of xwindow modules.
+9. "libeusgl.so" is the library for interfacing with opengl or mesa.
+
+;**************** I M P O R T A N T **************************
+;;
+;; bootstrapping
+;;
+
+The toplevel bootstrapping procedure is directed by "Makefile",
+which invokes subsequent makes in subdirectories and feeds
+compiler commands to euscomp from tool/comp*.l.
+
+% make all
+
+This "make all" recursively invokes five makes, namely "make eus0",
+"make eus1", "make eus2", "make eusg", "make eus".
+If the "make all" succeeds, eus0, eus1, eus2 and eusg may be deleted.
+
+All these executables produced under the bin directory read and
+execute lib/eusrt.l when they start running. eusrt.l is the runtime start-off
+program to initialize internal modules described in Lisp.
+If these internal modules are already compiled and linked with eus,
+eusrt.l calls their entries for initialization. If they are
+not yet compiled, their corresponding source programs located under "l",
+"comp", and "geo" are read and executed. Anyways, the subprogram
+names are printed before eus enters toplevel loop.
+
+Following descriptions detail each make.
+;****************************************************************
+
+;;
+;; make eus0
+;;
+
+eus0 is the kernel of euslisp written only in C.
+
+After this make, eus0 is located in the bin directory.
+Problems which might occur in this make would stem from the incompatibility
+between C compilers or UNIX system calls or libraries. To solve these
+problems, hacking of some C source files, especially, c/eus.h, c/eus.c,
+c/eusstream.c, clib/unixcall.c and c/loadsave.sol.c would be required.
+Note that unlike previous versions (before 7.30), euslisp on Solaris
+does not use "ld -A" or "save". It uses Solaris's dynamic linking library,
+i.e., dlopen and dlsym.
+
+;;
+;; make eus1
+;;
+
+This 'make' executes eus0 to compile files under "l" and "comp".
+l/constants.l is translated into l/constants.l.c
+by the tool/gccls (generate c-compilable lisp source) utility.
+The resulted objects (l/*.o files) are linked with the eus kernel,
+and eus1 is placed in bin. bin/euscomp is symbolically linked to
+bin/eus1. This link is needed because following makes
+normally invoke euslisp compiler by the name of "euscomp". Euscomp is
+an alias of eus, i.e., if eus is invoked by the name of euscomp,
+it compiles the files specified in the command line.
+
+;;
+;; make eus2
+;;
+
+eus1 is invoked by the name of euscomp and files in the comp directory
+are compiled. Resulted objects are linked to produce bin/eus2.
+eus2 has nearly compatible features of CommonLisp.
+euscomp is chaged to point to eus2. eus2 can compile lisp programs
+much faster than eus0 and eus1, since everything needed for the
+compilation has already been compiled and loaded.
+
+% make eusg
+
+eus2 compiles the files in "geo". eusg is capable of defining solid
+models and display them on Tektronics displays.
+
+;;
+;; make eus, eusx and install
+;;
+
+% make eus
+% make eusx
+
+Files in "xwindow" are compiled. xwindow/xforeign.c is needed to
+refer to library functions in libX11.so. The resulted objects
+are linked to form a shared library "libeusx.so".
+You may put this library either in EUSDIR/lib, in /usr/lib,
+or in /usr/local/lib.
+
+Congratulations! Complete eus is produced in bin.
+To copy them to the public bin directory
+(typically, /usr/local/bin), issue "make install".
+
+eusx is a symbolic link to eus and they are identical.
+When eus is invoked by the name of "eusx", it knows "x" is included in
+the command name and eus tries to connect to Xserver designated by the
+DISPLAY environment variable when it begins execution.
+
+If you see a message like "connected to Xserver DISPLAY=xxxxxx",
+you are ready to use xwindow from euslisp. The simplest way to
+open a window is the folliwing three lines:
+eusx$ (setq win (instance x:xwindow :create))
+eusx$ (send win :line 20 30 100 200)
+eusx$ (xflush)
+To open a more complicated window, you may try:
+eusx$ (instance x:filepanel :create)
+These expressions just create passive windows; they do not respond
+to mouse-button events, until you evaluate (x:window-main-loop).
+
+A more convenient way to handle window event is to enable asynchronous
+event handling by setting the USE_TOP_SELECTOR environment variable:
+% setenv USE_TOP_SELECTOR T
+When eusx starts running, it chooses blocking read or non-blocking read
+using the 'poll' system call depending on the USE_TOP_SELECTOR.
+All the eusx users are advised to put the above setenv in the .cshrc.
+
+If you do not use the Xwindow facilities and want eus to star up faster,
+invoke euslisp by "eus".
+
+This final executable should be approximately 1.3MB in file-size and
+occupies 1.7MB in process memory.
+
+You may proceed to make eusxv. Make of eusxv compiles files in
+vision directory and its subdirectories, and link them in libeusimg.so,
+which should be placed in the lib directory.
+
+% make eusgl
+
+opengl/src is the directory for modules to interface with opengl or mesa.
+The directory name for include files must be specified by GLINCLUDE in
+the Makefile. Since eusgl refers to opengl/mesa libraries such as libGL.so,
+libGLU.so, libtk.so, these libraries should be located in $(ADLIBDIR)
+or the library directory should be specified by $(GLLIB), e.g.
+-L/usr/local/Mesa/lib.
+
+% make install
+
+Hereafter, any modification added to the source files under c, l, clib, llib
+directory would be reflected to bin/eus by a simple make command. 
+
+;;
+;; how to run eus
+;;
+
+Every euslisp user should have his/her EUSDIR environment variable
+set to the correct EUSDIR, or /usr/local/eus is defaulted.
+This directory is needed even at runtime, because lib/eusrt.l is
+read when euslisp starts up and c/eus.h is referenced when lisp
+programs are compiled. You may put shared programs in llib or demo
+directory in EUSDIR, since euslisp's "load" assumes EUSDIR is the
+directory to look up when the file could not be located in the 
+current working directory.
+
+If you use eusx, the DISPLAY environment variable should also be set.
+
+;;
+;; .eusrc start up file
+;;
+Each time eus runs, it tries to load "$HOME/.eusrc" before entering
+a toplevel loop. Programming .eusrc is the easiest way to customize eus.
+You may change prompt, *load-path*, or toplevel loop, and
+you can load necessary files needed every time. EUSRC is a simple example
+of such a start-up file.
+
+
+;;;
+;;;Sample run 
+;;;
+
+% cd demo
+% pwd
+ /usr/local/eus/demo
+% eusx
+eusview$ load "view.l"
+eusview$ load "robot/eta3/eta3build.l"
+eusview$ draw eta3		;wire frame image is generated
+eusview$ send *viewer* :viewing :look #f(300 100 100) #f(33 0 30)
+eusview$ send *viewer* :viewing :zoom 2
+eusview$ cls			;clear the window
+eusview$ hid eta3		;hidden line eliminated image
+
+;; Try with other .Brep files under robot directory.
+;; Another fraktur demonstration program.
+
+eusview$ pwd
+/usr/local/eus/demo
+eusview$ load "notify.l"
+eusview$ load "sierp.l"
+eusview$ sierpinski
+eusview$ load "gosper.l"
+eusview$ gosper-curves
+
+;; To use tektronics terminal, run eus and load "demo/tek.l" 
+;; instead of "demo/view.l".
+;; The difference is the instantiation of the viewsurface object.
+
+;; To use Eusx, check if the environment
+;; variable DISPLAY is properly set to your Xserver address.
+
+% eusx
+
+eusx$ pwd
+ ~/eus
+eusx$ load "demo/view"
+eusx$ setq a (make-cube 50 40 30)
+eusx$ draw a
+eusx$ setq b (make-cylinder 10 50)
+eusx$ setq c (body+ a b)
+eusx$ dotimes (i 30) (send c :rotate 0.1 :x) (cls) (hid c)
+
+English documents are available in doc/latex.
+Try printing manual/manual.ps on a postscript printer.
+
+;;;
+;;; MEMORY IMAGE
+;;;
+Running EusLisp process's memory image is made of the following sections:
+1. C coded kernel
+2. Basic (common) lisp functions
+3. Compiler
+4. Geographical package
+5. X window functions
+6. System libraries (libc, libm, etc)
+7. loaded compiled-functions
+8. stack and heap
+
+Each section usually have its own static data section.
+In eus0, sections 2-5 are lisp code, and loaded in the section 8,
+where as eus has sections 2-3 linked with the section 1 and puts
+them in one section. On Linux/ix86, eus0's section-1 is about
+250KB, and eus's section-1-3 is about 1.1MB.  Sections 4-5 are
+compiled and linked as libraries named libeusgeo.so and libeusx.so.
+On Linux/ix86 configured for 1GB user process space, the memory map
+looks as follows:
+
+0x00000000	+-----------------------+
+		| 128MB vacancy 	|
+0x00800000	+-----------------------+
+		| C coded Eus kernel 	|
+		| + compiled lisp    	|	1.1MB
+		|    common funcs    	|
+0x008125	+-----------------------+
+		| raweus static data 	|	30KB
+		+-----------------------+
+		| Heap and stack     	|	usually 2-30MB
+		| where you play     	|
+		+- - - - - - - - - - - -+
+		|		     	|	can grow upto 1GB
+		|			|
+0x40000000	+-----------------------+ 	End of heap
+		| libeusx.so		|	0.5MB
+		+-----------------------+
+		| libeusgeo.so		|	0.5MB
+		+-----------------------+
+		| libc, libm, libX11	|	1.4MB
+0x40268000	+-----------------------+
+		| compiled lisp funcs   |	about 80-100KB/1000 lines  	
+        	|			|
+		+-----------------------+
+
+Thus, a minimum running EusLisp process takes up approximately
+5MB of memory, more than a half of whch is sharable with other eus processes.
+From this point you add memory by loading lisp-coded compiled functions
+and by consing, instantiating, making, etc.  Note that the latter
+memory is your private space and not shared.

@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Text Window</TITLE>
+<META NAME="description" CONTENT="Text Window">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3742" HREF="node140.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3740" HREF="node131.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3736" HREF="node138.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3744" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3745" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3743" HREF="node140.html">Image Processing</A>
+<B>Up:</B> <A NAME="tex2html3741" HREF="node131.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html3737" HREF="node138.html">Canvas</A>
+<BR> <P>
+<H2><A NAME="SECTION04075000000000000000">Text Window</A></H2>
+<P>
+There are three textwindow classes, <TT>TextWindow</TT>, <TT>BufferTextWindow</TT>
+and <TT>ScrollTextWindow</TT>.
+<P>
+<A NAME=23851>&#160;</A>
+<B>textWindow </B> [class]  <PRE><TT> :super B<>xwindow</B>
+<P>
+:slots 		 (fontid
+<P>
+		charwidth charheight charascent dots
+<P>
+		win-row-max win-col-max
+<P>
+		win-row win-col ;physical current position in window
+<P>
+		x y
+<P>
+		charbuf 		; for charcode conversion
+<P>
+		keybuf keycount 		 ;for key input
+<P>
+		echo
+<P>
+		show-cursor cursor-on 		 ;boolean
+<P>
+		kill delete 		 ;control character
+<P>
+		notify-object notify-method
+<P>
+		)
+<P>
+</TT></PRE>
+<UL><LI> 
+realizes virtual terminals usable for displaying messages.
+The displayed contents are not buffered and there is no way to retrieve
+a line or a character already displayed in the TextWindow.
+Basically, <TT>TextWindow</TT> has similar capabilities to the dumb terminals,
+that are, moving the cursor, erasing lines, erasing areas,
+scrolling displayed texts, inserting strings, etc.
+Also, the text cursor can be moved to the position designated by 
+the mouse pointer.
+</UL>
+<A NAME=23870>&#160;</A>
+<B>:init</B> <EM>id </EM>[method] 
+<UL><LI> initializes <EM>idth text-window.
+</UL>
+<A NAME=23881>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23882" SRC="img87.gif"  > <P>
+<UL><LI> 
+creates text-window.
+The sizes of the window may be specified either by <EM>width</EM> and <EM>height</EM>
+or by <EM>rows</EM> and <EM>columns</EM>.
+<EM>Notify-object</EM>'s <EM>notify-method</EM> is invoked when a newline character
+is typed in.
+</UL>
+<A NAME=23898>&#160;</A>
+<B>:cursor</B> <EM>flag </EM>[method] 
+<UL><LI> The <EM>flag can either be <TT>:on, :off</TT> or <TT>:toggle</TT>.
+The text cursor is addressed by the <EM>win-row</EM> and <EM>win-col</EM>. 
+The text cursor is displayed if <EM>flag</EM> is <TT>:on</TT>,
+is erased if <EM>flag</EM> is <TT>:off</TT>,
+or is reversed if <EM>flag</EM> is <TT>:toggle</TT>.
+This method must be invoked frequently
+whenever the character at the cursor is updated.
+</UL>
+<A NAME=23919>&#160;</A>
+<B>:clear</B> <EM></EM>[method] 
+<UL><LI> clears text-window.
+</UL>
+<A NAME=23929>&#160;</A>
+<B>:clear-eol</B> <EM>&amp;optional (r win-row) (c win-col) (csr :on) </EM>[method] 
+<UL><LI> clears the rest of the line after the character
+addressed by r and <EM>c, including the character at the cursor.
+<P>
+</UL>
+<A NAME=23941>&#160;</A>
+<B>:clear-lines</B> <EM>lines &amp;optional (r win-row) </EM>[method] 
+<UL><LI> clears multiple lines after <EM>r-th row.
+</UL>
+<A NAME=23952>&#160;</A>
+<B>:clear-eos</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method] 
+<UL><LI> clears the region after the character addressed by <EM>r and <EM>c
+till the end-of-the-screen.
+</UL>
+<A NAME=23964>&#160;</A>
+<B>:win-row-max</B> <EM></EM>[method] 
+<UL><LI> returns the maximum number of lines
+displayable in this window.
+</UL>
+<A NAME=23974>&#160;</A>
+<B>:win-col-max</B> <EM></EM>[method] 
+<UL><LI> returns the maximum number of columns
+displayable in this window.
+</UL>
+<A NAME=23984>&#160;</A>
+<B>:xy</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method] 
+<UL><LI> calculates the pixel coordinates of the character 
+addressed by <EM>r and <EM>c.
+</UL>
+<A NAME=23996>&#160;</A>
+<B>:goto</B> <EM>r c &amp;optional (cursor :on) </EM>[method] 
+<UL><LI> moves the cursor to <EM>r-th row and <EM>c-th column.
+<P>
+</UL>
+<A NAME=24008>&#160;</A>
+<B>:goback</B> <EM>&amp;optional (csr :on) </EM>[method] 
+<UL><LI> moves the cursor backward by one.
+</UL>
+<A NAME=24018>&#160;</A>
+<B>:advance</B> <EM>&amp;optional (n 1) </EM>[method] 
+<UL><LI> moves the cursor forward by <EM>n characters.
+</UL>
+<A NAME=24029>&#160;</A>
+<B>:scroll</B> <EM>&amp;optional (n 1) </EM>[method] 
+<UL><LI> scroll textwindow vertically by <EM>n lines.
+</UL>
+<A NAME=24040>&#160;</A>
+<B>:horizontal-scroll</B> <EM>&amp;optional (n 1) </EM>[method] 
+<UL><LI> horizontally scrolls the text by <EM>n columns.
+</UL>
+<A NAME=24051>&#160;</A>
+<B>:newline</B> <EM></EM>[method] 
+<UL><LI> moves cursor to the beginning of the next line.
+</UL>
+<A NAME=24061>&#160;</A>
+<B>:putch</B> <EM>ch </EM>[method] 
+<UL><LI> inserts the character <EM>ch at the cursor position.
+The rest of the line is moved forward by one.
+</UL>
+<A NAME=24072>&#160;</A>
+<B>:putstring</B> <EM>str &amp;optional (e (length str)) </EM>[method] 
+<UL><LI> places <EM>str at the cursor position.
+</UL>
+<A NAME=24083>&#160;</A>
+<B>:event-row</B> <EM>event </EM>[method] 
+<UL><LI> </UL>
+<A NAME=24093>&#160;</A>
+<B>:event-col</B> <EM>event </EM>[method] 
+<UL><LI> returns the text cursor position designated by (<I>x</I>, <I>y</I>) in the <EM>event.
+</UL>
+<A NAME=24104>&#160;</A>
+<B>:KeyPress</B> <EM>event </EM>[method] 
+<UL><LI> inserts the character entered at the cursor position.
+If the character is newline, notification is sent to the <EM>notify-object.
+</UL>
+<A NAME=24116>&#160;</A>
+<B>textWindowStream </B> [class]  <PRE><TT> :super B<>stream</B>
+<P>
+:slots 		 (textwin)
+<P>
+</TT></PRE>
+<UL><LI> 
+<TT>TextWindowStream</TT> is an output stream connected to a TextWindow.
+Characters or strings output to this stream by using <TT>print, format,
+write-byte</TT>, etc., are displayed in the textwindow.
+As usual file streams, the output data are buffered.
+</UL>
+<A NAME=24135>&#160;</A>
+<B>:flush</B> <EM></EM>[method] 
+<UL><LI> flushes buffered text string and send them to the textwindow.
+<TT>Finish-output</TT> or writing a newline character to this stream
+automatically calls this method.
+</UL>
+<A NAME=24146>&#160;</A>
+<B>make-text-window-stream</B> <EM>xwin </EM>[function] 
+<UL><LI> makes text-window-stream and returns the stream object.
+</UL>
+<A NAME=24157>&#160;</A>
+<B>BufferTextWindow </B> [class]  <PRE><TT> :super B<>TextWindow</B>
+<P>
+:slots 		 
+(linebuf expbuf max-line-length row col)
+<P>
+</TT></PRE>
+<UL><LI> 
+maintains the line buffer representing the contents of the textwindow.
+Linebuf is the vector of lines. Expbuf holds tab-expanded text.
+Only lines displayable in the window are maintained.
+BufferTextWindows can be used as simple text editors
+which have several, often only one, lines of text.
+<TT>Text-item</TT> employs a BufferTextWindow as a displayable line buffer.
+</UL>
+<A NAME=24175>&#160;</A>
+<B>:line</B> <EM>n </EM>[method] 
+<UL><LI> returns the contents of the <EM>n-th line as a
+string.
+</UL>
+<A NAME=24186>&#160;</A>
+<B>:nlines</B> <EM></EM>[method] 
+<UL><LI> returns number of lines in the linebuf.
+</UL>
+<A NAME=24196>&#160;</A>
+<B>:all-lines</B> <EM></EM>[method] 
+<UL><LI> returns the linebuf, which is a vector of strings.
+</UL>
+<A NAME=24206>&#160;</A>
+<B>:refresh-line</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method] 
+<UL><LI> redraws the <EM>r-th line after the <EM>c-th column.
+</UL>
+<A NAME=24218>&#160;</A>
+<B>:refresh</B> <EM>&amp;optional (start 0) </EM>[method] 
+<UL><LI> redraws the lines after the <EM>start-th line inclusively.
+</UL>
+<A NAME=24229>&#160;</A>
+<B>:insert-string</B> <EM>string </EM>[method] 
+<UL><LI> inserts <EM>string at the cursor position.
+</UL>
+<A NAME=24240>&#160;</A>
+<B>:insert</B> <EM>ch </EM>[method] 
+<UL><LI> inserts the character at the cursor.
+</UL>
+<A NAME=24250>&#160;</A>
+<B>:delete</B> <EM>n </EM>[method] 
+<UL><LI> deletes <EM>n characters after the cursor.
+</UL>
+<A NAME=24261>&#160;</A>
+<B>expand-tab</B> <EM>src &amp;optional (offset 0) </EM>[function] 
+<UL><LI> <EM>Src is a string possibly containing tabs.
+These tabs are replaced by spaces assuming the tab stops at every 8th
+position.
+</UL>
+<A NAME=24273>&#160;</A>
+<B>ScrollTextWindow </B> [class]  <PRE><TT> :super B<>BufferTextWindow</B>
+<P>
+:slots 		 
+(top-row top-col ;display-starting position
+<P>
+		 scroll-bar-window
+<P>
+		 horizontal-scroll-bar-window
+<P>
+		 selected-line)
+<P>
+</TT></PRE>
+<UL><LI> 
+<TT>ScrollTextWindow</TT> defines buffertextwindow with unlimited number of lines,
+and vertical and horizontal scroll-bars can be attached.
+ScrollTextWindow can handle <TT>:configureNotify</TT> event to resize 
+itself and accompanying scroll-bar windows, and to redisplay texts.
+By clicking, a line can be selected.
+</UL>
+<A NAME=24293>&#160;</A>
+<B>:create</B> <EM>&amp;rest args
+           &amp;key (scroll-bar nil)
+                (horizontal-scroll-bar nil)
+           &amp;allow-other-keys </EM>[method] 
+<UL><LI> When scroll-bars are needed, specify T to each keyword argument.
+</UL>
+<A NAME=24303>&#160;</A>
+<B>:locate</B> <EM>n </EM>[method] 
+<UL><LI> displays the buffered text by placing the <EM>n-th
+line at the top of the window.
+</UL>
+<A NAME=24314>&#160;</A>
+<B>:display-selection</B> <EM>selection </EM>[method] 
+<UL><LI> <EM>Selection represents
+the location of the selected line. The entire seleced line is displayed
+highlighted.
+</UL>
+<A NAME=24325>&#160;</A>
+<B>:selection</B> <EM></EM>[method] 
+<UL><LI> returns the selected line (string).
+</UL>
+<A NAME=24335>&#160;</A>
+<B>:read-file</B> <EM>fname </EM>[method] 
+<UL><LI> reads the textfile specified by <EM>fname
+into the <EM>linebuf, expands tabs, and display in the window.
+The cursor is put at the beginning of the screen.
+</UL>
+<A NAME=24347>&#160;</A>
+<B>:display-string</B> <EM>strings </EM>[method] 
+<UL><LI> <EM>Strings is a sequence
+of lines (strings). The <EM>strings are copied in the linebuf
+and displayed in the window.
+</UL>
+<A NAME=24359>&#160;</A>
+<B>:scroll</B> <EM>n </EM>[method] 
+<UL><LI> vertically scrolls <EM>n lines.
+</UL>
+<A NAME=24370>&#160;</A>
+<B>:horizontal-scroll</B> <EM>n </EM>[method] 
+<UL><LI> horizontally scrolls <EM>n columns.
+</UL>
+<A NAME=24381>&#160;</A>
+<B>:buttonRelease</B> <EM>event </EM>[method] 
+<UL><LI> The line where the mouse pointer is located is selected.
+If notification is specified when the window is created,
+<EM>notify-object's <EM>notify-method is invoked.
+</UL>
+<A NAME=24393>&#160;</A>
+<B>:resize</B> <EM>w h </EM>[method] 
+<UL><LI> changes the size of the window
+and redisplays the contents according to the new size.
+The same message is sent to scroll-bars if attached.
+</UL>
+<P>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html3742" HREF="node140.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3740" HREF="node131.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3736" HREF="node138.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3744" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3745" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3743" HREF="node140.html">Image Processing</A>
+<B>Up:</B> <A NAME="tex2html3741" HREF="node131.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html3737" HREF="node138.html">Canvas</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

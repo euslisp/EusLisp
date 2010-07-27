@@ -1,0 +1,35 @@
+foreign-stringはどうやって使うのかという質問が来ています。
+簡単です。make-foreign-stringという関数があります。1つめの
+引数が変数のアドレス、2つめの引数がストリングのバイト数です。
+
+(setq fs (make-foreign-string #x2000 32))
+
+これはなんでしょう。fsは、#x2000番地からの32バイトの文字列
+を表現します。これはsunではa.outヘッダの領域に相当します。
+(dump-string fs)
+などとすると、マジックナンバやらテキストセグメントの大きさ
+やらがわかります。
+
+foreign-stringは、要素型がforeignであるようなベクタとして振舞
+います。奇妙なことにストリングではありません。ストリングは要素の
+型がバイトであるようなベクタだからです。バイト単位での読み書きは、
+aref,setfなどで行ないます。
+(aref fs 1)  
+(setf (aref fs  1) 128)
+ところが、これはcore-dumpします。a.outのヘッダはテキストの先頭
+にあって書き込み禁止だからです。
+
+ショートワード、ロングワード単位での読み書きには、peek,pokeを
+使います。
+(sys:peek string offset [:byte | :short | :long])
+(sys:poke value string offset  [:byte | :short | :long])
+
+ここでも、sun3はいいですが、sparcは奇数番地からワードのアクセス
+をするとsegmentation-faultを起こしますから注意して下さい。
+
+foreign-stringは、主に、malloc,valloc,mmapなどと組み合わせて使
+います。もうひとつ、shmget(共有メモリ)と組み合わせる方法があり
+ますが、この機能はsystem5起源であり、あまり使われないようなので
+インプリしてありません。SunOS4.0のmmapを使えば簡単に共有メモリ
+が作れるようです。
+

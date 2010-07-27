@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Message Sending</TITLE>
+<META NAME="description" CONTENT="Message Sending">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2315" HREF="node34.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2313" HREF="node31.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2307" HREF="node32.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2317" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2318" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2316" HREF="node34.html">Instance Management</A>
+<B>Up:</B> <A NAME="tex2html2314" HREF="node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html2308" HREF="node32.html">Classes and Methods</A>
+<BR> <P>
+<H2><A NAME="SECTION03042000000000000000">Message Sending</A></H2>
+<P>
+<A NAME=2208>&#160;</A>
+<B>send</B> <EM>object selector {arg}* </EM>[function] 
+<UL><LI> send a message consisting of <EM>selector and <EM>arg</EM> to <EM>object</EM>.
+<EM>object</EM> can be anything but number.
+<EM>selector</EM> must be evaluated to be a keyword.
+</UL>
+<A NAME=2223>&#160;</A>
+<B>send-message</B> <EM>target search selector {arg}* </EM>[function] 
+<UL><LI> Low level primitive to implement <B>send-super</B>.
+</UL>
+<A NAME=2234>&#160;</A>
+<B>send*</B> <EM>object selector &amp;rest msg-list </EM>[macro] 
+<UL><LI> <B>send*</B> applies <B>send-message</B> to a list of arguments.
+The relation between <B>send</B> and <B>send*</B> is like the one
+between <B>funcall</B> and <B>apply</B>, or <B>list</B> and <B>list*</B>.
+</UL>
+<A NAME=2252>&#160;</A>
+<B>send-all</B> <EM>receivers selector &amp;rest mesg </EM>[function] 
+<UL><LI> sends the same message to all the receivers, and collects the result
+in a list.
+</UL>
+<A NAME=2262>&#160;</A>
+<B>send-super</B> <EM>selector &amp;rest msgs </EM>[macro] 
+<UL><LI> sends <EM>msgs to self, but
+begins method searching at the superclass of the class
+where the method currently being executed is defined.
+It is an error to <EM>send-super outside a method (i.e. in a function).
+</UL>
+<A NAME=2274>&#160;</A>
+<B>send-super*</B> <EM>selector &amp;rest msg-list </EM>[macro] 
+<UL><LI> <B>send-super*</B> is apply version of send-super.
+</UL>
+</EM></EM></EM><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

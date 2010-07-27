@@ -1,0 +1,79 @@
+(char-equal function-documentation "
+Args: (char &rest more-chars)
+Returns T if all CHARs are the same; NIL otherwise.  Lower-case characters are
+regarded the same as the corresponding upper-case characters.")
+(copy-seq function-documentation "
+Args: (sequence)
+Returns a new copy of SEQUENCE.")
+(equal function-documentation "
+Args: (x y)
+Returns T if the args satisfy one of the following conditions.
+	1. EQL
+	2. are conses with EQUAL cars and EQUAL cdrs
+	3. are strings of the same length and element-wise EQL
+	4. are bit-vectors of the same length and element-wise EQL
+	5. are pathnames with EQUAL slots
+Returns NIL otherwise.")
+(list-all-packages function-documentation "
+Args: ()
+Returns a list of all packages.")
+(parse-integer function-documentation "
+Args: (string
+       &key (start 0) (end (length string)) (radix 10) (junk-allowed nil))
+Parses STRING for an integer and returns it.  As the second value, returns the
+index to the character next to the last character that is parsed.  If JUNK-
+ALLOWED is non-NIL, ignores white spaces before and after the number
+representation in STRING and returns NIL even if STRING is not parsed
+successfully.")
+(setq function-documentation "
+Syntax: (setq {var form}*)
+Evaluates each FORM and assigns the value to VAR in order.  Returns the value
+of the last FORM.")
+(special-form-p function-documentation "
+Args: (symbol)
+Returns T if SYMBOL names a special form; NIL otherwise.
+The special forms defined in Common Lisp are:
+	block		if			progv
+	catch		labels			quote
+	compiler-let	let			return-from
+	declare		let*			setq
+	eval-when	macrolet		tagbody
+	flet		multiple-value-call	the
+	function	multiple-value-prog1	throw
+	go		progn			unwind-protect
+In addition, KCL implements the following macros as special forms, though of
+course macro-expanding functions such as MACROEXPAND work correctly for these
+macros.
+	and		incf			prog1
+	case		locally			prog2
+	cond		loop			psetq
+	decf		multiple-value-bind	push
+	defmacro	multiple-value-list	return
+	defun		multiple-value-set	setf
+	do		or			unless
+	do*		pop			when
+	dolist		prog
+	dotimes		prog*")
+(string-capitalize function-documentation "
+Args: (string &key (start 0) (end (length string)))
+Returns a copy of STRING with the first character of each word converted to
+upper case, and remaining characters converted to lower case.  Its destructive
+version is NSTRING-CAPITALIZE.")
+(subseq function-documentation "
+Args: (sequence start &optional (end (length sequence)))
+Returns a copy of the subsequence of SEQUENCE between START (inclusive) and
+END (exclusive).")
+(tree-equal function-documentation "
+Args: (x y &key (test #'eql) test-not)
+Returns T if X and Y have the same tree structures and corresponding leaves
+are all the same in the sense of TEST.  Returns NIL otherwise.")
+(getenv function-documentation "
+Args: (string)
+KCL/UNIX specific.
+Returns the environment with the name STRING as a string.  Returns NIL, if the
+specified environment is not found.")
+(make-string-output-stream-from-string function-documentation "
+Args (string)
+KCL specific.
+Creates and returns a string-output-stream to STRING.  STRING must have a
+fill-pointer.")

@@ -1,0 +1,77 @@
+# makefile for IRIX5 (32bit)
+#
+#	Copyright (1988) Toshihiro MATSUI, Electrotechnical Laboratory
+
+#########################################################################
+# Customizable section begins
+#########################################################################
+
+MACHINE=mips
+ARCH=IRIX
+
+include Makefile.generic1
+
+#
+# Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
+#
+#CFLAGS=-D$(MACHINE) -Dbsd4_2
+# For SunOS4.1, add "-DSunOS4_1" in the following CFLAGS definition.
+# add -DSolaris2  -D_REENTRANT 
+#CFLAGS=-D$(MACHINE)  -DSunOS4_1 -DGCC \
+#	-I/usr/share/include/X11 -I$(EUSDIR)/$(CDIR)
+CFLAGS=-signed -G 0 -D$(MACHINE) -DIRIX $(IRIX6_2) -DVERSION=\"$(VERSION)\" \
+	-I/usr/include -I/usr/include/X11 -I$(EUSDIR)/include
+# For older version IRIX than 6.2, comment out the following difinition.
+IRIX6_2=-DIRIX6_2
+# Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
+# ucb cc cannot compile since it doesnot recognize prototype declarations.
+CC=cc
+# CC=gcc
+#	-I/usr/include \
+
+#XVERSION=X_V11R2
+#XVERSION=X_V11R3
+XVERSION=X_V11R4
+#
+# L I B R A R I E S
+# Three kinds of libraries are needed to build eus.
+# 1. RAWLIB: unix libraries needed to make eus0-eus2
+# 2. XLIB: X window libraries
+#    When you use a window toolkit, you may need to override the 'read'
+#    function in libc.a with a specific window library such as libXview.a.
+# 3. EUSLIB: euslisp functions that cannot be linked in eus because of
+#    'GLOBAL OFFSET TABLE OVERFLOW', that are xwindow interface functions.
+# You may add any optional user-supplied library in EUSLIB.
+# On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
+
+# IRIX
+RAWLIB=-elf -lm
+XLIB=-lX11 
+
+# IRIX
+EUSLIB= -L$(ADLIBDIR) -L/usr/local/lib
+
+# for openGL or MESA
+LIBEUSGL=libeusgl.so
+GLLIB= -lGLU -lGL -lXext -L/usr/share/src/OpenGL/libaux -laux -L$(ADLIBDIR) -leusgl
+GLINCLUDE=-I/usr/share/src/OpenGL/libtk
+
+# If you don't like optimization, comment out the next line.
+OFLAGS=-O
+#OFLAGS=
+# link-editor's default flags
+# LDFLAGS= -rdynamic
+LDFLAGS=
+SOFLAGS= -shared
+# No multithread functions
+MTOBJECTS=
+MTCOBJECTS=
+# function for foreign call in assembly language
+KSOBJECTS=$(OBJDIR)/call_foreign.o
+
+#################################################################
+# end of the customizable section
+################################################################
+
+include Makefile.generic2
+

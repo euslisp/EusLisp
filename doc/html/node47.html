@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Lists</TITLE>
+<META NAME="description" CONTENT="Lists">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2490" HREF="node48.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2488" HREF="node45.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2482" HREF="node46.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2492" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2493" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2491" HREF="node48.html">Vectors and Arrays</A>
+<B>Up:</B> <A NAME="tex2html2489" HREF="node45.html">SequencesArrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html2483" HREF="node46.html">General Sequences</A>
+<BR> <P>
+<H2><A NAME="SECTION03072000000000000000">Lists</A></H2>
+<P>
+<A NAME=6051>&#160;</A>
+<B>listp</B> <EM>object </EM>[function] 
+<UL><LI> returns T if object is an instance of cons or NIL.
+</UL>
+<A NAME=6061>&#160;</A>
+<B>consp</B> <EM>object </EM>[function] 
+<UL><LI> equivalent to (not (atom object)). (consp '()) is nil.
+</UL>
+<A NAME=6071>&#160;</A>
+<B>car</B> <EM>list </EM>[function] 
+<UL><LI> returns the first element in <EM>list. <B>car</B> of NIL is NIL.
+<B>car</B> of atom is error.
+</UL>
+<A NAME=6084>&#160;</A>
+<B>cdr</B> <EM>list </EM>[function] 
+<UL><LI> returns the list which removed the first element
+of <EM>list. <B>cdr</B> of NIL is NIL.
+<B>cdr</B> of atom is error.
+</UL>
+<A NAME=6097>&#160;</A>
+<B>cadr</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6108>&#160;</A>
+<B>cddr</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6119>&#160;</A>
+<B>cdar</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6130>&#160;</A>
+<B>caar</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6141>&#160;</A>
+<B>caddr</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6152>&#160;</A>
+<B>caadr</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6163>&#160;</A>
+<B>caaar</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6174>&#160;</A>
+<B>cdadr</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6185>&#160;</A>
+<B>cdadr</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6196>&#160;</A>
+<B>cdaar</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6207>&#160;</A>
+<B>cdddr</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6218>&#160;</A>
+<B>cdddr</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6229>&#160;</A>
+<B>cddar</B> <EM>list </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6240>&#160;</A>
+<B>first</B> <EM>list </EM>[function] 
+<UL><LI> retrieves the first element in <EM>list.
+<A NAME=6252>&#160;</A><B>s</B>econd, third, fourth, fifth, sixth, seventh, eighth are also 
+available.
+</UL>
+<A NAME=6254>&#160;</A>
+<B>nth</B> <EM>count list </EM>[function] 
+<UL><LI> returns the <EM>count-th element in <EM>list.
+Note that <TT>(nth 1 list)</TT> is equivalent to <TT>(second list)</TT>,
+and to <TT>(elt list 1)</TT>.
+</UL>
+<A NAME=6269>&#160;</A>
+<B>nthcdr</B> <EM>count list </EM>[function] 
+<UL><LI> applies <B>cdr</B> <EM>count times to <EM>list.
+</UL>
+<A NAME=6282>&#160;</A>
+<B>last</B> <EM>list </EM>[function] 
+<UL><LI> the last cons is returned, not the last element.
+</UL>
+<A NAME=6292>&#160;</A>
+<B>butlast</B> <EM>list &amp;optional (n 1) </EM>[function] 
+<UL><LI> returns a list which does not contain the last <EM>n elements.
+</UL>
+<A NAME=6303>&#160;</A>
+<B>cons</B> <EM>car cdr </EM>[function] 
+<UL><LI> makes a new cons whose car is <EM>car and cdr is <EM>cdr.
+</UL>
+<A NAME=6315>&#160;</A>
+<B>list</B> <EM>{element}* </EM>[function] 
+<UL><LI> makes a list of <EM>elements.
+</UL>
+<A NAME=6326>&#160;</A>
+<B>list*</B> <EM>{element}* </EM>[function] 
+<UL><LI> makes a list of <EM>elements, but the last element is consed in cdr:
+for example, <TT>(list* 1 2 3 '(4 5)) = (1 2 3 4 5)</TT>.
+</UL>
+<A NAME=6338>&#160;</A>
+<B>list-length</B> <EM>list </EM>[function] 
+<UL><LI> returns the length of the <EM>list. <EM>List can be circular.
+</UL>
+<A NAME=6350>&#160;</A>
+<B>make-list</B> <EM>size &amp;key (initial-element nil) </EM>[function] 
+<UL><LI> makes a list whose length is <EM>size and elements are <EM>initial-element.
+</UL>
+<A NAME=6362>&#160;</A>
+<B>rplaca</B> <EM>cons a </EM>[function] 
+<UL><LI> replace the car of <EM>cons with a.
+Use of <B>setf</B> to <B>car</B> is recommended.
+</UL>
+<A NAME=6375>&#160;</A>
+<B>rplacd</B> <EM>cons d </EM>[function] 
+<UL><LI> replace the cdr of <EM>cons with d.
+Use of <B>setf</B> to <B>cdr</B> is recommended.
+</UL>
+<A NAME=6388>&#160;</A>
+<B>memq</B> <EM>item list </EM>[function] 
+<UL><LI> resembles <B>member</B>, but test is always done by <B>eq</B>.
+</UL>
+<A NAME=6400>&#160;</A>
+<B>member</B> <EM>item list &amp;key :key (:test #'eq) :test-not </EM>[function] 
+<UL><LI> The <EM>list is searched for an element that satisfies the <EM>test.
+If none is found, NIL is returned; otherwise, the tail of <EM>list beginning
+with the first element that satisfied the test is returned. The <EM>list
+is searched on the top level only.
+</UL>
+<A NAME=6414>&#160;</A>
+<B>assq</B> <EM>item alist  </EM>[function] 
+<UL><LI> </UL>
+<A NAME=6425>&#160;</A>
+<B>assoc</B> <EM>item alist &amp;key :key (:test #'eq) :test-not </EM>[function] 
+<UL><LI> searches the association list <EM>alist. The value returned is the
+first pair in the <EM>alist such that the <EM>car of the pair satisfies
+the <EM>test, or NIL if there is no such pair in the <EM>alist.
+</UL>
+<A NAME=6440>&#160;</A>
+<B>rassoc</B> <EM>item alist </EM>[function] 
+<UL><LI> returns the first pair in <EM>alist whose cdr is equal to <EM>item.
+</UL>
+<A NAME=6452>&#160;</A>
+<B>pairlis</B> <EM>l1 l2 &amp;optional alist </EM>[function] 
+<UL><LI> makes a list of pairs consing corresponding elements in <EM>l1 and <EM>l2.
+If <EM>alist is given, it is concatenated at the tail of the pair list
+made from <EM>l1 and <EM>l2.
+</UL>
+<A NAME=6467>&#160;</A>
+<B>acons</B> <EM>key val alist </EM>[function] 
+<UL><LI> add the <EM>key val pair to <EM>alist, that is,
+<TT>(cons (cons key val) alist)</TT>.
+</UL>
+<A NAME=6480>&#160;</A>
+<B>append</B> <EM>{list}* </EM>[function] 
+<UL><LI> appends <EM>list to form a new list.
+All the elements in <EM>list</EM>, except the last list, are copied.
+</UL>
+<A NAME=6492>&#160;</A>
+<B>nconc</B> <EM>{list}* </EM>[function] 
+<UL><LI> concatenates <EM>list destructively by replacing the last cdr of each
+<EM>list</EM>.
+</UL>
+<A NAME=6504>&#160;</A>
+<B>subst</B> <EM>new old tree </EM>[function] 
+<UL><LI> substitutes every <EM>old in <EM>tree</EM> with <EM>new</EM>.
+</UL>
+<A NAME=6517>&#160;</A>
+<B>flatten</B> <EM>complex-list </EM>[function] 
+<UL><LI> <EM>Complex-list composed of atoms and lists of any depth
+is transformed into a single level linear list which have all the elements
+in <EM>complex-list</EM> at the top level.
+For example, <TT>(flatten '(a (b (c d) e))) = (a b c d e)</TT>
+</UL>
+<A NAME=6530>&#160;</A>
+<B>push</B> <EM>item place </EM>[macro] 
+<UL><LI> pushes item into a stack (list) bound to <EM>place.
+</UL>
+<A NAME=6541>&#160;</A>
+<B>pop</B> <EM>stack </EM>[macro] 
+<UL><LI> removes the first item from <EM>stack and returns it.
+If <EM>stack</EM> is empty (nil), nil is returned.
+</UL>
+<A NAME=6553>&#160;</A>
+<B>pushnew</B> <EM>item place &amp;key test test-not key </EM>[macro] 
+<UL><LI> pushes <EM>item in the <EM>place</EM> list
+if <EM>item</EM> is not a member of <EM>place</EM>.
+The <EM>test</EM>, <EM>test-not</EM> and <EM>key</EM> arguments are
+passed to the member function.
+</UL>
+<A NAME=6570>&#160;</A>
+<B>adjoin</B> <EM>item list </EM>[function] 
+<UL><LI> The item is added at the head of the list if it is not included
+in the list.
+</UL>
+<A NAME=6580>&#160;</A>
+<B>union</B> <EM>list1 list2 &amp;key (test #'eq) (test-not) (key #'identity) </EM>[function] 
+<UL><LI> returns union set of two lists.
+</UL>
+<A NAME=6590>&#160;</A>
+<B>subsetp</B> <EM>list1 list2 &amp;key (test #'eq) (test-not) (key #'identity) </EM>[function] 
+<UL><LI> tests if <EM>list1 is a subset of <EM>list2, i.e. if each element
+of <EM>list1 is a member of <EM>list2</EM>.
+</UL>
+<A NAME=6604>&#160;</A>
+<B>intersection</B> <EM>list1 list2
+ &amp;key (test #'eq) (test-not) (key #'identity) </EM>[function] 
+<UL><LI> returns the intersection of two sets, <EM>list1 and <EM>list2</EM>.
+</UL>
+<A NAME=6616>&#160;</A>
+<B>set-difference</B> <EM>list1 list2
+&amp;key (test #'eq) (test-not) (key #'identity) </EM>[function] 
+<UL><LI> returns the list whose elements are only contained in <EM>list1
+and not in <EM>list2</EM>.
+</UL>
+<A NAME=6628>&#160;</A>
+<B>set-exclusive-or</B> <EM>list1 list2
+ &amp;key (test #'eq) (test-not) (key #'identity) </EM>[function] 
+<UL><LI> returns the list of elements that appear only either in <EM>list1 or <EM>list2</EM>.
+</UL>
+<A NAME=6640>&#160;</A>
+<B>list-insert</B> <EM>item pos list </EM>[function] 
+<UL><LI> Insert <EM>item as the <EM>pos</EM>'th element in <EM>list</EM> destructively.
+If <EM>pos</EM> is bigger than the length of <EM>list</EM>, <EM>item</EM> is
+nconc'ed at the tail.
+For example, <TT>(list-insert 'x 2 '(a b c d)) = (a b x c d)</TT>
+</UL>
+<A NAME=6657>&#160;</A>
+<B>copy-tree</B> <EM>tree </EM>[function] 
+<UL><LI> returns the copy of <EM>tree which may be a nested list
+but cannot have circular reference. Circular lists can be copied by
+<B>copy-object</B>.
+Actually, <B>copy-tree</B> is simply coded as <TT>(subst t t tree)</TT>.
+</UL>
+<A NAME=6671>&#160;</A>
+<B>mapc</B> <EM>func arg-list &amp;rest more-arg-lists </EM>[function] 
+<UL><LI> applies <EM>func to a list of N-th elements in <EM>arg-list</EM> and each of
+<EM>more-arg-lists</EM>.
+The results of application are ignored and <EM>arg-list</EM> is returned.
+</UL>
+<A NAME=6685>&#160;</A>
+<B>mapcar</B> <EM>func &amp;rest arg-list </EM>[function] 
+<UL><LI> maps <EM>func to each element of <EM>arg-list</EM>,
+and makes a list from all the results.
+Before using <B>mapcar</B>, try <B>dolist</B>.
+</UL>
+<A NAME=6699>&#160;</A>
+<B>mapcan</B> <EM>func arg-list &amp;rest more-arg-lists </EM>[function] 
+<UL><LI> maps <EM>func to each element of <EM>arg-list</EM>,
+and makes a list from all the results by <B>nconc</B>.
+<B>Mapcan</B> is suitable for filtering (selecting) elements
+in <EM>arg-list</EM>, since nconc does nothing with NIL.
+</UL>
+<P>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2490" HREF="node48.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2488" HREF="node45.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2482" HREF="node46.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2492" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2493" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2491" HREF="node48.html">Vectors and Arrays</A>
+<B>Up:</B> <A NAME="tex2html2489" HREF="node45.html">SequencesArrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html2483" HREF="node46.html">General Sequences</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

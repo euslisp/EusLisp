@@ -1,0 +1,90 @@
+(caaaar function-documentation "
+Args: (x)
+Equivalent to (CAR (CAR (CAR (CAR X)))).")
+(caaar function-documentation "
+Args: (x)
+Equivalent to (CAR (CAR (CAR X))).")
+(caar function-documentation "
+Args: (x)
+Equivalent to (CAR (CAR X)).")
+(caddar function-documentation "
+Args: (x)
+Equivalent to (CAR (CDR (CDR (CAR X)))).")
+(car function-documentation "
+Args: (x)
+Returns the car of X if X is a cons.  Returns NIL if X is NIL.")
+(cdadar function-documentation "
+Args: (x)
+Equivalent to (CDR (CAR (CDR (CAR X)))).")
+(cddaar function-documentation "
+Args: (x)
+Equivalent to (CDR (CDR (CAR (CAR X)))).")
+(cddar function-documentation "
+Args: (x)
+Equivalent to (CDR (CDR (CAR X))).")
+(char-code-limit variable-documentation "
+The upper bound of values returned by CHAR-CODE.")
+(char-font-limit variable-documentation "
+The upper bound of values returned by CHAR-FONT.  1 in KCL.")
+(code-char function-documentation "
+Args: (code &optional (bits 0) (font 0))
+Returns a character with the specified character code, if any.  Returns NIL
+if no such character exists.  BITS and FONT specify the bits and font
+attributes of the returned character but are both ignored in KCL.")
+(*features* variable-documentation "
+List of symbols that name features of the current version of KCL.  These
+features are used in connection with the read macros #+ and #-.  When the
+reader encounters
+	#+ feature-spec form
+it reads FORM in the usual manner if FEATURE-SPEC is satisfied.  Otherwise,
+the reader just skips FORM.
+	#- feature-spec form
+is equivalent to
+	#- (not feature-spec) form
+A feature-spec may be a symbol, in which case the spec is satisfied iff the
+symbol is an element of *FEATURES*.  Or else, a feature-spec must be one of
+the following forms.
+	(and {feature-spec}*)
+		Satisfied iff all FEATURE-SPECs are satisfied
+	(or {feature-spec}*)
+		Satisfied iff at least one of FEATURE-SPECs is satisfied
+	(not feature-spec)
+		Satisfied iff FEATURE-SPEC is not satisfied")
+(machine-instance function-documentation "
+Args: ()
+Returns, as a string, the identifier of the machine on which KCL runs.")
+(name-char function-documentation "
+Args: (name)
+Given an argument acceptable to string,
+Returns a character object with the specified character name (see CHARACTER).
+Returns NIL if no such character object exists.  NAME is typically a string
+but may be any object that can be coerced to string.")
+(nreconc function-documentation "
+Args: (x y)
+Equivalent to (NCONC (NREVERSE X) Y).")
+(peek-char function-documentation "
+Args: (&optional (char-spec nil) (stream *standard-input*)
+                 (eof-error-p t) (eof-value nil) (recursive-p nil))
+Reads characters from STREAM until the specified character is read.  Returns
+the last character but leaves it in STREAM.  CHAR-SPEC may be a character
+object, T (specifies non-whitespace characters), or NIL (specifies all
+characters).")
+(princ function-documentation "
+Args: (object &optional (stream *standard-output*))
+Prints OBJECT without escape characters.  Returns OBJECT.  Equivalent to
+(WRITE OBJECT :STREAM STREAM :ESCAPE NIL).")
+(pushnew function-documentation "
+Syntax: (pushnew form place {keyword-form value-form}*)
+Evaluates FORM first.  If the value is already in the list stored in PLACE,
+does nothing.  Else, conses the value onto the list and makes the result the
+new value of PLACE.  Returns NIL.  KEYWORD-FORMs and VALUE-FORMs are used to
+check if the value of FORM is already in PLACE as if their values are passed
+to MEMBER.")
+(software-type function-documentation "
+Args: ()
+Returns, as a string, the type of the software under which KCL runs.")
+(throw function-documentation "
+Syntax: (throw tag form)
+Evaluates TAG and aborts the execution of the most recent CATCH form that
+establishes a catcher with the same catch tag.  Returns all values of FORM as
+the values of the CATCH form.")

@@ -1,0 +1,156 @@
+\section{OpenGL Interface}
+\markright{\arabic{section}. OpenGL}
+EusLisp has the interface to OpenGL, which is the standard
+3D rendering package available on many platforms.
+Though OpenGL was first implemented on SGI machines and was
+dependent on their graphics hardware, 
+the software emulation library, Mesa, has long been available.
+
+To make use of the OpenGL interface,
+euslisp should be invoked by ``eusgl'' instead of eus or eusx.
+Machines on which eusgl is installed must have the opengl libraries,
+namely libGL.so and libGLU.so. These may be symbolic links
+either to SGI's openGL libraries or Mesa libraries, libMesaGL.so
+and libMesaGLU.so.  Note that these libraries must be provided
+in the shared object.
+
+
+\subsection{OpenGL Extensions}
+
+EusLisp's OpenGL interface has been implemented by subclassing
+the viewsurface and viewer classes,
+and by replacing the {\tt draw} function with {\tt gldraw}.
+Classes for representing the color-material and lighting have also
+been added.
+
+\classdesc{glviewsurface}{geometry:viewsurface}{}{
+glviewsurface defines a viewsurface class particularly for OpenGL.
+Drawing requests to a viewer are interpreted to OpenGL requests.
+}
+
+\methoddesc{:create}{}{ \&key (x 0) (y 0) (size 256) (w size) (h size)
+		      (title (string (gensym "GL")))
+		      (displaymode (logior gl:AUX\_DOUBLE gl:AUX\_RGB gl:AUX\_DEPTH))
+		      \&allow-other-keys}{
+{\relax glviewsurface} is created and initialized.}
+
+\methoddesc{:material}{ambient diffuse specular emission shininess}{
+changes current material colors.}
+
+\methoddesc{:color}{color-vector}{
+changes the current color.}
+
+\methoddesc{:3d-mode}{}{
+射影変換を透視法射影モードにし、デプス検査、ライティングをイネーブルす
+る。３次元モデル──シーンの描画に適したモードにする。
+}
+\methoddesc{:2d-mode}{}{
+射影変換を正射影にし、デプス検査、ライティングをディスエーブルする。
+２次元の描画要素の描画に適したモードにする。
+}
+\methoddesc{:clear}{mask \&key (color)}{
+{\relax mask} で指定される、フレームバッファの内容を消去する。
+{\relax color} は指定があれば、消去時に用いられる色を設定し直す。
+}
+\methoddesc{:init}{\&key \&allow-other-keys}{
+初期化メソッド。
+}
+\methoddesc{:point}{x y}{
+２次元モードで、点を描く。
+}
+\methoddesc{:line}{x1 y1 x2 y2}{
+２次元モードで、直線を描く。
+}
+\methoddesc{:3d-point}{pos}{
+３次元モードで点を描く。
+}
+\methoddesc{:3d-line}{start end}{
+３次元モードで直線を描く。
+}
+\methoddesc{:draw-faces}{faces}{
+３次元モードで面（ポリゴン）を描く。
+}
+\methoddesc{:rectangle}{x y w h}{
+２次元モードで矩形を描く。
+}
+\methoddesc{:draw-point}{p}{
+２次元モードで、点を描く。
+}
+\methoddesc{:draw-line}{from to}{
+２次元モードで、直線を描く。
+}
+\methoddesc{:draw-rectangle}{}{
+２次元モードで矩形を描く。
+}
+\classdesc{colormaterial}{object}{}{
+モデルのマテリアル指定に用いるデータ構造。
+}
+\funcdesc{gl:draw-face}{face}{
+ポリゴンの描画単位。凸でホールのない、ポリゴンは glVertex3fv\(\) を用
+いて、そのまま描かれる。そうでないものは GLU ライブラリの tesselation 
+機能を用いて描かれる。
+}
+\funcdesc{gl:draw-body}{abody}{
+{\relax body} の描画単位。\\
+
+{\relax body} の描画手順は一度、各面毎の描画要求の列として、その {\relax
+body} を描く手順が OpenGL の Display List として定義され、実際の描画は
+その後、その Display List を呼び出すことにより描画が行なわれる。\\
+
+Display List の記録は {\relax body} の plist に attribute {\relax
+:GL-DISPLAYLIST-ID} で put される。
+}
+\classdesc{linecolor}{object}{}{
+点、直線の色指定に用いるデータ構造。
+}
+
+\funcdesc{cls}{}{
+画面をクリアする。
+}
+\funcdesc{swapb}{}{
+ダブルバッファ・モードのときのバッファ・スワップを行なう。
+}
+\funcdesc{resetperspective}{}{
+現在の{\relax \*viewing\*} から視点、注視点位置を取り出し、GL のコンテキ
+ストに反映させる。
+}
+\funcdesc{gldraw}{\&rest things}{
+視点の再設定 {\relax (resetperspective)}、
+フレームバッファのクリア {\relax (cls)}、
+描画 {\relax (apply \#'draw things)}、
+ダブルバッファの交換 {\relax (swapb)}
+を順に行ない、シーンの描画を行なう。\\
+
+things は左から右に順に処理され、その要素が、クラス colormaterial、
+linecolor のインスタンスの時は、GL のカレントコンテキストの色が変更さ
+れる。すなわち、(gldraw *color1* *obj1* *color2* *obj2*) では、
+*obj1* が *color1* で描かれ、*obj2* が *color2* で描かれる。
+}
+
+\subsection{起動方法}
+eusgl は OpenGL の補助ライブラリ aux、glx を用いるのため、環境変数 
+DISPLAY、LD\_LIBRARY\_PATH が適当な値にセットされている必要がある。aux 
+ライブラリは irix5 ではデフォルトでインストールされていないが、
+/usr/share/src/OpenGL 下にソースコードがあるほか、
+http://www.sgi.com/Technology/openGL/opengl.html または 
+ftp://sgigate.sgi.com/pub/opengl/ 等から取得できる。\\
+
+Mesa GL ライブラリを用いる場合は、LD\_LIBRARY\_PATH の変更のみ
+で、切替ができる。詳細は /usr/local/eus/gl/src/README.Mesa を参照のこ
+と。Mesa GL は、http://www.ssec.wisc.edu/\~brianp/Mesa.html または 
+ftp://iris.ssec.wisc.edu/pub/Mesa/ 等から入手できる。\\
+
+プログラム名 eusgl として起動することで、OpenGL 拡張機能つきの Euslisp
+が立ち上がる。\\
+
+eta3 マニピュレータを描くサンプル /usr/local/eus/gl/src/Sample.l が
+用意してあり、
+
+\begin{verbatim}
+eusgl$ (load "/usr/local/eus/gl/src/Sample.l")
+eusgl$ (load "view")
+eusgl$ (gldraw *scene*)
+\end{verbatim}
+
+等とすると絵が表示できる。
+

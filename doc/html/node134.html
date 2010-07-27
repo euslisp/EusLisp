@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Subpanels (menu-panel and menubar-panel)</TITLE>
+<META NAME="description" CONTENT="Subpanels (menu-panel and menubar-panel)">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html3686" HREF="node135.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html3684" HREF="node133.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html3678" HREF="node133.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html3688" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html3689" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html3687" HREF="node135.html">File Panel</A>
+<B>Up:</B> <A NAME="tex2html3685" HREF="node133.html">Panel</A>
+<B> Previous:</B> <A NAME="tex2html3679" HREF="node133.html">Panel</A>
+<BR> <P>
+<H3><A NAME="SECTION04072100000000000000">Subpanels (menu-panel and menubar-panel)</A></H3>
+<P>
+<A NAME=23285>&#160;</A>
+<B>menu-panel </B> [class]  <PRE><TT> :super B<>panel</B>
+<P>
+:slots 		 
+ (items item-dots item-height
+<P>
+                		charwidth charheight
+<P>
+                		height-offset
+<P>
+                		highlight-item
+<P>
+                		color-pixels
+<P>
+                		active-color)
+<P>
+</TT></PRE>
+<UL><LI> 
+<TT>Menu-panel</TT> is a kind of panel that can locate only 
+<TT>button-item</TT>s and/or <TT>bitmap-button-item</TT>s.
+Unlike <TT>panel</TT>, however, <TT>menu-panel</TT> is normally invisible
+and is exposed when the <TT>button-item</TT> to which the <TT>menu-panel</TT> is
+associated is pressed.
+If a <TT>menu-panel</TT> is made always visible, it becomes a pinned menu.
+The response of each button-item to mouse events is slightly different from
+button-items in other panels,
+as the mouse button has been pressed somewhere outside the button-item.
+Creation of a <TT>menu-panel</TT> should follow the order described below:
+<OL><LI> create a menu-panel by <TT>(instance menu-panel :create)</TT>.<LI> create button-items or/and bitmap-button-items and locate them in the
+menu-panel by <TT>(send aMenuPanel :create-item button-item &quot;BTN&quot; obj meth)</TT>.<LI> create a menu-button-item in another panel and associate the menu-panel
+with the menu-button-item by <TT>(instance menu-button-item :create
+&quot;Option&quot; obj meth :menu-window aMenuPanel)</TT>.
+</OL></UL>
+<A NAME=23316>&#160;</A>
+<P> <IMG  ALIGN=BOTTOM ALT="emtabbing23317" SRC="img75.gif"  > <P>
+<UL><LI> 
+create a menu-panel window. The size of the window is expanded each time
+new menu-item is added.
+</UL>
+<A NAME=23327>&#160;</A>
+<B>:create-item</B> <EM>class label receiver method  &amp;rest mesg </EM>[method] 
+<UL><LI> adds a menu item in this menu-panel window and attatches
+the corresponding action. 
+The <EM>receiver objects receives <EM>mesg</EM>
+when the mouse button is released on the item.
+</UL>
+<A NAME=23340>&#160;</A>
+<B>menubar-panel </B> [class]  <PRE><TT> :super B<>panel</B>
+<P>
+:slots
+<P>
+</TT></PRE>
+<UL><LI> 
+<TT>Menubar-panel</TT> is a subpanel always located at the top of the parent 
+panel. A menubar-panel resembles with the Macintosh desktop's menubar
+which lets out several pull-down menus.
+Panel-items placed in the menubar should be <TT>menu-button-item</TT>s.
+A menubar-panel is created by the panel's <TT>:create-menubar</TT> method.
+</UL>
+</EM><BR> <HR>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,94 @@
+(array type-documentation "
+An array is a compound object whose elements are referenced by indexing.  One-
+dimensional arrays are called vectors.  Other arrays are notated as
+	#?a( ... )	or	#?A( ... )
+where '?' is actually the rank of the array.
+Arrays may be displaced to another array, may have a fill-pointer, or may be
+adjustable.  Other arrays are called simple-arrays.  Only simple-arrays can be
+input in the above format.")
+(byte function-documentation "
+Args: (size position)
+Returns a byte specifier of integers.  The value specifies the SIZE-bits byte
+starting the least-significant-bit but POSITION bits of integers.  In KCL, a
+byte specifier is represented by a dotted pair (SIZE . POSITION).")
+(char-not-greaterp function-documentation "
+Args: (char &rest more-chars)
+Returns T if the character codes of CHARs are in non-decreasing order; NIL
+otherwise.  For lower-case characters, codes of corresponding upper-case
+characters are used.")
+(compiled-function-p function-documentation "
+Args: (x)
+Returns T if X is a compiled function object; NIL otherwise.")
+(elt function-documentation "
+Args: (sequence n)
+Returns the N-th element of SEQUENCE.")
+(file-namestring function-documentation "
+Args: (filespec)
+Returns as a string the name, type, and version parts of the specified
+pathname.  FILESPEC may be a symbol, a string, a pathname, or a file stream.")
+(integer-decode-float function-documentation "
+Args: (float)
+Returns, as three values, the integer interpretation of significand F, the
+exponent E, and the sign S of FLOAT, such that
+	FLOAT = S * F * B^E
+where B = (float-radix FLOAT).  F is a non-negative integer, E is an integer,
+and S is either 1 or -1.")
+(least-negative-single-float variable-documentation "
+Same as LEAST-NEGATIVE-LONG-FLOAT.")
+(make-array function-documentation "
+Args: (dimensions &key (element-type t) initial-element (initial-contents nil)
+                       (adjustable nil) (fill-pointer nil) (displaced-to nil)
+                       (displaced-index-offset 0))
+Creates an array of the specified DIMENSIONS.  DIMENSIONS is a list of
+non-negative integers each representing the length of the corresponding
+dimension.  It may be an integer for vectors, i.e., one-dimensional arrays.
+ELEMENT-TYPE specifies the type of array elements.  INITIAL-ELEMENT specifies
+the initial value for all elements.  Its default value depends on ELEMENT-
+TYPE.  INITIAL-CONTENTS specifies each element in terms of sequences.
+ADJUSTABLE specifies whether or not the array is adjustable (see ADJUST-
+ARRAY).  FILL-POINTER is meaningful only for vectors.  It specifies whether
+the vector has fill-pointer or not, and if it has, the initial value of the
+fill-pointer.  Possible values are NIL (no fill-pointer), T (the length of the
+vector), or an integer.  See VECTOR-PUSH and VECTOR-POP.  DISPLACED-TO, if
+non-NIL, must be an array and specifies that the new array is displaced to the
+given array.  DISPLACED-INDEX-OFFSET is meaningful only when DISPLACED-TO is
+non-NIL and specifies that the reference to the I-th element of the new array
+in raw-major indexing is actually the reference to the (I + DISPLACED-INDEX-
+OFFSET)th element of the given array.")
+(multiple-values-limit variable-documentation "
+The upper bound on the number of values that a function can return.  Actually,
+however, there is no such upper bound in KCL.")
+(nset-exclusive-or function-documentation "
+Args: (list1 list2 &key (key #'identity) (test #'eql) test-not)
+Destructive SET-EXCLUSIVE-OR.  Both LIST1 and LIST2 may be destroyed.")
+(nsubstitute-if function-documentation "
+Args: (new test sequence
+       &key (key #'identity) (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Destructive SUBSTITUTE-IF.  SEQUENCE may be destroyed.")
+(read-byte function-documentation "
+Args: (stream &optional (eof-error-p t) (eof-value nil))
+Reads one byte from STREAM and returns it as an integer.")
+(substitute function-documentation "
+Args: (new old sequence
+       &key (key #'identity) (test #'eql) test-not
+            (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Returns a copy of SEQUENCE with all elements that match OLD replaced by NEW.
+The original SEQUENCE is not destroyed.")
+(truncate function-documentation "
+Args: (number &optional (divisor 1))
+Returns the integer obtained by truncating NUMBER/DIVISOR.  Returns the value
+of (- NUMBER (* first-value DIVISOR)) as the second value.")
+(write function-documentation "
+Args: (object &key (stream *standard-output*) (escape *print-escape*)
+                   (radix *print-radix*) (base *print-base*)
+                   (circle *print-circle*) (pretty *print-pretty*)
+                   (level *print-level*) (length *print-length*)
+                   (case *print-case*) (array *print-array*)
+                   (gensym *print-gensym*))
+Prints OBJECT in the specified mode.  See the variable docs of *PRINT-...* for
+the mode.")
+(write-byte function-documentation "
+Args: (integer stream)
+Outputs INTEGER to the binary stream STREAM.  Returns INTEGER.")

@@ -1,0 +1,1326 @@
+;; checkers
+
+;; modified for common lisp ops from bliss version
+(load "board.ops") ;;	 must be loaded before rules are
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Start-up rules
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p start
+	;find out what symbol human wants 
+	(ready)
+	-->
+	(make opposite ^of human ^is computer)
+	(make opposite ^of computer ^is human)
+	(write (crlf) "Would you like to be X or O ?")
+	(make player ^with-mark (accept) ^is human)
+	(make opposite ^of X ^is O )
+	(make king ^of X ^is *)
+	(make opposite ^of O ^is X )
+	(make king ^of O ^is @)
+
+)
+
+(p check-for-valid-mark
+	;if the human enters an invalid mark make him o
+	(player ^with-mark <mark> ^is human)
+	-(opposite ^of <mark> ^is <other-mark>)
+	-->
+	(modify 1 ^with-mark O )
+)
+
+(p pop	
+ 	;if there is nothing left to do in the most recently generated task
+ 	;delete the task	
+ 	(task)			
+ 	-->
+ 	(remove 1)
+ )			
+
+(p generate-first-task
+	;once marks have been assigned, pass control to referee 
+	(player ^with-mark <mark> ^is human)
+	(opposite ^of <mark> ^is <other-mark>)
+	-->
+	(make task ^actor referee)
+)
+
+(p referee_set-up-board
+	;the first thing for the referee to do is to set-up the board
+	(task ^actor referee)
+	-(move)
+	(player ^with-mark <mark> ^is human)
+	(opposite ^of <mark> ^is <other-mark>)
+	(position ^id 1-B)
+	(position ^id 1-D)
+	(position ^id 1-F)
+	(position ^id 1-H)
+	;second row
+	(position ^id 2-A)
+	(position ^id 2-C)
+	(position ^id 2-E)
+	(position ^id 2-G) 
+	;third row
+	(position ^id 3-B)
+	(position ^id 3-D)
+	(position ^id 3-F)
+	(position ^id 3-H)
+	;sixth row 
+	(position ^id 6-A)
+	(position ^id 6-C)
+	(position ^id 6-E)
+	(position ^id 6-G)
+	;seventh row
+	(position ^id 7-B)
+	(position ^id 7-D) 
+	(position ^id 7-F)
+	(position ^id 7-H)
+	;human end row
+	(position ^id 8-A)
+	(position ^id 8-C)
+	(position ^id 8-E)
+	(position ^id 8-G)
+	-->
+	(make player ^with-mark <other-mark> ^is computer)
+	(make move ^status made)
+	(make step ^status made)
+	(modify 4 ^value <other-mark>)
+	(modify 5 ^value <other-mark>)
+	(modify 6 ^value <other-mark>)
+	(modify 7 ^value <other-mark>)
+	(modify 8 ^value <other-mark>)
+	(modify 9 ^value <other-mark>)
+	(modify 10 ^value <other-mark>)
+	(modify 11 ^value <other-mark>)
+	(modify 12 ^value <other-mark>)
+	(modify 13 ^value <other-mark>)
+	(modify 14 ^value <other-mark>)
+	(modify 15 ^value <other-mark>)
+	(modify 16 ^value <mark>)
+	(modify 17 ^value <mark>)
+	(modify 18 ^value <mark>)
+	(modify 19 ^value <mark>)
+	(modify 20 ^value <mark>)
+	(modify 21 ^value <mark>)
+	(modify 22 ^value <mark>)
+	(modify 23 ^value <mark>)
+	(modify 24 ^value <mark>)
+	(modify 25 ^value <mark>)
+	(modify 26 ^value <mark>)
+	(modify 27 ^value <mark>)
+)
+
+(p referee_prepare-for-first-move
+	;determine who should go first
+	(task ^actor referee)
+ 	(move ^whose-turn nil ^input nil)
+	-->
+	(write (crlf) "Would you like to go first?")
+ 	(modify 2 ^input (accept))
+)
+
+(p referee_human-goes-first
+	;if the human says he wants to go first, 
+	;fake that the computer was the last actor to move 
+	(task ^actor referee)
+	(move ^whose-turn nil ^input yes)
+	-->
+	(modify 2 ^whose-turn computer ^input nil)
+)
+
+(p referee_computer-goes-first
+	;if the human doesn't want to go first, 
+	;fake that the human was the last actor to move 
+	(task ^actor referee)
+	(move ^whose-turn nil ^input no)
+	-->
+	(modify 2 ^whose-turn human ^input nil)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Referee's task during the game
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p referee_display-board
+	;after a step is made or at the beginning of the game, 
+	;display the board 
+	(task ^actor referee)
+	(step ^status made)
+	(position ^value <a2> ^id 1-B)
+	(position ^value <a4> ^id 1-D)
+	(position ^value <a6> ^id 1-F)
+	(position ^value <a8> ^id 1-H)
+	(position ^value <b1> ^id 2-A)
+	(position ^value <b3> ^id 2-C)
+	(position ^value <b5> ^id 2-E)
+	(position ^value <b7> ^id 2-G)
+	(position ^value <c2> ^id 3-B)
+	(position ^value <c4> ^id 3-D)
+	(position ^value <c6> ^id 3-F)
+	(position ^value <c8> ^id 3-H)
+	(position ^value <d1> ^id 4-A)
+	(position ^value <d3> ^id 4-C)
+	(position ^value <d5> ^id 4-E)
+	(position ^value <d7> ^id 4-G)
+	(position ^value <e2> ^id 5-B)
+	(position ^value <e4> ^id 5-D)
+	(position ^value <e6> ^id 5-F)
+	(position ^value <e8> ^id 5-H)
+	(position ^value <f1> ^id 6-A)
+	(position ^value <f3> ^id 6-C)
+	(position ^value <f5> ^id 6-E)
+	(position ^value <f7> ^id 6-G)
+	(position ^value <g2> ^id 7-B)
+	(position ^value <g4> ^id 7-D)
+	(position ^value <g6> ^id 7-F)
+	(position ^value <g8> ^id 7-H)
+	(position ^value <h1> ^id 8-A)
+	(position ^value <h3> ^id 8-C)
+	(position ^value <h5> ^id 8-E)
+	(position ^value <h7> ^id 8-G)
+	-->
+;; redo using tab-to
+	(write (crlf) (crlf)
+	"                               C O L U M N           " (crlf) (crlf)
+	"                      A   B   C   D   E   F   G   H  " (crlf)
+	"                    ---------------------------------" (crlf)
+	"                  1 |###|" <a2> "|###|" <a4> "|###|" <a6> "|###|" <a8> "|" (crlf)
+	"                    ---------------------------------" (crlf)
+        "                  2 |" <b1> "|###|" <b3> "|###|" <b5> "|###|" <b7> "|###|" (crlf)
+	"                    ---------------------------------" (crlf)
+	"               R  3 |###|" <c2> "|###|" <c4> "|###|" <c6> "|###|" <c8> "|" (crlf)
+	"                    ---------------------------------" (crlf)
+	"               O  4 |" <d1> "|###|" <d3> "|###|" <d5> "|###|" <d7> "|###|" (crlf)
+	"                    ---------------------------------" (crlf)
+	"               W  5 |###|" <e2> "|###|" <e4> "|###|" <e6> "|###|" <e8> "|" (crlf)
+	"                    ---------------------------------" (crlf)
+	"                  6 |" <f1> "|###|" <f3> "|###|" <f5> "|###|" <f7> "|###|" (crlf)
+	"                    ---------------------------------" (crlf)
+	"                  7 |###|" <g2> "|###|" <g4> "|###|" <g6> "|###|" <g8> "|" (crlf)
+	"                    ---------------------------------" (crlf)
+	"                  8 |" <h1> "|###|" <h3> "|###|" <h5> "|###|" <h7> "|###|" (crlf)
+	"                    ---------------------------------" (crlf)
+	"                      A   B   C   D   E   F   G   H  " (crlf))
+) 
+
+(p referee_direct-traffic-forward
+	;pass control to opposite actor after a slide
+	(task ^actor referee)
+	(move ^status made ^whose-turn <who> )
+	(step ^status made)
+	(opposite ^of <who> ^is <whose-next>)
+	-->
+	(modify 2 ^status unmade ^whose-turn <whose-next> ^input nil)
+	(modify 3 ^status unmade ^start nil ^end nil)
+	(make task ^actor <whose-next>)
+)
+
+(p referee_direct-traffic-back-pawn
+	;pass control back to actor after a sub-step is complete and you know
+	;that there is another jump for the pawn that started jumping
+	(task ^actor referee)
+	(move ^status unmade ^whose-turn <who> )
+	(step ^status made ^end <e>)
+	(player ^with-mark <mark> ^is <who>)
+	(king ^of <mark> ^is <king>)
+	(link ^actor <who> ^start <e> ^slide <x> ^jump <j>)
+	(position ^value <mark> ^id <e>)
+	(position ^value { <> <mark> <> <king> <> | | } ^id <x>)
+	(position ^value | | ^id <j>)
+	-->
+	(modify 2 ^input nil)
+	(modify 3 ^status continuing ^start <e> ^end nil)
+	(make task ^actor <who>)
+)
+
+(p referee_direct-traffic-back-king
+	;pass control back to actor after a sub-step is complete and you know
+	;that there is another jump for the king that started jumping
+	(task ^actor referee)
+	(move ^status unmade ^whose-turn <who> )
+	(step ^status made ^end <e>)
+	(player ^with-mark <mark> ^is <who>)
+	(king ^of <mark> ^is <king>)
+	(link ^start <e> ^slide <x> ^jump <j>)
+	(position ^value <king> ^id <e>)
+	(position ^value { <> <mark> <> <king> <> | | } ^id <x>)
+	(position ^value | | ^id <j>)
+	-->
+	(modify 2 ^input nil)
+	(modify 3 ^status continuing ^start <e> ^end nil)
+	(make task ^actor <who>)
+)
+
+(p referee_dont-direct-traffic-back
+	;pass control to opposite actor if no next jump is possible
+	(task ^actor referee)
+	(move ^status unmade ^whose-turn <who> )
+	(step ^status made)
+	(opposite ^of <who> ^is <whose-next>)
+	-->
+	(modify 2 ^status unmade ^whose-turn <whose-next> ^input nil)
+	(modify 3 ^status unmade ^start nil ^end nil)
+	(make task ^actor <whose-next>)
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Human's task of entering moves
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p human_request-move-start
+	;get the id of the piece the human wants to move 
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input nil)
+	(step ^status unmade ^start nil)
+	-->
+	(write (crlf) "Enter the position of the piece you'd like to move.")
+	(modify 3 ^start (accept))
+	(modify 2 ^input start)	
+)
+
+(p human_request-move-next-end
+	;get the next end point for a sequence of jumps
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input nil)
+	(step ^status continuing ^start <s>)
+	-->
+	(write (crlf) "Piece " <s> " can continue jumping.")
+	(modify 2 ^input start)
+)
+
+(p human_request-move-end
+	;get the id of the end point of the human's move
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input start)
+	(step ^status << unmade continuing >> ^start { <s> <>nil })
+	-->
+	(write (crlf) "Enter the destination of piece " <s> ".")
+ 	(modify 3 ^end (accept))
+	(modify 2 ^input end)	
+)
+
+(p human_start-not-on-board
+	; check to see if human entered a position on the board
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input start)
+	(step ^status unmade ^start <s>)
+	-(position ^id <s>)
+	-->
+	(write (crlf) "There is no board position" <s> ". Try again")
+	(modify 2 ^input nil)
+	(modify 3 ^start nil) 
+)
+
+(p human_restart
+	; check to see if human entered a request to restart move
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status unmade ^end back)
+	-->
+	(write (crlf) "Restarting move.")
+	(modify 1 ^input nil)
+	(modify 2 ^start nil) 
+)
+
+(p human_reset-end
+	; check to see if human entered a request to reset
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status << unmade continuing >> ^end reset)
+	-->
+	(make task ^actor janitor)
+)
+
+(p human_reset-start
+	; check to see if human entered a request to reset
+	(move ^status unmade ^whose-turn human ^input start)
+	(step ^status unmade ^start reset)
+	-->
+	(make task ^actor janitor)
+)
+
+(p human_end-not-on-board
+	; check to see if human entered a position on the board
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status  << unmade continuing >> ^end <e>)
+	-(position ^id <e>)
+	-->
+	(write (crlf) "There is no board position" <e> ". Try again")
+	(modify 2 ^input start)
+	(modify 3 ^end nil)
+)
+
+(p human_start-not-human-piece
+	; check to see if human entered a position of one of his pieces
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input start)
+	(step ^status unmade ^start <s>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(position ^id <s>)
+	-(position ^value <mark> ^id <s>)
+	-(position ^value <king> ^id <s>)
+	-->
+	(write (crlf) "You do not have a piece at position " <s> ".")
+	(modify 2 ^input nil)
+	(modify 3 ^start nil) 
+)
+
+(p human_end-not-empty
+	;make sure the human's end position is empty 
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status << unmade continuing >> ^start <s> ^end <e>)
+	(position ^id <e>)
+	(position ^value <> | | ^id <e>)
+	-->
+	(write (crlf) "Position " <e> "is occupied. Try again.")
+	(modify 2 ^input start)
+	(modify 3 ^end nil)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Human's task of validating moves
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p human_validate-pawn-slide
+	;validate a move where the human is sliding a pawn,
+	;modify board position values here
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status unmade ^start <s> ^end <e>)
+	(player ^with-mark <mark> ^is human)
+	(position ^value <mark> ^id <s>)
+	(link ^actor human ^start <s> ^slide <e>)
+	(position ^value | | ^id <e>)
+	-->
+	(modify 2 ^status made)
+	(modify 3 ^status made)
+	(modify 5 ^value | |)
+	(modify 7 ^value <mark>)
+)
+
+(p human_validate-king-slide
+	;validate a move where the human is sliding a king,
+	;modify board position values here
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status unmade ^start <s> ^end <e>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(position ^value <king> ^id <s>)
+	(link ^start <s> ^slide <e>)
+	(position ^value | | ^id <e>)
+	-->
+	(modify 2 ^status made)
+	(modify 3 ^status made)
+	(modify 6 ^value | |)
+	(modify 8 ^value <king>)
+)
+
+(p human_validate-pawn-jump
+	;validate a move where the human is jumping with a pawn,
+	;modify board position values here
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status << unmade continuing >> ^start <s> ^end <e>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(position ^value <mark> ^id <s>)
+	(link ^actor human ^start <s> ^slide <x> ^jump <e>)
+	(position ^value { <> <mark> <> <king> <> | | } ^id <x>)
+	(position ^value | | ^id <e>)
+	-->
+	(write (crlf) "ARRGH !!")
+	(modify 2 ^status unmade)
+	(modify 3 ^status made)
+	(modify 6 ^value | |)
+	(modify 8 ^value | |)
+	(modify 9 ^value <mark>)
+)
+
+(p human_validate-king-jump
+	;validate a move where the human is jumping with a king,
+	;modify board position values here
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status << unmade continuing >> ^start <s> ^end <e>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(position ^value <king> ^id <s>)
+	(link ^start <s> ^slide <x> ^jump <e>)
+	(position ^value { <> <mark> <> <king> <> | | } ^id <x>)
+	(position ^value | | ^id <e>)
+	-->
+	(write (crlf) "ARRGH !!")
+	(modify 2 ^status unmade)
+	(modify 3 ^status made)
+	(modify 6 ^value | |)
+	(modify 8 ^value | |)
+	(modify 9 ^value <king>)
+)
+
+(p human_reject-invalid-moves
+	;if the human's move wasn't validated by one of the other productions
+	;then it must be invalid, reset destination to nil
+	(task ^actor human)
+	(move ^status unmade ^whose-turn human ^input end)
+	(step ^status << unmade continuing >> ^start <s> ^end <e>)
+	-->
+	(write (crlf) "Piece " <s> " can't move to position " <e> " ."
+	       (crlf) "Try again or type 'back' to reset move entirely.")
+	(modify 2 ^input start)
+	(modify 3 ^end nil)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Computer's control tasks
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p computer_prepare-for-new-move
+	;if the computer is starting a new move, set goal priority
+	(task ^actor computer ^goal nil)
+	(move ^status unmade ^whose-turn computer ^input nil)
+	(step ^status unmade ^start nil ^end nil)
+	-->
+	(make task ^actor computer ^goal slide)
+	(make task ^actor computer ^goal jump)
+)
+
+(p computer_prepare-for-next-step
+	;if the computer is continuing a series of jumps, retrieve the next 
+	;destination from the step-stack
+	(task ^actor computer ^goal nil)
+	(move ^status unmade)
+	(step ^status continuing)
+	(step-stack ^stack <s>)
+	-->
+	(bind <first> (litval stack))
+	(bind <second> (compute <first> + 1))
+	(modify 3 ^status pending ^end <s>)
+	(modify 4 ^stack (substr 4 <second> inf) nil)
+	(modify 1 ^goal execute)
+)
+
+(p computer_pop-to-select
+	; if all possible steps have been generated in either the jump or
+	;slide goals, then enter selection task
+	; enter selection sub-task
+	(task ^actor computer ^goal << jump slide >>)
+	(move ^status unmade)
+	(step ^status unmade)
+	-->
+	(modify 1 ^goal select)
+)
+
+(p computer_pop-to-execute
+	;if a possible-step has been selected, enter the execution task
+	(task ^actor computer ^goal select)
+	(step ^status pending)
+	-(possible-step)
+	-->
+	(modify 1 ^goal execute)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Computer's task of generating possible-steps
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p computer_create-possible-pawn-slides
+	;generate possible pawn slides and make the vacated position a ghost
+	(task ^actor computer ^goal slide)
+	(move ^status unmade)
+	(step ^status unmade)
+	(player ^with-mark <mark> ^is computer)
+	(position ^value <mark> ^id <s>)
+	(link ^actor computer ^start <s> ^slide <e>)
+	(position ^value | | ^id <e>)
+	-->
+	(bind <tag> (genatom))
+	(make possible-step ^piece pawn ^start <s> ^end <e> 
+			    ^type slide ^rank 0 ^tag <tag>)
+	(make ghost ^id <s> ^tag <tag>)
+)
+
+(p computer_create-possible-king-slides
+	;generate possible king slides and make the vacated position a ghost
+	;ranked as -0.75 to discourage useless slides back and forth
+	(task ^actor computer ^goal slide)
+	(move ^status unmade)
+	(step ^status unmade)
+	(player ^with-mark <mark> ^is computer)
+	(king ^of <mark> ^is <king>)
+	(position ^value <king> ^id <s>)
+	(link ^start <s> ^slide <e>)
+	(position ^value | | ^id <e>)
+	-->
+	(bind <tag> (genatom))
+	(make possible-step ^piece king ^start <s> ^end <e> 
+			    ^type slide ^rank -0.75 ^tag <tag>)
+       	(make ghost ^id <s> ^tag <tag>)
+)
+
+;===========================================================================
+
+(p computer_create-possible-pawn-jump-pawn
+	;generate these jumps, assign a rank based on the piece taken,
+	;make ghosts out of the vacated position and then jumped position,
+	;and enter the extend-jump task
+	(task ^actor computer ^goal jump)
+	(move ^status unmade)
+	(step ^status unmade)
+	(player ^with-mark <mark> ^is computer)
+	(player ^with-mark <other-mark> ^is human)
+	(position ^value <mark> ^id <s>)
+	(link ^actor computer ^start <s> ^slide <x> ^jump <e>)
+	(position ^value <other-mark> ^id <x>)
+	(position ^value | | ^id <e>)
+	-->
+	(bind <tag> (genatom))
+	(make possible-step ^piece pawn ^start <s> ^end <e> ^type jump 
+			    ^rank 1 ^tag <tag>)
+       	(make ghost ^id <s> ^tag <tag>)
+	(make ghost ^id <x> ^tag <tag>)
+	(make task ^actor computer ^goal extend-jump)
+)
+
+(p computer_create-possible-pawn-jump-king
+	;generate these jumps, assign a rank based on the piece taken,
+	;make ghosts out of the vacated position and then jumped position,
+	;and enter the extend-jump task
+	(task ^actor computer ^goal jump)
+	(move ^status unmade)
+	(step ^status unmade)
+	(player ^with-mark <mark> ^is computer)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <other-mark> ^is <other-king>)
+	(position ^value <mark> ^id <s>)
+	(link ^actor computer ^start <s> ^slide <x> ^jump <e>)
+	(position ^value <other-king> ^id <x>)
+	(position ^value | | ^id <e>)
+	-->
+	(bind <tag> (genatom))
+	(make possible-step ^piece pawn ^start <s> ^end <e> ^type jump 
+			    ^rank 2 ^tag <tag>)
+       	(make ghost ^id <s> ^tag <tag>)
+	(make ghost ^id <x> ^tag <tag>)
+	(make task ^actor computer ^goal extend-jump)
+)
+
+(p computer_create-possible-king-jump-pawn
+	;generate these jumps, assign a rank based on the piece taken,
+	;make ghosts out of the vacated position and then jumped position,
+	;and enter the extend-jump task
+	(task ^actor computer ^goal jump)
+	(move ^status unmade)
+	(step ^status unmade)
+	(player ^with-mark <mark> ^is computer)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(position ^value <king> ^id <s>)
+	(link ^start <s> ^slide <x> ^jump <e>)
+	(position ^value <other-mark> ^id <x>)
+	(position ^value | | ^id <e>)
+	-->
+	(bind <tag> (genatom))
+	(make possible-step ^piece king ^start <s> ^end <e> ^type jump
+			    ^rank 1 ^tag <tag>)
+       	(make ghost ^id <s> ^tag <tag>)
+	(make ghost ^id <x> ^tag <tag>)
+	(make task ^actor computer ^goal extend-jump)
+)
+
+(p computer_create-possible-king-jump-king
+	;generate these jumps, assign a rank based on the piece taken,
+	;make ghosts out of the vacated position and then jumped position,
+	;and enter the extend-jump task
+	(task ^actor computer ^goal jump)
+	(move ^status unmade)
+	(step ^status unmade)
+	(player ^with-mark <mark> ^is computer)
+	(king ^of <mark> ^is <king>)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <other-mark> ^is <other-king>)
+	(position ^value <king> ^id <s>)
+	(link ^start <s> ^slide <x> ^jump <e>)
+	(position ^value <other-king> ^id <x>)
+	(position ^value | | ^id <e>)
+	-->
+	(bind <tag> (genatom))
+	(make possible-step ^piece king ^start <s> ^end <e> ^type jump
+			    ^rank 2 ^tag <tag>)
+       	(make ghost ^id <s> ^tag <tag>)
+	(make ghost ^id <x> ^tag <tag>)
+	(make task ^actor computer ^goal extend-jump)
+)
+
+(p computer_purge-out-partial-jumps
+	;whenever there exists a jumps that has been completely extended,
+	;purge them from the bottom up
+	(task ^actor computer ^goal jump)
+	(possible-step ^tag <tag2> ^ext-of <tag1>)
+	(possible-step  ^tag <tag1> ^ext-of <tag0>)
+	-(possible-step ^tag <tag0>)
+	-->
+	(remove 3)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Computer's ranking task (need 'credit' to avoid looping)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p computer_rank-columns-A&8
+	;give a small credit to a possible-step that stays closer to the 
+	;edges of the board where a jump is less likely
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(position ^id { <e> << 1-H 2-A 3-H 4-A 5-H 6-A 7-H 8-A >> })
+	-->
+	(make credit ^rank +0.75 ^tag <tag>)
+)
+
+(p computer_rank-columns-B&7
+	;give a small credit to a possible-step that stays closer to the 
+	;edges of the board where a jump is less likely
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(position ^id { <e> << 1-B 2-G 3-B 4-G 5-B 6-G 7-B 8-G >> })
+	-->
+	(make credit ^rank +0.5 ^tag <tag>)
+)
+
+(p computer_rank-columns-C&6
+	;give a small credit to a possible-step that stays closer to the 
+	;edges of the board where a jump is less likely
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(position ^id { <e> << 1-F 2-C 3-F 4-C 5-F 6-C 7-F 8-C >> })
+	-->
+	(make credit ^rank +0.25 ^tag <tag>)
+)
+
+(p computer_rank-losing-moved-king-to-pawn
+	;give a negative credit to a possible-step where the moved piece 
+	;could be lost on the next human move, there should only be one of 
+	;this type of credit given to any possible-step 
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^piece king ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(link ^actor human ^start <x> ^slide <e> ^jump <j>)
+	(position ^value <mark> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value | | ^id <j>)
+	-(credit ^tag <tag> ^type end)
+	-->
+	(make credit ^rank -2 ^tag <tag> ^type end)
+)
+
+(p computer_rank-losing-moved-king-to-pawn-special
+	;give a negative credit to a possible-step where the moved piece 
+	;could be lost on the next human move, there should only be one of 
+	;this type of credit given to any possible-step 
+	;special means that human would be jumping to a ghost position
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^piece king ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(link ^actor human ^start <x> ^slide <e> ^jump <j>)
+	(position ^value <mark> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(ghost ^id <j> ^tag <tag>)
+	-(credit ^tag <tag> ^type end)
+	-->
+	(make credit ^rank -2 ^tag <tag> ^type end)
+)
+
+(p computer_rank-losing-moved-king-to-king
+	;give a negative credit to a possible-step where the moved piece 
+	;could be lost on the next human move, there should only be one of 
+	;this type of credit given to any possible-step 
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^piece king ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(link ^start <x> ^slide <e> ^jump <j>)
+	(position ^value <king> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value | | ^id <j>)
+	-(credit ^tag <tag> ^type end)
+	-->
+	(make credit ^rank -2 ^tag <tag> ^type end)
+)
+
+(p computer_rank-losing-moved-king-to-king-special
+	;give a negative credit to a possible-step where the moved piece 
+	;could be lost on the next human move, there should only be one of 
+	;this type of credit given to any possible-step 
+	;special means that human would be jumping to a ghost position
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^piece king ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(link ^start <x> ^slide <e> ^jump <j>)
+	(position ^value <king> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(ghost ^id <j> ^tag <tag>)
+	-(credit ^tag <tag> ^type end)
+	-->
+	(make credit ^rank -2 ^tag <tag> ^type end)
+)
+
+(p computer_rank-losing-moved-pawn-to-pawn
+	;give a negative credit to a possible-step where the moved piece 
+	;could be lost on the next human move, there should only be one of 
+	;this type of credit given to any possible-step 
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^piece pawn ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(link ^actor human ^start <x> ^slide <e> ^jump <j>)
+	(position ^value <mark> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value | | ^id <j>)
+	-(credit ^tag <tag> ^type end)
+	-->
+	(make credit ^rank -1 ^tag <tag> ^type end)
+)
+
+(p computer_rank-losing-moved-pawn-to-pawn-special
+	;give a negative credit to a possible-step where the moved piece 
+	;could be lost on the next human move, there should only be one of 
+	;this type of credit given to any possible-step 
+	;special means that human would be jumping to a ghost position
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^piece pawn ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(link ^actor human ^start <x> ^slide <e> ^jump <j>)
+	(position ^value <mark> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(ghost ^id <j> ^tag <tag>)
+	-(credit ^tag <tag> ^type end)
+	-->
+	(make credit ^rank -1 ^tag <tag> ^type end)
+)
+
+(p computer_rank-losing-moved-pawn-to-king
+	;give a negative credit to a possible-step where the moved piece 
+	;could be lost on the next human move, there should only be one of 
+	;this type of credit given to any possible-step 
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^piece pawn ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(link ^start <x> ^slide <e> ^jump <j>)
+	(position ^value <king> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value | | ^id <j>)
+	-(credit ^tag <tag> ^type end)
+	-->
+	(make credit ^rank -1 ^tag <tag> ^type end)
+)
+
+(p computer_rank-losing-moved-pawn-to-king-special
+	;give a negative credit to a possible-step where the moved piece 
+	;could be lost on the next human move, there should only be one of 
+	;this type of credit given to any possible-step, 
+	;special means that human would be jumping to a ghost position
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^piece pawn ^end <e> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(link ^start <x> ^slide <e> ^jump <j>)
+	(position ^value <king> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(ghost ^id <j> ^tag <tag>)
+	-(credit ^tag <tag> ^type end)
+	-->
+	(make credit ^rank -1 ^tag <tag> ^type end)
+)
+
+(p computer_rank-losing-adjacent-pawn-to-pawn
+	;give a negative credit to any possible-step that sets up a human jump
+	;as a result of vacating the starting position, multiple credits of 
+	;this time can fire for a single possible-step
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^start <s> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(player ^with-mark <other-mark> ^is computer)
+	(link ^actor human ^start <x> ^slide <y> ^jump <s>)
+	(position ^value <mark> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value <other-mark> ^id <y>)
+	-->
+	(make credit ^rank -1 ^tag <tag>)
+)
+
+(p computer_rank-losing-adjacent-pawn-to-king
+	;give a negative credit to any possible-step that sets up a human jump
+	;as a result of vacating the starting position, multiple credits of 
+	;this time can fire for a single possible-step
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^start <s> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(player ^with-mark <other-mark> ^is computer)
+	(link ^start <x> ^slide <y> ^jump <s>)
+	(position ^value <king> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value <other-mark> ^id <y>)
+	-->
+	(make credit ^rank -1 ^tag <tag>)
+)
+
+(p computer_rank-losing-adjacent-king-to-king
+	;give a negative credit to any possible-step that sets up a human jump
+	;as a result of vacating the starting position, multiple credits of 
+	;this time can fire for a single possible-step
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^start <s> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	(player ^with-mark <other-mark> ^is computer)
+	(king ^of <other-mark> ^is <other-king>)
+	(link ^start <x> ^slide <y> ^jump <s>)
+	(position ^value <king> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value <other-king> ^id <y>)
+	-->
+	(make credit ^rank -2 ^tag <tag>)
+)
+
+(p computer_rank-losing-adjacent-king-to-pawn
+	;give a negative credit to any possible-step that sets up a human jump
+	;as a result of vacating the starting position, multiple credits of 
+	;this time can fire for a single possible-step
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^start <s> ^tag <tag>)
+	-(possible-step ^ext-of <tag>)
+	(player ^with-mark <mark> ^is human)
+	(player ^with-mark <other-mark> ^is computer)
+	(king ^of <other-mark> ^is <other-king>)
+	(link ^actor human ^start <x> ^slide <y> ^jump <s>)
+	(position ^value <mark> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value <other-king> ^id <y>)
+	-->
+	(make credit ^rank -2 ^tag <tag>)
+)
+
+(p computer_rank-pawn-escaped-pawn
+	;give a positive credit to a move that escapes an impending jump
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^start <s> ^tag <tag>)
+	(player ^with-mark <mark> ^is computer)
+	(player ^with-mark <other-mark> ^is human)
+	(link ^actor human ^start <x> ^slide <s> ^jump <y>)
+	(position ^id <x> ^value <other-mark>)
+	(position ^id <s> ^value <mark>)
+	(position ^id <y> ^value | |)
+	-(credit ^tag <tag> ^type start)
+	-->
+	(make credit ^rank 1 ^tag <tag> ^type start)
+)
+
+(p computer_rank-pawn-escaped-king
+	;give a positive credit to a move that escapes an impending jump
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^start <s> ^tag <tag>)
+	(player ^with-mark <mark> ^is computer)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <other-mark> ^is <other-king>)
+	(link ^start <x> ^slide <s> ^jump <y>)
+	(position ^id <x> ^value <other-king>)
+	(position ^id <s> ^value <mark>)
+	(position ^id <y> ^value | |)
+	-(credit ^tag <tag> ^type start)
+	-->
+	(make credit ^rank 1 ^tag <tag> ^type start)
+)
+
+(p computer_rank-king-escaped-pawn
+	;give a positive credit to a move that escapes an impending jump
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^start <s> ^tag <tag>)
+	(player ^with-mark <mark> ^is computer)
+	(king ^of <mark> ^is <king>)
+	(player ^with-mark <other-mark> ^is human)
+	(link ^actor human ^start <x> ^slide <s> ^jump <y>)
+	(position ^id <x> ^value <other-mark>)
+	(position ^id <s> ^value <king>)
+	(position ^id <y> ^value | |)
+	-(credit ^tag <tag> ^type start)
+	-->
+	(make credit ^rank 1 ^tag <tag> ^type start)
+)
+
+(p computer_rank-king-escaped-king
+	;give a positive credit to a move that escapes an impending jump
+	(task ^actor computer ^goal << jump slide >>)
+	(possible-step ^start <s> ^tag <tag>)
+	(player ^with-mark <mark> ^is computer)
+	(king ^of <mark> ^is <king>)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <other-mark> ^is <other-king>)
+	(link ^start <x> ^slide <s> ^jump <y>)
+	(position ^id <x> ^value <other-king>)
+	(position ^id <s> ^value <king>)
+	(position ^id <y> ^value | |)
+	-(credit ^tag <tag> ^type start)
+	-->
+	(make credit ^rank 1 ^tag <tag> ^type start)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Computer's task of extending jumps
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p computer_king-computer-possible-steps
+	;when investigating extended jumps, recognize that piece get kinged
+	(possible-step ^piece pawn ^end << 8-A 8-C 8-E 8-G >> ^rank <r>)
+	-->
+	(modify 1 ^piece king ^rank (compute <r> + 1))
+)
+
+(p computer_create-extended-pawn-jump-pawn
+	;create a new possible-step from any one that can be extended and 
+	;identify the piece jumped as a new ghost
+	(task ^actor computer ^goal extend-jump)
+	(move ^status unmade)
+	(step ^status unmade)
+	(player ^with-mark <mark> ^is computer)
+	(player ^with-mark <other-mark> ^is human)
+	{(possible-step ^piece pawn ^start <s> ^end <e> ^type jump ^rank <r>
+		        ^tag <tag>) <p> }
+	(link ^actor computer ^start <e> ^slide <x> ^jump <j>)
+	(position ^value <other-mark> ^id <x>)
+	(position ^value | | ^id <j>)
+	-->
+	(bind <newtag> (genatom))
+	(make possible-step ^piece pawn ^start <s> ^end <j>  
+			    ^stops <e> (substr <p> stops inf)
+			    ^type jump ^rank (compute <r> + 1 )
+			     ^tag <newtag> ^ext-of <tag>)
+	(make ghost ^id <x> ^tag <newtag>)
+)
+
+(p computer_create-extended-pawn-jump-king
+	;create a new possible-step from any one that can be extended and 
+	;identify the piece jumped as a new ghost
+	(task ^actor computer ^goal extend-jump)
+	(move ^status unmade)
+	(step ^status unmade)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <other-mark> ^is <other-king>)
+	{(possible-step ^piece pawn ^start <s> ^end <e> ^type jump ^rank <r>
+		        ^tag <tag>) <p> }
+	(link ^actor computer ^start <e> ^slide <x> ^jump <j>)
+	(position ^value <other-king> ^id <x>)
+	(position ^value | | ^id <j>)
+	-->
+	(bind <newtag> (genatom))
+	(make possible-step ^piece pawn ^start <s> ^end <j>  
+			    ^stops <e> (substr <p> stops inf)
+			    ^type jump ^rank (compute <r> + 2 )
+			     ^tag <newtag> ^ext-of <tag>)
+	(make ghost ^id <x> ^tag <newtag>)
+)
+
+(p computer_create-extended-king-jump-pawn
+	;create a new possible-step from any one that can be extended and 
+	;identify the piece jumped as a new ghost
+	(task ^actor computer ^goal extend-jump)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <other-mark> ^is <other-king>)
+	{(possible-step ^piece king ^start <s> ^end <e> ^type jump ^rank <r>
+		        ^tag <tag>) <p> }
+	(link ^start <e> ^slide <x> ^jump <j>)
+	(position ^value <other-mark> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value | | ^id <j>)
+	-->
+	(bind <newtag> (genatom))
+	(make possible-step ^piece king ^start <s> ^end <j>  
+			    ^stops <e> (substr <p> stops inf)
+			    ^type jump ^rank (compute <r> + 1 )
+			     ^tag <newtag> ^ext-of <tag>)
+	(make ghost ^id <x> ^tag <newtag>)
+)
+
+(p computer_create-extended-king-jump-king
+	;create a new possible-step from any one that can be extended and 
+	;identify the piece jumped as a new ghost
+	(task ^actor computer ^goal extend-jump)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <other-mark> ^is <other-king>)
+	{(possible-step ^piece king ^start <s> ^end <e> ^type jump ^rank <r>
+		        ^tag <tag>) <p> }
+	(link ^start <e> ^slide <x> ^jump <j>)
+	(position ^value <other-king> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	(position ^value | | ^id <j>)
+	-->
+	(bind <newtag> (genatom))
+	(make possible-step ^piece king ^start <s> ^end <j>  
+			    ^stops <e> (substr <p> stops inf)
+			    ^type jump ^rank (compute <r> + 2 )
+			     ^tag <newtag> ^ext-of <tag>)
+	(make ghost ^id <x> ^tag <newtag>)
+)
+
+(p computer_create-extended-king-jump-pawn-special
+	;create a new possible-step from any one that can be extended and 
+	;identify the piece jumped as a new ghost
+	;special means that you are jumping to a ghost position 
+	(task ^actor computer ^goal extend-jump)
+	(player ^with-mark <other-mark> ^is human)
+	{(possible-step ^piece king ^start <s> ^end <e> ^type jump ^rank <r>
+		        ^tag <tag>) <p> }
+	(link ^start <e> ^slide <x> ^jump <s>)
+	(position ^value <other-mark> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	-->
+	(bind <newtag> (genatom))
+	(make possible-step ^piece king ^start <s> ^end <s>  
+			    ^stops <e> (substr <p> stops inf)
+			    ^type jump ^rank (compute <r> + 1 )
+			     ^tag <newtag> ^ext-of <tag>)
+	(make ghost ^id <x> ^tag <newtag>)
+)
+
+(p computer_create-extended-king-jump-king-special
+	;create a new possible-step from any one that can be extended and 
+	;identify the piece jumped as a new ghost
+	;special means that you are jumping to a ghost position 
+	(task ^actor computer ^goal extend-jump)
+	(player ^with-mark <other-mark> ^is human)
+	(king ^of <other-mark> ^is <other-king>)
+	{(possible-step ^piece king ^start <s> ^end <e> ^type jump ^rank <r>
+		        ^tag <tag>) <p> }
+	(link ^start <e> ^slide <x> ^jump <s>)
+	(position ^value <other-king> ^id <x>)
+	-(ghost ^id <x> ^tag <tag>)
+	-->
+	(bind <newtag> (genatom))
+	(make possible-step ^piece king ^start <s> ^end <s>  
+			    ^stops <e> (substr <p> stops inf)
+			    ^type jump ^rank (compute <r> + 2 )
+			     ^tag <newtag> ^ext-of <tag>)
+	(make ghost ^id <x> ^tag <newtag>)
+)
+
+(p computer_inheret-ghosts
+	;extended possible-steps should inheret the ghosts of the partial
+	;step from which they were extended
+	(possible-step ^start <s> ^end <z> ^stops <e> 
+		       ^tag <tag2> ^ext-of <tag1>)
+	(ghost ^id <x> ^tag <tag1>)
+	-(ghost ^id <x> ^tag <tag2>)
+	-->
+	(make ghost ^id <x> ^tag <tag2>)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Computer's task of selecting one of the possible-steps
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p computer_assess-credits
+	;when entering the selection task, first attribute all credits to the 
+	;appropriate possible-step
+	(task ^actor computer ^goal select)
+	(possible-step ^rank <r> ^tag <tag>)
+	(credit ^rank <p> ^tag <tag>)
+	-->
+	(modify 2 ^rank (compute <r> + <p> ))
+	(remove 3)
+)
+
+(p computer_select-possible-step-complete
+	;once all the credits have been assessed, and you have a complete 
+	;move with an empty or cleaned-out stops field,
+	;select one of the top ranked steps for execution
+	(task ^actor computer ^goal select)
+	(step ^status unmade)
+	(possible-step ^start <s> ^end <e> ^stops nil ^rank <r> 
+		       ^tag <tag>)
+	-(possible-step ^rank > <r>)
+	-(credit)
+	-->
+	(modify 2 ^status pending ^start <s> ^end <e>)
+)
+
+(p computer_select-possible-step-partial
+	;if a possible-step with the highest rank has a non-nil stops 
+	;field, select it for loading into step stack
+	;select any of the top ranked steps for execution
+	(task ^actor computer ^goal select)
+	(step ^status unmade)
+	(possible-step ^start <s> ^end <e> ^stops <> nil ^rank <r>
+		       ^tag <tag>)
+	-(possible-step ^rank > <r>)
+	-(credit)
+	-->
+	(make step-stack)
+	(modify 3 ^rank 100)
+)
+
+(p computer_create-step-stack
+	;load step-stack by peeling off the top of stops and pushing 
+	;that stop down the stack
+	(possible-step ^rank 100 ^end <e> ^stops { <s> <> nil })
+	(step-stack)
+	-->
+	(bind <stack> (litval stack))
+	(bind <first> (litval stops))
+	(bind <second> (compute <first> + 1))
+	(modify 2 ^stack <e> (substr 2 <stack> inf))
+	(modify 1 ^end <s> ^stops (substr 1 <second> inf) nil)
+)
+
+(p computer_clean-out-ghosts-and-possible-steps
+	;once a step is pending execution, clean-up 
+	(task ^actor computer ^goal select)
+	(step ^status pending)
+	( << ghost possible-step >> )
+	-->
+	(remove 3)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Computer's task of executing the selected step
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p computer_execute-jump-step
+	;execute a jump and return to referee
+	(task ^actor computer ^goal execute)
+	(move ^status unmade)
+	(step ^status pending ^start <s> ^end <e>)
+	(link ^start <s> ^slide <x> ^jump <e>)
+	(position ^value <mark> ^id <s>)
+	(position ^id <x>)
+	(position ^id <e>)
+	-->
+	(modify 2 ^status unmade)
+	(modify 3 ^status made)
+	(modify 5 ^value | |)
+	(modify 6 ^value | |)
+	(modify 7 ^value <mark>)
+	(write (crlf) "I jumped from " <s> " to " <e> ". Gotcha!")
+)
+
+(p computer_clean-out-step-stack
+	;if a step stack has been depleted, get rid of it
+	(task ^actor computer ^goal execute)
+	(step-stack ^stack nil)
+	-->
+	(remove 2)
+)
+
+(p computer_execute-slide-step
+	;execute a slide and return to referee
+	(task ^actor computer ^goal execute)
+	(move ^status unmade)
+	(step ^status pending ^start <s> ^end <e>)
+	(link ^start <s> ^slide <e>)
+	(position ^value <mark> ^id <s>)
+	(position ^id <e>)
+	-->
+	(modify 2 ^status made)
+	(modify 3 ^status made)
+	(modify 5 ^value | |)
+	(modify 6 ^value <mark>)
+	(write (crlf) "I slid from " <s> " to " <e> ".")
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Janitor's task of cleaning up at the end of the game
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p janitor_cleanup
+	;at the end of the game, clean out everything except 'position', 
+	;'link', and 'task'
+	(task ^actor janitor)
+	{ ({ <> position <> link <> task }) <x> }
+	-->
+	(remove <x>)
+)
+
+(p janitor_blank-board
+	;at the end of the game, clean off the board
+	(task ^actor janitor)
+	(position ^value <> | |)
+	-->
+	(modify 2 ^value | |)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Miscellaneous demons
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(p demon_king-human-pieces
+	;if the human has a piece in the first row, it should be a king
+	(position ^value <mark> ^id << 1-B 1-D 1-F 1-H >>)
+	(player ^with-mark <mark> ^is human)
+	(king ^of <mark> ^is <king>)
+	-->
+	(modify 1 ^value <king>)
+	(write (crlf) "You get a king!!!")
+)
+
+(p demon_king-computer-pieces
+	;if the computer has a piece in the last row, it should be a king
+	(position ^value <mark> ^id << 8-A 8-C 8-E 8-G >>)
+	(player ^with-mark <mark> ^is computer)
+	(king ^of <mark> ^is <king>)
+	-->
+	(modify 1 ^value <king>)
+	(write (crlf) "I get a king!!!")
+)
+
+(p demon_end-of-game
+	;if position's value was just changed to be empty, and there are no 
+	;more pieces for a player, declare the end of the game
+	(position ^value | |)
+	(player ^with-mark <mark> ^is <player1>)
+	(king ^of <mark> ^is <king>)
+	(opposite ^of <player1> ^is <player2>)
+	-(position ^value <mark>)
+	-(position ^value <king>)
+	-(task ^actor janitor)
+	-->
+	(write (crlf)(crlf) "Game is over, " <player2> "wins!!!" (crlf)(crlf))
+	(make task ^actor janitor)
+)
+
+;; input conversion demons
+
+(p demon_reply-yes
+	(move ^input y)
+	-->
+	(modify 1 ^input yes)
+)
+
+(p demon_reply-no
+	(move ^input n)
+	-->
+	(modify 1 ^input no)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ok, doit 
+
+(strategy mea)
+(make ready)
+(make start)

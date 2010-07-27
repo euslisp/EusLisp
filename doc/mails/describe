@@ -1,0 +1,38 @@
+オブジェクトの中身の印刷されたリストを取るにはどうしたらよいかという
+問合せが多いので、describe-listの解説をします。何かオブジェクトが
+あるとします。
+
+(setf cub1 (make-cube 30 20 10))
+
+cub1の面の中身を知りたいときは次のようにして下さい。
+
+(describe-list (body-faces cub1))
+
+外部のファイルに書きだしたいときは、2つめの引数にファイル名を
+指定すればOKです。
+
+(describe-list (body-faces cub1) "cubfac")
+
+cub2のdescribe-listをそのあとにappendするには、
+
+(describe-list (body-faces cub2) "cubfac")
+
+でよいはずです。"cubfac"はdescribe-listの中では :if-exists :append
+でオープンされているのでした。
+
+もう1つ面白い例は、lprを使ってプリントするものです。
+まず、lprへの口を作ります。
+
+(setf lpr (sys:piped-fork "lpr"))
+
+変数lprには、パイプ経由のio-streamが作成されます。describe-list
+の第2引数はストリームでもよいので、
+
+(describe-list (body-edges cub1) lpr)
+
+などとすることができます。最後にlprをクローズすることを
+忘れないように。sys:piped-forkはこのようにおもしろいので
+systemパッケージからlispパッケージに移そうかと考えています。
+rshと組み合わせるとさらに面白い!
+
+

@@ -1,0 +1,282 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;  Operations-of-Cube-body  88.11.17  ;;;;
+;;;            Written by M.adachi      ;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+(eval-when (compile eval)
+	   (load "/usr/local/eus/llib/geoclasses.l"))
+;;
+;;
+
+(defmethod body    ;;;; body must be (make-cube x y z)
+
+   (:face-separate ()
+       (let* ((x (abs (aref (car vertices) 0)))
+              (y (abs (aref (car vertices) 1)))
+              (z (abs (aref (car vertices) 2)))
+              (v1  (float-vector    x     y     0 )) 
+              (v2  (float-vector    x  (- y)    0 )) 
+              (v3  (float-vector (- x)    y     0 )) 
+              (v4  (float-vector (- x) (- y)    0 )) 
+              (v5  (float-vector    0     y     z )) 
+              (v6  (float-vector    0     y  (- z))) 
+              (v7  (float-vector    0  (- y)    z )) 
+              (v8  (float-vector    0  (- y) (- z))) 
+              (v9  (float-vector    x     0     z )) 
+              (v10 (float-vector    x     0  (- z))) 
+              (v11 (float-vector (- x)    0     z )) 
+              (v12 (float-vector (- x)    0  (- z))) 
+              (v13 (float-vector    x     0     0 ))
+              (v14 (float-vector (- x)    0     0 ))
+              (v15 (float-vector    0     y     0 ))
+              (v16 (float-vector    0  (- y)    0 ))
+              (v17 (float-vector    0     0     z ))
+              (v18 (float-vector    0     0  (- z))))
+
+;;;; make 12 new vertices on edges  ;;;;;;
+       (send self :make-vertex v1 )
+       (send self :make-vertex v2 )
+       (send self :make-vertex v3 )
+       (send self :make-vertex v4 )
+       (send self :make-vertex v5 )
+       (send self :make-vertex v6 )
+       (send self :make-vertex v7 )
+       (send self :make-vertex v8 )
+       (send self :make-vertex v9 )
+       (send self :make-vertex v10)
+       (send self :make-vertex v11)
+       (send self :make-vertex v12)
+
+;;;; make 6 new edges by new new vertex ;;;;;;
+       (send self :make-edge v1  v2 )
+       (send self :make-edge v2  v4 )
+       (send self :make-edge v3  v4 )
+       (send self :make-edge v1  v3 )
+       (send self :make-edge v9  v11)
+       (send self :make-edge v10 v12)
+
+;;;; make 6 new vertices on new edges ;;;;;;
+       (send self :make-vertex v13)
+       (send self :make-vertex v14)
+       (send self :make-vertex v15)
+       (send self :make-vertex v16)
+       (send self :make-vertex v17)
+       (send self :make-vertex v18)
+
+;;;; make 12 new edges by new vertex ;;;;;;;
+       (send self :make-edge v13 v9 ) 
+       (send self :make-edge v13 v10) 
+       (send self :make-edge v14 v11) 
+       (send self :make-edge v14 v12) 
+       (send self :make-edge v15 v5 ) 
+       (send self :make-edge v15 v6 ) 
+       (send self :make-edge v16 v7 ) 
+       (send self :make-edge v16 v8 ) 
+       (send self :make-edge v17 v5 ) 
+       (send self :make-edge v17 v7 ) 
+       (send self :make-edge v18 v6 ) 
+       (send self :make-edge v18 v8 ) 
+
+    )) 
+
+   (:balloon (m)    ;;;; m is magnification 
+       (let* ((k (/ (float m) (+ (float m) 2.0)))
+              (coner-verts)
+              (onedge-verts)
+              (center-verts))
+
+         (dolist (v vertices)
+            (cond 
+                 ((or 
+                    (and (zerop (aref v 0)) 
+                         (zerop (aref v 1)) 
+                         (not (zerop (aref v 2)))) 
+                    (and (zerop (aref v 0)) 
+                         (not (zerop (aref v 1))) 
+                         (zerop (aref v 2))) 
+                    (and (not (zerop (aref v 0))) 
+                         (zerop (aref v 1)) 
+                         (zerop (aref v 2))) 
+                    )
+                             (push v center-verts))
+                 ((or 
+                    (and (zerop (aref v 0)) 
+                         (not (zerop (aref v 1))) 
+                         (not (zerop (aref v 2)))) 
+                    (and (not (zerop (aref v 0))) 
+                         (zerop (aref v 1)) 
+                         (not (zerop (aref v 2)))) 
+                    (and (not (zerop (aref v 0))) 
+                         (not (zerop (aref v 1))) 
+                         (zerop (aref v 2))) 
+                    )
+                             (push v onedge-verts))
+                 (t (push v coner-verts))
+                ))
+
+          (send self :re-cube (abs (aref (car coner-verts) 0))
+                              (abs (aref (car coner-verts) 1))  
+                              (abs (aref (car coner-verts) 2)))
+
+          (dolist (v center-verts)
+             (replace v (scale (+ 1 m) v)))
+
+          (dolist (v onedge-verts)
+             (replace v (scale (+ 1 k) v)))
+ 
+          (dolist (f faces)
+             (send f :reset-normal))
+
+          ))
+
+   (:re-cube (x y z)    
+       (let (nx ny nz)
+       (dolist (v vertices)
+          (if (zerop (aref v 0))
+              (setq nx 0.0)
+              (if (minusp (aref v 0))
+                  (setq nx (- x))
+                  (setq nx x)))
+          (if (zerop (aref v 1))
+              (setq ny 0.0)
+              (if (minusp (aref v 1))
+                  (setq ny (- y))
+                  (setq ny y)))
+          (if (zerop (aref v 2))
+              (setq nz 0.0)
+              (if (minusp (aref v 2))
+                  (setq nz (- z))
+                  (setq nz z)))
+          (replace v (float-vector nx ny nz))
+         )   
+
+       (dolist (f faces)
+          (send f :reset-normal))
+
+          ))
+
+   (:extend (m &optional (axis 'x))  ;;;; m is scale   
+      (dolist (v vertices)
+         (if 
+           (eq axis 'x)
+           (replace v (float-vector (* m (aref v 0)) (aref v 1) (aref v 2)))
+           (if 
+             (eq axis 'y)
+             (replace v (float-vector (aref v 0) (* m (aref v 1)) (aref v 2)))
+             (replace v (float-vector (aref v 0) (aref v 1) (* m (aref v 2))))
+        ))))
+          
+   (:old-round-face (fac &optional (segment 4))
+      (let* ((edg (fac . edges))
+             (vert (cdr (fac . vertices)))
+             (flag)
+             (vert-list)
+             (ratio)
+             (angle-seg (/ pi segment))
+             v1 v2 v3 v4 l)
+        (cls)
+        (draw (car edg))
+        (print "OK (y/n)")
+        (setq flag (read))
+        (cond 
+           ((eq flag 'y) 
+                (progn 
+                    (setq v1 ((car edg) . pvert) v2 ((car edg) . nvert))
+                    (setq vert (rotate-list1 vert v1))
+                    (if (eq (cadr vert) v2) 
+                        (setq v3 (caddr vert) v4 (cadddr vert))
+                        (setq v3 (caddr vert) v4 (cadr vert)))
+                    ))
+           (t 
+                (progn 
+                    (setq v2 ((car edg) . pvert) v3 ((car edg) . nvert))
+                    (setq vert (rotate-list1 vert v2))
+                    (if (eq (cadr vert) v3) 
+                        (setq v4 (caddr vert) v1 (cadddr vert))
+                        (setq v4 (caddr vert) v1 (cadr vert)))
+                    ))
+              )
+        (setq l (/ (vector-length (v- v1 v2)) 2))
+
+        (dotimes (i (- segment 1))
+           (push (list (- 1.0 (cos (* (+ i 1) angle-seg))) 
+                              (sin (* (+ i 1) angle-seg))) ratio))
+        (dolist (r ratio)
+           (let ((p1 (v+ (scale (/ (car r) 2) v1)
+                         (scale (- 1 (/ (car r) 2)) v2))) 
+                 (p2 (v+ (scale (/ (car r) 2) v4)
+                         (scale (- 1 (/ (car r) 2)) v3))))
+             (send self :make-vertex p1)
+             (send self :make-vertex p2)
+             (send self :make-edge p1 p2)
+             (push (list (cadr r) p1 p2) vert-list)))
+
+        (dolist (elm vert-list)
+           (replace (cadr elm)
+              (v+ (cadr elm) (scale (* (car elm) l) (fac . normal))))
+           (replace (caddr elm)
+              (v+ (caddr elm) (scale (* (car elm) l) (fac . normal))))
+          )
+        (send self :make-edge v1 v2)
+        (send self :make-edge v3 v4)
+        (send self :reset-model-vertices)
+        (dolist (f faces) (send f :reset-normal))
+        )) 
+
+   (:round-face (fac edg &optional (segment 8))
+      (let* ((vert (cdr (fac . vertices)))
+             (vert-list)
+             (ratio)
+             (angle-seg (/ pi segment))
+             v1 v2 v3 v4 l)
+        (setq v1 (edg . pvert) v2 (edg . nvert))
+        (setq vert (rotate-list1 vert v1))
+        (if (eq (cadr vert) v2) 
+             (setq v3 (caddr vert) v4 (cadddr vert))
+             (setq v3 (caddr vert) v4 (cadr vert)))
+        (setq l (/ (norm (v- v1 v2)) 2))
+
+        (dotimes (i (- segment 1))
+           (push (list (- 1.0 (cos (* (+ i 1) angle-seg))) 
+                              (sin (* (+ i 1) angle-seg))) ratio))
+        (dolist (r ratio)
+           (let ((p1 (v+ (scale (/ (car r) 2) v1)
+                         (scale (- 1 (/ (car r) 2)) v2))) 
+                 (p2 (v+ (scale (/ (car r) 2) v4)
+                         (scale (- 1 (/ (car r) 2)) v3))))
+             (send self :make-vertex p1)
+             (send self :make-vertex p2)
+             (send self :make-edge p1 p2)
+             (push (list (cadr r) p1 p2) vert-list)))
+(setq cc (copy-object self))
+        (dolist (elm vert-list)
+           (replace (cadr elm)
+              (v+ (cadr elm) (scale (* (car elm) l) (fac . normal))))
+           (replace (caddr elm)
+              (v+ (caddr elm) (scale (* (car elm) l) (fac . normal))))
+          )
+        (send self :make-edge v1 v2)
+        (send self :make-edge v3 v4)
+        (send self :reset-model-vertices)
+        (dolist (f faces) (send f :reset-normal))
+        (dolist (e edges) (send e :set-angle) (send e :set-approximated-flag))
+        )) 
+)
+                
+;;
+;;
+
+(defun separate-face (bod)
+  (let ((pln (instance plane :init #f(0 0 1) #f(0 0 0)))
+        (new-body (copy-object bod)))
+    (setq new-body (devide-body new-body pln))
+    (send pln :init #f(0 1 0) #f(0 0 0))
+    (setq new-body (devide-body new-body pln))
+    (send pln :init #f(1 0 0) #f(0 0 0))
+    (setq new-body (devide-body new-body pln))))
+                         
+                
+                        
+                         
+ 
+

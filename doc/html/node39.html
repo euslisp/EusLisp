@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<!--Converted with LaTeX2HTML 96.1 (Feb 5, 1996) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds -->
+<HTML>
+<HEAD>
+<TITLE>Integer and Bit-Wise Operations</TITLE>
+<META NAME="description" CONTENT="Integer and Bit-Wise Operations">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<LINK REL=STYLESHEET HREF="manual.css">
+</HEAD>
+<BODY LANG="EN">
+ <A NAME="tex2html2390" HREF="node40.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2388" HREF="node36.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2382" HREF="node38.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2392" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2393" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2391" HREF="node40.html">Generic Number Functions</A>
+<B>Up:</B> <A NAME="tex2html2389" HREF="node36.html">Arithmetic Functions</A>
+<B> Previous:</B> <A NAME="tex2html2383" HREF="node38.html">Arithmetic Predicates</A>
+<BR> <P>
+<H2><A NAME="SECTION03053000000000000000">Integer and Bit-Wise Operations</A></H2>
+<P>
+Following functions request arguments to be integers.
+<P>
+<A NAME=3308>&#160;</A>
+<B>mod</B> <EM>dividend divisor </EM>[function] 
+<UL><LI> returns remainder when <EM>dividend is divided by <EM>divisor</EM>.
+<TT>(mod 6 5)=1, (mod -6 5)=-1, (mod 6 -5)=1, (mod -6 -5)=-1</TT>.
+</UL>
+<A NAME=3321>&#160;</A>
+<B>1-</B> <EM>integer </EM>[function] 
+<UL><LI> The compiler assumes the argument to be an integer.
+<I>integer</I>-1 is returned.
+</UL>
+<A NAME=3331>&#160;</A>
+<B>1+</B> <EM>integer </EM>[function] 
+<UL><LI> Arguments to 1+ and 1- must be an integer.
+<I>integer</I>+1 is returned.
+</UL>
+<A NAME=3341>&#160;</A>
+<B>logand</B> <EM>&amp;rest integers </EM>[function] 
+<UL><LI> bitwise-and of <EM>integers.
+</UL>
+<A NAME=3352>&#160;</A>
+<B>logior</B> <EM>&amp;rest integers </EM>[function] 
+<UL><LI> bitwise-inclusive-or of <EM>integers.
+</UL>
+<A NAME=3363>&#160;</A>
+<B>logxor</B> <EM>&amp;rest integers </EM>[function] 
+<UL><LI> bitwise-exclusive-or of <EM>integers.
+</UL>
+<A NAME=3374>&#160;</A>
+<B>logeqv</B> <EM>&amp;rest integers </EM>[function] 
+<UL><LI> <B>logeqv</B> is equivalent to (lognot (logxor ...)).
+</UL>
+<A NAME=3385>&#160;</A>
+<B>lognand</B> <EM>&amp;rest integers </EM>[function] 
+<UL><LI> bitwise-nand of <EM>integers.
+</UL>
+<A NAME=3396>&#160;</A>
+<B>lognor</B> <EM>&amp;rest integers </EM>[function] 
+<UL><LI> bitwise-nor of <EM>integers.
+</UL>
+<A NAME=3407>&#160;</A>
+<B>lognot</B> <EM>integer </EM>[function] 
+<UL><LI> bit reverse of <EM>integer.
+</UL>
+<A NAME=3418>&#160;</A>
+<B>logtest</B> <EM>integer1 integer2 </EM>[function] 
+<UL><LI> T if (logand <EM>integer1 integer2) is not zero.
+</UL>
+<A NAME=3429>&#160;</A>
+<B>logbitp</B> <EM>index integer </EM>[function] 
+<UL><LI> T if <EM>indexth bit of <EM>integer (counted from the LSB) is 1,
+otherwise NIL.
+</UL>
+<A NAME=3441>&#160;</A>
+<B>ash</B> <EM>integer count </EM>[function] 
+<UL><LI> Arithmetic Shift Left.
+If <EM>count is positive, shift direction is left,
+and if <EM>count is negative,
+<EM>integer is shifted to right by abs(<EM>count</EM>) bits.
+</UL>
+<A NAME=3455>&#160;</A>
+<B>ldb</B> <EM>target position width </EM>[function] 
+<UL><LI> LoaD Byte.
+Byte specifier for <B>ldb</B> and <B>dpb</B> does not exist in EusLisp.
+Use a pair of integers instead.
+The field of <EM>width bits at <EM>position</EM> within <EM>target</EM>
+is extracted. For example, <TT>(ldb #x1234 4 4)</TT> is 3.
+</UL>
+<A NAME=3471>&#160;</A>
+<B>dpb</B> <EM>value integer position width </EM>[function] 
+<UL><LI> DePosit byte.
+<EM>Width bits of <EM>value</EM> is put in <EM>integer</EM>
+at <EM>position</EM>th bits from LSB.
+</UL>
+</EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM></EM><HR><A NAME="tex2html2390" HREF="node40.html"><IMG WIDTH=37 HEIGHT=24 ALIGN=BOTTOM ALT="next" SRC="./icons/next_motif.gif"></A> <A NAME="tex2html2388" HREF="node36.html"><IMG WIDTH=26 HEIGHT=24 ALIGN=BOTTOM ALT="up" SRC="./icons/up_motif.gif"></A> <A NAME="tex2html2382" HREF="node38.html"><IMG WIDTH=63 HEIGHT=24 ALIGN=BOTTOM ALT="previous" SRC="./icons/previous_motif.gif"></A> <A NAME="tex2html2392" HREF="node1.html"><IMG WIDTH=65 HEIGHT=24 ALIGN=BOTTOM ALT="contents" SRC="./icons/contents_motif.gif"></A> <A NAME="tex2html2393" HREF="node153.html"><IMG WIDTH=43 HEIGHT=24 ALIGN=BOTTOM ALT="index" SRC="./icons/index_motif.gif"></A> <BR>
+<B> Next:</B> <A NAME="tex2html2391" HREF="node40.html">Generic Number Functions</A>
+<B>Up:</B> <A NAME="tex2html2389" HREF="node36.html">Arithmetic Functions</A>
+<B> Previous:</B> <A NAME="tex2html2383" HREF="node38.html">Arithmetic Predicates</A>
+<P><ADDRESS>
+<I>Hirofumi Nakagaki <BR>
+Tue Mar 19 19:45:39 JST 1996</I>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,92 @@
+(ash function-documentation "
+Args: (integer count)
+Returns the integer obtained by shifting the bits that represent INTEGER as
+specified by COUNT.  Shifts left in COUNT bits if COUNT is positive.  Shifts
+right in -COUNT bits if COUNT is negative.")
+(atanh function-documentation "
+Args: (number)
+Returns the hyperbolic arc tangent of NUMBER.")
+(char-hyper-bit variable-documentation "
+The bit position indicating a hyper character.  0 in KCL.")
+(cosh function-documentation "
+Args: (number)
+Returns the hyperbolic cosine of NUMBER.")
+(gethash function-documentation "
+Args: (key hash-table &optional (default nil))
+Searches HASH-TABLE for the entry of KEY.  If found, returns the value of the
+entry and T, as two values.  If not, returns DEFAULT and NIL.")
+(lcm function-documentation "
+Args: (integer &rest more-integers)
+Returns the least common multiple of the args.  Returns 0 if at least one of
+the args is 0.")
+(let* function-documentation "
+Syntax: (let* ({var | (var [init])}*) {decl}* {form}*)
+Evaluates INIT (which defaults to NIL) and binds the value to the
+corresponding VAR, one by one for each pair of VAR and INIT.  Then evaluates
+FORMs and returns all values of the last FORM.  Returns NIL if no FORM is
+given.")
+(list* function-documentation "
+Args: (arg &rest more-args)
+With one arg, simply returns it.  With n args (n > 1), conses the first arg to
+the LIST* of the rest of args.")
+(lower-case-p function-documentation "
+Args: (char)
+Returns T if CHAR is a lower-case character; NIL otherwise.")
+(make-concatenated-stream function-documentation "
+Args: (&rest streams)
+Creates and returns a concatenated stream.  Inputs from this stream are first
+obtained from the first STREAM.  When the end of the first STREAM is reached,
+then inputs are obtained from the second STREAM.  And so forth.
+A concatenated stream is notated as
+	#<concatenated stream n>
+where N is a number that identifies the stream.")
+(make-echo-stream function-documentation "
+Args: (stream1 stream2)
+Creates and returns an echo stream.  Inputs from this stream are obtained from
+STREAM1 and outputs to this stream are output to STREAM2.  In addition, all
+inputs from STREAM1 are output to STREAM2.
+An echo stream is notated as
+	#<echo stream n>
+where N is a number that identifies the stream.")
+(make-string function-documentation "
+Args: (length &key (initial-element #\\Space))
+Creates and returns a new string of the given LENGTH, whose elements are all
+INITIAL-ELEMENT.")
+(maphash function-documentation "
+Args: (function hash-table)
+For each entry of HASH-TABLE, applies FUNCTION to the key and the value of the
+entry.  Returns NIL.")
+(*package* variable-documentation "
+The current package.  The initial value is the USER package.")
+(*print-escape* variable-documentation "
+Specifies whether the KCL printer should output objects in the way that they
+can be reread later if possible.")
+(*query-io* variable-documentation "
+The query I/O stream.  The initial value is a synonym stream to *TERMINAL-IO*.")
+(rassoc function-documentation "
+Args: (item alist &key (key #'identity) (test #'eql) test-not)
+Returns the first pair in ALIST whose cdr is equal (in the sense of TEST) to
+ITEM.  Returns NIL if no such pair exists.")
+(read-from-string function-documentation "
+Args: (string &optional (eof-error-p t) (eof-value nil)
+              &key (start 0) (end (length string)) (preserve-whitespace nil))
+Reads an object from STRING and returns the object.  As the second value,
+returns the index to the character next to the object's representation.
+PRESERVE-WHITESPACE specifies whether to leave the character next to the
+object's representation.")
+(remhash function-documentation "
+Args: (key hash-table)
+Removes the entry for KEY in HASH-TABLE.  Returns T if such an entry existed;
+NIL otherwise.")
+(sxhash function-documentation "
+Args: (object)
+Returns the hash code for OBJECT as an integer.")
+(tanh function-documentation "
+Args: (number)
+Returns the hyperbolic tangent of NUMBER.")
+(vector-push-extend function-documentation "
+Args: (item vector &optional (n (length vector)))
+Replaces ITEM for the element of VECTOR that is pointed to by the fill-pointer
+of VECTOR and then increments the fill-pointer by one.  If the new value of
+the fill-pointer becomes too large, extends VECTOR for N more elements.
+Returns the new value of the fill-pointer.")

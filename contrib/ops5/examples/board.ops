@@ -1,0 +1,215 @@
+
+;; wme-types for static board representation
+
+(literalize position
+	value			; x,X,o,O, or | |
+	id)			; row-column
+
+
+    ; these should be combined into a new wme type, side which will
+    ; keep track
+(literalize player 
+	with-mark 		; x or o
+	is)			; human or computer
+
+(literalize opposite 
+	of is)
+
+(literalize king 
+	of is)
+
+;; wme-types for 'dynamic' representation of move
+
+(literalize step 
+	status 			; made, unmade, pending, continuing
+	start 			; position of piece to be moved
+	end)			; destination of piece
+
+(vector-attribute stops )  
+(literalize possible-step 
+	piece 			; pawn or king
+	start 			; position of piece to be moved
+	end 			; destination of piece
+	rank 			; for determining best steps
+	type 			; slide or jump
+	tag 			; genatom label to link things
+	ext-of			; for extending jump
+	stops )			; vector of positions jumped to in an
+				; extended move
+(literalize ghost 
+	id 			; position on board
+	tag)			; tied to the appropriate possible-step
+(literalize credit 
+	rank 			; points for losing piece at end of move,
+				; gaining piece for escaping a jump, etc.
+	tag 			;tied to the appropriate possible-step
+	type)			; start or end
+
+;maybe relace w/ slide ^from ^to & jump ^f ^t
+(literalize link
+	actor			; human or computer
+	start			;  position we start from
+	slide			;  a position available via a slide-move
+	jump)			;  a position available via a slide-move
+
+
+
+(vector-attribute stack)
+(literalize step-stack
+	stack)			; vector of destinations for a computer's
+				; extended jump
+
+
+;; wme-types for control -- context, subtasking
+;;    these should probably be put together, if we're ever going to use
+;;    truth-maintence for backtracking
+
+(literalize move 
+	status 			; made or unmade
+	whose-turn 		; human or computer
+	input)			; marker for input of human move in two
+
+
+(literalize task
+	actor			; referee, computer, or human
+	goal)			; jump, slide, extend-jump, select, or
+				; execute
+				; steps
+
+(p set-up-board
+	; set up blank board and links between positions
+	(start)
+	-->
+	(make position ^value | | ^id 1-B)
+	(make position ^value | | ^id 1-D)
+	(make position ^value | | ^id 1-F)
+	(make position ^value | | ^id 1-H)
+	(make position ^value | | ^id 2-A)
+	(make position ^value | | ^id 2-C)
+	(make position ^value | | ^id 2-E)
+	(make position ^value | | ^id 2-G)
+	(make position ^value | | ^id 3-B)
+	(make position ^value | | ^id 3-D)
+	(make position ^value | | ^id 3-F)
+	(make position ^value | | ^id 3-H)
+	(make position ^value | | ^id 4-A)
+	(make position ^value | | ^id 4-C)
+	(make position ^value | | ^id 4-E)
+	(make position ^value | | ^id 4-G)
+	(make position ^value | | ^id 5-B)
+	(make position ^value | | ^id 5-D)
+	(make position ^value | | ^id 5-F)
+	(make position ^value | | ^id 5-H)
+	(make position ^value | | ^id 6-A)
+	(make position ^value | | ^id 6-C)
+	(make position ^value | | ^id 6-E)
+	(make position ^value | | ^id 6-G)
+	(make position ^value | | ^id 7-B)
+	(make position ^value | | ^id 7-D)
+	(make position ^value | | ^id 7-F)
+	(make position ^value | | ^id 7-H)
+	(make position ^value | | ^id 8-A)
+	(make position ^value | | ^id 8-C)
+	(make position ^value | | ^id 8-E)
+	(make position ^value | | ^id 8-G)
+	(make link ^actor human ^start 8-G ^slide 7-F ^jump 6-E)
+	(make link ^actor human ^start 8-G ^slide 7-H)
+	(make link ^actor human ^start 8-E ^slide 7-D ^jump 6-C)
+	(make link ^actor human ^start 8-E ^slide 7-F ^jump 6-G)
+	(make link ^actor human ^start 8-C ^slide 7-B ^jump 6-A)
+	(make link ^actor human ^start 8-C ^slide 7-D ^jump 6-E)
+	(make link ^actor human ^start 8-A ^slide 7-B ^jump 6-C)
+	(make link ^actor human ^start 7-H ^slide 6-G ^jump 5-F)
+	(make link ^actor computer ^start 7-H ^slide 8-G)
+	(make link ^actor human ^start 7-F ^slide 6-E ^jump 5-D)
+	(make link ^actor human ^start 7-F ^slide 6-G ^jump 5-H)
+	(make link ^actor computer ^start 7-F ^slide 8-G)
+	(make link ^actor computer ^start 7-F ^slide 8-E)
+	(make link ^actor human ^start 7-D ^slide 6-C ^jump 5-B)
+	(make link ^actor human ^start 7-D ^slide 6-E ^jump 5-F)
+	(make link ^actor computer ^start 7-D ^slide 8-E)
+	(make link ^actor computer ^start 7-D ^slide 8-C)
+	(make link ^actor human ^start 7-B ^slide 6-A)
+	(make link ^actor human ^start 7-B ^slide 6-C ^jump 5-D)
+	(make link ^actor computer ^start 7-B ^slide 8-C)
+	(make link ^actor computer ^start 7-B ^slide 8-A)
+	(make link ^actor human ^start 6-G ^slide 5-F ^jump 4-E)
+	(make link ^actor human ^start 6-G ^slide 5-H)
+	(make link ^actor computer ^start 6-G ^slide 7-H)
+	(make link ^actor computer ^start 6-G ^slide 7-F ^jump 8-E)
+	(make link ^actor human ^start 6-E ^slide 5-D ^jump 4-C)
+	(make link ^actor human ^start 6-E ^slide 5-F ^jump 4-G)
+	(make link ^actor computer ^start 6-E ^slide 7-F ^jump 8-G)
+	(make link ^actor computer ^start 6-E ^slide 7-D ^jump 8-C)
+	(make link ^actor human ^start 6-C ^slide 5-B ^jump 4-A)
+	(make link ^actor human ^start 6-C ^slide 5-D ^jump 4-E)
+	(make link ^actor computer ^start 6-C ^slide 7-D ^jump 8-E)
+	(make link ^actor computer ^start 6-C ^slide 7-B ^jump 8-A)
+	(make link ^actor human ^start 6-A ^slide 5-B ^jump 4-C)
+	(make link ^actor computer ^start 6-A ^slide 7-B ^jump 8-C)
+	(make link ^actor human ^start 5-H ^slide 4-G ^jump 3-F)
+	(make link ^actor computer ^start 5-H ^slide 6-G ^jump 7-F)
+	(make link ^actor human ^start 5-F ^slide 4-E ^jump 3-D)
+	(make link ^actor human ^start 5-F ^slide 4-G ^jump 3-H)
+	(make link ^actor computer ^start 5-F ^slide 6-G ^jump 7-H)
+	(make link ^actor computer ^start 5-F ^slide 6-E ^jump 7-D)
+	(make link ^actor human ^start 5-D ^slide 4-C ^jump 3-B)
+	(make link ^actor human ^start 5-D ^slide 4-E ^jump 3-F)
+	(make link ^actor computer ^start 5-D ^slide 6-E ^jump 7-F)
+	(make link ^actor computer ^start 5-D ^slide 6-C ^jump 7-B)
+	(make link ^actor human ^start 5-B ^slide 4-A)
+	(make link ^actor human ^start 5-B ^slide 4-C ^jump 3-D)
+	(make link ^actor computer ^start 5-B ^slide 6-C ^jump 7-D)
+	(make link ^actor computer ^start 5-B ^slide 6-A)
+	(make link ^actor human ^start 4-G ^slide 3-F ^jump 2-E)
+	(make link ^actor human ^start 4-G ^slide 3-H)
+	(make link ^actor computer ^start 4-G ^slide 5-H)
+	(make link ^actor computer ^start 4-G ^slide 5-F ^jump 6-E)
+	(make link ^actor human ^start 4-E ^slide 3-D ^jump 2-C)
+	(make link ^actor human ^start 4-E ^slide 3-F ^jump 2-G)
+	(make link ^actor computer ^start 4-E ^slide 5-F ^jump 6-G)
+	(make link ^actor computer ^start 4-E ^slide 5-D ^jump 6-C)
+	(make link ^actor human ^start 4-C ^slide 3-B ^jump 2-A)
+	(make link ^actor human ^start 4-C ^slide 3-D ^jump 2-E)
+	(make link ^actor computer ^start 4-C ^slide 5-D ^jump 6-E)
+	(make link ^actor computer ^start 4-C ^slide 5-B ^jump 6-A)
+	(make link ^actor human ^start 4-A ^slide 3-B ^jump 2-C)
+	(make link ^actor computer ^start 4-A ^slide 5-B ^jump 6-C)
+	(make link ^actor human ^start 3-H ^slide 2-G ^jump 1-F)
+	(make link ^actor computer ^start 3-H ^slide 4-G ^jump 5-F)
+	(make link ^actor human ^start 3-F ^slide 2-E ^jump 1-D)
+	(make link ^actor human ^start 3-F ^slide 2-G ^jump 1-H)
+	(make link ^actor computer ^start 3-F ^slide 4-G ^jump 5-H)
+	(make link ^actor computer ^start 3-F ^slide 4-E ^jump 5-D)
+	(make link ^actor human ^start 3-D ^slide 2-C ^jump 1-B)
+	(make link ^actor human ^start 3-D ^slide 2-E ^jump 1-F)
+	(make link ^actor computer ^start 3-D ^slide 4-E ^jump 5-F) 
+	(make link ^actor computer ^start 3-D ^slide 4-C ^jump 5-B)
+	(make link ^actor human ^start 3-B ^slide 2-A)
+	(make link ^actor human ^start 3-B ^slide 2-C ^jump 1-D)
+	(make link ^actor computer ^start 3-B ^slide 4-C ^jump 5-D)
+	(make link ^actor computer ^start 3-B ^slide 4-A)
+	(make link ^actor human ^start 2-G ^slide 1-F)
+	(make link ^actor human ^start 2-G ^slide 1-H)
+	(make link ^actor computer ^start 2-G ^slide 3-H)
+	(make link ^actor computer ^start 2-G ^slide 3-F ^jump 4-E)
+	(make link ^actor human ^start 2-E ^slide 1-D)
+	(make link ^actor human ^start 2-E ^slide 1-F)
+	(make link ^actor computer ^start 2-E ^slide 3-F ^jump 4-G)
+	(make link ^actor computer ^start 2-E ^slide 3-D ^jump 4-C)
+	(make link ^actor human ^start 2-C ^slide 1-B)
+	(make link ^actor human ^start 2-C ^slide 1-D)
+	(make link ^actor computer ^start 2-C ^slide 3-D ^jump 4-E)
+	(make link ^actor computer ^start 2-C ^slide 3-B ^jump 4-A)
+	(make link ^actor human ^start 2-A ^slide 1-B)
+	(make link ^actor computer ^start 2-A ^slide 3-B ^jump 4-C)
+	(make link ^actor computer ^start 1-H ^slide 2-G ^jump 3-F)
+	(make link ^actor computer ^start 1-F ^slide 2-G ^jump 3-H)
+	(make link ^actor computer ^start 1-F ^slide 2-E ^jump 3-D)
+	(make link ^actor computer ^start 1-D ^slide 2-E ^jump 3-F)
+	(make link ^actor computer ^start 1-D ^slide 2-C ^jump 3-B)
+	(make link ^actor computer ^start 1-B ^slide 2-C ^jump 3-D)
+	(make link ^actor computer ^start 1-B ^slide 2-A)
+)
+
+

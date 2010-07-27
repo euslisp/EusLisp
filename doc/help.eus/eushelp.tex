@@ -1,0 +1,121 @@
+\documentstyle[]{j-article}
+\pagestyle{plain}
+\setlength{\headheight}{0cm}
+\setlength{\headsep}{0cm}
+\setlength{\footheight}{0cm}
+\setlength{\footskip}{0cm}
+\setlength{\topskip}{0mm}
+\setlength{\textwidth}{17cm}
+\setlength{\textheight}{24cm}
+%\setlength{\baselineskip}{0cm}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-0.5cm}
+\begin{document}
+\title{Euslispのオンラインヘルプについて}
+\author{中垣 博文（九州電力）}
+\maketitle
+
+\section{はじめに}
+本文では、Euslispで使用できるEuslispコマンドのオンラインヘルプについて
+説明する。これは、現在Euslispに搭載されている{\bf help}コマンドと同様な方法で
+Euslisp本来のコマンドの説明を出力するためのプログラムである。
+説明用のドキュメントとしては、Euslispのマニュアル($\LaTeX$用のテキスト)から
+命令を探索して、表示を行なう。現在、Euslispのマニュアルは英語版および日本語
+版があるため、そのどちらかを選択することができる。
+
+\section{使用方法}
+このプログラムを使用するためには、{\bf *eusdir*}の変数に設定されているパスのどこかに
+次の３つのファイルを置く。\\
+\begin{tabular}{ll}
+eushelp.l & オンラインヘルプのLispソース\\
+help-sub.o & オンラインヘルプのサブプログラム\\
+euslisp.hlp & Euslispのマニュアルを参照するためのファイルポインタのデータ
+\end{tabular}\\
+euslisp.hlpには、英語版のeuslisp.e.hlpと日本語版のeuslisp.j.hlpの２つがある。
+現在デフォルトとしては、日本語版が設定されている。
+ヘルプのデータ名は、eushelp.lの中の{\bf *help-file*}変数を変更することにより
+変えることができる。
+
+その後、euslisp上からeushelp.lをロードすれば、次節に示すコマンドが使用できる。
+
+\section{ヘルプコマンド}
+
+help {\em \&optional cmd class}
+
+{\em cmd}のヘルプを出力する。
+もし、{\em cmd}を指定していない場合、このヘルプの
+使用方法が表示される。
+{\em cmd}がメソッドの場合、{\em class}の指定が必要である。
+もし、{\em class}を指定しなかった場合、そのメソッドを持つクラスの一覧が表示される。
+{\em cmd}に対応する命令が見つかった場合、その命令のヘルプを出力するが、
+見つからなかった場合、{\bf apropos}を呼び出して似た名前の命令を出力する。
+
+{\setlength{\baselineskip}{2mm}
+\begin{verbatim}
+2.eus$ help 'coordinates
+NAME
+     coordinates
+TYPE
+     class
+SUPER-CLASS
+     propertied-object
+SLOTS
+     (pos :type float-vector
+      rot :type array)
+DESCRIPTION
+     位置ベクトルと3x3の回転行列の組で座標系を定義する。
+nil
+3.eus$
+\end{verbatim}
+}
+
+help-method {\em class}
+
+{\em class}で指定されるクラスの全てのメソッドを表示する。
+{\tt (help-method 'xwindow)}
+
+\section{euslisp.hlpの作成方法}
+euslisp.hlpは、makehelp.lによって作成することができる。実行は簡単で、
+make-helpあるいはmake-jhelpを入力すれば良い。
+
+ただし、ドキュメントの置いてあるデイレクトリは、英語版で{\tt /usr/local/eus/doc/latex}、
+日本語版で\\{\tt /net/atom/homde0/nakagaki/eus/latex}になっている。異なる場所の
+ドキュメントを参照したい場合、{\bf *eus-tex-dir*}あるいは{\bf *eus-jtex-dir*}の
+設定を変更すれば良い。
+
+参照するドキュメントも、{\bf *eus-tex-list*}と{\bf *eus-jtex-list*}に設定されているので
+独自のドキュメントを追加したい場合、このリストにそのファイル名を追加すれば良い。
+
+また、{\bf *help-file*}変数を変更することにより、出力するファイルの名前を変更することができる。
+
+\section{配布場所}
+プログラム類については，/net/etlcom/home1/nakagaki/eushelp.tazというファイルの中に
+tarとgzipを用いて圧縮して納められている。次のようにして展開する。
+\begin{verbatim}
+cat eushelp.taz | gzip -d | tar -xvf -
+\end{verbatim}
+このコマンドにより，実行したディレクトリの中にhelpというディレクトリを作成し，そのdemoディレクトリの中にプログラム
+が展開される。
+このhelpディレクトリに展開されているプログラムは，以下の通りである。\\
+\begin{tabular}{ll}
+eushelp.l & オンラインヘルプのLispソースプログラム\\
+help-sub.o & オンラインヘルプのサブプログラム\\
+help-sub.c & help-sub.oのCのソースプログラム\\
+makehelp.l & euslisp.hlpを作成するためのLispソースプログラム\\
+euslisp.hlp & Euslispのマニュアルを参照するためのファイルポインタのデータ\\
+euslisp.e.hlp & euslisp.hlpの英語版\\
+euslisp.j.hlp& euslilsp.hlpの日本語版\\
+eushelp.tex & このドキュメント\\
+README & \\
+\end{tabular}
+
+\section{その他}
+プログラムのバグなどを発見された場合，すみやかに下記のメールアドレスまで連絡をお願いします。
+また，使用方法等不明な点についても下記のメールアドレスで受け付けます。
+\begin{center}
+九州電力(株) 配電部 工法技術開発\\
+中垣 博文\\
+nakagaki@etl.go.jp
+\end{center}
+\end{document}
