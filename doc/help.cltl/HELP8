@@ -1,0 +1,70 @@
+(++ variable-documentation "
+The last-but-one top-level form.")
+(+++ variable-documentation "
+The last-but-two top-level form.")
+(and function-documentation "
+Syntax: (and {form}*)
+Evaluates FORMs in order.  If any FORM evaluates to NIL, returns immediately
+with the value NIL.  Otherwise, returns all values of the last FORM.")
+(append function-documentation "
+Args: (&rest lists)
+Constructs and returns a new list by concatenating the args.")
+(char-not-lessp function-documentation "
+Args: (char &rest more-chars)
+Returns T if the character codes of CHARs are in non-increasing order; NIL
+otherwise.  For lower-case characters, codes of corresponding upper-case
+characters are used.")
+(cond function-documentation "
+Syntax: (cond {(test {form}*)}*)
+Evaluates TESTs in order until one evaluates to non-NIL.  Then evaluates FORMs
+in order that follow the TEST and returns all values of the last FORM.  If no
+forms follow the TEST, then returns the value of the TEST.  Returns NIL, if no
+TESTs evaluates to non-NIL.")
+(float-sign function-documentation "
+Args: (float1 &optional (float2 (float 1 float1)))
+Returns a float with the same sign as FLOAT1 and with the same absolute value
+as FLOAT2.")
+(fround function-documentation "
+Args: (number &optional (divisor 1))
+Same as ROUND, but returns a float as the first value.")
+(get-properties function-documentation "
+Args: (plist list)
+Searches PLIST for a property that is EQ to one of the members of LIST.
+Returns three values.  If such a property if found, returns the property, the
+value of the property, and the rest of LIST.  If not, returns three NILs.")
+(lognand function-documentation "
+Args: (integer1 integer2)
+Equivalent to (LOGNOT (LOGAND INTEGER1 INTEGER2)).")
+(makunbound function-documentation "
+Args: (symbol)
+Makes the global variable named SYMBOL have no value.  Returns SYMBOL.")
+(most-positive-short-float variable-documentation "
+The largest positive short-float.")
+(multiple-value-call function-documentation "
+Syntax: (multiple-value-call function-form {form}*)
+Evaluates FUNCTION-FORM, whose value must be a function.  Then evaluates FORMs
+and applies the function to all values of FORMs.  Unlike FUNCALL, all values
+of each FORM are used as arguments.  Returns all values of the function.")
+(revappend function-documentation "
+Args: (x y)
+Equivalent to (APPEND (REVERSE X) Y)")
+(second function-documentation "
+Args: (x)
+Equivalent to CADR.")
+(simple-string-p function-documentation "
+Args: (x)
+Returns T if X is a simple-string; NIL otherwise.")
+(simple-vector-p function-documentation "
+Args: (x)
+Returns T if X is a simple-vector; NIL otherwise.")
+(software-version function-documentation "
+Args: ()
+Returns, as a string, the version of the software under which KCL runs.")
+(string-equal function-documentation "
+Args: (string1 string2
+       &key (start1 0) (end1 (length string1))
+            (start2 0) (end2 (length string2)))
+Returns T if STRING1 and STRING2 are character-wise CHAR-EQUAL; NIL otherwise.")
+(terpri function-documentation "
+Args: (&optional (stream *standard-output*))
+Outputs a newline character.")

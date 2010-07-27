@@ -1,0 +1,189 @@
+% regexp
+% postgres
+% jpeg
+% sound
+% http, httpcgi
+% fast CGI
+
+
+
+\section{Sound}
+
+\section{HTTP client}
+
+\classdesc{URL-pathname}{pathname}{server port protocol}{
+extends pathname to allow URL notation.}
+
+\funcdesc{url-pathname}{
+}
+
+\fundesc{read-http}{url &key (timeout 10) (retry 5))}
+{makes a socket connection to the designated url, and
+read the html document.
+The result is a list of tags and plain strings.
+HTML tags are converted as lists consisting of the tag-name
+and argument lists.
+For example, the following html document,
+\begin{verbatim}
+<body bgcolor=#ffa080>
+<h1> EusLisp Title</h1>
+<li> item1 </li>
+<a href="http://www.etl.go.jp/~matsui/eus/euslisp.html"> euslisp</a>
+</body>
+\end{verbatim}
+results in the following list.
+Note that tags are represented as lists, in which
+the directive is represented as a symbol
+followed by symbols or strings.
+Whether an argument is represented as symbol or string
+reflects how the original argument is described.
+
+\begin{verbatim}
+("HTTP/1.1 200 OK"
+ "Date: Sun, 21 May 2000 11:47:00 GMT"
+ "Server: Apache/1.3.9 (Unix)"
+ "Last-Modified: Sun, 21 May 2000 11:19:35 GMT"
+ "ETag: \"4f014-c7-3927c647\""
+ "Accept-Ranges: bytes"
+ "Content-Length: 199"
+ "Content-Type: text/html"
+ (head) (title) " Toshihiro Matsui on t570" (/title) (/head)
+ (body bgcolor |#FFA080|)
+ (h1) " Title Line" (/h1)
+ (li) " item1 " (/li)
+ (a href "http://www.etl.go.jp/~matsui/eus/euslisp.html")
+ " euslisp"
+ (/a)
+ (/body))
+\end{verbatim}
+
+\fundesc{extract-html}{tag html-list}{
+returns a list of strings (and tags) sandwitched by tag and /tag.}
+
+\fundesc{remove-html-tags}{html-list}{
+removes tags from the html-list leaving only texts (strings).}
+
+\section{HTTP CGI Programming}
+
+EusLisp can be used for  CGI programming.
+The following is a typical cgi entry to a EusLisp program.
+This code piece should be placed under .../cgi-bin/ or under
+any directories where ExecCGI is allowed.  The code piece
+must have execute permission by the `nobody' user.
+Note that CGI programs are executed by httpd whose owner is
+nobody. You also have to set up some environment variables in the
+code piece, for nobody does not know anything particular for EusLisp.
+
+\begin{verbatim}
+#! /bin/csh
+setenv EUSDIR /usr/local/eus/
+setenv LD_LIBRARY_PATH /usr/local/eus/Linux/lib
+/usr/local/bin/eus /usr/local/eus/lib/demo/mycgi.l
+\end{verbatim}
+
+mycgi.l is a lisp source program, which should load
+"$EUSDIR/lib/llib/httpcgi.l" at the beginning.
+The CGI program is responsible for obtaining CGI arguments,
+generating an html header, and producing html contents.
+The arguments are obtained by the {\tt get-cgi-query} function,
+and split to a list by the {\tt parse-cgi-query} function.
+The parsed list contains pairs of argument-name and argument-value.
+For example, if the CGI is invoked by href to
+"/cgi-bin/eus.cgi?user=matsui&age=43",
+the parsed list gives ((user matsui) (age 43)).
+
+All normal CGI output should go to *cgi-out*.
+Before any html document, a header should be generated
+by the {\tt html-header} function.
+If there is any error message written to *error-output*,
+it appears in the httpd's error-log.
+When the work is done and html document finishes by '</html> tag,
+the process may close the connection (*cgi-out*) and may exit.
+Normal exit of the CGI process usually signals the httpd to
+send the data to http clients.
+
+
+{*cgi-out*} is the output stream to which the generated html document
+should be sent.
+
+\fundesc{gen}{string}{ Outputs the string to *cgi-out* stream,
+which is then forwarded to to the client (browser).}
+
+\fundesc{html}{args ...}{generates args as one string.}
+
+\fundesc{html-table}{lst &key heading (table-option "")}{
+generates an html table.}
+
+\fundesc{get-cgi-query}{}{gets the argument to this CGI program.
+First, the REQUEST_METHOD environment variable is looked up, and
+the POST/GET method is determined. The query string is obtained
+from the QUERY_STRING environment variable or from the standard input.
+Anyways, the result is returned in one string.}
+
+\fundesc{parse-http-query}{query-string}
+
+\fundesc{html-header}{}{generates the html header, 
+usually a simple string of two lines,
+"Content-type: text/html~%~%".}
+
+\fundesc{qval}{arg query}{
+arg (symbol) is searched in the query list,
+and the value is returned if found.
+The result is converted to euc encoding from sjis encoding.}
+
+\subsection{Fast-CGI}
+
+Whereas CGI is a convenient method to produce dynamic document on
+the server side, it is not the very best choice due to a performance reason:
+the cgi process must be spawned everytime a request arrives, and the
+process invocation time is not always negligible.  In my measurement, 
+the simplest CGI written in EusLisp needs 0.3 sec to respond.
+In this sense, EusLisp or any other programming system with rich runtime
+modules is not a very good choice for CGI writing.
+
+Since this invocation load is a common problem for all CGI programs,
+there is a clever work around called Fast-CGI.
+The basic idea of the Fast-CGI is to allow
+CGI processes to keep alive even one CGI request is fulfilled.
+The httpd process communicates with a fast-cgi process via a TCP connection.
+ 
+
+
+
+
+
+
+
+
+
+\subsection{File-name generation}
+
+\funcdesc{digits-string}{n digits &optional (base 10))}
+{generates a string representing the integer, n, with n columns of
+digits.
+Zeros are padded before the number if n is too small to represent
+in digits.}
+
+\funcdesc{sequential-file-name}{head num extension &optional (digits 4))}
+{generates a filename string with an advancing number part.
+This is similar to gentemp, but differs in that an extension can be specified
+and the result is a string.}
+
+\funcdesc{timed-file-name}{head extension &optional (dt (unix:localtime)))}
+{generates a filename string that consists of head, hour, minute, second,
+and extension. For example, (timed-file-name "img" "jpg") generates
+"img191015.jpg" at 7:10:15 pm.}
+
+\funcdesc{dated-file-name}{head extension &optional (dt (unix:localtime)))}
+{generates a filename string formatted as
+"headyymmmdd.extension", where yy is the lower two digits of the year,
+mmm is the abbreviated month name, and dd is the date.}
+
+\subsection{JPEG image compression}
+JPEG image compression is provided by loading eusjpeg.l.
+eusjpeg.l loads libjpeg.so and defines linkage to the compression
+and decompression functions.
+
+\funcdesc{jpeg-compress}{}{}
+\funcdesc{jpeg-decompress}{}{}
+

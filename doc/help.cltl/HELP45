@@ -1,0 +1,95 @@
+(array-dimension-limit variable-documentation "
+The upper bound of the length of an array dimension.")
+(byte-position function-documentation "
+Args: (byte)
+Returns the position part (in KCL, the cdr part) of the byte specifier BYTE.")
+(char< function-documentation "
+Args: (char &rest more-chars)
+Returns T if the character codes of CHARs are in increasing order; NIL
+otherwise.")
+(defla function-documentation "
+Syntax: (defla name lambda-list {decl | doc}* {form}*)
+KCL specific.
+Used to DEFine Lisp Alternative.  For the interpreter, DEFLA is equivalent to
+DEFUN, but the compiler ignores this form.")
+(documentation function-documentation "
+Args: (symbol doc-type)
+Returns the DOC-TYPE doc-string of SYMBOL; NIL if none exists.  Possible doc-
+types are:
+	FUNCTION  (special forms, macros, and functions)
+	VARIABLE  (global variables)
+	TYPE      (type specifiers)
+	STRUCTURE (structures)
+	SETF      (SETF methods)
+All built-in special forms, macros, functions, and variables have their doc-
+strings.")
+(endp function-documentation "
+Args: (x)
+Returns T if X is NIL.  Returns NIL if X is a cons.  Otherwise, signals an
+error.")
+(evalhook function-documentation "
+Args: (form fun1 fun2 &optional (env nil))
+Evaluates FORM with *EVALHOOK* bound to FUN1 and *APPLYHOOK* bound to FUN2,
+and returns all the values.")
+(evenp function-documentation "
+Args: (integer)
+Returns T if INTEGER is an even number; NIL otherwise.")
+(fboundp function-documentation "
+Args: (symbol)
+Returns T if SYMBOL names a special form, a global macro, or a global
+function.  Returns NIL otherwise.")
+(file-position function-documentation "
+Args: (file-stream &optional file-position)
+With one arg, returns the current position of FILE-STREAM's file pointer as a
+non-negative integer.  Returns NIL if the position is unknown.  With two args,
+resets the file pointer and returns T.  Returns NIL if the file pointer cannot
+be reset.  FILE-POSITION may be a non-negative integer, :START, or :END.")
+(functionp function-documentation "
+Args: (x)
+Returns T if X is an object that can be used to specify a function to be
+invoked by function-calling functions such as FUNCALL or APPLY.  Returns NIL
+otherwise.")
+(keywordp function-documentation "
+Args: (x)
+Returns T if X is a symbol that belongs to the KEYWORD package; NIL otherwise.")
+(lambda-parameters-limit variable-documentation "
+The upper bound of the number of parameters specified by a lambda list.
+Ignore this number; there is no such upper bound in KCL.")
+(make-hash-table function-documentation "
+Args: (&key (test 'eql) (size 1024) (rehash-size 1.5) (rehash-threshold 0.7))
+Creates and returns a hash-table.
+TEST specifies which predicate should be used to access hash-table entries.
+It must be EQ, EQL, or EQUAL.  SIZE specifies the number of entries in the
+hash-table.  REHASH-SIZE, if an integer, specifies how many entries should be
+added when the hash-table becomes 'almost full'.  REHASH-SIZE, if a float,
+specifies the ratio of the new size and the old size.  REHASH-THRESHOLD
+specifies when to expand the hash-table.  If an integer, the hash-table is
+expanded when REHASH-THRESHOLD / REHASH-SIZE entries have been used.  If a
+float, the hash-table is expanded when REHASH-THRESHOLD times the whole
+entries have been used.")
+(oddp function-documentation "
+Args: (integer)
+Returns T if INTEGER is an odd number; NIL otherwise.")
+(plusp function-documentation "
+Args: (number)
+Returns T if NUMBER is positive; NIL otherwise.")
+(rationalize function-documentation "
+Args: (number)
+Converts NUMBER into rational approximately and returns the result.")
+(stable-sort function-documentation "
+Args: (sequence test &key (key #'identity))
+Destructively sorts SEQUENCE and returns the result.  TEST should return non-
+NIL if its first argument is to precede its second argument.  For two elements
+X and Y, if both
+	(FUNCALL TEST X Y)
+	(FUNCALL TEST Y X)
+evaluates to NIL, then the order of X and Y are the same as in the original
+SEQUENCE.  See SORT.")
+(standard-char type-documentation "
+A standard-char is a space character (#\\Space), a newline character
+(#\\Newline,) or a character that represents one of the following letters.
+	!  \"  #  $  %  &  '  (  )  *  +  ,  -  .  /  0  1  2  3  4
+	5  6  7  8  9  :  ;  <  =  >  ?  @  A  B  C  D  E  F  G  H
+	I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z  [  \\
+	]  ^  _  `  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p
+	q  r  s  t  u  v  w  x  y  z  {  |  }  ~")

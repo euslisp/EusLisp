@@ -1,0 +1,12 @@
+# subst
+# subst pattern new file1 file2 ...
+#
+
+set a=$1
+set b=$2
+shift; shift
+foreach file($*)
+  sed "s/$a/$b/" $file >$file.$$
+  mv $file.$$ $file
+end
+

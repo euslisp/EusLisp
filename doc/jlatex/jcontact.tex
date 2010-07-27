@@ -1,0 +1,77 @@
+\subsection{\label{Contact}立体の接触状態解析}
+
+この節のメソッドおよび関数は、次のファイルに記述されている。
+{\bf contact/model2const.l, con\-tact/in\-e\-qual\-i\-ties.l, contact/drawconst.l}
+
+\begin{refdesc}
+
+\funcdesc{constrained-motion}{c}{拘束{\em c}を満たしている
+動作のリストを返す。}
+
+\funcdesc{constrained-force}{m}{拘束されている{\bf body}から
+拘束している{\bf body}に加わる力を返す。{\em m}は、{\bf constrained-motion}
+から返される動作のリストである。}
+
+\funcdesc{draw-constraint}{c}{拘束{\em c}を描く。}
+
+\funcdesc{draw-motion}{m a b}{{\em a}が{\em b}に接触しているときに
+取り得る動作を描く。リターンキーを押すことにより描画を始める。}
+\end{refdesc}
+Example\\
+\begin{verbatim}
+;;
+;;      peg in a hole with 6 contact points
+;;
+(in-package "GEOMETRY")
+(load "view")
+(load "../model2const.l" :package "GEOMETRY")
+(load "../inequalities.l" :package "GEOMETRY")
+(load "../drawconst.l" :package "GEOMETRY")
+
+(setq x (make-prism '(#f(50 50 0) #f(50 -50 0) #f(-50 -50 0) #f(-50 50 0))
+                    #f(0 0 200)))
+(setq x1 (copy-object x))
+(send x1 :translate #f(0 0 -100))
+(send x1 :worldcoords)
+(setq a1 (make-prism '(#f(100 100 -150) #f(100 -100 -150)
+                       #f(-100 -100 -150) #f(-100 100 -150))
+                     #f(0 0 150)))
+(setq ana (body- a1 x1))
+(send x :translate #f(0 -18.30127 -18.30127))
+(send x :rotate -0.523599 :x)
+(send x :worldcoords)
+
+(setq c (list (send x :constraint ana)))
+(setq m (constrained-motion c))
+(setq f (constrained-force m))
+
+(hidd x ana)
+(draw-constraint c)
+(draw-motion m)
+\end{verbatim}
+\clearpage
+拘束の例を次の図で示す。図の小さな矢印は，ペグに対する拘束を示す。
+\\
+\begin{figure}[h]
+\epsfile{file=fig/fig-peg-in-hole1.ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-in-hole2.ps,width=7.9cm}\\
+\epsfile{file=fig/fig-peg-in-hole3.ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-in-hole4.ps,width=7.9cm}
+\caption{Constraints for a peg in a hole.}
+\label{fig:peg-in-hole}
+\end{figure}
+\clearpage
+ペグを穴に入れる作業において取り得る動作の例を次の図で示す。
+この例は，上記のプログラムと一致している。
+\begin{figure}[h]
+\begin{center}
+\epsfile{file=fig/fig-peg-naname-m1.ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-naname-m2.ps,width=7.9cm}\\
+\epsfile{file=fig/fig-peg-naname-m3.ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-naname-m4.ps,width=7.9cm}
+\end{center}
+\caption{Possible motions of a peg in a hole}
+\label{fig:peg-in-a-hole}
+\end{figure}
+
+\clearpage

@@ -1,0 +1,327 @@
+\section{オブジェクト指向プログラミング}
+\markright{\arabic{section}. オブジェクト指向プログラミング}
+
+オブジェクトの構造と動作は、クラスの中に記述されている。
+それらは、{\bf defclass}マクロや{\bf defmethod}特殊書式により定義されている。
+{\bf defclass}は、クラスの名前・そのスーパークラス・スロット変数名とオプションとして
+任意の型およびメッセージの前方への送信を定義する。
+{\bf defmethod}は、メッセージが送られてきたとき呼び出される
+メソッドを定義する。
+クラス定義は、symbolの特殊値として割り当てられる。
+{\bf クラス}は、Common Lispの{\bf sutructure}のcounter部分と考えることができる。
+スロットアクセス関数と{\bf setf}メソッドは、{\bf defclass}によってそれぞれの
+スロットに自動的に定義される。
+
+大部分のクラスは、内部クラス{\bf metaclass}から派生している。
+{\bf metaclass}のサブクラスであるクラス{\bf vector-class}
+はベクトルのためのメタクラスである。
+もし、class-variablesやclass-methodsを使いたいときは、
+{\bf metaclass}のサブクラスとして自分独自のメタクラスを作り、
+メタクラスの名前を{\tt :metaclass}のキーワードで{\bf defclass}に与えればよい。
+
+ベクトルは、その他のrecord-likeオブジェクトと違っている。
+なぜなら、ベクトルのインスタンスは、任意の数の要素を持っているが、
+record-likeオブジェクトは固定数のスロットを持っている。
+EusLispのオブジェクトは、record-likeオブジェクトかまたはベクトルであって、
+両方同時ではない。
+
+要素の型が決められているかまたは要素が入れられないベクトルも
+{\bf defclass}によって定義することができる。
+次の例の中で、クラス{\tt intvec5}は５つのinteger要素を持つクラス
+として定義されている。
+自動型判定と型変換は、要素がインタープリタによってアクセスされたとき
+実施される。
+正しい宣言でコンパイルされたとき、高速なアクセスコードが生成される。
+
+\begin{verbatim}
+(defclass intvec5 :super vector :element-type :integer :size 5)
+(setq x (instantiate intvec5))  --> #i(0 0 0 0 0)
+\end{verbatim}
+
+メッセージがオブジェクトに送られたとき、
+一致するメッセージを最初そのオブジェクトのクラスから探し、次にそのスーパークラスから探して、
+スーパークラスが尽きるまで探す。
+もし、メソッドが定義されてなかったならば、
+前方のリストが探される。
+この前方探索は、疑似多重継承によって作られる。
+もし、探索が失敗したときは、{\tt :nomethod}というメソッド名が探され、
+メソッドは、全ての引数のリストと一緒に呼び出される。
+次の例の中で、メッセージ{\tt :telephone}と{\tt :mail}は{\tt person}
+という型のオブジェクトスロット{\tt secretary}に送られる。
+そして、メッセージ{\tt go-home}はスロット{\tt chauffeur}に送られる。
+
+\begin{verbatim}
+(defclass president :super object
+                    :slots ((name :type string)
+                            (age  :type :integer)
+                            (secretary  :type person
+                                        :forward (:telephone :mail))
+                            (chauffeur  :forward (:go-home))))
+\end{verbatim}
+
+メソッドにおいて、2つのローカル変数（{\bf class}と{\bf self}）
+が使用可能となる。
+これらの変数は変更すべきでない。
+もし、変更したならば、システムから供給された変数は隠され、
+{\bf send-super}と{\bf send self}は正しい動作をしない。
+
+
+\subsection{クラスとメソッド}
+
+\begin{refdesc}
+
+\longdescription{defclass}
+%{classname \&key \= :super object \hspace{85mm} [マクロ] \\
+{classname \&key \= :super object \` [マクロ] \\
+\> :slots (\{var $|$ (var [:type type] [:forward selectors])\}*) \\
+\> :metaclass metaclass \\
+\> :element-type t \\
+\> :size -1\\}
+{クラスを生成または再定義する。
+異なったスーパークラスやスロットを持つクラスに再定義したとき、
+メソッドが新しいスロット配置を仮定するため、
+以前のクラスを継承する古いオブジェクトは予想できない振舞いをする。}
+
+\specialdesc{defmethod}{classname \{(selector lambda-list . body)\}*}{
+{\em classname}の1つ以上のメソッドを定義する。
+それぞれの{\em selector}は、キーワードsymbolでなければならない。}
+
+\macdesc{defclassmethod}{classname \{(selector lambda-list . body)\}*}
+
+\funcdesc{classp}{object}{{\em object}がクラスオブジェクトのときTを返す。
+そのオブジェクトは、クラス{\bf metaclass}かそのサブクラスの
+インスタンスである。}
+
+\funcdesc{subclassp}{class super}{
+{\em class}が{\em super}のサブクラスであることを検査する。}
+
+\funcdesc{vector-class-p}{x}{
+{\em x}が、{\bf vector-class}のインスタンスであるとき、Tを返す。}
+
+\funcdesc{delete-method}{class method-name}{
+{\em method-name}のメソッド定義を{\em class}から除く。}
+
+\funcdesc{class-hierarchy}{class}{
+{\em class}の下の継承構造を表示する。}
+
+\funcdesc{system:list-all-classes}{}{
+今まで定義されたクラスを全てリストアップする。}
+
+\funcdesc{system:find-method}{object selector}{
+{\em selector}に記述されたメソッドを{\em object}のクラスおよび
+そのスーパークラスの中から見つける。
+{\em object}が、{\em selector}に応じることができるかどうかを
+知るために使用される。}
+
+\funcdesc{system:method-cache}{\&optional flag}{
+メソッドキャッシュのヒット率を調査し、
+ヒットとミスの2つの数値のリストを返す。
+もし{\em flag}がNILのとき、メソッドキャッシュは無効になる。
+もしnon-NILの{\em flag}が与えられたとき、メソッドキャッシュは初期化され
+キャッシュ可能になる。}
+
+\end{refdesc}
+
+\subsection{メッセージ送信}
+\begin{refdesc}
+
+\funcdesc{send}{object selector \{arg\}*}{
+{\em object}に{\em selector}と{\em arg}で構成されるメッセージを送信する。
+{\em object}は、何でもよいが数値はいけない。
+{\em selector}はキーワードとして評価されなければならない。}
+
+\funcdesc{send-message}{target search selector \{arg\}*}{
+{\bf send-super}を実行するための低レベル命令である。}
+
+\macrodesc{send*}{object selector \&rest msg-list}{
+{\bf send*}は、引数のリストに{\bf send-message}を適用する。
+{\bf send}と{\bf send*}の関係は、
+{\bf funcall}と{\bf apply}あるいは{\bf list}と{\bf list*}の関係に似ている。}
+
+\funcdesc{send-all}{receivers selector \&rest mesg}{
+全ての{\em receivers}に同じメッセージを送信し、結果をリストとして集める。}
+
+\macrodesc{send-super}{selector \&rest msgs}{
+{\em msgs}を{\tt self}に送信するが、
+メソッドが定義されているクラスのスーパークラスでの
+メソッドを探し始める。
+メソッドの外の{\bf send-super}は、エラーとなる（すなわち、メソッド内で
+なければならない）。}
+
+\macrodesc{send-super*}{selector \&rest msg-list}{
+{\bf send-super*}は、{\bf send-super}のapply版である。}
+
+\end{refdesc}
+
+\subsection{インスタンス管理}
+
+\begin{refdesc}
+
+\funcdesc{instantiate}{class \&optional size}{
+{\em class}から新しいオブジェクトを作る低レベル命令である。
+もし{\em class}が{\bf vector-class}ならば、{\em size}がなければならない。}
+
+\macrodesc{instance}{class \&rest message}{
+インスタンスが作られ、そこに{\em message}が送られる。}
+
+\funcdesc{make-instance}{class \&rest var-val-pairs}{
+{\em class}のインスタンスを作成し、スロット変数を
+{\em var-val-pairs}のように設定する。
+例えば、{\tt (make-instance cons :car 1 :cdr 2)}
+は、{\tt (cons 1 2)}と同等である。}
+
+\funcdesc{copy-object}{object}{
+{\bf copy-object}関数は、参照トポロジー（再帰参照でも構わない）を保ったまま
+コピーするために使用する。
+{\bf copy-object}は、独自性の保存に触れないsymbolやパッケージを除いて、
+{\em object}からアクセス可能などんなオブジェクトもコピーする。
+{\bf copy-object}は、オブジェクトの中の全ての参照を2度妨害する。
+1度が、新しいオブジェクトを作り既にコピーされたオブジェクトのオリジナルに
+マークを付けるとき、そしてマークを消すときにもう1度。
+この2段階の処理は、{\bf copy-object}を{\bf copy-seq}よりも遅くする。
+もし順番にコピーをしたいならば、
+{\bf copy-seq}か{\bf copy-tree}を使用することを薦める。}
+
+\funcdesc{become}{object class}{
+{\em object}のクラスを{\em class}に変更する。
+古いクラスと新しいクラス両方のスロット構造は、一致しなければならない。
+普通、２要素ベクトル間のクラス変更にのみ安全に使用することができる。
+例えば、整数ベクトルからビットベクトルへの変更。}
+
+\funcdesc{replace-object}{dest src}{
+{\em dest}は、{\em src}のサブクラスのインスタンスでなければならない。}
+
+\funcdesc{class}{object}{
+{\em object}のクラスオブジェクトを返す。
+クラス名を得るために、クラスオブジェクトに{\tt :name}メッセージを送る。}
+
+\funcdesc{derivedp}{object class}{
+{\bf derivedp}は、{\em object}が{\em class}またはそのサブクラスから
+インスタンス化されているかどうかを判定する。
+{\bf subclassp}と{\bf derivedp}関数は、クラス継承のなかを探索できない。
+したがって、一定時間内に型のチェックがいつも終了する。}
+
+\funcdesc{slot}{object class (index $|$ slot-name)}{
+スロット値の名前かインデックスを返す。}
+
+\funcdesc{setslot}{object class (index $|$ slot-name) value}{
+{\bf setslot}は、内部処理関数でユーザーが使用できない。
+代りに、{\bf setf}と{\bf slot}の組み合せを使用する。}
+
+\end{refdesc}
+
+\subsection{基本クラス}
+
+\begin{refdesc}
+\classdesc{object}{}
+{}
+{objectは、最も基本のクラスである。それは、クラス継承の最上位に位置する。
+スロット変数が定義されていないため、{\bf object}はインスタンスを作るために
+使用しない。}
+
+\methoddesc{:prin1}{\&optional stream \&rest mesg}{
+標準の再読み込可能なオブジェクトフォーマットのなかにあるオブジェクトを
+表示する。
+そのクラス名とアドレスは、角括弧でくくられ、符号を前に置く。
+どのオブジェクトのサブクラスも{\em mesg}文字列で説明するマクロ{\bf send-super}
+を使ってもっと広範囲な情報と一緒にそれ自身を印刷するのにこの方法を
+使用することができる。
+オブジェクトは、もし{\tt \#$<$}で始まるなら、再読み込み可能である。
+そのクラス名・正確なアドレス・どのLispでも読み込可能な情報・\verb+>+をあとに
+従えて。
+全てのデータオブジェクトは数値を除いて、{\bf object}を継承している。
+この構文で書式の表示が得られる。（symbolや文字列でも構わない）
+この構文で述べることは、symbolに{\bf setq}し忘れたデータオブジェクトを
+把握することができる。
+ただし、表示された後にガーベージコレクションが起こらない限りである。
+}
+
+\methoddesc{:slots}{}{
+変数名のリストおよびオブジェクトの全てのスロットと対になる値を返す。
+このリストに{\bf assoc}を適用することにより、スロットの詳細値が得られる。
+しかしながら、それらを変更することはできない。}
+
+\classdesc{propertied-object}{object}
+{plist}
+{property-listを持つオブジェクトを定義する。
+他のCommon Lispと違って、
+EusLispは、たとえ、symbolでなかったとしても、property-listを持つ
+{\bf propertied-object}を継承するどんなオブジェクトも
+許可する。}
+
+\methoddesc{:plist}{\&optional plist}{
+もし{\em plist}が明記されるならば、このオブジェクトの{\tt plist}スロットに
+設定する。そのため、以前の{\tt plist}の値はなくなる。
+{\em plist}は、
+\verb+((indicator1 . value1) (indicator2 . value2) ...)+の書式にすべきである。
+それぞれの\verb+indicator+は、{\bf eq}関数で等価性をテストされたどのような
+lisp書式も可能である。
+symbolが{\tt indicator}として用いられたとき、内部パッケージを広く実行される
+等価性のチェックを確実にするためにキーワードの使用を推薦する。
+{\bf :plist}は、主な{\tt plist}を返す。}
+\methoddesc{:get}{indicator}{
+{\tt plist}のなかで{\em indicator}と結び付く値を返す。
+\verb+(send x :get :y) == (cdr (assoc :y (send x :plist)))+}
+\methoddesc{:put}{indicator value}{
+{\tt plist}のなかで、{\em value}と{\em indicator}を結び付ける。}
+\methoddesc{:remprop}{indicator}{
+{\tt plist}から{\em indicator}とvalueの組を削除する。
+さらに、{\bf :get}を試すとvalueとしてNILを返す。}
+\methoddesc{:name}{\&optional name}{
+{\tt plist}のなかの{\tt :name}特性を定義し、取り出す。
+この特性は、表示のために使用される。}
+\methoddesc{:prin1}{\&optional stream \&rest mesg}{
+再読み込み可能な書式のオブジェクトを表示する。
+もしオブジェクトが{\tt :name}特性を持っているならば、
+オブジェクトのアドレスの後に特性を表示する。}
+
+\classdesc{metaclass}{propertied-object}
+{name super cix vars types forwards methods}
+{{\bf metaclass}は、複数クラスを定義する。独自のクラス変数を持つ複数クラスは、
+それらのスーパークラスとして{\bf metaclass}を定義しなければならない。}
+\methoddesc{:new}{}
+{このクラスのインスタンスを生成し、全てのスロットをNILにした後、
+それを返す。}
+\methoddesc{:super}{}{
+このクラスのスーパークラスオブジェクトを返す。
+一旦クラス定義したスーパークラスを変更することはできない。}
+\methoddesc{:methods}{}{
+このクラスで定義された全てのメソッドのリストを返す。
+そのリストは、メソッド名とパラメータと本体を組みにしたリスト
+によって構成されたリストである。}
+\methoddesc{:method}{name}{
+{\em name}で関連づけられたメソッド定義を返す。
+もし見つからなければ、NILを返す。}
+\methoddesc{:method-names}{subname}{
+メソッド名のなかに{\em subname}を含む全てのメソッド名のリストを返す。
+メソッドは、このクラスのなかのみ探索される。}
+\methoddesc{:all-methods}{}{
+このクラスとその全てのスーパークラスのなかで定義されているすべてのメソッドの
+リストを返す。
+言い替えると、このクラスのインスタンスは、これらのメソッドを
+実行することができる。}
+\methoddesc{:all-method-names}{subname}{
+{\em subname}と一致する全てのメソッド名のリストを返す。
+その探索は、このクラスから{\bf object}まで実行される。}
+\methoddesc{:slots}{}{
+スロット名のベクトルを返す。}
+\methoddesc{:name}{}{
+このクラスのsymbol名を返す。}
+\methoddesc{:cid}{}{
+このクラスと同一であることを示すために、このクラスのインスタンスすべてに
+割り当てられた整数を返す。
+これは、システム内部のクラステーブルへのインデックスで、
+このクラスの下に新しいサブクラスが定義されたとき、変更される。}
+\methoddesc{:subclasses}{}{
+このクラスの直接のサブクラスのリストを返す。}
+\methoddesc{:hierarchy}{}{
+このクラスの下に定義された全てのサブクラスのリストを返す。
+全てのクラス継承の広範囲なリストを得るためには、{\bf class-hierarchy}関数
+を呼び出す。}
+\funcdesc{find-method}{object selector}{
+{\em object}のクラスやそのスーパークラスのなかで、{\em selector}と一致する
+メソッドを探索する。
+この関数は、{\em object}のクラスが不確かで、その{\em object}が
+エラーなしにメッセージを受け取ってくれるかどうかを知りたい時に役立つ。}
+\end{refdesc}
+\newpage

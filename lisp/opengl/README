@@ -1,0 +1,34 @@
+$Header: /home/cvs/euslisp/opengl/README,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $
+
+* eusgl environment setup *
+
+to run:
+
+	if (! $?EUSDIR) then
+	  setenv EUSDIR /usr/local/eus
+	endif
+	
+	set path = ($EUSDIR/IRIX/bin $path)
+	
+	if (! $?LD_LIBRARY_PATH) then
+	  setenv LD_LIBRARY_PATH "/lib:/usr/lib:/usr/local/lib:/usr/lib/X11"
+	endif
+	
+	setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${EUSDIR}/IRIX/lib"
+	
+	#libaux -- if under IRIX:
+	setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/share/src/OpenGL/libaux
+
+	#libaux -- if under Mesa
+	setenv LD_LIBRARY_PATH ${WHERE_YOU_HAVE_INSTALLED_MESA}:$LD_LIBRARY_PATH
+	setenv MESA_RGB_VISUAL "PseudoColor 8"  # 8-bit PseudoColor 
+
+start:
+
+	% eusgl
+
+then try:
+
+	eusgl$ (load "/usr/local/eus/lisp/opengl/src/test.l")
+	eusgl$ (pos2)
+	eusgl$ (test-r)

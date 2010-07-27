@@ -1,0 +1,24 @@
+# $Header: /home/cvs/euslisp/opengl/src/README.Mesa,v 1.1.1.1 2003/11/20 07:46:32 eus Exp $
+
+● X 端末（＋Mesa）を使って、動かす場合
+
+	○ Mesa のコンパイルは、irix or TGS のインクルード・ファイルを
+	   使って行なう。
+
+	○ lib/libGL.so, lib/libGLU.so, lib/libtk.so, lib/libaux.so という
+	   シンボリックリンクをそれぞれ、lib/libMesaGL.so, lib/libMesaGLU.so,
+	   lib/libMesatk.so, lib/libMesaaux.so を指すよう、作成する。
+
+	○ 環境変数 LD_LIBRARY_PATH 中に Mesa のシェアードライブラリの
+	   ディレクトリが含まれるようにする。
+		(MesaGL を /usr/local/lib/Mesa にインストールした場合：)
+
+		setenv LD_LIBRARY /usr/local/lib/Mesa:$LD_LIBRARY_PATH
+
+	○ 必要な Mesa のセットアップをする（Cf. Mesa/README）。
+
+		setenv MESA_RGB_VISUAL "PseudoColor 8"  # 8-bit PseudoColor 
+
+	○ DISPLAY 環境変数をセットする。
+
+	○ eusgl を立ち上げる。

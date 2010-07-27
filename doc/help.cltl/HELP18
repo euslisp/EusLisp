@@ -1,0 +1,53 @@
+(char-downcase function-documentation "
+Args: (char)
+Returns the lower-case character corresponding to CHAR, if CHAR is upper-case.
+Otherwise, returns CHAR.")
+(compiler:compile-file function-documentation "
+Args: (input-pathname)
+Compiles the file specified by INPUT-PATHNAME and generates a fasl file
+specified by OUTPUT-FILE.  If the filetype is not specified in INPUT-PATHNAME,
+then \".l\" is used as the default file type for the source file.
+BY the compilation of lisp source, C source program, C header, quote vector
+and object files are generated, each has suffix .c, .h, .o and .q.")
+(file-length function-documentation "
+Args: (file-stream)
+Returns the length of the specified FILE-STREAM.  Returns NIL if the length is
+unknown.")
+(find-package function-documentation "
+Args: (name)
+Returns the package whose package name or nickname is NAME.  Returns NIL if no
+such package exists.  NAME may be a string or a symbol.")
+(get-setf-method function-documentation "
+Args: (place)
+Returns the 'five gangs' (see DEFINE-SETF-METHOD) for PLACE as five values.
+Checks if the third gang is a single-element list.")
+(list-length function-documentation "
+Args: (list)
+Returns the length of LIST.  Returns NIL if LIST is circular.")
+(load function-documentation "
+Args: (filespec
+       &key (verbose *load-verbose*) (print nil) (if-does-not-exist :error))
+Loads the contents of the specified file into KCL.
+If the filetype is not specified, KCL first tries to load the fasl file with
+filetype \".fasl\", then tries to load the source file with filetype \".lsp\",
+and then tries to load the source file with no filetype.
+FILESPEC may be a symbol, a string, a pathname, or a file stream.  VERBOSE
+specifies whether or not the loader prints a loading message.  PRINT specifies
+whether or not the loader prints the values of the top-level forms.
+IF-DOES-NOT-EXIST specifies the behavior of the loader when the specified file
+is not found.  It may be :ERROR or NIL.")
+(nstring-capitalize function-documentation "
+Args: (string &key (start 0) (end (length string)))
+Destructive STRING-CAPITALIZE.  STRING may be destroyed.")
+(pathname-type function-documentation "
+Args: (filespec)
+Returns the type slot of the pathname specified by FILESPEC.  FILESPEC may be
+a symbol, a string, a pathname, or a file stream.")
+(read function-documentation "
+Args: (&optional (stream *standard-input*)
+                 (eof-error-p t) (eof-value nil) (recursivep nil))
+Reads an object from STREAM and returns the object.")
+(string-char-p function-documentation "
+Args: (char)
+Returns T if CHAR is a string-char, i.e. can be stored in strings; NIL
+otherwise.  In KCL, this function always returns T.")

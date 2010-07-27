@@ -1,0 +1,85 @@
+(** variable-documentation "
+The value of the last-but-one top-level form.")
+(/ function-documentation "
+Args: (number &rest more-numbers)
+Returns the first arg divided by the rest of args.  With one arg, returns
+1/NUMBER.")
+(bignum type-documentation "
+A bignum is an integer that is not a fixnum. There is no bignum in euslisp")
+(character type-documentation "
+A character represents a character that can be handled by the computer.
+Characters have font, bits, and code attributes.  Font and bits attributes
+are always 0 in KCL.  Most versions of KCL uses ASCII code:
+  000 - 037	#\\^@  #\\^A  #^B ... #\\Z  #\\^[  #\\^\\  #\\^]  #\\^^  #\\^_
+		except #\\Tab(011)     #\\Newline(012)     #\\Page(014)
+		       #\\Return(015)  #\\Backspace(031)
+  040 - 057	#\\Space  #\\!  #\\\"  #\\#  #\\$  #\\%  #\\&  #\\'  #\\(  #\\)  #\\*
+		#\\+  #\\,  #\\-  #\\.  #\\/
+  060 - 071	#\\0  #\\1  #\\2  #\\3  #\\4  #\\5  #\\6  #\\7  #\\8  #\\9
+  072 - 100	#\\:  #\\;  #\\<  #\\=  #\\>  #\\?  #\\@
+  101 - 132	#\\A ... #\\Z
+  133 - 140	#\\[  #\\\\  #\\]  #\\^  #\\_  #\\`
+  141 - 172	#\\a ... #\\z
+  173 - 177	#\\{  #\\|  #\\}  #\\~  #\\Rubout
+Some versions of KCL support additional characters to represent Japanese
+character set.")
+(character function-documentation "
+Args: (x)
+Coerces X into a character if possible.  Signals an error if not possible.")
+(copy-readtable function-documentation "
+Args: (&optional (readtable *readtable*) (to-readtable nil))
+Returns a new copy of READTABLE.  If TO-READTABLE is non-NIL, then copies the
+contents of READTABLE into TO-READTABLE and returns TO-READTABLE.")
+(ffloor function-documentation "
+Args: (number &optional (divisor 1))
+Same as FLOOR, but returns a float as the first value.")
+(get-macro-character function-documentation "
+Args: (char &optional (readtable *readtable*))
+Returns the read macro associated with the macro character CHAR in READTABLE.
+Returns the non-terminating-p flag (see READTABLE) as the second value.
+Returns NIL if CHAR is not a macro character.")
+(input-stream-p function-documentation "
+Args: (stream)
+Returns T if STREAM can handle input operations; NIL otherwise.")
+(least-positive-single-float variable-documentation "
+Same as LEAST-POSITIVE-LONG-FLOAT.")
+(lisp-implementation-type function-documentation "
+Args: ()
+Returns the string \"Kyoto Common Lisp\".")
+(logior function-documentation "
+Args: (&rest integers)
+Returns the bit-wise INCLUSIVE OR of the args.")
+(member function-documentation "
+Args: (item list &key (key #'identity) (test #'eql) test-not)
+Searches LIST for an element that is equal to ITEM in the sense of the TEST.
+If found, returns the sublist of LIST that begins with the element.
+Otherwise, returns NIL.")
+(nstring-downcase function-documentation "
+Args: (string &key (start 0) (end (length string)))
+Destructive STRING-DOWNCASE.  STRING may be destroyed.")
+(numerator function-documentation "
+Args: (rational)
+Returns the numerator of RATIONAL as an integer, if RATIONAL is a ratio.
+Returns RATIONAL if it is an integer.")
+(*print-length* variable-documentation "
+Specifies how many elements the KCL printer should print when it prints a
+list.  KCL printer prints all elements if the value of this variable is NIL.")
+(single-float-epsilon variable-documentation "
+Same as LONG-FLOAT-EPSILON.")
+(stream type-documentation "
+A stream is a source of input or a destination of output.  The following kinds
+of streams are supported.
+	file streams
+	string-input streams
+	string-output streams
+	two-way streams
+	echo streams
+	synonym streams
+	concatenated streams
+	broadcast streams
+Basically, file streams are created by OPEN and other kinds of streams are
+created by MAKE-...-STREAM.  See these functions.")
+(get-string-input-stream-index function-documentation "
+Args: (string-input-stream)
+KCL specific.
+Returns the current index of STRING-INPUT-STREAM.")

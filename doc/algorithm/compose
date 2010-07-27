@@ -1,0 +1,99 @@
+\section{接触物体の合成}
+
+\subsection{アルゴリズムの概要}
+2つの物体をbody1, body2とする。
+合成の計算は、次のように進展する。
+\begin{enumerate}
+\item 交差の登録(insert-intersections)
+\item 交差によって区切られた線分からedgeを生成(make-edge-segments)
+\item 交差を面の上でつないで相貫線を生成(make-crossing-edges)
+\item 線分を面ごとにソート
+\item 接触している面の発見(find-contacting-faces)
+\item 重なっている面の発見(find-aligned-faces)
+\item 接触している面の併合(merge-contacting-faces)
+\item 重なっている面の併合(merge-aligned-faces)
+\item 共通の面に由来する線分のリストから閉路を見つけ、面、穴を作る
+(construct-faces)
+\item 面からbodyの生成
+\end{enumerate}
+
+\subsubsection{insert-intersections}
+
+body1のすべてのエッジとbody2のすべての面の交差をintersect1に、
+body2のすべてのエッジとbody1のすべての面の交差をintersects2に記録する。
+intersects[12]の各要素は、以下のようなリスト。
+  (edge	(param1 point1 [face1])
+	(param2 point2 [face2])
+	. . .)
+
+エッジが面とほとんど平行な場合は、交差がないものとみなす。
+平行性は、エッジの端点と面とのplane-distanceを*coplanar-threshold*
+と比較して検査する。
+
+一つのエッジが、その上の一つの点の近傍で二つ以上の面と交差すると
+判定される場合がある。たとえば、円柱の上に円錐が乗っている場合、
+円柱の側面の軸方向のエッジは、その端点において、円錐の底面および
+側面の両方と交差すると判定される可能性がある。これを一つの面に
+絞る方法はいくつか考えられるが、ここでは、最も直角に近い角度で
+交差する面を選び、他を捨てる。
+
+エッジの端点、すなわちparam=0 or 1の点は、たとえ交差がなくても
+intersectsに記録される。これは、エッジセグメントを取り出す作業を
+簡単にするため。また、intlistの各要素は、parameterが0から1に向かって
+小さい順にソートされる。
+
+
+\subsubsection{make-edge-segments}
+
+intersects[12]中の各要素について、エッジのセグメントを切り出す。
+パラメータで区切られたセグメントの中点を求め、それが相手物体の
+内部(inside)か、面上(border)か、外部(outside)かを判定する。
+unionを取る場合は、insideと判定されたセグメントを捨て、border, outside
+のセグメントをedgeオブジェクトとして生成する。結果は、segments[12]
+にリストされる。edgeオブジェクトのpface, nfaceスロットには、便宜的に
+元のエッジのpface, nfaceをコピーしておく。これは、後に面の回りに
+沿ってエッジをトラバースしてサーキット(closed-region)を形成するため。
+
+\subsubsection{body :insidep}
+
+点が物体の内部にあるか外部にあるかの判定には、bodyの:insidepメソッドを
+用いる。:insidepは、物体が凸物体か凹物体かで異なるアルゴリズムを
+実行する。凸の場合、点と物体を構成する各面との符合つき距離を計算する。
+距離が、正で*coplanar-threshold*以上であれば、外部である。距離が
+*coplanar-threshold*の範囲内でほとんどゼロであり、その面の内部にあれば
+borderと判定する。エッジ上にあるか、面上にあるかは判定しない。
+凹の場合、まず、点と面との距離を計算し、*coplanar-threshold*の範囲内で
+接触していればborderと判定する。次に、点からランダムな方向に直線を投射し、
+各面との交差を列挙する。交差の数が奇数であれば内部、偶数であれば外部と
+判定する。
+
+\subsubsection{face :insidep}
+
+面の内外判定は、face, closed-regionの:insidepメソッドが行なう。convexpが
+Tの場合、triangle関数を用いて、点がエッジの同じ側面にあうことを調べる。
+triangleは、3つの点が作る三角形の符合付面積の2倍を返す。この値が、
+エッジの長さに比べて(*epsilon*の範囲内で)ほとんどゼロである場合、
+borderと判定する。凹の場合、点から面の各エッジを見込む角度を、vector-angle
+関数を用いて計算し、その総和を取る。内点ではこの総和が2piになり、
+外点ではゼロになる。あるエッジについて見込み角がpiに近い場合、
+borderと判定する。
+
+\subsubsection{make-crossing-edges}
+intfaces1, intfaces2, firstの三つを引数として受けとる。
+intfaces1は、body1のエッジについてbody2の面との交差をbody1の面毎にリストしたもの、
+intfaces2は、body2のエッジについてbody1の面との交差をbody2の面毎にリストしたものである。
+intfaces1の一つの要素は、次のような内容のリスト。
+
+\begin{verbatim}
+  (face1
+      (original-edge11
+          created-edge111
+             crossing-face11a
+             crossing-face11b
+             location (inside/outside/border)
+             parameter11a
+             parameter11b)
+      . . .)
+\end{verbatim}
+
+

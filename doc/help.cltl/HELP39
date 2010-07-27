@@ -1,0 +1,71 @@
+(bye function-documentation "
+Args: ()
+KCL specific.
+Exits from KCL.  Equivalent to BY.")
+(char-not-equal function-documentation "
+Args: (char &rest more-chars)
+Returns T if no two of CHARs are the same; NIL otherwise.  Lower-case
+characters are regarded the same as the corresponding upper-case characters.")
+(conjugate function-documentation "
+Args: (number)
+Returns the complex conjugate of NUMBER.  Returns NUMBER if it is not a
+complex number.")
+(copy-tree function-documentation "
+Args: (tree)
+Returns a copy of TREE.  Defined as:
+	(defun copy-tree (tree)
+	  (if (atom tree)
+	      tree
+	      (cons (copy-tree (car tree)) (copy-tree (cdr tree)))))")
+(defmacro function-documentation "
+Syntax: (defmacro name defmacro-lambda-list {decl | doc}* {form}*)
+Defines a global macro named by NAME.  The complete syntax of DEFMACRO-LAMBDA-
+LIST is:
+	( [&whole var] [&environment var] . pvar )
+where PVAR may be a symbol,
+	( {pvar}* [&optional {var | (pvar [init [pvar]])}*] . var )
+or
+	( {pvar}*
+	  [&optional {var | (pvar [init [pvar]])}*]
+	  [{&rest | &body} pvar]
+	  [&key {var | ({var | (keyword pvar)} [init [pvar]])}*
+	        [&allow-other-keys]]
+	  [&aux {var | (pvar [init])}*] )
+The doc-string DOC, if supplied, is saved as a FUNCTION doc and can be
+retrieved by (documentation 'NAME 'function).  See LIST for the backquote
+macro useful for defining macros.")
+(delete function-documentation "
+Args: (item sequence
+       &key (key #'identity) (test #'eql) test-not
+            (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Destructive REMOVE.  SEQUENCE may be destroyed.")
+(ftruncate function-documentation "
+Args: (number &optional (divisor 1))
+Same as TRUNCATE, but returns a float as the first value.")
+(integer-length function-documentation "
+Args: (integer)
+Returns the number of \"significant bits\" in the representation of INTEGER.
+With positive arg, returns one plus the position of the most significant bit
+that is 'on'.  With negative arg other than -1, returns one plus the position
+of the most significant bit that is 'off'.  For 0 and -1, returns 0.")
+(least-positive-double-float variable-documentation "
+Same as LEAST-POSITIVE-LONG-FLOAT.")
+(least-positive-short-float variable-documentation "
+The smallest positive short-float.")
+(most-positive-fixnum variable-documentation "
+The largest positive fixnum.  2^31 - 1 in KCL.")
+(package-used-by-list function-documentation "
+Args: (package)
+Returns, as a list, those packages that use PACKAGE.")
+(prin1 function-documentation "
+Args: (object &optional (stream *standard-output*))
+Prints OBJECT in the way that the output can be reread later if possible.
+Returns OBJECT.  Equivalent to (WRITE OBJECT :STREAM STREAM :ESCAPE T).")
+(quote function-documentation "
+Syntax: (quote x) or 'x
+Simply returns X without evaluating it.")
+(t type-documentation "
+The type T is a supertype of every type.  Every object belongs to this type.")
+(t variable-documentation "
+The value of T is T.")

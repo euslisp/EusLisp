@@ -1,0 +1,130 @@
+(* function-documentation "
+Args: (&rest numbers)
+Returns the product of the args.  With no args, returns 1.")
+(* variable-documentation "
+The value of the last top-level form.")
+(array-dimension function-documentation "
+Args: (array n)
+Returns the length of the N-th dimension of ARRAY.")
+(atom type-documentation "
+An atom is an object that is not a cons.")
+(atom function-documentation "
+Args: (x)
+Returns T if X is not a cons; NIL otherwise.")
+(caaddr function-documentation "
+Args: (x)
+Equivalent to (CAR (CAR (CDR (CDR X)))).")
+(cadadr function-documentation "
+Args: (x)
+Equivalent to (CAR (CDR (CAR (CDR X)))).")
+(caddr function-documentation "
+Args: (x)
+Equivalent to (CAR (CDR (CDR X))).")
+(cdaadr function-documentation "
+Args: (x)
+Equivalent to (CDR (CAR (CAR (CDR X)))).")
+(cdadr function-documentation "
+Args: (x)
+Equivalent to (CDR (CAR (CDR X))).")
+(cddddr function-documentation "
+Args: (x)
+Equivalent to (CDR (CDR (CDR (CDR X)))).")
+(cddr function-documentation "
+Args: (x)
+Equivalent to (CDR (CDR X)).")
+(char> function-documentation "
+Args: (char &rest more-chars)
+Returns T if the character codes of CHARs are in decreasing order; NIL
+otherwise.")
+(copy-symbol function-documentation "
+Args: (symbol &optional (flag nil))
+Returns a new uninterned symbol with the same print name as SYMBOL.  If FLAG
+is NIL, the symbol property of the new symbol is empty.  Otherwise, the new
+symbol gets a copy of the property list of SYMBOL.")
+(find-symbol function-documentation "
+Args: (string &optional (package *package*))
+Searches PACKAGE for a symbol whose print name is NAME.  If such a symbol is
+found, then returns the symbol as the first value and returns one of the
+following symbols as the second value.
+	:INTERNAL (internal symbol in PACKAGE)
+	:EXTERNAL (external symbol in PACKAGE)
+	:INHERITED (external symbol of a package that PACKAGE is using)
+If no such symbol is found, returns NIL as the first and second values.")
+(float-digits function-documentation "
+Args: (float)
+Returns the number of radix-B digits used to represent the significand of
+FLOAT, where B is the base number used in the representation of FLOAT.")
+(gbc function-documentation "
+Args: (x)
+KCL specific.
+Starts garbage collection with the specified collection level.  If X is NIL,
+collects only cells.  If X is T, collects everything.")
+(gensym function-documentation "
+Args: (&optional (x nil))
+Creates and returns a new uninterned symbol whose print name begins with some
+prefix (initially \"G\"), followed by a generation number.  The generation
+number is incremented by one at each call to GENSYM.  If X is an integer, it
+becomes the new generation number.  If X is a string, it becomes the new
+prefix.")
+(nthcdr function-documentation "
+Args: (n list)
+Returns the N-th cdr of LIST.  N must be a non-negative integer.")
+(prog* function-documentation "
+Syntax: (prog* ({var | (var [init])}*) {decl}* {tag | statement}*)
+Establishes a NIL block, binds each VAR to the value of INIT (which defaults
+to NIL) sequentially, and executes STATEMENTs.  Returns NIL.")
+(random function-documentation "
+Args: (number &optional (random-state *random-state*))
+Creates and returns a random number by using RANDOM-STATE.  NUMBER must be
+either a positive integer or a positive float.  If NUMBER is a positive
+integer, returns a positive integer less than NUMBER.  If NUMBER is a positive
+float, returns a positive float less than NUMBER in the same float format as
+NUMBER.")
+(*read-suppress* variable-documentation "
+When the value of this variable is non-NIL, the KCL reader parses input
+characters without most of the ordinary processings such as interning.  Used
+to skip over forms.")
+(rem function-documentation "
+Args: (number divisor)
+Returns the second value of (TRUNCATE NUMBER DIVISOR), i.e. the value of
+	(- NUMBER (* (TRUNCATE NUMBER DIVISOR) DIVISOR))")
+(room function-documentation "
+Args: (&optional (x t))
+Displays information about storage allocation in the following format.
+	* for each type class
+		* number of pages so-far allocated for the type class
+		* maximum number of pages for the type class
+		* percentage of used cells to cells so-far allocated
+		* number of times the garbage collector has been called to
+		  collect cells of the type class
+		* implementation types that belongs to the type class
+	* number of pages actually allocated for contiguous blocks
+	* maximum number of pages for contiguous blocks
+	* number of times the garbage collector has been called to collect
+	  contiguous blocks
+	* number of pages in the hole
+	* maximum number of pages for relocatable blocks
+	* number of times the garbage collector has been called to collect
+	  relocatable blocks
+	* total number of pages allocated for cells
+	* total number of pages allocated
+	* number of available pages
+	* number of pages KCL can use.
+The number of times the garbage collector has been called is not shown, if the
+number is zero.  The optional X is simply ignored.")
+(symbol-package function-documentation "
+Args: (symbol)
+Returns the home package of SYMBOL.  Returns NIL if SYMBOL is not interned.")
+(system function-documentation "
+Args: (string)
+KCL/UNIX specific.
+Executes a Shell command as if STRING is an input to the Shell.")
+(argc function-documentation "
+Args: ()
+KCL specific.
+Returns the number of arguments given in the command line that invoked KCL.")
+(chdir function-documentation "
+Args: (filespec)
+KCL/UNIX specific.
+Changes the current working directory to the one specified by FILESPEC.
+FILESPEC may be a symbol, a string, or a pathname.")

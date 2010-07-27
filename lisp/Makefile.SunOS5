@@ -1,0 +1,89 @@
+# makefile for EusLisp on sun4 with SunOS (Solaris)
+#RCSid="@(#)$Id: Makefile.SunOS5,v 1.1.1.1 2003/11/20 07:46:22 eus Exp $"
+#	Copyright (1988) Toshihiro MATSUI, Electrotechnical Laboratory
+#	1989/Oct
+#	1990/Sep Second Tape Distribution
+#########################################################################
+# Customizable section begins
+#########################################################################
+
+ARCH=SunOS5
+
+include Makefile.generic1
+
+THREAD= -DTHREADED
+
+#
+# Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
+#
+#CFLAGS=-D$(MACHINE) -Dbsd4_2
+# For SunOS4.1, add "-DSunOS4_1" in the following CFLAGS definition.
+# add -DSolaris2  -D_REENTRANT 
+#CFLAGS=-D$(MACHINE)  -DSunOS4_1 -DGCC \
+#	-I/usr/share/include/X11 -I$(EUSDIR)/include
+CFLAGS=-D$(MACHINE) -DSolaris2  -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+	-xcg92 -xstrconst \
+	-I/usr/include/X11 -I$(EUSDIR)/include $(THREAD)
+PIC=-k pic
+
+# Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
+# /usr/ucb/cc cannot compile because of its incapability of recognizing
+# prototype declarations.
+CC=cc
+# CC=gcc
+LD=cc
+
+#XVERSION=X_V11R2
+#XVERSION=X_V11R3
+XVERSION=X_V11R4
+
+#
+# L I B R A R I E S
+# Three kinds of libraries are needed to build eus.
+# 1. RAWLIB: unix libraries needed to make eus0-eus2
+# 2. XLIB: X window libraries
+#    When you use a window toolkit, you may need to override the 'read'
+#    function in libc.a with a specific window library such as libXview.a.
+# 3. EUSLIB: euslisp functions that cannot be linked in eus because of
+#    'GLOBAL OFFSET TABLE OVERFLOW', that are xwindow interface functions.
+# You may add any optional user-supplied library in EUSLIB.
+# On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
+
+# Solaris2
+RAWLIB=-lsocket -ldl -lnsl -lelf -lthread -lm
+
+# Solaris2
+XLIB= -L/usr/openwin/lib -lX11 
+
+# Solaris2
+EUSLIB=-R$(ADLIBDIR):/usr/local/lib:/usr/openwin/lib \
+ -L$(ADLIBDIR) -L/usr/local/lib
+
+# for openGL or MESA
+# GLINCLUDE=-I/opt/Mesa/include/
+GLINCLUDE=-I/fs/local/Mesa-2.3/include/
+# There sould be symbolic links
+# such as SunOS5/lib/libGL.so ->/opt/Mesa/lib/libMesaGL.so
+#GLLIB= -ltk -lGLU -lGL -lXext -leusgl
+GLLIB=  -lGLU -lGL -lXext -leusgl
+
+# If you don't like optimization, comment out the next line.
+OFLAGS=-O
+# link-editor's default flags
+#LDFLAGS= -dy -Bdynamic 
+SOFLAGS= -G
+
+#LDFLAGS= -dy 
+LDFLAGS= 
+
+MAPOPTION= -Wl,-m 
+MTCOBJECTS=  $(OBJDIR)/mthread.o
+MTOBJECTS=  $(OBJDIR)/par.o  \
+	  $(OBJDIR)/cyclic.o 
+
+#################################################################
+# end of the customizable section
+################################################################
+
+include Makefile.generic2
+

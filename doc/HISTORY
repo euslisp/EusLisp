@@ -1,0 +1,485 @@
+;;; EUSLISP revision history
+;;;
+1986-April
+	Basic memory management mechanism using fibonacci buddy method
+	is implemented. New efficient pointer tag encoding has
+	been examined.
+1986-May
+	The first version of EUSLISP, with a simple reader/printer and
+	eval worked on Ustation/system5.
+1986-Nov
+	Euslisp compiler which generates m68020 'as' (assembler) source
+	has been developed.
+1986
+	Addition of vector/matrix package.
+1987-Feb
+	Faster type check mechanism for inherited objects has been devised.
+	Integer arithmetic runs more efficiently when compiled with
+	declaration.
+1987-Sep
+	Inaba M. bagan to make suncore/sunview interface.
+	Foreign language interface is introduced.
+	Keyword parameter is added.
+1987-Nov
+	The toplevel has been recoded in euslisp to make the signal
+	programming flexible.
+1987-Dec
+	Ported on VAX8800/Ultrix.
+	Compiler has been modified to generate C program
+	as intermediate code to get higher portability.
+1988-Jan
+	Port on sun4.
+1988-Jan
+	Matrix has been implemented as an 3*3 two dimensional array,
+	instead of vector of floatvectors.
+	#nA, #nF, #nI printing format has been introduced.
+1988-Jan
+	Socket streams for IPC both in unix domain and internet domain
+	have been implemented.
+1988-Jan-28
+	Load function is rewritten by &keyword parameters.
+1988-Jan-29
+	defun-c-callble for sun3 has been recovered.
+1988-Jan-30
+	A bug in the hierarchy of built-in classes has been fixed.
+1988-Feb
+	Quick implementation of geometric modeling package
+	 Feb-1	2D convex-hull
+	 Feb-5	3D convex-hull
+	 Feb-6	cut-body
+	 Feb-8	hidden-line eliminated display
+	 Feb-14	edge wings removed since they are redundant
+1988-Feb-17
+	Geometric computation package "llib/geopack.l" has been enhanced.
+	It includes generation of convex-hulls both for 2D and 3D points,
+	hidden-line eliminated drawing and body composition.
+1988-Feb-18
+	The compiler has been improved to produce faster and smaller code
+	using a register for the temporary stack pointer.
+1988-Feb-21
+	The compiler recognizes type declarations for floats and vectors.
+	Faster code for floating arithmetic and vector reference
+	can be generated.
+1988-Feb-22
+	Boxing and unboxing of floating numbers are defined by macros.
+1988-Feb-29
+	Compilation of conditional clause has been modified.
+	A bug of #n=,#n# reader on sun4 is fixed.
+1988-Mar-10
+	Defun-c-callable function is added to SUN4 euslisp.
+	A bug of foreign function interface has been fixed.
+1988-Mar-12
+	Suncore and Sunview packages are updated by Dr.Inaba.
+	Pathname class and related functions are added.
+	#nA, #nF, #nI dispatch macros for reading arrays.
+1988-Mar-15
+	&ALLOW-OTHER-KEYS is allowed.
+1988-Mar-22
+	Ioctl functions are defined in clib/ioctl.c
+	NOMAD(multi-dial device) interface added to the library.
+1988-Apr-1
+	Sys:list-all-instances functions is added.
+	Sys:list-all-catchers, list-all-bindings, list-all-special-bindings.
+	^C interrupt works while reading pipes.
+1988-May-18
+	Portable prolog has been ported, gandb.prl timed 1.3sec on sun3/60,
+	and 0.4sec on sun4/260.
+	The compiler revised to produce smaller and faster code: 
+	the size shrinked 10% on sun3 and 30% on sun4, and runs 30% faster.
+1988-May-20
+	Implementation of file open changed. Open is rewritten in euslisp
+	in order to enable append, overwrite mode, permission flag, buffersize
+	using &key parameters.
+	HELP documents are borrowed from kcl.
+1988-May-24
+	A bug of let has been fixed.  Formerly, special variables in let
+	special forms are treated as in let*, i.e., they were bound
+	sequentially. Now they are bound in parallel.
+1988-May-27
+	Apropos is added.
+        Prog1 is now defined as a macro.
+	Database functions using ndbm library have been added.
+	#S format for read/print of objects is added. This is more flexible
+	but slower than #J format since #s accepts pairs of a slot name
+	and its value.
+1988-May-29
+	Eusview is updated by M.inaba so that it uses classes for the
+	definition of windows and items.
+	Coerce is added, and concatenate accepts the result type argument.
+1988-Jun-6
+	Defmethod's bug, which does not update method cache entry when
+	a method is replaced, is fixed.
+	Ugeomap interface revised to utilize keyword parameters for
+	the specification of radius, height, center and points.
+1988-Jun-7
+	Volume and centroid computation algorithm are added to geopack.l.
+1988-Jun-15
+	Foreign string is implemented. It is defined by foreign-string
+	class and svref,svset,sys:peek,sys:poke,concatenate,coerce
+	recognize the accessing method.
+	Physical memory management functions such as MALLOC,VALLOC,FREE,
+	MMAP,MUNMAP are added to connect VMEbus device such as MMD.
+	*READ-BASE* is added.
+1988-Jun-27
+	Super class object is pointed directly from the slot in a subclass.
+	Defclass is redefined by macro using keywords.
+	Setf is introduced.
+1988-July-5
+	Defclass defines defstruct compatible accessor functions automatically.
+	For the purpose, primitive object access functions slot and setslot
+        are added to leo.c, and the compiler is modified to optimize
+	slot access. Ovaf is made obsolete.
+1988-Jul-7
+	General sequence functions REPLACE, REMOVE, FIND, POSITION
+	DELETE, SUBSTITUTE, NSUBSTITUTE, FILL, MAP,COUNT
+	and their variations with suffix of -if and -if-not are arranged
+	using keyword parameters.
+1988-Jul-20
+	Behaviors of FORMAT for ~A and ~S parameters are reversed.
+	Svref is corrected to work on only simple general vectors.
+	To access other vectors, aref or char, bit must be used.
+	The document is updated to include descriptions about geomap,
+	coordinates, suncore, sunview functions.
+1988-Aug-2
+	EUS preloads files specified by command arguments
+	before the interactive session.
+	SYS:NEWSTACK which allocates new quantity of memory for stack
+	is added.
+1988-Aug-4
+	READTABLE as well as multiple escape character is implemented.
+1988-Aug-11
+	TRACE is implemented. The bug of STEP is fixed.
+	Dynamic values can be examined when STEPping.
+1988-Aug-12	winged edge is optional	
+1988-Aug-15
+	Coordinates is updated to be more general.
+	Coerce accepts array objects not only sequences for the first arg.
+	EUSGEO (euslisp with geomatric modelling) is generated.
+1988-Sep-14
+	Bugs of geopack (body:insidep) and compose.l(make-sticking-edges)
+	are fixed, and body composition has become more robust.
+	Primitive solid body generation functions are enhanced.
+	Make-prism, make-cube, make-solid-of-revolution, make-icosahedron
+	and make-gdome are added.
+	Remove-duplicates is rewritten in C to get higher performance
+	when used with general sequences.
+1988-Oct-5
+	TAGBODY and GO special forms are implemented, so is PROG. 
+1988-Oct-7
+	approximated flag for curvatures is added to edge
+1988-Oct-8
+	HID runs faster since intersection checks are made only at contour
+	edges, and approximated edges on curved bodies are not drawn.
+1988-Nov-10
+	Euslisp implementation on sony-news.
+1988-Nov-25
+	Object-module class is removed. Foreign-module and closure classes
+	are placed under compiled-code class.
+1988-Dec-10
+	Xlib is linked to EUSLISP.  Load-foreign has been slightly modified
+	to enable linking with archive libraries.
+1988-Dec-23
+	Foreign interface for Linpack is made.
+1989-Jan-20
+	Behavior of coordinate systems is changed, so are viewings and
+	bodies.
+	&AUX parameter is implemented (it was easy).
+1989-Feb-1	;version 3.47
+	FLET and LABELS special forms are implemented.
+	A bug in evalhook is fixed to make step work correctly.
+	MEMBER and ASSOC are changed to be fully compatible with CommonLisp.
+1989-Feb-4
+	% read macro to read C-like mathematical forms is implemented.
+1989-Feb-9
+	A bug of return-from is fixed. Return-from and go runs with less
+	overhead than before.  A bug of do macro, a return in do cannot
+	return expected value, is fixed.
+	Property-list is removed from symbol class and is attributed to 
+	propertied-object class, which is the superclass of symbol.
+1989-Feb-14
+	INTVECTOR is changed to INTEGER-VECTOR, and FLOATVECTOR is
+	changed to FLOAT-VECTOR. Including BIT-VECTOR, every vector is
+	uniformly named.
+1989-Feb-16
+	Prin1 method is made to be customizable for each class of objects,
+	by defining :prin1 method. Default :prin1 method is defined in object.
+	Function 'truename' is added.
+1989-Apr-10
+	Built-in functions which create instances of basic classes such as
+	cons and symbols can use user-defined classes. demo/bcons.l is the
+	example demonstrating this feature.
+1989-May-10
+	Viewing is changed to be a subclass of the cascaded-coords class.
+	Server.l is programmed. #\ dispatch-macro accepts mnemonic char code
+	such as newline, return or tab.
+1989-Jun-1
+	Unix:fcntl, unix:getrusage added.
+	Upgraded to run with SunOS4.01.
+	Package compiler is introduced.  In-package is correctly compiled.
+1989-Jun-20
+	Make-coords and make-cascoords accept keywords.
+	Command line arguments are sent to (eustop) individually, not grouped
+	in a vector.  Eustop receives arguments with &rest parameter.
+	*Symbol-input* is set refering to PATH environment variable when eus
+	starts off.  ~$HOME/.eusrc is automatically loaded then.
+	Find-method returns a list of class and method.
+1989-Jul-10
+	Loader recognizes *load-path*.
+	Pathname-directory returns a list of directory components.
+1989-Aug
+	Class ROTATIONAL-JOINT, MANIPULATOR, PART are defined.
+1989-Aug-29
+	ISRR. Eus Distribution to LAAS and Stanford.        
+1989-Sep-4
+	A bug in a compiled-module (module object is garbage collected)
+	is fixed.  :Insidep of body class is corrected.
+1989-Oct-5
+	Makefile is changed to make maintenance easier.
+1989-Nov-27
+	Source files are moved to /usr/share/src/eus to ease sharing
+	and to speed-up making.
+1990-Feb-2
+	XView interface is added.
+1990-Feb-14
+	Documentation is available for functions, methods, classes,
+	and variables.
+1990-Mar
+	Interface to vxworks is added.
+1990-Apr
+	Xwindow color facilities.
+	*safety* parameter is recognized by the compiler.
+1990-May-15
+	CSG parameter and shape modification history are recorded
+	in bodies. Face-type is also recorded in faces.
+1990-May-31
+	:hierarchy of metaclass.
+	double.c for float<-->double conversion
+1990-Jun-20
+	Hidd can display hidden-lines with dashed-lines.
+	LaTex version reference manual is available.
+	#R and #D dispatch macro for conversion between radian and 
+	degree added.
+1990-July-10
+	defcstruct changed to define accessor functions compatible with
+	setf macro.
+	Classes local to UTYO, like '2dlnseg', '2dpoints' are separated
+	from geoclasses.l and moved to llib/utyoclasses.l.
+1990-July-15
+	Asynchronous I/O using `defasync' macro.
+1990-Sep
+	2nd tape distribution
+1990-Nov
+	Datagram socket (UDP).
+1991-Jan
+	upgrade to conform with SunOs4.1.1
+1991-Feb
+	PUMA-560 Models
+1991-May
+        Default documentation string
+1991-Aug
+	Line to line distance.
+        Toplevel input history and its interactive line editing
+1991-Sep-10
+	Porting on DEC/Mips. Lots of chagens in loadsave.c to conform to coff.
+1991-Oct-9
+	Speed-up of interference check (factor 1.8) and hid.
+	setf macros for matrix-row and matrix-column
+	Load concatenates given directory name to directories listed
+	in *load-path*.
+1991-Oct-10
+	Incorporation of Hirukawa's motion constraint package.
+	Bounding-box functions added.
+1991-Oct-15
+	Speed-up of draw up to 40%.
+	:look-body is defined in perspective-viewing. View direction,
+	viewing angle, and hither, yon are determined automatically so that
+	all the bodies to be seen fit in the viewport.
+1991-Oct-30
+	Add 2dimensional geometry to matrix, coordinates, viewing, etc.
+1991-Nov-15
+	Comparison with tolerance (geopack).
+	:coplanar, :colinear :on-edge, :on-vertex, and so on.
+1991-Nov-20
+	Boolean Operation for touching objects.
+1991-Dec-20
+	Common Lisp compatible package system.
+	Load changed to concatenate given "directory/filename" after 
+	*load-path*.
+1992-Jan-15
+	Intersection of coplanar polygons and common area.
+	Face+ and face* for union and intersection of two coplanar faces.
+1992-Feb-5
+	Coordinates key arguments such as :pos, :rot, :at can be specified
+	to functions for body primitive creation.
+	Coordinates-axes object
+1992-May-7
+	Projection of shadow of a body onto a plane.
+	line-intersection3 is rewritten according to Graphics GEM.
+1992-May-19
+	The Global variable names in package X have been changed to have
+	'*' as their prefix and suffix.
+1992-July-20
+	vers. 7.26
+	Attribute handling of GContext has been changed.
+1992-Oct
+	Reference manual for version 7.28 
+1993-Jan
+	S2200 frame grabber and motion tracking by image correlation.
+1994-May
+	Porting onto the Solaris 2.3 operating system. PICT-DRAW.
+1994-June
+	Multithread facility is added. Multiple contexts are supported.
+	Every C function is changed to have ctx as the first parameter.
+1994-July
+	Porting to Linux on PC and MachTen on Machintosh.
+1994-Dec
+	Xtoolkit is added.
+1995-Jan
+	2nd version of the Reference Manual for V 8.00.
+1995-Feb
+	EusLisp Release 8.00 with FilePanel.
+1995-Apr
+	Nomad interface.
+1995-May
+	load-library
+	Cyclic scheduler using interval timer.
+1995-June
+	Incorporating Argus vision learning algorithm.
+1995-June-17
+	Japanese translateion of EusLisp reference manual by H. Nakagaki.
+1995-June-20
+	v+, v-, distance, v., etc. accept integer vectors
+	x:gcontext recognizes symbolic color names for foreground
+	and background.
+1995-June-25
+	Skelton of Eusdraw.
+1995-June-30
+	Merging the source files and the make procedure for Solaris2,
+	Solaris1 (and Linux). Windows version by Nakagaki.
+1995-July-3
+	Windows for threads by redirecting I/O via tool/sockstd.
+1995-July-5
+	version and makedate are incorporated in executables, and lib/files
+        are not read in, making start-up quicker.
+199-Aug
+	RSJ (Robot Gakkai) CDROM version 8.05.
+1995-Sep
+	Class name symbols are no longer special variables.
+1995-Oct
+	Ratio type and bignum type are partially introduced. v. 8.06
+1995-Nov
+        Thread local special variables are introduced. Defvar defines process
+        global variables, whereas deflocal defines thread local specials.
+        V.8.09
+1996-Jan
+        aset, aref, ash, format, #x..., peek, poke recognize bignums.
+	Disposal processing before garbage cells are really reclaimed.
+1996-Jan
+        Using CVS for version management.
+1996-Feb
+	Merging opengl and Mesa on Solaris, Linux, SGI
+1996-Mar-7
+	thread local special bindings are copied each time a thread is invoked.
+1996-Apr-26
+	Reading strings of any length is allowed.
+1996-May-22
+	Demonstration program "tss96.l" for Tsukuba Software Symposium '96
+1996-May-25, Jun-3
+	Shadow.l and bodyrel.l are included in the standard eus.
+	Menus pop up much faster.
+	Menus pop up automatically when the pointer traverses in a menu-bar.
+	Colors can be allocated by planes.
+	*modules* holds version info.
+	eusdraw (2D drawing tool) can be called from tss96 panel.
+	Class faceset is introduced as the superclass of body.
+	FileDialog is added as the superclass of filepanel.
+	Default background color is obtained from the parent window.
+	Double buffering by exchanging color map.
+1996-Jun-28
+	A bug in addmethod (leo.c) is fixed.
+	thr_kill kills individual threads.
+	libaux.so is no longer needed.
+	push, pushnew, and pop allow generic variables for stack.	
+1996-July-1
+	Release 8.16	
+1996-July-5
+	Port-selector is implemented.
+	Reploop waits for toplevel inputs by the select library call
+	as well as other connections registerd in *top-selector*.
+	Thus, windon-main-loop is no longer needed since X events
+	are monitored by the select.
+1996-Oct
+	kana.l converts romaji to kana. kana-date and kana-time are available.
+1996-Dec
+	URL-pathname and VRML parser are added.
+????    
+	x:pixmap-scroller
+1997-Jan-2
+	Reader converts symbols string-case according to current readtable's
+	readtable-case.
+---- history lost
+
+1997-???
+	deep-pixel-image and long-pixel-image to make use of full-color
+	visuals.
+1997-Aug
+	Porting on Solaris/i386PC.
+
+1997-Sep
+	JPEG compression/decompression using libjpeg.so (jpeg-6a).
+	24bit full color image support on X.
+1997-Oct
+	History editing is available on SGI.
+	Package name input at the toplevel changes the *package*.
+	"eus$ image" is equivalent to "eus$ setq *package* (find-package "IMAGE")
+1997-Nov
+	unix:select allows fd-set bigger than 30 bits upto 256bits.
+	canvas defines :graph.
+	MAXBUDDY is upgraded to 40 (307Mword) from 30 (2.5Mword).
+1998-Feb
+	DDA for generation of lines and ellipsis is added.
+1998-Mar
+	method-list and pfuncs, which are useful to get listings of all
+	available methods and funcs, accept 'verbose' argument to produce
+	more info.
+1998-Apr
+	Reader is chaged to enable reading  of ';' and ':'.
+	(Readtable needs to be set up.)
+1998-July
+	Popper protocol.
+1998-Oct
+	Linux low level I/O primitives, IOPERM, OUTB, and INB.
+1999-June
+	the time class
+1999-July
+	Hiragana to Roman-ji conversion.
+1999-July
+	unix:mkdir and unix:rmdir are added.
+1999-Aug
+	More efficient in-core JPEG decompression
+	16/24bit color images
+1999-Nov
+	*timer-job* is invoked when a select call at the toplevel expires.
+2000-Jan
+	Cleaning-up gray-pixmaps.
+	*toplevel-hook*, *gc-hook* and *exit-hook* are added to define
+	x:eustop-win which integrates user's xterm window with Euslisp
+	status information.
+	hiragana-katanaka conversion.
+	gdbm (GNU dbm).
+2000-Mar
+	Interface to postgreSQL using libpq.so.
+	interval-time and calender-time are split.
+	Defforeign allows :foreign-string as function results.
+	Abs can be applied to bignum.
+	http.l and sound.l are debugged. webnews.l and weather.l
+	are added in lib/llib.
+2000-Apr
+	Regular expression (regexp, regmatch) is added.
+	UNIX:ENVIRON is added.
+2000-May
+	Passing bignum (32bit) integer to foreign functions.
+	CGI programming in EusLisp. httpdb.l for the postgreSQL database
+	manipulation on HTTP. Linking Fast-CGI library.
+	Base64 encoding. Crypt is added.
+	Documentation is updated.

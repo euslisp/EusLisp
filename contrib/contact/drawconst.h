@@ -1,0 +1,30 @@
+static pointer (*ftab[7])();
+
+#define QUOTE_STRINGS_SIZE 25
+const static char *quote_strings[QUOTE_STRINGS_SIZE]={
+    "*viewer*",
+    ":draw-constraint",
+    "draw",
+    ":rot",
+    "make-matrix",
+    ":pos",
+    "make-coords",
+    ":transform",
+    ":world",
+    ":worldcoords",
+    "cls",
+    "hidd",
+    ":geoclasses",
+    "\"geoclasses.l\"",
+    "require",
+    ":drawconst",
+    "provide",
+    "draw-constraint",
+    "\"(constraint &optional (a nil) (b nil) (vwr *viewer*) (arrow-length 30))\"",
+    "draw-cbodies",
+    "\"(constraint &optional (arrow-length 5.0))\"",
+    "draw-motion",
+    "\"(motion a &rest b)\"",
+    "draw-force",
+    "\"(force a b)\"",
+  };

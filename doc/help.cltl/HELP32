@@ -1,0 +1,126 @@
+(caadar function-documentation "
+Args: (x)
+Equivalent to (CAR (CAR (CDR (CAR X)))).")
+(cadaar function-documentation "
+Args: (x)
+Equivalent to (CAR (CDR (CAR (CAR X)))).")
+(cadar function-documentation "
+Args: (x)
+Equivalent to (CAR (CDR (CAR X))).")
+(catch function-documentation "
+Syntax: (catch tag-form {form}*)
+Sets up a catcher whose catch tag is the value of TAG-FORM.  Then evaluates
+FORMs in order and returns all values of the last FORM.  During the evaluation
+of FORMs, if a THROW form is evaluated that specifies a catch tag EQ to the
+value of the TAG-FORM, then the execution of the CATCH form terminates
+immediately and the values specified by the THROW form are returned as the
+value of the CATCH form.")
+(cdaaar function-documentation "
+Args: (x)
+Equivalent to (CDR (CAR (CAR (CAR X)))).")
+(cdaar function-documentation "
+Args: (x)
+Equivalent to (CDR (CAR (CAR X))).")
+(cdar function-documentation "
+Args: (x)
+Equivalent to (CDR (CAR X)).")
+(cdddar function-documentation "
+Args: (x)
+Equivalent to (CDR (CDR (CDR (CAR X)))).")
+(char function-documentation "
+Args: (string index)
+Returns the INDEX-th character in STRING.")
+(char-bits-limit variable-documentation "
+The upper bound of values returned by CHAR-BITS.  1 in KCL.")
+(defvar function-documentation "
+Syntax: (defvar name [form [doc]])
+Declares the variable named by NAME as a special variable.  If the variable
+does not have a value, then evaluates FORM and assigns the value to the
+variable.  FORM defaults to NIL.  The doc-string DOC, if supplied, is saved
+as a VARIABLE doc and can be retrieved by (documentation 'NAME 'variable).")
+(deposit-field function-documentation "
+Args: (integer1 bytespec integer2)
+Returns an integer represented by the bit sequence obtained by replacing the
+specified bits of INTEGER2 with the specified bits of INTEGER1.")
+(digit-char function-documentation "
+Args: (digit &optional (n 10) (font 0))
+Returns a character that represents the DIGIT in radix N.  Returns NIL if no
+such character exists.")
+(double-float-negative-epsilon variable-documentation "
+Same as LONG-FLOAT-NEGATIVE-EPSILON.")
+(int-char function-documentation "
+Args: (integer)
+Equivalent to CODE-CHAR.")
+(*macroexpand-hook* variable-documentation "
+The value of this variable must be a three-argument function object.
+Each time a macro form is expanded, KCL calls that function with
+	1. the macro expansion function (see MACRO-FUNCTION)
+	2. the macro form to expand
+	3. an environment (NIL in most case)
+as three arguments, and uses the returned value as the expanded form.
+The initial value of this variable is the function FUNCALL.")
+(make-broadcast-stream function-documentation "
+Args: (&rest streams)
+Creates and returns a broadcast stream.  Outputs to this stream are output to
+all STREAMs.  A broadcast stream is notated as
+	#<broadcast stream n>
+where N is a number that identify the stream.")
+(make-char function-documentation "
+Args: (char &optional (bits 0) (font 0))
+Returns a character object with the same code as CHAR and with the specified
+BITS and FONT attributes.  Returns NIL if no such character exists.")
+(mapcar function-documentation "
+Args: (function list &rest more-lists)
+Creates and returns a list of K elements, with the N-th element being the
+value of applying FUNCTION to the N-th elements of the given LISTs, where K
+is the maximum length of the given LISTs.")
+(mismatch function-documentation "
+Args: (sequence1 sequence2
+       &key (key #'identity) (test #'eql) test-not
+            (start1 0) (end1 (length sequence1))
+            (start2 0) (end2 (length sequence2))
+            (from-end nil))
+Compares element-wise the specified subsequences of SEQUENCE1 and SEQUENCE2.
+Returns NIL if they are of the same length and they have the same elements in
+the sense of TEST.  Otherwise, returns the index of SEQUENCE1 to the first
+element that does not match.")
+(*modules* variable-documentation "
+List of module names that have been loaded into KCL.
+See PROVIDE and REQUIRE.")
+(nconc function-documentation "
+Args: (&rest lists)
+Destructive APPEND.  The args except for the last may be destroyed.")
+(pathname-device function-documentation "
+Args: (filespec)
+Returns the device slot of the pathname specified by FILESPEC.  FILESPEC may
+be a symbol, a string, a pathname, or a file stream.")
+(read-char function-documentation "
+Args: (&optional (stream *standard-input*)
+                 (eof-error-p t) (eof-value nil) (recursive-p nil))
+Reads a character from STREAM and returns it.")
+(schar function-documentation "
+Args: (simple-string n)
+Returns the character object representing the N-th character in SIMPLE-STRING.
+This is faster than CHAR.")
+(search function-documentation "
+Args: (sequence1 sequence2
+       &key (key #'identity) (test #'eql) test-not
+            (start1 0) (end1 (length sequence1))
+            (start2 0) (end2 (length sequence2))
+            (from-end nil))
+Searches SEQUENCE2 for a subsequence that element-wise matches SEQUENCE1.
+Returns the index to the first element of the subsequence if such a
+subsequence is found.  Returns NIL otherwise.")
+(shadow function-documentation "
+Args: (symbol &optional (package *package*))
+If no symbol is registered in PACKAGE with the same name as SYMBOL, then
+creates an internal symbol with the same name and registers it into PACKAGE.
+The created symbol shadows external symbols of the same name in those packages
+that PACKAGE uses.  SYMBOL may be a list of symbols.")
+(write-char function-documentation "
+Args: (char &optional (stream *standard-output*))
+Outputs CHAR to STREAM.  Returns CHAR.")
+(bds-var function-documentation "
+Args: (n)
+KCL specific.
+Returns the symbol of the N-th entity in the bind stack.")

@@ -1,0 +1,776 @@
+\section{Evaluation}
+\markright{\arabic{section}. Evaluation}
+
+\subsection{Evaluators}
+
+In order to specify the behaviors upon an error and an interrupt(signal),
+set an appropriate function to each of the special variables
+{\bf *error-handler*} and {\bf *signal-handler*} in advance.
+There is no correctable or continue-able error.
+After analyzing errors you must abort the current execution by
+{\bf reset} or appropriate {\bf throw} to upper level catchers.
+{\bf reset} is equivalent to {\tt (throw 0 NIL)}, since EusLisp's top-level
+creates catch frame named {\tt 0}.
+
+Error handlers should be programmed as functions with three or four
+arguments:  {\em code msg1 form \&optional (msg2)}.
+{\em Code} is the error code which identifies system defined errors,
+such as 14 for 'mismatch argument' or 13 for 'undefined function'.
+These mappings are described in "c/eus.h".
+{\em msg1} and {\em msg1} are messages displayed to the user.
+{\em form} is the S-expression which caused the error.
+
+Signal handlers should be programmed as functions receiving
+two arguments: {\em sig} and {\em code}. 
+{\em Sig} is the signal number ranging from 1 to 31, and {\em code}
+is the minor signal code defined in signal-number dependent manners.
+
+\verb+^+D ({\em end-of-file}) at the top-level terminates eus session.
+This is useful when eus is programmed as a filter.
+
+{\bf Eval-dynamic} is the function to find the dynamic value bound
+to a symbol used as a let or lambda variable.
+This is useful for debugging.
+
+\begin{refdesc}
+
+\funcdesc{identity}{obj}{
+returns obj itself.
+Note the difference between {\bf identity} and {\bf quote}.
+{\bf identity} is a function whereas {\bf quote} is a special form.
+Therefore, {\tt (identity 'abc)} is evaluated to {\tt abc} and
+{\tt (quote 'abc) == (quote (quote abc))} is evaluated to {\tt 'abc}.
+{\bf Identity} is often used as the default value for {\tt :key} parameters
+of many generic sequence functions.}
+
+\funcdesc{eval}{form [environment]}{
+evaluates {\em} form and returns its value.
+Hook function can be called before entering the evaluation,
+if {\bf *evalhook*} is set to some function that accept form and environment.}
+
+\funcdesc{apply}{func \&rest args}{
+{\em func} is applied to {\em args}.
+{\em Func} must be evaluated to be a function symbol (a symbol which has
+a function definition), a lambda form, or a closure.
+Macros and special forms cannot be applied.
+The last element of {\em args} must be a list of arguments while other args
+should be bare arguments.
+Thus, if the last {\em args} is NIL, then apply is almost equivalent to
+funcall, except that apply has one more arguments than funcall.
+{\tt (apply \#'max 2 5 3 '(8 2)) --> 8}.}
+
+\funcdesc{funcall}{func \&rest args}{
+applies {\em func} to {\em args}.
+The number of {\em args} must coincide to the number of arguments
+the {\em func} requests.}
+
+\specialdesc{quote}{obj}{evaluates to {\em obj} itself.}
+
+\specialdesc{function}{func}{makes a function closure.
+If {\em func} is a symbol, its function definition is retrieved.}
+
+\funcdesc{evalhook}{hookfunc form [env]}
+{evaluates {\em form} once after binding {\em hookfunc} to {\bf *evalhook*}.}
+
+\funcdesc{eval-dynamic}{variable}{
+finds the value of {\em variable} (symbol) on the stack.}
+
+\funcdesc{macroexpand}{form}{
+expands {\em form} if it is a macro call.
+If {\em form} is expanded to a macro call again, 
+expansion is repeated until non macro call results.}
+
+\specialdesc{eval-when}{situation \{form\}*}{
+Situation is a list of {\tt compile, load and eval}.
+Forms are evaluated when the current
+execution mode matches with situation.
+{\bf eval-when} is important to control the behavior and environment
+of the compiler.
+If {\tt compile} is specified, {\em forms} are evaluated by the compiler
+so that the result will affect the consequent compilation.
+For example, {\em defmacro} should be evaluated by the compiler
+in order to let the compiler expand macro calls at compile time.
+If {\tt load} is given in the {\em situation} list,
+{\em forms} are compiled to be loaded (evaluated) at load time,
+i.e., compiled functions are defined at load time.
+This is the normal effect that we expect to the compiler.
+{\tt load} situation is used to control the compiler's environment.
+If {\tt eval} is included in situation list, {\em forms}
+are evaluated when their source code is loaded.}
+
+\specialdesc{the}{type form}
+{Declares {\em form} is of {\em type}.
+{\em type} is either a class object, :integer, :fixnum, or :float.}
+
+\specialdesc{declare}{declaration*}{
+Each {\em declaration} is a list of a declaration specifier and an integer
+or target symbols.
+Declarations are important to let the compiler produce faster code.
+\begin{description}
+\item {special} declares special variables
+\item {type} declares the type of variables; {\tt (type integer count)};
+valid type specifiers are {\emx integer}, {\emx :integer} {\emx fixnum},
+{\emx :float} and  {\emx float}. The {\bf type} keyword may be omitted
+if type specifier is either one listed here. So {\tt (integer count)}
+is a correct declaration. Other types (classes) such as {\em float-vector},
+{\em integer-vector}, etc. need to be preceded by {\bf type}, as
+{\tt (type float-vector vec1)}.
+\item {ftype} declares the result type of functions
+\item {optimize} set *optimize* parameter (0--3) of the compiler
+\item {safety} set *safety* parameter (0--3) of the compiler
+\item {space}  set *space* parameter (0--3) of the compiler
+\item {inline} not recognized
+\item {not-inline} not recognized
+\end{description}
+}
+\funcdesc{proclaim}{proclamation}{
+globally declares the types of variables and compiler options.
+The same declarations are accepted as described for {\bf declare} special form.
+However, {\bf proclaim} is a function of one argument and proclamation 
+is evaluated.}
+
+\funcdesc{warn}{format-string \&rest args}{
+prints warning-message given as {\em format-string} and {\em args} to
+*error-output*.}
+\funcdesc{error}{format-string \&rest args}{
+calls the current error-handler function bound to {\bf *error-handler*}.
+The default error-handler 'euserror' first
+prints arguments to {\bf *error-output*} using {\bf format},
+then enters a new top level session.
+The prompt shows you the depth of your error session.
+{\bf Throw}ing to the number, you can go back to the lower level error
+session.}
+\end{refdesc}
+
+In the multithread EusLisp, special variables are shared among threads
+and the same {\bf *error-handler*} is referenced by different threads.
+To avoid this inconvenience, multithread EusLisp provides
+the {\bf install-error-handler} function which installs different
+error handler for each thread.
+
+\begin{refdesc}
+\funcdesc{install-error-handler}{handler}{
+installs the {\em handler} as the error handler of the current thread.}
+\end{refdesc}
+
+\newpage
+
+\subsection{Top-level Interaction}
+
+EusLisp's standard top-level read-eval-print loop is controlled by {\bf eustop}.
+% which is also responsible for the initial loading of files.
+When EusLisp is invoked,
+{\bf eustop} tries to load the file named {\tt ".eusrc"} in your home directory
+or the file specified by the {\tt EUSRC} environment variable.
+It also tries to load a file named {\tt ".eusrc"} in the current working
+directory.  So, if you are in your home directory, note that .eusrc is
+loaded twice.
+Then EusLisp loads files specified in its argument list.
+After these loading, {\bf eustop} enters normal interactive session.
+
+When {\bf *standard-input*} is connected to user's tty,
+{\bf eustop} prints prompt generated by the {\bf toplevel-prompt} function.
+The default toplevel-prompt prints {\tt "eus\$ "}.
+The effect of changing the definition of toplevel-prompt appears
+when eustop is invoked next time.
+One way to change the prompt from the first time is to define
+toplevel-prompt in your {\tt .eusrc} file.
+
+Inputs are read from {\bf *terminal-io*} stream.
+If the input is parenthesized, it is taken as a lisp form and
+is evaluated by {\bf eval}.
+Else if the first symbol of the input line has function definition,
+the line is automatically parenthesized and evaluated.
+If no function definition is found,
+then its special value is examined and the value is printed.
+If the symbol is unbound,
+the line is regarded as UNIX command and passed to sh (Bourn's shell).
+If sh cannot find corresponding unix command,
+``command unrecognized" message is printed.
+Thus, {\bf eustop} works both as a lisp interpreter and as a unix shell.
+If you do not wish to execute the input as UNIX command,
+you may escape the form by preceeding a comma ',' at the begining of the line.
+This is also useful to see the dynamic value binding when
+an error occured in the interpretive execution.
+Since EusLisp adopts lexical scope,
+we cannot examine the value of local variables outside of the scope
+unless they are declared special.
+
+If the environment variable, {\bf USE\_TOP\_SELECTOR}, is defined,
+the toplevel input is read in an asynchronous manner using the {\tt select} 
+library call.
+The input stream ({\tt *standard-input*}) is registered to
+the {\tt *top-selector*},
+which is an instance of the {\bf port-selector} class,
+together with the read-eval-print function ({\tt repsel})
+Therefore arrival of key inputs invokes the evaluation of the {\tt repsel}.
+This feature is particularly useful when EusLisp is to handle
+multiple events, i.e., key inputs, X window events, and socket connection
+requests, at the same time.
+In order to exploit this asynchronous toplevel interaction,
+users should never write a code that blocks  at  the {\tt read} operation.
+Instead, the input stream should be registered to the {\tt *top-selector*}
+with its handler function by using the {\tt :add-port} method.
+The handler function is expected to read from the stream,
+which is already known ready to return the input without blocking.
+
+Note that Xwindow event handlers are defined to use the {\tt *top-selector*}
+implicitly when {\tt USE\_TOP\_SELECTOR} is defined, and user programs do not
+have to call {\tt x:window-main-loop} at all to catch X events.
+
+Using the time-out of the select call, users may define a timer handler.
+Each time the select call times out, the function
+bound to {\tt *timer-job*} is invoked with no argument.
+The timer interval is defined by *top-selector-interval*, which is 
+defaulted to 10.0 second.
+Note that the timer function invokation is not precisely periodic
+when there are inputs to the *top-selector*.
+
+In the toplevel interaction,
+each line input is remembered in {\bf *history*} vector with a sequence
+number.
+You can recall a specific input by {\bf !} function
+as if you were in csh.
+The difference from csh's history is, you need at least one white space
+between the exclamaition mark and the sequence number since {\bf !}
+is a function, and you can edit the line interactively with control keys,
+as in emacs.
+
+\verb+^+D (EOF) terminates EusLisp normally.
+To return abnormal termination code to upper level (usually a csh),
+use {\bf exit} with an appropriate condition code.
+
+{\bf eustop} sets a signal handler only for SIGINT and SIGPIPE,
+and other signals are not caught.
+Thus, signals such as SIGTERM or SIGQUIT cause EusLisp to terminate.
+In order to catch these signals to avoid termination,
+use {\bf unix:signal} function to set user-defined signal handlers.
+
+\begin{refdesc}
+
+\functiondescription{-}{}{variable}{current input.}
+\functiondescription{+}{}{variable}{previous input.}
+\functiondescription{++}{}{variable}{old input.}
+\functiondescription{+++}{}{variable}{ancient input.}
+\functiondescription{*}{}{variable}{previous result.}
+\functiondescription{**}{}{variable}{old result.}
+\functiondescription{***}{}{variable}{ancient result.}
+\functiondescription{*prompt-string*}{}{variable}{prompt string used by
+{\bf eustop}.}
+\functiondescription{*program-name*}{}{variable}{
+the command that invoked this EusLisp, possibly eus, eusx, eusxview
+or user-saved euslisp.}
+
+\funcdesc{eustop}{\&rest argv}{is the default toplevel loop.}
+
+\funcdesc{eussig}{sig code}{is the default signal hander for SIGPIPE.
+{\bf eussig} prints signal number upon its arrival and enters
+another toplevel loop.}
+
+\funcdesc{sigint-handler}{sig code}{
+is the default signal handler for SIGINT (control-C).
+It enters a new top level session.}
+
+\funcdesc{euserror}{code message \&rest arg}{
+the default error handler that 
+prints {\em message} and enters a new error session.}
+
+\funcdesc{reset}{}{
+quits error loop and goes back to the outermost eustop session.}
+
+\funcdesc{exit}{\&optional termination-code}{
+terminates EusLisp process and returns {\em termination-code} (0..255)
+as the process status code (0..255).}
+
+\functiondescription{*top-selector*}{}{variable}{The port-selector
+object to handle asynchronous function invocation according to
+inputs from multiple streams.}
+
+\funcdesc{h}{}{prints all the inputs remembered in {\bf *history*} vector 
+with associated sequence numbers.}
+\funcdesc{!}{\&optional (seq 0)}{
+recalls the input line associated with the sequence number {\em seq}.
+When {\em seq} is 0, the most recent command is recalled, and
+if {\em seq} is negative, the line is specified relatively to the
+current input.
+The recalled line is printed and the cursor is located at the end of the line.
+You can go backward by control-H (backspace) or control-B,
+go forward by control-F or control-K,
+go to the beginning of line by control-A, to the end of line by control-L.
+control-C cancels the line editing. control-M (carriage-return) 
+or control-J (line-feed)
+finishes  editing the line and starts evaluation of the edited line.
+If {\em seq} is not a number and is a symbol or a string,
+the history list is searched toward old input,
+and a command line which include the symbol or a string as a substring
+is returned.}
+\funcdesc{new-history}{depth}{
+initializes {\bf *history*} vector to have {\em depth} length.
+{\em Depth} input lines are remembered.
+All the input lines recorded in the current {\bf *history*} are discarded.}
+
+\end{refdesc}
+
+\newpage
+
+\subsection{Compilation}\label{compiler}
+
+EusLisp compiler is used to speed the execution of Lisp programs.
+You can expect 5 to 30 times faster execution and notable reduction of garbage
+collection time elapsed by macro expansion.
+
+Euscomp does optimization for arithmetic operation and vector access.
+Sometimes proper type declarations are needed to inform
+the compiler applicability of optimization.
+
+{\bf Compile-function} compiles functions one by one.
+{\bf Compile-file}  compiles an entire source file.
+During the execution of {\bf Compile-file}, each form in a file
+is read and evaluated.
+This may change the current EusLisp environment.
+For examples, {\bf defparameter}
+may set a new value to a symbol and {\bf defun} may substitute the existing
+compiled function with its non-compiled version.
+To avoid these unexpected effects, use the {\bf eval-when} special form
+without compile time situation,
+or use {\bf euscomp} command to run the compiler as a separate process.
+
+{\bf Euscomp} is a unix command, which is usually a symbolic link to {\bf eus}.
+It recognizes several options.
+-O flag indicates optimization of the C compiler.
+Each of -O1,-O2, -O3 indicates optimization level of EusLisp compiler,
+which is equivalent to proclaiming (optimize 1 or 2 or 3).
+Each of -S0, -S1, -S2, -S3 set 0,1,2 and 3 to compiler:*safety*.
+If *safety* is less than 2, no code for checking interrupt is emitted,
+and you will lose control if the program enters an infinite loop.
+If *safety* is zero, the number of required arguments is not checked.
+-V flag is used to print function names when they are compiled (verbose).
+-c flag prevents from forking and exec'ing cc.
+-D pushes next argument to the {\bf *features*} list, which can be used for
+conditional compilation in conjunction with \#- and \#+ read-macro.
+
+The compiler translates EusLisp source program named as "xxx.l" 
+into the intermediate C program file named "xxx.c" and the  header file
+named "xxx.h".
+Then the C compiler is run and "xxx.o" is generated.
+Intermediate files "xxx.c" and "xxx.h" are left
+for the purpose of cross compilation:
+usually you only need to compile "xxx.c" files by cc unix command
+when you wish to use the code on machines of different architecture.
+Compiled code is loaded to EusLisp by '(load "xxx")'.
+
+Each intermediate file refers to the "eus.h" header file, which is
+supposed to be located in the {\tt *eusdir*/c} directory.
+{\tt *eusdir*} is copied from the {\tt EUSDIR} environment variable.
+If none is set, {\tt /usr/local/eus/} is taken as the default directory.
+
+When compiled, intermediate C programs are usually much bigger than
+the original source code. For example, 1,161 lines of "l/common.l"
+lisp source expands to 8,194 lines of "l/common.c" and 544 lines of "l/common.h".
+Compiling 1,000 lines of lisp source is not a hard task, but 
+optimized compililation of nearly 10,000 lines of C program not only takes
+long time (several minutes), but also consumes much disk space.
+So if you are compiling relatively big programs, be sure your machine has
+sufficient /var/tmp disk, otherwise CC may die.
+Setting the {\tt TEMPDIR} environment variable to a bigger disk slice may help.
+
+As the linkage is performed at load-time or at run-time,
+no recompilation  is required even the eus kernel is updated.
+On the other hand, run-time linkage may impose you another inconvenience.
+Suppose you have two functions A and B in a file "x.l" and A calls B.
+After compiling "x.l", you load "x.o" and tries to call A which internally
+calles B.
+Then you find a bug in B, and probably you would redefine B.
+Here, you have compiled A and non-compiled B.
+You may call A again, but nothing will change, since A still calls
+old compiled B which is linked regidly when A first called B.
+To avoid this problem, A must be redefined again,
+or B must be redefined just after "x.o" is loaded and before A is called.
+
+When a compiled-code is loaded, its top level code, which is normally
+a series of defun, defmethod, etc.,  is excuted. This top level code
+is defined as the entry function of the load module.
+The compiler names the entry function,
+and the loader has to know the exact name of this function.
+To make the situation simple, both the compiler and the loader assume
+the entry function name is identical to the basename of the object file.
+For example, if you are compile and load "fib.l",
+the compiler produce "fib(...)" as the entry function of "fib.c",
+and the loader looks for "fib" in the "fib.o" object file.
+Since the final object file is produced by "cc" and "ld" of unix, 
+this entry function name has to satisfy the naming rule of C functions.
+Therefore, you have to avoid C's reserved keywords
+such as "int", "struct", "union", "register", "extern", etc., or
+the private identifiers defined in "c/eus.h" such as "pointer", "cons",
+"makeint", etc., to be used as the name of the file.
+If you have to use one of these reserved words as the name of the
+source file, you specify it for {\em :entry} arguments of
+the compiler and the loader.
+
+
+A restriction exists for the usage of closure:
+{\bf return-from} special form in closures and clean-up forms in 
+unwind-protect is not always correctly compiled.
+
+{\bf Disassemble} is not implemented.
+In order to analyze compiled code, see the intermediate C program
+or use {\tt adb}.
+
+\begin{refdesc}
+
+\functiondescription{euscomp}{\{filename\}*}{unix-command}{
+Invokes EusLisp compiler.}
+
+\longdescription{compile-file}{srcfile \&key \= (:verbose nil) \hspace{43mm} \=  \`[function]\\
+\> (:optimize 2) (:c-optimize 1) (:safety 1) \> {\rm ;optimization level} \\
+\> (:pic t)  \> {\rm ;generate position independ-} \\
+\>\>{ \rm ent code to build library} \\
+\> (:cc t) \> {\rm ; run c compiler} \\
+\> (:entry (pathname-name file)) \\}{
+compiles a file.
+".l" is assumed for the suffix of the {\em srcfile}.
+If {\em :verbose} is T, names of functions and methods being compiled
+are printed to make it easy to find the expressions where errors occurred.
+{\em :Optimize, :c-optimize} and {\em :safety} specifies the optimization
+levels. 
+{\em :Pic} should be set T, unless the module is hard-linked in the
+EusLisp core during the make stage.
+}
+
+\funcdesc{compile}{funcname}{compiles a function. {\bf Compile} first
+prints the function definition into a temporary file.
+The file is compiled by {\bf compile-file} and then is loaded by {\bf load}.
+Temporary files are deleted.}
+
+\funcdesc{compile-file-if-src-newer}{srcfile \&key compiler-options}{
+compiles the {\em srcfile} if it is newer (more recently modified) than
+its corresponding object file. The object file is supposed to have
+the ".o" suffix.}
+
+\functiondescription{*optimize*}{}{variable}{controls optimization level.}
+
+\functiondescription{*verbose*}{}{variable}{
+When set to non-nil, the name of a function or a method being compiled,
+and the time required for the compilation are displayed.}
+
+\functiondescription{*safety*}{}{variable}{
+controls safety level.}
+
+\end{refdesc}
+
+\newpage
+\subsection{Program Loading}
+\begin{refdesc}
+
+\longdescription{load}{fname \&key \= :verbose \hspace{20mm} \= *load-verbose* \\
+ \> :package \>  *package* \\
+ \> :entry  \>  (pathname-name fname) \\
+ \> :symbol-input  \> "/usr/local/bin/eus" \\
+ \> :symbol-output \> "a.out" \\
+ \> :print \> nil \\
+ \> :ld-option \> ""}{
+{\bf Load} is the function
+to read either a source file or an compiled object file into the
+EusLisp process.
+If the file specified by {\em fname} exists, it is loaded.
+Whether the file is source or binary is automatically checked by seeing
+its magic number.
+If the file does not exist but a file with the file type '.o' exists,
+the file is loaded as an object file.
+%A file of file type '.q' is also
+%read as a quote vector file (refer to the section for compilation)
+on Sun based systems.
+Else if a file with the '.l' suffix is found, it is loaded as a 
+source program.
+Therefore, there is a case where you specified "foo.so"
+expecting "foo.l" is already compiled, but "foo.l" is 
+actually loaded, since it has not yet been compiled in reality.
+In other words, if you just specify a base-name of a file,
+its compiled version is first tried to be loaded, and the source
+file suffixed by ".l" is tried later.
+If the file name is not specified in the absolute path by prefixing
+the name with a slash "/",
+
+{\bf load} searches for the file in the directories specified
+by the {\bf *load-path*} global variable.
+For example, if {\tt *load-path*} is {\tt ("/user/eus/" "/usr/lisp/")},
+and {\tt "llib/math"} is given as {\em fname},
+{\bf load} tries to find {\tt "/user/eus/llib/math.o", 
+"/usr/lisp/llib/math.o", "/user/eus/llib/math.l"} and
+{\tt "/usr/lisp/llib/math.l"}
+in this order.
+If no appropriate file could be found, an error is reported.
+
+{\it :entry} option specifies the entry address to initialize the load module.
+For example, {\tt :entry "\_myfunc"} option means that the execution begins
+at {\tt \_myfunc}.
+Default entry is the basename of the file loaded as described
+in the section \ref{compiler}.
+Library module names can be specified in {\bf :ld-option} option string.
+For example, in order to link a module which uses suncore libraries,
+{\bf :ld-option} {\tt "-lsuncore -lsunwindow -lpixrect -lm -lc"}
+should be given. 
+On non Solaris systems, ld runs twice when libraries are included;
+once to determine the size of the linked module,
+and again to link them actually with a proper memory allocation.
+
+{\bf :symbol-input} and {\bf :symbol-output} options are used to 
+solve references from one object module to another or to avoid duplicated
+loading of libraries.
+Suppose you have two object modules A and B which has reference to symbols
+defined in A. You first load the module A specifying {\tt :symbol-output =
+"a.out"}.
+Symbol information generated by this linking is written to {\tt a.out}.
+In order to load the module B, you have to specify
+{\tt :symbol-input = "a.out"} to solve the references from B to A.}
+
+On Solaris2 OS, the loading of compiled code is done by calling {\em dlopen}
+in the dynamic loader library.
+Application of {\em dlopen} is restricted to shared objects which are
+compiled position independently with "-K pic" option.
+Also,  since {\em dlopen} cannot open the same file twice,
+load first does {\em dlclose} on the file already loaded.
+
+{\bf :print} option decides whether load should produce output
+to *standard-output* for each input expression.  This option is provided
+to find which expression (usually defun, defmethod, etc.) results error
+in loading.
+
+\funcdesc{load-files}{\&rest files}{loads {\em files} successively
+with setting {\tt :verbose} to T.}
+
+\vardesc{*modules*}{holds a list of names of the modules that
+have been loaded so far.}
+\funcdesc{provide}{module-name}{adds {\em module-name} in {\tt *modules*}
+as the name of the module being loaded. {\em module-name} should be
+a symbol or a string. Calls to {\bf require} should appear at the beginning
+of files that compose a complete modules.}
+\funcdesc{require}{module-name \&optional file}{
+loads {\em file} unless {\em module-name} is found in {\tt *modules*}.
+{\bf provide} and {\bf require} control dependency among modules and
+are used to avoid duplicated loading of basic modules.
+Suppose you have one basic module named "A" and two application modules
+named "B" and "C" which are independent from each other but rely on 
+"A" module. At the beginning of each file, module name is declared
+by {\bf provide}. Since "A" module does not depend on any other modules
+it does not {\bf require} anything. 
+{\tt (require "A" "a.o")} follows  calls to {\bf provide} in "B" and "C".
+If you load "B" (more precisely, "b.o"), "a.o" is also loaded since
+it is found in {\tt *modules*} and
+two module names "A" and "B" are added to {\tt *modules*}.
+Then if you load "C", "A" module is not loaded and "C" is added to
+{\tt *modules*}.}
+
+\longdescription{system:binload}{opath qpath \&optional \=
+(entry (pathname-name opath)) \`[function] \\
+\> (symfile "/usr/local/bin/eus")  \\
+\> (symout "a.out") \\
+\> (ldopt "")\\}{link-load a binary file.}
+
+\fundesc{system:txtload}{fname}
+\end{refdesc}
+
+\newpage
+\subsection{Debugging Aid}
+
+\begin{refdesc}
+
+\funcdesc{describe}{obj \&optional (stream *standard-output*)}{
+{\bf Describe} prints the contents of an object slot by slot.}
+
+\funcdesc{describe-list}{list \&optional (stream *standard-output*)}{
+{\bf describe}s each element in {\em list}.}
+
+\macrodesc{inspect}{obj}{
+{\bf Inspect} is the interactive version of {\bf describe}.
+It accepts subcommands to print each slot of an object,
+to go deeper into a slot, or set a new value to a slot, etc.
+Use '?' command to see the subcommand menu.}
+
+\funcdesc{more} {\&rest forms}{
+After evaluating forms
+with the binding of *standard-output* to a temporary file,
+the temporary file is output to *standard-output* with Unix's 'more' command.
+{\bf More} is useful to see a long output generated by
+functions like {\bf describe}.}
+
+\funcdesc{break}{\&optional (prompt ":: ")}{
+Enters a break loop.
+Since the current binding context is in effect,
+local variables can be seen by prefixing  "," to an input.
+To end break, type control-D.}
+
+\funcdesc{help}{topic}{
+{\bf Help} prints the brief description on the topic which is usually
+a function symbol.
+The help description has been created from the reference manual (this
+document).
+The environment variable {\tt LANG} is referrenced to determine one
+of two reference manuals, Japanese or English.
+If {\tt LANG} is constituted either with {\tt "ja", "JA", "jp"},
+ or {\tt "JP"}, Japanese is selected. Otherwise, English.
+This determination is made when EusLisp start up.
+The actual reading of the help document is made at the first time
+when the 'help' is invoked to save memory if unnecessary.}
+
+\funcdesc{apropos}{key}{
+{\bf Apropos} is useful when you forget the exact name of a function or
+a variable and you only know its partial or ambiguous name.
+It prints all the symbols whose symbol-names include the
+{\em key} as a substring. Case insensitive.}
+
+\funcdesc{apropos-list}{key}{
+is similar to {\bf appropos} but does no printing and returns the
+result as a list.}
+
+\funcdesc{constants}{\&optional (string  "") (pkg *package*)}{
+lists every symbol in pkg which has defined constant and matches with
+{\em string}.}
+
+\funcdesc{variables}{\&optional (string  "") (pkg *package*)}{
+lists every symbol in pkg which has global value assigned and matches with
+{\em string}.}
+
+\funcdesc{functions}{\&optional (string  "") (pkg *package*)}{
+lists every symbol in pkg which has global function defined and matches with
+{\em string}.}
+
+\funcdesc{btrace}{\&optional (depth 10)}{
+prints call history of {\em depth} levels.}
+\fundesc{step-hook}{form env}
+\funcdesc{step}{form}{
+{\bf Step} and {\bf trace} work correctly only for functions, and not for macro
+or special forms.}
+
+\funcdesc{trace}{\&rest functions}{
+begins tracing of {\em functions}.
+Each time functions are called, their arguments and results are prited.}
+
+\funcdesc{untrace}{\&rest functions}{stops tracing.}
+
+\macrodesc{timing}{count \&rest forms}{
+executes {\em forms} count times, and calculates time required for one
+execution of forms.}
+
+\macrodesc{time}{function}{
+begins measurement of time elapsed by {\em function}.}
+
+\funcdesc{sys:list-all-catchers}{}{
+returns a list of all {\bf catch} tags.}
+
+\funcdesc{sys:list-all-instances}{aclass [scan-sub]}{
+scans in the overall heap, and collects all the instances of the specified class.
+If {\em scan-sub} is NIL, then instances of exactly the {\em aclass} are
+listed, otherwise, instances of {\em aclass} or its subclasses are collected.}
+
+\funcdesc{sys:list-all-bindings}{}{scans bind stack,
+and returns a list of all the accessible value bindings.}
+
+\funcdesc{sys:list-all-special-bindings}{}{
+scans the stack and list up all value bindings.}
+
+\end{refdesc}
+
+\newpage
+
+\subsection{Dump Objects}
+EusLisp's reader and printer are designed so that they can write any
+objects out to files in the forms that are rereadable.
+The objects may have mutual or recursive references.
+This feature is enabled when {\tt *print-circle*} and {\tt *print-object*}
+are set to T.
+Following functions set these variables to T, open a file, and
+print objects.
+The most important application of these functions is to dump the
+structures of 3D models that have mutual references.
+
+\begin{refdesc}
+\fundesc{dump-object}{file \&rest objects}
+\funcdesc{dump-structure}{file \&rest objects}{
+dumps objects to {\em file} in a format as they can be read back again.}
+
+\funcdesc{dump-loadable-structure}{file \&rest symbols}{
+dumps objects bound to symbols to {\em file}. The file can be read back
+again by simply loading it.}
+\end{refdesc}
+
+\subsection{Process Image Saving}
+This process image saving is no longer supported on Solaris2 based
+EusLisp, since it heavily depends on Solaris's dynamic loading facility
+which loads shared objects position-independently above the {\tt sbrk}
+point.
+
+\begin{refdesc}
+\funcdesc{save}{path \&optional (symbol-file "") starter}{
+{\bf Save} dumps the current EusLisp process environment to a file
+which can be invoked as a Unix command later.
+If a function name is specified for {\em starter},
+the function is evaluated when the command begins execution.
+Each command line argument is coerced to string in EusLisp and
+they are passed to {\em starter} as its arguments, so that it can parse
+the command line.
+Be sure that you have closed all the streams except {\bf *standard-input*}
+and {\bf *standard-output*}.
+File open states cannot be saved.
+Also, be sure you have not attempted {\bf mmap},
+which unnoticeably happens when you make internetwork socket-stream.
+Sun's network library always memory-maps NIS information such as
+host-by-name table and locates them at the uppermost available location
+of a process that cannot be saved.
+When the saved image is run later, any access to the network library
+fails and causes core dump.
+Note that Xwindow also uses this library,
+thus you cannot save your process image once you opened connection
+to Xserver.}
+
+\end{refdesc}
+
+\subsection{Customization of Toplevel}
+When EusLisp is invoked from Unix, execution is initiated by the toplevel
+function bound to {\bf *toplevel*}.
+This function is {\tt eustop} in {\tt eus} and {\tt xtop} in {\tt eusx}.
+You can change this toplevel function by specifying your own 
+function to the third argument to {\bf save}. \index{save}
+
+The toplevel function should be programmed to accept arbitrary number of
+arguments.
+Each argument on the command line is coerced to a string and transfered
+to the toplevel function.
+The program below repeatedly reads expressions from the file given by
+the first argument and pretty-prints them to the second argument file.
+
+\begin{verbatim}
+(defun pprint-copy (infile outfile)
+  (with-open-file (in infile)
+     (with-open-file (out outfile :direction :output)
+        (let ((eof (cons nil nil)) (exp))
+           (while (not (eq (setq exp (read in nil eof)) eof))
+              (pprint exp out))))))
+(defun pprint-copy-top (&rest argv)
+   (when (= (length argv) 2)
+      (pprint-copy (first argv) (second argv))))
+\end{verbatim}
+
+Once you defined these functions in EusLisp, 
+{\tt (save "ppcopy" "" 'pprint-copy-top)} creates a unix executable command
+named {\tt ppcopy}. 
+
+In Solaris based EusLisp, the toplevel evaluator cannot change in this
+manner, since {\bf save} is not available.
+Instead, edit {\tt lib/eusrt.l} to define the custom toplevel evaluator
+and set it to {\bf *toplevel*}.
+{\tt lib/eusrt.l} defines initialization procedures evaluated
+at every invocation of the EusLisp.
+
+\subsection{Miscelaneous Functions}
+\begin{refdesc}
+\funcdesc{lisp-implementation-type}{}
+{returns {\tt "EusLisp"}.}
+\funcdesc{lisp-implementation-version}{}{
+returns the name, the version and the make-date of this EusLisp.
+This string is also printed at the opening of a session.
+{\tt "MT-EusLisp 7.50 X 1.2 for Solaris Sat Jan  7 11:13:28 1995"}}
+\end{refdesc}
+\newpage
+
+

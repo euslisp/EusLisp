@@ -1,0 +1,1667 @@
+object
+	:all-methods         
+	:error               (&rest mesgs)
+	:methods             
+	:prin1               (&optional (strm t) &rest msgs)
+	:slots               
+	:super               
+	:warning             (format &rest mesgs)
+
+cons
+	:car                 
+	:cdr                 
+
+queue
+	:dequeue             
+	:empty?              
+	:enqueue             (x)
+	:init                
+	:length              
+
+propertied-object
+	:get                 (tag)
+	:name                (&optional n)
+	:plist               (&optional p)
+	:prin1               (&optional (strm t) &rest msg &aux (name (send self :name)))
+	:put                 (tag val)
+	:remprop             (attr)
+
+symbol
+	:constant            (c &optional (doc nil))
+	:func                
+	:global              (v &optional doc)
+	:home-package        
+	:init                (pn &optional (vt 1))
+	:pname               
+	:special             (v &optional (doc nil))
+	:value               (val)
+	:vtype               (&optional set)
+
+foreign-pod
+	:init                (param result func)
+	:pod-address         
+
+package
+	:enter               (sym)
+	:find                (s)
+	:find-external       (s)
+	:hash                (s)
+	:import              (sym)
+	:name                
+	:nicknames           (&optional n)
+	:rename              (s)
+	:shadow              (sym)
+	:unexport            (sym)
+	:unintern            (sym)
+	:unuse               (pkg)
+	:unused              (pkg)
+	:use                 (pkg)
+	:use-list            
+	:used-by             (a)
+	:used-by-list        
+
+stream
+	:buffer              (&optional start size)
+	:chars-left          
+	:count               
+	:discard             (&optional (n 1))
+	:init                (dir buf &optional start end)
+	:reset               
+	:tail                
+	:tail-string         
+
+file-stream
+	:async               (flag)
+	:fd                  
+	:flag                
+	:fname               
+	:infd                
+	:init                (f name dir &optional (size 128))
+	:instream            
+	:nonblock            (flag)
+	:outfd               
+	:outstream           
+	:prin1               (&optional (strm t) &rest msgs)
+
+broadcast-stream
+	:close               
+	:destinations        (&optional d)
+	:flush               (&aux buf)
+	:init                (dests)
+
+x:textwindowstream
+	:fill                
+	:flush               
+	:init                (xtext direction)
+
+io-stream
+	:async               (flag)
+	:flag                
+	:fname               
+	:infd                
+	:init                (in out)
+	:instream            (&optional in)
+	:outfd               
+	:outstream           (&optional out)
+
+socket-stream
+	:domain              
+	:init                (sockid addr &optional (size 128))
+
+metaclass
+	:all-method-names    (&optional (pattern ))
+	:all-methods         
+	:cid                 
+	:cix                 
+	:hierarchy           
+	:method              (selector)
+	:method-names        (&optional (pat ))
+	:methods             
+	:name                
+	:new                 
+	:slots               
+	:sub                 
+	:subclasses          
+	:super               
+	:superclasses        
+
+vectorclass
+	:element-type        
+	:elmtype             
+
+cstructclass
+	:access              (id &optional index)
+	:offset              (id &optional index)
+	:size                
+	:slot                (id)
+	:slotlist            (&optional slots)
+
+readtable
+
+array
+	:element-type        
+
+image-2d
+	:clear               
+	:copy                
+	:copy-from           (src)
+	:duplicate           (&rest args)
+	:entity              
+	:fill                (val)
+	:height              
+	:hex                 (&optional (x 0) (y 0) (w 8) (h 8) (strm t))
+	:init                (w h &optional imgvec (deepth 8))
+	:map                 (fn &optional (result (send self :duplicate)))
+	:map-picture         (lut &optional (result (send self :duplicate)))
+	:pixel               (x y)
+	:prin1               (strm &rest msg)
+	:set-pixel           (x y val)
+	:size                
+	:transpose           (&optional (result (instance (class self) :init (send self :height) (send self :width))))
+	:width               
+
+single-channel-image
+	:amplify             (rate &optional (result (send self :duplicate)) &aux (pict2 (array-entity result)))
+	:average-pixel       
+	:brightest-pixel     
+	:compress-gray-scale (levels &optional result &aux pict2)
+	:darkest-pixel       
+	:display             (&optional (xw *viewsurface*) (lut) (x 0) (y 0))
+	:display-lut         (&optional newlut)
+	:double              (&optional (simage))
+	:halve               (&optional (simage))
+	:lut                 (lut1 &optional (result (send self :duplicate)))
+	:lut2                (lut1 lut2 &optional (result (send self :duplicate)))
+	:patch-in            (xs ys img)
+	:pixel               (x y)
+	:pixel-hex-string    (x y)
+	:set-pixel           (x y val)
+	:subimage            (x y subwidth subheight)
+	:to16                
+	:to24                
+	:to32                
+	:xpicture            (&optional lut)
+
+bitmap-image
+	:init                (w h &optional imgvec)
+	:pixel-hex-string    (x y)
+
+grayscale-image
+
+index-color-image
+
+multi-channel-image
+	:components          
+
+split-color-image
+
+color-image
+	:blue                
+	:byte-depth          
+	:component           (n &optional cimg)
+	:depth               
+	:display             (&optional (xw *viewsurface*) (x 0) (y 0))
+	:double              (&optional (simage))
+	:green               
+	:halve               (&optional (simage))
+	:init                (w h &optional (colorimg) (deepth 24) (num-components 3))
+	:monochromize        (&optional (mimg))
+	:patch-in            (xs ys img)
+	:pixel               (x y)
+	:pixel-hex-string    (x y)
+	:pixel-list          (x y)
+	:pseudo2true         (img8)
+	:red                 
+	:subimage            (x y subwidth subheight)
+	:width               
+
+color-image16
+	:component           (n)
+	:init                (w h &optional img)
+	:pixel               (x y)
+	:pixel-hex-string    (x y)
+	:pixel-list          (x y)
+	:set-pixel           (x y val)
+	:to16                
+
+color-image24
+	:from32              (img32)
+	:hls                 (&optional (hls-image (instance (class self) :init (send self :width) (send self :height))))
+	:pixel-list          (x y)
+	:to16                
+	:to24                
+	:to32                (&optional entity32)
+
+color-image32
+	:blue                
+	:component           (n &optional (cimg (instance grayscale-image :init (send self :width) (send self :height))))
+	:from24              (img24)
+	:green               
+	:hls                 (&optional (hls-image (instance color-image32 :init (send self :width) (send self :height))))
+	:init                (w h &optional imgvec)
+	:monochromize        (&optional (mimg (instance grayscale-image :init (send self :width) (send self :height))))
+	:red                 
+	:to16                
+	:to24                (&optional entity24)
+	:to8                 (&optional entity8)
+
+thread
+	:id                  
+	:priority            
+
+port-selector
+	:add-port            (strm handler &rest arglist)
+	:fds                 
+	:get-stream-fd       (strm)
+	:init                (&rest port-handlers)
+	:remove-port         (strm)
+	:select              (&optional (timeout 0.1))
+	:select-loop         (&optional (timeout 0.1) (idle-func) &rest idle-args)
+	:streams             
+
+coordinates
+	:4x4                 (&optional mat44)
+	:changed             
+	:coords              (&optional (dest (instance coordinates :create (length pos))))
+	:copy-coords         (&optional (dest (instance coordinates :create (length pos))))
+	:copy-pos            
+	:copy-rot            
+	:copy-worldcoords    
+	:create              (&optional (dimension 3))
+	:dimension           
+	:euler               (azimuth elevation rotation)
+	:euler-angle         
+	:init                (&key (dimension 3) ((:pos p) (instantiate float-vector dimension)) ((:rot r) (unit-matrix dimension)) (euler nil) (rpy nil) (axis nil) (angle nil) (at nil) (coords at) (4x4 nil) (wrt :local) ((:name nm)) (properties nil) &allow-other-keys)
+	:inverse-transform-vector (vec)
+	:inverse-transformation (&optional (dest (instance coordinates :create (length pos))))
+	:locate              (vec &optional (wrt :local))
+	:move-to             (c &optional (wrt :local) &aux cc)
+	:name                (&optional nm)
+	:newcoords           (c &optional p)
+	:orient              (theta axis &optional (wrt :local))
+	:orient-with-matrix  (mat wrt)
+	:parent-orientation  (v wrt)
+	:parent-vector       (v wrt)
+	:parentcoords        
+	:pos                 
+	:prin1               (&optional (strm t) &rest more-args &aux (rpy (send self :worldrot)) (p (send self :worldpos)))
+	:replace-coords      (c &optional p)
+	:replace-pos         (p)
+	:replace-rot         (r)
+	:reset-coords        
+	:rot                 
+	:rotate              (theta &optional axis (wrt :local))
+	:rotate-vector       (v)
+	:rotate-with-matrix  (mat wrt)
+	:rotation-angle      
+	:rpy                 (r p y)
+	:rpy-angle           
+	:scale               (&optional s)
+	:transform           (c &optional (wrt :local))
+	:transform-vector    (v)
+	:transformation      (c2 &optional (wrt :local))
+	:translate           (vec &optional (wrt :local))
+	:worldcoords         
+	:worldpos            
+	:worldrot            
+	:x-axis              
+	:y-axis              
+	:z-axis              
+
+cascaded-coords
+	:assoc               (child &optional c)
+	:changed             
+	:clear-assoc         
+	:copy-worldcoords    (&optional (dest (instance coordinates :create (length pos))))
+	:descendants         
+	:disobey             (mother)
+	:dissoc              (child)
+	:inheritance         
+	:init                (&rest initargs &key ((:parent par)) at &allow-other-keys)
+	:inverse-transform-vector (v)
+	:inverse-transformation (&optional (dest (instance coordinates :create)))
+	:leaves              
+	:manager             (&optional m)
+	:move-to             (c &optional (wrt :local) &aux cc)
+	:newcoords           (c &optional p)
+	:obey                (mother)
+	:orient              (theta axis &optional (wrt :local))
+	:orient-with-matrix  (mat wrt)
+	:parent              
+	:parent-orientation  (v wrt)
+	:parent-vector       (v wrt)
+	:parentcoords        
+	:rotate              (theta axis &optional (wrt :local))
+	:rotate-vector       (v)
+	:rotate-with-matrix  (mat wrt)
+	:transform           (c &optional (wrt :local))
+	:transform-vector    (v)
+	:transformation      (c2 &optional (wrt :local))
+	:update              
+	:worldcoords         
+	:worldpos            
+	:worldrot            
+
+faceset
+	:all-edges           
+	:box                 
+	:color               (&optional new)
+	:common-box          (b &optional (tolerance))
+	:contour-edges       (vp &aux (visible-faces (send self :visible-faces vp)) r)
+	:diffusion           (&optional new &aux dif)
+	:distance            (target)
+	:edge                (n)
+	:edges               
+	:face                (n)
+	:faces               (&rest x)
+	:faces-intersect-with-point-vector args=(point vector)
+checks intersection with a line which extends from POINT toward VECTOR direction.
+	:holes               
+	:init                (&rest initargs &key ((:faces f)) ((:edges e)) ((:vertices v)) (color nil) (reflectance) (diffusion) &allow-other-keys)
+	:magnify             (scale &optional (axis))
+	:newbox              (&optional (tolerance *contact-threshold*))
+	:non-contour-edges   (vp &aux (visible-faces (send self :visible-faces vp)) r)
+	:reflectance         (&optional new &aux ref)
+	:reset-vertices      
+	:rotate-vertices     (rad axis)
+	:translate-vertices  (trans)
+	:update              
+	:vertex              (n)
+	:vertices            
+	:visible-edges       (vp &aux visible-faces r)
+	:visible-faces       (vp)
+
+body
+	:*                   (&rest bodies)
+	:+                   (&rest bodies)
+	:-                   (&rest bodies)
+	:area                
+	:body-type           
+	:centroid            (&optional (point (float-vector 0 0 0)))
+	:constraint          (b)
+	:contact-edges       (b)
+	:contact-vertices    (b)
+	:copy-csg            
+	:creation-form       returns eus program that re-creates this body.
+	:csg                 (&optional newcsg)
+	:euler               :euler returns the number of rings (passes)
+	:evert               
+	:extream-point       :extream-point (vec) finds the farthest point along vec in vertices.
+	:get-face            (&optional b f id)
+	:init                (&rest initargs &key (approximated nil) (primitive nil) ((:csg csgform) nil) &allow-other-keys)
+	:insidep             (point &optional (tolerance *coplanar-threshold*))
+	:intersect-face      (f)
+	:intersectp          (b)
+	:intersectp2         (body2 &optional (tolerance *epsilon*))
+	:length              length in vec direction
+	:magnify             (scale &optional (axis))
+	:perimeter           
+	:possibly-contacting-edges (cbox)
+	:possibly-contacting-faces (cbox)
+	:possibly-contacting-vertices (cbox)
+	:possibly-interfering-edges (cbox)
+	:possibly-interfering-faces (cbox)
+	:primitive-bodies    collects primitive bodies that defines this body in a list
+	:primitive-body-p    
+	:primitive-groups    
+	:prin1               (strm)
+	:replace-shape       (newbody)
+	:rotate-vertices     (rad axis)
+	:set-convexp         
+	:supporting-faces    (&optional (gravity (floatvector 0.0 0.0 -1.0)))
+	:translate-vertices  (trans)
+	:volume              (&optional (point #f(0.0 0.0 0.0)))
+	:world-centroid      
+
+sphere
+	:closest-point       (point)
+	:init                (&key (center (float-vector 0 0 0)) ((:radius r) 1.0))
+	:inner               (point)
+	:intersect-line      (p1 p2)
+	:intersect-with-body (bod)
+	:radius              (&optional r)
+	:volume              
+
+viewing
+	:changed             
+	:init                (&rest viewargs &key (dimension 3) (target nil) (view-direction nil) (view-up (float-vector 0.0 0.0 1.0)) (view-right nil) &allow-other-keys)
+	:look                (from &optional (to #f(0.0 0.0 0.0)))
+	:makeviewcoords      (ax ay az p)
+	:sendviewcoords      
+	:update              
+	:view-direction      
+	:view-right          
+	:view-up             
+	:viewpoint           
+
+projection
+	:aspect              (&optional (rate nil))
+	:hither              (&optional (h nil))
+	:init                (&rest viewing-params &key ((:hither h) 100.0) ((:yon y) 10000.0) (aspect 1.0) (screen 100.0) (screen-x screen) (screen-y (* aspect screen-x)) &allow-other-keys)
+	:make-projection     (&rest args)
+	:newprojection       (pmat)
+	:project             (vec)
+	:project3            (vec3)
+	:projection          
+	:screen              (&optional (sx nil) (sy sx))
+	:view                (point)
+	:viewreference       
+	:yon                 (&optional (y nil))
+
+viewing2d
+	:init                (&rest initargs &key (screen 1.0) (screen-x screen) (screen-y screen-x) &allow-other-keys)
+	:make-projection     
+	:project             (vec)
+	:project2            (vec3)
+	:view                (point)
+
+parallel-viewing
+	:make-projection     
+
+perspective-viewing
+	:fovy                
+	:init                (&rest params &key ((:viewdistance vd)) &allow-other-keys)
+	:look-body           (&rest bodies)
+	:look-body2          (&rest bodies)
+	:lookaround          (alfa beta)
+	:make-projection     
+	:prin1               (strm &optional msg)
+	:ray                 returns direction vector pointing (u,v) in NDC from the viewpoint
+	:view-angle          (&optional ang)
+	:view-line           (&optional (v #f(0.0 0.0)))
+	:view-orient         (&optional (v (float-vector 0 0)))
+	:view-plane          +offset makes the viewplane closer to the viewpoint,
+-offset takes further distance.
+	:viewdistance        (&optional (vd nil))
+	:zoom                (&optional (s nil))
+
+coordinates-axes
+	:drawners            
+	:init                (sz &rest args)
+	:magnify             (r)
+	:update              
+
+polygon2d
+	:3d                  (&optional (z 0.0) (klass polygon))
+	:box                 
+	:boxtest             (b)
+	:distance            (pnt)
+	:distance-point      (pnt)
+	:draw                (xwin &optional color)
+	:draw-fill           (xwin &optional color)
+	:drawners            
+	:edges               
+	:init                (vlist)
+	:insidep             (point)
+	:intersect-line      (p1 &optional p2)
+	:intersect-polygon2d (pg)
+	:lines               
+	:on-edge             (p &optional (tolerance *contact-threshold*) &aux res)
+	:set-convexp         
+	:update              
+	:vertices            
+
+geometry::circle2d
+	:draw                (v)
+	:init                (r &rest args)
+	:radius              
+
+viewport
+	:center              (&optional x (y x))
+	:height              (&optional v)
+	:init                (&rest args &key (dimension 3) (xcenter 100) (ycenter 100) (width 200) (height 200) &allow-other-keys)
+	:ndc-height-to-screen (hei)
+	:ndc-line-to-screen  (p1 p2 &optional (do-clip t))
+	:ndc-point-to-screen (p)
+	:ndc-width-to-screen (wid)
+	:resize              (&rest args &key xcenter ycenter width height &allow-other-keys)
+	:screen-point-to-ndc (p)
+	:size                (&optional w (h w))
+	:width               (&optional v)
+	:xcenter             (&optional v)
+	:ycenter             (&optional v)
+
+system:barrier-synch
+	:add                 
+	:init                
+	:remove              
+	:wait                
+
+system:synch-memory-port
+	:init                
+	:read                
+	:write               
+
+line
+	:box                 (&optional (tolerance))
+	:boxtest             (box &optional tolerance)
+	:colinear-line       (ln &optional (tol *coplanar-threshold*))
+	:colinear-line-intersection (ln2)
+	:colinear-point      (p &optional (tol *coplanar-threshold*))
+	:common-perpendicular (l)
+	:coplanar            (ln &optional (tolerance *coplanar-threshold*))
+	:direction           
+	:distance            (x)
+	:distance-line       (ln)
+	:distance-point      (p &aux (par (send self :foot p)))
+	:end-point           (v)
+	:eq                  (ln2)
+	:eql                 (ln2)
+	:equall              (ln2)
+	:foot                (point &aux (a (v- pvert nvert)))
+	:init                (&key ((:pvertex pv)) ((:nvertex nv)) &allow-other-keys)
+	:intersect-line      (ln &optional (tolerance *parallel-threshold*))
+	:intersection        (ln)
+	:length              
+	:nvertex             (&optional f)
+	:on-line-point       (pnt &optional (tol *coplanar-threshold*) &aux param)
+	:parameter           (point)
+	:point               (p)
+	:prin1               (strm)
+	:project             (pln)
+	:pvertex             (&optional f)
+	:vertices            
+
+edge
+	:angle               
+	:another-face        (fac)
+	:anothervertex       (point)
+	:approximated-p      
+	:binormal            (f)
+	:body                
+	:center-coordinates  
+	:color               (&optional new)
+	:connected-vertex    (e)
+	:contact             (e)
+	:contourp            is this a contour edge when observed from viewpoint?
+	:direction           (&optional (f pface))
+	:faces               
+	:flags               
+	:init                (&rest args &key ((:pface pf)) ((:nface nf)) ((:angle ang)) (approximated nil) ((:flags f) 0) &allow-other-keys)
+	:invert              
+	:ncwing              
+	:neighborpoints      (point)
+	:next-edge           (f)
+	:next-edge-angle     (f)
+	:next-vertex         (f)
+	:nface               (pv nv)
+	:nvertex             (f)
+	:nwing               
+	:pcwing              
+	:pface               (pv nv)
+	:previous-edge-angle (f)
+	:pvertex             (f)
+	:pwing               
+	:replace-face        (f newface)
+	:set-angle           
+	:set-approximated-flag (&optional (threshold 0.7))
+	:set-face            (pv nv f)
+
+winged-edge
+	:init                (&rest args &key ((:pwing pw)) ((:nwing nw)) ((:pcwing pcw)) ((:ncwing ncw)) &allow-other-keys)
+	:ncwing              
+	:nwing               
+	:pcwing              
+	:pwing               
+	:set-wings           
+
+plane
+	:box                 
+	:brightness          (light-source)
+	:coplanar-line       (ln &optional (tolerance *coplanar-threshold*))
+	:coplanar-point      (point &optional (tolerance *coplanar-threshold*))
+	:distance            (point)
+	:foot                (point)
+	:id                  
+	:init                (n apoint)
+	:intersect-edge      (eg)
+	:intersection        (pv nv)
+	:normal              
+	:on-plane-p          (point &optional (tolerance *epsilon*))
+	:original-body       
+	:plane-distance      (point)
+	:project             (&optional (point (float-vector 0 0 0)))
+	:separation          (mypoints hispoints)
+
+polygon
+	:adjacent-faces      (&aux flist pf nf)
+	:aligned-plane       (f)
+	:all-edges           
+	:area                
+	:box                 (&optional tolerance)
+	:boxtest             (box &optional tolerance)
+	:centroid            (&optional point)
+	:color               (&optional new)
+	:contact-edge        (p &optional (tolerance *contact-threshold*))
+	:contact-plane       (f &optional (tolerance *contact-threshold*))
+	:contact-point       (p &optional (tolerance *contact-threshold*))
+	:contactp            (p &optional (tolerance *contact-threshold*))
+	:convexp             
+	:coplanar-distance   (pnt)
+	:coplanar-intersections (cr &optional (tolerance *coplanar-threshold*))
+	:distance            (point)
+	:edge                (n)
+	:edges               
+	:face                
+	:init                (&key ((:vertices ver)) ((:edges edg)) ((:normal nor)) ((:distance dis)))
+	:insidep             (point &optional (*epsilon* *epsilon*))
+	:intersect-edge      (e)
+	:intersect-face      (f &optional (cbox (send (send self :box) :intersection (send f :box))))
+	:intersect-line      (p1 p2)
+	:intersect-point-vector (point vnorm)
+	:invert              
+	:next-edge           (e)
+	:on-edge             (p &optional (tolerance *contact-threshold*) &aux res)
+	:on-vertex           (p &optional (*epsilon* *contact-threshold*) &aux res)
+	:perimeter           
+	:previous-edge       (e)
+	:reset-normal        
+	:set-convexp         
+	:transform-normal    (c)
+	:vertex              (n)
+	:vertices            
+	:vertices-mean       
+	:visible             (vp)
+	:volume              (&optional (point #f(0.0 0.0 0.0)))
+
+face
+	:all-edges           
+	:all-vertices        
+	:area                
+	:body                (&optional bod)
+	:body-type           
+	:centroid            (&optional (point nil))
+	:color               (&optional newcolor)
+	:contact-edge        (e1)
+	:contact-point       (p &optional (tolerance *contact-threshold*))
+	:copied-primitive-face-p 
+	:diffusion           (&optional new &aux dif)
+	:distance            (point)
+	:enter-hole          (h)
+	:face                
+	:face-id             
+	:holes               
+	:id                  (&optional newid)
+	:init                (&key ((:normal nor)) ((:distance d)) ((:edges p)) ((:vertices ver)) ((:holes h)) ((:id newid) nil) ((:body bod) nil) ((:primitive-face pface) self))
+	:insidep             (point &optional (tol 0.001))
+	:invert              
+	:on-edge             (p &optional (tolerance *contact-threshold*))
+	:on-vertex           (p &optional (*epsilon* *contact-threshold*) &aux res)
+	:primitive-body      
+	:primitive-body-type 
+	:primitive-face      (&optional fac)
+	:prin1               (strm)
+	:reflectance         (&optional new &aux ref)
+	:reset-normal        
+	:transform-normal    (c)
+
+hole
+	:face                (&optional fac)
+	:hollowed-faces      
+	:init                (&key ((:normal nor)) ((:distance dis)) ((:edges edg)) ((:vertices ver)) ((:face fac)))
+
+semi-space
+	:body                (&optional x)
+	:box                 (&optional (tolerance 0.0))
+	:edges               
+	:faces               
+	:id                  (&optional x)
+	:insidep             (pnt)
+	:on-edge             (point &optional tol)
+	:primitive-face      (&optional x)
+
+viewer
+	:adjust-viewport     (&optional w h (cx (/ w 2)) (cy (/ h 2)))
+	:clear               
+	:draw                (thing &optional info)
+	:draw-2dlnseg        (l)
+	:draw-arc            (point width height &optional (angle1 0) (angle2 2pi) color &aux v)
+	:draw-arc-ndc        (point width height &optional (angle1 0) (angle2 2pi) color)
+	:draw-arrow          (p1 p2 &optional (do-clip t) (color nil))
+	:draw-axis           (coords &optional size)
+	:draw-body           (bod &optional (normal-clip t))
+	:draw-box            (v &optional (size (/ (send surface :width) 300.0)))
+	:draw-box-ndc        (lower-left upper-right)
+	:draw-edge           (e &optional color)
+	:draw-edge-image     (ei &optional (dashed-invisibles nil) (color (send ei :color)))
+	:draw-faces          (flist &optional (normal-clip nil) color)
+	:draw-fill-arc       (point width height &optional (angle1 0) (angle2 2pi) color &aux v)
+	:draw-fill-arc-ndc   (point width height angle1 angle2 &optional color)
+	:draw-fill-rectangle-ndc (point width height &optional color)
+	:draw-image-string-ndc (point string &optional color)
+	:draw-line           (p1 p2 &optional (do-clip t) (color nil))
+	:draw-line-ndc       (p1 p2 &optional (do-clip t) (color nil))
+	:draw-one            (thing info)
+	:draw-point-ndc      (p &optional color)
+	:draw-polyline       (vlist)
+	:draw-polyline-ndc   (polyline)
+	:draw-rectangle-ndc  (point width height &optional color)
+	:draw-star           (v &optional size)
+	:draw-star-ndc       (point &optional (size 0.02))
+	:draw-string-ndc     (point string &optional color)
+	:erase               (thing)
+	:flush               
+	:init                (&key ((:viewing ving)) ((:viewport vport)) ((:viewsurface vsurf)) alternate name)
+	:pane                
+	:point-to-screen     (p)
+	:resize              (width &optional (height width))
+	:viewing             (&rest msg)
+	:viewport            (&rest msg)
+	:viewsurface         (&rest msg)
+
+viewsurface
+	:draw-line           (v1 v2 &optional color)
+	:drawline-primitive  (x1 y1 x2 y2 &optional color)
+	:flush               
+	:init                (&rest l &key &allow-other-keys)
+	:line-style          (x)
+	:line-width          (x)
+	:nomethod            (&rest msg)
+	:set-erase-mode      
+	:set-show-mode       
+
+tektro-viewsurface
+	:clear               
+	:drawline-primitive  (x0 y0 x1 y1 &optional color)
+	:height              (&optional x)
+	:init                (&rest args &key ((:color c) 0) ((:width w) 768) ((:height h) 512) &allow-other-keys)
+	:resize              (w h)
+	:width               (&optional x)
+
+x:xobject
+
+x:gcontext
+	:background          (&optional pix (cmap *color-map*))
+	:cap-style           (&optional x)
+	:change-attributes   &key function planemask foreground background 
+ line-width line-style cap-style join-style font
+	:copy                
+	:create              (&rest args &key (drawable (defaultrootwindow *display*)) (background *bg-pixel*) (foreground *fg-pixel*) (name) &allow-other-keys)
+	:dash                (&rest x)
+	:fill-rule           (&optional x)
+	:fill-style          (&optional x)
+	:font                (&optional x)
+	:foreback            (&optional fore back)
+	:foreground          (&optional pix (cmap *color-map*))
+	:free                
+	:function            0=Clear,	1=And,		2=AndReverse,	3=Copy
+4=AndInverted,	5=NoOp,		6=Xor,		7=Or,
+8=Nor,		9=Equiv,	10=Invert,	11=XorReverse,
+12=CopyInverted,13=OrInverted,	14=Nand,	15=Set
+	:function-to-value   (f)
+	:gc                  
+	:get-attribute       (attr)
+	:get-attributes      (&rest attrs)
+	:init                (id)
+	:join-style          (&optional x)
+	:line-style          (&optional x)
+	:line-width          (&optional x)
+	:planemask           (&optional plane-mask)
+	:reverse             
+	:stipple             (pixmap)
+	:tile                (pixmap)
+
+x:xdrawable
+	:3d-fill-rectangle   (x y w h b lightedge darkedge surface topleft-edge &optional (state :flat))
+	:arc                 (x y width &optional (height width) (angle1 0.0) (angle2 2pi) (system:gc gcon))
+	:clear               
+	:clear-area          (&key (x 0) (y 0) (width (send self :width)) (height (send self :height)) ((:gc g) gcon))
+	:color               (&optional color)
+	:copy-from           (dw &key (width) (height) (source-x 0) (source-y 0) (x 0) (y 0))
+	:draw-arc            (point width &optional (height width) (angle1 0.0) (angle2 2pi) (system:gc gcon))
+	:draw-fill-arc       (point width &optional (height width) (angle1 0.0) (angle2 2pi) (system:gc gcon))
+	:draw-fill-rectangle (point width height &optional (system:gc gcon))
+	:draw-image-string   (point str &optional (start 0) (end (length str)) (system:gc gcon))
+	:draw-line           (from to &optional (system:gc gcon))
+	:draw-lines          (points &optional (mode 0) (system:gc gcon))
+	:draw-point          (p &optional (system:gc gcon))
+	:draw-polygon        (points &optional (system:gc gcon))
+	:draw-rectangle      (point width height &optional (system:gc gcon))
+	:draw-string         (point str &optional (start 0) (end (length str)) (system:gc gcon))
+	:drawable            
+	:drawline-primitive  (x1 y1 x2 y2)
+	:fill-arc            (x y width &optional (height width) (angle1 0.0) (angle2 2pi) (system:gc gcon))
+	:fill-polygon        (points &optional (shape 0) (coordmode 0) (system:gc gcon))
+	:fill-rectangle      (x y width height &optional (system:gc gcon))
+	:flush               
+	:gc                  (&rest newgc)
+	:gcid                
+	:geometry            
+	:getimage            (&key (xy nil) (x 0) (y 0) (width (- (send self :width) x)) (height (- (send self :height) y)) (mask 4294967295) (format 2))
+	:graph               (values &key (color) (max) (min) (system:gc gcon) (clear nil))
+	:height              
+	:image-string        (x y str &optional (start 0) (end (length str)) (system:gc gcon))
+	:init                (id &optional w h system:gc)
+	:line                (x1 y1 x2 y2 &optional (system:gc gcon))
+	:line-style          (&optional dash)
+	:line-width          (&optional dots)
+	:point               (x y &optional (system:gc gcon))
+	:pos                 
+	:putimage            (image &key (src nil) (src-x 0) (src-y 0) (dst nil) (dst-x 0) (dst-y 0) (width) (height) ((:gc g) gcon) (visual (send self :visual)) (depth (visual-depth visual)) (bitunit depth) (ximage *default-ximage*))
+	:putimage8to24       (image &key (src nil) (src-x 0) (src-y 0) (dst nil) (dst-x 0) (dst-y 0) (width (- (send self :width) dst-x)) (height (- (send self :height) dst-y)) ((:gc g) gcon) &aux image32 pixel8)
+	:rectangle           (x y width height &optional (system:gc gcon))
+	:set-erase-mode      
+	:set-show-mode       
+	:set-xor-mode        
+	:shift               (x &optional (y 0))
+	:string              (x y str &optional (start 0) (end (length str)) (system:gc gcon))
+	:width               
+	:x                   
+	:y                   
+
+x:xpixmap
+	:create              (&key (size 256) (width size) (height width) (depth (defaultdepth *display* 0)) (system:gc *defaultgc*) &allow-other-keys)
+	:create-from-bitmap-file (fname)
+	:destroy             
+	:write-to-bitmap-file (fname)
+
+x:xwindow
+	:associate           (child)
+	:attributes          (&aux attr)
+	:background          (&optional color)
+	:background-pixmap   (pixmap)
+	:border              (pixel)
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:clear               
+	:clear-area          (&key (x 0) (y 0) (width 0) (height 0))
+	:colormap            
+	:configurenotify     (event)
+	:configurerequest    (event)
+	:copy                (&rest args)
+	:create              (&key ((:parent par) *root*) (x 0) (y 0) (size 256) (width size) (height width) (border-width 2) (border *fg-pixel*) (save-under nil) (backing-store :always) ((:backing-pixmap backingpixmap) nil) (foreground) (background) (title (string (gensym WINDOW))) (event-mask 139279) ((:gc xgc)) (font) (name) (map t) ((:visual vi) *visual*) (depth (visual-depth vi)) (color-map) (override-redirect nil) (gravity :northwest) &allow-other-keys)
+	:depth               
+	:destroy             
+	:dissociate          (child)
+	:enternotify         (event)
+	:event-mask          
+	:event-notify        (type event)
+	:event-notify-dispatch (type event)
+	:event-notify-print  (type event)
+	:expose              (event)
+	:global-pos          
+	:keyenter            (ch &optional event)
+	:keypress            (event)
+	:keyrelease          (event)
+	:leavenotify         (event)
+	:location            (&aux (attr (send self :attributes)))
+	:lower               
+	:map                 
+	:motionnotify        (event)
+	:move                (newx newy)
+	:override_redirect   (&optional (val 1))
+	:parent              
+	:querypointer        
+	:raise               
+	:redraw              
+	:refresh             
+	:remap               
+	:reparent            (par &optional (x 0) (y 0))
+	:resize              (w h)
+	:root                
+	:save                
+	:save_under          (&optional (val 1))
+	:screen              
+	:selectinput         (event-mask)
+	:set-colormap        (cmap)
+	:settransientforhint 
+	:size                (&aux (attr (send self :attributes)))
+	:subwindows          (&optional n)
+	:title               (title)
+	:unmap               
+	:visibilitynotify    (event)
+	:visual              
+	:write-to-bitmap-file (fname)
+
+x:panel
+	:active-menu         (w)
+	:buttonpress         (pos)
+	:buttonrelease       (pos)
+	:create              (&rest args &key ((:item-height iheight) 28) ((:item-width iwidth) 50) (font font-lucidasans-bold-12) ((:background color)) (parent) (event-mask nil) &allow-other-keys)
+	:create-item         (klass label receiver method &rest args &key (x) (y) (font fontid) &allow-other-keys)
+	:create-menubar      (&rest args &key (x 0) (y 0) (font fontid) &allow-other-keys)
+	:delete-items        
+	:enternotify         (event)
+	:expose              (event)
+	:items               
+	:keyenter            (pos)
+	:leavenotify         (pos)
+	:locate-item         (item &optional x y)
+	:motionnotify        (pos)
+	:quit                (&rest a)
+	:redraw              
+	:resize              (w h)
+
+x:menu-panel
+	:buttonrelease       (event)
+	:create              (&rest args &key (font font-cour12) (border-width 2) (width 100) (color *bisque1*) &allow-other-keys)
+	:create-item         (klass label receiver method &rest args &key (font fontid) (active-color) &allow-other-keys)
+	:draw-panel          
+	:find-button         (label)
+	:mapnotify           (event)
+	:newsize             
+	:popup               (x y &optional (offset 20))
+
+x:menubar-panel
+	:create              (&rest args &key (font font-lucidasans-bold-12) width height &allow-other-keys)
+	:locate-item         (item &optional x y)
+	:popup-all-menus     
+	:unmap-all-menus     
+
+x:pixmap-scroller
+	:create              (&rest args &key pixmap &allow-other-keys)
+	:reset-subwindows    
+	:scroll              (&optional (n 1) &aux srcy desty erasey)
+	:set-pixmap          (pmap)
+
+x:filedialog
+	:cancel              (event)
+	:configurenotify     (event)
+	:create              (&rest args &key (font font-courb12) (directory (concatenate string (pwd) /)) (ok-notify) (cancel-notify ok-notify) &allow-other-keys)
+	:create-buttons      
+	:create-fileview     (directory)
+	:cwd                 
+	:file-selected       (line)
+	:go-up               (event)
+	:ok                  (event)
+	:open                (event)
+	:resize              (w h)
+	:selected-fname      
+	:view                (event)
+
+x:filepanel
+	:compile             (event)
+	:create              (&rest args)
+	:create-buttons      
+	:eval                (event)
+	:load                (event)
+	:print               (event)
+	:remove              (event)
+	:remove-confirm      (answer)
+
+x:textviewpanel
+	:configurenotify     (event)
+	:create              (&rest args &key font file strings (sexp) (width 400) &allow-other-keys)
+	:find                (event)
+	:finish              (event)
+	:print               (event)
+	:quit                (event)
+	:resize              (w h)
+
+x:confirmpanel
+	:ask                 (rcv meth &rest lines)
+	:configurenotify     (event)
+	:create              (&rest args)
+	:draw-message        
+	:no                  (event)
+	:yes                 (event)
+
+x::colorpickerpanel
+	:ambient             (event)
+	:create              (&rest args)
+	:diffuse             (event)
+	:emission            (event)
+	:init-value          (colmat)
+	:shininess           (event)
+	:specular            (event)
+	:transparency        (event)
+	:value1              (item v)
+	:value2              (item v)
+	:value3              (item v)
+
+x::objectbrowser
+	:create              (&rest args &key (width 350) (height 500) &allow-other-keys)
+	:set-class           (evnt)
+	:set-object          (evnt)
+	:set-subclass        (item)
+	:set-superclass      (item)
+	:update-method-names (&optional (klass current-class))
+
+x:canvas
+	:adjust-corners      
+	:background-event    (color e)
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:clear-event         (e)
+	:color-event         (color e)
+	:create              (&rest args)
+	:draw-selection-rectangle 
+	:motionnotify        (event)
+	:selection           
+
+x:graph-canvas
+	:clear               
+	:create              (&rest args &key (max 1.0) (min -1.0) (samples) (foreground *whitepixel*) (background *blackpixel*) &allow-other-keys)
+	:graph               (&rest args)
+	:new-pixmap          (&optional (w width) (h height))
+	:range               (max &optional (min 0.0))
+	:redraw              
+	:resize              (x y)
+
+x:panel-item
+	:buttonpress         (pos)
+	:create              (name receiver method &rest args &key ((:size s) 100) ((:width w) s) ((:height h) w) (font font-courb12) &allow-other-keys)
+	:draw-label          (x y)
+	:enternotify         (event)
+	:keypress            (pos)
+	:keyrelease          (pos)
+	:leavenotify         (pos)
+	:motionnotify        (pos)
+	:notify              (&rest args)
+
+x:button-item
+	:active-color        (&optional pix)
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:create              (label receiver method &rest args &key ((:width wid)) ((:height hei)) (parent *root*) (event-mask '(:button)) (font font-lucidasans-bold-12) (foreground *blackpixel*) (border-width 0) (state (if (derivedp parent menu-panel) :flat :up)) (active-color nil) (submenu nil) &allow-other-keys)
+	:draw-label          (&optional (state :up) (color bg-color) (border 2) (offset))
+	:enternotify         (event)
+	:keypress            (event)
+	:keyrelease          (event)
+	:label               (&optional (newlab) (min-width 10))
+	:leavenotify         (event)
+	:redraw              
+	:resize              (w h)
+	:submenu             (&optional sm)
+
+x:menu-button-item
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:create              (label receiver method &rest args &key (menu nil) (items) (state :flat) &allow-other-keys)
+	:enternotify         (event)
+	:label               (&optional (newlab))
+	:popup-menu          
+	:unmap-menu          
+
+x:bitmap-button-item
+	:create              (fname reciever method &rest args &key width height &allow-other-keys)
+	:create-bitmap-from-file (fname)
+	:draw-label          (&optional (state :flat) (color bg-color) (border 2))
+	:redraw              
+
+x:text-item
+	:create              (label receiver method &rest args &key (font font-courb12) (columns 20) (initial-value) (border-width 0) &allow-other-keys)
+	:enternotify         (event)
+	:getstring           
+	:leavenotify         (event)
+	:redraw              
+	:value               (&optional newval invocation &aux ln)
+
+x:slider-item
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:compute-value       (event)
+	:continuous-notify   (flag)
+	:create              (label receiver method &rest args &key (min 0.0) (max 1.0) (parent) (min-label) (max-label) (value-format ~4,2f) (font font-courb12) (span 100) (border-width 0) (initial-value min) (continuous-update t) &allow-other-keys)
+	:display-value       (&optional (newval value))
+	:draw-bar-rectangle  
+	:draw-nob-rectangle  (&optional (oldx nob-x) (newx nob-x))
+	:inside-nob-p        (pos)
+	:motionnotify        (event)
+	:new-range           (min min-label max max-label)
+	:nob-x               (&optional (v value))
+	:redraw              
+	:value               (&optional (newval) (invocation))
+
+x:choice-item
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:choice              (event)
+	:create              (label receiver method &rest args &key (parent *root*) (choices '(0 1)) (font) (initial-choice 0) (button-size 13) (border-width 0) (event-mask nil) &allow-other-keys &aux choice-y choice-dots)
+	:draw-active-button  (&optional (old-choice active-choice) (new-choice active-choice))
+	:draw-label          (&optional (lab (get self :name)))
+	:redraw              
+	:value               (&optional (new-choice) invocation)
+
+x:joystick-item
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:create              (name receiver method &rest args &key (stick-size 5) (return nil) (follow-move t) (min-x -1.0) (max-x 1.0) (min-y -1.0) (max-y 1.0) &allow-other-keys)
+	:draw-circles        
+	:draw-stick          (&optional (x value-x) (y value-y) (erase t))
+	:motionnotify        (event)
+	:redraw              
+	:value               (&optional (newx) (newy) invocation)
+	:value-from-event    (event &optional (invocation follow-move))
+	:xy                  (&optional (x value-x) (y value-y))
+
+x:xscroll-bar
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:create              (&rest args &key parent ((:height h)) handle &allow-other-keys)
+	:draw-pattern        
+	:hit-region          (event)
+	:motionnotify        (event)
+	:move-handle         (&optional (newpos 0.0) (handle-size 0.1))
+	:resize              (w h)
+
+x:xhorizontal-scroll-bar
+	:buttonpress         (event)
+	:create              (&rest args &key (parent) ((:width w)) &allow-other-keys)
+	:draw-pattern        
+	:motionnotify        (event)
+
+x:characterwindow
+	:clear-lines         (start count)
+	:create              (&rest args &key (width 256) (height 256) (font) rows columns (event-mask '(:key :button :enterleave)) (parent *root*) &allow-other-keys)
+	:put-line            (row col str)
+	:xy                  (&optional (r 0) (c 0))
+
+x:textwindow
+	:advance             (&optional (n 1))
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:clear               
+	:clear-eol           (&optional (r win-row) (c win-col) (csr :on))
+	:clear-eos           (&optional (r win-row) (c win-col))
+	:clear-in-line       (row scol ecol)
+	:clear-lines         (lines &optional (r win-row))
+	:clear-text-area     (startrow startcol endrow endcol)
+	:configurenotify     (event)
+	:create              (&rest args &key width height rows columns (event-mask '(:key :button :enterleave)) (show-cursor nil) (notify-object nil) (notify-method nil) &allow-other-keys)
+	:cursor              (&optional (switch :toggle))
+	:echo                (flag)
+	:enternotify         (event)
+	:event-col           (event)
+	:event-row           (event)
+	:getstring           
+	:goback              (&optional (csr :on))
+	:goto                (r c &optional (cursor :on))
+	:horizontal-scroll   (&optional (n 1) &aux srcx destx erasex)
+	:insert              (ch)
+	:keyenter            (ch &optional event)
+	:keyrelease          (event)
+	:leavenotify         (event)
+	:lineenter           (line &optional (len (length line)))
+	:newline             
+	:putch               (ch)
+	:putstring           (str &optional (e (length str)))
+	:resize              (w h)
+	:scroll              (&optional (n 1) &aux srcy desty erasey)
+	:set-notify          (receiver method)
+	:show-cursor         (flag)
+	:win-col             
+	:win-col-max         
+	:win-row             
+	:win-row-max         
+	:xy                  (&optional (r win-row) (c win-col))
+
+x:buffertextwindow
+	:all-lines           
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:clear               
+	:create              (&rest args)
+	:delete              (n)
+	:display-line-string (string)
+	:display-strings     (strings)
+	:goto                (r c &optional (csr :on))
+	:highlight           (flag srow scol erow ecol)
+	:insert              (ch)
+	:insert-string       (str &optional (end (length str)))
+	:keyenter            (ch &optional event)
+	:line                (n)
+	:lines               
+	:max-line-length     
+	:motionnotify        (event)
+	:nlines              
+	:read-file           (fname)
+	:redraw              
+	:refresh             (&optional (start 0))
+	:refresh-area        (startrow startcol endrow endcol)
+	:refresh-in-line     (row scol ecol)
+	:refresh-line        (&optional (r win-row) (c win-col))
+	:refresh-lines       (lines srow)
+	:region-direction    (origin current-row current-col)
+	:selection           
+
+x:scrolltextwindow
+	:buttonpress         (event)
+	:buttonrelease       (event)
+	:clear               
+	:configurenotify     (event)
+	:create              (&rest args &key (scroll-bar nil) (horizontal-scroll-bar nil) &allow-other-keys)
+	:display-selection   (selection)
+	:goto                (r c &optional (csr :on))
+	:horizontal-scroll   (n)
+	:horizontal-scroll-fraction 
+	:insert              (thing &optional (refresh t))
+	:insert-char         (c &optional (refresh t))
+	:insert-newline      (&optional (refresh t))
+	:line-in-window-p    (ln)
+	:lines               
+	:locate              (n)
+	:locate-scroll-bar   
+	:refresh             (&optional (offset 0) (lines (- win-row-max offset)))
+	:refresh-line        (ln &optional (highlight nil) &aux fg-save bg-save)
+	:resize              (w h)
+	:scroll              (n)
+	:scroll-fraction     
+	:selection           
+
+x::textedit
+
+dda
+	:init                
+
+line-dda
+	:init                (x0 y0 x1 y1)
+	:next                
+	:update-x-major      
+	:update-y-major      
+
+ellipse-dda
+	:init                (param-a param-b &optional (x-center 0) (y-center 0))
+	:next                
+
+circle-dda
+
+x:colormap
+	:alloc               (r &optional g b)
+	:allocate-colors     (rgb-list &optional (private nil) (nplanes 0))
+	:allocate-private-colors (npixels &optional (nplanes 0))
+	:copy-colors         (cmap start &optional (end (1+ start)))
+	:create              (&key (nplanes 0) (ncolors 1) (visual *visual*) (contiguous nil))
+	:define-gray-scale-lut (lut-name levels &optional (private nil))
+	:define-hls-lut      :define-HLS-LUT name count hue low high saturation
+	:define-lut          (lut-name rgb-list &optional (private nil))
+	:define-rainbow-lut  :define-RAINBOW-LUT name (count 32) (hue1 0) (hue2 360) (lightness 0.5) (saturation 1.0)
+	:define-rgb-lut      (lut-name red &optional (green red) (blue green) private)
+	:destroy             
+	:free                (&optional (pix nil))
+	:get-pixel           (name)
+	:id                  
+	:init                (&optional id)
+	:install             
+	:lut                 (lut)
+	:lut-list            
+	:lut-names           
+	:pixel               (lut n)
+	:plane-bits          
+	:plane-shifts        
+	:planes              
+	:query               (pix &aux color)
+	:set-window          (win)
+	:size                (lut)
+	:store               (pix r &optional g b &aux exactdef colordef status)
+	:store-hls           (pix hue lightness saturation)
+	:uninstall           
+
+compiled-code
+	:type                
+
+foreign-code
+	:init                (ent &optional param (result :integer))
+
+closure
+
+load-module
+	:find                (symname)
+	:prin1               (&optional (strm t) &rest msgs)
+
+label-reference
+
+vector
+	:element-type        
+	:elmtype             
+
+float-vector
+
+integer-vector
+
+string
+	:get                 (pos type)
+	:set                 (val pos type)
+
+socket-address
+	:domain              
+	:host                
+	:next-port           
+	:port                
+	:prin1               (&optional (strm t))
+
+cstruct
+	:get                 (id &optional index)
+	:set                 (val id &optional index)
+
+carray
+	:get                 (&optional (index 0))
+	:set                 (val &optional (index 0))
+
+x::c-long
+
+x::c-int
+
+x::gcvalues
+
+x:xcolor
+	:blue                (&aux v)
+	:green               (&aux v)
+	:init                (pix r g b &optional (f 7))
+	:pixel               
+	:red                 (&aux v)
+	:rgb                 
+
+x::setwindowattributes
+
+x::windowattributes
+
+x::xevent
+
+bit-vector
+
+foreign-string
+
+extended-number
+
+ratio
+
+complex
+
+bignum
+
+socket-port
+	:accept              
+	:address             
+	:async               (on)
+	:domain              
+	:fd                  
+	:flag                
+	:id                  
+	:infd                
+	:init                (addr)
+	:listen              (&optional (backlog 3))
+
+pathname
+	:add-directory       (d)
+	:device              (&optional d)
+	:directory           (&optional d)
+	:directory-string    
+	:host                (&optional h)
+	:init                (&key ((:host hst)) ((:device dev)) ((:directory dir)) ((:name nm)) ((:type tp)) ((:version vers)))
+	:merge               (defaults)
+	:name                (&optional n)
+	:namestring          
+	:parse-namestring    (pn)
+	:prin1               (&optional (strm t))
+	:set-type            (tp)
+	:type                (&optional tp)
+	:version             (&optional v)
+
+url-pathname
+	:host                (&optional s)
+	:parse-namestring    (url-string)
+	:port                (&optional p)
+	:prin1               (strm)
+	:protocol            (&optional proto)
+	:server              (&optional s)
+
+hash-table
+	:clear               
+	:delete              (sym)
+	:enter               (sym val)
+	:extend              
+	:find                (s)
+	:get                 (s)
+	:hash                (s)
+	:hash-function       (&optional hf)
+	:init                (&key ((:not-found nofound) nil) ((:size s) 10) (test #'eq) ((:rehash-size rehash) 2.0) (hash #'sxhash))
+	:list-keys           
+	:list-values         
+	:map                 map func to the key and its value
+	:prin1               (&optional (strm t) &rest mesgs)
+	:size                
+
+compiler::translator
+	:1+                  
+	:1-                  
+	:adjust              (n)
+	:bind-cleaner        
+	:bind-special        (id)
+	:bit                 
+	:caar                
+	:caddr               
+	:cadr                
+	:call                (sym n)
+	:call-cleaner        (cleaner)
+	:call-closure        (entry argc)
+	:car                 
+	:cdar                
+	:cddr                
+	:cdr                 
+	:char                
+	:check-cons-nil      
+	:check-key-arg       (n lab)
+	:check-opt-arg       (m lab)
+	:check-req-arg       (req opt)
+	:check-rest-arg      (m)
+	:clearpush           
+	:close               
+	:closure             (lab)
+	:comment             (&rest c)
+	:compare             (type comparator lab)
+	:cons                
+	:declare-forward-function (name)
+	:declare-ftab        
+	:defmacro            (sym label doc)
+	:defmethod           (klass sel label doc)
+	:defun               (sym cname doc)
+	:del-frame           (spe loc)
+	:discard             (n)
+	:dupe                
+	:enter               (cname lname)
+	:entercatch          (exit)
+	:eqx                 
+	:eusmain             (entry)
+	:exitcatch           (exlab)
+	:flt-abs             
+	:flt-neg             
+	:flt-op2             (op)
+	:ftab-initializer    
+	:getbase             (n argp)
+	:getfunc             (sym)
+	:go-tag              (k need-unwind)
+	:if-eq               (lab)
+	:if-neq              (lab)
+	:if-nil              (lab)
+	:if-not-type         (type lab)
+	:if-t                (lab)
+	:if-type             (type lab)
+	:init                
+	:init-file           (source-name cname hname entry)
+	:int-abs             
+	:int-neg             
+	:int-op2             (op)
+	:jump                (lab)
+	:label               (l)
+	:load-arg            (n level)
+	:load-float          (x)
+	:load-global         (ent)
+	:load-indexed-ov     (index)
+	:load-int            (x)
+	:load-local          (n level)
+	:load-nil            
+	:load-obj            (n level)
+	:load-ovaf           (var)
+	:load-quote          (ent)
+	:load-t              
+	:memqx               
+	:nullx               
+	:offset-from-fp      
+	:parse-key-params    (keyvec req+opt keyn allowotherkeys)
+	:pop                 
+	:push                (src)
+	:pushenv             
+	:quote               
+	:quote-entry         (q)
+	:quote-fqv-entry     (q)
+	:reset-vsp           
+	:rest                (pcnt)
+	:return              
+	:return-from         (k need-unwind)
+	:setbit              
+	:setchar             
+	:setpushcount        (n)
+	:store               (dest)
+	:store-arg           (n level)
+	:store-global        (var)
+	:store-indexed-ov    (index)
+	:store-local         (offset level)
+	:store-obj           (var level)
+	:store-ovaf          (var)
+	:svref               
+	:svset               
+	:throw               
+	:type-check-predicate (pred)
+	:type-checker        (tn)
+	:unbind-special      (count)
+	:vref                (type)
+	:vset                (type)
+	:write-quote-vector  
+
+compiler:identifier
+	:binding             (&optional (bin binding))
+	:init                (sym bin lev off)
+	:offset              (&optional (off offset))
+	:type                (&optional (tp type))
+
+compiler::identifier-table
+	:clear-frame         
+	:create-frame        
+	:enter               (id &optional (lev level))
+	:enter-special       (id)
+	:find                (id &optional (lev level))
+	:frame               (&optional (n level))
+	:get                 (id &optional (lev level))
+	:init                (&optional (maxlev 20))
+	:init-frames         
+	:level               (&optional (lvl level))
+	:pop-frame           
+
+compiler::stack-frame
+	:init                
+	:local               (&optional (i 0))
+	:offset              (&optional (off nil))
+	:special             (&optional (i 0))
+
+compiler::compiler
+	:add-closure         (clo)
+	:add-initcode        (form)
+	:and                 (bodies)
+	:arithmetic          (op argcount arg-type-list)
+	:bind                (id binding offset &optional (keyvarp nil))
+	:block               (lab bodies)
+	:call-closure        (fdef args)
+	:catch               (label bodies)
+	:change-flets        (newflets)
+	:closure-level       (increment)
+	:compile-a-closure   (entry def)
+	:compile-closures    
+	:compile-file        (file &key (optimize *optimize*) (c-optimize 1) (safety *safety*) (cc *do-cc*) (pic *pic*) (verbose *verbose*) (entry (pathname-name file)) (o))
+	:cond                (clauses)
+	:conditional-jump    (t-label nil-label)
+	:copy-compiler       
+	:create-frame        
+	:declare             (args)
+	:def-user-entry      (form)
+	:defmethod           (methods)
+	:defun               (fun-macro name arglist bodies)
+	:delete-frame        (flag)
+	:enter-block         (lab)
+	:enter-variable      (id)
+	:eval                (form)
+	:evcon               (condition t-label nil-label)
+	:flet                (funcs bodies recursive-scope &aux (flets-save flets))
+	:funcall             (sym args)
+	:function            (fn)
+	:genlabel            (head)
+	:get-function        (fn)
+	:go                  (lab)
+	:if                  (forms)
+	:init                
+	:lambda              (param forms)
+	:lambda-block        (name arglist bodies cname)
+	:leave-block         
+	:let                 (bodies)
+	:let*                (bodies)
+	:load-ovaf           (form var)
+	:load-var            (var)
+	:or                  (bodies)
+	:progn               (bodies)
+	:return-from         (lab val)
+	:setq                (var-val)
+	:setslot             (obj klass index newval)
+	:slot                (obj klass index)
+	:special-form        (fn args)
+	:special-variable-p  (id)
+	:specials            
+	:store-ovaf          (form varname)
+	:store-var           (var)
+	:tagbody             (bodies)
+	:throw               (lab val)
+	:toplevel            (form compiler-eval &optional pass)
+	:toplevel-eval       (form)
+	:toplevel-execution  (form)
+	:unwind-protect      (prot cleanup)
+	:var-binding         (var)
+	:variable            (var)
+	:vector-op           (func argcount arg-type-list)
+	:while               (bodies)
+
+bounding-box
+	:below               (box2 &optional (dir #f(0.0 0.0 1.0)))
+	:body                
+	:box                 (&optional tol)
+	:center              
+	:corners             
+	:diagonal            
+	:extream-point       (dir)
+	:grow                (s &optional (abs nil))
+	:init                (v &optional (tolerance))
+	:init2               (v1 v2 &optional tolerance)
+	:inner               (point)
+	:intersection        (box &optional (tolerance))
+	:intersection-p      (box)
+	:maxpoint            
+	:minpoint            
+	:prin1               (&optional (strm t))
+	:union               (box &optional (tolerance))
+	:volume              
+
+constrained-point
+
+constraint-relation
+
+edge-image
+	:add-segment         (p &optional info)
+	:box                 
+	:collect-segments    (flag)
+	:color               
+	:contourp            
+	:edge3               
+	:homo2real           (p)
+	:init                (&key ((:edge3 e)) ((:homo-pvert hp)) ((:homo-nvert hn)) ((:pvert2 p2)) ((:nvert2 n2)))
+	:intersecting-point  (ex)
+	:invisible-segments  
+	:mark-visible-segments (viewpoint)
+	:project             (edge3d view &optional (viewpoint (send view :viewpoint)))
+	:projected-homo-point (p)
+	:projected-intersection (ex mutual)
+	:projected-point     (p)
+	:sort-segments       
+	:vertices            
+	:visible-face        (viewpoint)
+	:visible-segments    
+
+face-image
+	:boxtest             (b)
+	:face3d              
+	:init                (f3d elist viewpoint)
+	:possibly-hiding     (point)
+
+stereo-viewing
+
+help::help-item
+	:init                (typ fna see n &optional (c nil))
+	:read-help           
+

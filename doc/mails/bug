@@ -1,0 +1,48 @@
+Two bugs have been reported by Dr.Inaba and Dr.Hirai.
+(1) Eus sometimes dumps core during hid and body composition.
+(2) "Outer circuit not found" error sometimes occurs during body composition.
+    It seems to happen stochasticly.
+
+I had a hard time being annoyed for three nights. But eventually,
+I found bugs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+(1) core dump was caused by inproper memory management.
+Although this is not informed to users, when a compiled object is loaded,
+"load" returns an instance of compiled-code class, which can be invoked later.
+Let a file "aho." have lines (print "aho") and compile it by "euscomp aho.l".
+By (setq a (load "aho")), a compiled code is bound to 'a after printing "aho".
+Then, (funcall a) will print another "aho" although it returns some garbage
+result.
+The problem starts here. When load is used without setting the result to 
+a symbol, which is a usual case, the compiled-code object is not protected
+from garbage collection.
+Since the compiled code object is referenced internally in the module when
+it makes closure, the closure is soon forced to refer to garbage object
+after garbage collection, and causes harmful damage in the memory structure.
+That was the reason why eus dumped cores.
+Now internal call to makeclosure function has been changed not to refer
+the compiled-code object for the case it is not set to a symbol.
+The change includes the modifying of c/makes.c and comp/trans.l, and
+complete boot strapping procedure using mkeus.l is required.
+Anyway, this bug has been fatal to any programs using closures
+and it is fixed.
+
+(2) the bug was caused randomly
+The key point is that this bug happened stochasticly. For example,
+body- fails at the first attempt, and succeeds several times then
+fails again.  I thought this bug relates with the first bug, since
+memory management error often reveals asynchronously with GC.
+But in reality, the true bug resides in the code of point-location problem.
+Geopack.l  checks if a point lies in a body by casting a ray from the point
+to somewhere.  The direction is determinded by a random vector.
+I intended to cast another ray when the previous ray intersects at the edge
+of a face, but it would not work correctly.  Now it's OK.
+
+I can sleep well tonight.
+
+T.Matsui
+
+
+
+
+

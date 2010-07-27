@@ -1,0 +1,51 @@
+.TH eus 1 "Apr/20/1989"
+.SH NAME
+eus eusx euscomp eusxview eusview \- EusLisp
+.SH SYNOPSIS
+.nf
+eus [start-up-files]
+euscomp [-V] [-O] [-O\fI0123\fR] filename ...
+eusx
+eusgl
+eusmpi
+.fi
+.SH DESCRIPTION
+EusLisp is an object-based implementation of CommonLisp with geometric
+modeling facilities.
+Eus is the basic and lightest euslisp.
+Euscomp is the EusLisp compiler, which is symbolically linked to eus.
+Each of eusx, eusxview and eusview has the window interface
+with Xlib, xview toolkit, or sunview library respectively.
+
+
+.SH FILES
+Source programs should be stored under /usr/share/src/eus on a file-server.
+For each installation on many machine architectures,
+machine:/usr/local/eus should be provided.
+Source programs can be referenced through symbolic links from this
+directory.
+The name of this installation directory is held in *eusdir* variable
+in EusLisp and referenced by \fBload\fR.
+
+.nf
+*eusdir*/bin/	architecture (and OS) dependent executables
+*eusdir*/lisp/c/	EusLisp kernel sources
+*eusdir*/lisp/l/	EusLisp functions defined in EusLisp
+*eusdir*/lisp/comp/	the compiler
+*eusdir*/lisp/xwindow/	Xlib interface
+*eusdir*/lisp/tool/	miscelaneous programs
+*eusdir*/lib/clib/	library sources coded in C
+*eusdir*/lib/llib/	library sources including geometric modeler
+*eusdir*/lib/demo/	demonstration programs
+*eusdir*/contrib/bench/	benchmark programs
+*eusdir*/contrib/pprolog/	portable prolog
+*eusdir*/contrib/ops5/	ops5 production system
+*eusdir*/doc/	documents including reference manual in latex
+
+.SH SEE ALSO
+Object-Based Robot Programming System EusLisp, Reference Manual
+
+.SH BUGS
+Hid and hidd cannot draw lines for intersecting bodies.
+
+

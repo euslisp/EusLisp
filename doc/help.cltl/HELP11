@@ -1,0 +1,42 @@
+(<= function-documentation "
+Args: (number &rest more-numbers)
+Returns T if the args are in non-decreasing order; NIL otherwise.")
+(char<= function-documentation "
+Args: (char &rest more-chars)
+Returns T if the character codes of CHARs are in non-decreasing order; NIL
+otherwise.")
+(fceiling function-documentation "
+Args: (number &optional (divisor 1))
+Same as CEILING, but returns a float as the first value.")
+(make-two-way-stream function-documentation "
+Args: (stream1 stream2)
+Creates and returns a two-way stream.  Inputs from this stream are obtained
+from STREAM1 and outputs to this stream are sent to STREAM2.  A two-way stream
+is notated as
+	#<two-way stream n>
+where N is a number that identifies the stream.")
+(most-negative-single-float variable-documentation "
+Same as MOST-NEGATIVE-LONG-FLOAT.")
+(simple-string type-documentation "
+A simple-string is a string that is not displaced to another array, has no
+fill-pointer, and is not adjustable.")
+(string type-documentation "
+A string is a vector of characters.  A string is notated by surrounding the
+characters with double quotes.  Some strings may be displaced to another
+string, may have a fill-pointer, or may be adjustable.  Other strings are
+called simple-strings.")
+(string function-documentation "
+Args: (x)
+Coerces X into a string.  If X is a string, then returns X itself.  If X is a
+symbol, then returns its print name.  If X is a character, then returns a one
+element string containing that character.  Signals an error if X cannot be
+coerced into a string.")
+(subst-if-not function-documentation "
+Args: (new test tree &key (key #'identity))
+Substitutes NEW for subtrees of TREE that do not satisfy TEST and returns the
+result.  The original TREE is not destroyed.")
+(*interrupt-enable* variable-documentation "
+KCL specific.
+If the value of SI:*INTERRUPT-ENABLE* is non-NIL, KCL signals an error on the
+terminal interrupt (this is the default case).  If it is NIL, KCL ignores the
+interrupt and assigns T to SI:*INTERRUPT-ENABLE*.")

@@ -1,0 +1,33 @@
+Source files of the euslisp reference manual are located
+in oc/latex. The toplevel file is manual.tex, which inputs
+other *.tex files describing individual sections.
+
+If you wish to add a new section, name it ???.tex and refer
+the file somewhere in the input lines in the end of manual.tex.
+The file should begin with \section{section-name}. A section
+may have any number of subsections or subsubsections.
+Section titles of \section through \subsection are listed in
+the table-of-contents.
+
+To add a general description in a section, just put it after
+the section header. Descriptions about functions, macros, 
+classes, methods, and variables must appear in \refdesc environment.
+A typical section with a bunch of function description appears
+as follows:
+
+\section{New Feature}
+\markright{\arabic{section}. New Feature}
+
+Here is a general description about a new feature.
+...
+\begin{refdesc}
+\funcdesc{funcname}{arg1 arg2 ...}{this function computes ....}
+\macrodesc{macroname}{arg1 arg2 ...}{{\em arg1} and {\em arg2} are ...}
+\methoddesc{methodname}{arg ...}{ ...}
+\end{refdesc}
+
+In each description, arguments should be referred by italic word,
+keywords and functions by bold or tt font.
+
+
+

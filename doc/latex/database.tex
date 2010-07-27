@@ -1,0 +1,149 @@
+\section{PostgreSQL Database}
+\markright{\arabic{section}. PostgreSQL Database}
+
+\subsection{PostgreSQL}
+
+PostgreSQL is a free implementation of the relational database system,
+which is available from \verb+ http://www.postgresql.org+.
+Once PostgreSQL is installed on your computer, EusLisp provides
+links to the databases via the {\tt libpq.so} library.
+
+
+\begin{description}
+\item{Connecting to the Postgres database}
+	Instantiate pq:pgsql with proper arguments.  In most cases,
+	you just want to specify the database name and the user name.
+	If you don't know, just trust the defaults, namely
+	(instance pq:pgsql :init) is usually ok to make a connection.
+
+\item{Synchronous data transfer}
+	There are the synchronous and asynchronous interface in libpq.so.
+	Synchronous transfer is easier.  You send SQL commands by
+	:exec method of the pgsql object, and get the result.
+	(send db :exec "select typname,oid from pg\_type order by oid")
+	will give you a list of all data types defined in your database.
+
+\item{Asynchronous database access}
+	For asynchronous processing, you have to define a function or
+	method to receive a query result as the first argument. Let's 
+	assume the receiver function is 'print'.  Then a query should be
+	issued by the :sendQuery method with the receiver function name
+	as the second argument.
+	(send db :sendQuery "select oid from pg\_type" 'print)
+
+\item{Type conversion}
+	Postgres database stores data in a variety of forms internally,
+	but every data item transferred between the database and the client
+	is always converted to the string format. Thus, integer 1234 is "1234",
+	and a symbol 'SYMBOL is "symbol".  But, of course, since we want to
+	access a database to store lisp data, they should be handled as
+	lisp integers and lisp symbols.
+	I found the datatype information is stored in the pg\_type table.
+	When we get data from a table, we can also retrieve the oid (object id)
+	attributed to each field.  By looking up pg\_type table with the oid,
+	we can know the datatype name, such as integer, character, date, etc.
+	However, there is no symbol!  We can use the 'name' type instead, 
+	but still there is incoherency to use as lisp symbol type, since
+	there is no escapes (vertical bar and backslash) and lower-case to
+	upcase conversion.  I mean if we use the 'intern' function to
+	change the 'name' object to symbol, it becomes a symbol with the
+	lower case print-name.  Do we call string-upcase before interning?
+	Usually it works, but not always, because escapes are ignored.
+	So I defined input and output function for Postgres in 'symbol\_io.c'.
+	There is also a Makefile for it.  Make symbol\_io.so and copy it
+	to /usr/local/pgsql/lib.  Invoke psql, and type "\i symbol\_io.sql",
+	which will make postgres to load the lisp\_symbol\_io functions, and
+	and define the symbol type.
+	Call make-type-hashtab function once before any other database retrieval
+	for the faster type look-up.
+	Then, every data transfered from the database is converted properly.
+	Currently, symbol, int, float, char (string), date, time, datetime
+	are coerced to corresponding lisp objects. Other unknown type data
+	are represented by strings.
+\end{description}
+
+ The following codes put in another file will load this database module,
+ creates the *type-hashtab*, and reads the type list.
+
+\begin{verbatim}
+(load "pgsql")
+(in-package "USER")
+(unless (boundp 'db)
+   (setq db (instance pq:pgsql :init) ))
+(send db :exec "select * from family")
+(pq:make-type-hashtab db)
+(setq types (send db :exec "select typname,oid from pg\_type order by oid"))
+\end{verbatim}
+
+\begin{refdesc}
+
+\classdesc{pgsql}{propertied-object}{...}
+
+\methoddesc{:init}{key host port dbname user password}{
+connects to a database designated by host, port and dbname.
+Host is defaulted to the localhost. The default port number is 5432.
+Default values to dbname and user are obtained from the USER environment variable.
+}
+
+\methoddesc{:type-conversion}{flag}{
+Basically, every result delivered by a database query consists of a string.
+If type-conversion is set to NIL, no type conversion is performed, and
+query result is returned as a list of strings.
+If type-conversion is set to T, number is coerced to number,
+and symbol is interned in the current package.}
+
+\methoddesc{:exec}{sql}{sends the SQL command to the database.
+EusLisp waits for the completion of the database processing and
+retrieves the results in a synchronous manner.}
+
+\funcdesc{pq:table-fields}{db table}{
+returns the list of all fields in the table
+managed in the {\it db} database.
+Each list element is again a list, describing the field number
+starting from one, the symbolic field name, and the field type,
+such as text, int4, symbol, etc.
+}
+
+\funcdesc{pq:table-attributes}{db table}{
+returns a list that describes attributes of the given table in db.
+The attributes are, name, owner, read-write grants, number of fields,
+etc.}
+
+\funcdesc{pq:query}{db handler \&rest sql}{
+sends an SQL command composed by the sql arguments to db.
+If handler is specified, the data retrieval is processed in asynchronous
+manner. The handler function is invoked when the database processing result
+arrives.
+The SQL command is composed by combining {\it sql} arguments by
+the {\it format} function.}
+
+\funcdesc{pq:tables}{db}{returns a list of all tables created in db.}
+
+\funcdesc{pq:delimit-list}{xlist delimiter}{
+returns a string combining {\it xlist} with the constant delimter string.
+For example, (delimit-list '(a b c) 'or) returns "a or b or c".
+This function is useful to compose SQL commands.}
+
+\funcdesc{pq:select}{db fields table \&key where limit limit-offset order-by}
+{ sends an SQL command composed by the argument, and retrieves the
+result in the synchronous manner.
+The following example
+gives a list of id, name and email selected from the address\_book table
+where the email ends with ".go.jp". Number of output lists are limited to
+10, and the result is sorted by 'id'.}
+
+\begin{verbatim}
+(select db '(id name email) 'address_book
+     :where "email like '\*.go.jp'"
+     :limit 10
+     :order-by 'id)
+\end{verbatim}
+
+
+\funcdesc{pq:record-count}{db table}{
+returns the number of records in the table. db is a pgsql object.}
+
+
+\end{refdesc}
+
+\newpage

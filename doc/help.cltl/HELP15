@@ -1,0 +1,79 @@
+(< function-documentation "
+Args: (number &rest more-numbers)
+Returns T if the args are in increasing order; NIL otherwise.")
+(characterp function-documentation "
+Args: (x)
+Returns T if X is a character; NIL otherwise.")
+(decode-universal-time function-documentation "
+Args: (integer &optional (timezone si:*default-time-zone*))
+Returns as nine values the day-and-time represented by INTEGER.  See GET-
+DECODED-TIME.")
+(euscomp function-documentation "
+Args: [-V] [-X eus-form*] [-O] file*
+Euscomp is a unix command, not a eus function,and invokes the eus compiler.
+FILEs are assumed to have suffixes of .l.
+If euscomp is called with -V option (verbose flag), then euscomp prints
+names of functions and methods at the beginning of each compilation,
+and also prints time consumed for the compilation.
+With -O option (optimize), simple optimizations are taken, and euscomp
+calles cc (C compiler) with -O option.")
+(gentemp function-documentation "
+Args: (&optional (string \"T\") (package *package*))
+Creates a new symbol interned in PACKAGE with PREFIX and returns the symbol.
+The symbol is given a print name beginning with PREFIX followed by some
+generation number.")
+(make-dispatch-macro-character function-documentation "
+Args: (char &optional (non-terminating-p nil) (readtable *readtable*))
+Register CHAR as a dispatch macro character in READTABLE.  NON-TERMINATING-P
+specifies whether CHAR is non-terminating (see READTABLE).")
+(make-sequence function-documentation "
+Args: (type length &key initial-element)
+Creates and returns a sequence of the given TYPE and LENGTH.  If INITIAL-
+ELEMENT is given, then it becomes the elements of the created sequence.  The
+default value of INITIAL-ELEMENT depends on TYPE.")
+(member-if-not function-documentation "
+Args: (test list &key (key #'identity))
+Searches LIST for an element that does not satisfy TEST.  If found, returns
+the sublist of LIST that begins with the element.  If not found, returns NIL.")
+(nsubstitute function-documentation "
+Args: (new old sequence
+       &key (key #'identity) (test #'eql) test-not
+            (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Destructive SUBSTITUTE.  SEQUENCE may be destroyed.")
+(psetf function-documentation "
+Syntax: (psetf {place form}*)
+Similar to SETF, but evaluates all FORMs first, and then assigns each value to
+the corresponding PLACE.  Returns NIL.")
+(read-char-no-hang function-documentation "
+Args: (&optional (stream *standard-input*)
+                 (eof-error-p t) (eof-value nil) (recursive-p nil))
+Returns the next character from STREAM if one is available; NIL otherwise.")
+(streamp function-documentation "
+Args: (x)
+Returns T if X is a stream object; NIL otherwise.")
+(svref function-documentation "
+Args: (simple-vector n)
+Returns the N-th element of SIMPLE-VECTOR.")
+(type-of function-documentation "
+Args: (x)
+Returns a type specifier of the type to which X belongs.")
+(unsigned-byte type-documentation "
+As a type specifier, (UNSIGNED-BYTE n) specifies non-negative integers that
+can be represented with N bits.")
+(*gbc-message* variable-documentation "
+KCL specific.
+If the value of SI:*GBC-MESSAGE* is non-NIL, the garbage collector prints some
+information on the terminal.  Usually SI:*GBC-MESSAGE* is set NIL.")
+(*system-directory* variable-documentation "
+KCL specific.
+The name of the KCL system directory.")
+(load-foreign function-documentation "
+Args: (file)
+FILE is loaded as a foreign language object module.
+LOAD-FOREIGN differs from LOAD, that the former does not call initialization
+routine in the object module, and after the loading, LOAD-FOREIGN also
+reads the symbol table for all the external symbols defined in the module.
+This is necessary to make entries to these functions from lisp functions.
+LOAD-FOREIGN returns foreign-module object which can be used for
+successive defforeign'")

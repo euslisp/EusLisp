@@ -1,0 +1,71 @@
+Received: from etlcom.etl.junet by etlic2.etl.junet (3.2/6.3Junet-1.0)
+	id AA23271; Mon, 10 Apr 89 19:43:18 JST
+Received: from etlsc6.etl.junet by etlcom.etl.junet (3.2/6.3Junet-1.0)
+	id AA19129; Mon, 10 Apr 89 19:43:51 JST
+Received: from etlcom.etl.junet by etlsc6.etl.junet (3.2/6.3Junet-1.0)
+	id AA02158; Mon, 10 Apr 89 19:37:05 JST
+Received: from etlic2.etl.junet by etlcom.etl.junet (3.2/6.3Junet-1.0)
+	id AA19116; Mon, 10 Apr 89 19:43:08 JST
+Received: by etlic2.etl.junet (3.2/6.3Junet-1.0)
+	id AA23258; Mon, 10 Apr 89 19:42:31 JST
+Date: Mon, 10 Apr 89 19:42:31 JST
+From: matsui@etlic2.etl.junet (Toshihiro MATSUI)
+Return-Path: <matsui@etlic2.etl.junet>
+Message-Id: <8904101042.AA23258@etlic2.etl.junet>
+To: terasaki@gonbe.tsukuba.sanyo.junet
+Subject: Re:  face normal
+Cc: euslisp@etlcom.etl.junet
+Status: R
+
+> なるほど。
+> (defclass body2 :super body :slots (tera))
+> (setq a (instantiate body2))
+> (setq b (make-cube 1 2 3))
+> (replace-object a b)
+> で クラスbodyのインスタンスb は、そのサブクラスbody2のインスタンスaに
+> コピーされたわけですね。
+
+bodyに独自のスロットを追加したいということですね。これは
+重要な発展だと思います。(問題はteraというスロット変数の中身ですが、)
+しかし、これをうまくやる方法はすでに手当してあるのであった。
+クラスの名前の整合性がいまひとつなのですが、
+
+(let ((*body-class* body2))   (make-cube 30 40 50))
+
+とするだけでよいはずです。make-cubeの中で、一箇所だけ
+(instantiate body) してるところがあるのですが、そこは実は
+(instantiate *body-class*) になっているのです。
+face,edgeのクラスを変える時はどうするかというと、やはり、
+(let ((*face-class* myfaceclass)) (make-cube ...))
+などとすればよいのです。上記のteraなどの、make-cubeが知らない
+スロットは、nilになります。ただし、:init のメソッドで、send-super
+の後に自分用のスロットを初期化するという手もあります。
+
+こういう、関数がインスタンスを作る時どのクラスを用いるかという
+問題はbodyやfaceに限られた問題ではなくて、新しいオブジェクトを
+作成する関数ではみな生じます。commonLispでも、map,coerce,などの関数は、
+結果の型、すなわちクラス名を指定するようになってますよね。
+(map 'vector #'identity "ABC") とか (coerce "ABC" 'vector)など。
+euslispでは型名にメタクラスを指定するようにしています。
+(map float-vector #'identity "ABC") -> #f(65.0 66.0 67.0)
+cons,append,list,read (intern)などはどうするか？
+これらの関数が作成するオブジェクトのクラスを変えるのは
+
+(defclass cons3 :super cons :slots (cxr))
+(let ((cons cons3)) (list 'a 'b 'c))
+などとします。ただしこの機能が使えるのは電総研のEusLisp
+だけです。ごめんなさい。
+
+
+>    >>予告、予告、予告
+>    >>幾何モデルの構造が変わる、変わる、変わる
+>    >>もう少し考えてからにしよう。
+> 
+> お任せします。します。します。します。
+
+ようく考えています。
+要するに、頂点(vertex)というクラスを新たに作って、
+エッジへの逆ポインタを張ろうかと思っているのです。
+メモリを食うようになるのと、管理に手間がかかり、
+処理速度も低下すると思います。それに見合うメリットが
+あるか、悩んでいるところです。どう思いますか。

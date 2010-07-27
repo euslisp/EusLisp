@@ -1,0 +1,36 @@
+
+change of  C O O R D I N A T E S	1989-Jun-16 Matsui
+
+Creation and initialization method of class coordinates and its subclasses
+has been enhanced.  Now, :init method of coordinates and make-coords and
+make-cascoords functions recognize keywords such as :dimension :pos, :rot,
+:rpy, :euler, :axis, :angle, :4X4 and :wrt.
+
+examples:
+	(make-coords  :rpy '(0.1 0.2 0.3) :pos #f(10 20 30))
+	(make-cascoords :pos #f(10 10 10)  :euler #(0.5 1.0 2.0))
+	(make-coords :axis :x  :angle pi/2  :wrt :world)
+	(make-coords :axis '(:x :y)   :angle (list pi pi/2))
+	...
+
+keywords
+	:dimension	2 or 3 (default)
+	:pos	specifies a position vector (defaulted to #f(0 0 0))
+	:rot	specifies a rotation matrix (defaulted to a unit-matrix)
+	:euler	gives a sequence of three elements for euler angles
+	:rpy	gives a sequence of three elements for roll-pitch-yaw
+	:axis	rotation axis (:x,:y,:z or an arbitrary float-vector)
+	:angle  rotation angle (used with :axis)
+	:wrt	where the rotation axis is taken (default is :local)
+	:4X4	4X4 matrix is used to specify both pos and rot
+
+:axis must be used in conjunction with :angle, and :wrt affects only
+to these parameters.  Whatever :wrt is given, :euler always specifies
+the euler angles defined in local coordinates, and :rpy specifies the angles
+defined in the world. Two or more of :rot, :euler, :rpy, :axis and :4X4
+cannot be specified simultaneously, although no error is reported.
+Sequences can be supplied to the :axis and :angle parameters, which mean
+successive rotations around the specific axis (see the fourth example above).
+
+This change will take an effect from this afternoon (Jun/17).
+Any bug reports will be appreciated.

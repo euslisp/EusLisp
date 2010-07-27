@@ -1,0 +1,824 @@
+\section{Streams and Input/Output}
+\markright{\arabic{section}. Streams and I/O}
+
+\subsection{Streams}
+
+Echo-streams and concatenated-streams are not available.
+Predefined streams are following:
+
+\begin{description}
+\item[*standard-input*] stdin fd=0
+\item[*standard-output*] stdout fd=1 
+\item[*error-output*] stderr fd=2 bufsize=1
+\item[*terminal-io*] two-way stream made of 
+{\bf *standard-input*} and {\bf *standard-output*}
+\end{description}
+
+\begin{refdesc}
+
+\funcdesc{streamp}{object}{
+Any object created from {\bfx stream}, {\bfx io-stream},
+or their subclasses returns T.}
+\funcdesc{input-stream-p}{object}{
+T if {\em object} is a stream and capable of reading.}
+\funcdesc{output-stream-p}{object}{
+T if {\em object} is a stream and capable of writing.}
+\funcdesc{io-stream-p}{object}{
+T if {\em object} is a two-way stream.}
+
+\longdescription{open}
+{path \&key \= :direction :input \`[function]\\
+ \> :if-exists :new-version \\
+ \> :if-does-not-exist \\
+ \> :permission \#o644 \\
+ \> :buffer-size 512\\}{
+{\bf Open} makes a stream associated with a file designated by {\em path}.
+{\em path} may either be a string or a pathname.
+Direction should be one of {\bf :input, :output} or {\bf :io}.
+Several open options, {\bf :append, :new-version, :overwrite, :error}
+and nil are allowed for {\bf :if-exists} parameter.
+However, this parameter is ignored when {\em direction} is {\bf :input}.
+Alternatives for {\bf :if-does-not-exist} are
+{\bf :error, :create} and nil.
+{\bf :new-version}, {\bf :rename} and {\bf :supersede}
+are not recognized.
+By default, the file is overwritten if {\em direction} is either
+{\bf :output} or {\bf :io}  when the file exists.
+For :input files, an error is reported when the file does not exist.
+To know the existence of a file, {\bf probe-file} can be used.
+Default value for {\bf buffer-size} is 512 bytes,
+and \#O644 for {\bf :permission}.
+SunOS4 allows to open as many as sixty files at the same time.
+}
+
+\macrodesc{with-open-file}{(svar path . open-options) \&rest forms}{
+A file named {\em path} is opened with {\em open-options} and the
+stream is bound to {\em svar}.
+Then {\em forms} are evaluated.
+The stream is automatically closed when evaluation of {\em forms} finishes
+or exits with {\bf throw}, {\bf return-from} or error.
+{\bf With-open-file} is a macro defined by {\bf unwind-protect} with {\bf close}
+in its clean-up forms.}
+
+\funcdesc{close}{stream}{closes the {\em stream}, and returns T if successful.
+The stream may have already been closed, in which case nil is returned.
+Streams are automatically closed by GC if there is no reference to
+that stream object.}
+
+% \fundesc{reset-stream}{s}
+
+\funcdesc{make-string-input-stream}{string}{
+makes an input stream from a string.}
+
+\funcdesc{make-string-output-stream}{size}{
+makes an output stream to a string of {\em size} length.
+Actually, the length is automatically expanded, so {\em size} is only 
+advisory information to allocate string at initialization.}
+
+\funcdesc{get-output-stream-string}{string-stream}{
+gets a string out of a {\em string-stream}.}
+
+\funcdesc{make-broadcast-stream}{\&rest output-streams}{
+makes a broad-cast stream which forwards all the messages written to
+this stream to each of {\em output-streams}.}
+
+\end{refdesc}
+\newpage
+
+%
+% R E A D E R
+%
+
+\subsection{Reader}
+
+Reader's global variables:
+
+\begin{description}
+\item[*read-base*] number base to be read; default is decimal ten
+\item[*readtable*] current readtable which determines reader syntax
+\end{description}
+
+Reader's default macro characters:
+\begin{tabbing}
+{\bf (} \hspace{10mm} \=  read list \\
+{\bf "} \>  read string \\
+{\bf '} \>  read quoted expression \\
+{\bf \#} \>  dispatch macro \\
+{\bf ;} \>  comment until end of line \\
+{\bf `} \>  back-quote \\
+{\bf ,} \>  list-time eval \\
+{\bf @} \>  append \\
+{\bf \%} \>  read C-like mathematical forms \\
+\end{tabbing}
+
+Escape characters:
+
+\begin{tabbing}
+{\bf $\backslash$} \hspace{10mm} \=  single character escape \\
+{\bf $|...|$} \>  multiple character escape \\
+\end{tabbing}
+
+When an unescaped symbol is read,
+all the constituent characters are converted to upcase by default,
+and upcase-character symbol is stored internally.
+For example, 'abc and 'ABC are regarded as the same symbol.
+Escape is necessary to distinguish between them.
+'$|$ABC$|$, 'ABC and 'abc are identical,
+while '$|$abc$|$ and 'abc are different symbols.
+By default, even if you enter a symbol with upcase letters,
+When symbols are printed,
+EusLisp's printer converts them into lowercase from
+internal upcase representation.
+This conversion is
+suppressed by setting {\bf *print-case*} to {\bf :UPCASE}.
+
+Note that 10. is read as integer 10, not floating 10.0.
+Since ':' is reserved for package marker, it must be escaped
+when used as a constituent of a symbol, like '$|g:pcube|$.
+This restriction is imposed not by the syntax of the character ':',
+but by the attribute which determines the alphabetical order and the meaning of
+the letter.
+The attributes of characters are hardwired in the reader.
+Thus, although you may change the syntax of a certain character by
+creating a new readtable by {\bf copy-readtable} and
+resetting the syntactic meaning for the character by {\bf set-syntax-from-char},
+you cannot change its attribute anyway. 
+In other words, digits are always digits, alphabets are alphabets,
+and we cannot use letters like '\#\$\%@' to represent numbers.
+
+String is denoted by two double quotes '"' at the beginning and at the end.
+No case conversion is taken inside the quotes.
+A back-slash '\' is used as an escape to include a double quote.
+Therefore, "He said, \"I like Lisp.\"" is read as a string
+including two double quotes.
+To enter a back-slash, two back-slashes are needed.
+Note that shift-JIS encoding of Japanese text is inadequate for this
+read-string convention, since some characters happen to have the
+code of a back-slash (\verb+#x5c+) as their second byte.
+Use of EUC coding is preferrable.
+
+
+{\bf \%} is an extended read-macro character specific to EusLisp.
+Preceding \% to a mathematical formula written in infix notation,
+the formula is converted to lisp's prefix form. For an instance,
+{\tt \%(1 + 2 * 3 / 4.0)} is transformed to
+{\tt (+ 1 (/ (* 2 3) 4.0))} and {\tt 2.5} is resulted.
+C-like function calls and array references are converted to lisp forms, too,
+thus, {\tt \%(sin(x) + a[1])}
+is evaluated to {\tt  (+ (sin x) (aref a 1))}.
+Functions having more than one arguments and arrays of more than two
+dimeisions are notated as {\tt func(a b c ...)} and {\tt ary[1 2 3 ...]},
+not {\tt func(a,b,c)} nor {\tt ary[1][2][3]}.
+Relative expressions and assignments are also properly handled, so,
+{\tt \%(a $<$ b)} is converted to {\tt ($<$ a b)},
+and {\tt \%(a[0] = b[0] * c[0])} is to
+{\tt (setf (aref b 0) (* (aref b 0) (aref c 0)))}.
+A simple optimization is performed to reduce duplicated function calls and
+array references.
+{\tt \%(sin(x) + cos(x) / sin(x))} is converted into 
+{\tt (let* ((temp (sin x))) (+ temp (/ (cos x) temp)))}.
+
+Dispatch macros are  preceeded by the \verb+#+ character.
+A number (integer) argument can be given between \verb+#+ and a dispatch macro
+character.
+This means that any digits (0 .. 9) cannot be defined as dispatch
+macro characters.
+Reader's standard dispatch macro characters follow:
+\begin{description}
+\item[{\tt \#nA(..)}] array
+\item[{\tt \#B}] binary number
+\item[{\tt \#D}] degree to radian conversion; \#D180 = 3.14
+\item[{\tt \#F(...)}] floatvector
+\item[{\tt \#nF((..))}] float array; \#2F((..) (..)) is matrix
+\item[{\tt \#I(...)}] integer-vector
+\item[{\tt \#nI((...))}] integer array
+\item[{\tt \#J(...)}] general object \#J(myclass ....); obsolete
+\item[{\tt \#O}] octal number
+\item[{\tt \#P}] pathname
+\item[{\tt \#R}] radian to degree conversion; \#R3.14 = 180.0
+\item[{\tt \#S(classname slotname1 val1 slotname2 val2 ...)}] structure (any object)
+\item[{\tt \#V(...)}]  vector \#V(vectorclass ...)
+\item[{\tt \#X}] hexadecimal number
+\item[{\tt \#(...)}] vector
+\item[{\tt \#n\#}] label reference
+\item[{\tt \#n=}] label definition	
+\item[{\tt \#'}] FUNCTION; compiled-code or lambda-closure
+\item[{\tt \#$\backslash$}] character
+\item[{\tt \#,}] read-time evaluation
+\item[{\tt \#+}] conditional read (positive)
+\item[{\tt \#-}] conditional read (negative)
+\item[{\tt \#*}] bit vector
+\item[{\tt \#:}] uninterned symbol
+\item[{\tt \#$|$...$|$\#}] comment; can be nested
+\end{description}
+
+Some reader functions have {\em eof-error-p, eof-value} and
+{\em recursive-p} parameters.
+The first two parameters control the behavior when the reader encounters
+with end-of-file.
+The default of {\em eof-error-p} is t, which causes an error at eof.
+If you want to know the occurrence of eof and don't want the system's
+error-handler to snatch control, specify nil to {\em eof-error-p}.
+Thus, when an eof appears during reading, the reader returns
+the {\em eof-value} instead of entering an error loop.
+{\em Eof-value} is defaulted to nil.
+So, you cannot know if nil is actually read, or eof appears.
+To distinguish them, give a value which can never appear in the stream.
+Use {\bf cons} or {\bf gensym} to make such unique data object.
+
+{\em Recursive-p} is often used in read-macro functions,
+which call reader recursively.
+Non-nil value of {\em recursive-p} tells the reader that the read operation
+has been started somewhere else and it should not reset
+the internal table for reading forms labeled by {\tt \#n=} and {\tt \#n\#}.
+
+\begin{refdesc}
+
+\funcdesc{read}{\&optional stream (eof-error-p t) (eof-value nil) recursive-p}{
+reads one S-expression.}
+
+\funcdesc{read-delimited-list}{delim-char \&optional stream recursive-p}{
+reads s-expression which is delimited by {\em delim-char}.
+This is useful to read comma-separated list, or to read a sequence
+terminated by a special character like {\tt \#$\backslash$]}.}
+
+\funcdesc{read-line}{\&optional stream (eof-error-p t) (eof-value nil)}{
+reads a line which is terminated by a {\tt \#$\backslash$newline}.
+The string returned does not contain the last newline character.}
+
+\funcdesc{read-char}{\&optional stream (eof-error-p t) (eof-value nil)}{
+reads one character and returns its integer representation.}
+
+\funcdesc{read-from-string}{string \&optional (eof-error-p t) (eof-value nil)}{
+reads one s-expression from {\em string}.
+Only the first s-expression can be read.
+If successive read operations need to be performed on a string
+containing more than one expression,
+use string-stream made by {\bfx make-string-input-stream}.}
+
+\funcdesc{unread-char}{char \&optional stream}{
+puts the {\em char} back to the {\em stream}.
+More than one characters cannot be put back successively.}
+
+\funcdesc{peek-char}{\&optional stream (eof-error-p t) (eof-value nil)}{
+reads a character from the {\em stream} without removing it from the buffer
+of the {\em stream}.
+This is equivalent to a {\em read-char} followed by a {\em unread-char}.}
+
+\funcdesc{y-or-n-p}{\&optional format-string \&rest args}{
+prints {\em format-string} and {\em args} on your terminal,
+and asks ``y-or-n''.
+Repeat query until your response begins with either of ``y'' or ``n'',
+and returns T or NIL. Case does not matter.}
+
+\funcdesc{yes-or-no-p}{\&optional stream}{
+prints {\em format-string} and {\em args} on your terminal,
+and asks ``yes-or-no''.
+Repeat query until your response is either of ``yes'' or ``no'',
+and returns T or NIL.
+Case does not matter.}
+
+\end{refdesc}
+
+In the readtable manipulating functions, the default value of readtable
+is the value of the global variable {\bf *readtable*}.
+
+\begin{refdesc}
+
+\funcdesc{readtable-p}{x}{T if {\em x} is an readtable.}
+\funcdesc{copy-readtable}{\&optional from-readtable to-readtable}{
+If no {\em to-readtable} is specified, a new one is created.
+All the information in {\em from-readtable} is transferd to {\em to-readtable}.
+The information included is, syntax table, read-macro table and
+dispatch-macro table, each of which has 256 elements.}
+
+\funcdesc{set-syntax-from-char}
+{to-char to-char [to-readtable from-readtable]}
+{copies syntax and read-macro definition of {\em from-char} in
+{\em from-readtable} to that of {\em to-char} in {\em to-readtable}.}
+
+\funcdesc{set-macro-character}{char func [non-teminating-p readtable]}{
+defines {\em func} as the read-macro function for {\em char}.}
+\funcdesc{get-macro-character}{char [readtable]}{
+returns the read-macro function for {\em char}.}
+\funcdesc{set-dispatch-macro-character}{dispchar char func [readtable]}{
+defines {\em func} as the dispatch read-macro function for 
+the combination of {\em dispchar} and {\em char}.}
+\funcdesc{get-dispatch-macro-character}{dispchar char [readtable]}{
+returns the dispatch read-macro function for 
+the combination of {\em dispchar} and {\em char}.}
+\end{refdesc}
+
+%
+% P R I N T E R
+%
+
+\newpage
+
+\subsection{Printer}
+
+The followings are special variables controlling printer's behaviors.
+
+\begin{description}
+
+\item[*print-case*] if this is {\tt :downcase},
+all symbols are printed in lowercase
+althought symbols are represented in uppercase
+internally unless they are escaped.
+\item[*print-circle*] print objects preserving recursive refernce
+\item[*print-object*] print the details of all objects
+\item[*print-structure*] print objects using \#s format.
+\item[*print-level*] printable depth of a sequence
+\item[*print-length*] printable length of a sequence
+\item[*print-escape*] currently not used
+\item[*print-pretty*] currently not used
+\item[*print-base*] number base in printing; defaulted to decimal ten
+\end{description}
+
+In order to print objects containing recursive references 
+so that they can be read back again,
+print the objects with both {\bf *print-circle*} and
+{\bf *print-structure*} set to T.
+Although most of the user defined objects can be printed in re-readable forms,
+classes, compiled-codes and packages cannot be dumped in that way,
+because classes and compiled-code include unrelocatable
+executable codes, and the rereading packages 
+damages the consistency among symbols.
+
+\begin{refdesc}
+
+\funcdesc{print}{obj \&optional stream}{
+is {\bf prin1} followed by {\bf terpri}.}
+
+\funcdesc{prin1}{obj \&optional stream}{
+outputs one s-expression in the format that they can be read back again
+by {\bf read}.
+The format includes slashes (escapes) and quotation marks.}
+
+\funcdesc{princ}{obj \&optional stream}{
+same as {\bf print} except that {\bf princ} does not add escape or quote.
+Objects printed by {\bf princ} cannot be read back.
+For example, the output of {\tt (princ 'abc)} is identical with that of
+{\tt (princ "abc")} and the reader cannot distinguish between them.}
+
+\funcdesc{terpri}{\&optional stream}{outputs \#$\backslash$newline and
+flush {\em stream}.}
+
+\funcdesc{finish-output}{\&optional stream}{flushes output stream.}
+
+\fundesc{princ-to-string}{x \&optional (l 16)}
+\funcdesc{prin1-to-string}{x \&optional (l 16)}
+{makes a string-output-stream, writes to it, and get-output-stream-string.}
+
+\funcdesc{format}{stream format-string \&rest args}{
+{\bf Format} only recognizes $\sim$A(ascii), $\sim$S(S-expression), $\sim$D(decimal),
+$\sim$X(hexadicimal), $\sim$O(octal), $\sim$C(character), $\sim$F(floating), $\sim$E(exponential),
+$\sim$G(general float), $\sim$V(dynamic number parameter), $\sim$T(tab)
+ and $\sim$\%(newline) format specifiers.
+}
+\begin{verbatim}
+       (format t "~s ~s ~a ~a ~10,3f~%" "abc" 'a#b "abc" 'a#b 1.2)
+       --->  "abc" |A#B| abc a#b     1.200
+\end{verbatim}
+
+\funcdesc{pprint}{obj \&optional (stream *standard-output*) (tab 0) (platen 75)}
+{pretty-prints {\em obj}.}
+
+\funcdesc{print-functions}{file \&rest fns}{
+write the "defun" forms of function definitions of {\em fns} out to {\em file}.}
+
+\fundesc{write-byte}{integer stream}
+\fundesc{write-word}{integer stream}
+\funcdesc{write-long}{integer stream}{
+write {\em integer} as a one-, two- or four-byte binary.}
+
+\funcdesc{spaces}{n \&optional stream}{
+outputs spaces {\em n} times.}
+%\fundesc{warning}{color format \&rest mesg}
+
+\macrodesc{pf}{func \&optional stream *standard-output*)}{
+pretty-prints a function. Compiled function cannot be printed.}
+
+\funcdesc{pp-method}{class selector \&optional (stream *standard-output*)}{
+pretty-prints the method defined in {\em class} by the name of
+{\em selector}.}
+
+\funcdesc{tprint}{obj tab \&optional (indent 0) (platen 79) (cpos 0)}
+{print {\em obj} in tabular format.}
+
+\funcdesc{print-size}{obj}{
+returns inexact length of obj when it is printed.}
+
+
+\end{refdesc}
+
+\newpage
+
+\subsection{InterProcess Communication and Network}\label{IPC}
+
+EusLisp provides four kinds of IPC facilities,
+{\em shared memory, message-queue, FIFO} and {\em socket}.
+\footnote{Since the pipe, the traditional process communication
+mechanism in Unix, is always used in conjunction with 'fork',
+EusLisp provides the {\bf piped-fork} function explained in the section
+\ref{UnixProcess}.}
+Normally,  efficiency decreases in this order.
+% SunOS implements pipe by using socket in the Unix domain.
+If you are using multithread facility, synchronization functions
+described in the section \ref{mthread} are also used for communications.
+Availability of these facilities depends on the configuration and
+the version of Unix.
+
+\subsubsection{Shared Memory}
+EusLisp supports the shared memory provided by SunOS's mmap,
+not by System5's shmem.
+Shared memory is allocated by the {\bf map-file} function.
+{\bf Map-file} maps a file into the EusLisp process memory space
+and an instance of {\bf foreign-string} is returned.
+Data can be written and retrieved using string functions on this
+foreign-string.
+Since shared memory is allocated at system-dependent page boundary, 
+you should not specify the map address.
+Mapping a file with the {\bf :share} keyparameter set to NIL
+or {\bf :private} set to T
+means the file should be accessed privately (exclusively).
+Since this is not useful for the purpose of memory sharing,
+the default value of {\bf :share} key is T.
+When a file is shared between two users, the read/write permission
+must be properly set for both users.
+Unfortunately, SunOS does not support file sharing through networks 
+between different workstations.
+
+Example programs to share a file of 64 byte length between two
+euslisp are shown below.
+
+\begin{verbatim}
+;; Create a file of 64 bytes
+(with-open-file (f "afile" :direction :output)  (princ (make-string 64) f))
+;; Map it
+(setq shared-string1 (map-file "afile" :direction :io))
+;;
+;; In another process
+(setq shared-string2 (map-file "afile" :direction :io))
+\end{verbatim}
+
+Then, data written to {\tt shared-string1}
+immediately appears in {\tt shared-string2}, and vice versa.
+Writing to a foreign string can be made by 
+{\bf replace} or {\bf setf} in conjunction with {\bf aref}.
+
+\begin{refdesc}
+\funcdesc{map-file}{filename \&key (direction :input) length (offset 0) (share t)
+(address 0)}{
+maps the file named {\em filename} to memory space.
+{\em Filename} can be either of a local file, an NFS-mounted remote file,
+or a memory device in {\tt /dev}.
+A {\bfx foreign-string}, whose elements can be accessed by {\bf aref},
+is returned.
+Writing data into a foreign-string mapped by {\tt map-file} with 
+{\em direction=:input} will result a segmentation fault.}
+\end{refdesc}
+
+\subsubsection{Message Queues and FIFOs}
+A message-queue is created by {\bf make-msgq-input-stream} or {\bf make-msgq-output-stream}.
+Each of these returns an instance of file-stream, which can then
+accept read and print operations like other streams connected to files.
+The {\tt fname} slot of message-queue stream is set to the key when it is
+created.
+
+To make a stream to FIFO,
+you first create a FIFO node with {\bf unix:mknod} function
+by setting its second argument {\em mode}=\#o10000,
+and you open it as a normal file.
+Message-queues and FIFOs are created locally on a machine and
+only provide communication channels within the machine.
+
+Note that message-queues and FIFOs are not removed from the system
+even after the owner process terminates.
+Explicit use of {\bf unix:msgctl} or {\bf ipcrm} command
+is needed to delete them.
+
+\begin{refdesc}
+\funcdesc{make-msgq-input-stream}{key \&optional (buffer-size 128)}{
+returns an input file-stream which is connected to a message-queue
+identified by {\em key}.}
+
+\funcdesc{make-msgq-output-stream}{key \&optional (buffer-size 128)}{
+returns an output file-stream which is connected to a message-queue
+identified by {\em key}.}
+
+\end{refdesc}
+
+\subsubsection{Sockets}
+The socket is more versatile than other communication mechanisms
+because it can operate either host-locally (in unix domain) or
+network-widely (in internet domain).
+Connection-oriented socket (SOCK\_STREAM) and
+unconnected socket (SOCK\_DGRAM) are supported.
+In both cases,
+you must first create a socket address object
+by {\bf make-socket-address} function,
+which returns an instance of {\tt socket-address}.
+In unix domain, a socket address is specified by a path-name
+in the unix file system.
+In internet domain, the address is specified by combining
+the host machine name, the port number, and optionally the protocol number.
+If the port number is defined in {\tt /etc/services}, it can be referred through
+the symbol specified by the service name.
+The function {\bf unix:getservbyname} can be used 
+to retrieve the port number from the symbolic service name.
+Port numbers less than 1024 are reserved for root users,
+and non-priviledged users are advised to use port numbers greater than 1024 
+for their private sockets.
+
+Although connected streams provide bidirectional communication channels,
+the connection establishment operation is asymmetric.
+One endpoint is refered
+to server and other to client.
+The endpoint on the behalf of the server
+(service access point) must be first established.
+It is created by {\bf make-socket-port} function which returns an instance
+of {\tt socket-port}.
+The socket-port object is then used to accept connections from
+one or more clients by {\bf make-server-socket-stream}.
+A call to {\bf make-server-socket-stream} may be blocked
+until a connection request from a client really happens.
+Clients can make socket streams by
+{\bf make-client-socket-stream} specifying a socket-address.
+
+\begin{verbatim}
+;;; an example of IPC through a socket stream:
+;;; server side
+(setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2000))
+(setq sport  (make-socket-port saddr))
+(setq sstream (make-server-socket-stream sport))
+;;;
+;;; client side
+(setq caddr (make-socket-address :domain af_inet :host "etlic2" :port 2000))
+(setq cstream (make-client-socket-stream caddr))
+\end{verbatim}
+
+In applications like a database or an environment simulator for mobile
+robots, {\em multiple connection service}
+between one server and many clients is required.
+This type of server can be programmed by the {\bf open-server} function.
+From the current host name and given port number,
+{\bf open-server} creates a socket port (service access point)
+on which connection requests are listened for.
+Since this port is attributed to be asynchronous,
+{\bf open-server} is not blocked and returns immediately.
+Thereafter, each connection request interrupts EusLisp's main loop,
+and an socket-stream is created asynchronously.
+This socket-stream also works in asynchronous mode:
+the asynchronous input processing function which is the second argument
+to {\bf open-server} is invoked whenever new data appear in this stream.
+Up to 30 connections can be established so that
+as many clients can access the server's data at the same time.
+
+\begin{verbatim}
+;; server side
+(defun server-func (s) 
+   (case (read s) ...    ;do appropriate jobs according to inputs
+(open-server 3000 #'server-func)
+... do other jobs in parallel
+;; client-1 through client-N
+(setq s (connect-server "etlmmd" 3000))
+(format s "..." ...) (finish-output s)	;issue a command to the server
+(read s)                                ;receive response
+\end{verbatim}
+
+In contrast to the {\it connection-oriented} streams which provide reliable
+communication channels,
+the {\it connectionless} sockets are unreliable: messages may be lost,
+duplicated, and may arrive out-of-order.
+The {\it connectionless} sockets, however, have advantages that they
+do not need to assign file descriptor to each connection,
+and sending process is never blocked even if the receiver is not
+reading data and the buffer overflows.
+
+To make connectionless sockets, use the following procedures.
+Messages are transferred by the {\bf unix:sendto} and {\bf unix:recvfrom}.
+\begin{verbatim}
+;;; receiver side
+(setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2001))
+(setq sock   (make-dgram-socket saddr))
+(unix:recvfrom sock)
+;;;
+;;; client side
+(setq caddr (make-socket-address :domain af_inet :host "etlic2" :port 2001))
+(setq sock (unix:socket (send caddr :domain) 2 0))
+(unix:sendto sock caddr "this is a message")
+;;;
+;;; how to use echo service which is registered in /etc/services.
+(setq caddr (make-socket-address :domain af_inet :host "etlic2"
+                                 :port (car (unix:getservbyname "echo"))))
+(setq echosock (unix:socket (send caddr :domain) 2 0))
+(unix:sendto echosock caddr "this is a message")
+(unix:recvfrom echosock)  --> "this is a message"
+\end{verbatim}
+
+
+\begin{refdesc}
+
+\funcdesc{make-socket-address}{\&key domain pathname host port proto service}{
+makes a sockaddr structure.}
+
+\funcdesc{make-socket-port}{sockaddr}{makes a server-side socket port
+which is used to establish a connection with a client.}
+
+\funcdesc{make-server-socket-stream}{sockport \&optional (size 100)}{
+accepts a connection from a client and returns a two-way stream.}
+
+\funcdesc{make-client-socket-stream}{sockaddr \&optional (size 100)}{
+connects to a server port and returns a two-way stream.}
+
+\funcdesc{open-server}{port remote-func}{
+prepares a socket port designated by the host name and {\em port} 
+in internetnet domain, and waits for the connection requests
+asynchronously.
+Each time a connection is requested, it is accepted and a new
+socket-stream is opened.
+When a message arrives at the socket-port, {\em remote-func}
+is invoked with the socket port as the argument.}
+
+\funcdesc{connect-server}{host port}{
+This is a shorhand of successive calls to make-socket-address and
+make-client-socket-stream.
+A socket-stream for a client to communicate with the server
+specified by {\em host} and {\em port} is returned.
+The port is made in internet domain.}
+
+\end{refdesc}
+
+\subsection{Asynchronous Input/Output}
+
+\begin{refdesc}
+
+\funcdesc{select-stream}{stream-list timeout}{
+finds a list of streams which are ready for input operation, in
+{\em stream-list}.
+NIL is returned if {\em timeout} seconds have expired before any 
+streams become ready.
+{\bf Select-stream} is useful when you choose active streams
+out of a list of input-streams on which input operation becomes
+possible asynchronously.
+{\em Timeout} specifies the time when the select operation is aborted.
+It can be a float number.
+If no timeout is specified, select-stream blocks
+until input arrives at least one stream.
+If {\em timeout} is specified and no input appears on any streams,
+select-stream aborts and returns NIL.
+}
+
+\macrodesc{def-async}{stream function}{
+defines {\em function} to be called when data arrives at {\em stream}.
+{\em stream} is either a file-stream or a socket-port.
+When data comes to the file-stream or a connection request appears on 
+the socket-port, {\em function} is invoked with the stream as its argument.
+This macro installs a SIGIO handler that dispatches to user supplied
+{\em function} which is expected to perform actual input operation,
+and uses {\bf unix:fcntl} on {\em stream} to issue SIGIO
+asynchronously when {\em stream} becomes ready to be read.}
+
+\end{refdesc}
+
+\newpage
+
+\subsection{\label{Pathnames}Pathnames}
+
+Pathnames give the way to analyze and compose file names OS-independently.
+A typical path name is assumed to be consisted of following components:
+host:device/directory1/.../directory-n/name.type.version.
+Since EusLisp only runs on Unix, host, device and version fields are ignored.
+The {\bf pathname} function decomposes a string into a list of directory
+components, name and type, and returns a pathname object, which
+is printed as a string prefixed by {\tt \#P}.
+
+\begin{refdesc}
+
+\funcdesc{pathnamep}{name}{
+returns T if {\em name} is a pathname.}
+
+\funcdesc{pathname}{name}{
+{\em name} is pathname or string.
+{\em name} is converted to pathname.
+To indicate the last name is a directory name, don't forget to suffix with "/".
+The inverse conversion is performed by {\em namestring}.}
+
+\funcdesc{pathname-directory}{path}{
+returns a list of directory names of {\em path}.
+Root directory (/) is represented by :ROOT.
+{\em path} can be either of string or pathname.}
+
+\funcdesc{pathname-name}{path}{
+returns the file-name portion of {\em path}.
+{\em path} can be either of string or pathname.}
+
+\funcdesc{pathname-type}{path}{
+extracts the file-type portion out of {\em path}.
+{\em path} can be either of string or pathname.}
+
+\funcdesc{make-pathname}{\&key host device directory name type version
+defaults}{
+makes a new pathname from {\em directory}, {\em name} and {\em type}.
+On unix, other parameters are ignored.}
+
+\fundesc{merge-pathnames}{name
+\&optional (defaults *default-pathname-defaults*))}
+\funcdesc{namestring}{path}{
+returns string representation of {\em path}.}
+\fundesc{parse-namestring}{name}
+\funcdesc{truename}{path}{
+tries to find the absolute pathname for the file named {\em path}.}
+
+\end{refdesc}
+
+
+\subsection{\label{URL-Pathnames}URL-Pathnames}
+
+URL-Pathname is an extension of pathname to have slots for a protocol
+and a port.
+A URL is composed of six components;
+protocol, server, port, directories, filename, and file-type, like
+\verb+http://shock2.etl.go.jp/matsui/index.html+.
+
+\begin{refdesc}
+
+\funcdesc{url-pathname}{name}{
+{\em name} is pathname or string.
+{\em name} is converted to pathname.
+To indicate the last name is a directory name, don't forget to suffix with "/".
+The inverse conversion is performed by {\em namestring}.}
+
+\end{refdesc}
+
+
+
+
+
+\subsection{File-name generation}
+
+\begin{refdesc}
+
+\funcdesc{digits-string}{n digits \&optional (base 10))}
+{generates a string representing the integer {\it n} in n columns of
+digits.
+Zeros are padded before the number if n is too small to represent
+in digits.}
+
+\funcdesc{sequential-file-name}{head num extension \&optional (digits 4))}
+{generates a filename string with an advancing number part.
+This is similar to gentemp, but differs in that an extension can be specified
+and the result is a string.}
+
+\funcdesc{timed-file-name}{head extension \&optional (dt (unix:localtime)))}
+{generates a filename string that consists of head, hour, minute, second,
+and extension. For example, (timed-file-name "img" "jpg") generates
+"img191015.jpg" at 7:10:15 pm.}
+
+\funcdesc{dated-file-name}{head extension \&optional (dt (unix:localtime)))}
+{generates a filename string formatted as
+"headyymmmdd.extension", where yy is the lower two digits of the year,
+mmm is the abbreviated month name, and dd is the date.}
+
+\end{refdesc}
+\newpage
+
+\subsection{File System Interface}
+\begin{refdesc}
+
+\funcdesc{probe-file}{path}{checks if a file named {\em path} exists.}
+\funcdesc{file-size}{path}{returns the size of the file named {\em path} 
+in bytes.}
+\funcdesc{directory-p}{path}{returns T if {\em path} is a directory,
+NIL otherwise even {\em path} does not exist.}
+\funcdesc{find-executable}{file}{
+returns the full pathname for the Unix command named {\em file}.
+{\em Find-executable} provides almost the same functionality with 
+Unix's 'which' command that searches the executable file in your path list.}
+
+\funcdesc{file-write-date}{file}{
+returns the integer representation of the time
+when the {\em file} was last modified.
+String representation can be obtained by
+{\tt (unix:asctime (unix:localtime (file-write-date {\em file})))}}
+
+\fundesc{file-newer}{new old}{
+returns T if the {\em new} file is modified more recently than
+the {\em old} file.}
+
+\funcdesc{object-file-p}{file}{returns T if the {\em file} is
+an object file by looking at the file's magic number in the header.}
+
+\funcdesc{directory}{\&optional (path ".")}{
+makes a list of all the files in the {\em path}.}
+
+\funcdesc{dir}{\&optional (dir ".")}{
+prints file names in the specified directory.}
+
+\end{refdesc}
+
+\newpage
+
+      
+

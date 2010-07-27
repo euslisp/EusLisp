@@ -1,0 +1,7 @@
+(defun combination (lst)
+  (let ((lst2 (cdr lst)) primary (result))
+     (while (cdr lst)
+	(setq primary (pop lst))
+	(dolist (l lst)
+	   (push (list primary l) result)))
+     result))

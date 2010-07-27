@@ -1,0 +1,53 @@
+Received: from etlcom.etl.go.jp by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA03430; Sat, 16 Dec 89 08:47:23 JST
+Received: by etlcom.etl.go.jp (5.51/6.4J.6-ETL.MASTER)
+	id AA23676; Sat, 16 Dec 89 10:04:34 JST
+Received: by etlmmd.etl.go.jp (4.0/6.4J.6-ETL.SLAVE)
+	id AA03426; Sat, 16 Dec 89 08:47:11 JST
+Date: Sat, 16 Dec 89 08:47:11 JST
+From: matsui@etl.go.jp (Toshihiro MATSUI)
+Return-Path: <matsui@etl.go.jp>
+Message-Id: <8912152347.AA03426@etlmmd.etl.go.jp>
+To: euslisp@etlcom.etl.go.jp
+Subject: eusview, eusx
+Status: R
+
+tamamuraさんから質問がありました。
+
+>　(window_set frame win_show 1) の代わりに，(window_main_loop frame)
+>  とすると表示するが，eusviewはwait状態となる．
+
+makefileの、EUSLIB変数に-lsunwindowを加えて下さい。つまり
+EUSLIG = -lsunwindow -lm
+です。sunwindow.aは、中でreadがblockされないようにsystem-callの
+ライブラリを再定義しています(貴重なノウハウ)。raweusをrmしてmake
+すればいいと思います。
+
+>　また，(draw object) がargumentエラーとなる．
+
+これは、最近:draw-lineにカラーを入れたためでしょう。sunlib/sunviewclass.l
+の:drawline-primitiveメソッドでエラーが出てるのだと思います。
+稲葉さん、パッチはどうしましたか。
+
+> (2)eusxは，disp変数がunbundedエラーとなる．
+
+これは簡単。eusxを走らせる前に、DISPLAY環境変数をsetenvしておいて下さい。
+% setenv DISPLAY etlmmd:0.0
+などとします。サーバがどこにあるかわからないとeusxはどこのconnectして
+いいかわからないのでした。おかしいな、どこかに書いておいたはずだけど。
+
+
+> とくにeusviewについては，sunviewにくわしくないので，ドキュメ
+> ントを参照しつつ調べている段階です．（稲葉先生に教えてもらう
+> のが早いかも．．）
+> 2)については，もう一台のsunにxwindowがのっていたので，とりあ
+> えずmakeして見たところです．原因はわかりません．
+> そのほかは詳しく調べたわけではないですが，幾何モデルを定義し
+> て，inspect, describe で様子を見た限りでは，うまくいっている
+> ようです．
+
+> 　それにしても，sunのドキュメントを参照しつつ，Euslispの膨大
+> なプログラムを勉強するのはなかなか大変です．
+> 上記に関してなにか御教示／コメントがいただければ幸いです．
+
+お役に立ちましたでしょうか。

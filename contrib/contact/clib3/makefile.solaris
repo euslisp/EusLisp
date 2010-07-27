@@ -1,0 +1,27 @@
+#
+# makefile for cone ( face pointer version )
+#
+#					Hirohisa HIRUKAWA
+#				Intelligent Machine Behavior Section
+#				Electrotechnical Laboratory
+#				1-1-4 Umezono, Tsukuba, Japan 305
+#				E-mail: hirukawa@etl.go.jp
+#
+#	Version 1.0, Jul.22, 1988.
+#	Version 1.1, Oct. 3, 1990.	Add.	install:
+#						OBJ2
+
+CFLAGS = -O
+
+OBJ = projection_inter.o projection.o
+
+projection : $(OBJ)
+	cc $(CFLAGS) $(OBJ) -lm -o projection
+
+$(OBJ) : arith.h
+
+lib: $(OBJ)
+	cc -G -o libprojection.so $(OBJ)
+
+install: libprojection.so
+	cp libprojection.so /home/hirukawa/eus/tangent/.

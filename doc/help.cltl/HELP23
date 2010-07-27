@@ -1,0 +1,75 @@
+(acons function-documentation "
+Args: (key datum alist)
+Add an alist entry. Equivalent to (CONS (CONS KEY DATUM) ALIST).")
+(assoc-if-not function-documentation "
+Args: (test alist)
+Returns the first pair in ALIST whose car does not satisfy TEST.  Returns NIL
+if no such pair exists. Euslisp does not support this function.")
+(common type-documentation "
+COMMON is the type of all Common Lisp data objects.")
+(compiler-let function-documentation "
+Syntax: (compiler-let ({var | (var [value])}*) {form}*)
+When interpreted, this form works just like a LET form with all VARs declared
+special.  When compiled, FORMs are processed with the VARs bound at compile
+time, but no bindings occur when the compiled code is executed.")
+(cons type-documentation "
+A cons is a compound object consisting of two components car and cdr.")
+(cons function-documentation "
+Args: (x y)
+Returns a new cons whose car and cdr are X and Y respectively.")
+(count-if-not function-documentation "
+Args: (test sequence
+            (start 0) (end (length sequence)) (from-end nil))
+Returns the number of elements in SEQUENCE not satisfying TEST.")
+(find-all-symbols function-documentation "
+Args: (string)
+Returns a list of all symbols that have the specified print name.  STRING may
+be a symbol, in which case the print name of the symbol is used.")
+(listen function-documentation "
+Args: (&optional (stream *standard-input*))
+Returns T if STREAM is ready to input a character from; NIL otherwise.  In
+some versions of KCL, this function does not work correctly because the
+underlying OS does not support such a mechanism.")
+(*load-verbose* variable-documentation "
+The default value for the VERBOSE parameter of LOAD.")
+(mask-field function-documentation "
+Args: (bytespec integer)
+Extracts the specified byte from INTEGER and returns the result as an integer.")
+(nsublis function-documentation "
+Args: (alist tree &key (key #'identity) (test #'eql) test-not)
+Destructive SUBLIS.  TREE may be destroyed.")
+(nunion function-documentation "
+Args: (list1 list2 &key (key #'identity) (test #'eql) test-not)
+Destructive UNION.  Both LIST1 and LIST2 may be destroyed.")
+(pairlis function-documentation "
+Args: (keys items &optional (alist nil))
+Conses each KEY and the corresponding ITEM, adds them to ALIST, and returns
+the result.  KEYS and ITEMS must be of the same length.")
+(pi variable-documentation "
+The float that is approximately equal to the ratio of the circumference of the
+circle to the diameter.")
+(position function-documentation "
+Args: (item sequence
+       &key (key #'identity) (test #'eql) test-not
+            (start 0) (end (length sequence)) (from-end nil))
+Returns the index to the first element in SEQUENCE that is equal to ITEM in
+the sense of TEST.  Returns NIL if no such element exists.")
+(*print-radix* variable-documentation "
+Specifies whether the KCL printer should print the radix when it prints
+integers and ratios.")
+(substitute-if function-documentation "
+Args: (new test sequence
+       &key (key #'identity) (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Returns a copy of SEQUENCE with all elements that satisfy TEST replaced by
+NEW.  The original SEQUENCE is not destroyed.")
+(address function-documentation "
+Args: (object)
+KCL specific.
+Returns the address of the OBJECT as a fixnum.")
+(init-system function-documentation "
+Args: ()
+KCL specific.
+Initializes the library and the compiler of KCL.  Since they have already been
+initialized in the standard image of KCL, calling this function will cause an
+error.")

@@ -1,0 +1,401 @@
+\section{ベクトル・行列演算機能}
+
+\subsection{ベクトル・マトリクス演算関数}
+
+Commonlisp では、1次元の配列がベクタであると定義されている。
+euslisp では、ベクタはfillpointer をdisplace,adjust 出来ない単純
+ベクタをさす。さらに、この章で述べるベクタは要素が浮動小数値に
+限定されたフロートベクタである。マトリクスは、要素が浮動小数で
+あるような2次元配列である。
+
+\begin{description}
+\item[float-vector-p {\em obj}]\hfill\\
+obj がフロートベクタならt を返す。さもなければ、nil を返す。
+\item[v+ {\em fvec1 \&optional fvec2 result-vec}]\hfill\\
+fvec1 と fvec2 の和ベクタを計算する。result-vec があれば
+結果を result-vec に入れ、なければ新たなベクタを作る。
+\item[v- {\em fvec1 fvec2 \&optional result-vec}]\hfill\\
+fvec1 と fvec2 の差ベクタを計算する。result-vec があれば
+結果を result-vec に入れ、なければ新たなベクタを作る。
+fvec2 が与えられなかった場合、fvec1 の符号を反転した新たなベクタを作る。
+符号を反転したベクタを新しいメモリ領域を消費することなくresult-vec に
+入れたい時は、関数scale を用いて\verb+(scale -1.0 fvec1 fvec2)+ とする。
+\item[v. {\em fvec1 fvec2}]\hfill\\
+fvec1 と fvec2 の内積。
+\item[v* {\em fvec1 fvec2 \&optional result-vec}]\hfill\\
+fvec1 と fvec2 の外積ベクタを計算する。result-vec があれば
+結果を result-vec に入れ、なければ新たなベクタを作る。
+fvec1,fvec2 は3次元でなければならない。
+\item[v.* {\em fvec1 fvec2 fvec3}]\hfill\\
+スカラー三重積を計算する。即ち、
+\begin{verbatim}
+(v.* fvec1 fvec2 fvec3)=(v. fvec1 (v* fvec2 fvec3))
+                       =(v. (v* fvec1 fvec2) fvec3)
+\end{verbatim}
+\item[v{\tt <} {\em fvec1 fvec2}]\hfill\\
+すべての要素について fvec1 より fvec2 の方が小さいか等しければt を、
+さもなければnil を返す。
+\item[v{\tt >} {\em fvec1 fvec2}]\hfill\\
+すべての要素について fvec1 より fvec2 の方が大きいか等しければt を、
+さもなければnil を返す。
+\item[vmin {\em \&rest fvec}]\hfill\\
+各要素が、fvec のうち最小の要素からなるベクタを作成して返す。
+\item[vmax {\em \&rest fvec}]\hfill\\
+各要素が、fvec のうち最大の要素からなるベクタを作成して返す。
+\item[minimal-box {\em fvec-list minfvec maxfvec \&optional err}]\hfill\\
+fvec-list の vmin を minfvec に、vmax を maxfvec にいれる。
+即ち、fvec-list で与えられたすべての点を含み、
+エッジが\ $x,y,z$\ 軸に平衡である最小の直方体の頂点を表す位置ベクタのうち、
+最も原点に近い位置ベクタが minfvec で、
+最も原点から遠い位置ベクタが maxfvec である。
+返す値は、minfvec と maxfvec との距離である。
+浮動小数点 err があれば、minfvec と maxfvec との距離の err 倍だけ直方体が
+拡大される。即ち、minfvec と maxfvec dist とすると、
+minfvec は、\verb+(v- minfvec (scale (* err dist) #f(1 1 1)))+となり、
+maxfvec は、\verb2(v+ maxfvec (scale\ (*\ err dist) #f(1 1 1)))2となる。
+\item[scale {\em number fvec \&optional result-vec}]\hfill\\
+fvec を number 倍したベクトルを計算する。result-vec があれば、
+結果を result-vec に入れ、なければ、新たなベクタを作る。
+\item[norm {\em fvec}]\hfill\\
+fvec のノルムを計算する。
+\item[distance {\em vec1 vec2}]\hfill\\
+位置ベクトル vec1 と vec2 との距離を計算する。
+\item[normalize-vector {\em fvec \&optional result-vec}]\hfill\\
+fvec の単位ベクトルを計算する。result-vec があれば
+結果を result-vec に入れ、なければ新たなベクタを作る。
+\item[float-vector {\em \&rest numbers}]\hfill\\
+numbers を要素とするフロートベクターを作る。coerce を用いて作ることも
+可能である。\\
+\verb+(apply float-vector '(1 2 3))=(coerce '(1 2 3) float-vector)+
+\item[transform {\em mat fvec \&optional result-vec}]\hfill\\
+fvec を mat によって変換したベクタを計算する。mat は左から掛ける。
+result-vec があれば、結果を result-vec に入れ、なければ、新たなベクタを作る。
+\item[transform {\em fvec mat \&optional result-vec}]\hfill\\
+fvec を mat によって変換したベクタを計算する。mat は右から掛ける。
+result-vec があれば、結果を result-vec に入れ、なければ、新たなベクタを作る。
+\item[m* {\em mat1 mat2 \&optional result-mat}]\hfill\\
+2つのマトリックスの掛算。result-mat があれば、結果を result-mat に入れ、
+なければ、新たなマトリックスを作る。
+\item[rotate-vector {\em fvec theta axis \&optional result-vec}]\hfill\\
+fvec を theta ラジアンだけ axis の周りを回転させたベクトルを計算する。
+result-vec があれば、結果を result-vec に入れ、なければ、新たなベクタを作る。
+axis は、:x :y :z あるいは 0 1 2 のいずれか。
+任意軸回りの回転を行うときはrotation によって回転マトリクスを作り、
+transformを用いる。
+\item[rotate-matrix {\em mat theta axis \&optional world-p result-mat}]\hfill\\
+mat を theta ラジアンだけ axis の周りを回転させたマトリックスを計算する。
+result-mat があれば、結果を result-mat に入れ、なければ、新たなマトリックスを
+作る。axis は、world-p がt なら ワールド座標系、nil ならローカル座標系に
+おける軸で、:x :y :z あるいは 0 1 2 のいずれか。world-p がt のとき、
+回転マトリクスが左から掛けられ、nil のときは右から掛けられる。
+\item[rotation-matrix {\em theta axis \&optional result-mat}]\hfill\\
+任意の軸 axis の周りを theta ラジアンだけ回転させるマトリックスを計算する。
+result-mat があれば、結果を result-mat に入れ、なければ、新たなマトリックスを
+作る。axis は、任意の（正規化されている必要はない）フロートベクタまたは
+回転軸を表すキーワード:x :y :z or 0 1 2。
+\item[rotation-angle {\em rotation-mat}]\hfill\\
+回転変換を表すマトリックス rotation-mat の等価回転角（ラジアン）および
+等価回転軸を求める。値は、回転角度と軸のリスト。
+\item[rpy-matrix {\em roll pitch yaw}]\hfill\\
+ロール・ピッチ・ヨウから、回転マトリクスを計算する。
+ロールはz軸、ピッチはy軸、ヨウはx軸回りの回転角（ラジアン）。
+すなわち、ワールドの x, y, z 軸回りに yaw, pitch, roll ラジアンずつ、
+この順で回転させる。 
+\item[rpy-angle {\em mat}]\hfill\\
+回転変換を表すマトリックス mat のロール、ピッチ、ヨウ（ラジアン）を求める。
+値は、2種類のロール・ピッチ・ヨウのリスト。
+\item[euler-matrix {\em az ay az2}]\hfill\\
+オイラー角（Paulの本の引数の順に準拠、ラジアン）から回転マトリクスを計算する。
+すなわち、ローカル座標系の z, y, z 軸回りに az, ay, az2 の順で回転させる。
+\item[euler-angle {\em mat}]\hfill\\
+回転変換を表すマトリックス mat のオイラー角（ラジアン）を求める。値は、
+2種類のオイラー角のリスト。
+\item[matrix {\em rowvec1 rowvec2 ...}]\hfill\\
+与えられた\ $rowvec1,\ldots,rowvec_{m}$\ からマトリクスを作成する。
+\item[matrixp {\em obj}]\hfill\\
+obj がマトリックスならばt を、さもなければnil を返す。マトリクスとは、
+要素が浮動少数点であるような2次元配列である。
+\item[make-matrix {\em row column \&optional initial-elements}]\hfill\\
+row 行 column 列のマトリックスを作る。initial-elements の指定があれば
+各要素の初期値はその値になり、なければすべてゼロになる。
+\begin{verbatim}
+eusgeo$ (setq x (make-matrix 2 2 '((1 2) (3 4))))
+#2f((1.00000 2.00000) (3.00000 4.00000))
+\end{verbatim}
+\item[unit-matrix {\em dimension}]\hfill\\
+dimension 次元の単位行列を作る。
+\item[replace-matrix {\em dest-mat src-mat}]\hfill\\
+dest-mat の各要素を、src-mat の要素に置き換える。返す値は、dest-mat。
+\item[copy-matrix {\em mat}]\hfill\\
+mat をコピーしたマトリックスを新たに作って返す。
+\item[transpose {\em mat \&optional result-mat}]\hfill\\
+mat の転置行列を計算する。result-mat があれば、結果を result-mat に入れ、
+なければ、新たなマトリックスを作る。mat は正方である必要はない。
+\item[scale-matrix {\em scalar mat}]\hfill\\
+mat の各要素を scalar 倍する。返す値は、mat。
+\item[matrix-row {\em mat row-index}]\hfill\\
+mat の row-index 行のベクトルを返す。
+\item[matrix-column {\em mat column-index}]\hfill\\
+mat の column-index 列のベクトルを返す。
+\item[lu-decompose {\em mat \&optional result}]\hfill\\
+mat をlu 分解する。分解されたマトリクスはresult が指定されていればresult に、
+result が与えられなければ、mat が書き換えられる。lu-decompose の値は、
+lu 分解の置換ベクタ（permutationベクタ）である。これは、ピボット選択によって
+列が交換されるために生じる。mat は正方であること。mat のrank が不足すると
+nil が返される。
+\item[lu-solve {\em lu-mat perm-vector bvector \&optional result}]\hfill\\
+lu分解されたマトリクスlu-mat に定数ベクタbvector を与えて1次連立方程式を
+解く。perm-vector はlu-decompose の結果返される置換ベクタである。
+係数行列が不変で定数ベクタだけが何種類かある場合、lu-solve だけで高速に
+何種類もの解が求められる。
+\item[simultaneous-equation {\em mat vec}]\hfill\\
+係数行列mat と定数ベクタvec から連立1次方程式を解く。
+\item[lu-determinant {\em lu-mat perm-vector}]\hfill\\
+lu分解された行列とlu-matと置換ベクタperm-vectorを用いて、行列式の値を
+求める。
+\item[inverse-matrix {\em mat}]\hfill\\
+mat の逆行列を求める。mat のrankが不足するとdegeneratedが返される。
+
+\item[ssvdc {\em mat}]\hfill\\
+matを特異値分解する。特異値が全て求まったかどうかを示すinfo、
+直交行列U、特異値をベクトルにしたもの、直交行列V、のリストを返す。
+詳しくは、LINPACKのマニュアルを参照。
+
+\item[pseudo-inverse {\em mat}]\hfill\\
+特異値分解を用いて、matの疑似逆行列を求める。
+matがフルランクでないときも使える。
+
+\end{description}
+\vspace{1.0cm}
+\subsection{座標系と座標変換}
+本節では、座標系のクラスについて述べる。座標系クラスは、
+{\bf l/coordinates.l} で定義されている。
+\\ [1.0cm]
+{\jLarge coordinates}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 3次元マトリクスと3次元フロートベクタで座標系、
+座標変換を定義するクラス。1つ39ワードのメモリを使う。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[object]\hspace{1.0cm} 
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[rot] 回転を表す\ $3\times3$\ マトリクス
+\item[pos] 原点位置を表す3次元フロートベクタ
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:dimension ()] 座標系の次元の問い合せ。
+\item[:rot ()] 回転マトリクスの問い合わせ。
+\item[:pos ()] 位置ベクタの問い合わせ。
+\item[:newcoords (r p)] 座標系の位置、姿勢が変化する時呼ばれるメソッド。
+この変化のイベントを利用したい時はサブクラスに同名のメソッドを定義し、
+send-superの後、所望の処理を行なう。
+\item[:replace-rot (r)]
+\item[:replace-pos (p)]
+\item[:replace-coords (coords)] この座標系の回転、位置を引数からコピーする。
+これらはnewpos, newrot, newcoords を用いない。
+\item[:copy-pos ()]
+\item[:copy-rot ()]
+\item[:copy-coords ()] この座標系の複製を作成する。
+\item[:worldrot ()]ワールド座標系における（実はselfの）回転マトリクスを返す。 
+\item[:worldpos ()]ワールド座標系における（実はselfの）位置ベクタを返す。
+\item[:parentcoords ()]親の座標系（*world-coords*）を返す。
+\item[:rotate-vector (vec)]ベクタvecをこの座標のワールド座標系における
+回転マトリクス（実はrot）だけ回転する。
+\item[:transform-vector (vec)] この座標系において表現されたベクタvec
+を外部（ワールド）における表現に変換する。
+\item[:inverse-transform-vector (vec)] 外部（ワールド）における位置ベクタ
+vecをこの座標系での表現に逆変換する。
+\item[:reset-coords ()] 位置を原点に、回転を単位マトリクスにする。
+\item[:inverse-transformation ()]
+この座標系の逆変換の座標系を作成する。
+\item[:transformation (c2 \&optional (wrt 'local))]
+この座標系(c1)と他の座標系(c2)との間のwrt座標系に関する変換(ct)を求める。\\
+$wrt=local\ c2=c1*ct \\ 
+wrt=world,parent\ c2=ct*c1 \\ 
+wrt=x\ c2=xw*ct*xw^{-1}*c1$ \\
+但し、xのworldcoordsをxwとする。
+\item[:transform (ct \&optional (wrt 'local))] 
+この座標系(c1)をwrt座標系に関する変換(ct)で変換する。\\
+$wrt=local\ \ c2=c1*ct \\ 
+wrt=world,parent\ \ c2=ct*c1 \\ 
+wrt=x\ \ c2=xw*ct*xw^{-1}*c1$ \\
+但し、変換後の座標系をc2とし、xのworldcoordsをxwとする。
+\item[:rotate (theta axis \&optional (wrt 'local))]
+この座標系に対し、wrt座標系に関してtheta axisで表わす回転を行なう。
+ただし、回転はこの座標系の原点を中心として行なう。
+従って、座標系の原点の位置は変わらない。
+axis（回転軸）は、:x,:y,:z,float-vector,nil のいずれか。
+axisが、:x,:y,:zの時は、それぞれ、wrt座標系のx,y,z軸回りにthetaラジアンの回転。
+axisが、float-vectorの時は、wrt座標系でのfloat-vectorを回転軸とした
+thetaラジアンの回転。
+axisが、nilの時は、thetaは回転角でなく回転マトリクスで、
+wrt座標系に関して回転マトリクスthetaだけ回転する。
+\item[:orient (theta axis \&optional (wrt 'local))]
+ワールド座標系から見て、
+「wrt座標系(cwrt)にtheta axisで表わされる回転(ctで表される)を行なった
+姿勢」と等しくなるように、この座標系を定めなおす。
+座標系の原点の位置は変わらない。
+$wrt=local\ \ c2=cwrt*ct \\
+wrt=world,parent\ \ c2=ct \\
+wrt=x\ \ c2=xw*ct$ \\
+但し、変換後の座標系をc2とし、xのworldcoordsのrotをxwとする。
+axis(回転軸)は、:x, :y, :z, float-vector, nil のいずれか。
+axisが、:x, :y, :zの時は、それぞれ、wrt座標系のx, y, z軸回りに
+thetaラジアンの回転。
+axisが、float-vectorの時は、wrt座標系でのfloat-vectorを回転軸とした
+thetaラジアンの回転。
+axisが、nilの時は、thetaは回転角でなく回転マトリクスで、
+wrt座標系に関して回転マトリクスthetaだけ回転する。
+\item[:translate (vec \&optional (wrt 'local))] wrt座標系で表されたベクタvec
+だけ、この座標系を相対移動する。
+\item[:locate (vec \&optional (wrt 'local))] この座標系を、wrt座標系で表された
+位置ベクタvecの位置に絶対移動する。
+\item[:euler (azimuth elevation rotation)]
+座標系を\ $z$\ 軸に沿って\ $azimuth$\ ラジアン、\ $y$\ 軸に沿って
+$elevation$\ 、\ $z$\ 軸に沿って\ $ratation$\ 回転させる。軸は、ローカル。
+\item[:euler-angle ()]この座標系のオイラー角を求める。
+\item[:rpy-angle ()]この座標系のロール、ピッチ、ヨウを求める。
+\item[:rpy(roll\ pitch\ yaw)]
+\item[:init] 座標系を初期化する。
+\begin{description}
+\item[:dimension] 3
+\item[:pos] \#f(0 0 0) 位置ベクタ
+\item[:rot] (unit-matrix) 回転マトリクス
+\item[:euler,\ :rpy] euler角、roll-pitch-yawによる回転指定
+\item[:axis,\ :angle] axis軸回りにangle回転
+\item[:coords] 他のcoordsからcopy
+\item[:4x4] 4\ $\times$\ 4\ マトリクスで指定
+\item[:wrt] axis, angleのwrt指定
+\item[:name] 座標系の:name属性値。プリントで使用される
+\end{description}
+
+\end{description}
+\end{description}
+\vfill
+\pagebreak
+{\jLarge cascaded-coords}
+\\ [0.5cm]
+
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] クラスcoordinatesのサブクラスで、座標系の親子関係を管理するクラス。
+1つ84ワードのメモリを使う。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[coordinates (rot pos)]\hspace{1cm}
+rot,pos によって自分の親座標系に対する相対的な変換を記録している。
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[parent] 
+\item[descendants]
+\item[worldcoords]
+\item[manager]
+\item[changed]
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:inheritance ()] 子供座標系の木構造をリストにして返す。
+\item[:assoc (childcoords)] childcoords を従座標系として登録する。
+selfとchildcoords の位置関係が変化しないようchildcoords の内容は書き換
+えられる。もし、childcoords が他の座標系の従座標系として定義されている
+ときはまずその関係を切り離してから自分自身に:obey によって接続する。
+\item[:dissoc (child)] child を切り離す。
+\item[:newcoords (r p)] 座標系の位置、姿勢が変化する時呼ばれるメソッド。
+この変化のイベントを利用したい時はサブクラスに同名のメソッドを定義し、
+send-superの後、所望の処理を行なう。
+\item[:changed ()] 自分と子孫のスロットchangedをすべてtにする。
+\item[:worldrot ()]この座標系のワールド座標系での回転ベクタを求める。
+\item[:worldpos ()]この座標系のワールド座標系での位置マトリクスを求める。
+\item[:worldcoords ()] worldcoordsの問合せ。
+changedがtならば、木構造をトラバースして、ワールドにおける変換を
+求め、内部変数worldcoords に入れる。副作用として、この座標系の親
+およびすべての先祖に対し、:worldcoords を行なう。
+\item[:update ()] worldcoordsを求めようとして、changed=Tのとき、すなわち、
+worldcoordsの実際の変更が起こったとき、この:updateが呼ばれる。
+\item[:parentcoords ()]parentのworldcoordsの問合せ。
+\item[:transform-vector (vec)] この座標系において表現された位置ベクタvec
+をワールド座標系における表現に変換する。
+\item[:rotate-vector (vec)]ベクタvecをこの座標のワールド座標系における
+回転マトリクスだけ回転する。
+\item[:inverse-transform-vector (vec)]ワールド座標系において表現された
+位置ベクタvecをこの座標系における表現に逆変換する。
+\item[:inverse-transformation ()]
+まずworldcoords を求め、その逆変換を求める。結果はcoordinates。
+\item[:transform (ct \&optional(wrt 'local))]
+この座標系(c1)をwrt座標系に関する変換(ct)で変換する。\\
+	$wrt=local\ c2=c1*ct \\ wrt=parent\ c2=ct*c1 \\
+wrt=world\  c2=c1p^{-1}*ct*c1p*c1 \\
+wrt=x\ c2=c1p^{-1}*xw*ct*xw^{-1}*c1p*c1$\\
+但し、変換後の座標系をc2、c1のparentcoordsをc1p、
+xのworldcoordsをxwとする。
+\item[:rotate (theta axis \&optional (wrt 'local)]
+この座標系に対し、wrt座標系に関してtheta axisで表わす回転を行なう。
+ただし、回転はこの座標系の原点を中心として行なう。
+従って、座標系の原点の位置は変わらない。
+axis（回転軸）は、:x,:y,:z,float-vector,nil のいずれか。
+axisが、:x,:y,:zの時は、それぞれ、wrt座標系のx,y,z軸回りにthetaラジアンの回転。
+axisが、float-vectorの時は、wrt座標系でのfloat-vectorを回転軸とした
+thetaラジアンの回転。
+axisが、nilの時は、thetaは回転角でなく回転マトリクスで、
+wrt座標系に関して回転マトリクスthetaだけ回転する。
+\item[:orient (theta axis \&optional (wrt 'local)]
+親座標系から見て、
+「wrt座標系(cwrt)にtheta axisで表わされる回転(ctで表される)を行なった
+姿勢」と等しくなるように、この座標系を定めなおす。
+座標系の原点の位置は変わらない。
+        $wrt=local\ c2=cwrt*ct \\ wrt=parent\ c2=ct \\
+wrt=world\  c2=cwrtp^{-1}*ct \\
+wrt=x\ c2=cwrtp^{-1}*xw*ct$\\
+但し、変換後の座標系をc2、cwrtのparentcoordsのrotをcwrtp、
+xのworldcoordsのrotをxwとする。
+axis(回転軸)は、:x,:y,:z,float-vector,nil のいずれか。
+axisが、:x,:y,:zの時は、それぞれ、wrt座標系のx,y,z軸回りにthetaラジアンの回転。
+axisが、float-vectorの時は、wrt座標系でのfloat-vectorを回転軸とした
+thetaラジアンの回転。
+axisが、nilの時は、thetaは回転角でなく回転マトリクスで、
+wrt座標系に関して回転マトリクスthetaだけ回転する。
+\item[:manager (\&optional m)]managerの問合せ。
+mがあれば、managerをmにセットする。
+\item[:init]
+\end{description}
+\item[{\jlarge \bf Note}]\hspace{1cm}
+\begin{description}
+\item[:transform\ :rotate\ :orient\ :translate\ :locate]
+これらの\ {\bf method}\ を呼んでも、\ {\bf worldcoords}\ スロットは変更
+されない。\ {\bf changed}\ スロットを\ $t$\ にセットして、変更されたことが
+記録されるだけである。\ {\bf worldcoords}\ スロットが更新されるのは、後に
+\ {\bf :worldcoords}\ メソッドが呼ばれたときである。
+\end{description}
+
+\end{description}
+\vfill
+
+\subsection{座標の生成と変換}
+
+\begin{description}
+\item[make-coords] coordinates の生成。
+\item[make-cascoords] cascaded-coords の生成。
+\item[transform-coords c1 c2 \&optional (c3 (instance coordinates :init))]
+\hfill\\
+座標系の変換 $c1*c2$。c3があれば結果をc3に入れ、なければ新たなcoordinates
+を作る。
+\end{description}
+

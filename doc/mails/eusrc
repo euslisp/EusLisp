@@ -1,0 +1,22 @@
+EusLisp change notice		July/10/1989
+
+(1) .eusrc
+When eus begins execution, it always tries to load ~/.eusrc.
+User specific initialization procedures like setting *prompt-string*
+or creating windows, can be programmed in this file. Euscomp also loads
+this file before the compilation. No errors are allowed to occur during
+the load of this file.
+
+(2) *load-path*
+New load searches for a file in the directories listed in *load-path*.
+The default path is ("./" "/usr/local/eus/llib/" "/usr/local/eus/demo/"),
+and (load "x") is sufficient to load "/usr/local/eus/demo/x.l".
+However this default is temporal, and it would be better to explicitly
+set this variable in .eusrc file.
+Note that slash(/) is necessary for each entry in *path-list* to
+indicate it is a directory.
+
+These changes are available only in ETL.
+
+T.Matsui
+

@@ -1,0 +1,149 @@
+\documentstyle[art10,titlepage,makeidx,twoside,EPSF/epsf]{article}
+\makeindex
+\pagestyle{myheadings}
+\oddsidemargin=0cm
+\evensidemargin=0cm
+
+% A4 size
+\textwidth=16cm
+\textheight=24cm
+\topmargin=-1.5cm
+\oddsidemargin= 0.7cm
+\evensidemargin=0.7cm
+
+% Letter size
+%\topmargin=0.5cm
+%\textwidth=17.6cm
+%\textheight=23cm
+%\oddsidemargin= 0.2cm
+%\evensidemargin=0.2cm
+
+\parindent=10mm
+\parskip=1mm
+%\baselineskip 14pt
+
+\setcounter{totalnumber}{3}
+\renewcommand{\topfraction}{0.99}       % 85% of a page (from page
+                                        % top)
+                                        % can be occupied by tbl / fig
+                                        %
+\renewcommand{\bottomfraction}{0.99}    % 85% of a page (from page
+                                        % bottom)
+                                        % can be occupied by tbl / fig
+\renewcommand{\textfraction}{0.0}      % text shoud occupy 15% or
+                                        % more in
+                                        % a page
+%\renewcommand{\floatpagefraction}{0.99} % 70% or more shoud occupy in
+                                        % a
+                                        % a float page
+
+
+\jintercharskip=0pt plus3.0pt minus1pt%
+
+\begin{document}
+
+\newcommand{\ptext}[1]
+{\tt \begin{quote} \begin{tabbing} #1 \end{tabbing} \end{quote} \rm}
+
+\newcommand{\desclist}[1]{
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item #1
+\end{list}
+\vspace{3mm}}
+
+\newcommand{\functiondescription}[4]{
+\index{#1}
+{\bf #1} \em #2 \rm \hfill [#3] 
+\ifx#4\null \\ \else\desclist{#4}\fi
+}
+
+\newcommand{\longdescription}[3]{
+\index{#1}
+\begin{tabbing}
+{\bf #1} 
+\em #2
+\rm
+\end{tabbing}
+\desclist{#3}
+}
+
+\newcommand{\funcdesc}[3]{\functiondescription{#1}{#2}{function}{#3}}
+\newcommand{\macrodesc}[3]{\functiondescription{#1}{#2}{macro}{#3}}
+\newcommand{\specialdesc}[3]{\functiondescription{#1}{#2}{special}{#3}}
+\newcommand{\methoddesc}[3]{\functiondescription{#1}{#2}{method}{#3}}
+\newcommand{\vardesc}[2]{\functiondescription{#1}{}{variable}{#2}}
+
+\newcommand{\fundesc}[2]{\functiondescription{#1}{#2}{function}{\hspace{0mm}}}
+\newcommand{\macdesc}[2]{\functiondescription{#1}{#2}{macro}{\hspace{0mm}}}
+\newcommand{\spedesc}[2]{\functiondescription{#1}{#2}{special}{\hspace{0mm}}}
+\newcommand{\metdesc}[2]{\functiondescription{#1}{#2}{method}{\hspace{0mm}}}
+
+\newcommand{\constdesc}[2]{\functiondescription{#1}{}{constant}{#2}}
+
+\newcommand{\classdesc}[4]{	%class, super slots description
+%\vspace{5mm} 
+\index{#1}
+{\Large {\bf #1 }} \hfill [class]  %super
+\begin{tabbing}
+\hspace{30mm} :super \hspace{5mm} \= {\bf #2} \\
+\hspace{30mm} :slots \> #3 
+\end{tabbing}
+\vspace{4mm}
+\desclist{#4}}
+
+\newenvironment{refdesc}{
+ \vspace{5mm} \parindent=0mm \topsep=0mm \parskip=0mm \leftmargin=10mm}{
+             \parindent=10mm \topsep=3mm \parskip=1mm \leftmargin=0mm }
+
+
+% \title{\LARGE \bf EusLisp \\
+% {\large \bf version 7.27} \\
+% \bf Reference Manual \\
+% \vspace{5mm}
+% \normalsize
+% ETL-RM-87-06E \\
+% Feb,Jun/1989, Jun,Sep/1990, Oct/1991, Oct/1992  \\ }
+% \author{MATSUI, Toshihiro \\
+% Autonomous Systems Section, Intelligent Systems Division \\
+% Electrotechnical Laboratory \\
+% Tsukuba-city Ibaraki 305, JAPAN}
+% \thispagestyle{empty}
+% \maketitle
+% \pagenumbering{roman}
+% \tableofcontents
+% % \listoffigures
+% % \listoftables
+% \bibliographystyle{plain}
+% \newpage
+% \pagenumbering{arabic}
+% \part{EusLisp Basics}
+% \markboth{EusLisp Reference Manual (Part I)}{Introduction}
+% \input{intro}
+% \input{generals}
+% \input{controls}
+% \input{objects}
+% %\input{predicates}
+% \input{arith}
+% \input{symbols}
+% \input{sequences}
+% \input{io}
+% \input{evaluation}
+% \newpage
+% \part{EusLisp Extensions}
+% \markboth{EusLisp Reference Manual (Part II)}{System Functions}
+% \input{sysfunc}
+% \input{matrix}
+% \input{geometry}
+% \input{contact}
+% \input{voronoi}
+% \input{graphics}
+% \input{xwindow}
+% \input{image}
+% \input{manipulator}
+\input{opengl}
+%
+\cleardoublepage
+\footnotesize
+\printindex
+\end{document}
+

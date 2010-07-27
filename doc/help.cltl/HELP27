@@ -1,0 +1,96 @@
+(*** variable-documentation "
+The value of the last-but-two top-level form.")
+(bit-vector type-documentation "
+A bit-vector is a vector of bits.  A bit-vector is notated by '#*' followed
+by its elements (0 or 1).  Bit-vectors may be displaced to another array, may
+have a fill-pointer, or may be adjustable.  Other bit-vectors are called
+simple-bit-vectors.  Only simple-bit-vectors can be input in the above format
+using '#*'.")
+(cerror function-documentation "
+Args: (continue-format-string error-format-string &rest args)
+Signals a continuable error.")
+(delete-duplicates function-documentation "
+Args: (sequence &key (key #'identity) (test #'eql) test-not
+                     (start 0) (end (length sequence)) (from-end nil))
+Destructive REMOVE-DUPLICATES.  SEQUENCE may be destroyed.")
+(error function-documentation "
+Args: (format-string &rest args)
+Signals an error.  The args are FORMATed to *error-output*.")
+(fixnum type-documentation "
+A fixnum is an integer between MOST-NEGATIVE-FIXNUM (= - 2^31 in KCL) and
+MOST-POSITIVE-FIXNUM (= 2^31 - 1 in KCL) inclusive.  Other integers are
+bignums.")
+(floor function-documentation "
+Args: (number &optional (divisor 1))
+Returns the largest integer not larger than the NUMBER divided by DIVISOR.
+Returns the value of (- NUMBER (* first-value DIVISOR)) as the second value.")
+(get-internal-run-time function-documentation "
+Args: ()
+Returns the CPU time (in 1/1000 seconds) since the invocation of KCL.")
+(hash-table-count function-documentation "
+Args: (hash-table)
+Returns the number of entries in HASH-TABLE.")
+(integer type-documentation "
+An integer object represents an integer in mathematical sense.  An integer may
+be a fixnum, or else it is a bignum.  Normally, an integer is notated in radix
+10 (see *PRINT-BASE* and *READ-BASE*) as
+	[sign] {digit}+
+where DIGIT is a decimal digit ('0', ..., '9') and SIGN is either '+' or '-'.
+Also, the following syntax is used to notate the radix explicitly.
+	# radix {r | R} [sign] {digit}+
+where RADIX is one of '2', '3', ..., '36' and DIGIT is a digit in radix RADIX:
+	Digits in radix 2 are '0' and '1'
+	Digits in radix 8 are '0', ..., '7'
+	Digits in radix 16 are '0', ..., '9', 'a', ..., 'f', and 'A', ..., 'F'
+The following syntax is also available for radix 2, 8, 10, and 16.
+	# {b | B} [sign] {digit}+
+	# {o | O} [sign] {digit}+
+		  [sign] {digit}+ .
+	# {x | X} [sign] {digit}+")
+(lognor function-documentation "
+Args: (integer1 integer2)
+Equivalent to (LOGNOT (LOGIOR INTEGER1 INTEGER2)).")
+(logxor function-documentation "
+Args: (&rest integers)
+Returns the bit-wise EXCLUSIVE OR of the args.")
+(make-random-state function-documentation "
+Args: (&optional (random-state nil))
+Creates and returns a random-state object.  If RANDOM-STATE is NIL, copies the
+value of *RANDOM-STATE*.  If RANDOM-STATE is a random-state, copies it.  If
+RANDOM-STATE is T, creates a random-state randomly.")
+(number type-documentation "
+A number is an integer, a ratio, a float, or a complex number.  Integers and
+ratios are collectively called rationals.")
+(or function-documentation "
+Syntax: (or {form}*)
+Evaluates FORMs in order from left to right.  If any FORM evaluates to non-
+NIL, quits and returns that (single) value.  If the last FORM is reached,
+returns whatever values it returns.")
+(*print-gensym* variable-documentation "
+Specifies whether the KCL printer should prefix uninterned symbols with \"#:\".")
+(signum function-documentation "
+Args: (number)
+Returns a number that represents the sign of NUMBER.  Returns NUMBER If it is
+zero.  Otherwise, returns the value of
+	(/ NUMBER (ABS NUMBER))")
+(simple-vector type-documentation "
+A simple-vector is a vector that is not displaced to another array, has no
+fill-pointer, and is not adjustable.")
+(string-lessp function-documentation "
+Args: (string1 string2
+       &key (start1 0) (end1 (length string1))
+            (start2 0) (end2 (length string2)))
+Similar to STRING<, but ignores cases.")
+(vector type-documentation "
+A vector is a one-dimensional array.  Strings and bit-vectors are kinds of
+vectors.  Other vectors are called general vectors and are notated as
+	#(elem ... elem)
+Some vectors may be displaced to another array, may have a fill-pointer, or
+may be adjustable.  Other vectors are called simple-vectors.")
+(vector function-documentation "
+Args: (&rest objects)
+Creates and returns a simple-vector, with the N-th OBJECT being the N-th
+element.")
+(m* function-documentation "
+Args: (m1 m2 &optional result)
+Two matrices are multiplied to produce result, i.e., result=m1*m2.")

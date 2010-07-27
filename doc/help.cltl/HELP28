@@ -1,0 +1,118 @@
+(atan function-documentation "
+Args: (x &optional (y 1))
+Returns the arc tangent of X/Y.")
+(char-bits function-documentation "
+Args: (char)
+Returns the bit attributes of CHAR as an integer.  Returns always 0 in KCL,
+since KCL characters have no bit attributes.")
+(clines function-documentation "
+Syntax: (clines {string}*)
+KCL specific.
+The KCL compiler embeds STRINGs into the intermediate C language code.  The
+interpreter ignores this form.")
+(cos function-documentation "
+Args: (radians)
+Returns the cosine of RADIANS.")
+(defcfun function-documentation "
+Syntax: (defcfun header n {element}*)
+KCL specific.
+Defines a C-language function which calls Lisp functions and/or handles Lisp
+objects.  HEADER gives the header of the C function as a string.  N is the
+number of the main stack entries used by the C function, primarily for
+protecting Lisp objects from being garbage-collected.  Each ELEMENT may give
+a C code fragment as a string, or it may be a list
+	((symbol {arg}*) {place}*)
+which, when executed, calls the Lisp function named by SYMBOL with the
+specified arguments and saves all values to the specified places.  The DEFCFUN
+form has the above meanings only after compiled;  The KCL interpreter simply
+ignores this form.")
+(directory-namestring function-documentation "
+Args: (filespec)
+Returns as a string the directory part of the pathname specified by FILESPEC.
+FILESPEC may be a symbol, a string, a pathname, or a file stream.")
+(double-float type-documentation "
+A double-float is a double-precision floating point number.
+DOUBLE-FLOAT as a type specifier is equivalent to LONG-FLOAT in KCL.")
+(dotimes function-documentation "
+Syntax: (dotimes (var form [result])
+          {decl}* {tag | statement}*)
+Establishes a NIL block and executes STATEMENTs once for each integer between
+0 (inclusive) and the value of FORM (exclusive), with VAR bound to the
+integer.  Then evaluates RESULT (which defaults to NIL) and returns all
+values.")
+(enough-namestring function-documentation "
+Args: (filespec &optional (defaults *default-pathname-defaults*))
+Returns a string which uniquely identifies the file specified by FILESPEC,
+with respect to DEFAULTS.  FILESPEC and DEFAULTS may be a symbol, a string, a
+pathname, or a file stream.")
+(get-setf-method-multiple-value function-documentation "
+Args: (form)
+Returns the 'five gangs' (see DEFINE-SETF-METHOD) for PLACE as five values.
+Does not check if the third gang is a single-element list.")
+(keyword type-documentation "
+A keyword is a symbol in the keyword package.")
+(make-string-output-stream function-documentation "
+Args: ()
+Creates and returns a string-output stream.  Outputs to this stream are
+obtained as a string by GET-OUTPUT-STREAM-STRING.  A string-output stream
+is notated as
+	#<string-output stream n>
+where N is a number that identifies the stream.")
+(mapcan function-documentation "
+Args: (function list &rest more-lists)
+For each N (0 <= N < K), applies FUNCTION to the N-th elements of the given
+LISTs, where K is the maximum length of the given LISTs.  Nconcs the values,
+one for each call to FUNCTION, and returns the result.")
+(most-negative-short-float variable-documentation "
+The short-float with the largest absolute value.")
+(package-shadowing-symbols function-documentation "
+Args: (package)
+Returns, as a list, those symbols in PACKAGE that are shadowing symbols in
+other packages.")
+(*print-array* variable-documentation "
+Specifies whether KCL should print elements when it prints arrays other than
+strings.  KCL uses the following abbreviation notations.
+	#<bit-vector n>		for bit-vectors
+	#<vector n>		for vectors other than strings and bit-vectors
+	#<array n>		for arrays other than vectors
+where N is a number that identifies the array.")
+(rplacd function-documentation "
+Args: (cons x)
+Replaces the cdr of CONS with X, and returns the modified CONS.")
+(set-dispatch-macro-character function-documentation "
+Args: (char subchar function &optional (readtable *readtable*))
+Replaces FUNCTION for the read macro of SUBCHAR associated with the dispatch
+macro character CHAR in READTABLE.  When the KCL reader reads an object that
+begins with CHAR followed by SUBCHAR, it calls FUNCTION with the input stream,
+SUBCHAR, and NIL as arguments.  When the KCL reader reads an object that
+begins with CHAR, followed by a decimal representation of a number N, followed
+by SUB-CHAR, it calls FUNCTION with N as the third argument.  In both cases,
+if FUNCTION returns a single value, then that value is returned as the value
+of the reader.  If FUNCTION returns no value, then the reader tries to read an
+object again.  See MAKE-DISPATCH-MACRO-CHARACTER and GET-DISPATCH-MACRO-
+CHARACTER.")
+(*standard-input* variable-documentation "
+The default input stream used by the KCL reader.  The initial value is a
+synonym stream to *TERMINAL-IO*.")
+(tan function-documentation "
+Args: (radians)
+Returns the tangent of RADIANS.")
+(*terminal-io* variable-documentation "
+The terminal I/O stream.")
+(third function-documentation "
+Args: (x)
+Equivalent to CADDR.")
+(values function-documentation "
+Args: (&rest args)
+Returns ARGs as multiple values, the N-th ARG being the N-th value.")
+(with-open-stream function-documentation "
+Syntax: (with-open-stream (var stream-form) {decl}* {form}*)
+Evaluates FORMs with VAR bound to the value of STREAM-FORM.  The stream is
+automatically closed on exit.")
+(rotate-matrix function-documentation "
+Args: (matrix radian axis &optional (world-p nil) (result (make-matrix)))
+Rotates matrix around the given axis by radian. Axis may be one of :x, :y, :z,
+0,1,2 or arbitrary floatvector which represents the rotation axis.
+If world-p is nil, the rotation is taken in the local coordinates, i.e.,
+the rotation matrix is multiplied  from the right, and world-p is non-nil,
+vice-versa. If result is specified, it must be a matrix.")

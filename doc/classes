@@ -1,0 +1,592 @@
+object 
+   cons 
+      queue 
+   propertied-object 
+      symbol 
+         foreign-pod 
+      package 
+      stream 
+         file-stream 
+         broadcast-stream 
+         textwindowstream 
+      io-stream 
+         socket-stream 
+      metaclass 
+         vectorclass 
+            cstructclass 
+      readtable 
+      array 
+         image-2d 
+            single-channel-image 
+               bitmap-image 
+               grayscale-image 
+               index-color-image 
+            multi-channel-image 
+               split-color-image 
+               color-image 
+                  color-image16 
+                  color-image24 
+                  color-image32 
+      thread 
+      port-selector 
+      coordinates 
+         cascaded-coords 
+            faceset 
+               body 
+            sphere 
+            viewing 
+               projection 
+                  viewing2d 
+                  parallel-viewing 
+                  perspective-viewing 
+            coordinates-axes 
+            polygon2d 
+            circle2d 
+         viewport 
+      barrier-synch 
+      synch-memory-port 
+      line 
+         edge 
+            winged-edge 
+      plane 
+         polygon 
+            face 
+            hole 
+         semi-space 
+      viewer 
+      viewsurface 
+         tektro-viewsurface 
+         xobject 
+            gcontext 
+            xdrawable 
+               xpixmap 
+               xwindow 
+                  panel 
+                     menu-panel 
+                     menubar-panel 
+                     pixmap-scroller 
+                     filedialog 
+                        filepanel 
+                     textviewpanel 
+                     confirmpanel 
+                     colorpickerpanel 
+                     objectbrowser 
+                  canvas 
+                     graph-canvas 
+                  panel-item 
+                     button-item 
+                        menu-button-item 
+                        bitmap-button-item 
+                     text-item 
+                     slider-item 
+                     choice-item 
+                     joystick-item 
+                  xscroll-bar 
+                     xhorizontal-scroll-bar 
+                  characterwindow 
+                     textwindow 
+                        buffertextwindow 
+                           scrolltextwindow 
+                        textedit 
+      dda 
+         line-dda 
+         ellipse-dda 
+            circle-dda 
+      colormap 
+   compiled-code 
+      foreign-code 
+      closure 
+      load-module 
+   label-reference 
+   vector 
+      float-vector 
+      integer-vector 
+      string 
+         socket-address 
+         cstruct 
+            carray 
+               c-long 
+               c-int 
+            gcvalues 
+            xcolor 
+            setwindowattributes 
+            windowattributes 
+            xevent 
+      bit-vector 
+      foreign-string 
+   extended-number 
+      ratio 
+      complex 
+      bignum 
+   socket-port 
+   pathname 
+      url-pathname 
+   hash-table 
+   translator 
+   identifier 
+   identifier-table 
+   stack-frame 
+   compiler 
+   bounding-box 
+   constrained-point 
+   constraint-relation 
+   edge-image 
+   face-image 
+   stereo-viewing 
+   help-item 
+
+(defclass object :super nil :slots nil)
+(defclass cons :super object :slots (car cdr))
+(defclass queue :super cons :slots nil)
+(defclass propertied-object :super object :slots (plist))
+(defclass symbol :super
+   propertied-object
+   :slots
+   (value vtype function pname homepkg))
+(defclass foreign-pod :super symbol :slots (podcode paramtypes resulttype))
+(defclass package :super
+   propertied-object
+   :slots
+   (names use symvector symcount intsymvector intsymcount shadows used-by))
+(defclass stream :super
+   propertied-object
+   :slots
+   (direction buffer count tail))
+(defclass file-stream :super stream :slots (fd fname))
+(defclass broadcast-stream :super stream :slots (destinations))
+(defclass x:textwindowstream :super stream :slots (x::textwin))
+(defclass io-stream :super propertied-object :slots (instream outstream))
+(defclass socket-stream :super io-stream :slots (lisp::address fd))
+(defclass metaclass :super
+   propertied-object
+   :slots
+   (name super cix vars types forwards methods))
+(defclass vectorclass :super metaclass :slots (element-type size))
+(defclass cstructclass :super vectorclass :slots (lisp::slotlist))
+(defclass readtable :super
+   propertied-object
+   :slots
+   (syntax macro dispatch-macro case))
+(defclass array :super
+   propertied-object
+   :slots
+   (entity
+    rank
+    fill-pointer
+    displaced-index-offset
+    dim0
+    dim1
+    dim2
+    dim3
+    dim4
+    dim5
+    dim6))
+(defclass image-2d :super array :slots (image::depth))
+(defclass single-channel-image :super image-2d :slots nil)
+(defclass bitmap-image :super single-channel-image :slots nil)
+(defclass grayscale-image :super single-channel-image :slots nil)
+(defclass index-color-image :super single-channel-image :slots nil)
+(defclass multi-channel-image :super image-2d :slots (image::components))
+(defclass split-color-image :super multi-channel-image :slots nil)
+(defclass color-image :super
+   multi-channel-image
+   :slots
+   (image::pixel-bytes
+    image::redshift
+    image::redwidth
+    image::greenshift
+    image::greenwidth
+    image::blueshift
+    image::bluewidth))
+(defclass color-image16 :super color-image :slots nil)
+(defclass color-image24 :super color-image :slots nil)
+(defclass color-image32 :super color-image :slots nil)
+(defclass thread :super
+   propertied-object
+   :slots
+   (id requester request-sem done-sem func args result context idle wait))
+(defclass port-selector :super
+   propertied-object
+   :slots
+   (lisp::port-bits lisp::streams lisp::ready-bits))
+(defclass coordinates :super propertied-object :slots (rot pos))
+(defclass cascaded-coords :super
+   coordinates
+   :slots
+   (parent descendants worldcoords manager changed))
+(defclass faceset :super
+   cascaded-coords
+   :slots
+   (box faces edges vertices model-vertices))
+(defclass body :super faceset :slots (convexp geometry::evertedp csg))
+(defclass sphere :super cascaded-coords :slots (geometry::radius))
+(defclass viewing :super cascaded-coords :slots (geometry::viewcoords))
+(defclass projection :super
+   viewing
+   :slots
+   (geometry::screenx geometry::screeny geometry::hither geometry::yon geometry::projection-matrix))
+(defclass viewing2d :super projection :slots nil)
+(defclass parallel-viewing :super projection :slots nil)
+(defclass perspective-viewing :super projection :slots (geometry::viewdistance))
+(defclass coordinates-axes :super
+   cascaded-coords
+   :slots
+   (size geometry::model-points geometry::points geometry::lines))
+(defclass polygon2d :super
+   cascaded-coords
+   :slots
+   (model-vertices vertices geometry::lines convexp box))
+(defclass geometry::circle2d :super cascaded-coords :slots (geometry::radius))
+(defclass viewport :super coordinates :slots nil)
+(defclass system:barrier-synch :super
+   propertied-object
+   :slots
+   (system::threads system::n-threads count system::barrier-cond system::threads-lock system::count-lock))
+(defclass system:synch-memory-port :super
+   propertied-object
+   :slots
+   (system::sema-in system::sema-out system::buf system::empty system::lock))
+(defclass line :super propertied-object :slots (pvert nvert))
+(defclass edge :super line :slots (pface nface angle flags))
+(defclass winged-edge :super edge :slots (geometry::pwing geometry::pcwing geometry::nwing geometry::ncwing))
+(defclass plane :super propertied-object :slots (normal distance))
+(defclass polygon :super
+   plane
+   :slots
+   (convexp edges vertices model-normal model-distance))
+(defclass face :super polygon :slots (holes mbody primitive-face id))
+(defclass hole :super polygon :slots (geometry::myface))
+(defclass semi-space :super plane :slots nil)
+(defclass viewer :super propertied-object :slots (geometry::eye geometry::port geometry::surface))
+(defclass viewsurface :super propertied-object :slots nil)
+(defclass tektro-viewsurface :super viewsurface :slots (geometry::width geometry::height geometry::color))
+(defclass x:xobject :super viewsurface :slots (x::display))
+(defclass x:gcontext :super x:xobject :slots (x::gcid x::gcvalues))
+(defclass x:xdrawable :super
+   x:xobject
+   :slots
+   (x::drawable x::gcon x::bg-color x::width x::height))
+(defclass x:xpixmap :super x:xdrawable :slots nil)
+(defclass x:xwindow :super
+   x:xdrawable
+   :slots
+   (x::parent x::subwindows x::visual x::backing-pixmap x::event-forward))
+(defclass x:panel :super
+   x:xwindow
+   :slots
+   (x::pos
+    x::items
+    x::fontid
+    x::rows
+    x::columns
+    x::next-x
+    x::next-y
+    x::item-width
+    x::item-height
+    x::dark-edge-color
+    x::light-edge-color
+    x::topleft-edge-polygon
+    x::active-menu))
+(defclass x:menu-panel :super x:panel :slots (x::height-offset x::menu-buttons))
+(defclass x:menubar-panel :super x:panel :slots nil)
+(defclass x:pixmap-scroller :super
+   x:panel
+   :slots
+   (x::pixwin x::vscroll x::hscroll x::pixmap x::start-x x::start-y x::pix-width x::pix-height))
+(defclass x:filedialog :super
+   x:panel
+   :slots
+   (x::current-dir
+    x::cd-button
+    x::cdir-text
+    x::fname-text
+    x::file-win
+    x::file-win-offset
+    x::ok-button
+    x::cancel-button
+    x::view-button
+    x::goup-button
+    x::oknotify
+    x::cancelnotify))
+(defclass x:filepanel :super
+   x:filedialog
+   :slots
+   (x::print-button
+    x::remove-button
+    x::find-button
+    x::load-button
+    x::compile-button
+    x::eval-text
+    x::confirm-win
+    x::file-being-removed))
+(defclass x:textviewpanel :super
+   x:panel
+   :slots
+   (x::quit-button
+    x::find-button
+    x::print-button
+    x::file-name
+    x::finish-button
+    x::find-text
+    x::view-window))
+(defclass x:confirmpanel :super
+   x:panel
+   :slots
+   (x::yes-button x::no-button x::answer x::message x::notify-object x::notify-method))
+(defclass x::colorpickerpanel :super
+   x:panel
+   :slots
+   (x::ok-button
+    x::cancel-button
+    x::ambient-button
+    x::diffuse-button
+    x::specular-button
+    x::emission-button
+    x::slider1
+    x::slider2
+    x::slider3
+    x::shininess-button
+    x::transparency-button
+    x::ambient-value
+    x::diffuse-value
+    x::specular-value
+    x::emission-value
+    x::shininess-value
+    x::transparency-value
+    x::reply-object
+    x::reply-method))
+(defclass x::objectbrowser :super
+   x:panel
+   :slots
+   (x::object-text
+    x::class-text
+    x::super-button
+    x::sub-botton
+    x::view-panel
+    x::msg-win
+    x::msg-stream
+    x::current-object
+    x::current-class
+    x::class-tree
+    methods
+    x::method-names))
+(defclass x:canvas :super
+   x:xwindow
+   :slots
+   (x::topleft x::bottomright x::buttonactive x::menu))
+(defclass x:graph-canvas :super
+   x:canvas
+   :slots
+   (x::pixmap x::ymax x::ymin x::next-x x::graph-args x::xinc x::yinc))
+(defclass x:panel-item :super
+   x:xwindow
+   :slots
+   (x::pos x::notify-object x::notify-method x::fontid label x::labeldots x::buttonpressed))
+(defclass x:button-item :super
+   x:panel-item
+   :slots
+   (x::submenu
+    x::activecolor
+    x::3d-state
+    x::dark-edge-color
+    x::light-edge-color
+    x::topleft-edge-polygon))
+(defclass x:menu-button-item :super
+   x:button-item
+   :slots
+   (x::items
+    x::item-dots
+    x::item-labels
+    x::charwidth
+    x::charheight
+    x::menu-window
+    x::window-pos
+    x::high-light))
+(defclass x:bitmap-button-item :super
+   x:button-item
+   :slots
+   (x::pixmap-id x::bitmap-width x::bitmap-height))
+(defclass x:text-item :super x:panel-item :slots (x::textwin))
+(defclass x:slider-item :super
+   x:panel-item
+   :slots
+   (x::min-value
+    x::max-value
+    value
+    x::minlabel
+    x::maxlabel
+    x::valueformat
+    x::bar-x
+    x::bar-y
+    x::bar-width
+    x::bar-height
+    x::valuedots
+    x::label-base
+    x::nob-x
+    x::nob-moving
+    x::charwidth
+    x::continuous-notify))
+(defclass x:choice-item :super
+   x:panel-item
+   :slots
+   (x::choice-list x::active-choice x::transient-choice x::choice-pos x::button-size))
+(defclass x:joystick-item :super
+   x:panel-item
+   :slots
+   (x::stick-size
+    x::min-x
+    x::min-y
+    x::max-x
+    x::max-y
+    x::center-x
+    x::center-y
+    x::stick-x
+    x::stick-y
+    x::value-x
+    x::value-y
+    x::stick-return
+    x::stick-grabbed
+    x::fraction-x
+    x::fraction-y
+    x::follow-move))
+(defclass x:xscroll-bar :super
+   x:xwindow
+   :slots
+   (x::arrow-length x::handle-pos x::handle-length x::verticalp x::handle-grabbed))
+(defclass x:xhorizontal-scroll-bar :super x:xscroll-bar :slots nil)
+(defclass x:characterwindow :super
+   x:xwindow
+   :slots
+   (x::fontid x::charwidth x::charheight x::charascent x::win-row-max x::win-col-max x::x x::y))
+(defclass x:textwindow :super
+   x:characterwindow
+   :slots
+   (x::win-row
+    x::win-col
+    x::charbuf
+    x::keybuf
+    x::keycount
+    x::echo
+    x::show-cursor
+    x::cursor-on
+    x::notify-object
+    x::notify-method
+    x::buttonactive))
+(defclass x:buffertextwindow :super
+   x:textwindow
+   :slots
+   (x::linebuf x::expbuf x::max-line-length x::selected-pos))
+(defclass x:scrolltextwindow :super
+   x:buffertextwindow
+   :slots
+   (x::row
+    x::col
+    x::top-row
+    x::top-col
+    x::scroll-bar-window
+    x::horizontal-scroll-bar-window
+    x::selected-line))
+(defclass x::textedit :super x:textwindow :slots (x::total-lines x::lines))
+(defclass dda :super propertied-object :slots (count))
+(defclass line-dda :super
+   dda
+   :slots
+   (geometry::x geometry::y geometry::dx geometry::dy geometry::err geometry::errinc geometry::errdec geometry::xyinc length geometry::update-method))
+(defclass ellipse-dda :super
+   dda
+   :slots
+   (geometry::finished geometry::xcenter geometry::ycenter geometry::a geometry::b geometry::m geometry::eps geometry::ix geometry::iy geometry::x geometry::y geometry::ix1 geometry::iy1 geometry::x1 geometry::y1))
+(defclass circle-dda :super ellipse-dda :slots nil)
+(defclass x:colormap :super
+   propertied-object
+   :slots
+   (x::cmapid x::planes x::pixels x::lut-list))
+(defclass compiled-code :super
+   object
+   :slots
+   (codevector quotevector type entry))
+(defclass foreign-code :super compiled-code :slots (paramtypes resulttype))
+(defclass closure :super compiled-code :slots (env1 env2))
+(defclass load-module :super
+   compiled-code
+   :slots
+   (symbol-table object-file handle))
+(defclass label-reference :super object :slots (label value unsolved next))
+(defclass vector :super object :slots (length))
+(defclass float-vector :super vector :slots nil)
+(defclass integer-vector :super vector :slots nil)
+(defclass string :super vector :slots nil)
+(defclass socket-address :super string :slots nil)
+(defclass cstruct :super string :slots nil)
+(defclass carray :super cstruct :slots nil)
+(defclass x::c-long :super carray :slots nil)
+(defclass x::c-int :super carray :slots nil)
+(defclass x::gcvalues :super cstruct :slots nil)
+(defclass x:xcolor :super cstruct :slots nil)
+(defclass x::setwindowattributes :super cstruct :slots nil)
+(defclass x::windowattributes :super cstruct :slots nil)
+(defclass x::xevent :super cstruct :slots nil)
+(defclass bit-vector :super vector :slots nil)
+(defclass foreign-string :super vector :slots nil)
+(defclass extended-number :super object :slots nil)
+(defclass ratio :super extended-number :slots (numerator denominator))
+(defclass complex :super extended-number :slots (real imaginary))
+(defclass bignum :super extended-number :slots (size bv))
+(defclass socket-port :super object :slots (id lisp::address))
+(defclass pathname :super
+   object
+   :slots
+   (lisp::host lisp::device directory name type lisp::version))
+(defclass url-pathname :super pathname :slots (lisp::protocol lisp::server lisp::port))
+(defclass hash-table :super
+   object
+   :slots
+   (lisp::key
+    value
+    size
+    count
+    lisp::hash-function
+    lisp::test-function
+    lisp::rehash-size
+    lisp::empty
+    lisp::deleted
+    lisp::not-found))
+(defclass compiler::translator :super
+   object
+   :slots
+   (compiler::cfile compiler::hfile push compiler::pushcount compiler::quotev))
+(defclass compiler:identifier :super object :slots (name type compiler::binding compiler::level compiler::offset))
+(defclass compiler::identifier-table :super object :slots (compiler::frames compiler::level compiler::maxlevel))
+(defclass compiler::stack-frame :super object :slots (compiler::offset compiler::specials compiler::locals))
+(defclass compiler::compiler :super
+   object
+   :slots
+   (compiler::idtable
+    compiler::closure-level
+    compiler::scope
+    compiler::frames
+    compiler::blocks
+    compiler::tags
+    compiler::function-closures
+    compiler::initcodes
+    compiler::flets
+    compiler::unwind-frames))
+(defclass bounding-box :super object :slots (geometry::minpoint geometry::maxpoint))
+(defclass constrained-point :super
+   object
+   :slots
+   (position geometry::hisposition geometry::hisface geometry::myneighborhood geometry::condition))
+(defclass constraint-relation :super
+   object
+   :slots
+   (geometry::constraining-body geometry::constrained-body geometry::constraints))
+(defclass edge-image :super
+   object
+   :slots
+   (geometry::edge3 geometry::homo-pvert geometry::homo-nvert geometry::pvert2 geometry::nvert2 geometry::segments geometry::contourp))
+(defclass face-image :super object :slots (box geometry::edge-images geometry::face3d distance))
+(defclass stereo-viewing :super
+   object
+   :slots
+   (geometry::viewpoint geometry::offset geometry::target geometry::rightview geometry::leftview))
+(defclass help::help-item :super object :slots (type fname help::seek count help::clas help::mhash))

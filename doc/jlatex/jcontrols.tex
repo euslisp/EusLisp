@@ -1,0 +1,260 @@
+\section{制御構造}
+\markright{\arabic{section}. 制御構造}
+\subsection{条件文}
+
+{\bf and,or}および{\bf cond}は、Common Lispにおいてマクロとして知られているが、
+EusLispではインタプリタ時の効率を改善するために特殊書式として実行される。
+
+\begin{refdesc}
+\specialdesc{and}{\{form\}*}{
+{\em form}は、NILが現れるまで左から右に評価される。
+もし、全ての書式がnon-NILとして評価されるならば、
+最後の値が返される。}
+
+\specialdesc{or}{\{form\}*}{
+{\em form}は、non-NIL値が現れるまで左から右に評価される。
+そして、その値が返される。
+もし、全ての書式がNILとして評価されるならば、NILを返す。}
+
+\specialdesc{if}{test then [else]}{
+{\bf if}は、１つの{\it then}と{\it else}書式のみを持つことができる。
+そこに多重書式を書きたいときは、{\bf progn}を使って
+グループ化しなければならない。}
+
+\macrodesc{when}{test forms}{
+{\bf if}と違って、
+{\bf when}と{\bf unless}は、多重{\em 書式}で書くことを許可している。
+{\em test}の評価がnon-NILのとき、{\bf when}は実行され、
+評価がNILのとき、{\em unless}は実行される。
+もう一方で、これらのマクロは{\em else}書式を追加することを
+許可していない。}
+
+\macrodesc{unless}{test forms}{
+{\tt(when (not {\em test}) . {\em forms})}と同等である。}
+
+\specialdesc{cond}{{(test \{form\}*)}*}{
+任意の数の条件項は、{\bf cond}の後に続けることができる。
+それぞれの条件項において、最初の書式{\em test}が評価される。
+もし、non-NILであったとき、その条件項の残りの書式は、続いて評価される。
+そして、最後の値が返される。
+もし、{\em test}のあとに書式がなかったならば、
+{\em test}の値が返される。
+{\em test}が失敗したとき、次の条件項は{\em test}がnon-NIL評価されるかまたは
+全ての条件項が尽きてしまうまで繰り返される。
+条件項が尽きてしまった場合、{\bf cond}はNILを返す。}
+
+\macrodesc{case}{key \{(\{label $|$ (\{lab\}*) \{form\}*)\}*}{
+{\em key}と{\em label}が一致した条件項について、
+{\em form}が評価され、最後の値が返される。
+{\em key}と{\em label}の間の等価は、{\bf eq}または
+{\bf memq}で行われ、{\bf equal}ではない。}
+
+\end{refdesc}
+
+\subsection{逐次実行とLet}
+
+\begin{refdesc}
+\funcdesc{prog1}{form1 \&rest forms}{
+{\em form1}と{\em forms}は、次々と評価され、
+{\em form1}から返される値が{\bf prog1}の値として返される。}
+
+\specialdesc{progn}{\{form\}*}{
+{\em form}は次々に評価され、最後の{\em form}の値が返される。
+{\bf progn}は特殊書式である。なぜなら、ファイルの最初に現れたとき
+特別な意味を持つからである。
+そのような書式がコンパイルされたとき、内部書式はすべて最初に現れた
+として見なす。
+マクロが{\bf defun}や{\bf defmethod}の連続で拡張される場合、それが最初に
+現われなければならないときに役立つ。}
+
+\macrodesc{setf}{\{access-form value\}*}{
+{\em value}を一般化変数{\em access-form}に割り当てる。}
+
+\specialdesc{let}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
+ローカル変数を生成する。
+すべての{\em value}は評価され、並行して{\em var}に割り当てられる。すなわち、
+{\tt (let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))} の結果は
+(2 1)である。}
+
+\specialdesc{let*}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
+ローカル変数を生成する。
+全ての{\em value}は次々に評価され、{\em var}に割り当てられる。すなわち、
+{\tt (let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))}の結果は
+(2 2)である。}
+\end{refdesc}
+
+\subsection{ローカル関数}
+\begin{refdesc}
+\specialdesc{flet}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
+ローカル関数を定義する。}
+
+\specialdesc{labels}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
+ローカルなスコープとなる関数を定義する。
+{\bf flet}と{\bf labels}との違いは、
+{\bf flet}で定義されたローカル関数は、その他の関数を参照または再帰できないが、
+{\bf labels}は相互の参照を許可する。}
+\end{refdesc}
+
+\subsection{ブロックとExit}
+\begin{refdesc}
+\specialdesc{block}{tag \{form\}*}{
+{\bf return-from}によって脱出可能なローカルブロックを作る。
+{\em tag}は、ローカルにスコープされ、評価されない。}
+
+\specialdesc{return-from}{tag value}{
+{\em tag}によって示されたブロックを脱出する。
+{\bf return-from}は、関数やメソッドから脱出するときに使用される。
+関数やメソッドは、その本体をすべて取り囲んだ部分をブロックとして
+自動的に確定され、その関数またはメソッドの名前を付ける。}
+
+\macrodesc{return}{value}{
+{\tt  (return x)}は、{\tt (return-from nil x)}と同等である。
+{\bf loop, while, do, dolist, dotimes}は、暗黙的にNILと名前が付けられた
+ブロックとして確定されるため、これらの特殊書式と組み合わせて使用する。}
+
+\specialdesc{catch}{ tag \{form\}*}{
+{\bf throw}によって脱出または値を返すための動的なブロックを確定する。
+{\em tag}は評価される。
+
+全て見える{\bf catch}の{\em tag}は、{\tt sys:list-all-catchers}から得ることができる。}
+
+\specialdesc{throw}{tag value}{
+{\bf catch}ブロックから脱出または{\em value}を返す。
+{\em tag}と{\em value}は評価される。}
+
+\specialdesc{unwind-protect}{protected-form \{cleanup-form\}*}{
+{\em protected-form}の評価が終った後、
+{\em cleanup-form}が評価される。
+{\bf unwind-protect}の外側にブロックまたは{\bf catch}
+ブロックを作っても構わない。
+
+{\bf return-from}や{\bf throw}でさえ、そのようなブロックから
+抜け出すためには{\em protected-form}の中で実行される。
+{\em cleanup-form}は、評価されることが保証されている。
+また、もし{\em protected-form}が実行されている間にエラーが起こったならば、
+{\em cleanup-form}はいつも{\bf reset}によって実行される。}
+
+\end{refdesc}
+
+\subsection{繰返し}
+
+\begin{refdesc}
+
+\specialdesc{while}{test \{form\}*}{
+{\em test}がnon-NILと評価されている間、
+{\em form}は、繰返し評価される。
+{\bf while}は、{\em form}のまわりにNILと名付けられるブロックを自動的に確定する
+特殊書式である。
+{\bf return}は、そのループから抜け出すために使用することができる。}
+
+\specialdesc{tagbody}{\{tag $|$ statement\}*}{
+{\em tag}は、{\bf go}のために名付けられる。
+{\bf tagbody}の中のみ{\bf go}を使用することができる。}
+
+\specialdesc{go}{tag}{
+ローカルにスコープされた{\bf tagbody}のなかに現れる{\em tag}の直後の
+書式に制御を移す。
+ローカルスコープを横切って違う{\bf tagbody}のtagに制御を移すことは
+禁止されている。}
+
+\macrodesc{prog}{(\{var $|$ (var [init])\}*) \{tag $|$ statement\}*}{
+{\bf prog}はマクロで、以下のように展開される。
+\ptext{
+(block nil 
+    (let {\em var}
+	(tagbody
+		{\em tag $|$ statement})))}
+}
+
+\macrodesc{do}{(\{(var init [next])\}*) (endtest [result])\{declare\} \{form\}
+*}
+{{\em var}はローカル変数である。
+それぞれの{\em var}に、{\em init}は並行に評価され、割り当てられる。
+つぎに、{\em endtest}が評価され、もし真のとき{\bf do}は{\em result}を返す。
+ (そうでないときは、NILを返す)
+もし{\em endtest}がNILを返したならば、それぞれの{\em form}は、
+順番に評価される。
+書式の評価後、{\em next}が評価され、その値は
+それぞれの{\em var}に再割当され、次の繰返しが始まる。}
+
+\macrodesc{do*}{(\{var init [next]\}*) (endtest [result])\{declare\} \{form\}*}
+{{\bf do*}は、{\em init}と{\em next}の評価と
+{\em var}への割り当てが連続的に起こることを除いて、{\bf do}と同様である。}
+
+\macrodesc{dotimes}{(var count [result]) \{forms\}*}{
+{\em forms}の評価を{\em count}回行う。
+{\em count}は、一回のみ評価される。
+それぞれの評価の中で、{\em var}は整数のゼロから
+{\em count}-1まで増加する。}
+
+\macrodesc{dolist}{(var list [result]) \{forms\}*}{
+{\em list}のそれぞれの要素は、{\em var}に連続的に与えられる。
+そして{\em forms}は、それぞれの値で評価される。
+{\bf dolist}は、他の繰返しより早く実行される。たとえば、
+{\bf mapcar}や再帰的関数のようなものより。
+それは、{\bf dolist}が関数のclosureを作ったり適用したりする必要が
+なく、新しいパラメータのバインドが必要でないため。}
+
+\macrodesc{until}{condition \{forms\}*}{
+{\em condition}が満たされている間、{\em forms}を評価する。}
+
+\macrodesc{loop}{\{forms\}*}{
+{\em forms}を永遠に評価する。
+実行を止めるためには、{\bf return-from, throw}または{\bf go}が
+{\em forms}のなかで評価されなければならない。}
+
+\subsection{述語}
+
+Common Lispの{\bf typep}と{\bf subtypep}はないので、
+{\bf subclassp}や{\bf derivedp}で疑似実現すること。
+
+\begin{refdesc}
+
+\funcdesc{eq}{obj1 obj2}{{\em obj1}と{\em obj2}が同じオブジェクトを指すポインタあるいは同じ
+数値のときTを返す。
+例えば:{\tt (eq 'a 'a)}はT、{\tt (eq 1 1)}はT、{\tt (eq 1. 1.0)}はNIL、
+{\tt (eq "a" "a")}はNILである。}
+\funcdesc{eql}{obj1 obj2}{
+EusLispの中で数値は全て直接値で表現されるため、{\bf eq}と{\bf eql}は
+同一である。}
+\funcdesc{equal}{obj1 obj2}{
+いろんな構造のオブジェクトの等価性をチェックする。オブジェクトは、文字列・ベクトル・
+行列などで再帰的に参照してないことが保証されなければならない。
+{\em obj1}や{\em obj2}が再帰的に参照されていたとすると、
+{\bf equal}は無限ループとなる。}
+\funcdesc{superequal}{obj1 obj2}{
+{\bf superequal}は、環状参照をチェックするので遅い。しかしロバストな等価が得られる。}
+
+\funcdesc{null}{object}{{\em object}がNILのとき、Tを返す。
+{\tt (eq {\em object} nil)}を評価する。}
+\funcdesc{not}{object}{
+{\bf not}は、{\bf null}と同一である。}
+\funcdesc{atom}{object}{
+オブジェクトがconsのインスタンスである時のみ、NILを返す。
+{\tt (atom nil) = (atom '()) = T)}\\
+注意:vectors, strings, read-table, hash-tableなどに対しては、それらがどんなに
+複雑なオブジェクトとなっていても{\bf atom}はTを返す。}
+\funcdesc{every}{pred \&rest args}{
+全ての{\em args}が{\em pred}についてTを返した時のみ
+Tを返す。{\bf every}は、{\em pred}が全ての{\em args}に対して効力があるかどうかを
+検査する時に使用される。}
+\funcdesc{some}{pred \&rest args}{
+{\em args}のうちどれか1つが{\em pred}についてTを返したとき
+Tを返す。{\bf some}は、{\em pred}が{\em args}のどれかに対して効力があるかどうかを
+検査する時に使用される。}
+\end{refdesc}
+\funcdesc{functionp}{object}{
+{\em object}が{\bf apply}や{\bf funcall}で与えられる関数オブジェクトであるならTを返す。\\
+注意:マクロは{\bf apply}や{\bf funcall}を適用することができない。
+{\bf functionp}は、{\em object}が、type=0のコンパイルコードか、関数定義を持つsymbolか、
+lambda-formかあるいはlambda-closureであったとき、Tを返す。
+{\tt Examples: (functionp 'car) = T, (functionp 'do) = NIL}}
+\funcdesc{compiled-function-p}{object}{
+{\em object}が、コンパイルコードのインスタンスであったとき、Tを返す。
+そのコンパイルコードが関数かまたはマクロかを知るためには、
+そのオブジェクトに{\tt :type}メッセージを送り、その返り値が
+{\tt function}と{\tt macro}のどちらになっているかを調べる。}
+
+\end{refdesc}
+
+\newpage

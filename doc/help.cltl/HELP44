@@ -1,0 +1,56 @@
+(char-control-bit variable-documentation "
+The bit position indicating a control character.  0 in KCL.")
+(deftype function-documentation "
+Syntax: (deftype name lambda-list {decl | doc}* {form}*)
+Defines a new type-specifier abbreviation in terms of an 'expansion' function
+	(lambda lambda-list1 {DECL}* {FORM}*)
+where LAMBDA-LIST1 is identical to LAMBDA-LIST except that all optional
+parameters with no default value specified in LAMBDA-LIST defaults to the
+symbol '*', but not to NIL.  When the type system of KCL encounters a type
+specifier (NAME arg1 ... argn), it calls the expansion function with the
+arguments ARG1 ... ARGn, and uses the returned value instead of the original
+type specifier.  When the symbol NAME is used as a type specifier, the
+expansion function is called with no argument.
+The doc-string DOC, if supplied, is saved as a TYPE doc and can be retrieved
+by (documentation 'NAME 'type).")
+(export function-documentation "
+Args: (symbol &optional (package *package*))
+Register SYMBOL as an external symbol of PACKAGE.  SYMBOL may be a list of
+symbols.")
+(isqrt function-documentation "
+Args: (integer)
+Returns the integer square root of INTEGER.")
+(ratio type-documentation "
+A ratio is notated by its numerator and denominator, separated by a slash '/'.
+Normally, a ratio is notated in radix 10 (see *PRINT-BASE* and *READ-BASE*) as
+	[sign] {digit}+ / {digit}+
+where DIGIT is a decimal digit ('0', ..., '9') and SIGN is either '+' or '-'.
+Also, the following syntax is used to notate the radix explicitly.
+	# radix {r | R} [sign] {digit}+ / {digit}+
+where RADIX is one of '2', '3', ..., '36' and DIGIT is a digit in radix RADIX:
+	Digits in radix 2 are '0' and '1'
+	Digits in radix 8 are '0', ..., '7'
+	Digits in radix 16 are '0', ..., '9', 'a', ..., 'f', and 'A', ..., 'F'
+The following syntax is also available for radix 2, 8, 10, and 16.
+	# {b | B} [sign] {digit}+ / {digit}+
+	# {o | O} [sign] {digit}+ / {digit}+
+	# {x | X} [sign] {digit}+ / {digit}+")
+(sort function-documentation "
+Args: (sequence test &key (key #'identity))
+Destructively sorts SEQUENCE and returns the result.  TEST should return non-
+NIL if its first argument is to precede its second argument.  The order of two
+elements X and Y is arbitrary if both
+	(FUNCALL TEST X Y)
+	(FUNCALL TEST Y X)
+evaluates to NIL.  See STABLE-SORT.")
+(sqrt function-documentation "
+Args: (number)
+Returns the square root of the arg.")
+(user-homedir-pathname function-documentation "
+Args: (&optional host)
+Returns a pathname the represents the user's home directory.  HOST is simply
+ignored in KCL.")
+(set-hole-size function-documentation "
+Args: (fixnum)
+KCL specific.
+Sets the size of the memory hole (in pages).")

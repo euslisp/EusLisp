@@ -1,0 +1,72 @@
+(abs function-documentation "
+Args: (number)
+Returns the absolute value of the arg.")
+(do-symbols function-documentation "
+Syntax: (do-symbols (var [package [result]])
+          {decl}* {tag | statement}*)
+Executes STATEMENTs once for each symbol in PACKAGE (which defaults to the
+current package), with VAR bound to the symbol.  Then evaluates RESULT (which
+defaults to NIL) and returns all values.")
+(ed function-documentation "
+Args: (&optional x)
+Invokes the editor.  The action depends on the version of KCL.  See the KCL
+Report for details.")
+(labels function-documentation "
+Syntax: (labels ({(name lambda-list {decl | doc}* {form}*)}*) . body)
+Introduces local functions and evaluates BODY as a PROGN.  The scope of each
+local function include the local function definitions.  Thus self- and mutual-
+recursive local functions can be defined.  Doc-strings for local functions are
+simply ignored.")
+(least-negative-double-float variable-documentation "
+Same as LEAST-NEGATIVE-LONG-FLOAT.")
+(max function-documentation "
+Args: (number &rest more-numbers)
+Returns the largest arg.  The args must be non-complex numbers.")
+(mod function-documentation "
+Args: (number divisor)
+Returns the second result of (FLOOR NUMBER DIVISOR), i.e. the value of
+	(- NUMBER (* (FLOOR NUMBER DIVISOR) DIVISOR))")
+(most-negative-fixnum variable-documentation "
+The negative fixnum with the largest absolute value.  - 2^31 in KCL.")
+(nset-difference function-documentation "
+Args: (list1 list2 &key (key #'identity) (test #'eql) test-not)
+Destructive SET-DIFFERENCE.  Only LIST1 may be destroyed.")
+(nstring-upcase function-documentation "
+Args: (string &key (start 0) (end (length string)))
+Destructive STRING-UPCASE.  STRING may be destroyed.")
+(*print-level* variable-documentation "
+Specifies how many levels of depth the KCL printer should print when it prints
+a list.  KCL printer prints all levels if the value of this variable is NIL.")
+(*read-base* variable-documentation "
+The radix used to read numbers.  The initial value is 10.")
+(*readtable* variable-documentation "
+The current readtable.")
+(simple-bit-vector type-documentation "
+A simple-bit-vector is a bit-vector that is not displaced to another array,
+has no fill-pointer, and is not adjustable.")
+(unintern function-documentation "
+Args: (symbol &optional (package *package*))
+Removes SYMBOL from PACKAGE.  If PACKAGE is the home package of SYMBOL, then
+makes SYMBOL uninterned.  Returns T if SYMBOL is actually registered in
+PACKAGE; NIL otherwise.")
+(vector-push function-documentation "
+Args: (item vector)
+Replaces ITEM for the element of VECTOR that is pointed to by the fill-pointer
+of VECTOR and then increments the fill-pointer by one.  Returns NIL if the new
+value of the fill-pointer becomes too large.  Otherwise, returns the new fill-
+pointer as the value.")
+(frs-vs function-documentation "
+Args: (n)
+KCL specific.
+Returns the value stack index of the N-th entity in the frame stack.")
+(vs function-documentation "
+Args: (n)
+KCL specific.
+Returns the N-th entity in the value stack.")
+(defun-c-callable function-documentation "
+Args: (func-name parameters result-type &rest body)
+Defines FUNC-NAME symbol as a function callable from foreign languages.
+PARAMETERS is a list of param-specifications each of which are consisted of
+a variable name and its type specifier keyword. RESULT-TYPE is also
+one of type specifier keywords, :integer, :float or :string.
+BODY is usual lisp forms.")

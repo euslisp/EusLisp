@@ -1,0 +1,7 @@
+#!/bin/sh
+if [ $# != 2 ]; then
+ echo Usage: $0 lineno filename
+ exit 1
+fi
+lineno=`echo zzz | nawk "{srand();print 1+int(rand()*$1)}"`
+echo `sed -n "${lineno}p" $2`

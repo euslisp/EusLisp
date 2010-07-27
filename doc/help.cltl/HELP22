@@ -1,0 +1,52 @@
+(caaadr function-documentation "
+Args: (x)
+Equivalent to (CAR (CAR (CAR (CDR X)))).")
+(caadr function-documentation "
+Args: (x)
+Equivalent to (CAR (CAR (CDR X))).")
+(cadddr function-documentation "
+Args: (x)
+Equivalent to (CAR (CDR (CDR (CDR X)))).")
+(cadr function-documentation "
+Args: (x)
+Equivalent to (CAR (CDR X)).")
+(cdaddr function-documentation "
+Args: (x)
+Equivalent to (CDR (CAR (CDR (CDR X)))).")
+(cddadr function-documentation "
+Args: (x)
+Equivalent to (CDR (CDR (CAR (CDR X)))).")
+(cdddr function-documentation "
+Args: (x)
+Equivalent to (CDR (CDR (CDR X))).")
+(cdr function-documentation "
+Args: (x)
+Returns the cdr of X if X is a cons.  Returns NIL if X is NIL.")
+(*error-output* variable-documentation "
+The output stream to which error messages are output.  The initial value is an
+synonym stream to *TERMINAL-IO*.")
+(host-namestring function-documentation "
+Args: (filespec)
+Returns as a string the host part of the pathname specified by FILESPEC.
+FILESPEC may be a symbol, a string, a pathname, or a file stream.")
+(make-symbol function-documentation "
+Args: (string)
+Creates and returns a new uninterned symbol whose print name is STRING.")
+(nintersection function-documentation "
+Args: (list1 list2 &key (key #'identity) (test #'eql) test-not)
+Destructive INTERSECTION.  Only LIST1 may be destroyed.")
+(set-macro-character function-documentation "
+Args: (char function
+       &optional (non-terminating-p nil) (readtable *readtable*))
+Registers CHAR as a macro character in READTABLE and makes FUNCTION the read
+macro associated with CHAR.  When the KCL reader reads an object that begins
+with CHAR, it calls FUNCTION with the input stream and CHAR as arguments.  If
+FUNCTION returns a single value, it is returned as the value of the reader.
+If FUNCTION returns no value, then the reader tries to read an object again.
+NON-TERMINATING-P specifies whether CHAR is non-terminating or not (see
+READTABLE).
+Use GET-MACRO-CHARACTER to get the read macro associated with a character.")
+(string-upcase function-documentation "
+Args: (string &key (start 0) (end (length string)))
+Returns a copy of STRING with all lower case characters converted to upper
+cases.  Its destructive version is NSTRING-UPCASE.")

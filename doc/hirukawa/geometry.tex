@@ -1,0 +1,1755 @@
+\section{幾何モデリング機能}
+
+\subsection{幾何モデリングの基本機能}
+
+本節で述べる機能に対応するソースファイルは、\ $geopack.l$\ である。
+
+\subsubsection{基本処理関数}
+
+\begin{description}
+\item[vplus {\em vertices}]\hfill\\
+verticesは3次元フロートベクタのリスト。全verticesの和を求める。
+\item[vector-mean {\em vertices}]\hfill\\
+3次元フロートベクタのリストverticesの重心を求める。
+\item[triangle {\em a b c \&optional (normal \#f(0 0 1))}]\hfill\\
+a,b,c は3次元フロートベクタであり、3角形が形成される。triangleはこの3角
+形の面積の2倍に当たる量を求める。normalは、この3点が載っている平面の正規
+化された法線ベクトルを表す。法線の向きにしたがって、triangleは正、または負
+の値となる。a,b,c が反時計回りに並んでいる時、triangleは正である。a,b,c が
+時計回りに並んでいれば負である。また、triangleが正であれば、c は直線abの左
+側にあり、負であれば直線abの右側にあることがわかる。
+\item[triangle-normal {\em a b c}]\hfill\\
+反時計回りに並んだ3点a,b,c の載る平面の正規化された法線ベクタを求める。
+\item[vector-angle {\em v1 v2 normal}]\hfill\\
+2つの方向ベクタv1,v2 のなす角度（ラジアン）を求める。v1, v2, normalはいづれ
+も前以て正規化されている必要がある。
+\item[face-normal-vector {\em vertices \&optional rotatep}]\hfill\\
+1平面上の3次元フロートベクタのリストverticesから正規化された法線ベクタを
+求める。verticesの最初の要素と最後の要素が同一の点を表す時、rotatep をnil
+にして呼ぶ。rotatep!=nilであれば、verticesの最初の要素を最後にアペンドして
+法線ベクタを計算する。
+\item[farthest {\em p points}]\hfill\\
+p はフロートベクタ、pointsはフロートベクタのリストである。pointsの中から、
+p から最も遠い点を探す。
+\item[farthest-pair {\em points}]\hfill\\
+pointsの中から、互いに最も隔たった点対を探す。
+\item[maxindex {\em fv}]\hfill\\
+3次元フロートベクタfvの3つの要素のうち、絶対値の最も大きい要素のインデッ
+クス(0,1,2) を求める。
+\item[random-vector {\em \&optional (range 1.0)}]\hfill\\
+3次元空間のrange の範囲内で一様に分布した座標を作成する。
+\item[random-normalized-vector ()]\hfill\\
+正規化されたランダムベクタを求める。(note:極座標を用いて計算すべきである）
+\item[random-vectors {\em n range}]\hfill\\
+-range/2<x,y,z<range/2の空間に一様に分布したn個のランダムベクタを求める。
+\end{description}
+
+\subsubsection{幾何モデルのためのクラス}
+
+本節では、幾何モデリングとそれに基づく処理を行なうためのクラスについて述べる。
+\\ [2.0cm]
+{\jLarge surrounding-box}
+\\ [0.5cm]
+
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 与えられたすべての３次元の点がその中に含まれ、
+エッジがx,y,z 軸に平行であるような最小の直方体のクラス。
+干渉検査の前処理等に用いる。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[object] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item{minpoint}
+\item{maxpoint}
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:inner (point)] point がこのbox 内に含まれる時t,そうでないときnil 。
+\item[:grow (rate)]
+たとえばrate=0.01 のとき、box を現在の大きさから1\%ふくらませる。
+\item[:volume ()] このbox の体積。
+\item[:vectors (vlist)]
+floatvector のリストvlist から、box のminpoint, maxpoint を設定する。
+\item[:vectors2 (v1 v2)]
+2つのfloatvector,v1,v2 からminpoint,maxpoint を設定する。
+\end{description}
+
+\end{description}
+
+\vfill
+\pagebreak
+{\jLarge line}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 直線のクラス。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[object] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[pvert] 通過する点。サブクラスedgeでは、エッジの始点。
+\item[nvert] 通過する点。サブクラスedegでは、エッジの終点。
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:vertices ()] pvert とnvert のリスト。
+\item[:point (parameter)] pvert を0.0,nvert を1.0 に対応させたときの
+パラメタ表現から線分上の点の座標を求める。すなわち、
+$pvert=(x_{p},y_{p},z_{p})$, $nvert=(x_{n},y_{n},z_{n})$\ とし、
+この2点を通る直線を、
+
+\begin{equation}
+\left(
+\begin{array}{c}
+x \\ y \\ z \\ 1
+\end{array} \right)=\left(
+\begin{array}{cc}
+(1-t) & t
+\end{array} \right) \left(
+\begin{array}{cc}
+x_{p} & x_{n} \\
+y_{p} & y_{n} \\
+z_{p} & z_{n} \\
+1 & 1
+\end{array} \right)
+\end{equation}
+と表したとき、\ $t$\ を与えれば座標\ $(x,y,z)$\ を返す。
+\item[:parameter (point)] :pointの逆で点の座標からパラメタを求める。
+\item[:box ()]
+\item[:boxtest (box)]
+:boxはこのエッジが含まれるsurrounding-box を作成する。:boxtestはまず自分
+のsurrounding-box を作成し、他のbox との干渉を検査する。
+\item[:foot(point)]
+点\ $point=(x_{1},y_{1},z_{1})$\ からこの直線に下ろした垂線の足のパラメータ
+\ $t$\ を返す。これは、
+\begin{equation}
+t=\frac{(x_{n}-x_{p})(x_{1}-x_{p})+(y_{n}-y_{p})(y_{1}-y_{p})
++(z_{n}-z_{p})(z_{1}-z_{p})}
+{(x_{n}-x_{p})^{2}+(y_{n}-y_{p})^{2}+(z_{n}-z_{p})^{2}}
+\end{equation}
+により与えられる。（Ref.矢野健太郎著、図形と式、p.178、講談社）
+\item[:distance(point)]
+点pointからこの直線までの距離を返す。これは、pointからこの直線に下ろした
+垂線の足とpointの距離から求めている。
+\item[:common-perpendicular(l)]
+直線\ $l$\ との共通垂線を求める。返す値は、2直線との交点のリスト
+である。2直線が平行のときは、parallelを返す。これは、以下の様に求めている。
+2直線が経由する2点をそれぞれ\ $(x_{11},y_{11},z_{11})$\ 
+$(x_{12},y_{12},z_{12})$, $(x_{21},y_{21},z_{21})$\ $(x_{22},y_{22},z_{22})$
+\ とし、この2直線の共通垂線
+との交点を\ $(x_{31},y_{31},z_{31})$\ $(x_{32},y_{32},z_{32})$\ とすると、
+\begin{equation}
+(x_{12}-x_{11}\ y_{12}-y_{11}\ z_{12}-z_{11})^{T}
+(x_{32}-x_{31}\ y_{32}-y_{32}\ z_{32}-z_{31})=0 \label{eq:suityoku1}
+\end{equation}
+\begin{equation}
+(x_{22}-x_{21}\ y_{22}-y_{21}\ z_{22}-z_{21})^{T}
+(x_{32}-x_{31}\ y_{32}-y_{32}\ z_{32}-z_{31})=0 \label{eq:suityoku2}
+\end{equation}
+\begin{equation}
+\left(
+\begin{array}{c}
+x_{31} \\ y_{31} \\ z_{31} \\ 1
+\end{array} \right)=\left(
+\begin{array}{cc}
+(1-t_{1}) & t_{1}
+\end{array} \right) \left(
+\begin{array}{cc}
+x_{11} & x_{12} \\
+y_{11} & y_{12} \\
+z_{11} & z_{12} \\
+1 & 1
+\end{array} \right)
+\label{eq:online1}
+\end{equation}
+\begin{equation}
+\left(
+\begin{array}{c}
+x_{32} \\ y_{32} \\ z_{32} \\ 1
+\end{array} \right)=\left(
+\begin{array}{cc}
+(1-t_{2}) & t_{2}
+\end{array} \right) \left(
+\begin{array}{cc}
+x_{21} & x_{22} \\
+y_{21} & y_{22} \\
+z_{21} & z_{22} \\
+1 & 1
+\end{array} \right)
+\label{eq:online2}
+\end{equation}
+が成立する。\ $X_{ij}=(x_{ij},y_{ij},z_{ij})^{T}$\ とおき、
+(\ref{eq:suityoku1}),(\ref{eq:suityoku2})式に
+(\ref{eq:online1}),(\ref{eq:online2})式を代入すると、
+\begin{displaymath}
+(X_{12}-X_{11})^{T}(X_{12}-X_{11})t_{1}-(X_{12}-X_{11})^{T}(X_{22}-X_{21})t_{2}
+=(X_{12}-X_{11})^{T}(X_{21}-X_{11})
+\end{displaymath}
+\begin{displaymath}
+(X_{12}-X_{11})^{T}(X_{22}-X_{21})t_{1}-(X_{22}-X_{21})^{T}(X_{22}-X_{21})t_{2}
+=(X_{22}-X_{21})^{T}(X_{21}-X_{11})
+\end{displaymath}
+となり、これから\ $t_{1},t_{2}$\ を求め、それらを(\ref{eq:online1}),
+(\ref{eq:online2})に代入することにより、共通垂線との2交点が求まる。
+（Ref.矢野健太郎著、図形と式、p.178、講談社）
+\item[:init (\&key :pvertex :nvertex)]
+\end{description}
+
+\end{description}
+\vfill
+\pagebreak
+{\jLarge edge}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 2つの頂点pvert からnvert に向かうエッジのクラス。wing情報を含まない。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[line] (pvert nvert)
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[pface] エッジの左側の面
+\item[nface] エッジの右側の面
+\item[(angle float)] pface とnface がなす角度
+\end{description}
+% picture= edge.tex
+% \begin{figure}
+\begin{minipage}[b]{16cm}
+\begin{picture}( 391, 320)
+\large\tt
+\put( 203.4, 152.8){nface}
+\put( 102.2, 152.8){pface}
+\put( 152.8,  51.6){pvert}
+\put( 152.8, 253.9){nvert}
+\thicklines
+\put( 168.6, 101.2){\line( 1,-1){  84.3}}
+\put( 168.6, 101.2){\line(-1,-1){  84.3}}
+\put( 168.6, 101.2){\vector( 0, 1){ 118.0}}
+\put( 168.6, 219.2){\line( 1, 1){  84.3}}
+\put(  84.3, 303.5){\line( 1,-1){  84.3}}
+\end{picture}
+\end{minipage}
+% \end{figure}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:pvertex (f)]
+\item[:nvertex (f)] f はpface またはnface 。f にとってのpvert,nvert を求める。
+\item[:pface ()] pfaceを返す。
+\item[:nface ()] nface を返す。
+\item[:binormal (f)]
+f はpface またはnface 。fの法線とこのエッジの両方に直交する正規化された方向ベ
+クタを計算する。
+\item[:angle ()] angle
+\item[:set-angle ()] 面間の角度（2面角）を計算してangle に入れる。
+\item[:invert ()] エッジの方向を逆転させる。すなわち、pface とnface を
+交換する。
+\item[:set-face (pv nv f)] pvert,nvert に対応するpface またはnface を
+セットする。
+\item[:distance (point)] 点pointと、edge上の最近点との距離を求める。
+pointからこのedgeに下ろした垂線の足がこのedge上に乗るときはその足との距離、
+そうでないときは、近い方の端点との距離である。
+\item[:init (\&key :pface :nface :pvertex :nvertex)]
+\end{description}
+
+\end{description}
+
+\vfill
+\pagebreak
+{\jLarge plane}
+\\ [0.5cm]
+
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 境界のない平面のクラス
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[object] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[(normal :type floatvector)] 
+\item[(distance :type float) )]
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:normal ()] normal
+\item[:distance (point)] pointとこの平面の距離を計算する。
+\item[:intersection (pv nv)]
+2点pv,nv によって表現される直線とこの平面との交点をパラメータで返す。
+すなわち、$pvert=(x_{p},y_{p},z_{p})$,\ $nvert=(x_{n},y_{n},z_{n})$\ 
+とし、この2点を通る直線を、
+
+\begin{equation}
+\left(
+\begin{array}{c}
+x \\ y \\ z \\ 1
+\end{array} \right)=\left(
+\begin{array}{cc}
+(1-t) & t
+\end{array} \right) \left(
+\begin{array}{cc}
+x_{p} & x_{n} \\
+y_{p} & y_{n} \\
+z_{p} & z_{n} \\
+1 & 1
+\end{array} \right)
+\end{equation}
+とおいたとき、平面
+
+\begin{equation}
+\left(
+\begin{array}{cccc}
+a & b & c & d
+\end{array} \right) \left(
+\begin{array}{c}
+x \\ y \\ z \\ 1
+\end{array} \right) = 0
+\end{equation}
+との交点におけるパラメータ\ $t$\ の値、
+
+\begin{equation}
+t=\frac{ax_{p}+by_{p}+cz_{p}+d}{(ax_{p}+by_{p}+cz_{p})-(ax_{n}+by_{n}+cz_{n})}
+\end{equation}
+を返す。
+\item[:foot (point)]
+点\ $point=(x_{1},y_{1},z_{1})$\ から平面\ $ax+by+cz+d=0$\ に降ろした垂線の足
+\ $(x_{0},y_{0},z_{0})$\ を求める。これは、
+\begin{equation}
+\left(
+\begin{array}{c}
+x_{0} \\ y_{0} \\ z_{0}
+\end{array}
+\right) = \left(
+\begin{array}{c}
+x_{1} \\ y_{1} \\ z_{1}
+\end{array}
+\right) + t \left(
+\begin{array}{c}
+a \\ b \\ c
+\end{array}
+\right)
+\end{equation}
+とおき、これを\ $ax_{0}+by_{0}+cz_{0}+d=0$\ に代入して、
+\begin{equation}
+t=-\frac{ax_{1}+by_{1}+cz_{1}+d}{a^{2}+b^{2}+c^{2}}
+\end{equation}
+とパラメータ\ $t$\ の値を求めることにより得られる。
+\item[:intersect-edge (edge)]
+edgeとの交点のパラメータと座標をリストにして返す。
+
+\item[:init (normal apoint)]
+法線がnormalで、点apointを通るような平面を定義する。
+\end{description}
+
+\end{description}
+\vfill
+\pagebreak
+{\jLarge closed-region}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] エッジによって囲まれた平面の領域のクラス
+面は基本的に平面方程式とエッジを囲むエッジ、頂点のループで表現される。
+平面方程式はplane に保持され、closed-region はループを保持する。
+edges とverticesは面を物体の外部から
+眺めた時、反時計回りに並ぶようなリストである。別の言い方では、edges,
+verticesの順にループを描くようにねじを回すとねじが進む方向が物体の外部す
+なわち面の法線方向である。このループによってエッジ、頂点をたどることができる
+ので、edgeにはウィング情報を保持しない。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[plane] ((normal :type floatvector) (distance :type float))
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[convexp] 凸多角形のときT
+\item[edges] 面の内部がエッジの左側になるように並べたエッジのリスト
+\item[vertices] 面の内部がエッジの左側になるように並べた頂点のリスト。
+$v_{1},v_{2},\cdots,v_{n},v_{1})$\ と最後に先頭の要素が再び現れることに注意。
+\item[(model-normal :type floatvector)]
+\item[(model-distance :type float))]
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:box ()] この閉領域を含むsurrounding-box を作成する。
+\item[:boxtest (box)]
+\item[:edges ()] edges
+\item[:vertices ()] vertices
+\item[:insidep (point)]
+point がこの閉領域内にあるときinside, 外部の時outside,境界上の時border.
+凸多角形のとき、点がすべてのエッジの左側にあるかどうかを調べる。凸でない
+ときは点が辺を見込む角度の総和を計算し、2πのとき内部、0のとき外部と判
+定している。
+\item[:intersect-point-vector (point vnorm)]
+点point から正規化ベクタvnorm の方向に向かう半直線との交差を求める。
+半直線と閉領域が平行のときは、結果はparallelになる。
+vnormの方向と閉領域の法線ベクタの内積が正（負）のときは、pointが閉領域
+から見て法線ベクタの向く側（反対側）にあれば、半直線と閉領域は交わらない
+ので、結果はoutsideになる。逆に、半直線と閉領域が交わるときは、その交点に
+対して、:insidepの結果(inside, outside, border) を返す。
+（図\ref{fig:intersect-point}\ 参照）
+% picture = intersect-point.tex
+\begin{figure}
+\begin{minipage}[b]{16cm}
+\begin{picture}( 388, 287)(20,0)
+\Large\tt
+\put(  17.0,  12.0){p= -(ax+by+cz+d)/dnm  分子は点の閉領域からの距離。
+pが正なら交わる。}
+\put(  14.5,  45.7){dnm= au+by+cw dnmが正なら半直線と閉領域の法線ベクタは
+同じ向き}
+\put( 119.0, 113.1){ax+by+cz+d=0}
+\put( 216.0, 198.3){(a,b,c)}
+\put( 123.3, 232.0){(u,v,w)}
+\put( 237.9, 253.1){(x,y,z)}
+\thicklines
+\put( 223.4, 255.5){\vector(-3,-2){  42.2}}
+\put( 231.9, 263.9){\line(-1,-1){  16.9}}
+\put( 215.0, 263.9){\line( 1,-1){  16.9}}
+\put( 198.1, 145.9){\vector( 0, 1){  67.5}}
+\put(  97.0, 112.1){\line( 5,-2){  84.3}}
+\put( 265.6, 129.0){\line(-2, 3){  33.7}}
+\put( 265.6, 129.0){\line(-5,-3){  84.3}}
+\put( 147.6, 196.5){\line( 5,-1){  84.3}}
+\put( 147.6, 145.9){\line(-3,-2){  50.6}}
+\put( 147.6, 196.5){\line( 0,-1){  50.6}}
+\end{picture}
+\end{minipage}
+\label{fig:intersect-point}
+\end{figure}
+\item[:intersect-line (p1 p2)]
+線分p1-p2 との交差を求める。交差がないときnil,交差する時、交点のパラメタ
+と交点の座標のリストを返す。
+\item[:intersect-edge (e)]
+エッジとの交点。結果は:intersect-line と同じ。
+\item[:intersect-face (fac)]
+面fac とこの面との交差。t またはnil 。
+\item[:transform-normal (trans)]
+trans はクラスcoordinates のインスタンスであり、座標変換を表す。法線ベクタ
+を変換する。
+\item[:reset-normal ()]
+verticesからnormalおよびdistanceを計算する。
+\item[:invert ()] この面の内、外を反転する。
+\item[:area ()] この閉領域の面積を計算する。
+\item[:volume (point)] pointとこの閉領域で作られる錐対の体積
+\item[:centroid ()] この閉領域の重心位置
+\item[:perimeter] 周囲長
+\item[:init (\&key :vertices :edges :normal :distance)]
+\end{description}
+
+\end{description}
+\vfill
+\pagebreak
+{\jLarge face}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 多面体の面のクラス。 
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[closed-region] (convexp edges vertices)
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[holes] 面に空いた穴。
+\item[pbody] この面が作成されたprimitive\ bodyへのポインタ。
+\item[type] 面のタイプ
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:all-edges]
+\item[:all-vertices] この面上の全てのエッジ・頂点、全ての内部ループを返す。
+\item[:insidep {\em point}]
+\item[:area] 面積を求める。
+\item[:centroid {\em \&optional reference-point}] 面の重心を求める。
+穴も考慮する。
+\item[:invert]
+\item[:enter-hole {\em hole}] 穴を登録する。
+\item[:init {\em \&key :normal :distance :edges :vertices :holes}]
+\end{description}
+
+\end{description}
+\vfill
+\pagebreak
+{\jLarge hole}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 穴のクラス。 
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[closed-region] (convexp edges vertices)
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[myface] 穴が属するfaceオブジェクト
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:face]
+\item[:enter-face {\em face}]
+\item[:init {\em \&key :normal :distance :edges :vertices :face}]
+\end{description}
+
+\end{description}
+\vfill
+\pagebreak
+{\jLarge body}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 多面体のクラス。
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[cascaded-coords] (parent descendants worldcoords manager)
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[faces] 面のリスト。
+\item[edges] エッジのリスト。
+\item[vertices] 頂点のリスト。
+\item[model-vertices] 頂点のリスト。:translate 等で動かしても不変。
+\item[box]
+\item[convexp] 凸多角形のときT
+\item[evertedp]
+\item[csg] bodyの形状が変更された履歴を示すCSG情報。
+\end{description}
+
+\item[{\jlarge \bf methods}]\hspace{1cm}
+\begin{description}
+\item[:newcoords {\em rot pos}]
+\item[:vertices]
+\item[:faces]
+\item[:edges]
+\item[:box]
+\item[:volume {\em \&optional (reference-point \#f(0 0 0))}] 体積計算
+\item[:centroid {\em \&optional (reference-point \#f(0 0 0))}] 重心計算
+\item[:possibly-interfering-faces {\em box}] 干渉している可能性のある面を
+boxテストで探す。
+\item[:common-box {\em body}]
+自分自身とbodyとの最小共通箱を返す。
+\item[:insidep {\em point}]
+\item[:intersect-face {\em face}]
+\item[:intersectp {\em body}] 自分自身とbody との干渉チェックをする。tのとき
+干渉がある。
+\item[:evert] bodyの裏表を反転させる。
+\item[:init {\em \&key :faces :edges :vertices}] :initによって作成された
+bodyは、*bodies*リストにpushされる。
+\item[:translate-vertices {\em vector}]
+座標系とは独立に、頂点（model-vertices）の位置を移動する。
+\item[:rotate-vertices {\em radian axis}]
+同様に、頂点の位置をaxis 軸（:x,:y or :z）まわりに回転する。
+\item[:magnify {\em scale}]
+\item[:csg {\em \&optional newcsg}] csg情報を返す。newcsgがあれば、csgの値
+を更新して、新しい値を返す。
+\end{description}
+
+\end{description}
+
+\clearpage
+\subsection{素立体の作成}
+
+\begin{description}
+\item[make-plane {\em :normal :point :distance}]
+\item[make-prism {\em bottom-vertices sweep \&key name color}]\hfill\\
+柱体の生成。柱体とは、\ $2\frac{1}{2}$\ 物体のこと。
+bottom-vertices は底面の頂点\ $V_{1},V_{2},\cdots,V_{n}$\ 
+のリスト。\ $V_{1},V_{2},\cdots,V_{n}$\ は、この順に底面を外から見て
+反時計回りに回る。sweep は、掃引ベクタ（例えば、\#f(0 0 50)）または
+単に柱体の高さ。座標原点は、ワールドの\#f(0 0 0)。
+
+% picture = make-prism.tex
+\begin{figure}[h]
+\begin{picture}( 286, 236)
+\thicklines
+\put(  21.9, 158.5){\line( 0,-1){  84.3}}
+\put(  21.9, 158.5){\line( 1, 1){  50.6}}
+\put(  72.5, 209.1){\line( 5, 1){  84.3}}
+\put( 156.8, 226.0){\line( 1,-1){  50.6}}
+\put(  21.9, 158.5){\line( 4,-3){  67.5}}
+\put(  89.4, 107.9){\line( 2, 3){  33.7}}
+\put( 123.1, 158.5){\line( 5, 1){  84.3}}
+\put(  89.4, 107.9){\line( 0,-1){  84.3}}
+\put( 123.1, 158.5){\line( 0,-1){  84.3}}
+\put( 207.4, 175.4){\line( 0,-1){  84.3}}
+\thinlines
+\put(  72.5, 209.1){\line( 0,-1){ 101.2}}
+\put( 156.8, 226.0){\line( 0,-1){ 101.2}}
+\put( 156.8, 124.8){\line(-5,-1){  84.3}}
+\put(  72.5, 107.9){\line(-3,-2){  50.6}}
+\put( 156.8, 124.8){\line( 3,-2){  50.6}}
+\thicklines
+\put(  21.9,  74.2){\line( 4,-3){  67.5}}
+\put( 123.1,  74.2){\line(-2,-3){  33.7}}
+\put( 207.4,  91.1){\line(-5,-1){  84.3}}
+\large\tt
+\put( 208.4,  75.2){V1}
+\put( 124.1,  58.3){V2}
+\put(  90.4,   7.7){V3}
+\put(   6.1,  58.3){V4}
+\put( 141.0, 108.9){Vm}
+\put( 248.9, 127.5){sweep}
+\put( 231.0,  92.7){\vector( 0, 1){  84.3}}
+\put(  21.9, 158.5){\line( 0,-1){  84.3}}
+\put(  21.9, 158.5){\line( 1, 1){  50.6}}
+\put(  72.5, 209.1){\line( 5, 1){  84.3}}
+\put( 156.8, 226.0){\line( 1,-1){  50.6}}
+\put(  21.9, 158.5){\line( 4,-3){  67.5}}
+\put(  89.4, 107.9){\line( 2, 3){  33.7}}
+\put( 123.1, 158.5){\line( 5, 1){  84.3}}
+\put(  89.4, 107.9){\line( 0,-1){  84.3}}
+\put( 123.1, 158.5){\line( 0,-1){  84.3}}
+\put( 207.4, 175.4){\line( 0,-1){  84.3}}
+\thinlines
+\put(  72.5, 209.1){\line( 0,-1){ 101.2}}
+\put( 156.8, 226.0){\line( 0,-1){ 101.2}}
+\put( 156.8, 124.8){\line(-5,-1){  84.3}}
+\put(  72.5, 107.9){\line(-3,-2){  50.6}}
+\put( 156.8, 124.8){\line( 3,-2){  50.6}}
+\thicklines
+\put(  21.9,  74.2){\line( 4,-3){  67.5}}
+\put( 123.1,  74.2){\line(-2,-3){  33.7}}
+\put( 207.4,  91.1){\line(-5,-1){  84.3}}
+\put( 208.4,  75.2){V1}
+\put( 124.1,  58.3){V2}
+\put(  90.4,   7.7){V3}
+\put(   6.1,  58.3){V4}
+\put( 141.0, 108.9){Vm}
+\put( 248.9, 127.5){sweep}
+\put( 231.0,  92.7){\vector( 0, 1){  84.3}}
+\end{picture}
+\caption{make-prism}
+\end{figure}
+\item[make-cylinder {\em radius height \&key segments name color}]\hfill\\
+円柱の生成。radius は底面の半径。height は高さ。segment数のdefaultは、12。
+座標原点は、底面の中心。
+
+% picture = make-cylinder.tex
+\begin{figure}[h]
+\begin{picture}( 388, 236)
+\thicklines
+\put( 185.5,  50.6){\vector(-1,-1){  16.9}}
+\put( 185.5,  50.6){\vector( 0, 1){  16.9}}
+\large\tt
+\put( 321.4, 119.0){height}
+\put( 303.5,  50.6){\vector( 0, 1){ 134.9}}
+\put( 237.1,  17.9){radius}
+\put( 185.5,  50.6){\vector( 1, 0){  33.7}}
+\thinlines
+\put( 134.9,  67.5){\line(-1,-1){  16.9}}
+\thicklines
+\put( 118.0, 168.6){\line( 0,-1){ 134.9}}
+\thinlines
+\put( 219.2,  84.3){\line(-1, 0){  50.6}}
+\put( 168.6,  84.3){\line(-2,-1){  33.7}}
+\put( 219.2, 219.2){\line( 0,-1){ 134.9}}
+\thicklines
+\put( 252.9, 185.5){\line( 0,-1){ 134.9}}
+\put( 236.1,  33.7){\line( 0, 1){ 134.9}}
+\put( 202.4,  16.9){\line( 0, 1){ 134.9}}
+\put( 252.9,  50.6){\line(-1,-1){  16.9}}
+\put( 202.4,  16.9){\line( 2, 1){  33.7}}
+\put( 151.8,  16.9){\line( 1, 0){  50.6}}
+\put( 118.0,  33.7){\line( 2,-1){  33.7}}
+\thinlines
+\put( 134.9, 202.4){\line( 0,-1){ 134.9}}
+\thicklines
+\put( 151.8,  16.9){\line( 0, 1){ 134.9}}
+\thinlines
+\put( 168.6, 219.2){\line( 0,-1){ 134.9}}
+\thicklines
+\put( 134.9, 202.4){\line(-1,-1){  16.9}}
+\put( 168.6, 219.2){\line(-2,-1){  33.7}}
+\put( 219.2, 219.2){\line(-1, 0){  50.6}}
+\put( 252.9, 202.4){\line(-2, 1){  33.7}}
+\put( 252.9, 185.5){\line( 0, 1){  16.9}}
+\put( 252.9, 185.5){\line(-1,-1){  16.9}}
+\put( 202.4, 151.8){\line( 2, 1){  33.7}}
+\put( 202.4, 151.8){\line(-1, 0){  50.6}}
+\put( 151.8, 151.8){\line(-2, 1){  33.7}}
+\put( 118.0, 185.5){\line( 0,-1){  16.9}}
+\thinlines
+\put( 252.9,  67.5){\line(-2, 1){  33.7}}
+\thicklines
+\put( 185.5,  50.6){\line( 3,-1){  50.6}}
+\end{picture}
+\caption{make-cylinder}
+\end{figure}
+\item[make-cube {\em xsize ysize zsize \&key name color}]\hfill\\
+直方体の生成。xsize,ysize,zsize はそれぞれ3辺の長さ。座標原点は、
+重心に一致。
+\begin{figure}[h]
+\begin{picture}( 304, 152)
+\large\tt
+\put( 253.9, 102.2){zsize}
+\put( 135.9,  17.9){ysize}
+\put( 237.1,  51.6){xsize}
+\put( 168.6,  84.3){\vector( 1, 0){  33.7}}
+\put( 168.6,  84.3){\vector(-1,-1){  16.9}}
+\put( 168.6,  84.3){\vector( 0, 1){  33.7}}
+\put( 134.9,  67.5){\line( 1, 0){ 101.2}}
+\put( 134.9,  67.5){\line(-1,-1){  33.7}}
+\put( 134.9, 134.9){\line( 0,-1){  67.5}}
+\thicklines
+\put( 101.2,  33.7){\line( 1, 0){ 101.2}}
+\put( 236.1,  67.5){\line(-1,-1){  33.7}}
+\put( 236.1, 134.9){\line( 0,-1){  67.5}}
+\put( 236.1, 134.9){\line(-1,-1){  33.7}}
+\put( 202.4, 101.2){\line( 0,-1){  67.5}}
+\put( 101.2, 101.2){\line( 1, 0){ 101.2}}
+\put( 134.9, 134.9){\line( 1, 0){ 101.2}}
+\put( 101.2, 101.2){\line( 1, 1){  33.7}}
+\put( 101.2, 101.2){\line( 0,-1){  67.5}}
+\end{picture}
+\caption{make-cube}
+\end{figure}
+\item[make-cone {\em top bottom-vertices \&key name color}]\hfill\\
+多角錐の生成。top は、頂点の座標。bottom-vertices は、make-prism の項参照。
+\begin{figure}[h]
+\begin{picture}( 320, 169)
+\small\tt
+\put( 186.5, 136.2){top}
+\put( 237.1,  51.9){=bottom}
+\put( 102.2,  51.9){V4}
+\put( 135.9,  18.2){V3}
+\put( 186.5,  18.2){V2}
+\put( 220.2,  51.9){V1}
+\put( 185.5,  67.5){\line( 1,-1){  16.9}}
+\put( 151.8,  67.5){\line( 1, 0){  33.7}}
+\put( 151.8,  67.5){\line(-1,-1){  16.9}}
+\put( 168.6, 134.9){\line( 1,-4){  16.9}}
+\put( 168.6, 134.9){\line(-1,-4){  16.9}}
+\put( 151.8,  33.7){\line(-1, 1){  16.9}}
+\put( 185.5,  33.7){\line(-1, 0){  33.7}}
+\put( 202.4,  50.6){\line(-1,-1){  16.9}}
+\put( 168.6, 134.9){\line( 2,-5){  33.7}}
+\put( 168.6, 134.9){\line( 1,-6){  16.9}}
+\put( 168.6, 134.9){\line(-1,-6){  16.9}}
+\put( 134.9,  50.6){\line( 2, 5){  33.7}}
+\end{picture}
+\caption{make-cone}
+\end{figure}
+\clearpage
+\item[make-solid-of-revolution {\em points \&key (segments 16) name key}]
+\hfill\\
+回転体の生成。\ $points=(V_{1},V_{2},\cdots,V_{n})$\ を接続した折線を
+z 軸回りに回転した物体を生成する。pointsのy座標は０にしておくこと。
+% picture = make-revolution
+\begin{figure}[h]
+\begin{picture}( 219, 169)
+\put(  67.5,  33.7){\line( 1, 0){  50.6}}
+\small\tt
+\put( 135.9,  35.1){V5}
+\put( 152.8,  51.9){V4}
+\put( 152.8,  85.7){V3}
+\put( 135.9, 119.4){V2}
+\put( 119.0, 136.2){V1}
+\put(  67.5, 134.9){\line( 1, 0){  33.7}}
+\thicklines
+\put( 134.9,  50.6){\line(-1,-1){  16.9}}
+\put( 134.9,  84.3){\line( 0,-1){  33.7}}
+\put( 118.0, 101.2){\line( 1,-1){  16.9}}
+\put( 118.0, 118.0){\line( 0,-1){  16.9}}
+\put( 101.2, 134.9){\line( 1,-1){  16.9}}
+\put(  16.9,  67.5){\vector( 1, 0){ 185.5}}
+\put(  67.5,  16.9){\vector( 0, 1){ 134.9}}
+\end{picture}
+\caption{make-solid-of-revolution}
+\end{figure}
+\item[convex-hull-3d {\em vertices}]\hfill\\
+頂点列から凸包を作成する。
+\item[make-torus {\em points \&key (segments 16) name color}]
+\item[make-icosahedron] {\em \&optional radius}]
+\item[make-dodecahedraon {\em \&optional radius}]
+\item[make-gdome]
+\end{description}
+\subsection{物体間の集合演算}
+
+集合演算には、和(union)、積(intersection)、差(difference)、および
+平面による分離(cut)がある。これらを実行する関数は、
+
+\begin{description}
+\item[cut-body {\em abody plane}] abodyをplaneで切断したときの
+切断面をfaceとして作成し返す。
+\item[body+ {\em body1 \&rest more-bodies}]\hfill
+\item[body* {\em body1 \&rest more-bodies}]\hfill
+\item[body- {\em body1 \&rest more-bodies}]\hfill
+\item[body/ {\em body cutting-plane}]\hfill
+\end{description}
+で、いづれも関数\ $compose-body$\ を呼び出す。これらの計算の過程では、
+元の物体には何らの変更も加えない。従って、合成が途中で失敗したとしても
+元の物体は何の影響も受けない。この方法を採った結果として、非常に複雑な
+物体と単純な物体の和をとるような場合には、全体の複製が作り直されること
+から処理に時間がかかる。
+
+現在のバージョンでは、集合演算を施す2物体のいづれかの面どうしが同一
+平面上に載っている、あるいは、非常に近い様な場合には、集合演算が出来ない。
+\clearpage
+\subsection{物体間の接触による拘束の導出}
+
+\subsubsection{アルゴリズムの概要}
+物体が自由空間にあるとすると、その物体には任意の微小変位が可能であるが、
+他の物体に対して力を発生することは出来ない。
+逆に、物体が十分重い物体に固定されている場合は、その物体は変位することは
+出来ないが、固定している物体に対して任意の力を発生することが可能である。
+この両極端の間の状態として、両側拘束された物体の場合を考えると、
+拘束条件は微小変位と力に関する同次方程式になり、
+その解である許される微小変位の集合と発生可能な力の集合は直交補空間になる。
+また、物体が片側拘束されている場合は、物体に対する拘束条件は同次不等式になり、
+許される微小変位と発生可能な力の集合は双対凸多面錐になる。
+
+本節では、これら片側拘束や両側拘束を区別することなく、
+任意の形状の多面体が他の多面体に任意の状態で接触している場合に、
+その等価拘束点の位置と、各々の点における拘束条件を求めるプログラム
+について説明する。
+トップレベルのみ使う普通のユーザーは、c-bodyの説明のみ読めば十分である。
+これらのプログラムを使うためには、
+$eus/llib/model2const.l$\ をロードする必要がある。
+プログラムの全体構造をFig.\ref{fig:constraint-program}に示す。
+
+\begin{figure}[h]
+\begin{center}
+\epsfile{file=fig-program.ps,width=8cm}
+\end{center}
+\caption{Structure of the Algorithm}
+\label{fig:constraint-program}
+\end{figure}
+\vfill
+\clearpage
+\subsubsection{インプリメンテーション}
+\vspace{1.0cm}
+{\jLarge c-body}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 拘束条件を格納するスロットを追加したbodyのサブクラス
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[body] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[constraint] 等価拘束点と拘束条件
+\end{description}
+
+\item {\jlarge \bf methods}
+\\ [0.5cm]
+{\bf :constraint (b)} selfとbの等価拘束点と拘束ベクトルを求める 
+\begin{enumerate}
+\item {\bf if}\ selfと多面体bの各々の極小箱が干渉しない\ {\bf then}
+\begin{description}
+\item selfは多面体bと接触していない
+\item アルゴリズム終了
+\end{description}
+\item {\bf if} bから受ける拘束を既に求めている {\bf then} return constraint
+\item mycontact\ $\leftarrow$\ (send self {\bf :contact-vertices} b)\ $+$\ 
+(send self {\bf :contact-edges} b)
+\item hiscontact\ $\leftarrow$\ (send b {\bf :contact-vertices} self)\ $+$\ 
+(send b {\bf :contact-edges} self)
+\item constraint $\leftarrow$ constraint $+$
+{\bf contact-to-constraint}\ (mycontact\ hisconstact)
+\item return constraint
+\end{enumerate}
+{\bf :contact (b)} selfとbの接触の等価拘束点を返す。
+\begin{enumerate}
+\item {\bf if} bから受ける拘束を既に求めている {\bf then} 
+return 等価拘束点
+\item constraint $\leftarrow$ constraint $+$ (send self {\bf :constraint} b)
+\item return bから受ける拘束の等価拘束点の位置のリスト
+\end{enumerate}
+{\bf :draw-constraint (\&optional b (arrow-length 30.0))}
+bから受ける拘束条件を矢印で画面に表示する。
+bを指定しないと、これまでに求めた拘束を全て表示する。
+矢印の長さをarrow-lengthで指定することも出来る。
+\vfill
+\clearpage
+{\bf :contact-vertices (b)} bに接触しているselfの頂点、
+対応するbの接触面、凸集合の和集合で表現したselfの近傍を求める
+\begin{enumerate}
+\item cbox\ $\leftarrow$\ selfと多面体bの各々の極小箱の共通集合
+\item {\bf if}\ cboxが空集合\ {\bf then}
+\begin{description}
+\item selfは多面体bと接触していない
+\item アルゴリズム終了
+\end{description}
+\item myvertices\ $\leftarrow$\ cboxに含まれるselfの頂点のリスト
+\item hisfaces\ $\leftarrow$\ cboxに含まれるbの面のリスト
+\item {\bf for\ each}\ v\ $\leftarrow$\ myverticesの全ての要素
+\begin{description}
+\item {\bf if}\ vが、hisfacesのどれかに接触している\ {\bf then}
+conp\ $\leftarrow$\ conp\ $+$\ (selfの接触頂点v\ \ bの接触面の一つ)
+\end{description}
+\item {\bf for\ each}\ p\ $\leftarrow$\ conpの全ての要素
+\begin{description}
+\item p\ $\leftarrow$\ (selfの接触頂点\ \ bの接触面の一つ
+\ \ selfの接触頂点を端点とする稜のリスト)
+\end{description}
+\item {\bf for\ each}\ p\ $\leftarrow$\ conpの全ての要素
+\begin{description}
+\item (send p {\bf :to-convex})
+\end{description}
+\item return\ conp
+\end{enumerate}
+\begin{itemize}
+\item ステップ６は、selfの接触頂点に、それが載るselfの稜へのバックポインタ
+を付けている。
+\item ステップ７は、selfの近傍が凸でない場合に、それを凸集合の和集合に
+変換している。
+\end{itemize}
+{\bf :contact-edges (b)} bに接触しているselfの稜の内点、
+対応するbの接触面、凸集合の和集合で表現したselfの近傍を求める
+\begin{enumerate}
+\item cbox\ $\leftarrow$\ selfと多面体bの各々の極小箱の共通集合
+\item {\bf if}\ cboxが空集合\ {\bf then}
+\begin{description}
+\item selfは多面体bと接触していない
+\item アルゴリズム終了
+\end{description}
+\item myedges\ $\leftarrow$\ cboxに含まれるselfの稜のリスト
+\item hisfaces\ $\leftarrow$\ cboxに含まれるbの面のリスト
+\item {\bf for\ each}\  e\ $\leftarrow$\ myedgesの全ての要素
+\begin{description}
+\item {\bf for\ each}\ f\ hisfacesの全ての要素
+\begin{description}
+\item {\bf if} eが平行でない面fのどれかの稜と接触している、かつ、
+接触点がconpの要素ではない\ {\bf then}
+\begin{description}
+\item {\bf if}\ eの2面角の平面角が\ $\pi$\ より小さい\ {\bf then}
+\begin{description}
+\item conp\ $\leftarrow$\ conp\ $+$\ 
+(接触しているselfの稜上の点\ \ bの接触面の一つ\ \ ((接触しているselfの稜)))
+\end{description}
+\item {\bf else}
+\begin{description}
+\item conp\ $\leftarrow$\ conp\ $+$\ 
+(接触しているselfの稜上の点\ \ bの接触面の一つ
+\ \ ((接触しているselfの稜のp面)\ (接触しているselfの稜のn面)))
+\end{description}
+\end{description}
+\end{description}
+\end{description}
+\item return\ conp
+\end{enumerate}
+
+\end{description}
+\vfill
+\clearpage
+{\Large surrounding-box}
+\\ [0.5cm]
+{\jlarge \bf methods}
+\begin{description}
+\item[{\bf :contact(box)}]
+selfとboxが接触しているかどうかをチェックする。接触している場合は、
+両者の共通箱を、していない場合はnilを返す。
+\begin{enumerate}
+\item clearance\ $\leftarrow$\ 微小ベクトル
+\item v1\ $\leftarrow$\ (max\ selfの最小点\ boxの最小点)\ $-\ clearance$
+\item v2\ \ $\leftarrow$\ (min\ selfの最大点\ boxの最小点)\ $+\ clearance$
+\item {\bf if}\ v1がv2より小さい\ {\bf then}
+\begin{description}
+\item return\ v1を最小点、v2を最大点とする箱
+\item {\bf else}\ return\ nil
+\end{description}
+\end{enumerate}
+\end{description}
+\vfill
+\clearpage
+{\Large edge}
+\\ [0.5cm]
+{\jlarge \bf methods}
+\\ [0.5cm]
+{\bf :boxcontact(box)}selfがboxと接触しているかどうかをチェックする。
+接触しているときは両者の共通箱を、していないときはnilを返す。
+\begin{enumerate}
+\item return\ (send\ box\ {\bf :contact}\ selfを含む最小箱)
+\end{enumerate}
+{\bf :neighborpoints(point)}selfの近傍を表す次の３点のリストを返す。
+self上の点でpointとは異なる点、selfのpface上の点、selfのnface上の点。
+\begin{enumerate}
+\item p1\ $\leftarrow$\ (send\ self\ {\bf :anothervertex}\ point)
+\item p2\ \ $\leftarrow$\ $point\ +\ pface$の法線ベクトル\ $\times\ 
+(pvert\ -\ nvert)$
+\item p3\ \ $\leftarrow$\ $point\ +\ nface$の法線ベクトル\ $\times\ 
+(nvert\ -\ pvert)$
+\item return\ (p1\ p2\ p3)
+\end{enumerate}
+{\bf :contact(e)}selfの内点と稜eとの接触点を求める。
+接触していない場合は、nilを返す。
+\begin{enumerate}
+\item {\bf if}\ selfとeが各々載る２直線が平行\ {\bf then}\ return\ nil
+\begin{description}
+\item p1\ $\leftarrow$\ selfとeが各々載る２直線の共通垂線の、self側の足
+\item p2\ $\leftarrow$\ selfとeが各々載る２直線の共通垂線の、e側の足
+\item {\bf if}\ p1とp2の距離が微小値より小さい、
+p1がselfの両端点より微小距離以上内側、かつ、\\
+p2がeの両端点より微小距離以上外側ではない
+\ {\bf then}\ return\ p1
+\end{description}
+\end{enumerate}
+\begin{itemize}
+\item selfとeが重なる場合は、selfは必ず他の稜と交差するので、
+接触点を出す必要はない。
+\item p1とselfの両端点の距離が微小距離以下の場合は、
+selfの頂点と稜eの接触に相当するので、接触点を出す必要はない。
+\item p2が稜eの微小距離未満外側の場合を含めないと、
+数値計算誤差で接触点が求まらないことがある。
+\end{itemize}
+{\bf :anothervertex(point)}pointと同一点ではないselfを端点を返す。
+\begin{enumerate}
+\item {\bf if}\ pvertとpointの距離が微小距離より大きい\ {\bf then}\ 
+\begin{description}
+\item return\ pvert
+\item {\bf else}\ nvert
+\end{description}
+\end{enumerate}
+\vfill
+\clearpage
+{\Large plane}\\
+\\ [0.5cm]
+{\jlarge \bf methods}
+\\ [0.5cm]
+{\bf :separation(mypoints\ hispoints)}
+面selfがmypointsとhispointsの分離面になるかどうかをチェックする。
+分離面になる場合は、mypoints側に向く様に符合を合わせた、selfの
+法線ベクトルを返す。分離面にならない場合は、nilを返す
+\begin{enumerate}
+\item {\bf if}\ mypointsの全ての点のselfからの距離が同符合\ {\bf then}
+\begin{description}
+\item sign\ $\leftarrow$\ 距離の符合
+\item {\bf if}\ hispointsの全ての点のselfからの距離が同符合\ {\bf then}
+\begin{description}
+\item return\ sign\ $\times$\ selfの法線ベクトル
+\end{description}
+\end{description}
+\item return\ nil
+\end{enumerate}
+\vspace{2.0cm}
+{\Large closed-region}\\
+\\ [0.5cm]
+{\jlarge \bf methods}
+\\ [0.5cm]
+{\bf :boxcontact(box)}selfがboxと接触しているかどうかをチェックする。
+接触しているときは両者の共通箱を、していないときはnilを返す。
+\begin{enumerate}
+\item return\ (send\ box\ {\bf :contact}\ selfを含む最小箱)
+\end{enumerate}
+{\bf :contactp(p)}点pがselfに接触しているかどうかをチェックする。
+接触しているときはinside、境界上のときはborder、接触していないときは
+outsideを返す。
+\begin{enumerate}
+\item d\ $\leftarrow$\ pとselfとの距離
+\item {\bf if}\ dが微小値より大きい\ {\bf then}\ return\ outside
+\item {\bf else}
+\begin{description}
+\item point\ $\leftarrow$\ pからselfへ降ろした垂線の足
+\item {\bf for each} e $\leftarrow$ selfのedges
+\begin{description}
+\item {\bf if} (send e {\bf :distance} point)が微小値より小さい
+{\bf then} return border
+\end{description}
+\item return\ (send\ self\ {\bf :insidep}\ ip)
+\end{description}
+\end{enumerate}
+\vfill
+\clearpage
+{\Large face}\\
+\\ [0.5cm]
+{\jlarge \bf methods}
+\\ [0.5cm]
+{\bf :contactp(p)}点pがselfに接触しているかどうかをチェックする。
+接触しているときはinside、境界上のときはborder、接触していないときは
+outsideを返す。
+\begin{enumerate}
+\item result $\leftarrow$ (send-super {\bf :contactp} p)
+\item {\bf if} resultがinsideではない {\bf then} return result
+\item {\bf for each} h $\leftarrow$ selfのholes
+\begin{description}
+\item result $\leftarrow$ (send h {\bf :contactp} p)
+\item {\bf if} resultがinside {\bf then} return outside
+\item {\bf if} resultがborder {\bf then} return border
+\item return inside
+\end{description}
+\end{enumerate} 
+{\bf :contact-edge(e1)}稜e1とselfが平行でないとき、
+e1とselfのどれかの稜との接触点を返す
+\begin{enumerate}
+\item {\bf if}\ e1とselfが平行\ {\bf then}\ return\ nil
+\item {\bf for\ each}\ e2\ $\leftarrow$\ selfのedges
+\begin{description}
+\item foot\ $\leftarrow$\ (send\ e1\ {\bf :contact}\ e2)
+\item {\bf if}\ footがnilでない\ {\bf then}\ return\ foot 
+\end{description}
+\end{enumerate}
+\vfill
+\clearpage
+{\jLarge constrained-point}
+\\ [0.5cm]
+\begin{description}
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 被拘束点のクラス
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[object] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[myvertex] 被拘束点の座標
+\item[hisface] 被拘束点における拘束物体の面の一つ
+\item[myneighborhood] 被拘束点における自分の近傍
+\end{description}
+
+\end{description}
+{\jlarge \bf methods}\\
+\begin{description}
+\item[:to-convex\ ()] selfの近傍を凸近傍の和に分解する 
+\begin{enumerate}
+\item count\ $\leftarrow$\ selfの近傍のor-edgeの数
+\item {\bf if}\ count=0\ {\bf then}
+\begin{description}
+\item selfの近傍\ $\leftarrow$\ 
+(vertex\ hisface\ ((myedge11\ and\ myedge12\ $\cdots$)))
+\end{description}
+{\bf else}
+\begin{description}
+\item {\bf if}\ count=1\ {\bf then}
+\begin{description}
+\item (send\ self\ {\bf :divide1}\ or-edge)
+\end{description}
+\item {\bf else}
+\begin{description}
+\item (send\ self\ {\bf :dividen}\ or-edge)
+\end{description}
+\end{description}
+\end{enumerate}
+\item[:divide1\ (or-edge)] or-edgeが一つだけあるselfの近傍をor-edgeの
+p-faceとn-faceの各々で切断した凸近傍を求め、それらのリストで
+{\bf myneighborhood}スロットを次の形に置換する。\\
+((myedge11\ and\ myedge12\ $\cdots$)\ or\ (myedge21\ and\ myedge22\ $\cdots$))
+\\
+\begin{enumerate}
+\item {\bf for\ each}\ or-edge-face\ $\leftarrow$\ or-edgeのp-faceとn-face
+\begin{description}
+\item eset\ $\leftarrow$\ or-edge-faceの外に出ない、近傍のand-edgeのリスト
+\item flist\ $\leftarrow$\ or-edge-faceの外に出ない、近傍のfaceのリスト
+\item {\bf if}\ flistの要素数が2より多い\ {\bf then}
+\begin{description}
+\item ip\ $\leftarrow$\ or-edge-faceに切断された面の稜で、selfのmyvertexを
+端点にしない稜とor-edge-faceの交点
+\item {\bf if}\ ipと隣のand-edgeとの距離が少しはある\ {\bf then}
+\begin{description}
+\item selfのmyvertexとipを両端点とする稜をesetに追加する
+\end{description}
+\end{description}
+\item esets\ $\leftarrow$\ esets\ $+$\ eset
+\end{description}
+\item {\bf myneighborhood}\ $\leftarrow$\ esets
+\end{enumerate}
+\item[:dividen\ (or-edge)] or-edgeが2つ以上ある近傍を凸近傍に分割し、
+それらのリストで{\bf myneighborhood}スロットを次の形に置換する。\\
+((myedge11\ and myedge12$\cdots$)\ or\ (myedge21\ and\ myedge22$\cdots$)
+\ $\cdots$\ (face1)\ or\ (face2)\ $\cdots$))\\
+
+\begin{enumerate}
+\item elist\ $\leftarrow$\ 近傍を表すedgeのリストからスタート
+のor-edgeを除いたリスト
+\item flist\ $\leftarrow$\ (スタートのor-edgeの一方の面)
+\item {\bf while}\ elistが空リストでない\ {\bf do}
+\begin{description}
+\item ee\ $\leftarrow$\ flistの先頭要素の面へのバックポインタのついた稜
+\item anotherface\ $\leftarrow$\ eeの反対側の面
+\item {\bf if}\ eeがand-edge\ {\bf then}
+\begin{description}
+\item flist\ $\leftarrow$\ flist\ $+$\ anotherface
+\item eset\ $\leftarrow$\ eset\ $+$\ ee
+\end{description}
+\item {\bf else}\ ;\ eeがor-edgeの場合
+\begin{description}
+\item {\bf if}\ esetに稜が含まれる\ {\bf then}
+\begin{description}
+\item {\bf if}\ flistの要素数が2より多い\ {\bf then}
+\begin{description}
+\item n-point\ $\leftarrow$\ flistの先頭と最後の要素の面の交線上
+にあり、近傍の境界面上にある点
+\item eset\ $\leftarrow$\ eset\ $+$\ 接触点とn-pointを端点とし、flistの
+先頭と最後の面にバックポインタを持った稜
+\end{description}
+\item esets\ $\leftarrow$\ esets + eset
+\end{description}
+\item {\bf else}
+\begin{description}
+\item esets\ $\leftarrow$\ esets\ $+$\ flist
+\end{description}
+\item eset\ $\leftarrow$\ 空リスト
+\item flist\ $\leftarrow$\ anotherface
+\end{description}
+\item elist\ $\leftarrow$\ elist\ $-$\ ee
+\end{description}
+\item {\bf if}\ esetに稜が含まれる\ {\bf then}
+\begin{description}
+\item esets\ $\leftarrow$\ esets\ $+$\ eset
+\item {\bf else}
+\begin{description}
+\item esets\ $\leftarrow$\ esets\ $+$\ flist
+\end{description}
+\end{description}
+\item {\bf myneighborhood}\ $\leftarrow$\ esets
+\end{enumerate}
+\vfill
+\clearpage
+\item[:analyse-contact(hispoint)]
+自分の接触点とその近傍を表すselfと相手の接触点とその近傍を表すhispoint
+から、自分に対する接触条件を求める
+\begin{enumerate}
+\item {\bf for\ each}\ $(mine,his)$\ $\leftarrow$\ selfの構成要素の凸近傍と
+hispointの構成要素の凸近傍の全ての組合せ
+\begin{description}
+\item {\bf if}\ mineが面\ {\bf then}\ and-cond\ $\leftarrow$\ 
+and-cond\ $+$\ {\bf face-contact}(mine\ -1.0)
+\end{description}
+\begin{description}
+\item {\bf if}\ hisが面\ {\bf then}\ and-cond\ $\leftarrow$\ 
+and-cond\ $+$\ {\bf face-contact}(his\ 1.0)
+\end{description}
+\begin{description}
+\item {\bf if}\ 稜と稜の接触\ {\bf then}\ and-cond\ $\leftarrow$\ 
+and-cond\ $+$\ {\bf edge-edge-contact}(接触点\ mine\ his)
+\item {\bf if}\ 稜と頂点の接触\ {\bf then}\ and-cond\ $\leftarrow$\ 
+and-cond\ $+$\ {\bf edge-vertex-contact}(接触点\ mine\ his)
+\item {\bf if}\ 頂点と稜の接触\ {\bf then}\ and-cond\ $\leftarrow$\ 
+and-cond\ $+$\ {\bf edge-vertex-contact}(接触点\ his\ mine)のそれぞれの
+要素の符合を反転したリスト
+\item {\bf if}\ 頂点と頂点の接触\ {\bf then}\ and-cond\ $\leftarrow$\ 
+and-cond\ $+$\ {\bf vertex-vertex-contact}(接触点\ mine\ his)
+\end{description}
+\item return\ (接触点\ and-cond)
+\end{enumerate}
+\begin{itemize}
+\item ステップ３でand-condに追加するのは、追加される要素がand-condに
+含まれていないときのみ。
+\end{itemize}
+\end{description}
+\vspace{2.0cm}
+{\bf :draw-constraint} {\em \&optional (length 30.0)}\\
+この点における拘束を矢印で画面に表示する。
+矢印の長さをlengthで指定することも出来る。
+\vfill
+\clearpage
+{\large \bf 関数}
+\vspace{1.0cm}\\
+{\bf contact-to-constraint(mycontact\ hiscontact)}\\
+相手に接触している自分の頂点と稜上の点のリストmycontactと
+自分に接触している相手の頂点と稜上の点のリストhiscontactから、
+自分が受ける拘束条件を求める関数\\
+{\bf return}\ =\ {\bf ((接触点\ \ (($f_{11}\ or\ f_{12}\ \cdots$)\ and\ 
+($f_{21}\ or\ f_{22}\ \cdots$)\ $\cdots$))\ $\cdots$)}
+\begin{enumerate}
+\item {\bf while}\ mycontactが空リストでない\ {\bf do}
+\begin{description}
+\item point\ $\leftarrow$\ mycontactの要素の一つ
+\item {\bf if}\ pointと同じ点がhiscontactの要素にある\ {\bf then}
+\begin{description}
+\item anotherpoint\ $\leftarrow$\ 対応する点とその近傍
+\item constraints\ $\leftarrow$\ constraints\ $+$\ (send\ point\ 
+{\bf :analyse-contact}\ anotherpoint)
+\item hiscontact\ $\leftarrow$\ hiscontact\ $-$\ another-point
+\end{description}
+\item {\bf else}
+\begin{description}
+\item constraints\ $\leftarrow$\ constraints\ $+$\ 
+(point\ ((自分の頂点が接触している相手の面の法線ベクトル)))
+\end{description}
+\item mycontact\ $\leftarrow$\ mycontact\ $-$\ point
+\end{description}
+\item {\bf while}\ hiscontactが空リストでない\ {\bf do}
+\begin{description}
+\item point\ $\leftarrow$\ hiscontactの要素の一つ
+\item constraints\ $\leftarrow$\ constraints\ $+$\ 
+(point\ ((相手の頂点が接触している自分の面の法線ベクトルの逆向きのベクトル)))
+\item hiscontact\ $\leftarrow$\ hiscontact\ $-$\ point
+\end{description}
+\item return\ constraints
+\end{enumerate}
+{\bf face-contact\ (face\ sign)}
+面faceによる拘束条件を求める。faceが自身の面のときはsignは\ $-1.0$\ 、
+相手の面のときは\ $1.0$。
+\begin{enumerate}
+\item return\ (list\ faceの法線ベクトル\ $\times$\ sign)
+\end{enumerate}
+{\bf edge-edge-contact\ (point\ myedge\ hisedge)}
+接触点pointにおける自分の近傍を表す稜myedgeと相手の近傍を
+表す稜hisedgeから、この接触点による拘束条件を求める
+\begin{enumerate}
+\item mypoints\ $\leftarrow$\ (send\ myedge\ {\bf :neighborpoints}\ point)
+\item hispoints\ $\leftarrow$\ (send\ hisedge\ {\bf :neighborpoints}\ point)
+\item {\bf if} myedgeとhisedgeが平行 {\bf then} return nil
+\item s-plane\ $\leftarrow$\ myedgeとhisedgeを含む面
+\item return\ (\ (send\ s-plane\ {\bf :separation}\ mypoints\ hispoints)\ )
+\end{enumerate}
+\vfill
+\clearpage
+{\bf edge-vertex-contact\ (point\ myedge\ hisvertex)}
+接触点pointにおける自分の近傍を表す稜myedgeと相手の近傍を
+表す頂点hisvertexから、この接触点による拘束条件を求める
+\begin{enumerate}
+\item mypoints\ $\leftarrow$\ (send\ myedge\ {\bf :neighborpoints}\ point)
+\item hispoints\ $\leftarrow$\ hisvertexの載っている稜の反対側の頂点のリスト
+\item {\bf for\ each}\ f\ $\leftarrow$\ myedgeの載る２つの面
+\begin{description}
+\item c-vector\ $\leftarrow$\ (send f\ {\bf :separation}\ mypoints\ hispoints)
+\item {\bf if}\ c-vectorがnilでない\ {\bf then}\ 
+or-cond\ $\leftarrow$\ or-cond\ $+$\ c-vector
+\end{description}
+\item {\bf for\ each}\ $p1,p2$\ $\leftarrow$\ myedge上の点、hispointsの
+中から異なる２点の組合せ
+\begin{description}
+\item s-plane\ $\leftarrow$\ $point,p1,p2$\ の３点の載る面
+\item c-vector\ $\leftarrow$\ 
+(send s-plane\ {\bf :separation}\ mypoints\ hispoints)
+\item {\bf if}\ c-vectorがnilでない\ {\bf then}\ 
+or-cond\ $\leftarrow$\ or-cond\ $+$\ c-vector
+\end{description}
+\item return\ or-cond
+\end{enumerate}
+{\bf vertex-vertex-contact\ (point\ myvertex\ hisvertex)}
+接触点pointにおける自分の近傍を表す頂点myvertexと相手の近傍を
+表す頂点hisvertexから、この接触点による拘束条件を求める
+\begin{enumerate}
+\item mypoints\ $\leftarrow$\ myvertexの載っている稜の反対側の頂点のリスト
+\item hispoints\ $\leftarrow$\ hisvertexの載っている稜の反対側の頂点のリスト
+\item bothpoints\ $\leftarrow$\ myvertexとhisvertexの重複を除いた和集合
+\item {\bf for\ each}\ $p1,p2$\ $\leftarrow$\ bothpoint
+の中から異なる２点の組合せ
+\begin{description}
+\item s-plane\ $\leftarrow$\ $point,p1,p2$\ の３点の載る面
+\item c-vector\ $\leftarrow$\ 
+(send s-plane\ {\bf :separation}\ mypoints\ hispoints)
+\item {\bf if}\ c-vectorがnilでない\ {\bf then}\ 
+or-cond\ $\leftarrow$\ or-cond\ $+$\ c-vector
+\end{description}
+\item return\ or-cond
+\end{enumerate}
+\vfill
+\clearpage
+\subsubsection{計算例}
+本プログラムによって、等価拘束点の位置と、各々の点における拘束条件を
+求めた例を次に示す。
+Fig.\ref{fig:bilateral}は両側拘束の例、
+Fig.\ref{fig:unilateral}は片側拘束の例である。
+\begin{figure}[h]
+\begin{center}
+\epsfile{file=fig-bilateral.ps,width=15cm}
+\end{center}
+\caption{Bilateral constraint}
+\label{fig:bilateral}
+\end{figure}
+\begin{verbatim}
+(setq x (make-cube 200 200 100))
+(setq y (make-cube 100 100 300))
+(setq ana (body- x y))
+(send y :constraint ana)
+(hidd y ana)
+(send y :draw-constraint)
+\end{verbatim}
+\vfill
+\clearpage
+\begin{figure}[h]
+\begin{center}
+\epsfile{file=fig-unilateral.ps,width=15cm}
+\end{center}
+\caption{Unilateral constraint}
+\label{fig:unilateral}
+\end{figure}
+\begin{verbatim}
+(setq x (make-prism '(#f(-80 0 -50) #f(-80 -25 0) #f(-80 -100 0)
+		      #f(-80 -100 25) #f(-80 100 25) #f(-80 100 0)
+		      #f(-80 25 0))
+		    #f(160 0 0)))
+(setq mizo (make-prism '(#f(-100 0 -50) #f(-100 25 0) #f(-100 100 0)
+			 #f(-100 100 -100) #f(-100 -100 -100) #f(-100 -100 0)
+			 #f(-100 -25 0))
+		       #f(200 0 0)))
+(send x :constraint mizo)
+(hidd x mizo)
+(send x :draw-constraint mizo 20.0)
+\end{verbatim}
+\vfill
+\clearpage
+Fig.\ref{fig:peg-in-hole}は、穴にぺグを入れる作業中の拘束状態の例である。
+\begin{figure}[h]
+\epsfile{file=fig-peg-in-hole1.ps,width=8cm}
+\epsfile{file=fig-peg-in-hole2.ps,width=8cm}
+\epsfile{file=fig-peg-in-hole3.ps,width=8cm}
+\epsfile{file=fig-peg-in-hole4.ps,width=8cm}
+\caption{Peg in a hole}
+\label{fig:peg-in-hole}
+\end{figure}
+\subsubsection{文献}
+本節の内容は、次の論文によっている。
+本節のプログラムを用いて学会等で発表される際は、
+ご参照下さる様お願いします。
+\begin{itemize}
+\item 比留川博久、松井俊浩、高瀬國克、
+多面体間の接触による拘束条件を幾何モデルから導出する一般的なアルゴリズム、
+日本ロボット学会誌、９巻、４号、１９９１。
+\end{itemize}
+\vfill
+\clearpage
+\subsection{物体間の接触による拘束の解析}
+
+\subsubsection{アルゴリズムの概要}
+前節で述べた様に、被拘束物体と拘束物体の形状は多面体、
+両者の間に摩擦は働かないと仮定すると、被拘束物体に対する拘束条件は一般に、
+\begin{equation}
+\bigcap_{k=1}^{L} \bigcap_{i=1}^{N(k)}\ \bigcup_{j=1}^{M(k,i)}\ 
+F_{kij}^{T}J_{k}\left(
+\begin{array}{c}
+\Delta X \\ \Omega
+\end{array}
+\right)\geq 0
+\label{eq:ippannokosoku}
+\end{equation}
+で与えられる。ここに、$L$は等価拘束点の数、
+$N(k)$は各等価拘束点における論理積条件の数、$M(k,i)$は論理和条件の数である。
+また、$F_{kij}:3\times 1$は拘束法線ベクトル、
+$J_{k}:3\times 6$は、物体座標系で表された微小変位$\Delta X$・回転$\Omega$を
+等価拘束点を原点とする座標系で表された微小変位$\Delta X_{k}$
+に変換するヤコビ行列である。
+分配則を用いて論理和を前に出すと、(\ref{eq:ippannokosoku})式は、
+\begin{equation}
+\bigcup_{p=1}^{Q}\ C_{p}\ \left(
+\begin{array}{c}
+\Delta X \\ \Omega
+\end{array}
+\right)\geq 0
+\label{eq:matrix-form}
+\end{equation}
+という形にかける。ここに、$Q=\Pi_{k,i}M(k,i)$、
+$C_{p}:n\times 6$ は$F_{kij}^{T}J_{k}$を行ベクトルとする行列である。
+$n$は$p$に依存して決まる数であるが、ここでは簡単のため単に$n$と記した。
+(\ref{eq:ippannokosoku})式の解は、各々の、
+\begin{equation}
+C_{p}\ \left(
+\begin{array}{c}
+\Delta X \\ \Omega
+\end{array}
+\right)\geq 0
+\label{eq:each-matrix-form}
+\end{equation}
+という連立線形不等式の解の和集合になる。
+(\ref{eq:each-matrix-form})式の解は凸多面錐になるが、
+解を求めるのに必要な計算量は$r=rank\ C_{p}$に依存する。
+そこで、まず行列$C_{p}$を、
+\begin{equation}
+C_{p}=\ \left(
+\begin{array}{cc}
+U_{1} & U_{2}
+\end{array}
+\right) \left(
+\begin{array}{cc}
+D_{rr} & O \\
+O & O
+\end{array}
+\right) \left(
+\begin{array}{c}
+V_{1}^{T} \\
+V_{2}^{T}
+\end{array}
+\right)
+\label{eq:svd}
+\end{equation}
+と特異値分解することにより、$C_{p}$の零空間を分離する。
+ここに、$U_{1}:n\times r$、$U_{2}:n\times (6-r)$、
+$V_{1}:6\times r$、$V_{2}:6\times (6-r)$は直交行列、
+$D_{rr}:r\times r$は対角行列である。
+(\ref{eq:each-matrix-form})式の解は、$C_{p}$の零空間と、
+$V_{1}$の列ベクトルで張られる$r$次元線形部分空間における解の直和になる。
+後者は、
+\begin{equation}
+U_{1}D_{rr}V_{1}^{T}V_{1}W_{r}
+=U_{1}D_{rr}W_{r}\stackrel{\rm def}{=}
+\left(
+\begin{array}{c}
+H_{1}^{T} \\ \vdots \\ H_{n}^{T}
+\end{array}
+\right) W_{r}
+\geq O
+\label{eq:pointed-cone}
+\end{equation}
+なる連立線形不等式の解$W_{r}$である。
+$rank\ U_{1}D_{rr}=r$であるので、この解は原点を「頂点」とする凸多面錐になり、
+\begin{equation}
+W_{r}=\left(
+\begin{array}{ccc}
+E_{1} & \cdots & E_{m}
+\end{array}
+\right) \left(
+\begin{array}{c}
+\epsilon_{1} \\ \vdots \\ \epsilon_{m}
+\end{array}
+\right)
+\label{eq:pointed-cone-solution}
+\end{equation}
+という非負１次結合で表現される。
+ここに、$E_{j}:r\times 1$ は凸多面錐の側辺の方向を表すベクトル、
+$\epsilon_{j}$は非負のスカラー、$m$は側辺の数である。
+最終的な(\ref{eq:each-matrix-form})式の解は、$C_{p}$の零空間の要素を加えて、
+\begin{equation}
+\left(
+\begin{array}{c}
+\Delta X \\ \Omega
+\end{array}
+\right) =V_{1} \left(
+\begin{array}{ccc}
+E_{1} & \cdots & E_{m}
+\end{array}
+\right) \left(
+\begin{array}{c}
+\epsilon_{1} \\ \vdots \\ \epsilon_{m}
+\end{array}
+\right) + \left(
+\begin{array}{cc}
+V_{2} & -V_{2}
+\end{array}
+\right) \left(
+\begin{array}{c}
+\epsilon_{m+1} \\ \vdots \\ \epsilon_{m+2(6-r)}
+\end{array}
+\right)
+\label{eq:finalsolution}
+\end{equation}
+と表される。
+$V_{1}E_{j}$は拘束状態を変化させる微小変位に対応し、
+$V_{2}$は全ての等価拘束点との接触状態を維持する微小変位に対応する。
+この式は、接触により拘束を受けた物体に許される任意の微小変位が、
+$m+2(6-r)$個の微小変位の非負１次結合で表されることを示している。
+これは最小の数の基底である。
+このとき、被拘束物体が拘束物体に対して
+発生可能な力$F$、トルク$T$の集合は、
+(\ref{eq:finalsolution})式の双対凸多面錐で、
+\begin{equation}
+\left(
+\begin{array}{ccc}
+V_{1}(E_{1}\ \cdots\ E_{m}) & V_{2} &  -V_{2}
+\end{array}
+\right)^{T}
+\left(
+\begin{array}{c}
+F \\ T
+\end{array}
+\right) \leq 0
+\label{eq:force}
+\end{equation}
+なる連立不等式の解になる。
+
+本節では、c-bodyのメソッド$:constraint$で求めた(\ref{eq:ippannokosoku})式
+から解である(\ref{eq:finalsolution})式を求めるプログラム、
+(\ref{eq:force})式の解を求めるプログラムを説明する。
+これらのプログラムを使うためには、
+$eus/llib/solve-inequalities.l$\ をロードする必要がある。
+本アルゴリズムの主要部分は$C$でインプリメントされており、
+$Euslisp$の他言語インターフェイスを用いてリンクしている。
+$C$の部分は$eus/cone$というdirectoryにあり、
+\begin{verbatim}
+ % cd eus/cone
+ % make cone
+ % make install
+\end{verbatim}
+を実行することによって、ライブラリーが作られる。
+リンクする際には$convexconeref.o$というオブジェクトファイルが
+何処かに必要である。詳細は、eus/llib/solve-inequalities.l\ を参照されたい。
+
+インプリメンテーション上の制約から、等価拘束条件の数は最大３２となっている。
+\vfill
+\clearpage
+\subsubsection{インプリメンテーション}
+\vspace{1.0cm}
+{\jLarge c-body}
+\\ [0.5cm]
+\begin{description}
+
+\item[{\jlarge \bf description}]\hspace{1cm}
+\begin{description}
+\item[] 拘束条件を格納するスロットを追加したbodyのサブクラス
+\end{description}
+
+\item[{\jlarge \bf super class}]\hspace{1cm}
+\begin{description}
+\item[body] ()
+\end{description}
+
+\item[{\jlarge \bf slots}]\hspace{1cm}
+\begin{description}
+\item[motion] 許される微小変位
+\item[force] 発生可能な力
+\end{description}
+
+\item {\jlarge \bf methods}
+\\ [0.5cm]
+\begin{description}
+\item[:motion ()] selfに対する拘束条件を解いて、許される微小変位を求める。
+\item[:force ()] selfに許される微小変位から、発生可能な力を求める。
+\item[:draw-motion (b)] selfとbが接触しているときに、selfに許される微小変位
+を表示する。
+\end{description}
+\end{description}
+\vfill
+\clearpage
+\subsubsection{計算例}
+本プログラムによって、(\ref{eq:finalsolution})式で
+表される解を求めた例を以下に示す。
+
+Fig.\ref{fig:trigonalprism}に、３角柱がテーブルの上に載っている例を示す。
+この場合、解は次式で表される。
+\begin{equation}
+\left(
+\begin{array}{c}
+\Delta X \\ \Omega
+\end{array}
+\right) = \left(
+\begin{array}{ccc}
+0.0 & 0.0 & 0.0 \\
+0.0 & 0.0 & 0.0 \\
+2.31 & 6.00 & 2.31 \\
+-.0308 & 0.08 & -.0308 \\
+.0923 & 0.0 & -0.923 \\
+0.0 & 0.0 & 0.0
+\end{array}
+\right) \left(
+\begin{array}{c}
+\epsilon_{1} \\ \epsilon_{2} \\ \epsilon_{3}
+\end{array}
+\right) + \left(
+\begin{array}{cccccc}
+-10. & 10. & 0.0 & 0.0 & 0.0 & 0.0 \\
+0.0 & 0.0 & -10. & 10. & 0.0 & 0.0 \\
+0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+0.0 & 0.0 & 0.0 & 0.0 & 0.1 & -0.1
+\end{array}
+\right) \left(
+\begin{array}{c}
+\epsilon_{4} \\ \epsilon_{5} \\ \epsilon_{6} \\
+\epsilon_{7} \\ \epsilon_{8} \\ \epsilon_{9}
+\end{array}
+\right)
+\end{equation}
+図に示してあるのは、拘束条件、離脱動作の一つ、拘束を維持する並進と回転である。
+\begin{figure}[h]
+\begin{center}
+\epsfile{file=fig-onthetable-0.ps,width=7cm}
+\epsfile{file=fig-onthetable-m1.ps,width=7cm}\\
+\epsfile{file=fig-onthetable-mt.ps,width=7cm}
+\epsfile{file=fig-onthetable-mr.ps,width=7cm}
+\end{center}
+\caption{Possible motions of a trigonal prism}
+\label{fig:trigonalprism}
+\end{figure}
+\vfill
+\clearpage
+Fig.\ref{fig:peg-in-a-hole}に角柱が穴に入っている例を示す。
+この場合、解は次式で表される。
+\begin{equation}
+\left(
+\begin{array}{c}
+\Delta X \\ \Omega
+\end{array}
+\right) = \left(
+\begin{array}{ccc}
+0.0 & 0.0 & 0.0 \\
+3.87 & -8.66 & -3.87 \\
+2.24 & 5.0 & -2.24 \\
+.0894 & 0.0 & -.0894 \\
+0.0 & 0.0 & 0.0 \\
+0.0 & 0.0 & 0.0
+\end{array}
+\right) \left(
+\begin{array}{c}
+\epsilon_{1} \\ \epsilon_{2} \\ \epsilon_{3}
+\end{array}
+\right)
+\end{equation}
+この例では、拘束状態を変えない動作は存在せず、
+任意の動作は図に示した様な３つの動作から生成される。
+\begin{figure}[h]
+\begin{center}
+\epsfile{file=fig-peg-naname-0.ps,width=7cm}
+\epsfile{file=fig-peg-naname-m1.ps,width=7cm}\\
+\epsfile{file=fig-peg-naname-m2.ps,width=7cm}
+\epsfile{file=fig-peg-naname-m3.ps,width=7cm}
+\end{center}
+\caption{Possible motions of a peg in a hole}
+\label{fig:peg-in-a-hole}
+\end{figure}
+\vfill
+\clearpage
+\subsubsection{文献}
+本節の内容は、次の論文によっている。
+本節のプログラムを用いて学会等で発表される際は、
+ご参照下さる様お願いします。
+\begin{itemize}
+\item 比留川博久、松井俊浩、高瀬國克、
+多面体間の接触による拘束条件の高速解法とその離脱動作計画への応用、
+日本ロボット学会誌、掲載予定。
+\end{itemize}

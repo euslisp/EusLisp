@@ -1,0 +1,47 @@
+(1+ function-documentation "
+Args: (integer)
+Returns NUMBER plus one.")
+(delete-if-not function-documentation "
+Args: (test sequence
+       &key (key #'identity) (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Destructive REMOVE-IF-NOT.  SEQUENCE may be destroyed")
+(intern function-documentation "
+Args: (string &optional (package *package*))
+Searches PACKAGE for a symbol whose print name is STRING.  If such a symbol is
+found, returns the symbol and, as the second value, one of the keywords
+:INTERNAL, :EXTERNAL, and :INHERITED.  Otherwise, creates and returns a new
+symbol and, as the second value, returns NIL.")
+(machine-type function-documentation "
+Args: ()
+Returns, as a string, the type of the machine on which KCL runs.")
+(make-string-input-stream function-documentation "
+Args: (string &optional (start 0) (end (length string)))
+Creates and returns a string-input stream.  Inputs from this stream are
+obtained form STRING.  A string-input stream is notated as
+	#<string-input stream from s>
+where S is a string.")
+(output-stream-p function-documentation "
+Args: (stream)
+Returns T if STREAM can handle output operations; NIL otherwise.")
+(return function-documentation "
+Syntax: (return [result])
+Terminates execution of the lexically surrounding NIL block and returns all
+values of RESULT (which defaults to NIL) as the values of the terminated
+block.")
+(warn function-documentation "
+Args: (format-string &rest args)
+Formats FORMAT-STRING and ARGs to *ERROR-OUTPUT* as a warning message.  Enters
+a break level if the value of *BREAK-ON-WARNINGS* is non-NIL.  Otherwise,
+returns with NIL.")
+(ihs-vs function-documentation "
+Args: (n)
+KCL specific.
+Returns the value stack index of the N-th entity in the invocation history
+stack.")
+(nani function-documentation "
+Args: (fixnum)
+KCL specific.
+Returns the object at the address FIXNUM.  This function is the inverse of
+SI:ADDRESS.  Although SI:ADDRESS is a harmless operation, SI:NANI is quite
+dangerous and should be used with care.")

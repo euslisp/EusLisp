@@ -1,0 +1,46 @@
+(call-arguments-limit variable-documentation "
+The upper bound of the number of arguments to a function.  Ignore this value
+since there is no such logical upper bound in KCL.")
+(encode-universal-time function-documentation "
+Args: (second minute hour date month year
+       &optional (timezone si:*default-time-zone*))
+Returns an integer that represents the given day-and-time.  See GET-DECODE-
+TIME.")
+(machine-version function-documentation "
+Args: ()
+Returns, as a string, the version of the machine on which KCL runs.")
+(map function-documentation "
+Args: (type function sequence &rest more-sequences)
+Creates and returns a sequence of TYPE with K elements, with the N-th element
+being the value of applying FUNCTION to the N-th elements of the given
+SEQUENCEs, where K is the maximum length of the given SEQUENCEs.")
+(*print-base* variable-documentation "
+The radix used to print integers and ratios.  The value must be an integer
+from 2 to 36, inclusive.  The initial value is 10.")
+(proclamation function-documentation "
+Args: (decl-spec)
+KCL specific.
+Returns T if the specified declaration is globally in effect; NIL otherwise.
+See DECLARE for possible DECL-SPECs.")
+(prog2 function-documentation "
+Syntax: (prog2 first-form second-form {forms}*)
+Evaluates FIRST-FORM, SECOND-FORM, and FORMs in order.  Returns the value of
+SECOND-FORM.")
+(symbol-name function-documentation "
+Args: (symbol)
+Returns the print name of SYMBOL.")
+(unwind-protect function-documentation "
+Syntax: (unwind-protect form {cleanup-form}*)
+Evaluates FORM and returns all its values.  Before returning, evaluates
+CLEANUP-FORMs in order, whether FORM returns normally or abnormally by a non-
+local exit.")
+(y-or-n-p function-documentation "
+Args: (&optional (format-string nil) &rest args)
+Asks the user a Y-or-N question.  Does FRESH-LINE, prints a message as if
+FORMAT-STRING and ARGs were given to FORMAT, and then prints \"(Y or N)\" is
+printed.  If FORMAT-STRING is NIL, however, no prompt will appear.")
+(reset-gbc-count function-documentation "
+Args: ()
+KCL specific.
+Resets the counter of the garbage collector that records how many times the
+garbage collector has been called for each implementation type.")

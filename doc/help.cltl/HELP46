@@ -1,0 +1,58 @@
+(/= function-documentation "
+Args: (number &rest more-numbers)
+Returns T if no two of the args are numerically equal; NIL otherwise.")
+(char/= function-documentation "
+Args: (char &rest more-chars)
+Returns T if no two of CHARs are the same; NIL otherwise.")
+(char= function-documentation "
+Args: (char &rest more-chars)
+Returns T if all CHARs are the same; NIL otherwise.")
+(define-setf-method function-documentation "
+Syntax: (define-setf-method symbol defmacro-lambda-list {decl | doc}*
+          {form}*)
+Defines the SETF-method for generalized-variables (SYMBOL ...).
+When a form (setf (SYMBOL arg1 ... argn) value-form) is evaluated, the FORMs
+given in the DEFINE-SETF-METHOD are evaluated in order with the parameters in
+DEFMACRO-LAMBDA-LIST bound to ARG1 ... ARGn.  The last FORM must return five
+values
+	(var1 ... vark)
+	(form1 ... formk)
+	(value-var)
+	storing-form
+	access-form
+in order.  These values are collectively called the five gangs of the
+generalized variable (SYMBOL arg1 ... argn).  The whole SETF form is then
+expanded into
+	(let* ((var1 from1) ... (vark formk)
+	       (value-var value-form))
+	  storing-form)
+The doc-string DOC, if supplied, is saved as a SETF doc and can be retrieved
+by (DOCUMENTATION 'SYMBOL 'SETF).")
+(defparameter function-documentation "
+Syntax: (defparameter name form [doc])
+Declares the global variable named by NAME as a special variable and assigns
+the value of FORM to the variable.  The doc-string DOC, if supplied, is saved
+as a VARIABLE doc and can be retrieved by (documentation 'NAME 'variable).")
+(internal-time-units-per-second variable-documentation "
+Gives the time unit used by GET-INTERNAL-REAL-TIME and GET-INTERNAL-RUN-TIME.
+1000 in KCL.")
+(simple-array type-documentation "
+A simple-array is an array that is not displaced to another array, has no
+fill-pointer, and is not adjustable.")
+(string>= function-documentation "
+Args: (string1 string2
+       &key (start1 0) (end1 (length string1))
+            (start2 0) (end2 (length string2)))
+If STRING1 comes after STRING2 in lexicographic order or if the strings are
+character-wise CHAR=, then returns the number of characters in the longest
+common prefix of the strings.  Otherwise, returns NIL.")
+(symbol type-documentation "
+Symbol objects.")
+(write-to-string function-documentation "
+Args: (object &key (escape *print-escape*) (radix *print-radix*)
+                   (base *print-base*) (circle *print-circle*)
+                   (pretty *print-pretty*) (level *print-level*)
+                   (length *print-length*) (case *print-case*)
+                   (array *print-array*) (gensym *print-gensym*))
+Returns as a string the printed representation of OBJECT in the specified
+mode.  See the variable docs of *PRINT-...* for the mode.")

@@ -1,0 +1,92 @@
+(char-name function-documentation "
+Args: (char)
+Returns the 'character name' of CHAR as a string; NIL if CHAR has no character
+name.  Only #\\Backspace, #\\Tab, #\\Newline (or #\\Linefeed), #\\Page,
+#\\Return, and #\\Rubout have character names in KCL.")
+(coerce function-documentation "
+Args: (x type)
+Coerces X to an object of the specified type, if possible.  Signals an error
+if not possible.")
+(declare function-documentation "
+Syntax: (declare {decl-spec}*)
+Gives declarations.  Possible DECL-SPECs are:
+  (SPECIAL {var}*)
+  (TYPE type {var}*)
+  (type {var}*) where 'type' is one of the following symbols
+	array		fixnum		package		simple-string
+	atom		float		pathname	simple-vector
+	bignum		function	random-state	single-float
+	bit		hash-table	ratio		standard-char
+	bit-vector	integer		rational	stream
+	character	keyword		readtable	string
+	common		list		sequence	string-char
+	compiled-function  long-float	short-float	symbol
+	complex		nil		signed-byte	t
+	cons		null		simple-array	unsigned-byte
+	double-float	number		simple-bit-vector  vector
+  (OBJECT {var}*)
+  (FTYPE type {function-name}*)
+  (FUNCTION function-name ({arg-type}*) {return-type}*)
+  (INLINE {function-name}*)
+  (NOTINLINE {function-name}*)
+  (IGNORE {var}*)
+  (OPTIMIZE {({SPEED | SPACE | SAFETY | COMPILATION-SPEED} {0 | 1 | 2 | 3})}*)
+  (DECLARATION {non-standard-decl-name}*).")
+(flet function-documentation "
+Syntax: (flet ({(name lambda-list {decl | doc}* {form}*)}*) . body)
+Introduces local functions and evaluates BODY as a PROGN.  BODY is the scope
+of each local function but the local function definitions are not.  Thus each
+local function can reference externally defined functions of the same name as
+local functions.  Doc-strings for local functions are simply ignored.")
+(get function-documentation "
+Args: (symbol property &optional (default nil))
+Searches the symbol property of SYMBOL for a property that is EQ to PROPERTY.
+If found, returns the value of the property.  Otherwise, returns DEFAULT.")
+(lognot function-documentation "
+Args: (integer)
+Returns the bit-wise logical NOT of the arg.")
+(macrolet function-documentation "
+Syntax: (macrolet ({(name defmacro-lambda-list {decl | doc}* {form}*)}*)
+          . body)
+Introduces local macros and evaluates BODY as a PROGN.  See DEFMACRO for the
+complete syntax of defmacro-lambda-list.  Doc-strings for local macros are
+simply ignored.")
+(most-negative-long-float variable-documentation "
+The long-float with the largest absolute value.")
+(notany function-documentation "
+Args: (predicate sequence &rest more-sequences)
+Returns T if none of the elements in SEQUENCEs satisfies PREDICATE; NIL
+otherwise.")
+(rename-package function-documentation "
+Args: (package new-name &optional (new-nicknames nil))
+Renames PACKAGE to NEW-NAME and replaces the nicknames with NEW-NICKNAMES.
+See MAKE-PACKAGE.")
+(replace function-documentation "
+Args: (sequence1 sequence2
+       &key (start1 0) (end1 (length sequence1))
+            (start2 0) (end2 (length sequence2)))
+Replaces elements of SEQUENCE1 with the corresponding elements of SEQUENCE2.
+SEQUENCE1 may be destroyed and is returned.")
+(sequence type-documentation "
+A sequence is either a list or a vector.")
+(set function-documentation "
+Args: (symbol object)
+Assigns OBJECT to the global variable named SYMBOL.  Returns OBJECT.")
+(tagbody function-documentation "
+Syntax: (tagbody {tag | statement}*)
+Executes STATEMENTs in order and returns NIL after the execution of the last
+STATEMENT.  But, if a GO form causes a jump to one of the TAGs, then execution
+continues at the point right after the TAG.  Lists are regarded as STATEMENTs
+and other objects are regarded as TAGs.")
+(time function-documentation "
+Syntax: (time form)
+Evaluates FORM, outputs the realtime and runtime used for the evaluation to
+*TRACE-OUTPUT*, and then returns all values of FORM.")
+(truename function-documentation "
+Args: (filespec)
+Returns the full pathname of the file specified by FILESPEC.  FILESPEC may be
+a symbol, a string, a pathname, or a file stream.")
+(untrace function-documentation "
+Syntax: (untrace {function-name}*)
+Ends tracing the specified functions.  With no FUNCTION-NAMEs, ends tracing
+all functions.")

@@ -1,0 +1,218 @@
+\section{Arithmetic Functions}
+\markright{\arabic{section}. Arithmetic}
+\subsection{Arithmetic Constants}
+\begin{refdesc}
+\constdesc{most-positive-fixnum}{\#x1fffffff=536,870,911}
+\constdesc{most-negative-fixnum}{-\#x20000000= -536,870,912}
+\constdesc{short-float-epsilon}{
+A floating point number on machines with IEEE floating-point format is
+represented by 21 bit mantissa with 1 bit sign and 7 bit exponent with
+1 bit sign.
+Therefore, floating point epsilon is $2^{-21}= 4.768368 \times 10^{-7}$.}
+\constdesc{single-float-epsilon}{same as {\bf short-float-epsilon}, $2^{-21}$.}
+\constdesc{long-float-epsilon}{same as {\bf short-float-epsilon} since
+there is no double or long float. $2^{-21}$.}
+\constdesc{pi}{$\pi$, actually 3.14159203, not 3.14159265.}
+\constdesc{2pi}{$2\times \pi$}
+\constdesc{pi/2}{$\pi/2$}
+\constdesc{-pi}{-3.14159203}
+\constdesc{-2pi}{$-2\times \pi$}
+\constdesc{-pi/2}{$\pi/2$}
+\end{refdesc}
+
+\subsection{Arithmetic Predicates}
+\begin{refdesc}
+\funcdesc{numberp}{object}{
+T if {\em object} is number, namely integer or float.
+Note that characters are also represented by numbers.}
+\funcdesc{integerp}{object}{
+T if {\em object} is an integer number.
+A float can be converted to an integer by
+{\bf round, trunc} and {\bf ceiling} functions.}
+\funcdesc{floatp}{object}{T if {\em object} is a floating-point number.
+An integer can be converted to a float by the {\bf float} function.}
+
+\funcdesc{zerop}{number}{T if the number is integer zero or float 0.0.}
+\funcdesc{plusp}{number}{equivalent to ($>$ number 0).}
+\funcdesc{minusp}{number}{equivalent to ($<$ number 0).}
+
+\funcdesc{oddp}{integer}{
+The argument must be an integer.
+T if {\em integer} is odd.}
+
+\funcdesc{evenp}{integer}{
+The argument must be an integer.
+T if {\em integer} is an even number.}
+
+\funcdesc{/=}{n1 n2}{
+Both {\em n1} and {\em n2} must be numbers.
+T if {\em n1} is not equal to {\em n2}.}
+
+\funcdesc{=}{num1 num2 \&rest more-numbers}{
+Both {\em n1} and {\em n2} must be numbers.
+T if {\em n1} is equal to {\em n2}.}
+
+\fundesc{$>$}{num1 num2 \&rest more-numbers}
+\fundesc{$<$}{num1 num2 \&rest more-numbers}
+\fundesc{$>=$}{num1 num2 \&rest more-numbers}
+\funcdesc{$<=$}{num1 num2 \&rest more-numbers}{
+These comparisons can only be applicable to numbers.
+For numerical comparisons with tolerance, use functions prefixed
+by {\bf eps} as described in the section \ref{Geometry}.}
+\end{refdesc}
+
+\subsection{Integer and Bit-Wise Operations}
+Following functions request arguments to be integers.
+
+\begin{refdesc}
+\funcdesc{mod}{dividend divisor}{
+returns remainder when {\em dividend} is divided by {\em divisor}.
+{\tt (mod 6 5)=1, (mod -6 5)=-1, (mod 6 -5)=1, (mod -6 -5)=-1}.}
+
+\funcdesc{1-}{integer}{
+The compiler assumes the argument to be an integer.
+$integer-1$ is returned.}
+
+\funcdesc{1+}{integer}{
+Arguments to 1+ and 1- must be an integer.
+$integer+1$ is returned.}
+\funcdesc{logand}{\&rest integers}{bitwise-and of {\em integers}.}
+\funcdesc{logior}{\&rest integers}{bitwise-inclusive-or of {\em integers}.}
+\funcdesc{logxor}{\&rest integers}{bitwise-exclusive-or of {\em integers}.}
+\funcdesc{logeqv}{\&rest integers}{
+{\bf logeqv} is equivalent to (lognot (logxor ...)).}
+\funcdesc{lognand}{\&rest integers}{bitwise-nand of {\em integers}.}
+\funcdesc{lognor}{\&rest integers}{bitwise-nor of {\em integers}.}
+\funcdesc{lognot}{integer}{ bit reverse of {\em integer}.}
+\funcdesc{logtest}{integer1 integer2}{
+T if (logand {\em integer1 integer2}) is not zero.}
+
+\funcdesc{logbitp}{index integer}{
+T if {\em index}th bit of {\em integer} (counted from the LSB) is 1,
+otherwise NIL.}
+
+\funcdesc{ash}{integer count}{
+Arithmetic Shift Left.
+If {\em count} is positive, shift direction is left,
+and if {\em count} is negative,
+{\em integer} is shifted to right by abs({\em count}) bits.}
+
+\funcdesc{ldb}{target position width}{
+LoaD Byte.
+Byte specifier for {\bf ldb} and {\bf dpb} does not exist in EusLisp.
+Use a pair of integers instead.
+The field of {\em width} bits at {\em position} within {\em target}
+is extracted. For example, {\tt (ldb \#x1234 4 4)} is 3.}
+
+\funcdesc{dpb}{value integer position width}{
+DePosit byte.
+{\em Width} bits of {\em value} is put in {\em integer}
+at {\em position}th bits from LSB.}
+
+\end{refdesc}
+
+
+\subsection{Generic Number Functions}
+\begin{refdesc}
+\funcdesc{+}{\&rest numbers}{returns the sum of {\em numbers}.}
+\funcdesc{-}{num \&rest more-numbers}{
+If {\em more-numbers} are given, they are subtracted from {\em num}.
+Otherwise, {\em num} is negated.}
+\funcdesc{*}{\&rest numbers}{returns the product of {\em numbers}.}
+\funcdesc{/}{num1 num2 \&rest more-numbers}{
+{\em num1} is divided by {\em num2} and {\em more-numbers}.
+The result is an integer if all the arguments are integers,
+and an float if at least one of the arguments is a float.}
+\funcdesc{abs}{number}{returns absolute number.}
+\funcdesc{round}{number}{
+rounds to the nearest integer.
+{\tt (round 1.5)=2, (round -1.5)=2}.}
+
+\funcdesc{floor}{number}{
+rounds to the nearest smaller integer.
+{\tt (floor 1.5)=1, (floor -1.5)=-2}.}
+
+\funcdesc{ceiling}{number}{
+rounds to the nearest larger integer.
+{\tt (ceiling 1.5)=2, (ceiling -1.5)=-1}.}
+
+\funcdesc{truncate}{number}{
+rounds to the absolutely smaller and nearest integer.
+{\tt (truncate 1.5)=1, (truncate -1.5)=-1}.}
+
+\funcdesc{float}{number}{
+returns floating-point representation of {\em number}.}
+
+\funcdesc{max}{\&rest numbers}{
+finds the maximum value among {\em numbers}.}
+
+\funcdesc{min}{\&rest numbers}{
+finds the minimum number in {\em numbers}.}
+
+\funcdesc{random}{range \&optional (randstate *random-state*)}{
+Returns a random number between 0 or 0.0 and {\em range}.
+If {\em range} is an integer,
+the result is truncated to an integer.
+Otherwise, a floating value is returned.
+Optional {\em randstate} can be specified
+to get predictable random number sequence.
+There is no special data type for random-state,
+and it is represented with an integer vector of two elements.
+}
+
+\macrodesc{incf}{variable \&optional (increment 1)}{
+{\em variable} is a generalized variable.
+The value of {\em variable} is incremented by {\em increment},
+and it is set back to {\em variable}.}
+\macrodesc{decf}{variable \&optional decrement}{
+{\em variable} is a generalized variable.
+The value of {\em variable} is decremented by {\em decrement},
+and it is set back to {\em variable}.}
+
+\funcdesc{reduce}{func seq}{
+combines all the elements in {\em seq} using the binary operator {\em func}.
+For an example, {\tt (reduce \#'expt '(2 3 4)) = (expt (expt 2 3) 4)=4096}.}
+
+\funcdesc{rad2deg}{radian}{Radian value is converted to degree notation.
+\#R does the same thing at read time.
+Note that the official representation of angle in EusLisp is radian
+and every EusLisp function that accepts angle argument
+requests it to be represented by radian.}
+\funcdesc{deg2rad}{degree}{Conversion from degree to radian.
+Also accomplished by \#D reader's dispatch macros.}
+\end{refdesc}
+
+\subsection{Trigonometric and Related Functions}
+\begin{refdesc}
+\funcdesc{sin}{theta}{{\em theta} is a float representing angle by radian.
+returns $sin(theta)$.}
+\funcdesc{cos}{theta}{{\em theta} is a float representing angle by radian.
+returns $cos(theta)$.}
+\funcdesc{tan}{theta}{{\em theta} is a float representing angle by radian.
+returns $tan(theta)$.}
+\funcdesc{sinh}{x}{ hyperbolic sine, that is,
+$\frac{e^{x}-e^{-x}}{2}$.}
+\funcdesc{cosh}{x}{ hyperbolic cosine, that is,
+$\frac{e^{x}+e^{-x}}{2}$.}
+\funcdesc{tanh}{x}{ hyperbolic tangent, that is,
+$\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$.}
+\funcdesc{asin}{number}{arc sine of {\em number}.}
+\funcdesc{acos}{number}{arc cosine of {\em number}.}
+\funcdesc{atan}{y \&optional x}{
+When {\bf atan} is called with one argument, its arctangent is calculated.
+When called with two arguments, $atan(y/x)$ is returned.}
+\funcdesc{asinh}{x}{hyperbolic arc sine.}
+\funcdesc{acosh}{x}{hyperbolic arc cosine.}
+\funcdesc{atanh}{x}{hyperbolic arc tangent.}
+
+\funcdesc{sqrt}{number}{returns square root of {\em number}.}
+
+\funcdesc{log}{number}{returns natural logarithm of {\em number}.}
+
+\funcdesc{exp}{x}{returns exponential, $e^{x}$.}
+
+\funcdesc{expt}{a x}{
+returns {\em x}th power to {\em a}.}
+\end{refdesc}
+
+\newpage

@@ -1,0 +1,176 @@
+;;Sparc330  memory=24MB, 16mips
+;;
+;; 1990/Oct/3
+;; 1997/Nov/15
+(make-cube 10 20 30)		38ms (sparc330)
+(make-cube 10 20 30)		90ms (DEC3100)
+(make-cube 10 20 30)		26ms (486DX4/100MHz) Linux 
+(make-cube 10 20 30)		17ms (SS10/30)
+(make-cube 10 20 30)		10ms (SS20/60MHz)
+(make-cube 10 20 30)		7ms (Pentium/100MHz)
+(make-cube 10 20 30)		9ms (Ultra Sparc 140MHz)
+(make-cube 10 20 30)		9ms (Indigo)
+(make-cube 10 20 30)		4.0ms	PPro 166MHz
+(make-cube 10 20 30)		5.33ms (PPro/200Mhz)
+(make-cube 10 20 30)		4.4ms (Ultra Sparc-II 300MHz)
+(make-cube 10 20 30)		2.2ms (PC/Pentium-II 400MHz)
+(make-cube)			0.34ms (pentium-4 2800MHz)
+
+--------------------------
+(make-cylinder 10 10)		110--120msec
+(make-cylinder 10 10)		38ms (SS20/60MHz)
+(make-cylinder 10 10)		11ms (PPro/166MHz)
+(make-cylinder 10 10)		14.16ms (PPro/200Mhz)
+(make-cylinder 10 10)		13ms (Cygwin X40 Centrino 1GHz 2004)
+(make-cylinder 10 10)		11.5ms (Ultra Sparc-II 300MHz)
+(make-cylinder 10 20)		5.6ms (PC/Pentium-II 400MHz)
+(make-cylinder 10 20)		2.1ms (Athlon XP1800+ VMware 1533MHz)
+---------------------------
+(copy-object <cube>)		6.7msec
+(copy-object <cylinder>)	17msec
+(copy-object <cylinder>)	1.3ms (PPro/166MHz)
+---------------------------
+(sys:object-size <cube>)  =    (169 575 822)
+(sys:object-size <cylinder>) = (429 1391 1986)
+
+(send <cube> :centroid)		50msec
+(send <cube> :centroid)		3msec (ss10/30)
+(send <cube> :centroid)		2msec (ss20/60MHz)
+(send <cube> :centroid)		0.8ms (PPro/166MHz)
+(send <cube> :centroid)		0.8ms (Ultra Sparc-II 300MHz)
+(send <cube> :centroid)		0.45ms (PC/Pentium-II 400MHz)
+(send <cube> :centroid)		1.0ms (Cygwin X40 Centrio 1GHz 2004)
+(get <cube> :centroid)		0.08msec
+(send <cylinder> :volume)	12msec		Sparc/LT
+(replace '(a b c) '(1 2 3)	0.08msec
+(replace #f(1 2 3) #f(3 2 1))	0.075msec
+(sort '(3 1 2) #'<)		0.22msec
+(sort #f(3 2 1) #'<)		0.22msec
+
+(fib 20)	185ms	Sun4/330 (16MHz) (-O2)
+(fib 20)	71ms    SS10/30MHz
+(fib 20)	40ms    SS20/60MHz
+(fib 20)	40ms	Indigo2 R8000		
+(fib 20)	115ms	486DX4/100MHz
+(fib 20)	34ms	MkLinux PPC/120MHz (8500)
+(fib 20)	23ms    PC/Pentium 100MHz
+(fib 20)	28ms    PC/Pentium 100MHz
+(fib 20)	24ms    Ultra Sparc 140MHz
+(fib 20)	22ms	PPro 166MHz Jan, 1997
+(fib 20)	17ms	PPro 166MHa gcc -O
+(fib 20)	18ms	P5 200MHz (rwcpc14)
+(fib 20)	15ms	PPro/200MHz Solaris2 gcc -O
+(fib 20)	17ms	SGI Impact R10000
+(fib 20)	15ms	P5-MMX/233MHz
+(fib 20)	12.1ms	Ultra Sparc-II 300MHz	
+(fib 20)	11ms	Pentium-II/266MHz 97Jun
+(fib 20)	9ms	AMD K6-II/400MHz  99May
+(fib 20)	8ms	Pentium-II-mobile/366MHz (thinkpad 570)
+(fib 20)	7ms	Pentium-II/400MHz 98May
+(fib 20)	4.8ms	Pentium-III/600MHz 99Oct
+(fib 20)	12.5ms  VIA EPIA 533MHz
+(fib 20)	2.4ms	Cygwin IBM-X40 1GHz 2004
+(fib 20)	1.8ms	Athlon-XP1800+ VMware Feb2003
+(fib 20)	1.8ms	Celeron-M 1.4GHz
+(fib 20)	1.13ms	Pentium-4/2.8GHz Feb2003 
+(fib 20)	2.4ms	Atom/1.6GHz 2008
+	
+------------------------------
+(fib 30)	4.2s	MkLinux PPC/120MHz (8500)
+(fib 30)	2.8s	PC/Pentium 100MHz
+(fib 30)	2.15s	P5 200MHz (rwcpc14)
+(fib 30)	2.13s	PPro 166MHz gcc -O
+(fib 30)	2.3s	PC/Pentium Pro 200MHz
+(fib 30)	1.8s	P5-MMX/233MHz
+(fib 30)	1.5s	Ultra Sparc-II 300MHz	
+(fib 30)	1.14s	AMD K6-II 400MHz	
+(fib 30)	0.97s	Pentium-II-mobile 366MHz Thinkpad570
+(fib 30)	0.85s	Pentimu-II 400MHz	
+(fib 30)	0.58s	Pentium-III 600MHz 99-Oct
+(fib 30)	0.29s	Cygwin IBM-X40 Centrino 1GHz 2004
+(fib 30)	0.22s	Athlon-XP1800+ (1533MHz) VMware Feb/2003
+(fib 30)	1.52s	via epia 533MHZ
+(fib 30)	0.22s	Celeron-M 1.4GHz
+(fib 30)	0.131	Pentium-4 (2.8GHz) Feb 2003
+(fib 30)	0.30s	Atom/1.6GHz, 2008
+
+----------------------------------
+ifib: fibonacci with integer declarations
+(ifib 20)	75ms		sun4/330 (-o2)
+(ifib 20)       60ms		sparc/lt (-o2)
+(ifib 20)	43ms	   	dx4/100mhz
+(ifib 20        21ms		ss10/30
+(ifib 20)       12ms  	   	ss20/60mhz
+(ifib 20)	10.3ms		indigo r8000 
+(ifib 20)       6.8ms		pc/pentium 100mhz
+(ifib 20)	5.9ms		ppro 166mhz gcc -o
+(ifib 20)       10.6ms	    	ultra sparc 140mhz
+(ifib 20)        6.7ms  	pc/pentium pro 200mhz
+(ifib 20)	 5.2ms		impact r10000
+(ifib 20)	 5.1ms		ultra sparc-ii 300mhz
+(ifib 20)	 5.0ms		p5-mmx/233mhz
+(ifib 20)	 2.5ms		p-ii mobile 366mhz thinkpad 570
+(ifib 20)	 2.4ms		pentium-ii 400mhz
+(ifib 20)	 1.6ms		pentium-ii 600mhz
+(ifib 20)	 0.83ms		Cygwin, Centrino 1GHz, 2004
+(ifib 20)	 0.6ms		Athlon XP1800+ VMware
+(ifib 20)	 0.43ms		Peintium-iv 2800MHz
+
+--------------------------------------
+(etafib 20)     4500ms		sun4/330  interpreted by etalisp
+(fib 20)        4400ms		Sun4/330  interpreted by euslisp
+(fib 20)         315ms		Ultra Sparc  interpreted by euslisp
+(fib 20)	2610ms		DEC3100 interpreted
+(fib 20)	 949ms		DX4/100MHz interpreted
+(fib 20)	 174ms		PPro/166MHz interpreter
+(fib 20)	 155ms		Sparc/LT (-O2)
+(fib 20)	  79ms		Pentium-II mobile 366MHz Thinkpad 570
+(fib 20)	  70ms		Pentium-II 400MHz
+(fig 20)	  27ms		Interpreted, Cygwin Centrino 1GHz, 2004
+(fib 20)	  17ms		Athlon XP1800+
+(fib 20)	  14ms		Pentium-4 2800MHz (interpreted)
+(fib 20)	  18ms		Celeron-M 1.4GHz (interpret, 2007)
+(fib 20)	  28ms		atom 1.6GHz (interpreted, 2008)
+	
+(prime 1000000)	865ms		Pen-II/400
+
+(send <cube> :translate #f(1 2 3))    0.32msec
+(send <coords> :translate #f(1 2 3))  0.2msec
+(send <coords> or <cube> :translate #f(1 2 3))  0.02msec Ultra Sparc 140MHz
+translate and :worldcoords of a cylinder       7--10msec
+(transform 4x4 vec4)		0.18msec	Sun4/330
+(transform 4x4 vec4)		0.01ms	Ultra Sparc-II 300MHz
+
+(ssvdc 4x6mat)			8.6msec	using linpack.f
+
+(body-interference eta32 eta33)	; 250msec; 75 and 32 faces, not touching,
+				; most severe case; Sparc/LT 17mips
+(body* cyl1 cyl2)		; 0.9sec	Sparc/LT
+(body* cyl1 cyl2)		; 0.16sec	SS10/30
+(body* cyl1 cyl2)		; 0.09sec	SS20/60MHz
+----
+(body+ cyl1 cyl2)		; 1.4sec	Sparc/LT
+(body+ cyl1 cyl2)		; 0.33s		486DX/100MHz -g
+(body+ cyl1 cyl2)		; 0.15sec	SS10/30
+(body+ cyl1 cyl2)		; 0.1sec	SS20/60MHz
+(body+ cyl1 cyl2)		; 0.13sec	Ultra Sparc 140MHz
+(body+ cyl1 cyl2)		; 0.065sec	Pentium/200MHzreset
+(body+ cyl1 cyl2)		; 0.05s		Cygwin X40 Centrino 1GHz 2004
+(body+ cyl1 cyl2)		; 0.025sec	Pentium-II/400MHzreset
+
+(vector-angle v1 v2 normal)	; 85 micro (Sparc/LT)
+(triangle v1 v2 normal)		; 57 micro (Sparc/LT)
+
+(random 1.0)		50 micro
+(random 1.0)		7 micro	sec	; Ultra Sparc 140MHz
+(random 1.0)		1 micro sec	;cygwin Centrino 1GHz
+;;;
+Bogomips
+rwcpc1 		P5/100		66.15
+asnomad2	586		71.68
+matsuipc	P5/200		80.08
+asnomad1	P6		179.81
+rwceyes		P7/266		265.42
+rwcpc14		?		299.83
+thinkpad570			364.54
+VIA EPIA500			1065		Dec, 2002

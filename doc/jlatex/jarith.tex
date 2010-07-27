@@ -1,0 +1,214 @@
+\section{数値演算}
+\markright{\arabic{section}. 数値演算}
+\subsection{数値演算定数}
+\begin{refdesc}
+\constdesc{most-positive-fixnum}{\#x1fffffff=536,870,911。{\tt integer}の正の最大値。}
+\constdesc{most-negative-fixnum}{-\#x20000000= -536,870,912。{\tt integer}の負の最大値}
+\constdesc{short-float-epsilon}{IEEEの浮動小数点表現形式である{\tt float}は、
+21ビットの固定小数(うち符号
+が1ビット)と7ビットの指数(うち符号が1ビット)で構成されている。
+したがって、浮動小数点誤差$\epsilon$は $2^{-21}= 4.768368 \times 10^{-7}$となる。}
+\constdesc{single-float-epsilon}{{\bf short-float-epsilon}と同様に $2^{-21}$である。}
+\constdesc{long-float-epsilon}{Euslispには、doubleもlong floatもないため、
+{\bf short-float-epsilon}と同様に$2^{-21}$である。}
+\constdesc{pi}{$\pi$。 実際には 3.14159203で、 3.14159265ではない。}
+\constdesc{2pi}{$2\times \pi$。}
+\constdesc{pi/2}{$\pi/2$。}
+\constdesc{-pi}{-3.14159203。}
+\constdesc{-2pi}{$-2\times \pi$。}
+\constdesc{-pi/2}{$-\pi/2$。}
+\end{refdesc}
+
+\subsection{比較演算関数}
+\begin{refdesc}
+\funcdesc{numberp}{object}{
+{\em object}が{\tt integer}か{\tt float}の時、Tを返す。
+その文字が数字で構成されているときも同様である。}
+\funcdesc{integerp}{object}{
+{\em object}が{\tt integer}の時、Tを返す。
+{\tt float}は{\bf round, trunc}および{\bf ceiling}関数で{\tt integer}に変換できる。}
+\funcdesc{floatp}{object}{ {\em object} が {\tt float} の時 T を返す。
+{\tt integer}は{\bf float}関数で{\tt float}に変換できる。}
+
+\funcdesc{zerop}{number}{ {\em number}が{\tt integer}のゼロまたは
+{\tt float}の0.0の時、 Tを返す。}
+\funcdesc{plusp}{number}{{\em number}が正(ゼロは含まない)のとき、Tを返す。}
+\funcdesc{minusp}{number}{{\em number}が負のとき、Tを返す。}
+
+\funcdesc{oddp}{integer}{
+{\em integer}が奇数のとき、Tを返す。引数は{\tt integer}のみ有効。}
+
+\funcdesc{evenp}{integer}{
+{\em integer}が偶数のとき、Tを返す。引数は{\tt integer}のみ有効。}
+
+\funcdesc{/=}{num1 num2}{
+{\em num1}が{\em num2}と等しくないとき、Tを返す。
+{\em num1}と{\em num2}は数値であること。}
+
+\funcdesc{=}{num1 num2 \&rest more-numbers}{
+{\em num1}と{\em num2}等しいときを、T返す。
+{\em num1}と{\em num2}は数値であること。}
+
+\fundesc{$>$}{num1 num2 \&rest more-numbers}
+\fundesc{$<$}{num1 num2 \&rest more-numbers}
+\fundesc{$>=$}{num1 num2 \&rest more-numbers}
+\funcdesc{$<=$}{num1 num2 \&rest more-numbers}{
+これらの比較演算は、数値のみ適用できる。誤差を含めた数値比較に対しては、
+\ref{Geometry}章に書かれている関数（これらの比較演算子の前に{\bf eps}が
+ついている）を使用する。}
+\end{refdesc}
+
+\subsection{整数とビット毎の操作関数}
+以下の関数の引数は、すべて{\tt integer}とする。
+
+\begin{refdesc}
+\funcdesc{mod}{dividend divisor}{
+{\em dividend} を {\em divisor}で割った余りを返す。
+{\tt (mod 6 5)=1, (mod -6 5)=-1, (mod 6 -5)=1, (mod -6 -5)=-1}.}
+
+\funcdesc{1-}{integer}{
+$integer-1$ を返す。コンパイラでは、引数を {\tt integer} と仮定する。}
+
+\funcdesc{1+}{integer}{
+$integer+1$ を返す。
+{\bf 1+} と {\bf 1$-$} の引数は、{\tt integer} でなければならない。}
+\funcdesc{logand}{\&rest integers}{{\em integers}のビット単位ＡＮＤ。}
+\funcdesc{logior}{\&rest integers}{{\em integers}のビット単位ＯＲ。}
+\funcdesc{logxor}{\&rest integers}{{\em integers}のビット単位ＸＯＲ。}
+\funcdesc{logeqv}{\&rest integers}{
+{\bf logeqv}は{\tt (lognot (logxor ...))}と同等である。}
+\funcdesc{lognand}{\&rest integers}{{\em integers}のビット単位ＮＡＮＤ。}
+\funcdesc{lognor}{\&rest integers}{{\em integers}のビット単位ＮＯＲ。}
+\funcdesc{lognot}{integer}{{\em integer}のビット反転。}
+\funcdesc{logtest}{integer1 integer2}{
+{\tt (logand {\em integer1 integer2})}がゼロでないとき T を返す。}
+
+\funcdesc{logbitp}{index integer}{
+{\em integer}がNILでなければ、LSBから数えて {\em index}番目の 
+ビットが 1 のとき T を返す。}
+
+\funcdesc{ash}{integer count}{
+数値演算左シフト。
+もし {\em count} が正のとき、{\em integer}を左にシフトする。
+もし {\em count} が負のとき、
+{\em integer} を $\vert${\em count}$\vert$ ビット右にシフトする。}
+
+\funcdesc{ldb}{target position width}{
+LoaD Byte.
+{\bf ldb} や {\bf dpb} のByte型は、 EusLispにないため、代りに
+2個の {\tt integer} を使用する。
+{\em target} のLSBより{\em position}番目の位置からMSBへ {\em width} ビットの
+範囲を抜き出す。例えば、 {\tt (ldb \#x1234 4 4)} は 3となる。}
+
+\funcdesc{dpb}{value target position width}{
+DePosit Byte.
+{\em target}のLSBより{\em position}番目の位置へ{\em value}を
+{\em width}ビット置き換える。}
+
+\end{refdesc}
+
+
+\subsection{一般数値関数}
+\begin{refdesc}
+\funcdesc{+}{\&rest numbers}{{\em numbers}の和を返す。}
+\funcdesc{-}{num \&rest more-numbers}{
+もし {\em more-numbers} が与えられたとき、{\em num}より引く。
+そうでないとき、{\em num} は符号反転される。}
+\funcdesc{*}{\&rest numbers}{{\em numbers}の積を返す。}
+\funcdesc{/}{num1 num2 \&rest more-numbers}{
+{\em num1} を、{\em num2} や {\em more-numbers}で割り算する。
+全ての引数が{\tt integer}のとき、{\tt integer}を返し、
+引数に1つでも{\tt float}があったときは、{\tt float}を返す。}
+\funcdesc{abs}{number}{{\em number}の絶対値を返す。}
+\funcdesc{round}{number}{
+{\em number}の小数第1位を四捨五入し {\tt integer}を返す。
+{\tt (round 1.5)=2, (round -1.5)=2}.}
+
+\funcdesc{floor}{number}{
+{\em number}の小数を切捨てる。
+{\tt (floor 1.5)=1, (floor -1.5)=-2}.}
+
+\funcdesc{ceiling}{number}{
+{\em number}の小数を切り上げる。
+{\tt (ceiling 1.5)=2, (ceiling -1.5)=-1}.}
+
+\funcdesc{truncate}{number}{
+{\em number}が正のときは切捨て、負のときは切り上げる。
+{\tt (truncate 1.5)=1, (truncate -1.5)=-1}.}
+
+\funcdesc{float}{number}{
+ {\em number}を{\tt float}にして返す。}
+
+\funcdesc{max}{\&rest numbers}{
+ {\em numbers}の中から、最大値をさがす。}
+
+\funcdesc{min}{\&rest numbers}{
+{\em numbers}の中から、最小値をさがす。}
+
+\funcdesc{random}{range \&optional (randstate *random-state*)}{
+ 0あるいは0.0 から {\em range}までの乱数を返す。
+もし {\em range} が {\tt integer}のとき、
+{\tt integer} に変換して返す。
+そうでないとき、{\tt float} を返す。
+オプションの{\em randstate} は、決まった乱数列で表される。
+{\em randstate}に特別なデータの型はなく、
+2つの要素からなる 整数ベクトルで表される。
+}
+
+\macrodesc{incf}{variable \&optional (increment 1)}{
+{\em variable} は一般の変数である。
+{\em variable} は、{\em increment}だけ増加され、
+{\em variable}に戻される。}
+\macrodesc{decf}{variable \&optional decrement}{
+{\em variable} は一般の変数である。
+{\em variable} は、{\em decrement}だけ減少され、
+{\em variable}に戻される。}
+
+\funcdesc{reduce}{func seq}{
+2変数操作の{\em func}関数を用いて、{\em seq}の中の全ての要素を結合させる。
+例えば、{\tt (reduce \#'expt '(2 3 4)) = (expt (expt 2 3) 4)=4096}.}
+
+\funcdesc{rad2deg}{radian}{ラジアン値を 度数表現に変換する。
+\#R は同じものである。
+EusLisp の中での角度の表記はラジアンであり、
+EusLisp 内の全ての関数が要求する角度引数は、ラジアン表現である。}
+
+\funcdesc{deg2rad}{degree}{角度値をラジアン表現に変換する。
+また \#D でも実行できる。}
+\end{refdesc}
+
+\subsection{基本関数}
+\begin{refdesc}
+\funcdesc{sin}{theta}{{\em theta} はラジアンで表される {\tt float} 値。
+$\sin(theta)$を返す。}
+\funcdesc{cos}{theta}{{\em theta} はラジアンで表される {\tt float} 値。
+$\cos(theta)$を返す。}
+\funcdesc{tan}{theta}{{\em theta} はラジアンで表される {\tt float} 値。
+$\tan(theta)$を返す。}
+\funcdesc{sinh}{x}{ hyperbolic sine、
+$\frac{e^{x}-e^{-x}}{2}$で表される。}
+\funcdesc{cosh}{x}{ hyperbolic cosine、
+$\frac{e^{x}+e^{-x}}{2}$で表される。}
+\funcdesc{tanh}{x}{ hyperbolic tangent、
+$\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$で表される。}
+\funcdesc{asin}{number}{{\em number}のarc sineを返す。}
+\funcdesc{acos}{number}{{\em number}のarc cosineを返す。}
+\funcdesc{atan}{y \&optional x}{
+{\bf atan} が1つの引数だけのとき、arctangent を計算する。
+2つの引数のとき、{\tt atan}$(y/x)$ を計算する。}
+\funcdesc{asinh}{x}{hyperbolic arc sine.}
+\funcdesc{acosh}{x}{hyperbolic arc cosine.}
+\funcdesc{atanh}{x}{hyperbolic arc tangent.}
+
+\funcdesc{sqrt}{number}{{\em number} の平方根を返す。}
+
+\funcdesc{log}{number}{{\em number} の自然対数を返す。}
+
+\funcdesc{exp}{x}{$e^{x}$を返す。}
+
+\funcdesc{expt}{a x}{
+{\em a}の{\em x}乗を返す。}
+\end{refdesc}
+
+\newpage
+

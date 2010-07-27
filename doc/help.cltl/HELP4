@@ -1,0 +1,75 @@
+(float-radix function-documentation "
+Args: (float)
+Returns the base number used in the representation of FLOAT.")
+(*ignore-maximum-pages* variable-documentation "
+KCL specific.
+Tells the KCL memory manager whether (non-NIL) or not (NIL) it should expand
+memory when the maximum allocatable pages have been used up.  The initial
+value is T.")
+(let function-documentation "
+Syntax: (let ({var | (var [init])}*) {decl}* {form}*)
+Evaluates all INITs (which defaults to NIL), binds the value of each INIT to
+the corresponding VAR, evaluates FORMs, and returns all values of the last
+FORM.  Returns NIL if no FORM is given.")
+(long-float-epsilon variable-documentation "
+The smallest positive long-float E that satisfies
+	(not (= (float 1 E) (+ (float 1 E) E)))")
+(not function-documentation "
+Args: (x)
+Returns T if X is NIL; NIL otherwise.")
+(pathname type-documentation "
+A pathname object identifies an external file or a collection of external
+files.  A pathname object consists of six slots, HOST, DEVICE, DIRECTORY,
+NAME, and TYPE.  HOST, DEVICE, and VERSION slots are meaningless in KCL,
+though they are harmless at all.
+A pathname is notated as #\\\"...\", where '...' is actually some information
+on the pathname.  This depends on the version of KCL.  Refer to the KCL Report
+for details.")
+(pathname function-documentation "
+Args: (filespec)
+Returns a pathname specified by FILESPEC.  FILESPEC may be a symbol, a string,
+a pathname, or a file stream.")
+(prog1 function-documentation "
+Syntax: (prog1 first-form {form}*)
+Evaluates FIRST-FORM and FORMs in order.  Returns the value of FIRST-FORM.")
+(reduce function-documentation "
+Args: (function sequence
+       &key (from-end nil) (start 0) (end (length sequence)) initial-value)
+Combines all the elements of SEQUENCE using the binary operation FUNCTION.")
+(require function-documentation "
+Args: (module-name &optional pathname)
+If the specified module name is not found in *MODULES*, then loads the files
+specified by PATHNAME.  Otherwise, does nothing.  MODULE-NAME may be a string
+or a symbol.  If it is a symbol, the print name of the symbol is used as the
+module name.  PATHNAME may be a pathname object or it may be a list of
+pathname objects.  If PATHNAME is not given, then KCL tries to load the file
+whose file name is MODULE-NAME and whose filetype is either .FASL, .LSP, or
+none.  See PROVIDE.")
+(some function-documentation "
+Args: (predicate sequence &rest more-sequences)
+Returns T if at least one of the elements in SEQUENCEs satisfies PREDICATE;
+NIL otherwise.")
+(*standard-output* variable-documentation "
+The default output stream used by the KCL printer.  The initial value is a
+synonym stream to *TERMINAL-IO*.")
+(the function-documentation "
+Syntax: (the type form)
+Declares that FORM evaluates to a value of TYPE.  Evaluates FORM and checks if
+the value belongs to TYPE.  If it does, returns the value.  Otherwise, signals
+an error.")
+(trace function-documentation "
+Syntax: (trace {function-name}*)
+Begins tracing the specified functions.  With no FUNCTION-NAMEs, returns a
+list of functions currently being traced.")
+(error-set function-documentation "
+Args: (form)
+KCL specific.
+Evaluates the FORM in the null environment.  If the evaluation is successfully
+completed, SI:ERROR-SET returns NIL as the first value and the results of the
+evaluation as the rest of the values.  If, in the course of the evaluation, a
+non-local jump from the FORM is attempted, SI:ERROR-SET traps the jump and
+returns the corresponding jump tag as its value.")
+(*indent-formatted-output* variable-documentation "
+KCL specific.
+The FORMAT directive ~% indents the next line, if the value of this variable
+is non-NIL.  If NIL, ~% simply does Newline.")

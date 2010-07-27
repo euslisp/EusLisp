@@ -1,0 +1,161 @@
+\section{Text Processing}
+
+\subsection{Japanese Text}
+Japanese characters are encoded in 16-bit, i.e. two bytes.
+Inside EusLisp, there is no provision to handle Japanese 16-bit
+character as a representation of Japanese.  They are just regarded
+as a series of byte-encoded characters.
+The following code will print a Japanese character "AI" that
+means {\it love} in English, if you are using a terminal
+that can display EUC kanji, like kterm.
+\begin{verbatim}
+(setq AI-str 
+      (let ((jstr (make-string 2)))
+          (setf (aref jstr 0) #xb0
+	        (aref jstr 1) #xa6)
+	  jstr))
+(print AI-str)
+\end{verbatim}
+
+In a similar manner, (intern AI-str) will create a symbol
+with its printname "AI".
+\begin{verbatim}
+(set (intern AI-str) "love")
+\end{verbatim}
+
+Conversion functions for different character codes and
+Roman-ji representation are provided.
+
+\begin{refdesc}
+\funcdesc{romkan}{romanji-str}{Roman-ji representation is 
+converted into EUC coded Japanese.
+Numbers are converted into pronunciation in hiragana.}
+
+\funcdesc{romanji}{kana-str}{kana-str which represents
+Japanese in hiragana or in katakana coded in EUC
+is converted into a roman-ji representation.
+English alphabets and numbers are unchanged.}
+
+\funcdesc{sjis2euc}{kana-str}{kana-str coded in shift-jis
+is converted into EUC.}
+
+\funcdesc{euc2sjis}{kana-str}{kana-str coded in EUC
+is converted into shift-JIS.}
+
+\funcdesc{jis2euc}{kana-str}{kana-str coded in EUC
+is converted into JIS coding, which enters kana mode by
+\verb+ESC\$B+ and exits by \verb+ESC(J+.
+Note that there is no euc2jis function is provided yet.}
+
+\funcdesc{kana-date}{time}{time is converted a Japanese
+date pronunciation represented in roman-ji. The default time
+is the current time.}
+
+\funcdesc{kana-date}{time}{time is converted a Japanese
+time pronunciation represented in roman-ji. The default time
+is the current time.}
+
+\funcdesc{hira2kata}{hiragana-str}{
+hiragana-str is converted into katakana representation.}
+
+\funcdesc{kata2hira}{katakana-str}{
+katakana-str is converted into hiragana representation.}
+
+\end{refdesc}
+
+\subsection {ICONV - Character Code Conversion}
+
+ICONV is a set of the gnu standard library functions for character
+code conversion.  The interface is programmed in eus/lib/clib/charconv.c.
+
+
+\begin{refdesc}
+\funcdesc{iconv-open}{to-code from-code}{returns a descriptor for
+converting characters from \it{from-code} to \it{to-code}.}
+\end{refdesc}
+
+
+\subsection{Regular Expression}
+
+\begin{refdesc}
+
+\funcdesc{regmatch}{regpat string}{searches for an occurence of a regular
+expression, {\it regpat} in {\it string}.
+If found, a list of the starting index and the ending index
+of the found pattern is returned.
+example;
+(regmatch "ca[ad]+r" "any string ...") will look for cadr, caar, cadadr ...
+ in the second argument.
+}
+
+\end{refdesc}
+
+\subsection{Base64 encoding}
+
+Base64 is an encoding scheme to represent binary data using only
+printable graphic characters.  The scheme is applied to
+uuencode/uudecode.  The following functions are defined in
+lib/llib/base64.l.
+
+\begin{refdesc}
+\funcdesc{base64encode}{binstr}{
+A binary string, {\it binstr } is converted to an ASCII string
+consisting only of \[A-Za-z0-9+/=\] letters
+according to the base-64 encoding rule.
+The resulted string is 33\% longer than the original.
+A newline is inserted every 76 characters.
+One or two '=' characters are padded at the end to adjust the
+length of the result to be a multiple of four.}
+
+\funcdesc{base64decode}{ascstr}{
+An ASCII string, {\it ascstr}, is converted to a binary string
+according to the base-64 encodeing.
+Error is reported if ascstr includes an invalid character.}
+\end{refdesc}
+
+\subsection{DES cryptography}
+Linux and other UNIX employs the DES (Data Encryption Standard)
+to encrypt password strings.
+The function is provided in the libcrypt.so library.
+lib/llib/crypt.l links this library and provides the following
+functions for string encryption.
+Note that the $2^56$ key space of DES is not large enough to
+reject challenges by current powerful computers.  Note also
+that only the encrypting functions are provided and no
+rational decrypting is possible.
+
+\begin{refdesc}
+\funcdesc{crypt}{str salt}{
+The raw function provided by libcrypt.so.
+{\it Str} is encrypted by using the {\it salt} string.
+{\it Salt} is a string of two characters, and used to randamize
+the output of encryption in 4096 ways.
+The output string is always 13 characters regardless to the
+length of {\it str}.
+In other words, only the first eight characters from {\it str}
+are taken for encryption, and the rest are ignored.
+The same string encrypted with the same salt is the same.
+The same string yields different encryption result 
+with different salts.
+The salt becomes the first two characters of the resulted
+encrypted string.}
+
+\funcdesc{rcrypt}{str \&optional (salt (random-string 2))}{
+The plain string, {\it str}, is converted into its encrypted
+representation.  The {\it salt} is randomly generated if
+not given.}
+
+\funcdesc{random-string}{len \&optional random-string}{
+This is a utility function to generate a random string
+which constitutes of elements in the {\it random-string}.
+By default, "A-Za-z0-9/." is taken for the {\it random-string}.
+In order not to make mistakes between i, I, l, 1, O, 0, and o,
+you can specify *safe-salt-string* for the {\it random-string}.}
+
+\funcdesc{compcrypt}{input cryption}{
+{\it Input} is a plain string and {\it cryption} is a encrypted
+string.  {\it Input} is encrypted with the salt found in the {\it cryption}
+and the result is compared with it.  If both are the same,
+T is returnd, NIL, otherwise.}
+
+\end{refdesc}

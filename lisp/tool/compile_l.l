@@ -1,0 +1,52 @@
+;;;
+;;;  
+;;;
+(setq user::*NOWDIR* (unix:getenv "PWD"))
+
+;;; change directory to "l"
+(unix:chdir *EUSDIR*)
+(unix:chdir "lisp/l")
+
+(in-package "LISP")
+
+(setq *objdir*
+      (cond ((member :solaris2 *features*)  "../../SunOS5/obj/")
+	    ((member :irix *features*) "../../IRIX/obj/")
+	    ((member :irix6 *features*) "../../IRIX6/obj/")
+	    ((member :linux *features*) "../../Linux/obj/")
+	    ((member :SunOS4.1 *features*) "../../SunOS4/obj/")
+	    ((member :Windows *features*) "../../Windows/obj/")
+	    ((member :Windows95 *features*) "../../Win95/obj/")
+	    ((member :WindowsNT *features*) "../../WinNT/obj/")
+	    ((member :alpha *features*) "../../Alpha/obj/")
+	))
+
+(comp::compile-file-if-src-newer "readmacro.l" *objdir*)
+(comp::compile-file-if-src-newer "common.l" *objdir*)
+(comp::compile-file-if-src-newer "pprint.l" *objdir*)
+(comp::compile-file-if-src-newer "stream.l" *objdir*)
+(comp::compile-file-if-src-newer "loader.l" *objdir*) 
+(comp::compile-file-if-src-newer "eusdebug.l" *objdir*)
+(comp::compile-file-if-src-newer "process.l" *objdir*)
+(comp::compile-file-if-src-newer "packsym.l" *objdir*)
+(comp::compile-file-if-src-newer "object.l" *objdir*)
+(comp::compile-file-if-src-newer "string.l" *objdir*)
+(comp::compile-file-if-src-newer "array.l" *objdir*)
+(comp::compile-file-if-src-newer "hashtab.l" *objdir*)
+(comp::compile-file-if-src-newer "eusforeign.l" *objdir*)	
+(comp::compile-file-if-src-newer "mathtran.l" *objdir*)
+(comp::compile-file-if-src-newer "toplevel.l" *objdir*)
+(comp::compile-file-if-src-newer "tty.l" *objdir*) 
+(comp::compile-file-if-src-newer "history.l" *objdir*)
+(when (member :thread *features*)
+   (comp::compile-file-if-src-newer "cyclic.l" *objdir*))
+(comp::compile-file-if-src-newer "eushelp.l" *objdir*)
+(in-package "GEOMETRY")
+(comp::compile-file-if-src-newer "coordinates.l" lisp::*objdir*)
+(in-package "SYSTEM")
+(comp::compile-file-if-src-newer "par.l" lisp::*objdir*)
+(in-package "LISP")
+(print "euscomp finished.")
+(unix:chdir user::*NOWDIR*)
+(print user::*NOWDIR*)
+(unix::exit 0)

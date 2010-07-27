@@ -1,0 +1,60 @@
+(adjoin function-documentation "
+Args: (item list &key (key #'identity) (test #'eql) test-not)
+Returns cons of ITEM and LIST unless ITEM is already an element of LIST.
+Otherwise, returns LIST.")
+(apropos-list function-documentation "
+Args: (string &optional (package nil))
+Returns a list of all symbols whose print-names contain STRING as substring.
+If PACKAGE is non-NIL, then only the specified PACKAGE is searched.")
+(asin function-documentation "
+Args: (number)
+Returns the arc sine of NUMBER.")
+(compiled-function type-documentation "
+A compiled function is an object that is created by compiling a function.  A
+compiled function is notated in either of the following formats:
+	#<compiled-function s>
+	#<compiled-closure nil>
+where S is actually the symbol that names the function.")
+(make-package function-documentation "
+Args: (package-name &key (nicknames nil) (use '(lisp)))
+Creates and returns a new package named PACKAGE-NAME.  PACKAGE-NAME must be a
+string or a symbol.  The print name is used if PACKAGE-NAME is a symbol.
+NICKNAMES gives the nicknames of the package.  It must be a list of strings
+and symbols.  USE specifies the packages used by the created package.  It must
+be a list of package objects, strings, and symbols.")
+(maximum-allocatable-pages function-documentation "
+Args: (type)
+KCL specific.
+Returns the current maximum number of pages for the type class of the KCL
+implementation type TYPE.")
+(merge-pathnames function-documentation "
+Args: (filespec
+       &optional (defaults *default-pathname-defaults*) default-version)
+Fills in unspecified slots of the pathname specified by FILESPEC from the
+pathname specified by DEFAULTS, and returns the result pathname.  DEFAULT-
+VERSION is simply ignored in KCL.  FILESPEC and DEFAULTS may be a symbol, a
+string, a pathname, or a file stream.")
+(min function-documentation "
+Args: (number &rest more-numbers)
+Returns the smallest arg.  The args must be non-complex numbers.")
+(sin function-documentation "
+Args: (radians)
+Returns the sine of RADIANS.")
+(string-trim function-documentation "
+Args: (char-spec string)
+Returns a copy of STRING with the specified characters removed from both ends.
+CHAR-SPEC must be a sequence of characters.")
+(with-output-to-string function-documentation "
+Syntax: (with-output-to-string (var [string-form]) {decl}* {form}*)
+Evaluates FORMs with VAR bound to a string output stream to the string that is
+the value of STRING-FORM.  If STRING-FORM is not given, a new string is used.
+The stream is automatically closed on exit and the string is returned.")
+(frs-ihs function-documentation "
+Args: (n)
+KCL specific.
+Returns the invocation history stack index of the N-th entity in the frame
+stack.")
+(string-to-object function-documentation "
+Args: (string)
+KCL specific.
+Equivalent to (READ-FROM-STRING STRING), but is much faster.")

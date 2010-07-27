@@ -1,0 +1,55 @@
+(char-meta-bit variable-documentation "
+The bit position indicating a meta character.  0 in KCL.")
+(complex type-documentation "
+A complex number represents a complex number in mathematical sense, consisting
+of a real part and an imaginary part.  A complex number is notated as
+	#c( realpart  imagpart )  or  #C( realpart  imagpart )
+where REALPART and IMAGPART are non-complex numbers.")
+(complex function-documentation "
+Args: (realpart &optional (imagpart 0))
+Returns a complex number with the given realpart and imagpart.  Returns
+REALPART if it is a rational and IMAGPART is 0.")
+(find function-documentation "
+Args: (item sequence
+       &key (key #'identity) (test #'eql) test-not
+            (start 0) (end (length sequence)) (from-end nil))
+Returns the first element in SEQUENCE satisfying TEST with ITEM.  Returns NIL
+if no such element exists.")
+(logand function-documentation "
+Args: (&rest integers)
+Returns the bit-wise AND of the args.")
+(package-nicknames function-documentation "
+Args: (package)
+Returns the nicknames of PACKAGE as a list of strings.")
+(progn function-documentation "
+Syntax: (progn {form}*)
+Evaluates FORMs in order, and returns all values of the last FORM.  Returns
+NIL if no FORM is given.")
+(round function-documentation "
+Args: (number &optional (divisor 1))
+Returns the integer nearest to NUMBER/DIVISOR.  Returns the value of (- NUMBER
+(* first-value DIVISOR)) as the second value.")
+(string-char type-documentation "
+A string-char is a character that can be stored in strings.  In KCL, every
+character is a string-character.")
+(unread-char function-documentation "
+Args: (char &optional (stream *standard-input*))
+Puts CHAR back on the front of the input stream STREAM.")
+(reset-stack-limits function-documentation "
+Args: ()
+KCL specific.
+Resets the stack limits to the normal state.  When a stack has overflowed, KCL
+extends the limit for the stack in order to execute the error handler.  After
+processing the error, KCL resets the stack limit with this function.")
+(defforeign function-documentation "
+Args: (func-name module c-entry parameter-types result-type)
+Defines FUNC-NAME as a foreign language function. MODULE is a foreign
+module object loaded by load-foreign function. C_ENTRY is a string
+expressing the function entry name in the module. In unix C, note
+that underscore \"_\" is usually added as a prefix of external symbols.
+PARAMETER-TYPES is a list of parameter type specifications, which are
+either of :integer, :float, :string or (:string n) where n is an integer.
+When these specifications are omitted, default type conversion is taken
+by euslisp's funcall.  On the other hand RESULT-TYPE cannot be omitted
+since euslisp cannot infer the type of an object returned from
+C functions.")

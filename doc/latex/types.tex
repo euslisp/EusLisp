@@ -1,0 +1,475 @@
+
+\section{Data Types}
+\markright{\arabic{section}. Data Types}
+Like other Lisps, it is data objects that are typed, not variables.
+Any variable can have any object as its value.
+Of course, it is possible to
+declare the type of object which is bound to a variable, but in many cases
+it is only advisary information to the compiler to generate faster code.
+In EusLisp, it needs to distinguish pointers and objects.
+Numbers are immediately represented by pointers and all the others
+are represented by ojbects referenced by pointers.
+ 
+\subsection{Numbers}
+
+There are two kinds of numbers, that is, 
+integer and float (floating-point number), both are represented
+with 29 bits value and 1 bit sign.
+Thus, intergers range from -536,870,912 to 536,870,911.
+Floatings can represent plus/minus from 4.8E-38 to 3.8E38 with the
+approximate accuracy of 6 digits in decimal, i.e.,
+floating-point epsilon is about 1/1,000,000.
+
+Numbers are always represented by pointers, and not by objects,
+this is the only exception of EusLisp's object orientation.
+However, since numbers never waste heap memory, number crunching application
+runs efficiently without causing garbage collection.
+
+EusLisp does not have the character type,
+and characters are represented by integers.
+In order to write a program independent of character code sets,
+%\#$\backslash$
+\verb+#\+ reader dispatch macro is useful, but when the character is read,
+it is converted to numerical representation, and the printer does not
+know how to reconvert it to
+%\#$\backslash$
+\verb+#\+ notation.
+
+\subsection{Class Hierarchy}
+
+Data structures are defined by classes, and their behaviors are defined by
+methods.
+In EusLisp, several dozens of classes are predefined in tree order
+as depicted in table \ref{ClassHierarchy}.
+The class 'object' at the leftmost is the ultimate super-class of
+all the classes in EusLisp.
+User-defined classe can inherit any of these built-in classes.
+
+\begin{table}
+\begin{verbatim}
+           +--- cons
+           +--- propertied-object
+           |        +--- symbol ------ foreign-pod
+           |        +--- metaclass --- vectorclass --- cstructclass
+           |        +--- readtable
+           |        +--- package
+           |        +--- hash-table
+           |        +--- array   + ----- matrix
+           |                     + ----- pixel-image
+           |        +--- stream  --+-- file-stream
+           |                       +-- broadcast-stream
+           |        +--- io-stream --- socket-stream
+object-----+--- compiled-code --+-- foreign-code
+           |                    +-- foreign-module
+           |                    +-- closure
+           +--- label-reference
+           +--- socket-port
+           +--- pathname
+           +--- vector --------+--- float-vector
+                               +--- integer-vector
+                               +--- string --+-- cstructure
+                               |             +-- socket-address
+                               +--- bit-vector
+                               +--- foreign-string
+\end{verbatim}
+\caption{\label{ClassHierarchy}Hierarchy of Predefined Classes}
+\end{table}
+
+A class is defined by the following defclass macro, or defstruct macro.
+
+\ptext{
+(defclass class-name \&key \= :super \hspace{15mm} \= class \\
+ \> :slots \> () \\
+ \> :metaclass \> metaclass \\
+ \> :element-type \> t \\
+ \> :size  -1\\ ) \\
+(defstruct struct-name slots...) \\
+(defstruct (struct-name [struct-options ...]) \\
+\hspace{25mm}        (slot-name1 [slot-option...]) \\
+\hspace{25mm}        (slot-name2 [slot-option...]) \\
+\hspace{25mm}         ...) \\}
+
+Methods are defined by the defmethod special form of following syntax.
+
+\ptext{
+(defmethod class-name  \\
+ (:method-name1 (parameter...) . body1) \\
+ (:method-name2 (parameter...) . body2) \\
+ ...)
+}
+
+Field definitions for each class are found in eus.h header file,
+and by {\bf describ}ing the symbol-value of each class symbol
+the slot names are obtained on line.
+Followings are definitions of built-in classes.
+
+\ptext{
+(defclass {\bf object} :super {\bf nil} :slots ())
+}
+
+\ptext{
+(defclass {\bf cons} :super {\bf object} :slots (car cdr))
+}
+
+\ptext{
+(defclass {\bf propertied-object} :super {\bf object} \\
+ \hspace{20mm} \=   :slots (plist)) \hspace{10mm} ;property list \\
+}
+
+\ptext{
+(defclass {\bf symbol} :super {\bf propertied-object} \\
+\hspace{20mm} :slots (\=value \hspace{15mm} \= ;specially bound value \\
+ \>      vtype \>                ;const(0),var(1),special(2)  \\
+ \>      function \>             ;global func def \\
+ \>      pname               \>  ;print name string \\
+ \>      homepkg)) \>            ;home package \\}
+
+\ptext{
+(defclass {\bf package} :super {\bf propertied-object} \\
+\hspace{20mm} :slots (\= names \hspace{15mm} \= ;list of package name and nicknames\\
+\>                   uses \>  ;spreaded use-package list \\
+\>                   symvector \> ;hashed obvector \\
+\>                   symcount)) \>  ;number of interned symbols \\
+}
+
+\ptext{
+(defclass {\bf stream} :super {\bf propertied-object} \hspace{20mm} \\
+\hspace{20mm} :slots (\= direction \hspace{3mm} \= ;:input or :output, nil if closed \\
+  \>                   buffer  \>  ;buffer string \\
+  \>                   count \> ;current character index \\
+  \>                   tail)) \>  ;last character index \\
+}
+
+\ptext{
+(defclass {\bf filestream} :super {\bf stream} \\
+\hspace{20mm} :slots (\= fd \hspace{10mm} \= ;file descriptor (integer)\\
+ \>                    fname))\> ;file name str; qid for msgq \\
+}
+
+\ptext{
+(defclass {\bf iostream} \= :super {\bf propertied-object}\\
+\>        :slots (instream outstream))}
+
+\ptext{
+(defclass {\bf readtable} \= :super {\bf propertied-object} \\
+\>                :slots (syntax macro dispatchmacro))}
+
+\ptext{
+(defclass {\bf array} :super {\bf propertied-object} \\
+\hspace{20mm} :slots (\= entity \hspace{12mm}\= ;simple vector to hold array entity \\
+ \>           rank  \> ;number of dimensions: 0-7 \\
+ \>           fillpointer \>    ;pointer to push next element \\
+ \>           offset      \>    ;offset for displaced array \\
+ \>           dim0,dim1,dim2,dim3,dim4,dim5,dim6))  ;dimensions \\}
+
+\ptext{
+(defclass {\bf metaclass} :super {\bf propertied-object} \\
+\hspace{20mm}   :slots   (\= name  \hspace{8mm} \= ;class name symbol \\
+ \>           super   \>   ;super class \\
+ \>           cix  \>      ;class id \\
+ \>             vars  \>     ;var name vector including inherited vars \\
+ \>           types  \>    ;type vector of object variables \\
+ \>           forwards \>  ;componets to which messages are forwarded \\
+ \>             methods))  \>  ;method list \\ }
+
+\ptext{
+(defclass {\bf vectorclass} :super {\bf metaclass}  \\
+\hspace{20mm} :slots (\= elment-type  \hspace{4mm} \= ;vector element type 0-7\\
+ \>                 size)) \>  ;vector size; 0 if unspecified \\ }
+
+\ptext{
+(defclass {\bf label-reference} \hspace{8mm}  ;for reading \#n=, \#n\# objects \\
+\hspace{20mm} \= :super {\bf object} \\
+\>   :slots (label value unsolved next)) \\}
+
+\ptext{
+(defclass {\bf compiled-code} :super {\bf object} \\
+\hspace{20mm}  :slots   (\= codevector \\
+ \>          quotevector \\
+ \>          type \hspace{15mm} \=    ;0=func, 1=macro, 2=special \\
+ \>          entry))  \>  ;entry offset }
+
+\ptext{
+(defclass {\bf closure} \= :super {\bf compiled-code} \\
+\>              :slots (env1 env2));environment}
+
+\ptext{
+(defclass {\bf foreign-code}  :super {\bf compiled-code}  \\
+\hspace{20mm}  :slots   (\= paramtypes  \hspace{10mm} \=  ;list of parameter types\\
+ \>              resulttype)) \> ;function result type}
+
+\ptext{
+(defclass {\bf foreign-module}  :super {\bf compiled-code}  \\
+ \hspace{20mm}  :slots  (\= symbol-table \hspace{5mm} \= ;hashtable of symbols defined \\
+ \>         object-file)) \> ;name of the object file loaded}
+
+\ptext{
+(defclass {\bf vector} :super {\bf object} :slots (size))}
+
+\ptext{
+(defclass {\bf floatvector} :super {\bf vector} :element-type :float)}
+
+\ptext{
+(defclass {\bf string} :super {\bf vector} :element-type :char)}
+
+\newpage
+
+\section{Forms and Evaluation}
+\markright{\arabic{section}. Forms and Evaluation}
+\subsection{Atoms}
+
+A data object which is not a cons is always an atom, no matter what complex
+structure it may have.
+Note that NIL, which is sometimes noted as () to represent an empty
+list, is also an atom.
+Every atom except a symbol is always evaluated to itself,
+although quoting is required in some other Common Lisp implementations.
+
+\subsection{Scoping}
+
+Every symbol has the nature of a variable.
+A symbol is evaluated to its value determined in the current binding context.
+There are two kinds of variable bindings;
+the lexical or static binding and the special or dynamic binding.
+Lexically bound variables are introduced by lambda or let,let* special forms
+unless they are declared special.
+Lexical binding can be nested and the only one binding which is introduced
+innermost level is visible, hiding outer lexical bindings and the special 
+binding.
+Special variables are used in two ways:
+one is for global variables, and the other is for dynamicaly scoped
+local variables which are visible even at the outside of
+the lexical definitions as long as the binding is in effect.
+In the latter case, special variables are needed to be declared special.
+The declaration is recognized not only by the compiler, but also by
+the interpreter.
+According to the Common Lisp's terms, special variables are said to have
+indefinite scope and dynamic extent.
+\footnote{In Maclisp, all the variables are taken to be special by the
+interpreter, and lexical by the compiler if not declared special.
+In Etalisp, all variables are special and no declaration is recognized.}
+
+Even if there exists a lexical variable in a certain scope,
+the same variable name can be redeclared inner scope
+to refer to specially bound value.
+Function {\bf symbol-value} is also available to access the special value.
+Note that {\bf set} function works only for special variable, i.e.
+it cannot be used to change the value of lambda or let variables
+unless they are declared special.
+
+\begin{verbatim}
+(let ((x 1))
+   (declare (special x))
+   (let* ((x (+ x x)) (y x))
+      (let* ((y (+ y y)) (z (+ x x)))
+         (declare (special x))
+         (format t "x=~S y=~s z=~s~%" x y z) ) ) )
+--> x=1 y=4 z=2
+\end{verbatim}
+
+A symbol can be declared to be a constant by {\bf defconstant} macro.
+Once declared, an attempt to change the value signals an error hereafter.
+Moreover, such a constant symbol is inhibitted being used as
+a name of variable even for a local variable.
+NIL and T are examples of such constants.
+Symbols in the keyword package are always declared to be constants
+when they are created.
+In contrast, {\bf defvar} and {\bf defparameter} macro declare
+a symbol to be a special variable.
+{\bf Defvar} initializes the value only if the symbol is unbound,
+and does nothing when it already has a value assigned,
+while {\bf defparameter} always resets the value.
+
+When a symbol is referenced and there is no lexical binding for the symbol,
+then its special value is taken.
+However, if no value has ever been given to its special value yet,
+unbound variable error is signaled.
+
+\subsection{Generalized Variables}
+Each value of a variable is remembered in the slot of the object or in
+the stack frame.
+Two primitive operations, {\em access} and {\em update}, must be defined
+to recall and alter the value of a slot.
+Instead of defining two distinct primitives for every slot of objects,
+EusLisp, like Common Lisp, provides uniform update operations
+based on the generalized variable concept.
+In this concept, a common form is recognized as either a value access form
+or a slot location specifier.
+Thus, you only need to remember accessing form for each slot and
+update is achieved by {\bf setf} macro used in conjunction with the access form.
+For an example, {\tt (car x)} can be used to replace the value
+in the car slot of {\tt x} when used with {\bf setf},
+as well as to take the car value out of the list.
+
+This method is also applicable for all the user defined objects.
+When a class or a structure is defined, the access and undate forms
+for each slot are automatically defined.
+Each of those forms is defined as a macro whose name is the concatenation of
+the class name and slot name.
+For example, car of a cons can be addressed by {\tt (cons-car '(a b c))}.
+
+\begin{verbatim}
+(defclass person :super object :slots (name age))
+(defclass programmer :super person :slots (language machine))
+(setq x (instantiate programmer))
+(setf (programmer-name x) "MATSUI"
+      (person-age x) 30)
+(incf (programmer-age x))
+(programmer-age x)   --> 31
+(setf (programmer-language x) 'EUSLISP
+      (programmer-machine x) 'SUN4)
+\end{verbatim}
+
+Array elements can be accessed in the same manner.
+
+\begin{verbatim}
+(setq a (make-array '(3 3) :element-type :float))
+(setf (aref a 0 0) 1.0 (aref a 1 1) 1.0 (aref a 2 2) 1.0)
+a --> #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))
+
+(setq b (instantiate bit-vector 10))  --> #*0000000000
+(setf (bit b 5) 1)
+b --> #*0000010000
+\end{verbatim}
+
+In order to define special setf methods for particular objects,
+{\bf defsetf} macro is provided.
+
+\begin{verbatim}
+(defsetf symbol-value set)
+(defsetf get (sym prop) (val) `(putprop ,sym ,val ,prop))
+\end{verbatim}
+
+\subsection{Special Forms}
+
+\begin{table}
+\begin{tabular}{|l l l|} \hline 
+AND & FLET & QUOTE \\
+BLOCK & FUNCTION & RETURN-FROM\\
+CATCH & GO & SETQ \\
+COND & IF & TAGBODY \\
+DECLARE & LABELS & THE \\
+DEFMACRO & LET & THROW \\
+DEFMETHOD & LET* & UNWIND-PROTECT \\
+DEFUN & PROGN & WHILE \\
+EVAL-WHEN & OR & \\
+\hline
+\end{tabular}
+\caption{list of all special forms}
+\end{table}
+
+All the special forms are listed in table-1.
+Special forms are essential language constructs for the management of
+evaluation contexts and control flows.
+The interpreter and compiler must have special knowledge to
+process each of these constructs properly, while the application
+method is uniform for all functions.
+Users cannot add their own special form definition.
+
+\subsection{Macros}
+
+Macro is a convenient method to expand language constructs.
+When a macro is called, arguments are passed to the macro body, that is a
+macro expansion function, without evaluating them.
+Then, the macro expansion function expands the arguments,
+and returns the new form.
+The resulted form is then evaluated again outside the macro.
+It is an error to apply a macro or special form to a list of arguments.
+{\bf Macroexpand} function can be used for the explicit macro expansion.
+
+Though macro runs slowly when interpreted,
+it speeds up compiled code execution,
+because macro expansion is taken at compile-time only once
+and no overhead is left to run-time.
+Note that explicit call to eval or apply in the macro function may
+produce different results between interpreted execution
+and the compiled execution.
+
+\subsection{Functions}
+
+A function is expressed by a lambda form which is merely a list
+whose first element is {\bf lambda}.
+If a lambda form is defined for a symbol using {\bf defun}, it can be referred
+as a global function name.
+Lambda form takes following syntax.
+
+\ptext{
+(lambda (\= \{var\}* \\
+\>  [\&optional \{var $|$ (var [initform])\}*] \\
+\>  [\&rest form] \\
+\>  [\&key \= \{var $|$ (var [initform]) $|$ ((keyword var) [initform])\}* \\
+\> \> [\&allow-other-keys]] \\
+\>  [\&aux \{var $|$ (var [initform])\}*]) \\
+ \hspace{10mm} \{declaration\}* \\
+ \hspace{10mm} \{form\}*) \\
+}
+
+There is no function type such as EXPR, LEXPR, FEXPR, etc.:
+arguments to functions are always evaluated before its application,
+and the number of acceptable arguments is determined by lambda-list.
+Lambda-list specifies the sequence of parameters to the lambda form.
+Each of {\bf \&optional, \&rest, \&key } and {\bf \&aux} has special
+meaning in lambda-lists, and these symbols cannot be used as variable
+names.
+Supplied-p variables for \&optional or \&key parameters are not supported.
+
+Since a lambda form is indistinguishable from normal list data,
+{\bf function} special form should be used to inform the interpreter and
+compiler the form is intended to be a function.
+{\bf function} is also important to freeze the environment onto the function,
+so that all the lexical variables can be accesible in the function,
+even the function is passed to another function of different lexical scope.
+The following program does not work either interpretedly nor after compiled,
+since {\tt sum} of {\tt let} be seen inside lambda form.
+
+\begin{verbatim}
+(let ((x '(1 2 3)) (sum 0))
+  (mapc '(lambda (x) (setq sum (+ sum x))) x))
+\end{verbatim}
+
+To get expected result, it should be written as follows:
+\begin{verbatim}
+(let ((x '(1 2 3)) (sum 0))
+   (mapc #'(lambda (x) (setq sum (+ sum x))) x ))
+\end{verbatim}
+
+\#' is abrebiated expression for {\bf function},
+i.e. {\tt \#'(lambda (x) x)} is equivalent to
+{\tt (function (lambda (x) x))}.
+Here is another example of what is called a funarg problem:
+
+\begin{verbatim}
+(defun mapvector (f v)
+    (do ((i 0 (1+ i)))
+       ((>= i (length v)))
+       (funcall f (aref v i))))
+(defun vector-sum (v)
+    (let ((i 0))
+       (mapvector #'(lambda (x) (setq i (+ i x))) v)
+       i))
+(vector-sum #(1 2 3 4)) --> 10 
+\end{verbatim}
+
+EusLisp's closure cannot have indefinite extent:
+i.e. a closure can only survive as long as its outer extent is in effect.
+This means that a closure cannot be used for programming generators.
+The following program does not work.
+
+\begin{verbatim}
+(proclaim '(special gen))
+(let ((index 0))
+   (setq gen #'(lambda () (setq index (1+ index)))))
+(funcall gen)
+\end{verbatim}
+
+However, the same purpose is accomplished by object oriented programming,
+because an object can hold its own static variables:
+\begin{verbatim}
+(defclass generator object (index))
+(defmethod generator
+ (:next () (setq index (1+ index)))
+ (:init (&optional (start 0)) (setq index start) self))
+(defvar gen (instance generator :init 0))
+(send gen :next)
+\end{verbatim}
+\newpage

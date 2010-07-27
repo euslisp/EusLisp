@@ -1,0 +1,92 @@
+(array-dimensions function-documentation "
+Args: (array)
+Returns a list whose N-th element is the length of the N-th dimension of ARRAY.")
+(assoc-if function-documentation "
+Args: (test alist)
+Returns the first pair in ALIST whose car satisfies TEST.  Returns NIL if no
+such pair exists. Euslisp does not support this function.")
+(char-upcase function-documentation "
+Args: (char)
+Returns the upper-case character of CHAR, if CHAR is lower-case.  Otherwise,
+returns CHAR.")
+(clear-input function-documentation "
+Args: (&optional (stream *standard-input*))
+Clears the input buffer of STREAM and returns NIL.  Contents of the buffer are
+discarded.")
+(count-if function-documentation "
+Args: (test sequence
+       &key (key #'identity)
+            (start 0) (end (length sequence)) (from-end nil))
+Returns the number of elements in SEQUENCE satisfying TEST.")
+(get-decoded-time function-documentation "
+Args: ()
+Returns the current day-and-time as nine values:
+	second (0 - 59)
+	minute (0 - 59)
+	hour (0 - 23)
+	date (1 - 31)
+	month (1 - 12)
+	year (Christian, not Japanese long-live-Emperor)
+	day of week (0 for Mon, .. 6 for Sun)
+	summer time or not (T or NIL)
+	time zone (-9 in Japan)
+Sunday is the *last* day of the week!!")
+(help function-documentation "
+Args: (&optional symbol)
+KCL specific.
+Prints the documentation associated with SYMBOL.  With no args, prints the
+greeting message to KCL beginners.")
+(if function-documentation "
+Syntax: (if test form1 [form2])
+If TEST evaluates to non-NIL, then evaluates FORM1 and returns all values.
+Otherwise, evaluates FORM2 (which defaults to NIL) and returns all values.")
+(logorc2 function-documentation "
+Args: (integer1 integer2)
+Equivalent to (LOGIOR INTEGER1 (LOGNOT INTEGER2)).")
+(macroexpand-1 function-documentation "
+Args: (form &optional (env nil))
+If FORM is a macro form, then expands it once and returns the result as the
+first value and T as the second value.  Otherwise, returns FORM and NIL as two
+values.")
+(member-if function-documentation "
+Args: (test list &key (key #'identity))
+Searches LIST for an element that satisfies TEST.  If found, returns the
+sublist of LIST that begins with the element.  If not found, returns NIL.")
+(most-positive-long-float variable-documentation "
+The largest positive long-float.")
+(multiple-value-bind function-documentation "
+Syntax: (multiple-value-bind ({var}*) init {decl}* {form}*)
+Evaluates INIT and binds the N-th VAR to the N-th value of INIT or, if INIT
+returns less than N values, to NIL.  Then evaluates FORMs, and returns all
+values of the last FORM.  If no FORM is given, returns NIL.")
+(rationalp function-documentation "
+Args: (x)
+Returns T if X is an integer or a ratio; NIL otherwise.")
+(remove-if function-documentation "
+Args: (test sequence
+       &key (key #'identity) (start 0) (end (length sequence))
+            (count most-positive-fixnum) (from-end nil))
+Returns a copy of SEQUENCE with elements satisfying TEST removed.")
+(stream-element-type function-documentation "
+Args: (stream)
+Returns the type specifier for the io unit of STREAM.")
+(subst-if function-documentation "
+Args: (new test tree &key (key #'identity))
+Substitutes NEW for subtrees of TREE that satisfy TEST and returns the result.
+The original TREE is not destroyed.")
+(symbolp function-documentation "
+Args: (x)
+Returns T if X is a symbol; NIL otherwise.")
+(tailp function-documentation "
+Args: (x list)
+Returns T if X is identical to one of the conses that constitute LIST.
+Returns NIL otherwise.")
+(*make-constant function-documentation "
+Args: (symbol value)
+KCL specific.
+Declares that the global variable named by SYMBOL is a constant with VALUE as
+its constant value.")
+(specialp function-documentation "
+Args: (symbol)
+KCL specific.
+Returns T if the SYMBOL names a globally special variable; NIL otherwise.")

@@ -1,0 +1,48 @@
+\macrodesc{load-foreign}{objfile \&key symbol-input symbol-output (symbol-file objfile) ld-option)}
+{loads an object module written other than EusLisp.
+A compiled code object is returned.
+This result is necessary to make function entries in the module by
+{\bf defforeign}.
+Libraries can be specified in {\em ld-option}.
+However, the symbols defined in these libraries cannot be captured
+in the default symbol-output file.
+In order to allow EusLisp to call functions defined in the libraries,
+{\em symbol-output} and {\em symbol-file} must be given explicitly.
+(These arguments are not needed if you are not going to call the library
+functions directly from EusLisp and if you are  referring them only from
+{\em objfile})
+{\bf load-foreign} links {\em objfile} with libraries specified and global
+symbols in EusLisp which is in core, and writes the linked object in
+{\em symbol-output}.
+Then, symbols in {\em symbol-file} are searched and listed in the
+foreign-module. Since {\em symbol-file} is defaulted to be {\em objfile},
+only the symbols defined in {\em objfile} are  recognized if {\em symbol-file}
+is not given. To find all the global entries both in {\em objfile} and
+libraries, the linked (merged) symbol table resulted from the first link
+process of load-foreign must be examined.
+For this reason, an identical file name must be given to {\em symbol-output}
+and {\em symbol-file}.
+
+As shown below, the intermediate symbol file can be removed
+by {\bf unix:unlink}.
+However, if you are loading more than one foreign modules both of which 
+refer to the same library, and if you want to avoid loading
+the library duplicatedly, you have to use {\em symbol-input} argument.
+Suppose you have loaded all the functions in "linpack.a" in the above
+example and you are going to load another file "linapp.o" that calls functions
+in "linpack.a".
+The following call of load-foreign should be issued before you
+unlink "euslinpack".
+{\tt (load-foreign "linapp.o" :symbol-input "euslinpack")}
+}
+
+\begin{verbatim}
+(setq linpack-module
+    (load-foreign "/usr/local/eus/clib/linpackref.o"
+        :ld-option  "-L/usr/local/lib -llinpack -lF77 -lm -lc"
+        :symbol-output "euslinpack"
+        :symbol-file "euslinpack"
+        ))
+(unix:unlink "euslinpack")
+\end{verbatim}
+

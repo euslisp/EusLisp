@@ -1,0 +1,10 @@
+JPEG for euslisp
+
+1. make libjpeg.so and put it in /usr/local/lib
+   The default Makefile of jpeg-6a is organized to just produce libjpeg.a.
+   You must add -shared, -KPIC, -Kpic, -G, etc., depending on the machine
+   architecture.
+2. make jpegmemcd.so using the makefile or makefile.linux in this directory.
+   This is an addition to the libjpeg.so that enables in-core compression/
+   decompression.
+3. Load eusjpeg.l from euslisp. 
