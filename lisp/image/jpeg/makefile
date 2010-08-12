@@ -31,5 +31,5 @@ $(OBJDIR)/jmemsrc.o:	jmemsrc.c
 $(OBJDIR)/jmemdst.o:	jmemdst.c
 	$(CC) -c -o $@ $^
 clean:
-	rm -f $(OBJFILES) $(LIBDIR)/jpegmemcd.$(LSFX)
+	rm -f $(OBJFILES) $(LIBDIR)/jpegmemcd.$(LSFX) eusjpeg.c eusjpeg.h
 
