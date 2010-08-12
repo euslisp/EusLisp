@@ -15,11 +15,12 @@
 (export '(jpeg-compress jpeg-decompress 
 	  read-jpeg-file write-jpeg-file))
 
-(let ((m 
-       (load-foreign (format nil "~A/~A/lib/jpegmemcd.dll" *eusdir* (unix:getenv "ARCHDIR")))))
-  (defforeign jpeg_header m "JPEG_header" () :integer)
-  (defforeign jpeg_decompress m "JPEG_decompress" () :integer)
-  (defforeign jpeg_compress m "JPEG_compress" () :integer))
+(eval-when (load eval)
+  (let ((m
+         (load-foreign (format nil "~A/~A/lib/jpegmemcd" *eusdir* (unix:getenv "ARCHDIR")))))
+    (defforeign jpeg_header m "JPEG_header" () :integer)
+    (defforeign jpeg_decompress m "JPEG_decompress" () :integer)
+    (defforeign jpeg_compress m "JPEG_compress" () :integer)))
 
 
 (defun jpeg-compress (rgb-image &optional (quality 50) (jpeg-buffer) )
