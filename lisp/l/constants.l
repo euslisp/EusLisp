@@ -55,7 +55,7 @@
 (defconstant array-rank-limit 7)
 (defconstant array-dimension-limit #x1fffffff)
 (defconstant most-positive-fixnum #x1fffffff)
-(defconstant most-negative-fixnum #x20000000)
+(defconstant most-negative-fixnum (- #x20000000))
 (defconstant most-positive-float 3.4028235677e38)
 (defconstant most-negative-float -3.4028235677e38)
 (defconstant least-positive-float 5.605194e-45)
