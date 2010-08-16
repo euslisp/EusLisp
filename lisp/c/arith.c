@@ -544,7 +544,7 @@ bigplus:
   /*  fprintf(stderr, "big plus\n"); */
   i++;
   if (is >= 0)  add_int_big(is, b);
-  else sub_int_big(is, b);
+  else sub_int_big(-is, b);
   vpush(b);
   while (i<n) {
     a=argv[i];
