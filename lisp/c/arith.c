@@ -346,7 +346,7 @@ pointer argv[];
 { register eusinteger_t x,y;
   ckarg(2);
   x=bigintval(argv[0]); y=bigintval(argv[1]);
-  return(makeint(x % y));}
+  return(mkbigint(x % y));}
 
 pointer SUB1(ctx,n,argv)
 register context *ctx;
@@ -519,7 +519,7 @@ register pointer argv[];
       j=intval(a);
       is+=j;
       if (((is >> 1) ^ is)&((eusinteger_t)1<<(WORD_SIZE-3))) { /* fixnum overflow */
-	b=makebig1(is); goto bigplus;} }
+	b=makebig1(0); goto bigplus;} }
     else if (isflt(a)) { fs=is; goto fplus;}
     else if (pisratio(a)) { rs=makeratio(is,1);  goto rplus;}
     else if (pisbignum(a)) { b=copy_big(a); goto bigplus;}
@@ -585,7 +585,7 @@ register pointer argv[];
       return(makeratio(-intval(a->c.ratio.numerator),
 			intval(a->c.ratio.denominator)));}
 
-    else if (isbignum(a)) {  return(big_minus(a));}
+    else if (isbignum(a)) {  return(normalize_bignum(big_minus(a)));}
     else error(E_NONUMBER); }
 
   /* n>1 */
@@ -646,7 +646,7 @@ BIGMINUS1:
 	if (ia>0) sub_int_big(intval(a), b);
 	else if (ia<0) add_int_big(-ia, b);
 	b=normalize_bignum(b);
-	if (isint(b)) { vpop(); goto IMINUS;}
+	if (isint(b)) { vpop(); is=intval(b); goto IMINUS;}
         }
      else if (isflt(a)) {
 	is= big_to_float(b); vpop(); goto FMINUS;}
@@ -700,6 +700,7 @@ ITIMES1:
       extended_mul(is, s, 0, &hi, &lo);
       if( hi !=0 || (lo & ((eusinteger_t)7 << (WORD_SIZE-3)))!=0) { /*overflow -->bignum */
 	b=makebig2(hi, lo & MASK);
+        b=normalize_bignum(b);
 	vpush(b);
 	if (sign<0) complement_big(b);
         goto BIGTIMES;}
@@ -800,7 +801,7 @@ pointer argv[];
     if (isflt(a)) { fs=is; goto fquo2;}
     else if (isint(a)) is/=intval(a);
     else if (pisratio(a)) { rs=makeratio(is,1); goto rquo;}
-    else if (pisbignum(a)) error(E_USER,(pointer)"int div big?");
+    else if (pisbignum(a)) is = 0;
     else error(E_NONUMBER);
     i++;}
   return(makeint(is));
@@ -830,10 +831,14 @@ bquo:
     a=argv[i];
     if (isflt(a)) {
       fs=big_to_float(rs); goto fquo2;}
-    if (!isint(a)) error(E_USER,(pointer)"big div ?");
-    is=intval(a);
-    if (is<0) { sign = - sign; is= -is;}    
-    div_int_big(is, rs);
+    if (!isint(a)) {
+      int rv = sign*div_big_big(a, rs);
+      return(mkbigint(rv));
+    } else {
+      is=intval(a);
+      if (is<0) { sign = - sign; is= -is;}
+      div_int_big(is, rs);
+    }
     i++;
     }
   if (sign<0) complement_big(rs);

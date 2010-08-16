@@ -766,6 +766,7 @@ pointer x, y;
 	    else	break;}
 	break;}
   }
+  y=normalize_big(y);
 }
 
 /*
