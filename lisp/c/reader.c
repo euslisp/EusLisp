@@ -598,7 +598,7 @@ static pointer read_sharp_object(ctx,f)	/* #< */
 register context *ctx;
 register pointer f;
 { register pointer element,result,obj;
-  register int val;
+  register eusinteger_t val;
   Char ch;
   element=read1(ctx,f);
   if (!issymbol(element)) error(E_NOSYMBOL);  /*class name*/
@@ -674,7 +674,7 @@ char token[];
 { register pointer pkg;
   pointer pkgstr,sym;
   register int doublecolon=1;
-  int hash;
+  eusinteger_t hash;
   if (colon==0) pkg=keywordpkg;
   else if (colon>0) {
     if (charattr[token[colon-1]]==package_marker) {
@@ -728,7 +728,7 @@ static pointer readint(ctx,token,len)
 context *ctx;
 char *token;
 int len;
-{ int base=intval(Spevalof(READBASE));
+{ eusinteger_t base=intval(Spevalof(READBASE));
   int head,i,sign=1, k;
   pointer b;
 
@@ -853,7 +853,8 @@ register pointer ins;
 int escaped,multiescaped,i;
 char token[];
 int colon;
-{ register int j,c, base;
+{ register int j,c;
+  register eusinteger_t base;
   int slash;
   enum ch_type ctype;
   /*Char ch;*/
