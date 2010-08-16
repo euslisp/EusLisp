@@ -232,8 +232,8 @@ context *ctx;
 pointer big,f;
 int base, field1,field2;
 { pointer bv,p;
-  eusinteger_t *b, d; long digits=0;
-  int i, x, sign;
+  eusinteger_t *b, d, sign; long digits=0;
+  int i, x;
   int downcase;
   extern eusinteger_t big_sign(), div_int_big();
 

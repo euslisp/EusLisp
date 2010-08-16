@@ -479,24 +479,28 @@ register context *ctx;
 register pointer f;
 eusinteger_t val;
 int subchar;
-{ register int i=0,j,x,c,p,q;
+{ register int i=0,j,c,p,q;
   pointer b;
-  eusinteger_t *bv;
+  eusinteger_t *bv,x;
   char ch, buf[WORD_SIZE];
 
   ch=readch(f);
   while (i<WORD_SIZE && isxdigit(ch)) { buf[i++] = ch; ch=readch(f);}
   unreadch(f,ch); buf[i]=0;
-  if (i<sizeof(eusinteger_t)*2) { sscanf(buf,"%lx",&val);  return(makeint(val));}
+  j = i*4 - (buf[0]<'2' ? 3 :
+             buf[0]<'4' ? 2 :
+             buf[0]<'8' ? 1 : 0); /* alphabet is bigger than '9'*/
+  if (j<WORD_SIZE-2) { sscanf(buf,"%lx",&val);  return(makeint(val));}
   else {
-    b= (pointer)makebig((i*4+WORD_SIZE-1)/(WORD_SIZE-1));
+    b= (pointer)makebig((j+WORD_SIZE-2)/(WORD_SIZE-1));
     bv=bigvec(b);
     p=0;q=0;
     for (j=i-1; j>=0; j--) {
       c=toupper(buf[j]);
       x=(c<='9')?(c-'0'):(c-'A'+10);
       bv[p/(WORD_SIZE-1)] |= ((x << q) & MASK);
-      if (q>=(WORD_SIZE-4)) bv[p/(WORD_SIZE-1) + 1] = x>>(WORD_SIZE-1-q);
+      if (q>=(WORD_SIZE-4) && (x>>(WORD_SIZE-1-q)))
+        bv[p/(WORD_SIZE-1) + 1] = x>>(WORD_SIZE-1-q);
       p +=4; q = (q+4) % (WORD_SIZE-1);
       }
     b=(pointer)normalize_bignum(b);
