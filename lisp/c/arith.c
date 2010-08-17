@@ -343,10 +343,16 @@ pointer MOD(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ register eusinteger_t x,y;
-  ckarg(2);
-  x=bigintval(argv[0]); y=bigintval(argv[1]);
-  return(mkbigint(x % y));}
+{ ckarg(2);
+  if (isflt(argv[0]) || isflt(argv[1])) {
+    numunion nu;
+    register eusfloat_t x,y;
+    x=ckfltval(argv[0]); y=ckfltval(argv[1]);
+    return(makeflt(fmod(x,y)));
+  } else {
+    register eusinteger_t x,y;
+    x=bigintval(argv[0]); y=bigintval(argv[1]);
+    return(mkbigint(x % y));}}
 
 pointer SUB1(ctx,n,argv)
 register context *ctx;
