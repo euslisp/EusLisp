@@ -1,4 +1,10 @@
 #
 # echo \"`date`\" >MAKEDATE 
 echo "char *makedate="\"`date`\"';'
+echo "#if Linux"
+echo "char *svnrevision="\"r`svnversion -n`\"';'
+echo "#else"
+echo "char *svnrevision="\"\"';'
+echo "#endif"
+
 
