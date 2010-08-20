@@ -152,8 +152,6 @@ all:
 
 eus:	$(BINDIR)/eus
 
-MAKEDATE:	$(EUSDIR)$(LIBDIR)/MAKEDATE
-
 MKDIR:
 	mkdir -p $(EUSDIR)/$(ARCH) $(BINDIR) $(OBJDIR) $(ADLIBDIR)
 	(cd $(EUSDIR); test -e include || ln -sf lisp/c include)
@@ -165,7 +163,7 @@ MKDIR:
 # eusg is loaded with geometric functions.
 # eusx also has xwindow interface.
 
-eus0:	MKDIR MAKEDATE $(BINDIR)/eus0
+eus0:	MKDIR $(BINDIR)/eus0
 
 eus1:	$(BINDIR)/eus1
 
@@ -173,13 +171,13 @@ eus2:	$(BINDIR)/eus2
 
 eusg:	$(BINDIR)/eusg
 
-eusx:	MAKEDATE $(BINDIR)/eusx
+eusx:	$(BINDIR)/eusx
 
-eus:	MAKEDATE $(BINDIR)/eus
+eus:	$(BINDIR)/eus
 
 eusxv:	$(BINDIR)/eusxv
 
-eusgl:   MAKEDATE $(BINDIR)/eusgl
+eusgl:  $(BINDIR)/eusgl
 
 raweus.so:	$(BINDIR)/raweus.so
 
@@ -228,7 +226,7 @@ $(BINDIR)/eus2:	 $(BINDIR)/eus1 $(COMPOBJECTS)
 		$(RAWLIB) ; \
 	cd $(BINDIR); rm -f euscomp; ln -sf eus2 euscomp)
 
-$(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(LIBEUSGEO)  
+$(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(ADLIBDIR)/$(LIBEUSGEO)  
 	($(CC) -o $(BINDIR)/eusg $(LDFLAGS)  \
 	 	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS) $(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
@@ -239,7 +237,7 @@ $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(COMPOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
 		$(XCOBJECTS) \
-		$(LIBEUSGEO) $(LIBEUSX)
+		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX)
 	($(CC) -o $(BINDIR)/eusx $(LDFLAGS)  \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
 		$(LOBJECTS)   $(LCOBJECTS) $(COMPOBJECTS) \
@@ -249,7 +247,7 @@ $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 $(BINDIR)/eus:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS)  $(COMPOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
-		$(LIBEUSGEO) $(LIBEUSX) 
+		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX) 
 	($(CC) -o $(BINDIR)/eus $(LDFLAGS)  \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
@@ -262,7 +260,7 @@ $(BINDIR)/eus:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 
 $(BINDIR)/eusxv:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(MTCOBJECTS) $(MTOBJECTS) \
-		$(LIBEUSGEO) $(LIBEUSX)
+		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX)
 	($(CC) -o $(BINDIR)/eusxv $(LDFLAGS)  \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
@@ -270,7 +268,7 @@ $(BINDIR)/eusxv:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 
 $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS) $(COMPOBJECTS)  \
-		$(LIBEUSGEO) $(LIBEUSX) $(LIBEUSGL) 
+		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX) $(ADLIBDIR)/$(LIBEUSGL) 
 	($(CC) -o $(BINDIR)/eusgl $(LDFLAGS)  \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
@@ -281,7 +279,7 @@ $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 
 $(BINDIR)/raweus.so:	$(NOKOBJECTS) $(KOBJECTS)  $(LOBJECTS) \
 		$(COMPOBJECTS) \
-		$(LIBEUSGEO) $(LIBEUSX) 
+		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX) 
 	($(CC)  -o $(BINDIR)/raweus.so  $(LDFLAGS)  \
 		$(NOKOBJECTS) $(KOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
