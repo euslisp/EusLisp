@@ -201,6 +201,9 @@ $(EUSDIR)$(LIBDIR)/MAKEDATE:	FORCE
 	(cd ../$(LIBDIR);  echo \"`date`\" >MAKEDATE ; \
 	 cd $(EUSDIR)/lisp; sh tool/makedate >$(CDIR)/makedate.c)
 
+$(CDIR)/makedate.c:
+	(cd $(EUSDIR)/lisp; sh tool/makedate >$(CDIR)/makedate.c)
+
 FORCE:
 
 $(BINDIR)/eus0:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(MTCOBJECTS) $(RGCOBJECTS)\
