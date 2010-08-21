@@ -692,7 +692,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { pointer exithook=speval(QEXITHOOK);
-  if (n==0) exit(0);
+  if (n==0) _exit(0);
   else _exit(ckintval(argv[0]));
 }
 
