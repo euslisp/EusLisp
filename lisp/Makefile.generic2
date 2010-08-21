@@ -152,8 +152,11 @@ all:
 
 eus:	$(BINDIR)/eus
 
-MKDIR:
-	mkdir -p $(EUSDIR)/$(ARCH) $(BINDIR) $(OBJDIR) $(ADLIBDIR)
+MKDIR: $(EUSDIR)/$(ARCH) $(BINDIR) $(OBJDIR) $(ADLIBDIR) $(EUSDIR)/include
+
+$(EUSDIR)/$(ARCH) $(BINDIR) $(OBJDIR) $(ADLIBDIR):
+	mkdir -p $@
+$(EUSDIR)/include:
 	(cd $(EUSDIR); test -e include || ln -sf lisp/c include)
 
 # eus0=lowest level eus --- made only from c routines
@@ -197,14 +200,12 @@ $(ADLIBDIR)/$(LIBEUSGL):	$(GLCOBJECTS) $(GLOBJECTS)
 	( $(LD) $(SOFLAGS) -o $(ADLIBDIR)/$(LIBEUSGL) \
 		$(GLCOBJECTS) $(GLOBJECTS))
 
-$(EUSDIR)$(LIBDIR)/MAKEDATE:	FORCE
-	(cd ../$(LIBDIR);  echo \"`date`\" >MAKEDATE ; \
-	 cd $(EUSDIR)/lisp; sh tool/makedate >$(CDIR)/makedate.c)
-
-$(CDIR)/makedate.c:
+$(CDIR)/makedate.c: $(filter-out $(OBJDIR)/makedate.o, $(KOBJECTS)) \
+		$(NOKOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+		$(LCOBJECTS) $(COMPOBJECTS) \
+		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX) $(ADLIBDIR)/$(LIBEUSGL)
 	(cd $(EUSDIR)/lisp; sh tool/makedate >$(CDIR)/makedate.c)
 
-FORCE:
 
 $(BINDIR)/eus0:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(MTCOBJECTS) $(RGCOBJECTS)\
 		$(GCCLS) $(LCOBJECTS)
