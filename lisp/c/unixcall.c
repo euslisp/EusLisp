@@ -681,7 +681,7 @@ on SunOS 4.1. So we use thr_exit function on SunOS 4.1.
   else thr_exit(ckintval(argv[0]));
 #else
     if (exithook != NIL) {
-      ufuncall(ctx,exithook,exithook,(pointer)(ctx->vsp),0,0);}
+      ufuncall(ctx,exithook,exithook,(pointer)(ctx->vsp-n),0,n);}
   if (n==0) exit(0);
   else exit(ckintval(argv[0]));
 #endif
