@@ -200,10 +200,9 @@ $(ADLIBDIR)/$(LIBEUSGL):	$(GLCOBJECTS) $(GLOBJECTS)
 	( $(LD) $(SOFLAGS) -o $(ADLIBDIR)/$(LIBEUSGL) \
 		$(GLCOBJECTS) $(GLOBJECTS))
 
-$(CDIR)/makedate.c: $(filter-out $(OBJDIR)/makedate.o, $(KOBJECTS)) \
-		$(NOKOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
-		$(LCOBJECTS) $(COMPOBJECTS) \
-		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX) $(ADLIBDIR)/$(LIBEUSGL)
+$(CDIR)/makedate.c: $(filter-out $(CDIR)/makedate.c, $(shell echo $(CDIR)/*.c)) \
+		    $(LDIR)/*.l $(GEODIR)/*.l $(COMPDIR)/*.l \
+		    $(XWINDOWDIR)/*.l $(GLDIR)/*.l
 	(cd $(EUSDIR)/lisp; sh tool/makedate >$(CDIR)/makedate.c)
 
 
