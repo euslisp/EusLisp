@@ -99,7 +99,7 @@
 	  (eof (cons nil nil))
 	  (maxval (read-pbm-token f eof))
 	  img sbuf
-	  offset (buflen (* 512 3))  rdlen)
+	  offset (buflen (* size 3))  rdlen)
 	(if (/= maxval 255)
 	    (error "unknown ppm file format maxval=~A" maxval))
 	(read-char f)
@@ -110,7 +110,7 @@
 	    (setq rdlen (- 3 (mod (length sbuf) 3)))
 	    (unix:uread (send f :infd) rgb rdlen offset)
 	    (incf offset rdlen)   )
-	(while (> (setq rdlen (unix:uread (send f :infd) rgb buflen offset)) 0)
+	(while (> (setq rdlen (unix:uread (send f :infd) rgb (- buflen offset) offset)) 0)
 	   (incf offset rdlen)  )
 	(setq img (instance color-image24 :init	width height rgb))
 	(send img :name (pathname-name (send f :fname)))
