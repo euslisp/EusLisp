@@ -288,6 +288,7 @@ $(BINDIR)/raweus.so:	$(NOKOBJECTS) $(KOBJECTS)  $(LOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
 		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB))
 
+$(CDIR)/eus.h: $(CDIR)/eus_proto.h
 $(KOBJECTS) $(DMYOBJECTS) $(MTCOBJECTS):	$(CDIR)/eus.h
 	(cd $(CDIR); \
 	 $(CC) -c $(CFLAGS) -o $(OBJDIR)/$(*F).o $(OFLAGS) $(*F).c)
