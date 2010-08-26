@@ -62,11 +62,11 @@
 (defun lisp-implementation-type () "EusLisp")
 (defun lisp-implementation-version ()
 	(format nil
-	        "EusLisp ~A(~A) for ~A  created on ~A"
+	        "EusLisp ~A~A for ~A  created on ~A"
 		(car lisp-implementation-version)
-		(cadr lisp-implementation-version)
+		(cddr lisp-implementation-version)
 		*OS-VERSION*
-		(caddr lisp-implementation-version)))
+		(cadr lisp-implementation-version)))
 (setq euserror nil)
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
