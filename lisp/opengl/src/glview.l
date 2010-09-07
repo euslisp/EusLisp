@@ -461,7 +461,8 @@
   (glMatrixMode GL_PROJECTION)
   (glLoadIdentity)
   (let* ((viewpoint (send view :viewpoint))
-	 (view-direction (v+ (send view :view-direction) viewpoint))
+	 (view-scale (max 10 (norm viewpoint)))
+	 (view-direction (v+ (scale view-scale (send view :view-direction)) viewpoint))
 	 (view-up (send view :view-up)))
     ;; the following should get aspect ration from viewport
     (gluPerspectivefv (float-vector (rad2deg (send view :fovy))
