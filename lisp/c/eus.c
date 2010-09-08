@@ -796,14 +796,17 @@ static void initfeatures()
   register context *ctx=mainctx;
   extern char *makedate;
   extern char *svnrevision;
+  extern char *compilehost;
 
   p=makestring(VERSION,strlen(VERSION));
   vpush(p);
-  p=makestring(svnrevision,strlen(svnrevision));
+  p=makestring(compilehost,strlen(compilehost));
   vpush(p);
   p=makestring(makedate,strlen(makedate));
   vpush(p);
-  p=stacknlist(ctx,3);
+  p=makestring(svnrevision,strlen(svnrevision));
+  vpush(p);
+  p=stacknlist(ctx,4);
   QVERSION=defvar(ctx, "LISP-IMPLEMENTATION-VERSION", p,lisppkg);
 
   /*make features*/
