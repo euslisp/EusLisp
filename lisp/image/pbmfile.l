@@ -63,7 +63,7 @@
 	   (if (eql token eof) (error "unexpected EOF"))
 	   (setf (char img i) token))
 	(setq img (instance grayscale-image :init width height img))
-	(send img :name (pathname-name (send f :fname)))
+	(send img :name (send f :fname))
 	img   ) )
 
 (defun read-binary-pgm (f img width height)
@@ -88,7 +88,7 @@
 	   ; (print offset)
 	   )
 	(setq img (instance grayscale-image :init width height img))
-	(send img :name (pathname-name (send f :fname)))
+	(send img :name (send f :fname))
 	img   
 	))
 
@@ -113,7 +113,7 @@
 	(while (> (setq rdlen (unix:uread (send f :infd) rgb (- buflen offset) offset)) 0)
 	   (incf offset rdlen)  )
 	(setq img (instance color-image24 :init	width height rgb))
-	(send img :name (pathname-name (send f :fname)))
+	(send img :name (send f :fname))
 	img   
 	))
 
@@ -139,7 +139,7 @@
 	   (setf (char rgb (+ ii 2)) token))
 	(setq rgbimg (instance color-image24 :init
 			width height rgb))
-	(send rgbimg :name (pathname-name (send f :fname)))
+	(send rgbimg :name (send f :fname))
 	rgbimg   ) )
 
 (defun write-ppm (f rgb-image)
