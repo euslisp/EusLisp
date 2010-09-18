@@ -11,12 +11,13 @@
 #include <X11/Xlib.h> 
 #include <X11/Xutil.h> 
 #include <stdio.h> 
- 
+
 /* X globals, defines, and prototypes */ 
 Display *dpy; 
 Window glwin; 
 //static int attributes[] = {GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None}; 
-static int attributes[] = {GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, 0};
+//static int attributes[] = {GLX_RGBA, GLX_RED_SIZE, 8, GLX_GREEN_SIZE, 8, GLX_BLUE_SIZE, 8, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, 0};
+static int attributes[] = {GLX_RGBA, GLX_RED_SIZE, 8, GLX_GREEN_SIZE, 8, GLX_BLUE_SIZE, 8, GLX_DEPTH_SIZE, 1, 0};
  
 #define SWAPBUFFERS glXSwapBuffers(dpy, glwin) 
 #define BLACK_INDEX     0 
@@ -78,13 +79,14 @@ main(int argc, char **argv)
     } 
  
     /* create an OpenGL rendering context */ 
-    cx = glXCreateContext(dpy, vi,  None, GL_TRUE); 
+    cx = glXCreateContext(dpy, vi,  None, GL_TRUE);
     if (cx == NULL) { 
         fprintf(stderr, "could not create rendering context\n"); 
         exit(1); 
     } 
  
     /* create an X colormap since probably not using default visual */ 
+#ifndef OFFLINE_RENDERING
     cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen),  
                                 vi->visual, AllocNone); 
     swa.colormap = cmap; 
@@ -95,11 +97,15 @@ main(int argc, char **argv)
                         CWBorderPixel | CWColormap | CWEventMask, &swa); 
     XSetStandardProperties(dpy, glwin, "xogl", "xogl", None, argv,  
                                 argc, NULL); 
- 
+#else
+    glwin = glXCreateGLXPixmap(dpy, vi, XCreatePixmap(dpy, RootWindow(dpy, vi->screen), WIDTH, HEIGHT, vi->depth));
+#endif
     glXMakeCurrent(dpy, glwin, cx); 
  
+#ifndef OFFLINE_RENDERING
     XMapWindow(dpy, glwin); 
     XIfEvent(dpy,  &event,  WaitForMapNotify,  (char *)glwin); 
+#endif
      
     initializeGL(WIDTH, HEIGHT); 
     resize(WIDTH, HEIGHT); 
@@ -247,5 +253,25 @@ GLvoid drawScene(GLvoid)
  
     glPopMatrix(); 
  
+#ifdef OFFLINE_RENDERING
+    {
+      static int i = 0;
+      char imgbuf[WIDTH*HEIGHT*3];
+      glReadBuffer(GL_FRONT);
+      glPixelStorei(GL_PACK_ALIGNMENT, 1);
+      glReadPixels(0, 0, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, imgbuf);
+
+      char filename[256];
+      sprintf(filename, "test%08d.ppm", i++);
+      fprintf(stderr, "writing to %s (%7.3f %7.3f)\n", filename, latitude, longitude);
+
+      FILE *fp = fopen(filename, "w+");
+      fprintf(fp, "P6\n");
+      fprintf(fp, "#\n");
+      fprintf(fp, "%d %d 255\n", WIDTH, HEIGHT);
+      fwrite(imgbuf, 1, WIDTH*HEIGHT*3, fp);
+      fclose(fp);
+    }
+#endif
     SWAPBUFFERS; 
 } 
