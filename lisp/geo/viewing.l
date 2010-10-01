@@ -184,11 +184,9 @@
   (:ray (u v)	; u,v are normalized: -1<u<1, -1<v<1
      "returns direction vector pointing (u,v) in NDC from the viewpoint"
      (declare (float u v))
-     (normalize-vector 
-	(v-
-	 (send self :transform-vector
-		(float-vector (* screenx u) (* screeny v)  (- viewdistance)))
-	 pos)))
+     (normalize-vector
+	(send self :rotate-vector
+		(float-vector (* screenx u) (* screeny v)  (- viewdistance)))))
   (:view-plane (&optional (offset 0.0))
 "+offset makes the viewplane closer to the viewpoint,
 -offset takes further distance."
