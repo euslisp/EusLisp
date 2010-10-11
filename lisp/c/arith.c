@@ -992,6 +992,7 @@ register pointer argv[];
   numunion nu;
   ckarg(1);
   if (isint(a)) return(a);
+  else if (isbignum(a)) return(a);
   else {
     f=ckfltval(a);
     f=(double)rint(f);
@@ -1008,6 +1009,7 @@ pointer argv[];
   numunion nu;
   ckarg(1);
   if (isint(a)) return(a);
+  else if (isbignum(a)) return(a);
   else {
     f=floor(ckfltval(a)); return(eusfloat_to_big(f));} }
 
@@ -1020,6 +1022,7 @@ pointer argv[];
   numunion nu;
   ckarg(1);
   if (isint(a)) return(a);
+  else if (isbignum(a)) return(a);
   else { f=ckfltval(a); f=ceil(f); return(eusfloat_to_big(f));}
   }
 
