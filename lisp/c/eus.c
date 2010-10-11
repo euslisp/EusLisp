@@ -965,7 +965,7 @@ eusinteger_t addr;
       prinx(ctx,ctx->callfp->form,ERROUT);
       flushstream(ERROUT);
       fprintf(stderr,"\n");}
-    fprintf(stderr,";; You are still in a signal handerl.\n;;Try reset or throw to upper level as soon as possible.\n");
+    fprintf(stderr,";; You are still in a signal handler.\n;;Try reset or throw to upper level as soon as possible.\n");
     fprintf(stderr,";; code=%d x=%x addr=%x\n",code,x,addr);
     reploop(mainctx, "Fatal: ");
     fprintf(stderr,";; No, you cannot continue the previous evaluation.\n");
