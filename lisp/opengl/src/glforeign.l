@@ -347,6 +347,9 @@
         (symbol-function 'glGetMaterialfv))
   (setf (symbol-function 'glMaterialfv-org)
         (symbol-function 'glMaterialfv))
+  (if (boundp 'glGenTexturesEXT)
+      (setf (symbol-function 'glGenTexturesEXT-org)
+	    (symbol-function 'glGenTexturesEXT)))
   )
 #+:x86_64
 (defun glMaterialfv (face pname fv)
@@ -364,6 +367,14 @@
   (let ((tmp (user::dvector2float-bytestring fv)))
     (glLightfv-org light pname tmp)
     ))
+#+:x86_64
+(if (boundp 'glGenTexturesEXT-org)
+    (defun glGenTexturesEXT (len iv)
+      (let ((tmp (user::lvector2integer-bytestring iv)) ret)
+	(setq ret (glGenTexturesEXT-org len tmp))
+	(user::integer-bytestring2lvector tmp iv)
+	ret
+	)))
 #|
 (defforeign glAccum GL "glAccum" (:integer :float) :integer)
 (defforeign glAlphaFunc GL "glAlphaFunc" (:integer :float) :integer)
