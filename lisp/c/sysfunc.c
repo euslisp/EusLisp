@@ -97,7 +97,7 @@ pointer argv[];
 #if Solaris2
 extern _end();
 #else
-//extern edata();
+extern edata();
 #endif
 
 xmark(ctx,p)
