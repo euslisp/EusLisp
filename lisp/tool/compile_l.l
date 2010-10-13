@@ -14,6 +14,7 @@
       (cond ((member :solaris2 *features*)  "../../SunOS5/obj/")
 	    ((member :irix *features*) "../../IRIX/obj/")
 	    ((member :irix6 *features*) "../../IRIX6/obj/")
+	    ((member :darwin *features*) "../../Darwin/obj/")
 	    ((member :sh4 *features*) "../../LinuxSH4/obj/")
 	    ((member :linux *features*)
              (if (member :x86_64 *features*)

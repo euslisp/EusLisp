@@ -97,7 +97,7 @@ pointer argv[];
 #if Solaris2
 extern _end();
 #else
-extern edata();
+//extern edata();
 #endif
 
 xmark(ctx,p)
@@ -110,7 +110,7 @@ register pointer p;
 #endif
 #if Solaris2
   if ((eusinteger_t)p<(eusinteger_t)_end) return(NULL);
-#elif sun3 || sun4 || news || (i386 && !Cygwin) || alpha || mips /* Cygwin does not have edata */
+#elif sun3 || sun4 || news || (i386 && (!Cygwin && !Darwin)) || alpha || mips /* Cygwin does not have edata */
   if ((eusinteger_t)p<(eusinteger_t)edata) return(NULL);
 #endif
 #if sun4 || vax || i386 

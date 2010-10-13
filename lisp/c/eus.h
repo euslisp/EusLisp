@@ -40,6 +40,10 @@ typedef float eusfloat_t;
 #define	USE_STDARG
 #endif
 
+#ifdef Darwin
+#define cfree free
+#endif
+
 #ifdef USE_STDARG
 #include <stdarg.h>
 #else

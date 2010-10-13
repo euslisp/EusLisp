@@ -29,6 +29,9 @@ unsigned int thr_self() { return(1);}
 #if Linux
 #define M_MMAP_MAX (-4)
 #endif
+#if Darwin
+int _end;
+#endif
 
 /*variables*/
 /* process id and program name*/
@@ -887,6 +890,9 @@ static void initfeatures()
 #if Cygwin
   p=cons(ctx,intern(ctx,"CYGWIN",6,keywordpkg),p);
 #endif
+#if Darwin
+  p=cons(ctx,intern(ctx,"DARWIN",6,keywordpkg),p);
+#endif
 #if THREADED
   p=cons(ctx,intern(ctx,"THREAD",6,keywordpkg),p);
 #endif
@@ -1233,13 +1239,17 @@ char *argv[];
 { int i, stat=0;
   unsigned char *m;
 
+#ifdef Darwin
+  _end = sbrk(0);
+#endif
+
   mypid=getpid();
   mainargc=argc;
   for (i=0; i<argc; i++) mainargv[i]=argv[i];
 
   tzset();
 
-#if Linux && !OLD_LINUX
+#if Linux && !OLD_LINUX && !Darwin
   mallopt(M_MMAP_MAX,0);
 #endif
 
