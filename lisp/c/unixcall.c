@@ -378,7 +378,7 @@ pointer argv[];
   sv.sa_handler= (void (*)())f;
 #if Linux || Cygwin
 
-#if LIB6
+#if LIB6 && !Darwin
   for (i=0; i< _SIGSET_NWORDS; i++)   sv.sa_mask.__val[i]=0; 
 #else
   /* old type sigmask */

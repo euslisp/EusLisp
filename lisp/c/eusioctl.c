@@ -7,7 +7,9 @@
 static char *rcsid="@(#)$Id$";
 #include <ctype.h>
 #include <sys/termios.h>
+#ifndef Darwin
 #include <termio.h>
+#endif
 /*  #include <sgtty.h>  */
 
 #undef MAX
@@ -167,7 +169,7 @@ pointer argv[];
 ********************************************/
 
 
-
+#if !Darwin
 #if sun3 || sun4 || Linux || alpha || IRIX || Solaris2
 
 pointer IOCTL_TCGETS(ctx,n,argv)
@@ -217,6 +219,7 @@ pointer IOCTL_TCSETAW(n,argv)
 int n;
 pointer argv[];
 { return(ioctl_struct(n,argv,TCSETAW,sizeof(struct termio)));}
+#endif
 
 pointer TCGETATTR(ctx,n,argv)
 register context *ctx;
@@ -268,7 +271,7 @@ register pointer mod;
 #endif
 *********************************************/
 
-
+#if !Darwin
 #if sun3 || sun4 || Linux || alpha || IRIX || Solaris2
   defunpkg(ctx,"TCGETS",mod,IOCTL_TCGETS,unixpkg);
   defunpkg(ctx,"TCSETS",mod,IOCTL_TCSETS,unixpkg);
@@ -279,6 +282,7 @@ register pointer mod;
   defunpkg(ctx,"TCSETA",mod,IOCTL_TCSETA,unixpkg);
   defunpkg(ctx,"TCSETAW",mod,IOCTL_TCSETAW,unixpkg);
   defunpkg(ctx,"TCSETAF",mod,IOCTL_TCSETAF,unixpkg);
+#endif
   defunpkg(ctx,"TCGETATTR",mod,TCGETATTR,unixpkg);
   defunpkg(ctx,"TCSETATTR",mod,TCSETATTR,unixpkg);
 /*  printf("eusioctl: TCGETS=%x\n", TCGETS); */

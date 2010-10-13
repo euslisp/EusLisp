@@ -395,6 +395,7 @@ int e,cid;
   printf( "alloc:%d:after filling NIL:", count );
   dump_bcell( req, tb );
 #endif
+
   return(p);}
 
 #endif /* RGC */
@@ -418,7 +419,7 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #define out_of_heap(p) ((unsigned int)p<(unsigned int)_end || (pointer)maxmemory <p)
 #endif
 #else /* Linux */
-#if Cygwin /* Cygwin does not have _end */
+#if Cygwin /* Cygwin does not have _end */ || Darwin
 #define out_of_heap(p) ((unsigned int)p<(unsigned int)minmemory || (pointer)maxmemory <p)
 #else /* Cygwin */
 #if alpha
