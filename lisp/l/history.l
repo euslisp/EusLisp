@@ -74,17 +74,17 @@
       (setf (aref *line-edit-dispatch* i) 'line-insert) )
    (dotimes (i 32) 
       (setf (aref *line-edit-dispatch* i) 'line-null) )
-   (setf (aref *line-edit-dispatch* 1) 'line-head)
-   (setf (aref *line-edit-dispatch* 2) 'line-left)
-   (setf (aref *line-edit-dispatch* 3) 'line-abort)
-   (setf (aref *line-edit-dispatch* 4) 'line-delch)
-   (setf (aref *line-edit-dispatch* 6) 'line-right)
+   (setf (aref *line-edit-dispatch* 1) 'line-head)	;^A
+   (setf (aref *line-edit-dispatch* 2) 'line-left)	;^B
+   (setf (aref *line-edit-dispatch* 3) 'line-abort)	;^C
+   (setf (aref *line-edit-dispatch* 4) 'line-delch)	;^D
+   (setf (aref *line-edit-dispatch* 6) 'line-right)	;^F
    (setf (aref *line-edit-dispatch* 7) 'line-refresh)	;^G
-   (setf (aref *line-edit-dispatch* 8) 'line-left)
-   (setf (aref *line-edit-dispatch* 10) 'line-end)
-   (setf (aref *line-edit-dispatch* 11) 'line-right)
-   (setf (aref *line-edit-dispatch* 12) 'line-tail)
-   (setf (aref *line-edit-dispatch* 13) 'line-end)
+   (setf (aref *line-edit-dispatch* 8) 'line-left)	;^H
+   (setf (aref *line-edit-dispatch* 10) 'line-end)	;^J
+   (setf (aref *line-edit-dispatch* 11) 'line-right)	;^K
+   (setf (aref *line-edit-dispatch* 12) 'line-tail)	;^L
+   (setf (aref *line-edit-dispatch* 13) 'line-end)	;^M
    (setf (aref *line-edit-dispatch* 18) 'line-refresh)  ;^R
    (setf (aref *line-edit-dispatch* 21) 'line-clear)  ;^u
    (setf (aref *line-edit-dispatch* 127) 'line-delch-previous)
