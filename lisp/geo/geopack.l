@@ -551,6 +551,8 @@ Normal must be given if the sign of the angle is needed."
 		;; there must be overlapping segment
 		(setq q1 (send ln :colinear-point pvert)
 		      q2 (send ln :colinear-point nvert))
+		(unless (and q1 q2)	;no intersection
+		   (return-from :intersect-line ':parallel)) 
 		(if (< q2 q1) (psetq q1 q2 q2 q1))
 		(list ':colinear (list (max 0.0 p1) (min 1.0 p2))
 				 (list (max 0.0 q1) (min 1.0 q2)) ))
