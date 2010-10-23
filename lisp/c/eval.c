@@ -619,7 +619,11 @@ extern long exec_function_f(void (*)(), long *, long *, long, long *);
 // vargc %rcx
 // vargv %r8
 __asm__ (".align 8\n"
+#if Darwin
+         "_exec_function_i:\n\t"
+#else
          "exec_function_i:\n\t"
+#endif
          "push %rbx\n\t"
          "sub  $0x120, %rsp\n\t"
          "mov %rdx, %rax\n\t"
@@ -659,7 +663,11 @@ __asm__ (".align 8\n"
          "retq"
          );
 __asm__ (".align 8\n"
+#if Darwin
+         "_exec_function_f:\n\t"
+#else
          "exec_function_f:\n\t"
+#endif
          "push %rbx\n\t"
          "sub  $0x120, %rsp\n\t"
          "mov %rdx, %rax\n\t"

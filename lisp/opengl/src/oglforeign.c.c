@@ -36,6 +36,16 @@ char *xentry;
   if ( !entry ) {
     dlhandle=(eusinteger_t)dlopen(0, RTLD_LAZY);
     entry=(eusinteger_t)dlsym(dlhandle, xentry);}
+#elif Darwin
+  eusinteger_t dlhandle;
+  dlhandle=(eusinteger_t)dlopen("/usr/X11/lib/libGL.dylib", RTLD_LAZY);
+  entry=(eusinteger_t)dlsym((eusinteger_t)dlhandle, xentry);
+  if ( !entry ) {
+    dlhandle=(eusinteger_t)dlopen("/usr/X11/lib/libGLU.dylib", RTLD_LAZY);
+    entry=(eusinteger_t)dlsym(dlhandle, xentry);}
+  if ( !entry ) {
+    dlhandle=(eusinteger_t)dlopen(0, RTLD_LAZY);
+    entry=(eusinteger_t)dlsym(dlhandle, xentry);}
 #else
 #if x86_64
   entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3L), xentry);

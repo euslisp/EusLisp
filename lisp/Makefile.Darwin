@@ -41,7 +41,7 @@ else
 endif
 
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
-MACHINE=i486
+MACHINE=x86_64
 DEBUG= -g
 
 # If you use libc.so.5, remove -DLIB6 option.
@@ -56,9 +56,8 @@ CFLAGS=-D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" -DDarwin \
 # Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
 # /usr/ucb/cc cannot compile because of its incapability of recognizing
 # prototype declarations.
-#CC=cc
-CC=gcc -m32 -DUSE_MULTI_LIB
-LD=gcc -m32 
+CC=gcc
+LD=gcc
 
 #
 # L I B R A R I E S
@@ -76,24 +75,20 @@ RAWLIB=-ldl -lm -lpthread
 XLIB= -L/usr/X11R6/lib -lX11
 
 # specify directories where euslisp's libraries are located.
-#EUSLIB= -Xlinker -R$(ADLIBDIR):$(EUSDIR)/lib/Linux -L$(ADLIBDIR)
-EUSLIB= -L$(ADLIBDIR) 
-#GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
-GLLIB= -L/usr/X11R6/lib -lGL -lGLU -lXext -lX11 -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+EUSLIB= -L$(ADLIBDIR)
+GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
 
 # POSIX Thread 
 THREADDEP=mthread_posix.c
-#THREADDEP=pthreads.c
 
 
 # If you don't like optimization, comment out the next line.
 # OFLAGS=-O2
 
 # link-editor's default flags ?-rdynamic 
-SOFLAGS= -dynamiclib --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc
-LDFLAGS= -rdynamic -Xlinker -bind_at_load
+SOFLAGS= -dynamiclib -flat_namespace -undefined suppress
+LDFLAGS= 
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
-#MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/pthreads.o
 MAPOPTION=  $(OBJDIR)/par.o
 
 #################################################################
@@ -102,65 +97,4 @@ MAPOPTION=  $(OBJDIR)/par.o
 
 
 include Makefile.generic2
-
-$(BINDIR)/eusg $(ADLIBDIR)/$(LIBEUSGEO) $(GEOOBJECTS) $(GEOCOBJECTS) $(IMGCOBJECTS) $(IMGOBJECTS) \
-$(BINDIR)/eusx $(ADLIBDIR)/$(LIBEUSX) $(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) 	\
-$(BINDIR)/eusgl $(ADLIBDIR)/$(LIBEUSGL) $(GLOBJECTS) $(GLCOBJECTS) 	:
-	@echo ";; Do not compile $@ for Darwin"
-
-# $(ADLIBDIR)/$(LIBEUSGEO):
-# 	@echo ";; Do not compile $@ for Darwin"
-# $(ADLIBDIR)/$(LIBEUSX):
-# 	@echo ";; Do not compile $@ for Darwin"
-# $(ADLIBDIR)/$(LIBEUSGL):
-# 	@echo ";; Do not compile $@ for Darwin"
-
-# $(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(GEOOBJECTS) $(GEOCOBJECTS)  \
-# 		$(IMGCOBJECTS) $(IMGOBJECTS)
-# 	($(CC) -o $(BINDIR)/eusg $(LDFLAGS)  \
-# 	 	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
-# 		$(LCOBJECTS) $(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
-# 		$(GEOOBJECTS) $(GEOCOBJECTS) \
-# 		$(IMGCOBJECTS) $(IMGOBJECTS) \
-# 		$(COMPOBJECTS) $(EUSLIB) $(RAWLIB) ; \
-# 	cd $(BINDIR); rm -f euscomp; ln -sf eusg euscomp)
-
-# $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
-# 		$(COMPOBJECTS) \
-# 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
-# 		$(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) 
-# 	($(CC) -o $(BINDIR)/eusx $(LDFLAGS)  \
-# 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
-# 		$(LOBJECTS)   $(LCOBJECTS) $(COMPOBJECTS) \
-# 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
-# 		$(GEOOBJECTS) $(GEOCOBJECTS) \
-# 		$(IMGCOBJECTS) $(IMGOBJECTS) \
-# 		$(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) \
-# 		$(XLIB)  $(RAWLIB);)
-
-# $(BINDIR)/eusgl: $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
-# 		$(LCOBJECTS) $(COMPOBJECTS) $(MAPOPTION) \
-# 		$(LIBEUSGEO) $(LIBEUSX) $(LIBEUSGL) 
-# 		$(CC) $(LDFLAGS) -o $(BINDIR)/eusgl \
-# 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
-# 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
-# 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
-# 		$(MAPOPTION) $(GEOOBJECTS) $(GEOCOBJECTS) \
-# 		$(IMGCOBJECTS) $(IMGOBJECTS) \
-# 		$(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) \
-# 		$(GLCOBJECTS) $(GLOBJECTS) \
-# 		$(GLLIB) $(RAWLIB)\
-# 		>$(ADLIBDIR)/eusmap
-# 		$(CC) $(SOFLAGS) -o $(ADLIBDIR)/libeusgl.dylib $(LDFLAGS) \
-# 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
-# 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
-# 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
-# 		$(MAPOPTION) $(GEOOBJECTS) $(GEOCOBJECTS) \
-# 		$(IMGCOBJECTS) $(IMGOBJECTS) \
-# 		$(XOBJECTS) $(XTKOBJECTS) $(XCOBJECTS) \
-# 		$(GLCOBJECTS) $(GLOBJECTS) \
-# 		$(GLLIB) $(RAWLIB)\
-
-		
-# COMPOBJECTS =
 
