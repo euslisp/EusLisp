@@ -251,6 +251,8 @@
   (setq *OS-VERSION* "alpha")
 #+:cygwin
   (setq *OS-VERSION* "Cygwin")
+#+:darwin
+  (setq *OS-VERSION* "Darwin")
 
 ; llib objects
 (system:alloc 80000)

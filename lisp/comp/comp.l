@@ -1308,6 +1308,8 @@
 		   	 ((memq :vax *features*)  " -Dvax -J")
 		   	 ((memq :news *features*)  " -Dnews")
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
+		   	 ((memq :darwin *features*)
+			  " -DDarwin -Dx86_64 -DLinux -w -malign-functions=4 ")
 		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
 			  (if (memq :x86_64 *features*)
 				" -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 "
@@ -1318,7 +1320,6 @@
 				" -Di386 -DLinux -Wimplicit -malign-functions=8 "))
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
 			 ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DX_V11R6_1 -falign-functions=4")
-		   	 ((memq :darwin *features*)  " -DDarwin")
 			 ((memq :i386  *features*) " -Di386")
 			 (t (warn "cpu type is not properly set")))
 		   (cond ((memq :sunos4 *features*) " -DSunOS4 -Bstatic")
@@ -1363,7 +1364,7 @@
 			(concatenate string
 				     (cond 
 				      ((memq :darwin *features*)
-				       "; ld -shared -o ")
+				       "; gcc -dynamiclib -flat_namespace -undefined suppress -o ")
 				      ((memq :sh4 *features*)
 				       "; sh4-linux-gcc -shared -o ")
 				      ((memq :ia32 *features*)
