@@ -92,11 +92,14 @@
 ; libpq.so foreign functions
 ;****************************************************************
 
-#+:linux
+#+:darwin
+(setq *libpq* nil)
+#+(and :linux (not :darwin))
 (setq *libpq* (load "/usr/lib/libpq.so"))
 #+:cygwin
 (setq *libpq* (load "/usr/bin/cygpq.dll"))
 
+(when *libpq*
 (defforeign setdbLogin *libpq* "PQsetdbLogin"
 	() (:foreign-string 4436))
 ;; sizeof(PGconn)=4436
@@ -163,7 +166,7 @@
 (defforeign lo_lseek *libpq* "lo_lseek" (:string :integer :integer :integer) :integer)
 (defforeign lo_close *libpq* "lo_close" (:string :integer) :integer)
 (defforeign lo_unlink *libpq* "lo_unlink" (:string :integer) :integer)
-
+) ;; when *libpq*
 ;; mode bits for lo_creat, lo_open
 ;; #define INV_WRITE               0x00020000
 ;; #define INV_READ                0x00040000
