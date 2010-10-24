@@ -426,7 +426,7 @@ char *xentry;
    entry=(eusinteger_t)dlsym(dlhandle, xentry);
 #elif Darwin
    eusinteger_t dlhandle;
-   dlhandle=(eusinteger_t)dlopen("/usr/X11/lib/libX11.dylib", RTLD_LAZY);
+   dlhandle=(eusinteger_t)dlopen("/opt/local/lib/libX11.dylib", RTLD_LAZY);
    entry=(eusinteger_t)dlsym(dlhandle, xentry);
 #else
   entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3), xentry);

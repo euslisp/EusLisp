@@ -51,7 +51,7 @@ CFLAGS=-D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" -DDarwin \
 	-DLIB6 $(ALIGN_FUNCTIONS) -falign-functions=4 \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	-DGCC $(GCC3) \
-        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/include
+        -I/usr/include -I/opt/local/include -I$(EUSDIR)/include
 
 # Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
 # /usr/ucb/cc cannot compile because of its incapability of recognizing
@@ -72,7 +72,7 @@ LD=gcc
 # On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
 
 RAWLIB=-ldl -lm -lpthread
-XLIB= -L/usr/X11R6/lib -lX11
+XLIB= -L/opt/local/lib -lX11
 
 # specify directories where euslisp's libraries are located.
 EUSLIB= -L$(ADLIBDIR)
