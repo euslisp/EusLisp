@@ -598,6 +598,8 @@ pointer argv[];
   /* kanehiro's glu patch 2000.12.13 */
   defoglforeign(ctx,"gluTessBeginContour");
   defoglforeign(ctx,"gluTessEndContour");
+  defoglforeign(ctx,"gluTessBeginPolygon");
+  defoglforeign(ctx,"gluTessEndPolygon");
 
 #if GL_EXT_texture_object
   defoglforeign(ctx,"glGenTexturesEXT");
