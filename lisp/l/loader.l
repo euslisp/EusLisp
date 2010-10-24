@@ -108,6 +108,7 @@
 	      ((member :irix6 *features*) (list #x7f #\E #\L #\F))
 	      ((member :mips *features*) (list #x62 #x1))
 	      ((member :Solaris2 *features*) (list #x7f #\E #\L #\F))
+	      ((member :darwin *features*) (list #xcf #xfa #xed #xfe))
 	      ((member :linux *features*) (list #x7f #\E #\L #\F))
 	      ((member :cygwin *features*) (list #x4d #x5a #x90 #x00))
 ; alpha is little endian
@@ -223,6 +224,8 @@
 			  '(:file :character :fifo :socket))
 			(do-load path))
 		      ((probe-file (setq oname (merge-pathnames ".dll" path)))
+		       (do-load oname))
+		      ((probe-file (setq oname (merge-pathnames ".dylib" path)))
 		       (do-load oname))
 		      ((probe-file (setq oname (merge-pathnames ".so" path)))
 		       (do-load oname))

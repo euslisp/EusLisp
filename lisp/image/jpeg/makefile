@@ -1,20 +1,25 @@
 # jpeg compression/decompression for euslisp
 # copyright (c) 1997, Toshihiro Matsui, Electrotechnical Laboratory
 
-OS = $(shell /bin/uname | sed s/-.*//)
+OS = $(shell uname | sed s/-.*//)
 ifeq ($(OS), Linux)
+ LSFX = so
+else ifeq ($(OS), Darwin)
  LSFX = so
 else
  LSFX = dll
 endif
 
 CC = gcc
-ifeq ($(shell /bin/uname -m), x86_64)
+ifeq ($(shell uname -m), x86_64)
 ifneq ($(ARCHDIR), Linux64)
 CC += -m32
 else
 CC += -fPIC
 endif
+endif
+ifeq ($(ARCHDIR), Darwin)
+CC += -I/opt/local/lib/jpeg6b/include -L/opt/local/lib/jpeg6b/lib
 endif
 ARCH=$(ARCHDIR)
 LIBDIR=$(EUSDIR)/$(ARCH)/lib
