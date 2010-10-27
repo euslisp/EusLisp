@@ -108,7 +108,7 @@
 	      ((member :irix6 *features*) (list #x7f #\E #\L #\F))
 	      ((member :mips *features*) (list #x62 #x1))
 	      ((member :Solaris2 *features*) (list #x7f #\E #\L #\F))
-	      ((member :darwin *features*) (list #xcf #xfa #xed #xfe))
+	      ((member :darwin *features*) (list '(#xcf #xca) '(#xfa #xfe) '(#xed #xba) '(#xfe #x #xbe)))
 	      ((member :linux *features*) (list #x7f #\E #\L #\F))
 	      ((member :cygwin *features*) (list #x4d #x5a #x90 #x00))
 ; alpha is little endian
@@ -131,7 +131,8 @@
 	 (ans t)
 	 (quit nil))
 	((or (null cmplist) (>= hptr hlen) quit) ans)
-	(if (and cnum (not (eql hnum cnum)))
+	(if (and cnum (not (eql hnum cnum))
+		 (not (memq hnum cnum)))
 	    (setq ans nil quit t))
 	)
     )))
