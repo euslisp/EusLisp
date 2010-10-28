@@ -1108,7 +1108,7 @@ pointer *argv;
   return(a);}
 #endif /* !vxworks*/
 
-#if Solaris2 || linux || alpha || Cygwin
+#if Solaris2 || Linux || alpha || Cygwin
 /*
   Usage: (unix::directory "directory_name")
   Return: a reverse list of file names in "directory_name" dir.
