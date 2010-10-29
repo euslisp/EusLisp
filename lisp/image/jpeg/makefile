@@ -4,10 +4,12 @@
 OS = $(shell uname | sed s/-.*//)
 ifeq ($(OS), Linux)
  LSFX = so
-else ifeq ($(OS), Darwin)
+else
+ifeq ($(OS), Darwin)
  LSFX = so
 else
  LSFX = dll
+endif
 endif
 
 CC = gcc
