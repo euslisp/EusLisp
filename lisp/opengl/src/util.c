@@ -265,6 +265,9 @@ void glPolygonOffsetEXTfv(v)
 void glPointSized (double d) {
   glPointSize((float)d);
 }
+void glLineWidthd (double d) {
+  glLineWidth((float)d);
+}
 void gluNurbsPropertyd(GLUnurbs* nurb, GLenum property, double value) {
   gluNurbsProperty(nurb, property, (GLfloat)value);
 }
