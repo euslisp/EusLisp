@@ -458,6 +458,9 @@ extern pointer THR_SETCONCURRENCY(context */*ctx*/, int /*n*/, pointer */*argv*/
 extern pointer THR_SETPRIO(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer THR_SIGSETMASK(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer THR_SUSPEND(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer MAKE_THREAD(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer AFUNCALL(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer AFUNCALL_NO_WAIT(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer WAIT_AFUNCALL(context */*ctx*/, int /*n*/, pointer */*argv*/);
 /* paragc.c */
 /* predicates.c */
