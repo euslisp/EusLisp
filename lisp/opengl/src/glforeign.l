@@ -340,6 +340,7 @@
   (set-function-fv-as-dv glgetfloatv glGetDoublev)
   (set-function-fv-as-dv glmultmatrixf glMultMatrixd)
   (set-function-fv-as-dv glPointSize glPointSized)
+  (set-function-fv-as-dv glLineWidth glLineWidthd)
   ;; define wrapped functions later
   (setf (symbol-function 'glLightfv-org)
         (symbol-function 'glLightfv))

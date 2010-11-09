@@ -593,6 +593,7 @@ pointer argv[];
   defoglforeign(ctx,"glDepthRangefv");
 #if x86_64
   defoglforeign(ctx,"glPointSized");
+  defoglforeign(ctx,"glLineWidthd");
   defoglforeign(ctx,"gluNurbsPropertyd");
 #endif
   /* kanehiro's glu patch 2000.12.13 */
