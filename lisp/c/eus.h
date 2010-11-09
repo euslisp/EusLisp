@@ -31,7 +31,6 @@ typedef float eusfloat_t;
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <malloc.h>
 #include <ctype.h>
 #endif
 
