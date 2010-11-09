@@ -129,8 +129,12 @@ extern int sema_port(sema_t *);
 extern int sema_wait(sema_t *);
 extern int sema_trywait(sema_t *);
 
+extern int mthread(context *ctx, pointer mod);
 #endif	/* !Solaris2 */
-
+#if PTHREAD
+extern int sema_post(sema_t *sem);
+extern void mthread_init( context *mainctx );
+#endif
 
 /*
  * EusLisp variables

@@ -31,6 +31,8 @@ typedef float eusfloat_t;
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <malloc.h>
+#include <ctype.h>
 #endif
 
 #if alpha
@@ -1060,7 +1062,7 @@ extern pointer defconst(context *, char *, pointer, pointer);
 extern pointer stacknlist(context *, int);
 #endif
 
-#if Solaris2 || SunOS4_1 || alpha
+#if THREADED
 extern pointer makethreadport(context *);
 #endif
 
@@ -1104,6 +1106,5 @@ extern sema_t   free_thread_sem;
 }
 #endif
 
-#if x86_64
-eusinteger_t hide_ptr (pointer p);
-#endif
+extern eusinteger_t hide_ptr (pointer p);
+
