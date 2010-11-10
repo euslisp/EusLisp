@@ -41,7 +41,12 @@ else
 endif
 
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
-MACHINE=x86_64
+OS_VERSION=$(shell sw_vers -productVersion | sed s/\.[^.]*$$//)
+ifeq ($(OS_VERSION), 10.5) 
+ MACHINE=i386
+else
+ MACHINE=x86_64
+endif
 DEBUG= -g
 
 # If you use libc.so.5, remove -DLIB6 option.

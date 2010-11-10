@@ -12,7 +12,12 @@ else
 endif
 endif
 
-CC = gcc
+ifneq ($(OS), Darwin)
+ LD = gcc -shared 
+else
+ LD = gcc -dynamiclib
+endif
+
 ifeq ($(shell uname -m), x86_64)
 ifneq ($(ARCHDIR), Linux64)
 CC += -m32
@@ -21,14 +26,15 @@ CC += -fPIC
 endif
 endif
 ifeq ($(ARCHDIR), Darwin)
-CC += -I/opt/local/lib/jpeg6b/include -L/opt/local/lib/jpeg6b/lib
+CC += -I/opt/local/lib/jpeg6b/include
+LD += -L/opt/local/lib/jpeg6b/lib
 endif
 ARCH=$(ARCHDIR)
 LIBDIR=$(EUSDIR)/$(ARCH)/lib
 OBJDIR=$(EUSDIR)/$(ARCH)/obj
 OBJFILES= $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o
 $(LIBDIR)/jpegmemcd.$(LSFX):	$(OBJFILES)
-	$(CC) -shared -o jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
+	$(LD) -o jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
 	mv jpegmemcd.$(LSFX) $(EUSDIR)/$(ARCHDIR)/lib
 
 $(OBJDIR)/jpegmemcd.o:	jpegmemcd.c
