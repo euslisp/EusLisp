@@ -199,9 +199,9 @@
 (defconstant unix::O_RDONLY 0)
 (defconstant unix::O_WRONLY 1)
 (defconstant unix::O_RDWR 2)
-#-:linux
+#-(and :linux (not :darwin))
 (defconstant unix::O_APPEND #x8)
-#+:linux
+#+(and :linux (not :darwin))
 (defconstant unix::O_APPEND #o2000)
 
 #-(or :Solaris2 :linux :irix :irix6)
@@ -214,11 +214,16 @@
    (defconstant unix::O_CREAT #x100)
    (defconstant unix::O_TRUNC #x200)
    (defconstant unix::O_EXCL  #x400) )
-#+:linux
+#+(and :linux (not :darwin))
 (progn
    (defconstant unix::O_CREAT #o100)
    (defconstant unix::O_TRUNC #o1000)
    (defconstant unix::O_EXCL  #o200) )
+#+:darwin
+(progn
+   (defconstant unix::O_CREAT #x0200)
+   (defconstant unix::O_TRUNC #x0400)
+   (defconstant unix::O_EXCL  #x0800) )
 
 (defconstant AF_UNIX  1)
 (defconstant AF_INET 2)
