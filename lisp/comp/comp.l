@@ -1309,7 +1309,7 @@
 		   	 ((memq :news *features*)  " -Dnews")
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
 		   	 ((memq :darwin *features*)
-			  (if (memq :86_64 *features*)
+			  (if (memq :x86_64 *features*)
 			      " -DDarwin -Dx86_64 -DLinux -w -malign-functions=4 "
 			    " -DDarwin -Di386 -DLinux -w -malign-functions=4 "))
 		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
