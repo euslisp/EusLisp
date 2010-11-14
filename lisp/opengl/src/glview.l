@@ -235,10 +235,10 @@
 	   ;; Tesslation support
 
 	   (setf *tess-obj* (gluNewTess))
-	   (gluTessCallbackl *tess-obj* GLU_BEGIN (#'glBegin . entry))
-	   ;;(gluTessCallbackl *tess-obj* GLU_VERTEX (#'glVertex3dv . entry))
-	   (gluTessCallbackl *tess-obj* GLU_VERTEX (#'tess_vertex_cb . entry))
-	   (gluTessCallbackl *tess-obj* GLU_END (#'glEnd . entry))
+	   (gluTessCallbackl *tess-obj* GLU_BEGIN (#'glBegin . entry) (#'glBegin . entry2))
+	   ;;(gluTessCallbackl *tess-obj* GLU_VERTEX (#'glVertex3dv . entry) (#'glVertex3dv . entry2))
+	   (gluTessCallbackl *tess-obj* GLU_VERTEX (#'tess_vertex_cb . entry) (#'tess_vertex_cb . entry2))
+	   (gluTessCallbackl *tess-obj* GLU_END (#'glEnd . entry) (#'glEnd . entry2))
 
 	   ; (setf window (auxxwindow))
 	   ;(setf x::drawable (auxxwindow))
