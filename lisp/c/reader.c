@@ -221,7 +221,7 @@ register pointer f;
 /****************************************************************/
 
 static pointer findlabel(labx)
-int labx;
+eusinteger_t labx;
 { register pointer obj,labid;
   labid=makeint(labx);
   obj=oblabels[thr_self()]->c.lab.next;
@@ -233,7 +233,7 @@ int labx;
 static pointer readlabdef(ctx,f,labx)
 context *ctx;
 pointer f;	/*stream*/
-int labx;
+eusinteger_t labx;
 { pointer  unsol, *unsolp, result,newlab;
 
   if (findlabel(labx)!=NIL)  error(E_READLABEL,makeint(labx));	/*already defined*/
@@ -265,7 +265,7 @@ pointer *addr;
   labp->c.lab.unsolved=(pointer)addr;
 #endif
 #if sun4 || vax || news || mips || alpha || i386 || x86_64
-  { int i;
+  { eusinteger_t i;
     i=(((eusinteger_t)addr)>>2);
     labp->c.lab.unsolved=makeint(i);}
 #endif
@@ -273,6 +273,8 @@ pointer *addr;
 
 static pointer readlabref(ctx,f,val,subchar)
 pointer f;
+eusinteger_t val;
+int subchar;
 { register pointer obj,element;
   obj=findlabel(val);
   if (obj==NIL) error(E_READLABEL,makeint(val));	/*undefined label*/
@@ -380,7 +382,8 @@ register context *ctx;
 register pointer s;	/*input stream*/
 {
   register pointer name, klass, elem, result;
-  register int i,sz;
+  register eusinteger_t sz;
+  register int i;
   Char ch;
 
   ch=nextch(ctx,s);
@@ -452,14 +455,16 @@ register pointer s;	/*input stream*/
 static pointer read_sharp_char(ctx,f,val,subchar)	/* #\ */
 register context *ctx;
 register pointer f;
-int val,subchar;
+eusinteger_t val;
+int subchar;
 { char ch;
   ch=readch(f); return(makeint(ch));}
 
 static pointer read_sharp_comment(ctx,f,val,subchar)	/* #| ... |# */
 register context *ctx;
 register pointer f;
-register int val,subchar;
+register eusinteger_t val;
+register int subchar;
 { Char ch;
   val=0;
   ch=readch(f);
@@ -523,13 +528,15 @@ int subchar;
 static pointer read_sharp_function(ctx,f,val,subchar)	/* #' */
 register context *ctx;
 pointer f;
-int val,subchar;
+eusinteger_t val;
+int subchar;
 { return(cons(ctx,FUNCTION,cons(ctx,read1(ctx,f),NIL)));}
 
 static pointer read_uninterned_symbol(ctx,f,val,subchar,token)	/* #: */
 context *ctx;
 pointer f;
-int val,subchar;
+eusinteger_t val;
+int subchar;
 char token[];
 { register int i=0;
   char ch;
@@ -617,7 +624,8 @@ register context *ctx;
 register pointer f;
 Char ch;
 char token[];
-{ register int i=0,val=0,subchar;
+{ register eusinteger_t val=0;
+  register int i=0,subchar;
   pointer macrofunc,result;
   pointer (*intmac)();
 
@@ -674,7 +682,7 @@ char token[];
 { register pointer pkg;
   pointer pkgstr,sym;
   register int doublecolon=1;
-  eusinteger_t hash;
+  int hash;
   if (colon==0) pkg=keywordpkg;
   else if (colon>0) {
     if (charattr[token[colon-1]]==package_marker) {
