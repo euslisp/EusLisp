@@ -93,7 +93,7 @@ extern int daylight;
 
 extern pointer eussigvec[NSIG];
 
-extern int coerceintval(pointer);
+extern eusinteger_t coerceintval(pointer);
 
 
 /***************** times and status *****************/

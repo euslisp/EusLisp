@@ -92,7 +92,7 @@ register int n;
 pointer newval;
 { register int x,y;
   numunion nu;
-  extern int coerceintval(pointer);
+  extern eusinteger_t coerceintval(pointer);
 
   if (n<0 || vecsize(a)<=n) error(E_ARRAYINDEX);
   switch(elmtypeof(a)) {
