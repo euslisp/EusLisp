@@ -49,12 +49,12 @@ pointer func,arg1,arg2;
 
 /* type-independent vector access primitives */
 
-int coerceintval(x)
+eusinteger_t coerceintval(x)
 register pointer x;
 { numunion nu;
   int y;
-  if (isflt(x)) return((int)(fltval(x)+0.5));
-  else return((int)bigintval(x)); /* why int ???? */
+  if (isflt(x)) return((eusinteger_t)(fltval(x)+0.5));
+  else return((eusinteger_t)bigintval(x));
   }
 
 pointer fastvref(vec,index)

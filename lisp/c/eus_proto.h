@@ -508,7 +508,7 @@ extern void initreader(context */*ctx*/);
 /* sequence.c */
 extern pointer call1(context */*ctx*/, pointer /*func*/, pointer /*arg*/);
 extern pointer call2(context */*ctx*/, pointer /*func*/, pointer /*arg1*/, pointer /*arg2*/);
-extern int coerceintval(pointer /*x*/);
+extern eusinteger_t coerceintval(pointer /*x*/);
 extern pointer fastvref(pointer /*vec*/, int /*index*/);
 extern void fastvset(pointer /*vec*/, int /*index*/, pointer /*val*/);
 extern pointer IDENTITY(context */*ctx*/, int /*n*/, pointer /*argv*/*);
