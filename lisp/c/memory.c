@@ -148,6 +148,7 @@ register int k;
   if((char *)cp < minmemory)
     minmemory = (char *)cp;
 #endif
+  cp->rootcell.h.cix = -1; /* free tag */
   buddy[k].bp= &cp->rootcell;
   buddy[k].count++;
   totalheap += s; freeheap += s;
@@ -179,6 +180,7 @@ register struct buddyfree *buddy;
     b2->h.cix = -1; /* free tag */
 #else
     b2->h.bix= 1;
+    b2->h.cix = -1; /* free tag */
 #endif
   } else {
     b1->b.nextbcell= buddy[k-1].bp;
@@ -192,6 +194,7 @@ register struct buddyfree *buddy;
     b2->h.cix = -1; /* free tag */
 #else
     b2->h.bix= k-2;
+    b2->h.cix = -1; /* free tag */
 #endif
   }
   b2->h.m=b1->h.m;
