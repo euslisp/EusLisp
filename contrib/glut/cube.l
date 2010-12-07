@@ -79,10 +79,10 @@
 
 (defun main nil
   (let ((argc "0")
-	(argv "0") (argv0 (unix::malloc 4)) argv1
+	(argv "0") (argv0 (unix::malloc lisp::sizeof-*)) argv1
 	(str "red 3D lighted cube"))
     (sys::poke 1 argc 0 :integer)
-    (setq argv1 (make-foreign-string argv0 4))
+    (setq argv1 (make-foreign-string argv0 lisp::sizeof-*))
     (setf (elt argv1 0) 0)
     (sys::poke argv0 argv 0 :integer)
     (glutInit argc argv)

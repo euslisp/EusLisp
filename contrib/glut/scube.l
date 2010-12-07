@@ -507,12 +507,12 @@
 
 (defun main nil
   (let ((argc "0")
-	(argv "0") (argv0 (unix::malloc 4)) argv1
+	(argv "0") (argv0 (unix::malloc lisp::sizeof-*)) argv1
 	(width 350) (height 350))
     (glutInitWindowSize width height)
 
     (sys::poke 1 argc 0 :integer)
-    (setq argv1 (make-foreign-string argv0 4))
+    (setq argv1 (make-foreign-string argv0 lisp::sizeof-*))
     (setf (elt argv1 0) 0)
     (sys::poke argv0 argv 0 :integer)
     (glutInit argc argv)
