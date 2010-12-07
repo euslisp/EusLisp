@@ -1,7 +1,7 @@
 #+:cygwin
 (setq m (load-foreign "/usr/X11R6/bin/cygglut-3.dll"))
 #-:cygwin
-(setq m (load-foreign "/usr/lib/libglut.so.3.7"))
+(setq m (load-foreign "/usr/lib/libglut.so"))
 
 ;; Display mode bit masks.
 (defconstant GLUT_RGB			0)
