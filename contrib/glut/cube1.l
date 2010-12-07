@@ -29,7 +29,6 @@
 (setf (elt argv1 0) 0)
 (sys::poke argv0 argv 0 :integer)
 (gl::glutInit argc argv)
-(gl::glutInit argc argv)
 (gl::glutInitDisplayMode (logior GLUT_DOUBLE GLUT_RGB GLUT_DEPTH))
 (gl::glutCreateWindow (+ (sys:address str) (* lisp::sizeof-* 2)))
 (gl::glutDisplayFunc (pod-address 'gl::display1))
