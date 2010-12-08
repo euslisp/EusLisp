@@ -11,6 +11,7 @@
       (glNormal3fv (send f :normal))
       (dolist (v (cdr (send f :vertices)))
 	(glVertex3fv v))
+      (glEnd)
       )
     ))
 
