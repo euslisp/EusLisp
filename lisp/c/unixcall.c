@@ -1399,6 +1399,19 @@ pointer argv[];
   return(makeint(errno));
   }
 
+pointer PERROR(ctx,n,argv)
+context *ctx;
+int n;
+pointer argv[];
+{ 
+  ckarg(1);
+  char *s=Getstring(argv[0])->c.str.chars;
+  fprintf(stderr, "%c[3%cm;; ERROR ", 0x1b, 49);
+  perror(s);
+  fprintf(stderr, "%c[0m", 0x1b);
+  return T;
+  }
+
 pointer SYSERRLIST(ctx,n,argv)
 register context *ctx;
 register int n;
@@ -2069,6 +2082,7 @@ pointer mod;
   defun(ctx,"ENVIRON",mod,ENVIRON);
   defun(ctx,"SLEEP",mod,SLEEP);
   defun(ctx,"ERRNO",mod,ERRNO);
+  defun(ctx,"PERROR",mod,PERROR);
   defun(ctx,"SYSERRLIST",mod,SYSERRLIST);
   defun(ctx,"PAUSE",mod,PAUSE);
   defun(ctx,"ISATTY",mod,ISATTY);
