@@ -349,7 +349,7 @@
        (if (< id 0)
 	   (return-from :init id))
        (setq stat (unix:bind id address))
-       (cond ((< stat 0) stat)
+       (cond ((< stat 0) (unix:perror "bind") stat)
 	     (t (setq stat (send self :listen))
 		(if (= stat 0) self stat)))
        )) )
