@@ -243,6 +243,8 @@
   (setq *OS-VERSION* "SunOS 4.1")
 #+:linux
   (setq *OS-VERSION* "Linux")
+#+(and :linux :x86_64)
+  (setq *OS-VERSION* "Linux64")
 #+:irix
   (setq *OS-VERSION* "IRIX")
 #+:irix6
