@@ -143,7 +143,7 @@ extern eusinteger_t setjmp_val;
 #define KEYWORDPARAMETERLIMIT 32	/*determined by bits in a long word*/
 #define ARRAYRANKLIMIT	7	/*minimal requirement for CommonLisp*/
 #define MAXTHREAD	64	/*maximum number of threads*/
-#define MAX_SPECIALS	256	/*maximum number of special variables*/
+#define MAX_SPECIALS	512	/*maximum number of special variables*/
 #if (WORD_SIZE == 64)
 #define MAXPOSFIXNUM (0x1fffffffffffffff)
 #define MINNEGFIXNUM (0xe000000000000000)
