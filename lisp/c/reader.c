@@ -941,11 +941,11 @@ int colon;
         else return(readsymbol(ctx,i,colon,token));}
       else if (token[j] == '/') {  /* ratio? */
         slash=j;
-        if (++j==i) return(readsymbol(i,colon));
+        if (++j==i) return(readsymbol(ctx,i,colon,token));
         /*ratio or symbol*/
         while (is_digit(token[j],base)) j++;
         if (j==i) return(readratio(ctx,token,slash));
-        else return(readsymbol(i,colon));}
+        else return(readsymbol(ctx,i,colon,token));}
       else if (j==i) return(readint(ctx,token,i));
       else {
         c=to_upper(token[j]);
