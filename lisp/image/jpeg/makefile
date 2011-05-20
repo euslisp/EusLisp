@@ -20,7 +20,11 @@ endif
 
 ifeq ($(shell uname -m), x86_64)
 ifneq ($(ARCHDIR), Linux64)
+ifneq ($(ARCHDIR), Darwin)
 CC += -m32
+else
+CC += -fPIC
+endif
 else
 CC += -fPIC
 endif
