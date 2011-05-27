@@ -4,7 +4,7 @@
 ;;(unless (find-package "GL") (make-package "GL"))
 ;;(in-package "GL")
 ;;(when (and 
-;;       (substringp "gl" *program-name*)
+;;       (substringp "gl" (pathname-name *program-name*))
 ;;       (push :GL *features*)
 ;;       (use-package "GEOMETRY")
 ;;       (sys::exec-module-init "oglforeign")
