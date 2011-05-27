@@ -45,7 +45,7 @@
 ;; (shadow 'gc)
 ;; initilize Xlib interface
 (when (and 
-       (or (substringp "sx" *program-name*) (substringp "gl" *program-name*))
+       (or (substringp "sx" (pathname-name *program-name*)) (substringp "gl" (pathname-name *program-name*)))
 	(sys::exec-module-init "xforeign" "xwindow/loadx.l")
 #+(and :thread :x11r6.1)
 	(InitThreads)
@@ -103,7 +103,7 @@
 
 ;; opengl or Mesa
 ;;
-(when   (substringp "gl" *program-name*)
+(when   (substringp "gl" (pathname-name *program-name*))
    (load (format nil "~a/lib/eusglrt.l" *eusdir*)))
 
 (in-package "USER")
