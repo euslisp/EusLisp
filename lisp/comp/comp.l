@@ -1310,16 +1310,16 @@
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
 		   	 ((memq :darwin *features*)
 			  (if (memq :x86_64 *features*)
-			      " -DDarwin -Dx86_64 -DLinux -w -malign-functions=4 "
+			      " -DDarwin -Dx86_64 -DLinux -w -malign-functions=8 "
 			    " -DDarwin -Di386 -DLinux -w -malign-functions=4 "))
 		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
 			  (if (memq :x86_64 *features*)
 				" -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 "
-				" -Di386 -DLinux -w -falign-functions=4 -DGCC3 "))
+				" -Di386 -DLinux -Wimplicit -falign-functions=4 -DGCC3 "))
 		   	 ((memq :linux *features*)
 			  (if (memq :x86_64 *features)
-				" -Dx86_64 -DLinux -w -malign-functions=4 "
-				" -Di386 -DLinux -Wimplicit -malign-functions=8 "))
+				" -Dx86_64 -DLinux -Wimplicit -malign-functions=8 "
+				" -Di386 -DLinux -Wimplicit -malign-functions=4 "))
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
 			 ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DX_V11R6_1 -falign-functions=4")
 			 ((memq :i386  *features*) " -Di386")
