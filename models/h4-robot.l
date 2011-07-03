@@ -2720,97 +2720,97 @@
 
      ;; definition of joint
 
-     ;; definition of :neck-z
+     ;; definition of :h4head-neck-z
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :h4head-neck-z :axis :-z
 			     :min -120.0 :max  120.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :neck-x
+     ;; definition of :h4head-neck-x
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink1 :child-link blink2 :name :h4head-neck-x :axis :-z
 			     :min  -60.0 :max   60.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :camera1-z
+     ;; definition of :h4head-camera1-z
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink2 :child-link blink3 :name :h4head-camera1-z :axis :-z
 			     :min  -60.0 :max   60.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :camera2-z
+     ;; definition of :h4head-camera2-z
      (setq joint3 (instance rotational-joint :init
 			     :parent-link blink2 :child-link blink4 :name :h4head-camera2-z :axis :-z
 			     :min  -60.0 :max   60.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :shoulder-p
+     ;; definition of :h4larm-shoulder-p
      (setq joint4 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink5 :name :h4larm-shoulder-p :axis :-z
 			     :min  -10.0 :max  170.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :shoulder-r
+     ;; definition of :h4larm-shoulder-r
      (setq joint5 (instance rotational-joint :init
 			     :parent-link blink5 :child-link blink6 :name :h4larm-shoulder-r :axis :-z
 			     :min -120.0 :max   45.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :shoulder-y
+     ;; definition of :h4larm-shoulder-y
      (setq joint6 (instance rotational-joint :init
 			     :parent-link blink6 :child-link blink7 :name :h4larm-shoulder-y :axis :-z
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :elbow-p
+     ;; definition of :h4larm-elbow-p
      (setq joint7 (instance rotational-joint :init
 			     :parent-link blink7 :child-link blink8 :name :h4larm-elbow-p :axis :-z
 			     :min   -5.0 :max  135.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :wrist-y
+     ;; definition of :h4larm-wrist-y
      (setq joint8 (instance rotational-joint :init
 			     :parent-link blink8 :child-link blink9 :name :h4larm-wrist-y :axis :-z
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :wrist-p
+     ;; definition of :h4larm-wrist-p
      (setq joint9 (instance rotational-joint :init
 			     :parent-link blink9 :child-link blink10 :name :h4larm-wrist-p :axis :-z
 			     :min   -5.0 :max  135.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :shoulder-p
+     ;; definition of :h4rarm-shoulder-p
      (setq joint10 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink11 :name :h4rarm-shoulder-p :axis :-z
 			     :min  -10.0 :max  170.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :shoulder-r
+     ;; definition of :h4rarm-shoulder-r
      (setq joint11 (instance rotational-joint :init
 			     :parent-link blink11 :child-link blink12 :name :h4rarm-shoulder-r :axis :-z
 			     :min -120.0 :max   45.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :shoulder-y
+     ;; definition of :h4rarm-shoulder-y
      (setq joint12 (instance rotational-joint :init
 			     :parent-link blink12 :child-link blink13 :name :h4rarm-shoulder-y :axis :-z
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :elbow-p
+     ;; definition of :h4rarm-elbow-p
      (setq joint13 (instance rotational-joint :init
 			     :parent-link blink13 :child-link blink14 :name :h4rarm-elbow-p :axis :-z
 			     :min   -5.0 :max  135.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :wrist-y
+     ;; definition of :h4rarm-wrist-y
      (setq joint14 (instance rotational-joint :init
 			     :parent-link blink14 :child-link blink15 :name :h4rarm-wrist-y :axis :-z
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :wrist-p
+     ;; definition of :h4rarm-wrist-p
      (setq joint15 (instance rotational-joint :init
 			     :parent-link blink15 :child-link blink16 :name :h4rarm-wrist-p :axis :-z
 			     :min   -5.0 :max  135.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :waist2-z
+     ;; definition of :h4waist-waist2-z
      (setq joint18 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink19 :name :h4waist-waist2-z :axis :-z
 			     :min -180.0 :max  180.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :waist-x
+     ;; definition of :h4waist-waist-x
      (setq joint17 (instance rotational-joint :init
 			     :parent-link blink19 :child-link blink18 :name :h4waist-waist-x :axis :-z
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :waist1-z
+     ;; definition of :h4waist-waist1-z
      (setq joint16 (instance rotational-joint :init
 			     :parent-link blink18 :child-link blink17 :name :h4waist-waist1-z :axis :-z
 			     :min -180.0 :max  180.0 :max-joint-velocity 0.785398 :max-joint-torque 100))

@@ -246,9 +246,9 @@
 
      ;; definition of joint
 
-     ;; definition of :joint221737432
+     ;; definition of :joint0
      (setq joint0 (instance rotational-joint :init
-			     :parent-link blink0 :child-link blink1 :name :joint221737432 :axis :-y
+			     :parent-link blink0 :child-link blink1 :name :joint0    :axis :-y
 			     :min    0.0 :max  180.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
 
@@ -263,7 +263,7 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:joint221737432 (&rest args) (forward-message-to joint0 args))
+  (:joint0 (&rest args) (forward-message-to joint0 args))
   (:handle () (list ))
   (:attention () (list ))
   (:button () (list ))
