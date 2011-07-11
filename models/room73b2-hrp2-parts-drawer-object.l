@@ -269,22 +269,22 @@
 
      ;; definition of :drawer0
      (setq joint1 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink2 :name :drawer0   :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink2 :name :drawer1   :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
      ;; definition of :drawer0
      (setq joint2 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink3 :name :drawer0   :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink3 :name :drawer2   :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
      ;; definition of :drawer0
      (setq joint3 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink4 :name :drawer0   :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink4 :name :drawer3   :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
      ;; definition of :drawer0
      (setq joint4 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink5 :name :drawer0   :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink5 :name :drawer4   :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
 
