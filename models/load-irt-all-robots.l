@@ -113,3 +113,4 @@
 (load "models/ape-robot.l")
 ;;
 ;;
+(setq *irt-all-robots* '( (ape) (ape3) (hanzou) (miharu) (saizo) (ikuo-haru) (hanzous) (bishamon) (igoid) (igoid2) (igoid3) (kuma) (taro) (millennium) (akira) (akira2) (akira3) (zero) (kaz) (kaz2) (kaz3) (tot) (chibikaz) (tama) (tamaii) (penguin) (macra) (macket) (jrob1) (h3) (h3s) (h4) (h6) (h7) (patra) (human)))
