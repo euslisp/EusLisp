@@ -267,24 +267,24 @@
 			     :parent-link blink0 :child-link blink1 :name :drawer0   :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :drawer0
+     ;; definition of :drawer01
      (setq joint1 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink2 :name :drawer1   :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink2 :name :drawer01  :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :drawer0
+     ;; definition of :drawer02
      (setq joint2 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink3 :name :drawer2   :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink3 :name :drawer02  :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :drawer0
+     ;; definition of :drawer03
      (setq joint3 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink4 :name :drawer3   :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink4 :name :drawer03  :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :drawer0
+     ;; definition of :drawer04
      (setq joint4 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink5 :name :drawer4   :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink5 :name :drawer04  :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  400.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
 
@@ -304,10 +304,10 @@
    (forward-message-to-all (list) args))
 
   (:drawer0 (&rest args) (forward-message-to joint0 args))
-  (:drawer1 (&rest args) (forward-message-to joint1 args))
-  (:drawer2 (&rest args) (forward-message-to joint2 args))
-  (:drawer3 (&rest args) (forward-message-to joint3 args))
-  (:drawer4 (&rest args) (forward-message-to joint4 args))
+  (:drawer01 (&rest args) (forward-message-to joint1 args))
+  (:drawer02 (&rest args) (forward-message-to joint2 args))
+  (:drawer03 (&rest args) (forward-message-to joint3 args))
+  (:drawer04 (&rest args) (forward-message-to joint4 args))
   (:handle () (list  handle0))
   (:handle-handle0 () handle0)
   (:attention () (list ))
