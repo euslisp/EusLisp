@@ -253,17 +253,17 @@
      ;; definition of :hour-joint
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :hour-joint :axis :-x
-			     :min -360.0 :max  360.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min -360.0 :max  360.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :minute-joint
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink1 :child-link blink2 :name :minute-joint :axis :-x
-			     :min -360.0 :max  360.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min -360.0 :max  360.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :second-joint
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink2 :child-link blink3 :name :second-joint :axis :-x
-			     :min -360.0 :max  360.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min -360.0 :max  360.0 :max-joint-velocity 5 :max-joint-torque 100))
 
 
      ;; init-ending 
