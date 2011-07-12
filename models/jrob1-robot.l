@@ -1155,72 +1155,72 @@
      ;; definition of :titan-head-neck-y
      (setq joint12 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink13 :name :titan-head-neck-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :titan-head-neck-p
      (setq joint13 (instance rotational-joint :init
 			     :parent-link blink13 :child-link blink14 :name :titan-head-neck-p :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lf-crotch-y
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :lf-crotch-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lf-crotch-r
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink1 :child-link blink2 :name :lf-crotch-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lf-knee-r
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink2 :child-link blink3 :name :lf-knee-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lb-crotch-y
      (setq joint3 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink4 :name :lb-crotch-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lb-crotch-r
      (setq joint4 (instance rotational-joint :init
 			     :parent-link blink4 :child-link blink5 :name :lb-crotch-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lb-knee-r
      (setq joint5 (instance rotational-joint :init
 			     :parent-link blink5 :child-link blink6 :name :lb-knee-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rf-crotch-y
      (setq joint6 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink7 :name :rf-crotch-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rf-crotch-r
      (setq joint7 (instance rotational-joint :init
 			     :parent-link blink7 :child-link blink8 :name :rf-crotch-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rf-knee-r
      (setq joint8 (instance rotational-joint :init
 			     :parent-link blink8 :child-link blink9 :name :rf-knee-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rb-crotch-y
      (setq joint9 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink10 :name :rb-crotch-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rb-crotch-r
      (setq joint10 (instance rotational-joint :init
 			     :parent-link blink10 :child-link blink11 :name :rb-crotch-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rb-knee-r
      (setq joint11 (instance rotational-joint :init
 			     :parent-link blink11 :child-link blink12 :name :rb-knee-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      (setq titan-head-root-link blink13)
      (setq titan-head (list blink13 blink14))

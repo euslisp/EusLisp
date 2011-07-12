@@ -1264,82 +1264,82 @@
      ;; definition of :torso-waist-p
      (setq joint9 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink10 :name :torso-waist-p :axis :-z
-			     :min -115.0 :max   65.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min -115.0 :max   65.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :head-neck-p
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :head-neck-p :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :larm-shoulder-p
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink2 :name :larm-shoulder-p :axis :-z
-			     :min  -10.0 :max  135.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -10.0 :max  135.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :larm-shoulder-r
      (setq joint3 (instance rotational-joint :init
 			     :parent-link blink2 :child-link blink4 :name :larm-shoulder-r :axis :-z
-			     :min  -10.0 :max  170.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -10.0 :max  170.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :larm-elbow-y
      (setq joint5 (instance rotational-joint :init
 			     :parent-link blink4 :child-link blink6 :name :larm-elbow-y :axis :-z
-			     :min   90.0 :max  270.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min   90.0 :max  270.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :larm-elbow-p
      (setq joint7 (instance rotational-joint :init
 			     :parent-link blink6 :child-link blink8 :name :larm-elbow-p :axis :-z
-			     :min   -5.0 :max  175.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min   -5.0 :max  175.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rarm-shoulder-p
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink3 :name :rarm-shoulder-p :axis :-z
-			     :min  -10.0 :max  170.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -10.0 :max  170.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rarm-shoulder-r
      (setq joint4 (instance rotational-joint :init
 			     :parent-link blink3 :child-link blink5 :name :rarm-shoulder-r :axis :-z
-			     :min   20.0 :max  200.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min   20.0 :max  200.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rarm-elbow-y
      (setq joint6 (instance rotational-joint :init
 			     :parent-link blink5 :child-link blink7 :name :rarm-elbow-y :axis :-z
-			     :min   90.0 :max  270.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min   90.0 :max  270.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rarm-elbow-p
      (setq joint8 (instance rotational-joint :init
 			     :parent-link blink7 :child-link blink9 :name :rarm-elbow-p :axis :-z
-			     :min   -5.0 :max  175.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min   -5.0 :max  175.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lleg-crotch-r
      (setq joint10 (instance rotational-joint :init
 			     :parent-link blink10 :child-link blink11 :name :lleg-crotch-r :axis :-z
-			     :min -130.0 :max   50.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min -130.0 :max   50.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lleg-crotch-p
      (setq joint12 (instance rotational-joint :init
 			     :parent-link blink11 :child-link blink13 :name :lleg-crotch-p :axis :-z
-			     :min  -75.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -75.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lleg-knee-p
      (setq joint14 (instance rotational-joint :init
 			     :parent-link blink13 :child-link blink15 :name :lleg-knee-p :axis :-z
-			     :min -130.0 :max   10.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min -130.0 :max   10.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rleg-crotch-r
      (setq joint11 (instance rotational-joint :init
 			     :parent-link blink10 :child-link blink12 :name :rleg-crotch-r :axis :-z
-			     :min  -50.0 :max  130.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -50.0 :max  130.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rleg-crotch-p
      (setq joint13 (instance rotational-joint :init
 			     :parent-link blink12 :child-link blink14 :name :rleg-crotch-p :axis :-z
-			     :min  -75.0 :max  105.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -75.0 :max  105.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :rleg-knee-p
      (setq joint15 (instance rotational-joint :init
 			     :parent-link blink14 :child-link blink16 :name :rleg-knee-p :axis :-z
-			     :min -130.0 :max   10.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min -130.0 :max   10.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      (setq torso-root-link blink10)
      (setq torso (list blink10))

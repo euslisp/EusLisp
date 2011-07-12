@@ -1193,67 +1193,67 @@
      ;; definition of :h3head-neck-y
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :h3head-neck-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3head-neck-r
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink1 :child-link blink2 :name :h3head-neck-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3head-neck-p
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink2 :child-link blink3 :name :h3head-neck-p :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3larm-shoulder-y
      (setq joint3 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink4 :name :h3larm-shoulder-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3larm-shoulder-p
      (setq joint4 (instance rotational-joint :init
 			     :parent-link blink4 :child-link blink5 :name :h3larm-shoulder-p :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3larm-elbow-p
      (setq joint5 (instance rotational-joint :init
 			     :parent-link blink5 :child-link blink6 :name :h3larm-elbow-p :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3larm-wrist-r
      (setq joint6 (instance rotational-joint :init
 			     :parent-link blink6 :child-link blink7 :name :h3larm-wrist-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3larm-hand-y
      (setq joint7 (instance rotational-joint :init
 			     :parent-link blink7 :child-link blink8 :name :h3larm-hand-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3rarm-shoulder-y
      (setq joint8 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink9 :name :h3rarm-shoulder-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3rarm-shoulder-p
      (setq joint9 (instance rotational-joint :init
 			     :parent-link blink9 :child-link blink10 :name :h3rarm-shoulder-p :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3rarm-elbow-p
      (setq joint10 (instance rotational-joint :init
 			     :parent-link blink10 :child-link blink11 :name :h3rarm-elbow-p :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3rarm-wrist-r
      (setq joint11 (instance rotational-joint :init
 			     :parent-link blink11 :child-link blink12 :name :h3rarm-wrist-r :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :h3rarm-hand-y
      (setq joint12 (instance rotational-joint :init
 			     :parent-link blink12 :child-link blink13 :name :h3rarm-hand-y :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      (setq h3head-root-link blink1)
      (setq h3head (list blink1 blink2 blink3))

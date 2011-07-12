@@ -1276,22 +1276,22 @@
      ;; definition of :patra-foot-limb-foot
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :patra-foot-limb-foot :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :patra-back-limb-back
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink2 :name :patra-back-limb-back :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :patra-lower-limb-rear
      (setq joint3 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink4 :name :patra-lower-limb-rear :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :patra-lower-limb-front
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink4 :child-link blink3 :name :patra-lower-limb-front :axis :-z
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      (setq patra-foot-limb-root-link blink1)
      (setq patra-foot-limb (list blink1))
