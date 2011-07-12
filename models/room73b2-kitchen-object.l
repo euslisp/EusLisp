@@ -586,12 +586,12 @@
      ;; definition of :door-2
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :door-2    :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door-1
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink2 :name :door-1    :axis :-z
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :drawer-0
      (setq joint2 (instance linear-joint :init
@@ -616,27 +616,27 @@
      ;; definition of :door-3
      (setq joint6 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink7 :name :door-3    :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door-4
      (setq joint7 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink8 :name :door-4    :axis :-z
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door-5
      (setq joint8 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink9 :name :door-5    :axis :-z
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :tap-tube-joint
      (setq joint9 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink10 :name :tap-tube-joint :axis :z 
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :tap-handle-joint
      (setq joint10 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink11 :name :tap-handle-joint :axis :y 
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
 
      ;; definition of :handle

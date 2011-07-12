@@ -1286,12 +1286,12 @@
      ;; definition of :left-side-door
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink3 :name :left-side-door :axis :-z
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :right-side-door
      (setq joint3 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink4 :name :right-side-door :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :left-middle-drawer
      (setq joint4 (instance linear-joint :init
@@ -1323,45 +1323,45 @@
 			     :parent-link blink0 :child-link blink10 :name :drawer    :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  630.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :bodyset117883776-body-joint-1
+     ;; definition of :bodyset138023688-body-joint-1
      (setq joint10 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink11 :name :bodyset117883776-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink11 :name :bodyset138023688-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :bodyset110093440-body-joint-2
+     ;; definition of :bodyset138009320-body-joint-2
      (setq joint11 (instance rotational-joint :init
-			     :parent-link blink11 :child-link blink12 :name :bodyset110093440-body-joint-2 :axis :z 
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :parent-link blink11 :child-link blink12 :name :bodyset138009320-body-joint-2 :axis :z 
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
-     ;; definition of :bodyset124143392-body-joint-1
+     ;; definition of :bodyset138136616-body-joint-1
      (setq joint12 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink13 :name :bodyset124143392-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink13 :name :bodyset138136616-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :bodyset123438592-body-joint-2
+     ;; definition of :bodyset138098560-body-joint-2
      (setq joint13 (instance rotational-joint :init
-			     :parent-link blink13 :child-link blink14 :name :bodyset123438592-body-joint-2 :axis :z 
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :parent-link blink13 :child-link blink14 :name :bodyset138098560-body-joint-2 :axis :z 
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
-     ;; definition of :bodyset124190304-body-joint-1
+     ;; definition of :bodyset138828912-body-joint-1
      (setq joint14 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink15 :name :bodyset124190304-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink15 :name :bodyset138828912-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :bodyset124204944-body-joint-2
+     ;; definition of :bodyset138135296-body-joint-2
      (setq joint15 (instance rotational-joint :init
-			     :parent-link blink15 :child-link blink16 :name :bodyset124204944-body-joint-2 :axis :z 
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :parent-link blink15 :child-link blink16 :name :bodyset138135296-body-joint-2 :axis :z 
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :tap-tube-joint
      (setq joint16 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink17 :name :tap-tube-joint :axis :z 
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :tap-handle-joint
      (setq joint17 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink18 :name :tap-handle-joint :axis :y 
-			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
 
      ;; definition of :handle
@@ -1397,12 +1397,12 @@
   (:left-top-drawer (&rest args) (forward-message-to joint7 args))
   (:center-top-drawer (&rest args) (forward-message-to joint8 args))
   (:drawer (&rest args) (forward-message-to joint9 args))
-  (:bodyset117883776-body-joint-1 (&rest args) (forward-message-to joint10 args))
-  (:bodyset110093440-body-joint-2 (&rest args) (forward-message-to joint11 args))
-  (:bodyset124143392-body-joint-1 (&rest args) (forward-message-to joint12 args))
-  (:bodyset123438592-body-joint-2 (&rest args) (forward-message-to joint13 args))
-  (:bodyset124190304-body-joint-1 (&rest args) (forward-message-to joint14 args))
-  (:bodyset124204944-body-joint-2 (&rest args) (forward-message-to joint15 args))
+  (:bodyset138023688-body-joint-1 (&rest args) (forward-message-to joint10 args))
+  (:bodyset138009320-body-joint-2 (&rest args) (forward-message-to joint11 args))
+  (:bodyset138136616-body-joint-1 (&rest args) (forward-message-to joint12 args))
+  (:bodyset138098560-body-joint-2 (&rest args) (forward-message-to joint13 args))
+  (:bodyset138828912-body-joint-1 (&rest args) (forward-message-to joint14 args))
+  (:bodyset138135296-body-joint-2 (&rest args) (forward-message-to joint15 args))
   (:tap-tube-joint (&rest args) (forward-message-to joint16 args))
   (:tap-handle-joint (&rest args) (forward-message-to joint17 args))
   (:handle () (list  handle0 handle1 handle2 handle3 handle4))
