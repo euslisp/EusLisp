@@ -263,12 +263,12 @@
      ;; definition of :upper-door
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :upper-door :axis :y 
-			     :min  -80.0 :max    0.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -80.0 :max    0.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lower-door
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink2 :name :lower-door :axis :y 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :upper-shelf
      (setq joint2 (instance linear-joint :init

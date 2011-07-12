@@ -371,12 +371,12 @@
      ;; definition of :door-upper-right
      (setq joint5 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink6 :name :door-upper-right :axis :-z
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door-upper-left
      (setq joint6 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink7 :name :door-upper-left :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
 
      ;; definition of :handle

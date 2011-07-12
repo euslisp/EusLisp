@@ -136,17 +136,17 @@
      ;; definition of :door
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :door      :axis :-z
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :knob
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink1 :child-link blink2 :name :knob      :axis :x 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :lock
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink2 :child-link blink3 :name :lock      :axis :x 
-			     :min  -90.0 :max    0.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min  -90.0 :max    0.0 :max-joint-velocity 5 :max-joint-torque 100))
 
 
      ;; definition of :handle

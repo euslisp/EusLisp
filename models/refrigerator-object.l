@@ -304,12 +304,12 @@
      ;; definition of :left-door
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :left-door :axis :-z
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :right-door
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink2 :name :right-door :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :vegetable-drawer
      (setq joint2 (instance linear-joint :init

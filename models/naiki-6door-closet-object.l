@@ -226,32 +226,32 @@
      ;; definition of :door0
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :door0     :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door1
      (setq joint1 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink2 :name :door1     :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door2
      (setq joint2 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink3 :name :door2     :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door3
      (setq joint3 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink4 :name :door3     :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door4
      (setq joint4 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink5 :name :door4     :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :door5
      (setq joint5 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink6 :name :door5     :axis :z 
-			     :min    0.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
 
      ;; definition of :handle

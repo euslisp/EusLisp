@@ -152,7 +152,7 @@
      ;; definition of :joint0
      (setq joint0 (instance rotational-joint :init
 			     :parent-link blink0 :child-link blink1 :name :joint0    :axis :x 
-			     :min    0.0 :max  180.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+			     :min    0.0 :max  180.0 :max-joint-velocity 5 :max-joint-torque 100))
 
 
      ;; definition of :handle
