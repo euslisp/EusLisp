@@ -23,7 +23,7 @@
 	*remote-port*
 	remote-error reval *server-streams* remote-port))
 
-(defmacro assert (pred place message &rest args)
+(defmacro assert (pred message &rest args)
     `(while (not ,pred)
 	(format *error-output* ,message ,@args)
         (finish-output *error-output*)
