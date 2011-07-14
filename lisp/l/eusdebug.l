@@ -25,7 +25,7 @@
 
 (defmacro assert (pred place message &rest args)
     `(while (not ,pred)
-	(apply #'format *error-output* ,message (list ,@args))
+	(format *error-output* ,message ,@args)
         (finish-output *error-output*)
 	(reploop "ass: " )))
 
