@@ -75,9 +75,12 @@ register context *ctx;
 int n;
 pointer argv[];
 { pointer s;
+  int osf;
   ckarg2(1,2);
+  osf=ctx->slashflag;
   ctx->slashflag=0;
   prinx(ctx,argv[0],s=getoutstream(ctx,n,argv[1])); terpri(s);
+  ctx->slashflag=osf;
   return(argv[0]);}
 
 pointer PRIN1(ctx,n,argv)
@@ -85,18 +88,23 @@ register context *ctx;
 int n;
 pointer argv[];
 { ckarg2(1,2);
+  int osf;
+  osf=ctx->slashflag;
   ctx->slashflag=0;
   prinx(ctx,argv[0],getoutstream(ctx,n,argv[1]));
+  ctx->slashflag=osf;
   return(argv[0]);}
 
 pointer PRINC(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ ckarg2(1,2);
+{ int osf;
+  ckarg2(1,2);
+  osf=ctx->slashflag;
   ctx->slashflag=1;
   prinx(ctx,argv[0],getoutstream(ctx,n,argv[1]));
-  ctx->slashflag=0;
+  ctx->slashflag=osf;
   return(argv[0]);}
 
 pointer TERPRI(ctx,n,argv)
@@ -426,7 +434,7 @@ pointer argv[];
   int  cx,cmax;
   pointer *fargv, varg;
   int fargc,fargx;
-  int wcount;
+  int wcount, osf;
   numunion nu;
   extern double fabs();
 
@@ -465,11 +473,12 @@ pointer argv[];
 	if (islower(cch)) cch=toupper(cch);}
       switch(cch) {
 	case 'A':	/*Ascii*/
+	  osf=ctx->slashflag;
 	  ctx->slashflag=1;
 	  written_count[thr_self()]=0;
 	  prinx(ctx,(pointer)nextfarg(),dest);
 	  while (param[0]>written_count[thr_self()]) writech(dest,' ');
-	  ctx->slashflag=0;
+	  ctx->slashflag=osf;
 	  break;
 	case 'S':	/*S-expression*/
 	  written_count[thr_self()]=0;
