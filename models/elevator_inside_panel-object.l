@@ -14,7 +14,7 @@
    (&rest args &key (name "elevator_inside_panel") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-         )
+                 )
      (send-super* :init :name name args)
 
      ;; definition of link

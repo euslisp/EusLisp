@@ -12,7 +12,7 @@
    (&rest args &key (name "room73a3-73a3-ground") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-         )
+                 )
      (send-super* :init :name name args)
 
      ;; definition of link

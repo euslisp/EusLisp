@@ -13,7 +13,7 @@
    (&rest args &key (name "itoki-900-slide-shelf") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2 blink3
-         )
+                 )
      (send-super* :init :name name args)
 
      ;; definition of link

@@ -13,7 +13,7 @@
    (&rest args &key (name "room602-kitchen") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2 blink3 blink4 blink5 blink6 blink7 blink8 blink9 blink10 blink11 blink12 blink13 blink14 blink15 blink16 blink17 blink18
-         )
+                 )
      (send-super* :init :name name args)
 
      ;; definition of link
