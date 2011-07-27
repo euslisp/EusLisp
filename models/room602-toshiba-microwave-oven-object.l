@@ -6,13 +6,13 @@
 (defclass room602-toshiba-microwave-oven-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1
          joint0 joint1 ))
 (defmethod room602-toshiba-microwave-oven-object
   (:init
    (&rest args &key (name "room602-toshiba-microwave-oven") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2
-                 handle0 handle1
          )
      (send-super* :init :name name args)
 

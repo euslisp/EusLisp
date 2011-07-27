@@ -6,13 +6,13 @@
 (defclass room602-uchida-shelf-object
   :super cascaded-link
   :slots (sensors
+         handle0
          ))
 (defmethod room602-uchida-shelf-object
   (:init
    (&rest args &key (name "room602-uchida-shelf") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 handle0
          )
      (send-super* :init :name name args)
 

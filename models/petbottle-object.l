@@ -6,14 +6,14 @@
 (defclass petbottle-object
   :super cascaded-link
   :slots (sensors
+         handle0
+         attention0
          ))
 (defmethod petbottle-object
   (:init
    (&rest args &key (name "petbottle") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 handle0
-         attention0
          )
      (send-super* :init :name name args)
 

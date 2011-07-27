@@ -6,13 +6,13 @@
 (defclass room73b2-hrp2-parts-drawer-object
   :super cascaded-link
   :slots (sensors
+         handle0
          joint0 joint1 joint2 joint3 joint4 ))
 (defmethod room73b2-hrp2-parts-drawer-object
   (:init
    (&rest args &key (name "room73b2-hrp2-parts-drawer") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2 blink3 blink4 blink5
-                 handle0
          )
      (send-super* :init :name name args)
 

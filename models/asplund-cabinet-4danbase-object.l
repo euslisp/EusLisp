@@ -6,13 +6,13 @@
 (defclass asplund-cabinet-4danbase-object
   :super cascaded-link
   :slots (sensors
+         handle0
          joint0 ))
 (defmethod asplund-cabinet-4danbase-object
   (:init
    (&rest args &key (name "asplund-cabinet-4danbase") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1
-                 handle0
          )
      (send-super* :init :name name args)
 

@@ -6,13 +6,13 @@
 (defclass karimoku-kannonbiraki-cabinet-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1
          joint0 joint1 ))
 (defmethod karimoku-kannonbiraki-cabinet-object
   (:init
    (&rest args &key (name "karimoku-kannonbiraki-cabinet") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2
-                 handle0 handle1
          )
      (send-super* :init :name name args)
 

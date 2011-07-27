@@ -6,13 +6,13 @@
 (defclass room602-door-right-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1 handle2 handle3
          joint0 joint1 joint2 ))
 (defmethod room602-door-right-object
   (:init
    (&rest args &key (name "room602-door-right") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2 blink3
-                 handle0 handle1 handle2 handle3
          )
      (send-super* :init :name name args)
 

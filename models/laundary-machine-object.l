@@ -6,14 +6,14 @@
 (defclass laundary-machine-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1 handle2
+         button0
          joint0 ))
 (defmethod laundary-machine-object
   (:init
    (&rest args &key (name "laundary-machine") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1
-                 handle0 handle1 handle2
-         button0
          )
      (send-super* :init :name name args)
 

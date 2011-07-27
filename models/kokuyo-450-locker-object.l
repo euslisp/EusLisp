@@ -6,13 +6,13 @@
 (defclass kokuyo-450-locker-object
   :super cascaded-link
   :slots (sensors
+         handle0
          joint0 ))
 (defmethod kokuyo-450-locker-object
   (:init
    (&rest args &key (name "kokuyo-450-locker") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1
-                 handle0
          )
      (send-super* :init :name name args)
 

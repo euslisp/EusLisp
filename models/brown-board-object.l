@@ -6,13 +6,13 @@
 (defclass brown-board-object
   :super cascaded-link
   :slots (sensors
+         handle0
          joint0 joint1 joint2 ))
 (defmethod brown-board-object
   (:init
    (&rest args &key (name "brown-board") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2 blink3
-                 handle0
          )
      (send-super* :init :name name args)
 

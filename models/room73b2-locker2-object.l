@@ -6,13 +6,13 @@
 (defclass room73b2-locker2-object
   :super cascaded-link
   :slots (sensors
+         handle0
          joint0 ))
 (defmethod room73b2-locker2-object
   (:init
    (&rest args &key (name "room73b2-locker2") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1
-                 handle0
          )
      (send-super* :init :name name args)
 

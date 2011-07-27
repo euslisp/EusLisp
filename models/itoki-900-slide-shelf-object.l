@@ -6,13 +6,13 @@
 (defclass itoki-900-slide-shelf-object
   :super cascaded-link
   :slots (sensors
+         handle0
          joint0 joint1 joint2 ))
 (defmethod itoki-900-slide-shelf-object
   (:init
    (&rest args &key (name "itoki-900-slide-shelf") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2 blink3
-                 handle0
          )
      (send-super* :init :name name args)
 

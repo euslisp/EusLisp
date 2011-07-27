@@ -6,13 +6,13 @@
 (defclass room73b2-bariera-1400-middle-object
   :super cascaded-link
   :slots (sensors
+         handle0
          ))
 (defmethod room73b2-bariera-1400-middle-object
   (:init
    (&rest args &key (name "room73b2-bariera-1400-middle") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 handle0
          )
      (send-super* :init :name name args)
 

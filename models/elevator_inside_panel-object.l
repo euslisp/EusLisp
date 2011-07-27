@@ -6,14 +6,14 @@
 (defclass elevator_inside_panel-object
   :super cascaded-link
   :slots (sensors
+         attention0
+         button0 button1 button2 button3 button4 button5 button6 button7 button8 button9 button10
          ))
 (defmethod elevator_inside_panel-object
   (:init
    (&rest args &key (name "elevator_inside_panel") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 attention0
-         button0 button1 button2 button3 button4 button5 button6 button7 button8 button9 button10
          )
      (send-super* :init :name name args)
 

@@ -6,14 +6,14 @@
 (defclass sushi-cup-object
   :super cascaded-link
   :slots (sensors
+         handle0
+         attention0
          ))
 (defmethod sushi-cup-object
   (:init
    (&rest args &key (name "sushi-cup") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 handle0
-         attention0
          )
      (send-super* :init :name name args)
 

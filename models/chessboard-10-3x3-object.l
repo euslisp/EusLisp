@@ -6,13 +6,13 @@
 (defclass chessboard-10-3x3-object
   :super cascaded-link
   :slots (sensors
+         attention0
          ))
 (defmethod chessboard-10-3x3-object
   (:init
    (&rest args &key (name "chessboard-10-3x3") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 attention0
          )
      (send-super* :init :name name args)
 

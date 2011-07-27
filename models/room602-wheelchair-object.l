@@ -6,13 +6,13 @@
 (defclass room602-wheelchair-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1 handle2 handle3 handle4 handle5 handle6 handle7 handle8 handle9 handle10 handle11 handle12
          ))
 (defmethod room602-wheelchair-object
   (:init
    (&rest args &key (name "room602-wheelchair") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 handle0 handle1 handle2 handle3 handle4 handle5 handle6 handle7 handle8 handle9 handle10 handle11 handle12
          )
      (send-super* :init :name name args)
 

@@ -6,13 +6,13 @@
 (defclass refrigerator-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1 handle2
          joint0 joint1 joint2 joint3 joint4 joint5 ))
 (defmethod refrigerator-object
   (:init
    (&rest args &key (name "refrigerator") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2 blink3 blink4 blink5 blink6
-                 handle0 handle1 handle2
          )
      (send-super* :init :name name args)
 

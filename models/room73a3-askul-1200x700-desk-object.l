@@ -12,7 +12,7 @@
    (&rest args &key (name "room73a3-askul-1200x700-desk") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 )
+         )
      (send-super* :init :name name args)
 
      ;; definition of link

@@ -6,14 +6,14 @@
 (defclass tognana-pasta-dish-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1 handle2 handle3 handle4 handle5 handle6 handle7
+         attention0
          ))
 (defmethod tognana-pasta-dish-object
   (:init
    (&rest args &key (name "tognana-pasta-dish") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 handle0 handle1 handle2 handle3 handle4 handle5 handle6 handle7
-         attention0
          )
      (send-super* :init :name name args)
 

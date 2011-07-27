@@ -6,13 +6,13 @@
 (defclass room73b2-tray-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1 handle2 handle3
          ))
 (defmethod room73b2-tray-object
   (:init
    (&rest args &key (name "room73b2-tray") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0
-                 handle0 handle1 handle2 handle3
          )
      (send-super* :init :name name args)
 

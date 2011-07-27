@@ -6,13 +6,13 @@
 (defclass akiba-room-door-object
   :super cascaded-link
   :slots (sensors
+         handle0 handle1 handle2
          joint0 joint1 joint2 ))
 (defmethod akiba-room-door-object
   (:init
    (&rest args &key (name "akiba-room-door") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
          blink0 blink1 blink2 blink3
-                 handle0 handle1 handle2
          )
      (send-super* :init :name name args)
 
