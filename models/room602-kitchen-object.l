@@ -1323,34 +1323,34 @@
 			     :parent-link blink0 :child-link blink10 :name :drawer    :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  630.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :bodyset190135184-body-joint-1
+     ;; definition of :button0-body-joint-1
      (setq joint10 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink11 :name :bodyset190135184-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink11 :name :button0-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :bodyset188194416-body-joint-2
+     ;; definition of :button0-body-joint-2
      (setq joint11 (instance rotational-joint :init
-			     :parent-link blink11 :child-link blink12 :name :bodyset188194416-body-joint-2 :axis :z 
+			     :parent-link blink11 :child-link blink12 :name :button0-body-joint-2 :axis :z 
 			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
-     ;; definition of :bodyset191872464-body-joint-1
+     ;; definition of :button1-body-joint-1
      (setq joint12 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink13 :name :bodyset191872464-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink13 :name :button1-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :bodyset190132232-body-joint-2
+     ;; definition of :button1-body-joint-2
      (setq joint13 (instance rotational-joint :init
-			     :parent-link blink13 :child-link blink14 :name :bodyset190132232-body-joint-2 :axis :z 
+			     :parent-link blink13 :child-link blink14 :name :button1-body-joint-2 :axis :z 
 			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
-     ;; definition of :bodyset192694968-body-joint-1
+     ;; definition of :button2-body-joint-1
      (setq joint14 (instance linear-joint :init
-			     :parent-link blink0 :child-link blink15 :name :bodyset192694968-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
+			     :parent-link blink0 :child-link blink15 :name :button2-body-joint-1 :axis (float-vector 1.0 0.0 0.0)
 			     :min  -90.0 :max   90.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
-     ;; definition of :bodyset192319208-body-joint-2
+     ;; definition of :button2-body-joint-2
      (setq joint15 (instance rotational-joint :init
-			     :parent-link blink15 :child-link blink16 :name :bodyset192319208-body-joint-2 :axis :z 
+			     :parent-link blink15 :child-link blink16 :name :button2-body-joint-2 :axis :z 
 			     :min  -90.0 :max   90.0 :max-joint-velocity 5 :max-joint-torque 100))
 
      ;; definition of :tap-tube-joint
@@ -1397,12 +1397,12 @@
   (:left-top-drawer (&rest args) (forward-message-to joint7 args))
   (:center-top-drawer (&rest args) (forward-message-to joint8 args))
   (:drawer (&rest args) (forward-message-to joint9 args))
-  (:bodyset190135184-body-joint-1 (&rest args) (forward-message-to joint10 args))
-  (:bodyset188194416-body-joint-2 (&rest args) (forward-message-to joint11 args))
-  (:bodyset191872464-body-joint-1 (&rest args) (forward-message-to joint12 args))
-  (:bodyset190132232-body-joint-2 (&rest args) (forward-message-to joint13 args))
-  (:bodyset192694968-body-joint-1 (&rest args) (forward-message-to joint14 args))
-  (:bodyset192319208-body-joint-2 (&rest args) (forward-message-to joint15 args))
+  (:button0-body-joint-1 (&rest args) (forward-message-to joint10 args))
+  (:button0-body-joint-2 (&rest args) (forward-message-to joint11 args))
+  (:button1-body-joint-1 (&rest args) (forward-message-to joint12 args))
+  (:button1-body-joint-2 (&rest args) (forward-message-to joint13 args))
+  (:button2-body-joint-1 (&rest args) (forward-message-to joint14 args))
+  (:button2-body-joint-2 (&rest args) (forward-message-to joint15 args))
   (:tap-tube-joint (&rest args) (forward-message-to joint16 args))
   (:tap-handle-joint (&rest args) (forward-message-to joint17 args))
   (:handle () (list  handle0 handle1 handle2 handle3 handle4))
