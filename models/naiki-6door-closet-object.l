@@ -114,7 +114,7 @@
      (send (elt bc 9) :set-color :beige)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :naiki-6door-closet-bodyset184
+     ;; definition of :naiki-6door-closet-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 -0.5 820.0) (float-vector -25.0 -0.5 820.0) (float-vector -25.0 -280.5 820.0) (float-vector 0.0 -280.5 820.0)))
@@ -127,9 +127,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :beige)
-     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset184 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :naiki-6door-closet-bodyset205
+     ;; definition of :naiki-6door-closet-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 -0.5 820.0) (float-vector -25.0 -0.5 820.0) (float-vector -25.0 -280.5 820.0) (float-vector 0.0 -280.5 820.0)))
@@ -142,9 +142,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :beige)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset205 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :naiki-6door-closet-bodyset226
+     ;; definition of :naiki-6door-closet-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 -0.5 820.0) (float-vector -25.0 -0.5 820.0) (float-vector -25.0 -280.5 820.0) (float-vector 0.0 -280.5 820.0)))
@@ -157,9 +157,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :beige)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset226 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :naiki-6door-closet-bodyset247
+     ;; definition of :naiki-6door-closet-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 -0.5 820.0) (float-vector -25.0 -0.5 820.0) (float-vector -25.0 -280.5 820.0) (float-vector 0.0 -280.5 820.0)))
@@ -172,9 +172,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :beige)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset247 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :naiki-6door-closet-bodyset268
+     ;; definition of :naiki-6door-closet-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 -0.5 820.0) (float-vector -25.0 -0.5 820.0) (float-vector -25.0 -280.5 820.0) (float-vector 0.0 -280.5 820.0)))
@@ -187,9 +187,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :beige)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset268 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :naiki-6door-closet-bodyset289
+     ;; definition of :naiki-6door-closet-bodyset7
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 -0.5 820.0) (float-vector -25.0 -0.5 820.0) (float-vector -25.0 -280.5 820.0) (float-vector 0.0 -280.5 820.0)))
@@ -202,7 +202,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :beige)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset289 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :naiki-6door-closet-bodyset7 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 255.5 -148.667 930.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

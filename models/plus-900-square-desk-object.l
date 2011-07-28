@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :plus-900-square-desk-bodyset12
+     ;; definition of :plus-900-square-desk-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 450.0 450.0 700.0) (float-vector -450.0 450.0 700.0) (float-vector -450.0 -450.0 700.0) (float-vector 450.0 -450.0 700.0)))
@@ -66,7 +66,7 @@
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :gray60)
      (send (elt bc 3) :set-color :gray60)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :plus-900-square-desk-bodyset12 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :plus-900-square-desk-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

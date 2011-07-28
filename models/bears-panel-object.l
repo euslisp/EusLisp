@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :bears-panel-bodyset9
+     ;; definition of :bears-panel-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -15.0 -167.321 530.0) (float-vector -15.0 -170.0 540.0) (float-vector -15.0 -160.622 575.0) (float-vector -15.0 -135.0 600.622) (float-vector -15.0 -100.0 610.0) (float-vector -15.0 -65.0 600.622) (float-vector -15.0 -39.3782 575.0) (float-vector -15.0 -30.0 540.0) (float-vector -15.0 -32.6795 530.0)))
@@ -106,7 +106,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :yellow)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :bears-panel-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :bears-panel-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

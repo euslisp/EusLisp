@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :iron-table-bodyset9
+     ;; definition of :iron-table-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -200.0 -300.0 720.0) (float-vector 200.0 -300.0 720.0) (float-vector 200.0 350.0 720.0) (float-vector 30.0 650.0 720.0) (float-vector -30.0 650.0 720.0) (float-vector -200.0 350.0 720.0)))
@@ -126,7 +126,7 @@
      (send (elt bc 4) :set-color :white)
      (send (elt bc 5) :set-color :white)
      (send (elt bc 6) :set-color :gray)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :iron-table-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :iron-table-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

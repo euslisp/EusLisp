@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :pockey-bodyset11
+     ;; definition of :pockey-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 0.0 90.0) (float-vector 0.0 -24.0 90.0) (float-vector 145.0 -24.0 90.0) (float-vector 137.0 0.0 90.0)))
@@ -40,7 +40,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :red)
      (send (elt bc 1) :set-color :red)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :pockey-bodyset11 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :pockey-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

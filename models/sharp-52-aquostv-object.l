@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :sharp-52-aquostv-bodyset9
+     ;; definition of :sharp-52-aquostv-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -45.0 660.2 484.0) (float-vector -45.0 -660.2 484.0) (float-vector -45.0 -660.2 1300.0) (float-vector -45.0 660.2 1300.0))
@@ -116,7 +116,7 @@
      (gl::transparent (elt bc 7) 0.2)
      (send (elt bc 8) :set-color :gray)
      (gl::transparent (elt bc 8) 0.2)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :sharp-52-aquostv-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :sharp-52-aquostv-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

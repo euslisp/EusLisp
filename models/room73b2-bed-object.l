@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73b2-bed-bodyset9
+     ;; definition of :room73b2-bed-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 260.0 485.0 25.0) (float-vector 255.225 492.725 12.5) (float-vector 256.266 498.143 25.0)))
@@ -819,7 +819,7 @@
      (send (elt bc 11) :set-color :lemonchiffon)
      (send (elt bc 12) :set-color :saddlebrown)
      (send (elt bc 13) :set-color :saddlebrown)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-bed-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-bed-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

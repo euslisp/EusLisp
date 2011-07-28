@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :sponge-bodyset9
+     ;; definition of :sponge-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 35.0 55.0 22.5) (float-vector -35.0 55.0 22.5) (float-vector -35.0 -55.0 22.5) (float-vector 35.0 -55.0 22.5)))
@@ -39,7 +39,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :yellow)
      (send (elt bc 1) :set-color :green)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :sponge-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :sponge-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

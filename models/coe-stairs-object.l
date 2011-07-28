@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :coe-stairs-bodyset9
+     ;; definition of :coe-stairs-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 371.0 -92.5 90.0) (float-vector 371.0 117.5 90.0) (float-vector -371.0 117.5 90.0) (float-vector -371.0 -92.5 90.0)))
@@ -40,7 +40,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :whitesmoke)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coe-stairs-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coe-stairs-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

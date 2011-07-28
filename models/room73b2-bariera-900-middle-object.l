@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73b2-bariera-900-middle-bodyset11
+     ;; definition of :room73b2-bariera-900-middle-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 60.0 885.0 2500.0) (float-vector 0.0 885.0 2500.0) (float-vector 0.0 15.0 2500.0) (float-vector 60.0 15.0 2500.0)))
@@ -276,7 +276,7 @@
      (send (elt bc 9) :set-color :gray76)
      (send (elt bc 10) :set-color :gray76)
      (send (elt bc 11) :set-color :gray76)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-bariera-900-middle-bodyset11 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-bariera-900-middle-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

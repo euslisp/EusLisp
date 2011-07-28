@@ -96,7 +96,7 @@
      (send (elt bc 7) :set-color :brown)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :brown-board-bodyset150
+     ;; definition of :brown-board-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -240.0 145.0 -55.0) (float-vector -240.0 -145.0 -55.0) (float-vector -240.0 -145.0 55.0) (float-vector -240.0 145.0 55.0)))
@@ -122,9 +122,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :brown-board-bodyset150 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :brown-board-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :brown-board-bodyset196
+     ;; definition of :brown-board-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -240.0 145.0 -55.0) (float-vector -240.0 -145.0 -55.0) (float-vector -240.0 -145.0 55.0) (float-vector -240.0 145.0 55.0)))
@@ -150,9 +150,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :brown-board-bodyset196 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :brown-board-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :brown-board-bodyset242
+     ;; definition of :brown-board-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -240.0 145.0 -150.0) (float-vector -240.0 -145.0 -150.0) (float-vector -240.0 -145.0 150.0) (float-vector -240.0 145.0 150.0)))
@@ -178,7 +178,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :brown-board-bodyset242 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :brown-board-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 0.0 0.0 200.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

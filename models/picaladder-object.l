@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :picaladder-bodyset9
+     ;; definition of :picaladder-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 1824.0 -562.0 -456.0) (float-vector 1824.0 -562.0 -476.0) (float-vector 1824.0 -622.0 -476.0) (float-vector 1824.0 -622.0 -456.0)))
@@ -174,7 +174,7 @@
      (send (elt bc 14) :set-color (list))
      (send (elt bc 15) :set-color (list))
      (send (elt bc 16) :set-color (list))
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :picaladder-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :picaladder-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

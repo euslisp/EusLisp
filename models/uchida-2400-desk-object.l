@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :uchida-2400-desk-bodyset9
+     ;; definition of :uchida-2400-desk-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 490.0 1180.0 647.5) (float-vector -490.0 1180.0 647.5) (float-vector -490.0 -1180.0 647.5) (float-vector 490.0 -1180.0 647.5)))
@@ -491,7 +491,7 @@
      (send (elt bc 35) :set-color :white)
      (send (elt bc 36) :set-color :white)
      (send (elt bc 37) :set-color :white)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :uchida-2400-desk-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :uchida-2400-desk-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

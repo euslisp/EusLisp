@@ -121,7 +121,7 @@
      (send (elt bc 8) :set-color (list))
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73a3-plus-830-locker-bodyset199
+     ;; definition of :room73a3-plus-830-locker-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -9.0 9.5 0.0) (float-vector -9.0 -385.5 0.0) (float-vector -9.0 -385.5 1780.0) (float-vector -9.0 9.5 1780.0)))
@@ -142,9 +142,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-plus-830-locker-bodyset199 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-plus-830-locker-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73a3-plus-830-locker-bodyset232
+     ;; definition of :room73a3-plus-830-locker-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -9.0 9.5 0.0) (float-vector -9.0 -385.5 0.0) (float-vector -9.0 -385.5 1780.0) (float-vector -9.0 9.5 1780.0)))
@@ -165,7 +165,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-plus-830-locker-bodyset232 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-plus-830-locker-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 291.0 -9.0 80.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

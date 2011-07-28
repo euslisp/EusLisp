@@ -96,7 +96,7 @@
      (send (elt bc 7) :set-color :burlywood1)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :asplund-cabinet-4dan-bodyset150
+     ;; definition of :asplund-cabinet-4dan-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -76.25) (float-vector -182.5 -375.0 -76.25) (float-vector -182.5 -375.0 76.25) (float-vector -182.5 375.0 76.25)))
@@ -173,9 +173,9 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :asplund-cabinet-4dan-bodyset150 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :asplund-cabinet-4dan-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :asplund-cabinet-4dan-bodyset295
+     ;; definition of :asplund-cabinet-4dan-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -76.25) (float-vector -182.5 -375.0 -76.25) (float-vector -182.5 -375.0 76.25) (float-vector -182.5 375.0 76.25)))
@@ -252,9 +252,9 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :asplund-cabinet-4dan-bodyset295 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :asplund-cabinet-4dan-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :asplund-cabinet-4dan-bodyset440
+     ;; definition of :asplund-cabinet-4dan-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -76.25) (float-vector -182.5 -375.0 -76.25) (float-vector -182.5 -375.0 76.25) (float-vector -182.5 375.0 76.25)))
@@ -331,9 +331,9 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :asplund-cabinet-4dan-bodyset440 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :asplund-cabinet-4dan-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :asplund-cabinet-4dan-bodyset585
+     ;; definition of :asplund-cabinet-4dan-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -76.25) (float-vector -182.5 -375.0 -76.25) (float-vector -182.5 -375.0 76.25) (float-vector -182.5 375.0 76.25)))
@@ -410,7 +410,7 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :asplund-cabinet-4dan-bodyset585 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :asplund-cabinet-4dan-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 5.5 0.0 76.25) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

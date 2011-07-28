@@ -19,7 +19,7 @@
 
      ;; definition of link
 
-     ;; definition of :tognana-pasta-dish-bodyset20
+     ;; definition of :tognana-pasta-dish-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 76.5 0.0 23.0) (float-vector 70.6768 -29.2753 23.0) (float-vector 0.0 0.0 23.0)))
@@ -218,7 +218,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :tognana-pasta-dish-bodyset20 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :tognana-pasta-dish-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

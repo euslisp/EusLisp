@@ -87,7 +87,7 @@
      (send (elt bc 6) :set-color :ivory1)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :hitachi-fiesta-refrigerator-bodyset133
+     ;; definition of :hitachi-fiesta-refrigerator-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -215.0 200.0 -190.0) (float-vector -215.0 -200.0 -190.0) (float-vector -215.0 -200.0 190.0) (float-vector -215.0 200.0 190.0)))
@@ -113,9 +113,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :ivory1)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset133 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :hitachi-fiesta-refrigerator-bodyset179
+     ;; definition of :hitachi-fiesta-refrigerator-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -225.0 220.0 -140.0) (float-vector -225.0 -220.0 -140.0) (float-vector -225.0 -220.0 140.0) (float-vector -225.0 220.0 140.0)))
@@ -141,9 +141,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :ivory1)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset179 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :hitachi-fiesta-refrigerator-bodyset225
+     ;; definition of :hitachi-fiesta-refrigerator-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -25.0 25.0 600.0) (float-vector -25.0 25.0 0.0) (float-vector -25.0 -515.0 0.0) (float-vector -25.0 -515.0 600.0)))
@@ -176,7 +176,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color (list))
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset225 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 300.0 245.0 850.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

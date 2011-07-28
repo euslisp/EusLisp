@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :room602-uchida-shelf2-bodyset11
+     ;; definition of :room602-uchida-shelf2-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 300.0 900.0 50.0) (float-vector -300.0 900.0 50.0) (float-vector -300.0 -900.0 50.0) (float-vector 300.0 -900.0 50.0)))
@@ -103,7 +103,7 @@
      (send (elt bc 6) :set-color :floralwhite)
      (send (elt bc 7) :set-color :floralwhite)
      (send (elt bc 8) :set-color :floralwhite)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-uchida-shelf2-bodyset11 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-uchida-shelf2-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

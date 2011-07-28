@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73b2-hrp2-rack-bodyset9
+     ;; definition of :room73b2-hrp2-rack-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -390.0 -275.0 55.0) (float-vector -390.0 -245.0 80.0) (float-vector -390.0 245.0 80.0) (float-vector -390.0 245.0 795.0) (float-vector -390.0 -245.0 795.0) (float-vector -390.0 -245.0 55.0) (float-vector -390.0 -275.0 820.0) (float-vector -390.0 275.0 820.0) (float-vector -390.0 275.0 55.0)))
@@ -241,7 +241,7 @@
      (send (elt bc 12) :set-color :dimgray)
      (send (elt bc 13) :set-color :dimgray)
      (send (elt bc 14) :set-color :dimgray)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-rack-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-rack-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

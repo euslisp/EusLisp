@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :plasmatv-bodyset9
+     ;; definition of :plasmatv-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -45.0 521.7 -318.0) (float-vector -45.0 -521.7 -318.0) (float-vector -45.0 -521.7 318.0) (float-vector -45.0 521.7 318.0))
@@ -69,7 +69,7 @@
      (send (elt bc 1) :set-color :black)
      (send (elt bc 2) :set-color :gray20)
      (send (elt bc 3) :set-color :gray)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :plasmatv-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :plasmatv-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

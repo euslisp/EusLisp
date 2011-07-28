@@ -577,7 +577,7 @@
      (send (elt bc 38) :set-color :gray50)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1025
+     ;; definition of :room602-kitchen-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -295.0 430.0 -77.5) (float-vector -295.0 -430.0 -77.5) (float-vector -295.0 -430.0 77.5) (float-vector -295.0 430.0 77.5)))
@@ -626,9 +626,9 @@
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :gray60)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1025 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1112
+     ;; definition of :room602-kitchen-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -295.0 505.0 -77.5) (float-vector -295.0 -505.0 -77.5) (float-vector -295.0 -505.0 77.5) (float-vector -295.0 505.0 77.5)))
@@ -677,9 +677,9 @@
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :gray60)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1112 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1199
+     ;; definition of :room602-kitchen-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 25.0 140.0 4.5) (float-vector -8.0 140.0 4.5) (float-vector -8.0 -20.0 4.5) (float-vector 25.0 -20.0 4.5)))
@@ -715,9 +715,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray60)
      (send (elt bc 1) :set-color :red3)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1199 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1261
+     ;; definition of :room602-kitchen-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 25.0 20.0 4.5) (float-vector -8.0 20.0 4.5) (float-vector -8.0 -140.0 4.5) (float-vector 25.0 -140.0 4.5)))
@@ -753,9 +753,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray60)
      (send (elt bc 1) :set-color :red3)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1261 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1323
+     ;; definition of :room602-kitchen-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 325.0 -170.0) (float-vector -265.0 -325.0 -170.0) (float-vector -265.0 -325.0 170.0) (float-vector -265.0 325.0 170.0)))
@@ -804,9 +804,9 @@
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :red3)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1323 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1410
+     ;; definition of :room602-kitchen-bodyset7
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 175.0 -170.0) (float-vector -265.0 -175.0 -170.0) (float-vector -265.0 -175.0 170.0) (float-vector -265.0 175.0 170.0)))
@@ -855,9 +855,9 @@
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :red3)
-     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1410 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset7 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1497
+     ;; definition of :room602-kitchen-bodyset8
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 325.0 -170.0) (float-vector -265.0 -325.0 -170.0) (float-vector -265.0 -325.0 170.0) (float-vector -265.0 325.0 170.0)))
@@ -906,9 +906,9 @@
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :red3)
-     (setq blink7 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1497 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink7 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset8 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1584
+     ;; definition of :room602-kitchen-bodyset9
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -295.0 40.0 -75.0) (float-vector -295.0 -40.0 -75.0) (float-vector -295.0 -40.0 75.0) (float-vector -295.0 40.0 75.0)))
@@ -957,9 +957,9 @@
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :gray60)
-     (setq blink8 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1584 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink8 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1671
+     ;; definition of :room602-kitchen-bodyset10
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 250.0 -60.0) (float-vector -265.0 -250.0 -60.0) (float-vector -265.0 -250.0 60.0) (float-vector -265.0 250.0 60.0)))
@@ -1008,9 +1008,9 @@
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :red3)
-     (setq blink9 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1671 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink9 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset10 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1758
+     ;; definition of :room602-kitchen-bodyset11
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 95.0 -50.0) (float-vector -265.0 -95.0 -50.0) (float-vector -265.0 -95.0 50.0) (float-vector -265.0 95.0 50.0)))
@@ -1059,7 +1059,7 @@
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :gray20)
-     (setq blink10 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1758 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink10 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset11 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of 'tap-tube
      (setq bc (list
@@ -1116,7 +1116,7 @@
      (send (elt bc 0) :set-color (list))
      (setq blink18 (instance bodyset-link :init (make-cascoords) :bodies bc :name 'tap-handle-body :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1934
+     ;; definition of :room602-kitchen-bodyset12
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 2.5 2.5 2.5) (float-vector -2.5 2.5 2.5) (float-vector -2.5 -2.5 2.5) (float-vector 2.5 -2.5 2.5)))
@@ -1129,9 +1129,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink15 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1934 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink15 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset12 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1955
+     ;; definition of :room602-kitchen-bodyset13
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 17.3205 -10.0 30.0) (float-vector 20.0 0.0 30.0) (float-vector 17.3205 10.0 30.0) (float-vector 10.0 17.3205 30.0) (float-vector -1.136868e-13 20.0 30.0) (float-vector -10.0 17.3205 30.0) (float-vector -17.3205 10.0 30.0) (float-vector -20.0 0.0 30.0) (float-vector -17.3205 -10.0 30.0) (float-vector -10.0 -17.3205 30.0) (float-vector 0.0 -20.0 30.0) (float-vector 10.0 -17.3205 30.0)))
@@ -1152,9 +1152,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink16 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1955 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink16 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset13 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset1992
+     ;; definition of :room602-kitchen-bodyset14
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 2.5 2.5 2.5) (float-vector -2.5 2.5 2.5) (float-vector -2.5 -2.5 2.5) (float-vector 2.5 -2.5 2.5)))
@@ -1167,9 +1167,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink13 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset1992 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink13 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset14 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset2013
+     ;; definition of :room602-kitchen-bodyset15
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 17.3205 -10.0 30.0) (float-vector 20.0 0.0 30.0) (float-vector 17.3205 10.0 30.0) (float-vector 10.0 17.3205 30.0) (float-vector 0.0 20.0 30.0) (float-vector -10.0 17.3205 30.0) (float-vector -17.3205 10.0 30.0) (float-vector -20.0 0.0 30.0) (float-vector -17.3205 -10.0 30.0) (float-vector -10.0 -17.3205 30.0) (float-vector 0.0 -20.0 30.0) (float-vector 10.0 -17.3205 30.0)))
@@ -1190,9 +1190,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink14 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset2013 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink14 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset15 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset2050
+     ;; definition of :room602-kitchen-bodyset16
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 2.5 2.5 2.5) (float-vector -2.5 2.5 2.5) (float-vector -2.5 -2.5 2.5) (float-vector 2.5 -2.5 2.5)))
@@ -1205,9 +1205,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink11 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset2050 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink11 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset16 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-kitchen-bodyset2071
+     ;; definition of :room602-kitchen-bodyset17
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 17.3205 -10.0 30.0) (float-vector 20.0 0.0 30.0) (float-vector 17.3205 10.0 30.0) (float-vector 10.0 17.3205 30.0) (float-vector 0.0 20.0 30.0) (float-vector -10.0 17.3205 30.0) (float-vector -17.3205 10.0 30.0) (float-vector -20.0 0.0 30.0) (float-vector -17.3205 -10.0 30.0) (float-vector -10.0 -17.3205 30.0) (float-vector 0.0 -20.0 30.0) (float-vector 10.0 -17.3205 30.0)))
@@ -1228,7 +1228,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink12 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset2071 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink12 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-kitchen-bodyset17 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink16 :newcoords (make-coords :pos (float-vector 5.0 0.0 0.0) :rot #2f((2.220446e-16 1.232595e-32 -1.0) (1.224606e-16 -1.0 1.232595e-32) (-1.0 -1.224606e-16 -2.220446e-16))))

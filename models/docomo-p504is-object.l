@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :docomo-p504is-bodyset9
+     ;; definition of :docomo-p504is-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -70.0 -21.75 8.39711) (float-vector -70.0 -19.5 9.0) (float-vector -70.0 -17.25 8.39711) (float-vector -70.0 -15.6029 6.75) (float-vector -70.0 -15.0 4.5) (float-vector -70.0 -15.6029 2.25) (float-vector -70.0 -17.25 0.602886) (float-vector -70.0 -19.5 5.329071e-15) (float-vector -70.0 -21.75 0.602886) (float-vector -70.0 -23.3971 2.25) (float-vector -70.0 -24.0 4.5) (float-vector -70.0 -23.3971 6.75)))
@@ -47,9 +47,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :whitesmoke)
      (send (elt bc 1) :set-color :whitesmoke)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :docomo-p504is-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :docomo-p504is-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :docomo-p504is-bodyset63
+     ;; definition of :docomo-p504is-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 95.5 24.0 4.5) (float-vector -4.5 24.0 4.5) (float-vector -4.5 -24.0 4.5) (float-vector 95.5 -24.0 4.5)))
@@ -73,7 +73,7 @@
      (send (elt bc 1) :paste-texture-to-face (elt (send (elt bc 1) :faces)1) :file "models/kotaro_head.jpg")
      (send (elt bc 0) :set-color :whitesmoke)
      (send (elt bc 1) :set-color :gray20)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :docomo-p504is-bodyset63 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :docomo-p504is-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector -45.5 0.0 13.5) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

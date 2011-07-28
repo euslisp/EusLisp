@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73b2-coe-450-shelf-bodyset11
+     ;; definition of :room73b2-coe-450-shelf-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 225.0 225.0 44.5) (float-vector -225.0 225.0 44.5) (float-vector -225.0 -225.0 44.5) (float-vector 225.0 -225.0 44.5)))
@@ -85,7 +85,7 @@
      (send (elt bc 4) :set-color :gray)
      (send (elt bc 5) :set-color :khaki)
      (send (elt bc 6) :set-color :orange)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-coe-450-shelf-bodyset11 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-coe-450-shelf-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73a3-door-right-bodyset13
+     ;; definition of :room73a3-door-right-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -10.0 -385.0 2350.0) (float-vector -20.0 -385.0 2350.0) (float-vector -20.0 -395.0 2350.0) (float-vector -10.0 -395.0 2350.0)))
@@ -31,9 +31,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :ivory1)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-door-right-bodyset13 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-door-right-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73a3-door-right-bodyset34
+     ;; definition of :room73a3-door-right-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -25.0 585.0 175.0) (float-vector -25.0 485.0 175.0) (float-vector 0.0 485.0 175.0) (float-vector 0.0 585.0 175.0)))
@@ -107,9 +107,9 @@
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.3)
      (send (elt bc 2) :set-color :ivory1)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-door-right-bodyset34 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-door-right-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73a3-door-right-bodyset149
+     ;; definition of :room73a3-door-right-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -5.0 -10.0 -17.3205) (float-vector -5.0 0.0 -20.0) (float-vector -5.0 10.0 -17.3205) (float-vector -5.0 17.3205 -10.0) (float-vector -5.0 20.0 0.0) (float-vector -5.0 17.3205 10.0) (float-vector -5.0 10.0 17.3205) (float-vector -5.0 0.0 20.0) (float-vector -5.0 -10.0 17.3205) (float-vector -5.0 -17.3205 10.0) (float-vector -5.0 -20.0 0.0) (float-vector -5.0 -17.3205 -10.0)))
@@ -156,9 +156,9 @@
      (send (elt bc 0) :set-color :dimgray)
      (send (elt bc 1) :set-color :dimgray)
      (send (elt bc 2) :set-color :dimgray)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-door-right-bodyset149 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-door-right-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73a3-door-right-bodyset236
+     ;; definition of :room73a3-door-right-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 -5.0 -8.66025) (float-vector 15.0 0.0 -10.0) (float-vector 15.0 5.0 -8.66025) (float-vector 15.0 8.66025 -5.0) (float-vector 15.0 10.0 0.0) (float-vector 15.0 8.66025 5.0) (float-vector 15.0 5.0 8.66025) (float-vector 15.0 0.0 10.0) (float-vector 15.0 -5.0 8.66025) (float-vector 15.0 -8.66025 5.0) (float-vector 15.0 -10.0 0.0) (float-vector 15.0 -8.66025 -5.0)))
@@ -248,7 +248,7 @@
      (send (elt bc 3) :set-color :dimgray)
      (send (elt bc 4) :set-color :dimgray)
      (send (elt bc 5) :set-color :dimgray)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-door-right-bodyset236 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-door-right-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink2 :newcoords (make-coords :pos (float-vector 90.0 705.0 960.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

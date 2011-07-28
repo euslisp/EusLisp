@@ -87,7 +87,7 @@
      (send (elt bc 6) :set-color :beige)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :itoki-900-closet-bodyset133
+     ;; definition of :itoki-900-closet-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 10.0 1000.0) (float-vector -20.0 10.0 1000.0) (float-vector -20.0 -440.0 1000.0) (float-vector 0.0 -440.0 1000.0)))
@@ -100,9 +100,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :beige)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-closet-bodyset133 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-closet-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :itoki-900-closet-bodyset154
+     ;; definition of :itoki-900-closet-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 440.0 1000.0) (float-vector -20.0 440.0 1000.0) (float-vector -20.0 -10.0 1000.0) (float-vector 0.0 -10.0 1000.0)))
@@ -115,7 +115,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :beige)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-closet-bodyset154 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-closet-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 225.0 -440.0 20.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

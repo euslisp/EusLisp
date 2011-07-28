@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :akiba-door-bodyset13
+     ;; definition of :akiba-door-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -10.0 -475.0 2400.0) (float-vector -20.0 -475.0 2400.0) (float-vector -20.0 -485.0 2400.0) (float-vector -10.0 -485.0 2400.0)))
@@ -31,9 +31,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :ivory1)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-door-bodyset13 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-door-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :akiba-door-bodyset34
+     ;; definition of :akiba-door-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 975.0 2400.0) (float-vector -15.0 975.0 2400.0) (float-vector -15.0 -15.0 2400.0) (float-vector 15.0 -15.0 2400.0)))
@@ -55,9 +55,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :ivory1)
      (send (elt bc 1) :set-color :ivory1)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-door-bodyset34 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-door-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :akiba-door-bodyset72
+     ;; definition of :akiba-door-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -5.0 -10.0 -17.3205) (float-vector -5.0 0.0 -20.0) (float-vector -5.0 10.0 -17.3205) (float-vector -5.0 17.3205 -10.0) (float-vector -5.0 20.0 0.0) (float-vector -5.0 17.3205 10.0) (float-vector -5.0 10.0 17.3205) (float-vector -5.0 0.0 20.0) (float-vector -5.0 -10.0 17.3205) (float-vector -5.0 -17.3205 10.0) (float-vector -5.0 -20.0 0.0) (float-vector -5.0 -17.3205 -10.0)))
@@ -104,9 +104,9 @@
      (send (elt bc 0) :set-color :dimgray)
      (send (elt bc 1) :set-color :dimgray)
      (send (elt bc 2) :set-color :dimgray)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-door-bodyset72 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-door-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :akiba-door-bodyset159
+     ;; definition of :akiba-door-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 -5.0 -8.66025) (float-vector 15.0 0.0 -10.0) (float-vector 15.0 5.0 -8.66025) (float-vector 15.0 8.66025 -5.0) (float-vector 15.0 10.0 0.0) (float-vector 15.0 8.66025 5.0) (float-vector 15.0 5.0 8.66025) (float-vector 15.0 0.0 10.0) (float-vector 15.0 -5.0 8.66025) (float-vector 15.0 -8.66025 5.0) (float-vector 15.0 -10.0 0.0) (float-vector 15.0 -8.66025 -5.0)))
@@ -196,7 +196,7 @@
      (send (elt bc 3) :set-color :dimgray)
      (send (elt bc 4) :set-color :dimgray)
      (send (elt bc 5) :set-color :dimgray)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-door-bodyset159 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-door-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink2 :newcoords (make-coords :pos (float-vector 90.0 885.0 960.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

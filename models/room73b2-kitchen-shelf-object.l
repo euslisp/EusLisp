@@ -144,7 +144,7 @@
      (send (elt bc 12) :set-color :white)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-kitchen-shelf-bodyset241
+     ;; definition of :room73b2-kitchen-shelf-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 285.0 894.5) (float-vector -15.0 285.0 894.5) (float-vector -15.0 225.0 894.5) (float-vector 15.0 225.0 894.5)))
@@ -176,9 +176,9 @@
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.5)
      (send (elt bc 2) :set-color :mediumspringgreen)
-     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset241 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-kitchen-shelf-bodyset296
+     ;; definition of :room73b2-kitchen-shelf-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 15.0 894.5) (float-vector -15.0 15.0 894.5) (float-vector -15.0 -45.0 894.5) (float-vector 15.0 -45.0 894.5)))
@@ -210,9 +210,9 @@
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.5)
      (send (elt bc 2) :set-color :mediumspringgreen)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset296 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-kitchen-shelf-bodyset351
+     ;; definition of :room73b2-kitchen-shelf-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 285.0 644.5) (float-vector -15.0 285.0 644.5) (float-vector -15.0 -15.0 644.5) (float-vector 15.0 -15.0 644.5)))
@@ -225,9 +225,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :mediumspringgreen)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset351 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-kitchen-shelf-bodyset372
+     ;; definition of :room73b2-kitchen-shelf-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 15.0 644.5) (float-vector -15.0 15.0 644.5) (float-vector -15.0 -285.0 644.5) (float-vector 15.0 -285.0 644.5)))
@@ -240,9 +240,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :mediumspringgreen)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset372 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-kitchen-shelf-bodyset393
+     ;; definition of :room73b2-kitchen-shelf-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 285.0 644.5) (float-vector -15.0 285.0 644.5) (float-vector -15.0 -15.0 644.5) (float-vector 15.0 -15.0 644.5)))
@@ -255,9 +255,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :mediumspringgreen)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset393 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-kitchen-shelf-bodyset414
+     ;; definition of :room73b2-kitchen-shelf-bodyset7
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 15.0 15.0 644.5) (float-vector -15.0 15.0 644.5) (float-vector -15.0 -285.0 644.5) (float-vector 15.0 -285.0 644.5)))
@@ -270,7 +270,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :mediumspringgreen)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset414 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kitchen-shelf-bodyset7 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 180.0 1485.0 250.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

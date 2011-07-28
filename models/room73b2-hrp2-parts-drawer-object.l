@@ -105,7 +105,7 @@
      (send (elt bc 8) :set-color :burlywood1)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-hrp2-parts-drawer-bodyset167
+     ;; definition of :room73b2-hrp2-parts-drawer-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -190.0 377.5 -85.0) (float-vector -190.0 -377.5 -85.0) (float-vector -190.0 -377.5 85.0) (float-vector -190.0 377.5 85.0)))
@@ -131,9 +131,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :burlywood1)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset167 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-hrp2-parts-drawer-bodyset213
+     ;; definition of :room73b2-hrp2-parts-drawer-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -190.0 377.5 -85.0) (float-vector -190.0 -377.5 -85.0) (float-vector -190.0 -377.5 85.0) (float-vector -190.0 377.5 85.0)))
@@ -159,9 +159,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :burlywood1)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset213 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-hrp2-parts-drawer-bodyset259
+     ;; definition of :room73b2-hrp2-parts-drawer-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -190.0 377.5 -85.0) (float-vector -190.0 -377.5 -85.0) (float-vector -190.0 -377.5 85.0) (float-vector -190.0 377.5 85.0)))
@@ -187,9 +187,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :burlywood1)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset259 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-hrp2-parts-drawer-bodyset305
+     ;; definition of :room73b2-hrp2-parts-drawer-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -190.0 377.5 -85.0) (float-vector -190.0 -377.5 -85.0) (float-vector -190.0 -377.5 85.0) (float-vector -190.0 377.5 85.0)))
@@ -215,9 +215,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :burlywood1)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset305 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-hrp2-parts-drawer-bodyset351
+     ;; definition of :room73b2-hrp2-parts-drawer-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -190.0 377.5 -180.0) (float-vector -190.0 -377.5 -180.0) (float-vector -190.0 -377.5 180.0) (float-vector -190.0 377.5 180.0)))
@@ -243,7 +243,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :burlywood1)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset351 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-hrp2-parts-drawer-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 0.0 0.0 200.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

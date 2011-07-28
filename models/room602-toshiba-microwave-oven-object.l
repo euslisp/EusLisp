@@ -78,7 +78,7 @@
      (send (elt bc 5) :set-color :white)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-toshiba-microwave-oven-bodyset117
+     ;; definition of :room602-toshiba-microwave-oven-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -25.0 395.0 0.0) (float-vector -25.0 -25.0 0.0) (float-vector -25.0 -25.0 300.0) (float-vector -25.0 395.0 300.0))
@@ -140,9 +140,9 @@
      (send (elt bc 1) :set-color :black)
      (gl::transparent (elt bc 1) 0.9)
      (send (elt bc 2) :set-color :white)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-toshiba-microwave-oven-bodyset117 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-toshiba-microwave-oven-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-toshiba-microwave-oven-bodyset224
+     ;; definition of :room602-toshiba-microwave-oven-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 20.0 0.0 0.0) (float-vector 17.3205 10.0 0.0) (float-vector 17.3205 10.0 10.0) (float-vector 20.0 0.0 10.0)))
@@ -179,7 +179,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-toshiba-microwave-oven-bodyset224 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-toshiba-microwave-oven-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink2 :newcoords (make-coords :pos (float-vector 210.0 210.0 85.0) :rot #2f((7.216450e-16 8.715764e-33 -1.0) (-8.715764e-33 1.0 8.715764e-33) (1.0 8.715764e-33 7.216450e-16))))

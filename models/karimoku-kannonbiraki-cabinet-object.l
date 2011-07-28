@@ -87,7 +87,7 @@
      (send (elt bc 6) :set-color :burlywood1)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :karimoku-kannonbiraki-cabinet-bodyset134
+     ;; definition of :karimoku-kannonbiraki-cabinet-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 10.0 390.0 740.0) (float-vector -10.0 390.0 740.0) (float-vector -10.0 -10.0 740.0) (float-vector 10.0 -10.0 740.0)))
@@ -100,9 +100,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :burlywood1)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :karimoku-kannonbiraki-cabinet-bodyset134 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :karimoku-kannonbiraki-cabinet-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :karimoku-kannonbiraki-cabinet-bodyset155
+     ;; definition of :karimoku-kannonbiraki-cabinet-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 10.0 10.0 740.0) (float-vector -10.0 10.0 740.0) (float-vector -10.0 -390.0 740.0) (float-vector 10.0 -390.0 740.0)))
@@ -115,7 +115,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :burlywood1)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :karimoku-kannonbiraki-cabinet-bodyset155 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :karimoku-kannonbiraki-cabinet-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 157.0 390.0 10.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

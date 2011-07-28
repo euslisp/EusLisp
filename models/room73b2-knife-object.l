@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73b2-knife-bodyset11
+     ;; definition of :room73b2-knife-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 60.0 5.0 12.5) (float-vector -60.0 5.0 12.5) (float-vector -60.0 -5.0 12.5) (float-vector 60.0 -5.0 12.5)))
@@ -40,7 +40,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :blue)
      (send (elt bc 1) :set-color :yellow)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-knife-bodyset11 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-knife-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

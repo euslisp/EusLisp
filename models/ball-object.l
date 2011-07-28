@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :ball-bodyset11
+     ;; definition of :ball-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 96.3861 0.0 -26.6405) (float-vector 98.7688 8.22425 -13.3071) (float-vector 98.7688 -8.22425 -13.3071)))
@@ -1305,7 +1305,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :red)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :ball-bodyset11 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :ball-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

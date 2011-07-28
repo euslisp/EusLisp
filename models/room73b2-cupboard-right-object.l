@@ -123,7 +123,7 @@
      (send (elt bc 10) :set-color :beige)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-cupboard-right-bodyset201
+     ;; definition of :room73b2-cupboard-right-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 5.0 5.5 684.5) (float-vector -5.0 5.5 684.5) (float-vector -5.0 -287.5 684.5) (float-vector 5.0 -287.5 684.5)))
@@ -136,9 +136,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :lightgoldenrodyellow)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset201 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-cupboard-right-bodyset222
+     ;; definition of :room73b2-cupboard-right-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 5.0 287.5 684.5) (float-vector -5.0 287.5 684.5) (float-vector -5.0 -5.5 684.5) (float-vector 5.0 -5.5 684.5)))
@@ -151,9 +151,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :lightgoldenrodyellow)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset222 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-cupboard-right-bodyset243
+     ;; definition of :room73b2-cupboard-right-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -166.5 283.0 -52.5) (float-vector -166.5 -283.0 -52.5) (float-vector -166.5 -283.0 52.5) (float-vector -166.5 283.0 52.5)))
@@ -179,9 +179,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :lightgoldenrodyellow)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset243 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-cupboard-right-bodyset289
+     ;; definition of :room73b2-cupboard-right-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 5.0 5.0 910.0) (float-vector -5.0 5.0 910.0) (float-vector -5.0 -55.0 910.0) (float-vector 5.0 -55.0 910.0)))
@@ -213,9 +213,9 @@
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.5)
      (send (elt bc 2) :set-color :lightgoldenrodyellow)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset289 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-cupboard-right-bodyset344
+     ;; definition of :room73b2-cupboard-right-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 5.0 287.0 910.0) (float-vector -5.0 287.0 910.0) (float-vector -5.0 227.0 910.0) (float-vector 5.0 227.0 910.0)))
@@ -247,7 +247,7 @@
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.5)
      (send (elt bc 2) :set-color :lightgoldenrodyellow)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset344 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-cupboard-right-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 171.0 -288.0 885.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

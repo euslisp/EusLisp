@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :bidirectional-arrow-bodyset9
+     ;; definition of :bidirectional-arrow-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 33.3333 140.0 8.572244e-15) (float-vector 30.796 140.0 12.7561) (float-vector 23.5702 140.0 23.5702) (float-vector 12.7561 140.0 30.796) (float-vector -3.021825e-13 140.0 33.3333) (float-vector -12.7561 140.0 30.796) (float-vector -23.5702 140.0 23.5702) (float-vector -30.796 140.0 12.7561) (float-vector -33.3333 140.0 -1.731455e-13) (float-vector -30.796 140.0 -12.7561) (float-vector -23.5702 140.0 -23.5702) (float-vector -12.7561 140.0 -30.796) (float-vector 3.164696e-14 140.0 -33.3333) (float-vector 12.7561 140.0 -30.796) (float-vector 23.5702 140.0 -23.5702) (float-vector 30.796 140.0 -12.7561)))
@@ -78,7 +78,7 @@
      (send (elt bc 0) :set-color :red)
      (send (elt bc 1) :set-color :red)
      (send (elt bc 2) :set-color :red)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :bidirectional-arrow-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :bidirectional-arrow-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

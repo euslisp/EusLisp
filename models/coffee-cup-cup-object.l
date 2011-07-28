@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :coffee-cup-cup-bodyset11
+     ;; definition of :coffee-cup-cup-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 21.0 0.0 0.0) (float-vector 19.4015 -8.03635 0.0) (float-vector 14.8492 -14.8492 0.0) (float-vector 8.03635 -19.4015 0.0) (float-vector -1.903750e-13 -21.0 0.0) (float-vector -8.03635 -19.4015 0.0) (float-vector -14.8492 -14.8492 0.0) (float-vector -19.4015 -8.03635 0.0) (float-vector -21.0 1.144822e-13 0.0) (float-vector -19.4015 8.03635 0.0) (float-vector -14.8492 14.8492 0.0) (float-vector -8.03635 19.4015 0.0) (float-vector 1.993758e-14 21.0 0.0) (float-vector 8.03635 19.4015 0.0) (float-vector 14.8492 14.8492 0.0) (float-vector 19.4015 8.03635 0.0)))
@@ -545,7 +545,7 @@
      (send (elt bc 0) :set-color :yellow)
      (send (elt bc 1) :set-color :ivory)
      (send (elt bc 2) :set-color :yellow)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coffee-cup-cup-bodyset11 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coffee-cup-cup-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

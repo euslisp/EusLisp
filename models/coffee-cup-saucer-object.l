@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :coffee-cup-saucer-bodyset14
+     ;; definition of :coffee-cup-saucer-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 28.0 0.0 4.5) (float-vector 25.8686 -10.7151 4.5) (float-vector 0.0 0.0 4.5)))
@@ -668,7 +668,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :ivory)
      (send (elt bc 1) :set-color :yellow)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coffee-cup-saucer-bodyset14 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coffee-cup-saucer-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

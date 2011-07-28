@@ -105,7 +105,7 @@
      (send (elt bc 8) :set-color :burlywood1)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :shelf-bodyset167
+     ;; definition of :shelf-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -76.25) (float-vector -182.5 -375.0 -76.25) (float-vector -182.5 -375.0 76.25) (float-vector -182.5 375.0 76.25)))
@@ -182,9 +182,9 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset167 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :shelf-bodyset312
+     ;; definition of :shelf-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -76.25) (float-vector -182.5 -375.0 -76.25) (float-vector -182.5 -375.0 76.25) (float-vector -182.5 375.0 76.25)))
@@ -261,9 +261,9 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset312 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :shelf-bodyset457
+     ;; definition of :shelf-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -76.25) (float-vector -182.5 -375.0 -76.25) (float-vector -182.5 -375.0 76.25) (float-vector -182.5 375.0 76.25)))
@@ -340,9 +340,9 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset457 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :shelf-bodyset602
+     ;; definition of :shelf-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -76.25) (float-vector -182.5 -375.0 -76.25) (float-vector -182.5 -375.0 76.25) (float-vector -182.5 375.0 76.25)))
@@ -419,9 +419,9 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset602 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :shelf-bodyset747
+     ;; definition of :shelf-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -182.5 375.0 -175.0) (float-vector -182.5 -375.0 -175.0) (float-vector -182.5 -375.0 175.0) (float-vector -182.5 375.0 175.0)))
@@ -498,7 +498,7 @@
      (send (elt bc 2) :set-color :lightgray)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset747 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :shelf-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 5.5 0.0 175.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

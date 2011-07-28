@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :coe-demospace-bodyset9
+     ;; definition of :coe-demospace-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 2000.0 -2690.0 2030.0) (float-vector -2000.0 -2690.0 2030.0) (float-vector -2000.0 -2810.0 2030.0) (float-vector 2000.0 -2810.0 2030.0)))
@@ -502,7 +502,7 @@
      (send (elt bc 19) :set-color :orange)
      (send (elt bc 20) :set-color :gray)
      (send (elt bc 21) :set-color :white)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coe-demospace-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coe-demospace-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

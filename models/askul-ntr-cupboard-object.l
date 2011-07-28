@@ -105,7 +105,7 @@
      (send (elt bc 8) :set-color :beige)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :askul-ntr-cupboard-bodyset167
+     ;; definition of :askul-ntr-cupboard-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 5.0 5.5 450.0) (float-vector -5.0 5.5 450.0) (float-vector -5.0 -287.5 450.0) (float-vector 5.0 -287.5 450.0)))
@@ -118,9 +118,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :lightgoldenrodyellow)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :askul-ntr-cupboard-bodyset167 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :askul-ntr-cupboard-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :askul-ntr-cupboard-bodyset188
+     ;; definition of :askul-ntr-cupboard-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 5.0 287.5 450.0) (float-vector -5.0 287.5 450.0) (float-vector -5.0 -5.5 450.0) (float-vector 5.0 -5.5 450.0)))
@@ -133,9 +133,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :lightgoldenrodyellow)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :askul-ntr-cupboard-bodyset188 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :askul-ntr-cupboard-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :askul-ntr-cupboard-bodyset209
+     ;; definition of :askul-ntr-cupboard-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 5.0 5.0 470.0) (float-vector -5.0 5.0 470.0) (float-vector -5.0 -55.0 470.0) (float-vector 5.0 -55.0 470.0)))
@@ -167,9 +167,9 @@
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.5)
      (send (elt bc 2) :set-color :lightgoldenrodyellow)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :askul-ntr-cupboard-bodyset209 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :askul-ntr-cupboard-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :askul-ntr-cupboard-bodyset264
+     ;; definition of :askul-ntr-cupboard-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 5.0 287.0 470.0) (float-vector -5.0 287.0 470.0) (float-vector -5.0 227.0 470.0) (float-vector 5.0 227.0 470.0)))
@@ -201,7 +201,7 @@
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.5)
      (send (elt bc 2) :set-color :lightgoldenrodyellow)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :askul-ntr-cupboard-bodyset264 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :askul-ntr-cupboard-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 171.0 -288.0 1325.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

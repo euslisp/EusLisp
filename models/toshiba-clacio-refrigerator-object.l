@@ -96,7 +96,7 @@
      (send (elt bc 7) :set-color :darkseagreen2)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :toshiba-clacio-refrigerator-bodyset154
+     ;; definition of :toshiba-clacio-refrigerator-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 305.0 -167.5) (float-vector -265.0 -305.0 -167.5) (float-vector -265.0 -305.0 167.5) (float-vector -265.0 305.0 167.5)))
@@ -134,9 +134,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :darkseagreen2)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset154 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :toshiba-clacio-refrigerator-bodyset224
+     ;; definition of :toshiba-clacio-refrigerator-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 305.0 -157.5) (float-vector -265.0 -305.0 -157.5) (float-vector -265.0 -305.0 157.5) (float-vector -265.0 305.0 157.5)))
@@ -174,9 +174,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :darkseagreen2)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset224 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :toshiba-clacio-refrigerator-bodyset294
+     ;; definition of :toshiba-clacio-refrigerator-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 103.0 -92.5) (float-vector -265.0 -103.0 -92.5) (float-vector -265.0 -103.0 92.5) (float-vector -265.0 103.0 92.5)))
@@ -214,9 +214,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :darkseagreen2)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset294 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :toshiba-clacio-refrigerator-bodyset364
+     ;; definition of :toshiba-clacio-refrigerator-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -265.0 180.0 -92.5) (float-vector -265.0 -180.0 -92.5) (float-vector -265.0 -180.0 92.5) (float-vector -265.0 180.0 92.5)))
@@ -254,9 +254,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :darkseagreen2)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset364 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :toshiba-clacio-refrigerator-bodyset434
+     ;; definition of :toshiba-clacio-refrigerator-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 25.0 -485.0 195.75) (float-vector 15.0 -485.0 195.75) (float-vector 15.0 -565.0 195.75) (float-vector 17.5 -565.0 195.75) (float-vector 17.5 -525.0 195.75) (float-vector 25.0 -525.0 195.75)))
@@ -283,7 +283,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :darkseagreen2)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset434 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-clacio-refrigerator-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 275.0 300.0 960.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

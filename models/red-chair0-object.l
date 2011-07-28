@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :red-chair0-bodyset12
+     ;; definition of :red-chair0-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 56.6312 18.4006 45.0) (float-vector 35.0 -48.1734 45.0) (float-vector -35.0 -48.1734 45.0) (float-vector -56.6312 18.4006 45.0) (float-vector 3.646114e-15 59.5456 45.0)))
@@ -424,7 +424,7 @@
      (send (elt bc 24) :set-color :gray)
      (send (elt bc 25) :set-color :red)
      (send (elt bc 26) :set-color :gray)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :red-chair0-bodyset12 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :red-chair0-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

@@ -87,7 +87,7 @@
      (send (elt bc 6) :set-color :peru)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :audio_shelf-bodyset133
+     ;; definition of :audio_shelf-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 10.0 10.0 540.0) (float-vector -10.0 10.0 540.0) (float-vector -10.0 -380.0 540.0) (float-vector 10.0 -380.0 540.0)))
@@ -100,9 +100,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :peru)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset133 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :audio_shelf-bodyset154
+     ;; definition of :audio_shelf-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 10.0 380.0 540.0) (float-vector -10.0 380.0 540.0) (float-vector -10.0 -10.0 540.0) (float-vector 10.0 -10.0 540.0)))
@@ -115,9 +115,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :peru)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset154 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :audio_shelf-bodyset175
+     ;; definition of :audio_shelf-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -222.5 175.0 -60.0) (float-vector -222.5 -175.0 -60.0) (float-vector -222.5 -175.0 60.0) (float-vector -222.5 175.0 60.0)))
@@ -143,9 +143,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :peru)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset175 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :audio_shelf-bodyset221
+     ;; definition of :audio_shelf-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -222.5 175.0 -80.0) (float-vector -222.5 -175.0 -80.0) (float-vector -222.5 -175.0 80.0) (float-vector -222.5 175.0 80.0)))
@@ -171,9 +171,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :peru)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset221 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :audio_shelf-bodyset267
+     ;; definition of :audio_shelf-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -222.5 175.0 -100.0) (float-vector -222.5 -175.0 -100.0) (float-vector -222.5 -175.0 100.0) (float-vector -222.5 175.0 100.0)))
@@ -199,7 +199,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :peru)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset267 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :audio_shelf-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 0.0 390.0 180.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

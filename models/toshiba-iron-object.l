@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :toshiba-iron-bodyset9
+     ;; definition of :toshiba-iron-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -60.9044 75.9057 -35.0) (float-vector -60.9044 34.0943 -35.0) (float-vector -52.2113 -6.8034 -35.0) (float-vector -35.2051 -45.0 -35.0) (float-vector -10.629 -78.8261 -35.0) (float-vector 1.421085e-14 -88.3965 -35.0) (float-vector 10.629 -78.8261 -35.0) (float-vector 35.2051 -45.0 -35.0) (float-vector 52.2113 -6.8034 -35.0) (float-vector 60.9044 34.0943 -35.0) (float-vector 60.9044 75.9057 -35.0) (float-vector 56.8458 95.0 -35.0) (float-vector -56.8458 95.0 -35.0)))
@@ -103,7 +103,7 @@
      (send (elt bc 2) :set-color (list))
      (send (elt bc 3) :set-color :pink)
      (send (elt bc 4) :set-color :white)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-iron-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :toshiba-iron-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

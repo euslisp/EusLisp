@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :book-bodyset14
+     ;; definition of :book-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.0 0.0 210.0) (float-vector 0.0 -9.0 210.0) (float-vector 2.0 -10.0 210.0) (float-vector 150.0 -10.0 210.0) (float-vector 150.0 -9.0 210.0) (float-vector 2.0 -9.0 210.0) (float-vector 2.0 9.0 210.0) (float-vector 150.0 9.0 210.0) (float-vector 150.0 10.0 210.0) (float-vector 5.0 10.0 210.0) (float-vector 0.0 9.0 210.0)))
@@ -47,7 +47,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :blue)
      (send (elt bc 1) :set-color :white)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :book-bodyset14 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :book-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

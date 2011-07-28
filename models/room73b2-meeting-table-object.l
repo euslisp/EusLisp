@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73b2-meeting-table-bodyset9
+     ;; definition of :room73b2-meeting-table-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 338.66 715.0 740.0) (float-vector 340.0 720.0 740.0) (float-vector 338.66 725.0 740.0) (float-vector 335.0 728.66 740.0) (float-vector 330.0 730.0 740.0) (float-vector 325.0 728.66 740.0) (float-vector 321.34 725.0 740.0) (float-vector 320.0 720.0 740.0) (float-vector 321.34 715.0 740.0) (float-vector 325.0 711.34 740.0) (float-vector 330.0 710.0 740.0) (float-vector 335.0 711.34 740.0)))
@@ -138,7 +138,7 @@
      (send (elt bc 2) :set-color :silver)
      (send (elt bc 3) :set-color :silver)
      (send (elt bc 4) :set-color :white)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-meeting-table-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-meeting-table-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

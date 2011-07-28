@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :room602-door-bodyset9
+     ;; definition of :room602-door-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -12.0 -12.0 1900.0) (float-vector -22.0 -12.0 1900.0) (float-vector -22.0 -22.0 1900.0) (float-vector -12.0 -22.0 1900.0)))
@@ -30,9 +30,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :darkseagreen2)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-door-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-door-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-door-bodyset30
+     ;; definition of :room602-door-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 17.5 17.0 1900.0) (float-vector -17.5 17.0 1900.0) (float-vector -17.5 -863.0 1900.0) (float-vector 17.5 -863.0 1900.0)))
@@ -45,7 +45,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :darkseagreen2)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-door-bodyset30 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-door-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector -17.0 -17.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

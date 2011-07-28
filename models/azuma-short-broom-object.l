@@ -19,7 +19,7 @@
 
      ;; definition of link
 
-     ;; definition of :azuma-short-broom-bodyset14
+     ;; definition of :azuma-short-broom-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 8.66025 -5.0 800.0) (float-vector 10.0 0.0 800.0) (float-vector 8.66025 5.0 800.0) (float-vector 5.0 8.66025 800.0) (float-vector 5.329071e-15 10.0 800.0) (float-vector -5.0 8.66025 800.0) (float-vector -8.66025 5.0 800.0) (float-vector -10.0 1.065814e-14 800.0) (float-vector -8.66025 -5.0 800.0) (float-vector -5.0 -8.66025 800.0) (float-vector -1.598721e-14 -10.0 800.0) (float-vector 5.0 -8.66025 800.0)))
@@ -64,7 +64,7 @@
      (send (elt bc 0) :set-color :gray)
      (send (elt bc 1) :set-color :brown)
      (send (elt bc 2) :set-color :red)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :azuma-short-broom-bodyset14 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :azuma-short-broom-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

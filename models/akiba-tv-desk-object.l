@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :akiba-tv-desk-bodyset9
+     ;; definition of :akiba-tv-desk-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 750.0 365.0 730.0) (float-vector -750.0 365.0 730.0) (float-vector -750.0 -365.0 730.0) (float-vector 750.0 -365.0 730.0)))
@@ -152,7 +152,7 @@
      (send (elt bc 8) :set-color :gray10)
      (send (elt bc 9) :set-color :gray10)
      (send (elt bc 10) :set-color :gray10)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-tv-desk-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :akiba-tv-desk-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :kokuyo-600-sidetable-bodyset9
+     ;; definition of :kokuyo-600-sidetable-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 300.0 200.0 300.0) (float-vector 290.0 200.0 300.0) (float-vector 290.0 -200.0 300.0) (float-vector 300.0 -200.0 300.0)))
@@ -59,7 +59,7 @@
      (send (elt bc 1) :set-color :seashell)
      (send (elt bc 2) :set-color :seashell)
      (send (elt bc 3) :set-color :seashell)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :kokuyo-600-sidetable-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :kokuyo-600-sidetable-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

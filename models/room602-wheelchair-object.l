@@ -18,7 +18,7 @@
 
      ;; definition of link
 
-     ;; definition of :room602-wheelchair-bodyset23
+     ;; definition of :room602-wheelchair-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 47.3004 290.0 386.077) (float-vector 41.2028 305.9 383.552) (float-vector 61.9 305.9 279.5) (float-vector 68.5 290.0 279.5)))
@@ -984,7 +984,7 @@
      (send (elt bc 36) :set-color :gray5)
      (send (elt bc 37) :set-color :gray5)
      (send (elt bc 38) :set-color :gray20)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-wheelchair-bodyset23 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-wheelchair-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

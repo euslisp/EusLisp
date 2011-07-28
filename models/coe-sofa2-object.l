@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :coe-sofa2-bodyset9
+     ;; definition of :coe-sofa2-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 56.2917 250.0 335.0) (float-vector 65.0 250.0 302.5) (float-vector 56.2917 250.0 270.0) (float-vector 32.5 250.0 246.208) (float-vector 4.263256e-14 250.0 237.5) (float-vector -32.5 250.0 246.208) (float-vector -56.2917 250.0 270.0) (float-vector -65.0 250.0 302.5) (float-vector -56.2917 250.0 335.0) (float-vector -32.5 250.0 358.792) (float-vector -1.278977e-13 250.0 367.5) (float-vector 32.5 250.0 358.792)))
@@ -167,7 +167,7 @@
      (send (elt bc 7) :set-color :black)
      (send (elt bc 8) :set-color :black)
      (send (elt bc 9) :set-color :orange)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coe-sofa2-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :coe-sofa2-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

@@ -95,7 +95,7 @@
      (send (elt bc 6) :set-color :peru)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room602-3t-600-clean-locker-bodyset149
+     ;; definition of :room602-3t-600-clean-locker-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -9.0 9.0 -0.5) (float-vector -9.0 -573.0 -0.5) (float-vector -9.0 -573.0 1736.5) (float-vector -9.0 9.0 1736.5)))
@@ -116,7 +116,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-3t-600-clean-locker-bodyset149 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-3t-600-clean-locker-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 191.0 282.0 44.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

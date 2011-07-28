@@ -19,7 +19,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73b2-azuma-broom-bodyset14
+     ;; definition of :room73b2-azuma-broom-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 8.66025 -5.0 1250.0) (float-vector 10.0 0.0 1250.0) (float-vector 8.66025 5.0 1250.0) (float-vector 5.0 8.66025 1250.0) (float-vector -4.547474e-13 10.0 1250.0) (float-vector -5.0 8.66025 1250.0) (float-vector -8.66025 5.0 1250.0) (float-vector -10.0 0.0 1250.0) (float-vector -8.66025 -5.0 1250.0) (float-vector -5.0 -8.66025 1250.0) (float-vector -2.273737e-13 -10.0 1250.0) (float-vector 5.0 -8.66025 1250.0)))
@@ -55,7 +55,7 @@
      (send (elt bc 1) :paste-texture-to-face (elt (send (elt bc 1) :faces)1) :file "models/houki-saki.ppm")
      (send (elt bc 0) :set-color :gray)
      (send (elt bc 1) :set-color :gray)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-azuma-broom-bodyset14 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-azuma-broom-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

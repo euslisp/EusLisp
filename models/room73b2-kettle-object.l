@@ -19,7 +19,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73b2-kettle-bodyset13
+     ;; definition of :room73b2-kettle-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 72.5 0.0 0.0) (float-vector 66.9813 -27.7445 0.0) (float-vector 0.0 0.0 0.0)))
@@ -534,9 +534,9 @@
      (send (elt bc 2) :set-color :red)
      (send (elt bc 3) :set-color :red)
      (send (elt bc 4) :set-color :gray)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kettle-bodyset13 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kettle-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73b2-kettle-bodyset1034
+     ;; definition of :room73b2-kettle-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 10.0 -82.4025 97.3895) (float-vector -10.0 -82.4025 97.3895) (float-vector -10.0 -91.7995 93.9693) (float-vector 10.0 -91.7995 93.9693)))
@@ -567,7 +567,7 @@
      (send (elt bc 0) :set-color (list))
      (send (elt bc 1) :set-color (list))
      (send (elt bc 2) :set-color (list))
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kettle-bodyset1034 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73b2-kettle-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 0.0 0.0 101.305) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

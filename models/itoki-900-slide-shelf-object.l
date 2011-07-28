@@ -87,7 +87,7 @@
      (send (elt bc 6) :set-color :beige)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :itoki-900-slide-shelf-bodyset133
+     ;; definition of :itoki-900-slide-shelf-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -10.0 0.0 0.0) (float-vector -10.0 -286.667 0.0) (float-vector -10.0 -286.667 1000.0) (float-vector -10.0 0.0 1000.0))
@@ -120,9 +120,9 @@
      (send (elt bc 0) :set-color :beige)
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.3)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-slide-shelf-bodyset133 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-slide-shelf-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :itoki-900-slide-shelf-bodyset183
+     ;; definition of :itoki-900-slide-shelf-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -10.0 0.0 0.0) (float-vector -10.0 -286.667 0.0) (float-vector -10.0 -286.667 1000.0) (float-vector -10.0 0.0 1000.0))
@@ -155,9 +155,9 @@
      (send (elt bc 0) :set-color :beige)
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.3)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-slide-shelf-bodyset183 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-slide-shelf-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :itoki-900-slide-shelf-bodyset233
+     ;; definition of :itoki-900-slide-shelf-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -10.0 286.667 0.0) (float-vector -10.0 0.0 0.0) (float-vector -10.0 0.0 1000.0) (float-vector -10.0 286.667 1000.0))
@@ -190,7 +190,7 @@
      (send (elt bc 0) :set-color :beige)
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.3)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-slide-shelf-bodyset233 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :itoki-900-slide-shelf-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 155.0 -430.0 20.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

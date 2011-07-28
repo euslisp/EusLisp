@@ -87,7 +87,7 @@
      (send (elt bc 6) :set-color :darkgray)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :washing-machine-bodyset137
+     ;; definition of :washing-machine-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.5 0.5 0.5) (float-vector -0.5 0.5 0.5) (float-vector -0.5 -0.5 0.5) (float-vector 0.5 -0.5 0.5)))
@@ -129,9 +129,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :blue)
      (send (elt bc 1) :set-color :lightgrey)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :washing-machine-bodyset137 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :washing-machine-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :washing-machine-bodyset215
+     ;; definition of :washing-machine-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -35.0 0.0 210.0) (float-vector 0.0 0.0 210.0) (float-vector 0.0 550.0 210.0) (float-vector -35.0 550.0 210.0)))
@@ -163,9 +163,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray)
      (send (elt bc 1) :set-color :springgreen)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :washing-machine-bodyset215 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :washing-machine-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :washing-machine-bodyset265
+     ;; definition of :washing-machine-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.5 0.5 0.5) (float-vector -0.5 0.5 0.5) (float-vector -0.5 -0.5 0.5) (float-vector 0.5 -0.5 0.5)))
@@ -208,9 +208,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :blue)
      (send (elt bc 1) :set-color :lightgrey)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :washing-machine-bodyset265 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :washing-machine-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :washing-machine-bodyset345
+     ;; definition of :washing-machine-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 125.0 0.0 125.0) (float-vector 135.0 0.0 125.0) (float-vector 135.0 550.0 125.0) (float-vector 125.0 550.0 125.0)))
@@ -243,7 +243,7 @@
      (send (elt bc 0) :set-color :gray)
      (send (elt bc 1) :set-color :white)
      (gl::transparent (elt bc 1) 0.5)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :washing-machine-bodyset345 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :washing-machine-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector -50.0 -275.0 415.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

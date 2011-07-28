@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73a3-73a3-ground-bodyset9
+     ;; definition of :room73a3-73a3-ground-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 4210.5 1725.0 5.0) (float-vector -4210.5 1725.0 5.0) (float-vector -4210.5 -1725.0 5.0) (float-vector 4210.5 -1725.0 5.0)))
@@ -32,7 +32,7 @@
      ;; paste texture akihabara-floor-tex.jpg
      (send (elt bc 0) :paste-texture-to-face (elt (send (elt bc 0) :faces)0) :file "models/akihabara-floor-tex.jpg")
      (send (elt bc 0) :set-color :black)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-73a3-ground-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-73a3-ground-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)

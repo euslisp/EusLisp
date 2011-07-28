@@ -96,7 +96,7 @@
      (send (elt bc 7) :set-color :white)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :fridge-bodyset151
+     ;; definition of :fridge-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -294.0 292.5 -157.5) (float-vector -294.0 -292.5 -157.5) (float-vector -294.0 -292.5 157.5) (float-vector -294.0 292.5 157.5)))
@@ -122,9 +122,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset151 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :fridge-bodyset197
+     ;; definition of :fridge-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -294.0 292.5 -157.5) (float-vector -294.0 -292.5 -157.5) (float-vector -294.0 -292.5 157.5) (float-vector -294.0 292.5 157.5)))
@@ -150,9 +150,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset197 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :fridge-bodyset243
+     ;; definition of :fridge-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -294.0 121.0 -77.5) (float-vector -294.0 -121.0 -77.5) (float-vector -294.0 -121.0 77.5) (float-vector -294.0 121.0 77.5)))
@@ -178,9 +178,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset243 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :fridge-bodyset289
+     ;; definition of :fridge-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -294.0 121.0 -77.5) (float-vector -294.0 -121.0 -77.5) (float-vector -294.0 -121.0 77.5) (float-vector -294.0 121.0 77.5)))
@@ -206,9 +206,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset289 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :fridge-bodyset335
+     ;; definition of :fridge-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 25.0 317.0 824.5) (float-vector -25.0 317.0 824.5) (float-vector -25.0 -25.0 824.5) (float-vector 25.0 -25.0 824.5)))
@@ -221,9 +221,9 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset335 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :fridge-bodyset356
+     ;; definition of :fridge-bodyset7
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 25.0 25.0 824.5) (float-vector -25.0 25.0 824.5) (float-vector -25.0 -317.0 824.5) (float-vector 25.0 -317.0 824.5)))
@@ -236,7 +236,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset356 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :fridge-bodyset7 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 319.0 317.0 1000.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))

@@ -105,7 +105,7 @@
      (send (elt bc 8) :set-color :white)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :multibox-shelf-bodyset167
+     ;; definition of :multibox-shelf-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -140.0 115.0 -120.0) (float-vector -140.0 -115.0 -120.0) (float-vector -140.0 -115.0 120.0) (float-vector -140.0 115.0 120.0)))
@@ -131,9 +131,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink8 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset167 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink8 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :multibox-shelf-bodyset213
+     ;; definition of :multibox-shelf-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -140.0 115.0 -120.0) (float-vector -140.0 -115.0 -120.0) (float-vector -140.0 -115.0 120.0) (float-vector -140.0 115.0 120.0)))
@@ -159,9 +159,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :brown)
-     (setq blink7 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset213 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink7 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :multibox-shelf-bodyset259
+     ;; definition of :multibox-shelf-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -140.0 115.0 -120.0) (float-vector -140.0 -115.0 -120.0) (float-vector -140.0 -115.0 120.0) (float-vector -140.0 115.0 120.0)))
@@ -187,9 +187,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset259 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :multibox-shelf-bodyset305
+     ;; definition of :multibox-shelf-bodyset5
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -140.0 115.0 -120.0) (float-vector -140.0 -115.0 -120.0) (float-vector -140.0 -115.0 120.0) (float-vector -140.0 115.0 120.0)))
@@ -215,9 +215,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :brown)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset305 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :multibox-shelf-bodyset351
+     ;; definition of :multibox-shelf-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -140.0 115.0 -120.0) (float-vector -140.0 -115.0 -120.0) (float-vector -140.0 -115.0 120.0) (float-vector -140.0 115.0 120.0)))
@@ -243,9 +243,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :brown)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset351 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :multibox-shelf-bodyset397
+     ;; definition of :multibox-shelf-bodyset7
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -140.0 115.0 -120.0) (float-vector -140.0 -115.0 -120.0) (float-vector -140.0 -115.0 120.0) (float-vector -140.0 115.0 120.0)))
@@ -271,9 +271,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset397 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset7 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :multibox-shelf-bodyset443
+     ;; definition of :multibox-shelf-bodyset8
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -140.0 115.0 -120.0) (float-vector -140.0 -115.0 -120.0) (float-vector -140.0 -115.0 120.0) (float-vector -140.0 115.0 120.0)))
@@ -299,9 +299,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :brown)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset443 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset8 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :multibox-shelf-bodyset489
+     ;; definition of :multibox-shelf-bodyset9
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -140.0 115.0 -120.0) (float-vector -140.0 -115.0 -120.0) (float-vector -140.0 -115.0 120.0) (float-vector -140.0 115.0 120.0)))
@@ -327,7 +327,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :white)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset489 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :multibox-shelf-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 0.0 -140.0 170.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
