@@ -860,6 +860,7 @@ int bs_size;
   cntx->my_gc_pri = 2;
 #endif
 #endif
+  cntx->slashflag=0;
   cntx->intsig=0;
 #ifdef __RETURN_BARRIER
   cntx->rbar.pointer = NULL;
