@@ -21,12 +21,12 @@
      ;; definition of :elevator_call_panel_eng2-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 0.5 66.5 120.5) (float-vector -0.5 66.5 120.5) (float-vector -0.5 -66.5 120.5) (float-vector 0.5 -66.5 120.5)))
-         (instance face :init :vertices (list (float-vector -0.5 66.5 -120.5) (float-vector 0.5 66.5 -120.5) (float-vector 0.5 -66.5 -120.5) (float-vector -0.5 -66.5 -120.5)))
-         (instance face :init :vertices (list (float-vector 0.5 66.5 120.5) (float-vector 0.5 66.5 -120.5) (float-vector -0.5 66.5 -120.5) (float-vector -0.5 66.5 120.5)))
-         (instance face :init :vertices (list (float-vector 0.5 -66.5 120.5) (float-vector 0.5 -66.5 -120.5) (float-vector 0.5 66.5 -120.5) (float-vector 0.5 66.5 120.5)))
-         (instance face :init :vertices (list (float-vector -0.5 -66.5 120.5) (float-vector -0.5 -66.5 -120.5) (float-vector 0.5 -66.5 -120.5) (float-vector 0.5 -66.5 120.5)))
-         (instance face :init :vertices (list (float-vector -0.5 66.5 120.5) (float-vector -0.5 66.5 -120.5) (float-vector -0.5 -66.5 -120.5) (float-vector -0.5 -66.5 120.5)))
+         (instance face :init :vertices (list (float-vector 0.5 49.0 120.5) (float-vector -0.5 49.0 120.5) (float-vector -0.5 -49.0 120.5) (float-vector 0.5 -49.0 120.5)))
+         (instance face :init :vertices (list (float-vector -0.5 49.0 -120.5) (float-vector 0.5 49.0 -120.5) (float-vector 0.5 -49.0 -120.5) (float-vector -0.5 -49.0 -120.5)))
+         (instance face :init :vertices (list (float-vector 0.5 49.0 120.5) (float-vector 0.5 49.0 -120.5) (float-vector -0.5 49.0 -120.5) (float-vector -0.5 49.0 120.5)))
+         (instance face :init :vertices (list (float-vector 0.5 -49.0 120.5) (float-vector 0.5 -49.0 -120.5) (float-vector 0.5 49.0 -120.5) (float-vector 0.5 49.0 120.5)))
+         (instance face :init :vertices (list (float-vector -0.5 -49.0 120.5) (float-vector -0.5 -49.0 -120.5) (float-vector 0.5 -49.0 -120.5) (float-vector 0.5 -49.0 120.5)))
+         (instance face :init :vertices (list (float-vector -0.5 49.0 120.5) (float-vector -0.5 49.0 -120.5) (float-vector -0.5 -49.0 -120.5) (float-vector -0.5 -49.0 120.5)))
        ))
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
@@ -46,7 +46,7 @@
      ;; definition of :button
      (setq button0 (make-cascoords :pos (float-vector 0.0 0.0 -10.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "down"))
      (send self :assoc button0)
-     (setq button1 (make-cascoords :pos (float-vector 0.0 0.0 35.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "up"))
+     (setq button1 (make-cascoords :pos (float-vector 0.0 0.0 45.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "up"))
      (send self :assoc button1)
 
      ;; init-ending 
