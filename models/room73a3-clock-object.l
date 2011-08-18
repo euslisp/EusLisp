@@ -17,7 +17,7 @@
 
      ;; definition of link
 
-     ;; definition of :room73a3-clock-bodyset9
+     ;; definition of :room73a3-clock-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 20.0 -31.0583 34.0889) (float-vector 20.0 0.0 30.0) (float-vector 20.0 31.0583 34.0889) (float-vector 20.0 60.0 46.077) (float-vector 20.0 84.8528 65.1472) (float-vector 20.0 103.923 90.0) (float-vector 20.0 115.911 118.942) (float-vector 20.0 120.0 150.0) (float-vector 20.0 115.911 181.058) (float-vector 20.0 103.923 210.0) (float-vector 20.0 84.8528 234.853) (float-vector 20.0 60.0 253.923) (float-vector 20.0 31.0583 265.911) (float-vector 20.0 2.273737e-13 270.0) (float-vector 20.0 -31.0583 265.911) (float-vector 20.0 -60.0 253.923) (float-vector 20.0 -84.8528 234.853) (float-vector 20.0 -103.923 210.0) (float-vector 20.0 -115.911 181.058) (float-vector 20.0 -120.0 150.0) (float-vector 20.0 -115.911 118.942) (float-vector 20.0 -103.923 90.0) (float-vector 20.0 -84.8528 65.1472) (float-vector 20.0 -60.0 46.077)))
@@ -139,53 +139,21 @@
      (gl::transparent (elt bc 0) 0.1)
      (send (elt bc 1) :set-color :whitesmoke)
      (send (elt bc 2) :set-color :white)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-clock-bodyset9 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-clock-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73a3-clock-bodyset236
+     ;; definition of :room73a3-clock-bodyset3
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 0.5 3.5 60.0) (float-vector -0.5 3.5 60.0) (float-vector -0.5 -3.5 60.0) (float-vector 0.5 -3.5 60.0)))
-         (instance face :init :vertices (list (float-vector -0.5 3.5 0.0) (float-vector 0.5 3.5 0.0) (float-vector 0.5 -3.5 0.0) (float-vector -0.5 -3.5 0.0)))
-         (instance face :init :vertices (list (float-vector 0.5 3.5 60.0) (float-vector 0.5 3.5 0.0) (float-vector -0.5 3.5 0.0) (float-vector -0.5 3.5 60.0)))
-         (instance face :init :vertices (list (float-vector 0.5 -3.5 60.0) (float-vector 0.5 -3.5 0.0) (float-vector 0.5 3.5 0.0) (float-vector 0.5 3.5 60.0)))
-         (instance face :init :vertices (list (float-vector -0.5 -3.5 60.0) (float-vector -0.5 -3.5 0.0) (float-vector 0.5 -3.5 0.0) (float-vector 0.5 -3.5 60.0)))
-         (instance face :init :vertices (list (float-vector -0.5 3.5 60.0) (float-vector -0.5 3.5 0.0) (float-vector -0.5 -3.5 0.0) (float-vector -0.5 -3.5 60.0)))
+         (instance face :init :vertices (list (float-vector -0.5 3.5 4.547474e-13) (float-vector 0.5 3.5 4.547474e-13) (float-vector 0.5 -3.5 4.547474e-13) (float-vector -0.5 -3.5 4.547474e-13)))
+         (instance face :init :vertices (list (float-vector 0.5 3.5 60.0) (float-vector 0.5 3.5 4.547474e-13) (float-vector -0.5 3.5 4.547474e-13) (float-vector -0.5 3.5 60.0)))
+         (instance face :init :vertices (list (float-vector 0.5 -3.5 60.0) (float-vector 0.5 -3.5 4.547474e-13) (float-vector 0.5 3.5 4.547474e-13) (float-vector 0.5 3.5 60.0)))
+         (instance face :init :vertices (list (float-vector -0.5 -3.5 60.0) (float-vector -0.5 -3.5 4.547474e-13) (float-vector 0.5 -3.5 4.547474e-13) (float-vector 0.5 -3.5 60.0)))
+         (instance face :init :vertices (list (float-vector -0.5 3.5 60.0) (float-vector -0.5 3.5 4.547474e-13) (float-vector -0.5 -3.5 4.547474e-13) (float-vector -0.5 -3.5 60.0)))
        ))
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector 0.5 0.0 -10.5) (float-vector 0.5 5.25 -9.09327) (float-vector 0.5 9.09327 -5.25) (float-vector 0.5 10.5 0.0) (float-vector 0.5 9.09327 5.25) (float-vector 0.5 5.25 9.09327) (float-vector 0.5 0.0 10.5) (float-vector 0.5 -5.25 9.09327) (float-vector 0.5 -9.09327 5.25) (float-vector 0.5 -10.5 2.273737e-13) (float-vector 0.5 -9.09327 -5.25)))
-         (instance face :init :vertices (list (float-vector -0.5 0.0 -10.5) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -10.5 2.273737e-13) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 0.0 10.5) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 10.5 0.0) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 5.25 -9.09327)))
-         (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 0.0 -10.5) (float-vector 0.5 0.0 -10.5)))
-         (instance face :init :vertices (list (float-vector 0.5 -9.09327 -5.25) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -5.25 -9.09327) (float-vector 0.5 -5.25 -9.09327)))
-         (instance face :init :vertices (list (float-vector 0.5 -10.5 2.273737e-13) (float-vector -0.5 -10.5 2.273737e-13) (float-vector -0.5 -9.09327 -5.25) (float-vector 0.5 -9.09327 -5.25)))
-         (instance face :init :vertices (list (float-vector 0.5 -9.09327 5.25) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -10.5 2.273737e-13) (float-vector 0.5 -10.5 2.273737e-13)))
-         (instance face :init :vertices (list (float-vector 0.5 -5.25 9.09327) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 -9.09327 5.25) (float-vector 0.5 -9.09327 5.25)))
-         (instance face :init :vertices (list (float-vector 0.5 0.0 10.5) (float-vector -0.5 0.0 10.5) (float-vector -0.5 -5.25 9.09327) (float-vector 0.5 -5.25 9.09327)))
-         (instance face :init :vertices (list (float-vector 0.5 5.25 9.09327) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 0.0 10.5) (float-vector 0.5 0.0 10.5)))
-         (instance face :init :vertices (list (float-vector 0.5 9.09327 5.25) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 5.25 9.09327) (float-vector 0.5 5.25 9.09327)))
-         (instance face :init :vertices (list (float-vector 0.5 10.5 0.0) (float-vector -0.5 10.5 0.0) (float-vector -0.5 9.09327 5.25) (float-vector 0.5 9.09327 5.25)))
-         (instance face :init :vertices (list (float-vector 0.5 9.09327 -5.25) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 10.5 0.0) (float-vector 0.5 10.5 0.0)))
-         (instance face :init :vertices (list (float-vector 0.5 5.25 -9.09327) (float-vector -0.5 5.25 -9.09327) (float-vector -0.5 9.09327 -5.25) (float-vector 0.5 9.09327 -5.25)))
-         (instance face :init :vertices (list (float-vector 0.5 0.0 -10.5) (float-vector -0.5 0.0 -10.5) (float-vector -0.5 5.25 -9.09327) (float-vector 0.5 5.25 -9.09327)))
-       ))
-       ))
-     (dolist (b (cdr bc)) (send (car bc) :assoc b))
-     (send (elt bc 0) :set-color :black)
-     (send (elt bc 1) :set-color :black)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-clock-bodyset236 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
-
-     ;; definition of :room73a3-clock-bodyset290
-     (setq bc (list
-       (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 0.5 1.75 96.0) (float-vector -0.5 1.75 96.0) (float-vector -0.5 -1.75 96.0) (float-vector 0.5 -1.75 96.0)))
-         (instance face :init :vertices (list (float-vector -0.5 1.75 4.547474e-13) (float-vector 0.5 1.75 4.547474e-13) (float-vector 0.5 -1.75 0.0) (float-vector -0.5 -1.75 0.0)))
-         (instance face :init :vertices (list (float-vector 0.5 1.75 96.0) (float-vector 0.5 1.75 4.547474e-13) (float-vector -0.5 1.75 4.547474e-13) (float-vector -0.5 1.75 96.0)))
-         (instance face :init :vertices (list (float-vector 0.5 -1.75 96.0) (float-vector 0.5 -1.75 0.0) (float-vector 0.5 1.75 4.547474e-13) (float-vector 0.5 1.75 96.0)))
-         (instance face :init :vertices (list (float-vector -0.5 -1.75 96.0) (float-vector -0.5 -1.75 0.0) (float-vector 0.5 -1.75 0.0) (float-vector 0.5 -1.75 96.0)))
-         (instance face :init :vertices (list (float-vector -0.5 1.75 96.0) (float-vector -0.5 1.75 4.547474e-13) (float-vector -0.5 -1.75 0.0) (float-vector -0.5 -1.75 96.0)))
-       ))
-       (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector 0.5 2.273737e-13 -10.5) (float-vector 0.5 5.25 -9.09327) (float-vector 0.5 9.09327 -5.25) (float-vector 0.5 10.5 0.0) (float-vector 0.5 9.09327 5.25) (float-vector 0.5 5.25 9.09327) (float-vector 0.5 0.0 10.5) (float-vector 0.5 -5.25 9.09327) (float-vector 0.5 -9.09327 5.25) (float-vector 0.5 -10.5 0.0) (float-vector 0.5 -9.09327 -5.25)))
-         (instance face :init :vertices (list (float-vector -0.5 2.273737e-13 -10.5) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -10.5 0.0) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 0.0 10.5) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 10.5 0.0) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 5.25 -9.09327)))
+         (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector 0.5 2.273737e-13 -10.5) (float-vector 0.5 5.25 -9.09327) (float-vector 0.5 9.09327 -5.25) (float-vector 0.5 10.5 4.547474e-13) (float-vector 0.5 9.09327 5.25) (float-vector 0.5 5.25 9.09327) (float-vector 0.5 0.0 10.5) (float-vector 0.5 -5.25 9.09327) (float-vector 0.5 -9.09327 5.25) (float-vector 0.5 -10.5 0.0) (float-vector 0.5 -9.09327 -5.25)))
+         (instance face :init :vertices (list (float-vector -0.5 2.273737e-13 -10.5) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -10.5 0.0) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 0.0 10.5) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 10.5 4.547474e-13) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 5.25 -9.09327)))
          (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 2.273737e-13 -10.5) (float-vector 0.5 2.273737e-13 -10.5)))
          (instance face :init :vertices (list (float-vector 0.5 -9.09327 -5.25) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -5.25 -9.09327) (float-vector 0.5 -5.25 -9.09327)))
          (instance face :init :vertices (list (float-vector 0.5 -10.5 0.0) (float-vector -0.5 -10.5 0.0) (float-vector -0.5 -9.09327 -5.25) (float-vector 0.5 -9.09327 -5.25)))
@@ -194,8 +162,8 @@
          (instance face :init :vertices (list (float-vector 0.5 0.0 10.5) (float-vector -0.5 0.0 10.5) (float-vector -0.5 -5.25 9.09327) (float-vector 0.5 -5.25 9.09327)))
          (instance face :init :vertices (list (float-vector 0.5 5.25 9.09327) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 0.0 10.5) (float-vector 0.5 0.0 10.5)))
          (instance face :init :vertices (list (float-vector 0.5 9.09327 5.25) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 5.25 9.09327) (float-vector 0.5 5.25 9.09327)))
-         (instance face :init :vertices (list (float-vector 0.5 10.5 0.0) (float-vector -0.5 10.5 0.0) (float-vector -0.5 9.09327 5.25) (float-vector 0.5 9.09327 5.25)))
-         (instance face :init :vertices (list (float-vector 0.5 9.09327 -5.25) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 10.5 0.0) (float-vector 0.5 10.5 0.0)))
+         (instance face :init :vertices (list (float-vector 0.5 10.5 4.547474e-13) (float-vector -0.5 10.5 4.547474e-13) (float-vector -0.5 9.09327 5.25) (float-vector 0.5 9.09327 5.25)))
+         (instance face :init :vertices (list (float-vector 0.5 9.09327 -5.25) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 10.5 4.547474e-13) (float-vector 0.5 10.5 4.547474e-13)))
          (instance face :init :vertices (list (float-vector 0.5 5.25 -9.09327) (float-vector -0.5 5.25 -9.09327) (float-vector -0.5 9.09327 -5.25) (float-vector 0.5 9.09327 -5.25)))
          (instance face :init :vertices (list (float-vector 0.5 2.273737e-13 -10.5) (float-vector -0.5 2.273737e-13 -10.5) (float-vector -0.5 5.25 -9.09327) (float-vector 0.5 5.25 -9.09327)))
        ))
@@ -203,31 +171,31 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :black)
      (send (elt bc 1) :set-color :black)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-clock-bodyset290 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-clock-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :room73a3-clock-bodyset344
+     ;; definition of :room73a3-clock-bodyset4
      (setq bc (list
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 0.5 0.875 102.0) (float-vector -0.5 0.875 102.0) (float-vector -0.5 -0.875 102.0) (float-vector 0.5 -0.875 102.0)))
-         (instance face :init :vertices (list (float-vector -0.5 0.875 0.0) (float-vector 0.5 0.875 0.0) (float-vector 0.5 -0.875 4.547474e-13) (float-vector -0.5 -0.875 4.547474e-13)))
-         (instance face :init :vertices (list (float-vector 0.5 0.875 102.0) (float-vector 0.5 0.875 0.0) (float-vector -0.5 0.875 0.0) (float-vector -0.5 0.875 102.0)))
-         (instance face :init :vertices (list (float-vector 0.5 -0.875 102.0) (float-vector 0.5 -0.875 4.547474e-13) (float-vector 0.5 0.875 0.0) (float-vector 0.5 0.875 102.0)))
-         (instance face :init :vertices (list (float-vector -0.5 -0.875 102.0) (float-vector -0.5 -0.875 4.547474e-13) (float-vector 0.5 -0.875 4.547474e-13) (float-vector 0.5 -0.875 102.0)))
-         (instance face :init :vertices (list (float-vector -0.5 0.875 102.0) (float-vector -0.5 0.875 0.0) (float-vector -0.5 -0.875 4.547474e-13) (float-vector -0.5 -0.875 102.0)))
+         (instance face :init :vertices (list (float-vector 0.5 1.75 96.0) (float-vector -0.5 1.75 96.0) (float-vector -0.5 -1.75 96.0) (float-vector 0.5 -1.75 96.0)))
+         (instance face :init :vertices (list (float-vector -0.5 1.75 0.0) (float-vector 0.5 1.75 0.0) (float-vector 0.5 -1.75 0.0) (float-vector -0.5 -1.75 0.0)))
+         (instance face :init :vertices (list (float-vector 0.5 1.75 96.0) (float-vector 0.5 1.75 0.0) (float-vector -0.5 1.75 0.0) (float-vector -0.5 1.75 96.0)))
+         (instance face :init :vertices (list (float-vector 0.5 -1.75 96.0) (float-vector 0.5 -1.75 0.0) (float-vector 0.5 1.75 0.0) (float-vector 0.5 1.75 96.0)))
+         (instance face :init :vertices (list (float-vector -0.5 -1.75 96.0) (float-vector -0.5 -1.75 0.0) (float-vector 0.5 -1.75 0.0) (float-vector 0.5 -1.75 96.0)))
+         (instance face :init :vertices (list (float-vector -0.5 1.75 96.0) (float-vector -0.5 1.75 0.0) (float-vector -0.5 -1.75 0.0) (float-vector -0.5 -1.75 96.0)))
        ))
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector 0.5 0.0 -10.5) (float-vector 0.5 5.25 -9.09327) (float-vector 0.5 9.09327 -5.25) (float-vector 0.5 10.5 0.0) (float-vector 0.5 9.09327 5.25) (float-vector 0.5 5.25 9.09327) (float-vector 0.5 -2.273737e-13 10.5) (float-vector 0.5 -5.25 9.09327) (float-vector 0.5 -9.09327 5.25) (float-vector 0.5 -10.5 4.547474e-13) (float-vector 0.5 -9.09327 -5.25)))
-         (instance face :init :vertices (list (float-vector -0.5 0.0 -10.5) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -10.5 4.547474e-13) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 -2.273737e-13 10.5) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 10.5 0.0) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 5.25 -9.09327)))
+         (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector 0.5 0.0 -10.5) (float-vector 0.5 5.25 -9.09327) (float-vector 0.5 9.09327 -5.25) (float-vector 0.5 10.5 2.273737e-13) (float-vector 0.5 9.09327 5.25) (float-vector 0.5 5.25 9.09327) (float-vector 0.5 -4.547474e-13 10.5) (float-vector 0.5 -5.25 9.09327) (float-vector 0.5 -9.09327 5.25) (float-vector 0.5 -10.5 2.273737e-13) (float-vector 0.5 -9.09327 -5.25)))
+         (instance face :init :vertices (list (float-vector -0.5 0.0 -10.5) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -10.5 2.273737e-13) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 -4.547474e-13 10.5) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 10.5 2.273737e-13) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 5.25 -9.09327)))
          (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 0.0 -10.5) (float-vector 0.5 0.0 -10.5)))
          (instance face :init :vertices (list (float-vector 0.5 -9.09327 -5.25) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -5.25 -9.09327) (float-vector 0.5 -5.25 -9.09327)))
-         (instance face :init :vertices (list (float-vector 0.5 -10.5 4.547474e-13) (float-vector -0.5 -10.5 4.547474e-13) (float-vector -0.5 -9.09327 -5.25) (float-vector 0.5 -9.09327 -5.25)))
-         (instance face :init :vertices (list (float-vector 0.5 -9.09327 5.25) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -10.5 4.547474e-13) (float-vector 0.5 -10.5 4.547474e-13)))
+         (instance face :init :vertices (list (float-vector 0.5 -10.5 2.273737e-13) (float-vector -0.5 -10.5 2.273737e-13) (float-vector -0.5 -9.09327 -5.25) (float-vector 0.5 -9.09327 -5.25)))
+         (instance face :init :vertices (list (float-vector 0.5 -9.09327 5.25) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -10.5 2.273737e-13) (float-vector 0.5 -10.5 2.273737e-13)))
          (instance face :init :vertices (list (float-vector 0.5 -5.25 9.09327) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 -9.09327 5.25) (float-vector 0.5 -9.09327 5.25)))
-         (instance face :init :vertices (list (float-vector 0.5 -2.273737e-13 10.5) (float-vector -0.5 -2.273737e-13 10.5) (float-vector -0.5 -5.25 9.09327) (float-vector 0.5 -5.25 9.09327)))
-         (instance face :init :vertices (list (float-vector 0.5 5.25 9.09327) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 -2.273737e-13 10.5) (float-vector 0.5 -2.273737e-13 10.5)))
+         (instance face :init :vertices (list (float-vector 0.5 -4.547474e-13 10.5) (float-vector -0.5 -4.547474e-13 10.5) (float-vector -0.5 -5.25 9.09327) (float-vector 0.5 -5.25 9.09327)))
+         (instance face :init :vertices (list (float-vector 0.5 5.25 9.09327) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 -4.547474e-13 10.5) (float-vector 0.5 -4.547474e-13 10.5)))
          (instance face :init :vertices (list (float-vector 0.5 9.09327 5.25) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 5.25 9.09327) (float-vector 0.5 5.25 9.09327)))
-         (instance face :init :vertices (list (float-vector 0.5 10.5 0.0) (float-vector -0.5 10.5 0.0) (float-vector -0.5 9.09327 5.25) (float-vector 0.5 9.09327 5.25)))
-         (instance face :init :vertices (list (float-vector 0.5 9.09327 -5.25) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 10.5 0.0) (float-vector 0.5 10.5 0.0)))
+         (instance face :init :vertices (list (float-vector 0.5 10.5 2.273737e-13) (float-vector -0.5 10.5 2.273737e-13) (float-vector -0.5 9.09327 5.25) (float-vector 0.5 9.09327 5.25)))
+         (instance face :init :vertices (list (float-vector 0.5 9.09327 -5.25) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 10.5 2.273737e-13) (float-vector 0.5 10.5 2.273737e-13)))
          (instance face :init :vertices (list (float-vector 0.5 5.25 -9.09327) (float-vector -0.5 5.25 -9.09327) (float-vector -0.5 9.09327 -5.25) (float-vector 0.5 9.09327 -5.25)))
          (instance face :init :vertices (list (float-vector 0.5 0.0 -10.5) (float-vector -0.5 0.0 -10.5) (float-vector -0.5 5.25 -9.09327) (float-vector 0.5 5.25 -9.09327)))
        ))
@@ -235,7 +203,39 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :black)
      (send (elt bc 1) :set-color :black)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-clock-bodyset344 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-clock-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+
+     ;; definition of :room73a3-clock-bodyset5
+     (setq bc (list
+       (instance faceset :init :faces (list
+         (instance face :init :vertices (list (float-vector 0.5 0.875 102.0) (float-vector -0.5 0.875 102.0) (float-vector -0.5 -0.875 102.0) (float-vector 0.5 -0.875 102.0)))
+         (instance face :init :vertices (list (float-vector -0.5 0.875 -1.136868e-13) (float-vector 0.5 0.875 -1.136868e-13) (float-vector 0.5 -0.875 -1.136868e-13) (float-vector -0.5 -0.875 -1.136868e-13)))
+         (instance face :init :vertices (list (float-vector 0.5 0.875 102.0) (float-vector 0.5 0.875 -1.136868e-13) (float-vector -0.5 0.875 -1.136868e-13) (float-vector -0.5 0.875 102.0)))
+         (instance face :init :vertices (list (float-vector 0.5 -0.875 102.0) (float-vector 0.5 -0.875 -1.136868e-13) (float-vector 0.5 0.875 -1.136868e-13) (float-vector 0.5 0.875 102.0)))
+         (instance face :init :vertices (list (float-vector -0.5 -0.875 102.0) (float-vector -0.5 -0.875 -1.136868e-13) (float-vector 0.5 -0.875 -1.136868e-13) (float-vector 0.5 -0.875 102.0)))
+         (instance face :init :vertices (list (float-vector -0.5 0.875 102.0) (float-vector -0.5 0.875 -1.136868e-13) (float-vector -0.5 -0.875 -1.136868e-13) (float-vector -0.5 -0.875 102.0)))
+       ))
+       (instance faceset :init :faces (list
+         (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector 0.5 0.0 -10.5) (float-vector 0.5 5.25 -9.09327) (float-vector 0.5 9.09327 -5.25) (float-vector 0.5 10.5 -1.136868e-13) (float-vector 0.5 9.09327 5.25) (float-vector 0.5 5.25 9.09327) (float-vector 0.5 4.547474e-13 10.5) (float-vector 0.5 -5.25 9.09327) (float-vector 0.5 -9.09327 5.25) (float-vector 0.5 -10.5 1.136868e-13) (float-vector 0.5 -9.09327 -5.25)))
+         (instance face :init :vertices (list (float-vector -0.5 0.0 -10.5) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -10.5 1.136868e-13) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 4.547474e-13 10.5) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 10.5 -1.136868e-13) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 5.25 -9.09327)))
+         (instance face :init :vertices (list (float-vector 0.5 -5.25 -9.09327) (float-vector -0.5 -5.25 -9.09327) (float-vector -0.5 0.0 -10.5) (float-vector 0.5 0.0 -10.5)))
+         (instance face :init :vertices (list (float-vector 0.5 -9.09327 -5.25) (float-vector -0.5 -9.09327 -5.25) (float-vector -0.5 -5.25 -9.09327) (float-vector 0.5 -5.25 -9.09327)))
+         (instance face :init :vertices (list (float-vector 0.5 -10.5 1.136868e-13) (float-vector -0.5 -10.5 1.136868e-13) (float-vector -0.5 -9.09327 -5.25) (float-vector 0.5 -9.09327 -5.25)))
+         (instance face :init :vertices (list (float-vector 0.5 -9.09327 5.25) (float-vector -0.5 -9.09327 5.25) (float-vector -0.5 -10.5 1.136868e-13) (float-vector 0.5 -10.5 1.136868e-13)))
+         (instance face :init :vertices (list (float-vector 0.5 -5.25 9.09327) (float-vector -0.5 -5.25 9.09327) (float-vector -0.5 -9.09327 5.25) (float-vector 0.5 -9.09327 5.25)))
+         (instance face :init :vertices (list (float-vector 0.5 4.547474e-13 10.5) (float-vector -0.5 4.547474e-13 10.5) (float-vector -0.5 -5.25 9.09327) (float-vector 0.5 -5.25 9.09327)))
+         (instance face :init :vertices (list (float-vector 0.5 5.25 9.09327) (float-vector -0.5 5.25 9.09327) (float-vector -0.5 4.547474e-13 10.5) (float-vector 0.5 4.547474e-13 10.5)))
+         (instance face :init :vertices (list (float-vector 0.5 9.09327 5.25) (float-vector -0.5 9.09327 5.25) (float-vector -0.5 5.25 9.09327) (float-vector 0.5 5.25 9.09327)))
+         (instance face :init :vertices (list (float-vector 0.5 10.5 -1.136868e-13) (float-vector -0.5 10.5 -1.136868e-13) (float-vector -0.5 9.09327 5.25) (float-vector 0.5 9.09327 5.25)))
+         (instance face :init :vertices (list (float-vector 0.5 9.09327 -5.25) (float-vector -0.5 9.09327 -5.25) (float-vector -0.5 10.5 -1.136868e-13) (float-vector 0.5 10.5 -1.136868e-13)))
+         (instance face :init :vertices (list (float-vector 0.5 5.25 -9.09327) (float-vector -0.5 5.25 -9.09327) (float-vector -0.5 9.09327 -5.25) (float-vector 0.5 9.09327 -5.25)))
+         (instance face :init :vertices (list (float-vector 0.5 0.0 -10.5) (float-vector -0.5 0.0 -10.5) (float-vector -0.5 5.25 -9.09327) (float-vector 0.5 5.25 -9.09327)))
+       ))
+       ))
+     (dolist (b (cdr bc)) (send (car bc) :assoc b))
+     (send (elt bc 0) :set-color :black)
+     (send (elt bc 1) :set-color :black)
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room73a3-clock-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink3 :newcoords (make-coords :pos (float-vector 8.0 0.0 150.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
