@@ -1365,15 +1365,15 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 6660.0 2350.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
+     (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
      (send self :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 7055.0 1865.0 730.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle1"))
+     (setq handle1 (make-cascoords :pos (float-vector 395.0 -485.0 730.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle1"))
      (send self :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector 7055.0 1800.0 750.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle2"))
+     (setq handle2 (make-cascoords :pos (float-vector 395.0 -550.0 750.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle2"))
      (send self :assoc handle2)
-     (setq handle3 (make-cascoords :pos (float-vector 7055.0 1735.0 730.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle3"))
+     (setq handle3 (make-cascoords :pos (float-vector 395.0 -615.0 730.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle3"))
      (send self :assoc handle3)
-     (setq handle4 (make-cascoords :pos (float-vector 6655.38 3384.62 1063.99) :rot #2f((0.707107 -5.551115e-16 0.707107) (-0.707107 -2.498002e-16 0.707107) (-1.665335e-16 -1.0 -5.273559e-16)) :name "handle-of-tap"))
+     (setq handle4 (make-cascoords :pos (float-vector -4.62411 1034.62 1063.99) :rot #2f((0.707107 -5.551115e-16 0.707107) (-0.707107 -2.498002e-16 0.707107) (-1.665335e-16 -1.0 -5.273559e-16)) :name "handle-of-tap"))
      (send self :assoc handle4)
 
      ;; init-ending 

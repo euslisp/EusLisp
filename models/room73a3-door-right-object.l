@@ -280,11 +280,11 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 75.0 670.0 990.0) :rot #2f((-1.0 -1.224606e-16 1.232595e-32) (-1.232595e-32 2.220446e-16 1.0) (-1.224606e-16 1.0 -2.220446e-16)) :name "rear-knob"))
+     (setq handle0 (make-cascoords :pos (float-vector 75.0 265.0 990.0) :rot #2f((-1.0 -1.224606e-16 1.232595e-32) (-1.232595e-32 2.220446e-16 1.0) (-1.224606e-16 1.0 -2.220446e-16)) :name "rear-knob"))
      (send self :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 75.0 670.0 930.0) :rot #2f((-1.0 -1.224606e-16 1.232595e-32) (-1.232595e-32 2.220446e-16 1.0) (-1.224606e-16 1.0 -2.220446e-16)) :name "front-knob"))
+     (setq handle1 (make-cascoords :pos (float-vector 75.0 265.0 930.0) :rot #2f((-1.0 -1.224606e-16 1.232595e-32) (-1.232595e-32 2.220446e-16 1.0) (-1.224606e-16 1.0 -2.220446e-16)) :name "front-knob"))
      (send self :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector 65.0 750.0 1060.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "lock"))
+     (setq handle2 (make-cascoords :pos (float-vector 65.0 345.0 1060.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "lock"))
      (send self :assoc handle2)
 
      ;; init-ending 

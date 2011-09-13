@@ -51,7 +51,7 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 5100.0 1100.0 700.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
+     (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
      (send self :assoc handle0)
 
      ;; init-ending 

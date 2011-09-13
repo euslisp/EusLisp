@@ -78,9 +78,9 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 150.0 -160.0 30.0) :rot #2f((-0.707107 -6.661338e-16 -0.707107) (0.707107 -5.551115e-16 -0.707107) (1.110223e-16 -1.0 8.881784e-16)) :name "handle0"))
+     (setq handle0 (make-cascoords :pos (float-vector 150.0 -160.0 30.0) :rot #2f((-0.707107 -6.106227e-16 -0.707107) (0.707107 -2.775558e-16 -0.707107) (2.775558e-16 -1.0 6.106227e-16)) :name "handle0"))
      (send self :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 150.0 160.0 30.0) :rot #2f((-0.707107 6.661338e-16 -0.707107) (-0.707107 -5.551115e-16 0.707107) (1.110223e-16 1.0 8.881784e-16)) :name "handle1"))
+     (setq handle1 (make-cascoords :pos (float-vector 150.0 160.0 30.0) :rot #2f((-0.707107 6.106227e-16 -0.707107) (-0.707107 -2.775558e-16 0.707107) (2.775558e-16 1.0 6.106227e-16)) :name "handle1"))
      (send self :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector -150.0 -160.0 30.0) :rot #2f((0.707107 -6.661338e-16 -0.707107) (0.707107 5.828671e-16 0.707107) (-5.551115e-17 -1.0 8.604228e-16)) :name "handle2"))
      (send self :assoc handle2)

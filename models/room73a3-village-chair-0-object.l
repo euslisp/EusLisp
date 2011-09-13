@@ -259,9 +259,9 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 1995.0 2340.0 800.0) :rot #2f((-2.220446e-16 -1.0 0.0) (1.0 -2.220446e-16 0.0) (0.0 0.0 1.0)) :name ":larm"))
+     (setq handle0 (make-cascoords :pos (float-vector 205.0 260.0 800.0) :rot #2f((2.220446e-16 1.0 0.0) (-1.0 2.220446e-16 0.0) (0.0 0.0 1.0)) :name ":larm"))
      (send self :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 2405.0 2340.0 800.0) :rot #2f((-2.220446e-16 -1.0 0.0) (1.0 -2.220446e-16 0.0) (0.0 0.0 1.0)) :name ":rarm"))
+     (setq handle1 (make-cascoords :pos (float-vector -205.0 260.0 800.0) :rot #2f((2.220446e-16 1.0 0.0) (-1.0 2.220446e-16 0.0) (0.0 0.0 1.0)) :name ":rarm"))
      (send self :assoc handle1)
 
      ;; init-ending 

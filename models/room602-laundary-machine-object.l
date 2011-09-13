@@ -156,15 +156,15 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 997.328 4212.31 580.0) :rot #2f((0.492404 0.173648 0.852869) (-0.086824 0.984808 -0.150384) (-0.866025 1.387779e-17 0.5)) :name "contents"))
+     (setq handle0 (make-cascoords :pos (float-vector 505.0 0.0 580.0) :rot #2f((0.5 1.709814e-17 0.866025) (-3.097593e-17 1.0 -1.859271e-18) (-0.866025 -2.589630e-17 0.5)) :name "contents"))
      (send self :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 1163.27 4375.98 770.0) :rot #2f((-0.173648 -0.336824 -0.925417) (-0.984808 0.059391 0.163176) (4.440892e-16 0.939693 -0.34202)) :name "handle-cap"))
+     (setq handle1 (make-cascoords :pos (float-vector 640.0 190.0 770.0) :rot #2f((-3.053113e-16 -0.34202 -0.939693) (-1.0 6.938894e-16 1.110223e-16) (6.106227e-16 0.939693 -0.34202)) :name "handle-cap"))
      (send self :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector 1132.56 4432.16 930.0) :rot #2f((0.492404 0.173648 0.852869) (-0.086824 0.984808 -0.150384) (-0.866025 -2.775558e-17 0.5)) :name "open-button"))
+     (setq handle2 (make-cascoords :pos (float-vector 600.0 240.0 930.0) :rot #2f((0.5 6.517221e-17 0.866025) (-7.904999e-17 1.0 -2.961485e-17) (-0.866025 -5.365188e-17 0.5)) :name "open-button"))
      (send self :assoc handle2)
 
      ;; definition of :button
-     (setq button0 (make-cascoords :pos (float-vector 1132.56 4432.16 930.0) :rot #2f((0.492404 0.173648 0.852869) (-0.086824 0.984808 -0.150384) (-0.866025 1.387779e-17 0.5)) :name "open"))
+     (setq button0 (make-cascoords :pos (float-vector 600.0 240.0 930.0) :rot #2f((0.5 1.709814e-17 0.866025) (-3.097593e-17 1.0 -1.859271e-18) (-0.866025 -2.589630e-17 0.5)) :name "open"))
      (send self :assoc button0)
 
      ;; init-ending 

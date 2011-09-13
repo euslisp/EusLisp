@@ -331,9 +331,9 @@
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 307.5 -295.0 1273.5) :rot #2f((-0.866025 0.5 0.0) (-0.5 -0.866025 0.0) (0.0 0.0 1.0)) :name "door-upper"))
      (send self :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 294.739 -123.0 937.191) :rot #2f((-0.939693 -0.34202 8.326673e-17) (1.387779e-16 -1.110223e-16 1.0) (-0.34202 0.939693 1.110223e-16)) :name "drawer-middle-right"))
+     (setq handle1 (make-cascoords :pos (float-vector 294.739 -123.0 937.191) :rot #2f((-0.939693 -0.34202 1.387779e-16) (8.326673e-17 1.110223e-16 1.0) (-0.34202 0.939693 -1.110223e-16)) :name "drawer-middle-right"))
      (send self :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector 294.739 95.0 937.191) :rot #2f((-0.939693 -0.34202 8.326673e-17) (1.387779e-16 -1.110223e-16 1.0) (-0.34202 0.939693 1.110223e-16)) :name "drawer-middle-left"))
+     (setq handle2 (make-cascoords :pos (float-vector 294.739 95.0 937.191) :rot #2f((-0.939693 -0.34202 1.387779e-16) (8.326673e-17 1.110223e-16 1.0) (-0.34202 0.939693 -1.110223e-16)) :name "drawer-middle-left"))
      (send self :assoc handle2)
      (setq handle3 (make-cascoords :pos (float-vector 305.0 0.0 699.0) :rot #2f((-0.866025 0.5 0.0) (8.326673e-17 1.110223e-16 1.0) (0.5 0.866025 -1.110223e-16)) :name "drawer-lower1"))
      (send self :assoc handle3)

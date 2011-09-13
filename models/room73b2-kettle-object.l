@@ -585,11 +585,11 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 500.0 1500.0 1020.0) :rot #2f((1.0 4.930381e-32 -2.449213e-16) (-2.449213e-16 2.220446e-16 -1.0) (0.0 1.0 2.220446e-16)) :name "handle0"))
+     (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 195.0) :rot #2f((1.0 1.743153e-32 -1.743153e-32) (-1.743153e-32 2.220446e-16 -1.0) (-1.743153e-32 1.0 2.220446e-16)) :name "handle0"))
      (send self :assoc handle0)
 
      ;; definition of :attention
-     (setq attention0 (make-cascoords :pos (float-vector 500.0 1380.0 925.0) :rot #2f((1.0 2.449213e-16 0.0) (-2.449213e-16 1.0 0.0) (0.0 0.0 1.0)) :name "attention0"))
+     (setq attention0 (make-cascoords :pos (float-vector -5.684342e-14 -120.0 100.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "attention0"))
      (send self :assoc attention0)
 
      ;; init-ending 

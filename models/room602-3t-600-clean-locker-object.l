@@ -134,7 +134,7 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 599.102 513.374 991.0) :rot #2f((0.707107 0.707107 0.0) (-0.707107 0.707107 0.0) (0.0 0.0 1.0)) :name "door-handle"))
+     (setq handle0 (make-cascoords :pos (float-vector 586.626 -100.898 991.0) :rot #2f((0.707107 -0.707107 0.0) (0.707107 0.707107 0.0) (0.0 0.0 1.0)) :name "door-handle"))
      (send self :assoc handle0)
 
      ;; init-ending 
