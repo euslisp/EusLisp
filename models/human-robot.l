@@ -5332,7 +5332,7 @@
 
      ;; definition of head camera-coords
      (setq sensor2
-       (make-camera-from-param :pwidth 320.0 :pheight 240.0 :fx 4.8 :fy 4.8 :cx 160.0 :cy 120.0 :parent-coords
+       (make-camera-from-param :pwidth 320.0 :pheight 240.0 :fx 4.8 :fy 4.8 :cx 159.5 :cy 119.5 :parent-coords
          (make-cascoords
     	:coords (send (send blink64 :copy-worldcoords) :transform 
     		      (make-coords :pos (float-vector 0.0 0.0 0.0) :rot #2f((0.0 0.0 1.0) (-1.0 0.0 0.0) (0.0 -1.0 0.0))))
@@ -5341,7 +5341,7 @@
 
      ;; definition of head camera-coords
      (setq sensor3
-       (make-camera-from-param :pwidth 320.0 :pheight 240.0 :fx 4.8 :fy 4.8 :cx 160.0 :cy 120.0 :parent-coords
+       (make-camera-from-param :pwidth 320.0 :pheight 240.0 :fx 4.8 :fy 4.8 :cx 159.5 :cy 119.5 :parent-coords
          (make-cascoords
     	:coords (send (send blink63 :copy-worldcoords) :transform 
     		      (make-coords :pos (float-vector 0.0 0.0 0.0) :rot #2f((0.0 0.0 1.0) (-1.0 0.0 0.0) (0.0 -1.0 0.0))))
