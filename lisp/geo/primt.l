@@ -251,49 +251,83 @@ vertices= list of (#f(x y z) edge1 edge2 ...)"
       (make-face-from-vertices hull-vertices)
 	))
 
-(defun find-initial-hull (s)
-   (let ((p1			   ; certainly a vertex constructing hull
-	   (find-extream s #'(lambda (p) (aref (car p) 2)) #'>=))
-	 (p2) (p3) (p4) (v) cot2 cot3 cot4 a
-	 (dummyface (instantiate *face-class*))
-	 (n (float-vector 0.0 0.0 1.0)))
-      (declare (type float-vector v n))
-      (setq (dummyface . vertices) (list (car p1)))
-      (while (eq (setq p2 
-		       (gift-wrapping dummyface (car p1) n
-			     (normalize-vector
-				 (float-vector (random 1.0) (random 1.0) 0))
-			     s))
-		 :nan))
-      (setq cot2 *maxcot*)
-      ; two points p1,p2 have been determined
-	(if *debug*
-	   (format t ";; initial-hull p1=~s  p2=~s  cot=~s~%"
-		   (car p1) (car p2) cot2))
-      (setq v  (v- (car p2) (car p1)))
-      (setf (aref n 1) (aref v 2)
-	    (aref n 2) (- (aref v 1)))
-      (when (< (aref n 2) 0.0)
-	(setf (aref n 1) (- (aref v 2))
-	      (aref n 2) (aref v 1)))
-      (normalize-vector n n)
-      (setq a (normalize-vector (v* v n)))
-      (setq (dummyface . vertices) (list (car p1) (car p2))
- 	    p3 (gift-wrapping dummyface (car p1) n a s)
-	    cot3 *maxcot*)
-      (setq a (v- a))
-      (setq (dummyface . vertices) (list (car p1) (car p2) (car p3))
-	    p4 (gift-wrapping dummyface (car p1) n a s)
-	    cot4 *maxcot*)
-      (if (> cot4 cot3) (setq p3 p4))
-      (when (< (triangle (car p1) (car p2) (car p3)) 0.0)
-	    (setq v p2 p2 p3 p3 v))
-      (when (< (aref (triangle-normal (car p1) (car p2) (car p3)) 2) 0.0)
-          (error "bad initial-hull"))
-	  (if *debug* (format t ";; p3=~s~%" p3))
-      (make-face-from-coplanar-vertices p1 p2 p3 s)
-      )   )
+(defun tangent-foot (p1 p2 p3)
+  ;;;  calculate foot (p3) of a perpendicular line (p1, p2)
+  (let* ((p12 (v- p1 p2))
+         (p32 (v- p3 p2))
+         (2np12 (norm2 p12))
+         (k (/ (v. p12 p32) 2np12))
+         )
+    (v+ p2 (scale k p12))))
 
+(defun calc-p2-of-lowest-hull (p1 s)
+  "ARGS=(p1 s)"
+  (let (result (minangle pi/2) angle fvec vec)
+    (dolist
+     (v s)
+     (setq vec (v- (car p1) (car v)))
+     (when (and (not (equal (car v) (car p1)))
+                (> (norm vec) 0.1)
+                (not (and (= 0.0 (elt vec 0))
+                          (= 0.0 (elt vec 1))))
+                )
+           (setq fvec (copy-object vec))
+           (setf (elt fvec 2) 0)
+           (if (= 0.0 (elt vec 2)) (setq angle 0.0)
+             (setq angle
+                   (vector-angle (normalize-vector vec)
+                                 (normalize-vector fvec)
+                                 (normalize-vector (v* vec fvec))
+                                 )))
+           (when (< angle minangle)
+                 (setq result v minangle angle)))
+     )
+    result))
+
+(defun calc-p3-of-lowest-hull (p1 p2 s)
+  "ARGS=(p1 p2 s)"
+  (let ((foot) result (minangle pi) angle vec n)
+    (dolist
+     (v s)
+     (when (and (not (equal (car v) (car p1)))
+                (not (equal (car v) (car p2))))
+           (setq foot (tangent-foot (car p1) (car p2) (car v)))
+           (setq vec (v- foot (car v)))
+           (when (> (norm vec) 0.2)
+                 (setq n (triangle-normal (car p1) (car p2) (car v)))
+                 (if (< (elt n 2) 0) (setq n (scale -1 n)))
+                 (if (eps= (norm (v- #f(0 0 1) n)) 0.0)
+                     (setq angle 0.0)
+                   (setq angle
+                         (vector-angle #f(0 0 1)
+                                       (normalize-vector n)
+                                       (normalize-vector (v* #f(0 0 1) n))
+                                       )))
+                 (if (< angle minangle)
+                     (setq result v minangle angle))))
+     )
+    result))
+
+
+(defun find-initial-hull (s)
+  ;;;  "ARGS=s, s=((vertex1)(vertex2)....(vertexn))
+  ;;; retunrs hull that contians most smallest z-coordintes as one of its vertex
+  (let* ((p1 (find-extream s #'(lambda (p) (aref (car p) 2)) #'<=))
+         (p2) (p3) v)
+    (setq p2 (calc-p2-of-lowest-hull p1 s))
+    (setq p3 (calc-p3-of-lowest-hull  p1 p2 s))
+    (if (null p3) (return-from find-initial-hull nil) )
+    (when (< (triangle (car p1) (car p2) (car p3)) 0.0)
+          (setq v p2 p2 p3 p3 v))
+    (while (< (length (remove-colinears-from-circuit
+                       (mapcar #'car (list p2 p1 p3 p2 p1)))) 5)
+      (setq s (remove p3 s))
+      (setq p3 (calc-p3-of-lowest-hull  p1 p2 s))
+      (when (< (triangle (car p1) (car p2) (car p3)) 0.0)
+            (setq v p2 p2 p3 p3 v))
+      )
+    (make-face-from-coplanar-vertices p1 p3 p2 s)
+    ))
 ;;
 ;; convexhull using gift-wrapping algorithm
 ;;
@@ -309,6 +343,7 @@ Create a body of convex-hull from a list of vertices"
 	 (newbody)
 	 (faceq)
 	 (edgeq)
+	 (searched-v)
 	 )
       (setq *points* vertices
 	    *vertices* (mapcar #'list vertices)
@@ -344,8 +379,14 @@ Create a body of convex-hull from a list of vertices"
 			       (v- (car p2) (car p1)))
 			   0.0)
 		       (setq temp p2 p2 p3 p3 temp))
+		   (setq searched-v
+			 (send (if (e . pface)
+				   (e . pface) (e . nface)) :vertices))
+		   (setq searched-v
+			 (mapcar #'list (set-difference searched-v
+							(send e :vertices))))
 		   (setq newface (make-face-from-coplanar-vertices
-					 p1 p2 p3 *vertices*))
+					 p1 p2 p3 (set-difference *vertices* searched-v :key #'car)))
 		   (setq newedges (send newface :edges))
 		   (dolist (ne newedges)
 			(if (memq ne edgeq)
