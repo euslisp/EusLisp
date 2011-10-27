@@ -24,13 +24,20 @@ THREAD= -DTHREADED -DPTHREAD
 MFLAGS=
 XVERSION=X_V11R6_1
 
-
 #
 # Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
 #
 # for Linux
 
-GCC_VERSION=$(shell gcc -dumpversion | sed s/\\..\*//)
+GCC_MAJOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\.\([0-9]\)/\1/')
+GCC_MINOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\.\([0-9]\)/\2/')
+# GCC_PATCH_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\.\([0-9]\)/\3/')
+
+ADD_LDFLAGS=
+ifneq (,$(findstring t,$(shell if [ $(GCC_MAJOR_VERSION) -ge 4 -a $(GCC_MINOR_VERSION) -ge 5 ] ; then echo t ;fi )))
+ADD_LDFLAGS += -Wl,--no-as-needed
+endif
+
 CPU_OPTIMIZE=-m64
 ALIGN_FUNCTIONS=-falign-functions=8
 GCC3=-DGCC3
@@ -61,11 +68,11 @@ CC=gcc
 
 # Linux
 RAWLIB=-ldl -lm -lpthread
-XLIB= -L/usr/X11R6/lib -lX11
+XLIB= -L/usr/X11R6/lib $(ADD_LDFLAGS) -lX11
 
 # specify directories where euslisp's libraries are located.
-EUSLIB= -Xlinker -R$(ADLIBDIR):$(EUSDIR)/lib/Linux -L$(ADLIBDIR) 
-GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
+EUSLIB= -Xlinker -R$(ADLIBDIR):$(EUSDIR)/lib/Linux -L$(ADLIBDIR) $(ADD_LDFLAGS)
+GLLIB= -L$(ADLIBDIR) $(ADD_LDFLAGS) -lGLU -lGL -lXext -leusgl
 
 # POSIX Thread 
 THREADDEP=mthread_posix.c
