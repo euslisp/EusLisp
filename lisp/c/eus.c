@@ -1093,7 +1093,7 @@ register context *ctx;
 { pointer argv, p, in;
   int i,j;
   char *eusdir, *eusrt;
-  char fname[128];
+  char fname[1024];
   extern pointer SRCLOAD();
 
   /* reset stack pointer and frame pointers*/
