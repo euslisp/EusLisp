@@ -330,20 +330,18 @@ static pointer readivector(ctx,s)
 register context *ctx;
 register pointer s;
 { register int i=0,x;
+  register pointer elm;
   register pointer rvec;
   Char ch;
   ch=nextch(ctx,s);
   if (ch!='(') error(E_READFVECTOR);
   ch=nextch(ctx,s);
   while (ch!=')' && ch!=EOF) {
-    if (isdigit(ch)) {
-      x=0;
-      while (isdigit(ch)) { x=x*10+ch-'0'; ch=readch(s);}
-      if (ch=='.') ch=readch(s);}
-    else {
-      unreadch(s,ch);
-      x=intval(read1(ctx,s));
-      ch=nextch(ctx,s);}
+    unreadch(s,ch);
+    elm=read1(ctx,s);
+    if(!isint(elm)) error(E_READFVECTOR);
+    x=intval(elm);
+    ch=nextch(ctx,s);
     ckpush(makeint(x>>16)); ckpush(makeint(x & 0xffff));
     i++;}
   rvec=makevector(C_INTVECTOR,i);
