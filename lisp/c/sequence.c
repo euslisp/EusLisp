@@ -963,8 +963,15 @@ pointer *x, *y;
     default: xx= *x; yy= *y;}
   if (COMPKEY) {
     xx=call1(qsortctx,COMPKEY,xx);
-    yy=call1(qsortctx,COMPKEY,yy);}
+    (*qsortctx->vsp++=((pointer)xx)); // vpush
+    yy=call1(qsortctx,COMPKEY,yy);
+    (*qsortctx->vsp++=((pointer)yy)); // vpush
+  }
   result=call2(qsortctx,COMPAR,xx,yy);
+  if (COMPKEY) {
+    (*(--(qsortctx->vsp))); // vpop
+    (*(--(qsortctx->vsp))); // vpop
+  }
   if (result==NIL) return(1); else return(-1);}
 
 pointer SORT(ctx,n,argv)
