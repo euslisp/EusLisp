@@ -53,7 +53,7 @@ eusinteger_t coerceintval(x)
 register pointer x;
 { numunion nu;
   int y;
-  if (isflt(x)) return((eusinteger_t)(fltval(x)+0.5));
+  if (isflt(x)) return((eusinteger_t)round(fltval(x)));
   else return((eusinteger_t)bigintval(x));
   }
 
