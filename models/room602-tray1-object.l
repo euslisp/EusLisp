@@ -6,7 +6,7 @@
 (defclass room602-tray1-object
   :super cascaded-link
   :slots (sensors
-         handle0 handle1 handle2 handle3
+         handle0 handle1 handle2 handle3 handle4 handle5
          ))
 (defmethod room602-tray1-object
   (:init
@@ -98,14 +98,18 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 200.0 -120.0 55.0) :rot #2f((-0.707107 -7.216450e-16 -0.707107) (0.707107 -5.551115e-16 -0.707107) (1.665335e-16 -1.0 8.881784e-16)) :name "handle0"))
+     (setq handle0 (make-cascoords :pos (float-vector 0.0 150.0 55.0) :rot #2f((2.220446e-16 0.0 1.0) (0.0 1.0 0.0) (-1.0 0.0 2.220446e-16)) :name ":larm-handle"))
      (send self :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 200.0 120.0 55.0) :rot #2f((-0.707107 8.881784e-16 -0.707107) (-0.707107 -4.996004e-16 0.707107) (2.775558e-16 1.0 9.436896e-16)) :name "handle1"))
+     (setq handle1 (make-cascoords :pos (float-vector 0.0 -150.0 55.0) :rot #2f((2.220446e-16 0.0 1.0) (0.0 1.0 0.0) (-1.0 0.0 2.220446e-16)) :name ":rarm-handle"))
      (send self :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector -200.0 -120.0 55.0) :rot #2f((0.707107 -5.551115e-16 -0.707107) (0.707107 6.106227e-16 0.707107) (0.0 -1.0 8.326673e-16)) :name "handle2"))
+     (setq handle2 (make-cascoords :pos (float-vector 200.0 -120.0 55.0) :rot #2f((-0.707107 -7.216450e-16 -0.707107) (0.707107 -5.551115e-16 -0.707107) (1.665335e-16 -1.0 8.881784e-16)) :name "handle2"))
      (send self :assoc handle2)
-     (setq handle3 (make-cascoords :pos (float-vector -200.0 120.0 55.0) :rot #2f((0.707107 6.661338e-16 -0.707107) (-0.707107 5.828671e-16 -0.707107) (-5.551115e-17 1.0 8.604228e-16)) :name "handle3"))
+     (setq handle3 (make-cascoords :pos (float-vector 200.0 120.0 55.0) :rot #2f((-0.707107 8.881784e-16 -0.707107) (-0.707107 -4.996004e-16 0.707107) (2.775558e-16 1.0 9.436896e-16)) :name "handle3"))
      (send self :assoc handle3)
+     (setq handle4 (make-cascoords :pos (float-vector -200.0 -120.0 55.0) :rot #2f((0.707107 -5.551115e-16 -0.707107) (0.707107 6.106227e-16 0.707107) (0.0 -1.0 8.326673e-16)) :name "handle4"))
+     (send self :assoc handle4)
+     (setq handle5 (make-cascoords :pos (float-vector -200.0 120.0 55.0) :rot #2f((0.707107 6.661338e-16 -0.707107) (-0.707107 5.828671e-16 -0.707107) (-5.551115e-17 1.0 8.604228e-16)) :name "handle5"))
+     (send self :assoc handle5)
 
      ;; init-ending 
      (setq links (list blink0))
@@ -118,11 +122,13 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list  handle0 handle1 handle2 handle3))
-  (:handle-handle0 () handle0)
-  (:handle-handle1 () handle1)
+  (:handle () (list  handle0 handle1 handle2 handle3 handle4 handle5))
+  (:handle-larm-handle () handle0)
+  (:handle-rarm-handle () handle1)
   (:handle-handle2 () handle2)
   (:handle-handle3 () handle3)
+  (:handle-handle4 () handle4)
+  (:handle-handle5 () handle5)
   (:attention () (list ))
   (:button () (list ))
   )
