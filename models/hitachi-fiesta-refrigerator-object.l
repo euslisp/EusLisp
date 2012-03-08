@@ -6,7 +6,7 @@
 (defclass hitachi-fiesta-refrigerator-object
   :super cascaded-link
   :slots (sensors
-         handle0
+         handle0 handle1 handle2 handle3
          joint0 joint1 joint2 ))
 (defmethod hitachi-fiesta-refrigerator-object
   (:init
@@ -248,8 +248,14 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
+     (setq handle0 (make-cascoords :pos (float-vector 360.0 0.0 430.0) :rot #2f((1.0 0.0 0.0) (0.0 2.220446e-16 -1.0) (0.0 1.0 2.220446e-16)) :name ":drawer2"))
      (send self :assoc handle0)
+     (setq handle1 (make-cascoords :pos (float-vector 350.0 0.0 770.0) :rot #2f((1.0 0.0 0.0) (0.0 2.220446e-16 -1.0) (0.0 1.0 2.220446e-16)) :name ":drawer1"))
+     (send self :assoc handle1)
+     (setq handle2 (make-cascoords :pos (float-vector 350.0 -225.0 1100.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name ":door1"))
+     (send self :assoc handle2)
+     (setq handle3 (make-cascoords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle3"))
+     (send self :assoc handle3)
 
      ;; init-ending 
      (setq links (list blink0 blink1 blink2 blink3))
@@ -265,8 +271,11 @@
   (:door1 (&rest args) (forward-message-to joint0 args))
   (:drawer1 (&rest args) (forward-message-to joint1 args))
   (:drawer2 (&rest args) (forward-message-to joint2 args))
-  (:handle () (list  handle0))
-  (:handle-handle0 () handle0)
+  (:handle () (list  handle0 handle1 handle2 handle3))
+  (:handle-drawer2 () handle0)
+  (:handle-drawer1 () handle1)
+  (:handle-door1 () handle2)
+  (:handle-handle3 () handle3)
   (:attention () (list ))
   (:button () (list ))
   )
