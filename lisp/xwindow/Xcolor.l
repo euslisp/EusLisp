@@ -64,7 +64,7 @@
 	 (sys:peek (+ vis 20) :long)))
 (defun visual-bits-per-rgb (vis) (sys:peek (+ vis 24) :long))
 (defun visual-depth (vis) 
-   (let ((depth  (cadr (assoc vis *visuals*))) )
+   (let ((depth  (cadr (assoc vis *visuals* :test #'=))) )
 	(if depth
 	    depth 
 	    (error ";; visual-depth: no such visual ~s registered." vis)))) 
