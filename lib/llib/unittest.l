@@ -214,4 +214,4 @@
     (setq *unit-test* (instance unit-test-container :init :log-fname log-fname))
     t))
 
-(provide :gtest)
+(provide :unittest)
