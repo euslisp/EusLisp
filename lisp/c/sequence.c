@@ -521,10 +521,10 @@ register pointer *argv;
 { register pointer item=argv[0],seq=argv[1],element;
   pointer test=argv[2],testnot=argv[3],key=argv[4];
   pointer iftest=argv[5],ifnottest=argv[6];
-  register eusinteger_t start,end,i=0;
+  register eusinteger_t start,end,count,i=0;
   
-  ckarg(9);
-  start=ckintval(argv[7]); end=ckintval(argv[8]);
+  ckarg(10);
+  start=ckintval(argv[7]); end=ckintval(argv[8]); count=ckintval(argv[9]);
 
   if (seq==NIL) return(NIL);
   else if (islist(seq)) {
@@ -549,7 +549,7 @@ register pointer *argv;
       if (call2(ctx,testnot,item,element)==NIL) return(makeint(start));}
     else if (test!=QEQ) {
       if (call2(ctx,test,item,element)!=NIL) return(makeint(start));}
-    else if (item==element) return(makeint(start));
+    else if (item==element&&--count<=0) return(makeint(start));
     start++;}
   return(NIL);}
 
