@@ -542,13 +542,13 @@ register pointer *argv;
     else element=fastvref(seq,start);
     if (key!=QIDENTITY) element=call1(ctx,key,element);
     if (ifnottest!=NIL) {
-      if (call1(ctx,ifnottest,element)==NIL) return(makeint(start));}
+      if (call1(ctx,ifnottest,element)==NIL&&--count<=0) return(makeint(start));}
     else if (iftest!=NIL) {
-      if (call1(ctx,iftest,element)!=NIL) return(makeint(start));}
+      if (call1(ctx,iftest,element)!=NIL&&--count<=0) return(makeint(start));}
     else if (testnot!=NIL) {
-      if (call2(ctx,testnot,item,element)==NIL) return(makeint(start));}
+      if (call2(ctx,testnot,item,element)==NIL&&--count<=0) return(makeint(start));}
     else if (test!=QEQ) {
-      if (call2(ctx,test,item,element)!=NIL) return(makeint(start));}
+      if (call2(ctx,test,item,element)!=NIL&&--count<=0) return(makeint(start));}
     else if (item==element&&--count<=0) return(makeint(start));
     start++;}
   return(NIL);}
