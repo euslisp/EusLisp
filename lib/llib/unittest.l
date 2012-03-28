@@ -164,22 +164,6 @@
      (send *unit-test* :add-function ',name)
      ',name))
 
-(defmacro assert (pred &optional (message "") &rest args)
-  (with-gensyms
-   (ret)
-   `(let* (failure (ret ,pred))
-      (warning-message 2 "testing [~A] ~A~%" (format nil ,message ,@args) ',pred)
-      ;; lisp::step could not work with macros..
-      ;;     (if (and (listp ',pred) (functionp (car ',pred)))
-      ;;	 (setq ret (lisp::step ,pred))
-      ;;       (setq ret ,pred))
-      ;;
-      (if (not ret)
-	  ;; escape <> for xml
-	  (send *unit-test* :increment-failure ',pred (format nil ,message ,@args)
-		(escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer)))))))
-      )))
-
 (defun run-test (func-sym)
   (let ((func (symbol-function func-sym)) tm)
     ;; initilize result
@@ -212,6 +196,24 @@
     (unix:signal unix::sighup 'unittest-sigint-handler)
 
     (setq *unit-test* (instance unit-test-container :init :log-fname log-fname))
+
+    (defmacro assert (pred &optional (message "") &rest args)
+      (with-gensyms
+       (ret)
+       `(let* (failure (ret ,pred))
+	  (warning-message 2 "testing [~A] ~A~%" (format nil ,message ,@args) ',pred)
+	  ;; lisp::step could not work with macros..
+	  ;;     (if (and (listp ',pred) (functionp (car ',pred)))
+	  ;;	 (setq ret (lisp::step ,pred))
+	  ;;       (setq ret ,pred))
+	  ;;
+	  (if (not ret)
+	      ;; escape <> for xml
+	      (send *unit-test* :increment-failure ',pred (format nil ,message ,@args)
+		    (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer)))))))
+	  )))
+
+
     t))
 
 (provide :unittest)
