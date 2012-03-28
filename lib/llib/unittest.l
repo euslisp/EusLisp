@@ -202,7 +202,7 @@
 
 (defun init-unit-test (&key log-fname)
   (let* ((p "--gtest_output=xml:")
-         (s (find-if #'(lambda (x) (substringp p x)) lisp::*eustop-argument*))
+         (s (find-if #'(lambda (tmpx) (substringp p tmpx)) lisp::*eustop-argument*))
          (xml-fname (if s (string-left-trim p s))))
     (if xml-fname (setq log-fname xml-fname))
 
