@@ -929,6 +929,7 @@ pointer normalize_big(pointer x)
     else break;}
   if (newsize != size) {
     x->c.bgnm.bv->c.ivec.length=makeint(newsize);
+    x->c.bgnm.size=makeint(newsize);
     if (!positive) xv[newsize-1] |= MSB;}
   return(x);
   }
