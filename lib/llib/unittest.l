@@ -188,17 +188,16 @@
   (send *unit-test* :print-result)
   t)
 
-(defun init-unit-test (&key log-fname (update-handlers t))
+(defun init-unit-test (&key log-fname)
   (let* ((p "--gtest_output=xml:")
          (s (find-if #'(lambda (tmpx) (substringp p tmpx)) lisp::*eustop-argument*))
          (xml-fname (if s (string-left-trim p s))))
     (if xml-fname (setq log-fname xml-fname))
 
-    (when update-handlers
-      (setq lisp::*exit-on-fatal-error* t)
-      (lisp::install-error-handler 'unittest-error)
-      (unix:signal unix::sigint 'unittest-sigint-handler)
-      (unix:signal unix::sighup 'unittest-sigint-handler))
+    (setq lisp::*exit-on-fatal-error* t)
+    (lisp::install-error-handler 'unittest-error)
+    (unix:signal unix::sigint 'unittest-sigint-handler)
+    (unix:signal unix::sighup 'unittest-sigint-handler)
 
     (setq *unit-test* (instance unit-test-container :init :log-fname log-fname))
 
