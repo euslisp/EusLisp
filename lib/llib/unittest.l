@@ -41,13 +41,13 @@
   (format *error-output* ", exitting...~C[0m~%"  #x1b)
   (send *unit-test* :increment-failure form msg1 code)
   (send *unit-test* :print-result)
-  (exit 1))
+  (if lisp::*exit-on-fatal-error* (exit 1)))
 
 (defun unittest-sigint-handler (sig code)
   (format *error-output* "unittest-sigint-handler ~A~%" sig)
   (send *unit-test* :increment-failure "" (format nil "signal-handler ~A" sig) code)
   (send *unit-test* :print-result)
-  (exit 1))
+  (if lisp::*exit-on-fatal-error* (exit 1)))
 
 (defclass unit-test-result
   :super propertied-object
