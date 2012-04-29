@@ -2134,7 +2134,7 @@
      (setq blink32 (instance bodyset-link :init (make-cascoords) :bodies bc :name :head-neck-y :weight 1009.43 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
 
      ;; definition of assoc
-     (send blink36 :newcoords (make-coords :pos (float-vector 0.0 22.0 -68.0) :rot #2f((1.0 0.0 0.0) (0.0 0.999391 0.034899) (0.0 -0.034899 0.999391))))
+     (send blink36 :newcoords (make-coords :pos (float-vector 0.0 22.0 -68.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
      (send blink35 :assoc blink36)
      (send blink16 :newcoords (make-coords :pos (float-vector -51.0 -32.0 -135.0) :rot #2f((-1.0 0.0 0.0) (0.0 -1.0 0.0) (0.0 0.0 1.0))))
      (send blink15 :assoc blink16)
@@ -2152,7 +2152,7 @@
      (send blink10 :assoc blink11)
      (send blink10 :newcoords (make-coords :pos (float-vector 3.552714e-14 -147.0 0.0) :rot #2f((1.0 1.232595e-32 1.570092e-16) (1.570092e-16 -2.220446e-16 -1.0) (1.232595e-32 1.0 -2.220446e-16))))
      (send blink9 :assoc blink10)
-     (send blink34 :newcoords (make-coords :pos (float-vector 1.136868e-13 22.0 -68.0) :rot #2f((1.0 -4.917529e-32 -7.792762e-33) (4.941730e-32 0.999391 0.034899) (6.071822e-33 -0.034899 0.999391))))
+     (send blink34 :newcoords (make-coords :pos (float-vector 1.136868e-13 22.0 -68.0) :rot #2f((1.0 0.0 -4.622232e-33) (0.0 1.0 0.0) (4.622232e-33 0.0 1.0))))
      (send blink33 :assoc blink34)
      (send blink8 :newcoords (make-coords :pos (float-vector 51.0 -32.0 -135.0) :rot #2f((1.0 1.139468e-64 -4.622232e-33) (1.139468e-64 1.0 4.930381e-32) (4.622232e-33 -4.930381e-32 1.0))))
      (send blink7 :assoc blink8)
