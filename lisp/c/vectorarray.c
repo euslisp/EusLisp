@@ -39,7 +39,7 @@ pointer vref(a,n)
 	/*simple but not general vector (one dimensional) reference*/
 register pointer a;
 register int n;
-{ register int x;
+{ register eusinteger_t x;
   numunion nu;
   if (n<0 || vecsize(a)<=n ) error(E_ARRAYINDEX);
   switch(elmtypeof(a)) {
