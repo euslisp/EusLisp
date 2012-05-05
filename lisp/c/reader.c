@@ -329,7 +329,8 @@ register int size;
 static pointer readivector(ctx,s)
 register context *ctx;
 register pointer s;
-{ register int i=0,x;
+{ register int i=0;
+  register eusinteger_t x;
   register pointer elm;
   register pointer rvec;
   Char ch;
@@ -339,15 +340,15 @@ register pointer s;
   while (ch!=')' && ch!=EOF) {
     unreadch(s,ch);
     elm=read1(ctx,s);
-    if(!isint(elm)) error(E_READFVECTOR);
-    x=intval(elm);
+    if(!ckintval(elm)) error(E_READFVECTOR);
+    x=bigintval(elm);
     ch=nextch(ctx,s);
-    ckpush(makeint(x>>16)); ckpush(makeint(x & 0xffff));
+    vpush(elm);
     i++;}
   rvec=makevector(C_INTVECTOR,i);
   while (i>0) {
-    x=intval(vpop());
-    x=(intval(vpop())<<16) + x;
+    elm=vpop();
+    x=bigintval(elm);
     rvec->c.ivec.iv[--i]=x;}
   return(rvec);}
 
