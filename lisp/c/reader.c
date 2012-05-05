@@ -340,8 +340,7 @@ register pointer s;
   while (ch!=')' && ch!=EOF) {
     unreadch(s,ch);
     elm=read1(ctx,s);
-    if(!ckintval(elm)) error(E_READFVECTOR);
-    x=bigintval(elm);
+    x=ckintval(elm);
     ch=nextch(ctx,s);
     vpush(elm);
     i++;}
