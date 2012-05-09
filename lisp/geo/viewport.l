@@ -251,15 +251,16 @@
     (setq point (send eye :view  point))
     (setq v (send eye :project (float-vector width height)))
     (send self :draw-fill-arc-ndc point (aref v 0) (aref v 1) angle1 angle2 color))
-  (:draw-arrow (p1 p2 &optional (do-clip t) (color nil))
+  (:draw-arrow (p1 p2 &optional (do-clip t) (color nil) &key (arrow-scale #f(1 1)))
     ;; added by Hirukawa
     (let (p21 pn pa pb)
        (setq p1 (send eye :view p1) p2 (send eye :view p2)) ; world to NDC
        (setq p1 (homo2normal p1) p2 (homo2normal p2))
        (setq p21 (v- p1 p2))
        (scale 0.3 p21 p21)
-       (setq pn (float-vector (- (elt p21 1)) (elt p21 0) 0))
+       (setq pn (float-vector (* (elt arrow-scale 1) (- (elt p21 1))) (* (elt arrow-scale 1) (elt p21 0)) 0))
        (setf (elt p21 2) 0.0)
+       (scale (elt arrow-scale 0) p21 p21)
        ; p21 and pn became vectors on Zv plane
        (setq pa (v+ (v+ p2 (scale 0.5 pn)) p21)
 	     pb (v+ (v+ p2 (scale -0.5 pn)) p21))
