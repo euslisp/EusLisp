@@ -30,8 +30,8 @@ CC += -fPIC
 endif
 endif
 ifeq ($(ARCHDIR), Darwin)
-CC += -I/opt/local/lib/jpeg6b/include
-LD += -L/opt/local/lib/jpeg6b/lib
+CC += -I/opt/local/lib/jpeg6b/include -I/opt/local/include
+LD += -L/opt/local/lib/jpeg6b/lib     -L/opt/local/lib
 endif
 ARCH=$(ARCHDIR)
 LIBDIR=$(EUSDIR)/$(ARCH)/lib
