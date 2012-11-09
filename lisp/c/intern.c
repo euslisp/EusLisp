@@ -80,6 +80,7 @@ pointer sym,pkg;
   pointer pnam,s;
 
   pnam=sym->c.sym.pname;
+  usedby = (T);
   /*check symbol conflict in each of used-by packages*/
   while (usedby && iscons(usedbylist)) {
     usedby=ccar(usedbylist);
