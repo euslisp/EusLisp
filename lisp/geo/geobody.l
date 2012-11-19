@@ -283,7 +283,8 @@ checks intersection with a line which extends from POINT toward VECTOR direction
 		(if (or (send f1 :intersect-face f2 cbox)
 			(send f2 :intersect-face f1 cbox))
 		     (return-from :intersectp t))
-		(sys:reclaim-tree cbox))))))
+		;; (sys:reclaim-tree cbox) ;; segfaults if GC occured
+                )))))
 (:intersectp2 (body2 &optional (tolerance *epsilon*))
    (let* ((cbox (send self :common-box body2))
 	  faces1 faces2 edges1  edges2 p point flag inside-flag)
