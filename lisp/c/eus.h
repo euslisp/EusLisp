@@ -63,8 +63,10 @@ typedef float eusfloat_t;
 #define errno errnoGet()
 #else
 #include <stdio.h>
+#ifndef __cplusplus
 #define min(x,y) ((x<y)?x:y)
 #define max(x,y) ((x<y)?y:x)
+#endif
 #endif
 
 #if (WORD_SIZE == 64)
