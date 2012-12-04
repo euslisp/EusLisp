@@ -92,7 +92,7 @@
 (setq fogIndex	#f(0.0))
 
 (setq shadowPattern
-  #i(#xaa #xaa #xaa #xaa #x55 #x55 #x55 #x55  /* 50% Grey */
+  #i(#xaa #xaa #xaa #xaa #x55 #x55 #x55 #x55  ;; /* 50% Grey */
 	   #xaa #xaa #xaa #xaa #x55 #x55 #x55 #x55
 	   #xaa #xaa #xaa #xaa #x55 #x55 #x55 #x55
 	   #xaa #xaa #xaa #xaa #x55 #x55 #x55 #x55
@@ -111,7 +111,7 @@
 	   ))
 
 (setq sgiPattern
-  #i(#xff #xff #xff #xff #xff #xff #xff #xff  /* SGI Logo */
+  #i(#xff #xff #xff #xff #xff #xff #xff #xff  ;; /* SGI Logo */
 	   #xff #xbd #xff #x83 #xff #x5a #xff #xef
 	   #xfe #xdb #x7f #xef #xfd #xdb #xbf #xef
 	   #xfb #xdb #xdf #xef #xf7 #xdb #xef #xef
