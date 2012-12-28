@@ -98,7 +98,7 @@
  (send (room73b2-locker1) :transform (make-coords :pos (float-vector 9145.0 -1925.0 0.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room73b2-door-left) :transform (make-coords :pos (float-vector 0.0 405.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
  (send (room73b2-door-right) :transform (make-coords :pos (float-vector 0.0 -405.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
- (send (room73b2-foldable-desk) :transform (make-coords :pos (float-vector 1850.0 -2000.0 0.0) :rot #2f((7.216450e-16 1.0 0.0) (-1.0 7.216450e-16 0.0) (0.0 0.0 1.0))))
+ (send (room73b2-foldable-desk) :transform (make-coords :pos (float-vector 1850.0 -2100.0 0.0) :rot #2f((7.216450e-16 1.0 0.0) (-1.0 7.216450e-16 0.0) (0.0 0.0 1.0))))
  (send (room73b2-gifuplastic-900-cart) :transform (make-coords :pos (float-vector 2700.0 -600.0 0.0) :rot #2f((7.216450e-16 1.0 0.0) (-1.0 7.216450e-16 0.0) (0.0 0.0 1.0))))
  (send (room73b2-picaladder) :transform (make-coords :pos (float-vector 800.0 -2000.0 0.0) :rot #2f((0.5 -0.866025 0.0) (0.866025 0.5 0.0) (0.0 0.0 1.0))))
  (send (room73b2-broom) :transform (make-coords :pos (float-vector 600.0 -3000.0 0.0) :rot #2f((0.707107 -0.707107 0.0) (0.707107 0.707107 0.0) (0.0 0.0 1.0))))
