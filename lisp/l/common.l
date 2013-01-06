@@ -954,7 +954,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
    (let ((length (- end start)))
       (when from-end (setq seq (reverse seq)))
       (cond
-	 ((and (= length 1) (null initial-value)) seq)
+	 ((and (= length 1) (null initial-value)) (car seq))
 	 ((= length 0)
 	  (if initial-value initial-value (funcall func)))
 	 (t
