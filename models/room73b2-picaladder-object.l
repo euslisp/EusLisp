@@ -138,7 +138,7 @@
      (send (elt bc 10) :set-color :darkgray)
      (send (elt bc 11) :set-color :darkgray)
      (send (elt bc 12) :set-color :darkgray)
-     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 14.3 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :root :weight 14300 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send self :assoc blink0)
