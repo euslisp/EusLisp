@@ -1068,7 +1068,7 @@ pointer argv[];
   vers=1-cs;
   sn2=sqrt(t1*t1 + t2*t2 + t3*t3);
   th=atan2(sn2,cs2);
-  if (th<1e-10) return(NIL);
+  if (th<1e-10||vers<1e-10) return(NIL);
   else if (th<2.6) {
     kx=(m[size+size+1]-m[size+2])/sn2;
     ky=(m[2]-m[size+size])/sn2;
