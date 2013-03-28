@@ -1086,17 +1086,22 @@ pointer argv[];
   if (debug) 
     printf("rotation-angle1: %f %f %f\n",kx,ky,kz);
   if ((fabs(kx) > fabs(ky)) && (fabs(kx) > fabs(kz))) {
-    ky=(m[size]+m[1])/(2*kx*vers); kz=(m[2]+m[size+size])/(2*kx*vers);}
+    ky=(m[size]+m[1])/(2*kx*vers); kz=(m[2]+m[size+size])/(2*kx*vers);
+    norm=sqrt((ky*ky+kz*kz)/(1.0-kx*kx)); ky/=norm; kz/=norm;}
   else if ((fabs(ky) > fabs(kx)) && (fabs(ky) > fabs(kz))) {
-    kx=(m[size]+m[1])/(2*ky*vers); kz=(m[size+2]+m[size+size+1])/(2*ky*vers);}
+    kx=(m[size]+m[1])/(2*ky*vers); kz=(m[size+2]+m[size+size+1])/(2*ky*vers);
+    norm=sqrt((kx*kx+kz*kz)/(1.0-ky*ky)); kx/=norm; kz/=norm;}
   else {
     kx=(m[2]+m[size+size])/(2*kz*vers);
-    ky=(m[size+2]+m[size+size+1])/(2*kz*vers);}
+    ky=(m[size+2]+m[size+size+1])/(2*kz*vers);
+    norm=sqrt((kx*kx+ky*ky)/(1.0-kz*kz)); kx/=norm; ky/=norm;}
   /**/
   norm=sqrt(kx*kx + ky*ky + kz*kz);
   if (debug) 
     printf("rotation-angle2: %f %f %f norm=%f\n",kx,ky,kz,norm);
   krv[0]=kx/norm; krv[1]=ky/norm; krv[2]=kz/norm;
+  kx=kx/norm; ky=ky/norm; kz=kz/norm;
+  norm=sqrt(kx*kx + ky*ky + kz*kz);
   return(cons(ctx,makeflt(th),cons(ctx,kr,NIL)));}
 
 	      
