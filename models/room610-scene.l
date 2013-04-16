@@ -23,11 +23,6 @@
 (load "models/room610-kitchen-object.l")
 (load "models/room610-table-object.l")
 (load "models/room610-laundary-machine-object.l")
-(load "models/room610-wall195-object.l")
-(load "models/room610-wall193-object.l")
-(load "models/room610-wall191-object.l")
-(load "models/room610-wall189-object.l")
-(load "models/room610-wall187-object.l")
 
 (defclass room610-scene
   :super scene-model
@@ -58,11 +53,6 @@
  (send (room610-kitchen) :transform (make-coords :pos (float-vector 7750.0 -1010.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
  (send (room610-table) :transform (make-coords :pos (float-vector 4650.0 -110.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
  (send (room610-laundary-machine) :transform (make-coords :pos (float-vector 3500.0 2640.0 0.0) :rot #2f((2.220446e-16 1.0 0.0) (-1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
- (send (room610-wall195) :transform (make-coords :pos (float-vector 9160.0 0.0 1375.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
- (send (room610-wall193) :transform (make-coords :pos (float-vector 4580.0 -3870.0 1375.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
- (send (room610-wall191) :transform (make-coords :pos (float-vector 4580.0 3840.0 1375.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
- (send (room610-wall189) :transform (make-coords :pos (float-vector 0.0 2330.0 1375.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
- (send (room610-wall187) :transform (make-coords :pos (float-vector 0.0 -2345.0 1375.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
        ))
      ))
   )
