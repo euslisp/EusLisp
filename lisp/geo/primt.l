@@ -332,6 +332,13 @@ vertices= list of (#f(x y z) edge1 edge2 ...)"
 ;; convexhull using gift-wrapping algorithm
 ;;
 
+(defun enclosed-vertexp (v)  ;; v=(#f() #<edge..> #<edge..>...)
+  (let ((result t))
+    (dolist (e (cdr v))
+      (setq result (and (e . pface)(e . nface) result))
+      )
+    (and (cdr v) result)))
+
 (defun convex-hull-3d (vertices)
 "ARGS = (vertices)
 Create a body of convex-hull from a list of vertices"
@@ -390,8 +397,15 @@ Create a body of convex-hull from a list of vertices"
 		   (setq newedges (send newface :edges))
 		   (dolist (ne newedges)
 			(if (memq ne edgeq)
-		    	    (setq edgeq (delete ne edgeq))
-			    (setq edgeq (cons ne edgeq))))
+                            (progn
+                              (setq edgeq (delete ne edgeq))
+                              (let ((ver))
+                                (dolist (v (send ne :vertices))
+                                  (setq ver (find v *vertices* :key #'car))
+                                  (if (enclosed-vertexp ver)
+                                      (setq *vertices* (delete ver *vertices* :count 1                              )
+                                            )))))
+                          (setq edgeq (append edgeq (list ne)))))
 		   (setq faceq (cons newface faceq))
 		   (nconc *faces* (list newface))
 		   (if *debug* (print (length *faces* )))
