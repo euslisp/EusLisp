@@ -42,7 +42,7 @@
  (send (room610-bears-panel) :transform (make-coords :pos (float-vector 5750.0 -1730.0 0.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room610-bears-panel) :transform (make-coords :pos (float-vector 5300.0 -2100.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
  (send (room610-610-ground) :transform (make-coords :pos (float-vector 4650.0 110.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
- (send (room610-tray) :transform (make-coords :pos (float-vector 4650.0 340.0 700.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+ (send (room610-tray) :transform (make-coords :pos (float-vector 4650.0 340.0 700.0) :rot #2f((-1.0 4.440892e-16 0.0) (-4.440892e-16 -1.0 0.0) (0.0 0.0 1.0))))
  (send (room610-sweeper) :transform (make-coords :pos (float-vector 3100.0 1990.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
  (send (room610-cabinet-mamoru) :transform (make-coords :pos (float-vector 4650.0 -910.0 0.0) :rot #2f((-2.220446e-16 -1.0 0.0) (1.0 -2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room610-cabinet) :transform (make-coords :pos (float-vector 3610.0 -2160.0 0.0) :rot #2f((-2.220446e-16 -1.0 0.0) (1.0 -2.220446e-16 0.0) (0.0 0.0 1.0))))
