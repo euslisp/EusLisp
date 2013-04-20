@@ -1092,18 +1092,16 @@ static void configure_eus(ctx)
 register context *ctx;
 { pointer argv, p, in;
   int i,j;
-  char *eusdir, *archdir, *eusrt;
+  char *eusdir, *eusrt;
   char fname[1024];
   extern pointer SRCLOAD();
 
   /* reset stack pointer and frame pointers*/
   j=(int)eussetjmp(topjbuf);  
-  fprintf(stderr, "set ARCHDIR to Linux64\n");
-  archdir= "Linux64";
-  setenv("ARCHDIR",archdir,1);
-  fprintf(stderr, "set EUSDIR to /home/k-okada/ros/fuerte/jsk-ros-pkg/euslisp/jskeus/eus\n");
-  eusdir= "/home/k-okada/ros/fuerte/jsk-ros-pkg/euslisp/jskeus/eus";
-  setenv("EUSDIR",eusdir,1);
+  eusdir=(char *)getenv("EUSDIR");
+  if (eusdir==NULL) { 
+    fprintf(stderr, "EUSDIR is not setenved, assuming /usr/local/eus\n");
+    eusdir= "/usr/local/eus/"; }
   sprintf(fname,"%s/lib/eus.init.l", eusdir);
 
 #if !Solaris2 || GCC
