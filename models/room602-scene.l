@@ -55,7 +55,7 @@
 (load "models/room602-bed-object.l")
 (load "models/room602-wheelchair-object.l")
 (load "models/room602-clock-object.l")
-(load "models/room602-laundary-machine-object.l")
+(load "models/room602-laundry-machine-object.l")
 (load "models/room602-tray1-object.l")
 
 (defclass room602-scene
@@ -119,7 +119,7 @@
  (send (room602-bed) :transform (make-coords :pos (float-vector 2465.0 3460.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
  (send (room602-wheelchair) :transform (make-coords :pos (float-vector 4500.0 5300.0 0.0) :rot #2f((-1.0 1.224606e-16 0.0) (-1.224606e-16 -1.0 0.0) (0.0 0.0 1.0))))
  (send (room602-clock) :transform (make-coords :pos (float-vector 25.0 1300.0 2100.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
- (send (room602-laundary-machine) :transform (make-coords :pos (float-vector 500.0 4300.0 0.0) :rot #2f((0.984808 0.173648 0.0) (-0.173648 0.984808 0.0) (0.0 0.0 1.0))))
+ (send (room602-laundry-machine) :transform (make-coords :pos (float-vector 500.0 4300.0 0.0) :rot #2f((0.984808 0.173648 0.0) (-0.173648 0.984808 0.0) (0.0 0.0 1.0))))
  (send (room602-tray1) :transform (make-coords :pos (float-vector 4790.0 2400.0 705.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
        ))
      ))
