@@ -67,15 +67,15 @@
      ;; definition of 'button
      (setq bc (list
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 21.6506 -12.5 10.0) (float-vector 25.0 0.0 10.0) (float-vector 21.6506 12.5 10.0) (float-vector 12.5 21.6506 10.0) (float-vector 0.0 25.0 10.0) (float-vector -12.5 21.6506 10.0) (float-vector -21.6506 12.5 10.0) (float-vector -25.0 0.0 10.0) (float-vector -21.6506 -12.5 10.0) (float-vector -12.5 -21.6506 10.0) (float-vector -5.684342e-14 -25.0 10.0) (float-vector 12.5 -21.6506 10.0)))
-         (instance face :init :vertices (list (float-vector 25.0 0.0 1.136868e-13) (float-vector 21.6506 -12.5 0.0) (float-vector 12.5 -21.6506 1.136868e-13) (float-vector 0.0 -25.0 0.0) (float-vector -12.5 -21.6506 0.0) (float-vector -21.6506 -12.5 0.0) (float-vector -25.0 0.0 0.0) (float-vector -21.6506 12.5 0.0) (float-vector -12.5 21.6506 0.0) (float-vector 0.0 25.0 0.0) (float-vector 12.5 21.6506 0.0) (float-vector 21.6506 12.5 0.0)))
+         (instance face :init :vertices (list (float-vector 21.6506 -12.5 10.0) (float-vector 25.0 0.0 10.0) (float-vector 21.6506 12.5 10.0) (float-vector 12.5 21.6506 10.0) (float-vector 0.0 25.0 10.0) (float-vector -12.5 21.6506 10.0) (float-vector -21.6506 12.5 10.0) (float-vector -25.0 2.842171e-14 10.0) (float-vector -21.6506 -12.5 10.0) (float-vector -12.5 -21.6506 10.0) (float-vector -5.684342e-14 -25.0 10.0) (float-vector 12.5 -21.6506 10.0)))
+         (instance face :init :vertices (list (float-vector 25.0 0.0 1.136868e-13) (float-vector 21.6506 -12.5 0.0) (float-vector 12.5 -21.6506 1.136868e-13) (float-vector 0.0 -25.0 0.0) (float-vector -12.5 -21.6506 0.0) (float-vector -21.6506 -12.5 0.0) (float-vector -25.0 2.842171e-14 0.0) (float-vector -21.6506 12.5 0.0) (float-vector -12.5 21.6506 0.0) (float-vector 0.0 25.0 0.0) (float-vector 12.5 21.6506 0.0) (float-vector 21.6506 12.5 0.0)))
          (instance face :init :vertices (list (float-vector 21.6506 -12.5 10.0) (float-vector 21.6506 -12.5 0.0) (float-vector 25.0 0.0 1.136868e-13) (float-vector 25.0 0.0 10.0)))
          (instance face :init :vertices (list (float-vector 12.5 -21.6506 10.0) (float-vector 12.5 -21.6506 1.136868e-13) (float-vector 21.6506 -12.5 0.0) (float-vector 21.6506 -12.5 10.0)))
          (instance face :init :vertices (list (float-vector -5.684342e-14 -25.0 10.0) (float-vector 0.0 -25.0 0.0) (float-vector 12.5 -21.6506 1.136868e-13) (float-vector 12.5 -21.6506 10.0)))
          (instance face :init :vertices (list (float-vector -12.5 -21.6506 10.0) (float-vector -12.5 -21.6506 0.0) (float-vector 0.0 -25.0 0.0) (float-vector -5.684342e-14 -25.0 10.0)))
          (instance face :init :vertices (list (float-vector -21.6506 -12.5 10.0) (float-vector -21.6506 -12.5 0.0) (float-vector -12.5 -21.6506 0.0) (float-vector -12.5 -21.6506 10.0)))
-         (instance face :init :vertices (list (float-vector -25.0 0.0 10.0) (float-vector -25.0 0.0 0.0) (float-vector -21.6506 -12.5 0.0) (float-vector -21.6506 -12.5 10.0)))
-         (instance face :init :vertices (list (float-vector -21.6506 12.5 10.0) (float-vector -21.6506 12.5 0.0) (float-vector -25.0 0.0 0.0) (float-vector -25.0 0.0 10.0)))
+         (instance face :init :vertices (list (float-vector -25.0 2.842171e-14 10.0) (float-vector -25.0 2.842171e-14 0.0) (float-vector -21.6506 -12.5 0.0) (float-vector -21.6506 -12.5 10.0)))
+         (instance face :init :vertices (list (float-vector -21.6506 12.5 10.0) (float-vector -21.6506 12.5 0.0) (float-vector -25.0 2.842171e-14 0.0) (float-vector -25.0 2.842171e-14 10.0)))
          (instance face :init :vertices (list (float-vector -12.5 21.6506 10.0) (float-vector -12.5 21.6506 0.0) (float-vector -21.6506 12.5 0.0) (float-vector -21.6506 12.5 10.0)))
          (instance face :init :vertices (list (float-vector 0.0 25.0 10.0) (float-vector 0.0 25.0 0.0) (float-vector -12.5 21.6506 0.0) (float-vector -12.5 21.6506 10.0)))
          (instance face :init :vertices (list (float-vector 12.5 21.6506 10.0) (float-vector 12.5 21.6506 0.0) (float-vector 0.0 25.0 0.0) (float-vector 0.0 25.0 10.0)))
@@ -171,13 +171,13 @@
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 505.0 0.0 580.0) :rot #2f((0.5 0.0 0.866025) (0.0 1.0 0.0) (-0.866025 0.0 0.5)) :name "contents"))
      (send self :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 640.0 490.0 770.0) :rot #2f((-3.330669e-16 -0.34202 -0.939693) (-1.0 4.440892e-16 1.665335e-16) (3.330669e-16 0.939693 -0.34202)) :name "handle-cap"))
+     (setq handle1 (make-cascoords :pos (float-vector 640.0 190.0 770.0) :rot #2f((-3.330669e-16 -0.34202 -0.939693) (-1.0 4.440892e-16 1.665335e-16) (3.330669e-16 0.939693 -0.34202)) :name "handle-cap"))
      (send self :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector 600.0 540.0 930.0) :rot #2f((0.5 0.0 0.866025) (0.0 1.0 0.0) (-0.866025 0.0 0.5)) :name "open-button"))
+     (setq handle2 (make-cascoords :pos (float-vector 600.0 240.0 930.0) :rot #2f((0.5 0.0 0.866025) (0.0 1.0 0.0) (-0.866025 0.0 0.5)) :name "open-button"))
      (send self :assoc handle2)
 
      ;; definition of :button
-     (setq button0 (make-cascoords :pos (float-vector 600.0 540.0 930.0) :rot #2f((0.5 0.0 0.866025) (0.0 1.0 0.0) (-0.866025 0.0 0.5)) :name "open"))
+     (setq button0 (make-cascoords :pos (float-vector 600.0 240.0 930.0) :rot #2f((0.5 0.0 0.866025) (0.0 1.0 0.0) (-0.866025 0.0 0.5)) :name "open"))
      (send self :assoc button0)
 
      ;; init-ending 
