@@ -1587,9 +1587,9 @@
   (:rleg-knee-p (&rest args) (forward-message-to joint5 args))
   (:rleg-ankle-p (&rest args) (forward-message-to joint6 args))
   (:rleg-ankle-r (&rest args) (forward-message-to joint7 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun zero (&rest args) (instance* zero-robot :init args))

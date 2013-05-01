@@ -1674,9 +1674,9 @@
   (:rbleg-crotch (&rest args) (forward-message-to joint13 args))
   (:rbleg-knee (&rest args) (forward-message-to joint12 args))
   (:rbleg-ankle (&rest args) (forward-message-to joint11 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun tamaii (&rest args) (instance* tamaii-robot :init args))

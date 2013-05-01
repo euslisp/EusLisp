@@ -5422,9 +5422,9 @@
   (:head-leye-y (&rest args) (forward-message-to joint61 args))
   (:head-reye-p (&rest args) (forward-message-to joint62 args))
   (:head-leye-p (&rest args) (forward-message-to joint63 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun human (&rest args) (instance* human-robot :init args))

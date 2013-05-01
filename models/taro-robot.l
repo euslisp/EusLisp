@@ -1675,9 +1675,9 @@
   (:rleg-ankle-r (&rest args) (forward-message-to joint15 args))
   (:rleg-ankle-p (&rest args) (forward-message-to joint16 args))
   (:spine-spine-p (&rest args) (forward-message-to joint18 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun taro (&rest args) (instance* taro-robot :init args))

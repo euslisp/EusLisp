@@ -3199,9 +3199,9 @@
   (:arm-1-shoulder-p (&rest args) (forward-message-to joint16 args))
   (:head-neck-y (&rest args) (forward-message-to joint20 args))
   (:head-neck-p (&rest args) (forward-message-to joint21 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun macra (&rest args) (instance* macra-robot :init args))

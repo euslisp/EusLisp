@@ -1357,9 +1357,9 @@
   (:rleg-crotch-p (&rest args) (forward-message-to joint0 args))
   (:rleg-knee-p (&rest args) (forward-message-to joint1 args))
   (:rleg-ankle-p (&rest args) (forward-message-to joint2 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun ape3 (&rest args) (instance* ape3-robot :init args))

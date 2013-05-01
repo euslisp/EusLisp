@@ -1505,9 +1505,9 @@
   (:h3rarm-hand-y (&rest args) (forward-message-to joint12 args))
   (:h3scout-tire-r (&rest args) (forward-message-to joint13 args))
   (:h3scout-tire-l (&rest args) (forward-message-to joint14 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun h3s (&rest args) (instance* h3s-robot :init args))

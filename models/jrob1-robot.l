@@ -1264,9 +1264,9 @@
   (:rb-crotch-y (&rest args) (forward-message-to joint9 args))
   (:rb-crotch-r (&rest args) (forward-message-to joint10 args))
   (:rb-knee-r (&rest args) (forward-message-to joint11 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun jrob1 (&rest args) (instance* jrob1-robot :init args))

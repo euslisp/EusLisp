@@ -1292,9 +1292,9 @@
   (:h3rarm-elbow-p (&rest args) (forward-message-to joint10 args))
   (:h3rarm-wrist-r (&rest args) (forward-message-to joint11 args))
   (:h3rarm-hand-y (&rest args) (forward-message-to joint12 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun h3 (&rest args) (instance* h3-robot :init args))

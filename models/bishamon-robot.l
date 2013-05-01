@@ -1387,9 +1387,9 @@
   (:rleg-crotch-r (&rest args) (forward-message-to joint11 args))
   (:rleg-crotch-p (&rest args) (forward-message-to joint13 args))
   (:rleg-knee-p (&rest args) (forward-message-to joint15 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun bishamon (&rest args) (instance* bishamon-robot :init args))

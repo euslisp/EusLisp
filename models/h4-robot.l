@@ -2860,9 +2860,9 @@
   (:h4waist-waist2-z (&rest args) (forward-message-to joint18 args))
   (:h4waist-waist-x (&rest args) (forward-message-to joint17 args))
   (:h4waist-waist1-z (&rest args) (forward-message-to joint16 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun h4 (&rest args) (instance* h4-robot :init args))

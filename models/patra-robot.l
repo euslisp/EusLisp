@@ -1322,9 +1322,9 @@
   (:patra-back-limb-back (&rest args) (forward-message-to joint1 args))
   (:patra-lower-limb-rear (&rest args) (forward-message-to joint3 args))
   (:patra-lower-limb-front (&rest args) (forward-message-to joint2 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun patra (&rest args) (instance* patra-robot :init args))

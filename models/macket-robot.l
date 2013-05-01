@@ -4940,9 +4940,9 @@
   (:rleg-knee-p (&rest args) (forward-message-to joint12 args))
   (:rleg-ankle-p (&rest args) (forward-message-to joint11 args))
   (:rleg-ankle-r (&rest args) (forward-message-to joint10 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun macket (&rest args) (instance* macket-robot :init args))

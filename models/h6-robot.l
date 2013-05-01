@@ -2610,9 +2610,9 @@
   (:rarm-wrist-p (&rest args) (forward-message-to joint13 args))
   (:rarm-wrist-r (&rest args) (forward-message-to joint14 args))
   (:rarm-gripper (&rest args) (forward-message-to joint15 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun h6 (&rest args) (instance* h6-robot :init args))

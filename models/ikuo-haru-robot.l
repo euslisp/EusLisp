@@ -1978,9 +1978,9 @@
   (:rleg-knee-p (&rest args) (forward-message-to joint15 args))
   (:rleg-ankle-p (&rest args) (forward-message-to joint9 args))
   (:rleg-ankle-r (&rest args) (forward-message-to joint10 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun ikuo-haru (&rest args) (instance* ikuo-haru-robot :init args))
