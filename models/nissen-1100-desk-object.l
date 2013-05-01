@@ -205,9 +205,9 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun nissen-1100-desk (&rest args) (instance* nissen-1100-desk-object :init args))

@@ -93,11 +93,11 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list  handle0 handle1))
-  (:handle-handle-l () handle0)
-  (:handle-handle-r () handle1)
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list  handle0 handle1) args))
+  (:handle-handle-l (&rest args) (forward-message-to handle0 args))
+  (:handle-handle-r (&rest args) (forward-message-to handle1 args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun plus-900-square-desk (&rest args) (instance* plus-900-square-desk-object :init args))
