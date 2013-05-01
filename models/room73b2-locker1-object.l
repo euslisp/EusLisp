@@ -168,10 +168,10 @@
    (forward-message-to-all (list) args))
 
   (:door (&rest args) (forward-message-to joint0 args))
-  (:handle () (list  handle0))
-  (:handle-door-handle () handle0)
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list  handle0) args))
+  (:handle-door-handle (&rest args) (forward-message-to handle0 args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun room73b2-locker1 (&rest args) (instance* room73b2-locker1-object :init args))

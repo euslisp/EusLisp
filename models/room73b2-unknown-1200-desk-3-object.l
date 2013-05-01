@@ -96,9 +96,9 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun room73b2-unknown-1200-desk-3 (&rest args) (instance* room73b2-unknown-1200-desk-3-object :init args))

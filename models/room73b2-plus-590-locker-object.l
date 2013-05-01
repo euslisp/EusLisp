@@ -206,10 +206,10 @@
 
   (:door-left (&rest args) (forward-message-to joint0 args))
   (:door-right (&rest args) (forward-message-to joint1 args))
-  (:handle () (list  handle0))
-  (:handle-door-handle () handle0)
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list  handle0) args))
+  (:handle-door-handle (&rest args) (forward-message-to handle0 args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun room73b2-plus-590-locker (&rest args) (instance* room73b2-plus-590-locker-object :init args))
