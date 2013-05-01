@@ -222,11 +222,11 @@
 
   (:door (&rest args) (forward-message-to joint0 args))
   (:knob (&rest args) (forward-message-to joint1 args))
-  (:handle () (list  handle0 handle1))
-  (:handle-door () handle0)
-  (:handle-knob () handle1)
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list  handle0 handle1) args))
+  (:handle-door (&rest args) (forward-message-to handle0 args))
+  (:handle-knob (&rest args) (forward-message-to handle1 args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun room602-toshiba-microwave-oven (&rest args) (instance* room602-toshiba-microwave-oven-object :init args))
