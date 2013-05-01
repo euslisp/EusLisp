@@ -60,11 +60,11 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list  button0 button1))
-  (:button-down () button0)
-  (:button-up () button1)
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list  button0 button1) args))
+  (:button-down (&rest args) (forward-message-to button0 args))
+  (:button-up (&rest args) (forward-message-to button1 args))
   )
 
 (defun elevator_call_panel (&rest args) (instance* elevator_call_panel-object :init args))
