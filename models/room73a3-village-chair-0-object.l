@@ -275,11 +275,11 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list  handle0 handle1))
-  (:handle-larm () handle0)
-  (:handle-rarm () handle1)
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list  handle0 handle1) args))
+  (:handle-larm (&rest args) (forward-message-to handle0 args))
+  (:handle-rarm (&rest args) (forward-message-to handle1 args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun room73a3-village-chair-0 (&rest args) (instance* room73a3-village-chair-0-object :init args))
