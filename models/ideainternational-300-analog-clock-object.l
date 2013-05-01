@@ -280,9 +280,9 @@
   (:hour-joint (&rest args) (forward-message-to joint0 args))
   (:minute-joint (&rest args) (forward-message-to joint1 args))
   (:second-joint (&rest args) (forward-message-to joint2 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun ideainternational-300-analog-clock (&rest args) (instance* ideainternational-300-analog-clock-object :init args))

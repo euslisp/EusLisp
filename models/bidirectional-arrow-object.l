@@ -99,9 +99,9 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun bidirectional-arrow (&rest args) (instance* bidirectional-arrow-object :init args))

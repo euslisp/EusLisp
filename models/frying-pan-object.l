@@ -101,10 +101,10 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list  handle0))
-  (:handle-grip () handle0)
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list  handle0) args))
+  (:handle-grip (&rest args) (forward-message-to handle0 args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun frying-pan (&rest args) (instance* frying-pan-object :init args))

@@ -80,9 +80,9 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun kokuyo-600-sidetable (&rest args) (instance* kokuyo-600-sidetable-object :init args))

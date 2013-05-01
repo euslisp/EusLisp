@@ -94,9 +94,9 @@
    (forward-message-to-all (list) args))
 
   (:door (&rest args) (forward-message-to joint0 args))
-  (:handle () (list ))
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun akiba-door-window (&rest args) (instance* akiba-door-window-object :init args))

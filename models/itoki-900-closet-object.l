@@ -156,10 +156,10 @@
 
   (:door-left (&rest args) (forward-message-to joint0 args))
   (:door-right (&rest args) (forward-message-to joint1 args))
-  (:handle () (list  handle0))
-  (:handle-handle0 () handle0)
-  (:attention () (list ))
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list  handle0) args))
+  (:handle-handle0 (&rest args) (forward-message-to handle0 args))
+  (:attention (&rest args) (forward-message-to-all (list ) args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun itoki-900-closet (&rest args) (instance* itoki-900-closet-object :init args))

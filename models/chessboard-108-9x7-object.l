@@ -623,10 +623,10 @@
   (:cameras (&rest args)
    (forward-message-to-all (list) args))
 
-  (:handle () (list ))
-  (:attention () (list  attention0))
-  (:attention-origin () attention0)
-  (:button () (list ))
+  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:attention (&rest args) (forward-message-to-all (list  attention0) args))
+  (:attention-origin (&rest args) (forward-message-to attention0 args))
+  (:button (&rest args) (forward-message-to-all (list ) args))
   )
 
 (defun chessboard-108-9x7 (&rest args) (instance* chessboard-108-9x7-object :init args))
