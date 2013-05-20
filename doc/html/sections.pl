@@ -2,7 +2,7 @@
 # Associate sections original text with physical files.
 
 $key = q/0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0/;
-$section_info{$key} = '0%:%manual.html%:%<B>EusLisp</B> <BR> <B>version 8.00</B> <BR> <B>Reference Manual</B> <BR> Featuring Multithread and XToolKit <BR> ETL-TR-95-2 <BR> January, 1995 <BR> ' unless ($section_info{$key}); 
+$section_info{$key} = '0%:%manual.html%:%<B>EusLisp</B> <BR> <B>version 9.00</B> <BR> <B>Reference Manual</B> <BR> Featuring Multithread and XToolKit <BR> ETL-TR-95-2 <BR> January, 1995 <BR> ' unless ($section_info{$key}); 
 $done{"manual.html"} = 1;
 $key = q/0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0/;
 $section_info{$key} = '1%:%node2.html%:%EusLisp Basics' unless ($section_info{$key}); 
