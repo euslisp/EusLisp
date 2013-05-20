@@ -1,48 +1,48 @@
 \subsection{VxWorks}
 \markright{\arabic{section}. VxWorks}
-ホストとVxWorksとの通信機能が"vxworks/vxweus.l"ファイルで提供されている。
-VxWorks上に{\bf vxwserv}サーバを常駐させることにより、
-ホスト上のEusLispから{\bf vxwserv}に
-コネクションを張り、vxwsプロトコルに従った
-コマンドを送ることにより、VxWorksの関数を起動し、引数を送り、
-結果を受け取ることができる。
+ホストとVxWorksとの通信機能が"vxworks/vxweus.l"ファイルで提供されている。
+VxWorks上に{\bf vxwserv}サーバを常駐させることにより、
+ホスト上のEusLispから{\bf vxwserv}に
+コネクションを張り、vxwsプロトコルに従った
+コマンドを送ることにより、VxWorksの関数を起動し、引数を送り、
+結果を受け取ることができる。
 
-VxWorksのソフトはSunのcコンパイラによって開発することができる上、
-データ表現がsun3, sun4, VME147の間で共通であることを利用して、
-vxwsプロトコルは、バイナリモードで動作することができる。
+VxWorksのソフトはSunのcコンパイラによって開発することができる上、
+データ表現がsun3, sun4, VME147の間で共通であることを利用して、
+vxwsプロトコルは、バイナリモードで動作することができる。
 
-\subsubsection{VxWorks側の起動}
-VxWorksにログインし、"*eusdir*/vxworks/vxwserv.o"をロードする。
-その後、{\bf vxwserv}タスクをspawnする。
-{\bf vxwserv}はVxWorks上の2200番ポートをlistenする。
-2200が塞がっている場合、2201, 2202, ...を試す。
-正しくbindされたポート番号が表示される。
+\subsubsection{VxWorks側の起動}
+VxWorksにログインし、"*eusdir*/vxworks/vxwserv.o"をロードする。
+その後、{\bf vxwserv}タスクをspawnする。
+{\bf vxwserv}はVxWorks上の2200番ポートをlistenする。
+2200が塞がっている場合、2201, 2202, ...を試す。
+正しくbindされたポート番号が表示される。
 
 \begin {verbatim}
-% rlogin asvx0  (あるいはetlic2上であれば、% tip asvx[01] も可能)
+% rlogin asvx0  (あるいはetlic2上であれば、% tip asvx[01] も可能)
 -> cd "atom:/usr/share/src/eus/vxworks"
 -> ld <vxwserv.o
 -> sp vxwserv
 port 2200 is bound.
 \end{verbatim}
 
-VxWorksのiコマンドで、{\bf vxwserv}タスクが常駐したことを確かめる。
-同じ要領で、eusから呼び出したいVxWorksのプログラムをVxWorks上にロードする。
-その後、EuslispとVxWorksとの
-コネクションが張られると、{\bf vxwserv}を走らせたTTYに、次のようなメッセージが
-出力される。
+VxWorksのiコマンドで、{\bf vxwserv}タスクが常駐したことを確かめる。
+同じ要領で、eusから呼び出したいVxWorksのプログラムをVxWorks上にロードする。
+その後、EuslispとVxWorksとの
+コネクションが張られると、{\bf vxwserv}を走らせたTTYに、次のようなメッセージが
+出力される。
 
 \begin{verbatim}
 CLIENT accepted: sock=9 port = 1129: family = 2: addr = c01fcc10:
 VxWserv started with 16394 byte buffer
 \end{verbatim}
 
-\subsubsection{ホスト側の起動}
-任意のマシンの上でeusを起動し、"vxworks/vxweus"をロードする。
-{\bf connect-vxw}関数を用いて{\bf vxwserv}に接続する。
-接続後、ソケットストリームが{\bf *vxw-stream*}にバインドされる。
-以下に、コネクトの例を示す。この例では、VxWorks上のsin, vadd関数を
-euslispの関数VSIN,VADとして定義している。
+\subsubsection{ホスト側の起動}
+任意のマシンの上でeusを起動し、"vxworks/vxweus"をロードする。
+{\bf connect-vxw}関数を用いて{\bf vxwserv}に接続する。
+接続後、ソケットストリームが{\bf *vxw-stream*}にバインドされる。
+以下に、コネクトの例を示す。この例では、VxWorks上のsin, vadd関数を
+euslispの関数VSIN,VADとして定義している。
 
 
 \begin {verbatim}
@@ -52,65 +52,65 @@ euslispの関数VSIN,VADとして定義している。
 (defvxw VAD "_vadd" (v1 v2) (float-vector 3))
 \end{verbatim}
 
-VxWorks上に作成される関数が、vxwsを通じて呼び出されるためには、
-次の条件を満たさなければならない。
+VxWorks上に作成される関数が、vxwsを通じて呼び出されるためには、
+次の条件を満たさなければならない。
 
 \begin{enumerate}
 \setlength{\itemsep}{0cm}
-\item 引数は、32個以内であること、引数に受け取るベクタの容量の合計が
-connect-vxwの:buffer-sizeで指定した値を越えないこと
-\item structを引数にしないこと、必ずstructへのポインタを引数にすること
-\item 結果は、int, float, doubleまたは、それらの配列のアドレスであること
-\item 配列のアドレスを結果とする場合、その配列の実体は、
-関数の外部に取られていること
+\item 引数は、32個以内であること、引数に受け取るベクタの容量の合計が
+connect-vxwの:buffer-sizeで指定した値を越えないこと
+\item structを引数にしないこと、必ずstructへのポインタを引数にすること
+\item 結果は、int, float, doubleまたは、それらの配列のアドレスであること
+\item 配列のアドレスを結果とする場合、その配列の実体は、
+関数の外部に取られていること
 \end{enumerate}
 
 \begin{refdesc}
 
-\longdescription{connect-vxw}{\&key \= (:host "asvx0") \` [関数] \\
+\longdescription{connect-vxw}{\&key \= (:host "asvx0") \` [関数] \\
 \> (:port 2200)\\
 \> (:buffer-size 16384)\\
 \> (:priority 1280)\\
 \> (:option \#x1c)}{
-{\em :host}に対してvxwsプロトコルによる通信のためのソケットストリームを作成し、そのストリームを返す。
-{\em :host}には、ネットワークにおけるVxWorksのアクセス番号あるいはアクセス名を指定する。
-{\em :port}には、VxWorks上の{\bf vxwserv}がバインドしたポートを捜すための最初のポート番号を指定する。
-このポート番号から、増加方向に接続を試行する。
-{\em :option}のコードについては、VxWorksの、spawn関数を参照のこと。
-コネクションは、同時に複数張ってよい。}
+{\em :host}に対してvxwsプロトコルによる通信のためのソケットストリームを作成し、そのストリームを返す。
+{\em :host}には、ネットワークにおけるVxWorksのアクセス番号あるいはアクセス名を指定する。
+{\em :port}には、VxWorks上の{\bf vxwserv}がバインドしたポートを捜すための最初のポート番号を指定する。
+このポート番号から、増加方向に接続を試行する。
+{\em :option}のコードについては、VxWorksの、spawn関数を参照のこと。
+コネクションは、同時に複数張ってよい。}
 
 \funcdesc{vxw}{vxw-stream entry result-type args}{
-{\bf vxw}は、{\em vxw-stream}に接続されているVxWorksの関数{\em entry}を呼び出し、
-その関数に引き数{\em args}を与えて{\em result-type}で指定された結果を得る。
-{\em vxw-stream}には、{\bf connect-vxw}で作成したソケットストリームを与える。
-{\em entry}には、VxWorksの関数名をストリングで指定するか、あるいは関数の
-アドレスを整数で指定する。
-関数のアドレスを知るには、VxWorksのfindsymbolを呼び出す。
-知りたいシンボルは、通常、"\_"で始まることに注意。
-{\em entry}がストリングの場合、VxWorks上でシンボルテーブルの逐次探索が行われる。
-{\em result-type}には、結果のデータ型({\tt :integer}または{\tt :float})、
-あるいはデータを受け取るベクタ型を指定する。
-ベクタは、{\tt float-vector, integer-vector, string}のインスタンスである。
-{\tt general vector}(lispの任意のオブジェクトを要素とするベクタ)は指定できない。
-結果型は、必ず、実際のVxWorks関数の結果型と一致しなければならない。
-{\em args}には、{\em entry}に与える引き数を指定する。
-引数に許されるEusLispデータは、{\tt integer, float, string, integer-vector,
-float-vector, integer-matrix, float-matrix}である。
-ポインタを含んだ一般のオブジェクト、一般のベクトルは送れない。
-また、送られたベクトルデータは、一旦{\bf vxwserv}が獲得したバッファの中に蓄積される。
-例えば、VxWorksに定義された関数"sin"を呼び出すためには、次のように実行すればよい。
+{\bf vxw}は、{\em vxw-stream}に接続されているVxWorksの関数{\em entry}を呼び出し、
+その関数に引き数{\em args}を与えて{\em result-type}で指定された結果を得る。
+{\em vxw-stream}には、{\bf connect-vxw}で作成したソケットストリームを与える。
+{\em entry}には、VxWorksの関数名をストリングで指定するか、あるいは関数の
+アドレスを整数で指定する。
+関数のアドレスを知るには、VxWorksのfindsymbolを呼び出す。
+知りたいシンボルは、通常、"\_"で始まることに注意。
+{\em entry}がストリングの場合、VxWorks上でシンボルテーブルの逐次探索が行われる。
+{\em result-type}には、結果のデータ型({\tt :integer}または{\tt :float})、
+あるいはデータを受け取るベクタ型を指定する。
+ベクタは、{\tt float-vector, integer-vector, string}のインスタンスである。
+{\tt general vector}(lispの任意のオブジェクトを要素とするベクタ)は指定できない。
+結果型は、必ず、実際のVxWorks関数の結果型と一致しなければならない。
+{\em args}には、{\em entry}に与える引き数を指定する。
+引数に許されるEusLispデータは、{\tt integer, float, string, integer-vector,
+float-vector, integer-matrix, float-matrix}である。
+ポインタを含んだ一般のオブジェクト、一般のベクトルは送れない。
+また、送られたベクトルデータは、一旦{\bf vxwserv}が獲得したバッファの中に蓄積される。
+例えば、VxWorksに定義された関数"sin"を呼び出すためには、次のように実行すればよい。
 {\tt (vxw *vxw-stream* "sin" :float 1.0)}
 }
 
 \macrodesc{defvxw}{eus-func-name entry args \&optional (result-type :integer)}{
-{\bf defvxw}は、findsymbolを用いて{\bf vxw}を呼び出して、VxWorksの関数の高速な呼び出しを
-実現するためのマクロである。
-VxWorksの関数{\em entry}を呼び出すためのEuslispの関数{\em eus-func-name}を定義する。
-このマクロを実行後は、{\em eus-func-name}を呼び出すことにより、VxWorksの関数を呼び出すことができる。
-このとき、呼び出しに使用されるソケットストリームは{\bf *vxw-stream*}に固定されている。
-ただし、VxWorks側で、関数をコンパイルし直して再ロードした場合、
-新しい関数定義が呼ばれるようにするためには、eus側で、{\bf defvxw}をもう一度
-実行し直して、最新のエントリアドレスが指定されるようにする必要がある。
+{\bf defvxw}は、findsymbolを用いて{\bf vxw}を呼び出して、VxWorksの関数の高速な呼び出しを
+実現するためのマクロである。
+VxWorksの関数{\em entry}を呼び出すためのEuslispの関数{\em eus-func-name}を定義する。
+このマクロを実行後は、{\em eus-func-name}を呼び出すことにより、VxWorksの関数を呼び出すことができる。
+このとき、呼び出しに使用されるソケットストリームは{\bf *vxw-stream*}に固定されている。
+ただし、VxWorks側で、関数をコンパイルし直して再ロードした場合、
+新しい関数定義が呼ばれるようにするためには、eus側で、{\bf defvxw}をもう一度
+実行し直して、最新のエントリアドレスが指定されるようにする必要がある。
 }
 \end{refdesc}
 \newpage
