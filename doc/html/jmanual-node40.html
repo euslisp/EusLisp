@@ -1,0 +1,367 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>一般数値関数</TITLE>
+<META NAME="description" CONTENT="一般数値関数">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node41.html">
+<LINK REL="previous" HREF="jmanual-node39.html">
+<LINK REL="up" HREF="jmanual-node36.html">
+<LINK REL="next" HREF="jmanual-node41.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html942"
+  HREF="jmanual-node41.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html936"
+  HREF="jmanual-node36.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html930"
+  HREF="jmanual-node39.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html938"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html940"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html943"
+  HREF="jmanual-node41.html">基本関数</A>
+<B> Up:</B> <A NAME="tex2html937"
+  HREF="jmanual-node36.html">数値演算</A>
+<B> Previous:</B> <A NAME="tex2html931"
+  HREF="jmanual-node39.html">整数とビット毎の操作関数</A>
+ &nbsp; <B>  <A NAME="tex2html939"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html941"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03054000000000000000">
+一般数値関数</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="6083"></A>
+<B>+</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>numbers</EM>の和を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6094"></A>
+<B>-</B> <EM>num &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし <EM>more-numbers</EM> が与えられたとき、<EM>num</EM>より引く。
+そうでないとき、<EM>num</EM> は符号反転される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6107"></A>
+<B>*</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>numbers</EM>の積を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6118"></A>
+<B>/</B> <EM>num1 num2 &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM> を、<EM>num2</EM> や <EM>more-numbers</EM>で割り算する。
+全ての引数が<TT>integer</TT>のとき、<TT>integer</TT>を返し、
+引数に1つでも<TT>float</TT>があったときは、<TT>float</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6135"></A>
+<B>abs</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>number</EM>の絶対値を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6146"></A>
+<B>round</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>number</EM>の小数第1位を四捨五入し <TT>integer</TT>を返す。
+<TT>(round 1.5)=2, (round -1.5)=2</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6159"></A>
+<B>floor</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>number</EM>の小数を切捨てる。
+<TT>(floor 1.5)=1, (floor -1.5)=-2</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6171"></A>
+<B>ceiling</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>number</EM>の小数を切り上げる。
+<TT>(ceiling 1.5)=2, (ceiling -1.5)=-1</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6183"></A>
+<B>truncate</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>number</EM>が正のときは切捨て、負のときは切り上げる。
+<TT>(truncate 1.5)=1, (truncate -1.5)=-1</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6195"></A>
+<B>float</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ <EM>number</EM>を<TT>float</TT>にして返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6207"></A>
+<B>max</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ <EM>numbers</EM>の中から、最大値をさがす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6218"></A>
+<B>min</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>numbers</EM>の中から、最小値をさがす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6229"></A>
+<B>random</B> <EM>range &amp;optional (randstate *random-state*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 0あるいは0.0 から <EM>range</EM>までの乱数を返す。
+もし <EM>range</EM> が <TT>integer</TT>のとき、
+<TT>integer</TT> に変換して返す。
+そうでないとき、<TT>float</TT> を返す。
+オプションの<EM>randstate</EM> は、決まった乱数列で表される。
+<EM>randstate</EM>に特別なデータの型はなく、
+2つの要素からなる 整数ベクトルで表される。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6246"></A>
+<B>incf</B> <EM>variable &amp;optional (increment 1) </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>variable</EM> は一般の変数である。
+<EM>variable</EM> は、<EM>increment</EM>だけ増加され、
+<EM>variable</EM>に戻される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6260"></A>
+<B>decf</B> <EM>variable &amp;optional decrement </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>variable</EM> は一般の変数である。
+<EM>variable</EM> は、<EM>decrement</EM>だけ減少され、
+<EM>variable</EM>に戻される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6274"></A>
+<B>reduce</B> <EM>func seq </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2変数操作の<EM>func</EM>関数を用いて、<EM>seq</EM>の中の全ての要素を結合させる。
+例えば、<TT>(reduce #'expt '(2 3 4)) = (expt (expt 2 3) 4)=4096</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6287"></A>
+<B>rad2deg</B> <EM>radian </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> ラジアン値を 度数表現に変換する。
+#R は同じものである。
+EusLisp の中での角度の表記はラジアンであり、
+EusLisp 内の全ての関数が要求する角度引数は、ラジアン表現である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6297"></A>
+<B>deg2rad</B> <EM>degree </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 角度値をラジアン表現に変換する。
+また #D でも実行できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html942"
+  HREF="jmanual-node41.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html936"
+  HREF="jmanual-node36.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html930"
+  HREF="jmanual-node39.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html938"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html940"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html943"
+  HREF="jmanual-node41.html">基本関数</A>
+<B> Up:</B> <A NAME="tex2html937"
+  HREF="jmanual-node36.html">数値演算</A>
+<B> Previous:</B> <A NAME="tex2html931"
+  HREF="jmanual-node39.html">整数とビット毎の操作関数</A>
+ &nbsp; <B>  <A NAME="tex2html939"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html941"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

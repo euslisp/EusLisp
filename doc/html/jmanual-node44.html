@@ -1,0 +1,562 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>パッケージ</TITLE>
+<META NAME="description" CONTENT="パッケージ">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node43.html">
+<LINK REL="up" HREF="jmanual-node42.html">
+<LINK REL="next" HREF="jmanual-node45.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html996"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html990"
+  HREF="jmanual-node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html986"
+  HREF="jmanual-node43.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html992"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html994"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html997"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Up:</B> <A NAME="tex2html991"
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
+<B> Previous:</B> <A NAME="tex2html987"
+  HREF="jmanual-node43.html">symbol</A>
+ &nbsp; <B>  <A NAME="tex2html993"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html995"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03062000000000000000">
+パッケージ</A>
+</H2>
+
+<P>
+パッケージは、symbolをグループ化するための区分された名前の付いた空間を与える。
+複数のプログラマが要求されるような膨大なソフトウェアシステム
+を開発しようとするとき、symbol（関数および変数名）が重複する問題を減少させるために
+Common Lispでパッケージシステムが生まれた。
+それぞれのパッケージは、内部symbolと外部symbolを持つ。
+パッケージの中でsymbolが作成されたとき、いつでも内部symbolとなる。
+<B>export</B>を使用することにより外部symbolにすることができる。
+異なったパッケージの外部symbolは、symbolの前にパッケージ名とコロン(:)を
+つけることにより参照することができる。例えば、<TT>x:*display*</TT>となる。
+他のパッケージの内部symbolを参照する場合には、<TT>sys::free-threads</TT>のように
+ダブルコロン(::)を使用する。
+前にパッケージ名をつけることを省略するためには、<B>import</B>を用いる。
+その上、<B>use-package</B>を使用すれば、他のパッケージの全ての
+外部symbolをimportすることができる。
+symbolをexportあるいはimportするとき、あらゆるパッケージ内の
+全てのsymbolが独自の
+print-nameを持つ必要があるため、symbol名の重複を発見することができる。
+<A NAME="8086"></A><B>s</B>hadowは、パッケージからsymbolを仮想的に削除することにより、
+存在するsymbolと同じ名前のsymbolを作成することができる。
+
+<P>
+Euslispは次の8つのパッケージを定義する。
+<DL>
+<DT><STRONG>lisp:</STRONG></DT>
+<DD>全てのlisp関数、マクロ、定数、など
+</DD>
+<DT><STRONG>keyword:</STRONG></DT>
+<DD>キーワードsymbol
+</DD>
+<DT><STRONG>unix:</STRONG></DT>
+<DD>UNIXシステムコールとライブラリ関数
+</DD>
+<DT><STRONG>system:</STRONG></DT>
+<DD>システム管理または危険な関数; nicknames=sys,si
+</DD>
+<DT><STRONG>compiler:</STRONG></DT>
+<DD>EusLispコンパイラ; nicknames=comp
+</DD>
+<DT><STRONG>user:</STRONG></DT>
+<DD>ユーザー領域
+</DD>
+<DT><STRONG>geometry:</STRONG></DT>
+<DD>幾何学クラスとその関数
+</DD>
+<DT><STRONG>xwindow:</STRONG></DT>
+<DD>X-windowインターフェース; nickname=x
+</DD>
+</DL>
+
+<P>
+これらのパッケージとユーザー定義パッケージは、システムの
+package-listに繋げられている。
+それは、<B>list-all-packages</B>よって得ることができる。
+それぞれのパッケージは、内部および外部symbolを探索・位置付けするために2つの
+ハッシュテーブルを管理する。
+また、パッケージは、その名前(stringまたはsymbol)とnick nameのリストと
+そのパッケージが使う他のパッケージリストを記憶している。
+<B>*package*</B>は、読み込み・印刷のための主なパッケージを持つ
+グローバル変数である。
+もし<B>*package*</B>が<TT>user:</TT>でないならば、
+top-levelプロンプトは、現在のパッケージを示すために<TT>mypkg:eus</TT>$のように変更される。
+
+<P>
+
+ <BR>
+<BR> <A NAME="8088"></A>
+<B>*lisp-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  Lispパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8098"></A>
+<B>*user-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  ユーザーパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8108"></A>
+<B>*unix-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  UNIXパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8118"></A>
+<B>*system-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  システムパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8128"></A>
+<B>*keyword-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  キーワードパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8138"></A>
+<B>find-symbol</B> <EM>string &amp;optional (package *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>package</EM>のなかでprint-nameとして<EM>string</EM>をもつsymbolを
+見つける。
+もし見つかったとき、そのsymbolが返され、そうでないときNILが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8150"></A>
+<B>make-symbol</B> <EM>string </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>で示される名前の新しい収容されていないsymbolを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8161"></A>
+<B>intern</B> <EM>string &amp;optional (package *package*) (klass symbol) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>と同じprint-nameのsymbolを見つけようとする。
+もし探索成功のとき、そのsymbolが返される。
+もし失敗したとき、<EM>string</EM>というprint-nameを持つsymbolが新しく作られ、
+<EM>package</EM>の中におかれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8174"></A>
+<B>list-all-packages</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+今までに作られた全てのパッケージのリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8184"></A>
+<B>find-package</B> <EM>name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+パッケージの名前またはnicknameが<EM>name</EM>と同じものを探す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8195"></A>
+<B>make-package</B> <EM>name &amp;key :nicknames (:use '(lisp)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>name</EM>で示される名前の新しいパッケージを作る。
+<EM>name</EM>は、stringあるいはsymbolでよい。
+もしパッケージが既に存在している場合、エラーが報告される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8207"></A>
+<B>in-package</B> <EM>pkg &amp;key :nicknames (:uses '(lisp)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+現在のパッケージ(<B>*pacakge*</B>の値)を
+<EM>pkg</EM>に変える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8219"></A>
+<B>package-name</B> <EM>pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>パッケージの名前を文字列として返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8230"></A>
+<B>package-nicknames</B> <EM>pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>のnicknameのリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8241"></A>
+<B>rename-package</B> <EM>pkg new-name &amp;optional new-nicknames </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>の名前を<EM>new-name</EM>に変更し、そのnicknameを 
+<EM>new-nicknames</EM>に変更する。
+それらは、symbolかstringまたはsymbolかstringのリストのどれでも可能である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8254"></A>
+<B>package-use-list</B> <EM>pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>で使用されるパッケージリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8265"></A>
+<B>packagep</B> <EM>pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>pkg</EM>がパッケージのときTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8276"></A>
+<B>use-package</B> <EM>pkg &amp;optional (curpkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>を<EM>curpkg</EM>のuse-listに付け加える。
+一旦追加すると、<EM>pkg</EM>のなかのsymbolは、パッケージの前置詞なしで
+<EM>curpkg</EM>を見ることが可能になる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8290"></A>
+<B>unuse-package</B> <EM>pkg &amp;optional (curpkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>curpkg</EM>のuse-listから<EM>pkg</EM>を削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8302"></A>
+<B>shadow</B> <EM>sym &amp;optional(pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+存在する<EM>sym</EM>を隠すことによって、
+<EM>pkg</EM>内に内部symbolを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8314"></A>
+<B>export</B> <EM>sym &amp;optional (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>は、symbolかsymbolのリストである。
+<B>export</B>は、<EM>sym</EM>を他のパッケージから
+外部symbolとしてアクセス可能とする。
+実際に、<EM>sym</EM>は、<EM>pkg</EM>のなかの外部symbolとして記録される。
+もしsymbolが<B>export</B>されると、パッケージマークとしてsingle colon ":"を使って
+アクセス可能となる。これに対して、<B>export</B>されていないsymbolはdouble colon "::"
+で得られる。
+そのうえ、<B>export</B>されたsymbolは、
+<B>use-package</B>を使用したり、パッケージに<B>import</B>されたとき、コロンの
+必要がない。
+symbolがexportされたかどうかは、それぞれのsymbolにでなくそれが収容されている
+パッケージに属性付けられる。
+それで、symbolは1つのパッケージの内部にあり、その他の外部となる。
+<B>export</B>は、<EM>pkg</EM>が使用している他のパッケージの中の
+symbol名と<EM>sym</EM>が重複していないかどうかを検査する。
+もし<EM>sym</EM>と同じprint nameをもつsymbolがあったならば、
+"symbol conflict"とエラーを報告する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8338"></A>
+<B>unexport</B> <EM>sym &amp;optional pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>sym</EM>が<EM>pkg</EM>の外部symbolであったならば、unexportされ、
+内部symbolとなる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8350"></A>
+<B>import</B> <EM>sym &amp;optional (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>は、symbolまたはsymbolのリストである。
+<B>import</B>は、他のパッケージで定義されたsymbolを
+<EM>pkg</EM>からパッケージの前置詞なしで内部symbolとして見えるようにする。
+もし<EM>sym</EM>と同じprint-nameを持ったsymbolが既にあったとき、
+"name conflict"とエラーを報告する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8364"></A>
+<B>do-symbols</B> <EM>(var pkg) &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>において、（内部あるいは外部）symbolに対して繰り返しをする。
+そのときの<EM>forms</EM>の評価が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8376"></A>
+<B>do-external-symbols</B> <EM>(var pkg) &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>において、外部symbolに対して繰り返しをする。
+そのときの<EM>forms</EM>の評価が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8388"></A>
+<B>do-all-symbols</B> <EM>(var [result]) &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全てのパッケージにおいて、symbolに対して繰り返しをする。そのときの<EM>forms</EM>の評価が返される。
+もし、1つ以上のパッケージの中にそのsymbolが現れたならば、<EM>forms</EM>は、
+1度以上評価される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html996"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html990"
+  HREF="jmanual-node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html986"
+  HREF="jmanual-node43.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html992"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html994"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html997"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Up:</B> <A NAME="tex2html991"
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
+<B> Previous:</B> <A NAME="tex2html987"
+  HREF="jmanual-node43.html">symbol</A>
+ &nbsp; <B>  <A NAME="tex2html993"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html995"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

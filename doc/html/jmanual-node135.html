@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Xイベント</TITLE>
+<META NAME="description" CONTENT="Xイベント">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node136.html">
+<LINK REL="previous" HREF="jmanual-node134.html">
+<LINK REL="up" HREF="jmanual-node134.html">
+<LINK REL="next" HREF="jmanual-node136.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2431"
+  HREF="jmanual-node136.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2425"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2419"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2427"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2429"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2432"
+  HREF="jmanual-node136.html">パネル</A>
+<B> Up:</B> <A NAME="tex2html2426"
+  HREF="jmanual-node134.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2420"
+  HREF="jmanual-node134.html">XToolKit</A>
+ &nbsp; <B>  <A NAME="tex2html2428"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2430"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04071000000000000000">
+Xイベント</A>
+</H2>
+
+<P>
+現在の実行において、
+イベント構造は固定イベントバッファ（25要素の整数ベクトル）から受け、
+同じバッファが全てのイベントに関して再使用される。
+イベント構造は、同時に2つ以上のイベントを参照する必要があるとき、
+コピーされなければならない。
+
+<P>
+<B>window-main-loop</B>は、Xserverから送られる全てのイベントを
+捕獲し、イベントが発生したwindowに配るための関数である。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="44191"></A>
+<B>event</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> もっとも最近のイベント構造を持つ25要素の整数ベクトル
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44201"></A>
+<B>next-event</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>event</B>の中にイベント構造を蓄積し、
+もし１つでも未決定のイベントがあればそれを返し、
+なければNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44212"></A>
+<B>event-type</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>のイベント型を表現するキーワードsymbol返す。
+イベント型キーワードは、
+<TT>:KeyPress</TT> (2),
+<TT>:KeyRelease</TT> (3),
+<TT>:ButtonPress</TT> (4),
+<TT>:ButtonRelease</TT> (5),
+<TT>:MotionNotify</TT> (6),
+<TT>:EnterNotify</TT> (7),
+<TT>:LeaveNotify</TT> (8),
+<TT>:FocusIn</TT> (9),
+<TT>:FocusOut</TT> (0),
+<TT>:KeymapNotify</TT> (1),
+<TT>:Expose</TT> (12),
+<TT>:GraphicsExpose</TT> (13),
+<TT>:NoExpose</TT> (14),
+<TT>:VisibilityNotify</TT> (15),
+<TT>:CreateNotify</TT> (16),
+<TT>:DestroyNotify</TT> (17), 
+<BR><TT>:UnmapNotify</TT> (18),  
+<TT>:MapNotify</TT> (19),  
+<TT>:MapRequest</TT> (20),  
+<TT>:ConfigureNotify</TT> (22),  
+<TT>:ConfigureRequest</TT> (23),  
+<TT>:GravityNotify</TT> (24),  
+<TT>:ResizeRequest</TT> (25),  
+<TT>:CirculateNotify</TT> (26),  
+<TT>:CirculateRequest</TT> (27),  
+<TT>:PropertyNotify</TT> (28),  
+<TT>:SelectionClear</TT> (29),  
+<TT>:SelectionRequest</TT> (30),  
+<TT>:SelectionNotify</TT> (31),  
+<TT>:ColormapNotify</TT> (32),  
+<TT>:ClientMessage</TT> (33),  
+<TT>:MappingNotify</TT> (34),  
+<TT>:LASTEvent</TT> (35)である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44256"></A>
+<B>event-window</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>が発生したwindowオブジェクトを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44267"></A>
+<B>event-x</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>からそのイベントが発生した<TT>x</TT>座標を抜き出す。
+(すなわち、window内におけるマウスポインタの横方向の相対的な位置)
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44279"></A>
+<B>event-y</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>からそのイベントが発生した<TT>y</TT>座標を抜き出す。
+(すなわち、window内におけるマウスポインタの縦方向の相対的な位置)
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44291"></A>
+<B>event-width</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>:configureNotify</TT>イベントに幅パラメータを表現する
+<EM>event</EM>の８つの要素を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44303"></A>
+<B>event-height</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>:configureNotify</TT>イベントに高さパラメータを表現する
+<EM>event</EM>の8つの要素を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44315"></A>
+<B>event-state</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+キーの状態で変更されたマウスボタンを表現するキーワードのリストを返す。
+キーワードは、<TT>:shift, :control, :meta, :left, :middle</TT>と<TT>:right</TT>である。
+例えば、もしシフトキーが押されている状態で左のボタンが押されたならば、
+<TT>(:shift :left)</TT>が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44328"></A>
+<B>display-events</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>x:nextevent</B>によって捕獲された全てのxwindowイベントを表示する。
+Control-Cは、この関数を停止させる唯一の方法である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44339"></A>
+<B>window-main-loop</B> <EM>&amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xeventを受け、イベントが発生したwindowオブジェクトにそれを
+配る。
+イベントの型に沿って、
+<TT>:KeyPress, :KeyRelease, :ButtonPress,
+:ButtonRelease, :MotionNotify,
+:EnterNotify, :LeaveNotify</TT>
+<BR>や <TT>:ConfigureNotify</TT>と名付けられた
+ windowクラスのメソッドが<EM>event</EM>を引数として
+呼び出される。
+もし、<EM>forms</EM>が与えられたならば、
+到着したイベントがチェックされるとき毎にそれらを評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44353"></A>
+<B>window-main-thread</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スレッドであることを除いて<B>window-main-loop</B>と同じことをする。
+<B>window-main-thread</B>は、Solaris2でのみ実現されている。
+<B>window-main-thread</B>は、read-eval-printが入力されない
+エラーハンドラをインストールしている。
+エラー情報を表示した後、そのイベントは処理を続ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2431"
+  HREF="jmanual-node136.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2425"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2419"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2427"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2429"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2432"
+  HREF="jmanual-node136.html">パネル</A>
+<B> Up:</B> <A NAME="tex2html2426"
+  HREF="jmanual-node134.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2420"
+  HREF="jmanual-node134.html">XToolKit</A>
+ &nbsp; <B>  <A NAME="tex2html2428"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2430"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

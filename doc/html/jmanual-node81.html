@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>マルチスレッド</TITLE>
+<META NAME="description" CONTENT="マルチスレッド">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node82.html">
+<LINK REL="previous" HREF="jmanual-node80.html">
+<LINK REL="up" HREF="jmanual-node76.html">
+<LINK REL="next" HREF="jmanual-node82.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1638"
+  HREF="jmanual-node82.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1632"
+  HREF="jmanual-node76.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1626"
+  HREF="jmanual-node80.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1634"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1636"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1639"
+  HREF="jmanual-node82.html">低レベルメモリ管理</A>
+<B> Up:</B> <A NAME="tex2html1633"
+  HREF="jmanual-node76.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1627"
+  HREF="jmanual-node80.html">シグナル</A>
+ &nbsp; <B>  <A NAME="tex2html1635"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1637"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04012500000000000000">
+マルチスレッド</A>
+</H3>
+スレッド内でシグナルを生成することはできない。
+したがって、1つのシグナルスタックと1つのタイマーがEuslispのプロセスの
+中で実現されている。
+Solaris2の上では、メインの最上位レベルが分割されたスレッド内で実行する。
+
+<P>
+
+ <BR>
+<BR> <A NAME="22055"></A>
+<B>unix:thr-self</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+現在実行されているスレッドのID(整数)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22065"></A>
+<B>unix:thr-getprio</B> <EM>id </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>id</EM>で指定されたスレッドの実行優先順位を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22076"></A>
+<B>unix:thr-setprio</B> <EM>id newprio </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>id</EM>で指定されたスレッドの実行優先順位に<EM>newprio</EM>を設定する。
+<EM>newprio</EM>が小さい数値の場合、優先順位が高いことを意味する。
+言い替えれば、
+<EM>newprio</EM>よりも大きな数値を持つスレッドは、CPUにアクセスされることが
+少なくなる。
+ユーザーは、実行優先順位をプロセスの値（普通はゼロ）よりも高く
+することはできない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22090"></A>
+<B>unix:thr-getconcurrency</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+並列に実行できるスレッドの数で表現される
+並列度(整数)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22100"></A>
+<B>unix:thr-setconcurrency</B> <EM>concurrency </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>concurrency</EM>の値は、プロセス内のLWPの数である。
+もし、<EM>concurrensy</EM>がデフォルトの1ならば、
+生成されたたくさんのスレッドがすべて実行可能であったとしても
+順番に1つのLWPに割り当てられる。
+もし、プログラムがマルチプロセッサマシン上で実行され、
+同時に複数のCPUを利用したいならば、
+<EM>concurrency</EM>に1より大きい値を設定しなければならない。
+<EM>concurrency</EM>に大きな値を設定すると、オペレーティングシステムの
+リソースをたくさん消費する。普通、<EM>concurrency</EM>はプロセッサの数
+と同じかあるいは小さくすべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22115"></A>
+<B>unix:thr-create</B> <EM>func arg-list &amp;optional (size 64*1024) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>size</EM>ワードのlispスタックを持ち、<EM>size</EM>バイトのCスタック持つ
+新しいスレッドを作成し、そのスレッド内で<EM>arg-list</EM>に<EM>func</EM>を適用する。
+スレッドは、どんな結果も呼びだし側に返すことができない。
+この関数の使用は避けること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Blocks and Exits</TITLE>
+<META NAME="description" CONTENT="Blocks and Exits">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node29.html">
+<LINK REL="previous" HREF="manual-node27.html">
+<LINK REL="up" HREF="manual-node24.html">
+<LINK REL="next" HREF="manual-node29.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html803"
+  HREF="manual-node29.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html797"
+  HREF="manual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html791"
+  HREF="manual-node27.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html799"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html801"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html804"
+  HREF="manual-node29.html">Iteration</A>
+<B> Up:</B> <A NAME="tex2html798"
+  HREF="manual-node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html792"
+  HREF="manual-node27.html">Local Functions</A>
+ &nbsp; <B>  <A NAME="tex2html800"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html802"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03034000000000000000">
+Blocks and Exits</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="2375"></A>
+<B>block</B> <EM>tag {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a lexical block from which you can exit by <B>return-from</B>.
+<EM>Tag</EM> is lexically scoped and is not evaluated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2387"></A>
+<B>return-from</B> <EM>tag value </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+exits the block labeled by <EM>tag</EM>.
+<B>return-from</B> can be used to exit from a function or a method which
+automatically establishes block labeled by its function or method name
+surrounding the entire body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2399"></A>
+<B>return</B> <EM>value </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(return x)</TT> is equivalent to <TT>(return-from nil x)</TT>. This is
+convenient to use in conjunction with <B>loop, while, do, dolist,</B>
+and <B>dotimes</B> which implicitly establish blocks labeled NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2413"></A>
+<B>catch</B> <EM>tag {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+establishes a dynamic block from which you can exit and return a value
+by <B>throw</B>. <EM>Tag</EM> is evaluated.
+The list of all visible catch tags can be obtained by <TT>sys:list-all-catchers</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2426"></A>
+<B>throw</B> <EM>tag value </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+exits and returns <EM>value</EM> from a catch block.
+<EM>tag</EM> and <EM>value</EM> are evaluated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2439"></A>
+<B>unwind-protect</B> <EM>protected-form {cleanup-form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+After the evaluation of <EM>protected-form</EM> finishes,
+<EM>cleanup-form</EM> is evaluated.
+You may make a block or a catch block outside the <TT>unwind-protect</TT>.
+Even <B>return-from</B> or <B>throw</B> is executed in <EM>protected-form</EM>
+to escape from such blocks, <EM>cleanup-form</EM> is assured to be evaluated.
+Also, if you had an error while executing <EM>protected-form</EM>,
+<EM>cleanup-form</EM> would always be executed by <EM>reset</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html803"
+  HREF="manual-node29.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html797"
+  HREF="manual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html791"
+  HREF="manual-node27.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html799"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html801"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html804"
+  HREF="manual-node29.html">Iteration</A>
+<B> Up:</B> <A NAME="tex2html798"
+  HREF="manual-node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html792"
+  HREF="manual-node27.html">Local Functions</A>
+ &nbsp; <B>  <A NAME="tex2html800"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html802"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

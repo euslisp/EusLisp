@@ -1,0 +1,455 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>行列と変換</TITLE>
+<META NAME="description" CONTENT="行列と変換">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node109.html">
+<LINK REL="previous" HREF="jmanual-node107.html">
+<LINK REL="up" HREF="jmanual-node106.html">
+<LINK REL="next" HREF="jmanual-node109.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2034"
+  HREF="jmanual-node109.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2028"
+  HREF="jmanual-node106.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2022"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2030"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2032"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2035"
+  HREF="jmanual-node109.html">LU分解</A>
+<B> Up:</B> <A NAME="tex2html2029"
+  HREF="jmanual-node106.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2023"
+  HREF="jmanual-node107.html">実数ベクトル(float-vector)</A>
+ &nbsp; <B>  <A NAME="tex2html2031"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2033"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04032000000000000000">
+行列と変換</A>
+</H2>
+
+<P>
+行列は、要素がすべて実数の2次元の配列である。
+ほとんどの関数において行列はどんなサイズでもよいが、
+<B>v*, v.*, euler-angle, rpy-angle</B>関数では3次元の行列のみ
+扱うことができる。
+<B>transform, m*</B>と<B>transpose</B>は、行列を正方行列に限定せず、
+一般のn*m行列に対して処理を行う。
+
+<P>
+<EM>result</EM>パラメータを受けた関数は、計算結果をそこに置く。
+そのため、ヒープは使用しない。
+すべての行列関数は、正規座標系における変換を考慮しており、
+同次座標系は考慮していない。
+
+<P>
+<B>rpy-angle</B>関数は、回転行列をワールド座標系におけるz,y,x軸回りの
+3つの回転角に分解する。
+<B>euler-angle</B>関数は<B>rpy-angle</B>と同様に分解するが、
+回転軸がローカル座標系のz,y,z軸となっている。
+角度が反対方向にも得られるため、これらの関数は2つの解を返す。
+
+<P>
+<PRE>
+; Mat is a 3X3 rotation matrix.
+(setq rots (rpy-angle mat))
+(setq r (unit-matrix 3))
+(rotate-matrix r (car rots) :x t r)
+(rotate-matrix r (cadr rots) :y t r)
+(rotate-matrix r (caddr rots) :z t r)
+;--&gt; resulted r is equivalent to mat
+</PRE>
+
+<P>
+3次元空間の位置と方向の組みを保つために、<A HREF="jmanual-node110.html#Coordinates"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="/usr/share/latex2html/icons/crossref.png"></A>節に記載されている
+<B>coordinates</B>と<B>cascaded-coords</B>クラスを使用すること。
+
+<P>
+
+ <BR>
+<BR> <A NAME="26899"></A>
+<B>matrix</B> <EM>&amp;rest elements </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>elements</EM>から行列を新しく作る。
+<TT>Row x Col = (elementsの数) x (最初のelementの長さ)</TT>
+<EM>elements</EM>は、どの型の列でもよい。
+それぞれの列は行列の行ベクトルとしてならべられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26912"></A>
+<B>make-matrix</B> <EM>rowsize columnsize &amp;optional init </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $rowsize \times columnsize$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="135" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img56.png"
+ ALT="$rowsize \times columnsize$"></SPAN>の大きさの行列を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26922"></A>
+<B>matrixp</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>obj</EM>が行列のとき、すなわち、<EM>obj</EM>が2次元の配列で
+その要素が実数であるとき、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26934"></A>
+<B>matrix-row</B> <EM>mat row-index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>mat</EM>から<EM>row-index</EM>で示される行ベクトルを抽出する。
+<B>matrix-row</B>は、<B>setf</B>を使用することにより
+行列の特定の行にベクトルを設定することにも使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26948"></A>
+<B>matrix-column</B> <EM>mat column-index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>mat</EM>から<EM>coloumn-index</EM>で示される列ベクトルを抽出する。
+<B>matrix-column</B>は、<B>setf</B>を使用することにより
+行列の特定の列にベクトルを設定することにも使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26962"></A>
+<B>m*</B> <EM>matrix1 matrix2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix1</EM>と<EM>matrix2</EM>の積を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26974"></A>
+<B>transpose</B> <EM>matrix &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>の転置行列を返す。すなわち、<EM>matrix</EM>の列と行を入れ替える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26986"></A>
+<B>unit-matrix</B> <EM>dim </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dim</EM> <SPAN CLASS="MATH"><IMG
+ WIDTH="160" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img57.png"
+ ALT="$\times$"></SPAN> <EM>dim</EM>の単位行列を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26998"></A>
+<B>replace-matrix</B> <EM>dest src </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>dest</EM>のすべての要素を同一な行列<EM>src</EM>で置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27010"></A>
+<B>scale-matrix</B> <EM>scalar mat </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>mat</EM>のすべての要素に<EM>scaler</EM>を掛ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27022"></A>
+<B>copy-matrix</B> <EM>matrix </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>のコピーを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27033"></A>
+<B>transform</B> <EM>matrix fltvector &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>matrix</EM>をベクトル<EM>fltvector</EM>の左から掛ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27045"></A>
+<B>transform</B> <EM>fltvector matrix &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>matrix</EM>をベクトル<EM>fltvector</EM>の右から掛ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27057"></A>
+<B>rotate-matrix</B> <EM>matrix theta axis &amp;optional world-p result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>rotate-matrix</B>で行列<EM>matrix</EM>を回転させるとき、
+回転軸（<B>:x, :y, :z</B>または0,1,2）はワールド座標系あるいは
+ローカル座標系のどちらかを与えられる。
+もし、<EM>world-p</EM>にNILが指定されているとき、
+ローカル座標系の軸に沿った回転を意味し、回転行列を左から掛ける。
+もし、<EM>world-p</EM>がnon-NILのとき、
+ワールド座標系に対する回転行列を作り、回転行列を右から掛ける。
+もし、<EM>axis</EM>にNILが与えられたとき、行列<EM>matrix</EM>は2次元と仮定され、
+<EM>world-p</EM>の如何にかかわらず2次元空間の回転が与えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27075"></A>
+<B>rotation-matrix</B> <EM>theta axis &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>axis</EM>軸回りの2次元あるいは3次元の回転行列を作る。
+軸は:x,:y,:z,0,1,2,3次元ベクトルあるいはNILのどれかである。
+2次元回転行列を作るとき、<EM>axis</EM>はNILでなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27087"></A>
+<B>rotation-angle</B> <EM>rotation-matrix </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>rotation-matrix</EM>から等価な回転軸と角度を抽出し、
+実数とfloat-vectorのリストを返す。
+<EM>rotation-matrix</EM>が単位行列のとき、NILが返される。
+また、回転角が小さいとき、結果がエラーとなる。
+<EM>rotation-matrix</EM>が2次元のとき、1つの角度値が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27100"></A>
+<B>rpy-matrix</B> <EM>ang-z ang-y ang-x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ロール、ピッチ、ヨー角で定義される回転行列を作る。
+最初に、単位行列をx軸回りに<EM>ang-x</EM>ラジアン回転させる。
+次に、y軸回りに<EM>ang-y</EM>ラジアン、最後にｚ軸回りに<EM>ang-z</EM>
+ラジアン回転させる。
+すべての回転軸はワールド座標系で与えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27113"></A>
+<B>rpy-angle</B> <EM>matrix </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>の2組のロール、ピッチ、ヨー角を抽出する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27124"></A>
+<B>Euler-matrix</B> <EM>ang-z ang-y ang2-z </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+3つのオイラー角で定義される回転行列を作る。
+最初に単位行列をz軸回りに<EM>ang-z</EM>回転させ、次にy軸回りに<EM>ang-y</EM>
+回転させ、最後にz軸回りに<EM>ang2-z</EM>回転させる。
+すべての回転軸はローカル座標系で与えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27137"></A>
+<B>Euler-angle</B> <EM>matrix </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>から2組のオイラー角を抽出する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2034"
+  HREF="jmanual-node109.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2028"
+  HREF="jmanual-node106.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2022"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2030"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2032"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2035"
+  HREF="jmanual-node109.html">LU分解</A>
+<B> Up:</B> <A NAME="tex2html2029"
+  HREF="jmanual-node106.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2023"
+  HREF="jmanual-node107.html">実数ベクトル(float-vector)</A>
+ &nbsp; <B>  <A NAME="tex2html2031"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2033"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

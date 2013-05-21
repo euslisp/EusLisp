@@ -1,0 +1,706 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>一般列</TITLE>
+<META NAME="description" CONTENT="一般列">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node47.html">
+<LINK REL="previous" HREF="jmanual-node45.html">
+<LINK REL="up" HREF="jmanual-node45.html">
+<LINK REL="next" HREF="jmanual-node47.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1030"
+  HREF="jmanual-node47.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1024"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1018"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1026"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1028"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1031"
+  HREF="jmanual-node47.html">リスト</A>
+<B> Up:</B> <A NAME="tex2html1025"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1019"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+ &nbsp; <B>  <A NAME="tex2html1027"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1029"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03071000000000000000">
+一般列</A>
+</H2>
+
+<P>
+ベクトル(1次元行列)とリストは、一般の列である。
+文字列(string)は、文字(character)のベクトルなので、列である。
+
+<P>
+<B>map, concatenate</B>や<B>coerce</B>における結果の型を明記するためには、
+クラスオブジェクトがsymbolにバインドされていないので、引用符なしで
+<TT>cons, string, integer-vector, float-vector</TT>などのクラス名symbolを使う。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="10079"></A>
+<B>elt</B> <EM>sequence pos </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>elt</B>は、<EM>sequence</EM>の中の<EM>pos</EM>番目の位置の値を得たり、(<B>setf</B>と
+ともに)置いたりする最も一般的な関数である。
+<EM>sequence</EM>は、リストまたは任意のオブジェクト、<TT>bit, char, integer, float</TT>の
+ベクトルである。
+<B>elt</B>は、多次元の行列に適用できない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10096"></A>
+<B>length</B> <EM>sequence </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の長さを返す。
+ベクトルにおいて、<B>length</B>は一定の時間で終了する。
+しかし、リスト型においては、長さに比例した時間がかかる。
+<B>length</B>が、もし環状リストに適用されたとき、決して終了しない。
+代わりに<B>list-length</B>を使用すること。
+もし、<EM>sequence</EM>がfill-pointerを持つ行列ならば、
+<B>length</B>は行列全体のサイズを返すのではなくfill-pointerを返す。
+このような行列のサイズを知りたい場合には、<B>array-total-size</B>を
+使用すること。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10113"></A>
+<B>subseq</B> <EM>sequence start [end] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の<EM>start</EM>番目から(<EM>end</EM><SPAN CLASS="MATH"><IMG
+ WIDTH="393" HEIGHT="140" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="$-$"></SPAN>1)番目までをそっくりコピーした
+列を作る。
+<EM>end</EM>は、デフォルト値として<EM>sequence</EM>の長さをとる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10128"></A>
+<B>copy-seq</B> <EM>sequence </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>のコピーした列を作る。
+このコピーでは、<EM>sequence</EM>のトップレベルの参照のみがコピーされる。
+入れこリストのコピーには<B>copy-tree</B>を使い、
+再帰参照を持つような列のコピーには
+<B>copy-object</B>を使うこと。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10142"></A>
+<B>reverse</B> <EM>sequence </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の順番を逆にし、<EM>sequence</EM>と同じ型の新しい列を
+返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10154"></A>
+<B>nreverse</B> <EM>sequence </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>nreverse</B>は、<B>reverse</B>の破壊(destructive)バージョンである。
+<B>reverse</B>はメモリを確保するが、<B>nreverse</B>はしない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10168"></A>
+<B>concatenate</B> <EM>result-type {sequence}* </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全ての<EM>sequence</EM>を連結させる。
+それぞれの<EM>sequence</EM>は、なにかの列型である。
+<B>append</B>と違って、最後の一つまで含めた全ての列がコピーされる。
+<EM>result-type</EM>は、<TT>cons,string,vector,float-vector</TT>などの
+クラスである。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10183"></A>
+<B>coerce</B> <EM>sequence result-type </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の型を変更する。
+例えば、<TT>(coerce '(a b c) vector) = #(a b c)</TT>や
+<TT>(coerce "ABC" cons) = (a b c)</TT>である。
+<EM>result-type</EM>型の新しい列が作られ、
+<EM>sequence</EM>のそれぞれの要素はその列にコピーされる。
+<EM>result-type</EM>は、<TT>vector, integer-vector, float-vector, bit-vector, string, cons</TT>
+またはそれらの1つを継承したユーザー定義クラス
+のうちの1つである。
+<B>coerce</B>は、<EM>sequence</EM>の型が<EM>result-type</EM>と同一である場合、コピーをする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10203"></A>
+<B>map</B> <EM>result-type function seq &amp;rest more-seqs </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>function</EM>は、<EM>seq</EM>と<EM>more-seqs</EM>のそれぞれのN番目(<SPAN CLASS="MATH"><IMG
+ WIDTH="27" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img34.png"
+ ALT="$N=0,1,\cdots$"></SPAN>)の要素
+からなるリストに
+対して適用され、その結果は<EM>result-type</EM>の型の列に蓄積される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10217"></A>
+<B>fill</B> <EM>sequence item &amp;key (:start 0) (:end (length sequence)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の<EM>start</EM>番目から(<EM>end</EM><SPAN CLASS="MATH"><IMG
+ WIDTH="393" HEIGHT="140" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="$-$"></SPAN>1)番目まで、<EM>item</EM>で満たす。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10231"></A>
+<B>replace</B> <EM>dest source &amp;key :start1 :end1 :start2 :end2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dest</EM>列の中の<EM>start1</EM>から<EM>end1</EM>までの要素が、
+<EM>source</EM>列の中の<EM>start2</EM>から<EM>end2</EM>までの要素に置き換えられる。
+<EM>start1</EM>と<EM>start2</EM>のデフォルト値はゼロで、
+<EM>end1</EM>と<EM>end2</EM>のデフォルト値はそれぞれの列の長さである。
+もし片方の列がもう一方よりも長いならば、
+endは短い列の長さに一致するように縮められる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10251"></A>
+<B>sort</B> <EM>sequence compare &amp;optional key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>は、Unixのquick-sortサブルーチンを使って破壊的に(destructively)
+にソートされる。
+<EM>key</EM>は、キーワードパラメータでなく、比較用のパラメータである。
+同じ要素を持った列のソートをするときは十分気をつけること。
+例えば、<TT>(sort '(1 1) #'&gt;)</TT>は失敗する。なぜなら、1と1の比較は
+どちらからでも失敗するからである。
+この問題を避けるために、比較として<TT>#'<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img19.png"
+ ALT="$&gt;=$"></SPAN></TT>か<TT>#'<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img20.png"
+ ALT="$&lt;=$"></SPAN></TT>のような関数を用いる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10266"></A>
+<B>merge</B> <EM>result-type seq1 seq2 pred &amp;key (:key #'identity) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+２つの列<EM>seq1</EM>と<EM>seq2</EM>は、<EM>result-type</EM>型の１つの列に
+合併され、それらの要素は<EM>pred</EM>に記述された比較を満足する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10280"></A>
+<B>merge-list</B> <EM>list1 list2 pred key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+２つのリストを合併させる。<B>merge</B>と違って、一般列は引数として
+許可されないが、<B>merge-list</B>は<B>merge</B>より実行が速い
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+次の関数は、1つの基本関数と-ifや-if-notを後に付けた変形関数から成る。
+基本形は、少なくともitemとsequenceの引数を持つ。
+sequenceの中のそれぞれの要素とitemを比較し、
+何かの処理をする。
+例えば、インデックスを探したり、
+現れる回数を数えたり、itemを削除したりなど。
+変形関数は、predicateとsequenceの引数を持つ。
+sequenceのそれぞれの要素にpredicateを適用し、
+もしpredicateがnon-NILを返したとき(-if version)、
+またはNILを返したとき(-if-not version)に何かをする。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="10293"></A>
+<B>position</B> <EM>item seq &amp;key :start :end :test :test-not :key (:count 1) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中から<EM>item</EM>と同一な要素を探し、
+その要素の中で<EM>:count</EM>番目に現れた要素の
+インデックスを返す。
+その探索は、<EM>:start</EM>番目の要素から始め、それ以前の要素は無視する。
+デフォルトの探索は、<TT>eql</TT>で実行されるが、
+<EM>test</EM>か<EM>test-not</EM>パラメータで変更できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10310"></A>
+<B>position-if</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10321"></A>
+<B>position-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10332"></A>
+<B>find</B> <EM>item seq &amp;key :start :end :test :test-not :key (:count 1) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中の<EM>start</EM>番目の要素から
+<EM>:end</EM>番目の要素までの間で要素を探し、
+その探された要素の内、<EM>:count</EM>番目の要素を返す。
+その要素は、<EM>:test</EM>か<EM>:test-not</EM>に<TT>#'eql</TT>
+以外のものが記述されていないなら、<EM>item</EM>と同じものである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10350"></A>
+<B>find-if</B> <EM>predicate seq &amp;key :start :end :key (:count 1) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の要素の中で<EM>predicate</EM>がnon-NILを返す要素の内、
+<EM>:count</EM>番目の要素を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10363"></A>
+<B>find-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10374"></A>
+<B>count</B> <EM>item seq &amp;key :start :end :test :test-not :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中の<EM>:start</EM>番目から<EM>:end</EM>番目までの要素に<EM>item</EM>が
+何回現れるか数える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10388"></A>
+<B>count-if</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>predicate</EM>がnon-NILを返す<EM>seq</EM>内の要素数を数える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10400"></A>
+<B>count-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10411"></A>
+<B>remove</B> <EM>item seq &amp;key :start :end :test :test-not :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中の<EM>:start</EM>番目から<EM>:end</EM>番目までの要素のなかで、
+<EM>item</EM>と同一の要素を探し、<EM>:count</EM>
+（デフォルト値は∞）番目までの要素を削除した新しい列を作る。
+もし、<EM>item</EM>が一回のみ現れることが確定しているなら、
+無意味な探索を避けるために、<EM>:count=1</EM>を指定すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10428"></A>
+<B>remove-if</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10439"></A>
+<B>remove-if-not</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10450"></A>
+<B>remove-duplicates</B> <EM>seq &amp;key :start :end :key :test :test-not :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中から複数存在するitemを探し、その中の1つだけを残した新しい列を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10461"></A>
+<B>delete</B> <EM>item seq &amp;key :start :end :test :test-not :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>delete</EM>は、<EM>seq</EM>自体を修正し、新しい列を作らないことを除いては、
+<B>remove</B>同じである。
+もし、<EM>item</EM>が一回のみ現れることが確定しているなら、
+無意味な探索を避けるために、<EM>:count=1</EM>を指定すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10476"></A>
+<B>delete-if</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10487"></A>
+<B>delete-if-not</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>remove</B>や<B>delete</B>の<EM>:count</EM>デフォルト値は、1,000,000である。
+もし列が長く、削除したい要素が一回しか現れないときは、
+<EM>:count</EM>を1と記述すべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10501"></A>
+<B>substitute</B> <EM>newitem olditem seq
+ &amp;key :start :end :test :test-not :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中で<EM>:count</EM>番目に現れた<EM>olditem</EM>を<EM>newitem</EM>に置き換えた
+新しい列を返す。
+デフォルトでは、全ての<EM>olditem</EM>を置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10516"></A>
+<B>substitute-if</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10527"></A>
+<B>substitute-if-not</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10538"></A>
+<B>nsubstitute</B> <EM>newitem olditem seq &amp;key :start :end :test :test-not :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>seq</EM>の中で<EM>count</EM>番目に現れた<EM>olditem</EM>を<EM>newitem</EM>に置き換え、
+元の列<EM>seq</EM>に返す。デフォルトでは、全ての<EM>olditem</EM>を置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10554"></A>
+<B>nsubstitute-if</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10565"></A>
+<B>nsubstitute-if-not</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1030"
+  HREF="jmanual-node47.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1024"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1018"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1026"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1028"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1031"
+  HREF="jmanual-node47.html">リスト</A>
+<B> Up:</B> <A NAME="tex2html1025"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1019"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+ &nbsp; <B>  <A NAME="tex2html1027"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1029"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Objects</TITLE>
+<META NAME="description" CONTENT="Objects">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node15.html">
+<LINK REL="previous" HREF="manual-node13.html">
+<LINK REL="up" HREF="manual-node12.html">
+<LINK REL="next" HREF="manual-node15.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html599"
+  HREF="manual-node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html593"
+  HREF="manual-node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html587"
+  HREF="manual-node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html595"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html597"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html600"
+  HREF="manual-node15.html">Class Hierarchy</A>
+<B> Up:</B> <A NAME="tex2html594"
+  HREF="manual-node12.html">Data Types</A>
+<B> Previous:</B> <A NAME="tex2html588"
+  HREF="manual-node13.html">Numbers</A>
+ &nbsp; <B>  <A NAME="tex2html596"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html598"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03012000000000000000">
+Objects</A>
+</H2>
+Every data  other than number is represented by an object which is allocated
+in heap. 
+Each memory cell of an object has the object header and fixed number of 
+slots for object variables.
+Since vectors may consist of arbitrary number of elements,
+they have 'size' slot immediately after the header.
+Fig. <A HREF="#ObjectFig">3</A> depicts the structures of object and vector, and their
+header word.
+Only the words indicated as <EM>slot</EM> and <EM>element</EM>
+are accessible from users.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="ObjectFig"></A><A NAME="982"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 3:</STRONG>
+Structures of object, vector, and object header</CAPTION>
+<TR><TD><IMG
+ WIDTH="452" HEIGHT="133" BORDER="0"
+ SRC="manual-img3.png"
+ ALT="\begin{figure}\begin{center}
+\mbox{\epsfxsize =10cm
+\epsfbox{fig/object.ps}
+}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+A header is composed of six fields.
+Two MSB bits, <EM>m</EM> and <EM>b</EM>,
+are used to indicate the side of the neighbor cell
+in Fibonacci-buddy memory management.
+There are three mark bits in the <EM>mark</EM> field, each of which
+is used by the garbage collector to identify accessible cells,
+by the printer to recognize circular objects in printing in <TT>#n=</TT> and
+<TT>#n#</TT> notations,
+and by <B>copy-object</B> to copy shared objects.
+The <EM>elmt</EM> field discriminates one of seven possible data types
+of vector elements, <EM>pointer, bit, character, byte, integer, float</EM>
+and <EM>foreign-string</EM>.
+Although <EM>elmt</EM> can be available in the class, 
+it is provided in the header to make the memory manager independent of
+the structure of a class and to make the element accessing faster.
+The <EM>bid</EM> field represents the physical size of a memory cell.
+31 different sizes up to 16 MB are represented by the five bits in this field.
+The lower short word (16 bits) is used for the class id.
+This is used to retrieve the class of an object via the system's class table.
+This class id can be regarded as the type tag of traditional Lisps.
+Currently only the lower 8 bits of the cid are used and the upper 8 bits
+are ignored.
+Therefore, the maximum number of classes is limited to 256, though
+this limit can be raised up to 65536 by reconfiguring the EusLisp to allocate
+more memory to the system's class table.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html599"
+  HREF="manual-node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html593"
+  HREF="manual-node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html587"
+  HREF="manual-node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html595"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html597"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html600"
+  HREF="manual-node15.html">Class Hierarchy</A>
+<B> Up:</B> <A NAME="tex2html594"
+  HREF="manual-node12.html">Data Types</A>
+<B> Previous:</B> <A NAME="tex2html588"
+  HREF="manual-node13.html">Numbers</A>
+ &nbsp; <B>  <A NAME="tex2html596"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html598"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>ホスト側の起動</TITLE>
+<META NAME="description" CONTENT="ホスト側の起動">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node89.html">
+<LINK REL="up" HREF="jmanual-node88.html">
+<LINK REL="next" HREF="jmanual-node91.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1760"
+  HREF="jmanual-node91.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1754"
+  HREF="jmanual-node88.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1750"
+  HREF="jmanual-node89.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1756"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1758"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1761"
+  HREF="jmanual-node91.html">マルチスレッド</A>
+<B> Up:</B> <A NAME="tex2html1755"
+  HREF="jmanual-node88.html">VxWorks</A>
+<B> Previous:</B> <A NAME="tex2html1751"
+  HREF="jmanual-node89.html">VxWorks側の起動</A>
+ &nbsp; <B>  <A NAME="tex2html1757"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1759"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04016200000000000000">
+ホスト側の起動</A>
+</H3>
+任意のマシンの上でeusを起動し、"vxworks/vxweus"をロードする。
+<B>connect-vxw</B>関数を用いて<B>vxwserv</B>に接続する。
+接続後、ソケットストリームが<B>*vxw-stream*</B>にバインドされる。
+以下に、コネクトの例を示す。この例では、VxWorks上のsin, vadd関数を
+euslispの関数VSIN,VADとして定義している。
+
+<P>
+<PRE>
+(load "vxworks/vxweus")
+(setq s (connect-vxw :host "asvx0" :port 2200 :buffer-size 1024))
+(defvxw VSIN "_sin" (theta) :float)
+(defvxw VAD "_vadd" (v1 v2) (float-vector 3))
+</PRE>
+
+<P>
+VxWorks上に作成される関数が、vxwsを通じて呼び出されるためには、
+次の条件を満たさなければならない。
+
+<P>
+
+<OL>
+<LI>引数は、32個以内であること、引数に受け取るベクタの容量の合計が
+connect-vxwの:buffer-sizeで指定した値を越えないこと
+</LI>
+<LI>structを引数にしないこと、必ずstructへのポインタを引数にすること
+</LI>
+<LI>結果は、int, float, doubleまたは、それらの配列のアドレスであること
+</LI>
+<LI>配列のアドレスを結果とする場合、その配列の実体は、
+関数の外部に取られていること
+</LI>
+</OL>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="24776"></A>
+<BR>
+<IMG
+ WIDTH="78" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img45.png"
+ ALT="\begin{emtabbing}
+{\bf connect-vxw}
+\it\&amp;key \= (:host ''asvx0'') \\lq  [関数] \...
+...ze 16384)\\
+\&gt; (:priority 1280)\\
+\&gt; (:option \char93 x1c)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>:host</EM>に対してvxwsプロトコルによる通信のためのソケットストリームを作成し、そのストリームを返す。
+<EM>:host</EM>には、ネットワークにおけるVxWorksのアクセス番号あるいはアクセス名を指定する。
+<EM>:port</EM>には、VxWorks上の<B>vxwserv</B>がバインドしたポートを捜すための最初のポート番号を指定する。
+このポート番号から、増加方向に接続を試行する。
+<EM>:option</EM>のコードについては、VxWorksの、spawn関数を参照のこと。
+コネクションは、同時に複数張ってよい。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="24792"></A>
+<B>vxw</B> <EM>vxw-stream entry result-type args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>vxw</B>は、<EM>vxw-stream</EM>に接続されているVxWorksの関数<EM>entry</EM>を呼び出し、
+その関数に引き数<EM>args</EM>を与えて<EM>result-type</EM>で指定された結果を得る。
+<EM>vxw-stream</EM>には、<B>connect-vxw</B>で作成したソケットストリームを与える。
+<EM>entry</EM>には、VxWorksの関数名をストリングで指定するか、あるいは関数の
+アドレスを整数で指定する。
+関数のアドレスを知るには、VxWorksのfindsymbolを呼び出す。
+知りたいシンボルは、通常、"_"で始まることに注意。
+<EM>entry</EM>がストリングの場合、VxWorks上でシンボルテーブルの逐次探索が行われる。
+<EM>result-type</EM>には、結果のデータ型(<TT>:integer</TT>または<TT>:float</TT>)、
+あるいはデータを受け取るベクタ型を指定する。
+ベクタは、<TT>float-vector, integer-vector, string</TT>のインスタンスである。
+<TT>general vector</TT>(lispの任意のオブジェクトを要素とするベクタ)は指定できない。
+結果型は、必ず、実際のVxWorks関数の結果型と一致しなければならない。
+<EM>args</EM>には、<EM>entry</EM>に与える引き数を指定する。
+引数に許されるEusLispデータは、<TT>integer, float, string, integer-vector,
+float-vector, integer-matrix, float-matrix</TT>である。
+ポインタを含んだ一般のオブジェクト、一般のベクトルは送れない。
+また、送られたベクトルデータは、一旦<B>vxwserv</B>が獲得したバッファの中に蓄積される。
+例えば、VxWorksに定義された関数"sin"を呼び出すためには、次のように実行すればよい。
+<TT>(vxw *vxw-stream* "sin" :float 1.0)</TT>
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="24821"></A>
+<B>defvxw</B> <EM>eus-func-name entry args &amp;optional (result-type :integer) </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>defvxw</B>は、findsymbolを用いて<B>vxw</B>を呼び出して、VxWorksの関数の高速な呼び出しを
+実現するためのマクロである。
+VxWorksの関数<EM>entry</EM>を呼び出すためのEuslispの関数<EM>eus-func-name</EM>を定義する。
+このマクロを実行後は、<EM>eus-func-name</EM>を呼び出すことにより、VxWorksの関数を呼び出すことができる。
+このとき、呼び出しに使用されるソケットストリームは<B>*vxw-stream*</B>に固定されている。
+ただし、VxWorks側で、関数をコンパイルし直して再ロードした場合、
+新しい関数定義が呼ばれるようにするためには、eus側で、<B>defvxw</B>をもう一度
+実行し直して、最新のエントリアドレスが指定されるようにする必要がある。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+
+<BR><HR>
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>述語</TITLE>
+<META NAME="description" CONTENT="述語">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node29.html">
+<LINK REL="up" HREF="jmanual-node24.html">
+<LINK REL="next" HREF="jmanual-node31.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html795"
+  HREF="jmanual-node31.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html789"
+  HREF="jmanual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html785"
+  HREF="jmanual-node29.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html791"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html793"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html796"
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
+<B> Up:</B> <A NAME="tex2html790"
+  HREF="jmanual-node24.html">制御構造</A>
+<B> Previous:</B> <A NAME="tex2html786"
+  HREF="jmanual-node29.html">繰返し</A>
+ &nbsp; <B>  <A NAME="tex2html792"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html794"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03036000000000000000">
+述語</A>
+</H2>
+
+<P>
+Common Lispの<B>typep</B>と<B>subtypep</B>はないので、
+<B>subclassp</B>や<B>derivedp</B>で疑似実現すること。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="2547"></A>
+<B>eq</B> <EM>obj1 obj2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>obj1</EM>と<EM>obj2</EM>が同じオブジェクトを指すポインタあるいは同じ
+数値のときTを返す。
+例えば:<TT>(eq 'a 'a)</TT>はT、<TT>(eq 1 1)</TT>はT、<TT>(eq 1. 1.0)</TT>はNIL、
+<TT>(eq "a" "a")</TT>はNILである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2563"></A>
+<B>eql</B> <EM>obj1 obj2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+EusLispの中で数値は全て直接値で表現されるため、<B>eq</B>と<B>eql</B>は
+同一である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2575"></A>
+<B>equal</B> <EM>obj1 obj2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+いろんな構造のオブジェクトの等価性をチェックする。オブジェクトは、文字列・ベクトル・
+行列などで再帰的に参照してないことが保証されなければならない。
+<EM>obj1</EM>や<EM>obj2</EM>が再帰的に参照されていたとすると、
+<B>equal</B>は無限ループとなる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2588"></A>
+<B>superequal</B> <EM>obj1 obj2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>superequal</B>は、環状参照をチェックするので遅い。しかしロバストな等価が得られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2599"></A>
+<B>null</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>object</EM>がNILのとき、Tを返す。
+<TT>(eq <EM>object</EM> nil)</TT>を評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2612"></A>
+<B>not</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>not</B>は、<B>null</B>と同一である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2624"></A>
+<B>atom</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+オブジェクトがconsのインスタンスである時のみ、NILを返す。
+<TT>(atom nil) = (atom '()) = T)</TT>
+<BR>注意:vectors, strings, read-table, hash-tableなどに対しては、それらがどんなに
+複雑なオブジェクトとなっていても<B>atom</B>はTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2636"></A>
+<B>every</B> <EM>pred &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全ての<EM>args</EM>が<EM>pred</EM>についてTを返した時のみ
+Tを返す。<B>every</B>は、<EM>pred</EM>が全ての<EM>args</EM>に対して効力があるかどうかを
+検査する時に使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2651"></A>
+<B>some</B> <EM>pred &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>args</EM>のうちどれか1つが<EM>pred</EM>についてTを返したとき
+Tを返す。<B>some</B>は、<EM>pred</EM>が<EM>args</EM>のどれかに対して効力があるかどうかを
+検査する時に使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <A NAME="2666"></A>
+<B>functionp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>が<B>apply</B>や<B>funcall</B>で与えられる関数オブジェクトであるならTを返す。
+<BR>注意:マクロは<B>apply</B>や<B>funcall</B>を適用することができない。
+<B>functionp</B>は、<EM>object</EM>が、type=0のコンパイルコードか、関数定義を持つsymbolか、
+lambda-formかあるいはlambda-closureであったとき、Tを返す。
+<TT>Examples: (functionp 'car) = T, (functionp 'do) = NIL</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2684"></A>
+<B>compiled-function-p</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>が、コンパイルコードのインスタンスであったとき、Tを返す。
+そのコンパイルコードが関数かまたはマクロかを知るためには、
+そのオブジェクトに<TT>:type</TT>メッセージを送り、その返り値が
+<TT>function</TT>と<TT>macro</TT>のどちらになっているかを調べる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html795"
+  HREF="jmanual-node31.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html789"
+  HREF="jmanual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html785"
+  HREF="jmanual-node29.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html791"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html793"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html796"
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
+<B> Up:</B> <A NAME="tex2html790"
+  HREF="jmanual-node24.html">制御構造</A>
+<B> Previous:</B> <A NAME="tex2html786"
+  HREF="jmanual-node29.html">繰返し</A>
+ &nbsp; <B>  <A NAME="tex2html792"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html794"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

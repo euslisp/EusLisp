@@ -1,0 +1,449 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Edge Finder</TITLE>
+<META NAME="description" CONTENT="Edge Finder">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node141.html">
+<LINK REL="previous" HREF="manual-node139.html">
+<LINK REL="up" HREF="manual-node136.html">
+<LINK REL="next" HREF="manual-node141.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2536"
+  HREF="manual-node141.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2530"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2524"
+  HREF="manual-node139.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2532"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2534"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2537"
+  HREF="manual-node141.html">Tracking</A>
+<B> Up:</B> <A NAME="tex2html2531"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2525"
+  HREF="manual-node139.html">Color-Pixel-Image</A>
+ &nbsp; <B>  <A NAME="tex2html2533"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2535"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04064000000000000000">
+Edge Finder</A>
+</H2>
+
+<P>
+Edge Finding facilities are provided by <TT>"vision/edge/edge"</TT>.
+
+<P>
+
+ <BR>
+<BR> <A NAME="39015"></A>
+<BR>
+<IMG
+ WIDTH="570" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img88.png"
+ ALT="\begin{emtabbing}
+{\bf edge1}
+\it img \=\&amp;optional \=(method 1) \\lq [function]\\ ...
+...&gt;\&amp;aux (width (send img :width)) (height (send img :height))
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>finds edge pixels in this image.
+<B>edge1</B> first applies a gradient operator to every pixel.
+There are three kinds of gradient operators provided:
+<B>grad3</B> which takes difference between horizontally and vertically 
+neighboring pixels,
+<B>prewitt</B> and <B>sobel</B>.
+<EM>method</EM>=0,1 selects <B>grad3</B>, 2 selects <B>prewitt</B> and 3 selects
+<B>sobel</B>.
+Pixels that have edge intensity greater than <EM>th1</EM> are identified as
+strong edge pixels.
+After thinning edges referring to edge intensities and
+directions of gradient, isolated edge pixels are marked.
+Starting from end points of these strong edges, weak edge pixels
+that are consistent with the strong edge's direction are searched for and linked
+to compose elongated lines.
+Weak edge pixels that have greater edge intensity than <EM>th2</EM> are
+unconditionally linked.
+Even very weak edge pixels that have less edge intensity than <EM>th2</EM>
+can be linked as long as they connect to another weak or strong edge
+within <EM>run</EM> length.
+<B>edge1</B> returns a pixel-image object
+each pixel of which represents either a strong edge pixel (=1),
+a weak and elongated edge pixel (=2),
+or an isolated pixel (=255).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39039"></A>
+<B>overlay-edge</B> <EM>ximg edgeimg </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+displays <EM>edgeimg</EM> obtained by <B>edge1</B> on top of
+x-display-able pixel image <EM>ximg</EM>.
+Strong edge pixels are colored in red, weak pixels in green, and
+isolated pixels in blue.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39052"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img89.png"
+ ALT="\begin{emtabbing}
+{\bf edge2}
+\it img1 edge1result \&amp;key \=(kvalue 8.0) \\lq [func...
+...) (line-error 2.8)\\
+\&gt;(curve-error 2.8) (plane-limit 0.3)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>tries to fit straight lines and elliptic curves to the
+result obtained by <B>edge1</B>.
+A list of three elements, which represents regions, boundaries, and
+line segments is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+Three elements represented by <B>edge2</B> are defined as follow.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="39065"></A>
+<BIG CLASS="XLARGE"><B>region </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 contour area intensity std-deviation 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents region.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="39083"></A>
+<BIG CLASS="XLARGE"><B>boundary </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 parent-region  hole  segments  intensity  top-left  bottom-right  length 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents boundary.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="39101"></A>
+<BIG CLASS="XLARGE"><B>edge-segment </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 prev next   wing ; the other half-edge  intensity std-deviation   start end 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents edge-segment.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="39119"></A>
+<BIG CLASS="XLARGE"><B>line-edge-segment </B></BIG> [class]  <PRE><TT>
+  :super   <B>edge-segment</B> 
+<BR>  :slots 		 la lb 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents line-edge-segment.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="39137"></A>
+<BIG CLASS="XLARGE"><B>curved-edge-segment </B></BIG> [class]  <PRE><TT>
+  :super   <B>edge-segment</B> 
+<BR>  :slots 		 rotation total-rot side   a b c d e 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents curved-edge-segment.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39154"></A>
+<BR>
+<IMG
+ WIDTH="668" HEIGHT="35" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img90.png"
+ ALT="\begin{emtabbing}
+{\bf draw-ellipse-segment}
+\it elp gc \&amp;optional \=(vs *views...
+...*)
+(height (send vs :height)) \\lq [function]\\
+\&gt;(x 0) (y 0)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>draws <B>curved-edge-segment</B> object <EM>elp</EM> on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39168"></A>
+<B>draw-line-segment</B> <EM>s &amp;optional gc (vs *viewsurface*)
+				(height (send vs :height))
+				(x 0) (y 0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws <B>line-edge-segment</B> object <EM>s</EM> on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39181"></A>
+<BR>
+<IMG
+ WIDTH="639" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img91.png"
+ ALT="\begin{emtabbing}
+{\bf draw-segments}
+\it segs \&amp;key \=(line-gc image::*red-gc*...
+...*)
+(height (send vs :height))
+(step nil)\\
+\&gt;(x 0) (y 0)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>draws <EM>s</EM>, a list of <B>edge-segment</B> objects on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39195"></A>
+<B>draw-boundary</B> <EM>b &amp;optional gc </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws segments of <B>boundary</B> object <EM>b</EM> on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39208"></A>
+<B>draw-boundaries</B> <EM>bs &amp;optional gc (step nil) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws segments of <B>boundary</B> objects <EM>bs</EM> on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39221"></A>
+<B>*red-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #ff0000
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39231"></A>
+<B>*blue-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #0000ff
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39241"></A>
+<B>*green-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #00ff00
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39251"></A>
+<B>*yellow-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #ffff00
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39261"></A>
+<B>*cyan-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #00ffff
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <DIV ALIGN="CENTER"><A NAME="38067"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 14:</STRONG>
+Edge Finder and Overlaid Edges</CAPTION>
+<TR><TD><IMG
+ WIDTH="818" HEIGHT="767" BORDER="0"
+ SRC="manual-img92.png"
+ ALT="\begin{figure}\begin{center}
+\mbox{\epsfsize10cm
+\epsfbox{fig/block1.edg.ps}
+}\end{center}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2536"
+  HREF="manual-node141.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2530"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2524"
+  HREF="manual-node139.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2532"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2534"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2537"
+  HREF="manual-node141.html">Tracking</A>
+<B> Up:</B> <A NAME="tex2html2531"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2525"
+  HREF="manual-node139.html">Color-Pixel-Image</A>
+ &nbsp; <B>  <A NAME="tex2html2533"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2535"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

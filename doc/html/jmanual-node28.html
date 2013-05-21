@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>ブロックとExit</TITLE>
+<META NAME="description" CONTENT="ブロックとExit">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node29.html">
+<LINK REL="previous" HREF="jmanual-node27.html">
+<LINK REL="up" HREF="jmanual-node24.html">
+<LINK REL="next" HREF="jmanual-node29.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html769"
+  HREF="jmanual-node29.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html763"
+  HREF="jmanual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html757"
+  HREF="jmanual-node27.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html765"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html767"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html770"
+  HREF="jmanual-node29.html">繰返し</A>
+<B> Up:</B> <A NAME="tex2html764"
+  HREF="jmanual-node24.html">制御構造</A>
+<B> Previous:</B> <A NAME="tex2html758"
+  HREF="jmanual-node27.html">ローカル関数</A>
+ &nbsp; <B>  <A NAME="tex2html766"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html768"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03034000000000000000">
+ブロックとExit</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="2306"></A>
+<B>block</B> <EM>tag {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>return-from</B>によって脱出可能なローカルブロックを作る。
+<EM>tag</EM>は、ローカルにスコープされ、評価されない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2318"></A>
+<B>return-from</B> <EM>tag value </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>tag</EM>によって示されたブロックを脱出する。
+<B>return-from</B>は、関数やメソッドから脱出するときに使用される。
+関数やメソッドは、その本体をすべて取り囲んだ部分をブロックとして
+自動的に確定され、その関数またはメソッドの名前を付ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2330"></A>
+<B>return</B> <EM>value </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(return x)</TT>は、<TT>(return-from nil x)</TT>と同等である。
+<B>loop, while, do, dolist, dotimes</B>は、暗黙的にNILと名前が付けられた
+ブロックとして確定されるため、これらの特殊書式と組み合わせて使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2343"></A>
+<B>catch</B> <EM>tag {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>throw</B>によって脱出または値を返すための動的なブロックを確定する。
+<EM>tag</EM>は評価される。
+
+<P>
+全て見える<B>catch</B>の<EM>tag</EM>は、<TT>sys:list-all-catchers</TT>から得ることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2358"></A>
+<B>throw</B> <EM>tag value </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>catch</B>ブロックから脱出または<EM>value</EM>を返す。
+<EM>tag</EM>と<EM>value</EM>は評価される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2372"></A>
+<B>unwind-protect</B> <EM>protected-form {cleanup-form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>protected-form</EM>の評価が終った後、
+<EM>cleanup-form</EM>が評価される。
+<B>unwind-protect</B>の外側にブロックまたは<B>catch</B>
+ブロックを作っても構わない。
+
+<P>
+<B>return-from</B>や<B>throw</B>でさえ、そのようなブロックから
+抜け出すためには<EM>protected-form</EM>の中で実行される。
+<EM>cleanup-form</EM>は、評価されることが保証されている。
+また、もし<EM>protected-form</EM>が実行されている間にエラーが起こったならば、
+<EM>cleanup-form</EM>はいつも<B>reset</B>によって実行される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

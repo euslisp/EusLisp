@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Sequencing and Lets</TITLE>
+<META NAME="description" CONTENT="Sequencing and Lets">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node27.html">
+<LINK REL="previous" HREF="manual-node25.html">
+<LINK REL="up" HREF="manual-node24.html">
+<LINK REL="next" HREF="manual-node27.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html775"
+  HREF="manual-node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html769"
+  HREF="manual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html763"
+  HREF="manual-node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html771"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html773"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html776"
+  HREF="manual-node27.html">Local Functions</A>
+<B> Up:</B> <A NAME="tex2html770"
+  HREF="manual-node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html764"
+  HREF="manual-node25.html">Conditionals</A>
+ &nbsp; <B>  <A NAME="tex2html772"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html774"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03032000000000000000">
+Sequencing and Lets</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <A NAME="2285"></A>
+<B>prog1</B> <EM>form1 &amp;rest forms </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form1</EM> and <EM>forms</EM> are evaluated sequentially, 
+and the value returned by <EM>form1</EM> is returned as the value of <B>prog1</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2299"></A>
+<B>progn</B> <EM>{form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Form</EM>s are evaluated sequentially, and the value of the rightmost form
+is returned.
+<B>Progn</B> is a special form because it has a special meaning when it
+appeared at top level in a file.
+When such a form is compiled, all inner forms are regarded as they appear
+at top level.
+This is useful for a macro which expands to a series of
+<B>defun</B>s or <B>defmethod</B>s, which must appear at top level.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2313"></A>
+<B>setf</B> <EM>{access-form value}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+assigns <EM>value</EM> to a generalized-variable <EM>access-form</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2325"></A>
+<B>let</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN> (var [value])}*) {declare}* {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+introduces local variables.
+All <EM>value</EM>s are evaluated and assigned to <EM>var</EM>s in parallel, i.e.,
+<TT>(let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))</TT> produces
+(2 1).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2338"></A>
+<B>let*</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN> (var [value])}*) {declare}* {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+introduces local variables.
+All <EM>value</EM>s are evaluated sequentially, and assigned to <EM>var</EM>s
+i.e.,
+<TT>(let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))</TT> produces
+(2 2).
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html775"
+  HREF="manual-node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html769"
+  HREF="manual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html763"
+  HREF="manual-node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html771"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html773"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html776"
+  HREF="manual-node27.html">Local Functions</A>
+<B> Up:</B> <A NAME="tex2html770"
+  HREF="manual-node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html764"
+  HREF="manual-node25.html">Conditionals</A>
+ &nbsp; <B>  <A NAME="tex2html772"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html774"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

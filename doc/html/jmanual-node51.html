@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>ハッシュテーブル</TITLE>
+<META NAME="description" CONTENT="ハッシュテーブル">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node50.html">
+<LINK REL="up" HREF="jmanual-node45.html">
+<LINK REL="next" HREF="jmanual-node52.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1098"
+  HREF="jmanual-node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1092"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1088"
+  HREF="jmanual-node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1094"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1096"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1099"
+  HREF="jmanual-node52.html">ストリームと入出力</A>
+<B> Up:</B> <A NAME="tex2html1093"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1089"
+  HREF="jmanual-node50.html">Foreign String</A>
+ &nbsp; <B>  <A NAME="tex2html1095"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1097"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03076000000000000000">
+ハッシュテーブル</A>
+</H2>
+
+<P>
+hash-tableは、キーで連想される値を探すためのクラスである（<B>assoc</B>でもできる）。
+比較的大きな問題において、hash-tableはassocより良い性能を出す。
+キーと値の組数が増加しても探索に要する時間は、一定のままである。
+簡単に言うと、hash-tableは100以上の要素から探す場合に用い、
+それより小さい場合はassocを用いるべきである。
+
+<P>
+hash-tableは、テーブルの要素数がrehash-sizeを越えたなら、自動的に拡張される。
+デフォルトとして、テーブルの半分が満たされたとき拡張が起こるようになっている。
+<B>sxhash</B>関数は、オブジェクトのメモリアドレスと無関係なハッシュ値を
+返し、オブジェクトが等しい(equal)ときのハッシュ値はいつも同じである。
+それで、hash-tableはデフォルトのハッシュ関数に<B>sxhash</B>を使用している
+ので、再ロード可能である。
+<B>sxhash</B>がロバストで安全な間は、
+列やtreeの中のすべての要素を探索するため、比較的に遅い。
+高速なハッシュのためには、アプリケーションにより他の特定のハッシュ関数を
+選んだ方がよい。
+ハッシュ関数を変えるためには、hash-tableに<TT>:hash-function</TT>メッセージを
+送信すれば良い。
+簡単な場合、ハッシュ関数を<TT>#'sxhash</TT>から
+<TT>#'sys:address</TT>に変更すればよい。
+EusLisp内のオブジェクトのアドレスは
+決して変更されないため、<TT>#'sys:address</TT>を設定することができる。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="11858"></A>
+<B>sxhash</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>obj</EM>のハッシュ値を計算する。
+<B>equal</B>な2つのオブジェクトでは、同じハッシュ値を生じること
+が保証されている。
+symbolなら、そのpnameに対するハッシュ値を返す。
+numberなら、その<TT>integer</TT>表現を返す。
+listなら、その要素全てのハッシュ値の合計が返される。
+stringなら、それぞれの文字コードの合計をシフトしたものが返される。
+その他どんなオブジェクトでも、<B>sxhash</B>はそれぞれのスロットのハッシュ値を
+再帰的呼出しで計算し、それらの合計を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11872"></A>
+<B>make-hash-table</B> <EM>&amp;key (:size 30) (:test #'eq) (:rehash-size 2.0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+hash-tableを作り、返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11882"></A>
+<B>gethash</B> <EM>key htab </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>htab</EM>の中から<EM>key</EM>と一致する値を得る。
+<B>gethash</B>は、<B>setf</B>を組み合せることにより<EM>key</EM>に値を設定する
+ことにも使用される。
+hash-tableに新しい値が登録され、そのテーブルの埋まったスロットの数が
+1/rehash-sizeを越えたとき、hash-tableは自動的に2倍の大きさに拡張される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11897"></A>
+<B>remhash</B> <EM>key htab </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>htab</EM>の中から<EM>key</EM>で指定されたハッシュ登録を削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11909"></A>
+<B>maphash</B> <EM>function htab  </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>htab</EM>の要素全てを<EM>function</EM>で<B>map</B>する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11922"></A>
+<B>hash-table-p</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>x</EM>がhash-tableクラスのインスタンスなら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="11934"></A>
+<BIG CLASS="XLARGE"><B>hash-table </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (key value count 
+<BR>
+hash-function test-function 
+<BR>
+rehash-size empty deleted) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>hash-tableを定義する。
+<EM>key</EM>と<EM>value</EM>は大きさが等しい一次元ベクトルである。
+<EM>count</EM>は、<EM>key</EM>や<EM>value</EM>が埋まっている数である。
+<EM>hash-function</EM>のデフォルトは<B>sxhash</B>である。
+<EM>test-function</EM>のデフォルトは<B>eq</B>である。
+<EM>empty</EM>と<EM>deleted</EM>は、<EM>key</EM>ベクトルのなかで空または削除された
+数を示すsymbol(パッケージに収容されていない）である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11963"></A>
+<B>:hash-function</B> <EM>newhash </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このhash-tableのハッシュ関数を<EM>newhash</EM>に変更する。
+<EM>newhash</EM>は、1つの引数を持ち、<TT>integer</TT>を返す関数でなければならない。
+<EM>newhash</EM>の1つの候補として<B>sys:address</B>がある。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1098"
+  HREF="jmanual-node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1092"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1088"
+  HREF="jmanual-node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1094"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1096"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1099"
+  HREF="jmanual-node52.html">ストリームと入出力</A>
+<B> Up:</B> <A NAME="tex2html1093"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1089"
+  HREF="jmanual-node50.html">Foreign String</A>
+ &nbsp; <B>  <A NAME="tex2html1095"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1097"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

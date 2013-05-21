@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>並列度の計測</TITLE>
+<META NAME="description" CONTENT="並列度の計測">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node104.html">
+<LINK REL="previous" HREF="jmanual-node96.html">
+<LINK REL="up" HREF="jmanual-node91.html">
+<LINK REL="next" HREF="jmanual-node104.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1961"
+  HREF="jmanual-node104.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1955"
+  HREF="jmanual-node91.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1949"
+  HREF="jmanual-node102.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1957"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1959"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1962"
+  HREF="jmanual-node104.html">スレッド生成</A>
+<B> Up:</B> <A NAME="tex2html1956"
+  HREF="jmanual-node91.html">マルチスレッド</A>
+<B> Previous:</B> <A NAME="tex2html1950"
+  HREF="jmanual-node102.html">タイマー</A>
+ &nbsp; <B>  <A NAME="tex2html1958"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1960"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04023000000000000000">
+並列度の計測</A>
+</H2>
+
+<P>
+表 <A HREF="#paragain"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="/usr/share/latex2html/icons/crossref.png"></A>は、32CPUで構成されるCray Superserverの上で測定
+した並列実行効率を示したものである。
+コンパイルされたフィボナッチ関数において線形な並列度が得られた。
+なぜなら、共有メモリへのアクセスがなく、それぞれのプロセッサのキャッシュ
+メモリに十分ロードできるほどちいさなプログラムであったためである。
+それに反して、同じプログラムをインタープリターで実行したとき、
+キャッシュメモリを使い果たしたため、
+線形な高効率を達成することができなかった。
+さらにまた、頻繁に共有メモリを参照するようなプログラムや
+メモリ配置を要求するようなプログラムは1個のプロセッサで実行した
+ときよりも良い性能を得ることができなかった。
+これは、頻繁なキャッシュメモリの入れ替えが原因と考えられる。
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER">
+
+<DIV ALIGN="CENTER">
+<A NAME="25189"></A>
+<TABLE CELLPADDING=3 BORDER="1">
+<CAPTION><STRONG>Table:</STRONG>
+マルチプロセッサ上で実行されたプログラムの並列度</CAPTION>
+<TR><TD ALIGN="LEFT">processors</TD>
+<TD ALIGN="RIGHT">1</TD>
+<TD ALIGN="RIGHT">2</TD>
+<TD ALIGN="RIGHT">4</TD>
+<TD ALIGN="RIGHT">8</TD>
+<TD ALIGN="CENTER">GC (ratio)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(a) compiled Fibonacci</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">2.0</TD>
+<TD ALIGN="RIGHT">4.0</TD>
+<TD ALIGN="RIGHT">7.8</TD>
+<TD ALIGN="CENTER">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(b) interpreted Fibonacci</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">1.7</TD>
+<TD ALIGN="RIGHT">2.7</TD>
+<TD ALIGN="RIGHT">4.4</TD>
+<TD ALIGN="CENTER">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(c) copy-seq</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">1.3</TD>
+<TD ALIGN="RIGHT">0.76</TD>
+<TD ALIGN="RIGHT">0.71</TD>
+<TD ALIGN="CENTER">0.15</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(d) make-cube</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">0.91</TD>
+<TD ALIGN="RIGHT">0.40</TD>
+<TD ALIGN="RIGHT">0.39</TD>
+<TD ALIGN="CENTER">0.15</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(e) interference-check</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">0.88</TD>
+<TD ALIGN="RIGHT">0.55</TD>
+<TD ALIGN="RIGHT">0.34</TD>
+<TD ALIGN="CENTER">0.21</TD>
+</TR>
+</TABLE> 
+<BR>
+</DIV>
+</DIV>
+<BR>
+
+<P>
+<BR><HR>
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,536 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>立体(body)</TITLE>
+<META NAME="description" CONTENT="立体(body)">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node117.html">
+<LINK REL="previous" HREF="jmanual-node115.html">
+<LINK REL="up" HREF="jmanual-node112.html">
+<LINK REL="next" HREF="jmanual-node117.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2153"
+  HREF="jmanual-node117.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2147"
+  HREF="jmanual-node112.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2141"
+  HREF="jmanual-node115.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2149"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2151"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2154"
+  HREF="jmanual-node117.html">基本bodyの作成関数</A>
+<B> Up:</B> <A NAME="tex2html2148"
+  HREF="jmanual-node112.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2142"
+  HREF="jmanual-node115.html">平面と面</A>
+ &nbsp; <B>  <A NAME="tex2html2150"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2152"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04044000000000000000">
+立体(body)</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="32076"></A>
+<BIG CLASS="XLARGE"><B>body </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (faces edges vertices model-vertices box convexp evertedp csg) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>３次元形状を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32093"></A>
+<B>:magnify</B> <EM>rate </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>のサイズを<EM>rate</EM>で変更する。拡大は，<TT>csg</TT>リストの中に
+記録される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32106"></A>
+<B>:translate-vertices</B> <EM>vector </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+モデルの頂点を相対移動する。<EM>vector</EM>はローカル座標系で与えられなければならない。
+変換は<TT>csg</TT>リストに記録される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32118"></A>
+<B>:rotate-vertices</B> <EM>angle axis </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+モデルの頂点を<EM>axis</EM>軸回りに<EM>angle</EM>ラジアン回転させる。
+回転は<TT>csg</TT>リストに記録される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32131"></A>
+<B>:reset-model-vertices</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32142"></A>
+<B>:newcoords</B> <EM>rot pos </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+座標系を<EM>rot</EM>や<EM>pos</EM>を用いて変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32154"></A>
+<B>:vertices</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>body</B>のすべての頂点のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32165"></A>
+<B>:edges</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>body</B>のすべてのエッジのリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32176"></A>
+<B>:faces</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>を構成するすべての面のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32187"></A>
+<B>:box</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>body</B>の<B>bounding-box</B>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32199"></A>
+<B>:Euler</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>のオイラー数を計算する。これは，
+<TT>faces+vertices<SPAN CLASS="MATH"><IMG
+ WIDTH="393" HEIGHT="140" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="$-$"></SPAN>edges<SPAN CLASS="MATH"><IMG
+ WIDTH="393" HEIGHT="140" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="$-$"></SPAN>2<SPAN CLASS="MATH"><IMG
+ WIDTH="393" HEIGHT="140" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="$-$"></SPAN>holes</TT>である。
+これは，<TT><SPAN CLASS="MATH"><IMG
+ WIDTH="393" HEIGHT="140" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="$-$"></SPAN>2rings</TT>と等しくなるべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32212"></A>
+<B>:perimeter</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+すべてのエッジの長さの合計を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32222"></A>
+<B>:volume</B> <EM>&amp;optional (reference-point #f(0 0 0)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>の体積を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32233"></A>
+<B>:centroid</B> <EM>&amp;optional (point #f(0 0 0) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>が均質な立体と仮定し，重心の位置を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32244"></A>
+<B>:possibly-interfering-faces</B> <EM>box </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32255"></A>
+<B>:common-box</B> <EM>body </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>と他の<EM>body</EM>の共通な最小の<B>box</B>を返す。
+もし，2つの<B>body</B>が干渉しているならば，その交差部分は
+この共通<B>box</B>の中に存在するはずである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32270"></A>
+<B>:insidep</B> <EM>point </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし，<EM>point</EM>がこの<B>body</B>に属するなら，<TT>:inside</TT>を返す。
+もし，<EM>point</EM>がこの<B>body</B>の表面上にある場合，<TT>:border</TT>を返す。
+そうでなければ，<TT>:outside</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32287"></A>
+<B>:intersect-face</B> <EM>face </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし，この<B>body</B>の面と<EM>face</EM>の間に干渉がある場合，Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32299"></A>
+<B>:intersectp</B> <EM>body </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>と他の<EM>body</EM>との間の交差部分を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32311"></A>
+<B>:evert</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> すべての面とエッジの方向を反転させる。
+そのため，この<B>body</B>の内部は外部になる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32322"></A>
+<B>:faces-intersect-with-point-vector</B> <EM>point direction </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>point</EM>から<EM>direction</EM>の方向に伸びるベクトルと交差する面をすべて集める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32334"></A>
+<B>:distance</B> <EM>target </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>target</EM>は，実数ベクトルあるいは平面オブジェクトである。
+<B>:distance</B>メソッドは，<EM>target</EM>から最も近い面を見つけ，
+その面と距離のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32347"></A>
+<B>:csg</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>body</B>が構築された履歴である<TT>csg</TT>スロットを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32359"></A>
+<B>:primitive-body</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>を構築する基本<B>body</B>のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32371"></A>
+<B>:primitive-body-p</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> もし，この<B>body</B>が<A HREF="jmanual-node117.html#primitive-body-creation"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="/usr/share/latex2html/icons/crossref.png"></A>
+節で示される関数の内の1つから作られた基本<B>body</B>であるなら，Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32384"></A>
+<B>:creation-form</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>body</B>を作るためのLisp表現を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32395"></A>
+<B>:body-type</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし，この<B>body</B>が基本<B>body</B>あるいはこの<B>body</B>の表現が複雑（に構成された）
+<B>body</B>なら，作成パラメータのリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32409"></A>
+<B>:primitive-groups</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つの要素をもつリストを返す。
+最初の要素は，この<B>body</B>を構成するために追加(body+)された基本<B>body</B>
+のリストである。次の要素は，差し引かれた基本<B>body</B>のリストである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32422"></A>
+<B>:get-face</B> <EM>body &amp;optional face id </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>body</EM>は，この<B>body</B>を構成している<B>body</B>のインスタンスであり，
+基本<B>body</B>型の1つである。例えば，<TT>:cube, :prism, :cone, :solid-of-resolution</TT>などか
+あるいはNILである。
+もし，<EM>face</EM>も<EM>id</EM>も与えられないならば，<EM>body</EM>に一致する面をすべて返す。
+もし，<EM>face</EM>が与えられたなら，その上にフィルターが実行される。
+<EM>face</EM>は，<TT>:top</TT>,<TT>:bottom</TT>と<TT>:side</TT>の内の1つでなければならない。
+<TT>(send abody :get-face :cylinder :top)</TT>は，<TT>abody</TT>を構成する円柱の上面すべてを返す。
+もし，<EM>face</EM>が<TT>:side</TT>なら，<EM>id</EM>で番号付けされた面を取り出すことができる。
+<TT>(send abody nil :side 2)</TT>は，<EM>id</EM>が0から始まるため，<TT>abody</TT>を構成する
+<B>body</B>の側面から３番目の面をすべて返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32454"></A>
+<B>:init</B> <EM>&amp;key :faces :edges :vertices </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>:faces</EM>よりこの<B>body</B>を初期化する。
+<EM>:faces</EM>は，必要な引き数である。
+<EM>:faces</EM>,<EM>:edges</EM>と<EM>:vertices</EM>は完全な立体モデルを定義するために
+矛盾のない関係を持っていなければならないので，矛盾した引き数でこのメソッドを
+呼び出すことは，意味の無いことである。
+<B>body</B>を作るために，<A HREF="jmanual-node117.html#primitive-body-creation"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="/usr/share/latex2html/icons/crossref.png"></A>節で書いている基本<B>body</B>の作成関数と
+<A HREF="jmanual-node118.html#BodyComposition"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="/usr/share/latex2html/icons/crossref.png"></A>節の<B>body</B>合成関数を使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32475"></A>
+<B>:constraint</B> <EM>b </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>body</B>が<EM>b</EM>に接触しているとき，
+この<B>body</B>の拘束を返す。このメソッドの詳細な説明は<A HREF="jmanual-node120.html#Contact"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="/usr/share/latex2html/icons/crossref.png"></A>節を参照すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2153"
+  HREF="jmanual-node117.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2147"
+  HREF="jmanual-node112.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2141"
+  HREF="jmanual-node115.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2149"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2151"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2154"
+  HREF="jmanual-node117.html">基本bodyの作成関数</A>
+<B> Up:</B> <A NAME="tex2html2148"
+  HREF="jmanual-node112.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2142"
+  HREF="jmanual-node115.html">平面と面</A>
+ &nbsp; <B>  <A NAME="tex2html2150"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2152"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

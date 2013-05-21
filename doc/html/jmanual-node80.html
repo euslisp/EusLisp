@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>シグナル</TITLE>
+<META NAME="description" CONTENT="シグナル">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node81.html">
+<LINK REL="previous" HREF="jmanual-node79.html">
+<LINK REL="up" HREF="jmanual-node76.html">
+<LINK REL="next" HREF="jmanual-node81.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1624"
+  HREF="jmanual-node81.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1618"
+  HREF="jmanual-node76.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1612"
+  HREF="jmanual-node79.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1620"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1622"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1625"
+  HREF="jmanual-node81.html">マルチスレッド</A>
+<B> Up:</B> <A NAME="tex2html1619"
+  HREF="jmanual-node76.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1613"
+  HREF="jmanual-node79.html">ファイルシステムと入出力</A>
+ &nbsp; <B>  <A NAME="tex2html1621"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1623"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04012400000000000000">
+シグナル</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <A NAME="21922"></A>
+<B>unix:signal</B> <EM>signal func &amp;optional option </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>signal</EM>に対してシグナルハンドラー<EM>func</EM>をインストールする。
+BSD4.2システムにおいて、システムコール処理の間に捕まえたシグナルは、
+システムコールのリトライに起因する。
+これは、もしその処理がシステムコールの呼び出しを発行するならば、
+シグナルを無視することを意味する。
+もし、<EM>option=2</EM>が指定されたならば、シグナルはsystem-5の手法で
+処理される。そのシグナルは、システムコールの失敗に起因する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21935"></A>
+<B>unix:kill</B> <EM>pid signal </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pid</EM>で名前付けされるプロセスに<EM>signal</EM>を送る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21947"></A>
+<B>unix:pause</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+シグナルが到着するまでこのプロセスの実行を一時停止する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21957"></A>
+<B>unix:alarm</B> <EM>time </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>time</EM>秒後にアラーム時計シグナル(SIGALRM 14)を送る。
+<EM>time</EM>=0で<B>unix:alarm</B>を呼び出すと、アラーム時計をリセットする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21970"></A>
+<B>unix:ualarm</B> <EM>time </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>time</EM>がマイクロ秒単位であることを除いて<B>unix:alarm</B>と同じである。
+<B>ualarm</B>は、Solaris2あるいはSystem5系のシステムに実現されていない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21983"></A>
+<B>unix:getitimer</B> <EM>timer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>timer</EM>は、0 (<TT>ITIMER_REAL</TT>), 1 (<TT>ITIMER_VIRTUAL</TT>),
+2(<TT>ITIMER_PROF</TT>)の内の１つである。
+秒単位の時間(timer)と間隔(interval)の2つの要素を持つリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21997"></A>
+<B>unix:setitimer</B> <EM>timer value interval </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>timer</EM>に<EM>value</EM>と<EM>interval</EM>を設定する。
+<EM>timer</EM>は、0 (<TT>ITIMER_REAL</TT>), 1 (<TT>ITIMER_VIRTUAL</TT>),
+2(<TT>ITIMER_PROF</TT>)の内の１つである。
+<TT>ITIMER_REAL</TT>は、<EM>value</EM>が終了したとき、SIGALRMを発行する。
+<TT>ITIMER_VIRTUAL</TT>は、SIGVTALRMを発行し、
+<TT>ITIMER_PROF</TT>は、SIGPROFを発行する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22018"></A>
+<B>unix:select</B> <EM>inlist outlist exceptlist timeout </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>inlist, outlist</EM>と<EM>exceptlist</EM>は、ファイルディスクリプタ
+を示すビットベクトルである。そのファイルディスクリプタの入出力イベント
+は、テストされなければならない。
+例えば、もし<EM>inlist</EM>=<TT>#b0110</TT>で<EM>outlist</EM>=<TT>#b100</TT>で
+<EM>exceptlist</EM>=NILであるなら、
+fd=1あるいはfd=2で読み込み可能かあるいはfd=2で書き込み可能であるかどうかをテストする。
+<EM>timeout</EM>は、<B>unix:select</B>が待つために許される秒数を指定する。
+<EM>inlist</EM>で指定されているポートの1つに入力データが現れるかあるいは
+<EM>outlist</EM>に指定されるポートの1つに書き込み可能となるかあるいは
+<EM>exceptlist</EM>で指定されるポートの1つに例外条件が起こるとすぐに
+<B>unix:select</B>は、<EM>inlist, outlist, exceptlist</EM>のそれぞれにおいて
+アクセス可能なポートとして設定されたポートの中で、入力処理可能なポート番号を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22042"></A>
+<B>unix:select-read-fd</B> <EM>read-fdset timeout </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+入出力の選択は、ふつう入力処理のときのみ意味がある。
+<B>unix:select-read-fd</B>は、
+<TT>select fdset nil nil timeout</TT>の速記法である。
+<EM>read-fdset</EM>は、ビットベクトルでなく、設定された読み込みfdを指定する整数である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1624"
+  HREF="jmanual-node81.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1618"
+  HREF="jmanual-node76.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1612"
+  HREF="jmanual-node79.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1620"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1622"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1625"
+  HREF="jmanual-node81.html">マルチスレッド</A>
+<B> Up:</B> <A NAME="tex2html1619"
+  HREF="jmanual-node76.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1613"
+  HREF="jmanual-node79.html">ファイルシステムと入出力</A>
+ &nbsp; <B>  <A NAME="tex2html1621"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1623"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

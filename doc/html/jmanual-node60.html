@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>非同期入出力</TITLE>
+<META NAME="description" CONTENT="非同期入出力">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node61.html">
+<LINK REL="previous" HREF="jmanual-node56.html">
+<LINK REL="up" HREF="jmanual-node52.html">
+<LINK REL="next" HREF="jmanual-node61.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1235"
+  HREF="jmanual-node61.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1229"
+  HREF="jmanual-node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1223"
+  HREF="jmanual-node59.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1231"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html1233"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1236"
+  HREF="jmanual-node61.html">パス名</A>
+<B> Up:</B> <A NAME="tex2html1230"
+  HREF="jmanual-node52.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1224"
+  HREF="jmanual-node59.html">ソケット</A>
+ &nbsp; <B>  <A NAME="tex2html1232"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1234"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03085000000000000000">
+非同期入出力</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15589"></A>
+<B>select-stream</B> <EM>stream-list timeout </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>stream-list</EM>の中で、入力処理が準備されているストリームを見つけリストで返す。
+もし、<EM>timeout</EM>秒が経つまでにどのストリームも準備が出来ないときは、
+NILを返す。
+<B>select-stream</B>は、入力ストリームのリストからアクティブなストリーム
+を選ぶときに役立つ。そのストリームでは、入力処理が非同期で可能となる。
+<EM>timeout</EM>は、選択処理が失敗するまでの時間を示す。
+これは、実数でもよい。
+もし、<EM>timeout</EM>の指定がないときは、最低１つのストリームから入力が到着するまで
+<B>select-stream</B>は続けられる。
+もし、<EM>timeout</EM>が指定されどのストリームからも入力が現れなかったならば、
+<B>select-stream</B>は失敗しNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15607"></A>
+<B>def-async</B> <EM>stream function </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>stream</EM>にデータが到着したときに呼び出される<EM>function</EM>
+を定義する。<EM>stream</EM>は、ファイルストリームかソケットストリームのどちらかである。
+ファイルストリームにデータが来たとき又はソケットポートに接続要求が現れたとき、
+そのストリームを引き数として<EM>function</EM>が呼び出される。
+このマクロは、SIGIO ハンドラーとして装備され、ユーザーから与えられる
+実際の入力処理を実行するための<EM>function</EM>に置き換えられる。
+そして、<EM>stream</EM>が読み込み可能となったとき、非同期にSIGIOを発する
+ために<EM>stream</EM>に関して<B>unix:fnctl</B>が使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+<BR><HR>
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

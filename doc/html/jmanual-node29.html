@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>繰返し</TITLE>
+<META NAME="description" CONTENT="繰返し">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node30.html">
+<LINK REL="previous" HREF="jmanual-node28.html">
+<LINK REL="up" HREF="jmanual-node24.html">
+<LINK REL="next" HREF="jmanual-node30.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html783"
+  HREF="jmanual-node30.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html777"
+  HREF="jmanual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html771"
+  HREF="jmanual-node28.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html779"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html781"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html784"
+  HREF="jmanual-node30.html">述語</A>
+<B> Up:</B> <A NAME="tex2html778"
+  HREF="jmanual-node24.html">制御構造</A>
+<B> Previous:</B> <A NAME="tex2html772"
+  HREF="jmanual-node28.html">ブロックとExit</A>
+ &nbsp; <B>  <A NAME="tex2html780"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html782"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03035000000000000000">
+繰返し</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="2393"></A>
+<B>while</B> <EM>test {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>test</EM>がnon-NILと評価されている間、
+<EM>form</EM>は、繰返し評価される。
+<B>while</B>は、<EM>form</EM>のまわりにNILと名付けられるブロックを自動的に確定する
+特殊書式である。
+<B>return</B>は、そのループから抜け出すために使用することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2408"></A>
+<B>tagbody</B> <EM>{tag <SPAN CLASS="MATH"><IMG
+ WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> statement}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>tag</EM>は、<B>go</B>のために名付けられる。
+<B>tagbody</B>の中のみ<B>go</B>を使用することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2422"></A>
+<B>go</B> <EM>tag </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ローカルにスコープされた<B>tagbody</B>のなかに現れる<EM>tag</EM>の直後の
+書式に制御を移す。
+ローカルスコープを横切って違う<B>tagbody</B>のtagに制御を移すことは
+禁止されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2435"></A>
+<B>prog</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> (var [init])}*) {tag <SPAN CLASS="MATH"><IMG
+ WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> statement}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>prog</B>はマクロで、以下のように展開される。<PRE><TT>
+ (block nil     (let <EM>var</EM> (tagbody  <EM>tag <SPAN CLASS="MATH"><IMG
+ WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> statement</EM>))) 
+</TT></PRE>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2455"></A>
+<B>do</B> <EM>({(var init [next])}*) (endtest [result]){declare} {form}
+* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>var</EM>はローカル変数である。
+それぞれの<EM>var</EM>に、<EM>init</EM>は並行に評価され、割り当てられる。
+つぎに、<EM>endtest</EM>が評価され、もし真のとき<B>do</B>は<EM>result</EM>を返す。
+ (そうでないときは、NILを返す)
+もし<EM>endtest</EM>がNILを返したならば、それぞれの<EM>form</EM>は、
+順番に評価される。
+書式の評価後、<EM>next</EM>が評価され、その値は
+それぞれの<EM>var</EM>に再割当され、次の繰返しが始まる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2475"></A>
+<B>do*</B> <EM>({var init [next]}*) (endtest [result]){declare} {form}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> <B>do*</B>は、<EM>init</EM>と<EM>next</EM>の評価と
+<EM>var</EM>への割り当てが連続的に起こることを除いて、<B>do</B>と同様である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2490"></A>
+<B>dotimes</B> <EM>(var count [result]) {forms}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>の評価を<EM>count</EM>回行う。
+<EM>count</EM>は、一回のみ評価される。
+それぞれの評価の中で、<EM>var</EM>は整数のゼロから
+<EM>count</EM>-1まで増加する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2505"></A>
+<B>dolist</B> <EM>(var list [result]) {forms}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>のそれぞれの要素は、<EM>var</EM>に連続的に与えられる。
+そして<EM>forms</EM>は、それぞれの値で評価される。
+<B>dolist</B>は、他の繰返しより早く実行される。たとえば、
+<B>mapcar</B>や再帰的関数のようなものより。
+それは、<B>dolist</B>が関数のclosureを作ったり適用したりする必要が
+なく、新しいパラメータのバインドが必要でないため。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2521"></A>
+<B>until</B> <EM>condition {forms}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>condition</EM>が満たされている間、<EM>forms</EM>を評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2533"></A>
+<B>loop</B> <EM>{forms}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>を永遠に評価する。
+実行を止めるためには、<B>return-from, throw</B>または<B>go</B>が
+<EM>forms</EM>のなかで評価されなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html783"
+  HREF="jmanual-node30.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html777"
+  HREF="jmanual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html771"
+  HREF="jmanual-node28.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html779"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html781"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html784"
+  HREF="jmanual-node30.html">述語</A>
+<B> Up:</B> <A NAME="tex2html778"
+  HREF="jmanual-node24.html">制御構造</A>
+<B> Previous:</B> <A NAME="tex2html772"
+  HREF="jmanual-node28.html">ブロックとExit</A>
+ &nbsp; <B>  <A NAME="tex2html780"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html782"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,834 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>テキストwindow</TITLE>
+<META NAME="description" CONTENT="テキストwindow">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node141.html">
+<LINK REL="up" HREF="jmanual-node134.html">
+<LINK REL="next" HREF="jmanual-node143.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2528"
+  HREF="jmanual-node143.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2522"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2518"
+  HREF="jmanual-node141.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2524"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2526"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2529"
+  HREF="jmanual-node143.html">画像処理</A>
+<B> Up:</B> <A NAME="tex2html2523"
+  HREF="jmanual-node134.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2519"
+  HREF="jmanual-node141.html">キャンバス</A>
+ &nbsp; <B>  <A NAME="tex2html2525"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2527"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04075000000000000000">
+テキストwindow</A>
+</H2>
+
+<P>
+<TT>TextWindow</TT>と<TT>BufferTextWidnow</TT>と<TT>ScrollTextWindow</TT>の
+３つのテキストwindowがある。
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="45125"></A>
+<BIG CLASS="XLARGE"><B>textWindow </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (fontid 
+<BR>
+charwidth charheight charascent dots 
+<BR>
+win-row-max win-col-max 
+<BR>
+win-row win-col   ;physical current position in window 
+<BR>
+x y
+<BR>
+charbuf 		; for charcode conversion 
+<BR>
+keybuf keycount 		 ;for key input
+<BR>
+echo 
+<BR>
+show-cursor cursor-on 		 ;boolean
+<BR>
+kill delete 		 ;control character 
+<BR>
+notify-object notify-method 
+<BR>) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>メッセージを表示するために使用可能な仮想端末を実現する。
+表示される内容は、バッファされないし、<B>TextWindow</B>に既に表示された
+文字や行を引き出す方法はない。
+基本的に、<B>TextWindow</B>は
+カーソル移動、行削除、領域削除、表示テキストのスクロール、文字列挿入
+などを持つダンプ端末と似た能力を持っている。
+また、テキストカーソルはマウスポインタで指示された位置に
+移動することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45145"></A>
+<B>:init</B> <EM>id </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>id</EM>番目のテキストwindowを初期化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45156"></A>
+<BR>
+<IMG
+ WIDTH="728" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img98.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\=\&amp;rest args \\lq  [メソッド]\\
+\&gt;\&amp;key \...
+...ify-object nil) (:notify-method nil)\\
+\&gt;\&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>text-windowを作成する。
+windowの大きさは、<EM>:width</EM>と<EM>:height</EM>かあるいは<EM>:rows</EM>と
+<EM>:columns</EM>で指定されたものとなる。
+<EM>:notify-object</EM>の<EM>:notify-method</EM>は、改行文字が入力された
+ときに呼び出される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45173"></A>
+<B>:cursor</B> <EM>flag </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>flag</EM>は、<TT>:on, :off, :toggle</TT>のどれかが可能である。
+テキストカーソルは、<TT>win-row</TT>と<TT>win-col</TT>の位置である。
+もし、<EM>flag</EM>が<TT>:on</TT>であれば、テキストカーソルは表示され、
+<EM>flag</EM>が<TT>:off</TT>ならば、消される。
+また、<EM>flag</EM>が<TT>toggle</TT>ならば、反対になる。
+このメソッドは、カーソルの位置の文字を更新するときはいつでも、
+呼び出されなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45193"></A>
+<B>:clear</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+テキストwindow内を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45203"></A>
+<B>:clear-eol</B> <EM>&amp;optional (r win-row) (c win-col) (csr :on) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>と<EM>c</EM>で指定される位置の文字以降の残りの行を
+消去する。カーソル位置の文字も含む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45215"></A>
+<B>:clear-lines</B> <EM>lines &amp;optional (r win-row) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>番目の行以降の複数行を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45226"></A>
+<B>:clear-eos</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>と<EM>c</EM>で指定される位置から画面の最後までの領域を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45238"></A>
+<B>:win-row-max</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowに表示可能な最大行数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45248"></A>
+<B>:win-col-max</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowに表示可能な最大列数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45258"></A>
+<B>:xy</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>と<EM>c</EM>で指定される位置の文字のピクセル座標を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45270"></A>
+<B>:goto</B> <EM>r c &amp;optional (cursor :on) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>番目の行の<EM>c</EM>番目の列にカーソルを移動する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45282"></A>
+<B>:goback</B> <EM>&amp;optional (csr :on) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソルを１文字戻す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45292"></A>
+<B>:advance</B> <EM>&amp;optional (n 1) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>n</EM>文字だけカーソルを進める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45303"></A>
+<B>:scroll</B> <EM>&amp;optional (n 1) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>n</EM>行だけ縦方向にテキストwindowをスクロールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45314"></A>
+<B>:horizontal-scroll</B> <EM>&amp;optional (n 1) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>n</EM>列だけ横方向にテキストをスクロールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45325"></A>
+<B>:newline</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+次の行の最初にカーソルを移動する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45335"></A>
+<B>:putch</B> <EM>ch </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソル位置に文字<EM>ch</EM>を挿入する。
+行の残りは、１文字前方に進められる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45346"></A>
+<B>:putstring</B> <EM>str &amp;optional (e (length str)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソル位置に<EM>str</EM>を置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45357"></A>
+<B>:event-row</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45367"></A>
+<B>:event-col</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>における、テキストカーソルの位置をを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45378"></A>
+<B>:KeyPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソル位置に入力された文字を挿入する。
+もし、文字が改行であったなら、<TT>notify-object</TT>に通知する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45390"></A>
+<BIG CLASS="XLARGE"><B>TextWindowStream </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>stream</B> 
+<BR>  :slots 		 (textwin) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>TextWindowStream</TT>は、TextWdinowに接続された出力ストリームである。
+<TT>print, format, write-byte</TT>などによってこのストリームに出力
+される文字や文字列がTextWdindowに表示される。
+通常のファイルストリームとしては、
+出力データはバッファされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45409"></A>
+<B>:flush</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+バッファされたテキスト文字列を掃き出し、TextWindowに送る。
+<TT>finish-output</TT>やこのストリームへの改行文字の書き込みは、
+このメソッドを自動的に呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45420"></A>
+<B>make-text-window-stream</B> <EM>xwin </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>text-window-stream</B>を作り、そのストリームオブジェクトを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45432"></A>
+<BIG CLASS="XLARGE"><B>BufferTextWindow </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>TextWindow</B> 
+<BR>  :slots 		 (linebuf expbuf max-line-length row col) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>TextWindow</B>の内容を表現する行バッファを保持する。
+<TT>linebuf</TT>は、行のベクトルである。<TT>exbuf</TT>は、
+タブ拡張されたテキストを持つ。
+windowに表示可能な行のみが保持される。
+<B>BufferTextWindow</B>は、数行のテキストを持つ
+簡単なテキストエディタとして使用することができる。
+<TT>text-item</TT>は、表示可能な行バッファとして<B>BufferTextWindow</B>を
+使う。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45455"></A>
+<B>:line</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>n</EM>番目の行の内容を文字列として返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45466"></A>
+<B>:nlines</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>linebuf</TT>の行数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45477"></A>
+<B>:all-lines</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 文字列のベクトルである<TT>linebuf</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45488"></A>
+<B>:refresh-line</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>番目の行の<EM>c</EM>番目の列以降を再書き込みする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45500"></A>
+<B>:refresh</B> <EM>&amp;optional (start 0) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>start</EM>番目の行以降の行を再書き込みする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45511"></A>
+<B>:insert-string</B> <EM>string </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソル位置に<EM>string</EM>を挿入する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45522"></A>
+<B>:insert</B> <EM>ch </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> カーソル位置に文字を挿入する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45532"></A>
+<B>:delete</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> カーソル以降の<EM>n</EM>文字を削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45543"></A>
+<B>expand-tab</B> <EM>src &amp;optional (offset 0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>src</EM>は、タブを含んだ可能性のある文字列である。
+これらのタブは、タブの停止位置が8の倍数であると仮定して空白文字に
+置き換えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45555"></A>
+<BIG CLASS="XLARGE"><B>ScrollTextWindow </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>BufferTextWindow</B> 
+<BR>  :slots 		 (top-row top-col   ;display-starting position 
+<BR>
+scroll-bar-window 
+<BR>
+horizontal-scroll-bar-window 
+<BR>
+selected-line) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>ScrollTextWindow</B>は、行数制限がなく、縦と横にスクロールバーを持った
+<TT>BufferTextWindow</TT>を定義する。
+<B>ScrollTextWindow</B>は、スクロールバーを伴ってwindowの大きさを変更するため、
+あるいはテキストを再表示するために<TT>:configureNotify</TT>イベントを
+扱うことができる。
+クリックすることによって、行を選択することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45577"></A>
+<B>:create</B> <EM>&amp;rest args
+           &amp;key (scroll-bar nil)
+                (horizontal-scroll-bar nil)
+           &amp;allow-other-keys </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スクロールバーが必要なとき、それぞれのキーワードの引き数にTを指定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45587"></A>
+<B>:locate</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> windowの上部から<EM>n</EM>番目の行に
+バッファされたテキストを表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45598"></A>
+<B>:display-selection</B> <EM>selection </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>selection</EM>は、選択された行の位置を表現する。
+選択された行がすべて高輝度で表示される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45609"></A>
+<B>:selection</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 選択された行（文字列）を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45619"></A>
+<B>:read-file</B> <EM>fname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fname</EM>で指定されるテキストファイルを<TT>linebuf</TT>に読み込み、
+タブを拡張し、windowに表示する。
+カーソルは、画面の最初に置かれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45631"></A>
+<B>:display-string</B> <EM>strings </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>strings</EM>は、行（文字列）の列である。
+<EM>strings</EM>は、<TT>linebuf</TT>にコピーされ、windowに表示される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45644"></A>
+<B>:scroll</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>n</EM>行、縦にスクロールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45655"></A>
+<B>:horizontal-scroll</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>n</EM>列、横にスクロールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45666"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+マウスポインタが置かれている行が選択される。
+もし、windowが作成されたときに<TT>notification</TT>が指定されている
+ならば、<TT>notify-object</TT>の<TT>notify-method</TT>が呼び出される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45679"></A>
+<B>:resize</B> <EM>w h </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+windowの大きさを変更し、新しいサイズに合うように
+内容を再表示する。
+もし、スクロールバーがあれば、同じメッセージが送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2528"
+  HREF="jmanual-node143.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2522"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2518"
+  HREF="jmanual-node141.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2524"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2526"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2529"
+  HREF="jmanual-node143.html">画像処理</A>
+<B> Up:</B> <A NAME="tex2html2523"
+  HREF="jmanual-node134.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2519"
+  HREF="jmanual-node141.html">キャンバス</A>
+ &nbsp; <B>  <A NAME="tex2html2525"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2527"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

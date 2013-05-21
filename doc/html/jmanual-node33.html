@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>メッセージ送信</TITLE>
+<META NAME="description" CONTENT="メッセージ送信">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node34.html">
+<LINK REL="previous" HREF="jmanual-node32.html">
+<LINK REL="up" HREF="jmanual-node31.html">
+<LINK REL="next" HREF="jmanual-node34.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html841"
+  HREF="jmanual-node34.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html835"
+  HREF="jmanual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html829"
+  HREF="jmanual-node32.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html837"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html839"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html842"
+  HREF="jmanual-node34.html">インスタンス管理</A>
+<B> Up:</B> <A NAME="tex2html836"
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
+<B> Previous:</B> <A NAME="tex2html830"
+  HREF="jmanual-node32.html">クラスとメソッド</A>
+ &nbsp; <B>  <A NAME="tex2html838"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html840"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03042000000000000000">
+メッセージ送信</A>
+</H2>
+
+ <BR>
+<BR> <P>
+
+<A NAME="3924"></A>
+<B>send</B> <EM>object selector {arg}* </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>に<EM>selector</EM>と<EM>arg</EM>で構成されるメッセージを送信する。
+<EM>object</EM>は、何でもよいが数値はいけない。
+<EM>selector</EM>はキーワードとして評価されなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="3939"></A>
+<B>send-message</B> <EM>target search selector {arg}* </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>send-super</B>を実行するための低レベル命令である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="3950"></A>
+<B>send*</B> <EM>object selector &amp;rest msg-list </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>send*</B>は、引数のリストに<B>send-message</B>を適用する。
+<B>send</B>と<B>send*</B>の関係は、
+<B>funcall</B>と<B>apply</B>あるいは<B>list</B>と<B>list*</B>の関係に似ている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="3968"></A>
+<B>send-all</B> <EM>receivers selector &amp;rest mesg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全ての<EM>receivers</EM>に同じメッセージを送信し、結果をリストとして集める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="3979"></A>
+<B>send-super</B> <EM>selector &amp;rest msgs </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>msgs</EM>を<TT>self</TT>に送信するが、
+メソッドが定義されているクラスのスーパークラスでの
+メソッドを探し始める。
+メソッドの外の<B>send-super</B>は、エラーとなる（すなわち、メソッド内で
+なければならない）。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="3992"></A>
+<B>send-super*</B> <EM>selector &amp;rest msg-list </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>send-super*</B>は、<B>send-super</B>のapply版である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,397 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>パネル</TITLE>
+<META NAME="description" CONTENT="パネル">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node140.html">
+<LINK REL="previous" HREF="jmanual-node135.html">
+<LINK REL="up" HREF="jmanual-node134.html">
+<LINK REL="next" HREF="jmanual-node137.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2445"
+  HREF="jmanual-node137.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2439"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2433"
+  HREF="jmanual-node135.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2441"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2443"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2446"
+  HREF="jmanual-node137.html">サブパネル(メニューとメニューバー)</A>
+<B> Up:</B> <A NAME="tex2html2440"
+  HREF="jmanual-node134.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2434"
+  HREF="jmanual-node135.html">Xイベント</A>
+ &nbsp; <B>  <A NAME="tex2html2442"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2444"
+  HREF="jmanual-node156.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04072000000000000000">
+パネル</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="44367"></A>
+<BIG CLASS="XLARGE"><B>panel </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (pos items fontid
+<BR>
+rows columns ;total number of rows and columns
+<BR>
+next-x next-y
+<BR>
+item-width item-height) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>panel</B>は、パネルアイテムや他のpanelを含んだどんなxwindowも置くこと
+ができるxwindowである。
+<B>panel</B>オブジェクトは、panelの中で生成されたパネルアイテムへの
+デフォルトフォントを供給する。
+アプリケーションwindowは、<B>panel</B>のサブクラスとして定義
+去れなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44387"></A>
+<BR>
+<IMG
+ WIDTH="27" HEIGHT="31" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img82.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\&amp;rest args \= \&amp;key \= ((:item-height iheig...
+...) ((:background color) *bisque1*) \\
+\&gt; \&amp;allow-other-keys)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>panel</B>を生成し、初期化する。
+スーパークラスの<TT>:create</TT>が呼び出されるため、
+<B>xwindow</B>に対する全ての生成用パラメータ（<EM>:width, :height, 
+:border-width</EM>など）が許される。
+<EM>:item-height</EM>と<EM>:item-width</EM>は、最小の高さと幅をそれぞれのパネルアイテムに
+与える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44404"></A>
+<B>:items</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 関連するアイテムを全てリストで返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44414"></A>
+<B>:locate-item</B> <EM>item &amp;optional x y </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>item</EM>は、xwindowオブジェクト（ふつうはパネルアイテム）である。
+もし<EM>x</EM>と<EM>y</EM>が与えられたならば、アイテムはそこに置かれる。
+そうでなければ、<EM>item</EM>は、もっとも最近に置かれたアイテムに
+隣接するように置かれる。
+アイテムは、
+図 <A HREF="#panellayout"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="/usr/share/latex2html/icons/crossref.png"></A>のように
+上から下に向かって、また左から右に向かって置かれていく。
+<B>:locate-item</B>は、また<TT>items</TT>や<TT>subwindows</TT>リストに
+<EM>item</EM>を追加し、<TT>:map</TT>を送ることにより見えるようにする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="panellayout"></A><A NAME="44107"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+panelのアイテムレイアウト</CAPTION>
+<TR><TD><IMG
+ WIDTH="618" HEIGHT="54" BORDER="0"
+ SRC="jmanual-img83.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/panellayout.ps,height=7cm}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="44434"></A>
+<BR>
+<IMG
+ WIDTH="423" HEIGHT="302" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img84.png"
+ ALT="\begin{emtabbing}
+{\bf :create-item}
+\it klass label receiver method \= \&amp;rest ...
+...ャ繝云\\
+\&gt; \&amp;key ((:font fontid)\\
+\&gt; \&amp;allow-other-keys)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>klass</EM>縺ァ謖�蜒∵縺輔ｌ繧九ヱ繝阪ャH繧「繧、繝�繝縺ョ繧ッ繝ゥ繧ケ
+（すなわち、<TT>button-item,  menu-button-item, slider-item, joystick-item</TT>など),
+のインスタンスを作り、<TT>:locate-item</TT>を用いてpanelにアイテムを置く。
+<EM>args</EM>は、<EM>klass</EM>の<TT>:create</TT>メソッドに送られる。
+<EM>label</EM>は、パネルアイテムの中に書かれる識別文字列である。
+<EM>receiver</EM>と<EM>method</EM>は、一致するイベントを呼び出すイベントハンドラを
+指定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44454"></A>
+<B>:delete-items</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> パネルアイテムを全て削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44464"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img85.png"
+ ALT="\begin{emtabbing}
+{\bf :create-menubar}
+\it\= \&amp;rest args \\lq [メソッド]\\
+\&gt; \&amp;key (:font fontid)\\
+\&gt; \&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>menubar-panel</EM>を作成し、panelの最上部に置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+以下に示すメソッドは、イベントがイベントハンドラのないpanelに送られたとき、
+"subclass's responsibility"警告メッセージを避けるために提供されている。
+ユーザーのアプリケーションでは、これらのメソッドを上書きしなければならない。
+
+<P>
+
+ <BR>
+<BR> <A NAME="44476"></A>
+<B>:quit</B> <EM>&amp;rest a </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>window-main-loop</B>に<TT>:quit</TT>メッセージを送り、
+イベント処理を停止する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44488"></A>
+<B>:KeyPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44498"></A>
+<B>:KeyRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44508"></A>
+<B>:ButtonPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44518"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44528"></A>
+<B>:MotionNotify</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44538"></A>
+<B>:EnterNotify</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44548"></A>
+<B>:LeaveNotify</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html2447"
+  HREF="jmanual-node137.html">サブパネル(メニューとメニューバー)</A>
+<LI><A NAME="tex2html2448"
+  HREF="jmanual-node138.html">ファイルパネル</A>
+<LI><A NAME="tex2html2449"
+  HREF="jmanual-node139.html">テキスト表示パネル</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2445"
+  HREF="jmanual-node137.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html2439"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html2433"
+  HREF="jmanual-node135.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html2441"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html2443"
+  HREF="jmanual-node156.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2446"
+  HREF="jmanual-node137.html">サブパネル(メニューとメニューバー)</A>
+<B> Up:</B> <A NAME="tex2html2440"
+  HREF="jmanual-node134.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2434"
+  HREF="jmanual-node135.html">Xイベント</A>
+ &nbsp; <B>  <A NAME="tex2html2442"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2444"
+  HREF="jmanual-node156.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+k-okada
+2013-05-21
+</ADDRESS>
+</BODY>
+</HTML>
