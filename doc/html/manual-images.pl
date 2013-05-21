@@ -60,6 +60,18 @@ $cached_env_img{$key} = q|<IMG
  SRC="|."$dir".q|manual-img40.png"
  ALT="$which=2$">|; 
 
+$key = q/(x,y);MSF=1.6;AAT/;
+$cached_env_img{$key} = q|<IMG
+ WIDTH="41" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="|."$dir".q|manual-img98.png"
+ ALT="$(x, y)$">|; 
+
+$key = q/-2rings;MSF=1.6;AAT/;
+$cached_env_img{$key} = q|<IMG
+ WIDTH="63" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="|."$dir".q|manual-img66.png"
+ ALT="$-2 rings$">|; 
+
 $key = q/{emtabbing}{{bf{defclass}{it{classname&key=:superobject`[macro]>:slots({var{|{(vctors])}*)>:metaclassmetaclass>:element-typet>:size-1{rm{{emtabbing};MSF=1.6;AAT/;
 $cached_env_img{$key} = q|<IMG
  WIDTH="556" HEIGHT="89" ALIGN="BOTTOM" BORDER="0"
@@ -72,18 +84,6 @@ $cached_env_img{$key} = q|<IMG
 \&gt; :size -1\\\\
 \rm
 \end{emtabbing}">|; 
-
-$key = q/(x,y);MSF=1.6;AAT/;
-$cached_env_img{$key} = q|<IMG
- WIDTH="41" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="|."$dir".q|manual-img98.png"
- ALT="$(x, y)$">|; 
-
-$key = q/-2rings;MSF=1.6;AAT/;
-$cached_env_img{$key} = q|<IMG
- WIDTH="63" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
- SRC="|."$dir".q|manual-img66.png"
- ALT="$-2 rings$">|; 
 
 $key = q/{emtabbing}{{bf{system:binload}{it{opathqpath&optional=(entry(pathname-nameopathlashusrslashlocalslashbinslasheus")>(symout"a.out")>(ldopt""){rm{{emtabbing};AAT/;
 $cached_env_img{$key} = q|<IMG
@@ -268,19 +268,6 @@ $cached_env_img{$key} = q|<IMG
 \rm
 \end{emtabbing}">|; 
 
-$key = q/{emtabbing}{{bf{open}{it{path&key=:direction:input`[function]>:if-exists:new-version>:if-does-not-exist>:permission#o644>:buffer-size512{rm{{emtabbing};AAT/;
-$cached_env_img{$key} = q|<IMG
- WIDTH="553" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
- SRC="|."$dir".q|manual-img32.png"
- ALT="\begin{emtabbing}
-{\bf open}
-\it path \&amp;key \= :direction :input \\\\lq [function]\\\\...
-...\\\\
-\&gt; :permission \char93 o644 \\\\
-\&gt; :buffer-size 512\\\\
-\rm
-\end{emtabbing}">|; 
-
 $key = q/{emtabbing}{{bf{:create}{it{&key=(drawabledefaultRootWindow)`[method]>(foregrounonplane-mask>line-widthline-stylecap-stylejoin-style>fontdash{rm{{emtabbing};AAT/;
 $cached_env_img{$key} = q|<IMG
  WIDTH="552" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
@@ -298,6 +285,19 @@ $cached_env_img{$key} = q|<IMG
  WIDTH="83" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
  SRC="|."$dir".q|manual-img18.png"
  ALT="$integer+1$">|; 
+
+$key = q/{emtabbing}{{bf{open}{it{path&key=:direction:input`[function]>:if-exists:new-version>:if-does-not-exist>:permission#o644>:buffer-size512{rm{{emtabbing};AAT/;
+$cached_env_img{$key} = q|<IMG
+ WIDTH="553" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="|."$dir".q|manual-img32.png"
+ ALT="\begin{emtabbing}
+{\bf open}
+\it path \&amp;key \= :direction :input \\\\lq [function]\\\\...
+...\\\\
+\&gt; :permission \char93 o644 \\\\
+\&gt; :buffer-size 512\\\\
+\rm
+\end{emtabbing}">|; 
 
 $key = q/>;MSF=1.6;AAT/;
 $cached_env_img{$key} = q|<IMG
@@ -845,7 +845,7 @@ $cached_env_img{$key} = q|<IMG
  SRC="|."$dir".q|manual-img88.png"
  ALT="\begin{emtabbing}
 {\bf edge1}
-\it img \=\&amp;optional \=(method 1) \\\\lq [function]\ ...
+\it img \=\&amp;optional \=(method 1) \\\\lq [function] ...
 ...&gt;\&amp;aux (width (send img :width)) (height (send img :height))
 \rm
 \end{emtabbing}">|; 

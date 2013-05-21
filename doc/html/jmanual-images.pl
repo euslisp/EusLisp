@@ -327,7 +327,7 @@ $cached_env_img{$key} = q|<IMG
  SRC="|."$dir".q|jmanual-img99.png"
  ALT="\begin{emtabbing}
 {\bf :edge1}
-\it\&amp;optional \= (method 1) \\\\lq  [メソッド]\ ...
+\it\&amp;optional \= (method 1) \\\\lq  [メソッド] ...
 ...th-threshold*)\\\\
 \&gt; (win geometry:*viewsurface*) (edgeimg1)
 \rm
@@ -712,6 +712,12 @@ $cached_env_img{$key} = q|<IMG
 ...ps,width=7.9cm}
 \epsfile{file=fig/fig-peg-in-hole4.ps,width=7.9cm}\end{figure}">|; 
 
+$key = q/{figure}epsfile{file=figslasheta3colavo.ps,width=150mm}{{{figure};FSF=1.6;AAT/;
+$cached_env_img{$key} = q|<IMG
+ WIDTH="580" HEIGHT="16" BORDER="0"
+ SRC="|."$dir".q|jmanual-img2.png"
+ ALT="\begin{figure}\epsfile{file=fig/eta3colavo.ps,width=150mm}\end{figure}">|; 
+
 $key = q/0;MSF=1.6;AAT/;
 $cached_env_img{$key} = q|<IMG
  WIDTH="9" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
@@ -852,7 +858,7 @@ $cached_env_img{$key} = q|<IMG
  SRC="|."$dir".q|jmanual-img100.png"
  ALT="\begin{emtabbing}
 {\bf :edge1}
-\it\&amp;optional \= (method 1) \\\\lq  [メソッド]\ ...
+\it\&amp;optional \= (method 1) \\\\lq  [メソッド] ...
 ...
 \&gt; (run *edge-length-threshold*)\\\\
 \&gt; (win *color-viewer*)
@@ -965,7 +971,7 @@ $cached_env_img{$key} = q|<IMG
  SRC="|."$dir".q|jmanual-img36.png"
  ALT="\begin{emtabbing}
 {\bf open}
-\it path \&amp;key \= :direction :input \\\\lq  [関数]\ ...
+\it path \&amp;key \= :direction :input \\\\lq  [関数] ...
 ...\\\\
 \&gt; :permission \char93 o644 \\\\
 \&gt; :buffer-size 512\\\\
