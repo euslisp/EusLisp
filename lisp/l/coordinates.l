@@ -547,8 +547,10 @@
     (setf manager self
 	  changed t	;safer
 	  worldcoords	;prepare a world-coordinates holder
-	  (instance coordinates :init :rot (copy-object rot)
-				      :pos (copy-object pos)))
+          ;; avoid to use copy-object, see https://sourceforge.net/p/jskeus/tickets/28/
+	  (instance coordinates :init :rot (copy-matrix rot) ; (copy-object rot)
+				      :pos (copy-seq pos)    ; (copy-object pos)
+                                      ))
     (if par (send par :assoc self at)) 
     self)
 )
