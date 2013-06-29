@@ -164,6 +164,7 @@
   `(progn
      ;; its not cool...
      (defun ,name ()
+       (warning-message 2 "start testing [~A]~%" ',name)
        ,@body)
      (send *unit-test* :add-function ',name)
      ',name))
