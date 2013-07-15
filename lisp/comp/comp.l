@@ -1456,7 +1456,8 @@
       (setq pname (make-pathname :defaults fname :type "h"))
       (unix:unlink (namestring pname))
       (setq pname (make-pathname :defaults fname :type
-	#-:linux	"o"
+        #-(or :linux :cygwin) "o"
+        #+:cygwin       "dll"
 	#+:linux	"so"
 	))
       (load pname)
