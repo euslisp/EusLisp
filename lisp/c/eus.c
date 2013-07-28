@@ -911,6 +911,9 @@ static void initfeatures()
 #if x86_64
   p=cons(ctx,intern(ctx,"X86_64",6,keywordpkg),p);
 #endif
+#if ARM
+  p=cons(ctx,intern(ctx,"ARM",3,keywordpkg),p);
+#endif
 
   defvar(ctx,"*FEATURES*",p,lisppkg);
 
