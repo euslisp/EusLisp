@@ -27,7 +27,7 @@ static char *rcsid="@(#)$Id$";
 #include "eus.h"
 
 struct foreignpod {
-#if vax || sun4 || news || mips || i386 || alpha || x86_64
+#if vax || sun4 || news || mips || i386 || alpha || x86_64 || ARM
     unsigned mark:1;
     unsigned b:1;
     unsigned m:1;

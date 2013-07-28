@@ -447,7 +447,7 @@ int n; pointer argv[];
   return(makeint(alarm(ckintval(argv[0]))));}
 
 
-#if sun3 || sun4 || news || sanyo  || alpha || i386 || x86_64
+#if sun3 || sun4 || news || sanyo  || alpha || i386 || x86_64 || ARM
 #if !Solaris2
 pointer UALARM(ctx,n,argv)
 register context *ctx;
@@ -621,7 +621,7 @@ pointer *argv;
   }
 #endif
 
-#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64
+#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64 || ARM
 pointer VFORK(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1341,7 +1341,7 @@ pointer *argv;
   if (envval) return(makestring(envval,strlen(envval)));
   else return(NIL);}
 
-#if sun3 || sun4 || vax || mips || i386 || alpha || x86_64
+#if sun3 || sun4 || vax || mips || i386 || alpha || x86_64 || ARM
 pointer PUTENV(ctx,n,argv)
 register context *ctx;
 int n;
@@ -2040,7 +2040,7 @@ pointer mod;
   defun(ctx,"GETTIMEOFDAY",mod,GETTIMEOFDAY);
   defun(ctx,"ALARM",mod,ALARM);
 
-#if sun3 || sun4 || news || sanyo || alpha || x86_64 /* why i386 does not exist? */
+#if sun3 || sun4 || news || sanyo || alpha || x86_64 || ARM /* why i386 does not exist? */
 #if !Solaris2
   defun(ctx,"UALARM",mod,UALARM);
 #endif
@@ -2115,7 +2115,7 @@ pointer mod;
   defun(ctx,"NTOHS",mod,N2HS);
 #endif
 
-#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64
+#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64 || ARM
   defun(ctx,"VFORK",mod,VFORK);
 #endif
   defun(ctx,"EXEC",mod,EXEC);
@@ -2124,7 +2124,7 @@ pointer mod;
   defun(ctx,"SETPRIORITY",mod,SETPRIORITY);
 #endif
 
-#if sun3 || sun4 || vax || mips || i386 || alpha || x86_64
+#if sun3 || sun4 || vax || mips || i386 || alpha || x86_64 || ARM
   defun(ctx,"PUTENV",mod,PUTENV);
 #endif
 #if sun3 || sun4 && !Solaris2 || Linux || alpha || Cygwin

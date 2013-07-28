@@ -200,9 +200,9 @@
 		    direction font_ascent font_descent overall)
   (integer-vector (c-int font_ascent)
 		  (c-int font_descent)
-#-(or :i386 :alpha :x86_64)
+#-(or :i386 :alpha :x86_64 :arm)
 		%(overall [ 4 ] * 256 + overall [ 5 ])
-#+(or :i386 :alpha :x86_64)
+#+(or :i386 :alpha :x86_64 :arm)
 		%(overall [ 5 ] * 256 + overall [ 4 ])
 		)))
 	#| return = (ascent descent width) |#

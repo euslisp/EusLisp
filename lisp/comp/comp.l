@@ -1313,9 +1313,12 @@
 			      " -DDarwin -Dx86_64 -DLinux -w -malign-functions=8 "
 			    " -DDarwin -Di386 -DLinux -w -malign-functions=4 "))
 		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
-			  (if (memq :x86_64 *features*)
-				" -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 "
-				" -Di386 -DLinux -Wimplicit -falign-functions=4 -DGCC3 "))
+			  (cond
+                           ((memq :x86_64 *features*)
+                            " -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                           ((memq :arm *features*)
+                            " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
+                           (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")))
 		   	 ((memq :linux *features*)
 			  (if (memq :x86_64 *features)
 				" -Dx86_64 -DLinux -Wimplicit -malign-functions=8 "

@@ -188,7 +188,11 @@ enum ch_attr charattr[256]={
 #if IRIX || Linux_ppc
 #define Char int
 #else
+#if ARM
+#define Char signed char
+#else
 #define Char char
+#endif
 #endif
 
 static Char skip(ctx, f, ch)
@@ -264,7 +268,7 @@ pointer *addr;
 #if sun3 ||( !alpha && system5 ) || sanyo
   labp->c.lab.unsolved=(pointer)addr;
 #endif
-#if sun4 || vax || news || mips || alpha || i386 || x86_64
+#if sun4 || vax || news || mips || alpha || i386 || x86_64 || ARM
   { eusinteger_t i;
     i=(((eusinteger_t)addr)>>2);
     labp->c.lab.unsolved=makeint(i);}

@@ -249,7 +249,7 @@ $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 
 $(BINDIR)/eus:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS)  $(COMPOBJECTS) \
-		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
+		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) $(MAPOPTION) \
 		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX) 
 	($(CC) -o $(BINDIR)/eus $(LDFLAGS)  \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
@@ -270,7 +270,7 @@ $(BINDIR)/eusxv:	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(IMGLIB) $(EDGELIB) $(XLIB) $(RAWLIB))
 
 $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
-		$(LCOBJECTS) $(COMPOBJECTS)  \
+		$(LCOBJECTS) $(COMPOBJECTS)  $(MAPOPTION) \
 		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX) $(ADLIBDIR)/$(LIBEUSGL) 
 	($(CC) -o $(BINDIR)/eusgl $(LDFLAGS)  \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
@@ -319,7 +319,7 @@ $(LCOBJECTS):
         $(CC) -c -o $(OBJDIR)/constants.l.o $(CFLAGS) constants.l.c; \
 	 $(BINDIR)/gccls eusstart.l; \
         $(CC) -c $(CFLAGS) -o $(OBJDIR)/eusstart.l.o eusstart.l.c)
-$(LOBJECTS):
+$(LOBJECTS) $(MAPOPTION):
 	(echo $*; $(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l)
 $(COMPOBJECTS):	$(GCCLS)
 	($(BINDIR)/euscomp <$(TOOLDIR)/compile_comp.l ; \

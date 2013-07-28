@@ -1,0 +1,109 @@
+# makefile for EusLisp on sun4 with SunOS (Solaris)
+# RCSid="@(#)$Id$"
+#	Copyright (1988) Toshihiro MATSUI, Electrotechnical Laboratory
+#	1989/Oct
+#	1990/Sep Second Tape Distribution
+#	KOBJECTS --- eus kernel objects written in C
+#	NOKOBJECTS-- eus kernel, but cannot be optimized with -O option
+#	CLIBOBJECTS- functions written in C, not members of kernel
+#	LOBJECTS --- functions coded in EUSLISP; must be compiled with euscomp
+#	GEOOBJECTS-- geometric modeling functions and classes
+#	XOBJECTS---- Xwindow interface
+#	XTKOBJECTS---- Xwindow interface
+#	IMGOBJECTS--- image processing
+#	MTOBJECTS--- multithread functions
+#
+#########################################################################
+# Customizable section begins
+#########################################################################
+ifneq ($(ARCHDIR),)
+ARCH=$(ARCHDIR)
+else
+ARCH=LinuxARM
+endif
+
+include Makefile.generic1
+
+THREAD= -DTHREADED -DPTHREAD
+MFLAGS=
+XVERSION=X_V11R6_1
+
+
+#
+# Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
+#
+# for ARM
+
+MACHINE=armv6
+#MACHINE=armv5te
+
+GCC_VERSION=$(shell gcc -dumpversion | sed s/\\..\*//)
+ifeq ($(GCC_VERSION), 2)
+ CPU_OPTIMIZE=
+ ALIGN_FUNCTIONS="-malign-functions=4"
+else
+ CPU_OPTIMIZE=-march=$(MACHINE)
+ ALIGN_FUNCTIONS=-falign-functions=4
+ GCC3=-DGCC3
+endif
+
+# Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
+DEBUG= -g
+#WFLAGS= -Wall -Wno-unused -Wno-switch -Wno-return-type -Wno-comment
+
+# If you use libc.so.5, remove -DLIB6 option.
+# In order to include thread library, libc.so.6 is preferrable.
+
+CFLAGS=$(WFLAGS) -D$(MACHINE) -DLinux -DARM -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+	-DLIB6 $(ALIGN_FUNCTIONS) \
+        $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
+	-DGCC $(GCC3) \
+	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/include
+
+# Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
+# /usr/ucb/cc cannot compile because of its incapability of recognizing
+# prototype declarations.
+CC=gcc
+LD=gcc
+
+#
+# L I B R A R I E S
+# Three kinds of libraries are needed to build eus.
+# 1. RAWLIB: unix libraries needed to make eus0-eus2
+# 2. XLIB: X window libraries
+#    When you use a window toolkit, you may need to override the 'read'
+#    function in libc.a with a specific window library such as libXview.a.
+# 3. EUSLIB: euslisp functions that cannot be linked in eus because of
+#    'GLOBAL OFFSET TABLE OVERFLOW', that are xwindow interface functions.
+# You may add any optional user-supplied library in EUSLIB.
+# On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
+
+# Linux
+RAWLIB=-ldl -lm -lpthread
+XLIB= -L/usr/X11R6/lib -lX11
+
+# specify directories where euslisp's libraries are located.
+EUSLIB= -Xlinker -R$(ADLIBDIR):$(EUSDIR)/lib/ARM -L$(ADLIBDIR) 
+GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
+
+# POSIX Thread 
+THREADDEP=mthread_posix.c
+#THREADDEP=pthreads.c
+
+# If you don't like optimization, comment out the next line.
+OFLAGS=-O2
+
+# link-editor's default flags ?-rdynamic 
+SOFLAGS= -shared
+LDFLAGS= -rdynamic -fno-stack-protector -Wl,-z,execstack
+MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
+#MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/pthreads.o
+MAPOPTION=$(OBJDIR)/par.o
+
+#################################################################
+# end of the customizable section
+################################################################
+
+#include Makefile.rgc
+include Makefile.generic2
+

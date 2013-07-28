@@ -88,7 +88,7 @@ register pointer s;
 #if system5 || Solaris2
       if (c<0) { breakck; goto tryqread;}
 #endif
-#if sun3 || sun4 || vax || apollo || news || sanyo || mips || i386 || alpha || x86_64
+#if sun3 || sun4 || vax || apollo || news || sanyo || mips || i386 || alpha || x86_64 || ARM
       breakck;
 #endif
       s->c.stream.buffer->c.str.length=lsave;

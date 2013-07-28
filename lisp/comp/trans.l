@@ -454,7 +454,7 @@
 	   (send self :store "w")
 	   (when (memq op '(+ -))
 	      (format cfile
-		 "#if sun4 || vax || mips || i386 || alpha || x86_64~%	w=(pointer)((eusinteger_t)w-2);~%#endif~%"))
+		 "#if sun4 || vax || mips || i386 || alpha || x86_64 || ARM~%	w=(pointer)((eusinteger_t)w-2);~%#endif~%"))
 	   (send self :push
 		 (format nil "(pointer)((eusinteger_t)~A ~A (eusinteger_t)w)"
 			 (send self :pop) 
