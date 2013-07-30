@@ -1127,7 +1127,7 @@ pointer argv[];
 
   ckarg2(0,1);
   if (n==1)  s=get_string(argv[0]); else s=(byte *)".";
-  dirp = opendir((char *)s);
+  if ( (dirp = opendir((char *)s)) == NULL ) return (NIL);
   while ( (direntp = readdir( dirp )) != NULL ){
      str=direntp->d_name; 
      if(flag) a=cons(ctx,makestring(str,strlen(str)),a);
