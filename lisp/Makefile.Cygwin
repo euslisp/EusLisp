@@ -76,8 +76,7 @@ THREADDEP=mthread_posix.c
 OFLAGS=-O2
 
 # link-editor's default flags ?-rdynamic 
-#SOFLAGS= -shared --allow-shlib-undefined --warn-unresolved-symbols --unresolved-symbols=ignore-all --warn-once --enable-extra-pe-debug --enable-auto-import
-SOFLAGS= -shared --export-all-symbols --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc
+SOFLAGS= -shared -Wl,--export-all-symbols -Wl,--unresolved-symbols=ignore-all -Wl,--enable-runtime-pseudo-reloc
 LDFLAGS= -Wl,--out-implib=$(BINDIR)/$(@F).a -Wl,--export-all-symbols -Wl,--enable-auto-import
 
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
@@ -141,11 +140,3 @@ $(ADLIBDIR)/$(LIBEUSGL):
 $(BINDIR)/eus:
 	@echo ";; Do not compile eus for Cygwin, Just symlink"
 	(cd $(BINDIR); rm -f eus.exe; ln -sf eusgl.exe eus.exe)
-
-
-
-
-
-
-
-
