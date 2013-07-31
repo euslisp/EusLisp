@@ -1390,7 +1390,7 @@
 		   (if (and (memq :cygwin *features*)
 			    (not *kernel*))
 			(concatenate string
-				"; gcc -shared -g -falign-functions=4 --export-all-symbols --unresolved-symbols=ignore-all --enable-runtime-pseudo-reloc -o "
+				"; gcc -shared -g -falign-functions=4 -Wl,--export-all-symbols -Wl,--unresolved-symbols=ignore-all -Wl,--enable-runtime-pseudo-reloc -o "
 				(namestring file.dll) " "
 				(namestring file.o) " "
 				*eusdir* (unix:getenv "ARCHDIR")
