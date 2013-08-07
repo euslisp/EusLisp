@@ -30,7 +30,8 @@ XVERSION=X_V11R6_1
 #
 # for Cygwin
 
-CPU_OPTIMIZE=-mcpu=i486
+#CPU_OPTIMIZE=-mcpu=i486
+CPU_OPTIMIZE=
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
 MACHINE=i486
 DEBUG= -g
@@ -38,7 +39,7 @@ DEBUG= -g
 # If you use libc.so.5, remove -DLIB6 option.
 # In order to include thread library, libc.so.6 is preferrable.
 
-CFLAGS=-Wl,--stack,5000000 -D$(MACHINE) -DCygwin -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+CFLAGS=-D$(MACHINE) -DCygwin -D_REENTRANT -DVERSION=\"$(VERSION)\" \
 	-DGCC -DKERNEL -falign-functions=8 \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/lisp/c
@@ -76,8 +77,9 @@ THREADDEP=mthread_posix.c
 OFLAGS=-O2
 
 # link-editor's default flags ?-rdynamic 
-SOFLAGS= -shared -Wl,--export-all-symbols -Wl,--unresolved-symbols=ignore-all -Wl,--enable-runtime-pseudo-reloc
-LDFLAGS= -Wl,--out-implib=$(BINDIR)/$(@F).a -Wl,--export-all-symbols -Wl,--enable-auto-import
+#SOFLAGS= -shared -Wl,--export-all-symbols -Wl,--unresolved-symbols=ignore-all -Wl,--enable-runtime-pseudo-reloc
+SOFLAGS= -shared -Wl,--export-all-symbols -Wl,--enable-runtime-pseudo-reloc
+LDFLAGS= -Wl,--out-implib=$(BINDIR)/$(@F).a -Wl,--export-all-symbols -Wl,--enable-auto-import -Wl,--stack,5000000
 
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 MAPOPTION=  $(OBJDIR)/par.o
