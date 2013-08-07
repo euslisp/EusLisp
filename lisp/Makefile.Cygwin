@@ -38,7 +38,7 @@ DEBUG= -g
 # If you use libc.so.5, remove -DLIB6 option.
 # In order to include thread library, libc.so.6 is preferrable.
 
-CFLAGS=-D$(MACHINE) -DCygwin -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+CFLAGS=-Wl,--stack,5000000 -D$(MACHINE) -DCygwin -D_REENTRANT -DVERSION=\"$(VERSION)\" \
 	-DGCC -DKERNEL -falign-functions=8 \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/lisp/c
