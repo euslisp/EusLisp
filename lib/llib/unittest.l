@@ -66,9 +66,10 @@
    (format strm "    PASSED:   ~A~%" (send self :num-successes))
    (if (> (send self :num-failures) 0)
        (format strm "~C[3~Cm" #x1b 49))
-   (format strm "    FAILURE:  ~A~%" (send self :num-failures))
+   (format strm "    FAILURE:  ~A" (send self :num-failures))
    (if (> (send self :num-failures) 0)
-       (format strm "~C[0m" #x1b))
+       (format strm "~C[0m~%" #x1b)
+     (format strm "~%"))
    )
   (:prin1-xml
    (strm)
