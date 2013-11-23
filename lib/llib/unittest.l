@@ -56,7 +56,7 @@
   (:init (n) (setq name n tests nil failures nil time 0))
   (:tests () tests)
   (:num-tests () (length tests))
-  (:num-failures () (if failures 1 0)) ;; need fix
+  (:num-failures () (length failures))
   (:num-successes () (- (send self :num-tests) (send self :num-failures)))
   (:time () time)
   (:prin1
@@ -123,8 +123,7 @@
    (push (instance unit-test-result :init func-sym) result))
   (:clear-result ()
    (setq result nil)
-   (send self :init-result 'all-test)
-   (send self :increment-test 'all-test))
+   )
   ;;
   (:print-xml-result
    (&optional (strm t))
@@ -176,7 +175,6 @@
     (send *unit-test* :init-result func-sym)
     (format t "TEST-NAME: ~A~%" func-sym)
     (format t "  now testing...~%")
-    (send *unit-test* :increment-test func-sym)
     (setq tm (instance mtimer :init))
     (send tm :start)
     (funcall func)
@@ -213,6 +211,7 @@
 	  ;;	 (setq ret (lisp::step ,pred))
 	  ;;       (setq ret ,pred))
 	  ;;
+	  (send *unit-test* :increment-test ',pred)
 	  (if (not ret)
 	      ;; escape <> for xml
 	      (send *unit-test* :increment-failure ',pred (format nil ,message ,@args)
