@@ -53,11 +53,11 @@ DEBUG= -g
 # If you use libc.so.5, remove -DLIB6 option.
 # In order to include thread library, libc.so.6 is preferrable.
 
-CFLAGS=-D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" -DDarwin \
+CFLAGS=-D$(MACHINE) -Wno-return-type -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" -DDarwin \
 	-DLIB6 $(ALIGN_FUNCTIONS)  \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	-DGCC $(GCC3) \
-        -I/usr/include -I/opt/local/include -I/usr/X11/include -I$(EUSDIR)/include
+        -I/usr/include -I/opt/local/include -I/opt/X11/include -I$(EUSDIR)/include
 
 # Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
 # /usr/ucb/cc cannot compile because of its incapability of recognizing
@@ -78,11 +78,11 @@ LD=gcc
 # On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
 
 RAWLIB=-ldl -lm -lpthread
-XLIB= -L/opt/local/lib -L/usr/X11/lib -lX11
+XLIB= -L/opt/local/lib -L/opt/X11/lib -lX11
 
 # specify directories where euslisp's libraries are located.
 EUSLIB= -L$(ADLIBDIR)
-GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
+GLLIB= -L$/opt/X11/lib -lGLU -lGL -lXext -leusgl
 
 # POSIX Thread 
 THREADDEP=mthread_posix.c
