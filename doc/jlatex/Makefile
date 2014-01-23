@@ -1,5 +1,9 @@
 all:
-	make dvi dvi pdf
+	make toc dvi dvi pdf
+
+
+toc:
+	makeindex jmanual.tex
 
 dvi:
 	platex jmanual.tex
@@ -9,4 +13,7 @@ pdf:
 
 
 clean:
-	rm -f *~ *.aux
+	rm -f *~ *.aux *.idx *.log *.toc *.out *.ind *.ilg
+
+distclean: clean
+	rm -f *.dvi *.pdf
