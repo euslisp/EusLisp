@@ -1,11 +1,12 @@
 all:
-	make toc dvi dvi pdf
+	make toc dvi pdf
 
 
 toc:
 	makeindex jmanual.tex
 
 dvi:
+	platex jmanual.tex
 	platex jmanual.tex
 
 pdf:
