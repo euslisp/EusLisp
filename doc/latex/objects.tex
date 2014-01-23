@@ -229,7 +229,7 @@ more comprehensive information  by using
 {\bf send-super} macro specifying {\em mesg} string.
 An object is re-readable if it begins with \#$<$,
 followed by its class name, correct address, any lisp-readable information,
-and \verb+>+.
+and \verb~>~.
 Since every data object except numbers inherits {\bf object},
 you can get print forms in this notation, even for symbols or strings.
 Specifying this notation, you can catch data objects that you forgot
@@ -253,8 +253,8 @@ lists, even if they are not symbols.}
 if {\em plist} is specified, it is set to the plist slot of this object.
 Previous plist, if there had been one, is lost.
 Legal plist should be of the form of
-\verb+((indicator1 . value1) (indicator2 . value2) ...)+.
-Each \verb+indicator+ can be any lisp form that are tested its equality
+\verb~((indicator1 . value1) (indicator2 . value2) ...)~.
+Each \verb~indicator~ can be any lisp form that are tested its equality
 with the {\bf eq} function.
 When a symbol is used for an indicator, use of keyword is recommended
 to ensure the equality check will be performed interpacakge-widely.
@@ -262,7 +262,7 @@ to ensure the equality check will be performed interpacakge-widely.
 
 \methoddesc{:get}{indicator}{
 returns the value associated with {\em indicator} in the property list.
-\verb+(send x :get :y) == (cdr (assoc :y (send x :plist)))+.}
+\verb~(send x :get :y) == (cdr (assoc :y (send x :plist)))~.}
 
 \methoddesc{:put}{indicator value}{
 associates {\em value} to {\em indicator} in the plist.}
