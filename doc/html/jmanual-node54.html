@@ -94,14 +94,8 @@ Readerのデフォルトマクロ文字は：
 
 <P>
 <PRE><TT>
-<B><SPAN CLASS="MATH"><IMG
- WIDTH="20" HEIGHT="17" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img32.png"
- ALT="$\backslash$"></SPAN></B>   単一文字エスケープ
-<BR><B><SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img33.png"
- ALT="$\vert...\vert$"></SPAN></B> 		  多重文字エスケープ
+<B><SPAN CLASS="MATH">32#32</SPAN></B>   単一文字エスケープ
+<BR><B><SPAN CLASS="MATH">33#33</SPAN></B> 		  多重文字エスケープ
 <BR>
 </TT></PRE>
 
@@ -111,20 +105,8 @@ Readerのデフォルトマクロ文字は：
 そして大文字のsymbolは内部に蓄えられる。
 例えば、'abcと'ABCは同じsymbolとみなされる。
 エスケープは、それらを区別するのに必要である。
-'<SPAN CLASS="MATH"><IMG
- WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img7.png"
- ALT="$\vert$"></SPAN>ABC<SPAN CLASS="MATH"><IMG
- WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img7.png"
- ALT="$\vert$"></SPAN>, 'ABCと'abcは同一であるが、
-'<SPAN CLASS="MATH"><IMG
- WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img7.png"
- ALT="$\vert$"></SPAN>abc<SPAN CLASS="MATH"><IMG
- WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img7.png"
- ALT="$\vert$"></SPAN>と'abcは違うsymbolである。
+'<SPAN CLASS="MATH">7#7</SPAN>ABC<SPAN CLASS="MATH">7#7</SPAN>, 'ABCと'abcは同一であるが、
+'<SPAN CLASS="MATH">7#7</SPAN>abc<SPAN CLASS="MATH">7#7</SPAN>と'abcは違うsymbolである。
 デフォルトとして、大文字のsymbolを入力したときでさえ、
 そのsymbolを表示するときは
 EusLispのプリンタが内部の大文字表現から小文字に変換する。
@@ -135,10 +117,7 @@ EusLispのプリンタが内部の大文字表現から小文字に変換する。
 <P>
 10.は整数の10として読まれ、実数の10.0ではない。
 ':'がパッケージマーカーとして予約されているので、
-'<SPAN CLASS="MATH"><IMG
- WIDTH="554" HEIGHT="92" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img37.png"
- ALT="$\vert g:pcube\vert$"></SPAN>のようにsymbolを構成するものとして使うとき、エスケープ化しなければ
+'<SPAN CLASS="MATH">37#37</SPAN>のようにsymbolを構成するものとして使うとき、エスケープ化しなければ
 ならない。
 この制限は、文字':'の構文により強制されないが、
 アルファベット順やletterの意味を決定する属性により強制される。
@@ -164,13 +143,7 @@ Cの様な関数呼出や行列参照も、lisp形式に変換される。
 <TT>func(a b c ...)</TT>や<TT>ary[1 2 3 ...]</TT>のように記述し、
 <TT>func(a,b,c)</TT>や<TT>ary[1][2][3]</TT>のように書かない。
 相対表現や割り当てもまた、正しく扱われる。
-それで、<TT>%(a <SPAN CLASS="MATH"><IMG
- WIDTH="556" HEIGHT="89" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img9.png"
- ALT="$&lt;$"></SPAN> b)</TT>は<TT>(<SPAN CLASS="MATH"><IMG
- WIDTH="556" HEIGHT="89" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img9.png"
- ALT="$&lt;$"></SPAN> a b)</TT>に変換され、
+それで、<TT>%(a <SPAN CLASS="MATH">9#9</SPAN> b)</TT>は<TT>(<SPAN CLASS="MATH">9#9</SPAN> a b)</TT>に変換され、
 <TT>%(a[0] = b[0] * c[0])</TT>は 
 <TT>(setf (aref a 0) (* (aref b 0) (aref c 0)))</TT>として得られる。
 単純な最適化は、重複した関数呼出や行列参照をなくすことである。
@@ -237,10 +210,7 @@ Cの様な関数呼出や行列参照も、lisp形式に変換される。
 <DT><STRONG><TT>#'</TT></STRONG></DT>
 <DD>関数; コンパイルコードあるいはlambda-closure
 </DD>
-<DT><STRONG><TT>#<SPAN CLASS="MATH"><IMG
- WIDTH="20" HEIGHT="17" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img32.png"
- ALT="$\backslash$"></SPAN></TT></STRONG></DT>
+<DT><STRONG><TT>#<SPAN CLASS="MATH">32#32</SPAN></TT></STRONG></DT>
 <DD>文字
 </DD>
 <DT><STRONG><TT>#,</TT></STRONG></DT>
@@ -258,13 +228,7 @@ Cの様な関数呼出や行列参照も、lisp形式に変換される。
 <DT><STRONG><TT>#:</TT></STRONG></DT>
 <DD>収容されてないsymbol
 </DD>
-<DT><STRONG><TT>#<SPAN CLASS="MATH"><IMG
- WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img7.png"
- ALT="$\vert$"></SPAN>...<SPAN CLASS="MATH"><IMG
- WIDTH="368" HEIGHT="940" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img7.png"
- ALT="$\vert$"></SPAN>#</TT></STRONG></DT>
+<DT><STRONG><TT>#<SPAN CLASS="MATH">7#7</SPAN>...<SPAN CLASS="MATH">7#7</SPAN>#</TT></STRONG></DT>
 <DD>コメント; 入れ子可能
 </DD>
 </DL>
@@ -319,10 +283,7 @@ s表現を1つ読み込む。
 <DD> 
 <EM>delim-char</EM>で終了するs表現を読み込む。
 これは、コンマで区切られたリストや
-<TT>#<SPAN CLASS="MATH"><IMG
- WIDTH="20" HEIGHT="17" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img32.png"
- ALT="$\backslash$"></SPAN>]</TT>のような特殊文字で終る数列を読むために役立つ。
+<TT>#<SPAN CLASS="MATH">32#32</SPAN>]</TT>のような特殊文字で終る数列を読むために役立つ。
 </DD>
 </DL>
 <BR>
@@ -336,10 +297,7 @@ s表現を1つ読み込む。
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>#<SPAN CLASS="MATH"><IMG
- WIDTH="20" HEIGHT="17" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img32.png"
- ALT="$\backslash$"></SPAN>newline</TT>(改行)で終了する1行を読み込む。
+<TT>#<SPAN CLASS="MATH">32#32</SPAN>newline</TT>(改行)で終了する1行を読み込む。
 返された文字列には、最後の改行文字を含まない。
 </DD>
 </DL>
@@ -578,7 +536,7 @@ dispatch read-macro関数を返す。
 <!--End of Navigation Panel-->
 <ADDRESS>
 k-okada
-2013-05-21
+2014-01-23
 </ADDRESS>
 </BODY>
 </HTML>
