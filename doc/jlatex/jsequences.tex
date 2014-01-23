@@ -1,192 +1,192 @@
-\section{列、行列とテーブル}
-\markright{\arabic{section}. 列、行列とテーブル}
+\section{列、行列とテーブル}
+\markright{\arabic{section}. 列、行列とテーブル}
 
-\subsection{一般列}
+\subsection{一般列}
 
-ベクトル(1次元行列)とリストは、一般の列である。
-文字列(string)は、文字(character)のベクトルなので、列である。
+ベクトル(1次元行列)とリストは、一般の列である。
+文字列(string)は、文字(character)のベクトルなので、列である。
 
-{\bf map, concatenate}や{\bf coerce}における結果の型を明記するためには、
-クラスオブジェクトがsymbolにバインドされていないので、引用符なしで
-{\tt cons, string, integer-vector, float-vector}などのクラス名symbolを使う。
+{\bf map, concatenate}や{\bf coerce}における結果の型を明記するためには、
+クラスオブジェクトがsymbolにバインドされていないので、引用符なしで
+{\tt cons, string, integer-vector, float-vector}などのクラス名symbolを使う。
 
 \begin{refdesc}
 
 \funcdesc{elt}{sequence pos}{
-{\bf elt}は、{\em sequence}の中の{\em pos}番目の位置の値を得たり、({\bf setf}と
-ともに)置いたりする最も一般的な関数である。
-{\em sequence}は、リストまたは任意のオブジェクト、{\tt bit, char, integer, float}の
-ベクトルである。
-{\bf elt}は、多次元の行列に適用できない。}
+{\bf elt}は、{\em sequence}の中の{\em pos}番目の位置の値を得たり、({\bf setf}と
+ともに)置いたりする最も一般的な関数である。
+{\em sequence}は、リストまたは任意のオブジェクト、{\tt bit, char, integer, float}の
+ベクトルである。
+{\bf elt}は、多次元の行列に適用できない。}
 
 \funcdesc{length}{sequence}{
-{\em sequence}の長さを返す。
-ベクトルにおいて、{\bf length}は一定の時間で終了する。
-しかし、リスト型においては、長さに比例した時間がかかる。
-{\bf length}が、もし環状リストに適用されたとき、決して終了しない。
-代わりに{\bf list-length}を使用すること。
-もし、{\em sequence}がfill-pointerを持つ行列ならば、
-{\bf length}は行列全体のサイズを返すのではなくfill-pointerを返す。
-このような行列のサイズを知りたい場合には、{\bf array-total-size}を
-使用すること。
+{\em sequence}の長さを返す。
+ベクトルにおいて、{\bf length}は一定の時間で終了する。
+しかし、リスト型においては、長さに比例した時間がかかる。
+{\bf length}が、もし環状リストに適用されたとき、決して終了しない。
+代わりに{\bf list-length}を使用すること。
+もし、{\em sequence}がfill-pointerを持つ行列ならば、
+{\bf length}は行列全体のサイズを返すのではなくfill-pointerを返す。
+このような行列のサイズを知りたい場合には、{\bf array-total-size}を
+使用すること。
 }
 
 \funcdesc{subseq}{sequence start [end]}{
-{\em sequence}の{\em start}番目から({\em end}$-$1)番目までをそっくりコピーした
-列を作る。
-{\em end}は、デフォルト値として{\em sequence}の長さをとる。}
+{\em sequence}の{\em start}番目から({\em end}$-$1)番目までをそっくりコピーした
+列を作る。
+{\em end}は、デフォルト値として{\em sequence}の長さをとる。}
 
 \funcdesc{copy-seq}{sequence}{
-{\em sequence}のコピーした列を作る。
-このコピーでは、{\em sequence}のトップレベルの参照のみがコピーされる。
-入れこリストのコピーには{\bf copy-tree}を使い、
-再帰参照を持つような列のコピーには
-{\bf copy-object}を使うこと。}
+{\em sequence}のコピーした列を作る。
+このコピーでは、{\em sequence}のトップレベルの参照のみがコピーされる。
+入れこリストのコピーには{\bf copy-tree}を使い、
+再帰参照を持つような列のコピーには
+{\bf copy-object}を使うこと。}
 
 \funcdesc{reverse}{sequence}{
-{\em sequence}の順番を逆にし、{\em sequence}と同じ型の新しい列を
-返す。}
+{\em sequence}の順番を逆にし、{\em sequence}と同じ型の新しい列を
+返す。}
 
 \funcdesc{nreverse}{sequence}{
-{\bf nreverse}は、{\bf reverse}の破壊(destructive)バージョンである。
-{\bf reverse}はメモリを確保するが、{\bf nreverse}はしない。}
+{\bf nreverse}は、{\bf reverse}の破壊(destructive)バージョンである。
+{\bf reverse}はメモリを確保するが、{\bf nreverse}はしない。}
 
 \funcdesc{concatenate}{result-type \{sequence\}*}{
-全ての{\em sequence}を連結させる。
-それぞれの{\em sequence}は、なにかの列型である。
-{\bf append}と違って、最後の一つまで含めた全ての列がコピーされる。
-{\em result-type}は、{\tt cons,string,vector,float-vector}などの
-クラスである。
+全ての{\em sequence}を連結させる。
+それぞれの{\em sequence}は、なにかの列型である。
+{\bf append}と違って、最後の一つまで含めた全ての列がコピーされる。
+{\em result-type}は、{\tt cons,string,vector,float-vector}などの
+クラスである。
 }
 
 \funcdesc{coerce}{sequence result-type}{
-{\em sequence}の型を変更する。
-例えば、{\tt (coerce '(a b c) vector) = \#(a b c)}や
-{\tt (coerce "ABC" cons) = (a b c)}である。
-{\em result-type}型の新しい列が作られ、
-{\em sequence}のそれぞれの要素はその列にコピーされる。
-{\em result-type}は、{\tt vector, integer-vector, float-vector, bit-vector, string, cons}
-またはそれらの1つを継承したユーザー定義クラス
-のうちの1つである。
-{\bf coerce}は、{\em sequence}の型が{\em result-type}と同一である場合、コピーをする。}
+{\em sequence}の型を変更する。
+例えば、{\tt (coerce '(a b c) vector) = \#(a b c)}や
+{\tt (coerce "ABC" cons) = (a b c)}である。
+{\em result-type}型の新しい列が作られ、
+{\em sequence}のそれぞれの要素はその列にコピーされる。
+{\em result-type}は、{\tt vector, integer-vector, float-vector, bit-vector, string, cons}
+またはそれらの1つを継承したユーザー定義クラス
+のうちの1つである。
+{\bf coerce}は、{\em sequence}の型が{\em result-type}と同一である場合、コピーをする。}
 
 \funcdesc{map}{result-type function seq \&rest more-seqs}{
-{\em function}は、{\em seq}と{\em more-seqs}のそれぞれのN番目($N=0,1,\cdots$)の要素
-からなるリストに
-対して適用され、その結果は{\em result-type}の型の列に蓄積される。}
+{\em function}は、{\em seq}と{\em more-seqs}のそれぞれのN番目($N=0,1,\cdots$)の要素
+からなるリストに
+対して適用され、その結果は{\em result-type}の型の列に蓄積される。}
 
 \funcdesc{fill}{sequence item \&key (:start 0) (:end (length sequence))}{
-{\em sequence}の{\em start}番目から({\em end}$-$1)番目まで、{\em item}で満たす。
+{\em sequence}の{\em start}番目から({\em end}$-$1)番目まで、{\em item}で満たす。
 }
 
 \funcdesc{replace}{dest source \&key :start1 :end1 :start2 :end2}{
-{\em dest}列の中の{\em start1}から{\em end1}までの要素が、
-{\em source}列の中の{\em start2}から{\em end2}までの要素に置き換えられる。
-{\em start1}と{\em start2}のデフォルト値はゼロで、
-{\em end1}と{\em end2}のデフォルト値はそれぞれの列の長さである。
-もし片方の列がもう一方よりも長いならば、
-endは短い列の長さに一致するように縮められる。}
+{\em dest}列の中の{\em start1}から{\em end1}までの要素が、
+{\em source}列の中の{\em start2}から{\em end2}までの要素に置き換えられる。
+{\em start1}と{\em start2}のデフォルト値はゼロで、
+{\em end1}と{\em end2}のデフォルト値はそれぞれの列の長さである。
+もし片方の列がもう一方よりも長いならば、
+endは短い列の長さに一致するように縮められる。}
 
 \funcdesc{sort}{sequence compare \&optional key}{
-{\em sequence}は、Unixのquick-sortサブルーチンを使って破壊的に(destructively)
-にソートされる。
-{\em key}は、キーワードパラメータでなく、比較用のパラメータである。
-同じ要素を持った列のソートをするときは十分気をつけること。
-例えば、{\tt (sort '(1 1) \#'>)}は失敗する。なぜなら、1と1の比較は
-どちらからでも失敗するからである。
-この問題を避けるために、比較として{\tt \#'$>=$}か{\tt \#'$<=$}のような関数を用いる。}
+{\em sequence}は、Unixのquick-sortサブルーチンを使って破壊的に(destructively)
+にソートされる。
+{\em key}は、キーワードパラメータでなく、比較用のパラメータである。
+同じ要素を持った列のソートをするときは十分気をつけること。
+例えば、{\tt (sort '(1 1) \#'>)}は失敗する。なぜなら、1と1の比較は
+どちらからでも失敗するからである。
+この問題を避けるために、比較として{\tt \#'$>=$}か{\tt \#'$<=$}のような関数を用いる。}
 
 \funcdesc{merge}{result-type seq1 seq2 pred \&key (:key \#'identity)}{
-２つの列{\em seq1}と{\em seq2}は、{\em result-type}型の１つの列に
-合併され、それらの要素は{\em pred}に記述された比較を満足する。}
+２つの列{\em seq1}と{\em seq2}は、{\em result-type}型の１つの列に
+合併され、それらの要素は{\em pred}に記述された比較を満足する。}
 
 \funcdesc{merge-list}{list1 list2 pred key}{
-２つのリストを合併させる。{\bf merge}と違って、一般列は引数として
-許可されないが、{\bf merge-list}は{\bf merge}より実行が速い}
+２つのリストを合併させる。{\bf merge}と違って、一般列は引数として
+許可されないが、{\bf merge-list}は{\bf merge}より実行が速い}
 
 \end{refdesc}
 
-次の関数は、1つの基本関数と-ifや-if-notを後に付けた変形関数から成る。
-基本形は、少なくともitemとsequenceの引数を持つ。
-sequenceの中のそれぞれの要素とitemを比較し、
-何かの処理をする。
-例えば、インデックスを探したり、
-現れる回数を数えたり、itemを削除したりなど。
-変形関数は、predicateとsequenceの引数を持つ。
-sequenceのそれぞれの要素にpredicateを適用し、
-もしpredicateがnon-NILを返したとき(-if version)、
-またはNILを返したとき(-if-not version)に何かをする。
+次の関数は、1つの基本関数と-ifや-if-notを後に付けた変形関数から成る。
+基本形は、少なくともitemとsequenceの引数を持つ。
+sequenceの中のそれぞれの要素とitemを比較し、
+何かの処理をする。
+例えば、インデックスを探したり、
+現れる回数を数えたり、itemを削除したりなど。
+変形関数は、predicateとsequenceの引数を持つ。
+sequenceのそれぞれの要素にpredicateを適用し、
+もしpredicateがnon-NILを返したとき(-if version)、
+またはNILを返したとき(-if-not version)に何かをする。
 
 \begin{refdesc}
 
 \funcdesc{position}{item seq \&key :start :end :test :test-not :key (:count 1)}{
-{\em seq}の中から{\em item}と同一な要素を探し、
-その要素の中で{\em :count}番目に現れた要素の
-インデックスを返す。
-その探索は、{\em :start}番目の要素から始め、それ以前の要素は無視する。
-デフォルトの探索は、{\tt eql}で実行されるが、
-{\em test}か{\em test-not}パラメータで変更できる。}
+{\em seq}の中から{\em item}と同一な要素を探し、
+その要素の中で{\em :count}番目に現れた要素の
+インデックスを返す。
+その探索は、{\em :start}番目の要素から始め、それ以前の要素は無視する。
+デフォルトの探索は、{\tt eql}で実行されるが、
+{\em test}か{\em test-not}パラメータで変更できる。}
 
 \fundesc{position-if}{predicate seq \&key :start :end :key}
 
 \fundesc{position-if-not}{predicate seq \&key :start :end :key}
 
 \funcdesc{find}{item seq \&key :start :end :test :test-not :key (:count 1)}{
-{\em seq}の中の{\em start}番目の要素から
-{\em :end}番目の要素までの間で要素を探し、
-その探された要素の内、{\em :count}番目の要素を返す。
-その要素は、{\em :test}か{\em :test-not}に{\tt \#'eql}
-以外のものが記述されていないなら、{\em item}と同じものである。}
+{\em seq}の中の{\em start}番目の要素から
+{\em :end}番目の要素までの間で要素を探し、
+その探された要素の内、{\em :count}番目の要素を返す。
+その要素は、{\em :test}か{\em :test-not}に{\tt \#'eql}
+以外のものが記述されていないなら、{\em item}と同じものである。}
 
 \funcdesc{find-if}{predicate seq \&key :start :end :key (:count 1)}{
-{\em seq}の要素の中で{\em predicate}がnon-NILを返す要素の内、
-{\em :count}番目の要素を返す。}
+{\em seq}の要素の中で{\em predicate}がnon-NILを返す要素の内、
+{\em :count}番目の要素を返す。}
 \fundesc{find-if-not}{predicate seq \&key :start :end :key}
 
 \funcdesc{count}{item seq \&key :start :end :test :test-not :key}{
-{\em seq}の中の{\em :start}番目から{\em :end}番目までの要素に{\em item}が
-何回現れるか数える。}
+{\em seq}の中の{\em :start}番目から{\em :end}番目までの要素に{\em item}が
+何回現れるか数える。}
 
 \funcdesc{count-if}{predicate seq \&key :start :end :key}{
-{\em predicate}がnon-NILを返す{\em seq}内の要素数を数える。}
+{\em predicate}がnon-NILを返す{\em seq}内の要素数を数える。}
 \fundesc{count-if-not}{predicate seq \&key :start :end :key}
 
 \funcdesc{remove}{item seq \&key :start :end :test :test-not :key :count}{
-{\em seq}の中の{\em :start}番目から{\em :end}番目までの要素のなかで、
-{\em item}と同一の要素を探し、{\em :count}
-（デフォルト値は∞）番目までの要素を削除した新しい列を作る。
-もし、{\em item}が一回のみ現れることが確定しているなら、
-無意味な探索を避けるために、{\em :count=1}を指定すること。}
+{\em seq}の中の{\em :start}番目から{\em :end}番目までの要素のなかで、
+{\em item}と同一の要素を探し、{\em :count}
+（デフォルト値は∞）番目までの要素を削除した新しい列を作る。
+もし、{\em item}が一回のみ現れることが確定しているなら、
+無意味な探索を避けるために、{\em :count=1}を指定すること。}
 
 \fundesc{remove-if}{predicate seq \&key :start :end :key :count}
 \fundesc{remove-if-not}{predicate seq \&key :start :end :key :count}
 \funcdesc{remove-duplicates}{seq \&key :start :end :key :test :test-not :count}{
-{\em seq}の中から複数存在するitemを探し、その中の1つだけを残した新しい列を作る。}
+{\em seq}の中から複数存在するitemを探し、その中の1つだけを残した新しい列を作る。}
 
 \funcdesc{delete}{item seq \&key :start :end :test :test-not :key :count}{
-{\em delete}は、{\em seq}自体を修正し、新しい列を作らないことを除いては、
-{\bf remove}同じである。
-もし、{\em item}が一回のみ現れることが確定しているなら、
-無意味な探索を避けるために、{\em :count=1}を指定すること。}
+{\em delete}は、{\em seq}自体を修正し、新しい列を作らないことを除いては、
+{\bf remove}同じである。
+もし、{\em item}が一回のみ現れることが確定しているなら、
+無意味な探索を避けるために、{\em :count=1}を指定すること。}
 
 \fundesc{delete-if}{predicate seq \&key :start :end :key :count}
 \funcdesc{delete-if-not}{predicate seq \&key :start :end :key :count}{
-{\bf remove}や{\bf delete}の{\em :count}デフォルト値は、1,000,000である。
-もし列が長く、削除したい要素が一回しか現れないときは、
-{\em :count}を1と記述すべきである。}
+{\bf remove}や{\bf delete}の{\em :count}デフォルト値は、1,000,000である。
+もし列が長く、削除したい要素が一回しか現れないときは、
+{\em :count}を1と記述すべきである。}
 
 \funcdesc{substitute}{newitem olditem seq
  \&key :start :end :test :test-not :key :count}{
-{\em seq}の中で{\em :count}番目に現れた{\em olditem}を{\em newitem}に置き換えた
-新しい列を返す。
-デフォルトでは、全ての{\em olditem}を置き換える。}
+{\em seq}の中で{\em :count}番目に現れた{\em olditem}を{\em newitem}に置き換えた
+新しい列を返す。
+デフォルトでは、全ての{\em olditem}を置き換える。}
 
 \fundesc{substitute-if}{newitem predicate seq \&key :start :end :key :count}
 \fundesc{substitute-if-not}{newitem predicate seq \&key :start :end :key :count}
 
 \funcdesc{nsubstitute}{newitem olditem seq \&key :start :end :test :test-not :key :count}
-{{\em seq}の中で{\em count}番目に現れた{\em olditem}を{\em newitem}に置き換え、
-元の列{\em seq}に返す。デフォルトでは、全ての{\em olditem}を置き換える。}
+{{\em seq}の中で{\em count}番目に現れた{\em olditem}を{\em newitem}に置き換え、
+元の列{\em seq}に返す。デフォルトでは、全ての{\em olditem}を置き換える。}
 \fundesc{nsubstitute-if}{newitem predicate seq \&key :start :end :key :count}
 \fundesc{nsubstitute-if-not}{newitem predicate seq \&key :start :end :key :count}
 
@@ -194,19 +194,19 @@ sequenceのそれぞれの要素にpredicateを適用し、
 
 \newpage
 
-\subsection{リスト}
+\subsection{リスト}
 
 \begin{refdesc}
 \funcdesc{listp}{object}{
-オブジェクトがconsのインスタンスかもしくはNILならば、Tを返す。}
+オブジェクトがconsのインスタンスかもしくはNILならば、Tを返す。}
 \funcdesc{consp}{object}{
-{\tt (not (atom object))}と同一である。{\tt (consp '())}はNILである。}
+{\tt (not (atom object))}と同一である。{\tt (consp '())}はNILである。}
 \funcdesc{car}{list}{
-{\em list}の最初の要素を返す。NILの{\bf car}はNILである。
-atomの{\bf car}はエラーとなる。{\tt (car '(1 2 3)) = 1}}
+{\em list}の最初の要素を返す。NILの{\bf car}はNILである。
+atomの{\bf car}はエラーとなる。{\tt (car '(1 2 3)) = 1}}
 \funcdesc{cdr}{list}{
-{\em list}の最初の要素を削除した残りのリストを返す。NILの{\bf cdr}はNILである。
-atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
+{\em list}の最初の要素を削除した残りのリストを返す。NILの{\bf cdr}はNILである。
+atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 \funcdesc{cadr}{list}{{\tt (cadr list) = (car (cdr list))}}
 \funcdesc{cddr}{list}{{\tt (cddr list) = (cdr (cdr list))}}
 \funcdesc{cdar}{list}{{\tt (cdar list) = (cdr (car list))}}
@@ -219,260 +219,260 @@ atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 \funcdesc{cdaar}{list}{{\tt (cdaar list) = (cdr (car (car list)))}}
 \funcdesc{cdddr}{list}{{\tt (cdddr list) = (cdr (cdr (cdr list)))}}
 \funcdesc{cddar}{list}{{\tt (cddar list) = (cdr (cdr (car list)))}}
-\funcdesc{first}{list}{{\em list}の最初の要素を取り出す。
-{\bf second, third, fourth, fifth, sixth, seventh, eighth}もまた定義されている。{\tt (first list) = (car list)}}
+\funcdesc{first}{list}{{\em list}の最初の要素を取り出す。
+{\bf second, third, fourth, fifth, sixth, seventh, eighth}もまた定義されている。{\tt (first list) = (car list)}}
 %\funcdesc{second}{list}{{\tt (second list) = (cadr list)}}
 %\funcdesc{third}{list}{{\tt (third list) = (caddr list)}}
 %\funcdesc{fourth}{list}{{\tt (fourth list) = (car (cdddr list))}}
 %\funcdesc{fifth}{list}{{\tt (fifth list) = (cadr (cdddr list))}}
 \funcdesc{nth}{count list}{
-{\em list}内の{\em count}番目の要素を返す。
-{\tt (nth 1 list)}は、{\tt (second list)}あるいは{\tt (elt list 1)}と等価である。}
+{\em list}内の{\em count}番目の要素を返す。
+{\tt (nth 1 list)}は、{\tt (second list)}あるいは{\tt (elt list 1)}と等価である。}
 
 \funcdesc{nthcdr}{count list}{
-{\em list}に{\bf cdr}を{\em count}回適用した後のリストを返す。}
+{\em list}に{\bf cdr}を{\em count}回適用した後のリストを返す。}
 
 \funcdesc{last}{list}{
-{\em list}の最後の要素でなく、最後のconsを返す。}
+{\em list}の最後の要素でなく、最後のconsを返す。}
 
 \funcdesc{butlast}{list \&optional (n 1)}
-{{\em list}の最後から{\em n}個の要素を削除したリストを返す。}
+{{\em list}の最後から{\em n}個の要素を削除したリストを返す。}
 
 \funcdesc{cons}{car cdr}{
-{\tt car}が{\em car}で{\tt cdr}が{\em cdr}であるような新しいconsを作る。}
+{\tt car}が{\em car}で{\tt cdr}が{\em cdr}であるような新しいconsを作る。}
 
-\funcdesc{list}{\{element\}*}{{\em element}を要素とするリストを作る。}
+\funcdesc{list}{\{element\}*}{{\em element}を要素とするリストを作る。}
 
 \funcdesc{list*}{\{element\}*}{
-{\em element}を要素とするリストを作る。しかし、最後の要素は{\bf cons}されるため、
-atomであってはならない。
-例えば、{\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}である。}
+{\em element}を要素とするリストを作る。しかし、最後の要素は{\bf cons}されるため、
+atomであってはならない。
+例えば、{\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}である。}
 
 \funcdesc{list-length}{list}{
-{\em list}の長さを返す。{\em list}は、環状リストでも良い。}
+{\em list}の長さを返す。{\em list}は、環状リストでも良い。}
 
 \funcdesc{make-list}{size \&key (:initial-element nil)}{
-{\em size}長さで要素が全て{\em :initial-element}のリストを作る。}
+{\em size}長さで要素が全て{\em :initial-element}のリストを作る。}
 
 \funcdesc{rplaca}{cons a}{
-{\em cons}の{\bf car}を{\em a}に置き換える。
-{\bf setf}と{\bf car}の使用を推薦する。
+{\em cons}の{\bf car}を{\em a}に置き換える。
+{\bf setf}と{\bf car}の使用を推薦する。
 {\tt (rplaca cons a) = (setf (car cons) a)}}
 
 \funcdesc{rplacd}{cons d}{
-{\em cons}の{\bf cdr}を{\em d}に置き換える。
-{\bf setf}と{\bf cdr}の使用を推薦する。
+{\em cons}の{\bf cdr}を{\em d}に置き換える。
+{\bf setf}と{\bf cdr}の使用を推薦する。
 {\tt (rplacd cons d) = (setf (cdr cons) d)}}
 
 \funcdesc{memq}{item list}{
-{\bf member}に似ている。しかしテストはいつも{\tt eq}で行う。}
+{\bf member}に似ている。しかしテストはいつも{\tt eq}で行う。}
 
 \funcdesc{member}{item list \&key :key :test :test-not}
-{{\em list}の中から条件にあった要素を探す。
-{\em list}の中から{\em item}を探索し、{\em :test}の条件にあったものがなければNILを返す。
-見つかったならば、それ以降をリストとして返す。この探索は、最上位のリストに対して
-行なわれる。{\em :test}のデフォルトは{\tt \#'eq}である。
+{{\em list}の中から条件にあった要素を探す。
+{\em list}の中から{\em item}を探索し、{\em :test}の条件にあったものがなければNILを返す。
+見つかったならば、それ以降をリストとして返す。この探索は、最上位のリストに対して
+行なわれる。{\em :test}のデフォルトは{\tt \#'eq}である。
 {\tt (member 'a '(g (a y) b a d g e a y))=(a d g e a y)}}
 
 \fundesc{assq}{item alist}
 
 \funcdesc{assoc}{item alist \&key :key :test :test-not}
-{{\em alist}の要素の{\bf car}が{\em :test}の条件にあった最初のものを返す。
-合わなければ、NILを返す。
-{\em :test}のデフォルトは{\tt \#'eq}である。
+{{\em alist}の要素の{\bf car}が{\em :test}の条件にあった最初のものを返す。
+合わなければ、NILを返す。
+{\em :test}のデフォルトは{\tt \#'eq}である。
 {\tt (assoc '2 '((1 d t y)(2 g h t)(3 e x g))=(2 g h t)}}
 
 \funcdesc{rassoc}{item alist}{
-{\bf cdr}が{\em item}に等しい{\em alist}のなかの最初の組を返す。}
+{\bf cdr}が{\em item}に等しい{\em alist}のなかの最初の組を返す。}
 
 \funcdesc{pairlis}{l1 l2 \&optional alist}{
-{\em l1}と{\em l2}の中の一致する要素を対にしたリストを作る。
-もし{\em alist}が与えられたとき、
-{\em l1}と{\em l2}から作られた対リストの最後に連結させる。}
+{\em l1}と{\em l2}の中の一致する要素を対にしたリストを作る。
+もし{\em alist}が与えられたとき、
+{\em l1}と{\em l2}から作られた対リストの最後に連結させる。}
 
 \funcdesc{acons}{key val alist}{
-{\em alist}に{\em key val}の組を付け加える。
-{\tt (cons (cons key val) alist)}と同等である。}
+{\em alist}に{\em key val}の組を付け加える。
+{\tt (cons (cons key val) alist)}と同等である。}
 
 \funcdesc{append}{\{list\}*}{
-新しいリストを形成するために{\em list}を連結させる。
-最後のリストを除いて、{\em list}のなかの全ての要素はコピーされる。}
+新しいリストを形成するために{\em list}を連結させる。
+最後のリストを除いて、{\em list}のなかの全ての要素はコピーされる。}
 
 \funcdesc{nconc}{\{list\}*}{
-それぞれの{\em list}の最後の{\bf cdr}を置き換える事によって、{\em list}を
-破壊的に(destructively)連結する。}
+それぞれの{\em list}の最後の{\bf cdr}を置き換える事によって、{\em list}を
+破壊的に(destructively)連結する。}
 
 \funcdesc{subst}{new old tree}{
-{\em tree}の中のすべての{\em old}を{\em new}に置き換える。}
+{\em tree}の中のすべての{\em old}を{\em new}に置き換える。}
 
 \funcdesc{flatten}{complex-list}{
-atomやいろんな深さのリストを含んだ{\em complex-list}を、
-１つの線形リストに変換する。そのリストは、
-{\em complex-list}の中のトップレベルに全ての要素を置く。
+atomやいろんな深さのリストを含んだ{\em complex-list}を、
+１つの線形リストに変換する。そのリストは、
+{\em complex-list}の中のトップレベルに全ての要素を置く。
 {\tt (flatten '(a (b (c d) e))) = (a b c d e)}}
 
 \macrodesc{push}{item place}{
-{\em place}にバインドされたスタック(リスト)に{\em item}を置く。}
+{\em place}にバインドされたスタック(リスト)に{\em item}を置く。}
 
 \macrodesc{pop}{stack}{
-{\em stack}から最初の要素を削除し、それを返す。
-もし{\em stack}が空(NIL)ならば、NILを返す。}
+{\em stack}から最初の要素を削除し、それを返す。
+もし{\em stack}が空(NIL)ならば、NILを返す。}
 
 \macrodesc{pushnew}{item place \&key :test :test-not :key}{
-もし{\em item}が{\em place}のメンバーでないなら、
-{\em place}リストに{\em item}を置く。
-{\em :test}, {\em :test-not}と{\em :key}引数は、
-{\bf member}関数に送られる。}
+もし{\em item}が{\em place}のメンバーでないなら、
+{\em place}リストに{\em item}を置く。
+{\em :test}, {\em :test-not}と{\em :key}引数は、
+{\bf member}関数に送られる。}
 
 \funcdesc{adjoin}{item list}{
-もし{\em item}が{\em list}に含まれてないなら、{\em list}の最初に付け加える。}
+もし{\em item}が{\em list}に含まれてないなら、{\em list}の最初に付け加える。}
 
 \funcdesc{union}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
-2つのリストの和集合を返す。}
+2つのリストの和集合を返す。}
 \funcdesc{subsetp}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}
-{{\em list1}が{\em list2}の部分集合であること、すなわち、
-{\em list1}のそれぞれの要素が{\em list2}のメンバーであることをテストする。}
+{{\em list1}が{\em list2}の部分集合であること、すなわち、
+{\em list1}のそれぞれの要素が{\em list2}のメンバーであることをテストする。}
 
 \funcdesc{intersection}{list1 list2
  \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
-2つのリスト{\em list1}と{\em list2}の積集合を返す。}
+2つのリスト{\em list1}と{\em list2}の積集合を返す。}
 
 \funcdesc{set-difference}{list1 list2
 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
-{\em list1}にのみ含まれていて
-{\em list2}に含まれていない要素からなるリストを返す。}
+{\em list1}にのみ含まれていて
+{\em list2}に含まれていない要素からなるリストを返す。}
 \funcdesc{set-exclusive-or}{list1 list2
  \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
-{\em list1}および{\em list2}にのみ現れる要素からなるリストを返す。}
+{\em list1}および{\em list2}にのみ現れる要素からなるリストを返す。}
 \funcdesc{list-insert}{item pos list}{
-{\em list}の{\em pos}番目の要素として{\em item}を挿入する
-（元のリストを変化させる）。
-もし{\em pos}が{\em list}の長さより大きいなら、{\em item}は最後に
-{\bf nconc}される。
+{\em list}の{\em pos}番目の要素として{\em item}を挿入する
+（元のリストを変化させる）。
+もし{\em pos}が{\em list}の長さより大きいなら、{\em item}は最後に
+{\bf nconc}される。
 {\tt (list-insert 'x 2 '(a b c d)) = (a b x c d)}}
 
 \funcdesc{copy-tree}{tree}{
-入れこリストである{\em tree}のコピーを返す。
-しかし、環状参照はできない。環状リストは、
-{\bf copy-object}でコピーできる。
-実際に、{\bf copy-tree}は{\tt (subst t t tree)}と簡単に記述される。}
+入れこリストである{\em tree}のコピーを返す。
+しかし、環状参照はできない。環状リストは、
+{\bf copy-object}でコピーできる。
+実際に、{\bf copy-tree}は{\tt (subst t t tree)}と簡単に記述される。}
 
 \funcdesc{mapc}{func arg-list \&rest more-arg-lists}{
-{\em arg-list}や{\em more-arg-lists}それぞれのN番目($N=0,1,\cdots$)の要素からなるリストに
-{\em func}を適用する。
-適用結果は無視され、{\em arg-list}が返される。}
+{\em arg-list}や{\em more-arg-lists}それぞれのN番目($N=0,1,\cdots$)の要素からなるリストに
+{\em func}を適用する。
+適用結果は無視され、{\em arg-list}が返される。}
 
 \funcdesc{mapcar}{func \&rest arg-list}{
-{\em arg-list}のそれぞれの要素に{\em func}を{\bf map}し、
-その全ての結果のリストを作る。
-{\bf mapcar}を使う前に、{\bf dolist}を試すこと。}
+{\em arg-list}のそれぞれの要素に{\em func}を{\bf map}し、
+その全ての結果のリストを作る。
+{\bf mapcar}を使う前に、{\bf dolist}を試すこと。}
 
 \funcdesc{mapcan}{func arg-list \&rest more-arg-lists}{
-{\em arg-list}のそれぞれの要素に{\em func}を{\bf map}し、
-{\bf nconc}を用いてその全ての結果のリストを作る。
-{\bf nconc}はNILに対して何もしないため、
-{\bf mapcan}は、{\em arg-list}の要素にフィルタをかける（選択する）
-のに合っている。
+{\em arg-list}のそれぞれの要素に{\em func}を{\bf map}し、
+{\bf nconc}を用いてその全ての結果のリストを作る。
+{\bf nconc}はNILに対して何もしないため、
+{\bf mapcan}は、{\em arg-list}の要素にフィルタをかける（選択する）
+のに合っている。
 }
 \end{refdesc}
 \newpage
 
-\subsection{ベクトルと行列}
+\subsection{ベクトルと行列}
 
-７次元以内の行列が許可されている。
-１次元の行列は、ベクトルと呼ばれる。
-ベクトルとリストは、列としてグループ化される。
-もし、行列の要素がいろんな型であったとき、その行列は一般化されていると言う。
-もし、行列がfill-pointerを持ってなく、他の行列で置き換えられなく、
-拡張不可能であるなら、その行列は簡略化されたと言う。
+７次元以内の行列が許可されている。
+１次元の行列は、ベクトルと呼ばれる。
+ベクトルとリストは、列としてグループ化される。
+もし、行列の要素がいろんな型であったとき、その行列は一般化されていると言う。
+もし、行列がfill-pointerを持ってなく、他の行列で置き換えられなく、
+拡張不可能であるなら、その行列は簡略化されたと言う。
 
-全ての行列要素は、{\bf aref}により取り出すことができ、{\bf aref}を用いて{\bf setf}
-により設定することができる。
-しかし、一次元ベクトルのために簡単で高速なアクセス関数がある。
-{\bf svref}は一次元一般ベクトル、{\bf char}と{\bf schar}は
-一次元文字ベクトル（文字列）、{\bf bit}と{\bf sbit}は
-一次元ビットベクトルのための高速関数である。
-これらの関数はコンパイルされたとき、
-アクセスはin-lineを拡張し、型チェックと境界チェックなしに実行される。
+全ての行列要素は、{\bf aref}により取り出すことができ、{\bf aref}を用いて{\bf setf}
+により設定することができる。
+しかし、一次元ベクトルのために簡単で高速なアクセス関数がある。
+{\bf svref}は一次元一般ベクトル、{\bf char}と{\bf schar}は
+一次元文字ベクトル（文字列）、{\bf bit}と{\bf sbit}は
+一次元ビットベクトルのための高速関数である。
+これらの関数はコンパイルされたとき、
+アクセスはin-lineを拡張し、型チェックと境界チェックなしに実行される。
 
-ベクトルもまたオブジェクトであるため、
-別のベクトルクラスを派生させることができる。
-5種類の内部ベクトルクラスがある。
-{\tt vector, string, float-vector, integer-vector}と{\tt bit-vector}である。
-ベクトルの作成を容易にするために、make-array関数がある。
-要素の型は、{\tt :integer, :bit, :character, :float, :foreign}
-かあるいはユーザーが定義したベクトルクラスの内の一つでなければならない。
-{\em :initial-element}と{\em :initial-contents}のキーワード引数は、
-行列の初期値を設定するために役に立つ。
+ベクトルもまたオブジェクトであるため、
+別のベクトルクラスを派生させることができる。
+5種類の内部ベクトルクラスがある。
+{\tt vector, string, float-vector, integer-vector}と{\tt bit-vector}である。
+ベクトルの作成を容易にするために、make-array関数がある。
+要素の型は、{\tt :integer, :bit, :character, :float, :foreign}
+かあるいはユーザーが定義したベクトルクラスの内の一つでなければならない。
+{\em :initial-element}と{\em :initial-contents}のキーワード引数は、
+行列の初期値を設定するために役に立つ。
 
 \begin{refdesc}
 
-\constdesc{array-rank-limit}{7。行列の最大次元を示す。}
-\constdesc{array-dimension-limit}{\#x1fffffff。各次元の最大要素数を示す。
-論理的な数であって、システムの物理メモリあるいは仮想メモリの大きさによって
-制限される。}
+\constdesc{array-rank-limit}{7。行列の最大次元を示す。}
+\constdesc{array-dimension-limit}{\#x1fffffff。各次元の最大要素数を示す。
+論理的な数であって、システムの物理メモリあるいは仮想メモリの大きさによって
+制限される。}
 
 \funcdesc{vectorp}{object}{
-行列は１次元であってもベクトルではない。
-{\em object}が{\tt vector, integer-vector, float-vector, string, bit-vector}
-あるいはユーザーで定義したベクトルならTを返す。}
+行列は１次元であってもベクトルではない。
+{\em object}が{\tt vector, integer-vector, float-vector, string, bit-vector}
+あるいはユーザーで定義したベクトルならTを返す。}
 \funcdesc{vector}{\&rest elements}{
-{\em elements}からなる一次元ベクトルを作る。}
+{\em elements}からなる一次元ベクトルを作る。}
 
 \longdescription{make-array}{
-%dims \&key \= (:element-type vector) \hspace{75mm} [関数] \\
-dims \&key \= (:element-type vector) \` [関数] \\
+%dims \&key \= (:element-type vector) \hspace{75mm} [関数] \\
+dims \&key \= (:element-type vector) \` [関数] \\
 \> (:initial-contents nil) \\
 \> (:initial-element nil) \\
 \> (:fill-pointer nil)  \\
 \> (:displaced-to nil) \\
 \> (:displaced-index-offset 0) \\
 \> (:adjustable nil)}
-{ベクトルか行列を作る。
-{\em dims}は、整数かリストである。
-もし{\em dims}が整数なら、一次元ベクトルが作られる。}
+{ベクトルか行列を作る。
+{\em dims}は、整数かリストである。
+もし{\em dims}が整数なら、一次元ベクトルが作られる。}
 
 \funcdesc{svref}{vector pos}{
-{\em vector}の{\em pos}番目の要素を返す。
-{\em vector}は、一次元一般ベクトルでなければならない。}
+{\em vector}の{\em pos}番目の要素を返す。
+{\em vector}は、一次元一般ベクトルでなければならない。}
 
 \funcdesc{aref}{vector \&rest (indices)}{
-{\em vector}の{\em indices}によってインデックスされる要素を返す。
-{\em indices}は、整数であり、{\em vector}の次元の数だけ指定する。
-{\bf aref}は、非効率的である。なぜなら、{\em vector}の型に従うように
-変更する必要があるためである。コンパイルコードの速度を改善する
-ため、できるだけ型の宣言を与えるべきである。}
+{\em vector}の{\em indices}によってインデックスされる要素を返す。
+{\em indices}は、整数であり、{\em vector}の次元の数だけ指定する。
+{\bf aref}は、非効率的である。なぜなら、{\em vector}の型に従うように
+変更する必要があるためである。コンパイルコードの速度を改善する
+ため、できるだけ型の宣言を与えるべきである。}
 
 \funcdesc{vector-push}{val array}{
-{\em array}のfill-pointer番目のスロットに{\em val}を保管する。
-{\em array}は、fill-pointerを持っていなければならない。
-{\em val}が保管された後、
-fill-pointerは、次の位置にポイントを1つ進められる。
-もし、行列の境界よりも大きくなったとき、エラーが報告される。}
+{\em array}のfill-pointer番目のスロットに{\em val}を保管する。
+{\em array}は、fill-pointerを持っていなければならない。
+{\em val}が保管された後、
+fill-pointerは、次の位置にポイントを1つ進められる。
+もし、行列の境界よりも大きくなったとき、エラーが報告される。}
 
 \funcdesc{vector-push-extend}{val array}{
-{\em array}のfill-pointerが最後に到達したとき、自動的に{\em array}のサイズが
-拡張されることを除いては、{\bf vector-push}と同じである。}
+{\em array}のfill-pointerが最後に到達したとき、自動的に{\em array}のサイズが
+拡張されることを除いては、{\bf vector-push}と同じである。}
 
 \funcdesc{arrayp}{obj}
-{もし{\em obj}が行列またはベクトルのインスタンスであるならTを返す。}
+{もし{\em obj}が行列またはベクトルのインスタンスであるならTを返す。}
 
 \funcdesc{array-total-size}{array}{
 
-{\em array}の要素数の合計を返す。}
-\funcdesc{fill-pointer}{array}{{\em array}のfill-pointerを返す。
-file-pointerを持っていなければNILを返す。}
-\funcdesc{array-rank}{array}{{\em array}の次元数を返す。}
+{\em array}の要素数の合計を返す。}
+\funcdesc{fill-pointer}{array}{{\em array}のfill-pointerを返す。
+file-pointerを持っていなければNILを返す。}
+\funcdesc{array-rank}{array}{{\em array}の次元数を返す。}
 \funcdesc{array-dimensions}{array}{
-{\em array}の各次元の要素数をリストで返す。}
+{\em array}の各次元の要素数をリストで返す。}
 
 \funcdesc{array-dimension}{array axis}{
-{\bf array-dimension}は、{\em array}の{\em axis}
-番目の次元を返す。{\em axis}はゼロから始まる。}
+{\bf array-dimension}は、{\em array}の{\em axis}
+番目の次元を返す。{\em axis}はゼロから始まる。}
 
 \funcdesc{bit}{bitvec index}{
-{\em bitvec}の{\em index}番目の要素を返す。
-ビットベクトルの要素を変更するには、{\bf setf}と{\bf bit}を使用すること。}
+{\em bitvec}の{\em index}番目の要素を返す。
+ビットベクトルの要素を変更するには、{\bf setf}と{\bf bit}を使用すること。}
 \fundesc{bit-and}{bits1 bits2 \&optional result}
 \fundesc{bit-ior}{bits1 bits2 \&optional result}
 \fundesc{bit-xor}{bits1 bits2 \&optional result}
@@ -480,215 +480,215 @@ file-pointerを持っていなければNILを返す。}
 \fundesc{bit-nand}{bits1 bits2 \&optional result}
 \fundesc{bit-nor}{bits1 bits2 \&optional result}
 \funcdesc{bit-not}{bits1 \&optional result}{
-同じ長さの{\em bits1}と{\em bits2}というビットベクトルにおいて、
-それらのand, inclusive-or,
-exclusive-or, 等価, not-and, not-orとnotがそれぞれ返される。}
+同じ長さの{\em bits1}と{\em bits2}というビットベクトルにおいて、
+それらのand, inclusive-or,
+exclusive-or, 等価, not-and, not-orとnotがそれぞれ返される。}
 
 \end{refdesc}
 
 \newpage
 
-\subsection{文字と文字列}
+\subsection{文字と文字列}
 
-EusLispには、文字型がない。
-文字は、{\tt integer}によって表現されている。
-ファイル名を現わす文字列を扱うためには、
-\ref{Pathnames}節に書かれている{\bf pathname}を使うこと。
+EusLispには、文字型がない。
+文字は、{\tt integer}によって表現されている。
+ファイル名を現わす文字列を扱うためには、
+\ref{Pathnames}節に書かれている{\bf pathname}を使うこと。
 
 \begin{refdesc}
 
 \funcdesc{digit-char-p}{ch}{
-もし{\em ch}が{\tt \#$\backslash$0}〜{\tt \#$\backslash$9}ならTを返す。}
+もし{\em ch}が{\tt \#$\backslash$0}〜{\tt \#$\backslash$9}ならTを返す。}
 
 \funcdesc{alpha-char-p}{ch}{
-もし{\em ch}が{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}または
-{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
+もし{\em ch}が{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}または
+{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
 
 \funcdesc{upper-case-p}{ch}{
-もし{\em ch}が{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}なら、Tを返す。}
+もし{\em ch}が{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}なら、Tを返す。}
 
 \funcdesc{lower-case-p}{ch}{
-もし{\em ch}が{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
+もし{\em ch}が{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
 
 \funcdesc{alphanumeric-p}{ch}{
-もし{\em ch}が{\tt \#$\backslash$0}〜{\tt \#$\backslash$9}、
-{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}または
-{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
+もし{\em ch}が{\tt \#$\backslash$0}〜{\tt \#$\backslash$9}、
+{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}または
+{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
 
 \funcdesc{char-upcase}{ch}{
-{\em ch}を大文字に変換する。}
+{\em ch}を大文字に変換する。}
 
 \funcdesc{char-downcase}{ch}{
-{\em ch}を小文字に変換する。}
+{\em ch}を小文字に変換する。}
 
 \funcdesc{char}{string index}{
-{\em string}の{\em index}番目の文字を返す。}
+{\em string}の{\em index}番目の文字を返す。}
 
 \funcdesc{schar}{string index}{
-{\em string}から文字を抜き出す。
-{\em string}の型が明確に解っていて、型チェックを要しないときのみ、{\bf schar}
-を使うこと。}
+{\em string}から文字を抜き出す。
+{\em string}の型が明確に解っていて、型チェックを要しないときのみ、{\bf schar}
+を使うこと。}
 
 \funcdesc{stringp}{string}{
-{\em string}がバイト(256より小さい正の整数)のベクトルなら、Tを返す。}
+{\em string}がバイト(256より小さい正の整数)のベクトルなら、Tを返す。}
 
 \funcdesc{string-upcase}{str \&key :start :end}{
-{\em str}を大文字の文字列に変換して、新しい文字列を返す。}
+{\em str}を大文字の文字列に変換して、新しい文字列を返す。}
 
 \funcdesc{string-downcase}{str \&key :start :end}{
-{\em str}を小文字の文字列に変換して、新しい文字列を返す。}
+{\em str}を小文字の文字列に変換して、新しい文字列を返す。}
 
 \funcdesc{nstring-upcase}{str}{
-{\em str}を大文字の文字列に変換し、元に置き換える。}
+{\em str}を大文字の文字列に変換し、元に置き換える。}
 
 \funcdesc{nstring-downcase}{str \&key :start :end}{
-{\em str}を小文字の文字列に変換し、元に置き換える。}
+{\em str}を小文字の文字列に変換し、元に置き換える。}
 
 \funcdesc{string=}{str1 str2 \&key :start1 :end1 :start2 :end2}{
-もし{\em str1}が{\em str2}と等しいとき、Tを返す。
-{\bf string=}は、大文字・小文字を判別する。}
+もし{\em str1}が{\em str2}と等しいとき、Tを返す。
+{\bf string=}は、大文字・小文字を判別する。}
 
 \funcdesc{string-equal}{str1 str2 \&key :start1 :end1 :start2 :end2}{
-{\em str1}と{\em str2}の等価性をテストする。
-{\bf string-equal}は、大文字・小文字を判別しない。}
+{\em str1}と{\em str2}の等価性をテストする。
+{\bf string-equal}は、大文字・小文字を判別しない。}
 
 \funcdesc{string}{object}{
-{\em object}の文字列表現を得る。
-もし{\em object}が文字列なら、{\em object}が返される。
-もし{\em object}がsymbolなら、その{\tt pname}がコピーされ、返される。
-{\tt (equal (string 'a) (symbol-pname 'a))==T}であるが、
-{\tt (eq (string 'a) (symbol-pname 'a))==NIL}である。
-もし{\em object}が数値なら、それを文字列にしたものが返される
-(これはCommon Lispと非互換である)。
-もっと複雑なオブジェクトから文字列表現を得るためには、
-最初の引数をNILにした{\bf format}関数を用いること。}
+{\em object}の文字列表現を得る。
+もし{\em object}が文字列なら、{\em object}が返される。
+もし{\em object}がsymbolなら、その{\tt pname}がコピーされ、返される。
+{\tt (equal (string 'a) (symbol-pname 'a))==T}であるが、
+{\tt (eq (string 'a) (symbol-pname 'a))==NIL}である。
+もし{\em object}が数値なら、それを文字列にしたものが返される
+(これはCommon Lispと非互換である)。
+もっと複雑なオブジェクトから文字列表現を得るためには、
+最初の引数をNILにした{\bf format}関数を用いること。}
 
 \fundesc{string$<$}{str1 str2}
 \fundesc{string$<=$}{str1 str2}
 \fundesc{string$>$}{str1 str2}
 \funcdesc{string$>=$}{str1 str2}{
-{\em str1}と{\em str2}を先頭から順番に比較して、比較演算が成立した位置
-を返す。もし、成立しなければ、NILを返す。文字の比較は、その文字のコードに
-に対して行なわれるため、{\tt A$<$Z}である。。}
+{\em str1}と{\em str2}を先頭から順番に比較して、比較演算が成立した位置
+を返す。もし、成立しなければ、NILを返す。文字の比較は、その文字のコードに
+に対して行なわれるため、{\tt A$<$Z}である。。}
 
 \fundesc{string-left-trim}{bag str}
 \funcdesc{string-right-trim}{bag str}{
-{\em str}は、左（右）から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
-その要素を削除する。
-一旦{\em bag}に含まれない文字が見つかると、その後の探索は中止され、
-{\em str}の残りが返される。}
+{\em str}は、左（右）から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
+その要素を削除する。
+一旦{\em bag}に含まれない文字が見つかると、その後の探索は中止され、
+{\em str}の残りが返される。}
 
 \funcdesc{string-trim}{bag str}{
-{\em bag}は、文字コードの列である。
-両端に{\em bag}に書かれた文字を含まない{\em str}のコピーが作られ、返される。}
+{\em bag}は、文字コードの列である。
+両端に{\em bag}に書かれた文字を含まない{\em str}のコピーが作られ、返される。}
 
 \funcdesc{substringp}{sub string}{
-{\em sub}文字列が{\em string}に部分文字列として含まれるなら、Tを返す。
-大文字・小文字を判別しない。}
+{\em sub}文字列が{\em string}に部分文字列として含まれるなら、Tを返す。
+大文字・小文字を判別しない。}
 
 \end{refdesc}
 
 \subsection{Foreign String}
-{\bf foreign-string}は、EusLispのヒープ外にあるバイトベクトルの1種である。
-普通の文字列は、長さとバイトの列を持ったオブジェクトであるが、
-foreign-stringは、長さと文字列本体のアドレスを持っている。
-foreign-stringは文字列であるが、
-いくつかの文字列および列に対する関数は適用できない。
-{\bf length}、{\bf aref}、{\bf replace}、{\bf subseq}と{\bf copy-seq}だけが
-foreign-stringを認識し、 
-その他の関数の適用はクラッシュの原因となる恐れがある。
+{\bf foreign-string}は、EusLispのヒープ外にあるバイトベクトルの1種である。
+普通の文字列は、長さとバイトの列を持ったオブジェクトであるが、
+foreign-stringは、長さと文字列本体のアドレスを持っている。
+foreign-stringは文字列であるが、
+いくつかの文字列および列に対する関数は適用できない。
+{\bf length}、{\bf aref}、{\bf replace}、{\bf subseq}と{\bf copy-seq}だけが
+foreign-stringを認識し、 
+その他の関数の適用はクラッシュの原因となる恐れがある。
 
-foreign-stringは、/dev/a??d??(??は32あるいは16)の特殊ファイルで与えられる
-I/O空間を参照することがある。
-そのデバイスがバイトアクセスにのみ応答するI/O空間の一つに
-割り当てられた場合、
-{\bf replace}は、いつもバイト毎に要素をコピーする。
-メモリのlarge chunkを連続的にアクセスしたとき、比較的に遅く動作する。。
+foreign-stringは、/dev/a??d??(??は32あるいは16)の特殊ファイルで与えられる
+I/O空間を参照することがある。
+そのデバイスがバイトアクセスにのみ応答するI/O空間の一つに
+割り当てられた場合、
+{\bf replace}は、いつもバイト毎に要素をコピーする。
+メモリのlarge chunkを連続的にアクセスしたとき、比較的に遅く動作する。。
 
 \begin{refdesc}
 \funcdesc{make-foreign-string}{address length}{
-{\em address}の位置から{\em length}バイトの
-{\bf foreign-string}のインスタンスを作る。
-例えば、{\tt (make-foreign-string (unix:malloc 32) 32)}は、
-EusLispのヒープ外に位置する32バイトメモリを参照部分として作る。}
+{\em address}の位置から{\em length}バイトの
+{\bf foreign-string}のインスタンスを作る。
+例えば、{\tt (make-foreign-string (unix:malloc 32) 32)}は、
+EusLispのヒープ外に位置する32バイトメモリを参照部分として作る。}
 
 \end{refdesc}
 \newpage
 
-\subsection{ハッシュテーブル}
+\subsection{ハッシュテーブル}
 
-hash-tableは、キーで連想される値を探すためのクラスである（{\bf assoc}でもできる）。
-比較的大きな問題において、hash-tableはassocより良い性能を出す。
-キーと値の組数が増加しても探索に要する時間は、一定のままである。
-簡単に言うと、hash-tableは100以上の要素から探す場合に用い、
-それより小さい場合はassocを用いるべきである。
+hash-tableは、キーで連想される値を探すためのクラスである（{\bf assoc}でもできる）。
+比較的大きな問題において、hash-tableはassocより良い性能を出す。
+キーと値の組数が増加しても探索に要する時間は、一定のままである。
+簡単に言うと、hash-tableは100以上の要素から探す場合に用い、
+それより小さい場合はassocを用いるべきである。
 
-hash-tableは、テーブルの要素数がrehash-sizeを越えたなら、自動的に拡張される。
-デフォルトとして、テーブルの半分が満たされたとき拡張が起こるようになっている。
-{\bf sxhash}関数は、オブジェクトのメモリアドレスと無関係なハッシュ値を
-返し、オブジェクトが等しい(equal)ときのハッシュ値はいつも同じである。
-それで、hash-tableはデフォルトのハッシュ関数に{\bf sxhash}を使用している
-ので、再ロード可能である。
-{\bf sxhash}がロバストで安全な間は、
-列やtreeの中のすべての要素を探索するため、比較的に遅い。
-高速なハッシュのためには、アプリケーションにより他の特定のハッシュ関数を
-選んだ方がよい。
-ハッシュ関数を変えるためには、hash-tableに{\tt :hash-function}メッセージを
-送信すれば良い。
-簡単な場合、ハッシュ関数を{\tt \#'sxhash}から
-{\tt \#'sys:address}に変更すればよい。
-EusLisp内のオブジェクトのアドレスは
-決して変更されないため、{\tt \#'sys:address}を設定することができる。
+hash-tableは、テーブルの要素数がrehash-sizeを越えたなら、自動的に拡張される。
+デフォルトとして、テーブルの半分が満たされたとき拡張が起こるようになっている。
+{\bf sxhash}関数は、オブジェクトのメモリアドレスと無関係なハッシュ値を
+返し、オブジェクトが等しい(equal)ときのハッシュ値はいつも同じである。
+それで、hash-tableはデフォルトのハッシュ関数に{\bf sxhash}を使用している
+ので、再ロード可能である。
+{\bf sxhash}がロバストで安全な間は、
+列やtreeの中のすべての要素を探索するため、比較的に遅い。
+高速なハッシュのためには、アプリケーションにより他の特定のハッシュ関数を
+選んだ方がよい。
+ハッシュ関数を変えるためには、hash-tableに{\tt :hash-function}メッセージを
+送信すれば良い。
+簡単な場合、ハッシュ関数を{\tt \#'sxhash}から
+{\tt \#'sys:address}に変更すればよい。
+EusLisp内のオブジェクトのアドレスは
+決して変更されないため、{\tt \#'sys:address}を設定することができる。
 
 \begin{refdesc}
 
 \funcdesc{sxhash}{obj}{
-{\em obj}のハッシュ値を計算する。
-{\bf equal}な2つのオブジェクトでは、同じハッシュ値を生じること
-が保証されている。
-symbolなら、そのpnameに対するハッシュ値を返す。
-numberなら、その{\tt integer}表現を返す。
-listなら、その要素全てのハッシュ値の合計が返される。
-stringなら、それぞれの文字コードの合計をシフトしたものが返される。
-その他どんなオブジェクトでも、{\bf sxhash}はそれぞれのスロットのハッシュ値を
-再帰的呼出しで計算し、それらの合計を返す。}
+{\em obj}のハッシュ値を計算する。
+{\bf equal}な2つのオブジェクトでは、同じハッシュ値を生じること
+が保証されている。
+symbolなら、そのpnameに対するハッシュ値を返す。
+numberなら、その{\tt integer}表現を返す。
+listなら、その要素全てのハッシュ値の合計が返される。
+stringなら、それぞれの文字コードの合計をシフトしたものが返される。
+その他どんなオブジェクトでも、{\bf sxhash}はそれぞれのスロットのハッシュ値を
+再帰的呼出しで計算し、それらの合計を返す。}
 
 \funcdesc{make-hash-table}{\&key (:size 30) (:test \#'eq) (:rehash-size 2.0)}{
-hash-tableを作り、返す。}
+hash-tableを作り、返す。}
 
 
 \funcdesc{gethash}{key htab}{
-{\em htab}の中から{\em key}と一致する値を得る。
-{\bf gethash}は、{\bf setf}を組み合せることにより{\em key}に値を設定する
-ことにも使用される。
-hash-tableに新しい値が登録され、そのテーブルの埋まったスロットの数が
-1/rehash-sizeを越えたとき、hash-tableは自動的に2倍の大きさに拡張される。}
+{\em htab}の中から{\em key}と一致する値を得る。
+{\bf gethash}は、{\bf setf}を組み合せることにより{\em key}に値を設定する
+ことにも使用される。
+hash-tableに新しい値が登録され、そのテーブルの埋まったスロットの数が
+1/rehash-sizeを越えたとき、hash-tableは自動的に2倍の大きさに拡張される。}
 
 \funcdesc{remhash}{key htab}{
-{\em htab}の中から{\em key}で指定されたハッシュ登録を削除する。}
+{\em htab}の中から{\em key}で指定されたハッシュ登録を削除する。}
 
 \funcdesc{maphash}{function htab }{
-{\em htab}の要素全てを{\em function}で{\bf map}する。}
+{\em htab}の要素全てを{\em function}で{\bf map}する。}
 
 \funcdesc{hash-table-p}{x}{
-もし{\em x}がhash-tableクラスのインスタンスなら、Tを返す。}
+もし{\em x}がhash-tableクラスのインスタンスなら、Tを返す。}
 
 \classdesc{hash-table}{object}
 {(key value count \\
 \> hash-function test-function \\
 \> rehash-size empty deleted)}{
-hash-tableを定義する。
-{\em key}と{\em value}は大きさが等しい一次元ベクトルである。
-{\em count}は、{\em key}や{\em value}が埋まっている数である。
-{\em hash-function}のデフォルトは{\bf sxhash}である。
-{\em test-function}のデフォルトは{\bf eq}である。
-{\em empty}と{\em deleted}は、{\em key}ベクトルのなかで空または削除された
-数を示すsymbol(パッケージに収容されていない）である。}
+hash-tableを定義する。
+{\em key}と{\em value}は大きさが等しい一次元ベクトルである。
+{\em count}は、{\em key}や{\em value}が埋まっている数である。
+{\em hash-function}のデフォルトは{\bf sxhash}である。
+{\em test-function}のデフォルトは{\bf eq}である。
+{\em empty}と{\em deleted}は、{\em key}ベクトルのなかで空または削除された
+数を示すsymbol(パッケージに収容されていない）である。}
 
 \methoddesc{:hash-function}{newhash}{
-このhash-tableのハッシュ関数を{\em newhash}に変更する。
-{\em newhash}は、1つの引数を持ち、{\tt integer}を返す関数でなければならない。
-{\em newhash}の1つの候補として{\bf sys:address}がある。}
+このhash-tableのハッシュ関数を{\em newhash}に変更する。
+{\em newhash}は、1つの引数を持ち、{\tt integer}を返す関数でなければならない。
+{\em newhash}の1つの候補として{\bf sys:address}がある。}
 
 \end{refdesc}
 

@@ -1,24 +1,24 @@
-\subsection{多角形のVoronoi Diagram}
+\subsection{多角形のVoronoi Diagram}
 
-\hfill {\em 著者: Philippe PIGNON, 電総研ゲスト研究者}
+\hfill {\em 著者: Philippe PIGNON, 電総研ゲスト研究者}
 
-このプログラムは，Common Lispで書かれている。
+このプログラムは，Common Lispで書かれている。
  "A sweepline algorithm for Voronoi diagrams", Proceedings of
-the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.を
-手法として用い、
-多角形の場合への応用を行った。これは，サンプルプログラム付きの簡単な説明である。
-このプログラムは，ETLのEuslisp環境で書かれているため，
-画像への出力もサポートしている。
-どのCommon Lisp上でも使用することはできるが，
-{\tt utilities.l}で与えられている画像への関数を自分のディスプレイ環境へ
-合うように書き換える必要がある。この節の最後にその関数を示す。
+the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.を
+手法として用い、
+多角形の場合への応用を行った。これは，サンプルプログラム付きの簡単な説明である。
+このプログラムは，ETLのEuslisp環境で書かれているため，
+画像への出力もサポートしている。
+どのCommon Lisp上でも使用することはできるが，
+{\tt utilities.l}で与えられている画像への関数を自分のディスプレイ環境へ
+合うように書き換える必要がある。この節の最後にその関数を示す。
 
 \begin{description}
-\item[目的:] 多角形の集合のvoronoi diagramの計算を行う。
-語彙を理解するために上記の文献を読んで、使用してください。
-ここでは、このプログラムに対する説明をしません。
+\item[目的:] 多角形の集合のvoronoi diagramの計算を行う。
+語彙を理解するために上記の文献を読んで、使用してください。
+ここでは、このプログラムに対する説明をしません。
 
-\item[入力:] 多角形のリストと囲むための枠は，次のように定義する。
+\item[入力:] 多角形のリストと囲むための枠は，次のように定義する。
 \begin{verbatim}
 DATA= (
        (x11 y11 x12 y12 x13 y13 ...) first polygon,
@@ -30,15 +30,15 @@ DATA= (
        (xf1 yf1 xf2 yf2 xf3 yf3 xf4 yf4) enclosing frame
       )
 \end{verbatim}
-囲む枠は，{\bf DATA}内のどの位置にも配置することができる。また，
-内部と外部が矛盾しないように時計方向の順番でなければならない。
-多角形は交差の無い簡単な図形でなければならない。
-一直線あるいは平坦なエッジは受け付けない。
-独立した点あるいは線分も受け付けない。
+囲む枠は，{\bf DATA}内のどの位置にも配置することができる。また，
+内部と外部が矛盾しないように時計方向の順番でなければならない。
+多角形は交差の無い簡単な図形でなければならない。
+一直線あるいは平坦なエッジは受け付けない。
+独立した点あるいは線分も受け付けない。
 
-\item[出力:] {\bf *diagram*}:2重に接続されたエッジリストのリスト
-(utilities.lファイルを参照)を返す。それぞれのエッジは，symbolであり，次に示す
-ようなfieldを含むproperty-listを持っている。
+\item[出力:] {\bf *diagram*}:2重に接続されたエッジリストのリスト
+(utilities.lファイルを参照)を返す。それぞれのエッジは，symbolであり，次に示す
+ようなfieldを含むproperty-listを持っている。
 \begin{verbatim}
 (start <pointer to a vertex>)
        (end <pointer to a vertex>)
@@ -49,44 +49,44 @@ DATA= (
        (type <:endpoint or :point-point or :segment-segment or :point-segment>)
        (outflag <t or nil>)
 \end{verbatim}
-{\em vertex}は，symbolで"{\tt pos}"fieldを含むproperty-listを持つ。
-このfieldは，cons{\em (x,y)}を含み，{\em vertex}の平面座標を示す。
-{\em pred}と{\em succ}のfieldは，decl形式にしたがって反時計方向の
-前者と後者を与える(ShamosとPreparataの,
-Computational Geometry: An introduction, 1985, pp 15-17を参照)。
-{\em site}もsymbolであり，関連した情報を含むproperty-listを持つ。
-{\em site}は，元の入力データを記述しており，多角形の頂点であるpoint
-あるいは多角形のエッジであるsegmentを持つ。
+{\em vertex}は，symbolで"{\tt pos}"fieldを含むproperty-listを持つ。
+このfieldは，cons{\em (x,y)}を含み，{\em vertex}の平面座標を示す。
+{\em pred}と{\em succ}のfieldは，decl形式にしたがって反時計方向の
+前者と後者を与える(ShamosとPreparataの,
+Computational Geometry: An introduction, 1985, pp 15-17を参照)。
+{\em site}もsymbolであり，関連した情報を含むproperty-listを持つ。
+{\em site}は，元の入力データを記述しており，多角形の頂点であるpoint
+あるいは多角形のエッジであるsegmentを持つ。
 
-{\em type}は，2等分線の中点であり，それを分割する{\em site}の型より
-決定される。
-規約により，外側はstart-endエッジの右側である。
-voronoi diagramは，2等分線の内部と同様に外側を計算する。
-必要とするoutflagを保つためにoutflagをソートする。
+{\em type}は，2等分線の中点であり，それを分割する{\em site}の型より
+決定される。
+規約により，外側はstart-endエッジの右側である。
+voronoi diagramは，2等分線の内部と同様に外側を計算する。
+必要とするoutflagを保つためにoutflagをソートする。
 
-\item[サンプル:]
-サンプルプログラムを実行するためには，以下のようなステップを実施してください。
+\item[サンプル:]
+サンプルプログラムを実行するためには，以下のようなステップを実施してください。
 \begin{enumerate}
-\item 自分の環境に以下のプログラムをコピーする。\\
+\item 自分の環境に以下のプログラムをコピーする。\\
 \begin{tabular}{ll}
-utilities.l & 幾何学ユーティリティ関数とeusxの画像出力関数\\
-polygonalvoronoi.l & プログラム本体\\
-testdata.l & 上記の書式によるデモデータ
+utilities.l & 幾何学ユーティリティ関数とeusxの画像出力関数\\
+polygonalvoronoi.l & プログラム本体\\
+testdata.l & 上記の書式によるデモデータ
 \end{tabular}
-\item もし，Euslispを使用しないなら，命令にしたがって{\tt utilities.l}を書き換え，
-"compatibility package"を修正する。。
-\item 以下の3つのファイルをコンパイルしてロードするか、あるいはそのままロードする。\\
+\item もし，Euslispを使用しないなら，命令にしたがって{\tt utilities.l}を書き換え，
+"compatibility package"を修正する。。
+\item 以下の3つのファイルをコンパイルしてロードするか、あるいはそのままロードする。\\
 \begin{tabular}{ll}
 utilities.l\\
 polygonalvoronoi.l\\
-testdata.l & 上記の書式によるデモデータを含んでいる。
+testdata.l & 上記の書式によるデモデータを含んでいる。
 \end{tabular}
-\item (pv demoworld)でデモデータ上でプログラムが実行される。
-グローバル変数{\bf *diagram*}には，voronoi diagramの2等分線が含まれている。
+\item (pv demoworld)でデモデータ上でプログラムが実行される。
+グローバル変数{\bf *diagram*}には，voronoi diagramの2等分線が含まれている。
 \end{enumerate}
 \end{description}
 
-eusx(Xwindowインターフェースを持つEuslisp)のもとでは，以下の命令でdiagramの結果を画面上に表示することができる。
+eusx(Xwindowインターフェースを持つEuslisp)のもとでは，以下の命令でdiagramの結果を画面上に表示することができる。
 \begin{verbatim}
        (make-display)          ;;Initializes the *display* window object
        (dps demoworld *thick*) ;; Shows original data in thick lines
@@ -95,7 +95,7 @@ eusx(Xwindowインターフェースを持つEuslisp)のもとでは，以下の命令でdi
 
 \begin{refdesc}
 \funcdesc{pv}{data}{
-上記の書式で書かれた{\em data}から多角形のvoronoi diagramを計算する。}
+上記の書式で書かれた{\em data}から多角形のvoronoi diagramを計算する。}
 \end{refdesc}
 
 \newpage

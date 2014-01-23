@@ -1,304 +1,304 @@
-\section{symbolとパッケージ}
-\markright{\arabic{section}. Symbolとパッケージ}
+\section{symbolとパッケージ}
+\markright{\arabic{section}. Symbolとパッケージ}
 
 \subsection{symbol}
-symbolは、いつでも唯一であることが保証され、パッケージに収容される。
-1つのパッケージのなかに、その他の
-symbolとしておなじprint-nameを持っていることはあるが、symbol自体がコピーされることはない。
-symbolがリーダに読まれるとき、symbolオブジェクトは、自動的に生成され、
-1つのパッケージに収容される。
-そのパッケージは、パッケージ名にコロン（：）を付け加えた接頭語によって
-記すことができる。
-そのようなパッケージ接頭語がないならば、symbolは{\bf lisp:*package*}
-の値にある主なパッケージに収容される。
-全てのsymbolは、1つのホームパッケージを持っている。
-もしsymbolがそのようなホームパッケージを持っていないならば、
-収容されていないsymbolと言われる。
-収容されていないsymbolは、{\bf gensym}や{\bf make-symbol}関数によって
-作ることができ、表示のときは、"{\tt \#:}"接頭語がつけられる。
-これらのsymbolは収容されていないので、そのような2つのsymbolが同じ
-print-nameを持っていた場合、等しいことが保証されない。
+symbolは、いつでも唯一であることが保証され、パッケージに収容される。
+1つのパッケージのなかに、その他の
+symbolとしておなじprint-nameを持っていることはあるが、symbol自体がコピーされることはない。
+symbolがリーダに読まれるとき、symbolオブジェクトは、自動的に生成され、
+1つのパッケージに収容される。
+そのパッケージは、パッケージ名にコロン（：）を付け加えた接頭語によって
+記すことができる。
+そのようなパッケージ接頭語がないならば、symbolは{\bf lisp:*package*}
+の値にある主なパッケージに収容される。
+全てのsymbolは、1つのホームパッケージを持っている。
+もしsymbolがそのようなホームパッケージを持っていないならば、
+収容されていないsymbolと言われる。
+収容されていないsymbolは、{\bf gensym}や{\bf make-symbol}関数によって
+作ることができ、表示のときは、"{\tt \#:}"接頭語がつけられる。
+これらのsymbolは収容されていないので、そのような2つのsymbolが同じ
+print-nameを持っていた場合、等しいことが保証されない。
 
-ふつう、lispリーダがsymbolに出会ったとき、リーダは自動的に
-symbolのprint-name文字列を大文字に変換する。
-したがって、例えば{\tt (symbol-name 'car)}と入力したとすると、
-EusLispは、{\tt "car"}の代りに{\tt "CAR"}と答える。
-{\tt (make-symbol "car")}は、{\tt car}や{\tt CAR}の代りに$|${\tt car}$|$
-を返す。
-もし、小文字から構成されるsymbolをリーダに作らせたい場合、
-$\backslash$や$|...|$のようなエスケープを用いること。
+ふつう、lispリーダがsymbolに出会ったとき、リーダは自動的に
+symbolのprint-name文字列を大文字に変換する。
+したがって、例えば{\tt (symbol-name 'car)}と入力したとすると、
+EusLispは、{\tt "car"}の代りに{\tt "CAR"}と答える。
+{\tt (make-symbol "car")}は、{\tt car}や{\tt CAR}の代りに$|${\tt car}$|$
+を返す。
+もし、小文字から構成されるsymbolをリーダに作らせたい場合、
+$\backslash$や$|...|$のようなエスケープを用いること。
 
 \begin{refdesc}
 
-\funcdesc{symbolp}{object}{ {\em object}が
-クラスsymbolかそのサブクラスのインスタンスであったならば、Tを返す。}
+\funcdesc{symbolp}{object}{ {\em object}が
+クラスsymbolかそのサブクラスのインスタンスであったならば、Tを返す。}
 
 \funcdesc{symbol-value}{symbol}{
-{\em symbol}の特殊値を得る。ローカル変数値は、この関数では取り出す
-ことはできない。}
+{\em symbol}の特殊値を得る。ローカル変数値は、この関数では取り出す
+ことはできない。}
 
 \funcdesc{symbol-function}{symbol}{
-{\em symbol}のグローバル関数定義を得る。
-ローカル関数は、この関数で得られない。}
+{\em symbol}のグローバル関数定義を得る。
+ローカル関数は、この関数で得られない。}
 
 \funcdesc{symbol-package}{sym}{
-{\em sym}が収容されているパッケージを返す。}
+{\em sym}が収容されているパッケージを返す。}
 
 \funcdesc{symbol-name}{sym}{
-{\em sym}のprint-nameを返す。
-{\bf symbol-name}は、{\bf string}がコピーするのに反して、
- pname文字列をコピーしない。
-したがって、もし{\bf symbol-name}で返された文字列を変えるならば
-symbolは普通の内部手続きを通してアクセス不可能となる。}
+{\em sym}のprint-nameを返す。
+{\bf symbol-name}は、{\bf string}がコピーするのに反して、
+ pname文字列をコピーしない。
+したがって、もし{\bf symbol-name}で返された文字列を変えるならば
+symbolは普通の内部手続きを通してアクセス不可能となる。}
 
 \funcdesc{symbol-plist}{sym}{
-{\em sym}のproperty-list(plist)を返す。
-EusLispのplistは、関連リスト（association-list）と同じ様な書式を与える。
-それは、属性名とその値の組を点でつないだ構成である。
-これは、Common Lispの定義が要求するplist（属性名と値の線形リスト）
-と非互換である。
-EusLispにおいて、plistはsymbolに独特なものではない。
-{\bf propertied-object}を継承するクラスから派生したどんなオブジェクトも、
-property-listを持つことができる。
-{\bf propertied-object}の中のこれらのplistを設定したり、取りだしたりするために、
-{\bf propertied-object-plist}マクロは、{\bf symbol-plist}の代りに
-使用されるべきである。
-しかしながら、{\bf get}と{\bf putprop}はどのオブジェクトにも働く。}
+{\em sym}のproperty-list(plist)を返す。
+EusLispのplistは、関連リスト（association-list）と同じ様な書式を与える。
+それは、属性名とその値の組を点でつないだ構成である。
+これは、Common Lispの定義が要求するplist（属性名と値の線形リスト）
+と非互換である。
+EusLispにおいて、plistはsymbolに独特なものではない。
+{\bf propertied-object}を継承するクラスから派生したどんなオブジェクトも、
+property-listを持つことができる。
+{\bf propertied-object}の中のこれらのplistを設定したり、取りだしたりするために、
+{\bf propertied-object-plist}マクロは、{\bf symbol-plist}の代りに
+使用されるべきである。
+しかしながら、{\bf get}と{\bf putprop}はどのオブジェクトにも働く。}
 
 \funcdesc{boundp}{symbol}{
-{\em symbol}がグローバルな値を持っているかどうかを検査する。\\
-注意:ローカル変数やオブジェクト変数として使用されるsymbolは
-いつも値を持っているため、{\em boundp}はこれらのローカル変数の
-格納状態を検査することができない。}
+{\em symbol}がグローバルな値を持っているかどうかを検査する。\\
+注意:ローカル変数やオブジェクト変数として使用されるsymbolは
+いつも値を持っているため、{\em boundp}はこれらのローカル変数の
+格納状態を検査することができない。}
 \funcdesc{fboundp}{symbol}{
-{\em symbol}がグローバルな関数定義を持っているかどうかを検査する。}
+{\em symbol}がグローバルな関数定義を持っているかどうかを検査する。}
 \funcdesc{makunbound}{symbol}{
-{\em symbol}は、（特殊値を持たないように）強制的にunboundされる。
-ローカル変数は、いつも値が割り当てられ、{\bf makunbound}できない。}
+{\em symbol}は、（特殊値を持たないように）強制的にunboundされる。
+ローカル変数は、いつも値が割り当てられ、{\bf makunbound}できない。}
 
 \funcdesc{get}{sym attribute}{
-{\em sym}のplistの中で{\em attribute}に関連する値を取り出す。
-{\tt (cdr (assoc {\em attribute} (symbol-plist {\em sym})))}と等価である。}
+{\em sym}のplistの中で{\em attribute}に関連する値を取り出す。
+{\tt (cdr (assoc {\em attribute} (symbol-plist {\em sym})))}と等価である。}
 \funcdesc{putprop}{sym val attribute}{
-{\bf putprop}は、{\bf setf}と{\bf get}の組み合せで置き換えるべきである。}
+{\bf putprop}は、{\bf setf}と{\bf get}の組み合せで置き換えるべきである。}
 \funcdesc{remprop}{sym attr}{
-属性値({\em attr})と{\em sym}の組をproperty-listから削除する。}
+属性値({\em attr})と{\em sym}の組をproperty-listから削除する。}
 
 \specialdesc{setq}{\{var value\}*}{
-{\em value}を{\em var}に割り当てる。{\em var}は、symbolか点で継った組である。
-{\em var}は、ローカル変数・オブジェクト変数・特殊変数の順番にその名前の中から探される。
-ただし、明確にspecialと宣言されてないものに限る。}
+{\em value}を{\em var}に割り当てる。{\em var}は、symbolか点で継った組である。
+{\em var}は、ローカル変数・オブジェクト変数・特殊変数の順番にその名前の中から探される。
+ただし、明確にspecialと宣言されてないものに限る。}
 
 \funcdesc{set}{sym val}{
-{\em val}を{\em sym}の特殊値として割り当てる。
-{\bf set}は、ローカル変数やオブジェクト変数に値を
-割当てることはできない。}
+{\em val}を{\em sym}の特殊値として割り当てる。
+{\bf set}は、ローカル変数やオブジェクト変数に値を
+割当てることはできない。}
 
 \specialdesc{defun}{symbol [documentation] lambda-list . body}{
-{\em symbol}にグローバル関数を定義する。
-ローカル関数を定義するためには、{\bf flet}か{\bf labels}を使用すること。
-もし、{\em documentation}が与えられない場合、lambda-listに書かれている
-デフォルトのdocumentation文字列が入力される。}
+{\em symbol}にグローバル関数を定義する。
+ローカル関数を定義するためには、{\bf flet}か{\bf labels}を使用すること。
+もし、{\em documentation}が与えられない場合、lambda-listに書かれている
+デフォルトのdocumentation文字列が入力される。}
 
 \specialdesc{defmacro}{symbol [documentation] lambda-list . body}{
-グローバルマクロを定義する。
-EusLispは、ローカルスコープマクロ定義の機能を持っていない。}
+グローバルマクロを定義する。
+EusLispは、ローカルスコープマクロ定義の機能を持っていない。}
 
 \macrodesc{defvar}{var \&optional (init nil) doc}{
-もし{\em var}が特殊値を持っていれば、{\bf defvar} は何もしない。
-もし{\em var}がunboundならば、{\tt special}として宣言し、
-{\em init}をその値として設定する。}
+もし{\em var}が特殊値を持っていれば、{\bf defvar} は何もしない。
+もし{\em var}がunboundならば、{\tt special}として宣言し、
+{\em init}をその値として設定する。}
 
 \macrodesc{defparameter}{var init \&optional doc}{
-{\bf defparameter}は、{\em var}を{\tt special}として宣言し、
-{\em var}が既に値を持っていたとしても、{\em init}をその値として設定する。}
+{\bf defparameter}は、{\em var}を{\tt special}として宣言し、
+{\em var}が既に値を持っていたとしても、{\em init}をその値として設定する。}
 
 \macrodesc{defconstant}{sym val \&optional doc}{
-{\bf defconstant}は、{\bf val}を{\bf sym}の特殊値として設定する。
-{\bf defvar, defparameter}や{\bf setq}と違い、その値は
-{\bf defconstant}でのみ設定され、これらの書式で変更することができない。
-もし定数symbolの値が、変更されようとしたならば、
-エラーが返される。
-しかし、{\bf defconstant}は以前の
-定数値に上書きでき、上書きした場合は注意メッセージが出力される。}
+{\bf defconstant}は、{\bf val}を{\bf sym}の特殊値として設定する。
+{\bf defvar, defparameter}や{\bf setq}と違い、その値は
+{\bf defconstant}でのみ設定され、これらの書式で変更することができない。
+もし定数symbolの値が、変更されようとしたならば、
+エラーが返される。
+しかし、{\bf defconstant}は以前の
+定数値に上書きでき、上書きした場合は注意メッセージが出力される。}
 
 \funcdesc{keywordp}{obj}{
-もし{\em obj}がsymbolで、そのホームパッケージが{\bf KEYWORD}のときTを返す。}
+もし{\em obj}がsymbolで、そのホームパッケージが{\bf KEYWORD}のときTを返す。}
 \funcdesc{constantp}{symbol}{
-もしsymbolが{\bf defconstant}マクロで定数に宣言されているときTを返す。}
+もしsymbolが{\bf defconstant}マクロで定数に宣言されているときTを返す。}
 
 \funcdesc{documentation}{sym \&optional type}{
-{\em sym}のために提示文字列(documentation string)を取り出す。}
+{\em sym}のために提示文字列(documentation string)を取り出す。}
 
 \funcdesc{gensym}{\&optional x}{
-{\tt g001}のような前置文字列と付属数字を組み合わせた新しい収容されていないsymbolを作る。
-収容されてないsymbolは、symbolに関連するパッケージがないため、パッケージ前置詞
-の部分に\#:を示す。\#:が前につくsymbolは、読めないsymbolで、
-リーダではこれらのsymbolへの参照を作成することができない。
-{\em x}は、整数か文字列が可能で、
-接頭(prefix)インデックスか接尾(suffix)値として使用される。}
+{\tt g001}のような前置文字列と付属数字を組み合わせた新しい収容されていないsymbolを作る。
+収容されてないsymbolは、symbolに関連するパッケージがないため、パッケージ前置詞
+の部分に\#:を示す。\#:が前につくsymbolは、読めないsymbolで、
+リーダではこれらのsymbolへの参照を作成することができない。
+{\em x}は、整数か文字列が可能で、
+接頭(prefix)インデックスか接尾(suffix)値として使用される。}
 
 \funcdesc{gentemp}{\&optional (prefix "T") (pkg *package*)}{
-{\em pkg}に収容される新しいsymbolを作る。
-ほとんどのアプリケーションにおいて、{\bf gensym}が{\bf gentemp}よりも好まれる。
-なぜなら、収容されないsymbolの方が高速に作ることができ、
-ガーベージコレクトも可能であるため。}
+{\em pkg}に収容される新しいsymbolを作る。
+ほとんどのアプリケーションにおいて、{\bf gensym}が{\bf gentemp}よりも好まれる。
+なぜなら、収容されないsymbolの方が高速に作ることができ、
+ガーベージコレクトも可能であるため。}
 
 \end{refdesc}
 
-\subsection{パッケージ}
+\subsection{パッケージ}
 
-パッケージは、symbolをグループ化するための区分された名前の付いた空間を与える。
-複数のプログラマが要求されるような膨大なソフトウェアシステム
-を開発しようとするとき、symbol（関数および変数名）が重複する問題を減少させるために
-Common Lispでパッケージシステムが生まれた。
-それぞれのパッケージは、内部symbolと外部symbolを持つ。
-パッケージの中でsymbolが作成されたとき、いつでも内部symbolとなる。
-{\bf export}を使用することにより外部symbolにすることができる。
-異なったパッケージの外部symbolは、symbolの前にパッケージ名とコロン(:)を
-つけることにより参照することができる。例えば、{\tt x:*display*}となる。
-他のパッケージの内部symbolを参照する場合には、{\tt sys::free-threads}のように
-ダブルコロン(::)を使用する。
-前にパッケージ名をつけることを省略するためには、{\bf import}を用いる。
-その上、{\bf use-package}を使用すれば、他のパッケージの全ての
-外部symbolをimportすることができる。
-symbolをexportあるいはimportするとき、あらゆるパッケージ内の
-全てのsymbolが独自の
-print-nameを持つ必要があるため、symbol名の重複を発見することができる。
-{\bfx shadow}は、パッケージからsymbolを仮想的に削除することにより、
-存在するsymbolと同じ名前のsymbolを作成することができる。
+パッケージは、symbolをグループ化するための区分された名前の付いた空間を与える。
+複数のプログラマが要求されるような膨大なソフトウェアシステム
+を開発しようとするとき、symbol（関数および変数名）が重複する問題を減少させるために
+Common Lispでパッケージシステムが生まれた。
+それぞれのパッケージは、内部symbolと外部symbolを持つ。
+パッケージの中でsymbolが作成されたとき、いつでも内部symbolとなる。
+{\bf export}を使用することにより外部symbolにすることができる。
+異なったパッケージの外部symbolは、symbolの前にパッケージ名とコロン(:)を
+つけることにより参照することができる。例えば、{\tt x:*display*}となる。
+他のパッケージの内部symbolを参照する場合には、{\tt sys::free-threads}のように
+ダブルコロン(::)を使用する。
+前にパッケージ名をつけることを省略するためには、{\bf import}を用いる。
+その上、{\bf use-package}を使用すれば、他のパッケージの全ての
+外部symbolをimportすることができる。
+symbolをexportあるいはimportするとき、あらゆるパッケージ内の
+全てのsymbolが独自の
+print-nameを持つ必要があるため、symbol名の重複を発見することができる。
+{\bfx shadow}は、パッケージからsymbolを仮想的に削除することにより、
+存在するsymbolと同じ名前のsymbolを作成することができる。
 
-Euslispは次の8つのパッケージを定義する。
+Euslispは次の8つのパッケージを定義する。
 \begin{description}
-\item [lisp:] 全てのlisp関数、マクロ、定数、など
-\item [keyword:] キーワードsymbol
-\item [unix:] UNIXシステムコールとライブラリ関数
-\item [system:] システム管理または危険な関数; nicknames=sys,si
-\item [compiler:] EusLispコンパイラ; nicknames=comp
-\item [user:] ユーザー領域
-\item [geometry:] 幾何学クラスとその関数
-\item [xwindow:] X-windowインターフェース; nickname=x
+\item [lisp:] 全てのlisp関数、マクロ、定数、など
+\item [keyword:] キーワードsymbol
+\item [unix:] UNIXシステムコールとライブラリ関数
+\item [system:] システム管理または危険な関数; nicknames=sys,si
+\item [compiler:] EusLispコンパイラ; nicknames=comp
+\item [user:] ユーザー領域
+\item [geometry:] 幾何学クラスとその関数
+\item [xwindow:] X-windowインターフェース; nickname=x
 \end{description}
 
-これらのパッケージとユーザー定義パッケージは、システムの
-package-listに繋げられている。
-それは、{\bf list-all-packages}よって得ることができる。
-それぞれのパッケージは、内部および外部symbolを探索・位置付けするために2つの
-ハッシュテーブルを管理する。
-また、パッケージは、その名前(stringまたはsymbol)とnick nameのリストと
-そのパッケージが使う他のパッケージリストを記憶している。
-{\bf *package*}は、読み込み・印刷のための主なパッケージを持つ
-グローバル変数である。
-もし{\bf *package*}が{\tt user:}でないならば、
-top-levelプロンプトは、現在のパッケージを示すために{\tt mypkg:eus}\$のように変更される。
+これらのパッケージとユーザー定義パッケージは、システムの
+package-listに繋げられている。
+それは、{\bf list-all-packages}よって得ることができる。
+それぞれのパッケージは、内部および外部symbolを探索・位置付けするために2つの
+ハッシュテーブルを管理する。
+また、パッケージは、その名前(stringまたはsymbol)とnick nameのリストと
+そのパッケージが使う他のパッケージリストを記憶している。
+{\bf *package*}は、読み込み・印刷のための主なパッケージを持つ
+グローバル変数である。
+もし{\bf *package*}が{\tt user:}でないならば、
+top-levelプロンプトは、現在のパッケージを示すために{\tt mypkg:eus}\$のように変更される。
 
 \begin{refdesc}
-\constdesc{*lisp-package*}{ Lispパッケージ。}
-\constdesc{*user-package*}{ ユーザーパッケージ。}
-\constdesc{*unix-package*}{ UNIXパッケージ。}
-\constdesc{*system-package*}{ システムパッケージ。}
-\constdesc{*keyword-package*}{ キーワードパッケージ。}
+\constdesc{*lisp-package*}{ Lispパッケージ。}
+\constdesc{*user-package*}{ ユーザーパッケージ。}
+\constdesc{*unix-package*}{ UNIXパッケージ。}
+\constdesc{*system-package*}{ システムパッケージ。}
+\constdesc{*keyword-package*}{ キーワードパッケージ。}
 
 \funcdesc{find-symbol}{string \&optional (package *package*)}{
-{\em package}のなかでprint-nameとして{\em string}をもつsymbolを
-見つける。
-もし見つかったとき、そのsymbolが返され、そうでないときNILが返される。}
+{\em package}のなかでprint-nameとして{\em string}をもつsymbolを
+見つける。
+もし見つかったとき、そのsymbolが返され、そうでないときNILが返される。}
 
 \funcdesc{make-symbol}{string}{
-{\em string}で示される名前の新しい収容されていないsymbolを作る。}
+{\em string}で示される名前の新しい収容されていないsymbolを作る。}
 
 \funcdesc{intern}{string \&optional (package *package*) (klass symbol)}{
-{\em string}と同じprint-nameのsymbolを見つけようとする。
-もし探索成功のとき、そのsymbolが返される。
-もし失敗したとき、{\em string}というprint-nameを持つsymbolが新しく作られ、
-{\em package}の中におかれる。}
+{\em string}と同じprint-nameのsymbolを見つけようとする。
+もし探索成功のとき、そのsymbolが返される。
+もし失敗したとき、{\em string}というprint-nameを持つsymbolが新しく作られ、
+{\em package}の中におかれる。}
 
 \funcdesc{list-all-packages}{}{
-今までに作られた全てのパッケージのリストを返す。}
+今までに作られた全てのパッケージのリストを返す。}
 
 \funcdesc{find-package}{name}{
-パッケージの名前またはnicknameが{\em name}と同じものを探す。}
+パッケージの名前またはnicknameが{\em name}と同じものを探す。}
 \funcdesc{make-package}{name \&key :nicknames (:use '(lisp))}{
-{\em name}で示される名前の新しいパッケージを作る。
-{\em name}は、stringあるいはsymbolでよい。
-もしパッケージが既に存在している場合、エラーが報告される。}
+{\em name}で示される名前の新しいパッケージを作る。
+{\em name}は、stringあるいはsymbolでよい。
+もしパッケージが既に存在している場合、エラーが報告される。}
 
 \funcdesc{in-package}{pkg \&key :nicknames (:uses '(lisp))}{
-現在のパッケージ({\bf *pacakge*}の値)を
-{\em pkg}に変える。}
+現在のパッケージ({\bf *pacakge*}の値)を
+{\em pkg}に変える。}
 
 \funcdesc{package-name}{pkg}{
-{\em pkg}パッケージの名前を文字列として返す。}
+{\em pkg}パッケージの名前を文字列として返す。}
 
 \funcdesc{package-nicknames}{pkg}{
-{\em pkg}のnicknameのリストを返す。}
+{\em pkg}のnicknameのリストを返す。}
 
 \funcdesc{rename-package}{pkg new-name \&optional new-nicknames}{
-{\em pkg}の名前を{\em new-name}に変更し、そのnicknameを 
-{\em new-nicknames}に変更する。
-それらは、symbolかstringまたはsymbolかstringのリストのどれでも可能である。}
+{\em pkg}の名前を{\em new-name}に変更し、そのnicknameを 
+{\em new-nicknames}に変更する。
+それらは、symbolかstringまたはsymbolかstringのリストのどれでも可能である。}
 
 \funcdesc{package-use-list}{pkg}{
-{\em pkg}で使用されるパッケージリストを返す。}
+{\em pkg}で使用されるパッケージリストを返す。}
 
 \funcdesc{packagep}{pkg}{
-もし{\em pkg}がパッケージのときTを返す。}
+もし{\em pkg}がパッケージのときTを返す。}
 
 \funcdesc{use-package}{pkg \&optional (curpkg *package*)}{
-{\em pkg}を{\em curpkg}のuse-listに付け加える。
-一旦追加すると、{\em pkg}のなかのsymbolは、パッケージの前置詞なしで
-{\em curpkg}を見ることが可能になる。}
+{\em pkg}を{\em curpkg}のuse-listに付け加える。
+一旦追加すると、{\em pkg}のなかのsymbolは、パッケージの前置詞なしで
+{\em curpkg}を見ることが可能になる。}
 
 \funcdesc{unuse-package}{pkg \&optional (curpkg *package*)}{
-{\em curpkg}のuse-listから{\em pkg}を削除する。}
+{\em curpkg}のuse-listから{\em pkg}を削除する。}
 
 \funcdesc{shadow}{sym \&optional(pkg *package*)}{
-存在する{\em sym}を隠すことによって、
-{\em pkg}内に内部symbolを作る。}
+存在する{\em sym}を隠すことによって、
+{\em pkg}内に内部symbolを作る。}
 
 \funcdesc{export}{sym \&optional (pkg *package*)}{
-{\em sym}は、symbolかsymbolのリストである。
-{\bf export}は、{\em sym}を他のパッケージから
-外部symbolとしてアクセス可能とする。
-実際に、{\em sym}は、{\em pkg}のなかの外部symbolとして記録される。
-もしsymbolが{\bf export}されると、パッケージマークとしてsingle colon ":"を使って
-アクセス可能となる。これに対して、{\bf export}されていないsymbolはdouble colon "::"
-で得られる。
-そのうえ、{\bf export}されたsymbolは、
-{\bf use-package}を使用したり、パッケージに{\bf import}されたとき、コロンの
-必要がない。
-symbolがexportされたかどうかは、それぞれのsymbolにでなくそれが収容されている
-パッケージに属性付けられる。
-それで、symbolは1つのパッケージの内部にあり、その他の外部となる。
-{\bf export}は、{\em pkg}が使用している他のパッケージの中の
-symbol名と{\em sym}が重複していないかどうかを検査する。
-もし{\em sym}と同じprint nameをもつsymbolがあったならば、
-"symbol conflict"とエラーを報告する。}
+{\em sym}は、symbolかsymbolのリストである。
+{\bf export}は、{\em sym}を他のパッケージから
+外部symbolとしてアクセス可能とする。
+実際に、{\em sym}は、{\em pkg}のなかの外部symbolとして記録される。
+もしsymbolが{\bf export}されると、パッケージマークとしてsingle colon ":"を使って
+アクセス可能となる。これに対して、{\bf export}されていないsymbolはdouble colon "::"
+で得られる。
+そのうえ、{\bf export}されたsymbolは、
+{\bf use-package}を使用したり、パッケージに{\bf import}されたとき、コロンの
+必要がない。
+symbolがexportされたかどうかは、それぞれのsymbolにでなくそれが収容されている
+パッケージに属性付けられる。
+それで、symbolは1つのパッケージの内部にあり、その他の外部となる。
+{\bf export}は、{\em pkg}が使用している他のパッケージの中の
+symbol名と{\em sym}が重複していないかどうかを検査する。
+もし{\em sym}と同じprint nameをもつsymbolがあったならば、
+"symbol conflict"とエラーを報告する。}
 
 \funcdesc{unexport}{sym \&optional pkg}{
-もし{\em sym}が{\em pkg}の外部symbolであったならば、unexportされ、
-内部symbolとなる。}
+もし{\em sym}が{\em pkg}の外部symbolであったならば、unexportされ、
+内部symbolとなる。}
 
 \funcdesc{import}{sym \&optional (pkg *package*)}{
-{\em sym}は、symbolまたはsymbolのリストである。
-{\bf import}は、他のパッケージで定義されたsymbolを
-{\em pkg}からパッケージの前置詞なしで内部symbolとして見えるようにする。
-もし{\em sym}と同じprint-nameを持ったsymbolが既にあったとき、
-"name conflict"とエラーを報告する。}
+{\em sym}は、symbolまたはsymbolのリストである。
+{\bf import}は、他のパッケージで定義されたsymbolを
+{\em pkg}からパッケージの前置詞なしで内部symbolとして見えるようにする。
+もし{\em sym}と同じprint-nameを持ったsymbolが既にあったとき、
+"name conflict"とエラーを報告する。}
 
 \macrodesc{do-symbols}{(var pkg) \&rest forms}{
-{\em pkg}において、（内部あるいは外部）symbolに対して繰り返しをする。
-そのときの{\em forms}の評価が返される。}
+{\em pkg}において、（内部あるいは外部）symbolに対して繰り返しをする。
+そのときの{\em forms}の評価が返される。}
 
 \macrodesc{do-external-symbols}{(var pkg) \&rest forms}{
-{\em pkg}において、外部symbolに対して繰り返しをする。
-そのときの{\em forms}の評価が返される。}
+{\em pkg}において、外部symbolに対して繰り返しをする。
+そのときの{\em forms}の評価が返される。}
 
 
 \macrodesc{do-all-symbols}{(var [result]) \&rest forms}{
-全てのパッケージにおいて、symbolに対して繰り返しをする。そのときの{\em forms}の評価が返される。
-もし、1つ以上のパッケージの中にそのsymbolが現れたならば、{\em forms}は、
-1度以上評価される。}
+全てのパッケージにおいて、symbolに対して繰り返しをする。そのときの{\em forms}の評価が返される。
+もし、1つ以上のパッケージの中にそのsymbolが現れたならば、{\em forms}は、
+1度以上評価される。}
 
 \end{refdesc}
 
