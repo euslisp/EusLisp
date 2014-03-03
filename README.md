@@ -1,4 +1,4 @@
-## [EusLisp](http://euslisp.sourceforge.net)
+## [EusLisp](http://euslisp.sourceforge.net) [![Build Status](https://travis-ci.org/euslisp/EusLisp.png?branch=master)](https://travis-ci.org/euslisp/EusLisp)
 
 EusLisp was originally developed by [Dr. Toshihiro Matusi at AIST](http://staff.aist.go.jp/t.matsui/ )
 
