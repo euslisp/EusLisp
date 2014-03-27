@@ -205,13 +205,11 @@
       (with-gensyms
        (ret)
        `(let* (failure (ret ,pred))
-	  (warning-message 2 "testing [~A] ~A~%" (format nil ,message ,@args) ',pred)
 	  ;; lisp::step could not work with macros..
 	  ;;     (if (and (listp ',pred) (functionp (car ',pred)))
 	  ;;	 (setq ret (lisp::step ,pred))
 	  ;;       (setq ret ,pred))
 	  ;;
-	  (send *unit-test* :increment-test ',pred)
 	  (if (not ret)
 	      ;; escape <> for xml
 	      (send *unit-test* :increment-failure ',pred (format nil ,message ,@args)
