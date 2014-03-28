@@ -64,7 +64,7 @@
   (:init (n) (setq name n tests nil failures nil time 0))
   (:tests () tests)
   (:num-tests () (length tests))
-  (:num-failures () (length failures))
+  (:num-failures () (if failures 1 0))
   (:num-successes () (- (send self :num-tests) (send self :num-failures)))
   (:time () time)
   (:prin1
@@ -111,6 +111,7 @@
      (setq output-mode :xml))
    self)
   (:functions () (reverse functions))
+  (:result () result)
   ;;
   (:add-function (name) (push name functions))
   (:increment-test
@@ -131,6 +132,8 @@
    (push (instance unit-test-result :init func-sym) result))
   (:clear-result ()
    (setq result nil)
+   (send self :init-result 'all-test)
+   ;(send self :increment-test 'all-test)
    )
   ;;
   (:print-xml-result
@@ -183,6 +186,7 @@
     (send *unit-test* :init-result func-sym)
     (format t "TEST-NAME: ~A~%" func-sym)
     (format t "  now testing...~%")
+    (send *unit-test* :increment-test func-sym)
     (setq tm (instance mtimer :init))
     (send tm :start)
     (funcall func)
