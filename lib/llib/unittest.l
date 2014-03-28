@@ -39,14 +39,22 @@
   (if msg2 (format *error-output* " ~A" msg2))
   (if form (format *error-output* " in ~s" form))
   (format *error-output* ", exitting...~C[0m~%"  #x1b)
-  (send *unit-test* :increment-failure form msg1 code)
-  (send *unit-test* :print-result)
+  (when (*unit-test* . result) ;; force put error code into all-test
+    (push 'all-test (unit-test-result-tests (car (last (*unit-test* . result)))))
+    (push (list form msg1 code) (unit-test-result-failures (car (last (*unit-test* . result))))))
+  (when code
+    (format *error-output* "~C[3~Cm[ERROR] test ~A failed" #x1b 49 form)
+    (format *error-output* " ... (~A ~A)" msg1 code)
+    (format *error-output* ".~C[0m~%" #x1b))
+  (send *unit-test* :print-result :if-exists :overwrite)
   (if lisp::*exit-on-fatal-error* (exit 1)))
 
 (defun unittest-sigint-handler (sig code)
   (format *error-output* "unittest-sigint-handler ~A~%" sig)
-  (send *unit-test* :increment-failure "" (format nil "signal-handler ~A" sig) code)
-  (send *unit-test* :print-result)
+  (when (*unit-test* . result) ;; force put error code into all-test
+    (push 'all-test (unit-test-result-tests (car (last (*unit-test* . result)))))
+    (push (list "" (format nil "signal-handler ~A" sig) code) (unit-test-result-failures (car (last (*unit-test* . result))))))
+  (send *unit-test* :print-result :if-exists :overwrite)
   (if lisp::*exit-on-fatal-error* (exit 1)))
 
 (defclass unit-test-result
@@ -150,11 +158,11 @@
      (dolist (r (reverse result)) (prin1 r strm))
      ))
   (:print-result
-   ()
+   (&key (if-exists :append))
    (send self :print-normal-result)
    (when (and result (eq output-mode :xml))
      (let ((strm (open log-fname :direction :output
-		       :if-exists :append
+		       :if-exists if-exists
 		       :if-does-not-exist :create)))
        (send self :print-xml-result strm)
        (close strm))))
