@@ -798,7 +798,7 @@ static void initfeatures()
 { register pointer p;
   register context *ctx=mainctx;
   extern char *makedate;
-  extern char *svnrevision;
+  extern char *gitrevision;
   extern char *compilehost;
 
   p=makestring(VERSION,strlen(VERSION));
@@ -807,7 +807,7 @@ static void initfeatures()
   vpush(p);
   p=makestring(makedate,strlen(makedate));
   vpush(p);
-  p=makestring(svnrevision,strlen(svnrevision));
+  p=makestring(gitrevision,strlen(gitrevision));
   vpush(p);
   p=stacknlist(ctx,4);
   QVERSION=defvar(ctx, "LISP-IMPLEMENTATION-VERSION", p,lisppkg);
