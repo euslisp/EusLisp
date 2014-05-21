@@ -701,7 +701,7 @@ hedron is an icosahedron or a gdome of lower level"
 
 ;;
 
-
+#|
 (defun make-body-from-vertices (face-vertices &optional (klass *body-class*))
    ; face-vertices=(list #f(x1 y1 z1) #f(x2 y2 z2) ...) ...
    #|(setq a
@@ -728,6 +728,29 @@ hedron is an icosahedron or a gdome of lower level"
      (setq bod (instance *body-class* :init :faces (nreverse faces)))
      (send bod :csg (list (cons :body-from-vertices face-vertices)))
      bod) )
+|#
+;; 2014.5.21 add Henry Baker's contribution of 2013.8.31
+(defun make-body-from-vertices (face-vertices &optional (klass *body-class*))
+                                         ; face-vertices=(list #f(x1 y1 z1) #f(x2 y2 z2) ...) ...
+    (let* ((vlist (mapcar #'list
+                          (remove-duplicates
+                                  (apply #'append face-vertices)
+                                  :test #'equal)))
+            (vhash (make-hash-table :size (* 2 (length vlist)) :test #'equal))
+           faces bod)
+      (dolist (vlist-entry vlist) ; Populate hash table.
+        (or (gethash (car vlist-entry) vhash)
+             (setf (gethash (car vlist-entry) vhash) vlist-entry)))
+      (dolist (fverts face-vertices)
+         (let ((fvlist))
+            (dolist (fv fverts)
+              ;; (push (assoc fv vlist) fvlist)
+              ;; (push (assoc fv vlist :test #'equal) fvlist) ; *** Too slow !!! ***
+              (push (gethash fv vhash) fvlist))
+            (push (make-face-from-vertices (nreverse fvlist)) faces)) )
+      (setq bod (instance *body-class* :init :faces (nreverse faces)))
+      (send bod :csg (list (cons :body-from-vertices face-vertices)))
+      bod) )
 
 
 
