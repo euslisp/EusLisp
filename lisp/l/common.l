@@ -620,9 +620,29 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
       ((memq (car l) (cdr l)) (unique (cdr l)))
       (t (cons (car l) (unique (cdr l))))))
 
+#|
 (defun remove-duplicates (seq &key (test #'eq) (test-not) (key #'identity)
 				   (start 0) (end 1000000))
    (system::raw-remove-duplicates seq test test-not key start end))
+|#
+;; 2014.5.21 add Henry Baker's contribution of 2013.7.22, 2013.8.31
+(defun remove-duplicates (seq &key (key #'identity)
+                               (test #'eq) (test-not)
+                               (start 0) (end (length seq)))
+   (if (and (or (eq test #'eq) (eq test #'eql) (eq test #'equal))
+            (> end 100))
+       (let* ((htab (make-hash-table :size (* 2 (length seq)) :test test)))
+         (let* ((res
+                 (remove-if
+                 #'(lambda (k)
+                      (let* ((v (gethash k htab)))
+                        (unless v (setf (gethash k htab) t))
+                        v))
+                 seq
+                 :start start :end end :key key)))
+           res))
+     (system::raw-remove-duplicates seq test test-not key start end)))
+
 
 (defun extream (seq test &optional (key #'identity))
    (if (null seq)
