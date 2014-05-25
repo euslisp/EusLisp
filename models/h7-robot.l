@@ -2672,14 +2672,14 @@
         :name "rleg-force-plate1"))
      (send blink30 :assoc sensor27)
 
+     (setq cameras (list sensor0 sensor1))
+     (setq force-sensors (list sensor2 sensor3 sensor4 sensor5 sensor6 sensor7 sensor8 sensor9 sensor10 sensor11 sensor12 sensor13 sensor14 sensor15 sensor16 sensor17 sensor18 sensor19 sensor20 sensor21 sensor22 sensor23 sensor24 sensor25 sensor26 sensor27))
      (setq sensors (list sensor0 sensor1 sensor2 sensor3 sensor4 sensor5 sensor6 sensor7 sensor8 sensor9 sensor10 sensor11 sensor12 sensor13 sensor14 sensor15 sensor16 sensor17 sensor18 sensor19 sensor20 sensor21 sensor22 sensor23 sensor24 sensor25 sensor26 sensor27))
      (send self :init-ending)
      (send self :move-to (make-coords :pos pos :rot rot))
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list sensor0 sensor1) args))
 
   (:reset-pose () (send self :angle-vector (float-vector -3.0 45.0 0.0 -110.0 0.0 0.0 0.0 0.0 -3.0 45.0 0.0 -110.0 0.0 0.0 0.0 0.0 0.0 0.0 -17.54 42.976 -25.435 0.0 0.0 0.0 0.0 0.0 -17.54 42.976 -25.435 0.0 0.0 0.0 0.0 -2.0 0.0 -2.0)))
   (:head-neck-p (&rest args) (forward-message-to joint23 args))

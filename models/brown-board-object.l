@@ -221,8 +221,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:drawer0 (&rest args) (forward-message-to joint0 args))
   (:drawer1 (&rest args) (forward-message-to joint1 args))

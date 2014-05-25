@@ -295,8 +295,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:door (&rest args) (forward-message-to joint0 args))
   (:knob (&rest args) (forward-message-to joint1 args))

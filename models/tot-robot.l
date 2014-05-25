@@ -3048,8 +3048,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:reset-pose () (send self :angle-vector (float-vector 0.0 -39.8003 69.3057 -29.5054 0.0 0.0 0.0 20.0 0.0 -90.0 -20.0 0.0 0.0 0.0 0.0 0.0 0.0 -39.8003 69.3057 -29.5054 0.0 0.0 0.0 20.0 0.0 -90.0 -20.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0)))
   (:torso-waist-p (&rest args) (forward-message-to joint35 args))

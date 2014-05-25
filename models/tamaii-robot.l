@@ -1651,8 +1651,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:head-pan1 (&rest args) (forward-message-to joint14 args))
   (:head-pan2 (&rest args) (forward-message-to joint7 args))

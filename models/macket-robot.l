@@ -4905,14 +4905,13 @@
         :name "rleg-force-sensor(list)"))
      (send blink13 :assoc sensor146)
 
+     (setq force-sensors (list sensor0 sensor1 sensor2 sensor3 sensor4 sensor5 sensor6 sensor7 sensor8 sensor9 sensor26 sensor27 sensor28 sensor29 sensor30 sensor31 sensor32 sensor33 sensor34 sensor35 sensor36 sensor37 sensor38 sensor39 sensor40 sensor41 sensor42 sensor43 sensor44 sensor45 sensor46 sensor47 sensor48 sensor49 sensor60 sensor61 sensor62 sensor63 sensor64 sensor65 sensor66 sensor67 sensor68 sensor69 sensor70 sensor71 sensor72 sensor73 sensor74 sensor75 sensor76 sensor77 sensor78 sensor79 sensor80 sensor81 sensor82 sensor83 sensor84 sensor85 sensor86 sensor87 sensor88 sensor89 sensor90 sensor91 sensor92 sensor93 sensor94 sensor95 sensor96 sensor101 sensor102 sensor103 sensor104 sensor105 sensor106 sensor113 sensor114 sensor115 sensor116 sensor117 sensor118 sensor119 sensor120 sensor125 sensor126 sensor127 sensor128 sensor129 sensor130 sensor137 sensor138 sensor139 sensor140 sensor141 sensor142 sensor143 sensor144 sensor145 sensor146))
      (setq sensors (list sensor0 sensor1 sensor2 sensor3 sensor4 sensor5 sensor6 sensor7 sensor8 sensor9 sensor10 sensor11 sensor12 sensor13 sensor14 sensor15 sensor16 sensor17 sensor18 sensor19 sensor20 sensor21 sensor22 sensor23 sensor24 sensor25 sensor26 sensor27 sensor28 sensor29 sensor30 sensor31 sensor32 sensor33 sensor34 sensor35 sensor36 sensor37 sensor38 sensor39 sensor40 sensor41 sensor42 sensor43 sensor44 sensor45 sensor46 sensor47 sensor48 sensor49 sensor50 sensor51 sensor52 sensor53 sensor54 sensor55 sensor56 sensor57 sensor58 sensor59 sensor60 sensor61 sensor62 sensor63 sensor64 sensor65 sensor66 sensor67 sensor68 sensor69 sensor70 sensor71 sensor72 sensor73 sensor74 sensor75 sensor76 sensor77 sensor78 sensor79 sensor80 sensor81 sensor82 sensor83 sensor84 sensor85 sensor86 sensor87 sensor88 sensor89 sensor90 sensor91 sensor92 sensor93 sensor94 sensor95 sensor96 sensor97 sensor98 sensor99 sensor100 sensor101 sensor102 sensor103 sensor104 sensor105 sensor106 sensor107 sensor108 sensor109 sensor110 sensor111 sensor112 sensor113 sensor114 sensor115 sensor116 sensor117 sensor118 sensor119 sensor120 sensor121 sensor122 sensor123 sensor124 sensor125 sensor126 sensor127 sensor128 sensor129 sensor130 sensor131 sensor132 sensor133 sensor134 sensor135 sensor136 sensor137 sensor138 sensor139 sensor140 sensor141 sensor142 sensor143 sensor144 sensor145 sensor146))
      (send self :init-ending)
      (send self :move-to (make-coords :pos pos :rot rot))
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:reset-pose () (send self :angle-vector (float-vector -2.0 -35.0 45.0 -15.0 2.0 0.0 -50.0 0.0 0.0 20.0 -2.0 -35.0 45.0 -15.0 2.0 0.0 -50.0 0.0 0.0 20.0 0.0 0.0 0.0 0.0 0.0)))
   (:torso-waist-y (&rest args) (forward-message-to joint20 args))

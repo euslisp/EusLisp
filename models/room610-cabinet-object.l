@@ -153,8 +153,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:door-upper-left (&rest args) (forward-message-to joint0 args))
   (:door-upper-right (&rest args) (forward-message-to joint1 args))

@@ -3167,14 +3167,13 @@
         :name "arm-1-force-sensor29"))
      (send blink20 :assoc sensor37)
 
+     (setq force-sensors (list sensor0 sensor1 sensor2 sensor3 sensor4 sensor5 sensor6 sensor7 sensor8 sensor9 sensor10 sensor11 sensor12 sensor13 sensor14 sensor15 sensor16 sensor17 sensor18 sensor19 sensor20 sensor21 sensor22 sensor23 sensor24 sensor25 sensor26 sensor27 sensor28 sensor29 sensor30 sensor31 sensor32 sensor33 sensor34 sensor35 sensor36 sensor37))
      (setq sensors (list sensor0 sensor1 sensor2 sensor3 sensor4 sensor5 sensor6 sensor7 sensor8 sensor9 sensor10 sensor11 sensor12 sensor13 sensor14 sensor15 sensor16 sensor17 sensor18 sensor19 sensor20 sensor21 sensor22 sensor23 sensor24 sensor25 sensor26 sensor27 sensor28 sensor29 sensor30 sensor31 sensor32 sensor33 sensor34 sensor35 sensor36 sensor37))
      (send self :init-ending)
      (send self :move-to (make-coords :pos pos :rot rot))
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:reset-pose () (send self :angle-vector (float-vector 0.0 2.0 -26.5 45.0 -22.5 -2.0 0.0 20.0 0.0 -50.0 0.0 2.0 -26.5 45.0 -22.5 -2.0 0.0 20.0 0.0 -50.0 0.0 0.0)))
   (:leg-0-ankle-r (&rest args) (forward-message-to joint5 args))

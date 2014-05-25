@@ -274,8 +274,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:hour-joint (&rest args) (forward-message-to joint0 args))
   (:minute-joint (&rest args) (forward-message-to joint1 args))

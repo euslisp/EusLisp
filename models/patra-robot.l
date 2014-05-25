@@ -1316,8 +1316,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:reset-pose () (send self :angle-vector (float-vector 0.0 0.0 0.0 0.0)))
   (:patra-foot-limb-foot (&rest args) (forward-message-to joint0 args))

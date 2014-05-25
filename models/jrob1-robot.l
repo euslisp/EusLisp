@@ -1247,8 +1247,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:titan-head-neck-y (&rest args) (forward-message-to joint12 args))
   (:titan-head-neck-p (&rest args) (forward-message-to joint13 args))

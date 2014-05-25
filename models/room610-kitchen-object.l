@@ -304,8 +304,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:handle (&rest args) (forward-message-to-all (list ) args))
   (:attention (&rest args) (forward-message-to-all (list ) args))

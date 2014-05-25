@@ -188,8 +188,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:joint0 (&rest args) (forward-message-to joint0 args))
   (:joint1 (&rest args) (forward-message-to joint1 args))
