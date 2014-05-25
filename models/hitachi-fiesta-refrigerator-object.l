@@ -7,12 +7,12 @@
   :super cascaded-link
   :slots (sensors
          handle0 handle1 handle2 handle3
-         joint0 joint1 joint2 ))
+         joint0 joint1 joint2 joint3 joint4 joint5 ))
 (defmethod hitachi-fiesta-refrigerator-object
   (:init
    (&rest args &key (name "hitachi-fiesta-refrigerator") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (c bc
-         blink0 blink1 blink2 blink3
+         blink0 blink1 blink2 blink3 blink4 blink5 blink6
                  )
      (send-super* :init :name name args)
 
@@ -90,6 +90,51 @@
      ;; definition of :hitachi-fiesta-refrigerator-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
+         (instance face :init :vertices (list (float-vector 150.0 240.0 5.0) (float-vector -150.0 240.0 5.0) (float-vector -150.0 -240.0 5.0) (float-vector 150.0 -240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 240.0 -5.0) (float-vector 150.0 240.0 -5.0) (float-vector 150.0 -240.0 -5.0) (float-vector -150.0 -240.0 -5.0)))
+         (instance face :init :vertices (list (float-vector 150.0 240.0 5.0) (float-vector 150.0 240.0 -5.0) (float-vector -150.0 240.0 -5.0) (float-vector -150.0 240.0 5.0)))
+         (instance face :init :vertices (list (float-vector 150.0 -240.0 5.0) (float-vector 150.0 -240.0 -5.0) (float-vector 150.0 240.0 -5.0) (float-vector 150.0 240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 -240.0 5.0) (float-vector -150.0 -240.0 -5.0) (float-vector 150.0 -240.0 -5.0) (float-vector 150.0 -240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 240.0 5.0) (float-vector -150.0 240.0 -5.0) (float-vector -150.0 -240.0 -5.0) (float-vector -150.0 -240.0 5.0)))
+       ))
+       ))
+     (dolist (b (cdr bc)) (send (car bc) :assoc b))
+     (send (elt bc 0) :set-color :ivory1)
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+
+     ;; definition of :hitachi-fiesta-refrigerator-bodyset3
+     (setq bc (list
+       (instance faceset :init :faces (list
+         (instance face :init :vertices (list (float-vector 150.0 240.0 5.0) (float-vector -150.0 240.0 5.0) (float-vector -150.0 -240.0 5.0) (float-vector 150.0 -240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 240.0 -5.0) (float-vector 150.0 240.0 -5.0) (float-vector 150.0 -240.0 -5.0) (float-vector -150.0 -240.0 -5.0)))
+         (instance face :init :vertices (list (float-vector 150.0 240.0 5.0) (float-vector 150.0 240.0 -5.0) (float-vector -150.0 240.0 -5.0) (float-vector -150.0 240.0 5.0)))
+         (instance face :init :vertices (list (float-vector 150.0 -240.0 5.0) (float-vector 150.0 -240.0 -5.0) (float-vector 150.0 240.0 -5.0) (float-vector 150.0 240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 -240.0 5.0) (float-vector -150.0 -240.0 -5.0) (float-vector 150.0 -240.0 -5.0) (float-vector 150.0 -240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 240.0 5.0) (float-vector -150.0 240.0 -5.0) (float-vector -150.0 -240.0 -5.0) (float-vector -150.0 -240.0 5.0)))
+       ))
+       ))
+     (dolist (b (cdr bc)) (send (car bc) :assoc b))
+     (send (elt bc 0) :set-color :ivory1)
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+
+     ;; definition of :hitachi-fiesta-refrigerator-bodyset4
+     (setq bc (list
+       (instance faceset :init :faces (list
+         (instance face :init :vertices (list (float-vector 150.0 240.0 5.0) (float-vector -150.0 240.0 5.0) (float-vector -150.0 -240.0 5.0) (float-vector 150.0 -240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 240.0 -5.0) (float-vector 150.0 240.0 -5.0) (float-vector 150.0 -240.0 -5.0) (float-vector -150.0 -240.0 -5.0)))
+         (instance face :init :vertices (list (float-vector 150.0 240.0 5.0) (float-vector 150.0 240.0 -5.0) (float-vector -150.0 240.0 -5.0) (float-vector -150.0 240.0 5.0)))
+         (instance face :init :vertices (list (float-vector 150.0 -240.0 5.0) (float-vector 150.0 -240.0 -5.0) (float-vector 150.0 240.0 -5.0) (float-vector 150.0 240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 -240.0 5.0) (float-vector -150.0 -240.0 -5.0) (float-vector 150.0 -240.0 -5.0) (float-vector 150.0 -240.0 5.0)))
+         (instance face :init :vertices (list (float-vector -150.0 240.0 5.0) (float-vector -150.0 240.0 -5.0) (float-vector -150.0 -240.0 -5.0) (float-vector -150.0 -240.0 5.0)))
+       ))
+       ))
+     (dolist (b (cdr bc)) (send (car bc) :assoc b))
+     (send (elt bc 0) :set-color :ivory1)
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+
+     ;; definition of :hitachi-fiesta-refrigerator-bodyset5
+     (setq bc (list
+       (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -215.0 200.0 -190.0) (float-vector -215.0 -200.0 -190.0) (float-vector -215.0 -200.0 190.0) (float-vector -215.0 200.0 190.0)))
          (instance face :init :vertices (list (float-vector 215.0 -200.0 -190.0) (float-vector 215.0 -200.0 190.0) (float-vector -215.0 -200.0 190.0) (float-vector -215.0 -200.0 -190.0)))
          (instance face :init :vertices (list (float-vector 215.0 200.0 -190.0) (float-vector 215.0 200.0 190.0) (float-vector 215.0 190.0 190.0) (float-vector 215.0 190.0 -180.0) (float-vector 215.0 -190.0 -180.0) (float-vector 215.0 -190.0 190.0) (float-vector 215.0 -200.0 190.0) (float-vector 215.0 -200.0 -190.0)))
@@ -133,9 +178,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :ivory1)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset2 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset5 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :hitachi-fiesta-refrigerator-bodyset3
+     ;; definition of :hitachi-fiesta-refrigerator-bodyset6
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -225.0 220.0 -140.0) (float-vector -225.0 -220.0 -140.0) (float-vector -225.0 -220.0 140.0) (float-vector -225.0 220.0 140.0)))
@@ -181,9 +226,9 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :white)
      (send (elt bc 1) :set-color :ivory1)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset6 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
-     ;; definition of :hitachi-fiesta-refrigerator-bodyset4
+     ;; definition of :hitachi-fiesta-refrigerator-bodyset7
      (setq bc (list
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector -25.0 25.0 600.0) (float-vector -25.0 25.0 0.0) (float-vector -25.0 -515.0 0.0) (float-vector -25.0 -515.0 600.0)))
@@ -216,7 +261,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :ivory1)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset4 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :hitachi-fiesta-refrigerator-bodyset7 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
      (send blink1 :newcoords (make-coords :pos (float-vector 300.0 245.0 850.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
@@ -225,6 +270,12 @@
      (send blink0 :assoc blink2)
      (send blink3 :newcoords (make-coords :pos (float-vector 60.0 0.0 240.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
      (send blink0 :assoc blink3)
+     (send blink4 :newcoords (make-coords :pos (float-vector -95.0 0.0 1275.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (send blink0 :assoc blink4)
+     (send blink5 :newcoords (make-coords :pos (float-vector -95.0 0.0 1085.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (send blink0 :assoc blink5)
+     (send blink6 :newcoords (make-coords :pos (float-vector -95.0 0.0 935.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (send blink0 :assoc blink6)
      (send self :assoc blink0)
 
      ;; definition of end-coords
@@ -246,6 +297,21 @@
 			     :parent-link blink0 :child-link blink3 :name :drawer2   :axis (float-vector 1.0 0.0 0.0)
 			     :min    0.0 :max  550.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
 
+     ;; definition of :shelf1
+     (setq joint3 (instance linear-joint :init
+			     :parent-link blink0 :child-link blink4 :name :shelf1    :axis (float-vector 1.0 0.0 0.0)
+			     :min    0.0 :max  300.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+
+     ;; definition of :shelf2
+     (setq joint4 (instance linear-joint :init
+			     :parent-link blink0 :child-link blink5 :name :shelf2    :axis (float-vector 1.0 0.0 0.0)
+			     :min    0.0 :max  300.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+
+     ;; definition of :shelf3
+     (setq joint5 (instance linear-joint :init
+			     :parent-link blink0 :child-link blink6 :name :shelf3    :axis (float-vector 1.0 0.0 0.0)
+			     :min    0.0 :max  300.0 :max-joint-velocity 0.785398 :max-joint-torque 100))
+
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 360.0 0.0 430.0) :rot #2f((1.0 0.0 0.0) (0.0 2.220446e-16 -1.0) (0.0 1.0 2.220446e-16)) :name ":drawer2"))
@@ -258,8 +324,8 @@
      (send self :assoc handle3)
 
      ;; init-ending 
-     (setq links (list blink0 blink1 blink2 blink3))
-     (setq joint-list (list joint0 joint1 joint2))
+     (setq links (list blink0 blink1 blink2 blink3 blink4 blink5 blink6))
+     (setq joint-list (list joint0 joint1 joint2 joint3 joint4 joint5))
      (send self :init-ending)
      (send self :move-to (make-coords :pos pos :rot rot))
      (send-all links :worldcoords)
@@ -271,6 +337,9 @@
   (:door1 (&rest args) (forward-message-to joint0 args))
   (:drawer1 (&rest args) (forward-message-to joint1 args))
   (:drawer2 (&rest args) (forward-message-to joint2 args))
+  (:shelf1 (&rest args) (forward-message-to joint3 args))
+  (:shelf2 (&rest args) (forward-message-to joint4 args))
+  (:shelf3 (&rest args) (forward-message-to joint5 args))
   (:handle (&rest args) (forward-message-to-all (list  handle0 handle1 handle2 handle3) args))
   (:handle-drawer2 (&rest args) (forward-message-to handle0 args))
   (:handle-drawer1 (&rest args) (forward-message-to handle1 args))
