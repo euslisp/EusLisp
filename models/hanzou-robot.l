@@ -1501,8 +1501,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:larm-collar-y (&rest args) (forward-message-to joint4 args))
   (:larm-shoulder-p (&rest args) (forward-message-to joint5 args))

@@ -1276,8 +1276,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:h3head-neck-y (&rest args) (forward-message-to joint0 args))
   (:h3head-neck-r (&rest args) (forward-message-to joint1 args))

@@ -1568,8 +1568,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:head-neck-y (&rest args) (forward-message-to joint8 args))
   (:head-neck-p (&rest args) (forward-message-to joint0 args))

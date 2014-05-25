@@ -79,8 +79,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:handle (&rest args) (forward-message-to-all (list  handle0 handle1) args))
   (:handle-handle0 (&rest args) (forward-message-to handle0 args))

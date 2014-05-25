@@ -3045,8 +3045,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:reset-pose () (send self :angle-vector (float-vector 0.0 0.0 0.0 0.0 0.0 0.0 0.0 60.0 0.0 20.0 0.0 -90.0 0.0 -20.0 0.0 0.0 0.0 20.0 0.0 -90.0 0.0 -20.0 0.0 0.0 0.0 0.0 -30.0 60.0 -30.0 0.0 0.0 -30.0 0.0 0.0 -30.0 0.0)))
   (:head-neck-y (&rest args) (forward-message-to joint0 args))

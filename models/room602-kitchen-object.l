@@ -1384,8 +1384,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:left-bottom-drawer (&rest args) (forward-message-to joint0 args))
   (:right-bottom-drawer (&rest args) (forward-message-to joint1 args))

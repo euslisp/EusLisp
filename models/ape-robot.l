@@ -919,8 +919,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:larm-shoulder-p (&rest args) (forward-message-to joint3 args))
   (:larm-elbow-p (&rest args) (forward-message-to joint4 args))

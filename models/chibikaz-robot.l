@@ -2173,8 +2173,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:reset-pose () (send self :angle-vector (float-vector 0.0 -40.3931 68.4005 -28.0074 0.0 45.0 -75.0 0.0 0.0 -40.3931 68.4005 -28.0074 0.0 45.0 -75.0 0.0 0.0 0.0)))
   (:head-neck-p (&rest args) (forward-message-to joint16 args))

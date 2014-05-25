@@ -2996,14 +2996,13 @@
             :name "head-camera0")))
      (send blink3 :assoc sensor1)
 
+     (setq cameras (list sensor0 sensor1))
      (setq sensors (list sensor0 sensor1))
      (send self :init-ending)
      (send self :move-to (make-coords :pos pos :rot rot))
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list sensor0 sensor1) args))
 
   (:reset-pose () (send self :angle-vector (float-vector 0.0 0.0 0.0 0.0 0.0 0.0 0.0 60.0 0.0 20.0 0.0 -90.0 0.0 -20.0 0.0 0.0 0.0 20.0 0.0 -90.0 0.0 -20.0 0.0 0.0 0.0 0.0 -30.0 60.0 -30.0 0.0 0.0 -30.0 0.0 0.0 -30.0)))
   (:head-neck-y (&rest args) (forward-message-to joint0 args))

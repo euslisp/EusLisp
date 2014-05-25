@@ -127,8 +127,6 @@
      (send-all links :worldcoords)
 
      self))
-  (:cameras (&rest args)
-   (forward-message-to-all (list) args))
 
   (:handle (&rest args) (forward-message-to-all (list  handle0 handle1 handle2 handle3) args))
   (:handle-handle-l (&rest args) (forward-message-to handle0 args))
