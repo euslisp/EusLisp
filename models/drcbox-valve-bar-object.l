@@ -6,6 +6,7 @@
 (defclass drcbox-valve-bar-object
   :super cascaded-link
   :slots (sensors
+         handle0
          joint0 ))
 (defmethod drcbox-valve-bar-object
   (:init
@@ -171,6 +172,10 @@
 			     :min -3600.0 :max 3600.0 :max-joint-velocity 5 :max-joint-torque 100))
 
 
+     ;; definition of :handle
+     (setq handle0 (make-cascoords :pos (float-vector 1.136868e-13 50.0 353.0) :rot #2f((1.0 0.0 0.0) (0.0 2.220446e-16 -1.0) (0.0 1.0 2.220446e-16)) :name ":valve-handle"))
+     (send self :assoc handle0)
+
      ;; init-ending 
      (setq links (list blink0 blink1))
      (setq joint-list (list joint0))
@@ -181,7 +186,8 @@
      self))
 
   (:crank-joint (&rest args) (forward-message-to joint0 args))
-  (:handle (&rest args) (forward-message-to-all (list ) args))
+  (:handle (&rest args) (forward-message-to-all (list  handle0) args))
+  (:handle-valve-handle (&rest args) (forward-message-to handle0 args))
   (:attention (&rest args) (forward-message-to-all (list ) args))
   (:button (&rest args) (forward-message-to-all (list ) args))
   )
