@@ -23,13 +23,13 @@
      (send-super
       :init :name name :objects
       (list
- (send (drcbox-hose-reel) :transform (make-coords :pos (float-vector 765.0 475.0 930.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
- (send (drcbox-hose-y-joint) :transform (make-coords :pos (float-vector 225.0 450.0 910.0) :rot #2f((0.0 -1.0 0.0) (0.0 0.0 1.0) (-1.0 0.0 0.0))))
- (send (drcbox-drill-table) :transform (make-coords :pos (float-vector 1015.0 -400.0 960.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
- (send (drcbox-drill-wall) :transform (make-coords :pos (float-vector 500.0 -440.0 500.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
- (send (drcbox-valve-bar) :transform (make-coords :pos (float-vector 250.0 -380.0 980.0) :rot #2f((2.220446e-16 0.0 -1.0) (0.0 1.0 0.0) (1.0 0.0 2.220446e-16))))
- (send (drcbox-valve-large) :transform (make-coords :pos (float-vector 200.0 -10.0 1175.0) :rot #2f((2.220446e-16 0.0 -1.0) (0.0 1.0 0.0) (1.0 0.0 2.220446e-16))))
- (send (drcbox-valve-small) :transform (make-coords :pos (float-vector 250.0 385.0 980.0) :rot #2f((0.0 0.0 -1.0) (-1.0 0.0 0.0) (0.0 1.0 0.0))))
+ (send (drcbox-hose-reel) :transform (make-coords :pos (float-vector 312.0 462.0 1006.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+ (send (drcbox-hose-y-joint) :transform (make-coords :pos (float-vector -225.0 462.0 1005.0) :rot #2f((0.0 -1.0 0.0) (0.0 0.0 1.0) (-1.0 0.0 0.0))))
+ (send (drcbox-drill-table) :transform (make-coords :pos (float-vector 547.0 -410.5 866.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
+ (send (drcbox-drill-wall) :transform (make-coords :pos (float-vector 0.0 -444.0 693.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
+ (send (drcbox-valve-bar) :transform (make-coords :pos (float-vector -182.75 -390.0 1063.0) :rot #2f((0.0 0.0 -1.0) (1.0 0.0 0.0) (0.0 -1.0 0.0))))
+ (send (drcbox-valve-large) :transform (make-coords :pos (float-vector -196.75 -60.0 1268.0) :rot #2f((2.220446e-16 0.0 -1.0) (0.0 1.0 0.0) (1.0 0.0 2.220446e-16))))
+ (send (drcbox-valve-small) :transform (make-coords :pos (float-vector -141.75 385.0 1065.0) :rot #2f((2.220446e-16 0.0 -1.0) (0.0 1.0 0.0) (1.0 0.0 2.220446e-16))))
  (send (drcbox-drcbox-base) :transform (make-coords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
        ))
      ))
