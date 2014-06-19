@@ -470,17 +470,17 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 291.0 -37.0 1211.0) :rot #2f((-0.5 0.866025 0.0) (-0.866025 -0.5 0.0) (0.0 0.0 1.0)) :name "door-left-handle"))
-     (send self :assoc handle0)
+     (send blink1 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector 291.0 46.0 931.0) :rot #2f((-0.5 -0.866025 0.0) (0.866025 -0.5 0.0) (0.0 0.0 1.0)) :name "door-right-handle"))
-     (send self :assoc handle1)
+     (send blink2 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector 308.0 -147.0 657.5) :rot #2f((-0.5 -0.866025 -1.110223e-15) (7.771561e-16 8.326673e-16 -1.0) (0.866025 -0.5 2.775558e-16)) :name "drawer1-handle"))
-     (send self :assoc handle2)
+     (send blink3 :assoc handle2)
      (setq handle3 (make-cascoords :pos (float-vector 308.0 -147.0 506.5) :rot #2f((-0.5 -0.866025 -1.110223e-15) (7.771561e-16 8.326673e-16 -1.0) (0.866025 -0.5 2.775558e-16)) :name "drawer2-handle"))
-     (send self :assoc handle3)
+     (send blink4 :assoc handle3)
      (setq handle4 (make-cascoords :pos (float-vector 308.0 -147.0 329.5) :rot #2f((-0.5 -0.866025 -1.110223e-15) (7.771561e-16 8.326673e-16 -1.0) (0.866025 -0.5 2.775558e-16)) :name "drawer3-handle"))
-     (send self :assoc handle4)
+     (send blink5 :assoc handle4)
      (setq handle5 (make-cascoords :pos (float-vector 308.0 -147.0 128.5) :rot #2f((-0.5 -0.866025 -1.110223e-15) (7.771561e-16 8.326673e-16 -1.0) (0.866025 -0.5 2.775558e-16)) :name "drawer4-handle"))
-     (send self :assoc handle5)
+     (send blink6 :assoc handle5)
 
      ;; init-ending 
      (setq links (list blink0 blink1 blink2 blink3 blink4 blink5 blink6))

@@ -1366,15 +1366,15 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
-     (send self :assoc handle0)
+     (send blink0 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector 395.0 -485.0 730.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle1"))
-     (send self :assoc handle1)
+     (send blink12 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector 395.0 -550.0 750.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle2"))
-     (send self :assoc handle2)
+     (send blink14 :assoc handle2)
      (setq handle3 (make-cascoords :pos (float-vector 395.0 -615.0 730.0) :rot #2f((-1.0 5.079640e-33 -8.881784e-16) (1.036873e-31 -1.0 -1.224606e-16) (-8.881784e-16 -1.224606e-16 1.0)) :name "handle3"))
-     (send self :assoc handle3)
+     (send blink16 :assoc handle3)
      (setq handle4 (make-cascoords :pos (float-vector -4.62411 1034.62 1063.99) :rot #2f((0.707107 -5.551115e-16 0.707107) (-0.707107 -2.498002e-16 0.707107) (-1.665335e-16 -1.0 -5.273559e-16)) :name "handle-of-tap"))
-     (send self :assoc handle4)
+     (send blink18 :assoc handle4)
 
      ;; init-ending 
      (setq links (list blink0 blink1 blink2 blink3 blink4 blink5 blink6 blink7 blink8 blink9 blink10 blink11 blink12 blink13 blink14 blink15 blink16 blink17 blink18))

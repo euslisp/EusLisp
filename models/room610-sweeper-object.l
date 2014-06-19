@@ -138,13 +138,13 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 1000.0) :rot #2f((0.707107 -0.707107 0.0) (0.707107 0.707107 0.0) (0.0 0.0 1.0)) :name ":rarm"))
-     (send self :assoc handle0)
+     (send blink2 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector 0.0 0.0 1150.0) :rot #2f((0.707107 0.707107 0.0) (-0.707107 0.707107 0.0) (0.0 0.0 1.0)) :name ":larm"))
-     (send self :assoc handle1)
+     (send blink2 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector 0.0 0.0 700.0) :rot #2f((1.0 0.0 0.0) (0.0 -1.0 -1.224606e-16) (0.0 1.224606e-16 -1.0)) :name ":side-rarm"))
-     (send self :assoc handle2)
+     (send blink2 :assoc handle2)
      (setq handle3 (make-cascoords :pos (float-vector 0.0 0.0 1150.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name ":side-larm"))
-     (send self :assoc handle3)
+     (send blink2 :assoc handle3)
 
      ;; init-ending 
      (setq links (list blink0 blink1 blink2))

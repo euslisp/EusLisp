@@ -151,13 +151,13 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector -17.5 780.0 1060.0) :rot #2f((2.220446e-16 1.0 0.0) (-1.0 2.220446e-16 0.0) (0.0 0.0 1.0)) :name "door-side"))
-     (send self :assoc handle0)
+     (send blink1 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector -135.0 730.0 910.0) :rot #2f((1.0 0.0 0.0) (0.0 0.866025 0.5) (0.0 -0.5 0.866025)) :name "rear-knob"))
-     (send self :assoc handle1)
+     (send blink2 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector 100.0 730.0 910.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.060540e-16 -0.866025 0.5) (-6.123032e-17 0.5 0.866025)) :name "front-knob"))
-     (send self :assoc handle2)
+     (send blink2 :assoc handle2)
      (setq handle3 (make-cascoords :pos (float-vector 67.5 760.0 1010.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "lock"))
-     (send self :assoc handle3)
+     (send blink3 :assoc handle3)
 
      ;; init-ending 
      (setq links (list blink0 blink1 blink2 blink3))

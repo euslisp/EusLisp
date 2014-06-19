@@ -358,7 +358,7 @@
 
      ;; definition of :attention
      (setq attention0 (make-cascoords :pos (float-vector -75.0 -45.0 0.0) :rot #2f((2.220446e-16 1.0 0.0) (1.0 -2.220446e-16 0.0) (0.0 0.0 -1.0)) :name "origin"))
-     (send self :assoc attention0)
+     (send blink0 :assoc attention0)
 
      ;; init-ending 
      (setq links (list blink0))

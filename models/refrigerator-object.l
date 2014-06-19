@@ -334,11 +334,11 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 355.0 0.0 1005.0) :rot #2f((-1.0 -1.898817e-15 1.972152e-31) (-1.972152e-31 2.220446e-16 1.0) (-1.898817e-15 1.0 -2.220446e-16)) :name ":vegetable-drawer"))
-     (send self :assoc handle0)
+     (send blink0 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector 340.0 75.0 1115.0) :rot #2f((-0.5 0.866025 4.482370e-17) (-0.866025 -0.5 -1.672843e-16) (-1.224606e-16 -1.224606e-16 1.0)) :name ":right-door"))
-     (send self :assoc handle1)
+     (send blink0 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector 340.0 -75.0 1115.0) :rot #2f((-0.5 -0.866025 -1.672843e-16) (0.866025 -0.5 4.482370e-17) (-1.224606e-16 -1.224606e-16 1.0)) :name ":left-door"))
-     (send self :assoc handle2)
+     (send blink0 :assoc handle2)
 
      ;; init-ending 
      (setq links (list blink0 blink1 blink2 blink3 blink4 blink5 blink6))

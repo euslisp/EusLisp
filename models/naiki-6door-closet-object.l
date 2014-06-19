@@ -256,7 +256,7 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
-     (send self :assoc handle0)
+     (send blink0 :assoc handle0)
 
      ;; init-ending 
      (setq links (list blink0 blink1 blink2 blink3 blink4 blink5 blink6))

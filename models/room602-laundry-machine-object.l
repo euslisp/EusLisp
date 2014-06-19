@@ -170,15 +170,15 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 505.0 0.0 580.0) :rot #2f((0.5 1.709814e-17 0.866025) (-3.097593e-17 1.0 -1.859271e-18) (-0.866025 -2.589630e-17 0.5)) :name "contents"))
-     (send self :assoc handle0)
+     (send blink0 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector 640.0 190.0 770.0) :rot #2f((-3.053113e-16 -0.34202 -0.939693) (-1.0 6.938894e-16 1.110223e-16) (6.106227e-16 0.939693 -0.34202)) :name "handle-cap"))
-     (send self :assoc handle1)
+     (send blink1 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector 600.0 240.0 930.0) :rot #2f((0.5 1.709814e-17 0.866025) (-3.097593e-17 1.0 -1.859271e-18) (-0.866025 -2.589630e-17 0.5)) :name "open-button"))
-     (send self :assoc handle2)
+     (send blink2 :assoc handle2)
 
      ;; definition of :button
      (setq button0 (make-cascoords :pos (float-vector 600.0 240.0 930.0) :rot #2f((0.5 1.709814e-17 0.866025) (-3.097593e-17 1.0 -1.859271e-18) (-0.866025 -2.589630e-17 0.5)) :name "open"))
-     (send self :assoc button0)
+     (send blink0 :assoc button0)
 
      ;; init-ending 
      (setq links (list blink0 blink1 blink2))

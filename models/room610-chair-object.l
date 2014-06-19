@@ -111,17 +111,17 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector -300.0 160.0 750.0) :rot #2f((-5.551115e-17 0.939693 -0.34202) (-1.0 -1.110223e-16 2.775558e-17) (-2.775558e-17 0.34202 0.939693)) :name ":side-larm"))
-     (send self :assoc handle0)
+     (send blink0 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector -300.0 -160.0 750.0) :rot #2f((-5.551115e-17 -0.939693 -0.34202) (1.0 -1.110223e-16 -2.775558e-17) (-2.775558e-17 -0.34202 0.939693)) :name ":side-rarm"))
-     (send self :assoc handle1)
+     (send blink0 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector -300.0 0.0 830.0) :rot #2f((0.5 0.866025 -1.110223e-16) (1.110223e-16 -1.665335e-16 -1.0) (-0.866025 0.5 -1.665335e-16)) :name ":above-larm"))
-     (send self :assoc handle2)
+     (send blink0 :assoc handle2)
      (setq handle3 (make-cascoords :pos (float-vector -330.0 0.0 830.0) :rot #2f((0.5 -0.866025 -1.110223e-16) (-1.110223e-16 -1.665335e-16 1.0) (-0.866025 -0.5 -1.665335e-16)) :name ":above-rarm"))
-     (send self :assoc handle3)
+     (send blink0 :assoc handle3)
      (setq handle4 (make-cascoords :pos (float-vector -370.0 0.0 850.0) :rot #2f((0.5 0.866025 -1.110223e-16) (1.110223e-16 -1.665335e-16 -1.0) (-0.866025 0.5 -1.665335e-16)) :name ":above-cloth-larm"))
-     (send self :assoc handle4)
+     (send blink0 :assoc handle4)
      (setq handle5 (make-cascoords :pos (float-vector -370.0 0.0 850.0) :rot #2f((0.5 -0.866025 -1.110223e-16) (-1.110223e-16 -1.665335e-16 1.0) (-0.866025 -0.5 -1.665335e-16)) :name ":above-cloth-rarm"))
-     (send self :assoc handle5)
+     (send blink0 :assoc handle5)
 
      ;; init-ending 
      (setq links (list blink0))
