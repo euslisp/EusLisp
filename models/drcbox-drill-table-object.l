@@ -20,16 +20,16 @@
      ;; definition of :drcbox-drill-table-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 100.0 95.0 12.0) (float-vector -100.0 95.0 12.0) (float-vector -100.0 -95.0 12.0) (float-vector 100.0 -95.0 12.0)))
-         (instance face :init :vertices (list (float-vector -100.0 95.0 0.0) (float-vector 100.0 95.0 0.0) (float-vector 100.0 -95.0 0.0) (float-vector -100.0 -95.0 0.0)))
-         (instance face :init :vertices (list (float-vector 100.0 95.0 12.0) (float-vector 100.0 95.0 0.0) (float-vector -100.0 95.0 0.0) (float-vector -100.0 95.0 12.0)))
-         (instance face :init :vertices (list (float-vector 100.0 -95.0 12.0) (float-vector 100.0 -95.0 0.0) (float-vector 100.0 95.0 0.0) (float-vector 100.0 95.0 12.0)))
-         (instance face :init :vertices (list (float-vector -100.0 -95.0 12.0) (float-vector -100.0 -95.0 0.0) (float-vector 100.0 -95.0 0.0) (float-vector 100.0 -95.0 12.0)))
-         (instance face :init :vertices (list (float-vector -100.0 95.0 12.0) (float-vector -100.0 95.0 0.0) (float-vector -100.0 -95.0 0.0) (float-vector -100.0 -95.0 12.0)))
+         (instance face :init :vertices (list (float-vector 101.5 97.0 14.0) (float-vector -101.5 97.0 14.0) (float-vector -101.5 -97.0 14.0) (float-vector 101.5 -97.0 14.0)))
+         (instance face :init :vertices (list (float-vector -101.5 97.0 0.0) (float-vector 101.5 97.0 0.0) (float-vector 101.5 -97.0 0.0) (float-vector -101.5 -97.0 0.0)))
+         (instance face :init :vertices (list (float-vector 101.5 97.0 14.0) (float-vector 101.5 97.0 0.0) (float-vector -101.5 97.0 0.0) (float-vector -101.5 97.0 14.0)))
+         (instance face :init :vertices (list (float-vector 101.5 -97.0 14.0) (float-vector 101.5 -97.0 0.0) (float-vector 101.5 97.0 0.0) (float-vector 101.5 97.0 14.0)))
+         (instance face :init :vertices (list (float-vector -101.5 -97.0 14.0) (float-vector -101.5 -97.0 0.0) (float-vector 101.5 -97.0 0.0) (float-vector 101.5 -97.0 14.0)))
+         (instance face :init :vertices (list (float-vector -101.5 97.0 14.0) (float-vector -101.5 97.0 0.0) (float-vector -101.5 -97.0 0.0) (float-vector -101.5 -97.0 14.0)))
        ))
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
-     (send (elt bc 0) :set-color :brown)
+     (send (elt bc 0) :set-color :peru)
      (setq blink0 (instance bodyset-link :init (make-cascoords) :bodies bc :name :drcbox-drill-table-bodyset2 :weight 1000 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc

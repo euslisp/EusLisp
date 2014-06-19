@@ -20,12 +20,12 @@
      ;; definition of :drcbox-drill-wall-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 5.0 285.0 725.0) (float-vector -5.0 285.0 725.0) (float-vector -5.0 -285.0 725.0) (float-vector 5.0 -285.0 725.0)))
-         (instance face :init :vertices (list (float-vector -5.0 285.0 0.0) (float-vector 5.0 285.0 0.0) (float-vector 5.0 -285.0 0.0) (float-vector -5.0 -285.0 0.0)))
-         (instance face :init :vertices (list (float-vector 5.0 285.0 725.0) (float-vector 5.0 285.0 0.0) (float-vector -5.0 285.0 0.0) (float-vector -5.0 285.0 725.0)))
-         (instance face :init :vertices (list (float-vector 5.0 -285.0 725.0) (float-vector 5.0 -285.0 0.0) (float-vector 5.0 285.0 0.0) (float-vector 5.0 285.0 725.0)))
-         (instance face :init :vertices (list (float-vector -5.0 -285.0 725.0) (float-vector -5.0 -285.0 0.0) (float-vector 5.0 -285.0 0.0) (float-vector 5.0 -285.0 725.0)))
-         (instance face :init :vertices (list (float-vector -5.0 285.0 725.0) (float-vector -5.0 285.0 0.0) (float-vector -5.0 -285.0 0.0) (float-vector -5.0 -285.0 725.0)))
+         (instance face :init :vertices (list (float-vector 5.0 427.5 600.0) (float-vector -5.0 427.5 600.0) (float-vector -5.0 -427.5 600.0) (float-vector 5.0 -427.5 600.0)))
+         (instance face :init :vertices (list (float-vector -5.0 427.5 0.0) (float-vector 5.0 427.5 0.0) (float-vector 5.0 -427.5 0.0) (float-vector -5.0 -427.5 0.0)))
+         (instance face :init :vertices (list (float-vector 5.0 427.5 600.0) (float-vector 5.0 427.5 0.0) (float-vector -5.0 427.5 0.0) (float-vector -5.0 427.5 600.0)))
+         (instance face :init :vertices (list (float-vector 5.0 -427.5 600.0) (float-vector 5.0 -427.5 0.0) (float-vector 5.0 427.5 0.0) (float-vector 5.0 427.5 600.0)))
+         (instance face :init :vertices (list (float-vector -5.0 -427.5 600.0) (float-vector -5.0 -427.5 0.0) (float-vector 5.0 -427.5 0.0) (float-vector 5.0 -427.5 600.0)))
+         (instance face :init :vertices (list (float-vector -5.0 427.5 600.0) (float-vector -5.0 427.5 0.0) (float-vector -5.0 -427.5 0.0) (float-vector -5.0 -427.5 600.0)))
        ))
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
