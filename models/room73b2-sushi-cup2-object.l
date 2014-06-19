@@ -614,11 +614,11 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 46.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
-     (send self :assoc handle0)
+     (send blink0 :assoc handle0)
 
      ;; definition of :attention
      (setq attention0 (make-cascoords :pos (float-vector 0.0 0.0 152.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "attention0"))
-     (send self :assoc attention0)
+     (send blink0 :assoc attention0)
 
      ;; init-ending 
      (setq links (list blink0))

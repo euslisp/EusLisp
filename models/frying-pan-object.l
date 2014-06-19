@@ -88,7 +88,7 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector -205.0 0.0 25.0) :rot #2f((8.604228e-16 0.087156 0.996195) (1.0 -8.326673e-17 -8.881784e-16) (-5.551115e-17 0.996195 -0.087156)) :name "grip"))
-     (send self :assoc handle0)
+     (send blink0 :assoc handle0)
 
      ;; init-ending 
      (setq links (list blink0))

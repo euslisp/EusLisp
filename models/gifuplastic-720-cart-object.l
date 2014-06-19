@@ -336,9 +336,9 @@
 
      ;; definition of :handle
      (setq handle0 (make-cascoords :pos (float-vector 80.0 200.0 860.0) :rot #2f((1.0 0.0 0.0) (0.0 0.707107 -0.707107) (0.0 0.707107 0.707107)) :name ":larm"))
-     (send self :assoc handle0)
+     (send blink0 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector 80.0 -200.0 860.0) :rot #2f((1.0 0.0 0.0) (0.0 0.707107 0.707107) (0.0 -0.707107 0.707107)) :name ":rarm"))
-     (send self :assoc handle1)
+     (send blink0 :assoc handle1)
 
      ;; init-ending 
      (setq links (list blink0))
