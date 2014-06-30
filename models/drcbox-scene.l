@@ -24,7 +24,7 @@
       :init :name name :objects
       (list
  (send (drcbox-hose-reel) :transform (make-coords :pos (float-vector 312.0 462.0 1006.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
- (send (drcbox-hose-y-joint) :transform (make-coords :pos (float-vector -225.0 462.0 1005.0) :rot #2f((0.0 -1.0 0.0) (0.0 0.0 1.0) (-1.0 0.0 0.0))))
+ (send (drcbox-hose-y-joint) :transform (make-coords :pos (float-vector -225.0 462.0 993.0) :rot #2f((0.0 1.0 0.0) (0.0 0.0 1.0) (1.0 0.0 0.0))))
  (send (drcbox-drill-table) :transform (make-coords :pos (float-vector 547.0 -410.5 866.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (drcbox-drill-wall) :transform (make-coords :pos (float-vector 0.0 -444.0 693.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (drcbox-valve-bar) :transform (make-coords :pos (float-vector -182.75 -390.0 1063.0) :rot #2f((0.0 0.0 -1.0) (1.0 0.0 0.0) (0.0 -1.0 0.0))))
