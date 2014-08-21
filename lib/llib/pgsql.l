@@ -92,10 +92,12 @@
 ; libpq.so foreign functions
 ;****************************************************************
 
-#+:darwin
-(setq *libpq* nil)
-#+(and :linux (not :darwin))
-(setq *libpq* (load "/usr/lib/libpq.so"))
+#+:linux
+(setq *libpq* (cond
+               ((probe-file "/usr/lib/libpq.so") (load "/usr/lib/libpq.so"))
+               ((probe-file "/usr/lib/x86_64-linux-gnu/libpq.so") (load "/usr/lib/x86_64-linux-gnu/libpq.so"))
+               ((probe-file "/usr/lib/i386-linux-gnu/libpq.so") (load "/usr/lib/i386-linux-gnu/libpq.so"))
+               (t nil)))
 #+:cygwin
 (setq *libpq* (load "/usr/bin/cygpq.dll"))
 
