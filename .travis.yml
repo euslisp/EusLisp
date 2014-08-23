@@ -14,6 +14,7 @@ before_install: # Use this to prepare the system to install prerequisites or dep
   - export CI_SOURCE_PATH=$(pwd)
   - export REPOSITORY_NAME=${PWD##*/}
   - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
+  - sudo apt-get update -qq
   - sudo apt-get install -qq -y subversion gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng12-dev xfonts-100dpi xfonts-75dpi msttcorefonts
 install: # Use this to install any prerequisites or dependencies necessary to run your build
   - cd ${HOME}
