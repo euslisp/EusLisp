@@ -1,213 +1,213 @@
-\section{$B?tCM1i;;(B}
-\markright{\arabic{section}. $B?tCM1i;;(B}
-\subsection{$B?tCM1i;;Dj?t(B}
+\section{数値演算}
+\markright{\arabic{section}. 数値演算}
+\subsection{数値演算定数}
 \begin{refdesc}
-\constdesc{most-positive-fixnum}{\#x1fffffff=536,870,911$B!#(B{\tt integer}$B$N@5$N:GBgCM!#(B}
-\constdesc{most-negative-fixnum}{-\#x20000000= -536,870,912$B!#(B{\tt integer}$B$NIi$N:GBgCM(B}
-\constdesc{short-float-epsilon}{IEEE$B$NIbF0>.?tE@I=8=7A<0$G$"$k(B{\tt float}$B$O!"(B
-21$B%S%C%H$N8GDj>.?t(B($B$&$AId9f(B
-$B$,(B1$B%S%C%H(B)$B$H(B7$B%S%C%H$N;X?t(B($B$&$AId9f$,(B1$B%S%C%H(B)$B$G9=@.$5$l$F$$$k!#(B
-$B$7$?$,$C$F!"IbF0>.?tE@8m:9(B$\epsilon$$B$O(B $2^{-21}= 4.768368 \times 10^{-7}$$B$H$J$k!#(B}
-\constdesc{single-float-epsilon}{{\bf short-float-epsilon}$B$HF1MM$K(B $2^{-21}$$B$G$"$k!#(B}
-\constdesc{long-float-epsilon}{Euslisp$B$K$O!"(Bdouble$B$b(Blong float$B$b$J$$$?$a!"(B
-{\bf short-float-epsilon}$B$HF1MM$K(B$2^{-21}$$B$G$"$k!#(B}
-\constdesc{pi}{$\pi$$B!#(B $B<B:]$K$O(B 3.14159203$B$G!"(B 3.14159265$B$G$O$J$$!#(B}
-\constdesc{2pi}{$2\times \pi$$B!#(B}
-\constdesc{pi/2}{$\pi/2$$B!#(B}
-\constdesc{-pi}{-3.14159203$B!#(B}
-\constdesc{-2pi}{$-2\times \pi$$B!#(B}
-\constdesc{-pi/2}{$-\pi/2$$B!#(B}
+\constdesc{most-positive-fixnum}{\#x1fffffff=536,870,911。{\tt integer}の正の最大値。}
+\constdesc{most-negative-fixnum}{-\#x20000000= -536,870,912。{\tt integer}の負の最大値}
+\constdesc{short-float-epsilon}{IEEEの浮動小数点表現形式である{\tt float}は、
+21ビットの固定小数(うち符号
+が1ビット)と7ビットの指数(うち符号が1ビット)で構成されている。
+したがって、浮動小数点誤差$\epsilon$は $2^{-21}= 4.768368 \times 10^{-7}$となる。}
+\constdesc{single-float-epsilon}{{\bf short-float-epsilon}と同様に $2^{-21}$である。}
+\constdesc{long-float-epsilon}{Euslispには、doubleもlong floatもないため、
+{\bf short-float-epsilon}と同様に$2^{-21}$である。}
+\constdesc{pi}{$\pi$。 実際には 3.14159203で、 3.14159265ではない。}
+\constdesc{2pi}{$2\times \pi$。}
+\constdesc{pi/2}{$\pi/2$。}
+\constdesc{-pi}{-3.14159203。}
+\constdesc{-2pi}{$-2\times \pi$。}
+\constdesc{-pi/2}{$-\pi/2$。}
 \end{refdesc}
 
-\subsection{$BHf3S1i;;4X?t(B}
+\subsection{比較演算関数}
 \begin{refdesc}
 \funcdesc{numberp}{object}{
-{\em object}$B$,(B{\tt integer}$B$+(B{\tt float}$B$N;~!"(BT$B$rJV$9!#(B
-$B$=$NJ8;z$,?t;z$G9=@.$5$l$F$$$k$H$-$bF1MM$G$"$k!#(B}
+{\em object}が{\tt integer}か{\tt float}の時、Tを返す。
+その文字が数字で構成されているときも同様である。}
 \funcdesc{integerp}{object}{
-{\em object}$B$,(B{\tt integer}$B$N;~!"(BT$B$rJV$9!#(B
-{\tt float}$B$O(B{\bf round, trunc}$B$*$h$S(B{\bf ceiling}$B4X?t$G(B{\tt integer}$B$KJQ49$G$-$k!#(B}
-\funcdesc{floatp}{object}{ {\em object} $B$,(B {\tt float} $B$N;~(B T $B$rJV$9!#(B
-{\tt integer}$B$O(B{\bf float}$B4X?t$G(B{\tt float}$B$KJQ49$G$-$k!#(B}
+{\em object}が{\tt integer}の時、Tを返す。
+{\tt float}は{\bf round, trunc}および{\bf ceiling}関数で{\tt integer}に変換できる。}
+\funcdesc{floatp}{object}{ {\em object} が {\tt float} の時 T を返す。
+{\tt integer}は{\bf float}関数で{\tt float}に変換できる。}
 
-\funcdesc{zerop}{number}{ {\em number}$B$,(B{\tt integer}$B$N%<%m$^$?$O(B
-{\tt float}$B$N(B0.0$B$N;~!"(B T$B$rJV$9!#(B}
-\funcdesc{plusp}{number}{{\em number}$B$,@5(B($B%<%m$O4^$^$J$$(B)$B$N$H$-!"(BT$B$rJV$9!#(B}
-\funcdesc{minusp}{number}{{\em number}$B$,Ii$N$H$-!"(BT$B$rJV$9!#(B}
+\funcdesc{zerop}{number}{ {\em number}が{\tt integer}のゼロまたは
+{\tt float}の0.0の時、 Tを返す。}
+\funcdesc{plusp}{number}{{\em number}が正(ゼロは含まない)のとき、Tを返す。}
+\funcdesc{minusp}{number}{{\em number}が負のとき、Tを返す。}
 
 \funcdesc{oddp}{integer}{
-{\em integer}$B$,4q?t$N$H$-!"(BT$B$rJV$9!#0z?t$O(B{\tt integer}$B$N$_M-8z!#(B}
+{\em integer}が奇数のとき、Tを返す。引数は{\tt integer}のみ有効。}
 
 \funcdesc{evenp}{integer}{
-{\em integer}$B$,6v?t$N$H$-!"(BT$B$rJV$9!#0z?t$O(B{\tt integer}$B$N$_M-8z!#(B}
+{\em integer}が偶数のとき、Tを返す。引数は{\tt integer}のみ有効。}
 
 \funcdesc{/=}{num1 num2}{
-{\em num1}$B$,(B{\em num2}$B$HEy$7$/$J$$$H$-!"(BT$B$rJV$9!#(B
-{\em num1}$B$H(B{\em num2}$B$O?tCM$G$"$k$3$H!#(B}
+{\em num1}が{\em num2}と等しくないとき、Tを返す。
+{\em num1}と{\em num2}は数値であること。}
 
 \funcdesc{=}{num1 num2 \&rest more-numbers}{
-{\em num1}$B$H(B{\em num2}$BEy$7$$$H$-$r!"(BT$BJV$9!#(B
-{\em num1}$B$H(B{\em num2}$B$O?tCM$G$"$k$3$H!#(B}
+{\em num1}と{\em num2}等しいときを、T返す。
+{\em num1}と{\em num2}は数値であること。}
 
 \fundesc{$>$}{num1 num2 \&rest more-numbers}
 \fundesc{$<$}{num1 num2 \&rest more-numbers}
 \fundesc{$>=$}{num1 num2 \&rest more-numbers}
 \funcdesc{$<=$}{num1 num2 \&rest more-numbers}{
-$B$3$l$i$NHf3S1i;;$O!"?tCM$N$_E,MQ$G$-$k!#8m:9$r4^$a$??tCMHf3S$KBP$7$F$O!"(B
-\ref{Geometry}$B>O$K=q$+$l$F$$$k4X?t!J$3$l$i$NHf3S1i;;;R$NA0$K(B{\bf eps}$B$,(B
-$B$D$$$F$$$k!K$r;HMQ$9$k!#(B}
+これらの比較演算は、数値のみ適用できる。誤差を含めた数値比較に対しては、
+\ref{Geometry}章に書かれている関数（これらの比較演算子の前に{\bf eps}が
+ついている）を使用する。}
 \end{refdesc}
 
-\subsection{$B@0?t$H%S%C%HKh$NA`:n4X?t(B}
-$B0J2<$N4X?t$N0z?t$O!"$9$Y$F(B{\tt integer}$B$H$9$k!#(B
+\subsection{整数とビット毎の操作関数}
+以下の関数の引数は、すべて{\tt integer}とする。
 
 \begin{refdesc}
 \funcdesc{mod}{dividend divisor}{
-{\em dividend} $B$r(B {\em divisor}$B$G3d$C$?M>$j$rJV$9!#(B
+{\em dividend} を {\em divisor}で割った余りを返す。
 {\tt (mod 6 5)=1, (mod -6 5)=-1, (mod 6 -5)=1, (mod -6 -5)=-1}.}
 
 \funcdesc{1-}{integer}{
-$integer-1$ $B$rJV$9!#%3%s%Q%$%i$G$O!"0z?t$r(B {\tt integer} $B$H2>Dj$9$k!#(B}
+$integer-1$ を返す。コンパイラでは、引数を {\tt integer} と仮定する。}
 
 \funcdesc{1+}{integer}{
-$integer+1$ $B$rJV$9!#(B
-{\bf 1+} $B$H(B {\bf 1$-$} $B$N0z?t$O!"(B{\tt integer} $B$G$J$1$l$P$J$i$J$$!#(B}
-\funcdesc{logand}{\&rest integers}{{\em integers}$B$N%S%C%HC10L#A#N#D!#(B}
-\funcdesc{logior}{\&rest integers}{{\em integers}$B$N%S%C%HC10L#O#R!#(B}
-\funcdesc{logxor}{\&rest integers}{{\em integers}$B$N%S%C%HC10L#X#O#R!#(B}
+$integer+1$ を返す。
+{\bf 1+} と {\bf 1$-$} の引数は、{\tt integer} でなければならない。}
+\funcdesc{logand}{\&rest integers}{{\em integers}のビット単位ＡＮＤ。}
+\funcdesc{logior}{\&rest integers}{{\em integers}のビット単位ＯＲ。}
+\funcdesc{logxor}{\&rest integers}{{\em integers}のビット単位ＸＯＲ。}
 \funcdesc{logeqv}{\&rest integers}{
-{\bf logeqv}$B$O(B{\tt (lognot (logxor ...))}$B$HF1Ey$G$"$k!#(B}
-\funcdesc{lognand}{\&rest integers}{{\em integers}$B$N%S%C%HC10L#N#A#N#D!#(B}
-\funcdesc{lognor}{\&rest integers}{{\em integers}$B$N%S%C%HC10L#N#O#R!#(B}
-\funcdesc{lognot}{integer}{{\em integer}$B$N%S%C%HH?E>!#(B}
+{\bf logeqv}は{\tt (lognot (logxor ...))}と同等である。}
+\funcdesc{lognand}{\&rest integers}{{\em integers}のビット単位ＮＡＮＤ。}
+\funcdesc{lognor}{\&rest integers}{{\em integers}のビット単位ＮＯＲ。}
+\funcdesc{lognot}{integer}{{\em integer}のビット反転。}
 \funcdesc{logtest}{integer1 integer2}{
-{\tt (logand {\em integer1 integer2})}$B$,%<%m$G$J$$$H$-(B T $B$rJV$9!#(B}
+{\tt (logand {\em integer1 integer2})}がゼロでないとき T を返す。}
 
 \funcdesc{logbitp}{index integer}{
-{\em integer}$B$,(BNIL$B$G$J$1$l$P!"(BLSB$B$+$i?t$($F(B {\em index}$BHVL\$N(B 
-$B%S%C%H$,(B 1 $B$N$H$-(B T $B$rJV$9!#(B}
+{\em integer}がNILでなければ、LSBから数えて {\em index}番目の 
+ビットが 1 のとき T を返す。}
 
 \funcdesc{ash}{integer count}{
-$B?tCM1i;;:8%7%U%H!#(B
-$B$b$7(B {\em count} $B$,@5$N$H$-!"(B{\em integer}$B$r:8$K%7%U%H$9$k!#(B
-$B$b$7(B {\em count} $B$,Ii$N$H$-!"(B
-{\em integer} $B$r(B $\vert${\em count}$\vert$ $B%S%C%H1&$K%7%U%H$9$k!#(B}
+数値演算左シフト。
+もし {\em count} が正のとき、{\em integer}を左にシフトする。
+もし {\em count} が負のとき、
+{\em integer} を $\vert${\em count}$\vert$ ビット右にシフトする。}
 
 \funcdesc{ldb}{target position width}{
 LoaD Byte.
-{\bf ldb} $B$d(B {\bf dpb} $B$N(BByte$B7?$O!"(B EusLisp$B$K$J$$$?$a!"Be$j$K(B
-2$B8D$N(B {\tt integer} $B$r;HMQ$9$k!#(B
-{\em target} $B$N(BLSB$B$h$j(B{\em position}$BHVL\$N0LCV$+$i(BMSB$B$X(B {\em width} $B%S%C%H$N(B
-$BHO0O$rH4$-=P$9!#Nc$($P!"(B {\tt (ldb \#x1234 4 4)} $B$O(B 3$B$H$J$k!#(B}
+{\bf ldb} や {\bf dpb} のByte型は、 EusLispにないため、代りに
+2個の {\tt integer} を使用する。
+{\em target} のLSBより{\em position}番目の位置からMSBへ {\em width} ビットの
+範囲を抜き出す。例えば、 {\tt (ldb \#x1234 4 4)} は 3となる。}
 
 \funcdesc{dpb}{value target position width}{
 DePosit Byte.
-{\em target}$B$N(BLSB$B$h$j(B{\em position}$BHVL\$N0LCV$X(B{\em value}$B$r(B
-{\em width}$B%S%C%HCV$-49$($k!#(B}
+{\em target}のLSBより{\em position}番目の位置へ{\em value}を
+{\em width}ビット置き換える。}
 
 \end{refdesc}
 
 
-\subsection{$B0lHL?tCM4X?t(B}
+\subsection{一般数値関数}
 \begin{refdesc}
-\funcdesc{+}{\&rest numbers}{{\em numbers}$B$NOB$rJV$9!#(B}
+\funcdesc{+}{\&rest numbers}{{\em numbers}の和を返す。}
 \funcdesc{-}{num \&rest more-numbers}{
-$B$b$7(B {\em more-numbers} $B$,M?$($i$l$?$H$-!"(B{\em num}$B$h$j0z$/!#(B
-$B$=$&$G$J$$$H$-!"(B{\em num} $B$OId9fH?E>$5$l$k!#(B}
-\funcdesc{*}{\&rest numbers}{{\em numbers}$B$N@Q$rJV$9!#(B}
+もし {\em more-numbers} が与えられたとき、{\em num}より引く。
+そうでないとき、{\em num} は符号反転される。}
+\funcdesc{*}{\&rest numbers}{{\em numbers}の積を返す。}
 \funcdesc{/}{num1 num2 \&rest more-numbers}{
-{\em num1} $B$r!"(B{\em num2} $B$d(B {\em more-numbers}$B$G3d$j;;$9$k!#(B
-$BA4$F$N0z?t$,(B{\tt integer}$B$N$H$-!"(B{\tt integer}$B$rJV$7!"(B
-$B0z?t$K(B1$B$D$G$b(B{\tt float}$B$,$"$C$?$H$-$O!"(B{\tt float}$B$rJV$9!#(B}
-\funcdesc{abs}{number}{{\em number}$B$N@dBPCM$rJV$9!#(B}
+{\em num1} を、{\em num2} や {\em more-numbers}で割り算する。
+全ての引数が{\tt integer}のとき、{\tt integer}を返し、
+引数に1つでも{\tt float}があったときは、{\tt float}を返す。}
+\funcdesc{abs}{number}{{\em number}の絶対値を返す。}
 \funcdesc{round}{number}{
-{\em number}$B$N>.?tBh(B1$B0L$r;M<N8^F~$7(B {\tt integer}$B$rJV$9!#(B
+{\em number}の小数第1位を四捨五入し {\tt integer}を返す。
 {\tt (round 1.5)=2, (round -1.5)=2}.}
 
 \funcdesc{floor}{number}{
-{\em number}$B$N>.?t$r@Z<N$F$k!#(B
+{\em number}の小数を切捨てる。
 {\tt (floor 1.5)=1, (floor -1.5)=-2}.}
 
 \funcdesc{ceiling}{number}{
-{\em number}$B$N>.?t$r@Z$j>e$2$k!#(B
+{\em number}の小数を切り上げる。
 {\tt (ceiling 1.5)=2, (ceiling -1.5)=-1}.}
 
 \funcdesc{truncate}{number}{
-{\em number}$B$,@5$N$H$-$O@Z<N$F!"Ii$N$H$-$O@Z$j>e$2$k!#(B
+{\em number}が正のときは切捨て、負のときは切り上げる。
 {\tt (truncate 1.5)=1, (truncate -1.5)=-1}.}
 
 \funcdesc{float}{number}{
- {\em number}$B$r(B{\tt float}$B$K$7$FJV$9!#(B}
+ {\em number}を{\tt float}にして返す。}
 
 \funcdesc{max}{\&rest numbers}{
- {\em numbers}$B$NCf$+$i!":GBgCM$r$5$,$9!#(B}
+ {\em numbers}の中から、最大値をさがす。}
 
 \funcdesc{min}{\&rest numbers}{
-{\em numbers}$B$NCf$+$i!":G>.CM$r$5$,$9!#(B}
+{\em numbers}の中から、最小値をさがす。}
 
 \funcdesc{random}{range \&optional (randstate *random-state*)}{
- 0$B$"$k$$$O(B0.0 $B$+$i(B {\em range}$B$^$G$NMp?t$rJV$9!#(B
-$B$b$7(B {\em range} $B$,(B {\tt integer}$B$N$H$-!"(B
-{\tt integer} $B$KJQ49$7$FJV$9!#(B
-$B$=$&$G$J$$$H$-!"(B{\tt float} $B$rJV$9!#(B
-$B%*%W%7%g%s$N(B{\em randstate} $B$O!"7h$^$C$?Mp?tNs$GI=$5$l$k!#(B
-{\em randstate}$B$KFCJL$J%G!<%?$N7?$O$J$/!"(B
-2$B$D$NMWAG$+$i$J$k(B $B@0?t%Y%/%H%k$GI=$5$l$k!#(B
+ 0あるいは0.0 から {\em range}までの乱数を返す。
+もし {\em range} が {\tt integer}のとき、
+{\tt integer} に変換して返す。
+そうでないとき、{\tt float} を返す。
+オプションの{\em randstate} は、決まった乱数列で表される。
+{\em randstate}に特別なデータの型はなく、
+2つの要素からなる 整数ベクトルで表される。
 }
 
 \macrodesc{incf}{variable \&optional (increment 1)}{
-{\em variable} $B$O0lHL$NJQ?t$G$"$k!#(B
-{\em variable} $B$O!"(B{\em increment}$B$@$1A}2C$5$l!"(B
-{\em variable}$B$KLa$5$l$k!#(B}
+{\em variable} は一般の変数である。
+{\em variable} は、{\em increment}だけ増加され、
+{\em variable}に戻される。}
 \macrodesc{decf}{variable \&optional decrement}{
-{\em variable} $B$O0lHL$NJQ?t$G$"$k!#(B
-{\em variable} $B$O!"(B{\em decrement}$B$@$18:>/$5$l!"(B
-{\em variable}$B$KLa$5$l$k!#(B}
+{\em variable} は一般の変数である。
+{\em variable} は、{\em decrement}だけ減少され、
+{\em variable}に戻される。}
 
 \funcdesc{reduce}{func seq}{
-2$BJQ?tA`:n$N(B{\em func}$B4X?t$rMQ$$$F!"(B{\em seq}$B$NCf$NA4$F$NMWAG$r7k9g$5$;$k!#(B
-$BNc$($P!"(B{\tt (reduce \#'expt '(2 3 4)) = (expt (expt 2 3) 4)=4096}.}
+2変数操作の{\em func}関数を用いて、{\em seq}の中の全ての要素を結合させる。
+例えば、{\tt (reduce \#'expt '(2 3 4)) = (expt (expt 2 3) 4)=4096}.}
 
-\funcdesc{rad2deg}{radian}{$B%i%8%"%sCM$r(B $BEY?tI=8=$KJQ49$9$k!#(B
-\#R $B$OF1$8$b$N$G$"$k!#(B
-EusLisp $B$NCf$G$N3QEY$NI=5-$O%i%8%"%s$G$"$j!"(B
-EusLisp $BFb$NA4$F$N4X?t$,MW5a$9$k3QEY0z?t$O!"%i%8%"%sI=8=$G$"$k!#(B}
+\funcdesc{rad2deg}{radian}{ラジアン値を 度数表現に変換する。
+\#R は同じものである。
+EusLisp の中での角度の表記はラジアンであり、
+EusLisp 内の全ての関数が要求する角度引数は、ラジアン表現である。}
 
-\funcdesc{deg2rad}{degree}{$B3QEYCM$r%i%8%"%sI=8=$KJQ49$9$k!#(B
-$B$^$?(B \#D $B$G$b<B9T$G$-$k!#(B}
+\funcdesc{deg2rad}{degree}{角度値をラジアン表現に変換する。
+また \#D でも実行できる。}
 \end{refdesc}
 
-\subsection{$B4pK\4X?t(B}
+\subsection{基本関数}
 \begin{refdesc}
-\funcdesc{sin}{theta}{{\em theta} $B$O%i%8%"%s$GI=$5$l$k(B {\tt float} $BCM!#(B
-$\sin(theta)$$B$rJV$9!#(B}
-\funcdesc{cos}{theta}{{\em theta} $B$O%i%8%"%s$GI=$5$l$k(B {\tt float} $BCM!#(B
-$\cos(theta)$$B$rJV$9!#(B}
-\funcdesc{tan}{theta}{{\em theta} $B$O%i%8%"%s$GI=$5$l$k(B {\tt float} $BCM!#(B
-$\tan(theta)$$B$rJV$9!#(B}
-\funcdesc{sinh}{x}{ hyperbolic sine$B!"(B
-$\frac{e^{x}-e^{-x}}{2}$$B$GI=$5$l$k!#(B}
-\funcdesc{cosh}{x}{ hyperbolic cosine$B!"(B
-$\frac{e^{x}+e^{-x}}{2}$$B$GI=$5$l$k!#(B}
-\funcdesc{tanh}{x}{ hyperbolic tangent$B!"(B
-$\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$$B$GI=$5$l$k!#(B}
-\funcdesc{asin}{number}{{\em number}$B$N(Barc sine$B$rJV$9!#(B}
-\funcdesc{acos}{number}{{\em number}$B$N(Barc cosine$B$rJV$9!#(B}
+\funcdesc{sin}{theta}{{\em theta} はラジアンで表される {\tt float} 値。
+$\sin(theta)$を返す。}
+\funcdesc{cos}{theta}{{\em theta} はラジアンで表される {\tt float} 値。
+$\cos(theta)$を返す。}
+\funcdesc{tan}{theta}{{\em theta} はラジアンで表される {\tt float} 値。
+$\tan(theta)$を返す。}
+\funcdesc{sinh}{x}{ hyperbolic sine、
+$\frac{e^{x}-e^{-x}}{2}$で表される。}
+\funcdesc{cosh}{x}{ hyperbolic cosine、
+$\frac{e^{x}+e^{-x}}{2}$で表される。}
+\funcdesc{tanh}{x}{ hyperbolic tangent、
+$\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$で表される。}
+\funcdesc{asin}{number}{{\em number}のarc sineを返す。}
+\funcdesc{acos}{number}{{\em number}のarc cosineを返す。}
 \funcdesc{atan}{y \&optional x}{
-{\bf atan} $B$,(B1$B$D$N0z?t$@$1$N$H$-!"(Barctangent $B$r7W;;$9$k!#(B
-2$B$D$N0z?t$N$H$-!"(B{\tt atan}$(y/x)$ $B$r7W;;$9$k!#(B}
+{\bf atan} が1つの引数だけのとき、arctangent を計算する。
+2つの引数のとき、{\tt atan}$(y/x)$ を計算する。}
 \funcdesc{asinh}{x}{hyperbolic arc sine.}
 \funcdesc{acosh}{x}{hyperbolic arc cosine.}
 \funcdesc{atanh}{x}{hyperbolic arc tangent.}
 
-\funcdesc{sqrt}{number}{{\em number} $B$NJ?J}:,$rJV$9!#(B}
+\funcdesc{sqrt}{number}{{\em number} の平方根を返す。}
 
-\funcdesc{log}{number}{{\em number} $B$N<+A3BP?t$rJV$9!#(B}
+\funcdesc{log}{number}{{\em number} の自然対数を返す。}
 
-\funcdesc{exp}{x}{$e^{x}$$B$rJV$9!#(B}
+\funcdesc{exp}{x}{$e^{x}$を返す。}
 
 \funcdesc{expt}{a x}{
-{\em a}$B$N(B{\em x}$B>h$rJV$9!#(B}
+{\em a}の{\em x}乗を返す。}
 \end{refdesc}
 
 \newpage

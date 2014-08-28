@@ -1,195 +1,195 @@
-\section{$B;k3&$H%0%i%U%#%C%/%9(B}
-\markright{\arabic{section}. $B;k3&$H%0%i%U%#%C%/%9(B}
+\section{視界とグラフィックス}
+\markright{\arabic{section}. 視界とグラフィックス}
 
-\subsection{$B;k3&(B(viewing)}
-{\bf viewing}$B%*%V%8%'%/%H$O!"(Bviewing$B:BI87O$r=hM}$9$k!#(B
-$B$3$N:BI87O$N86E@$O2>A[%+%a%i$N0LCV$KCV$+$l$k!#(B
-{\em -z}$B<4J}8~$,%*%V%8%'%/%H$N;k@~J}8~$G!"(Bxy$BJ?LL$,Ej1F2hLL$G$"$k!#(B
-{\bf viewing}$B$,(B{\bf cascaded-coords}$B%/%i%9$r7Q>5$9$k$N$G!"(B
-{\bf :translate}$B$d(B{\bf :rotate}$B$d(B{\bf :transform}$B$N$h$&$J(B
-$B:BI8JQ49%a%C%;!<%8$r<u$1IU$1$k!#(B
-$B$^$?!"(B{\bf cascaded-coords}$B$+$iF@$i$l$kB>$N%*%V%8%'%/%H$rD%$jIU$1$k$3$H$,$G$-$k!#(B
-$B$7$?$,$C$F!"0\F0J*BN>e$N%+%a%i%7%9%F%`$N%7%_%e%l!<%7%g%s$,$G$-$k!#(B
-{\bf viewing}$B$N<g$JL\E*$O!"%o!<%k%I:BI87O$GI=8=$5$l$k%Y%/%H%k$r(B
-$B%+%a%i:BI87O$KJQ49$9$k$3$H$G$"$k!#(B
-$BJQ49$O!"0lHL$N:BI8JQ49$KBP$7$F5UJ}8~$GM?$($i$l$k!#(B
-$B$3$N%m!<%+%k:BI87OFb$N%Y%/%H%k$O%o!<%k%I:BI87O$K$*$1$kI=8=$KJQ49$5$l$k!#(B
-$B$7$?$,$C$F!"(B{\bf viewing}$B$O(B{\tt viewcoords}$B%9%m%C%H$K5UJQ49$5$l$?:8<j7OJQ49$r;}$D!#(B
-$B$3$N%9%m%C%H$O!"(Bviewing$B:BI87O$H$7$FIaDL;2>H$5$l$k!#(B
+\subsection{視界(viewing)}
+{\bf viewing}オブジェクトは、viewing座標系を処理する。
+この座標系の原点は仮想カメラの位置に置かれる。
+{\em -z}軸方向がオブジェクトの視線方向で、xy平面が投影画面である。
+{\bf viewing}が{\bf cascaded-coords}クラスを継承するので、
+{\bf :translate}や{\bf :rotate}や{\bf :transform}のような
+座標変換メッセージを受け付ける。
+また、{\bf cascaded-coords}から得られる他のオブジェクトを張り付けることができる。
+したがって、移動物体上のカメラシステムのシミュレーションができる。
+{\bf viewing}の主な目的は、ワールド座標系で表現されるベクトルを
+カメラ座標系に変換することである。
+変換は、一般の座標変換に対して逆方向で与えられる。
+このローカル座標系内のベクトルはワールド座標系における表現に変換される。
+したがって、{\bf viewing}は{\tt viewcoords}スロットに逆変換された左手系変換を持つ。
+このスロットは、viewing座標系として普通参照される。
 
 \begin{figure}
 \begin{center}
 \epsfile{file=fig/viewcoords.ps,height=10cm}
 \end{center}
-\caption{viewing$B:BI87O$HEj1F2hLL(B}
+\caption{viewing座標系と投影画面}
 \end{figure}
 
 \begin{refdesc}
 
 \classdesc{viewing}{cascaded-coords}{(viewcoords)}
-{viewing$BJQ49$rDj5A$9$k!#(B}
+{viewing変換を定義する。}
 
 \methoddesc{:viewpoint}{}{
-$B$3$N(B{\bf viewing}$B$N86E@$N%Y%/%H%k0LCV$rJV$9!#(B}
+この{\bf viewing}の原点のベクトル位置を返す。}
 
 \methoddesc{:view-direction}{}{
-{\bf viewing}$B$N86E@$+$i2hLL$NCf?4$^$G$N%Y%/%H%k$rJV$9!#(B
-$B$3$l$O!"(Bviewing$B:BI87O$N(Bz$B<4J}8~$G$"$k!#(B}
+{\bf viewing}の原点から画面の中心までのベクトルを返す。
+これは、viewing座標系のz軸方向である。}
 
 \methoddesc{:view-up}{}{
-$B%o!<%k%I:BI87O$K$*$1$k$3$N(B{\bf viewing}$B$N(By$B<4%Y%/%H%k$rJV$9!#(B
-y$B<4$O!"(B{\bf viewport}$B$N>eJ}$G$"$k!#(B}
+ワールド座標系におけるこの{\bf viewing}のy軸ベクトルを返す。
+y軸は、{\bf viewport}の上方である。}
 \methoddesc{:view-right}{}{
-$B%o!<%k%I:BI87O$K$*$1$k$3$N(B{\bf viewing}$B$N(Bx$B<4%Y%/%H%k$rJV$9!#(B
-x$B<4$O!"(B{\bf viewport}$B$N?eJ?1&J}8~$G$"$k!#(B}
+ワールド座標系におけるこの{\bf viewing}のx軸ベクトルを返す。
+x軸は、{\bf viewport}の水平右方向である。}
 
 \methoddesc{:look}{from \&optional (to \#f(0 0 0))}{
-{\bf :look}$B$O!"$=$NL\$,(B{\em from}$B$K0LCV$5$l$F$*$j!"(B{\em to}$B$N0LCV$r(B
-$B8+$F$$$k$H$7$F(Bviewing$B:BI87O$r@_Dj$9$k!#(B}
+{\bf :look}は、その目が{\em from}に位置されており、{\em to}の位置を
+見ているとしてviewing座標系を設定する。}
 
 % \metdesc{:makeviewcoords}{ ax ay az vpoint}
 \longdescription{:init}{
-%\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \hspace{85mm} [$B%a%=%C%I(B]\\
-\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \` [$B%a%=%C%I(B]\\
+%\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \hspace{85mm} [メソッド]\\
+\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \` [メソッド]\\
        \> :view-direction \> nil \\
        \> :view-up \>  \#f(0.0 0.0 1.0)) \\
        \> :view-right \>  nil \\
        \> \&allow-other-keys}{
-{\bf viewing}$B$O!"(B{\bf cascaded-coords}$B$r7Q>5$9$k$N$G!"(B{\em :pos}$B$d(B{\em :rot}$B$d(B{\em :euler}
-$B$d(B{\em :rpy}$B$J$I$N(B{\em :init}$B$N%Q%i%a!<%?$O$9$Y$F(Bviewing$B:BI87O$N0LCV$d;Q@*$r(B
-$B;XDj$9$k$3$H$K;HMQ$G$-$k!#(B
-$B$7$+$7$J$,$i!"(Bviewing$B$N(B{\em :init}$B$O2sE>$r7hDj$9$k4JC1$JJ}K!$r;}$C$F$$$k!#(B
-$B$b$7!"(B{\em :target}$B$@$1$,M?$($i$l$?$H$-!";k@~J}8~$O;kE@$+$i(B{\em target}$B0LCV(B
-$B$NJ}8~$K7hDj$5$l!"(B{\em :view-right}$B%Y%/%H%k$O%o!<%k%I:BI87O$N(Bxy$BJ?LL$KJ?9T$J(B
-x$B<4$K7hDj$5$l$k!#(B
-{\em :view-direction}$B$r(B{\em :target}$B$NBe$o$j$K;XDj$7$F$bF1$8MM$J(B
-$B8z2L$rF@$i$l$k!#(B
-$B$b$7!"(B{\em :view-up}$B$^$?$O(B{\em :view-right}$B%Q%i%a!<%?$r(B{\em :target}$B$"$k$$$O(B
-{\em :view-direction}$B$K2C$($F;XDj$9$k$J$i$P!"(B3$B$D$N2sE>%Q%i%a!<%?$r$9$Y$F(B
-$B<+J,<+?H$G7hDj$9$k$3$H$,$G$-$k!#(B}
+{\bf viewing}は、{\bf cascaded-coords}を継承するので、{\em :pos}や{\em :rot}や{\em :euler}
+や{\em :rpy}などの{\em :init}のパラメータはすべてviewing座標系の位置や姿勢を
+指定することに使用できる。
+しかしながら、viewingの{\em :init}は回転を決定する簡単な方法を持っている。
+もし、{\em :target}だけが与えられたとき、視線方向は視点から{\em target}位置
+の方向に決定され、{\em :view-right}ベクトルはワールド座標系のxy平面に平行な
+x軸に決定される。
+{\em :view-direction}を{\em :target}の代わりに指定しても同じ様な
+効果を得られる。
+もし、{\em :view-up}または{\em :view-right}パラメータを{\em :target}あるいは
+{\em :view-direction}に加えて指定するならば、3つの回転パラメータをすべて
+自分自身で決定することができる。}
 
 \end{refdesc}
 
-\subsection{$BEj1F(B}
+\subsection{投影}
 
-{\bf parallel-projection}$B$H(B{\bf perspective-projection}$B%/%i%9$O!"(B
-$BEj1FJQ49$r=hM}$9$k!#$3$NJQ49$O(B4X4$B$N9TNs$GI=8=$5$l$k!#$9$J$o$A!"JQ49$O(B
-3$B<!85$NF1<!:BI87O$GM?$($i$l$k!#(B
-{\bf projection}$B%/%i%9$O!"N>J}$N%/%i%9$NCj>]%/%i%9$G$"$k!#(B
-$B$3$l$i$NEj1F%/%i%9$O!"(Bviewing$B%/%i%9$r7Q>5$7$F$$$k$N$G!"(B
-2$B$D$N:BI8JQ49!J%o!<%k%I:BI8$+$i(Bviewing$B:BI87O$X$NJQ49$HEj1FJQ49!K$r(B
-$BF1;~$K<B9T$9$k$3$H$,$G$-$k!#(B
-3D$B%Y%/%H%k$H(B{\tt :project3}$B%a%C%;!<%8$rEj1F%*%V%8%'%/%H$KAw$k$3$H$K$h$j!"(B
-4$BMWAG$N<B?t%Y%/%H%kJV$9!#(B
-{\bf homo2normal}$B4X?t$O!"$3$NF1<!%Y%/%H%k$rI8=`$N%Y%/%H%kI=8=$KJQ49(B
-$B$9$k$?$a$K;HMQ$5$l$k!#(B
-$B$=$N7k2L$O!"I8=`%G%P%$%9:BI87O(B(NDC)$B$H8F$P$l$k:BI87O>e$KI=8=$5$l$k(B
-$B%Y%/%H%k$G$"$k!#(B
-$B$=$NCf$G!"8+$($k%Y%/%H%k$O$=$l$>$l$N(Bx,y,z$B<!85$K$*$$$F(B-1$B$+$i(B1$B$^$G$N(B
-$BHO0O$GI=$5$l$k!#(B
-$B%m%\%C%H@$3&$NK\Ev$N%+%a%i$r%7%_%e%l!<%H$9$k$?$a$K!"(B
-{\bf perspective-projection}$B$O(B{\bf parallel-projection}$B$h$j$bB?$/;HMQ$5$l$k!#(B
-{\bf perspective-projection}$B$O!"Dj5A$5$l$F$$$k%Q%i%a!<%?$,>/$7B?$$!#(B
-{\tt screenx}$B$H(B{\tt screeny}$B$O!"8+$($kJ*BN$,Ej1F$5$l$k(Bviewing$BJ?LL$N>e$N(Bwindow$B$NBg$-$5$G!"(B
-$BBg$-$J2hLL$H9-$$6u4V$,Ej1F$5$l$k!#(B
-{\tt viewdistance}$B$O!";kE@$H(Bview$BJ?LL$H$N5wN%$rDj5A$7$F$$$k$,!"(B
-$B;k3Q$K$b4X78$9$k!#(B
-{\tt viewdistance}$B$rBg$-$/$9$k$H!"(Bview$BJ?LL$N(Bwindow$B$K69$$HO0O$,Ej1F$5$l$k!#(B
-{\tt hither}$B$H(B{\tt yon}$B%Q%i%a!<%?$O!"%/%j%C%W$9$kJ?LL$NA0LL$H8eLL$N5wN%$r(B
-$BDj5A$9$k!#(B
-$B$3$l$i(B2$B$D$NJ?LL$N30B&$K0LCV$9$k%*%V%8%'%/%H$O!"%/%j%C%W$+$i=|30$5$l$k!#(B
-$B<B:]$K!"$3$N%/%j%C%W=hM}$O(B{\bf viewport}$B%*%V%8%'%/%H$K$h$C$F<B8=$5$l$F$$$k!#(B
+{\bf parallel-projection}と{\bf perspective-projection}クラスは、
+投影変換を処理する。この変換は4X4の行列で表現される。すなわち、変換は
+3次元の同次座標系で与えられる。
+{\bf projection}クラスは、両方のクラスの抽象クラスである。
+これらの投影クラスは、viewingクラスを継承しているので、
+2つの座標変換（ワールド座標からviewing座標系への変換と投影変換）を
+同時に実行することができる。
+3Dベクトルと{\tt :project3}メッセージを投影オブジェクトに送ることにより、
+4要素の実数ベクトル返す。
+{\bf homo2normal}関数は、この同次ベクトルを標準のベクトル表現に変換
+するために使用される。
+その結果は、標準デバイス座標系(NDC)と呼ばれる座標系上に表現される
+ベクトルである。
+その中で、見えるベクトルはそれぞれのx,y,z次元において-1から1までの
+範囲で表される。
+ロボット世界の本当のカメラをシミュレートするために、
+{\bf perspective-projection}は{\bf parallel-projection}よりも多く使用される。
+{\bf perspective-projection}は、定義されているパラメータが少し多い。
+{\tt screenx}と{\tt screeny}は、見える物体が投影されるviewing平面の上のwindowの大きさで、
+大きな画面と広い空間が投影される。
+{\tt viewdistance}は、視点とview平面との距離を定義しているが、
+視角にも関係する。
+{\tt viewdistance}を大きくすると、view平面のwindowに狭い範囲が投影される。
+{\tt hither}と{\tt yon}パラメータは、クリップする平面の前面と後面の距離を
+定義する。
+これら2つの平面の外側に位置するオブジェクトは、クリップから除外される。
+実際に、このクリップ処理は{\bf viewport}オブジェクトによって実現されている。
 
 \begin{refdesc}
 
 \classdesc{projection}{viewing}
 {(screenx screeny hither yon projection-matrix)}
-{4x4$B9TNs$G$"$i$o$5$l$kEj1FJQ49$rDj5A$9$k!#(B}
+{4x4行列であらわされる投影変換を定義する。}
 
 \methoddesc{:projection}{\&optional pmat}{
-$B$b$7!"(B{\em pmat}$B$,M?$($i$l$?$J$i$P!"(B
-{\tt projection-matrix}$B$N%9%m%C%H$K@_Dj$9$k!#(B
-{\bf :projection}$B$O!"8=:_$N(B4x4$BEj1F9TNs$rJV$9!#(B}
+もし、{\em pmat}が与えられたならば、
+{\tt projection-matrix}のスロットに設定する。
+{\bf :projection}は、現在の4x4投影行列を返す。}
 \methoddesc{:project}{vec}{
-{\em vec}$B$O!"(B4$BMWAG$r;}$D(B3$B<!85F1<!%Y%/%H%k$G$"$k!#(B
-{\em vec}$B$O!"Ej1F9TNs$K$h$jJQ49$5$l$k!#(B
-$B$=$7$F!"JQ49$5$l$?7k2L$G$"$kF1<!I=8=$,JV$5$l$k!#(B}
+{\em vec}は、4要素を持つ3次元同次ベクトルである。
+{\em vec}は、投影行列により変換される。
+そして、変換された結果である同次表現が返される。}
 \methoddesc{:project3}{vec}{
-{\em vec}$B$O!"I8=`$N(B3D$B%Y%/%H%k!#(B
-{\em vec}$B$O!"Ej1F9TNs$K$h$jF1<!2=$5$lJQ49$5$l$k!#(B
-$B$=$7$F!"JQ49$5$l$?7k2L$G$"$kF1<!I=8=$,JV$5$l$k!#(B}
+{\em vec}は、標準の3Dベクトル。
+{\em vec}は、投影行列により同次化され変換される。
+そして、変換された結果である同次表現が返される。}
 \methoddesc{:view}{ vec}{
-{\em vec}$B$K(Bviewing$BJQ49$HEj1FJQ49$rO"B3E*$KE,MQ$9$k!#(B
-$B$=$7$F!"JQ49$5$l$?7k2L$G$"$kF1<!I=8=$,JV$5$l$k!#(B}
+{\em vec}にviewing変換と投影変換を連続的に適用する。
+そして、変換された結果である同次表現が返される。}
 \methoddesc{:screen}{xsize (\&optional (ysize xsize))}{
-viewing$B2hLL$NBg$-$5$rJQ$($k!#(B
-$BBg$-$/$9$k$H!"9-$$(Bview$B$,F@$i$l$k!#(B}
+viewing画面の大きさを変える。
+大きくすると、広いviewが得られる。}
 \methoddesc{:hither}{ depth-to-front-clip-plane}{
-$B;kE@$+$i%/%j%C%WA0LL$^$G$N5wN%$r7hDj$9$k!#(B
-$B$3$N%/%j%C%WA0LL$h$j$bA0$K$"$k%*%V%8%'%/%H$O%/%j%C%W$+$i=|30$5$l$k!#(B}
+視点からクリップ前面までの距離を決定する。
+このクリップ前面よりも前にあるオブジェクトはクリップから除外される。}
 \methoddesc{:yon}{ depth-to-back-clip-plane}{
-$B;kE@$+$i%/%j%C%W8eLL$^$G$N5wN%$rJQ$($k!#(B
-$B$3$N%/%j%C%W8eLL$h$j$b8e$m$K$"$k%*%V%8%'%/%H$O%/%j%C%W$+$i=|30$5$l$k!#(B}
+視点からクリップ後面までの距離を変える。
+このクリップ後面よりも後ろにあるオブジェクトはクリップから除外される。}
 \methoddesc{:aspect}{\&oiptional ratio}{
-$B%"%9%Z%/%HHf$O!"(Bscreen-y$B$H(Bscreen-x$B$H$NHf$G$"$k!#(B
-$B$b$7!"(B{\em ratio}$B$,M?$($i$l$?$J$i$P!"(B
-$B%"%9%Z%/%HHf$OJQ$($i$l!"(Bscreen-y$B$O(Bscreen-x * {\em ratio}$B$K@_Dj$5$l$k!#(B
-{\bf :aspect}$B$O!"8=:_$N%"%9%Z%/%HHf$rJV$9!#(B}
+アスペクト比は、screen-yとscreen-xとの比である。
+もし、{\em ratio}が与えられたならば、
+アスペクト比は変えられ、screen-yはscreen-x * {\em ratio}に設定される。
+{\bf :aspect}は、現在のアスペクト比を返す。}
 \longdescription{:init}{
-%\&key \= :hither  \hspace{5mm} \= 100.0 \hspace{100mm}[$B%a%=%C%I(B]\\
-\&key \= :hither  \hspace{5mm} \= 100.0 \` [$B%a%=%C%I(B]\\
+%\&key \= :hither  \hspace{5mm} \= 100.0 \hspace{100mm}[メソッド]\\
+\&key \= :hither  \hspace{5mm} \= 100.0 \` [メソッド]\\
       \> :yon    \> 1000.0 \\
       \> :aspect \> 1.0  \\
       \> :screen \> 100.0 \\
       \> :screen-x  \> screen \\
       \> :screen-y \> (* screen-x aspect) \\
       \>  \&allow-other-keys}{
-{\bf viewing}$B$H(B{\bf projection}$B$r=i4|2=$9$k!#(B}
+{\bf viewing}と{\bf projection}を初期化する。}
 
 \vspace{5mm}
 
 \classdesc{parallel-viewing}{projection}{()}{
-$BJ?9TEj1F$rDj5A$9$k!#(B
-{\bf hid}($B1"@~>C5n4X?t(B)$B$OJ?9TEj1F$G$O07$&$3$H$,=PMh$J$$!#(B}
+平行投影を定義する。
+{\bf hid}(陰線消去関数)は平行投影では扱うことが出来ない。}
 
 \metdesc{:make-projection}{}
 
 \classdesc{perspective-viewing}{projection}
-{(viewdistance)}{$BF);kEj1FJQ49$rDj5A$9$k!#(B}
+{(viewdistance)}{透視投影変換を定義する。}
 
 \metdesc{:make-projection}{ }
 \methoddesc{:ray}{u v}{
-$B;kE@$+$i@55,2=2hLL$N>e$K$"$k(B{\em (u,v)}$B$X$NC10LJ}8~%Y%/%H%k$rJV$9!#(B}
+視点から正規化画面の上にある{\em (u,v)}への単位方向ベクトルを返す。}
 \methoddesc{:viewdistance}{\&optional vd}{
-{\tt viewdistance}$B$O!";kE@$+$i2hLLKx$N5wN%$G$"$k!#(B
-$B$b$7!"(B{\em vd}$B$,M?$($i$l$?$J$i$P!"(B{\tt viewdistance}$B$K@_Dj$5$l$k!#(B
-{\tt viewdistance}$B$O!"%+%a%i$N>GE@5wN%$H0lCW$9$k!#(B
-{\em vd}$B$rBg$-$/$9$l$P!"%:!<%`%"%C%W$5$l$?(Bview$B$rF@$k$3$H$,$G$-$k!#(B
-{\bf :viewdistance}$B$O!"8=:_$N(B{\tt viewdistance}$B$rJV$9!#(B}
+{\tt viewdistance}は、視点から画面迄の距離である。
+もし、{\em vd}が与えられたならば、{\tt viewdistance}に設定される。
+{\tt viewdistance}は、カメラの焦点距離と一致する。
+{\em vd}を大きくすれば、ズームアップされたviewを得ることができる。
+{\bf :viewdistance}は、現在の{\tt viewdistance}を返す。}
 \methoddesc{:view-angle}{\&optional ang}{
-$B2hLL$NBP3Q@~$r8+9~$`3QEY$,(B{\em ang}$B%i%8%"%s$G$"$k$h$&$K2hLL$NBg$-$5$r@_Dj$9$k!#(B
-20$BEY(B($BLs(B0.4$B%i%8%"%s(B)$B$+$i(B50$BEY(B($BLs(B0.9$B%i%8%"%s(B)$B$^$G$N3QEY$,<+A3$JF);k(Bview
-$B$r@8@.$9$k$3$H$,$G$-$k!#(B
-$B3QEY$rBg$-$/$9$k$HOD$s$@(Bview$B$r@8@.$9$k!#(B
-$B$=$7$F!"69$/$9$k$HD>3Q(B($BJ?9T(B)viewing$B$N$h$&$JJ?C3$J(Bview$B$,@8@.$5$l$k!#(B
-{\bf :view-angle}$B$O!"8=:_$N;k3Q$"$k$$$O?7$7$$;k3Q$r%i%8%"%s$GJV$9!#(B}
+画面の対角線を見込む角度が{\em ang}ラジアンであるように画面の大きさを設定する。
+20度(約0.4ラジアン)から50度(約0.9ラジアン)までの角度が自然な透視view
+を生成することができる。
+角度を大きくすると歪んだviewを生成する。
+そして、狭くすると直角(平行)viewingのような平坦なviewが生成される。
+{\bf :view-angle}は、現在の視角あるいは新しい視角をラジアンで返す。}
 \methoddesc{:zoom}{\&optional scale}{
-$B$b$7!"(B{\em scale}$B$,M?$($i$l$?$J$i$P!"2hLL$O(B{\em scale}$B$K$h$C$F(B
-$B8=:_$NBg$-$5$rAjBPE*$KJQ2=$5$;$k!J(B{\tt viewdistance}$B$OJQ2=$7$J$$!K!#(B
-$B$b$7!"(B{\em scale}$B$K(B0.5$B$rM?$($k$J$i$P!"0JA0$N(Bview$B$h$j(B2$BG\9-$$(Bview$B$rF@$i$l$k!#(B
-{\bf :zoom}$B$O!"?7$7$$;k3Q$r%i%8%"%s$GJV$9!#(B}
+もし、{\em scale}が与えられたならば、画面は{\em scale}によって
+現在の大きさを相対的に変化させる（{\tt viewdistance}は変化しない）。
+もし、{\em scale}に0.5を与えるならば、以前のviewより2倍広いviewを得られる。
+{\bf :zoom}は、新しい視角をラジアンで返す。}
 \methoddesc{:lookaround}{alfa beta}{
-$B;kE@$r0\F0$72sE>$5$;$k!#(B
-$B2sE>Cf?4$O!";k@~$N>e$G(B{\tt hither}$BJ?LL$H(B{\tt yon}$BJ?LL$NCf4VE@(B
-$B$KM?$($i$l$k!#(B
-viewing$B:BI87O$O!"%o!<%k%I:BI87O$N(Bz$B<42s$j$K(B{\em alfa}$B%i%8%"%s2sE>$7!"(B
-$B%m!<%+%k:BI87O$N(Bx$B<42s$j$K(B{\em beta}$B%i%8%"%s2sE>$5$l$k!#(B
-{\bf :lookaround}$B$O!"(B{\bf viewing}$B$NCf?4$K$"$k%*%V%8%'%/%H2s$j$K;k@~$r(B
-$BF0$+$9$3$H$,$G$-$k!#(B}
+視点を移動し回転させる。
+回転中心は、視線の上で{\tt hither}平面と{\tt yon}平面の中間点
+に与えられる。
+viewing座標系は、ワールド座標系のz軸回りに{\em alfa}ラジアン回転し、
+ローカル座標系のx軸回りに{\em beta}ラジアン回転される。
+{\bf :lookaround}は、{\bf viewing}の中心にあるオブジェクト回りに視線を
+動かすことができる。}
 \methoddesc{:look-body}{bodies}{
-$B;k@~!"2hLL$NBg$-$5$*$h$S(Bhither/yon$B$r$9$Y$F$N(B{\em bodies}$B$KE,9g$9$k(Bviewport
-$B$H$J$k$h$&JQ$($k!#;kE@$OJQ2=$7$J$$!#(B
-$B;k@~$O!"$9$Y$F$N(B{\em bodies}$B$N(Bbounding box$B$NCf?4$rDL$k;k@~$+$iA*Br$5$l$k!#(B}
+視線、画面の大きさおよびhither/yonをすべての{\em bodies}に適合するviewport
+となるよう変える。視点は変化しない。
+視線は、すべての{\em bodies}のbounding boxの中心を通る視線から選択される。}
 
 \metdesc{:init}{ \&key (:viewdistance 100.0) \&allow-other-keys}
 
@@ -197,79 +197,79 @@ viewing$B:BI87O$O!"%o!<%k%I:BI87O$N(Bz$B<42s$j$K(B{\em alfa}$B%i%8%"%s2sE>$
 
 \subsection{Viewport}
 
-{\bf viewport}$B%/%i%9$O!"@55,%G%P%$%9:BI87O(B(NDC)$B$NCf$N(B3$B<!85(Bviewport$B$N%/%j%C%W(B
-$B$r<B9T$9$k!#$=$7$F!"%G%P%$%9$K0MB8$9$k:BI87O$K7k2L$r:n$k!#(B
-{\bf viewport}$B$O!"2hLL>e$N8+$($k;M3QNN0h$N6-3&I=8=$G$"$k!#(B
-{\bf viewport}$B$NJ*M}E*$JBg$-$5!J(Bx$B<4$H(By$B<4J}8~$N%I%C%H?t!K$O!"(B
-{\bf :init}$B%a%C%;!<%8$NCf$N(B{\em :width}$B$H(B{\em :height}$B$H$N0z$-?t(B
-$B$GM?$($i$l$J$1$l$P$J$i$J$$!#(B
-{\em :xcenter}$B$H(B{\em :ycenter}$B0z$-?t$O!"(Bviewport$B$NJ*M}E*$J0LCV$r7hDj$9$k!#(B
-$B2hLL$N86E@$+$i$N$=$l$>$l$N<!85$,@dBPE*$KM?$($i$l$F$$$k%F%/%H%m%K%/%9(B4014
-$B$N$h$&$J4pK\E*$J%G%#%9%W%l%$%G%P%$%9$r;H$C$F$$$k$H$-!"$3$l$i(B2$B$D$N%Q%i%a!<%?$O!"<B:]$K2hLL$N>e$K%*%V%8%'%/%H$rIA$/0LCV$r7hDj$9$k!#(B
-$B$b$7!"0LCV$,?F(Bwindow$B$+$iAjBPE*$K7h$^$k(BXwindow$B$N$h$&$J@:9*$J%G%#%9%W%l%$(B
-$B%G%P%$%9$r;H$C$F$$$k$J$i!"(B
-viewport$B$rF0$+$9$?$a$K(Bviewport$B$N%Q%i%a!<%?$rJQ$($kI,MW$O$J$$!#(B
-$B$J$<$J$i!"$3$l$i$N%Q%i%a!<%?$O!"<B:]$N%G%#%9%W%l%$0LCV$K0MB8$7$J$$$+$i$G$"$k!#!#(B
+{\bf viewport}クラスは、正規デバイス座標系(NDC)の中の3次元viewportのクリップ
+を実行する。そして、デバイスに依存する座標系に結果を作る。
+{\bf viewport}は、画面上の見える四角領域の境界表現である。
+{\bf viewport}の物理的な大きさ（x軸とy軸方向のドット数）は、
+{\bf :init}メッセージの中の{\em :width}と{\em :height}との引き数
+で与えられなければならない。
+{\em :xcenter}と{\em :ycenter}引き数は、viewportの物理的な位置を決定する。
+画面の原点からのそれぞれの次元が絶対的に与えられているテクトロニクス4014
+のような基本的なディスプレイデバイスを使っているとき、これら2つのパラメータは、実際に画面の上にオブジェクトを描く位置を決定する。
+もし、位置が親windowから相対的に決まるXwindowのような精巧なディスプレイ
+デバイスを使っているなら、
+viewportを動かすためにviewportのパラメータを変える必要はない。
+なぜなら、これらのパラメータは、実際のディスプレイ位置に依存しないからである。。
 
-{\bf viewport}$B%/%i%9$O!";M3QNN0h$N:82<$r(Bviewport$B$N86E@$H2>Dj$7$F$$$k!#(B
-$B$=$7$F!"(By$B<4$O>eJ}8~$K?-$S$F$$$k$H$9$k!#(B
-$B$7$+$7!"B?$/$N(Bwindow$B%7%9%F%`$d%G%#%9%W%l%$%G%P%$%9$G$O86E@$r:8>e$H$7!"(B
-y$B<4$,2<J}8~$K?-$S$F$$$k$H$7$F$$$k!#(B
-$B$3$NLdBj$r2sHr$9$k$?$a$K!"(B{\em :height}$B%Q%i%a!<%?$KIi$NCM$rM?$($l$P$h$$!#(B
+{\bf viewport}クラスは、四角領域の左下をviewportの原点と仮定している。
+そして、y軸は上方向に伸びているとする。
+しかし、多くのwindowシステムやディスプレイデバイスでは原点を左上とし、
+y軸が下方向に伸びているとしている。
+この問題を回避するために、{\em :height}パラメータに負の値を与えればよい。
 
 \begin{refdesc}
 
 \funcdesc{homo-viewport-clip}{v1 v2}{
-{\em v1}$B$H(B{\em v2}$B$O!"(B4$BMWAG$r;}$DF1<!%Y%/%H%k$G$"$C$F!"(B
-3$B<!856u4V$N@~J,$H$7$FI=8=$5$l$k!#(B
-$B$=$N@~J,$O!"(B$x=-1, x=1, y=-1, y=1, z=0, z=1$$B$N6-3&$G%/%j%C%W$5$l$k!#(B
-$B$=$7$F!"(B2$B$D$N%Y%/%H%k$N%j%9%H$rJV$9!#(B
-$B$b$7!"$=$N@~J,$,(B{\bf viewport}$B$N30B&$K40A4$KCV$+$l$F$$$k$J$i$P!"(B
-NIL$B$rJV$9!#(B}
+{\em v1}と{\em v2}は、4要素を持つ同次ベクトルであって、
+3次元空間の線分として表現される。
+その線分は、$x=-1, x=1, y=-1, y=1, z=0, z=1$の境界でクリップされる。
+そして、2つのベクトルのリストを返す。
+もし、その線分が{\bf viewport}の外側に完全に置かれているならば、
+NILを返す。}
 
 \classdesc{viewport}{coordinates}{}
-{viewport$BJQ49$O!"%G%P%$%9$G;XDj$5$l$k:BI87O$K(BNDC$B!J@55,2=%G%P%$%9:BI87O!K$r:n$k!#(B
-{\bf coordinates}$B%/%i%9$r7Q>5$7$F$$$k$?$a!"(B{\bf viewport}$B$O%5%$%:$HEj1F2hLL$N(B
-$BAjBP0LCV$rDj5A$7$F$$$k!#(B}
+{viewport変換は、デバイスで指定される座標系にNDC（正規化デバイス座標系）を作る。
+{\bf coordinates}クラスを継承しているため、{\bf viewport}はサイズと投影画面の
+相対位置を定義している。}
 
 \methoddesc{:xcenter}{\&optional xcenter}{
-$B$3$N(B{\bf viewport}$B$N(Bx$B<4$NCf?4$rJV$9!#(B
-$B$b$7!"(B{\em xcenter}$B$,M?$($i$l$F$$$l$P!"@_Dj$r9T$&!#(B}
+この{\bf viewport}のx軸の中心を返す。
+もし、{\em xcenter}が与えられていれば、設定を行う。}
 \methoddesc{:ycenter}{\&optional ycenter}{
-$B$3$N(B{\bf viewport}$B$N(By$B<4$NCf?4$rJV$9!#(B}
+この{\bf viewport}のy軸の中心を返す。}
 \methoddesc{:size}{\&optional size}{
-$B$3$N(B{\bf viewport}$B$N(Bx$B<4$H(By$B<4J}8~$NBg$-$5$N%j%9%H$rJV$9!#(B}
+この{\bf viewport}のx軸とy軸方向の大きさのリストを返す。}
 
-\methoddesc{:width}{ \&optional width}{$B$3$N(B{\bf viewport}$B$NI}$r(B{\em width}$B$K(B
-$B@_Dj$9$k!#(B}
-\methoddesc{:height}{ \&optional height}{$B$3$N(B{\bf viewport}$B$N9b$5$r(B
-{\em height}$B$K@_Dj$9$k!#(B}
+\methoddesc{:width}{ \&optional width}{この{\bf viewport}の幅を{\em width}に
+設定する。}
+\methoddesc{:height}{ \&optional height}{この{\bf viewport}の高さを
+{\em height}に設定する。}
 \methoddesc{:screen-point-to-ndc}{p}{
-{\em p}$B$O!"J*M}E*2hLL$NCf$N0LCV$rI=8=$9$k<B?t%Y%/%H%k$G$"$k!#(B
-{\em p}$B$O!"@55,2=%G%P%$%9:BI87O(B(NDC)$B$NCf$G$NI=8=$KJQ49$5$l$k!#(B}
+{\em p}は、物理的画面の中の位置を表現する実数ベクトルである。
+{\em p}は、正規化デバイス座標系(NDC)の中での表現に変換される。}
 \methoddesc{:ndc-point-to-screen}{p}{
-$B$3$N(B{\bf viewport}$B$N(BNDC$BI=8=$G$"$k(B{\em p}$B$r2hLL$NJ*M}E*0LCV$KJQ49$9$k!#(B}
+この{\bf viewport}のNDC表現である{\em p}を画面の物理的位置に変換する。}
 \methoddesc{:ndc-line-to-screen}{p1 p2 \&optional (do-clip t)}{
-2$B$D$N(B3$B<!85%Y%/%H%k(B{\em p1}$B$H(B{\em p2}$B$O!"(BNDC$B$NCf$N@~J,$rDj5A$9$k!#(B
-$B$3$l$i$N(B2$B$D$NC<E@$O!"2hLL6u4V$NI=8=$KJQ49$5$l$k!#(B
-$B$b$7!"(B{\em do-clip}$B$,(Bnon-NIL$B$J$i!"$=$N@~J,$O%/%j%C%W$5$l$k!#(B}
+2つの3次元ベクトル{\em p1}と{\em p2}は、NDCの中の線分を定義する。
+これらの2つの端点は、画面空間の表現に変換される。
+もし、{\em do-clip}がnon-NILなら、その線分はクリップされる。}
 \methoddesc{:init}{\&key (:xcenter 100) (:ycenter 100) (:size 100)
 (width 100) (height 100)}
-{$B?7$7$$(B{\bf viewport}$B%*%V%8%'%/%H$r:n$k!#(B}
+{新しい{\bf viewport}オブジェクトを作る。}
 
 \end{refdesc}
 
 \subsection{Viewer}
-$B2hLL$N>e$KIA2h$9$k$?$a$K$O!"(B4$B$D$N%*%V%8%'%/%H$,I,MW$G$"$k!#(B
-1$B$D$OIA$+$l$?%*%V%8%'%/%H!"(B2$B$D$O(Bviewing$B:BI87O$HEj1F$GDj5A$5$l$k(B{\bf viewing}$B!"(B
-3$B$D$O(BNDC$B$NCf$G$N%/%j%C%W=hM}$N$?$a$N(B{\bf viewport}$B$H(BNDC$B$+$iJ*M}E*2hLL:BI87O$X$N(B
-$BJQ49!"(B4$B$D$O(B
-$BJ*M}E*%G%#%9%W%l%$%G%P%$%9$N>e$KIA2h4X?t$r<B9T$9$k(B{\bf viewsurface}$B!#(B
-{\bf viewer}$B%*%V%8%'%/%H$O!"(B{\bf viewing}$B$H(B{\bf viewport}$B$H(B{\bf viewsurface}
-$B%*%V%8%'%/%H$r;}$A!"(B
-$B:BI87OJQ49$rO"B3E*$K@)8f$9$k!#(B
-\ref{Drawings}$B@a$K5-=R$5$l$k(B{\bf draw}$B$H(B{\bf hid}$B4X?t$O(B{\bf viewer}$B$N(B
-$B%$%s%9%?%s%9$r;HMQ$9$k!#(B
+画面の上に描画するためには、4つのオブジェクトが必要である。
+1つは描かれたオブジェクト、2つはviewing座標系と投影で定義される{\bf viewing}、
+3つはNDCの中でのクリップ処理のための{\bf viewport}とNDCから物理的画面座標系への
+変換、4つは
+物理的ディスプレイデバイスの上に描画関数を実行する{\bf viewsurface}。
+{\bf viewer}オブジェクトは、{\bf viewing}と{\bf viewport}と{\bf viewsurface}
+オブジェクトを持ち、
+座標系変換を連続的に制御する。
+\ref{Drawings}節に記述される{\bf draw}と{\bf hid}関数は{\bf viewer}の
+インスタンスを使用する。
 
 \begin{refdesc}
 
@@ -277,76 +277,76 @@ NIL$B$rJV$9!#(B}
 {(eye :type viewint) \\
 \> (port :type viewport) \\
 \> (surface :type viewsurface)} 
-{viewing$B$+$i(Bviewport$B$r7PM3$7$F(Bviewsurface$B$X0\$k(BCascaded Coordinates$B$NJQ49$rDj5A$9$k!#(B}
+{viewingからviewportを経由してviewsurfaceへ移るCascaded Coordinatesの変換を定義する。}
 
 \methoddesc{:viewing}{\&rest msg}{
-$B$b$7!"(B{\em msg}$B$,M?$($i$l$?$J$i$P!"(B{\em msg}$B$O(B{\bf viewing}{\tt (eye)}$B%*%V%8%'%/%H(B
-$B$KAw$i$l$k!#$=$&$G$J$1$l$P!"(B{\bf viewing}{\tt (eye)}$B%*%V%8%'%/%H$,JV$5$l$k!#(B}
+もし、{\em msg}が与えられたならば、{\em msg}は{\bf viewing}{\tt (eye)}オブジェクト
+に送られる。そうでなければ、{\bf viewing}{\tt (eye)}オブジェクトが返される。}
 \methoddesc{:viewport}{\&rest msg}{
-$B$b$7!"(B{\em msg}$B$,M?$($i$l$?$J$i$P!"(B{\em msg}$B$O(B{\bf viewport}{\tt (port)}$B%*%V%8%'%/%H(B
-$B$KAw$i$l$k!#$=$&$G$J$1$l$P!"(B{\bf viewport}{\tt (port)}$B%*%V%8%'%/%H$,JV$5$l$k!#(B}
+もし、{\em msg}が与えられたならば、{\em msg}は{\bf viewport}{\tt (port)}オブジェクト
+に送られる。そうでなければ、{\bf viewport}{\tt (port)}オブジェクトが返される。}
 \methoddesc{:viewsurface}{\&rest msg}{
-$B$b$7!"(B{\em msg}$B$,M?$($i$l$?$J$i$P!"(B{\em msg}$B$O(B{\bf viewsurface}{\tt (surface)}$B%*%V%8%'%/%H(B
-$B$KAw$i$l$k!#$=$&$G$J$1$l$P!"(B{\bf viewsurface}{\tt (surface)}$B%*%V%8%'%/%H$,JV$5$l$k!#(B}
+もし、{\em msg}が与えられたならば、{\em msg}は{\bf viewsurface}{\tt (surface)}オブジェクト
+に送られる。そうでなければ、{\bf viewsurface}{\tt (surface)}オブジェクトが返される。}
 \methoddesc{:adjust-viewport}{}{
-{\bf viewsurface}$B$NBg$-$5$,JQ$($i$l$?$H$-!"(B{\bf :adjust-viewport}$B$O(B
-{\tt port}$B$K8GM-$N%a%C%;!<%8$rAw$k$3$H$K$h$j(B{\bf viewport}$B$NJQ49$rJQ$($k!#(B}
+{\bf viewsurface}の大きさが変えられたとき、{\bf :adjust-viewport}は
+{\tt port}に固有のメッセージを送ることにより{\bf viewport}の変換を変える。}
 \methoddesc{:resize}{width height}{
-{\bf viewsurface}$B$K(B{\tt :resize}$B%a%C%;!<%8$rAw$j!"(B{\bf viewport}$B$K(B{\tt :size}$B%a%C%;!<%8$rAw$k(B
-$B$3$H$K$h$j(Bviewsurface$B$NBg$-$5$rJQ$($k!#(B}
+{\bf viewsurface}に{\tt :resize}メッセージを送り、{\bf viewport}に{\tt :size}メッセージを送る
+ことによりviewsurfaceの大きさを変える。}
 \methoddesc{:draw-line-ndc}{ p1 p2 \&optional (do-clip t)}{
-NDC$B$NCf$KDj5A$5$l$k(B2$B$D$NC<E@(B{\em p1,p2}$B$r7k$V@~$rIA$/!#(B}
+NDCの中に定義される2つの端点{\em p1,p2}を結ぶ線を描く。}
 \methoddesc{:draw-polyline-ndc}{polylines}{
-NDC$B$NCf$KDj5A$5$l$kC<E@$r7k$VB?3Q7A$rIA$/!#(B}
+NDCの中に定義される端点を結ぶ多角形を描く。}
 \methoddesc{:draw-star-ndc}{center \&optional (size 0.01)}{
-NDC$B$NCf$K==;z%^!<%/$rIA$/!#(B}
+NDCの中に十字マークを描く。}
 \methoddesc{:draw-box-ndc}{low-left up-right}{
-NDC$B$NCf$K;M3Q7A$rIA$/!#(B}
+NDCの中に四角形を描く。}
 \methoddesc{:draw-arc-ndc}{point width height angle1 angle2 \&optional color}{
-NDC$B$NCf$K1_8L$rIA$/!#(B
-$B$3$N(B{\bf viewer}$B$K7k$SIU$/(B{\bf viewsurface}$B%*%V%8%'%/%H$O!"(B{\bf :arc}$B%a%C%;!<%8$r(B
-$B<u$1$J$1$l$P$J$i$J$$!#(B}
+NDCの中に円弧を描く。
+この{\bf viewer}に結び付く{\bf viewsurface}オブジェクトは、{\bf :arc}メッセージを
+受けなければならない。}
 \methoddesc{:draw-fill-arc-ndc}{ point width height angle1 angle2 \&optional color}{
-NDC$B$NCf$KEI$jDY$71_8L$rIA$/!#(B}
+NDCの中に塗り潰し円弧を描く。}
 \methoddesc{:draw-string-ndc}{position string \&optional color}{
-NDC$B$NCf$KDj5A$5$l$k(B{\em position}$B$K(B{\em string}$B$rIA$/!#(B}
+NDCの中に定義される{\em position}に{\em string}を描く。}
 \metdesc{:draw-image-string-ndc}{position string \&optional color}
 \metdesc{:draw-rectangle-ndc}{position width height \&optional color}
 \metdesc{:draw-fill-rectangle-ndc}{point width height \&optional color}
 \methoddesc{:draw-line}{p1 p2 \&optional (do-clip t)}{
-$B%o!<%k%I:BI87O$KDj5A$5$l$k(B2$B$D$NC<E@(B{\em p1,p2}$B$r7k$V@~$rIA$/!#(B}
+ワールド座標系に定義される2つの端点{\em p1,p2}を結ぶ線を描く。}
 \methoddesc{:draw-star}{position \&optional (size 0.01)}{
-$B%o!<%k%I:BI87O$N(B{\em position}$B0LCV$K==;z%^!<%/$rIA$/!#(B}
+ワールド座標系の{\em position}位置に十字マークを描く。}
 \methoddesc{:draw-box}{center \&optional (size 0.01)}{
-$B%o!<%k%I:BI87O$N(B{\em center}$B$K;M3Q7A$rIA$/!#(B}
+ワールド座標系の{\em center}に四角形を描く。}
 \methoddesc{:draw-arrow}{p1 p2}{
-{\em p1}$B$+$i(B{\em p2}$B$X8~$1$F$NLp0u$rIA$/!#(B}
+{\em p1}から{\em p2}へ向けての矢印を描く。}
 \metdesc{:draw-edge}{edge}
 \metdesc{:draw-edge-image}{edge-image}
 \metdesc{:draw-faces}{face-list \&optional (normal-clip nil)}
 \metdesc{:draw-body}{body \&optional (normal-clip nil)}
 \methoddesc{:draw-axis}{coordinates \&optional size}{
-{\em coordinates}$B$GDj5A$5$l$k<4$r(B{\em size}$B$ND9$5$GIA$/!#(B}
+{\em coordinates}で定義される軸を{\em size}の長さで描く。}
 \methoddesc{:draw}{\&rest things}{
-3$B<!85$N4v2?3X%*%V%8%'%/%H$rIA$/!#(B
-$B$b$7!"%*%V%8%'%/%H$,(B3$B<!85%Y%/%H%k$J$i$P!"$=$N0LCV$K>.$5$J==;z%^!<%/$rIA$/!#(B
-$B$b$7!"(B3$B<!85%Y%/%H%k$N%j%9%H$G$"$l$P!"B?3Q7A$rIA$/!#(B
-$B$b$7!"(B{\em thing}$B$,(B{\tt :draw}$B%a%C%;!<%8$r<u$1$?$J$i$P!"(B
-$B$3$N(B{\bf viewer}$B$r0z$-?t$H$7$F$=$N%a%=%C%I$,8F$S=P$5$l$k!#(B
-$B$b$7!"%*%V%8%'%/%H$,(B{\tt :drawners}$B%a%=%C%I$rDj5A$7$F$$$k$J$i$P!"(B
-{\bf :draw}$B%a%C%;!<%8$O(B{\tt :drawners}$B$N7k2L$KAw$i$l$k!#(B
-{\tt line, edge, polygon, face}$B$*$h$S(B{\tt body}$B%*%V%8%'%/%H$O!"(B
-{\bf viewer}$B$KDj5A$5$l$F$$$k(B{\bf :draw-xxx}(xxx$B$K$=$N%*%V%8%'%/%H$N%/%i%9L>$,F~$k(B)
-$B%a%=%C%I$K$h$C$FIA$+$l$k!#(B}
+3次元の幾何学オブジェクトを描く。
+もし、オブジェクトが3次元ベクトルならば、その位置に小さな十字マークを描く。
+もし、3次元ベクトルのリストであれば、多角形を描く。
+もし、{\em thing}が{\tt :draw}メッセージを受けたならば、
+この{\bf viewer}を引き数としてそのメソッドが呼び出される。
+もし、オブジェクトが{\tt :drawners}メソッドを定義しているならば、
+{\bf :draw}メッセージは{\tt :drawners}の結果に送られる。
+{\tt line, edge, polygon, face}および{\tt body}オブジェクトは、
+{\bf viewer}に定義されている{\bf :draw-xxx}(xxxにそのオブジェクトのクラス名が入る)
+メソッドによって描かれる。}
 \methoddesc{:erase}{\&rest things}{
-$BGX7J?'$G(B{\em things}$B$rIA$/!#(B}
+背景色で{\em things}を描く。}
 \methoddesc{:init}{\&key :viewing :viewport :viewsurface}{
-{\em viewing, viewport}$B$*$h$S(B{\em viewsurface}$B$r$3$N(B{\bf viewer}$B$N%9%m%C%H(B
-{\tt eye, port}$B$H(B{\tt surface}$B$K@_Dj$9$k!#(B}
+{\em viewing, viewport}および{\em viewsurface}をこの{\bf viewer}のスロット
+{\tt eye, port}と{\tt surface}に設定する。}
 
 \longdescription{view}{\&key \= (:size 500) (:width size) (:height size)
-\` [$B4X?t(B] \\
-%\hspace{74mm} [$B4X?t(B] \\
+\` [関数] \\
+%\hspace{74mm} [関数] \\
 \> (:x 100) (:y 100) \\
 \> (:title "eusx") \\
 \> (:border-width 3) \\
@@ -355,174 +355,174 @@ NDC$B$NCf$KDj5A$5$l$k(B{\em position}$B$K(B{\em string}$B$rIA$/!#(B}
 \> (:viewdistance 5.0)  (:hither 100.0) (:yon 10000.0) \\
 \> (:screen 1.0) (:screen-x screen) (:screen-y screen) \\
 \> (:xcenter 500) (:ycenter 400) \\}
-{$B?7$7$$(B{\bf viewer}$B$r:n$j!"(B{\bf *viewer*}$B%j%9%H$KCV$/!#(B}
+{新しい{\bf viewer}を作り、{\bf *viewer*}リストに置く。}
 
 \end{refdesc}
 
 \newpage
-\subsection{\label{Drawings}$BIA2h(B}
+\subsection{\label{Drawings}描画}
 
 \begin{refdesc}
 
 \funcdesc{draw}{[viewer] \&rest thing}{
-{\em viewer}$B$K(B{\em thing}$B$rIA$/!#(B
-{\em thing}$B$O!":BI87O!"N)BN!"LL!"%(%C%8!"%Y%/%H%k!"(B2$B$D$N%Y%/%H%k$N%j%9%H$N$I$l$G$b2DG=$G$"$k!#(B
+{\em viewer}に{\em thing}を描く。
+{\em thing}は、座標系、立体、面、エッジ、ベクトル、2つのベクトルのリストのどれでも可能である。
 {\tt (progn (view) (draw (make-cube 10 20 30)))}
-$B$O!"(Bxwindow$B$KN)J}BN$rIA$/!#(B}
+は、xwindowに立方体を描く。}
 
 
 \funcdesc{draw-axis}{[viewer] [size] \&rest thing}{
-{\em viewer}$B$NCf$K(B{\em thing}$B$N:BI87O$N<4$r(B{\em size}$B$ND9$5$GIA$/!#(B
-{\em thing}$B$O!":BI87O$+$iF@$i$l$k$I$N%*%V%8%'%/%H$G$b2DG=$G$"$k!#(B}
+{\em viewer}の中に{\em thing}の座標系の軸を{\em size}の長さで描く。
+{\em thing}は、座標系から得られるどのオブジェクトでも可能である。}
 
 \funcdesc{draw-arrow}{p1 p2}{
-{\bf *viewer*}$B$K(B{\em p1}$B$+$i(B{\em p2}$B$K8~$+$&Lp0u$rIA$/!#(B}
+{\bf *viewer*}に{\em p1}から{\em p2}に向かう矢印を描く。}
 
 \funcdesc{hid}{[viewer] \&rest thing }
-{{\em viewer}$B$K1"@~=hM}$5$l$?2hA|$rIA$/!#(B
-{\em thing}$B$O!"(B{\tt face}$B$^$?$O(B{\tt body}$B$,2DG=$G$"$k!#(B}
+{{\em viewer}に陰線処理された画像を描く。
+{\em thing}は、{\tt face}または{\tt body}が可能である。}
 
 \funcdesc{hidd}{[viewer] \&rest thing }{
-$B1"@~$rE@@~$GIA$/$3$H$r=|$$$F!"(B{\bf hid}$B$HF1$8$G$"$k!#(B}
+陰線を点線で描くことを除いて、{\bf hid}と同じである。}
 
 \funcdesc{hid2}{body-list viewing}{
-edge-image$B%*%V%8%'%/%H$GI=8=$5$l$k1"@~=hM}2hA|$r@8@.$9$k!#(B
-$B$=$N7k2L$O(B{\bf *hid*}$B$KCV$+$l$k!#(B}
+edge-imageオブジェクトで表現される陰線処理画像を生成する。
+その結果は{\bf *hid*}に置かれる。}
 
-\longdescription{render}{\&key \= :bodies :faces (:viewer *viewer*) \` [$B4X?t(B]\\
+\longdescription{render}{\&key \= :bodies :faces (:viewer *viewer*) \` [関数]\\
 \> (:lights *light-sources*)\\
 \> (colormap *render-colormap*) (y 1.0)}{
-{\em bodies}$B$H(B{\em faces}$B$K%l%$%H%l!<%7%s%0$r9T$$!"1"LL>C5n$7$?2hA|$r@8@.$9$k!#(B
-{\bf viewing, viewport}$B$*$h$S(B{\bf viewsurface$B$O(B}$B!"(B{\em viewer}$B$+$iF@$i$l$k!#(B
-{\em lights}$B$O!"(B{\tt light-source}$B!J8w8;!K%*%V%8%'%/%H$N%j%9%H$G$"$k!#(B
-{\em colormap}$B$O!"(BXwindow$B$N(B{\bf colormap}$B%*%V%8%'%/%H$G$"$k!#(B
-$B$=$l$>$l$N(B{\em bodies}$B$H(B{\em faces}$B$O!"3d$jEv$F$i$l$k%+%i!<B0@-$r(B
-$B;}$?$J$1$l$P$J$i$J$$!#(B
-{\em colormap}$B$KDj5A$5$l$F$$$k%+%i!<(BLUT$B$NL>A0$r(B{\tt :color}$B%a%C%;!<%8$G(B
-$BAw$k$3$H$K$h$j%+%i!<B0@-$r@_Dj$G$-$k!#(B
-$B0lHL$K$3$N4X?t$O!"(BXlib$B4D6-2<$G$N$_F/$/!#(B
-{\tt demo/renderdemo.l}$B$N%5%s%W%k%W%m%0%i%`$r8+$k$3$H!#(B}
+{\em bodies}と{\em faces}にレイトレーシングを行い、陰面消去した画像を生成する。
+{\bf viewing, viewport}および{\bf viewsurfaceは}、{\em viewer}から得られる。
+{\em lights}は、{\tt light-source}（光源）オブジェクトのリストである。
+{\em colormap}は、Xwindowの{\bf colormap}オブジェクトである。
+それぞれの{\em bodies}と{\em faces}は、割り当てられるカラー属性を
+持たなければならない。
+{\em colormap}に定義されているカラーLUTの名前を{\tt :color}メッセージで
+送ることによりカラー属性を設定できる。
+一般にこの関数は、Xlib環境下でのみ働く。
+{\tt demo/renderdemo.l}のサンプルプログラムを見ること。}
 
 \funcdesc{make-light-source}{pos \&optional (intensity 1.0)}{
-{\em pos}$B$N0LCV$K8w8;%*%V%8%'%/%H$r:n$k!#(B
-{\em intensity}$B$O!"%G%U%)%k%H$N8w$N6/$5$rA}$93HBgHf$G$"$k!#(B
-$B$b$C$H@53N$K6/$5$r7hDj$9$k$?$a$K$O!"8w8;$N(B{\tt :intensity}$B%a%=%C%I$r(B
-$B;HMQ$9$k!#(B}
+{\em pos}の位置に光源オブジェクトを作る。
+{\em intensity}は、デフォルトの光の強さを増す拡大比である。
+もっと正確に強さを決定するためには、光源の{\tt :intensity}メソッドを
+使用する。}
 
 \macrodesc{tektro}{file \&rest forms}{
-{\tt *tektro-port*}$B%9%H%j!<%`$N$?$a$K(B{\em file}$B$r%*!<%W%s$7!"(B
-{\em forms}$B$rI>2A$9$k!#(B
-$B$3$l$O!"(Btektro$BIA2h$N=PNO$rD>@\(B{\em file}$B$K=q$-9~$`$?$a$K;HMQ$5$l$k!#(B}
+{\tt *tektro-port*}ストリームのために{\em file}をオープンし、
+{\em forms}を評価する。
+これは、tektro描画の出力を直接{\em file}に書き込むために使用される。}
 
 \macrodesc{kdraw}{file \&rest forms}{
-{\bf kdraw}$B$O!"(B{\tt kdraw}$B$^$?$O(B{\tt idraw}$B$GFI$_9~$a$k%]%9%H%9%/%j%W%H%U%!%$%k$r(B
-$B@8@.$9$k$?$a$N%^%/%mL?Na$G$"$k!#(B
-{\bf kdraw}$B$O!"(B{\tt :output}$B%b!<%I$G(B{\em file}$B$r%*!<%W%s$7!"(B
-{\tt *viewer*}$B$rCV$-49$($k$?$a$N(Bkdraw-viewsurface$B$H(Bviewport$B$r(B
-$B:n$j!"(B{\em forms}$B$rI>2A$9$k!#(B
-$B$=$l$>$l$N(B{\em forms}$B$O!"(B{\tt draw}$B$d(B{\tt hid}$B$N$h$&$JIA2h4X?t$N(B
-$B$I$l$+$r8F$S=P$9!#(B
-$B$3$l$i$N(B{\em forms}$B$+$i$NIA2h%a%C%;!<%8$O!"(B{\tt kdraw-viewsurface}$B$K(B
-$BD>@\=PNO$5$l$k!#$3$N=PNO$O(B{\tt idraw}$B$d(B{\tt kdraw}$B$GG'<1$G$-$k(B
-$B%]%9%H%9%/%j%W%HI=8=$K%a%C%;!<%8$rJQ49$9$k!#(B
-$B$=$7$F!"(B{\em file}$B$KC_@Q$9$k!#(B
-{\tt idraw}$B$^$?$O(B{\tt kdraw}$B$,8F$S=P$5$l(B{\em file}$B$,%*!<%W%s$5$l$?$H$-!"(B
-EusViewer window$B$K=q$$$?$b$N$HF10l$N?^7A$r8+$k$3$H$,$G$-$k!#(B
-$B$=$N?^7A$O!"(B{\tt idraw}$B$N5!G=$GJQ99$9$k$3$H$,$G$-$k!#(B
-$B$=$7$F!":G=*IA2h$O(B{\tt epsfile}$B4D6-$rMQ$$$k$3$H$K$h$j(B\LaTeX $B%I%-%e%a%s%H(B
-$B$KAH$_9~$`$3$H$,$G$-$k!#(B
-$B$3$N5!G=$O!"(B"llib/kdraw.l"$B$N%U%!%$%k$K5-=R$5$l$F$$$k!#(B}
+{\bf kdraw}は、{\tt kdraw}または{\tt idraw}で読み込めるポストスクリプトファイルを
+生成するためのマクロ命令である。
+{\bf kdraw}は、{\tt :output}モードで{\em file}をオープンし、
+{\tt *viewer*}を置き換えるためのkdraw-viewsurfaceとviewportを
+作り、{\em forms}を評価する。
+それぞれの{\em forms}は、{\tt draw}や{\tt hid}のような描画関数の
+どれかを呼び出す。
+これらの{\em forms}からの描画メッセージは、{\tt kdraw-viewsurface}に
+直接出力される。この出力は{\tt idraw}や{\tt kdraw}で認識できる
+ポストスクリプト表現にメッセージを変換する。
+そして、{\em file}に蓄積する。
+{\tt idraw}または{\tt kdraw}が呼び出され{\em file}がオープンされたとき、
+EusViewer windowに書いたものと同一の図形を見ることができる。
+その図形は、{\tt idraw}の機能で変更することができる。
+そして、最終描画は{\tt epsfile}環境を用いることにより\LaTeX ドキュメント
+に組み込むことができる。
+この機能は、"llib/kdraw.l"のファイルに記述されている。}
 
 \macrodesc{pictdraw}{file \&rest forms}{
-{\bf pictdraw}$B$O!"(BMacintosh$B$N(BPICT$B%U%)!<%^%C%H$G2hA|%U%!%$%k$r(B
-$B@8@.$9$k$?$a$N%^%/%m$G$"$k!#(B
-{\bf pictdraw}$B$O!"(B{\em file}$B$r(B{\tt :output}$B%b!<%I$G%*!<%W%s$7!"(B
-pictdraw-viewsurface$B$r:n$j!"(B{\tt *viewer*}$B$N(Bviewport$B$KCV$-49$(!"(B
-{\em forms}$B$rI>2A$9$k!#(B
-{\em forms}$B$O!"$=$l$>$l(B{\tt draw}$B$"$k$$$O(B{\tt hid}$B$N$h$&$JIA2h4X?t$N$I$l$+$r(B
-$B8F$S=P$9$b$N$G$"$k!#(B
-$B$3$l$i$N=q<0$+$i$NIA2h%a%C%;!<%8$O!"(B{\tt kdraw-viewsurface}$B$K(B
-$BD>@\=PNO$5$l$?8e!"(BPICT$B%U%)!<%^%C%H$X$N%a%C%;!<%8$KJQ49$5$l(B,
-{\em file}$B$XC_@Q$5$l$k!#(B
-$B$3$N(BPICT$B%U%)!<%^%C%H$O!"(BMacintosh$B$N(B{\tt macdraw}$B$d(B{\tt teachtext}$B$G(B
-$BG'<1$9$k$3$H$,$G$-$k!#(B}
+{\bf pictdraw}は、MacintoshのPICTフォーマットで画像ファイルを
+生成するためのマクロである。
+{\bf pictdraw}は、{\em file}を{\tt :output}モードでオープンし、
+pictdraw-viewsurfaceを作り、{\tt *viewer*}のviewportに置き換え、
+{\em forms}を評価する。
+{\em forms}は、それぞれ{\tt draw}あるいは{\tt hid}のような描画関数のどれかを
+呼び出すものである。
+これらの書式からの描画メッセージは、{\tt kdraw-viewsurface}に
+直接出力された後、PICTフォーマットへのメッセージに変換され,
+{\em file}へ蓄積される。
+このPICTフォーマットは、Macintoshの{\tt macdraw}や{\tt teachtext}で
+認識することができる。}
 
 \funcdesc{hls2rgb}{hue lightness saturation \&optional (range 255)}{
-HLS(Hue, Lightness, Saturation)$B$GI=8=$5$l$k?'$r!"(BRGB$BI=8=$KJQ49$9$k!#(B
-HLS$B$O!"$7$P$7$P(BHSL$B$H$7$F;2>H$5$l$k!#(B
-{\em hue}$B$O!"(Brainbow circle(0$B$+$i(B360)$B$N?'$GI=8=$5$l$k!#(B
-0$B$,@V$G(B45$B$,2+$G(B120$B$,NP$G(B240$B$,@D$G(B270$B$,;g$=$7$F(B360$B$,:F$S@V$H$J$k!#(B
-{\em lightness}$B$O!"(B0.0$B$+$i(B0.1$B$NCM$r;}$A!"9u$+$iGr$^$G$NL@$k$5$rI=8=$9$k!#(B
-{\em lightness}$B$,(B0$B$N$H$-$O!"(B{\em hue}$B$d(B{\em saturation}$B$K$+$+$o$i$:(B
-$B9u$H$J$k!#$=$7$F!"(B{\em lightness}$B$,(B1$B$N$H$-$O!"Gr$H$J$k!#(B
-{\em saturation}$B$O!"(B0.0$B$+$i(B1.0$B$^$G$NCM$r;}$A!"?'$N6/$5$rI=8=$9$k!#(B
-{\em saturation}$B$NCM$,Bg$-$$$HA/L@$J?'D4$r@8@.$7!">.$5$$CM$O<e$/By$C$??'D4(B
-$B$r@8@.$9$k!#(B
-{\em range}$B$O!"(BRGB$BCM$N8B3&$r<($9!#(B
-$B$b$7!"$=$l$>$l$N?'$K(B8$B%S%C%H$NCM$,3d$jEv$F$i$l$F$$$k%+%i!<%G%#%9%W%l%$(B
-$B$r;H$C$F$$$k$J$i$P!"(B{\em range}$B$O(B255$B$H$9$Y$-$G$"$k!#(B
-$B$b$7!"(BRGB$B$K(B16$B%S%C%H$N@0?t$,2>A[E*$K3d$jEv$F$i$l$F$$$k(BXwindow$B$r;H$C$F(B
-$B$$$k$J$i$P!"(B{\em range}$B$O(B65536$B$H$9$Y$-$G$"$k!#(B
-HSV$B$H(BHLS$B$H$N0c$$$KCm0U$9$k$3$H!#(B
-HLS$B$G$O!"A/L@$J(B(rainbow)$B?'$O(B{\tt lightness=0.5}$B$GDj5A$5$l$F$$$k!#(B}
+HLS(Hue, Lightness, Saturation)で表現される色を、RGB表現に変換する。
+HLSは、しばしばHSLとして参照される。
+{\em hue}は、rainbow circle(0から360)の色で表現される。
+0が赤で45が黄で120が緑で240が青で270が紫そして360が再び赤となる。
+{\em lightness}は、0.0から0.1の値を持ち、黒から白までの明るさを表現する。
+{\em lightness}が0のときは、{\em hue}や{\em saturation}にかかわらず
+黒となる。そして、{\em lightness}が1のときは、白となる。
+{\em saturation}は、0.0から1.0までの値を持ち、色の強さを表現する。
+{\em saturation}の値が大きいと鮮明な色調を生成し、小さい値は弱く濁った色調
+を生成する。
+{\em range}は、RGB値の限界を示す。
+もし、それぞれの色に8ビットの値が割り当てられているカラーディスプレイ
+を使っているならば、{\em range}は255とすべきである。
+もし、RGBに16ビットの整数が仮想的に割り当てられているXwindowを使って
+いるならば、{\em range}は65536とすべきである。
+HSVとHLSとの違いに注意すること。
+HLSでは、鮮明な(rainbow)色は{\tt lightness=0.5}で定義されている。}
 \funcdesc{rgb2hls}{red green blue \&optional (range 255)}{
-RGB$B$N?'I=8=$r!"(BHLS$BI=8=$KJQ49$9$k!#(B}
+RGBの色表現を、HLS表現に変換する。}
 
 \end{refdesc}
 
-\subsection{$B%"%K%a!<%7%g%s(B}
+\subsection{アニメーション}
 \index{animation}
-EusLisp$B$N%"%K%a!<%7%g%s$O!"%0%i%U%#%C%/%"%/%;%i%l!<%?$r;}$?$J$$(B
-$BIaDL$N%o!<%/%9%F!<%7%g%s>e$G$N5<;w%j%"%k%?%$%`%0%i%U%#%C%/%95!G=$rHw$($F$$$k!#(B
-$B$=$N4pK\E*$J9M$(J}$O!"D9$$;~4V$+$+$C$F@8@.$5$l$?(B1$BO"$N2hA|$r9bB.$K(B
-$B:FI=<($9$k$3$H$G$"$k!#(B
-$B2hA|$O(B2$B$D$NJ}K!$GJ]B8$5$l$k!#(B
-1$B$D$O!"40A4$J%T%/%;%k2hA|$r;}$D$?$/$5$s$N(BXwindow pixmap$B$rJ]B8$9$k!#(B
-$B$b$&(B1$B$D$O!"1"@~=hM}$GF@$i$l$k@~J,%G!<%?$rJ]B8$9$k!#(B
-$BA0<T$O!"9bB.$G1"LL=hM}$5$l$?2hA|$rI=<($9$k$?$a$NJ}K!$G$"$k$,!"(B
-$BD9$$%"%K%a!<%7%g%s$G$O$?$/$5$s$N%a%b%j!<$r(BX server$B$KMW5a$9$k$?$a(B
-$BE,$5$J$$!#(B
-$B8e<T$O!"%a%b%j!<$,>/$J$/$F:Q$_!"%G!<%?$r%G%#%9%/$KC_@Q$9$k$N$KE,$9$k!#(B
-$B$7$+$7!"@~J,$N?t$,A}2C$7$?$J$i$P!"@-G=$r0-2=$5$;$k!#(B
+EusLispのアニメーションは、グラフィックアクセラレータを持たない
+普通のワークステーション上での擬似リアルタイムグラフィックス機能を備えている。
+その基本的な考え方は、長い時間かかって生成された1連の画像を高速に
+再表示することである。
+画像は2つの方法で保存される。
+1つは、完全なピクセル画像を持つたくさんのXwindow pixmapを保存する。
+もう1つは、陰線処理で得られる線分データを保存する。
+前者は、高速で陰面処理された画像を表示するための方法であるが、
+長いアニメーションではたくさんのメモリーをX serverに要求するため
+適さない。
+後者は、メモリーが少なくて済み、データをディスクに蓄積するのに適する。
+しかし、線分の数が増加したならば、性能を悪化させる。
 
-$BB>$NJ}K!$H$7$F!"IA$+$l$k%*%V%8%'%/%H$N9=@.$rF@$F!"(B
-{\bf *viewer*}$B$KIA2h$r@8@.$9$k4X?t$r%f!<%6!<$,:n$k$3$H$b$G$-$k!#(B
-{\bf pixmap-animation}$B$O!"(B{\em count}$B0z?t$G;XDj$5$l$??t$HF1$82s?t$3$N4X?t$r8F$S=P$9!#(B
-$B$=$l$>$l$N8F$S=P$78e!"(BXwindow$B$H2>Dj$5$l$k(B{\tt viewsurface}$B$NFbMF$O!"(B
-$B?7$7$/:n$i$l$?(BXwindow pixmap$B$K%3%T!<$5$l$k!#(B
-$B$3$l$i$N(Bpixmap$B$O!"(B{\bf playback-pixmap}$B$G:FI=<($5$l$k!#(B
-$BF1MM$K!"(B{\bf hid-lines-animation}$B$O(B{\bf hid}$B$N7k2L$+$i8+$($k@~J,$rH4$-=P$7!"(B
-$B%j%9%H$KC_@Q$9$k!#(B
-$B$=$N%j%9%H$O!"(B{\bf playback-hid-lines}$B$K$h$C$F:FI=<($5$l$k!#(B
+他の方法として、描かれるオブジェクトの構成を得て、
+{\bf *viewer*}に描画を生成する関数をユーザーが作ることもできる。
+{\bf pixmap-animation}は、{\em count}引数で指定された数と同じ回数この関数を呼び出す。
+それぞれの呼び出し後、Xwindowと仮定される{\tt viewsurface}の内容は、
+新しく作られたXwindow pixmapにコピーされる。
+これらのpixmapは、{\bf playback-pixmap}で再表示される。
+同様に、{\bf hid-lines-animation}は{\bf hid}の結果から見える線分を抜き出し、
+リストに蓄積する。
+そのリストは、{\bf playback-hid-lines}によって再表示される。
 
-$B0J2<$K<($94X?t$O!"(B"llib/animation.l"$B$KDj5A$5$l$F$*$j!"(B
-"llib/animdemo.l"$B$NCf$K$O(BETA3 $B%^%K%T%e%l!<%?$N%b%G%k$K4X$7$F(B
-{\bf hid-lines-animation}$B$rMQ$$$?%"%K%a!<%7%g%s$N(B
-$B%5%s%W%k%W%m%0%i%`$r4^$s$G$$$k!#(B
+以下に示す関数は、"llib/animation.l"に定義されており、
+"llib/animdemo.l"の中にはETA3 マニピュレータのモデルに関して
+{\bf hid-lines-animation}を用いたアニメーションの
+サンプルプログラムを含んでいる。
 
 \begin{refdesc}
 \macrodesc{pixmap-animation}{count \&rest forms}{
-{\em forms}$B$O!"(B{\em count}$B2sI>2A$5$l$k!#(B
-$B$=$l$>$l$NI>2A8e!"(B{\tt *viewsurface*}$B$NFbMF$O?7$7$$(Bpixmap$B$K%3%T!<$5$l$k!#(B
-{\em count}$BKg$N(B{\bf pixmap}$B$N%j%9%H$,!"JV$5$l$k!#(B}
+{\em forms}は、{\em count}回評価される。
+それぞれの評価後、{\tt *viewsurface*}の内容は新しいpixmapにコピーされる。
+{\em count}枚の{\bf pixmap}のリストが、返される。}
 \funcdesc{playback-pixmaps}{pixmaps \&optional (surf *viewsurface*)}{
-{\em pixmaps}$B%j%9%H$N$J$+$N(B{\bf pixmap}$B$O$=$l$>$l!"(B
-%{\em wait}$\mu$$BIC$N4V3V$r$*$$$F(B
-{\em surf}$B$KO"B3E*$K%3%T!<$5$l$k!#(B}
+{\em pixmaps}リストのなかの{\bf pixmap}はそれぞれ、
+%{\em wait}$\mu$秒の間隔をおいて
+{\em surf}に連続的にコピーされる。}
 
 \macrodesc{hid-lines-animation}{count \&rest forms}{
-{\bf hid}$B$X$N8F$S=P$7$r4^$`(B{\em forms}$B$,(B{\em count}$B2sI>2A$5$l$k!#(B
-$B$=$l$>$l$NI>2A8e!"(B{\bf *hid*}$B$,;}$D(B{\bf hid}$B$N7k2L$O8!:w$5$l!"(B
-$B8+$($k@~J,$O(B2$BE@0lAH$N%j%9%H$N7A$G=8$a$i$l$k!#(B
-{\em count}$BD9$5$N%j%9%H$,JV$5$l$k!#(B}
+{\bf hid}への呼び出しを含む{\em forms}が{\em count}回評価される。
+それぞれの評価後、{\bf *hid*}が持つ{\bf hid}の結果は検索され、
+見える線分は2点一組のリストの形で集められる。
+{\em count}長さのリストが返される。}
 \funcdesc{playback-hid-lines}{lines \&optional (view *viewer*)}{
-{\em lines}$B$O!"(B2$BE@0lAH$N%j%9%H$G$"$k!#(B
-{\em view}$B$N>e$K@~J,$rO"B3E*$KIA$/!#(B
-$BB>$N(Bpixmap$B$r3d$jEv$F$k$H$-$K%U%j%C%+!<%U%j!<%"%K%a!<%7%g%s$r@8@.$9$k$?$a$K(B
-2$B=E%P%C%U%!5;K!$,;HMQ$5$l$k!#(B}
+{\em lines}は、2点一組のリストである。
+{\em view}の上に線分を連続的に描く。
+他のpixmapを割り当てるときにフリッカーフリーアニメーションを生成するために
+2重バッファ技法が使用される。}
 
 \funcdesc{list-visible-segments}{hid-result}{
-{\em hid-result}$B$N(Bedge$B2hA|$N%j%9%H$+$i8+$($k@~J,$r=8$a$k!#(B}
+{\em hid-result}のedge画像のリストから見える線分を集める。}
 
 \end{refdesc}
 

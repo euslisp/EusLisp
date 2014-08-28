@@ -1,21 +1,21 @@
-\subsection{\label{Contact}$BN)BN$N@\?(>uBV2r@O(B}
+\subsection{\label{Contact}立体の接触状態解析}
 
-$B$3$N@a$N%a%=%C%I$*$h$S4X?t$O!"<!$N%U%!%$%k$K5-=R$5$l$F$$$k!#(B
+この節のメソッドおよび関数は、次のファイルに記述されている。
 {\bf contact/model2const.l, con\-tact/in\-e\-qual\-i\-ties.l, contact/drawconst.l}
 
 \begin{refdesc}
 
-\funcdesc{constrained-motion}{c}{$B94B+(B{\em c}$B$rK~$?$7$F$$$k(B
-$BF0:n$N%j%9%H$rJV$9!#(B}
+\funcdesc{constrained-motion}{c}{拘束{\em c}を満たしている
+動作のリストを返す。}
 
-\funcdesc{constrained-force}{m}{$B94B+$5$l$F$$$k(B{\bf body}$B$+$i(B
-$B94B+$7$F$$$k(B{\bf body}$B$K2C$o$kNO$rJV$9!#(B{\em m}$B$O!"(B{\bf constrained-motion}
-$B$+$iJV$5$l$kF0:n$N%j%9%H$G$"$k!#(B}
+\funcdesc{constrained-force}{m}{拘束されている{\bf body}から
+拘束している{\bf body}に加わる力を返す。{\em m}は、{\bf constrained-motion}
+から返される動作のリストである。}
 
-\funcdesc{draw-constraint}{c}{$B94B+(B{\em c}$B$rIA$/!#(B}
+\funcdesc{draw-constraint}{c}{拘束{\em c}を描く。}
 
-\funcdesc{draw-motion}{m a b}{{\em a}$B$,(B{\em b}$B$K@\?($7$F$$$k$H$-$K(B
-$B<h$jF@$kF0:n$rIA$/!#%j%?!<%s%-!<$r2!$9$3$H$K$h$jIA2h$r;O$a$k!#(B}
+\funcdesc{draw-motion}{m a b}{{\em a}が{\em b}に接触しているときに
+取り得る動作を描く。リターンキーを押すことにより描画を始める。}
 \end{refdesc}
 Example\\
 \begin{verbatim}
@@ -50,7 +50,7 @@ Example\\
 (draw-motion m)
 \end{verbatim}
 \clearpage
-$B94B+$NNc$r<!$N?^$G<($9!#?^$N>.$5$JLp0u$O!$%Z%0$KBP$9$k94B+$r<($9!#(B
+拘束の例を次の図で示す。図の小さな矢印は，ペグに対する拘束を示す。
 \\
 \begin{figure}[h]
 \epsfile{file=fig/fig-peg-in-hole1.ps,width=7.9cm}
@@ -61,8 +61,8 @@ Example\\
 \label{fig:peg-in-hole}
 \end{figure}
 \clearpage
-$B%Z%0$r7j$KF~$l$k:n6H$K$*$$$F<h$jF@$kF0:n$NNc$r<!$N?^$G<($9!#(B
-$B$3$NNc$O!$>e5-$N%W%m%0%i%`$H0lCW$7$F$$$k!#(B
+ペグを穴に入れる作業において取り得る動作の例を次の図で示す。
+この例は，上記のプログラムと一致している。
 \begin{figure}[h]
 \begin{center}
 \epsfile{file=fig/fig-peg-naname-m1.ps,width=7.9cm}

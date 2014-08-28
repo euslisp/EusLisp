@@ -1,328 +1,328 @@
-\section{$B$O$8$a$K(B}
-\markright{\arabic{section}. $B$O$8$a$K(B}
-EusLisp$B$O!"CNG=%m%\%C%H$N8&5f$rL\E*$H$7$?8@8l$G!"(BCommon Lisp$B$H(B
-$B%*%V%8%'%/%H;X8~7?%W%m%0%i%_%s%0$r%Y!<%9$H$7$F$$$k!#%m%\%C%H$N8&5f$G$O!"(B
-$B%;%s%5%G!<%?$N=hM}!"4D6-G'<1!">c32J*2sHrF0:n7W2h!":n6H7W2h$J$I$,(B
-$B=EMW$J%F!<%^$H$7$F<h$j>e$2$i$l$k$,!"$3$l$i$K6&DL$9$k$N$O!"%m%\%C%H$H(B
-$B303&$N(B3$B<!854v2?%b%G%k$G$"$k!#(BEusLisp$B$r3+H/$9$kF05!$H$J$C$?$N$O!"(B
-$B5-9f=hM}%7%9%F%`$+$i4JC1$K;H$($F3HD%@-$N9b$$%=%j%C%I%b%G%i!<$N(B
-$BI,MW@-$rDK46$7$?$+$i$G$"$k!#4{B8$N%=%j%C%I%b%G%i!<$rD4$Y$F$o$+$C$?$3$H$O!"(B
-$B$=$N<B8=$K$H$C$F:G$b=EMW$J5!G=$O!"?tCM1i;;$G$O$J$/%b%G%kMWAG$N(B
-$B%H%]%m%8!<$rI=8=!"4IM}$9$k$?$a$N%j%9%H=hM}G=NO$G$"$C$?!#$b$A$m$s!"(B
-$B4v2?1i;;$b=EMW$G$O$"$k$,!"%Y%/%H%k!&9TNs$rA`:n$9$k4X?t$rAH$_9~$a$P(B
-$B==J,$G$"$k$3$H$,$o$+$C$?!#(B
+\section{はじめに}
+\markright{\arabic{section}. はじめに}
+EusLispは、知能ロボットの研究を目的とした言語で、Common Lispと
+オブジェクト指向型プログラミングをベースとしている。ロボットの研究では、
+センサデータの処理、環境認識、障害物回避動作計画、作業計画などが
+重要なテーマとして取り上げられるが、これらに共通するのは、ロボットと
+外界の3次元幾何モデルである。EusLispを開発する動機となったのは、
+記号処理システムから簡単に使えて拡張性の高いソリッドモデラーの
+必要性を痛感したからである。既存のソリッドモデラーを調べてわかったことは、
+その実現にとって最も重要な機能は、数値演算ではなくモデル要素の
+トポロジーを表現、管理するためのリスト処理能力であった。もちろん、
+幾何演算も重要ではあるが、ベクトル・行列を操作する関数を組み込めば
+十分であることがわかった。
 
-$B$3$&$7$F!"%=%j%C%I%b%G%i!<$O(BLisp$B$N>e$K<B8=$5$l$k$Y$-$G$"$k$H8@$&(B
-$B4pK\J}?K$,F@$i$l$?!#$5$i$K!"%=%j%C%I%b%G%i!<$O!"(B3$B<!85J*BN%b%G%k$r(B
-$BDj5A$7!"F0$-$r%7%_%e%l!<%H$7!"J*BN$NAj8_4X78$rI=8=$7!"%0%i%U%#%C%/%9$r(B
-$BI=<($9$k5!G=$rDs6!$9$k$,!"@h$K=R$Y$?3F<o$N%m%\%C%HLdBj$H7k9g$5$l$J$1(B
-$B$l$P0UL#$,$J$$!#$^$?!"%m%\%C%H$r40@.$5$l$?%7%9%F%`$H$7$F<B8=$9$k$K$O!"(B
-$B$3$l$i$N%m%\%C%HLdBj$r2r$/%b%8%e!<%k$,8z2LE*$KE}9g$5$l$J$1$l$P$J$i$J$$!#(B
-EusLisp$B$O!"$3$NE}9g$NOHAH$r%*%V%8%'%/%H;X8~$K5a$a$?!#%*%V%8%'%/%H;X8~$O!"(B
-$B%b%8%e%i!<%W%m%0%i%_%s%0$rB%?J$7!"7Q>55!G=$K$h$j4{B8$N5!G=$rCJ3,E*$K(B
-$B3HD%$9$k$3$H$,MF0W$K$J$k!#<B:]!">e5-$N%=%j%C%I%b%G%i!<$O!"J*BN!"LL!"(B
-$B%(%C%8$J$I$NJ*M}E*<BBN$N?6Iq$$$r%/%i%9$KDj5A$7!"%m%\%C%HLdBj$K0MB8$9$k(B
-$B5!G=$O!"$3$l$i$r%5%V%/%i%9$K3HD%$9$k$3$H$G8zN($h$/H/E8$5$;$i$l$k!#(B
-$B$3$l$O!"%=%U%H%&%'%";q8;$N:FMxMQ$K$b$D$J$,$k!#(B
+こうして、ソリッドモデラーはLispの上に実現されるべきであると言う
+基本方針が得られた。さらに、ソリッドモデラーは、3次元物体モデルを
+定義し、動きをシミュレートし、物体の相互関係を表現し、グラフィックスを
+表示する機能を提供するが、先に述べた各種のロボット問題と結合されなけ
+れば意味がない。また、ロボットを完成されたシステムとして実現するには、
+これらのロボット問題を解くモジュールが効果的に統合されなければならない。
+EusLispは、この統合の枠組をオブジェクト指向に求めた。オブジェクト指向は、
+モジュラープログラミングを促進し、継承機能により既存の機能を段階的に
+拡張することが容易になる。実際、上記のソリッドモデラーは、物体、面、
+エッジなどの物理的実体の振舞いをクラスに定義し、ロボット問題に依存する
+機能は、これらをサブクラスに拡張することで効率よく発展させられる。
+これは、ソフトウェア資源の再利用にもつながる。
 
-$B$3$&$7$F(BEusLisp$B$O!"%*%V%8%'%/%H;X8~$H(BCommonLisp$B$r%Y!<%9$H$7$F(B3$B<!854v2?%b%G%i!<(B
-$B$r<B8=$7!"J#?t%m%\%C%H$N6(D4F0:n$KI,MW$J%?%9%/4VDL?.5!G=!"%^%s%^%7%s(B
-$B%$%s%?%U%'!<%9$K=EMW$J%&%#%s%I%&!"%0%i%U%#%C%/%9!"J#9gE*%W%m%0%i%_%s%0$K(B
-$BI,MW$JB>8@8l%$%s%?%U%'!<%9Ey$rHw$(!"$5$^$6$^$J%m%\%C%HLdBj$X$NE,MQ$r(B
-$B2DG=$K$7$?%W%m%0%i%_%s%0%7%9%F%`$H$7$F9=C[$5$l$?!#$3$N$[$+!"%a%b%j4IM}$K$b(B
-$B9)IW$r6E$i$7!"%a%b%jMFNL0J30$K@8$8$kNN0h$NBg$-$5$K4X$9$k@)Ls$r6KNO(B
-$BGS=|$7!"%,!<%Y!<%8%3%l%/%7%g%s$,8zN(E*$K9T$J$o$l!"%f!<%6$,%a%b%j4IM}$K4X$9$k(B
-$B%Q%i%a!<%?$rA`:n$9$kI,MW$,$J$$$h$&$KEX$a$?!#(B
+こうしてEusLispは、オブジェクト指向とCommonLispをベースとして3次元幾何モデラー
+を実現し、複数ロボットの協調動作に必要なタスク間通信機能、マンマシン
+インタフェースに重要なウィンドウ、グラフィックス、複合的プログラミングに
+必要な他言語インタフェース等を備え、さまざまなロボット問題への適用を
+可能にしたプログラミングシステムとして構築された。このほか、メモリ管理にも
+工夫を凝らし、メモリ容量以外に生じる領域の大きさに関する制約を極力
+排除し、ガーベージコレクションが効率的に行なわれ、ユーザがメモリ管理に関する
+パラメータを操作する必要がないように努めた。
 
-$B$3$N%j%U%!%l%s%9%^%K%e%"%k$O!"(BEusLisp$B$N4pAC$H3HD%$KJ,$+$l!"(B
-$BA0<T$,(BCommon Lisp$B$N5!G=$H%*%V%8%'%/%H;X8~7?%W%m%0%i%_%s%0$r!"8e<T$,(B
-$B4v2?%b%G%k!"%m%\%C%H%b%G%k!"%&%#%s%I%&!"2hA|=hM}$J$I!"$h$j%m%\%C%H(B
-$B1~MQ$K6a$$ItJ,$r07$C$F$$$k!#%"%C%W%G!<%H>pJs$O!"(B\ref{License}$B@a$K=q$+$l(B
-$B$F$$$k$H$*$j!"(BEuslisp$B$N%a!<%j%s%0%j%9%H$+$iF~<j$9$k$3$H$,$G$-$k!#(B
+このリファレンスマニュアルは、EusLispの基礎と拡張に分かれ、
+前者がCommon Lispの機能とオブジェクト指向型プログラミングを、後者が
+幾何モデル、ロボットモデル、ウィンドウ、画像処理など、よりロボット
+応用に近い部分を扱っている。アップデート情報は、\ref{License}節に書かれ
+ているとおり、Euslispのメーリングリストから入手することができる。
 
-\subsection{EusLisp$B$K$*$1$k%*%V%8%'%/%H;X8~%W%m%0%i%_%s%0(B}
-EusLisp $B$O!"$=$NB>$N(BLisp$B$r4pAC$H$7$?%*%V%8%'%/%H;X8~%W%m%0%i%`8@8l!J(B
-$BNc$($P(BCLOS \cite{CLOS:Keene}$B!K$H0[$J$j!"%*%V%8%'%/%H;X8~$r4pAC$H$7$?(B
-Lisp$B%7%9%F%`$G$"$k!#(B
-$B0JA0$N9M$(J}$H$7$F!"(BLisp$B$O%*%V%8%'%/%H;X8~%W%m%0%i%_%s%0$r<B8=$9$k$?$a$N(B
-$B8@8l$H$7$F;HMQ$5$l!"$=$NCf$G%7%9%F%`$N%G!<%?7?$,$=$lAj1~$N%/%i%9$r(B
-$B;}$C$F$$$J$+$C$?$N$G!"%7%9%F%`Dj5A%*%V%8%'%/%H$H%f!<%6!<Dj5A(B
-$B%*%V%8%'%/%H$H$N4V$KL@$i$+$J6hJL$,$"$C$?!#(B
-$B0lJ}!"(BEusLisp$BFb$N?tCM$r=|$/A4$F$N%G!<%?9=B$$O(B
-$B%*%V%8%'%/%H$GI=8=$5$l$F$$$k!#(B
-$B$=$7$F!"FbIt%G!<%?7?!JNc$($P(B{\tt cons}$B$d(B{\tt symbols}$B!K$H%f!<%6!<Dj5A%/%i%9(B
-$B$H$N4V$KFCJL$J0c$$$O$J$$!#(B
-$B$3$l$O!"%7%9%F%`$NFbIt%G!<%?7?$G$5$(%f!<%6!<Dj5A$N%/%i%9$K$h$C$F(B
-$B3HD%!J7Q>5!K$G$-$k$3$H$r0UL#$9$k!#(B
-$B$^$?!"%f!<%6!<$,FbIt%/%i%9$N%5%V%/%i%9$H$7$F<+J,FH<+$N%/%i%9$rDj5A$7$?$H$-!"(B
-$B$=$N?7$7$$%/%i%9$KBP$7$FFbIt%a%=%C%I$*$h$SFbIt4X?t$r;HMQ$9$k$3$H$,$G$-!"(B
-$B?7$7$$%W%m%0%i%`$r5-=R$9$kNL$r8:$i$9$3$H$,$G$-$k!#(B
-$BNc$($P!"%-%e!<$d(Btree$B$d%9%?%C%/$J$I$rDj5A$9$k$?$a$K!"(B{\tt car}$B$d(B{\tt cdr}
-$B$H0[$J$C$?FCJL$JItJ,$r;}$D$h$&$K(B{\tt cons}$B%/%i%9$r3HD%$7$?$H$9$k!#(B
-$B$3$l$i$N%$%s%9%?%s%9$G$5$(!"(B
-{\tt cons}$B%/%i%9$NFbIt4X?t$,7?$N7Q>5$r0lDj;~4V$GG'<1$9$k$?$a!"(B
-$B$=$l$i$N4X?t$r$N%m%9;~4V$J$7$GE,MQ$G$-$k!#(B
-$B$7$?$,$C$F!"(BEusLisp$B$O%7%9%F%`$NA4$F$NFbIt5!G=!J3HD%2DG=$J%G!<%?7?$N7A<0!K$r(B
-$B%W%m%0%i%^!<$K8x3+$7$F$$$k!#(B
-$B$3$N2h0l@-$b$^$?!"(BEusLisp$B$N<B9T$N$?$a$KLr$KN)$D!#$J$<$J$i!"<B9T8@8l$NCf$G(B
-{\bf defclass}$B$d(B{\bf send}$B$d(B{\bf instantiate}$B$N$h$&$J6O$+$J3K$K$J$k4X?t$r(B
-$BDj5A$7$?8e$O!"FbIt%G!<%?7?$NFbIt9=B$$K%"%/%;%9$9$k$?$a$NBgItJ,$N4X?t$r(B
-EusLisp$B<+?H$G=q$/$3$H$,$G$-$k!#(B
-$B$3$l$O!"(BEusLisp$B$N3N<B@-$*$h$S0];}@-$r2~A1$9$k$b$N$G$"$k!#(B
+\subsection{EusLispにおけるオブジェクト指向プログラミング}
+EusLisp は、その他のLispを基礎としたオブジェクト指向プログラム言語（
+例えばCLOS \cite{CLOS:Keene}）と異なり、オブジェクト指向を基礎とした
+Lispシステムである。
+以前の考え方として、Lispはオブジェクト指向プログラミングを実現するための
+言語として使用され、その中でシステムのデータ型がそれ相応のクラスを
+持っていなかったので、システム定義オブジェクトとユーザー定義
+オブジェクトとの間に明らかな区別があった。
+一方、EusLisp内の数値を除く全てのデータ構造は
+オブジェクトで表現されている。
+そして、内部データ型（例えば{\tt cons}や{\tt symbols}）とユーザー定義クラス
+との間に特別な違いはない。
+これは、システムの内部データ型でさえユーザー定義のクラスによって
+拡張（継承）できることを意味する。
+また、ユーザーが内部クラスのサブクラスとして自分独自のクラスを定義したとき、
+その新しいクラスに対して内部メソッドおよび内部関数を使用することができ、
+新しいプログラムを記述する量を減らすことができる。
+例えば、キューやtreeやスタックなどを定義するために、{\tt car}や{\tt cdr}
+と異なった特別な部分を持つように{\tt cons}クラスを拡張したとする。
+これらのインスタンスでさえ、
+{\tt cons}クラスの内部関数が型の継承を一定時間で認識するため、
+それらの関数をのロス時間なしで適用できる。
+したがって、EusLispはシステムの全ての内部機能（拡張可能なデータ型の形式）を
+プログラマーに公開している。
+この画一性もまた、EusLispの実行のために役に立つ。なぜなら、実行言語の中で
+{\bf defclass}や{\bf send}や{\bf instantiate}のような僅かな核になる関数を
+定義した後は、内部データ型の内部構造にアクセスするための大部分の関数を
+EusLisp自身で書くことができる。
+これは、EusLispの確実性および維持性を改善するものである。
 
-\subsection{Euslisp$B$NFCD'(B}
+\subsection{Euslispの特徴}
 
 \begin{description}
-\item [$B%*%V%8%'%/%H;X8~%W%m%0%i%_%s%0(B]
-EusLisp$B$O!"C10l7Q>5%*%V%8%'%/%H;X8~%W%m%0%i%_%s%0$G$"$k!#(B
-$B?tCM$r=|$$$?A4$F$N%G!<%?7?$O!"%*%V%8%'%/%H$GI=8=$5$l!"$=$NF0:n$O(B
-$B$=$l$i$N%/%i%9$NCf$KDj5A$5$l$F$$$k!#(B
+\item [オブジェクト指向プログラミング]
+EusLispは、単一継承オブジェクト指向プログラミングである。
+数値を除いた全てのデータ型は、オブジェクトで表現され、その動作は
+それらのクラスの中に定義されている。
 \item [Common Lisp] 
-EusLisp$B$O!"(BEusLisp$B$N%4!<%k$d%*%V%8%'%/%H;X8~$H0lCW$9$k8B$j$K$*$$$F!"(B
-\cite{CLtL}$B$d(B\cite{CLtL2}$B$K=q$+$l$F$$$k(BCommon Lisp$B$NJ8K!$K=>$&!#(B
-$B<!$N@a$K8_49@-$K$D$$$F5-=R$9$k!#(B
-\item [$B%3%s%Q%$%i(B]
-EusLisp$B$N%3%s%Q%$%i$O!"%$%s%?%W%j%?$K$h$k<B9T$h$j$b(B5$B!A(B30$BG\<B9TB.EY$r(B
-$B>e$2$k$3$H$,$G$-$k!#(B
-$B%3%s%Q%$%i$O!"%$%s%?%W%j%?$HF10l$N9=J8$r;}$C$F$$$k!#(B
-\item[$B%a%b%j4IM}(B] 
-$B%U%#%\%J%C%A%P%G%#J}K!$O!"%a%b%j@)8f!&(BGC$B!&%m%P%9%H@)8f$KM-8z$J$?$a!"(B
-$B%a%b%j4IM}<jK!$H$7$F!";HMQ$5$l$F$$$k!#(B
-EusLisp $B$O!"Hf3SE*$KJ?6QE*$JNL$N%a%b%j$r;}$D%7%9%F%`$GF0:n$G$-$k!#(B
-$B%f!<%6!<$O!"$=$l$>$l$N%G!<%?7?Kh$N%Z!<%8%"%m%1!<%7%g%s$N:GE,2=(B
-$B$r9M$($kI,MW$,$J$$!#(B
-\item [$B4v2?3X4X?t(B]
-$B?tCM$O!"$$$D$bD>@\%G!<%?$H$7$FI=8=$5$l$k$?$a!"(B
-$B?tCM7W;;$K$h$C$F%4%_$OH/@8$7$J$$!#(B
-$BG$0U$NBg$-$5$N%Y%/%H%k!&9TNs$K$*$1$k$?$/$5$s$N4v2?3X4X?t$O!"(B
-$BFbIt4X?t$H$J$C$F$$$k!#(B
-\item [$B4v2?3X%b%G%i!<(B]
-$BN)BN%b%G%k$O!"(BCSG$B$N=hM}$r;HMQ$7$F!"4pK\E*$J7A$+$iDj5A$9$k$3$H$,$G$-$k!#(B
-$B<ANL$d43>D%A%'%C%/$d@\?(H=JLEy$rHw$($F$$$k!#(B
-\item [$B%0%i%U%#%C%/%9(B]
-$BIA2h;~$N1"@~=hM}$d%l%s%@%j%s%0;~$N1"LL=hM}$rHw$($F$$$k!#(B
-$B2hA|$r%]%9%H%9%/%j%W%H%G!<%?$H$7$F=PNO$G$-$k!#(B
-\item [$B2hA|=hM}(B]
-$B%(%C%8Cj=P5!G=$rHw$($F$$$k!#(B
-\item [$B%^%K%T%e%l!<%?%b%G%k(B]
-$B#6<+M3EY$r;}$D%m%\%C%H%^%K%T%e%l!<%?$r4JC1$K%b%G%k2=$G$-$k!#(B
-\item [Xwindow$B%$%s%?!<%U%'!<%9(B]
-Xlib$B$N4X?t8F$S=P$7$H(BXlib$B$N%/%i%9$*$h$SFH<+$N(BXToolKit$B%/%i%9$N(B3$B$D$N(B
-$B%l%Y%k$N(BXwindow$B%$%s%?!<%U%'!<%9$rHw$($F$$$k!#(B
-\item [$BB>8@8l%$%s%?!<%U%'!<%9(B]
-$B#C$dB>$N8@8l$G=q$+$l$?4X?t$r(BEusLisp$B$NCf$+$i8F$S=P$9$3$H$,$G$-$k!#(B
-EusLisp$B$HB>8@8l4V$NN>J}8~8F$S$@$7$rHw$($F$$$k!#(B
-LINPACK$B$N$h$&$J%i%$%V%i%jFb$N4X?t$O!"$3$N%$%s%?!<%U%'!<%9$rDL$7$F<B9T$5$l$k!#(B
-X toolkit$B$N(BCall-back$B4X?t$O(BLisp$B$XDj5A$9$k$3$H$,$G$-$k!#(B
-\item [UNIX$B0MB84X?t(B]
-$B$[$H$s$I$N(BUNIX$B$N%7%9%F%`8F$S$@$7$*$h$S%i%$%V%i%j4X?t$O!"(BLisp$B4X?t$H$7$F(B
-$BB7$C$F$$$k!#(B
-$BDL?.=hM}$dHsF14|F~=PNO$b2DG=$G$"$k!#(B
-\item[$B%^%k%A%9%l%C%I(B]
-$B%0%m!<%P%k%G!<%?$rJ,3d$7$F%^%k%A=hM}$r<B8=$9$k%^%k%A%9%l%C%I%W%m%0%i%_%s%0$,(B
-Solaris 2$B%*%Z%l!<%F%#%s%0%7%9%F%`$N>e$G2DG=$H$J$C$?!#(B
-$B%^%k%A%9%l%C%I$O!"HsF14|%W%m%0%i%_%s%0$rMF0W$K$7!"<B;~4V1~Ez$r2~A1$9$k(B\cite{MTEus1,MTEus2}$B!#(B
-$B$b$7!"%^%k%A%W%m%;%C%5$N%^%7%s>e$G(BEuslisp$B$r<B9T$9$k$J$i$P!"JBNs%W%m%;%C%5$N(B
-$B9b$$7W;;G=NO$rMxMQ$9$k$3$H$,$G$-$k!#(B
-%\item[$B%G%#%9%/J]B8(B]
-%EusLisp$B$N=hM}%$%a!<%8$O!"=i4|%m!<%I$rMF0W$K$7$+$D40A4$J%"%W%j%1!<%7%g%s$r:n$k$?$a$K(B
-%$B%G%#%9%/%U%!%$%k$NCf$K%;!<%V$G$-$k!#(B
+EusLispは、EusLispのゴールやオブジェクト指向と一致する限りにおいて、
+\cite{CLtL}や\cite{CLtL2}に書かれているCommon Lispの文法に従う。
+次の節に互換性について記述する。
+\item [コンパイラ]
+EusLispのコンパイラは、インタプリタによる実行よりも5〜30倍実行速度を
+上げることができる。
+コンパイラは、インタプリタと同一の構文を持っている。
+\item[メモリ管理] 
+フィボナッチバディ方法は、メモリ制御・GC・ロバスト制御に有効なため、
+メモリ管理手法として、使用されている。
+EusLisp は、比較的に平均的な量のメモリを持つシステムで動作できる。
+ユーザーは、それぞれのデータ型毎のページアロケーションの最適化
+を考える必要がない。
+\item [幾何学関数]
+数値は、いつも直接データとして表現されるため、
+数値計算によってゴミは発生しない。
+任意の大きさのベクトル・行列におけるたくさんの幾何学関数は、
+内部関数となっている。
+\item [幾何学モデラー]
+立体モデルは、CSGの処理を使用して、基本的な形から定義することができる。
+質量や干渉チェックや接触判別等を備えている。
+\item [グラフィックス]
+描画時の陰線処理やレンダリング時の陰面処理を備えている。
+画像をポストスクリプトデータとして出力できる。
+\item [画像処理]
+エッジ抽出機能を備えている。
+\item [マニピュレータモデル]
+６自由度を持つロボットマニピュレータを簡単にモデル化できる。
+\item [Xwindowインターフェース]
+Xlibの関数呼び出しとXlibのクラスおよび独自のXToolKitクラスの3つの
+レベルのXwindowインターフェースを備えている。
+\item [他言語インターフェース]
+Ｃや他の言語で書かれた関数をEusLispの中から呼び出すことができる。
+EusLispと他言語間の両方向呼びだしを備えている。
+LINPACKのようなライブラリ内の関数は、このインターフェースを通して実行される。
+X toolkitのCall-back関数はLispへ定義することができる。
+\item [UNIX依存関数]
+ほとんどのUNIXのシステム呼びだしおよびライブラリ関数は、Lisp関数として
+揃っている。
+通信処理や非同期入出力も可能である。
+\item[マルチスレッド]
+グローバルデータを分割してマルチ処理を実現するマルチスレッドプログラミングが
+Solaris 2オペレーティングシステムの上で可能となった。
+マルチスレッドは、非同期プログラミングを容易にし、実時間応答を改善する\cite{MTEus1,MTEus2}。
+もし、マルチプロセッサのマシン上でEuslispを実行するならば、並列プロセッサの
+高い計算能力を利用することができる。
+%\item[ディスク保存]
+%EusLispの処理イメージは、初期ロードを容易にしかつ完全なアプリケーションを作るために
+%ディスクファイルの中にセーブできる。
 \end{description}
 
-\subsection{Common Lisp$B$H$N8_49@-(B}
+\subsection{Common Lispとの互換性}
 
-Common Lisp$B$O!"$h$/K\$H$J$C$F$$$F9-$/F~<j$G$-$kI8=`E*$J(BLisp\cite{CLtL,CLtL2}
-$B$H$J$C$F$$$k!#(B
-$B$=$N$?$a!"(BEusLisp$B$O(BCommon Lisp$B$NFCD'$r$?$/$5$s:NMQ$7$F$$$k!#Nc$($P!"(B
-$BJQ?t%9%3!<%W%k!<%k!&%Q%C%1!<%8!&Ns!&0lHLJQ?t!&%V%m%C%/!&9=B$BN!&(B
-$B%-!<%o!<%I%Q%i%a!<%?$J$I$G$"$k$,!"Hs8_49$b$^$@;D$C$F$$$k!#(B
-$B<B8=$5$l$F$$$J$$FCD'$r<!$KNs5s$9$k!#(B
+Common Lispは、よく本となっていて広く入手できる標準的なLisp\cite{CLtL,CLtL2}
+となっている。
+そのため、EusLispはCommon Lispの特徴をたくさん採用している。例えば、
+変数スコープルール・パッケージ・列・一般変数・ブロック・構造体・
+キーワードパラメータなどであるが、非互換もまだ残っている。
+実現されていない特徴を次に列挙する。
 
 \begin{enumerate}
-\item $BB?CMJQ?t(B:
+\item 多値変数:
       multiple-value-call, multiple-value-prog1, etc.
-\item $B$$$/$D$+$N%G!<%?7?(B:
+\item いくつかのデータ型:
       complex number, bignum, ratio, character, deftype
-\item $B$$$/$D$+$NFC<l=q<0(B:
+\item いくつかの特殊書式:
       progv, compiler-let,macrolet
 \end{enumerate}
 
-$B<!$NFCD'$O!"$^$@40A4$G$J$$!#!'(B
+次の特徴は、まだ完全でない。：
 \begin{enumerate}
 \setcounter{enumi}{3}
-\item  closure -- $BF0E*HO0O$N$_M-8z$G$"$k!#(B
+\item  closure -- 動的範囲のみ有効である。
 %\item  package --  no shadowing-list
-\item  declare,proclaim -- inline$B$H(Bignore$B$OG'<1$5$l$J$$!#(B
+\item  declare,proclaim -- inlineとignoreは認識されない。
 \end{enumerate}
 
-\subsection{$B3+H/MzNr(B}
+\subsection{開発履歴}
 \begin{description}
-\item[1986] EusLisp$B$N:G=i$N%P!<%8%g%s$,(BUNIX-System5/Ustation-E20$B>e$GAv$C$?!#(B
-$B%U%#%\%J%C%A%P%G%#$N%a%b%j4IM}!&(BM68020$B$N%"%;%s%V%i%3!<%I$r@8@.$9$k%3%s%Q%$%i!&(B
-$B%Y%/%H%k!?9TNs4X?t$,%F%9%H$5$l$?!#(B
-\item[1987] $B?7$7$$9bB.7?%A%'%C%/J}K!$,<B8=$5$l$?!#(B
-$BB>8@8l%$%s%?%U%'!<%9$H(BSunView$B%$%s%?!<%U%'!<%9$,AH$_9~$^$l$?!#(B
-\item[1988] $B%3%s%Q%$%i$O!"Cf4V%3!<%I$H$7$F!"#C%W%m%0%i%`$r@8@.$9$k$h$&(B
-$BJQ99$5$l$?!#(B
-$B%3%s%Q%$%i$,Cf1{=hM}AuCV$HL54X78$H$J$C$?$?$a!"(B
-EusLisp$B$O4JC1$K(BUltrix/VAX8800$B$d(BSunOS3.5/Sun3$B$d(B/Sun4$B$N>e$K0\?"$5$l$?!#(B
-$B%=%1%C%H$r;HMQ$7$?(BIPC$B5!G=$,DI2C$5$l$?!#(B
-$B%=%j%C%I%b%G%i!<$,<B8=$5$l$?!#(B
-Common Lisp$B$NFCD'$NBgItJ,$,DI2C$5$l$?!#Nc$($P!"%-!<%o!<%I%Q%i%a!<%?!"(B
-$B:F5"E*%G!<%?%*%V%8%'%/%H$r07$&$?$a$NI=<(%U%)!<%^%C%H!"(B
-$B0lHLNs4X?t!"(B
-readtables, tagbody, go, flet, $B$d(B labels special forms, $BEy!#(B
-\item[1989] Xlib$B%$%s%?!<%U%'!<%9$,:n$i$l$?!#(B
-C$B$N$h$&$J?t<0I=8=$rFI$_9~$`(B\%$B%^%/%m$,:n$i$l$?!#(B
-$B%^%K%T%e%l!<%?$N%/%i%9$,Dj5A$5$l$?!#(B
-\item[1990] XView$B%$%s%?!<%U%'!<%9$,0pMU;a$K$h$j:n@.$5$l$?!#(B
-$B%l%$%H%l!<%5$,:n@.$5$l$?!#(B
-$B%=%j%C%I%b%G%i!<$,(BCSG$B=hM}MzNr$rJ];}$9$k$h$&=$@5$5$l$?!#(B
-$BHsF14|F~=PNO$,DI2C$5$l$?!#(B
-\item[1991] $BF0:n94B+%W%m%0%i%`$,HfN1@n;a$K$h$j:n@.$5$l$?!#(B
-DEC station$B$K0\?"$5$l$?!#(B
-Coordinates$B%/%i%9$,(B2$B<!85$H(B3$B<!85$NN>J}$N:BI87O$r07$($k$h$&JQ99$5$l$?!#(B
-Body$BAHN)4X?t$,@\?(%*%V%8%'%/%H$r07$($k$h$&3HD%$5$l$?!#(B
-$B@\?(%*%V%8%'%/%H$N$?$a$N(BCSG$B=hM}$,:n$i$l$?!#(B
-$B%Q%C%1!<%8%7%9%F%`$,(BCommon Lisp$B$H8_49$K$J$C$?!#(B
+\item[1986] EusLispの最初のバージョンがUNIX-System5/Ustation-E20上で走った。
+フィボナッチバディのメモリ管理・M68020のアセンブラコードを生成するコンパイラ・
+ベクトル／行列関数がテストされた。
+\item[1987] 新しい高速型チェック方法が実現された。
+他言語インタフェースとSunViewインターフェースが組み込まれた。
+\item[1988] コンパイラは、中間コードとして、Ｃプログラムを生成するよう
+変更された。
+コンパイラが中央処理装置と無関係となったため、
+EusLispは簡単にUltrix/VAX8800やSunOS3.5/Sun3や/Sun4の上に移植された。
+ソケットを使用したIPC機能が追加された。
+ソリッドモデラーが実現された。
+Common Lispの特徴の大部分が追加された。例えば、キーワードパラメータ、
+再帰的データオブジェクトを扱うための表示フォーマット、
+一般列関数、
+readtables, tagbody, go, flet, や labels special forms, 等。
+\item[1989] Xlibインターフェースが作られた。
+Cのような数式表現を読み込む\%マクロが作られた。
+マニピュレータのクラスが定義された。
+\item[1990] XViewインターフェースが稲葉氏により作成された。
+レイトレーサが作成された。
+ソリッドモデラーがCSG処理履歴を保持するよう修正された。
+非同期入出力が追加された。
+\item[1991] 動作拘束プログラムが比留川氏により作成された。
+DEC stationに移植された。
+Coordinatesクラスが2次元と3次元の両方の座標系を扱えるよう変更された。
+Body組立関数が接触オブジェクトを扱えるよう拡張された。
+接触オブジェクトのためのCSG処理が作られた。
+パッケージシステムがCommon Lispと互換になった。
 \item[1992]
-2$B$D$NJ?LL$N7k9g$d8r:9$r5a$a$k(B{\bf face+}$B$d(B{\bf face*}$B$,DI2C$5$l$?!#(B
-$B2hA|=hM}5!G=$,DI2C$5$l$?!#(B
-$B%j%U%!%l%s%9%^%K%e%"%k$NBh0lHG$,H/9T$5$l!"G[I[$5$l$?!#(B
+2つの平面の結合や交差を求める{\bf face+}や{\bf face*}が追加された。
+画像処理機能が追加された。
+リファレンスマニュアルの第一版が発行され、配布された。
 \item[1993]
-Euslisp$B$O!"A4$/JQ99$,$J$+$C$?!#(B
-\item[1994] Solaris 2$B$K0\?"$5$l$?!#(B
-Solaris$B$N%^%k%A%9%l%C%I5!G=$rMQ$$$F!"%^%k%A%?%9%/$,<B8=$5$l$?!#(B
-XToolKit$B$,9=C[$5$l$?!#(B
-$B%^%k%A%m%\%C%H%7%_%e%l!<%?(BMARS$B$,T"5H;a$K$h$j:n@.$5$l$?!#(B
-$BJ!2,$G3+:E$5$l$?F|K\%m%\%C%H3X2q3X=Q9V1i2q$K$*$$$F(B
-Euslisp$B$N%*!<%,%J%$%:%I%;%C%7%g%s$,3+$+$l$?!#(B
+Euslispは、全く変更がなかった。
+\item[1994] Solaris 2に移植された。
+Solarisのマルチスレッド機能を用いて、マルチタスクが実現された。
+XToolKitが構築された。
+マルチロボットシミュレータMARSが國吉氏により作成された。
+福岡で開催された日本ロボット学会学術講演会において
+Euslispのオーガナイズドセッションが開かれた。
 \item[1995]
-$B%j%U%!%l%s%9%^%K%e%"%k$NBhFsHG$,H/9T$5$l$?!#(B
-\item[2010] $B=$@5(BBSD$B%i%$%;%s%9$KJQ99$5$l(B,$B%P!<%8%g%s$,(B9.00$B$H$J$C$?!%(B
+リファレンスマニュアルの第二版が発行された。
+\item[2010] 修正BSDライセンスに変更され,バージョンが9.00となった．
 \end{description}
 
-\subsection{$B%$%s%9%H!<%k(B}
-$B%$%s%9%H!<%k$N<jB3$-$O!"(B{\tt README}$B$K5-=R$5$l$F$$$k!#(B
-$B%$%s%9%H!<%k$5$l$k%G%#%l%/%H%j!J(B{\tt "/usr/local/eus/"}$B$r2>Dj$9$k!K$O!"(B
-$B%0%m!<%P%kJQ?t(B{\tt *eusdir*}$B$K@_Dj$5$l$k!#$3$N>l=j$O!"(B{\bf load}$B$d%3%s%Q%$%i(B
-$B$,;2>H$9$k!#(B
+\subsection{インストール}
+インストールの手続きは、{\tt README}に記述されている。
+インストールされるディレクトリ（{\tt "/usr/local/eus/"}を仮定する）は、
+グローバル変数{\tt *eusdir*}に設定される。この場所は、{\bf load}やコンパイラ
+が参照する。
 
-{\tt *eusdir*}$B$N%5%V%G%#%l%/%H%j$O(B $B!"I=(B\ref{Directories}$B$K=q$$$F$"$k$H$*$j!#(B
-$B$3$l$i$NCf$G!"(B
-{\tt c/, l/, comp/, geo/, clib/, lib/} $B$d(B{\tt xwindow/}$B$O!"(Beus$B$d(Beusx$B$r:n@.$9$k$H$-$N(B
-$B4pK\%U%!%$%k$r4^$s$G$$$k!#(B
-$B$=$NB>$O!"IUB0%i%$%V%i%j!&%G%b%W%m%0%i%`!&%f!<%6!<$+$i$N4sB#IJ$G$"$k!#(B
+{\tt *eusdir*}のサブディレクトリは 、表\ref{Directories}に書いてあるとおり。
+これらの中で、
+{\tt c/, l/, comp/, geo/, clib/, lib/} や{\tt xwindow/}は、eusやeusxを作成するときの
+基本ファイルを含んでいる。
+その他は、付属ライブラリ・デモプログラム・ユーザーからの寄贈品である。
 
 \begin{table}
-\caption{\label{Directories}{\tt *eusdir*}$B$N%G%#%l%/%H%j(B}
+\caption{\label{Directories}{\tt *eusdir*}のディレクトリ}
 \begin{center}
 {\footnotesize
 \begin{tabular}{|l | l|}\hline 
-FILES &  $B$3$N%I%-%e%a%s%H(B \\
-README &  $B%i%$%;%s%9!&%$%s%9%H!<%k!&%5%s%W%k<B9T$N%,%$%I(B\\
-VERSION &  EusLisp $B$N%P!<%8%g%s(B\\
-bin/ &  $B<B9T%U%!%$%k(B(eus, euscomp$B$H(Beusx)\\
-c/ &  C$B$G=q$+$l$?(BEusLisp$B$N%+!<%M%k(B\\
-l/ &  EusLisp$B$G=q$+$l$?%+!<%M%k4X?t(B\\
-comp/ &  EusLisp$B$G=q$+$l$?(BEusLisp$B%3%s%Q%$%i(B\\
-clib/ &  C$B$G=q$+$l$?%i%$%V%i%j4X?t(B\\
-doc/ &  $B%I%-%e%a%s%H(B(latex$B$H(Bjlatex$B$N%F%-%9%H$H%a%b(B)\\
-geo/ &  $B4v2?3X4X?t$H%0%i%U%#%C%/%W%m%0%i%`(B\\
-lib/ & $B6&M-%i%$%V%i%j(B(.so)$B$H%9%?!<%H%"%C%W%U%!%$%k(B\\
-llib/ &  Lisp$B%i%$%V%i%j(B\\
-llib2/ &  Lisp$B%i%$%V%i%j(B2$B!J(BUTYO$B$G3+H/!K(B\\
-xwindow/ &  X11$B%$%s%?!<%U%'!<%9(B\\
-makefile@ &  makefile.sun[34]os[34],.vax$BEy$X$N%7%s%\%j%C%/%j%s%/(B\\
-pprolog/ &  tiny prolog$B$N%$%s%?!<%W%j%?(B\\
-xview/ &  xview tool kit$B%$%s%?!<%U%'!<%9(B\\
+FILES &  このドキュメント \\
+README &  ライセンス・インストール・サンプル実行のガイド\\
+VERSION &  EusLisp のバージョン\\
+bin/ &  実行ファイル(eus, euscompとeusx)\\
+c/ &  Cで書かれたEusLispのカーネル\\
+l/ &  EusLispで書かれたカーネル関数\\
+comp/ &  EusLispで書かれたEusLispコンパイラ\\
+clib/ &  Cで書かれたライブラリ関数\\
+doc/ &  ドキュメント(latexとjlatexのテキストとメモ)\\
+geo/ &  幾何学関数とグラフィックプログラム\\
+lib/ & 共有ライブラリ(.so)とスタートアップファイル\\
+llib/ &  Lispライブラリ\\
+llib2/ &  Lispライブラリ2（UTYOで開発）\\
+xwindow/ &  X11インターフェース\\
+makefile@ &  makefile.sun[34]os[34],.vax等へのシンボリックリンク\\
+pprolog/ &  tiny prologのインタープリタ\\
+xview/ &  xview tool kitインターフェース\\
 tool/ & \\
-vxworks/ & $B%j%"%k%?%$%`(BOS VxWorks$B$H$N%$%s%?!<%U%'!<%9(B\\
-robot/ & $B%m%\%C%H%b%G%k$H%m%\%C%H%7%_%e%l!<%?(B(MARS)\\
-vision/ &  $B2hA|=hM}%W%m%0%i%`(B\\
-contact/ & $B94B+F0:n2r@O!!HfN1@n;a:n(B
+vxworks/ & リアルタイムOS VxWorksとのインターフェース\\
+robot/ & ロボットモデルとロボットシミュレータ(MARS)\\
+vision/ &  画像処理プログラム\\
+contact/ & 拘束動作解析　比留川氏作
 \cite{Hirukawa:1991a,Hirukawa:1991b,Hirukawa:1991c}\\
-demo/ &  $B%G%b%W%m%0%i%`(B\\
-bench/ &  $B%Y%s%A%^!<%/%F%9%HMQ%W%m%0%i%`(B\\ \hline
+demo/ &  デモプログラム\\
+bench/ &  ベンチマークテスト用プログラム\\ \hline
 \end{tabular}
 }
 \end{center}
 \end{table}
 
-\subsection{\label{License}$B%i%$%;%s%9(B}
-EusLisp$B$O0J2<$N=$@5(BBSD$B%i%$%;%s%9$N85G[I[$5$l$F$$$k!%(B
+\subsection{\label{License}ライセンス}
+EusLispは以下の修正BSDライセンスの元配布されている．
 
 \begin{verbatim}
 Copyright (c) 1984-2001, National Institute of Advanced Industrial Science
 All rights reserved.
-$B%=!<%9%3!<%I7A<0$+%P%$%J%j7A<0$+!"JQ99$9$k$+$7$J$$$+$rLd$o$:!"0J2<$N>r(B
-$B7o$rK~$?$9>l9g$K8B$j!":FHRI[$*$h$S;HMQ$,5v2D$5$l$^$9!#(B
+ソースコード形式かバイナリ形式か、変更するかしないかを問わず、以下の条
+件を満たす場合に限り、再頒布および使用が許可されます。
 
-$B%=!<%9%3!<%I$r:FHRI[$9$k>l9g!">e5-$NCx:n8"I=<(!"K\>r7o0lMw!"$*$h$S2<5-(B
-$BLH@U>r9`$r4^$a$k$3$H!#(B
-$B%P%$%J%j7A<0$G:FHRI[$9$k>l9g!"HRI[J*$KIUB0$N%I%-%e%a%s%HEy$N;qNA$K!">e(B
-$B5-$NCx:n8"I=<(!"K\>r7o0lMw!"$*$h$S2<5-LH@U>r9`$r4^$a$k$3$H!#(B
-$B=qLL$K$h$kFCJL$N5v2D$J$7$K!"K\%=%U%H%&%'%"$+$iGI@8$7$?@=IJ$N@kEA$^$?$O(B
-$BHNGdB%?J$K!"(B<$BAH?%(B>$B$NL>A0$^$?$O%3%s%H%j%S%e!<%?!<$NL>A0$r;HMQ$7$F$O$J$i(B
-$B$J$$!#(B
-$BK\%=%U%H%&%'%"$O!"Cx:n8"<T$*$h$S%3%s%H%j%S%e!<%?!<$K$h$C$F!V8=>u$N$^$^!W(B
-$BDs6!$5$l$F$*$j!"L@<(L[<($rLd$o$:!">&6HE*$J;HMQ2DG=@-!"$*$h$SFCDj$NL\E*(B
-$B$KBP$9$kE,9g@-$K4X$9$k0EL[$NJ]>Z$b4^$a!"$^$?$=$l$K8BDj$5$l$J$$!"$$$+$J(B
-$B$kJ]>Z$b$"$j$^$;$s!#Cx:n8"<T$b%3%s%H%j%S%e!<%?!<$b!";vM3$N$$$+$s$rLd$o(B
-$B$:!"(B $BB;32H/@8$N860x$$$+$s$rLd$o$:!"$+$D@UG$$N:,5r$,7@Ls$G$"$k$+873J@U(B
-$BG$$G$"$k$+!J2a<:$=$NB>$N!KITK!9T0Y$G$"$k$+$rLd$o$:!"2>$K$=$N$h$&$JB;32(B
-$B$,H/@8$9$k2DG=@-$rCN$i$5$l$F$$$?$H$7$F$b!"K\%=%U%H%&%'%"$N;HMQ$K$h$C$F(B
-$BH/@8$7$?!JBeBXIJ$^$?$OBeMQ%5!<%S%9$ND4C#!";HMQ$NAS<:!"%G!<%?$NAS<:!"Mx(B
-  $B1W$NAS<:!"6HL3$NCfCG$b4^$a!"$^$?$=$l$K8BDj$5$l$J$$!KD>@\B;32!"4V@\B;(B
-$B32!"6vH/E*$JB;32!"FCJLB;32!"D(H3E*B;32!"$^$?$O7k2LB;32$K$D$$$F!"0l@Z@U(B
-$BG$$rIi$o$J$$$b$N$H$7$^$9!#(B
+ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、および下記
+免責条項を含めること。
+バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の資料に、上
+記の著作権表示、本条件一覧、および下記免責条項を含めること。
+書面による特別の許可なしに、本ソフトウェアから派生した製品の宣伝または
+販売促進に、<組織>の名前またはコントリビューターの名前を使用してはなら
+ない。
+本ソフトウェアは、著作権者およびコントリビューターによって「現状のまま」
+提供されており、明示黙示を問わず、商業的な使用可能性、および特定の目的
+に対する適合性に関する暗黙の保証も含め、またそれに限定されない、いかな
+る保証もありません。著作権者もコントリビューターも、事由のいかんを問わ
+ず、 損害発生の原因いかんを問わず、かつ責任の根拠が契約であるか厳格責
+任であるか（過失その他の）不法行為であるかを問わず、仮にそのような損害
+が発生する可能性を知らされていたとしても、本ソフトウェアの使用によって
+発生した（代替品または代用サービスの調達、使用の喪失、データの喪失、利
+  益の喪失、業務の中断も含め、またそれに限定されない）直接損害、間接損
+害、偶発的な損害、特別損害、懲罰的損害、または結果損害について、一切責
+任を負わないものとします。
 \end{verbatim}
 
-$B$J$*(B8.25$BHG$^$G$O0J2<$N%i%$%;%s%9$GG[I[$5$l$F$$$?!%(B
+なお8.25版までは以下のライセンスで配布されていた．
 
-$B%f!<%6!<$O!"%a!<%j%s%0%j%9%H(B(euslisp@etl.go.jp)$B$KEPO?$5$l!"$=$3$K#Q!u#A!&%P%0!&(B
-$B%"%C%W%G!<%H>pJs$rN.$9!#(B
-$B$3$N>pJs$O!"(B{\tt *eusdir*/doc/mails}$B$KC_@Q$5$l$F$$$k!#(B
+ユーザーは、メーリングリスト(euslisp@etl.go.jp)に登録され、そこにＱ＆Ａ・バグ・
+アップデート情報を流す。
+この情報は、{\tt *eusdir*/doc/mails}に蓄積されている。
 
 \begin{enumerate}
-\item EusLisp$B$NCx:n8"$O:n<T!J>>0f=S9@!K$*$h$SEE;R5;=QAm9g8&5f=j$KB0$9$k!#(B
-$B%f!<%6!<$O!":n<T$h$j;HMQ5v2D$rF@$kI,MW$,$"$k!#(B
-\item $B73;vL\E*0J30$G$"$l$P$I$s$JL\E*$N$?$a$K(BEusLisp$B$r;HMQ$7$F$b$h$$!#(B
-\item EusLisp$B$O(Bftp$B7PM3$GEE;R5;=QAm9g8&5f=j$+$i<+M3$KF@$k$3$H$,$G$-$k!#(B
-\item EusLisp$B$O$3$3$N>r9`$r<i$k8B$j$K$*$$$F%3%T!<$^$?$OHNGd$7$F$b9=$o$J$$!#(B
-$B$?$@$7!"HNGd$9$k:]!"HNGd<T$O%*%j%8%J%k$N(BEusLisp$B$,L5NA$G$"$k$3$H$r>CHq<T$K(B
-$BDLCN$7$J$1$l$P$J$i$J$$!#(B
-\item $B%i%$%;%s%9<hF@<T$,(BEsuLisp$B$r;HMQ$7$F8&5f!&3X=,$7$?7k2L$r8xI=$9$k:]!"(B
-EusLisp$B$N;HMQ$rFCDj;29MJ88%$H$7$F0zMQ$7$J$1$l$P$J$i$J$$!#(B
-\item $B%i%$%;%s%9<hF@<T$O!"(BEusLisp$B$N%=!<%9%3!<%I$rDI2C!&JQ99$7$F$b$h$$!#(B
-$B%W%m%0%i%`7k2L$O!"%3!<%I$N(B50\%$B0J>e$,JQ99$5$l$J$$8B$j(BEusLisp$B$G$"$j!"(B
-$BJQ99$7$F$$$J$$ItJ,$K$D$$$F$O!"$3$l$i$N>r9`$r<i$kI,MW$,$"$k!#(B
-\item EusLisp$B$G3+H/$5$l$?%W%m%0%i%`$NCx:n8"$O!"3+H/<T$KB0$9$k!#(B
-$B$7$+$7$J$,$i!"(BEusLisp$BK\BN$NCx:n8"$KIU$12C$($k$3$H$O$G$-$J$$!#(B
-\item $B:n<T$*$h$SEEAm8&$O;HMQ$K:]$7$F!"$I$s$JJ]>Z$b$7$J$$!#(B
+\item EusLispの著作権は作者（松井俊浩）および電子技術総合研究所に属する。
+ユーザーは、作者より使用許可を得る必要がある。
+\item 軍事目的以外であればどんな目的のためにEusLispを使用してもよい。
+\item EusLispはftp経由で電子技術総合研究所から自由に得ることができる。
+\item EusLispはここの条項を守る限りにおいてコピーまたは販売しても構わない。
+ただし、販売する際、販売者はオリジナルのEusLispが無料であることを消費者に
+通知しなければならない。
+\item ライセンス取得者がEsuLispを使用して研究・学習した結果を公表する際、
+EusLispの使用を特定参考文献として引用しなければならない。
+\item ライセンス取得者は、EusLispのソースコードを追加・変更してもよい。
+プログラム結果は、コードの50\%以上が変更されない限りEusLispであり、
+変更していない部分については、これらの条項を守る必要がある。
+\item EusLispで開発されたプログラムの著作権は、開発者に属する。
+しかしながら、EusLisp本体の著作権に付け加えることはできない。
+\item 作者および電総研は使用に際して、どんな保証もしない。
 \end{enumerate}
 
-\subsection{$B%G%b%W%m%0%i%`(B}
-$B%G%b%W%m%0%i%`$O!"%5%V%G%#%l%/%H%j(B{\tt demo}$B$NCf$K$"$k!#(B
-{\tt *eusdir*}$B$X(B{\tt cd}$B$7$?8e!"(Beusx$B>e$G<B9T$G$-$k!#(B
+\subsection{デモプログラム}
+デモプログラムは、サブディレクトリ{\tt demo}の中にある。
+{\tt *eusdir*}へ{\tt cd}した後、eusx上で実行できる。
 \begin{description}
-\item[$B%m%\%C%H%"%K%a!<%7%g%s(B] \index{animation}
-eusx$B$h$j(B{\tt demo/animdemo.l}$B$r%m!<%I$9$k!#(B
-$BLs(B20$BJ,$N7W;;$N8e!"(BETA3$B%^%K%T%e%l!<%?$N3j$i$+$J%"%K%a!<%7%g%s$,I=<($5$l$k!#(B
-($B?^(B\ref{animdemo})
-\item[$B%l!<%H%l!<%7%s%0(B] \index{ray-tracing}
-$B$b$7!"(B8$B%S%C%H$N5?;w%+%i!<%G%#%9%W%l%$$r;}$C$F$$$k$J$i!"(B
-{\tt demo/renderdemo.l}$B$r%m!<%I$7$F%l%$%H%l!<%7%s%02hA|$r3Z$7$`$3$H$,$G$-$k!#(B
-{\tt geo/render.l}$B$,@h$K%3%s%Q%$%k$5$l$F$$$k$3$H$,I,MW!#(B
-\item[$B%(%C%8Cj=P(B]
-{\tt demo/edgedemo.l}$B$r%m!<%I$9$k$H!"%5%s%W%kC1?'2hA|$,I=<($5$l$k!#(B
-$BHyJ,%*%Z%l!<%?$H$7$-$$CM$rA*$V$?$a$N%Q%i%a!<%?$rF~NO$9$k!#(B
-$B%(%C%8$,?tIC$N$&$A$KC5$5$l!"85$N2hA|$K>e=q$-$5$l$k!#(B
+\item[ロボットアニメーション] \index{animation}
+eusxより{\tt demo/animdemo.l}をロードする。
+約20分の計算の後、ETA3マニピュレータの滑らかなアニメーションが表示される。
+(図\ref{animdemo})
+\item[レートレーシング] \index{ray-tracing}
+もし、8ビットの疑似カラーディスプレイを持っているなら、
+{\tt demo/renderdemo.l}をロードしてレイトレーシング画像を楽しむことができる。
+{\tt geo/render.l}が先にコンパイルされていることが必要。
+\item[エッジ抽出]
+{\tt demo/edgedemo.l}をロードすると、サンプル単色画像が表示される。
+微分オペレータとしきい値を選ぶためのパラメータを入力する。
+エッジが数秒のうちに探され、元の画像に上書きされる。
 \end{description}
 
 \begin{figure}
 \epsfile{file=fig/eta3colavo.ps,width=150mm}
-\caption{\label{animdemo}$B>WFM2sHr7PO)7W2h$N%"%K%a!<%7%g%s(B}
+\caption{\label{animdemo}衝突回避経路計画のアニメーション}
 \end{figure}
 
 \bibliography{/net/atom/usr/users/matsui/biblio/lang,/net/atom/usr/users/matsui/biblio/hirukawa}
