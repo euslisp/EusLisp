@@ -1,54 +1,54 @@
-\section{$B%*%V%8%'%/%H;X8~%W%m%0%i%_%s%0(B}
-\markright{\arabic{section}. $B%*%V%8%'%/%H;X8~%W%m%0%i%_%s%0(B}
+\section{オブジェクト指向プログラミング}
+\markright{\arabic{section}. オブジェクト指向プログラミング}
 
-$B%*%V%8%'%/%H$N9=B$$HF0:n$O!"%/%i%9$NCf$K5-=R$5$l$F$$$k!#(B
-$B$=$l$i$O!"(B{\bf defclass}$B%^%/%m$d(B{\bf defmethod}$BFC<l=q<0$K$h$jDj5A$5$l$F$$$k!#(B
-{\bf defclass}$B$O!"%/%i%9$NL>A0!&$=$N%9!<%Q!<%/%i%9!&%9%m%C%HJQ?tL>$H%*%W%7%g%s$H$7$F(B
-$BG$0U$N7?$*$h$S%a%C%;!<%8$NA0J}$X$NAw?.$rDj5A$9$k!#(B
-{\bf defmethod}$B$O!"%a%C%;!<%8$,Aw$i$l$F$-$?$H$-8F$S=P$5$l$k(B
-$B%a%=%C%I$rDj5A$9$k!#(B
-$B%/%i%9Dj5A$O!"(Bsymbol$B$NFC<lCM$H$7$F3d$jEv$F$i$l$k!#(B
-{\bf $B%/%i%9(B}$B$O!"(BCommon Lisp$B$N(B{\bf sutructure}$B$N(Bcounter$BItJ,$H9M$($k$3$H$,$G$-$k!#(B
-$B%9%m%C%H%"%/%;%94X?t$H(B{\bf setf}$B%a%=%C%I$O!"(B{\bf defclass}$B$K$h$C$F$=$l$>$l$N(B
-$B%9%m%C%H$K<+F0E*$KDj5A$5$l$k!#(B
+オブジェクトの構造と動作は、クラスの中に記述されている。
+それらは、{\bf defclass}マクロや{\bf defmethod}特殊書式により定義されている。
+{\bf defclass}は、クラスの名前・そのスーパークラス・スロット変数名とオプションとして
+任意の型およびメッセージの前方への送信を定義する。
+{\bf defmethod}は、メッセージが送られてきたとき呼び出される
+メソッドを定義する。
+クラス定義は、symbolの特殊値として割り当てられる。
+{\bf クラス}は、Common Lispの{\bf sutructure}のcounter部分と考えることができる。
+スロットアクセス関数と{\bf setf}メソッドは、{\bf defclass}によってそれぞれの
+スロットに自動的に定義される。
 
-$BBgItJ,$N%/%i%9$O!"FbIt%/%i%9(B{\bf metaclass}$B$+$iGI@8$7$F$$$k!#(B
-{\bf metaclass}$B$N%5%V%/%i%9$G$"$k%/%i%9(B{\bf vector-class}
-$B$O%Y%/%H%k$N$?$a$N%a%?%/%i%9$G$"$k!#(B
-$B$b$7!"(Bclass-variables$B$d(Bclass-methods$B$r;H$$$?$$$H$-$O!"(B
-{\bf metaclass}$B$N%5%V%/%i%9$H$7$F<+J,FH<+$N%a%?%/%i%9$r:n$j!"(B
-$B%a%?%/%i%9$NL>A0$r(B{\tt :metaclass}$B$N%-!<%o!<%I$G(B{\bf defclass}$B$KM?$($l$P$h$$!#(B
+大部分のクラスは、内部クラス{\bf metaclass}から派生している。
+{\bf metaclass}のサブクラスであるクラス{\bf vector-class}
+はベクトルのためのメタクラスである。
+もし、class-variablesやclass-methodsを使いたいときは、
+{\bf metaclass}のサブクラスとして自分独自のメタクラスを作り、
+メタクラスの名前を{\tt :metaclass}のキーワードで{\bf defclass}に与えればよい。
 
-$B%Y%/%H%k$O!"$=$NB>$N(Brecord-like$B%*%V%8%'%/%H$H0c$C$F$$$k!#(B
-$B$J$<$J$i!"%Y%/%H%k$N%$%s%9%?%s%9$O!"G$0U$N?t$NMWAG$r;}$C$F$$$k$,!"(B
-record-like$B%*%V%8%'%/%H$O8GDj?t$N%9%m%C%H$r;}$C$F$$$k!#(B
-EusLisp$B$N%*%V%8%'%/%H$O!"(Brecord-like$B%*%V%8%'%/%H$+$^$?$O%Y%/%H%k$G$"$C$F!"(B
-$BN>J}F1;~$G$O$J$$!#(B
+ベクトルは、その他のrecord-likeオブジェクトと違っている。
+なぜなら、ベクトルのインスタンスは、任意の数の要素を持っているが、
+record-likeオブジェクトは固定数のスロットを持っている。
+EusLispのオブジェクトは、record-likeオブジェクトかまたはベクトルであって、
+両方同時ではない。
 
-$BMWAG$N7?$,7h$a$i$l$F$$$k$+$^$?$OMWAG$,F~$l$i$l$J$$%Y%/%H%k$b(B
-{\bf defclass}$B$K$h$C$FDj5A$9$k$3$H$,$G$-$k!#(B
-$B<!$NNc$NCf$G!"%/%i%9(B{\tt intvec5}$B$O#5$D$N(Binteger$BMWAG$r;}$D%/%i%9(B
-$B$H$7$FDj5A$5$l$F$$$k!#(B
-$B<+F07?H=Dj$H7?JQ49$O!"MWAG$,%$%s%?!<%W%j%?$K$h$C$F%"%/%;%9$5$l$?$H$-(B
-$B<B;\$5$l$k!#(B
-$B@5$7$$@k8@$G%3%s%Q%$%k$5$l$?$H$-!"9bB.$J%"%/%;%9%3!<%I$,@8@.$5$l$k!#(B
+要素の型が決められているかまたは要素が入れられないベクトルも
+{\bf defclass}によって定義することができる。
+次の例の中で、クラス{\tt intvec5}は５つのinteger要素を持つクラス
+として定義されている。
+自動型判定と型変換は、要素がインタープリタによってアクセスされたとき
+実施される。
+正しい宣言でコンパイルされたとき、高速なアクセスコードが生成される。
 
 \begin{verbatim}
 (defclass intvec5 :super vector :element-type :integer :size 5)
 (setq x (instantiate intvec5))  --> #i(0 0 0 0 0)
 \end{verbatim}
 
-$B%a%C%;!<%8$,%*%V%8%'%/%H$KAw$i$l$?$H$-!"(B
-$B0lCW$9$k%a%C%;!<%8$r:G=i$=$N%*%V%8%'%/%H$N%/%i%9$+$iC5$7!"<!$K$=$N%9!<%Q!<%/%i%9$+$iC5$7$F!"(B
-$B%9!<%Q!<%/%i%9$,?T$-$k$^$GC5$9!#(B
-$B$b$7!"%a%=%C%I$,Dj5A$5$l$F$J$+$C$?$J$i$P!"(B
-$BA0J}$N%j%9%H$,C5$5$l$k!#(B
-$B$3$NA0J}C5:w$O!"5?;wB?=E7Q>5$K$h$C$F:n$i$l$k!#(B
-$B$b$7!"C5:w$,<:GT$7$?$H$-$O!"(B{\tt :nomethod}$B$H$$$&%a%=%C%IL>$,C5$5$l!"(B
-$B%a%=%C%I$O!"A4$F$N0z?t$N%j%9%H$H0l=o$K8F$S=P$5$l$k!#(B
-$B<!$NNc$NCf$G!"%a%C%;!<%8(B{\tt :telephone}$B$H(B{\tt :mail}$B$O(B{\tt person}
-$B$H$$$&7?$N%*%V%8%'%/%H%9%m%C%H(B{\tt secretary}$B$KAw$i$l$k!#(B
-$B$=$7$F!"%a%C%;!<%8(B{\tt go-home}$B$O%9%m%C%H(B{\tt chauffeur}$B$KAw$i$l$k!#(B
+メッセージがオブジェクトに送られたとき、
+一致するメッセージを最初そのオブジェクトのクラスから探し、次にそのスーパークラスから探して、
+スーパークラスが尽きるまで探す。
+もし、メソッドが定義されてなかったならば、
+前方のリストが探される。
+この前方探索は、疑似多重継承によって作られる。
+もし、探索が失敗したときは、{\tt :nomethod}というメソッド名が探され、
+メソッドは、全ての引数のリストと一緒に呼び出される。
+次の例の中で、メッセージ{\tt :telephone}と{\tt :mail}は{\tt person}
+という型のオブジェクトスロット{\tt secretary}に送られる。
+そして、メッセージ{\tt go-home}はスロット{\tt chauffeur}に送られる。
 
 \begin{verbatim}
 (defclass president :super object
@@ -59,274 +59,274 @@ EusLisp$B$N%*%V%8%'%/%H$O!"(Brecord-like$B%*%V%8%'%/%H$+$^$?$O%Y%/%H%k$G$"$C$
                             (chauffeur  :forward (:go-home))))
 \end{verbatim}
 
-$B%a%=%C%I$K$*$$$F!"(B2$B$D$N%m!<%+%kJQ?t!J(B{\bf class}$B$H(B{\bf self}$B!K(B
-$B$,;HMQ2DG=$H$J$k!#(B
-$B$3$l$i$NJQ?t$OJQ99$9$Y$-$G$J$$!#(B
-$B$b$7!"JQ99$7$?$J$i$P!"%7%9%F%`$+$i6!5k$5$l$?JQ?t$O1#$5$l!"(B
-{\bf send-super}$B$H(B{\bf send self}$B$O@5$7$$F0:n$r$7$J$$!#(B
+メソッドにおいて、2つのローカル変数（{\bf class}と{\bf self}）
+が使用可能となる。
+これらの変数は変更すべきでない。
+もし、変更したならば、システムから供給された変数は隠され、
+{\bf send-super}と{\bf send self}は正しい動作をしない。
 
 
-\subsection{$B%/%i%9$H%a%=%C%I(B}
+\subsection{クラスとメソッド}
 
 \begin{refdesc}
 
 \longdescription{defclass}
-%{classname \&key \= :super object \hspace{85mm} [$B%^%/%m(B] \\
-{classname \&key \= :super object \` [$B%^%/%m(B] \\
+%{classname \&key \= :super object \hspace{85mm} [マクロ] \\
+{classname \&key \= :super object \` [マクロ] \\
 \> :slots (\{var $|$ (var [:type type] [:forward selectors])\}*) \\
 \> :metaclass metaclass \\
 \> :element-type t \\
 \> :size -1\\}
-{$B%/%i%9$r@8@.$^$?$O:FDj5A$9$k!#(B
-$B0[$J$C$?%9!<%Q!<%/%i%9$d%9%m%C%H$r;}$D%/%i%9$K:FDj5A$7$?$H$-!"(B
-$B%a%=%C%I$,?7$7$$%9%m%C%HG[CV$r2>Dj$9$k$?$a!"(B
-$B0JA0$N%/%i%9$r7Q>5$9$k8E$$%*%V%8%'%/%H$OM=A[$G$-$J$$?6Iq$$$r$9$k!#(B}
+{クラスを生成または再定義する。
+異なったスーパークラスやスロットを持つクラスに再定義したとき、
+メソッドが新しいスロット配置を仮定するため、
+以前のクラスを継承する古いオブジェクトは予想できない振舞いをする。}
 
 \specialdesc{defmethod}{classname \{(selector lambda-list . body)\}*}{
-{\em classname}$B$N(B1$B$D0J>e$N%a%=%C%I$rDj5A$9$k!#(B
-$B$=$l$>$l$N(B{\em selector}$B$O!"%-!<%o!<%I(Bsymbol$B$G$J$1$l$P$J$i$J$$!#(B}
+{\em classname}の1つ以上のメソッドを定義する。
+それぞれの{\em selector}は、キーワードsymbolでなければならない。}
 
 \macdesc{defclassmethod}{classname \{(selector lambda-list . body)\}*}
 
-\funcdesc{classp}{object}{{\em object}$B$,%/%i%9%*%V%8%'%/%H$N$H$-(BT$B$rJV$9!#(B
-$B$=$N%*%V%8%'%/%H$O!"%/%i%9(B{\bf metaclass}$B$+$=$N%5%V%/%i%9$N(B
-$B%$%s%9%?%s%9$G$"$k!#(B}
+\funcdesc{classp}{object}{{\em object}がクラスオブジェクトのときTを返す。
+そのオブジェクトは、クラス{\bf metaclass}かそのサブクラスの
+インスタンスである。}
 
 \funcdesc{subclassp}{class super}{
-{\em class}$B$,(B{\em super}$B$N%5%V%/%i%9$G$"$k$3$H$r8!::$9$k!#(B}
+{\em class}が{\em super}のサブクラスであることを検査する。}
 
 \funcdesc{vector-class-p}{x}{
-{\em x}$B$,!"(B{\bf vector-class}$B$N%$%s%9%?%s%9$G$"$k$H$-!"(BT$B$rJV$9!#(B}
+{\em x}が、{\bf vector-class}のインスタンスであるとき、Tを返す。}
 
 \funcdesc{delete-method}{class method-name}{
-{\em method-name}$B$N%a%=%C%IDj5A$r(B{\em class}$B$+$i=|$/!#(B}
+{\em method-name}のメソッド定義を{\em class}から除く。}
 
 \funcdesc{class-hierarchy}{class}{
-{\em class}$B$N2<$N7Q>59=B$$rI=<($9$k!#(B}
+{\em class}の下の継承構造を表示する。}
 
 \funcdesc{system:list-all-classes}{}{
-$B:#$^$GDj5A$5$l$?%/%i%9$rA4$F%j%9%H%"%C%W$9$k!#(B}
+今まで定義されたクラスを全てリストアップする。}
 
 \funcdesc{system:find-method}{object selector}{
-{\em selector}$B$K5-=R$5$l$?%a%=%C%I$r(B{\em object}$B$N%/%i%9$*$h$S(B
-$B$=$N%9!<%Q!<%/%i%9$NCf$+$i8+$D$1$k!#(B
-{\em object}$B$,!"(B{\em selector}$B$K1~$8$k$3$H$,$G$-$k$+$I$&$+$r(B
-$BCN$k$?$a$K;HMQ$5$l$k!#(B}
+{\em selector}に記述されたメソッドを{\em object}のクラスおよび
+そのスーパークラスの中から見つける。
+{\em object}が、{\em selector}に応じることができるかどうかを
+知るために使用される。}
 
 \funcdesc{system:method-cache}{\&optional flag}{
-$B%a%=%C%I%-%c%C%7%e$N%R%C%HN($rD4::$7!"(B
-$B%R%C%H$H%_%9$N(B2$B$D$N?tCM$N%j%9%H$rJV$9!#(B
-$B$b$7(B{\em flag}$B$,(BNIL$B$N$H$-!"%a%=%C%I%-%c%C%7%e$OL58z$K$J$k!#(B
-$B$b$7(Bnon-NIL$B$N(B{\em flag}$B$,M?$($i$l$?$H$-!"%a%=%C%I%-%c%C%7%e$O=i4|2=$5$l(B
-$B%-%c%C%7%e2DG=$K$J$k!#(B}
+メソッドキャッシュのヒット率を調査し、
+ヒットとミスの2つの数値のリストを返す。
+もし{\em flag}がNILのとき、メソッドキャッシュは無効になる。
+もしnon-NILの{\em flag}が与えられたとき、メソッドキャッシュは初期化され
+キャッシュ可能になる。}
 
 \end{refdesc}
 
-\subsection{$B%a%C%;!<%8Aw?.(B}
+\subsection{メッセージ送信}
 \begin{refdesc}
 
 \funcdesc{send}{object selector \{arg\}*}{
-{\em object}$B$K(B{\em selector}$B$H(B{\em arg}$B$G9=@.$5$l$k%a%C%;!<%8$rAw?.$9$k!#(B
-{\em object}$B$O!"2?$G$b$h$$$,?tCM$O$$$1$J$$!#(B
-{\em selector}$B$O%-!<%o!<%I$H$7$FI>2A$5$l$J$1$l$P$J$i$J$$!#(B}
+{\em object}に{\em selector}と{\em arg}で構成されるメッセージを送信する。
+{\em object}は、何でもよいが数値はいけない。
+{\em selector}はキーワードとして評価されなければならない。}
 
 \funcdesc{send-message}{target search selector \{arg\}*}{
-{\bf send-super}$B$r<B9T$9$k$?$a$NDc%l%Y%kL?Na$G$"$k!#(B}
+{\bf send-super}を実行するための低レベル命令である。}
 
 \macrodesc{send*}{object selector \&rest msg-list}{
-{\bf send*}$B$O!"0z?t$N%j%9%H$K(B{\bf send-message}$B$rE,MQ$9$k!#(B
-{\bf send}$B$H(B{\bf send*}$B$N4X78$O!"(B
-{\bf funcall}$B$H(B{\bf apply}$B$"$k$$$O(B{\bf list}$B$H(B{\bf list*}$B$N4X78$K;w$F$$$k!#(B}
+{\bf send*}は、引数のリストに{\bf send-message}を適用する。
+{\bf send}と{\bf send*}の関係は、
+{\bf funcall}と{\bf apply}あるいは{\bf list}と{\bf list*}の関係に似ている。}
 
 \funcdesc{send-all}{receivers selector \&rest mesg}{
-$BA4$F$N(B{\em receivers}$B$KF1$8%a%C%;!<%8$rAw?.$7!"7k2L$r%j%9%H$H$7$F=8$a$k!#(B}
+全ての{\em receivers}に同じメッセージを送信し、結果をリストとして集める。}
 
 \macrodesc{send-super}{selector \&rest msgs}{
-{\em msgs}$B$r(B{\tt self}$B$KAw?.$9$k$,!"(B
-$B%a%=%C%I$,Dj5A$5$l$F$$$k%/%i%9$N%9!<%Q!<%/%i%9$G$N(B
-$B%a%=%C%I$rC5$7;O$a$k!#(B
-$B%a%=%C%I$N30$N(B{\bf send-super}$B$O!"%(%i!<$H$J$k!J$9$J$o$A!"%a%=%C%IFb$G(B
-$B$J$1$l$P$J$i$J$$!K!#(B}
+{\em msgs}を{\tt self}に送信するが、
+メソッドが定義されているクラスのスーパークラスでの
+メソッドを探し始める。
+メソッドの外の{\bf send-super}は、エラーとなる（すなわち、メソッド内で
+なければならない）。}
 
 \macrodesc{send-super*}{selector \&rest msg-list}{
-{\bf send-super*}$B$O!"(B{\bf send-super}$B$N(Bapply$BHG$G$"$k!#(B}
+{\bf send-super*}は、{\bf send-super}のapply版である。}
 
 \end{refdesc}
 
-\subsection{$B%$%s%9%?%s%94IM}(B}
+\subsection{インスタンス管理}
 
 \begin{refdesc}
 
 \funcdesc{instantiate}{class \&optional size}{
-{\em class}$B$+$i?7$7$$%*%V%8%'%/%H$r:n$kDc%l%Y%kL?Na$G$"$k!#(B
-$B$b$7(B{\em class}$B$,(B{\bf vector-class}$B$J$i$P!"(B{\em size}$B$,$J$1$l$P$J$i$J$$!#(B}
+{\em class}から新しいオブジェクトを作る低レベル命令である。
+もし{\em class}が{\bf vector-class}ならば、{\em size}がなければならない。}
 
 \macrodesc{instance}{class \&rest message}{
-$B%$%s%9%?%s%9$,:n$i$l!"$=$3$K(B{\em message}$B$,Aw$i$l$k!#(B}
+インスタンスが作られ、そこに{\em message}が送られる。}
 
 \funcdesc{make-instance}{class \&rest var-val-pairs}{
-{\em class}$B$N%$%s%9%?%s%9$r:n@.$7!"%9%m%C%HJQ?t$r(B
-{\em var-val-pairs}$B$N$h$&$K@_Dj$9$k!#(B
-$BNc$($P!"(B{\tt (make-instance cons :car 1 :cdr 2)}
-$B$O!"(B{\tt (cons 1 2)}$B$HF1Ey$G$"$k!#(B}
+{\em class}のインスタンスを作成し、スロット変数を
+{\em var-val-pairs}のように設定する。
+例えば、{\tt (make-instance cons :car 1 :cdr 2)}
+は、{\tt (cons 1 2)}と同等である。}
 
 \funcdesc{copy-object}{object}{
-{\bf copy-object}$B4X?t$O!";2>H%H%]%m%8!<!J:F5";2>H$G$b9=$o$J$$!K$rJ]$C$?$^$^(B
-$B%3%T!<$9$k$?$a$K;HMQ$9$k!#(B
-{\bf copy-object}$B$O!"FH<+@-$NJ]B8$K?($l$J$$(Bsymbol$B$d%Q%C%1!<%8$r=|$$$F!"(B
-{\em object}$B$+$i%"%/%;%92DG=$J$I$s$J%*%V%8%'%/%H$b%3%T!<$9$k!#(B
-{\bf copy-object}$B$O!"%*%V%8%'%/%H$NCf$NA4$F$N;2>H$r(B2$BEYK832$9$k!#(B
-1$BEY$,!"?7$7$$%*%V%8%'%/%H$r:n$j4{$K%3%T!<$5$l$?%*%V%8%'%/%H$N%*%j%8%J%k$K(B
-$B%^!<%/$rIU$1$k$H$-!"$=$7$F%^!<%/$r>C$9$H$-$K$b$&(B1$BEY!#(B
-$B$3$N(B2$BCJ3,$N=hM}$O!"(B{\bf copy-object}$B$r(B{\bf copy-seq}$B$h$j$bCY$/$9$k!#(B
-$B$b$7=gHV$K%3%T!<$r$7$?$$$J$i$P!"(B
-{\bf copy-seq}$B$+(B{\bf copy-tree}$B$r;HMQ$9$k$3$H$rA&$a$k!#(B}
+{\bf copy-object}関数は、参照トポロジー（再帰参照でも構わない）を保ったまま
+コピーするために使用する。
+{\bf copy-object}は、独自性の保存に触れないsymbolやパッケージを除いて、
+{\em object}からアクセス可能などんなオブジェクトもコピーする。
+{\bf copy-object}は、オブジェクトの中の全ての参照を2度妨害する。
+1度が、新しいオブジェクトを作り既にコピーされたオブジェクトのオリジナルに
+マークを付けるとき、そしてマークを消すときにもう1度。
+この2段階の処理は、{\bf copy-object}を{\bf copy-seq}よりも遅くする。
+もし順番にコピーをしたいならば、
+{\bf copy-seq}か{\bf copy-tree}を使用することを薦める。}
 
 \funcdesc{become}{object class}{
-{\em object}$B$N%/%i%9$r(B{\em class}$B$KJQ99$9$k!#(B
-$B8E$$%/%i%9$H?7$7$$%/%i%9N>J}$N%9%m%C%H9=B$$O!"0lCW$7$J$1$l$P$J$i$J$$!#(B
-$BIaDL!"#2MWAG%Y%/%H%k4V$N%/%i%9JQ99$K$N$_0BA4$K;HMQ$9$k$3$H$,$G$-$k!#(B
-$BNc$($P!"@0?t%Y%/%H%k$+$i%S%C%H%Y%/%H%k$X$NJQ99!#(B}
+{\em object}のクラスを{\em class}に変更する。
+古いクラスと新しいクラス両方のスロット構造は、一致しなければならない。
+普通、２要素ベクトル間のクラス変更にのみ安全に使用することができる。
+例えば、整数ベクトルからビットベクトルへの変更。}
 
 \funcdesc{replace-object}{dest src}{
-{\em dest}$B$O!"(B{\em src}$B$N%5%V%/%i%9$N%$%s%9%?%s%9$G$J$1$l$P$J$i$J$$!#(B}
+{\em dest}は、{\em src}のサブクラスのインスタンスでなければならない。}
 
 \funcdesc{class}{object}{
-{\em object}$B$N%/%i%9%*%V%8%'%/%H$rJV$9!#(B
-$B%/%i%9L>$rF@$k$?$a$K!"%/%i%9%*%V%8%'%/%H$K(B{\tt :name}$B%a%C%;!<%8$rAw$k!#(B}
+{\em object}のクラスオブジェクトを返す。
+クラス名を得るために、クラスオブジェクトに{\tt :name}メッセージを送る。}
 
 \funcdesc{derivedp}{object class}{
-{\bf derivedp}$B$O!"(B{\em object}$B$,(B{\em class}$B$^$?$O$=$N%5%V%/%i%9$+$i(B
-$B%$%s%9%?%s%92=$5$l$F$$$k$+$I$&$+$rH=Dj$9$k!#(B
-{\bf subclassp}$B$H(B{\bf derivedp}$B4X?t$O!"%/%i%97Q>5$N$J$+$rC5:w$G$-$J$$!#(B
-$B$7$?$,$C$F!"0lDj;~4VFb$K7?$N%A%'%C%/$,$$$D$b=*N;$9$k!#(B}
+{\bf derivedp}は、{\em object}が{\em class}またはそのサブクラスから
+インスタンス化されているかどうかを判定する。
+{\bf subclassp}と{\bf derivedp}関数は、クラス継承のなかを探索できない。
+したがって、一定時間内に型のチェックがいつも終了する。}
 
 \funcdesc{slot}{object class (index $|$ slot-name)}{
-$B%9%m%C%HCM$NL>A0$+%$%s%G%C%/%9$rJV$9!#(B}
+スロット値の名前かインデックスを返す。}
 
 \funcdesc{setslot}{object class (index $|$ slot-name) value}{
-{\bf setslot}$B$O!"FbIt=hM}4X?t$G%f!<%6!<$,;HMQ$G$-$J$$!#(B
-$BBe$j$K!"(B{\bf setf}$B$H(B{\bf slot}$B$NAH$_9g$;$r;HMQ$9$k!#(B}
+{\bf setslot}は、内部処理関数でユーザーが使用できない。
+代りに、{\bf setf}と{\bf slot}の組み合せを使用する。}
 
 \end{refdesc}
 
-\subsection{$B4pK\%/%i%9(B}
+\subsection{基本クラス}
 
 \begin{refdesc}
 \classdesc{object}{}
 {}
-{object$B$O!":G$b4pK\$N%/%i%9$G$"$k!#$=$l$O!"%/%i%97Q>5$N:G>e0L$K0LCV$9$k!#(B
-$B%9%m%C%HJQ?t$,Dj5A$5$l$F$$$J$$$?$a!"(B{\bf object}$B$O%$%s%9%?%s%9$r:n$k$?$a$K(B
-$B;HMQ$7$J$$!#(B}
+{objectは、最も基本のクラスである。それは、クラス継承の最上位に位置する。
+スロット変数が定義されていないため、{\bf object}はインスタンスを作るために
+使用しない。}
 
 \methoddesc{:prin1}{\&optional stream \&rest mesg}{
-$BI8=`$N:FFI$_9~2DG=$J%*%V%8%'%/%H%U%)!<%^%C%H$N$J$+$K$"$k%*%V%8%'%/%H$r(B
-$BI=<($9$k!#(B
-$B$=$N%/%i%9L>$H%"%I%l%9$O!"3Q3g8L$G$/$/$i$l!"Id9f$rA0$KCV$/!#(B
-$B$I$N%*%V%8%'%/%H$N%5%V%/%i%9$b(B{\em mesg}$BJ8;zNs$G@bL@$9$k%^%/%m(B{\bf send-super}
-$B$r;H$C$F$b$C$H9-HO0O$J>pJs$H0l=o$K$=$l<+?H$r0u:~$9$k$N$K$3$NJ}K!$r(B
-$B;HMQ$9$k$3$H$,$G$-$k!#(B
-$B%*%V%8%'%/%H$O!"$b$7(B{\tt \#$<$}$B$G;O$^$k$J$i!":FFI$_9~$_2DG=$G$"$k!#(B
-%%% change 2004.12.14 $B$=$N%/%i%9L>!&@53N$J%"%I%l%9!&$I$N(BLisp$B$G$bFI$_9~2DG=$J>pJs!&(B\verb+>+$B$r$"$H$K(B
-$B$=$N%/%i%9L>!&@53N$J%"%I%l%9!&$I$N(BLisp$B$G$bFI$_9~2DG=$J>pJs!&(B\verb~>~$B$r$"$H$K(B
-$B=>$($F!#(B
-$BA4$F$N%G!<%?%*%V%8%'%/%H$O?tCM$r=|$$$F!"(B{\bf object}$B$r7Q>5$7$F$$$k!#(B
-$B$3$N9=J8$G=q<0$NI=<($,F@$i$l$k!#!J(Bsymbol$B$dJ8;zNs$G$b9=$o$J$$!K(B
-$B$3$N9=J8$G=R$Y$k$3$H$O!"(Bsymbol$B$K(B{\bf setq}$B$7K:$l$?%G!<%?%*%V%8%'%/%H$r(B
-$BGD0.$9$k$3$H$,$G$-$k!#(B
-$B$?$@$7!"I=<($5$l$?8e$K%,!<%Y!<%8%3%l%/%7%g%s$,5/$3$i$J$$8B$j$G$"$k!#(B
+標準の再読み込可能なオブジェクトフォーマットのなかにあるオブジェクトを
+表示する。
+そのクラス名とアドレスは、角括弧でくくられ、符号を前に置く。
+どのオブジェクトのサブクラスも{\em mesg}文字列で説明するマクロ{\bf send-super}
+を使ってもっと広範囲な情報と一緒にそれ自身を印刷するのにこの方法を
+使用することができる。
+オブジェクトは、もし{\tt \#$<$}で始まるなら、再読み込み可能である。
+%%% change 2004.12.14 そのクラス名・正確なアドレス・どのLispでも読み込可能な情報・\verb+>+をあとに
+そのクラス名・正確なアドレス・どのLispでも読み込可能な情報・\verb~>~をあとに
+従えて。
+全てのデータオブジェクトは数値を除いて、{\bf object}を継承している。
+この構文で書式の表示が得られる。（symbolや文字列でも構わない）
+この構文で述べることは、symbolに{\bf setq}し忘れたデータオブジェクトを
+把握することができる。
+ただし、表示された後にガーベージコレクションが起こらない限りである。
 }
 
 \methoddesc{:slots}{}{
-$BJQ?tL>$N%j%9%H$*$h$S%*%V%8%'%/%H$NA4$F$N%9%m%C%H$HBP$K$J$kCM$rJV$9!#(B
-$B$3$N%j%9%H$K(B{\bf assoc}$B$rE,MQ$9$k$3$H$K$h$j!"%9%m%C%H$N>\:YCM$,F@$i$l$k!#(B
-$B$7$+$7$J$,$i!"$=$l$i$rJQ99$9$k$3$H$O$G$-$J$$!#(B}
+変数名のリストおよびオブジェクトの全てのスロットと対になる値を返す。
+このリストに{\bf assoc}を適用することにより、スロットの詳細値が得られる。
+しかしながら、それらを変更することはできない。}
 
 \classdesc{propertied-object}{object}
 {plist}
-{property-list$B$r;}$D%*%V%8%'%/%H$rDj5A$9$k!#(B
-$BB>$N(BCommon Lisp$B$H0c$C$F!"(B
-EusLisp$B$O!"$?$H$(!"(Bsymbol$B$G$J$+$C$?$H$7$F$b!"(Bproperty-list$B$r;}$D(B
-{\bf propertied-object}$B$r7Q>5$9$k$I$s$J%*%V%8%'%/%H$b(B
-$B5v2D$9$k!#(B}
+{property-listを持つオブジェクトを定義する。
+他のCommon Lispと違って、
+EusLispは、たとえ、symbolでなかったとしても、property-listを持つ
+{\bf propertied-object}を継承するどんなオブジェクトも
+許可する。}
 
 \methoddesc{:plist}{\&optional plist}{
-$B$b$7(B{\em plist}$B$,L@5-$5$l$k$J$i$P!"$3$N%*%V%8%'%/%H$N(B{\tt plist}$B%9%m%C%H$K(B
-$B@_Dj$9$k!#$=$N$?$a!"0JA0$N(B{\tt plist}$B$NCM$O$J$/$J$k!#(B
-{\em plist}$B$O!"(B
-%%% change 2004.12.14 \verb+((indicator1 . value1) (indicator2 . value2) ...)+$B$N=q<0$K$9$Y$-$G$"$k!#(B
-\verb~((indicator1 . value1) (indicator2 . value2) ...)~$B$N=q<0$K$9$Y$-$G$"$k!#(B
-%%% change 2004.12.14 $B$=$l$>$l$N(B\verb+indicator+$B$O!"(B{\bf eq}$B4X?t$GEy2A(B
-%%% $B@-$r%F%9%H$5$l$?$I$N$h$&$J(B
-$B$=$l$>$l$N(B\verb~indicator~$B$O!"(B{\bf eq}$B4X?t$GEy2A@-$r%F%9%H$5$l$?$I$N$h$&$J(B
-lisp$B=q<0$b2DG=$G$"$k!#(B
-symbol$B$,(B{\tt indicator}$B$H$7$FMQ$$$i$l$?$H$-!"FbIt%Q%C%1!<%8$r9-$/<B9T$5$l$k(B
-$BEy2A@-$N%A%'%C%/$r3N<B$K$9$k$?$a$K%-!<%o!<%I$N;HMQ$r?dA&$9$k!#(B
-{\bf :plist}$B$O!"<g$J(B{\tt plist}$B$rJV$9!#(B}
+もし{\em plist}が明記されるならば、このオブジェクトの{\tt plist}スロットに
+設定する。そのため、以前の{\tt plist}の値はなくなる。
+{\em plist}は、
+%%% change 2004.12.14 \verb+((indicator1 . value1) (indicator2 . value2) ...)+の書式にすべきである。
+\verb~((indicator1 . value1) (indicator2 . value2) ...)~の書式にすべきである。
+%%% change 2004.12.14 それぞれの\verb+indicator+は、{\bf eq}関数で等価
+%%% 性をテストされたどのような
+それぞれの\verb~indicator~は、{\bf eq}関数で等価性をテストされたどのような
+lisp書式も可能である。
+symbolが{\tt indicator}として用いられたとき、内部パッケージを広く実行される
+等価性のチェックを確実にするためにキーワードの使用を推薦する。
+{\bf :plist}は、主な{\tt plist}を返す。}
 \methoddesc{:get}{indicator}{
-{\tt plist}$B$N$J$+$G(B{\em indicator}$B$H7k$SIU$/CM$rJV$9!#(B
+{\tt plist}のなかで{\em indicator}と結び付く値を返す。
 %%% change 2004.12.14 \verb+(send x :get :y) == (cdr (assoc :y (send x :plist)))+}
 \verb~(send x :get :y) == (cdr (assoc :y (send x :plist)))~}
 \methoddesc{:put}{indicator value}{
-{\tt plist}$B$N$J$+$G!"(B{\em value}$B$H(B{\em indicator}$B$r7k$SIU$1$k!#(B}
+{\tt plist}のなかで、{\em value}と{\em indicator}を結び付ける。}
 \methoddesc{:remprop}{indicator}{
-{\tt plist}$B$+$i(B{\em indicator}$B$H(Bvalue$B$NAH$r:o=|$9$k!#(B
-$B$5$i$K!"(B{\bf :get}$B$r;n$9$H(Bvalue$B$H$7$F(BNIL$B$rJV$9!#(B}
+{\tt plist}から{\em indicator}とvalueの組を削除する。
+さらに、{\bf :get}を試すとvalueとしてNILを返す。}
 \methoddesc{:name}{\&optional name}{
-{\tt plist}$B$N$J$+$N(B{\tt :name}$BFC@-$rDj5A$7!"<h$j=P$9!#(B
-$B$3$NFC@-$O!"I=<($N$?$a$K;HMQ$5$l$k!#(B}
+{\tt plist}のなかの{\tt :name}特性を定義し、取り出す。
+この特性は、表示のために使用される。}
 \methoddesc{:prin1}{\&optional stream \&rest mesg}{
-$B:FFI$_9~$_2DG=$J=q<0$N%*%V%8%'%/%H$rI=<($9$k!#(B
-$B$b$7%*%V%8%'%/%H$,(B{\tt :name}$BFC@-$r;}$C$F$$$k$J$i$P!"(B
-$B%*%V%8%'%/%H$N%"%I%l%9$N8e$KFC@-$rI=<($9$k!#(B}
+再読み込み可能な書式のオブジェクトを表示する。
+もしオブジェクトが{\tt :name}特性を持っているならば、
+オブジェクトのアドレスの後に特性を表示する。}
 
 \classdesc{metaclass}{propertied-object}
 {name super cix vars types forwards methods}
-{{\bf metaclass}$B$O!"J#?t%/%i%9$rDj5A$9$k!#FH<+$N%/%i%9JQ?t$r;}$DJ#?t%/%i%9$O!"(B
-$B$=$l$i$N%9!<%Q!<%/%i%9$H$7$F(B{\bf metaclass}$B$rDj5A$7$J$1$l$P$J$i$J$$!#(B}
+{{\bf metaclass}は、複数クラスを定義する。独自のクラス変数を持つ複数クラスは、
+それらのスーパークラスとして{\bf metaclass}を定義しなければならない。}
 \methoddesc{:new}{}
-{$B$3$N%/%i%9$N%$%s%9%?%s%9$r@8@.$7!"A4$F$N%9%m%C%H$r(BNIL$B$K$7$?8e!"(B
-$B$=$l$rJV$9!#(B}
+{このクラスのインスタンスを生成し、全てのスロットをNILにした後、
+それを返す。}
 \methoddesc{:super}{}{
-$B$3$N%/%i%9$N%9!<%Q!<%/%i%9%*%V%8%'%/%H$rJV$9!#(B
-$B0lC6%/%i%9Dj5A$7$?%9!<%Q!<%/%i%9$rJQ99$9$k$3$H$O$G$-$J$$!#(B}
+このクラスのスーパークラスオブジェクトを返す。
+一旦クラス定義したスーパークラスを変更することはできない。}
 \methoddesc{:methods}{}{
-$B$3$N%/%i%9$GDj5A$5$l$?A4$F$N%a%=%C%I$N%j%9%H$rJV$9!#(B
-$B$=$N%j%9%H$O!"%a%=%C%IL>$H%Q%i%a!<%?$HK\BN$rAH$_$K$7$?%j%9%H(B
-$B$K$h$C$F9=@.$5$l$?%j%9%H$G$"$k!#(B}
+このクラスで定義された全てのメソッドのリストを返す。
+そのリストは、メソッド名とパラメータと本体を組みにしたリスト
+によって構成されたリストである。}
 \methoddesc{:method}{name}{
-{\em name}$B$G4XO"$E$1$i$l$?%a%=%C%IDj5A$rJV$9!#(B
-$B$b$78+$D$+$i$J$1$l$P!"(BNIL$B$rJV$9!#(B}
+{\em name}で関連づけられたメソッド定義を返す。
+もし見つからなければ、NILを返す。}
 \methoddesc{:method-names}{subname}{
-$B%a%=%C%IL>$N$J$+$K(B{\em subname}$B$r4^$`A4$F$N%a%=%C%IL>$N%j%9%H$rJV$9!#(B
-$B%a%=%C%I$O!"$3$N%/%i%9$N$J$+$N$_C5:w$5$l$k!#(B}
+メソッド名のなかに{\em subname}を含む全てのメソッド名のリストを返す。
+メソッドは、このクラスのなかのみ探索される。}
 \methoddesc{:all-methods}{}{
-$B$3$N%/%i%9$H$=$NA4$F$N%9!<%Q!<%/%i%9$N$J$+$GDj5A$5$l$F$$$k$9$Y$F$N%a%=%C%I$N(B
-$B%j%9%H$rJV$9!#(B
-$B8@$$BX$($k$H!"$3$N%/%i%9$N%$%s%9%?%s%9$O!"$3$l$i$N%a%=%C%I$r(B
-$B<B9T$9$k$3$H$,$G$-$k!#(B}
+このクラスとその全てのスーパークラスのなかで定義されているすべてのメソッドの
+リストを返す。
+言い替えると、このクラスのインスタンスは、これらのメソッドを
+実行することができる。}
 \methoddesc{:all-method-names}{subname}{
-{\em subname}$B$H0lCW$9$kA4$F$N%a%=%C%IL>$N%j%9%H$rJV$9!#(B
-$B$=$NC5:w$O!"$3$N%/%i%9$+$i(B{\bf object}$B$^$G<B9T$5$l$k!#(B}
+{\em subname}と一致する全てのメソッド名のリストを返す。
+その探索は、このクラスから{\bf object}まで実行される。}
 \methoddesc{:slots}{}{
-$B%9%m%C%HL>$N%Y%/%H%k$rJV$9!#(B}
+スロット名のベクトルを返す。}
 \methoddesc{:name}{}{
-$B$3$N%/%i%9$N(Bsymbol$BL>$rJV$9!#(B}
+このクラスのsymbol名を返す。}
 \methoddesc{:cid}{}{
-$B$3$N%/%i%9$HF10l$G$"$k$3$H$r<($9$?$a$K!"$3$N%/%i%9$N%$%s%9%?%s%9$9$Y$F$K(B
-$B3d$jEv$F$i$l$?@0?t$rJV$9!#(B
-$B$3$l$O!"%7%9%F%`FbIt$N%/%i%9%F!<%V%k$X$N%$%s%G%C%/%9$G!"(B
-$B$3$N%/%i%9$N2<$K?7$7$$%5%V%/%i%9$,Dj5A$5$l$?$H$-!"JQ99$5$l$k!#(B}
+このクラスと同一であることを示すために、このクラスのインスタンスすべてに
+割り当てられた整数を返す。
+これは、システム内部のクラステーブルへのインデックスで、
+このクラスの下に新しいサブクラスが定義されたとき、変更される。}
 \methoddesc{:subclasses}{}{
-$B$3$N%/%i%9$ND>@\$N%5%V%/%i%9$N%j%9%H$rJV$9!#(B}
+このクラスの直接のサブクラスのリストを返す。}
 \methoddesc{:hierarchy}{}{
-$B$3$N%/%i%9$N2<$KDj5A$5$l$?A4$F$N%5%V%/%i%9$N%j%9%H$rJV$9!#(B
-$BA4$F$N%/%i%97Q>5$N9-HO0O$J%j%9%H$rF@$k$?$a$K$O!"(B{\bf class-hierarchy}$B4X?t(B
-$B$r8F$S=P$9!#(B}
+このクラスの下に定義された全てのサブクラスのリストを返す。
+全てのクラス継承の広範囲なリストを得るためには、{\bf class-hierarchy}関数
+を呼び出す。}
 \funcdesc{find-method}{object selector}{
-{\em object}$B$N%/%i%9$d$=$N%9!<%Q!<%/%i%9$N$J$+$G!"(B{\em selector}$B$H0lCW$9$k(B
-$B%a%=%C%I$rC5:w$9$k!#(B
-$B$3$N4X?t$O!"(B{\em object}$B$N%/%i%9$,IT3N$+$G!"$=$N(B{\em object}$B$,(B
-$B%(%i!<$J$7$K%a%C%;!<%8$r<u$1<h$C$F$/$l$k$+$I$&$+$rCN$j$?$$;~$KLrN)$D!#(B}
+{\em object}のクラスやそのスーパークラスのなかで、{\em selector}と一致する
+メソッドを探索する。
+この関数は、{\em object}のクラスが不確かで、その{\em object}が
+エラーなしにメッセージを受け取ってくれるかどうかを知りたい時に役立つ。}
 \end{refdesc}
 \newpage

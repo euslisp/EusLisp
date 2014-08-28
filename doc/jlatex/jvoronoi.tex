@@ -1,24 +1,24 @@
-\subsection{$BB?3Q7A$N(BVoronoi Diagram}
+\subsection{多角形のVoronoi Diagram}
 
-\hfill {\em $BCx<T(B: Philippe PIGNON, $BEEAm8&%2%9%H8&5f<T(B}
+\hfill {\em 著者: Philippe PIGNON, 電総研ゲスト研究者}
 
-$B$3$N%W%m%0%i%`$O!$(BCommon Lisp$B$G=q$+$l$F$$$k!#(B
+このプログラムは，Common Lispで書かれている。
  "A sweepline algorithm for Voronoi diagrams", Proceedings of
-the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.$B$r(B
-$B<jK!$H$7$FMQ$$!"(B
-$BB?3Q7A$N>l9g$X$N1~MQ$r9T$C$?!#$3$l$O!$%5%s%W%k%W%m%0%i%`IU$-$N4JC1$J@bL@$G$"$k!#(B
-$B$3$N%W%m%0%i%`$O!$(BETL$B$N(BEuslisp$B4D6-$G=q$+$l$F$$$k$?$a!$(B
-$B2hA|$X$N=PNO$b%5%]!<%H$7$F$$$k!#(B
-$B$I$N(BCommon Lisp$B>e$G$b;HMQ$9$k$3$H$O$G$-$k$,!$(B
-{\tt utilities.l}$B$GM?$($i$l$F$$$k2hA|$X$N4X?t$r<+J,$N%G%#%9%W%l%$4D6-$X(B
-$B9g$&$h$&$K=q$-49$($kI,MW$,$"$k!#$3$N@a$N:G8e$K$=$N4X?t$r<($9!#(B
+the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.を
+手法として用い、
+多角形の場合への応用を行った。これは，サンプルプログラム付きの簡単な説明である。
+このプログラムは，ETLのEuslisp環境で書かれているため，
+画像への出力もサポートしている。
+どのCommon Lisp上でも使用することはできるが，
+{\tt utilities.l}で与えられている画像への関数を自分のディスプレイ環境へ
+合うように書き換える必要がある。この節の最後にその関数を示す。
 
 \begin{description}
-\item[$BL\E*(B:] $BB?3Q7A$N=89g$N(Bvoronoi diagram$B$N7W;;$r9T$&!#(B
-$B8lWC$rM}2r$9$k$?$a$K>e5-$NJ88%$rFI$s$G!";HMQ$7$F$/$@$5$$!#(B
-$B$3$3$G$O!"$3$N%W%m%0%i%`$KBP$9$k@bL@$r$7$^$;$s!#(B
+\item[目的:] 多角形の集合のvoronoi diagramの計算を行う。
+語彙を理解するために上記の文献を読んで、使用してください。
+ここでは、このプログラムに対する説明をしません。
 
-\item[$BF~NO(B:] $BB?3Q7A$N%j%9%H$H0O$`$?$a$NOH$O!$<!$N$h$&$KDj5A$9$k!#(B
+\item[入力:] 多角形のリストと囲むための枠は，次のように定義する。
 \begin{verbatim}
 DATA= (
        (x11 y11 x12 y12 x13 y13 ...) first polygon,
@@ -30,15 +30,15 @@ DATA= (
        (xf1 yf1 xf2 yf2 xf3 yf3 xf4 yf4) enclosing frame
       )
 \end{verbatim}
-$B0O$`OH$O!$(B{\bf DATA}$BFb$N$I$N0LCV$K$bG[CV$9$k$3$H$,$G$-$k!#$^$?!$(B
-$BFbIt$H30It$,L7=b$7$J$$$h$&$K;~7WJ}8~$N=gHV$G$J$1$l$P$J$i$J$$!#(B
-$BB?3Q7A$O8r:9$NL5$$4JC1$J?^7A$G$J$1$l$P$J$i$J$$!#(B
-$B0lD>@~$"$k$$$OJ?C3$J%(%C%8$O<u$1IU$1$J$$!#(B
-$BFHN)$7$?E@$"$k$$$O@~J,$b<u$1IU$1$J$$!#(B
+囲む枠は，{\bf DATA}内のどの位置にも配置することができる。また，
+内部と外部が矛盾しないように時計方向の順番でなければならない。
+多角形は交差の無い簡単な図形でなければならない。
+一直線あるいは平坦なエッジは受け付けない。
+独立した点あるいは線分も受け付けない。
 
-\item[$B=PNO(B:] {\bf *diagram*}:2$B=E$K@\B3$5$l$?%(%C%8%j%9%H$N%j%9%H(B
-(utilities.l$B%U%!%$%k$r;2>H(B)$B$rJV$9!#$=$l$>$l$N%(%C%8$O!$(Bsymbol$B$G$"$j!$<!$K<($9(B
-$B$h$&$J(Bfield$B$r4^$`(Bproperty-list$B$r;}$C$F$$$k!#(B
+\item[出力:] {\bf *diagram*}:2重に接続されたエッジリストのリスト
+(utilities.lファイルを参照)を返す。それぞれのエッジは，symbolであり，次に示す
+ようなfieldを含むproperty-listを持っている。
 \begin{verbatim}
 (start <pointer to a vertex>)
        (end <pointer to a vertex>)
@@ -49,44 +49,44 @@ DATA= (
        (type <:endpoint or :point-point or :segment-segment or :point-segment>)
        (outflag <t or nil>)
 \end{verbatim}
-{\em vertex}$B$O!$(Bsymbol$B$G(B"{\tt pos}"field$B$r4^$`(Bproperty-list$B$r;}$D!#(B
-$B$3$N(Bfield$B$O!$(Bcons{\em (x,y)}$B$r4^$_!$(B{\em vertex}$B$NJ?LL:BI8$r<($9!#(B
-{\em pred}$B$H(B{\em succ}$B$N(Bfield$B$O!$(Bdecl$B7A<0$K$7$?$,$C$FH?;~7WJ}8~$N(B
-$BA0<T$H8e<T$rM?$($k(B(Shamos$B$H(BPreparata$B$N(B,
-Computational Geometry: An introduction, 1985, pp 15-17$B$r;2>H(B)$B!#(B
-{\em site}$B$b(Bsymbol$B$G$"$j!$4XO"$7$?>pJs$r4^$`(Bproperty-list$B$r;}$D!#(B
-{\em site}$B$O!$85$NF~NO%G!<%?$r5-=R$7$F$*$j!$B?3Q7A$ND:E@$G$"$k(Bpoint
-$B$"$k$$$OB?3Q7A$N%(%C%8$G$"$k(Bsegment$B$r;}$D!#(B
+{\em vertex}は，symbolで"{\tt pos}"fieldを含むproperty-listを持つ。
+このfieldは，cons{\em (x,y)}を含み，{\em vertex}の平面座標を示す。
+{\em pred}と{\em succ}のfieldは，decl形式にしたがって反時計方向の
+前者と後者を与える(ShamosとPreparataの,
+Computational Geometry: An introduction, 1985, pp 15-17を参照)。
+{\em site}もsymbolであり，関連した情報を含むproperty-listを持つ。
+{\em site}は，元の入力データを記述しており，多角形の頂点であるpoint
+あるいは多角形のエッジであるsegmentを持つ。
 
-{\em type}$B$O!$(B2$BEyJ,@~$NCfE@$G$"$j!$$=$l$rJ,3d$9$k(B{\em site}$B$N7?$h$j(B
-$B7hDj$5$l$k!#(B
-$B5,Ls$K$h$j!$30B&$O(Bstart-end$B%(%C%8$N1&B&$G$"$k!#(B
-voronoi diagram$B$O!$(B2$BEyJ,@~$NFbIt$HF1MM$K30B&$r7W;;$9$k!#(B
-$BI,MW$H$9$k(Boutflag$B$rJ]$D$?$a$K(Boutflag$B$r%=!<%H$9$k!#(B
+{\em type}は，2等分線の中点であり，それを分割する{\em site}の型より
+決定される。
+規約により，外側はstart-endエッジの右側である。
+voronoi diagramは，2等分線の内部と同様に外側を計算する。
+必要とするoutflagを保つためにoutflagをソートする。
 
-\item[$B%5%s%W%k(B:]
-$B%5%s%W%k%W%m%0%i%`$r<B9T$9$k$?$a$K$O!$0J2<$N$h$&$J%9%F%C%W$r<B;\$7$F$/$@$5$$!#(B
+\item[サンプル:]
+サンプルプログラムを実行するためには，以下のようなステップを実施してください。
 \begin{enumerate}
-\item $B<+J,$N4D6-$K0J2<$N%W%m%0%i%`$r%3%T!<$9$k!#(B\\
+\item 自分の環境に以下のプログラムをコピーする。\\
 \begin{tabular}{ll}
-utilities.l & $B4v2?3X%f!<%F%#%j%F%#4X?t$H(Beusx$B$N2hA|=PNO4X?t(B\\
-polygonalvoronoi.l & $B%W%m%0%i%`K\BN(B\\
-testdata.l & $B>e5-$N=q<0$K$h$k%G%b%G!<%?(B
+utilities.l & 幾何学ユーティリティ関数とeusxの画像出力関数\\
+polygonalvoronoi.l & プログラム本体\\
+testdata.l & 上記の書式によるデモデータ
 \end{tabular}
-\item $B$b$7!$(BEuslisp$B$r;HMQ$7$J$$$J$i!$L?Na$K$7$?$,$C$F(B{\tt utilities.l}$B$r=q$-49$(!$(B
-"compatibility package"$B$r=$@5$9$k!#!#(B
-\item $B0J2<$N(B3$B$D$N%U%!%$%k$r%3%s%Q%$%k$7$F%m!<%I$9$k$+!"$"$k$$$O$=$N$^$^%m!<%I$9$k!#(B\\
+\item もし，Euslispを使用しないなら，命令にしたがって{\tt utilities.l}を書き換え，
+"compatibility package"を修正する。。
+\item 以下の3つのファイルをコンパイルしてロードするか、あるいはそのままロードする。\\
 \begin{tabular}{ll}
 utilities.l\\
 polygonalvoronoi.l\\
-testdata.l & $B>e5-$N=q<0$K$h$k%G%b%G!<%?$r4^$s$G$$$k!#(B
+testdata.l & 上記の書式によるデモデータを含んでいる。
 \end{tabular}
-\item (pv demoworld)$B$G%G%b%G!<%?>e$G%W%m%0%i%`$,<B9T$5$l$k!#(B
-$B%0%m!<%P%kJQ?t(B{\bf *diagram*}$B$K$O!$(Bvoronoi diagram$B$N(B2$BEyJ,@~$,4^$^$l$F$$$k!#(B
+\item (pv demoworld)でデモデータ上でプログラムが実行される。
+グローバル変数{\bf *diagram*}には，voronoi diagramの2等分線が含まれている。
 \end{enumerate}
 \end{description}
 
-eusx(Xwindow$B%$%s%?!<%U%'!<%9$r;}$D(BEuslisp)$B$N$b$H$G$O!$0J2<$NL?Na$G(Bdiagram$B$N7k2L$r2hLL>e$KI=<($9$k$3$H$,$G$-$k!#(B
+eusx(Xwindowインターフェースを持つEuslisp)のもとでは，以下の命令でdiagramの結果を画面上に表示することができる。
 \begin{verbatim}
        (make-display)          ;;Initializes the *display* window object
        (dps demoworld *thick*) ;; Shows original data in thick lines
@@ -95,7 +95,7 @@ eusx(Xwindow$B%$%s%?!<%U%'!<%9$r;}$D(BEuslisp)$B$N$b$H$G$O!$0J2<$NL?Na$G(Bdi
 
 \begin{refdesc}
 \funcdesc{pv}{data}{
-$B>e5-$N=q<0$G=q$+$l$?(B{\em data}$B$+$iB?3Q7A$N(Bvoronoi diagram$B$r7W;;$9$k!#(B}
+上記の書式で書かれた{\em data}から多角形のvoronoi diagramを計算する。}
 \end{refdesc}
 
 \newpage

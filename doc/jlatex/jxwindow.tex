@@ -1,38 +1,38 @@
-\section{Xwindow $B%$%s%?!<%U%'!<%9(B}
+\section{Xwindow インターフェース}
 \markright{\arabic{section}. Xwindow}
-Euslisp$B>e$N(BXwindow$B%$%s%?!<%U%'!<%9$O!"(B{\tt 'eusx'}$B$H$$$&(B
-$BL>A0$G(BEuslisp$B$,8F$S=P$5$l$?$H$-!"<B9T2DG=$H$J$k!#(B
-\footnote{eusx$B$O!"(Beus$B$X$N%7%s%\%j%C%/%j%s%/$G$"$k!#(B}
-eusx$B$O!"5/F0;~$K4D6-JQ?t(B"DISPLAY"$B$r;2>H$7$F(BXserver$B$K@\B3$r;n$_$k$?$a!"(B
-$B<+J,$N(BXsever$B$K4D6-JQ?t(B"DISPLAY"$B$,@5$7$/@_Dj$5$l$F$$$J$1$l$P$J$i$J$$!#(B
+Euslisp上のXwindowインターフェースは、{\tt 'eusx'}という
+名前でEuslispが呼び出されたとき、実行可能となる。
+\footnote{eusxは、eusへのシンボリックリンクである。}
+eusxは、起動時に環境変数"DISPLAY"を参照してXserverに接続を試みるため、
+自分のXseverに環境変数"DISPLAY"が正しく設定されていなければならない。
 
-Euslisp$B$K$O!"<!$N(B3$B$D$N%l%Y%k$N(BXwindow$B%$%s%?!<%U%'!<%9$,Dj5A$5$l$F$$$k!#(B
-(1) Xlib$B4X?t(B, (2) Xlib$B%/%i%9$H(B(3) XToolKit$B%/%i%9$G$"$k!#(B
-$B$3$N@a$H<!$N(BXToolKit$B$N@a$K5-=R$5$l$F$$$k(B
-$BA4$F$N(BXwindow$B4X?t$O!"(B"X"$B%Q%C%1!<%8$NCf$K4^$^$l$F$$$k!#(B
-$B$=$l$i$N4X?tL>$O!"85$N(BXlib$B4X?tL>$+$i:G=i$N(B"X"$B$r>J$$$-!"A4$F$NJ8;z$rBgJ8;z$K(B
-$BJQ99$7$?$b$N$H$J$C$F$$$k!#(B
-$BNc$($P(B{\tt XdefaultGC}$B$O(B{\tt X:DEFAULTGC}$B$HL>IU$1$i$l$F$$$F!"(B
-{\tt X:XDEFAULTGC}$B$G$O$J$$!#(B
+Euslispには、次の3つのレベルのXwindowインターフェースが定義されている。
+(1) Xlib関数, (2) Xlibクラスと(3) XToolKitクラスである。
+この節と次のXToolKitの節に記述されている
+全てのXwindow関数は、"X"パッケージの中に含まれている。
+それらの関数名は、元のXlib関数名から最初の"X"を省いき、全ての文字を大文字に
+変更したものとなっている。
+例えば{\tt XdefaultGC}は{\tt X:DEFAULTGC}と名付けられていて、
+{\tt X:XDEFAULTGC}ではない。
 
-Xlib$B4X?t$O!"(BXwindow$B%7%9%F%`$X$NDc%l%Y%k%$%s%?!<%U%'!<%9$G!"(B
-foreign$B4X?t$H$7$FDj5A$5$l$F$$$k!#(B
-$B$3$l$i$N(BXlib$B4X?t$O!"%Q%i%a!<%?$N7?%A%'%C%/$"$k$$$O(B
-$B%Q%i%a!<%?$N?t$N%A%'%C%/$r<B9T$7$F$$$J$$$?$a!"(B
-$B==J,Cm0U$7$F;HMQ$7$J$1$l$P$J$i$J$$!#(B
-$BNc$($P!"$9$Y$F$N(BXlib$B$N8F$S=P$7$K$*$$$F(BXserver$B$H$N@\B3$r3NG'$9$k$?$a$K(B
-{\tt x:*display*}$B$r0z$-?t$H$7$FMW5a$9$k!#$b$7!";XDj$7K:$l$?$J$i$P!"(BXlib$B$O(B
-$B%(%i!<$rDLCN$7!"$=$N%W%m%;%9$O;`$L!#(B
-$B$3$N$h$&$JITJX$rHr$1!"%*%V%8%'%/%H;X8~$N%$%s%?!<%U%'!<%9$r:n$k$?$a$K!"(B
-2$BHV$a$N%l%Y%k$N%$%s%?!<%U%'!<%9$G$"$k(BXlib$B%/%i%9$,Hw$o$C$F$$$k!#(B
+Xlib関数は、Xwindowシステムへの低レベルインターフェースで、
+foreign関数として定義されている。
+これらのXlib関数は、パラメータの型チェックあるいは
+パラメータの数のチェックを実行していないため、
+十分注意して使用しなければならない。
+例えば、すべてのXlibの呼び出しにおいてXserverとの接続を確認するために
+{\tt x:*display*}を引き数として要求する。もし、指定し忘れたならば、Xlibは
+エラーを通知し、そのプロセスは死ぬ。
+このような不便を避け、オブジェクト指向のインターフェースを作るために、
+2番めのレベルのインターフェースであるXlibクラスが備わっている。
 %By instantiating the xwindow class, you will get a window on a screen,
 %and sending messages to the instance, you can draw lines, strings, or whatever
 %in it.
-$B$3$N@a$G$O!"$3$N(B2$BHV$a$N%l%Y%k$N%$%s%?!<%U%'!<%9$K>GE@$rEv$F$k!#(B
-XToolKit$B$H8F$P$l$k$b$C$H9b%l%Y%k$N(BXwindow$B%i%$%V%i%j$O!"<!@a$G(B
-$B@bL@$5$l$F$$$k!#(B
+この節では、この2番めのレベルのインターフェースに焦点を当てる。
+XToolKitと呼ばれるもっと高レベルのXwindowライブラリは、次節で
+説明されている。
 
-$B$3$N@a$K5-=R$5$l$F$$$k%/%i%9$O!"0J2<$N7Q>5$N3,AX$r;}$C$F$$$k!#(B
+この節に記述されているクラスは、以下の継承の階層を持っている。
 
 \begin{quote}
 \begin{verbatim}
@@ -47,29 +47,29 @@ propertied-object
 \end{verbatim}
 \end{quote}
 
-\subsection{\label{xvariables}Xlib$B$N%0%m!<%P%kJQ?t$H$=$NB>4X?t(B}
+\subsection{\label{xvariables}Xlibのグローバル変数とその他関数}
 \begin{refdesc}
-\vardesc{x:*display*}{X$B$N(Bdisplay ID$B!J@0?t!K(B}
-\vardesc{x:*root*}{$B%G%U%)%k%H$N(Broot window$B%*%V%8%'%/%H(B}
-\vardesc{x:*screen*}{$B%G%U%)%k%H$N(Bscreen ID$B!J@0?t!K(B}
-\vardesc{x:*visual*}{$B%G%U%)%k%H$N(Bvisual ID$B!J@0?t!K(B}
-\vardesc{x:*blackpixel*}{$B9u?'$N(Bpixel$BCM(B = 1}
-\vardesc{x:*whitepixel*}{$BGr?'$N(Bpixel$BCM(B = 0}
-\vardesc{x:*fg-pixel*}{window$B:n@.;~$K;2>H$5$l$k%G%U%)%k%H$NJ8;z?'$N(Bpixel$BCM!"$U$D$&(B{\tt *blackpixel*}$B!#(B}
-\vardesc{x:*bg-pixel*}{window$B:n@.;~$K;2>H$5$l$kGX7J?'$N(Bpixel$BCM!"$U$D$&(B{\tt *whitepixel}$B!#(B}
-\vardesc{x:*color-map*}{$B%7%9%F%`$N%G%U%)%k%H%+%i!<%^%C%W(B}
-\vardesc{x:*defaultGC*}{pixmap$B@8@.;~$K;2>H$5$l$k%G%U%)%k%H(Bgcontext}
-\vardesc{x:*whitegc*}{$BJ8;z?'$,Gr?'$N(Bgcontext}
-\vardesc{x:*blackgc*}{$BJ8;z?'$,9u?'$N(Bgcontext}
-% \vardesc{*gray-gc*}{$B%O!<%U%H!<%s$N(BGC}
-\vardesc{*gray-pixmap*}{{\tt (make-gray-pixmap 0.5)}$B$N7k2L!#(B}
+\vardesc{x:*display*}{Xのdisplay ID（整数）}
+\vardesc{x:*root*}{デフォルトのroot windowオブジェクト}
+\vardesc{x:*screen*}{デフォルトのscreen ID（整数）}
+\vardesc{x:*visual*}{デフォルトのvisual ID（整数）}
+\vardesc{x:*blackpixel*}{黒色のpixel値 = 1}
+\vardesc{x:*whitepixel*}{白色のpixel値 = 0}
+\vardesc{x:*fg-pixel*}{window作成時に参照されるデフォルトの文字色のpixel値、ふつう{\tt *blackpixel*}。}
+\vardesc{x:*bg-pixel*}{window作成時に参照される背景色のpixel値、ふつう{\tt *whitepixel}。}
+\vardesc{x:*color-map*}{システムのデフォルトカラーマップ}
+\vardesc{x:*defaultGC*}{pixmap生成時に参照されるデフォルトgcontext}
+\vardesc{x:*whitegc*}{文字色が白色のgcontext}
+\vardesc{x:*blackgc*}{文字色が黒色のgcontext}
+% \vardesc{*gray-gc*}{ハーフトーンのGC}
+\vardesc{*gray-pixmap*}{{\tt (make-gray-pixmap 0.5)}の結果。}
 \vardesc{*gray25-pixmap*}{
-1/4$B$N%T%/%;%k$,(B{\tt *fg-pixel*}$B$G$"$j!"(B3/4$B$,(B{\tt *bg-pixel*}$B$G$"$k(B16x16$B$N(Bpixmap$B!#(B}
-\vardesc{*gray50-pixmap*}{1/2$B$N%T%/%;%k$,(B{\tt *fg-pixel*}$B$G$"$k(B16x16$B$N(Bpixmap$B!#(B}
-\vardesc{*gray75-pixmap*}{3/4$B$N%T%/%;%k$,9u?'$G$"$k(B16x16$B$N(Bpixmap$B!#(B}
-\vardesc{*gray25-gc*}{{\tt *gray25-pixmap*}$B$+$i:n$k(B25\%$B$N%0%l!<(BGC$B!#(B}
-\vardesc{*gray50-gc*}{{\tt *gray50-pixmap*}$B$+$i:n$k(B50\%$B$N%0%l!<(BGC$B!#(B}
-\vardesc{*gray75-gc*}{{\tt *gray75-pixmap*}$B$+$i:n$k(B75\%$B$N%0%l!<(BGC$B!#(B}
+1/4のピクセルが{\tt *fg-pixel*}であり、3/4が{\tt *bg-pixel*}である16x16のpixmap。}
+\vardesc{*gray50-pixmap*}{1/2のピクセルが{\tt *fg-pixel*}である16x16のpixmap。}
+\vardesc{*gray75-pixmap*}{3/4のピクセルが黒色である16x16のpixmap。}
+\vardesc{*gray25-gc*}{{\tt *gray25-pixmap*}から作る25\%のグレーGC。}
+\vardesc{*gray50-gc*}{{\tt *gray50-pixmap*}から作る50\%のグレーGC。}
+\vardesc{*gray75-gc*}{{\tt *gray75-pixmap*}から作る75\%のグレーGC。}
 \vardesc{*gray*}{{\tt "\#b0b0b0"}}
 \vardesc{*bisque1*}{{\tt "\#ffe4c4"}}
 \vardesc{*bisque2*}{{\tt "\#eed5b7"}}
@@ -94,24 +94,24 @@ propertied-object
 \vardesc{font-a14}{{\tt (font-id "*-fixed-medium-r-normal-*-14-*")}}
 
 %\vardesc{x:*reversevideo*}{}
-\vardesc{x:*xwindows*}{Euslisp$B$K$h$k;R(Bwindow$B$r4^$s$@A4$F$N(Bwindow$B$N%j%9%H$r(B
-$BJ];}$9$k!#(B}
-\vardesc{x:*xwindow-hash-tab*}{drawable ID$B$+$i(Bxwindow$B%*%V%8%'%/%H$r(B
-$BC5$9$?$a$N%O%C%7%e%F!<%V%k!#(B
-{\tt x:nextevent}$B$GF@$i$l$k%$%Y%s%H9=B$$O(Bwindow ID$B$G$"$k$?$a!"(B
-{\tt x:window-main-loop}$B$O$3$N%F!<%V%k$r;HMQ$7$F0lCW$9$k(Bxwindow$B%*%V%8%'%/%H(B
-$B$rCN$k$?$a$K(B{\tt x:event-window}$B$r8F$S=P$9!#(B}
+\vardesc{x:*xwindows*}{Euslispによる子windowを含んだ全てのwindowのリストを
+保持する。}
+\vardesc{x:*xwindow-hash-tab*}{drawable IDからxwindowオブジェクトを
+探すためのハッシュテーブル。
+{\tt x:nextevent}で得られるイベント構造はwindow IDであるため、
+{\tt x:window-main-loop}はこのテーブルを使用して一致するxwindowオブジェクト
+を知るために{\tt x:event-window}を呼び出す。}
 %\vardesc{x:gcval}{}
 
 \funcdesc{xflush}{}{
-Xlib$B$N%3%^%s%I%P%C%U%!$KJ]M-$9$k%3%^%s%I$r$9$Y$F(BXserver$B$KAw$k!#(B
-Xlib$B%P%C%U%!$,(BXserver$B$K=PNO$9$k$?$a!"(B
-Xserver$B$KH/9T$5$l$?%3%^%s%I$O!"$9$0$K<B9T$5$l$J$$!#(B
-$B$3$l$O!"%M%C%H%o!<%/$N=BBZ$*$h$S%W%m%;%9$N@ZBX$(IQEY$r8:>/$5$;$k$?$a$K(B
-$BI,MW$G$"$k!#(B
-$B%3%^%s%I$N8z2L$r8+$k$?$a$K%3%^%s%I%P%C%U%!$rA]$-=P$9J}K!$H$7$F!"(B
-{\bf xflush}$B$r;HMQ$9$k$+$"$k$$$O(B{\bf :flush}$B%a%C%;!<%8$r(Bxwindow$B%*%V%8%'%/%H$K(B
-$BAw$k!#(B}
+Xlibのコマンドバッファに保有するコマンドをすべてXserverに送る。
+XlibバッファがXserverに出力するため、
+Xserverに発行されたコマンドは、すぐに実行されない。
+これは、ネットワークの渋滞およびプロセスの切替え頻度を減少させるために
+必要である。
+コマンドの効果を見るためにコマンドバッファを掃き出す方法として、
+{\bf xflush}を使用するかあるいは{\bf :flush}メッセージをxwindowオブジェクトに
+送る。}
 
 \end{refdesc}
 
@@ -120,138 +120,138 @@ Xserver$B$KH/9T$5$l$?%3%^%s%I$O!"$9$0$K<B9T$5$l$J$$!#(B
 \begin{refdesc}
 
 \classdesc{Xobject}{geometry:viewsurface}{}{
-$B$9$Y$F$N(BXwindow$B$K4XO"$9$k%/%i%9$N6&DL$N%9!<%Q!<%/%i%9$G$"$k!#(B
-$B8=:_!"%9%m%C%H$b%a%=%C%I$bDj5A$5$l$F$$$J$$!#(B}
+すべてのXwindowに関連するクラスの共通のスーパークラスである。
+現在、スロットもメソッドも定義されていない。}
 
 \classdesc{Xdrawable}{Xobject}
 {(drawable  \hspace{10mm} \=  ; drawable  ID \\
  \> gcon \>  ; this drawable's default graphic context object\\
 \> bg-color \> ; background color \\
 \> width height \> ; horizontal and vertical dimensions in dots}
-{{\bf Xdrawable}$B$O!"@~J,$dJ8;zNs$N$h$&$J%0%i%U%#%C%/%*%V%8%'%/%H(B
-$B$rIA$/$?$a$N;M3QNN0h$rDj5A$9$k!#(B
-{\bf Xdrawable}$B$O!"(Bxwindow$B$d(Bxpixmap$B$N$?$a$N6&DL%a%=%C%I(B
-$B$rDj5A$9$k$?$a$NCj>]%/%i%9$G$"$j!"(B
-$B$3$N%/%i%9$N%$%s%9%?%s%9$O2?$N8z2L$b;}$C$F$$$J$$!#(B}
+{{\bf Xdrawable}は、線分や文字列のようなグラフィックオブジェクト
+を描くための四角領域を定義する。
+{\bf Xdrawable}は、xwindowやxpixmapのための共通メソッド
+を定義するための抽象クラスであり、
+このクラスのインスタンスは何の効果も持っていない。}
 
 \methoddesc{:init}{id}{
-{\em id}$B$O!"$3$N(Bdrawable$B$N(BID$B$H$7$F(B{\tt drawable}$B%9%m%C%H$K@_Dj$5$l$k!#(B
-$B?7$7$$(BGC(graphic context)$B$,@8@.$5$l!"$3$N(Bdrawable$B%*%V%8%'%/%H$N(B
-$B%G%U%)%k%H(BGC$B$H$7$F(B{\tt gcon}$B$K@_Dj$5$l$k!#(B}
-\methoddesc{:drawable}{}{drawable ID$B$rJV$9!#(B}
-\methoddesc{:flush}{}{Xlib$B$N%P%C%U%!$KJ]M-$5$l$k%3%^%s%I$rA]$-=P$9!#(B}
+{\em id}は、このdrawableのIDとして{\tt drawable}スロットに設定される。
+新しいGC(graphic context)が生成され、このdrawableオブジェクトの
+デフォルトGCとして{\tt gcon}に設定される。}
+\methoddesc{:drawable}{}{drawable IDを返す。}
+\methoddesc{:flush}{}{Xlibのバッファに保有されるコマンドを掃き出す。}
 \methoddesc{:geometry}{}{
-7$B$D$N4v2?3XB0@-$N%j%9%H$rJV$9!#(B
-$B$=$N%j%9%H$O!"(Broot-window-id, x$B:BI8(B, y$B:BI8(B,
-$BI}(B, $B9b$5(B, $BOH@~$NI}(B, visual$B$N?<$5$G$"$k!#(B}
+7つの幾何学属性のリストを返す。
+そのリストは、root-window-id, x座標, y座標,
+幅, 高さ, 枠線の幅, visualの深さである。}
 
 \methoddesc{:height}{}{
-$B$3$N(B{\bf Xdrawable}$B$N9b$5!J(By$B<4J}8~$N%I%C%H?t!K$rJV$9!#(B}
+この{\bf Xdrawable}の高さ（y軸方向のドット数）を返す。}
 \methoddesc{:width}{}{
-$B$3$N(B{\bf Xdrawable}$B$NI}!J(Bx$B<4J}8~$N%I%C%H?t!K$rJV$9!#(B}
+この{\bf Xdrawable}の幅（x軸方向のドット数）を返す。}
 \methoddesc{:gc}{\&rest newgc}{
-$B$b$7!"(B{\em newgc}$B$,M?$($i$l$J$$>l9g!"8=:_$N(BGC$B%*%V%8%'%/%H$rJV$9!#(B
-$B$b$7!"(B{\em newgc}$B$,(B{\bf gcontext}$B$N%$%s%9%?%s%9$J$i!"(B
-$B$3$N(B{\bf Xdrawable}$B$N(B{\tt gc}$B$K@_Dj$9$k!#(B
-$B$=$&$G$J$1$l$P!"(B{\em newgc}$B$O%a%C%;!<%8$H$_$J$5$l!"(B
-$B8=:_$N(B{\tt gc}$B$KAw$i$l$k!#(B}
+もし、{\em newgc}が与えられない場合、現在のGCオブジェクトを返す。
+もし、{\em newgc}が{\bf gcontext}のインスタンスなら、
+この{\bf Xdrawable}の{\tt gc}に設定する。
+そうでなければ、{\em newgc}はメッセージとみなされ、
+現在の{\tt gc}に送られる。}
 \methoddesc{:pos}{}{
-$B$3$N(B{\bf Xdrawable}$B$N0LCV$r<($9@0?t%Y%/%H%k$rJV$9!#(B
-$B0LCV$O?F(Bwindow$B$NAjBP0LCV$H$7$F$$$D$bDj5A$5$l!"(B
-window$B%^%M!<%8%c$NCg2p$N$b$H$K%k!<%H(Bwindow$B$ND>@\$N;R(Bwindow$B$H$7$F(B
-$B@8@.$5$l$?(Bwindow$B$O!"%k!<%H(Bwindow$B$NK\Ev$N0LCV$K4X$o$i$:!"4D6-$N(B
-$B%?%$%H%k(Bwindow$B$N8GDj:BI8$rJV$9!#(B}
-\methoddesc{:x}{}{$B$3$N(B{\bf Xdrawable}$B$N?F(Bwindow$B$H$NAjBPE*$J8=:_$N(Bx$B:BI8$rJV$9!#(B}
-\methoddesc{:y}{}{$B$3$N(B{\bf Xdrawable}$B$N?F(Bwindow$B$H$NAjBPE*$J8=:_$N(By$B:BI8$rJV$9!#(B}
+この{\bf Xdrawable}の位置を示す整数ベクトルを返す。
+位置は親windowの相対位置としていつも定義され、
+windowマネージャの仲介のもとにルートwindowの直接の子windowとして
+生成されたwindowは、ルートwindowの本当の位置に関わらず、環境の
+タイトルwindowの固定座標を返す。}
+\methoddesc{:x}{}{この{\bf Xdrawable}の親windowとの相対的な現在のx座標を返す。}
+\methoddesc{:y}{}{この{\bf Xdrawable}の親windowとの相対的な現在のy座標を返す。}
 \methoddesc{:copy-from}{drw}{
-{\em drw}$B$O!"B>$N(B{\bf drawable}$B%*%V%8%'%/%H(B(Xwindow$B$^$?$O(Bpixmap)$B$G$"$k!#(B
-{\em drw}$B$NFbMF$,$3$N(B{\bf Xdrawable}$B$K%3%T!<$5$l$k!#(B}
+{\em drw}は、他の{\bf drawable}オブジェクト(Xwindowまたはpixmap)である。
+{\em drw}の内容がこの{\bf Xdrawable}にコピーされる。}
 
 \begin{figure}
 \begin{center}
 \epsfile{file=fig/xdraw.ps,height=6cm}
 \end{center}
-\caption{$BIA2h$N4pK\(B\label{xdraw}}
+\caption{描画の基本\label{xdraw}}
 \end{figure}
 
 
 \methoddesc{:point}{x y \&optional (gc gccon)}{
-$(x, y)$$B$N0LCV$K%*%W%7%g%s$N(B{\em gc}$B$GE@$rIA$/!#(B}
+$(x, y)$の位置にオプションの{\em gc}で点を描く。}
 \methoddesc{:line}{x1 y1 x2 y2 \&optional (gc gcon)}{
-{\em (x1,y1)}$B$+$i(B{\em (x2,y2)}$B$X%*%W%7%g%s$N(B{\em gc}$B$rMQ$$$F(B
-$B@~J,$rIA$/!#(B{\em x1, y1, x2, y2}$B$O@0?t$G$J$1$l$P$J$i$J$$!#(B}
+{\em (x1,y1)}から{\em (x2,y2)}へオプションの{\em gc}を用いて
+線分を描く。{\em x1, y1, x2, y2}は整数でなければならない。}
 \methoddesc{:rectangle}{x y width height \&optional (gc gcon)}{
-{\em (x,y)}$B$rCf?4$H$7$F(B{\em width}$B$NI}$H(B{\em height}$B$N9b$5$r;}$D(B
-$B;M3Q7A$rIA$/!#(B}
+{\em (x,y)}を中心として{\em width}の幅と{\em height}の高さを持つ
+四角形を描く。}
 \methoddesc{:arc}{x y width height angle1 angle2 \&optional (gc gcon)}{
-{\em (x,y)}$B$rCf?4$H$7$F(B{\em width}$B$NI}$H(B{\em height}$B$N9b$5$r;}$D(B
-$B;M3Q7A$KFb@\$9$kBJ1_$N1_8L$rIA$/!#(B{\em angle1}$B$,;O$^$j$N3QEY$r<($7!"(B
-{\em angle2}$B$,=*$o$j$N3QEY$r<($9!#$3$l$i$N3QEY$NC10L$O%i%8%"%s$G$"$k!#(B}
+{\em (x,y)}を中心として{\em width}の幅と{\em height}の高さを持つ
+四角形に内接する楕円の円弧を描く。{\em angle1}が始まりの角度を示し、
+{\em angle2}が終わりの角度を示す。これらの角度の単位はラジアンである。}
 \methoddesc{:fill-rectangle}{x y width height \&optional (gc gcon)}{
-$B;M3QNN0h$rKd$a$k!#(B}
+四角領域を埋める。}
 \methoddesc{:fill-arc}{x y width height angle1 angle2 \&optional (gc gcon)}{
-$B1_8L$NCf$rKd$a$k!#(B}
+円弧の中を埋める。}
 \methoddesc{:string}{x y str \&optional (gc gcon)}{
-{\em (x,y)}$B$N0LCV$+$iJ8;zNs(B{\em str}$B$rI=<($9$k!#GX7J$O!"=q$+$J$$!#(B}
+{\em (x,y)}の位置から文字列{\em str}を表示する。背景は、書かない。}
 \methoddesc{:image-string}{x y str \&optional (gc gcon)}{
-$BJ8;zNs(B{\em str}$B$rI=<($9$k!#J8;zNs$O!"GX7J?'$GK~$?$5$l$k!#(B}
+文字列{\em str}を表示する。文字列は、背景色で満たされる。}
 \methoddesc{:getimage}{\&key :x :y :width :height (:mask \#ffffffff) (:format 2)}{
-server$B$+$i(Bximage$B$r<h$j!"%T%/%;%k%G!<%?$rJ8;zNs$H$7$FJV$9!#(B
-server$B$+$iAw$i$l$k%T%/%;%k%G!<%?$O!"0lC<(B Xlib$B$N(Bximage$B9=B$$KC_@Q$5$l$k!#(B
-$B$=$N8e!"9TKh$KJ8;zNs$K%3%T!<$5$l$k!#(B
-ximage$B9=B$$O!"<+F0E*$KGK2u$5$l$k!#(B
-{\tt :getimage}$B$K$h$jF@$i$l$?2hA|J8;zNs$O!"(B{\tt pixel-image}$B$r:n$k$?$a$K(B
-$B;HMQ$G$-$k!#$^$?!"(B\ref{PBMfile}$B@a$K=q$+$l$F$$$k$h$&$K(Bpbm$B%U%)!<%^%C%H$N%U%!%$%k$K(B
-$B=q$-9~$`$3$H$,$G$-$k!#(B}
+serverからximageを取り、ピクセルデータを文字列として返す。
+serverから送られるピクセルデータは、一端 Xlibのximage構造に蓄積される。
+その後、行毎に文字列にコピーされる。
+ximage構造は、自動的に破壊される。
+{\tt :getimage}により得られた画像文字列は、{\tt pixel-image}を作るために
+使用できる。また、\ref{PBMfile}節に書かれているようにpbmフォーマットのファイルに
+書き込むことができる。}
 \methoddesc{:putimage}{image \&key :src-x :src-y :dst-x :dst-y :width :height ((:gc g) gc)}{
-$B$3$N(B{\bf Xdrawable}$B$N;XDj$5$l$?0LCV$K(B{\em image}$B$rI=<($9$k!#(B
-{\em image}$B$O!"J8;zNs$"$k$$$O(Bximage$B9=B$$X$N%"%I%l%9%]%$%s%?!<$G$"$k!#(B}
+この{\bf Xdrawable}の指定された位置に{\em image}を表示する。
+{\em image}は、文字列あるいはximage構造へのアドレスポインターである。}
 \methoddesc{:draw-line}{from to}{
-{\bf :line}$B%a%=%C%I$HF1$8$G$"$k!#(B
-$BB>$N(B{\bf viewsurface}$B%/%i%9$H$N8_49@-$rDs6!$G$-$k!#(B}
+{\bf :line}メソッドと同じである。
+他の{\bf viewsurface}クラスとの互換性を提供できる。}
 \methoddesc{:line-width}{\&optional dots}{
-$B$3$N(B{\bf Xdrawable}$B$N%G%U%)%k%H(BGC$B$N@~$NI}$r@_Dj$9$k!#(B
-{\tt :gc :line-width}$B%a%C%;!<%8$N;HMQ$r?dA&$9$k!#(B}
+この{\bf Xdrawable}のデフォルトGCの線の幅を設定する。
+{\tt :gc :line-width}メッセージの使用を推薦する。}
 \methoddesc{:line-style}{\&optional dash}{
-$B$3$N(B{\bf Xdrawable}$B$N%G%U%)%k%H(BGC$B$N@~%9%?%$%k$r@_Dj$9$k!#(B
-{\tt :gc :line-style}$B$N;HMQ$,9%$^$l$k!#(B}
-\methoddesc{:color}{\&optional c}{$B$3$N(B{\bf Xdrawable}$B$N?'$r@_Dj$9$k!#(B}
+この{\bf Xdrawable}のデフォルトGCの線スタイルを設定する。
+{\tt :gc :line-style}の使用が好まれる。}
+\methoddesc{:color}{\&optional c}{この{\bf Xdrawable}の色を設定する。}
 %\methoddesc{:set-show-mode}{}{
-%$B%3%T!<%b!<%I$r@_Dj$9$k!#$3$N4X?t$O!"$U$D$&Gr9u%G%#%9%W%l%$$G;HMQ$5$l$k!#(B}
+%コピーモードを設定する。この関数は、ふつう白黒ディスプレイで使用される。}
 %\methoddesc{:set-erase-mode}{}{
-%$B>C5n%b!<%I$r@_Dj$9$k!#$3$N4X?t$O!"$U$D$&Gr9u%G%#%9%W%l%$$G;HMQ$5$l$k!#(B}
+%消去モードを設定する。この関数は、ふつう白黒ディスプレイで使用される。}
 %\methoddesc{:set-xor-mode}{}{
-%$BH?E>%b!<%I$r@_Dj$9$k!#$3$N4X?t$O!"$U$D$&Gr9u%G%#%9%W%l%$$G;HMQ$5$l$k!#(B}
+%反転モードを設定する。この関数は、ふつう白黒ディスプレイで使用される。}
 \methoddesc{:clear}{}{
-$BA42hLL$r>C5n$9$k!#$3$N4X?t$O!"(B{\tt :clear-area}$B$r8F$S=P$9!#(B}
+全画面を消去する。この関数は、{\tt :clear-area}を呼び出す。}
 \methoddesc{:clear-area}{\&key :x  :y :width :height :gc}{
-{\bf :fill-rectangle}$B%a%=%C%I$rMQ$$$F;M3QNN0h$r>C5n$9$k!#(B}
+{\bf :fill-rectangle}メソッドを用いて四角領域を消去する。}
 
 \classdesc{Xpixmap}{Xdrawable}{}{
-pixmap$B$O!"2hA|%P%C%U%!$"$k$$$OGX7J$N%Q%?!<%s$H$7$F$7$P$7$PMQ$$$i$l$k(B
-drawable$B$G$"$k!#(Bxwindow$B$H0[$J$j!"(Bxwindow$B$K%3%T!<$5$l$k$^$G(B
-pixmap$B<+?H$r8+$k$3$H$O$G$-$J$$$7!"(Bpixmap$B$O$I$s$J%$%Y%s%H$bH/@8$7$J$$!#(B}
+pixmapは、画像バッファあるいは背景のパターンとしてしばしば用いられる
+drawableである。xwindowと異なり、xwindowにコピーされるまで
+pixmap自身を見ることはできないし、pixmapはどんなイベントも発生しない。}
 
-\methoddesc{:init}{id}{$B$3$N(Bpixmap$B$r=i4|2=$9$k!#(B}
+\methoddesc{:init}{id}{このpixmapを初期化する。}
 \methoddesc{:create}{\&key (:width 500) (:height 500) (:depth 1) (:gc *defaultgc*)}{
-$B%G%U%)%k%H(BGC$B$H$7$F(B{\em :gc}$B$r;}$D!"(B{\em width}$\times${\em height}$B$N(Bpixmap$B$r:n@.$9$k!#(B}
+デフォルトGCとして{\em :gc}を持つ、{\em width}$\times${\em height}のpixmapを作成する。}
 \methoddesc{:create-from-bitmap-file}{fname}{
-{\em file}$B$G;XDj$5$l$k(Bbitmap$B%U%!%$%k$+$i(Bpixmap$B$r:n$k!#(B}
+{\em file}で指定されるbitmapファイルからpixmapを作る。}
 \methoddesc{:write-to-bitmap-file}{fname}{
-$B$3$N(Bpixmap$B$NFbMF$r(B{\em fname}$B$G;XDj$5$l$k(Bbitmap$B%U%!%$%k$K=q$-9~$`!#(B
-$B$3$N%U%!%$%k$O!"(B{\bf :create-from-bitmap-file}$B%a%=%C%I$G(B
-pixmap$B$r:n$j!"FI$_La$9$3$H$,$G$-$k!#(B}
+このpixmapの内容を{\em fname}で指定されるbitmapファイルに書き込む。
+このファイルは、{\bf :create-from-bitmap-file}メソッドで
+pixmapを作り、読み戻すことができる。}
 \methoddesc{:destroy}{}{
-$B$3$N(Bpixmap$B$rGK2u$7!"(BX resource$B$r3+J|$9$k!#(B}
+このpixmapを破壊し、X resourceを開放する。}
 
 \classdesc{Xwindow}{Xdrawable}{(parent subwindows backing-store)}{
-{\bf Xwindow}$B$O!"2hLL$N8+$($k;M3QNN0h$rDj5A$9$k!#(B
-$B$3$l$O!"(B{\bf text-window}$B$d%0%i%U%#%C%/%*%V%8%'%/%H$rIA$/$?$a$N(B{\bf canvas}
-$B$@$1$G$J$/!"(Bwindow$B$H$$$&$h$j$O$`$7$m%0%i%U%#%C%/%*%V%8%'%/%H$N$h$&$J(B
-$B$?$/$5$s$N(B{\bf panel-item}$B$d(B{\bf scroll-bars}$B$+$i$b7Q>5$5$l$k!#(B}
+{\bf Xwindow}は、画面の見える四角領域を定義する。
+これは、{\bf text-window}やグラフィックオブジェクトを描くための{\bf canvas}
+だけでなく、windowというよりはむしろグラフィックオブジェクトのような
+たくさんの{\bf panel-item}や{\bf scroll-bars}からも継承される。}
 
-\longdescription{:create}{\&key ( \= (:parent *root*) \` [$B%a%=%C%I(B] \\
-%\longdescription{:create}{\&key ( \= (:parent par) \hspace{98mm} [$B%a%=%C%I(B] \\
+\longdescription{:create}{\&key ( \= (:parent *root*) \` [メソッド] \\
+%\longdescription{:create}{\&key ( \= (:parent par) \hspace{98mm} [メソッド] \\
 \> (:x 0) (:y 0) (:size 256) (:width size) (:height size) (:border-width 2) \\
 \> (:save-under nil) (:backing-store :always) (:backing-pixmap nil)\\
 \> (:border *fg-pixel*) (:background *bg-pixel*) \\
@@ -259,66 +259,66 @@ pixmap$B$r:n$j!"FI$_La$9$3$H$,$G$-$k!#(B}
 \> (:title "WINDOW") (:name title) \\
 \> (:font) \\
 \> :event-mask (:key :button :enterLeave :configure :motion)}
-{xwindow$B@8@.$7!"=i4|2=$9$k!#(B
-{\em :parent}$B$,M?$($i$l$?$H$-!"$3$N(Bwindow$B$O(B{\em :parent}$B$N;R(Bwindow$B$H$7$F(B
-$B@8@.$5$l!"(B{\em :parent}$B$N(B{\tt subwindows}$B%j%9%H$KC_@Q$5$l$k!#(B
-{\em :x, :y, :size, :width, :height}$B$H(B{\em :border-width}$B$O!"$3$N(Bwindow
-$B$N0LCV$H@#K!$r7hDj$9$k!#(B
-{\em :save-under}$B$H(B{\em :backing-store}$B$O!"(Bwindow$B$,:F%^%C%W$5$l$?$H$-$K(B
-$B@8$8$k(BXserver$B$N9TF0$r@)8f$9$k!#(B
-{\em :backing-store}$B$O(B{\tt :notUseful, :WhenMapped, :Always}$B$N$I$l$+$G$"$k$,!"(B
-{\em :save-under}$B$O(BT$B$"$k$$$O(BNIL$B$G$"$k!#(B
-{\em :backing-pixmap}$B$,(BT$B$N$H$-!"$3$N(Bwindow$B$HF1$8%5%$%:$N(Bpixmap$B$,(BEuslisp$B$K$h$j(B
-$B@8@.$5$l!"$b$7(BXserver$B$,(B{\tt backing-store}$B$NMFNL$r;}$C$F$$$J$$>l9g$O!"(B
-backing-store$B$H$7$FC_@Q$5$l$k!#(B
-{\em :border}$B$H(B{\em :background}$B$O!"(B{\tt border\_pixel}$B$H(B
-{\tt background\_pixel}$BB0@-$r$=$l$>$l;XDj$9$k!#(B
-$B$b$7!"(B{\bf panel}$B$NCf$N(Bpanel-button$B$H$7$F$?$/$5$s$N>.$5$J(Bwindow$B$r(B
-$B:n@.$9$k$h$&$J>l9g$G!"$3$N(Bwindow$B$,@8@.8e$K$9$0I=<($5$l$k$Y$-$G$J$$$J$i$P!"(B
-{\em :map}$B$O(BNIL$B$K%;%C%H$5$l$J$1$l$P$J$i$J$$!#(B
-{\em :title}$B$O!"(Bwindow$B$N%?%$%H%k%P!<$K8=$l$k(Bwindow$B$N%?%$%H%k$G$"$k!#(B
-{\em :name}$B$O!"$3$N(Bwindow$B$N(Bplist$B$KC_@Q$5$l$k(Bwindow$B$NL>A0$G$"$j!"(B
-$B%W%j%s%?$K$h$jI=<($5$l$kL>A0$G$"$k!#(B
-$B$3$N(Bwindow$B$X$N(BX$B$N%$%Y%s%H$O!"(B{\em :event-mask}$B$K$h$C$F7hDj$5$l$k!#(B
-$B$=$l$O%S%C%H$G9=@.$5$l$k(Bevent-mask$B$N@0?tI=8=$"$k$$$O<!$N(Bsymbol$B$N%j%9%H(B
-$B$G$"$k!#(B
-{\tt :key, :button, :enterLeave, :motion}$B$H(B{\tt :configure}$B!#(B
-$B$b$7!"$b$C$H@53N$J@)8f$,I,MW$J$i$P!"<!$N(Bsymbol$B$r$=$l$>$l$N%$%Y%s%H$K(B
-$B;XDj$9$k$3$H$,$G$-$k!#(B{\tt :keyPress, :keyRelease, :ButtonPress, :ButtonRelease,} 
+{xwindow生成し、初期化する。
+{\em :parent}が与えられたとき、このwindowは{\em :parent}の子windowとして
+生成され、{\em :parent}の{\tt subwindows}リストに蓄積される。
+{\em :x, :y, :size, :width, :height}と{\em :border-width}は、このwindow
+の位置と寸法を決定する。
+{\em :save-under}と{\em :backing-store}は、windowが再マップされたときに
+生じるXserverの行動を制御する。
+{\em :backing-store}は{\tt :notUseful, :WhenMapped, :Always}のどれかであるが、
+{\em :save-under}はTあるいはNILである。
+{\em :backing-pixmap}がTのとき、このwindowと同じサイズのpixmapがEuslispにより
+生成され、もしXserverが{\tt backing-store}の容量を持っていない場合は、
+backing-storeとして蓄積される。
+{\em :border}と{\em :background}は、{\tt border\_pixel}と
+{\tt background\_pixel}属性をそれぞれ指定する。
+もし、{\bf panel}の中のpanel-buttonとしてたくさんの小さなwindowを
+作成するような場合で、このwindowが生成後にすぐ表示されるべきでないならば、
+{\em :map}はNILにセットされなければならない。
+{\em :title}は、windowのタイトルバーに現れるwindowのタイトルである。
+{\em :name}は、このwindowのplistに蓄積されるwindowの名前であり、
+プリンタにより表示される名前である。
+このwindowへのXのイベントは、{\em :event-mask}によって決定される。
+それはビットで構成されるevent-maskの整数表現あるいは次のsymbolのリスト
+である。
+{\tt :key, :button, :enterLeave, :motion}と{\tt :configure}。
+もし、もっと正確な制御が必要ならば、次のsymbolをそれぞれのイベントに
+指定することができる。{\tt :keyPress, :keyRelease, :ButtonPress, :ButtonRelease,} 
 {\tt :EnterWindow, :LeaveWindow, :PointerMotion, :PointerMotionHint,} 
 {\tt :ButtonMotion, :KeyMapState,\\ :Exposure, :VisibilityChange,}
  {\tt :StructureNotify,
 :ResezeRedirect, :SubstructureNotify,\\ :SubstructureRedirect,} {\tt
-:FocusChange, :PropertyChange, :ColormapChange}$B$H(B\\{\tt :OwnerGrabButton}$B!#(B
-{\tt :key}$B$O!"(B{\tt :keyPress}$B$H(B{\tt :KeyRelease}$B$NN>J}$,;XDj$G$-!"(B
-{\tt :button}$B$O!"(B{\tt :ButtonPress}$B$H(B{\tt :ButtonRelease}$B$NN>J}$,;XDj$G$-$k!#(B
-$B%5!<%P$+$i%$%Y%s%H$,Aw$i$l$F$-$?$H$-!"(B{\bf window-main-loop}$B$O!"(B
-$B$=$N%$%Y%s%H9=B$$r2r@O$7!"(B{\tt :KeyPress, :KeyRelease, :buttonPress,} {\tt
+:FocusChange, :PropertyChange, :ColormapChange}と\\{\tt :OwnerGrabButton}。
+{\tt :key}は、{\tt :keyPress}と{\tt :KeyRelease}の両方が指定でき、
+{\tt :button}は、{\tt :ButtonPress}と{\tt :ButtonRelease}の両方が指定できる。
+サーバからイベントが送られてきたとき、{\bf window-main-loop}は、
+そのイベント構造を解析し、{\tt :KeyPress, :KeyRelease, :buttonPress,} {\tt
 :ButtonRelease, :EnterNotify,} {\tt :LeaveNotify, :MotionNotify, :ConfigureNotify}
-$B%a%C%;!<%8$r$=$N%$%Y%s%H$,H/@8$7$?(Bwindow$B$KAw$k!#(B}
+メッセージをそのイベントが発生したwindowに送る。}
 
-\methoddesc{:map}{}{$B$3$N(B{\bf Xwindow}$B$H$=$N;R(Bwindow$B$rA4$FI=<($9$k!#(B}
-\methoddesc{:unmap}{}{$B$3$N(B{\bf Xwindow}$B$r$H$=$N;R(Bwindow$B$rA4$FHsI=<($K$9$k!#(B}
+\methoddesc{:map}{}{この{\bf Xwindow}とその子windowを全て表示する。}
+\methoddesc{:unmap}{}{この{\bf Xwindow}をとその子windowを全て非表示にする。}
 \methoddesc{:selectinput}{event-mask}{
-{\em event-mask}$B$O!"@0?t$+$"$k$$$O%$%Y%s%H%^%9%/(Bsymbol$B$N%j%9%H$G$"$k!#(B
-$B%S%C%H$,#1$H$J$C$F$$$k$+$"$k$$$O(B{\em event-mask}$B%j%9%H(B
-$B$KNs5s$5$l$F$$$k%$%Y%s%H$O!"$=$l$>$l$3$N(Bwindow$B$KDLCN$5$l$k!#(B}
-\methoddesc{:destroy}{}{$B$3$N(B{\bf Xwindow}$B$rGK2u$7!"(BX resource$B$r3+J|$9$k!#(B
-window$B%*%V%8%'%/%H$O!"%,!<%Y!<%8%3%l%/%H$5$l$J$$$?$a!"(B
-{\tt *xwindow*}$B$d(B{\tt *xwindow-hash-tab*}$B$NCf$N0lCW$9$k%(%s%H%j$b:o=|$5$l$k!#(B
-$BA4$F$N;R(Bwindow$B$b(B{\tt :destroy}$B$rAw$k$3$H$K$h$j:o=|$9$k!#(B
-$B$3$N(Bwindow$B$O!"?F(Bwindow$B$N;R(Bwindow$B$N%j%9%H$+$i:o=|$5$l$k!#(B
-{\tt drawable}ID$B$O!"(BNIL$B$K@_Dj$5$l$k!#(B}
-\methoddesc{:parent}{}{$B?F(Bwindow$B%*%V%8%'%/%H$rJV$9!#(B}
+{\em event-mask}は、整数かあるいはイベントマスクsymbolのリストである。
+ビットが１となっているかあるいは{\em event-mask}リスト
+に列挙されているイベントは、それぞれこのwindowに通知される。}
+\methoddesc{:destroy}{}{この{\bf Xwindow}を破壊し、X resourceを開放する。
+windowオブジェクトは、ガーベージコレクトされないため、
+{\tt *xwindow*}や{\tt *xwindow-hash-tab*}の中の一致するエントリも削除される。
+全ての子windowも{\tt :destroy}を送ることにより削除する。
+このwindowは、親windowの子windowのリストから削除される。
+{\tt drawable}IDは、NILに設定される。}
+\methoddesc{:parent}{}{親windowオブジェクトを返す。}
 \methoddesc{:subwindows}{}{
-$BA4$F$N;R(Bwindow$B$N%j%9%H$rJV$9!#(B
-$B;R(Bwindow$B$O!"$b$C$H$b:G6a:n$i$l$?$b$N$,%j%9%H$N:G=i$G$"$k!#(B
-$B$3$N(Bwindow$B$ND>@\$N;R(Bwindow$B$@$1$,%j%9%H$5$l!";R(Bwindow$B$N;R(Bwindow$B$O(B
-$B%j%9%H$5$l$J$$!#(B}
+全ての子windowのリストを返す。
+子windowは、もっとも最近作られたものがリストの最初である。
+このwindowの直接の子windowだけがリストされ、子windowの子windowは
+リストされない。}
 \methoddesc{:associate}{child}{
-$B$3$N(Bwindow$B$N;R(Bwindow$B$H$7$F(B{\em child} window$B$rEPO?$9$k!#(B}
+このwindowの子windowとして{\em child} windowを登録する。}
 \methoddesc{:dissociate}{child}{
-$B;R(Bwindow$B$N%j%9%H$+$i(B{\em child} window$B$r:o=|$9$k!#(B}
+子windowのリストから{\em child} windowを削除する。}
 
 %\methoddesc{:save}{}{
 %copies the content of this window to the backing-store pixmap.}
@@ -327,101 +327,101 @@ window$B%*%V%8%'%/%H$O!"%,!<%Y!<%8%3%l%/%H$5$l$J$$$?$a!"(B
 %copies from the backing-store.}
 
 \methoddesc{:title}{title}{
-$B$3$N(Bwindow$B$N%?%$%H%kL>$rJQ99$9$k!#$=$N%?%$%H%kL>$O(BXserver$B$KAw$i$l$k$?$a!"(B
-$B0lC6C_@Q$5$l!"(Bwindow manager$B$K$h$C$FI=<($5$l$k!#(B}
+このwindowのタイトル名を変更する。そのタイトル名はXserverに送られるため、
+一旦蓄積され、window managerによって表示される。}
 
-\methoddesc{:attributes}{}{$B$3$N(Bwindow$B$NB0@-$rI=8=$9$k@0?t%Y%/%H%k$rJV$9!#(B}
-\methoddesc{:visual}{}{$B$3$N(B{\bf Xwindow}$B$N(Bvisual resource ID$B$rJV$9!#(B}
-\methoddesc{:screen}{}{$B$3$N(B{\bf Xwindow}$B$N(Bscreen resource ID$B$rJV$9!#(B}
-\methoddesc{:root}{}{root window ID$B$rJV$9!#(B} 
+\methoddesc{:attributes}{}{このwindowの属性を表現する整数ベクトルを返す。}
+\methoddesc{:visual}{}{この{\bf Xwindow}のvisual resource IDを返す。}
+\methoddesc{:screen}{}{この{\bf Xwindow}のscreen resource IDを返す。}
+\methoddesc{:root}{}{root window IDを返す。} 
 
 \methoddesc{:location}{}{
-$B$3$N(Bwindow$B$N(Bx$B$H(By$B:BI8$r5-=R$9$k(B2$B<!85$N@0?t%Y%/%H%k$rJV$9!#(B}
+このwindowのxとy座標を記述する2次元の整数ベクトルを返す。}
 \methoddesc{:depth}{}{
-$B$3$N(Bwindow$B$N?<$5(B($B%+%i!<%W%l!<%s$N?t(B)$B$rJV$9!#(B}
-\methoddesc{:size}{}{$B$3$N(Bwindow$B$N%5%$%:(B($B9b$5$HI}(B)$B$rJV$9!#(B}
-\methoddesc{:colormap}{}{$B$3$N(Bwindow$B$N(Bcolormap resource ID$B$rJV$9!#(B}
+このwindowの深さ(カラープレーンの数)を返す。}
+\methoddesc{:size}{}{このwindowのサイズ(高さと幅)を返す。}
+\methoddesc{:colormap}{}{このwindowのcolormap resource IDを返す。}
 \methoddesc{:move}{newx newy}{
-$B$3$N(Bwindow$B$N0LCV$r(B{\em (newx,newy)}$B$KJQ99$9$k!#(B
-$B0LCV$O!"?F(Bwindow$B$NAjBP0LCV$GM?$($i$l$k!#(B}
+このwindowの位置を{\em (newx,newy)}に変更する。
+位置は、親windowの相対位置で与えられる。}
 \methoddesc{:resize}{width height}{
-$B$3$N(Bwindow$B$N%5%$%:$rJQ99$9$k!#(B
-$B$?$V$s!"Bg$-$5$N%Q%i%a!<%?$,%/%i%$%"%s%HB&$N(BXlib$B$KCf$K%-%c%C%7%e$5$l$k$?$a!"(B
-{\bf :resize}$B$ND>8e$K(B{\tt :geometry}$B%a%C%;!<%8$r(B
-$BAw$k$H8m$C$?!J8E$$!K7k2L$rJV$9!#(B}
-\methoddesc{:raise}{}{$B$3$N(Bwindow$B$rA0LL$K;}$C$F$/$k!#(B}
-\methoddesc{:lower}{}{$B$3$N(Bwindow$B$r8e$m$KCV$/!#(B}
+このwindowのサイズを変更する。
+たぶん、大きさのパラメータがクライアント側のXlibに中にキャッシュされるため、
+{\bf :resize}の直後に{\tt :geometry}メッセージを
+送ると誤った（古い）結果を返す。}
+\methoddesc{:raise}{}{このwindowを前面に持ってくる。}
+\methoddesc{:lower}{}{このwindowを後ろに置く。}
 \methoddesc{:background}{pixel}{
-$BGX7J$N%T%/%;%kCM!J%+%i!<%^%C%W$N%$%s%G%C%/%9!K$r(B{\em pixel}$B$KJQ99$9$k!#(B
-{\em pixel}$BCM$O!"(B{\tt bg-color}$B%9%m%C%H$K$bJ]B8$5$l$k!#(B
-{\tt :clear}$B=hM}$O!"8=:_$NGX7J$r;XDj$5$l$?(B{\em pixel}$B$GKd$a$k!#(B}
+背景のピクセル値（カラーマップのインデックス）を{\em pixel}に変更する。
+{\em pixel}値は、{\tt bg-color}スロットにも保存される。
+{\tt :clear}処理は、現在の背景を指定された{\em pixel}で埋める。}
 
 \methoddesc{:background-pixmap}{pixmap}{
-$BGX7J$N(Bpixmap$BCM$r(B{\em pixmap}$B$KJQ99$9$k!#(B}
+背景のpixmap値を{\em pixmap}に変更する。}
 \methoddesc{:border}{pixel}{
-$B$3$N(Bwindow$B$NOH@~$N?'$r(B{\em pixel}$B$K@_Dj$9$k!#(B}
+このwindowの枠線の色を{\em pixel}に設定する。}
 %\methoddesc{:line-style}{style}{sets style attribute of GC.}
 %\methoddesc{:line-width}{width}{sets width attribute of GC.}
 %\methoddesc{:write-to-bitmap-file}{fname}{
 %dumps the content of the backing-store pixmap to a bitmap-file.}
 %\methoddesc{:draw-line}{from to}{
 %a line is drawn in both this window and the backing-store.}
-\methoddesc{:set-colormap}{cmap}{colormap$B$r@_Dj$9$k!#(B}
+\methoddesc{:set-colormap}{cmap}{colormapを設定する。}
 \methoddesc{:clear}{}{
-$B$3$N(B{\bf Xwindow}$BFb$rA4$F>C5n$9$k!#(B}
+この{\bf Xwindow}内を全て消去する。}
 \methoddesc{:clear-area}{\&key :x :y :width :height}{
-$B$3$N(B{\bf Xwindow}$B$N;XDj$5$l$?;M3QNN0h$r>C5n$9$k!#(B}
+この{\bf Xwindow}の指定された四角領域を消去する。}
 %\methoddesc{:who-is-parent}{\&optional obj}{
-%{\em obj}$B$N?F(Bwindow$B$rJV$9!#$b$7!"(B{\em obj}$B$,$J$1$l$P!"$3$N(B{\bf Xwindow}$B$N(B
-%$B?F(Bwindow$B$rJV$9!#(B}
+%{\em obj}の親windowを返す。もし、{\em obj}がなければ、この{\bf Xwindow}の
+%親windowを返す。}
 
 \funcdesc{make-xwindow}{\&rest args}{
-$B0z$-?t(B{\em args}$B$G<($5$l$k(B{\bf Xwindow}$B$r:n$k!#(B}
+引き数{\em args}で示される{\bf Xwindow}を作る。}
 \funcdesc{init-xwindow}{\&optional (display (getenv "DISPLAY"))}{
-eusx$B$,5/F0$9$k$H$-$K:G=i$K8F$S=P$5$l$k4X?t$G$"$k!#(B
-{\bf init-xwindow}$B$O!"(B{\em display}$B$G;XDj$5$l$k(BXserver$B$K@\B3$7!"(B
-\ref{xvariables}$B@a$K5-=R$5$l$F$$$k%G%U%)%k%HJQ?t$r=i4|2=$9$k!#(B
-{\bf init-xwindow}$B$O!"%G%U%)%k%H%U%)%s%H$r%m!<%I$7!"(B
-$B%0%m!<%P%kJQ?t$K@_Dj$9$k!#Nc$($P!"(Bfont-courb12, lucidasans-bold-12$B$J$I!#(B
-$B$3$N%U%)%s%H%m!<%I$O!"5/F0;~$K;~4VCY$l$r0z$-5/$3$9!#(B
-$B%U%)%s%H%m!<%I$N?t$r8:$i$7$?$j!"%o%$%k%I%+!<%IJ8;z(B"*"$B$r;HMQ$;$:$K(B
-$B@53N$J%U%)%s%HL>$r;XDj$9$k$3$H$K$h$j!"$=$NCY$l$rC;$/$G$-$k!#(B}
+eusxが起動するときに最初に呼び出される関数である。
+{\bf init-xwindow}は、{\em display}で指定されるXserverに接続し、
+\ref{xvariables}節に記述されているデフォルト変数を初期化する。
+{\bf init-xwindow}は、デフォルトフォントをロードし、
+グローバル変数に設定する。例えば、font-courb12, lucidasans-bold-12など。
+このフォントロードは、起動時に時間遅れを引き起こす。
+フォントロードの数を減らしたり、ワイルドカード文字"*"を使用せずに
+正確なフォント名を指定することにより、その遅れを短くできる。}
 
 %\funcdesc{switchvideo}{}{
-%$BJ8;z?'$HGX7J?'$r8r49$9$k!#(B
-%$B$3$N4X?t$O!"0lHL$KGr9u%G%#%9%W%l%$$G;HMQ$5$l$k!#(B}
+%文字色と背景色を交換する。
+%この関数は、一般に白黒ディスプレイで使用される。}
 %\funcdesc{reversevideo}{}{
-%$BJ8;z?'$KGr?'$r@_Dj$7!"GX7J?'$K9u$r@_Dj$9$k!#(B
-%$B$3$N4X?t$O!"0lHL$KGr9u%G%#%9%W%l%$$G;HMQ$5$l$k!#(B}
+%文字色に白色を設定し、背景色に黒を設定する。
+%この関数は、一般に白黒ディスプレイで使用される。}
 
 \subsection{Graphic Context}
 
-\classdesc{gcontext}{Xobject}{(gcid GCValues)}{graphic context(GC)$B$rDj5A$9$k!#(B
-Euslisp$B$NCf$G!"A4$F$N(Bwindow$B$O%G%U%)%k%H(BGC$B$r;}$C$F$$$k!#(B}
+\classdesc{gcontext}{Xobject}{(gcid GCValues)}{graphic context(GC)を定義する。
+Euslispの中で、全てのwindowはデフォルトGCを持っている。}
 
-\longdescription{:create}{\&key \= (:drawable defaultRootWindow) \` [$B%a%=%C%I(B]\\
+\longdescription{:create}{\&key \= (:drawable defaultRootWindow) \` [メソッド]\\
 \> (:foreground *fg-pixel*) (:background *bg-pixel*) \\
 \> :function :plane-mask \\
 \> :line-width :line-style :cap-style :join-style \\
 \> :font :dash \\}{
-$BM?$($i$l$?B0@-$G(BGC$B$r:n@.$9$k!#(B
-{\em drawable}$B$O!"2hLL$H2hLL$N?<$5$rCN$k$?$a$K(BXserver$B$K$h$j;HMQ$5$l$k!#(B
-$B7k2L$N(BGC$B$O!"F1$82hLL>e$G:n@.$5$l$k8B$j!"(B
-$B$I$N(Bdrawable$B$G$b;HMQ$G$-$k!#(B}
+与えられた属性でGCを作成する。
+{\em drawable}は、画面と画面の深さを知るためにXserverにより使用される。
+結果のGCは、同じ画面上で作成される限り、
+どのdrawableでも使用できる。}
 
-\methoddesc{:gc}{}{X$B$N(BGC ID$B$rJV$9!#(B}
-\methoddesc{:free}{}{$B$3$N(B{\bf GC}$B$r3+J|$9$k!#(B}
+\methoddesc{:gc}{}{XのGC IDを返す。}
+\methoddesc{:free}{}{この{\bf GC}を開放する。}
 
-\methoddesc{:copy}{}{$B$3$N(B{\bf GC}$B$N%3%T!<$r:n$k!#(B}
-\methoddesc{:foreground}{\&optional color}{$B$b$7!"(B{\em color}$B$,M?$($i$l$?$J$i$P!"(B
-$BJ8;z?'$K(B{\em color}$B$r@_Dj$9$k!#(B{\em color}$B$O%T%/%;%kCM$G$"$k!#(B}
-\methoddesc{:background}{\&optional color}{$B$b$7!"(B{\em color}$B$,M?$($i$l$?$J$i$P!"(B
-$BGX7J?'$K(B{\em color}$B$r@_Dj$9$k!#(B{\em color}$B$O%T%/%;%kCM$G$"$k!#(B}
-\methoddesc{:foreback}{fore back}{$B0lEY$KJ8;z?'$HGX7J?'$r@_Dj$9$k!#(B}
-\methoddesc{:planemask}{\&optional plane-mask}{plane-mask$B$r@_Dj$9$k!#(B}
+\methoddesc{:copy}{}{この{\bf GC}のコピーを作る。}
+\methoddesc{:foreground}{\&optional color}{もし、{\em color}が与えられたならば、
+文字色に{\em color}を設定する。{\em color}はピクセル値である。}
+\methoddesc{:background}{\&optional color}{もし、{\em color}が与えられたならば、
+背景色に{\em color}を設定する。{\em color}はピクセル値である。}
+\methoddesc{:foreback}{fore back}{一度に文字色と背景色を設定する。}
+\methoddesc{:planemask}{\&optional plane-mask}{plane-maskを設定する。}
 
-\methoddesc{:function}{x}{$BIA2h5!G=$r@_Dj$9$k!#(B
-{\em x}$B$O!"0J2<$K<($9?t;z$+%-!<%o!<%I$NFb$N(B1$B$D$G$"$k!#(B
+\methoddesc{:function}{x}{描画機能を設定する。
+{\em x}は、以下に示す数字かキーワードの内の1つである。
 {\tt 0=Clear, 1=And, 2=AndReverse, 3=Copy, 4=AndInverted, 5=NoOp, 6=Xor, 7=Or,
 8=Nor, 9=Equiv, 10=Invert,\\ 11=XorReverse, 12=CopyInverted, 13=OrInverted,
 14=Nand, 15=Set, :clear, :and,\\ :andReverse, :copy, :andInverted,
@@ -429,213 +429,213 @@ Euslisp$B$NCf$G!"A4$F$N(Bwindow$B$O%G%U%)%k%H(BGC$B$r;}$C$F$$$k!#(B}
 :OrInverted, :Nand, :Set}}
 
 \methoddesc{:font}{x}{
-$B$3$N(BGC$B$N%U%)%s%HB0@-$r@_Dj$9$k!#(B
-{\em x}$B$O!"%U%)%s%HL>$"$k$$$O%U%)%s%H(BID$B$G$"$k!#(B
-$B$b$7!"(B{\em x}$B$,%U%)%s%HL>!JJ8;zNs!K$G$"$C$?$J$i$P!"(B{\bf :font}$B$O(B
-$B%U%)%s%H(BID$B$r7h$a$k$?$a$K(B{\bf x:LoadQueryFont}$B$r8F$S=P$9!#(B
-$B$b$7!"8+$D$+$i$J$+$C$?>l9g!"(B{\tt "no such font ..."}$B$,7Y9p$5$l$k!#(B
-$B$b$7!"(B{\em x}$B$,(BNIL$B!JM?$($i$l$J$+$C$?!K$J$i$P!"$3$N(BGC$B$N8=:_$N(B
-$B%U%)%s%H(BID$B$,JV$5$l$k!#(B}
+このGCのフォント属性を設定する。
+{\em x}は、フォント名あるいはフォントIDである。
+もし、{\em x}がフォント名（文字列）であったならば、{\bf :font}は
+フォントIDを決めるために{\bf x:LoadQueryFont}を呼び出す。
+もし、見つからなかった場合、{\tt "no such font ..."}が警告される。
+もし、{\em x}がNIL（与えられなかった）ならば、このGCの現在の
+フォントIDが返される。}
 
-\methoddesc{:line-width}{x}{$B@~I}$r%T%/%;%k?t(B{\em x}$B$G@_Dj$9$k!#(B}
-\methoddesc{:line-style}{x}{$B@~%9%?%$%k(B($B<B@~!"E@@~$J$I(B)$B$r@_Dj$9$k!#(B}
-\methoddesc{:dash}{\&rest x}{{\em x}$B$N$=$l$>$l$NMWAG$O!"@0?t$G$"$k!#(B
-{\bf :dash}$B$O!"@~%9%?%$%k$NE@@~%Q%?!<%s$r@_Dj$9$k!#(B}
-%\methoddesc{:color}{c}{$BJ8;z?'$r(B{\em c}$B$K@_Dj$9$k!#(B}
-\methoddesc{:tile}{pixmap}{{\em pixmap}$B$r$3$N(BGC$B$N%?%$%k%Q%?!<%s$K@_Dj$9$k!#(B}
-\methoddesc{:stipple}{pixmap}{{\em pixmap}$B$r$3$N(BGC$B$NE@2h$K@_Dj$9$k!#(B}
-\methoddesc{:get-attribute}{attr}{$BB0@-CM$rF@$k!#(B
-{\em attr}$B$O!"(B{\tt :function, :plane-mask, :foreground,
+\methoddesc{:line-width}{x}{線幅をピクセル数{\em x}で設定する。}
+\methoddesc{:line-style}{x}{線スタイル(実線、点線など)を設定する。}
+\methoddesc{:dash}{\&rest x}{{\em x}のそれぞれの要素は、整数である。
+{\bf :dash}は、線スタイルの点線パターンを設定する。}
+%\methoddesc{:color}{c}{文字色を{\em c}に設定する。}
+\methoddesc{:tile}{pixmap}{{\em pixmap}をこのGCのタイルパターンに設定する。}
+\methoddesc{:stipple}{pixmap}{{\em pixmap}をこのGCの点画に設定する。}
+\methoddesc{:get-attribute}{attr}{属性値を得る。
+{\em attr}は、{\tt :function, :plane-mask, :foreground,
 :background, :line-width, :line-style, :cap-style, :join-style,
-:fill-style, :fill-rule, :font}$B$NFb$N#1$D$G$"$k!#(B
-$BB0@-CM$rI=$9@0?t$,JV$5$l$k!#(B}
+:fill-style, :fill-rule, :font}の内の１つである。
+属性値を表す整数が返される。}
 
 \longdescription{:change-attributes}{\&key \= :function :plane-mask :foreground :background
-\`[$B%a%=%C%I(B]\\
+\`[メソッド]\\
 \>:line-width :line-style :cap-style :join-style :font :dash}{
-$BB0@-CM$rJQ99$9$k!#(B
-$BF1;~$KJ#?t$NB0@-CM$rJQ99$G$-$k!#(B}
+属性値を変更する。
+同時に複数の属性値を変更できる。}
 
-%\funcdesc{make-color-gc}{color}{{\em color}$B$G;XDj$5$l$k(B{\bf GC}$B$r:n$j!"(B
-%$B$3$N(B{\bf GC}$B$rJV$9!#(B}
+%\funcdesc{make-color-gc}{color}{{\em color}で指定される{\bf GC}を作り、
+%この{\bf GC}を返す。}
 
 \funcdesc{font-id}{fontname}{
-$B$b$7!"(B{\em fontname}$B$,@0?t$G$"$k$J$i!"%U%)%s%H(BID$B$H$_$J$7$F$=$NCM$rJV$9!#(B
-$B$b$7!"(B{\em fontname}$B$,J8;zNs$G$"$k$J$i!"(B{\bf x:LoadQueryFont}$B$r;HMQ$7$F(B
-$B%U%)%s%H9=B$$rF@$F!"$=$N%U%)%s%H(BID$B$rJV$9!#(B
-{\em fontname}$B$O!"@53N$JL>A0$NN,8l$G$bNI$$!#Nc$($P!"(B
-24$B%]%$%s%H$N%/!<%j%(%U%)%s%H$H$7$F(B{\tt "*-courier-24-*"}$B$r;XDj$G$-$k!#(B
-$B$b$7!"%U%)%s%H$,8+$D$+$i$J$1$l$P!"(B{\tt can't load font}$B$N7Y9p$r(B
-$B=PNO$9$k!#(B}
+もし、{\em fontname}が整数であるなら、フォントIDとみなしてその値を返す。
+もし、{\em fontname}が文字列であるなら、{\bf x:LoadQueryFont}を使用して
+フォント構造を得て、そのフォントIDを返す。
+{\em fontname}は、正確な名前の略語でも良い。例えば、
+24ポイントのクーリエフォントとして{\tt "*-courier-24-*"}を指定できる。
+もし、フォントが見つからなければ、{\tt can't load font}の警告を
+出力する。}
 
 \funcdesc{textdots}{str font-id}{
-{\em str}$BJ8;zNs$N(Bascent descent width$B$r%I%C%HC10L$K<($9(B3$B$D$N@0?t$N%j%9%H$r(B
-$BJV$9!#(B}
+{\em str}文字列のascent descent widthをドット単位に示す3つの整数のリストを
+返す。}
 
 \end{refdesc}
 
-\subsection{$B?'$H%+%i!<%^%C%W(B}
+\subsection{色とカラーマップ}
 
 \begin{refdesc}
 \classdesc{colormap}{object}
 {(cmapid planes pixels LUT-list)}{
-{\bf Xwindow}$B$N%+%i!<%^%C%W$*$h$S%"%W%j%1!<%7%g%s;X8~$N%+%i!<%k%C%/%"%C%W%F!<%V%k(B
-$B$rDj5A$9$k!#(B
-$B%+%i!<$O(BRGB$BCM$GI=8=$5$l!"$=$NHO0O$O(B0$B!A(B65535$B$G$"$k!#(B
-$B%+%i!<%^%C%W$N%+%i!<%;%k$O!"(B8$B%S%C%H$N5<;w%+%i!<%G%#%9%W%l%$$N>e$N(B
-0$B!A(B255$B$NHO0O$NCM$K@_Dj$5$l$k!#(B}
+{\bf Xwindow}のカラーマップおよびアプリケーション指向のカラールックアップテーブル
+を定義する。
+カラーはRGB値で表現され、その範囲は0〜65535である。
+カラーマップのカラーセルは、8ビットの擬似カラーディスプレイの上の
+0〜255の範囲の値に設定される。}
 \end{refdesc}
 
-$B$3$3$G!"#8%S%C%H$N5<;w%+%i!<%G%#%9%W%l%$$N5!G=$,$"$j!"(B
-256$B?'$rA*Br$9$k$3$H$,$G$-$k$H2>Dj$9$k!#(B
-$B4pK\E*$K%+%i!<%^%C%W$r;HMQ$9$k#2$D$NJ}K!$,$"$k!#(B
-$B#1$D$O!"%7%9%F%`%G%U%)%k%H$N%+%i!<%^%C%W$r6&M-$9$kJ}K!$G!"(B
-$B$b$&#1$D$O%W%m%;%9$KFH<+$N%+%i!<%^%C%W$r:n@.$9$kJ}K!$G$"$k!#(B
-$B$b$7!"%7%9%F%`$N%G%U%)%k%H%+%i!<%^%C%W$r;HMQ$9$k>l9g!"(B
-$B%^%C%W$N$9$Y$F$N%+%i!<%;%k$r;H$$$-$i$J$$$h$&$KCm0U$7$J$1$l$P$J$i$J$$!#(B
-$B$J$<$J$i!"%^%C%W$OB?$/$N$N%W%m%;%9$+$i6&M-$5$l$F$$$k$+$i$G$"$k!#(B
-$B$b$7!"FH<+$N%+%i!<%^%C%W$r;HMQ$9$k>l9g!"(B
-$BB>$N%W%m%;%9$r5$$K$9$k$3$H$J$/(B256$B?'$9$Y$F$r;HMQ$9$k$3$H$,$G$-$k!#(B
-$B$7$+$7!"$=$N%^%C%W$OL@3N$KFH<+$N(Bwindow$B$K@_Dj$7$J$1$l$P$J$i$J$$!#(B
-$B%^%&%9$N%]%$%s%?!<$,(Bwindow$BFb$N$I$3$+$KF0$+$5$l$?$H$-!"(B
-$B%+%i!<%^%C%W$O(Bwindow manager$B$K$h$j3h@-2=$5$l$k!#(B
+ここで、８ビットの擬似カラーディスプレイの機能があり、
+256色を選択することができると仮定する。
+基本的にカラーマップを使用する２つの方法がある。
+１つは、システムデフォルトのカラーマップを共有する方法で、
+もう１つはプロセスに独自のカラーマップを作成する方法である。
+もし、システムのデフォルトカラーマップを使用する場合、
+マップのすべてのカラーセルを使いきらないように注意しなければならない。
+なぜなら、マップは多くののプロセスから共有されているからである。
+もし、独自のカラーマップを使用する場合、
+他のプロセスを気にすることなく256色すべてを使用することができる。
+しかし、そのマップは明確に独自のwindowに設定しなければならない。
+マウスのポインターがwindow内のどこかに動かされたとき、
+カラーマップはwindow managerにより活性化される。
 
-$B%7%9%F%`%G%U%)%k%H$N%+%i!<%^%C%W$O(B
-eusx$B$,<B9T$5$l$k:G=i$K(B{\bf x:colormap}$B$N%/%i%9$N%$%s%9%?%s%9$H$7$F!"(B
-{\bf x:*color-map*}$B$K@_Dj$5$l$F$$$k!#(B
-$B$b$7!"FH<+$N%+%i!<%^%C%W$r;HMQ$9$k$H$-!"(B{\bf x:colormap}$B$N%$%s%9%?%s%9$r(B
-$B:n$k!#(B
-$B$3$l$i$N%$%s%9%?%s%9$O!"(Bx server$B$GDj5A$5$l$?(Bcolormap$B%*%V%8%'%/%H$H(B
-$B0lCW$7$F$*$j!"$=$l$>$l$N%$%s%9%?%s%9$N(B{\tt cmapid}$B$K<($5$l$F$$$k!#(B
+システムデフォルトのカラーマップは
+eusxが実行される最初に{\bf x:colormap}のクラスのインスタンスとして、
+{\bf x:*color-map*}に設定されている。
+もし、独自のカラーマップを使用するとき、{\bf x:colormap}のインスタンスを
+作る。
+これらのインスタンスは、x serverで定義されたcolormapオブジェクトと
+一致しており、それぞれのインスタンスの{\tt cmapid}に示されている。
 
-$B%7%9%F%`%G%U%)%k%H$N%+%i!<%^%C%W$r;HMQ$9$k$H$-!"(B
-$BB>$N%W%m%;%9$H6&M-$9$k%+%i!<$rFI$_9~$_@lMQ(B({\em read-only})$B$K!"(B
-Euslisp$B$NFH<+%+%i!<$rFI$_=q$-2DG=(B({\em read-write})$B$KDj5A$9$k$3$H$,$G$-$k!#(B
-"$BFI$_9~$_@lMQ(B"$B$O!"%+%i!<%;%k$K3d$jEv$F$i$l$k(B
-$BG$0U$N%+%i!<$KDj5A$9$k$3$H$,$G$-$k!#(B
-$B$7$+$7!"3d$jEv$F$?8eJQ99$9$k$3$H$,$G$-$J$$!#(B
-$B$b$&0lJ}$G!"(B"$BFI$_=q$-2DG=(B"$B%+%i!<$ODj5A$7$?8e$G$5$(!"JQ99$9$k$3$H$,$G$-$k!#(B
-$B6&M-%+%i!<$O!"B>$N%W%m%;%9$,JQ99$rM=4|$7$F$$$J$$$?$a(B"$BFI$_9~$_@lMQ(B"$B$G$"$k!#(B
-$B$3$N(B"$BFI$_9~$_@lMQ(B"$B$H(B"$BFI$_=q$-2DG=(B"$B$NB0@-$O!"$=$l$>$l$N%+%i!<$KIU$1$i$l$k!#(B
-$B!J$7$P$7$P!"%+%i!<%;%k$H$7$F;2>H$5$l$k!K(B
+システムデフォルトのカラーマップを使用するとき、
+他のプロセスと共有するカラーを読み込み専用({\em read-only})に、
+Euslispの独自カラーを読み書き可能({\em read-write})に定義することができる。
+"読み込み専用"は、カラーセルに割り当てられる
+任意のカラーに定義することができる。
+しかし、割り当てた後変更することができない。
+もう一方で、"読み書き可能"カラーは定義した後でさえ、変更することができる。
+共有カラーは、他のプロセスが変更を予期していないため"読み込み専用"である。
+この"読み込み専用"と"読み書き可能"の属性は、それぞれのカラーに付けられる。
+（しばしば、カラーセルとして参照される）
 
-{\bf colormap}$B%*%V%8%'%/%H$O!"(Bcolor ID$B$+$i(BRGB$B$NJ*M}E*$JI=8=$X$NJQ49$r(B
-$BDj5A$9$k!#(B
-$B$7$+$7$J$,$i!"$3$l$i$NO@M}E*$J(Bcolor ID$B$O!"G$0U$KA*Br$9$k$3$H$,$G$-$J$$!#(B
-$BFC$K!"%7%9%F%`$N%G%U%)%k%H$N%+%i!<%^%C%W$r;HMQ$7$F$$$k$H$-!";HMQ$G$-$J$$!#(B
-color ID$B!J$7$P$7$P(B'pixel'$B$H$7$F;2>H$5$l$k!K$O!"%+%i!<%^%C%W$NFCJL$J?'(B
-$B$N%$%s%G%C%/%9$G$"$k!#(B
-Xlib$B$O!"3d$jEv$F$NMW5a$,$"$k$H!"6&M-%+%i!<$N$?$a$K6u$$$?%$%s%G%C%/%9$N(B
-$B#1$D$rA*Br$9$k!#(B
-$B$7$?$,$C$F!"$?$/$5$s$N%0%l!<3,D4$N%+%i!<$rO"B3E*$K3d$jEv$F$k$3$H$r(B
-$BJ]>Z$9$k$3$H$"$k$$$O:G=i!J(B0$BHVL\!K$N%$%s%G%C%/%9$+$i;O$a$k$3$H$O$G$-$J$$!#(B
+{\bf colormap}オブジェクトは、color IDからRGBの物理的な表現への変換を
+定義する。
+しかしながら、これらの論理的なcolor IDは、任意に選択することができない。
+特に、システムのデフォルトのカラーマップを使用しているとき、使用できない。
+color ID（しばしば'pixel'として参照される）は、カラーマップの特別な色
+のインデックスである。
+Xlibは、割り当ての要求があると、共有カラーのために空いたインデックスの
+１つを選択する。
+したがって、たくさんのグレー階調のカラーを連続的に割り当てることを
+保証することあるいは最初（0番目）のインデックスから始めることはできない。
 
-$B%"%W%j%1!<%7%g%s$N4QE@$+$i!"$b$C$HO@M}E*$J%+%i!<L>$,I,MW$H$5$l$k!#(B
-$BNc$($P!"%0%l!<3,D4$N?t$OL@$k$5$r%$%s%G%C%/%9$H$7$F;2>H$9$Y$-$G$"$k!#(B
-$B%l%$%H%l!<%7%s%0%W%m%0%i%`$O!"(B
-HLS$B$GDj5A$5$l$k0c$C$?L@$k$5$N%+%i!<$N%0%k!<%W$N$?$a$K(B
-$BO"B3E*$J%$%s%G%C%/%9$N3d$jEv$F$rMW5a$9$k!#(B
+アプリケーションの観点から、もっと論理的なカラー名が必要とされる。
+例えば、グレー階調の数は明るさをインデックスとして参照すべきである。
+レイトレーシングプログラムは、
+HLSで定義される違った明るさのカラーのグループのために
+連続的なインデックスの割り当てを要求する。
 
-$B$3$NLdBj$KBP=h$9$k$?$a$K!"(BEuslisp$B$N%+%i!<%^%C%W$O%k%C%/%"%C%W%F!<%V%k(B(LUT)
-$B$H8F$P$l$kJL$NJQ49%F!<%V%k$rDs6!$7$F$$$k!#(B
-$BO@M}E*$J%+%i!<%0%k!<%W$N$?$a$K!"(BLUT$B$rDj5A$G$-!"(Bsymbol$BL>$rIU$1$k$3$H$,$G$-$k!#(B
-$B#1$D0J>e$N(BLUT$B$r%+%i!<%^%C%W$H$7$FDj5A$G$-$k!#(B
-LUT$B$O!"(BXserver$B$,G'<1$G$-$k$h$&$K!"%"%W%j%1!<%7%g%s$,;XDj$7$?O@M}%+%i!<$N(B
-$B%$%s%G%C%/%9$rJ*M}%T%/%;%kCM$KJQ49$9$k$?$a$K@0?t%Y%/%H%k$G$"$k!#(B
+この問題に対処するために、Euslispのカラーマップはルックアップテーブル(LUT)
+と呼ばれる別の変換テーブルを提供している。
+論理的なカラーグループのために、LUTを定義でき、symbol名を付けることができる。
+１つ以上のLUTをカラーマップとして定義できる。
+LUTは、Xserverが認識できるように、アプリケーションが指定した論理カラーの
+インデックスを物理ピクセル値に変換するために整数ベクトルである。
  
 \begin{refdesc}
 
-\methoddesc{:id}{}{{\tt cmapid}$B$rJV$9!#(B}
-\methoddesc{:query}{pix}{$B;XDj$5$l$?%T%/%;%k?t$N(BRGB$BCM$rJV$9!#(B}
+\methoddesc{:id}{}{{\tt cmapid}を返す。}
+\methoddesc{:query}{pix}{指定されたピクセル数のRGB値を返す。}
 \methoddesc{:alloc}{pix r g b}{
-$B$3$N%a%=%C%I$O!"(B{\tt :store nil r g b}$B$HF10l$G$"$k!#(B
-$B?7$7$$%+%i!<%;%k$,$3$N%+%i!<%^%C%W$KG[CV$5$l!";XDj$5$l$?(BRGB$BCM$K3d$jEv$F$i$l$k!#(B}
-\methoddesc{:store}{pix r g b}{{\em pix}$BHVL\$N%+%i!<%;%k$N(BRGB$BCM$r@_Dj$9$k!#(B}
+このメソッドは、{\tt :store nil r g b}と同一である。
+新しいカラーセルがこのカラーマップに配置され、指定されたRGB値に割り当てられる。}
+\methoddesc{:store}{pix r g b}{{\em pix}番目のカラーセルのRGB値を設定する。}
 \methoddesc{:store}{pix color-name}{
-{\bf :store}$B$O!"%+%i!<%^%C%W$K?'$r@_Dj$9$kDc%l%Y%k%a%=%C%I$G$"$k!#(B
-$B#1$D$N=q<0$H$7$F!"(BRGB$BCM$r(B0$B!A(B65535$B$G;XDj$9$kJ}K!$G$"$k!#(B
-$BB>$N=q<0$H$7$F!"(B"red" $B$d(B"navy-blue"$B$N$h$&$J%+%i!<L>$G;XDj$9$k!#(B
-$B$b$7!"(B{\em color-name}$B$,$J$1$l$P!"(BNIL$B$rJV$9!#(B
-$B%T%/%;%k$O%+%i!<%^%C%W$N%$%s%G%C%/%9$"$k$$$O(BNIL$B$G$"$k!#(B
-$B$b$7@0?t$J$i!"%+%i!<%;%k$OFI$_=q$-2DG=$G$J$1$l$P$J$i$J$$!#(B
-$B$b$7(BNIL$B$J$i!"6&M-$NFI$_9~$_@lMQ%+%i!<%;%k$,3d$jEv$F$i$l$F$$$k!#(B
-{\bf :store}$B$O!"%+%i!<%^%C%WFb$N%+%i!<%;%k$N%$%s%G%C%/%9$rJV$9!#(B}
+{\bf :store}は、カラーマップに色を設定する低レベルメソッドである。
+１つの書式として、RGB値を0〜65535で指定する方法である。
+他の書式として、"red" や"navy-blue"のようなカラー名で指定する。
+もし、{\em color-name}がなければ、NILを返す。
+ピクセルはカラーマップのインデックスあるいはNILである。
+もし整数なら、カラーセルは読み書き可能でなければならない。
+もしNILなら、共有の読み込み専用カラーセルが割り当てられている。
+{\bf :store}は、カラーマップ内のカラーセルのインデックスを返す。}
 
 \methoddesc{:store-hls}{pix hue lightness saturation}{
-HLS(Hue, Lightness and Saturation)$B$G(B
-$B;XDj$5$l$k?'$r%+%i!<%^%C%W$N(B{\em pix}$BHVL\$KC_@Q$9$k!#(B
-$B$b$7!"(B{\em pix}$B$,(BNIL$B$J$i!"6&M-$NFI$_9~$_@lMQ$N%+%i!<%;%k$,3d$jEv$F$i$l$k!#(B
-{\bf :store-hls}$B$O!"%+%i!<%;%k$K3d$jEv$F$i$l$k%$%s%G%C%/%9$rJV$9!#(B}
+HLS(Hue, Lightness and Saturation)で
+指定される色をカラーマップの{\em pix}番目に蓄積する。
+もし、{\em pix}がNILなら、共有の読み込み専用のカラーセルが割り当てられる。
+{\bf :store-hls}は、カラーセルに割り当てられるインデックスを返す。}
 
-\methoddesc{:destroy}{}{$B$3$N(B{\bf colormap}$B$rGK2u$7!"%j%=!<%9$r6u$K$9$k!#(B}
+\methoddesc{:destroy}{}{この{\bf colormap}を破壊し、リソースを空にする。}
 \methoddesc{:pixel}{LUT-name id}{
-{\em LUT}$B$NCf$+$i(B{\em id}$BHVL\$rD4$Y$F!"%T%/%;%kCM$rJV$9!#(B
-{\em LUT-name}$B$O!"(B{\tt :define-LUT}$B$GDj5A$5$l$?%k%C%/%"%C%W%F!<%V%k$NL>A0$G$"$k!#(B}
+{\em LUT}の中から{\em id}番目を調べて、ピクセル値を返す。
+{\em LUT-name}は、{\tt :define-LUT}で定義されたルックアップテーブルの名前である。}
 
 \methoddesc{:allocate-private-colors}{num}{
-$BFH<+$N%+%i!<%^%C%W$K(B{\em num}$B8D$N%+%i!<%;%k$r3d$jEv$F$k!#(B}
+独自のカラーマップに{\em num}個のカラーセルを割り当てる。}
 
 \methoddesc{:allocate-colors}{rgb-list [private]}{
-{\em rgb-list}$B$N$=$l$>$l$NMWAG$O!"(Bred,green,blue$B$N%j%9%H$G$"$k!#(B
-$B%+%i!<%;%k$O!"$=$l$>$l$N(BRGB$BCM$,3d$jEv$F$i$l!"%T%/%;%kCM$rMWAG$H$9$k(B
-$B@0?t%Y%/%H%k$rJV$9!#(B}
+{\em rgb-list}のそれぞれの要素は、red,green,blueのリストである。
+カラーセルは、それぞれのRGB値が割り当てられ、ピクセル値を要素とする
+整数ベクトルを返す。}
 
 \methoddesc{:define-LUT}{LUT-name rgb-list [private]}{
-{\em rgb-list}$B$K5-=R$5$l$?%+%i!<$,3d$jEv$F$i$l!"(B
-LUT$B$,(B{\em LUT-name}$B$N%7%s%\%j%C%/L>$GEPO?$5$l$k!#(B
-$BFH<+$N%+%i!<%;%k$rDj5A$9$k$?$a$K$O!"(B{\em private}$B$r(BT$B$K@_Dj$9$k$3$H!#(B}
+{\em rgb-list}に記述されたカラーが割り当てられ、
+LUTが{\em LUT-name}のシンボリック名で登録される。
+独自のカラーセルを定義するためには、{\em private}をTに設定すること。}
 
 \methoddesc{:define-gray-scale-LUT}{LUT-name levels [private]}{
-$B@~7A$N%0%l!<%9%1!<%k%+%i!<$GI=8=$5$l$k(B{\em levels}$B3,D4$N(B
-$B%+%i!<%;%k$r3d$jEv$F!"(BLUT$B$rJV$9!#(B
-$BNc$($P!"(B{\tt (send x:*color-map* :define-gray-scale-LUT 'gray8 8)}
-$B$O!"%7%9%F%`$N%G%U%)%k%H%+%i!<%^%C%W$NCf$K#8$D$N%0%l!<%+%i!<$rG[CV$7!"(B
-{\tt \#i(29 30 31 48 49 50 51 0)}$B$N$h$&$J@0?t%Y%/%H%k$rJV$9!#(B
-$BJ*M}%T%/%;%kCM$O!"(B{\tt :pixel}$B%a%C%;!<%8$rAw$k$3$H$K$h$jF@$i$l$k!#(B
-$BNc$($P!"(B{\tt (send x:*color-map* :pixel 'gray8 2)}$B$O!"(B31$B$rJV$9!#(B}
+線形のグレースケールカラーで表現される{\em levels}階調の
+カラーセルを割り当て、LUTを返す。
+例えば、{\tt (send x:*color-map* :define-gray-scale-LUT 'gray8 8)}
+は、システムのデフォルトカラーマップの中に８つのグレーカラーを配置し、
+{\tt \#i(29 30 31 48 49 50 51 0)}のような整数ベクトルを返す。
+物理ピクセル値は、{\tt :pixel}メッセージを送ることにより得られる。
+例えば、{\tt (send x:*color-map* :pixel 'gray8 2)}は、31を返す。}
  
 \methoddesc{:define-rgb-LUT}{LUT-name red green blue [private]}{
-RGB$BI=8=$r=L>.$7$?(BLUT$B$rDj5A$9$k!#(B
-$BNc$($P!"$b$7!"(B{\em red}={\em green}={\em blue}=2$B$J$i!"%+%i!<%;%k$K$O(B$2^{2+2+2}=2^6=64$
-$B$,3d$jEv$F$i$l$k!#(B}
+RGB表現を縮小したLUTを定義する。
+例えば、もし、{\em red}={\em green}={\em blue}=2なら、カラーセルには$2^{2+2+2}=2^6=64$
+が割り当てられる。}
 \methoddesc{:define-hls-LUT}{LUT-name count hue low-brightness
 high-brightness saturation [private]}{
-HLS$B$G;HMQ$9$k(B{\em count}$B?t$N%+%i!<$rG[CV$9$k!#(B
+HLSで使用する{\em count}数のカラーを配置する。
 {\em hue} (0..360),{\em saturation} (0..1),{\em low-brightness}
-$B$H(B{\em high-brightness}$B$NL@$k$5$N:9$r%+%i!<%^%C%W$KC_@Q$5$l$k!#(B
-{\em LUT-name}$B$GL>IU$1$i$l$k(BLUT$B$b:n$i$l$k!#(B}
+と{\em high-brightness}の明るさの差をカラーマップに蓄積される。
+{\em LUT-name}で名付けられるLUTも作られる。}
 
-\longdescription{:define-rainbow-LUT}{\= LUT-name count \` [$B%a%=%C%I(B]\\
+\longdescription{:define-rainbow-LUT}{\= LUT-name count \` [メソッド]\\
 \> (hue-start 0) (hue-end 360)\\
 \> (brightness 0.5)\\
 \> (saturation 1.0) (private nil)}{
-HLS$B%b%G%k$rMQ$$$F(B{\em count}$B$N?'$rG[CV$9$k!#(B
-{\em brightness} (0..1)$B$H(B
-{\em saturation} (0..1)$B$H(B,
-{\em hue-start}$B$H(B{\em hue-end}$B4V$N0[$J$C$?(Bhue$B$r;}$D?'$r(B
-$B%+%i!<%^%C%W$KC_@Q$9$k!#(B
-{\em LUT-name}$B$rL>IU$1$i$l$?(BLUT$B$b@8@.$5$l$k!#(B}
+HLSモデルを用いて{\em count}の色を配置する。
+{\em brightness} (0..1)と
+{\em saturation} (0..1)と,
+{\em hue-start}と{\em hue-end}間の異なったhueを持つ色を
+カラーマップに蓄積する。
+{\em LUT-name}を名付けられたLUTも生成される。}
 
-\methoddesc{:LUT-list}{}{$B$3$N%+%i!<%^%C%W$KDj5A$5$l$F$$$kA4$F$N(BLUT$B$N%j%9%H$rJV$9!#(B
-$B%j%9%H$N$=$l$>$l$N%(%s%H%j$O!"(BLUT$BL>$H@0?t%Y%/%H%k$NAH$G$"$k!#(B}
-\methoddesc{:LUT-names}{}{$B$3$N%+%i!<%^%C%W$NA4$F$N(BLUT$B$NL>A0$N%j%9%H$rJV$9!#(B}
-\methoddesc{:LUT}{name}{{\em name}$B$G;XDj$5$l$k@0?t%Y%/%H%k(B(LUT)$B$rJV$9!#(B}
-\methoddesc{:size}{LUT}{{\em LUT}$B$ND9$5$rJV$9!#(B}
-\methoddesc{:planes}{}{$B$3$N%+%i!<%^%C%W$N%W%l!<%s$rJV$9!#(B}
+\methoddesc{:LUT-list}{}{このカラーマップに定義されている全てのLUTのリストを返す。
+リストのそれぞれのエントリは、LUT名と整数ベクトルの組である。}
+\methoddesc{:LUT-names}{}{このカラーマップの全てのLUTの名前のリストを返す。}
+\methoddesc{:LUT}{name}{{\em name}で指定される整数ベクトル(LUT)を返す。}
+\methoddesc{:size}{LUT}{{\em LUT}の長さを返す。}
+\methoddesc{:planes}{}{このカラーマップのプレーンを返す。}
 %\metdesc{:planes-bits}{}
 %\metdesc{:planes-shifts}{}
 
 \methoddesc{:set-window}{xwin}{
-$B$3$N%+%i!<%^%C%W$r(B{\em xwin}$B$N(Bwindow$B$H4XO"IU$1$k!#(B
-$B$3$N%+%i!<%^%C%W$O!"(B{\em xwin}$B$K%+!<%=%k$,F~$C$?$H$-3h@-2=$5$l$k!#(B}
-\methoddesc{:free}{pixel | LUT}{{\em pixel}$B$N>l=j$K$"$k%+%i!<%;%k$r3+J|$9$k$+(B
-$B$"$k$$$O(B{\em LUT}$B$N$9$Y$F$r3+J|$9$k!#(B}
+このカラーマップを{\em xwin}のwindowと関連付ける。
+このカラーマップは、{\em xwin}にカーソルが入ったとき活性化される。}
+\methoddesc{:free}{pixel | LUT}{{\em pixel}の場所にあるカラーセルを開放するか
+あるいは{\em LUT}のすべてを開放する。}
 \methoddesc{:init}{[cmapid]}{
-$B$3$N%+%i!<%^%C%W$r(B{\rm cmapid}$B$G=i4|2=$9$k!#(B
-$BEPO?$5$l$?(BLUT$B$O$9$Y$F<N$F$i$l$k!#(B}
+このカラーマップを{\rm cmapid}で初期化する。
+登録されたLUTはすべて捨てられる。}
 \methoddesc{:create}{\&key (planes 0) (colors 1) (visual *visual*) (contiguous i
 l)}
-{$B?7$7$$%+%i!<%^%C%W$r:n@.$9$k!#(B}
+{新しいカラーマップを作成する。}
 
 \classdesc{XColor}{cstruct}
 {((pixel        :integer) \\
@@ -644,22 +644,22 @@ l)}
 \>  (blue         :short) \\
 \>  (flags        :byte) \\
 \>  (pad          :byte))}{
-RGB$B%b%G%k$N%+%i!<$rDj5A$9$k!#(B
-$B$=$l$>$l$N%9%m%C%H$KCM$r3d$jEv$F$k$K$O!"(B{\bf setf}$B$rMQ$$$k!#(B
-RGB$BCM$O!"Id9g3HD%$5$l!":GBgCM$O(B$-1$$B$HI=8=$5$l$k!#(B}
+RGBモデルのカラーを定義する。
+それぞれのスロットに値を割り当てるには、{\bf setf}を用いる。
+RGB値は、符合拡張され、最大値は$-1$と表現される。}
 
-\methoddesc{:red}{}{$B$3$N(B{\bf XColor}$B$N@V?'$NCM$rJV$9!#(B}
-\methoddesc{:blue}{}{$B$3$N(B{\bf XColor}$B$N@D?'$NCM$rJV$9!#(B}
-\methoddesc{:green}{}{$B$3$N(B{\bf XColor}$B$NNP?'$NCM$rJV$9!#(B}
-\methoddesc{:color}{}{$B$3$N(B{\bf XColor}$B$N(BRGB$BCM$N%j%9%H$rJV$9!#(B}
+\methoddesc{:red}{}{この{\bf XColor}の赤色の値を返す。}
+\methoddesc{:blue}{}{この{\bf XColor}の青色の値を返す。}
+\methoddesc{:green}{}{この{\bf XColor}の緑色の値を返す。}
+\methoddesc{:color}{}{この{\bf XColor}のRGB値のリストを返す。}
 \methoddesc{:init}{pix R G B \&optional (f 7)}{
-{\bf XColor}$B$r=i4|2=$9$k!#(B}
+{\bf XColor}を初期化する。}
 
 \funcdesc{find-visual}{type depth \&optional (screen 0)}{
-{\em type}$B$H(B{\em depth}$B$G;XDj$5$l$k(Bvisual-ID$B$r8+$D$1$k!#(B
-{\em type}$B$O!"(B{\tt :StaticGray, :GrayScale,
-:StaticColor, :pseudoColor, :TrueColor}$B$"$k$$$O(B{\tt :DirectColor}$B$N$I$l$+$G$"$k!#(B
-$B$U$D$&!"(B{\em depth}$B$O(B1, 8 $B$^$?$O(B 24$B$G$"$k!#(B}
+{\em type}と{\em depth}で指定されるvisual-IDを見つける。
+{\em type}は、{\tt :StaticGray, :GrayScale,
+:StaticColor, :pseudoColor, :TrueColor}あるいは{\tt :DirectColor}のどれかである。
+ふつう、{\em depth}は1, 8 または 24である。}
 
 \end{refdesc}
 

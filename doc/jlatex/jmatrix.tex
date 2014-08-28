@@ -1,118 +1,118 @@
-\section{$B4v2?3X4X?t(B}
-\markright{\arabic{section}. $B4v2?3X4X?t(B}
+\section{幾何学関数}
+\markright{\arabic{section}. 幾何学関数}
 
-\subsection{$B<B?t%Y%/%H%k(B(float-vector)}
+\subsection{実数ベクトル(float-vector)}
 
-float-vector$B$O!"MWAG$,<B?t$G$"$k(B1$B<!85%Y%/%H%k$G$"$k!#(B
-float-vector$B$O!"$I$s$J%5%$%:$G$bNI$$!#(B
-{\em result}$B$,0z$-?t%j%9%H$G;XDj$5$l$F$$$k$H$-!"(B
-$B$=$N(B{\em result}$B$O(Bfloat-vector$B$G$"$k$Y$-$G$"$k!#(B
+float-vectorは、要素が実数である1次元ベクトルである。
+float-vectorは、どんなサイズでも良い。
+{\em result}が引き数リストで指定されているとき、
+その{\em result}はfloat-vectorであるべきである。
 
 \begin{refdesc}
 
 \funcdesc{float-vector}{\&rest numbers}{
-{\em numbers}$B$rMWAG$H$9$k(Bfloat-vector$B$r?7$7$/:n$k!#(B
-{\tt (float-vector 1 2 3)}$B$H(B{\tt \#F(1 2 3)}$B$N0c$$$KCm0U$9$k$3$H!#(B
-$BA0<T$O!"8F$P$l$?$H$-$O$$$D$G$b%Y%/%H%k$,@8@.$5$l$k$,!"(B
-$B8e<T$OFI$_9~$^$l$?$H$-$N$_@8@.$5$l$k!#(B}
+{\em numbers}を要素とするfloat-vectorを新しく作る。
+{\tt (float-vector 1 2 3)}と{\tt \#F(1 2 3)}の違いに注意すること。
+前者は、呼ばれたときはいつでもベクトルが生成されるが、
+後者は読み込まれたときのみ生成される。}
 
 \funcdesc{float-vectorp}{obj}{
-{\em obj}$B$,(Bfloat-vector$B$G$"$k$J$i$P!"(BT$B$rJV$9!#(B}
+{\em obj}がfloat-vectorであるならば、Tを返す。}
 
 \funcdesc{v+}{fltvec1 fltvec2 \&optional result}{
-2$B$D$N(Bfloat-vector$B$r2C$($k!#(B}
+2つのfloat-vectorを加える。}
 
 \funcdesc{v-}{fltvec1 \&optional fltvec2  result}{
-2$B$D$N(Bfloat-vector$B$r:9$70z$/!#$b$7!"(B{\em fltvec2}$B$,>JN,$5$l$F$$$k$J$i$P!"(B
-{\em fltvec1}$B$NId9f$,H?E>$5$l$k!#(B}
+2つのfloat-vectorを差し引く。もし、{\em fltvec2}が省略されているならば、
+{\em fltvec1}の符号が反転される。}
 
-\funcdesc{v.}{fltvec1 fltvec2}{2$B$D$N(Bfloat-vector$B$NFb@Q$r7W;;$9$k!#(B}
+\funcdesc{v.}{fltvec1 fltvec2}{2つのfloat-vectorの内積を計算する。}
 
 \funcdesc{v*}{fltvec1 fltvec2 \&optional result}{
-2$B$D$N(Bfloat-vector$B$N30@Q$r7W;;$9$k!#(B}
+2つのfloat-vectorの外積を計算する。}
 
 \funcdesc{v.*}{fltvec1 fltvec2 fltvec3}{
-$B%9%+%i!<(B3$B=E@Q$r7W;;$9$k!#(B{\tt (v.* A B C)=(V. A (V* B C))=(V. (V* A B) C)}}
+スカラー3重積を計算する。{\tt (v.* A B C)=(V. A (V* B C))=(V. (V* A B) C)}}
 
 \funcdesc{v$<$}{fltvec1 fltvec2}{
-$B$b$7!"(B{\em fltvec1}$B$NMWAG$,(B{\em fltvec2}$B$NBP1~$9$kMWAG$h$j$9$Y$F>.$5$$$H$-!"(B
-T$B$rJV$9!#(B}
+もし、{\em fltvec1}の要素が{\em fltvec2}の対応する要素よりすべて小さいとき、
+Tを返す。}
 
 \funcdesc{v$>$}{fltvec1 fltvec2}{
-$B$b$7!"(B{\em fltvec1}$B$NMWAG$,(B{\em fltvec2}$B$NBP1~$9$kMWAG$h$j$9$Y$FBg$-$$$H$-!"(B
-T$B$rJV$9!#(B}
+もし、{\em fltvec1}の要素が{\em fltvec2}の対応する要素よりすべて大きいとき、
+Tを返す。}
 
 \funcdesc{vmin}{\&rest fltvec}{
-{\em fltvec}$B$NCf$N$=$l$>$l$N<!85$K$*$1$k:G>.CM$rA\$7!"(B
-$B$=$NCM$G(Bfloat-vector$B$r?7$7$/:n$k!#(B{\bf vmin}$B$H(B{\bf vmax}$B$O!"(B
-$BD:E@$N:BI8$+$i:G>.$N(Bminimal-box$B$r8+$D$1$k$?$a$K;HMQ$5$l$k!#(B}
+{\em fltvec}の中のそれぞれの次元における最小値を捜し、
+その値でfloat-vectorを新しく作る。{\bf vmin}と{\bf vmax}は、
+頂点の座標から最小のminimal-boxを見つけるために使用される。}
 
 \funcdesc{vmax}{\&rest fltvec}{
-{\em fltvec}$B$NCf$N$=$l$>$l$N<!85$K$*$1$k:GBgCM$rA\$7!"(B
-$B$=$NCM$G(Bfloat-vector$B$r?7$7$/:n$k!#(B}
+{\em fltvec}の中のそれぞれの次元における最大値を捜し、
+その値でfloat-vectorを新しく作る。}
 
 \funcdesc{minimal-box}{v-list minvec maxvec [err]}{
-$BM?$($i$l$?(B{\em v-list}$B$KBP$7$F(B{\tt minimal bounding box}$B$r7W;;$7!"(B
-$B$=$N7k2L$r(B{\em minvec}$B$H(B{\em maxvec}$B$KC_@Q$9$k!#(B
-$B$b$7!"<B?t(B{\em err}$B$,;XDj$5$l$F$$$k$J$i$P!"(B{\tt minimal box}$B$O$=$NHfN($K$h$C$F(B
-$B@.D9$9$k!#$9$J$o$A!"$b$7(B{\em err}$B$,(B0.01$B$N$H$-!"(B{\em minvec}$B$N$=$l$>$l$N(B
-$BMWAG$O(B{\em minvec}$B$H(B{\em maxvec}$B$H$N5wN%$N(B1\%$B8:>/$9$k!#(B
-$B$=$7$F!"(B{\em maxvec}$B$N$=$l$>$l$NMWAG$O(B1\%$BA}2C$9$k!#(B
-{\bf minimal-box}$B$O!"(B{\em minvec}$B$H(B{\em maxvec}$B$H$N5wN%$rJV$9!#(B}
+与えられた{\em v-list}に対して{\tt minimal bounding box}を計算し、
+その結果を{\em minvec}と{\em maxvec}に蓄積する。
+もし、実数{\em err}が指定されているならば、{\tt minimal box}はその比率によって
+成長する。すなわち、もし{\em err}が0.01のとき、{\em minvec}のそれぞれの
+要素は{\em minvec}と{\em maxvec}との距離の1\%減少する。
+そして、{\em maxvec}のそれぞれの要素は1\%増加する。
+{\bf minimal-box}は、{\em minvec}と{\em maxvec}との距離を返す。}
 
 \funcdesc{scale}{number fltvec \&optional result}{
-{\em fltvec}$B$N$9$Y$F$NMWAG$r%9%+%i!<(B{\em number}$BG\$9$k!#(B}
+{\em fltvec}のすべての要素をスカラー{\em number}倍する。}
 
-\funcdesc{norm}{fltvec}{{\em fltvec}$B$N%N%k%`$r5a$a$k!#(B{\tt $\Vert fltvec\Vert$}}
-\funcdesc{norm2}{fltvec}{{\em fltvec}$B$N%N%k%`$N#2>h$r5a$a$k!#(B
+\funcdesc{norm}{fltvec}{{\em fltvec}のノルムを求める。{\tt $\Vert fltvec\Vert$}}
+\funcdesc{norm2}{fltvec}{{\em fltvec}のノルムの２乗を求める。
 {\tt $\Vert fltvec\Vert^2$=(v. fltvec fltvec)}}
 \funcdesc{normalize-vector}{fltvec \&optional result}{
-{\em fltvec}$B$N%N%k%`$,(B1.0$B$H$J$k$h$&$K@55,2=$9$k!#(B}
+{\em fltvec}のノルムが1.0となるように正規化する。}
 \funcdesc{distance}{fltvec1 fltvec2}{
-2$B$D$N(Bfloat-vector$B$N5wN%$rJV$9!#(B$|fltvec-fltvec2|$}
+2つのfloat-vectorの距離を返す。$|fltvec-fltvec2|$}
 \funcdesc{distance2}{fltvec1 fltvec2}{
-2$B$D$N(Bfloat-vector$B$N5wN%$N(B2$B>h$rJV$9!#(B$|fltvec-fltvec2|^2$}
+2つのfloat-vectorの距離の2乗を返す。$|fltvec-fltvec2|^2$}
 
 \funcdesc{homo2normal}{homovec \&optional normalvec}{
-$BF1<!%Y%/%H%k(B{\em homovec}$B$r@55,I=8=$KJQ49$9$k!#(B}
+同次ベクトル{\em homovec}を正規表現に変換する。}
 
 \funcdesc{homogenize}{normalvec \&optional homovec}{
-$B@55,%Y%/%H%k(B{\em normalvec}$B$rF1<!I=8=$KJQ49$9$k!#(B}
+正規ベクトル{\em normalvec}を同次表現に変換する。}
 
 \funcdesc{midpoint}{p p1 p2 \&optional result}{
-{\em p}$B$O<B?t$G!"(B{\em p1,p2}$B$OF1<!85$N(Bfloat-vector$B$G$"$k!#(B
-{\em p1$-$p2}$B$r(B$p:(1-p)$$B$NHfN($GEyJ,$7$?E@(B$(1-p)\cdot p1 + p\cdot p2$
-$B$rJV$9!#(B}
+{\em p}は実数で、{\em p1,p2}は同次元のfloat-vectorである。
+{\em p1$-$p2}を$p:(1-p)$の比率で等分した点$(1-p)\cdot p1 + p\cdot p2$
+を返す。}
 
 \funcdesc{rotate-vector}{fltvec theta axis \&optional result}{
-2$B<!85$"$k$$$O(B3$B<!85$N(B{\em fltvec}$B$r(B{\em axis}$B2s$j$K(B{\em theta}$B%i%8%"%s(B
-$B2sE>$9$k!#(B
-{\em axis}$B$O!"(B{\em :x, :y, :z, 0, 1, 2}, $B$^$?$O(B NIL$B$NFb$N0l$D$G$"$k!#(B
-{\em axis}$B$,(BNIL$B$N$H$-!"(B{\em fltvec}$B$O(B2$B<!85$H$7$F07$o$l$k!#(B
-3$B<!856u4V$NG$0U$N<4$N2s$j$K%Y%/%H%k$r2sE>$9$k$?$a$K$O!"(B
-{\bf rotation-matrix}$B$G2sE>9TNs$r:n$j!"$=$N%Y%/%H%k$K$+$1$l$P$h$$!#(B}
+2次元あるいは3次元の{\em fltvec}を{\em axis}回りに{\em theta}ラジアン
+回転する。
+{\em axis}は、{\em :x, :y, :z, 0, 1, 2}, または NILの内の一つである。
+{\em axis}がNILのとき、{\em fltvec}は2次元として扱われる。
+3次元空間の任意の軸の回りにベクトルを回転するためには、
+{\bf rotation-matrix}で回転行列を作り、そのベクトルにかければよい。}
 
 \end{refdesc}
 
-\subsection{$B9TNs$HJQ49(B}
+\subsection{行列と変換}
 
-$B9TNs$O!"MWAG$,$9$Y$F<B?t$N(B2$B<!85$NG[Ns$G$"$k!#(B
-$B$[$H$s$I$N4X?t$K$*$$$F9TNs$O$I$s$J%5%$%:$G$b$h$$$,!"(B
-{\bf v*, v.*, euler-angle, rpy-angle}$B4X?t$G$O(B3$B<!85$N9TNs$N$_(B
-$B07$&$3$H$,$G$-$k!#(B
-{\bf transform, m*}$B$H(B{\bf transpose}$B$O!"9TNs$r@5J}9TNs$K8BDj$;$:!"(B
-$B0lHL$N(Bn*m$B9TNs$KBP$7$F=hM}$r9T$&!#(B
+行列は、要素がすべて実数の2次元の配列である。
+ほとんどの関数において行列はどんなサイズでもよいが、
+{\bf v*, v.*, euler-angle, rpy-angle}関数では3次元の行列のみ
+扱うことができる。
+{\bf transform, m*}と{\bf transpose}は、行列を正方行列に限定せず、
+一般のn*m行列に対して処理を行う。
 
-{\em result}$B%Q%i%a!<%?$r<u$1$?4X?t$O!"7W;;7k2L$r$=$3$KCV$/!#(B
-$B$=$N$?$a!"%R!<%W$O;HMQ$7$J$$!#(B
-$B$9$Y$F$N9TNs4X?t$O!"@55,:BI87O$K$*$1$kJQ49$r9MN8$7$F$*$j!"(B
-$BF1<!:BI87O$O9MN8$7$F$$$J$$!#(B
+{\em result}パラメータを受けた関数は、計算結果をそこに置く。
+そのため、ヒープは使用しない。
+すべての行列関数は、正規座標系における変換を考慮しており、
+同次座標系は考慮していない。
 
-{\bf rpy-angle}$B4X?t$O!"2sE>9TNs$r%o!<%k%I:BI87O$K$*$1$k(Bz,y,x$B<42s$j$N(B
-3$B$D$N2sE>3Q$KJ,2r$9$k!#(B
-{\bf euler-angle}$B4X?t$O(B{\bf rpy-angle}$B$HF1MM$KJ,2r$9$k$,!"(B
-$B2sE><4$,%m!<%+%k:BI87O$N(Bz,y,z$B<4$H$J$C$F$$$k!#(B
-$B3QEY$,H?BPJ}8~$K$bF@$i$l$k$?$a!"$3$l$i$N4X?t$O(B2$B$D$N2r$rJV$9!#(B
+{\bf rpy-angle}関数は、回転行列をワールド座標系におけるz,y,x軸回りの
+3つの回転角に分解する。
+{\bf euler-angle}関数は{\bf rpy-angle}と同様に分解するが、
+回転軸がローカル座標系のz,y,z軸となっている。
+角度が反対方向にも得られるため、これらの関数は2つの解を返す。
 
 \begin{verbatim}
 ; Mat is a 3X3 rotation matrix.
@@ -124,93 +124,93 @@ T$B$rJV$9!#(B}
 ;--> resulted r is equivalent to mat
 \end{verbatim}
 
-3$B<!856u4V$N0LCV$HJ}8~$NAH$_$rJ]$D$?$a$K!"(B\ref{Coordinates}$B@a$K5-:\$5$l$F$$$k(B
-{\bf coordinates}$B$H(B{\bf cascaded-coords}$B%/%i%9$r;HMQ$9$k$3$H!#(B
+3次元空間の位置と方向の組みを保つために、\ref{Coordinates}節に記載されている
+{\bf coordinates}と{\bf cascaded-coords}クラスを使用すること。
 
 \begin{refdesc}
 \funcdesc{matrix}{\&rest elements}{
-{\em elements}$B$+$i9TNs$r?7$7$/:n$k!#(B
-{\tt Row x Col = (elements$B$N?t(B) x ($B:G=i$N(Belement$B$ND9$5(B)}
-{\em elements}$B$O!"$I$N7?$NNs$G$b$h$$!#(B
-$B$=$l$>$l$NNs$O9TNs$N9T%Y%/%H%k$H$7$F$J$i$Y$i$l$k!#(B}
+{\em elements}から行列を新しく作る。
+{\tt Row x Col = (elementsの数) x (最初のelementの長さ)}
+{\em elements}は、どの型の列でもよい。
+それぞれの列は行列の行ベクトルとしてならべられる。}
 
 \funcdesc{make-matrix}{rowsize columnsize \&optional init}{
-$rowsize \times columnsize$$B$NBg$-$5$N9TNs$r:n$k!#(B}
+$rowsize \times columnsize$の大きさの行列を作る。}
 
 \funcdesc{matrixp}{obj}{
-$B$b$7!"(B{\em obj}$B$,9TNs$N$H$-!"$9$J$o$A!"(B{\em obj}$B$,(B2$B<!85$NG[Ns$G(B
-$B$=$NMWAG$,<B?t$G$"$k$H$-!"(BT$B$rJV$9!#(B}
+もし、{\em obj}が行列のとき、すなわち、{\em obj}が2次元の配列で
+その要素が実数であるとき、Tを返す。}
 
 \funcdesc{matrix-row}{mat row-index}{
-$B9TNs(B{\em mat}$B$+$i(B{\em row-index}$B$G<($5$l$k9T%Y%/%H%k$rCj=P$9$k!#(B
-{\bf matrix-row}$B$O!"(B{\bf setf}$B$r;HMQ$9$k$3$H$K$h$j(B
-$B9TNs$NFCDj$N9T$K%Y%/%H%k$r@_Dj$9$k$3$H$K$b;HMQ$5$l$k!#(B}
+行列{\em mat}から{\em row-index}で示される行ベクトルを抽出する。
+{\bf matrix-row}は、{\bf setf}を使用することにより
+行列の特定の行にベクトルを設定することにも使用される。}
 \funcdesc{matrix-column}{mat column-index}{
-$B9TNs(B{\em mat}$B$+$i(B{\em coloumn-index}$B$G<($5$l$kNs%Y%/%H%k$rCj=P$9$k!#(B
-{\bf matrix-column}$B$O!"(B{\bf setf}$B$r;HMQ$9$k$3$H$K$h$j(B
-$B9TNs$NFCDj$NNs$K%Y%/%H%k$r@_Dj$9$k$3$H$K$b;HMQ$5$l$k!#(B}
+行列{\em mat}から{\em coloumn-index}で示される列ベクトルを抽出する。
+{\bf matrix-column}は、{\bf setf}を使用することにより
+行列の特定の列にベクトルを設定することにも使用される。}
 \funcdesc{m*}{matrix1 matrix2 \&optional result}{
-{\em matrix1}$B$H(B{\em matrix2}$B$N@Q$rJV$9!#(B}
+{\em matrix1}と{\em matrix2}の積を返す。}
 \funcdesc{transpose}{matrix \&optional result}{
-{\em matrix}$B$NE>CV9TNs$rJV$9!#$9$J$o$A!"(B{\em matrix}$B$NNs$H9T$rF~$lBX$($k!#(B}
+{\em matrix}の転置行列を返す。すなわち、{\em matrix}の列と行を入れ替える。}
 \funcdesc{unit-matrix}{dim}{
-{\em dim} $\times$ {\em dim}$B$NC10L9TNs$r:n$k!#(B}
+{\em dim} $\times$ {\em dim}の単位行列を作る。}
 \funcdesc{replace-matrix}{dest src}{
-$B9TNs(B{\em dest}$B$N$9$Y$F$NMWAG$rF10l$J9TNs(B{\em src}$B$GCV$-49$($k!#(B}
+行列{\em dest}のすべての要素を同一な行列{\em src}で置き換える。}
 
 \funcdesc{scale-matrix}{scalar mat}{
-{\em mat}$B$N$9$Y$F$NMWAG$K(B{\em scaler}$B$r3]$1$k!#(B}
+{\em mat}のすべての要素に{\em scaler}を掛ける。}
 
 \funcdesc{copy-matrix}{matrix}{
-{\em matrix}$B$N%3%T!<$r:n$k!#(B}
+{\em matrix}のコピーを作る。}
 
 \funcdesc{transform}{matrix fltvector \&optional result}{
-$B9TNs(B{\em matrix}$B$r%Y%/%H%k(B{\em fltvector}$B$N:8$+$i3]$1$k!#(B}
+行列{\em matrix}をベクトル{\em fltvector}の左から掛ける。}
 \funcdesc{transform}{fltvector matrix \&optional result}{
-$B9TNs(B{\em matrix}$B$r%Y%/%H%k(B{\em fltvector}$B$N1&$+$i3]$1$k!#(B}
+行列{\em matrix}をベクトル{\em fltvector}の右から掛ける。}
 
 \funcdesc{rotate-matrix}{matrix theta axis \&optional world-p result}{
-{\bf rotate-matrix}$B$G9TNs(B{\em matrix}$B$r2sE>$5$;$k$H$-!"(B
-$B2sE><4!J(B{\bf :x, :y, :z}$B$^$?$O(B0,1,2$B!K$O%o!<%k%I:BI87O$"$k$$$O(B
-$B%m!<%+%k:BI87O$N$I$A$i$+$rM?$($i$l$k!#(B
-$B$b$7!"(B{\em world-p}$B$K(BNIL$B$,;XDj$5$l$F$$$k$H$-!"(B
-$B%m!<%+%k:BI87O$N<4$K1h$C$?2sE>$r0UL#$7!"2sE>9TNs$r:8$+$i3]$1$k!#(B
-$B$b$7!"(B{\em world-p}$B$,(Bnon-NIL$B$N$H$-!"(B
-$B%o!<%k%I:BI87O$KBP$9$k2sE>9TNs$r:n$j!"2sE>9TNs$r1&$+$i3]$1$k!#(B
-$B$b$7!"(B{\em axis}$B$K(BNIL$B$,M?$($i$l$?$H$-!"9TNs(B{\em matrix}$B$O(B2$B<!85$H2>Dj$5$l!"(B
-{\em world-p}$B$NG!2?$K$+$+$o$i$:(B2$B<!856u4V$N2sE>$,M?$($i$l$k!#(B}
+{\bf rotate-matrix}で行列{\em matrix}を回転させるとき、
+回転軸（{\bf :x, :y, :z}または0,1,2）はワールド座標系あるいは
+ローカル座標系のどちらかを与えられる。
+もし、{\em world-p}にNILが指定されているとき、
+ローカル座標系の軸に沿った回転を意味し、回転行列を左から掛ける。
+もし、{\em world-p}がnon-NILのとき、
+ワールド座標系に対する回転行列を作り、回転行列を右から掛ける。
+もし、{\em axis}にNILが与えられたとき、行列{\em matrix}は2次元と仮定され、
+{\em world-p}の如何にかかわらず2次元空間の回転が与えられる。}
 
 
 \funcdesc{rotation-matrix}{theta axis \&optional result}{
-{\em axis}$B<42s$j$N(B2$B<!85$"$k$$$O(B3$B<!85$N2sE>9TNs$r:n$k!#(B
-$B<4$O(B:x,:y,:z,0,1,2,3$B<!85%Y%/%H%k$"$k$$$O(BNIL$B$N$I$l$+$G$"$k!#(B
-2$B<!852sE>9TNs$r:n$k$H$-!"(B{\em axis}$B$O(BNIL$B$G$J$1$l$P$J$i$J$$!#(B}
+{\em axis}軸回りの2次元あるいは3次元の回転行列を作る。
+軸は:x,:y,:z,0,1,2,3次元ベクトルあるいはNILのどれかである。
+2次元回転行列を作るとき、{\em axis}はNILでなければならない。}
 
 \funcdesc{rotation-angle}{rotation-matrix}{
-{\em rotation-matrix}$B$+$iEy2A$J2sE><4$H3QEY$rCj=P$7!"(B
-$B<B?t$H(Bfloat-vector$B$N%j%9%H$rJV$9!#(B
-{\em rotation-matrix}$B$,C10L9TNs$N$H$-!"(BNIL$B$,JV$5$l$k!#(B
-$B$^$?!"2sE>3Q$,>.$5$$$H$-!"7k2L$,%(%i!<$H$J$k!#(B
-{\em rotation-matrix}$B$,(B2$B<!85$N$H$-!"(B1$B$D$N3QEYCM$,JV$5$l$k!#(B}
+{\em rotation-matrix}から等価な回転軸と角度を抽出し、
+実数とfloat-vectorのリストを返す。
+{\em rotation-matrix}が単位行列のとき、NILが返される。
+また、回転角が小さいとき、結果がエラーとなる。
+{\em rotation-matrix}が2次元のとき、1つの角度値が返される。}
 
 \funcdesc{rpy-matrix}{ang-z ang-y ang-x}{
-$B%m!<%k!"%T%C%A!"%h!<3Q$GDj5A$5$l$k2sE>9TNs$r:n$k!#(B
-$B:G=i$K!"C10L9TNs$r(Bx$B<42s$j$K(B{\em ang-x}$B%i%8%"%s2sE>$5$;$k!#(B
-$B<!$K!"(By$B<42s$j$K(B{\em ang-y}$B%i%8%"%s!":G8e$K#z<42s$j$K(B{\em ang-z}
-$B%i%8%"%s2sE>$5$;$k!#(B
-$B$9$Y$F$N2sE><4$O%o!<%k%I:BI87O$GM?$($i$l$k!#(B}
+ロール、ピッチ、ヨー角で定義される回転行列を作る。
+最初に、単位行列をx軸回りに{\em ang-x}ラジアン回転させる。
+次に、y軸回りに{\em ang-y}ラジアン、最後にｚ軸回りに{\em ang-z}
+ラジアン回転させる。
+すべての回転軸はワールド座標系で与えられる。}
 
 \funcdesc{rpy-angle}{matrix}{
-{\em matrix}$B$N(B2$BAH$N%m!<%k!"%T%C%A!"%h!<3Q$rCj=P$9$k!#(B}
+{\em matrix}の2組のロール、ピッチ、ヨー角を抽出する。}
 
 \funcdesc{Euler-matrix}{ang-z ang-y ang2-z}{
-3$B$D$N%*%$%i!<3Q$GDj5A$5$l$k2sE>9TNs$r:n$k!#(B
-$B:G=i$KC10L9TNs$r(Bz$B<42s$j$K(B{\em ang-z}$B2sE>$5$;!"<!$K(By$B<42s$j$K(B{\em ang-y}
-$B2sE>$5$;!":G8e$K(Bz$B<42s$j$K(B{\em ang2-z}$B2sE>$5$;$k!#(B
-$B$9$Y$F$N2sE><4$O%m!<%+%k:BI87O$GM?$($i$l$k!#(B}
+3つのオイラー角で定義される回転行列を作る。
+最初に単位行列をz軸回りに{\em ang-z}回転させ、次にy軸回りに{\em ang-y}
+回転させ、最後にz軸回りに{\em ang2-z}回転させる。
+すべての回転軸はローカル座標系で与えられる。}
 
 \funcdesc{Euler-angle}{matrix}{
-{\em matrix}$B$+$i(B2$BAH$N%*%$%i!<3Q$rCj=P$9$k!#(B}
+{\em matrix}から2組のオイラー角を抽出する。}
 
 %\funcdesc{set-matrix-row}{mat row-index values}{
 %puts values in the {\em row-index}th row of matrix {\em mat}.}
@@ -219,190 +219,190 @@ $rowsize \times columnsize$$B$NBg$-$5$N9TNs$r:n$k!#(B}
 %put values in the {\em column-index}th column of of matrix {\em mat}.}
 \end{refdesc}
 
-\subsection{LU$BJ,2r(B}
-{\bf lu-decompose}$B$H(B{\bf lu-solve}$B$O!"@~7A$NO"N)J}Dx<0$r(B
-$B2r$/$?$a$KMQ0U$5$l$F$$$k!#(B
-$B:G=i$K!"(B{\bf lu-decompose}$B$O9TNs$r2<;03Q9TNs$r>e;03Q9TNs$KJ,2r$9$k!#(B
-$B$b$7!"9TNs$,FC0[CM$J$i!"(B{\bf lu-decompose}$B$O(BNIL$B$rJV$9!#(B
-$B$=$&$G$J$1$l$P!"(B{\bf lu-solve}$B$KM?$($k$Y$-=gNs%Y%/%H%k$rJV$9!#(B
-{\bf lu-solve}$B$O!"M?$($i$l$?Dj?t%Y%/%H%k$N2r$r(BLU$B9TNs$G7W;;$9$k!#(B
-$B$3$N<jK!$O!"F1$878?t9TNs$H0[$J$C$?Dj?t%Y%/%H%k$N$?$/$5$s$NAH$KBP$7$F(B
-$B2r$r5a$a$?$$$H$-$K8z2LE*$G$"$k!#(B
+\subsection{LU分解}
+{\bf lu-decompose}と{\bf lu-solve}は、線形の連立方程式を
+解くために用意されている。
+最初に、{\bf lu-decompose}は行列を下三角行列を上三角行列に分解する。
+もし、行列が特異値なら、{\bf lu-decompose}はNILを返す。
+そうでなければ、{\bf lu-solve}に与えるべき順列ベクトルを返す。
+{\bf lu-solve}は、与えられた定数ベクトルの解をLU行列で計算する。
+この手法は、同じ係数行列と異なった定数ベクトルのたくさんの組に対して
+解を求めたいときに効果的である。
 %These functions are coded in C, and they computes a solution
 %for a 3*3 matrix within 3 milli-sec on sun3.
-{\bf simultaneous-equation}$B$O!"(B1$B$D$N2r$@$1$r5a$a$?$$$H$-$K$b$C$H$b(B
-$B<j7Z$J4X?t$G$"$k!#(B
-{\bf lu-determinant}$B$O!"(BLU$BJ,2r$5$l$?9TNs$N9TNs<0$r7W;;$9$k!#(B
-{\bf inverse-matrix}$B4X?t$O!"(B{\bf lu-decompose}$B$r(B1$B2s$H(B{\bf lu-solve}$B$r(Bn$B2s(B
-$B;H$C$F5U9TNs$r5a$a$k!#(B
-3*3$B9TNs$G$N7W;;;~4V$OLs(B4ms$B$G$"$k!#(B
+{\bf simultaneous-equation}は、1つの解だけを求めたいときにもっとも
+手軽な関数である。
+{\bf lu-determinant}は、LU分解された行列の行列式を計算する。
+{\bf inverse-matrix}関数は、{\bf lu-decompose}を1回と{\bf lu-solve}をn回
+使って逆行列を求める。
+3*3行列での計算時間は約4msである。
 
 \begin{refdesc}
 
 \funcdesc{lu-decompose}{matrix \&optional result}{
-{\em matrix}$B$K(BLU$BJ,2r$r<B9T$9$k!#(B}
+{\em matrix}にLU分解を実行する。}
 
 \funcdesc{lu-solve}{lu-mat perm-vector bvector [result]}{
-LU$BJ,2r$5$l$?(B1$B<!O"N)J}Dx<0$r2r$/!#(B
-{\em perm-vector}$B$O!"(B{\bf lu-decompose}$B$GJV$5$l$?7k2L$G$J$1$l$P$J$i$J$$!#(B}
+LU分解された1次連立方程式を解く。
+{\em perm-vector}は、{\bf lu-decompose}で返された結果でなければならない。}
 
 \funcdesc{lu-determinant}{lu-mat perm-vector}{
-LU$BJ,2r$5$l$?9TNs$N9TNs<0$r5a$a$k!#(B}
+LU分解された行列の行列式を求める。}
 
 \funcdesc{simultaneous-equation}{mat vec}{
-$B78?t$,(B{\em mat}$B$G!"Dj?t$,(B{\em vec}$B$G5-=R$5$l$k(B1$B<!O"N)J}Dx<0$r2r$/!#(B}
+係数が{\em mat}で、定数が{\em vec}で記述される1次連立方程式を解く。}
 
 \funcdesc{inverse-matrix}{mat}{
-$B@5J}9TNs(B{\em mat}$B$N5U9TNs$r5a$a$k!#(B}
+正方行列{\em mat}の逆行列を求める。}
 
 \funcdesc{pseudo-inverse}{mat}{
-$BFC0[CMJ,2r$rMQ$$$F5<;w5U9TNs$r5a$a$k!#(B}
+特異値分解を用いて擬似逆行列を求める。}
 
 \end{refdesc}
 
 \newpage
 
-\subsection{\label{Coordinates}$B:BI87O(B}
+\subsection{\label{Coordinates}座標系}
 
-$B:BI87O$H:BI8JQ49$O!"(B{\bf coordinates}$B%/%i%9$GI=8=$5$l$k!#(B
-4*4$B$NF1<!9TNsI=8=$NBe$o$j$K!"(B
-Euslisp$BFb$G:BI87O$O!"9bB.@-$H0lHL@-$N$?$a$K(B
-3*3$B$N2sE>9TNs$H(B3$B<!850LCV%Y%/%H%k$NAH$GI=8=$5$l$k!#(B
+座標系と座標変換は、{\bf coordinates}クラスで表現される。
+4*4の同次行列表現の代わりに、
+Euslisp内で座標系は、高速性と一般性のために
+3*3の回転行列と3次元位置ベクトルの組で表現される。
 
 \begin{refdesc}
 
 \classdesc{coordinates}{propertied-object}
 {(pos :type float-vector \\
 \>  rot :type array)}
-{$B0LCV%Y%/%H%k$H(B3x3$B$N2sE>9TNs$NAH$_$G:BI87O$rDj5A$9$k!#(B}
+{位置ベクトルと3x3の回転行列の組みで座標系を定義する。}
 
 \funcdesc{coordinates-p}{obj}{
-{\em obj}$B$,(B{\bf coordinates}$B%/%i%9$+$^$?$O$=$N%5%V%/%i%9$N%$%s%9%?%s%9(B
-$B$N$H$-!"(BT$B$rJV$9!#(B}
+{\em obj}が{\bf coordinates}クラスかまたはそのサブクラスのインスタンス
+のとき、Tを返す。}
 
 \methoddesc{:rot}{}{
-$B$3$N:BI87O$N(B3x3$B2sE>9TNs$rJV$9!#(B}
+この座標系の3x3回転行列を返す。}
 
 \methoddesc{:pos}{}{
-$B$3$N:BI87O$N(B3$B<!850LCV%Y%/%H%k$rJV$9!#(B}
+この座標系の3次元位置ベクトルを返す。}
 
 \methoddesc{:newcoords}{newrot newpos}{
-{\em newrot}$B$H(B{\em newpos}$B$G$3$N:BI87O$r99?7$9$k!#(B
-$B$3$N:BI87O$N>uBV$,JQ2=$9$k$H$-$O$$$D$G$b!"$3$N%a%=%C%I$rMQ$$$F?7$7$$(B
-$B2sE>9TNs$H0LCV%Y%/%H%k$K99?7$9$k$Y$-$G$"$k!#(B
-$B$3$N%a%C%;!<%8$O%$%Y%s%H$rEA$($FB>$N(B{\bf :update}$B%a%=%C%I$r8F$S=P$9!#(B}
+{\em newrot}と{\em newpos}でこの座標系を更新する。
+この座標系の状態が変化するときはいつでも、このメソッドを用いて新しい
+回転行列と位置ベクトルに更新するべきである。
+このメッセージはイベントを伝えて他の{\bf :update}メソッドを呼び出す。}
 
 \methoddesc{:replace-coords}{newrot newpos}{
-{\em :newcoords}$B%a%=%C%I$r8F$S=P$5$:$K(B{\tt rot}$B$H(B{\tt pos}$B%9%m%C%H$rJQ99$9$k!#(B}
+{\em :newcoords}メソッドを呼び出さずに{\tt rot}と{\tt pos}スロットを変更する。}
 \metdesc{:coords}{}
 
 \methoddesc{:copy-coords}{\&optional dest}{
-$B$b$7(B{\em dest}$B$,M?$($i$l$J$+$C$?$H$-!"(B{\bf :copy-coords}$B$OF1$8(B{\tt rot}$B$H(B{\tt pos}
-$B%9%m%C%H$r;}$D:BI87O%*%V%8%'%/%H$r:n$k!#(B
-$B$b$7!"(B{\em dest}$B$,M?$($i$l$?$H$-!"(B{\em dest}$B:BI87O$K$3$N:BI87O$N(Brot$B$H(Bpos$B$r(B
-$B%3%T!<$9$k!#(B}
+もし{\em dest}が与えられなかったとき、{\bf :copy-coords}は同じ{\tt rot}と{\tt pos}
+スロットを持つ座標系オブジェクトを作る。
+もし、{\em dest}が与えられたとき、{\em dest}座標系にこの座標系のrotとposを
+コピーする。}
 
 \methoddesc{:reset-coords}{}{
-$B$3$N:BI87O$N2sE>9TNs$rC10L9TNs$K$7!"0LCV%Y%/%H%k$r$9$Y$F%<%m$K$9$k!#(B}
+この座標系の回転行列を単位行列にし、位置ベクトルをすべてゼロにする。}
 
 \metdesc{:worldpos}{}
 \metdesc{:worldrot}{}
 \methoddesc{:worldcoords}{}{
-$B$3$N%*%V%8%'%/%H$N%o!<%k%I:BI87O$K$*$1$k0LCV%Y%/%H%k!&2sE>9TNs!&:BI87O(B
-$B$r7W;;$9$k!#(B
-$B$=$N:BI87O$O!"$$$D$b%o!<%k%I:BI87O$GI=8=$5$l$F$$$k$H2>Dj$5$l!"(B
-$B$3$l$i$N%a%=%C%I$O4JC1$K(B{\tt pos}$B$H(B{\tt rot}$B$H(B{\tt self}$B$rJV$9$3$H$,$G$-$k!#(B
-$B$3$l$i$N%a%=%C%I$O(B{\bf cascaded-coords}$B%/%i%9$H8_49@-$,$H$i$l$F$$$k!#(B
-{\bf cascaded-coords}$B$G$O%o!<%k%I:BI87O$G$NI=8=$H2>Dj$7$F$$$J$$!#(B}
+このオブジェクトのワールド座標系における位置ベクトル・回転行列・座標系
+を計算する。
+その座標系は、いつもワールド座標系で表現されていると仮定され、
+これらのメソッドは簡単に{\tt pos}と{\tt rot}と{\tt self}を返すことができる。
+これらのメソッドは{\bf cascaded-coords}クラスと互換性がとられている。
+{\bf cascaded-coords}ではワールド座標系での表現と仮定していない。}
 
 \methoddesc{:copy-worldcoords}{\&optional dest}{
-$B:G=i$K!"%o!<%k%I:BI87O$,7W;;$5$l!"(B{\em dest}$B$K%3%T!<$5$l$k!#(B
-$B$b$7!"(B{\em dest}$B$,;XDj$5$l$F$J$$$H$-!"?7$?$K(B{\bf coordinates}
-$B%*%V%8%'%/%H$r:n$k!#(B}
+最初に、ワールド座標系が計算され、{\em dest}にコピーされる。
+もし、{\em dest}が指定されてないとき、新たに{\bf coordinates}
+オブジェクトを作る。}
 
 \methoddesc{:rotate-vector}{vec}{
-$B$3$N:BI87O$N2sE>9TNs$K$h$C$F(B{\em vec}$B$r2sE>$5$;$k!#$9$J$o$A!"(B
-$B$3$N:BI87O$GI=8=$5$l$kJ}8~%Y%/%H%k$r%o!<%k%I:BI87O$K$*$1$kI=8=(B
-$B$KJQ49$9$k!#(B
-$B$3$N:BI87O$N0LCV$O!"2sE>$K1F6A$rM?$($J$$!#(B}
+この座標系の回転行列によって{\em vec}を回転させる。すなわち、
+この座標系で表現される方向ベクトルをワールド座標系における表現
+に変換する。
+この座標系の位置は、回転に影響を与えない。}
 
 \methoddesc{:transform-vector}{vec}{
-$B$3$N:BI87O$GI=8=$5$l$k(B{\em vec}$B$r%o!<%k%I:BI87O$NI=8=$KJQ49$9$k!#(B}
+この座標系で表現される{\em vec}をワールド座標系の表現に変換する。}
 
 \methoddesc{:inverse-transform-vector}{vec}{
-$B%o!<%k%I:BI87O$K$*$1$k(B{\em vec}$B$r%m!<%+%k:BI87O$NI=8=$K5UJQ49$9$k!#(B}
+ワールド座標系における{\em vec}をローカル座標系の表現に逆変換する。}
 
 \methoddesc{:transform}{ trans \&optional (wrt :local)}{
-{\em wrt}$B:BI87O$GI=8=$5$l$k(B{\em trans}$B$K$h$C$F$3$N:BI87O$rJQ49$9$k!#(B
-{\em trans}$B$O:BI87O$N7?$G$J$1$l$P$J$i$J$$$7!"(B{\em wrt}$B$O(B
-{\tt :local, :parent, :world}$B$N%-!<%o!<%I$"$k$$$O(B{\bf coordinates}$B$N(B
-$B%$%s%9%?%s%9$G$J$1$l$P$J$i$J$$!#(B
-$B$b$7(B{\em wrt}$B$,(B{\tt :local}$B$N$H$-!"(B{\em trans}$B$r$3$N:BI87O$N1&(B
-$B$+$iE,MQ$9$k!#$b$7(B{\em wrt}$B$,(B{\tt :world, :parent}$B$N$H$-!"(B
-{\em trans}$B$r:8$+$i3]$1$k!#(B
-$B$b$7(B{\em wrt}$B$,(B{\bf coordinates}$B$N7?$G$"$k$H$-!"(B{\em wrt}$B:BI87O$GI=8=$5$l$k(B
-{\em trans}$B$O:G=i$K%o!<%k%I:BI87O$NI=8=$KJQ49$5$l!":8$+$i3]$1$k!#(B}
+{\em wrt}座標系で表現される{\em trans}によってこの座標系を変換する。
+{\em trans}は座標系の型でなければならないし、{\em wrt}は
+{\tt :local, :parent, :world}のキーワードあるいは{\bf coordinates}の
+インスタンスでなければならない。
+もし{\em wrt}が{\tt :local}のとき、{\em trans}をこの座標系の右
+から適用する。もし{\em wrt}が{\tt :world, :parent}のとき、
+{\em trans}を左から掛ける。
+もし{\em wrt}が{\bf coordinates}の型であるとき、{\em wrt}座標系で表現される
+{\em trans}は最初にワールド座標系の表現に変換され、左から掛ける。}
 
 \methoddesc{:move-to}{trans \&optional (wrt :local)}{
-{\em wrt}$B$GI=8=$5$l$k(B{\em trans}$B$G$3$N:BI87O$N(B{\tt rot}$B$H(B{\tt pos}
-$B$rCV$-49$($k!#(B}
+{\em wrt}で表現される{\em trans}でこの座標系の{\tt rot}と{\tt pos}
+を置き換える。}
 
 \methoddesc{:translate}{ p \&optional (wrt :local)}{
-$B$3$N%*%V%8%'%/%H$N0LCV$r(B{\em wrt}$B:BI87O$GAjBPE*$KJQ99$9$k!#(B}
+このオブジェクトの位置を{\em wrt}座標系で相対的に変更する。}
 
 \methoddesc{:locate}{ p \&optional (wrt :local)}{
-$B$3$N:BI87O$N0LCV$r(B{\em wrt}$B:BI87O$G@dBPE*$KJQ99$9$k!#(B
-$B$b$7!"(B{\em wrt}$B$,(B{\tt :local}$B$N$H$-!"(B{\bf :translate}$B$HF10l$J(B
-$B8z2L$r@8$`!#(B}
+この座標系の位置を{\em wrt}座標系で絶対的に変更する。
+もし、{\em wrt}が{\tt :local}のとき、{\bf :translate}と同一な
+効果を生む。}
 
 \methoddesc{:rotate}{ theta axis \&optional (wrt :local)}{
-{\em axis}$B<42s$j$K(B{\em theta}$B%i%8%"%s$@$1AjBPE*$K$3$N:BI87O$r2sE>$5$;$k!#(B
-{\em axis}$B$O!"<4%-!<%o!<%I(B({\tt :x, :y, :z})$B$"$k$$$OG$0U$N(B{\tt float-vector}
-$B$G$"$k!#(B
-{\em axis}$B$O(B{\em wrt}$B:BI87O$GI=8=$5$l$F$$$k$H9M$($k!#(B
-$B$h$C$F!"$b$7(B{\em wrt}$B$,(B{\tt :local}$B$G(B{\em axis}$B$,(B{\tt :z}$B$G$"$k$H$-!"(B
-$B:BI87O$O%m!<%+%k:BI87O$N(Bz$B<42s$j$K2sE>$5$l$k!#(B
-$B$b$7(B{\em wrt}$B$,(B{\tt :world, :parent}$B$G$"$k$H$-!"%o!<%k%I:BI87O$N(Bz$B<42s$j$K(B
-$B2sE>$5$l$k!#(B
-$B8@$$49$($k$H!"$b$7(B{\em wrt}$B$,(B{\tt :local}$B$N$H$-!"(B
-$B2sE>9TNs$O$3$N:BI87O$N1&$+$i3]$1$i$l$k!#(B
-$B$=$7$F!"$b$7(B{\em wrt}$B$,(B{\tt :world}$B$"$k$$$O(B{\tt :parent}$B$N$H$-!"(B
-$B2sE>9TNs$O:8$+$i3]$1$i$l$k!#(B
-{\em wrt}$B$,(B{\tt :world}$B$"$k$$$O(B{\tt :parent}$B$G$5$(!"(B
-$B$3$N:BI87O$N(B{\tt pos}$B%Y%/%H%k$OJQ2=$7$J$$!#(B
-$BK\Ev$K%o!<%k%I:BI87O$N<42s$j$K2sE>$9$k$?$a$K$O!"(B
-$B2sE>$rI=8=$9$k(B{\bf coordinates}$B%/%i%9$N%$%s%9%?%s%9$r(B
-{\bf :transform}$B%a%=%C%I$KM?$($J$1$l$P$J$i$J$$!#(B}
+{\em axis}軸回りに{\em theta}ラジアンだけ相対的にこの座標系を回転させる。
+{\em axis}は、軸キーワード({\tt :x, :y, :z})あるいは任意の{\tt float-vector}
+である。
+{\em axis}は{\em wrt}座標系で表現されていると考える。
+よって、もし{\em wrt}が{\tt :local}で{\em axis}が{\tt :z}であるとき、
+座標系はローカル座標系のz軸回りに回転される。
+もし{\em wrt}が{\tt :world, :parent}であるとき、ワールド座標系のz軸回りに
+回転される。
+言い換えると、もし{\em wrt}が{\tt :local}のとき、
+回転行列はこの座標系の右から掛けられる。
+そして、もし{\em wrt}が{\tt :world}あるいは{\tt :parent}のとき、
+回転行列は左から掛けられる。
+{\em wrt}が{\tt :world}あるいは{\tt :parent}でさえ、
+この座標系の{\tt pos}ベクトルは変化しない。
+本当にワールド座標系の軸回りに回転するためには、
+回転を表現する{\bf coordinates}クラスのインスタンスを
+{\bf :transform}メソッドに与えなければならない。}
 
 \methoddesc{:orient}{ theta axis \&optional (wrt :local)}{
-{\tt rot}$B$r6/@)E*$KJQ99$9$k!#(B{\bf :rotate}$B%a%=%C%I$N@dBPCMHG$G$"$k!#(B}
+{\tt rot}を強制的に変更する。{\bf :rotate}メソッドの絶対値版である。}
 
 \methoddesc{:inverse-transformation}{}{
-$B$3$N:BI87O$N5UJQ49$r;}$D:BI87O$r?7$7$/:n$k!#(B}
+この座標系の逆変換を持つ座標系を新しく作る。}
 
 \methoddesc{:transformation}{ coords (wrt :local)}{
-$B$3$N:BI87O$H0z$-?t$GM?$($i$l$k(B{\em coords}$B$H$N4V$NJQ49$r:n$k!#(B
-$B$b$7!"(B{\em wrt}$B$,(B{\tt :local}$B$G$"$k$H$-!"%m!<%+%k:BI87O$GI=8=$5$l$k!#(B
-$B$9$J$o$A!"$b$7$3$N(B{\bf :transformation}$B$N7k2L$r(B{\bf :transform}$B$N0z$-?t$H$7$F(B
-{\em wrt}={\tt :local}$B$H0l=o$K(B
-$BM?$($?$H$-!"$3$N:BI87O$O(B{\em coords}$B$HF10l$J:BI87O$KJQ49$5$l$k!#(B}
+この座標系と引き数で与えられる{\em coords}との間の変換を作る。
+もし、{\em wrt}が{\tt :local}であるとき、ローカル座標系で表現される。
+すなわち、もしこの{\bf :transformation}の結果を{\bf :transform}の引き数として
+{\em wrt}={\tt :local}と一緒に
+与えたとき、この座標系は{\em coords}と同一な座標系に変換される。}
 
 \methoddesc{:Euler}{ az1 ay az2}{
-$B%*%$%i!<3Q(B({\em az1, ay, az2})$B$GI=8=$5$l$k2sE>9TNs$r(B{\tt rot}$B$K(B
-$B@_Dj$9$k!#(B}
+オイラー角({\em az1, ay, az2})で表現される回転行列を{\tt rot}に
+設定する。}
 
 \methoddesc{:roll-pitch-yaw}{roll pitch yaw}{
-$B%m!<%k!&%T%C%A!&%h!<3Q$GI=8=$5$l$k2sE>9TNs$r(B{\tt rot}$B$K@_Dj$9$k!#(B}
+ロール・ピッチ・ヨー角で表現される回転行列を{\tt rot}に設定する。}
 
 \methoddesc{:4x4}{\&optional mat44}{
-$B$b$7!"(B{\em mat44}$B$H$7$F(B4x4$B9TNs$,M?$($i$l$k$H$-!"(B3x3$B2sE>9TNs$H(B3$B<!850LCV%Y%/%H%k(B
-$B$N:BI8I=8=$KJQ49$5$l$k!#(B
-$B$b$7!"(B{\em mat44}$B$,M?$($i$l$J$$$H$-!"$3$N:BI87O$NI=8=$r(B
-4x4$B$NF1<!9TNsI=8=$KJQ49$7$FJV$9!#(B}
+もし、{\em mat44}として4x4行列が与えられるとき、3x3回転行列と3次元位置ベクトル
+の座標表現に変換される。
+もし、{\em mat44}が与えられないとき、この座標系の表現を
+4x4の同次行列表現に変換して返す。}
 
 \longdescription{:init}{\&key \= :pos \hspace{8mm} \= \#f(0 0 0)
- \` [$B%a%=%C%I(B] \\
-% \hspace{95mm} [$B%a%=%C%I(B] \\
+ \` [メソッド] \\
+% \hspace{95mm} [メソッド] \\
  \> :rot \> \#2f((1 0 0) (0 1 0) (0 0 1)) \\
  \> :rpy \> roll pitch yaw \\
  \> :Euler \> az ay az2 \\
@@ -412,94 +412,94 @@ Euslisp$BFb$G:BI87O$O!"9bB.@-$H0lHL@-$N$?$a$K(B
  \> :coords \> another coordinates \\
  \> :properties \>  a list of (ind . value) pair \\
  \> :name \> name property \\}{
-$B$3$N(B{\bf coordinates}$B%*%V%8%'%/%H$r=i4|2=$7!"(B{\tt rot}$B$H(B{\tt pos}$B$r@_Dj$9$k!#(B
-$B$=$l$>$l$N%-!<%o!<%I$N0UL#$O!"0J2<$K<($9DL$j$G$"$k!#(B
+この{\bf coordinates}オブジェクトを初期化し、{\tt rot}と{\tt pos}を設定する。
+それぞれのキーワードの意味は、以下に示す通りである。
 \begin{description}
-\item[:dimension] 2$B$"$k$$$O(B3 ($B%G%U%)%k%H$O(B 3)
-\item[:pos] $B0LCV%Y%/%H%k$r;XDj$9$k(B ($B%G%U%)%k%H$O(B \#f(0 0 0))
-\item[:rot] $B2sE>9TNs$r;XDj$9$k(B ($B%G%U%)%k%H$OC10L9TNs(B)
-\item[:Euler] $B%*%$%i!<3Q$H$7$F(B3$B$D$NMWAG$NNs$rM?$($k(B
-\item[:rpy] $B%m!<%k!&%T%C%A!&%h!<3Q$H$7$F(B3$B$D$NMWAG$NNs$rM?$($k(B
-\item[:axis] $B2sE><4(B ({\tt :x,:y,:z} $B$"$k$$$OG$0U$N(B{\tt float-vector})
-\item[:angle] $B2sE>3Q(B ({\em :axis}$B$H0l=o$K;HMQ(B)
-\item[:wrt] $B2sE><4$r<($9:BI87O(B ($B%G%U%)%k%H$O(B {\tt :local})
-\item[:4X4] 4X4 $B9TNs(B({\tt pos}$B$H(B{\tt rot}$B$rF1;~$K;XDj(B)
-\item[:coords] {\em coords}$B$+$i(B{\tt rot}$B$H(B{\tt pos}$B$r%3%T!<$9$k(B
-\item[:name] {\tt :name}$BCM$r@_Dj$9$k!#(B
+\item[:dimension] 2あるいは3 (デフォルトは 3)
+\item[:pos] 位置ベクトルを指定する (デフォルトは \#f(0 0 0))
+\item[:rot] 回転行列を指定する (デフォルトは単位行列)
+\item[:Euler] オイラー角として3つの要素の列を与える
+\item[:rpy] ロール・ピッチ・ヨー角として3つの要素の列を与える
+\item[:axis] 回転軸 ({\tt :x,:y,:z} あるいは任意の{\tt float-vector})
+\item[:angle] 回転角 ({\em :axis}と一緒に使用)
+\item[:wrt] 回転軸を示す座標系 (デフォルトは {\tt :local})
+\item[:4X4] 4X4 行列({\tt pos}と{\tt rot}を同時に指定)
+\item[:coords] {\em coords}から{\tt rot}と{\tt pos}をコピーする
+\item[:name] {\tt :name}値を設定する。
 \end{description}
-{\em :angle}$B$O(B{\em :axis}$B$HAH$_$GM#0l;HMQ$9$k$3$H$,$G$-$k!#(B
-$B$=$N<4$O(B{\em :wrt}$B:BI87O$G7hDj$5$l$k!#(B
-{\em :wrt}$B$H4X78$J$7$K(B{\em :Euler}$B$O%m!<%+%k:BI87O$GDj5A$5$l$k%*%$%i!<3Q(B
-$B!J(B{\em az1, ay}$B$H(B{\em az2}$B!K$r$$$D$b;XDj$9$k!#(B
-$B$^$?!"(B{\em :rpy}$B$O%o!<%k%I:BI87O$N(B{\em z}, {\em y}$B$H(B{\em x}$B<42s$j$N3QEY(B
-$B$r;XDj$9$k!#(B
-{\em :rot, :Euler, :rpy, :axis, :4X4}$B$NCf$+$i#2$D0J>e$rO"B3$G;XDj$9$k$3$H$O(B
-$B$G$-$J$$!#$7$+$7$J$,$i!";XDj$7$F$b%(%i!<$OJV$5$J$$!#(B
-{\em axis}$B$H(B{\em :angle}$B%Q%i%a!<%?$K$ONs$r;XDj$9$k$3$H$,$G$-$k!#(B
-$B$=$N0UL#$O!"M?$($i$l$?<42s$j$N2sE>$rO"B3E*$K=hM}$9$k!#(B
-$BB0@-$H$=$NCM$NAH$_$N%j%9%H$r(B{\em :properties}$B$N0z$-?t$H$7$F(B
-$BM?$($k$3$H$,$G$-$k!#$3$l$i$NAH$_$O!"$3$N:BI87O$N(B{\tt plist}$B$K%3%T!<$5$l$k!#(B}
+{\em :angle}は{\em :axis}と組みで唯一使用することができる。
+その軸は{\em :wrt}座標系で決定される。
+{\em :wrt}と関係なしに{\em :Euler}はローカル座標系で定義されるオイラー角
+（{\em az1, ay}と{\em az2}）をいつも指定する。
+また、{\em :rpy}はワールド座標系の{\em z}, {\em y}と{\em x}軸回りの角度
+を指定する。
+{\em :rot, :Euler, :rpy, :axis, :4X4}の中から２つ以上を連続で指定することは
+できない。しかしながら、指定してもエラーは返さない。
+{\em axis}と{\em :angle}パラメータには列を指定することができる。
+その意味は、与えられた軸回りの回転を連続的に処理する。
+属性とその値の組みのリストを{\em :properties}の引き数として
+与えることができる。これらの組みは、この座標系の{\tt plist}にコピーされる。}
 
-\subsection{$BO"7k:BI87O(B}
+\subsection{連結座標系}
 
 \classdesc{cascaded-coords}{coordinates}
 {(parent descendants worldcoords manager changed)}
-{$BO"7k$5$l$?:BI87O$rDj5A$9$k!#(B{\bf cascaded-coords}$B$O!"(B
-$B$7$P$7$P(B{\bf cascoords}$B$HN,$9!#(B}
+{連結された座標系を定義する。{\bf cascaded-coords}は、
+しばしば{\bf cascoords}と略す。}
 
 \methoddesc{:inheritance}{ }{
-$B$3$N(B{\bf cascaded-coords}$B$N;RB9$r$9$Y$F5-=R$7$?7Q>5(Btree$B%j%9%H$rJV$9!#(B
-$B$b$7!"(B{\tt a}$B$H(B{\tt b}$B$,$3$N:BI87O$ND>2<$N;RB9$G(B{\tt c}$B$,(B{\tt a}$B$N(B
-$B;RB9$G$"$k$H$-!"(B{\tt ((a (c)) (b))}$B$rJV$9!#(B}
+この{\bf cascaded-coords}の子孫をすべて記述した継承treeリストを返す。
+もし、{\tt a}と{\tt b}がこの座標系の直下の子孫で{\tt c}が{\tt a}の
+子孫であるとき、{\tt ((a (c)) (b))}を返す。}
 
 \methoddesc{:assoc}{childcoords \&optional relative-coords}{
-{\em childcoords}$B$O!"$3$N:BI87O$N;RB9$H$7$F4X78$7$F$$$k!#(B
-$B$b$7!"(B{\em childcoords}$B$,4{$KB>$N(B{\bf cascaded-coords}$B$K(B{\bf assoc}$B$5$l$F(B
-$B$$$k$H$-!"(B{\em childcoords}$B$O$=$l$>$l$N(B{\bf cascaded-coords}$B$,(B1$B$D$N?F$7$+(B
-$B;}$C$F$$$J$$$J$i(B{\bf dessoc}$B$5$l$k!#(B
-$B%o!<%k%I:BI87O$K$*$1$k(B{\em childcoords}$B$NJ}8~$"$k$$$O0LCV$OJQ99$5$l$J$$!#(B}
+{\em childcoords}は、この座標系の子孫として関係している。
+もし、{\em childcoords}が既に他の{\bf cascaded-coords}に{\bf assoc}されて
+いるとき、{\em childcoords}はそれぞれの{\bf cascaded-coords}が1つの親しか
+持っていないなら{\bf dessoc}される。
+ワールド座標系における{\em childcoords}の方向あるいは位置は変更されない。}
 
 \methoddesc{:dissoc}{childcoords}{
-$B$3$N:BI87O$N;RB9%j%9%H$+$i(B{\em childcoords}$B$r30$9!#(B
-$B%o!<%k%I:BI87O$K$*$1$k(B{\em childcoords}$B$NJ}8~$"$k$$$O0LCV$OJQ99$5$l$J$$!#(B}
+この座標系の子孫リストから{\em childcoords}を外す。
+ワールド座標系における{\em childcoords}の方向あるいは位置は変更されない。}
 
 \methoddesc{:changed}{}{
-$B$3$N:BI87O$N?F:BI87O$,JQ99$5$l$F$$$k$3$H$rDLCN$9$k!#(B
-$B$^$?!"$b$C$H$"$H$G%o!<%k%I:BI87O$,MW5a$5$l$?$H$-!"%o!<%k%I:BI87O$r:F7W;;$9$k(B
-$BI,MW$,$"$k!#(B}
+この座標系の親座標系が変更されていることを通知する。
+また、もっとあとでワールド座標系が要求されたとき、ワールド座標系を再計算する
+必要がある。}
 
 \methoddesc{:update}{ }{
-$B8=:_$N%o!<%k%I:BI87O$r:F7W;;$9$k$?$a$K(B{\bf :worldcoords}$B%a%=%C%I(B
-$B$r8F$S=P$9!#(B}
+現在のワールド座標系を再計算するために{\bf :worldcoords}メソッド
+を呼び出す。}
 
 \methoddesc{:worldcoords}{}{
-$B%k!<%H$N:BI87O$+$i$3$N:BI87O$^$G$NA4$F$N:BI87O$rO"7k$5$;$k$3$H$K$h$j!"(B
-$B$3$N:BI87O$r%o!<%k%I:BI87O$GI=8=$7$?(B{\bf coordinates}$B%*%V%8%'%/%H$GJV$9!#(B
-$B$=$N7k2L$O!"$3$N%*%V%8%'%/%H$,;}$A!"8e$K:FMxMQ$5$l$k!#(B
-$B$h$C$F!"$3$N7k2L$N:BI87O$rJQ99$9$Y$-$G$J$$!#(B}
+ルートの座標系からこの座標系までの全ての座標系を連結させることにより、
+この座標系をワールド座標系で表現した{\bf coordinates}オブジェクトで返す。
+その結果は、このオブジェクトが持ち、後に再利用される。
+よって、この結果の座標系を変更すべきでない。}
 
 \methoddesc{:worldpos}{}{
-$B%o!<%k%I:BI87O$GI=8=$7$?$3$N:BI87O$N(B{\tt rot}$B$rJV$9!#(B}
+ワールド座標系で表現したこの座標系の{\tt rot}を返す。}
 
 \methoddesc{:worldrot}{}{
-$B%o!<%k%I:BI87O$GI=8=$7$?$3$N:BI87O$N(B{\tt pos}$B$rJV$9!#(B}
+ワールド座標系で表現したこの座標系の{\tt pos}を返す。}
 
 \methoddesc{:transform-vector}{vec}{
-{\em vec}$B$r$3$N%m!<%+%k:BI87O$G$NI=8=$H$_$J$7$F!"%o!<%k%I:BI87O$G$N(B
-$BI=8=$KJQ49$9$k!#(B}
+{\em vec}をこのローカル座標系での表現とみなして、ワールド座標系での
+表現に変換する。}
 
 \methoddesc{:inverse-transform-vector}{vec}{
-$B%o!<%k%I:BI87O$GI=8=$5$l$k(B{\em vec}$B$r$3$N%m!<%+%k:BI87O$NI=8=$K5UJQ49$9$k!#(B}
+ワールド座標系で表現される{\em vec}をこのローカル座標系の表現に逆変換する。}
 
 \methoddesc{:inverse-transformation}{}{
-$B$3$N:BI87O$N5UJQ49$rI=8=$9$k(B{\bf coordinates}$B$N%$%s%9%?%s%9$r:n$k!#(B}
+この座標系の逆変換を表現する{\bf coordinates}のインスタンスを作る。}
 
 \metdesc{:transform}{trans  \&optional (wrt :local)}
 \metdesc{:translate}{fltvec \&optional (wrt :local)}
 \metdesc{:locate}{fltvec \&optional (wrt :local)}
 \metdesc{:rotate}{theta axis \&optional (wrt :local)}
 \methoddesc{:orient}{theta axis \&optional (wrt :local)}{
-{\bf coordinates}$B%/%i%9$N5-=R$r;2>H$9$k$3$H!#(B}
+{\bf coordinates}クラスの記述を参照すること。}
 
 \fundesc{make-coords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
 
@@ -507,19 +507,19 @@ Euslisp$BFb$G:BI87O$O!"9bB.@-$H0lHL@-$N$?$a$K(B
 \fundesc{coords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
 \funcdesc{cascoords}{\&key :pos :rot :rpy :Euler :angle :axis
 :4X4 :coords :name}{
-$B$3$l$i$N4X?t$O!"$9$Y$F(B{\bf coordinates}$B$"$k$$$O(B{\bf cascaded-coords}$B$r(B
-$B?7$7$/:n$k!#(B
-$B%-!<%o!<%I%Q%i%a!<%?$K$D$$$F$O!"(B{\bf coordinates}$B%/%i%9$N(B{\bf :init}$B%a%=%C%I$r(B
-$B8+$k$3$H!#(B}
+これらの関数は、すべて{\bf coordinates}あるいは{\bf cascaded-coords}を
+新しく作る。
+キーワードパラメータについては、{\bf coordinates}クラスの{\bf :init}メソッドを
+見ること。}
 \funcdesc{transform-coords}{coords1 coords2 \&optional (coords3 (coords))}{
-{\em coords1}$B$,(B{\em coords2}$B$K:8$+$iE,MQ!J>h;;!K$5$l$k!#(B
-$B$=$N@Q$O(B{\em coords3}$B$KC_@Q$5$l$k!#(B}
+{\em coords1}が{\em coords2}に左から適用（乗算）される。
+その積は{\em coords3}に蓄積される。}
 \funcdesc{transform-coords*}{\&rest coords}{
-{\em coords}$B$K%j%9%HI=8=$5$l$F$$$kJQ49$rO"7k$5$;$k!#(B
-$BO"7k$5$l$?JQ49$GI=8=$5$l$k(B{\bf coordinates}$B$N%$%s%9%?%s%9$rJV$9!#(B}
+{\em coords}にリスト表現されている変換を連結させる。
+連結された変換で表現される{\bf coordinates}のインスタンスを返す。}
 \funcdesc{wrt}{coords vec}{
-{\em vec}$B$r(B{\em coords}$B$K$*$1$kI=8=$KJQ49$9$k!#(B
-$B$=$N7k2L$O(B{\tt  (send {\em coords} :trans\-form-\-vec\-tor {\em vec})}$B$HF10l$G$"$k!#(B}
+{\em vec}を{\em coords}における表現に変換する。
+その結果は{\tt  (send {\em coords} :trans\-form-\-vec\-tor {\em vec})}と同一である。}
 \end{refdesc}
 
 \newpage

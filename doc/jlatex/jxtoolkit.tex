@@ -1,14 +1,14 @@
 \section{XToolKit}
 \markright{\arabic{section}. XToolKit}
 
-XToolKit$B$O!"(B
-$B%\%?%s!"%W%k%@%&%s%a%K%e!"%F%-%9%H(Bwindow$B$J$I$N(BGUI$BMWAG$r;HMQ$7$F(B
-GUI (Graphical User Interface)$B$r:n@.$9$k$N$rMF0W$K$9$k$?$a$N(B
-$B9b%l%Y%k(BXwindow$B%$%s%?!<%U%'!<%9$G$"$k!#(B
-Xlib$B%/%i%9$H$NBg$-$J0c$$$O!"(BXToolKit$B$,(BXserver$B$+$iAw$i$l$k(B
-Xevent$B$H0lCW$9$k%f!<%6!<$,Dj5A$7$?BPOC%k!<%A%s$r8F$S=P$7!"(B
-$B$=$l$i$NBPOC;X8~(Bwindow$B%Q!<%D$H0lCW$7$?304Q$rDs6!$9$k$3$H$G$"$k!#(B
-XToolKit$B$K4^$^$l$k%/%i%9$O!"0J2<$N7Q>59=B$$r;}$C$F$$$k!#(B
+XToolKitは、
+ボタン、プルダウンメニュ、テキストwindowなどのGUI要素を使用して
+GUI (Graphical User Interface)を作成するのを容易にするための
+高レベルXwindowインターフェースである。
+Xlibクラスとの大きな違いは、XToolKitがXserverから送られる
+Xeventと一致するユーザーが定義した対話ルーチンを呼び出し、
+それらの対話指向windowパーツと一致した外観を提供することである。
+XToolKitに含まれるクラスは、以下の継承構造を持っている。
 \begin{verbatim}
           xwindow
                panel
@@ -35,75 +35,75 @@ XToolKit$B$K4^$^$l$k%/%i%9$O!"0J2<$N7Q>59=B$$r;}$C$F$$$k!#(B
                     horizontal-scroll-bar
 \end{verbatim}
 
-$B0J2<$K<($9(Bxwindow$B%/%i%9$O(BXToolKit$B$N(B5$B$D$N4pK\%/%i%9$G$"$k!#(B
+以下に示すxwindowクラスはXToolKitの5つの基本クラスである。
 {\tt panel}, {\tt panel-item},
-{\tt canvas}, {\tt textWindow}$B$H(B{\tt scroll-bar}$B!#(B
-{\tt menubar-panel}$B$H(B{\tt menu-panel}$B$O!"(B{\tt panel}$B$N2<$KDj5A$5$l$k!#(B
-$B?7$7$$%"%W%j%1!<%7%g%s(Bwindow$B$r:n$j!"%$%Y%s%H$N>e$G$=$l$r<B9T$5$;$k$?$a$N(B
-$B4pK\E*$JJ}:v$O!"0J2<$NDL$j$G$"$k!#(B
+{\tt canvas}, {\tt textWindow}と{\tt scroll-bar}。
+{\tt menubar-panel}と{\tt menu-panel}は、{\tt panel}の下に定義される。
+新しいアプリケーションwindowを作り、イベントの上でそれを実行させるための
+基本的な方策は、以下の通りである。
 \begin{enumerate}
-\item{\bf $B%"%W%j%1!<%7%g%s%/%i%9$NDj5A(B} $B%"%W%j%1!<%7%g%s%/%i%9(Bwindow$B$O!"(B
-XToolKit$B$NMWAG$rCV$/G=NO$r;}$D(B{\bf panel}$B$N%5%V%/%i%9$H$7$F(B
-$BDj5A$5$l$J$1$l$P$J$i$J$$!#(B
-\item{\bf $B%$%Y%s%H%O%s%I%i$NDj5A(B} $B%"%W%j%1!<%7%g%s%/%i%9$K$*$$$F!"(B
-$B%\%?%s$,2!$5$l$?$j!"%a%K%e!<%"%$%F%`$,A*Br$5$l$?$j$7$?$H$-$K(B
-$B8F$S=P$5$l$k%$%Y%s%H%O%s%I%i$rDj5A$9$k!#(B
-$B%$%Y%s%H%O%s%I%i$O!"(Bpanel-item$B$N;XDj$5$l$?0z?t$r;}$D%a%=%C%I$H$7$F(B
-$BDj5A$9$Y$-$G$"$k!#(B
-\item{\bf $B%5%V%Q%M%k$NDj5A(B} $B$b$7!"(B{\tt menubar-panel}$B$r;HMQ$9$k$J$i!"(B
-$B%"%W%j%1!<%7%g%s(Bwindow$B$N0lHV>e$K$*$+$l$k!#(B
-$B$7$?$,$C$F!"(B{\tt :create-menubar}$B$K$h$C$F:G=i$K:n@.$5$l$J$1$l$P(B
-$B$J$i$J$$!#(B
-$BF1MM$K!"(B{\tt menu-panel}$B$O!"$=$N(B{\tt menu-panel}$B$H4XO"$9$k(B
-{\tt menu-button-item}$B$h$jA0$KDj5A$9$kI,MW$,$"$k!#(B
-\item{\bf $B%Q%M%k%"%$%F%`$N:n@.(B} {\tt button-item},
-{\tt text-item}, {\tt slider-item}$B$J$I$N$h$&$J%Q%M%k%"%$%F%`$O!"(B
-{\tt (send-super :create-item {\em class label object method})}$B$K$h$C$F(B
-$B:n@.$9$k$3$H$,$G$-$k!#(B
-$B>e5-$GDj5A$5$l$?%$%Y%s%H%O%s%I%i$O!"$=$l$>$l$N%Q%M%k%"%$%F%`$H(B
-$B@\B3$5$l$k!#(B
-$B$3$l$i$N=i4|2=<jB3$-$O!"%"%W%j%1!<%7%g%s(Bwindow$B%/%i%9$N(B
-{\tt :create}$B%a%=%C%I$NCf$GDj5A$9$Y$-$G$"$k!#(B
-$BI,MW$J$H$-$O$$$D$G$b%$%Y%s%HAw?.$rDd;_$9$k$?$a$N(B{\tt quit}$B%\%?%s$r(B
-$BDj5A$9$k$3$H$rK:$l$J$$$3$H!#(B
-$B$I$s$J(B{\tt textWindow}$B$H(B{\tt canvas}$B$b!"(B{\tt :locate-item}$B%a%=%C%I$r7PM3$7$F(B
-$B%"%W%j%1!<%7%g%s(Bwindow$B$NCf$KCV$/$3$H$,$G$-$k!#(B
-\item{\bf window$BA4BN$N:n@.(B} {\tt :create}$B%a%C%;!<%8$r%"%W%j%1!<%7%g%s(B
-$B%/%i%9$KAw$k$3$H$G!"(Bwindow$B$K(BXToolKit$B$NMWAG$r@5$7$/CV$$$?%"%W%j%1!<%7%g%s(B
-window$B$r:n@.$9$k!#(B
+\item{\bf アプリケーションクラスの定義} アプリケーションクラスwindowは、
+XToolKitの要素を置く能力を持つ{\bf panel}のサブクラスとして
+定義されなければならない。
+\item{\bf イベントハンドラの定義} アプリケーションクラスにおいて、
+ボタンが押されたり、メニューアイテムが選択されたりしたときに
+呼び出されるイベントハンドラを定義する。
+イベントハンドラは、panel-itemの指定された引数を持つメソッドとして
+定義すべきである。
+\item{\bf サブパネルの定義} もし、{\tt menubar-panel}を使用するなら、
+アプリケーションwindowの一番上におかれる。
+したがって、{\tt :create-menubar}によって最初に作成されなければ
+ならない。
+同様に、{\tt menu-panel}は、その{\tt menu-panel}と関連する
+{\tt menu-button-item}より前に定義する必要がある。
+\item{\bf パネルアイテムの作成} {\tt button-item},
+{\tt text-item}, {\tt slider-item}などのようなパネルアイテムは、
+{\tt (send-super :create-item {\em class label object method})}によって
+作成することができる。
+上記で定義されたイベントハンドラは、それぞれのパネルアイテムと
+接続される。
+これらの初期化手続きは、アプリケーションwindowクラスの
+{\tt :create}メソッドの中で定義すべきである。
+必要なときはいつでもイベント送信を停止するための{\tt quit}ボタンを
+定義することを忘れないこと。
+どんな{\tt textWindow}と{\tt canvas}も、{\tt :locate-item}メソッドを経由して
+アプリケーションwindowの中に置くことができる。
+\item{\bf window全体の作成} {\tt :create}メッセージをアプリケーション
+クラスに送ることで、windowにXToolKitの要素を正しく置いたアプリケーション
+windowを作成する。
 %If you do not like the default placement, add {\tt :x} and {\tt :y}
 %parameters at the creation of each component.
-\item{\bf $B%$%Y%s%HAw?.$N<B9T(B} Xserver$B$+$i%$%Y%s%H$r<u$1!"0lCW$9$k(B
-window$B$KG[$k$?$a$K$O!"(B{\tt window-main-loop}$B$r<B9T$9$k$3$H!#(B
-Solaris2$B>e$G$O!"%$%Y%s%H$rG[$k$?$a$N0[$J$C$?%9%l%C%I$G$"$k(B
-{\tt window-main-thread}$B$G<B9T$9$k!#(B
-{\tt window-main-thread}$B$G$O!":G>e0L%l%Y%k$NBPOC$,3h$-$F$$$k!#(B
-{\tt window-main-thread}$B$r#22s0J>e<B9T$7$F$O$J$i$J$$!#(B
+\item{\bf イベント送信の実行} Xserverからイベントを受け、一致する
+windowに配るためには、{\tt window-main-loop}を実行すること。
+Solaris2上では、イベントを配るための異なったスレッドである
+{\tt window-main-thread}で実行する。
+{\tt window-main-thread}では、最上位レベルの対話が活きている。
+{\tt window-main-thread}を２回以上実行してはならない。
 \end{enumerate}
 
-\subsection{X$B%$%Y%s%H(B}
+\subsection{Xイベント}
 
-$B8=:_$N<B9T$K$*$$$F!"(B
-$B%$%Y%s%H9=B$$O8GDj%$%Y%s%H%P%C%U%!!J(B25$BMWAG$N@0?t%Y%/%H%k!K$+$i<u$1!"(B
-$BF1$8%P%C%U%!$,A4$F$N%$%Y%s%H$K4X$7$F:F;HMQ$5$l$k!#(B
-$B%$%Y%s%H9=B$$O!"F1;~$K(B2$B$D0J>e$N%$%Y%s%H$r;2>H$9$kI,MW$,$"$k$H$-!"(B
-$B%3%T!<$5$l$J$1$l$P$J$i$J$$!#(B
+現在の実行において、
+イベント構造は固定イベントバッファ（25要素の整数ベクトル）から受け、
+同じバッファが全てのイベントに関して再使用される。
+イベント構造は、同時に2つ以上のイベントを参照する必要があるとき、
+コピーされなければならない。
 
-{\bf window-main-loop}$B$O!"(BXserver$B$+$iAw$i$l$kA4$F$N%$%Y%s%H$r(B
-$BJa3M$7!"%$%Y%s%H$,H/@8$7$?(Bwindow$B$KG[$k$?$a$N4X?t$G$"$k!#(B
+{\bf window-main-loop}は、Xserverから送られる全てのイベントを
+捕獲し、イベントが発生したwindowに配るための関数である。
 
 \begin{refdesc}
 
-\vardesc{event}{$B$b$C$H$b:G6a$N%$%Y%s%H9=B$$r;}$D(B25$BMWAG$N@0?t%Y%/%H%k(B}
+\vardesc{event}{もっとも最近のイベント構造を持つ25要素の整数ベクトル}
 
 \funcdesc{next-event}{}{
-{\bf event}$B$NCf$K%$%Y%s%H9=B$$rC_@Q$7!"(B
-$B$b$7#1$D$G$bL$7hDj$N%$%Y%s%H$,$"$l$P$=$l$rJV$7!"(B
-$B$J$1$l$P(BNIL$B$rJV$9!#(B}
+{\bf event}の中にイベント構造を蓄積し、
+もし１つでも未決定のイベントがあればそれを返し、
+なければNILを返す。}
 
 \funcdesc{event-type}{event}{
-{\em event}$B$N%$%Y%s%H7?$rI=8=$9$k%-!<%o!<%I(Bsymbol$BJV$9!#(B
-$B%$%Y%s%H7?%-!<%o!<%I$O!"(B
+{\em event}のイベント型を表現するキーワードsymbol返す。
+イベント型キーワードは、
 {\tt :KeyPress} (2),
 {\tt :KeyRelease} (3),
 {\tt :ButtonPress} (4),
@@ -136,58 +136,58 @@ Solaris2$B>e$G$O!"%$%Y%s%H$rG[$k$?$a$N0[$J$C$?%9%l%C%I$G$"$k(B
 {\tt :ColormapNotify} (32),  
 {\tt :ClientMessage} (33),  
 {\tt :MappingNotify} (34),  
-{\tt :LASTEvent} (35)$B$G$"$k!#(B}
+{\tt :LASTEvent} (35)である。}
 
 \funcdesc{event-window}{event}{
-{\em event}$B$,H/@8$7$?(Bwindow$B%*%V%8%'%/%H$rJV$9!#(B}
+{\em event}が発生したwindowオブジェクトを返す。}
 
 \funcdesc{event-x}{event}{
-{\em event}$B$+$i$=$N%$%Y%s%H$,H/@8$7$?(B{\tt x}$B:BI8$rH4$-=P$9!#(B
-($B$9$J$o$A!"(Bwindow$BFb$K$*$1$k%^%&%9%]%$%s%?$N2#J}8~$NAjBPE*$J0LCV(B)}
+{\em event}からそのイベントが発生した{\tt x}座標を抜き出す。
+(すなわち、window内におけるマウスポインタの横方向の相対的な位置)}
 
 \funcdesc{event-y}{event}{
-{\em event}$B$+$i$=$N%$%Y%s%H$,H/@8$7$?(B{\tt y}$B:BI8$rH4$-=P$9!#(B
-($B$9$J$o$A!"(Bwindow$BFb$K$*$1$k%^%&%9%]%$%s%?$N=DJ}8~$NAjBPE*$J0LCV(B)}
+{\em event}からそのイベントが発生した{\tt y}座標を抜き出す。
+(すなわち、window内におけるマウスポインタの縦方向の相対的な位置)}
 
 \funcdesc{event-width}{event}{
-{\tt :configureNotify}$B%$%Y%s%H$KI}%Q%i%a!<%?$rI=8=$9$k(B
-{\em event}$B$N#8$D$NMWAG$rJV$9!#(B}
+{\tt :configureNotify}イベントに幅パラメータを表現する
+{\em event}の８つの要素を返す。}
 
 \funcdesc{event-height}{event}{
-{\tt :configureNotify}$B%$%Y%s%H$K9b$5%Q%i%a!<%?$rI=8=$9$k(B
-{\em event}$B$N(B8$B$D$NMWAG$rJV$9!#(B}
+{\tt :configureNotify}イベントに高さパラメータを表現する
+{\em event}の8つの要素を返す。}
 
 \funcdesc{event-state}{event}{
-$B%-!<$N>uBV$GJQ99$5$l$?%^%&%9%\%?%s$rI=8=$9$k%-!<%o!<%I$N%j%9%H$rJV$9!#(B
-$B%-!<%o!<%I$O!"(B{\tt :shift, :control, :meta, :left, :middle}$B$H(B{\tt :right}$B$G$"$k!#(B
-$BNc$($P!"$b$7%7%U%H%-!<$,2!$5$l$F$$$k>uBV$G:8$N%\%?%s$,2!$5$l$?$J$i$P!"(B
-{\tt (:shift :left)}$B$,JV$5$l$k!#(B}
+キーの状態で変更されたマウスボタンを表現するキーワードのリストを返す。
+キーワードは、{\tt :shift, :control, :meta, :left, :middle}と{\tt :right}である。
+例えば、もしシフトキーが押されている状態で左のボタンが押されたならば、
+{\tt (:shift :left)}が返される。}
 \funcdesc{display-events}{}{
-{\bf x:nextevent}$B$K$h$C$FJa3M$5$l$?A4$F$N(Bxwindow$B%$%Y%s%H$rI=<($9$k!#(B
-Control-C$B$O!"$3$N4X?t$rDd;_$5$;$kM#0l$NJ}K!$G$"$k!#(B}
+{\bf x:nextevent}によって捕獲された全てのxwindowイベントを表示する。
+Control-Cは、この関数を停止させる唯一の方法である。}
 
 \macrodesc{window-main-loop}{\&rest forms}{
-Xevent$B$r<u$1!"%$%Y%s%H$,H/@8$7$?(Bwindow$B%*%V%8%'%/%H$K$=$l$r(B
-$BG[$k!#(B
-$B%$%Y%s%H$N7?$K1h$C$F!"(B
+Xeventを受け、イベントが発生したwindowオブジェクトにそれを
+配る。
+イベントの型に沿って、
 {\tt :KeyPress, :KeyRelease, :ButtonPress,
 :ButtonRelease, :MotionNotify,
-:EnterNotify, :LeaveNotify}\\ $B$d(B {\tt :ConfigureNotify}$B$HL>IU$1$i$l$?(B
- window$B%/%i%9$N%a%=%C%I$,(B{\em event}$B$r0z?t$H$7$F(B
-$B8F$S=P$5$l$k!#(B
-$B$b$7!"(B{\em forms}$B$,M?$($i$l$?$J$i$P!"(B
-$BE~Ce$7$?%$%Y%s%H$,%A%'%C%/$5$l$k$H$-Kh$K$=$l$i$rI>2A$9$k!#(B}
+:EnterNotify, :LeaveNotify}\\ や {\tt :ConfigureNotify}と名付けられた
+ windowクラスのメソッドが{\em event}を引数として
+呼び出される。
+もし、{\em forms}が与えられたならば、
+到着したイベントがチェックされるとき毎にそれらを評価する。}
 
 \funcdesc{window-main-thread}{}{
-$B%9%l%C%I$G$"$k$3$H$r=|$$$F(B{\bf window-main-loop}$B$HF1$8$3$H$r$9$k!#(B
-{\bf window-main-thread}$B$O!"(BSolaris2$B$G$N$_<B8=$5$l$F$$$k!#(B
-{\bf window-main-thread}$B$O!"(Bread-eval-print$B$,F~NO$5$l$J$$(B
-$B%(%i!<%O%s%I%i$r%$%s%9%H!<%k$7$F$$$k!#(B
-$B%(%i!<>pJs$rI=<($7$?8e!"$=$N%$%Y%s%H$O=hM}$rB3$1$k!#(B}
+スレッドであることを除いて{\bf window-main-loop}と同じことをする。
+{\bf window-main-thread}は、Solaris2でのみ実現されている。
+{\bf window-main-thread}は、read-eval-printが入力されない
+エラーハンドラをインストールしている。
+エラー情報を表示した後、そのイベントは処理を続ける。}
 
 \end{refdesc}
 
-\subsection{$B%Q%M%k(B}
+\subsection{パネル}
 
 \begin{refdesc}
 \classdesc{panel}{xwindow}
@@ -195,81 +195,81 @@ Xevent$B$r<u$1!"%$%Y%s%H$,H/@8$7$?(Bwindow$B%*%V%8%'%/%H$K$=$l$r(B
 \>rows columns	;total number of rows and columns\\
 \>next-x next-y\\
 \>item-width item-height)}{
-{\bf panel}$B$O!"%Q%M%k%"%$%F%`$dB>$N(Bpanel$B$r4^$s$@$I$s$J(Bxwindow$B$bCV$/$3$H(B
-$B$,$G$-$k(Bxwindow$B$G$"$k!#(B
-{\bf panel}$B%*%V%8%'%/%H$O!"(Bpanel$B$NCf$G@8@.$5$l$?%Q%M%k%"%$%F%`$X$N(B
-$B%G%U%)%k%H%U%)%s%H$r6!5k$9$k!#(B
-$B%"%W%j%1!<%7%g%s(Bwindow$B$O!"(B{\bf panel}$B$N%5%V%/%i%9$H$7$FDj5A(B
-$B5n$l$J$1$l$P$J$i$J$$!#(B}
+{\bf panel}は、パネルアイテムや他のpanelを含んだどんなxwindowも置くこと
+ができるxwindowである。
+{\bf panel}オブジェクトは、panelの中で生成されたパネルアイテムへの
+デフォルトフォントを供給する。
+アプリケーションwindowは、{\bf panel}のサブクラスとして定義
+去れなければならない。}
 
 \longdescription{:create}{\&rest args \= \&key \= ((:item-height iheight) 30)
 ((:item-width iwidth) 50)
-\` [$B%a%=%C%I(B]\\
+\` [メソッド]\\
 \>\> (:font font-lucidasans-bold-12)  ((:background color) *bisque1*) \\
 \> \&allow-other-keys)}{
-{\bf panel}$B$r@8@.$7!"=i4|2=$9$k!#(B
-$B%9!<%Q!<%/%i%9$N(B{\tt :create}$B$,8F$S=P$5$l$k$?$a!"(B
-{\bf xwindow}$B$KBP$9$kA4$F$N@8@.MQ%Q%i%a!<%?!J(B{\em :width, :height, 
-:border-width}$B$J$I!K$,5v$5$l$k!#(B
-{\em :item-height}$B$H(B{\em :item-width}$B$O!":G>.$N9b$5$HI}$r$=$l$>$l$N%Q%M%k%"%$%F%`$K(B
-$BM?$($k!#(B}
+{\bf panel}を生成し、初期化する。
+スーパークラスの{\tt :create}が呼び出されるため、
+{\bf xwindow}に対する全ての生成用パラメータ（{\em :width, :height, 
+:border-width}など）が許される。
+{\em :item-height}と{\em :item-width}は、最小の高さと幅をそれぞれのパネルアイテムに
+与える。}
 
-\methoddesc{:items}{}{$B4XO"$9$k%"%$%F%`$rA4$F%j%9%H$GJV$9!#(B}
+\methoddesc{:items}{}{関連するアイテムを全てリストで返す。}
 \methoddesc{:locate-item}{item \&optional x y}{
-{\em item}$B$O!"(Bxwindow$B%*%V%8%'%/%H!J$U$D$&$O%Q%M%k%"%$%F%`!K$G$"$k!#(B
-$B$b$7(B{\em x}$B$H(B{\em y}$B$,M?$($i$l$?$J$i$P!"%"%$%F%`$O$=$3$KCV$+$l$k!#(B
-$B$=$&$G$J$1$l$P!"(B{\em item}$B$O!"$b$C$H$b:G6a$KCV$+$l$?%"%$%F%`$K(B
-$BNY@\$9$k$h$&$KCV$+$l$k!#(B
-$B%"%$%F%`$O!"(B
-$B?^(B \ref{panellayout}$B$N$h$&$K(B
-$B>e$+$i2<$K8~$+$C$F!"$^$?:8$+$i1&$K8~$+$C$FCV$+$l$F$$$/!#(B
-{\bf :locate-item}$B$O!"$^$?(B{\tt items}$B$d(B{\tt subwindows}$B%j%9%H$K(B
-{\em item}$B$rDI2C$7!"(B{\tt :map}$B$rAw$k$3$H$K$h$j8+$($k$h$&$K$9$k!#(B}
+{\em item}は、xwindowオブジェクト（ふつうはパネルアイテム）である。
+もし{\em x}と{\em y}が与えられたならば、アイテムはそこに置かれる。
+そうでなければ、{\em item}は、もっとも最近に置かれたアイテムに
+隣接するように置かれる。
+アイテムは、
+図 \ref{panellayout}のように
+上から下に向かって、また左から右に向かって置かれていく。
+{\bf :locate-item}は、また{\tt items}や{\tt subwindows}リストに
+{\em item}を追加し、{\tt :map}を送ることにより見えるようにする。}
 
 \begin{figure}
 \begin{center}
 \epsfile{file=fig/panellayout.ps,height=7cm}
 \end{center}
-\caption{panel$B$N%"%$%F%`%l%$%"%&%H(B\label{panellayout}}
+\caption{panelのアイテムレイアウト\label{panellayout}}
 \end{figure}
 
 \longdescription{:create-item}{klass label receiver method \= \&rest args
-\` [$B%a%=%C%I(B]\\
+\` [メソッド]\\
 \> \&key ((:font fontid)\\
 \> \&allow-other-keys)}{
-{\em klass}$B$G;XDj$5$l$k%Q%M%k%"%$%F%`$N%/%i%9(B
-$B!J$9$J$o$A!"(B{\tt button-item,  menu-button-item, slider-item, joystick-item}$B$J$I(B),
-$B$N%$%s%9%?%s%9$r:n$j!"(B{\tt :locate-item}$B$rMQ$$$F(Bpanel$B$K%"%$%F%`$rCV$/!#(B
-{\em args}$B$O!"(B{\em klass}$B$N(B{\tt :create}$B%a%=%C%I$KAw$i$l$k!#(B
-{\em label}$B$O!"%Q%M%k%"%$%F%`$NCf$K=q$+$l$k<1JLJ8;zNs$G$"$k!#(B
-{\em receiver}$B$H(B{\em method}$B$O!"0lCW$9$k%$%Y%s%H$r8F$S=P$9%$%Y%s%H%O%s%I%i$r(B
-$B;XDj$9$k!#(B}
+{\em klass}で指定されるパネルアイテムのクラス
+（すなわち、{\tt button-item,  menu-button-item, slider-item, joystick-item}など),
+のインスタンスを作り、{\tt :locate-item}を用いてpanelにアイテムを置く。
+{\em args}は、{\em klass}の{\tt :create}メソッドに送られる。
+{\em label}は、パネルアイテムの中に書かれる識別文字列である。
+{\em receiver}と{\em method}は、一致するイベントを呼び出すイベントハンドラを
+指定する。}
 
-\methoddesc{:delete-items}{}{$B%Q%M%k%"%$%F%`$rA4$F:o=|$9$k!#(B}
-\longdescription{:create-menubar}{ \= \&rest args \`[$B%a%=%C%I(B]\\
+\methoddesc{:delete-items}{}{パネルアイテムを全て削除する。}
+\longdescription{:create-menubar}{ \= \&rest args \`[メソッド]\\
 \> \&key (:font fontid)\\
 \> \&allow-other-keys}{
-{\em menubar-panel}$B$r:n@.$7!"(Bpanel$B$N:G>eIt$KCV$/!#(B}
+{\em menubar-panel}を作成し、panelの最上部に置く。}
 \end{refdesc}
 
-$B0J2<$K<($9%a%=%C%I$O!"%$%Y%s%H$,%$%Y%s%H%O%s%I%i$N$J$$(Bpanel$B$KAw$i$l$?$H$-!"(B
-"subclass's responsibility"$B7Y9p%a%C%;!<%8$rHr$1$k$?$a$KDs6!$5$l$F$$$k!#(B
-$B%f!<%6!<$N%"%W%j%1!<%7%g%s$G$O!"$3$l$i$N%a%=%C%I$r>e=q$-$7$J$1$l$P$J$i$J$$!#(B
+以下に示すメソッドは、イベントがイベントハンドラのないpanelに送られたとき、
+"subclass's responsibility"警告メッセージを避けるために提供されている。
+ユーザーのアプリケーションでは、これらのメソッドを上書きしなければならない。
 
 \begin{refdesc}
 \methoddesc{:quit}{\&rest a}{
-{\bf window-main-loop}$B$K(B{\tt :quit}$B%a%C%;!<%8$rAw$j!"(B
-$B%$%Y%s%H=hM}$rDd;_$9$k!#(B}
-\methoddesc{:KeyPress}{event}{NIL$B$rJV$9!#(B}
-\methoddesc{:KeyRelease}{event}{NIL$B$rJV$9!#(B}
-\methoddesc{:ButtonPress}{event}{NIL$B$rJV$9!#(B}
-\methoddesc{:ButtonRelease}{event}{NIL$B$rJV$9!#(B}
-\methoddesc{:MotionNotify}{event}{NIL$B$rJV$9!#(B}
-\methoddesc{:EnterNotify}{event}{NIL$B$rJV$9!#(B}
-\methoddesc{:LeaveNotify}{event}{NIL$B$rJV$9!#(B}
+{\bf window-main-loop}に{\tt :quit}メッセージを送り、
+イベント処理を停止する。}
+\methoddesc{:KeyPress}{event}{NILを返す。}
+\methoddesc{:KeyRelease}{event}{NILを返す。}
+\methoddesc{:ButtonPress}{event}{NILを返す。}
+\methoddesc{:ButtonRelease}{event}{NILを返す。}
+\methoddesc{:MotionNotify}{event}{NILを返す。}
+\methoddesc{:EnterNotify}{event}{NILを返す。}
+\methoddesc{:LeaveNotify}{event}{NILを返す。}
 \end{refdesc}
 
-\subsubsection{$B%5%V%Q%M%k(B($B%a%K%e!<$H%a%K%e!<%P!<(B)}
+\subsubsection{サブパネル(メニューとメニューバー)}
 
 \begin{refdesc}
 % menu-panel
@@ -281,37 +281,37 @@ Xevent$B$r<u$1!"%$%Y%s%H$,H/@8$7$?(Bwindow$B%*%V%8%'%/%H$K$=$l$r(B
                 \>color-pixels\\
                 \>active-color)
 }{
-{\bf menu-panel}$B$O!"(B{\tt panel-button}$B$H(B{\tt menu-item}$B$N$_$r(B
-$B4^$`$3$H$,$G$-$k%Q%M%k$N0l<o$G$"$k!#(B
-{\tt panel}$B$H0[$J$j!"(B{\tt menu-panel}$B$O$U$D$&8+$($J$$$7!"(B
-{\tt menu-panel}$B$H4XO"$7$?(B{\tt button-item}$B$,2!$5$l$?;~$K(B
-$BI=<($5$l$k!#(B
-$B$b$7!"(Bmenu-panel$B$,$$$D$b8+$($k$h$&$K:n$i$l$?$J$i$P!"(B
-$B%T%s$r;I$7$?%a%K%e!<$H$J$k!#(B
-$B%^%&%9%$%Y%s%H$KBP$9$k(Bmenu-item$B$N1~Ez$O!"%"%$%F%`$N30$N$I$3$+$G(B
-$B2!$5$l$?%^%&%9%\%?%s$N$h$&$K$U$D$&$N(Bmenu-button$B$H(B
-$BA4$/0[$J$C$F$$$k!#(B
-{\tt menu-panel}$B$r;HMQ$9$k$?$a$K$O!":G=i$K:n@.$7!"(B
-$B$=$NCf$K(Bbutton-item$B$rCV$/!#(B
-$B$=$l$+$i!"(B{\tt menu-button-item}$B$,(Bpanel$B$NCf$"$k$$$O(Bmenubar$B$NCf$K(B
-{\em :menu}$B$N0z?t$H$7$F(B{\tt menu-panel}$B$H0l=o$K:n@.$5$l$k!#(B}
+{\bf menu-panel}は、{\tt panel-button}と{\tt menu-item}のみを
+含むことができるパネルの一種である。
+{\tt panel}と異なり、{\tt menu-panel}はふつう見えないし、
+{\tt menu-panel}と関連した{\tt button-item}が押された時に
+表示される。
+もし、menu-panelがいつも見えるように作られたならば、
+ピンを刺したメニューとなる。
+マウスイベントに対するmenu-itemの応答は、アイテムの外のどこかで
+押されたマウスボタンのようにふつうのmenu-buttonと
+全く異なっている。
+{\tt menu-panel}を使用するためには、最初に作成し、
+その中にbutton-itemを置く。
+それから、{\tt menu-button-item}がpanelの中あるいはmenubarの中に
+{\em :menu}の引数として{\tt menu-panel}と一緒に作成される。}
 
 \longdescription{:create}{\&rest args \= \&key\= (:items) (:border-width 0)
    (:font font-courb12)
-\` [$B%a%=%C%I(B]\\
+\` [メソッド]\\
 \>\> (:width 100) (:height-offset 15) (:color *bisque1*)
                       (:active *bisque2*) \\
            \>\&allow-other-keys) 
   }{
-{\bf menu-panel} window$B$r:n@.$9$k!#(B
-$B$=$N(Bwindow$B$NBg$-$5$O!"?7$7$$(Bmenu-item$B$,DI2C$5$l$k;~$K(B
-$B3HD%$5$l$k!#(B}
+{\bf menu-panel} windowを作成する。
+そのwindowの大きさは、新しいmenu-itemが追加される時に
+拡張される。}
 
 \methoddesc{:add-item}{label name \&optional (receiver self)  \&rest mesg}{
-$B$3$N(B{\bf menu-panel} window$B$NCf$K(Bmenu$B%"%$%F%`$rDI2C$7!"(B
-$BBP1~$9$k9TF0$rD%$jIU$1$k!#(B
-$B%^%&%9%\%?%s$,%"%$%F%`$N>e$G30$5$l$?$H$-!"(B
-{\em receiver}$B%*%V%8%'%/%H$O(B{\em mesg}$B$r<u$1<h$k!#(B}
+この{\bf menu-panel} windowの中にmenuアイテムを追加し、
+対応する行動を張り付ける。
+マウスボタンがアイテムの上で外されたとき、
+{\em receiver}オブジェクトは{\em mesg}を受け取る。}
 
 % \methoddesc{:popup}{x y \&optional (offset 20)}{
 % pops up the menu at the position (x,y) specified on the root window.}
@@ -322,55 +322,55 @@ Xevent$B$r<u$1!"%$%Y%s%H$,H/@8$7$?(Bwindow$B%*%V%8%'%/%H$K$=$l$r(B
 %}
 
 \classdesc{menubar-panel}{panel}{}{
-{\tt menubar-panel}$B$O!"?F(Bpanel$B$N:G>eIt$K$$$D$bCV$+$l$k%5%V%Q%M%k$G$"$k!#(B
-$B%a%K%e!<%P!<$KCV$+$l$k%Q%M%k%"%$%F%`$O!"(B{\tt menu-button-item}$B$G(B
-$B$J$1$l$P$J$i$J$$!#(B
-menubar-panel$B$O!"(Bpanel$B$N(B{\tt :create-menubar}$B%a%=%C%I$K$h$j(B
-$B@8@.$5$l$k!#(B}
+{\tt menubar-panel}は、親panelの最上部にいつも置かれるサブパネルである。
+メニューバーに置かれるパネルアイテムは、{\tt menu-button-item}で
+なければならない。
+menubar-panelは、panelの{\tt :create-menubar}メソッドにより
+生成される。}
 
 \end{refdesc}
 
-\subsubsection{$B%U%!%$%k%Q%M%k(B}
-FilePanel$B$O!"%U%!%$%k$d%G%#%l%/%H%j$rBPOCE*$K=hM}$9$k(B
-$B%"%W%j%1!<%7%g%s(Bwindow$B$G$"$k!#(B
-{\tt cd}$B$d(B{\tt go-up}$B%\%?%s$r;HMQ$9$k$3$H$K$h$j!"(B
-$B$I$s$J%G%#%l%/%H%j$b8+$K9T$/$3$H$,$G$-$k$7!"(B
-$B0J2<$N(B{\tt ScrollTextWindow}$B$NCf$K%G%#%l%/%H%jFb$K4^$^$l$k%U%!%$%k$r(B
-$BI=<($9$k!#(B
-$B%F%-%9%H%U%!%$%k$O!"0[$J$C$?(Bwindow(TextViewPanel)$B$NCf$K(B
-$BI=<($9$k$3$H$,$G$-$k!#(B
-$B%U%!%$%k$O!"$^$?0u:~$9$k$3$H$,$G$-!":o=|$9$k$3$H$,$G$-!"(B
-$B%\%?%s$r%/%j%C%/$9$k$3$H$K$h$j4JC1$K%3%s%Q%$%k$9$k$3$H$,$G$-$k!#(B
-$B%U%!%$%k$r0u:~$9$k$H$-!"(B{\tt a2ps {\em file} | lpr}$B%3%^%s%I$,(Bfork$B$5$l$?%W%m%;%9$H$7$F<B9T$5$l$k!#(B
+\subsubsection{ファイルパネル}
+FilePanelは、ファイルやディレクトリを対話的に処理する
+アプリケーションwindowである。
+{\tt cd}や{\tt go-up}ボタンを使用することにより、
+どんなディレクトリも見に行くことができるし、
+以下の{\tt ScrollTextWindow}の中にディレクトリ内に含まれるファイルを
+表示する。
+テキストファイルは、異なったwindow(TextViewPanel)の中に
+表示することができる。
+ファイルは、また印刷することができ、削除することができ、
+ボタンをクリックすることにより簡単にコンパイルすることができる。
+ファイルを印刷するとき、{\tt a2ps {\em file} | lpr}コマンドがforkされたプロセスとして実行される。
 
 \begin{figure}
 \begin{center}
 \epsfile{file=fig/filepanel.ps,height=7.5cm}
 \end{center}
-\caption{$B%U%!%$%k%Q%M%k(Bwindow}
+\caption{ファイルパネルwindow}
 \end{figure}
 
-\subsubsection{$B%F%-%9%HI=<(%Q%M%k(B}
+\subsubsection{テキスト表示パネル}
 
-TextViewPanel$B$O!"%F%-%9%H%U%!%$%k$rI=<($9$k$?$a$N(B
-$B%"%W%j%1!<%7%g%s(Bwindow$B%/%i%9$G$"$k(B
-($B?^(B \ref{textviewpanel})$B!#(B
-$B%W%m%0%i%`%F%-%9%H$O!"$b$C$H$b4JC1$J%"%W%j%1!<%7%g%s(Bwindow$B$N#1$D$,(B
-$B$I$N$h$&$K5-=R$5$l$F$$$k$+$r8+$l$k!#(B
-{\tt :create}$B%a%=%C%I$K$*$$$F!"(Bquit$B%\%?%s$H(Bfind$B%\%?%s$H(B
-$B%U%!%$%k$NCf$rA\$9$?$a$NJ8;zNs$r6!5k$9$k$?$a$N(Btext-item$B$r(B
-$B:n@.$9$k!#(B
-view-window$B$O!"=D$H2#$K%9%/%m!<%k%P!<$r;}$A%U%!%$%k$rI=<($9$k$?$a$N(B
-ScrollTextWindow$B$G$"$k!#(B
-TextViewPanel$B$O!"(Bwindow$B%^%M!<%8%c!<$K$h$j0lHV30B&$N%?%$%H%k(Bwindow$B$N(B
-$BBg$-$5$rJQ$($?$H$-(Bview-window$B$NBg$-$5$rJQ$($k$?$a$K(B
-{\tt :ConfigureNotify}$B%$%Y%s%H$rJa3M$9$k!#(B
+TextViewPanelは、テキストファイルを表示するための
+アプリケーションwindowクラスである
+(図 \ref{textviewpanel})。
+プログラムテキストは、もっとも簡単なアプリケーションwindowの１つが
+どのように記述されているかを見れる。
+{\tt :create}メソッドにおいて、quitボタンとfindボタンと
+ファイルの中を捜すための文字列を供給するためのtext-itemを
+作成する。
+view-windowは、縦と横にスクロールバーを持ちファイルを表示するための
+ScrollTextWindowである。
+TextViewPanelは、windowマネージャーにより一番外側のタイトルwindowの
+大きさを変えたときview-windowの大きさを変えるために
+{\tt :ConfigureNotify}イベントを捕獲する。
 
 \begin{figure}
 \begin{center}
 \epsfile{file=fig/textviewpanel.ps,height=7cm}
 \end{center}
-\caption{$B%F%-%9%HI=<(%Q%M%k(Bwindow\label{textviewpanel}}
+\caption{テキスト表示パネルwindow\label{textviewpanel}}
 \end{figure}
 
 \begin{verbatim}
@@ -414,177 +414,177 @@ TextViewPanel$B$O!"(Bwindow$B%^%M!<%8%c!<$K$h$j0lHV30B&$N%?%$%H%k(Bwindow$B
           (send self :resize newwidth newheight)))  ) )
 \end{verbatim}
 
-\subsection{$B%Q%M%k%"%$%F%`(B}
+\subsection{パネルアイテム}
 \begin{refdesc}
 \classdesc{panel-item}{xwindow}
 {(pos notify-object notify-method\\
 \>fontid label labeldots)}{
-{\bf panel-item}$B$O!"%Q%M%k%"%$%F%`(Bwindow$B$N$9$Y$F$N<oN`$K$*$$$F!"(B
-$B%"%$%F%`$,;XDj$9$k%$%Y%s%H$,H/@8$7$?$H$-(B
-{\tt notify-object}$B$N(B{\tt notify-method}$B$r8F$S=P$9$?$a$N(B
-$BCj>]%/%i%9$G$"$k!#(B
+{\bf panel-item}は、パネルアイテムwindowのすべての種類において、
+アイテムが指定するイベントが発生したとき
+{\tt notify-object}の{\tt notify-method}を呼び出すための
+抽象クラスである。
 }
 
 \methoddesc{:notify}{\&rest args}{
-{\tt notify-object}$B$N(B{\tt notify-method}$B$r8F$S=P$9!#(B
-$B%$%Y%s%H1~Ez$d(B{\tt notify-method}$B$XAw$k$?$a$N0z$-?t$,(B
-$B%"%$%F%`$K$h$j6hJL$5$l$k!#(B
+{\tt notify-object}の{\tt notify-method}を呼び出す。
+イベント応答や{\tt notify-method}へ送るための引き数が
+アイテムにより区別される。
 \begin{description}
-\item [button-item] $B%\%?%s$O!"F1$8(Bbutton-item$B$N2!$7!"30$7;~$K1~Ez!#(B
-$B0z$-?t$O(Bbutton-item$B%*%V%8%'%/%H$G$"$k!#(B
-\item [menu-button-item] $B%a%K%e!<%"%$%F%`$NA*Br;~$K1~Ez!#(B
-$B0z$-?t$O!"(Bmenu-button-item$B%*%V%8%'%/%H$G$"$k!#(B
-\item [choice-item] $B?7$7$$A*Br%\%?%s$NA*Br;~$K1~Ez!#(B
-$B0z$-?t$O!"(Bchoice-item$B%*%V%8%'%/%H$H$=$NA*BrHV9f$G$"$k!#(B
-\item [text-item] $B2~9T$"$k$$$O%j%?!<%s$NF~NO;~$K1~Ez!#(B
-$B0z$-?t$O!"(Btext-item$B%*%V%8%'%/%H$HF~NO9T!JJ8;zNs!K$G$"$k!#(B
-\item [slider-item] $B%9%i%$%@!<%N%V$O!"$D$+$_$H0\F0;~$K1~Ez!#(B
-$B0z$-?t$O!"(Bslider-item$B%*%V%8%'%/%H$H?7$?$JCM$G$"$k!#(B
-\item [joystick-item] $B%8%g%$%9%F%#%C%/$O!"$D$+$_$H0\F0;~$K1~Ez!#(B
-$B0z$-?t$O(Bslider-item$B%*%V%8%'%/%H$H?7$7$$(Bx$B$H(By$B$NCM$G$"$k!#(B
+\item [button-item] ボタンは、同じbutton-itemの押し、外し時に応答。
+引き数はbutton-itemオブジェクトである。
+\item [menu-button-item] メニューアイテムの選択時に応答。
+引き数は、menu-button-itemオブジェクトである。
+\item [choice-item] 新しい選択ボタンの選択時に応答。
+引き数は、choice-itemオブジェクトとその選択番号である。
+\item [text-item] 改行あるいはリターンの入力時に応答。
+引き数は、text-itemオブジェクトと入力行（文字列）である。
+\item [slider-item] スライダーノブは、つかみと移動時に応答。
+引き数は、slider-itemオブジェクトと新たな値である。
+\item [joystick-item] ジョイスティックは、つかみと移動時に応答。
+引き数はslider-itemオブジェクトと新しいxとyの値である。
 \end{description}
 }
 
 \longdescription{:create}{name reciever method \= \&rest args
-\` [$B%a%=%C%I(B] \\
+\` [メソッド] \\
 \> \&key ((:width w) 100) ((:height h) 100) (:font font-courb12)\\
 \> \&allow-other-keys}{
-$B%Q%M%k%"%$%F%`$r:n@.$9$k!#(B
-$B%Q%M%k%"%$%F%`$O!"Cj>]%/%i%9$G$"$k!#(B
-$B$3$N%a%=%C%I$O!"%5%V%/%i%9$K$h$C$F(B{\tt send-super}$B$rDL$7$F$N$_(B
-$B8F$S=P$9$Y$-$G$"$k!#(B}
+パネルアイテムを作成する。
+パネルアイテムは、抽象クラスである。
+このメソッドは、サブクラスによって{\tt send-super}を通してのみ
+呼び出すべきである。}
 
 \classdesc{button-item}{panel-item}{}{
-{\bf button-item}$B$O!"4JC1$J%Q%M%k%"%$%F%`$G$"$k!#(B
-button-item$B$O!";M3Q%\%C%/%9$H$=$NCf$N%i%Y%kJ8;zNs$r;}$C$F$$$k!#(B
-$B%/%j%C%/$5$l$?$H$-!"(Bbutton-item$B$O(Bpanel-item$B%*%V%8%'%/%H$rM#0l$N0z$-?t$H$7$F(B
-{\tt notify-object}$B$N(B{\tt notify-method}
-$B$r8F$S=P$9!#(B}
+{\bf button-item}は、簡単なパネルアイテムである。
+button-itemは、四角ボックスとその中のラベル文字列を持っている。
+クリックされたとき、button-itemはpanel-itemオブジェクトを唯一の引き数として
+{\tt notify-object}の{\tt notify-method}
+を呼び出す。}
 
 \methoddesc{:draw-label}{\&optional (state :top) (color bg-color) (border 2) (offset)}{
-{\bf button-item}$B$N%i%Y%k$r=q$/!#(B}
+{\bf button-item}のラベルを書く。}
 
 \longdescription{:create}{label revciever method \= \&rest args
-\` [$B%a%=%C%I(B]\\
+\` [メソッド]\\
 \>\&key\= :width :height (:font (send parent :gc :font))\\
 \>\> (:background (send parent :gc :background)) \\
 \>\> (:border-width 0) \\
 \>\> (:state :top)\\
 \>\&allow-other-keys}{
-{\bf button-item}$B$r:n@.$9$k!#(B
-$B$b$7!"%\%?%s$NI}$H9b$5$,M?$($i$l$J$$$J$i!"%5%$%:$O(B
-$BM?$($i$l$?%U%)%s%H$rMQ$$$F=q$+$l$?(B
-$B%i%Y%kJ8;zNs$K9g$o$;$F<+F0E*$K@_Dj$5$l$k!#(B
-{\em :border-width}$B$O%G%U%)%k%H$G(B0$B$G$"$k$,!"(B
-$B5<;w#3<!85I=8=$G%\%?%s$rIb$-=P$7$K$9$k!#(B
-$BGX7J$d%U%)%s%H$O?F(Bwindow($B$9$J$o$A!"(Bpanel)$B$GDj5A$5$l$F$$$k$b$N$r(B
-$B%G%U%)%k%H$H$9$k!#(B}
+{\bf button-item}を作成する。
+もし、ボタンの幅と高さが与えられないなら、サイズは
+与えられたフォントを用いて書かれた
+ラベル文字列に合わせて自動的に設定される。
+{\em :border-width}はデフォルトで0であるが、
+擬似３次元表現でボタンを浮き出しにする。
+背景やフォントは親window(すなわち、panel)で定義されているものを
+デフォルトとする。}
 
 \methoddesc{:ButtonPress}{event}{
-$B$b$7!"%\%?%s$G$"$l$P!"GX7J?'$r%0%l!<$K$9$k!#(B}
+もし、ボタンであれば、背景色をグレーにする。}
 
 \methoddesc{:ButtonRelease}{event}{
-{\em event}$B$NGX7J?'$rI8=`$KJQ99$9$k!#(B}
+{\em event}の背景色を標準に変更する。}
 
 
 \classdesc{menu-button-item}{button-item}{(\= items item-dots item-labels\\
 \>charwidth charheight \\
 \>menu-window window-pos high-light)
 }{
-$B%W%k%@%&%s%a%K%e!<$rDj5A$9$k!#(B
-{\bf menu-button-item}$B$O!"(B{\tt button-item}$B$N$h$&$G$"$k$,!"(B
-{\bf menu-button-item}$B$O!"%\%?%s$N2<$N4XO"$9$k(B{\tt menu-panel}$B$,(B
-$B2!$5$l$?$H$-!"(B
-{\tt notify-object}$B$K$9$0$K%a%C%;!<%8$rAw$kBe$o$j$K!"(B
-$B3h@-2=$5$;$k!#(B
-$B%a%K%e!<%"%$%F%`$N#1$D$N>e$G%^%&%9%\%?%s$,30$5$l$?$H$-$K!"K\Ev$N%a%C%;!<%8$,(B
-$BAw$i$l$k!#(B}
+プルダウンメニューを定義する。
+{\bf menu-button-item}は、{\tt button-item}のようであるが、
+{\bf menu-button-item}は、ボタンの下の関連する{\tt menu-panel}が
+押されたとき、
+{\tt notify-object}にすぐにメッセージを送る代わりに、
+活性化させる。
+メニューアイテムの１つの上でマウスボタンが外されたときに、本当のメッセージが
+送られる。}
 
-\longdescription{:create}{\= label reciever method \` [$B%a%=%C%I(B]\\
+\longdescription{:create}{\= label reciever method \` [メソッド]\\
 \>\&rest args\\
 \>\&key (:menu nil) (:items) (:state :flat)\\
 \>\&allow-other-keys}{
-$B%W%k%@%&%s%a%K%e!<$r:n@.$9$k!#(B
-{\em receiver}$B$H(B{\em method}$B0z$-?t$O!"1F6A$rM?$($J$$!#(B}
+プルダウンメニューを作成する。
+{\em receiver}と{\em method}引き数は、影響を与えない。}
 
 \methoddesc{:ButtonPress}{event}{
-$B%W%k%@%&%s%a%K%e!<$N%\%?%s$rH?E>$5$;!"(B
-$B%\%?%s$N2<$K4XO"$9$k(Bmenu-panel$B$r$5$i$9!#(B}
+プルダウンメニューのボタンを反転させ、
+ボタンの下に関連するmenu-panelをさらす。}
 
 \methoddesc{:ButtonRelease}{event}{
-$B$3$N%\%?%s$N2<$N(B{\tt menu-panel}$B$r>C$7!"(B
-$B$3$N%\%?%s$r85$KLa$9!#(B}
+このボタンの下の{\tt menu-panel}を消し、
+このボタンを元に戻す。}
 
 % Bitmap-button-item
 \classdesc{bitmap-button-item}{button-item}{
 (pixmap-id bitmap-width bitmap-height)
 }{
-{\bf bitmap-button-item}$B$N4X?t$O!"(B{\tt button-item}$B$K;w$F$$$k$,!"(B
-$BI=8=$,0[$J$C$F$$$k!#(B
-{\tt button-item}$B$N>l9g$K%\%?%s$N>e$K4JC1$J%i%Y%kJ8;zNs$rIA$/Be$o$j$K!"(B
-{\tt bitmap-button-item}$B$G$O!"%\%?%s$,:n$i$l$?$H$-$K(Bbitmap$B%U%!%$%k$+$i(B
-$B%m!<%I$5$l$k(Bpixmap$B$rIA$/!#(B}
+{\bf bitmap-button-item}の関数は、{\tt button-item}に似ているが、
+表現が異なっている。
+{\tt button-item}の場合にボタンの上に簡単なラベル文字列を描く代わりに、
+{\tt bitmap-button-item}では、ボタンが作られたときにbitmapファイルから
+ロードされるpixmapを描く。}
 
 \longdescription{:create}{ bitmap-file reciever method \= \&rest args
-\` [$B%a%=%C%I(B]\\
+\` [メソッド]\\
                  \>\&key :width :height\\
                  \>\&allow-other-keys)
 }{
-{\bf bitmap-button-item}$B$r:n@.$9$k!#(B
-$B:G=i$N0z$-?t(B{\em bitmap-file}$B$O!"(B{\tt button-item}$B$N(B{\em label}$B0z$-?t(B
-$B$rCV$-49$($?$b$N$G$"$k!#(B}
+{\bf bitmap-button-item}を作成する。
+最初の引き数{\em bitmap-file}は、{\tt button-item}の{\em label}引き数
+を置き換えたものである。}
 
 \methoddesc{:draw-label}{\&optional (state :flat) (color bg-color) (border 2)}{
-$B%\%?%s$N>e$K(Bbitmap$B$+(Bpixmap$B$rIA$/!#(B}
+ボタンの上にbitmapかpixmapを描く。}
 
 \methoddesc{:create-bitmap-from-file}{fname}{
-{\em fname}$B$H$$$&L>$N(Bbitmap$B%U%!%$%k$+$i(Bpixmap$B$r:n$j!"(B
-{\tt pixmap-id}$B$K$=$N(BID$B$rF~$l$k!#(B}
+{\em fname}という名のbitmapファイルからpixmapを作り、
+{\tt pixmap-id}にそのIDを入れる。}
 
 % choice-item
 \classdesc{choice-item}{button-item}{
  (choice-list active-choice transient-choice \\
                 \>choice-dots choice-pos button-size)
 }{
-{\bf choice-item}$B$O!"4]$$A*Br%\%?%s$N=89g$G$"$k!#(B
-$B#1$D$NA*Br$O$$$D$b3h@-2=$7$F$*$j!"F1;~$K#1$D$NA*Br$@$1$,(B
-$B3h@-2=$9$k$3$H$,$G$-$k!#(B
-{\bf choice-item}$B$O!"%i%8%*%\%?%s$HF1MM$J5!G=$rDs6!$9$k!#(B}
+{\bf choice-item}は、丸い選択ボタンの集合である。
+１つの選択はいつも活性化しており、同時に１つの選択だけが
+活性化することができる。
+{\bf choice-item}は、ラジオボタンと同様な機能を提供する。}
 
 \longdescription{:create}{label reciever method \= \&rest args
-\` [$B%a%=%C%I(B]\\
+\` [メソッド]\\
            \>\&key \=(:choices '("0" "1")) (:initial-choice 0)\\
 \>\> (:font (send parent :gc :font))\\
                 \>\>(:button-size 13)\\
                 \>\>(:border-width 0)\\
   }{
-{\bf choice-item-button}$B$r:n@.$9$k!#(B
-$B$=$l$>$l$NA*Br%\%?%s$O(B{\em :button-size}$B$NH>7B$r;}$D1_$G$"$k!#(B
-$B?7$7$$A*Br%\%?%s$,A*Br$5$l$?$H$-!"(B
-{\tt notify-object}$B$N(B{\tt notify-method}$B$,(B
-choice-item$B%*%V%8%'%/%H$HA*Br$5$l$?A*Br%\%?%s$NHV9f$H0l=o$K8F$S=P$5$l$k!#(B}
+{\bf choice-item-button}を作成する。
+それぞれの選択ボタンは{\em :button-size}の半径を持つ円である。
+新しい選択ボタンが選択されたとき、
+{\tt notify-object}の{\tt notify-method}が
+choice-itemオブジェクトと選択された選択ボタンの番号と一緒に呼び出される。}
 
 \methoddesc{:value}{\&optional (new-choice) (invocation)}{
-$B$b$7!"(B{\em new-choice}$B$,M?$($i$l$?$J$i$P!"8=:_$N3h@-2=A*Br%\%?%s$H$7$F(B
-$B@_Dj$7!"BP1~$9$k1_$,9u?'$K$J$k!#(B
-$B$b$7(B{\em  invocation}$B$b;XDj$5$l$F$$$k$J$i!"(B{\tt notify-object}$B$N(B
-{\tt notify-method}$B$,8F$S=P$5$l$k!#(B
-{\tt :value}$B$O!"8=:_$N!J$"$k$$$O?7$7$$!KA*Br%\%?%s$NHV9f$rJV$9!#(B}
+もし、{\em new-choice}が与えられたならば、現在の活性化選択ボタンとして
+設定し、対応する円が黒色になる。
+もし{\em  invocation}も指定されているなら、{\tt notify-object}の
+{\tt notify-method}が呼び出される。
+{\tt :value}は、現在の（あるいは新しい）選択ボタンの番号を返す。}
 
 \methoddesc{:draw-active-button}{\&optional
 (old-choice active-choice) (new-choice active-choice)}{
-$B%\%?%s$r3h@-2=$H$7$F=q$/!#(B
+ボタンを活性化として書く。
 }
 
 \methoddesc{:ButtonPress}{event}{
-$B$b$7!"A*Br%\%?%s$N$I$3$+$G%^%&%9%\%?%s$,2!$5$l$F$$$k$J$i!"(B
-$B$=$NHV9f$,(B{\tt transient-choice}$B$K5-O?$5$l$k!#(B
-$B%^%&%9%\%?%s$,30$5$l$k$^$G$=$l0J>e$N9TF0$O!"5/$3$5$J$$!#(B}
+もし、選択ボタンのどこかでマウスボタンが押されているなら、
+その番号が{\tt transient-choice}に記録される。
+マウスボタンが外されるまでそれ以上の行動は、起こさない。}
 
 \methoddesc{:ButtonRelease}{event}{
-$B$b$7!"4{$K2!$5$l$F$$$?$H$3$m$HF1$8%\%?%s$N>e$G%^%&%9%\%?%s$,30$5$l$?$J$i!"(B
-{\tt active-choice}$B$,99?7$5$l!"(B
-{\tt notify-object}$B$N(B{\tt notify-method}$B$,8F$S=P$5$l$k!#(B
+もし、既に押されていたところと同じボタンの上でマウスボタンが外されたなら、
+{\tt active-choice}が更新され、
+{\tt notify-object}の{\tt notify-method}が呼び出される。
 }
 
 % Slider-item
@@ -595,29 +595,29 @@ choice-item$B%*%V%8%'%/%H$HA*Br$5$l$?A*Br%\%?%s$NHV9f$H0l=o$K8F$S=P$5$l$k!#(B}
                 \>nob-x nob-moving\\
                 \>charwidth) 
 }{
-{\tt choice-item}$B$,N%;6E*$JCM$NA*Br$K;HMQ$5$l$k$N$KBP$7!"(B
-{\bf slider-item}$B$O(B{\tt min-value}$B$H(B{\tt max-value}$B$N4V$NHO0O$N(B
-$BO"B3E*$JCM$KBP$7$F;HMQ$5$l$k!#(B
-$B$=$l$>$lCM$,JQ2=$7$?=V4V!"(Bslider-item$B%*%V%8%'%/%H$H?7$7$$CM$,0z$-?t$H$7$F(B
-$B0l=o$K(B{\tt notify-object}$B$N(B{\tt notify-method}$B$,8F$S=P$5$l$k!#(B}
+{\tt choice-item}が離散的な値の選択に使用されるのに対し、
+{\bf slider-item}は{\tt min-value}と{\tt max-value}の間の範囲の
+連続的な値に対して使用される。
+それぞれ値が変化した瞬間、slider-itemオブジェクトと新しい値が引き数として
+一緒に{\tt notify-object}の{\tt notify-method}が呼び出される。}
 
 \longdescription{:create}{label reciever method \= \&rest args
-\` [$B%a%=%C%I(B]\\
+\` [メソッド]\\
 \>\&key (:min 0.0) (:max 1.0) (:parent)\\
 \>(:min-label "") (:max-label "") (:value-format "~4,2f")\\
 \>(:font font-courb12) (:span 100) (:border-width 0) (:initial-value min)  }{
-{\bf slider-item}$B$r:n@.$9$k!#(B
-$B%9%i%$%I$N%N%V$O!"%P!<$N>e$K>.$5$J9u$N;M3Q$H$7$FI=<($5$l$k!#(B
-$B:8C<$,(B{\em :min}$BCM$rI=8=$7!"1&C<$,(B{\em :max}$BCM$rI=8=$9$k!#(B
-$B%P!<$ND9$5$O!"(B{\em :span}$B%I%C%H$K0z$-?-$P$9!#(B
-$B8=:_$NCM$O!"(B{\em :value-format}$B$G(Bslider-item$B$N1&$KI=<($9$k!#(B}
+{\bf slider-item}を作成する。
+スライドのノブは、バーの上に小さな黒の四角として表示される。
+左端が{\em :min}値を表現し、右端が{\em :max}値を表現する。
+バーの長さは、{\em :span}ドットに引き伸ばす。
+現在の値は、{\em :value-format}でslider-itemの右に表示する。}
 
 \methoddesc{:value}{\&optional newval invocation}{
-$B$b$7!"(B{\em newval}$B$,M?$($i$l$?$J$i!"8=:_$NCM$H$7$F@_Dj$5$l!"(B
-$B%N%V$OBP1~$9$k0LCV$K%9%i%$%I$9$k!#(B
-$B$b$7!"(B{\em invocation}$B$b(Bnon NIL$B$K;XDj$5$l$F$$$?$J$i!"(B
-{\tt notify-object}$B$N(B{\tt notify-method}$B$,8F$S=P$5$l$k!#(B
-{\tt :value}$B$O!"8=:_$N!J?7$7$$!KCM$rJV$9!#(B}
+もし、{\em newval}が与えられたなら、現在の値として設定され、
+ノブは対応する位置にスライドする。
+もし、{\em invocation}もnon NILに指定されていたなら、
+{\tt notify-object}の{\tt notify-method}が呼び出される。
+{\tt :value}は、現在の（新しい）値を返す。}
 
 % JoyStick-item
 \classdesc{joystick-item}{panel-item}{
@@ -627,23 +627,23 @@ choice-item$B%*%V%8%'%/%H$HA*Br$5$l$?A*Br%\%?%s$NHV9f$H0l=o$K8F$S=P$5$l$k!#(B}
                 \>stick-return stick-grabbed\\
                 \>fraction-x fraction-y)
 }{
-{\bf joystick-item}$B$O!"(B2$B<!85$N(Bslider-item$B$H$7$F$_$J$9$3$H$,$G$-$k!#(B
-2$B$D$NO"B3CM$O%/%b$NAc$N$h$&$JF1?41_?^$N>e$rF0$/9u$$1_$K$h$C$F(B
-$B;XDj$9$k$3$H$,$G$-$k(B($B?^(B \ref{panelitem})$B!#(B}
+{\bf joystick-item}は、2次元のslider-itemとしてみなすことができる。
+2つの連続値はクモの巣のような同心円図の上を動く黒い円によって
+指定することができる(図 \ref{panelitem})。}
 
 \longdescription{:create}{name reciever method \= \&rest args
-\` [$B%a%=%C%I(B]\\
+\` [メソッド]\\
            \>\&key \=(:stick-size 5) (:return nil)\\
                 \>\>(:min-x -1.0) (:max-x 1.0)\\
                 \>\>(:min-y -1.0) (:max-y 1.0)\\
            \>\&allow-other-keys) 
   }{
-{\em :stick-size}$B$O!"%9%F%#%C%/$N9u$$1_$NH>7B$G$"$k!#(B
-$BF1?41_?^$N1_$NBg$-$5$O!"(B{\bf joystick-item} window$B$NI}$H9b$5(B
-$B$K9g$&$h$&$K7hDj$5$l$k!#(B
-$B$b$7!"(B{\em :return}$B$,(Bnon NIL$B$G$"$k$J$i!"(B
-$B%8%g%$%9%F%#%C%/$O!"%^%&%9%\%?%s$,30$5$l$?;~$N86E@$K5"$k!#(B
-$B$=$&$G$J$$$J$i!"%8%g%$%9%F%#%C%/$O!"30$5$l$?0LCV$K;D$k!#(B}
+{\em :stick-size}は、スティックの黒い円の半径である。
+同心円図の円の大きさは、{\bf joystick-item} windowの幅と高さ
+に合うように決定される。
+もし、{\em :return}がnon NILであるなら、
+ジョイスティックは、マウスボタンが外された時の原点に帰る。
+そうでないなら、ジョイスティックは、外された位置に残る。}
 
 
 %\methoddesc{:draw-circles}{}{
@@ -653,18 +653,18 @@ choice-item$B%*%V%8%'%/%H$HA*Br$5$l$?A*Br%\%?%s$NHV9f$H0l=o$K8F$S=P$5$l$k!#(B}
 %\methoddesc{:draw-stick}{\&optional (x value-x) (y value-y) (erase t)}{
 %}
 \methoddesc{:value}{\&optional (newx) (newy) (invocation)}{
-$B$b$7!"(B{\em newx}$B$H(B{\em newy}$B$,M?$($i$l$?$J$i!"(B
-$B8=:_$N0LCV$H$7$F@_Dj$5$l!"%8%g%$%9%F%#%C%/$OF1?41_?^$N(B
-$BBP1~$9$k0LCV$K0\F0$9$k!#(B
-$B$b$7!"(B{\em invocation}$B$b(Bnon NIL$B$K;XDj$5$l$?$J$i!"(B
-{\tt notify-object}$B$N(B{\tt notify-method}$B$,!"(B
-{\bf joystick-item}$B%*%V%8%'%/%H$H(Bx,y$BCM$r0z$-?t$H$7$F0l=o$K8F$S=P$5$l$k!#(B
-{\tt :value}$B$O!"8=:_$N!J?7$7$$!KCM$N%j%9%H$rJV$9!#(B}
+もし、{\em newx}と{\em newy}が与えられたなら、
+現在の位置として設定され、ジョイスティックは同心円図の
+対応する位置に移動する。
+もし、{\em invocation}もnon NILに指定されたなら、
+{\tt notify-object}の{\tt notify-method}が、
+{\bf joystick-item}オブジェクトとx,y値を引き数として一緒に呼び出される。
+{\tt :value}は、現在の（新しい）値のリストを返す。}
 
 \end{refdesc}
 
-$B0J2<$K>e$K5-=R$5$l$F$$$k(Bpanel-item$B$r;H$C$?C;$$%W%m%0%i%`$r<($7!"(B
-$B?^(B \ref{panelitem}$B$,%Q%M%k$NCf$K$I$N$h$&$KI=<($5$l$k$+$r<($7$?$b$N$G$"$k!#(B
+以下に上に記述されているpanel-itemを使った短いプログラムを示し、
+図 \ref{panelitem}がパネルの中にどのように表示されるかを示したものである。
 
 \begin{verbatim}
 (in-package "X")
@@ -693,36 +693,36 @@ choice-item$B%*%V%8%'%/%H$HA*Br$5$l$?A*Br%\%?%s$NHV9f$H0l=o$K8F$S=P$5$l$k!#(B}
 \begin{center}
 \epsfile{file=fig/panelitem.ps,height=5cm}
 \end{center}
-\caption{panel$B$NCf$K:n@.$5$l$?(Bpanel-item\label{panelitem}}
+\caption{panelの中に作成されたpanel-item\label{panelitem}}
 \end{figure}
 
 \begin{refdesc}
 \classdesc{text-item}{panel-item}
 {(textwin)}{
-{\bf text-item}$B$O!"%U%!%$%kL>$N$h$&$JC;$$%F%-%9%H$rI=<($7$?$jF~NO$7$?$j(B
-$B$9$k$?$a$K;HMQ$9$k!#(B
-{\bf text-item}$B$O!"%i%Y%kJ8;zNs$H$=$N1&B&$K>.$5$J%F%-%9%H(Bwindow$B$r;}$C$F$$$k!#(B
-$B%F%-%9%H(Bwindow$BFb$K%]%$%s%?$,CV$+$l$?$H$-!"%-!<F~NO$,2DG=$H$J$j!"(B
-$BF~NO$5$l$?J8;z$,%P%C%U%!$KF~$l$i$l$k!#(B
-$B%F%-%9%H(Bwindow$BFb$N9T=$@5$,2DG=$G$"$k!#(B
-{\tt control-F}$B$H(B{\tt control-B}$B$OA08e$K#1J8;zF0$+$7!"(B
-{\tt del}$B$O%+!<%=%k$N:8$N#1J8;z$r:o=|$7!"(B
-{\tt control-D}$B$O%+!<%=%k0LCV$NJ8;z$r:o=|$7!"(B
-$B%+!<%=%k0LCV$K$O$I$s$J%0%i%U%#%C%/J8;z$bA^F~$G$-$k!#(B
-$B%^%&%9%\%?%s$r%/%j%C%/$9$l$P!"%/%j%C%/$5$l$?J8;z$K%+!<%=%k$r(B
-$B0\F0$5$;$k!#(B
-enter$B!J2~9T!K%-!<$rBG$D$3$H$K$h$j!"%P%C%U%!$5$l$?%F%-%9%H$,(B
-{\tt notify-object}$B$N(B{\tt notify-method}$B$KAw$i$l$k!#(B}
+{\bf text-item}は、ファイル名のような短いテキストを表示したり入力したり
+するために使用する。
+{\bf text-item}は、ラベル文字列とその右側に小さなテキストwindowを持っている。
+テキストwindow内にポインタが置かれたとき、キー入力が可能となり、
+入力された文字がバッファに入れられる。
+テキストwindow内の行修正が可能である。
+{\tt control-F}と{\tt control-B}は前後に１文字動かし、
+{\tt del}はカーソルの左の１文字を削除し、
+{\tt control-D}はカーソル位置の文字を削除し、
+カーソル位置にはどんなグラフィック文字も挿入できる。
+マウスボタンをクリックすれば、クリックされた文字にカーソルを
+移動させる。
+enter（改行）キーを打つことにより、バッファされたテキストが
+{\tt notify-object}の{\tt notify-method}に送られる。}
 
-\longdescription{:create}{label revciever method \= \&rest args \` [$B%a%=%C%I(B]\\
+\longdescription{:create}{label revciever method \= \&rest args \` [メソッド]\\
 \>\&key (:font font-courb12) (:columns 20) (:initial-value ) (:border-width 0)\\
 \>\&allow-other-keys}{
-{\bf text-item}$B$r:n@.$9$k!#(B
-$B%F%-%9%H(Bwindow$B$N9T%P%C%U%!$K$O!"D9$5$N@)8B$,L5$$$1$l$I$b!"(B
-$B8+$($kItJ,$O(B{\em columns}$BJ8;z$K@)8B$5$l$F$$$k!#(B}
+{\bf text-item}を作成する。
+テキストwindowの行バッファには、長さの制限が無いけれども、
+見える部分は{\em columns}文字に制限されている。}
 
 \methoddesc{:getstring}{}{
-$B%-!<%P%C%U%!Fb$NJ8;zNs$rJV$9!#(B}
+キーバッファ内の文字列を返す。}
 
 %\methoddesc{:KeyPress}{pos}{
 %if key is pressed, print key character to cursor position.}
@@ -733,16 +733,16 @@ enter$B!J2~9T!K%-!<$rBG$D$3$H$K$h$j!"%P%C%U%!$5$l$?%F%-%9%H$,(B
 %ignores.}
 \end{refdesc}
 
-\subsection{$B%-%c%s%P%9(B}
+\subsection{キャンバス}
 \begin{refdesc}
 \classdesc{canvas}{xwindow}{(topleft bottomright)}{
-{\bf canvas}$B$O!"?^$d2hA|$rF~$l$k$?$a$N(BXwindow$B$G$"$k!#(B
-$B8=:_!"NN0hA*Br5!G=$N$_<B8=$5$l$F$$$k!#(B
-ButtonPress$B%$%Y%s%H$K$h$j!"(B{\bf canvas}$B$O2!$5$l$?0LCV$r:8>e$NC<$H$7!"(B
-$B8=:_$N0LCV$r1&2<$NC<$H$9$k;M3Q$rIA$-;O$a$k!#(B
-ButtonRelease$B$K$h$j!"(B{\tt notify-object}$B$N(B{\tt notify-method}$B$,(B
-$BAw$i$l$k!#(B
-canvas$BFb$K?^$d2hA|$rIA$/$?$a$K$O(BXdrawable$B$N%a%=%C%I$,;HMQ$5$l$k!#(B}
+{\bf canvas}は、図や画像を入れるためのXwindowである。
+現在、領域選択機能のみ実現されている。
+ButtonPressイベントにより、{\bf canvas}は押された位置を左上の端とし、
+現在の位置を右下の端とする四角を描き始める。
+ButtonReleaseにより、{\tt notify-object}の{\tt notify-method}が
+送られる。
+canvas内に図や画像を描くためにはXdrawableのメソッドが使用される。}
 
 %\methoddesc{:adjust-corners}{}{
 %corrects toleft and bottomright.}
@@ -766,10 +766,10 @@ canvas$BFb$K?^$d2hA|$rIA$/$?$a$K$O(BXdrawable$B$N%a%=%C%I$,;HMQ$5$l$k!#(B}
 
 \end{refdesc}
 
-\subsection{$B%F%-%9%H(Bwindow}
+\subsection{テキストwindow}
 
-{\tt TextWindow}$B$H(B{\tt BufferTextWidnow}$B$H(B{\tt ScrollTextWindow}$B$N(B
-$B#3$D$N%F%-%9%H(Bwindow$B$,$"$k!#(B
+{\tt TextWindow}と{\tt BufferTextWidnow}と{\tt ScrollTextWindow}の
+３つのテキストwindowがある。
 
 \begin{refdesc}
 \classdesc{textWindow}{xwindow}
@@ -785,93 +785,93 @@ canvas$BFb$K?^$d2hA|$rIA$/$?$a$K$O(BXdrawable$B$N%a%=%C%I$,;HMQ$5$l$k!#(B}
 \>kill delete \> ;control character \\
 \>notify-object notify-method \\
 \>)}{
-$B%a%C%;!<%8$rI=<($9$k$?$a$K;HMQ2DG=$J2>A[C<Kv$r<B8=$9$k!#(B
-$BI=<($5$l$kFbMF$O!"%P%C%U%!$5$l$J$$$7!"(B{\bf TextWindow}$B$K4{$KI=<($5$l$?(B
-$BJ8;z$d9T$r0z$-=P$9J}K!$O$J$$!#(B
-$B4pK\E*$K!"(B{\bf TextWindow}$B$O(B
-$B%+!<%=%k0\F0!"9T:o=|!"NN0h:o=|!"I=<(%F%-%9%H$N%9%/%m!<%k!"J8;zNsA^F~(B
-$B$J$I$r;}$D%@%s%WC<Kv$H;w$?G=NO$r;}$C$F$$$k!#(B
-$B$^$?!"%F%-%9%H%+!<%=%k$O%^%&%9%]%$%s%?$G;X<($5$l$?0LCV$K(B
-$B0\F0$9$k$3$H$,$G$-$k!#(B}
+メッセージを表示するために使用可能な仮想端末を実現する。
+表示される内容は、バッファされないし、{\bf TextWindow}に既に表示された
+文字や行を引き出す方法はない。
+基本的に、{\bf TextWindow}は
+カーソル移動、行削除、領域削除、表示テキストのスクロール、文字列挿入
+などを持つダンプ端末と似た能力を持っている。
+また、テキストカーソルはマウスポインタで指示された位置に
+移動することができる。}
 
 \methoddesc{:init}{id}{
-{\em id}$BHVL\$N%F%-%9%H(Bwindow$B$r=i4|2=$9$k!#(B}
+{\em id}番目のテキストwindowを初期化する。}
 
-\longdescription{:create}{\=\&rest args \` [$B%a%=%C%I(B]\\
+\longdescription{:create}{\=\&rest args \` [メソッド]\\
 \>\&key \=:width :height (:font font-courb14) :rows :columns\\
 \>(:show-cursor nil) (:notify-object nil) (:notify-method nil)\\
 \>\&allow-other-keys}{
-text-window$B$r:n@.$9$k!#(B
-window$B$NBg$-$5$O!"(B{\em :width}$B$H(B{\em :height}$B$+$"$k$$$O(B{\em :rows}$B$H(B
-{\em :columns}$B$G;XDj$5$l$?$b$N$H$J$k!#(B
-{\em :notify-object}$B$N(B{\em :notify-method}$B$O!"2~9TJ8;z$,F~NO$5$l$?(B
-$B$H$-$K8F$S=P$5$l$k!#(B}
+text-windowを作成する。
+windowの大きさは、{\em :width}と{\em :height}かあるいは{\em :rows}と
+{\em :columns}で指定されたものとなる。
+{\em :notify-object}の{\em :notify-method}は、改行文字が入力された
+ときに呼び出される。}
 
 %\methoddesc{:set-notify}{reciever method}{
 %}
 
 \methoddesc{:cursor}{flag}{
-{\em flag}$B$O!"(B{\tt :on, :off, :toggle}$B$N$I$l$+$,2DG=$G$"$k!#(B
-$B%F%-%9%H%+!<%=%k$O!"(B{\tt win-row}$B$H(B{\tt win-col}$B$N0LCV$G$"$k!#(B
-$B$b$7!"(B{\em flag}$B$,(B{\tt :on}$B$G$"$l$P!"%F%-%9%H%+!<%=%k$OI=<($5$l!"(B
-{\em flag}$B$,(B{\tt :off}$B$J$i$P!">C$5$l$k!#(B
-$B$^$?!"(B{\em flag}$B$,(B{\tt toggle}$B$J$i$P!"H?BP$K$J$k!#(B
-$B$3$N%a%=%C%I$O!"%+!<%=%k$N0LCV$NJ8;z$r99?7$9$k$H$-$O$$$D$G$b!"(B
-$B8F$S=P$5$l$J$1$l$P$J$i$J$$!#(B}
+{\em flag}は、{\tt :on, :off, :toggle}のどれかが可能である。
+テキストカーソルは、{\tt win-row}と{\tt win-col}の位置である。
+もし、{\em flag}が{\tt :on}であれば、テキストカーソルは表示され、
+{\em flag}が{\tt :off}ならば、消される。
+また、{\em flag}が{\tt toggle}ならば、反対になる。
+このメソッドは、カーソルの位置の文字を更新するときはいつでも、
+呼び出されなければならない。}
 
 \methoddesc{:clear}{}{
-$B%F%-%9%H(Bwindow$BFb$r>C5n$9$k!#(B}
+テキストwindow内を消去する。}
 
 \methoddesc{:clear-eol}{\&optional (r win-row) (c win-col) (csr :on)}{
-{\em r}$B$H(B{\em c}$B$G;XDj$5$l$k0LCV$NJ8;z0J9_$N;D$j$N9T$r(B
-$B>C5n$9$k!#%+!<%=%k0LCV$NJ8;z$b4^$`!#(B}
+{\em r}と{\em c}で指定される位置の文字以降の残りの行を
+消去する。カーソル位置の文字も含む。}
 
 \methoddesc{:clear-lines}{lines \&optional (r win-row)}{
-{\em r}$BHVL\$N9T0J9_$NJ#?t9T$r>C5n$9$k!#(B}
+{\em r}番目の行以降の複数行を消去する。}
 
 \methoddesc{:clear-eos}{\&optional (r win-row) (c win-col)}{
-{\em r}$B$H(B{\em c}$B$G;XDj$5$l$k0LCV$+$i2hLL$N:G8e$^$G$NNN0h$r>C5n$9$k!#(B}
+{\em r}と{\em c}で指定される位置から画面の最後までの領域を消去する。}
 
-\methoddesc{:win-row-max}{}{$B$3$N(Bwindow$B$KI=<(2DG=$J:GBg9T?t$rJV$9!#(B}
+\methoddesc{:win-row-max}{}{このwindowに表示可能な最大行数を返す。}
 
-\methoddesc{:win-col-max}{}{$B$3$N(Bwindow$B$KI=<(2DG=$J:GBgNs?t$rJV$9!#(B}
+\methoddesc{:win-col-max}{}{このwindowに表示可能な最大列数を返す。}
 
 \methoddesc{:xy}{\&optional (r win-row) (c win-col)}{
-{\em r}$B$H(B{\em c}$B$G;XDj$5$l$k0LCV$NJ8;z$N%T%/%;%k:BI8$r7W;;$9$k!#(B}
+{\em r}と{\em c}で指定される位置の文字のピクセル座標を計算する。}
 
 \methoddesc{:goto}{r c \&optional (cursor :on)}{
-{\em r}$BHVL\$N9T$N(B{\em c}$BHVL\$NNs$K%+!<%=%k$r0\F0$9$k!#(B}
+{\em r}番目の行の{\em c}番目の列にカーソルを移動する。}
 
 \methoddesc{:goback}{\&optional (csr :on)}{
-$B%+!<%=%k$r#1J8;zLa$9!#(B}
+カーソルを１文字戻す。}
 
 \methoddesc{:advance}{\&optional (n 1)}{
-{\em n}$BJ8;z$@$1%+!<%=%k$r?J$a$k!#(B}
+{\em n}文字だけカーソルを進める。}
 
 \methoddesc{:scroll}{\&optional (n 1)}{
-{\em n}$B9T$@$1=DJ}8~$K%F%-%9%H(Bwindow$B$r%9%/%m!<%k$9$k!#(B}
+{\em n}行だけ縦方向にテキストwindowをスクロールする。}
 
 \methoddesc{:horizontal-scroll}{\&optional (n 1)}{
-{\em n}$BNs$@$12#J}8~$K%F%-%9%H$r%9%/%m!<%k$9$k!#(B}
+{\em n}列だけ横方向にテキストをスクロールする。}
 
 \methoddesc{:newline}{}{
-$B<!$N9T$N:G=i$K%+!<%=%k$r0\F0$9$k!#(B}
+次の行の最初にカーソルを移動する。}
 
 \methoddesc{:putch}{ch}{
-$B%+!<%=%k0LCV$KJ8;z(B{\em ch}$B$rA^F~$9$k!#(B
-$B9T$N;D$j$O!"#1J8;zA0J}$K?J$a$i$l$k!#(B}
+カーソル位置に文字{\em ch}を挿入する。
+行の残りは、１文字前方に進められる。}
 
 %\methoddesc{:putstr}{str \&optional (e (length str))}{
 %prints {\em str} to text-window.}
 %
 \methoddesc{:putstring}{str \&optional (e (length str))}{
-$B%+!<%=%k0LCV$K(B{\em str}$B$rCV$/!#(B}
+カーソル位置に{\em str}を置く。}
 
 %\methoddesc{:getstring}{}{gets key-buffer.}
 
 \methoddesc{:event-row}{event}{}
 \methoddesc{:event-col}{event}{
-{\em event}$B$K$*$1$k!"%F%-%9%H%+!<%=%k$N0LCV$r$rJV$9!#(B}
+{\em event}における、テキストカーソルの位置をを返す。}
 %\methoddesc{:EnterNotify}{event}{}
 %\methoddesc{:ButtonPress}{event}{}
 %\methoddesc{:ButtonRelease}{event}{}
@@ -881,79 +881,79 @@ window$B$NBg$-$5$O!"(B{\em :width}$B$H(B{\em :height}$B$+$"$k$$$O(B{\em :r
 %\methoddesc{:enterNotify}{event}{}
 %\methoddesc{:LeaveNotify}{event}{}
 \methoddesc{:KeyPress}{event}{
-$B%+!<%=%k0LCV$KF~NO$5$l$?J8;z$rA^F~$9$k!#(B
-$B$b$7!"J8;z$,2~9T$G$"$C$?$J$i!"(B{\tt notify-object}$B$KDLCN$9$k!#(B}
+カーソル位置に入力された文字を挿入する。
+もし、文字が改行であったなら、{\tt notify-object}に通知する。}
 %\methoddesc{:keyEnter}{ch}{}
 %\methoddesc{:LineEnter}{ch}{}
 %\methoddesc{:clear-text}{item}{clear text-window.}
 
 \classdesc{TextWindowStream}{stream}{(textwin)}{
-{\tt TextWindowStream}$B$O!"(BTextWdinow$B$K@\B3$5$l$?=PNO%9%H%j!<%`$G$"$k!#(B
-{\tt print, format, write-byte}$B$J$I$K$h$C$F$3$N%9%H%j!<%`$K=PNO(B
-$B$5$l$kJ8;z$dJ8;zNs$,(BTextWdindow$B$KI=<($5$l$k!#(B
-$BDL>o$N%U%!%$%k%9%H%j!<%`$H$7$F$O!"(B
-$B=PNO%G!<%?$O%P%C%U%!$5$l$k!#(B}
+{\tt TextWindowStream}は、TextWdinowに接続された出力ストリームである。
+{\tt print, format, write-byte}などによってこのストリームに出力
+される文字や文字列がTextWdindowに表示される。
+通常のファイルストリームとしては、
+出力データはバッファされる。}
 
 \methoddesc{:flush}{}{
-$B%P%C%U%!$5$l$?%F%-%9%HJ8;zNs$rA]$-=P$7!"(BTextWindow$B$KAw$k!#(B
-{\tt finish-output}$B$d$3$N%9%H%j!<%`$X$N2~9TJ8;z$N=q$-9~$_$O!"(B
-$B$3$N%a%=%C%I$r<+F0E*$K8F$S=P$9!#(B}
+バッファされたテキスト文字列を掃き出し、TextWindowに送る。
+{\tt finish-output}やこのストリームへの改行文字の書き込みは、
+このメソッドを自動的に呼び出す。}
 
 \funcdesc{make-text-window-stream}{xwin}{
-{\bf text-window-stream}$B$r:n$j!"$=$N%9%H%j!<%`%*%V%8%'%/%H$rJV$9!#(B}
+{\bf text-window-stream}を作り、そのストリームオブジェクトを返す。}
 
 \classdesc{BufferTextWindow}{TextWindow}{
 (linebuf expbuf max-line-length row col)}{
-{\bf TextWindow}$B$NFbMF$rI=8=$9$k9T%P%C%U%!$rJ];}$9$k!#(B
-{\tt linebuf}$B$O!"9T$N%Y%/%H%k$G$"$k!#(B{\tt exbuf}$B$O!"(B
-$B%?%V3HD%$5$l$?%F%-%9%H$r;}$D!#(B
-window$B$KI=<(2DG=$J9T$N$_$,J];}$5$l$k!#(B
-{\bf BufferTextWindow}$B$O!"?t9T$N%F%-%9%H$r;}$D(B
-$B4JC1$J%F%-%9%H%(%G%#%?$H$7$F;HMQ$9$k$3$H$,$G$-$k!#(B
-{\tt text-item}$B$O!"I=<(2DG=$J9T%P%C%U%!$H$7$F(B{\bf BufferTextWindow}$B$r(B
-$B;H$&!#(B}
+{\bf TextWindow}の内容を表現する行バッファを保持する。
+{\tt linebuf}は、行のベクトルである。{\tt exbuf}は、
+タブ拡張されたテキストを持つ。
+windowに表示可能な行のみが保持される。
+{\bf BufferTextWindow}は、数行のテキストを持つ
+簡単なテキストエディタとして使用することができる。
+{\tt text-item}は、表示可能な行バッファとして{\bf BufferTextWindow}を
+使う。}
 
 %\methoddesc{:create}{\&rest args}{}
 %\methoddesc{:clear}{}{}
 %\methoddesc{:goto}{r c \&optional (csr :on)}{}
 \methoddesc{:line}{n}{
-{\em n}$BHVL\$N9T$NFbMF$rJ8;zNs$H$7$FJV$9!#(B}
+{\em n}番目の行の内容を文字列として返す。}
 
-\methoddesc{:nlines}{}{{\tt linebuf}$B$N9T?t$rJV$9!#(B}
-\methoddesc{:all-lines}{}{$BJ8;zNs$N%Y%/%H%k$G$"$k(B{\tt linebuf}$B$rJV$9!#(B}
+\methoddesc{:nlines}{}{{\tt linebuf}の行数を返す。}
+\methoddesc{:all-lines}{}{文字列のベクトルである{\tt linebuf}を返す。}
 \methoddesc{:refresh-line}{\&optional (r win-row) (c win-col)}{
-{\em r}$BHVL\$N9T$N(B{\em c}$BHVL\$NNs0J9_$r:F=q$-9~$_$9$k!#(B}
+{\em r}番目の行の{\em c}番目の列以降を再書き込みする。}
 \methoddesc{:refresh}{\&optional (start 0)}{
-{\em start}$BHVL\$N9T0J9_$N9T$r:F=q$-9~$_$9$k!#(B}
+{\em start}番目の行以降の行を再書き込みする。}
 \methoddesc{:insert-string}{string}{
-$B%+!<%=%k0LCV$K(B{\em string}$B$rA^F~$9$k!#(B}
-\methoddesc{:insert}{ch}{$B%+!<%=%k0LCV$KJ8;z$rA^F~$9$k!#(B}
-\methoddesc{:delete}{n}{$B%+!<%=%k0J9_$N(B{\em n}$BJ8;z$r:o=|$9$k!#(B}
+カーソル位置に{\em string}を挿入する。}
+\methoddesc{:insert}{ch}{カーソル位置に文字を挿入する。}
+\methoddesc{:delete}{n}{カーソル以降の{\em n}文字を削除する。}
 %\methoddesc{:KeyEnter}{ch \&optional event}{}
 %\methoddesc{:ButtonRelease}{event}{}
 
 \funcdesc{expand-tab}{src \&optional (offset 0)}{
-{\em src}$B$O!"%?%V$r4^$s$@2DG=@-$N$"$kJ8;zNs$G$"$k!#(B
-$B$3$l$i$N%?%V$O!"%?%V$NDd;_0LCV$,(B8$B$NG\?t$G$"$k$H2>Dj$7$F6uGrJ8;z$K(B
-$BCV$-49$($i$l$k!#(B}
+{\em src}は、タブを含んだ可能性のある文字列である。
+これらのタブは、タブの停止位置が8の倍数であると仮定して空白文字に
+置き換えられる。}
 
 \classdesc{ScrollTextWindow}{BufferTextWindow}{
 (top-row top-col \hspace{30mm} \= ;display-starting position \\
 \> scroll-bar-window \\
 \> horizontal-scroll-bar-window \\
 \> selected-line)}{
-{\bf ScrollTextWindow}$B$O!"9T?t@)8B$,$J$/!"=D$H2#$K%9%/%m!<%k%P!<$r;}$C$?(B
-{\tt BufferTextWindow}$B$rDj5A$9$k!#(B
-{\bf ScrollTextWindow}$B$O!"%9%/%m!<%k%P!<$rH<$C$F(Bwindow$B$NBg$-$5$rJQ99$9$k$?$a!"(B
-$B$"$k$$$O%F%-%9%H$r:FI=<($9$k$?$a$K(B{\tt :configureNotify}$B%$%Y%s%H$r(B
-$B07$&$3$H$,$G$-$k!#(B
-$B%/%j%C%/$9$k$3$H$K$h$C$F!"9T$rA*Br$9$k$3$H$,$G$-$k!#(B}
+{\bf ScrollTextWindow}は、行数制限がなく、縦と横にスクロールバーを持った
+{\tt BufferTextWindow}を定義する。
+{\bf ScrollTextWindow}は、スクロールバーを伴ってwindowの大きさを変更するため、
+あるいはテキストを再表示するために{\tt :configureNotify}イベントを
+扱うことができる。
+クリックすることによって、行を選択することができる。}
 
 \methoddesc{:create}{\&rest args
            \&key (scroll-bar nil)
                 (horizontal-scroll-bar nil)
            \&allow-other-keys}{
-$B%9%/%m!<%k%P!<$,I,MW$J$H$-!"$=$l$>$l$N%-!<%o!<%I$N0z$-?t$K(BT$B$r;XDj$9$k!#(B}
+スクロールバーが必要なとき、それぞれのキーワードの引き数にTを指定する。}
 
 %\methoddesc{:locate-scroll-bar}{}{}
 %\methoddesc{:clear}{}{}
@@ -963,41 +963,41 @@ window$B$KI=<(2DG=$J9T$N$_$,J];}$5$l$k!#(B
 %\methoddesc{:line-in-window-p}{ln}{}
 %\methoddesc{:refresh-line}{ln \&optional (highlight nil) \&aux fg-save bg-save}{
 %}
-\methoddesc{:locate}{n}{window$B$N>eIt$+$i(B{\em n}$BHVL\$N9T$K(B
-$B%P%C%U%!$5$l$?%F%-%9%H$rI=<($9$k!#(B}
+\methoddesc{:locate}{n}{windowの上部から{\em n}番目の行に
+バッファされたテキストを表示する。}
 \methoddesc{:display-selection}{selection}{
-{\em selection}$B$O!"A*Br$5$l$?9T$N0LCV$rI=8=$9$k!#(B
-$BA*Br$5$l$?9T$,$9$Y$F9b51EY$GI=<($5$l$k!#(B}
+{\em selection}は、選択された行の位置を表現する。
+選択された行がすべて高輝度で表示される。}
 
-\methoddesc{:selection}{}{$BA*Br$5$l$?9T!JJ8;zNs!K$rJV$9!#(B}
+\methoddesc{:selection}{}{選択された行（文字列）を返す。}
 
 \methoddesc{:read-file}{fname}{
-{\em fname}$B$G;XDj$5$l$k%F%-%9%H%U%!%$%k$r(B{\tt linebuf}$B$KFI$_9~$_!"(B
-$B%?%V$r3HD%$7!"(Bwindow$B$KI=<($9$k!#(B
-$B%+!<%=%k$O!"2hLL$N:G=i$KCV$+$l$k!#(B}
+{\em fname}で指定されるテキストファイルを{\tt linebuf}に読み込み、
+タブを拡張し、windowに表示する。
+カーソルは、画面の最初に置かれる。}
 
 \methoddesc{:display-string}{strings}{
-{\em strings}$B$O!"9T!JJ8;zNs!K$NNs$G$"$k!#(B
-{\em strings}$B$O!"(B{\tt linebuf}$B$K%3%T!<$5$l!"(Bwindow$B$KI=<($5$l$k!#(B}
+{\em strings}は、行（文字列）の列である。
+{\em strings}は、{\tt linebuf}にコピーされ、windowに表示される。}
 
 %\methoddesc{:scroll-fraction}{}{}
 %\methoddesc{:horizontal-scroll-fraction}{}{}
 
-\methoddesc{:scroll}{n}{{\em n}$B9T!"=D$K%9%/%m!<%k$9$k!#(B}
-\methoddesc{:horizontal-scroll}{n}{{\em n}$BNs!"2#$K%9%/%m!<%k$9$k!#(B}
+\methoddesc{:scroll}{n}{{\em n}行、縦にスクロールする。}
+\methoddesc{:horizontal-scroll}{n}{{\em n}列、横にスクロールする。}
 %\methoddesc{:insert-char}{c \&optional (refresh t)}{}
 %\methoddesc{:insert-newline}{\&optional (refresh t)}{}
 %\methoddesc{:insert}{thing \&optional (refresh t)}{}
 %\methoddesc{:buttonPress}{event}{}
 \methoddesc{:ButtonRelease}{event}{
-$B%^%&%9%]%$%s%?$,CV$+$l$F$$$k9T$,A*Br$5$l$k!#(B
-$B$b$7!"(Bwindow$B$,:n@.$5$l$?$H$-$K(B{\tt notification}$B$,;XDj$5$l$F$$$k(B
-$B$J$i$P!"(B{\tt notify-object}$B$N(B{\tt notify-method}$B$,8F$S=P$5$l$k!#(B}
+マウスポインタが置かれている行が選択される。
+もし、windowが作成されたときに{\tt notification}が指定されている
+ならば、{\tt notify-object}の{\tt notify-method}が呼び出される。}
 
 \methoddesc{:resize}{w h}{
-window$B$NBg$-$5$rJQ99$7!"?7$7$$%5%$%:$K9g$&$h$&$K(B
-$BFbMF$r:FI=<($9$k!#(B
-$B$b$7!"%9%/%m!<%k%P!<$,$"$l$P!"F1$8%a%C%;!<%8$,Aw$i$l$k!#(B}
+windowの大きさを変更し、新しいサイズに合うように
+内容を再表示する。
+もし、スクロールバーがあれば、同じメッセージが送られる。}
 %\methoddesc{:ConfigureNotify}{event}{}
 
 %\classdesc{xitem}{xwindow}
