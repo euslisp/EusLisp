@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>����</TITLE>
-<META NAME="description" CONTENT="����">
+<TITLE>同期</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="同期">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,11 +44,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1988"
-  HREF="jmanual-node106.html">�􉽊w�֐�</A>
+  HREF="jmanual-node106.html">幾何学関数</A>
 <B> Up:</B> <A NAME="tex2html1982"
-  HREF="jmanual-node91.html">�}���`�X���b�h</A>
+  HREF="jmanual-node91.html">マルチスレッド</A>
 <B> Previous:</B> <A NAME="tex2html1978"
-  HREF="jmanual-node104.html">�X���b�h����</A>
+  HREF="jmanual-node104.html">スレッド生成</A>
  &nbsp; <B>  <A NAME="tex2html1984"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1986"
@@ -57,28 +58,28 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04025000000000000000">
-����</A>
+同期</A>
 </H2>
 
 <P>
-Solaris�I�y���[�e�B���O�V�X�e�����ɂ́A�}���`�X���b�h�v���O�����̂��߂�
-4�̓�����@������B
-Euslisp�́Amutex-lock��condition variable�ƃZ�}�t�H��񋟂��Ă���B
-reader-writer lock�͎�������ĂȂ��B
-�����̎�@�Ɋ�Â��āA�����������|�[�g�⓯����ǂ̂悤��
-�����x���̓����@�\����������Ă���B
+Solarisオペレーティングシステム内には、マルチスレッドプログラムのために
+4つの同期手法がある。
+Euslispは、mutex-lockとcondition variableとセマフォを提供している。
+reader-writer lockは実現されてない。
+これらの手法に基づいて、同期メモリポートや同期障壁のような
+高レベルの同期機構が実現されている。
 
 <P>
 
  <BR>
-<BR> <A NAME="25305"></A>
-<B>sys:make-mutex-lock</B> [�֐�]
+<BR> <A NAME="25302"></A>
+<B>sys:make-mutex-lock</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-mutex-lock�����A�Ԃ��B
-mutex-lock�́A6�̗v�f���������x�N�g���ŕ\������Ă���B
+mutex-lockを作り、返す。
+mutex-lockは、6つの要素を持つ整数ベクトルで表現されている。
 </DD>
 </DL>
 <BR>
@@ -86,15 +87,15 @@ mutex-lock�́A6�̗v�f���������x�N�g���ŕ\������Ă���B
 
 <P>
 
-<A NAME="25315"></A>
-<B>sys:mutex-lock</B> <EM>mlock </EM>[�֐�]
+<A NAME="25312"></A>
+<B>sys:mutex-lock</B> <EM>mlock </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-mutex-lock��<EM>mlock</EM>�����b�N����B
-�����A<EM>mlock</EM>�����ɑ��̃X���b�h���烍�b�N����Ă���Ȃ�A
-<B>mutex-lock</B>�̓��b�N���O�����܂ő҂B
+mutex-lockの<EM>mlock</EM>をロックする。
+もし、<EM>mlock</EM>が既に他のスレッドからロックされているなら、
+<B>mutex-lock</B>はロックが外されるまで待つ。
 </DD>
 </DL>
 <BR>
@@ -102,13 +103,13 @@ mutex-lock��<EM>mlock</EM>�����b�N����B
 
 <P>
 
-<A NAME="25328"></A>
-<B>sys:mutex-unlock</B> <EM>mlock </EM>[�֐�]
+<A NAME="25325"></A>
+<B>sys:mutex-unlock</B> <EM>mlock </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>mlock</EM>���������A���̃��b�N��҂��Ă��鑼�̃X���b�h�̓��̂P���Ăю��s����n�߂�B
+<EM>mlock</EM>を解除し、このロックを待っている他のスレッドの内の１つが再び実行され始める。
 </DD>
 </DL>
 <BR>
@@ -116,19 +117,19 @@ mutex-lock��<EM>mlock</EM>�����b�N����B
 
 <P>
 
-<A NAME="25339"></A>
-<B>sys:mutex</B> <EM>mlock &amp;rest forms </EM>[�}�N��]
+<A NAME="25336"></A>
+<B>sys:mutex</B> <EM>mlock &amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
-<B>mutex</B>�́A�d�v�ȕ������ЂƂ܂Ƃ܂�ɂ����}�N���ł���B
-<EM>mlock</EM>�́A�]������<EM>forms</EM>���]�������O�Ƀ��b�N�����B
-�����āA�]�����I�������Ƃ��ɁA���b�N�����������B
-���̃}�N���́A�ȉ���progn form�ɓW�J�����B
-<B>unwind-protect</B>�́A<EM>forms</EM>�̕]�����ɃG���[�����������Ƃ�
-�ł����A���b�N�̉�����ۏ؂��邽�߂Ɏg�p����邱�Ƃɒ��ӂ��邱�ƁB
+mutex-lockとmutex-unlockは、組みで使用されなければならない。
+<B>mutex</B>は、重要な部分をひとまとまりにしたマクロである。
+<EM>mlock</EM>は、評価する<EM>forms</EM>が評価される前にロックされる。
+そして、評価が終了したときに、ロックが解除される。
+このマクロは、以下のprogn formに展開される。
+<B>unwind-protect</B>は、<EM>forms</EM>の評価中にエラーが発生したとき
+でさえ、ロックの解除を保証するために使用されることに注意すること。
 
 </DD>
 </DL>
@@ -144,14 +145,14 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="25354"></A>
-<B>sys:make-cond</B> [�֐�]
+<A NAME="25351"></A>
+<B>sys:make-cond</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-4�̗v�f���������x�N�g���ł���condition variable�I�u�W�F�N�g��
-���Bcondition variable�̕Ԃ�l�Ƃ��ẮA���b�N����ĂȂ���Ԃłł���B
+4つの要素を持つ整数ベクトルであるcondition variableオブジェクトを
+作る。condition variableの返り値としては、ロックされてない状態でである。
 </DD>
 </DL>
 <BR>
@@ -159,15 +160,15 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="25364"></A>
-<B>sys:cond-wait</B> <EM>condvar mlock </EM>[�֐�]
+<A NAME="25361"></A>
+<B>sys:cond-wait</B> <EM>condvar mlock </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>condvar</EM>�ɐM�����o�����܂ő҂B
-�����A<EM>condvar</EM>�����̃X���b�h�ɂ���Ă��łɊl������Ă����Ȃ�΁A
-<EM>mlock</EM>���������A<EM>condvar</EM>�ɐM�����o�����܂ő҂B
+<EM>condvar</EM>に信号が出されるまで待つ。
+もし、<EM>condvar</EM>が他のスレッドによってすでに獲得されていたならば、
+<EM>mlock</EM>を解除し、<EM>condvar</EM>に信号が出されるまで待つ。
 </DD>
 </DL>
 <BR>
@@ -175,48 +176,48 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="25378"></A>
-<B>sys:cond-signal</B> <EM>condvar </EM>[�֐�]
+<A NAME="25375"></A>
+<B>sys:cond-signal</B> <EM>condvar </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>condvar</EM>�Ŏ������condition variable�ɐM�����o���B
+<EM>condvar</EM>で示されるcondition variableに信号を出す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="25389"></A>
-<B>sys:make-semaphore</B> [�֐�]
+<A NAME="25386"></A>
+<B>sys:make-semaphore</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-20�̗v�f���������x�N�g���ɂ���ĕ\�������Z�}�t�H�I�u�W�F�N�g�����B
+20の要素を持つ整数ベクトルによって表現されるセマフォオブジェクトを作る。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="25399"></A>
-<B>sys:sema-post</B> <EM>sem </EM>[�֐�]
+<A NAME="25396"></A>
+<B>sys:sema-post</B> <EM>sem </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>sem</EM>�ɐM�����o���B
+<DD> <EM>sem</EM>に信号を出す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="25410"></A>
-<B>sys:sema-wait</B> <EM>sem </EM>[�֐�]
+<A NAME="25407"></A>
+<B>sys:sema-wait</B> <EM>sem </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>sem</EM>�ɐM��������܂ő҂B
+<EM>sem</EM>に信号が来るまで待つ。
 </DD>
 </DL>
 <BR>
@@ -224,8 +225,8 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 	<BR> 
-<A NAME="25422"></A>
-<BIG CLASS="XLARGE"><B>sys:barrier-synch </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="25419"></A>
+<BIG CLASS="XLARGE"><B>sys:barrier-synch </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 threads n-threads count barrier-cond threads-lock count-lock 
 </TT></PRE>
@@ -234,20 +235,20 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <DL COMPACT>
 <DT> 
-<DD>������ǂ̂��߂̍\����\������B
-������҂��Ă���X���b�h�́A<EM>thread-lock</EM>�ɂ����
-���݂ɔr�������<EM>thread</EM>�ɒu�����B
-<B>barrier-synch</B>�I�u�W�F�N�g���������ꂽ�Ƃ��A
-<EM>count</EM>�́A�[���ɏ����������B
-�������Ă���X���b�h�́A<TT>:add</TT>���b�Z�[�W�𑗂邱�Ƃɂ���āA
-<EM>threads</EM>���X�g�ɒu�����B
-����barrier-synch�I�u�W�F�N�g��<TT>:wait</TT>�𑗂邱�Ƃ́A
-<EM>count</EM>�𑝉������邱�Ƃ̌����ƂȂ�A
-����ꂽ�X���b�h�͑҂���ԂɂȂ�B
-<EM>threads</EM>�̒��̂��ׂẴX���b�h��<TT>:wait</TT>���b�Z�[�W������ꂽ�Ƃ��A
-�҂�����������A���ׂẴX���b�h�̎��s���Ăюn�܂�B
-�����́A<EM>count-lock</EM>��mutex-lock��<EM>barrier-cond</EM>��condition-variable
-�̑g�ݍ��킹�ɂ���Ď��s�����B
+<DD>同期障壁のための構造を表現する。
+同期を待っているスレッドは、<EM>thread-lock</EM>によって
+相互に排除される<EM>thread</EM>に置かれる。
+<B>barrier-synch</B>オブジェクトが生成されたとき、
+<EM>count</EM>は、ゼロに初期化される。
+同期しているスレッドは、<TT>:add</TT>メッセージを送ることによって、
+<EM>threads</EM>リストに置かれる。
+このbarrier-synchオブジェクトに<TT>:wait</TT>を送ることは、
+<EM>count</EM>を増加させることの原因となり、
+送られたスレッドは待ち状態になる。
+<EM>threads</EM>の中のすべてのスレッドに<TT>:wait</TT>メッセージが送られたとき、
+待ちが解除され、すべてのスレッドの実行が再び始まる。
+同期は、<EM>count-lock</EM>のmutex-lockと<EM>barrier-cond</EM>のcondition-variable
+の組み合わせによって実行される。
 </DD>
 </DL>
 <BR>
@@ -255,47 +256,47 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="25451"></A>
-<B>:init</B> [���\�b�h]
+<A NAME="25448"></A>
+<B>:init</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����barrier-synch�I�u�W�F�N�g������������B
-2��mutex-lock��1��condition-variable�����������B
+<DD> このbarrier-synchオブジェクトを初期化する。
+2つのmutex-lockと1つのcondition-variableが生成される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="25461"></A>
-<B>:add</B> <EM>thr </EM>[���\�b�h]
+<A NAME="25458"></A>
+<B>:add</B> <EM>thr </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>threads</EM>���X�g�̒���<EM>thr</EM>�X���b�h���ǉ������B
+<DD> <EM>threads</EM>リストの中に<EM>thr</EM>スレッドが追加される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="25473"></A>
-<B>:remove</B> <EM>thr </EM>[���\�b�h]
+<A NAME="25470"></A>
+<B>:remove</B> <EM>thr </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>threads</EM>���X�g�̒�����<EM>thr</EM>�X���b�h���폜����B
+<DD> <EM>threads</EM>リストの中から<EM>thr</EM>スレッドを削除する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="25485"></A>
-<B>:wait</B> [���\�b�h]
+<A NAME="25482"></A>
+<B>:wait</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>threads</EM>���X�g�̒��̂��ׂẴX���b�h��<TT>:wait</TT>
-���z�z�����̂�҂B
+<DD> <EM>threads</EM>リストの中のすべてのスレッドに<TT>:wait</TT>
+が配布されるのを待つ。
 </DD>
 </DL>
 <BR>
@@ -303,8 +304,8 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 	<BR> 
-<A NAME="25498"></A>
-<BIG CLASS="XLARGE"><B>sys:synch-memory-port </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="25495"></A>
+<BIG CLASS="XLARGE"><B>sys:synch-memory-port </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 sema-in sema-out buf empty lock 
 </TT></PRE>
@@ -313,9 +314,9 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <DL COMPACT>
 <DT> 
-<DD>1�����̓������ꂽ�������|�[�g����������B
-���̃I�u�W�F�N�g��ʂ��ăf�[�^��]�����邽�߂ɁA2�̃X���b�h�𓯊�������B
-�]������́A�Z�}�t�H��p���Ď�������Ă���B
+<DD>1方向の同期されたメモリポートを実現する。
+このオブジェクトを通じてデータを転送するために、2つのスレッドを同期させる。
+転送制御は、セマフォを用いて実現されている。
 </DD>
 </DL>
 <BR>
@@ -323,14 +324,14 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="25515"></A>
-<B>:read</B> [���\�b�h]
+<A NAME="25512"></A>
+<B>:read</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<B>synch-memory-port</B>�Ƀo�b�t�@����Ă���f�[�^��ǂށB
-�����A�܂�������Ă��Ȃ������Ȃ�΁A<TT>:read</TT>�͒�~����B
+この<B>synch-memory-port</B>にバッファされているデータを読む。
+もし、まだ書かれていなかったならば、<TT>:read</TT>は停止する。
 </DD>
 </DL>
 <BR>
@@ -338,16 +339,16 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="25527"></A>
-<B>:write</B> <EM>datum </EM>[���\�b�h]
+<A NAME="25524"></A>
+<B>:write</B> <EM>datum </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�o�b�t�@��<EM>datum</EM>���������ށB
-1���[�h�̃o�b�t�@�̂ݑ��݂���̂ŁA
-�������̃f�[�^�����ɏ�����Ă���܂��ǂ܂�Ă��Ȃ������Ȃ�΁A
-<TT>:write</TT>��<TT>:read</TT>�ɂ���Ă��̃f�[�^���ǂݍ��܂��܂ő҂B
+バッファに<EM>datum</EM>を書き込む。
+1ワードのバッファのみ存在するので、
+もし他のデータが既に書かれておりまだ読まれていなかったならば、
+<TT>:write</TT>は<TT>:read</TT>によってそのデータが読み込まれるまで待つ。
 </DD>
 </DL>
 <BR>
@@ -355,13 +356,13 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="25540"></A>
-<B>:init</B> [���\�b�h]
+<A NAME="25537"></A>
+<B>:init</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����<B>sync-memory-port</B>������������B
-����ɂ�2�̃Z�}�t�H����������A<TT>:write</TT>���삪�\�ȏ�ԂɂȂ��Ă���B
+<DD> この<B>sync-memory-port</B>を初期化する。
+これには2つのセマフォが生成され、<TT>:write</TT>動作が可能な状態になっている。
 </DD>
 </DL>
 <BR>
@@ -390,19 +391,19 @@ mutex-lock��mutex-unlock�́A�g�݂Ŏg�p����Ȃ���΂Ȃ�Ȃ��B
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1988"
-  HREF="jmanual-node106.html">�􉽊w�֐�</A>
+  HREF="jmanual-node106.html">幾何学関数</A>
 <B> Up:</B> <A NAME="tex2html1982"
-  HREF="jmanual-node91.html">�}���`�X���b�h</A>
+  HREF="jmanual-node91.html">マルチスレッド</A>
 <B> Previous:</B> <A NAME="tex2html1978"
-  HREF="jmanual-node104.html">�X���b�h����</A>
+  HREF="jmanual-node104.html">スレッド生成</A>
  &nbsp; <B>  <A NAME="tex2html1984"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1986"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

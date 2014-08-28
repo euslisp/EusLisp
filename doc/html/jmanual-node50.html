@@ -8,6 +8,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <HTML>
 <HEAD>
 <TITLE>Foreign String</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <META NAME="description" CONTENT="Foreign String">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1087"
-  HREF="jmanual-node51.html">�n�b�V���e�[�u��</A>
+  HREF="jmanual-node51.html">ハッシュテーブル</A>
 <B> Up:</B> <A NAME="tex2html1081"
-  HREF="jmanual-node45.html">��A�s��ƃe�[�u��</A>
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
 <B> Previous:</B> <A NAME="tex2html1075"
-  HREF="jmanual-node49.html">�����ƕ�����</A>
+  HREF="jmanual-node49.html">文字と文字列</A>
  &nbsp; <B>  <A NAME="tex2html1083"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1085"
@@ -60,36 +61,36 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <H2><A NAME="SECTION03075000000000000000">
 Foreign String</A>
 </H2>
-<B>foreign-string</B>�́AEusLisp�̃q�[�v�O�ɂ���o�C�g�x�N�g����1��ł���B
-���ʂ̕�����́A�����ƃo�C�g�̗���������I�u�W�F�N�g�ł��邪�A
-foreign-string�́A�����ƕ�����{�̂̃A�h���X�������Ă���B
-foreign-string�͕�����ł��邪�A
-�������̕����񂨂�ї�ɑ΂���֐��͓K�p�ł��Ȃ��B
-<B>length</B>�A<B>aref</B>�A<B>replace</B>�A<B>subseq</B>��<B>copy-seq</B>������
-foreign-string��F�����A 
-���̑��̊֐��̓K�p�̓N���b�V���̌����ƂȂ鋰�ꂪ����B
+<B>foreign-string</B>は、EusLispのヒープ外にあるバイトベクトルの1種である。
+普通の文字列は、長さとバイトの列を持ったオブジェクトであるが、
+foreign-stringは、長さと文字列本体のアドレスを持っている。
+foreign-stringは文字列であるが、
+いくつかの文字列および列に対する関数は適用できない。
+<B>length</B>、<B>aref</B>、<B>replace</B>、<B>subseq</B>と<B>copy-seq</B>だけが
+foreign-stringを認識し、 
+その他の関数の適用はクラッシュの原因となる恐れがある。
 
 <P>
-foreign-string�́A/dev/a??d??(??��32���邢��16)�̓���t�@�C���ŗ^������
-I/O��Ԃ��Q�Ƃ��邱�Ƃ�����B
-���̃f�o�C�X���o�C�g�A�N�Z�X�ɂ̂݉�������I/O��Ԃ̈��
-���蓖�Ă�ꂽ�ꍇ�A
-<B>replace</B>�́A�����o�C�g���ɗv�f���R�s�[����B
-��������large chunk��A���I�ɃA�N�Z�X�����Ƃ��A��r�I�ɒx�����삷��B�B
+foreign-stringは、/dev/a??d??(??は32あるいは16)の特殊ファイルで与えられる
+I/O空間を参照することがある。
+そのデバイスがバイトアクセスにのみ応答するI/O空間の一つに
+割り当てられた場合、
+<B>replace</B>は、いつもバイト毎に要素をコピーする。
+メモリのlarge chunkを連続的にアクセスしたとき、比較的に遅く動作する。。
 
 <P>
 
  <BR>
-<BR> <A NAME="11844"></A>
-<B>make-foreign-string</B> <EM>address length </EM>[�֐�]
+<BR> <A NAME="11841"></A>
+<B>make-foreign-string</B> <EM>address length </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>address</EM>�̈ʒu����<EM>length</EM>�o�C�g��
-<B>foreign-string</B>�̃C���X�^���X�����B
-�Ⴆ�΁A<TT>(make-foreign-string (unix:malloc 32) 32)</TT>�́A
-EusLisp�̃q�[�v�O�Ɉʒu����32�o�C�g���������Q�ƕ����Ƃ��č��B
+<EM>address</EM>の位置から<EM>length</EM>バイトの
+<B>foreign-string</B>のインスタンスを作る。
+例えば、<TT>(make-foreign-string (unix:malloc 32) 32)</TT>は、
+EusLispのヒープ外に位置する32バイトメモリを参照部分として作る。
 </DD>
 </DL>
 <BR>
@@ -100,8 +101,8 @@ EusLisp�̃q�[�v�O�Ɉʒu����32�o�C�g���������Q�ƕ����Ƃ��č��B
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

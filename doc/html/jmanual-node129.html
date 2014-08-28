@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Xwindow �C���^�[�t�F�[�X</TITLE>
-<META NAME="description" CONTENT="Xwindow �C���^�[�t�F�[�X">
+<TITLE>Xwindow インターフェース</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Xwindow インターフェース">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2338"
-  HREF="jmanual-node130.html">Xlib�̃O���[�o���ϐ��Ƃ��̑��֐�</A>
+  HREF="jmanual-node130.html">Xlibのグローバル変数とその他関数</A>
 <B> Up:</B> <A NAME="tex2html2332"
-  HREF="jmanual-node73.html">EusLisp �g��</A>
+  HREF="jmanual-node73.html">EusLisp 拡張</A>
 <B> Previous:</B> <A NAME="tex2html2326"
-  HREF="jmanual-node128.html">�A�j���[�V����</A>
+  HREF="jmanual-node128.html">アニメーション</A>
  &nbsp; <B>  <A NAME="tex2html2334"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2336"
@@ -58,42 +59,42 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H1><A NAME="SECTION04060000000000000000">
-Xwindow �C���^�[�t�F�[�X</A>
+Xwindow インターフェース</A>
 </H1>
 
-Euslisp���Xwindow�C���^�[�t�F�[�X�́A<TT>'eusx'</TT>�Ƃ���
-���O��Euslisp���Ăяo���ꂽ�Ƃ��A���s�\�ƂȂ�B
+Euslisp上のXwindowインターフェースは、<TT>'eusx'</TT>という
+名前でEuslispが呼び出されたとき、実行可能となる。
 <A NAME="tex2html19"
-  HREF="jmanual-footnode.html#foot38821"><SUP><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="footnote.png"></SUP></A>eusx�́A�N�����Ɋ��ϐ�"DISPLAY"���Q�Ƃ���Xserver�ɐڑ������݂邽�߁A
-������Xsever�Ɋ��ϐ�"DISPLAY"���������ݒ肳��Ă��Ȃ���΂Ȃ�Ȃ��B
+  HREF="jmanual-footnode.html#foot38818"><SUP><SPAN CLASS="arabic">3</SPAN></SUP></A>eusxは、起動時に環境変数"DISPLAY"を参照してXserverに接続を試みるため、
+自分のXseverに環境変数"DISPLAY"が正しく設定されていなければならない。
 
 <P>
-Euslisp�ɂ́A����3�̃��x����Xwindow�C���^�[�t�F�[�X����`����Ă���B
-(1) Xlib�֐�, (2) Xlib�N���X��(3) XToolKit�N���X�ł���B
-���̐߂Ǝ���XToolKit�̐߂ɋL�q����Ă���
-�S�Ă�Xwindow�֐��́A"X"�p�b�P�[�W�̒��Ɋ܂܂�Ă���B
-�����̊֐����́A����Xlib�֐�������ŏ���"X"���Ȃ����A�S�Ă̕�����啶����
-�ύX�������̂ƂȂ��Ă���B
-�Ⴆ��<TT>XdefaultGC</TT>��<TT>X:DEFAULTGC</TT>�Ɩ��t�����Ă��āA
-<TT>X:XDEFAULTGC</TT>�ł͂Ȃ��B
+Euslispには、次の3つのレベルのXwindowインターフェースが定義されている。
+(1) Xlib関数, (2) Xlibクラスと(3) XToolKitクラスである。
+この節と次のXToolKitの節に記述されている
+全てのXwindow関数は、"X"パッケージの中に含まれている。
+それらの関数名は、元のXlib関数名から最初の"X"を省いき、全ての文字を大文字に
+変更したものとなっている。
+例えば<TT>XdefaultGC</TT>は<TT>X:DEFAULTGC</TT>と名付けられていて、
+<TT>X:XDEFAULTGC</TT>ではない。
 
 <P>
-Xlib�֐��́AXwindow�V�X�e���ւ̒჌�x���C���^�[�t�F�[�X�ŁA
-foreign�֐��Ƃ��Ē�`����Ă���B
-������Xlib�֐��́A�p�����[�^�̌^�`�F�b�N���邢��
-�p�����[�^�̐��̃`�F�b�N�����s���Ă��Ȃ����߁A
-�\�����ӂ��Ďg�p���Ȃ���΂Ȃ�Ȃ��B
-�Ⴆ�΁A���ׂĂ�Xlib�̌Ăяo���ɂ�����Xserver�Ƃ̐ڑ����m�F���邽�߂�
-<TT>x:*display*</TT>���������Ƃ��ėv������B�����A�w�肵�Y�ꂽ�Ȃ�΁AXlib��
-�G���[��ʒm���A���̃v���Z�X�͎��ʁB
-���̂悤�ȕs�ւ�����A�I�u�W�F�N�g�w���̃C���^�[�t�F�[�X����邽�߂ɁA
-2�Ԃ߂̃��x���̃C���^�[�t�F�[�X�ł���Xlib�N���X��������Ă���B
-���̐߂ł́A����2�Ԃ߂̃��x���̃C���^�[�t�F�[�X�ɏœ_�𓖂Ă�B
-XToolKit�ƌĂ΂������ƍ����x����Xwindow���C�u�����́A���߂�
-��������Ă���B
+Xlib関数は、Xwindowシステムへの低レベルインターフェースで、
+foreign関数として定義されている。
+これらのXlib関数は、パラメータの型チェックあるいは
+パラメータの数のチェックを実行していないため、
+十分注意して使用しなければならない。
+例えば、すべてのXlibの呼び出しにおいてXserverとの接続を確認するために
+<TT>x:*display*</TT>を引き数として要求する。もし、指定し忘れたならば、Xlibは
+エラーを通知し、そのプロセスは死ぬ。
+このような不便を避け、オブジェクト指向のインターフェースを作るために、
+2番めのレベルのインターフェースであるXlibクラスが備わっている。
+この節では、この2番めのレベルのインターフェースに焦点を当てる。
+XToolKitと呼ばれるもっと高レベルのXwindowライブラリは、次節で
+説明されている。
 
 <P>
-���̐߂ɋL�q����Ă���N���X�́A�ȉ��̌p���̊K�w�������Ă���B
+この節に記述されているクラスは、以下の継承の階層を持っている。
 
 <P><PRE>
 propertied-object
@@ -113,19 +114,19 @@ propertied-object
 
 <UL CLASS="ChildLinks">
 <LI><A NAME="tex2html2339"
-  HREF="jmanual-node130.html">Xlib�̃O���[�o���ϐ��Ƃ��̑��֐�</A>
+  HREF="jmanual-node130.html">Xlibのグローバル変数とその他関数</A>
 <LI><A NAME="tex2html2340"
   HREF="jmanual-node131.html">Xwindow</A>
 <LI><A NAME="tex2html2341"
   HREF="jmanual-node132.html">Graphic Context</A>
 <LI><A NAME="tex2html2342"
-  HREF="jmanual-node133.html">�F�ƃJ���[�}�b�v</A>
+  HREF="jmanual-node133.html">色とカラーマップ</A>
 </UL>
 <!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

@@ -8,6 +8,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <HTML>
 <HEAD>
 <TITLE>symbol</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <META NAME="description" CONTENT="symbol">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html985"
-  HREF="jmanual-node44.html">�p�b�P�[�W</A>
+  HREF="jmanual-node44.html">パッケージ</A>
 <B> Up:</B> <A NAME="tex2html979"
-  HREF="jmanual-node42.html">symbol�ƃp�b�P�[�W</A>
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
 <B> Previous:</B> <A NAME="tex2html973"
-  HREF="jmanual-node42.html">symbol�ƃp�b�P�[�W</A>
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
  &nbsp; <B>  <A NAME="tex2html981"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html983"
@@ -60,45 +61,57 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <H2><A NAME="SECTION03061000000000000000">
 symbol</A>
 </H2>
-symbol�́A���ł��B��ł��邱�Ƃ��ۏ؂���A�p�b�P�[�W�Ɏ��e�����B
-1�̃p�b�P�[�W�̂Ȃ��ɁA���̑���
-symbol�Ƃ��Ă��Ȃ�print-name�������Ă��邱�Ƃ͂��邪�Asymbol���̂��R�s�[����邱�Ƃ͂Ȃ��B
-symbol�����[�_�ɓǂ܂��Ƃ��Asymbol�I�u�W�F�N�g�́A�����I�ɐ�������A
-1�̃p�b�P�[�W�Ɏ��e�����B
-���̃p�b�P�[�W�́A�p�b�P�[�W���ɃR�����i�F�j��t���������ړ���ɂ����
-�L�����Ƃ��ł���B
-���̂悤�ȃp�b�P�[�W�ړ��ꂪ�Ȃ��Ȃ�΁Asymbol��<B>lisp:*package*</B>
-�̒l�ɂ����ȃp�b�P�[�W�Ɏ��e�����B
-�S�Ă�symbol�́A1�̃z�[���p�b�P�[�W�������Ă���B
-����symbol�����̂悤�ȃz�[���p�b�P�[�W�������Ă��Ȃ��Ȃ�΁A
-���e����Ă��Ȃ�symbol�ƌ�����B
-���e����Ă��Ȃ�symbol�́A<B>gensym</B>��<B>make-symbol</B>�֐��ɂ����
-��邱�Ƃ��ł��A�\���̂Ƃ��́A"<TT>#:</TT>"�ړ��ꂪ������B
-������symbol�͎��e����Ă��Ȃ��̂ŁA���̂悤��2��symbol������
-print-name�������Ă����ꍇ�A���������Ƃ��ۏ؂���Ȃ��B
+symbolは、いつでも唯一であることが保証され、パッケージに収容される。
+1つのパッケージのなかに、その他の
+symbolとしておなじprint-nameを持っていることはあるが、symbol自体がコピーされることはない。
+symbolがリーダに読まれるとき、symbolオブジェクトは、自動的に生成され、
+1つのパッケージに収容される。
+そのパッケージは、パッケージ名にコロン（：）を付け加えた接頭語によって
+記すことができる。
+そのようなパッケージ接頭語がないならば、symbolは<B>lisp:*package*</B>
+の値にある主なパッケージに収容される。
+全てのsymbolは、1つのホームパッケージを持っている。
+もしsymbolがそのようなホームパッケージを持っていないならば、
+収容されていないsymbolと言われる。
+収容されていないsymbolは、<B>gensym</B>や<B>make-symbol</B>関数によって
+作ることができ、表示のときは、"<TT>#:</TT>"接頭語がつけられる。
+これらのsymbolは収容されていないので、そのような2つのsymbolが同じ
+print-nameを持っていた場合、等しいことが保証されない。
 
 <P>
-�ӂ��Alisp���[�_��symbol�ɏo������Ƃ��A���[�_�͎����I��
-symbol��print-name�������啶���ɕϊ�����B
-���������āA�Ⴆ��<TT>(symbol-name 'car)</TT>�Ɠ��͂����Ƃ���ƁA
-EusLisp�́A<TT>"car"</TT>�̑���<TT>"CAR"</TT>�Ɠ�����B
-<TT>(make-symbol "car")</TT>�́A<TT>car</TT>��<TT>CAR</TT>�̑���<SPAN CLASS="MATH">7#7</SPAN><TT>car</TT><SPAN CLASS="MATH">7#7</SPAN>
-��Ԃ��B
-�����A����������\�������symbol�����[�_�ɍ�点�����ꍇ�A
-<SPAN CLASS="MATH">32#32</SPAN>��<SPAN CLASS="MATH">33#33</SPAN>�̂悤�ȃG�X�P�[�v��p���邱�ƁB
+ふつう、lispリーダがsymbolに出会ったとき、リーダは自動的に
+symbolのprint-name文字列を大文字に変換する。
+したがって、例えば<TT>(symbol-name 'car)</TT>と入力したとすると、
+EusLispは、<TT>"car"</TT>の代りに<TT>"CAR"</TT>と答える。
+<TT>(make-symbol "car")</TT>は、<TT>car</TT>や<TT>CAR</TT>の代りに<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN><TT>car</TT><SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN>
+を返す。
+もし、小文字から構成されるsymbolをリーダに作らせたい場合、
+<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>や<SPAN CLASS="MATH"><IMG
+ WIDTH="27" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img33.png"
+ ALT="$\vert...\vert$"></SPAN>のようなエスケープを用いること。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="7779"></A>
-<B>symbolp</B> <EM>object </EM>[�֐�]
+<A NAME="7776"></A>
+<B>symbolp</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD>  <EM>object</EM>��
-�N���Xsymbol�����̃T�u�N���X�̃C���X�^���X�ł������Ȃ�΁AT��Ԃ��B
+<DD>  <EM>object</EM>が
+クラスsymbolかそのサブクラスのインスタンスであったならば、Tを返す。
 </DD>
 </DL>
 <BR>
@@ -106,14 +119,14 @@ EusLisp�́A<TT>"car"</TT>�̑���<TT>"CAR"</TT>�Ɠ�����B
 
 <P>
 
-<A NAME="7790"></A>
-<B>symbol-value</B> <EM>symbol </EM>[�֐�]
+<A NAME="7787"></A>
+<B>symbol-value</B> <EM>symbol </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>symbol</EM>�̓���l�𓾂�B���[�J���ϐ��l�́A���̊֐��ł͎��o��
-���Ƃ͂ł��Ȃ��B
+<EM>symbol</EM>の特殊値を得る。ローカル変数値は、この関数では取り出す
+ことはできない。
 </DD>
 </DL>
 <BR>
@@ -121,14 +134,14 @@ EusLisp�́A<TT>"car"</TT>�̑���<TT>"CAR"</TT>�Ɠ�����B
 
 <P>
 
-<A NAME="7801"></A>
-<B>symbol-function</B> <EM>symbol </EM>[�֐�]
+<A NAME="7798"></A>
+<B>symbol-function</B> <EM>symbol </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>symbol</EM>�̃O���[�o���֐���`�𓾂�B
-���[�J���֐��́A���̊֐��œ����Ȃ��B
+<EM>symbol</EM>のグローバル関数定義を得る。
+ローカル関数は、この関数で得られない。
 </DD>
 </DL>
 <BR>
@@ -136,13 +149,13 @@ EusLisp�́A<TT>"car"</TT>�̑���<TT>"CAR"</TT>�Ɠ�����B
 
 <P>
 
-<A NAME="7812"></A>
-<B>symbol-package</B> <EM>sym </EM>[�֐�]
+<A NAME="7809"></A>
+<B>symbol-package</B> <EM>sym </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>sym</EM>�����e����Ă���p�b�P�[�W��Ԃ��B
+<EM>sym</EM>が収容されているパッケージを返す。
 </DD>
 </DL>
 <BR>
@@ -150,17 +163,17 @@ EusLisp�́A<TT>"car"</TT>�̑���<TT>"CAR"</TT>�Ɠ�����B
 
 <P>
 
-<A NAME="7823"></A>
-<B>symbol-name</B> <EM>sym </EM>[�֐�]
+<A NAME="7820"></A>
+<B>symbol-name</B> <EM>sym </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>sym</EM>��print-name��Ԃ��B
-<B>symbol-name</B>�́A<B>string</B>���R�s�[����̂ɔ����āA
- pname��������R�s�[���Ȃ��B
-���������āA����<B>symbol-name</B>�ŕԂ��ꂽ�������ς���Ȃ��
-symbol�͕��ʂ̓����葱����ʂ��ăA�N�Z�X�s�\�ƂȂ�B
+<EM>sym</EM>のprint-nameを返す。
+<B>symbol-name</B>は、<B>string</B>がコピーするのに反して、
+ pname文字列をコピーしない。
+したがって、もし<B>symbol-name</B>で返された文字列を変えるならば
+symbolは普通の内部手続きを通してアクセス不可能となる。
 </DD>
 </DL>
 <BR>
@@ -168,24 +181,24 @@ symbol�͕��ʂ̓����葱����ʂ��ăA�N�Z�X�s�\�ƂȂ�B
 
 <P>
 
-<A NAME="7837"></A>
-<B>symbol-plist</B> <EM>sym </EM>[�֐�]
+<A NAME="7834"></A>
+<B>symbol-plist</B> <EM>sym </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>sym</EM>��property-list(plist)��Ԃ��B
-EusLisp��plist�́A�֘A���X�g�iassociation-list�j�Ɠ����l�ȏ�����^����B
-����́A�������Ƃ��̒l�̑g��_�łȂ����\���ł���B
-����́ACommon Lisp�̒�`���v������plist�i�������ƒl�̐��`���X�g�j
-�Ɣ�݊��ł���B
-EusLisp�ɂ����āAplist��symbol�ɓƓ��Ȃ��̂ł͂Ȃ��B
-<B>propertied-object</B>���p������N���X����h�������ǂ�ȃI�u�W�F�N�g���A
-property-list�������Ƃ��ł���B
-<B>propertied-object</B>�̒��̂�����plist��ݒ肵����A��肾�����肷�邽�߂ɁA
-<B>propertied-object-plist</B>�}�N���́A<B>symbol-plist</B>�̑���
-�g�p�����ׂ��ł���B
-�������Ȃ���A<B>get</B>��<B>putprop</B>�͂ǂ̃I�u�W�F�N�g�ɂ������B
+<EM>sym</EM>のproperty-list(plist)を返す。
+EusLispのplistは、関連リスト（association-list）と同じ様な書式を与える。
+それは、属性名とその値の組を点でつないだ構成である。
+これは、Common Lispの定義が要求するplist（属性名と値の線形リスト）
+と非互換である。
+EusLispにおいて、plistはsymbolに独特なものではない。
+<B>propertied-object</B>を継承するクラスから派生したどんなオブジェクトも、
+property-listを持つことができる。
+<B>propertied-object</B>の中のこれらのplistを設定したり、取りだしたりするために、
+<B>propertied-object-plist</B>マクロは、<B>symbol-plist</B>の代りに
+使用されるべきである。
+しかしながら、<B>get</B>と<B>putprop</B>はどのオブジェクトにも働く。
 </DD>
 </DL>
 <BR>
@@ -193,80 +206,41 @@ property-list�������Ƃ��ł���B
 
 <P>
 
-<A NAME="7854"></A>
-<B>boundp</B> <EM>symbol </EM>[�֐�]
+<A NAME="7851"></A>
+<B>boundp</B> <EM>symbol </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>symbol</EM>���O���[�o���Ȓl�������Ă��邩�ǂ�������������B
-<BR>����:���[�J���ϐ���I�u�W�F�N�g�ϐ��Ƃ��Ďg�p�����symbol��
-�����l�������Ă��邽�߁A<EM>boundp</EM>�͂����̃��[�J���ϐ���
-�i�[��Ԃ��������邱�Ƃ��ł��Ȃ��B
+<EM>symbol</EM>がグローバルな値を持っているかどうかを検査する。
+<BR>注意:ローカル変数やオブジェクト変数として使用されるsymbolは
+いつも値を持っているため、<EM>boundp</EM>はこれらのローカル変数の
+格納状態を検査することができない。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="7866"></A>
-<B>fboundp</B> <EM>symbol </EM>[�֐�]
+<A NAME="7863"></A>
+<B>fboundp</B> <EM>symbol </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>symbol</EM>���O���[�o���Ȋ֐���`�������Ă��邩�ǂ�������������B
+<EM>symbol</EM>がグローバルな関数定義を持っているかどうかを検査する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="7877"></A>
-<B>makunbound</B> <EM>symbol </EM>[�֐�]
+<A NAME="7874"></A>
+<B>makunbound</B> <EM>symbol </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>symbol</EM>�́A�i����l�������Ȃ��悤�Ɂj�����I��unbound�����B
-���[�J���ϐ��́A�����l�����蓖�Ă��A<B>makunbound</B>�ł��Ȃ��B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="7889"></A>
-<B>get</B> <EM>sym attribute </EM>[�֐�]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>sym</EM>��plist�̒���<EM>attribute</EM>�Ɋ֘A����l�����o���B
-<TT>(cdr (assoc <EM>attribute</EM> (symbol-plist <EM>sym</EM>)))</TT>�Ɠ����ł���B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="7904"></A>
-<B>putprop</B> <EM>sym val attribute </EM>[�֐�]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>putprop</B>�́A<B>setf</B>��<B>get</B>�̑g�ݍ����Œu��������ׂ��ł���B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="7917"></A>
-<B>remprop</B> <EM>sym attr </EM>[�֐�]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-�����l(<EM>attr</EM>)��<EM>sym</EM>�̑g��property-list����폜����B
+<EM>symbol</EM>は、（特殊値を持たないように）強制的にunboundされる。
+ローカル変数は、いつも値が割り当てられ、<B>makunbound</B>できない。
 </DD>
 </DL>
 <BR>
@@ -274,15 +248,38 @@ property-list�������Ƃ��ł���B
 
 <P>
 
-<A NAME="7929"></A>
-<B>setq</B> <EM>{var value}* </EM>[����]
+<A NAME="7886"></A>
+<B>get</B> <EM>sym attribute </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>value</EM>��<EM>var</EM>�Ɋ��蓖�Ă�B<EM>var</EM>�́Asymbol���_�Ōp�����g�ł���B
-<EM>var</EM>�́A���[�J���ϐ��E�I�u�W�F�N�g�ϐ��E����ϐ��̏��Ԃɂ��̖��O�̒�����T�����B
-�������A���m��special�Ɛ錾����ĂȂ����̂Ɍ���B
+<EM>sym</EM>のplistの中で<EM>attribute</EM>に関連する値を取り出す。
+<TT>(cdr (assoc <EM>attribute</EM> (symbol-plist <EM>sym</EM>)))</TT>と等価である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7901"></A>
+<B>putprop</B> <EM>sym val attribute </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>putprop</B>は、<B>setf</B>と<B>get</B>の組み合せで置き換えるべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7914"></A>
+<B>remprop</B> <EM>sym attr </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+属性値(<EM>attr</EM>)と<EM>sym</EM>の組をproperty-listから削除する。
 </DD>
 </DL>
 <BR>
@@ -290,15 +287,15 @@ property-list�������Ƃ��ł���B
 
 <P>
 
-<A NAME="7943"></A>
-<B>set</B> <EM>sym val </EM>[�֐�]
+<A NAME="7926"></A>
+<B>setq</B> <EM>{var value}* </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>val</EM>��<EM>sym</EM>�̓���l�Ƃ��Ċ��蓖�Ă�B
-<B>set</B>�́A���[�J���ϐ���I�u�W�F�N�g�ϐ��ɒl��
-�����Ă邱�Ƃ͂ł��Ȃ��B
+<EM>value</EM>を<EM>var</EM>に割り当てる。<EM>var</EM>は、symbolか点で継った組である。
+<EM>var</EM>は、ローカル変数・オブジェクト変数・特殊変数の順番にその名前の中から探される。
+ただし、明確にspecialと宣言されてないものに限る。
 </DD>
 </DL>
 <BR>
@@ -306,16 +303,15 @@ property-list�������Ƃ��ł���B
 
 <P>
 
-<A NAME="7956"></A>
-<B>defun</B> <EM>symbol [documentation] lambda-list . body </EM>[����]
+<A NAME="7940"></A>
+<B>set</B> <EM>sym val </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>symbol</EM>�ɃO���[�o���֐����`����B
-���[�J���֐����`���邽�߂ɂ́A<B>flet</B>��<B>labels</B>���g�p���邱�ƁB
-�����A<EM>documentation</EM>���^�����Ȃ��ꍇ�Alambda-list�ɏ�����Ă���
-�f�t�H���g��documentation�����񂪓��͂����B
+<EM>val</EM>を<EM>sym</EM>の特殊値として割り当てる。
+<B>set</B>は、ローカル変数やオブジェクト変数に値を
+割当てることはできない。
 </DD>
 </DL>
 <BR>
@@ -323,14 +319,16 @@ property-list�������Ƃ��ł���B
 
 <P>
 
-<A NAME="7970"></A>
-<B>defmacro</B> <EM>symbol [documentation] lambda-list . body </EM>[����]
+<A NAME="7953"></A>
+<B>defun</B> <EM>symbol [documentation] lambda-list . body </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�O���[�o���}�N�����`����B
-EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
+<EM>symbol</EM>にグローバル関数を定義する。
+ローカル関数を定義するためには、<B>flet</B>か<B>labels</B>を使用すること。
+もし、<EM>documentation</EM>が与えられない場合、lambda-listに書かれている
+デフォルトのdocumentation文字列が入力される。
 </DD>
 </DL>
 <BR>
@@ -338,15 +336,14 @@ EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
 
 <P>
 
-<A NAME="7980"></A>
-<B>defvar</B> <EM>var &amp;optional (init nil) doc </EM>[�}�N��]
+<A NAME="7967"></A>
+<B>defmacro</B> <EM>symbol [documentation] lambda-list . body </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<EM>var</EM>������l�������Ă���΁A<B>defvar</B> �͉������Ȃ��B
-����<EM>var</EM>��unbound�Ȃ�΁A<TT>special</TT>�Ƃ��Đ錾���A
-<EM>init</EM>�����̒l�Ƃ��Đݒ肷��B
+グローバルマクロを定義する。
+EusLispは、ローカルスコープマクロ定義の機能を持っていない。
 </DD>
 </DL>
 <BR>
@@ -354,14 +351,15 @@ EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
 
 <P>
 
-<A NAME="7995"></A>
-<B>defparameter</B> <EM>var init &amp;optional doc </EM>[�}�N��]
+<A NAME="7977"></A>
+<B>defvar</B> <EM>var &amp;optional (init nil) doc </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>defparameter</B>�́A<EM>var</EM>��<TT>special</TT>�Ƃ��Đ錾���A
-<EM>var</EM>�����ɒl�������Ă����Ƃ��Ă��A<EM>init</EM>�����̒l�Ƃ��Đݒ肷��B
+もし<EM>var</EM>が特殊値を持っていれば、<B>defvar</B> は何もしない。
+もし<EM>var</EM>がunboundならば、<TT>special</TT>として宣言し、
+<EM>init</EM>をその値として設定する。
 </DD>
 </DL>
 <BR>
@@ -369,19 +367,14 @@ EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
 
 <P>
 
-<A NAME="8010"></A>
-<B>defconstant</B> <EM>sym val &amp;optional doc </EM>[�}�N��]
+<A NAME="7992"></A>
+<B>defparameter</B> <EM>var init &amp;optional doc </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>defconstant</B>�́A<B>val</B>��<B>sym</B>�̓���l�Ƃ��Đݒ肷��B
-<B>defvar, defparameter</B>��<B>setq</B>�ƈႢ�A���̒l��
-<B>defconstant</B>�ł̂ݐݒ肳��A�����̏����ŕύX���邱�Ƃ��ł��Ȃ��B
-�����萔symbol�̒l���A�ύX����悤�Ƃ����Ȃ�΁A
-�G���[���Ԃ����B
-�������A<B>defconstant</B>�͈ȑO��
-�萔�l�ɏ㏑���ł��A�㏑�������ꍇ�͒��Ӄ��b�Z�[�W���o�͂����B
+<B>defparameter</B>は、<EM>var</EM>を<TT>special</TT>として宣言し、
+<EM>var</EM>が既に値を持っていたとしても、<EM>init</EM>をその値として設定する。
 </DD>
 </DL>
 <BR>
@@ -389,25 +382,19 @@ EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
 
 <P>
 
-<A NAME="8027"></A>
-<B>keywordp</B> <EM>obj </EM>[�֐�]
+<A NAME="8007"></A>
+<B>defconstant</B> <EM>sym val &amp;optional doc </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<EM>obj</EM>��symbol�ŁA���̃z�[���p�b�P�[�W��<B>KEYWORD</B>�̂Ƃ�T��Ԃ��B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="8039"></A>
-<B>constantp</B> <EM>symbol </EM>[�֐�]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-����symbol��<B>defconstant</B>�}�N���Œ萔�ɐ錾����Ă���Ƃ�T��Ԃ��B
+<B>defconstant</B>は、<B>val</B>を<B>sym</B>の特殊値として設定する。
+<B>defvar, defparameter</B>や<B>setq</B>と違い、その値は
+<B>defconstant</B>でのみ設定され、これらの書式で変更することができない。
+もし定数symbolの値が、変更されようとしたならば、
+エラーが返される。
+しかし、<B>defconstant</B>は以前の
+定数値に上書きでき、上書きした場合は注意メッセージが出力される。
 </DD>
 </DL>
 <BR>
@@ -415,13 +402,25 @@ EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
 
 <P>
 
-<A NAME="8050"></A>
-<B>documentation</B> <EM>sym &amp;optional type </EM>[�֐�]
+<A NAME="8024"></A>
+<B>keywordp</B> <EM>obj </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>sym</EM>�̂��߂ɒ񎦕�����(documentation string)�����o���B
+もし<EM>obj</EM>がsymbolで、そのホームパッケージが<B>KEYWORD</B>のときTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8036"></A>
+<B>constantp</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もしsymbolが<B>defconstant</B>マクロで定数に宣言されているときTを返す。
 </DD>
 </DL>
 <BR>
@@ -429,18 +428,13 @@ EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
 
 <P>
 
-<A NAME="8061"></A>
-<B>gensym</B> <EM>&amp;optional x </EM>[�֐�]
+<A NAME="8047"></A>
+<B>documentation</B> <EM>sym &amp;optional type </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>g001</TT>�̂悤�ȑO�u������ƕt��������g�ݍ��킹���V�������e����Ă��Ȃ�symbol�����B
-���e����ĂȂ�symbol�́Asymbol�Ɋ֘A����p�b�P�[�W���Ȃ����߁A�p�b�P�[�W�O�u��
-�̕�����#:�������B#:���O�ɂ�symbol�́A�ǂ߂Ȃ�symbol�ŁA
-���[�_�ł͂�����symbol�ւ̎Q�Ƃ��쐬���邱�Ƃ��ł��Ȃ��B
-<EM>x</EM>�́A�����������񂪉\�ŁA
-�ړ�(prefix)�C���f�b�N�X���ڔ�(suffix)�l�Ƃ��Ďg�p�����B
+<EM>sym</EM>のために提示文字列(documentation string)を取り出す。
 </DD>
 </DL>
 <BR>
@@ -448,16 +442,35 @@ EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
 
 <P>
 
-<A NAME="8073"></A>
-<B>gentemp</B> <EM>&amp;optional (prefix "T") (pkg *package*) </EM>[�֐�]
+<A NAME="8058"></A>
+<B>gensym</B> <EM>&amp;optional x </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>pkg</EM>�Ɏ��e�����V����symbol�����B
-�قƂ�ǂ̃A�v���P�[�V�����ɂ����āA<B>gensym</B>��<B>gentemp</B>�����D�܂��B
-�Ȃ��Ȃ�A���e����Ȃ�symbol�̕��������ɍ�邱�Ƃ��ł��A
-�K�[�x�[�W�R���N�g���\�ł��邽�߁B
+<TT>g001</TT>のような前置文字列と付属数字を組み合わせた新しい収容されていないsymbolを作る。
+収容されてないsymbolは、symbolに関連するパッケージがないため、パッケージ前置詞
+の部分に#:を示す。#:が前につくsymbolは、読めないsymbolで、
+リーダではこれらのsymbolへの参照を作成することができない。
+<EM>x</EM>は、整数か文字列が可能で、
+接頭(prefix)インデックスか接尾(suffix)値として使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8070"></A>
+<B>gentemp</B> <EM>&amp;optional (prefix "T") (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>に収容される新しいsymbolを作る。
+ほとんどのアプリケーションにおいて、<B>gensym</B>が<B>gentemp</B>よりも好まれる。
+なぜなら、収容されないsymbolの方が高速に作ることができ、
+ガーベージコレクトも可能であるため。
 </DD>
 </DL>
 <BR>
@@ -485,19 +498,19 @@ EusLisp�́A���[�J���X�R�[�v�}�N����`�̋@�\�������Ă��Ȃ��B
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html985"
-  HREF="jmanual-node44.html">�p�b�P�[�W</A>
+  HREF="jmanual-node44.html">パッケージ</A>
 <B> Up:</B> <A NAME="tex2html979"
-  HREF="jmanual-node42.html">symbol�ƃp�b�P�[�W</A>
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
 <B> Previous:</B> <A NAME="tex2html973"
-  HREF="jmanual-node42.html">symbol�ƃp�b�P�[�W</A>
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
  &nbsp; <B>  <A NAME="tex2html981"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html983"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

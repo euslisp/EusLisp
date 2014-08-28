@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�X���b�h����</TITLE>
-<META NAME="description" CONTENT="�X���b�h����">
+<TITLE>スレッド生成</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="スレッド生成">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1976"
-  HREF="jmanual-node105.html">����</A>
+  HREF="jmanual-node105.html">同期</A>
 <B> Up:</B> <A NAME="tex2html1970"
-  HREF="jmanual-node91.html">�}���`�X���b�h</A>
+  HREF="jmanual-node91.html">マルチスレッド</A>
 <B> Previous:</B> <A NAME="tex2html1964"
-  HREF="jmanual-node103.html">����x�̌v��</A>
+  HREF="jmanual-node103.html">並列度の計測</A>
  &nbsp; <B>  <A NAME="tex2html1972"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1974"
@@ -58,36 +59,36 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04024000000000000000">
-�X���b�h����</A>
+スレッド生成</A>
 </H2>
-�X���b�h�́A�v�Z�����蓖�Ă�P�ʂł���A����lisp������]������
-���߂̒P�ʂł���B
-Euslisp�̃X���b�h�́A<B>thread</B>�N���X�̃C���X�^���X�ɂ����
-�\�������B
-���̃I�u�W�F�N�g�́A���e��\������X���b�h�S�̂Ƃ������͂ނ���A
-���ۂɈ������ƌ��ʂ�n�����߂̃X���b�h��
-����|�[�g�ł���A�]�����n�߂���̂ł���B
+スレッドは、計算を割り当てる単位であり、普通lisp書式を評価する
+ための単位である。
+Euslispのスレッドは、<B>thread</B>クラスのインスタンスによって
+表現される。
+このオブジェクトは、内容を表現するスレッド全体というよりはむしろ、
+実際に引き数と結果を渡すためのスレッドの
+制御ポートであり、評価を始めるものである。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="25213"></A>
-<B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[�֐�]
+<A NAME="25210"></A>
+<B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>lsize</EM>���[�h��lisp�X�^�b�N��<EM>csize</EM>���[�h��C-�X�^�b�N������
-�X���b�h��<EM>num</EM>�����������A�V�X�e���̃X���b�h�v�[����
-�u���B
-�X���b�h�v�[�����̂��ׂẴX���b�h�́Asys:*threads*�ɑ��˂Ă���A
-<B>make-thread</B>���Ăяo���ꂽ�Ƃ��Ɋg�������B
-<B>thread</B>�֐��ɂ���āA�v�Z�̓X���b�h�v�[���̒��ŋ󂢂��X���b�h��
-�P�Ɋ��蓖�Ă���B
-���������āA�w�肳�ꂽ�v�Z���ǂ̃X���b�h�Ɋ��蓖�Ă��邩
-����ł��Ȃ����߁A�X���b�h�̃X�^�b�N�T�C�Y��ύX������@�������B
+<EM>lsize</EM>ワードのlispスタックと<EM>csize</EM>ワードのC-スタックを持つ
+スレッドを<EM>num</EM>個だけ生成し、システムのスレッドプールに
+置く。
+スレッドプール内のすべてのスレッドは、sys:*threads*に束ねてあり、
+<B>make-thread</B>が呼び出されたときに拡張される。
+<B>thread</B>関数によって、計算はスレッドプールの中で空いたスレッドの
+１つに割り当てられる。
+したがって、指定された計算がどのスレッドに割り当てられるか
+制御できないため、スレッドのスタックサイズを変更する方法が無い。
 </DD>
 </DL>
 <BR>
@@ -95,13 +96,13 @@ Euslisp�̃X���b�h�́A<B>thread</B>�N���X�̃C���X�^���X�ɂ����
 
 <P>
 
-<A NAME="25228"></A>
-<B>sys:*threads*</B> [�ϐ�]
+<A NAME="25225"></A>
+<B>sys:*threads*</B> [変数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>make-thread</B>�ɂ���č쐬���ꂽ���ׂẴX���b�h�̃��X�g�����B
+<B>make-thread</B>によって作成されたすべてのスレッドのリストを持つ。
 </DD>
 </DL>
 <BR>
@@ -109,17 +110,17 @@ Euslisp�̃X���b�h�́A<B>thread</B>�N���X�̃C���X�^���X�ɂ����
 
 <P>
 
-<A NAME="25239"></A>
-<B>sys::free-threads</B> [�֐�]
+<A NAME="25236"></A>
+<B>sys::free-threads</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�X���b�h�v�[�����̋󂢂��X���b�h�̃��X�g��Ԃ��B
-�����A���ʂ�NIL�Ȃ�΁A�X���b�h�ւ̃^�X�N�̐V�����t���͌��ݎ��s����Ă���
-�X���b�h�̂ǂꂩ�̕]�����I�����邩���邢��
-<B>make-thread</B>�ɂ���ăX���b�h�v�[���ɐV�����X���b�h�𐶐�����܂�
-��~�����B
+スレッドプール内の空いたスレッドのリストを返す。
+もし、結果がNILならば、スレッドへのタスクの新しい付託は現在実行されている
+スレッドのどれかの評価が終了するかあるいは
+<B>make-thread</B>によってスレッドプールに新しいスレッドを生成するまで
+停止される。
 </DD>
 </DL>
 <BR>
@@ -127,20 +128,20 @@ Euslisp�̃X���b�h�́A<B>thread</B>�N���X�̃C���X�^���X�ɂ����
 
 <P>
 
-<A NAME="25250"></A>
-<B>sys:thread</B> <EM>func &amp;rest args </EM>[�֐�]
+<A NAME="25247"></A>
+<B>sys:thread</B> <EM>func &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�X���b�h�v�[������󂢂��X���b�h��1���o���A
-<EM>(func . args)</EM>�̕]���̂��߂ɂ�������蓖�Ă�B
-<B>sys:thread</B>�́A<EM>args</EM>��W�J�������X�g��func��K�p
-���邪�A�֐��̓K�p���ʂ��󂯎��Ȃ����߁A
-�񓯊���<B>funcall</B>�Ƃ݂Ȃ����Ƃ��ł���B
-�ނ���A<B>sys:thread</B>��funcall�Ɋ��蓖�Ă�ꂽ�X���b�h
-�I�u�W�F�N�g��Ԃ��̂ŁA���ۂ̌��ʂ�<B>sys:wait-thread</B>�ɂ����
-�ォ�瓾�邱�Ƃ��ł���B
+スレッドプールから空いたスレッドを1つ取り出し、
+<EM>(func . args)</EM>の評価のためにそれを割り当てる。
+<B>sys:thread</B>は、<EM>args</EM>を展開したリストにfuncを適用
+するが、関数の適用結果を受け取らないため、
+非同期の<B>funcall</B>とみなすことができる。
+むしろ、<B>sys:thread</B>はfuncallに割り当てられたスレッド
+オブジェクトを返すので、実際の結果は<B>sys:wait-thread</B>によって
+後から得ることができる。
 </DD>
 </DL>
 <BR>
@@ -154,15 +155,15 @@ Euslisp�̃X���b�h�́A<B>thread</B>�N���X�̃C���X�^���X�ɂ����
 
 <P>
 
-<A NAME="25267"></A>
-<B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[�֐�]
+<A NAME="25264"></A>
+<B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�󂢂��X���b�h��1�Ɍv�Z�����蓖�Ă�B
-�X���b�h�́A<B>wait-thread</B>����邱�ƂȂ��ɁA
-�]�����I�������Ƃ��A�X���b�h�v�[���ɖ߂����B
+空いたスレッドの1つに計算を割り当てる。
+スレッドは、<B>wait-thread</B>されることなしに、
+評価が終了したとき、スレッドプールに戻される。
 </DD>
 </DL>
 <BR>
@@ -170,18 +171,18 @@ Euslisp�̃X���b�h�́A<B>thread</B>�N���X�̃C���X�^���X�ɂ����
 
 <P>
 
-<A NAME="25278"></A>
-<B>sys:wait-thread</B> <EM>thread </EM>[�֐�]
+<A NAME="25275"></A>
+<B>sys:wait-thread</B> <EM>thread </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>thread</EM>��<B>sys:thread</B>�֐��ɂ���ė^����ꂽfuncall�̕]����
-�I������̂�҂��A���̌��ʂ��󂯎��A�Ԃ��B
-�����A�X���b�h��<B>sys:thread</B>�ɂ���ĕ]�������蓖�Ă�ꂽ�Ȃ�΁A
-<B>sys:wait-thread</B>�́A�K�{�ł���B
-�Ȃ��Ȃ�A�X���b�h�͌��ʂ�]�����I���܂ŃX���b�h�v�[���ɖ߂�Ȃ�
-���߂ł���B
+<EM>thread</EM>に<B>sys:thread</B>関数によって与えられたfuncallの評価が
+終了するのを待ち、その結果を受け取り、返す。
+もし、スレッドに<B>sys:thread</B>によって評価が割り当てられたならば、
+<B>sys:wait-thread</B>は、必須である。
+なぜなら、スレッドは結果を転送し終わるまでスレッドプールに戻らない
+ためである。
 </DD>
 </DL>
 <BR>
@@ -189,17 +190,17 @@ Euslisp�̃X���b�h�́A<B>thread</B>�N���X�̃C���X�^���X�ɂ����
 
 <P>
 
-<A NAME="25292"></A>
-<B>sys:plist</B> <EM>&amp;rest forms </EM>[�}�N��]
+<A NAME="25289"></A>
+<B>sys:plist</B> <EM>&amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�قȂ����X���b�h�ɂ������<EM>forms</EM>��]�����A
-���ׂĂ̕]�����I������̂�҂��A
-���ʂ̃��X�g��Ԃ��B
-<B>sys:plist</B>�́A���X�g�����ꂽ���ꂼ���form���֐��Ăяo�������
-���Ƃ������āA<EM>parallel-list</EM>�Ƃ��Ă݂Ȃ���邾�낤�B
+異なったスレッドにより並列に<EM>forms</EM>を評価し、
+すべての評価が終了するのを待ち、
+結果のリストを返す。
+<B>sys:plist</B>は、リスト化されたそれぞれのformが関数呼び出しされる
+ことを除いて、<EM>parallel-list</EM>としてみなされるだろう。
 </DD>
 </DL>
 <BR>
@@ -209,8 +210,8 @@ Euslisp�̃X���b�h�́A<B>thread</B>�N���X�̃C���X�^���X�ɂ����
              <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

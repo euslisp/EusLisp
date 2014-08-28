@@ -8,6 +8,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <HTML>
 <HEAD>
 <TITLE>IOCTL</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <META NAME="description" CONTENT="IOCTL">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1667"
-  HREF="jmanual-node84.html">ƒL[ƒCƒ“ƒfƒbƒNƒXƒtƒ@ƒCƒ‹</A>
+  HREF="jmanual-node84.html">ã‚­ãƒ¼ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«</A>
 <B> Up:</B> <A NAME="tex2html1661"
-  HREF="jmanual-node76.html">UNIXƒVƒXƒeƒ€ƒR[ƒ‹</A>
+  HREF="jmanual-node76.html">UNIXã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ¼ãƒ«</A>
 <B> Previous:</B> <A NAME="tex2html1655"
-  HREF="jmanual-node82.html">’áƒŒƒxƒ‹ƒƒ‚ƒŠŠÇ—</A>
+  HREF="jmanual-node82.html">ä½ãƒ¬ãƒ™ãƒ«ãƒ¡ãƒ¢ãƒªç®¡ç†</A>
  &nbsp; <B>  <A NAME="tex2html1663"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1665"
@@ -60,67 +61,56 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <H3><A NAME="SECTION04012700000000000000">
 IOCTL</A>
 </H3>
-Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
-§Œä‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚ªAEuslisp‚ÍƒCƒ“ƒNƒ‹[ƒhƒtƒ@ƒCƒ‹‚ÌQÆ‚â–½—ßƒR[ƒh‚Æ‚µ‚Ä‚Ì
-ˆø”‚Ì˜_—˜a‚ğÈ—ª‚·‚é‚½‚ß‚ÉAŠÖ”‚Å”õ‚¦‚Ä‚¢‚éB
-Ú‚µ‚¢“à—e‚ÍAUnix‚Ì<TT>termio</TT>‚Ìƒ}ƒjƒ…ƒAƒ‹‚ğQÆ‚·‚é‚±‚ÆB
+Unixã¯ã‚¿ãƒ¼ãƒŸãƒŠãƒ«ãƒ‡ãƒã‚¤ã‚¹ã‚’<TT>ioctl</TT>ã®2ç•ªç›®ã®å¼•æ•°ã«å‘½ä»¤ã‚’è¨­å®šã™ã‚‹ã“ã¨ã«ã‚ˆã‚Š
+åˆ¶å¾¡ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ãŒã€Euslispã¯ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®å‚ç…§ã‚„å‘½ä»¤ã‚³ãƒ¼ãƒ‰ã¨ã—ã¦ã®
+å¼•æ•°ã®è«–ç†å’Œã‚’çœç•¥ã™ã‚‹ãŸã‚ã«ã€é–¢æ•°ã§å‚™ãˆã¦ã„ã‚‹ã€‚
+è©³ã—ã„å†…å®¹ã¯ã€Unixã®<TT>termio</TT>ã®ãƒãƒ‹ãƒ¥ã‚¢ãƒ«ã‚’å‚ç…§ã™ã‚‹ã“ã¨ã€‚
 
 <P>
-ƒ^[ƒ~ƒiƒ‹‚Ì“üo—Í§Œä‚É‚ÍATIOC*‚ÆTC*‚Æ‚¢‚¤2‚Â‚Ì–½—ßŒn‚ª‚ ‚éB
-©•ª‚ÌƒIƒyƒŒ[ƒeƒBƒ“ƒOƒVƒXƒeƒ€‚É‚±‚ê‚ç‚ÌŠÖ”‚ªÀŒ»‚³‚ê‚Ä‚¢‚é‚ª‚Ç‚¤‚©
-‚É‚Â‚¢‚Ä‹C‚ğ•t‚¯‚È‚³‚¢B
-Šî–{“I‚ÉABSDŒn‚ÍTIOC*‚Ì“üo—Í‚ğƒTƒ|[ƒg‚µASystem5Œn‚ªTC*‚ğ
-ƒTƒ|[ƒg‚µ‚Ä‚¢‚éB
+ã‚¿ãƒ¼ãƒŸãƒŠãƒ«ã®å…¥å‡ºåŠ›åˆ¶å¾¡ã«ã¯ã€TIOC*ã¨TC*ã¨ã„ã†2ã¤ã®å‘½ä»¤ç³»ãŒã‚ã‚‹ã€‚
+è‡ªåˆ†ã®ã‚ªãƒšãƒ¬ãƒ¼ãƒ†ã‚£ãƒ³ã‚°ã‚·ã‚¹ãƒ†ãƒ ã«ã“ã‚Œã‚‰ã®é–¢æ•°ãŒå®Ÿç¾ã•ã‚Œã¦ã„ã‚‹ãŒã©ã†ã‹
+ã«ã¤ã„ã¦æ°—ã‚’ä»˜ã‘ãªã•ã„ã€‚
+åŸºæœ¬çš„ã«ã€BSDç³»ã¯TIOC*ã®å…¥å‡ºåŠ›ã‚’ã‚µãƒãƒ¼ãƒˆã—ã€System5ç³»ãŒTC*ã‚’
+ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã‚‹ã€‚
 <DL>
 <DT></DT>
-<DD>SunOS 4.1 TIOC*‚ÆTC*‚Ì—¼•ûƒTƒ|[ƒg
+<DD>SunOS 4.1 TIOC*ã¨TC*ã®ä¸¡æ–¹ã‚µãƒãƒ¼ãƒˆ
 </DD>
 <DT></DT>
-<DD>Solaris2 TC*‚Ì‚İƒTƒ|[ƒg
+<DD>Solaris2 TC*ã®ã¿ã‚µãƒãƒ¼ãƒˆ
 </DD>
 <DT></DT>
-<DD>mips, ultrix? TIOC*‚Ì‚İƒTƒ|[ƒg
+<DD>mips, ultrix? TIOC*ã®ã¿ã‚µãƒãƒ¼ãƒˆ
 </DD>
 </DL>
 
  <BR>
 <BR> <P>
 
-<A NAME="22194"></A>
-<B>unix:tiocgetp</B> <EM>stream [sgttybuf] </EM>[ŠÖ”]
+<A NAME="22191"></A>
+<B>unix:tiocgetp</B> <EM>stream [sgttybuf] </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
-<DD> ƒpƒ‰ƒ[ƒ^‚ğ“¾‚éB
+<DD> ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å¾—ã‚‹ã€‚
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22204"></A>
-<B>unix:tiocsetp</B> <EM>stream sgttybuf </EM>[ŠÖ”]
+<A NAME="22201"></A>
+<B>unix:tiocsetp</B> <EM>stream sgttybuf </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
-<DD> ƒpƒ‰ƒ[ƒ^‚ğİ’è‚·‚éB
+<DD> ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¨­å®šã™ã‚‹ã€‚
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22214"></A>
-<B>unix:tiocsetn</B> <EM>stream [sgttybuf] </EM>[ŠÖ”]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22225"></A>
-<B>unix:tiocgetd</B> <EM>stream [sgttybuf] </EM>[ŠÖ”]
+<A NAME="22211"></A>
+<B>unix:tiocsetn</B> <EM>stream [sgttybuf] </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -130,41 +120,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22236"></A>
-<B>unix:tiocflush</B> <EM>stream </EM>[ŠÖ”]
-
-<DL COMPACT>
-<DT> 
-<DD> ƒoƒbƒtƒ@‚ğ‚·‚×‚Äo—Í‚·‚éB
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22246"></A>
-<B>unix:tiocgpgrp</B> <EM>stream integer </EM>[ŠÖ”]
-
-<DL COMPACT>
-<DT> 
-<DD> ƒvƒƒZƒX‚ÌƒOƒ‹[ƒvID‚ğ“¾‚éB
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22256"></A>
-<B>unix:tiocspgrp</B> <EM>stream integer </EM>[ŠÖ”]
-
-<DL COMPACT>
-<DT> 
-<DD> ƒvƒƒZƒX‚ÌƒOƒ‹[ƒvID‚ğİ’è‚·‚éB
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22266"></A>
-<B>unix:tiocoutq</B> <EM>stream integer </EM>[ŠÖ”]
+<A NAME="22222"></A>
+<B>unix:tiocgetd</B> <EM>stream [sgttybuf] </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -174,8 +131,41 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22277"></A>
-<B>unix:fionread</B> <EM>stream integer </EM>[ŠÖ”]
+<A NAME="22233"></A>
+<B>unix:tiocflush</B> <EM>stream </EM>[é–¢æ•°]
+
+<DL COMPACT>
+<DT> 
+<DD> ãƒãƒƒãƒ•ã‚¡ã‚’ã™ã¹ã¦å‡ºåŠ›ã™ã‚‹ã€‚
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22243"></A>
+<B>unix:tiocgpgrp</B> <EM>stream integer </EM>[é–¢æ•°]
+
+<DL COMPACT>
+<DT> 
+<DD> ãƒ—ãƒ­ã‚»ã‚¹ã®ã‚°ãƒ«ãƒ¼ãƒ—IDã‚’å¾—ã‚‹ã€‚
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22253"></A>
+<B>unix:tiocspgrp</B> <EM>stream integer </EM>[é–¢æ•°]
+
+<DL COMPACT>
+<DT> 
+<DD> ãƒ—ãƒ­ã‚»ã‚¹ã®ã‚°ãƒ«ãƒ¼ãƒ—IDã‚’è¨­å®šã™ã‚‹ã€‚
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22263"></A>
+<B>unix:tiocoutq</B> <EM>stream integer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -185,8 +175,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22288"></A>
-<B>unix:tiocsetc</B> <EM>stream buf </EM>[ŠÖ”]
+<A NAME="22274"></A>
+<B>unix:fionread</B> <EM>stream integer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -196,8 +186,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22299"></A>
-<B>unix:tioclbis</B> <EM>stream buf </EM>[ŠÖ”]
+<A NAME="22285"></A>
+<B>unix:tiocsetc</B> <EM>stream buf </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -207,8 +197,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22310"></A>
-<B>unix:tioclbic</B> <EM>stream buf </EM>[ŠÖ”]
+<A NAME="22296"></A>
+<B>unix:tioclbis</B> <EM>stream buf </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -218,8 +208,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22321"></A>
-<B>unix:tioclset</B> <EM>stream buf </EM>[ŠÖ”]
+<A NAME="22307"></A>
+<B>unix:tioclbic</B> <EM>stream buf </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -229,8 +219,19 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22332"></A>
-<B>unix:tioclget</B> <EM>stream buf </EM>[ŠÖ”]
+<A NAME="22318"></A>
+<B>unix:tioclset</B> <EM>stream buf </EM>[é–¢æ•°]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22329"></A>
+<B>unix:tioclget</B> <EM>stream buf </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -242,66 +243,55 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 
 <P>
 
-<A NAME="22343"></A>
-<B>unix:tcseta</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22340"></A>
+<B>unix:tcseta</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
-<DD> ƒ^[ƒ~ƒiƒ‹ƒpƒ‰ƒ[ƒ^‚ğ‚·‚®‚Éİ’è‚·‚éB
+<DD> ã‚¿ãƒ¼ãƒŸãƒŠãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ã™ãã«è¨­å®šã™ã‚‹ã€‚
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22353"></A>
-<B>unix:tcsets</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22350"></A>
+<B>unix:tcsets</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
-<DD> ƒ^[ƒ~ƒiƒ‹ƒpƒ‰ƒ[ƒ^‚ğİ’è‚·‚éB
+<DD> ã‚¿ãƒ¼ãƒŸãƒŠãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¨­å®šã™ã‚‹ã€‚
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22363"></A>
-<B>unix:tcsetsw</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22360"></A>
+<B>unix:tcsetsw</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
-<DD> o—Í‚Æ‚µ‚Ä—ñ‚ğ‚È‚·‘S‚Ä‚Ì•¶š‚ğ“]‘—‚µ‚½
-ŒãAƒ^[ƒ~ƒiƒ‹ƒpƒ‰ƒ[ƒ^‚ğİ’è‚·‚éB
+<DD> å‡ºåŠ›ã¨ã—ã¦åˆ—ã‚’ãªã™å…¨ã¦ã®æ–‡å­—ã‚’è»¢é€ã—ãŸ
+å¾Œã€ã‚¿ãƒ¼ãƒŸãƒŠãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¨­å®šã™ã‚‹ã€‚
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22373"></A>
-<B>unix:tcsetsf</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22370"></A>
+<B>unix:tcsetsf</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
-<DD> o—Í‚Æ‚µ‚Ä—ñ‚ğ‚È‚·‘S‚Ä‚Ì•¶š‚ğ“]‘—‚µA
-“ü—Í‚Æ‚µ‚Ä—ñ‚ğ‚È‚·‘S‚Ä‚Ì•¶š—ñ‚ğ”pŠü‚µ‚½
-ŒãAƒ^[ƒ~ƒiƒ‹ƒpƒ‰ƒ[ƒ^‚ğİ’è‚·‚éB
+<DD> å‡ºåŠ›ã¨ã—ã¦åˆ—ã‚’ãªã™å…¨ã¦ã®æ–‡å­—ã‚’è»¢é€ã—ã€
+å…¥åŠ›ã¨ã—ã¦åˆ—ã‚’ãªã™å…¨ã¦ã®æ–‡å­—åˆ—ã‚’å»ƒæ£„ã—ãŸ
+å¾Œã€ã‚¿ãƒ¼ãƒŸãƒŠãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¨­å®šã™ã‚‹ã€‚
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22383"></A>
-<B>unix:tiocsetc</B> <EM>stream buffer </EM>[ŠÖ”]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22394"></A>
-<B>unix:tcsetaf</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22380"></A>
+<B>unix:tiocsetc</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -311,8 +301,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22405"></A>
-<B>unix:tcsetaw</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22391"></A>
+<B>unix:tcsetaf</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -322,8 +312,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22416"></A>
-<B>unix:tcgeta</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22402"></A>
+<B>unix:tcsetaw</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -333,8 +323,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22427"></A>
-<B>unix:tcgets</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22413"></A>
+<B>unix:tcgeta</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -344,8 +334,8 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22438"></A>
-<B>unix:tcgetattr</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22424"></A>
+<B>unix:tcgets</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -355,8 +345,19 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <BR>
 <BR>
 
-<A NAME="22449"></A>
-<B>unix:tcsetattr</B> <EM>stream buffer </EM>[ŠÖ”]
+<A NAME="22435"></A>
+<B>unix:tcgetattr</B> <EM>stream buffer </EM>[é–¢æ•°]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22446"></A>
+<B>unix:tcsetattr</B> <EM>stream buffer </EM>[é–¢æ•°]
 
 <DL COMPACT>
 <DT> 
@@ -388,19 +389,19 @@ Unix‚Íƒ^[ƒ~ƒiƒ‹ƒfƒoƒCƒX‚ğ<TT>ioctl</TT>‚Ì2”Ô–Ú‚Ìˆø”‚É–½—ß‚ğİ’è‚·‚é‚±‚Æ‚É‚æ‚è
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1667"
-  HREF="jmanual-node84.html">ƒL[ƒCƒ“ƒfƒbƒNƒXƒtƒ@ƒCƒ‹</A>
+  HREF="jmanual-node84.html">ã‚­ãƒ¼ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«</A>
 <B> Up:</B> <A NAME="tex2html1661"
-  HREF="jmanual-node76.html">UNIXƒVƒXƒeƒ€ƒR[ƒ‹</A>
+  HREF="jmanual-node76.html">UNIXã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ¼ãƒ«</A>
 <B> Previous:</B> <A NAME="tex2html1655"
-  HREF="jmanual-node82.html">’áƒŒƒxƒ‹ƒƒ‚ƒŠŠÇ—</A>
+  HREF="jmanual-node82.html">ä½ãƒ¬ãƒ™ãƒ«ãƒ¡ãƒ¢ãƒªç®¡ç†</A>
  &nbsp; <B>  <A NAME="tex2html1663"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1665"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

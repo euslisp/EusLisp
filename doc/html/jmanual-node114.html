@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>���ƃG�b�W</TITLE>
-<META NAME="description" CONTENT="���ƃG�b�W">
+<TITLE>線とエッジ</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="線とエッジ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2126"
-  HREF="jmanual-node115.html">���ʂƖ�</A>
+  HREF="jmanual-node115.html">平面と面</A>
 <B> Up:</B> <A NAME="tex2html2120"
-  HREF="jmanual-node112.html">�􉽊w���f�����O</A>
+  HREF="jmanual-node112.html">幾何学モデリング</A>
 <B> Previous:</B> <A NAME="tex2html2114"
-  HREF="jmanual-node113.html">��X�̊􉽊w�֐�</A>
+  HREF="jmanual-node113.html">種々の幾何学関数</A>
  &nbsp; <B>  <A NAME="tex2html2122"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2124"
@@ -58,23 +59,23 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04042000000000000000">
-���ƃG�b�W</A>
+線とエッジ</A>
 </H2>
 
 <P>
-���_�̏��Ԃ�G�b�W�̏��Ԃ̌����́A<B>body</B>���O���猩���Ƃ��ɔ����v����
-�ɐ��񂷂�悤�ɒ�`�����B
-<TT>pvertex</TT>��<TT>nvertex</TT>��<TT>pface</TT>��<TT>nface</TT>�́A
-<TT>pface</TT>���O���猩���Ƃ��G�b�W�̍����Ɉʒu���Ă���Ƃ��A
-<TT>pvertex</TT>����<TT>nvertex</TT>�Ɍ����������ɃG�b�W���`����B
+頂点の順番やエッジの順番の向きは、<B>body</B>を外から見たときに反時計方向
+に整列するように定義される。
+<TT>pvertex</TT>や<TT>nvertex</TT>や<TT>pface</TT>や<TT>nface</TT>は、
+<TT>pface</TT>が外から見たときエッジの左側に位置しているとき、
+<TT>pvertex</TT>から<TT>nvertex</TT>に向かう方向にエッジを定義する。
 
 <P>
 
  <BR>
 <BR> <P>
 	<BR> 
-<A NAME="31094"></A>
-<BIG CLASS="XLARGE"><B>line </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="31091"></A>
+<BIG CLASS="XLARGE"><B>line </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 ((pvert :type floatvector)(nvert :type floatvector)) 
 </TT></PRE>
@@ -83,9 +84,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DL COMPACT>
 <DT> 
-<DD><TT>pvert</TT>��<TT>nvert</TT>�̏��ʂ�������`����B
-�����́A<EM>pvert</EM>����<EM>nvert</EM>�Ɍ��������������B
-<TT>t <SPAN CLASS="MATH">60#60</SPAN> pvert +(1-t)nvert</TT>
+<DD><TT>pvert</TT>と<TT>nvert</TT>の上を通る線分を定義する。
+線分は、<EM>pvert</EM>から<EM>nvert</EM>に向かう方向を持つ。
+<TT>t <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img60.png"
+ ALT="$\cdot$"></SPAN> pvert +(1-t)nvert</TT>
 </DD>
 </DL>
 <BR>
@@ -93,12 +97,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="31116"></A>
-<B>:vertices</B> [���\�b�h]
+<A NAME="31113"></A>
+<B>:vertices</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <TT>pvert</TT>��<TT>nvert</TT>�̃��X�g��Ԃ��B
+<DD> <TT>pvert</TT>と<TT>nvert</TT>のリストを返す。
 </DD>
 </DL>
 <BR>
@@ -106,54 +110,57 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="31128"></A>
-<B>:point</B> <EM>p </EM>[���\�b�h]
+<A NAME="31125"></A>
+<B>:point</B> <EM>p </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̐����̏��<EM>p</EM>�p�����[�^�Ŏ������ʒu��3�����̃x�N�g����Ԃ��B
-<TT>p <SPAN CLASS="MATH">60#60</SPAN> pvert + (1-p)nvert</TT>
+この線分の上で<EM>p</EM>パラメータで示される位置の3次元のベクトルを返す。
+<TT>p <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img60.png"
+ ALT="$\cdot$"></SPAN> pvert + (1-p)nvert</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31140"></A>
-<B>:parameter</B> <EM>point </EM>[���\�b�h]
+<A NAME="31137"></A>
+<B>:parameter</B> <EM>point </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̐����̏��<EM>point</EM>�ɑ΂���p�����[�^���v�Z����B
-����́A<B>:point</B>���\�b�h�̋t���\�b�h�ł���B
+この線分の上の<EM>point</EM>に対するパラメータを計算する。
+これは、<B>:point</B>メソッドの逆メソッドである。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31152"></A>
-<B>:direction</B> [���\�b�h]
+<A NAME="31149"></A>
+<B>:direction</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>pvert</TT>����<TT>nvert</TT>�֌��������K���x�N�g����Ԃ��B
+<TT>pvert</TT>から<TT>nvert</TT>へ向かう正規化ベクトルを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31164"></A>
-<B>:end-point</B> <EM>v </EM>[���\�b�h]
+<A NAME="31161"></A>
+<B>:end-point</B> <EM>v </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̐����̑��̒[�_��Ԃ��B���Ȃ킿�A
-����<EM>v</EM>��<TT>pvert</TT>�ɓ������Ƃ��A<TT>nvert</TT>��Ԃ��B
-����<EM>v</EM>��<TT>nvert</TT>�ɓ������Ƃ��A<TT>pvert</TT>��Ԃ��B
-����ȊO�̂Ƃ��ANIL��Ԃ��B
+この線分の他の端点を返す。すなわち、
+もし<EM>v</EM>が<TT>pvert</TT>に等しいとき、<TT>nvert</TT>を返す。
+もし<EM>v</EM>が<TT>nvert</TT>に等しいとき、<TT>pvert</TT>を返す。
+それ以外のとき、NILを返す。
 </DD>
 </DL>
 <BR>
@@ -161,52 +168,52 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="31180"></A>
-<B>:box</B> [���\�b�h]
+<A NAME="31177"></A>
+<B>:box</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̐�����<B>bounding-box</B>���쐬���A�Ԃ��B
+<DD> この線分の<B>bounding-box</B>を作成し、返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31191"></A>
-<B>:boxtest</B> <EM>box </EM>[���\�b�h]
+<A NAME="31188"></A>
+<B>:boxtest</B> <EM>box </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>box</EM>�Ƃ��̐�����<B>bounding-box</B>�̋��ʕ������`�F�b�N����B
+<EM>box</EM>とこの線分の<B>bounding-box</B>の共通部分をチェックする。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31203"></A>
-<B>:length</B> [���\�b�h]
+<A NAME="31200"></A>
+<B>:length</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̐����̒�����Ԃ��B
+<DD> この線分の長さを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31213"></A>
-<B>:distance</B> <EM>point-or-line </EM>[���\�b�h]
+<A NAME="31210"></A>
+<B>:distance</B> <EM>point-or-line </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̐�����<EM>point-or-line</EM>�̊Ԃ̋�����Ԃ��B
-�����_���炱�̐����ɂ��낵�������̑���
-<TT>pvert</TT>��<TT>nvert</TT>�̊ԂɂȂ���΁A
-�ł��߂��[�_�܂ł̋�����Ԃ��B
-���̃��\�b�h���g�����Ƃɂ��A2�̐����̊Ԃ̋������v�Z���邱�Ƃ��ł��邽�߁A
-2�̉~���̊Ԃ̊����e�X�g���邱�Ƃ��ł���B
+この線分と<EM>point-or-line</EM>の間の距離を返す。
+もし点からこの線分におろした垂線の足が
+<TT>pvert</TT>と<TT>nvert</TT>の間になければ、
+最も近い端点までの距離を返す。
+このメソッドを使うことにより、2つの線分の間の距離を計算することができるため、
+2つの円柱の間の干渉をテストすることができる。
 </DD>
 </DL>
 <BR>
@@ -214,126 +221,126 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="31226"></A>
-<B>:foot</B> <EM>point </EM>[���\�b�h]
+<A NAME="31223"></A>
+<B>:foot</B> <EM>point </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>point</EM>���炱�̐����ւ��낵�������̑��ł���_�������p�����[�^
-��������B
+<EM>point</EM>からこの線分へおろした垂線の足である点を示すパラメータ
+を見つける。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31237"></A>
-<B>:common-perpendicular</B> <EM>l </EM>[���\�b�h]
+<A NAME="31234"></A>
+<B>:common-perpendicular</B> <EM>l </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̐�����<EM>l</EM>�Ƃɐ����Ȑ����������A2��3�����x�N�g���̃��X�g
-�Ƃ��ĕԂ��B
-2�̐��������s�ŋ��ʂȐ�������ӂɌ���ł��Ȃ��Ƃ��A<TT>:parallel</TT>��Ԃ��B
+この線分と<EM>l</EM>とに垂直な線分を見つけ、2つの3次元ベクトルのリスト
+として返す。
+2つの線分が平行で共通な垂線が一意に決定できないとき、<TT>:parallel</TT>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31249"></A>
-<B>:project</B> <EM>plane </EM>[���\�b�h]
+<A NAME="31246"></A>
+<B>:project</B> <EM>plane </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>plane</EM>��<TT>pvert</TT>��<TT>nvert</TT>�𓊉e����2�̓_�̃��X�g��Ԃ��B
+<EM>plane</EM>に<TT>pvert</TT>と<TT>nvert</TT>を投影した2つの点のリストを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31262"></A>
-<B>:collinear-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[���\�b�h]
+<A NAME="31259"></A>
+<B>:collinear-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>collinear-p</B>��p����<EM>torelance</EM>�̌덷�͈͓���<EM>point</EM>�����̐�����
-�꒼����ɂ��邩�ǂ������`�F�b�N����B
-�����A<EM>point</EM>�����̐����ƈ꒼����ɂ���Ƃ��A���̐����̂��̓_��
-�΂���p�����[�^��Ԃ��B�����łȂ���΁ANIL��Ԃ��B
+<B>collinear-p</B>を用いて<EM>torelance</EM>の誤差範囲内で<EM>point</EM>がこの線分と
+一直線上にあるかどうかをチェックする。
+もし、<EM>point</EM>がこの線分と一直線上にあるとき、その線分のその点に
+対するパラメータを返す。そうでなければ、NILを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31276"></A>
-<B>:on-line-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[���\�b�h]
+<A NAME="31273"></A>
+<B>:on-line-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>point</EM>�����̐����ƈ꒼����ɂ���A<TT>pvert</TT>��<TT>nvert</TT>�Ƃ̊Ԃ�
-���邩�ǂ������`�F�b�N����B
+<EM>point</EM>がこの線分と一直線上にあり、<TT>pvert</TT>と<TT>nvert</TT>との間に
+あるかどうかをチェックする。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31289"></A>
-<B>:collinear-line</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[���\�b�h]
+<A NAME="31286"></A>
+<B>:collinear-line</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>ln</EM>�����̐����Ƌ��ʐ���ɂ���Ƃ��A���Ȃ킿<EM>ln</EM>�̗��[�����̐������
-����Ƃ�T��Ԃ��A�����łȂ��Ƃ�NIL��Ԃ��B
+<EM>ln</EM>がこの線分と共通線上にあるとき、すなわち<EM>ln</EM>の両端がこの線分上に
+あるときTを返し、そうでないときNILを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31301"></A>
-<B>:coplanar</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[���\�b�h]
+<A NAME="31298"></A>
+<B>:coplanar</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>ln</EM>�Ƃ��̐��������ʕ��ʏ�ɂ��邩�ǂ������`�F�b�N����B
-���̐����̗��[��<EM>ln</EM>��1�̒[�_�ŕ��ʂ���`�����B
-�����A<EM>ln</EM>�̑��̒[�_�����̕��ʏ�ɂ���Ƃ��AT��Ԃ��B
-�����łȂ���΁ANIL��Ԃ��B
+<EM>ln</EM>とこの線分が共通平面上にあるかどうかをチェックする。
+この線分の両端と<EM>ln</EM>の1つの端点で平面が定義される。
+もし、<EM>ln</EM>の他の端点がその平面上にあるとき、Tを返す。
+そうでなければ、NILを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31314"></A>
-<B>:intersection</B> <EM>ln </EM>[���\�b�h]
+<A NAME="31311"></A>
+<B>:intersection</B> <EM>ln </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>ln</EM>�́A���̐����Ƌ��ʕ��ʏ�ɂ���Ƃ���B
-<B>:intersection</B>�́A�����2�̐����̌�_�ɑ΂���2�̃p�����[�^��
-���X�g��Ԃ��B
-�p�����[�^��0����1�܂ł̎����ł���B����́A���[�ŋ�؂�ꂽ
-�����̓����_�������B2�̐������s�ł���Ƃ�NIL��Ԃ��B
+<EM>ln</EM>は、この線分と共通平面上にあるとする。
+<B>:intersection</B>は、これら2つの線分の交点に対する2つのパラメータの
+リストを返す。
+パラメータは0から1までの実数である。これは、両端で区切られた
+線分の内分点を示す。2つの線が平行であるときNILを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31326"></A>
-<B>:intersect-line</B> <EM>ln </EM>[���\�b�h]
+<A NAME="31323"></A>
+<B>:intersect-line</B> <EM>ln </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>ln</EM>�́A���̐����Ƌ��ʕ��ʏ�ɂ���Ƃ���B
-��_�̃p�����[�^��<TT>:parallel, :collinear</TT>��<TT>:intersect</TT>�̂悤��
-�V���{�����Ƌ��ɕԂ����B
+<EM>ln</EM>は、この線分と共通平面上にあるとする。
+交点のパラメータが<TT>:parallel, :collinear</TT>や<TT>:intersect</TT>のような
+シンボル情報と共に返される。
 </DD>
 </DL>
 <BR>
@@ -341,8 +348,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 	<BR> 
-<A NAME="31340"></A>
-<BIG CLASS="XLARGE"><B>edge </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="31337"></A>
+<BIG CLASS="XLARGE"><B>edge </B></BIG> [クラス]  <PRE><TT>
   :super   <B>line</B> 
 <BR>  :slots 		 (pface nface 
 <BR>(angle :type float) 
@@ -353,13 +360,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DL COMPACT>
 <DT> 
-<DD>2�̖ʂ̊Ԃ̌��������Ƃ��Ē�`�����G�b�W��\������B
-<TT>pface</TT>��<TT>nface</TT>���X���b�g�̒��ɒ�`����Ă��邪�A
-�����̉��߂͂��̃G�b�W�̕����ɂ���đ��ΓI�Ɍ��܂�B
-�Ⴆ�΁A���̃G�b�W��<TT>pvert</TT>����<TT>nvert</TT>�Ɍ������Ă����
-�l�����Ƃ��A<TT>pface</TT>��������pface��\�����Ă���B
-���̂��߁A<B>:pface</B>��<B>:nface</B>���\�b�h�œK���Ȗʂ�I�����邽�߂ɂ́A
-pvert��nvert�̉��߂�^���Ȃ���΂Ȃ�Ȃ��B
+<DD>2つの面の間の交差線分として定義されるエッジを表現する。
+<TT>pface</TT>と<TT>nface</TT>がスロットの中に定義されているが、
+それらの解釈はこのエッジの方向によって相対的に決まる。
+例えば、このエッジが<TT>pvert</TT>から<TT>nvert</TT>に向かっていると
+考えたとき、<TT>pface</TT>が正しいpfaceを表現している。
+そのため、<B>:pface</B>や<B>:nface</B>メソッドで適当な面を選択するためには、
+pvertとnvertの解釈を与えなければならない。
 
 </DD>
 </DL>
@@ -368,14 +375,14 @@ pvert��nvert�̉��߂�^���Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="31364"></A>
-<B>make-line</B> <EM>point1 point2 </EM>[�֐�]
+<A NAME="31361"></A>
+<B>make-line</B> <EM>point1 point2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>point1</EM>��<TT>pvert</TT>�Ƃ��A<EM>point2</EM>��<TT>nvert</TT>�Ƃ���
-<B>line</B>�̃C���X�^���X�����B
+<EM>point1</EM>を<TT>pvert</TT>とし、<EM>point2</EM>を<TT>nvert</TT>とする
+<B>line</B>のインスタンスを作る。
 </DD>
 </DL>
 <BR>
@@ -383,13 +390,13 @@ pvert��nvert�̉��߂�^���Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="31379"></A>
-<B>:pvertex</B> <EM>pf </EM>[���\�b�h]
+<A NAME="31376"></A>
+<B>:pvertex</B> <EM>pf </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>pf</EM>�����̃G�b�W��<TT>pface</TT>�Ƃ݂Ȃ���<TT>pvertex</TT>��Ԃ��B
+<EM>pf</EM>をこのエッジの<TT>pface</TT>とみなした<TT>pvertex</TT>を返す。
 </DD>
 </DL>
 <BR>
@@ -397,13 +404,13 @@ pvert��nvert�̉��߂�^���Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="31392"></A>
-<B>:nvertex</B> <EM>pf </EM>[���\�b�h]
+<A NAME="31389"></A>
+<B>:nvertex</B> <EM>pf </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>pf</EM>�����̃G�b�W��<TT>pface</TT>�Ƃ݂Ȃ���<TT>nvertex</TT>��Ԃ��B
+<EM>pf</EM>をこのエッジの<TT>pface</TT>とみなした<TT>nvertex</TT>を返す。
 </DD>
 </DL>
 <BR>
@@ -411,73 +418,73 @@ pvert��nvert�̉��߂�^���Ȃ���΂Ȃ�Ȃ��B
 
 <P>
 
-<A NAME="31405"></A>
-<B>:body</B> [���\�b�h]
+<A NAME="31402"></A>
+<B>:body</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̃G�b�W���`����<B>body</B>�I�u�W�F�N�g��Ԃ��B
+<DD> このエッジを定義する<B>body</B>オブジェクトを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31416"></A>
-<B>:pface</B> <EM>pv nv </EM>[���\�b�h]
+<A NAME="31413"></A>
+<B>:pface</B> <EM>pv nv </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���z�I��<EM>pv</EM>��<EM>nv</EM>�����̃G�b�W��
-pvert��nvert�ɉ��߂����Ƃ���pface��Ԃ��B
+<DD> 仮想的に<EM>pv</EM>と<EM>nv</EM>をこのエッジの
+pvertとnvertに解釈したときのpfaceを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31428"></A>
-<B>:nface</B> <EM>pv nv </EM>[���\�b�h]
+<A NAME="31425"></A>
+<B>:nface</B> <EM>pv nv </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���z�I��<EM>pv</EM>��<EM>nv</EM>�����̃G�b�W��
-pvert��nvert�ɉ��߂����Ƃ���nface��Ԃ��B
+<DD> 仮想的に<EM>pv</EM>と<EM>nv</EM>をこのエッジの
+pvertとnvertに解釈したときのnfaceを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31440"></A>
-<B>:binormal</B> <EM>aface </EM>[���\�b�h]
+<A NAME="31437"></A>
+<B>:binormal</B> <EM>aface </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃G�b�W��<EM>aface</EM>�̐��K���x�N�g���ɐ����ȕ����x�N�g����������B
+このエッジと<EM>aface</EM>の正規化ベクトルに垂直な方向ベクトルを見つける。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31451"></A>
-<B>:angle</B> [���\�b�h]
+<A NAME="31448"></A>
+<B>:angle</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃G�b�W�łȂ�����2�̖ʂ̊Ԃ̊p�x��Ԃ��B
+このエッジでつながった2つの面の間の角度を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31461"></A>
-<B>:set-angle</B> [���\�b�h]
+<A NAME="31458"></A>
+<B>:set-angle</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃G�b�W�łȂ�����2�̖ʂ̊Ԃ̊p�x���v�Z���A
-�����<TT>angle</TT>�X���b�g�ɒu���B
+このエッジでつながった2つの面の間の角度を計算し、
+それを<TT>angle</TT>スロットに置く。
 </DD>
 </DL>
 <BR>
@@ -485,8 +492,8 @@ pvert��nvert�ɉ��߂����Ƃ���nface��Ԃ��B
 
 <P>
 
-<A NAME="31472"></A>
-<B>:invert</B> [���\�b�h]
+<A NAME="31469"></A>
+<B>:invert</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
@@ -496,16 +503,16 @@ pvert��nvert�ɉ��߂����Ƃ���nface��Ԃ��B
 <BR>
 <BR>
 
-<A NAME="31483"></A>
-<B>:set-face</B> <EM>pv nv f </EM>[���\�b�h]
+<A NAME="31480"></A>
+<B>:set-face</B> <EM>pv nv f </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>f</EM>��<TT>pface</TT>�Ƃ��A<EM>pv</EM>��<TT>pvertex</TT>�Ƃ��A<EM>nv</EM>��
-<TT>nvertex</TT>�Ƃ��Đݒ肷��B
-���̃��\�b�h�́A���̃G�b�W��<TT>pface</TT>���邢��<TT>nface</TT>��ύX���邱�Ƃ�
-���ӂ��邱�ƁB
+<EM>f</EM>を<TT>pface</TT>とし、<EM>pv</EM>を<TT>pvertex</TT>とし、<EM>nv</EM>を
+<TT>nvertex</TT>として設定する。
+このメソッドは、このエッジの<TT>pface</TT>あるいは<TT>nface</TT>を変更することに
+注意すること。
 </DD>
 </DL>
 <BR>
@@ -513,15 +520,15 @@ pvert��nvert�ɉ��߂����Ƃ���nface��Ԃ��B
 
 <P>
 
-<A NAME="31501"></A>
-<B>:contourp</B> <EM>viewpoint </EM>[���\�b�h]
+<A NAME="31498"></A>
+<B>:contourp</B> <EM>viewpoint </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�����A���̃G�b�W���֊s�G�b�W�ł���΁A���Ȃ킿�A���̃G�b�W��<TT>pface</TT>
-���邢��<TT>nface</TT>�̂ǂ��炩��<EM>viewpoint</EM>���猩���A���������
-�����Ȃ��Ȃ�T��Ԃ��B
+もし、このエッジが輪郭エッジであれば、すなわち、このエッジの<TT>pface</TT>
+あるいは<TT>nface</TT>のどちらかが<EM>viewpoint</EM>から見え、もう一方が
+見えないならTを返す。
 </DD>
 </DL>
 <BR>
@@ -529,15 +536,15 @@ pvert��nvert�ɉ��߂����Ƃ���nface��Ԃ��B
 
 <P>
 
-<A NAME="31514"></A>
-<B>:approximated-p</B> [���\�b�h]
+<A NAME="31511"></A>
+<B>:approximated-p</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃G�b�W���~���̑��ʂ̂悤�ȋȖʂ�\�����邽�߂̋ߎ��G�b�W�ł���Ȃ�΁A
-T��Ԃ��B
-�ߎ��G�b�W�͕��������ŋȐ���\������̂ɕK�v�ł���B
+このエッジが円柱の側面のような曲面を表現するための近似エッジであるならば、
+Tを返す。
+近似エッジは部分直線で曲線を表現するのに必要である。
 
 </DD>
 </DL>
@@ -546,19 +553,19 @@ T��Ԃ��B
 
 <P>
 
-<A NAME="31524"></A>
-<B>:set-approximated-flag</B> <EM>&amp;optional (threshold 0.7) </EM>[���\�b�h]
+<A NAME="31521"></A>
+<B>:set-approximated-flag</B> <EM>&amp;optional (threshold 0.7) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Euslisp�ł́A�ǂ�ȋȖʂ���������̕��ʂŋߎ������B
-<TT>flags</TT>��LSB�́A���̃G�b�W�̗����̖ʂ��Ȗʂł��邩�ǂ�����
-�������߂Ɏg�p�����B
+Euslispでは、どんな曲面もたくさんの平面で近似される。
+<TT>flags</TT>のLSBは、このエッジの両側の面が曲面であるかどうかを
+示すために使用される。
 
 <P>
-�����A2�̖ʂ̊Ԃ̊p�x��<EM>threshold</EM>���傫���Ȃ�A
-<B>:set-approximated-flag</B>�́A���̃t���O��T�ɐݒ肷��B
+もし、2つの面の間の角度が<EM>threshold</EM>より大きいなら、
+<B>:set-approximated-flag</B>は、このフラグをTに設定する。
 </DD>
 </DL>
 <BR>
@@ -566,8 +573,8 @@ Euslisp�ł́A�ǂ�ȋȖʂ���������̕��ʂŋߎ������B
 
 <P>
 
-<A NAME="31537"></A>
-<B>:init</B> <EM>&amp;key :pface :nface :pvertex :nvertex </EM>[���\�b�h]
+<A NAME="31534"></A>
+<B>:init</B> <EM>&amp;key :pface :nface :pvertex :nvertex </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
@@ -599,19 +606,19 @@ Euslisp�ł́A�ǂ�ȋȖʂ���������̕��ʂŋߎ������B
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2126"
-  HREF="jmanual-node115.html">���ʂƖ�</A>
+  HREF="jmanual-node115.html">平面と面</A>
 <B> Up:</B> <A NAME="tex2html2120"
-  HREF="jmanual-node112.html">�􉽊w���f�����O</A>
+  HREF="jmanual-node112.html">幾何学モデリング</A>
 <B> Previous:</B> <A NAME="tex2html2114"
-  HREF="jmanual-node113.html">��X�̊􉽊w�֐�</A>
+  HREF="jmanual-node113.html">種々の幾何学関数</A>
  &nbsp; <B>  <A NAME="tex2html2122"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2124"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

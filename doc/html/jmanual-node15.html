@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�N���X�p��</TITLE>
-<META NAME="description" CONTENT="�N���X�p��">
+<TITLE>クラス継承</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="クラス継承">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html580"
-  HREF="jmanual-node16.html">�^�w��</A>
+  HREF="jmanual-node16.html">型指定</A>
 <B> Up:</B> <A NAME="tex2html574"
-  HREF="jmanual-node12.html">�f�[�^�^</A>
+  HREF="jmanual-node12.html">データ型</A>
 <B> Previous:</B> <A NAME="tex2html568"
-  HREF="jmanual-node14.html">�I�u�W�F�N�g</A>
+  HREF="jmanual-node14.html">オブジェクト</A>
  &nbsp; <B>  <A NAME="tex2html576"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html578"
@@ -58,30 +59,41 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03013000000000000000">
-�N���X�p��</A>
+クラス継承</A>
 </H2>
 
 <P>
-�I�u�W�F�N�g�̃f�[�^�\���̓N���X�ɂ���Ē�`����A�����āA�����̓����
-�N���X���̃��\�b�h�ɒ�`����Ă���B
-EusLisp�ɂ����āA���_�[�X�̃N���X���}<A HREF="#ClassHierarchy">4</A>�ɏ�����Ă���悤��
-�؍\�������ꂽ�p���̂Ȃ��ɂ��łɒ�`����Ă���B
-<B>class-hierarchy</B>�֐���p����΁A���ۂ̌p���\�������邱�Ƃ��ł���B
-���[�̃N���Xobject�́AEusLisp���̑S�ẴN���X�̍����ƂȂ�X�[�p�[�N���X�ł���B
-���[�U�[����`�����N���X�́A�����̓����N���X�̂ǂ�ł��p�����邱�Ƃ��ł���B
+オブジェクトのデータ構造はクラスによって定義され、そして、それらの動作は
+クラス内のメソッドに定義されている。
+EusLispにおいて、数ダースのクラスが図<A HREF="#ClassHierarchy">4</A>に書かれているように
+木構造化された継承のなかにすでに定義されている。
+<B>class-hierarchy</B>関数を用いれば、実際の継承構造を見ることができる。
+左端のクラスobjectは、EusLisp内の全てのクラスの根幹となるスーパークラスである。
+ユーザーが定義したクラスは、これらの内部クラスのどれでも継承することができる。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="ClassHierarchy"></A><A NAME="962"></A>
+<DIV ALIGN="CENTER"><A NAME="ClassHierarchy"></A><A NAME="959"></A>
 <TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 4:</STRONG>
-��`�ς݂̃N���X�p��</CAPTION>
-<TR><TD>6#6</TD></TR>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+定義済みのクラス継承</CAPTION>
+<TR><TD><IMG
+ WIDTH="368" HEIGHT="940" BORDER="0"
+ SRC="jmanual-img6.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+propertied-object
+symbol -...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></TD></TR>
 </TABLE>
 </DIV>
 
 <P>
-�N���X�́A<B>defclass</B>�}�N����<B>defstruct</B>�}�N���Œ�`�����B
+クラスは、<B>defclass</B>マクロか<B>defstruct</B>マクロで定義される。
 
 <P><PRE><TT>
  (defclass class-name &amp;key :super   class 
@@ -98,8 +110,8 @@ EusLisp�ɂ����āA���_�[�X�̃N���X���}<A HREF="#ClassHierarchy">4</A>�ɏ�����Ă�
 <BR>
 </TT></PRE>
 <P>
-���\�b�h�́A<B>defmethod</B>�ɂ���`�����B
-<B>defmethod</B>�́A����̃N���X�ɂ��ĉ��x�ł����݂��邱�Ƃ��ł���B
+メソッドは、<B>defmethod</B>により定義される。
+<B>defmethod</B>は、特定のクラスについて何度でも存在することができる。
 
 <P><PRE><TT>
  (defmethod class-name  
@@ -108,15 +120,15 @@ EusLisp�ɂ����āA���_�[�X�̃N���X���}<A HREF="#ClassHierarchy">4</A>�ɏ�����Ă�
 <BR>...) 
 </TT></PRE>
 <P>
-�����N���X�ɂ�����field��`�́A�啔����
-<TT>*eusdir*/c/eus.h</TT>�̃w�b�_�[�t�@�C���̒��ɂ���B
+内部クラスにおけるfield定義は、大部分が
+<TT>*eusdir*/c/eus.h</TT>のヘッダーファイルの中にある。
 
 <P>
-<EM>�N���X</EM>�́A<TT>(describe)</TT>�֐��ɂ��N���X���̑S�ẴX���b�g�A
-���O�A�X�[�p�[�N���X�A�X���b�g���A�X���b�g�^�A���\�b�h���X�g�A
-�Ȃǂ�\�����邱�Ƃ��ł���B
-�����N���X�̒�`�͎��̒ʂ�ł���B
-�N���Xobject�̓X�[�p�[�N���X�������Ȃ����߁A���̃X�[�p�[�N���X��NIL�ł���B
+<EM>クラス</EM>は、<TT>(describe)</TT>関数によりクラス内の全てのスロット、
+名前、スーパークラス、スロット名、スロット型、メソッドリスト、
+などを表示することができる。
+内部クラスの定義は次の通りである。
+クラスobjectはスーパークラスを持たないため、このスーパークラスはNILである。
 
 <P><PRE><TT>
  (defclass <B>object</B> :super <B>NIL</B> :slots ()) 
@@ -350,19 +362,19 @@ handle)) 		 ;file handle returned by ''dlopen''
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html580"
-  HREF="jmanual-node16.html">�^�w��</A>
+  HREF="jmanual-node16.html">型指定</A>
 <B> Up:</B> <A NAME="tex2html574"
-  HREF="jmanual-node12.html">�f�[�^�^</A>
+  HREF="jmanual-node12.html">データ型</A>
 <B> Previous:</B> <A NAME="tex2html568"
-  HREF="jmanual-node14.html">�I�u�W�F�N�g</A>
+  HREF="jmanual-node14.html">オブジェクト</A>
  &nbsp; <B>  <A NAME="tex2html576"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html578"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

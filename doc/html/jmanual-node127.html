@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�`��</TITLE>
-<META NAME="description" CONTENT="�`��">
+<TITLE>描画</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="描画">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,9 +45,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2312"
-  HREF="jmanual-node128.html">�A�j���[�V����</A>
+  HREF="jmanual-node128.html">アニメーション</A>
 <B> Up:</B> <A NAME="tex2html2306"
-  HREF="jmanual-node122.html">���E�ƃO���t�B�b�N�X</A>
+  HREF="jmanual-node122.html">視界とグラフィックス</A>
 <B> Previous:</B> <A NAME="tex2html2300"
   HREF="jmanual-node126.html">Viewer</A>
  &nbsp; <B>  <A NAME="tex2html2308"
@@ -59,7 +60,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H2><A NAME="SECTION04055000000000000000"></A><A NAME="Drawings"></A>
 <BR>
-�`��
+描画
 </H2>
 
 <P>
@@ -67,16 +68,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  <BR>
 <BR> <P>
 
-<A NAME="37126"></A>
-<B>draw</B> <EM>[viewer] &amp;rest thing </EM>[�֐�]
+<A NAME="37123"></A>
+<B>draw</B> <EM>[viewer] &amp;rest thing </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>viewer</EM>��<EM>thing</EM>��`���B
-<EM>thing</EM>�́A���W�n�A���́A�ʁA�G�b�W�A�x�N�g���A2�̃x�N�g���̃��X�g�̂ǂ�ł��\�ł���B
+<EM>viewer</EM>に<EM>thing</EM>を描く。
+<EM>thing</EM>は、座標系、立体、面、エッジ、ベクトル、2つのベクトルのリストのどれでも可能である。
 <TT>(progn (view) (draw (make-cube 10 20 30)))</TT>
-�́Axwindow�ɗ����̂�`���B
+は、xwindowに立方体を描く。
 </DD>
 </DL>
 <BR>
@@ -84,14 +85,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="37140"></A>
-<B>draw-axis</B> <EM>[viewer] [size] &amp;rest thing </EM>[�֐�]
+<A NAME="37137"></A>
+<B>draw-axis</B> <EM>[viewer] [size] &amp;rest thing </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>viewer</EM>�̒���<EM>thing</EM>�̍��W�n�̎���<EM>size</EM>�̒����ŕ`���B
-<EM>thing</EM>�́A���W�n���瓾����ǂ̃I�u�W�F�N�g�ł��\�ł���B
+<EM>viewer</EM>の中に<EM>thing</EM>の座標系の軸を<EM>size</EM>の長さで描く。
+<EM>thing</EM>は、座標系から得られるどのオブジェクトでも可能である。
 </DD>
 </DL>
 <BR>
@@ -99,13 +100,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="37154"></A>
-<B>draw-arrow</B> <EM>p1 p2 </EM>[�֐�]
+<A NAME="37151"></A>
+<B>draw-arrow</B> <EM>p1 p2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>*viewer*</B>��<EM>p1</EM>����<EM>p2</EM>�Ɍ���������`���B
+<B>*viewer*</B>に<EM>p1</EM>から<EM>p2</EM>に向かう矢印を描く。
 </DD>
 </DL>
 <BR>
@@ -113,13 +114,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="37167"></A>
-<B>hid</B> <EM>[viewer] &amp;rest thing  </EM>[�֐�]
+<A NAME="37164"></A>
+<B>hid</B> <EM>[viewer] &amp;rest thing  </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>viewer</EM>�ɉA���������ꂽ�摜��`���B
-<EM>thing</EM>�́A<TT>face</TT>�܂���<TT>body</TT>���\�ł���B
+<DD> <EM>viewer</EM>に陰線処理された画像を描く。
+<EM>thing</EM>は、<TT>face</TT>または<TT>body</TT>が可能である。
 </DD>
 </DL>
 <BR>
@@ -127,13 +128,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="37181"></A>
-<B>hidd</B> <EM>[viewer] &amp;rest thing  </EM>[�֐�]
+<A NAME="37178"></A>
+<B>hidd</B> <EM>[viewer] &amp;rest thing  </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�A����_���ŕ`�����Ƃ������āA<B>hid</B>�Ɠ����ł���B
+陰線を点線で描くことを除いて、<B>hid</B>と同じである。
 </DD>
 </DL>
 <BR>
@@ -141,14 +142,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="37192"></A>
-<B>hid2</B> <EM>body-list viewing </EM>[�֐�]
+<A NAME="37189"></A>
+<B>hid2</B> <EM>body-list viewing </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-edge-image�I�u�W�F�N�g�ŕ\�������A�������摜�𐶐�����B
-���̌��ʂ�<B>*hid*</B>�ɒu�����B
+edge-imageオブジェクトで表現される陰線処理画像を生成する。
+その結果は<B>*hid*</B>に置かれる。
 </DD>
 </DL>
 <BR>
@@ -156,23 +157,32 @@ edge-image�I�u�W�F�N�g�ŕ\�������A�������摜�𐶐�����B
 
 <P>
 
-<A NAME="37203"></A>
+<A NAME="37200"></A>
 <BR>
-73#73
+<IMG
+ WIDTH="554" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img73.png"
+ ALT="\begin{emtabbing}
+{\bf render}
+\it\&amp;key \= :bodies :faces (:viewer *viewer*) \\lq ...
+... *light-sources*)\\
+\&gt; (colormap *render-colormap*) (y 1.0)
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD><EM>bodies</EM>��<EM>faces</EM>�Ƀ��C�g���[�V���O���s���A�A�ʏ��������摜�𐶐�����B
-<B>viewing, viewport</B>�����<B>viewsurface��</B>�A<EM>viewer</EM>���瓾����B
-<EM>lights</EM>�́A<TT>light-source</TT>�i�����j�I�u�W�F�N�g�̃��X�g�ł���B
-<EM>colormap</EM>�́AXwindow��<B>colormap</B>�I�u�W�F�N�g�ł���B
-���ꂼ���<EM>bodies</EM>��<EM>faces</EM>�́A���蓖�Ă���J���[������
-�����Ȃ���΂Ȃ�Ȃ��B
-<EM>colormap</EM>�ɒ�`����Ă���J���[LUT�̖��O��<TT>:color</TT>���b�Z�[�W��
-���邱�Ƃɂ��J���[������ݒ�ł���B
-��ʂɂ��̊֐��́AXlib�����ł̂ݓ����B
-<TT>demo/renderdemo.l</TT>�̃T���v���v���O���������邱�ƁB
+<DD><EM>bodies</EM>と<EM>faces</EM>にレイトレーシングを行い、陰面消去した画像を生成する。
+<B>viewing, viewport</B>および<B>viewsurfaceは</B>、<EM>viewer</EM>から得られる。
+<EM>lights</EM>は、<TT>light-source</TT>（光源）オブジェクトのリストである。
+<EM>colormap</EM>は、Xwindowの<B>colormap</B>オブジェクトである。
+それぞれの<EM>bodies</EM>と<EM>faces</EM>は、割り当てられるカラー属性を
+持たなければならない。
+<EM>colormap</EM>に定義されているカラーLUTの名前を<TT>:color</TT>メッセージで
+送ることによりカラー属性を設定できる。
+一般にこの関数は、Xlib環境下でのみ働く。
+<TT>demo/renderdemo.l</TT>のサンプルプログラムを見ること。
 </DD>
 </DL>
 <BR>
@@ -180,16 +190,16 @@ edge-image�I�u�W�F�N�g�ŕ\�������A�������摜�𐶐�����B
 
 <P>
 
-<A NAME="37228"></A>
-<B>make-light-source</B> <EM>pos &amp;optional (intensity 1.0) </EM>[�֐�]
+<A NAME="37225"></A>
+<B>make-light-source</B> <EM>pos &amp;optional (intensity 1.0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>pos</EM>�̈ʒu�Ɍ����I�u�W�F�N�g�����B
-<EM>intensity</EM>�́A�f�t�H���g�̌��̋����𑝂��g���ł���B
-�����Ɛ��m�ɋ��������肷�邽�߂ɂ́A������<TT>:intensity</TT>���\�b�h��
-�g�p����B
+<EM>pos</EM>の位置に光源オブジェクトを作る。
+<EM>intensity</EM>は、デフォルトの光の強さを増す拡大比である。
+もっと正確に強さを決定するためには、光源の<TT>:intensity</TT>メソッドを
+使用する。
 </DD>
 </DL>
 <BR>
@@ -197,15 +207,15 @@ edge-image�I�u�W�F�N�g�ŕ\�������A�������摜�𐶐�����B
 
 <P>
 
-<A NAME="37241"></A>
-<B>tektro</B> <EM>file &amp;rest forms </EM>[�}�N��]
+<A NAME="37238"></A>
+<B>tektro</B> <EM>file &amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>*tektro-port*</TT>�X�g���[���̂��߂�<EM>file</EM>���I�[�v�����A
-<EM>forms</EM>��]������B
-����́Atektro�`��̏o�͂𒼐�<EM>file</EM>�ɏ������ނ��߂Ɏg�p�����B
+<TT>*tektro-port*</TT>ストリームのために<EM>file</EM>をオープンし、
+<EM>forms</EM>を評価する。
+これは、tektro描画の出力を直接<EM>file</EM>に書き込むために使用される。
 </DD>
 </DL>
 <BR>
@@ -213,29 +223,29 @@ edge-image�I�u�W�F�N�g�ŕ\�������A�������摜�𐶐�����B
 
 <P>
 
-<A NAME="37255"></A>
-<B>kdraw</B> <EM>file &amp;rest forms </EM>[�}�N��]
+<A NAME="37252"></A>
+<B>kdraw</B> <EM>file &amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>kdraw</B>�́A<TT>kdraw</TT>�܂���<TT>idraw</TT>�œǂݍ��߂�|�X�g�X�N���v�g�t�@�C����
-�������邽�߂̃}�N�����߂ł���B
-<B>kdraw</B>�́A<TT>:output</TT>���[�h��<EM>file</EM>���I�[�v�����A
-<TT>*viewer*</TT>��u�������邽�߂�kdraw-viewsurface��viewport��
-���A<EM>forms</EM>��]������B
-���ꂼ���<EM>forms</EM>�́A<TT>draw</TT>��<TT>hid</TT>�̂悤�ȕ`��֐���
-�ǂꂩ���Ăяo���B
-������<EM>forms</EM>����̕`�惁�b�Z�[�W�́A<TT>kdraw-viewsurface</TT>��
-���ڏo�͂����B���̏o�͂�<TT>idraw</TT>��<TT>kdraw</TT>�ŔF���ł���
-�|�X�g�X�N���v�g�\���Ƀ��b�Z�[�W��ϊ�����B
-�����āA<EM>file</EM>�ɒ~�ς���B
-<TT>idraw</TT>�܂���<TT>kdraw</TT>���Ăяo����<EM>file</EM>���I�[�v�����ꂽ�Ƃ��A
-EusViewer window�ɏ��������̂Ɠ���̐}�`�����邱�Ƃ��ł���B
-���̐}�`�́A<TT>idraw</TT>�̋@�\�ŕύX���邱�Ƃ��ł���B
-�����āA�ŏI�`���<TT>epsfile</TT>����p���邱�Ƃɂ��<SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN>�h�L�������g
-�ɑg�ݍ��ނ��Ƃ��ł���B
-���̋@�\�́A"llib/kdraw.l"�̃t�@�C���ɋL�q����Ă���B
+<B>kdraw</B>は、<TT>kdraw</TT>または<TT>idraw</TT>で読み込めるポストスクリプトファイルを
+生成するためのマクロ命令である。
+<B>kdraw</B>は、<TT>:output</TT>モードで<EM>file</EM>をオープンし、
+<TT>*viewer*</TT>を置き換えるためのkdraw-viewsurfaceとviewportを
+作り、<EM>forms</EM>を評価する。
+それぞれの<EM>forms</EM>は、<TT>draw</TT>や<TT>hid</TT>のような描画関数の
+どれかを呼び出す。
+これらの<EM>forms</EM>からの描画メッセージは、<TT>kdraw-viewsurface</TT>に
+直接出力される。この出力は<TT>idraw</TT>や<TT>kdraw</TT>で認識できる
+ポストスクリプト表現にメッセージを変換する。
+そして、<EM>file</EM>に蓄積する。
+<TT>idraw</TT>または<TT>kdraw</TT>が呼び出され<EM>file</EM>がオープンされたとき、
+EusViewer windowに書いたものと同一の図形を見ることができる。
+その図形は、<TT>idraw</TT>の機能で変更することができる。
+そして、最終描画は<TT>epsfile</TT>環境を用いることにより<SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN>ドキュメント
+に組み込むことができる。
+この機能は、"llib/kdraw.l"のファイルに記述されている。
 </DD>
 </DL>
 <BR>
@@ -243,24 +253,24 @@ EusViewer window�ɏ��������̂Ɠ���̐}�`�����邱�Ƃ��ł���B
 
 <P>
 
-<A NAME="37286"></A>
-<B>pictdraw</B> <EM>file &amp;rest forms </EM>[�}�N��]
+<A NAME="37283"></A>
+<B>pictdraw</B> <EM>file &amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>pictdraw</B>�́AMacintosh��PICT�t�H�[�}�b�g�ŉ摜�t�@�C����
-�������邽�߂̃}�N���ł���B
-<B>pictdraw</B>�́A<EM>file</EM>��<TT>:output</TT>���[�h�ŃI�[�v�����A
-pictdraw-viewsurface�����A<TT>*viewer*</TT>��viewport�ɒu�������A
-<EM>forms</EM>��]������B
-<EM>forms</EM>�́A���ꂼ��<TT>draw</TT>���邢��<TT>hid</TT>�̂悤�ȕ`��֐��̂ǂꂩ��
-�Ăяo�����̂ł���B
-�����̏�������̕`�惁�b�Z�[�W�́A<TT>kdraw-viewsurface</TT>��
-���ڏo�͂��ꂽ��APICT�t�H�[�}�b�g�ւ̃��b�Z�[�W�ɕϊ�����,
-<EM>file</EM>�֒~�ς����B
-����PICT�t�H�[�}�b�g�́AMacintosh��<TT>macdraw</TT>��<TT>teachtext</TT>��
-�F�����邱�Ƃ��ł���B
+<B>pictdraw</B>は、MacintoshのPICTフォーマットで画像ファイルを
+生成するためのマクロである。
+<B>pictdraw</B>は、<EM>file</EM>を<TT>:output</TT>モードでオープンし、
+pictdraw-viewsurfaceを作り、<TT>*viewer*</TT>のviewportに置き換え、
+<EM>forms</EM>を評価する。
+<EM>forms</EM>は、それぞれ<TT>draw</TT>あるいは<TT>hid</TT>のような描画関数のどれかを
+呼び出すものである。
+これらの書式からの描画メッセージは、<TT>kdraw-viewsurface</TT>に
+直接出力された後、PICTフォーマットへのメッセージに変換され,
+<EM>file</EM>へ蓄積される。
+このPICTフォーマットは、Macintoshの<TT>macdraw</TT>や<TT>teachtext</TT>で
+認識することができる。
 </DD>
 </DL>
 <BR>
@@ -268,41 +278,41 @@ pictdraw-viewsurface�����A<TT>*viewer*</TT>��viewport�ɒu�������A
 
 <P>
 
-<A NAME="37309"></A>
-<B>hls2rgb</B> <EM>hue lightness saturation &amp;optional (range 255) </EM>[�֐�]
+<A NAME="37306"></A>
+<B>hls2rgb</B> <EM>hue lightness saturation &amp;optional (range 255) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-HLS(Hue, Lightness, Saturation)�ŕ\�������F���ARGB�\���ɕϊ�����B
-HLS�́A���΂���HSL�Ƃ��ĎQ�Ƃ����B
-<EM>hue</EM>�́Arainbow circle(0����360)�̐F�ŕ\�������B
-0���Ԃ�45������120���΂�240����270����������360���ĂѐԂƂȂ�B
-<EM>lightness</EM>�́A0.0����0.1�̒l�������A�����甒�܂ł̖��邳��\������B
-<EM>lightness</EM>��0�̂Ƃ��́A<EM>hue</EM>��<EM>saturation</EM>�ɂ�����炸
-���ƂȂ�B�����āA<EM>lightness</EM>��1�̂Ƃ��́A���ƂȂ�B
-<EM>saturation</EM>�́A0.0����1.0�܂ł̒l�������A�F�̋�����\������B
-<EM>saturation</EM>�̒l���傫���ƑN���ȐF���𐶐����A�������l�͎キ�������F��
-�𐶐�����B
-<EM>range</EM>�́ARGB�l�̌��E�������B
-�����A���ꂼ��̐F��8�r�b�g�̒l�����蓖�Ă��Ă���J���[�f�B�X�v���C
-���g���Ă���Ȃ�΁A<EM>range</EM>��255�Ƃ��ׂ��ł���B
-�����ARGB��16�r�b�g�̐��������z�I�Ɋ��蓖�Ă��Ă���Xwindow���g����
-����Ȃ�΁A<EM>range</EM>��65536�Ƃ��ׂ��ł���B
-HSV��HLS�Ƃ̈Ⴂ�ɒ��ӂ��邱�ƁB
-HLS�ł́A�N����(rainbow)�F��<TT>lightness=0.5</TT>�Œ�`����Ă���B
+HLS(Hue, Lightness, Saturation)で表現される色を、RGB表現に変換する。
+HLSは、しばしばHSLとして参照される。
+<EM>hue</EM>は、rainbow circle(0から360)の色で表現される。
+0が赤で45が黄で120が緑で240が青で270が紫そして360が再び赤となる。
+<EM>lightness</EM>は、0.0から0.1の値を持ち、黒から白までの明るさを表現する。
+<EM>lightness</EM>が0のときは、<EM>hue</EM>や<EM>saturation</EM>にかかわらず
+黒となる。そして、<EM>lightness</EM>が1のときは、白となる。
+<EM>saturation</EM>は、0.0から1.0までの値を持ち、色の強さを表現する。
+<EM>saturation</EM>の値が大きいと鮮明な色調を生成し、小さい値は弱く濁った色調
+を生成する。
+<EM>range</EM>は、RGB値の限界を示す。
+もし、それぞれの色に8ビットの値が割り当てられているカラーディスプレイ
+を使っているならば、<EM>range</EM>は255とすべきである。
+もし、RGBに16ビットの整数が仮想的に割り当てられているXwindowを使って
+いるならば、<EM>range</EM>は65536とすべきである。
+HSVとHLSとの違いに注意すること。
+HLSでは、鮮明な(rainbow)色は<TT>lightness=0.5</TT>で定義されている。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="37331"></A>
-<B>rgb2hls</B> <EM>red green blue &amp;optional (range 255) </EM>[�֐�]
+<A NAME="37328"></A>
+<B>rgb2hls</B> <EM>red green blue &amp;optional (range 255) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-RGB�̐F�\�����AHLS�\���ɕϊ�����B
+RGBの色表現を、HLS表現に変換する。
 </DD>
 </DL>
 <BR>
@@ -330,9 +340,9 @@ RGB�̐F�\�����AHLS�\���ɕϊ�����B
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2312"
-  HREF="jmanual-node128.html">�A�j���[�V����</A>
+  HREF="jmanual-node128.html">アニメーション</A>
 <B> Up:</B> <A NAME="tex2html2306"
-  HREF="jmanual-node122.html">���E�ƃO���t�B�b�N�X</A>
+  HREF="jmanual-node122.html">視界とグラフィックス</A>
 <B> Previous:</B> <A NAME="tex2html2300"
   HREF="jmanual-node126.html">Viewer</A>
  &nbsp; <B>  <A NAME="tex2html2308"
@@ -341,8 +351,8 @@ RGB�̐F�\�����AHLS�\���ɕϊ�����B
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

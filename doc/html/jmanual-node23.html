@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�֐�</TITLE>
-<META NAME="description" CONTENT="�֐�">
+<TITLE>関数</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="関数">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,11 +44,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html694"
-  HREF="jmanual-node24.html">����\��</A>
+  HREF="jmanual-node24.html">制御構造</A>
 <B> Up:</B> <A NAME="tex2html688"
-  HREF="jmanual-node17.html">�����ƕ]��</A>
+  HREF="jmanual-node17.html">書式と評価</A>
 <B> Previous:</B> <A NAME="tex2html684"
-  HREF="jmanual-node22.html">�}�N��</A>
+  HREF="jmanual-node22.html">マクロ</A>
  &nbsp; <B>  <A NAME="tex2html690"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html692"
@@ -57,45 +58,48 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03026000000000000000">
-�֐�</A>
+関数</A>
 </H2>
 
 <P>
-�֐��́A�P�Ƀ��X�g�̍ŏ��̗v�f��<B>lambda</B>�ł���悤��lambda�����ɂ����
-�\�������B
-����lambda������<B>defun</B>���g����symbol���`����Ƃ��A
-�O���[�o���֐����Ƃ��ĎQ�Ƃ��邱�Ƃ��ł���B
-lambda�����́A���̕��@�ŗ^������B
+関数は、単にリストの最初の要素が<B>lambda</B>であるようなlambda書式によって
+表現される。
+もしlambda書式が<B>defun</B>を使ってsymbolを定義するとき、
+グローバル関数名として参照することができる。
+lambda書式は、次の文法で与えられる。
 
 <P><PRE><TT>
  (lambda ({var}* <BR>)}*] <BR>
-<BR>) <SPAN CLASS="MATH">7#7</SPAN> ((keyword var) [initform])}* <BR>] <BR>)}*]) 
+<BR>) <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> ((keyword var) [initform])}* <BR>] <BR>)}*]) 
 <BR>  {declaration}* 
 <BR>  {form}*) 
 <BR>
 </TT></PRE>
 <P>
-������EXPR,LEXPR,FEXPR�Ȃǂ̂悤�Ȍ^�̊֐��͂Ȃ��B
-�֐��ւ̈����́A�������̊֐������s����O�ɕ]�������B
-�󂯂�����̐��́Alambda-list�ɂ���Č��肳���B
-lambda-list�́Alambda�����̂��߂Ƀp�����[�^�̗���L���B
+ここにEXPR,LEXPR,FEXPRなどのような型の関数はない。
+関数への引数は、いつもその関数を実行する前に評価される。
+受ける引数の数は、lambda-listによって決定される。
+lambda-listは、lambda書式のためにパラメータの列を記す。
 
 <P>
-<B>&amp;optional, &amp;rest, &amp;key </B>��<B>&amp;aux</B> �͂��ꂼ��Alambda-list
-�̂Ȃ��ɓ���ȈӖ��������Ă��āA������symbol�́A�ϐ����Ƃ��Ďg�p
-���邱�Ƃ͂ł��Ȃ��B
-&amp;optional��&amp;key�p�����[�^��supplied-p�ϐ��́A�T�|�[�g����Ă��Ȃ��B
+<B>&amp;optional, &amp;rest, &amp;key </B>や<B>&amp;aux</B> はそれぞれ、lambda-list
+のなかに特殊な意味を持っていて、これらのsymbolは、変数名として使用
+することはできない。
+&amp;optionalや&amp;keyパラメータのsupplied-p変数は、サポートされていない。
 
 <P>
-lambda�����́A���ʂ̃��X�g�f�[�^�Ƌ�ʂł��Ȃ����߁A
-<B>function</B>���ꏑ����p���āA�C���^�v���^��R���p�C���Ɋ֐��Ƃ���
-�F������悤�ɒm�点�Ȃ���΂Ȃ�Ȃ��B
+lambda書式は、普通のリストデータと区別できないため、
+<B>function</B>特殊書式を用いて、インタプリタやコンパイラに関数として
+認識するように知らせなければならない。
 <A NAME="tex2html7"
-  HREF="jmanual-footnode.html#foot942"><SUP><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="footnote.png"></SUP></A><B>function</B>�́A�֐��̏�Ɋ����Œ肷�邽�߂ɏd�v�ł���B
-���̂��߁A���ׂẴ��[�J���ϐ��͂��̊֐�����������[�J���X�R�[�v�̑��̊֐���
-�ʂ��Ă����Ƃ��Ă����A�A�N�Z�X���邱�Ƃ��ł���B
-���̃v���O�����́A<TT>let</TT>��<TT>sum</TT>��lambda�����̒��Ɍ����邽�߁A
-�C���^�v���^�ƃR���p�C����̂ǂ�����������Ȃ��B
+  HREF="jmanual-footnode.html#foot939"><SUP><SPAN CLASS="arabic">1</SPAN></SUP></A><B>function</B>は、関数の上に環境を固定するために重要である。
+そのため、すべてのローカル変数はその関数が違ったローカルスコープの他の関数を
+通ってきたとしてさえ、アクセスすることができる。
+次のプログラムは、<TT>let</TT>の<TT>sum</TT>がlambda書式の中に見えるため、
+インタプリタとコンパイル後のどちらも何もしない。
 
 <P>
 <PRE>
@@ -104,17 +108,17 @@ lambda�����́A���ʂ̃��X�g�f�[�^�Ƌ�ʂł��Ȃ����߁A
 </PRE>
 
 <P>
-�\�z�������ʂ������邽�߂ɂ́A���̂悤�ɏ����ׂ��ł���B
+予想した結果が得られるためには、次のように書くべきである。
 <PRE>
 (let ((x '(1 2 3)) (sum 0))
    (mapc #'(lambda (x) (setq sum (+ sum x))) x ))
 </PRE>
 
 <P>
-#'�́A<B>function</B>�̗���ł���B
-���Ȃ킿�A<TT>#'(lambda (x) x)</TT>��
-<TT>(function (lambda (x) x))</TT>�Ɠ����ł���B
-�����́Afunarg���ƌĂ΂��ʂ̗�������B
+#'は、<B>function</B>の略語である。
+すなわち、<TT>#'(lambda (x) x)</TT>は
+<TT>(function (lambda (x) x))</TT>と同等である。
+ここは、funarg問題と呼ばれる別の例を示す。
 
 <P>
 <PRE>
@@ -130,10 +134,10 @@ lambda�����́A���ʂ̃��X�g�f�[�^�Ƌ�ʂł��Ȃ����߁A
 </PRE>
 
 <P>
-EusLisp��closure�́A�s��ȑ傫���������Ƃ��ł��Ȃ��B
-���Ȃ킿�Aclosure�͂��̊O���̑傫���ŉ\�ȑ傫���܂Ŏ����Ƃ��ł���B
-�����closure��'generators'�̃v���O���~���O�̂��߂Ɏg�p����Ȃ����Ƃ��Ӗ�����B
-���̃v���O�����͉������Ȃ��B
+EusLispのclosureは、不定な大きさを持つことができない。
+すなわち、closureはその外側の大きさで可能な大きさまで持つことができる。
+これはclosureが'generators'のプログラミングのために使用されないことを意味する。
+次のプログラムは何もしない。
 
 <P>
 <PRE>
@@ -144,8 +148,8 @@ EusLisp��closure�́A�s��ȑ傫���������Ƃ��ł��Ȃ��B
 </PRE>
 
 <P>
-�������Ȃ���A���̓����ړI���I�u�W�F�N�g�w���v���O���~���O�Ŏ����ł���B
-�Ȃ��Ȃ�A�I�u�W�F�N�g�͂��ꎩ�g�̌Œ�ϐ��������Ƃ��ł��邽�߂ł���B
+しかしながら、その同じ目的がオブジェクト指向プログラミングで実現できる。
+なぜなら、オブジェクトはそれ自身の固定変数を持つことができるためである。
 <PRE>
 (defclass generator object (index))
 (defmethod generator
@@ -157,8 +161,8 @@ EusLisp��closure�́A�s��ȑ傫���������Ƃ��ł��Ȃ��B
 
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

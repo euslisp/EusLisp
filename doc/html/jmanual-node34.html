@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�C���X�^���X�Ǘ�</TITLE>
-<META NAME="description" CONTENT="�C���X�^���X�Ǘ�">
+<TITLE>インスタンス管理</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="インスタンス管理">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html856"
-  HREF="jmanual-node35.html">��{�N���X</A>
+  HREF="jmanual-node35.html">基本クラス</A>
 <B> Up:</B> <A NAME="tex2html850"
-  HREF="jmanual-node31.html">�I�u�W�F�N�g�w���v���O���~���O</A>
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
 <B> Previous:</B> <A NAME="tex2html844"
-  HREF="jmanual-node33.html">���b�Z�[�W���M</A>
+  HREF="jmanual-node33.html">メッセージ送信</A>
  &nbsp; <B>  <A NAME="tex2html852"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html854"
@@ -58,7 +59,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03043000000000000000">
-�C���X�^���X�Ǘ�</A>
+インスタンス管理</A>
 </H2>
 
 <P>
@@ -66,14 +67,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  <BR>
 <BR> <P>
 
-<A NAME="4004"></A>
-<B>instantiate</B> <EM>class &amp;optional size </EM>[�֐�]
+<A NAME="4001"></A>
+<B>instantiate</B> <EM>class &amp;optional size </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>class</EM>����V�����I�u�W�F�N�g�����჌�x�����߂ł���B
-����<EM>class</EM>��<B>vector-class</B>�Ȃ�΁A<EM>size</EM>���Ȃ���΂Ȃ�Ȃ��B
+<EM>class</EM>から新しいオブジェクトを作る低レベル命令である。
+もし<EM>class</EM>が<B>vector-class</B>ならば、<EM>size</EM>がなければならない。
 </DD>
 </DL>
 <BR>
@@ -81,13 +82,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4018"></A>
-<B>instance</B> <EM>class &amp;rest message </EM>[�}�N��]
+<A NAME="4015"></A>
+<B>instance</B> <EM>class &amp;rest message </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�C���X�^���X������A������<EM>message</EM>��������B
+インスタンスが作られ、そこに<EM>message</EM>が送られる。
 </DD>
 </DL>
 <BR>
@@ -95,16 +96,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4029"></A>
-<B>make-instance</B> <EM>class &amp;rest var-val-pairs </EM>[�֐�]
+<A NAME="4026"></A>
+<B>make-instance</B> <EM>class &amp;rest var-val-pairs </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>class</EM>�̃C���X�^���X���쐬���A�X���b�g�ϐ���
-<EM>var-val-pairs</EM>�̂悤�ɐݒ肷��B
-�Ⴆ�΁A<TT>(make-instance cons :car 1 :cdr 2)</TT>
-�́A<TT>(cons 1 2)</TT>�Ɠ����ł���B
+<EM>class</EM>のインスタンスを作成し、スロット変数を
+<EM>var-val-pairs</EM>のように設定する。
+例えば、<TT>(make-instance cons :car 1 :cdr 2)</TT>
+は、<TT>(cons 1 2)</TT>と同等である。
 </DD>
 </DL>
 <BR>
@@ -112,22 +113,22 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4043"></A>
-<B>copy-object</B> <EM>object </EM>[�֐�]
+<A NAME="4040"></A>
+<B>copy-object</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>copy-object</B>�֐��́A�Q�ƃg�|���W�[�i�ċA�Q�Ƃł��\��Ȃ��j��ۂ����܂�
-�R�s�[���邽�߂Ɏg�p����B
-<B>copy-object</B>�́A�Ǝ����̕ۑ��ɐG��Ȃ�symbol��p�b�P�[�W�������āA
-<EM>object</EM>����A�N�Z�X�\�Ȃǂ�ȃI�u�W�F�N�g���R�s�[����B
-<B>copy-object</B>�́A�I�u�W�F�N�g�̒��̑S�Ă̎Q�Ƃ�2�x�W�Q����B
-1�x���A�V�����I�u�W�F�N�g�������ɃR�s�[���ꂽ�I�u�W�F�N�g�̃I���W�i����
-�}�[�N��t����Ƃ��A�����ă}�[�N�������Ƃ��ɂ���1�x�B
-����2�i�K�̏����́A<B>copy-object</B>��<B>copy-seq</B>�����x������B
-�������ԂɃR�s�[���������Ȃ�΁A
-<B>copy-seq</B>��<B>copy-tree</B>���g�p���邱�Ƃ�E�߂�B
+<B>copy-object</B>関数は、参照トポロジー（再帰参照でも構わない）を保ったまま
+コピーするために使用する。
+<B>copy-object</B>は、独自性の保存に触れないsymbolやパッケージを除いて、
+<EM>object</EM>からアクセス可能などんなオブジェクトもコピーする。
+<B>copy-object</B>は、オブジェクトの中の全ての参照を2度妨害する。
+1度が、新しいオブジェクトを作り既にコピーされたオブジェクトのオリジナルに
+マークを付けるとき、そしてマークを消すときにもう1度。
+この2段階の処理は、<B>copy-object</B>を<B>copy-seq</B>よりも遅くする。
+もし順番にコピーをしたいならば、
+<B>copy-seq</B>か<B>copy-tree</B>を使用することを薦める。
 </DD>
 </DL>
 <BR>
@@ -135,16 +136,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4061"></A>
-<B>become</B> <EM>object class </EM>[�֐�]
+<A NAME="4058"></A>
+<B>become</B> <EM>object class </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>object</EM>�̃N���X��<EM>class</EM>�ɕύX����B
-�Â��N���X�ƐV�����N���X�����̃X���b�g�\���́A��v���Ȃ���΂Ȃ�Ȃ��B
-���ʁA�Q�v�f�x�N�g���Ԃ̃N���X�ύX�ɂ݈̂��S�Ɏg�p���邱�Ƃ��ł���B
-�Ⴆ�΁A�����x�N�g������r�b�g�x�N�g���ւ̕ύX�B
+<EM>object</EM>のクラスを<EM>class</EM>に変更する。
+古いクラスと新しいクラス両方のスロット構造は、一致しなければならない。
+普通、２要素ベクトル間のクラス変更にのみ安全に使用することができる。
+例えば、整数ベクトルからビットベクトルへの変更。
 </DD>
 </DL>
 <BR>
@@ -152,13 +153,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4073"></A>
-<B>replace-object</B> <EM>dest src </EM>[�֐�]
+<A NAME="4070"></A>
+<B>replace-object</B> <EM>dest src </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>dest</EM>�́A<EM>src</EM>�̃T�u�N���X�̃C���X�^���X�łȂ���΂Ȃ�Ȃ��B
+<EM>dest</EM>は、<EM>src</EM>のサブクラスのインスタンスでなければならない。
 </DD>
 </DL>
 <BR>
@@ -166,14 +167,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4085"></A>
-<B>class</B> <EM>object </EM>[�֐�]
+<A NAME="4082"></A>
+<B>class</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>object</EM>�̃N���X�I�u�W�F�N�g��Ԃ��B
-�N���X���𓾂邽�߂ɁA�N���X�I�u�W�F�N�g��<TT>:name</TT>���b�Z�[�W�𑗂�B
+<EM>object</EM>のクラスオブジェクトを返す。
+クラス名を得るために、クラスオブジェクトに<TT>:name</TT>メッセージを送る。
 </DD>
 </DL>
 <BR>
@@ -181,16 +182,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4097"></A>
-<B>derivedp</B> <EM>object class </EM>[�֐�]
+<A NAME="4094"></A>
+<B>derivedp</B> <EM>object class </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>derivedp</B>�́A<EM>object</EM>��<EM>class</EM>�܂��͂��̃T�u�N���X����
-�C���X�^���X������Ă��邩�ǂ����𔻒肷��B
-<B>subclassp</B>��<B>derivedp</B>�֐��́A�N���X�p���̂Ȃ���T���ł��Ȃ��B
-���������āA��莞�ԓ��Ɍ^�̃`�F�b�N�������I������B
+<B>derivedp</B>は、<EM>object</EM>が<EM>class</EM>またはそのサブクラスから
+インスタンス化されているかどうかを判定する。
+<B>subclassp</B>と<B>derivedp</B>関数は、クラス継承のなかを探索できない。
+したがって、一定時間内に型のチェックがいつも終了する。
 </DD>
 </DL>
 <BR>
@@ -198,13 +199,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4112"></A>
-<B>slot</B> <EM>object class (index <SPAN CLASS="MATH">7#7</SPAN> slot-name) </EM>[�֐�]
+<A NAME="4109"></A>
+<B>slot</B> <EM>object class (index <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> slot-name) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�X���b�g�l�̖��O���C���f�b�N�X��Ԃ��B
+スロット値の名前かインデックスを返す。
 </DD>
 </DL>
 <BR>
@@ -212,14 +216,17 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4122"></A>
-<B>setslot</B> <EM>object class (index <SPAN CLASS="MATH">7#7</SPAN> slot-name) value </EM>[�֐�]
+<A NAME="4119"></A>
+<B>setslot</B> <EM>object class (index <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> slot-name) value </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>setslot</B>�́A���������֐��Ń��[�U�[���g�p�ł��Ȃ��B
-���ɁA<B>setf</B>��<B>slot</B>�̑g�ݍ������g�p����B
+<B>setslot</B>は、内部処理関数でユーザーが使用できない。
+代りに、<B>setf</B>と<B>slot</B>の組み合せを使用する。
 </DD>
 </DL>
 <BR>
@@ -247,19 +254,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html856"
-  HREF="jmanual-node35.html">��{�N���X</A>
+  HREF="jmanual-node35.html">基本クラス</A>
 <B> Up:</B> <A NAME="tex2html850"
-  HREF="jmanual-node31.html">�I�u�W�F�N�g�w���v���O���~���O</A>
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
 <B> Previous:</B> <A NAME="tex2html844"
-  HREF="jmanual-node33.html">���b�Z�[�W���M</A>
+  HREF="jmanual-node33.html">メッセージ送信</A>
  &nbsp; <B>  <A NAME="tex2html852"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html854"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

@@ -8,6 +8,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <HTML>
 <HEAD>
 <TITLE>Context Separation</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <META NAME="description" CONTENT="Context Separation">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1834"
-  HREF="jmanual-node95.html">�������Ǘ�</A>
+  HREF="jmanual-node95.html">メモリ管理</A>
 <B> Up:</B> <A NAME="tex2html1828"
-  HREF="jmanual-node92.html">�}���`�X���b�hEuslisp�̐݌v</A>
+  HREF="jmanual-node92.html">マルチスレッドEuslispの設計</A>
 <B> Previous:</B> <A NAME="tex2html1822"
-  HREF="jmanual-node93.html">Solaris 2 �I�y���[�e�B���O�V�X�e���̃}���`�X���b�h</A>
+  HREF="jmanual-node93.html">Solaris 2 オペレーティングシステムのマルチスレッド</A>
  &nbsp; <B>  <A NAME="tex2html1830"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1832"
@@ -60,40 +61,45 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <H3><A NAME="SECTION04021200000000000000">
 Context Separation</A>
 </H3>
-MT-Eus�́A���ꂼ��̃X���b�h�ɑ΂��ʂɃX�^�b�N�Ɗ���z�u����B
-���̂��߁A���̃X���b�h�ƓƗ��Ɏ��s���邱�Ƃ��ł���B
-symbol��cons�̂悤�ȃI�u�W�F�N�g�́A����܂ł�Euslisp�̂悤��
-���L�q�[�v��������ɔz�u�����B
-���������āAblock label��catch tag�⃍�[�J���ϐ��̂悤��
-�X���b�h�̌ʃf�[�^�́A���̃X���b�h����ی삳���B
-�Ƃ��낪�A�O���[�o���ϐ��ɂ���Ď������l�i�I�u�W�F�N�g�j�́A
-���̕ύX��������Ă��邷�ׂẴX���b�h���猩�邱�Ƃ��ł���B
+MT-Eusは、それぞれのスレッドに対し個別にスタックと環境を配置する。
+そのため、他のスレッドと独立に実行することができる。
+symbolやconsのようなオブジェクトは、これまでのEuslispのように
+共有ヒープメモリ上に配置される。
+したがって、block labelやcatch tagやローカル変数のような
+スレッドの個別データは、他のスレッドから保護される。
+ところが、グローバル変数によって示される値（オブジェクト）は、
+情報の変更が許可されているすべてのスレッドから見ることができる。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="threadmodel"></A><A NAME="24981"></A>
+<DIV ALIGN="CENTER"><A NAME="threadmodel"></A><A NAME="24978"></A>
 <TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 5:</STRONG>
-Solaris�I�y���[�e�B���O�V�X�e���̃X���b�h���f��</CAPTION>
-<TR><TD>46#46</TD></TR>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+Solarisオペレーティングシステムのスレッドモデル</CAPTION>
+<TR><TD><IMG
+ WIDTH="574" HEIGHT="251" BORDER="0"
+ SRC="jmanual-img46.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/threadfig.ps,width=130mm}
+\end{center}\end{figure}"></TD></TR>
 </TABLE>
 </DIV>
 
 <P>
-����C-stack��binding-stack�����<TT>lambda, block, catch, let, flet</TT>
-�Ȃǂ̃��[�J���u���b�N�Ɍq����t���[���|�C���^�ɂ��\������Ă���A
-�V�����X���b�h���쐬���ꂽ�Ƃ��ɐݒu�����B
-�����̊����{���̃}���`�v���Z�b�T�}�V���̏�œ�����
-����ł���̂ŁA�O���[�o���ϐ��̒��̌��݂̊��ɑ΂��ĒP��ȃ|�C���^
-�������Ƃ��ł��Ȃ��B
-�ނ���A���̃|�C���^���ŏ�ʂ̕]������჌�x���̃������Ǘ��ɕϊ����邽�߂ɁA
-���ׂĂ̓����֐��ɂ������������t�������Ȃ���΂Ȃ�Ȃ��B
+環境はC-stackとbinding-stackおよび<TT>lambda, block, catch, let, flet</TT>
+などのローカルブロックに繋がるフレームポインタにより構成されており、
+新しいスレッドが作成されたときに設置される。
+複数の環境が本当のマルチプロセッサマシンの上で同時に
+動作できるので、グローバル変数の中の現在の環境に対して単一なポインタ
+を持つことができない。
+むしろ、環境のポインタを最上位の評価から低レベルのメモリ管理に変換するために、
+すべての内部関数にもう一つ引き数を付け加えなければならない。
 
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

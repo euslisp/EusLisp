@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>���L������</TITLE>
-<META NAME="description" CONTENT="���L������">
+<TITLE>共有メモリ</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="共有メモリ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1196"
-  HREF="jmanual-node58.html">���b�Z�[�W�L���[��FIFO</A>
+  HREF="jmanual-node58.html">メッセージキューとFIFO</A>
 <B> Up:</B> <A NAME="tex2html1190"
-  HREF="jmanual-node56.html">�v���Z�X�ԒʐM�ƃl�b�g���[�N</A>
+  HREF="jmanual-node56.html">プロセス間通信とネットワーク</A>
 <B> Previous:</B> <A NAME="tex2html1184"
-  HREF="jmanual-node56.html">�v���Z�X�ԒʐM�ƃl�b�g���[�N</A>
+  HREF="jmanual-node56.html">プロセス間通信とネットワーク</A>
  &nbsp; <B>  <A NAME="tex2html1192"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1194"
@@ -58,61 +59,61 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION03084100000000000000">
-���L������</A>
+共有メモリ</A>
 </H3>
-Euslisp�́ASystem5��shmem�ł͂Ȃ��ASunOS��mmap�ɂ���ċ��L��������񋟂���B
-���L�������́A<B>map-file</B>�֐��ɂ���Ĕz�u�����B
-<B>map-file</B>�́AEusLisp�̃v���Z�X��������ԓ��Ƀt�@�C����z�u���A
-<B>foreign-string</B>�̃C���X�^���X��Ԃ��B
-�f�[�^�͂���foreign-string�ɑ΂��镶����֐���p���邱�Ƃɂ��
-�������݂Ɠǂ݂������ł���B
-���L�������́A�V�X�e���ˑ��̃y�[�W���E�ɔz�u�����̂ŁA 
-�z�u�A�h���X���w�肷�ׂ��ł͂Ȃ��B
-<B>:share</B>�̃L�[�p�����[�^��NIL�ɐݒ肳��Ă��邩�܂���
-<B>:private</B>��T�ɐݒ肳��Ă���t�@�C����z�u���邱�Ƃ́A
-�t�@�C�����v���C�x�[�g(�r���I)�ɃA�N�Z�X���ׂ��ł��邱�Ƃ��Ӗ�����B
-�������A�������̋��L���̖ړI����O��邽�߁A
-<B>:share</B>�̃f�t�H���g�l��T�ł���B
-2�l�̃��[�U�[�Ńt�@�C�������L�����Ƃ��A�ǂݏ����̋���
-�����̃��[�U�[�ɐ��m�ɐݒ肳��Ȃ���΂Ȃ�Ȃ��B
-�c�O�Ȃ��Ƃ�SunOS�́A�l�b�g���[�N��ʂ��ĈقȂ������[�N�X�e�[�V�����Ԃ�
-�t�@�C���̋��L�����T�|�[�g���Ă��Ȃ��B
+Euslispは、System5のshmemではなく、SunOSのmmapによって共有メモリを提供する。
+共有メモリは、<B>map-file</B>関数によって配置される。
+<B>map-file</B>は、EusLispのプロセスメモリ空間内にファイルを配置し、
+<B>foreign-string</B>のインスタンスを返す。
+データはこのforeign-stringに対する文字列関数を用いることにより
+書き込みと読みだしができる。
+共有メモリは、システム依存のページ境界に配置されるので、 
+配置アドレスを指定すべきではない。
+<B>:share</B>のキーパラメータがNILに設定されているかまたは
+<B>:private</B>がTに設定されているファイルを配置することは、
+ファイルをプライベート(排他的)にアクセスすべきであることを意味する。
+しかし、メモリの共有化の目的から外れるため、
+<B>:share</B>のデフォルト値はTである。
+2人のユーザーでファイルが共有されるとき、読み書きの許可は
+両方のユーザーに正確に設定されなければならない。
+残念なことにSunOSは、ネットワークを通して異なったワークステーション間の
+ファイルの共有ををサポートしていない。
 
 <P>
-64�o�C�g���̃t�@�C����2��EusLisp�ŋ��L����v���O����������Ɏ����B
+64バイト長のファイルを2つのEusLispで共有するプログラム例を下に示す。
 
 <P>
 <PRE>
-;; 64�o�C�g�̃t�@�C�������
+;; 64バイトのファイルを作る
 (with-open-file (f "afile" :direction :output)  (princ (make-string 64) f))
-;; �z�u����
+;; 配置する
 (setq shared-string1 (map-file "afile" :direction :io))
 ;;
-;; ���̃v���Z�X�̒���
+;; 他のプロセスの中で
 (setq shared-string2 (map-file "afile" :direction :io))
 </PRE>
 
 <P>
-���̌�A<TT>shared-string1</TT>�ɏ����ꂽ�f�[�^��
-������<TT>shared-string2</TT>�֌����B
-foreign string�ւ̏������݂́A
-<B>replace</B>��<B>setf</B>��<B>aref</B>��g�ݍ����邱�Ƃɂ��\�ł���B
+その後、<TT>shared-string1</TT>に書かれたデータは
+すぐに<TT>shared-string2</TT>へ現れる。
+foreign stringへの書き込みは、
+<B>replace</B>か<B>setf</B>に<B>aref</B>を組み合せることにより可能である。
 
 <P>
 
  <BR>
-<BR> <A NAME="15484"></A>
+<BR> <A NAME="15481"></A>
 <B>map-file</B> <EM>filename &amp;key (:direction  :input) :length (:offset 0) (:share t)
-(:address 0) </EM>[�֐�]
+(:address 0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>filename</EM>�Ƃ������̃t�@�C������������Ԃɔz�u����B
-<EM>filename</EM>�́A���[�J���t�@�C���ANFS�Ń}�E���g���ꂽ�����[�g�t�@�C���A
-�܂���<TT>/dev</TT>�̒��̃������f�o�C�X�̂ǂ�ł��\�ł���B
-���̊֐��̌��ʂƂ���<B>foreign-string</B>���Ԃ����B���̗v�f�́A<B>aref</B>�ɂ���ăA�N�Z�X�\�ł���B<TT>map-file</TT>�ɂ����<EM>:direction=:input</EM>�Ƃ���������
-�z�u���ꂽforeign-string�Ƀf�[�^���������ނ��Ƃ́Asegmentation fault�̌����ƂȂ�B
+<EM>filename</EM>という名のファイルをメモリ空間に配置する。
+<EM>filename</EM>は、ローカルファイル、NFSでマウントされたリモートファイル、
+または<TT>/dev</TT>の中のメモリデバイスのどれでも可能である。
+この関数の結果として<B>foreign-string</B>が返される。その要素は、<B>aref</B>によってアクセス可能である。<TT>map-file</TT>によって<EM>:direction=:input</EM>という条件で
+配置されたforeign-stringにデータを書き込むことは、segmentation faultの原因となる。
 </DD>
 </DL>
 <BR>
@@ -121,8 +122,8 @@ foreign string�ւ̏������݂́A
              <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

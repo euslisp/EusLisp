@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�F�ƃJ���[�}�b�v</TITLE>
-<META NAME="description" CONTENT="�F�ƃJ���[�}�b�v">
+<TITLE>色とカラーマップ</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="色とカラーマップ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -45,7 +46,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Next:</B> <A NAME="tex2html2396"
   HREF="jmanual-node134.html">XToolKit</A>
 <B> Up:</B> <A NAME="tex2html2390"
-  HREF="jmanual-node129.html">Xwindow �C���^�[�t�F�[�X</A>
+  HREF="jmanual-node129.html">Xwindow インターフェース</A>
 <B> Previous:</B> <A NAME="tex2html2386"
   HREF="jmanual-node132.html">Graphic Context</A>
  &nbsp; <B>  <A NAME="tex2html2392"
@@ -57,15 +58,15 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04064000000000000000">
-�F�ƃJ���[�}�b�v</A>
+色とカラーマップ</A>
 </H2>
 
 <P>
 
  <BR>
 <BR> <BR> 
-<A NAME="41104"></A>
-<BIG CLASS="XLARGE"><B>colormap </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="41101"></A>
+<BIG CLASS="XLARGE"><B>colormap </B></BIG> [クラス]  <PRE><TT>
   :super   <B>object</B> 
 <BR>  :slots 		 (cmapid planes pixels LUT-list) 
 </TT></PRE>
@@ -74,143 +75,143 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DL COMPACT>
 <DT> 
-<DD><B>Xwindow</B>�̃J���[�}�b�v����уA�v���P�[�V�����w���̃J���[���b�N�A�b�v�e�[�u��
-���`����B
-�J���[��RGB�l�ŕ\������A���͈̔͂�0�`65535�ł���B
-�J���[�}�b�v�̃J���[�Z���́A8�r�b�g�̋[���J���[�f�B�X�v���C�̏��
-0�`255�͈̔͂̒l�ɐݒ肳���B
+<DD><B>Xwindow</B>のカラーマップおよびアプリケーション指向のカラールックアップテーブル
+を定義する。
+カラーはRGB値で表現され、その範囲は0〜65535である。
+カラーマップのカラーセルは、8ビットの擬似カラーディスプレイの上の
+0〜255の範囲の値に設定される。
 </DD>
 </DL>
 <BR>
 <BR>
              <P>
-�����ŁA�W�r�b�g�̋[���J���[�f�B�X�v���C�̋@�\������A
-256�F��I�����邱�Ƃ��ł���Ɖ��肷��B
-��{�I�ɃJ���[�}�b�v���g�p����Q�̕��@������B
-�P�́A�V�X�e���f�t�H���g�̃J���[�}�b�v�����L������@�ŁA
-�����P�̓v���Z�X�ɓƎ��̃J���[�}�b�v���쐬������@�ł���B
-�����A�V�X�e���̃f�t�H���g�J���[�}�b�v���g�p����ꍇ�A
-�}�b�v�̂��ׂẴJ���[�Z�����g������Ȃ��悤�ɒ��ӂ��Ȃ���΂Ȃ�Ȃ��B
-�Ȃ��Ȃ�A�}�b�v�͑����̂̃v���Z�X���狤�L����Ă��邩��ł���B
-�����A�Ǝ��̃J���[�}�b�v���g�p����ꍇ�A
-���̃v���Z�X���C�ɂ��邱�ƂȂ�256�F���ׂĂ��g�p���邱�Ƃ��ł���B
-�������A���̃}�b�v�͖��m�ɓƎ���window�ɐݒ肵�Ȃ���΂Ȃ�Ȃ��B
-�}�E�X�̃|�C���^�[��window���̂ǂ����ɓ������ꂽ�Ƃ��A
-�J���[�}�b�v��window manager�ɂ�芈���������B
+ここで、８ビットの擬似カラーディスプレイの機能があり、
+256色を選択することができると仮定する。
+基本的にカラーマップを使用する２つの方法がある。
+１つは、システムデフォルトのカラーマップを共有する方法で、
+もう１つはプロセスに独自のカラーマップを作成する方法である。
+もし、システムのデフォルトカラーマップを使用する場合、
+マップのすべてのカラーセルを使いきらないように注意しなければならない。
+なぜなら、マップは多くののプロセスから共有されているからである。
+もし、独自のカラーマップを使用する場合、
+他のプロセスを気にすることなく256色すべてを使用することができる。
+しかし、そのマップは明確に独自のwindowに設定しなければならない。
+マウスのポインターがwindow内のどこかに動かされたとき、
+カラーマップはwindow managerにより活性化される。
 
 <P>
-�V�X�e���f�t�H���g�̃J���[�}�b�v��
-eusx�����s�����ŏ���<B>x:colormap</B>�̃N���X�̃C���X�^���X�Ƃ��āA
-<B>x:*color-map*</B>�ɐݒ肳��Ă���B
-�����A�Ǝ��̃J���[�}�b�v���g�p����Ƃ��A<B>x:colormap</B>�̃C���X�^���X��
-���B
-�����̃C���X�^���X�́Ax server�Œ�`���ꂽcolormap�I�u�W�F�N�g��
-��v���Ă���A���ꂼ��̃C���X�^���X��<TT>cmapid</TT>�Ɏ�����Ă���B
+システムデフォルトのカラーマップは
+eusxが実行される最初に<B>x:colormap</B>のクラスのインスタンスとして、
+<B>x:*color-map*</B>に設定されている。
+もし、独自のカラーマップを使用するとき、<B>x:colormap</B>のインスタンスを
+作る。
+これらのインスタンスは、x serverで定義されたcolormapオブジェクトと
+一致しており、それぞれのインスタンスの<TT>cmapid</TT>に示されている。
 
 <P>
-�V�X�e���f�t�H���g�̃J���[�}�b�v���g�p����Ƃ��A
-���̃v���Z�X�Ƌ��L����J���[��ǂݍ��ݐ�p(<EM>read-only</EM>)�ɁA
-Euslisp�̓Ǝ��J���[��ǂݏ����\(<EM>read-write</EM>)�ɒ�`���邱�Ƃ��ł���B
-"�ǂݍ��ݐ�p"�́A�J���[�Z���Ɋ��蓖�Ă���
-�C�ӂ̃J���[�ɒ�`���邱�Ƃ��ł���B
-�������A���蓖�Ă���ύX���邱�Ƃ��ł��Ȃ��B
-��������ŁA"�ǂݏ����\"�J���[�͒�`������ł����A�ύX���邱�Ƃ��ł���B
-���L�J���[�́A���̃v���Z�X���ύX��\�����Ă��Ȃ�����"�ǂݍ��ݐ�p"�ł���B
-����"�ǂݍ��ݐ�p"��"�ǂݏ����\"�̑����́A���ꂼ��̃J���[�ɕt������B
-�i���΂��΁A�J���[�Z���Ƃ��ĎQ�Ƃ����j
+システムデフォルトのカラーマップを使用するとき、
+他のプロセスと共有するカラーを読み込み専用(<EM>read-only</EM>)に、
+Euslispの独自カラーを読み書き可能(<EM>read-write</EM>)に定義することができる。
+"読み込み専用"は、カラーセルに割り当てられる
+任意のカラーに定義することができる。
+しかし、割り当てた後変更することができない。
+もう一方で、"読み書き可能"カラーは定義した後でさえ、変更することができる。
+共有カラーは、他のプロセスが変更を予期していないため"読み込み専用"である。
+この"読み込み専用"と"読み書き可能"の属性は、それぞれのカラーに付けられる。
+（しばしば、カラーセルとして参照される）
 
 <P>
-<B>colormap</B>�I�u�W�F�N�g�́Acolor ID����RGB�̕����I�ȕ\���ւ̕ϊ���
-��`����B
-�������Ȃ���A�����̘_���I��color ID�́A�C�ӂɑI�����邱�Ƃ��ł��Ȃ��B
-���ɁA�V�X�e���̃f�t�H���g�̃J���[�}�b�v���g�p���Ă���Ƃ��A�g�p�ł��Ȃ��B
-color ID�i���΂���'pixel'�Ƃ��ĎQ�Ƃ����j�́A�J���[�}�b�v�̓��ʂȐF
-�̃C���f�b�N�X�ł���B
-Xlib�́A���蓖�Ă̗v��������ƁA���L�J���[�̂��߂ɋ󂢂��C���f�b�N�X��
-�P��I������B
-���������āA��������̃O���[�K���̃J���[��A���I�Ɋ��蓖�Ă邱�Ƃ�
-�ۏ؂��邱�Ƃ��邢�͍ŏ��i0�Ԗځj�̃C���f�b�N�X����n�߂邱�Ƃ͂ł��Ȃ��B
+<B>colormap</B>オブジェクトは、color IDからRGBの物理的な表現への変換を
+定義する。
+しかしながら、これらの論理的なcolor IDは、任意に選択することができない。
+特に、システムのデフォルトのカラーマップを使用しているとき、使用できない。
+color ID（しばしば'pixel'として参照される）は、カラーマップの特別な色
+のインデックスである。
+Xlibは、割り当ての要求があると、共有カラーのために空いたインデックスの
+１つを選択する。
+したがって、たくさんのグレー階調のカラーを連続的に割り当てることを
+保証することあるいは最初（0番目）のインデックスから始めることはできない。
 
 <P>
-�A�v���P�[�V�����̊ϓ_����A�����Ƙ_���I�ȃJ���[�����K�v�Ƃ����B
-�Ⴆ�΁A�O���[�K���̐��͖��邳���C���f�b�N�X�Ƃ��ĎQ�Ƃ��ׂ��ł���B
-���C�g���[�V���O�v���O�����́A
-HLS�Œ�`������������邳�̃J���[�̃O���[�v�̂��߂�
-�A���I�ȃC���f�b�N�X�̊��蓖�Ă�v������B
+アプリケーションの観点から、もっと論理的なカラー名が必要とされる。
+例えば、グレー階調の数は明るさをインデックスとして参照すべきである。
+レイトレーシングプログラムは、
+HLSで定義される違った明るさのカラーのグループのために
+連続的なインデックスの割り当てを要求する。
 
 <P>
-���̖��ɑΏ����邽�߂ɁAEuslisp�̃J���[�}�b�v�̓��b�N�A�b�v�e�[�u��(LUT)
-�ƌĂ΂��ʂ̕ϊ��e�[�u����񋟂��Ă���B
-�_���I�ȃJ���[�O���[�v�̂��߂ɁALUT���`�ł��Asymbol����t���邱�Ƃ��ł���B
-�P�ȏ��LUT���J���[�}�b�v�Ƃ��Ē�`�ł���B
-LUT�́AXserver���F���ł���悤�ɁA�A�v���P�[�V�������w�肵���_���J���[��
-�C���f�b�N�X�𕨗��s�N�Z���l�ɕϊ����邽�߂ɐ����x�N�g���ł���B
+この問題に対処するために、Euslispのカラーマップはルックアップテーブル(LUT)
+と呼ばれる別の変換テーブルを提供している。
+論理的なカラーグループのために、LUTを定義でき、symbol名を付けることができる。
+１つ以上のLUTをカラーマップとして定義できる。
+LUTは、Xserverが認識できるように、アプリケーションが指定した論理カラーの
+インデックスを物理ピクセル値に変換するために整数ベクトルである。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="41122"></A>
-<B>:id</B> [���\�b�h]
+<A NAME="41119"></A>
+<B>:id</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <TT>cmapid</TT>��Ԃ��B
+<DD> <TT>cmapid</TT>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41133"></A>
-<B>:query</B> <EM>pix </EM>[���\�b�h]
+<A NAME="41130"></A>
+<B>:query</B> <EM>pix </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> �w�肳�ꂽ�s�N�Z������RGB�l��Ԃ��B
+<DD> 指定されたピクセル数のRGB値を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41143"></A>
-<B>:alloc</B> <EM>pix r g b </EM>[���\�b�h]
+<A NAME="41140"></A>
+<B>:alloc</B> <EM>pix r g b </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃��\�b�h�́A<TT>:store nil r g b</TT>�Ɠ���ł���B
-�V�����J���[�Z�������̃J���[�}�b�v�ɔz�u����A�w�肳�ꂽRGB�l�Ɋ��蓖�Ă���B
+このメソッドは、<TT>:store nil r g b</TT>と同一である。
+新しいカラーセルがこのカラーマップに配置され、指定されたRGB値に割り当てられる。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41154"></A>
-<B>:store</B> <EM>pix r g b </EM>[���\�b�h]
+<A NAME="41151"></A>
+<B>:store</B> <EM>pix r g b </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>pix</EM>�Ԗڂ̃J���[�Z����RGB�l��ݒ肷��B
+<DD> <EM>pix</EM>番目のカラーセルのRGB値を設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41165"></A>
-<B>:store</B> <EM>pix color-name </EM>[���\�b�h]
+<A NAME="41162"></A>
+<B>:store</B> <EM>pix color-name </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>:store</B>�́A�J���[�}�b�v�ɐF��ݒ肷��჌�x�����\�b�h�ł���B
-�P�̏����Ƃ��āARGB�l��0�`65535�Ŏw�肷����@�ł���B
-���̏����Ƃ��āA"red" ��"navy-blue"�̂悤�ȃJ���[���Ŏw�肷��B
-�����A<EM>color-name</EM>���Ȃ���΁ANIL��Ԃ��B
-�s�N�Z���̓J���[�}�b�v�̃C���f�b�N�X���邢��NIL�ł���B
-���������Ȃ�A�J���[�Z���͓ǂݏ����\�łȂ���΂Ȃ�Ȃ��B
-����NIL�Ȃ�A���L�̓ǂݍ��ݐ�p�J���[�Z�������蓖�Ă��Ă���B
-<B>:store</B>�́A�J���[�}�b�v���̃J���[�Z���̃C���f�b�N�X��Ԃ��B
+<B>:store</B>は、カラーマップに色を設定する低レベルメソッドである。
+１つの書式として、RGB値を0〜65535で指定する方法である。
+他の書式として、"red" や"navy-blue"のようなカラー名で指定する。
+もし、<EM>color-name</EM>がなければ、NILを返す。
+ピクセルはカラーマップのインデックスあるいはNILである。
+もし整数なら、カラーセルは読み書き可能でなければならない。
+もしNILなら、共有の読み込み専用カラーセルが割り当てられている。
+<B>:store</B>は、カラーマップ内のカラーセルのインデックスを返す。
 </DD>
 </DL>
 <BR>
@@ -218,16 +219,16 @@ LUT�́AXserver���F���ł���悤�ɁA�A�v���P�[�V�������w�肵���_���J���[��
 
 <P>
 
-<A NAME="41178"></A>
-<B>:store-hls</B> <EM>pix hue lightness saturation </EM>[���\�b�h]
+<A NAME="41175"></A>
+<B>:store-hls</B> <EM>pix hue lightness saturation </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-HLS(Hue, Lightness and Saturation)��
-�w�肳���F���J���[�}�b�v��<EM>pix</EM>�Ԗڂɒ~�ς���B
-�����A<EM>pix</EM>��NIL�Ȃ�A���L�̓ǂݍ��ݐ�p�̃J���[�Z�������蓖�Ă���B
-<B>:store-hls</B>�́A�J���[�Z���Ɋ��蓖�Ă���C���f�b�N�X��Ԃ��B
+HLS(Hue, Lightness and Saturation)で
+指定される色をカラーマップの<EM>pix</EM>番目に蓄積する。
+もし、<EM>pix</EM>がNILなら、共有の読み込み専用のカラーセルが割り当てられる。
+<B>:store-hls</B>は、カラーセルに割り当てられるインデックスを返す。
 </DD>
 </DL>
 <BR>
@@ -235,39 +236,25 @@ HLS(Hue, Lightness and Saturation)��
 
 <P>
 
-<A NAME="41191"></A>
-<B>:destroy</B> [���\�b�h]
+<A NAME="41188"></A>
+<B>:destroy</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����<B>colormap</B>��j�󂵁A���\�[�X����ɂ���B
+<DD> この<B>colormap</B>を破壊し、リソースを空にする。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41202"></A>
-<B>:pixel</B> <EM>LUT-name id </EM>[���\�b�h]
+<A NAME="41199"></A>
+<B>:pixel</B> <EM>LUT-name id </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>LUT</EM>�̒�����<EM>id</EM>�Ԗڂ𒲂ׂāA�s�N�Z���l��Ԃ��B
-<EM>LUT-name</EM>�́A<TT>:define-LUT</TT>�Œ�`���ꂽ���b�N�A�b�v�e�[�u���̖��O�ł���B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="41216"></A>
-<B>:allocate-private-colors</B> <EM>num </EM>[���\�b�h]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-�Ǝ��̃J���[�}�b�v��<EM>num</EM>�̃J���[�Z�������蓖�Ă�B
+<EM>LUT</EM>の中から<EM>id</EM>番目を調べて、ピクセル値を返す。
+<EM>LUT-name</EM>は、<TT>:define-LUT</TT>で定義されたルックアップテーブルの名前である。
 </DD>
 </DL>
 <BR>
@@ -275,15 +262,13 @@ HLS(Hue, Lightness and Saturation)��
 
 <P>
 
-<A NAME="41227"></A>
-<B>:allocate-colors</B> <EM>rgb-list [private] </EM>[���\�b�h]
+<A NAME="41213"></A>
+<B>:allocate-private-colors</B> <EM>num </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>rgb-list</EM>�̂��ꂼ��̗v�f�́Ared,green,blue�̃��X�g�ł���B
-�J���[�Z���́A���ꂼ���RGB�l�����蓖�Ă��A�s�N�Z���l��v�f�Ƃ���
-�����x�N�g����Ԃ��B
+独自のカラーマップに<EM>num</EM>個のカラーセルを割り当てる。
 </DD>
 </DL>
 <BR>
@@ -291,15 +276,15 @@ HLS(Hue, Lightness and Saturation)��
 
 <P>
 
-<A NAME="41238"></A>
-<B>:define-LUT</B> <EM>LUT-name rgb-list [private] </EM>[���\�b�h]
+<A NAME="41224"></A>
+<B>:allocate-colors</B> <EM>rgb-list [private] </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>rgb-list</EM>�ɋL�q���ꂽ�J���[�����蓖�Ă��A
-LUT��<EM>LUT-name</EM>�̃V���{���b�N���œo�^�����B
-�Ǝ��̃J���[�Z�����`���邽�߂ɂ́A<EM>private</EM>��T�ɐݒ肷�邱�ƁB
+<EM>rgb-list</EM>のそれぞれの要素は、red,green,blueのリストである。
+カラーセルは、それぞれのRGB値が割り当てられ、ピクセル値を要素とする
+整数ベクトルを返す。
 </DD>
 </DL>
 <BR>
@@ -307,19 +292,15 @@ LUT��<EM>LUT-name</EM>�̃V���{���b�N���œo�^�����B
 
 <P>
 
-<A NAME="41251"></A>
-<B>:define-gray-scale-LUT</B> <EM>LUT-name levels [private] </EM>[���\�b�h]
+<A NAME="41235"></A>
+<B>:define-LUT</B> <EM>LUT-name rgb-list [private] </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���`�̃O���[�X�P�[���J���[�ŕ\�������<EM>levels</EM>�K����
-�J���[�Z�������蓖�āALUT��Ԃ��B
-�Ⴆ�΁A<TT>(send x:*color-map* :define-gray-scale-LUT 'gray8 8)</TT>
-�́A�V�X�e���̃f�t�H���g�J���[�}�b�v�̒��ɂW�̃O���[�J���[��z�u���A
-<TT>#i(29 30 31 48 49 50 51 0)</TT>�̂悤�Ȑ����x�N�g����Ԃ��B
-�����s�N�Z���l�́A<TT>:pixel</TT>���b�Z�[�W�𑗂邱�Ƃɂ�蓾����B
-�Ⴆ�΁A<TT>(send x:*color-map* :pixel 'gray8 2)</TT>�́A31��Ԃ��B
+<EM>rgb-list</EM>に記述されたカラーが割り当てられ、
+LUTが<EM>LUT-name</EM>のシンボリック名で登録される。
+独自のカラーセルを定義するためには、<EM>private</EM>をTに設定すること。
 </DD>
 </DL>
 <BR>
@@ -327,34 +308,57 @@ LUT��<EM>LUT-name</EM>�̃V���{���b�N���œo�^�����B
 
 <P>
 
-<A NAME="41266"></A>
-<B>:define-rgb-LUT</B> <EM>LUT-name red green blue [private] </EM>[���\�b�h]
+<A NAME="41248"></A>
+<B>:define-gray-scale-LUT</B> <EM>LUT-name levels [private] </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-RGB�\�����k������LUT���`����B
-�Ⴆ�΁A�����A<EM>red</EM>=<EM>green</EM>=<EM>blue</EM>=2�Ȃ�A�J���[�Z���ɂ�<!-- MATH
+線形のグレースケールカラーで表現される<EM>levels</EM>階調の
+カラーセルを割り当て、LUTを返す。
+例えば、<TT>(send x:*color-map* :define-gray-scale-LUT 'gray8 8)</TT>
+は、システムのデフォルトカラーマップの中に８つのグレーカラーを配置し、
+<TT>#i(29 30 31 48 49 50 51 0)</TT>のような整数ベクトルを返す。
+物理ピクセル値は、<TT>:pixel</TT>メッセージを送ることにより得られる。
+例えば、<TT>(send x:*color-map* :pixel 'gray8 2)</TT>は、31を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41263"></A>
+<B>:define-rgb-LUT</B> <EM>LUT-name red green blue [private] </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGB表現を縮小したLUTを定義する。
+例えば、もし、<EM>red</EM>=<EM>green</EM>=<EM>blue</EM>=2なら、カラーセルには<!-- MATH
  $2^{2+2+2}=2^6=64$
  -->
-<SPAN CLASS="MATH">79#79</SPAN>
-�����蓖�Ă���B
+<SPAN CLASS="MATH"><IMG
+ WIDTH="125" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img79.png"
+ ALT="$2^{2+2+2}=2^6=64$"></SPAN>
+が割り当てられる。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41280"></A>
+<A NAME="41277"></A>
 <B>:define-hls-LUT</B> <EM>LUT-name count hue low-brightness
-high-brightness saturation [private] </EM>[���\�b�h]
+high-brightness saturation [private] </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-HLS�Ŏg�p����<EM>count</EM>���̃J���[��z�u����B
+HLSで使用する<EM>count</EM>数のカラーを配置する。
 <EM>hue</EM> (0..360),<EM>saturation</EM> (0..1),<EM>low-brightness</EM>
-��<EM>high-brightness</EM>�̖��邳�̍����J���[�}�b�v�ɒ~�ς����B
-<EM>LUT-name</EM>�Ŗ��t������LUT�������B
+と<EM>high-brightness</EM>の明るさの差をカラーマップに蓄積される。
+<EM>LUT-name</EM>で名付けられるLUTも作られる。
 </DD>
 </DL>
 <BR>
@@ -362,19 +366,29 @@ HLS�Ŏg�p����<EM>count</EM>���̃J���[��z�u����B
 
 <P>
 
-<A NAME="41296"></A>
+<A NAME="41293"></A>
 <BR>
-80#80
+<IMG
+ WIDTH="552" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img80.png"
+ ALT="\begin{emtabbing}
+{\bf :define-rainbow-LUT}
+\it\= LUT-name count \\lq  [メソッ�...
+...\\
+\&gt; (brightness 0.5)\\
+\&gt; (saturation 1.0) (private nil)
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>HLS���f����p����<EM>count</EM>�̐F��z�u����B
-<EM>brightness</EM> (0..1)��
-<EM>saturation</EM> (0..1)��,
-<EM>hue-start</EM>��<EM>hue-end</EM>�Ԃ̈قȂ���hue�����F��
-�J���[�}�b�v�ɒ~�ς���B
-<EM>LUT-name</EM>�𖼕t����ꂽLUT�����������B
+<DD>HLSモデルを用いて<EM>count</EM>の色を配置する。
+<EM>brightness</EM> (0..1)と
+<EM>saturation</EM> (0..1)と,
+<EM>hue-start</EM>と<EM>hue-end</EM>間の異なったhueを持つ色を
+カラーマップに蓄積する。
+<EM>LUT-name</EM>を名付けられたLUTも生成される。
 </DD>
 </DL>
 <BR>
@@ -382,57 +396,57 @@ HLS�Ŏg�p����<EM>count</EM>���̃J���[��z�u����B
 
 <P>
 
-<A NAME="41313"></A>
-<B>:LUT-list</B> [���\�b�h]
+<A NAME="41310"></A>
+<B>:LUT-list</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̃J���[�}�b�v�ɒ�`����Ă���S�Ă�LUT�̃��X�g��Ԃ��B
-���X�g�̂��ꂼ��̃G���g���́ALUT���Ɛ����x�N�g���̑g�ł���B
+<DD> このカラーマップに定義されている全てのLUTのリストを返す。
+リストのそれぞれのエントリは、LUT名と整数ベクトルの組である。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41323"></A>
-<B>:LUT-names</B> [���\�b�h]
+<A NAME="41320"></A>
+<B>:LUT-names</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̃J���[�}�b�v�̑S�Ă�LUT�̖��O�̃��X�g��Ԃ��B
+<DD> このカラーマップの全てのLUTの名前のリストを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41333"></A>
-<B>:LUT</B> <EM>name </EM>[���\�b�h]
+<A NAME="41330"></A>
+<B>:LUT</B> <EM>name </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>name</EM>�Ŏw�肳��鐮���x�N�g��(LUT)��Ԃ��B
+<DD> <EM>name</EM>で指定される整数ベクトル(LUT)を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41344"></A>
-<B>:size</B> <EM>LUT </EM>[���\�b�h]
+<A NAME="41341"></A>
+<B>:size</B> <EM>LUT </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>LUT</EM>�̒�����Ԃ��B
+<DD> <EM>LUT</EM>の長さを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41355"></A>
-<B>:planes</B> [���\�b�h]
+<A NAME="41352"></A>
+<B>:planes</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̃J���[�}�b�v�̃v���[����Ԃ��B
+<DD> このカラーマップのプレーンを返す。
 </DD>
 </DL>
 <BR>
@@ -440,51 +454,51 @@ HLS�Ŏg�p����<EM>count</EM>���̃J���[��z�u����B
 
 <P>
 
-<A NAME="41365"></A>
-<B>:set-window</B> <EM>xwin </EM>[���\�b�h]
+<A NAME="41362"></A>
+<B>:set-window</B> <EM>xwin </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃J���[�}�b�v��<EM>xwin</EM>��window�Ɗ֘A�t����B
-���̃J���[�}�b�v�́A<EM>xwin</EM>�ɃJ�[�\�����������Ƃ������������B
+このカラーマップを<EM>xwin</EM>のwindowと関連付ける。
+このカラーマップは、<EM>xwin</EM>にカーソルが入ったとき活性化される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41377"></A>
-<B>:free</B> <EM>pixel | LUT </EM>[���\�b�h]
+<A NAME="41374"></A>
+<B>:free</B> <EM>pixel | LUT </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>pixel</EM>�̏ꏊ�ɂ���J���[�Z�����J�����邩
-���邢��<EM>LUT</EM>�̂��ׂĂ��J������B
+<DD> <EM>pixel</EM>の場所にあるカラーセルを開放するか
+あるいは<EM>LUT</EM>のすべてを開放する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41389"></A>
-<B>:init</B> <EM>[cmapid] </EM>[���\�b�h]
+<A NAME="41386"></A>
+<B>:init</B> <EM>[cmapid] </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃J���[�}�b�v��cmapid�ŏ���������B
-�o�^���ꂽLUT�͂��ׂĎ̂Ă���B
+このカラーマップをcmapidで初期化する。
+登録されたLUTはすべて捨てられる。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41400"></A>
+<A NAME="41397"></A>
 <B>:create</B> <EM>&amp;key (planes 0) (colors 1) (visual *visual*) (contiguous i
-l) </EM>[���\�b�h]
+l) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> �V�����J���[�}�b�v���쐬����B
+<DD> 新しいカラーマップを作成する。
 </DD>
 </DL>
 <BR>
@@ -492,8 +506,8 @@ l) </EM>[���\�b�h]
 
 <P>
 	<BR> 
-<A NAME="41411"></A>
-<BIG CLASS="XLARGE"><B>XColor </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="41408"></A>
+<BIG CLASS="XLARGE"><B>XColor </B></BIG> [クラス]  <PRE><TT>
   :super   <B>cstruct</B> 
 <BR>  :slots 		 ((pixel        :integer) 
 <BR>(red          :short) 
@@ -507,9 +521,12 @@ l) </EM>[���\�b�h]
 
 <DL COMPACT>
 <DT> 
-<DD>RGB���f���̃J���[���`����B
-���ꂼ��̃X���b�g�ɒl�����蓖�Ă�ɂ́A<B>setf</B>��p����B
-RGB�l�́A�����g������A�ő�l��<SPAN CLASS="MATH">81#81</SPAN>�ƕ\�������B
+<DD>RGBモデルのカラーを定義する。
+それぞれのスロットに値を割り当てるには、<B>setf</B>を用いる。
+RGB値は、符合拡張され、最大値は<SPAN CLASS="MATH"><IMG
+ WIDTH="25" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img81.png"
+ ALT="$-1$"></SPAN>と表現される。
 </DD>
 </DL>
 <BR>
@@ -517,57 +534,57 @@ RGB�l�́A�����g������A�ő�l��<SPAN CLASS="MATH">81#81</SPAN>�ƕ\�������B
 
 <P>
 
-<A NAME="41429"></A>
-<B>:red</B> [���\�b�h]
+<A NAME="41426"></A>
+<B>:red</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����<B>XColor</B>�̐ԐF�̒l��Ԃ��B
+<DD> この<B>XColor</B>の赤色の値を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41440"></A>
-<B>:blue</B> [���\�b�h]
+<A NAME="41437"></A>
+<B>:blue</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����<B>XColor</B>�̐F�̒l��Ԃ��B
+<DD> この<B>XColor</B>の青色の値を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41451"></A>
-<B>:green</B> [���\�b�h]
+<A NAME="41448"></A>
+<B>:green</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����<B>XColor</B>�̗ΐF�̒l��Ԃ��B
+<DD> この<B>XColor</B>の緑色の値を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41462"></A>
-<B>:color</B> [���\�b�h]
+<A NAME="41459"></A>
+<B>:color</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����<B>XColor</B>��RGB�l�̃��X�g��Ԃ��B
+<DD> この<B>XColor</B>のRGB値のリストを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="41473"></A>
-<B>:init</B> <EM>pix R G B &amp;optional (f 7) </EM>[���\�b�h]
+<A NAME="41470"></A>
+<B>:init</B> <EM>pix R G B &amp;optional (f 7) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>XColor</B>������������B
+<B>XColor</B>を初期化する。
 </DD>
 </DL>
 <BR>
@@ -575,16 +592,16 @@ RGB�l�́A�����g������A�ő�l��<SPAN CLASS="MATH">81#81</SPAN>�ƕ\�������B
 
 <P>
 
-<A NAME="41484"></A>
-<B>find-visual</B> <EM>type depth &amp;optional (screen 0) </EM>[�֐�]
+<A NAME="41481"></A>
+<B>find-visual</B> <EM>type depth &amp;optional (screen 0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>type</EM>��<EM>depth</EM>�Ŏw�肳���visual-ID��������B
-<EM>type</EM>�́A<TT>:StaticGray, :GrayScale,
-:StaticColor, :pseudoColor, :TrueColor</TT>���邢��<TT>:DirectColor</TT>�̂ǂꂩ�ł���B
-�ӂ��A<EM>depth</EM>��1, 8 �܂��� 24�ł���B
+<EM>type</EM>と<EM>depth</EM>で指定されるvisual-IDを見つける。
+<EM>type</EM>は、<TT>:StaticGray, :GrayScale,
+:StaticColor, :pseudoColor, :TrueColor</TT>あるいは<TT>:DirectColor</TT>のどれかである。
+ふつう、<EM>depth</EM>は1, 8 または 24である。
 </DD>
 </DL>
 <BR>
@@ -615,7 +632,7 @@ RGB�l�́A�����g������A�ő�l��<SPAN CLASS="MATH">81#81</SPAN>�ƕ\�������B
 <B> Next:</B> <A NAME="tex2html2396"
   HREF="jmanual-node134.html">XToolKit</A>
 <B> Up:</B> <A NAME="tex2html2390"
-  HREF="jmanual-node129.html">Xwindow �C���^�[�t�F�[�X</A>
+  HREF="jmanual-node129.html">Xwindow インターフェース</A>
 <B> Previous:</B> <A NAME="tex2html2386"
   HREF="jmanual-node132.html">Graphic Context</A>
  &nbsp; <B>  <A NAME="tex2html2392"
@@ -624,8 +641,8 @@ RGB�l�́A�����g������A�ő�l��<SPAN CLASS="MATH">81#81</SPAN>�ƕ\�������B
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

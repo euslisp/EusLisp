@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�􉽊w���f�����O</TITLE>
-<META NAME="description" CONTENT="�􉽊w���f�����O">
+<TITLE>幾何学モデリング</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="幾何学モデリング">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2089"
-  HREF="jmanual-node113.html">��X�̊􉽊w�֐�</A>
+  HREF="jmanual-node113.html">種々の幾何学関数</A>
 <B> Up:</B> <A NAME="tex2html2083"
-  HREF="jmanual-node73.html">EusLisp �g��</A>
+  HREF="jmanual-node73.html">EusLisp 拡張</A>
 <B> Previous:</B> <A NAME="tex2html2077"
-  HREF="jmanual-node111.html">�A�����W�n</A>
+  HREF="jmanual-node111.html">連結座標系</A>
  &nbsp; <B>  <A NAME="tex2html2085"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2087"
@@ -59,26 +60,32 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION04040000000000000000"></A><A NAME="Geometry"></A>
 <BR>
-�􉽊w���f�����O
+幾何学モデリング
 </H1>
 
 <P>
-Euslisp�́A�R�����̊􉽊w���f���̓����\���Ƃ���<A NAME="30534"></A><EM>B</EM>rep�i���E�\���j���̗p���Ă���B
-Brep���̗v�f��<B>edge, plane, polygon, face, hole,</B>��<B>body</B>�N���X�ɂ����
-�\�������B
-��{body�̍쐬�֐���body�̍����֐��́A�����̃N���X�̐V����
-�C���X�^���X�����B
-�����Ƒ������������Ǝ��̊􉽊w�N���X���g�p���邽�߂ɂ́A
-<B>*edge-class*, *face-class*</B>��<B>*body-class*</B>�̓���ϐ���
-�Ǝ��̃N���X�I�u�W�F�N�g��ݒ肷�邱�ƁB
+Euslispは、３次元の幾何学モデルの内部表現として<A NAME="30531"></A><EM>B</EM>rep（境界表現）を採用している。
+Brep内の要素は<B>edge, plane, polygon, face, hole,</B>や<B>body</B>クラスによって
+表現される。
+基本bodyの作成関数とbodyの合成関数は、これらのクラスの新しい
+インスタンスを作る。
+もっと属性を持った独自の幾何学クラスを使用するためには、
+<B>*edge-class*, *face-class*</B>と<B>*body-class*</B>の特殊変数に
+独自のクラスオブジェクトを設定すること。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="29527"></A>
+<DIV ALIGN="CENTER"><A NAME="29524"></A>
 <TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 9:</STRONG>
-���_�ƃG�b�W�Ɩʂ̕���</CAPTION>
-<TR><TD>59#59</TD></TR>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+頂点とエッジと面の分類</CAPTION>
+<TR><TD><IMG
+ WIDTH="505" HEIGHT="444" BORDER="0"
+ SRC="jmanual-img59.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/beam.ps,height=10cm}
+\end{center}
+\end{figure}"></TD></TR>
 </TABLE>
 </DIV>
 
@@ -89,29 +96,29 @@ Brep���̗v�f��<B>edge, plane, polygon, face, hole,</B>��<B>body</B>�N���X�ɂ���
 
 <UL CLASS="ChildLinks">
 <LI><A NAME="tex2html2090"
-  HREF="jmanual-node113.html">��X�̊􉽊w�֐�</A>
+  HREF="jmanual-node113.html">種々の幾何学関数</A>
 <LI><A NAME="tex2html2091"
-  HREF="jmanual-node114.html">���ƃG�b�W</A>
+  HREF="jmanual-node114.html">線とエッジ</A>
 <LI><A NAME="tex2html2092"
-  HREF="jmanual-node115.html">���ʂƖ�</A>
+  HREF="jmanual-node115.html">平面と面</A>
 <LI><A NAME="tex2html2093"
-  HREF="jmanual-node116.html">����(body)</A>
+  HREF="jmanual-node116.html">立体(body)</A>
 <LI><A NAME="tex2html2094"
-  HREF="jmanual-node117.html">��{body�̍쐬�֐�</A>
+  HREF="jmanual-node117.html">基本bodyの作成関数</A>
 <LI><A NAME="tex2html2095"
-  HREF="jmanual-node118.html">body�̍����֐�</A>
+  HREF="jmanual-node118.html">bodyの合成関数</A>
 <LI><A NAME="tex2html2096"
-  HREF="jmanual-node119.html">���W��</A>
+  HREF="jmanual-node119.html">座標軸</A>
 <LI><A NAME="tex2html2097"
-  HREF="jmanual-node120.html">���̂̐ڐG��ԉ��</A>
+  HREF="jmanual-node120.html">立体の接触状態解析</A>
 <LI><A NAME="tex2html2098"
-  HREF="jmanual-node121.html">���p�`��Voronoi Diagram</A>
+  HREF="jmanual-node121.html">多角形のVoronoi Diagram</A>
 </UL>
 <!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

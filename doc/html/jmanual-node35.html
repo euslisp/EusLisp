@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>��{�N���X</TITLE>
-<META NAME="description" CONTENT="��{�N���X">
+<TITLE>基本クラス</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="基本クラス">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,11 +44,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html868"
-  HREF="jmanual-node36.html">���l���Z</A>
+  HREF="jmanual-node36.html">数値演算</A>
 <B> Up:</B> <A NAME="tex2html862"
-  HREF="jmanual-node31.html">�I�u�W�F�N�g�w���v���O���~���O</A>
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
 <B> Previous:</B> <A NAME="tex2html858"
-  HREF="jmanual-node34.html">�C���X�^���X�Ǘ�</A>
+  HREF="jmanual-node34.html">インスタンス管理</A>
  &nbsp; <B>  <A NAME="tex2html864"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html866"
@@ -57,15 +58,15 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03044000000000000000">
-��{�N���X</A>
+基本クラス</A>
 </H2>
 
 <P>
 
  <BR>
 <BR> <BR> 
-<A NAME="4136"></A>
-<BIG CLASS="XLARGE"><B>object </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="4133"></A>
+<BIG CLASS="XLARGE"><B>object </B></BIG> [クラス]  <PRE><TT>
   :super    
 <BR>  :slots 		 
 </TT></PRE>
@@ -74,9 +75,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DL COMPACT>
 <DT> 
-<DD>object�́A�ł���{�̃N���X�ł���B����́A�N���X�p���̍ŏ�ʂɈʒu����B
-�X���b�g�ϐ�����`����Ă��Ȃ����߁A<B>object</B>�̓C���X�^���X����邽�߂�
-�g�p���Ȃ��B
+<DD>objectは、最も基本のクラスである。それは、クラス継承の最上位に位置する。
+スロット変数が定義されていないため、<B>object</B>はインスタンスを作るために
+使用しない。
 </DD>
 </DL>
 <BR>
@@ -84,26 +85,29 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4154"></A>
-<B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[���\�b�h]
+<A NAME="4151"></A>
+<B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�W���̍ēǂݍ��\�ȃI�u�W�F�N�g�t�H�[�}�b�g�̂Ȃ��ɂ���I�u�W�F�N�g��
-�\������B
-���̃N���X���ƃA�h���X�́A�p���ʂł������A������O�ɒu���B
-�ǂ̃I�u�W�F�N�g�̃T�u�N���X��<EM>mesg</EM>������Ő�������}�N��<B>send-super</B>
-���g���Ă����ƍL�͈͂ȏ��ƈꏏ�ɂ��ꎩ�g���������̂ɂ��̕��@��
-�g�p���邱�Ƃ��ł���B
-�I�u�W�F�N�g�́A����<TT>#<SPAN CLASS="MATH">9#9</SPAN></TT>�Ŏn�܂�Ȃ�A�ēǂݍ��݉\�ł���B
-���̃N���X���E���m�ȃA�h���X�E�ǂ�Lisp�ł��ǂݍ��\�ȏ��E<code>&gt;</code>�����Ƃ�
-�]���āB
-�S�Ẵf�[�^�I�u�W�F�N�g�͐��l�������āA<B>object</B>���p�����Ă���B
-���̍\���ŏ����̕\����������B�isymbol�╶����ł��\��Ȃ��j
-���̍\���ŏq�ׂ邱�Ƃ́Asymbol��<B>setq</B>���Y�ꂽ�f�[�^�I�u�W�F�N�g��
-�c�����邱�Ƃ��ł���B
-�������A�\�����ꂽ��ɃK�[�x�[�W�R���N�V�������N����Ȃ�����ł���B
+標準の再読み込可能なオブジェクトフォーマットのなかにあるオブジェクトを
+表示する。
+そのクラス名とアドレスは、角括弧でくくられ、符号を前に置く。
+どのオブジェクトのサブクラスも<EM>mesg</EM>文字列で説明するマクロ<B>send-super</B>
+を使ってもっと広範囲な情報と一緒にそれ自身を印刷するのにこの方法を
+使用することができる。
+オブジェクトは、もし<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img9.png"
+ ALT="$&lt;$"></SPAN></TT>で始まるなら、再読み込み可能である。
+そのクラス名・正確なアドレス・どのLispでも読み込可能な情報・<code>&gt;</code>をあとに
+従えて。
+全てのデータオブジェクトは数値を除いて、<B>object</B>を継承している。
+この構文で書式の表示が得られる。（symbolや文字列でも構わない）
+この構文で述べることは、symbolに<B>setq</B>し忘れたデータオブジェクトを
+把握することができる。
+ただし、表示された後にガーベージコレクションが起こらない限りである。
 
 </DD>
 </DL>
@@ -112,15 +116,15 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="4169"></A>
-<B>:slots</B> [���\�b�h]
+<A NAME="4166"></A>
+<B>:slots</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�ϐ����̃��X�g����уI�u�W�F�N�g�̑S�ẴX���b�g�Ƒ΂ɂȂ�l��Ԃ��B
-���̃��X�g��<B>assoc</B>��K�p���邱�Ƃɂ��A�X���b�g�̏ڍגl��������B
-�������Ȃ���A������ύX���邱�Ƃ͂ł��Ȃ��B
+変数名のリストおよびオブジェクトの全てのスロットと対になる値を返す。
+このリストに<B>assoc</B>を適用することにより、スロットの詳細値が得られる。
+しかしながら、それらを変更することはできない。
 </DD>
 </DL>
 <BR>
@@ -128,8 +132,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 	<BR> 
-<A NAME="4181"></A>
-<BIG CLASS="XLARGE"><B>propertied-object </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="4178"></A>
+<BIG CLASS="XLARGE"><B>propertied-object </B></BIG> [クラス]  <PRE><TT>
   :super   <B>object</B> 
 <BR>  :slots 		 plist 
 </TT></PRE>
@@ -138,11 +142,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DL COMPACT>
 <DT> 
-<DD>property-list�����I�u�W�F�N�g���`����B
-����Common Lisp�ƈ���āA
-EusLisp�́A���Ƃ��Asymbol�łȂ������Ƃ��Ă��Aproperty-list������
-<B>propertied-object</B>���p������ǂ�ȃI�u�W�F�N�g��
-������B
+<DD>property-listを持つオブジェクトを定義する。
+他のCommon Lispと違って、
+EusLispは、たとえ、symbolでなかったとしても、property-listを持つ
+<B>propertied-object</B>を継承するどんなオブジェクトも
+許可する。
 </DD>
 </DL>
 <BR>
@@ -150,86 +154,86 @@ EusLisp�́A���Ƃ��Asymbol�łȂ������Ƃ��Ă��Aproperty-list������
 
 <P>
 
-<A NAME="4199"></A>
-<B>:plist</B> <EM>&amp;optional plist </EM>[���\�b�h]
+<A NAME="4196"></A>
+<B>:plist</B> <EM>&amp;optional plist </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<EM>plist</EM>�����L�����Ȃ�΁A���̃I�u�W�F�N�g��<TT>plist</TT>�X���b�g��
-�ݒ肷��B���̂��߁A�ȑO��<TT>plist</TT>�̒l�͂Ȃ��Ȃ�B
-<EM>plist</EM>�́A
-<code>((indicator1 . value1) (indicator2 . value2) ...)</code>�̏����ɂ��ׂ��ł���B
-���ꂼ���<code>indicator</code>�́A<B>eq</B>�֐��œ��������e�X�g���ꂽ�ǂ̂悤��
-lisp�������\�ł���B
-symbol��<TT>indicator</TT>�Ƃ��ėp����ꂽ�Ƃ��A�����p�b�P�[�W���L�����s�����
-�������̃`�F�b�N���m���ɂ��邽�߂ɃL�[���[�h�̎g�p�𐄑E����B
-<B>:plist</B>�́A���<TT>plist</TT>��Ԃ��B
+もし<EM>plist</EM>が明記されるならば、このオブジェクトの<TT>plist</TT>スロットに
+設定する。そのため、以前の<TT>plist</TT>の値はなくなる。
+<EM>plist</EM>は、
+<code>((indicator1 . value1) (indicator2 . value2) ...)</code>の書式にすべきである。
+それぞれの<code>indicator</code>は、<B>eq</B>関数で等価性をテストされたどのような
+lisp書式も可能である。
+symbolが<TT>indicator</TT>として用いられたとき、内部パッケージを広く実行される
+等価性のチェックを確実にするためにキーワードの使用を推薦する。
+<B>:plist</B>は、主な<TT>plist</TT>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4217"></A>
-<B>:get</B> <EM>indicator </EM>[���\�b�h]
+<A NAME="4214"></A>
+<B>:get</B> <EM>indicator </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>plist</TT>�̂Ȃ���<EM>indicator</EM>�ƌ��ѕt���l��Ԃ��B
+<TT>plist</TT>のなかで<EM>indicator</EM>と結び付く値を返す。
 <code>(send x :get :y) == (cdr (assoc :y (send x :plist)))</code>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4229"></A>
-<B>:put</B> <EM>indicator value </EM>[���\�b�h]
+<A NAME="4226"></A>
+<B>:put</B> <EM>indicator value </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>plist</TT>�̂Ȃ��ŁA<EM>value</EM>��<EM>indicator</EM>�����ѕt����B
+<TT>plist</TT>のなかで、<EM>value</EM>と<EM>indicator</EM>を結び付ける。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4242"></A>
-<B>:remprop</B> <EM>indicator </EM>[���\�b�h]
+<A NAME="4239"></A>
+<B>:remprop</B> <EM>indicator </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>plist</TT>����<EM>indicator</EM>��value�̑g���폜����B
-����ɁA<B>:get</B>��������value�Ƃ���NIL��Ԃ��B
+<TT>plist</TT>から<EM>indicator</EM>とvalueの組を削除する。
+さらに、<B>:get</B>を試すとvalueとしてNILを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4255"></A>
-<B>:name</B> <EM>&amp;optional name </EM>[���\�b�h]
+<A NAME="4252"></A>
+<B>:name</B> <EM>&amp;optional name </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>plist</TT>�̂Ȃ���<TT>:name</TT>�������`���A���o���B
-���̓����́A�\���̂��߂Ɏg�p�����B
+<TT>plist</TT>のなかの<TT>:name</TT>特性を定義し、取り出す。
+この特性は、表示のために使用される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4267"></A>
-<B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[���\�b�h]
+<A NAME="4264"></A>
+<B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�ēǂݍ��݉\�ȏ����̃I�u�W�F�N�g��\������B
-�����I�u�W�F�N�g��<TT>:name</TT>�����������Ă���Ȃ�΁A
-�I�u�W�F�N�g�̃A�h���X�̌�ɓ�����\������B
+再読み込み可能な書式のオブジェクトを表示する。
+もしオブジェクトが<TT>:name</TT>特性を持っているならば、
+オブジェクトのアドレスの後に特性を表示する。
 </DD>
 </DL>
 <BR>
@@ -237,8 +241,8 @@ symbol��<TT>indicator</TT>�Ƃ��ėp����ꂽ�Ƃ��A�����p�b�P�[�W���L�����s�����
 
 <P>
 	<BR> 
-<A NAME="4279"></A>
-<BIG CLASS="XLARGE"><B>metaclass </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="4276"></A>
+<BIG CLASS="XLARGE"><B>metaclass </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 name super cix vars types forwards methods 
 </TT></PRE>
@@ -247,181 +251,181 @@ symbol��<TT>indicator</TT>�Ƃ��ėp����ꂽ�Ƃ��A�����p�b�P�[�W���L�����s�����
 
 <DL COMPACT>
 <DT> 
-<DD><B>metaclass</B>�́A�����N���X���`����B�Ǝ��̃N���X�ϐ����������N���X�́A
-�����̃X�[�p�[�N���X�Ƃ���<B>metaclass</B>���`���Ȃ���΂Ȃ�Ȃ��B
+<DD><B>metaclass</B>は、複数クラスを定義する。独自のクラス変数を持つ複数クラスは、
+それらのスーパークラスとして<B>metaclass</B>を定義しなければならない。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4298"></A>
-<B>:new</B> [���\�b�h]
+<A NAME="4295"></A>
+<B>:new</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̃N���X�̃C���X�^���X�𐶐����A�S�ẴX���b�g��NIL�ɂ�����A
-�����Ԃ��B
+<DD> このクラスのインスタンスを生成し、全てのスロットをNILにした後、
+それを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4308"></A>
-<B>:super</B> [���\�b�h]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-���̃N���X�̃X�[�p�[�N���X�I�u�W�F�N�g��Ԃ��B
-��U�N���X��`�����X�[�p�[�N���X��ύX���邱�Ƃ͂ł��Ȃ��B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="4318"></A>
-<B>:methods</B> [���\�b�h]
+<A NAME="4305"></A>
+<B>:super</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃N���X�Œ�`���ꂽ�S�Ẵ��\�b�h�̃��X�g��Ԃ��B
-���̃��X�g�́A���\�b�h���ƃp�����[�^�Ɩ{�̂�g�݂ɂ������X�g
-�ɂ���č\�����ꂽ���X�g�ł���B
+このクラスのスーパークラスオブジェクトを返す。
+一旦クラス定義したスーパークラスを変更することはできない。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4328"></A>
-<B>:method</B> <EM>name </EM>[���\�b�h]
+<A NAME="4315"></A>
+<B>:methods</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>name</EM>�Ŋ֘A�Â���ꂽ���\�b�h��`��Ԃ��B
-����������Ȃ���΁ANIL��Ԃ��B
+このクラスで定義された全てのメソッドのリストを返す。
+そのリストは、メソッド名とパラメータと本体を組みにしたリスト
+によって構成されたリストである。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4339"></A>
-<B>:method-names</B> <EM>subname </EM>[���\�b�h]
+<A NAME="4325"></A>
+<B>:method</B> <EM>name </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���\�b�h���̂Ȃ���<EM>subname</EM>���܂ޑS�Ẵ��\�b�h���̃��X�g��Ԃ��B
-���\�b�h�́A���̃N���X�̂Ȃ��̂ݒT�������B
+<EM>name</EM>で関連づけられたメソッド定義を返す。
+もし見つからなければ、NILを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4350"></A>
-<B>:all-methods</B> [���\�b�h]
+<A NAME="4336"></A>
+<B>:method-names</B> <EM>subname </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃N���X�Ƃ��̑S�ẴX�[�p�[�N���X�̂Ȃ��Œ�`����Ă��邷�ׂẴ��\�b�h��
-���X�g��Ԃ��B
-�����ւ���ƁA���̃N���X�̃C���X�^���X�́A�����̃��\�b�h��
-���s���邱�Ƃ��ł���B
+メソッド名のなかに<EM>subname</EM>を含む全てのメソッド名のリストを返す。
+メソッドは、このクラスのなかのみ探索される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4360"></A>
-<B>:all-method-names</B> <EM>subname </EM>[���\�b�h]
+<A NAME="4347"></A>
+<B>:all-methods</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>subname</EM>�ƈ�v����S�Ẵ��\�b�h���̃��X�g��Ԃ��B
-���̒T���́A���̃N���X����<B>object</B>�܂Ŏ��s�����B
+このクラスとその全てのスーパークラスのなかで定義されているすべてのメソッドの
+リストを返す。
+言い替えると、このクラスのインスタンスは、これらのメソッドを
+実行することができる。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4372"></A>
-<B>:slots</B> [���\�b�h]
+<A NAME="4357"></A>
+<B>:all-method-names</B> <EM>subname </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�X���b�g���̃x�N�g����Ԃ��B
+<EM>subname</EM>と一致する全てのメソッド名のリストを返す。
+その探索は、このクラスから<B>object</B>まで実行される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4382"></A>
-<B>:name</B> [���\�b�h]
+<A NAME="4369"></A>
+<B>:slots</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃N���X��symbol����Ԃ��B
+スロット名のベクトルを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4392"></A>
-<B>:cid</B> [���\�b�h]
+<A NAME="4379"></A>
+<B>:name</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃N���X�Ɠ���ł��邱�Ƃ��������߂ɁA���̃N���X�̃C���X�^���X���ׂĂ�
-���蓖�Ă�ꂽ������Ԃ��B
-����́A�V�X�e�������̃N���X�e�[�u���ւ̃C���f�b�N�X�ŁA
-���̃N���X�̉��ɐV�����T�u�N���X����`���ꂽ�Ƃ��A�ύX�����B
+このクラスのsymbol名を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4402"></A>
-<B>:subclasses</B> [���\�b�h]
+<A NAME="4389"></A>
+<B>:cid</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃N���X�̒��ڂ̃T�u�N���X�̃��X�g��Ԃ��B
+このクラスと同一であることを示すために、このクラスのインスタンスすべてに
+割り当てられた整数を返す。
+これは、システム内部のクラステーブルへのインデックスで、
+このクラスの下に新しいサブクラスが定義されたとき、変更される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4412"></A>
-<B>:hierarchy</B> [���\�b�h]
+<A NAME="4399"></A>
+<B>:subclasses</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃N���X�̉��ɒ�`���ꂽ�S�ẴT�u�N���X�̃��X�g��Ԃ��B
-�S�ẴN���X�p���̍L�͈͂ȃ��X�g�𓾂邽�߂ɂ́A<B>class-hierarchy</B>�֐�
-���Ăяo���B
+このクラスの直接のサブクラスのリストを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4423"></A>
-<B>find-method</B> <EM>object selector </EM>[�֐�]
+<A NAME="4409"></A>
+<B>:hierarchy</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>object</EM>�̃N���X�₻�̃X�[�p�[�N���X�̂Ȃ��ŁA<EM>selector</EM>�ƈ�v����
-���\�b�h��T������B
-���̊֐��́A<EM>object</EM>�̃N���X���s�m���ŁA����<EM>object</EM>��
-�G���[�Ȃ��Ƀ��b�Z�[�W���󂯎���Ă���邩�ǂ�����m�肽�����ɖ𗧂B
+このクラスの下に定義された全てのサブクラスのリストを返す。
+全てのクラス継承の広範囲なリストを得るためには、<B>class-hierarchy</B>関数
+を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4420"></A>
+<B>find-method</B> <EM>object selector </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>のクラスやそのスーパークラスのなかで、<EM>selector</EM>と一致する
+メソッドを探索する。
+この関数は、<EM>object</EM>のクラスが不確かで、その<EM>object</EM>が
+エラーなしにメッセージを受け取ってくれるかどうかを知りたい時に役立つ。
 </DD>
 </DL>
 <BR>
@@ -447,19 +451,19 @@ symbol��<TT>indicator</TT>�Ƃ��ėp����ꂽ�Ƃ��A�����p�b�P�[�W���L�����s�����
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html868"
-  HREF="jmanual-node36.html">���l���Z</A>
+  HREF="jmanual-node36.html">数値演算</A>
 <B> Up:</B> <A NAME="tex2html862"
-  HREF="jmanual-node31.html">�I�u�W�F�N�g�w���v���O���~���O</A>
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
 <B> Previous:</B> <A NAME="tex2html858"
-  HREF="jmanual-node34.html">�C���X�^���X�Ǘ�</A>
+  HREF="jmanual-node34.html">インスタンス管理</A>
  &nbsp; <B>  <A NAME="tex2html864"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html866"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

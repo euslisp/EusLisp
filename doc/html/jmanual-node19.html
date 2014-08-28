@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�X�R�[�v</TITLE>
-<META NAME="description" CONTENT="�X�R�[�v">
+<TITLE>スコープ</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="スコープ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html640"
-  HREF="jmanual-node20.html">��ʉ��ϐ�</A>
+  HREF="jmanual-node20.html">一般化変数</A>
 <B> Up:</B> <A NAME="tex2html634"
-  HREF="jmanual-node17.html">�����ƕ]��</A>
+  HREF="jmanual-node17.html">書式と評価</A>
 <B> Previous:</B> <A NAME="tex2html628"
-  HREF="jmanual-node18.html">�A�g��(atom)</A>
+  HREF="jmanual-node18.html">アトム(atom)</A>
  &nbsp; <B>  <A NAME="tex2html636"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html638"
@@ -58,36 +59,36 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03022000000000000000">
-�X�R�[�v</A>
+スコープ</A>
 </H2>
 
 <P>
-���ׂĂ�symbol�́A�l�ƌ��ѕt���Ă���B
-symbol�́A��ɂ�����ꂽ�������猈�肳���l�ɂ���ĕ]�������B
-������2��ނ̕ϐ��o�C���h������B����́A
-���[�J���܂��͐ÓI�o�C���h�ƃX�y�V�����܂��͓��I�o�C���h�ł���B
-���[�J���Ƀo�C���h���ꂽ�ϐ���<B>lambda</B>�����܂���
-<B>let</B>��<B>let*</B>�̓��ꏑ���ɂ�����special�Ɛ錾����Ȃ�����
-�O���猩�邱�Ƃ͂ł��Ȃ��B
-���[�J���o�C���h�͓���q���\�ŁA�O���̃��[�J���o�C���h��X�y�V�����o�C���h���B���āA
-�ł������̃��x���Œ�`����Ă���1�̃o�C���h�̂݌��邱�Ƃ��ł���B
-�X�y�V�����ϐ���2�̕��@�Ŏg�p�����B
-1�́A�O���[�o���ϐ��Ƃ��āA����1�͓��I�ɔ`���郍�[�J���ϐ��Ƃ��ėp����B
-���̃��[�J���ϐ��́A�o�C���h�̌��ʂ̒��ɂ�����胍�[�J���X�R�[�v��
-�O�ɂ��Ă������邱�Ƃ��ł���B
-��҂̏ꍇ�A�X�y�V�����ϐ���<B>special</B>�Ő錾�����K�v������B
-���̐錾�́A�R���p�C�������łȂ��C���^�v���^�ł��F�������B
-Common Lisp�ɂ��ƁA�X�y�V�����ϐ��͕s���ĂȃX�R�[�v�Ɠ��I��
-�L���������Ă���ƌ����Ă���B
+すべてのsymbolは、値と結び付いている。
+symbolは、主にくくられた文脈から決定される値によって評価される。
+ここに2種類の変数バインドがある。それは、
+ローカルまたは静的バインドとスペシャルまたは動的バインドである。
+ローカルにバインドされた変数は<B>lambda</B>書式または
+<B>let</B>や<B>let*</B>の特殊書式においてspecialと宣言されない限り
+外から見ることはできない。
+ローカルバインドは入れ子が可能で、外側のローカルバインドやスペシャルバインドを隠して、
+最も内側のレベルで定義されている1つのバインドのみ見ることができる。
+スペシャル変数は2つの方法で使用される。
+1つは、グローバル変数として、もう1つは動的に覗けるローカル変数として用いる。
+このローカル変数は、バインドの効果の中にある限りローカルスコープの
+外にいてさえ見ることができる。
+後者の場合、スペシャル変数は<B>special</B>で宣言される必要がある。
+その宣言は、コンパイラだけでなくインタプリタでも認識される。
+Common Lispによると、スペシャル変数は不明瞭なスコープと動的な
+広さを持っていると言われている。
 
 <P>
-����X�R�[�v�̂Ȃ��ŁA���[�J���ϐ������݂���Ƃ��Ă��A
-�����ϐ���������X�R�[�v�̒���<B>special</B>�Ƃ��čĐ錾���邱�Ƃ��ł���B
-<B>symbol-value</B>�֐��́A���[�J���X�R�[�v�ɍ\�킸special�l�������o��
-���߂Ɏg�p���邱�Ƃ��ł���B
-<B>set</B>�֐��́A�X�y�V�����ϐ��Ƃ��Ă̂ݓ����B���Ȃ킿�A
-special�Ƃ��Đ錾���Ă��Ȃ�����Alambda��let�ϐ��̒l��
-�ύX���邽�߂Ɏg�p���邱�Ƃ͂ł��Ȃ��B
+あるスコープのなかで、ローカル変数が存在するとしても、
+同じ変数名を内部スコープの中で<B>special</B>として再宣言することができる。
+<B>symbol-value</B>関数は、ローカルスコープに構わずspecial値を引き出す
+ために使用することができる。
+<B>set</B>関数は、スペシャル変数としてのみ働く。すなわち、
+specialとして宣言していない限り、lambdaやlet変数の値を
+変更するために使用することはできない。
 
 <P>
 <PRE>
@@ -101,29 +102,29 @@ special�Ƃ��Đ錾���Ă��Ȃ�����Alambda��let�ϐ��̒l��
 </PRE>
 
 <P>
-symbol�́A<B>defconstant</B>�}�N���ɂ��萔�Ƃ��Đ錾���邱�Ƃ��ł���B
-��U�錾����ƁA���̌�l��ύX���悤�Ƃ���ƃG���[����������B
-���̂����A���̂悤�Ȓ萔symbol�́A���[�J���ϐ��Ƃ��Ă����ϐ����Ƃ���
-�g�p����邱�Ƃ��ւ�����B
-NIL��T�́A���̂悤�Ȓ萔�̗�ł���B
-keyword�p�b�P�[�W��symbol�́A�����쐬�����Ƃ��ɒ萔�Ƃ��Đ錾�����B
-�ΏƓI�ɁA<B>defvar</B>��<B>defparameter</B>�}�N���́A�X�y�V�����ϐ��Ƃ���
-symbol��錾����B
-<B>defvar</B>�́Asymbol���o�C���h����Ă��Ȃ����̂ݒl�̏��������s���A
-�l�����Ɋ��蓖�Ă��Ă���Ƃ��͉������Ȃ��B
-����ɑ΂��āA<B>defparameter</B>�͂����l�����Z�b�g����B
+symbolは、<B>defconstant</B>マクロにより定数として宣言することができる。
+一旦宣言すると、その後値を変更しようとするとエラーが発生する。
+そのうえ、そのような定数symbolは、ローカル変数としてさえ変数名として
+使用されることを禁じられる。
+NILやTは、そのような定数の例である。
+keywordパッケージのsymbolは、いつも作成されるときに定数として宣言される。
+対照的に、<B>defvar</B>や<B>defparameter</B>マクロは、スペシャル変数として
+symbolを宣言する。
+<B>defvar</B>は、symbolがバインドされていない時のみ値の初期化を行い、
+値が既に割り当てられているときは何もしない。
+それに対して、<B>defparameter</B>はいつも値をリセットする。
 
 <P>
-symbol���Q�Ƃ���Asymbol�̂��߂̃��[�J���o�C���h���Ȃ������Ƃ��A
-����special�l�́A�����o�����B
-�������Ȃ���A����special�l�ɂ܂��l�����蓖�ĂĂȂ������Ȃ�΁A
-unbound variable�G���[����������B
+symbolが参照され、symbolのためのローカルバインドがなかったとき、
+そのspecial値は、引き出される。
+しかしながら、そのspecial値にまだ値が割り当ててなかったならば、
+unbound variableエラーが発生する。
 
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

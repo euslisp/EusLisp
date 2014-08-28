@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�������Ǘ�</TITLE>
-<META NAME="description" CONTENT="�������Ǘ�">
+<TITLE>メモリ管理</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="メモリ管理">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,9 +44,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1846"
-  HREF="jmanual-node96.html">�񓯊��v���O���~���O�ƕ���v���O���~���O�̍\�z</A>
+  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
 <B> Up:</B> <A NAME="tex2html1840"
-  HREF="jmanual-node92.html">�}���`�X���b�hEuslisp�̐݌v</A>
+  HREF="jmanual-node92.html">マルチスレッドEuslispの設計</A>
 <B> Previous:</B> <A NAME="tex2html1836"
   HREF="jmanual-node94.html">Context Separation</A>
  &nbsp; <B>  <A NAME="tex2html1842"
@@ -57,58 +58,63 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04021300000000000000">
-�������Ǘ�</A>
+メモリ管理</A>
 </H3>
-EusLisp�́A���ׂĂ̌^�̃I�u�W�F�N�g�ɑ΂��ĒP��̃q�[�v�̒���
-�t�B�{�i�b�`�o�f�B��p�����������Ǘ����@���̗p���Ă���B
-�قȂ����������v�������v���O���������s������A
-�t�B�{�i�b�`�o�f�B���l�X�ȑ傫���̃I�u�W�F�N�g�𓙂��������ɔz�u���邱�Ƃ��ł��A�R�s�[�Ȃ��ɑf�����K�[�x�[�W�R���N�g���ł��A
-���A�������������p���i����������10�`15%�ŊO�������͖����ł���j
-���������Ƃ��m�M�����B
-�}���`�X���b�h�̂��߂ɂ́A2�ڂ̃|�C���g���Ȃ킿�R�s�[�Ȃ���
-�K�[�x�[�W�R���N�g���d�v�ł���B
-�����A�I�u�W�F�N�g�̃A�h���X���K�[�x�[�W�R���N�g�̃R�s�[�ɂ��
-�ω������Ȃ�΁A���ׂẴX���b�h���̃X�^�b�N�����CPU�̃��W�X�^
-���̃|�C���^��V�����A�h���X�ɏ��������Ȃ���΂Ȃ�Ȃ��B
-�������A���̏��������͕s�\�����邢�͑�ύ���ł���B
+EusLispは、すべての型のオブジェクトに対して単一のヒープの中で
+フィボナッチバディを用いたメモリ管理方法を採用している。
+異なったメモリ要求を持つプログラムを実行した後、
+フィボナッチバディが様々な大きさのオブジェクトを等しく高速に配置することができ、コピーなしに素早くガーベージコレクトができ、
+かつ、高いメモリ利用率（内部損失が10〜15%で外部損失は無視できる）
+を示すことを確信した。
+マルチスレッドのためには、2つ目のポイントすなわちコピーなしの
+ガーベージコレクトが重要である。
+もし、オブジェクトのアドレスがガーベージコレクトのコピーにより
+変化したならば、すべてのスレッド環境のスタックおよびCPUのレジスタ
+内のポインタを新しいアドレスに書き換えなければならない。
+しかし、この書き換えは不可能かあるいは大変困難である。
 
 <P>
-���ׂẴ������z�u�v���́A�჌�x����<TT>alloc</TT>�֐��ɂ���ď��������B
-<TT>alloc</TT>�́Amutex-locking������B�Ȃ��Ȃ�A�傫���������Ȃ����X�g��
-�O���[�o���f�[�^�x�[�X����������ł���B
-�K�[�x�[�W�R���N�g�̎n�܂鎞������тǂ̃X���b�h�ɂ���ăK�[�x�[�W�R���N�g��
-������̂���\���ł��Ȃ��̂ŁA
-���ׂẴX���b�h�͓˔��I�ɋN����K�[�x�[�W�R���N�g�̂��߂�
-���������Ă����Ȃ���΂Ȃ�Ȃ��B
-�����Ă���I�u�W�F�N�g�ւ̂��ׂẴ|�C���^�́A�S�~�Ƃ��đ|������Ȃ�
-�悤�ɕی삷�邽�߂��ł��K�[�x�[�W�R���N�g����A�N�Z�X�ł���悤
-��������Ȃ���΂Ȃ�Ȃ��B
-����́A�X�^�b�N�̏�ɕۑ�����Ă��邱�Ƃ�M�p�������ɁA
-���ꂼ��̊��̌Œ肳�ꂽ�X���b�g�̒��ɋɍŋ߂ɔz�u���ꂽ�I�u�W�F�N�g��
-�΂���|�C���^��~�ς��邱�Ƃɂ���ĒB�������B
+すべてのメモリ配置要求は、低レベルの<TT>alloc</TT>関数によって処理される。
+<TT>alloc</TT>は、mutex-lockingをする。なぜなら、大きさを持たないリストの
+グローバルデータベースを扱うからである。
+ガーベージコレクトの始まる時期およびどのスレッドによってガーベージコレクトが
+生じるのかを予言できないので、
+すべてのスレッドは突発的に起こるガーベージコレクトのために
+準備をしておかなければならない。
+生きているオブジェクトへのすべてのポインタは、ゴミとして掃除されない
+ように保護するためいつでもガーベージコレクトからアクセスできるよう
+調整されなければならない。
+これは、スタックの上に保存されていることを信用する代わりに、
+それぞれの環境の固定されたスロットの中に極最近に配置されたオブジェクトに
+対するポインタを蓄積することによって達成される。
 
 <P>
-�} <A HREF="#parathreads">6</A>�́A�X���b�h�̃������v����fork���ꂽ�K�[�x�[�W�R���N�g
-�����ł�marking�����sweeping�����ɍs���Ă��闬��}�����������̂ł���B
-�������v������у|�C���^�̏������s��Ȃ��X���b�h�̓K�[�x�[�W�R���N�g�ƕ����
-���s���邱�Ƃ��ł��A�M��������摜�l���̂悤�Ȓ჌�x���̃^�X�N��
-�����ԉ��������P���邱�Ƃɒ��ӂ��邱�ƁB
+図 <A HREF="#parathreads">6</A>は、スレッドのメモリ要求とforkされたガーベージコレクト
+内部でのmarkingおよびsweepingを並列に行っている流れ図を示したものである。
+メモリ要求およびポインタの処理を行わないスレッドはガーベージコレクトと並列に
+実行することができ、信号処理や画像獲得のような低レベルのタスクの
+実時間応答を改善することに注意すること。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="parathreads"></A><A NAME="24993"></A>
+<DIV ALIGN="CENTER"><A NAME="parathreads"></A><A NAME="24990"></A>
 <TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 6:</STRONG>
-����X���b�h�̃������v���ƃK�[�x�[�W�R���N�g�ɕ�����s</CAPTION>
-<TR><TD>47#47</TD></TR>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+並列スレッドのメモリ要求とガーベージコレクトに並列実行</CAPTION>
+<TR><TD><IMG
+ WIDTH="521" HEIGHT="469" BORDER="0"
+ SRC="jmanual-img47.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/parathreads.ps,width=120mm}
+\end{center}\end{figure}"></TD></TR>
 </TABLE>
 </DIV>
 
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

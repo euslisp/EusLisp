@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>����</TITLE>
-<META NAME="description" CONTENT="����">
+<TITLE>時間</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="時間">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1583"
-  HREF="jmanual-node78.html">�v���Z�X</A>
+  HREF="jmanual-node78.html">プロセス</A>
 <B> Up:</B> <A NAME="tex2html1577"
-  HREF="jmanual-node76.html">UNIX�V�X�e���R�[��</A>
+  HREF="jmanual-node76.html">UNIXシステムコール</A>
 <B> Previous:</B> <A NAME="tex2html1571"
-  HREF="jmanual-node76.html">UNIX�V�X�e���R�[��</A>
+  HREF="jmanual-node76.html">UNIXシステムコール</A>
  &nbsp; <B>  <A NAME="tex2html1579"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1581"
@@ -58,19 +59,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04012100000000000000">
-����</A>
+時間</A>
 </H3>
 
  <BR>
-<BR> <A NAME="21215"></A>
-<B>unix:ptimes</B> [�֐�]
+<BR> <A NAME="21212"></A>
+<B>unix:ptimes</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�o�ߎ��ԁA�V�X�e�����ԁA���[�U�[���ԁA�T�u�v���Z�X�̃V�X�e�����ԂƃT�u�v���Z�X�̃��[�U�[����
-��5�̗v�f�������X�g��Ԃ��B
-���̊֐��͋����̂ŁA<B>unix:getrusage</B>�̎g�p�𐄏�����B
+経過時間、システム時間、ユーザー時間、サブプロセスのシステム時間とサブプロセスのユーザー時間
+の5つの要素を持つリストを返す。
+この関数は旧いので、<B>unix:getrusage</B>の使用を推奨する。
 </DD>
 </DL>
 <BR>
@@ -78,14 +79,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="21226"></A>
-<B>unix:runtime</B> [�֐�]
+<A NAME="21223"></A>
+<B>unix:runtime</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�v���Z�X�̃V�X�e���ƃ��[�U�[���Ԃ̍��v��Ԃ��B
-�P�ʂ́A1/60�b�ł���B
+プロセスのシステムとユーザー時間の合計を返す。
+単位は、1/60秒である。
 </DD>
 </DL>
 <BR>
@@ -93,14 +94,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="21236"></A>
-<B>unix:localtime</B> [�֐�]
+<A NAME="21233"></A>
+<B>unix:localtime</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���݂̎��Ԃƌ����𐮐��x�N�g���ŕԂ��B
-�v�f�́A�b�A���A���A���A�N�A�j���ł���B
+現在の時間と月日を整数ベクトルで返す。
+要素は、秒、分、時、日、年、曜日である。
 </DD>
 </DL>
 <BR>
@@ -108,15 +109,15 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="21246"></A>
-<B>unix:asctime</B> <EM>tm_intvector </EM>[�֐�]
+<A NAME="21243"></A>
+<B>unix:asctime</B> <EM>tm_intvector </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�����x�N�g���ŕ\������郍�[�J�����Ԃ𕶎���\���ɕϊ�����B
-<TT>(unix:asctime (unix:localtime))</TT>�́A���݂̎��ۂ̎��Ԃ̕�����
-�\����Ԃ��B
+整数ベクトルで表現されるローカル時間を文字列表現に変換する。
+<TT>(unix:asctime (unix:localtime))</TT>は、現在の実際の時間の文字列
+表現を返す。
 </DD>
 </DL>
 <BR>
@@ -126,8 +127,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
              <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

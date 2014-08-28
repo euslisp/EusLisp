@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>������C���^�[�t�F�[�X</TITLE>
-<META NAME="description" CONTENT="������C���^�[�t�F�[�X">
+<TITLE>他言語インターフェース</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="他言語インターフェース">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -46,9 +47,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Next:</B> <A NAME="tex2html1721"
   HREF="jmanual-node88.html">VxWorks</A>
 <B> Up:</B> <A NAME="tex2html1715"
-  HREF="jmanual-node74.html">�V�X�e���֐�</A>
+  HREF="jmanual-node74.html">システム関数</A>
 <B> Previous:</B> <A NAME="tex2html1709"
-  HREF="jmanual-node86.html">�b�ŏ����ꂽLisp�֐��̒ǉ�</A>
+  HREF="jmanual-node86.html">Ｃで書かれたLisp関数の追加</A>
  &nbsp; <B>  <A NAME="tex2html1717"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1719"
@@ -58,26 +59,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04015000000000000000">
-������C���^�[�t�F�[�X</A>
+他言語インターフェース</A>
 </H2>
 
 <P>
-Euslisp�Ƃ̃����N���l�����Ă��Ȃ�C�̊֐���Euslisp�Ƀ��[�h���邱�Ƃ��ł���B
-�����̊֐��́A������֐��ƌĂ΂��B
-���̂悤�ȃv���O������<B>load-foreign</B>�}�N���ɂ�胍�[�h�����B
-���̃}�N���́A<B>foreign-module</B>�̃C���X�^���X��Ԃ��B
-�I�u�W�F�N�g�t�@�C���̒��̊O��symbol��`�́A���W���[���I�u�W�F�N�g�̒���
-�o�^����Ă���B
-<B>defforeign</B>�́AEuslisp����Ăяo�����߂�
-C�֐��ɑ΂���G���g���[����邽�߂Ɏg�p�����B
-<B>defun-c-callable</B>�́AC����Ăяo���\��lisp�֐����`����B
-�Ăяo���\��C�̊֐��́A�p�����[�^��ϊ����֘A����Euslisp�̊֐��֐�����ڂ����߂�
-<EM>pod-code</EM>�ƌĂ΂����ʂȃR�[�h�����B
-<B>pod-address</B>�́A���̓��ʂȃR�[�h�̃A�h���X��Ԃ��B
-���̃A�h���X��C�̊֐��ɒʒm�����ׂ��ł���B
+Euslispとのリンクを考慮していないCの関数もEuslispにロードすることができる。
+これらの関数は、他言語関数と呼ばれる。
+そのようなプログラムは<B>load-foreign</B>マクロによりロードされる。
+そのマクロは、<B>foreign-module</B>のインスタンスを返す。
+オブジェクトファイルの中の外部symbol定義は、モジュールオブジェクトの中に
+登録されている。
+<B>defforeign</B>は、Euslispから呼び出すための
+C関数に対するエントリーを作るために使用される。
+<B>defun-c-callable</B>は、Cから呼び出し可能なlisp関数を定義する。
+呼び出し可能なCの関数は、パラメータを変換し関連するEuslispの関数へ制御を移すために
+<EM>pod-code</EM>と呼ばれる特別なコードを持つ。
+<B>pod-address</B>は、この特別なコードのアドレスを返す。
+そのアドレスはCの関数に通知されるべきである。
 
 <P>
-����́AC�̃v���O�����̃T���v����Euslisp�ւ̊֐��C���^�[�t�F�[�X�ł���B
+これは、CのプログラムのサンプルとEuslispへの関数インターフェースである。
 <PRE>
 /* C program named cfunc.c*/
 
@@ -127,37 +128,37 @@ int x;
 </PRE>
 
 <P>
-Euslisp�̃f�[�^�\���́A�ȉ��Ɏ������@��C�̃f�[�^�\���ɕϊ������B
-EusLisp��30�r�b�g�����i��������܂ށj�́A�����g������A�X�^�b�N��ʂ���C�̊֐��ɓn�����B
-30�r�b�g�����́A�{���x����(double)�Ɋg������A�X�^�b�N��ʂ��ēn�����B
-������Ɛ����x�N�g���Ǝ����x�N�g���ɂ��ẮA���̍ŏ��̗v�f�̃A�h���X�݂̂�
-�X�^�b�N�ɓn����A�s�񎩑̂̓R�s�[����Ȃ��B
-Euslisp�ɂ́A2�����ȏ�̔z���n�����@���Ȃ��B
-2�����ȏ�̔z��͂��ׂĂ̗v�f����`�ɕێ�����1�����x�N�g�������B
-���̃x�N�g���́A<B>array-entity</B>�}�N���ɂ�蓾����B
-�����A2�����s���FORTRAN�̃T�u���[�`���ɑ���ꍇ�AFORTRAN�ɂ����ė�ƍs�����΂ƂȂ��Ă��邽��
-���̍s���]�u���Ȃ���΂Ȃ�Ȃ����Ƃɒ��ӂ��邱�ƁB
+Euslispのデータ表現は、以下に示す方法でCのデータ表現に変換される。
+EusLispの30ビット整数（文字列を含む）は、符号拡張され、スタックを通してCの関数に渡される。
+30ビット実数は、倍精度実数(double)に拡張され、スタックを通して渡される。
+文字列と整数ベクトルと実数ベクトルについては、その最初の要素のアドレスのみが
+スタックに渡され、行列自体はコピーされない。
+Euslispには、2次元以上の配列を渡す方法がない。
+2次元以上の配列はすべての要素を線形に保持する1次元ベクトルを持つ。
+このベクトルは、<B>array-entity</B>マクロにより得られる。
+もし、2次元行列をFORTRANのサブルーチンに送る場合、FORTRANにおいて列と行が反対となっているため
+その行列を転置しなければならないことに注意すること。
 
 <P>
-������Euslisp�\���́A�����P���x�ł���̂ŁA�{���x�̎����̃x�N�g���ɓn���Ƃ��ϊ���v����B
-�ϊ��֐��A<B>double2float</B>��<B>float2double</B>�́A���̖ړI��clib/double.c�̒��ɒ�`����Ă���B
-�Ⴆ�΁A����3x3�̎����s�񂪂���ACF�̂�������C�̊֐��ɂ����{���x�����̍s��Ƃ��ēn�������Ȃ�A
-�ȉ��̂悤�Ɏg�p����΂悢�B
+実数のEuslisp表現は、いつも単精度であるので、倍精度の実数のベクトルに渡すとき変換を要する。
+変換関数、<B>double2float</B>と<B>float2double</B>は、この目的でclib/double.cの中に定義されている。
+例えば、もし3x3の実数行列があり、CFのいう名のCの関数にそれを倍精度実数の行列として渡したいなら、
+以下のように使用すればよい。
 <PRE>
      (setq mat (make-matrix 3 3))
      (CF (float2double (array-entity mat)))
 </PRE>
 
 <P>
-C�̍\���̂́A<B>defstruct</B>�}�N���ɂ���`���邱�Ƃ��ł���B
-<B>defstruct</B>�́A���̂悤�ȃt�B�[���h��`�����ɂ��struct-name���󂯎��B
+Cの構造体は、<B>defstruct</B>マクロにより定義することができる。
+<B>defstruct</B>は、次のようなフィールド定義書式によりstruct-nameを受け取る。
 
 <P>
 <PRE>
      (defcstruct &lt;struct-name&gt;
         {(&lt;field&gt; &lt;type&gt; [*] [size])}*)
 </PRE>
-���Ƃ��΁A�ȉ��Ɏ����\���̂̒�`�́A����<B>defstruct</B>�ɂ���ĕ\�������B
+たとえば、以下に示す構造体の定義は、つぎの<B>defstruct</B>によって表現される。
 <PRE>
      /* C definition */
      struct example {
@@ -179,45 +180,45 @@ C�̍\���̂́A<B>defstruct</B>�}�N���ɂ���`���邱�Ƃ��ł���B
  <BR>
 <BR> <P>
 
-<A NAME="22551"></A>
-<B>load-foreign</B> <EM>objfile &amp;key symbol-input symbol-output (symbol-file objfile) ld-option) </EM>[�}�N��]
+<A NAME="22548"></A>
+<B>load-foreign</B> <EM>objfile &amp;key symbol-input symbol-output (symbol-file objfile) ld-option) </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
-<DD> Euslisp�ȊO�̌���ŏ����ꂽ�I�u�W�F�N�g���W���[�������[�h����B
-Solaris2�ɂ����āA<B>load-foreign</B>��<EM>:entry</EM>�p�����[�^��null�������
-�^����<B>load</B>���Ăяo���B
-�R���p�C�����ꂽ�R�[�h�̃I�u�W�F�N�g���Ԃ����B
-���̌��ʂ́A���<B>defforeign</B>���Ăяo�����Ƃɂ����
-���W���[���̒��̊֐��̃G���g���[����邱�Ƃ�
-�K�v�ł���B
-���C�u�����[��<EM>ld-option</EM>�Ɏw�肷�邱�Ƃ��ł���B
-�������Ȃ���A���C�u�����̒��ɒ�`���ꂽsymbol�̓f�t�H���g��symbol-output�t�@�C����
-�l�����邱�Ƃ��ł��Ȃ��B
-���C�u�����Œ�`���ꂽ�֐��̌Ăяo����Euslisp�ɋ����邽�߂ɁA
-<EM>symbol-output</EM>��<EM>symbol-file</EM>�������I�ɗ^�����Ȃ���΂Ȃ�Ȃ��B
-�i�����A<EM>objfile</EM>����݂̂������Q�Ƃ���Ȃ�΁A�����̈������͕K�v�Ȃ��B�j
-<B>load-foreign</B>�́A�w�肳�ꂽ���C�u�����ƃO���[�o���ϐ��ƈꏏ��<EM>objfile</EM>��Euslisp�̃R�A�Ƀ����N���A
-�����N���ꂽ�I�u�W�F�N�g��<EM>symbol-output</EM>�ɏ������ށB
-���ꂩ��A<EM>symbol-file</EM>�̒���symbol�́A��������A�����ꃂ�W���[���̒��Ƀ��X�g�A�b�v�����B
-<EM>symbol-file</EM>�̃f�t�H���g��<EM>objfile</EM>�ł���̂ŁA����<EM>symbol-file</EM>���^�����Ȃ��Ȃ�A
-<EM>objfile</EM>�ɒ�`����Ă���symbol�̂ݔF�������B
-<EM>objfile</EM>�ƃ��C�u�����̗����̃O���[�o���G���g���[�����ׂČ��邽�߂ɁA
-<B>load-foreign</B>�̍ŏ��̃v���Z�X�����N�̌��ʂł��郊���N���ꂽ(�}�[�W���ꂽ)symbol�e�[�u��
-�͊m���߂��Ȃ���΂Ȃ�Ȃ��B���̂悤�ȗ��R�ŁA<EM>symbol-output</EM>��<EM>symbol-file</EM>�̗�����
-����̃t�@�C������^���Ȃ���΂Ȃ�Ȃ��B
+<DD> Euslisp以外の言語で書かれたオブジェクトモジュールをロードする。
+Solaris2において、<B>load-foreign</B>は<EM>:entry</EM>パラメータにnull文字列を
+与えた<B>load</B>を呼び出す。
+コンパイルされたコードのオブジェクトが返される。
+この結果は、後に<B>defforeign</B>を呼び出すことによって
+モジュールの中の関数のエントリーを作ることが
+必要である。
+ライブラリーは<EM>ld-option</EM>に指定することができる。
+しかしながら、ライブラリの中に定義されたsymbolはデフォルトのsymbol-outputファイルで
+獲得することができない。
+ライブラリで定義された関数の呼び出しをEuslispに許可するために、
+<EM>symbol-output</EM>と<EM>symbol-file</EM>が明示的に与えられなければならない。
+（もし、<EM>objfile</EM>からのみそれらを参照するならば、これらの引き数は必要ない。）
+<B>load-foreign</B>は、指定されたライブラリとグローバル変数と一緒に<EM>objfile</EM>をEuslispのコアにリンクし、
+リンクされたオブジェクトを<EM>symbol-output</EM>に書き込む。
+それから、<EM>symbol-file</EM>の中のsymbolは、検索され、他言語モジュールの中にリストアップされる。
+<EM>symbol-file</EM>のデフォルトが<EM>objfile</EM>であるので、もし<EM>symbol-file</EM>が与えられないなら、
+<EM>objfile</EM>に定義されているsymbolのみ認識される。
+<EM>objfile</EM>とライブラリの両方のグローバルエントリーをすべて見るために、
+<B>load-foreign</B>の最初のプロセスリンクの結果であるリンクされた(マージされた)symbolテーブル
+は確かめられなければならない。このような理由で、<EM>symbol-output</EM>と<EM>symbol-file</EM>の両方に
+同一のファイル名を与えなければならない。
 
 <P>
-�ȉ��Ɏ������悤�ɁA���Ԃ�symbol�t�@�C����<B>unix:unlink</B>�ɂ����
-�폜���邱�Ƃ��ł���B
-�������Ȃ���A�����������C�u�������Q�Ƃ���Q�ȏ�̑����ꃂ�W���[�������[�h����Ƃ��A
-���C�u������2�d������������Ȃ�A<EM>symbol-output</EM>���������g�p���Ȃ���΂Ȃ�Ȃ��B
-��L�̗�Ƃ��āA"linpack.a"�̂��ׂĂ̊֐������[�h���Ă���A
-����"linpack.a"�̊֐����Ăяo���Ă��鑼�̃t�@�C��"linapp.o"���Ăт������Ƃ��Ă���Ɖ��肷��B
-����<B>load-foreign</B>�Ăяo���́A"euslinpack"��unlink����O�ɔ��s���Ȃ���΂Ȃ�Ȃ�
-<TT>(load-foreign "linapp.o" :symbol-input "euslinpack")</TT>�B
-<B>load-foreign</B>��<B>defforeign</B>�̂����Ɗ��S�ȗ�́A<TT>*eusdir*/llib/linpack.l</TT>��
-���邱�Ƃ��ł���B
+以下に示されるように、中間のsymbolファイルは<B>unix:unlink</B>によって
+削除することができる。
+しかしながら、もし同じライブラリを参照する２つ以上の他言語モジュールをロードするとき、
+ライブラリの2重化を避けたいなら、<EM>symbol-output</EM>引き数を使用しなければならない。
+上記の例として、"linpack.a"のすべての関数をロードしており、
+次に"linpack.a"の関数を呼び出している他のファイル"linapp.o"を呼びだそうとしていると仮定する。
+次の<B>load-foreign</B>呼び出しは、"euslinpack"をunlinkする前に発行しなければならない
+<TT>(load-foreign "linapp.o" :symbol-input "euslinpack")</TT>。
+<B>load-foreign</B>と<B>defforeign</B>のもっと完全な例は、<TT>*eusdir*/llib/linpack.l</TT>で
+見ることができる。
 
 </DD>
 </DL>
@@ -235,36 +236,36 @@ Solaris2�ɂ����āA<B>load-foreign</B>��<EM>:entry</EM>�p�����[�^��null�������
 
 <P>
 
-<A NAME="22588"></A>
-<B>defforeign</B> <EM>funcname module cname paramspec resulttype </EM>[�}�N��]
+<A NAME="22585"></A>
+<B>defforeign</B> <EM>funcname module cname paramspec resulttype </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�����ꃂ�W���[���̒��̊֐��G���g���[�����B
-<EM>funcname</EM>�́AEuslisp�ɍ����symbol�ł���B
-<EM>module</EM>�́A<B>load-foreign</B>�ɂ���ĕԂ����R���p�C�����ꂽ�R�[�h�̃I�u�W�F�N�g�ł���B
-<EM>cname</EM>�́A������v���O�����̒��Œ�`����Ă���C�̊֐��̖��O�ł���B
-���̖��O��"_myfunc"�̂悤�ȕ�����ł���B
-<EM>paramspec</EM>�́A�p�����[�^�̌^�w��̃��X�g�ł���B
-����́AEuslisp����C�̊֐��Ɉ�������n���Ƃ��ɁA�f�[�^�̌^�ϊ��Ƌ���(coercion)���s�����߂Ɏg�p�����B
-�f�[�^�ϊ����Ȃ�������A���邢�͌^�`�F�b�N���K�v�Ȃ��Ƃ��A<EM>paramspec</EM>��NIL�ō\��Ȃ��B
-<TT>:integer, :float, :string</TT>, <TT>(:string n)</TT>�̓��̂P��<EM>resulttype</EM>�ɗ^�����Ȃ���΂Ȃ�Ȃ��B
-<TT>:integer</TT>�́AC�̊֐���char,short,int(long)�̂����ꂩ��Ԃ����Ƃ��Ӗ�����B
-<TT>:float</TT>�́A�Ԃ��l��float���邢��double�̂Ƃ��Ɏw�肷��B
-<TT>:string</TT>�́AC�֐���string�ւ̃|�C���^�[��Ԃ����Ƃ��Ӗ����A
-Euslisp��Euslisp�̕�����ɕύX���邽�߂�string��long-word�̃w�b�_�[��ǉ�����B
-������̒�����<B>strlen</B>�ɂ���Č�������B
-string�̒��O�ɏ������܂��w�b�_�[�́A�ߎS�Ȍ��ʂ������N�������Ƃ����邱�Ƃɒ��ӁB
-��������ŁA<TT>(:string n)</TT>�́A���S�����x���B�Ȃ��Ȃ�A
-<B>n</B>�̒���������Euslisp�̕����񂪐V�����쐬����AC�̕�����̓��e��
-�����ɃR�s�[����邩��ł���B
-<TT>(:string 4)</TT>�́A�����ւ̃|�C���^�[��Ԃ�C�̊֐��Ɏg�p�ł���B
-FORTRAN���[�U�[�́AFORTRAN�̊֐����邢�̓T�u���[�`���̂�����������́A
-call-by-refference�ɂ���ēn����邱�Ƃɒ��ӂ��ׂ��ł���B
-���������āA1�̐������邢�͎����^�̈������ł���FORTRAN��
-�n�����O�ɐ����x�N�g�����邢�͎����x�N�g����
-�u����Ȃ���΂Ȃ�Ȃ��B
+他言語モジュールの中の関数エントリーを作る。
+<EM>funcname</EM>は、Euslispに作られるsymbolである。
+<EM>module</EM>は、<B>load-foreign</B>によって返されるコンパイルされたコードのオブジェクトである。
+<EM>cname</EM>は、他言語プログラムの中で定義されているCの関数の名前である。
+その名前は"_myfunc"のような文字列である。
+<EM>paramspec</EM>は、パラメータの型指定のリストである。
+それは、EuslispからCの関数に引き数を渡すときに、データの型変換と強制(coercion)を行うために使用される。
+データ変換がなかったり、あるいは型チェックが必要ないとき、<EM>paramspec</EM>はNILで構わない。
+<TT>:integer, :float, :string</TT>, <TT>(:string n)</TT>の内の１つが<EM>resulttype</EM>に与えられなければならない。
+<TT>:integer</TT>は、Cの関数がchar,short,int(long)のいずれかを返すことを意味する。
+<TT>:float</TT>は、返す値がfloatあるいはdoubleのときに指定する。
+<TT>:string</TT>は、C関数がstringへのポインターを返すことを意味し、
+EuslispはEuslispの文字列に変更するためにstringにlong-wordのヘッダーを追加する。
+文字列の長さは<B>strlen</B>によって見つけられる。
+stringの直前に書き込まれるヘッダーは、悲惨な結果を引き起こすことがあることに注意。
+もう一方で、<TT>(:string n)</TT>は、安全だが遅い。なぜなら、
+<B>n</B>の長さを持つEuslispの文字列が新しく作成され、Cの文字列の内容が
+そこにコピーされるからである。
+<TT>(:string 4)</TT>は、整数へのポインターを返すCの関数に使用できる。
+FORTRANユーザーは、FORTRANの関数あるいはサブルーチンのあらゆる引き数は、
+call-by-refferenceによって渡されることに注意すべきである。
+したがって、1つの整数あるいは実数型の引き数でさえFORTRANへ
+渡される前に整数ベクトルあるいは実数ベクトルに
+置かれなければならない。
 </DD>
 </DL>
 <BR>
@@ -272,28 +273,28 @@ call-by-refference�ɂ���ēn����邱�Ƃɒ��ӂ��ׂ��ł���B
 
 <P>
 
-<A NAME="22614"></A>
-<B>defun-c-callable</B> <EM>funcname paramspec resulttype . body </EM>[�}�N��]
+<A NAME="22611"></A>
+<B>defun-c-callable</B> <EM>funcname paramspec resulttype . body </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-������̃R�[�h����Ăяo�����Ƃ��ł���Euslisp�̊֐����`����B
-<EM>funcname</EM>�́AEuslisp�̊֐��Ƃ��Ē�`����Ă���symbol�ł���B
-<EM>paramspec</EM>�́A<B>defforeign</B>�̒��̌^�w��̃��X�g�ł���B
-<B>defforeign</B>��paramspec�ƈႢ�A<B>defun-c-callable</B>��paramspec�́A
-�֐�����������S���󂯎��Ȃ��ꍇ�ȊO�A�ȗ����邱�Ƃ��ł��Ȃ��B
-<TT>:integer</TT>�́Aint,char,short�̂��ׂĂ̌^�Ɏg�p���ׂ��ł���B
-<TT>:float</TT>�́Afloat��double�Ɏg�p����B
-<EM>resulttype</EM>�́ALisp�֐��̌^�ł���B
-<EM>resulttype</EM>�́A�^�̃`�F�b�N���邢�͐�����������Ɍ^�̋�����
-�K�v�Ƃ���ꍇ�������āA�ȗ����邱�Ƃ��ł���B
-<EM>body</EM>�́A���̊֐���C����Ăяo�����Ƃ��A���s�����lisp�\���ł���B
-<B>defun-c-callable</B>�Œ�`����Ă���֐��́ALisp�\������ł�
-�Ăяo�����Ƃ��ł���B
-<B>defun-c-callable</B>��<EM>funcname</EM>��Ԃ��B
-���̕Ԃ�l�́Asymbol�̂悤�ł��邪�A�����ł͂Ȃ��Asymbol�̃T�u�N���X�ł���
-<B>foreign-pod</B>�̃C���X�^���X�ł���B
+他言語のコードから呼び出すことができるEuslispの関数を定義する。
+<EM>funcname</EM>は、Euslispの関数として定義されているsymbolである。
+<EM>paramspec</EM>は、<B>defforeign</B>の中の型指定のリストである。
+<B>defforeign</B>のparamspecと違い、<B>defun-c-callable</B>のparamspecは、
+関数が引き数を全く受け取らない場合以外、省略することができない。
+<TT>:integer</TT>は、int,char,shortのすべての型に使用すべきである。
+<TT>:float</TT>は、floatとdoubleに使用する。
+<EM>resulttype</EM>は、Lisp関数の型である。
+<EM>resulttype</EM>は、型のチェックあるいは整数から実数に型の強制を
+必要とする場合を除いて、省略することができる。
+<EM>body</EM>は、この関数がCから呼び出されるとき、実行されるlisp表現である。
+<B>defun-c-callable</B>で定義されている関数は、Lisp表現からでも
+呼び出すことができる。
+<B>defun-c-callable</B>は<EM>funcname</EM>を返す。
+その返り値は、symbolのようであるが、そうではなく、symbolのサブクラスである
+<B>foreign-pod</B>のインスタンスである。
 </DD>
 </DL>
 <BR>
@@ -301,15 +302,15 @@ call-by-refference�ɂ���ēn����邱�Ƃɒ��ӂ��ׂ��ł���B
 
 <P>
 
-<A NAME="22638"></A>
-<B>pod-address</B> <EM>funcname </EM>[�֐�]
+<A NAME="22635"></A>
+<B>pod-address</B> <EM>funcname </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>defun-c-callable</B>�Œ�`���ꂽC�ŌĂяo���\��Lisp�֐�<EM>funcname</EM>�ɂ�����
-�������Euslisp�Ƃ̃C���^�[�t�F�[�X�R�[�h�̃A�h���X��Ԃ��B
-����́A������v���O������Lisp�֐��̈ʒu��m�点�邽�߂Ɏg�p�����B
+<B>defun-c-callable</B>で定義されたCで呼び出し可能なLisp関数<EM>funcname</EM>における
+他言語とEuslispとのインターフェースコードのアドレスを返す。
+これは、他言語プログラムにLisp関数の位置を知らせるために使用される。
 </DD>
 </DL>
 <BR>
@@ -317,15 +318,15 @@ call-by-refference�ɂ���ēn����邱�Ƃɒ��ӂ��ׂ��ł���B
 
 <P>
 
-<A NAME="22650"></A>
-<B>array-entity</B> <EM>array-of-more-than-one-dimension </EM>[�}�N��]
+<A NAME="22647"></A>
+<B>array-entity</B> <EM>array-of-more-than-one-dimension </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�������z��̗v�f��ێ�����P�����x�N�g����Ԃ��B
-����́A���������邢�͈�ʂ̔z��𑼌���ɓn�����߂ɕK�v�ł���B
-�������A�P�����̃x�N�g���͒��ړn�����Ƃ��ł���B
+多次元配列の要素を保持する１次元ベクトルを返す。
+これは、多次元あるいは一般の配列を他言語に渡すために必要である。
+しかし、１次元のベクトルは直接渡すことができる。
 </DD>
 </DL>
 <BR>
@@ -333,14 +334,14 @@ call-by-refference�ɂ���ēn����邱�Ƃɒ��ӂ��ׂ��ł���B
 
 <P>
 
-<A NAME="22660"></A>
-<B>float2double</B> <EM>float-vector [doublevector] </EM>[�֐�]
+<A NAME="22657"></A>
+<B>float2double</B> <EM>float-vector [doublevector] </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>float-vector</TT>��{���x�����̕\���ɕϊ�����B
-���̌��ʂ́A<TT>float-vector</TT>�ł��邪�A�ŏ��̈������̒����̂Q�{�ɂȂ��Ă���B
+<TT>float-vector</TT>を倍精度実数の表現に変換する。
+その結果は、<TT>float-vector</TT>であるが、最初の引き数の長さの２倍になっている。
 </DD>
 </DL>
 <BR>
@@ -348,13 +349,13 @@ call-by-refference�ɂ���ēn����邱�Ƃɒ��ӂ��ׂ��ł���B
 
 <P>
 
-<A NAME="22672"></A>
-<B>double2float</B> <EM>doublevector [float-vector] </EM>[�֐�]
+<A NAME="22669"></A>
+<B>double2float</B> <EM>doublevector [float-vector] </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�{���x�����\�����P���x��<TT>float-vector</TT>�ɕϊ������B
+倍精度実数表現が単精度の<TT>float-vector</TT>に変換される。
 </DD>
 </DL>
 <BR>
@@ -384,17 +385,17 @@ call-by-refference�ɂ���ēn����邱�Ƃɒ��ӂ��ׂ��ł���B
 <B> Next:</B> <A NAME="tex2html1721"
   HREF="jmanual-node88.html">VxWorks</A>
 <B> Up:</B> <A NAME="tex2html1715"
-  HREF="jmanual-node74.html">�V�X�e���֐�</A>
+  HREF="jmanual-node74.html">システム関数</A>
 <B> Previous:</B> <A NAME="tex2html1709"
-  HREF="jmanual-node86.html">�b�ŏ����ꂽLisp�֐��̒ǉ�</A>
+  HREF="jmanual-node86.html">Ｃで書かれたLisp関数の追加</A>
  &nbsp; <B>  <A NAME="tex2html1717"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1719"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

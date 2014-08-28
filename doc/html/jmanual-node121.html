@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>���p�`��Voronoi Diagram</TITLE>
-<META NAME="description" CONTENT="���p�`��Voronoi Diagram">
+<TITLE>多角形のVoronoi Diagram</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="多角形のVoronoi Diagram">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,11 +44,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2222"
-  HREF="jmanual-node122.html">���E�ƃO���t�B�b�N�X</A>
+  HREF="jmanual-node122.html">視界とグラフィックス</A>
 <B> Up:</B> <A NAME="tex2html2216"
-  HREF="jmanual-node112.html">�􉽊w���f�����O</A>
+  HREF="jmanual-node112.html">幾何学モデリング</A>
 <B> Previous:</B> <A NAME="tex2html2212"
-  HREF="jmanual-node120.html">���̂̐ڐG��ԉ��</A>
+  HREF="jmanual-node120.html">立体の接触状態解析</A>
  &nbsp; <B>  <A NAME="tex2html2218"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2220"
@@ -57,35 +58,35 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04049000000000000000">
-���p�`��Voronoi Diagram</A>
+多角形のVoronoi Diagram</A>
 </H2>
 
 <P>
-<EM>����: Philippe PIGNON, �d�����Q�X�g������</EM>
+<EM>著者: Philippe PIGNON, 電総研ゲスト研究者</EM>
 
 <P>
-���̃v���O�����́CCommon Lisp�ŏ�����Ă���B
+このプログラムは，Common Lispで書かれている。
  "A sweepline algorithm for Voronoi diagrams", Proceedings of
-the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.��
-��@�Ƃ��ėp���A
-���p�`�̏ꍇ�ւ̉��p���s�����B����́C�T���v���v���O�����t���̊ȒP�Ȑ����ł���B
-���̃v���O�����́CETL��Euslisp���ŏ�����Ă��邽�߁C
-�摜�ւ̏o�͂��T�|�[�g���Ă���B
-�ǂ�Common Lisp��ł��g�p���邱�Ƃ͂ł��邪�C
-<TT>utilities.l</TT>�ŗ^�����Ă���摜�ւ̊֐��������̃f�B�X�v���C����
-�����悤�ɏ���������K�v������B���̐߂̍Ō�ɂ��̊֐��������B
+the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.を
+手法として用い、
+多角形の場合への応用を行った。これは，サンプルプログラム付きの簡単な説明である。
+このプログラムは，ETLのEuslisp環境で書かれているため，
+画像への出力もサポートしている。
+どのCommon Lisp上でも使用することはできるが，
+<TT>utilities.l</TT>で与えられている画像への関数を自分のディスプレイ環境へ
+合うように書き換える必要がある。この節の最後にその関数を示す。
 
 <P>
 <DL>
-<DT><STRONG>�ړI:</STRONG></DT>
-<DD>���p�`�̏W����voronoi diagram�̌v�Z���s���B
-��b�𗝉����邽�߂ɏ�L�̕�����ǂ�ŁA�g�p���Ă��������B
-�����ł́A���̃v���O�����ɑ΂�����������܂���B
+<DT><STRONG>目的:</STRONG></DT>
+<DD>多角形の集合のvoronoi diagramの計算を行う。
+語彙を理解するために上記の文献を読んで、使用してください。
+ここでは、このプログラムに対する説明をしません。
 
 <P>
 </DD>
-<DT><STRONG>����:</STRONG></DT>
-<DD>���p�`�̃��X�g�ƈ͂ނ��߂̘g�́C���̂悤�ɒ�`����B
+<DT><STRONG>入力:</STRONG></DT>
+<DD>多角形のリストと囲むための枠は，次のように定義する。
 <PRE>
 DATA= (
        (x11 y11 x12 y12 x13 y13 ...) first polygon,
@@ -97,18 +98,18 @@ DATA= (
        (xf1 yf1 xf2 yf2 xf3 yf3 xf4 yf4) enclosing frame
       )
 </PRE>
-�͂ޘg�́C<B>DATA</B>���̂ǂ̈ʒu�ɂ��z�u���邱�Ƃ��ł���B�܂��C
-�����ƊO�����������Ȃ��悤�Ɏ��v�����̏��ԂłȂ���΂Ȃ�Ȃ��B
-���p�`�͌����̖����ȒP�Ȑ}�`�łȂ���΂Ȃ�Ȃ��B
-�꒼�����邢�͕��R�ȃG�b�W�͎󂯕t���Ȃ��B
-�Ɨ������_���邢�͐������󂯕t���Ȃ��B
+囲む枠は，<B>DATA</B>内のどの位置にも配置することができる。また，
+内部と外部が矛盾しないように時計方向の順番でなければならない。
+多角形は交差の無い簡単な図形でなければならない。
+一直線あるいは平坦なエッジは受け付けない。
+独立した点あるいは線分も受け付けない。
 
 <P>
 </DD>
-<DT><STRONG>�o��:</STRONG></DT>
-<DD><B>*diagram*</B>:2�d�ɐڑ����ꂽ�G�b�W���X�g�̃��X�g
-(utilities.l�t�@�C�����Q��)��Ԃ��B���ꂼ��̃G�b�W�́Csymbol�ł���C���Ɏ���
-�悤��field���܂�property-list�������Ă���B
+<DT><STRONG>出力:</STRONG></DT>
+<DD><B>*diagram*</B>:2重に接続されたエッジリストのリスト
+(utilities.lファイルを参照)を返す。それぞれのエッジは，symbolであり，次に示す
+ようなfieldを含むproperty-listを持っている。
 <PRE>
 (start &lt;pointer to a vertex&gt;)
        (end &lt;pointer to a vertex&gt;)
@@ -119,45 +120,45 @@ DATA= (
        (type &lt;:endpoint or :point-point or :segment-segment or :point-segment&gt;)
        (outflag &lt;t or nil&gt;)
 </PRE>
-<EM>vertex</EM>�́Csymbol��"<TT>pos</TT>"field���܂�property-list�����B
-����field�́Ccons<EM>(x,y)</EM>���܂݁C<EM>vertex</EM>�̕��ʍ��W�������B
-<EM>pred</EM>��<EM>succ</EM>��field�́Cdecl�`���ɂ��������Ĕ����v������
-�O�҂ƌ�҂�^����(Shamos��Preparata��,
-Computational Geometry: An introduction, 1985, pp 15-17���Q��)�B
-<EM>site</EM>��symbol�ł���C�֘A���������܂�property-list�����B
-<EM>site</EM>�́C���̓��̓f�[�^���L�q���Ă���C���p�`�̒��_�ł���point
-���邢�͑��p�`�̃G�b�W�ł���segment�����B
+<EM>vertex</EM>は，symbolで"<TT>pos</TT>"fieldを含むproperty-listを持つ。
+このfieldは，cons<EM>(x,y)</EM>を含み，<EM>vertex</EM>の平面座標を示す。
+<EM>pred</EM>と<EM>succ</EM>のfieldは，decl形式にしたがって反時計方向の
+前者と後者を与える(ShamosとPreparataの,
+Computational Geometry: An introduction, 1985, pp 15-17を参照)。
+<EM>site</EM>もsymbolであり，関連した情報を含むproperty-listを持つ。
+<EM>site</EM>は，元の入力データを記述しており，多角形の頂点であるpoint
+あるいは多角形のエッジであるsegmentを持つ。
 
 <P>
-<EM>type</EM>�́C2�������̒��_�ł���C����𕪊�����<EM>site</EM>�̌^���
-���肳���B
-�K��ɂ��C�O����start-end�G�b�W�̉E���ł���B
-voronoi diagram�́C2�������̓����Ɠ��l�ɊO�����v�Z����B
-�K�v�Ƃ���outflag��ۂ��߂�outflag���\�[�g����B
+<EM>type</EM>は，2等分線の中点であり，それを分割する<EM>site</EM>の型より
+決定される。
+規約により，外側はstart-endエッジの右側である。
+voronoi diagramは，2等分線の内部と同様に外側を計算する。
+必要とするoutflagを保つためにoutflagをソートする。
 
 <P>
 </DD>
-<DT><STRONG>�T���v��:</STRONG></DT>
-<DD>�T���v���v���O���������s���邽�߂ɂ́C�ȉ��̂悤�ȃX�e�b�v�����{���Ă��������B
+<DT><STRONG>サンプル:</STRONG></DT>
+<DD>サンプルプログラムを実行するためには，以下のようなステップを実施してください。
 
 <OL>
-<LI>�����̊��Ɉȉ��̃v���O�������R�s�[����B
+<LI>自分の環境に以下のプログラムをコピーする。
 <BR><TABLE CELLPADDING=3>
 <TR><TD ALIGN="LEFT">utilities.l</TD>
-<TD ALIGN="LEFT">�􉽊w���[�e�B���e�B�֐���eusx�̉摜�o�͊֐�</TD>
+<TD ALIGN="LEFT">幾何学ユーティリティ関数とeusxの画像出力関数</TD>
 </TR>
 <TR><TD ALIGN="LEFT">polygonalvoronoi.l</TD>
-<TD ALIGN="LEFT">�v���O�����{��</TD>
+<TD ALIGN="LEFT">プログラム本体</TD>
 </TR>
 <TR><TD ALIGN="LEFT">testdata.l</TD>
-<TD ALIGN="LEFT">��L�̏����ɂ��f���f�[�^</TD>
+<TD ALIGN="LEFT">上記の書式によるデモデータ</TD>
 </TR>
 </TABLE>
 </LI>
-<LI>�����CEuslisp���g�p���Ȃ��Ȃ�C���߂ɂ���������<TT>utilities.l</TT>�����������C
-"compatibility package"���C������B�B
+<LI>もし，Euslispを使用しないなら，命令にしたがって<TT>utilities.l</TT>を書き換え，
+"compatibility package"を修正する。。
 </LI>
-<LI>�ȉ���3�̃t�@�C�����R���p�C�����ă��[�h���邩�A���邢�͂��̂܂܃��[�h����B
+<LI>以下の3つのファイルをコンパイルしてロードするか、あるいはそのままロードする。
 <BR><TABLE CELLPADDING=3>
 <TR><TD ALIGN="LEFT">utilities.l</TD>
 <TD ALIGN="LEFT">&nbsp;</TD>
@@ -166,19 +167,19 @@ voronoi diagram�́C2�������̓����Ɠ��l�ɊO�����v�Z����B
 <TD ALIGN="LEFT">&nbsp;</TD>
 </TR>
 <TR><TD ALIGN="LEFT">testdata.l</TD>
-<TD ALIGN="LEFT">��L�̏����ɂ��f���f�[�^���܂�ł���B</TD>
+<TD ALIGN="LEFT">上記の書式によるデモデータを含んでいる。</TD>
 </TR>
 </TABLE>
 </LI>
-<LI>(pv demoworld)�Ńf���f�[�^��Ńv���O���������s�����B
-�O���[�o���ϐ�<B>*diagram*</B>�ɂ́Cvoronoi diagram��2���������܂܂�Ă���B
+<LI>(pv demoworld)でデモデータ上でプログラムが実行される。
+グローバル変数<B>*diagram*</B>には，voronoi diagramの2等分線が含まれている。
 </LI>
 </OL>
 </DD>
 </DL>
 
 <P>
-eusx(Xwindow�C���^�[�t�F�[�X������Euslisp)�̂��Ƃł́C�ȉ��̖��߂�diagram�̌��ʂ���ʏ�ɕ\�����邱�Ƃ��ł���B
+eusx(Xwindowインターフェースを持つEuslisp)のもとでは，以下の命令でdiagramの結果を画面上に表示することができる。
 <PRE>
        (make-display)          ;;Initializes the *display* window object
        (dps demoworld *thick*) ;; Shows original data in thick lines
@@ -188,13 +189,13 @@ eusx(Xwindow�C���^�[�t�F�[�X������Euslisp)�̂��Ƃł́C�ȉ��̖��߂�diagram�̌��ʂ
 <P>
 
  <BR>
-<BR> <A NAME="35579"></A>
-<B>pv</B> <EM>data </EM>[�֐�]
+<BR> <A NAME="35576"></A>
+<B>pv</B> <EM>data </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-��L�̏����ŏ����ꂽ<EM>data</EM>���瑽�p�`��voronoi diagram���v�Z����B
+上記の書式で書かれた<EM>data</EM>から多角形のvoronoi diagramを計算する。
 </DD>
 </DL>
 <BR>
@@ -204,8 +205,8 @@ eusx(Xwindow�C���^�[�t�F�[�X������Euslisp)�̂��Ƃł́C�ȉ��̖��߂�diagram�̌��ʂ
 
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

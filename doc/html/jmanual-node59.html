@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�\�P�b�g</TITLE>
-<META NAME="description" CONTENT="�\�P�b�g">
+<TITLE>ソケット</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="ソケット">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,11 +44,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1222"
-  HREF="jmanual-node60.html">�񓯊����o��</A>
+  HREF="jmanual-node60.html">非同期入出力</A>
 <B> Up:</B> <A NAME="tex2html1216"
-  HREF="jmanual-node56.html">�v���Z�X�ԒʐM�ƃl�b�g���[�N</A>
+  HREF="jmanual-node56.html">プロセス間通信とネットワーク</A>
 <B> Previous:</B> <A NAME="tex2html1212"
-  HREF="jmanual-node58.html">���b�Z�[�W�L���[��FIFO</A>
+  HREF="jmanual-node58.html">メッセージキューとFIFO</A>
  &nbsp; <B>  <A NAME="tex2html1218"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1220"
@@ -57,43 +58,43 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION03084300000000000000">
-�\�P�b�g</A>
+ソケット</A>
 </H3>
-�\�P�b�g�́A���̒ʐM��i�ɔ�ׂđ��˂ȋ@�\�������Ă���B
-�Ȃ��Ȃ�AUNIX�̈�̋����z�X�g���ƃC���^�[�l�b�g�̈��
-�L���l�b�g�[���[�N���̗����ŋ@�\���邱�Ƃ��ł��邽�߂ł���B
-�ʐM�w���̃\�P�b�g(SOCK_STREAM)�Ɛڑ�����Ȃ�
-�\�P�b�g(SOCK_DGRAM)��2���T�|�[�g����Ă���B
-�����Ƃ��܂�<B>make-socket-address</B>�֐���
-�\�P�b�g�A�h���X�̃I�u�W�F�N�g�����Ȃ���΂Ȃ�Ȃ��B
-<B>make-socket-address</B>�́A<TT>socket-address</TT>�̃C���X�^���X��Ԃ��B
-UNIX�̈�ł́A�\�P�b�g�A�h���X��UNIX�t�@�C���V�X�e�����̃p�X����
-�����B
-�C���^�[�l�b�g���ł́A�\�P�b�g�A�h���X��
-�z�X�g���ƃ|�[�g�ԍ��ƕK�v�Ȃ�v���g�R���ԍ�������
-�������̂�����B
-�����A�|�[�g�ԍ���<TT>/etc/services</TT>�ɒ�`����Ă���΁A
-service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
-<B>unix:getservbyname</B>�֐���symbol�����ꂽservice������|�[�g�ԍ���
-�����o�����߂Ɏg�p�����B
-1024��菬�����|�[�g�ԍ��́Aroot���[�U�[�̂��߂ɗ\�񂳂�Ă���B
-�����̂Ȃ����[�U�[�́A1024���傫�ȃ|�[�g�ԍ����l�I�ȃ\�P�b�g�Ƃ���
-�g�p���邱�Ƃ𐄏�����B
+ソケットは、他の通信手段に比べて多才な機能を持っている。
+なぜなら、UNIX領域の狭いホスト内とインターネット領域の
+広いネットーワーク内の両方で機能することができるためである。
+通信指向のソケット(SOCK_STREAM)と接続されない
+ソケット(SOCK_DGRAM)の2つがサポートされている。
+両方ともまず<B>make-socket-address</B>関数で
+ソケットアドレスのオブジェクトを作らなければならない。
+<B>make-socket-address</B>は、<TT>socket-address</TT>のインスタンスを返す。
+UNIX領域では、ソケットアドレスにUNIXファイルシステム内のパス名を
+入れる。
+インターネット内では、ソケットアドレスに
+ホスト名とポート番号と必要ならプロトコル番号を結合
+したものを入れる。
+もし、ポート番号が<TT>/etc/services</TT>に定義されていれば、
+service名によって指定されたsymbolを通して参照される。
+<B>unix:getservbyname</B>関数がsymbol化されたservice名からポート番号を
+引き出すために使用される。
+1024より小さいポート番号は、rootユーザーのために予約されている。
+特権のないユーザーは、1024より大きなポート番号を個人的なソケットとして
+使用することを推奨する。
 
 <P>
-�ڑ����ꂽ�X�g���[���́A�������ʐM�`�����l���Ƃ��ċ�������邪�A
-�ڑ��m�菈���́A���́E�o�͂ŕʁX�ł���B
-�Е����T�[�o�[�Ƃ��ĎQ�Ƃ���A����������N���C�A���g�Ƃ��ĎQ�Ƃ����B
-�T�[�o�[�ƂȂ����[(service access point)�́A�ŏ��Ɋm�肳���B
-����́A<B>make-socket-port</B>�֐��ɂ��쐬�����B
-���̊֐��́A<TT>socket-port</TT>�̃C���X�^���X��Ԃ��B
-�\�P�b�g�|�[�g�̃I�u�W�F�N�g�́A<B>make-server-socket-stream</B>�ɂ����
-�P�܂��͕����̃N���C�A���g����̐ڑ����󂯂邽�߂Ɏg�p�����B
-<B>make-server-socket-stream</B>�ւ̌Ăяo���́A�N���C�A���g�����
-�ڑ��v�������ۂɋN����܂Ŏ��s�҂���ԂƂȂ�B
-�N���C�A���g�́A�\�P�b�g�A�h���X���w�肷�邱�Ƃɂ����
-<B>make-client-socket-stream</B>�Ń\�P�b�g�X�g���[��
-�𕡐���邱�Ƃ��ł���B
+接続されたストリームは、両方向通信チャンネルとして供給されるが、
+接続確定処理は、入力・出力で別々である。
+片方がサーバーとして参照され、もう一方がクライアントとして参照される。
+サーバーとなった端(service access point)は、最初に確定される。
+これは、<B>make-socket-port</B>関数により作成される。
+この関数は、<TT>socket-port</TT>のインスタンスを返す。
+ソケットポートのオブジェクトは、<B>make-server-socket-stream</B>によって
+１つまたは複数のクライアントからの接続を受けるために使用される。
+<B>make-server-socket-stream</B>への呼び出しは、クライアントからの
+接続要求が実際に起こるまで実行待ち状態となる。
+クライアントは、ソケットアドレスを指定することによって
+<B>make-client-socket-stream</B>でソケットストリーム
+を複数作ることができる。
 
 <P>
 <PRE>
@@ -109,23 +110,23 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
 </PRE>
 
 <P>
-�f�[�^�x�[�X��ړ����{�b�g�̊��V�~�����[�^�̂悤�ȃA�v���P�[�V����
-�ł́A1�̃T�[�o�[�ƕ����̃N���C�A���g�Ԃ�
-<EM>multiple connection service</EM>�i���d�ڑ��T�[�r�X�j���v�������B
-���̌^�̃T�[�o�[�́A<B>open-server</B>�֐��ɂ��v���O����
-���邱�Ƃ��ł���B
-�J�����g�z�X�g���Ɨ^����ꂽ�|�[�g�ԍ�����
-<B>open-server</B>�́A�ڑ��v���ɂ��������ă\�P�b�g�|�[�g(service access point)
-�����B
-���̃|�[�g�͔񓯊��Ȃ̂ŁA
-<B>open-server</B>�͎Ւf���ꂸ�A�����ɕԐM����B
-���̌�A�ڑ��v���͂��ꂼ��Euslisp�̃��C�����[�v�𒆒f���A
-�\�P�b�g�X�g���[�� ���񓯊��ɍ쐬�����B
-���̃\�P�b�g�X�g���[�����񓯊����[�h�œ����B
-<B>open-server</B>��2�Ԗڂ̈������ɂ���񓯊����͏����́A
-�V�����f�[�^�����̃X�g���[���Ɍ��ꂽ�Ƃ��͂��ł��Ăяo�����B
-30�ȏ�̐ڑ����\�ł��邽�߁A�����ɑ����̃N���C�A���g���T�[�o�[��
-�f�[�^�ɃA�N�Z�X���邱�Ƃ��ł���B
+データベースや移動ロボットの環境シミュレータのようなアプリケーション
+では、1つのサーバーと複数のクライアント間の
+<EM>multiple connection service</EM>（多重接続サービス）が要求される。
+この型のサーバーは、<B>open-server</B>関数によりプログラム
+することができる。
+カレントホスト名と与えられたポート番号から
+<B>open-server</B>は、接続要求にしたがってソケットポート(service access point)
+を作る。
+このポートは非同期なので、
+<B>open-server</B>は遮断されず、直ちに返信する。
+その後、接続要求はそれぞれEuslispのメインループを中断し、
+ソケットストリーム が非同期に作成される。
+このソケットストリームも非同期モードで働く。
+<B>open-server</B>の2番目の引き数にある非同期入力処理は、
+新しいデータがこのストリームに現れたときはいつでも呼び出される。
+30以上の接続が可能であるため、同時に多くのクライアントがサーバーの
+データにアクセスすることができる。
 
 <P>
 <PRE>
@@ -141,17 +142,17 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
 </PRE>
 
 <P>
-�m���ȒʐM�`�����l���Ƃ��ċ��������<I>�ڑ��w��</I> �X�g���[���ƑΏƓI��
-<I>��ڑ�</I> �\�P�b�g�́A�s�m���ȒʐM�`�����l���ł���B
-���b�Z�[�W���Ȃ��Ȃ�����A�d��������A�̏Ⴕ���肷��\��������B
-�������Ȃ���A<I>��ڑ�</I> �\�P�b�g�́A���ꂼ��̐ڑ��Ƀt�@�C���f�B�X�N���v�^��
-���蓖�Ă�K�v���������A
-�܂��A�f�[�^��o�b�t�@�̃I�[�o�[�t���[�̓ǂݍ��݂����Ȃ����V�[�o�[�ł���
-���M�����𒆒f���邱�Ƃ��ł��Ȃ��Ƃ������_������B
+確実な通信チャンネルとして供給される<I>接続指向</I> ストリームと対照的に
+<I>非接続</I> ソケットは、不確実な通信チャンネルである。
+メッセージがなくなったり、重複したり、故障したりする可能性がある。
+しかしながら、<I>非接続</I> ソケットは、それぞれの接続にファイルディスクリプタを
+割り当てる必要が無いし、
+また、データやバッファのオーバーフローの読み込みをしないレシーバーでさえ
+送信処理を中断することができないという利点がある。
 
 <P>
-��ڑ��\�P�b�g����邽�߂ɂ́A�ȉ��̖��߂��g�p����B
-���b�Z�[�W��<B>unix:sendto</B>��<B>unix:recvfrom</B>�ɂ���ĕϊ������B
+非接続ソケットを作るためには、以下の命令を使用する。
+メッセージは<B>unix:sendto</B>と<B>unix:recvfrom</B>によって変換される。
 <PRE>
 ;;; receiver side
 (setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2001))
@@ -176,13 +177,13 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
  <BR>
 <BR> <P>
 
-<A NAME="15523"></A>
-<B>make-socket-address</B> <EM>&amp;key :domain :pathname :host :port :proto :service </EM>[�֐�]
+<A NAME="15520"></A>
+<B>make-socket-address</B> <EM>&amp;key :domain :pathname :host :port :proto :service </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�\�P�b�g�A�h���X�̃I�u�W�F�N�g�����B
+ソケットアドレスのオブジェクトを作る。
 </DD>
 </DL>
 <BR>
@@ -190,13 +191,13 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
 
 <P>
 
-<A NAME="15533"></A>
-<B>make-socket-port</B> <EM>sockaddr </EM>[�֐�]
+<A NAME="15530"></A>
+<B>make-socket-port</B> <EM>sockaddr </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> �T�[�o�[���̃\�P�b�g�|�[�g�����B
-���̊֐��́A�N���C�A���g�Ƃ̐ڑ����m�����邽�߂Ɏg�p�����B
+<DD> サーバー側のソケットポートを作る。
+この関数は、クライアントとの接続を確立するために使用される。
 </DD>
 </DL>
 <BR>
@@ -204,13 +205,13 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
 
 <P>
 
-<A NAME="15543"></A>
-<B>make-server-socket-stream</B> <EM>sockport &amp;optional (size 100) </EM>[�֐�]
+<A NAME="15540"></A>
+<B>make-server-socket-stream</B> <EM>sockport &amp;optional (size 100) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�N���C�A���g����̐ڑ��v�����󂯂āA�o�����X�g���[����Ԃ��B
+クライアントからの接続要求を受けて、双方向ストリームを返す。
 </DD>
 </DL>
 <BR>
@@ -218,13 +219,13 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
 
 <P>
 
-<A NAME="15553"></A>
-<B>make-client-socket-stream</B> <EM>sockaddr &amp;optional (size 100) </EM>[�֐�]
+<A NAME="15550"></A>
+<B>make-client-socket-stream</B> <EM>sockaddr &amp;optional (size 100) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�T�[�o�[�̃|�[�g�Ɛڑ������A�o�����X�g���[����Ԃ��B
+サーバーのポートと接続をし、双方向ストリームを返す。
 </DD>
 </DL>
 <BR>
@@ -232,17 +233,17 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
 
 <P>
 
-<A NAME="15563"></A>
-<B>open-server</B> <EM>port remote-func </EM>[�֐�]
+<A NAME="15560"></A>
+<B>open-server</B> <EM>port remote-func </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�C���^�[�l�b�g�̈���Ńz�X�g����<EM>port</EM>�Ŏw�肳���\�P�b�g�|�[�g��
-�������A�񓯊��ɐڑ��v����҂B
-�ڑ����v�����ꂽ�Ƃ��A������󂯐V�����\�P�b�g�X�g���[�����I�[�v�������B
-�\�P�b�g�|�[�g�Ƀ��b�Z�[�W�����������Ƃ��A<EM>remote-func</EM>�́A
-�\�P�b�g�|�[�g���������Ƃ��ČĂяo�����B
+インターネット領域内でホスト名と<EM>port</EM>で指定されるソケットポートを
+準備し、非同期に接続要求を待つ。
+接続が要求されたとき、それを受け新しいソケットストリームがオープンされる。
+ソケットポートにメッセージが到着したとき、<EM>remote-func</EM>は、
+ソケットポートを引き数として呼び出される。
 </DD>
 </DL>
 <BR>
@@ -250,17 +251,17 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
 
 <P>
 
-<A NAME="15575"></A>
-<B>connect-server</B> <EM>host port </EM>[�֐�]
+<A NAME="15572"></A>
+<B>connect-server</B> <EM>host port </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>make-socket-address</B>��<B>make-client-socket-stream</B>��A���I�ɌĂяo����
-�s�����߂̊֐��ł���B
-<EM>host</EM>��<EM>port</EM>�Ŏw�肳���\�P�b�g�X�g���[����Ԃ��B���̃\�P�b�g�X�g���[��
-�́A�N���C�A���g���T�[�o�[�ƒʐM���s�����߂̂��̂ł���B
-�|�[�g�́A�C���^�[�l�b�g�̈���p�ɍ����B
+<B>make-socket-address</B>と<B>make-client-socket-stream</B>を連続的に呼び出しを
+行うための関数である。
+<EM>host</EM>と<EM>port</EM>で指定されるソケットストリームを返す。このソケットストリーム
+は、クライアントがサーバーと通信を行うためのものである。
+ポートは、インターネット領域内用に作られる。
 </DD>
 </DL>
 <BR>
@@ -270,8 +271,8 @@ service���ɂ���Ďw�肳�ꂽsymbol��ʂ��ĎQ�Ƃ����B
              <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>

@@ -8,6 +8,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <HTML>
 <HEAD>
 <TITLE>Viewport</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <META NAME="description" CONTENT="Viewport">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
@@ -46,9 +47,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Next:</B> <A NAME="tex2html2284"
   HREF="jmanual-node126.html">Viewer</A>
 <B> Up:</B> <A NAME="tex2html2278"
-  HREF="jmanual-node122.html">���E�ƃO���t�B�b�N�X</A>
+  HREF="jmanual-node122.html">視界とグラフィックス</A>
 <B> Previous:</B> <A NAME="tex2html2272"
-  HREF="jmanual-node124.html">���e</A>
+  HREF="jmanual-node124.html">投影</A>
  &nbsp; <B>  <A NAME="tex2html2280"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2282"
@@ -62,47 +63,50 @@ Viewport</A>
 </H2>
 
 <P>
-<B>viewport</B>�N���X�́A���K�f�o�C�X���W�n(NDC)�̒���3����viewport�̃N���b�v
-�����s����B�����āA�f�o�C�X�Ɉˑ�������W�n�Ɍ��ʂ����B
-<B>viewport</B>�́A��ʏ�̌�����l�p�̈�̋��E�\���ł���B
-<B>viewport</B>�̕����I�ȑ傫���ix����y�������̃h�b�g���j�́A
-<B>:init</B>���b�Z�[�W�̒���<EM>:width</EM>��<EM>:height</EM>�Ƃ̈�����
-�ŗ^�����Ȃ���΂Ȃ�Ȃ��B
-<EM>:xcenter</EM>��<EM>:ycenter</EM>�������́Aviewport�̕����I�Ȉʒu�����肷��B
-��ʂ̌��_����̂��ꂼ��̎�������ΓI�ɗ^�����Ă���e�N�g���j�N�X4014
-�̂悤�Ȋ�{�I�ȃf�B�X�v���C�f�o�C�X���g���Ă���Ƃ��A�����2�̃p�����[�^�́A���ۂɉ�ʂ̏�ɃI�u�W�F�N�g��`���ʒu�����肷��B
-�����A�ʒu���ewindow���瑊�ΓI�Ɍ��܂�Xwindow�̂悤�Ȑ��I�ȃf�B�X�v���C
-�f�o�C�X���g���Ă���Ȃ�A
-viewport�𓮂������߂�viewport�̃p�����[�^��ς���K�v�͂Ȃ��B
-�Ȃ��Ȃ�A�����̃p�����[�^�́A���ۂ̃f�B�X�v���C�ʒu�Ɉˑ����Ȃ�����ł���B�B
+<B>viewport</B>クラスは、正規デバイス座標系(NDC)の中の3次元viewportのクリップ
+を実行する。そして、デバイスに依存する座標系に結果を作る。
+<B>viewport</B>は、画面上の見える四角領域の境界表現である。
+<B>viewport</B>の物理的な大きさ（x軸とy軸方向のドット数）は、
+<B>:init</B>メッセージの中の<EM>:width</EM>と<EM>:height</EM>との引き数
+で与えられなければならない。
+<EM>:xcenter</EM>と<EM>:ycenter</EM>引き数は、viewportの物理的な位置を決定する。
+画面の原点からのそれぞれの次元が絶対的に与えられているテクトロニクス4014
+のような基本的なディスプレイデバイスを使っているとき、これら2つのパラメータは、実際に画面の上にオブジェクトを描く位置を決定する。
+もし、位置が親windowから相対的に決まるXwindowのような精巧なディスプレイ
+デバイスを使っているなら、
+viewportを動かすためにviewportのパラメータを変える必要はない。
+なぜなら、これらのパラメータは、実際のディスプレイ位置に依存しないからである。。
 
 <P>
-<B>viewport</B>�N���X�́A�l�p�̈�̍�����viewport�̌��_�Ɖ��肵�Ă���B
-�����āAy���͏�����ɐL�тĂ���Ƃ���B
-�������A������window�V�X�e����f�B�X�v���C�f�o�C�X�ł͌��_������Ƃ��A
-y�����������ɐL�тĂ���Ƃ��Ă���B
-���̖���������邽�߂ɁA<EM>:height</EM>�p�����[�^�ɕ��̒l��^����΂悢�B
+<B>viewport</B>クラスは、四角領域の左下をviewportの原点と仮定している。
+そして、y軸は上方向に伸びているとする。
+しかし、多くのwindowシステムやディスプレイデバイスでは原点を左上とし、
+y軸が下方向に伸びているとしている。
+この問題を回避するために、<EM>:height</EM>パラメータに負の値を与えればよい。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="36624"></A>
-<B>homo-viewport-clip</B> <EM>v1 v2 </EM>[�֐�]
+<A NAME="36621"></A>
+<B>homo-viewport-clip</B> <EM>v1 v2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>v1</EM>��<EM>v2</EM>�́A4�v�f���������x�N�g���ł����āA
-3������Ԃ̐����Ƃ��ĕ\�������B
-���̐����́A<!-- MATH
+<EM>v1</EM>と<EM>v2</EM>は、4要素を持つ同次ベクトルであって、
+3次元空間の線分として表現される。
+その線分は、<!-- MATH
  $x=-1, x=1, y=-1, y=1, z=0, z=1$
  -->
-<SPAN CLASS="MATH">71#71</SPAN>�̋��E�ŃN���b�v�����B
-�����āA2�̃x�N�g���̃��X�g��Ԃ��B
-�����A���̐�����<B>viewport</B>�̊O���Ɋ��S�ɒu����Ă���Ȃ�΁A
-NIL��Ԃ��B
+<SPAN CLASS="MATH"><IMG
+ WIDTH="291" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img71.png"
+ ALT="$x=-1, x=1, y=-1, y=1, z=0, z=1$"></SPAN>の境界でクリップされる。
+そして、2つのベクトルのリストを返す。
+もし、その線分が<B>viewport</B>の外側に完全に置かれているならば、
+NILを返す。
 </DD>
 </DL>
 <BR>
@@ -110,8 +114,8 @@ NIL��Ԃ��B
 
 <P>
 	<BR> 
-<A NAME="36638"></A>
-<BIG CLASS="XLARGE"><B>viewport </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="36635"></A>
+<BIG CLASS="XLARGE"><B>viewport </B></BIG> [クラス]  <PRE><TT>
   :super   <B>coordinates</B> 
 <BR>  :slots 		 
 </TT></PRE>
@@ -120,9 +124,9 @@ NIL��Ԃ��B
 
 <DL COMPACT>
 <DT> 
-<DD>viewport�ϊ��́A�f�o�C�X�Ŏw�肳�����W�n��NDC�i���K���f�o�C�X���W�n�j�����B
-<B>coordinates</B>�N���X���p�����Ă��邽�߁A<B>viewport</B>�̓T�C�Y�Ɠ��e��ʂ�
-���Έʒu���`���Ă���B
+<DD>viewport変換は、デバイスで指定される座標系にNDC（正規化デバイス座標系）を作る。
+<B>coordinates</B>クラスを継承しているため、<B>viewport</B>はサイズと投影画面の
+相対位置を定義している。
 </DD>
 </DL>
 <BR>
@@ -130,38 +134,38 @@ NIL��Ԃ��B
 
 <P>
 
-<A NAME="36657"></A>
-<B>:xcenter</B> <EM>&amp;optional xcenter </EM>[���\�b�h]
+<A NAME="36654"></A>
+<B>:xcenter</B> <EM>&amp;optional xcenter </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<B>viewport</B>��x���̒��S��Ԃ��B
-�����A<EM>xcenter</EM>���^�����Ă���΁A�ݒ���s���B
+この<B>viewport</B>のx軸の中心を返す。
+もし、<EM>xcenter</EM>が与えられていれば、設定を行う。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="36669"></A>
-<B>:ycenter</B> <EM>&amp;optional ycenter </EM>[���\�b�h]
+<A NAME="36666"></A>
+<B>:ycenter</B> <EM>&amp;optional ycenter </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<B>viewport</B>��y���̒��S��Ԃ��B
+この<B>viewport</B>のy軸の中心を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="36680"></A>
-<B>:size</B> <EM>&amp;optional size </EM>[���\�b�h]
+<A NAME="36677"></A>
+<B>:size</B> <EM>&amp;optional size </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<B>viewport</B>��x����y�������̑傫���̃��X�g��Ԃ��B
+この<B>viewport</B>のx軸とy軸方向の大きさのリストを返す。
 </DD>
 </DL>
 <BR>
@@ -169,76 +173,76 @@ NIL��Ԃ��B
 
 <P>
 
-<A NAME="36691"></A>
-<B>:width</B> <EM>&amp;optional width </EM>[���\�b�h]
+<A NAME="36688"></A>
+<B>:width</B> <EM>&amp;optional width </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����<B>viewport</B>�̕���<EM>width</EM>��
-�ݒ肷��B
+<DD> この<B>viewport</B>の幅を<EM>width</EM>に
+設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="36703"></A>
-<B>:height</B> <EM>&amp;optional height </EM>[���\�b�h]
+<A NAME="36700"></A>
+<B>:height</B> <EM>&amp;optional height </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ����<B>viewport</B>�̍�����
-<EM>height</EM>�ɐݒ肷��B
+<DD> この<B>viewport</B>の高さを
+<EM>height</EM>に設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="36715"></A>
-<B>:screen-point-to-ndc</B> <EM>p </EM>[���\�b�h]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>p</EM>�́A�����I��ʂ̒��̈ʒu��\����������x�N�g���ł���B
-<EM>p</EM>�́A���K���f�o�C�X���W�n(NDC)�̒��ł̕\���ɕϊ������B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="36727"></A>
-<B>:ndc-point-to-screen</B> <EM>p </EM>[���\�b�h]
+<A NAME="36712"></A>
+<B>:screen-point-to-ndc</B> <EM>p </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<B>viewport</B>��NDC�\���ł���<EM>p</EM>����ʂ̕����I�ʒu�ɕϊ�����B
+<EM>p</EM>は、物理的画面の中の位置を表現する実数ベクトルである。
+<EM>p</EM>は、正規化デバイス座標系(NDC)の中での表現に変換される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="36739"></A>
-<B>:ndc-line-to-screen</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[���\�b�h]
+<A NAME="36724"></A>
+<B>:ndc-point-to-screen</B> <EM>p </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-2��3�����x�N�g��<EM>p1</EM>��<EM>p2</EM>�́ANDC�̒��̐������`����B
-������2�̒[�_�́A��ʋ�Ԃ̕\���ɕϊ������B
-�����A<EM>do-clip</EM>��non-NIL�Ȃ�A���̐����̓N���b�v�����B
+この<B>viewport</B>のNDC表現である<EM>p</EM>を画面の物理的位置に変換する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="36752"></A>
+<A NAME="36736"></A>
+<B>:ndc-line-to-screen</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つの3次元ベクトル<EM>p1</EM>と<EM>p2</EM>は、NDCの中の線分を定義する。
+これらの2つの端点は、画面空間の表現に変換される。
+もし、<EM>do-clip</EM>がnon-NILなら、その線分はクリップされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36749"></A>
 <B>:init</B> <EM>&amp;key (:xcenter 100) (:ycenter 100) (:size 100)
-(width 100) (height 100) </EM>[���\�b�h]
+(width 100) (height 100) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> �V����<B>viewport</B>�I�u�W�F�N�g�����B
+<DD> 新しい<B>viewport</B>オブジェクトを作る。
 </DD>
 </DL>
 <BR>
@@ -268,17 +272,17 @@ NIL��Ԃ��B
 <B> Next:</B> <A NAME="tex2html2284"
   HREF="jmanual-node126.html">Viewer</A>
 <B> Up:</B> <A NAME="tex2html2278"
-  HREF="jmanual-node122.html">���E�ƃO���t�B�b�N�X</A>
+  HREF="jmanual-node122.html">視界とグラフィックス</A>
 <B> Previous:</B> <A NAME="tex2html2272"
-  HREF="jmanual-node124.html">���e</A>
+  HREF="jmanual-node124.html">投影</A>
  &nbsp; <B>  <A NAME="tex2html2280"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2282"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-28
 </ADDRESS>
 </BODY>
 </HTML>
