@@ -1,606 +1,606 @@
-\section{\label{Geometry}$B4v2?3X%b%G%j%s%0(B}
-\markright{\arabic{section}. $B4v2?3X%b%G%j%s%0(B}
+\section{\label{Geometry}幾何学モデリング}
+\markright{\arabic{section}. 幾何学モデリング}
 
-Euslisp$B$O!"#3<!85$N4v2?3X%b%G%k$NFbItI=8=$H$7$F(B{\emx Brep}$B!J6-3&I=8=!K$r:NMQ$7$F$$$k!#(B
-Brep$BFb$NMWAG$O(B{\bf edge, plane, polygon, face, hole,}$B$d(B{\bf body}$B%/%i%9$K$h$C$F(B
-$BI=8=$5$l$k!#(B
-$B4pK\(Bbody$B$N:n@.4X?t$H(Bbody$B$N9g@.4X?t$O!"$3$l$i$N%/%i%9$N?7$7$$(B
-$B%$%s%9%?%s%9$r:n$k!#(B
-$B$b$C$HB0@-$r;}$C$?FH<+$N4v2?3X%/%i%9$r;HMQ$9$k$?$a$K$O!"(B
-{\bf *edge-class*, *face-class*}$B$H(B{\bf *body-class*}$B$NFC<lJQ?t$K(B
-$BFH<+$N%/%i%9%*%V%8%'%/%H$r@_Dj$9$k$3$H!#(B
+Euslispは、３次元の幾何学モデルの内部表現として{\emx Brep}（境界表現）を採用している。
+Brep内の要素は{\bf edge, plane, polygon, face, hole,}や{\bf body}クラスによって
+表現される。
+基本bodyの作成関数とbodyの合成関数は、これらのクラスの新しい
+インスタンスを作る。
+もっと属性を持った独自の幾何学クラスを使用するためには、
+{\bf *edge-class*, *face-class*}と{\bf *body-class*}の特殊変数に
+独自のクラスオブジェクトを設定すること。
 
 \begin{figure}
 \begin{center}
 \epsfile{file=fig/beam.ps,height=10cm}
 \end{center}
-\caption{$BD:E@$H%(%C%8$HLL$NJ,N`(B}
+\caption{頂点とエッジと面の分類}
 \end{figure}
 
-\subsection{$B<o!9$N4v2?3X4X?t(B}
+\subsection{種々の幾何学関数}
 
 \begin{refdesc}
 
 \funcdesc{vplus}{vector-list}{
-{\em vector-list}$B$N$9$Y$F$NMWAG$N9g7W$r<B?t%Y%/%H%k$H$7$F(B
-$B?7$7$/:n$j!"JV$9!#(B
-{\bf v+}$B$H$N0c$$$O!"(B{\bf vplus}$B$,(B2$B$D0J>e$N0z?t$K$D$$$F9g7W$r7W;;$7!"(B
-$B7k2L$N%Y%/%H%k$,;XDj$G$-$J$$E@$G$"$k!#(B}
+{\em vector-list}のすべての要素の合計を実数ベクトルとして
+新しく作り、返す。
+{\bf v+}との違いは、{\bf vplus}が2つ以上の引数について合計を計算し、
+結果のベクトルが指定できない点である。}
 
 \funcdesc{vector-mean}{vector-list}{
-{\em vector-list}$B$NJ?6Q%Y%/%H%k$rJV$9!#(B}
+{\em vector-list}の平均ベクトルを返す。}
 
 \funcdesc{triangle}{a b c \&optional (normal \#f(0 0 1))}{
-{\em a, b, c}$B$O!"(B2$B<!85$^$?$O(B3$B<!85$N<B?t%Y%/%H%k$G$"$k!#(B
-{\em normal}$B$O!"(B{\em a,b,c}$B$,CV$+$l$kJ?LL$N@55,%Y%/%H%k$G$"$k!#(B
-{\bf triangle}$B$O(B{\em a,b,c}$B$G7A:n$i$l$k;03Q7A$NNN0h$N(B2$BG\$NBg$-$5$rJV$9!#(B
-{\em normal}$B$HF1$8J}8~$+$i8+$?$H$-$K(B{\em a,b,c}$B$,;~7WJ}8~$K2sE>$9$k(B
-$B$J$i$P!"(B{\bf triangle}$B$O@5$G$"$k!#(B
-$B8@$$49$($k$H!"$b$7(B{\bf triangle}$B$,@5$J$i$P!"(B
-{\em c}$B$O(B{\em a-b}$B$N@~J,$N:8<jB&$K0LCV$7!"(B
-{\em b}$B$O(B{\em a-c}$B$N1&<jB&$K0LCV$7$F$$$k!#(B}
+{\em a, b, c}は、2次元または3次元の実数ベクトルである。
+{\em normal}は、{\em a,b,c}が置かれる平面の正規ベクトルである。
+{\bf triangle}は{\em a,b,c}で形作られる三角形の領域の2倍の大きさを返す。
+{\em normal}と同じ方向から見たときに{\em a,b,c}が時計方向に回転する
+ならば、{\bf triangle}は正である。
+言い換えると、もし{\bf triangle}が正ならば、
+{\em c}は{\em a-b}の線分の左手側に位置し、
+{\em b}は{\em a-c}の右手側に位置している。}
 
 \funcdesc{triangle-normal}{a b c}{
-{\em a b c}$B$GDj5A$5$l$k;03Q7A$KBP$7$F?bD>J}8~$N@55,%Y%/%H%k$r8+$D$1$k!#(B}
+{\em a b c}で定義される三角形に対して垂直方向の正規ベクトルを見つける。}
 
 \funcdesc{vector-angle}{v1 v2 \&optional (normal (v* v1 v2))}{
-2$B$D$N%Y%/%H%k$N3QEY$r7W;;$9$k!#(B
-$B$3$l$O<!$N<0$G$"$i$o$5$l$k(B{\tt atan(normal$\cdot$(v1$\times$v2), v1$\cdot$v2)}$B!#(B
-{\em v1,v2}$B$H(B{\em normal}$B$O@55,%Y%/%H%k$G$J$1$l$P$J$i$J$$!#(B
-{\em normal}$B$,M?$($i$l$J$$$H$-!"(B{\em v1,v2}$B$N6&DL?b@~$N@55,%Y%/%H%k$,(B
-$B;HMQ$5$l$k!#$3$N>l9g!"7k2L$O(B$0$$B$+$i(B$\pi$$B$^$G$NHO0O$N@5$N3QEY$K$J$k!#(B
-$BId9fIU$-$N3QEY$rF@$k$?$a$K$O!"(B{\em normal}$B$r;XDj$7$J$1$l$P$J$i$J$$!#(B}
+2つのベクトルの角度を計算する。
+これは次の式であらわされる{\tt atan(normal$\cdot$(v1$\times$v2), v1$\cdot$v2)}。
+{\em v1,v2}と{\em normal}は正規ベクトルでなければならない。
+{\em normal}が与えられないとき、{\em v1,v2}の共通垂線の正規ベクトルが
+使用される。この場合、結果は$0$から$\pi$までの範囲の正の角度になる。
+符号付きの角度を得るためには、{\em normal}を指定しなければならない。}
 
 \funcdesc{face-normal-vector}{vertices}{
-$BF1$8J?LL$N>e$K$"$k%Y%/%H%k$N%j%9%H$+$iLL$N@55,2=%Y%/%H%k$r7W;;$9$k!#(B}
+同じ平面の上にあるベクトルのリストから面の正規化ベクトルを計算する。}
 
 \funcdesc{farthest}{p points}{
-3$B<!85%Y%/%H%k$N%j%9%H(B{\em points}$B$NCf$+$i(B{\em p}$B$h$j:G$b1s$$E@$rA\$9!#(B}
+3次元ベクトルのリスト{\em points}の中から{\em p}より最も遠い点を捜す。}
 
 \funcdesc{farthest-pair}{points}{
-3$B<!85%Y%/%H%k$N%j%9%H(B{\em points}$B$+$i$b$C$H$b1s$$E@$NAH$r(B
-$BA\$9!#(B}
+3次元ベクトルのリスト{\em points}からもっとも遠い点の組を
+捜す。}
 
 \funcdesc{maxindex}{3D-floatvec}{
-{\em 3D-floatvec}$B$N(B3$B$D$NMWAG$NCf$G@dBPCM$,:GBg$NMWAG$N0LCV$rA\$9!#(B}
+{\em 3D-floatvec}の3つの要素の中で絶対値が最大の要素の位置を捜す。}
 
 \funcdesc{random-vector}{\&optional (range 1.0)}{
-3$B<!85%G%+%k%H6u4V$NCf$GF1<!E*$KJ,;6$5$l$k%i%s%@%`%Y%/%H%k$rH/@8$9$k!#(B}
+3次元デカルト空間の中で同次的に分散されるランダムベクトルを発生する。}
 
 \funcdesc{random-normalized-vector}{\&optional (range 1.0)}{
-3$B<!85$N@55,2=%i%s%@%`%Y%/%H%k$rJV$9!#(B}
+3次元の正規化ランダムベクトルを返す。}
 
 \funcdesc{random-vectors}{count range}{
-{\em range}$B$NBg$-$5$N%i%s%@%`%Y%/%H%k$r(B{\em count}$B8D$D$/$j!"$=$N%j%9%H$rJV$9!#(B}
+{\em range}の大きさのランダムベクトルを{\em count}個つくり、そのリストを返す。}
 
 \funcdesc{line-intersection}{p1 p2 p3 p4}{
-{\em p1, p2, p3, p4}$B$O!"$9$Y$F(B2$B<!850J>e$N<B?t%Y%/%H%k$G$"$k!#(B
-{\em p1-p2}$B$H(B{\em p3-p4}$B$,J?LL>e$N(B2$B$D$N@~J,$H$7$FDj5A$5$l$k!#(B
-{\bf line-intersection}$B$O!"$3$l$i$N(B2$B$D$N@~J,$N8r:9$9$kE@$N%Q%i%a!<%?!J@~J,$KCV$1$k(B
-$B8rE@$N0LCV$NHfN(!K$r(B2$BMWAG$N%j%9%H$GJV$9!#(B3$B<!85$G;HMQ$9$k$H$-!"(B
-{\em p1, p2, p3, p4}$B$O6&DLJ?LLFb$K$J$1$l$P$J$i$J$$!#(B}
+{\em p1, p2, p3, p4}は、すべて2次元以上の実数ベクトルである。
+{\em p1-p2}と{\em p3-p4}が平面上の2つの線分として定義される。
+{\bf line-intersection}は、これらの2つの線分の交差する点のパラメータ（線分に置ける
+交点の位置の比率）を2要素のリストで返す。3次元で使用するとき、
+{\em p1, p2, p3, p4}は共通平面内になければならない。}
 
 \funcdesc{collinear-p}{p1 p2 p3 \&optional tolerance}{
-{\em p1, p2, p3}$B$O!"$9$Y$F(B3$B<!85$N<B?t%Y%/%H%k$G(B3$B$D$NE@$rI=8=$7$F$$$k!#(B
-{\bf collinear-p}$B$O!"$b$7(B{\tt $\Vert$((p2$-$p1)$\times$(p3$-$p1))$\Vert$}$B$,(B
-{\tt *coplanar-threshold*}$B$h$j>.$5$1$l$P!"(B{\em p1-p3}$B$N@~J,$N>e$K(B
-{\em p2}$B$rEj1F$7$?$H$-$N%Q%i%a!<%?$rJV$9!#$=$&$G$J$1$l$P!"(BNIL$B$rJV$9!#(B}
+{\em p1, p2, p3}は、すべて3次元の実数ベクトルで3つの点を表現している。
+{\bf collinear-p}は、もし{\tt $\Vert$((p2$-$p1)$\times$(p3$-$p1))$\Vert$}が
+{\tt *coplanar-threshold*}より小さければ、{\em p1-p3}の線分の上に
+{\em p2}を投影したときのパラメータを返す。そうでなければ、NILを返す。}
 
 \funcdesc{find-coplanar-vertices}{p1 p2 p3 vlist}{
-{\em p1, p2, p3}$B$O!"(B3$B<!85$N<B?t%Y%/%H%k$G!"$3$N(B3$B$D$N%Y%/%H%k$+$iJ?LL$rI=8=$7$F$$$k!#(B
-{\bf find-coplanar-vertices}$B$O!"$=$NJ?LLFb$K$"$kE@$r(B
-{\em vlist}$B$NCf$+$iA\$9!#(B}
+{\em p1, p2, p3}は、3次元の実数ベクトルで、この3つのベクトルから平面を表現している。
+{\bf find-coplanar-vertices}は、その平面内にある点を
+{\em vlist}の中から捜す。}
 
 \funcdesc{find-connecting-edge}{vertex edgelist}{
-{\em vertex}$B$K@\B3$5$l$?(B{\em edgelist}$B$NCf$+$i%(%C%8$rA\$9!#(B}
+{\em vertex}に接続された{\em edgelist}の中からエッジを捜す。}
 
 \funcdesc{make-vertex-edge-htab}{bodfacs}{
-{\em bodfacs}$B$O!"(B{\bf body}$B$"$k$$$O(B{\bf face}$B$N%j%9%H$G$"$k!#(B
-{\bf make-vertex-edge-htab}$B$O!"(B{\em bodfacs}$B$NCf$ND:E@$rCj=P$7!"$=$l$K@\B3$5$l$k%(%C%8$N8!:w$,$G$-$k(B
-$B%O%C%7%e%F!<%V%k$r:n$k!#(B}
+{\em bodfacs}は、{\bf body}あるいは{\bf face}のリストである。
+{\bf make-vertex-edge-htab}は、{\em bodfacs}の中の頂点を抽出し、それに接続されるエッジの検索ができる
+ハッシュテーブルを作る。}
 
 \funcdesc{left-points}{points p1 p2 normal}{
-{\em points, p1, p2}$B$O!"@55,2=%Y%/%H%k(B{\em normal}$B$GI=8=$5$l$k(B
-$BJ?LLFb$K$"$k$b$N$H2>Dj$9$k!#(B
-{\bf left-points}$B$O!"(B{\em p1, p2}$B4V$N@~J,$N:8B&$KCV$+$l$F$$$kE@$r(B
-{\em points}$B$NCf$+$iA\$7!"=8$a$k!#(B}
+{\em points, p1, p2}は、正規化ベクトル{\em normal}で表現される
+平面内にあるものと仮定する。
+{\bf left-points}は、{\em p1, p2}間の線分の左側に置かれている点を
+{\em points}の中から捜し、集める。}
 
 \funcdesc{right-points}{points p1 p2 normal}{
-{\em points, p1, p2}$B$O!"@55,2=%Y%/%H%k(B{\em normal}$B$GI=8=$5$l$k(B
-$BJ?LLFb$K$"$k$b$N$H2>Dj$9$k!#(B
-{\bf right-points}$B$O!"(B{\em p1, p2}$B4V$N@~J,$N1&B&$KCV$+$l$F$$$kE@$r(B
-{\em points}$B$NCf$+$iA\$7!"=8$a$k!#(B}
+{\em points, p1, p2}は、正規化ベクトル{\em normal}で表現される
+平面内にあるものと仮定する。
+{\bf right-points}は、{\em p1, p2}間の線分の右側に置かれている点を
+{\em points}の中から捜し、集める。}
 
 \funcdesc{left-most-point}{points p1 p2 normal}{
-{\em points, p1, p2}$B$O!"@55,2=%Y%/%H%k(B{\em normal}$B$GI=8=$5$l$k(B
-$BJ?LLFb$K$"$k$b$N$H2>Dj$9$k!#(B
-{\bf left-most-points}$B$O!"(B{\em p1, p2}$B$G7hDj$5$l$k@~J,$N:8B&$KCV$+$l$F$$$kE@$r(B
-{\em points}$B$NCf$+$iA\$7!"$=$NCf$G$b$C$H$b1s$$E@$rJV$9!#(B}
+{\em points, p1, p2}は、正規化ベクトル{\em normal}で表現される
+平面内にあるものと仮定する。
+{\bf left-most-points}は、{\em p1, p2}で決定される線分の左側に置かれている点を
+{\em points}の中から捜し、その中でもっとも遠い点を返す。}
 
 \funcdesc{right-most-point}{points p1 p2 normal}{
-{\em points, p1, p2}$B$O!"@55,2=%Y%/%H%k(B{\em normal}$B$GI=8=$5$l$k(B
-$BJ?LLFb$K$"$k$b$N$H2>Dj$9$k!#(B
-{\bf right-most-points}$B$O!"(B{\em p1, p2}$B$G7hDj$5$l$k@~J,$N1&B&$KCV$+$l$F$$$kE@$r(B
-{\em points}$B$NCf$+$iA\$7!"$=$NCf$G$b$C$H$b1s$$E@$rJV$9!#(B}
+{\em points, p1, p2}は、正規化ベクトル{\em normal}で表現される
+平面内にあるものと仮定する。
+{\bf right-most-points}は、{\em p1, p2}で決定される線分の右側に置かれている点を
+{\em points}の中から捜し、その中でもっとも遠い点を返す。}
 
 \funcdesc{eps=}{num1 num2 [(tolerance *epsilon*)]}{
-2$B$D$N<B?t(B{\em num1}$B$H(B{\em num2}$B$rHf3S$7$F!"(B{\em torelance}$B$N8m:9HO0OFb$G(B
-$BEy$7$$$+$I$&$+$rJV$9!#(B}
+2つの実数{\em num1}と{\em num2}を比較して、{\em torelance}の誤差範囲内で
+等しいかどうかを返す。}
 \funcdesc{eps$<$}{num1 num2 [(tolerance *epsilon*)]}{
-{\em num1}$B$,L@$i$+$K(B{\em num2}$B$h$j$b>.$5$$$H$-(BT$B$rJV$9!#$9$J$o$A!"(B
-{\tt num1$<$num2-tolerance}$B$G$"$k!#(B}
+{\em num1}が明らかに{\em num2}よりも小さいときTを返す。すなわち、
+{\tt num1$<$num2-tolerance}である。}
 \funcdesc{eps$<=$}{num1 num2 [(tolerance *epsilon*)]}{
-{\em num1}$B$,B?J,(B{\em num2}$B$h$j$b>.$5$$$H$-$"$k$$$OEy$7$$$H$-(BT$B$rJV$9!#$9$J$o$A!"(B
-{\tt num1$<$num2+tolerance}$B$G$"$k!#(B}
+{\em num1}が多分{\em num2}よりも小さいときあるいは等しいときTを返す。すなわち、
+{\tt num1$<$num2+tolerance}である。}
 \funcdesc{eps$>$}{num1 num2 [(tolerance *epsilon*)]}{
-{\em num1}$B$,L@$i$+$K(B{\em num2}$B$h$j$bBg$-$$$H$-(BT$B$rJV$9!#$9$J$o$A!"(B
-{\tt num1$>$num2-tolerance}$B$G$"$k!#(B}
+{\em num1}が明らかに{\em num2}よりも大きいときTを返す。すなわち、
+{\tt num1$>$num2-tolerance}である。}
 \funcdesc{eps$>=$}{num1 num2 [(tolerance *epsilon*)]}{
-{\em num1}$B$,B?J,(B{\em num2}$B$h$j$bBg$-$$$H$-$"$k$$$OEy$7$$$H$-(BT$B$rJV$9!#$9$J$o$A!"(B
-{\tt num1$>$num2+tolerance}$B$G$"$k!#(B}
+{\em num1}が多分{\em num2}よりも大きいときあるいは等しいときTを返す。すなわち、
+{\tt num1$>$num2+tolerance}である。}
 
 
 \classdesc{bounding-box}{object}{(minpoint maxpoint)}
-{xy-,yz-$B$d(Bzx-$BJ?LL$KJ?9T$JLL$r6-3&$H$9$k:G>.$N;M3QCl$rDj5A$9$k!#(B
-{\bf bounding-box}$B$O!"=i4|$KM?$($i$l$k%Y%/%H%k$N<!85$K$h$C$F!"(B
-$B$I$s$J<!85$G$b;HMQ$9$k$3$H$,$G$-$k!#(B
-{\bf bounding-box}$B$O!"(Bsurrounding-box$B$NL>A0$GDj5A$5$l$F$$$?!#(B}
+{xy-,yz-やzx-平面に平行な面を境界とする最小の四角柱を定義する。
+{\bf bounding-box}は、初期に与えられるベクトルの次元によって、
+どんな次元でも使用することができる。
+{\bf bounding-box}は、surrounding-boxの名前で定義されていた。}
 
-\methoddesc{:box}{}{$B$3$N(B{\bf bounding-box}$B$N%*%V%8%'%/%H<+?H$rJV$9!#(B}
-\methoddesc{:volume}{}{$B$3$N(B{\bf bounding-box}$B$NBN@Q$rJV$9!#(B}
+\methoddesc{:box}{}{この{\bf bounding-box}のオブジェクト自身を返す。}
+\methoddesc{:volume}{}{この{\bf bounding-box}の体積を返す。}
 \methoddesc{:grow}{rate}{
-$B$3$N(B{\bf bounding-box}$B$N%5%$%:$r(B{\em rate}$BN($GA}2C$^$?$O8:>/$5$;$k!#(B
-{\em rate}$B$,(B0.01$B$N$H$-!"(B1\%$B3HBg$5$l$k!#(B}
+この{\bf bounding-box}のサイズを{\em rate}率で増加または減少させる。
+{\em rate}が0.01のとき、1\%拡大される。}
 \methoddesc{:inner}{point}{
-{\em point}$B$,$3$N(B{\bf bounding-box}$BFb$K$"$l$P(BT$B$rJV$7!"(B
-$B$=$&$G$J$$$H$-$O(BNIL$B$rJV$9!#(B}
+{\em point}がこの{\bf bounding-box}内にあればTを返し、
+そうでないときはNILを返す。}
 \methoddesc{:intersection}{box2 \&optional tolerance}{
-$B$3$N(B{\bf bounding-box}$B$H(B{\em box2}$B$H$N6&DL(B{\tt bounding-box}$B$rJV$9!#(B
-$B$b$7!"(B{\em torelance}$B$,M?$($i$l$?$J$i$P!"$3$N(B{\bf box}$B$O$=$N8m:9$G3HBg$5$l$k!#(B
-$B$b$7!"6&DLItJ,$,$J$1$l$P!"(BNIL$B$rJV$9!#(B}
+この{\bf bounding-box}と{\em box2}との共通{\tt bounding-box}を返す。
+もし、{\em torelance}が与えられたならば、この{\bf box}はその誤差で拡大される。
+もし、共通部分がなければ、NILを返す。}
 \methoddesc{:union}{box2}{
-$B$3$N(B{\bf bounding-box}$B$H(B{\em box2}$B$r7k9g$7$?(B{\tt bounding-box}$B$rJV$9!#(B}
+この{\bf bounding-box}と{\em box2}を結合した{\tt bounding-box}を返す。}
 \methoddesc{:intersectionp}{box2}{
-$B$3$N(B{\bf bounding-box}$B$H(B{\em box2}$B$H$N4V$K6&DLNN0h$,$"$l$P(BT$B$rJV$7!"(B
-$B$=$&$G$J$1$l$P(BNIL$B$rJV$9!#(B
-$B$3$N%a%=%C%I$O!"(B{\bf :intersection}$B$h$j$bB.$$!#$J$<$J$i!"?7$7$$(B
-{\bf bounding-box}$B$N%$%s%9%?%s%9$r:n$i$J$$$?$a$G$"$k!#(B}
+この{\bf bounding-box}と{\em box2}との間に共通領域があればTを返し、
+そうでなければNILを返す。
+このメソッドは、{\bf :intersection}よりも速い。なぜなら、新しい
+{\bf bounding-box}のインスタンスを作らないためである。}
 \methoddesc{:extreme-point}{direction}{
-$B$3$N(B{\bf bounding-box}$B$N#8$D$ND:E@$NCf$G!"(B{\em direction}$B$H$NFb@Q$,:GBg$N$b$N$r(B
-$BJV$9!#(B}
+この{\bf bounding-box}の８つの頂点の中で、{\em direction}との内積が最大のものを
+返す。}
 \methoddesc{:corners}{}{
-$B$3$N(B{\bf bounding-box}$B$N$9$Y$F$ND:E@$N%j%9%H$rJV$9!#(B
-$B$b$7!"$3$N(B{\bf box}$B$,(B2$B<!85$G$"$l$P!"(B4$BE@$,JV$5$l$k!#(B
-$BF1MM$K(B3$B<!85$N>l9g!"(B8$BE@$,JV$5$l$k!#(B}
+この{\bf bounding-box}のすべての頂点のリストを返す。
+もし、この{\bf box}が2次元であれば、4点が返される。
+同様に3次元の場合、8点が返される。}
 \methoddesc{:below}{box2 \&optional (direction \#(0 0 1)}{
-$B$3$N(B{\bf bounding-box}$B$,(B{\em box2}$B$KBP$7$F(B{\em direction}$B$N<($9%Y%/%H%k(B
-$B$N2<$NJ}8~$K$"$l$P(BT$B$rJV$9!#(B
-$B$3$N(B{\bf boundign-box}$B$,(B{\em direction}$B$NJ}8~$KF0$+$5$l$k$H$-!"(B
-2$B$D$N(Bbox$B$K6&DLItJ,$G$G$-$k$+$I$&$+$r%A%'%C%/$9$k$?$a$K;HMQ$5$l$k!#(B}
+この{\bf bounding-box}が{\em box2}に対して{\em direction}の示すベクトル
+の下の方向にあればTを返す。
+この{\bf boundign-box}が{\em direction}の方向に動かされるとき、
+2つのboxに共通部分でできるかどうかをチェックするために使用される。}
 \methoddesc{:body}{}{
-$B$3$N(B{\bf bounding-box}$B$K$h$C$FFbJq$5$l$kN)J}BN$rI=8=$9$k(B
-{\bf body}$B$rJV$9!#(B}
+この{\bf bounding-box}によって内包される立方体を表現する
+{\bf body}を返す。}
 \methoddesc{:init}{vlist \&optional tolerance}{
-{\tt minpoint}$B$H(B{\tt maxpoint}$B%9%m%C%H$r(B{\em vlist}$B$+$i@_Dj$9$k!#(B
-$B$b$7!"(B{\em torelance}$B$,;XDj$5$l$?$J$i!"$3$N(B{\bf bounding-box}$B$O(B
-$B$=$NNL$GA}Bg$5$l$k!#(B}
+{\tt minpoint}と{\tt maxpoint}スロットを{\em vlist}から設定する。
+もし、{\em torelance}が指定されたなら、この{\bf bounding-box}は
+その量で増大される。}
 
 \funcdesc{make-bounding-box}{points [tolerance]}{
-{\em points}$B$N%j%9%H$NCf$+$i:G>.$H:GBg$N:BI8CM$r8+$D$1!"(B
-{\tt bounding-box}$B$N%$%s%9%?%s%9$r:n$k!#(B}
+{\em points}のリストの中から最小と最大の座標値を見つけ、
+{\tt bounding-box}のインスタンスを作る。}
 \funcdesc{bounding-box-union}{boxes [tolerance *contact-threshold*]}{
-{\em boxes}$B$N7k9g$GI=8=$5$l$k(Bbounding-box$B$N%$%s%9%?%s%9$r:n$k!#(B
-$B$=$N7k2L$O!"(B{\em tolerance}$B$K$h$C$F3HD%$5$l$k!#(B}
+{\em boxes}の結合で表現されるbounding-boxのインスタンスを作る。
+その結果は、{\em tolerance}によって拡張される。}
 \funcdesc{bounding-box-intersection}{boxes [tolerance *contact-threshold*]}{
-{\em boxes}$B$N6&DLNN0h$rI=8=$9$k(Bbounding-box$B$N%$%s%9%?%s%9$r:n$k!#(B
-$B$=$N7k2L$O!"(B{\em tolerance}$B$K$h$C$F3HD%$5$l$k!#(B}
+{\em boxes}の共通領域を表現するbounding-boxのインスタンスを作る。
+その結果は、{\em tolerance}によって拡張される。}
 \end{refdesc}
 
 \newpage
-\subsection{$B@~$H%(%C%8(B}
+\subsection{線とエッジ}
 
-$BD:E@$N=gHV$d%(%C%8$N=gHV$N8~$-$O!"(B{\bf body}$B$r30$+$i8+$?$H$-$KH?;~7WJ}8~(B
-$B$K@0Ns$9$k$h$&$KDj5A$5$l$k!#(B
-{\tt pvertex}$B$d(B{\tt nvertex}$B$d(B{\tt pface}$B$d(B{\tt nface}$B$O!"(B
-{\tt pface}$B$,30$+$i8+$?$H$-%(%C%8$N:8B&$K0LCV$7$F$$$k$H$-!"(B
-{\tt pvertex}$B$+$i(B{\tt nvertex}$B$K8~$+$&J}8~$K%(%C%8$rDj5A$9$k!#(B
+頂点の順番やエッジの順番の向きは、{\bf body}を外から見たときに反時計方向
+に整列するように定義される。
+{\tt pvertex}や{\tt nvertex}や{\tt pface}や{\tt nface}は、
+{\tt pface}が外から見たときエッジの左側に位置しているとき、
+{\tt pvertex}から{\tt nvertex}に向かう方向にエッジを定義する。
 
 \begin{refdesc}
 
 \classdesc{line}{propertied-object}
 {((pvert :type floatvector)
 (nvert :type floatvector))}{
-{\tt pvert}$B$H(B{\tt nvert}$B$N>e$rDL$k@~J,$rDj5A$9$k!#(B
-$B@~J,$O!"(B{\em pvert}$B$+$i(B{\em nvert}$B$K8~$+$&J}8~$r;}$D!#(B
+{\tt pvert}と{\tt nvert}の上を通る線分を定義する。
+線分は、{\em pvert}から{\em nvert}に向かう方向を持つ。
 {\tt t $\cdot$ pvert +(1-t)nvert}}
 
-\methoddesc{:vertices}{}{{\tt pvert}$B$H(B{\tt nvert}$B$N%j%9%H$rJV$9!#(B}
+\methoddesc{:vertices}{}{{\tt pvert}と{\tt nvert}のリストを返す。}
 
 \methoddesc{:point}{p}{
-$B$3$N@~J,$N>e$G(B{\em p}$B%Q%i%a!<%?$G<($5$l$k0LCV$N(B3$B<!85$N%Y%/%H%k$rJV$9!#(B
+この線分の上で{\em p}パラメータで示される位置の3次元のベクトルを返す。
 {\tt p $\cdot$ pvert + (1-p)nvert}}
 \methoddesc{:parameter}{point}{
-$B$3$N@~J,$N>e$N(B{\em point}$B$KBP$9$k%Q%i%a!<%?$r7W;;$9$k!#(B
-$B$3$l$O!"(B{\bf :point}$B%a%=%C%I$N5U%a%=%C%I$G$"$k!#(B}
+この線分の上の{\em point}に対するパラメータを計算する。
+これは、{\bf :point}メソッドの逆メソッドである。}
 \methoddesc{:direction}{}{
-{\tt pvert}$B$+$i(B{\tt nvert}$B$X8~$+$&@55,2=%Y%/%H%k$rJV$9!#(B}
+{\tt pvert}から{\tt nvert}へ向かう正規化ベクトルを返す。}
 \methoddesc{:end-point}{v}{
-$B$3$N@~J,$NB>$NC<E@$rJV$9!#$9$J$o$A!"(B
-$B$b$7(B{\em v}$B$,(B{\tt pvert}$B$KEy$7$$$H$-!"(B{\tt nvert}$B$rJV$9!#(B
-$B$b$7(B{\em v}$B$,(B{\tt nvert}$B$KEy$7$$$H$-!"(B{\tt pvert}$B$rJV$9!#(B
-$B$=$l0J30$N$H$-!"(BNIL$B$rJV$9!#(B}
+この線分の他の端点を返す。すなわち、
+もし{\em v}が{\tt pvert}に等しいとき、{\tt nvert}を返す。
+もし{\em v}が{\tt nvert}に等しいとき、{\tt pvert}を返す。
+それ以外のとき、NILを返す。}
 
-\methoddesc{:box}{}{$B$3$N@~J,$N(B{\bf bounding-box}$B$r:n@.$7!"JV$9!#(B}
+\methoddesc{:box}{}{この線分の{\bf bounding-box}を作成し、返す。}
 \methoddesc{:boxtest}{box}{
-{\em box}$B$H$3$N@~J,$N(B{\bf bounding-box}$B$N6&DLItJ,$r%A%'%C%/$9$k!#(B}
-\methoddesc{:length}{}{$B$3$N@~J,$ND9$5$rJV$9!#(B}
+{\em box}とこの線分の{\bf bounding-box}の共通部分をチェックする。}
+\methoddesc{:length}{}{この線分の長さを返す。}
 \methoddesc{:distance}{point-or-line}{
-$B$3$N@~J,$H(B{\em point-or-line}$B$N4V$N5wN%$rJV$9!#(B
-$B$b$7E@$+$i$3$N@~J,$K$*$m$7$??b@~$NB-$,(B
-{\tt pvert}$B$H(B{\tt nvert}$B$N4V$K$J$1$l$P!"(B
-$B:G$b6a$$C<E@$^$G$N5wN%$rJV$9!#(B
-$B$3$N%a%=%C%I$r;H$&$3$H$K$h$j!"(B2$B$D$N@~J,$N4V$N5wN%$r7W;;$9$k$3$H$,$G$-$k$?$a!"(B
-2$B$D$N1_Cl$N4V$N43>D$r%F%9%H$9$k$3$H$,$G$-$k!#(B}
+この線分と{\em point-or-line}の間の距離を返す。
+もし点からこの線分におろした垂線の足が
+{\tt pvert}と{\tt nvert}の間になければ、
+最も近い端点までの距離を返す。
+このメソッドを使うことにより、2つの線分の間の距離を計算することができるため、
+2つの円柱の間の干渉をテストすることができる。}
 
 \methoddesc{:foot}{point}{
-{\em point}$B$+$i$3$N@~J,$X$*$m$7$??b@~$NB-$G$"$kE@$r<($9%Q%i%a!<%?(B
-$B$r8+$D$1$k!#(B}
+{\em point}からこの線分へおろした垂線の足である点を示すパラメータ
+を見つける。}
 \methoddesc{:common-perpendicular}{l}{
-$B$3$N@~J,$H(B{\em l}$B$H$K?bD>$J@~J,$r8+$D$1!"(B2$B$D$N(B3$B<!85%Y%/%H%k$N%j%9%H(B
-$B$H$7$FJV$9!#(B
-2$B$D$N@~J,$,J?9T$G6&DL$J?b@~$,0l0U$K7hDj$G$-$J$$$H$-!"(B{\tt :parallel}$B$rJV$9!#(B}
+この線分と{\em l}とに垂直な線分を見つけ、2つの3次元ベクトルのリスト
+として返す。
+2つの線分が平行で共通な垂線が一意に決定できないとき、{\tt :parallel}を返す。}
 \methoddesc{:project}{plane}{
-{\em plane}$B$K(B{\tt pvert}$B$H(B{\tt nvert}$B$rEj1F$7$?(B2$B$D$NE@$N%j%9%H$rJV$9!#(B}
+{\em plane}に{\tt pvert}と{\tt nvert}を投影した2つの点のリストを返す。}
 \methoddesc{:collinear-point}{point \&optional (tolerance *coplanar-threshold*)}{
-{\bf collinear-p}$B$rMQ$$$F(B{\em torelance}$B$N8m:9HO0OFb$G(B{\em point}$B$,$3$N@~J,$H(B
-$B0lD>@~>e$K$"$k$+$I$&$+$r%A%'%C%/$9$k!#(B
-$B$b$7!"(B{\em point}$B$,$3$N@~J,$H0lD>@~>e$K$"$k$H$-!"$=$N@~J,$N$=$NE@$K(B
-$BBP$9$k%Q%i%a!<%?$rJV$9!#$=$&$G$J$1$l$P!"(BNIL$B$rJV$9!#(B}
+{\bf collinear-p}を用いて{\em torelance}の誤差範囲内で{\em point}がこの線分と
+一直線上にあるかどうかをチェックする。
+もし、{\em point}がこの線分と一直線上にあるとき、その線分のその点に
+対するパラメータを返す。そうでなければ、NILを返す。}
 \methoddesc{:on-line-point}{point \&optional (tolerance *coplanar-threshold*)}{
-{\em point}$B$,$3$N@~J,$H0lD>@~>e$K$"$j!"(B{\tt pvert}$B$H(B{\tt nvert}$B$H$N4V$K(B
-$B$"$k$+$I$&$+$r%A%'%C%/$9$k!#(B}
+{\em point}がこの線分と一直線上にあり、{\tt pvert}と{\tt nvert}との間に
+あるかどうかをチェックする。}
 \methoddesc{:collinear-line}{ln \&optional (tolerance *coplanar-threshold*)}{
-{\em ln}$B$,$3$N@~J,$H6&DL@~>e$K$"$k$H$-!"$9$J$o$A(B{\em ln}$B$NN>C<$,$3$N@~J,>e$K(B
-$B$"$k$H$-(BT$B$rJV$7!"$=$&$G$J$$$H$-(BNIL$B$rJV$9!#(B}
+{\em ln}がこの線分と共通線上にあるとき、すなわち{\em ln}の両端がこの線分上に
+あるときTを返し、そうでないときNILを返す。}
 \methoddesc{:coplanar}{ln \&optional (tolerance *coplanar-threshold*)}{
-{\em ln}$B$H$3$N@~J,$,6&DLJ?LL>e$K$"$k$+$I$&$+$r%A%'%C%/$9$k!#(B
-$B$3$N@~J,$NN>C<$H(B{\em ln}$B$N(B1$B$D$NC<E@$GJ?LL$,Dj5A$5$l$k!#(B
-$B$b$7!"(B{\em ln}$B$NB>$NC<E@$,$=$NJ?LL>e$K$"$k$H$-!"(BT$B$rJV$9!#(B
-$B$=$&$G$J$1$l$P!"(BNIL$B$rJV$9!#(B}
+{\em ln}とこの線分が共通平面上にあるかどうかをチェックする。
+この線分の両端と{\em ln}の1つの端点で平面が定義される。
+もし、{\em ln}の他の端点がその平面上にあるとき、Tを返す。
+そうでなければ、NILを返す。}
 \methoddesc{:intersection}{ln}{
-{\em ln}$B$O!"$3$N@~J,$H6&DLJ?LL>e$K$"$k$H$9$k!#(B
-{\bf :intersection}$B$O!"$3$l$i(B2$B$D$N@~J,$N8rE@$KBP$9$k(B2$B$D$N%Q%i%a!<%?$N(B
-$B%j%9%H$rJV$9!#(B
-$B%Q%i%a!<%?$O(B0$B$+$i(B1$B$^$G$N<B?t$G$"$k!#$3$l$O!"N>C<$G6h@Z$i$l$?(B
-$B@~J,$NFbJ,E@$r<($9!#(B2$B$D$N@~$,J?9T$G$"$k$H$-(BNIL$B$rJV$9!#(B}
+{\em ln}は、この線分と共通平面上にあるとする。
+{\bf :intersection}は、これら2つの線分の交点に対する2つのパラメータの
+リストを返す。
+パラメータは0から1までの実数である。これは、両端で区切られた
+線分の内分点を示す。2つの線が平行であるときNILを返す。}
 \methoddesc{:intersect-line}{ln}{
-{\em ln}$B$O!"$3$N@~J,$H6&DLJ?LL>e$K$"$k$H$9$k!#(B
-$B8rE@$N%Q%i%a!<%?$,(B{\tt :parallel, :collinear}$B$d(B{\tt :intersect}$B$N$h$&$J(B
-$B%7%s%\%k>pJs$H6&$KJV$5$l$k!#(B}
+{\em ln}は、この線分と共通平面上にあるとする。
+交点のパラメータが{\tt :parallel, :collinear}や{\tt :intersect}のような
+シンボル情報と共に返される。}
 
 \classdesc{edge}{line}
 {(pface nface \\
  \> (angle :type float) \\
  \> (flags :type integer))}
-{2$B$D$NLL$N4V$N8r:9@~J,$H$7$FDj5A$5$l$k%(%C%8$rI=8=$9$k!#(B
-{\tt pface}$B$H(B{\tt nface}$B$,%9%m%C%H$NCf$KDj5A$5$l$F$$$k$,!"(B
-$B$=$l$i$N2r<a$O$3$N%(%C%8$NJ}8~$K$h$C$FAjBPE*$K7h$^$k!#(B
-$BNc$($P!"$3$N%(%C%8$,(B{\tt pvert}$B$+$i(B{\tt nvert}$B$K8~$+$C$F$$$k$H(B
-$B9M$($?$H$-!"(B{\tt pface}$B$,@5$7$$(Bpface$B$rI=8=$7$F$$$k!#(B
-$B$=$N$?$a!"(B{\bf :pface}$B$d(B{\bf :nface}$B%a%=%C%I$GE,Ev$JLL$rA*Br$9$k$?$a$K$O!"(B
-pvert$B$H(Bnvert$B$N2r<a$rM?$($J$1$l$P$J$i$J$$!#(B
+{2つの面の間の交差線分として定義されるエッジを表現する。
+{\tt pface}と{\tt nface}がスロットの中に定義されているが、
+それらの解釈はこのエッジの方向によって相対的に決まる。
+例えば、このエッジが{\tt pvert}から{\tt nvert}に向かっていると
+考えたとき、{\tt pface}が正しいpfaceを表現している。
+そのため、{\bf :pface}や{\bf :nface}メソッドで適当な面を選択するためには、
+pvertとnvertの解釈を与えなければならない。
 }
 
 \funcdesc{make-line}{point1 point2}{
-{\em point1}$B$r(B{\tt pvert}$B$H$7!"(B{\em point2}$B$r(B{\tt nvert}$B$H$9$k(B
-{\bf line}$B$N%$%s%9%?%s%9$r:n$k!#(B}
+{\em point1}を{\tt pvert}とし、{\em point2}を{\tt nvert}とする
+{\bf line}のインスタンスを作る。}
 
 \methoddesc{:pvertex}{pf}{
-{\em pf}$B$r$3$N%(%C%8$N(B{\tt pface}$B$H$_$J$7$?(B{\tt pvertex}$B$rJV$9!#(B}
+{\em pf}をこのエッジの{\tt pface}とみなした{\tt pvertex}を返す。}
 
 \methoddesc{:nvertex}{pf}{
-{\em pf}$B$r$3$N%(%C%8$N(B{\tt pface}$B$H$_$J$7$?(B{\tt nvertex}$B$rJV$9!#(B}
+{\em pf}をこのエッジの{\tt pface}とみなした{\tt nvertex}を返す。}
 
-\methoddesc{:body}{}{$B$3$N%(%C%8$rDj5A$9$k(B{\bf body}$B%*%V%8%'%/%H$rJV$9!#(B}
-\methoddesc{:pface}{pv nv}{$B2>A[E*$K(B{\em pv}$B$H(B{\em nv}$B$r$3$N%(%C%8$N(B
-pvert$B$H(Bnvert$B$K2r<a$7$?$H$-$N(Bpface$B$rJV$9!#(B}
-\methoddesc{:nface}{pv nv}{$B2>A[E*$K(B{\em pv}$B$H(B{\em nv}$B$r$3$N%(%C%8$N(B
-pvert$B$H(Bnvert$B$K2r<a$7$?$H$-$N(Bnface$B$rJV$9!#(B}
+\methoddesc{:body}{}{このエッジを定義する{\bf body}オブジェクトを返す。}
+\methoddesc{:pface}{pv nv}{仮想的に{\em pv}と{\em nv}をこのエッジの
+pvertとnvertに解釈したときのpfaceを返す。}
+\methoddesc{:nface}{pv nv}{仮想的に{\em pv}と{\em nv}をこのエッジの
+pvertとnvertに解釈したときのnfaceを返す。}
 \methoddesc{:binormal}{aface}{
-$B$3$N%(%C%8$H(B{\em aface}$B$N@55,2=%Y%/%H%k$K?bD>$JJ}8~%Y%/%H%k$r8+$D$1$k!#(B}
+このエッジと{\em aface}の正規化ベクトルに垂直な方向ベクトルを見つける。}
 \methoddesc{:angle}{}{
-$B$3$N%(%C%8$G$D$J$,$C$?(B2$B$D$NLL$N4V$N3QEY$rJV$9!#(B}
+このエッジでつながった2つの面の間の角度を返す。}
 \methoddesc{:set-angle}{}{
-$B$3$N%(%C%8$G$D$J$,$C$?(B2$B$D$NLL$N4V$N3QEY$r7W;;$7!"(B
-$B$=$l$r(B{\tt angle}$B%9%m%C%H$KCV$/!#(B}
+このエッジでつながった2つの面の間の角度を計算し、
+それを{\tt angle}スロットに置く。}
 
 \metdesc{:invert}{}
 \methoddesc{:set-face}{pv nv f}{
-{\em f}$B$r(B{\tt pface}$B$H$7!"(B{\em pv}$B$r(B{\tt pvertex}$B$H$7!"(B{\em nv}$B$r(B
-{\tt nvertex}$B$H$7$F@_Dj$9$k!#(B
-$B$3$N%a%=%C%I$O!"$3$N%(%C%8$N(B{\tt pface}$B$"$k$$$O(B{\tt nface}$B$rJQ99$9$k$3$H$K(B
-$BCm0U$9$k$3$H!#(B}
+{\em f}を{\tt pface}とし、{\em pv}を{\tt pvertex}とし、{\em nv}を
+{\tt nvertex}として設定する。
+このメソッドは、このエッジの{\tt pface}あるいは{\tt nface}を変更することに
+注意すること。}
 
 \methoddesc{:contourp}{ viewpoint}{
-$B$b$7!"$3$N%(%C%8$,NX3T%(%C%8$G$"$l$P!"$9$J$o$A!"$3$N%(%C%8$N(B{\tt pface}
-$B$"$k$$$O(B{\tt nface}$B$N$I$A$i$+$,(B{\em viewpoint}$B$+$i8+$(!"$b$&0lJ}$,(B
-$B8+$($J$$$J$i(BT$B$rJV$9!#(B}
+もし、このエッジが輪郭エッジであれば、すなわち、このエッジの{\tt pface}
+あるいは{\tt nface}のどちらかが{\em viewpoint}から見え、もう一方が
+見えないならTを返す。}
 
 \methoddesc{:approximated-p}{}{
-$B$3$N%(%C%8$,1_Cl$NB&LL$N$h$&$J6JLL$rI=8=$9$k$?$a$N6a;w%(%C%8$G$"$k$J$i$P!"(B
-T$B$rJV$9!#(B
-$B6a;w%(%C%8$OItJ,D>@~$G6J@~$rI=8=$9$k$N$KI,MW$G$"$k!#(B
+このエッジが円柱の側面のような曲面を表現するための近似エッジであるならば、
+Tを返す。
+近似エッジは部分直線で曲線を表現するのに必要である。
 %If edges are defined to exist where the curvature changes non-continuously,
 %these approximated edges should not exist.
 }
 
 \methoddesc{:set-approximated-flag}{\&optional (threshold 0.7)}{
-Euslisp$B$G$O!"$I$s$J6JLL$b$?$/$5$s$NJ?LL$G6a;w$5$l$k!#(B
-{\tt flags}$B$N(BLSB$B$O!"$3$N%(%C%8$NN>B&$NLL$,6JLL$G$"$k$+$I$&$+$r(B
-$B<($9$?$a$K;HMQ$5$l$k!#(B
+Euslispでは、どんな曲面もたくさんの平面で近似される。
+{\tt flags}のLSBは、このエッジの両側の面が曲面であるかどうかを
+示すために使用される。
 
-$B$b$7!"(B2$B$D$NLL$N4V$N3QEY$,(B{\em threshold}$B$h$jBg$-$$$J$i!"(B
-{\bf :set-approximated-flag}$B$O!"$3$N%U%i%0$r(BT$B$K@_Dj$9$k!#(B}
+もし、2つの面の間の角度が{\em threshold}より大きいなら、
+{\bf :set-approximated-flag}は、このフラグをTに設定する。}
 
 \metdesc{:init}{\&key :pface :nface :pvertex :nvertex}
 
 \end{refdesc}
 
 \newpage
-\subsection{$BJ?LL$HLL(B}
+\subsection{平面と面}
 
-{\bf plane}$B%*%V%8%'%/%H$O!"$=$NJ?LL$N@55,2=%Y%/%H%k$H:BI886E@$+$iJ?LL$^$G$N(B
-$B5wN%$GI=8=$5$l$k!#(B
-2$BBP$N@55,2=%Y%/%H%k$H5wN%$,(B{\bf plane}$B%*%V%8%'%/%H$K5-O?$5$l$k!#(B
-1$B$D$O!"JQ498e$N8=>u$rI=8=$7!"$b$&(B1$B$D$,J?LL$rDj5A$7$?$H$-$N(B
-$B@55,2=%Y%/%H%k$H5wN%$rI=8=$9$k!#(B
+{\bf plane}オブジェクトは、その平面の正規化ベクトルと座標原点から平面までの
+距離で表現される。
+2対の正規化ベクトルと距離が{\bf plane}オブジェクトに記録される。
+1つは、変換後の現状を表現し、もう1つが平面を定義したときの
+正規化ベクトルと距離を表現する。
 
 \begin{refdesc}
 
 \classdesc{plane}{propertied-object}
 {((normal :type float-vector) \\
 \> (distance :float))}
-{$BJ?LLJ}Dx<0$rDj5A$9$k!#J?LL$O6-3&$,$J$/!"L58B$K9-$,$C$F$$$k$b$N$H$9$k!#(B}
+{平面方程式を定義する。平面は境界がなく、無限に広がっているものとする。}
 
 \methoddesc{:normal}{}{
-$B$3$NJ?LL$N@55,2=%Y%/%H%k$rJV$9!#(B}
+この平面の正規化ベクトルを返す。}
 \methoddesc{:distance}{ point}{
-$B$3$NJ?LL$H(B{\em point}$B$H$N4V$N5wN%$r7W;;$9$k!#(B}
+この平面と{\em point}との間の距離を計算する。}
 \methoddesc{:coplanar-point}{point}{
-$B$b$7!"(B{\em point}$B$,$3$NJ?LL$N>e$KCV$+$l$F$$$k$J$i(BT$B$rJV$9!#(B}
+もし、{\em point}がこの平面の上に置かれているならTを返す。}
 \methoddesc{:coplanar-line}{line}{
-$B$b$7!"(B{\em line}$B$,$3$NJ?LL$N>e$KCV$+$l$F$$$k$J$i!"(BT$B$rJV$9!#(B}
+もし、{\em line}がこの平面の上に置かれているなら、Tを返す。}
 
 \methoddesc{:intersection}{ point1 point2}{
-{\em point1}$B$H(B{\em point2}$B$rC<E@$H$9$k@~J,$H$3$NJ?LL$H$N8rE@(B
-$B$r7W;;$9$k!#$=$N@~J,$N>e$N8rE@$KBP$9$k%Q%i%a!<%?$rJV$9!#(B
-$B$b$7!"@~J,$H$3$NJ?LL$,J?9T$G$"$k$J$i!"(B{\tt :parallel}$B$rJV$9!#(B}
+{\em point1}と{\em point2}を端点とする線分とこの平面との交点
+を計算する。その線分の上の交点に対するパラメータを返す。
+もし、線分とこの平面が平行であるなら、{\tt :parallel}を返す。}
 \methoddesc{:intersection-edge}{edge}{
-$B$3$NJ?LL$H(B{\em point1}$B$H(B{\em point2}$B$GI=8=$5$l$k@~J,$"$k$$$O%(%C%8$H$N(B
-$B8rE@$N%Q%i%a!<%?$rJV$9!#(B}
+この平面と{\em point1}と{\em point2}で表現される線分あるいはエッジとの
+交点のパラメータを返す。}
 \methoddesc{:foot}{point}{
-$B$3$NJ?LL>e$K(B{\em point}$B$rD>3Q$KEj1F$7$?0LCV$N#3<!85%Y%/%H%k$rJV$9!#(B}
+この平面上に{\em point}を直角に投影した位置の３次元ベクトルを返す。}
 
 \methoddesc{:init}{normal point}{
-{\em point}$B$rDL$j(B{\em normal}$B$rLL$N@55,2=%Y%/%H%k$H$9$kJ?LL$rDj5A$9$k!#(B
-{\em normal}$B$O!"@55,2=$5$l$F$$$J$1$l$P$J$i$J$$!#(B$|normal|=1$}
+{\em point}を通り{\em normal}を面の正規化ベクトルとする平面を定義する。
+{\em normal}は、正規化されていなければならない。$|normal|=1$}
 
 \classdesc{polygon}{plane}
 {(convexp edges vertices \\
 \> (model-normal float-vector) \\
 \> (model-distance :float))\\}{
-{\bf polygon}$B$O!"J?LL$N>e$NNX$GI=8=$5$l$k!#(B
-{\tt convexp}$B$O!"$=$NNX$,FLLL$G$"$k$+$I$&$+$r<($9O@M}%U%i%0$G$"$k!#(B
-{\tt edges}$B$O!"$3$NNX$NNX3T$dD:E@$N%j%9%H$G$"$k(B{\tt vertices}$B$G(B
-$B7A@.$5$l$k%(%C%8$N%j%9%H$G$"$k!#(B}
+{\bf polygon}は、平面の上の輪で表現される。
+{\tt convexp}は、その輪が凸面であるかどうかを示す論理フラグである。
+{\tt edges}は、この輪の輪郭や頂点のリストである{\tt vertices}で
+形成されるエッジのリストである。}
 
 \methoddesc{:box}{\&optional tolerance}{
-$B$3$NB?3Q7A$N$?$a$N(B{\bf bounding-box}$B$rJV$9!#(B}
+この多角形のための{\bf bounding-box}を返す。}
 \methoddesc{:boxtest}{box2 \&optional tolerance}{
-$B$3$NB?3Q7A$N$?$a$N(B{\bf bounding-box}$B$r:n@.$7!$(B
-$B$=$N(B{\bf boundign-box}$B$H(B{\em box2}$B$H$N6&DLNN0h$rJV$9!#(B
-$B$b$7!$6&DLNN0h$,$J$+$C$?>l9g!$(BNIL$B$rJV$9!#(B}
+この多角形のための{\bf bounding-box}を作成し，
+その{\bf boundign-box}と{\em box2}との共通領域を返す。
+もし，共通領域がなかった場合，NILを返す。}
 \methoddesc{:edges}{}{
-$B$3$NB?3Q7A$N%(%C%8$N%j%9%H$rJV$9!#(B
-$B$=$N%j%9%H$O!$$3$NJ?LL$N@55,2=%Y%/%H%k$K1h$C$F$=$NB?3Q7A$r8+$?$H$-!$(B
-$B;~7WJ}8~$N=gHV$K$J$C$F$$$k!#(B
-$B$b$7!$@55,2=%Y%/%H%k$r$M$8$H9M$($k$H!$$=$N%(%C%8$O(B
-$B$M$8$rF~$l$kJ}8~$K2sE>$5$;$k8~$-$N=gHV$K$J$C$F$$$k!#(B
-$BB?3Q7A$^$?$OLL$,N)BN%*%V%8%'%/%H$NLL$rI=8=$9$k$?$a$K;HMQ$5$l$F$$$k$H$-!$(B
-$B$=$N@55,2=%Y%/%H%k$O$=$NN)BN$N30B&$K8~$+$C$F$$$k!#(B
-$BB?3Q7A$r$=$N%*%V%8%'%/%H$N30B&$+$i8+$?$H$-!$%(%C%8$O(B
-$BH?;~7WJ}8~$N=gHV$K$J$C$F$$$k!#(B}
+この多角形のエッジのリストを返す。
+そのリストは，この平面の正規化ベクトルに沿ってその多角形を見たとき，
+時計方向の順番になっている。
+もし，正規化ベクトルをねじと考えると，そのエッジは
+ねじを入れる方向に回転させる向きの順番になっている。
+多角形または面が立体オブジェクトの面を表現するために使用されているとき，
+その正規化ベクトルはその立体の外側に向かっている。
+多角形をそのオブジェクトの外側から見たとき，エッジは
+反時計方向の順番になっている。}
 \methoddesc{:edge}{n}
-{$B%(%C%8$N(B{\em n}$BHVL\$NMWAG$rJV$9!#(B}
+{エッジの{\em n}番目の要素を返す。}
 \methoddesc{:vertices}{}{
-$B$3$NB?3Q7A$ND:E@$r%(%C%8$HF1$8=gHV$K$J$i$Y$?$b$N$rJV$9!#(B
-$B:G=i$ND:E@$O!$$=$N%j%9%H$N:G8e$K=EJ#$7$F%3%T!<$5$l$F$$$k$?$a!$(B
-$B$=$N%j%9%H$O<B:]$ND:E@$N?t$h$j#1$@$1D9$/$J$C$F$$$k$3$H$KCm0U$9$k$3$H!#(B
-$B$3$l$O!$D:E@$N%j%9%H$rMQ$$$F%(%C%8$X$NJQ49$r4JC1$K$9$k$?$a$G$"$k!#(B}
+この多角形の頂点をエッジと同じ順番にならべたものを返す。
+最初の頂点は，そのリストの最後に重複してコピーされているため，
+そのリストは実際の頂点の数より１だけ長くなっていることに注意すること。
+これは，頂点のリストを用いてエッジへの変換を簡単にするためである。}
 \methoddesc{:vertex}{n}
-{$BD:E@$N(B{\em n}$BHVL\$NMWAG$rJV$9!#(B}
+{頂点の{\em n}番目の要素を返す。}
 \methoddesc{:insidep}{point \&optional (tolerance *epsilon*)}{
-$B$3$NNN0h$KBP$7$FAjBPE*$KCV$+$l$?(B{\em point}$B$N0LCV$K$7$?$,$C$F(B
-{\tt :inside},{\tt :outside}$B$"$k$$$O(B{\tt :border}$B$rJV$9!#(B}
+この領域に対して相対的に置かれた{\em point}の位置にしたがって
+{\tt :inside},{\tt :outside}あるいは{\tt :border}を返す。}
 \methoddesc{:intersect-point-vector}{ point vnorm}{
-{\em point}$B$H@55,2=J}8~%Y%/%H%k(B{\em vnorm}$B$K$h$C$FDj5A$5$l$k(B
-$B5<;w@~J,$H$N8rE@$r7W;;$9$k!#(B}
+{\em point}と正規化方向ベクトル{\em vnorm}によって定義される
+擬似線分との交点を計算する。}
 \methoddesc{:intersect-line}{p1 p2}{
-{\em p1}$B$H(B{\em p2}$B$G;XDj$5$l$k@~J,$H$N8rE@$r7W;;$9$k!#(B
-$B$=$N7k2L$O!"8rE@$,$J$1$l$P(BNIL$B$rJV$7!$8rE@$,$"$l$P$=$N8rE@$N0LCV$N(B
-$B%Q%i%a!<%?$N%j%9%H$rJV$9!#(B}
+{\em p1}と{\em p2}で指定される線分との交点を計算する。
+その結果は、交点がなければNILを返し，交点があればその交点の位置の
+パラメータのリストを返す。}
 \methoddesc{:intersect-edge}{edge}{
-{\em edge}$B$G;XDj$5$l$k@~J,$H$N8rE@$r7W;;$9$k!#(B
-$B$=$N7k2L$O!$8rE@$,$J$1$l$P(BNIL$B$rJV$7!"8rE@$,$"$l$P(B
-$B8rE@$N0LCV$N%Q%i%a!<%?$N%j%9%H$rJV$9!#(B}
+{\em edge}で指定される線分との交点を計算する。
+その結果は，交点がなければNILを返し、交点があれば
+交点の位置のパラメータのリストを返す。}
 \methoddesc{:intersect-face}{aregion}{
-$B$b$7!$$3$NNN0h$,(B{\em aregion}$B$H8r:9$7$F$$$k$J$i!$(BT$B$rJV$9!#(B}
+もし，この領域が{\em aregion}と交差しているなら，Tを返す。}
 \metdesc{:transform-normal}{}
 \methoddesc{:reset-normal}{}{
-$B$3$NB?3Q7A$N8=:_$N(B{\tt vertices}$B%j%9%H$+$iLL$N@55,2=%Y%/%H%k$r:F7W;;$9$k!#(B}
+この多角形の現在の{\tt vertices}リストから面の正規化ベクトルを再計算する。}
 \metdesc{:invert}{}
-\methoddesc{:area}{}{$B$3$NNN0h$NLL@Q$rJV$9!#(B}
+\methoddesc{:area}{}{この領域の面積を返す。}
 \metdesc{:init}{\&key :vertices :edges :normal :distance}
 
 \classdesc{face}{polygon}
-{(holes mbody primitive-face id)}{$B7j$r;}$C$?LL$rDj5A$9$k!#(B
-{\em mbody}$B$H(B{\em type}$B$O!"4pK\(Bbody$B$H(Bbody$BFb$NLL$NB0@-(B{\tt (:top, :bottom, :side)}
-$B$rI=8=$9$k!#(B}
+{(holes mbody primitive-face id)}{穴を持った面を定義する。
+{\em mbody}と{\em type}は、基本bodyとbody内の面の属性{\tt (:top, :bottom, :side)}
+を表現する。}
 
 \metdesc{:all-edges}{}
 \methoddesc{:all-vertices}{}{
-$B$3$NLL$*$h$SFbIt%k!<%W!J7j!K$NNX3T$N%(%C%8$"$k$$$OD:E@$r$9$Y$FJV$9!#(B
-{\bf :edges}$B$H(B{\bf :verticies}$B%a%=%C%I$O!$(B
-$BNX3T$r9=@.$9$k%(%C%8$HD:E@$N$_$rJV$9!#(B}
+この面および内部ループ（穴）の輪郭のエッジあるいは頂点をすべて返す。
+{\bf :edges}と{\bf :verticies}メソッドは，
+輪郭を構成するエッジと頂点のみを返す。}
 \methoddesc{:insidep}{point}{
-{\em point}$B$,$3$NLL$NFbIt$K$"$k$+$I$&$+$r7hDj$9$k!#(B
-$B$b$7(B{\em point}$B$,$3$NLL$N30B&$NNX3T$NCf$K$"$j!$$I$l$+$N7j$N(B
-$BHO0OFb$K$"$k$J$i$P!$30B&$H$7$FJ,N`$5$l$k!#(B}
+{\em point}がこの面の内部にあるかどうかを決定する。
+もし{\em point}がこの面の外側の輪郭の中にあり，どれかの穴の
+範囲内にあるならば，外側として分類される。}
 \methoddesc{:area}{}{
-$B$3$NLL$NLL@Q$rJV$9!#(B
-$B$3$l$O!$30B&$N%(%C%8$G0O$^$l$kLL@Q$+$i7j$NLL@Q$r0z$$$?$b$N$G$"$k!#(B}
+この面の面積を返す。
+これは，外側のエッジで囲まれる面積から穴の面積を引いたものである。}
 \methoddesc{:centroid}{ \&optional point}{
-$B$3$NLL$N=E?4$rI=8=$9$k<B?t$H<B?t%Y%/%H%k$N%j%9%H$rJV$9!#(B
-$B$b$7!$(B{\em point}$B$,M?$($i$l$J$$$J$i$P!$:G=i$N?t$O$3$NB?3Q7A$N(B
-$BLL@Q$rI=$o$7!$(B2$BHVL\$N%Y%/%H%k$,$3$NB?3Q7A$N=E?4$N0LCV$r<($9!#(B
-$B$b$7!$(B{\em point}$B$,M?$($i$l$?$J$i$P!$$3$NB?3Q7A$rDlLL$H$7$=$NE@$rD:E@(B
-$B$H$9$k$h$&$JB?3Q?m$r9M$(!$$=$NBN@Q$H=E?4$N%Y%/%H%k$rJV$9!#(B}
+この面の重心を表現する実数と実数ベクトルのリストを返す。
+もし，{\em point}が与えられないならば，最初の数はこの多角形の
+面積を表わし，2番目のベクトルがこの多角形の重心の位置を示す。
+もし，{\em point}が与えられたならば，この多角形を底面としその点を頂点
+とするような多角錐を考え，その体積と重心のベクトルを返す。}
 \methoddesc{:invert}{ }{
-$B$3$NLL$N8~$-$r$R$C$/$jJV$9!#(B
-$B@55,2=%Y%/%H%k$,5UJ}8~$H$5$l!$%(%C%8%k!<%W$N=gHV$bH?E>$5$l$k!#(B}
+この面の向きをひっくり返す。
+正規化ベクトルが逆方向とされ，エッジループの順番も反転される。}
 \methoddesc{:enter-hole}{hole}{
-$B$3$NLL$K7j(B{\em hole}$B$r2C$($k!#(B}
+この面に穴{\em hole}を加える。}
 \methoddesc{:primitive-body}{}{
-$B$3$NLL$rDj5A$9$k4pK\(B{\bf body}$B$rJV$9!#(B}
+この面を定義する基本{\bf body}を返す。}
 \methoddesc{:id}{}{
-{\tt (:bottom), (:top)}$B$d(B{\tt (:side seq-no.)}$B$NCf$N(B1$B$D$rJV$9!#(B}
+{\tt (:bottom), (:top)}や{\tt (:side seq-no.)}の中の1つを返す。}
 \methoddesc{:face-id}{}{
-$B4pK\(B{\bf body}$B$N7?$H$3$NLL$N7?$r%j%9%H$GJV$9!#(B
-$BNc$($P!$1_Cl$NB&LL$O(B
-{\tt ((:cylinder {\em radius height segments}) :side {\em id})}$B$rJV$9!#(B}
+基本{\bf body}の型とこの面の型をリストで返す。
+例えば，円柱の側面は
+{\tt ((:cylinder {\em radius height segments}) :side {\em id})}を返す。}
 \methoddesc{:body-type}{}{
-$B$3$NLL$rDj5A$9$k4pK\(B{\bf body}$B$rJV$9!#(B}
+この面を定義する基本{\bf body}を返す。}
 \metdesc{:init}{ \&key :normal :distance :edges :vertices :holes}
 
 \classdesc{hole}{polygon}
 {(myface)}
-{$B7j$O!$LL$NFbIt%k!<%W$rI=8=$9$kB?3Q7A$G$"$k!#(B{\bf face}$B$N%*%V%8%'%/%H$O!"(B
-$B<+J,$N(B{\tt holes}$B%9%m%C%H(B
-$B$NCf$K(B{\bf hole}$B$N%j%9%H$r;}$C$F$$$k!#(B}
+{穴は，面の内部ループを表現する多角形である。{\bf face}のオブジェクトは、
+自分の{\tt holes}スロット
+の中に{\bf hole}のリストを持っている。}
 
 \methoddesc{:face}{}
-{$B$3$N(B{\bf hole}$B$r4^$`LL$rJV$9!#(B}
+{この{\bf hole}を含む面を返す。}
 \methoddesc{:enter-face}{face}{
-$B$3$N(B{\bf hole}$B$r0O$s$G$$$kLL(B{\em face}$B$X%j%s%/$r:n$k!#(B
-$B$3$N%a%=%C%I$O!"(B{\bf face}$B%/%i%9$N(B{\tt :enter-hole}$B%a%=%C%I$H6&$K(B
-$B;HMQ$5$l$k$b$N$G$"$k!#(B}
+この{\bf hole}を囲んでいる面{\em face}へリンクを作る。
+このメソッドは、{\bf face}クラスの{\tt :enter-hole}メソッドと共に
+使用されるものである。}
 \metdesc{:init}{ \&key :normal :distance :edges :vertices :face}
 
 \newpage
-\subsection{$BN)BN(B(body)}
+\subsection{立体(body)}
 
 \classdesc{body}{cascaded-coords}
 {(faces edges vertices model-vertices
- box convexp evertedp csg)}{$B#3<!857A>u$rDj5A$9$k!#(B}
+ box convexp evertedp csg)}{３次元形状を定義する。}
 
 \methoddesc{:magnify}{rate}{
-$B$3$N(B{\bf body}$B$N%5%$%:$r(B{\em rate}$B$GJQ99$9$k!#3HBg$O!$(B{\tt csg}$B%j%9%H$NCf$K(B
-$B5-O?$5$l$k!#(B}
+この{\bf body}のサイズを{\em rate}で変更する。拡大は，{\tt csg}リストの中に
+記録される。}
 
 \methoddesc{:translate-vertices}{ vector}{
-$B%b%G%k$ND:E@$rAjBP0\F0$9$k!#(B{\em vector}$B$O%m!<%+%k:BI87O$GM?$($i$l$J$1$l$P$J$i$J$$!#(B
-$BJQ49$O(B{\tt csg}$B%j%9%H$K5-O?$5$l$k!#(B}
+モデルの頂点を相対移動する。{\em vector}はローカル座標系で与えられなければならない。
+変換は{\tt csg}リストに記録される。}
 
 \methoddesc{:rotate-vertices}{ angle axis}{
-$B%b%G%k$ND:E@$r(B{\em axis}$B<42s$j$K(B{\em angle}$B%i%8%"%s2sE>$5$;$k!#(B
-$B2sE>$O(B{\tt csg}$B%j%9%H$K5-O?$5$l$k!#(B}
+モデルの頂点を{\em axis}軸回りに{\em angle}ラジアン回転させる。
+回転は{\tt csg}リストに記録される。}
 \metdesc{:reset-model-vertices}{}
 \methoddesc{:newcoords}{rot pos}{
-$B:BI87O$r(B{\em rot}$B$d(B{\em pos}$B$rMQ$$$FJQ99$9$k!#(B}
-\methoddesc{:vertices}{}{$B$3$N(B{\bf body}$B$N$9$Y$F$ND:E@$N%j%9%H$rJV$9!#(B}
-\methoddesc{:edges}{}{$B$3$N(B{\bf body}$B$N$9$Y$F$N%(%C%8$N%j%9%H$rJV$9!#(B}
+座標系を{\em rot}や{\em pos}を用いて変更する。}
+\methoddesc{:vertices}{}{この{\bf body}のすべての頂点のリストを返す。}
+\methoddesc{:edges}{}{この{\bf body}のすべてのエッジのリストを返す。}
 \methoddesc{:faces}{}{
-$B$3$N(B{\bf body}$B$r9=@.$9$k$9$Y$F$NLL$N%j%9%H$rJV$9!#(B}
-\methoddesc{:box}{}{$B$3$N(B{\bf body}$B$N(B{\bf bounding-box}$B$rJV$9!#(B}
+この{\bf body}を構成するすべての面のリストを返す。}
+\methoddesc{:box}{}{この{\bf body}の{\bf bounding-box}を返す。}
 \methoddesc{:Euler}{}{
-$B$3$N(B{\bf body}$B$N%*%$%i!<?t$r7W;;$9$k!#$3$l$O!$(B
-{\tt faces+vertices$-$edges$-$2$-$holes}$B$G$"$k!#(B
-$B$3$l$O!$(B{\tt $-$2rings}$B$HEy$7$/$J$k$Y$-$G$"$k!#(B}
+この{\bf body}のオイラー数を計算する。これは，
+{\tt faces+vertices$-$edges$-$2$-$holes}である。
+これは，{\tt $-$2rings}と等しくなるべきである。}
 \methoddesc{:perimeter}{}{
-$B$9$Y$F$N%(%C%8$ND9$5$N9g7W$rJV$9!#(B}
+すべてのエッジの長さの合計を返す。}
 \methoddesc{:volume}{ \&optional (reference-point \#f(0 0 0))}{
-$B$3$N(B{\bf body}$B$NBN@Q$rJV$9!#(B}
+この{\bf body}の体積を返す。}
 \methoddesc{:centroid}{ \&optional (point \#f(0 0 0)}{
-$B$3$N(B{\bf body}$B$,6Q<A$JN)BN$H2>Dj$7!$=E?4$N0LCV$rJV$9!#(B}
+この{\bf body}が均質な立体と仮定し，重心の位置を返す。}
 \metdesc{:possibly-interfering-faces}{box}
 \methoddesc{:common-box}{body}{
-$B$3$N(B{\bf body}$B$HB>$N(B{\em body}$B$N6&DL$J:G>.$N(B{\bf box}$B$rJV$9!#(B
-$B$b$7!$(B2$B$D$N(B{\bf body}$B$,43>D$7$F$$$k$J$i$P!$$=$N8r:9ItJ,$O(B
-$B$3$N6&DL(B{\bf box}$B$NCf$KB8:_$9$k$O$:$G$"$k!#(B}
+この{\bf body}と他の{\em body}の共通な最小の{\bf box}を返す。
+もし，2つの{\bf body}が干渉しているならば，その交差部分は
+この共通{\bf box}の中に存在するはずである。}
 \methoddesc{:insidep}{ point}{
-$B$b$7!$(B{\em point}$B$,$3$N(B{\bf body}$B$KB0$9$k$J$i!$(B{\tt :inside}$B$rJV$9!#(B
-$B$b$7!$(B{\em point}$B$,$3$N(B{\bf body}$B$NI=LL>e$K$"$k>l9g!$(B{\tt :border}$B$rJV$9!#(B
-$B$=$&$G$J$1$l$P!$(B{\tt :outside}$B$rJV$9!#(B}
+もし，{\em point}がこの{\bf body}に属するなら，{\tt :inside}を返す。
+もし，{\em point}がこの{\bf body}の表面上にある場合，{\tt :border}を返す。
+そうでなければ，{\tt :outside}を返す。}
 
 \methoddesc{:intersect-face}{face}{
-$B$b$7!$$3$N(B{\bf body}$B$NLL$H(B{\em face}$B$N4V$K43>D$,$"$k>l9g!$(BT$B$rJV$9!#(B}
+もし，この{\bf body}の面と{\em face}の間に干渉がある場合，Tを返す。}
 \methoddesc{:intersectp}{body}{
-$B$3$N(B{\bf body}$B$HB>$N(B{\em body}$B$H$N4V$N8r:9ItJ,$rJV$9!#(B}
-\methoddesc{:evert}{}{$B$9$Y$F$NLL$H%(%C%8$NJ}8~$rH?E>$5$;$k!#(B
-$B$=$N$?$a!$$3$N(B{\bf body}$B$NFbIt$O30It$K$J$k!#(B}
+この{\bf body}と他の{\em body}との間の交差部分を返す。}
+\methoddesc{:evert}{}{すべての面とエッジの方向を反転させる。
+そのため，この{\bf body}の内部は外部になる。}
 \methoddesc{:faces-intersect-with-point-vector}{point direction}{
-{\em point}$B$+$i(B{\em direction}$B$NJ}8~$K?-$S$k%Y%/%H%k$H8r:9$9$kLL$r$9$Y$F=8$a$k!#(B}
+{\em point}から{\em direction}の方向に伸びるベクトルと交差する面をすべて集める。}
 \methoddesc{:distance}{target}{
-{\em target}$B$O!$<B?t%Y%/%H%k$"$k$$$OJ?LL%*%V%8%'%/%H$G$"$k!#(B
-{\bf :distance}$B%a%=%C%I$O!$(B{\em target}$B$+$i:G$b6a$$LL$r8+$D$1!$(B
-$B$=$NLL$H5wN%$N%j%9%H$rJV$9!#(B}
+{\em target}は，実数ベクトルあるいは平面オブジェクトである。
+{\bf :distance}メソッドは，{\em target}から最も近い面を見つけ，
+その面と距離のリストを返す。}
 \methoddesc{:csg}{}{
-{\bf body}$B$,9=C[$5$l$?MzNr$G$"$k(B{\tt csg}$B%9%m%C%H$rJV$9!#(B}
+{\bf body}が構築された履歴である{\tt csg}スロットを返す。}
 \methoddesc{:primitive-body}{ }{
-$B$3$N(B{\bf body}$B$r9=C[$9$k4pK\(B{\bf body}$B$N%j%9%H$rJV$9!#(B}
-\methoddesc{:primitive-body-p}{}{$B$b$7!$$3$N(B{\bf body}$B$,(B\ref{primitive-body-creation}
-$B@a$G<($5$l$k4X?t$NFb$N(B1$B$D$+$i:n$i$l$?4pK\(B{\bf body}$B$G$"$k$J$i!$(BT$B$rJV$9!#(B}
+この{\bf body}を構築する基本{\bf body}のリストを返す。}
+\methoddesc{:primitive-body-p}{}{もし，この{\bf body}が\ref{primitive-body-creation}
+節で示される関数の内の1つから作られた基本{\bf body}であるなら，Tを返す。}
 \methoddesc{:creation-form}{}{
-$B$3$N(B{\bf body}$B$r:n$k$?$a$N(BLisp$BI=8=$rJV$9!#(B}
+この{\bf body}を作るためのLisp表現を返す。}
 \methoddesc{:body-type}{}{
-$B$b$7!$$3$N(B{\bf body}$B$,4pK\(B{\bf body}$B$"$k$$$O$3$N(B{\bf body}$B$NI=8=$,J#;(!J$K9=@.$5$l$?!K(B
-{\bf body}$B$J$i!$:n@.%Q%i%a!<%?$N%j%9%H$rJV$9!#(B}
+もし，この{\bf body}が基本{\bf body}あるいはこの{\bf body}の表現が複雑（に構成された）
+{\bf body}なら，作成パラメータのリストを返す。}
 \methoddesc{:primitive-groups}{}{
-2$B$D$NMWAG$r$b$D%j%9%H$rJV$9!#(B
-$B:G=i$NMWAG$O!$$3$N(B{\bf body}$B$r9=@.$9$k$?$a$KDI2C(B(body+)$B$5$l$?4pK\(B{\bf body}
-$B$N%j%9%H$G$"$k!#<!$NMWAG$O!$:9$70z$+$l$?4pK\(B{\bf body}$B$N%j%9%H$G$"$k!#(B}
+2つの要素をもつリストを返す。
+最初の要素は，この{\bf body}を構成するために追加(body+)された基本{\bf body}
+のリストである。次の要素は，差し引かれた基本{\bf body}のリストである。}
 \methoddesc{:get-face}{body \&optional face id}{
-{\em body}$B$O!$$3$N(B{\bf body}$B$r9=@.$7$F$$$k(B{\bf body}$B$N%$%s%9%?%s%9$G$"$j!$(B
-$B4pK\(B{\bf body}$B7?$N(B1$B$D$G$"$k!#Nc$($P!$(B{\tt :cube, :prism, :cone, :solid-of-resolution}$B$J$I$+(B
-$B$"$k$$$O(BNIL$B$G$"$k!#(B
-$B$b$7!$(B{\em face}$B$b(B{\em id}$B$bM?$($i$l$J$$$J$i$P!$(B{\em body}$B$K0lCW$9$kLL$r$9$Y$FJV$9!#(B
-$B$b$7!$(B{\em face}$B$,M?$($i$l$?$J$i!$$=$N>e$K%U%#%k%?!<$,<B9T$5$l$k!#(B
-{\em face}$B$O!$(B{\tt :top},{\tt :bottom}$B$H(B{\tt :side}$B$NFb$N(B1$B$D$G$J$1$l$P$J$i$J$$!#(B
-{\tt (send abody :get-face :cylinder :top)}$B$O!$(B{\tt abody}$B$r9=@.$9$k1_Cl$N>eLL$9$Y$F$rJV$9!#(B
-$B$b$7!$(B{\em face}$B$,(B{\tt :side}$B$J$i!$(B{\em id}$B$GHV9fIU$1$5$l$?LL$r<h$j=P$9$3$H$,$G$-$k!#(B
-{\tt (send abody nil :side 2)}$B$O!$(B{\em id}$B$,(B0$B$+$i;O$^$k$?$a!$(B{\tt abody}$B$r9=@.$9$k(B
-{\bf body}$B$NB&LL$+$i#3HVL\$NLL$r$9$Y$FJV$9!#(B}
+{\em body}は，この{\bf body}を構成している{\bf body}のインスタンスであり，
+基本{\bf body}型の1つである。例えば，{\tt :cube, :prism, :cone, :solid-of-resolution}などか
+あるいはNILである。
+もし，{\em face}も{\em id}も与えられないならば，{\em body}に一致する面をすべて返す。
+もし，{\em face}が与えられたなら，その上にフィルターが実行される。
+{\em face}は，{\tt :top},{\tt :bottom}と{\tt :side}の内の1つでなければならない。
+{\tt (send abody :get-face :cylinder :top)}は，{\tt abody}を構成する円柱の上面すべてを返す。
+もし，{\em face}が{\tt :side}なら，{\em id}で番号付けされた面を取り出すことができる。
+{\tt (send abody nil :side 2)}は，{\em id}が0から始まるため，{\tt abody}を構成する
+{\bf body}の側面から３番目の面をすべて返す。}
 \methoddesc{:init}{ \&key :faces :edges :vertices}{
-{\em :faces}$B$h$j$3$N(B{\bf body}$B$r=i4|2=$9$k!#(B
-{\em :faces}$B$O!$I,MW$J0z$-?t$G$"$k!#(B
-{\em :faces},{\em :edges}$B$H(B{\em :vertices}$B$O40A4$JN)BN%b%G%k$rDj5A$9$k$?$a$K(B
-$BL7=b$N$J$$4X78$r;}$C$F$$$J$1$l$P$J$i$J$$$N$G!$L7=b$7$?0z$-?t$G$3$N%a%=%C%I$r(B
-$B8F$S=P$9$3$H$O!$0UL#$NL5$$$3$H$G$"$k!#(B
-{\bf body}$B$r:n$k$?$a$K!$(B\ref{primitive-body-creation}$B@a$G=q$$$F$$$k4pK\(B{\bf body}$B$N:n@.4X?t$H(B
-\ref{BodyComposition}$B@a$N(B{\bf body}$B9g@.4X?t$r;HMQ$9$k!#(B}
-\methoddesc{:constraint}{b}{$B$3$N(B{\bf body}$B$,(B{\em b}$B$K@\?($7$F$$$k$H$-!$(B
-$B$3$N(B{\bf body}$B$N94B+$rJV$9!#$3$N%a%=%C%I$N>\:Y$J@bL@$O(B\ref{Contact}$B@a$r;2>H$9$k$3$H!#(B}
+{\em :faces}よりこの{\bf body}を初期化する。
+{\em :faces}は，必要な引き数である。
+{\em :faces},{\em :edges}と{\em :vertices}は完全な立体モデルを定義するために
+矛盾のない関係を持っていなければならないので，矛盾した引き数でこのメソッドを
+呼び出すことは，意味の無いことである。
+{\bf body}を作るために，\ref{primitive-body-creation}節で書いている基本{\bf body}の作成関数と
+\ref{BodyComposition}節の{\bf body}合成関数を使用する。}
+\methoddesc{:constraint}{b}{この{\bf body}が{\em b}に接触しているとき，
+この{\bf body}の拘束を返す。このメソッドの詳細な説明は\ref{Contact}節を参照すること。}
 
 
 \end{refdesc}
 \newpage
-\subsection{\label{primitive-body-creation}$B4pK\(Bbody$B$N:n@.4X?t(B}
+\subsection{\label{primitive-body-creation}基本bodyの作成関数}
 
 \begin{refdesc}
 
 \funcdesc{make-plane}{\&key :normal :point :distance}{
-{\em point}$B$rDL$j!$(B{\em normal}$B$NJ}8~$r8~$$$?(B{\bf plane}$B%*%V%8%'%/%H$r:n$k!#(B
-{\em point}$B$rM?$($kBe$o$j(B{\em distance}$B$r;XDj$9$k$3$H$b$G$-$k!#(B}
+{\em point}を通り，{\em normal}の方向を向いた{\bf plane}オブジェクトを作る。
+{\em point}を与える代わり{\em distance}を指定することもできる。}
 
 \vardesc{*xy-plane*}{\hspace{0mm}}
 \vardesc{*yz-plane*}{\hspace{0mm}}
@@ -610,65 +610,65 @@ Euslisp$B$G$O!"$I$s$J6JLL$b$?$/$5$s$NJ?LL$G6a;w$5$l$k!#(B
 \begin{center}
 \epsfile{file=fig/fig1.ps,height=19cm}
 \end{center}
-\caption{$B4pK\(Bbody}
+\caption{基本body}
 \end{figure}
 
 \funcdesc{make-cube}{xsize ysize zsize \&key :name :color}{
-x,y,z$B<4$NJ}8~$KBg$-$5$,(B{\em xsize},{\em ysize},{\em zsize}$B$G$"$k!$D>J}BN$r:n$k!#(B
-$B$3$ND>J}BN$N86E@$O(B{\bf body}$B$NCf?4$KCV$+$l$k!#(B}
+x,y,z軸の方向に大きさが{\em xsize},{\em ysize},{\em zsize}である，直方体を作る。
+この直方体の原点は{\bf body}の中心に置かれる。}
 
 \funcdesc{make-prism}{bottom-points sweep-vector \&key :name :color}{
-{\em sweep-vector}$B$K1h$C$?(B{\em bottom-points}$B$K$h$jDj5A$5$l$k(B
-$B7A>u$r@Q$_>e$2$k$3$H$K$h$j3QCl$r:n$k!#(B
-$B$b$7!"(B{\em sweep-vector}$B$,<B?t%Y%/%H%k$G$J$/?t;z$G$"$l$P!"(B$z$$BJ}8~$N(B
-$B3QCl$N9b$5$H$7$F07$o$l$k!#(B
-{\em bottom-points}$B$O!$$3$N(B{\bf body}$B$NDlLL$rDj5A$9$k=gHV$K$J$C$F$$$J$1$l$P$J$i$J$$!#(B
-$BNc$($P!$(B
+{\em sweep-vector}に沿った{\em bottom-points}により定義される
+形状を積み上げることにより角柱を作る。
+もし、{\em sweep-vector}が実数ベクトルでなく数字であれば、$z$方向の
+角柱の高さとして扱われる。
+{\em bottom-points}は，この{\bf body}の底面を定義する順番になっていなければならない。
+例えば，
  {\tt (make-prism '(\#f(1 1 0) \#f(1 -1 0) \#f(-1 -1 0) \#f(-1 1 0)) 2.0)}
-$B$O!$9b$5(B2.0$B$ND>J}BN$r:n$k!#(B}
+は，高さ2.0の直方体を作る。}
 
 \funcdesc{make-cylinder}{radius height \&key (:segments 12) :name :color}{
-$BH>7B(B{\em radius}$B$H9b$5(B{\em height}$B$G;XDj$5$l$k1_Cl$r:n$k!#(B
-$BDlLL$O!$(Bxy-$BJ?LL$KDj5A$5$l!$:BI87O$N86E@$ODlLL$NCf?4$KCV$+$l$k!#(B}
+半径{\em radius}と高さ{\em height}で指定される円柱を作る。
+底面は，xy-平面に定義され，座標系の原点は底面の中心に置かれる。}
 
 \funcdesc{make-cone}{top bottom \&key (:segments 16) :color :name}{
-$BD:E@$,(B{\em top}$B$GDlLL$,(B{\em bottom}$B$G$"$k3Q?m$r:n$k!#(B
-{\em top}$B$O!$(B3$B<!85%Y%/%H%k$G$"$k!#(B
-{\em bottom}$B$O!$DlLL$ND:E@$N%j%9%H$"$k$$$OH>7B$G$"$k!#(B
-$B$b$7!$D:E@$N%j%9%H$J$i!$=gHV$r?5=E$K$7$J$5$$!#(B
+頂点が{\em top}で底面が{\em bottom}である角錐を作る。
+{\em top}は，3次元ベクトルである。
+{\em bottom}は，底面の頂点のリストあるいは半径である。
+もし，頂点のリストなら，順番を慎重にしなさい。
 %%% change 2004.12.14 \verb+ (make-cone \#f(0 0 10) (list \#f(10 0 0) \#f(0 10 0) \#f(-10 0 0)
-%%% change 2004.12.14 \#f(0 -10 0)))+ $B$O!$@5J}7A$NDlLL$r;}$D;M3Q?m$r:n$k!#(B}
+%%% change 2004.12.14 \#f(0 -10 0)))+ は，正方形の底面を持つ四角錐を作る。}
 \verb~ (make-cone \#f(0 0 10) (list \#f(10 0 0) \#f(0 10 0) \#f(-10 0 0)
-\#f(0 -10 0)))~ $B$O!$@5J}7A$NDlLL$r;}$D;M3Q?m$r:n$k!#(B}
+\#f(0 -10 0)))~ は，正方形の底面を持つ四角錐を作る。}
 
 \funcdesc{make-solid-of-revolution}{points \&key (:segments 16) :name :color}{
-{\em points}$B$O!$(Bz$B<4$^$o$j$N;~7WJ}8~$K2sE>$5$l$k!#(B
-$B$b$7!"(B{\em points}$B$N%j%9%H$N(B2$B$D$NC<E@$,(Bz$B<4>e$KCV$+$l$F$J$$$J$i$P!$(B
-$B6JLL$r:n$k!#$7$?$,$C$F!$(B
+{\em points}は，z軸まわりの時計方向に回転される。
+もし、{\em points}のリストの2つの端点がz軸上に置かれてないならば，
+曲面を作る。したがって，
 {\tt (make-solid-of-revolution '(\#f(0 0 1) \#f(1 0 0)))}
-$B$O!"1_?m$r:n$j!"(B
+は、円錐を作り、
 {\tt (make-solid-of-revolution '(\#f(1 0 1) \#f(1 0 0)))}
-$B$O!"1_Cl$r:n$k!#(B
-{\em points}$B$O!"=gHV$,=EMW$G$"$j!"(B$z$$B<4$N9b$$J}$+$iDc$$J}$X(B
-$B@0Ns$7$F$*$/$3$H$,K>$^$l$k!#(B}
+は、円柱を作る。
+{\em points}は、順番が重要であり、$z$軸の高い方から低い方へ
+整列しておくことが望まれる。}
 
 \funcdesc{make-torus}{points \&key (:segments 16) :name :color}{
-$B%I!<%J%C%D$N$h$&$J(Btorus$B7A>u$r:n$k!#(B
-{\em points}$B$O!$CGLL>e$ND:E@$N%j%9%H$G$"$k!#(B}
+ドーナッツのようなtorus形状を作る。
+{\em points}は，断面上の頂点のリストである。}
 
 \funcdesc{make-icosahedron}{\&optional (radius 1.0)}{
-$B@5(B20$BLLBN$r:n$k!#$=$l$>$l$NLL$O@5;03Q7A$G$"$k!#(B}
+正20面体を作る。それぞれの面は正三角形である。}
 
 \funcdesc{make-dodecahedron}{\&optional (radius 1.0)}{
-$B@5(B12$BLLBN$r:n$k!#$=$l$>$l$NLL$O!$@58^3Q7A$G$"$k!#(B}
+正12面体を作る。それぞれの面は，正五角形である。}
 
 \funcdesc{make-gdome}{abody}{
-{\em abody}$B$N;03QLL$r(B4$B$D$NLL$K>.J,$1$9$k$3$H$K$h$j(B
-$BB,CO%I!<%`$r?7$7$/:n$k!#(B
-{\em abody}$B$O!$:G=i@5(B20$BLLBN$H$9$Y$-$G$"$k!#(B
-$B$=$l$+$i!$(B{\bf make-gdome}$B$N7k2L$r:F5"E*$K(B{\bf make-gdome}$B$KM?$($k$3$H$,$G$-$k!#(B
-$B$=$l$>$l$N8F$S=P$7$G!$B,CO%I!<%`$NLL$N?t$O!$(B4$BG\$KA}2C$9$k!#$9$J$o$A!$(B
-20, 80, 320, 1280, 5120$B$J$I$K$J$k!#(B}
+{\em abody}の三角面を4つの面に小分けすることにより
+測地ドームを新しく作る。
+{\em abody}は，最初正20面体とすべきである。
+それから，{\bf make-gdome}の結果を再帰的に{\bf make-gdome}に与えることができる。
+それぞれの呼び出しで，測地ドームの面の数は，4倍に増加する。すなわち，
+20, 80, 320, 1280, 5120などになる。}
 
 \begin{quote}
 \begin{verbatim}
@@ -680,68 +680,68 @@ x,y,z$B<4$NJ}8~$KBg$-$5$,(B{\em xsize},{\em ysize},{\em zsize}$B$G$"$k!$D>J}B
 \end{quote}
 
 \funcdesc{grahamhull}{vertices \&optional (normal \#f(0 0 1))}{
-Graham$B$N%"%k%4%j%:%`$rMQ$$$F!$(B2$B<!85>e$GFL>u$NJ$$$$r7W;;$9$k!#(B
-{\bf quickhull}$B$h$j$bCY$$!#(B}
+Grahamのアルゴリズムを用いて，2次元上で凸状の覆いを計算する。
+{\bf quickhull}よりも遅い。}
 
 \funcdesc{quickhull}{vertices \&optional (normal \#f(0 0 1))}{
-2$BJ,C5:wK!$rMQ$$$F(B2$B<!85>e$GFL>u$NJ$$$$r7W;;$9$k!#(B}
+2分探索法を用いて2次元上で凸状の覆いを計算する。}
 
 \funcdesc{convex-hull-3d}{vertices}{
-gift-wrapping$BK!$rMQ$$$F(B3$B<!85>e$GFLLL$NJ$$$$r7W;;$9$k!#(B}
+gift-wrapping法を用いて3次元上で凸面の覆いを計算する。}
 \funcdesc{make-body-from-vertices}{vertices-list}{
-$BL7=b$7$J$$=gHV$K$J$C$F$$$kLL$N%k!<%W$rDj5A$9$kD:E@$N%j%9%H$+$i(B{\bf body}$B$rJV$9!#(B}
+矛盾しない順番になっている面のループを定義する頂点のリストから{\bf body}を返す。}
 
 \end{refdesc}
 
-\subsection{\label{BodyComposition}body$B$N9g@.4X?t(B}
+\subsection{\label{BodyComposition}bodyの合成関数}
 
 \begin{refdesc}
 
 \fundesc{face+}{face1 face2}
 \funcdesc{face*}{face1 face2}{
-{\em face1}$B$H(B{\em face2}$B$O!$(B3$B<!85>e$G6&DLJ?LL>e$K$"$k!#(B
-{\bf face+}$B$O!$$3$l$i$NLL$N7k9g$r9=C[$7!$LL$N%*%V%8%'%/%H$H$7$FJV$9!#(B
-$B$b$7!$8r:9NN0h$,$J$$$J$i!$85$N(B2$B$D$NLL$,JV$5$l$k!#(B
-{\bf face*}$B$O!$$3$l$i$NLL$N8r:9NN0h$rJV$9!#$b$7!$8r:9NN0h$,$J$1$l$P!$(BNIL$B$rJV$9!#(B}
+{\em face1}と{\em face2}は，3次元上で共通平面上にある。
+{\bf face+}は，これらの面の結合を構築し，面のオブジェクトとして返す。
+もし，交差領域がないなら，元の2つの面が返される。
+{\bf face*}は，これらの面の交差領域を返す。もし，交差領域がなければ，NILを返す。}
 
 \funcdesc{cut-body}{body cutting-plane}{
-{\em body}$B$r(B{\em cutting-plane}$B$G@ZCG$7!$$=$N@ZCGLL$K:n$i$l$kLL$N%j%9%H$rJV$9!#(B}
+{\em body}を{\em cutting-plane}で切断し，その切断面に作られる面のリストを返す。}
 
 \fundesc{body+}{body1 body2 \&rest more-bodies}
 \fundesc{body-}{body1 body2}
 \funcdesc{body*}{body1 body2}{
-2$B$D$"$k$$$O$=$l0J>e$N(B{\bf body}$B$NOB!$:9$"$k$$$O@Q$r7W;;$9$k!#(B
-$B$=$l$>$l$N(Bbody$B$O!$(B{\bf body+, body-, body*}$B$N=hM}$r9T$&A0$K(B
-$B%3%T!<$5$l!$85$N(Bbody$B$OJQ99$5$l$J$$!#(B
-$B$=$N7k2L$N(Bbody$B$N?7$7$$:BI87O$N0LCV!&;Q@*$O!$%o!<%k%I:BI87O$N$b$N$H0lCW$7$F$$$k!#(B
-$B$b$7!$$7$-$$CM%Q%i%a!<%?(B{\tt *coplanar-threshold*},{\tt *contact-threshold*},{\tt *parallel-threshold*}
-$B$r@53N$K@_Dj$9$k$J$i!$(B2$B$D$N(B{\bf body}$B$,LLF1;N$G@\?($7$F$$$k>l9g$G$b(B
-$B$3$l$i$N4X?t$O@5$7$/F/$/$G$"$m$&!#(B
-$B$7$+$7$J$,$i!$$b$7(B{\bf body}$B$ND:E@$,B>$N(B{\bf body}$B$ND:E@$"$k$$$OLL$K@\?($7$F$$$k>l9g!$(B
-$B$I$N=hM}$b<:GT$9$k!#(B}
+2つあるいはそれ以上の{\bf body}の和，差あるいは積を計算する。
+それぞれのbodyは，{\bf body+, body-, body*}の処理を行う前に
+コピーされ，元のbodyは変更されない。
+その結果のbodyの新しい座標系の位置・姿勢は，ワールド座標系のものと一致している。
+もし，しきい値パラメータ{\tt *coplanar-threshold*},{\tt *contact-threshold*},{\tt *parallel-threshold*}
+を正確に設定するなら，2つの{\bf body}が面同士で接触している場合でも
+これらの関数は正しく働くであろう。
+しかしながら，もし{\bf body}の頂点が他の{\bf body}の頂点あるいは面に接触している場合，
+どの処理も失敗する。}
 
 \funcdesc{body/}{body plane}{
-{\bf make-plane}$B$G:n$i$l$?(B{\bf plane}$B%/%i%9$N%$%s%9%?%s%9$G$"$k(B{\em plane}$B$G(B
-{\em body}$B$r@ZCG$9$k!#?7$7$/:n$i$l$?(B{\bf body}$B$,JV$5$l$k!#(B}
+{\bf make-plane}で作られた{\bf plane}クラスのインスタンスである{\em plane}で
+{\em body}を切断する。新しく作られた{\bf body}が返される。}
 
 \funcdesc{body-interference}{\&rest bodies}{
-{\em bodies}$B$NCf$G(B1$BBP(B1$B$NAH$_9g$o$;$K$*$1$k43>D$r%A%'%C%/$7!$(B
-$B8r:9$7$F$$$k(B2$B$D$N(B{\bf body}$B$N%j%9%H$rJV$9!#(B}
+{\em bodies}の中で1対1の組み合わせにおける干渉をチェックし，
+交差している2つの{\bf body}のリストを返す。}
 
 \end{refdesc}
 
-\subsection{$B:BI8<4(B}
-{\bf coordinates-axes}$B%/%i%9$O!$2hLL>e$KI=<(2DG=$J(B3$B<!85:BI8<4$rDj5A$9$k!#(B
-$B$=$l$>$l$N<4$H(Bz$B<4$ND:E@$NLp0u$O!$(B{\bf line}$B%*%V%8%'%/%H$GDj5A$5$l$k!#(B
-$B$3$N%/%i%9$O!$(B{\bf cascaded-coords}$B$r7Q>5$7$F$$$k$N$G!$(B
-$B$3$N%/%i%9$N%*%V%8%'%/%H$O!$(B{\bf body}$B$N$h$&$JB>$N(B{\bf cascaded-coords}$B$r85$H$9$k(B
-$B%*%V%8%'%/%H$KIU$1$k$3$H$,$G$-$k!#(B
-$B$3$N%*%V%8%'%/%H$O!$(B{\bf body}$B$N:BI8<4$"$k$$$OB>$N:BI8$NAjBP:BI87O$r8+$k$?$a$K(B
-$B;HMQ$5$l$k!#(B
+\subsection{座標軸}
+{\bf coordinates-axes}クラスは，画面上に表示可能な3次元座標軸を定義する。
+それぞれの軸とz軸の頂点の矢印は，{\bf line}オブジェクトで定義される。
+このクラスは，{\bf cascaded-coords}を継承しているので，
+このクラスのオブジェクトは，{\bf body}のような他の{\bf cascaded-coords}を元とする
+オブジェクトに付けることができる。
+このオブジェクトは，{\bf body}の座標軸あるいは他の座標の相対座標系を見るために
+使用される。
 
 \begin{refdesc}
 \classdesc{coordinates-axes}{cascaded-coords}
-{(size model-points points lines)}{$BI=<(2DG=$J(B3$B<!85:BI8<4$rDj5A$9$k!#(B}
+{(size model-points points lines)}{表示可能な3次元座標軸を定義する。}
 \end{refdesc}
 
 \newpage
