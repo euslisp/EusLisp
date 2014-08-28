@@ -1,164 +1,164 @@
-\section{$B@)8f9=B$(B}
-\markright{\arabic{section}. $B@)8f9=B$(B}
-\subsection{$B>r7oJ8(B}
+\section{制御構造}
+\markright{\arabic{section}. 制御構造}
+\subsection{条件文}
 
-{\bf and,or}$B$*$h$S(B{\bf cond}$B$O!"(BCommon Lisp$B$K$*$$$F%^%/%m$H$7$FCN$i$l$F$$$k$,!"(B
-EusLisp$B$G$O%$%s%?%W%j%?;~$N8zN($r2~A1$9$k$?$a$KFC<l=q<0$H$7$F<B9T$5$l$k!#(B
+{\bf and,or}および{\bf cond}は、Common Lispにおいてマクロとして知られているが、
+EusLispではインタプリタ時の効率を改善するために特殊書式として実行される。
 
 \begin{refdesc}
 \specialdesc{and}{\{form\}*}{
-{\em form}$B$O!"(BNIL$B$,8=$l$k$^$G:8$+$i1&$KI>2A$5$l$k!#(B
-$B$b$7!"A4$F$N=q<0$,(Bnon-NIL$B$H$7$FI>2A$5$l$k$J$i$P!"(B
-$B:G8e$NCM$,JV$5$l$k!#(B}
+{\em form}は、NILが現れるまで左から右に評価される。
+もし、全ての書式がnon-NILとして評価されるならば、
+最後の値が返される。}
 
 \specialdesc{or}{\{form\}*}{
-{\em form}$B$O!"(Bnon-NIL$BCM$,8=$l$k$^$G:8$+$i1&$KI>2A$5$l$k!#(B
-$B$=$7$F!"$=$NCM$,JV$5$l$k!#(B
-$B$b$7!"A4$F$N=q<0$,(BNIL$B$H$7$FI>2A$5$l$k$J$i$P!"(BNIL$B$rJV$9!#(B}
+{\em form}は、non-NIL値が現れるまで左から右に評価される。
+そして、その値が返される。
+もし、全ての書式がNILとして評価されるならば、NILを返す。}
 
 \specialdesc{if}{test then [else]}{
-{\bf if}$B$O!"#1$D$N(B{\it then}$B$H(B{\it else}$B=q<0$N$_$r;}$D$3$H$,$G$-$k!#(B
-$B$=$3$KB?=E=q<0$r=q$-$?$$$H$-$O!"(B{\bf progn}$B$r;H$C$F(B
-$B%0%k!<%W2=$7$J$1$l$P$J$i$J$$!#(B}
+{\bf if}は、１つの{\it then}と{\it else}書式のみを持つことができる。
+そこに多重書式を書きたいときは、{\bf progn}を使って
+グループ化しなければならない。}
 
 \macrodesc{when}{test forms}{
-{\bf if}$B$H0c$C$F!"(B
-{\bf when}$B$H(B{\bf unless}$B$O!"B?=E(B{\em $B=q<0(B}$B$G=q$/$3$H$r5v2D$7$F$$$k!#(B
-{\em test}$B$NI>2A$,(Bnon-NIL$B$N$H$-!"(B{\bf when}$B$O<B9T$5$l!"(B
-$BI>2A$,(BNIL$B$N$H$-!"(B{\em unless}$B$O<B9T$5$l$k!#(B
-$B$b$&0lJ}$G!"$3$l$i$N%^%/%m$O(B{\em else}$B=q<0$rDI2C$9$k$3$H$r(B
-$B5v2D$7$F$$$J$$!#(B}
+{\bf if}と違って、
+{\bf when}と{\bf unless}は、多重{\em 書式}で書くことを許可している。
+{\em test}の評価がnon-NILのとき、{\bf when}は実行され、
+評価がNILのとき、{\em unless}は実行される。
+もう一方で、これらのマクロは{\em else}書式を追加することを
+許可していない。}
 
 \macrodesc{unless}{test forms}{
-{\tt(when (not {\em test}) . {\em forms})}$B$HF1Ey$G$"$k!#(B}
+{\tt(when (not {\em test}) . {\em forms})}と同等である。}
 
 \specialdesc{cond}{{(test \{form\}*)}*}{
-$BG$0U$N?t$N>r7o9`$O!"(B{\bf cond}$B$N8e$KB3$1$k$3$H$,$G$-$k!#(B
-$B$=$l$>$l$N>r7o9`$K$*$$$F!":G=i$N=q<0(B{\em test}$B$,I>2A$5$l$k!#(B
-$B$b$7!"(Bnon-NIL$B$G$"$C$?$H$-!"$=$N>r7o9`$N;D$j$N=q<0$O!"B3$$$FI>2A$5$l$k!#(B
-$B$=$7$F!":G8e$NCM$,JV$5$l$k!#(B
-$B$b$7!"(B{\em test}$B$N$"$H$K=q<0$,$J$+$C$?$J$i$P!"(B
-{\em test}$B$NCM$,JV$5$l$k!#(B
-{\em test}$B$,<:GT$7$?$H$-!"<!$N>r7o9`$O(B{\em test}$B$,(Bnon-NIL$BI>2A$5$l$k$+$^$?$O(B
-$BA4$F$N>r7o9`$,?T$-$F$7$^$&$^$G7+$jJV$5$l$k!#(B
-$B>r7o9`$,?T$-$F$7$^$C$?>l9g!"(B{\bf cond}$B$O(BNIL$B$rJV$9!#(B}
+任意の数の条件項は、{\bf cond}の後に続けることができる。
+それぞれの条件項において、最初の書式{\em test}が評価される。
+もし、non-NILであったとき、その条件項の残りの書式は、続いて評価される。
+そして、最後の値が返される。
+もし、{\em test}のあとに書式がなかったならば、
+{\em test}の値が返される。
+{\em test}が失敗したとき、次の条件項は{\em test}がnon-NIL評価されるかまたは
+全ての条件項が尽きてしまうまで繰り返される。
+条件項が尽きてしまった場合、{\bf cond}はNILを返す。}
 
 \macrodesc{case}{key \{(\{label $|$ (\{lab\}*) \{form\}*)\}*}{
-{\em key}$B$H(B{\em label}$B$,0lCW$7$?>r7o9`$K$D$$$F!"(B
-{\em form}$B$,I>2A$5$l!":G8e$NCM$,JV$5$l$k!#(B
-{\em key}$B$H(B{\em label}$B$N4V$NEy2A$O!"(B{\bf eq}$B$^$?$O(B
-{\bf memq}$B$G9T$o$l!"(B{\bf equal}$B$G$O$J$$!#(B}
+{\em key}と{\em label}が一致した条件項について、
+{\em form}が評価され、最後の値が返される。
+{\em key}と{\em label}の間の等価は、{\bf eq}または
+{\bf memq}で行われ、{\bf equal}ではない。}
 
 \end{refdesc}
 
-\subsection{$BC`<!<B9T$H(BLet}
+\subsection{逐次実行とLet}
 
 \begin{refdesc}
 \funcdesc{prog1}{form1 \&rest forms}{
-{\em form1}$B$H(B{\em forms}$B$O!"<!!9$HI>2A$5$l!"(B
-{\em form1}$B$+$iJV$5$l$kCM$,(B{\bf prog1}$B$NCM$H$7$FJV$5$l$k!#(B}
+{\em form1}と{\em forms}は、次々と評価され、
+{\em form1}から返される値が{\bf prog1}の値として返される。}
 
 \specialdesc{progn}{\{form\}*}{
-{\em form}$B$O<!!9$KI>2A$5$l!":G8e$N(B{\em form}$B$NCM$,JV$5$l$k!#(B
-{\bf progn}$B$OFC<l=q<0$G$"$k!#$J$<$J$i!"%U%!%$%k$N:G=i$K8=$l$?$H$-(B
-$BFCJL$J0UL#$r;}$D$+$i$G$"$k!#(B
-$B$=$N$h$&$J=q<0$,%3%s%Q%$%k$5$l$?$H$-!"FbIt=q<0$O$9$Y$F:G=i$K8=$l$?(B
-$B$H$7$F8+$J$9!#(B
-$B%^%/%m$,(B{\bf defun}$B$d(B{\bf defmethod}$B$NO"B3$G3HD%$5$l$k>l9g!"$=$l$,:G=i$K(B
-$B8=$o$l$J$1$l$P$J$i$J$$$H$-$KLrN)$D!#(B}
+{\em form}は次々に評価され、最後の{\em form}の値が返される。
+{\bf progn}は特殊書式である。なぜなら、ファイルの最初に現れたとき
+特別な意味を持つからである。
+そのような書式がコンパイルされたとき、内部書式はすべて最初に現れた
+として見なす。
+マクロが{\bf defun}や{\bf defmethod}の連続で拡張される場合、それが最初に
+現われなければならないときに役立つ。}
 
 \macrodesc{setf}{\{access-form value\}*}{
-{\em value}$B$r0lHL2=JQ?t(B{\em access-form}$B$K3d$jEv$F$k!#(B}
+{\em value}を一般化変数{\em access-form}に割り当てる。}
 
 \specialdesc{let}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
-$B%m!<%+%kJQ?t$r@8@.$9$k!#(B
-$B$9$Y$F$N(B{\em value}$B$OI>2A$5$l!"JB9T$7$F(B{\em var}$B$K3d$jEv$F$i$l$k!#$9$J$o$A!"(B
-{\tt (let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))} $B$N7k2L$O(B
-(2 1)$B$G$"$k!#(B}
+ローカル変数を生成する。
+すべての{\em value}は評価され、並行して{\em var}に割り当てられる。すなわち、
+{\tt (let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))} の結果は
+(2 1)である。}
 
 \specialdesc{let*}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
-$B%m!<%+%kJQ?t$r@8@.$9$k!#(B
-$BA4$F$N(B{\em value}$B$O<!!9$KI>2A$5$l!"(B{\em var}$B$K3d$jEv$F$i$l$k!#$9$J$o$A!"(B
-{\tt (let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))}$B$N7k2L$O(B
-(2 2)$B$G$"$k!#(B}
+ローカル変数を生成する。
+全ての{\em value}は次々に評価され、{\em var}に割り当てられる。すなわち、
+{\tt (let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))}の結果は
+(2 2)である。}
 \end{refdesc}
 
-\subsection{$B%m!<%+%k4X?t(B}
+\subsection{ローカル関数}
 \begin{refdesc}
 \specialdesc{flet}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
-$B%m!<%+%k4X?t$rDj5A$9$k!#(B}
+ローカル関数を定義する。}
 
 \specialdesc{labels}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
-$B%m!<%+%k$J%9%3!<%W$H$J$k4X?t$rDj5A$9$k!#(B
-{\bf flet}$B$H(B{\bf labels}$B$H$N0c$$$O!"(B
-{\bf flet}$B$GDj5A$5$l$?%m!<%+%k4X?t$O!"$=$NB>$N4X?t$r;2>H$^$?$O:F5"$G$-$J$$$,!"(B
-{\bf labels}$B$OAj8_$N;2>H$r5v2D$9$k!#(B}
+ローカルなスコープとなる関数を定義する。
+{\bf flet}と{\bf labels}との違いは、
+{\bf flet}で定義されたローカル関数は、その他の関数を参照または再帰できないが、
+{\bf labels}は相互の参照を許可する。}
 \end{refdesc}
 
-\subsection{$B%V%m%C%/$H(BExit}
+\subsection{ブロックとExit}
 \begin{refdesc}
 \specialdesc{block}{tag \{form\}*}{
-{\bf return-from}$B$K$h$C$FC&=P2DG=$J%m!<%+%k%V%m%C%/$r:n$k!#(B
-{\em tag}$B$O!"%m!<%+%k$K%9%3!<%W$5$l!"I>2A$5$l$J$$!#(B}
+{\bf return-from}によって脱出可能なローカルブロックを作る。
+{\em tag}は、ローカルにスコープされ、評価されない。}
 
 \specialdesc{return-from}{tag value}{
-{\em tag}$B$K$h$C$F<($5$l$?%V%m%C%/$rC&=P$9$k!#(B
-{\bf return-from}$B$O!"4X?t$d%a%=%C%I$+$iC&=P$9$k$H$-$K;HMQ$5$l$k!#(B
-$B4X?t$d%a%=%C%I$O!"$=$NK\BN$r$9$Y$F<h$j0O$s$@ItJ,$r%V%m%C%/$H$7$F(B
-$B<+F0E*$K3NDj$5$l!"$=$N4X?t$^$?$O%a%=%C%I$NL>A0$rIU$1$k!#(B}
+{\em tag}によって示されたブロックを脱出する。
+{\bf return-from}は、関数やメソッドから脱出するときに使用される。
+関数やメソッドは、その本体をすべて取り囲んだ部分をブロックとして
+自動的に確定され、その関数またはメソッドの名前を付ける。}
 
 \macrodesc{return}{value}{
-{\tt  (return x)}$B$O!"(B{\tt (return-from nil x)}$B$HF1Ey$G$"$k!#(B
-{\bf loop, while, do, dolist, dotimes}$B$O!"0EL[E*$K(BNIL$B$HL>A0$,IU$1$i$l$?(B
-$B%V%m%C%/$H$7$F3NDj$5$l$k$?$a!"$3$l$i$NFC<l=q<0$HAH$_9g$o$;$F;HMQ$9$k!#(B}
+{\tt  (return x)}は、{\tt (return-from nil x)}と同等である。
+{\bf loop, while, do, dolist, dotimes}は、暗黙的にNILと名前が付けられた
+ブロックとして確定されるため、これらの特殊書式と組み合わせて使用する。}
 
 \specialdesc{catch}{ tag \{form\}*}{
-{\bf throw}$B$K$h$C$FC&=P$^$?$OCM$rJV$9$?$a$NF0E*$J%V%m%C%/$r3NDj$9$k!#(B
-{\em tag}$B$OI>2A$5$l$k!#(B
+{\bf throw}によって脱出または値を返すための動的なブロックを確定する。
+{\em tag}は評価される。
 
-$BA4$F8+$($k(B{\bf catch}$B$N(B{\em tag}$B$O!"(B{\tt sys:list-all-catchers}$B$+$iF@$k$3$H$,$G$-$k!#(B}
+全て見える{\bf catch}の{\em tag}は、{\tt sys:list-all-catchers}から得ることができる。}
 
 \specialdesc{throw}{tag value}{
-{\bf catch}$B%V%m%C%/$+$iC&=P$^$?$O(B{\em value}$B$rJV$9!#(B
-{\em tag}$B$H(B{\em value}$B$OI>2A$5$l$k!#(B}
+{\bf catch}ブロックから脱出または{\em value}を返す。
+{\em tag}と{\em value}は評価される。}
 
 \specialdesc{unwind-protect}{protected-form \{cleanup-form\}*}{
-{\em protected-form}$B$NI>2A$,=*$C$?8e!"(B
-{\em cleanup-form}$B$,I>2A$5$l$k!#(B
-{\bf unwind-protect}$B$N30B&$K%V%m%C%/$^$?$O(B{\bf catch}
-$B%V%m%C%/$r:n$C$F$b9=$o$J$$!#(B
+{\em protected-form}の評価が終った後、
+{\em cleanup-form}が評価される。
+{\bf unwind-protect}の外側にブロックまたは{\bf catch}
+ブロックを作っても構わない。
 
-{\bf return-from}$B$d(B{\bf throw}$B$G$5$(!"$=$N$h$&$J%V%m%C%/$+$i(B
-$BH4$1=P$9$?$a$K$O(B{\em protected-form}$B$NCf$G<B9T$5$l$k!#(B
-{\em cleanup-form}$B$O!"I>2A$5$l$k$3$H$,J]>Z$5$l$F$$$k!#(B
-$B$^$?!"$b$7(B{\em protected-form}$B$,<B9T$5$l$F$$$k4V$K%(%i!<$,5/$3$C$?$J$i$P!"(B
-{\em cleanup-form}$B$O$$$D$b(B{\bf reset}$B$K$h$C$F<B9T$5$l$k!#(B}
+{\bf return-from}や{\bf throw}でさえ、そのようなブロックから
+抜け出すためには{\em protected-form}の中で実行される。
+{\em cleanup-form}は、評価されることが保証されている。
+また、もし{\em protected-form}が実行されている間にエラーが起こったならば、
+{\em cleanup-form}はいつも{\bf reset}によって実行される。}
 
 \end{refdesc}
 
-\subsection{$B7+JV$7(B}
+\subsection{繰返し}
 
 \begin{refdesc}
 
 \specialdesc{while}{test \{form\}*}{
-{\em test}$B$,(Bnon-NIL$B$HI>2A$5$l$F$$$k4V!"(B
-{\em form}$B$O!"7+JV$7I>2A$5$l$k!#(B
-{\bf while}$B$O!"(B{\em form}$B$N$^$o$j$K(BNIL$B$HL>IU$1$i$l$k%V%m%C%/$r<+F0E*$K3NDj$9$k(B
-$BFC<l=q<0$G$"$k!#(B
-{\bf return}$B$O!"$=$N%k!<%W$+$iH4$1=P$9$?$a$K;HMQ$9$k$3$H$,$G$-$k!#(B}
+{\em test}がnon-NILと評価されている間、
+{\em form}は、繰返し評価される。
+{\bf while}は、{\em form}のまわりにNILと名付けられるブロックを自動的に確定する
+特殊書式である。
+{\bf return}は、そのループから抜け出すために使用することができる。}
 
 \specialdesc{tagbody}{\{tag $|$ statement\}*}{
-{\em tag}$B$O!"(B{\bf go}$B$N$?$a$KL>IU$1$i$l$k!#(B
-{\bf tagbody}$B$NCf$N$_(B{\bf go}$B$r;HMQ$9$k$3$H$,$G$-$k!#(B}
+{\em tag}は、{\bf go}のために名付けられる。
+{\bf tagbody}の中のみ{\bf go}を使用することができる。}
 
 \specialdesc{go}{tag}{
-$B%m!<%+%k$K%9%3!<%W$5$l$?(B{\bf tagbody}$B$N$J$+$K8=$l$k(B{\em tag}$B$ND>8e$N(B
-$B=q<0$K@)8f$r0\$9!#(B
-$B%m!<%+%k%9%3!<%W$r2#@Z$C$F0c$&(B{\bf tagbody}$B$N(Btag$B$K@)8f$r0\$9$3$H$O(B
-$B6X;_$5$l$F$$$k!#(B}
+ローカルにスコープされた{\bf tagbody}のなかに現れる{\em tag}の直後の
+書式に制御を移す。
+ローカルスコープを横切って違う{\bf tagbody}のtagに制御を移すことは
+禁止されている。}
 
 \macrodesc{prog}{(\{var $|$ (var [init])\}*) \{tag $|$ statement\}*}{
-{\bf prog}$B$O%^%/%m$G!"0J2<$N$h$&$KE83+$5$l$k!#(B
+{\bf prog}はマクロで、以下のように展開される。
 \ptext{
 (block nil 
     (let {\em var}
@@ -168,92 +168,92 @@ EusLisp$B$G$O%$%s%?%W%j%?;~$N8zN($r2~A1$9$k$?$a$KFC<l=q<0$H$7$F<B9T$5$l$k!#(B
 
 \macrodesc{do}{(\{(var init [next])\}*) (endtest [result])\{declare\} \{form\}
 *}
-{{\em var}$B$O%m!<%+%kJQ?t$G$"$k!#(B
-$B$=$l$>$l$N(B{\em var}$B$K!"(B{\em init}$B$OJB9T$KI>2A$5$l!"3d$jEv$F$i$l$k!#(B
-$B$D$.$K!"(B{\em endtest}$B$,I>2A$5$l!"$b$7??$N$H$-(B{\bf do}$B$O(B{\em result}$B$rJV$9!#(B
- ($B$=$&$G$J$$$H$-$O!"(BNIL$B$rJV$9(B)
-$B$b$7(B{\em endtest}$B$,(BNIL$B$rJV$7$?$J$i$P!"$=$l$>$l$N(B{\em form}$B$O!"(B
-$B=gHV$KI>2A$5$l$k!#(B
-$B=q<0$NI>2A8e!"(B{\em next}$B$,I>2A$5$l!"$=$NCM$O(B
-$B$=$l$>$l$N(B{\em var}$B$K:F3dEv$5$l!"<!$N7+JV$7$,;O$^$k!#(B}
+{{\em var}はローカル変数である。
+それぞれの{\em var}に、{\em init}は並行に評価され、割り当てられる。
+つぎに、{\em endtest}が評価され、もし真のとき{\bf do}は{\em result}を返す。
+ (そうでないときは、NILを返す)
+もし{\em endtest}がNILを返したならば、それぞれの{\em form}は、
+順番に評価される。
+書式の評価後、{\em next}が評価され、その値は
+それぞれの{\em var}に再割当され、次の繰返しが始まる。}
 
 \macrodesc{do*}{(\{var init [next]\}*) (endtest [result])\{declare\} \{form\}*}
-{{\bf do*}$B$O!"(B{\em init}$B$H(B{\em next}$B$NI>2A$H(B
-{\em var}$B$X$N3d$jEv$F$,O"B3E*$K5/$3$k$3$H$r=|$$$F!"(B{\bf do}$B$HF1MM$G$"$k!#(B}
+{{\bf do*}は、{\em init}と{\em next}の評価と
+{\em var}への割り当てが連続的に起こることを除いて、{\bf do}と同様である。}
 
 \macrodesc{dotimes}{(var count [result]) \{forms\}*}{
-{\em forms}$B$NI>2A$r(B{\em count}$B2s9T$&!#(B
-{\em count}$B$O!"0l2s$N$_I>2A$5$l$k!#(B
-$B$=$l$>$l$NI>2A$NCf$G!"(B{\em var}$B$O@0?t$N%<%m$+$i(B
-{\em count}-1$B$^$GA}2C$9$k!#(B}
+{\em forms}の評価を{\em count}回行う。
+{\em count}は、一回のみ評価される。
+それぞれの評価の中で、{\em var}は整数のゼロから
+{\em count}-1まで増加する。}
 
 \macrodesc{dolist}{(var list [result]) \{forms\}*}{
-{\em list}$B$N$=$l$>$l$NMWAG$O!"(B{\em var}$B$KO"B3E*$KM?$($i$l$k!#(B
-$B$=$7$F(B{\em forms}$B$O!"$=$l$>$l$NCM$GI>2A$5$l$k!#(B
-{\bf dolist}$B$O!"B>$N7+JV$7$h$jAa$/<B9T$5$l$k!#$?$H$($P!"(B
-{\bf mapcar}$B$d:F5"E*4X?t$N$h$&$J$b$N$h$j!#(B
-$B$=$l$O!"(B{\bf dolist}$B$,4X?t$N(Bclosure$B$r:n$C$?$jE,MQ$7$?$j$9$kI,MW$,(B
-$B$J$/!"?7$7$$%Q%i%a!<%?$N%P%$%s%I$,I,MW$G$J$$$?$a!#(B}
+{\em list}のそれぞれの要素は、{\em var}に連続的に与えられる。
+そして{\em forms}は、それぞれの値で評価される。
+{\bf dolist}は、他の繰返しより早く実行される。たとえば、
+{\bf mapcar}や再帰的関数のようなものより。
+それは、{\bf dolist}が関数のclosureを作ったり適用したりする必要が
+なく、新しいパラメータのバインドが必要でないため。}
 
 \macrodesc{until}{condition \{forms\}*}{
-{\em condition}$B$,K~$?$5$l$F$$$k4V!"(B{\em forms}$B$rI>2A$9$k!#(B}
+{\em condition}が満たされている間、{\em forms}を評価する。}
 
 \macrodesc{loop}{\{forms\}*}{
-{\em forms}$B$r1J1s$KI>2A$9$k!#(B
-$B<B9T$r;_$a$k$?$a$K$O!"(B{\bf return-from, throw}$B$^$?$O(B{\bf go}$B$,(B
-{\em forms}$B$N$J$+$GI>2A$5$l$J$1$l$P$J$i$J$$!#(B}
+{\em forms}を永遠に評価する。
+実行を止めるためには、{\bf return-from, throw}または{\bf go}が
+{\em forms}のなかで評価されなければならない。}
 
-\subsection{$B=R8l(B}
+\subsection{述語}
 
-Common Lisp$B$N(B{\bf typep}$B$H(B{\bf subtypep}$B$O$J$$$N$G!"(B
-{\bf subclassp}$B$d(B{\bf derivedp}$B$G5?;w<B8=$9$k$3$H!#(B
+Common Lispの{\bf typep}と{\bf subtypep}はないので、
+{\bf subclassp}や{\bf derivedp}で疑似実現すること。
 
 \begin{refdesc}
 
-\funcdesc{eq}{obj1 obj2}{{\em obj1}$B$H(B{\em obj2}$B$,F1$8%*%V%8%'%/%H$r;X$9%]%$%s%?$"$k$$$OF1$8(B
-$B?tCM$N$H$-(BT$B$rJV$9!#(B
-$BNc$($P(B:{\tt (eq 'a 'a)}$B$O(BT$B!"(B{\tt (eq 1 1)}$B$O(BT$B!"(B{\tt (eq 1. 1.0)}$B$O(BNIL$B!"(B
-{\tt (eq "a" "a")}$B$O(BNIL$B$G$"$k!#(B}
+\funcdesc{eq}{obj1 obj2}{{\em obj1}と{\em obj2}が同じオブジェクトを指すポインタあるいは同じ
+数値のときTを返す。
+例えば:{\tt (eq 'a 'a)}はT、{\tt (eq 1 1)}はT、{\tt (eq 1. 1.0)}はNIL、
+{\tt (eq "a" "a")}はNILである。}
 \funcdesc{eql}{obj1 obj2}{
-EusLisp$B$NCf$G?tCM$OA4$FD>@\CM$GI=8=$5$l$k$?$a!"(B{\bf eq}$B$H(B{\bf eql}$B$O(B
-$BF10l$G$"$k!#(B}
+EusLispの中で数値は全て直接値で表現されるため、{\bf eq}と{\bf eql}は
+同一である。}
 \funcdesc{equal}{obj1 obj2}{
-$B$$$m$s$J9=B$$N%*%V%8%'%/%H$NEy2A@-$r%A%'%C%/$9$k!#%*%V%8%'%/%H$O!"J8;zNs!&%Y%/%H%k!&(B
-$B9TNs$J$I$G:F5"E*$K;2>H$7$F$J$$$3$H$,J]>Z$5$l$J$1$l$P$J$i$J$$!#(B
-{\em obj1}$B$d(B{\em obj2}$B$,:F5"E*$K;2>H$5$l$F$$$?$H$9$k$H!"(B
-{\bf equal}$B$OL58B%k!<%W$H$J$k!#(B}
+いろんな構造のオブジェクトの等価性をチェックする。オブジェクトは、文字列・ベクトル・
+行列などで再帰的に参照してないことが保証されなければならない。
+{\em obj1}や{\em obj2}が再帰的に参照されていたとすると、
+{\bf equal}は無限ループとなる。}
 \funcdesc{superequal}{obj1 obj2}{
-{\bf superequal}$B$O!"4D>u;2>H$r%A%'%C%/$9$k$N$GCY$$!#$7$+$7%m%P%9%H$JEy2A$,F@$i$l$k!#(B}
+{\bf superequal}は、環状参照をチェックするので遅い。しかしロバストな等価が得られる。}
 
-\funcdesc{null}{object}{{\em object}$B$,(BNIL$B$N$H$-!"(BT$B$rJV$9!#(B
-{\tt (eq {\em object} nil)}$B$rI>2A$9$k!#(B}
+\funcdesc{null}{object}{{\em object}がNILのとき、Tを返す。
+{\tt (eq {\em object} nil)}を評価する。}
 \funcdesc{not}{object}{
-{\bf not}$B$O!"(B{\bf null}$B$HF10l$G$"$k!#(B}
+{\bf not}は、{\bf null}と同一である。}
 \funcdesc{atom}{object}{
-$B%*%V%8%'%/%H$,(Bcons$B$N%$%s%9%?%s%9$G$"$k;~$N$_!"(BNIL$B$rJV$9!#(B
+オブジェクトがconsのインスタンスである時のみ、NILを返す。
 {\tt (atom nil) = (atom '()) = T)}\\
-$BCm0U(B:vectors, strings, read-table, hash-table$B$J$I$KBP$7$F$O!"$=$l$i$,$I$s$J$K(B
-$BJ#;($J%*%V%8%'%/%H$H$J$C$F$$$F$b(B{\bf atom}$B$O(BT$B$rJV$9!#(B}
+注意:vectors, strings, read-table, hash-tableなどに対しては、それらがどんなに
+複雑なオブジェクトとなっていても{\bf atom}はTを返す。}
 \funcdesc{every}{pred \&rest args}{
-$BA4$F$N(B{\em args}$B$,(B{\em pred}$B$K$D$$$F(BT$B$rJV$7$?;~$N$_(B
-T$B$rJV$9!#(B{\bf every}$B$O!"(B{\em pred}$B$,A4$F$N(B{\em args}$B$KBP$7$F8zNO$,$"$k$+$I$&$+$r(B
-$B8!::$9$k;~$K;HMQ$5$l$k!#(B}
+全ての{\em args}が{\em pred}についてTを返した時のみ
+Tを返す。{\bf every}は、{\em pred}が全ての{\em args}に対して効力があるかどうかを
+検査する時に使用される。}
 \funcdesc{some}{pred \&rest args}{
-{\em args}$B$N$&$A$I$l$+(B1$B$D$,(B{\em pred}$B$K$D$$$F(BT$B$rJV$7$?$H$-(B
-T$B$rJV$9!#(B{\bf some}$B$O!"(B{\em pred}$B$,(B{\em args}$B$N$I$l$+$KBP$7$F8zNO$,$"$k$+$I$&$+$r(B
-$B8!::$9$k;~$K;HMQ$5$l$k!#(B}
+{\em args}のうちどれか1つが{\em pred}についてTを返したとき
+Tを返す。{\bf some}は、{\em pred}が{\em args}のどれかに対して効力があるかどうかを
+検査する時に使用される。}
 \end{refdesc}
 \funcdesc{functionp}{object}{
-{\em object}$B$,(B{\bf apply}$B$d(B{\bf funcall}$B$GM?$($i$l$k4X?t%*%V%8%'%/%H$G$"$k$J$i(BT$B$rJV$9!#(B\\
-$BCm0U(B:$B%^%/%m$O(B{\bf apply}$B$d(B{\bf funcall}$B$rE,MQ$9$k$3$H$,$G$-$J$$!#(B
-{\bf functionp}$B$O!"(B{\em object}$B$,!"(Btype=0$B$N%3%s%Q%$%k%3!<%I$+!"4X?tDj5A$r;}$D(Bsymbol$B$+!"(B
-lambda-form$B$+$"$k$$$O(Blambda-closure$B$G$"$C$?$H$-!"(BT$B$rJV$9!#(B
+{\em object}が{\bf apply}や{\bf funcall}で与えられる関数オブジェクトであるならTを返す。\\
+注意:マクロは{\bf apply}や{\bf funcall}を適用することができない。
+{\bf functionp}は、{\em object}が、type=0のコンパイルコードか、関数定義を持つsymbolか、
+lambda-formかあるいはlambda-closureであったとき、Tを返す。
 {\tt Examples: (functionp 'car) = T, (functionp 'do) = NIL}}
 \funcdesc{compiled-function-p}{object}{
-{\em object}$B$,!"%3%s%Q%$%k%3!<%I$N%$%s%9%?%s%9$G$"$C$?$H$-!"(BT$B$rJV$9!#(B
-$B$=$N%3%s%Q%$%k%3!<%I$,4X?t$+$^$?$O%^%/%m$+$rCN$k$?$a$K$O!"(B
-$B$=$N%*%V%8%'%/%H$K(B{\tt :type}$B%a%C%;!<%8$rAw$j!"$=$NJV$jCM$,(B
-{\tt function}$B$H(B{\tt macro}$B$N$I$A$i$K$J$C$F$$$k$+$rD4$Y$k!#(B}
+{\em object}が、コンパイルコードのインスタンスであったとき、Tを返す。
+そのコンパイルコードが関数かまたはマクロかを知るためには、
+そのオブジェクトに{\tt :type}メッセージを送り、その返り値が
+{\tt function}と{\tt macro}のどちらになっているかを調べる。}
 
 \end{refdesc}
 

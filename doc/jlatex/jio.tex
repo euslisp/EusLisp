@@ -1,89 +1,89 @@
-\section{$B%9%H%j!<%`$HF~=PNO(B}
-\markright{\arabic{section}. $B%9%H%j!<%`$HF~=PNO(B}
+\section{ストリームと入出力}
+\markright{\arabic{section}. ストリームと入出力}
 
-\subsection{$B%9%H%j!<%`(B}
+\subsection{ストリーム}
 
-$BDj5A:Q$_%9%H%j!<%`$O<!$N$b$N$G$"$j!"(B
-echo-stream$B$H(Bconcatenated-stream$B$OMxMQ$G$-$J$$!#(B
+定義済みストリームは次のものであり、
+echo-streamとconcatenated-streamは利用できない。
 
 \begin{description}
-\item[*standard-input*] $BI8=`F~NO(B stdin fd=0 
-\item[*standard-output*] $BI8=`=PNO(B stdout fd=1 
-\item[*error-output*] $BI8=`%(%i!<=PNO(B stderr fd=2 bufsize=1
-\item[*terminal-io*] {\bf *standard-input*}$B$H(B{\bf *standard-output*}
-$B$G:n$i$l$kF~=PNO%9%H%j!<%`(B
+\item[*standard-input*] 標準入力 stdin fd=0 
+\item[*standard-output*] 標準出力 stdout fd=1 
+\item[*error-output*] 標準エラー出力 stderr fd=2 bufsize=1
+\item[*terminal-io*] {\bf *standard-input*}と{\bf *standard-output*}
+で作られる入出力ストリーム
 \end{description}
 
 \begin{refdesc}
 
 \funcdesc{streamp}{object}{
-{\em object}$B$,(B{\bf stream}, {\bf io-stream}$B$+$=$N%5%V%/%i%9$+$i(B
-$B:n$i$l$F$$$k$H$-(BT$B$rJV$9!#(B}
+{\em object}が{\bf stream}, {\bf io-stream}かそのサブクラスから
+作られているときTを返す。}
 \funcdesc{input-stream-p}{object}{
-{\em object}$B$,%9%H%j!<%`$GFI$_9~$_2DG=$G$"$l$P!"(BT$B$rJV$9!#(B}
+{\em object}がストリームで読み込み可能であれば、Tを返す。}
 \funcdesc{output-stream-p}{object}{
-{\em object}$B$,%9%H%j!<%`$G=q$-9~$_2DG=$G$"$l$P!"(BT$B$rJV$9!#(B}
+{\em object}がストリームで書き込み可能であれば、Tを返す。}
 \funcdesc{io-stream-p}{object}{
-{\em object}$B$,FI$_=q$-2DG=$J%9%H%j!<%`$G$"$l$P!"(BT$B$rJV$9!#(B}
+{\em object}が読み書き可能なストリームであれば、Tを返す。}
 
 \longdescription{open}
-{path \&key \= :direction :input \` [$B4X?t(B]\\
-%{path \&key \= :direction :input \hspace{98mm} [$B4X?t(B]\\
+{path \&key \= :direction :input \` [関数]\\
+%{path \&key \= :direction :input \hspace{98mm} [関数]\\
  \> :if-exists :new-version \\
  \> :if-does-not-exist \\
  \> :permission \#o644 \\
  \> :buffer-size 512\\}{
-{\bf open}$B$O!"(B{\em path}$B$G;XDj$5$l$?%U%!%$%k$H7k9g$5$l$k%9%H%j!<%`$r:n$k!#(B
-{\em path}$B$O!"J8;zNs$+%Q%9L>$G$h$$!#(B
-{\em :direction}$B$O!"(B{\tt :input, :output}$B$^$?$O(B{\tt :io}$B$N$I$l$+(B
-1$B$D$G$J$1$l$P$J$i$J$$!#(B
-$B$$$/$D$+$N(Bopen$B%*%W%7%g%s(B{\tt :append, :new-version, :overwrite, :error}
-$B$H(BNIL$B$,(B{\em :if-exists}$B$N%Q%i%a!<%?$H$7$F5v$5$l$k!#(B
-$B$7$+$7$J$,$i!"$3$N%Q%i%a!<%?$O(B{\em :direction}$B$,(B{\tt :input}$B$N$H$-L5;k$5$l$k!#(B
-{\em :if-does-not-exist}$B$K$O!"(B
-{\tt :error, :create}$B$+(BNIL$B$N$I$l$+(B1$B$D$r$H$k!#(B
-{\tt :new-version}, {\tt :rename}$B$H(B{\tt :supersede}$B$OG'<1$5$l$J$$!#(B
-$B%G%U%)%k%H$H$7$F!"(B{\em :direction}$B$,(B
-{\tt :output}$B$+(B{\tt :io}$B$G%U%!%$%k$,B8:_$9$k$H$-!"$=$N%U%!%$%k$K>e=q$-$9$k!#(B
-{\tt :input}$B$K$*$$$F!"%U%!%$%k$,$J$$$H$-!"%(%i!<$,Js9p$5$l$k!#(B
-$B%U%!%$%k$NB8:_$rCN$k$?$a$K!"(B{\bf probe-file}$B$r;H$&$3$H$,$G$-$k!#(B
-{\em :buffer-size}$B$N%G%U%)%k%HCM$O(B512$B%P%$%H!"(B
-{\em :permission}$B$N%G%U%)%k%HCM$O(B{\tt \#O644}$B$G$"$k!#(B
-SunOS4$B$O!"F1;~$K(B60$B%U%!%$%k$N%*!<%W%s$r5v2D$7$F$$$k!#(B
+{\bf open}は、{\em path}で指定されたファイルと結合されるストリームを作る。
+{\em path}は、文字列かパス名でよい。
+{\em :direction}は、{\tt :input, :output}または{\tt :io}のどれか
+1つでなければならない。
+いくつかのopenオプション{\tt :append, :new-version, :overwrite, :error}
+とNILが{\em :if-exists}のパラメータとして許される。
+しかしながら、このパラメータは{\em :direction}が{\tt :input}のとき無視される。
+{\em :if-does-not-exist}には、
+{\tt :error, :create}かNILのどれか1つをとる。
+{\tt :new-version}, {\tt :rename}と{\tt :supersede}は認識されない。
+デフォルトとして、{\em :direction}が
+{\tt :output}か{\tt :io}でファイルが存在するとき、そのファイルに上書きする。
+{\tt :input}において、ファイルがないとき、エラーが報告される。
+ファイルの存在を知るために、{\bf probe-file}を使うことができる。
+{\em :buffer-size}のデフォルト値は512バイト、
+{\em :permission}のデフォルト値は{\tt \#O644}である。
+SunOS4は、同時に60ファイルのオープンを許可している。
 }
 
 \macrodesc{with-open-file}{(svar path . open-options) \&rest forms}{
-{\em path}$B$H$$$&L>$N%U%!%$%k$,!"(B{\em open-options}$B$G%*!<%W%s$5$l!"(B
-$B$=$N%9%H%j!<%`$O(B{\em svar}$B$K%P%$%s%I$5$l$k!#(B
-$B$=$l$+$i(B{\em forms}$B$,I>2A$5$l$k!#(B
-$B%9%H%j!<%`$O!"(B{\em forms}$B$NI>2A$,=*$k$+$^$?$O(B
-{\bf throw}, {\bf return-from}$B$d%(%i!<$GC&=P$7$?$H$-!"<+F0E*$K%/%m!<%:$5$l$k!#(B
-{\bf with-open-file}$B$O!"(B{\bf unwind-protect}$B$K$h$C$F(B{\bf close}$B$H$=$NFbIt=q<0$r(B
-$B0l=o$K$7$FDj5A$5$l$k%^%/%m$G$"$k!#(B
+{\em path}という名のファイルが、{\em open-options}でオープンされ、
+そのストリームは{\em svar}にバインドされる。
+それから{\em forms}が評価される。
+ストリームは、{\em forms}の評価が終るかまたは
+{\bf throw}, {\bf return-from}やエラーで脱出したとき、自動的にクローズされる。
+{\bf with-open-file}は、{\bf unwind-protect}によって{\bf close}とその内部書式を
+一緒にして定義されるマクロである。
 }
 
 \funcdesc{close}{stream}{
-{\em stream}$B$,%/%m!<%:$5$l!"@.8y$7$?$i(BT$B$rJV$9!#(B
-{\em stream}$B$,4{$K%/%m!<%:$5$l$F$$$?>l9g!"(BNIL$B$,JV$5$l$k!#(B
-$B%9%H%j!<%`$O!"$=$N%9%H%j!<%`%*%V%8%'%/%H$,;2>H$9$k$b$N$,$J$$$J$i!"(BGC$B$K$h$C$F(B
-$B<+F0E*$K%/%m!<%:$5$l$k!#(B}
+{\em stream}がクローズされ、成功したらTを返す。
+{\em stream}が既にクローズされていた場合、NILが返される。
+ストリームは、そのストリームオブジェクトが参照するものがないなら、GCによって
+自動的にクローズされる。}
 
 % \fundesc{reset-stream}{s}
 
 \funcdesc{make-string-input-stream}{string}{
-{\em string}$B$+$iF~NO%9%H%j!<%`$r:n$k!#(B}
+{\em string}から入力ストリームを作る。}
 
 \funcdesc{make-string-output-stream}{size}{
-{\em size}$BD9$5$NJ8;zNs$N$?$a$K=PNO%9%H%j!<%`$r:n$k!#(B
-$B$=$ND9$5$O<+F0E*$K3HD%$5$l$k!#$=$N$?$a!"(B{\em size}$B$O=i4|2=;~$KG[CV$9$k(B
-$BJ8;zNs$N$?$a$NJd=u>pJs$G$"$k!#(B}
+{\em size}長さの文字列のために出力ストリームを作る。
+その長さは自動的に拡張される。そのため、{\em size}は初期化時に配置する
+文字列のための補助情報である。}
 
 \funcdesc{get-output-stream-string}{string-stream}{
-{\em string-stream}$B$KJ8;zNs$r=PNO$9$k!#(B}
+{\em string-stream}に文字列を出力する。}
 
 \funcdesc{make-broadcast-stream}{\&rest output-streams}{
-$B9-Js(B(broadcast)$B%9%H%j!<%`$r:n$j!"$3$N%9%H%j!<%`$K=q$+$l$?%a%C%;!<%8$O$9$Y$F$N(B
-{\em output-streams}$B$XE>Aw$5$l$k!#(B}
+広報(broadcast)ストリームを作り、このストリームに書かれたメッセージはすべての
+{\em output-streams}へ転送される。}
 
 \end{refdesc}
 \newpage
@@ -92,208 +92,208 @@ SunOS4$B$O!"F1;~$K(B60$B%U%!%$%k$N%*!<%W%s$r5v2D$7$F$$$k!#(B
 % R E A D E R
 %
 
-\subsection{$B%j!<%@(B(reader)}
+\subsection{リーダ(reader)}
 
-$B%j!<%@$N%0%m!<%P%kJQ?t$O!'(B
+リーダのグローバル変数は：
 
 \begin{description}
-\item[*read-base*] $BFI$_9~;~$N4p?t!(%G%U%)%k%H$O(B10
-\item[*readtable*] reader$B9=J8$r7hDj$9$k%+%l%s%HFI$_9~$_%F!<%V%k(B
+\item[*read-base*] 読み込時の基数；デフォルトは10
+\item[*readtable*] reader構文を決定するカレント読み込みテーブル
 \end{description}
 
-Reader$B$N%G%U%)%k%H%^%/%mJ8;z$O!'(B
+Readerのデフォルトマクロ文字は：
 \begin{tabbing}
-{\bf (} \hspace{10mm} \=  $B%j%9%HFI$_9~$_(B \\
-{\bf "} \>  $BJ8;zNsFI$_9~$_(B \\
-{\bf '} \>  $B0zMQIdI=8=FI$_9~$_(B \\
-{\bf \#} \>  $B%^%/%mJQ49(B \\
-{\bf ;} \>  $B%3%a%s%H(B\\
+{\bf (} \hspace{10mm} \=  リスト読み込み \\
+{\bf "} \>  文字列読み込み \\
+{\bf '} \>  引用符表現読み込み \\
+{\bf \#} \>  マクロ変換 \\
+{\bf ;} \>  コメント\\
 {\bf `} \>  back-quote \\
 {\bf ,} \>  list-time eval \\
-{\bf @} \>  $BDI2C(B \\
-{\bf \%} \>  C$B8@8lI=5-$N?t<0FI$_9~$_(B \\
+{\bf @} \>  追加 \\
+{\bf \%} \>  C言語表記の数式読み込み \\
 \end{tabbing}
 
-$B%(%9%1!<%WJ8;z!'(B
+エスケープ文字：
 
 \begin{tabbing}
-{\bf $\backslash$} \hspace{10mm} \=  $BC10lJ8;z%(%9%1!<%W(B\\
-{\bf $|...|$} \>  $BB?=EJ8;z%(%9%1!<%W(B\\
+{\bf $\backslash$} \hspace{10mm} \=  単一文字エスケープ\\
+{\bf $|...|$} \>  多重文字エスケープ\\
 \end{tabbing}
 
-$B%(%9%1!<%W$5$l$F$$$J$$(Bsymbol$B$,FI$^$l$k$H!"(B
-$BA4$F$N9=@.$5$l$kJ8;z$O%G%U%)%k%H$GBgJ8;z$KJQ49$5$l!"(B
-$B$=$7$FBgJ8;z$N(Bsymbol$B$OFbIt$KC_$($i$l$k!#(B
-$BNc$($P!"(B'abc$B$H(B'ABC$B$OF1$8(Bsymbol$B$H$_$J$5$l$k!#(B
-$B%(%9%1!<%W$O!"$=$l$i$r6hJL$9$k$N$KI,MW$G$"$k!#(B
-'$|$ABC$|$, 'ABC$B$H(B'abc$B$OF10l$G$"$k$,!"(B
-'$|$abc$|$$B$H(B'abc$B$O0c$&(Bsymbol$B$G$"$k!#(B
-$B%G%U%)%k%H$H$7$F!"BgJ8;z$N(Bsymbol$B$rF~NO$7$?$H$-$G$5$(!"(B
-$B$=$N(Bsymbol$B$rI=<($9$k$H$-$O(B
-EusLisp$B$N%W%j%s%?$,FbIt$NBgJ8;zI=8=$+$i>.J8;z$KJQ49$9$k!#(B
-$B$3$NJQ49$O!"%W%j%s%?$K$h$C$F<B9T$5$l$F$$$k!#(B
-$B$3$NJQ49$O!"(B
-{\tt :UPCASE}$B$r(B{\bf *print-case*}$B$K@_Dj$9$k$3$H$K$h$j!"6X;_$5$l$k!#(B
+エスケープされていないsymbolが読まれると、
+全ての構成される文字はデフォルトで大文字に変換され、
+そして大文字のsymbolは内部に蓄えられる。
+例えば、'abcと'ABCは同じsymbolとみなされる。
+エスケープは、それらを区別するのに必要である。
+'$|$ABC$|$, 'ABCと'abcは同一であるが、
+'$|$abc$|$と'abcは違うsymbolである。
+デフォルトとして、大文字のsymbolを入力したときでさえ、
+そのsymbolを表示するときは
+EusLispのプリンタが内部の大文字表現から小文字に変換する。
+この変換は、プリンタによって実行されている。
+この変換は、
+{\tt :UPCASE}を{\bf *print-case*}に設定することにより、禁止される。
 
-10.$B$O@0?t$N(B10$B$H$7$FFI$^$l!"<B?t$N(B10.0$B$G$O$J$$!#(B
-':'$B$,%Q%C%1!<%8%^!<%+!<$H$7$FM=Ls$5$l$F$$$k$N$G!"(B
-'$|g:pcube|$$B$N$h$&$K(Bsymbol$B$r9=@.$9$k$b$N$H$7$F;H$&$H$-!"%(%9%1!<%W2=$7$J$1$l$P(B
-$B$J$i$J$$!#(B
-$B$3$N@)8B$O!"J8;z(B':'$B$N9=J8$K$h$j6/@)$5$l$J$$$,!"(B
-$B%"%k%U%!%Y%C%H=g$d(Bletter$B$N0UL#$r7hDj$9$kB0@-$K$h$j6/@)$5$l$k!#(B
-$B$=$NJ8;z$NB0@-$O!"%j!<%@$+$i7x$/7k$P$l$k(B(hardwired)$B!#(B
-$B$7$?$,$C$F!"(B{\bf copy-readtable}$B$G?7$7$$(Breadtable$B$r:n$C$?$j!"(B
-{\bf set-syntax-from-char}$B$GJ8;z$N$?$a$N9=J8E*0UL#$rAH$_D>$7$?$j$9$k$3$H$K$h$j!"(B
-$B$"$kJ8;z$N9=J8$rJQ992DG=$G$"$k$,!"(B
-$B$=$NB0@-$O$I$N$h$&$K$7$F$bJQ99$9$k$3$H$,$G$-$J$$!#(B
-$B$=$N0lJ}$G!"?t;z$O$$$D$b?t;z$G$"$j!"%"%k%U%!%Y%C%H$O%"%k%U%!%Y%C%H$G!"(B
-$B?tCM$rI=8=$9$k$?$a$K(B'{\tt \#\$\%@}'$B$NMM$JJ8;z$r;HMQ$9$k$3$H$O$G$-$J$$!#(B
+10.は整数の10として読まれ、実数の10.0ではない。
+':'がパッケージマーカーとして予約されているので、
+'$|g:pcube|$のようにsymbolを構成するものとして使うとき、エスケープ化しなければ
+ならない。
+この制限は、文字':'の構文により強制されないが、
+アルファベット順やletterの意味を決定する属性により強制される。
+その文字の属性は、リーダから堅く結ばれる(hardwired)。
+したがって、{\bf copy-readtable}で新しいreadtableを作ったり、
+{\bf set-syntax-from-char}で文字のための構文的意味を組み直したりすることにより、
+ある文字の構文を変更可能であるが、
+その属性はどのようにしても変更することができない。
+その一方で、数字はいつも数字であり、アルファベットはアルファベットで、
+数値を表現するために'{\tt \#\$\%@}'の様な文字を使用することはできない。
 
-{\bf \%}$B$O!"(BEusLisp$B$G3HD%(Bread-macro$BJ8;z$H$J$C$F$$$k!#(B
-$BA^F~5-=R$K$h$j=q$+$l$??t<0$NA0$K(B\%$B$rIU$1$k$3$H$K$h$j!"(B
-$B$=$N?t<0$O(Blisp$BMQ$N<0$KJQ49$5$l$k!#(B
-$B6qBNNc$r>e$2$k$H!"(B
-{\tt \%(1 + 2 * 3 / 4.0)}$B$O(B
-{\tt (+ 1 (/ (* 2 3) 4.0))}$B$KJQ49$5$l!"7k2L$O(B{\tt 2.5}$B$H$J$k!#(B
-C$B$NMM$J4X?t8F=P$d9TNs;2>H$b!"(Blisp$B7A<0$KJQ49$5$l$k!#(B
-$B=>$C$F!"(B{\tt \%(sin(x) + a[1])}$B$O(B
-{\tt  (+ (sin x) (aref a 1))}$B$H$7$FI>2A$5$l$k!#(B
-1$B$D0J>e$N0z?t$r;}$D4X?t$d(B2$B<!850J>e$N9TNs$O!"(B
-{\tt func(a b c ...)}$B$d(B{\tt ary[1 2 3 ...]}$B$N$h$&$K5-=R$7!"(B
-{\tt func(a,b,c)}$B$d(B{\tt ary[1][2][3]}$B$N$h$&$K=q$+$J$$!#(B
-$BAjBPI=8=$d3d$jEv$F$b$^$?!"@5$7$/07$o$l$k!#(B
-$B$=$l$G!"(B{\tt \%(a $<$ b)}$B$O(B{\tt ($<$ a b)}$B$KJQ49$5$l!"(B
-{\tt \%(a[0] = b[0] * c[0])}$B$O(B 
-{\tt (setf (aref a 0) (* (aref b 0) (aref c 0)))}$B$H$7$FF@$i$l$k!#(B
-$BC1=c$J:GE,2=$O!"=EJ#$7$?4X?t8F=P$d9TNs;2>H$r$J$/$9$3$H$G$"$k!#(B
-{\tt \%(sin(x) + cos(x) / sin(x))}$B$O(B
-{\tt (let* ((temp (sin x))) (+ temp (/ (cos x) temp)))}$B$N$h$&$KJQ49$5$l$k!#(B
+{\bf \%}は、EusLispで拡張read-macro文字となっている。
+挿入記述により書かれた数式の前に\%を付けることにより、
+その数式はlisp用の式に変換される。
+具体例を上げると、
+{\tt \%(1 + 2 * 3 / 4.0)}は
+{\tt (+ 1 (/ (* 2 3) 4.0))}に変換され、結果は{\tt 2.5}となる。
+Cの様な関数呼出や行列参照も、lisp形式に変換される。
+従って、{\tt \%(sin(x) + a[1])}は
+{\tt  (+ (sin x) (aref a 1))}として評価される。
+1つ以上の引数を持つ関数や2次元以上の行列は、
+{\tt func(a b c ...)}や{\tt ary[1 2 3 ...]}のように記述し、
+{\tt func(a,b,c)}や{\tt ary[1][2][3]}のように書かない。
+相対表現や割り当てもまた、正しく扱われる。
+それで、{\tt \%(a $<$ b)}は{\tt ($<$ a b)}に変換され、
+{\tt \%(a[0] = b[0] * c[0])}は 
+{\tt (setf (aref a 0) (* (aref b 0) (aref c 0)))}として得られる。
+単純な最適化は、重複した関数呼出や行列参照をなくすことである。
+{\tt \%(sin(x) + cos(x) / sin(x))}は
+{\tt (let* ((temp (sin x))) (+ temp (/ (cos x) temp)))}のように変換される。
 
-$B%^%/%mJQ49$O(B\verb+#+$BJ8;z$,A0$KIU$$$F$$$k!#(B
-$B?tCM(B(integer)$B0z?t$O!"(B\verb+#+$B$H%^%/%mJQ49J8;z$N4V$KM?$($i$l$k!#(B
-$B$3$l$O!"$I$N?t;z(B(0 .. 9)$B$b%^%/%mJQ49J8;z$H$7$FDj5A$G$-$J$$$3$H$r0UL#$9$k!#(B
-$B%j!<%@$NI8=`$N%^%/%mJQ49J8;z$O<!$NDL$j!'(B
+マクロ変換は\verb+#+文字が前に付いている。
+数値(integer)引数は、\verb+#+とマクロ変換文字の間に与えられる。
+これは、どの数字(0 .. 9)もマクロ変換文字として定義できないことを意味する。
+リーダの標準のマクロ変換文字は次の通り：
 \begin{description}
-\item[{\tt \#nA(..)}] $B9TNs(B
-\item[{\tt \#B}] 2$B?J?t(B
-\item[{\tt \#D}] [$BEY(B]$B$+$i(B[$B%i%8%"%s(B]$B$X$NJQ49(B; \#D180 = 3.14
-\item[{\tt \#F(...)}] $B<B?t%Y%/%H%k(B
-\item[{\tt \#nF((..))}] $B<B?t9TNs(B; \#2F((..) (..)) is matrix
-\item[{\tt \#I(...)}] $B@0?t%Y%/%H%k(B
-\item[{\tt \#nI((...))}] $B@0?t9TNs(B
-\item[{\tt \#J(...)}] $B0lHL%*%V%8%'%/%H(B \#J(myclass ....); $B8E$$Dj5A(B
-\item[{\tt \#O}] 8$B?J?t(B
-\item[{\tt \#P}] $B%Q%9L>(B
-\item[{\tt \#R}] [$B%i%8%"%s(B]$B$+$i(B[$BEY(B]$B$X$NJQ49(B; \#R3.14 = 180.0
-\item[{\tt \#S(classname slotname1 val1 slotname2 val2 ...)}] $B9=B$BN(B ($B$"$i$f$k%*%V%8%'%/%H(B)
-\item[{\tt \#V(...)}] $B%Y%/%H%k(B \#V(vectorclass ...)
-\item[{\tt \#X}] 16$B?J?t(B
-\item[{\tt \#(...)}] $B%Y%/%H%k(B
-\item[{\tt \#n\#}] $B%i%Y%k;2>H(B
-\item[{\tt \#n=}] $B%i%Y%kDj5A(B
-\item[{\tt \#'}] $B4X?t(B; $B%3%s%Q%$%k%3!<%I$"$k$$$O(Blambda-closure
-\item[{\tt \#$\backslash$}] $BJ8;z(B
-\item[{\tt \#,}] $BFI$_9~$_;~$KI>2A(B
-\item[{\tt \#+}] $B>r7oFI$_$@$7(B(positive)
-\item[{\tt \#-}] $B>r7oFI$_$@$7(B(negative)
-\item[{\tt \#*}] $B%S%C%H%Y%/%H%k(B
-\item[{\tt \#:}] $B<}MF$5$l$F$J$$(Bsymbol
-\item[{\tt \#$|$...$|$\#}] $B%3%a%s%H(B; $BF~$l;R2DG=(B
+\item[{\tt \#nA(..)}] 行列
+\item[{\tt \#B}] 2進数
+\item[{\tt \#D}] [度]から[ラジアン]への変換; \#D180 = 3.14
+\item[{\tt \#F(...)}] 実数ベクトル
+\item[{\tt \#nF((..))}] 実数行列; \#2F((..) (..)) is matrix
+\item[{\tt \#I(...)}] 整数ベクトル
+\item[{\tt \#nI((...))}] 整数行列
+\item[{\tt \#J(...)}] 一般オブジェクト \#J(myclass ....); 古い定義
+\item[{\tt \#O}] 8進数
+\item[{\tt \#P}] パス名
+\item[{\tt \#R}] [ラジアン]から[度]への変換; \#R3.14 = 180.0
+\item[{\tt \#S(classname slotname1 val1 slotname2 val2 ...)}] 構造体 (あらゆるオブジェクト)
+\item[{\tt \#V(...)}] ベクトル \#V(vectorclass ...)
+\item[{\tt \#X}] 16進数
+\item[{\tt \#(...)}] ベクトル
+\item[{\tt \#n\#}] ラベル参照
+\item[{\tt \#n=}] ラベル定義
+\item[{\tt \#'}] 関数; コンパイルコードあるいはlambda-closure
+\item[{\tt \#$\backslash$}] 文字
+\item[{\tt \#,}] 読み込み時に評価
+\item[{\tt \#+}] 条件読みだし(positive)
+\item[{\tt \#-}] 条件読みだし(negative)
+\item[{\tt \#*}] ビットベクトル
+\item[{\tt \#:}] 収容されてないsymbol
+\item[{\tt \#$|$...$|$\#}] コメント; 入れ子可能
 \end{description}
 
-$B$$$/$D$+$N%j!<%@4X?t$O!"(B{\em eof-error-p, eof-value}$B$d(B
-{\em recursive-p}$B$N%Q%i%a!<%?$r;}$C$F$$$k!#(B
-$B:G=i$N(B2$B$D$N%Q%i%a!<%?$O!"%j!<%@$,(Bend-of-file$B$K=P2q$C$?$H$-$NF0:n$r@)8f$9$k!#(B
-{\em eof-error-p}$B$N%G%U%)%k%H$O!"(BT$B$G$"$k!#$3$l$O!"(Beof$B;~$N%(%i!<$N860x$H$J$k!#(B
-eof$B$NH/@8$rCN$j$?$+$C$?$j!"(Bsnatch control$B$K%7%9%F%`%(%i!<$rEO$7$?$/$J$$$J$i!"(B
-{\em eof-error-p}$B$K(BNIL$B$r;XDj$9$k$3$H!#(B
-$B$=$l$G!"FI$_9~$_$N:GCf$K(Beof$B$,8=$l$?$H$-!"%j!<%@$O%(%i!<%k!<%W$KF~$kBe$j$K(B
-{\em eof-value}$B$rJV$9!#(B
-{\em eof-value}$B$N%G%U%)%k%H$O!"(BNIL$B$G$"$k!#(B
-$B$=$N$?$a!"<B:]$K(BNIL$B$,FI$^$l$?$N$+(Beof$B$,8=$l$?$N$+H=JL$G$-$J$$!#(B
-$B$=$l$i$rH=JL$9$k$?$a$K$O!"%9%H%j!<%`$K7h$7$F8=$l$J$$CM$rM?$($k$3$H!#(B
-$B$=$N$h$&$JFC<l%G!<%?%*%V%8%'%/%H$r:n$k$K$O!"(B{\bf cons}$B$+(B{\bf gensym}$B$r(B
-$B;HMQ$9$k$3$H!#(B
+いくつかのリーダ関数は、{\em eof-error-p, eof-value}や
+{\em recursive-p}のパラメータを持っている。
+最初の2つのパラメータは、リーダがend-of-fileに出会ったときの動作を制御する。
+{\em eof-error-p}のデフォルトは、Tである。これは、eof時のエラーの原因となる。
+eofの発生を知りたかったり、snatch controlにシステムエラーを渡したくないなら、
+{\em eof-error-p}にNILを指定すること。
+それで、読み込みの最中にeofが現れたとき、リーダはエラーループに入る代りに
+{\em eof-value}を返す。
+{\em eof-value}のデフォルトは、NILである。
+そのため、実際にNILが読まれたのかeofが現れたのか判別できない。
+それらを判別するためには、ストリームに決して現れない値を与えること。
+そのような特殊データオブジェクトを作るには、{\bf cons}か{\bf gensym}を
+使用すること。
 
-{\em recursive-p}$B$O!"(Bread-macro$B4X?t$K$7$P$7$P;HMQ$5$l$k!#(B
-$B$=$l$O!"%j!<%@$r:F5"E*$K8F$S=P$9!#(B
-{\em recursive-p}$B$N(Bnon-NIL$BCM$O!"FI$_9~$_=hM}$,$I$3$+$G;O$^$C$F$$$F!"(B
-{\tt \#n=}$B$d(B{\tt \#n\#}$B$K$h$C$F%i%Y%kIU$1$5$l$k=q<0$NFI$_9~$_$N$?$a$K(B
-$BFbIt%F!<%V%k$r=i4|2=(B
-$B$9$Y$-$G$J$$$3$H$r%j!<%@$K9p$2$F$$$k!#(B
+{\em recursive-p}は、read-macro関数にしばしば使用される。
+それは、リーダを再帰的に呼び出す。
+{\em recursive-p}のnon-NIL値は、読み込み処理がどこかで始まっていて、
+{\tt \#n=}や{\tt \#n\#}によってラベル付けされる書式の読み込みのために
+内部テーブルを初期化
+すべきでないことをリーダに告げている。
 
 \begin{refdesc}
 
 \funcdesc{read}{\&optional stream (eof-error-p t) (eof-value nil) recursive-p}{
-s$BI=8=$r(B1$B$DFI$_9~$`!#(B}
+s表現を1つ読み込む。}
 
 \funcdesc{read-delimited-list}{delim-char \&optional stream recursive-p}{
-{\em delim-char}$B$G=*N;$9$k(Bs$BI=8=$rFI$_9~$`!#(B
-$B$3$l$O!"%3%s%^$G6h@Z$i$l$?%j%9%H$d(B
-{\tt \#$\backslash$]}$B$N$h$&$JFC<lJ8;z$G=*$k?tNs$rFI$`$?$a$KLrN)$D!#(B}
+{\em delim-char}で終了するs表現を読み込む。
+これは、コンマで区切られたリストや
+{\tt \#$\backslash$]}のような特殊文字で終る数列を読むために役立つ。}
 
 \funcdesc{read-line}{\&optional stream (eof-error-p t) (eof-value nil)}{
-{\tt \#$\backslash$newline}($B2~9T(B)$B$G=*N;$9$k(B1$B9T$rFI$_9~$`!#(B
-$BJV$5$l$?J8;zNs$K$O!":G8e$N2~9TJ8;z$r4^$^$J$$!#(B}
+{\tt \#$\backslash$newline}(改行)で終了する1行を読み込む。
+返された文字列には、最後の改行文字を含まない。}
 
 \funcdesc{read-char}{\&optional stream (eof-error-p t) (eof-value nil)}{
-1$BJ8;zFI$_9~$_!"$=$N@0?tI=8=$rJV$9!#(B}
+1文字読み込み、その整数表現を返す。}
 
 \funcdesc{read-from-string}{string \&optional (eof-error-p t) (eof-value nil)}{
-{\em string}$B$+$i(Bs$BI=8=$rFI$_9~$`!#(B
-$B:G=i$N(Bs$BI=8=$N$_FI$_9~$`$3$H$,$G$-$k!#(B
-$B$b$7!"J#?t$N(Bs$BI=8=$r;}$D(B{\em string}$B$+$i$NO"B3FI$_9~$_=hM}$,I,MW$G$"$k$J$i$P!"(B
-{\bf make-string-input-stream}$B$G:n$i$l$k(Bstring-stream$B$rMQ$$$k$3$H!#(B}
+{\em string}からs表現を読み込む。
+最初のs表現のみ読み込むことができる。
+もし、複数のs表現を持つ{\em string}からの連続読み込み処理が必要であるならば、
+{\bf make-string-input-stream}で作られるstring-streamを用いること。}
 
 \funcdesc{unread-char}{char \&optional stream}{
-{\em stream}$B$K(B{\em char}$B$rLa$9!#(B
-1$BJ8;z$r1[$($FO"B3$KLa$9$3$H$O$G$-$J$$!#(B}
+{\em stream}に{\em char}を戻す。
+1文字を越えて連続に戻すことはできない。}
 
 \funcdesc{peek-char}{\&optional stream (eof-error-p t) (eof-value nil)}{
-{\em stream}$B$+$i(B1$BJ8;z$rFI$_9~$`$,!"(B{\em stream}$B$N%P%C%U%!$+$i$=$NJ8;z$r:o=|$7$J$$!#(B
-$B$3$l$O(B{\bf read-char}$B$KB3$$$F(B{\bf unread-char}$B$r<B9T$7$?$b$N$H(B
-$BF1$8$G$"$k!#(B}
+{\em stream}から1文字を読み込むが、{\em stream}のバッファからその文字を削除しない。
+これは{\bf read-char}に続いて{\bf unread-char}を実行したものと
+同じである。}
 
 \funcdesc{y-or-n-p}{\&optional format-string \&rest args}{
-{\em format-string}$B$H(B{\em args}$B$r2hLL$KI=<($7$F!"(B``y$B$+(Bn$B$+(B''$B$r?R$M$k!#(B
-$BEz$($,(B``y''$B$^$?$O(B``n''$B$G;O$^$i$J$$>l9g!"<ALd$r7+$jJV$9!#(B
-y$B$J$i(BT$B$=$7$F(Bn$B$J$i(BNIL$B$rJV$9!#(B $B$=$l0J30$O5/$3$i$J$$!#(B}
+{\em format-string}と{\em args}を画面に表示して、``yかnか''を尋ねる。
+答えが``y''または``n''で始まらない場合、質問を繰り返す。
+yならTそしてnならNILを返す。 それ以外は起こらない。}
 
 \funcdesc{yes-or-no-p}{\&optional stream}{
-{\em format-string}$B$H(B{\em args}$B$r2hLL$KI=<($7$F!"(B``yes$B$+(Bno$B$+(B''$B$r?R$M$k!#(B
-$BEz$($,(B``yes''$B$^$?$O(B``no''$B$G$J$$>l9g!"<ALd$r7+$jJV$9!#(B
-yes$B$J$i(BT$B$=$7$F(Bno$B$J$i(BNIL$B$rJV$9!#(B $B$=$l0J30$O5/$3$i$J$$!#(B}
+{\em format-string}と{\em args}を画面に表示して、``yesかnoか''を尋ねる。
+答えが``yes''または``no''でない場合、質問を繰り返す。
+yesならTそしてnoならNILを返す。 それ以外は起こらない。}
 
 \end{refdesc}
 
-$B0J2<$K<($9(Breadtable$B$NA`:n4X?t$NCf$G!"(Breadtable$B$N%G%U%)%k%HCM$O(B
-$B%0%m!<%P%kJQ?t(B{\bf *readtable*}$B$NCM$G$"$k!#(B
+以下に示すreadtableの操作関数の中で、readtableのデフォルト値は
+グローバル変数{\bf *readtable*}の値である。
 
 \begin{refdesc}
 
 \funcdesc{readtable-p}{x}{
-{\em x}$B$,(Breadtable$B$J$i!"(BT$B$rJV$9!#(B}
+{\em x}がreadtableなら、Tを返す。}
 \funcdesc{copy-readtable}{\&optional from-readtable to-readtable}{
-{\em to-readtable}$B$,=q$+$l$F$$$J$1$l$P!"?7$7$$(Breadtable$B$r:n$k!#(B
-{\em from-readtable}$B$N$9$Y$F$N>pJs$,(B{\em to-readtable}$B$K0\$5$l$k!#(B
-$B4^$^$l$k>pJs$O!"(Bsyntax table, read-macro table$B$H(B
-dispatch-macro table$B$G$=$l$>$l(B256$B8D$NMWAG$r;}$D!#(B}
+{\em to-readtable}が書かれていなければ、新しいreadtableを作る。
+{\em from-readtable}のすべての情報が{\em to-readtable}に移される。
+含まれる情報は、syntax table, read-macro tableと
+dispatch-macro tableでそれぞれ256個の要素を持つ。}
 
 \funcdesc{set-syntax-from-char}
 {from-char to-char [from-readtable to-readtable]}
-{{\em from-readtable}$B$NCf$N(B{\em from-char}$B$N(Bsyntax$B$H(Bread-macro$BDj5A$r(B
-{\em to-readtable}$B$NCf$N(B{\em to-char}$B$K%3%T!<$9$k!#(B}
+{{\em from-readtable}の中の{\em from-char}のsyntaxとread-macro定義を
+{\em to-readtable}の中の{\em to-char}にコピーする。}
 
 \funcdesc{set-macro-character}{char func [non-teminating-p readtable]}{
-{\em char}$B$N(Bread-macro$B4X?t$H$7$F(B{\em func}$B$rDj5A$9$k!#(B}
+{\em char}のread-macro関数として{\em func}を定義する。}
 \funcdesc{get-macro-character}{char [readtable]}{
-{\em char}$B$N(Bread-macro$B4X?t$rJV$9!#(B}
+{\em char}のread-macro関数を返す。}
 \funcdesc{set-dispatch-macro-character}{dispchar char func [readtable]}{
-{\em dispchar}$B$H(B{\em char}$B$NAH$_9g$;$N(B
-dispatch read-macro$B4X?t$H$7$F(B{\em func}$B$rDj5A$9$k!#(B}
+{\em dispchar}と{\em char}の組み合せの
+dispatch read-macro関数として{\em func}を定義する。}
 \funcdesc{get-dispatch-macro-character}{dispchar char [readtable]}{
-{\em dispchar}$B$H(B{\em char}$B$NAH$_9g$;$N(B
-dispatch read-macro$B4X?t$rJV$9!#(B}
+{\em dispchar}と{\em char}の組み合せの
+dispatch read-macro関数を返す。}
 \end{refdesc}
 
 %
@@ -302,69 +302,69 @@ dispatch read-macro$B4X?t$rJV$9!#(B}
 
 \newpage
 
-\subsection{$B%W%j%s%?(B(printer)}
+\subsection{プリンタ(printer)}
 
-$B0J2<$K<($9$b$N$O!"%W%j%s%?$N9TF0$r@)8f$9$k$?$a$NFC<lJQ?t$G$"$k!#(B
+以下に示すものは、プリンタの行動を制御するための特殊変数である。
 
 \begin{description}
 
-\item[*print-case*] $B$3$NDj?t$,(B{\tt :downcase}$B$J$i!"(B
-$BA4$F$N(Bsymbol$B$O>.J8;z$G0u:~$5$l$k!#(B
-$B$7$+$7!"(Bsymbol$B$OFbItE*$KBgJ8;z$GI=8=$5$l$?$^$^$G$"$k!#(B
-\item[*print-circle*] $B:F5"E*;2>H$r;D$7$?%*%V%8%'%/%H$r0u:~$9$k!#(B
-\item[*print-object*] $BA4$F$N%*%V%8%'%/%H$N>\:Y$r0u:~$9$k!#(B
-\item[*print-structure*] {\tt \#}$B=q<0$r;H$C$F%*%V%8%'%/%H$r0u:~$9$k!#(B
-\item[*print-level*] $B?tNs$N0u:~2DG=?<$5(B
-\item[*print-length*] $B?tNs$N0u:~2DG=D9$5(B
-\item[*print-escape*] $B8=:_;HMQ$5$l$F$$$J$$!#(B
-\item[*print-pretty*] $B8=:_;HMQ$5$l$F$$$J$$!#(B
-\item[*print-base*] $B0u:~;~$N4p?t!(%G%U%)%k%H$O(B10$B?J?t(B
+\item[*print-case*] この定数が{\tt :downcase}なら、
+全てのsymbolは小文字で印刷される。
+しかし、symbolは内部的に大文字で表現されたままである。
+\item[*print-circle*] 再帰的参照を残したオブジェクトを印刷する。
+\item[*print-object*] 全てのオブジェクトの詳細を印刷する。
+\item[*print-structure*] {\tt \#}書式を使ってオブジェクトを印刷する。
+\item[*print-level*] 数列の印刷可能深さ
+\item[*print-length*] 数列の印刷可能長さ
+\item[*print-escape*] 現在使用されていない。
+\item[*print-pretty*] 現在使用されていない。
+\item[*print-base*] 印刷時の基数；デフォルトは10進数
 \end{description}
 
-$B:F5"E*;2>H$r;}$D%*%V%8%'%/%H$r0u:~$9$k$?$a$K$O!"(B
-$B:FEYFI$_La$7$,I,MW$J$?$a!"(B
-{\bf *print-circle*}$B$H(B
-{\bf *print-structure*}$B$rN>J}(BT$B$K@_Dj$7!"%*%V%8%'%/%H$r0u:~$9$k$3$H!#(B
-$B%f!<%6!<$,Dj5A$9$k$[$H$s$I$N%*%V%8%'%/%H$O:FFI$_9~$_2DG=$J=q<0$K(B
-$BI=<($5$l$k$,!"(B
-$B%/%i%9(B, $B%*%V%8%'%/%H%b%8%e!<%k$d%Q%C%1!<%8$r$=$NJ}K!$G(Bdump$B$9$k$3$H$O$G$-$J$$!#(B
-$B$J$<$J$i!"%/%i%9$H%*%V%8%'%/%H%b%8%e!<%k$O:FG[CVIT2DG=$J<B9T%3!<%I$r4^$_!"(B
-$B%Q%C%1!<%8$N:FFI$_$@$7$O!"9=@.$5$l$k(Bsymbol$BCf$K1F6A$,$"$k$+$i$G$"$k!#(B
+再帰的参照を持つオブジェクトを印刷するためには、
+再度読み戻しが必要なため、
+{\bf *print-circle*}と
+{\bf *print-structure*}を両方Tに設定し、オブジェクトを印刷すること。
+ユーザーが定義するほとんどのオブジェクトは再読み込み可能な書式に
+表示されるが、
+クラス, オブジェクトモジュールやパッケージをその方法でdumpすることはできない。
+なぜなら、クラスとオブジェクトモジュールは再配置不可能な実行コードを含み、
+パッケージの再読みだしは、構成されるsymbol中に影響があるからである。
 
 \begin{refdesc}
 
 \funcdesc{print}{obj \&optional stream}{
-{\bf prin1}$B$KB3$$$F(B{\bf terpri}$B$r9T$&!#(B}
+{\bf prin1}に続いて{\bf terpri}を行う。}
 
 \funcdesc{prin1}{obj \&optional stream}{
-$B=q<0$K1h$C$F(Bs$BI=8=$r(B1$B$D=PNO$9$k!#$=$N=PNO$O!"(B
-{\bf read}$B$K$h$C$F:FEYFI$_La$7$,2DG=$G$"$k!#(B
-$B=q<0$K$O!"%9%i%C%7%e!J%(%9%1!<%W!K$d0zMQId$r4^$s$G$$$k!#(B}
+書式に沿ってs表現を1つ出力する。その出力は、
+{\bf read}によって再度読み戻しが可能である。
+書式には、スラッシュ（エスケープ）や引用符を含んでいる。}
 
 \funcdesc{princ}{obj \&optional stream}{
-$B%(%9%1!<%W!J(Bescape$B!K$d0zMQId!J(Bquote$B!K$NDI2C(B(add)$B$,$J$$$3$H$r=|$$$F!"(B
-{\bf print}$B$HF1$8$G$"$k!#(B
-{\bf princ}$B$K$h$k%*%V%8%'%/%HI=<($O!"FI$_La$7$G$-$J$$!#(B
-$BNc$($P!"(B{\tt (princ 'abc)}$B$N=PNO$O!"(B{\tt (princ "abc")}$B$N=PNO$H(B
-$BF1$8$G$"$k$?$a!"%j!<%@$O$=$l$i$r6hJL$9$k$3$H$,$G$-$J$$!#(B} 
+エスケープ（escape）や引用符（quote）の追加(add)がないことを除いて、
+{\bf print}と同じである。
+{\bf princ}によるオブジェクト表示は、読み戻しできない。
+例えば、{\tt (princ 'abc)}の出力は、{\tt (princ "abc")}の出力と
+同じであるため、リーダはそれらを区別することができない。} 
 
 \funcdesc{terpri}{\&optional stream}{
-{\tt \#$\backslash$newline}($B2~9T(B)$B$r=PNO$7$F!"(B
-{\em stream}$B$r6u$K$9$k!#(B}
+{\tt \#$\backslash$newline}(改行)を出力して、
+{\em stream}を空にする。}
 
 \funcdesc{finish-output}{\&optional stream}{
-$B=PNO(B{\em stream}$B$r6u$K$9$k!#(B}
+出力{\em stream}を空にする。}
 
 \fundesc{princ-to-string}{x \&optional (l 16)}
 \funcdesc{prin1-to-string}{x \&optional (l 16)}
-{$BJ8;zNs$X$N=PNO%9%H%j!<%`$r:n$j!"(B{\em x}$B$r=q$-9~$`!#$=$7$F!"(B
-{\bf get-output-stream-string}$B$r<B9T$9$k!#(B}
+{文字列への出力ストリームを作り、{\em x}を書き込む。そして、
+{\bf get-output-stream-string}を実行する。}
 
 \funcdesc{format}{stream format-string \&rest args}{
-$\sim$A(ascii), $\sim$S(S-$BI=8=(B), $\sim$D(10$B?J?t(B),
-$\sim$X(16$B?J?t(B), $\sim$O(8$B?J?t(B), $\sim$C($BJ8;z(B), $\sim$F($B<B?tI=8=(B), $\sim$E($B;X?tI=8=(B),
-$\sim$G(general float), $\sim$V(dynamic number parameter), $\sim$T($B%?%V(B)
- $B$H(B$\sim$\% ($B2~9T(B)$B$N%U%)!<%^%C%H<1JL;R$N$_G'<1$9$k!#(B
+$\sim$A(ascii), $\sim$S(S-表現), $\sim$D(10進数),
+$\sim$X(16進数), $\sim$O(8進数), $\sim$C(文字), $\sim$F(実数表現), $\sim$E(指数表現),
+$\sim$G(general float), $\sim$V(dynamic number parameter), $\sim$T(タブ)
+ と$\sim$\% (改行)のフォーマット識別子のみ認識する。
 }
 \begin{verbatim}
        (format t "~s ~s ~a ~a ~10,3f~%" "abc" 'a#b "abc" 'a#b 1.2)
@@ -372,159 +372,159 @@ $\sim$G(general float), $\sim$V(dynamic number parameter), $\sim$T($B%?%V(B)
 \end{verbatim}
 
 \funcdesc{pprint}{obj \&optional (stream *standard-output*) (tab 0) (platen 75)}
-{{\em obj}$B$N:G8e$N6uGr$r=|$$$?$b$N$r@07AI=<($9$k!#(B.}
+{{\em obj}の最後の空白を除いたものを整形表示する。.}
 
 \funcdesc{print-functions}{file \&rest fns}{
-{\em file}$B$K(B{\em fns}$B$N4X?tDj5A$N(B"defun"$B=q<0$r=q$-=P$9!#(B}
+{\em file}に{\em fns}の関数定義の"defun"書式を書き出す。}
 
 \fundesc{write-byte}{integer stream}
 \fundesc{write-word}{integer stream}
 \funcdesc{write-long}{integer stream}{
-{\em integer}$B$r(B1, 2$B$^$?$O(B4$B%P%$%H$K$7$F=q$/!#(B}
+{\em integer}を1, 2または4バイトにして書く。}
 
 \funcdesc{spaces}{n \&optional stream}{
-$B6uGr$r(B{\em n}$B2s=PNO$9$k!#(B}
+空白を{\em n}回出力する。}
 %\fundesc{warning}{color format \&rest mesg}
 
 \macrodesc{pf}{func \&optional stream *standard-output*)}{
-$B4X?t(B{\em func}$B$r@07AI=<($9$k!#%3%s%Q%$%k$5$l$?4X?t$O!"0u:~$G$-$J$$!#(B}
+関数{\em func}を整形表示する。コンパイルされた関数は、印刷できない。}
 
 \funcdesc{pp-method}{class selector \&optional (stream *standard-output*)}
-{{\em class}$B%/%i%9$NCf$KDj5A$5$l$?(B{\em selector}$B%a%=%C%I$r@07AI=<($9$k!#(B}
+{{\em class}クラスの中に定義された{\em selector}メソッドを整形表示する。}
 \funcdesc{tprint}{obj tab \&optional (indent 0) (platen 79) (cpos 0)}
-{$BI=7A<0$G(B{\em obj}$B$r0u:~$9$k!#(B}
+{表形式で{\em obj}を印刷する。}
 
 \funcdesc{print-size}{obj}{
-$B0u:~$N$H$-$N(B{\em obj}$B$NBgBN$ND9$5$rJV$9!#(B}
+印刷のときの{\em obj}の大体の長さを返す。}
 
 
 \end{refdesc}
 
 \newpage
 
-\subsection{$B%W%m%;%94VDL?.$H%M%C%H%o!<%/(B\label{IPC}}
+\subsection{プロセス間通信とネットワーク\label{IPC}}
 
-EusLisp$B$O!"(B4$B<oN`$N(BIPC$B5!G=!J(B
-{\bf $B6&M-%a%b%j(B, $B%a%C%;!<%8%-%e!<(B, FIFO}$B$d(B{\bf $B%=%1%C%H(B}$B!K$rHw$($F$$$k!#(B
-\footnote{UNIX$B$K$*$1$kEAE}E*$J%W%m%;%94VDL?.5!9=$G$"$k%Q%$%W$O!"(B
-'fork'$B$H$NAH$_9g$;$G$$$D$b;HMQ$5$l$F$$$k!#(B
-EusLisp$B$O!"(B\ref{UnixProcess}$B@a$G@bL@$9$k(B{\bf piped-fork}$B4X?t$rHw$($F$$$k!#(B}
-$B0lHLE*$K!"$3$NL?Na$K$h$j@-G=$,0-$/$J$k!#(B
-% SunOS implements pipe by using $B%=%1%C%H(B in unix domain.
-$B$b$7!"%^%k%A%9%l%C%I5!G=$r;HMQ$9$k$J$i$P!"(B
-\ref{mthread}$B@a$K5-=R$5$l$F$$$kF14|4X?t$bDL?.<jCJ$H$7$F(B
-$BMQ$$$k$3$H$,$G$-$k!#(B
-$B$3$l$i$N5!G=$N$&$A$G;HMQ$G$-$k$b$N$O!"(BUnix$B$N%P!<%8%g%s$d9=@.$K0MB8$9$k!#(B
+EusLispは、4種類のIPC機能（
+{\bf 共有メモリ, メッセージキュー, FIFO}や{\bf ソケット}）を備えている。
+\footnote{UNIXにおける伝統的なプロセス間通信機構であるパイプは、
+'fork'との組み合せでいつも使用されている。
+EusLispは、\ref{UnixProcess}節で説明する{\bf piped-fork}関数を備えている。}
+一般的に、この命令により性能が悪くなる。
+% SunOS implements pipe by using ソケット in unix domain.
+もし、マルチスレッド機能を使用するならば、
+\ref{mthread}節に記述されている同期関数も通信手段として
+用いることができる。
+これらの機能のうちで使用できるものは、Unixのバージョンや構成に依存する。
 
-\subsubsection{$B6&M-%a%b%j(B}
-Euslisp$B$O!"(BSystem5$B$N(Bshmem$B$G$O$J$/!"(BSunOS$B$N(Bmmap$B$K$h$C$F6&M-%a%b%j$rDs6!$9$k!#(B
-$B6&M-%a%b%j$O!"(B{\bf map-file}$B4X?t$K$h$C$FG[CV$5$l$k!#(B
-{\bf map-file}$B$O!"(BEusLisp$B$N%W%m%;%9%a%b%j6u4VFb$K%U%!%$%k$rG[CV$7!"(B
-{\bf foreign-string}$B$N%$%s%9%?%s%9$rJV$9!#(B
-$B%G!<%?$O$3$N(Bforeign-string$B$KBP$9$kJ8;zNs4X?t$rMQ$$$k$3$H$K$h$j(B
-$B=q$-9~$_$HFI$_$@$7$,$G$-$k!#(B
-$B6&M-%a%b%j$O!"%7%9%F%`0MB8$N%Z!<%86-3&$KG[CV$5$l$k$N$G!"(B 
-$BG[CV%"%I%l%9$r;XDj$9$Y$-$G$O$J$$!#(B
-{\bf :share}$B$N%-!<%Q%i%a!<%?$,(BNIL$B$K@_Dj$5$l$F$$$k$+$^$?$O(B
-{\bf :private}$B$,(BT$B$K@_Dj$5$l$F$$$k%U%!%$%k$rG[CV$9$k$3$H$O!"(B
-$B%U%!%$%k$r%W%i%$%Y!<%H(B($BGSB>E*(B)$B$K%"%/%;%9$9$Y$-$G$"$k$3$H$r0UL#$9$k!#(B
-$B$7$+$7!"%a%b%j$N6&M-2=$NL\E*$+$i30$l$k$?$a!"(B
-{\bf :share}$B$N%G%U%)%k%HCM$O(BT$B$G$"$k!#(B
-2$B?M$N%f!<%6!<$G%U%!%$%k$,6&M-$5$l$k$H$-!"FI$_=q$-$N5v2D$O(B
-$BN>J}$N%f!<%6!<$K@53N$K@_Dj$5$l$J$1$l$P$J$i$J$$!#(B
-$B;DG0$J$3$H$K(BSunOS$B$O!"%M%C%H%o!<%/$rDL$7$F0[$J$C$?%o!<%/%9%F!<%7%g%s4V$N(B
-$B%U%!%$%k$N6&M-$r$r%5%]!<%H$7$F$$$J$$!#(B
+\subsubsection{共有メモリ}
+Euslispは、System5のshmemではなく、SunOSのmmapによって共有メモリを提供する。
+共有メモリは、{\bf map-file}関数によって配置される。
+{\bf map-file}は、EusLispのプロセスメモリ空間内にファイルを配置し、
+{\bf foreign-string}のインスタンスを返す。
+データはこのforeign-stringに対する文字列関数を用いることにより
+書き込みと読みだしができる。
+共有メモリは、システム依存のページ境界に配置されるので、 
+配置アドレスを指定すべきではない。
+{\bf :share}のキーパラメータがNILに設定されているかまたは
+{\bf :private}がTに設定されているファイルを配置することは、
+ファイルをプライベート(排他的)にアクセスすべきであることを意味する。
+しかし、メモリの共有化の目的から外れるため、
+{\bf :share}のデフォルト値はTである。
+2人のユーザーでファイルが共有されるとき、読み書きの許可は
+両方のユーザーに正確に設定されなければならない。
+残念なことにSunOSは、ネットワークを通して異なったワークステーション間の
+ファイルの共有ををサポートしていない。
 
-64$B%P%$%HD9$N%U%!%$%k$r(B2$B$D$N(BEusLisp$B$G6&M-$9$k%W%m%0%i%`Nc$r2<$K<($9!#(B
+64バイト長のファイルを2つのEusLispで共有するプログラム例を下に示す。
 
 \begin{verbatim}
-;; 64$B%P%$%H$N%U%!%$%k$r:n$k(B
+;; 64バイトのファイルを作る
 (with-open-file (f "afile" :direction :output)  (princ (make-string 64) f))
-;; $BG[CV$9$k(B
+;; 配置する
 (setq shared-string1 (map-file "afile" :direction :io))
 ;;
-;; $BB>$N%W%m%;%9$NCf$G(B
+;; 他のプロセスの中で
 (setq shared-string2 (map-file "afile" :direction :io))
 \end{verbatim}
 
-$B$=$N8e!"(B{\tt shared-string1}$B$K=q$+$l$?%G!<%?$O(B
-$B$9$0$K(B{\tt shared-string2}$B$X8=$l$k!#(B
-foreign string$B$X$N=q$-9~$_$O!"(B
-{\bf replace}$B$+(B{\bf setf}$B$K(B{\bf aref}$B$rAH$_9g$;$k$3$H$K$h$j2DG=$G$"$k!#(B
+その後、{\tt shared-string1}に書かれたデータは
+すぐに{\tt shared-string2}へ現れる。
+foreign stringへの書き込みは、
+{\bf replace}か{\bf setf}に{\bf aref}を組み合せることにより可能である。
 
 \begin{refdesc}
 \funcdesc{map-file}{filename \&key (:direction  :input) :length (:offset 0) (:share t)
 (:address 0)}{
-{\em filename}$B$H$$$&L>$N%U%!%$%k$r%a%b%j6u4V$KG[CV$9$k!#(B
-{\em filename}$B$O!"%m!<%+%k%U%!%$%k!"(BNFS$B$G%^%&%s%H$5$l$?%j%b!<%H%U%!%$%k!"(B
-$B$^$?$O(B{\tt /dev}$B$NCf$N%a%b%j%G%P%$%9$N$I$l$G$b2DG=$G$"$k!#(B
-$B$3$N4X?t$N7k2L$H$7$F(B{\bf foreign-string}$B$,JV$5$l$k!#$=$NMWAG$O!"(B{\bf aref}$B$K$h$C$F%"%/%;%92DG=$G$"$k!#(B{\tt map-file}$B$K$h$C$F(B{\em :direction=:input}$B$H$$$&>r7o$G(B
-$BG[CV$5$l$?(Bforeign-string$B$K%G!<%?$r=q$-9~$`$3$H$O!"(Bsegmentation fault$B$N860x$H$J$k!#(B}
+{\em filename}という名のファイルをメモリ空間に配置する。
+{\em filename}は、ローカルファイル、NFSでマウントされたリモートファイル、
+または{\tt /dev}の中のメモリデバイスのどれでも可能である。
+この関数の結果として{\bf foreign-string}が返される。その要素は、{\bf aref}によってアクセス可能である。{\tt map-file}によって{\em :direction=:input}という条件で
+配置されたforeign-stringにデータを書き込むことは、segmentation faultの原因となる。}
 \end{refdesc}
 
-\subsubsection{$B%a%C%;!<%8%-%e!<$H(BFIFO}
-$B%a%C%;!<%8%-%e!<$O!"(B{\bf make-msgq-input-stream}$B$+(B{\bf make-msgq-output-stream}$B$G(B
-$B:n$i$l$k!#(B
-$B$=$l$>$l%U%!%$%k%9%H%j!<%`$N%$%s%9%?%s%9$rJV$9!#(B
-$B$=$N%9%H%j!<%`$O!"%U%!%$%k$K@\B3$5$l$?B>$N%9%H%j!<%`$HF1$8$h$&$K!"(B
-$BFI$_$@$7$d=q$-9~$_=hM}$,5v2D$5$l$F$$$k!#(B
-$B%a%C%;!<%8%-%e!<$N%9%H%j!<%`$N(B{\tt fname}$B$O!":n$i$l$k$H$-$K!"(Bkey$B$+$i@_Dj$9$k!#(B
+\subsubsection{メッセージキューとFIFO}
+メッセージキューは、{\bf make-msgq-input-stream}か{\bf make-msgq-output-stream}で
+作られる。
+それぞれファイルストリームのインスタンスを返す。
+そのストリームは、ファイルに接続された他のストリームと同じように、
+読みだしや書き込み処理が許可されている。
+メッセージキューのストリームの{\tt fname}は、作られるときに、keyから設定する。
 
-FIFO$B$KBP$9$k%9%H%j!<%`$r:n$k$?$a$K!"(B
-$B:G=i$K(B{\bf unix:mknod}$B4X?t$G!"(B
-2$BHVL\$N0z?t$r(B{\em mode}={\tt \#o10000}$B$K@_Dj$7$?>e$G(B
-FIFO$B%N!<%I$r:n$j!"%N!<%^%k%U%!%$%k$H$7$F%*!<%W%s$9$k!#(B
-$B%a%C%;!<%8%-%e!<$H(BFIFO$B$O!"5!3#$N>e$G%m!<%+%k$K:n$i$l!"(B
-$B5!3#Fb$G$NDL?.%A%c%s%M%k$H$7$F$N$_M?$($i$l$k!#(B
+FIFOに対するストリームを作るために、
+最初に{\bf unix:mknod}関数で、
+2番目の引数を{\em mode}={\tt \#o10000}に設定した上で
+FIFOノードを作り、ノーマルファイルとしてオープンする。
+メッセージキューとFIFOは、機械の上でローカルに作られ、
+機械内での通信チャンネルとしてのみ与えられる。
 
-$B%a%C%;!<%8%-%e!<$H(BFIFO$B$O!"<+J,$N%W%m%;%9$,=*N;$7$?8e$G$5$($b(B
-$B%7%9%F%`$+$i:o=|$5$l$J$$!#(B
-$B:o=|$9$k$?$a$K$O!"(B{\bf unix:msgctl}$B$+(B{\bf ipcrm}$B%3%^%s%I$,I,MW$G$"$k!#(B
+メッセージキューとFIFOは、自分のプロセスが終了した後でさえも
+システムから削除されない。
+削除するためには、{\bf unix:msgctl}か{\bf ipcrm}コマンドが必要である。
 
 \begin{refdesc}
 \funcdesc{make-msgq-input-stream}{key \&optional (buffer-size 128)}{
-{\em key}$B$G<($9%a%C%;!<%8%-%e!<$K7R$,$kF~NO%U%!%$%k%9%H%j!<%`$rJV$9!#(B}
+{\em key}で示すメッセージキューに繋がる入力ファイルストリームを返す。}
 
 \funcdesc{make-msgq-output-stream}{key \&optional (buffer-size 128)}{
-{\em key}$B$G<($9%a%C%;!<%8%-%e!<$K7R$,$k=PNO%U%!%$%k%9%H%j!<%`$rJV$9!#(B}
+{\em key}で示すメッセージキューに繋がる出力ファイルストリームを返す。}
 
 \end{refdesc}
 
-\subsubsection{$B%=%1%C%H(B}
-$B%=%1%C%H$O!"B>$NDL?.<jCJ$KHf$Y$FB?:M$J5!G=$r;}$C$F$$$k!#(B
-$B$J$<$J$i!"(BUNIX$BNN0h$N69$$%[%9%HFb$H%$%s%?!<%M%C%HNN0h$N(B
-$B9-$$%M%C%H!<%o!<%/Fb$NN>J}$G5!G=$9$k$3$H$,$G$-$k$?$a$G$"$k!#(B
-$BDL?.;X8~$N%=%1%C%H(B(SOCK\_STREAM)$B$H@\B3$5$l$J$$(B
-$B%=%1%C%H(B(SOCK\_DGRAM)$B$N(B2$B$D$,%5%]!<%H$5$l$F$$$k!#(B
-$BN>J}$H$b$^$:(B{\bf make-socket-address}$B4X?t$G(B
-$B%=%1%C%H%"%I%l%9$N%*%V%8%'%/%H$r:n$i$J$1$l$P$J$i$J$$!#(B
-{\bf make-socket-address}$B$O!"(B{\tt socket-address}$B$N%$%s%9%?%s%9$rJV$9!#(B
-UNIX$BNN0h$G$O!"%=%1%C%H%"%I%l%9$K(BUNIX$B%U%!%$%k%7%9%F%`Fb$N%Q%9L>$r(B
-$BF~$l$k!#(B
-$B%$%s%?!<%M%C%HFb$G$O!"%=%1%C%H%"%I%l%9$K(B
-$B%[%9%HL>$H%]!<%HHV9f$HI,MW$J$i%W%m%H%3%kHV9f$r7k9g(B
-$B$7$?$b$N$rF~$l$k!#(B
-$B$b$7!"%]!<%HHV9f$,(B{\tt /etc/services}$B$KDj5A$5$l$F$$$l$P!"(B
-service$BL>$K$h$C$F;XDj$5$l$?(Bsymbol$B$rDL$7$F;2>H$5$l$k!#(B
-{\bf unix:getservbyname}$B4X?t$,(Bsymbol$B2=$5$l$?(Bservice$BL>$+$i%]!<%HHV9f$r(B
-$B0z$-=P$9$?$a$K;HMQ$5$l$k!#(B
-1024$B$h$j>.$5$$%]!<%HHV9f$O!"(Broot$B%f!<%6!<$N$?$a$KM=Ls$5$l$F$$$k!#(B
-$BFC8"$N$J$$%f!<%6!<$O!"(B1024$B$h$jBg$-$J%]!<%HHV9f$r8D?ME*$J%=%1%C%H$H$7$F(B
-$B;HMQ$9$k$3$H$r?d>)$9$k!#(B
+\subsubsection{ソケット}
+ソケットは、他の通信手段に比べて多才な機能を持っている。
+なぜなら、UNIX領域の狭いホスト内とインターネット領域の
+広いネットーワーク内の両方で機能することができるためである。
+通信指向のソケット(SOCK\_STREAM)と接続されない
+ソケット(SOCK\_DGRAM)の2つがサポートされている。
+両方ともまず{\bf make-socket-address}関数で
+ソケットアドレスのオブジェクトを作らなければならない。
+{\bf make-socket-address}は、{\tt socket-address}のインスタンスを返す。
+UNIX領域では、ソケットアドレスにUNIXファイルシステム内のパス名を
+入れる。
+インターネット内では、ソケットアドレスに
+ホスト名とポート番号と必要ならプロトコル番号を結合
+したものを入れる。
+もし、ポート番号が{\tt /etc/services}に定義されていれば、
+service名によって指定されたsymbolを通して参照される。
+{\bf unix:getservbyname}関数がsymbol化されたservice名からポート番号を
+引き出すために使用される。
+1024より小さいポート番号は、rootユーザーのために予約されている。
+特権のないユーザーは、1024より大きなポート番号を個人的なソケットとして
+使用することを推奨する。
 
-$B@\B3$5$l$?%9%H%j!<%`$O!"N>J}8~DL?.%A%c%s%M%k$H$7$F6!5k$5$l$k$,!"(B
-$B@\B33NDj=hM}$O!"F~NO!&=PNO$GJL!9$G$"$k!#(B
-$BJRJ}$,%5!<%P!<$H$7$F;2>H$5$l!"$b$&0lJ}$,%/%i%$%"%s%H$H$7$F;2>H$5$l$k!#(B
-$B%5!<%P!<$H$J$C$?C<(B(service access point)$B$O!":G=i$K3NDj$5$l$k!#(B
-$B$3$l$O!"(B{\bf make-socket-port}$B4X?t$K$h$j:n@.$5$l$k!#(B
-$B$3$N4X?t$O!"(B{\tt socket-port}$B$N%$%s%9%?%s%9$rJV$9!#(B
-$B%=%1%C%H%]!<%H$N%*%V%8%'%/%H$O!"(B{\bf make-server-socket-stream}$B$K$h$C$F(B
-$B#1$D$^$?$OJ#?t$N%/%i%$%"%s%H$+$i$N@\B3$r<u$1$k$?$a$K;HMQ$5$l$k!#(B
-{\bf make-server-socket-stream}$B$X$N8F$S=P$7$O!"%/%i%$%"%s%H$+$i$N(B
-$B@\B3MW5a$,<B:]$K5/$3$k$^$G<B9TBT$A>uBV$H$J$k!#(B
-$B%/%i%$%"%s%H$O!"%=%1%C%H%"%I%l%9$r;XDj$9$k$3$H$K$h$C$F(B
-{\bf make-client-socket-stream}$B$G%=%1%C%H%9%H%j!<%`(B
-$B$rJ#?t:n$k$3$H$,$G$-$k!#(B
+接続されたストリームは、両方向通信チャンネルとして供給されるが、
+接続確定処理は、入力・出力で別々である。
+片方がサーバーとして参照され、もう一方がクライアントとして参照される。
+サーバーとなった端(service access point)は、最初に確定される。
+これは、{\bf make-socket-port}関数により作成される。
+この関数は、{\tt socket-port}のインスタンスを返す。
+ソケットポートのオブジェクトは、{\bf make-server-socket-stream}によって
+１つまたは複数のクライアントからの接続を受けるために使用される。
+{\bf make-server-socket-stream}への呼び出しは、クライアントからの
+接続要求が実際に起こるまで実行待ち状態となる。
+クライアントは、ソケットアドレスを指定することによって
+{\bf make-client-socket-stream}でソケットストリーム
+を複数作ることができる。
 
 \begin{verbatim}
 ;;; an example of IPC through a socket stream:
@@ -538,23 +538,23 @@ service$BL>$K$h$C$F;XDj$5$l$?(Bsymbol$B$rDL$7$F;2>H$5$l$k!#(B
 (setq cstream (make-client-socket-stream caddr))
 \end{verbatim}
 
-$B%G!<%?%Y!<%9$d0\F0%m%\%C%H$N4D6-%7%_%e%l!<%?$N$h$&$J%"%W%j%1!<%7%g%s(B
-$B$G$O!"(B1$B$D$N%5!<%P!<$HJ#?t$N%/%i%$%"%s%H4V$N(B
-{\em multiple connection service}$B!JB?=E@\B3%5!<%S%9!K$,MW5a$5$l$k!#(B
-$B$3$N7?$N%5!<%P!<$O!"(B{\bf open-server}$B4X?t$K$h$j%W%m%0%i%`(B
-$B$9$k$3$H$,$G$-$k!#(B
-$B%+%l%s%H%[%9%HL>$HM?$($i$l$?%]!<%HHV9f$+$i(B
-{\bf open-server}$B$O!"@\B3MW5a$K$7$?$,$C$F%=%1%C%H%]!<%H(B(service access point)
-$B$r:n$k!#(B
-$B$3$N%]!<%H$OHsF14|$J$N$G!"(B
-{\bf open-server}$B$O<WCG$5$l$:!"D>$A$KJV?.$9$k!#(B
-$B$=$N8e!"@\B3MW5a$O$=$l$>$l(BEuslisp$B$N%a%$%s%k!<%W$rCfCG$7!"(B
-$B%=%1%C%H%9%H%j!<%`(B $B$,HsF14|$K:n@.$5$l$k!#(B
-$B$3$N%=%1%C%H%9%H%j!<%`$bHsF14|%b!<%I$GF/$/!#(B
-{\bf open-server}$B$N(B2$BHVL\$N0z$-?t$K$"$kHsF14|F~NO=hM}$O!"(B
-$B?7$7$$%G!<%?$,$3$N%9%H%j!<%`$K8=$l$?$H$-$O$$$D$G$b8F$S=P$5$l$k!#(B
-30$B0J>e$N@\B3$,2DG=$G$"$k$?$a!"F1;~$KB?$/$N%/%i%$%"%s%H$,%5!<%P!<$N(B
-$B%G!<%?$K%"%/%;%9$9$k$3$H$,$G$-$k!#(B
+データベースや移動ロボットの環境シミュレータのようなアプリケーション
+では、1つのサーバーと複数のクライアント間の
+{\em multiple connection service}（多重接続サービス）が要求される。
+この型のサーバーは、{\bf open-server}関数によりプログラム
+することができる。
+カレントホスト名と与えられたポート番号から
+{\bf open-server}は、接続要求にしたがってソケットポート(service access point)
+を作る。
+このポートは非同期なので、
+{\bf open-server}は遮断されず、直ちに返信する。
+その後、接続要求はそれぞれEuslispのメインループを中断し、
+ソケットストリーム が非同期に作成される。
+このソケットストリームも非同期モードで働く。
+{\bf open-server}の2番目の引き数にある非同期入力処理は、
+新しいデータがこのストリームに現れたときはいつでも呼び出される。
+30以上の接続が可能であるため、同時に多くのクライアントがサーバーの
+データにアクセスすることができる。
 
 \begin{verbatim}
 ;; server side
@@ -568,16 +568,16 @@ service$BL>$K$h$C$F;XDj$5$l$?(Bsymbol$B$rDL$7$F;2>H$5$l$k!#(B
 (read s)                                ;receive response
 \end{verbatim}
 
-$B3N<B$JDL?.%A%c%s%M%k$H$7$F6!5k$5$l$k(B{\it $B@\B3;X8~(B} $B%9%H%j!<%`$HBP>HE*$K(B
-{\it $BHs@\B3(B} $B%=%1%C%H$O!"IT3N<B$JDL?.%A%c%s%M%k$G$"$k!#(B
-$B%a%C%;!<%8$,$J$/$J$C$?$j!"=EJ#$7$?$j!"8N>c$7$?$j$9$k2DG=@-$,$"$k!#(B
-$B$7$+$7$J$,$i!"(B{\it $BHs@\B3(B} $B%=%1%C%H$O!"$=$l$>$l$N@\B3$K%U%!%$%k%G%#%9%/%j%W%?$r(B
-$B3d$jEv$F$kI,MW$,L5$$$7!"(B
-$B$^$?!"%G!<%?$d%P%C%U%!$N%*!<%P!<%U%m!<$NFI$_9~$_$r$7$J$$%l%7!<%P!<$G$5$((B
-$BAw?.=hM}$rCfCG$9$k$3$H$,$G$-$J$$$H$$$&MxE@$,$"$k!#(B
+確実な通信チャンネルとして供給される{\it 接続指向} ストリームと対照的に
+{\it 非接続} ソケットは、不確実な通信チャンネルである。
+メッセージがなくなったり、重複したり、故障したりする可能性がある。
+しかしながら、{\it 非接続} ソケットは、それぞれの接続にファイルディスクリプタを
+割り当てる必要が無いし、
+また、データやバッファのオーバーフローの読み込みをしないレシーバーでさえ
+送信処理を中断することができないという利点がある。
 
-$BHs@\B3%=%1%C%H$r:n$k$?$a$K$O!"0J2<$NL?Na$r;HMQ$9$k!#(B
-$B%a%C%;!<%8$O(B{\bf unix:sendto}$B$H(B{\bf unix:recvfrom}$B$K$h$C$FJQ49$5$l$k!#(B
+非接続ソケットを作るためには、以下の命令を使用する。
+メッセージは{\bf unix:sendto}と{\bf unix:recvfrom}によって変換される。
 \begin{verbatim}
 ;;; receiver side
 (setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2001))
@@ -601,148 +601,148 @@ service$BL>$K$h$C$F;XDj$5$l$?(Bsymbol$B$rDL$7$F;2>H$5$l$k!#(B
 \begin{refdesc}
 
 \funcdesc{make-socket-address}{\&key :domain :pathname :host :port :proto :service}{
-$B%=%1%C%H%"%I%l%9$N%*%V%8%'%/%H$r:n$k!#(B}
+ソケットアドレスのオブジェクトを作る。}
 
-\funcdesc{make-socket-port}{sockaddr}{$B%5!<%P!<B&$N%=%1%C%H%]!<%H$r:n$k!#(B
-$B$3$N4X?t$O!"%/%i%$%"%s%H$H$N@\B3$r3NN)$9$k$?$a$K;HMQ$5$l$k!#(B}
+\funcdesc{make-socket-port}{sockaddr}{サーバー側のソケットポートを作る。
+この関数は、クライアントとの接続を確立するために使用される。}
 
 \funcdesc{make-server-socket-stream}{sockport \&optional (size 100)}{
-$B%/%i%$%"%s%H$+$i$N@\B3MW5a$r<u$1$F!"APJ}8~%9%H%j!<%`$rJV$9!#(B}
+クライアントからの接続要求を受けて、双方向ストリームを返す。}
 
 \funcdesc{make-client-socket-stream}{sockaddr \&optional (size 100)}{
-$B%5!<%P!<$N%]!<%H$H@\B3$r$7!"APJ}8~%9%H%j!<%`$rJV$9!#(B}
+サーバーのポートと接続をし、双方向ストリームを返す。}
 
 \funcdesc{open-server}{port remote-func}{
-$B%$%s%?!<%M%C%HNN0hFb$G%[%9%HL>$H(B{\em port}$B$G;XDj$5$l$k%=%1%C%H%]!<%H$r(B
-$B=`Hw$7!"HsF14|$K@\B3MW5a$rBT$D!#(B
-$B@\B3$,MW5a$5$l$?$H$-!"$=$l$r<u$1?7$7$$%=%1%C%H%9%H%j!<%`$,%*!<%W%s$5$l$k!#(B
-$B%=%1%C%H%]!<%H$K%a%C%;!<%8$,E~Ce$7$?$H$-!"(B{\em remote-func}$B$O!"(B
-$B%=%1%C%H%]!<%H$r0z$-?t$H$7$F8F$S=P$5$l$k!#(B}
+インターネット領域内でホスト名と{\em port}で指定されるソケットポートを
+準備し、非同期に接続要求を待つ。
+接続が要求されたとき、それを受け新しいソケットストリームがオープンされる。
+ソケットポートにメッセージが到着したとき、{\em remote-func}は、
+ソケットポートを引き数として呼び出される。}
 
 \funcdesc{connect-server}{host port}{
-{\bf make-socket-address}$B$H(B{\bf make-client-socket-stream}$B$rO"B3E*$K8F$S=P$7$r(B
-$B9T$&$?$a$N4X?t$G$"$k!#(B
-{\em host}$B$H(B{\em port}$B$G;XDj$5$l$k%=%1%C%H%9%H%j!<%`$rJV$9!#$3$N%=%1%C%H%9%H%j!<%`(B
-$B$O!"%/%i%$%"%s%H$,%5!<%P!<$HDL?.$r9T$&$?$a$N$b$N$G$"$k!#(B
-$B%]!<%H$O!"%$%s%?!<%M%C%HNN0hFbMQ$K:n$i$l$k!#(B}
+{\bf make-socket-address}と{\bf make-client-socket-stream}を連続的に呼び出しを
+行うための関数である。
+{\em host}と{\em port}で指定されるソケットストリームを返す。このソケットストリーム
+は、クライアントがサーバーと通信を行うためのものである。
+ポートは、インターネット領域内用に作られる。}
 
 \end{refdesc}
 
-\subsection{$BHsF14|F~=PNO(B}
+\subsection{非同期入出力}
 
 \begin{refdesc}
 
 \funcdesc{select-stream}{stream-list timeout}{
-{\em stream-list}$B$NCf$G!"F~NO=hM}$,=`Hw$5$l$F$$$k%9%H%j!<%`$r8+$D$1%j%9%H$GJV$9!#(B
-$B$b$7!"(B{\em timeout}$BIC$,7P$D$^$G$K$I$N%9%H%j!<%`$b=`Hw$,=PMh$J$$$H$-$O!"(B
-NIL$B$rJV$9!#(B
-{\bf select-stream}$B$O!"F~NO%9%H%j!<%`$N%j%9%H$+$i%"%/%F%#%V$J%9%H%j!<%`(B
-$B$rA*$V$H$-$KLrN)$D!#$=$N%9%H%j!<%`$G$O!"F~NO=hM}$,HsF14|$G2DG=$H$J$k!#(B
-{\em timeout}$B$O!"A*Br=hM}$,<:GT$9$k$^$G$N;~4V$r<($9!#(B
-$B$3$l$O!"<B?t$G$b$h$$!#(B
-$B$b$7!"(B{\em timeout}$B$N;XDj$,$J$$$H$-$O!":GDc#1$D$N%9%H%j!<%`$+$iF~NO$,E~Ce$9$k$^$G(B
-{\bf select-stream}$B$OB3$1$i$l$k!#(B
-$B$b$7!"(B{\em timeout}$B$,;XDj$5$l$I$N%9%H%j!<%`$+$i$bF~NO$,8=$l$J$+$C$?$J$i$P!"(B
-{\bf select-stream}$B$O<:GT$7(BNIL$B$rJV$9!#(B}
+{\em stream-list}の中で、入力処理が準備されているストリームを見つけリストで返す。
+もし、{\em timeout}秒が経つまでにどのストリームも準備が出来ないときは、
+NILを返す。
+{\bf select-stream}は、入力ストリームのリストからアクティブなストリーム
+を選ぶときに役立つ。そのストリームでは、入力処理が非同期で可能となる。
+{\em timeout}は、選択処理が失敗するまでの時間を示す。
+これは、実数でもよい。
+もし、{\em timeout}の指定がないときは、最低１つのストリームから入力が到着するまで
+{\bf select-stream}は続けられる。
+もし、{\em timeout}が指定されどのストリームからも入力が現れなかったならば、
+{\bf select-stream}は失敗しNILを返す。}
 
 \macrodesc{def-async}{stream function}{
-{\em stream}$B$K%G!<%?$,E~Ce$7$?$H$-$K8F$S=P$5$l$k(B{\em function}
-$B$rDj5A$9$k!#(B{\em stream}$B$O!"%U%!%$%k%9%H%j!<%`$+%=%1%C%H%9%H%j!<%`$N$I$A$i$+$G$"$k!#(B
-$B%U%!%$%k%9%H%j!<%`$K%G!<%?$,Mh$?$H$-Kt$O%=%1%C%H%]!<%H$K@\B3MW5a$,8=$l$?$H$-!"(B
-$B$=$N%9%H%j!<%`$r0z$-?t$H$7$F(B{\em function}$B$,8F$S=P$5$l$k!#(B
-$B$3$N%^%/%m$O!"(BSIGIO $B%O%s%I%i!<$H$7$FAuHw$5$l!"%f!<%6!<$+$iM?$($i$l$k(B
-$B<B:]$NF~NO=hM}$r<B9T$9$k$?$a$N(B{\em function}$B$KCV$-49$($i$l$k!#(B
-$B$=$7$F!"(B{\em stream}$B$,FI$_9~$_2DG=$H$J$C$?$H$-!"HsF14|$K(BSIGIO$B$rH/$9$k(B
-$B$?$a$K(B{\em stream}$B$K4X$7$F(B{\bf unix:fnctl}$B$,;HMQ$5$l$k!#(B}
+{\em stream}にデータが到着したときに呼び出される{\em function}
+を定義する。{\em stream}は、ファイルストリームかソケットストリームのどちらかである。
+ファイルストリームにデータが来たとき又はソケットポートに接続要求が現れたとき、
+そのストリームを引き数として{\em function}が呼び出される。
+このマクロは、SIGIO ハンドラーとして装備され、ユーザーから与えられる
+実際の入力処理を実行するための{\em function}に置き換えられる。
+そして、{\em stream}が読み込み可能となったとき、非同期にSIGIOを発する
+ために{\em stream}に関して{\bf unix:fnctl}が使用される。}
 
 \end{refdesc}
 
 \newpage
 
-\subsection{\label{Pathnames}$B%Q%9L>(B}
+\subsection{\label{Pathnames}パス名}
 
-$B%Q%9L>$O!"(BOS$B$K0MB8$7$J$$$h$&$K%U%!%$%kL>$r2r@O$"$k$$$O9=@.$9$kJ}K!$H$7$F(B
-$BM?$($i$l$k$b$N$G$"$k!#(B
-$BE57?E*$J%Q%9L>$O!"<!$N$h$&$J9=@.$G@.$jN)$C$F$$$k$H2>Dj$5$l$F$$$k!#(B
-host:device/directory1/.../directory-n/name.type.version$B!#(B
-Euslisp$B$O!"(BUNIX$B$N>e$GF0:n$7$F$$$k8B$j!"%[%9%H!&%G%P%$%9!&%P!<%8%g%s$rL5;k$9$k!#(B
-{\bf pathname}$B4X?t$O!"J8;zNs$r%G%#%l%/%H%jMWAG!&L>A0!&7?$KJ,2r$7!"%Q%9L>(B
-$B%*%V%8%'%/%H$rJV$9!#$=$N%Q%9L>$O!"(B{\tt \#P}$B$r@hF,$K$D$1$?J8;zNs$H$7$FI=<($5$l$k!#(B
+パス名は、OSに依存しないようにファイル名を解析あるいは構成する方法として
+与えられるものである。
+典型的なパス名は、次のような構成で成り立っていると仮定されている。
+host:device/directory1/.../directory-n/name.type.version。
+Euslispは、UNIXの上で動作している限り、ホスト・デバイス・バージョンを無視する。
+{\bf pathname}関数は、文字列をディレクトリ要素・名前・型に分解し、パス名
+オブジェクトを返す。そのパス名は、{\tt \#P}を先頭につけた文字列として表示される。
 
 
 \begin{refdesc}
 
 \funcdesc{pathnamep}{name}{
-$B$b$7(B{\em name}$B$,%Q%9L>$J$i$P!"(BT$B$rJV$9!#(B}
+もし{\em name}がパス名ならば、Tを返す。}
 
 \funcdesc{pathname}{name}{
-{\em name}$B$O%Q%9L>$^$?$OJ8;zNs$G!"%Q%9L>$KJQ49$5$l$k!#(B
-$B:G8e$NL>A0$,%G%#%l%/%H%jL>$r<($9$?$a$K(B{\em name}$B$N:G8e$K(B"/"$B$r$D$1$k$3$H$r(B
-$BK:$l$J$$$3$H!#(B
-$B5UJQ49$O(B{\bf namestring}$B$G<B8=$5$l$k!#(B}
+{\em name}はパス名または文字列で、パス名に変換される。
+最後の名前がディレクトリ名を示すために{\em name}の最後に"/"をつけることを
+忘れないこと。
+逆変換は{\bf namestring}で実現される。}
 
 \funcdesc{pathname-directory}{path}{
-{\em path}$B$+$i%G%#%l%/%H%jL>$N%j%9%H$rJV$9!#(B
-"/"$B%G%#%l%/%H%j$O(B:ROOT$B$HI=8=$5$l$k!#(B
-{\em path}$B$O!"J8;zNs$"$k$$$O%Q%9L>$G$"$k!#(B}
+{\em path}からディレクトリ名のリストを返す。
+"/"ディレクトリは:ROOTと表現される。
+{\em path}は、文字列あるいはパス名である。}
 
 \funcdesc{pathname-name}{path}{
-{\em path}$B$+$i%U%!%$%kL>$NItJ,$rJV$9!#(B
-{\em path}$B$O!"J8;zNs$"$k$$$O%Q%9L>$G$"$k!#(B}
+{\em path}からファイル名の部分を返す。
+{\em path}は、文字列あるいはパス名である。}
 
 \funcdesc{pathname-type}{path}{
-{\em path}$B$+$i%U%!%$%k$N7?$NItJ,$r<h$j=P$9!#(B
-{\em path}$B$O!"J8;zNs$"$k$$$O%Q%9L>$G$"$k!#(B}
+{\em path}からファイルの型の部分を取り出す。
+{\em path}は、文字列あるいはパス名である。}
 
 \funcdesc{make-pathname}{\&key :host :device :directory :name :type :version
 defaults}{
-{\em directiory},{\em name}$B$H(B{\em type}$B$+$i?7$7$$%Q%9L>$r:n$k!#(B
-UNIX$B>e$G$O!"B>$N%Q%i%a!<%?$OL5;k$5$l$k!#(B}
+{\em directiory},{\em name}と{\em type}から新しいパス名を作る。
+UNIX上では、他のパラメータは無視される。}
 
 \fundesc{merge-pathnames}{name
 \&optional (defaults *default-pathname-defaults*)}
 \funcdesc{namestring}{path}{
-{\em path}$B$NJ8;zNsI=8=$rJV$9!#(B}
+{\em path}の文字列表現を返す。}
 \fundesc{parse-namestring}{name}
 \funcdesc{truename}{path}{
-{\em path}$B$GL>A0IU$1$5$l$F$$$k%U%!%$%k$N@dBP%Q%9L>$r8+$D$1$k!#(B}
+{\em path}で名前付けされているファイルの絶対パス名を見つける。}
 \end{refdesc}
 \newpage
 
-\subsection{$B%U%!%$%k%7%9%F%`%$%s%?!<%U%'!<%9(B}
+\subsection{ファイルシステムインターフェース}
 \begin{refdesc}
 
 \funcdesc{probe-file}{path}{
-{\em path}$B$H$$$&L>$N%U%!%$%k$,$"$k$+$I$&$+$r%A%'%C%/$9$k!#(B}
+{\em path}という名のファイルがあるかどうかをチェックする。}
 \funcdesc{file-size}{path}{
-{\em path}$B$H$$$&L>$N%U%!%$%k$N%5%$%:$r%P%$%H?t$GJV$9!#(B}
+{\em path}という名のファイルのサイズをバイト数で返す。}
 \funcdesc{directory-p}{path}{
-{\em path}$B$,%G%#%l%/%H%j$J$i$P!"(BT$B$rJV$9!#(B
-$B$=$&$G$J$+$C$?$H$-!J(B{\em path}$B$,B8:_$7$J$+$C$?$H$-$r4^$a$k!K(B
-$B$O(BNIL$B$rJV$9!#(B}
+{\em path}がディレクトリならば、Tを返す。
+そうでなかったとき（{\em path}が存在しなかったときを含める）
+はNILを返す。}
 \funcdesc{find-executable}{file}{U
-{\em file}$B$H$$$&L>$N(BUNIX$B%3%^%s%I$rC5$7!"%U%k%Q%9L>$GJV$9!#(B
-{\bf find-executable}$B$O!"<+J,$N(Bpath-list$B$+$i<B9T$G$-$k%U%!%$%k$rC5$9(B
-UNIX$B$N(Bwhich$B%3%^%s%I$H$[$H$s$IF1$84X?t$G$"$k!#(B}
+{\em file}という名のUNIXコマンドを探し、フルパス名で返す。
+{\bf find-executable}は、自分のpath-listから実行できるファイルを探す
+UNIXのwhichコマンドとほとんど同じ関数である。}
 
 \funcdesc{file-write-date}{file}{
-{\em file}$B$,:G8e$KJQ99$5$l$?F|;~$r@0?tI=8=$GJV$9!#(B
+{\em file}が最後に変更された日時を整数表現で返す。
 {\tt (unix:asctime (unix:localtime (file-write-date {\em file})))}
-$B$GJ8;zNsI=8=$,F@$i$l$k!#(B}
+で文字列表現が得られる。}
 
 \funcdesc{file-newer}{new old}{
-$B$b$7!"(B{\em new}$B%U%!%$%k$,(B{\em old}$B%U%!%$%k$h$j$b:G6a$KJQ99$5$l$F$$$k$J$i$P!"(B
-T$B$rJV$9!#(B}
+もし、{\em new}ファイルが{\em old}ファイルよりも最近に変更されているならば、
+Tを返す。}
 
 \funcdesc{object-file-p}{file}{
-$B$b$7!"(B{\em file}$B$,%X%C%@!<Fb$N%U%!%$%k$N(Bmagic number$B$r8+$k$3$H$K$h$j(B
-$B%*%V%8%'%/%H%U%!%$%k$G$"$C$?$J$i$P!"(BT$B$rJV$9!#(B}
+もし、{\em file}がヘッダー内のファイルのmagic numberを見ることにより
+オブジェクトファイルであったならば、Tを返す。}
 
 \funcdesc{directory}{\&optional (path ".")}{
-{\em path}$B$NCf$NA4$F$N%U%!%$%k$N%j%9%H$r:n$k!#(B}
+{\em path}の中の全てのファイルのリストを作る。}
 
 \funcdesc{dir}{\&optional (dir ".")}{
-{\em dir}$B$G;XDj$5$l$?%G%#%l%/%H%jFb$N%U%!%$%kL>$rI=<($9$k!#(B }
+{\em dir}で指定されたディレクトリ内のファイル名を表示する。 }
 
 \end{refdesc}
 

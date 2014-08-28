@@ -1,304 +1,304 @@
-\section{symbol$B$H%Q%C%1!<%8(B}
-\markright{\arabic{section}. Symbol$B$H%Q%C%1!<%8(B}
+\section{symbolとパッケージ}
+\markright{\arabic{section}. Symbolとパッケージ}
 
 \subsection{symbol}
-symbol$B$O!"$$$D$G$bM#0l$G$"$k$3$H$,J]>Z$5$l!"%Q%C%1!<%8$K<}MF$5$l$k!#(B
-1$B$D$N%Q%C%1!<%8$N$J$+$K!"$=$NB>$N(B
-symbol$B$H$7$F$*$J$8(Bprint-name$B$r;}$C$F$$$k$3$H$O$"$k$,!"(Bsymbol$B<+BN$,%3%T!<$5$l$k$3$H$O$J$$!#(B
-symbol$B$,%j!<%@$KFI$^$l$k$H$-!"(Bsymbol$B%*%V%8%'%/%H$O!"<+F0E*$K@8@.$5$l!"(B
-1$B$D$N%Q%C%1!<%8$K<}MF$5$l$k!#(B
-$B$=$N%Q%C%1!<%8$O!"%Q%C%1!<%8L>$K%3%m%s!J!'!K$rIU$12C$($?@\F,8l$K$h$C$F(B
-$B5-$9$3$H$,$G$-$k!#(B
-$B$=$N$h$&$J%Q%C%1!<%8@\F,8l$,$J$$$J$i$P!"(Bsymbol$B$O(B{\bf lisp:*package*}
-$B$NCM$K$"$k<g$J%Q%C%1!<%8$K<}MF$5$l$k!#(B
-$BA4$F$N(Bsymbol$B$O!"(B1$B$D$N%[!<%`%Q%C%1!<%8$r;}$C$F$$$k!#(B
-$B$b$7(Bsymbol$B$,$=$N$h$&$J%[!<%`%Q%C%1!<%8$r;}$C$F$$$J$$$J$i$P!"(B
-$B<}MF$5$l$F$$$J$$(Bsymbol$B$H8@$o$l$k!#(B
-$B<}MF$5$l$F$$$J$$(Bsymbol$B$O!"(B{\bf gensym}$B$d(B{\bf make-symbol}$B4X?t$K$h$C$F(B
-$B:n$k$3$H$,$G$-!"I=<($N$H$-$O!"(B"{\tt \#:}"$B@\F,8l$,$D$1$i$l$k!#(B
-$B$3$l$i$N(Bsymbol$B$O<}MF$5$l$F$$$J$$$N$G!"$=$N$h$&$J(B2$B$D$N(Bsymbol$B$,F1$8(B
-print-name$B$r;}$C$F$$$?>l9g!"Ey$7$$$3$H$,J]>Z$5$l$J$$!#(B
+symbolは、いつでも唯一であることが保証され、パッケージに収容される。
+1つのパッケージのなかに、その他の
+symbolとしておなじprint-nameを持っていることはあるが、symbol自体がコピーされることはない。
+symbolがリーダに読まれるとき、symbolオブジェクトは、自動的に生成され、
+1つのパッケージに収容される。
+そのパッケージは、パッケージ名にコロン（：）を付け加えた接頭語によって
+記すことができる。
+そのようなパッケージ接頭語がないならば、symbolは{\bf lisp:*package*}
+の値にある主なパッケージに収容される。
+全てのsymbolは、1つのホームパッケージを持っている。
+もしsymbolがそのようなホームパッケージを持っていないならば、
+収容されていないsymbolと言われる。
+収容されていないsymbolは、{\bf gensym}や{\bf make-symbol}関数によって
+作ることができ、表示のときは、"{\tt \#:}"接頭語がつけられる。
+これらのsymbolは収容されていないので、そのような2つのsymbolが同じ
+print-nameを持っていた場合、等しいことが保証されない。
 
-$B$U$D$&!"(Blisp$B%j!<%@$,(Bsymbol$B$K=P2q$C$?$H$-!"%j!<%@$O<+F0E*$K(B
-symbol$B$N(Bprint-name$BJ8;zNs$rBgJ8;z$KJQ49$9$k!#(B
-$B$7$?$,$C$F!"Nc$($P(B{\tt (symbol-name 'car)}$B$HF~NO$7$?$H$9$k$H!"(B
-EusLisp$B$O!"(B{\tt "car"}$B$NBe$j$K(B{\tt "CAR"}$B$HEz$($k!#(B
-{\tt (make-symbol "car")}$B$O!"(B{\tt car}$B$d(B{\tt CAR}$B$NBe$j$K(B$|${\tt car}$|$
-$B$rJV$9!#(B
-$B$b$7!">.J8;z$+$i9=@.$5$l$k(Bsymbol$B$r%j!<%@$K:n$i$;$?$$>l9g!"(B
-$\backslash$$B$d(B$|...|$$B$N$h$&$J%(%9%1!<%W$rMQ$$$k$3$H!#(B
+ふつう、lispリーダがsymbolに出会ったとき、リーダは自動的に
+symbolのprint-name文字列を大文字に変換する。
+したがって、例えば{\tt (symbol-name 'car)}と入力したとすると、
+EusLispは、{\tt "car"}の代りに{\tt "CAR"}と答える。
+{\tt (make-symbol "car")}は、{\tt car}や{\tt CAR}の代りに$|${\tt car}$|$
+を返す。
+もし、小文字から構成されるsymbolをリーダに作らせたい場合、
+$\backslash$や$|...|$のようなエスケープを用いること。
 
 \begin{refdesc}
 
-\funcdesc{symbolp}{object}{ {\em object}$B$,(B
-$B%/%i%9(Bsymbol$B$+$=$N%5%V%/%i%9$N%$%s%9%?%s%9$G$"$C$?$J$i$P!"(BT$B$rJV$9!#(B}
+\funcdesc{symbolp}{object}{ {\em object}が
+クラスsymbolかそのサブクラスのインスタンスであったならば、Tを返す。}
 
 \funcdesc{symbol-value}{symbol}{
-{\em symbol}$B$NFC<lCM$rF@$k!#%m!<%+%kJQ?tCM$O!"$3$N4X?t$G$O<h$j=P$9(B
-$B$3$H$O$G$-$J$$!#(B}
+{\em symbol}の特殊値を得る。ローカル変数値は、この関数では取り出す
+ことはできない。}
 
 \funcdesc{symbol-function}{symbol}{
-{\em symbol}$B$N%0%m!<%P%k4X?tDj5A$rF@$k!#(B
-$B%m!<%+%k4X?t$O!"$3$N4X?t$GF@$i$l$J$$!#(B}
+{\em symbol}のグローバル関数定義を得る。
+ローカル関数は、この関数で得られない。}
 
 \funcdesc{symbol-package}{sym}{
-{\em sym}$B$,<}MF$5$l$F$$$k%Q%C%1!<%8$rJV$9!#(B}
+{\em sym}が収容されているパッケージを返す。}
 
 \funcdesc{symbol-name}{sym}{
-{\em sym}$B$N(Bprint-name$B$rJV$9!#(B
-{\bf symbol-name}$B$O!"(B{\bf string}$B$,%3%T!<$9$k$N$KH?$7$F!"(B
- pname$BJ8;zNs$r%3%T!<$7$J$$!#(B
-$B$7$?$,$C$F!"$b$7(B{\bf symbol-name}$B$GJV$5$l$?J8;zNs$rJQ$($k$J$i$P(B
-symbol$B$OIaDL$NFbIt<jB3$-$rDL$7$F%"%/%;%9IT2DG=$H$J$k!#(B}
+{\em sym}のprint-nameを返す。
+{\bf symbol-name}は、{\bf string}がコピーするのに反して、
+ pname文字列をコピーしない。
+したがって、もし{\bf symbol-name}で返された文字列を変えるならば
+symbolは普通の内部手続きを通してアクセス不可能となる。}
 
 \funcdesc{symbol-plist}{sym}{
-{\em sym}$B$N(Bproperty-list(plist)$B$rJV$9!#(B
-EusLisp$B$N(Bplist$B$O!"4XO"%j%9%H!J(Bassociation-list$B!K$HF1$8MM$J=q<0$rM?$($k!#(B
-$B$=$l$O!"B0@-L>$H$=$NCM$NAH$rE@$G$D$J$$$@9=@.$G$"$k!#(B
-$B$3$l$O!"(BCommon Lisp$B$NDj5A$,MW5a$9$k(Bplist$B!JB0@-L>$HCM$N@~7A%j%9%H!K(B
-$B$HHs8_49$G$"$k!#(B
-EusLisp$B$K$*$$$F!"(Bplist$B$O(Bsymbol$B$KFHFC$J$b$N$G$O$J$$!#(B
-{\bf propertied-object}$B$r7Q>5$9$k%/%i%9$+$iGI@8$7$?$I$s$J%*%V%8%'%/%H$b!"(B
-property-list$B$r;}$D$3$H$,$G$-$k!#(B
-{\bf propertied-object}$B$NCf$N$3$l$i$N(Bplist$B$r@_Dj$7$?$j!"<h$j$@$7$?$j$9$k$?$a$K!"(B
-{\bf propertied-object-plist}$B%^%/%m$O!"(B{\bf symbol-plist}$B$NBe$j$K(B
-$B;HMQ$5$l$k$Y$-$G$"$k!#(B
-$B$7$+$7$J$,$i!"(B{\bf get}$B$H(B{\bf putprop}$B$O$I$N%*%V%8%'%/%H$K$bF/$/!#(B}
+{\em sym}のproperty-list(plist)を返す。
+EusLispのplistは、関連リスト（association-list）と同じ様な書式を与える。
+それは、属性名とその値の組を点でつないだ構成である。
+これは、Common Lispの定義が要求するplist（属性名と値の線形リスト）
+と非互換である。
+EusLispにおいて、plistはsymbolに独特なものではない。
+{\bf propertied-object}を継承するクラスから派生したどんなオブジェクトも、
+property-listを持つことができる。
+{\bf propertied-object}の中のこれらのplistを設定したり、取りだしたりするために、
+{\bf propertied-object-plist}マクロは、{\bf symbol-plist}の代りに
+使用されるべきである。
+しかしながら、{\bf get}と{\bf putprop}はどのオブジェクトにも働く。}
 
 \funcdesc{boundp}{symbol}{
-{\em symbol}$B$,%0%m!<%P%k$JCM$r;}$C$F$$$k$+$I$&$+$r8!::$9$k!#(B\\
-$BCm0U(B:$B%m!<%+%kJQ?t$d%*%V%8%'%/%HJQ?t$H$7$F;HMQ$5$l$k(Bsymbol$B$O(B
-$B$$$D$bCM$r;}$C$F$$$k$?$a!"(B{\em boundp}$B$O$3$l$i$N%m!<%+%kJQ?t$N(B
-$B3JG<>uBV$r8!::$9$k$3$H$,$G$-$J$$!#(B}
+{\em symbol}がグローバルな値を持っているかどうかを検査する。\\
+注意:ローカル変数やオブジェクト変数として使用されるsymbolは
+いつも値を持っているため、{\em boundp}はこれらのローカル変数の
+格納状態を検査することができない。}
 \funcdesc{fboundp}{symbol}{
-{\em symbol}$B$,%0%m!<%P%k$J4X?tDj5A$r;}$C$F$$$k$+$I$&$+$r8!::$9$k!#(B}
+{\em symbol}がグローバルな関数定義を持っているかどうかを検査する。}
 \funcdesc{makunbound}{symbol}{
-{\em symbol}$B$O!"!JFC<lCM$r;}$?$J$$$h$&$K!K6/@)E*$K(Bunbound$B$5$l$k!#(B
-$B%m!<%+%kJQ?t$O!"$$$D$bCM$,3d$jEv$F$i$l!"(B{\bf makunbound}$B$G$-$J$$!#(B}
+{\em symbol}は、（特殊値を持たないように）強制的にunboundされる。
+ローカル変数は、いつも値が割り当てられ、{\bf makunbound}できない。}
 
 \funcdesc{get}{sym attribute}{
-{\em sym}$B$N(Bplist$B$NCf$G(B{\em attribute}$B$K4XO"$9$kCM$r<h$j=P$9!#(B
-{\tt (cdr (assoc {\em attribute} (symbol-plist {\em sym})))}$B$HEy2A$G$"$k!#(B}
+{\em sym}のplistの中で{\em attribute}に関連する値を取り出す。
+{\tt (cdr (assoc {\em attribute} (symbol-plist {\em sym})))}と等価である。}
 \funcdesc{putprop}{sym val attribute}{
-{\bf putprop}$B$O!"(B{\bf setf}$B$H(B{\bf get}$B$NAH$_9g$;$GCV$-49$($k$Y$-$G$"$k!#(B}
+{\bf putprop}は、{\bf setf}と{\bf get}の組み合せで置き換えるべきである。}
 \funcdesc{remprop}{sym attr}{
-$BB0@-CM(B({\em attr})$B$H(B{\em sym}$B$NAH$r(Bproperty-list$B$+$i:o=|$9$k!#(B}
+属性値({\em attr})と{\em sym}の組をproperty-listから削除する。}
 
 \specialdesc{setq}{\{var value\}*}{
-{\em value}$B$r(B{\em var}$B$K3d$jEv$F$k!#(B{\em var}$B$O!"(Bsymbol$B$+E@$G7Q$C$?AH$G$"$k!#(B
-{\em var}$B$O!"%m!<%+%kJQ?t!&%*%V%8%'%/%HJQ?t!&FC<lJQ?t$N=gHV$K$=$NL>A0$NCf$+$iC5$5$l$k!#(B
-$B$?$@$7!"L@3N$K(Bspecial$B$H@k8@$5$l$F$J$$$b$N$K8B$k!#(B}
+{\em value}を{\em var}に割り当てる。{\em var}は、symbolか点で継った組である。
+{\em var}は、ローカル変数・オブジェクト変数・特殊変数の順番にその名前の中から探される。
+ただし、明確にspecialと宣言されてないものに限る。}
 
 \funcdesc{set}{sym val}{
-{\em val}$B$r(B{\em sym}$B$NFC<lCM$H$7$F3d$jEv$F$k!#(B
-{\bf set}$B$O!"%m!<%+%kJQ?t$d%*%V%8%'%/%HJQ?t$KCM$r(B
-$B3dEv$F$k$3$H$O$G$-$J$$!#(B}
+{\em val}を{\em sym}の特殊値として割り当てる。
+{\bf set}は、ローカル変数やオブジェクト変数に値を
+割当てることはできない。}
 
 \specialdesc{defun}{symbol [documentation] lambda-list . body}{
-{\em symbol}$B$K%0%m!<%P%k4X?t$rDj5A$9$k!#(B
-$B%m!<%+%k4X?t$rDj5A$9$k$?$a$K$O!"(B{\bf flet}$B$+(B{\bf labels}$B$r;HMQ$9$k$3$H!#(B
-$B$b$7!"(B{\em documentation}$B$,M?$($i$l$J$$>l9g!"(Blambda-list$B$K=q$+$l$F$$$k(B
-$B%G%U%)%k%H$N(Bdocumentation$BJ8;zNs$,F~NO$5$l$k!#(B}
+{\em symbol}にグローバル関数を定義する。
+ローカル関数を定義するためには、{\bf flet}か{\bf labels}を使用すること。
+もし、{\em documentation}が与えられない場合、lambda-listに書かれている
+デフォルトのdocumentation文字列が入力される。}
 
 \specialdesc{defmacro}{symbol [documentation] lambda-list . body}{
-$B%0%m!<%P%k%^%/%m$rDj5A$9$k!#(B
-EusLisp$B$O!"%m!<%+%k%9%3!<%W%^%/%mDj5A$N5!G=$r;}$C$F$$$J$$!#(B}
+グローバルマクロを定義する。
+EusLispは、ローカルスコープマクロ定義の機能を持っていない。}
 
 \macrodesc{defvar}{var \&optional (init nil) doc}{
-$B$b$7(B{\em var}$B$,FC<lCM$r;}$C$F$$$l$P!"(B{\bf defvar} $B$O2?$b$7$J$$!#(B
-$B$b$7(B{\em var}$B$,(Bunbound$B$J$i$P!"(B{\tt special}$B$H$7$F@k8@$7!"(B
-{\em init}$B$r$=$NCM$H$7$F@_Dj$9$k!#(B}
+もし{\em var}が特殊値を持っていれば、{\bf defvar} は何もしない。
+もし{\em var}がunboundならば、{\tt special}として宣言し、
+{\em init}をその値として設定する。}
 
 \macrodesc{defparameter}{var init \&optional doc}{
-{\bf defparameter}$B$O!"(B{\em var}$B$r(B{\tt special}$B$H$7$F@k8@$7!"(B
-{\em var}$B$,4{$KCM$r;}$C$F$$$?$H$7$F$b!"(B{\em init}$B$r$=$NCM$H$7$F@_Dj$9$k!#(B}
+{\bf defparameter}は、{\em var}を{\tt special}として宣言し、
+{\em var}が既に値を持っていたとしても、{\em init}をその値として設定する。}
 
 \macrodesc{defconstant}{sym val \&optional doc}{
-{\bf defconstant}$B$O!"(B{\bf val}$B$r(B{\bf sym}$B$NFC<lCM$H$7$F@_Dj$9$k!#(B
-{\bf defvar, defparameter}$B$d(B{\bf setq}$B$H0c$$!"$=$NCM$O(B
-{\bf defconstant}$B$G$N$_@_Dj$5$l!"$3$l$i$N=q<0$GJQ99$9$k$3$H$,$G$-$J$$!#(B
-$B$b$7Dj?t(Bsymbol$B$NCM$,!"JQ99$5$l$h$&$H$7$?$J$i$P!"(B
-$B%(%i!<$,JV$5$l$k!#(B
-$B$7$+$7!"(B{\bf defconstant}$B$O0JA0$N(B
-$BDj?tCM$K>e=q$-$G$-!">e=q$-$7$?>l9g$OCm0U%a%C%;!<%8$,=PNO$5$l$k!#(B}
+{\bf defconstant}は、{\bf val}を{\bf sym}の特殊値として設定する。
+{\bf defvar, defparameter}や{\bf setq}と違い、その値は
+{\bf defconstant}でのみ設定され、これらの書式で変更することができない。
+もし定数symbolの値が、変更されようとしたならば、
+エラーが返される。
+しかし、{\bf defconstant}は以前の
+定数値に上書きでき、上書きした場合は注意メッセージが出力される。}
 
 \funcdesc{keywordp}{obj}{
-$B$b$7(B{\em obj}$B$,(Bsymbol$B$G!"$=$N%[!<%`%Q%C%1!<%8$,(B{\bf KEYWORD}$B$N$H$-(BT$B$rJV$9!#(B}
+もし{\em obj}がsymbolで、そのホームパッケージが{\bf KEYWORD}のときTを返す。}
 \funcdesc{constantp}{symbol}{
-$B$b$7(Bsymbol$B$,(B{\bf defconstant}$B%^%/%m$GDj?t$K@k8@$5$l$F$$$k$H$-(BT$B$rJV$9!#(B}
+もしsymbolが{\bf defconstant}マクロで定数に宣言されているときTを返す。}
 
 \funcdesc{documentation}{sym \&optional type}{
-{\em sym}$B$N$?$a$KDs<(J8;zNs(B(documentation string)$B$r<h$j=P$9!#(B}
+{\em sym}のために提示文字列(documentation string)を取り出す。}
 
 \funcdesc{gensym}{\&optional x}{
-{\tt g001}$B$N$h$&$JA0CVJ8;zNs$HIUB0?t;z$rAH$_9g$o$;$??7$7$$<}MF$5$l$F$$$J$$(Bsymbol$B$r:n$k!#(B
-$B<}MF$5$l$F$J$$(Bsymbol$B$O!"(Bsymbol$B$K4XO"$9$k%Q%C%1!<%8$,$J$$$?$a!"%Q%C%1!<%8A0CV;l(B
-$B$NItJ,$K(B\#:$B$r<($9!#(B\#:$B$,A0$K$D$/(Bsymbol$B$O!"FI$a$J$$(Bsymbol$B$G!"(B
-$B%j!<%@$G$O$3$l$i$N(Bsymbol$B$X$N;2>H$r:n@.$9$k$3$H$,$G$-$J$$!#(B
-{\em x}$B$O!"@0?t$+J8;zNs$,2DG=$G!"(B
-$B@\F,(B(prefix)$B%$%s%G%C%/%9$+@\Hx(B(suffix)$BCM$H$7$F;HMQ$5$l$k!#(B}
+{\tt g001}のような前置文字列と付属数字を組み合わせた新しい収容されていないsymbolを作る。
+収容されてないsymbolは、symbolに関連するパッケージがないため、パッケージ前置詞
+の部分に\#:を示す。\#:が前につくsymbolは、読めないsymbolで、
+リーダではこれらのsymbolへの参照を作成することができない。
+{\em x}は、整数か文字列が可能で、
+接頭(prefix)インデックスか接尾(suffix)値として使用される。}
 
 \funcdesc{gentemp}{\&optional (prefix "T") (pkg *package*)}{
-{\em pkg}$B$K<}MF$5$l$k?7$7$$(Bsymbol$B$r:n$k!#(B
-$B$[$H$s$I$N%"%W%j%1!<%7%g%s$K$*$$$F!"(B{\bf gensym}$B$,(B{\bf gentemp}$B$h$j$b9%$^$l$k!#(B
-$B$J$<$J$i!"<}MF$5$l$J$$(Bsymbol$B$NJ}$,9bB.$K:n$k$3$H$,$G$-!"(B
-$B%,!<%Y!<%8%3%l%/%H$b2DG=$G$"$k$?$a!#(B}
+{\em pkg}に収容される新しいsymbolを作る。
+ほとんどのアプリケーションにおいて、{\bf gensym}が{\bf gentemp}よりも好まれる。
+なぜなら、収容されないsymbolの方が高速に作ることができ、
+ガーベージコレクトも可能であるため。}
 
 \end{refdesc}
 
-\subsection{$B%Q%C%1!<%8(B}
+\subsection{パッケージ}
 
-$B%Q%C%1!<%8$O!"(Bsymbol$B$r%0%k!<%W2=$9$k$?$a$N6hJ,$5$l$?L>A0$NIU$$$?6u4V$rM?$($k!#(B
-$BJ#?t$N%W%m%0%i%^$,MW5a$5$l$k$h$&$JKDBg$J%=%U%H%&%'%"%7%9%F%`(B
-$B$r3+H/$7$h$&$H$9$k$H$-!"(Bsymbol$B!J4X?t$*$h$SJQ?tL>!K$,=EJ#$9$kLdBj$r8:>/$5$;$k$?$a$K(B
-Common Lisp$B$G%Q%C%1!<%8%7%9%F%`$,@8$^$l$?!#(B
-$B$=$l$>$l$N%Q%C%1!<%8$O!"FbIt(Bsymbol$B$H30It(Bsymbol$B$r;}$D!#(B
-$B%Q%C%1!<%8$NCf$G(Bsymbol$B$,:n@.$5$l$?$H$-!"$$$D$G$bFbIt(Bsymbol$B$H$J$k!#(B
-{\bf export}$B$r;HMQ$9$k$3$H$K$h$j30It(Bsymbol$B$K$9$k$3$H$,$G$-$k!#(B
-$B0[$J$C$?%Q%C%1!<%8$N30It(Bsymbol$B$O!"(Bsymbol$B$NA0$K%Q%C%1!<%8L>$H%3%m%s(B(:)$B$r(B
-$B$D$1$k$3$H$K$h$j;2>H$9$k$3$H$,$G$-$k!#Nc$($P!"(B{\tt x:*display*}$B$H$J$k!#(B
-$BB>$N%Q%C%1!<%8$NFbIt(Bsymbol$B$r;2>H$9$k>l9g$K$O!"(B{\tt sys::free-threads}$B$N$h$&$K(B
-$B%@%V%k%3%m%s(B(::)$B$r;HMQ$9$k!#(B
-$BA0$K%Q%C%1!<%8L>$r$D$1$k$3$H$r>JN,$9$k$?$a$K$O!"(B{\bf import}$B$rMQ$$$k!#(B
-$B$=$N>e!"(B{\bf use-package}$B$r;HMQ$9$l$P!"B>$N%Q%C%1!<%8$NA4$F$N(B
-$B30It(Bsymbol$B$r(Bimport$B$9$k$3$H$,$G$-$k!#(B
-symbol$B$r(Bexport$B$"$k$$$O(Bimport$B$9$k$H$-!"$"$i$f$k%Q%C%1!<%8Fb$N(B
-$BA4$F$N(Bsymbol$B$,FH<+$N(B
-print-name$B$r;}$DI,MW$,$"$k$?$a!"(Bsymbol$BL>$N=EJ#$rH/8+$9$k$3$H$,$G$-$k!#(B
-{\bfx shadow}$B$O!"%Q%C%1!<%8$+$i(Bsymbol$B$r2>A[E*$K:o=|$9$k$3$H$K$h$j!"(B
-$BB8:_$9$k(Bsymbol$B$HF1$8L>A0$N(Bsymbol$B$r:n@.$9$k$3$H$,$G$-$k!#(B
+パッケージは、symbolをグループ化するための区分された名前の付いた空間を与える。
+複数のプログラマが要求されるような膨大なソフトウェアシステム
+を開発しようとするとき、symbol（関数および変数名）が重複する問題を減少させるために
+Common Lispでパッケージシステムが生まれた。
+それぞれのパッケージは、内部symbolと外部symbolを持つ。
+パッケージの中でsymbolが作成されたとき、いつでも内部symbolとなる。
+{\bf export}を使用することにより外部symbolにすることができる。
+異なったパッケージの外部symbolは、symbolの前にパッケージ名とコロン(:)を
+つけることにより参照することができる。例えば、{\tt x:*display*}となる。
+他のパッケージの内部symbolを参照する場合には、{\tt sys::free-threads}のように
+ダブルコロン(::)を使用する。
+前にパッケージ名をつけることを省略するためには、{\bf import}を用いる。
+その上、{\bf use-package}を使用すれば、他のパッケージの全ての
+外部symbolをimportすることができる。
+symbolをexportあるいはimportするとき、あらゆるパッケージ内の
+全てのsymbolが独自の
+print-nameを持つ必要があるため、symbol名の重複を発見することができる。
+{\bfx shadow}は、パッケージからsymbolを仮想的に削除することにより、
+存在するsymbolと同じ名前のsymbolを作成することができる。
 
-Euslisp$B$O<!$N(B8$B$D$N%Q%C%1!<%8$rDj5A$9$k!#(B
+Euslispは次の8つのパッケージを定義する。
 \begin{description}
-\item [lisp:] $BA4$F$N(Blisp$B4X?t!"%^%/%m!"Dj?t!"$J$I(B
-\item [keyword:] $B%-!<%o!<%I(Bsymbol
-\item [unix:] UNIX$B%7%9%F%`%3!<%k$H%i%$%V%i%j4X?t(B
-\item [system:] $B%7%9%F%`4IM}$^$?$O4m81$J4X?t(B; nicknames=sys,si
-\item [compiler:] EusLisp$B%3%s%Q%$%i(B; nicknames=comp
-\item [user:] $B%f!<%6!<NN0h(B
-\item [geometry:] $B4v2?3X%/%i%9$H$=$N4X?t(B
-\item [xwindow:] X-window$B%$%s%?!<%U%'!<%9(B; nickname=x
+\item [lisp:] 全てのlisp関数、マクロ、定数、など
+\item [keyword:] キーワードsymbol
+\item [unix:] UNIXシステムコールとライブラリ関数
+\item [system:] システム管理または危険な関数; nicknames=sys,si
+\item [compiler:] EusLispコンパイラ; nicknames=comp
+\item [user:] ユーザー領域
+\item [geometry:] 幾何学クラスとその関数
+\item [xwindow:] X-windowインターフェース; nickname=x
 \end{description}
 
-$B$3$l$i$N%Q%C%1!<%8$H%f!<%6!<Dj5A%Q%C%1!<%8$O!"%7%9%F%`$N(B
-package-list$B$K7R$2$i$l$F$$$k!#(B
-$B$=$l$O!"(B{\bf list-all-packages}$B$h$C$FF@$k$3$H$,$G$-$k!#(B
-$B$=$l$>$l$N%Q%C%1!<%8$O!"FbIt$*$h$S30It(Bsymbol$B$rC5:w!&0LCVIU$1$9$k$?$a$K(B2$B$D$N(B
-$B%O%C%7%e%F!<%V%k$r4IM}$9$k!#(B
-$B$^$?!"%Q%C%1!<%8$O!"$=$NL>A0(B(string$B$^$?$O(Bsymbol)$B$H(Bnick name$B$N%j%9%H$H(B
-$B$=$N%Q%C%1!<%8$,;H$&B>$N%Q%C%1!<%8%j%9%H$r5-21$7$F$$$k!#(B
-{\bf *package*}$B$O!"FI$_9~$_!&0u:~$N$?$a$N<g$J%Q%C%1!<%8$r;}$D(B
-$B%0%m!<%P%kJQ?t$G$"$k!#(B
-$B$b$7(B{\bf *package*}$B$,(B{\tt user:}$B$G$J$$$J$i$P!"(B
-top-level$B%W%m%s%W%H$O!"8=:_$N%Q%C%1!<%8$r<($9$?$a$K(B{\tt mypkg:eus}\$$B$N$h$&$KJQ99$5$l$k!#(B
+これらのパッケージとユーザー定義パッケージは、システムの
+package-listに繋げられている。
+それは、{\bf list-all-packages}よって得ることができる。
+それぞれのパッケージは、内部および外部symbolを探索・位置付けするために2つの
+ハッシュテーブルを管理する。
+また、パッケージは、その名前(stringまたはsymbol)とnick nameのリストと
+そのパッケージが使う他のパッケージリストを記憶している。
+{\bf *package*}は、読み込み・印刷のための主なパッケージを持つ
+グローバル変数である。
+もし{\bf *package*}が{\tt user:}でないならば、
+top-levelプロンプトは、現在のパッケージを示すために{\tt mypkg:eus}\$のように変更される。
 
 \begin{refdesc}
-\constdesc{*lisp-package*}{ Lisp$B%Q%C%1!<%8!#(B}
-\constdesc{*user-package*}{ $B%f!<%6!<%Q%C%1!<%8!#(B}
-\constdesc{*unix-package*}{ UNIX$B%Q%C%1!<%8!#(B}
-\constdesc{*system-package*}{ $B%7%9%F%`%Q%C%1!<%8!#(B}
-\constdesc{*keyword-package*}{ $B%-!<%o!<%I%Q%C%1!<%8!#(B}
+\constdesc{*lisp-package*}{ Lispパッケージ。}
+\constdesc{*user-package*}{ ユーザーパッケージ。}
+\constdesc{*unix-package*}{ UNIXパッケージ。}
+\constdesc{*system-package*}{ システムパッケージ。}
+\constdesc{*keyword-package*}{ キーワードパッケージ。}
 
 \funcdesc{find-symbol}{string \&optional (package *package*)}{
-{\em package}$B$N$J$+$G(Bprint-name$B$H$7$F(B{\em string}$B$r$b$D(Bsymbol$B$r(B
-$B8+$D$1$k!#(B
-$B$b$78+$D$+$C$?$H$-!"$=$N(Bsymbol$B$,JV$5$l!"$=$&$G$J$$$H$-(BNIL$B$,JV$5$l$k!#(B}
+{\em package}のなかでprint-nameとして{\em string}をもつsymbolを
+見つける。
+もし見つかったとき、そのsymbolが返され、そうでないときNILが返される。}
 
 \funcdesc{make-symbol}{string}{
-{\em string}$B$G<($5$l$kL>A0$N?7$7$$<}MF$5$l$F$$$J$$(Bsymbol$B$r:n$k!#(B}
+{\em string}で示される名前の新しい収容されていないsymbolを作る。}
 
 \funcdesc{intern}{string \&optional (package *package*) (klass symbol)}{
-{\em string}$B$HF1$8(Bprint-name$B$N(Bsymbol$B$r8+$D$1$h$&$H$9$k!#(B
-$B$b$7C5:w@.8y$N$H$-!"$=$N(Bsymbol$B$,JV$5$l$k!#(B
-$B$b$7<:GT$7$?$H$-!"(B{\em string}$B$H$$$&(Bprint-name$B$r;}$D(Bsymbol$B$,?7$7$/:n$i$l!"(B
-{\em package}$B$NCf$K$*$+$l$k!#(B}
+{\em string}と同じprint-nameのsymbolを見つけようとする。
+もし探索成功のとき、そのsymbolが返される。
+もし失敗したとき、{\em string}というprint-nameを持つsymbolが新しく作られ、
+{\em package}の中におかれる。}
 
 \funcdesc{list-all-packages}{}{
-$B:#$^$G$K:n$i$l$?A4$F$N%Q%C%1!<%8$N%j%9%H$rJV$9!#(B}
+今までに作られた全てのパッケージのリストを返す。}
 
 \funcdesc{find-package}{name}{
-$B%Q%C%1!<%8$NL>A0$^$?$O(Bnickname$B$,(B{\em name}$B$HF1$8$b$N$rC5$9!#(B}
+パッケージの名前またはnicknameが{\em name}と同じものを探す。}
 \funcdesc{make-package}{name \&key :nicknames (:use '(lisp))}{
-{\em name}$B$G<($5$l$kL>A0$N?7$7$$%Q%C%1!<%8$r:n$k!#(B
-{\em name}$B$O!"(Bstring$B$"$k$$$O(Bsymbol$B$G$h$$!#(B
-$B$b$7%Q%C%1!<%8$,4{$KB8:_$7$F$$$k>l9g!"%(%i!<$,Js9p$5$l$k!#(B}
+{\em name}で示される名前の新しいパッケージを作る。
+{\em name}は、stringあるいはsymbolでよい。
+もしパッケージが既に存在している場合、エラーが報告される。}
 
 \funcdesc{in-package}{pkg \&key :nicknames (:uses '(lisp))}{
-$B8=:_$N%Q%C%1!<%8(B({\bf *pacakge*}$B$NCM(B)$B$r(B
-{\em pkg}$B$KJQ$($k!#(B}
+現在のパッケージ({\bf *pacakge*}の値)を
+{\em pkg}に変える。}
 
 \funcdesc{package-name}{pkg}{
-{\em pkg}$B%Q%C%1!<%8$NL>A0$rJ8;zNs$H$7$FJV$9!#(B}
+{\em pkg}パッケージの名前を文字列として返す。}
 
 \funcdesc{package-nicknames}{pkg}{
-{\em pkg}$B$N(Bnickname$B$N%j%9%H$rJV$9!#(B}
+{\em pkg}のnicknameのリストを返す。}
 
 \funcdesc{rename-package}{pkg new-name \&optional new-nicknames}{
-{\em pkg}$B$NL>A0$r(B{\em new-name}$B$KJQ99$7!"$=$N(Bnickname$B$r(B 
-{\em new-nicknames}$B$KJQ99$9$k!#(B
-$B$=$l$i$O!"(Bsymbol$B$+(Bstring$B$^$?$O(Bsymbol$B$+(Bstring$B$N%j%9%H$N$I$l$G$b2DG=$G$"$k!#(B}
+{\em pkg}の名前を{\em new-name}に変更し、そのnicknameを 
+{\em new-nicknames}に変更する。
+それらは、symbolかstringまたはsymbolかstringのリストのどれでも可能である。}
 
 \funcdesc{package-use-list}{pkg}{
-{\em pkg}$B$G;HMQ$5$l$k%Q%C%1!<%8%j%9%H$rJV$9!#(B}
+{\em pkg}で使用されるパッケージリストを返す。}
 
 \funcdesc{packagep}{pkg}{
-$B$b$7(B{\em pkg}$B$,%Q%C%1!<%8$N$H$-(BT$B$rJV$9!#(B}
+もし{\em pkg}がパッケージのときTを返す。}
 
 \funcdesc{use-package}{pkg \&optional (curpkg *package*)}{
-{\em pkg}$B$r(B{\em curpkg}$B$N(Buse-list$B$KIU$12C$($k!#(B
-$B0lC6DI2C$9$k$H!"(B{\em pkg}$B$N$J$+$N(Bsymbol$B$O!"%Q%C%1!<%8$NA0CV;l$J$7$G(B
-{\em curpkg}$B$r8+$k$3$H$,2DG=$K$J$k!#(B}
+{\em pkg}を{\em curpkg}のuse-listに付け加える。
+一旦追加すると、{\em pkg}のなかのsymbolは、パッケージの前置詞なしで
+{\em curpkg}を見ることが可能になる。}
 
 \funcdesc{unuse-package}{pkg \&optional (curpkg *package*)}{
-{\em curpkg}$B$N(Buse-list$B$+$i(B{\em pkg}$B$r:o=|$9$k!#(B}
+{\em curpkg}のuse-listから{\em pkg}を削除する。}
 
 \funcdesc{shadow}{sym \&optional(pkg *package*)}{
-$BB8:_$9$k(B{\em sym}$B$r1#$9$3$H$K$h$C$F!"(B
-{\em pkg}$BFb$KFbIt(Bsymbol$B$r:n$k!#(B}
+存在する{\em sym}を隠すことによって、
+{\em pkg}内に内部symbolを作る。}
 
 \funcdesc{export}{sym \&optional (pkg *package*)}{
-{\em sym}$B$O!"(Bsymbol$B$+(Bsymbol$B$N%j%9%H$G$"$k!#(B
-{\bf export}$B$O!"(B{\em sym}$B$rB>$N%Q%C%1!<%8$+$i(B
-$B30It(Bsymbol$B$H$7$F%"%/%;%92DG=$H$9$k!#(B
-$B<B:]$K!"(B{\em sym}$B$O!"(B{\em pkg}$B$N$J$+$N30It(Bsymbol$B$H$7$F5-O?$5$l$k!#(B
-$B$b$7(Bsymbol$B$,(B{\bf export}$B$5$l$k$H!"%Q%C%1!<%8%^!<%/$H$7$F(Bsingle colon ":"$B$r;H$C$F(B
-$B%"%/%;%92DG=$H$J$k!#$3$l$KBP$7$F!"(B{\bf export}$B$5$l$F$$$J$$(Bsymbol$B$O(Bdouble colon "::"
-$B$GF@$i$l$k!#(B
-$B$=$N$&$(!"(B{\bf export}$B$5$l$?(Bsymbol$B$O!"(B
-{\bf use-package}$B$r;HMQ$7$?$j!"%Q%C%1!<%8$K(B{\bf import}$B$5$l$?$H$-!"%3%m%s$N(B
-$BI,MW$,$J$$!#(B
-symbol$B$,(Bexport$B$5$l$?$+$I$&$+$O!"$=$l$>$l$N(Bsymbol$B$K$G$J$/$=$l$,<}MF$5$l$F$$$k(B
-$B%Q%C%1!<%8$KB0@-IU$1$i$l$k!#(B
-$B$=$l$G!"(Bsymbol$B$O(B1$B$D$N%Q%C%1!<%8$NFbIt$K$"$j!"$=$NB>$N30It$H$J$k!#(B
-{\bf export}$B$O!"(B{\em pkg}$B$,;HMQ$7$F$$$kB>$N%Q%C%1!<%8$NCf$N(B
-symbol$BL>$H(B{\em sym}$B$,=EJ#$7$F$$$J$$$+$I$&$+$r8!::$9$k!#(B
-$B$b$7(B{\em sym}$B$HF1$8(Bprint name$B$r$b$D(Bsymbol$B$,$"$C$?$J$i$P!"(B
-"symbol conflict"$B$H%(%i!<$rJs9p$9$k!#(B}
+{\em sym}は、symbolかsymbolのリストである。
+{\bf export}は、{\em sym}を他のパッケージから
+外部symbolとしてアクセス可能とする。
+実際に、{\em sym}は、{\em pkg}のなかの外部symbolとして記録される。
+もしsymbolが{\bf export}されると、パッケージマークとしてsingle colon ":"を使って
+アクセス可能となる。これに対して、{\bf export}されていないsymbolはdouble colon "::"
+で得られる。
+そのうえ、{\bf export}されたsymbolは、
+{\bf use-package}を使用したり、パッケージに{\bf import}されたとき、コロンの
+必要がない。
+symbolがexportされたかどうかは、それぞれのsymbolにでなくそれが収容されている
+パッケージに属性付けられる。
+それで、symbolは1つのパッケージの内部にあり、その他の外部となる。
+{\bf export}は、{\em pkg}が使用している他のパッケージの中の
+symbol名と{\em sym}が重複していないかどうかを検査する。
+もし{\em sym}と同じprint nameをもつsymbolがあったならば、
+"symbol conflict"とエラーを報告する。}
 
 \funcdesc{unexport}{sym \&optional pkg}{
-$B$b$7(B{\em sym}$B$,(B{\em pkg}$B$N30It(Bsymbol$B$G$"$C$?$J$i$P!"(Bunexport$B$5$l!"(B
-$BFbIt(Bsymbol$B$H$J$k!#(B}
+もし{\em sym}が{\em pkg}の外部symbolであったならば、unexportされ、
+内部symbolとなる。}
 
 \funcdesc{import}{sym \&optional (pkg *package*)}{
-{\em sym}$B$O!"(Bsymbol$B$^$?$O(Bsymbol$B$N%j%9%H$G$"$k!#(B
-{\bf import}$B$O!"B>$N%Q%C%1!<%8$GDj5A$5$l$?(Bsymbol$B$r(B
-{\em pkg}$B$+$i%Q%C%1!<%8$NA0CV;l$J$7$GFbIt(Bsymbol$B$H$7$F8+$($k$h$&$K$9$k!#(B
-$B$b$7(B{\em sym}$B$HF1$8(Bprint-name$B$r;}$C$?(Bsymbol$B$,4{$K$"$C$?$H$-!"(B
-"name conflict"$B$H%(%i!<$rJs9p$9$k!#(B}
+{\em sym}は、symbolまたはsymbolのリストである。
+{\bf import}は、他のパッケージで定義されたsymbolを
+{\em pkg}からパッケージの前置詞なしで内部symbolとして見えるようにする。
+もし{\em sym}と同じprint-nameを持ったsymbolが既にあったとき、
+"name conflict"とエラーを報告する。}
 
 \macrodesc{do-symbols}{(var pkg) \&rest forms}{
-{\em pkg}$B$K$*$$$F!"!JFbIt$"$k$$$O30It!K(Bsymbol$B$KBP$7$F7+$jJV$7$r$9$k!#(B
-$B$=$N$H$-$N(B{\em forms}$B$NI>2A$,JV$5$l$k!#(B}
+{\em pkg}において、（内部あるいは外部）symbolに対して繰り返しをする。
+そのときの{\em forms}の評価が返される。}
 
 \macrodesc{do-external-symbols}{(var pkg) \&rest forms}{
-{\em pkg}$B$K$*$$$F!"30It(Bsymbol$B$KBP$7$F7+$jJV$7$r$9$k!#(B
-$B$=$N$H$-$N(B{\em forms}$B$NI>2A$,JV$5$l$k!#(B}
+{\em pkg}において、外部symbolに対して繰り返しをする。
+そのときの{\em forms}の評価が返される。}
 
 
 \macrodesc{do-all-symbols}{(var [result]) \&rest forms}{
-$BA4$F$N%Q%C%1!<%8$K$*$$$F!"(Bsymbol$B$KBP$7$F7+$jJV$7$r$9$k!#$=$N$H$-$N(B{\em forms}$B$NI>2A$,JV$5$l$k!#(B
-$B$b$7!"(B1$B$D0J>e$N%Q%C%1!<%8$NCf$K$=$N(Bsymbol$B$,8=$l$?$J$i$P!"(B{\em forms}$B$O!"(B
-1$BEY0J>eI>2A$5$l$k!#(B}
+全てのパッケージにおいて、symbolに対して繰り返しをする。そのときの{\em forms}の評価が返される。
+もし、1つ以上のパッケージの中にそのsymbolが現れたならば、{\em forms}は、
+1度以上評価される。}
 
 \end{refdesc}
 
