@@ -1,113 +1,113 @@
 \newpage
-\section{$B%^%k%A%9%l%C%I(B\label{mthread}}
-\markright{\arabic{section}. $B%^%k%A%9%l%C%I(B}
+\section{マルチスレッド\label{mthread}}
+\markright{\arabic{section}. マルチスレッド}
 
-$B%^%k%A%9%l%C%I$O!"(BSolaris$B%*%Z%l!<%F%#%s%0%7%9%F%`>e$N(B
-$BJBNs%W%m%0%i%_%s%0$dHsF14|%W%m%0%i%_%s%0$N5!G=$G$"$k!#(B
-$BHsF14|%W%m%0%i%_%s%0$O!"%W%m%0%i%`$N>uBV$HL54X78$KH/@8$9$k(B
-$BMM!9$J%;%s%5$r7PM3$7$?30It%$%Y%s%H$K1~Ez$9$k$?$a$N%W%m%0%i%`$KMW5a$5$l$k!#(B
-$BJBNs%W%m%0%i%_%s%0$O!"2hA|=hM}$d7PO)7W2h$N43>D%A%'%C%/$N$h$&$J(B
-$B%W%m%;%98~$-$N7W;;$N8zN($r2~A1$9$k>l9g$K8z2LE*$G$"$k!#(B
+マルチスレッドは、Solarisオペレーティングシステム上の
+並列プログラミングや非同期プログラミングの機能である。
+非同期プログラミングは、プログラムの状態と無関係に発生する
+様々なセンサを経由した外部イベントに応答するためのプログラムに要求される。
+並列プログラミングは、画像処理や経路計画の干渉チェックのような
+プロセス向きの計算の効率を改善する場合に効果的である。
 
-\subsection{$B%^%k%A%9%l%C%I(BEuslisp$B$N@_7W(B}
-\subsubsection{ Solaris 2 $B%*%Z%l!<%F%#%s%0%7%9%F%`$N%^%k%A%9%l%C%I(B}
-$B%^%k%A%9%l%C%I(BEuslisp(MT-Eus)$B$O!"J#?t$N%W%m%;%C%5$r;}$C$?(BSolaris 2 
-$B%*%Z%l!<%F%#%s%0%7%9%F%`>e$GF0:n$9$k!#(B
-Solaris$B$N%9%l%C%I$O!"(B $B6&M-%a%b%j$H0[$J$C$?4D6-$r;}$D$h$&$J=>Mh$N(B
-UNIX$B%W%m%;%9$r(BCPU$B$KG[CV$9$k$?$a$N%f%K%C%H$G$"$k!#(B%{\cite Solaris-thread}$B!#(B
-Solaris OS$B$K$h$C$FDs6!$5$l$k%9%l%C%I$N%i%$%V%i%j$O!"(B
-$B$=$l$>$l$N%9%l%C%I$rC10l$N(BLWP(light weight process)$B$KG[CV$9$k!#(B
-$B$3$N%W%m%;%9$,%+!<%M%k$N%j%=!<%9$G$"$k!#(B
-UNIX$B$N%+!<%M%k$O!"$=$l$>$l$N%9%l%C%I$K3d$jEv$F$i$l$?%9%l%C%I$NM%@h8"$K(B
-$B4p$E$$$FJ#?t$NJ*M}(BCPU$B$K(BLWP$B$NG[CV$r7W2h$9$k!#(B
-$B?^(B\ref{threadmodel}$B$O!"%9%l%C%I$H(BLWP$B$H(BCPU$B$N4X78$rI=$o$7$?$b$N$G$"$k!#(B
-Euslisp$B$N4D6-$*$h$S%a%b%j4IM}$N@_7W$K$D$$$F!"(B
-$B%^%k%A%9%l%C%I$NG=NO$r0z$-=P$9$?$a$K#2$D$NBg$-$JJQ99$,$5$l$?!#(B
+\subsection{マルチスレッドEuslispの設計}
+\subsubsection{ Solaris 2 オペレーティングシステムのマルチスレッド}
+マルチスレッドEuslisp(MT-Eus)は、複数のプロセッサを持ったSolaris 2 
+オペレーティングシステム上で動作する。
+Solarisのスレッドは、 共有メモリと異なった環境を持つような従来の
+UNIXプロセスをCPUに配置するためのユニットである。%{\cite Solaris-thread}。
+Solaris OSによって提供されるスレッドのライブラリは、
+それぞれのスレッドを単一のLWP(light weight process)に配置する。
+このプロセスがカーネルのリソースである。
+UNIXのカーネルは、それぞれのスレッドに割り当てられたスレッドの優先権に
+基づいて複数の物理CPUにLWPの配置を計画する。
+図\ref{threadmodel}は、スレッドとLWPとCPUの関係を表わしたものである。
+Euslispの環境およびメモリ管理の設計について、
+マルチスレッドの能力を引き出すために２つの大きな変更がされた。
 
 \subsubsection{Context Separation}
-MT-Eus$B$O!"$=$l$>$l$N%9%l%C%I$KBP$78DJL$K%9%?%C%/$H4D6-$rG[CV$9$k!#(B
-$B$=$N$?$a!"B>$N%9%l%C%I$HFHN)$K<B9T$9$k$3$H$,$G$-$k!#(B
-symbol$B$d(Bcons$B$N$h$&$J%*%V%8%'%/%H$O!"$3$l$^$G$N(BEuslisp$B$N$h$&$K(B
-$B6&M-%R!<%W%a%b%j>e$KG[CV$5$l$k!#(B
-$B$7$?$,$C$F!"(Bblock label$B$d(Bcatch tag$B$d%m!<%+%kJQ?t$N$h$&$J(B
-$B%9%l%C%I$N8DJL%G!<%?$O!"B>$N%9%l%C%I$+$iJ]8n$5$l$k!#(B
-$B$H$3$m$,!"%0%m!<%P%kJQ?t$K$h$C$F<($5$l$kCM!J%*%V%8%'%/%H!K$O!"(B
-$B>pJs$NJQ99$,5v2D$5$l$F$$$k$9$Y$F$N%9%l%C%I$+$i8+$k$3$H$,$G$-$k!#(B
+MT-Eusは、それぞれのスレッドに対し個別にスタックと環境を配置する。
+そのため、他のスレッドと独立に実行することができる。
+symbolやconsのようなオブジェクトは、これまでのEuslispのように
+共有ヒープメモリ上に配置される。
+したがって、block labelやcatch tagやローカル変数のような
+スレッドの個別データは、他のスレッドから保護される。
+ところが、グローバル変数によって示される値（オブジェクト）は、
+情報の変更が許可されているすべてのスレッドから見ることができる。
 
 \begin{figure}[b]
 \begin{center}
 \epsfile{file=fig/threadfig.ps,width=130mm}
-\caption{Solaris$B%*%Z%l!<%F%#%s%0%7%9%F%`$N%9%l%C%I%b%G%k(B}\label{threadmodel}
+\caption{Solarisオペレーティングシステムのスレッドモデル}\label{threadmodel}
 \end{center}
 \end{figure}
 
-$B4D6-$O(BC-stack$B$H(Bbinding-stack$B$*$h$S(B{\tt lambda, block, catch, let, flet}
-$B$J$I$N%m!<%+%k%V%m%C%/$K7R$,$k%U%l!<%`%]%$%s%?$K$h$j9=@.$5$l$F$*$j!"(B
-$B?7$7$$%9%l%C%I$,:n@.$5$l$?$H$-$K@_CV$5$l$k!#(B
-$BJ#?t$N4D6-$,K\Ev$N%^%k%A%W%m%;%C%5%^%7%s$N>e$GF1;~$K(B
-$BF0:n$G$-$k$N$G!"%0%m!<%P%kJQ?t$NCf$N8=:_$N4D6-$KBP$7$FC10l$J%]%$%s%?(B
-$B$r;}$D$3$H$,$G$-$J$$!#(B
-$B$`$7$m!"4D6-$N%]%$%s%?$r:G>e0L$NI>2A$+$iDc%l%Y%k$N%a%b%j4IM}$KJQ49$9$k$?$a$K!"(B
-$B$9$Y$F$NFbIt4X?t$K$b$&0l$D0z$-?t$rIU$12C$($J$1$l$P$J$i$J$$!#(B
+環境はC-stackとbinding-stackおよび{\tt lambda, block, catch, let, flet}
+などのローカルブロックに繋がるフレームポインタにより構成されており、
+新しいスレッドが作成されたときに設置される。
+複数の環境が本当のマルチプロセッサマシンの上で同時に
+動作できるので、グローバル変数の中の現在の環境に対して単一なポインタ
+を持つことができない。
+むしろ、環境のポインタを最上位の評価から低レベルのメモリ管理に変換するために、
+すべての内部関数にもう一つ引き数を付け加えなければならない。
 
-\subsubsection{$B%a%b%j4IM}(B}
-EusLisp$B$O!"$9$Y$F$N7?$N%*%V%8%'%/%H$KBP$7$FC10l$N%R!<%W$NCf$G(B
-$B%U%#%\%J%C%A%P%G%#$rMQ$$$?%a%b%j4IM}J}K!$r:NMQ$7$F$$$k!#(B
-$B0[$J$C$?%a%b%jMW5a$r;}$D%W%m%0%i%`$r<B9T$7$?8e!"(B
-$B%U%#%\%J%C%A%P%G%#$,MM!9$JBg$-$5$N%*%V%8%'%/%H$rEy$7$/9bB.$KG[CV$9$k$3$H$,$G$-!"%3%T!<$J$7$KAGAa$/%,!<%Y!<%8%3%l%/%H$,$G$-!"(B
-$B$+$D!"9b$$%a%b%jMxMQN(!JFbItB;<:$,(B10$B!A(B15\%$B$G30ItB;<:$OL5;k$G$-$k!K(B
-$B$r<($9$3$H$r3N?.$7$?!#(B
-$B%^%k%A%9%l%C%I$N$?$a$K$O!"(B2$B$DL\$N%]%$%s%H$9$J$o$A%3%T!<$J$7$N(B
-$B%,!<%Y!<%8%3%l%/%H$,=EMW$G$"$k!#(B
-$B$b$7!"%*%V%8%'%/%H$N%"%I%l%9$,%,!<%Y!<%8%3%l%/%H$N%3%T!<$K$h$j(B
-$BJQ2=$7$?$J$i$P!"$9$Y$F$N%9%l%C%I4D6-$N%9%?%C%/$*$h$S(BCPU$B$N%l%8%9%?(B
-$BFb$N%]%$%s%?$r?7$7$$%"%I%l%9$K=q$-49$($J$1$l$P$J$i$J$$!#(B
-$B$7$+$7!"$3$N=q$-49$($OIT2DG=$+$"$k$$$OBgJQ:$Fq$G$"$k!#(B
+\subsubsection{メモリ管理}
+EusLispは、すべての型のオブジェクトに対して単一のヒープの中で
+フィボナッチバディを用いたメモリ管理方法を採用している。
+異なったメモリ要求を持つプログラムを実行した後、
+フィボナッチバディが様々な大きさのオブジェクトを等しく高速に配置することができ、コピーなしに素早くガーベージコレクトができ、
+かつ、高いメモリ利用率（内部損失が10〜15\%で外部損失は無視できる）
+を示すことを確信した。
+マルチスレッドのためには、2つ目のポイントすなわちコピーなしの
+ガーベージコレクトが重要である。
+もし、オブジェクトのアドレスがガーベージコレクトのコピーにより
+変化したならば、すべてのスレッド環境のスタックおよびCPUのレジスタ
+内のポインタを新しいアドレスに書き換えなければならない。
+しかし、この書き換えは不可能かあるいは大変困難である。
 
-$B$9$Y$F$N%a%b%jG[CVMW5a$O!"Dc%l%Y%k$N(B{\tt alloc}$B4X?t$K$h$C$F=hM}$5$l$k!#(B
-{\tt alloc}$B$O!"(Bmutex-locking$B$r$9$k!#$J$<$J$i!"Bg$-$5$r;}$?$J$$%j%9%H$N(B
-$B%0%m!<%P%k%G!<%?%Y!<%9$r07$&$+$i$G$"$k!#(B
-$B%,!<%Y!<%8%3%l%/%H$N;O$^$k;~4|$*$h$S$I$N%9%l%C%I$K$h$C$F%,!<%Y!<%8%3%l%/%H$,(B
-$B@8$8$k$N$+$rM=8@$G$-$J$$$N$G!"(B
-$B$9$Y$F$N%9%l%C%I$OFMH/E*$K5/$3$k%,!<%Y!<%8%3%l%/%H$N$?$a$K(B
-$B=`Hw$r$7$F$*$+$J$1$l$P$J$i$J$$!#(B
-$B@8$-$F$$$k%*%V%8%'%/%H$X$N$9$Y$F$N%]%$%s%?$O!"%4%_$H$7$FA]=|$5$l$J$$(B
-$B$h$&$KJ]8n$9$k$?$a$$$D$G$b%,!<%Y!<%8%3%l%/%H$+$i%"%/%;%9$G$-$k$h$&(B
-$BD4@0$5$l$J$1$l$P$J$i$J$$!#(B
-$B$3$l$O!"%9%?%C%/$N>e$KJ]B8$5$l$F$$$k$3$H$r?.MQ$9$kBe$o$j$K!"(B
-$B$=$l$>$l$N4D6-$N8GDj$5$l$?%9%m%C%H$NCf$K6K:G6a$KG[CV$5$l$?%*%V%8%'%/%H$K(B
-$BBP$9$k%]%$%s%?$rC_@Q$9$k$3$H$K$h$C$FC#@.$5$l$k!#(B
+すべてのメモリ配置要求は、低レベルの{\tt alloc}関数によって処理される。
+{\tt alloc}は、mutex-lockingをする。なぜなら、大きさを持たないリストの
+グローバルデータベースを扱うからである。
+ガーベージコレクトの始まる時期およびどのスレッドによってガーベージコレクトが
+生じるのかを予言できないので、
+すべてのスレッドは突発的に起こるガーベージコレクトのために
+準備をしておかなければならない。
+生きているオブジェクトへのすべてのポインタは、ゴミとして掃除されない
+ように保護するためいつでもガーベージコレクトからアクセスできるよう
+調整されなければならない。
+これは、スタックの上に保存されていることを信用する代わりに、
+それぞれの環境の固定されたスロットの中に極最近に配置されたオブジェクトに
+対するポインタを蓄積することによって達成される。
 
-$B?^(B \ref{parathreads}$B$O!"%9%l%C%I$N%a%b%jMW5a$H(Bfork$B$5$l$?%,!<%Y!<%8%3%l%/%H(B
-$BFbIt$G$N(Bmarking$B$*$h$S(Bsweeping$B$rJBNs$K9T$C$F$$$kN.$l?^$r<($7$?$b$N$G$"$k!#(B
-$B%a%b%jMW5a$*$h$S%]%$%s%?$N=hM}$r9T$o$J$$%9%l%C%I$O%,!<%Y!<%8%3%l%/%H$HJBNs$K(B
-$B<B9T$9$k$3$H$,$G$-!"?.9f=hM}$d2hA|3MF@$N$h$&$JDc%l%Y%k$N%?%9%/$N(B
-$B<B;~4V1~Ez$r2~A1$9$k$3$H$KCm0U$9$k$3$H!#(B
+図 \ref{parathreads}は、スレッドのメモリ要求とforkされたガーベージコレクト
+内部でのmarkingおよびsweepingを並列に行っている流れ図を示したものである。
+メモリ要求およびポインタの処理を行わないスレッドはガーベージコレクトと並列に
+実行することができ、信号処理や画像獲得のような低レベルのタスクの
+実時間応答を改善することに注意すること。
 
 \begin{figure}
 \begin{center}
 \epsfile{file=fig/parathreads.ps,width=120mm}
-\caption{$BJBNs%9%l%C%I$N%a%b%jMW5a$H%,!<%Y!<%8%3%l%/%H$KJBNs<B9T(B}\label{parathreads}
+\caption{並列スレッドのメモリ要求とガーベージコレクトに並列実行}\label{parathreads}
 \end{center}
 \end{figure}
 
-\subsection{$BHsF14|%W%m%0%i%_%s%0$HJBNs%W%m%0%i%_%s%0$N9=C[(B}
-\subsubsection{$B%9%l%C%I:n@.$H%9%l%C%I%W!<%k(B}
-Solaris$B$K$*$$$FJ#?t$N%W%m%;%C%5>e$GJBNs$K%W%m%0%i%`$r<B9T$9$k$?$a$K$O!"(B
-$B$=$N%W%m%0%i%`$O4X?t$N=8$^$j$H$7$F=q$+$l$kI,MW$,$"$k!#(B
-$B$=$N4X?t$O$=$l$>$l%W%m%;%9$NCf$GF0E*$K:n@.$5$l$k%9%l%C%I$K$h$C$F(B
-$B<B9T$5$l$k!#(B
-$B%9%l%C%I$r:n@.$9$k$?$a$KMW5a$5$l$k;~4V$O!"%W%m%;%9$r:n@.$9$k$h$j$b(B
-$BB.$/$J$1$l$P$J$i$J$$$,!"%9%?%C%/$rG[CV$7%9%?%C%/$N%*!<%P!<%U%m!<$r(B
-$BH/8+$9$k$?$a$N%Z!<%8B0@-$r@_Dj$7$?8e$K%9%l%C%I$,F0$-;O$a$k$^$G$K(B
-Euslisp$B$K$*$$$F?t%_%jIC$+$+$k!#(B
-$B$3$NCY$l$O4X?t<B;\$HHf3S$7$F2fK}$G$-$J$$$?$a!"(B
-$BI>2A;~4V$K$*$1$k%7%9%F%`%3!<%k$KBP$9$k=jMW;~4V$rGS=|$9$kL\E*$G!"(B
-$B$"$i$+$8$a(B{\tt make-thread}$B4X?t$K$h$j==J,$J?t$N%9%l%C%I$,:n$i$l!"(B
-$B%7%9%F%`$N%9%l%C%I%W!<%k$KCV$+$l$k!#(B
-$B%9%l%C%I%W!<%k$NCf$N$=$l$>$l$N%9%l%C%I$O!"?^(B\ref{threadobj}$B$G<($5$l$k$h$&$K(B
-$B%9%l%C%I(BID$B$HF14|$N$?$a$N%;%^%U%)$H0z$-?t$dI>2A7k2L$rE>Aw$9$k$?$a$N%9%m%C%H(B
-$B$+$i9=@.$5$l$k%9%l%C%I%*%V%8%'%/%H$K$h$jI=8=$5$l$k!#(B
+\subsection{非同期プログラミングと並列プログラミングの構築}
+\subsubsection{スレッド作成とスレッドプール}
+Solarisにおいて複数のプロセッサ上で並列にプログラムを実行するためには、
+そのプログラムは関数の集まりとして書かれる必要がある。
+その関数はそれぞれプロセスの中で動的に作成されるスレッドによって
+実行される。
+スレッドを作成するために要求される時間は、プロセスを作成するよりも
+速くなければならないが、スタックを配置しスタックのオーバーフローを
+発見するためのページ属性を設定した後にスレッドが動き始めるまでに
+Euslispにおいて数ミリ秒かかる。
+この遅れは関数実施と比較して我慢できないため、
+評価時間におけるシステムコールに対する所要時間を排除する目的で、
+あらかじめ{\tt make-thread}関数により十分な数のスレッドが作られ、
+システムのスレッドプールに置かれる。
+スレッドプールの中のそれぞれのスレッドは、図\ref{threadobj}で示されるように
+スレッドIDと同期のためのセマフォと引き数や評価結果を転送するためのスロット
+から構成されるスレッドオブジェクトにより表現される。
 
 \begin{figure}
 \begin{center}
@@ -116,93 +116,93 @@ Euslisp$B$K$*$$$F?t%_%jIC$+$+$k!#(B
 \epsfile{file=fig/threadpool.ps,width=7.5cm} \\
 \end{tabular}
 \end{center}
-\caption{\label{threadobj}$B%9%l%C%I4V$G@)8f$d%G!<%?$r<u$1EO$9$?$a$N%9%l%C%I%*%V%8%'%/%H!J:8!K$H%9%l%C%I%W!<%kFb$KCV$+$l$?%9%l%C%I$N=8$^$j!J1&!K(B}
+\caption{\label{threadobj}スレッド間で制御やデータを受け渡すためのスレッドオブジェクト（左）とスレッドプール内に置かれたスレッドの集まり（右）}
 \end{figure}
 
-\subsubsection{$B%9%l%C%I$NJBNs<B9T(B}
-$B%9%l%C%I$K$h$kJBNs<B9T$NG[CV$N$?$a$K!"%9%l%C%I4X?t$,;HMQ$5$l$k!#(B
-$B%9%l%C%I$O!"%9%l%C%I%W!<%k$+$i(B1$B$D$N6u$-%9%l%C%I$r<h$j!"(B
-$B6&M-%a%b%j$r7PM3$7$F0z$-?t$rEO$7!"?^(B\ref{threadobj}$B$K<($5$l$k$h$&$J(B
-$B%;%^%U%)?.9f$K$h$j%9%l%C%I$rN)$A>e$2!"(B
-$BDd;_$9$k$3$H$J$7$K8F=PB&$X%9%l%C%I%*%V%8%'%/%H$rJV$9!#(B
-$BN)$A>e$2$i$l$?%9%l%C%I$O!"8F$S=P$7$?%9%l%C%I$HJBNs$K<B9T$5$l!"(B
-$B0z$-?t$rI>2A$7;O$a$k!#(B
-$B8F=PB&$O!"(Bfork$B$5$l$?%9%l%C%I$+$iI>2A7k2L$r<u$1$H$k$?$a$K(B{\tt wait-thread}$B$r(B
-$B;HMQ$9$k!#(B
-{\tt plist}$B%^%/%m$O!"0z$-?t$NJBNsI>2A$r5-=R$9$k$?$a$KBgJQJXMx$J=q<0$G$"$k!#(B
-{\tt plist}$B$O!"$=$l$>$l$N0z$-?t$rI>2A$9$k$?$a$K%9%l%C%I$r3d$jEv$F!"(B
-$B$9$Y$F$N%9%l%C%I$,I>2A$7=*$o$k$N$rBT$C$F7k2L$r%j%9%H%"%C%W$9$k!#(B
+\subsubsection{スレッドの並列実行}
+スレッドによる並列実行の配置のために、スレッド関数が使用される。
+スレッドは、スレッドプールから1つの空きスレッドを取り、
+共有メモリを経由して引き数を渡し、図\ref{threadobj}に示されるような
+セマフォ信号によりスレッドを立ち上げ、
+停止することなしに呼出側へスレッドオブジェクトを返す。
+立ち上げられたスレッドは、呼び出したスレッドと並列に実行され、
+引き数を評価し始める。
+呼出側は、forkされたスレッドから評価結果を受けとるために{\tt wait-thread}を
+使用する。
+{\tt plist}マクロは、引き数の並列評価を記述するために大変便利な書式である。
+{\tt plist}は、それぞれの引き数を評価するためにスレッドを割り当て、
+すべてのスレッドが評価し終わるのを待って結果をリストアップする。
 
-\subsubsection{$BF14|$N<jK!(B}
-MT-Eus$B$O!"(B{\bf mutex lock, condition variable, $B%;%^%U%)(B}$B$H8F$P$l$k(B
-3$B<oN`$NF14|<jK!$r;}$C$F$$$k!#(B
-mutex lock$B$O!"%9%l%C%I4V$N6&M-JQ?t$NO"B3%"%/%;%9$N$?$a$K;HMQ$5$l$k!#(B
-condition variable$B$O!"%m%C%/$N2>3+J|$"$k$$$O:F3MF@$K$h$C$F(Bmutex-lock$B$5$l$?(B
-$BItJ,$N>r7o$,(Btrue$B$K$J$k$3$H$rBT$D$3$H$r%9%l%C%I$K5v2D$9$k!#(B
-$B%;%^%U%)$O!"%$%Y%s%H$NH/@8$rDLCN$9$k$?$a$"$k$$$O%j%=!<%9$NJ,3d$r@)8f$9$k$?$a$K(B
-$B;HMQ$5$l$k!#(B
-Solaris$B$N%+!<%M%k$,;~4VJ,3d%9%1!<%8%e!<%j%s%0$r4pK\$H$7$F2?5$$J$7$K%?%9%/(B
-$B@Z$jBX$($rH/@8$9$k$N$H0[$J$j!"(B
-$B$3$l$i$NF14|<jK!$O!"G$0U$N4D6-@Z$jBX$($r0z$-5/$3$9!#(B
+\subsubsection{同期の手法}
+MT-Eusは、{\bf mutex lock, condition variable, セマフォ}と呼ばれる
+3種類の同期手法を持っている。
+mutex lockは、スレッド間の共有変数の連続アクセスのために使用される。
+condition variableは、ロックの仮開放あるいは再獲得によってmutex-lockされた
+部分の条件がtrueになることを待つことをスレッドに許可する。
+セマフォは、イベントの発生を通知するためあるいはリソースの分割を制御するために
+使用される。
+Solarisのカーネルが時間分割スケージューリングを基本として何気なしにタスク
+切り替えを発生するのと異なり、
+これらの同期手法は、任意の環境切り替えを引き起こす。
 
 \begin{figure}
 \begin{center}
 \epsfile{file=fig/synchports.ps,width=130mm}
-\caption{$BF14|>cJI$HF14|%a%b%j%]!<%H(B}
+\caption{同期障壁と同期メモリポート}
 \label{synchports}
 \end{center}
 \end{figure}
 
-\subsubsection{$BF14|>cJI(B}
-{\bf barrier-synch}$B$O!"J#?t$N%9%l%C%I$rF1;~$KF14|$5$;$k$?$a$N5!9=$G$"$k(B
-($B?^(B \ref{synchports})$B!#(B
-$B$3$NL\E*$K$*$$$F!"(B{\bf barrier}$B%/%i%9$N%$%s%9%?%s%9$,:n@.$5$l!"(B
-$BF14|$K4X78$9$k%9%l%C%I$,%*%V%8%'%/%H$KEPO?$5$l$k!#(B
-$B$=$N8e!"$=$l$>$l$N%9%l%C%I$O(Bbarrier$B%*%V%8%'%/%H$K(B{\tt :wait}$B%a%C%;!<%8$r(B
-$BAw$j!"$=$N%9%l%C%I$ODd;_$9$k!#(B
-$B%*%V%8%'%/%H$KEPO?$5$l$?:G8e$N%9%l%C%I$,(B{\tt :wait}$B%a%C%;!<%8$rAw$C$?$H$-!"(B
-$BBT$A$,2r=|$5$l!"$9$Y$F$NBT$A%9%l%C%I$,(BT$B$NJV$jCM$rF@$k!#(B
-barrier-sync$B$O!"%^%k%A%m%\%C%H%7%_%e%l!<%7%g%s$N%0%m!<%P%k%?%$%`$H$$$&(B
-$B=EMW$JLr3d$r1i$8$F$$$k!#(B
+\subsubsection{同期障壁}
+{\bf barrier-synch}は、複数のスレッドを同時に同期させるための機構である
+(図 \ref{synchports})。
+この目的において、{\bf barrier}クラスのインスタンスが作成され、
+同期に関係するスレッドがオブジェクトに登録される。
+その後、それぞれのスレッドはbarrierオブジェクトに{\tt :wait}メッセージを
+送り、そのスレッドは停止する。
+オブジェクトに登録された最後のスレッドが{\tt :wait}メッセージを送ったとき、
+待ちが解除され、すべての待ちスレッドがTの返り値を得る。
+barrier-syncは、マルチロボットシミュレーションのグローバルタイムという
+重要な役割を演じている。
 
-\subsubsection{$BF14|%a%b%j%]!<%H(B}
-{\bf $BF14|%a%b%j%]!<%H(B(synch-memory-port)}$B$O!"(B
-$B%9%l%C%I4V$G%G!<%?$r8r49$9$k$?$a$N(B1$B<o$N%9%H%j!<%`(B
-$B$G$"$k(B($B?^(B \ref{synchports})$B!#(B
-$B%W%m%;%9Fb$N$9$Y$F$N%9%l%C%I$O%R!<%W%a%b%j$r6&M-$7$F$$$k$N$G!"(B
-$B$b$7(B1$B$D$N%9%l%C%I$,%0%m!<%P%kJQ?t$K%*%V%8%'%/%H$r3d$jEv$F$?>l9g!"(B
-$BD>$A$KB>$N%9%l%C%I$+$i8+$l$k$h$&$K$J$k!#(B
-$B$7$+$7$J$,$i!"6&M-%a%b%j$O%0%m!<%P%k%G!<%?$,99?7$5$l$?$H$$$&(B
-$B%$%Y%s%H$rAw$k$?$a$NG=NO$,ITB-$7$F$$$k!#(B
-$BF14|%a%b%j%]!<%H$O!"6&M-%*%V%8%'%/%H$r%"%/%;%9$9$k$?$a$N(B
-$B$3$NF14|5!G=$rJ]>Z$9$k!#(B
-$BF14|%a%b%j%]!<%H%*%V%8%'%/%H$O!"(B1$B$D$N%P%C%U%!%9%m%C%H$HF14|FI$_=q$-$N(B
-$B$?$a$K;HMQ$5$l$k(B2$B$D$N%;%^%U%)$K$h$C$F9=@.$5$l$F$$$k!#(B
+\subsubsection{同期メモリポート}
+{\bf 同期メモリポート(synch-memory-port)}は、
+スレッド間でデータを交換するための1種のストリーム
+である(図 \ref{synchports})。
+プロセス内のすべてのスレッドはヒープメモリを共有しているので、
+もし1つのスレッドがグローバル変数にオブジェクトを割り当てた場合、
+直ちに他のスレッドから見れるようになる。
+しかしながら、共有メモリはグローバルデータが更新されたという
+イベントを送るための能力が不足している。
+同期メモリポートは、共有オブジェクトをアクセスするための
+この同期機能を保証する。
+同期メモリポートオブジェクトは、1つのバッファスロットと同期読み書きの
+ために使用される2つのセマフォによって構成されている。
 
-\subsubsection{$B%?%$%^!<(B}
-$B<B;~4V%W%m%0%i%`$O!"M=Dj$5$l$?;~4V$K<B9T$5$l$k4X?t$d!"(B
-$BFCDj$N4V3V$G7+$jJV$5$l$k4X?t$r$7$P$7$PMW5a$9$k!#(B
-$B$3$l$^$G$N(BEusLisp$B$O!"(BUnix$B$N%$%s%?!<%P%k%?%$%^!<$K$h$C$F(B
-$BDj4|E*$K@8@.$5$l$k?.9f$K$h$C$FH/@8$9$k%f!<%6!<4X?t$r(B
-$B<B9T$9$k$3$H$,$G$-$?!#(B
-MT-Eus$B$K$*$$$F!"$3$N<B9T$O%G%C%I%m%C%/$r0z$-5/$3$9!#(B
-$B$J$<$J$i!"3d$j9~$_$,(Bmutex-lock$B$5$l$?%V%m%C%/Fb$+$iH/@8$9$k2DG=@-$,$"$k!#(B
-$B$7$?$,$C$F!"@)8f$O(B{\tt eval}$B$N:G=i$N$h$&$K0BA4$J>l=j$GEO$5$l$J$1$l$P(B
-$B$J$i$J$$!#(B
-$B>e5-$NF14|$K$h$C$F0z$-5/$3$5$l$kCY$l$rHr$1$k$?$a$K!"(B
-MT-Eus$B$O%;%^%U%)$r7PM3$7$F?.9fDLCN(B(signal-notification)$B$b(B
-$BDs6!$9$k!#(B
-$B8@$$49$($l$P!"?.9f4X?t$O8F$S=P$5$l$k$+$"$k$$$O?.9f$NE~Ce$rCN$i$;$k(B
-$B4X?t$"$k$$$O%;%^%U%)$N$I$A$i$+$r$H$k!#(B
-$B%;%^%U%)$O!"Dc%l%Y%k$G9p<($5$l$k$N$G!"(B
-$BF14|$K$h$j1#$l$F$$$k$H$3$m$O:G>.$G$"$k!#(B
+\subsubsection{タイマー}
+実時間プログラムは、予定された時間に実行される関数や、
+特定の間隔で繰り返される関数をしばしば要求する。
+これまでのEusLispは、Unixのインターバルタイマーによって
+定期的に生成される信号によって発生するユーザー関数を
+実行することができた。
+MT-Eusにおいて、この実行はデッドロックを引き起こす。
+なぜなら、割り込みがmutex-lockされたブロック内から発生する可能性がある。
+したがって、制御は{\tt eval}の最初のように安全な場所で渡されなければ
+ならない。
+上記の同期によって引き起こされる遅れを避けるために、
+MT-Eusはセマフォを経由して信号通知(signal-notification)も
+提供する。
+言い換えれば、信号関数は呼び出されるかあるいは信号の到着を知らせる
+関数あるいはセマフォのどちらかをとる。
+セマフォは、低レベルで告示されるので、
+同期により隠れているところは最小である。
 
-$B0J2<$K<($9$b$N$O!"%^%k%A%9%l%C%I5!G=$rMQ$$$?2hA|=hM}$N%W%m%0%i%`Nc$G$"$k!#(B
-$B2hA|F~NO%9%l%C%I$H%U%#%k%?!<%9%l%C%I$,@8@.$5$l$k!#(B
-samp-image$B$O!"(B33msec$BKh$KDLCN$5$l$k(Bsamp-sem$B$rBT$D$3$H$K$h$j!"(B
-$BDj4|E*$K2hA|%G!<%?$r$H$k!#(B
-2$B$D$N%9%l%C%I$O(Bthread-port$B$NFI$_=q$-$rDL$8$FF14|$9$k!#(B
-filter-image$B$O!"%U%#%k%?!<$NJBNs7W;;$N$?$a$KJ#?t$N%9%l%C%I$r;HMQ$7$F$$$k!#(B
+以下に示すものは、マルチスレッド機能を用いた画像処理のプログラム例である。
+画像入力スレッドとフィルタースレッドが生成される。
+samp-imageは、33msec毎に通知されるsamp-semを待つことにより、
+定期的に画像データをとる。
+2つのスレッドはthread-portの読み書きを通じて同期する。
+filter-imageは、フィルターの並列計算のために複数のスレッドを使用している。
 
 \begin{quote}
 \begin{verbatim}
@@ -223,23 +223,23 @@ filter-image$B$O!"%U%#%k%?!<$NJBNs7W;;$N$?$a$KJ#?t$N%9%l%C%I$r;HMQ$7$F$$$k!#(B
 \end{verbatim}
 \end{quote}
 
-\subsection{$BJBNsEY$N7WB,(B}
+\subsection{並列度の計測}
 
-$BI=(B \ref{paragain}$B$O!"(B32CPU$B$G9=@.$5$l$k(BCray Superserver$B$N>e$GB,Dj(B
-$B$7$?JBNs<B9T8zN($r<($7$?$b$N$G$"$k!#(B
-$B%3%s%Q%$%k$5$l$?%U%#%\%J%C%A4X?t$K$*$$$F@~7A$JJBNsEY$,F@$i$l$?!#(B
-$B$J$<$J$i!"6&M-%a%b%j$X$N%"%/%;%9$,$J$/!"$=$l$>$l$N%W%m%;%C%5$N%-%c%C%7%e(B
-$B%a%b%j$K==J,%m!<%I$G$-$k$[$I$A$$$5$J%W%m%0%i%`$G$"$C$?$?$a$G$"$k!#(B
-$B$=$l$KH?$7$F!"F1$8%W%m%0%i%`$r%$%s%?!<%W%j%?!<$G<B9T$7$?$H$-!"(B
-$B%-%c%C%7%e%a%b%j$r;H$$2L$?$7$?$?$a!"(B
-$B@~7A$J9b8zN($rC#@.$9$k$3$H$,$G$-$J$+$C$?!#(B
-$B$5$i$K$^$?!"IQHK$K6&M-%a%b%j$r;2>H$9$k$h$&$J%W%m%0%i%`$d(B
-$B%a%b%jG[CV$rMW5a$9$k$h$&$J%W%m%0%i%`$O(B1$B8D$N%W%m%;%C%5$G<B9T$7$?(B
-$B$H$-$h$j$bNI$$@-G=$rF@$k$3$H$,$G$-$J$+$C$?!#(B
-$B$3$l$O!"IQHK$J%-%c%C%7%e%a%b%j$NF~$lBX$($,860x$H9M$($i$l$k!#(B
+表 \ref{paragain}は、32CPUで構成されるCray Superserverの上で測定
+した並列実行効率を示したものである。
+コンパイルされたフィボナッチ関数において線形な並列度が得られた。
+なぜなら、共有メモリへのアクセスがなく、それぞれのプロセッサのキャッシュ
+メモリに十分ロードできるほどちいさなプログラムであったためである。
+それに反して、同じプログラムをインタープリターで実行したとき、
+キャッシュメモリを使い果たしたため、
+線形な高効率を達成することができなかった。
+さらにまた、頻繁に共有メモリを参照するようなプログラムや
+メモリ配置を要求するようなプログラムは1個のプロセッサで実行した
+ときよりも良い性能を得ることができなかった。
+これは、頻繁なキャッシュメモリの入れ替えが原因と考えられる。
 
 \begin{table}
-\caption{\label{paragain}$B%^%k%A%W%m%;%C%5>e$G<B9T$5$l$?%W%m%0%i%`$NJBNsEY(B}
+\caption{\label{paragain}マルチプロセッサ上で実行されたプログラムの並列度}
 \begin{center}
 \begin{tabular}{|l|r|r|r|r|c|}  \hline
 processors & 1 & 2 & 4 & 8 & GC (ratio) \\ \hline
@@ -252,47 +252,47 @@ processors & 1 & 2 & 4 & 8 & GC (ratio) \\ \hline
 \end{center}
 \end{table}
 
-\subsection{$B%9%l%C%I@8@.(B}
-$B%9%l%C%I$O!"7W;;$r3d$jEv$F$kC10L$G$"$j!"IaDL(Blisp$B=q<0$rI>2A$9$k(B
-$B$?$a$NC10L$G$"$k!#(B
-Euslisp$B$N%9%l%C%I$O!"(B{\bf thread}$B%/%i%9$N%$%s%9%?%s%9$K$h$C$F(B
-$BI=8=$5$l$k!#(B
-$B$3$N%*%V%8%'%/%H$O!"FbMF$rI=8=$9$k%9%l%C%IA4BN$H$$$&$h$j$O$`$7$m!"(B
-$B<B:]$K0z$-?t$H7k2L$rEO$9$?$a$N%9%l%C%I$N(B
-$B@)8f%]!<%H$G$"$j!"I>2A$r;O$a$k$b$N$G$"$k!#(B
+\subsection{スレッド生成}
+スレッドは、計算を割り当てる単位であり、普通lisp書式を評価する
+ための単位である。
+Euslispのスレッドは、{\bf thread}クラスのインスタンスによって
+表現される。
+このオブジェクトは、内容を表現するスレッド全体というよりはむしろ、
+実際に引き数と結果を渡すためのスレッドの
+制御ポートであり、評価を始めるものである。
 
 \begin{refdesc}
 
 \funcdesc{sys:make-thread}{num \&optional (lsize 32*1024) (csize lsize)}{
-{\em lsize}$B%o!<%I$N(Blisp$B%9%?%C%/$H(B{\em csize}$B%o!<%I$N(BC-$B%9%?%C%/$r;}$D(B
-$B%9%l%C%I$r(B{\em num}$B8D$@$1@8@.$7!"%7%9%F%`$N%9%l%C%I%W!<%k$K(B
-$BCV$/!#(B
-$B%9%l%C%I%W!<%kFb$N$9$Y$F$N%9%l%C%I$O!"(Bsys:*threads*$B$KB+$M$F$"$j!"(B
-{\bf make-thread}$B$,8F$S=P$5$l$?$H$-$K3HD%$5$l$k!#(B
-{\bf thread}$B4X?t$K$h$C$F!"7W;;$O%9%l%C%I%W!<%k$NCf$G6u$$$?%9%l%C%I$N(B
-$B#1$D$K3d$jEv$F$i$l$k!#(B
-$B$7$?$,$C$F!";XDj$5$l$?7W;;$,$I$N%9%l%C%I$K3d$jEv$F$i$l$k$+(B
-$B@)8f$G$-$J$$$?$a!"%9%l%C%I$N%9%?%C%/%5%$%:$rJQ99$9$kJ}K!$,L5$$!#(B}
+{\em lsize}ワードのlispスタックと{\em csize}ワードのC-スタックを持つ
+スレッドを{\em num}個だけ生成し、システムのスレッドプールに
+置く。
+スレッドプール内のすべてのスレッドは、sys:*threads*に束ねてあり、
+{\bf make-thread}が呼び出されたときに拡張される。
+{\bf thread}関数によって、計算はスレッドプールの中で空いたスレッドの
+１つに割り当てられる。
+したがって、指定された計算がどのスレッドに割り当てられるか
+制御できないため、スレッドのスタックサイズを変更する方法が無い。}
 
 \vardesc{sys:*threads*}{
-{\bf make-thread}$B$K$h$C$F:n@.$5$l$?$9$Y$F$N%9%l%C%I$N%j%9%H$r;}$D!#(B}
+{\bf make-thread}によって作成されたすべてのスレッドのリストを持つ。}
 
 \funcdesc{sys::free-threads}{}{
-$B%9%l%C%I%W!<%kFb$N6u$$$?%9%l%C%I$N%j%9%H$rJV$9!#(B
-$B$b$7!"7k2L$,(BNIL$B$J$i$P!"%9%l%C%I$X$N%?%9%/$N?7$7$$IUBw$O8=:_<B9T$5$l$F$$$k(B
-$B%9%l%C%I$N$I$l$+$NI>2A$,=*N;$9$k$+$"$k$$$O(B
-{\bf make-thread}$B$K$h$C$F%9%l%C%I%W!<%k$K?7$7$$%9%l%C%I$r@8@.$9$k$^$G(B
-$BDd;_$5$l$k!#(B}
+スレッドプール内の空いたスレッドのリストを返す。
+もし、結果がNILならば、スレッドへのタスクの新しい付託は現在実行されている
+スレッドのどれかの評価が終了するかあるいは
+{\bf make-thread}によってスレッドプールに新しいスレッドを生成するまで
+停止される。}
 
 \funcdesc{sys:thread}{func \&rest args}{
-$B%9%l%C%I%W!<%k$+$i6u$$$?%9%l%C%I$r(B1$B$D<h$j=P$7!"(B
-{\em (func . args)}$B$NI>2A$N$?$a$K$=$l$r3d$jEv$F$k!#(B
-{\bf sys:thread}$B$O!"(B{\em args}$B$rE83+$7$?%j%9%H$K(B{\rm func}$B$rE,MQ(B
-$B$9$k$,!"4X?t$NE,MQ7k2L$r<u$1<h$i$J$$$?$a!"(B
-$BHsF14|$N(B{\bf funcall}$B$H$_$J$9$3$H$,$G$-$k!#(B
-$B$`$7$m!"(B{\bf sys:thread}$B$O(Bfuncall$B$K3d$jEv$F$i$l$?%9%l%C%I(B
-$B%*%V%8%'%/%H$rJV$9$N$G!"<B:]$N7k2L$O(B{\bf sys:wait-thread}$B$K$h$C$F(B
-$B8e$+$iF@$k$3$H$,$G$-$k!#(B}
+スレッドプールから空いたスレッドを1つ取り出し、
+{\em (func . args)}の評価のためにそれを割り当てる。
+{\bf sys:thread}は、{\em args}を展開したリストに{\rm func}を適用
+するが、関数の適用結果を受け取らないため、
+非同期の{\bf funcall}とみなすことができる。
+むしろ、{\bf sys:thread}はfuncallに割り当てられたスレッド
+オブジェクトを返すので、実際の結果は{\bf sys:wait-thread}によって
+後から得ることができる。}
 \begin{quote}
 \begin{verbatim}
 (defun compute-pi (digits) ...)
@@ -303,57 +303,57 @@ Euslisp$B$N%9%l%C%I$O!"(B{\bf thread}$B%/%i%9$N%$%s%9%?%s%9$K$h$C$F(B
 \end{quote}
 
 \funcdesc{sys:thread-no-wait}{func \&rest args}{
-$B6u$$$?%9%l%C%I$N(B1$B$D$K7W;;$r3d$jEv$F$k!#(B
-$B%9%l%C%I$O!"(B{\bf wait-thread}$B$5$l$k$3$H$J$7$K!"(B
-$BI>2A$,=*N;$7$?$H$-!"%9%l%C%I%W!<%k$KLa$5$l$k!#(B}
+空いたスレッドの1つに計算を割り当てる。
+スレッドは、{\bf wait-thread}されることなしに、
+評価が終了したとき、スレッドプールに戻される。}
 
 \funcdesc{sys:wait-thread}{thread}{
-{\em thread}$B$K(B{\bf sys:thread}$B4X?t$K$h$C$FM?$($i$l$?(Bfuncall$B$NI>2A$,(B
-$B=*N;$9$k$N$rBT$A!"$=$N7k2L$r<u$1<h$j!"JV$9!#(B
-$B$b$7!"%9%l%C%I$K(B{\bf sys:thread}$B$K$h$C$FI>2A$,3d$jEv$F$i$l$?$J$i$P!"(B
-{\bf sys:wait-thread}$B$O!"I,?\$G$"$k!#(B
-$B$J$<$J$i!"%9%l%C%I$O7k2L$rE>Aw$7=*$o$k$^$G%9%l%C%I%W!<%k$KLa$i$J$$(B
-$B$?$a$G$"$k!#(B}
+{\em thread}に{\bf sys:thread}関数によって与えられたfuncallの評価が
+終了するのを待ち、その結果を受け取り、返す。
+もし、スレッドに{\bf sys:thread}によって評価が割り当てられたならば、
+{\bf sys:wait-thread}は、必須である。
+なぜなら、スレッドは結果を転送し終わるまでスレッドプールに戻らない
+ためである。}
  
 \macrodesc{sys:plist}{\&rest forms}{
-$B0[$J$C$?%9%l%C%I$K$h$jJBNs$K(B{\em forms}$B$rI>2A$7!"(B
-$B$9$Y$F$NI>2A$,=*N;$9$k$N$rBT$A!"(B
-$B7k2L$N%j%9%H$rJV$9!#(B
-{\bf sys:plist}$B$O!"%j%9%H2=$5$l$?$=$l$>$l$N(Bform$B$,4X?t8F$S=P$7$5$l$k(B
-$B$3$H$r=|$$$F!"(B{\em parallel-list}$B$H$7$F$_$J$5$l$k$@$m$&!#(B}
+異なったスレッドにより並列に{\em forms}を評価し、
+すべての評価が終了するのを待ち、
+結果のリストを返す。
+{\bf sys:plist}は、リスト化されたそれぞれのformが関数呼び出しされる
+ことを除いて、{\em parallel-list}としてみなされるだろう。}
 
 \end{refdesc}
 
-\subsection{$BF14|(B}
+\subsection{同期}
 
-Solaris$B%*%Z%l!<%F%#%s%0%7%9%F%`Fb$K$O!"%^%k%A%9%l%C%I%W%m%0%i%`$N$?$a$K(B
-4$B$D$NF14|<jK!$,$"$k!#(B
-Euslisp$B$O!"(Bmutex-lock$B$H(Bcondition variable$B$H%;%^%U%)$rDs6!$7$F$$$k!#(B
-reader-writer lock$B$O<B8=$5$l$F$J$$!#(B
-$B$3$l$i$N<jK!$K4p$E$$$F!"F14|%a%b%j%]!<%H$dF14|>cJI$N$h$&$J(B
-$B9b%l%Y%k$NF14|5!9=$,<B8=$5$l$F$$$k!#(B
+Solarisオペレーティングシステム内には、マルチスレッドプログラムのために
+4つの同期手法がある。
+Euslispは、mutex-lockとcondition variableとセマフォを提供している。
+reader-writer lockは実現されてない。
+これらの手法に基づいて、同期メモリポートや同期障壁のような
+高レベルの同期機構が実現されている。
 
 \begin{refdesc}
 \funcdesc{sys:make-mutex-lock}{}{
-mutex-lock$B$r:n$j!"JV$9!#(B
-mutex-lock$B$O!"(B6$B$D$NMWAG$r;}$D@0?t%Y%/%H%k$GI=8=$5$l$F$$$k!#(B}
+mutex-lockを作り、返す。
+mutex-lockは、6つの要素を持つ整数ベクトルで表現されている。}
 
 \funcdesc{sys:mutex-lock}{mlock}{
-mutex-lock$B$N(B{\em mlock}$B$r%m%C%/$9$k!#(B
-$B$b$7!"(B{\em mlock}$B$,4{$KB>$N%9%l%C%I$+$i%m%C%/$5$l$F$$$k$J$i!"(B
-{\bf mutex-lock}$B$O%m%C%/$,30$5$l$k$^$GBT$D!#(B}
+mutex-lockの{\em mlock}をロックする。
+もし、{\em mlock}が既に他のスレッドからロックされているなら、
+{\bf mutex-lock}はロックが外されるまで待つ。}
 
 \funcdesc{sys:mutex-unlock}{mlock}{
-{\em mlock}$B$r2r=|$7!"$3$N%m%C%/$rBT$C$F$$$kB>$N%9%l%C%I$NFb$N#1$D$,:F$S<B9T$5$l;O$a$k!#(B}
+{\em mlock}を解除し、このロックを待っている他のスレッドの内の１つが再び実行され始める。}
 
 \macrodesc{sys:mutex}{mlock \&rest forms}{
-mutex-lock$B$H(Bmutex-unlock$B$O!"AH$_$G;HMQ$5$l$J$1$l$P$J$i$J$$!#(B
-{\bf mutex}$B$O!"=EMW$JItJ,$r$R$H$^$H$^$j$K$7$?%^%/%m$G$"$k!#(B
-{\em mlock}$B$O!"I>2A$9$k(B{\em forms}$B$,I>2A$5$l$kA0$K%m%C%/$5$l$k!#(B
-$B$=$7$F!"I>2A$,=*N;$7$?$H$-$K!"%m%C%/$,2r=|$5$l$k!#(B
-$B$3$N%^%/%m$O!"0J2<$N(Bprogn form$B$KE83+$5$l$k!#(B
-{\bf unwind-protect}$B$O!"(B{\em forms}$B$NI>2ACf$K%(%i!<$,H/@8$7$?$H$-(B
-$B$G$5$(!"%m%C%/$N2r=|$rJ]>Z$9$k$?$a$K;HMQ$5$l$k$3$H$KCm0U$9$k$3$H!#(B
+mutex-lockとmutex-unlockは、組みで使用されなければならない。
+{\bf mutex}は、重要な部分をひとまとまりにしたマクロである。
+{\em mlock}は、評価する{\em forms}が評価される前にロックされる。
+そして、評価が終了したときに、ロックが解除される。
+このマクロは、以下のprogn formに展開される。
+{\bf unwind-protect}は、{\em forms}の評価中にエラーが発生したとき
+でさえ、ロックの解除を保証するために使用されることに注意すること。
 }
 \begin{quote}
 \begin{verbatim}
@@ -366,64 +366,64 @@ mutex-lock$B$H(Bmutex-unlock$B$O!"AH$_$G;HMQ$5$l$J$1$l$P$J$i$J$$!#(B
 \end{quote}
 
 \funcdesc{sys:make-cond}{}{
-4$B$D$NMWAG$r;}$D@0?t%Y%/%H%k$G$"$k(Bcondition variable$B%*%V%8%'%/%H$r(B
-$B:n$k!#(Bcondition variable$B$NJV$jCM$H$7$F$O!"%m%C%/$5$l$F$J$$>uBV$G$G$"$k!#(B}
+4つの要素を持つ整数ベクトルであるcondition variableオブジェクトを
+作る。condition variableの返り値としては、ロックされてない状態でである。}
 
 \funcdesc{sys:cond-wait}{condvar mlock}{
-{\em condvar}$B$K?.9f$,=P$5$l$k$^$GBT$D!#(B
-$B$b$7!"(B{\em condvar}$B$,B>$N%9%l%C%I$K$h$C$F$9$G$K3MF@$5$l$F$$$?$J$i$P!"(B
-{\em mlock}$B$r2r=|$7!"(B{\em condvar}$B$K?.9f$,=P$5$l$k$^$GBT$D!#(B}
+{\em condvar}に信号が出されるまで待つ。
+もし、{\em condvar}が他のスレッドによってすでに獲得されていたならば、
+{\em mlock}を解除し、{\em condvar}に信号が出されるまで待つ。}
 
 \funcdesc{sys:cond-signal}{condvar}{
-{\em condvar}$B$G<($5$l$k(Bcondition variable$B$K?.9f$r=P$9!#(B}
+{\em condvar}で示されるcondition variableに信号を出す。}
 \funcdesc{sys:make-semaphore}{}{
-20$B$NMWAG$r;}$D@0?t%Y%/%H%k$K$h$C$FI=8=$5$l$k%;%^%U%)%*%V%8%'%/%H$r:n$k!#(B}
-\funcdesc{sys:sema-post}{sem}{{\em sem}$B$K?.9f$r=P$9!#(B}
+20の要素を持つ整数ベクトルによって表現されるセマフォオブジェクトを作る。}
+\funcdesc{sys:sema-post}{sem}{{\em sem}に信号を出す。}
 \funcdesc{sys:sema-wait}{sem}{
-{\em sem}$B$K?.9f$,Mh$k$^$GBT$D!#(B}
+{\em sem}に信号が来るまで待つ。}
 
 \classdesc{sys:barrier-synch}{propertied-object}{
 threads n-threads count barrier-cond threads-lock count-lock}
-{$BF14|>cJI$N$?$a$N9=B$$rI=8=$9$k!#(B
-$BF14|$rBT$C$F$$$k%9%l%C%I$O!"(B{\em thread-lock}$B$K$h$C$F(B
-$BAj8_$KGS=|$5$l$k(B{\em thread}$B$KCV$+$l$k!#(B
-{\bf barrier-synch}$B%*%V%8%'%/%H$,@8@.$5$l$?$H$-!"(B
-{\em count}$B$O!"%<%m$K=i4|2=$5$l$k!#(B
-$BF14|$7$F$$$k%9%l%C%I$O!"(B{\tt :add}$B%a%C%;!<%8$rAw$k$3$H$K$h$C$F!"(B
-{\em threads}$B%j%9%H$KCV$+$l$k!#(B
-$B$3$N(Bbarrier-synch$B%*%V%8%'%/%H$K(B{\tt :wait}$B$rAw$k$3$H$O!"(B
-{\em count}$B$rA}2C$5$;$k$3$H$N860x$H$J$j!"(B
-$BAw$i$l$?%9%l%C%I$OBT$A>uBV$K$J$k!#(B
-{\em threads}$B$NCf$N$9$Y$F$N%9%l%C%I$K(B{\tt :wait}$B%a%C%;!<%8$,Aw$i$l$?$H$-!"(B
-$BBT$A$,2r=|$5$l!"$9$Y$F$N%9%l%C%I$N<B9T$,:F$S;O$^$k!#(B
-$BF14|$O!"(B{\em count-lock}$B$N(Bmutex-lock$B$H(B{\em barrier-cond}$B$N(Bcondition-variable
-$B$NAH$_9g$o$;$K$h$C$F<B9T$5$l$k!#(B}
+{同期障壁のための構造を表現する。
+同期を待っているスレッドは、{\em thread-lock}によって
+相互に排除される{\em thread}に置かれる。
+{\bf barrier-synch}オブジェクトが生成されたとき、
+{\em count}は、ゼロに初期化される。
+同期しているスレッドは、{\tt :add}メッセージを送ることによって、
+{\em threads}リストに置かれる。
+このbarrier-synchオブジェクトに{\tt :wait}を送ることは、
+{\em count}を増加させることの原因となり、
+送られたスレッドは待ち状態になる。
+{\em threads}の中のすべてのスレッドに{\tt :wait}メッセージが送られたとき、
+待ちが解除され、すべてのスレッドの実行が再び始まる。
+同期は、{\em count-lock}のmutex-lockと{\em barrier-cond}のcondition-variable
+の組み合わせによって実行される。}
 
-\methoddesc{:init}{}{$B$3$N(Bbarrier-synch$B%*%V%8%'%/%H$r=i4|2=$9$k!#(B
-2$B$D$N(Bmutex-lock$B$H(B1$B$D$N(Bcondition-variable$B$,@8@.$5$l$k!#(B}
-\methoddesc{:add}{thr}{{\em threads}$B%j%9%H$NCf$K(B{\em thr}$B%9%l%C%I$,DI2C$5$l$k!#(B}
-\methoddesc{:remove}{thr}{{\em threads}$B%j%9%H$NCf$+$i(B{\em thr}$B%9%l%C%I$r:o=|$9$k!#(B}
-\methoddesc{:wait}{}{{\em threads}$B%j%9%H$NCf$N$9$Y$F$N%9%l%C%I$K(B{\tt :wait}
-$B$,G[I[$5$l$k$N$rBT$D!#(B}
+\methoddesc{:init}{}{このbarrier-synchオブジェクトを初期化する。
+2つのmutex-lockと1つのcondition-variableが生成される。}
+\methoddesc{:add}{thr}{{\em threads}リストの中に{\em thr}スレッドが追加される。}
+\methoddesc{:remove}{thr}{{\em threads}リストの中から{\em thr}スレッドを削除する。}
+\methoddesc{:wait}{}{{\em threads}リストの中のすべてのスレッドに{\tt :wait}
+が配布されるのを待つ。}
 
 \classdesc{sys:synch-memory-port}{propertied-object}{
 sema-in sema-out buf empty lock}{
-1$BJ}8~$NF14|$5$l$?%a%b%j%]!<%H$r<B8=$9$k!#(B
-$B$3$N%*%V%8%'%/%H$rDL$8$F%G!<%?$rE>Aw$9$k$?$a$K!"(B2$B$D$N%9%l%C%I$rF14|$5$;$k!#(B
-$BE>Aw@)8f$O!"%;%^%U%)$rMQ$$$F<B8=$5$l$F$$$k!#(B}
+1方向の同期されたメモリポートを実現する。
+このオブジェクトを通じてデータを転送するために、2つのスレッドを同期させる。
+転送制御は、セマフォを用いて実現されている。}
 
 \methoddesc{:read}{}{
-$B$3$N(B{\bf synch-memory-port}$B$K%P%C%U%!$5$l$F$$$k%G!<%?$rFI$`!#(B
-$B$b$7!"$^$@=q$+$l$F$$$J$+$C$?$J$i$P!"(B{\tt :read}$B$ODd;_$9$k!#(B}
+この{\bf synch-memory-port}にバッファされているデータを読む。
+もし、まだ書かれていなかったならば、{\tt :read}は停止する。}
 
 \methoddesc{:write}{datum}{
-$B%P%C%U%!$K(B{\em datum}$B$r=q$-9~$`!#(B
-1$B%o!<%I$N%P%C%U%!$N$_B8:_$9$k$N$G!"(B
-$B$b$7B>$N%G!<%?$,4{$K=q$+$l$F$*$j$^$@FI$^$l$F$$$J$+$C$?$J$i$P!"(B
-{\tt :write}$B$O(B{\tt :read}$B$K$h$C$F$=$N%G!<%?$,FI$_9~$^$l$k$^$GBT$D!#(B}
+バッファに{\em datum}を書き込む。
+1ワードのバッファのみ存在するので、
+もし他のデータが既に書かれておりまだ読まれていなかったならば、
+{\tt :write}は{\tt :read}によってそのデータが読み込まれるまで待つ。}
 
-\methoddesc{:init}{}{$B$3$N(B{\bf sync-memory-port}$B$r=i4|2=$9$k!#(B
-$B$3$l$K$O(B2$B$D$N%;%^%U%)$,@8@.$5$l!"(B{\tt :write}$BF0:n$,2DG=$J>uBV$K$J$C$F$$$k!#(B}
+\methoddesc{:init}{}{この{\bf sync-memory-port}を初期化する。
+これには2つのセマフォが生成され、{\tt :write}動作が可能な状態になっている。}
 
 \end{refdesc}
 

@@ -1,95 +1,95 @@
-\section{$B2hA|=hM}(B}
+\section{画像処理}
 
-\markright{\arabic{section}. $B2hA|=hM}(B}
-$B2hA|=hM}$N=t5!G=$O!$(B{\tt "vision/piximage"}$B%U%!%$%k$K3JG<$5$l$F$$$k!#(B
-$B2hA|%G!<%?$rI=8=$9$k$?$a$K(B2$B$D$N%/%i%9(B
-{\bf pixel-image}$B$H(B{\bf color-pixel-image}$B$,Dj5A$5$l$F$$$k!#(B
-$B%k%C%/%"%C%W%F!<%V%k(B(LUT)$B$rMQ$$$?%T%/%;%k(B(pixel)$BKh$NJQ49!$(B
-$B%(%C%8Cj=P!$(Bpbm$B%U%!%$%k$X$N2hA|%G!<%?$NJQ49$,<B8=$5$l$F$$$k!#(B
+\markright{\arabic{section}. 画像処理}
+画像処理の諸機能は，{\tt "vision/piximage"}ファイルに格納されている。
+画像データを表現するために2つのクラス
+{\bf pixel-image}と{\bf color-pixel-image}が定義されている。
+ルックアップテーブル(LUT)を用いたピクセル(pixel)毎の変換，
+エッジ抽出，pbmファイルへの画像データの変換が実現されている。
 
-\subsection{$B%k%C%/%"%C%W%F!<%V%k(B (LUT)}
-LUT$B$O!$%T%/%;%k(B(pixel)$B%G!<%?$rJQ49$9$k$?$a$N%Y%/%H%k%G!<%?$G$"$k!#(B 
+\subsection{ルックアップテーブル (LUT)}
+LUTは，ピクセル(pixel)データを変換するためのベクトルデータである。 
 
 \begin{refdesc}
 
 \funcdesc{make-equilevel-lut}{levels \&optional (size 256)}{
-$B#1<!85$N@0?t%Y%/%H%k(B(integer-vector)$B$rJV$9!#(B
-$B$=$N%Y%/%H%k$O!$(B0$B$+$i(B{\em size}$B$^$G$NCM$r(B0$B$+$i(B{\em levels}$B$^$G$NCM$K(B
-$B@~7AE*$K%^%C%W$9$k!#(B
-$BNc$($P!$(B{\tt (make-equilevel-lut 3 12)}$B$O!$(B
-{\tt \#i(0 0 0 0 1 1 1 1 2 2 2 2)}$B$rJV$9!#(B}
+１次元の整数ベクトル(integer-vector)を返す。
+そのベクトルは，0から{\em size}までの値を0から{\em levels}までの値に
+線形的にマップする。
+例えば，{\tt (make-equilevel-lut 3 12)}は，
+{\tt \#i(0 0 0 0 1 1 1 1 2 2 2 2)}を返す。}
 
 \funcdesc{look-up}{src dest lut}{
-$B%k%C%/%"%C%W%F!<%V%k(B{\em lut}$B$rMQ$$$F(B{\em src}$B%Y%/%H%k$r(B{\em dest}$B%Y%/%H%k$K(B
-$BCM$rJQ49$7$FCV$-49$($k!#(B $B$b$7(B{\em dest}$B%Y%/%H%k$,(BNIL$B$N$H$-$O!$(B
-{\em src}$B%Y%/%H%k$HF1$8%/%i%9$GF1$8%5%$%:$N%Y%/%H%k$r:n$k!#(B
-$BNc$($P!$(B {\tt (look-up \#i(1 2 3) nil \#(10 20 30 40 50))}$B$O!$(B
-{\tt \#i(20 30 40)}$B$rJV$9!#(B}
+ルックアップテーブル{\em lut}を用いて{\em src}ベクトルを{\em dest}ベクトルに
+値を変換して置き換える。 もし{\em dest}ベクトルがNILのときは，
+{\em src}ベクトルと同じクラスで同じサイズのベクトルを作る。
+例えば， {\tt (look-up \#i(1 2 3) nil \#(10 20 30 40 50))}は，
+{\tt \#i(20 30 40)}を返す。}
 
 \funcdesc{look-up2}{src dest lut1 lut2}{
-{\bf look-up2}$B$O!"%k%C%/%"%C%W%F!<%V%k(B{\em lut1}$B$*$h$S(B{\em lut2}$B$rO"B3E*$K;HMQ$7$F(B
-{\em src}$B%Y%/%H%k$r(B{\em dest}$B%Y%/%H%k$KJQ49$9$k!#(B
-{\em src}$B$H(B{\rm dest}$B$O!"F1$8%5%$%:$N@0?t%Y%/%H%k$"$k$$$O%P%$%H%Y%/%H%k!JJ8;zNs!K$G$"$k!#(B}
+{\bf look-up2}は、ルックアップテーブル{\em lut1}および{\em lut2}を連続的に使用して
+{\em src}ベクトルを{\em dest}ベクトルに変換する。
+{\em src}と{\rm dest}は、同じサイズの整数ベクトルあるいはバイトベクトル（文字列）である。}
 
 
 \funcdesc{look-up*}{src dest luts}{
-{\em luts}$B$O!$%k%C%/%"%C%W%F!<%V%k$N%j%9%H$G$"$k!#(B
-{\em luts}$B$+$iM?$($i$l$k%k%C%/%"%C%W%F!<%V%k$rO"B3E*$K;HMQ$7$F!$(B
-{\em src}$B%Y%/%H%k$r(B{\em dest}$B%Y%/%H%k$KJQ49$9$k!#(B}
+{\em luts}は，ルックアップテーブルのリストである。
+{\em luts}から与えられるルックアップテーブルを連続的に使用して，
+{\em src}ベクトルを{\em dest}ベクトルに変換する。}
 
 \funcdesc{concatenate-lut}{lut1 lut2 \&optional (size 256)}{
-2$B$D$N%k%C%/%"%C%W%F!<%V%k(B{\em lut1}$B$H(B{\em lut2}$B$r$D$J$$$@(B
-$B?7$7$$%k%C%/%"%C%W%F!<%V%k$rJV$9!#$=$N?7$7$$%F!<%V%k$r;HMQ$9$k$3$H$O!$(B
-{\em lut1}$B$H(B{\em lut2}$B$rO"B3E*$K;HMQ$9$k$3$H$HF1$8$G$"$k!#(B}
+2つのルックアップテーブル{\em lut1}と{\em lut2}をつないだ
+新しいルックアップテーブルを返す。その新しいテーブルを使用することは，
+{\em lut1}と{\em lut2}を連続的に使用することと同じである。}
 
 \funcdesc{make-colors}{default-color-map}{
-$B0J2<$K<($9%G%U%)%k%H$N%+%i!<%^%C%W$r:n$k!#(B}
+以下に示すデフォルトのカラーマップを作る。}
 
 \vardesc{*x-gray32-lut*}{
-$B%G%U%)%k%H%+%i!<%^%C%W(B{\tt x:*colormap*}
-$B$KDj5A$5$l$F$$$k(B32$B3,D4$N%0%l!<%9%1!<%k$N(BLUT$B$G$"$k!#(B
-{\tt (aref *x-gray32-lut* n)}$B$O!$(B32$B3,D4$NFb$N(Bn$BHVL\$N%0%l!<3,D4$rJV$9!#(B}
+デフォルトカラーマップ{\tt x:*colormap*}
+に定義されている32階調のグレースケールのLUTである。
+{\tt (aref *x-gray32-lut* n)}は，32階調の内のn番目のグレー階調を返す。}
 
 \vardesc{*x-gray16-lut*}{
-$B%G%U%)%k%H%+%i!<%^%C%W(B{\tt x:*colormap*}
-$B$KDj5A$5$l$F$$$k(B16$B3,D4$N%0%l!<%9%1!<%k$N(BLUT$B$G$"$k!#(B}
+デフォルトカラーマップ{\tt x:*colormap*}
+に定義されている16階調のグレースケールのLUTである。}
 
 \vardesc{*x-color-lut*}{
-$B%G%U%)%k%H%+%i!<%^%C%W(B{\tt x:*colormap*}
-$B$KDj5A$5$l$F$$$k4v$D$+$NA/L@$J%+%i!<$N(BLUT$B$G$"$k!#(B
-$BEPO?$5$l$F$$$k%+%i!<$O!$(B "black", "red", "green", "lightblue", "yellow",
-"orange", "blue", "magenta", "white"$B$G$"$k!#(B}
+デフォルトカラーマップ{\tt x:*colormap*}
+に定義されている幾つかの鮮明なカラーのLUTである。
+登録されているカラーは， "black", "red", "green", "lightblue", "yellow",
+"orange", "blue", "magenta", "white"である。}
 
 \vardesc{*256to8*}{
-0..255$B$NHO0O$N@0?t$r(B0..7$B$NHO0O$KJQ49$9$k(B256$BF~NO$N(BLUT$B$G$"$k!#(B
-$B$=$N3,D4$O!$@~7A$K%^%C%W$5$l$F$$$k!#(B}
+0..255の範囲の整数を0..7の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。}
 
 \vardesc{*256to16*}{
-0..255$B$NHO0O$N@0?t$r(B0..15$B$NHO0O$KJQ49$9$k(B256$BF~NO$N(BLUT$B$G$"$k!#(B
-$B$=$N3,D4$O!$@~7A$K%^%C%W$5$l$F$$$k!#(B}
+0..255の範囲の整数を0..15の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。}
 
 \vardesc{*256to32*}{
-0..255$B$NHO0O$N@0?t$r(B0..31$B$NHO0O$KJQ49$9$k(B256$BF~NO$N(BLUT$B$G$"$k!#(B
-$B$=$N3,D4$O!$@~7A$K%^%C%W$5$l$F$$$k!#(B}
+0..255の範囲の整数を0..31の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。}
 
 \vardesc{*gray32*}{
-$B%0%l!<%9%1!<%k%T%/%;%k$r(BX$B$N%+%i!<%^%C%W$KJQ49$9$k$?$a$N(B256$BF~NO$N(BLUT$B$G$"$k!#(B
-$B$3$l$O!"(B{\tt *256to32*}$B$H(B{\tt *x-gray32-lut*}$B$rO"7k$7$F:n$i$l$k!#(B
-$B%0%l!<(B32$B3,D4$N(BXwindow$B$NI=<(2DG=$J%T%/%;%k2hA|$O(B{\bf *gray32*}$B$K$h$C$F(B
-$B%0%l!<(B256$B3,D4$N2hA|$rJQ49$9$k$3$H$K$h$jF@$k$3$H$,$G$-$k!#(B}
+グレースケールピクセルをXのカラーマップに変換するための256入力のLUTである。
+これは、{\tt *256to32*}と{\tt *x-gray32-lut*}を連結して作られる。
+グレー32階調のXwindowの表示可能なピクセル画像は{\bf *gray32*}によって
+グレー256階調の画像を変換することにより得ることができる。}
 
 \vardesc{*rainbow32*}{
-256$B3,D4$N(Bhue$BCM$r(BX$B$N%l%$%s%\!<%+%i!<%^%C%W$KJQ49$9$k(B
-$B$?$a$N(B256$BF~NO$N(BLUT$B$G$"$k!#(B
-$B$3$l$O!"(B{\tt *256to32*}$B$H(B{\tt *x-rainbow32-lut*}$B$rO"7k$7$F:n$i$l$k!#(B}
+256階調のhue値をXのレインボーカラーマップに変換する
+ための256入力のLUTである。
+これは、{\tt *256to32*}と{\tt *x-rainbow32-lut*}を連結して作られる。}
 
 \end{refdesc}
 
-\subsection{$B%T%/%;%k2hA|(B}
-$B#1Kg$N2hA|%G!<%?$O!"(B{\bf pixel-image}$B%/%i%9$GI=8=$5$l$k!#(B{\bf pixel-image}$B$O!"(B
-$B%P%$%H7?%G!<%?$rMWAG$H$9$k(B2$B<!85G[Ns$G$"$k!#$=$l$>$l$N%G!<%?$NFbMF$O!"(B
-$B%"%W%j%1!<%7%g%s$K0MB8$7$F$$$k!#0lHLE*$K%T%/%;%k$NL@$k$5$rI=8=$9$k$?$a$K(B
-$B;H$o$l$k$,!"%(%C%851EY$dHyJ,J}8~$d%+%i!<51EY$d(Bbar$B%0%i%U$N$h$&$J$b$N$K$bMQ$$$k$3$H$,$G$-$k!#(B
+\subsection{ピクセル画像}
+１枚の画像データは、{\bf pixel-image}クラスで表現される。{\bf pixel-image}は、
+バイト型データを要素とする2次元配列である。それぞれのデータの内容は、
+アプリケーションに依存している。一般的にピクセルの明るさを表現するために
+使われるが、エッジ輝度や微分方向やカラー輝度やbarグラフのようなものにも用いることができる。
 
 \begin{refdesc}
 \classdesc{pixel-image}{array}{xpicture display-lut histogram\\
@@ -97,168 +97,168 @@ LUT$B$O!$%T%/%;%k(B(pixel)$B%G!<%?$rJQ49$9$k$?$a$N%Y%/%H%k%G!<%?$G$"$k!#(B
 \>brightness-distribution1\\
 \>brightness-covariance}{
 %provides a way to define image data with their horizontal/vertical sizes.
-{\bf pixel-image}$B$O!"(Bxwindow$B$X$NI=<(5!G=$r;}$D(B2$B<!85$N9TNs$G$"$k!#(B
-pixel$B$NJQ49$O!"(B{\bf display-lut}$B$K$h$C$F<B8=$5$l!"(B
-$B$=$N7k2L$N2hA|$O(B{\em xpicture}$B$KC_@Q$5$l$k!#(B
-$B<g$J<4$O=DJ}8~$K$H$k!#(B{\tt (x,y)}$B$N(B{\tt img}$B$N%T%/%;%k$O(B
-{\tt (aref img y x)}$B$G%"%/%;%9$9$k$3$H$,$G$-$k!#(B}
+{\bf pixel-image}は、xwindowへの表示機能を持つ2次元の行列である。
+pixelの変換は、{\bf display-lut}によって実現され、
+その結果の画像は{\em xpicture}に蓄積される。
+主な軸は縦方向にとる。{\tt (x,y)}の{\tt img}のピクセルは
+{\tt (aref img y x)}でアクセスすることができる。}
 
-\methoddesc{:width}{}{$B%T%/%;%k2hA|$N2#%5%$%:$rJV$9!#(B}
-\methoddesc{:height}{}{$B%T%/%;%k2hA|$N=D%5%$%:$rJV$9!#(B}
-\methoddesc{:size}{}{$BG[Ns$NBg$-$5$rJV$9!#(B}
+\methoddesc{:width}{}{ピクセル画像の横サイズを返す。}
+\methoddesc{:height}{}{ピクセル画像の縦サイズを返す。}
+\methoddesc{:size}{}{配列の大きさを返す。}
 \methoddesc{:transpose}{
 \&optional (result (instance (class self) :init dim0 dim1))}{
-x$B<4$H(By$B<4$r8r49$9$k!#(B}
+x軸とy軸を交換する。}
 \methoddesc{:map-picture}{lut \&optional (result (send self :duplicate))}{
-$B$3$N2hA|$r(B{\em lut}$B$GJQ49$7!"$=$N2hA|%G!<%?$r(B{\em result}$B$KC_@Q$9$k!#(B}
+この画像を{\em lut}で変換し、その画像データを{\em result}に蓄積する。}
 \methoddesc{:map}{fn \&optional (result (send self :duplicate))}{
-$B$3$N2hA|$N$9$Y$F$N%T%/%;%k$K(B{\em fn}$B$rE,MQ$7$F!"(B
-{\em result}$B$N%T%/%;%k$KCV$/!#(B}
-\methoddesc{:brightest-pixel}{}{$B$3$N2hA|$N0lHVL@$k$$%T%/%;%kCM$r8+$D$1$k!#(B}
-\methoddesc{:darkest-pixel}{}{$B$3$N2hA|$N0lHV0E$$%T%/%;%kCM$r8+$D$1$k!#(B}
+この画像のすべてのピクセルに{\em fn}を適用して、
+{\em result}のピクセルに置く。}
+\methoddesc{:brightest-pixel}{}{この画像の一番明るいピクセル値を見つける。}
+\methoddesc{:darkest-pixel}{}{この画像の一番暗いピクセル値を見つける。}
 \methoddesc{:average-pixel}{}{
-$B$3$N2hA|$N$9$Y$F$N%T%/%;%k$NJ?6Q51EY$r7W;;$9$k!#(B}
+この画像のすべてのピクセルの平均輝度を計算する。}
 \methoddesc{:halve}{\&optional simage}{
-$BH>J,$NBg$-$5$N2hA|$K=L>.$7$?%T%/%;%k2hA|$rJV$9!#(B}
+半分の大きさの画像に縮小したピクセル画像を返す。}
 % (:expand (rate) )
 \methoddesc{:subimage}{x y subwidth subheight}{
-$B$3$N2hA|$K(B{\em (x,y)}$B$r:8>e3Q$H$7!"I}$,(B{\em subwidth}$B$G9b$5$,(B{\em subheight}
-$B$G$"$k;M3Q7A$r@Z$j=P$9!#(B
-$B$=$N2hA|$N86E@$O(B{\em (x,y)}$B$KCV$+$l$k!#(B
-{\tt :subimage}$B$O!"$3$N;M3Q7A$G0O$^$l$?2hA|$rI=8=$9$k%T%/%;%k2hA|$r:n$k!#(B}
+この画像に{\em (x,y)}を左上角とし、幅が{\em subwidth}で高さが{\em subheight}
+である四角形を切り出す。
+その画像の原点は{\em (x,y)}に置かれる。
+{\tt :subimage}は、この四角形で囲まれた画像を表現するピクセル画像を作る。}
 \methoddesc{:xpicture}{\&optional lut}{
-$B$3$N2hA|$r(B{\em lut}$B$rMQ$$$FJQ49$7!"(B{\tt xpicture}$B$K@_Dj$9$k!#(B}
+この画像を{\em lut}を用いて変換し、{\tt xpicture}に設定する。}
 \methoddesc{:display-lut}{\&optional newlut}{
-{\tt display-lut}$B$K%k%C%/%"%C%W%F!<%V%k(B{\em newlut}$B$r@_Dj$9$k!#(B
-$B$=$N8e!"$3$N%k%C%/%"%C%W%F!<%V%k$rMQ$$$F2hA|$rJQ49$7!"(B
-{\tt xpicture}$B$K@_Dj$9$k!#(B}
+{\tt display-lut}にルックアップテーブル{\em newlut}を設定する。
+その後、このルックアップテーブルを用いて画像を変換し、
+{\tt xpicture}に設定する。}
 \methoddesc{:display}{(xwin geometry:*viewsurface*)}{
-{\bf :putimage}$B$rMQ$$$F(B{\em xwin}$B$G;XDj$5$l$k(BXwindow$B$K$3$N2hA|$r(B
-$BI=<($9$k!#(B
-$B$=$l$>$l$N%T%/%;%kCM$O(BX$B$N%+%i!<%^%C%W$r;2>H$9$k!#(B
-$B4uK>$9$kI=8=$rF@$k$?$a$K$O!"$3$N%T%/%;%k2hA|$r8GM-$N(BLUT$B$G(B
-$BJQ49$9$Y$-$G$"$k!#(B}
+{\bf :putimage}を用いて{\em xwin}で指定されるXwindowにこの画像を
+表示する。
+それぞれのピクセル値はXのカラーマップを参照する。
+希望する表現を得るためには、このピクセル画像を固有のLUTで
+変換すべきである。}
 \methoddesc{:duplicate}{}{
-$B$3$N2hA|%*%V%8%'%/%H$HF1$8I}$H9b$5$r;}$DF1$8%/%i%9$N(B
-$B%$%s%9%?%s%9$r:n$k!#%T%/%;%k%G!<%?$O%3%T!<$5$l$J$$!#(B}
+この画像オブジェクトと同じ幅と高さを持つ同じクラスの
+インスタンスを作る。ピクセルデータはコピーされない。}
 \methoddesc{:copy-from}{src}{
-{\em src}$B$G;XDj$5$l$kB>$N2hA|$+$i%T%/%;%k%G!<%?$r%3%T!<$9$k!#(B
-{\em src}$B$H$3$N2hA|$OF10l$N<!85$G$J$1$l$P$J$i$J$$!#(B}
+{\em src}で指定される他の画像からピクセルデータをコピーする。
+{\em src}とこの画像は同一の次元でなければならない。}
 \methoddesc{:hex}{\&optional (x 0) (y 0) (w 16) (h 16) (strm t)}{
-$B;M3QNN0h$G<($5$l$k%T%/%;%k%G!<%?$r(B16$B?J?t%U%)!<%^%C%H$GI=<($9$k!#(B}
+四角領域で示されるピクセルデータを16進数フォーマットで表示する。}
 \methoddesc{:hex1}{\&optional (x 0) (y 0) (w 64) (h 16) (strm t)}{
-$B;M3QNN0h$G<($5$l$k%T%/%;%k%G!<%?$r(B16$B?J?t%U%)!<%^%C%H$GI=<($9$k!#(B}
+四角領域で示されるピクセルデータを16進数フォーマットで表示する。}
 \methoddesc{:prin1}{strm \&rest msg}{
-$B$3$N%T%/%;%k2hA|$rL>A0$H<!85$H$H$b$KI=<($9$k!#(B}
+このピクセル画像を名前と次元とともに表示する。}
 \methoddesc{:init}{w h \&optional imgvec}{
-$BI}(B{\em w}$B!"9b$5(B{\em h}$B$r;}$D%T%/%;%k2hA|$r=i4|2=$9$k!#(B
-%$B$b$7!"$9$Y$F$N%T%/%;%kCM$,J8;zNs%Y%/%H%k$GI=8=$5$l$F$$$k(B{\em imgvec}
-%$B$,M?$($i$l$?$H$-!"$=$ND9$5$O(B{\em w*h}$B$G$J$1$l$P$J$i$J$$!#(B
+幅{\em w}、高さ{\em h}を持つピクセル画像を初期化する。
+%もし、すべてのピクセル値が文字列ベクトルで表現されている{\em imgvec}
+%が与えられたとき、その長さは{\em w*h}でなければならない。
 }
 \methoddesc{:amplify}{rate \&optional (result (send self :duplicate)}{
-{\em rate}$B$r$=$l$>$l$N%T%/%;%kCM$K3]$1$k!#(B}
+{\em rate}をそれぞれのピクセル値に掛ける。}
 \methoddesc{:compress-gray-scale}{levels \&optional result  \&aux pict2}{
-$B$3$N2hA|$N%T%/%;%kCM$r(B0$B$+$i(B{\em levels}$B$^$G$NHO0O$KJQ49$r$7!"(B
-$B$=$NJQ49$5$l$?2hA|$rJV$9!#(B}
+この画像のピクセル値を0から{\em levels}までの範囲に変換をし、
+その変換された画像を返す。}
 \methoddesc{:lut}{lut1 \&optional (result (send self :duplicate))}{
-$B%k%C%/%"%C%W%F!<%V%k(B{\em lut1}$B$rMQ$$$F$3$N2hA|$rJQ49$7!"(B
-$B$=$NJQ49$5$l$?2hA|$rJV$9!#(B}
+ルックアップテーブル{\em lut1}を用いてこの画像を変換し、
+その変換された画像を返す。}
 \methoddesc{:lut2}{lut1 lut2 \&optional (result (send self :duplicate))}{
-{\em lut1}$B$H(B{\em lut2}$B$rO"7k$7$?%k%C%/%"%C%W%F!<%V%k$rMQ$$$F$3$N2hA|$r(B
-$BJQ49$7!"$=$NJQ49$5$l$?2hA|$rJV$9!#(B}
+{\em lut1}と{\em lut2}を連結したルックアップテーブルを用いてこの画像を
+変換し、その変換された画像を返す。}
 \methoddesc{:histogram}{}{
-$B$3$N2hA|$N$=$l$>$l$N%T%/%;%kCM$NH/@82s?t$r?t$(!"$=$N%R%9%H%0%i%`(B
-$B$r@0?t%Y%/%H%kI=8=$GJV$9!#(B}
+この画像のそれぞれのピクセル値の発生回数を数え、そのヒストグラム
+を整数ベクトル表現で返す。}
 \methoddesc{:brightness-distribution}{}{
-$BL@$k$5$NJ,;6$rJV$9!#(B}
+明るさの分散を返す。}
 \methoddesc{:optimum-threshold}{}{
-$B$3$N2hA|$NL@$k$5$NJ,;6CM$,:GBg$H$J$C$F$$$k3,D4$rJV$9!#(B}
+この画像の明るさの分散値が最大となっている階調を返す。}
 \methoddesc{:project-x}{}{
-$BF1$8(Bx$B:BI8$N%T%/%;%kCM$r$9$Y$F2C;;$7!"$3$l$i$NCM$N%Y%/%H%k$rJV$9!#(B}
+同じx座標のピクセル値をすべて加算し、これらの値のベクトルを返す。}
 \methoddesc{:project-y}{}{
-$BF1$8(By$B:BI8$N%T%/%;%kCM$r$9$Y$F2C;;$7!"$3$l$i$NCM$N%Y%/%H%k$rJV$9!#(B}
+同じy座標のピクセル値をすべて加算し、これらの値のベクトルを返す。}
 \methoddesc{:digitize}{threshold \&optional (val0 0) (val1 255) result}{
-{\em threshold}$B$rMQ$$$F$3$N2hA|$r(B{\em val0}$B$H(B{\em val1}$B$N#2CM2hA|$K(B
-$BJQ49$9$k!#(B}
+{\em threshold}を用いてこの画像を{\em val0}と{\em val1}の２値画像に
+変換する。}
 \methoddesc{:and}{img2}{
-$B$3$N2hA|$H(B{\em img2}$B$N%S%C%HO@M}@Q$r$H$j!"=hM}$7$?2hA|$rJV$9!#(B}
+この画像と{\em img2}のビット論理積をとり、処理した画像を返す。}
 \methoddesc{:plot}{min max \&optional color viewsurface}{
-{\em min}$B$H(B{\em max}$B$N4V$NCM$r;}$D%T%/%;%k$r$9$Y$F(B{\em color}(gc)
-$B$G(B{\em viewsurface}$B$K%W%m%C%H$9$k!#(B}
+{\em min}と{\em max}の間の値を持つピクセルをすべて{\em color}(gc)
+で{\em viewsurface}にプロットする。}
 
-%\longdescription{:edge1}{\&optional \= (method 1) \hspace{97mm} [$B%a%=%C%I(B]\\
-\longdescription{:edge1}{\&optional \= (method 1) \` [$B%a%=%C%I(B]\\
+%\longdescription{:edge1}{\&optional \= (method 1) \hspace{97mm} [メソッド]\\
+\longdescription{:edge1}{\&optional \= (method 1) \` [メソッド]\\
 \> (th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
 \> (run *edge-length-threshold*)\\
 \> (win geometry:*viewsurface*) (edgeimg1)}{
-$B$3$N2hA|$N%(%C%8$rCj=P$7!"(BXwindow$B>e$K%(%C%82hA|$rI=<($9$k!#(B}
+この画像のエッジを抽出し、Xwindow上にエッジ画像を表示する。}
 \end{refdesc}
 
-\subsection{$B%+%i!<%T%/%;%k2hA|(B}
-$B%+%i!<2hA|$O!"(B{\bf color-pixel-image}$B%/%i%9$GI=8=$5$l$k!#(B
-$B$3$N%/%i%9$O!"(B3$B$D$N(B{\bf pixel-image}$B$r;}$C$F$*$j!"(BRGB$BI=8=$N(B
-red,green,blue$B$"$k$$$O(BHLS$B%b%G%k$N?'9g$$(B,$BL@$k$5(B,$BG;$5$r$=$l$>$lI=8=$9$k!#(B
-RGB$B$H(BHLS$B4V$NJQ49$b%5%]!<%H$7$F$$$k!#(B
+\subsection{カラーピクセル画像}
+カラー画像は、{\bf color-pixel-image}クラスで表現される。
+このクラスは、3つの{\bf pixel-image}を持っており、RGB表現の
+red,green,blueあるいはHLSモデルの色合い,明るさ,濃さをそれぞれ表現する。
+RGBとHLS間の変換もサポートしている。
 \begin{refdesc}
 
 \classdesc{color-pixel-image}{propertied-object}
 {width height component1 component2 component3}{
-3$B$D$N(B{\tt pixel-image}$B%*%V%8%'%/%H$G%+%i!<2hA|$rI=8=$9$k!#(B}
+3つの{\tt pixel-image}オブジェクトでカラー画像を表現する。}
 
-\methoddesc{:width}{}{$B$3$N2hA|$NI}$rJV$9!#(B}
-\methoddesc{:height}{}{$B$3$N2hA|$N9b$5$rJV$9!#(B}
-\methoddesc{:size}{}{$B$3$N2hA|$NI}(B$\times$$B9b$5$rJV$9!#(B}
-\methoddesc{:red}{}{{\tt component1}$B$rJV$9!#(B}
-\methoddesc{:green}{}{{\tt component2}$B$rJV$9!#(B}
-\methoddesc{:blue}{}{{\tt component3}$B$rJV$9!#(B}
-\methoddesc{:hue}{}{{\tt component1}$B$rJV$9!#(B
-$B?'9g$$(B(hue)$B$NCM(B(0$B!A(B360)$B$O!"(B0$B!A(B255$B$N(B1$B%P%$%H$GI=8=$5$l$k!#(B}
-\methoddesc{:lightness}{}{{\tt component2}$B$rJV$9!#(B
-$B@55,2=$5$l$?L@$k$5(B(brightness)$B$NCM(B(0$B!A(B1)$B$O!"(B0$B!A(B255$B$N@0?t$GI=8=$5$l$k!#(B}
-\methoddesc{:saturation}{}{{\tt component3}$BJV$9!#(B
-$B@55,2=$5$l$?G;$5(B(saturation)$B$NCM(B(0$B!A(B1)$B$O!"(B0$B!A(B255$B$N@0?t$GI=8=$5$l$k!#(B}
-\methoddesc{:pixel}{x y}{{\em (x,y)}$B$K$*$1$k(B
-{\tt component1,component2,component3}$B$NCM$r(B3$B$D$N@0?t$N%j%9%H$H$7$FJV$9!#(B
-$B$3$N%j%9%H$O!"(BRGB$BCM$"$k$$$O(BHLS$BCM$N$I$A$i$G$b2r<a$G$-$k!#(B}
+\methoddesc{:width}{}{この画像の幅を返す。}
+\methoddesc{:height}{}{この画像の高さを返す。}
+\methoddesc{:size}{}{この画像の幅$\times$高さを返す。}
+\methoddesc{:red}{}{{\tt component1}を返す。}
+\methoddesc{:green}{}{{\tt component2}を返す。}
+\methoddesc{:blue}{}{{\tt component3}を返す。}
+\methoddesc{:hue}{}{{\tt component1}を返す。
+色合い(hue)の値(0〜360)は、0〜255の1バイトで表現される。}
+\methoddesc{:lightness}{}{{\tt component2}を返す。
+正規化された明るさ(brightness)の値(0〜1)は、0〜255の整数で表現される。}
+\methoddesc{:saturation}{}{{\tt component3}返す。
+正規化された濃さ(saturation)の値(0〜1)は、0〜255の整数で表現される。}
+\methoddesc{:pixel}{x y}{{\em (x,y)}における
+{\tt component1,component2,component3}の値を3つの整数のリストとして返す。
+このリストは、RGB値あるいはHLS値のどちらでも解釈できる。}
 \methoddesc{:monochromize}{\&optional (NTSC nil)}{
-RGB$B9=@.$+$iL@$k$5$r7W;;$7!"?7$7$$(B{\tt pixel-image}$B$rJV$9!#(B
-$B$b$7!"(B{\em NTSC}$B$,(BNIL$B$J$i!"(B{\tt (R+G+B)/3}$B$,7W;;$5$l$k!#(B
-$B$b$7!"(BT$B$J$i!"(B{\tt 0.299*R+0.587*G+0.114*B}$B$,7W;;$5$l$k!#(B}
-\methoddesc{:HLS}{}{$B$3$N2hA|$r(BRGB$B2hA|$H2>Dj$7!"(BHLS$BI=8=$K2hA|$rJQ49$9$k!#(B
-$B$=$l$>$l$N%T%/%;%k$rJQ49$9$k$?$a$K(B{\bf RGB2HLS}$B$r8F$S=P$9!#(B}
-\methoddesc{:RGB}{}{$B$3$N2hA|$r(BHLS$B2hA|$H2>Dj$7!"(BRGB$BI=8=$K2hA|$rJQ49$9$k!#(B
-$B$=$l$>$l$N%T%/%;%k$rJQ49$9$k$?$a$K(B{\bf HLS2RGB}$B$r8F$S=P$9!#(B}
+RGB構成から明るさを計算し、新しい{\tt pixel-image}を返す。
+もし、{\em NTSC}がNILなら、{\tt (R+G+B)/3}が計算される。
+もし、Tなら、{\tt 0.299*R+0.587*G+0.114*B}が計算される。}
+\methoddesc{:HLS}{}{この画像をRGB画像と仮定し、HLS表現に画像を変換する。
+それぞれのピクセルを変換するために{\bf RGB2HLS}を呼び出す。}
+\methoddesc{:RGB}{}{この画像をHLS画像と仮定し、RGB表現に画像を変換する。
+それぞれのピクセルを変換するために{\bf HLS2RGB}を呼び出す。}
 \methoddesc{:halve}{}{
-$B$3$N2hA|$rH>J,$N%5%$%:$K=L>.$7$?(B{\bf color-pixel-image}$B$rJV$9!#(B}
+この画像を半分のサイズに縮小した{\bf color-pixel-image}を返す。}
 \methoddesc{:display}{\&optional (win *color-viewer*)}{
-{\bf :putimage}$B$rMQ$$$F(B{\em win}$B$G;XDj$5$l$k(BXwindow$B$K(B
-$B$3$N%+%i!<2hA|$rI=<($9$k!#(B
-$B$=$l$>$l$N%T%/%;%kCM$O(BX$B$N%+%i!<%^%C%W$r;2>H$9$k!#(B
-$B4uK>$9$kI=8=$rF@$k$?$a$K$O!"$3$N2hA|$r8GM-$N(BLUT$B$G(B
-$BJQ49$9$Y$-$G$"$k!#(B}
+{\bf :putimage}を用いて{\em win}で指定されるXwindowに
+このカラー画像を表示する。
+それぞれのピクセル値はXのカラーマップを参照する。
+希望する表現を得るためには、この画像を固有のLUTで
+変換すべきである。}
 \methoddesc{:display-lut}{\&optional (newlut1) (newlut2 newlut1) (newlut3 newlut2)}{
-$B%k%C%/%"%C%W%F!<%V%k(B{\em newlut1},{\em newlut2},{\em newlut3}$B$r(B
-{\tt display-lut}$B$K$=$l$>$l@_Dj$9$k!#$=$l$+$i!"$3$N%k%C%/%"%C%W%F!<%V%k$r(B
-$B;H$C$F$3$N2hA|$rJQ49$7!"(B{\tt xpicture}$B$K@_Dj$9$k!#(B}
-%\longdescription{:edge1}{\&optional \= (method 1) \hspace{97mm} [$B%a%=%C%I(B]\\
-\longdescription{:edge1}{\&optional \= (method 1) \` [$B%a%=%C%I(B]\\
+ルックアップテーブル{\em newlut1},{\em newlut2},{\em newlut3}を
+{\tt display-lut}にそれぞれ設定する。それから、このルックアップテーブルを
+使ってこの画像を変換し、{\tt xpicture}に設定する。}
+%\longdescription{:edge1}{\&optional \= (method 1) \hspace{97mm} [メソッド]\\
+\longdescription{:edge1}{\&optional \= (method 1) \` [メソッド]\\
 \> (th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
 \> (run *edge-length-threshold*)\\
 \> (win *color-viewer*)}{
-$B$3$N2hA|$N%(%C%8$rCj=P$9$k!#(BXwindow$B>e$K$3$N%(%C%82hA|$rI=<($9$k!#(B}
+この画像のエッジを抽出する。Xwindow上にこのエッジ画像を表示する。}
 \methoddesc{:hex}{\&optional (x 0) (y 0) (w 16) (h 16) (strm t)}{
-$B;M3QNN0h$G;XDj$5$l$k%T%/%;%k%G!<%?$r(B16$B?J?t%U%)!<%^%C%H$GI=<($9$k!#(B}
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。}
 \methoddesc{:hex1}{\&optional (x 0) (y 0) (w 64) (h 16) (strm t)}{
-$B;M3QNN0h$G;XDj$5$l$k%T%/%;%k%G!<%?$r(B16$B?J?t%U%)!<%^%C%H$GI=<($9$k!#(B}
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。}
 \methoddesc{:prin1}{strm \&rest msg}{
-$B$3$N2hA|$rL>A0$H<!85$H0l=o$KI=<($9$k!#(B}
+この画像を名前と次元と一緒に表示する。}
 \methoddesc{:init}{width height \&optional r g b}{
-$B%+%i!<2hA|$N%5%$%:$rDj5A$7!"(B{\tt pixel-image}$B$K$=$l$>$l%+%i!<$N(B1$B9=@.(B
-$B$r3d$jEv$F$k!#(B}
+カラー画像のサイズを定義し、{\tt pixel-image}にそれぞれカラーの1構成
+を割り当てる。}
 \end{refdesc}
 
-ppm$B%U%!%$%k$,$"$C$?$H$-!"<!$N%W%m%0%i%`$G%+%i!<CM$r2hA|$KE83+$7!"(B
-Xwindow$B$KI=<($r$9$k$3$H$,$G$-$k!#(B
+ppmファイルがあったとき、次のプログラムでカラー値を画像に展開し、
+Xwindowに表示をすることができる。
 \begin{quote}
 \begin{verbatim}
 (setq ppmimg (read-pnm "xxx.ppm"))
@@ -267,60 +267,60 @@ Xwindow$B$KI=<($r$9$k$3$H$,$G$-$k!#(B
 \end{verbatim}
 \end{quote}
 
-\subsection{$B%(%C%8Cj=P(B}
-$B%(%C%8Cj=P5!G=$O!"(B{\tt "vision/edge/edge"}$B$K<B8=$5$l$F$$$k!#(B
+\subsection{エッジ抽出}
+エッジ抽出機能は、{\tt "vision/edge/edge"}に実現されている。
 
 \begin{refdesc}
-%\longdescription{edge1}{img \= \&optional \= (method 1) \hspace{95mm} [$B4X?t(B]\\
-\longdescription{edge1}{img \= \&optional \= (method 1) \` [$B4X?t(B]\\
+%\longdescription{edge1}{img \= \&optional \= (method 1) \hspace{95mm} [関数]\\
+\longdescription{edge1}{img \= \&optional \= (method 1) \` [関数]\\
 \> \> (th1 *edge-intensity-threshold*)\\
 \> \> (th2 *weak-edge-threshold*) \\
 \> \> (run *edge-length-threshold*)\\
 \> \> result\\
 \> \&aux (width (send img :width)) (height (send img :height))}{
-{\em img}$B$N%(%C%8%T%/%;%k$rCj=P$9$k!#(B
-{\bf edge1}$B$O!"$^$:$9$Y$F$N%T%/%;%k$KHyJ,%*%Z%l!<%?$rE,MQ$9$k!#(B
-$B<!$N(B3$B$D$NHyJ,%*%Z%l!<%?$,MQ0U$5$l$F$$$k!#(B
-{\bf grad3}$B$O!"=D$H2#$NNY@\%T%/%;%k$N:9$rMQ$$$k!#(B
-{\bf prewitt}$B$O!"(B{\bf grad3}$B$K<P$aJ}8~$N%T%/%;%k$r9MN8$7$?$b$N$G$"$k!#(B
-{\bf sobel}$B$O!"(B{\bf prewitt}$B$K$*$$$F2#$H=D$N%T%/%;%k$K=E$_$rIU$1$F:9$r7W;;$7$?$b$N$rMQ$$$k!#(B
-{\em method}$B$,(B0,1$B$N$H$-(B{\bf grad3}$B!"(B2$B$N$H$-(B{\bf prewitt}$B!"(B3$B$N$H$-(B
-{\bf sobel}$B$rA*Br$9$k!#(B
-{\em th1}$B$h$jBg$-$J51EY$r;}$D%(%C%8%T%/%;%k$,6/$$%(%C%8%T%/%;%k$H$7$F(B
-$B;X<($5$l$k!#(B
-$BGv$$%(%C%8$O%(%C%8$N51EY$HHyJ,J}8~$r;2>H$7$?8e!"FHN)$7$?%T%/%;%k$KIU$1$i$l$k!#(B
-$B$3$l$i$N6/$$%(%C%8$NC<$+$i!"6/$$%(%C%8$NJ}8~$K4^$^$l$k<e$$%(%C%8$rA\$7!"(B
-$B@~J,$r1dD9$9$k!#(B
-{\em th2}$B$h$jBg$-$J%(%C%851EY$r;}$D<e$$%(%C%8$O!"L5>r7o$K7R$2$i$l$k!#(B
-$B$^$?!"(B{\em th2}$B$h$j>.$5$J%(%C%851EY$r;}$D$+$J$j<e$$%(%C%8$O!"B>$N%(%C%8(B
-$B$H$N5wN%$,(B{\em run}$B0JFb$G$"$l$P7R$2$i$l$k!#(B
-{\bf edge1}$B$O!"6/$$%(%C%8%T%/%;%k$r(B1$B!"<e$$%(%C%8$"$k$$$O(B
-$B1dD9$5$l$?%(%C%8%T%/%;%k$r(B2$B!"8IN)$7$?%T%/%;%k$r(B255$B$HI=8=$9$k(B
-{\bf pixel-image}$B%*%V%8%'%/%H$rJV$9!#(B}
+{\em img}のエッジピクセルを抽出する。
+{\bf edge1}は、まずすべてのピクセルに微分オペレータを適用する。
+次の3つの微分オペレータが用意されている。
+{\bf grad3}は、縦と横の隣接ピクセルの差を用いる。
+{\bf prewitt}は、{\bf grad3}に斜め方向のピクセルを考慮したものである。
+{\bf sobel}は、{\bf prewitt}において横と縦のピクセルに重みを付けて差を計算したものを用いる。
+{\em method}が0,1のとき{\bf grad3}、2のとき{\bf prewitt}、3のとき
+{\bf sobel}を選択する。
+{\em th1}より大きな輝度を持つエッジピクセルが強いエッジピクセルとして
+指示される。
+薄いエッジはエッジの輝度と微分方向を参照した後、独立したピクセルに付けられる。
+これらの強いエッジの端から、強いエッジの方向に含まれる弱いエッジを捜し、
+線分を延長する。
+{\em th2}より大きなエッジ輝度を持つ弱いエッジは、無条件に繋げられる。
+また、{\em th2}より小さなエッジ輝度を持つかなり弱いエッジは、他のエッジ
+との距離が{\em run}以内であれば繋げられる。
+{\bf edge1}は、強いエッジピクセルを1、弱いエッジあるいは
+延長されたエッジピクセルを2、孤立したピクセルを255と表現する
+{\bf pixel-image}オブジェクトを返す。}
 
 \funcdesc{overlay-edge}{ximg edgeimg}{
-Xwindow$B$KI=<(2DG=$J(B{\bf pixel-image}$B$G$"$k(B{\em ximg}$B$N:G>e0L$K(B
-{\bf edge1}$B$GF@$i$l$?(B{\em edgeimg}$B$rI=<($9$k!#(B
-$B6/$$%(%C%8%T%/%;%k$O@V!"<e$$%(%C%8%T%/%;%k$ONP!"8IN)$7$?%T%/%;%k$r@D(B
-$B$GI=8=$5$l$k!#(B}
+Xwindowに表示可能な{\bf pixel-image}である{\em ximg}の最上位に
+{\bf edge1}で得られた{\em edgeimg}を表示する。
+強いエッジピクセルは赤、弱いエッジピクセルは緑、孤立したピクセルを青
+で表現される。}
 
-%\longdescription{edge2}{img1 edge1result \&key \= (:kvalue 8.0) \hspace{83mm} [$B4X?t(B]\\
-\longdescription{edge2}{img1 edge1result \&key \= (:kvalue 8.0) \` [$B4X?t(B]\\
+%\longdescription{edge2}{img1 edge1result \&key \= (:kvalue 8.0) \hspace{83mm} [関数]\\
+\longdescription{edge2}{img1 edge1result \&key \= (:kvalue 8.0) \` [関数]\\
 \> (:curve-threshold 0.8)\\
 \> (:line-error 2.8)\\
 \> (:curve-error 2.8)\\
 \> (:plane-limit 0.3)}{
-{\em edge1}$B$N7k2L$+$i0lCW$9$kD>@~$"$k$$$OBJ1_6J@~$rA\$9!#(B
-$BNN0h(B(region)$B!"6-3&(B(boundary)$B!"@~J,(B(line segment)$B$N#3$D$NMWAG$N(B
-$B%j%9%H$,JV$5$l$k!#(B}
+{\em edge1}の結果から一致する直線あるいは楕円曲線を捜す。
+領域(region)、境界(boundary)、線分(line segment)の３つの要素の
+リストが返される。}
 
 \end{refdesc}
 
-{\bf edge2}$B$G=PNO$5$l$k(B3$B$D$NMWAG$O!"0J2<$N$h$&$KDj5A$5$l$k!#(B
+{\bf edge2}で出力される3つの要素は、以下のように定義される。
 
 \begin{refdesc}
 \classdesc{region}{propertied-object}{contour area intensity std-deviation}{
-$BNN0h$rI=8=!#(B}
+領域を表現。}
 \classdesc{boundary}{propertied-object}{parent-region
 		hole
 		segments
@@ -328,49 +328,49 @@ Xwindow$B$KI=<(2DG=$J(B{\bf pixel-image}$B$G$"$k(B{\em ximg}$B$N:G>e0L$K(B
 		topleft
 		bottomright
 		length}{
-$B6-3&$rI=8=!#(B}
+境界を表現。}
 \classdesc{edge-segment}{propertied-object}{prev next 
 		wing	; the other half-edge
 		intensity std-deviation 
 		start end}{
-$B%(%C%8@~J,$rI=8=!#(B}
+エッジ線分を表現。}
 \classdesc{line-edge-segment}{edge-segment}{la lb}{
-$BD>@~$N%(%C%8@~J,$rI=8=!#(B}
+直線のエッジ線分を表現。}
 \classdesc{curved-edge-segment}{edge-segment}{rotation total-rot side
 			a b c d e}{
-$B6J@~$N%(%C%8@~J,$rI=8=!#(B}
+曲線のエッジ線分を表現。}
 
 \funcdesc{draw-ellipse-segment}{elp gc \&optional (vs *viewsurface*)
 				      (height (send vs :height))
 					(x 0) (y 0)}{
-{\em vs}$B$G;XDj$5$l$k(BXwindow$B$K(B{\bf curved-edge-segment}$B%*%V%8%'%/%H$G$"$k(B
-{\em elp}$B$rIA$/!#(B}
+{\em vs}で指定されるXwindowに{\bf curved-edge-segment}オブジェクトである
+{\em elp}を描く。}
 \funcdesc{draw-line-segment}{s \&optional gc (vs *viewsurface*)
 				(height (send vs :height))
 				(x 0) (y 0)}{
-{\em vs}$B$G;XDj$5$l$k(BXwindow$B$K(B{\bf line-edge-segment}$B%*%V%8%'%/%H$G$"$k(B
-{\em s}$B$rIA$/!#(B}
-%\longdescription{draw-segments}{segs \&key \= (:line-gc image::*red-gc*) \hspace{67mm} [$B4X?t(B]\\
-\longdescription{draw-segments}{segs \&key \= (:line-gc image::*red-gc*) \` [$B4X?t(B]\\
+{\em vs}で指定されるXwindowに{\bf line-edge-segment}オブジェクトである
+{\em s}を描く。}
+%\longdescription{draw-segments}{segs \&key \= (:line-gc image::*red-gc*) \hspace{67mm} [関数]\\
+\longdescription{draw-segments}{segs \&key \= (:line-gc image::*red-gc*) \` [関数]\\
 \> (:ellipse-gc line-gc)\\
 \> (:vs geometry:*viewsurface*)\\
 \> (:height (send vs :height))\\
 \> (:step nil)\\
 \> (:x 0) (:y 0)}{
-{\em vs}$B$G;XDj$5$l$k(BXwindow$B$K(B{\bf edge-segment}$B$N%j%9%HI=8=$G$"$k(B
-{\em segs}$B$rIA$/!#(B}
+{\em vs}で指定されるXwindowに{\bf edge-segment}のリスト表現である
+{\em segs}を描く。}
 \funcdesc{draw-boundary}{b \&optional gc}{
-{\em vs}$B$G;XDj$5$l$k(BXwindow$B$K(B{\bf boundary}$B$N%*%V%8%'%/%H(B{\em b}
-$B$NCf$N@~J,$rIA$/!#(B}
+{\em vs}で指定されるXwindowに{\bf boundary}のオブジェクト{\em b}
+の中の線分を描く。}
 \funcdesc{draw-boundaries}{bs \&optional gc (step nil)}{
-{\em vs}$B$G;XDj$5$l$k(BXwindow$B$K(B{\bf boundary}$B$N%j%9%HI=8=$G$"$k(B{\em bs}
-$B$NCf$N@~J,$rIA$/!#(B}
+{\em vs}で指定されるXwindowに{\bf boundary}のリスト表現である{\em bs}
+の中の線分を描く。}
 
-\vardesc{*red-gc*}{\#ff0000($B@V?'(B)$B$N?'$r;}$D(B{\bf gcontext}$B!#(B}
-\vardesc{*blue-gc*}{\#0000ff($B@D?'(B)$B$N?'$r;}$D(B{\bf gcontext}$B!#(B}
-\vardesc{*green-gc*}{\#00ff00($BNP?'(B)$B$N?'$r;}$D(B{\bf gcontext}$B!#(B}
-\vardesc{*yellow-gc*}{\#ffff00($B2+?'(B)$B$N?'$r;}$D(B{\bf gcontext}$B!#(B}
-\vardesc{*cyan-gc*}{\#00ffff($B?e?'(B)$B$N?'$r;}$D(B{\bf gcontext}$B!#(B}
+\vardesc{*red-gc*}{\#ff0000(赤色)の色を持つ{\bf gcontext}。}
+\vardesc{*blue-gc*}{\#0000ff(青色)の色を持つ{\bf gcontext}。}
+\vardesc{*green-gc*}{\#00ff00(緑色)の色を持つ{\bf gcontext}。}
+\vardesc{*yellow-gc*}{\#ffff00(黄色)の色を持つ{\bf gcontext}。}
+\vardesc{*cyan-gc*}{\#00ffff(水色)の色を持つ{\bf gcontext}。}
 
 \end{refdesc}
 
@@ -382,93 +382,93 @@ Xwindow$B$KI=<(2DG=$J(B{\bf pixel-image}$B$G$"$k(B{\em ximg}$B$N:G>e0L$K(B
 \end{center}
 \end{figure}
 
-\subsection{\label{tracking}$B%H%i%C%-%s%0(B}
-{\tt "vision/correlation"}$B$K852hA|$H%H%i%C%-%s%0$7$?$$2hA|$H$N(B
-$BAj4X$r5a$a$k4X?t$,Dj5A$5$l$F$$$k!#(B
+\subsection{\label{tracking}トラッキング}
+{\tt "vision/correlation"}に元画像とトラッキングしたい画像との
+相関を求める関数が定義されている。
 
 \begin{refdesc}
 \classdesc{tracking-window}{pixel-image}{x-pos y-pos x-vel y-vel\\
 \>pattern-size window-size\\
 \>x-win y-win window window-margin\\
 \>update threshold half-pattern correlation}{
-$B$3$N%/%i%9$O!"%H%i%C%-%s%02hA|$rDj5A$9$k!#(B}
+このクラスは、トラッキング画像を定義する。}
 
 \methoddesc{:correlation}{}{
-$B$3$N2hA|$H852hA|$H$N4V$NAj4X$rJV$9!#(B}
+この画像と元画像との間の相関を返す。}
 \methoddesc{:grab}{\&optional (x x-pos) (y y-pos) (sampling 2)}{
-$B2hA|F~NOAuCV$+$i2hA|$r<h$j9~$_!"$=$N2hA|$N(B{\bf pixel-image}$B$rJV$9!#(B}
+画像入力装置から画像を取り込み、その画像の{\bf pixel-image}を返す。}
 \methoddesc{:window-rectangle}{val}{
-Xwindow$B$N>e$K;M3Q7A$rIA$/!#(B}
+Xwindowの上に四角形を描く。}
 \methoddesc{:rectangle}{val}{
-Xwindow$B$N>e$K;M3Q7A$rIA$/!#(B}
+Xwindowの上に四角形を描く。}
 \methoddesc{:move}{newpos \&aux (newx (aref newpos 0)) (newy (aref newpos 1))}{
-$B%H%i%C%-%s%0$9$k0LCV$r(B{\em newpos}$B$K0\F0$7!"?7$7$$2hA|$r<h$j9~$`!#(B}
+トラッキングする位置を{\em newpos}に移動し、新しい画像を取り込む。}
 \methoddesc{:track}{display-window \&optional th}{
-Xwindow$B$N2hA|$+$i$3$N2hA|$r%H%i%C%-%s%0$9$k!#(B}
+Xwindowの画像からこの画像をトラッキングする。}
 \methoddesc{:serach}{display-window \&optional th}{
-Xwindow$B$N2hA|$+$i$3$N2hA|$rA\$9!#(B}
+Xwindowの画像からこの画像を捜す。}
 \methoddesc{:track-and-search}{flag \&optional th}{
-$B$3$N2hA|$r%H%i%C%-%s%0$9$k!#(B
-$B$b$7!"%H%i%C%-%s%0$r<:GT$7$?$H$-!"(BXwindow$B$+$i$3$N2hA|$rA\$7$F(B
-$B0LCV$r99?7$9$k!#(B}
+この画像をトラッキングする。
+もし、トラッキングを失敗したとき、Xwindowからこの画像を捜して
+位置を更新する。}
 
 \methoddesc{:pos}{}{
-window$B$N:8>e0LCV$rJV$9!#(B}
+windowの左上位置を返す。}
 \methoddesc{:vel}{}{
-$B%H%i%C%-%s%0B.EY$rJV$9!#(B}
+トラッキング速度を返す。}
 \methoddesc{:insidep}{pos \&aux (x (aref pos 0)) (y (aref pos 1))}{
-{\em pos}$B$,(B{\bf tracking-window}$B$NCf$K4^$^$l$k$+$I$&$+$r%A%'%C%/$9$k!#(B}
+{\em pos}が{\bf tracking-window}の中に含まれるかどうかをチェックする。}
 \methoddesc{:update}{\&optional (flag :get)}{
-{\tt update}$B$K(B{\em flag}$B$r@_Dj$9$k!#$b$7!"(B{\em flag}$B$,$J$1$l$P!"(B
-{\tt update}$B$rJV$9!#(B}
+{\tt update}に{\em flag}を設定する。もし、{\em flag}がなければ、
+{\tt update}を返す。}
 \methoddesc{:prin1}{strm \&rest mesg}{
-$B$3$N(B{\bf tracking-window}$B$rL>A0$H<!85$H0l=o$KI=<($9$k!#(B}
+この{\bf tracking-window}を名前と次元と一緒に表示する。}
 \methoddesc{:init}{x y size win-size}{
-{\bf tracking-window}$B$r:n@.$9$k(B}
+{\bf tracking-window}を作成する}
 \end{refdesc}
 
-\subsection{\label{PBMfile}$B2hA|%U%!%$%kF~=PNO(B}
+\subsection{\label{PBMfile}画像ファイル入出力}
 %There are lots of file formats defined for the representation of
 %pixel images.
-{\tt "vision/pbmfile"}$B$O!"(BEuslisp$B$H%G%#%9%/%U%!%$%k$H$N4V$N(B
-$B2hA|%G!<%?$rJQ49$9$k4X?t$rDj5A$7$F$$$k!#(B
-EusLisp$B$O!"(Bpgm(portable gray-scale map)$B$H(Bppm(portable pixmap)$B%U%)!<%^%C%H(B
-$B$N%U%!%$%k$NFI$_=q$-$,$G$-$k!#(B
+{\tt "vision/pbmfile"}は、Euslispとディスクファイルとの間の
+画像データを変換する関数を定義している。
+EusLispは、pgm(portable gray-scale map)とppm(portable pixmap)フォーマット
+のファイルの読み書きができる。
 
 \begin{refdesc}
 \funcdesc{read-pnm}{f \&optional buf0 buf1 buf2}{
-{\bf file-stream}$B$N(B{\em f}$B$G;XDj$5$l$k(Bpgm$B$"$k$$$O(Bppm$B%U%!%$%k(B
-$B$rFI$_9~$_!"(B{\bf pixel-image}$B$"$k$$$O(B{\bf color-pixel-image}$B$rJV$9!#(B
-$B2hA|%U%!%$%k$O!"(Bascii$B$G$b%P%$%J%j!<$G$b2DG=$G$"$k!#(B
-$B8@$$49$($l$P!"(BP2,P3,P5,P6$B%U%)!<%^%C%H$OG'<1$G$-$k!#(B}
+{\bf file-stream}の{\em f}で指定されるpgmあるいはppmファイル
+を読み込み、{\bf pixel-image}あるいは{\bf color-pixel-image}を返す。
+画像ファイルは、asciiでもバイナリーでも可能である。
+言い換えれば、P2,P3,P5,P6フォーマットは認識できる。}
 \funcdesc{read-pnm-file}{file \&optional buf0 buf1 buf2}{
-$B%U%!%$%kL>(B{\em file}$B$G;XDj$5$l$k(Bpgm$B$"$k$$$O(Bppm$B%U%!%$%k$rFI$_9~$`!#(B
-%$B$3$N4X?t$O!"(B{\bf read-ppm}$B$r8F$S=P$9!#(B
+ファイル名{\em file}で指定されるpgmあるいはppmファイルを読み込む。
+%この関数は、{\bf read-ppm}を呼び出す。
 }
 
 \funcdesc{write-pgm}{f image  \&optional (depth 255)}{
-{\em image}$B$G;XDj$5$l$k(B{\bf pixel-image}$B$r(B{\bf file-stream}$B$G$"$k(B{\em f}
-$B$K%P%$%J%j!<(Bppm$B%U%)!<%^%C%H$G=q$-9~$`!#(B
-%($B$3$N4X?t$O!"%3%a%s%H$rDI2C$9$k$3$H$GJQ99$G$-$k!#(B)
+{\em image}で指定される{\bf pixel-image}を{\bf file-stream}である{\em f}
+にバイナリーppmフォーマットで書き込む。
+%(この関数は、コメントを追加することで変更できる。)
 }
 \funcdesc{write-ppm}{f image  \&optional (depth 255)}{
-{\em image}$B$G;XDj$5$l$k(B{\bf pixel-image}$B$r(B{\bf file-stream}$B$G$"$k(B{\em f}
-$B$K%P%$%J%j!<(Bpgm$B%U%)!<%^%C%H$G=q$-9~$`!#(B}
+{\em image}で指定される{\bf pixel-image}を{\bf file-stream}である{\em f}
+にバイナリーpgmフォーマットで書き込む。}
 \funcdesc{write-pnm}{f img}{
-{\em img}$B$G;XDj$5$l$k%T%/%;%k2hA|$r(B{\bf file-stream}$B$G$"$k(B{\em f}$B$K=q$-9~$`!#(B
-$B$b$7!"(B{\em img}$B$,(B{\bf pixel-image}$B$G$"$k$J$i!"%P%$%J%j!<(Bpgm$B%U%)!<%^%C%H$G(B
-$B=q$-9~$_!"(B{\bf color-pixel-image}$B$J$i%P%$%J%j!<(Bppm$B%U%)!<%^%C%H$G=q$-9~$`!#(B}
+{\em img}で指定されるピクセル画像を{\bf file-stream}である{\em f}に書き込む。
+もし、{\em img}が{\bf pixel-image}であるなら、バイナリーpgmフォーマットで
+書き込み、{\bf color-pixel-image}ならバイナリーppmフォーマットで書き込む。}
 \funcdesc{write-pnm-file}{file img}{
-$B%U%!%$%kL>(B{\em file}$B$K(B{\em img}$B$G;XDj$5$l$k%T%/%;%k2hA|$r=q$-9~$`!#(B
-$B$3$N4X?t$O!"(B{\bf write-pnm}$B$r8F$S=P$9!#(B}
+ファイル名{\em file}に{\em img}で指定されるピクセル画像を書き込む。
+この関数は、{\bf write-pnm}を呼び出す。}
 
 \funcdesc{image::read-raw-image}{file \&optional (x 256) (y x)}{
-raw-image$B%U%!%$%k$rFI$_9~$_!"(B1$B<!85$NJ8;zNs%Y%/%H%k$rJV$9!#(B
-%$B:BI87O$K$D$$$F$J$K$bA0Ds$,$J$$!#(B
-raw-image$B$N<!85$O!"M?$($i$l$?(B{\em x}$B$H(B{\em y}$B$K0lCW$7$J$1$l$P$J$i$J$$!#(B}
+raw-imageファイルを読み込み、1次元の文字列ベクトルを返す。
+%座標系についてなにも前提がない。
+raw-imageの次元は、与えられた{\em x}と{\em y}に一致しなければならない。}
 \funcdesc{image::write-raw-image}{file imgvec}{
-$B%T%/%;%kCM$r(B1$B%P%$%H$N%Y%/%H%k(B($BJ8;zNs(B)$B$KC_@Q$7$?(B{\em imgvec}$B$r(B{\em file}
-$B$K=q$-9~$`!#(B}
+ピクセル値を1バイトのベクトル(文字列)に蓄積した{\em imgvec}を{\em file}
+に書き込む。}
 \end{refdesc}
 
 \newpage

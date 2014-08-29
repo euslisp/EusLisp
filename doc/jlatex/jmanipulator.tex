@@ -1,52 +1,52 @@
-\section{\label{ManipulatorModel}$B%^%K%T%e%l!<%?(B}
-\markright{\arabic{section}. $B%^%K%T%e%l!<%?(B}
+\section{\label{ManipulatorModel}マニピュレータ}
+\markright{\arabic{section}. マニピュレータ}
 \hfill {\em documented by Hiromu Onda}
 
-{\bf rotational-joint}$B%/%i%9$H(B{\bf manipulator}$B%/%i%9$N%$%s%9%?%s%9$+$i%^%K%T%e%l!<%?(B
-$B%b%G%k$O9=@.$5$l$k!#(B{\bf rotational-join}$B%/%i%9$O!"(B{\bf body}$B$N%5%V%/%i%9$G$"$j!"(B
-$B%^%K%T%e%l!<%?$N4V@\%b%G%k$rDj5A$9$k!#(B
-{\bf manipulator}$B$O!"(B{\bf cascaded-coords}$B$N%5%V%/%i%9$G$"$j!"1?F0J}Dx<0$H5U1?F0J}Dx<0$N(B
-$B2r$r5a$a$k%a%=%C%I$r;}$C$F$$$k!#(B
+{\bf rotational-joint}クラスと{\bf manipulator}クラスのインスタンスからマニピュレータ
+モデルは構成される。{\bf rotational-join}クラスは、{\bf body}のサブクラスであり、
+マニピュレータの間接モデルを定義する。
+{\bf manipulator}は、{\bf cascaded-coords}のサブクラスであり、運動方程式と逆運動方程式の
+解を求めるメソッドを持っている。
 
-$B%^%K%T%e%l!<%?$rDj5A$9$k$K$O!"(B
-$B$9$Y$F$N4X@a$r:n@.$7$?8e!"(B{\bf manipulator}$B$K$=$l$i$rE}9g$9$k!#(B
+マニピュレータを定義するには、
+すべての関節を作成した後、{\bf manipulator}にそれらを統合する。
 
 \subsection{
 %\label{JointModel}
-$B4X@a$N%b%G%k(B}
+関節のモデル}
 
-$B%/%i%9(B{\bf rotational-joint}$B$,4X@a$N%b%G%k$r5-=R$9$k!#(B
-$B%/%i%9(B{\bf rotational-joint}$B$O!"(B{\bf body}$B$r%9!<%Q%/%i%9$K;}$A!"(B
-$B$=$N7A>u%b%G%k!":BI87O$K2C$($F(B
-$B4X@a2sE><4!"2sE>3QEY!"2DF03QEYHO0O!"$J$I$r4IM}$7$F$$$k!#(B
-$B<!$N(B{\bf defjoint}$B%^%/%m$K$h$C$F(B{\bf rotational-joint}
-$B$N%$%s%9%?%s%9$,:n@.$5$l!"(B{\em joint-name}$B$K%P%$%s%I$5$l$k!#(B
-{\bf parent}$B$K$O!"?F$N4X@a$r;XDj$9$k!#(B
-$B%Y!<%9$H;X$K$O2DF0<4$r;XDj$9$kI,MW$O$J$$!#(B
+クラス{\bf rotational-joint}が関節のモデルを記述する。
+クラス{\bf rotational-joint}は、{\bf body}をスーパクラスに持ち、
+その形状モデル、座標系に加えて
+関節回転軸、回転角度、可動角度範囲、などを管理している。
+次の{\bf defjoint}マクロによって{\bf rotational-joint}
+のインスタンスが作成され、{\em joint-name}にバインドされる。
+{\bf parent}には、親の関節を指定する。
+ベースと指には可動軸を指定する必要はない。
 
 \begin{refdesc}
-\longdescription{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \` [$B%^%/%m(B]\\
-% \hspace{70mm} [$B%^%/%m(B]\\
+\longdescription{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \` [マクロ]\\
+% \hspace{70mm} [マクロ]\\
 \> :color \> {\it color-id} \hspace{2cm} \= ;0-15 for MMD \\
 \> :parent \> {\it parent-joint} \\
 \> :axis \> {\it rotational-axis} \>  ; :x, :y or :z \\
 \> :offset \> {\it trans-from-parent-joint} \\
 \> :low-limit \> {\it joint-angle-limit-low} \\
 \> :high-limit \> {\it joint-angle-limit-hight}}{
-$B4X@a$N%b%G%k$r5-=R$9$k!#(B}
+関節のモデルを記述する。}
 \end{refdesc}
 
 \subsection{
 %\label{MultiJointsManipulator}
-$BB?4X@a%^%K%T%e%l!<%?(B}
+多関節マニピュレータ}
 
-$B%^%K%T%e%l!<%?%b%G%k$O%/%i%9(B{\bf manipulator}$B$K$h$C$F5-=R$5$l$k!#(B
-$B%^%K%T%e%l!<%?%b%G%k$r:n@.$9$k$K$O!"(B
-$B<!$N(B{\bf defmanipulator}$B%^%/%m$rMQ$$$k!#(B
+マニピュレータモデルはクラス{\bf manipulator}によって記述される。
+マニピュレータモデルを作成するには、
+次の{\bf defmanipulator}マクロを用いる。
 
 \begin{refdesc}
-\longdescription{defmanipulator}{manipulator-name \&key \= :class \hspace{2cm} \= {\it manipulator-class} \` [$B%^%/%m(B]\\
-%manipulator-class} \hspace{25mm} [$B%^%/%m(B]\\
+\longdescription{defmanipulator}{manipulator-name \&key \= :class \hspace{2cm} \= {\it manipulator-class} \` [マクロ]\\
+%manipulator-class} \hspace{25mm} [マクロ]\\
 \> :base \> {\it base-joint} \\
 \> :joints \>  {\it list-of-all-joints} \\
 \> :hand \> {\it handjoint} \\
@@ -56,101 +56,101 @@
 \> :toolcoords \> {\it trans-from-armsolcoords-to-toolcoords} \\
 \> :open-direction \> {\it finger-open-direction}\\
 \> :right-handed  \> {\it righty-or-lefty}}{
-$B%^%K%T%e%l!<%?%b%G%k$r:n@.$9$k!#(B}
+マニピュレータモデルを作成する。}
 
 \classdesc{rotational-joint}{body}{(axis offset high-limit low-limit)}
-{6$B<+M3EY%^%K%T%e%l!<%?$N4V@\$r5-=R$9$k!#(B}
+{6自由度マニピュレータの間接を記述する。}
 
 \classdesc{manipulator}{cascaded-coords}{(base baseinverse joint angles right-handed hand handcoords\\
 \> right-finger left-finger openvec max-span\\
 \> toolcoords toolinverse armsolcoords toolinverse armsocoords\\
 \> approach grasp affix)}
-{$B%Y!<%9$+$i%O%s%I$^$G$N%^%K%T%e%l!<%?$N1?F0$r4IM}$9$k!#(B}
+{ベースからハンドまでのマニピュレータの運動を管理する。}
 
 \methoddesc{:newcoords}{newrot \&optional newpos}{ 
-$B4X@a3QEY$,8BEY$K<}$^$C$F$$$l$P:BI87O$r(B
-{\em newrot}$B$H(B{\em newpos}$B$K99?7$9$k(B 
+関節角度が限度に収まっていれば座標系を
+{\em newrot}と{\em newpos}に更新する 
 }
 \methoddesc{:armsolcoords }{}{
-$B%Y!<%9:BI87O$+$i%O%s%I:BI87O$X$NJQ49!J:BI87O$N%$%s%9%?%s%9!K$r7W;;$7!":n@.$9$k!#(B
-%  $B%Y!<%9$+$i%O%s%I$K;j$kJQ49$r5a$a$k(B
+ベース座標系からハンド座標系への変換（座標系のインスタンス）を計算し、作成する。
+%  ベースからハンドに至る変換を求める
 }
 \methoddesc{:tool}{\&rest msg}{
- $B9)6q:BI87O$rJV$9!"$^$?$OJQ99$9$k(B
+ 工具座標系を返す、または変更する
 }
 \methoddesc{:set-tool}{newtool \&optional offset copy}{
- $B9)6q:BI87O(B{\tt toolcoords}$B$K(B{\em newtool}$B$r@_Dj$9$k(B
+ 工具座標系{\tt toolcoords}に{\em newtool}を設定する
 }
 \methoddesc{:reset-tool }{}{
- $B9)6q:BI87O$r=i4|CM$KLa$9(B
+ 工具座標系を初期値に戻す
 }
 \methoddesc{:worldcoords }{}{
- $B9)6q:BI87O$N0LCV%Y%/%H%k!"2sE>9TNs!":BI87O$N%o!<%k%II=8=$r5a$a$k(B
+ 工具座標系の位置ベクトル、回転行列、座標系のワールド表現を求める
 }
 \methoddesc{:set-coords }{}{
-$B=g1?F0$N2r$r5a$a$k$?$a$K!":BI87O$r6/@)E*$K@_Dj$9$k!#(B
-% $B0lC6=g%-%M%^$r7W;;$7!"$=$3$+$i$5$i$K3F4X@a3QEY$r5a$a$k(B
+順運動の解を求めるために、座標系を強制的に設定する。
+% 一旦順キネマを計算し、そこからさらに各関節角度を求める
 }
 \methoddesc{:config }{\&optional (a newangles)}{
- 6$B$D$N4X@a3QEY$rD>@\$K@_Dj$9$k(B
+ 6つの関節角度を直接に設定する
 }
 \methoddesc{:park }{}{
- $B=i4|;Q@*$KLa$9(B
+ 初期姿勢に戻す
 }
 \methoddesc{:hand}{\&optional (h nil)}{
- $B%O%s%I%*%V%8%'%/%H$rJV$9(B
+ ハンドオブジェクトを返す
 }
 \methoddesc{:handcoords}{}{
- $B%O%s%I:BI87O$N0LCV%Y%/%H%k!"2sE>9TNs!":BI87O$N%o!<%k%II=8=$r5a$a$k(B
+ ハンド座標系の位置ベクトル、回転行列、座標系のワールド表現を求める
 }
 \methoddesc{:span}{}{
- $B8=:_$N;X$N4V3V$rJV$9(B
+ 現在の指の間隔を返す
 }
 \methoddesc{:open-fingers}{s \&optional abs \&aux (current (send self :span))}
 {
- $B;XI}$rAjBPE*!"@dBPE*$K;XDj$9$k(B
+ 指幅を相対的、絶対的に指定する
 }
 \methoddesc{:close-fingers}{}{
- $B;X$r40A4$KJD$8$k(B 
+ 指を完全に閉じる 
 }
 \methoddesc{:angles}{\&optional flag}{
- $B8=:_$N;Q@*$N4X@a3QEY$N%j%9%H$rJV$9(B
+ 現在の姿勢の関節角度のリストを返す
 }
 
 % \methoddesc{:right-handed}{}{
-%% $B%=!<%9$=$N$b$N$,$"$j$^$;$s$G$7$?!#(B
-% $B1&<j;Q@*!":8<j;Q@*$rA*Br$9$k(B
+%% ソースそのものがありませんでした。
+% 右手姿勢、左手姿勢を選択する
 %}
 
 \methoddesc{:get-approach }{}{
- $B8=:_%"%W%m!<%A$7$F$$$kBP>]$rJV$9(B
+ 現在アプローチしている対象を返す
 }
 \methoddesc{:set-approach }{a}{
- $B%"%W%m!<%ABP>](B{\it a}$B$r@_Dj$9$k(B
+ アプローチ対象{\it a}を設定する
 }
 %\methoddesc{:get-grasp}{}{
 %(:get-grasp () grasp-config)
 %??? 
-% $BGD0.;Q@*$K$"$kBP>]J*$rJV$9(B
+% 把握姿勢にある対象物を返す
 %}
 \methoddesc{:set-grasp}{g}{
- $BGD0.BP>]J*(B{\it g}$B$r;XDj$9$k(B
+ 把握対象物{\it g}を指定する
 }
 \methoddesc{:get-affix}{}{
- $BGD0.$7$F$$$kJ*BN$rJV$9(B
+ 把握している物体を返す
 }
 \methoddesc{:affix}{\&optional (grasp)}{
-{\bf affixed-object}$B$K(B{\tt grasp}$B$r@_Dj$9$k!#(B
-{\tt grasp}$B$O!";RB9$H$7$F(B{\tt handcoords}$B$K4XO"IU$1$i$l$k!#(B
-% $BGD0.$r;X<($9$k(B
+{\bf affixed-object}に{\tt grasp}を設定する。
+{\tt grasp}は、子孫として{\tt handcoords}に関連付けられる。
+% 把握を指示する
 }
 \methoddesc{:unfix}{\&optional (margin 10.0)}{
-{\bf affixed-object}$B$K(BNIL$B$r@_Dj$9$k!#(B
-{\tt grasp}$B$O!"(B{\tt handcoords}$B$N;RB9%j%9%H$+$i30$5$l$k!#(B
-% $BGD0.J*BN$r2rJ|$7$?$3$H$r;X<($9$k(B
+{\bf affixed-object}にNILを設定する。
+{\tt grasp}は、{\tt handcoords}の子孫リストから外される。
+% 把握物体を解放したことを指示する
 }
-\longdescription{:create}{\= \&rest args \` [$B%a%=%C%I(B]\\
-%\longdescription{:create}{\= \&rest args \hspace{111mm} [$B%a%=%C%I(B]\\
+\longdescription{:create}{\= \&rest args \` [メソッド]\\
+%\longdescription{:create}{\= \&rest args \hspace{111mm} [メソッド]\\
 \> \&key \= (:name nm) (:hand h) (:joints j)\\
 \> \> (:left-finger lf) (:right-finger rf)\\
 \> \> ((:toolcoords tc) (make-coords))\\
@@ -161,51 +161,51 @@
 \> \> ((:lefty lft) t)\\
 \> \> ((:act a) nil)\\
 \> \&allow-other-keys}{
-$B?7$7$$%^%K%T%e%l!<%?%*%V%8%'%/%H$r:n@.!"=i4|2=$9$k(B
+新しいマニピュレータオブジェクトを作成、初期化する
 }
 \end{refdesc}
 
-{\bf manipulator}$B%*%V%8%'%/%H$O!"(B
-{\bf base$B!"(Bjoints(J1\ldots J6)$B!"(Bhandcoords$B!"(Btoolcoords}
-$B$N:BI87O$N7R$,$j$r4IM}$9$k!#(B
-%$B?^(B\ref{ManipulatorObject}$B$K(B{\bf manipulator}$B%*%V%8%'%/%H$N%9%m%C%H9=@.$r!"(B
-%$BI=(B\ref{ManipulatorMethods}$B$K<u$1IU$1$i$l$k%a%=%C%I$r7G$2$k!#(B
-{\bf manipulator}$B%/%i%9$O!"(B{\bf cascaded-coords}$B$N%5%V%/%i%9$G$"$j!"(B
-$B$d$O$j!"(B{\bf cascaded-coords}($B$^$?$O(B{\bf body}$B$J$I$N%5%V%/%i%9(B)
-$B$G$"$k(B{\bf base}$B$K7k9g$5$l!"(B
-{\bf base}$B$+$i(B{\bf toolcoords}($B<j@h:BI87O(B)$B$X$NJQ49$r4IM}$7$F$$$k!#(B
-$B$7$?$,$C$F!"(B{\bf manipulator}$B%*%V%8%'%/%H$KBP$7$FAw$i$l$k(B
-{\bf :translate$B!"(B:locate$B!"(B:rotate$B!"(B:orient$B!"(B:transform}
-$B$J$I$N%a%C%;!<%8$O!"<j@hE@$KBP$7$F:nMQ$9$k!#(B
-$B$=$N$H$-F1;~$K(BWRT$B%Q%i%a!<%?$r;XDj$9$l$P!"(B
-$B<j@h$O(BWRT$B:BI87O$KBP$7$FF0$/!#(B
-$B<!$N%W%m%0%i%`$G$O!"(B{\bf eta3}$B$r(B{\bf manipulator}$B$N%$%s%9%?%s%9$H2>Dj$7$F$$$k!#(B
+{\bf manipulator}オブジェクトは、
+{\bf base、joints(J1\ldots J6)、handcoords、toolcoords}
+の座標系の繋がりを管理する。
+%図\ref{ManipulatorObject}に{\bf manipulator}オブジェクトのスロット構成を、
+%表\ref{ManipulatorMethods}に受け付けられるメソッドを掲げる。
+{\bf manipulator}クラスは、{\bf cascaded-coords}のサブクラスであり、
+やはり、{\bf cascaded-coords}(または{\bf body}などのサブクラス)
+である{\bf base}に結合され、
+{\bf base}から{\bf toolcoords}(手先座標系)への変換を管理している。
+したがって、{\bf manipulator}オブジェクトに対して送られる
+{\bf :translate、:locate、:rotate、:orient、:transform}
+などのメッセージは、手先点に対して作用する。
+そのとき同時にWRTパラメータを指定すれば、
+手先はWRT座標系に対して動く。
+次のプログラムでは、{\bf eta3}を{\bf manipulator}のインスタンスと仮定している。
 
 \begin{verbatim}
-$B!!(B(send eta3 :translate #f(0 0 -100))        ;$B<j@h$r(B10cm$B0z$C9~$a$k!!(B
-$B!!(B(send eta3 :translate #f(0 0 -100) :world) ;10cm$B2<$2$k(B
-$B!!(B(send eta3 :translate #f(0 0 -100)
-             (manipulator-base eta3))     ;$B<j@h$r%Y!<%9:BI87O$G(B10cm$B2<$2$k(B
+　(send eta3 :translate #f(0 0 -100))        ;手先を10cm引っ込める　
+　(send eta3 :translate #f(0 0 -100) :world) ;10cm下げる
+　(send eta3 :translate #f(0 0 -100)
+             (manipulator-base eta3))     ;手先をベース座標系で10cm下げる
 \end{verbatim}
 
-$B$3$l$i$N%a%C%;!<%8$KBP$7$F!"(Bmanipulator$B$O%"!<%`2r$r7W;;$7$F(B6$B$D$N(B
-$B4X@a3QEY$r7hDj$9$k!#(B
-$B0lHL$K2r$OJ#?tB8:_$9$k$,!"(B{\bf right-handed}($B1&<j7O!":8<j7O(B)
-$B$N6hJL!"$*$h$S8=:_$N4X@a3QEY$H$NO"B3@-$K$h$jE,Ev$J2r$,A*Br$5$l$k!#(B
-$B$7$+$7!";XDj$5$l$?0LCV!";Q@*$KBP$9$k2r$,B8:_$7$J$$>l9g$d4X@a3Q$,(B
-$B8B3&$r1[$($k>l9g$O0\F0!"2sE>$O5/$3$i$:!"7Y9p$,H/$;$i$l$k!#(B
+これらのメッセージに対して、manipulatorはアーム解を計算して6つの
+関節角度を決定する。
+一般に解は複数存在するが、{\bf right-handed}(右手系、左手系)
+の区別、および現在の関節角度との連続性により適当な解が選択される。
+しかし、指定された位置、姿勢に対する解が存在しない場合や関節角が
+限界を越える場合は移動、回転は起こらず、警告が発せられる。
 
-$B%"!<%`2r$N7W;;$O!"<B:]$N%^%K%T%e%l!<%?$KBP1~$7$?(B
-$B8D!9$N(Bmanipulator$B%/%i%9$KDj5A$5$l$?(B{\bf :armsol}$B%a%=%C%I$,9T$&!#(B
-$B%^%K%T%e%l!<%?$,%o!<%k%I:BI87O$N$I$3$KCV$+$l$F$b$h$$$h$&$K!"(B
-$B$^$?!"$I$N$h$&$J9)6q$rMQ$$$F$b$h$$$h$&$K!"%"!<%`2r$O!"(B
-{\bf base$B!"(Btoolcoords}$B$H$OFHN)$K!"(Bbase$B:BI87OCf$G$N%O%s%I$N0LCV!";Q@*$K(B
-$BBP$7$FM?$($i$l$k!#(B
+アーム解の計算は、実際のマニピュレータに対応した
+個々のmanipulatorクラスに定義された{\bf :armsol}メソッドが行う。
+マニピュレータがワールド座標系のどこに置かれてもよいように、
+また、どのような工具を用いてもよいように、アーム解は、
+{\bf base、toolcoords}とは独立に、base座標系中でのハンドの位置、姿勢に
+対して与えられる。
 
-{\bf base$B!"(BJ1$B!"(BJ2$B!"(B\ldots $B!"(Bhandcoords$B!"(Btoolcoords}$B$N4X78$r?^(B\ref{JointCoords}
-$B$K<($9!#(B
-$B%o!<%k%I$+$i<j@h$X$NJQ49$r(B$T$$B$H$9$k$H!"(B$T$$B$*$h$S3FItJ,JQ49$O<!$N$h$&$K$7(B
-$B$FF@$i$l$k!#(B
+{\bf base、J1、J2、\ldots 、handcoords、toolcoords}の関係を図\ref{JointCoords}
+に示す。
+ワールドから手先への変換を$T$とすると、$T$および各部分変換は次のようにし
+て得られる。
 
 $
 \begin{array}{ll}
@@ -226,7 +226,7 @@ T_{h} & = handcoords \\
  & = (manipulator-handcoords \; eta3)\\
 \end{array}$
 
-$B$3$3$G!"(B$T$$B$O%o!<%k%I:BI87O$+$i9)6q:BI87O$^$GJQ49$9$k!#(B
+ここで、$T$はワールド座標系から工具座標系まで変換する。
 
 \begin{figure}
 \begin{center}
@@ -239,42 +239,42 @@ relation between coordinate systems in a manipulator}
 \end{figure}
 
 
-$B3F4X@a$O!"(BBrep$B$GI=8=$5$l$?4v2?%b%G%k$rJ];}$7$F$$$k!#$7$+$7!"D:E@$N:BI8!"(B
-$BJ?LL$NJ}Dx<0$O>o$K8=>u$rH?1G$7$F$$$k$H$O8B$i$J$$!#%^%K%T%e%l!<%?$KBP$9$k(B
-$B0\F0!"2sE>$J$I$N%a%C%;!<%8$G$O:BI87O$N99?7$@$1$r9T$$!"D:E@$N:BI8$OJQ2=$7(B
-$B$J$$!#$3$l$O!"0\F0!"2sE>$,J#?t2sB3$1$F5/$3$C$?>l9g$N7W;;NL$r8:$i$9$?$a$G(B
-$B$"$k!#99?7$O!"%^%K%T%e%l!<%?$K(B{\bf :worldcoords}$B%a%C%;!<%8$rAw$k(B
-$B$3$H$G0z$-5/$3$5$l$k!#(B
+各関節は、Brepで表現された幾何モデルを保持している。しかし、頂点の座標、
+平面の方程式は常に現状を反映しているとは限らない。マニピュレータに対する
+移動、回転などのメッセージでは座標系の更新だけを行い、頂点の座標は変化し
+ない。これは、移動、回転が複数回続けて起こった場合の計算量を減らすためで
+ある。更新は、マニピュレータに{\bf :worldcoords}メッセージを送る
+ことで引き起こされる。
 
 
-$B%^%K%T%e%l!<%?$O!"<j@h:BI87O$GF0:n$r;XDj$9$k$3$H$r<g$JL\E*$H$7$F$$$k!#(B
-$B4X@a3Q$K$h$k;XDj$K$O(B {\bf :config} $B$rMQ$$$k!#(B
-$B0z$-?t$K$O(B6$BMWAG$NNs$rM?$($k!#(B
+マニピュレータは、手先座標系で動作を指定することを主な目的としている。
+関節角による指定には {\bf :config} を用いる。
+引き数には6要素の列を与える。
 
 \begin{verbatim}
-$B!!(B (send eta3 :config (float-vector pi/2 pi/2 0 1 0 1))
+　 (send eta3 :config (float-vector pi/2 pi/2 0 1 0 1))
 \end{verbatim}
 
-{\bf :config}$B$O!"3F4X@a3QEY$,2DF0HO0O$K<}$^$C$F$$$k$3$H$r8!::$7$?8e!"(B
-$B$=$l$i$r2sE>$5$;$k!#(B
-$B$3$N7k2L!"%^%K%T%e%l!<%?$N4IM}$7$F$$$k:BI87O$H(B
-$B4X@a3QEY$+$iDj$^$k<B:]$N<j@h$N0LCV;Q@*$H$,0lCW$7$J$/$J$k!#(B
-$BN><T$r0lCW$5$;$k$?$a$K$O!"(B{\bf :set-coords}$B%a%C%;!<%8$rAw$k!#(B
-{\bf :set-coords}$B$O!"4X@a3QEY$+$i=gJ}8~$N%-%M%^%F%#%/%9$r7W;;$7!"(B
-$B:G=*E*$J<j@h:BI87O$KBP$7$F$5$i$K%"!<%`2r$r2r$/!#(B
+{\bf :config}は、各関節角度が可動範囲に収まっていることを検査した後、
+それらを回転させる。
+この結果、マニピュレータの管理している座標系と
+関節角度から定まる実際の手先の位置姿勢とが一致しなくなる。
+両者を一致させるためには、{\bf :set-coords}メッセージを送る。
+{\bf :set-coords}は、関節角度から順方向のキネマティクスを計算し、
+最終的な手先座標系に対してさらにアーム解を解く。
 
 
-$BNc(B ETA3$B$N%b%G%k@8@.$H$=$NIA2h(B
+例 ETA3のモデル生成とその描画
 \begin{verbatim}
 EusLisp 7.27 with Xlib created on Thu Sep 17 14:33:30 1992
-(load "view.l")                                ;$B%&%#%s%I%&$r3+$/(B
-(load "/usr/local/eus/robot/eta3/eta3build.l") ;ETA3$B$N%b%G%k$r@8@.$9$k(B
-(send *viewing* :look #f(2000 2000 2000))      ;$B;kE@$rJQ$($k(B
-(send-all (eta3arm-components eta3) :color 1)  ;$BJ*BN$N@~$N?'$r9u$KJQ$($k(B
+(load "view.l")                                ;ウィンドウを開く
+(load "/usr/local/eus/robot/eta3/eta3build.l") ;ETA3のモデルを生成する
+(send *viewing* :look #f(2000 2000 2000))      ;視点を変える
+(send-all (eta3arm-components eta3) :color 1)  ;物体の線の色を黒に変える
 (send eta3 :config (float-vector 0 (/ -Pi 4.0) Pi/2 0 (/ -Pi 4.0) 0 ))
-					       ;ETA3$B$r4X@a3QEY$N;XDj$GF0$+$9(B
-(send eta3 :set-coords)                        ;$B>e5-;2>H(B
-(draw eta3)                                    ;ETA3$B$rIA2h$9$k(B
+					       ;ETA3を関節角度の指定で動かす
+(send eta3 :set-coords)                        ;上記参照
+(draw eta3)                                    ;ETA3を描画する
 \end{verbatim}
 
 \newpage

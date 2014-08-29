@@ -1,684 +1,684 @@
-\section{$BI>2A(B}
-\markright{\arabic{section}. $BI>2A(B}
+\section{評価}
+\markright{\arabic{section}. 評価}
 
-\subsection{$BI>2A4X?t(B}
+\subsection{評価関数}
 
-$B%(%i!<$d%7%0%J%k(B(signal)$B$K4X$9$k?6$kIq$$$r<($9$?$a$K!"(B
-$B$"$i$+$8$a$=$l$>$lFCJL$NJQ?t(B{\bf *error-handler*}$B$H(B{\bf *signal-handler*}
-$B$KE,Ev$J4X?t$r@_Dj$9$k!#(B
-$B=$@5$"$k$$$OB39T$G$-$k%(%i!<$O$J$$!#(B
-$B%(%i!<$r2r@O8e!"8=:_$N<B9T$r(B{\bf reset}$B$^$?$O>e0L%l%Y%k$X$NE,Ev$J(B{\bf throw}
-$B$K$h$C$FDd;_$7$J$1$l$P$J$i$J$$!#(B
-Euslisp$B$N:G>e0L%l%Y%k$G(B{\tt 0}$B$HL>IU$1$i$l$?(Bcatch frame$B$r:n@.$7$F$$$k$N$G!"(B
-{\bf reset}$B$O!"(B{\tt (throw 0 NIL)}$B$HF1Ey$G$"$k!#(B
+エラーやシグナル(signal)に関する振る舞いを示すために、
+あらかじめそれぞれ特別の変数{\bf *error-handler*}と{\bf *signal-handler*}
+に適当な関数を設定する。
+修正あるいは続行できるエラーはない。
+エラーを解析後、現在の実行を{\bf reset}または上位レベルへの適当な{\bf throw}
+によって停止しなければならない。
+Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成しているので、
+{\bf reset}は、{\tt (throw 0 NIL)}と同等である。
 
-$B%(%i!<%O%s%I%i!<$O!"(B{\em code msg1 form \&optional (msg2)}
-$B$H$$$&(B3$B$D$"$k$$$O(B4$B$D$N0z$-?t$r;}$D4X?t$H$7$FDj5A$7$J$1$l$P$J$i$J$$!#(B
-{\em code}$B$O%(%i!<%3!<%I$G!"%7%9%F%`$GDj5A$5$l$?%(%i!<$r<($9!#(B
-$BNc$($P!"(B14$B$,(B'$B0z$-?t$,9g$o$J$$(B'$B!"(B13$B$,(B'$B4X?t$,Dj5A$5$l$F$$$J$$(B'$B$H$J$k!#(B
-$B$3$l$i$NDj5A$O!"(B"c/eus.h"$B$NCf$KDj5A$5$l$F$$$k!#(B
-{\em msg1}$B$H(B{\em msg2}$B$O!"%f!<%6!<$K<($5$l$k%a%C%;!<%8$G$"$k!#(B
-{\em form}$B$O!"%(%i!<$K$h$C$F@8$8$?(Bs$BI=8=$G$"$k!#(B
+エラーハンドラーは、{\em code msg1 form \&optional (msg2)}
+という3つあるいは4つの引き数を持つ関数として定義しなければならない。
+{\em code}はエラーコードで、システムで定義されたエラーを示す。
+例えば、14が'引き数が合わない'、13が'関数が定義されていない'となる。
+これらの定義は、"c/eus.h"の中に定義されている。
+{\em msg1}と{\em msg2}は、ユーザーに示されるメッセージである。
+{\em form}は、エラーによって生じたs表現である。
 
-$B%7%0%J%k%O%s%I%i!<$O!"(B{\em sig}$B$H(B{\em code}$B$N(B2$B$D$N0z$-?t$r<u$1$k4X?t$H$7$F(B
-$BDj5A$5$l$J$1$l$P$J$i$J$$!#(B
-{\em sig}$B$O!"(B1$B$+$i(B30$B$^$G$N%7%0%J%kHV9f$G$"$k!#(B
-{\em code}$B$O!"%7%0%J%kHV9f$NCf$KDj5A$5$l$?Jd=uHV9f$G$"$k!#(B
+シグナルハンドラーは、{\em sig}と{\em code}の2つの引き数を受ける関数として
+定義されなければならない。
+{\em sig}は、1から30までのシグナル番号である。
+{\em code}は、シグナル番号の中に定義された補助番号である。
 
-$B:G>e0L%l%Y%k$G$N(B\verb+^+D({\em end-of-file})$B$O!"(BEuslisp$B$N3hF0$rDd;_$5$;$k!#(B
-$B$3$l$O!"(BEuslisp$B$r%U%#%k%?!<$H$7$F%W%m%0%i%`$5$l$F$$$k$H$-(B
-$BLr$KN)$D!#(B
+最上位レベルでの\verb+^+D({\em end-of-file})は、Euslispの活動を停止させる。
+これは、Euslispをフィルターとしてプログラムされているとき
+役に立つ。
 
-{\bf eval-dynamic}$B$O!"(Blet$B$d(Blambda$BJQ?t$H$7$F;HMQ$5$l$k(Bsymbol$B$K7k$SIU$/(B
-$BF0E*$JJQ?t$rA\$94X?t$G$"$k!#(B
-$B%G%P%C%0$9$k$H$-$KLr$KN)$D!#(B
+{\bf eval-dynamic}は、letやlambda変数として使用されるsymbolに結び付く
+動的な変数を捜す関数である。
+デバッグするときに役に立つ。
 
 \begin{refdesc}
 
 \funcdesc{identity}{obj}{
-{\em obj}$B<+?H$rJV$9!#(B
-{\bf idnetity}$B$H(B{\bf quote}$B$H$N0c$$$KCm0U$9$k$3$H!#(B
-{\bf identity}$B$,4X?t$G$"$k$N$KBP$7$F(B{\bf quote}$B$O!"FC<l=q<0(B(special form)
-$B$G$"$k!#(B
-$B$7$?$,$C$F!"(B{\tt (identity 'abc)}$B$O(B{\tt abc}$B$HI>2A$5$l$k$,!"(B
-{\tt (quote 'abc) == (quote (quote abc))}$B$O(B{\tt 'abc}$B$HI>2A$5$l$k!#(B
-{\bf identity}$B$O!"B?$/$N0lHLNs4X?t$N(B{\em :key}$B%Q%i%a!<%?$N%G%U%)%k%HCM(B
-$B$H$7$F$7$P$7$PMQ$$$i$l$k!#(B}
+{\em obj}自身を返す。
+{\bf idnetity}と{\bf quote}との違いに注意すること。
+{\bf identity}が関数であるのに対して{\bf quote}は、特殊書式(special form)
+である。
+したがって、{\tt (identity 'abc)}は{\tt abc}と評価されるが、
+{\tt (quote 'abc) == (quote (quote abc))}は{\tt 'abc}と評価される。
+{\bf identity}は、多くの一般列関数の{\em :key}パラメータのデフォルト値
+としてしばしば用いられる。}
 
 \funcdesc{eval}{form [environment]}{
-{\em form}$B$rI>2A$7$F!"$=$NCM$rJV$9!#(B
-$B$b$7!"(B{\bf *evalhook*}$B$K(B{\em form}$B$d(B{\em environment}$B$r<u$1$k4X?t$r(B
-$B@_Dj$9$k$J$i$P!"(Bhook$B4X?t$rI>2A$KF~$kA0$K8F$S=P$9$3$H$,$G$-$k!#(B}
+{\em form}を評価して、その値を返す。
+もし、{\bf *evalhook*}に{\em form}や{\em environment}を受ける関数を
+設定するならば、hook関数を評価に入る前に呼び出すことができる。}
 
 \funcdesc{apply}{func \&rest args}{
-{\em args}$B$K(B{\em func}$B$rE,MQ$9$k!#(B
-{\em func}$B$O!"4X?t(Bsymbol$B$+(Blambda$B=q<0$+(Bclosure$B$G$J$1$l$P$J$i$J$$!#(B
-$B%^%/%m$HFC<l=q<0(B(special form)$B$OE,MQ=PMh$J$$!#(B
-{\em args}$B$N:G8e$NMWAG$O!"B>$N(B{\em args}$B$,6u$N0z$-?t$G$"$k$J$i(B
-$B0z$-?t$N%j%9%H$G$J$1$l$P$J$i$J$$!#(B
-$B$3$N$h$&$K!"$b$7!"(B{\em args}$B$N:G8e$,(BNIL$B$G$"$C$?$J$i$P!"(B
-{\bf apply}$B$O$[$H$s$I(B{\bf funcall}$B$HF1$8$G$"$k!#(B
-$B$?$@$7!"(B{\bf apply}$B$O(B{\bf funcall}$B$h$j(B1$B$DB?$/$N0z$-?t$r;}$D$3$H$,$G$-$k!#(B
+{\em args}に{\em func}を適用する。
+{\em func}は、関数symbolかlambda書式かclosureでなければならない。
+マクロと特殊書式(special form)は適用出来ない。
+{\em args}の最後の要素は、他の{\em args}が空の引き数であるなら
+引き数のリストでなければならない。
+このように、もし、{\em args}の最後がNILであったならば、
+{\bf apply}はほとんど{\bf funcall}と同じである。
+ただし、{\bf apply}は{\bf funcall}より1つ多くの引き数を持つことができる。
 {\tt (apply \#'max 2 5 3 '(8 2)) --> 8}.}
 
 \funcdesc{funcall}{func \&rest args}{
-{\em args}$B$K(B{\em func}$B$rE,MQ$9$k!#(B
-{\em args}$B$N?t$O!"(B{\em func}$B$GMW5a$5$l$F$$$k0z$-?t$N?t$H0lCW$7$J$1$l$P(B
-$B$J$i$J$$!#(B}
+{\em args}に{\em func}を適用する。
+{\em args}の数は、{\em func}で要求されている引き数の数と一致しなければ
+ならない。}
 
-\specialdesc{quote}{obj}{{\em obj}$B<+?H$rI>2A$9$k!#(B}
+\specialdesc{quote}{obj}{{\em obj}自身を評価する。}
 
-\specialdesc{function}{func}{closure$B4X?t$r:n$k!#(B
-$B$b$7!"(B{\em func}$B$,(Bsymbol$B$J$i$P!"$=$N4X?tDj5A$,8!:w$5$l$k!#(B}
+\specialdesc{function}{func}{closure関数を作る。
+もし、{\em func}がsymbolならば、その関数定義が検索される。}
 
 \funcdesc{evalhook}{hookfunc form [env]}{
-{\em hookfun}$B$r(B{\bf *evalhook*}$B$K7k$SIU$1$?8e!"(B{\em form}$B$r0lEYI>2A$9$k!#(B}
+{\em hookfun}を{\bf *evalhook*}に結び付けた後、{\em form}を一度評価する。}
 
 \funcdesc{eval-dynamic}{variable}{
-$B%9%?%C%/$K$"$k(B{\em variable}(symbol)$B$NCM$rA\$9!#(B}
+スタックにある{\em variable}(symbol)の値を捜す。}
 
 \funcdesc{macroexpand}{form}{
-$B$b$7!"(B{\em form}$B$,%^%/%m(Bcall$B$G$"$k$J$i!"$=$l$rE83+$9$k!#(B
-$B$b$7!"E83+$7$?$b$N$,$^$@%^%/%m(Bcall$B$r4^$s$G$$$k$J$i$P!"(B
-$B%^%/%m(Bcall$B$N$J$$7k2L$H$J$k$^$G$/$jJV$7E83+$9$k!#(B}
+もし、{\em form}がマクロcallであるなら、それを展開する。
+もし、展開したものがまだマクロcallを含んでいるならば、
+マクロcallのない結果となるまでくり返し展開する。}
 
 \specialdesc{eval-when}{situation \{form\}*}{
-{\em situation}$B$O(B{\tt compile, load, eval}$B$N%j%9%H$G$"$k!#(B
-{\em form}$B$O!"8=:_$N<B9T%b!<%I$,(B{\em situation}$B$H0lCW$9$k$H$-$KI>2A$5$l$k!#(B
-{\bf eval-when}$B$O!"%3%s%Q%$%i$G$NF0:n$d4D6-$r@)8f$9$k$?$a$K=EMW$J$b$N$G$"$k!#(B
-$B$b$7!"(B{\tt compile}$B$,;XDj$5$l$?$J$i$P!"(B{\em form}$B$O%3%s%Q%$%i$K$h$C$F(B
-$BI>2A$5$l$k$N$G!"$=$N7k2L$O%3%s%Q%$%k7k2L$K1F6A$r5Z$\$9$3$H$K$J$k!#(B
-$BNc$($P!"(B{\bf defmacro}$B$O%3%s%Q%$%k;~$K%^%/%m(Bcall$B$rE83+$9$k$?$a$K%3%s%Q%$%i$G(B
-$BI>2A$5$l$J$1$l$P$J$i$J$$!#(B
-$B$b$7!"(B{\tt load}$B$,(B{\em situation}$B$N%j%9%H$KM?$($i$l$?$J$i$P!"(B
-{\em form}$B$O(Bload$B;~$K(Bload$B$^$?$OI>2A$5$l$k$?$a$K%3%s%Q%$%k$5$l$k!#(B
-$B$9$J$o$A!"(Bload$B;~$K%3%s%Q%$%k$5$l$?4X?t$,Dj5A$5$l$k!#(B
-$B$3$l$O!"%3%s%Q%$%i$K4|BT$5$l$k0lHLE*$J5!G=$G$"$k!#(B
-{\tt load}$B$O!"%3%s%Q%$%i$N4D6-$r@)8f$9$k$?$a$K;HMQ$5$l$k!#(B
-$B$b$7!"(B{\tt eval}$B$,(B{\em situation}$B$N%j%9%H$K4^$^$l$F$$$k$J$i$P!"(B
-{\em form}$B$O%=!<%9%3!<%I$,(Bload$B$5$l$k$H$-$KI>2A$5$l$k!#(B}
+{\em situation}は{\tt compile, load, eval}のリストである。
+{\em form}は、現在の実行モードが{\em situation}と一致するときに評価される。
+{\bf eval-when}は、コンパイラでの動作や環境を制御するために重要なものである。
+もし、{\tt compile}が指定されたならば、{\em form}はコンパイラによって
+評価されるので、その結果はコンパイル結果に影響を及ぼすことになる。
+例えば、{\bf defmacro}はコンパイル時にマクロcallを展開するためにコンパイラで
+評価されなければならない。
+もし、{\tt load}が{\em situation}のリストに与えられたならば、
+{\em form}はload時にloadまたは評価されるためにコンパイルされる。
+すなわち、load時にコンパイルされた関数が定義される。
+これは、コンパイラに期待される一般的な機能である。
+{\tt load}は、コンパイラの環境を制御するために使用される。
+もし、{\tt eval}が{\em situation}のリストに含まれているならば、
+{\em form}はソースコードがloadされるときに評価される。}
 
 \specialdesc{the}{type form}{
-{\em form}$B$r(B{\em type}$B$H$7$F@k8@$9$k!#(B
-{\em type}$B$O!"(B{\tt :integer, :fixnum, :float}$B$G<($5$l$k%/%i%9%*%V%8%'%/%H(B
-$B$N$I$l$+$G$"$k!#(B}
+{\em form}を{\em type}として宣言する。
+{\em type}は、{\tt :integer, :fixnum, :float}で示されるクラスオブジェクト
+のどれかである。}
 
 \specialdesc{declare}{declaration*}{
-$B$=$l$>$l(B{\em declaration}$B$O!"@k8@;XDj$d@0?t$"$k$$$OL\E*$N(Bsymbol$B$N%j%9%H$G$"$k!#(B
-$B@k8@$O!"%3%s%Q%$%i$,9bB.$J%3!<%I$r@8@.$9$k$?$a$K=EMW$G$"$k!#(B
+それぞれ{\em declaration}は、宣言指定や整数あるいは目的のsymbolのリストである。
+宣言は、コンパイラが高速なコードを生成するために重要である。
 \begin{description}
-\item {special} $BFC<lJQ?t$r@k8@$9$k!#(B
-\item {type} $BJQ?t$N7?$r@k8@$9$k!#(B; {\tt (type integer count)};
-$BM-8z$J7?;XDj;R$O(B{\em integer}, {\em :integer}, {\em fixnum},
-{\em :float}$B$H(B{\em float}$B$G$"$k!#7?;XDj;R$,$3$3$K<($7$?$b$N$N#1$D$G$"$k(B
-$B$J$i$P!"(B{\bf type}$B%-!<%o!<%I$r:o=|$7$F$bNI$$!#$=$N$?$a!"(B
-{\tt (integer count)}$B$O@5$7$$@k8@$G$"$k!#(B
-{\em float-vector},{\em integer-vector}$B$J$I$N$h$&$J!"$=$NB>$N7?!J%/%i%9!K$G$O!"(B
-{\tt (type float-vector vec1)}$B$N$h$&$K(B{\bf type}$B$rA0$KIU$1$kI,MW$,$"$k!#(B
-\item {ftype} $B4X?t$N7k2L$N7?$r@k8@$9$k!#(B
-\item {optimize} $B%3%s%Q%$%i$N(B*optimize*$B%Q%i%a!<%?$KCM(B(0--3)$B$r@_Dj$9$k!#(B
-\item {safety} $B%3%s%Q%$%i$N(B*safety*$B%Q%i%a!<%?$KCM(B(0--3)$B$r@_Dj$9$k!#(B
-\item {space}  $B%3%s%Q%$%i$N(B*space*$B%Q%i%a!<%?$KCM(B(0--3)$B$r@_Dj$9$k!#(B
-\item {inline} $BG'<1$7$J$$!#(B
-\item {not-inline} $BG'<1$7$J$$!#(B
+\item {special} 特殊変数を宣言する。
+\item {type} 変数の型を宣言する。; {\tt (type integer count)};
+有効な型指定子は{\em integer}, {\em :integer}, {\em fixnum},
+{\em :float}と{\em float}である。型指定子がここに示したものの１つである
+ならば、{\bf type}キーワードを削除しても良い。そのため、
+{\tt (integer count)}は正しい宣言である。
+{\em float-vector},{\em integer-vector}などのような、その他の型（クラス）では、
+{\tt (type float-vector vec1)}のように{\bf type}を前に付ける必要がある。
+\item {ftype} 関数の結果の型を宣言する。
+\item {optimize} コンパイラの*optimize*パラメータに値(0--3)を設定する。
+\item {safety} コンパイラの*safety*パラメータに値(0--3)を設定する。
+\item {space}  コンパイラの*space*パラメータに値(0--3)を設定する。
+\item {inline} 認識しない。
+\item {not-inline} 認識しない。
 \end{description}
 
 }
 \funcdesc{proclaim}{proclamation}{
-$BJQ?t$d%3%s%Q%$%i%*%W%7%g%s$r%0%m!<%P%k$K@k8@$9$k!#(B
-$BF1MM$J@k8@$O!"(B{\bf declare}$BFC<l=q<0$K$h$C$F5-=R$9$k$3$H$,$G$-$k!#(B
-$B$7$+$7$J$,$i!"(B{\bf proclaim}$B$O!"(B1$B$D$N0z?t$r;}$D4X?t$G$"$j!"(B
-$B@k8@$rI>2A$9$k!#(B}
+変数やコンパイラオプションをグローバルに宣言する。
+同様な宣言は、{\bf declare}特殊書式によって記述することができる。
+しかしながら、{\bf proclaim}は、1つの引数を持つ関数であり、
+宣言を評価する。}
 
 \funcdesc{warn}{format-string \&rest args}{
-{\em format-string}$B$H(B{\em args}$B$GM?$($i$l$k7Y9p%a%C%;!<%8$r(B
-{\bf *error-output*}$B$K=PNO$9$k!#(B}
+{\em format-string}と{\em args}で与えられる警告メッセージを
+{\bf *error-output*}に出力する。}
 \funcdesc{error}{format-string \&rest args}{
-{\bf *error-handler*}$B$K7k$SIU$/8=:_$N%(%i!<%O%s%I%i!<4X?t$r8F$S=P$9!#(B
-$B%G%U%)%k%H$N%(%i!<%O%s%I%i!<(B'euserror'$B$r(B{\bf *error-output*}$B$K:G=i$K=PNO$7(B
-{\em format-string}$B$H(B{\em args}$B$r(B{\bf format}$B$rMQ$$$F=PNO$9$k!#(B
-$B$=$N8e!"?7$7$$:G>e0L%l%Y%k$N%;%C%7%g%s(B(session)$B$KF~$k!#(B
-$B%W%m%s%W%H$K$O!"%(%i!<%;%C%7%g%s$N?<$5$r<($9!#(B
-{\bf throw}$B$K$=$NHV9f$rM?$($k$3$H$K$h$j!"Dc$$%(%i!<%l%Y%k$N%;%C%7%g%s$XLa$k$3$H$,$G$-$k!#(B}
+{\bf *error-handler*}に結び付く現在のエラーハンドラー関数を呼び出す。
+デフォルトのエラーハンドラー'euserror'を{\bf *error-output*}に最初に出力し
+{\em format-string}と{\em args}を{\bf format}を用いて出力する。
+その後、新しい最上位レベルのセッション(session)に入る。
+プロンプトには、エラーセッションの深さを示す。
+{\bf throw}にその番号を与えることにより、低いエラーレベルのセッションへ戻ることができる。}
 \end{refdesc}
 
-$B%^%k%A%9%l%C%I(BEuslisp$B$K$*$$$F!"FC<lJQ?t$O%9%l%C%I4V$G6&M-$5$l!"(B
-$BF1$8(B{\bf *error-handler*}$B$,0[$J$C$?%9%l%C%I$+$i;2>H$5$l$k!#(B
-$B$3$NIT<+M3$rHr$1$k$?$a$K!"%^%k%A%9%l%C%I(BEuslisp$B$O(B{\bf install-error-handler}
-$B4X?t$rHw$($F$$$k!#$=$N4X?t$O!"$=$l$>$l$N%9%l%C%I$KBP$7$F(B
-$B0[$J$C$?%(%i!<%O%s%I%i!<$r%$%s%9%H!<%k$9$k!#(B
+マルチスレッドEuslispにおいて、特殊変数はスレッド間で共有され、
+同じ{\bf *error-handler*}が異なったスレッドから参照される。
+この不自由を避けるために、マルチスレッドEuslispは{\bf install-error-handler}
+関数を備えている。その関数は、それぞれのスレッドに対して
+異なったエラーハンドラーをインストールする。
 
 \begin{refdesc}
 \funcdesc{install-error-handler}{handler}{
-{\em handler}$B$r8=:_$N%9%l%C%I$N%(%i!<%O%s%I%i!<$H$7$F%$%s%9%H!<%k$9$k!#(B}
+{\em handler}を現在のスレッドのエラーハンドラーとしてインストールする。}
 \end{refdesc}
 
 \newpage
 
-\subsection{$B:G>e0L%l%Y%k$NBPOC(B}
+\subsection{最上位レベルの対話}
 
-EusLisp$B$NI8=`$N:G>e0L%l%Y%k$NF~NO!]I>2A!]=PNO$N%k!<%W(B(loop)$B$O!"(B{\bf eustop}
-$B$K$h$j@)8f$5$l$F$$$k!#(B
+EusLispの標準の最上位レベルの入力−評価−出力のループ(loop)は、{\bf eustop}
+により制御されている。
 % which is also responsible for the initial loading of files.
-euslisp$B$,8F$S=P$5$l$?$H$-!"(B
-{\bf eustop}$B$O!"%[!<%`%G%#%l%/%H%j$+$i(B{\tt ".eusrc"}$B$H$$$&%U%!%$%k$r(B
-$B$"$k$$$O(B{\tt EUSRC}$B4D6-JQ?t$G;XDj$5$l$?%U%!%$%k$r%m!<%I$9$k!#(B
-$B$=$l$+$i!"(Beuslisp$B$O!"0z$-?t%j%9%H$G;XDj$5$l$?%U%!%$%k$r%m!<%I$9$k!#(B
-$B$3$l$i$N%m!<%I$,=*N;8e!"(B{\bf eustop}$B$O!"IaDL$NBPOC%;%C%7%g%s(B(session)$B$KF~$k!#(B
+euslispが呼び出されたとき、
+{\bf eustop}は、ホームディレクトリから{\tt ".eusrc"}というファイルを
+あるいは{\tt EUSRC}環境変数で指定されたファイルをロードする。
+それから、euslispは、引き数リストで指定されたファイルをロードする。
+これらのロードが終了後、{\bf eustop}は、普通の対話セッション(session)に入る。
 
-{\bf *standard-input*}$B$K%f!<%6!<$N(BTTY$B$,@\B3$5$l$?$H$-!"(B
-{\bf eustop}$B$O!"(B{\bf *prompt-string*}$B!J%G%U%)%k%H$H$7$F(B{\tt "eus\$"}$B$,(B
-$B@_Dj$5$l$F$$$k!K$K@_Dj$5$l$?%W%m%s%W%H$r=PNO$9$k!#(B
-$B$=$7$F!"(B{\bf *terminal-io*}$B%9%H%j!<%`$+$iL?Na$rF~NO$9$k!#(B
-$B$b$7!"$=$NF~NO$,%+%C%3$G3g$i$l$?9T$J$i$P!"(B
-{\bf eval}$B$K$h$C$F(Blisp$B=q<0$H$7$F07$o$l$k!#(B
-$B$b$7!"F~NO9T$N:G=i$N(Bsymbol$B$K4X?tDj5A$,$"$C$?>l9g!"$=$N9T$K<+F0E*$K(B
-$B%+%C%3$,F~$l$i$l!"I>2A$5$l$k!#(B
-$B$b$7!"4X?tDj5A$,8+$D$+$i$J$+$C$?>l9g!"$=$NFC<lCM(B(special value)$B$,(B
-$BD4::$5$l!"$=$NCM$,=PNO$5$l$k!#(B
-$B$b$7!"$=$N(Bsymbol$B$K$J$K$bDj5A$5$l$F$J$$$J$i$P!"(B
-$B$=$N9T$O(BUNIX$BL?Na$H$_$J$5$l!"(Bsh(Bourn's shell)$B$XEO$5$l$k!#(B
-$B$b$7!"(Bsh$B$,0lCW$9$k(BUNIX$BL?Na$rA\$;$J$+$C$?$H$-!"(B
-"command unrecognized"$B$H$$$&%a%C%;!<%8$r=PNO$9$k!#(B
-$B$3$N$h$&$K!"(B{\bf eustop}$B$O(Blisp$B$N%$%s%?!<%W%j%?$*$h$S(BUNIX$B$N%7%'%k$H$7$FF0:n$9$k!#(B
-$B$b$7!"F~NO$r(BUNIX$BL?Na$H$7$F<B9T$7$?$/$J$$$H$-!"(B
-$B9T$N:G=i$K%3%s%^(B','$B$rIU$1$l$P$h$$!#(B
-$B$3$l$O!"BPOC<B9T(B(interpretive execution)$B$G%(%i!<$,H/@8$7$?$H$-!"(B
-$BF0E*$JCM$r8+$k$H$-$KLr$KN)$D!#(B
-Euslisp$B$O%m!<%+%k$J%9%3!<%W(B(lexical scope)$B$r:NMQ$7$F$$$k$N$G(B
-$B%m!<%+%kJQ?t$NCM$r(Bspecial$B$H$7$F@k8@$5$l$F$$$J$$8B$j%9%3!<%W$N30$+$i(B
-$BD4::$9$k$3$H$O=PMh$J$$!#(B
+{\bf *standard-input*}にユーザーのTTYが接続されたとき、
+{\bf eustop}は、{\bf *prompt-string*}（デフォルトとして{\tt "eus\$"}が
+設定されている）に設定されたプロンプトを出力する。
+そして、{\bf *terminal-io*}ストリームから命令を入力する。
+もし、その入力がカッコで括られた行ならば、
+{\bf eval}によってlisp書式として扱われる。
+もし、入力行の最初のsymbolに関数定義があった場合、その行に自動的に
+カッコが入れられ、評価される。
+もし、関数定義が見つからなかった場合、その特殊値(special value)が
+調査され、その値が出力される。
+もし、そのsymbolになにも定義されてないならば、
+その行はUNIX命令とみなされ、sh(Bourn's shell)へ渡される。
+もし、shが一致するUNIX命令を捜せなかったとき、
+"command unrecognized"というメッセージを出力する。
+このように、{\bf eustop}はlispのインタープリタおよびUNIXのシェルとして動作する。
+もし、入力をUNIX命令として実行したくないとき、
+行の最初にコンマ','を付ければよい。
+これは、対話実行(interpretive execution)でエラーが発生したとき、
+動的な値を見るときに役に立つ。
+Euslispはローカルなスコープ(lexical scope)を採用しているので
+ローカル変数の値をspecialとして宣言されていない限りスコープの外から
+調査することは出来ない。
 
-$BF~NO$O!"$=$l$>$l9THV9f$H$H$b$K(B{\bf *history*}$B%Y%/%H%k$K5-21$5$l$k!#(B
-csh$B$N>e$HF1$8MM$K(B{\bf !}$B4X?t$rF~NO$9$k$3$H$K$h$jF~NO$N>\:Y$r(B
-$B8F$S=P$9$3$H$,$G$-$k!#(B
-csh$B$NMzNr$H$N0c$$$O!"(B{\bf !}$B$,4X?t$G$"$k$?$a(B{\bf !}$B$N<!$K:GDc#1$D$N(B
-$B%9%Z!<%9$,I,MW$G$"$k!#(B
-$B$^$?!"%3%s%H%m!<%k%-!<$rMQ$$$k$3$H$K$h$j(Bemacs$B$N$h$&$KBPOCE*$K(B
-$B9T$rJT=8$9$k$3$H$,$G$-$k!#(B
+入力は、それぞれ行番号とともに{\bf *history*}ベクトルに記憶される。
+cshの上と同じ様に{\bf !}関数を入力することにより入力の詳細を
+呼び出すことができる。
+cshの履歴との違いは、{\bf !}が関数であるため{\bf !}の次に最低１つの
+スペースが必要である。
+また、コントロールキーを用いることによりemacsのように対話的に
+行を編集することができる。
 
-$BDL>o(B\verb+^+D (EOF)$B$G(BEuslisp$B$O=*N;$9$k!#(B
-$B>e0L%l%Y%k(B($BIaDL$O(Bcsh)$B$K0[>o=*N;%3!<%I$rJV$9$?$a$K$O!"E,Ev$J>r7o%3!<%I$r$D$1$?(B
-{\bf exit}$B$r;HMQ$9$k$3$H!#(B
+通常\verb+^+D (EOF)でEuslispは終了する。
+上位レベル(普通はcsh)に異常終了コードを返すためには、適当な条件コードをつけた
+{\bf exit}を使用すること。
 
-{\bf eustop}$B$O!"(BSIGINT$B$H(BSIGPIPE$B$N$?$a$K%7%0%J%k%O%s%I%i!<$r@_Dj$9$k!#(B
-$B$=$7$F!"B>$N%7%0%J%k$O(Bcatch$B$7$J$$!#(B
-$B$3$N$?$a!"(BSIGTERM$B$d(BSIGQUIT$B$N$h$&$J%7%0%J%k$G(BEuslisp$B$r=*N;$G$-$k!#(B
-$B=*N;$rHr$1$?$$$H$-!"$3$l$i$N%7%0%J%k$r(Bcatch$B$9$k$?$a$K$O!"(B
-{\bf unix:signal}$B4X?t$G%f!<%6!<$GDj5A$7$?%7%0%J%k%O%s%I%i!<$r@_Dj$9$k$3$H!#(B
+{\bf eustop}は、SIGINTとSIGPIPEのためにシグナルハンドラーを設定する。
+そして、他のシグナルはcatchしない。
+このため、SIGTERMやSIGQUITのようなシグナルでEuslispを終了できる。
+終了を避けたいとき、これらのシグナルをcatchするためには、
+{\bf unix:signal}関数でユーザーで定義したシグナルハンドラーを設定すること。
 
 \begin{refdesc}
 
-\vardesc{-}{$B8=:_$NF~NO(B}
-\vardesc{+}{$BD>A0$NF~NO(B}
-\vardesc{++}{$B#2$DA0$NF~NO(B}
-\vardesc{+++}{$B#3$DA0$NF~NO(B}
-\vardesc{*}{$BD>A0$N7k2L(B}
-\vardesc{**}{$B#2$DA0$N7k2L(B}
-\vardesc{***}{$B#3$DA0$N7k2L(B}
+\vardesc{-}{現在の入力}
+\vardesc{+}{直前の入力}
+\vardesc{++}{２つ前の入力}
+\vardesc{+++}{３つ前の入力}
+\vardesc{*}{直前の結果}
+\vardesc{**}{２つ前の結果}
+\vardesc{***}{３つ前の結果}
 \vardesc{*prompt-string*}{
-{\bf eustop}$B$G;HMQ$5$l$k%W%m%s%W%HJ8;zNs(B}
+{\bf eustop}で使用されるプロンプト文字列}
 \vardesc{*program-name*}{
-$B$3$N(BEuslisp$B$,8F$S=P$5$l$?L?Na!#Nc$($P!"(B{\tt eus,eusx,eusxview}$B$d%f!<%6!<$G:n$C$?(B
-euslisp$B$J$I!#(B}
+このEuslispが呼び出された命令。例えば、{\tt eus,eusx,eusxview}やユーザーで作った
+euslispなど。}
 
-\funcdesc{eustop}{\&rest argv}{$B%G%U%)%k%H$N:G>e0L%k!<%W(B}
+\funcdesc{eustop}{\&rest argv}{デフォルトの最上位ループ}
 
 \funcdesc{eussig}{sig code}{
-SIGPIPE$B$N%G%U%)%k%H%7%0%J%k%O%s%I%i!<!#(B
-{\bf eussig}$B$O!"(BSIGPIPE$B$,E~Ce$7$?$jB>$N:G>e0L%l%Y%k%k!<%W$KF~$k$H$-(B
-$B%7%0%J%kHV9f$r=PNO$9$k!#(B}
+SIGPIPEのデフォルトシグナルハンドラー。
+{\bf eussig}は、SIGPIPEが到着したり他の最上位レベルループに入るとき
+シグナル番号を出力する。}
 
 \funcdesc{sigint-handler}{sig code}{
-SIGINT(control-C)$B$N%G%U%)%k%H%7%0%J%k%O%s%I%i!<!#(B
-$B$3$N%7%0%J%k$G?7$7$$:G>e0L%;%C%7%g%s$XF~$k!#(B}
+SIGINT(control-C)のデフォルトシグナルハンドラー。
+このシグナルで新しい最上位セッションへ入る。}
 
 \funcdesc{euserror}{code message \&rest arg}{
-$B%G%U%)%k%H$N%(%i!<%O%s%I%i!<$G!"(B
-{\em message}$B$r=PNO$7!"?7$7$$%(%i!<%;%C%7%g%s$XF~$k!#(B}
+デフォルトのエラーハンドラーで、
+{\em message}を出力し、新しいエラーセッションへ入る。}
 
 \funcdesc{reset}{}{
-$B%(%i!<%k!<%W$+$iC&=P$7$F!":G8e$N(B{\bf eustop}$B%;%C%7%g%s$XLa$k!#(B}
+エラーループから脱出して、最後の{\bf eustop}セッションへ戻る。}
 
 \funcdesc{exit}{\&optional termination-code}{
-Euslisp$B%W%m%;%9$r=*N;$7!"%W%m%;%9$N>uBV%3!<%I$H$7$F(B{\em termination-code}
-(0..255)$B$rJV$9!#(B}
+Euslispプロセスを終了し、プロセスの状態コードとして{\em termination-code}
+(0..255)を返す。}
 
-\funcdesc{h}{}{{\bf *history*}$B$NCf$K5-21$5$l$F$$$kF~NOMzNr$r(B
-$B4XO"$9$kNsHV9f$H$H$b$K=PNO$9$k!#(B}
+\funcdesc{h}{}{{\bf *history*}の中に記憶されている入力履歴を
+関連する列番号とともに出力する。}
 \funcdesc{!}{\&optional (seq 0)}{
-$BNsHV9f(B{\em seq}$B$K4XO"$9$kF~NO9T$r8F$S=P$9!#(B
-{\em seq}$B$,(B0$B$N$H$-!"$b$C$H$b:G6a$NL?Na$,8F$S=P$5$l$k!#(B
-$B$b$7!"(B{\em seq}$B$,Ii$N>l9g!"8=:_9T$+$iAjBPE*$J0LCV$K$"$k9T$,(B
-$B8F$S=P$5$l$k!#(B
-$B8F$S=P$5$l$?9T$,I=<($5$l!"$=$N9T$N:G8e$K%+!<%=%k$r0\F0$9$k!#(B
-$B<!$N%3%s%H%m!<%k%-!<$,;HMQ=PMh$k!#(B
-control-H (backspace)$B$+(Bcontrol-B$B$G#1J8;zLa$k!#(B
-control-F$B$+(Bcontrol-K$B$G#1J8;z?J$`!#(B
-control-A$B$G9T$N:G=i$K0\F0$9$k!#(B
-control-L$B$G9T$N:G8e$K0\F0$9$k!#(B
-control-C$B$G9T$N=$@5$r%-%c%s%;%k$9$k!#(B
-control-M (carriage-return)$B$+(Bcontrol-J (line-feed)$B$G(B
-$B9T=$@5$r=*N;$7$F!"=$@5$7$?9T$rI>2A$9$k!#(B
-$B$b$7!"(B{\em seq}$B$,HV9f$G$J$/(Bsymbol$B$^$?$OJ8;zNs$N>l9g!"(B
-$BMzNr%j%9%H$r8E$$J}$K8~$+$C$F8!:w$7!"(B
-symbol$B$^$?$OJ8;zNs$,4^$^$l$F$$$kL?Na9T$rJV$9!#(B}
+列番号{\em seq}に関連する入力行を呼び出す。
+{\em seq}が0のとき、もっとも最近の命令が呼び出される。
+もし、{\em seq}が負の場合、現在行から相対的な位置にある行が
+呼び出される。
+呼び出された行が表示され、その行の最後にカーソルを移動する。
+次のコントロールキーが使用出来る。
+control-H (backspace)かcontrol-Bで１文字戻る。
+control-Fかcontrol-Kで１文字進む。
+control-Aで行の最初に移動する。
+control-Lで行の最後に移動する。
+control-Cで行の修正をキャンセルする。
+control-M (carriage-return)かcontrol-J (line-feed)で
+行修正を終了して、修正した行を評価する。
+もし、{\em seq}が番号でなくsymbolまたは文字列の場合、
+履歴リストを古い方に向かって検索し、
+symbolまたは文字列が含まれている命令行を返す。}
 \funcdesc{new-history}{depth}{
-{\em depth}$B$ND9$5$r;}$D$h$&$K(B{\bf *history*}$B$r=i4|2=$9$k!#(B
-{\em depth}$B9T$,5-21$5$l$k!#(B
-$B8=:_$N(B{\bf *history*}$B$K5-O?$5$l$?F~NO9T$O!"$9$Y$F>CLG$9$k!#(B}
+{\em depth}の長さを持つように{\bf *history*}を初期化する。
+{\em depth}行が記憶される。
+現在の{\bf *history*}に記録された入力行は、すべて消滅する。}
 
 \end{refdesc}
 
 \newpage
 
 
-\subsection{$B%3%s%Q%$%k(B}\label{compiler}
+\subsection{コンパイル}\label{compiler}
 
-Euslisp$B%3%s%Q%$%i$O!"(BLisp$B%W%m%0%i%`$N<B9T$r9bB.2=$9$k$?$a$K;HMQ$5$l$k!#(B
-$B<B9T;~4V$N(B5$B!A(B30$BG\$N9bB.2=$H%^%/%mE83+$K$h$k%,!<%Y!<%8%3%l%/%7%g%s(B
-$B;~4V$NBgI}$J8:>/$,4|BT$G$-$k!#(B
+Euslispコンパイラは、Lispプログラムの実行を高速化するために使用される。
+実行時間の5〜30倍の高速化とマクロ展開によるガーベージコレクション
+時間の大幅な減少が期待できる。
 
-euscomp$B$O!"7W;;=hM}$H%Y%/%H%k=hM}$N$?$a$N:GE,2=$r9T$&!#(B
-$B$H$-$I$-%3%s%Q%$%i$,:GE,2=$r8zN(NI$/<B9T$9$k$?$a$K!"8GM-$N7?@k8@$,I,MW$H$J$k!#(B
+euscompは、計算処理とベクトル処理のための最適化を行う。
+ときどきコンパイラが最適化を効率良く実行するために、固有の型宣言が必要となる。
 
-{\bf compile-function}$B$O!"(B1$B$D$:$D4X?t$r%3%s%Q%$%k$9$k!#(B
-{\bf compile-file}$B$O!"$9$Y$F$N%=!<%9%U%!%$%k$r%3%s%Q%$%k$9$k!#(B
-{\bf compile-file}$B$r<B9T$7$F$$$k4V!"%U%!%$%kFb$N$9$Y$F$N=q<0$,FI$_9~$^$l(B
-$BI>2A$5$l$k!#(B
-$B$3$l$O!"8=:_$N(BEuslisp$B$N4D6-$rJQ2=$5$;$k!#(B
-$BNc$($P!"(B{\bf defparameter}$B$O(Bsymbol$B$K?7$7$$CM$r@_Dj$9$k$7!"(B
-{\bf defun}$B$O%3%s%Q%$%k$5$l$F$$$J$$4X?t$r%3%s%Q%$%k$5$l$?4X?t$K(B
-$BCV$-49$($k!#(B
-$B$3$l$i$NM=4|$7$J$$1F6A$rHr$1$k$?$a$K$O!"(B{\tt compile}$B;XDj$N$J$$(B{\bf eval-when}$B$r(B
-$B;HMQ$7$?$j!"(B{\bf euscomp}$B$r;HMQ$7$FJL%W%m%;%9$H$7$F%3%s%Q%$%i$r<B9T$7$?$j$9$k!#(B
+{\bf compile-function}は、1つずつ関数をコンパイルする。
+{\bf compile-file}は、すべてのソースファイルをコンパイルする。
+{\bf compile-file}を実行している間、ファイル内のすべての書式が読み込まれ
+評価される。
+これは、現在のEuslispの環境を変化させる。
+例えば、{\bf defparameter}はsymbolに新しい値を設定するし、
+{\bf defun}はコンパイルされていない関数をコンパイルされた関数に
+置き換える。
+これらの予期しない影響を避けるためには、{\tt compile}指定のない{\bf eval-when}を
+使用したり、{\bf euscomp}を使用して別プロセスとしてコンパイラを実行したりする。
 
-{\bf euscomp}$B$O(BUNIX$B$N%3%^%s%I$G!"IaDL(B{\bf eus}$B$K%7%s%\%j%C%/%j%s%/$5$l$F$$$k!#(B
-$B4v$D$+$N%*%W%7%g%s$r;}$C$F$$$k!#(B
--O$B%U%i%0$O(BC$B%3%s%Q%$%i$N:GE,2=$r;X<($7!"(B
--O1,-O2, -O3 $B$O$=$l$>$l(BEuslisp$B%3%s%Q%$%i$N:GE,2=$N%l%Y%k$r;X<($9$k!#(B
-$B$3$l$O!"(B{\tt (optimize 1 or 2 or 3)}$B$H@k8@$9$k$N$HF1Ey$G$"$k!#(B
--S0, -S1, -S2, -S3$B$O!"(B{\bf compiler:*safety*}$B$K(B0,1,2,3$B$r@_Dj$9$k!#(B
-$B$b$7(B{\bf *safety*}$B$,(B2$B$h$j>.$5$1$l$P!"3d$j9~$_%A%'%C%/$N$?$a$N%3!<%I$rH/9T$7$J$$!#(B
-$B$b$7!"%W%m%0%i%`$,L58B%k!<%W$KF~$C$?$H$-!"@)8f$r<:$&$3$H$K$J$k!#(B
-$B$b$7(B{\bf *safety*}$B$,(B0$B$N$H$-$O!"0z$-?t$N?t$r%A%'%C%/$7$J$$!#(B
--V$B%U%i%0$O!"%3%s%Q%$%k$5$l$F$$$k4X?tL>$rI=<($9$k!#(B
--c$B%U%i%0$O!"(Bcc$B$N<B9T$d(Bfork$B$rKI$0!#(B
--D$B$O!"(B{\bf *features*}$B%j%9%H$KB3$/0z$-?t$rCV$/!#(B
-$B$3$l$O!"FI$_9~$_%^%/%m(B{\tt \#-}$B$H(B{\tt \#+}
-$B$rMQ$$$?>r7oIU$-%3%s%Q%$%k$N$?$a$K;HMQ$9$k$3$H$,$G$-$k!#(B
+{\bf euscomp}はUNIXのコマンドで、普通{\bf eus}にシンボリックリンクされている。
+幾つかのオプションを持っている。
+-OフラグはCコンパイラの最適化を指示し、
+-O1,-O2, -O3 はそれぞれEuslispコンパイラの最適化のレベルを指示する。
+これは、{\tt (optimize 1 or 2 or 3)}と宣言するのと同等である。
+-S0, -S1, -S2, -S3は、{\bf compiler:*safety*}に0,1,2,3を設定する。
+もし{\bf *safety*}が2より小さければ、割り込みチェックのためのコードを発行しない。
+もし、プログラムが無限ループに入ったとき、制御を失うことになる。
+もし{\bf *safety*}が0のときは、引き数の数をチェックしない。
+-Vフラグは、コンパイルされている関数名を表示する。
+-cフラグは、ccの実行やforkを防ぐ。
+-Dは、{\bf *features*}リストに続く引き数を置く。
+これは、読み込みマクロ{\tt \#-}と{\tt \#+}
+を用いた条件付きコンパイルのために使用することができる。
 
-$B%3%s%Q%$%i$O(B"xxx.l"$B$H$$$&L>$N(BEuslisp$B%=!<%9%W%m%0%i%`$r(B
-$BCf4V(BC$B%W%m%0%i%`%U%!%$%k(B"xxx.c"
-$B$H%X%C%@!<%U%!%$%k(B"xxx.h"$B$KJQ49$9$k!#(B
-$B$=$l$+$i!"(BC$B%3%s%Q%$%i$,<B9T$5$l!"(B"xxx.o"$B$,@8@.$5$l$k!#(B
-$BCf4V%U%!%$%k(B"xxx.c"$B$H(B"xxx.h"$B$O%/%m%9%3%s%Q%$%k$NL\E*$N$?$a$K;D$5$l$k!#(B
-$B$7$?$,$C$F!"0c$&%"!<%-%F%/%A%c!<$N5!3#$N>e$G;HMQ$7$?$$$H$-!"(BUNIX$BL?Na$N(Bcc$B$G(B
-"xxx.c"$B%U%!%$%k$r%3%s%Q%$%k$9$k$@$1$G$h$$!#(B
-$B%3%s%Q%$%k$5$l$?%3!<%I$O!"(B'{\tt (load "xxx")}'$B$K$h$C$F(BEuslisp$B$K%m!<%I$5$l$k!#(B
+コンパイラは"xxx.l"という名のEuslispソースプログラムを
+中間Cプログラムファイル"xxx.c"
+とヘッダーファイル"xxx.h"に変換する。
+それから、Cコンパイラが実行され、"xxx.o"が生成される。
+中間ファイル"xxx.c"と"xxx.h"はクロスコンパイルの目的のために残される。
+したがって、違うアーキテクチャーの機械の上で使用したいとき、UNIX命令のccで
+"xxx.c"ファイルをコンパイルするだけでよい。
+コンパイルされたコードは、'{\tt (load "xxx")}'によってEuslispにロードされる。
 
-$BCf4V%U%!%$%k$O$=$l$>$l!"(B"eus.h"$B%X%C%@!<%U%!%$%k$r;2>H$9$k!#(B
-$B$3$N%U%!%$%k$O!"(B{\tt *eusdir*/c}$B%G%#%l%/%H%j$KCV$+$l$F$$$k$H2>Dj$7$F$$$k!#(B
-{\tt *eusdir*}$B$O!"(B{\tt EUSDIR}$B4D6-JQ?t$+$i%3%T!<$5$l$k!#(B
-$B$b$7@_Dj$5$l$F$J$1$l$P!"(B{\tt /usr/local/eus/}$B$,%G%U%)%k%H%G%#%l%/%H%j(B
-$B$H$7$F07$o$l$k!#(B
+中間ファイルはそれぞれ、"eus.h"ヘッダーファイルを参照する。
+このファイルは、{\tt *eusdir*/c}ディレクトリに置かれていると仮定している。
+{\tt *eusdir*}は、{\tt EUSDIR}環境変数からコピーされる。
+もし設定されてなければ、{\tt /usr/local/eus/}がデフォルトディレクトリ
+として扱われる。
 
-$B%3%s%Q%$%k$5$l$?$H$-!"Cf4V$N(BC$B%W%m%0%i%`$OIaDL85$N%=!<%9%3!<%I$h$j$b(B
-$B$+$J$jBg$-$/$J$k!#Nc$($P!"(B1,161$B9T$N(Blisp$B%=!<%9%3!<%I(B"l/common.l"$B$O!"(B
-8,194$B9T$N(B"l/common.c"$B$H(B544$B9T$N(B"l/common.h"$B$KE83+$5$l$k!#(B
-1,000$B9T$N(Blisp$B%=!<%9$r%3%s%Q%$%k$9$k$N$O!"Fq$7$$:n6H$G$O$J$$$,!"(B
-10,000$B9T6a$$(BC$B$N%W%m%0%i%`$r:GE,%3%s%Q%$%k$9$k$3$H$O!"D9$$;~4V(B($B?tJ,(B)$B$+$+$k(B
-$B$H$H$b$K!"$?$/$5$s$N%G%#%9%/6u4V$r>CHq$9$k!#(B
-$B$=$N$?$a!"$b$7AjBPE*$KBg$-$J%W%m%0%i%`$N%3%s%Q%$%k$r$9$k$J$i$P!"(B
-/var/tmp$B$K==J,$J%G%#%9%/$,$"$k$+$I$&$+$r3NG'$9$k$3$H!#(B
-$B$=$&$G$J$1$l$P!"(BCC$B$O;`$L$@$m$&!#(B
-{\tt TMPDIR}$B4D6-JQ?t$r$b$C$HBg$-$J%G%#%9%/ItJ,$K@_Dj$9$k$3$H$,=u$+$kF;$G$"$k!#(B
+コンパイルされたとき、中間のCプログラムは普通元のソースコードよりも
+かなり大きくなる。例えば、1,161行のlispソースコード"l/common.l"は、
+8,194行の"l/common.c"と544行の"l/common.h"に展開される。
+1,000行のlispソースをコンパイルするのは、難しい作業ではないが、
+10,000行近いCのプログラムを最適コンパイルすることは、長い時間(数分)かかる
+とともに、たくさんのディスク空間を消費する。
+そのため、もし相対的に大きなプログラムのコンパイルをするならば、
+/var/tmpに十分なディスクがあるかどうかを確認すること。
+そうでなければ、CCは死ぬだろう。
+{\tt TMPDIR}環境変数をもっと大きなディスク部分に設定することが助かる道である。
 
-$B%j%s%/$,%m!<%I;~$^$?$O<B9T;~$K<B9T$5$l$k$N$G!"(B
-eus$B$N%+!<%M%k$,%P!<%8%g%s%"%C%W$5$l$F$b:F%3%s%Q%$%k$9$kI,MW$O$J$$!#(B
-$B$b$&0lJ}$G!"<B9T;~%j%s%/$OITJX$J$3$H$,$"$k!#(B
-$B#2$D$N4X?t(BA$B$H(BB$B$,(B"x.l"$B%U%!%$%k$K$"$j(BA$B$,(BB$B$r8F$S=P$7$F$$$k$H2>Dj$9$k!#(B
-"x.l"$B$r%3%s%Q%$%k8e!"(B"x.o"$B$r%m!<%I$7FbIt$G(BB$B$r8F$S=P$7$F$$$k(BA$B$r8F$S=P$=$&$H$9$k!#(B
-$B$=$l$+$i!"(BB$B$NCf$G(Bbug$B$r8+$D$1$k$H!"$?$V$s(BB$B$r:FDj5A$7$h$&$H$9$k$@$m$&!#(B
-$B$3$3$G!"%3%s%Q%$%k$5$l$?(BA$B$H%3%s%Q%$%k$5$l$F$$$J$$(BB$B$H$,$G$-$k!#(B
-$B:F$S(BA$B$r8F$S=P$7$?$H$9$k$H!"(BA$B$O$^$@8E$$%3%s%Q%$%k$5$l$F$$$k(BB$B$r8F$S=P$9!#(B
-$B$3$l$O!"(BA$B$,:G=i$K(BB$B$r8F$S=P$7$?$H$-8GDjE*$K%j%s%/$5$l$k$+$i$G$"$k!#(B
-$B$3$NLdBj$rHr$1$k$?$a$K$O!"(BA$B$r:FDj5A$7$J$*$9$+$"$k$$$O(B"x.o"$B$,%m!<%I$5$l$?D>8e$G(B
-A$B$r8F$S=P$9A0$K(BB$B$r:FDj5A$7$J$1$l$P$J$i$J$$!#(B
+リンクがロード時または実行時に実行されるので、
+eusのカーネルがバージョンアップされても再コンパイルする必要はない。
+もう一方で、実行時リンクは不便なことがある。
+２つの関数AとBが"x.l"ファイルにありAがBを呼び出していると仮定する。
+"x.l"をコンパイル後、"x.o"をロードし内部でBを呼び出しているAを呼び出そうとする。
+それから、Bの中でbugを見つけると、たぶんBを再定義しようとするだろう。
+ここで、コンパイルされたAとコンパイルされていないBとができる。
+再びAを呼び出したとすると、Aはまだ古いコンパイルされているBを呼び出す。
+これは、Aが最初にBを呼び出したとき固定的にリンクされるからである。
+この問題を避けるためには、Aを再定義しなおすかあるいは"x.o"がロードされた直後で
+Aを呼び出す前にBを再定義しなければならない。
 
-$B%3%s%Q%$%k$5$l$?%3!<%I$,%m!<%I$5$l$k$H$-!"0lHLE*$K(Bdefun$B$d(Bdefmethod$B$N(B
-$BNs$G$"$k:G>e0L%3!<%I$,<B9T$5$l$k!#(B
-$B$3$N:G>e0L%3!<%I$O%m!<%I%b%8%e!<%k$N%(%s%H%j4X?t$H$7$FDj5A$5$l$F$$$k!#(B
-$B%3%s%Q%$%i$,$=$N%(%s%H%j4X?t$NL>A0$rIU$1!"(B
-$B%m!<%@$,$3$N4X?t$NL>A0$r@53N$K$o$+$i$J$1$l$P$J$i$J$$!#(B
-$B>u67$r4JC1$K$9$k$?$a$K!"%3%s%Q%$%i$H%m!<%@$NN>J}$H$b(B
-$B$=$N%(%s%H%j4X?t$NL>A0$H$7$F%*%V%8%'%/%H%U%!%$%k$N(Bbasename$B$HF10l$N$b$N(B
-$B$H2>Dj$9$k!#(B
-$BNc$($P!"$b$7(B"fib.l"$B$r%3%s%Q%$%k$7$?$J$i$P!"(B
-$B%3%s%Q%$%i$O(B"fib.c"$B$N%(%s%H%j4X?t$H$7$F(B"fib(...)"$B$r@8@.$9$k!#(B
-$B$=$7$F!"%m!<%@$O%*%V%8%'%/%H%U%!%$%k(B"fib.o"$B$NCf$+$i(B"fib"$B$rC5$9!#(B
-$B:G=*E*$K%*%V%8%'%/%H%U%!%$%k$O(BUnix$B$N(B"cc"$B$d(B"ld"$B$G@8@.$5$l$k$N$G!"(B
-$B$3$N%(%s%H%j4X?tL>$O!"(BC$B4X?t$NL?L>%k!<%k$rK~B-$7$J$1$l$P$J$i$J$$!#(B
-$B$7$?$,$C$F!"%U%!%$%kL>$H$7$F(BC$B$NM=Ls%-!<%o!<%I!JNc$($P!"(B
-"int", "struct", "union", "register", "extern"$B$J$I!K$d(B"c/eus.h"$B$K(B
-$BDj5A$5$l$F$$$k%W%i%$%Y!<%H;X<(8l!JNc$($P!"(B"pointer", "cons",
-"makeint"$B$J$I!K$rHr$1$J$1$l$P$J$i$J$$!#(B
-$B$b$7!"%=!<%9%U%!%$%k$NL>A0$H$7$F$3$l$i$NM=Ls8l$NFb$N#1$D$r(B
-$B;HMQ$7$J$1$l$P$J$i$J$$$J$i$P!"%3%s%Q%$%i$d%m!<%@$N(B
-{\em :entry}$B0z?t$rJL$K;XDj$9$k$3$H!#(B
+コンパイルされたコードがロードされるとき、一般的にdefunやdefmethodの
+列である最上位コードが実行される。
+この最上位コードはロードモジュールのエントリ関数として定義されている。
+コンパイラがそのエントリ関数の名前を付け、
+ローダがこの関数の名前を正確にわからなければならない。
+状況を簡単にするために、コンパイラとローダの両方とも
+そのエントリ関数の名前としてオブジェクトファイルのbasenameと同一のもの
+と仮定する。
+例えば、もし"fib.l"をコンパイルしたならば、
+コンパイラは"fib.c"のエントリ関数として"fib(...)"を生成する。
+そして、ローダはオブジェクトファイル"fib.o"の中から"fib"を探す。
+最終的にオブジェクトファイルはUnixの"cc"や"ld"で生成されるので、
+このエントリ関数名は、C関数の命名ルールを満足しなければならない。
+したがって、ファイル名としてCの予約キーワード（例えば、
+"int", "struct", "union", "register", "extern"など）や"c/eus.h"に
+定義されているプライベート指示語（例えば、"pointer", "cons",
+"makeint"など）を避けなければならない。
+もし、ソースファイルの名前としてこれらの予約語の内の１つを
+使用しなければならないならば、コンパイラやローダの
+{\em :entry}引数を別に指定すること。
 
-closure$B$N;HMQ$K$O@)8B$,$"$k!#(B
-closure$B$NCf$N(B{\bf return-from}$BFC<l=q<0$H(B{\bf unwind-protect}$B$NCf$N(Bclean-up$B=q<0$O(B
-$B$$$D$b@5$7$/%3%s%Q%$%k$5$l$k$o$1$G$O$J$$!#(B
+closureの使用には制限がある。
+closureの中の{\bf return-from}特殊書式と{\bf unwind-protect}の中のclean-up書式は
+いつも正しくコンパイルされるわけではない。
 
-{\bf disassemble}$B$O!"<B8=$5$l$F$$$J$$!#(B
-$B%3%s%Q%$%k$5$l$?%3!<%I$r2r@O$9$k$?$a$K$OCf4V(BC$B%W%m%0%i%`$r8+$k$+$"$k$$$O(B
-{\bf adb}$B$r;HMQ$9$k!#(B
+{\bf disassemble}は、実現されていない。
+コンパイルされたコードを解析するためには中間Cプログラムを見るかあるいは
+{\bf adb}を使用する。
 
 \begin{refdesc}
 
-\functiondescription{euscomp}{\{filename\}*}{UNIX$B%3%^%s%I(B}{
-Euslisp$B%3%s%Q%$%i$r8F$S$@$9!#(B}
+\functiondescription{euscomp}{\{filename\}*}{UNIXコマンド}{
+Euslispコンパイラを呼びだす。}
 
 \longdescription{compile-file}{srcfile \&key \= (:verbose nil) \hspace{43mm} \=
-\` [$B4X?t(B]\\
+\` [関数]\\
 \> (:optimize 2) (:c-optimize 1) (:safety 1) \> {\rm ;optimization level} \\
 \> (:pic t)  \> {\rm ;generate position independ-} \\
 \>\>{ \rm ent code to build library} \\
 \> (:cc t) \> {\rm ; run c compiler} \\
 \> (:entry (pathname-name file)) \\}{
-$B%U%!%$%k$r%3%s%Q%$%k$9$k!#(B
-".l"$B$,(B{\em srcfile}$B$N3HD%;R$H$7$F2>Dj$5$l$k!#(B
-$B$b$7!"(B{\em :verbose}$B$,(BT$B$J$i$P!"%3%s%Q%$%k$5$l$?4X?t$d%a%=%C%IL>$,I=<($5$l$k!#(B
-$B$3$l$O!"%(%i!<$,H/@8$7$?2U=j$r4JC1$KC5$9$N$KLrN)$D!#(B
-{\em :optimize, :c-optimize}$B$H(B{\em :safety}$B$O!":GE,2=$N%l%Y%k$r(B
-$B;XDj$9$k!#(B
-$B%b%8%e!<%k$,:n@.Cf$K(BEuslisp$B$N%3%"$K%O!<%I%j%s%/$5$l$F$$$J$$$+$.$j!"(B
-{\em :pic}$B$O!"(BT$B$K@_Dj$9$Y$-$G$"$k!#(B
+ファイルをコンパイルする。
+".l"が{\em srcfile}の拡張子として仮定される。
+もし、{\em :verbose}がTならば、コンパイルされた関数やメソッド名が表示される。
+これは、エラーが発生した箇所を簡単に探すのに役立つ。
+{\em :optimize, :c-optimize}と{\em :safety}は、最適化のレベルを
+指定する。
+モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
+{\em :pic}は、Tに設定すべきである。
 }
 
 \funcdesc{compile}{funcname}{
-$B4X?t$r%3%s%Q%$%k$9$k!#(B{\bf compile}$B$O!":G=i$K4X?tDj5A$r%F%s%]%i%j%U%!%$%k$K(B
-$B=PNO$9$k!#$=$N%U%!%$%k$O!"(B{\bf compile-file}$B$K$h$C$F%3%s%Q%$%k$5$l!"(B
-$B$=$l$+$i(B{\bf load}$B$K$h$C$F%m!<%I$5$l$k!#(B
-$B%F%s%]%i%j%U%!%$%k$O:o=|$5$l$k!#(B}
+関数をコンパイルする。{\bf compile}は、最初に関数定義をテンポラリファイルに
+出力する。そのファイルは、{\bf compile-file}によってコンパイルされ、
+それから{\bf load}によってロードされる。
+テンポラリファイルは削除される。}
 
 \funcdesc{compile-file-if-src-newer}{srcfile \&key compiler-options}{
-{\em srcfile}$B$,BP1~$9$k%*%V%8%'%/%H%U%!%$%k$h$j$b?7$7$$!J:G6aJQ99$5$l$?!K(B
-$B$J$i$P!"%3%s%Q%$%k$9$k!#$=$N%*%V%8%'%/%H%U%!%$%k$O!"(B".o"$B3HD%;R$r(B
-$B;}$C$F$$$k$H2>Dj$5$l$k!#(B}
+{\em srcfile}が対応するオブジェクトファイルよりも新しい（最近変更された）
+ならば、コンパイルする。そのオブジェクトファイルは、".o"拡張子を
+持っていると仮定される。}
 
-\vardesc{*optimize*}{$B%3%s%Q%$%i$N:GE,2=%l%Y%k$r@)8f$9$k!#(B}
+\vardesc{*optimize*}{コンパイラの最適化レベルを制御する。}
 
 \vardesc{*verbose*}{
-non-NIL$B$,@_Dj$5$l$?$H$-!"%3%s%Q%$%k$5$l$F$$$k4X?tL>$d%a%=%C%IL>$=$7$F(B
-$B%3%s%Q%$%k$KMW$7$?;~4V$rI=<($9$k!#(B}
+non-NILが設定されたとき、コンパイルされている関数名やメソッド名そして
+コンパイルに要した時間を表示する。}
 
 \vardesc{*safety*}{
-$B0BA4@-%l%Y%k$r@)8f$9$k!#(B}
+安全性レベルを制御する。}
 
 \end{refdesc}
 
 \newpage
 
-\subsection{$B%W%m%0%i%`%m!<%I(B}
+\subsection{プログラムロード}
 \begin{refdesc}
 
-\longdescription{load}{fname \&key \= :verbose \hspace{20mm} \= *load-verbose* \` [$B4X?t(B]\\
+\longdescription{load}{fname \&key \= :verbose \hspace{20mm} \= *load-verbose* \` [関数]\\
  \> :package \>  *package* \\
  \> :entry  \>  (pathname-name fname) \\
  \> :symbol-input  \> "/usr/local/bin/eus" \\
  \> :symbol-output \> "a.out" \\
  \> :ld-option \> ""}{
-{\bf load}$B$O%=!<%9%U%!%$%k$"$k$$$O%3%s%Q%$%k$5$l$?%*%V%8%'%/%H%U%!%$%k(B
-$B$r(BEuslisp$B$KFI$_9~$`$?$a$N4X?t$G$"$k!#(B
-$B$b$7!"(B{\em fname}$B$G;XDj$5$l$?%U%!%$%k$,B8:_$9$k$H$-!"(B
-Euslisp$B$O%m!<%I$9$k!#(B
-$B$=$N%U%!%$%k$,%=!<%9$H%P%$%J%j!<$NFb$I$A$i$+$O!"(Bmagic number$B$r8+$k$3$H$K$h$j(B
-$B<+F0E*$K%A%'%C%/$5$l$k!#(B
-$B$b$7!"$=$N%U%!%$%k$,B8:_$7$J$$$,(B'.o'$B$N7?$N%U%!%$%k$,B8:_$9$k>l9g!"(B
-$B$=$N%U%!%$%k$r%*%V%8%'%/%H%U%!%$%k$H$7$F%m!<%I$9$k!#(B
-%$B7?$,(B'.q'$B$N%U%!%$%k$b$^$?!"0zMQ%Y%/%H%k%U%!%$%k$H$7$FFI$_9~$^$l$k!#(B
-%($B%3%s%Q%$%k$N@a$r;2>H$N$3$H(B)
-$B$=$NB>!"(B'.l'$B$N%U%!%$%k$,8+$D$+$C$?$J$i$P!"%=!<%9%W%m%0%i%`$H$7$F%m!<%I$9$k!#(B
-$B$b$7!"%U%!%$%kL>$N:G=i$K(B"/"$B$rIU$1$k@dBP%Q%9$r;XDj$7$F$$$J$$>l9g!"(B
-{\bf load}$B$O!"%0%m!<%P%kJQ?t(B{\tt *load-path*}$B$K;XDj$5$l$F$$$k%G%#%l%/%H%j(B
-$B$NCf$+$i%U%!%$%k$r8!:w$9$k!#(B
-$BNc$($P!"(B{\tt *load-path*}$B$,(B{\tt ("/user/eus/" "/usr/lisp/")}$B$G$"$j!"(B
-{\em fname}$B$H$7$F(B{\tt "llib/math"}$B$,M?$($i$l$?$H$-!"(B
-{\bf load}$B$O(B{\tt "/user/eus/llib/math.o", 
+{\bf load}はソースファイルあるいはコンパイルされたオブジェクトファイル
+をEuslispに読み込むための関数である。
+もし、{\em fname}で指定されたファイルが存在するとき、
+Euslispはロードする。
+そのファイルがソースとバイナリーの内どちらかは、magic numberを見ることにより
+自動的にチェックされる。
+もし、そのファイルが存在しないが'.o'の型のファイルが存在する場合、
+そのファイルをオブジェクトファイルとしてロードする。
+%型が'.q'のファイルもまた、引用ベクトルファイルとして読み込まれる。
+%(コンパイルの節を参照のこと)
+その他、'.l'のファイルが見つかったならば、ソースプログラムとしてロードする。
+もし、ファイル名の最初に"/"を付ける絶対パスを指定していない場合、
+{\bf load}は、グローバル変数{\tt *load-path*}に指定されているディレクトリ
+の中からファイルを検索する。
+例えば、{\tt *load-path*}が{\tt ("/user/eus/" "/usr/lisp/")}であり、
+{\em fname}として{\tt "llib/math"}が与えられたとき、
+{\bf load}は{\tt "/user/eus/llib/math.o", 
 "/usr/lisp/llib/math.o", "/user/eus/llib/math.l"},
-{\tt "/usr/lisp/llib/math.l"}$B$r$3$N=gHV$KA\$9!#(B
-$BE,Ev$J%U%!%$%k$,8+$D$+$i$J$1$l$P!"%(%i!<$rJV$9!#(B
+{\tt "/usr/lisp/llib/math.l"}をこの順番に捜す。
+適当なファイルが見つからなければ、エラーを返す。
 
-{\it :entry}$B%*%W%7%g%s$O!"%m!<%I%b%8%e!<%k$r=i4|2=$9$kF~NO%"%I%l%9$r(B
-$B;XDj$9$k!#(B
-$B$?$H$($P!"(B{\tt :entry "\_myfunc"}$B%*%W%7%g%s$O(B{\tt \_myfunc}$B$+$i<B9T$r;O$a$k(B
-$B$3$H$r0UL#$9$k!#(B
-$B%G%U%)%k%HF~NO%"%I%l%9$O!"(B\ref{compiler}$B@a$K5-=R$5$l$F$$$k$h$&$K(B
-$B%m!<%I$5$l$?%U%!%$%kL>$N(Bbasename$B$G$"$k!#(B
-$B%i%$%V%i%j%b%8%e!<%kL>$O(B{\em :ld-option}$B%*%W%7%g%sJ8;zNs$NCf$K;XDj(B
-$B$9$k$3$H$,$G$-$k!#(B
-$B$?$H$($P!"(Bsuncore$B%i%$%V%i%j$r;HMQ$9$k%b%8%e!<%k$r%j%s%/$9$k$?$a$K!"(B
-{\em :ld-option}$B$K$O(B {\tt "-lsuncore -lsunwindow -lpixrect -lm -lc"}
-$B$rM?$($kI,MW$,$"$k!#(BSolaris$B%7%9%F%`0J30$G$O!"(B
-$B%i%$%V%i%j$,%j%s%/$5$l$k$H$-(B{\bf ld}$B$O(B2$BEY<B9T$5$l$k!#(B
-$B#1EY$O%5%$%:$r7hDj$9$k$?$a!"(B2$BEYL\$O8GM-$N%a%b%j!<$K<B:]$K%j%s%/$9$k$?$a!#(B
+{\it :entry}オプションは、ロードモジュールを初期化する入力アドレスを
+指定する。
+たとえば、{\tt :entry "\_myfunc"}オプションは{\tt \_myfunc}から実行を始める
+ことを意味する。
+デフォルト入力アドレスは、\ref{compiler}節に記述されているように
+ロードされたファイル名のbasenameである。
+ライブラリモジュール名は{\em :ld-option}オプション文字列の中に指定
+することができる。
+たとえば、suncoreライブラリを使用するモジュールをリンクするために、
+{\em :ld-option}には {\tt "-lsuncore -lsunwindow -lpixrect -lm -lc"}
+を与える必要がある。Solarisシステム以外では、
+ライブラリがリンクされるとき{\bf ld}は2度実行される。
+１度はサイズを決定するため、2度目は固有のメモリーに実際にリンクするため。
 
-{\em :symbol-input}$B$H(B{\em :symbol-output}$B%*%W%7%g%s$O$"$k%*%V%8%'%/%H(B
-$B%b%8%e!<%k$+$iB>$N%b%8%e!<%k$X$N;2>H$r2r7h$9$k$?$a!"$"$k$$$O(B
-$B%i%$%V%i%j!<$N(B2$B=E%m!<%I$rHr$1$k$?$a$K;HMQ$5$l$k!#(B
-A,B$B#2$D$N%*%V%8%'%/%H%b%8%e!<%k$,$"$j(B,B$B$,(BA$B$NCf$GDj5A$5$l$F$$$k(Bsymbol$B$r(B
-$B;2>H$7$F$$$k$H$9$k!#(B
-{\tt :symbol-output ="a.out"}$B$r;XDj$7$F%b%8%e!<%k(BA$B$r%m!<%I$9$k!#(B
-$B$3$N%j%s%/$K$h$C$F@8@.$5$l$?(Bsymbol$B>pJs$O!"(B{\tt a.out}$B$K=q$-9~$^$l$k!#(B
-$B%b%8%e!<%k(BB$B$r%m!<%I$9$k$?$a$K$O!"(BB$B$+$i(BA$B$X$N;2>H$r2r7h$9$k(B
-{\tt :symbol-input = "a.out"}$B$r;XDj$7$J$1$l$P$J$i$J$$!#(B}
+{\em :symbol-input}と{\em :symbol-output}オプションはあるオブジェクト
+モジュールから他のモジュールへの参照を解決するため、あるいは
+ライブラリーの2重ロードを避けるために使用される。
+A,B２つのオブジェクトモジュールがあり,BがAの中で定義されているsymbolを
+参照しているとする。
+{\tt :symbol-output ="a.out"}を指定してモジュールAをロードする。
+このリンクによって生成されたsymbol情報は、{\tt a.out}に書き込まれる。
+モジュールBをロードするためには、BからAへの参照を解決する
+{\tt :symbol-input = "a.out"}を指定しなければならない。}
 
 \end{refdesc}
-Solaris2 OS$B$K$*$$$F!"%3%s%Q%$%k%3!<%I$N%m!<%I$O!"F0E*%m!<%I%i%$%V%i%j$NCf$N(B
-{\em dlopen}$B$r8F$S=P$9$3$H$K$h$j<B9T$7$F$$$k!#(B
-{\em dlopen}$B$N;HMQ$O!"6&M-%*%V%8%'%/%H$K@)8B$5$l$F$$$k!#(B
-$B$=$N%*%V%8%'%/%H$O!"0LCV$K0MB8$9$k$h$&$K%3%s%Q%$%k$5$l$k$?$a$K!"(B
-"-K pic"$B%*%W%7%g%s$r;XDj$9$k!#(B
-$B$^$?!"(B{\em dlopen}$B$OF1$8%U%!%$%k$r(B2$BEY%*!<%W%s$9$k$3$H$,$G$-$J$$$N$G!"(B
-$B4{$K%m!<%I$5$l$F$$$k%U%!%$%k$K4X$7$F$O!"(B{\em dlclose}$B$r:G=i$K(B
-$B<B9T$9$k!#(B
+Solaris2 OSにおいて、コンパイルコードのロードは、動的ロードライブラリの中の
+{\em dlopen}を呼び出すことにより実行している。
+{\em dlopen}の使用は、共有オブジェクトに制限されている。
+そのオブジェクトは、位置に依存するようにコンパイルされるために、
+"-K pic"オプションを指定する。
+また、{\em dlopen}は同じファイルを2度オープンすることができないので、
+既にロードされているファイルに関しては、{\em dlclose}を最初に
+実行する。
 \begin{refdesc}
 
-\funcdesc{load-files}{\&rest files}{{\tt :verbose}$B$K(BT$B$r@_Dj$7!"(B
-{\em files}$B$rO"B3E*$K%m!<%I$9$k!#(B}
+\funcdesc{load-files}{\&rest files}{{\tt :verbose}にTを設定し、
+{\em files}を連続的にロードする。}
 
-\vardesc{*modules*}{$B$3$l$^$G$K%m!<%I$5$l$?%b%8%e!<%k$NL>A0$N(B
-$B%j%9%H$r;}$D!#(B}
-\funcdesc{provide}{module-name}{{\em module-name}$B$r$9$G$K%m!<%I$5$l$?(B
-$B%b%8%e!<%k$NL>A0$H$7$F(B{\tt *modules*}$B$NCf$K2C$($k!#(B
-{\em module-name}$B$O(Bsymbol$B$"$k$$$OJ8;zNs$G$J$1$l$P$J$i$J$$!#(B
-{\bf require}$B$N8F$S=P$7$O!"40A4$J%b%8%e!<%k$r9=@.$9$k%U%!%$%k$N:G=i$K(B
-$BB8:_$7$J$1$l$P$J$i$J$$!#(B}
+\vardesc{*modules*}{これまでにロードされたモジュールの名前の
+リストを持つ。}
+\funcdesc{provide}{module-name}{{\em module-name}をすでにロードされた
+モジュールの名前として{\tt *modules*}の中に加える。
+{\em module-name}はsymbolあるいは文字列でなければならない。
+{\bf require}の呼び出しは、完全なモジュールを構成するファイルの最初に
+存在しなければならない。}
 \funcdesc{require}{module-name \&optional file}{
-{\tt *modules*}$B$NCf$K(B{\em module-name}$B$,8+$D$+$i$J$+$C$?$H$-(B
-{\em file}$B$r%m!<%I$9$k!#(B
-{\bf provide}$B$H(B{\bf require}$B$O!"%b%8%e!<%k$NCf$N0MB8$r@)8f$7!"(B
-$B4pK\%b%8%e!<%k$N(B2$B=E%m!<%I$rHr$1$k$?$a$K;HMQ$5$l$k!#(B
-1$B$D$N4pK\%b%8%e!<%k(B"A"$B$H(B2$B$D$N1~MQ%b%8%e!<%k(B"B"$B$H(B"C"$B$,$"$C$?$H$7!"(B
-"B"$B$H(B"C"$B$O8_$$$K0MB8$7$J$$$,(B"A"$B$K0MB8$7$F$$$k$H$9$k!#(B
-$B$=$l$>$l$N%U%!%$%k$N:G=i$K(B{\bf provide}$B$G%b%8%e!<%kL>$r@k8@$9$k!#(B
-"A"$B%b%8%e!<%k$,$I$N%b%8%e!<%k$K$b0MB8$7$F$$$J$$$J$i!"$J$K$b(B{\bf require}
-$B$7$J$/$F$h$$!#(B
-"B"$B$d(B"C"$B$NCf$N(B{\bf provide}$B8F$S=P$7$KB3$$$F(B{\tt (require "A" "a.o")}$B$,(B
-$B<B9T$5$l$k!#(B
-$B$b$7(B"B"$B$r%m!<%I$9$k$H$-!"(B{\tt *modules*}$B$NCf$K(B"A"$B$,8+$D$+$i$J$1$l$P(B
-"a.o"$B$b%m!<%I$7!"(B{\tt *modules*}$B$K(B"A"$B$H(B"B"$B$N%b%8%e!<%kL>$rDI2C$9$k!#(B
-$B$=$N8e!"$b$7(B"C"$B$,%m!<%I$5$l$k$J$i!"(B"A"$B%b%8%e!<%k$O%m!<%I$5$l$:!"(B"C"$B$,(B
-{\tt *modules*}$B$KDI2C$5$l$k$N$_$G$"$k!#(B}
+{\tt *modules*}の中に{\em module-name}が見つからなかったとき
+{\em file}をロードする。
+{\bf provide}と{\bf require}は、モジュールの中の依存を制御し、
+基本モジュールの2重ロードを避けるために使用される。
+1つの基本モジュール"A"と2つの応用モジュール"B"と"C"があったとし、
+"B"と"C"は互いに依存しないが"A"に依存しているとする。
+それぞれのファイルの最初に{\bf provide}でモジュール名を宣言する。
+"A"モジュールがどのモジュールにも依存していないなら、なにも{\bf require}
+しなくてよい。
+"B"や"C"の中の{\bf provide}呼び出しに続いて{\tt (require "A" "a.o")}が
+実行される。
+もし"B"をロードするとき、{\tt *modules*}の中に"A"が見つからなければ
+"a.o"もロードし、{\tt *modules*}に"A"と"B"のモジュール名を追加する。
+その後、もし"C"がロードされるなら、"A"モジュールはロードされず、"C"が
+{\tt *modules*}に追加されるのみである。}
 
 \longdescription{system:binload}{opath qpath \&optional \=
-(entry (pathname-name opath)) \` [$B4X?t(B]\\
+(entry (pathname-name opath)) \` [関数]\\
 \> (symfile "/usr/local/bin/eus")  \\
 \> (symout "a.out") \\
-\> (ldopt "")\\}{$B%P%$%J%j%U%!%$%k$r%m!<%I$7%j%s%/$9$k!#(B}
+\> (ldopt "")\\}{バイナリファイルをロードしリンクする。}
 
 \fundesc{system:txtload}{fname}
 \end{refdesc}
 
 \newpage
 
-\subsection{$B%G%P%C%0Jd=u(B}
+\subsection{デバッグ補助}
 
 \begin{refdesc}
 
 \funcdesc{describe}{obj \&optional (stream *standard-output*)}{
-{\bf describe}$B$O%*%V%8%'%/%H$N(Bslot$B$4$H$NCf?H$rI=<($9$k!#(B}
+{\bf describe}はオブジェクトのslotごとの中身を表示する。}
 
 \funcdesc{describe-list}{list \&optional (stream *standard-output*)}{
-{\em list}$BFb$N$=$l$>$l$NMWAG$K(B{\bf describe}$B$r<B9T$9$k!#(B}
+{\em list}内のそれぞれの要素に{\bf describe}を実行する。}
 
 \macrodesc{inspect}{obj}{
-{\bf inspect}$B$O(B{\bf describe}$B$NBPOCHG$G$"$k!#(B
-$B%*%V%8%'%/%H$N$=$l$>$l$N(Bslot$B$rI=<($9$k$?$a$K%5%VL?Na$r<u$1$?$H$-!"(B
-slot$B$NCf$K?<$/F~$C$?$j$"$k$$$O?7$7$$CM$r(Bslot$B$K@_Dj$7$?$j$9$k!#(B
-'?'$BL?Na$G%5%VL?Na$N%a%K%e!<$r8+$k$3$H$,$G$-$k!#(B}
+{\bf inspect}は{\bf describe}の対話版である。
+オブジェクトのそれぞれのslotを表示するためにサブ命令を受けたとき、
+slotの中に深く入ったりあるいは新しい値をslotに設定したりする。
+'?'命令でサブ命令のメニューを見ることができる。}
 
 \funcdesc{more} {\&rest forms}{
-{\bf *standard-output*}$B$K%F%s%]%i%j!<%U%!%$%k$r7k$SIU$1$F(B
-{\em forms}$B$rI>2A$7$?8e!"$=$N%F%s%]%i%j!<%U%!%$%k$r(BUNIX$B$N(B'more'$BL?Na(B
-$B$r;HMQ$7$F(B{\bf *standard-output*}$B$K=PNO$9$k!#(B
-{\bf more}$B$O(B{\bf describe}$B$N$h$&$J4X?t$K$h$C$FH/@8$7$?D9$$=PNO$r(B
-$B8+$k$H$-$KLr$KN)$D!#(B}
+{\bf *standard-output*}にテンポラリーファイルを結び付けて
+{\em forms}を評価した後、そのテンポラリーファイルをUNIXの'more'命令
+を使用して{\bf *standard-output*}に出力する。
+{\bf more}は{\bf describe}のような関数によって発生した長い出力を
+見るときに役に立つ。}
 
 \funcdesc{break}{\&optional (prompt ":: ")}{
-break$B%k!<%W$KF~$k!#(B
-$B8=:_%P%$%s%I$5$l$F$$$k4D6-$,<B;\$5$l$F$$$k4V!"F~NO$NA0$K(B","$B$rIU$1$k(B
-$B$3$H$K$h$j%m!<%+%kJQ?t$r8+$k$3$H$,$G$-$k!#(B
-break$B$r=*N;$7$?$$$H$-!"(Bcontrol-D$B$rF~NO$9$k!#(B}
+breakループに入る。
+現在バインドされている環境が実施されている間、入力の前に","を付ける
+ことによりローカル変数を見ることができる。
+breakを終了したいとき、control-Dを入力する。}
 
 \funcdesc{help}{topic}{
-{\bf help}$B$O!"(B{\em topic}$B$K4X$7$FC;$$@bL@$rI=<($9$k!#(B
-{\em topic}$B$O!"$U$D$&4X?t(Bsymbol$B$G$"$k!#(B
-$BJ8>O$O(BKCL$B$N%^%K%e%"%k$+$i<Z$j$F$$$k$?$a!"@bL@$,(BEuslisp$B4X?t$N$b$N$H$$$D$b(B
-$B9g$C$F$$$k$H$O8B$i$J$$!#(B}
+{\bf help}は、{\em topic}に関して短い説明を表示する。
+{\em topic}は、ふつう関数symbolである。
+文章はKCLのマニュアルから借りているため、説明がEuslisp関数のものといつも
+合っているとは限らない。}
 
 \funcdesc{apropos}{key}{
-{\bf apropos}$B$O!"4X?t$dJQ?t$N@53N$JL>A0$rK:$l$F$$$F!"$=$N0lIt$"$k$$$O(B
-$BIT3N$+$JL>A0$7$+CN$i$J$$$H$-$KLr$KN)$D!#(B
-symbol-name$B$NCf$KItJ,J8;zNs$H$7$F(B{\em key}$B$r4^$`$9$Y$F$N(Bsymbol$B$rI=<($9$k!#(B}
+{\bf apropos}は、関数や変数の正確な名前を忘れていて、その一部あるいは
+不確かな名前しか知らないときに役に立つ。
+symbol-nameの中に部分文字列として{\em key}を含むすべてのsymbolを表示する。}
 
 \funcdesc{apropos-list}{key}{
-{\bf appropos}$B$H;w$F$$$k$,I=<($O$7$J$$!"$7$+$7%j%9%H$H$7$F7k2L$rJV$9!#(B}
+{\bf appropos}と似ているが表示はしない、しかしリストとして結果を返す。}
 
 \funcdesc{constants}{\&optional (string  "") (pkg *package*)}{
-{\em pkg}$B$NCf$KDj?t$H$7$FDj5A$5$l(B{\em string}$B$H9g$&(Bsymbol$B$r$9$Y$F%j%9%H(B
-$B=PNO$9$k!#(B}
+{\em pkg}の中に定数として定義され{\em string}と合うsymbolをすべてリスト
+出力する。}
 
 \funcdesc{variables}{\&optional (string  "") (pkg *package*)}{
-{\em pkg}$B$NCf$K%0%m!<%P%kCM$H$7$F3d$jEv$F$i$l(B{\em string}$B$H9g$&(B
-symbol$B$r$9$Y$F%j%9%H=PNO$9$k!#(B}
+{\em pkg}の中にグローバル値として割り当てられ{\em string}と合う
+symbolをすべてリスト出力する。}
 
 \funcdesc{functions}{\&optional (string  "") (pkg *package*)}{
-{\em pkg}$B$NCf$K%0%m!<%P%k4X?t$H$7$FDj5A$5$l(B{\em string}$B$H9g$&(B
-symbol$B$r$9$Y$F%j%9%H=PNO$9$k!#(B}
+{\em pkg}の中にグローバル関数として定義され{\em string}と合う
+symbolをすべてリスト出力する。}
 
 \funcdesc{btrace}{\&optional (depth 10)}{
-{\em depth}$B%l%Y%k$NMzNr$r8F$S=P$7I=<($9$k!#(B}
+{\em depth}レベルの履歴を呼び出し表示する。}
 \fundesc{step-hook}{form env}
 \funcdesc{step}{form}{
-{\bf step}$B$H(B{\bf trace}$B$O4X?t$N>e$G$N$_@53N$KF/$/!#%^%/%m$dFC<l=q<0$G$O(B
-$BF/$+$J$$!#(B}
+{\bf step}と{\bf trace}は関数の上でのみ正確に働く。マクロや特殊書式では
+働かない。}
 
 \funcdesc{trace}{\&rest functions}{
-{\em functions}$B$N%H%l!<%9$r;O$a$k!#(B
-{\em functions}$B$,8F$S=P$5$l$?$H$-$O$$$D$G$b!"$=$N0z$-?t$H7k2L$rI=<($9$k!#(B}
+{\em functions}のトレースを始める。
+{\em functions}が呼び出されたときはいつでも、その引き数と結果を表示する。}
 
-\funcdesc{untrace}{\&rest functions}{$B%H%l!<%9$r=*N;$9$k!#(B}
+\funcdesc{untrace}{\&rest functions}{トレースを終了する。}
 
 \macrodesc{timing}{count \&rest forms}{
-{\em forms}$B$r(B{\em count}$B2s<B9T$7!"(B{\em forms}$B$N(B1$B2s$N<B9T$KMW$9$k(B
-$B;~4V$r7W;;$9$k!#(B}
+{\em forms}を{\em count}回実行し、{\em forms}の1回の実行に要する
+時間を計算する。}
 
 \macrodesc{time}{function}{
-{\em function}$B$K$h$C$F7P2a$7$?;~4V$rB,Dj$7;O$a$k!#(B}
+{\em function}によって経過した時間を測定し始める。}
 
 \funcdesc{sys:list-all-catchers}{}{
-$B$9$Y$F$N(B{\bf catch}$B%?%0$rJV$9!#(B}
+すべての{\bf catch}タグを返す。}
 
 \funcdesc{sys:list-all-instances}{aclass [scan-sub]}{
-$B$9$Y$F$N%R!<%W$NCf$+$i(B{\em aclass}$B$G;XDj$5$l$k%$%s%9%?%s%9$r$9$Y$F(B
-$BC5$7!"=8$a$k!#(B
-$B$b$7!"(B{\em scan-sub}$B$,(BNIL$B$J$i!"(B{\em aclass}$B$N3N<B$J%$%s%9%?%s%9$r(B
-$B%j%9%H$9$k!#$=$&$G$J$1$l$P!"(B{\em aclass}$B$N%$%s%9%?%s%9$"$k$$$O%5%V%/%i%9(B
-$B$,=8$a$i$l$k!#(B}
+すべてのヒープの中から{\em aclass}で指定されるインスタンスをすべて
+探し、集める。
+もし、{\em scan-sub}がNILなら、{\em aclass}の確実なインスタンスを
+リストする。そうでなければ、{\em aclass}のインスタンスあるいはサブクラス
+が集められる。}
 
-\funcdesc{sys:list-all-bindings}{}{$B%P%$%s%I$5$l$k%9%?%C%/$rC5$7!"(B
-$B%"%/%;%92DG=$JCM$9$Y$F$r%j%9%H$GJV$9!#(B}
+\funcdesc{sys:list-all-bindings}{}{バインドされるスタックを探し、
+アクセス可能な値すべてをリストで返す。}
 
 \funcdesc{sys:list-all-special-bindings}{}{
-$B%9%?%C%/$rA\$7!"CM$r$9$Y$F%j%9%H%"%C%W$9$k!#(B}
+スタックを捜し、値をすべてリストアップする。}
 
 \end{refdesc}
 
 \newpage
 
-\subsection{$B%@%s%W%*%V%8%'%/%H(B}
-EusLisp$B$N%j!<%@$H%W%j%s%?$O!"$I$N$h$&$J%*%V%8%'%/%H$b:FFI$_$@$72DG=$J=q<0(B
-$B$G%U%!%$%k$K=PNO$G$-$k$h$&$K@_7W$5$l$F$$$k!#(B
-$B%*%V%8%'%/%H$OAj8_;2>H$"$k$$$O:F5";2>H$r;}$C$F$$$F$b$h$$!#(B
-{\tt *print-circle*}$B$H(B{\tt *print-object*}$B$K(BT$B$r@_Dj$7$?$H$-!"$3$NFCD'$O(B
-$B$O2DG=$H$J$k!#(B
-$B<!$N4X?t$O$3$l$i$NJQ?t$r(BT$B$K$7!"%U%!%$%k$r%*!<%W%s$7!"%*%V%8%'%/%H$rI=<($9$k!#(B
-$B$3$l$i$N4X?t$N$b$C$H$b=EMW$JMQES$O!"Aj8_;2>H$r;}$D(B3D$B%b%G%k$N(B
-$B9=B$BN$r%@%s%W$9$k$3$H$G$"$k!#(B
+\subsection{ダンプオブジェクト}
+EusLispのリーダとプリンタは、どのようなオブジェクトも再読みだし可能な書式
+でファイルに出力できるように設計されている。
+オブジェクトは相互参照あるいは再帰参照を持っていてもよい。
+{\tt *print-circle*}と{\tt *print-object*}にTを設定したとき、この特徴は
+は可能となる。
+次の関数はこれらの変数をTにし、ファイルをオープンし、オブジェクトを表示する。
+これらの関数のもっとも重要な用途は、相互参照を持つ3Dモデルの
+構造体をダンプすることである。
 
 \begin{refdesc}
 \fundesc{dump-object}{file \&rest objects}
 \funcdesc{dump-structure}{file \&rest objects}{
-$B:F$SFI$_La$7$,$G$-$k$h$&$J=q<0$G(B{\em file}$B$K(B{\em objects}$B$r%@%s%W$9$k!#(B}
+再び読み戻しができるような書式で{\em file}に{\em objects}をダンプする。}
 
 \funcdesc{dump-loadable-structure}{file \&rest symbols}{
-{\em symbol}$B$K%P%$%s%I$5$l$?%*%V%8%'%/%H$r(B{\em file}$B$K%@%s%W$9$k!#(B
-$B$=$N(B{\em file}$B$O4JC1$K%m!<%I$9$k$3$H$K$h$C$FFI$_La$9$3$H$,$G$-$k!#(B}
+{\em symbol}にバインドされたオブジェクトを{\em file}にダンプする。
+その{\em file}は簡単にロードすることによって読み戻すことができる。}
 \end{refdesc}
 
-\subsection{$B%W%m%;%9%$%a!<%8J]B8(B}
-$B$3$N%W%m%;%9%$%a!<%8J]B8$O!"(BSolaris$B$NF0E*%m!<%I5!G=$K?<$/0MB8$7$F$$$k$?$a!"(B
-Solaris2$B$N(BEuslisp$B$K$*$$$F%5%]!<%H$5$l$F$$$J$$!#(B
-Solaris$B$NF0E*%m!<%I5!G=$O!"6&M-$9$k%*%V%8%'%/%H$r(B{\tt sbrk}$BE@$N>e$N(B
-$B0LCV$K0MB8$7$?7A$G%m!<%I$9$k!#(B
+\subsection{プロセスイメージ保存}
+このプロセスイメージ保存は、Solarisの動的ロード機能に深く依存しているため、
+Solaris2のEuslispにおいてサポートされていない。
+Solarisの動的ロード機能は、共有するオブジェクトを{\tt sbrk}点の上の
+位置に依存した形でロードする。
 
 \begin{refdesc}
 \funcdesc{save}{path \&optional (symbol-file "") starter}{
-{\bf save}$B$O!"8=:_$N(BEuslisp$B=hM}$N4D6-$r%U%!%$%k$K%@%s%W$9$k!#(B
-$B$=$N%U%!%$%k$O!"8e$G(BUNIX$BL?Na$H$7$F8F$S=P$9$3$H$,$G$-$k!#(B
-$B$b$74X?tL>$,(B{\em starter}$B$K$h$C$F;XDj$5$l$F$$$k$J$i!"(B
-$B$=$N4X?t$O$=$NL?Na$N<B9T$,;O$^$k$H$-$KI>2A$5$l$k!#(B
-$B$=$l$>$l$NL?Na9T$N0z$-?t$O(BEuslisp$B$NCf$G6/@)E*$KJ8;zNs$K$5$l!"(B
-$B0z$-?t$H$7$F(B{\em starter}$B$K<u$1EO$5$l$k!#(B
-$B$=$l$G!"L?Na9T$r2r@O$G$-$k!#(B
-{\bf *standard-input*}$B$H(B{\bf *standard-output*}$B$r=|$/$9$Y$F$N%9%H%j!<%`$r(B
-$B3N<B$K%/%m!<%:$7$F$$$J$1$l$P$J$i$J$$!#(B
-$B%U%!%$%k$,%*!<%W%s$5$l$?>uBV$rJ]B8$9$k$3$H$O$G$-$J$$!#(B
-$B$^$?!"(B{\bf mmap}$B$r;n$=$&$H$7$F$O$J$i$J$$!#(B
-{\bf mmap}$B$O%$%s%?!<%M%C%H$N%=%1%C%H%9%H%j!<%`$r:n$k$H$-!"8+$($J$$=j$G<B9T$5$l$F$$$k!#(B
-Sun$B$N%M%C%H%o!<%/%i%$%V%i%j$O(Bhost-by-name$B$N$h$&$J(BNIS$B>pJs$r%a%b%j>e$K(B
-$B$$$D$bE83+$7!"%W%m%;%9$N:G>e0L$KCV$/$?$aJ]B8$G$-$J$$!#(B
-$B$=$N$?$a!"J]B8$5$l$?%$%a!<%8$,<B9T$5$l$k$F$b!"%M%C%H%o!<%/%i%$%V%i%j$X$N(B
-$B%"%/%;%9$O$I$l$b<:GT$7!"%3%"%@%s%W$,@8$8$k!#(B
-Xwindow$B$b$3$N%i%$%V%i%j$r;HMQ$7$F$$$k!#(B
-$B$=$l$G!"0lEY(BXserver$B$K@\B3$5$l$?%W%m%;%9%$%a!<%8$rJ]B8$9$k$3$H$O$G$-$J$$!#(B}
+{\bf save}は、現在のEuslisp処理の環境をファイルにダンプする。
+そのファイルは、後でUNIX命令として呼び出すことができる。
+もし関数名が{\em starter}によって指定されているなら、
+その関数はその命令の実行が始まるときに評価される。
+それぞれの命令行の引き数はEuslispの中で強制的に文字列にされ、
+引き数として{\em starter}に受け渡される。
+それで、命令行を解析できる。
+{\bf *standard-input*}と{\bf *standard-output*}を除くすべてのストリームを
+確実にクローズしていなければならない。
+ファイルがオープンされた状態を保存することはできない。
+また、{\bf mmap}を試そうとしてはならない。
+{\bf mmap}はインターネットのソケットストリームを作るとき、見えない所で実行されている。
+Sunのネットワークライブラリはhost-by-nameのようなNIS情報をメモリ上に
+いつも展開し、プロセスの最上位に置くため保存できない。
+そのため、保存されたイメージが実行されるても、ネットワークライブラリへの
+アクセスはどれも失敗し、コアダンプが生じる。
+Xwindowもこのライブラリを使用している。
+それで、一度Xserverに接続されたプロセスイメージを保存することはできない。}
 
 \end{refdesc}
 
-\subsection{$B:G>e0L%l%Y%k$N%+%9%?%^%$%:(B}
-Euslisp$B$,(BUNIX$B$+$i8F$S=P$5$l$k$H$-!"(B{\bf *toplevel*}$B$K%P%$%s%I$5$l$k(B
-$B:G>e0L4X?t$K$h$C$F<B9T$,;O$a$i$l$k!#(B
-$B$3$N4X?t$O!"(B{\tt eus}$B$NCf$N(B{\tt eustop}$B$H(B{\tt eusx}$B$NCf$N(B{\tt xtop}$B$G$"$k!#(B
-{\bf save}$B$N(B3$BHVL\$N0z$-?t$KFH<+$N4X?t$r;XDj$9$k$3$H$K$h$j$3$N:G>e0L(B
-$B4X?t$rJQ99$9$k$3$H$,$G$-$k!#(B\index{save}
+\subsection{最上位レベルのカスタマイズ}
+EuslispがUNIXから呼び出されるとき、{\bf *toplevel*}にバインドされる
+最上位関数によって実行が始められる。
+この関数は、{\tt eus}の中の{\tt eustop}と{\tt eusx}の中の{\tt xtop}である。
+{\bf save}の3番目の引き数に独自の関数を指定することによりこの最上位
+関数を変更することができる。\index{save}
 
-$B$3$N:G>e0L4X?t$O!"G$0U$N?t$N0z$-?t$r<u$1<h$l$k$h$&$K%W%m%0%i%`$9$Y$-$G$"$k!#(B
-$B$=$NL?Na9T$N>e$N0z$-?t$O$=$l$>$l!"6/@)E*$KJ8;zNs$K$5$l!":G>e0L4X?t$KEO$5$l$k!#(B
-$B0J2<$K<($9%W%m%0%i%`$O!":G=i$N0z$-?t$KM?$($i$l$?%U%!%$%k$+$i$/$jJV$7FI$_9~$_!"(B
-2$BHVL\$N0z$-?t$N%U%!%$%k$K@07AI=<($9$k!#(B
+この最上位関数は、任意の数の引き数を受け取れるようにプログラムすべきである。
+その命令行の上の引き数はそれぞれ、強制的に文字列にされ、最上位関数に渡される。
+以下に示すプログラムは、最初の引き数に与えられたファイルからくり返し読み込み、
+2番目の引き数のファイルに整形表示する。
 
 \begin{verbatim}
 (defun pprint-copy (infile outfile)
@@ -692,24 +692,24 @@ Euslisp$B$,(BUNIX$B$+$i8F$S=P$5$l$k$H$-!"(B{\bf *toplevel*}$B$K%P%$%s%I$5$l
       (pprint-copy (first argv) (second argv))))
 \end{verbatim}
 
-$B0lEY$3$l$i$N4X?t$r(BEuslisp$B$NCf$KDj5A$9$l$P!"(B
-{\tt (save "ppcopy" "" 'pprint-copy-top)}$B$G(B{\tt ppcopy}$B$H$$$&L>$N(BUNIX$B$G<B9T(B
-$B2DG=$JL?Na$r:n$k!#(B
+一度これらの関数をEuslispの中に定義すれば、
+{\tt (save "ppcopy" "" 'pprint-copy-top)}で{\tt ppcopy}という名のUNIXで実行
+可能な命令を作る。
 
-Solaris$B>e$N(BEuslisp$B$K$*$$$F!"(B{\bf save}$B$,$J$$$N$G!"(B
-$B:G>e0LI>2A4X?t$O$3$N<jK!$G$OJQ99$G$-$J$$!#(B
-$BBe$o$j$K!"FH<+$N:G>e0LI>2A4X?t$rDj5A$9$k$?$a$K(B{\tt lib/eusrt.l}$B$r(B
-$B=$@5$7!"(B{\bf *toplevel*}$B$K@_Dj$9$k$3$H$,$G$-$k!#(B
-{\tt lib/eusrt.l}$B$K$O!"(BEuslisp$B$N5/F0;~$KI>2A$5$l$k=i4|2=<jB3$-$r(B
-$BDj5A$7$F$$$k!#(B
+Solaris上のEuslispにおいて、{\bf save}がないので、
+最上位評価関数はこの手法では変更できない。
+代わりに、独自の最上位評価関数を定義するために{\tt lib/eusrt.l}を
+修正し、{\bf *toplevel*}に設定することができる。
+{\tt lib/eusrt.l}には、Euslispの起動時に評価される初期化手続きを
+定義している。
 
-\subsection{$B$=$NB>$N4X?t(B}
+\subsection{その他の関数}
 \begin{refdesc}
 \funcdesc{lisp-implementation-type}{}
-{{\tt "EusLisp"}$B$rJV$9!#(B}
+{{\tt "EusLisp"}を返す。}
 \funcdesc{lisp-implementation-version}{}{
-$B$3$N(BEuslisp$B$NL>A0!"%P!<%8%g%s!":n@.F|$rJV$9!#(B
-$B$3$NJ8;zNs$,5/F0;~$K$bI=<($5$l$k!#(B
+このEuslispの名前、バージョン、作成日を返す。
+この文字列が起動時にも表示される。
 {\tt "MT-EusLisp 7.50 X 1.2 for Solaris Sat Jan  7 11:13:28 1995"}}
 \end{refdesc}
 
