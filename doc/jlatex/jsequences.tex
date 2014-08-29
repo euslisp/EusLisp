@@ -1,192 +1,192 @@
-\section{$BNs!"9TNs$H%F!<%V%k(B}
-\markright{\arabic{section}. $BNs!"9TNs$H%F!<%V%k(B}
+\section{列、行列とテーブル}
+\markright{\arabic{section}. 列、行列とテーブル}
 
-\subsection{$B0lHLNs(B}
+\subsection{一般列}
 
-$B%Y%/%H%k(B(1$B<!859TNs(B)$B$H%j%9%H$O!"0lHL$NNs$G$"$k!#(B
-$BJ8;zNs(B(string)$B$O!"J8;z(B(character)$B$N%Y%/%H%k$J$N$G!"Ns$G$"$k!#(B
+ベクトル(1次元行列)とリストは、一般の列である。
+文字列(string)は、文字(character)のベクトルなので、列である。
 
-{\bf map, concatenate}$B$d(B{\bf coerce}$B$K$*$1$k7k2L$N7?$rL@5-$9$k$?$a$K$O!"(B
-$B%/%i%9%*%V%8%'%/%H$,(Bsymbol$B$K%P%$%s%I$5$l$F$$$J$$$N$G!"0zMQId$J$7$G(B
-{\tt cons, string, integer-vector, float-vector}$B$J$I$N%/%i%9L>(Bsymbol$B$r;H$&!#(B
+{\bf map, concatenate}や{\bf coerce}における結果の型を明記するためには、
+クラスオブジェクトがsymbolにバインドされていないので、引用符なしで
+{\tt cons, string, integer-vector, float-vector}などのクラス名symbolを使う。
 
 \begin{refdesc}
 
 \funcdesc{elt}{sequence pos}{
-{\bf elt}$B$O!"(B{\em sequence}$B$NCf$N(B{\em pos}$BHVL\$N0LCV$NCM$rF@$?$j!"(B({\bf setf}$B$H(B
-$B$H$b$K(B)$BCV$$$?$j$9$k:G$b0lHLE*$J4X?t$G$"$k!#(B
-{\em sequence}$B$O!"%j%9%H$^$?$OG$0U$N%*%V%8%'%/%H!"(B{\tt bit, char, integer, float}$B$N(B
-$B%Y%/%H%k$G$"$k!#(B
-{\bf elt}$B$O!"B?<!85$N9TNs$KE,MQ$G$-$J$$!#(B}
+{\bf elt}は、{\em sequence}の中の{\em pos}番目の位置の値を得たり、({\bf setf}と
+ともに)置いたりする最も一般的な関数である。
+{\em sequence}は、リストまたは任意のオブジェクト、{\tt bit, char, integer, float}の
+ベクトルである。
+{\bf elt}は、多次元の行列に適用できない。}
 
 \funcdesc{length}{sequence}{
-{\em sequence}$B$ND9$5$rJV$9!#(B
-$B%Y%/%H%k$K$*$$$F!"(B{\bf length}$B$O0lDj$N;~4V$G=*N;$9$k!#(B
-$B$7$+$7!"%j%9%H7?$K$*$$$F$O!"D9$5$KHfNc$7$?;~4V$,$+$+$k!#(B
-{\bf length}$B$,!"$b$74D>u%j%9%H$KE,MQ$5$l$?$H$-!"7h$7$F=*N;$7$J$$!#(B
-$BBe$o$j$K(B{\bf list-length}$B$r;HMQ$9$k$3$H!#(B
-$B$b$7!"(B{\em sequence}$B$,(Bfill-pointer$B$r;}$D9TNs$J$i$P!"(B
-{\bf length}$B$O9TNsA4BN$N%5%$%:$rJV$9$N$G$O$J$/(Bfill-pointer$B$rJV$9!#(B
-$B$3$N$h$&$J9TNs$N%5%$%:$rCN$j$?$$>l9g$K$O!"(B{\bf array-total-size}$B$r(B
-$B;HMQ$9$k$3$H!#(B
+{\em sequence}の長さを返す。
+ベクトルにおいて、{\bf length}は一定の時間で終了する。
+しかし、リスト型においては、長さに比例した時間がかかる。
+{\bf length}が、もし環状リストに適用されたとき、決して終了しない。
+代わりに{\bf list-length}を使用すること。
+もし、{\em sequence}がfill-pointerを持つ行列ならば、
+{\bf length}は行列全体のサイズを返すのではなくfill-pointerを返す。
+このような行列のサイズを知りたい場合には、{\bf array-total-size}を
+使用すること。
 }
 
 \funcdesc{subseq}{sequence start [end]}{
-{\em sequence}$B$N(B{\em start}$BHVL\$+$i(B({\em end}$-$1)$BHVL\$^$G$r$=$C$/$j%3%T!<$7$?(B
-$BNs$r:n$k!#(B
-{\em end}$B$O!"%G%U%)%k%HCM$H$7$F(B{\em sequence}$B$ND9$5$r$H$k!#(B}
+{\em sequence}の{\em start}番目から({\em end}$-$1)番目までをそっくりコピーした
+列を作る。
+{\em end}は、デフォルト値として{\em sequence}の長さをとる。}
 
 \funcdesc{copy-seq}{sequence}{
-{\em sequence}$B$N%3%T!<$7$?Ns$r:n$k!#(B
-$B$3$N%3%T!<$G$O!"(B{\em sequence}$B$N%H%C%W%l%Y%k$N;2>H$N$_$,%3%T!<$5$l$k!#(B
-$BF~$l$3%j%9%H$N%3%T!<$K$O(B{\bf copy-tree}$B$r;H$$!"(B
-$B:F5";2>H$r;}$D$h$&$JNs$N%3%T!<$K$O(B
-{\bf copy-object}$B$r;H$&$3$H!#(B}
+{\em sequence}のコピーした列を作る。
+このコピーでは、{\em sequence}のトップレベルの参照のみがコピーされる。
+入れこリストのコピーには{\bf copy-tree}を使い、
+再帰参照を持つような列のコピーには
+{\bf copy-object}を使うこと。}
 
 \funcdesc{reverse}{sequence}{
-{\em sequence}$B$N=gHV$r5U$K$7!"(B{\em sequence}$B$HF1$87?$N?7$7$$Ns$r(B
-$BJV$9!#(B}
+{\em sequence}の順番を逆にし、{\em sequence}と同じ型の新しい列を
+返す。}
 
 \funcdesc{nreverse}{sequence}{
-{\bf nreverse}$B$O!"(B{\bf reverse}$B$NGK2u(B(destructive)$B%P!<%8%g%s$G$"$k!#(B
-{\bf reverse}$B$O%a%b%j$r3NJ]$9$k$,!"(B{\bf nreverse}$B$O$7$J$$!#(B}
+{\bf nreverse}は、{\bf reverse}の破壊(destructive)バージョンである。
+{\bf reverse}はメモリを確保するが、{\bf nreverse}はしない。}
 
 \funcdesc{concatenate}{result-type \{sequence\}*}{
-$BA4$F$N(B{\em sequence}$B$rO"7k$5$;$k!#(B
-$B$=$l$>$l$N(B{\em sequence}$B$O!"$J$K$+$NNs7?$G$"$k!#(B
-{\bf append}$B$H0c$C$F!":G8e$N0l$D$^$G4^$a$?A4$F$NNs$,%3%T!<$5$l$k!#(B
-{\em result-type}$B$O!"(B{\tt cons,string,vector,float-vector}$B$J$I$N(B
-$B%/%i%9$G$"$k!#(B
+全ての{\em sequence}を連結させる。
+それぞれの{\em sequence}は、なにかの列型である。
+{\bf append}と違って、最後の一つまで含めた全ての列がコピーされる。
+{\em result-type}は、{\tt cons,string,vector,float-vector}などの
+クラスである。
 }
 
 \funcdesc{coerce}{sequence result-type}{
-{\em sequence}$B$N7?$rJQ99$9$k!#(B
-$BNc$($P!"(B{\tt (coerce '(a b c) vector) = \#(a b c)}$B$d(B
-{\tt (coerce "ABC" cons) = (a b c)}$B$G$"$k!#(B
-{\em result-type}$B7?$N?7$7$$Ns$,:n$i$l!"(B
-{\em sequence}$B$N$=$l$>$l$NMWAG$O$=$NNs$K%3%T!<$5$l$k!#(B
-{\em result-type}$B$O!"(B{\tt vector, integer-vector, float-vector, bit-vector, string, cons}
-$B$^$?$O$=$l$i$N(B1$B$D$r7Q>5$7$?%f!<%6!<Dj5A%/%i%9(B
-$B$N$&$A$N(B1$B$D$G$"$k!#(B
-{\bf coerce}$B$O!"(B{\em sequence}$B$N7?$,(B{\em result-type}$B$HF10l$G$"$k>l9g!"%3%T!<$r$9$k!#(B}
+{\em sequence}の型を変更する。
+例えば、{\tt (coerce '(a b c) vector) = \#(a b c)}や
+{\tt (coerce "ABC" cons) = (a b c)}である。
+{\em result-type}型の新しい列が作られ、
+{\em sequence}のそれぞれの要素はその列にコピーされる。
+{\em result-type}は、{\tt vector, integer-vector, float-vector, bit-vector, string, cons}
+またはそれらの1つを継承したユーザー定義クラス
+のうちの1つである。
+{\bf coerce}は、{\em sequence}の型が{\em result-type}と同一である場合、コピーをする。}
 
 \funcdesc{map}{result-type function seq \&rest more-seqs}{
-{\em function}$B$O!"(B{\em seq}$B$H(B{\em more-seqs}$B$N$=$l$>$l$N(BN$BHVL\(B($N=0,1,\cdots$)$B$NMWAG(B
-$B$+$i$J$k%j%9%H$K(B
-$BBP$7$FE,MQ$5$l!"$=$N7k2L$O(B{\em result-type}$B$N7?$NNs$KC_@Q$5$l$k!#(B}
+{\em function}は、{\em seq}と{\em more-seqs}のそれぞれのN番目($N=0,1,\cdots$)の要素
+からなるリストに
+対して適用され、その結果は{\em result-type}の型の列に蓄積される。}
 
 \funcdesc{fill}{sequence item \&key (:start 0) (:end (length sequence))}{
-{\em sequence}$B$N(B{\em start}$BHVL\$+$i(B({\em end}$-$1)$BHVL\$^$G!"(B{\em item}$B$GK~$?$9!#(B
+{\em sequence}の{\em start}番目から({\em end}$-$1)番目まで、{\em item}で満たす。
 }
 
 \funcdesc{replace}{dest source \&key :start1 :end1 :start2 :end2}{
-{\em dest}$BNs$NCf$N(B{\em start1}$B$+$i(B{\em end1}$B$^$G$NMWAG$,!"(B
-{\em source}$BNs$NCf$N(B{\em start2}$B$+$i(B{\em end2}$B$^$G$NMWAG$KCV$-49$($i$l$k!#(B
-{\em start1}$B$H(B{\em start2}$B$N%G%U%)%k%HCM$O%<%m$G!"(B
-{\em end1}$B$H(B{\em end2}$B$N%G%U%)%k%HCM$O$=$l$>$l$NNs$ND9$5$G$"$k!#(B
-$B$b$7JRJ}$NNs$,$b$&0lJ}$h$j$bD9$$$J$i$P!"(B
-end$B$OC;$$Ns$ND9$5$K0lCW$9$k$h$&$K=L$a$i$l$k!#(B}
+{\em dest}列の中の{\em start1}から{\em end1}までの要素が、
+{\em source}列の中の{\em start2}から{\em end2}までの要素に置き換えられる。
+{\em start1}と{\em start2}のデフォルト値はゼロで、
+{\em end1}と{\em end2}のデフォルト値はそれぞれの列の長さである。
+もし片方の列がもう一方よりも長いならば、
+endは短い列の長さに一致するように縮められる。}
 
 \funcdesc{sort}{sequence compare \&optional key}{
-{\em sequence}$B$O!"(BUnix$B$N(Bquick-sort$B%5%V%k!<%A%s$r;H$C$FGK2uE*$K(B(destructively)
-$B$K%=!<%H$5$l$k!#(B
-{\em key}$B$O!"%-!<%o!<%I%Q%i%a!<%?$G$J$/!"Hf3SMQ$N%Q%i%a!<%?$G$"$k!#(B
-$BF1$8MWAG$r;}$C$?Ns$N%=!<%H$r$9$k$H$-$O==J,5$$r$D$1$k$3$H!#(B
-$BNc$($P!"(B{\tt (sort '(1 1) \#'>)}$B$O<:GT$9$k!#$J$<$J$i!"(B1$B$H(B1$B$NHf3S$O(B
-$B$I$A$i$+$i$G$b<:GT$9$k$+$i$G$"$k!#(B
-$B$3$NLdBj$rHr$1$k$?$a$K!"Hf3S$H$7$F(B{\tt \#'$>=$}$B$+(B{\tt \#'$<=$}$B$N$h$&$J4X?t$rMQ$$$k!#(B}
+{\em sequence}は、Unixのquick-sortサブルーチンを使って破壊的に(destructively)
+にソートされる。
+{\em key}は、キーワードパラメータでなく、比較用のパラメータである。
+同じ要素を持った列のソートをするときは十分気をつけること。
+例えば、{\tt (sort '(1 1) \#'>)}は失敗する。なぜなら、1と1の比較は
+どちらからでも失敗するからである。
+この問題を避けるために、比較として{\tt \#'$>=$}か{\tt \#'$<=$}のような関数を用いる。}
 
 \funcdesc{merge}{result-type seq1 seq2 pred \&key (:key \#'identity)}{
-$B#2$D$NNs(B{\em seq1}$B$H(B{\em seq2}$B$O!"(B{\em result-type}$B7?$N#1$D$NNs$K(B
-$B9gJ;$5$l!"$=$l$i$NMWAG$O(B{\em pred}$B$K5-=R$5$l$?Hf3S$rK~B-$9$k!#(B}
+２つの列{\em seq1}と{\em seq2}は、{\em result-type}型の１つの列に
+合併され、それらの要素は{\em pred}に記述された比較を満足する。}
 
 \funcdesc{merge-list}{list1 list2 pred key}{
-$B#2$D$N%j%9%H$r9gJ;$5$;$k!#(B{\bf merge}$B$H0c$C$F!"0lHLNs$O0z?t$H$7$F(B
-$B5v2D$5$l$J$$$,!"(B{\bf merge-list}$B$O(B{\bf merge}$B$h$j<B9T$,B.$$(B}
+２つのリストを合併させる。{\bf merge}と違って、一般列は引数として
+許可されないが、{\bf merge-list}は{\bf merge}より実行が速い}
 
 \end{refdesc}
 
-$B<!$N4X?t$O!"(B1$B$D$N4pK\4X?t$H(B-if$B$d(B-if-not$B$r8e$KIU$1$?JQ7A4X?t$+$i@.$k!#(B
-$B4pK\7A$O!">/$J$/$H$b(Bitem$B$H(Bsequence$B$N0z?t$r;}$D!#(B
-sequence$B$NCf$N$=$l$>$l$NMWAG$H(Bitem$B$rHf3S$7!"(B
-$B2?$+$N=hM}$r$9$k!#(B
-$BNc$($P!"%$%s%G%C%/%9$rC5$7$?$j!"(B
-$B8=$l$k2s?t$r?t$($?$j!"(Bitem$B$r:o=|$7$?$j$J$I!#(B
-$BJQ7A4X?t$O!"(Bpredicate$B$H(Bsequence$B$N0z?t$r;}$D!#(B
-sequence$B$N$=$l$>$l$NMWAG$K(Bpredicate$B$rE,MQ$7!"(B
-$B$b$7(Bpredicate$B$,(Bnon-NIL$B$rJV$7$?$H$-(B(-if version)$B!"(B
-$B$^$?$O(BNIL$B$rJV$7$?$H$-(B(-if-not version)$B$K2?$+$r$9$k!#(B
+次の関数は、1つの基本関数と-ifや-if-notを後に付けた変形関数から成る。
+基本形は、少なくともitemとsequenceの引数を持つ。
+sequenceの中のそれぞれの要素とitemを比較し、
+何かの処理をする。
+例えば、インデックスを探したり、
+現れる回数を数えたり、itemを削除したりなど。
+変形関数は、predicateとsequenceの引数を持つ。
+sequenceのそれぞれの要素にpredicateを適用し、
+もしpredicateがnon-NILを返したとき(-if version)、
+またはNILを返したとき(-if-not version)に何かをする。
 
 \begin{refdesc}
 
 \funcdesc{position}{item seq \&key :start :end :test :test-not :key (:count 1)}{
-{\em seq}$B$NCf$+$i(B{\em item}$B$HF10l$JMWAG$rC5$7!"(B
-$B$=$NMWAG$NCf$G(B{\em :count}$BHVL\$K8=$l$?MWAG$N(B
-$B%$%s%G%C%/%9$rJV$9!#(B
-$B$=$NC5:w$O!"(B{\em :start}$BHVL\$NMWAG$+$i;O$a!"$=$l0JA0$NMWAG$OL5;k$9$k!#(B
-$B%G%U%)%k%H$NC5:w$O!"(B{\tt eql}$B$G<B9T$5$l$k$,!"(B
-{\em test}$B$+(B{\em test-not}$B%Q%i%a!<%?$GJQ99$G$-$k!#(B}
+{\em seq}の中から{\em item}と同一な要素を探し、
+その要素の中で{\em :count}番目に現れた要素の
+インデックスを返す。
+その探索は、{\em :start}番目の要素から始め、それ以前の要素は無視する。
+デフォルトの探索は、{\tt eql}で実行されるが、
+{\em test}か{\em test-not}パラメータで変更できる。}
 
 \fundesc{position-if}{predicate seq \&key :start :end :key}
 
 \fundesc{position-if-not}{predicate seq \&key :start :end :key}
 
 \funcdesc{find}{item seq \&key :start :end :test :test-not :key (:count 1)}{
-{\em seq}$B$NCf$N(B{\em start}$BHVL\$NMWAG$+$i(B
-{\em :end}$BHVL\$NMWAG$^$G$N4V$GMWAG$rC5$7!"(B
-$B$=$NC5$5$l$?MWAG$NFb!"(B{\em :count}$BHVL\$NMWAG$rJV$9!#(B
-$B$=$NMWAG$O!"(B{\em :test}$B$+(B{\em :test-not}$B$K(B{\tt \#'eql}
-$B0J30$N$b$N$,5-=R$5$l$F$$$J$$$J$i!"(B{\em item}$B$HF1$8$b$N$G$"$k!#(B}
+{\em seq}の中の{\em start}番目の要素から
+{\em :end}番目の要素までの間で要素を探し、
+その探された要素の内、{\em :count}番目の要素を返す。
+その要素は、{\em :test}か{\em :test-not}に{\tt \#'eql}
+以外のものが記述されていないなら、{\em item}と同じものである。}
 
 \funcdesc{find-if}{predicate seq \&key :start :end :key (:count 1)}{
-{\em seq}$B$NMWAG$NCf$G(B{\em predicate}$B$,(Bnon-NIL$B$rJV$9MWAG$NFb!"(B
-{\em :count}$BHVL\$NMWAG$rJV$9!#(B}
+{\em seq}の要素の中で{\em predicate}がnon-NILを返す要素の内、
+{\em :count}番目の要素を返す。}
 \fundesc{find-if-not}{predicate seq \&key :start :end :key}
 
 \funcdesc{count}{item seq \&key :start :end :test :test-not :key}{
-{\em seq}$B$NCf$N(B{\em :start}$BHVL\$+$i(B{\em :end}$BHVL\$^$G$NMWAG$K(B{\em item}$B$,(B
-$B2?2s8=$l$k$+?t$($k!#(B}
+{\em seq}の中の{\em :start}番目から{\em :end}番目までの要素に{\em item}が
+何回現れるか数える。}
 
 \funcdesc{count-if}{predicate seq \&key :start :end :key}{
-{\em predicate}$B$,(Bnon-NIL$B$rJV$9(B{\em seq}$BFb$NMWAG?t$r?t$($k!#(B}
+{\em predicate}がnon-NILを返す{\em seq}内の要素数を数える。}
 \fundesc{count-if-not}{predicate seq \&key :start :end :key}
 
 \funcdesc{remove}{item seq \&key :start :end :test :test-not :key :count}{
-{\em seq}$B$NCf$N(B{\em :start}$BHVL\$+$i(B{\em :end}$BHVL\$^$G$NMWAG$N$J$+$G!"(B
-{\em item}$B$HF10l$NMWAG$rC5$7!"(B{\em :count}
-$B!J%G%U%)%k%HCM$O!g!KHVL\$^$G$NMWAG$r:o=|$7$??7$7$$Ns$r:n$k!#(B
-$B$b$7!"(B{\em item}$B$,0l2s$N$_8=$l$k$3$H$,3NDj$7$F$$$k$J$i!"(B
-$BL50UL#$JC5:w$rHr$1$k$?$a$K!"(B{\em :count=1}$B$r;XDj$9$k$3$H!#(B}
+{\em seq}の中の{\em :start}番目から{\em :end}番目までの要素のなかで、
+{\em item}と同一の要素を探し、{\em :count}
+（デフォルト値は∞）番目までの要素を削除した新しい列を作る。
+もし、{\em item}が一回のみ現れることが確定しているなら、
+無意味な探索を避けるために、{\em :count=1}を指定すること。}
 
 \fundesc{remove-if}{predicate seq \&key :start :end :key :count}
 \fundesc{remove-if-not}{predicate seq \&key :start :end :key :count}
 \funcdesc{remove-duplicates}{seq \&key :start :end :key :test :test-not :count}{
-{\em seq}$B$NCf$+$iJ#?tB8:_$9$k(Bitem$B$rC5$7!"$=$NCf$N(B1$B$D$@$1$r;D$7$??7$7$$Ns$r:n$k!#(B}
+{\em seq}の中から複数存在するitemを探し、その中の1つだけを残した新しい列を作る。}
 
 \funcdesc{delete}{item seq \&key :start :end :test :test-not :key :count}{
-{\em delete}$B$O!"(B{\em seq}$B<+BN$r=$@5$7!"?7$7$$Ns$r:n$i$J$$$3$H$r=|$$$F$O!"(B
-{\bf remove}$BF1$8$G$"$k!#(B
-$B$b$7!"(B{\em item}$B$,0l2s$N$_8=$l$k$3$H$,3NDj$7$F$$$k$J$i!"(B
-$BL50UL#$JC5:w$rHr$1$k$?$a$K!"(B{\em :count=1}$B$r;XDj$9$k$3$H!#(B}
+{\em delete}は、{\em seq}自体を修正し、新しい列を作らないことを除いては、
+{\bf remove}同じである。
+もし、{\em item}が一回のみ現れることが確定しているなら、
+無意味な探索を避けるために、{\em :count=1}を指定すること。}
 
 \fundesc{delete-if}{predicate seq \&key :start :end :key :count}
 \funcdesc{delete-if-not}{predicate seq \&key :start :end :key :count}{
-{\bf remove}$B$d(B{\bf delete}$B$N(B{\em :count}$B%G%U%)%k%HCM$O!"(B1,000,000$B$G$"$k!#(B
-$B$b$7Ns$,D9$/!":o=|$7$?$$MWAG$,0l2s$7$+8=$l$J$$$H$-$O!"(B
-{\em :count}$B$r(B1$B$H5-=R$9$Y$-$G$"$k!#(B}
+{\bf remove}や{\bf delete}の{\em :count}デフォルト値は、1,000,000である。
+もし列が長く、削除したい要素が一回しか現れないときは、
+{\em :count}を1と記述すべきである。}
 
 \funcdesc{substitute}{newitem olditem seq
  \&key :start :end :test :test-not :key :count}{
-{\em seq}$B$NCf$G(B{\em :count}$BHVL\$K8=$l$?(B{\em olditem}$B$r(B{\em newitem}$B$KCV$-49$($?(B
-$B?7$7$$Ns$rJV$9!#(B
-$B%G%U%)%k%H$G$O!"A4$F$N(B{\em olditem}$B$rCV$-49$($k!#(B}
+{\em seq}の中で{\em :count}番目に現れた{\em olditem}を{\em newitem}に置き換えた
+新しい列を返す。
+デフォルトでは、全ての{\em olditem}を置き換える。}
 
 \fundesc{substitute-if}{newitem predicate seq \&key :start :end :key :count}
 \fundesc{substitute-if-not}{newitem predicate seq \&key :start :end :key :count}
 
 \funcdesc{nsubstitute}{newitem olditem seq \&key :start :end :test :test-not :key :count}
-{{\em seq}$B$NCf$G(B{\em count}$BHVL\$K8=$l$?(B{\em olditem}$B$r(B{\em newitem}$B$KCV$-49$(!"(B
-$B85$NNs(B{\em seq}$B$KJV$9!#%G%U%)%k%H$G$O!"A4$F$N(B{\em olditem}$B$rCV$-49$($k!#(B}
+{{\em seq}の中で{\em count}番目に現れた{\em olditem}を{\em newitem}に置き換え、
+元の列{\em seq}に返す。デフォルトでは、全ての{\em olditem}を置き換える。}
 \fundesc{nsubstitute-if}{newitem predicate seq \&key :start :end :key :count}
 \fundesc{nsubstitute-if-not}{newitem predicate seq \&key :start :end :key :count}
 
@@ -194,19 +194,19 @@ sequence$B$N$=$l$>$l$NMWAG$K(Bpredicate$B$rE,MQ$7!"(B
 
 \newpage
 
-\subsection{$B%j%9%H(B}
+\subsection{リスト}
 
 \begin{refdesc}
 \funcdesc{listp}{object}{
-$B%*%V%8%'%/%H$,(Bcons$B$N%$%s%9%?%s%9$+$b$7$/$O(BNIL$B$J$i$P!"(BT$B$rJV$9!#(B}
+オブジェクトがconsのインスタンスかもしくはNILならば、Tを返す。}
 \funcdesc{consp}{object}{
-{\tt (not (atom object))}$B$HF10l$G$"$k!#(B{\tt (consp '())}$B$O(BNIL$B$G$"$k!#(B}
+{\tt (not (atom object))}と同一である。{\tt (consp '())}はNILである。}
 \funcdesc{car}{list}{
-{\em list}$B$N:G=i$NMWAG$rJV$9!#(BNIL$B$N(B{\bf car}$B$O(BNIL$B$G$"$k!#(B
-atom$B$N(B{\bf car}$B$O%(%i!<$H$J$k!#(B{\tt (car '(1 2 3)) = 1}}
+{\em list}の最初の要素を返す。NILの{\bf car}はNILである。
+atomの{\bf car}はエラーとなる。{\tt (car '(1 2 3)) = 1}}
 \funcdesc{cdr}{list}{
-{\em list}$B$N:G=i$NMWAG$r:o=|$7$?;D$j$N%j%9%H$rJV$9!#(BNIL$B$N(B{\bf cdr}$B$O(BNIL$B$G$"$k!#(B
-atom$B$N(B{\bf cdr}$B$O%(%i!<$H$J$k!#(B{\tt (cdr '(1 2 3)) = (2 3)}}
+{\em list}の最初の要素を削除した残りのリストを返す。NILの{\bf cdr}はNILである。
+atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 \funcdesc{cadr}{list}{{\tt (cadr list) = (car (cdr list))}}
 \funcdesc{cddr}{list}{{\tt (cddr list) = (cdr (cdr list))}}
 \funcdesc{cdar}{list}{{\tt (cdar list) = (cdr (car list))}}
@@ -219,260 +219,260 @@ atom$B$N(B{\bf cdr}$B$O%(%i!<$H$J$k!#(B{\tt (cdr '(1 2 3)) = (2 3)}}
 \funcdesc{cdaar}{list}{{\tt (cdaar list) = (cdr (car (car list)))}}
 \funcdesc{cdddr}{list}{{\tt (cdddr list) = (cdr (cdr (cdr list)))}}
 \funcdesc{cddar}{list}{{\tt (cddar list) = (cdr (cdr (car list)))}}
-\funcdesc{first}{list}{{\em list}$B$N:G=i$NMWAG$r<h$j=P$9!#(B
-{\bf second, third, fourth, fifth, sixth, seventh, eighth}$B$b$^$?Dj5A$5$l$F$$$k!#(B{\tt (first list) = (car list)}}
+\funcdesc{first}{list}{{\em list}の最初の要素を取り出す。
+{\bf second, third, fourth, fifth, sixth, seventh, eighth}もまた定義されている。{\tt (first list) = (car list)}}
 %\funcdesc{second}{list}{{\tt (second list) = (cadr list)}}
 %\funcdesc{third}{list}{{\tt (third list) = (caddr list)}}
 %\funcdesc{fourth}{list}{{\tt (fourth list) = (car (cdddr list))}}
 %\funcdesc{fifth}{list}{{\tt (fifth list) = (cadr (cdddr list))}}
 \funcdesc{nth}{count list}{
-{\em list}$BFb$N(B{\em count}$BHVL\$NMWAG$rJV$9!#(B
-{\tt (nth 1 list)}$B$O!"(B{\tt (second list)}$B$"$k$$$O(B{\tt (elt list 1)}$B$HEy2A$G$"$k!#(B}
+{\em list}内の{\em count}番目の要素を返す。
+{\tt (nth 1 list)}は、{\tt (second list)}あるいは{\tt (elt list 1)}と等価である。}
 
 \funcdesc{nthcdr}{count list}{
-{\em list}$B$K(B{\bf cdr}$B$r(B{\em count}$B2sE,MQ$7$?8e$N%j%9%H$rJV$9!#(B}
+{\em list}に{\bf cdr}を{\em count}回適用した後のリストを返す。}
 
 \funcdesc{last}{list}{
-{\em list}$B$N:G8e$NMWAG$G$J$/!":G8e$N(Bcons$B$rJV$9!#(B}
+{\em list}の最後の要素でなく、最後のconsを返す。}
 
 \funcdesc{butlast}{list \&optional (n 1)}
-{{\em list}$B$N:G8e$+$i(B{\em n}$B8D$NMWAG$r:o=|$7$?%j%9%H$rJV$9!#(B}
+{{\em list}の最後から{\em n}個の要素を削除したリストを返す。}
 
 \funcdesc{cons}{car cdr}{
-{\tt car}$B$,(B{\em car}$B$G(B{\tt cdr}$B$,(B{\em cdr}$B$G$"$k$h$&$J?7$7$$(Bcons$B$r:n$k!#(B}
+{\tt car}が{\em car}で{\tt cdr}が{\em cdr}であるような新しいconsを作る。}
 
-\funcdesc{list}{\{element\}*}{{\em element}$B$rMWAG$H$9$k%j%9%H$r:n$k!#(B}
+\funcdesc{list}{\{element\}*}{{\em element}を要素とするリストを作る。}
 
 \funcdesc{list*}{\{element\}*}{
-{\em element}$B$rMWAG$H$9$k%j%9%H$r:n$k!#$7$+$7!":G8e$NMWAG$O(B{\bf cons}$B$5$l$k$?$a!"(B
-atom$B$G$"$C$F$O$J$i$J$$!#(B
-$BNc$($P!"(B{\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}$B$G$"$k!#(B}
+{\em element}を要素とするリストを作る。しかし、最後の要素は{\bf cons}されるため、
+atomであってはならない。
+例えば、{\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}である。}
 
 \funcdesc{list-length}{list}{
-{\em list}$B$ND9$5$rJV$9!#(B{\em list}$B$O!"4D>u%j%9%H$G$bNI$$!#(B}
+{\em list}の長さを返す。{\em list}は、環状リストでも良い。}
 
 \funcdesc{make-list}{size \&key (:initial-element nil)}{
-{\em size}$BD9$5$GMWAG$,A4$F(B{\em :initial-element}$B$N%j%9%H$r:n$k!#(B}
+{\em size}長さで要素が全て{\em :initial-element}のリストを作る。}
 
 \funcdesc{rplaca}{cons a}{
-{\em cons}$B$N(B{\bf car}$B$r(B{\em a}$B$KCV$-49$($k!#(B
-{\bf setf}$B$H(B{\bf car}$B$N;HMQ$r?dA&$9$k!#(B
+{\em cons}の{\bf car}を{\em a}に置き換える。
+{\bf setf}と{\bf car}の使用を推薦する。
 {\tt (rplaca cons a) = (setf (car cons) a)}}
 
 \funcdesc{rplacd}{cons d}{
-{\em cons}$B$N(B{\bf cdr}$B$r(B{\em d}$B$KCV$-49$($k!#(B
-{\bf setf}$B$H(B{\bf cdr}$B$N;HMQ$r?dA&$9$k!#(B
+{\em cons}の{\bf cdr}を{\em d}に置き換える。
+{\bf setf}と{\bf cdr}の使用を推薦する。
 {\tt (rplacd cons d) = (setf (cdr cons) d)}}
 
 \funcdesc{memq}{item list}{
-{\bf member}$B$K;w$F$$$k!#$7$+$7%F%9%H$O$$$D$b(B{\tt eq}$B$G9T$&!#(B}
+{\bf member}に似ている。しかしテストはいつも{\tt eq}で行う。}
 
 \funcdesc{member}{item list \&key :key :test :test-not}
-{{\em list}$B$NCf$+$i>r7o$K$"$C$?MWAG$rC5$9!#(B
-{\em list}$B$NCf$+$i(B{\em item}$B$rC5:w$7!"(B{\em :test}$B$N>r7o$K$"$C$?$b$N$,$J$1$l$P(BNIL$B$rJV$9!#(B
-$B8+$D$+$C$?$J$i$P!"$=$l0J9_$r%j%9%H$H$7$FJV$9!#$3$NC5:w$O!":G>e0L$N%j%9%H$KBP$7$F(B
-$B9T$J$o$l$k!#(B{\em :test}$B$N%G%U%)%k%H$O(B{\tt \#'eq}$B$G$"$k!#(B
+{{\em list}の中から条件にあった要素を探す。
+{\em list}の中から{\em item}を探索し、{\em :test}の条件にあったものがなければNILを返す。
+見つかったならば、それ以降をリストとして返す。この探索は、最上位のリストに対して
+行なわれる。{\em :test}のデフォルトは{\tt \#'eq}である。
 {\tt (member 'a '(g (a y) b a d g e a y))=(a d g e a y)}}
 
 \fundesc{assq}{item alist}
 
 \funcdesc{assoc}{item alist \&key :key :test :test-not}
-{{\em alist}$B$NMWAG$N(B{\bf car}$B$,(B{\em :test}$B$N>r7o$K$"$C$?:G=i$N$b$N$rJV$9!#(B
-$B9g$o$J$1$l$P!"(BNIL$B$rJV$9!#(B
-{\em :test}$B$N%G%U%)%k%H$O(B{\tt \#'eq}$B$G$"$k!#(B
+{{\em alist}の要素の{\bf car}が{\em :test}の条件にあった最初のものを返す。
+合わなければ、NILを返す。
+{\em :test}のデフォルトは{\tt \#'eq}である。
 {\tt (assoc '2 '((1 d t y)(2 g h t)(3 e x g))=(2 g h t)}}
 
 \funcdesc{rassoc}{item alist}{
-{\bf cdr}$B$,(B{\em item}$B$KEy$7$$(B{\em alist}$B$N$J$+$N:G=i$NAH$rJV$9!#(B}
+{\bf cdr}が{\em item}に等しい{\em alist}のなかの最初の組を返す。}
 
 \funcdesc{pairlis}{l1 l2 \&optional alist}{
-{\em l1}$B$H(B{\em l2}$B$NCf$N0lCW$9$kMWAG$rBP$K$7$?%j%9%H$r:n$k!#(B
-$B$b$7(B{\em alist}$B$,M?$($i$l$?$H$-!"(B
-{\em l1}$B$H(B{\em l2}$B$+$i:n$i$l$?BP%j%9%H$N:G8e$KO"7k$5$;$k!#(B}
+{\em l1}と{\em l2}の中の一致する要素を対にしたリストを作る。
+もし{\em alist}が与えられたとき、
+{\em l1}と{\em l2}から作られた対リストの最後に連結させる。}
 
 \funcdesc{acons}{key val alist}{
-{\em alist}$B$K(B{\em key val}$B$NAH$rIU$12C$($k!#(B
-{\tt (cons (cons key val) alist)}$B$HF1Ey$G$"$k!#(B}
+{\em alist}に{\em key val}の組を付け加える。
+{\tt (cons (cons key val) alist)}と同等である。}
 
 \funcdesc{append}{\{list\}*}{
-$B?7$7$$%j%9%H$r7A@.$9$k$?$a$K(B{\em list}$B$rO"7k$5$;$k!#(B
-$B:G8e$N%j%9%H$r=|$$$F!"(B{\em list}$B$N$J$+$NA4$F$NMWAG$O%3%T!<$5$l$k!#(B}
+新しいリストを形成するために{\em list}を連結させる。
+最後のリストを除いて、{\em list}のなかの全ての要素はコピーされる。}
 
 \funcdesc{nconc}{\{list\}*}{
-$B$=$l$>$l$N(B{\em list}$B$N:G8e$N(B{\bf cdr}$B$rCV$-49$($k;v$K$h$C$F!"(B{\em list}$B$r(B
-$BGK2uE*$K(B(destructively)$BO"7k$9$k!#(B}
+それぞれの{\em list}の最後の{\bf cdr}を置き換える事によって、{\em list}を
+破壊的に(destructively)連結する。}
 
 \funcdesc{subst}{new old tree}{
-{\em tree}$B$NCf$N$9$Y$F$N(B{\em old}$B$r(B{\em new}$B$KCV$-49$($k!#(B}
+{\em tree}の中のすべての{\em old}を{\em new}に置き換える。}
 
 \funcdesc{flatten}{complex-list}{
-atom$B$d$$$m$s$J?<$5$N%j%9%H$r4^$s$@(B{\em complex-list}$B$r!"(B
-$B#1$D$N@~7A%j%9%H$KJQ49$9$k!#$=$N%j%9%H$O!"(B
-{\em complex-list}$B$NCf$N%H%C%W%l%Y%k$KA4$F$NMWAG$rCV$/!#(B
+atomやいろんな深さのリストを含んだ{\em complex-list}を、
+１つの線形リストに変換する。そのリストは、
+{\em complex-list}の中のトップレベルに全ての要素を置く。
 {\tt (flatten '(a (b (c d) e))) = (a b c d e)}}
 
 \macrodesc{push}{item place}{
-{\em place}$B$K%P%$%s%I$5$l$?%9%?%C%/(B($B%j%9%H(B)$B$K(B{\em item}$B$rCV$/!#(B}
+{\em place}にバインドされたスタック(リスト)に{\em item}を置く。}
 
 \macrodesc{pop}{stack}{
-{\em stack}$B$+$i:G=i$NMWAG$r:o=|$7!"$=$l$rJV$9!#(B
-$B$b$7(B{\em stack}$B$,6u(B(NIL)$B$J$i$P!"(BNIL$B$rJV$9!#(B}
+{\em stack}から最初の要素を削除し、それを返す。
+もし{\em stack}が空(NIL)ならば、NILを返す。}
 
 \macrodesc{pushnew}{item place \&key :test :test-not :key}{
-$B$b$7(B{\em item}$B$,(B{\em place}$B$N%a%s%P!<$G$J$$$J$i!"(B
-{\em place}$B%j%9%H$K(B{\em item}$B$rCV$/!#(B
-{\em :test}, {\em :test-not}$B$H(B{\em :key}$B0z?t$O!"(B
-{\bf member}$B4X?t$KAw$i$l$k!#(B}
+もし{\em item}が{\em place}のメンバーでないなら、
+{\em place}リストに{\em item}を置く。
+{\em :test}, {\em :test-not}と{\em :key}引数は、
+{\bf member}関数に送られる。}
 
 \funcdesc{adjoin}{item list}{
-$B$b$7(B{\em item}$B$,(B{\em list}$B$K4^$^$l$F$J$$$J$i!"(B{\em list}$B$N:G=i$KIU$12C$($k!#(B}
+もし{\em item}が{\em list}に含まれてないなら、{\em list}の最初に付け加える。}
 
 \funcdesc{union}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
-2$B$D$N%j%9%H$NOB=89g$rJV$9!#(B}
+2つのリストの和集合を返す。}
 \funcdesc{subsetp}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}
-{{\em list1}$B$,(B{\em list2}$B$NItJ,=89g$G$"$k$3$H!"$9$J$o$A!"(B
-{\em list1}$B$N$=$l$>$l$NMWAG$,(B{\em list2}$B$N%a%s%P!<$G$"$k$3$H$r%F%9%H$9$k!#(B}
+{{\em list1}が{\em list2}の部分集合であること、すなわち、
+{\em list1}のそれぞれの要素が{\em list2}のメンバーであることをテストする。}
 
 \funcdesc{intersection}{list1 list2
  \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
-2$B$D$N%j%9%H(B{\em list1}$B$H(B{\em list2}$B$N@Q=89g$rJV$9!#(B}
+2つのリスト{\em list1}と{\em list2}の積集合を返す。}
 
 \funcdesc{set-difference}{list1 list2
 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
-{\em list1}$B$K$N$_4^$^$l$F$$$F(B
-{\em list2}$B$K4^$^$l$F$$$J$$MWAG$+$i$J$k%j%9%H$rJV$9!#(B}
+{\em list1}にのみ含まれていて
+{\em list2}に含まれていない要素からなるリストを返す。}
 \funcdesc{set-exclusive-or}{list1 list2
  \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
-{\em list1}$B$*$h$S(B{\em list2}$B$K$N$_8=$l$kMWAG$+$i$J$k%j%9%H$rJV$9!#(B}
+{\em list1}および{\em list2}にのみ現れる要素からなるリストを返す。}
 \funcdesc{list-insert}{item pos list}{
-{\em list}$B$N(B{\em pos}$BHVL\$NMWAG$H$7$F(B{\em item}$B$rA^F~$9$k(B
-$B!J85$N%j%9%H$rJQ2=$5$;$k!K!#(B
-$B$b$7(B{\em pos}$B$,(B{\em list}$B$ND9$5$h$jBg$-$$$J$i!"(B{\em item}$B$O:G8e$K(B
-{\bf nconc}$B$5$l$k!#(B
+{\em list}の{\em pos}番目の要素として{\em item}を挿入する
+（元のリストを変化させる）。
+もし{\em pos}が{\em list}の長さより大きいなら、{\em item}は最後に
+{\bf nconc}される。
 {\tt (list-insert 'x 2 '(a b c d)) = (a b x c d)}}
 
 \funcdesc{copy-tree}{tree}{
-$BF~$l$3%j%9%H$G$"$k(B{\em tree}$B$N%3%T!<$rJV$9!#(B
-$B$7$+$7!"4D>u;2>H$O$G$-$J$$!#4D>u%j%9%H$O!"(B
-{\bf copy-object}$B$G%3%T!<$G$-$k!#(B
-$B<B:]$K!"(B{\bf copy-tree}$B$O(B{\tt (subst t t tree)}$B$H4JC1$K5-=R$5$l$k!#(B}
+入れこリストである{\em tree}のコピーを返す。
+しかし、環状参照はできない。環状リストは、
+{\bf copy-object}でコピーできる。
+実際に、{\bf copy-tree}は{\tt (subst t t tree)}と簡単に記述される。}
 
 \funcdesc{mapc}{func arg-list \&rest more-arg-lists}{
-{\em arg-list}$B$d(B{\em more-arg-lists}$B$=$l$>$l$N(BN$BHVL\(B($N=0,1,\cdots$)$B$NMWAG$+$i$J$k%j%9%H$K(B
-{\em func}$B$rE,MQ$9$k!#(B
-$BE,MQ7k2L$OL5;k$5$l!"(B{\em arg-list}$B$,JV$5$l$k!#(B}
+{\em arg-list}や{\em more-arg-lists}それぞれのN番目($N=0,1,\cdots$)の要素からなるリストに
+{\em func}を適用する。
+適用結果は無視され、{\em arg-list}が返される。}
 
 \funcdesc{mapcar}{func \&rest arg-list}{
-{\em arg-list}$B$N$=$l$>$l$NMWAG$K(B{\em func}$B$r(B{\bf map}$B$7!"(B
-$B$=$NA4$F$N7k2L$N%j%9%H$r:n$k!#(B
-{\bf mapcar}$B$r;H$&A0$K!"(B{\bf dolist}$B$r;n$9$3$H!#(B}
+{\em arg-list}のそれぞれの要素に{\em func}を{\bf map}し、
+その全ての結果のリストを作る。
+{\bf mapcar}を使う前に、{\bf dolist}を試すこと。}
 
 \funcdesc{mapcan}{func arg-list \&rest more-arg-lists}{
-{\em arg-list}$B$N$=$l$>$l$NMWAG$K(B{\em func}$B$r(B{\bf map}$B$7!"(B
-{\bf nconc}$B$rMQ$$$F$=$NA4$F$N7k2L$N%j%9%H$r:n$k!#(B
-{\bf nconc}$B$O(BNIL$B$KBP$7$F2?$b$7$J$$$?$a!"(B
-{\bf mapcan}$B$O!"(B{\em arg-list}$B$NMWAG$K%U%#%k%?$r$+$1$k!JA*Br$9$k!K(B
-$B$N$K9g$C$F$$$k!#(B
+{\em arg-list}のそれぞれの要素に{\em func}を{\bf map}し、
+{\bf nconc}を用いてその全ての結果のリストを作る。
+{\bf nconc}はNILに対して何もしないため、
+{\bf mapcan}は、{\em arg-list}の要素にフィルタをかける（選択する）
+のに合っている。
 }
 \end{refdesc}
 \newpage
 
-\subsection{$B%Y%/%H%k$H9TNs(B}
+\subsection{ベクトルと行列}
 
-$B#7<!850JFb$N9TNs$,5v2D$5$l$F$$$k!#(B
-$B#1<!85$N9TNs$O!"%Y%/%H%k$H8F$P$l$k!#(B
-$B%Y%/%H%k$H%j%9%H$O!"Ns$H$7$F%0%k!<%W2=$5$l$k!#(B
-$B$b$7!"9TNs$NMWAG$,$$$m$s$J7?$G$"$C$?$H$-!"$=$N9TNs$O0lHL2=$5$l$F$$$k$H8@$&!#(B
-$B$b$7!"9TNs$,(Bfill-pointer$B$r;}$C$F$J$/!"B>$N9TNs$GCV$-49$($i$l$J$/!"(B
-$B3HD%IT2DG=$G$"$k$J$i!"$=$N9TNs$O4JN,2=$5$l$?$H8@$&!#(B
+７次元以内の行列が許可されている。
+１次元の行列は、ベクトルと呼ばれる。
+ベクトルとリストは、列としてグループ化される。
+もし、行列の要素がいろんな型であったとき、その行列は一般化されていると言う。
+もし、行列がfill-pointerを持ってなく、他の行列で置き換えられなく、
+拡張不可能であるなら、その行列は簡略化されたと言う。
 
-$BA4$F$N9TNsMWAG$O!"(B{\bf aref}$B$K$h$j<h$j=P$9$3$H$,$G$-!"(B{\bf aref}$B$rMQ$$$F(B{\bf setf}
-$B$K$h$j@_Dj$9$k$3$H$,$G$-$k!#(B
-$B$7$+$7!"0l<!85%Y%/%H%k$N$?$a$K4JC1$G9bB.$J%"%/%;%94X?t$,$"$k!#(B
-{\bf svref}$B$O0l<!850lHL%Y%/%H%k!"(B{\bf char}$B$H(B{\bf schar}$B$O(B
-$B0l<!85J8;z%Y%/%H%k!JJ8;zNs!K!"(B{\bf bit}$B$H(B{\bf sbit}$B$O(B
-$B0l<!85%S%C%H%Y%/%H%k$N$?$a$N9bB.4X?t$G$"$k!#(B
-$B$3$l$i$N4X?t$O%3%s%Q%$%k$5$l$?$H$-!"(B
-$B%"%/%;%9$O(Bin-line$B$r3HD%$7!"7?%A%'%C%/$H6-3&%A%'%C%/$J$7$K<B9T$5$l$k!#(B
+全ての行列要素は、{\bf aref}により取り出すことができ、{\bf aref}を用いて{\bf setf}
+により設定することができる。
+しかし、一次元ベクトルのために簡単で高速なアクセス関数がある。
+{\bf svref}は一次元一般ベクトル、{\bf char}と{\bf schar}は
+一次元文字ベクトル（文字列）、{\bf bit}と{\bf sbit}は
+一次元ビットベクトルのための高速関数である。
+これらの関数はコンパイルされたとき、
+アクセスはin-lineを拡張し、型チェックと境界チェックなしに実行される。
 
-$B%Y%/%H%k$b$^$?%*%V%8%'%/%H$G$"$k$?$a!"(B
-$BJL$N%Y%/%H%k%/%i%9$rGI@8$5$;$k$3$H$,$G$-$k!#(B
-5$B<oN`$NFbIt%Y%/%H%k%/%i%9$,$"$k!#(B
-{\tt vector, string, float-vector, integer-vector}$B$H(B{\tt bit-vector}$B$G$"$k!#(B
-$B%Y%/%H%k$N:n@.$rMF0W$K$9$k$?$a$K!"(Bmake-array$B4X?t$,$"$k!#(B
-$BMWAG$N7?$O!"(B{\tt :integer, :bit, :character, :float, :foreign}
-$B$+$"$k$$$O%f!<%6!<$,Dj5A$7$?%Y%/%H%k%/%i%9$NFb$N0l$D$G$J$1$l$P$J$i$J$$!#(B
-{\em :initial-element}$B$H(B{\em :initial-contents}$B$N%-!<%o!<%I0z?t$O!"(B
-$B9TNs$N=i4|CM$r@_Dj$9$k$?$a$KLr$KN)$D!#(B
+ベクトルもまたオブジェクトであるため、
+別のベクトルクラスを派生させることができる。
+5種類の内部ベクトルクラスがある。
+{\tt vector, string, float-vector, integer-vector}と{\tt bit-vector}である。
+ベクトルの作成を容易にするために、make-array関数がある。
+要素の型は、{\tt :integer, :bit, :character, :float, :foreign}
+かあるいはユーザーが定義したベクトルクラスの内の一つでなければならない。
+{\em :initial-element}と{\em :initial-contents}のキーワード引数は、
+行列の初期値を設定するために役に立つ。
 
 \begin{refdesc}
 
-\constdesc{array-rank-limit}{7$B!#9TNs$N:GBg<!85$r<($9!#(B}
-\constdesc{array-dimension-limit}{\#x1fffffff$B!#3F<!85$N:GBgMWAG?t$r<($9!#(B
-$BO@M}E*$J?t$G$"$C$F!"%7%9%F%`$NJ*M}%a%b%j$"$k$$$O2>A[%a%b%j$NBg$-$5$K$h$C$F(B
-$B@)8B$5$l$k!#(B}
+\constdesc{array-rank-limit}{7。行列の最大次元を示す。}
+\constdesc{array-dimension-limit}{\#x1fffffff。各次元の最大要素数を示す。
+論理的な数であって、システムの物理メモリあるいは仮想メモリの大きさによって
+制限される。}
 
 \funcdesc{vectorp}{object}{
-$B9TNs$O#1<!85$G$"$C$F$b%Y%/%H%k$G$O$J$$!#(B
-{\em object}$B$,(B{\tt vector, integer-vector, float-vector, string, bit-vector}
-$B$"$k$$$O%f!<%6!<$GDj5A$7$?%Y%/%H%k$J$i(BT$B$rJV$9!#(B}
+行列は１次元であってもベクトルではない。
+{\em object}が{\tt vector, integer-vector, float-vector, string, bit-vector}
+あるいはユーザーで定義したベクトルならTを返す。}
 \funcdesc{vector}{\&rest elements}{
-{\em elements}$B$+$i$J$k0l<!85%Y%/%H%k$r:n$k!#(B}
+{\em elements}からなる一次元ベクトルを作る。}
 
 \longdescription{make-array}{
-%dims \&key \= (:element-type vector) \hspace{75mm} [$B4X?t(B] \\
-dims \&key \= (:element-type vector) \` [$B4X?t(B] \\
+%dims \&key \= (:element-type vector) \hspace{75mm} [関数] \\
+dims \&key \= (:element-type vector) \` [関数] \\
 \> (:initial-contents nil) \\
 \> (:initial-element nil) \\
 \> (:fill-pointer nil)  \\
 \> (:displaced-to nil) \\
 \> (:displaced-index-offset 0) \\
 \> (:adjustable nil)}
-{$B%Y%/%H%k$+9TNs$r:n$k!#(B
-{\em dims}$B$O!"@0?t$+%j%9%H$G$"$k!#(B
-$B$b$7(B{\em dims}$B$,@0?t$J$i!"0l<!85%Y%/%H%k$,:n$i$l$k!#(B}
+{ベクトルか行列を作る。
+{\em dims}は、整数かリストである。
+もし{\em dims}が整数なら、一次元ベクトルが作られる。}
 
 \funcdesc{svref}{vector pos}{
-{\em vector}$B$N(B{\em pos}$BHVL\$NMWAG$rJV$9!#(B
-{\em vector}$B$O!"0l<!850lHL%Y%/%H%k$G$J$1$l$P$J$i$J$$!#(B}
+{\em vector}の{\em pos}番目の要素を返す。
+{\em vector}は、一次元一般ベクトルでなければならない。}
 
 \funcdesc{aref}{vector \&rest (indices)}{
-{\em vector}$B$N(B{\em indices}$B$K$h$C$F%$%s%G%C%/%9$5$l$kMWAG$rJV$9!#(B
-{\em indices}$B$O!"@0?t$G$"$j!"(B{\em vector}$B$N<!85$N?t$@$1;XDj$9$k!#(B
-{\bf aref}$B$O!"Hs8zN(E*$G$"$k!#$J$<$J$i!"(B{\em vector}$B$N7?$K=>$&$h$&$K(B
-$BJQ99$9$kI,MW$,$"$k$?$a$G$"$k!#%3%s%Q%$%k%3!<%I$NB.EY$r2~A1$9$k(B
-$B$?$a!"$G$-$k$@$17?$N@k8@$rM?$($k$Y$-$G$"$k!#(B}
+{\em vector}の{\em indices}によってインデックスされる要素を返す。
+{\em indices}は、整数であり、{\em vector}の次元の数だけ指定する。
+{\bf aref}は、非効率的である。なぜなら、{\em vector}の型に従うように
+変更する必要があるためである。コンパイルコードの速度を改善する
+ため、できるだけ型の宣言を与えるべきである。}
 
 \funcdesc{vector-push}{val array}{
-{\em array}$B$N(Bfill-pointer$BHVL\$N%9%m%C%H$K(B{\em val}$B$rJ]4I$9$k!#(B
-{\em array}$B$O!"(Bfill-pointer$B$r;}$C$F$$$J$1$l$P$J$i$J$$!#(B
-{\em val}$B$,J]4I$5$l$?8e!"(B
-fill-pointer$B$O!"<!$N0LCV$K%]%$%s%H$r(B1$B$D?J$a$i$l$k!#(B
-$B$b$7!"9TNs$N6-3&$h$j$bBg$-$/$J$C$?$H$-!"%(%i!<$,Js9p$5$l$k!#(B}
+{\em array}のfill-pointer番目のスロットに{\em val}を保管する。
+{\em array}は、fill-pointerを持っていなければならない。
+{\em val}が保管された後、
+fill-pointerは、次の位置にポイントを1つ進められる。
+もし、行列の境界よりも大きくなったとき、エラーが報告される。}
 
 \funcdesc{vector-push-extend}{val array}{
-{\em array}$B$N(Bfill-pointer$B$,:G8e$KE~C#$7$?$H$-!"<+F0E*$K(B{\em array}$B$N%5%$%:$,(B
-$B3HD%$5$l$k$3$H$r=|$$$F$O!"(B{\bf vector-push}$B$HF1$8$G$"$k!#(B}
+{\em array}のfill-pointerが最後に到達したとき、自動的に{\em array}のサイズが
+拡張されることを除いては、{\bf vector-push}と同じである。}
 
 \funcdesc{arrayp}{obj}
-{$B$b$7(B{\em obj}$B$,9TNs$^$?$O%Y%/%H%k$N%$%s%9%?%s%9$G$"$k$J$i(BT$B$rJV$9!#(B}
+{もし{\em obj}が行列またはベクトルのインスタンスであるならTを返す。}
 
 \funcdesc{array-total-size}{array}{
 
-{\em array}$B$NMWAG?t$N9g7W$rJV$9!#(B}
-\funcdesc{fill-pointer}{array}{{\em array}$B$N(Bfill-pointer$B$rJV$9!#(B
-file-pointer$B$r;}$C$F$$$J$1$l$P(BNIL$B$rJV$9!#(B}
-\funcdesc{array-rank}{array}{{\em array}$B$N<!85?t$rJV$9!#(B}
+{\em array}の要素数の合計を返す。}
+\funcdesc{fill-pointer}{array}{{\em array}のfill-pointerを返す。
+file-pointerを持っていなければNILを返す。}
+\funcdesc{array-rank}{array}{{\em array}の次元数を返す。}
 \funcdesc{array-dimensions}{array}{
-{\em array}$B$N3F<!85$NMWAG?t$r%j%9%H$GJV$9!#(B}
+{\em array}の各次元の要素数をリストで返す。}
 
 \funcdesc{array-dimension}{array axis}{
-{\bf array-dimension}$B$O!"(B{\em array}$B$N(B{\em axis}
-$BHVL\$N<!85$rJV$9!#(B{\em axis}$B$O%<%m$+$i;O$^$k!#(B}
+{\bf array-dimension}は、{\em array}の{\em axis}
+番目の次元を返す。{\em axis}はゼロから始まる。}
 
 \funcdesc{bit}{bitvec index}{
-{\em bitvec}$B$N(B{\em index}$BHVL\$NMWAG$rJV$9!#(B
-$B%S%C%H%Y%/%H%k$NMWAG$rJQ99$9$k$K$O!"(B{\bf setf}$B$H(B{\bf bit}$B$r;HMQ$9$k$3$H!#(B}
+{\em bitvec}の{\em index}番目の要素を返す。
+ビットベクトルの要素を変更するには、{\bf setf}と{\bf bit}を使用すること。}
 \fundesc{bit-and}{bits1 bits2 \&optional result}
 \fundesc{bit-ior}{bits1 bits2 \&optional result}
 \fundesc{bit-xor}{bits1 bits2 \&optional result}
@@ -480,215 +480,215 @@ file-pointer$B$r;}$C$F$$$J$1$l$P(BNIL$B$rJV$9!#(B}
 \fundesc{bit-nand}{bits1 bits2 \&optional result}
 \fundesc{bit-nor}{bits1 bits2 \&optional result}
 \funcdesc{bit-not}{bits1 \&optional result}{
-$BF1$8D9$5$N(B{\em bits1}$B$H(B{\em bits2}$B$H$$$&%S%C%H%Y%/%H%k$K$*$$$F!"(B
-$B$=$l$i$N(Band, inclusive-or,
-exclusive-or, $BEy2A(B, not-and, not-or$B$H(Bnot$B$,$=$l$>$lJV$5$l$k!#(B}
+同じ長さの{\em bits1}と{\em bits2}というビットベクトルにおいて、
+それらのand, inclusive-or,
+exclusive-or, 等価, not-and, not-orとnotがそれぞれ返される。}
 
 \end{refdesc}
 
 \newpage
 
-\subsection{$BJ8;z$HJ8;zNs(B}
+\subsection{文字と文字列}
 
-EusLisp$B$K$O!"J8;z7?$,$J$$!#(B
-$BJ8;z$O!"(B{\tt integer}$B$K$h$C$FI=8=$5$l$F$$$k!#(B
-$B%U%!%$%kL>$r8=$o$9J8;zNs$r07$&$?$a$K$O!"(B
-\ref{Pathnames}$B@a$K=q$+$l$F$$$k(B{\bf pathname}$B$r;H$&$3$H!#(B
+EusLispには、文字型がない。
+文字は、{\tt integer}によって表現されている。
+ファイル名を現わす文字列を扱うためには、
+\ref{Pathnames}節に書かれている{\bf pathname}を使うこと。
 
 \begin{refdesc}
 
 \funcdesc{digit-char-p}{ch}{
-$B$b$7(B{\em ch}$B$,(B{\tt \#$\backslash$0}$B!A(B{\tt \#$\backslash$9}$B$J$i(BT$B$rJV$9!#(B}
+もし{\em ch}が{\tt \#$\backslash$0}〜{\tt \#$\backslash$9}ならTを返す。}
 
 \funcdesc{alpha-char-p}{ch}{
-$B$b$7(B{\em ch}$B$,(B{\tt \#$\backslash$A}$B!A(B{\tt \#$\backslash$Z}$B$^$?$O(B
-{\tt \#$\backslash$a}$B!A(B{\tt \#$\backslash$z}$B$J$i!"(BT$B$rJV$9!#(B}
+もし{\em ch}が{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}または
+{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
 
 \funcdesc{upper-case-p}{ch}{
-$B$b$7(B{\em ch}$B$,(B{\tt \#$\backslash$A}$B!A(B{\tt \#$\backslash$Z}$B$J$i!"(BT$B$rJV$9!#(B}
+もし{\em ch}が{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}なら、Tを返す。}
 
 \funcdesc{lower-case-p}{ch}{
-$B$b$7(B{\em ch}$B$,(B{\tt \#$\backslash$a}$B!A(B{\tt \#$\backslash$z}$B$J$i!"(BT$B$rJV$9!#(B}
+もし{\em ch}が{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
 
 \funcdesc{alphanumeric-p}{ch}{
-$B$b$7(B{\em ch}$B$,(B{\tt \#$\backslash$0}$B!A(B{\tt \#$\backslash$9}$B!"(B
-{\tt \#$\backslash$A}$B!A(B{\tt \#$\backslash$Z}$B$^$?$O(B
-{\tt \#$\backslash$a}$B!A(B{\tt \#$\backslash$z}$B$J$i!"(BT$B$rJV$9!#(B}
+もし{\em ch}が{\tt \#$\backslash$0}〜{\tt \#$\backslash$9}、
+{\tt \#$\backslash$A}〜{\tt \#$\backslash$Z}または
+{\tt \#$\backslash$a}〜{\tt \#$\backslash$z}なら、Tを返す。}
 
 \funcdesc{char-upcase}{ch}{
-{\em ch}$B$rBgJ8;z$KJQ49$9$k!#(B}
+{\em ch}を大文字に変換する。}
 
 \funcdesc{char-downcase}{ch}{
-{\em ch}$B$r>.J8;z$KJQ49$9$k!#(B}
+{\em ch}を小文字に変換する。}
 
 \funcdesc{char}{string index}{
-{\em string}$B$N(B{\em index}$BHVL\$NJ8;z$rJV$9!#(B}
+{\em string}の{\em index}番目の文字を返す。}
 
 \funcdesc{schar}{string index}{
-{\em string}$B$+$iJ8;z$rH4$-=P$9!#(B
-{\em string}$B$N7?$,L@3N$K2r$C$F$$$F!"7?%A%'%C%/$rMW$7$J$$$H$-$N$_!"(B{\bf schar}
-$B$r;H$&$3$H!#(B}
+{\em string}から文字を抜き出す。
+{\em string}の型が明確に解っていて、型チェックを要しないときのみ、{\bf schar}
+を使うこと。}
 
 \funcdesc{stringp}{string}{
-{\em string}$B$,%P%$%H(B(256$B$h$j>.$5$$@5$N@0?t(B)$B$N%Y%/%H%k$J$i!"(BT$B$rJV$9!#(B}
+{\em string}がバイト(256より小さい正の整数)のベクトルなら、Tを返す。}
 
 \funcdesc{string-upcase}{str \&key :start :end}{
-{\em str}$B$rBgJ8;z$NJ8;zNs$KJQ49$7$F!"?7$7$$J8;zNs$rJV$9!#(B}
+{\em str}を大文字の文字列に変換して、新しい文字列を返す。}
 
 \funcdesc{string-downcase}{str \&key :start :end}{
-{\em str}$B$r>.J8;z$NJ8;zNs$KJQ49$7$F!"?7$7$$J8;zNs$rJV$9!#(B}
+{\em str}を小文字の文字列に変換して、新しい文字列を返す。}
 
 \funcdesc{nstring-upcase}{str}{
-{\em str}$B$rBgJ8;z$NJ8;zNs$KJQ49$7!"85$KCV$-49$($k!#(B}
+{\em str}を大文字の文字列に変換し、元に置き換える。}
 
 \funcdesc{nstring-downcase}{str \&key :start :end}{
-{\em str}$B$r>.J8;z$NJ8;zNs$KJQ49$7!"85$KCV$-49$($k!#(B}
+{\em str}を小文字の文字列に変換し、元に置き換える。}
 
 \funcdesc{string=}{str1 str2 \&key :start1 :end1 :start2 :end2}{
-$B$b$7(B{\em str1}$B$,(B{\em str2}$B$HEy$7$$$H$-!"(BT$B$rJV$9!#(B
-{\bf string=}$B$O!"BgJ8;z!&>.J8;z$rH=JL$9$k!#(B}
+もし{\em str1}が{\em str2}と等しいとき、Tを返す。
+{\bf string=}は、大文字・小文字を判別する。}
 
 \funcdesc{string-equal}{str1 str2 \&key :start1 :end1 :start2 :end2}{
-{\em str1}$B$H(B{\em str2}$B$NEy2A@-$r%F%9%H$9$k!#(B
-{\bf string-equal}$B$O!"BgJ8;z!&>.J8;z$rH=JL$7$J$$!#(B}
+{\em str1}と{\em str2}の等価性をテストする。
+{\bf string-equal}は、大文字・小文字を判別しない。}
 
 \funcdesc{string}{object}{
-{\em object}$B$NJ8;zNsI=8=$rF@$k!#(B
-$B$b$7(B{\em object}$B$,J8;zNs$J$i!"(B{\em object}$B$,JV$5$l$k!#(B
-$B$b$7(B{\em object}$B$,(Bsymbol$B$J$i!"$=$N(B{\tt pname}$B$,%3%T!<$5$l!"JV$5$l$k!#(B
-{\tt (equal (string 'a) (symbol-pname 'a))==T}$B$G$"$k$,!"(B
-{\tt (eq (string 'a) (symbol-pname 'a))==NIL}$B$G$"$k!#(B
-$B$b$7(B{\em object}$B$,?tCM$J$i!"$=$l$rJ8;zNs$K$7$?$b$N$,JV$5$l$k(B
-($B$3$l$O(BCommon Lisp$B$HHs8_49$G$"$k(B)$B!#(B
-$B$b$C$HJ#;($J%*%V%8%'%/%H$+$iJ8;zNsI=8=$rF@$k$?$a$K$O!"(B
-$B:G=i$N0z?t$r(BNIL$B$K$7$?(B{\bf format}$B4X?t$rMQ$$$k$3$H!#(B}
+{\em object}の文字列表現を得る。
+もし{\em object}が文字列なら、{\em object}が返される。
+もし{\em object}がsymbolなら、その{\tt pname}がコピーされ、返される。
+{\tt (equal (string 'a) (symbol-pname 'a))==T}であるが、
+{\tt (eq (string 'a) (symbol-pname 'a))==NIL}である。
+もし{\em object}が数値なら、それを文字列にしたものが返される
+(これはCommon Lispと非互換である)。
+もっと複雑なオブジェクトから文字列表現を得るためには、
+最初の引数をNILにした{\bf format}関数を用いること。}
 
 \fundesc{string$<$}{str1 str2}
 \fundesc{string$<=$}{str1 str2}
 \fundesc{string$>$}{str1 str2}
 \funcdesc{string$>=$}{str1 str2}{
-{\em str1}$B$H(B{\em str2}$B$r@hF,$+$i=gHV$KHf3S$7$F!"Hf3S1i;;$,@.N)$7$?0LCV(B
-$B$rJV$9!#$b$7!"@.N)$7$J$1$l$P!"(BNIL$B$rJV$9!#J8;z$NHf3S$O!"$=$NJ8;z$N%3!<%I$K(B
-$B$KBP$7$F9T$J$o$l$k$?$a!"(B{\tt A$<$Z}$B$G$"$k!#!#(B}
+{\em str1}と{\em str2}を先頭から順番に比較して、比較演算が成立した位置
+を返す。もし、成立しなければ、NILを返す。文字の比較は、その文字のコードに
+に対して行なわれるため、{\tt A$<$Z}である。。}
 
 \fundesc{string-left-trim}{bag str}
 \funcdesc{string-right-trim}{bag str}{
-{\em str}$B$O!":8!J1&!K$+$iC5:w$5$l!"$b$7(B{\em bag}$B%j%9%HFb$NJ8;z$r4^$s$G$$$k$J$i!"(B
-$B$=$NMWAG$r:o=|$9$k!#(B
-$B0lC6(B{\em bag}$B$K4^$^$l$J$$J8;z$,8+$D$+$k$H!"$=$N8e$NC5:w$OCf;_$5$l!"(B
-{\em str}$B$N;D$j$,JV$5$l$k!#(B}
+{\em str}は、左（右）から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
+その要素を削除する。
+一旦{\em bag}に含まれない文字が見つかると、その後の探索は中止され、
+{\em str}の残りが返される。}
 
 \funcdesc{string-trim}{bag str}{
-{\em bag}$B$O!"J8;z%3!<%I$NNs$G$"$k!#(B
-$BN>C<$K(B{\em bag}$B$K=q$+$l$?J8;z$r4^$^$J$$(B{\em str}$B$N%3%T!<$,:n$i$l!"JV$5$l$k!#(B}
+{\em bag}は、文字コードの列である。
+両端に{\em bag}に書かれた文字を含まない{\em str}のコピーが作られ、返される。}
 
 \funcdesc{substringp}{sub string}{
-{\em sub}$BJ8;zNs$,(B{\em string}$B$KItJ,J8;zNs$H$7$F4^$^$l$k$J$i!"(BT$B$rJV$9!#(B
-$BBgJ8;z!&>.J8;z$rH=JL$7$J$$!#(B}
+{\em sub}文字列が{\em string}に部分文字列として含まれるなら、Tを返す。
+大文字・小文字を判別しない。}
 
 \end{refdesc}
 
 \subsection{Foreign String}
-{\bf foreign-string}$B$O!"(BEusLisp$B$N%R!<%W30$K$"$k%P%$%H%Y%/%H%k$N(B1$B<o$G$"$k!#(B
-$BIaDL$NJ8;zNs$O!"D9$5$H%P%$%H$NNs$r;}$C$?%*%V%8%'%/%H$G$"$k$,!"(B
-foreign-string$B$O!"D9$5$HJ8;zNsK\BN$N%"%I%l%9$r;}$C$F$$$k!#(B
-foreign-string$B$OJ8;zNs$G$"$k$,!"(B
-$B$$$/$D$+$NJ8;zNs$*$h$SNs$KBP$9$k4X?t$OE,MQ$G$-$J$$!#(B
-{\bf length}$B!"(B{\bf aref}$B!"(B{\bf replace}$B!"(B{\bf subseq}$B$H(B{\bf copy-seq}$B$@$1$,(B
-foreign-string$B$rG'<1$7!"(B 
-$B$=$NB>$N4X?t$NE,MQ$O%/%i%C%7%e$N860x$H$J$k62$l$,$"$k!#(B
+{\bf foreign-string}は、EusLispのヒープ外にあるバイトベクトルの1種である。
+普通の文字列は、長さとバイトの列を持ったオブジェクトであるが、
+foreign-stringは、長さと文字列本体のアドレスを持っている。
+foreign-stringは文字列であるが、
+いくつかの文字列および列に対する関数は適用できない。
+{\bf length}、{\bf aref}、{\bf replace}、{\bf subseq}と{\bf copy-seq}だけが
+foreign-stringを認識し、 
+その他の関数の適用はクラッシュの原因となる恐れがある。
 
-foreign-string$B$O!"(B/dev/a??d??(??$B$O(B32$B$"$k$$$O(B16)$B$NFC<l%U%!%$%k$GM?$($i$l$k(B
-I/O$B6u4V$r;2>H$9$k$3$H$,$"$k!#(B
-$B$=$N%G%P%$%9$,%P%$%H%"%/%;%9$K$N$_1~Ez$9$k(BI/O$B6u4V$N0l$D$K(B
-$B3d$jEv$F$i$l$?>l9g!"(B
-{\bf replace}$B$O!"$$$D$b%P%$%HKh$KMWAG$r%3%T!<$9$k!#(B
-$B%a%b%j$N(Blarge chunk$B$rO"B3E*$K%"%/%;%9$7$?$H$-!"Hf3SE*$KCY$/F0:n$9$k!#!#(B
+foreign-stringは、/dev/a??d??(??は32あるいは16)の特殊ファイルで与えられる
+I/O空間を参照することがある。
+そのデバイスがバイトアクセスにのみ応答するI/O空間の一つに
+割り当てられた場合、
+{\bf replace}は、いつもバイト毎に要素をコピーする。
+メモリのlarge chunkを連続的にアクセスしたとき、比較的に遅く動作する。。
 
 \begin{refdesc}
 \funcdesc{make-foreign-string}{address length}{
-{\em address}$B$N0LCV$+$i(B{\em length}$B%P%$%H$N(B
-{\bf foreign-string}$B$N%$%s%9%?%s%9$r:n$k!#(B
-$BNc$($P!"(B{\tt (make-foreign-string (unix:malloc 32) 32)}$B$O!"(B
-EusLisp$B$N%R!<%W30$K0LCV$9$k(B32$B%P%$%H%a%b%j$r;2>HItJ,$H$7$F:n$k!#(B}
+{\em address}の位置から{\em length}バイトの
+{\bf foreign-string}のインスタンスを作る。
+例えば、{\tt (make-foreign-string (unix:malloc 32) 32)}は、
+EusLispのヒープ外に位置する32バイトメモリを参照部分として作る。}
 
 \end{refdesc}
 \newpage
 
-\subsection{$B%O%C%7%e%F!<%V%k(B}
+\subsection{ハッシュテーブル}
 
-hash-table$B$O!"%-!<$GO"A[$5$l$kCM$rC5$9$?$a$N%/%i%9$G$"$k!J(B{\bf assoc}$B$G$b$G$-$k!K!#(B
-$BHf3SE*Bg$-$JLdBj$K$*$$$F!"(Bhash-table$B$O(Bassoc$B$h$jNI$$@-G=$r=P$9!#(B
-$B%-!<$HCM$NAH?t$,A}2C$7$F$bC5:w$KMW$9$k;~4V$O!"0lDj$N$^$^$G$"$k!#(B
-$B4JC1$K8@$&$H!"(Bhash-table$B$O(B100$B0J>e$NMWAG$+$iC5$9>l9g$KMQ$$!"(B
-$B$=$l$h$j>.$5$$>l9g$O(Bassoc$B$rMQ$$$k$Y$-$G$"$k!#(B
+hash-tableは、キーで連想される値を探すためのクラスである（{\bf assoc}でもできる）。
+比較的大きな問題において、hash-tableはassocより良い性能を出す。
+キーと値の組数が増加しても探索に要する時間は、一定のままである。
+簡単に言うと、hash-tableは100以上の要素から探す場合に用い、
+それより小さい場合はassocを用いるべきである。
 
-hash-table$B$O!"%F!<%V%k$NMWAG?t$,(Brehash-size$B$r1[$($?$J$i!"<+F0E*$K3HD%$5$l$k!#(B
-$B%G%U%)%k%H$H$7$F!"%F!<%V%k$NH>J,$,K~$?$5$l$?$H$-3HD%$,5/$3$k$h$&$K$J$C$F$$$k!#(B
-{\bf sxhash}$B4X?t$O!"%*%V%8%'%/%H$N%a%b%j%"%I%l%9$HL54X78$J%O%C%7%eCM$r(B
-$BJV$7!"%*%V%8%'%/%H$,Ey$7$$(B(equal)$B$H$-$N%O%C%7%eCM$O$$$D$bF1$8$G$"$k!#(B
-$B$=$l$G!"(Bhash-table$B$O%G%U%)%k%H$N%O%C%7%e4X?t$K(B{\bf sxhash}$B$r;HMQ$7$F$$$k(B
-$B$N$G!":F%m!<%I2DG=$G$"$k!#(B
-{\bf sxhash}$B$,%m%P%9%H$G0BA4$J4V$O!"(B
-$BNs$d(Btree$B$NCf$N$9$Y$F$NMWAG$rC5:w$9$k$?$a!"Hf3SE*$KCY$$!#(B
-$B9bB.$J%O%C%7%e$N$?$a$K$O!"%"%W%j%1!<%7%g%s$K$h$jB>$NFCDj$N%O%C%7%e4X?t$r(B
-$BA*$s$@J}$,$h$$!#(B
-$B%O%C%7%e4X?t$rJQ$($k$?$a$K$O!"(Bhash-table$B$K(B{\tt :hash-function}$B%a%C%;!<%8$r(B
-$BAw?.$9$l$PNI$$!#(B
-$B4JC1$J>l9g!"%O%C%7%e4X?t$r(B{\tt \#'sxhash}$B$+$i(B
-{\tt \#'sys:address}$B$KJQ99$9$l$P$h$$!#(B
-EusLisp$BFb$N%*%V%8%'%/%H$N%"%I%l%9$O(B
-$B7h$7$FJQ99$5$l$J$$$?$a!"(B{\tt \#'sys:address}$B$r@_Dj$9$k$3$H$,$G$-$k!#(B
+hash-tableは、テーブルの要素数がrehash-sizeを越えたなら、自動的に拡張される。
+デフォルトとして、テーブルの半分が満たされたとき拡張が起こるようになっている。
+{\bf sxhash}関数は、オブジェクトのメモリアドレスと無関係なハッシュ値を
+返し、オブジェクトが等しい(equal)ときのハッシュ値はいつも同じである。
+それで、hash-tableはデフォルトのハッシュ関数に{\bf sxhash}を使用している
+ので、再ロード可能である。
+{\bf sxhash}がロバストで安全な間は、
+列やtreeの中のすべての要素を探索するため、比較的に遅い。
+高速なハッシュのためには、アプリケーションにより他の特定のハッシュ関数を
+選んだ方がよい。
+ハッシュ関数を変えるためには、hash-tableに{\tt :hash-function}メッセージを
+送信すれば良い。
+簡単な場合、ハッシュ関数を{\tt \#'sxhash}から
+{\tt \#'sys:address}に変更すればよい。
+EusLisp内のオブジェクトのアドレスは
+決して変更されないため、{\tt \#'sys:address}を設定することができる。
 
 \begin{refdesc}
 
 \funcdesc{sxhash}{obj}{
-{\em obj}$B$N%O%C%7%eCM$r7W;;$9$k!#(B
-{\bf equal}$B$J(B2$B$D$N%*%V%8%'%/%H$G$O!"F1$8%O%C%7%eCM$r@8$8$k$3$H(B
-$B$,J]>Z$5$l$F$$$k!#(B
-symbol$B$J$i!"$=$N(Bpname$B$KBP$9$k%O%C%7%eCM$rJV$9!#(B
-number$B$J$i!"$=$N(B{\tt integer}$BI=8=$rJV$9!#(B
-list$B$J$i!"$=$NMWAGA4$F$N%O%C%7%eCM$N9g7W$,JV$5$l$k!#(B
-string$B$J$i!"$=$l$>$l$NJ8;z%3!<%I$N9g7W$r%7%U%H$7$?$b$N$,JV$5$l$k!#(B
-$B$=$NB>$I$s$J%*%V%8%'%/%H$G$b!"(B{\bf sxhash}$B$O$=$l$>$l$N%9%m%C%H$N%O%C%7%eCM$r(B
-$B:F5"E*8F=P$7$G7W;;$7!"$=$l$i$N9g7W$rJV$9!#(B}
+{\em obj}のハッシュ値を計算する。
+{\bf equal}な2つのオブジェクトでは、同じハッシュ値を生じること
+が保証されている。
+symbolなら、そのpnameに対するハッシュ値を返す。
+numberなら、その{\tt integer}表現を返す。
+listなら、その要素全てのハッシュ値の合計が返される。
+stringなら、それぞれの文字コードの合計をシフトしたものが返される。
+その他どんなオブジェクトでも、{\bf sxhash}はそれぞれのスロットのハッシュ値を
+再帰的呼出しで計算し、それらの合計を返す。}
 
 \funcdesc{make-hash-table}{\&key (:size 30) (:test \#'eq) (:rehash-size 2.0)}{
-hash-table$B$r:n$j!"JV$9!#(B}
+hash-tableを作り、返す。}
 
 
 \funcdesc{gethash}{key htab}{
-{\em htab}$B$NCf$+$i(B{\em key}$B$H0lCW$9$kCM$rF@$k!#(B
-{\bf gethash}$B$O!"(B{\bf setf}$B$rAH$_9g$;$k$3$H$K$h$j(B{\em key}$B$KCM$r@_Dj$9$k(B
-$B$3$H$K$b;HMQ$5$l$k!#(B
-hash-table$B$K?7$7$$CM$,EPO?$5$l!"$=$N%F!<%V%k$NKd$^$C$?%9%m%C%H$N?t$,(B
-1/rehash-size$B$r1[$($?$H$-!"(Bhash-table$B$O<+F0E*$K(B2$BG\$NBg$-$5$K3HD%$5$l$k!#(B}
+{\em htab}の中から{\em key}と一致する値を得る。
+{\bf gethash}は、{\bf setf}を組み合せることにより{\em key}に値を設定する
+ことにも使用される。
+hash-tableに新しい値が登録され、そのテーブルの埋まったスロットの数が
+1/rehash-sizeを越えたとき、hash-tableは自動的に2倍の大きさに拡張される。}
 
 \funcdesc{remhash}{key htab}{
-{\em htab}$B$NCf$+$i(B{\em key}$B$G;XDj$5$l$?%O%C%7%eEPO?$r:o=|$9$k!#(B}
+{\em htab}の中から{\em key}で指定されたハッシュ登録を削除する。}
 
 \funcdesc{maphash}{function htab }{
-{\em htab}$B$NMWAGA4$F$r(B{\em function}$B$G(B{\bf map}$B$9$k!#(B}
+{\em htab}の要素全てを{\em function}で{\bf map}する。}
 
 \funcdesc{hash-table-p}{x}{
-$B$b$7(B{\em x}$B$,(Bhash-table$B%/%i%9$N%$%s%9%?%s%9$J$i!"(BT$B$rJV$9!#(B}
+もし{\em x}がhash-tableクラスのインスタンスなら、Tを返す。}
 
 \classdesc{hash-table}{object}
 {(key value count \\
 \> hash-function test-function \\
 \> rehash-size empty deleted)}{
-hash-table$B$rDj5A$9$k!#(B
-{\em key}$B$H(B{\em value}$B$OBg$-$5$,Ey$7$$0l<!85%Y%/%H%k$G$"$k!#(B
-{\em count}$B$O!"(B{\em key}$B$d(B{\em value}$B$,Kd$^$C$F$$$k?t$G$"$k!#(B
-{\em hash-function}$B$N%G%U%)%k%H$O(B{\bf sxhash}$B$G$"$k!#(B
-{\em test-function}$B$N%G%U%)%k%H$O(B{\bf eq}$B$G$"$k!#(B
-{\em empty}$B$H(B{\em deleted}$B$O!"(B{\em key}$B%Y%/%H%k$N$J$+$G6u$^$?$O:o=|$5$l$?(B
-$B?t$r<($9(Bsymbol($B%Q%C%1!<%8$K<}MF$5$l$F$$$J$$!K$G$"$k!#(B}
+hash-tableを定義する。
+{\em key}と{\em value}は大きさが等しい一次元ベクトルである。
+{\em count}は、{\em key}や{\em value}が埋まっている数である。
+{\em hash-function}のデフォルトは{\bf sxhash}である。
+{\em test-function}のデフォルトは{\bf eq}である。
+{\em empty}と{\em deleted}は、{\em key}ベクトルのなかで空または削除された
+数を示すsymbol(パッケージに収容されていない）である。}
 
 \methoddesc{:hash-function}{newhash}{
-$B$3$N(Bhash-table$B$N%O%C%7%e4X?t$r(B{\em newhash}$B$KJQ99$9$k!#(B
-{\em newhash}$B$O!"(B1$B$D$N0z?t$r;}$A!"(B{\tt integer}$B$rJV$94X?t$G$J$1$l$P$J$i$J$$!#(B
-{\em newhash}$B$N(B1$B$D$N8uJd$H$7$F(B{\bf sys:address}$B$,$"$k!#(B}
+このhash-tableのハッシュ関数を{\em newhash}に変更する。
+{\em newhash}は、1つの引数を持ち、{\tt integer}を返す関数でなければならない。
+{\em newhash}の1つの候補として{\bf sys:address}がある。}
 
 \end{refdesc}
 

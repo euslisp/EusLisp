@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�]���֐�</TITLE>
-<META NAME="description" CONTENT="�]���֐�">
+<TITLE>評価関数</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="評価関数">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1297"
-  HREF="jmanual-node65.html">�ŏ�ʃ��x���̑Θb</A>
+  HREF="jmanual-node65.html">最上位レベルの対話</A>
 <B> Up:</B> <A NAME="tex2html1291"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
 <B> Previous:</B> <A NAME="tex2html1285"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
  &nbsp; <B>  <A NAME="tex2html1293"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1295"
@@ -58,63 +59,63 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03091000000000000000">
-�]���֐�</A>
+評価関数</A>
 </H2>
 
 <P>
-�G���[��V�O�i��(signal)�Ɋւ���U�镑�����������߂ɁA
-���炩���߂��ꂼ����ʂ̕ϐ�<B>*error-handler*</B>��<B>*signal-handler*</B>
-�ɓK���Ȋ֐���ݒ肷��B
-�C�����邢�͑��s�ł���G���[�͂Ȃ��B
-�G���[����͌�A���݂̎��s��<B>reset</B>�܂��͏�ʃ��x���ւ̓K����<B>throw</B>
-�ɂ���Ē�~���Ȃ���΂Ȃ�Ȃ��B
-Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
-<B>reset</B>�́A<TT>(throw 0 NIL)</TT>�Ɠ����ł���B
+エラーやシグナル(signal)に関する振る舞いを示すために、
+あらかじめそれぞれ特別の変数<B>*error-handler*</B>と<B>*signal-handler*</B>
+に適当な関数を設定する。
+修正あるいは続行できるエラーはない。
+エラーを解析後、現在の実行を<B>reset</B>または上位レベルへの適当な<B>throw</B>
+によって停止しなければならない。
+Euslispの最上位レベルで<TT>0</TT>と名付けられたcatch frameを作成しているので、
+<B>reset</B>は、<TT>(throw 0 NIL)</TT>と同等である。
 
 <P>
-�G���[�n���h���[�́A<EM>code msg1 form &amp;optional (msg2)</EM>
-�Ƃ���3���邢��4�̈����������֐��Ƃ��Ē�`���Ȃ���΂Ȃ�Ȃ��B
-<EM>code</EM>�̓G���[�R�[�h�ŁA�V�X�e���Œ�`���ꂽ�G���[�������B
-�Ⴆ�΁A14��'������������Ȃ�'�A13��'�֐�����`����Ă��Ȃ�'�ƂȂ�B
-�����̒�`�́A"c/eus.h"�̒��ɒ�`����Ă���B
-<EM>msg1</EM>��<EM>msg2</EM>�́A���[�U�[�Ɏ�����郁�b�Z�[�W�ł���B
-<EM>form</EM>�́A�G���[�ɂ���Đ�����s�\���ł���B
+エラーハンドラーは、<EM>code msg1 form &amp;optional (msg2)</EM>
+という3つあるいは4つの引き数を持つ関数として定義しなければならない。
+<EM>code</EM>はエラーコードで、システムで定義されたエラーを示す。
+例えば、14が'引き数が合わない'、13が'関数が定義されていない'となる。
+これらの定義は、"c/eus.h"の中に定義されている。
+<EM>msg1</EM>と<EM>msg2</EM>は、ユーザーに示されるメッセージである。
+<EM>form</EM>は、エラーによって生じたs表現である。
 
 <P>
-�V�O�i���n���h���[�́A<EM>sig</EM>��<EM>code</EM>��2�̈��������󂯂�֐��Ƃ���
-��`����Ȃ���΂Ȃ�Ȃ��B
-<EM>sig</EM>�́A1����30�܂ł̃V�O�i���ԍ��ł���B
-<EM>code</EM>�́A�V�O�i���ԍ��̒��ɒ�`���ꂽ�⏕�ԍ��ł���B
+シグナルハンドラーは、<EM>sig</EM>と<EM>code</EM>の2つの引き数を受ける関数として
+定義されなければならない。
+<EM>sig</EM>は、1から30までのシグナル番号である。
+<EM>code</EM>は、シグナル番号の中に定義された補助番号である。
 
 <P>
-�ŏ�ʃ��x���ł�<code>^</code>D(<EM>end-of-file</EM>)�́AEuslisp�̊������~������B
-����́AEuslisp���t�B���^�[�Ƃ��ăv���O��������Ă���Ƃ�
-���ɗ��B
+最上位レベルでの<code>^</code>D(<EM>end-of-file</EM>)は、Euslispの活動を停止させる。
+これは、Euslispをフィルターとしてプログラムされているとき
+役に立つ。
 
 <P>
-<B>eval-dynamic</B>�́Alet��lambda�ϐ��Ƃ��Ďg�p�����symbol�Ɍ��ѕt��
-���I�ȕϐ���{���֐��ł���B
-�f�o�b�O����Ƃ��ɖ��ɗ��B
+<B>eval-dynamic</B>は、letやlambda変数として使用されるsymbolに結び付く
+動的な変数を捜す関数である。
+デバッグするときに役に立つ。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="17857"></A>
-<B>identity</B> <EM>obj </EM>[�֐�]
+<A NAME="17854"></A>
+<B>identity</B> <EM>obj </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>obj</EM>���g��Ԃ��B
-<B>idnetity</B>��<B>quote</B>�Ƃ̈Ⴂ�ɒ��ӂ��邱�ƁB
-<B>identity</B>���֐��ł���̂ɑ΂���<B>quote</B>�́A���ꏑ��(special form)
-�ł���B
-���������āA<TT>(identity 'abc)</TT>��<TT>abc</TT>�ƕ]������邪�A
-<TT>(quote 'abc) == (quote (quote abc))</TT>��<TT>'abc</TT>�ƕ]�������B
-<B>identity</B>�́A�����̈�ʗ�֐���<EM>:key</EM>�p�����[�^�̃f�t�H���g�l
-�Ƃ��Ă��΂��Ηp������B
+<EM>obj</EM>自身を返す。
+<B>idnetity</B>と<B>quote</B>との違いに注意すること。
+<B>identity</B>が関数であるのに対して<B>quote</B>は、特殊書式(special form)
+である。
+したがって、<TT>(identity 'abc)</TT>は<TT>abc</TT>と評価されるが、
+<TT>(quote 'abc) == (quote (quote abc))</TT>は<TT>'abc</TT>と評価される。
+<B>identity</B>は、多くの一般列関数の<EM>:key</EM>パラメータのデフォルト値
+としてしばしば用いられる。
 </DD>
 </DL>
 <BR>
@@ -122,15 +123,15 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="17878"></A>
-<B>eval</B> <EM>form [environment] </EM>[�֐�]
+<A NAME="17875"></A>
+<B>eval</B> <EM>form [environment] </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>form</EM>��]�����āA���̒l��Ԃ��B
-�����A<B>*evalhook*</B>��<EM>form</EM>��<EM>environment</EM>���󂯂�֐���
-�ݒ肷��Ȃ�΁Ahook�֐���]���ɓ���O�ɌĂяo�����Ƃ��ł���B
+<EM>form</EM>を評価して、その値を返す。
+もし、<B>*evalhook*</B>に<EM>form</EM>や<EM>environment</EM>を受ける関数を
+設定するならば、hook関数を評価に入る前に呼び出すことができる。
 </DD>
 </DL>
 <BR>
@@ -138,20 +139,20 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="17892"></A>
-<B>apply</B> <EM>func &amp;rest args </EM>[�֐�]
+<A NAME="17889"></A>
+<B>apply</B> <EM>func &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>args</EM>��<EM>func</EM>��K�p����B
-<EM>func</EM>�́A�֐�symbol��lambda������closure�łȂ���΂Ȃ�Ȃ��B
-�}�N���Ɠ��ꏑ��(special form)�͓K�p�o���Ȃ��B
-<EM>args</EM>�̍Ō�̗v�f�́A����<EM>args</EM>����̈������ł���Ȃ�
-�������̃��X�g�łȂ���΂Ȃ�Ȃ��B
-���̂悤�ɁA�����A<EM>args</EM>�̍ŌオNIL�ł������Ȃ�΁A
-<B>apply</B>�͂قƂ��<B>funcall</B>�Ɠ����ł���B
-�������A<B>apply</B>��<B>funcall</B>���1�����̈������������Ƃ��ł���B
+<EM>args</EM>に<EM>func</EM>を適用する。
+<EM>func</EM>は、関数symbolかlambda書式かclosureでなければならない。
+マクロと特殊書式(special form)は適用出来ない。
+<EM>args</EM>の最後の要素は、他の<EM>args</EM>が空の引き数であるなら
+引き数のリストでなければならない。
+このように、もし、<EM>args</EM>の最後がNILであったならば、
+<B>apply</B>はほとんど<B>funcall</B>と同じである。
+ただし、<B>apply</B>は<B>funcall</B>より1つ多くの引き数を持つことができる。
 <TT>(apply #'max 2 5 3 '(8 2)) -&gt; 8</TT>.
 </DD>
 </DL>
@@ -160,15 +161,15 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="17913"></A>
-<B>funcall</B> <EM>func &amp;rest args </EM>[�֐�]
+<A NAME="17910"></A>
+<B>funcall</B> <EM>func &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>args</EM>��<EM>func</EM>��K�p����B
-<EM>args</EM>�̐��́A<EM>func</EM>�ŗv������Ă���������̐��ƈ�v���Ȃ����
-�Ȃ�Ȃ��B
+<EM>args</EM>に<EM>func</EM>を適用する。
+<EM>args</EM>の数は、<EM>func</EM>で要求されている引き数の数と一致しなければ
+ならない。
 </DD>
 </DL>
 <BR>
@@ -176,12 +177,12 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="17927"></A>
-<B>quote</B> <EM>obj </EM>[����]
+<A NAME="17924"></A>
+<B>quote</B> <EM>obj </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>obj</EM>���g��]������B
+<DD> <EM>obj</EM>自身を評価する。
 </DD>
 </DL>
 <BR>
@@ -189,13 +190,13 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="17938"></A>
-<B>function</B> <EM>func </EM>[����]
+<A NAME="17935"></A>
+<B>function</B> <EM>func </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
-<DD> closure�֐������B
-�����A<EM>func</EM>��symbol�Ȃ�΁A���̊֐���`�����������B
+<DD> closure関数を作る。
+もし、<EM>func</EM>がsymbolならば、その関数定義が検索される。
 </DD>
 </DL>
 <BR>
@@ -203,27 +204,13 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="17949"></A>
-<B>evalhook</B> <EM>hookfunc form [env] </EM>[�֐�]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>hookfun</EM>��<B>*evalhook*</B>�Ɍ��ѕt������A<EM>form</EM>����x�]������B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17962"></A>
-<B>eval-dynamic</B> <EM>variable </EM>[�֐�]
+<A NAME="17946"></A>
+<B>evalhook</B> <EM>hookfunc form [env] </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�X�^�b�N�ɂ���<EM>variable</EM>(symbol)�̒l��{���B
+<EM>hookfun</EM>を<B>*evalhook*</B>に結び付けた後、<EM>form</EM>を一度評価する。
 </DD>
 </DL>
 <BR>
@@ -231,15 +218,13 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="17973"></A>
-<B>macroexpand</B> <EM>form </EM>[�֐�]
+<A NAME="17959"></A>
+<B>eval-dynamic</B> <EM>variable </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�����A<EM>form</EM>���}�N��call�ł���Ȃ�A�����W�J����B
-�����A�W�J�������̂��܂��}�N��call���܂�ł���Ȃ�΁A
-�}�N��call�̂Ȃ����ʂƂȂ�܂ł���Ԃ��W�J����B
+スタックにある<EM>variable</EM>(symbol)の値を捜す。
 </DD>
 </DL>
 <BR>
@@ -247,26 +232,15 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="17984"></A>
-<B>eval-when</B> <EM>situation {form}* </EM>[����]
+<A NAME="17970"></A>
+<B>macroexpand</B> <EM>form </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>situation</EM>��<TT>compile, load, eval</TT>�̃��X�g�ł���B
-<EM>form</EM>�́A���݂̎��s���[�h��<EM>situation</EM>�ƈ�v����Ƃ��ɕ]�������B
-<B>eval-when</B>�́A�R���p�C���ł̓������𐧌䂷�邽�߂ɏd�v�Ȃ��̂ł���B
-�����A<TT>compile</TT>���w�肳�ꂽ�Ȃ�΁A<EM>form</EM>�̓R���p�C���ɂ����
-�]�������̂ŁA���̌��ʂ̓R���p�C�����ʂɉe�����y�ڂ����ƂɂȂ�B
-�Ⴆ�΁A<B>defmacro</B>�̓R���p�C�����Ƀ}�N��call��W�J���邽�߂ɃR���p�C����
-�]������Ȃ���΂Ȃ�Ȃ��B
-�����A<TT>load</TT>��<EM>situation</EM>�̃��X�g�ɗ^����ꂽ�Ȃ�΁A
-<EM>form</EM>��load����load�܂��͕]������邽�߂ɃR���p�C�������B
-���Ȃ킿�Aload���ɃR���p�C�����ꂽ�֐�����`�����B
-����́A�R���p�C���Ɋ��҂�����ʓI�ȋ@�\�ł���B
-<TT>load</TT>�́A�R���p�C���̊��𐧌䂷�邽�߂Ɏg�p�����B
-�����A<TT>eval</TT>��<EM>situation</EM>�̃��X�g�Ɋ܂܂�Ă���Ȃ�΁A
-<EM>form</EM>�̓\�[�X�R�[�h��load�����Ƃ��ɕ]�������B
+もし、<EM>form</EM>がマクロcallであるなら、それを展開する。
+もし、展開したものがまだマクロcallを含んでいるならば、
+マクロcallのない結果となるまでくり返し展開する。
 </DD>
 </DL>
 <BR>
@@ -274,15 +248,26 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="18009"></A>
-<B>the</B> <EM>type form </EM>[����]
+<A NAME="17981"></A>
+<B>eval-when</B> <EM>situation {form}* </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>form</EM>��<EM>type</EM>�Ƃ��Đ錾����B
-<EM>type</EM>�́A<TT>:integer, :fixnum, :float</TT>�Ŏ������N���X�I�u�W�F�N�g
-�̂ǂꂩ�ł���B
+<EM>situation</EM>は<TT>compile, load, eval</TT>のリストである。
+<EM>form</EM>は、現在の実行モードが<EM>situation</EM>と一致するときに評価される。
+<B>eval-when</B>は、コンパイラでの動作や環境を制御するために重要なものである。
+もし、<TT>compile</TT>が指定されたならば、<EM>form</EM>はコンパイラによって
+評価されるので、その結果はコンパイル結果に影響を及ぼすことになる。
+例えば、<B>defmacro</B>はコンパイル時にマクロcallを展開するためにコンパイラで
+評価されなければならない。
+もし、<TT>load</TT>が<EM>situation</EM>のリストに与えられたならば、
+<EM>form</EM>はload時にloadまたは評価されるためにコンパイルされる。
+すなわち、load時にコンパイルされた関数が定義される。
+これは、コンパイラに期待される一般的な機能である。
+<TT>load</TT>は、コンパイラの環境を制御するために使用される。
+もし、<TT>eval</TT>が<EM>situation</EM>のリストに含まれているならば、
+<EM>form</EM>はソースコードがloadされるときに評価される。
 </DD>
 </DL>
 <BR>
@@ -290,44 +275,60 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="18023"></A>
-<B>declare</B> <EM>declaration* </EM>[����]
+<A NAME="18006"></A>
+<B>the</B> <EM>type form </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���ꂼ��<EM>declaration</EM>�́A�錾�w��␮�����邢�͖ړI��symbol�̃��X�g�ł���B
-�錾�́A�R���p�C���������ȃR�[�h�𐶐����邽�߂ɏd�v�ł���B
+<EM>form</EM>を<EM>type</EM>として宣言する。
+<EM>type</EM>は、<TT>:integer, :fixnum, :float</TT>で示されるクラスオブジェクト
+のどれかである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18020"></A>
+<B>declare</B> <EM>declaration* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+それぞれ<EM>declaration</EM>は、宣言指定や整数あるいは目的のsymbolのリストである。
+宣言は、コンパイラが高速なコードを生成するために重要である。
 <DL>
 <DT></DT>
-<DD>special ����ϐ���錾����B
+<DD>special 特殊変数を宣言する。
 </DD>
 <DT></DT>
-<DD>type �ϐ��̌^��錾����B; <TT>(type integer count)</TT>;
-�L���Ȍ^�w��q��<EM>integer</EM>, <EM>:integer</EM>, <EM>fixnum</EM>,
-<EM>:float</EM>��<EM>float</EM>�ł���B�^�w��q�������Ɏ��������̂̂P�ł���
-�Ȃ�΁A<B>type</B>�L�[���[�h���폜���Ă��ǂ��B���̂��߁A
-<TT>(integer count)</TT>�͐������錾�ł���B
-<EM>float-vector</EM>,<EM>integer-vector</EM>�Ȃǂ̂悤�ȁA���̑��̌^�i�N���X�j�ł́A
-<TT>(type float-vector vec1)</TT>�̂悤��<B>type</B>��O�ɕt����K�v������B
+<DD>type 変数の型を宣言する。; <TT>(type integer count)</TT>;
+有効な型指定子は<EM>integer</EM>, <EM>:integer</EM>, <EM>fixnum</EM>,
+<EM>:float</EM>と<EM>float</EM>である。型指定子がここに示したものの１つである
+ならば、<B>type</B>キーワードを削除しても良い。そのため、
+<TT>(integer count)</TT>は正しい宣言である。
+<EM>float-vector</EM>,<EM>integer-vector</EM>などのような、その他の型（クラス）では、
+<TT>(type float-vector vec1)</TT>のように<B>type</B>を前に付ける必要がある。
 </DD>
 <DT></DT>
-<DD>ftype �֐��̌��ʂ̌^��錾����B
+<DD>ftype 関数の結果の型を宣言する。
 </DD>
 <DT></DT>
-<DD>optimize �R���p�C����*optimize*�p�����[�^�ɒl(0-3)��ݒ肷��B
+<DD>optimize コンパイラの*optimize*パラメータに値(0-3)を設定する。
 </DD>
 <DT></DT>
-<DD>safety �R���p�C����*safety*�p�����[�^�ɒl(0-3)��ݒ肷��B
+<DD>safety コンパイラの*safety*パラメータに値(0-3)を設定する。
 </DD>
 <DT></DT>
-<DD>space  �R���p�C����*space*�p�����[�^�ɒl(0-3)��ݒ肷��B
+<DD>space  コンパイラの*space*パラメータに値(0-3)を設定する。
 </DD>
 <DT></DT>
-<DD>inline �F�����Ȃ��B
+<DD>inline 認識しない。
 </DD>
 <DT></DT>
-<DD>not-inline �F�����Ȃ��B
+<DD>not-inline 認識しない。
 </DD>
 </DL>
 
@@ -337,16 +338,16 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 <BR>
 <BR>
 
-<A NAME="18056"></A>
-<B>proclaim</B> <EM>proclamation </EM>[�֐�]
+<A NAME="18053"></A>
+<B>proclaim</B> <EM>proclamation </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�ϐ���R���p�C���I�v�V�������O���[�o���ɐ錾����B
-���l�Ȑ錾�́A<B>declare</B>���ꏑ���ɂ���ċL�q���邱�Ƃ��ł���B
-�������Ȃ���A<B>proclaim</B>�́A1�̈��������֐��ł���A
-�錾��]������B
+変数やコンパイラオプションをグローバルに宣言する。
+同様な宣言は、<B>declare</B>特殊書式によって記述することができる。
+しかしながら、<B>proclaim</B>は、1つの引数を持つ関数であり、
+宣言を評価する。
 </DD>
 </DL>
 <BR>
@@ -354,53 +355,53 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 
 <P>
 
-<A NAME="18068"></A>
-<B>warn</B> <EM>format-string &amp;rest args </EM>[�֐�]
+<A NAME="18065"></A>
+<B>warn</B> <EM>format-string &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>format-string</EM>��<EM>args</EM>�ŗ^������x�����b�Z�[�W��
-<B>*error-output*</B>�ɏo�͂���B
+<EM>format-string</EM>と<EM>args</EM>で与えられる警告メッセージを
+<B>*error-output*</B>に出力する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18081"></A>
-<B>error</B> <EM>format-string &amp;rest args </EM>[�֐�]
+<A NAME="18078"></A>
+<B>error</B> <EM>format-string &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>*error-handler*</B>�Ɍ��ѕt�����݂̃G���[�n���h���[�֐����Ăяo���B
-�f�t�H���g�̃G���[�n���h���['euserror'��<B>*error-output*</B>�ɍŏ��ɏo�͂�
-<EM>format-string</EM>��<EM>args</EM>��<B>format</B>��p���ďo�͂���B
-���̌�A�V�����ŏ�ʃ��x���̃Z�b�V����(session)�ɓ���B
-�v�����v�g�ɂ́A�G���[�Z�b�V�����̐[���������B
-<B>throw</B>�ɂ��̔ԍ���^���邱�Ƃɂ��A�Ⴂ�G���[���x���̃Z�b�V�����֖߂邱�Ƃ��ł���B
+<B>*error-handler*</B>に結び付く現在のエラーハンドラー関数を呼び出す。
+デフォルトのエラーハンドラー'euserror'を<B>*error-output*</B>に最初に出力し
+<EM>format-string</EM>と<EM>args</EM>を<B>format</B>を用いて出力する。
+その後、新しい最上位レベルのセッション(session)に入る。
+プロンプトには、エラーセッションの深さを示す。
+<B>throw</B>にその番号を与えることにより、低いエラーレベルのセッションへ戻ることができる。
 </DD>
 </DL>
 <BR>
 <BR>
 
              <P>
-�}���`�X���b�hEuslisp�ɂ����āA����ϐ��̓X���b�h�Ԃŋ��L����A
-����<B>*error-handler*</B>���قȂ����X���b�h����Q�Ƃ����B
-���̕s���R������邽�߂ɁA�}���`�X���b�hEuslisp��<B>install-error-handler</B>
-�֐�������Ă���B���̊֐��́A���ꂼ��̃X���b�h�ɑ΂���
-�قȂ����G���[�n���h���[���C���X�g�[������B
+マルチスレッドEuslispにおいて、特殊変数はスレッド間で共有され、
+同じ<B>*error-handler*</B>が異なったスレッドから参照される。
+この不自由を避けるために、マルチスレッドEuslispは<B>install-error-handler</B>
+関数を備えている。その関数は、それぞれのスレッドに対して
+異なったエラーハンドラーをインストールする。
 
 <P>
 
  <BR>
-<BR> <A NAME="18097"></A>
-<B>install-error-handler</B> <EM>handler </EM>[�֐�]
+<BR> <A NAME="18094"></A>
+<B>install-error-handler</B> <EM>handler </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>handler</EM>�����݂̃X���b�h�̃G���[�n���h���[�Ƃ��ăC���X�g�[������B
+<EM>handler</EM>を現在のスレッドのエラーハンドラーとしてインストールする。
 </DD>
 </DL>
 <BR>
@@ -429,19 +430,19 @@ Euslisp�̍ŏ�ʃ��x����<TT>0</TT>�Ɩ��t����ꂽcatch frame���쐬���Ă���̂ŁA
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1297"
-  HREF="jmanual-node65.html">�ŏ�ʃ��x���̑Θb</A>
+  HREF="jmanual-node65.html">最上位レベルの対話</A>
 <B> Up:</B> <A NAME="tex2html1291"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
 <B> Previous:</B> <A NAME="tex2html1285"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
  &nbsp; <B>  <A NAME="tex2html1293"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1295"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

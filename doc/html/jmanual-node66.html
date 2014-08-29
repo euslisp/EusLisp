@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�R���p�C��</TITLE>
-<META NAME="description" CONTENT="�R���p�C��">
+<TITLE>コンパイル</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="コンパイル">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1325"
-  HREF="jmanual-node67.html">�v���O�������[�h</A>
+  HREF="jmanual-node67.html">プログラムロード</A>
 <B> Up:</B> <A NAME="tex2html1319"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
 <B> Previous:</B> <A NAME="tex2html1313"
-  HREF="jmanual-node65.html">�ŏ�ʃ��x���̑Θb</A>
+  HREF="jmanual-node65.html">最上位レベルの対話</A>
  &nbsp; <B>  <A NAME="tex2html1321"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1323"
@@ -59,132 +60,132 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H2><A NAME="SECTION03093000000000000000"></A><A NAME="compiler"></A>
 <BR>
-�R���p�C��
+コンパイル
 </H2>
 
 <P>
-Euslisp�R���p�C���́ALisp�v���O�����̎��s�����������邽�߂Ɏg�p�����B
-���s���Ԃ�5�`30�{�̍������ƃ}�N���W�J�ɂ��K�[�x�[�W�R���N�V����
-���Ԃ̑啝�Ȍ��������҂ł���B
+Euslispコンパイラは、Lispプログラムの実行を高速化するために使用される。
+実行時間の5〜30倍の高速化とマクロ展開によるガーベージコレクション
+時間の大幅な減少が期待できる。
 
 <P>
-euscomp�́A�v�Z�����ƃx�N�g�������̂��߂̍œK�����s���B
-�Ƃ��ǂ��R���p�C�����œK���������ǂ����s���邽�߂ɁA�ŗL�̌^�錾���K�v�ƂȂ�B
+euscompは、計算処理とベクトル処理のための最適化を行う。
+ときどきコンパイラが最適化を効率良く実行するために、固有の型宣言が必要となる。
 
 <P>
-<B>compile-function</B>�́A1���֐����R���p�C������B
-<B>compile-file</B>�́A���ׂẴ\�[�X�t�@�C�����R���p�C������B
-<B>compile-file</B>�����s���Ă���ԁA�t�@�C�����̂��ׂĂ̏������ǂݍ��܂�
-�]�������B
-����́A���݂�Euslisp�̊���ω�������B
-�Ⴆ�΁A<B>defparameter</B>��symbol�ɐV�����l��ݒ肷�邵�A
-<B>defun</B>�̓R���p�C������Ă��Ȃ��֐����R���p�C�����ꂽ�֐���
-�u��������B
-�����̗\�����Ȃ��e��������邽�߂ɂ́A<TT>compile</TT>�w��̂Ȃ�<B>eval-when</B>��
-�g�p������A<B>euscomp</B>���g�p���ĕʃv���Z�X�Ƃ��ăR���p�C�������s�����肷��B
+<B>compile-function</B>は、1つずつ関数をコンパイルする。
+<B>compile-file</B>は、すべてのソースファイルをコンパイルする。
+<B>compile-file</B>を実行している間、ファイル内のすべての書式が読み込まれ
+評価される。
+これは、現在のEuslispの環境を変化させる。
+例えば、<B>defparameter</B>はsymbolに新しい値を設定するし、
+<B>defun</B>はコンパイルされていない関数をコンパイルされた関数に
+置き換える。
+これらの予期しない影響を避けるためには、<TT>compile</TT>指定のない<B>eval-when</B>を
+使用したり、<B>euscomp</B>を使用して別プロセスとしてコンパイラを実行したりする。
 
 <P>
-<B>euscomp</B>��UNIX�̃R�}���h�ŁA����<B>eus</B>�ɃV���{���b�N�����N����Ă���B
-����̃I�v�V�����������Ă���B
--O�t���O��C�R���p�C���̍œK�����w�����A
--O1,-O2, -O3 �͂��ꂼ��Euslisp�R���p�C���̍œK���̃��x�����w������B
-����́A<TT>(optimize 1 or 2 or 3)</TT>�Ɛ錾����̂Ɠ����ł���B
--S0, -S1, -S2, -S3�́A<B>compiler:*safety*</B>��0,1,2,3��ݒ肷��B
-����<B>*safety*</B>��2��菬������΁A���荞�݃`�F�b�N�̂��߂̃R�[�h�𔭍s���Ȃ��B
-�����A�v���O�������������[�v�ɓ������Ƃ��A������������ƂɂȂ�B
-����<B>*safety*</B>��0�̂Ƃ��́A�������̐����`�F�b�N���Ȃ��B
--V�t���O�́A�R���p�C������Ă���֐�����\������B
--c�t���O�́Acc�̎��s��fork��h���B
--D�́A<B>*features*</B>���X�g�ɑ�����������u���B
-����́A�ǂݍ��݃}�N��<TT>#-</TT>��<TT>#+</TT>
-��p���������t���R���p�C���̂��߂Ɏg�p���邱�Ƃ��ł���B
+<B>euscomp</B>はUNIXのコマンドで、普通<B>eus</B>にシンボリックリンクされている。
+幾つかのオプションを持っている。
+-OフラグはCコンパイラの最適化を指示し、
+-O1,-O2, -O3 はそれぞれEuslispコンパイラの最適化のレベルを指示する。
+これは、<TT>(optimize 1 or 2 or 3)</TT>と宣言するのと同等である。
+-S0, -S1, -S2, -S3は、<B>compiler:*safety*</B>に0,1,2,3を設定する。
+もし<B>*safety*</B>が2より小さければ、割り込みチェックのためのコードを発行しない。
+もし、プログラムが無限ループに入ったとき、制御を失うことになる。
+もし<B>*safety*</B>が0のときは、引き数の数をチェックしない。
+-Vフラグは、コンパイルされている関数名を表示する。
+-cフラグは、ccの実行やforkを防ぐ。
+-Dは、<B>*features*</B>リストに続く引き数を置く。
+これは、読み込みマクロ<TT>#-</TT>と<TT>#+</TT>
+を用いた条件付きコンパイルのために使用することができる。
 
 <P>
-�R���p�C����"xxx.l"�Ƃ�������Euslisp�\�[�X�v���O������
-����C�v���O�����t�@�C��"xxx.c"
-�ƃw�b�_�[�t�@�C��"xxx.h"�ɕϊ�����B
-���ꂩ��AC�R���p�C�������s����A"xxx.o"�����������B
-���ԃt�@�C��"xxx.c"��"xxx.h"�̓N���X�R���p�C���̖ړI�̂��߂Ɏc�����B
-���������āA�Ⴄ�A�[�L�e�N�`���[�̋@�B�̏�Ŏg�p�������Ƃ��AUNIX���߂�cc��
-"xxx.c"�t�@�C�����R���p�C�����邾���ł悢�B
-�R���p�C�����ꂽ�R�[�h�́A'<TT>(load "xxx")</TT>'�ɂ����Euslisp�Ƀ��[�h�����B
+コンパイラは"xxx.l"という名のEuslispソースプログラムを
+中間Cプログラムファイル"xxx.c"
+とヘッダーファイル"xxx.h"に変換する。
+それから、Cコンパイラが実行され、"xxx.o"が生成される。
+中間ファイル"xxx.c"と"xxx.h"はクロスコンパイルの目的のために残される。
+したがって、違うアーキテクチャーの機械の上で使用したいとき、UNIX命令のccで
+"xxx.c"ファイルをコンパイルするだけでよい。
+コンパイルされたコードは、'<TT>(load "xxx")</TT>'によってEuslispにロードされる。
 
 <P>
-���ԃt�@�C���͂��ꂼ��A"eus.h"�w�b�_�[�t�@�C�����Q�Ƃ���B
-���̃t�@�C���́A<TT>*eusdir*/c</TT>�f�B���N�g���ɒu����Ă���Ɖ��肵�Ă���B
-<TT>*eusdir*</TT>�́A<TT>EUSDIR</TT>���ϐ�����R�s�[�����B
-�����ݒ肳��ĂȂ���΁A<TT>/usr/local/eus/</TT>���f�t�H���g�f�B���N�g��
-�Ƃ��Ĉ�����B
+中間ファイルはそれぞれ、"eus.h"ヘッダーファイルを参照する。
+このファイルは、<TT>*eusdir*/c</TT>ディレクトリに置かれていると仮定している。
+<TT>*eusdir*</TT>は、<TT>EUSDIR</TT>環境変数からコピーされる。
+もし設定されてなければ、<TT>/usr/local/eus/</TT>がデフォルトディレクトリ
+として扱われる。
 
 <P>
-�R���p�C�����ꂽ�Ƃ��A���Ԃ�C�v���O�����͕��ʌ��̃\�[�X�R�[�h����
-���Ȃ�傫���Ȃ�B�Ⴆ�΁A1,161�s��lisp�\�[�X�R�[�h"l/common.l"�́A
-8,194�s��"l/common.c"��544�s��"l/common.h"�ɓW�J�����B
-1,000�s��lisp�\�[�X���R���p�C������̂́A�����Ƃł͂Ȃ����A
-10,000�s�߂�C�̃v���O�������œK�R���p�C�����邱�Ƃ́A��������(����)������
-�ƂƂ��ɁA��������̃f�B�X�N��Ԃ������B
-���̂��߁A�������ΓI�ɑ傫�ȃv���O�����̃R���p�C��������Ȃ�΁A
-/var/tmp�ɏ\���ȃf�B�X�N�����邩�ǂ������m�F���邱�ƁB
-�����łȂ���΁ACC�͎��ʂ��낤�B
-<TT>TMPDIR</TT>���ϐ��������Ƒ傫�ȃf�B�X�N�����ɐݒ肷�邱�Ƃ������铹�ł���B
+コンパイルされたとき、中間のCプログラムは普通元のソースコードよりも
+かなり大きくなる。例えば、1,161行のlispソースコード"l/common.l"は、
+8,194行の"l/common.c"と544行の"l/common.h"に展開される。
+1,000行のlispソースをコンパイルするのは、難しい作業ではないが、
+10,000行近いCのプログラムを最適コンパイルすることは、長い時間(数分)かかる
+とともに、たくさんのディスク空間を消費する。
+そのため、もし相対的に大きなプログラムのコンパイルをするならば、
+/var/tmpに十分なディスクがあるかどうかを確認すること。
+そうでなければ、CCは死ぬだろう。
+<TT>TMPDIR</TT>環境変数をもっと大きなディスク部分に設定することが助かる道である。
 
 <P>
-�����N�����[�h���܂��͎��s���Ɏ��s�����̂ŁA
-eus�̃J�[�l�����o�[�W�����A�b�v����Ă��ăR���p�C������K�v�͂Ȃ��B
-��������ŁA���s�������N�͕s�ւȂ��Ƃ�����B
-�Q�̊֐�A��B��"x.l"�t�@�C���ɂ���A��B���Ăяo���Ă���Ɖ��肷��B
-"x.l"���R���p�C����A"x.o"�����[�h��������B���Ăяo���Ă���A���Ăяo�����Ƃ���B
-���ꂩ��AB�̒���bug��������ƁA���Ԃ�B���Ē�`���悤�Ƃ��邾�낤�B
-�����ŁA�R���p�C�����ꂽA�ƃR���p�C������Ă��Ȃ�B�Ƃ��ł���B
-�Ă�A���Ăяo�����Ƃ���ƁAA�͂܂��Â��R���p�C������Ă���B���Ăяo���B
-����́AA���ŏ���B���Ăяo�����Ƃ��Œ�I�Ƀ����N����邩��ł���B
-���̖�������邽�߂ɂ́AA���Ē�`���Ȃ��������邢��"x.o"�����[�h���ꂽ�����
-A���Ăяo���O��B���Ē�`���Ȃ���΂Ȃ�Ȃ��B
+リンクがロード時または実行時に実行されるので、
+eusのカーネルがバージョンアップされても再コンパイルする必要はない。
+もう一方で、実行時リンクは不便なことがある。
+２つの関数AとBが"x.l"ファイルにありAがBを呼び出していると仮定する。
+"x.l"をコンパイル後、"x.o"をロードし内部でBを呼び出しているAを呼び出そうとする。
+それから、Bの中でbugを見つけると、たぶんBを再定義しようとするだろう。
+ここで、コンパイルされたAとコンパイルされていないBとができる。
+再びAを呼び出したとすると、Aはまだ古いコンパイルされているBを呼び出す。
+これは、Aが最初にBを呼び出したとき固定的にリンクされるからである。
+この問題を避けるためには、Aを再定義しなおすかあるいは"x.o"がロードされた直後で
+Aを呼び出す前にBを再定義しなければならない。
 
 <P>
-�R���p�C�����ꂽ�R�[�h�����[�h�����Ƃ��A��ʓI��defun��defmethod��
-��ł���ŏ�ʃR�[�h�����s�����B
-���̍ŏ�ʃR�[�h�̓��[�h���W���[���̃G���g���֐��Ƃ��Ē�`����Ă���B
-�R���p�C�������̃G���g���֐��̖��O��t���A
-���[�_�����̊֐��̖��O�𐳊m�ɂ킩��Ȃ���΂Ȃ�Ȃ��B
-�󋵂��ȒP�ɂ��邽�߂ɁA�R���p�C���ƃ��[�_�̗����Ƃ�
-���̃G���g���֐��̖��O�Ƃ��ăI�u�W�F�N�g�t�@�C����basename�Ɠ���̂���
-�Ɖ��肷��B
-�Ⴆ�΁A����"fib.l"���R���p�C�������Ȃ�΁A
-�R���p�C����"fib.c"�̃G���g���֐��Ƃ���"fib(...)"�𐶐�����B
-�����āA���[�_�̓I�u�W�F�N�g�t�@�C��"fib.o"�̒�����"fib"��T���B
-�ŏI�I�ɃI�u�W�F�N�g�t�@�C����Unix��"cc"��"ld"�Ő��������̂ŁA
-���̃G���g���֐����́AC�֐��̖������[���𖞑����Ȃ���΂Ȃ�Ȃ��B
-���������āA�t�@�C�����Ƃ���C�̗\��L�[���[�h�i�Ⴆ�΁A
-"int", "struct", "union", "register", "extern"�Ȃǁj��"c/eus.h"��
-��`����Ă���v���C�x�[�g�w����i�Ⴆ�΁A"pointer", "cons",
-"makeint"�Ȃǁj������Ȃ���΂Ȃ�Ȃ��B
-�����A�\�[�X�t�@�C���̖��O�Ƃ��Ă����̗\���̓��̂P��
-�g�p���Ȃ���΂Ȃ�Ȃ��Ȃ�΁A�R���p�C���⃍�[�_��
-<EM>:entry</EM>������ʂɎw�肷�邱�ƁB
+コンパイルされたコードがロードされるとき、一般的にdefunやdefmethodの
+列である最上位コードが実行される。
+この最上位コードはロードモジュールのエントリ関数として定義されている。
+コンパイラがそのエントリ関数の名前を付け、
+ローダがこの関数の名前を正確にわからなければならない。
+状況を簡単にするために、コンパイラとローダの両方とも
+そのエントリ関数の名前としてオブジェクトファイルのbasenameと同一のもの
+と仮定する。
+例えば、もし"fib.l"をコンパイルしたならば、
+コンパイラは"fib.c"のエントリ関数として"fib(...)"を生成する。
+そして、ローダはオブジェクトファイル"fib.o"の中から"fib"を探す。
+最終的にオブジェクトファイルはUnixの"cc"や"ld"で生成されるので、
+このエントリ関数名は、C関数の命名ルールを満足しなければならない。
+したがって、ファイル名としてCの予約キーワード（例えば、
+"int", "struct", "union", "register", "extern"など）や"c/eus.h"に
+定義されているプライベート指示語（例えば、"pointer", "cons",
+"makeint"など）を避けなければならない。
+もし、ソースファイルの名前としてこれらの予約語の内の１つを
+使用しなければならないならば、コンパイラやローダの
+<EM>:entry</EM>引数を別に指定すること。
 
 <P>
-closure�̎g�p�ɂ͐���������B
-closure�̒���<B>return-from</B>���ꏑ����<B>unwind-protect</B>�̒���clean-up������
-�����������R���p�C�������킯�ł͂Ȃ��B
+closureの使用には制限がある。
+closureの中の<B>return-from</B>特殊書式と<B>unwind-protect</B>の中のclean-up書式は
+いつも正しくコンパイルされるわけではない。
 
 <P>
-<B>disassemble</B>�́A��������Ă��Ȃ��B
-�R���p�C�����ꂽ�R�[�h����͂��邽�߂ɂ͒���C�v���O���������邩���邢��
-<B>adb</B>���g�p����B
+<B>disassemble</B>は、実現されていない。
+コンパイルされたコードを解析するためには中間Cプログラムを見るかあるいは
+<B>adb</B>を使用する。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="18303"></A>
-<B>euscomp</B> <EM>{filename}* </EM>[UNIX�R�}���h]
+<A NAME="18300"></A>
+<B>euscomp</B> <EM>{filename}* </EM>[UNIXコマンド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Euslisp�R���p�C�����Ăт����B
+Euslispコンパイラを呼びだす。
 </DD>
 </DL>
 <BR>
@@ -192,21 +193,30 @@ Euslisp�R���p�C�����Ăт����B
 
 <P>
 
-<A NAME="18313"></A>
+<A NAME="18310"></A>
 <BR>
-39#39
+<IMG
+ WIDTH="688" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img39.png"
+ ALT="\begin{emtabbing}
+{\bf compile-file}
+\it srcfile \&amp;key \= (:verbose nil) \hspac...
+...m ; run c compiler} \\
+\&gt; (:entry (pathname-name file)) \\
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>�t�@�C�����R���p�C������B
-".l"��<EM>srcfile</EM>�̊g���q�Ƃ��ĉ��肳���B
-�����A<EM>:verbose</EM>��T�Ȃ�΁A�R���p�C�����ꂽ�֐��⃁�\�b�h�����\�������B
-����́A�G���[�����������ӏ����ȒP�ɒT���̂ɖ𗧂B
-<EM>:optimize, :c-optimize</EM>��<EM>:safety</EM>�́A�œK���̃��x����
-�w�肷��B
-���W���[�����쐬����Euslisp�̃R�A�Ƀn�[�h�����N����Ă��Ȃ�������A
-<EM>:pic</EM>�́AT�ɐݒ肷�ׂ��ł���B
+<DD>ファイルをコンパイルする。
+".l"が<EM>srcfile</EM>の拡張子として仮定される。
+もし、<EM>:verbose</EM>がTならば、コンパイルされた関数やメソッド名が表示される。
+これは、エラーが発生した箇所を簡単に探すのに役立つ。
+<EM>:optimize, :c-optimize</EM>と<EM>:safety</EM>は、最適化のレベルを
+指定する。
+モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
+<EM>:pic</EM>は、Tに設定すべきである。
 
 </DD>
 </DL>
@@ -215,32 +225,16 @@ Euslisp�R���p�C�����Ăт����B
 
 <P>
 
-<A NAME="18334"></A>
-<B>compile</B> <EM>funcname </EM>[�֐�]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-�֐����R���p�C������B<B>compile</B>�́A�ŏ��Ɋ֐���`���e���|�����t�@�C����
-�o�͂���B���̃t�@�C���́A<B>compile-file</B>�ɂ���ăR���p�C������A
-���ꂩ��<B>load</B>�ɂ���ă��[�h�����B
-�e���|�����t�@�C���͍폜�����B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18347"></A>
-<B>compile-file-if-src-newer</B> <EM>srcfile &amp;key compiler-options </EM>[�֐�]
+<A NAME="18331"></A>
+<B>compile</B> <EM>funcname </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>srcfile</EM>���Ή�����I�u�W�F�N�g�t�@�C�������V�����i�ŋߕύX���ꂽ�j
-�Ȃ�΁A�R���p�C������B���̃I�u�W�F�N�g�t�@�C���́A".o"�g���q��
-�����Ă���Ɖ��肳���B
+関数をコンパイルする。<B>compile</B>は、最初に関数定義をテンポラリファイルに
+出力する。そのファイルは、<B>compile-file</B>によってコンパイルされ、
+それから<B>load</B>によってロードされる。
+テンポラリファイルは削除される。
 </DD>
 </DL>
 <BR>
@@ -248,27 +242,15 @@ Euslisp�R���p�C�����Ăт����B
 
 <P>
 
-<A NAME="18358"></A>
-<B>*optimize*</B> [�ϐ�]
-
-<DL COMPACT>
-<DT> 
-<DD> �R���p�C���̍œK�����x���𐧌䂷��B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18368"></A>
-<B>*verbose*</B> [�ϐ�]
+<A NAME="18344"></A>
+<B>compile-file-if-src-newer</B> <EM>srcfile &amp;key compiler-options </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-non-NIL���ݒ肳�ꂽ�Ƃ��A�R���p�C������Ă���֐����⃁�\�b�h��������
-�R���p�C���ɗv�������Ԃ�\������B
+<EM>srcfile</EM>が対応するオブジェクトファイルよりも新しい（最近変更された）
+ならば、コンパイルする。そのオブジェクトファイルは、".o"拡張子を
+持っていると仮定される。
 </DD>
 </DL>
 <BR>
@@ -276,13 +258,41 @@ non-NIL���ݒ肳�ꂽ�Ƃ��A�R���p�C������Ă���֐����⃁�\�b�h��������
 
 <P>
 
-<A NAME="18378"></A>
-<B>*safety*</B> [�ϐ�]
+<A NAME="18355"></A>
+<B>*optimize*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> コンパイラの最適化レベルを制御する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18365"></A>
+<B>*verbose*</B> [変数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���S�����x���𐧌䂷��B
+non-NILが設定されたとき、コンパイルされている関数名やメソッド名そして
+コンパイルに要した時間を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18375"></A>
+<B>*safety*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+安全性レベルを制御する。
 </DD>
 </DL>
 <BR>
@@ -312,19 +322,19 @@ non-NIL���ݒ肳�ꂽ�Ƃ��A�R���p�C������Ă���֐����⃁�\�b�h��������
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1325"
-  HREF="jmanual-node67.html">�v���O�������[�h</A>
+  HREF="jmanual-node67.html">プログラムロード</A>
 <B> Up:</B> <A NAME="tex2html1319"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
 <B> Previous:</B> <A NAME="tex2html1313"
-  HREF="jmanual-node65.html">�ŏ�ʃ��x���̑Θb</A>
+  HREF="jmanual-node65.html">最上位レベルの対話</A>
  &nbsp; <B>  <A NAME="tex2html1321"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1323"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

@@ -34,7 +34,9 @@ For 64bit Linux system, set ARCHDIR=Linux64 and ln -sf Makefile.Linux64 Makefile
 
 ### Documnets
 
-See online [http://jskeus.sourceforge.net/html/manual.html manual]. (Japanese translation [http://jskeus.sourceforge.net/html/jmanual.html manual])
+See online [manual](http://euslisp.github.io/EusLisp/manual.html). (Japanese translation [manual](http://euslisp.github.io/EusLisp/jmanual.html))
+
+Download PDF version ([English](https://github.com/euslisp/EusLisp/raw/master/doc/latex/manual.pdf), [Japanese](https://github.com/euslisp/EusLisp/raw/master/doc/jlatex/jmanual.pdf))
 
 ### Original EusLisp Homepage
 

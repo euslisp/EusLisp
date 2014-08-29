@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�f�[�^�^</TITLE>
-<META NAME="description" CONTENT="�f�[�^�^">
+<TITLE>データ型</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="データ型">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,7 +45,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html534"
-  HREF="jmanual-node13.html">���l</A>
+  HREF="jmanual-node13.html">数値</A>
 <B> Up:</B> <A NAME="tex2html528"
   HREF="jmanual-node11.html">Bibliography</A>
 <B> Previous:</B> <A NAME="tex2html522"
@@ -58,30 +59,36 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H1><A NAME="SECTION03010000000000000000">
-�f�[�^�^</A>
+データ型</A>
 </H1>
 
-����Lisp�Ɠ��l�ɁA�^�̌��܂����f�[�^�I�u�W�F�N�g�͕ϐ��ł͂Ȃ��B
-�ǂ̕ϐ������̒l�Ƃ��āA�ǂ�ȃI�u�W�F�N�g�������Ƃ��ł���B
-�ϐ��ɃI�u�W�F�N�g�̌^��錾���邱�Ƃ��\�ł��邪�A
-��ʓI�ɃR���p�C���ō����ȃR�[�h�𐶐����邽�߂̏��Ƃ��Ă̂�
-�g�p�����B
-���l�́A�|�C���^�̒��Œ��ڒl�Ƃ��ĕ\������A
-���̂ق��́A�|�C���^�ɂ��Q�Ƃ����I�u�W�F�N�g�ɂ��\�������B
-Sun4�Ŏ��s����ꍇ�A�|�C���^����ѐ��l�͐}<A HREF="#Pointer">2</A>�ŕ`����Ă���悤��
-long word�ŕ\�������B
-�|�C���^��LSB��2�r�b�g�́A�|�C���^�Einteger�Efloat�����ʂ��邽�߂�
-tag�r�b�g�Ƃ��Ďg�p����Ă���B
-�|�C���^��tag�r�b�g���S�ă[���ł���A�I�u�W�F�N�g�̃A�h���X�Ƃ���32�r�b�g�S��
-�g�p�ł���̂ŁAEusLisp��4GB�ȏ�̃A�h���X��Ԃ𗘗p���邱�Ƃ��ł���B
+他のLispと同様に、型の決まったデータオブジェクトは変数ではない。
+どの変数もその値として、どんなオブジェクトも持つことができる。
+変数にオブジェクトの型を宣言することが可能であるが、
+一般的にコンパイラで高速なコードを生成するための情報としてのみ
+使用される。
+数値は、ポインタの中で直接値として表現され、
+そのほかは、ポインタにより参照されるオブジェクトにより表現される。
+Sun4で実行する場合、ポインタおよび数値は図<A HREF="#Pointer">2</A>で描かれているように
+long wordで表現される。
+ポインタのLSBの2ビットは、ポインタ・integer・floatを識別するための
+tagビットとして使用されている。
+ポインタはtagビットが全てゼロであり、オブジェクトのアドレスとして32ビット全て
+使用できるので、EusLispは4GB以上のアドレス空間を利用することができる。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="Pointer"></A><A NAME="960"></A>
+<DIV ALIGN="CENTER"><A NAME="Pointer"></A><A NAME="957"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 2:</STRONG>
-�|�C���^�ƒ��ڒl</CAPTION>
-<TR><TD>3#3</TD></TR>
+ポインタと直接値</CAPTION>
+<TR><TD><IMG
+ WIDTH="393" HEIGHT="140" BORDER="0"
+ SRC="jmanual-img3.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/pointer.ps}
+\end{center}
+\end{figure}"></TD></TR>
 </TABLE>
 </DIV>
 
@@ -92,19 +99,19 @@ tag�r�b�g�Ƃ��Ďg�p����Ă���B
 
 <UL CLASS="ChildLinks">
 <LI><A NAME="tex2html535"
-  HREF="jmanual-node13.html">���l</A>
+  HREF="jmanual-node13.html">数値</A>
 <LI><A NAME="tex2html536"
-  HREF="jmanual-node14.html">�I�u�W�F�N�g</A>
+  HREF="jmanual-node14.html">オブジェクト</A>
 <LI><A NAME="tex2html537"
-  HREF="jmanual-node15.html">�N���X�p��</A>
+  HREF="jmanual-node15.html">クラス継承</A>
 <LI><A NAME="tex2html538"
-  HREF="jmanual-node16.html">�^�w��</A>
+  HREF="jmanual-node16.html">型指定</A>
 </UL>
 <!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

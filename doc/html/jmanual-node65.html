@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�ŏ�ʃ��x���̑Θb</TITLE>
-<META NAME="description" CONTENT="�ŏ�ʃ��x���̑Θb">
+<TITLE>最上位レベルの対話</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="最上位レベルの対話">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1311"
-  HREF="jmanual-node66.html">�R���p�C��</A>
+  HREF="jmanual-node66.html">コンパイル</A>
 <B> Up:</B> <A NAME="tex2html1305"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
 <B> Previous:</B> <A NAME="tex2html1299"
-  HREF="jmanual-node64.html">�]���֐�</A>
+  HREF="jmanual-node64.html">評価関数</A>
  &nbsp; <B>  <A NAME="tex2html1307"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1309"
@@ -58,165 +59,165 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03092000000000000000">
-�ŏ�ʃ��x���̑Θb</A>
+最上位レベルの対話</A>
 </H2>
 
 <P>
-EusLisp�̕W���̍ŏ�ʃ��x���̓��́|�]���|�o�͂̃��[�v(loop)�́A<B>eustop</B>
-�ɂ�萧�䂳��Ă���B
-euslisp���Ăяo���ꂽ�Ƃ��A
-<B>eustop</B>�́A�z�[���f�B���N�g������<TT>".eusrc"</TT>�Ƃ����t�@�C����
-���邢��<TT>EUSRC</TT>���ϐ��Ŏw�肳�ꂽ�t�@�C�������[�h����B
-���ꂩ��Aeuslisp�́A���������X�g�Ŏw�肳�ꂽ�t�@�C�������[�h����B
-�����̃��[�h���I����A<B>eustop</B>�́A���ʂ̑Θb�Z�b�V����(session)�ɓ���B
+EusLispの標準の最上位レベルの入力−評価−出力のループ(loop)は、<B>eustop</B>
+により制御されている。
+euslispが呼び出されたとき、
+<B>eustop</B>は、ホームディレクトリから<TT>".eusrc"</TT>というファイルを
+あるいは<TT>EUSRC</TT>環境変数で指定されたファイルをロードする。
+それから、euslispは、引き数リストで指定されたファイルをロードする。
+これらのロードが終了後、<B>eustop</B>は、普通の対話セッション(session)に入る。
 
 <P>
-<B>*standard-input*</B>�Ƀ��[�U�[��TTY���ڑ����ꂽ�Ƃ��A
-<B>eustop</B>�́A<B>*prompt-string*</B>�i�f�t�H���g�Ƃ���<TT>"eus$"</TT>��
-�ݒ肳��Ă���j�ɐݒ肳�ꂽ�v�����v�g���o�͂���B
-�����āA<B>*terminal-io*</B>�X�g���[�����疽�߂���͂���B
-�����A���̓��͂��J�b�R�Ŋ���ꂽ�s�Ȃ�΁A
-<B>eval</B>�ɂ����lisp�����Ƃ��Ĉ�����B
-�����A���͍s�̍ŏ���symbol�Ɋ֐���`���������ꍇ�A���̍s�Ɏ����I��
-�J�b�R��������A�]�������B
-�����A�֐���`��������Ȃ������ꍇ�A���̓���l(special value)��
-��������A���̒l���o�͂����B
-�����A����symbol�ɂȂɂ���`����ĂȂ��Ȃ�΁A
-���̍s��UNIX���߂Ƃ݂Ȃ���Ash(Bourn's shell)�֓n�����B
-�����Ash����v����UNIX���߂�{���Ȃ������Ƃ��A
-"command unrecognized"�Ƃ������b�Z�[�W���o�͂���B
-���̂悤�ɁA<B>eustop</B>��lisp�̃C���^�[�v���^�����UNIX�̃V�F���Ƃ��ē��삷��B
-�����A���͂�UNIX���߂Ƃ��Ď��s�������Ȃ��Ƃ��A
-�s�̍ŏ��ɃR���}','��t����΂悢�B
-����́A�Θb���s(interpretive execution)�ŃG���[�����������Ƃ��A
-���I�Ȓl������Ƃ��ɖ��ɗ��B
-Euslisp�̓��[�J���ȃX�R�[�v(lexical scope)���̗p���Ă���̂�
-���[�J���ϐ��̒l��special�Ƃ��Đ錾����Ă��Ȃ�����X�R�[�v�̊O����
-�������邱�Ƃ͏o���Ȃ��B
+<B>*standard-input*</B>にユーザーのTTYが接続されたとき、
+<B>eustop</B>は、<B>*prompt-string*</B>（デフォルトとして<TT>"eus$"</TT>が
+設定されている）に設定されたプロンプトを出力する。
+そして、<B>*terminal-io*</B>ストリームから命令を入力する。
+もし、その入力がカッコで括られた行ならば、
+<B>eval</B>によってlisp書式として扱われる。
+もし、入力行の最初のsymbolに関数定義があった場合、その行に自動的に
+カッコが入れられ、評価される。
+もし、関数定義が見つからなかった場合、その特殊値(special value)が
+調査され、その値が出力される。
+もし、そのsymbolになにも定義されてないならば、
+その行はUNIX命令とみなされ、sh(Bourn's shell)へ渡される。
+もし、shが一致するUNIX命令を捜せなかったとき、
+"command unrecognized"というメッセージを出力する。
+このように、<B>eustop</B>はlispのインタープリタおよびUNIXのシェルとして動作する。
+もし、入力をUNIX命令として実行したくないとき、
+行の最初にコンマ','を付ければよい。
+これは、対話実行(interpretive execution)でエラーが発生したとき、
+動的な値を見るときに役に立つ。
+Euslispはローカルなスコープ(lexical scope)を採用しているので
+ローカル変数の値をspecialとして宣言されていない限りスコープの外から
+調査することは出来ない。
 
 <P>
-���͂́A���ꂼ��s�ԍ��ƂƂ���<B>*history*</B>�x�N�g���ɋL�������B
-csh�̏�Ɠ����l��<B>!</B>�֐�����͂��邱�Ƃɂ����͂̏ڍׂ�
-�Ăяo�����Ƃ��ł���B
-csh�̗����Ƃ̈Ⴂ�́A<B>!</B>���֐��ł��邽��<B>!</B>�̎��ɍŒ�P��
-�X�y�[�X���K�v�ł���B
-�܂��A�R���g���[���L�[��p���邱�Ƃɂ��emacs�̂悤�ɑΘb�I��
-�s��ҏW���邱�Ƃ��ł���B
+入力は、それぞれ行番号とともに<B>*history*</B>ベクトルに記憶される。
+cshの上と同じ様に<B>!</B>関数を入力することにより入力の詳細を
+呼び出すことができる。
+cshの履歴との違いは、<B>!</B>が関数であるため<B>!</B>の次に最低１つの
+スペースが必要である。
+また、コントロールキーを用いることによりemacsのように対話的に
+行を編集することができる。
 
 <P>
-�ʏ�<code>^</code>D (EOF)��Euslisp�͏I������B
-��ʃ��x��(���ʂ�csh)�Ɉُ�I���R�[�h��Ԃ����߂ɂ́A�K���ȏ����R�[�h������
-<B>exit</B>���g�p���邱�ƁB
+通常<code>^</code>D (EOF)でEuslispは終了する。
+上位レベル(普通はcsh)に異常終了コードを返すためには、適当な条件コードをつけた
+<B>exit</B>を使用すること。
 
 <P>
-<B>eustop</B>�́ASIGINT��SIGPIPE�̂��߂ɃV�O�i���n���h���[��ݒ肷��B
-�����āA���̃V�O�i����catch���Ȃ��B
-���̂��߁ASIGTERM��SIGQUIT�̂悤�ȃV�O�i����Euslisp���I���ł���B
-�I������������Ƃ��A�����̃V�O�i����catch���邽�߂ɂ́A
-<B>unix:signal</B>�֐��Ń��[�U�[�Œ�`�����V�O�i���n���h���[��ݒ肷�邱�ƁB
+<B>eustop</B>は、SIGINTとSIGPIPEのためにシグナルハンドラーを設定する。
+そして、他のシグナルはcatchしない。
+このため、SIGTERMやSIGQUITのようなシグナルでEuslispを終了できる。
+終了を避けたいとき、これらのシグナルをcatchするためには、
+<B>unix:signal</B>関数でユーザーで定義したシグナルハンドラーを設定すること。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="18108"></A>
-<B>-</B> [�ϐ�]
+<A NAME="18105"></A>
+<B>-</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> ���݂̓���
+<DD> 現在の入力
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18118"></A>
-<B>+</B> [�ϐ�]
+<A NAME="18115"></A>
+<B>+</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> ���O�̓���
+<DD> 直前の入力
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18128"></A>
-<B>++</B> [�ϐ�]
+<A NAME="18125"></A>
+<B>++</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> �Q�O�̓���
+<DD> ２つ前の入力
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18138"></A>
-<B>+++</B> [�ϐ�]
+<A NAME="18135"></A>
+<B>+++</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> �R�O�̓���
+<DD> ３つ前の入力
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18148"></A>
-<B>*</B> [�ϐ�]
+<A NAME="18145"></A>
+<B>*</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> ���O�̌���
+<DD> 直前の結果
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18158"></A>
-<B>**</B> [�ϐ�]
+<A NAME="18155"></A>
+<B>**</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> �Q�O�̌���
+<DD> ２つ前の結果
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18168"></A>
-<B>***</B> [�ϐ�]
+<A NAME="18165"></A>
+<B>***</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> �R�O�̌���
+<DD> ３つ前の結果
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18178"></A>
-<B>*prompt-string*</B> [�ϐ�]
+<A NAME="18175"></A>
+<B>*prompt-string*</B> [変数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>eustop</B>�Ŏg�p�����v�����v�g������
+<B>eustop</B>で使用されるプロンプト文字列
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18189"></A>
-<B>*program-name*</B> [�ϐ�]
+<A NAME="18186"></A>
+<B>*program-name*</B> [変数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����Euslisp���Ăяo���ꂽ���߁B�Ⴆ�΁A<TT>eus,eusx,eusxview</TT>�⃆�[�U�[�ō����
-euslisp�ȂǁB
+このEuslispが呼び出された命令。例えば、<TT>eus,eusx,eusxview</TT>やユーザーで作った
+euslispなど。
 </DD>
 </DL>
 <BR>
@@ -224,12 +225,12 @@ euslisp�ȂǁB
 
 <P>
 
-<A NAME="18200"></A>
-<B>eustop</B> <EM>&amp;rest argv </EM>[�֐�]
+<A NAME="18197"></A>
+<B>eustop</B> <EM>&amp;rest argv </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> �f�t�H���g�̍ŏ�ʃ��[�v
+<DD> デフォルトの最上位ループ
 </DD>
 </DL>
 <BR>
@@ -237,15 +238,15 @@ euslisp�ȂǁB
 
 <P>
 
-<A NAME="18210"></A>
-<B>eussig</B> <EM>sig code </EM>[�֐�]
+<A NAME="18207"></A>
+<B>eussig</B> <EM>sig code </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-SIGPIPE�̃f�t�H���g�V�O�i���n���h���[�B
-<B>eussig</B>�́ASIGPIPE�����������葼�̍ŏ�ʃ��x�����[�v�ɓ���Ƃ�
-�V�O�i���ԍ����o�͂���B
+SIGPIPEのデフォルトシグナルハンドラー。
+<B>eussig</B>は、SIGPIPEが到着したり他の最上位レベルループに入るとき
+シグナル番号を出力する。
 </DD>
 </DL>
 <BR>
@@ -253,14 +254,14 @@ SIGPIPE�̃f�t�H���g�V�O�i���n���h���[�B
 
 <P>
 
-<A NAME="18221"></A>
-<B>sigint-handler</B> <EM>sig code </EM>[�֐�]
+<A NAME="18218"></A>
+<B>sigint-handler</B> <EM>sig code </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-SIGINT(control-C)�̃f�t�H���g�V�O�i���n���h���[�B
-���̃V�O�i���ŐV�����ŏ�ʃZ�b�V�����֓���B
+SIGINT(control-C)のデフォルトシグナルハンドラー。
+このシグナルで新しい最上位セッションへ入る。
 </DD>
 </DL>
 <BR>
@@ -268,14 +269,14 @@ SIGINT(control-C)�̃f�t�H���g�V�O�i���n���h���[�B
 
 <P>
 
-<A NAME="18231"></A>
-<B>euserror</B> <EM>code message &amp;rest arg </EM>[�֐�]
+<A NAME="18228"></A>
+<B>euserror</B> <EM>code message &amp;rest arg </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�f�t�H���g�̃G���[�n���h���[�ŁA
-<EM>message</EM>���o�͂��A�V�����G���[�Z�b�V�����֓���B
+デフォルトのエラーハンドラーで、
+<EM>message</EM>を出力し、新しいエラーセッションへ入る。
 </DD>
 </DL>
 <BR>
@@ -283,13 +284,13 @@ SIGINT(control-C)�̃f�t�H���g�V�O�i���n���h���[�B
 
 <P>
 
-<A NAME="18242"></A>
-<B>reset</B> [�֐�]
+<A NAME="18239"></A>
+<B>reset</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�G���[���[�v����E�o���āA�Ō��<B>eustop</B>�Z�b�V�����֖߂�B
+エラーループから脱出して、最後の<B>eustop</B>セッションへ戻る。
 </DD>
 </DL>
 <BR>
@@ -297,14 +298,14 @@ SIGINT(control-C)�̃f�t�H���g�V�O�i���n���h���[�B
 
 <P>
 
-<A NAME="18253"></A>
-<B>exit</B> <EM>&amp;optional termination-code </EM>[�֐�]
+<A NAME="18250"></A>
+<B>exit</B> <EM>&amp;optional termination-code </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Euslisp�v���Z�X���I�����A�v���Z�X�̏�ԃR�[�h�Ƃ���<EM>termination-code</EM>
-(0..255)��Ԃ��B
+Euslispプロセスを終了し、プロセスの状態コードとして<EM>termination-code</EM>
+(0..255)を返す。
 </DD>
 </DL>
 <BR>
@@ -312,54 +313,54 @@ Euslisp�v���Z�X���I�����A�v���Z�X�̏�ԃR�[�h�Ƃ���<EM>termination-code</EM>
 
 <P>
 
-<A NAME="18264"></A>
-<B>h</B> [�֐�]
+<A NAME="18261"></A>
+<B>h</B> [関数]
 
 <DL COMPACT>
 <DT> 
-<DD> <B>*history*</B>�̒��ɋL������Ă�����͗�����
-�֘A�����ԍ��ƂƂ��ɏo�͂���B
+<DD> <B>*history*</B>の中に記憶されている入力履歴を
+関連する列番号とともに出力する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18275"></A>
-<B>!</B> <EM>&amp;optional (seq 0) </EM>[�֐�]
+<A NAME="18272"></A>
+<B>!</B> <EM>&amp;optional (seq 0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-��ԍ�<EM>seq</EM>�Ɋ֘A������͍s���Ăяo���B
-<EM>seq</EM>��0�̂Ƃ��A�����Ƃ��ŋ߂̖��߂��Ăяo�����B
-�����A<EM>seq</EM>�����̏ꍇ�A���ݍs���瑊�ΓI�Ȉʒu�ɂ���s��
-�Ăяo�����B
-�Ăяo���ꂽ�s���\������A���̍s�̍Ō�ɃJ�[�\�����ړ�����B
-���̃R���g���[���L�[���g�p�o����B
-control-H (backspace)��control-B�łP�����߂�B
-control-F��control-K�łP�����i�ށB
-control-A�ōs�̍ŏ��Ɉړ�����B
-control-L�ōs�̍Ō�Ɉړ�����B
-control-C�ōs�̏C�����L�����Z������B
-control-M (carriage-return)��control-J (line-feed)��
-�s�C�����I�����āA�C�������s��]������B
-�����A<EM>seq</EM>���ԍ��łȂ�symbol�܂��͕�����̏ꍇ�A
-�������X�g���Â����Ɍ������Č������A
-symbol�܂��͕����񂪊܂܂�Ă��閽�ߍs��Ԃ��B
+列番号<EM>seq</EM>に関連する入力行を呼び出す。
+<EM>seq</EM>が0のとき、もっとも最近の命令が呼び出される。
+もし、<EM>seq</EM>が負の場合、現在行から相対的な位置にある行が
+呼び出される。
+呼び出された行が表示され、その行の最後にカーソルを移動する。
+次のコントロールキーが使用出来る。
+control-H (backspace)かcontrol-Bで１文字戻る。
+control-Fかcontrol-Kで１文字進む。
+control-Aで行の最初に移動する。
+control-Lで行の最後に移動する。
+control-Cで行の修正をキャンセルする。
+control-M (carriage-return)かcontrol-J (line-feed)で
+行修正を終了して、修正した行を評価する。
+もし、<EM>seq</EM>が番号でなくsymbolまたは文字列の場合、
+履歴リストを古い方に向かって検索し、
+symbolまたは文字列が含まれている命令行を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="18289"></A>
-<B>new-history</B> <EM>depth </EM>[�֐�]
+<A NAME="18286"></A>
+<B>new-history</B> <EM>depth </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>depth</EM>�̒��������悤��<B>*history*</B>������������B
-<EM>depth</EM>�s���L�������B
-���݂�<B>*history*</B>�ɋL�^���ꂽ���͍s�́A���ׂď��ł���B
+<EM>depth</EM>の長さを持つように<B>*history*</B>を初期化する。
+<EM>depth</EM>行が記憶される。
+現在の<B>*history*</B>に記録された入力行は、すべて消滅する。
 </DD>
 </DL>
 <BR>
@@ -389,19 +390,19 @@ symbol�܂��͕����񂪊܂܂�Ă��閽�ߍs��Ԃ��B
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1311"
-  HREF="jmanual-node66.html">�R���p�C��</A>
+  HREF="jmanual-node66.html">コンパイル</A>
 <B> Up:</B> <A NAME="tex2html1305"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
 <B> Previous:</B> <A NAME="tex2html1299"
-  HREF="jmanual-node64.html">�]���֐�</A>
+  HREF="jmanual-node64.html">評価関数</A>
  &nbsp; <B>  <A NAME="tex2html1307"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1309"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

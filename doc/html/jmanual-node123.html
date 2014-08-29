@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>���E(viewing)</TITLE>
-<META NAME="description" CONTENT="���E(viewing)">
+<TITLE>視界(viewing)</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="視界(viewing)">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2256"
-  HREF="jmanual-node124.html">���e</A>
+  HREF="jmanual-node124.html">投影</A>
 <B> Up:</B> <A NAME="tex2html2250"
-  HREF="jmanual-node122.html">���E�ƃO���t�B�b�N�X</A>
+  HREF="jmanual-node122.html">視界とグラフィックス</A>
 <B> Previous:</B> <A NAME="tex2html2244"
-  HREF="jmanual-node122.html">���E�ƃO���t�B�b�N�X</A>
+  HREF="jmanual-node122.html">視界とグラフィックス</A>
  &nbsp; <B>  <A NAME="tex2html2252"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2254"
@@ -58,30 +59,36 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04051000000000000000">
-���E(viewing)</A>
+視界(viewing)</A>
 </H2>
-<B>viewing</B>�I�u�W�F�N�g�́Aviewing���W�n����������B
-���̍��W�n�̌��_�͉��z�J�����̈ʒu�ɒu�����B
-<EM>-z</EM>���������I�u�W�F�N�g�̎��������ŁAxy���ʂ����e��ʂł���B
-<B>viewing</B>��<B>cascaded-coords</B>�N���X���p������̂ŁA
-<B>:translate</B>��<B>:rotate</B>��<B>:transform</B>�̂悤��
-���W�ϊ����b�Z�[�W���󂯕t����B
-�܂��A<B>cascaded-coords</B>���瓾���鑼�̃I�u�W�F�N�g�𒣂�t���邱�Ƃ��ł���B
-���������āA�ړ����̏�̃J�����V�X�e���̃V�~�����[�V�������ł���B
-<B>viewing</B>�̎�ȖړI�́A���[���h���W�n�ŕ\�������x�N�g����
-�J�������W�n�ɕϊ����邱�Ƃł���B
-�ϊ��́A��ʂ̍��W�ϊ��ɑ΂��ċt�����ŗ^������B
-���̃��[�J�����W�n���̃x�N�g���̓��[���h���W�n�ɂ�����\���ɕϊ������B
-���������āA<B>viewing</B>��<TT>viewcoords</TT>�X���b�g�ɋt�ϊ����ꂽ����n�ϊ������B
-���̃X���b�g�́Aviewing���W�n�Ƃ��ĕ��ʎQ�Ƃ����B
+<B>viewing</B>オブジェクトは、viewing座標系を処理する。
+この座標系の原点は仮想カメラの位置に置かれる。
+<EM>-z</EM>軸方向がオブジェクトの視線方向で、xy平面が投影画面である。
+<B>viewing</B>が<B>cascaded-coords</B>クラスを継承するので、
+<B>:translate</B>や<B>:rotate</B>や<B>:transform</B>のような
+座標変換メッセージを受け付ける。
+また、<B>cascaded-coords</B>から得られる他のオブジェクトを張り付けることができる。
+したがって、移動物体上のカメラシステムのシミュレーションができる。
+<B>viewing</B>の主な目的は、ワールド座標系で表現されるベクトルを
+カメラ座標系に変換することである。
+変換は、一般の座標変換に対して逆方向で与えられる。
+このローカル座標系内のベクトルはワールド座標系における表現に変換される。
+したがって、<B>viewing</B>は<TT>viewcoords</TT>スロットに逆変換された左手系変換を持つ。
+このスロットは、viewing座標系として普通参照される。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="35670"></A>
+<DIV ALIGN="CENTER"><A NAME="35667"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 13:</STRONG>
-viewing���W�n�Ɠ��e���</CAPTION>
-<TR><TD>68#68</TD></TR>
+viewing座標系と投影画面</CAPTION>
+<TR><TD><IMG
+ WIDTH="656" HEIGHT="443" BORDER="0"
+ SRC="jmanual-img68.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/viewcoords.ps,height=10cm}
+\end{center}
+\end{figure}"></TD></TR>
 </TABLE>
 </DIV>
 
@@ -90,8 +97,8 @@ viewing���W�n�Ɠ��e���</CAPTION>
  <BR>
 <BR> <P>
 	<BR> 
-<A NAME="36243"></A>
-<BIG CLASS="XLARGE"><B>viewing </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="36240"></A>
+<BIG CLASS="XLARGE"><B>viewing </B></BIG> [クラス]  <PRE><TT>
   :super   <B>cascaded-coords</B> 
 <BR>  :slots 		 (viewcoords) 
 </TT></PRE>
@@ -100,7 +107,7 @@ viewing���W�n�Ɠ��e���</CAPTION>
 
 <DL COMPACT>
 <DT> 
-<DD>viewing�ϊ����`����B
+<DD>viewing変換を定義する。
 </DD>
 </DL>
 <BR>
@@ -108,13 +115,13 @@ viewing���W�n�Ɠ��e���</CAPTION>
 
 <P>
 
-<A NAME="36260"></A>
-<B>:viewpoint</B> [���\�b�h]
+<A NAME="36257"></A>
+<B>:viewpoint</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<B>viewing</B>�̌��_�̃x�N�g���ʒu��Ԃ��B
+この<B>viewing</B>の原点のベクトル位置を返す。
 </DD>
 </DL>
 <BR>
@@ -122,14 +129,14 @@ viewing���W�n�Ɠ��e���</CAPTION>
 
 <P>
 
-<A NAME="36271"></A>
-<B>:view-direction</B> [���\�b�h]
+<A NAME="36268"></A>
+<B>:view-direction</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>viewing</B>�̌��_�����ʂ̒��S�܂ł̃x�N�g����Ԃ��B
-����́Aviewing���W�n��z�������ł���B
+<B>viewing</B>の原点から画面の中心までのベクトルを返す。
+これは、viewing座標系のz軸方向である。
 </DD>
 </DL>
 <BR>
@@ -137,42 +144,27 @@ viewing���W�n�Ɠ��e���</CAPTION>
 
 <P>
 
-<A NAME="36282"></A>
-<B>:view-up</B> [���\�b�h]
+<A NAME="36279"></A>
+<B>:view-up</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���[���h���W�n�ɂ����邱��<B>viewing</B>��y���x�N�g����Ԃ��B
-y���́A<B>viewport</B>�̏���ł���B
+ワールド座標系におけるこの<B>viewing</B>のy軸ベクトルを返す。
+y軸は、<B>viewport</B>の上方である。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="36294"></A>
-<B>:view-right</B> [���\�b�h]
+<A NAME="36291"></A>
+<B>:view-right</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���[���h���W�n�ɂ����邱��<B>viewing</B>��x���x�N�g����Ԃ��B
-x���́A<B>viewport</B>�̐����E�����ł���B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="36306"></A>
-<B>:look</B> <EM>from &amp;optional (to #f(0 0 0)) </EM>[���\�b�h]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>:look</B>�́A���̖ڂ�<EM>from</EM>�Ɉʒu����Ă���A<EM>to</EM>�̈ʒu��
-���Ă���Ƃ���viewing���W�n��ݒ肷��B
+ワールド座標系におけるこの<B>viewing</B>のx軸ベクトルを返す。
+x軸は、<B>viewport</B>の水平右方向である。
 </DD>
 </DL>
 <BR>
@@ -180,25 +172,51 @@ x���́A<B>viewport</B>�̐����E�����ł���B
 
 <P>
 
-<A NAME="36319"></A>
+<A NAME="36303"></A>
+<B>:look</B> <EM>from &amp;optional (to #f(0 0 0)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:look</B>は、その目が<EM>from</EM>に位置されており、<EM>to</EM>の位置を
+見ているとしてviewing座標系を設定する。
+</DD>
+</DL>
 <BR>
-69#69
+<BR>
+
+<P>
+
+<A NAME="36316"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img69.png"
+ ALT="\begin{emtabbing}
+{\bf :init}
+\it
+\&amp;key \= :target \hspace{12mm} \= \char93 f(0...
+... 1.0)) \\
+\&gt; :view-right \&gt; nil \\
+\&gt; \&amp;allow-other-keys
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD><B>viewing</B>�́A<B>cascaded-coords</B>���p������̂ŁA<EM>:pos</EM>��<EM>:rot</EM>��<EM>:euler</EM>
-��<EM>:rpy</EM>�Ȃǂ�<EM>:init</EM>�̃p�����[�^�͂��ׂ�viewing���W�n�̈ʒu��p����
-�w�肷�邱�ƂɎg�p�ł���B
-�������Ȃ���Aviewing��<EM>:init</EM>�͉�]�����肷��ȒP�ȕ��@�������Ă���B
-�����A<EM>:target</EM>�������^����ꂽ�Ƃ��A���������͎��_����<EM>target</EM>�ʒu
-�̕����Ɍ��肳��A<EM>:view-right</EM>�x�N�g���̓��[���h���W�n��xy���ʂɕ��s��
-x���Ɍ��肳���B
-<EM>:view-direction</EM>��<EM>:target</EM>�̑���Ɏw�肵�Ă������l��
-���ʂ𓾂���B
-�����A<EM>:view-up</EM>�܂���<EM>:view-right</EM>�p�����[�^��<EM>:target</EM>���邢��
-<EM>:view-direction</EM>�ɉ����Ďw�肷��Ȃ�΁A3�̉�]�p�����[�^�����ׂ�
-�������g�Ō��肷�邱�Ƃ��ł���B
+<DD><B>viewing</B>は、<B>cascaded-coords</B>を継承するので、<EM>:pos</EM>や<EM>:rot</EM>や<EM>:euler</EM>
+や<EM>:rpy</EM>などの<EM>:init</EM>のパラメータはすべてviewing座標系の位置や姿勢を
+指定することに使用できる。
+しかしながら、viewingの<EM>:init</EM>は回転を決定する簡単な方法を持っている。
+もし、<EM>:target</EM>だけが与えられたとき、視線方向は視点から<EM>target</EM>位置
+の方向に決定され、<EM>:view-right</EM>ベクトルはワールド座標系のxy平面に平行な
+x軸に決定される。
+<EM>:view-direction</EM>を<EM>:target</EM>の代わりに指定しても同じ様な
+効果を得られる。
+もし、<EM>:view-up</EM>または<EM>:view-right</EM>パラメータを<EM>:target</EM>あるいは
+<EM>:view-direction</EM>に加えて指定するならば、3つの回転パラメータをすべて
+自分自身で決定することができる。
 </DD>
 </DL>
 <BR>
@@ -208,8 +226,8 @@ x���Ɍ��肳���B
              <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

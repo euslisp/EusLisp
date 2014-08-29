@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�_���v�I�u�W�F�N�g</TITLE>
-<META NAME="description" CONTENT="�_���v�I�u�W�F�N�g">
+<TITLE>ダンプオブジェクト</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="ダンプオブジェクト">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1367"
-  HREF="jmanual-node70.html">�v���Z�X�C���[�W�ۑ�</A>
+  HREF="jmanual-node70.html">プロセスイメージ保存</A>
 <B> Up:</B> <A NAME="tex2html1361"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
 <B> Previous:</B> <A NAME="tex2html1355"
-  HREF="jmanual-node68.html">�f�o�b�O�⏕</A>
+  HREF="jmanual-node68.html">デバッグ補助</A>
  &nbsp; <B>  <A NAME="tex2html1363"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1365"
@@ -58,22 +59,22 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03096000000000000000">
-�_���v�I�u�W�F�N�g</A>
+ダンプオブジェクト</A>
 </H2>
-EusLisp�̃��[�_�ƃv�����^�́A�ǂ̂悤�ȃI�u�W�F�N�g���ēǂ݂����\�ȏ���
-�Ńt�@�C���ɏo�͂ł���悤�ɐ݌v����Ă���B
-�I�u�W�F�N�g�͑��ݎQ�Ƃ��邢�͍ċA�Q�Ƃ������Ă��Ă��悢�B
-<TT>*print-circle*</TT>��<TT>*print-object*</TT>��T��ݒ肵���Ƃ��A���̓�����
-�͉\�ƂȂ�B
-���̊֐��͂����̕ϐ���T�ɂ��A�t�@�C�����I�[�v�����A�I�u�W�F�N�g��\������B
-�����̊֐��̂����Ƃ��d�v�ȗp�r�́A���ݎQ�Ƃ�����3D���f����
-�\���̂��_���v���邱�Ƃł���B
+EusLispのリーダとプリンタは、どのようなオブジェクトも再読みだし可能な書式
+でファイルに出力できるように設計されている。
+オブジェクトは相互参照あるいは再帰参照を持っていてもよい。
+<TT>*print-circle*</TT>と<TT>*print-object*</TT>にTを設定したとき、この特徴は
+は可能となる。
+次の関数はこれらの変数をTにし、ファイルをオープンし、オブジェクトを表示する。
+これらの関数のもっとも重要な用途は、相互参照を持つ3Dモデルの
+構造体をダンプすることである。
 
 <P>
 
  <BR>
-<BR> <A NAME="18761"></A>
-<B>dump-object</B> <EM>file &amp;rest objects </EM>[�֐�]
+<BR> <A NAME="18758"></A>
+<B>dump-object</B> <EM>file &amp;rest objects </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -83,13 +84,13 @@ EusLisp�̃��[�_�ƃv�����^�́A�ǂ̂悤�ȃI�u�W�F�N�g���ēǂ݂����\�ȏ���
 <BR>
 <BR>
 
-<A NAME="18772"></A>
-<B>dump-structure</B> <EM>file &amp;rest objects </EM>[�֐�]
+<A NAME="18769"></A>
+<B>dump-structure</B> <EM>file &amp;rest objects </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�Ăѓǂݖ߂����ł���悤�ȏ�����<EM>file</EM>��<EM>objects</EM>���_���v����B
+再び読み戻しができるような書式で<EM>file</EM>に<EM>objects</EM>をダンプする。
 </DD>
 </DL>
 <BR>
@@ -97,14 +98,14 @@ EusLisp�̃��[�_�ƃv�����^�́A�ǂ̂悤�ȃI�u�W�F�N�g���ēǂ݂����\�ȏ���
 
 <P>
 
-<A NAME="18784"></A>
-<B>dump-loadable-structure</B> <EM>file &amp;rest symbols </EM>[�֐�]
+<A NAME="18781"></A>
+<B>dump-loadable-structure</B> <EM>file &amp;rest symbols </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>symbol</EM>�Ƀo�C���h���ꂽ�I�u�W�F�N�g��<EM>file</EM>�Ƀ_���v����B
-����<EM>file</EM>�͊ȒP�Ƀ��[�h���邱�Ƃɂ���ēǂݖ߂����Ƃ��ł���B
+<EM>symbol</EM>にバインドされたオブジェクトを<EM>file</EM>にダンプする。
+その<EM>file</EM>は簡単にロードすることによって読み戻すことができる。
 </DD>
 </DL>
 <BR>
@@ -113,8 +114,8 @@ EusLisp�̃��[�_�ƃv�����^�́A�ǂ̂悤�ȃI�u�W�F�N�g���ēǂ݂����\�ȏ���
              <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

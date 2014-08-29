@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�b�ŏ����ꂽLisp�֐��̒ǉ�</TITLE>
-<META NAME="description" CONTENT="�b�ŏ����ꂽLisp�֐��̒ǉ�">
+<TITLE>Ｃで書かれたLisp関数の追加</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Ｃで書かれたLisp関数の追加">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1707"
-  HREF="jmanual-node87.html">������C���^�[�t�F�[�X</A>
+  HREF="jmanual-node87.html">他言語インターフェース</A>
 <B> Up:</B> <A NAME="tex2html1701"
-  HREF="jmanual-node74.html">�V�X�e���֐�</A>
+  HREF="jmanual-node74.html">システム関数</A>
 <B> Previous:</B> <A NAME="tex2html1695"
-  HREF="jmanual-node85.html">UNIX�v���Z�X</A>
+  HREF="jmanual-node85.html">UNIXプロセス</A>
  &nbsp; <B>  <A NAME="tex2html1703"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1705"
@@ -58,40 +59,40 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04014000000000000000">
-�b�ŏ����ꂽLisp�֐��̒ǉ�</A>
+Ｃで書かれたLisp関数の追加</A>
 </H2>
 
 <P>
-�t�@�C���Ɋ܂܂��C���d���Q�Ƃ�����A�s��ɂ��΂��΃A�N�Z�X����悤��
-�v���O�����ɂ����ẮAEuslisp�ŋL�q������͂ނ���C���邢�͑��̌����
-�L�q���������������ǂ��A�L�q���킩��Ղ��B
-EusLisp�́AC�ŏ����ꂽ�v���O�����������N������@������Ă���B
+ファイルに含まれるCを重く参照したり、行列にしばしばアクセスするような
+プログラムにおいては、Euslispで記述するよりはむしろCあるいは他の言語で
+記述した方が効率が良く、記述もわかり易い。
+EusLispは、Cで書かれたプログラムをリンクする方法を備えている。
 
 <P>
-����C�ŏ����ꂽEuslisp�̊֐����`�������Ȃ�΁A
-Euslisp�ŌĂяo���ł���C�̊֐��͂��ꂼ��A�R�̈��������󂯂�悤�ɏ�����Ȃ����
-�Ȃ�Ȃ��B���ւ̃|�C���^�Ǝ󂯎��������̐���lisp�̈����̈������
-�|�C���^��3�ł���B
-�����̈����́A<TT>c/eus.h</TT>�̒��̃}�N���ɂ���ĎQ�Ƃ���邽�߁A
-<TT>ctx, n, argv</TT>�Ɩ��t�����˂΂Ȃ�Ȃ��B
-C�̃v���O�����́A<TT>*eusdir*/c/eus.h</TT>��include���Ȃ���΂Ȃ�Ȃ��B
-�v���O���}�[�́A�����ɏ����ꂽ�^��}�N���ɐ��ʂ��Ă��Ȃ���΂Ȃ�Ȃ��B
-�G���g���֐����ɂ́A�\�[�X�t�@�C����basename��t���Ȃ���΂Ȃ�Ȃ��B
+もしCで書かれたEuslispの関数を定義したいならば、
+Euslispで呼び出しできるCの関数はそれぞれ、３つの引き数を受けるように書かれなければ
+ならない。環境へのポインタと受け取る引き数の数とlispの引数領域を示す
+ポインタの3つである。
+これらの引数は、<TT>c/eus.h</TT>の中のマクロによって参照されるため、
+<TT>ctx, n, argv</TT>と名付けられねばならない。
+Cのプログラムは、<TT>*eusdir*/c/eus.h</TT>をincludeしなければならない。
+プログラマーは、そこに書かれた型やマクロに精通していなければならない。
+エントリ関数名には、ソースファイルのbasenameを付けなければならない。
 
 <P>
-�C�ӂ̐��̎����̎Z�p���ς��v�Z����C�̊֐�AVERAGE�̃T���v���R�[�h�́A
-�ȉ��Ɏ����ʂ�ł���B
-���̗�ɂ����āA������������l�𓾂���@�A�����̃|�C���^�������@�A
-����ϐ�AVERAGE�Ƀ|�C���^��ݒ肷����@��G���g���֐�<TT>ave</TT>��
-�֐���symbol���`������@��m�邱�Ƃ��ł���B
-<TT>'cc -c -Dsun4 -DSolaris2 -K pic'</TT>�ł��̃v���O�������R���p�C������B
-<TT>c/eus.h</TT>���̐�������`��I�����邽�߂ɁA<TT>-Dsun4</TT>��<TT>-DSolaris2</TT>
-���K�v�ł���B
-<TT>-K pic</TT>�́A���[�h�\�ȋ��L�I�u�W�F�N�g�̂��߂ɁA�ʒu�Ɉˑ�����R�[�h��
-C�R���p�C���Ő��������邽�߂ɕK�v�ł���B
-���̌�A�R���p�C���̌��ʂł���'.o'�t�@�C����Euslisp�Ƀ��[�h���邱�Ƃ��ł���B
-�����Ɗ��S�ȗ��<TT>*eusdir*/clib/*.c</TT>�ɒu����Ă���B
-�����̗�́A�����ŏ����ꂽ���@�Œ�`����A���[�h�����B
+任意の数の実数の算術平均を計算するCの関数AVERAGEのサンプルコードは、
+以下に示す通りである。
+この例において、引数から実数値を得る方法、実数のポインタを作る方法、
+特殊変数AVERAGEにポインタを設定する方法やエントリ関数<TT>ave</TT>に
+関数やsymbolを定義する方法を知ることができる。
+<TT>'cc -c -Dsun4 -DSolaris2 -K pic'</TT>でこのプログラムをコンパイルする。
+<TT>c/eus.h</TT>内の正しい定義を選択するために、<TT>-Dsun4</TT>や<TT>-DSolaris2</TT>
+が必要である。
+<TT>-K pic</TT>は、ロード可能な共有オブジェクトのために、位置に依存するコードを
+Cコンパイラで生成させるために必要である。
+その後、コンパイルの結果である'.o'ファイルがEuslispにロードすることができる。
+もっと完全な例は<TT>*eusdir*/clib/*.c</TT>に置かれている。
+これらの例は、ここで書かれた方法で定義され、ロードされる。
 
 <P>
 <PRE>
@@ -129,8 +130,8 @@ pointer argv[];
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

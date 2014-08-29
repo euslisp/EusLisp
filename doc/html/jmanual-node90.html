@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�z�X�g���̋N��</TITLE>
-<META NAME="description" CONTENT="�z�X�g���̋N��">
+<TITLE>ホスト側の起動</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="ホスト側の起動">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,11 +44,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1761"
-  HREF="jmanual-node91.html">�}���`�X���b�h</A>
+  HREF="jmanual-node91.html">マルチスレッド</A>
 <B> Up:</B> <A NAME="tex2html1755"
   HREF="jmanual-node88.html">VxWorks</A>
 <B> Previous:</B> <A NAME="tex2html1751"
-  HREF="jmanual-node89.html">VxWorks���̋N��</A>
+  HREF="jmanual-node89.html">VxWorks側の起動</A>
  &nbsp; <B>  <A NAME="tex2html1757"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1759"
@@ -57,13 +58,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04016200000000000000">
-�z�X�g���̋N��</A>
+ホスト側の起動</A>
 </H3>
-�C�ӂ̃}�V���̏��eus���N�����A"vxworks/vxweus"�����[�h����B
-<B>connect-vxw</B>�֐���p����<B>vxwserv</B>�ɐڑ�����B
-�ڑ���A�\�P�b�g�X�g���[����<B>*vxw-stream*</B>�Ƀo�C���h�����B
-�ȉ��ɁA�R�l�N�g�̗�������B���̗�ł́AVxWorks���sin, vadd�֐���
-euslisp�̊֐�VSIN,VAD�Ƃ��Ē�`���Ă���B
+任意のマシンの上でeusを起動し、"vxworks/vxweus"をロードする。
+<B>connect-vxw</B>関数を用いて<B>vxwserv</B>に接続する。
+接続後、ソケットストリームが<B>*vxw-stream*</B>にバインドされる。
+以下に、コネクトの例を示す。この例では、VxWorks上のsin, vadd関数を
+euslispの関数VSIN,VADとして定義している。
 
 <P>
 <PRE>
@@ -74,21 +75,21 @@ euslisp�̊֐�VSIN,VAD�Ƃ��Ē�`���Ă���B
 </PRE>
 
 <P>
-VxWorks��ɍ쐬�����֐����Avxws��ʂ��ČĂяo����邽�߂ɂ́A
-���̏����𖞂����Ȃ���΂Ȃ�Ȃ��B
+VxWorks上に作成される関数が、vxwsを通じて呼び出されるためには、
+次の条件を満たさなければならない。
 
 <P>
 
 <OL>
-<LI>�����́A32�ȓ��ł��邱�ƁA�����Ɏ󂯎��x�N�^�̗e�ʂ̍��v��
-connect-vxw��:buffer-size�Ŏw�肵���l���z���Ȃ�����
+<LI>引数は、32個以内であること、引数に受け取るベクタの容量の合計が
+connect-vxwの:buffer-sizeで指定した値を越えないこと
 </LI>
-<LI>struct�������ɂ��Ȃ����ƁA�K��struct�ւ̃|�C���^�������ɂ��邱��
+<LI>structを引数にしないこと、必ずstructへのポインタを引数にすること
 </LI>
-<LI>���ʂ́Aint, float, double�܂��́A�����̔z��̃A�h���X�ł��邱��
+<LI>結果は、int, float, doubleまたは、それらの配列のアドレスであること
 </LI>
-<LI>�z��̃A�h���X�����ʂƂ���ꍇ�A���̔z��̎��̂́A
-�֐��̊O���Ɏ���Ă��邱��
+<LI>配列のアドレスを結果とする場合、その配列の実体は、
+関数の外部に取られていること
 </LI>
 </OL>
 
@@ -97,19 +98,29 @@ connect-vxw��:buffer-size�Ŏw�肵���l���z���Ȃ�����
  <BR>
 <BR> <P>
 
-<A NAME="24776"></A>
+<A NAME="24773"></A>
 <BR>
-45#45
+<IMG
+ WIDTH="554" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img45.png"
+ ALT="\begin{emtabbing}
+{\bf connect-vxw}
+\it\&amp;key \= (:host ''asvx0'') \\lq  [関数] \...
+...ze 16384)\\
+\&gt; (:priority 1280)\\
+\&gt; (:option \char93 x1c)
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD><EM>:host</EM>�ɑ΂���vxws�v���g�R���ɂ��ʐM�̂��߂̃\�P�b�g�X�g���[�����쐬���A���̃X�g���[����Ԃ��B
-<EM>:host</EM>�ɂ́A�l�b�g���[�N�ɂ�����VxWorks�̃A�N�Z�X�ԍ����邢�̓A�N�Z�X�����w�肷��B
-<EM>:port</EM>�ɂ́AVxWorks���<B>vxwserv</B>���o�C���h�����|�[�g��{�����߂̍ŏ��̃|�[�g�ԍ����w�肷��B
-���̃|�[�g�ԍ�����A���������ɐڑ������s����B
-<EM>:option</EM>�̃R�[�h�ɂ��ẮAVxWorks�́Aspawn�֐����Q�Ƃ̂��ƁB
-�R�l�N�V�����́A�����ɕ��������Ă悢�B
+<DD><EM>:host</EM>に対してvxwsプロトコルによる通信のためのソケットストリームを作成し、そのストリームを返す。
+<EM>:host</EM>には、ネットワークにおけるVxWorksのアクセス番号あるいはアクセス名を指定する。
+<EM>:port</EM>には、VxWorks上の<B>vxwserv</B>がバインドしたポートを捜すための最初のポート番号を指定する。
+このポート番号から、増加方向に接続を試行する。
+<EM>:option</EM>のコードについては、VxWorksの、spawn関数を参照のこと。
+コネクションは、同時に複数張ってよい。
 </DD>
 </DL>
 <BR>
@@ -117,31 +128,31 @@ connect-vxw��:buffer-size�Ŏw�肵���l���z���Ȃ�����
 
 <P>
 
-<A NAME="24792"></A>
-<B>vxw</B> <EM>vxw-stream entry result-type args </EM>[�֐�]
+<A NAME="24789"></A>
+<B>vxw</B> <EM>vxw-stream entry result-type args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>vxw</B>�́A<EM>vxw-stream</EM>�ɐڑ�����Ă���VxWorks�̊֐�<EM>entry</EM>���Ăяo���A
-���̊֐��Ɉ�����<EM>args</EM>��^����<EM>result-type</EM>�Ŏw�肳�ꂽ���ʂ𓾂�B
-<EM>vxw-stream</EM>�ɂ́A<B>connect-vxw</B>�ō쐬�����\�P�b�g�X�g���[����^����B
-<EM>entry</EM>�ɂ́AVxWorks�̊֐������X�g�����O�Ŏw�肷�邩�A���邢�͊֐���
-�A�h���X�𐮐��Ŏw�肷��B
-�֐��̃A�h���X��m��ɂ́AVxWorks��findsymbol���Ăяo���B
-�m�肽���V���{���́A�ʏ�A"_"�Ŏn�܂邱�Ƃɒ��ӁB
-<EM>entry</EM>���X�g�����O�̏ꍇ�AVxWorks��ŃV���{���e�[�u���̒����T�����s����B
-<EM>result-type</EM>�ɂ́A���ʂ̃f�[�^�^(<TT>:integer</TT>�܂���<TT>:float</TT>)�A
-���邢�̓f�[�^���󂯎��x�N�^�^���w�肷��B
-�x�N�^�́A<TT>float-vector, integer-vector, string</TT>�̃C���X�^���X�ł���B
-<TT>general vector</TT>(lisp�̔C�ӂ̃I�u�W�F�N�g��v�f�Ƃ���x�N�^)�͎w��ł��Ȃ��B
-���ʌ^�́A�K���A���ۂ�VxWorks�֐��̌��ʌ^�ƈ�v���Ȃ���΂Ȃ�Ȃ��B
-<EM>args</EM>�ɂ́A<EM>entry</EM>�ɗ^������������w�肷��B
-�����ɋ������EusLisp�f�[�^�́A<TT>integer, float, string, integer-vector,
-float-vector, integer-matrix, float-matrix</TT>�ł���B
-�|�C���^���܂񂾈�ʂ̃I�u�W�F�N�g�A��ʂ̃x�N�g���͑���Ȃ��B
-�܂��A����ꂽ�x�N�g���f�[�^�́A��U<B>vxwserv</B>���l�������o�b�t�@�̒��ɒ~�ς����B
-�Ⴆ�΁AVxWorks�ɒ�`���ꂽ�֐�"sin"���Ăяo�����߂ɂ́A���̂悤�Ɏ��s����΂悢�B
+<B>vxw</B>は、<EM>vxw-stream</EM>に接続されているVxWorksの関数<EM>entry</EM>を呼び出し、
+その関数に引き数<EM>args</EM>を与えて<EM>result-type</EM>で指定された結果を得る。
+<EM>vxw-stream</EM>には、<B>connect-vxw</B>で作成したソケットストリームを与える。
+<EM>entry</EM>には、VxWorksの関数名をストリングで指定するか、あるいは関数の
+アドレスを整数で指定する。
+関数のアドレスを知るには、VxWorksのfindsymbolを呼び出す。
+知りたいシンボルは、通常、"_"で始まることに注意。
+<EM>entry</EM>がストリングの場合、VxWorks上でシンボルテーブルの逐次探索が行われる。
+<EM>result-type</EM>には、結果のデータ型(<TT>:integer</TT>または<TT>:float</TT>)、
+あるいはデータを受け取るベクタ型を指定する。
+ベクタは、<TT>float-vector, integer-vector, string</TT>のインスタンスである。
+<TT>general vector</TT>(lispの任意のオブジェクトを要素とするベクタ)は指定できない。
+結果型は、必ず、実際のVxWorks関数の結果型と一致しなければならない。
+<EM>args</EM>には、<EM>entry</EM>に与える引き数を指定する。
+引数に許されるEusLispデータは、<TT>integer, float, string, integer-vector,
+float-vector, integer-matrix, float-matrix</TT>である。
+ポインタを含んだ一般のオブジェクト、一般のベクトルは送れない。
+また、送られたベクトルデータは、一旦<B>vxwserv</B>が獲得したバッファの中に蓄積される。
+例えば、VxWorksに定義された関数"sin"を呼び出すためには、次のように実行すればよい。
 <TT>(vxw *vxw-stream* "sin" :float 1.0)</TT>
 
 </DD>
@@ -151,20 +162,20 @@ float-vector, integer-matrix, float-matrix</TT>�ł���B
 
 <P>
 
-<A NAME="24821"></A>
-<B>defvxw</B> <EM>eus-func-name entry args &amp;optional (result-type :integer) </EM>[�}�N��]
+<A NAME="24818"></A>
+<B>defvxw</B> <EM>eus-func-name entry args &amp;optional (result-type :integer) </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>defvxw</B>�́Afindsymbol��p����<B>vxw</B>���Ăяo���āAVxWorks�̊֐��̍����ȌĂяo����
-�������邽�߂̃}�N���ł���B
-VxWorks�̊֐�<EM>entry</EM>���Ăяo�����߂�Euslisp�̊֐�<EM>eus-func-name</EM>���`����B
-���̃}�N�������s��́A<EM>eus-func-name</EM>���Ăяo�����Ƃɂ��AVxWorks�̊֐����Ăяo�����Ƃ��ł���B
-���̂Ƃ��A�Ăяo���Ɏg�p�����\�P�b�g�X�g���[����<B>*vxw-stream*</B>�ɌŒ肳��Ă���B
-�������AVxWorks���ŁA�֐����R���p�C���������čă��[�h�����ꍇ�A
-�V�����֐���`���Ă΂��悤�ɂ��邽�߂ɂ́Aeus���ŁA<B>defvxw</B>��������x
-���s�������āA�ŐV�̃G���g���A�h���X���w�肳���悤�ɂ���K�v������B
+<B>defvxw</B>は、findsymbolを用いて<B>vxw</B>を呼び出して、VxWorksの関数の高速な呼び出しを
+実現するためのマクロである。
+VxWorksの関数<EM>entry</EM>を呼び出すためのEuslispの関数<EM>eus-func-name</EM>を定義する。
+このマクロを実行後は、<EM>eus-func-name</EM>を呼び出すことにより、VxWorksの関数を呼び出すことができる。
+このとき、呼び出しに使用されるソケットストリームは<B>*vxw-stream*</B>に固定されている。
+ただし、VxWorks側で、関数をコンパイルし直して再ロードした場合、
+新しい関数定義が呼ばれるようにするためには、eus側で、<B>defvxw</B>をもう一度
+実行し直して、最新のエントリアドレスが指定されるようにする必要がある。
 
 </DD>
 </DL>
@@ -174,8 +185,8 @@ VxWorks�̊֐�<EM>entry</EM>���Ăяo�����߂�Euslisp�̊֐�<EM>eus-func-name</EM>��
 
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

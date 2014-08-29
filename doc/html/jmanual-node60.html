@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�񓯊����o��</TITLE>
-<META NAME="description" CONTENT="�񓯊����o��">
+<TITLE>非同期入出力</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="非同期入出力">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1236"
-  HREF="jmanual-node61.html">�p�X��</A>
+  HREF="jmanual-node61.html">パス名</A>
 <B> Up:</B> <A NAME="tex2html1230"
-  HREF="jmanual-node52.html">�X�g���[���Ɠ��o��</A>
+  HREF="jmanual-node52.html">ストリームと入出力</A>
 <B> Previous:</B> <A NAME="tex2html1224"
-  HREF="jmanual-node59.html">�\�P�b�g</A>
+  HREF="jmanual-node59.html">ソケット</A>
  &nbsp; <B>  <A NAME="tex2html1232"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1234"
@@ -58,7 +59,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03085000000000000000">
-�񓯊����o��</A>
+非同期入出力</A>
 </H2>
 
 <P>
@@ -66,23 +67,23 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  <BR>
 <BR> <P>
 
-<A NAME="15589"></A>
-<B>select-stream</B> <EM>stream-list timeout </EM>[�֐�]
+<A NAME="15586"></A>
+<B>select-stream</B> <EM>stream-list timeout </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>stream-list</EM>�̒��ŁA���͏�������������Ă���X�g���[�����������X�g�ŕԂ��B
-�����A<EM>timeout</EM>�b���o�܂łɂǂ̃X�g���[�����������o���Ȃ��Ƃ��́A
-NIL��Ԃ��B
-<B>select-stream</B>�́A���̓X�g���[���̃��X�g����A�N�e�B�u�ȃX�g���[��
-��I�ԂƂ��ɖ𗧂B���̃X�g���[���ł́A���͏������񓯊��ŉ\�ƂȂ�B
-<EM>timeout</EM>�́A�I�����������s����܂ł̎��Ԃ������B
-����́A�����ł��悢�B
-�����A<EM>timeout</EM>�̎w�肪�Ȃ��Ƃ��́A�Œ�P�̃X�g���[��������͂���������܂�
-<B>select-stream</B>�͑�������B
-�����A<EM>timeout</EM>���w�肳��ǂ̃X�g���[����������͂�����Ȃ������Ȃ�΁A
-<B>select-stream</B>�͎��s��NIL��Ԃ��B
+<EM>stream-list</EM>の中で、入力処理が準備されているストリームを見つけリストで返す。
+もし、<EM>timeout</EM>秒が経つまでにどのストリームも準備が出来ないときは、
+NILを返す。
+<B>select-stream</B>は、入力ストリームのリストからアクティブなストリーム
+を選ぶときに役立つ。そのストリームでは、入力処理が非同期で可能となる。
+<EM>timeout</EM>は、選択処理が失敗するまでの時間を示す。
+これは、実数でもよい。
+もし、<EM>timeout</EM>の指定がないときは、最低１つのストリームから入力が到着するまで
+<B>select-stream</B>は続けられる。
+もし、<EM>timeout</EM>が指定されどのストリームからも入力が現れなかったならば、
+<B>select-stream</B>は失敗しNILを返す。
 </DD>
 </DL>
 <BR>
@@ -90,20 +91,20 @@ NIL��Ԃ��B
 
 <P>
 
-<A NAME="15607"></A>
-<B>def-async</B> <EM>stream function </EM>[�}�N��]
+<A NAME="15604"></A>
+<B>def-async</B> <EM>stream function </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>stream</EM>�Ƀf�[�^�����������Ƃ��ɌĂяo�����<EM>function</EM>
-���`����B<EM>stream</EM>�́A�t�@�C���X�g���[�����\�P�b�g�X�g���[���̂ǂ��炩�ł���B
-�t�@�C���X�g���[���Ƀf�[�^�������Ƃ����̓\�P�b�g�|�[�g�ɐڑ��v�������ꂽ�Ƃ��A
-���̃X�g���[�����������Ƃ���<EM>function</EM>���Ăяo�����B
-���̃}�N���́ASIGIO �n���h���[�Ƃ��đ�������A���[�U�[����^������
-���ۂ̓��͏��������s���邽�߂�<EM>function</EM>�ɒu����������B
-�����āA<EM>stream</EM>���ǂݍ��݉\�ƂȂ����Ƃ��A�񓯊���SIGIO�𔭂���
-���߂�<EM>stream</EM>�Ɋւ���<B>unix:fnctl</B>���g�p�����B
+<EM>stream</EM>にデータが到着したときに呼び出される<EM>function</EM>
+を定義する。<EM>stream</EM>は、ファイルストリームかソケットストリームのどちらかである。
+ファイルストリームにデータが来たとき又はソケットポートに接続要求が現れたとき、
+そのストリームを引き数として<EM>function</EM>が呼び出される。
+このマクロは、SIGIO ハンドラーとして装備され、ユーザーから与えられる
+実際の入力処理を実行するための<EM>function</EM>に置き換えられる。
+そして、<EM>stream</EM>が読み込み可能となったとき、非同期にSIGIOを発する
+ために<EM>stream</EM>に関して<B>unix:fnctl</B>が使用される。
 </DD>
 </DL>
 <BR>
@@ -115,8 +116,8 @@ NIL��Ԃ��B
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

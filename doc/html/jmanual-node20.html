@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>��ʉ��ϐ�</TITLE>
-<META NAME="description" CONTENT="��ʉ��ϐ�">
+<TITLE>一般化変数</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="一般化変数">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html654"
-  HREF="jmanual-node21.html">���ꏑ��</A>
+  HREF="jmanual-node21.html">特殊書式</A>
 <B> Up:</B> <A NAME="tex2html648"
-  HREF="jmanual-node17.html">�����ƕ]��</A>
+  HREF="jmanual-node17.html">書式と評価</A>
 <B> Previous:</B> <A NAME="tex2html642"
-  HREF="jmanual-node19.html">�X�R�[�v</A>
+  HREF="jmanual-node19.html">スコープ</A>
  &nbsp; <B>  <A NAME="tex2html650"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html652"
@@ -58,32 +59,32 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03023000000000000000">
-��ʉ��ϐ�</A>
+一般化変数</A>
 </H2>
-��ʓI�ɁA�ǂ�Ȓl����ё������I�u�W�F�N�g�̃X���b�g�i�܂��̓X�^�b�N�j
-�ŕ\�������B
-�X���b�g�̒l�������o�����܂��͕ς���Ƃ��́A
-2�̊�{�I�Ȗ��߁A<B>access</B>��<B>update</B>�ōs��Ȃ���΂Ȃ�Ȃ��B
-�I�u�W�F�N�g�̑S�ẴX���b�g�ɑ΂���2�̈قȂ�����{���߂��`�������
-EusLisp�ł́ACommon Lisp�̂悤�ɁA��ʉ��ϐ��R���Z�v�g�Ɋ�Â���
-���I�ȍX�V���߂�����Ă���B
-���̃R���Z�v�g�̂Ȃ��ŁA���ʏ����́A�l�̃A�N�Z�X�������邢�̓X���b�g�̈ʒu�w��
-�Ƃ��ĔF�������B
-���������āA���ꂼ��̃X���b�g�ɑ΂��ăA�N�Z�X���鏑�����o���Ă��������΁A�X�V��
-���̃A�N�Z�X������<B>setf</B>�}�N����g�ݍ��킹�邱�Ƃɂ��
-�����ł���B
-�Ⴆ�΁Acar�l�����X�g�̊O�Ɏ��o���̂Ɠ����l��<TT>(setf (car '(a b)) 'c)</TT>
-�Ƃ���<B>setf</B>���g�p�����Ƃ��A<TT>(car x)</TT>��<TT>x</TT>��car�X���b�g�̂Ȃ���
-�l��u�������邱�ƂɎg�p���邱�Ƃ��ł���B
+一般的に、どんな値および属性もオブジェクトのスロット（またはスタック）
+で表現される。
+スロットの値を引き出すかまたは変えるときは、
+2つの基本的な命令、<B>access</B>と<B>update</B>で行わなければならない。
+オブジェクトの全てのスロットに対して2つの異なった基本命令を定義する代りに
+EusLispでは、Common Lispのように、一般化変数コンセプトに基づいた
+画一的な更新命令を備えている。
+このコンセプトのなかで、共通書式は、値のアクセス書式あるいはスロットの位置指定
+として認識される。
+したがって、それぞれのスロットに対してアクセスする書式を覚えてさえおけば、更新は
+そのアクセス書式と<B>setf</B>マクロを組み合わせることにより
+実現できる。
+例えば、car値をリストの外に取り出すのと同じ様に<TT>(setf (car '(a b)) 'c)</TT>
+として<B>setf</B>を使用したとき、<TT>(car x)</TT>は<TT>x</TT>のcarスロットのなかの
+値を置き換えることに使用することができる。
 
 <P>
-���̕��@�́A���[�U�[����`�����I�u�W�F�N�g�S�Ăɑ΂���
-�K�p�ł���B
-�N���X��\���̂���`�����Ƃ��A���ꂼ��̃X���b�g�ɑ΂���
-access��update�����́A�����I�ɒ�`�����B
-�����̏����́A���ꂼ��}�N���Ƃ��Ē�`����Ă���B���̖��O�́A
-�N���X���ƃX���b�g���̘A���ƂȂ�B
-�Ⴆ�΁Acons��car��<TT>(cons-car '(a b c))</TT>�ŏ������邱�Ƃ��ł���B
+この方法は、ユーザーが定義したオブジェクト全てに対して
+適用できる。
+クラスや構造体が定義されるとき、それぞれのスロットに対する
+accessやupdate書式は、自動的に定義される。
+それらの書式は、それぞれマクロとして定義されている。その名前は、
+クラス名とスロット名の連結となる。
+例えば、consのcarは<TT>(cons-car '(a b c))</TT>で処理することができる。
 
 <P>
 <PRE>
@@ -99,7 +100,7 @@ access��update�����́A�����I�ɒ�`�����B
 </PRE>
 
 <P>
-�s��v�f��������@�ŃA�N�Z�X���邱�Ƃ��ł���B
+行列要素も同じ手法でアクセスすることができる。
 
 <P>
 <PRE>
@@ -113,8 +114,8 @@ b --&gt; #*0000010000
 </PRE>
 
 <P>
-����̃I�u�W�F�N�g�ɓ��ʂ�setf���\�b�h���`���邽�߂�
-<B>defsetf</B>�}�N����p�ӂ��Ă���B
+特定のオブジェクトに特別なsetfメソッドを定義するために
+<B>defsetf</B>マクロを用意している。
 
 <P>
 <PRE>
@@ -125,8 +126,8 @@ b --&gt; #*0000010000
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

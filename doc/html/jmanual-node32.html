@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�N���X�ƃ��\�b�h</TITLE>
-<META NAME="description" CONTENT="�N���X�ƃ��\�b�h">
+<TITLE>クラスとメソッド</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="クラスとメソッド">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html828"
-  HREF="jmanual-node33.html">���b�Z�[�W���M</A>
+  HREF="jmanual-node33.html">メッセージ送信</A>
 <B> Up:</B> <A NAME="tex2html822"
-  HREF="jmanual-node31.html">�I�u�W�F�N�g�w���v���O���~���O</A>
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
 <B> Previous:</B> <A NAME="tex2html816"
-  HREF="jmanual-node31.html">�I�u�W�F�N�g�w���v���O���~���O</A>
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
  &nbsp; <B>  <A NAME="tex2html824"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html826"
@@ -58,7 +59,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03041000000000000000">
-�N���X�ƃ��\�b�h</A>
+クラスとメソッド</A>
 </H2>
 
 <P>
@@ -66,17 +67,27 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  <BR>
 <BR> <P>
 
-<A NAME="3795"></A>
+<A NAME="3792"></A>
 <BR>
-8#8
+<IMG
+ WIDTH="556" HEIGHT="89" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img8.png"
+ ALT="\begin{emtabbing}
+{\bf defclass}
+\it classname \&amp;key \= :super object \\lq  [マ�...
+...etaclass metaclass \\
+\&gt; :element-type t \\
+\&gt; :size -1\\
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>�N���X�𐶐��܂��͍Ē�`����B
-�قȂ����X�[�p�[�N���X��X���b�g�����N���X�ɍĒ�`�����Ƃ��A
-���\�b�h���V�����X���b�g�z�u�����肷�邽�߁A
-�ȑO�̃N���X���p������Â��I�u�W�F�N�g�͗\�z�ł��Ȃ��U����������B
+<DD>クラスを生成または再定義する。
+異なったスーパークラスやスロットを持つクラスに再定義したとき、
+メソッドが新しいスロット配置を仮定するため、
+以前のクラスを継承する古いオブジェクトは予想できない振舞いをする。
 </DD>
 </DL>
 <BR>
@@ -84,14 +95,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3806"></A>
-<B>defmethod</B> <EM>classname {(selector lambda-list . body)}* </EM>[����]
+<A NAME="3803"></A>
+<B>defmethod</B> <EM>classname {(selector lambda-list . body)}* </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>classname</EM>��1�ȏ�̃��\�b�h���`����B
-���ꂼ���<EM>selector</EM>�́A�L�[���[�hsymbol�łȂ���΂Ȃ�Ȃ��B
+<EM>classname</EM>の1つ以上のメソッドを定義する。
+それぞれの<EM>selector</EM>は、キーワードsymbolでなければならない。
 </DD>
 </DL>
 <BR>
@@ -99,8 +110,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3818"></A>
-<B>defclassmethod</B> <EM>classname {(selector lambda-list . body)}* </EM>[�}�N��]
+<A NAME="3815"></A>
+<B>defclassmethod</B> <EM>classname {(selector lambda-list . body)}* </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
@@ -112,14 +123,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3829"></A>
-<B>classp</B> <EM>object </EM>[�֐�]
+<A NAME="3826"></A>
+<B>classp</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>object</EM>���N���X�I�u�W�F�N�g�̂Ƃ�T��Ԃ��B
-���̃I�u�W�F�N�g�́A�N���X<B>metaclass</B>�����̃T�u�N���X��
-�C���X�^���X�ł���B
+<DD> <EM>object</EM>がクラスオブジェクトのときTを返す。
+そのオブジェクトは、クラス<B>metaclass</B>かそのサブクラスの
+インスタンスである。
 </DD>
 </DL>
 <BR>
@@ -127,13 +138,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3841"></A>
-<B>subclassp</B> <EM>class super </EM>[�֐�]
+<A NAME="3838"></A>
+<B>subclassp</B> <EM>class super </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>class</EM>��<EM>super</EM>�̃T�u�N���X�ł��邱�Ƃ���������B
+<EM>class</EM>が<EM>super</EM>のサブクラスであることを検査する。
 </DD>
 </DL>
 <BR>
@@ -141,13 +152,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3853"></A>
-<B>vector-class-p</B> <EM>x </EM>[�֐�]
+<A NAME="3850"></A>
+<B>vector-class-p</B> <EM>x </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>x</EM>���A<B>vector-class</B>�̃C���X�^���X�ł���Ƃ��AT��Ԃ��B
+<EM>x</EM>が、<B>vector-class</B>のインスタンスであるとき、Tを返す。
 </DD>
 </DL>
 <BR>
@@ -155,13 +166,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3865"></A>
-<B>delete-method</B> <EM>class method-name </EM>[�֐�]
+<A NAME="3862"></A>
+<B>delete-method</B> <EM>class method-name </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>method-name</EM>�̃��\�b�h��`��<EM>class</EM>���珜���B
+<EM>method-name</EM>のメソッド定義を<EM>class</EM>から除く。
 </DD>
 </DL>
 <BR>
@@ -169,13 +180,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3877"></A>
-<B>class-hierarchy</B> <EM>class </EM>[�֐�]
+<A NAME="3874"></A>
+<B>class-hierarchy</B> <EM>class </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>class</EM>�̉��̌p���\����\������B
+<EM>class</EM>の下の継承構造を表示する。
 </DD>
 </DL>
 <BR>
@@ -183,13 +194,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3888"></A>
-<B>system:list-all-classes</B> [�֐�]
+<A NAME="3885"></A>
+<B>system:list-all-classes</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���܂Œ�`���ꂽ�N���X��S�ă��X�g�A�b�v����B
+今まで定義されたクラスを全てリストアップする。
 </DD>
 </DL>
 <BR>
@@ -197,16 +208,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3898"></A>
-<B>system:find-method</B> <EM>object selector </EM>[�֐�]
+<A NAME="3895"></A>
+<B>system:find-method</B> <EM>object selector </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>selector</EM>�ɋL�q���ꂽ���\�b�h��<EM>object</EM>�̃N���X�����
-���̃X�[�p�[�N���X�̒����猩����B
-<EM>object</EM>���A<EM>selector</EM>�ɉ����邱�Ƃ��ł��邩�ǂ�����
-�m�邽�߂Ɏg�p�����B
+<EM>selector</EM>に記述されたメソッドを<EM>object</EM>のクラスおよび
+そのスーパークラスの中から見つける。
+<EM>object</EM>が、<EM>selector</EM>に応じることができるかどうかを
+知るために使用される。
 </DD>
 </DL>
 <BR>
@@ -214,17 +225,17 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="3912"></A>
-<B>system:method-cache</B> <EM>&amp;optional flag </EM>[�֐�]
+<A NAME="3909"></A>
+<B>system:method-cache</B> <EM>&amp;optional flag </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���\�b�h�L���b�V���̃q�b�g���𒲍����A
-�q�b�g�ƃ~�X��2�̐��l�̃��X�g��Ԃ��B
-����<EM>flag</EM>��NIL�̂Ƃ��A���\�b�h�L���b�V���͖����ɂȂ�B
-����non-NIL��<EM>flag</EM>���^����ꂽ�Ƃ��A���\�b�h�L���b�V���͏���������
-�L���b�V���\�ɂȂ�B
+メソッドキャッシュのヒット率を調査し、
+ヒットとミスの2つの数値のリストを返す。
+もし<EM>flag</EM>がNILのとき、メソッドキャッシュは無効になる。
+もしnon-NILの<EM>flag</EM>が与えられたとき、メソッドキャッシュは初期化され
+キャッシュ可能になる。
 </DD>
 </DL>
 <BR>
@@ -252,19 +263,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html828"
-  HREF="jmanual-node33.html">���b�Z�[�W���M</A>
+  HREF="jmanual-node33.html">メッセージ送信</A>
 <B> Up:</B> <A NAME="tex2html822"
-  HREF="jmanual-node31.html">�I�u�W�F�N�g�w���v���O���~���O</A>
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
 <B> Previous:</B> <A NAME="tex2html816"
-  HREF="jmanual-node31.html">�I�u�W�F�N�g�w���v���O���~���O</A>
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
  &nbsp; <B>  <A NAME="tex2html824"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html826"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

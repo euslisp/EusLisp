@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�^�C�}�[</TITLE>
-<META NAME="description" CONTENT="�^�C�}�[">
+<TITLE>タイマー</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="タイマー">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,11 +44,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1948"
-  HREF="jmanual-node103.html">����x�̌v��</A>
+  HREF="jmanual-node103.html">並列度の計測</A>
 <B> Up:</B> <A NAME="tex2html1942"
-  HREF="jmanual-node96.html">�񓯊��v���O���~���O�ƕ���v���O���~���O�̍\�z</A>
+  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
 <B> Previous:</B> <A NAME="tex2html1938"
-  HREF="jmanual-node101.html">�����������|�[�g</A>
+  HREF="jmanual-node101.html">同期メモリポート</A>
  &nbsp; <B>  <A NAME="tex2html1944"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1946"
@@ -57,32 +58,32 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04022600000000000000">
-�^�C�}�[</A>
+タイマー</A>
 </H3>
-�����ԃv���O�����́A�\�肳�ꂽ���ԂɎ��s�����֐���A
-����̊Ԋu�ŌJ��Ԃ����֐������΂��Ηv������B
-����܂ł�EusLisp�́AUnix�̃C���^�[�o���^�C�}�[�ɂ����
-����I�ɐ��������M���ɂ���Ĕ������郆�[�U�[�֐���
-���s���邱�Ƃ��ł����B
-MT-Eus�ɂ����āA���̎��s�̓f�b�h���b�N�������N�����B
-�Ȃ��Ȃ�A���荞�݂�mutex-lock���ꂽ�u���b�N�����甭������\��������B
-���������āA�����<TT>eval</TT>�̍ŏ��̂悤�Ɉ��S�ȏꏊ�œn����Ȃ����
-�Ȃ�Ȃ��B
-��L�̓����ɂ���Ĉ����N�������x�������邽�߂ɁA
-MT-Eus�̓Z�}�t�H���o�R���ĐM���ʒm(signal-notification)��
-�񋟂���B
-����������΁A�M���֐��͌Ăяo����邩���邢�͐M���̓�����m�点��
-�֐����邢�̓Z�}�t�H�̂ǂ��炩���Ƃ�B
-�Z�}�t�H�́A�჌�x���ō��������̂ŁA
-�����ɂ��B��Ă���Ƃ���͍ŏ��ł���B
+実時間プログラムは、予定された時間に実行される関数や、
+特定の間隔で繰り返される関数をしばしば要求する。
+これまでのEusLispは、Unixのインターバルタイマーによって
+定期的に生成される信号によって発生するユーザー関数を
+実行することができた。
+MT-Eusにおいて、この実行はデッドロックを引き起こす。
+なぜなら、割り込みがmutex-lockされたブロック内から発生する可能性がある。
+したがって、制御は<TT>eval</TT>の最初のように安全な場所で渡されなければ
+ならない。
+上記の同期によって引き起こされる遅れを避けるために、
+MT-Eusはセマフォを経由して信号通知(signal-notification)も
+提供する。
+言い換えれば、信号関数は呼び出されるかあるいは信号の到着を知らせる
+関数あるいはセマフォのどちらかをとる。
+セマフォは、低レベルで告示されるので、
+同期により隠れているところは最小である。
 
 <P>
-�ȉ��Ɏ������̂́A�}���`�X���b�h�@�\��p�����摜�����̃v���O������ł���B
-�摜���̓X���b�h�ƃt�B���^�[�X���b�h�����������B
-samp-image�́A33msec���ɒʒm�����samp-sem��҂��Ƃɂ��A
-����I�ɉ摜�f�[�^���Ƃ�B
-2�̃X���b�h��thread-port�̓ǂݏ�����ʂ��ē�������B
-filter-image�́A�t�B���^�[�̕���v�Z�̂��߂ɕ����̃X���b�h���g�p���Ă���B
+以下に示すものは、マルチスレッド機能を用いた画像処理のプログラム例である。
+画像入力スレッドとフィルタースレッドが生成される。
+samp-imageは、33msec毎に通知されるsamp-semを待つことにより、
+定期的に画像データをとる。
+2つのスレッドはthread-portの読み書きを通じて同期する。
+filter-imageは、フィルターの並列計算のために複数のスレッドを使用している。
 
 <P><PRE>
 (make-threads 8)
@@ -104,8 +105,8 @@ filter-image�́A�t�B���^�[�̕���v�Z�̂��߂ɕ����̃X���b�h���g�p���Ă���B
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>body�̍����֐�</TITLE>
-<META NAME="description" CONTENT="body�̍����֐�">
+<TITLE>bodyの合成関数</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="bodyの合成関数">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2182"
-  HREF="jmanual-node119.html">���W��</A>
+  HREF="jmanual-node119.html">座標軸</A>
 <B> Up:</B> <A NAME="tex2html2176"
-  HREF="jmanual-node112.html">�􉽊w���f�����O</A>
+  HREF="jmanual-node112.html">幾何学モデリング</A>
 <B> Previous:</B> <A NAME="tex2html2170"
-  HREF="jmanual-node117.html">��{body�̍쐬�֐�</A>
+  HREF="jmanual-node117.html">基本bodyの作成関数</A>
  &nbsp; <B>  <A NAME="tex2html2178"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2180"
@@ -59,7 +60,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H2><A NAME="SECTION04046000000000000000"></A><A NAME="BodyComposition"></A>
 <BR>
-body�̍����֐�
+bodyの合成関数
 </H2>
 
 <P>
@@ -67,8 +68,8 @@ body�̍����֐�
  <BR>
 <BR> <P>
 
-<A NAME="32695"></A>
-<B>face+</B> <EM>face1 face2 </EM>[�֐�]
+<A NAME="32692"></A>
+<B>face+</B> <EM>face1 face2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -78,16 +79,16 @@ body�̍����֐�
 <BR>
 <BR>
 
-<A NAME="32706"></A>
-<B>face*</B> <EM>face1 face2 </EM>[�֐�]
+<A NAME="32703"></A>
+<B>face*</B> <EM>face1 face2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>face1</EM>��<EM>face2</EM>�́C3������ŋ��ʕ��ʏ�ɂ���B
-<B>face+</B>�́C�����̖ʂ̌������\�z���C�ʂ̃I�u�W�F�N�g�Ƃ��ĕԂ��B
-�����C�����̈悪�Ȃ��Ȃ�C����2�̖ʂ��Ԃ����B
-<B>face*</B>�́C�����̖ʂ̌����̈��Ԃ��B�����C�����̈悪�Ȃ���΁CNIL��Ԃ��B
+<EM>face1</EM>と<EM>face2</EM>は，3次元上で共通平面上にある。
+<B>face+</B>は，これらの面の結合を構築し，面のオブジェクトとして返す。
+もし，交差領域がないなら，元の2つの面が返される。
+<B>face*</B>は，これらの面の交差領域を返す。もし，交差領域がなければ，NILを返す。
 </DD>
 </DL>
 <BR>
@@ -95,13 +96,13 @@ body�̍����֐�
 
 <P>
 
-<A NAME="32720"></A>
-<B>cut-body</B> <EM>body cutting-plane </EM>[�֐�]
+<A NAME="32717"></A>
+<B>cut-body</B> <EM>body cutting-plane </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>body</EM>��<EM>cutting-plane</EM>�Őؒf���C���̐ؒf�ʂɍ����ʂ̃��X�g��Ԃ��B
+<EM>body</EM>を<EM>cutting-plane</EM>で切断し，その切断面に作られる面のリストを返す。
 </DD>
 </DL>
 <BR>
@@ -109,8 +110,8 @@ body�̍����֐�
 
 <P>
 
-<A NAME="32732"></A>
-<B>body+</B> <EM>body1 body2 &amp;rest more-bodies </EM>[�֐�]
+<A NAME="32729"></A>
+<B>body+</B> <EM>body1 body2 &amp;rest more-bodies </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -120,8 +121,8 @@ body�̍����֐�
 <BR>
 <BR>
 
-<A NAME="32743"></A>
-<B>body-</B> <EM>body1 body2 </EM>[�֐�]
+<A NAME="32740"></A>
+<B>body-</B> <EM>body1 body2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -131,21 +132,21 @@ body�̍����֐�
 <BR>
 <BR>
 
-<A NAME="32754"></A>
-<B>body*</B> <EM>body1 body2 </EM>[�֐�]
+<A NAME="32751"></A>
+<B>body*</B> <EM>body1 body2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-2���邢�͂���ȏ��<B>body</B>�̘a�C�����邢�͐ς��v�Z����B
-���ꂼ���body�́C<B>body+, body-, body*</B>�̏������s���O��
-�R�s�[����C����body�͕ύX����Ȃ��B
-���̌��ʂ�body�̐V�������W�n�̈ʒu�E�p���́C���[���h���W�n�̂��̂ƈ�v���Ă���B
-�����C�������l�p�����[�^<TT>*coplanar-threshold*</TT>,<TT>*contact-threshold*</TT>,<TT>*parallel-threshold*</TT>
-�𐳊m�ɐݒ肷��Ȃ�C2��<B>body</B>���ʓ��m�ŐڐG���Ă���ꍇ�ł�
-�����̊֐��͐����������ł��낤�B
-�������Ȃ���C����<B>body</B>�̒��_������<B>body</B>�̒��_���邢�͖ʂɐڐG���Ă���ꍇ�C
-�ǂ̏��������s����B
+2つあるいはそれ以上の<B>body</B>の和，差あるいは積を計算する。
+それぞれのbodyは，<B>body+, body-, body*</B>の処理を行う前に
+コピーされ，元のbodyは変更されない。
+その結果のbodyの新しい座標系の位置・姿勢は，ワールド座標系のものと一致している。
+もし，しきい値パラメータ<TT>*coplanar-threshold*</TT>,<TT>*contact-threshold*</TT>,<TT>*parallel-threshold*</TT>
+を正確に設定するなら，2つの<B>body</B>が面同士で接触している場合でも
+これらの関数は正しく働くであろう。
+しかしながら，もし<B>body</B>の頂点が他の<B>body</B>の頂点あるいは面に接触している場合，
+どの処理も失敗する。
 </DD>
 </DL>
 <BR>
@@ -153,14 +154,14 @@ body�̍����֐�
 
 <P>
 
-<A NAME="32772"></A>
-<B>body/</B> <EM>body plane </EM>[�֐�]
+<A NAME="32769"></A>
+<B>body/</B> <EM>body plane </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>make-plane</B>�ō��ꂽ<B>plane</B>�N���X�̃C���X�^���X�ł���<EM>plane</EM>��
-<EM>body</EM>��ؒf����B�V�������ꂽ<B>body</B>���Ԃ����B
+<B>make-plane</B>で作られた<B>plane</B>クラスのインスタンスである<EM>plane</EM>で
+<EM>body</EM>を切断する。新しく作られた<B>body</B>が返される。
 </DD>
 </DL>
 <BR>
@@ -168,14 +169,14 @@ body�̍����֐�
 
 <P>
 
-<A NAME="32787"></A>
-<B>body-interference</B> <EM>&amp;rest bodies </EM>[�֐�]
+<A NAME="32784"></A>
+<B>body-interference</B> <EM>&amp;rest bodies </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>bodies</EM>�̒���1��1�̑g�ݍ��킹�ɂ����銱���`�F�b�N���C
-�������Ă���2��<B>body</B>�̃��X�g��Ԃ��B
+<EM>bodies</EM>の中で1対1の組み合わせにおける干渉をチェックし，
+交差している2つの<B>body</B>のリストを返す。
 </DD>
 </DL>
 <BR>
@@ -185,8 +186,8 @@ body�̍����֐�
              <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

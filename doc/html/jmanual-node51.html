@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�n�b�V���e�[�u��</TITLE>
-<META NAME="description" CONTENT="�n�b�V���e�[�u��">
+<TITLE>ハッシュテーブル</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="ハッシュテーブル">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,9 +44,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1099"
-  HREF="jmanual-node52.html">�X�g���[���Ɠ��o��</A>
+  HREF="jmanual-node52.html">ストリームと入出力</A>
 <B> Up:</B> <A NAME="tex2html1093"
-  HREF="jmanual-node45.html">��A�s��ƃe�[�u��</A>
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
 <B> Previous:</B> <A NAME="tex2html1089"
   HREF="jmanual-node50.html">Foreign String</A>
  &nbsp; <B>  <A NAME="tex2html1095"
@@ -57,54 +58,54 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03076000000000000000">
-�n�b�V���e�[�u��</A>
+ハッシュテーブル</A>
 </H2>
 
 <P>
-hash-table�́A�L�[�ŘA�z�����l��T�����߂̃N���X�ł���i<B>assoc</B>�ł��ł���j�B
-��r�I�傫�Ȗ��ɂ����āAhash-table��assoc���ǂ����\���o���B
-�L�[�ƒl�̑g�����������Ă��T���ɗv���鎞�Ԃ́A���̂܂܂ł���B
-�ȒP�Ɍ����ƁAhash-table��100�ȏ�̗v�f����T���ꍇ�ɗp���A
-�����菬�����ꍇ��assoc��p����ׂ��ł���B
+hash-tableは、キーで連想される値を探すためのクラスである（<B>assoc</B>でもできる）。
+比較的大きな問題において、hash-tableはassocより良い性能を出す。
+キーと値の組数が増加しても探索に要する時間は、一定のままである。
+簡単に言うと、hash-tableは100以上の要素から探す場合に用い、
+それより小さい場合はassocを用いるべきである。
 
 <P>
-hash-table�́A�e�[�u���̗v�f����rehash-size���z�����Ȃ�A�����I�Ɋg�������B
-�f�t�H���g�Ƃ��āA�e�[�u���̔������������ꂽ�Ƃ��g�����N����悤�ɂȂ��Ă���B
-<B>sxhash</B>�֐��́A�I�u�W�F�N�g�̃������A�h���X�Ɩ��֌W�ȃn�b�V���l��
-�Ԃ��A�I�u�W�F�N�g��������(equal)�Ƃ��̃n�b�V���l�͂��������ł���B
-����ŁAhash-table�̓f�t�H���g�̃n�b�V���֐���<B>sxhash</B>���g�p���Ă���
-�̂ŁA�ă��[�h�\�ł���B
-<B>sxhash</B>�����o�X�g�ň��S�ȊԂ́A
-���tree�̒��̂��ׂĂ̗v�f��T�����邽�߁A��r�I�ɒx���B
-�����ȃn�b�V���̂��߂ɂ́A�A�v���P�[�V�����ɂ�葼�̓���̃n�b�V���֐���
-�I�񂾕����悢�B
-�n�b�V���֐���ς��邽�߂ɂ́Ahash-table��<TT>:hash-function</TT>���b�Z�[�W��
-���M����Ηǂ��B
-�ȒP�ȏꍇ�A�n�b�V���֐���<TT>#'sxhash</TT>����
-<TT>#'sys:address</TT>�ɕύX����΂悢�B
-EusLisp���̃I�u�W�F�N�g�̃A�h���X��
-�����ĕύX����Ȃ����߁A<TT>#'sys:address</TT>��ݒ肷�邱�Ƃ��ł���B
+hash-tableは、テーブルの要素数がrehash-sizeを越えたなら、自動的に拡張される。
+デフォルトとして、テーブルの半分が満たされたとき拡張が起こるようになっている。
+<B>sxhash</B>関数は、オブジェクトのメモリアドレスと無関係なハッシュ値を
+返し、オブジェクトが等しい(equal)ときのハッシュ値はいつも同じである。
+それで、hash-tableはデフォルトのハッシュ関数に<B>sxhash</B>を使用している
+ので、再ロード可能である。
+<B>sxhash</B>がロバストで安全な間は、
+列やtreeの中のすべての要素を探索するため、比較的に遅い。
+高速なハッシュのためには、アプリケーションにより他の特定のハッシュ関数を
+選んだ方がよい。
+ハッシュ関数を変えるためには、hash-tableに<TT>:hash-function</TT>メッセージを
+送信すれば良い。
+簡単な場合、ハッシュ関数を<TT>#'sxhash</TT>から
+<TT>#'sys:address</TT>に変更すればよい。
+EusLisp内のオブジェクトのアドレスは
+決して変更されないため、<TT>#'sys:address</TT>を設定することができる。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="11858"></A>
-<B>sxhash</B> <EM>obj </EM>[�֐�]
+<A NAME="11855"></A>
+<B>sxhash</B> <EM>obj </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>obj</EM>�̃n�b�V���l���v�Z����B
-<B>equal</B>��2�̃I�u�W�F�N�g�ł́A�����n�b�V���l�𐶂��邱��
-���ۏ؂���Ă���B
-symbol�Ȃ�A����pname�ɑ΂���n�b�V���l��Ԃ��B
-number�Ȃ�A����<TT>integer</TT>�\����Ԃ��B
-list�Ȃ�A���̗v�f�S�Ẵn�b�V���l�̍��v���Ԃ����B
-string�Ȃ�A���ꂼ��̕����R�[�h�̍��v���V�t�g�������̂��Ԃ����B
-���̑��ǂ�ȃI�u�W�F�N�g�ł��A<B>sxhash</B>�͂��ꂼ��̃X���b�g�̃n�b�V���l��
-�ċA�I�ďo���Ōv�Z���A�����̍��v��Ԃ��B
+<EM>obj</EM>のハッシュ値を計算する。
+<B>equal</B>な2つのオブジェクトでは、同じハッシュ値を生じること
+が保証されている。
+symbolなら、そのpnameに対するハッシュ値を返す。
+numberなら、その<TT>integer</TT>表現を返す。
+listなら、その要素全てのハッシュ値の合計が返される。
+stringなら、それぞれの文字コードの合計をシフトしたものが返される。
+その他どんなオブジェクトでも、<B>sxhash</B>はそれぞれのスロットのハッシュ値を
+再帰的呼出しで計算し、それらの合計を返す。
 </DD>
 </DL>
 <BR>
@@ -112,13 +113,13 @@ string�Ȃ�A���ꂼ��̕����R�[�h�̍��v���V�t�g�������̂��Ԃ����B
 
 <P>
 
-<A NAME="11872"></A>
-<B>make-hash-table</B> <EM>&amp;key (:size 30) (:test #'eq) (:rehash-size 2.0) </EM>[�֐�]
+<A NAME="11869"></A>
+<B>make-hash-table</B> <EM>&amp;key (:size 30) (:test #'eq) (:rehash-size 2.0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-hash-table�����A�Ԃ��B
+hash-tableを作り、返す。
 </DD>
 </DL>
 <BR>
@@ -126,17 +127,17 @@ hash-table�����A�Ԃ��B
 
 <P>
 
-<A NAME="11882"></A>
-<B>gethash</B> <EM>key htab </EM>[�֐�]
+<A NAME="11879"></A>
+<B>gethash</B> <EM>key htab </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>htab</EM>�̒�����<EM>key</EM>�ƈ�v����l�𓾂�B
-<B>gethash</B>�́A<B>setf</B>��g�ݍ����邱�Ƃɂ��<EM>key</EM>�ɒl��ݒ肷��
-���Ƃɂ��g�p�����B
-hash-table�ɐV�����l���o�^����A���̃e�[�u���̖��܂����X���b�g�̐���
-1/rehash-size���z�����Ƃ��Ahash-table�͎����I��2�{�̑傫���Ɋg�������B
+<EM>htab</EM>の中から<EM>key</EM>と一致する値を得る。
+<B>gethash</B>は、<B>setf</B>を組み合せることにより<EM>key</EM>に値を設定する
+ことにも使用される。
+hash-tableに新しい値が登録され、そのテーブルの埋まったスロットの数が
+1/rehash-sizeを越えたとき、hash-tableは自動的に2倍の大きさに拡張される。
 </DD>
 </DL>
 <BR>
@@ -144,13 +145,13 @@ hash-table�ɐV�����l���o�^����A���̃e�[�u���̖��܂����X���b�g�̐���
 
 <P>
 
-<A NAME="11897"></A>
-<B>remhash</B> <EM>key htab </EM>[�֐�]
+<A NAME="11894"></A>
+<B>remhash</B> <EM>key htab </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>htab</EM>�̒�����<EM>key</EM>�Ŏw�肳�ꂽ�n�b�V���o�^���폜����B
+<EM>htab</EM>の中から<EM>key</EM>で指定されたハッシュ登録を削除する。
 </DD>
 </DL>
 <BR>
@@ -158,13 +159,13 @@ hash-table�ɐV�����l���o�^����A���̃e�[�u���̖��܂����X���b�g�̐���
 
 <P>
 
-<A NAME="11909"></A>
-<B>maphash</B> <EM>function htab  </EM>[�֐�]
+<A NAME="11906"></A>
+<B>maphash</B> <EM>function htab  </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>htab</EM>�̗v�f�S�Ă�<EM>function</EM>��<B>map</B>����B
+<EM>htab</EM>の要素全てを<EM>function</EM>で<B>map</B>する。
 </DD>
 </DL>
 <BR>
@@ -172,13 +173,13 @@ hash-table�ɐV�����l���o�^����A���̃e�[�u���̖��܂����X���b�g�̐���
 
 <P>
 
-<A NAME="11922"></A>
-<B>hash-table-p</B> <EM>x </EM>[�֐�]
+<A NAME="11919"></A>
+<B>hash-table-p</B> <EM>x </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<EM>x</EM>��hash-table�N���X�̃C���X�^���X�Ȃ�AT��Ԃ��B
+もし<EM>x</EM>がhash-tableクラスのインスタンスなら、Tを返す。
 </DD>
 </DL>
 <BR>
@@ -186,8 +187,8 @@ hash-table�ɐV�����l���o�^����A���̃e�[�u���̖��܂����X���b�g�̐���
 
 <P>
 	<BR> 
-<A NAME="11934"></A>
-<BIG CLASS="XLARGE"><B>hash-table </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="11931"></A>
+<BIG CLASS="XLARGE"><B>hash-table </B></BIG> [クラス]  <PRE><TT>
   :super   <B>object</B> 
 <BR>  :slots 		 (key value count 
 <BR>
@@ -200,13 +201,13 @@ rehash-size empty deleted)
 
 <DL COMPACT>
 <DT> 
-<DD>hash-table���`����B
-<EM>key</EM>��<EM>value</EM>�͑傫�����������ꎟ���x�N�g���ł���B
-<EM>count</EM>�́A<EM>key</EM>��<EM>value</EM>�����܂��Ă��鐔�ł���B
-<EM>hash-function</EM>�̃f�t�H���g��<B>sxhash</B>�ł���B
-<EM>test-function</EM>�̃f�t�H���g��<B>eq</B>�ł���B
-<EM>empty</EM>��<EM>deleted</EM>�́A<EM>key</EM>�x�N�g���̂Ȃ��ŋ�܂��͍폜���ꂽ
-��������symbol(�p�b�P�[�W�Ɏ��e����Ă��Ȃ��j�ł���B
+<DD>hash-tableを定義する。
+<EM>key</EM>と<EM>value</EM>は大きさが等しい一次元ベクトルである。
+<EM>count</EM>は、<EM>key</EM>や<EM>value</EM>が埋まっている数である。
+<EM>hash-function</EM>のデフォルトは<B>sxhash</B>である。
+<EM>test-function</EM>のデフォルトは<B>eq</B>である。
+<EM>empty</EM>と<EM>deleted</EM>は、<EM>key</EM>ベクトルのなかで空または削除された
+数を示すsymbol(パッケージに収容されていない）である。
 </DD>
 </DL>
 <BR>
@@ -214,15 +215,15 @@ rehash-size empty deleted)
 
 <P>
 
-<A NAME="11963"></A>
-<B>:hash-function</B> <EM>newhash </EM>[���\�b�h]
+<A NAME="11960"></A>
+<B>:hash-function</B> <EM>newhash </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����hash-table�̃n�b�V���֐���<EM>newhash</EM>�ɕύX����B
-<EM>newhash</EM>�́A1�̈����������A<TT>integer</TT>��Ԃ��֐��łȂ���΂Ȃ�Ȃ��B
-<EM>newhash</EM>��1�̌��Ƃ���<B>sys:address</B>������B
+このhash-tableのハッシュ関数を<EM>newhash</EM>に変更する。
+<EM>newhash</EM>は、1つの引数を持ち、<TT>integer</TT>を返す関数でなければならない。
+<EM>newhash</EM>の1つの候補として<B>sys:address</B>がある。
 </DD>
 </DL>
 <BR>
@@ -251,9 +252,9 @@ rehash-size empty deleted)
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1099"
-  HREF="jmanual-node52.html">�X�g���[���Ɠ��o��</A>
+  HREF="jmanual-node52.html">ストリームと入出力</A>
 <B> Up:</B> <A NAME="tex2html1093"
-  HREF="jmanual-node45.html">��A�s��ƃe�[�u��</A>
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
 <B> Previous:</B> <A NAME="tex2html1089"
   HREF="jmanual-node50.html">Foreign String</A>
  &nbsp; <B>  <A NAME="tex2html1095"
@@ -262,8 +263,8 @@ rehash-size empty deleted)
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

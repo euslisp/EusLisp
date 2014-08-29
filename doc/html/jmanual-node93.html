@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Solaris 2 �I�y���[�e�B���O�V�X�e���̃}���`�X���b�h</TITLE>
-<META NAME="description" CONTENT="Solaris 2 �I�y���[�e�B���O�V�X�e���̃}���`�X���b�h">
+<TITLE>Solaris 2 オペレーティングシステムのマルチスレッド</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Solaris 2 オペレーティングシステムのマルチスレッド">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -46,9 +47,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Next:</B> <A NAME="tex2html1820"
   HREF="jmanual-node94.html">Context Separation</A>
 <B> Up:</B> <A NAME="tex2html1814"
-  HREF="jmanual-node92.html">�}���`�X���b�hEuslisp�̐݌v</A>
+  HREF="jmanual-node92.html">マルチスレッドEuslispの設計</A>
 <B> Previous:</B> <A NAME="tex2html1808"
-  HREF="jmanual-node92.html">�}���`�X���b�hEuslisp�̐݌v</A>
+  HREF="jmanual-node92.html">マルチスレッドEuslispの設計</A>
  &nbsp; <B>  <A NAME="tex2html1816"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1818"
@@ -58,25 +59,25 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04021100000000000000">
- Solaris 2 �I�y���[�e�B���O�V�X�e���̃}���`�X���b�h</A>
+ Solaris 2 オペレーティングシステムのマルチスレッド</A>
 </H3>
-�}���`�X���b�hEuslisp(MT-Eus)�́A�����̃v���Z�b�T��������Solaris 2 
-�I�y���[�e�B���O�V�X�e����œ��삷��B
-Solaris�̃X���b�h�́A ���L�������ƈقȂ����������悤�ȏ]����
-UNIX�v���Z�X��CPU�ɔz�u���邽�߂̃��j�b�g�ł���BSolaris OS�ɂ���Ē񋟂����X���b�h�̃��C�u�����́A
-���ꂼ��̃X���b�h��P���LWP(light weight process)�ɔz�u����B
-���̃v���Z�X���J�[�l���̃��\�[�X�ł���B
-UNIX�̃J�[�l���́A���ꂼ��̃X���b�h�Ɋ��蓖�Ă�ꂽ�X���b�h�̗D�挠��
-��Â��ĕ����̕���CPU��LWP�̔z�u���v�悷��B
-�}<A HREF="jmanual-node94.html#threadmodel">5</A>�́A�X���b�h��LWP��CPU�̊֌W��\�킵�����̂ł���B
-Euslisp�̊�����у������Ǘ��̐݌v�ɂ��āA
-�}���`�X���b�h�̔\�͂������o�����߂ɂQ�̑傫�ȕύX�����ꂽ�B
+マルチスレッドEuslisp(MT-Eus)は、複数のプロセッサを持ったSolaris 2 
+オペレーティングシステム上で動作する。
+Solarisのスレッドは、 共有メモリと異なった環境を持つような従来の
+UNIXプロセスをCPUに配置するためのユニットである。Solaris OSによって提供されるスレッドのライブラリは、
+それぞれのスレッドを単一のLWP(light weight process)に配置する。
+このプロセスがカーネルのリソースである。
+UNIXのカーネルは、それぞれのスレッドに割り当てられたスレッドの優先権に
+基づいて複数の物理CPUにLWPの配置を計画する。
+図<A HREF="jmanual-node94.html#threadmodel">5</A>は、スレッドとLWPとCPUの関係を表わしたものである。
+Euslispの環境およびメモリ管理の設計について、
+マルチスレッドの能力を引き出すために２つの大きな変更がされた。
 
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

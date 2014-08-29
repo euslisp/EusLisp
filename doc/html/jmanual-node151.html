@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�֐߂̃��f��</TITLE>
-<META NAME="description" CONTENT="�֐߂̃��f��">
+<TITLE>関節のモデル</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="関節のモデル">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2661"
-  HREF="jmanual-node152.html">���֐߃}�j�s�����[�^</A>
+  HREF="jmanual-node152.html">多関節マニピュレータ</A>
 <B> Up:</B> <A NAME="tex2html2655"
-  HREF="jmanual-node150.html">�}�j�s�����[�^</A>
+  HREF="jmanual-node150.html">マニピュレータ</A>
 <B> Previous:</B> <A NAME="tex2html2649"
-  HREF="jmanual-node150.html">�}�j�s�����[�^</A>
+  HREF="jmanual-node150.html">マニピュレータ</A>
  &nbsp; <B>  <A NAME="tex2html2657"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2659"
@@ -59,30 +60,39 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H2><A NAME="SECTION04091000000000000000">
 
-�֐߂̃��f��</A>
+関節のモデル</A>
 </H2>
 
 <P>
-�N���X<B>rotational-joint</B>���֐߂̃��f�����L�q����B
-�N���X<B>rotational-joint</B>�́A<B>body</B>���X�[�p�N���X�Ɏ����A
-���̌`�󃂃f���A���W�n�ɉ�����
-�֐߉�]���A��]�p�x�A���p�x�͈́A�Ȃǂ��Ǘ����Ă���B
-����<B>defjoint</B>�}�N���ɂ����<B>rotational-joint</B>
-�̃C���X�^���X���쐬����A<EM>joint-name</EM>�Ƀo�C���h�����B
-<B>parent</B>�ɂ́A�e�̊֐߂��w�肷��B
-�x�[�X�Ǝw�ɂ͉������w�肷��K�v�͂Ȃ��B
+クラス<B>rotational-joint</B>が関節のモデルを記述する。
+クラス<B>rotational-joint</B>は、<B>body</B>をスーパクラスに持ち、
+その形状モデル、座標系に加えて
+関節回転軸、回転角度、可動角度範囲、などを管理している。
+次の<B>defjoint</B>マクロによって<B>rotational-joint</B>
+のインスタンスが作成され、<EM>joint-name</EM>にバインドされる。
+<B>parent</B>には、親の関節を指定する。
+ベースと指には可動軸を指定する必要はない。
 
 <P>
 
  <BR>
-<BR> <A NAME="50878"></A>
+<BR> <A NAME="50875"></A>
 <BR>
-105#105
+<IMG
+ WIDTH="559" HEIGHT="130" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img105.png"
+ ALT="\begin{emtabbing}
+{\bf defjoint}
+\it joint-name \&amp;key \= :shape \hspace{10mm}\=...
+...mit-low} \\
+\&gt; :high-limit \&gt; {\it joint-angle-limit-hight}
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>�֐߂̃��f�����L�q����B
+<DD>関節のモデルを記述する。
 </DD>
 </DL>
 <BR>
@@ -91,8 +101,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
              <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

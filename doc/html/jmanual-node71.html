@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�ŏ�ʃ��x���̃J�X�^�}�C�Y</TITLE>
-<META NAME="description" CONTENT="�ŏ�ʃ��x���̃J�X�^�}�C�Y">
+<TITLE>最上位レベルのカスタマイズ</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="最上位レベルのカスタマイズ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1395"
-  HREF="jmanual-node72.html">���̑��̊֐�</A>
+  HREF="jmanual-node72.html">その他の関数</A>
 <B> Up:</B> <A NAME="tex2html1389"
-  HREF="jmanual-node63.html">�]��</A>
+  HREF="jmanual-node63.html">評価</A>
 <B> Previous:</B> <A NAME="tex2html1383"
-  HREF="jmanual-node70.html">�v���Z�X�C���[�W�ۑ�</A>
+  HREF="jmanual-node70.html">プロセスイメージ保存</A>
  &nbsp; <B>  <A NAME="tex2html1391"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1393"
@@ -58,19 +59,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION03098000000000000000">
-�ŏ�ʃ��x���̃J�X�^�}�C�Y</A>
+最上位レベルのカスタマイズ</A>
 </H2>
-Euslisp��UNIX����Ăяo�����Ƃ��A<B>*toplevel*</B>�Ƀo�C���h�����
-�ŏ�ʊ֐��ɂ���Ď��s���n�߂���B
-���̊֐��́A<TT>eus</TT>�̒���<TT>eustop</TT>��<TT>eusx</TT>�̒���<TT>xtop</TT>�ł���B
-<B>save</B>��3�Ԗڂ̈������ɓƎ��̊֐����w�肷�邱�Ƃɂ�肱�̍ŏ��
-�֐���ύX���邱�Ƃ��ł���B<A NAME="17769"></A>
+EuslispがUNIXから呼び出されるとき、<B>*toplevel*</B>にバインドされる
+最上位関数によって実行が始められる。
+この関数は、<TT>eus</TT>の中の<TT>eustop</TT>と<TT>eusx</TT>の中の<TT>xtop</TT>である。
+<B>save</B>の3番目の引き数に独自の関数を指定することによりこの最上位
+関数を変更することができる。<A NAME="17766"></A>
 
 <P>
-���̍ŏ�ʊ֐��́A�C�ӂ̐��̈��������󂯎���悤�Ƀv���O�������ׂ��ł���B
-���̖��ߍs�̏�̈������͂��ꂼ��A�����I�ɕ�����ɂ���A�ŏ�ʊ֐��ɓn�����B
-�ȉ��Ɏ����v���O�����́A�ŏ��̈������ɗ^����ꂽ�t�@�C�����炭��Ԃ��ǂݍ��݁A
-2�Ԗڂ̈������̃t�@�C���ɐ��`�\������B
+この最上位関数は、任意の数の引き数を受け取れるようにプログラムすべきである。
+その命令行の上の引き数はそれぞれ、強制的に文字列にされ、最上位関数に渡される。
+以下に示すプログラムは、最初の引き数に与えられたファイルからくり返し読み込み、
+2番目の引き数のファイルに整形表示する。
 
 <P>
 <PRE>
@@ -86,23 +87,23 @@ Euslisp��UNIX����Ăяo�����Ƃ��A<B>*toplevel*</B>�Ƀo�C���h�����
 </PRE>
 
 <P>
-��x�����̊֐���Euslisp�̒��ɒ�`����΁A
-<TT>(save "ppcopy" "" 'pprint-copy-top)</TT>��<TT>ppcopy</TT>�Ƃ�������UNIX�Ŏ��s
-�\�Ȗ��߂����B
+一度これらの関数をEuslispの中に定義すれば、
+<TT>(save "ppcopy" "" 'pprint-copy-top)</TT>で<TT>ppcopy</TT>という名のUNIXで実行
+可能な命令を作る。
 
 <P>
-Solaris���Euslisp�ɂ����āA<B>save</B>���Ȃ��̂ŁA
-�ŏ�ʕ]���֐��͂��̎�@�ł͕ύX�ł��Ȃ��B
-����ɁA�Ǝ��̍ŏ�ʕ]���֐����`���邽�߂�<TT>lib/eusrt.l</TT>��
-�C�����A<B>*toplevel*</B>�ɐݒ肷�邱�Ƃ��ł���B
-<TT>lib/eusrt.l</TT>�ɂ́AEuslisp�̋N�����ɕ]������鏉�����葱����
-��`���Ă���B
+Solaris上のEuslispにおいて、<B>save</B>がないので、
+最上位評価関数はこの手法では変更できない。
+代わりに、独自の最上位評価関数を定義するために<TT>lib/eusrt.l</TT>を
+修正し、<B>*toplevel*</B>に設定することができる。
+<TT>lib/eusrt.l</TT>には、Euslispの起動時に評価される初期化手続きを
+定義している。
 
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

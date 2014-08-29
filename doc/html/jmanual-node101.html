@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�����������|�[�g</TITLE>
-<META NAME="description" CONTENT="�����������|�[�g">
+<TITLE>同期メモリポート</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="同期メモリポート">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1936"
-  HREF="jmanual-node102.html">�^�C�}�[</A>
+  HREF="jmanual-node102.html">タイマー</A>
 <B> Up:</B> <A NAME="tex2html1930"
-  HREF="jmanual-node96.html">�񓯊��v���O���~���O�ƕ���v���O���~���O�̍\�z</A>
+  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
 <B> Previous:</B> <A NAME="tex2html1924"
-  HREF="jmanual-node100.html">�������</A>
+  HREF="jmanual-node100.html">同期障壁</A>
  &nbsp; <B>  <A NAME="tex2html1932"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1934"
@@ -58,26 +59,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04022500000000000000">
-�����������|�[�g</A>
+同期メモリポート</A>
 </H3>
-<B>�����������|�[�g(synch-memory-port)</B>�́A
-�X���b�h�ԂŃf�[�^���������邽�߂�1��̃X�g���[��
-�ł���(�} <A HREF="jmanual-node99.html#synchports">8</A>)�B
-�v���Z�X���̂��ׂẴX���b�h�̓q�[�v�����������L���Ă���̂ŁA
-����1�̃X���b�h���O���[�o���ϐ��ɃI�u�W�F�N�g�����蓖�Ă��ꍇ�A
-�����ɑ��̃X���b�h���猩���悤�ɂȂ�B
-�������Ȃ���A���L�������̓O���[�o���f�[�^���X�V���ꂽ�Ƃ���
-�C�x���g�𑗂邽�߂̔\�͂��s�����Ă���B
-�����������|�[�g�́A���L�I�u�W�F�N�g���A�N�Z�X���邽�߂�
-���̓����@�\��ۏ؂���B
-�����������|�[�g�I�u�W�F�N�g�́A1�̃o�b�t�@�X���b�g�Ɠ����ǂݏ�����
-���߂Ɏg�p�����2�̃Z�}�t�H�ɂ���č\������Ă���B
+<B>同期メモリポート(synch-memory-port)</B>は、
+スレッド間でデータを交換するための1種のストリーム
+である(図 <A HREF="jmanual-node99.html#synchports">8</A>)。
+プロセス内のすべてのスレッドはヒープメモリを共有しているので、
+もし1つのスレッドがグローバル変数にオブジェクトを割り当てた場合、
+直ちに他のスレッドから見れるようになる。
+しかしながら、共有メモリはグローバルデータが更新されたという
+イベントを送るための能力が不足している。
+同期メモリポートは、共有オブジェクトをアクセスするための
+この同期機能を保証する。
+同期メモリポートオブジェクトは、1つのバッファスロットと同期読み書きの
+ために使用される2つのセマフォによって構成されている。
 
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

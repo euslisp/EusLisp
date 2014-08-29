@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>���W�n</TITLE>
-<META NAME="description" CONTENT="���W�n">
+<TITLE>座標系</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="座標系">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2063"
-  HREF="jmanual-node111.html">�A�����W�n</A>
+  HREF="jmanual-node111.html">連結座標系</A>
 <B> Up:</B> <A NAME="tex2html2057"
-  HREF="jmanual-node106.html">�􉽊w�֐�</A>
+  HREF="jmanual-node106.html">幾何学関数</A>
 <B> Previous:</B> <A NAME="tex2html2051"
-  HREF="jmanual-node109.html">LU����</A>
+  HREF="jmanual-node109.html">LU分解</A>
  &nbsp; <B>  <A NAME="tex2html2059"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2061"
@@ -59,22 +60,22 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H2><A NAME="SECTION04034000000000000000"></A><A NAME="Coordinates"></A>
 <BR>
-���W�n
+座標系
 </H2>
 
 <P>
-���W�n�ƍ��W�ϊ��́A<B>coordinates</B>�N���X�ŕ\�������B
-4*4�̓����s��\���̑���ɁA
-Euslisp���ō��W�n�́A�������ƈ�ʐ��̂��߂�
-3*3�̉�]�s���3�����ʒu�x�N�g���̑g�ŕ\�������B
+座標系と座標変換は、<B>coordinates</B>クラスで表現される。
+4*4の同次行列表現の代わりに、
+Euslisp内で座標系は、高速性と一般性のために
+3*3の回転行列と3次元位置ベクトルの組で表現される。
 
 <P>
 
  <BR>
 <BR> <P>
 	<BR> 
-<A NAME="27215"></A>
-<BIG CLASS="XLARGE"><B>coordinates </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="27212"></A>
+<BIG CLASS="XLARGE"><B>coordinates </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 (pos :type float-vector 
 <BR>
@@ -85,7 +86,7 @@ rot :type array)
 
 <DL COMPACT>
 <DT> 
-<DD>�ʒu�x�N�g����3x3�̉�]�s��̑g�݂ō��W�n���`����B
+<DD>位置ベクトルと3x3の回転行列の組みで座標系を定義する。
 </DD>
 </DL>
 <BR>
@@ -93,14 +94,14 @@ rot :type array)
 
 <P>
 
-<A NAME="27232"></A>
-<B>coordinates-p</B> <EM>obj </EM>[�֐�]
+<A NAME="27229"></A>
+<B>coordinates-p</B> <EM>obj </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>obj</EM>��<B>coordinates</B>�N���X���܂��͂��̃T�u�N���X�̃C���X�^���X
-�̂Ƃ��AT��Ԃ��B
+<EM>obj</EM>が<B>coordinates</B>クラスかまたはそのサブクラスのインスタンス
+のとき、Tを返す。
 </DD>
 </DL>
 <BR>
@@ -108,13 +109,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27244"></A>
-<B>:rot</B> [���\�b�h]
+<A NAME="27241"></A>
+<B>:rot</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̍��W�n��3x3��]�s���Ԃ��B
+この座標系の3x3回転行列を返す。
 </DD>
 </DL>
 <BR>
@@ -122,13 +123,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27254"></A>
-<B>:pos</B> [���\�b�h]
+<A NAME="27251"></A>
+<B>:pos</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̍��W�n��3�����ʒu�x�N�g����Ԃ��B
+この座標系の3次元位置ベクトルを返す。
 </DD>
 </DL>
 <BR>
@@ -136,16 +137,16 @@ rot :type array)
 
 <P>
 
-<A NAME="27264"></A>
-<B>:newcoords</B> <EM>newrot newpos </EM>[���\�b�h]
+<A NAME="27261"></A>
+<B>:newcoords</B> <EM>newrot newpos </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>newrot</EM>��<EM>newpos</EM>�ł��̍��W�n���X�V����B
-���̍��W�n�̏�Ԃ��ω�����Ƃ��͂��ł��A���̃��\�b�h��p���ĐV����
-��]�s��ƈʒu�x�N�g���ɍX�V����ׂ��ł���B
-���̃��b�Z�[�W�̓C�x���g��`���đ���<B>:update</B>���\�b�h���Ăяo���B
+<EM>newrot</EM>と<EM>newpos</EM>でこの座標系を更新する。
+この座標系の状態が変化するときはいつでも、このメソッドを用いて新しい
+回転行列と位置ベクトルに更新するべきである。
+このメッセージはイベントを伝えて他の<B>:update</B>メソッドを呼び出す。
 </DD>
 </DL>
 <BR>
@@ -153,20 +154,20 @@ rot :type array)
 
 <P>
 
-<A NAME="27277"></A>
-<B>:replace-coords</B> <EM>newrot newpos </EM>[���\�b�h]
+<A NAME="27274"></A>
+<B>:replace-coords</B> <EM>newrot newpos </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>:newcoords</EM>���\�b�h���Ăяo������<TT>rot</TT>��<TT>pos</TT>�X���b�g��ύX����B
+<EM>:newcoords</EM>メソッドを呼び出さずに<TT>rot</TT>と<TT>pos</TT>スロットを変更する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="27290"></A>
-<B>:coords</B> [���\�b�h]
+<A NAME="27287"></A>
+<B>:coords</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
@@ -178,16 +179,16 @@ rot :type array)
 
 <P>
 
-<A NAME="27301"></A>
-<B>:copy-coords</B> <EM>&amp;optional dest </EM>[���\�b�h]
+<A NAME="27298"></A>
+<B>:copy-coords</B> <EM>&amp;optional dest </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����<EM>dest</EM>���^�����Ȃ������Ƃ��A<B>:copy-coords</B>�͓���<TT>rot</TT>��<TT>pos</TT>
-�X���b�g�������W�n�I�u�W�F�N�g�����B
-�����A<EM>dest</EM>���^����ꂽ�Ƃ��A<EM>dest</EM>���W�n�ɂ��̍��W�n��rot��pos��
-�R�s�[����B
+もし<EM>dest</EM>が与えられなかったとき、<B>:copy-coords</B>は同じ<TT>rot</TT>と<TT>pos</TT>
+スロットを持つ座標系オブジェクトを作る。
+もし、<EM>dest</EM>が与えられたとき、<EM>dest</EM>座標系にこの座標系のrotとposを
+コピーする。
 </DD>
 </DL>
 <BR>
@@ -195,13 +196,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27317"></A>
-<B>:reset-coords</B> [���\�b�h]
+<A NAME="27314"></A>
+<B>:reset-coords</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̍��W�n�̉�]�s���P�ʍs��ɂ��A�ʒu�x�N�g�������ׂă[���ɂ���B
+この座標系の回転行列を単位行列にし、位置ベクトルをすべてゼロにする。
 </DD>
 </DL>
 <BR>
@@ -209,8 +210,8 @@ rot :type array)
 
 <P>
 
-<A NAME="27327"></A>
-<B>:worldpos</B> [���\�b�h]
+<A NAME="27324"></A>
+<B>:worldpos</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
@@ -220,8 +221,8 @@ rot :type array)
 <BR>
 <BR>
 
-<A NAME="27338"></A>
-<B>:worldrot</B> [���\�b�h]
+<A NAME="27335"></A>
+<B>:worldrot</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
@@ -231,18 +232,18 @@ rot :type array)
 <BR>
 <BR>
 
-<A NAME="27349"></A>
-<B>:worldcoords</B> [���\�b�h]
+<A NAME="27346"></A>
+<B>:worldcoords</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃I�u�W�F�N�g�̃��[���h���W�n�ɂ�����ʒu�x�N�g���E��]�s��E���W�n
-���v�Z����B
-���̍��W�n�́A�������[���h���W�n�ŕ\������Ă���Ɖ��肳��A
-�����̃��\�b�h�͊ȒP��<TT>pos</TT>��<TT>rot</TT>��<TT>self</TT>��Ԃ����Ƃ��ł���B
-�����̃��\�b�h��<B>cascaded-coords</B>�N���X�ƌ݊������Ƃ��Ă���B
-<B>cascaded-coords</B>�ł̓��[���h���W�n�ł̕\���Ɖ��肵�Ă��Ȃ��B
+このオブジェクトのワールド座標系における位置ベクトル・回転行列・座標系
+を計算する。
+その座標系は、いつもワールド座標系で表現されていると仮定され、
+これらのメソッドは簡単に<TT>pos</TT>と<TT>rot</TT>と<TT>self</TT>を返すことができる。
+これらのメソッドは<B>cascaded-coords</B>クラスと互換性がとられている。
+<B>cascaded-coords</B>ではワールド座標系での表現と仮定していない。
 </DD>
 </DL>
 <BR>
@@ -250,15 +251,15 @@ rot :type array)
 
 <P>
 
-<A NAME="27364"></A>
-<B>:copy-worldcoords</B> <EM>&amp;optional dest </EM>[���\�b�h]
+<A NAME="27361"></A>
+<B>:copy-worldcoords</B> <EM>&amp;optional dest </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�ŏ��ɁA���[���h���W�n���v�Z����A<EM>dest</EM>�ɃR�s�[�����B
-�����A<EM>dest</EM>���w�肳��ĂȂ��Ƃ��A�V����<B>coordinates</B>
-�I�u�W�F�N�g�����B
+最初に、ワールド座標系が計算され、<EM>dest</EM>にコピーされる。
+もし、<EM>dest</EM>が指定されてないとき、新たに<B>coordinates</B>
+オブジェクトを作る。
 </DD>
 </DL>
 <BR>
@@ -266,16 +267,16 @@ rot :type array)
 
 <P>
 
-<A NAME="27377"></A>
-<B>:rotate-vector</B> <EM>vec </EM>[���\�b�h]
+<A NAME="27374"></A>
+<B>:rotate-vector</B> <EM>vec </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̍��W�n�̉�]�s��ɂ����<EM>vec</EM>����]������B���Ȃ킿�A
-���̍��W�n�ŕ\�����������x�N�g�������[���h���W�n�ɂ�����\��
-�ɕϊ�����B
-���̍��W�n�̈ʒu�́A��]�ɉe����^���Ȃ��B
+この座標系の回転行列によって<EM>vec</EM>を回転させる。すなわち、
+この座標系で表現される方向ベクトルをワールド座標系における表現
+に変換する。
+この座標系の位置は、回転に影響を与えない。
 </DD>
 </DL>
 <BR>
@@ -283,13 +284,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27388"></A>
-<B>:transform-vector</B> <EM>vec </EM>[���\�b�h]
+<A NAME="27385"></A>
+<B>:transform-vector</B> <EM>vec </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̍��W�n�ŕ\�������<EM>vec</EM>�����[���h���W�n�̕\���ɕϊ�����B
+この座標系で表現される<EM>vec</EM>をワールド座標系の表現に変換する。
 </DD>
 </DL>
 <BR>
@@ -297,13 +298,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27399"></A>
-<B>:inverse-transform-vector</B> <EM>vec </EM>[���\�b�h]
+<A NAME="27396"></A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���[���h���W�n�ɂ�����<EM>vec</EM>�����[�J�����W�n�̕\���ɋt�ϊ�����B
+ワールド座標系における<EM>vec</EM>をローカル座標系の表現に逆変換する。
 </DD>
 </DL>
 <BR>
@@ -311,21 +312,21 @@ rot :type array)
 
 <P>
 
-<A NAME="27410"></A>
-<B>:transform</B> <EM>trans &amp;optional (wrt :local) </EM>[���\�b�h]
+<A NAME="27407"></A>
+<B>:transform</B> <EM>trans &amp;optional (wrt :local) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>wrt</EM>���W�n�ŕ\�������<EM>trans</EM>�ɂ���Ă��̍��W�n��ϊ�����B
-<EM>trans</EM>�͍��W�n�̌^�łȂ���΂Ȃ�Ȃ����A<EM>wrt</EM>��
-<TT>:local, :parent, :world</TT>�̃L�[���[�h���邢��<B>coordinates</B>��
-�C���X�^���X�łȂ���΂Ȃ�Ȃ��B
-����<EM>wrt</EM>��<TT>:local</TT>�̂Ƃ��A<EM>trans</EM>�����̍��W�n�̉E
-����K�p����B����<EM>wrt</EM>��<TT>:world, :parent</TT>�̂Ƃ��A
-<EM>trans</EM>��������|����B
-����<EM>wrt</EM>��<B>coordinates</B>�̌^�ł���Ƃ��A<EM>wrt</EM>���W�n�ŕ\�������
-<EM>trans</EM>�͍ŏ��Ƀ��[���h���W�n�̕\���ɕϊ�����A������|����B
+<EM>wrt</EM>座標系で表現される<EM>trans</EM>によってこの座標系を変換する。
+<EM>trans</EM>は座標系の型でなければならないし、<EM>wrt</EM>は
+<TT>:local, :parent, :world</TT>のキーワードあるいは<B>coordinates</B>の
+インスタンスでなければならない。
+もし<EM>wrt</EM>が<TT>:local</TT>のとき、<EM>trans</EM>をこの座標系の右
+から適用する。もし<EM>wrt</EM>が<TT>:world, :parent</TT>のとき、
+<EM>trans</EM>を左から掛ける。
+もし<EM>wrt</EM>が<B>coordinates</B>の型であるとき、<EM>wrt</EM>座標系で表現される
+<EM>trans</EM>は最初にワールド座標系の表現に変換され、左から掛ける。
 </DD>
 </DL>
 <BR>
@@ -333,14 +334,14 @@ rot :type array)
 
 <P>
 
-<A NAME="27436"></A>
-<B>:move-to</B> <EM>trans &amp;optional (wrt :local) </EM>[���\�b�h]
+<A NAME="27433"></A>
+<B>:move-to</B> <EM>trans &amp;optional (wrt :local) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>wrt</EM>�ŕ\�������<EM>trans</EM>�ł��̍��W�n��<TT>rot</TT>��<TT>pos</TT>
-��u��������B
+<EM>wrt</EM>で表現される<EM>trans</EM>でこの座標系の<TT>rot</TT>と<TT>pos</TT>
+を置き換える。
 </DD>
 </DL>
 <BR>
@@ -348,13 +349,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27450"></A>
-<B>:translate</B> <EM>p &amp;optional (wrt :local) </EM>[���\�b�h]
+<A NAME="27447"></A>
+<B>:translate</B> <EM>p &amp;optional (wrt :local) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃I�u�W�F�N�g�̈ʒu��<EM>wrt</EM>���W�n�ő��ΓI�ɕύX����B
+このオブジェクトの位置を<EM>wrt</EM>座標系で相対的に変更する。
 </DD>
 </DL>
 <BR>
@@ -362,15 +363,15 @@ rot :type array)
 
 <P>
 
-<A NAME="27461"></A>
-<B>:locate</B> <EM>p &amp;optional (wrt :local) </EM>[���\�b�h]
+<A NAME="27458"></A>
+<B>:locate</B> <EM>p &amp;optional (wrt :local) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̍��W�n�̈ʒu��<EM>wrt</EM>���W�n�Ő�ΓI�ɕύX����B
-�����A<EM>wrt</EM>��<TT>:local</TT>�̂Ƃ��A<B>:translate</B>�Ɠ����
-���ʂ𐶂ށB
+この座標系の位置を<EM>wrt</EM>座標系で絶対的に変更する。
+もし、<EM>wrt</EM>が<TT>:local</TT>のとき、<B>:translate</B>と同一な
+効果を生む。
 </DD>
 </DL>
 <BR>
@@ -378,29 +379,29 @@ rot :type array)
 
 <P>
 
-<A NAME="27475"></A>
-<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[���\�b�h]
+<A NAME="27472"></A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>axis</EM>������<EM>theta</EM>���W�A���������ΓI�ɂ��̍��W�n����]������B
-<EM>axis</EM>�́A���L�[���[�h(<TT>:x, :y, :z</TT>)���邢�͔C�ӂ�<TT>float-vector</TT>
-�ł���B
-<EM>axis</EM>��<EM>wrt</EM>���W�n�ŕ\������Ă���ƍl����B
-����āA����<EM>wrt</EM>��<TT>:local</TT>��<EM>axis</EM>��<TT>:z</TT>�ł���Ƃ��A
-���W�n�̓��[�J�����W�n��z�����ɉ�]�����B
-����<EM>wrt</EM>��<TT>:world, :parent</TT>�ł���Ƃ��A���[���h���W�n��z������
-��]�����B
-����������ƁA����<EM>wrt</EM>��<TT>:local</TT>�̂Ƃ��A
-��]�s��͂��̍��W�n�̉E����|������B
-�����āA����<EM>wrt</EM>��<TT>:world</TT>���邢��<TT>:parent</TT>�̂Ƃ��A
-��]�s��͍�����|������B
-<EM>wrt</EM>��<TT>:world</TT>���邢��<TT>:parent</TT>�ł����A
-���̍��W�n��<TT>pos</TT>�x�N�g���͕ω����Ȃ��B
-�{���Ƀ��[���h���W�n�̎����ɉ�]���邽�߂ɂ́A
-��]��\������<B>coordinates</B>�N���X�̃C���X�^���X��
-<B>:transform</B>���\�b�h�ɗ^���Ȃ���΂Ȃ�Ȃ��B
+<EM>axis</EM>軸回りに<EM>theta</EM>ラジアンだけ相対的にこの座標系を回転させる。
+<EM>axis</EM>は、軸キーワード(<TT>:x, :y, :z</TT>)あるいは任意の<TT>float-vector</TT>
+である。
+<EM>axis</EM>は<EM>wrt</EM>座標系で表現されていると考える。
+よって、もし<EM>wrt</EM>が<TT>:local</TT>で<EM>axis</EM>が<TT>:z</TT>であるとき、
+座標系はローカル座標系のz軸回りに回転される。
+もし<EM>wrt</EM>が<TT>:world, :parent</TT>であるとき、ワールド座標系のz軸回りに
+回転される。
+言い換えると、もし<EM>wrt</EM>が<TT>:local</TT>のとき、
+回転行列はこの座標系の右から掛けられる。
+そして、もし<EM>wrt</EM>が<TT>:world</TT>あるいは<TT>:parent</TT>のとき、
+回転行列は左から掛けられる。
+<EM>wrt</EM>が<TT>:world</TT>あるいは<TT>:parent</TT>でさえ、
+この座標系の<TT>pos</TT>ベクトルは変化しない。
+本当にワールド座標系の軸回りに回転するためには、
+回転を表現する<B>coordinates</B>クラスのインスタンスを
+<B>:transform</B>メソッドに与えなければならない。
 </DD>
 </DL>
 <BR>
@@ -408,13 +409,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27509"></A>
-<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[���\�b�h]
+<A NAME="27506"></A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>rot</TT>�������I�ɕύX����B<B>:rotate</B>���\�b�h�̐�Βl�łł���B
+<TT>rot</TT>を強制的に変更する。<B>:rotate</B>メソッドの絶対値版である。
 </DD>
 </DL>
 <BR>
@@ -422,13 +423,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27521"></A>
-<B>:inverse-transformation</B> [���\�b�h]
+<A NAME="27518"></A>
+<B>:inverse-transformation</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̍��W�n�̋t�ϊ��������W�n��V�������B
+この座標系の逆変換を持つ座標系を新しく作る。
 </DD>
 </DL>
 <BR>
@@ -436,17 +437,17 @@ rot :type array)
 
 <P>
 
-<A NAME="27531"></A>
-<B>:transformation</B> <EM>coords (wrt :local) </EM>[���\�b�h]
+<A NAME="27528"></A>
+<B>:transformation</B> <EM>coords (wrt :local) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̍��W�n�ƈ������ŗ^������<EM>coords</EM>�Ƃ̊Ԃ̕ϊ������B
-�����A<EM>wrt</EM>��<TT>:local</TT>�ł���Ƃ��A���[�J�����W�n�ŕ\�������B
-���Ȃ킿�A��������<B>:transformation</B>�̌��ʂ�<B>:transform</B>�̈������Ƃ���
-<EM>wrt</EM>=<TT>:local</TT>�ƈꏏ��
-�^�����Ƃ��A���̍��W�n��<EM>coords</EM>�Ɠ���ȍ��W�n�ɕϊ������B
+この座標系と引き数で与えられる<EM>coords</EM>との間の変換を作る。
+もし、<EM>wrt</EM>が<TT>:local</TT>であるとき、ローカル座標系で表現される。
+すなわち、もしこの<B>:transformation</B>の結果を<B>:transform</B>の引き数として
+<EM>wrt</EM>=<TT>:local</TT>と一緒に
+与えたとき、この座標系は<EM>coords</EM>と同一な座標系に変換される。
 </DD>
 </DL>
 <BR>
@@ -454,14 +455,14 @@ rot :type array)
 
 <P>
 
-<A NAME="27549"></A>
-<B>:Euler</B> <EM>az1 ay az2 </EM>[���\�b�h]
+<A NAME="27546"></A>
+<B>:Euler</B> <EM>az1 ay az2 </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�I�C���[�p(<EM>az1, ay, az2</EM>)�ŕ\��������]�s���<TT>rot</TT>��
-�ݒ肷��B
+オイラー角(<EM>az1, ay, az2</EM>)で表現される回転行列を<TT>rot</TT>に
+設定する。
 </DD>
 </DL>
 <BR>
@@ -469,13 +470,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27561"></A>
-<B>:roll-pitch-yaw</B> <EM>roll pitch yaw </EM>[���\�b�h]
+<A NAME="27558"></A>
+<B>:roll-pitch-yaw</B> <EM>roll pitch yaw </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���[���E�s�b�`�E���[�p�ŕ\��������]�s���<TT>rot</TT>�ɐݒ肷��B
+ロール・ピッチ・ヨー角で表現される回転行列を<TT>rot</TT>に設定する。
 </DD>
 </DL>
 <BR>
@@ -483,16 +484,16 @@ rot :type array)
 
 <P>
 
-<A NAME="27572"></A>
-<B>:4x4</B> <EM>&amp;optional mat44 </EM>[���\�b�h]
+<A NAME="27569"></A>
+<B>:4x4</B> <EM>&amp;optional mat44 </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�����A<EM>mat44</EM>�Ƃ���4x4�s�񂪗^������Ƃ��A3x3��]�s���3�����ʒu�x�N�g��
-�̍��W�\���ɕϊ������B
-�����A<EM>mat44</EM>���^�����Ȃ��Ƃ��A���̍��W�n�̕\����
-4x4�̓����s��\���ɕϊ����ĕԂ��B
+もし、<EM>mat44</EM>として4x4行列が与えられるとき、3x3回転行列と3次元位置ベクトル
+の座標表現に変換される。
+もし、<EM>mat44</EM>が与えられないとき、この座標系の表現を
+4x4の同次行列表現に変換して返す。
 </DD>
 </DL>
 <BR>
@@ -500,62 +501,71 @@ rot :type array)
 
 <P>
 
-<A NAME="27584"></A>
+<A NAME="27581"></A>
 <BR>
-58#58
+<IMG
+ WIDTH="553" HEIGHT="188" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img58.png"
+ ALT="\begin{emtabbing}
+{\bf :init}
+\it\&amp;key \= :pos \hspace{8mm} \= \char93 f(0 0 0)...
+...ist of (ind . value) pair \\
+\&gt; :name \&gt; name property \\
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>����<B>coordinates</B>�I�u�W�F�N�g�����������A<TT>rot</TT>��<TT>pos</TT>��ݒ肷��B
-���ꂼ��̃L�[���[�h�̈Ӗ��́A�ȉ��Ɏ����ʂ�ł���B
+<DD>この<B>coordinates</B>オブジェクトを初期化し、<TT>rot</TT>と<TT>pos</TT>を設定する。
+それぞれのキーワードの意味は、以下に示す通りである。
 <DL>
 <DT><STRONG>:dimension</STRONG></DT>
-<DD>2���邢��3 (�f�t�H���g�� 3)
+<DD>2あるいは3 (デフォルトは 3)
 </DD>
 <DT><STRONG>:pos</STRONG></DT>
-<DD>�ʒu�x�N�g�����w�肷�� (�f�t�H���g�� #f(0 0 0))
+<DD>位置ベクトルを指定する (デフォルトは #f(0 0 0))
 </DD>
 <DT><STRONG>:rot</STRONG></DT>
-<DD>��]�s����w�肷�� (�f�t�H���g�͒P�ʍs��)
+<DD>回転行列を指定する (デフォルトは単位行列)
 </DD>
 <DT><STRONG>:Euler</STRONG></DT>
-<DD>�I�C���[�p�Ƃ���3�̗v�f�̗��^����
+<DD>オイラー角として3つの要素の列を与える
 </DD>
 <DT><STRONG>:rpy</STRONG></DT>
-<DD>���[���E�s�b�`�E���[�p�Ƃ���3�̗v�f�̗��^����
+<DD>ロール・ピッチ・ヨー角として3つの要素の列を与える
 </DD>
 <DT><STRONG>:axis</STRONG></DT>
-<DD>��]�� (<TT>:x,:y,:z</TT> ���邢�͔C�ӂ�<TT>float-vector</TT>)
+<DD>回転軸 (<TT>:x,:y,:z</TT> あるいは任意の<TT>float-vector</TT>)
 </DD>
 <DT><STRONG>:angle</STRONG></DT>
-<DD>��]�p (<EM>:axis</EM>�ƈꏏ�Ɏg�p)
+<DD>回転角 (<EM>:axis</EM>と一緒に使用)
 </DD>
 <DT><STRONG>:wrt</STRONG></DT>
-<DD>��]�����������W�n (�f�t�H���g�� <TT>:local</TT>)
+<DD>回転軸を示す座標系 (デフォルトは <TT>:local</TT>)
 </DD>
 <DT><STRONG>:4X4</STRONG></DT>
-<DD>4X4 �s��(<TT>pos</TT>��<TT>rot</TT>�𓯎��Ɏw��)
+<DD>4X4 行列(<TT>pos</TT>と<TT>rot</TT>を同時に指定)
 </DD>
 <DT><STRONG>:coords</STRONG></DT>
-<DD><EM>coords</EM>����<TT>rot</TT>��<TT>pos</TT>���R�s�[����
+<DD><EM>coords</EM>から<TT>rot</TT>と<TT>pos</TT>をコピーする
 </DD>
 <DT><STRONG>:name</STRONG></DT>
-<DD><TT>:name</TT>�l��ݒ肷��B
+<DD><TT>:name</TT>値を設定する。
 </DD>
 </DL>
-<EM>:angle</EM>��<EM>:axis</EM>�Ƒg�݂ŗB��g�p���邱�Ƃ��ł���B
-���̎���<EM>:wrt</EM>���W�n�Ō��肳���B
-<EM>:wrt</EM>�Ɗ֌W�Ȃ���<EM>:Euler</EM>�̓��[�J�����W�n�Œ�`�����I�C���[�p
-�i<EM>az1, ay</EM>��<EM>az2</EM>�j�������w�肷��B
-�܂��A<EM>:rpy</EM>�̓��[���h���W�n��<EM>z</EM>, <EM>y</EM>��<EM>x</EM>�����̊p�x
-���w�肷��B
-<EM>:rot, :Euler, :rpy, :axis, :4X4</EM>�̒�����Q�ȏ��A���Ŏw�肷�邱�Ƃ�
-�ł��Ȃ��B�������Ȃ���A�w�肵�Ă��G���[�͕Ԃ��Ȃ��B
-<EM>axis</EM>��<EM>:angle</EM>�p�����[�^�ɂ͗���w�肷�邱�Ƃ��ł���B
-���̈Ӗ��́A�^����ꂽ�����̉�]��A���I�ɏ�������B
-�����Ƃ��̒l�̑g�݂̃��X�g��<EM>:properties</EM>�̈������Ƃ���
-�^���邱�Ƃ��ł���B�����̑g�݂́A���̍��W�n��<TT>plist</TT>�ɃR�s�[�����B
+<EM>:angle</EM>は<EM>:axis</EM>と組みで唯一使用することができる。
+その軸は<EM>:wrt</EM>座標系で決定される。
+<EM>:wrt</EM>と関係なしに<EM>:Euler</EM>はローカル座標系で定義されるオイラー角
+（<EM>az1, ay</EM>と<EM>az2</EM>）をいつも指定する。
+また、<EM>:rpy</EM>はワールド座標系の<EM>z</EM>, <EM>y</EM>と<EM>x</EM>軸回りの角度
+を指定する。
+<EM>:rot, :Euler, :rpy, :axis, :4X4</EM>の中から２つ以上を連続で指定することは
+できない。しかしながら、指定してもエラーは返さない。
+<EM>axis</EM>と<EM>:angle</EM>パラメータには列を指定することができる。
+その意味は、与えられた軸回りの回転を連続的に処理する。
+属性とその値の組みのリストを<EM>:properties</EM>の引き数として
+与えることができる。これらの組みは、この座標系の<TT>plist</TT>にコピーされる。
 </DD>
 </DL>
 <BR>
@@ -582,19 +592,19 @@ rot :type array)
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2063"
-  HREF="jmanual-node111.html">�A�����W�n</A>
+  HREF="jmanual-node111.html">連結座標系</A>
 <B> Up:</B> <A NAME="tex2html2057"
-  HREF="jmanual-node106.html">�􉽊w�֐�</A>
+  HREF="jmanual-node106.html">幾何学関数</A>
 <B> Previous:</B> <A NAME="tex2html2051"
-  HREF="jmanual-node109.html">LU����</A>
+  HREF="jmanual-node109.html">LU分解</A>
  &nbsp; <B>  <A NAME="tex2html2059"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2061"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

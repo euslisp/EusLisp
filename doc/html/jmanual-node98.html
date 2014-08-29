@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�X���b�h�̕�����s</TITLE>
-<META NAME="description" CONTENT="�X���b�h�̕�����s">
+<TITLE>スレッドの並列実行</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="スレッドの並列実行">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1894"
-  HREF="jmanual-node99.html">�����̎�@</A>
+  HREF="jmanual-node99.html">同期の手法</A>
 <B> Up:</B> <A NAME="tex2html1888"
-  HREF="jmanual-node96.html">�񓯊��v���O���~���O�ƕ���v���O���~���O�̍\�z</A>
+  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
 <B> Previous:</B> <A NAME="tex2html1882"
-  HREF="jmanual-node97.html">�X���b�h�쐬�ƃX���b�h�v�[��</A>
+  HREF="jmanual-node97.html">スレッド作成とスレッドプール</A>
  &nbsp; <B>  <A NAME="tex2html1890"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1892"
@@ -58,26 +59,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04022200000000000000">
-�X���b�h�̕�����s</A>
+スレッドの並列実行</A>
 </H3>
-�X���b�h�ɂ�������s�̔z�u�̂��߂ɁA�X���b�h�֐����g�p�����B
-�X���b�h�́A�X���b�h�v�[������1�̋󂫃X���b�h�����A
-���L���������o�R���Ĉ�������n���A�}<A HREF="jmanual-node97.html#threadobj">7</A>�Ɏ������悤��
-�Z�}�t�H�M���ɂ��X���b�h�𗧂��グ�A
-��~���邱�ƂȂ��Ɍďo���փX���b�h�I�u�W�F�N�g��Ԃ��B
-�����グ��ꂽ�X���b�h�́A�Ăяo�����X���b�h�ƕ���Ɏ��s����A
-��������]�����n�߂�B
-�ďo���́Afork���ꂽ�X���b�h����]�����ʂ��󂯂Ƃ邽�߂�<TT>wait-thread</TT>��
-�g�p����B
-<TT>plist</TT>�}�N���́A�������̕���]�����L�q���邽�߂ɑ�ϕ֗��ȏ����ł���B
-<TT>plist</TT>�́A���ꂼ��̈�������]�����邽�߂ɃX���b�h�����蓖�āA
-���ׂẴX���b�h���]�����I���̂�҂��Č��ʂ����X�g�A�b�v����B
+スレッドによる並列実行の配置のために、スレッド関数が使用される。
+スレッドは、スレッドプールから1つの空きスレッドを取り、
+共有メモリを経由して引き数を渡し、図<A HREF="jmanual-node97.html#threadobj">7</A>に示されるような
+セマフォ信号によりスレッドを立ち上げ、
+停止することなしに呼出側へスレッドオブジェクトを返す。
+立ち上げられたスレッドは、呼び出したスレッドと並列に実行され、
+引き数を評価し始める。
+呼出側は、forkされたスレッドから評価結果を受けとるために<TT>wait-thread</TT>を
+使用する。
+<TT>plist</TT>マクロは、引き数の並列評価を記述するために大変便利な書式である。
+<TT>plist</TT>は、それぞれの引き数を評価するためにスレッドを割り当て、
+すべてのスレッドが評価し終わるのを待って結果をリストアップする。
 
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

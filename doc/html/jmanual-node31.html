@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�I�u�W�F�N�g�w���v���O���~���O</TITLE>
-<META NAME="description" CONTENT="�I�u�W�F�N�g�w���v���O���~���O">
+<TITLE>オブジェクト指向プログラミング</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="オブジェクト指向プログラミング">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html810"
-  HREF="jmanual-node32.html">�N���X�ƃ��\�b�h</A>
+  HREF="jmanual-node32.html">クラスとメソッド</A>
 <B> Up:</B> <A NAME="tex2html804"
   HREF="jmanual-node11.html">Bibliography</A>
 <B> Previous:</B> <A NAME="tex2html798"
-  HREF="jmanual-node30.html">�q��</A>
+  HREF="jmanual-node30.html">述語</A>
  &nbsp; <B>  <A NAME="tex2html806"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html808"
@@ -58,44 +59,44 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H1><A NAME="SECTION03040000000000000000">
-�I�u�W�F�N�g�w���v���O���~���O</A>
+オブジェクト指向プログラミング</A>
 </H1>
 
 <P>
-�I�u�W�F�N�g�̍\���Ɠ���́A�N���X�̒��ɋL�q����Ă���B
-�����́A<B>defclass</B>�}�N����<B>defmethod</B>���ꏑ���ɂ���`����Ă���B
-<B>defclass</B>�́A�N���X�̖��O�E���̃X�[�p�[�N���X�E�X���b�g�ϐ����ƃI�v�V�����Ƃ���
-�C�ӂ̌^����у��b�Z�[�W�̑O���ւ̑��M���`����B
-<B>defmethod</B>�́A���b�Z�[�W�������Ă����Ƃ��Ăяo�����
-���\�b�h���`����B
-�N���X��`�́Asymbol�̓���l�Ƃ��Ċ��蓖�Ă���B
-<B>�N���X</B>�́ACommon Lisp��<B>sutructure</B>��counter�����ƍl���邱�Ƃ��ł���B
-�X���b�g�A�N�Z�X�֐���<B>setf</B>���\�b�h�́A<B>defclass</B>�ɂ���Ă��ꂼ���
-�X���b�g�Ɏ����I�ɒ�`�����B
+オブジェクトの構造と動作は、クラスの中に記述されている。
+それらは、<B>defclass</B>マクロや<B>defmethod</B>特殊書式により定義されている。
+<B>defclass</B>は、クラスの名前・そのスーパークラス・スロット変数名とオプションとして
+任意の型およびメッセージの前方への送信を定義する。
+<B>defmethod</B>は、メッセージが送られてきたとき呼び出される
+メソッドを定義する。
+クラス定義は、symbolの特殊値として割り当てられる。
+<B>クラス</B>は、Common Lispの<B>sutructure</B>のcounter部分と考えることができる。
+スロットアクセス関数と<B>setf</B>メソッドは、<B>defclass</B>によってそれぞれの
+スロットに自動的に定義される。
 
 <P>
-�啔���̃N���X�́A�����N���X<B>metaclass</B>����h�����Ă���B
-<B>metaclass</B>�̃T�u�N���X�ł���N���X<B>vector-class</B>
-�̓x�N�g���̂��߂̃��^�N���X�ł���B
-�����Aclass-variables��class-methods���g�������Ƃ��́A
-<B>metaclass</B>�̃T�u�N���X�Ƃ��Ď����Ǝ��̃��^�N���X�����A
-���^�N���X�̖��O��<TT>:metaclass</TT>�̃L�[���[�h��<B>defclass</B>�ɗ^����΂悢�B
+大部分のクラスは、内部クラス<B>metaclass</B>から派生している。
+<B>metaclass</B>のサブクラスであるクラス<B>vector-class</B>
+はベクトルのためのメタクラスである。
+もし、class-variablesやclass-methodsを使いたいときは、
+<B>metaclass</B>のサブクラスとして自分独自のメタクラスを作り、
+メタクラスの名前を<TT>:metaclass</TT>のキーワードで<B>defclass</B>に与えればよい。
 
 <P>
-�x�N�g���́A���̑���record-like�I�u�W�F�N�g�ƈ���Ă���B
-�Ȃ��Ȃ�A�x�N�g���̃C���X�^���X�́A�C�ӂ̐��̗v�f�������Ă��邪�A
-record-like�I�u�W�F�N�g�͌Œ萔�̃X���b�g�������Ă���B
-EusLisp�̃I�u�W�F�N�g�́Arecord-like�I�u�W�F�N�g���܂��̓x�N�g���ł����āA
-���������ł͂Ȃ��B
+ベクトルは、その他のrecord-likeオブジェクトと違っている。
+なぜなら、ベクトルのインスタンスは、任意の数の要素を持っているが、
+record-likeオブジェクトは固定数のスロットを持っている。
+EusLispのオブジェクトは、record-likeオブジェクトかまたはベクトルであって、
+両方同時ではない。
 
 <P>
-�v�f�̌^�����߂��Ă��邩�܂��͗v�f��������Ȃ��x�N�g����
-<B>defclass</B>�ɂ���Ē�`���邱�Ƃ��ł���B
-���̗�̒��ŁA�N���X<TT>intvec5</TT>�͂T��integer�v�f�����N���X
-�Ƃ��Ē�`����Ă���B
-�����^����ƌ^�ϊ��́A�v�f���C���^�[�v���^�ɂ���ăA�N�Z�X���ꂽ�Ƃ�
-���{�����B
-�������錾�ŃR���p�C�����ꂽ�Ƃ��A�����ȃA�N�Z�X�R�[�h�����������B
+要素の型が決められているかまたは要素が入れられないベクトルも
+<B>defclass</B>によって定義することができる。
+次の例の中で、クラス<TT>intvec5</TT>は５つのinteger要素を持つクラス
+として定義されている。
+自動型判定と型変換は、要素がインタープリタによってアクセスされたとき
+実施される。
+正しい宣言でコンパイルされたとき、高速なアクセスコードが生成される。
 
 <P>
 <PRE>
@@ -104,17 +105,17 @@ EusLisp�̃I�u�W�F�N�g�́Arecord-like�I�u�W�F�N�g���܂��̓x�N�g���ł����āA
 </PRE>
 
 <P>
-���b�Z�[�W���I�u�W�F�N�g�ɑ���ꂽ�Ƃ��A
-��v���郁�b�Z�[�W���ŏ����̃I�u�W�F�N�g�̃N���X����T���A���ɂ��̃X�[�p�[�N���X����T���āA
-�X�[�p�[�N���X���s����܂ŒT���B
-�����A���\�b�h����`����ĂȂ������Ȃ�΁A
-�O���̃��X�g���T�����B
-���̑O���T���́A�^�����d�p���ɂ���č����B
-�����A�T�������s�����Ƃ��́A<TT>:nomethod</TT>�Ƃ������\�b�h�����T����A
-���\�b�h�́A�S�Ă̈����̃��X�g�ƈꏏ�ɌĂяo�����B
-���̗�̒��ŁA���b�Z�[�W<TT>:telephone</TT>��<TT>:mail</TT>��<TT>person</TT>
-�Ƃ����^�̃I�u�W�F�N�g�X���b�g<TT>secretary</TT>�ɑ�����B
-�����āA���b�Z�[�W<TT>go-home</TT>�̓X���b�g<TT>chauffeur</TT>�ɑ�����B
+メッセージがオブジェクトに送られたとき、
+一致するメッセージを最初そのオブジェクトのクラスから探し、次にそのスーパークラスから探して、
+スーパークラスが尽きるまで探す。
+もし、メソッドが定義されてなかったならば、
+前方のリストが探される。
+この前方探索は、疑似多重継承によって作られる。
+もし、探索が失敗したときは、<TT>:nomethod</TT>というメソッド名が探され、
+メソッドは、全ての引数のリストと一緒に呼び出される。
+次の例の中で、メッセージ<TT>:telephone</TT>と<TT>:mail</TT>は<TT>person</TT>
+という型のオブジェクトスロット<TT>secretary</TT>に送られる。
+そして、メッセージ<TT>go-home</TT>はスロット<TT>chauffeur</TT>に送られる。
 
 <P>
 <PRE>
@@ -127,11 +128,11 @@ EusLisp�̃I�u�W�F�N�g�́Arecord-like�I�u�W�F�N�g���܂��̓x�N�g���ł����āA
 </PRE>
 
 <P>
-���\�b�h�ɂ����āA2�̃��[�J���ϐ��i<B>class</B>��<B>self</B>�j
-���g�p�\�ƂȂ�B
-�����̕ϐ��͕ύX���ׂ��łȂ��B
-�����A�ύX�����Ȃ�΁A�V�X�e�����狟�����ꂽ�ϐ��͉B����A
-<B>send-super</B>��<B>send self</B>�͐�������������Ȃ��B
+メソッドにおいて、2つのローカル変数（<B>class</B>と<B>self</B>）
+が使用可能となる。
+これらの変数は変更すべきでない。
+もし、変更したならば、システムから供給された変数は隠され、
+<B>send-super</B>と<B>send self</B>は正しい動作をしない。
 
 <P>
 <BR><HR>
@@ -140,19 +141,19 @@ EusLisp�̃I�u�W�F�N�g�́Arecord-like�I�u�W�F�N�g���܂��̓x�N�g���ł����āA
 
 <UL CLASS="ChildLinks">
 <LI><A NAME="tex2html811"
-  HREF="jmanual-node32.html">�N���X�ƃ��\�b�h</A>
+  HREF="jmanual-node32.html">クラスとメソッド</A>
 <LI><A NAME="tex2html812"
-  HREF="jmanual-node33.html">���b�Z�[�W���M</A>
+  HREF="jmanual-node33.html">メッセージ送信</A>
 <LI><A NAME="tex2html813"
-  HREF="jmanual-node34.html">�C���X�^���X�Ǘ�</A>
+  HREF="jmanual-node34.html">インスタンス管理</A>
 <LI><A NAME="tex2html814"
-  HREF="jmanual-node35.html">��{�N���X</A>
+  HREF="jmanual-node35.html">基本クラス</A>
 </UL>
 <!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

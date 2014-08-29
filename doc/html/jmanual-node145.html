@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�s�N�Z���摜</TITLE>
-<META NAME="description" CONTENT="�s�N�Z���摜">
+<TITLE>ピクセル画像</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="ピクセル画像">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2577"
-  HREF="jmanual-node146.html">�J���[�s�N�Z���摜</A>
+  HREF="jmanual-node146.html">カラーピクセル画像</A>
 <B> Up:</B> <A NAME="tex2html2571"
-  HREF="jmanual-node143.html">�摜����</A>
+  HREF="jmanual-node143.html">画像処理</A>
 <B> Previous:</B> <A NAME="tex2html2565"
-  HREF="jmanual-node144.html">���b�N�A�b�v�e�[�u�� (LUT)</A>
+  HREF="jmanual-node144.html">ルックアップテーブル (LUT)</A>
  &nbsp; <B>  <A NAME="tex2html2573"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2575"
@@ -58,19 +59,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04082000000000000000">
-�s�N�Z���摜</A>
+ピクセル画像</A>
 </H2>
-�P���̉摜�f�[�^�́A<B>pixel-image</B>�N���X�ŕ\�������B<B>pixel-image</B>�́A
-�o�C�g�^�f�[�^��v�f�Ƃ���2�����z��ł���B���ꂼ��̃f�[�^�̓��e�́A
-�A�v���P�[�V�����Ɉˑ����Ă���B��ʓI�Ƀs�N�Z���̖��邳��\�����邽�߂�
-�g���邪�A�G�b�W�P�x�����������J���[�P�x��bar�O���t�̂悤�Ȃ��̂ɂ��p���邱�Ƃ��ł���B
+１枚の画像データは、<B>pixel-image</B>クラスで表現される。<B>pixel-image</B>は、
+バイト型データを要素とする2次元配列である。それぞれのデータの内容は、
+アプリケーションに依存している。一般的にピクセルの明るさを表現するために
+使われるが、エッジ輝度や微分方向やカラー輝度やbarグラフのようなものにも用いることができる。
 
 <P>
 
  <BR>
 <BR> <BR> 
-<A NAME="48150"></A>
-<BIG CLASS="XLARGE"><B>pixel-image </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="48147"></A>
+<BIG CLASS="XLARGE"><B>pixel-image </B></BIG> [クラス]  <PRE><TT>
   :super   <B>array</B> 
 <BR>  :slots 		 xpicture display-lut histogram
 <BR>
@@ -85,11 +86,11 @@ brightness-covariance
 
 <DL COMPACT>
 <DT> 
-<DD><B>pixel-image</B>�́Axwindow�ւ̕\���@�\������2�����̍s��ł���B
-pixel�̕ϊ��́A<B>display-lut</B>�ɂ���Ď�������A
-���̌��ʂ̉摜��<EM>xpicture</EM>�ɒ~�ς����B
-��Ȏ��͏c�����ɂƂ�B<TT>(x,y)</TT>��<TT>img</TT>�̃s�N�Z����
-<TT>(aref img y x)</TT>�ŃA�N�Z�X���邱�Ƃ��ł���B
+<DD><B>pixel-image</B>は、xwindowへの表示機能を持つ2次元の行列である。
+pixelの変換は、<B>display-lut</B>によって実現され、
+その結果の画像は<EM>xpicture</EM>に蓄積される。
+主な軸は縦方向にとる。<TT>(x,y)</TT>の<TT>img</TT>のピクセルは
+<TT>(aref img y x)</TT>でアクセスすることができる。
 </DD>
 </DL>
 <BR>
@@ -97,399 +98,399 @@ pixel�̕ϊ��́A<B>display-lut</B>�ɂ���Ď�������A
 
 <P>
 
-<A NAME="48173"></A>
-<B>:width</B> [���\�b�h]
+<A NAME="48170"></A>
+<B>:width</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> �s�N�Z���摜�̉��T�C�Y��Ԃ��B
+<DD> ピクセル画像の横サイズを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48183"></A>
-<B>:height</B> [���\�b�h]
+<A NAME="48180"></A>
+<B>:height</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> �s�N�Z���摜�̏c�T�C�Y��Ԃ��B
+<DD> ピクセル画像の縦サイズを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48193"></A>
-<B>:size</B> [���\�b�h]
+<A NAME="48190"></A>
+<B>:size</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> �z��̑傫����Ԃ��B
+<DD> 配列の大きさを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48203"></A>
-<B>:transpose</B> <EM>&amp;optional (result (instance (class self) :init dim0 dim1)) </EM>[���\�b�h]
+<A NAME="48200"></A>
+<B>:transpose</B> <EM>&amp;optional (result (instance (class self) :init dim0 dim1)) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-x����y������������B
+x軸とy軸を交換する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48213"></A>
-<B>:map-picture</B> <EM>lut &amp;optional (result (send self :duplicate)) </EM>[���\�b�h]
+<A NAME="48210"></A>
+<B>:map-picture</B> <EM>lut &amp;optional (result (send self :duplicate)) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜��<EM>lut</EM>�ŕϊ����A���̉摜�f�[�^��<EM>result</EM>�ɒ~�ς���B
+この画像を<EM>lut</EM>で変換し、その画像データを<EM>result</EM>に蓄積する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48225"></A>
-<B>:map</B> <EM>fn &amp;optional (result (send self :duplicate)) </EM>[���\�b�h]
+<A NAME="48222"></A>
+<B>:map</B> <EM>fn &amp;optional (result (send self :duplicate)) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜�̂��ׂẴs�N�Z����<EM>fn</EM>��K�p���āA
-<EM>result</EM>�̃s�N�Z���ɒu���B
+この画像のすべてのピクセルに<EM>fn</EM>を適用して、
+<EM>result</EM>のピクセルに置く。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48237"></A>
-<B>:brightest-pixel</B> [���\�b�h]
+<A NAME="48234"></A>
+<B>:brightest-pixel</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̉摜�̈�Ԗ��邢�s�N�Z���l��������B
+<DD> この画像の一番明るいピクセル値を見つける。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48247"></A>
-<B>:darkest-pixel</B> [���\�b�h]
+<A NAME="48244"></A>
+<B>:darkest-pixel</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̉摜�̈�ԈÂ��s�N�Z���l��������B
+<DD> この画像の一番暗いピクセル値を見つける。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48257"></A>
-<B>:average-pixel</B> [���\�b�h]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-���̉摜�̂��ׂẴs�N�Z���̕��ϋP�x���v�Z����B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48267"></A>
-<B>:halve</B> <EM>&amp;optional simage </EM>[���\�b�h]
+<A NAME="48254"></A>
+<B>:average-pixel</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�����̑傫���̉摜�ɏk�������s�N�Z���摜��Ԃ��B
+この画像のすべてのピクセルの平均輝度を計算する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48277"></A>
-<B>:subimage</B> <EM>x y subwidth subheight </EM>[���\�b�h]
+<A NAME="48264"></A>
+<B>:halve</B> <EM>&amp;optional simage </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜��<EM>(x,y)</EM>������p�Ƃ��A����<EM>subwidth</EM>�ō�����<EM>subheight</EM>
-�ł���l�p�`��؂�o���B
-���̉摜�̌��_��<EM>(x,y)</EM>�ɒu�����B
-<TT>:subimage</TT>�́A���̎l�p�`�ň͂܂ꂽ�摜��\������s�N�Z���摜�����B
+半分の大きさの画像に縮小したピクセル画像を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48292"></A>
-<B>:xpicture</B> <EM>&amp;optional lut </EM>[���\�b�h]
+<A NAME="48274"></A>
+<B>:subimage</B> <EM>x y subwidth subheight </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜��<EM>lut</EM>��p���ĕϊ����A<TT>xpicture</TT>�ɐݒ肷��B
+この画像に<EM>(x,y)</EM>を左上角とし、幅が<EM>subwidth</EM>で高さが<EM>subheight</EM>
+である四角形を切り出す。
+その画像の原点は<EM>(x,y)</EM>に置かれる。
+<TT>:subimage</TT>は、この四角形で囲まれた画像を表現するピクセル画像を作る。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48304"></A>
-<B>:display-lut</B> <EM>&amp;optional newlut </EM>[���\�b�h]
+<A NAME="48289"></A>
+<B>:xpicture</B> <EM>&amp;optional lut </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<TT>display-lut</TT>�Ƀ��b�N�A�b�v�e�[�u��<EM>newlut</EM>��ݒ肷��B
-���̌�A���̃��b�N�A�b�v�e�[�u����p���ĉ摜��ϊ����A
-<TT>xpicture</TT>�ɐݒ肷��B
+この画像を<EM>lut</EM>を用いて変換し、<TT>xpicture</TT>に設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48317"></A>
-<B>:display</B> <EM>(xwin geometry:*viewsurface*) </EM>[���\�b�h]
+<A NAME="48301"></A>
+<B>:display-lut</B> <EM>&amp;optional newlut </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>:putimage</B>��p����<EM>xwin</EM>�Ŏw�肳���Xwindow�ɂ��̉摜��
-�\������B
-���ꂼ��̃s�N�Z���l��X�̃J���[�}�b�v���Q�Ƃ���B
-��]����\���𓾂邽�߂ɂ́A���̃s�N�Z���摜���ŗL��LUT��
-�ϊ����ׂ��ł���B
+<TT>display-lut</TT>にルックアップテーブル<EM>newlut</EM>を設定する。
+その後、このルックアップテーブルを用いて画像を変換し、
+<TT>xpicture</TT>に設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48329"></A>
-<B>:duplicate</B> [���\�b�h]
+<A NAME="48314"></A>
+<B>:display</B> <EM>(xwin geometry:*viewsurface*) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜�I�u�W�F�N�g�Ɠ������ƍ������������N���X��
-�C���X�^���X�����B�s�N�Z���f�[�^�̓R�s�[����Ȃ��B
+<B>:putimage</B>を用いて<EM>xwin</EM>で指定されるXwindowにこの画像を
+表示する。
+それぞれのピクセル値はXのカラーマップを参照する。
+希望する表現を得るためには、このピクセル画像を固有のLUTで
+変換すべきである。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48339"></A>
-<B>:copy-from</B> <EM>src </EM>[���\�b�h]
+<A NAME="48326"></A>
+<B>:duplicate</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>src</EM>�Ŏw�肳��鑼�̉摜����s�N�Z���f�[�^���R�s�[����B
-<EM>src</EM>�Ƃ��̉摜�͓���̎����łȂ���΂Ȃ�Ȃ��B
+この画像オブジェクトと同じ幅と高さを持つ同じクラスの
+インスタンスを作る。ピクセルデータはコピーされない。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48351"></A>
-<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[���\�b�h]
+<A NAME="48336"></A>
+<B>:copy-from</B> <EM>src </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�l�p�̈�Ŏ������s�N�Z���f�[�^��16�i���t�H�[�}�b�g�ŕ\������B
+<EM>src</EM>で指定される他の画像からピクセルデータをコピーする。
+<EM>src</EM>とこの画像は同一の次元でなければならない。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48361"></A>
-<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[���\�b�h]
+<A NAME="48348"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�l�p�̈�Ŏ������s�N�Z���f�[�^��16�i���t�H�[�}�b�g�ŕ\������B
+四角領域で示されるピクセルデータを16進数フォーマットで表示する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48371"></A>
-<B>:prin1</B> <EM>strm &amp;rest msg </EM>[���\�b�h]
+<A NAME="48358"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̃s�N�Z���摜�𖼑O�Ǝ����ƂƂ��ɕ\������B
+四角領域で示されるピクセルデータを16進数フォーマットで表示する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48381"></A>
-<B>:init</B> <EM>w h &amp;optional imgvec </EM>[���\�b�h]
+<A NAME="48368"></A>
+<B>:prin1</B> <EM>strm &amp;rest msg </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-��<EM>w</EM>�A����<EM>h</EM>�����s�N�Z���摜������������B
+このピクセル画像を名前と次元とともに表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48378"></A>
+<B>:init</B> <EM>w h &amp;optional imgvec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+幅<EM>w</EM>、高さ<EM>h</EM>を持つピクセル画像を初期化する。
 
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48393"></A>
-<B>:amplify</B> <EM>rate &amp;optional (result (send self :duplicate) </EM>[���\�b�h]
+<A NAME="48390"></A>
+<B>:amplify</B> <EM>rate &amp;optional (result (send self :duplicate) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>rate</EM>�����ꂼ��̃s�N�Z���l�Ɋ|����B
+<EM>rate</EM>をそれぞれのピクセル値に掛ける。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48404"></A>
-<B>:compress-gray-scale</B> <EM>levels &amp;optional result  &amp;aux pict2 </EM>[���\�b�h]
+<A NAME="48401"></A>
+<B>:compress-gray-scale</B> <EM>levels &amp;optional result  &amp;aux pict2 </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜�̃s�N�Z���l��0����<EM>levels</EM>�܂ł͈̔͂ɕϊ������A
-���̕ϊ����ꂽ�摜��Ԃ��B
+この画像のピクセル値を0から<EM>levels</EM>までの範囲に変換をし、
+その変換された画像を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48415"></A>
-<B>:lut</B> <EM>lut1 &amp;optional (result (send self :duplicate)) </EM>[���\�b�h]
+<A NAME="48412"></A>
+<B>:lut</B> <EM>lut1 &amp;optional (result (send self :duplicate)) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���b�N�A�b�v�e�[�u��<EM>lut1</EM>��p���Ă��̉摜��ϊ����A
-���̕ϊ����ꂽ�摜��Ԃ��B
+ルックアップテーブル<EM>lut1</EM>を用いてこの画像を変換し、
+その変換された画像を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48426"></A>
-<B>:lut2</B> <EM>lut1 lut2 &amp;optional (result (send self :duplicate)) </EM>[���\�b�h]
+<A NAME="48423"></A>
+<B>:lut2</B> <EM>lut1 lut2 &amp;optional (result (send self :duplicate)) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>lut1</EM>��<EM>lut2</EM>��A���������b�N�A�b�v�e�[�u����p���Ă��̉摜��
-�ϊ����A���̕ϊ����ꂽ�摜��Ԃ��B
+<EM>lut1</EM>と<EM>lut2</EM>を連結したルックアップテーブルを用いてこの画像を
+変換し、その変換された画像を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48438"></A>
-<B>:histogram</B> [���\�b�h]
+<A NAME="48435"></A>
+<B>:histogram</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜�̂��ꂼ��̃s�N�Z���l�̔����񐔂𐔂��A���̃q�X�g�O����
-�𐮐��x�N�g���\���ŕԂ��B
+この画像のそれぞれのピクセル値の発生回数を数え、そのヒストグラム
+を整数ベクトル表現で返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48448"></A>
-<B>:brightness-distribution</B> [���\�b�h]
+<A NAME="48445"></A>
+<B>:brightness-distribution</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���邳�̕��U��Ԃ��B
+明るさの分散を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48458"></A>
-<B>:optimum-threshold</B> [���\�b�h]
+<A NAME="48455"></A>
+<B>:optimum-threshold</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜�̖��邳�̕��U�l���ő�ƂȂ��Ă���K����Ԃ��B
+この画像の明るさの分散値が最大となっている階調を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48468"></A>
-<B>:project-x</B> [���\�b�h]
+<A NAME="48465"></A>
+<B>:project-x</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����x���W�̃s�N�Z���l�����ׂĉ��Z���A�����̒l�̃x�N�g����Ԃ��B
+同じx座標のピクセル値をすべて加算し、これらの値のベクトルを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48478"></A>
-<B>:project-y</B> [���\�b�h]
+<A NAME="48475"></A>
+<B>:project-y</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-����y���W�̃s�N�Z���l�����ׂĉ��Z���A�����̒l�̃x�N�g����Ԃ��B
+同じy座標のピクセル値をすべて加算し、これらの値のベクトルを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48488"></A>
-<B>:digitize</B> <EM>threshold &amp;optional (val0 0) (val1 255) result </EM>[���\�b�h]
+<A NAME="48485"></A>
+<B>:digitize</B> <EM>threshold &amp;optional (val0 0) (val1 255) result </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>threshold</EM>��p���Ă��̉摜��<EM>val0</EM>��<EM>val1</EM>�̂Q�l�摜��
-�ϊ�����B
+<EM>threshold</EM>を用いてこの画像を<EM>val0</EM>と<EM>val1</EM>の２値画像に
+変換する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48501"></A>
-<B>:and</B> <EM>img2 </EM>[���\�b�h]
+<A NAME="48498"></A>
+<B>:and</B> <EM>img2 </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜��<EM>img2</EM>�̃r�b�g�_���ς��Ƃ�A���������摜��Ԃ��B
+この画像と<EM>img2</EM>のビット論理積をとり、処理した画像を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48512"></A>
-<B>:plot</B> <EM>min max &amp;optional color viewsurface </EM>[���\�b�h]
+<A NAME="48509"></A>
+<B>:plot</B> <EM>min max &amp;optional color viewsurface </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>min</EM>��<EM>max</EM>�̊Ԃ̒l�����s�N�Z�������ׂ�<EM>color</EM>(gc)
-��<EM>viewsurface</EM>�Ƀv���b�g����B
+<EM>min</EM>と<EM>max</EM>の間の値を持つピクセルをすべて<EM>color</EM>(gc)
+で<EM>viewsurface</EM>にプロットする。
 </DD>
 </DL>
 <BR>
@@ -497,14 +498,23 @@ x����y������������B
 
 <P>
 
-<A NAME="48526"></A>
+<A NAME="48523"></A>
 <BR>
-99#99
+<IMG
+ WIDTH="553" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img99.png"
+ ALT="\begin{emtabbing}
+{\bf :edge1}
+\it\&amp;optional \= (method 1) \\lq  [メソッド]\ ...
+...th-threshold*)\\
+\&gt; (win geometry:*viewsurface*) (edgeimg1)
+\rm
+\end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>���̉摜�̃G�b�W�𒊏o���AXwindow��ɃG�b�W�摜��\������B
+<DD>この画像のエッジを抽出し、Xwindow上にエッジ画像を表示する。
 </DD>
 </DL>
 <BR>
@@ -531,19 +541,19 @@ x����y������������B
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2577"
-  HREF="jmanual-node146.html">�J���[�s�N�Z���摜</A>
+  HREF="jmanual-node146.html">カラーピクセル画像</A>
 <B> Up:</B> <A NAME="tex2html2571"
-  HREF="jmanual-node143.html">�摜����</A>
+  HREF="jmanual-node143.html">画像処理</A>
 <B> Previous:</B> <A NAME="tex2html2565"
-  HREF="jmanual-node144.html">���b�N�A�b�v�e�[�u�� (LUT)</A>
+  HREF="jmanual-node144.html">ルックアップテーブル (LUT)</A>
  &nbsp; <B>  <A NAME="tex2html2573"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2575"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�������Ǘ�</TITLE>
-<META NAME="description" CONTENT="�������Ǘ�">
+<TITLE>メモリ管理</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="メモリ管理">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1547"
-  HREF="jmanual-node76.html">UNIX�V�X�e���R�[��</A>
+  HREF="jmanual-node76.html">UNIXシステムコール</A>
 <B> Up:</B> <A NAME="tex2html1541"
-  HREF="jmanual-node74.html">�V�X�e���֐�</A>
+  HREF="jmanual-node74.html">システム関数</A>
 <B> Previous:</B> <A NAME="tex2html1535"
-  HREF="jmanual-node74.html">�V�X�e���֐�</A>
+  HREF="jmanual-node74.html">システム関数</A>
  &nbsp; <B>  <A NAME="tex2html1543"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1545"
@@ -58,114 +59,114 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04011000000000000000">
-�������Ǘ�</A>
+メモリ管理</A>
 </H2>
-�������Ǘ��̐݌v�́A�I�u�W�F�N�g�w������̏_��ƌ������ɂ����ւ�
-�e�����y�ڂ��B
-Euslisp�́A<B>�t�B�{�i�b�`�o�f�B�@</B>����{�ɓ��ꂵ�����@��
-�I�u�W�F�N�g���������Ɋ��蓖�Ă�B
-���̕��@�́Achunk�ƌĂ΂��傫�ȃ������̃v�[���������ȃZ���ɕ�������B
-���ꂼ��̃Z���́A�T�C�Y���������Ȃ��A�t�B�{�i�b�`�������ꂼ�ꊄ�蓖�Ă���B
-chunk�������́A<TT>symbol, cons, string, float-vector</TT>�Ȃǂ̂悤��
-�l�X�Ȍ^�̃I�u�W�F�N�g�̂��߂̓����ȃf�[�^�e��ł���B
-�����̃T�C�Y��chunk�ƈ�v���钷���ł���B
-chunk�́A�Œ�A���I�A�Ĕz�u�\�A��։\�Ȃǂ̂悤��
-�ǂ�ȓ��ʂȑ����������Ă��Ȃ��B
-EusLisp�̃q�[�v�������́Achunk�̏W���ł���B�����āA
-�q�[�v��UNIX���V����chunk�𓾂邱�Ƃɂ�蓮�I�Ɋg�����邱�Ƃ��ł���B
-�g���́A���쒆�Ɏ����I�ɔ������邩���邢�̓��[�U�[��<B>system:alloc</B>�֐���
-�Ăяo�����Ƃɂ�蔭������B
-�����I�ɏ��������Ƃ��A�g�p�\�ȃ������T�C�Y�͍��v�̃q�[�v�T�C�Y��
-��25%�ɕۂB���̔䗦�́A<B>sys:*gc-margin*</B>�p�����[�^��0.1����0.9�܂ł̒l��ݒ�
-���邱�Ƃɂ��ύX���邱�Ƃ��ł���B
+メモリ管理の設計は、オブジェクト指向言語の柔軟性と効率性にたいへん
+影響を及ぼす。
+Euslispは、<B>フィボナッチバディ法</B>を基本に統一した方法で
+オブジェクトをメモリに割り当てる。
+この方法は、chunkと呼ばれる大きなメモリのプールを小さなセルに分割する。
+それぞれのセルは、サイズが等しくなく、フィボナッチ数がそれぞれ割り当てられる。
+chunkメモリは、<TT>symbol, cons, string, float-vector</TT>などのような
+様々な型のオブジェクトのための同次なデータ容器である。
+それらのサイズはchunkと一致する長さである。
+chunkは、固定、動的、再配置可能、交替可能などのような
+どんな特別な属性も持っていない。
+EusLispのヒープメモリは、chunkの集合である。そして、
+ヒープはUNIXより新しいchunkを得ることにより動的に拡張することができる。
+拡張は、動作中に自動的に発生するかあるいはユーザーが<B>system:alloc</B>関数を
+呼び出すことにより発生する。
+自動的に処理されるとき、使用可能なメモリサイズは合計のヒープサイズの
+約25%に保つ。この比率は、<B>sys:*gc-margin*</B>パラメータに0.1から0.9までの値を設定
+することにより変更することができる。
 
 <P>
-���ׂẴq�[�v���������g���������Ƃ��Amark-and-sweep�^�̃K�[�x�[�W�R���N�V����(GC)
-���n�߂�B
-���[�g�i�p�b�P�[�W�C�N���X��X�^�b�N�j����A�N�Z�X�\�ȃZ���́C
-�����A�h���X�̂܂܂ł���B
-���̃A�N�Z�X�s�\�ȃZ���́A��������free-lists�Ƀ����N�����B
-GC�̊ԂɃR�s�[��R���p�N�g���͔������Ȃ��B
-�K�[�x�[�W�����Z�������������Ƃ��A���̗אڃZ����free���ǂ����`�F�b�N�����B
-�����āA�ł��邾���傫�ȃZ�����\������悤�Ƀ}�[�W�����B
-�������Ȃ���A���̃}�[�W�́A�Ƃ��ǂ��Ӗ��̖������̂ɂȂ�B
-�Ȃ��Ȃ�A�����Ƃ��p�ɂɌĂяo����郁�����A���P�[�^�ł���<TT>cons</TT>���A
-���̃}�[�W���ꂽ�Z�����ł������ȃZ���ɕ������邱�Ƃ�v�����邩��ł���B
-���������āAEuslisp��<TT>cons</TT>�̍������̂��߂Ƀ}�[�W����Ȃ��������̗ʂ�
-�q�[�v���c�����Ƃ������Ă���B
-���̔䗦�́A<B>sys:*gc-merge*</B>�p�����[�^�ɂ���Č��肳���B���̒l�̃f�t�H���g��
-0.3�ł���B
-<B>sys:*gc-merge*</B>�ɑ傫�Ȓl��ݒ肷�邱�Ƃɂ��A�}�[�W����Ȃ��q�[�v�𑽂��c���B
-����́A<TT>cons</TT>���v�������Ƃ��Abuddy-cell�̕������ő��ɋN����Ȃ��̂ŁA<TT>cons</TT>�̐��\�����P����B
-����́A�܂�3�����x�N�g���̂悤�ȑ��ΓI�ɏ����ȃZ���̃A���P�[�V�����ɂ���
-���ׂĐ��藧�B
+すべてのヒープメモリを使いきったとき、mark-and-sweep型のガーベージコレクション(GC)
+を始める。
+ルート（パッケージ，クラスやスタック）からアクセス可能なセルは，
+同じアドレスのままである。
+他のアクセス不可能なセルは、矯正されfree-listsにリンクされる。
+GCの間にコピーやコンパクト化は発生しない。
+ガーベージされるセルが矯正されるとき、その隣接セルがfreeかどうかチェックされる。
+そして、できるだけ大きなセルを構成するようにマージされる。
+しかしながら、このマージは、ときどき意味の無いものになる。
+なぜなら、もっとも頻繁に呼び出されるメモリアロケータである<TT>cons</TT>が、
+そのマージされたセルを最も小さなセルに分割することを要求するからである。
+したがって、Euslispは<TT>cons</TT>の高速化のためにマージされないある特定の量の
+ヒープを残すことを許可している。
+この比率は、<B>sys:*gc-merge*</B>パラメータによって決定される。その値のデフォルトは
+0.3である。
+<B>sys:*gc-merge*</B>に大きな値を設定することにより、マージされないヒープを多く残す。
+これは、<TT>cons</TT>が要求されるとき、buddy-cellの分割が滅多に起こらないので、<TT>cons</TT>の性能を改善する。
+これは、また3次元ベクトルのような相対的に小さなセルのアロケーションについて
+すべて成り立つ。
 
 <P>
-<B>sys:gc</B>�́A�����I�ɃK�[�x�[�W�R���N�^�[���Ăяo���B
-�����āA�q�[�v�ɔz�u���ꂽ�󂢂Ă��郏�[�h���ƑS�̂̃��[�h���i�o�C�g���ł͂Ȃ��j������2�̐�����
-���X�g��Ԃ��B
+<B>sys:gc</B>は、明示的にガーベージコレクターを呼び出す。
+そして、ヒープに配置された空いているワード数と全体のワード数（バイト数ではない）を示す2つの整数の
+リストを返す。
 
 <P>
-�����A���s����"fatal error: stack overflow"���񍐂���A
-���̃G���[���������[�v���邢�͍ċA�����ɂ����̂łȂ��Ɗm�M����Ȃ�΁A
-<B>sys:newstack</B>��Lisp�̃X�^�b�N�̑傫�����g������Ή���ł���B
-<B>sys:newstack</B>��ݒ肷��O�ɂ́A<B>reset</B>�����s���Ȃ���΂Ȃ�Ȃ��B
-�Ȃ��Ȃ�A
-�X�y�V�����o�C���h��<B>unwind-protect</B>�̐����p�̏�����
-���݂̃X�^�b�N�̒����炷�ׂĎ̂Ă��邽�߂ł���B
+もし、実行中に"fatal error: stack overflow"が報告され、
+そのエラーが無限ループあるいは再帰処理によるものでないと確信するならば、
+<B>sys:newstack</B>でLispのスタックの大きさを拡張すれば回避できる。
+<B>sys:newstack</B>を設定する前には、<B>reset</B>を実行しなければならない。
+なぜなら、
+スペシャルバインドと<B>unwind-protect</B>の整理用の書式が
+現在のスタックの中からすべて捨てられるためである。
 
 <P>
-�V�����X�^�b�N���z�u���ꂽ��A�I�[�v�j���O���b�Z�[�W��\������Ƃ��납��
-���s���n�߂�B
-�f�t�H���g�̃X�^�b�N�T�C�Y�́A16Kword�ł���B
-Lisp�̃X�^�b�N�́A�V�X�e���̃X�^�b�N�ƕʕ��ł���B
-�O�҂́A�q�[�v��ɔz�u����A��҂́A�I�y���[�e�B���O�V�X�e���ɂ����
-�X�^�b�N�Z�O�����g���ɔz�u�����B
-�����A"segmentation fault"�G���[�����������Ȃ�΁A�V�X�e���̃X�^�b�N�����������Ƃ�
-��蔭���������Ƃ��l������B
-csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
-�����ł���\��������B
+新しいスタックが配置された後、オープニングメッセージを表示するところから
+実行を始める。
+デフォルトのスタックサイズは、16Kwordである。
+Lispのスタックは、システムのスタックと別物である。
+前者は、ヒープ上に配置され、後者は、オペレーティングシステムによって
+スタックセグメント内に配置される。
+もし、"segmentation fault"エラーが発生したならば、システムのスタックが小さいことに
+より発生したことが考えられる。
+cshのコマンド<TT>limit</TT>で、システムのスタックサイズを増加することにより、
+解決できる可能性がある。
 
 <P>
-<B>sys:reclaim</B>��<B>sys:reclaim-tree</B>�֐��́A�I�u�W�F�N�g�ɂ���L����Ă���Z����
-�������}�l�[�W���[�ɖ߂��B���̂��߁A�K�[�x�[�W�R���N�V�������Ăяo�����ƂȂ���
-���̌���Ďg�p�����邱�Ƃ��ł���B
-�������A�����̃Z�������̃Z������Q�Ƃ���Ă��Ȃ����Ƃ��m���łȂ���΂Ȃ�Ȃ��B
+<B>sys:reclaim</B>と<B>sys:reclaim-tree</B>関数は、オブジェクトにより占有されているセルを
+メモリマネージャーに戻す。そのため、ガーベージコレクションを呼び出すことなしに
+その後も再使用をすることができる。
+しかし、それらのセルが他のセルから参照されていないことが確実でなければならない。
 
 <P>
-<B>memory-report</B>��<B>room</B>�֐��́A�������̎g�p�Ɋւ��铝�v��
-�Z���̃T�C�Y��N���X�ɂ��\�[�g���ĕ\������B
+<B>memory-report</B>と<B>room</B>関数は、メモリの使用に関する統計を
+セルのサイズやクラスによりソートして表示する。
 
 <P>
-<B>address</B>�́A�I�u�W�F�N�g�̃o�C�g���Z�����A�h���X��Ԃ��B
-���̃A�h���X�̓v���Z�X�ɓƎ��̂��̂ł��邩��A
-���̊֐��̓n�b�V���e�[�u�����g�p����n�b�V���֐��ɗL�p�ł���B
+<B>address</B>は、オブジェクトのバイト換算したアドレスを返す。
+このアドレスはプロセスに独自のものであるから、
+この関数はハッシュテーブルが使用するハッシュ関数に有用である。
 
 <P>
-<B>peek</B>��<B>poke</B>�́A���������璼�ڃf�[�^��ǂݏ����ł���֐��ł���B
-�A�N�Z�X����^�́A<TT>:char, :byte, :short, :long, :integer, :float, :double</TT>
-�̂ǂꂩ�ɂ��ׂ��ł���B
-�Ⴆ�΁A<TT>(SYS:PEEK (+ 2 (SYS:ADDRESS '(a b))) :short)</TT>�́A
-<TT>cons</TT>�Z���̃N���XID�i�ӂ��P�ł���j��Ԃ��B
+<B>peek</B>と<B>poke</B>は、メモリから直接データを読み書きできる関数である。
+アクセスする型は、<TT>:char, :byte, :short, :long, :integer, :float, :double</TT>
+のどれかにすべきである。
+例えば、<TT>(SYS:PEEK (+ 2 (SYS:ADDRESS '(a b))) :short)</TT>は、
+<TT>cons</TT>セルのクラスID（ふつう１である）を返す。
 
 <P>
-'<B>list-all-</B>'�𖼑O�̑O�ɕt���Ă������̊֐�������B
-�����̊֐��́A�V�X�e���̃��\�[�X���邢�͊��̃��X�g��Ԃ��A
-���I�ȃf�o�b�O�ɗL�p�ł���B
+'<B>list-all-</B>'を名前の前に付けている幾つかの関数がある。
+これらの関数は、システムのリソースあるいは環境のリストを返し、
+動的なデバッグに有用である。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="21022"></A>
-<B>sys:gc</B> [�֐�]
+<A NAME="21019"></A>
+<B>sys:gc</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�K�[�x�[�W�R���N�V���������s����B���蓖�Ă��Ă��钆�ŋ󂢂Ă��郏�[�h������ёS�̂̃��[�h��
-�̃��X�g��Ԃ��B
+ガーベージコレクションを実行する。割り当てられている中で空いているワード数および全体のワード数
+のリストを返す。
 </DD>
 </DL>
 <BR>
@@ -173,15 +174,15 @@ csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
 
 <P>
 
-<A NAME="21032"></A>
-<B>sys:gctime</B> [�֐�]
+<A NAME="21029"></A>
+<B>sys:gctime</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-3�̐����̃��X�g��Ԃ��B1�́A�f�b���Ăяo�����񐔁B
-2�́A�Z�����}�[�L���O���邽�߂Ɏg�p�������ԁi1���j�b�g��1/60�b�j�B
-3���A�����i�}�[�L���O���O���A�}�[�W����j�̂��߂Ɏg�p�������ԁB
+3つの整数のリストを返す。1つは、ＧＣを呼び出した回数。
+2つは、セルをマーキングするために使用した時間（1ユニットに1/60秒）。
+3つが、矯正（マーキングを外し、マージする）のために使用した時間。
 </DD>
 </DL>
 <BR>
@@ -189,14 +190,14 @@ csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
 
 <P>
 
-<A NAME="21042"></A>
-<B>sys:alloc</B> <EM>size </EM>[�֐�]
+<A NAME="21039"></A>
+<B>sys:alloc</B> <EM>size </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�q�[�v�ɏ��Ȃ��Ƃ�<EM>size</EM>���[�h�̃�������z�u���A
-���ۂɔz�u���ꂽ���[�h����Ԃ��B
+ヒープに少なくとも<EM>size</EM>ワードのメモリを配置し、
+実際に配置されたワード数を返す。
 </DD>
 </DL>
 <BR>
@@ -204,13 +205,13 @@ csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
 
 <P>
 
-<A NAME="21053"></A>
-<B>sys:newstack</B> <EM>size </EM>[�֐�]
+<A NAME="21050"></A>
+<B>sys:newstack</B> <EM>size </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���݂̃X�^�b�N��p�����A<EM>size</EM>���[�h�̐V�����X�^�b�N��z�u����B
+現在のスタックを廃棄し、<EM>size</EM>ワードの新しいスタックを配置する。
 </DD>
 </DL>
 <BR>
@@ -218,19 +219,19 @@ csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
 
 <P>
 
-<A NAME="21064"></A>
-<B>sys:*gc-merge*</B> [�ϐ�]
+<A NAME="21061"></A>
+<B>sys:*gc-merge*</B> [変数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�������Ǘ��p�̃p�����[�^�B
-<B>*gc-merge*</B>�́AGC�ɂ��}�[�W���ꂸ�Ɏc���q�[�v�������̔䗦�������B
-���̃}�[�W����Ȃ��̈�́A������<B>cons</B>�̂悤�ȏ����ȃZ���ɖ��������B
-�f�t�H���g�̒l�́A0.3�ł���B
-���̒l��0.4�̂悤�ɑ傫������ƁA�}�[�W����Ȃ��󂫃q�[�v��40%�ł��邱�Ƃ�
-�����Acons�̂��߂ɂ͖𗧂��A�����x�N�g����G�b�W��ʂȂǂ̂悤�ȑ傫�ȃZ��
-�̊m�ۂɂ́A�Q���y�ڂ��B
+メモリ管理用のパラメータ。
+<B>*gc-merge*</B>は、GCによりマージされずに残すヒープメモリの比率を示す。
+このマージされない領域は、すぐに<B>cons</B>のような小さなセルに満たされる。
+デフォルトの値は、0.3である。
+この値を0.4のように大きくすると、マージされない空きヒープが40%であることを
+示し、consのためには役立つが、実数ベクトルやエッジや面などのような大きなセル
+の確保には、害を及ぼす。
 </DD>
 </DL>
 <BR>
@@ -238,18 +239,18 @@ csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
 
 <P>
 
-<A NAME="21076"></A>
-<B>sys:*gc-margin*</B> [�ϐ�]
+<A NAME="21073"></A>
+<B>sys:*gc-margin*</B> [変数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�������Ǘ��p�̃p�����[�^�B
-<B>*gc-margin*</B>�́A�S�̂̃q�[�v�ɑ΂���󂫃q�[�v�̔䗦�����肷��B
-�������́AUNIX����l���������̂ł��邽�߁A�󂫋�Ԃ͂��̔䗦���
-�������Ȃ�Ȃ��B
-�f�t�H���g�́A0.25�ł���AGC�̍ۂ�25%�ȏ��
-�󂫋�Ԃ��ێ�����邱�Ƃ��Ӗ�����B
+メモリ管理用のパラメータ。
+<B>*gc-margin*</B>は、全体のヒープに対する空きヒープの比率を決定する。
+メモリは、UNIXから獲得したものであるため、空き空間はこの比率より
+小さくならない。
+デフォルトは、0.25であり、GCの際に25%以上の
+空き空間が維持されることを意味する。
 </DD>
 </DL>
 <BR>
@@ -257,15 +258,15 @@ csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
 
 <P>
 
-<A NAME="21087"></A>
-<B>sys:reclaim</B> <EM>object </EM>[�֐�]
+<A NAME="21084"></A>
+<B>sys:reclaim</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���݂Ƃ���<EM>object</EM>��p������B
-���̃I�u�W�F�N�g�́A���̂ǂ̃I�u�W�F�N�g�������΂ɎQ�Ƃ���Ȃ����Ƃ�
-�ۏ؂���Ȃ���΂Ȃ�Ȃ��B
+ごみとして<EM>object</EM>を廃棄する。
+そのオブジェクトは、他のどのオブジェクトからも絶対に参照されないことが
+保証されなければならない。
 </DD>
 </DL>
 <BR>
@@ -273,13 +274,13 @@ csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
 
 <P>
 
-<A NAME="21098"></A>
-<B>sys:reclaim-tree</B> <EM>object </EM>[�֐�]
+<A NAME="21095"></A>
+<B>sys:reclaim-tree</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>object</EM>����ʉ߂ł���symbol�������Ă��ׂẴI�u�W�F�N�g����������B
+<EM>object</EM>から通過できるsymbolを除いてすべてのオブジェクトを矯正する。
 </DD>
 </DL>
 <BR>
@@ -287,13 +288,13 @@ csh�̃R�}���h<TT>limit</TT>�ŁA�V�X�e���̃X�^�b�N�T�C�Y�𑝉����邱�Ƃɂ��A
 
 <P>
 
-<A NAME="21109"></A>
-<B>sys:btrace</B> <EM>num </EM>[�֐�]
+<A NAME="21106"></A>
+<B>sys:btrace</B> <EM>num </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Lisp�̃X�^�b�N��<EM>num</EM>�Ԗڂ̐[���̏����g���[�X���ĕ\������B
+Lispのスタックの<EM>num</EM>番目の深さの情報をトレースして表示する。
 </DD>
 </DL>
 <BR>
@@ -301,13 +302,13 @@ Lisp�̃X�^�b�N��<EM>num</EM>�Ԗڂ̐[���̏����g���[�X���ĕ\������B
 
 <P>
 
-<A NAME="21120"></A>
-<B>sys:memory-report</B> <EM>&amp;optional strm </EM>[�֐�]
+<A NAME="21117"></A>
+<B>sys:memory-report</B> <EM>&amp;optional strm </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�Z���̃T�C�Y�Ń\�[�g�����������g�p�̃e�[�u����<EM>strm</EM>�X�g���[���ɏo�͂���B
+セルのサイズでソートしたメモリ使用のテーブルを<EM>strm</EM>ストリームに出力する。
 </DD>
 </DL>
 <BR>
@@ -315,13 +316,13 @@ Lisp�̃X�^�b�N��<EM>num</EM>�Ԗڂ̐[���̏����g���[�X���ĕ\������B
 
 <P>
 
-<A NAME="21131"></A>
-<B>sys:room</B> <EM>output-stream </EM>[�֐�]
+<A NAME="21128"></A>
+<B>sys:room</B> <EM>output-stream </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�N���X�Ő��񂵂��������z�u�̏����o�͂���B
+クラスで整列したメモリ配置の情報を出力する。
 </DD>
 </DL>
 <BR>
@@ -329,13 +330,13 @@ Lisp�̃X�^�b�N��<EM>num</EM>�Ԗڂ̐[���̏����g���[�X���ĕ\������B
 
 <P>
 
-<A NAME="21141"></A>
-<B>sys:address</B> <EM>object </EM>[�֐�]
+<A NAME="21138"></A>
+<B>sys:address</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�v���Z�X�̃�������ԓ��ɂ���<EM>object</EM>�̃A�h���X��Ԃ��B
+プロセスのメモリ空間内にある<EM>object</EM>のアドレスを返す。
 
 </DD>
 </DL>
@@ -344,31 +345,31 @@ Lisp�̃X�^�b�N��<EM>num</EM>�Ԗڂ̐[���̏����g���[�X���ĕ\������B
 
 <P>
 
-<A NAME="21152"></A>
-<B>sys:peek</B> <EM>[vector] address type </EM>[�֐�]
+<A NAME="21149"></A>
+<B>sys:peek</B> <EM>[vector] address type </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>address</EM>�Ŏw�肳�ꂽ�������ʒu�̃f�[�^��ǂ݂����A
-����𐮐��Ƃ��ĕԂ��B
-<EM>type</EM>�́A<B>:char, :byte, :short, :long, :float, :double</B>�̓��̂P�ł���B
-�����A<EM>vector</EM>���^�����Ȃ������Ȃ�A
-���̃A�h���X�́AUNIX�̏�����ԂƂ��Ĉ�����B
-�Ⴆ�΁ASun�ɂ�����a.out�̃w�b�_�[��<TT>#x2000</TT>�ɒu����邽�߁A
-<TT>(sys:peek #x2000 :short)</TT>��magic number�i�ӂ���<TT>#o403</TT>)��Ԃ��B
-Solaris2�́AELF�w�b�_�[��<TT>#10000</TT>�ɒu�����߁A
-<TT>(sys:peek #x10000 :long)</TT>��"ELF"��\�����镶����ł���
-<TT>#xff454c46</TT>��Ԃ��B
-�����A<EM>vector</EM>���^����ꂽ�Ȃ�΁A�����<B>foreign-string</B>�ł���A
-�A�h���X��<EM>vector</EM>�̋N�_����̃I�t�Z�b�g�Ƃ��ĔF�������B
-<TT>(sys:peek "123456" 2 :short)</TT>�́A"34"��\������
-short word��Ԃ��B(<TT>#x3334(13108)</TT>�ł���)
+<EM>address</EM>で指定されたメモリ位置のデータを読みだし、
+それを整数として返す。
+<EM>type</EM>は、<B>:char, :byte, :short, :long, :float, :double</B>の内の１つである。
+もし、<EM>vector</EM>が与えられなかったなら、
+そのアドレスは、UNIXの処理空間として扱われる。
+例えば、Sunにおいてa.outのヘッダーは<TT>#x2000</TT>に置かれるため、
+<TT>(sys:peek #x2000 :short)</TT>はmagic number（ふつうは<TT>#o403</TT>)を返す。
+Solaris2は、ELFヘッダーを<TT>#10000</TT>に置くため、
+<TT>(sys:peek #x10000 :long)</TT>が"ELF"を表現する文字列である
+<TT>#xff454c46</TT>を返す。
+もし、<EM>vector</EM>が与えられたならば、それは<B>foreign-string</B>であり、
+アドレスは<EM>vector</EM>の起点からのオフセットとして認識される。
+<TT>(sys:peek "123456" 2 :short)</TT>は、"34"を表現する
+short wordを返す。(<TT>#x3334(13108)</TT>である)
 
 <P>
-�A�h���X�ʒu�ɂ��Ă͏\�����ӂ��邱�ƁB
-<TT>short, integer, long. float, double word</TT>����A�h���X����ǂݏo���ƁA
-"bus error"�ɂȂ�B
+アドレス位置については十分注意すること。
+<TT>short, integer, long. float, double word</TT>を奇数アドレスから読み出すと、
+"bus error"になる。
 </DD>
 </DL>
 <BR>
@@ -376,19 +377,19 @@ short word��Ԃ��B(<TT>#x3334(13108)</TT>�ł���)
 
 <P>
 
-<A NAME="21178"></A>
-<B>sys:poke</B> <EM>value [vector] address value type </EM>[�֐�]
+<A NAME="21175"></A>
+<B>sys:poke</B> <EM>value [vector] address value type </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>value</EM>��<EM>address</EM>�Ŏw�肳�ꂽ�ʒu�ɏ������ށB
-�v���Z�X�̃�������ԓ��̂ǂ��ł��������ނ��Ƃ��ł��邽�߁A
-���ɒ��ӂ����Ȃ���΂Ȃ�Ȃ��B
-�v���Z�X�̋�Ԃ̊O�֏������񂾂Ȃ�A
-�m����"segmentation fault"����������B
-<TT>short, integer, long. float, double word</TT>����A�h���X�ɏ�������
-�ꍇ�A"bus error"����������B
+<EM>value</EM>を<EM>address</EM>で指定された位置に書き込む。
+プロセスのメモリ空間内のどこでも書き込むことができるため、
+特に注意をしなければならない。
+プロセスの空間の外へ書き込んだなら、
+確実に"segmentation fault"が発生する。
+<TT>short, integer, long. float, double word</TT>を奇数アドレスに書き込んだ
+場合、"bus error"が発生する。
 </DD>
 </DL>
 <BR>
@@ -396,14 +397,14 @@ short word��Ԃ��B(<TT>#x3334(13108)</TT>�ł���)
 
 <P>
 
-<A NAME="21191"></A>
-<B>sys:list-all-chunks</B> [�֐�]
+<A NAME="21188"></A>
+<B>sys:list-all-chunks</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�z�u���ꂽ���ׂẴq�[�v��chunk�����X�g�A�b�v����B
-���ɗL�p�Ȏ��s�֐��͂Ȃ��B
+配置されたすべてのヒープのchunkをリストアップする。
+他に有用な実行関数はない。
 </DD>
 </DL>
 <BR>
@@ -411,21 +412,21 @@ short word��Ԃ��B(<TT>#x3334(13108)</TT>�ł���)
 
 <P>
 
-<A NAME="21201"></A>
-<B>sys:object-size</B> <EM>obj </EM>[�֐�]
+<A NAME="21198"></A>
+<B>sys:object-size</B> <EM>obj </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>obj</EM>����A�N�Z�X�\�ȃZ���ƃ��[�h�̐����v�Z����B
-<EM>obj</EM>����Q�Ɖ\�Ȃ��ׂẴI�u�W�F�N�g���T�������B
-�����āA3�̐��̃��X�g���Ԃ����B
-1�ڂ́A�Z���̐��B2�ڂ́A�����̃I�u�W�F�N�g�ɘ_���I�ɔz�u���ꂽ���[�h���i
-���Ȃ킿�A���[�U�[����A�N�Z�X�ł��郏�[�h���j�B
-3�ڂ́A�����I�ɔz�u���ꂽ���[�h���B
-����́A�w�b�_�[�ƃ������Ǘ��̂��߂̓��ʂȃX���b�g���܂ށB
-�T���́Asymbol�Œ�~����B���Ȃ킿�A<TT>property-list</TT>���邢��<TT>print-name string</TT>�̂悤��
-symbol����Q�Ƃ����I�u�W�F�N�g�́A�J�E���g����Ȃ��B
+<EM>obj</EM>からアクセス可能なセルとワードの数を計算する。
+<EM>obj</EM>から参照可能なすべてのオブジェクトが探索される。
+そして、3つの数のリストが返される。
+1つ目は、セルの数。2つ目は、これらのオブジェクトに論理的に配置されたワード数（
+すなわち、ユーザーからアクセスできるワード数）。
+3つ目は、物理的に配置されたワード数。
+これは、ヘッダーとメモリ管理のための特別なスロットを含む。
+探索は、symbolで停止する。すなわち、<TT>property-list</TT>あるいは<TT>print-name string</TT>のような
+symbolから参照されるオブジェクトは、カウントされない。
 </DD>
 </DL>
 <BR>
@@ -453,19 +454,19 @@ symbol����Q�Ƃ����I�u�W�F�N�g�́A�J�E���g����Ȃ��B
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1547"
-  HREF="jmanual-node76.html">UNIX�V�X�e���R�[��</A>
+  HREF="jmanual-node76.html">UNIXシステムコール</A>
 <B> Up:</B> <A NAME="tex2html1541"
-  HREF="jmanual-node74.html">�V�X�e���֐�</A>
+  HREF="jmanual-node74.html">システム関数</A>
 <B> Previous:</B> <A NAME="tex2html1535"
-  HREF="jmanual-node74.html">�V�X�e���֐�</A>
+  HREF="jmanual-node74.html">システム関数</A>
  &nbsp; <B>  <A NAME="tex2html1543"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1545"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

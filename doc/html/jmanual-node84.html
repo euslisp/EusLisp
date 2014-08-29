@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�L�[�C���f�b�N�X�t�@�C��</TITLE>
-<META NAME="description" CONTENT="�L�[�C���f�b�N�X�t�@�C��">
+<TITLE>キーインデックスファイル</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="キーインデックスファイル">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,9 +44,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1679"
-  HREF="jmanual-node85.html">UNIX�v���Z�X</A>
+  HREF="jmanual-node85.html">UNIXプロセス</A>
 <B> Up:</B> <A NAME="tex2html1673"
-  HREF="jmanual-node76.html">UNIX�V�X�e���R�[��</A>
+  HREF="jmanual-node76.html">UNIXシステムコール</A>
 <B> Previous:</B> <A NAME="tex2html1669"
   HREF="jmanual-node83.html">IOCTL</A>
  &nbsp; <B>  <A NAME="tex2html1675"
@@ -57,36 +58,36 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04012800000000000000">
-�L�[�C���f�b�N�X�t�@�C��</A>
+キーインデックスファイル</A>
 </H3>
-�ߔNUNIX�́A�L�[�C���f�b�N�X�t�@�C���̊Ǘ��̂��߂�<B>dbm</B>���邢��<B>ndbm</B>
-���C�u������񋟂���B���̃��C�u�������g�p���邱�Ƃɂ��A
-�L�[�ƃf�[�^�̑g�݂ō\�������f�[�^�x�[�X���\�z���邱�Ƃ��ł���B
-�ȉ��Ɏ����֐��́A<TT>clib/ndbm.c</TT>�ɒ�`����Ă���B
-Sun�ɂ����āA���̃t�@�C���́A<TT>cc -c -Dsun4 -Bstatic</TT>�ŃR���p�C�����A
-<TT>(load "clib/ndbm" :ld-option "-lc")</TT>��Euslisp�Ƀ��[�h���邱�ƁB
+近年UNIXは、キーインデックスファイルの管理のために<B>dbm</B>あるいは<B>ndbm</B>
+ライブラリを提供する。このライブラリを使用することにより、
+キーとデータの組みで構成されるデータベースを構築することができる。
+以下に示す関数は、<TT>clib/ndbm.c</TT>に定義されている。
+Sunにおいて、そのファイルは、<TT>cc -c -Dsun4 -Bstatic</TT>でコンパイルし、
+<TT>(load "clib/ndbm" :ld-option "-lc")</TT>でEuslispにロードすること。
 
 <P>
 
  <BR>
-<BR> <A NAME="22460"></A>
-<B>dbm-open</B> <EM>dbname mode flag </EM>[�֐�]
+<BR> <A NAME="22457"></A>
+<B>dbm-open</B> <EM>dbname mode flag </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>dbm-open</B>�́A�f�[�^�x�[�X�t�@�C�������Ƃ��ƁA���̃f�[�^�x�[�X�ɓǂݍ��݁^��������
-������Ƃ��A�ŏ��ɌĂяo����Ȃ���΂Ȃ�Ȃ��B
-<EM>dbname</EM>�́A�f�[�^�x�[�X�̖��O�ł���B
-���ۂɁAndbm manager��<TT>".pag"</TT>��<TT>".dir"</TT>�̊g���q������
-2�̃t�@�C�����쐬����B
-<EM>mode</EM>�́A�t�@�C���̃I�[�v�����[�h���w�肷��B0�͓ǂݍ��ݐ�p�A1�͏������ݐ�p�A
-2�͓ǂݏ����p�������B�܂��A�ŏ��Ƀt�@�C�����쐬����Ƃ��́A<TT>#x200</TT>��_���a���ׂ��ł���B
-<EM>flag</EM>�́A<B>chmod</B>�ŕύX�����A�N�Z�X����^����B
-<TT>#o666</TT>���邢��<TT>#o664</TT>���A<EM>flag</EM>�ɓK���Ă���B
-<B>dbm-open</B>�́A���̃f�[�^�x�[�X���m�F���邽�߂̐�����Ԃ��B
-���̒l�́A����dbm�֐��ɂ���ăf�[�^�x�[�X���m�F���邽�߂Ɏg�p�����B
-����������΁A�����Ɋ���̃f�[�^�x�[�X���I�[�v�����邱�Ƃ��ł���B
+<B>dbm-open</B>は、データベースファイルを作るときと、そのデータベースに読み込み／書き込み
+をするとき、最初に呼び出されなければならない。
+<EM>dbname</EM>は、データベースの名前である。
+実際に、ndbm managerは<TT>".pag"</TT>と<TT>".dir"</TT>の拡張子を持つ
+2つのファイルを作成する。
+<EM>mode</EM>は、ファイルのオープンモードを指定する。0は読み込み専用、1は書き込み専用、
+2は読み書き用を示す。また、最初にファイルを作成するときは、<TT>#x200</TT>を論理和すべきである。
+<EM>flag</EM>は、<B>chmod</B>で変更されるアクセス許可を与える。
+<TT>#o666</TT>あるいは<TT>#o664</TT>が、<EM>flag</EM>に適している。
+<B>dbm-open</B>は、そのデータベースを確認するための整数を返す。
+この値は、他のdbm関数によってデータベースを確認するために使用される。
+言い換えれば、同時に幾つかのデータベースをオープンすることができる。
 </DD>
 </DL>
 <BR>
@@ -94,16 +95,16 @@ Sun�ɂ����āA���̃t�@�C���́A<TT>cc -c -Dsun4 -Bstatic</TT>�ŃR���p�C�����A
 
 <P>
 
-<A NAME="22482"></A>
-<B>dbm-store</B> <EM>db key datum mode </EM>[�֐�]
+<A NAME="22479"></A>
+<B>dbm-store</B> <EM>db key datum mode </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>key</EM>��<EM>datum</EM>�̑g�ݍ��킹��<EM>db</EM>�ɒ~�ς���B
-<EM>db</EM>�́A�f�[�^�x�[�X���m�F���邽�߂̐����ł���B
-<EM>key</EM>��<EM>datum</EM>�͕�����ł���B
-<EM>mode</EM>��0(�}��)���邢��1(�u������)�̂ǂ��炩�ł���B
+<EM>key</EM>と<EM>datum</EM>の組み合わせを<EM>db</EM>に蓄積する。
+<EM>db</EM>は、データベースを確認するための整数である。
+<EM>key</EM>と<EM>datum</EM>は文字列である。
+<EM>mode</EM>は0(挿入)あるいは1(置き換え)のどちらかである。
 </DD>
 </DL>
 <BR>
@@ -111,13 +112,13 @@ Sun�ɂ����āA���̃t�@�C���́A<TT>cc -c -Dsun4 -Bstatic</TT>�ŃR���p�C�����A
 
 <P>
 
-<A NAME="22499"></A>
-<B>dbm-fetch</B> <EM>db key </EM>[�֐�]
+<A NAME="22496"></A>
+<B>dbm-fetch</B> <EM>db key </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>db</EM>�̒���<EM>key</EM>�Ɋ֘A�t�����Ă���f�[�^���Ăяo���B
+<EM>db</EM>の中の<EM>key</EM>に関連付けられているデータを呼び出す。
 </DD>
 </DL>
 <BR>
@@ -128,8 +129,8 @@ Sun�ɂ����āA���̃t�@�C���́A<TT>cc -c -Dsun4 -Bstatic</TT>�ŃR���p�C�����A
 
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

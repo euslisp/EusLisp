@@ -8,6 +8,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <HTML>
 <HEAD>
 <TITLE>XToolKit</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <META NAME="description" CONTENT="XToolKit">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2410"
-  HREF="jmanual-node135.html">X�C�x���g</A>
+  HREF="jmanual-node135.html">Xイベント</A>
 <B> Up:</B> <A NAME="tex2html2404"
-  HREF="jmanual-node73.html">EusLisp �g��</A>
+  HREF="jmanual-node73.html">EusLisp 拡張</A>
 <B> Previous:</B> <A NAME="tex2html2398"
-  HREF="jmanual-node133.html">�F�ƃJ���[�}�b�v</A>
+  HREF="jmanual-node133.html">色とカラーマップ</A>
  &nbsp; <B>  <A NAME="tex2html2406"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2408"
@@ -62,14 +63,14 @@ XToolKit</A>
 </H1>
 
 <P>
-XToolKit�́A
-�{�^���A�v���_�E�����j���A�e�L�X�gwindow�Ȃǂ�GUI�v�f���g�p����
-GUI (Graphical User Interface)���쐬����̂�e�Ղɂ��邽�߂�
-�����x��Xwindow�C���^�[�t�F�[�X�ł���B
-Xlib�N���X�Ƃ̑傫�ȈႢ�́AXToolKit��Xserver���瑗����
-Xevent�ƈ�v���郆�[�U�[����`�����Θb���[�`�����Ăяo���A
-�����̑Θb�w��window�p�[�c�ƈ�v�����O�ς�񋟂��邱�Ƃł���B
-XToolKit�Ɋ܂܂��N���X�́A�ȉ��̌p���\���������Ă���B
+XToolKitは、
+ボタン、プルダウンメニュ、テキストwindowなどのGUI要素を使用して
+GUI (Graphical User Interface)を作成するのを容易にするための
+高レベルXwindowインターフェースである。
+Xlibクラスとの大きな違いは、XToolKitがXserverから送られる
+Xeventと一致するユーザーが定義した対話ルーチンを呼び出し、
+それらの対話指向windowパーツと一致した外観を提供することである。
+XToolKitに含まれるクラスは、以下の継承構造を持っている。
 <PRE>
           xwindow
                panel
@@ -97,54 +98,54 @@ XToolKit�Ɋ܂܂��N���X�́A�ȉ��̌p���\���������Ă���B
 </PRE>
 
 <P>
-�ȉ��Ɏ���xwindow�N���X��XToolKit��5�̊�{�N���X�ł���B
+以下に示すxwindowクラスはXToolKitの5つの基本クラスである。
 <TT>panel</TT>, <TT>panel-item</TT>,
-<TT>canvas</TT>, <TT>textWindow</TT>��<TT>scroll-bar</TT>�B
-<TT>menubar-panel</TT>��<TT>menu-panel</TT>�́A<TT>panel</TT>�̉��ɒ�`�����B
-�V�����A�v���P�[�V����window�����A�C�x���g�̏�ł�������s�����邽�߂�
-��{�I�ȕ���́A�ȉ��̒ʂ�ł���B
+<TT>canvas</TT>, <TT>textWindow</TT>と<TT>scroll-bar</TT>。
+<TT>menubar-panel</TT>と<TT>menu-panel</TT>は、<TT>panel</TT>の下に定義される。
+新しいアプリケーションwindowを作り、イベントの上でそれを実行させるための
+基本的な方策は、以下の通りである。
 
 <OL>
-<LI><B>�A�v���P�[�V�����N���X�̒�`</B> �A�v���P�[�V�����N���Xwindow�́A
-XToolKit�̗v�f��u���\�͂�����<B>panel</B>�̃T�u�N���X�Ƃ���
-��`����Ȃ���΂Ȃ�Ȃ��B
+<LI><B>アプリケーションクラスの定義</B> アプリケーションクラスwindowは、
+XToolKitの要素を置く能力を持つ<B>panel</B>のサブクラスとして
+定義されなければならない。
 </LI>
-<LI><B>�C�x���g�n���h���̒�`</B> �A�v���P�[�V�����N���X�ɂ����āA
-�{�^���������ꂽ��A���j���[�A�C�e�����I�����ꂽ�肵���Ƃ���
-�Ăяo�����C�x���g�n���h�����`����B
-�C�x���g�n���h���́Apanel-item�̎w�肳�ꂽ�����������\�b�h�Ƃ���
-��`���ׂ��ł���B
+<LI><B>イベントハンドラの定義</B> アプリケーションクラスにおいて、
+ボタンが押されたり、メニューアイテムが選択されたりしたときに
+呼び出されるイベントハンドラを定義する。
+イベントハンドラは、panel-itemの指定された引数を持つメソッドとして
+定義すべきである。
 </LI>
-<LI><B>�T�u�p�l���̒�`</B> �����A<TT>menubar-panel</TT>���g�p����Ȃ�A
-�A�v���P�[�V����window�̈�ԏ�ɂ������B
-���������āA<TT>:create-menubar</TT>�ɂ���čŏ��ɍ쐬����Ȃ����
-�Ȃ�Ȃ��B
-���l�ɁA<TT>menu-panel</TT>�́A����<TT>menu-panel</TT>�Ɗ֘A����
-<TT>menu-button-item</TT>���O�ɒ�`����K�v������B
+<LI><B>サブパネルの定義</B> もし、<TT>menubar-panel</TT>を使用するなら、
+アプリケーションwindowの一番上におかれる。
+したがって、<TT>:create-menubar</TT>によって最初に作成されなければ
+ならない。
+同様に、<TT>menu-panel</TT>は、その<TT>menu-panel</TT>と関連する
+<TT>menu-button-item</TT>より前に定義する必要がある。
 </LI>
-<LI><B>�p�l���A�C�e���̍쐬</B> <TT>button-item</TT>,
-<TT>text-item</TT>, <TT>slider-item</TT>�Ȃǂ̂悤�ȃp�l���A�C�e���́A
-<TT>(send-super :create-item <EM>class label object method</EM>)</TT>�ɂ����
-�쐬���邱�Ƃ��ł���B
-��L�Œ�`���ꂽ�C�x���g�n���h���́A���ꂼ��̃p�l���A�C�e����
-�ڑ������B
-�����̏������葱���́A�A�v���P�[�V����window�N���X��
-<TT>:create</TT>���\�b�h�̒��Œ�`���ׂ��ł���B
-�K�v�ȂƂ��͂��ł��C�x���g���M���~���邽�߂�<TT>quit</TT>�{�^����
-��`���邱�Ƃ�Y��Ȃ����ƁB
-�ǂ��<TT>textWindow</TT>��<TT>canvas</TT>���A<TT>:locate-item</TT>���\�b�h���o�R����
-�A�v���P�[�V����window�̒��ɒu�����Ƃ��ł���B
+<LI><B>パネルアイテムの作成</B> <TT>button-item</TT>,
+<TT>text-item</TT>, <TT>slider-item</TT>などのようなパネルアイテムは、
+<TT>(send-super :create-item <EM>class label object method</EM>)</TT>によって
+作成することができる。
+上記で定義されたイベントハンドラは、それぞれのパネルアイテムと
+接続される。
+これらの初期化手続きは、アプリケーションwindowクラスの
+<TT>:create</TT>メソッドの中で定義すべきである。
+必要なときはいつでもイベント送信を停止するための<TT>quit</TT>ボタンを
+定義することを忘れないこと。
+どんな<TT>textWindow</TT>と<TT>canvas</TT>も、<TT>:locate-item</TT>メソッドを経由して
+アプリケーションwindowの中に置くことができる。
 </LI>
-<LI><B>window�S�̂̍쐬</B> <TT>:create</TT>���b�Z�[�W���A�v���P�[�V����
-�N���X�ɑ��邱�ƂŁAwindow��XToolKit�̗v�f�𐳂����u�����A�v���P�[�V����
-window���쐬����B
+<LI><B>window全体の作成</B> <TT>:create</TT>メッセージをアプリケーション
+クラスに送ることで、windowにXToolKitの要素を正しく置いたアプリケーション
+windowを作成する。
 </LI>
-<LI><B>�C�x���g���M�̎��s</B> Xserver����C�x���g���󂯁A��v����
-window�ɔz�邽�߂ɂ́A<TT>window-main-loop</TT>�����s���邱�ƁB
-Solaris2��ł́A�C�x���g��z�邽�߂̈قȂ����X���b�h�ł���
-<TT>window-main-thread</TT>�Ŏ��s����B
-<TT>window-main-thread</TT>�ł́A�ŏ�ʃ��x���̑Θb�������Ă���B
-<TT>window-main-thread</TT>���Q��ȏ���s���Ă͂Ȃ�Ȃ��B
+<LI><B>イベント送信の実行</B> Xserverからイベントを受け、一致する
+windowに配るためには、<TT>window-main-loop</TT>を実行すること。
+Solaris2上では、イベントを配るための異なったスレッドである
+<TT>window-main-thread</TT>で実行する。
+<TT>window-main-thread</TT>では、最上位レベルの対話が活きている。
+<TT>window-main-thread</TT>を２回以上実行してはならない。
 </LI>
 </OL>
 
@@ -155,30 +156,30 @@ Solaris2��ł́A�C�x���g��z�邽�߂̈قȂ����X���b�h�ł���
 
 <UL CLASS="ChildLinks">
 <LI><A NAME="tex2html2411"
-  HREF="jmanual-node135.html">X�C�x���g</A>
+  HREF="jmanual-node135.html">Xイベント</A>
 <LI><A NAME="tex2html2412"
-  HREF="jmanual-node136.html">�p�l��</A>
+  HREF="jmanual-node136.html">パネル</A>
 <UL>
 <LI><A NAME="tex2html2413"
-  HREF="jmanual-node137.html">�T�u�p�l��(���j���[�ƃ��j���[�o�[)</A>
+  HREF="jmanual-node137.html">サブパネル(メニューとメニューバー)</A>
 <LI><A NAME="tex2html2414"
-  HREF="jmanual-node138.html">�t�@�C���p�l��</A>
+  HREF="jmanual-node138.html">ファイルパネル</A>
 <LI><A NAME="tex2html2415"
-  HREF="jmanual-node139.html">�e�L�X�g�\���p�l��</A>
+  HREF="jmanual-node139.html">テキスト表示パネル</A>
 </UL>
 <BR>
 <LI><A NAME="tex2html2416"
-  HREF="jmanual-node140.html">�p�l���A�C�e��</A>
+  HREF="jmanual-node140.html">パネルアイテム</A>
 <LI><A NAME="tex2html2417"
-  HREF="jmanual-node141.html">�L�����o�X</A>
+  HREF="jmanual-node141.html">キャンバス</A>
 <LI><A NAME="tex2html2418"
-  HREF="jmanual-node142.html">�e�L�X�gwindow</A>
+  HREF="jmanual-node142.html">テキストwindow</A>
 </UL>
 <!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

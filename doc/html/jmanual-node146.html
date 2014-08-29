@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�J���[�s�N�Z���摜</TITLE>
-<META NAME="description" CONTENT="�J���[�s�N�Z���摜">
+<TITLE>カラーピクセル画像</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="カラーピクセル画像">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2591"
-  HREF="jmanual-node147.html">�G�b�W���o</A>
+  HREF="jmanual-node147.html">エッジ抽出</A>
 <B> Up:</B> <A NAME="tex2html2585"
-  HREF="jmanual-node143.html">�摜����</A>
+  HREF="jmanual-node143.html">画像処理</A>
 <B> Previous:</B> <A NAME="tex2html2579"
-  HREF="jmanual-node145.html">�s�N�Z���摜</A>
+  HREF="jmanual-node145.html">ピクセル画像</A>
  &nbsp; <B>  <A NAME="tex2html2587"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2589"
@@ -58,18 +59,18 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04083000000000000000">
-�J���[�s�N�Z���摜</A>
+カラーピクセル画像</A>
 </H2>
-�J���[�摜�́A<B>color-pixel-image</B>�N���X�ŕ\�������B
-���̃N���X�́A3��<B>pixel-image</B>�������Ă���ARGB�\����
-red,green,blue���邢��HLS���f���̐F����,���邳,�Z�������ꂼ��\������B
-RGB��HLS�Ԃ̕ϊ����T�|�[�g���Ă���B
+カラー画像は、<B>color-pixel-image</B>クラスで表現される。
+このクラスは、3つの<B>pixel-image</B>を持っており、RGB表現の
+red,green,blueあるいはHLSモデルの色合い,明るさ,濃さをそれぞれ表現する。
+RGBとHLS間の変換もサポートしている。
 
  <BR>
 <BR> <P>
 	<BR> 
-<A NAME="48538"></A>
-<BIG CLASS="XLARGE"><B>color-pixel-image </B></BIG> [�N���X]  <PRE><TT>
+<A NAME="48535"></A>
+<BIG CLASS="XLARGE"><B>color-pixel-image </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 width height component1 component2 component3 
 </TT></PRE>
@@ -78,7 +79,7 @@ RGB��HLS�Ԃ̕ϊ����T�|�[�g���Ă���B
 
 <DL COMPACT>
 <DT> 
-<DD>3��<TT>pixel-image</TT>�I�u�W�F�N�g�ŃJ���[�摜��\������B
+<DD>3つの<TT>pixel-image</TT>オブジェクトでカラー画像を表現する。
 </DD>
 </DL>
 <BR>
@@ -86,266 +87,279 @@ RGB��HLS�Ԃ̕ϊ����T�|�[�g���Ă���B
 
 <P>
 
-<A NAME="48556"></A>
-<B>:width</B> [���\�b�h]
+<A NAME="48553"></A>
+<B>:width</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̉摜�̕���Ԃ��B
+<DD> この画像の幅を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48566"></A>
-<B>:height</B> [���\�b�h]
+<A NAME="48563"></A>
+<B>:height</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̉摜�̍�����Ԃ��B
+<DD> この画像の高さを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48576"></A>
-<B>:size</B> [���\�b�h]
+<A NAME="48573"></A>
+<B>:size</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̉摜�̕�<SPAN CLASS="MATH">57#57</SPAN>������Ԃ��B
+<DD> この画像の幅<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img57.png"
+ ALT="$\times$"></SPAN>高さを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48586"></A>
-<B>:red</B> [���\�b�h]
+<A NAME="48583"></A>
+<B>:red</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <TT>component1</TT>��Ԃ��B
+<DD> <TT>component1</TT>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48597"></A>
-<B>:green</B> [���\�b�h]
+<A NAME="48594"></A>
+<B>:green</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <TT>component2</TT>��Ԃ��B
+<DD> <TT>component2</TT>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48608"></A>
-<B>:blue</B> [���\�b�h]
+<A NAME="48605"></A>
+<B>:blue</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <TT>component3</TT>��Ԃ��B
+<DD> <TT>component3</TT>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48619"></A>
-<B>:hue</B> [���\�b�h]
+<A NAME="48616"></A>
+<B>:hue</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <TT>component1</TT>��Ԃ��B
-�F����(hue)�̒l(0�`360)�́A0�`255��1�o�C�g�ŕ\�������B
+<DD> <TT>component1</TT>を返す。
+色合い(hue)の値(0〜360)は、0〜255の1バイトで表現される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48630"></A>
-<B>:lightness</B> [���\�b�h]
+<A NAME="48627"></A>
+<B>:lightness</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <TT>component2</TT>��Ԃ��B
-���K�����ꂽ���邳(brightness)�̒l(0�`1)�́A0�`255�̐����ŕ\�������B
+<DD> <TT>component2</TT>を返す。
+正規化された明るさ(brightness)の値(0〜1)は、0〜255の整数で表現される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48641"></A>
-<B>:saturation</B> [���\�b�h]
+<A NAME="48638"></A>
+<B>:saturation</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <TT>component3</TT>�Ԃ��B
-���K�����ꂽ�Z��(saturation)�̒l(0�`1)�́A0�`255�̐����ŕ\�������B
+<DD> <TT>component3</TT>返す。
+正規化された濃さ(saturation)の値(0〜1)は、0〜255の整数で表現される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48652"></A>
-<B>:pixel</B> <EM>x y </EM>[���\�b�h]
+<A NAME="48649"></A>
+<B>:pixel</B> <EM>x y </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>(x,y)</EM>�ɂ�����
-<TT>component1,component2,component3</TT>�̒l��3�̐����̃��X�g�Ƃ��ĕԂ��B
-���̃��X�g�́ARGB�l���邢��HLS�l�̂ǂ���ł����߂ł���B
+<DD> <EM>(x,y)</EM>における
+<TT>component1,component2,component3</TT>の値を3つの整数のリストとして返す。
+このリストは、RGB値あるいはHLS値のどちらでも解釈できる。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48664"></A>
-<B>:monochromize</B> <EM>&amp;optional (NTSC nil) </EM>[���\�b�h]
+<A NAME="48661"></A>
+<B>:monochromize</B> <EM>&amp;optional (NTSC nil) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-RGB�\�����疾�邳���v�Z���A�V����<TT>pixel-image</TT>��Ԃ��B
-�����A<EM>NTSC</EM>��NIL�Ȃ�A<TT>(R+G+B)/3</TT>���v�Z�����B
-�����AT�Ȃ�A<TT>0.299*R+0.587*G+0.114*B</TT>���v�Z�����B
+RGB構成から明るさを計算し、新しい<TT>pixel-image</TT>を返す。
+もし、<EM>NTSC</EM>がNILなら、<TT>(R+G+B)/3</TT>が計算される。
+もし、Tなら、<TT>0.299*R+0.587*G+0.114*B</TT>が計算される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48678"></A>
-<B>:HLS</B> [���\�b�h]
+<A NAME="48675"></A>
+<B>:HLS</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̉摜��RGB�摜�Ɖ��肵�AHLS�\���ɉ摜��ϊ�����B
-���ꂼ��̃s�N�Z����ϊ����邽�߂�<B>RGB2HLS</B>���Ăяo���B
+<DD> この画像をRGB画像と仮定し、HLS表現に画像を変換する。
+それぞれのピクセルを変換するために<B>RGB2HLS</B>を呼び出す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48689"></A>
-<B>:RGB</B> [���\�b�h]
+<A NAME="48686"></A>
+<B>:RGB</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> ���̉摜��HLS�摜�Ɖ��肵�ARGB�\���ɉ摜��ϊ�����B
-���ꂼ��̃s�N�Z����ϊ����邽�߂�<B>HLS2RGB</B>���Ăяo���B
+<DD> この画像をHLS画像と仮定し、RGB表現に画像を変換する。
+それぞれのピクセルを変換するために<B>HLS2RGB</B>を呼び出す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48700"></A>
-<B>:halve</B> [���\�b�h]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-���̉摜�𔼕��̃T�C�Y�ɏk������<B>color-pixel-image</B>��Ԃ��B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48711"></A>
-<B>:display</B> <EM>&amp;optional (win *color-viewer*) </EM>[���\�b�h]
+<A NAME="48697"></A>
+<B>:halve</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>:putimage</B>��p����<EM>win</EM>�Ŏw�肳���Xwindow��
-���̃J���[�摜��\������B
-���ꂼ��̃s�N�Z���l��X�̃J���[�}�b�v���Q�Ƃ���B
-��]����\���𓾂邽�߂ɂ́A���̉摜���ŗL��LUT��
-�ϊ����ׂ��ł���B
+この画像を半分のサイズに縮小した<B>color-pixel-image</B>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48723"></A>
-<B>:display-lut</B> <EM>&amp;optional (newlut1) (newlut2 newlut1) (newlut3 newlut2) </EM>[���\�b�h]
+<A NAME="48708"></A>
+<B>:display</B> <EM>&amp;optional (win *color-viewer*) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���b�N�A�b�v�e�[�u��<EM>newlut1</EM>,<EM>newlut2</EM>,<EM>newlut3</EM>��
-<TT>display-lut</TT>�ɂ��ꂼ��ݒ肷��B���ꂩ��A���̃��b�N�A�b�v�e�[�u����
-�g���Ă��̉摜��ϊ����A<TT>xpicture</TT>�ɐݒ肷��B
+<B>:putimage</B>を用いて<EM>win</EM>で指定されるXwindowに
+このカラー画像を表示する。
+それぞれのピクセル値はXのカラーマップを参照する。
+希望する表現を得るためには、この画像を固有のLUTで
+変換すべきである。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48738"></A>
-<BR>
-100#100
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>���̉摜�̃G�b�W�𒊏o����BXwindow��ɂ��̃G�b�W�摜��\������B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48749"></A>
-<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[���\�b�h]
+<A NAME="48720"></A>
+<B>:display-lut</B> <EM>&amp;optional (newlut1) (newlut2 newlut1) (newlut3 newlut2) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�l�p�̈�Ŏw�肳���s�N�Z���f�[�^��16�i���t�H�[�}�b�g�ŕ\������B
+ルックアップテーブル<EM>newlut1</EM>,<EM>newlut2</EM>,<EM>newlut3</EM>を
+<TT>display-lut</TT>にそれぞれ設定する。それから、このルックアップテーブルを
+使ってこの画像を変換し、<TT>xpicture</TT>に設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48759"></A>
-<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[���\�b�h]
+<A NAME="48735"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img100.png"
+ ALT="\begin{emtabbing}
+{\bf :edge1}
+\it\&amp;optional \= (method 1) \\lq  [メソッド]\ ...
+...
+\&gt; (run *edge-length-threshold*)\\
+\&gt; (win *color-viewer*)
+\rm
+\end{emtabbing}">
+<BR>
 
 <DL COMPACT>
 <DT> 
-<DD> 
-�l�p�̈�Ŏw�肳���s�N�Z���f�[�^��16�i���t�H�[�}�b�g�ŕ\������B
+<DD>この画像のエッジを抽出する。Xwindow上にこのエッジ画像を表示する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48769"></A>
-<B>:prin1</B> <EM>strm &amp;rest msg </EM>[���\�b�h]
+<A NAME="48746"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-���̉摜�𖼑O�Ǝ����ƈꏏ�ɕ\������B
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48779"></A>
-<B>:init</B> <EM>width height &amp;optional r g b </EM>[���\�b�h]
+<A NAME="48756"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-�J���[�摜�̃T�C�Y���`���A<TT>pixel-image</TT>�ɂ��ꂼ��J���[��1�\��
-�����蓖�Ă�B
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48766"></A>
+<B>:prin1</B> <EM>strm &amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像を名前と次元と一緒に表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48776"></A>
+<B>:init</B> <EM>width height &amp;optional r g b </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カラー画像のサイズを定義し、<TT>pixel-image</TT>にそれぞれカラーの1構成
+を割り当てる。
 </DD>
 </DL>
 <BR>
 <BR>
 
              <P>
-ppm�t�@�C�����������Ƃ��A���̃v���O�����ŃJ���[�l���摜�ɓW�J���A
-Xwindow�ɕ\�������邱�Ƃ��ł���B<PRE>
+ppmファイルがあったとき、次のプログラムでカラー値を画像に展開し、
+Xwindowに表示をすることができる。<PRE>
 (setq ppmimg (read-pnm "xxx.ppm"))
 (send ppmimg :hls)   ; RGB to HLS conversion
 (make-ximage (send ppmimg :hue) *rainbow32*)
@@ -372,19 +386,19 @@ Xwindow�ɕ\�������邱�Ƃ��ł���B<PRE>
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2591"
-  HREF="jmanual-node147.html">�G�b�W���o</A>
+  HREF="jmanual-node147.html">エッジ抽出</A>
 <B> Up:</B> <A NAME="tex2html2585"
-  HREF="jmanual-node143.html">�摜����</A>
+  HREF="jmanual-node143.html">画像処理</A>
 <B> Previous:</B> <A NAME="tex2html2579"
-  HREF="jmanual-node145.html">�s�N�Z���摜</A>
+  HREF="jmanual-node145.html">ピクセル画像</A>
  &nbsp; <B>  <A NAME="tex2html2587"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2589"
   HREF="jmanual-node156.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

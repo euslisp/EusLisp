@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>VxWorks���̋N��</TITLE>
-<META NAME="description" CONTENT="VxWorks���̋N��">
+<TITLE>VxWorks側の起動</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="VxWorks側の起動">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,7 +45,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1749"
-  HREF="jmanual-node90.html">�z�X�g���̋N��</A>
+  HREF="jmanual-node90.html">ホスト側の起動</A>
 <B> Up:</B> <A NAME="tex2html1743"
   HREF="jmanual-node88.html">VxWorks</A>
 <B> Previous:</B> <A NAME="tex2html1737"
@@ -58,17 +59,17 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04016100000000000000">
-VxWorks���̋N��</A>
+VxWorks側の起動</A>
 </H3>
-VxWorks�Ƀ��O�C�����A"*eusdir*/vxworks/vxwserv.o"�����[�h����B
-���̌�A<B>vxwserv</B>�^�X�N��spawn����B
-<B>vxwserv</B>��VxWorks���2200�ԃ|�[�g��listen����B
-2200���ǂ����Ă���ꍇ�A2201, 2202, ...�������B
-������bind���ꂽ�|�[�g�ԍ����\�������B
+VxWorksにログインし、"*eusdir*/vxworks/vxwserv.o"をロードする。
+その後、<B>vxwserv</B>タスクをspawnする。
+<B>vxwserv</B>はVxWorks上の2200番ポートをlistenする。
+2200が塞がっている場合、2201, 2202, ...を試す。
+正しくbindされたポート番号が表示される。
 
 <P>
 <PRE>
-% rlogin asvx0  (���邢��etlic2��ł���΁A% tip asvx[01] ���\)
+% rlogin asvx0  (あるいはetlic2上であれば、% tip asvx[01] も可能)
 -&gt; cd "atom:/usr/share/src/eus/vxworks"
 -&gt; ld &lt;vxwserv.o
 -&gt; sp vxwserv
@@ -76,11 +77,11 @@ port 2200 is bound.
 </PRE>
 
 <P>
-VxWorks��i�R�}���h�ŁA<B>vxwserv</B>�^�X�N���풓�������Ƃ��m���߂�B
-�����v�̂ŁAeus����Ăяo������VxWorks�̃v���O������VxWorks��Ƀ��[�h����B
-���̌�AEuslisp��VxWorks�Ƃ�
-�R�l�N�V������������ƁA<B>vxwserv</B>�𑖂点��TTY�ɁA���̂悤�ȃ��b�Z�[�W��
-�o�͂����B
+VxWorksのiコマンドで、<B>vxwserv</B>タスクが常駐したことを確かめる。
+同じ要領で、eusから呼び出したいVxWorksのプログラムをVxWorks上にロードする。
+その後、EuslispとVxWorksとの
+コネクションが張られると、<B>vxwserv</B>を走らせたTTYに、次のようなメッセージが
+出力される。
 
 <P>
 <PRE>
@@ -91,8 +92,8 @@ VxWserv started with 16394 byte buffer
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

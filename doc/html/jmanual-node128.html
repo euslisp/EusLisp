@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�A�j���[�V����</TITLE>
-<META NAME="description" CONTENT="�A�j���[�V����">
+<TITLE>アニメーション</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="アニメーション">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -43,11 +44,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html2324"
-  HREF="jmanual-node129.html">Xwindow �C���^�[�t�F�[�X</A>
+  HREF="jmanual-node129.html">Xwindow インターフェース</A>
 <B> Up:</B> <A NAME="tex2html2318"
-  HREF="jmanual-node122.html">���E�ƃO���t�B�b�N�X</A>
+  HREF="jmanual-node122.html">視界とグラフィックス</A>
 <B> Previous:</B> <A NAME="tex2html2314"
-  HREF="jmanual-node127.html">�`��</A>
+  HREF="jmanual-node127.html">描画</A>
  &nbsp; <B>  <A NAME="tex2html2320"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html2322"
@@ -57,97 +58,65 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION04056000000000000000"></A>
-<A NAME="36129"></A>
+<A NAME="36126"></A>
 <BR>
-�A�j���[�V����
+アニメーション
 </H2>
-EusLisp�̃A�j���[�V�����́A�O���t�B�b�N�A�N�Z�����[�^�������Ȃ�
-���ʂ̃��[�N�X�e�[�V������ł̋[�����A���^�C���O���t�B�b�N�X�@�\������Ă���B
-���̊�{�I�ȍl�����́A�������Ԃ������Đ������ꂽ1�A�̉摜��������
-�ĕ\�����邱�Ƃł���B
-�摜��2�̕��@�ŕۑ������B
-1�́A���S�ȃs�N�Z���摜�������������Xwindow pixmap��ۑ�����B
-����1�́A�A�������œ���������f�[�^��ۑ�����B
-�O�҂́A�����ŉA�ʏ������ꂽ�摜��\�����邽�߂̕��@�ł��邪�A
-�����A�j���[�V�����ł͂�������̃������[��X server�ɗv�����邽��
-�K���Ȃ��B
-��҂́A�������[�����Ȃ��čς݁A�f�[�^���f�B�X�N�ɒ~�ς���̂ɓK����B
-�������A�����̐������������Ȃ�΁A���\������������B
+EusLispのアニメーションは、グラフィックアクセラレータを持たない
+普通のワークステーション上での擬似リアルタイムグラフィックス機能を備えている。
+その基本的な考え方は、長い時間かかって生成された1連の画像を高速に
+再表示することである。
+画像は2つの方法で保存される。
+1つは、完全なピクセル画像を持つたくさんのXwindow pixmapを保存する。
+もう1つは、陰線処理で得られる線分データを保存する。
+前者は、高速で陰面処理された画像を表示するための方法であるが、
+長いアニメーションではたくさんのメモリーをX serverに要求するため
+適さない。
+後者は、メモリーが少なくて済み、データをディスクに蓄積するのに適する。
+しかし、線分の数が増加したならば、性能を悪化させる。
 
 <P>
-���̕��@�Ƃ��āA�`�����I�u�W�F�N�g�̍\���𓾂āA
-<B>*viewer*</B>�ɕ`��𐶐�����֐������[�U�[����邱�Ƃ��ł���B
-<B>pixmap-animation</B>�́A<EM>count</EM>�����Ŏw�肳�ꂽ���Ɠ����񐔂��̊֐����Ăяo���B
-���ꂼ��̌Ăяo����AXwindow�Ɖ��肳���<TT>viewsurface</TT>�̓��e�́A
-�V�������ꂽXwindow pixmap�ɃR�s�[�����B
-������pixmap�́A<B>playback-pixmap</B>�ōĕ\�������B
-���l�ɁA<B>hid-lines-animation</B>��<B>hid</B>�̌��ʂ��猩��������𔲂��o���A
-���X�g�ɒ~�ς���B
-���̃��X�g�́A<B>playback-hid-lines</B>�ɂ���čĕ\�������B
+他の方法として、描かれるオブジェクトの構成を得て、
+<B>*viewer*</B>に描画を生成する関数をユーザーが作ることもできる。
+<B>pixmap-animation</B>は、<EM>count</EM>引数で指定された数と同じ回数この関数を呼び出す。
+それぞれの呼び出し後、Xwindowと仮定される<TT>viewsurface</TT>の内容は、
+新しく作られたXwindow pixmapにコピーされる。
+これらのpixmapは、<B>playback-pixmap</B>で再表示される。
+同様に、<B>hid-lines-animation</B>は<B>hid</B>の結果から見える線分を抜き出し、
+リストに蓄積する。
+そのリストは、<B>playback-hid-lines</B>によって再表示される。
 
 <P>
-�ȉ��Ɏ����֐��́A"llib/animation.l"�ɒ�`����Ă���A
-"llib/animdemo.l"�̒��ɂ�ETA3 �}�j�s�����[�^�̃��f���Ɋւ���
-<B>hid-lines-animation</B>��p�����A�j���[�V������
-�T���v���v���O�������܂�ł���B
+以下に示す関数は、"llib/animation.l"に定義されており、
+"llib/animdemo.l"の中にはETA3 マニピュレータのモデルに関して
+<B>hid-lines-animation</B>を用いたアニメーションの
+サンプルプログラムを含んでいる。
 
 <P>
 
  <BR>
-<BR> <A NAME="37341"></A>
-<B>pixmap-animation</B> <EM>count &amp;rest forms </EM>[�}�N��]
+<BR> <A NAME="37338"></A>
+<B>pixmap-animation</B> <EM>count &amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>forms</EM>�́A<EM>count</EM>��]�������B
-���ꂼ��̕]����A<TT>*viewsurface*</TT>�̓��e�͐V����pixmap�ɃR�s�[�����B
-<EM>count</EM>����<B>pixmap</B>�̃��X�g���A�Ԃ����B
+<EM>forms</EM>は、<EM>count</EM>回評価される。
+それぞれの評価後、<TT>*viewsurface*</TT>の内容は新しいpixmapにコピーされる。
+<EM>count</EM>枚の<B>pixmap</B>のリストが、返される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="37356"></A>
-<B>playback-pixmaps</B> <EM>pixmaps &amp;optional (surf *viewsurface*) </EM>[�֐�]
+<A NAME="37353"></A>
+<B>playback-pixmaps</B> <EM>pixmaps &amp;optional (surf *viewsurface*) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>pixmaps</EM>���X�g�̂Ȃ���<B>pixmap</B>�͂��ꂼ��A
-<EM>surf</EM>�ɘA���I�ɃR�s�[�����B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="37369"></A>
-<B>hid-lines-animation</B> <EM>count &amp;rest forms </EM>[�}�N��]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>hid</B>�ւ̌Ăяo�����܂�<EM>forms</EM>��<EM>count</EM>��]�������B
-���ꂼ��̕]����A<B>*hid*</B>������<B>hid</B>�̌��ʂ͌�������A
-�����������2�_��g�̃��X�g�̌`�ŏW�߂���B
-<EM>count</EM>�����̃��X�g���Ԃ����B
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="37385"></A>
-<B>playback-hid-lines</B> <EM>lines &amp;optional (view *viewer*) </EM>[�֐�]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>lines</EM>�́A2�_��g�̃��X�g�ł���B
-<EM>view</EM>�̏�ɐ�����A���I�ɕ`���B
-����pixmap�����蓖�Ă�Ƃ��Ƀt���b�J�[�t���[�A�j���[�V�����𐶐����邽�߂�
-2�d�o�b�t�@�Z�@���g�p�����B
+<EM>pixmaps</EM>リストのなかの<B>pixmap</B>はそれぞれ、
+<EM>surf</EM>に連続的にコピーされる。
 </DD>
 </DL>
 <BR>
@@ -155,13 +124,45 @@ EusLisp�̃A�j���[�V�����́A�O���t�B�b�N�A�N�Z�����[�^�������Ȃ�
 
 <P>
 
-<A NAME="37397"></A>
-<B>list-visible-segments</B> <EM>hid-result </EM>[�֐�]
+<A NAME="37366"></A>
+<B>hid-lines-animation</B> <EM>count &amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>hid-result</EM>��edge�摜�̃��X�g���猩����������W�߂�B
+<B>hid</B>への呼び出しを含む<EM>forms</EM>が<EM>count</EM>回評価される。
+それぞれの評価後、<B>*hid*</B>が持つ<B>hid</B>の結果は検索され、
+見える線分は2点一組のリストの形で集められる。
+<EM>count</EM>長さのリストが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37382"></A>
+<B>playback-hid-lines</B> <EM>lines &amp;optional (view *viewer*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>lines</EM>は、2点一組のリストである。
+<EM>view</EM>の上に線分を連続的に描く。
+他のpixmapを割り当てるときにフリッカーフリーアニメーションを生成するために
+2重バッファ技法が使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37394"></A>
+<B>list-visible-segments</B> <EM>hid-result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>hid-result</EM>のedge画像のリストから見える線分を集める。
 </DD>
 </DL>
 <BR>
@@ -172,8 +173,8 @@ EusLisp�̃A�j���[�V�����́A�O���t�B�b�N�A�N�Z�����[�^�������Ȃ�
 
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>

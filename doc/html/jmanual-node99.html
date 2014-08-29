@@ -7,8 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>�����̎�@</TITLE>
-<META NAME="description" CONTENT="�����̎�@">
+<TITLE>同期の手法</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="同期の手法">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,11 +45,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
 <B> Next:</B> <A NAME="tex2html1908"
-  HREF="jmanual-node100.html">�������</A>
+  HREF="jmanual-node100.html">同期障壁</A>
 <B> Up:</B> <A NAME="tex2html1902"
-  HREF="jmanual-node96.html">�񓯊��v���O���~���O�ƕ���v���O���~���O�̍\�z</A>
+  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
 <B> Previous:</B> <A NAME="tex2html1896"
-  HREF="jmanual-node98.html">�X���b�h�̕�����s</A>
+  HREF="jmanual-node98.html">スレッドの並列実行</A>
  &nbsp; <B>  <A NAME="tex2html1904"
   HREF="jmanual-node1.html">Contents</A></B> 
  &nbsp; <B>  <A NAME="tex2html1906"
@@ -58,34 +59,38 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H3><A NAME="SECTION04022300000000000000">
-�����̎�@</A>
+同期の手法</A>
 </H3>
-MT-Eus�́A<B>mutex lock, condition variable, �Z�}�t�H</B>�ƌĂ΂��
-3��ނ̓�����@�������Ă���B
-mutex lock�́A�X���b�h�Ԃ̋��L�ϐ��̘A���A�N�Z�X�̂��߂Ɏg�p�����B
-condition variable�́A���b�N�̉��J�����邢�͍Ċl���ɂ����mutex-lock���ꂽ
-�����̏�����true�ɂȂ邱�Ƃ�҂��Ƃ��X���b�h�ɋ�����B
-�Z�}�t�H�́A�C�x���g�̔�����ʒm���邽�߂��邢�̓��\�[�X�̕����𐧌䂷�邽�߂�
-�g�p�����B
-Solaris�̃J�[�l�������ԕ����X�P�[�W���[�����O����{�Ƃ��ĉ��C�Ȃ��Ƀ^�X�N
-�؂�ւ��𔭐�����̂ƈقȂ�A
-�����̓�����@�́A�C�ӂ̊��؂�ւ��������N�����B
+MT-Eusは、<B>mutex lock, condition variable, セマフォ</B>と呼ばれる
+3種類の同期手法を持っている。
+mutex lockは、スレッド間の共有変数の連続アクセスのために使用される。
+condition variableは、ロックの仮開放あるいは再獲得によってmutex-lockされた
+部分の条件がtrueになることを待つことをスレッドに許可する。
+セマフォは、イベントの発生を通知するためあるいはリソースの分割を制御するために
+使用される。
+Solarisのカーネルが時間分割スケージューリングを基本として何気なしにタスク
+切り替えを発生するのと異なり、
+これらの同期手法は、任意の環境切り替えを引き起こす。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="synchports"></A><A NAME="25021"></A>
+<DIV ALIGN="CENTER"><A NAME="synchports"></A><A NAME="25018"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 8:</STRONG>
-������ǂƓ����������|�[�g</CAPTION>
-<TR><TD>49#49</TD></TR>
+同期障壁と同期メモリポート</CAPTION>
+<TR><TD><IMG
+ WIDTH="554" HEIGHT="255" BORDER="0"
+ SRC="jmanual-img49.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/synchports.ps,width=130mm}\end{center}\end{figure}"></TD></TR>
 </TABLE>
 </DIV>
 
 <P>
 <BR><HR>
 <ADDRESS>
-k-okada
-2014-01-23
+
+2014-08-29
 </ADDRESS>
 </BODY>
 </HTML>
