@@ -39,7 +39,7 @@ after_success:
   - (cd eus/doc/jlatex; make) > /dev/null
   - (cd eus/doc/html;   make) > /dev/null
   - cd eus/doc/html
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git diff --exit-code *.html || (git add -f .; git commit -m "add documents for $TRAVIS_COMMIT"); fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then git diff --exit-code *.html || (git add -f . ../*latex/*.{pdf,dvi}; git commit -m "add documents for $TRAVIS_COMMIT"); fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git checkout master;      fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git merge HEAD@{1};       fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git push --quiet https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git master; fi
