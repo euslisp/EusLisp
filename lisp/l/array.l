@@ -206,7 +206,7 @@
 (eval-when (load eval)
 (set-dispatch-macro-character #\# #\A 'read-array)
 (set-dispatch-macro-character #\# #\F 'read-float-array)
-;(set-dispatch-macro-character #\# #\I 'read-integer-array)
+(set-dispatch-macro-character #\# #\I 'read-integer-array)
 )
 
 ;;;;	floatvector and matrix
