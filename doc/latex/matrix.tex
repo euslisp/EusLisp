@@ -298,15 +298,20 @@ returns the 3X3 rotation matrix of this coords.}
 \methoddesc{:pos}{}{
 returns the 3-D position vector of this coords.}
 
-\methoddesc{:newcoords}{newrot newpos}{
+\methoddesc{:newcoords}{newrot &optional newpos}{
 updates the coords with newrot and newpos. Whenever a condition that changes
 the state of this coords occurs,
 this method should be called with the new rotation
 matrix and the position vector.
-This message may invoke another :update method to propagate the event.}
+This message may invoke another :update method to propagate the event.
+If newpos is not given, newrot is given as a instance of coordinate class.
+}
 
-\methoddesc{:replace-coords}{newrot newpos}{
-changes the rot and pos slots to be updated without calling newcoords method.}
+\methoddesc{:replace-coords}{newrot &optional newpos}{
+changes the rot and pos slots to be updated without calling newcoords method.
+If newpos is not given, newrot is given as a instance of coordinate class.
+}
+
 \metdesc{:coords}{}
 
 \methoddesc{:copy-coords}{\&optional dest}{

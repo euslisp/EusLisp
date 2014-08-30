@@ -286,14 +286,17 @@ Euslisp内で座標系は、高速性と一般性のために
 \methoddesc{:pos}{}{
 この座標系の3次元位置ベクトルを返す。}
 
-\methoddesc{:newcoords}{newrot newpos}{
+\methoddesc{:newcoords}{newrot &optional newpos}{
 {\em newrot}と{\em newpos}でこの座標系を更新する。
+{\em newpos}が省略された時は{\em newrot}にはcoordinatesのインスタンスを
+与える。
 この座標系の状態が変化するときはいつでも、このメソッドを用いて新しい
 回転行列と位置ベクトルに更新するべきである。
 このメッセージはイベントを伝えて他の{\bf :update}メソッドを呼び出す。}
 
-\methoddesc{:replace-coords}{newrot newpos}{
-{\em :newcoords}メソッドを呼び出さずに{\tt rot}と{\tt pos}スロットを変更する。}
+\methoddesc{:replace-coords}{newrot &optional newpos}{
+{\em :newcoords}メソッドを呼び出さずに{\tt rot}と{\tt pos}スロットを変更する。
+{\em newpos}が省略された時は{\em newrot}にはcoordinatesのインスタンスを与える。}
 \metdesc{:coords}{}
 
 \methoddesc{:copy-coords}{\&optional dest}{
