@@ -35,9 +35,9 @@ after_success:
   - export GIT_COMMITTER_EMAIL=$GIT_EMAIL
   - export GIT_AUTHOR_NAME=$GIT_NAME
   - export GIT_AUTHOR_EMAIL=$GIT_EMAIL
-  - (cd eus/doc/latex;  make) > /dev/null
-  - (cd eus/doc/jlatex; make) > /dev/null
-  - (cd eus/doc/html;   make) > /dev/null
+  - (cd eus/doc/latex;  make)
+  - (cd eus/doc/jlatex; make)
+  - (cd eus/doc/html;   make)
   - cd eus/doc/html
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git diff --exit-code *.html || (git add -f . ../*latex/*.{pdf,dvi}; git commit -m "add documents for $TRAVIS_COMMIT"); fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git checkout master;      fi
