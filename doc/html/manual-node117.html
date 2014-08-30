@@ -139,7 +139,7 @@ returns the 3-D position vector of this coords.
 <P>
 
 <A NAME="27387"></A>
-<B>:newcoords</B> <EM>newrot newpos </EM>[method]
+<B>:newcoords</B> <EM>newrot &amp;optional newpos </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -149,6 +149,8 @@ the state of this coords occurs,
 this method should be called with the new rotation
 matrix and the position vector.
 This message may invoke another :update method to propagate the event.
+If newpos is not given, newrot is given as a instance of coordinate class.
+
 </DD>
 </DL>
 <BR>
@@ -157,16 +159,20 @@ This message may invoke another :update method to propagate the event.
 <P>
 
 <A NAME="27397"></A>
-<B>:replace-coords</B> <EM>newrot newpos </EM>[method]
+<B>:replace-coords</B> <EM>newrot &amp;optional newpos </EM>[method]
 
 <DL COMPACT>
 <DT> 
 <DD> 
 changes the rot and pos slots to be updated without calling newcoords method.
+If newpos is not given, newrot is given as a instance of coordinate class.
+
 </DD>
 </DL>
 <BR>
 <BR>
+
+<P>
 
 <A NAME="27407"></A>
 <B>:coords</B> [method]
@@ -614,7 +620,7 @@ argument. These pairs are copied in the plist of this coordinates.
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-08-29
+2014-08-30
 </ADDRESS>
 </BODY>
 </HTML>
