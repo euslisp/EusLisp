@@ -4,8 +4,15 @@
 (defun escape-string (str)
   (let ((ret ""))
     (dotimes (i (length str))
-      (if (memq (schar str i) '(#\& #\# #\* #\_ #\")) (setq ret (concatenate string ret "\\")))
-      (setq ret (concatenate string ret (format nil "~c" (schar str i)))))
+      (cond ((eq (schar str i) #\")
+             (setq ret (concatenate string ret "\'\'")))
+            ((eq (schar str i) #\<)
+             (setq ret (concatenate string ret "\\textless ")))
+            ((eq (schar str i) #\>)
+             (setq ret (concatenate string ret "\\textgreater ")))
+            (t
+             (if (memq (schar str i) '(#\& #\# #\* #\_)) (setq ret (concatenate string ret "\\")))
+             (setq ret (concatenate string ret (format nil "~c" (schar str i)))))))
     ret))
 
 (defun make-class-document (cls super slots)
