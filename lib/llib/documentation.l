@@ -4,7 +4,7 @@
 (defun escape-string (str)
   (let ((ret ""))
     (dotimes (i (length str))
-      (if (memq (schar str i) '(#\& #\# #\* #\_)) (setq ret (concatenate string ret "\\")))
+      (if (memq (schar str i) '(#\& #\# #\* #\_ #\")) (setq ret (concatenate string ret "\\")))
       (setq ret (concatenate string ret (format nil "~c" (schar str i)))))
     ret))
 
