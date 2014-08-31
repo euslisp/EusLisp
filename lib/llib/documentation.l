@@ -6,6 +6,8 @@
     (dotimes (i (length str))
       (cond ((eq (schar str i) #\")
              (setq ret (concatenate string ret "\'\'")))
+            ((eq (schar str i) #\*)
+             (setq ret (concatenate string ret "\\textasteriskcentered ")))
             ((eq (schar str i) #\<)
              (setq ret (concatenate string ret "\\textless ")))
             ((eq (schar str i) #\>)
