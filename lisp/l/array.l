@@ -197,8 +197,7 @@
 (defun read-integer-array (strm char num)
    (let ((list (read strm t t t)))
       (if (= num 0)
-	  (fill-initial-contents (instantiate integer-vector (length list))
-				 0 (list (length list)) list)
+          (apply 'integer-vector list)
           (make-array (list-dimensions list)
 			:element-type :integer
 			:initial-contents list))))
