@@ -198,6 +198,10 @@
   (dolist (u (send *unit-test* :functions))
     (run-test u))
   (send *unit-test* :print-result)
+  ;; exit with error status (1), if there are any failure in tests.
+  (dolist (r (send *unit-test* :result))
+    (if (/= (send r :num-failures) 0)
+        (exit 1)))
   t)
 
 (defun init-unit-test (&key log-fname)
