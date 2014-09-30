@@ -836,7 +836,7 @@ bquo:
   while (i<n) {
     a=argv[i];
     if (isflt(a)) {
-      fs=big_to_float(rs); goto fquo2;}
+      fs=sign*big_to_float(rs); goto fquo2;}
     if (!isint(a)) {
       int rv = sign*div_big_big(a, rs);
       return(mkbigint(rv));
