@@ -216,6 +216,19 @@
     (unix:signal unix::sighup 'unittest-sigint-handler)
 
     (setq *unit-test* (instance unit-test-container :init :log-fname log-fname))
+    ;; set exit code based on failures
+    (unless (boundp 'exit-org)
+      (setf (symbol-function 'exit-org) (symbol-function 'exit)))
+    (defun exit (&optional (exit-code 0))
+      (exit-org
+       (cond
+        ((/= exit-code 0) ;; if exit code is not 0
+         exit-code)
+        ((> (apply #'+ (send-all (send *unit-test* :result) :num-failures)) 0) ;; if exit code is set to 0 and test is failed
+         1)
+        (t 0) ;; if test is success, exit by 0
+        )
+       ))
 
     (defmacro assert (pred &optional (message "") &rest args)
       (with-gensyms
