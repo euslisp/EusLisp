@@ -588,6 +588,27 @@ EusLispには、文字型がない。
 
 \end{refdesc}
 
+\subsubsection{日本語の扱い方}
+{\bf euslisp}で日本語を扱いたい時、文字コードは{\bf UTF-8}である必要がある。
+
+例えば{\bf concatenate}を用いると、リストの中の日本語を連結することが出来る。
+{\bf ROS}のトピックとして一つずつ取ってきた日本語を、連結することで一つの{\bf string}型の言葉に変換したい時などに便利である。
+
+(concatenate string "け" "ん" "し" "ろ" "う") 
+→ "けんしろう"
+
+最初から全ての文字がリストに入っていて、文字を連結したい時はこのようにすればよい。
+
+(reduce {\#}'(lambda (val1 val2) (concatenate string val1 val2)) (list "我" "輩" "は" "ピ" "ー" "ア" "ー" "ル" "ツ" "ー" "で" "あ" "る"))
+
+→ "我輩はピーアールツーである"
+
+{\bf coerce}を用いて、次のように書くことも出来る。
+
+(coerce (append (coerce "私はナオより" cons) (coerce "背が高い" cons)) string)
+
+→ "私はナオより背が高い"
+
 \subsection{Foreign String}
 {\bf foreign-string}は、EusLispのヒープ外にあるバイトベクトルの1種である。
 普通の文字列は、長さとバイトの列を持ったオブジェクトであるが、
