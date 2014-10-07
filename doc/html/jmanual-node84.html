@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>キーインデックスファイル</TITLE>
+<TITLE>IOCTL</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="キーインデックスファイル">
+<META NAME="description" CONTENT="IOCTL">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,75 +19,223 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
+<LINK REL="next" HREF="jmanual-node85.html">
 <LINK REL="previous" HREF="jmanual-node83.html">
-<LINK REL="up" HREF="jmanual-node76.html">
+<LINK REL="up" HREF="jmanual-node77.html">
 <LINK REL="next" HREF="jmanual-node85.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1678"
+<A NAME="tex2html1681"
   HREF="jmanual-node85.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1672"
-  HREF="jmanual-node76.html">
+<A NAME="tex2html1675"
+  HREF="jmanual-node77.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1668"
+<A NAME="tex2html1669"
   HREF="jmanual-node83.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1674"
+<A NAME="tex2html1677"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1676"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1679"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1679"
-  HREF="jmanual-node85.html">UNIXプロセス</A>
-<B> Up:</B> <A NAME="tex2html1673"
-  HREF="jmanual-node76.html">UNIXシステムコール</A>
-<B> Previous:</B> <A NAME="tex2html1669"
-  HREF="jmanual-node83.html">IOCTL</A>
- &nbsp; <B>  <A NAME="tex2html1675"
+<B> Next:</B> <A NAME="tex2html1682"
+  HREF="jmanual-node85.html">キーインデックスファイル</A>
+<B> Up:</B> <A NAME="tex2html1676"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1670"
+  HREF="jmanual-node83.html">低レベルメモリ管理</A>
+ &nbsp; <B>  <A NAME="tex2html1678"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1677"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1680"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04012800000000000000">
-キーインデックスファイル</A>
+<H3><A NAME="SECTION04012700000000000000">
+IOCTL</A>
 </H3>
-近年UNIXは、キーインデックスファイルの管理のために<B>dbm</B>あるいは<B>ndbm</B>
-ライブラリを提供する。このライブラリを使用することにより、
-キーとデータの組みで構成されるデータベースを構築することができる。
-以下に示す関数は、<TT>clib/ndbm.c</TT>に定義されている。
-Sunにおいて、そのファイルは、<TT>cc -c -Dsun4 -Bstatic</TT>でコンパイルし、
-<TT>(load "clib/ndbm" :ld-option "-lc")</TT>でEuslispにロードすること。
+Unixはターミナルデバイスを<TT>ioctl</TT>の2番目の引数に命令を設定することにより
+制御することができるが、Euslispはインクルードファイルの参照や命令コードとしての
+引数の論理和を省略するために、関数で備えている。
+詳しい内容は、Unixの<TT>termio</TT>のマニュアルを参照すること。
 
 <P>
+ターミナルの入出力制御には、TIOC*とTC*という2つの命令系がある。
+自分のオペレーティングシステムにこれらの関数が実現されているがどうか
+について気を付けなさい。
+基本的に、BSD系はTIOC*の入出力をサポートし、System5系がTC*を
+サポートしている。
+<DL>
+<DT></DT>
+<DD>SunOS 4.1 TIOC*とTC*の両方サポート
+</DD>
+<DT></DT>
+<DD>Solaris2 TC*のみサポート
+</DD>
+<DT></DT>
+<DD>mips, ultrix? TIOC*のみサポート
+</DD>
+</DL>
 
  <BR>
-<BR> <A NAME="22457"></A>
-<B>dbm-open</B> <EM>dbname mode flag </EM>[関数]
+<BR> <P>
+
+<A NAME="22229"></A>
+<B>unix:tiocgetp</B> <EM>stream [sgttybuf] </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-<B>dbm-open</B>は、データベースファイルを作るときと、そのデータベースに読み込み／書き込み
-をするとき、最初に呼び出されなければならない。
-<EM>dbname</EM>は、データベースの名前である。
-実際に、ndbm managerは<TT>".pag"</TT>と<TT>".dir"</TT>の拡張子を持つ
-2つのファイルを作成する。
-<EM>mode</EM>は、ファイルのオープンモードを指定する。0は読み込み専用、1は書き込み専用、
-2は読み書き用を示す。また、最初にファイルを作成するときは、<TT>#x200</TT>を論理和すべきである。
-<EM>flag</EM>は、<B>chmod</B>で変更されるアクセス許可を与える。
-<TT>#o666</TT>あるいは<TT>#o664</TT>が、<EM>flag</EM>に適している。
-<B>dbm-open</B>は、そのデータベースを確認するための整数を返す。
-この値は、他のdbm関数によってデータベースを確認するために使用される。
-言い換えれば、同時に幾つかのデータベースをオープンすることができる。
+<DD> パラメータを得る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22239"></A>
+<B>unix:tiocsetp</B> <EM>stream sgttybuf </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> パラメータを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22249"></A>
+<B>unix:tiocsetn</B> <EM>stream [sgttybuf] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22260"></A>
+<B>unix:tiocgetd</B> <EM>stream [sgttybuf] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22271"></A>
+<B>unix:tiocflush</B> <EM>stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> バッファをすべて出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22281"></A>
+<B>unix:tiocgpgrp</B> <EM>stream integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> プロセスのグループIDを得る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22291"></A>
+<B>unix:tiocspgrp</B> <EM>stream integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> プロセスのグループIDを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22301"></A>
+<B>unix:tiocoutq</B> <EM>stream integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22312"></A>
+<B>unix:fionread</B> <EM>stream integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22323"></A>
+<B>unix:tiocsetc</B> <EM>stream buf </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22334"></A>
+<B>unix:tioclbis</B> <EM>stream buf </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22345"></A>
+<B>unix:tioclbic</B> <EM>stream buf </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22356"></A>
+<B>unix:tioclset</B> <EM>stream buf </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22367"></A>
+<B>unix:tioclget</B> <EM>stream buf </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
 </DD>
 </DL>
 <BR>
@@ -95,30 +243,125 @@ Sunにおいて、そのファイルは、<TT>cc -c -Dsun4 -Bstatic</TT>でコ�
 
 <P>
 
-<A NAME="22479"></A>
-<B>dbm-store</B> <EM>db key datum mode </EM>[関数]
+<A NAME="22378"></A>
+<B>unix:tcseta</B> <EM>stream buffer </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-<EM>key</EM>と<EM>datum</EM>の組み合わせを<EM>db</EM>に蓄積する。
-<EM>db</EM>は、データベースを確認するための整数である。
-<EM>key</EM>と<EM>datum</EM>は文字列である。
-<EM>mode</EM>は0(挿入)あるいは1(置き換え)のどちらかである。
+<DD> ターミナルパラメータをすぐに設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="22496"></A>
-<B>dbm-fetch</B> <EM>db key </EM>[関数]
+<A NAME="22388"></A>
+<B>unix:tcsets</B> <EM>stream buffer </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-<EM>db</EM>の中の<EM>key</EM>に関連付けられているデータを呼び出す。
+<DD> ターミナルパラメータを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22398"></A>
+<B>unix:tcsetsw</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 出力として列をなす全ての文字を転送した
+後、ターミナルパラメータを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22408"></A>
+<B>unix:tcsetsf</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 出力として列をなす全ての文字を転送し、
+入力として列をなす全ての文字列を廃棄した
+後、ターミナルパラメータを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22418"></A>
+<B>unix:tiocsetc</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22429"></A>
+<B>unix:tcsetaf</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22440"></A>
+<B>unix:tcsetaw</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22451"></A>
+<B>unix:tcgeta</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22462"></A>
+<B>unix:tcgets</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22473"></A>
+<B>unix:tcgetattr</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22484"></A>
+<B>unix:tcsetattr</B> <EM>stream buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
 </DD>
 </DL>
 <BR>
@@ -127,10 +370,38 @@ Sunにおいて、そのファイルは、<TT>cc -c -Dsun4 -Bstatic</TT>でコ�
 <P>
              <P>
 
-<BR><HR>
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1681"
+  HREF="jmanual-node85.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1675"
+  HREF="jmanual-node77.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1669"
+  HREF="jmanual-node83.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1677"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1679"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1682"
+  HREF="jmanual-node85.html">キーインデックスファイル</A>
+<B> Up:</B> <A NAME="tex2html1676"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1670"
+  HREF="jmanual-node83.html">低レベルメモリ管理</A>
+ &nbsp; <B>  <A NAME="tex2html1678"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1680"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

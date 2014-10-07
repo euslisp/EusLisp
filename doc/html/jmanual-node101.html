@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>同期メモリポート</TITLE>
+<TITLE>同期障壁</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="同期メモリポート">
+<META NAME="description" CONTENT="同期障壁">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,64 +21,62 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node102.html">
 <LINK REL="previous" HREF="jmanual-node100.html">
-<LINK REL="up" HREF="jmanual-node96.html">
+<LINK REL="up" HREF="jmanual-node97.html">
 <LINK REL="next" HREF="jmanual-node102.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1935"
+<A NAME="tex2html1936"
   HREF="jmanual-node102.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1929"
-  HREF="jmanual-node96.html">
+<A NAME="tex2html1930"
+  HREF="jmanual-node97.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1923"
+<A NAME="tex2html1924"
   HREF="jmanual-node100.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1931"
+<A NAME="tex2html1932"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1933"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1934"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1936"
-  HREF="jmanual-node102.html">タイマー</A>
-<B> Up:</B> <A NAME="tex2html1930"
-  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
-<B> Previous:</B> <A NAME="tex2html1924"
-  HREF="jmanual-node100.html">同期障壁</A>
- &nbsp; <B>  <A NAME="tex2html1932"
+<B> Next:</B> <A NAME="tex2html1937"
+  HREF="jmanual-node102.html">同期メモリポート</A>
+<B> Up:</B> <A NAME="tex2html1931"
+  HREF="jmanual-node97.html">非同期プログラミングと並列プログラミングの構築</A>
+<B> Previous:</B> <A NAME="tex2html1925"
+  HREF="jmanual-node100.html">同期の手法</A>
+ &nbsp; <B>  <A NAME="tex2html1933"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1934"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1935"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04022500000000000000">
-同期メモリポート</A>
+<H3><A NAME="SECTION04022400000000000000">
+同期障壁</A>
 </H3>
-<B>同期メモリポート(synch-memory-port)</B>は、
-スレッド間でデータを交換するための1種のストリーム
-である(図 <A HREF="jmanual-node99.html#synchports">8</A>)。
-プロセス内のすべてのスレッドはヒープメモリを共有しているので、
-もし1つのスレッドがグローバル変数にオブジェクトを割り当てた場合、
-直ちに他のスレッドから見れるようになる。
-しかしながら、共有メモリはグローバルデータが更新されたという
-イベントを送るための能力が不足している。
-同期メモリポートは、共有オブジェクトをアクセスするための
-この同期機能を保証する。
-同期メモリポートオブジェクトは、1つのバッファスロットと同期読み書きの
-ために使用される2つのセマフォによって構成されている。
+<B>barrier-synch</B>は、複数のスレッドを同時に同期させるための機構である
+(図 <A HREF="jmanual-node100.html#synchports">8</A>)。
+この目的において、<B>barrier</B>クラスのインスタンスが作成され、
+同期に関係するスレッドがオブジェクトに登録される。
+その後、それぞれのスレッドはbarrierオブジェクトに<TT>:wait</TT>メッセージを
+送り、そのスレッドは停止する。
+オブジェクトに登録された最後のスレッドが<TT>:wait</TT>メッセージを送ったとき、
+待ちが解除され、すべての待ちスレッドがTの返り値を得る。
+barrier-syncは、マルチロボットシミュレーションのグローバルタイムという
+重要な役割を演じている。
 
 <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>評価関数</TITLE>
+<TITLE>評価</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="評価関数">
+<META NAME="description" CONTENT="評価">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,430 +19,78 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
-<LINK REL="next" HREF="jmanual-node65.html">
-<LINK REL="previous" HREF="jmanual-node63.html">
-<LINK REL="up" HREF="jmanual-node63.html">
+<LINK REL="previous" HREF="jmanual-node53.html">
+<LINK REL="up" HREF="jmanual-node11.html">
 <LINK REL="next" HREF="jmanual-node65.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1296"
+<A NAME="tex2html1288"
   HREF="jmanual-node65.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1290"
-  HREF="jmanual-node63.html">
+<A NAME="tex2html1282"
+  HREF="jmanual-node11.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1284"
+<A NAME="tex2html1278"
   HREF="jmanual-node63.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1292"
+<A NAME="tex2html1284"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1294"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1286"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1297"
-  HREF="jmanual-node65.html">最上位レベルの対話</A>
-<B> Up:</B> <A NAME="tex2html1291"
-  HREF="jmanual-node63.html">評価</A>
-<B> Previous:</B> <A NAME="tex2html1285"
-  HREF="jmanual-node63.html">評価</A>
- &nbsp; <B>  <A NAME="tex2html1293"
+<B> Next:</B> <A NAME="tex2html1289"
+  HREF="jmanual-node65.html">評価関数</A>
+<B> Up:</B> <A NAME="tex2html1283"
+  HREF="jmanual-node11.html">Bibliography</A>
+<B> Previous:</B> <A NAME="tex2html1279"
+  HREF="jmanual-node63.html">ファイルシステムインターフェース</A>
+ &nbsp; <B>  <A NAME="tex2html1285"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1295"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1287"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION03091000000000000000">
-評価関数</A>
-</H2>
+<H1><A NAME="SECTION03090000000000000000">
+評価</A>
+</H1>
 
 <P>
-エラーやシグナル(signal)に関する振る舞いを示すために、
-あらかじめそれぞれ特別の変数<B>*error-handler*</B>と<B>*signal-handler*</B>
-に適当な関数を設定する。
-修正あるいは続行できるエラーはない。
-エラーを解析後、現在の実行を<B>reset</B>または上位レベルへの適当な<B>throw</B>
-によって停止しなければならない。
-Euslispの最上位レベルで<TT>0</TT>と名付けられたcatch frameを作成しているので、
-<B>reset</B>は、<TT>(throw 0 NIL)</TT>と同等である。
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
-エラーハンドラーは、<EM>code msg1 form &amp;optional (msg2)</EM>
-という3つあるいは4つの引き数を持つ関数として定義しなければならない。
-<EM>code</EM>はエラーコードで、システムで定義されたエラーを示す。
-例えば、14が'引き数が合わない'、13が'関数が定義されていない'となる。
-これらの定義は、"c/eus.h"の中に定義されている。
-<EM>msg1</EM>と<EM>msg2</EM>は、ユーザーに示されるメッセージである。
-<EM>form</EM>は、エラーによって生じたs表現である。
-
-<P>
-シグナルハンドラーは、<EM>sig</EM>と<EM>code</EM>の2つの引き数を受ける関数として
-定義されなければならない。
-<EM>sig</EM>は、1から30までのシグナル番号である。
-<EM>code</EM>は、シグナル番号の中に定義された補助番号である。
-
-<P>
-最上位レベルでの<code>^</code>D(<EM>end-of-file</EM>)は、Euslispの活動を停止させる。
-これは、Euslispをフィルターとしてプログラムされているとき
-役に立つ。
-
-<P>
-<B>eval-dynamic</B>は、letやlambda変数として使用されるsymbolに結び付く
-動的な変数を捜す関数である。
-デバッグするときに役に立つ。
-
-<P>
-
- <BR>
-<BR> <P>
-
-<A NAME="17854"></A>
-<B>identity</B> <EM>obj </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>obj</EM>自身を返す。
-<B>idnetity</B>と<B>quote</B>との違いに注意すること。
-<B>identity</B>が関数であるのに対して<B>quote</B>は、特殊書式(special form)
-である。
-したがって、<TT>(identity 'abc)</TT>は<TT>abc</TT>と評価されるが、
-<TT>(quote 'abc) == (quote (quote abc))</TT>は<TT>'abc</TT>と評価される。
-<B>identity</B>は、多くの一般列関数の<EM>:key</EM>パラメータのデフォルト値
-としてしばしば用いられる。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17875"></A>
-<B>eval</B> <EM>form [environment] </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>form</EM>を評価して、その値を返す。
-もし、<B>*evalhook*</B>に<EM>form</EM>や<EM>environment</EM>を受ける関数を
-設定するならば、hook関数を評価に入る前に呼び出すことができる。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17889"></A>
-<B>apply</B> <EM>func &amp;rest args </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>args</EM>に<EM>func</EM>を適用する。
-<EM>func</EM>は、関数symbolかlambda書式かclosureでなければならない。
-マクロと特殊書式(special form)は適用出来ない。
-<EM>args</EM>の最後の要素は、他の<EM>args</EM>が空の引き数であるなら
-引き数のリストでなければならない。
-このように、もし、<EM>args</EM>の最後がNILであったならば、
-<B>apply</B>はほとんど<B>funcall</B>と同じである。
-ただし、<B>apply</B>は<B>funcall</B>より1つ多くの引き数を持つことができる。
-<TT>(apply #'max 2 5 3 '(8 2)) -&gt; 8</TT>.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17910"></A>
-<B>funcall</B> <EM>func &amp;rest args </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>args</EM>に<EM>func</EM>を適用する。
-<EM>args</EM>の数は、<EM>func</EM>で要求されている引き数の数と一致しなければ
-ならない。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17924"></A>
-<B>quote</B> <EM>obj </EM>[特殊]
-
-<DL COMPACT>
-<DT> 
-<DD> <EM>obj</EM>自身を評価する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17935"></A>
-<B>function</B> <EM>func </EM>[特殊]
-
-<DL COMPACT>
-<DT> 
-<DD> closure関数を作る。
-もし、<EM>func</EM>がsymbolならば、その関数定義が検索される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17946"></A>
-<B>evalhook</B> <EM>hookfunc form [env] </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>hookfun</EM>を<B>*evalhook*</B>に結び付けた後、<EM>form</EM>を一度評価する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17959"></A>
-<B>eval-dynamic</B> <EM>variable </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-スタックにある<EM>variable</EM>(symbol)の値を捜す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17970"></A>
-<B>macroexpand</B> <EM>form </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-もし、<EM>form</EM>がマクロcallであるなら、それを展開する。
-もし、展開したものがまだマクロcallを含んでいるならば、
-マクロcallのない結果となるまでくり返し展開する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="17981"></A>
-<B>eval-when</B> <EM>situation {form}* </EM>[特殊]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>situation</EM>は<TT>compile, load, eval</TT>のリストである。
-<EM>form</EM>は、現在の実行モードが<EM>situation</EM>と一致するときに評価される。
-<B>eval-when</B>は、コンパイラでの動作や環境を制御するために重要なものである。
-もし、<TT>compile</TT>が指定されたならば、<EM>form</EM>はコンパイラによって
-評価されるので、その結果はコンパイル結果に影響を及ぼすことになる。
-例えば、<B>defmacro</B>はコンパイル時にマクロcallを展開するためにコンパイラで
-評価されなければならない。
-もし、<TT>load</TT>が<EM>situation</EM>のリストに与えられたならば、
-<EM>form</EM>はload時にloadまたは評価されるためにコンパイルされる。
-すなわち、load時にコンパイルされた関数が定義される。
-これは、コンパイラに期待される一般的な機能である。
-<TT>load</TT>は、コンパイラの環境を制御するために使用される。
-もし、<TT>eval</TT>が<EM>situation</EM>のリストに含まれているならば、
-<EM>form</EM>はソースコードがloadされるときに評価される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18006"></A>
-<B>the</B> <EM>type form </EM>[特殊]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>form</EM>を<EM>type</EM>として宣言する。
-<EM>type</EM>は、<TT>:integer, :fixnum, :float</TT>で示されるクラスオブジェクト
-のどれかである。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18020"></A>
-<B>declare</B> <EM>declaration* </EM>[特殊]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-それぞれ<EM>declaration</EM>は、宣言指定や整数あるいは目的のsymbolのリストである。
-宣言は、コンパイラが高速なコードを生成するために重要である。
-<DL>
-<DT></DT>
-<DD>special 特殊変数を宣言する。
-</DD>
-<DT></DT>
-<DD>type 変数の型を宣言する。; <TT>(type integer count)</TT>;
-有効な型指定子は<EM>integer</EM>, <EM>:integer</EM>, <EM>fixnum</EM>,
-<EM>:float</EM>と<EM>float</EM>である。型指定子がここに示したものの１つである
-ならば、<B>type</B>キーワードを削除しても良い。そのため、
-<TT>(integer count)</TT>は正しい宣言である。
-<EM>float-vector</EM>,<EM>integer-vector</EM>などのような、その他の型（クラス）では、
-<TT>(type float-vector vec1)</TT>のように<B>type</B>を前に付ける必要がある。
-</DD>
-<DT></DT>
-<DD>ftype 関数の結果の型を宣言する。
-</DD>
-<DT></DT>
-<DD>optimize コンパイラの*optimize*パラメータに値(0-3)を設定する。
-</DD>
-<DT></DT>
-<DD>safety コンパイラの*safety*パラメータに値(0-3)を設定する。
-</DD>
-<DT></DT>
-<DD>space  コンパイラの*space*パラメータに値(0-3)を設定する。
-</DD>
-<DT></DT>
-<DD>inline 認識しない。
-</DD>
-<DT></DT>
-<DD>not-inline 認識しない。
-</DD>
-</DL>
-
-<P>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="18053"></A>
-<B>proclaim</B> <EM>proclamation </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-変数やコンパイラオプションをグローバルに宣言する。
-同様な宣言は、<B>declare</B>特殊書式によって記述することができる。
-しかしながら、<B>proclaim</B>は、1つの引数を持つ関数であり、
-宣言を評価する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18065"></A>
-<B>warn</B> <EM>format-string &amp;rest args </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>format-string</EM>と<EM>args</EM>で与えられる警告メッセージを
-<B>*error-output*</B>に出力する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="18078"></A>
-<B>error</B> <EM>format-string &amp;rest args </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>*error-handler*</B>に結び付く現在のエラーハンドラー関数を呼び出す。
-デフォルトのエラーハンドラー'euserror'を<B>*error-output*</B>に最初に出力し
-<EM>format-string</EM>と<EM>args</EM>を<B>format</B>を用いて出力する。
-その後、新しい最上位レベルのセッション(session)に入る。
-プロンプトには、エラーセッションの深さを示す。
-<B>throw</B>にその番号を与えることにより、低いエラーレベルのセッションへ戻ることができる。
-</DD>
-</DL>
-<BR>
-<BR>
-
-             <P>
-マルチスレッドEuslispにおいて、特殊変数はスレッド間で共有され、
-同じ<B>*error-handler*</B>が異なったスレッドから参照される。
-この不自由を避けるために、マルチスレッドEuslispは<B>install-error-handler</B>
-関数を備えている。その関数は、それぞれのスレッドに対して
-異なったエラーハンドラーをインストールする。
-
-<P>
-
- <BR>
-<BR> <A NAME="18094"></A>
-<B>install-error-handler</B> <EM>handler </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>handler</EM>を現在のスレッドのエラーハンドラーとしてインストールする。
-</DD>
-</DL>
-<BR>
-<BR>
-
-             <P>
-
-<P>
-
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1296"
-  HREF="jmanual-node65.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1290"
-  HREF="jmanual-node63.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1284"
-  HREF="jmanual-node63.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1292"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1294"
-  HREF="jmanual-node156.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1297"
-  HREF="jmanual-node65.html">最上位レベルの対話</A>
-<B> Up:</B> <A NAME="tex2html1291"
-  HREF="jmanual-node63.html">評価</A>
-<B> Previous:</B> <A NAME="tex2html1285"
-  HREF="jmanual-node63.html">評価</A>
- &nbsp; <B>  <A NAME="tex2html1293"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1295"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
-<!--End of Navigation Panel-->
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1290"
+  HREF="jmanual-node65.html">評価関数</A>
+<LI><A NAME="tex2html1291"
+  HREF="jmanual-node66.html">最上位レベルの対話</A>
+<LI><A NAME="tex2html1292"
+  HREF="jmanual-node67.html">コンパイル</A>
+<LI><A NAME="tex2html1293"
+  HREF="jmanual-node68.html">プログラムロード</A>
+<LI><A NAME="tex2html1294"
+  HREF="jmanual-node69.html">デバッグ補助</A>
+<LI><A NAME="tex2html1295"
+  HREF="jmanual-node70.html">ダンプオブジェクト</A>
+<LI><A NAME="tex2html1296"
+  HREF="jmanual-node71.html">プロセスイメージ保存</A>
+<LI><A NAME="tex2html1297"
+  HREF="jmanual-node72.html">最上位レベルのカスタマイズ</A>
+<LI><A NAME="tex2html1298"
+  HREF="jmanual-node73.html">その他の関数</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

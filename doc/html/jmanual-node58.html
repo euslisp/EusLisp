@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>メッセージキューとFIFO</TITLE>
+<TITLE>共有メモリ</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="メッセージキューとFIFO">
+<META NAME="description" CONTENT="共有メモリ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,101 +21,109 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node59.html">
 <LINK REL="previous" HREF="jmanual-node57.html">
-<LINK REL="up" HREF="jmanual-node56.html">
+<LINK REL="up" HREF="jmanual-node57.html">
 <LINK REL="next" HREF="jmanual-node59.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1209"
+<A NAME="tex2html1210"
   HREF="jmanual-node59.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1203"
-  HREF="jmanual-node56.html">
+<A NAME="tex2html1204"
+  HREF="jmanual-node57.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1197"
+<A NAME="tex2html1198"
   HREF="jmanual-node57.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1205"
+<A NAME="tex2html1206"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1207"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1208"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1210"
-  HREF="jmanual-node59.html">ソケット</A>
-<B> Up:</B> <A NAME="tex2html1204"
-  HREF="jmanual-node56.html">プロセス間通信とネットワーク</A>
-<B> Previous:</B> <A NAME="tex2html1198"
-  HREF="jmanual-node57.html">共有メモリ</A>
- &nbsp; <B>  <A NAME="tex2html1206"
+<B> Next:</B> <A NAME="tex2html1211"
+  HREF="jmanual-node59.html">メッセージキューとFIFO</A>
+<B> Up:</B> <A NAME="tex2html1205"
+  HREF="jmanual-node57.html">プロセス間通信とネットワーク</A>
+<B> Previous:</B> <A NAME="tex2html1199"
+  HREF="jmanual-node57.html">プロセス間通信とネットワーク</A>
+ &nbsp; <B>  <A NAME="tex2html1207"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1208"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1209"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION03084200000000000000">
-メッセージキューとFIFO</A>
+<H3><A NAME="SECTION03084100000000000000">
+共有メモリ</A>
 </H3>
-メッセージキューは、<B>make-msgq-input-stream</B>か<B>make-msgq-output-stream</B>で
-作られる。
-それぞれファイルストリームのインスタンスを返す。
-そのストリームは、ファイルに接続された他のストリームと同じように、
-読みだしや書き込み処理が許可されている。
-メッセージキューのストリームの<TT>fname</TT>は、作られるときに、keyから設定する。
+Euslispは、System5のshmemではなく、SunOSのmmapによって共有メモリを提供する。
+共有メモリは、<B>map-file</B>関数によって配置される。
+<B>map-file</B>は、EusLispのプロセスメモリ空間内にファイルを配置し、
+<B>foreign-string</B>のインスタンスを返す。
+データはこのforeign-stringに対する文字列関数を用いることにより
+書き込みと読みだしができる。
+共有メモリは、システム依存のページ境界に配置されるので、 
+配置アドレスを指定すべきではない。
+<B>:share</B>のキーパラメータがNILに設定されているかまたは
+<B>:private</B>がTに設定されているファイルを配置することは、
+ファイルをプライベート(排他的)にアクセスすべきであることを意味する。
+しかし、メモリの共有化の目的から外れるため、
+<B>:share</B>のデフォルト値はTである。
+2人のユーザーでファイルが共有されるとき、読み書きの許可は
+両方のユーザーに正確に設定されなければならない。
+残念なことにSunOSは、ネットワークを通して異なったワークステーション間の
+ファイルの共有ををサポートしていない。
 
 <P>
-FIFOに対するストリームを作るために、
-最初に<B>unix:mknod</B>関数で、
-2番目の引数を<EM>mode</EM>=<TT>#o10000</TT>に設定した上で
-FIFOノードを作り、ノーマルファイルとしてオープンする。
-メッセージキューとFIFOは、機械の上でローカルに作られ、
-機械内での通信チャンネルとしてのみ与えられる。
+64バイト長のファイルを2つのEusLispで共有するプログラム例を下に示す。
 
 <P>
-メッセージキューとFIFOは、自分のプロセスが終了した後でさえも
-システムから削除されない。
-削除するためには、<B>unix:msgctl</B>か<B>ipcrm</B>コマンドが必要である。
+<PRE>
+;; 64バイトのファイルを作る
+(with-open-file (f "afile" :direction :output)  (princ (make-string 64) f))
+;; 配置する
+(setq shared-string1 (map-file "afile" :direction :io))
+;;
+;; 他のプロセスの中で
+(setq shared-string2 (map-file "afile" :direction :io))
+</PRE>
+
+<P>
+その後、<TT>shared-string1</TT>に書かれたデータは
+すぐに<TT>shared-string2</TT>へ現れる。
+foreign stringへの書き込みは、
+<B>replace</B>か<B>setf</B>に<B>aref</B>を組み合せることにより可能である。
 
 <P>
 
  <BR>
-<BR> <A NAME="15498"></A>
-<B>make-msgq-input-stream</B> <EM>key &amp;optional (buffer-size 128) </EM>[関数]
+<BR> <A NAME="15519"></A>
+<B>map-file</B> <EM>filename &amp;key (:direction  :input) :length (:offset 0) (:share t)
+(:address 0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>key</EM>で示すメッセージキューに繋がる入力ファイルストリームを返す。
+<EM>filename</EM>という名のファイルをメモリ空間に配置する。
+<EM>filename</EM>は、ローカルファイル、NFSでマウントされたリモートファイル、
+または<TT>/dev</TT>の中のメモリデバイスのどれでも可能である。
+この関数の結果として<B>foreign-string</B>が返される。その要素は、<B>aref</B>によってアクセス可能である。<TT>map-file</TT>によって<EM>:direction=:input</EM>という条件で
+配置されたforeign-stringにデータを書き込むことは、segmentation faultの原因となる。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="15509"></A>
-<B>make-msgq-output-stream</B> <EM>key &amp;optional (buffer-size 128) </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>key</EM>で示すメッセージキューに繋がる出力ファイルストリームを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
              <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

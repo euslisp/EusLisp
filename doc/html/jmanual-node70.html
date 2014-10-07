@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>プロセスイメージ保存</TITLE>
+<TITLE>ダンプオブジェクト</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="プロセスイメージ保存">
+<META NAME="description" CONTENT="ダンプオブジェクト">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,89 +21,101 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node71.html">
 <LINK REL="previous" HREF="jmanual-node69.html">
-<LINK REL="up" HREF="jmanual-node63.html">
+<LINK REL="up" HREF="jmanual-node64.html">
 <LINK REL="next" HREF="jmanual-node71.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1380"
+<A NAME="tex2html1381"
   HREF="jmanual-node71.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1374"
-  HREF="jmanual-node63.html">
+<A NAME="tex2html1375"
+  HREF="jmanual-node64.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1368"
+<A NAME="tex2html1369"
   HREF="jmanual-node69.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1376"
+<A NAME="tex2html1377"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1378"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1379"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1381"
-  HREF="jmanual-node71.html">最上位レベルのカスタマイズ</A>
-<B> Up:</B> <A NAME="tex2html1375"
-  HREF="jmanual-node63.html">評価</A>
-<B> Previous:</B> <A NAME="tex2html1369"
-  HREF="jmanual-node69.html">ダンプオブジェクト</A>
- &nbsp; <B>  <A NAME="tex2html1377"
+<B> Next:</B> <A NAME="tex2html1382"
+  HREF="jmanual-node71.html">プロセスイメージ保存</A>
+<B> Up:</B> <A NAME="tex2html1376"
+  HREF="jmanual-node64.html">評価</A>
+<B> Previous:</B> <A NAME="tex2html1370"
+  HREF="jmanual-node69.html">デバッグ補助</A>
+ &nbsp; <B>  <A NAME="tex2html1378"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1379"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1380"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION03097000000000000000">
-プロセスイメージ保存</A>
+<H2><A NAME="SECTION03096000000000000000">
+ダンプオブジェクト</A>
 </H2>
-このプロセスイメージ保存は、Solarisの動的ロード機能に深く依存しているため、
-Solaris2のEuslispにおいてサポートされていない。
-Solarisの動的ロード機能は、共有するオブジェクトを<TT>sbrk</TT>点の上の
-位置に依存した形でロードする。
+EusLispのリーダとプリンタは、どのようなオブジェクトも再読みだし可能な書式
+でファイルに出力できるように設計されている。
+オブジェクトは相互参照あるいは再帰参照を持っていてもよい。
+<TT>*print-circle*</TT>と<TT>*print-object*</TT>にTを設定したとき、この特徴は
+は可能となる。
+次の関数はこれらの変数をTにし、ファイルをオープンし、オブジェクトを表示する。
+これらの関数のもっとも重要な用途は、相互参照を持つ3Dモデルの
+構造体をダンプすることである。
 
 <P>
 
  <BR>
-<BR> <A NAME="18794"></A>
-<B>save</B> <EM>path &amp;optional (symbol-file "") starter </EM>[関数]
+<BR> <A NAME="18796"></A>
+<B>dump-object</B> <EM>file &amp;rest objects </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18807"></A>
+<B>dump-structure</B> <EM>file &amp;rest objects </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>save</B>は、現在のEuslisp処理の環境をファイルにダンプする。
-そのファイルは、後でUNIX命令として呼び出すことができる。
-もし関数名が<EM>starter</EM>によって指定されているなら、
-その関数はその命令の実行が始まるときに評価される。
-それぞれの命令行の引き数はEuslispの中で強制的に文字列にされ、
-引き数として<EM>starter</EM>に受け渡される。
-それで、命令行を解析できる。
-<B>*standard-input*</B>と<B>*standard-output*</B>を除くすべてのストリームを
-確実にクローズしていなければならない。
-ファイルがオープンされた状態を保存することはできない。
-また、<B>mmap</B>を試そうとしてはならない。
-<B>mmap</B>はインターネットのソケットストリームを作るとき、見えない所で実行されている。
-Sunのネットワークライブラリはhost-by-nameのようなNIS情報をメモリ上に
-いつも展開し、プロセスの最上位に置くため保存できない。
-そのため、保存されたイメージが実行されるても、ネットワークライブラリへの
-アクセスはどれも失敗し、コアダンプが生じる。
-Xwindowもこのライブラリを使用している。
-それで、一度Xserverに接続されたプロセスイメージを保存することはできない。
+再び読み戻しができるような書式で<EM>file</EM>に<EM>objects</EM>をダンプする。
 </DD>
 </DL>
 <BR>
 <BR>
 
 <P>
+
+<A NAME="18819"></A>
+<B>dump-loadable-structure</B> <EM>file &amp;rest symbols </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>にバインドされたオブジェクトを<EM>file</EM>にダンプする。
+その<EM>file</EM>は簡単にロードすることによって読み戻すことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
              <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

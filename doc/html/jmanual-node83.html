@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>IOCTL</TITLE>
+<TITLE>低レベルメモリ管理</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="IOCTL">
+<META NAME="description" CONTENT="低レベルメモリ管理">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,107 +21,74 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node84.html">
 <LINK REL="previous" HREF="jmanual-node82.html">
-<LINK REL="up" HREF="jmanual-node76.html">
+<LINK REL="up" HREF="jmanual-node77.html">
 <LINK REL="next" HREF="jmanual-node84.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1666"
+<A NAME="tex2html1667"
   HREF="jmanual-node84.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1660"
-  HREF="jmanual-node76.html">
+<A NAME="tex2html1661"
+  HREF="jmanual-node77.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1654"
+<A NAME="tex2html1655"
   HREF="jmanual-node82.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1662"
+<A NAME="tex2html1663"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1664"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1665"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1667"
-  HREF="jmanual-node84.html">キーインデックスファイル</A>
-<B> Up:</B> <A NAME="tex2html1661"
-  HREF="jmanual-node76.html">UNIXシステムコール</A>
-<B> Previous:</B> <A NAME="tex2html1655"
-  HREF="jmanual-node82.html">低レベルメモリ管理</A>
- &nbsp; <B>  <A NAME="tex2html1663"
+<B> Next:</B> <A NAME="tex2html1668"
+  HREF="jmanual-node84.html">IOCTL</A>
+<B> Up:</B> <A NAME="tex2html1662"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1656"
+  HREF="jmanual-node82.html">マルチスレッド</A>
+ &nbsp; <B>  <A NAME="tex2html1664"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1665"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1666"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04012700000000000000">
-IOCTL</A>
+<H3><A NAME="SECTION04012600000000000000">
+低レベルメモリ管理</A>
 </H3>
-Unixはターミナルデバイスを<TT>ioctl</TT>の2番目の引数に命令を設定することにより
-制御することができるが、Euslispはインクルードファイルの参照や命令コードとしての
-引数の論理和を省略するために、関数で備えている。
-詳しい内容は、Unixの<TT>termio</TT>のマニュアルを参照すること。
-
-<P>
-ターミナルの入出力制御には、TIOC*とTC*という2つの命令系がある。
-自分のオペレーティングシステムにこれらの関数が実現されているがどうか
-について気を付けなさい。
-基本的に、BSD系はTIOC*の入出力をサポートし、System5系がTC*を
-サポートしている。
-<DL>
-<DT></DT>
-<DD>SunOS 4.1 TIOC*とTC*の両方サポート
-</DD>
-<DT></DT>
-<DD>Solaris2 TC*のみサポート
-</DD>
-<DT></DT>
-<DD>mips, ultrix? TIOC*のみサポート
-</DD>
-</DL>
 
  <BR>
-<BR> <P>
-
-<A NAME="22191"></A>
-<B>unix:tiocgetp</B> <EM>stream [sgttybuf] </EM>[関数]
+<BR> <A NAME="22164"></A>
+<B>unix:malloc</B> <EM>integer </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> パラメータを得る。
+<DD> 
+Euslispのメモリ空間の外にメモリを配置する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22201"></A>
-<B>unix:tiocsetp</B> <EM>stream sgttybuf </EM>[関数]
+<A NAME="22174"></A>
+<B>unix:free</B> <EM>integer </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> パラメータを設定する。
+<DD> 
+<B>unix:malloc</B>で配置されたメモリブロックを開放する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22211"></A>
-<B>unix:tiocsetn</B> <EM>stream [sgttybuf] </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22222"></A>
-<B>unix:tiocgetd</B> <EM>stream [sgttybuf] </EM>[関数]
+<A NAME="22185"></A>
+<B>unix:valloc</B> <EM>integer </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -131,41 +98,8 @@ Unixはターミナルデバイスを<TT>ioctl</TT>の2番目の引数に命令�
 <BR>
 <BR>
 
-<A NAME="22233"></A>
-<B>unix:tiocflush</B> <EM>stream </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> バッファをすべて出力する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22243"></A>
-<B>unix:tiocgpgrp</B> <EM>stream integer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> プロセスのグループIDを得る。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22253"></A>
-<B>unix:tiocspgrp</B> <EM>stream integer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> プロセスのグループIDを設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22263"></A>
-<B>unix:tiocoutq</B> <EM>stream integer </EM>[関数]
+<A NAME="22196"></A>
+<B>unix:mmap</B> <EM>address length protection share stream offset </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -175,8 +109,8 @@ Unixはターミナルデバイスを<TT>ioctl</TT>の2番目の引数に命令�
 <BR>
 <BR>
 
-<A NAME="22274"></A>
-<B>unix:fionread</B> <EM>stream integer </EM>[関数]
+<A NAME="22207"></A>
+<B>unix:munmap</B> <EM>address length </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -186,178 +120,8 @@ Unixはターミナルデバイスを<TT>ioctl</TT>の2番目の引数に命令�
 <BR>
 <BR>
 
-<A NAME="22285"></A>
-<B>unix:tiocsetc</B> <EM>stream buf </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22296"></A>
-<B>unix:tioclbis</B> <EM>stream buf </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22307"></A>
-<B>unix:tioclbic</B> <EM>stream buf </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22318"></A>
-<B>unix:tioclset</B> <EM>stream buf </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22329"></A>
-<B>unix:tioclget</B> <EM>stream buf </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="22340"></A>
-<B>unix:tcseta</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> ターミナルパラメータをすぐに設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22350"></A>
-<B>unix:tcsets</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> ターミナルパラメータを設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22360"></A>
-<B>unix:tcsetsw</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 出力として列をなす全ての文字を転送した
-後、ターミナルパラメータを設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22370"></A>
-<B>unix:tcsetsf</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 出力として列をなす全ての文字を転送し、
-入力として列をなす全ての文字列を廃棄した
-後、ターミナルパラメータを設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22380"></A>
-<B>unix:tiocsetc</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22391"></A>
-<B>unix:tcsetaf</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22402"></A>
-<B>unix:tcsetaw</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22413"></A>
-<B>unix:tcgeta</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22424"></A>
-<B>unix:tcgets</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22435"></A>
-<B>unix:tcgetattr</B> <EM>stream buffer </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="22446"></A>
-<B>unix:tcsetattr</B> <EM>stream buffer </EM>[関数]
+<A NAME="22218"></A>
+<B>unix:vadvise</B> <EM>integer </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -369,39 +133,10 @@ Unixはターミナルデバイスを<TT>ioctl</TT>の2番目の引数に命令�
 
 <P>
              <P>
-
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1666"
-  HREF="jmanual-node84.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1660"
-  HREF="jmanual-node76.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1654"
-  HREF="jmanual-node82.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1662"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1664"
-  HREF="jmanual-node156.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1667"
-  HREF="jmanual-node84.html">キーインデックスファイル</A>
-<B> Up:</B> <A NAME="tex2html1661"
-  HREF="jmanual-node76.html">UNIXシステムコール</A>
-<B> Previous:</B> <A NAME="tex2html1655"
-  HREF="jmanual-node82.html">低レベルメモリ管理</A>
- &nbsp; <B>  <A NAME="tex2html1663"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1665"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

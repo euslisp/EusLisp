@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>ピクセル画像</TITLE>
+<TITLE>ルックアップテーブル (LUT)</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="ピクセル画像">
+<META NAME="description" CONTENT="ルックアップテーブル (LUT)">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,76 +21,64 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node146.html">
 <LINK REL="previous" HREF="jmanual-node144.html">
-<LINK REL="up" HREF="jmanual-node143.html">
+<LINK REL="up" HREF="jmanual-node144.html">
 <LINK REL="next" HREF="jmanual-node146.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2576"
+<A NAME="tex2html2577"
   HREF="jmanual-node146.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2570"
-  HREF="jmanual-node143.html">
+<A NAME="tex2html2571"
+  HREF="jmanual-node144.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2564"
+<A NAME="tex2html2565"
   HREF="jmanual-node144.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2572"
+<A NAME="tex2html2573"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2574"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2575"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2577"
-  HREF="jmanual-node146.html">カラーピクセル画像</A>
-<B> Up:</B> <A NAME="tex2html2571"
-  HREF="jmanual-node143.html">画像処理</A>
-<B> Previous:</B> <A NAME="tex2html2565"
-  HREF="jmanual-node144.html">ルックアップテーブル (LUT)</A>
- &nbsp; <B>  <A NAME="tex2html2573"
+<B> Next:</B> <A NAME="tex2html2578"
+  HREF="jmanual-node146.html">ピクセル画像</A>
+<B> Up:</B> <A NAME="tex2html2572"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2566"
+  HREF="jmanual-node144.html">画像処理</A>
+ &nbsp; <B>  <A NAME="tex2html2574"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2575"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2576"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04082000000000000000">
-ピクセル画像</A>
+<H2><A NAME="SECTION04081000000000000000">
+ルックアップテーブル (LUT)</A>
 </H2>
-１枚の画像データは、<B>pixel-image</B>クラスで表現される。<B>pixel-image</B>は、
-バイト型データを要素とする2次元配列である。それぞれのデータの内容は、
-アプリケーションに依存している。一般的にピクセルの明るさを表現するために
-使われるが、エッジ輝度や微分方向やカラー輝度やbarグラフのようなものにも用いることができる。
+LUTは，ピクセル(pixel)データを変換するためのベクトルデータである。 
 
 <P>
 
  <BR>
-<BR> <BR> 
-<A NAME="48171"></A>
-<BIG CLASS="XLARGE"><B>pixel-image </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>array</B> 
-<BR>  :slots 		 xpicture display-lut histogram
-<BR>
-brightness-distribution0
-<BR>
-brightness-distribution1
-<BR>
-brightness-covariance 
-</TT></PRE>
-<BR>
-<BR>
+<BR> <P>
+
+<A NAME="48033"></A>
+<B>make-equilevel-lut</B> <EM>levels &amp;optional (size 256) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD><B>pixel-image</B>は、xwindowへの表示機能を持つ2次元の行列である。
-pixelの変換は、<B>display-lut</B>によって実現され、
-その結果の画像は<EM>xpicture</EM>に蓄積される。
-主な軸は縦方向にとる。<TT>(x,y)</TT>の<TT>img</TT>のピクセルは
-<TT>(aref img y x)</TT>でアクセスすることができる。
+<DD> 
+１次元の整数ベクトル(integer-vector)を返す。
+そのベクトルは，0から<EM>size</EM>までの値を0から<EM>levels</EM>までの値に
+線形的にマップする。
+例えば，<TT>(make-equilevel-lut 3 12)</TT>は，
+<TT>#i(0 0 0 0 1 1 1 1 2 2 2 2)</TT>を返す。
 </DD>
 </DL>
 <BR>
@@ -98,399 +86,17 @@ pixelの変換は、<B>display-lut</B>によって実現され、
 
 <P>
 
-<A NAME="48194"></A>
-<B>:width</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> ピクセル画像の横サイズを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48204"></A>
-<B>:height</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> ピクセル画像の縦サイズを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48214"></A>
-<B>:size</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 配列の大きさを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48224"></A>
-<B>:transpose</B> <EM>&amp;optional (result (instance (class self) :init dim0 dim1)) </EM>[メソッド]
+<A NAME="48047"></A>
+<B>look-up</B> <EM>src dest lut </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-x軸とy軸を交換する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48234"></A>
-<B>:map-picture</B> <EM>lut &amp;optional (result (send self :duplicate)) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像を<EM>lut</EM>で変換し、その画像データを<EM>result</EM>に蓄積する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48246"></A>
-<B>:map</B> <EM>fn &amp;optional (result (send self :duplicate)) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像のすべてのピクセルに<EM>fn</EM>を適用して、
-<EM>result</EM>のピクセルに置く。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48258"></A>
-<B>:brightest-pixel</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> この画像の一番明るいピクセル値を見つける。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48268"></A>
-<B>:darkest-pixel</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> この画像の一番暗いピクセル値を見つける。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48278"></A>
-<B>:average-pixel</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像のすべてのピクセルの平均輝度を計算する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48288"></A>
-<B>:halve</B> <EM>&amp;optional simage </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-半分の大きさの画像に縮小したピクセル画像を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48298"></A>
-<B>:subimage</B> <EM>x y subwidth subheight </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像に<EM>(x,y)</EM>を左上角とし、幅が<EM>subwidth</EM>で高さが<EM>subheight</EM>
-である四角形を切り出す。
-その画像の原点は<EM>(x,y)</EM>に置かれる。
-<TT>:subimage</TT>は、この四角形で囲まれた画像を表現するピクセル画像を作る。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48313"></A>
-<B>:xpicture</B> <EM>&amp;optional lut </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像を<EM>lut</EM>を用いて変換し、<TT>xpicture</TT>に設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48325"></A>
-<B>:display-lut</B> <EM>&amp;optional newlut </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<TT>display-lut</TT>にルックアップテーブル<EM>newlut</EM>を設定する。
-その後、このルックアップテーブルを用いて画像を変換し、
-<TT>xpicture</TT>に設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48338"></A>
-<B>:display</B> <EM>(xwin geometry:*viewsurface*) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>:putimage</B>を用いて<EM>xwin</EM>で指定されるXwindowにこの画像を
-表示する。
-それぞれのピクセル値はXのカラーマップを参照する。
-希望する表現を得るためには、このピクセル画像を固有のLUTで
-変換すべきである。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48350"></A>
-<B>:duplicate</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像オブジェクトと同じ幅と高さを持つ同じクラスの
-インスタンスを作る。ピクセルデータはコピーされない。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48360"></A>
-<B>:copy-from</B> <EM>src </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>src</EM>で指定される他の画像からピクセルデータをコピーする。
-<EM>src</EM>とこの画像は同一の次元でなければならない。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48372"></A>
-<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-四角領域で示されるピクセルデータを16進数フォーマットで表示する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48382"></A>
-<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-四角領域で示されるピクセルデータを16進数フォーマットで表示する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48392"></A>
-<B>:prin1</B> <EM>strm &amp;rest msg </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-このピクセル画像を名前と次元とともに表示する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48402"></A>
-<B>:init</B> <EM>w h &amp;optional imgvec </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-幅<EM>w</EM>、高さ<EM>h</EM>を持つピクセル画像を初期化する。
-
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48414"></A>
-<B>:amplify</B> <EM>rate &amp;optional (result (send self :duplicate) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>rate</EM>をそれぞれのピクセル値に掛ける。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48425"></A>
-<B>:compress-gray-scale</B> <EM>levels &amp;optional result  &amp;aux pict2 </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像のピクセル値を0から<EM>levels</EM>までの範囲に変換をし、
-その変換された画像を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48436"></A>
-<B>:lut</B> <EM>lut1 &amp;optional (result (send self :duplicate)) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-ルックアップテーブル<EM>lut1</EM>を用いてこの画像を変換し、
-その変換された画像を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48447"></A>
-<B>:lut2</B> <EM>lut1 lut2 &amp;optional (result (send self :duplicate)) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>lut1</EM>と<EM>lut2</EM>を連結したルックアップテーブルを用いてこの画像を
-変換し、その変換された画像を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48459"></A>
-<B>:histogram</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像のそれぞれのピクセル値の発生回数を数え、そのヒストグラム
-を整数ベクトル表現で返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48469"></A>
-<B>:brightness-distribution</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-明るさの分散を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48479"></A>
-<B>:optimum-threshold</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像の明るさの分散値が最大となっている階調を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48489"></A>
-<B>:project-x</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-同じx座標のピクセル値をすべて加算し、これらの値のベクトルを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48499"></A>
-<B>:project-y</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-同じy座標のピクセル値をすべて加算し、これらの値のベクトルを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48509"></A>
-<B>:digitize</B> <EM>threshold &amp;optional (val0 0) (val1 255) result </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>threshold</EM>を用いてこの画像を<EM>val0</EM>と<EM>val1</EM>の２値画像に
-変換する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48522"></A>
-<B>:and</B> <EM>img2 </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像と<EM>img2</EM>のビット論理積をとり、処理した画像を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="48533"></A>
-<B>:plot</B> <EM>min max &amp;optional color viewsurface </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>min</EM>と<EM>max</EM>の間の値を持つピクセルをすべて<EM>color</EM>(gc)
-で<EM>viewsurface</EM>にプロットする。
+ルックアップテーブル<EM>lut</EM>を用いて<EM>src</EM>ベクトルを<EM>dest</EM>ベクトルに
+値を変換して置き換える。 もし<EM>dest</EM>ベクトルがNILのときは，
+<EM>src</EM>ベクトルと同じクラスで同じサイズのベクトルを作る。
+例えば， <TT>(look-up #i(1 2 3) nil #(10 20 30 40 50))</TT>は，
+<TT>#i(20 30 40)</TT>を返す。
 </DD>
 </DL>
 <BR>
@@ -498,62 +104,227 @@ x軸とy軸を交換する。
 
 <P>
 
-<A NAME="48547"></A>
-<BR>
-<IMG
- WIDTH="553" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img99.png"
- ALT="\begin{emtabbing}
-{\bf :edge1}
-\it\&amp;optional \= (method 1) \\lq  [メソッド]\ ...
-...th-threshold*)\\
-\&gt; (win geometry:*viewsurface*) (edgeimg1)
-\rm
-\end{emtabbing}">
-<BR>
+<A NAME="48064"></A>
+<B>look-up2</B> <EM>src dest lut1 lut2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD>この画像のエッジを抽出し、Xwindow上にエッジ画像を表示する。
+<DD> 
+<B>look-up2</B>は、ルックアップテーブル<EM>lut1</EM>および<EM>lut2</EM>を連続的に使用して
+<EM>src</EM>ベクトルを<EM>dest</EM>ベクトルに変換する。
+<EM>src</EM>とdestは、同じサイズの整数ベクトルあるいはバイトベクトル（文字列）である。
 </DD>
 </DL>
 <BR>
 <BR>
 
+<P>
+
+<A NAME="48081"></A>
+<B>look-up*</B> <EM>src dest luts </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>luts</EM>は，ルックアップテーブルのリストである。
+<EM>luts</EM>から与えられるルックアップテーブルを連続的に使用して，
+<EM>src</EM>ベクトルを<EM>dest</EM>ベクトルに変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48095"></A>
+<B>concatenate-lut</B> <EM>lut1 lut2 &amp;optional (size 256) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのルックアップテーブル<EM>lut1</EM>と<EM>lut2</EM>をつないだ
+新しいルックアップテーブルを返す。その新しいテーブルを使用することは，
+<EM>lut1</EM>と<EM>lut2</EM>を連続的に使用することと同じである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48109"></A>
+<B>make-colors</B> <EM>default-color-map </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+以下に示すデフォルトのカラーマップを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48119"></A>
+<B>*x-gray32-lut*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトカラーマップ<TT>x:*colormap*</TT>
+に定義されている32階調のグレースケールのLUTである。
+<TT>(aref *x-gray32-lut* n)</TT>は，32階調の内のn番目のグレー階調を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48131"></A>
+<B>*x-gray16-lut*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトカラーマップ<TT>x:*colormap*</TT>
+に定義されている16階調のグレースケールのLUTである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48142"></A>
+<B>*x-color-lut*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトカラーマップ<TT>x:*colormap*</TT>
+に定義されている幾つかの鮮明なカラーのLUTである。
+登録されているカラーは， "black", "red", "green", "lightblue", "yellow",
+"orange", "blue", "magenta", "white"である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48153"></A>
+<B>*256to8*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+0..255の範囲の整数を0..7の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48163"></A>
+<B>*256to16*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+0..255の範囲の整数を0..15の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48173"></A>
+<B>*256to32*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+0..255の範囲の整数を0..31の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48183"></A>
+<B>*gray32*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+グレースケールピクセルをXのカラーマップに変換するための256入力のLUTである。
+これは、<TT>*256to32*</TT>と<TT>*x-gray32-lut*</TT>を連結して作られる。
+グレー32階調のXwindowの表示可能なピクセル画像は<B>*gray32*</B>によって
+グレー256階調の画像を変換することにより得ることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48196"></A>
+<B>*rainbow32*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+256階調のhue値をXのレインボーカラーマップに変換する
+ための256入力のLUTである。
+これは、<TT>*256to32*</TT>と<TT>*x-rainbow32-lut*</TT>を連結して作られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
              <P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2576"
+<A NAME="tex2html2577"
   HREF="jmanual-node146.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2570"
-  HREF="jmanual-node143.html">
+<A NAME="tex2html2571"
+  HREF="jmanual-node144.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2564"
+<A NAME="tex2html2565"
   HREF="jmanual-node144.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2572"
+<A NAME="tex2html2573"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2574"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2575"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2577"
-  HREF="jmanual-node146.html">カラーピクセル画像</A>
-<B> Up:</B> <A NAME="tex2html2571"
-  HREF="jmanual-node143.html">画像処理</A>
-<B> Previous:</B> <A NAME="tex2html2565"
-  HREF="jmanual-node144.html">ルックアップテーブル (LUT)</A>
- &nbsp; <B>  <A NAME="tex2html2573"
+<B> Next:</B> <A NAME="tex2html2578"
+  HREF="jmanual-node146.html">ピクセル画像</A>
+<B> Up:</B> <A NAME="tex2html2572"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2566"
+  HREF="jmanual-node144.html">画像処理</A>
+ &nbsp; <B>  <A NAME="tex2html2574"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2575"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
+ &nbsp; <B>  <A NAME="tex2html2576"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

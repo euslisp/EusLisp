@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>スレッド生成</TITLE>
+<TITLE>並列度の計測</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="スレッド生成">
+<META NAME="description" CONTENT="並列度の計測">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,198 +20,124 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
 <LINK REL="next" HREF="jmanual-node105.html">
-<LINK REL="previous" HREF="jmanual-node103.html">
-<LINK REL="up" HREF="jmanual-node91.html">
+<LINK REL="previous" HREF="jmanual-node97.html">
+<LINK REL="up" HREF="jmanual-node92.html">
 <LINK REL="next" HREF="jmanual-node105.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1975"
+<A NAME="tex2html1976"
   HREF="jmanual-node105.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1969"
-  HREF="jmanual-node91.html">
+<A NAME="tex2html1970"
+  HREF="jmanual-node92.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1963"
+<A NAME="tex2html1964"
   HREF="jmanual-node103.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1971"
+<A NAME="tex2html1972"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1973"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1974"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1976"
-  HREF="jmanual-node105.html">同期</A>
-<B> Up:</B> <A NAME="tex2html1970"
-  HREF="jmanual-node91.html">マルチスレッド</A>
-<B> Previous:</B> <A NAME="tex2html1964"
-  HREF="jmanual-node103.html">並列度の計測</A>
- &nbsp; <B>  <A NAME="tex2html1972"
+<B> Next:</B> <A NAME="tex2html1977"
+  HREF="jmanual-node105.html">スレッド生成</A>
+<B> Up:</B> <A NAME="tex2html1971"
+  HREF="jmanual-node92.html">マルチスレッド</A>
+<B> Previous:</B> <A NAME="tex2html1965"
+  HREF="jmanual-node103.html">タイマー</A>
+ &nbsp; <B>  <A NAME="tex2html1973"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1974"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1975"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04024000000000000000">
-スレッド生成</A>
+<H2><A NAME="SECTION04023000000000000000">
+並列度の計測</A>
 </H2>
-スレッドは、計算を割り当てる単位であり、普通lisp書式を評価する
-ための単位である。
-Euslispのスレッドは、<B>thread</B>クラスのインスタンスによって
-表現される。
-このオブジェクトは、内容を表現するスレッド全体というよりはむしろ、
-実際に引き数と結果を渡すためのスレッドの
-制御ポートであり、評価を始めるものである。
 
 <P>
-
- <BR>
-<BR> <P>
-
-<A NAME="25210"></A>
-<B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>lsize</EM>ワードのlispスタックと<EM>csize</EM>ワードのC-スタックを持つ
-スレッドを<EM>num</EM>個だけ生成し、システムのスレッドプールに
-置く。
-スレッドプール内のすべてのスレッドは、sys:*threads*に束ねてあり、
-<B>make-thread</B>が呼び出されたときに拡張される。
-<B>thread</B>関数によって、計算はスレッドプールの中で空いたスレッドの
-１つに割り当てられる。
-したがって、指定された計算がどのスレッドに割り当てられるか
-制御できないため、スレッドのスタックサイズを変更する方法が無い。
-</DD>
-</DL>
-<BR>
-<BR>
+表 <A HREF="#paragain">3</A>は、32CPUで構成されるCray Superserverの上で測定
+した並列実行効率を示したものである。
+コンパイルされたフィボナッチ関数において線形な並列度が得られた。
+なぜなら、共有メモリへのアクセスがなく、それぞれのプロセッサのキャッシュ
+メモリに十分ロードできるほどちいさなプログラムであったためである。
+それに反して、同じプログラムをインタープリターで実行したとき、
+キャッシュメモリを使い果たしたため、
+線形な高効率を達成することができなかった。
+さらにまた、頻繁に共有メモリを参照するようなプログラムや
+メモリ配置を要求するようなプログラムは1個のプロセッサで実行した
+ときよりも良い性能を得ることができなかった。
+これは、頻繁なキャッシュメモリの入れ替えが原因と考えられる。
 
 <P>
+<BR><P></P>
+<DIV ALIGN="CENTER">
 
-<A NAME="25225"></A>
-<B>sys:*threads*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>make-thread</B>によって作成されたすべてのスレッドのリストを持つ。
-</DD>
-</DL>
+<DIV ALIGN="CENTER">
+<A NAME="25224"></A>
+<TABLE CELLPADDING=3 BORDER="1">
+<CAPTION><STRONG>Table:</STRONG>
+マルチプロセッサ上で実行されたプログラムの並列度</CAPTION>
+<TR><TD ALIGN="LEFT">processors</TD>
+<TD ALIGN="RIGHT">1</TD>
+<TD ALIGN="RIGHT">2</TD>
+<TD ALIGN="RIGHT">4</TD>
+<TD ALIGN="RIGHT">8</TD>
+<TD ALIGN="CENTER">GC (ratio)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(a) compiled Fibonacci</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">2.0</TD>
+<TD ALIGN="RIGHT">4.0</TD>
+<TD ALIGN="RIGHT">7.8</TD>
+<TD ALIGN="CENTER">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(b) interpreted Fibonacci</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">1.7</TD>
+<TD ALIGN="RIGHT">2.7</TD>
+<TD ALIGN="RIGHT">4.4</TD>
+<TD ALIGN="CENTER">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(c) copy-seq</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">1.3</TD>
+<TD ALIGN="RIGHT">0.76</TD>
+<TD ALIGN="RIGHT">0.71</TD>
+<TD ALIGN="CENTER">0.15</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(d) make-cube</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">0.91</TD>
+<TD ALIGN="RIGHT">0.40</TD>
+<TD ALIGN="RIGHT">0.39</TD>
+<TD ALIGN="CENTER">0.15</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(e) interference-check</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">0.88</TD>
+<TD ALIGN="RIGHT">0.55</TD>
+<TD ALIGN="RIGHT">0.34</TD>
+<TD ALIGN="CENTER">0.21</TD>
+</TR>
+</TABLE> 
 <BR>
-<BR>
-
-<P>
-
-<A NAME="25236"></A>
-<B>sys::free-threads</B> [関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-スレッドプール内の空いたスレッドのリストを返す。
-もし、結果がNILならば、スレッドへのタスクの新しい付託は現在実行されている
-スレッドのどれかの評価が終了するかあるいは
-<B>make-thread</B>によってスレッドプールに新しいスレッドを生成するまで
-停止される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="25247"></A>
-<B>sys:thread</B> <EM>func &amp;rest args </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-スレッドプールから空いたスレッドを1つ取り出し、
-<EM>(func . args)</EM>の評価のためにそれを割り当てる。
-<B>sys:thread</B>は、<EM>args</EM>を展開したリストにfuncを適用
-するが、関数の適用結果を受け取らないため、
-非同期の<B>funcall</B>とみなすことができる。
-むしろ、<B>sys:thread</B>はfuncallに割り当てられたスレッド
-オブジェクトを返すので、実際の結果は<B>sys:wait-thread</B>によって
-後から得ることができる。
-</DD>
-</DL>
-<BR>
-<BR>
-<PRE>
-(defun compute-pi (digits) ...)
-(setq trd (sys:thread \#'compute-pi 1000)) ;assign compute-pi to a thread
-...  ;; other computation 
-(sys:wait-thread trd) ;get the result of (compute-pi 1000)
-</PRE>
-
-<P>
-
-<A NAME="25264"></A>
-<B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-空いたスレッドの1つに計算を割り当てる。
-スレッドは、<B>wait-thread</B>されることなしに、
-評価が終了したとき、スレッドプールに戻される。
-</DD>
-</DL>
-<BR>
+</DIV>
+</DIV>
 <BR>
 
 <P>
-
-<A NAME="25275"></A>
-<B>sys:wait-thread</B> <EM>thread </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>thread</EM>に<B>sys:thread</B>関数によって与えられたfuncallの評価が
-終了するのを待ち、その結果を受け取り、返す。
-もし、スレッドに<B>sys:thread</B>によって評価が割り当てられたならば、
-<B>sys:wait-thread</B>は、必須である。
-なぜなら、スレッドは結果を転送し終わるまでスレッドプールに戻らない
-ためである。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="25289"></A>
-<B>sys:plist</B> <EM>&amp;rest forms </EM>[マクロ]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-異なったスレッドにより並列に<EM>forms</EM>を評価し、
-すべての評価が終了するのを待ち、
-結果のリストを返す。
-<B>sys:plist</B>は、リスト化されたそれぞれのformが関数呼び出しされる
-ことを除いて、<EM>parallel-list</EM>としてみなされるだろう。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-             <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

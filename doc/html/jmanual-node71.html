@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>最上位レベルのカスタマイズ</TITLE>
+<TITLE>プロセスイメージ保存</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="最上位レベルのカスタマイズ">
+<META NAME="description" CONTENT="プロセスイメージ保存">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,89 +21,89 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node72.html">
 <LINK REL="previous" HREF="jmanual-node70.html">
-<LINK REL="up" HREF="jmanual-node63.html">
+<LINK REL="up" HREF="jmanual-node64.html">
 <LINK REL="next" HREF="jmanual-node72.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1394"
+<A NAME="tex2html1395"
   HREF="jmanual-node72.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1388"
-  HREF="jmanual-node63.html">
+<A NAME="tex2html1389"
+  HREF="jmanual-node64.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1382"
+<A NAME="tex2html1383"
   HREF="jmanual-node70.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1390"
+<A NAME="tex2html1391"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1392"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1393"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1395"
-  HREF="jmanual-node72.html">その他の関数</A>
-<B> Up:</B> <A NAME="tex2html1389"
-  HREF="jmanual-node63.html">評価</A>
-<B> Previous:</B> <A NAME="tex2html1383"
-  HREF="jmanual-node70.html">プロセスイメージ保存</A>
- &nbsp; <B>  <A NAME="tex2html1391"
+<B> Next:</B> <A NAME="tex2html1396"
+  HREF="jmanual-node72.html">最上位レベルのカスタマイズ</A>
+<B> Up:</B> <A NAME="tex2html1390"
+  HREF="jmanual-node64.html">評価</A>
+<B> Previous:</B> <A NAME="tex2html1384"
+  HREF="jmanual-node70.html">ダンプオブジェクト</A>
+ &nbsp; <B>  <A NAME="tex2html1392"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1393"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1394"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION03098000000000000000">
-最上位レベルのカスタマイズ</A>
+<H2><A NAME="SECTION03097000000000000000">
+プロセスイメージ保存</A>
 </H2>
-EuslispがUNIXから呼び出されるとき、<B>*toplevel*</B>にバインドされる
-最上位関数によって実行が始められる。
-この関数は、<TT>eus</TT>の中の<TT>eustop</TT>と<TT>eusx</TT>の中の<TT>xtop</TT>である。
-<B>save</B>の3番目の引き数に独自の関数を指定することによりこの最上位
-関数を変更することができる。<A NAME="17766"></A>
+このプロセスイメージ保存は、Solarisの動的ロード機能に深く依存しているため、
+Solaris2のEuslispにおいてサポートされていない。
+Solarisの動的ロード機能は、共有するオブジェクトを<TT>sbrk</TT>点の上の
+位置に依存した形でロードする。
 
 <P>
-この最上位関数は、任意の数の引き数を受け取れるようにプログラムすべきである。
-その命令行の上の引き数はそれぞれ、強制的に文字列にされ、最上位関数に渡される。
-以下に示すプログラムは、最初の引き数に与えられたファイルからくり返し読み込み、
-2番目の引き数のファイルに整形表示する。
+
+ <BR>
+<BR> <A NAME="18832"></A>
+<B>save</B> <EM>path &amp;optional (symbol-file "") starter </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>save</B>は、現在のEuslisp処理の環境をファイルにダンプする。
+そのファイルは、後でUNIX命令として呼び出すことができる。
+もし関数名が<EM>starter</EM>によって指定されているなら、
+その関数はその命令の実行が始まるときに評価される。
+それぞれの命令行の引き数はEuslispの中で強制的に文字列にされ、
+引き数として<EM>starter</EM>に受け渡される。
+それで、命令行を解析できる。
+<B>*standard-input*</B>と<B>*standard-output*</B>を除くすべてのストリームを
+確実にクローズしていなければならない。
+ファイルがオープンされた状態を保存することはできない。
+また、<B>mmap</B>を試そうとしてはならない。
+<B>mmap</B>はインターネットのソケットストリームを作るとき、見えない所で実行されている。
+Sunのネットワークライブラリはhost-by-nameのようなNIS情報をメモリ上に
+いつも展開し、プロセスの最上位に置くため保存できない。
+そのため、保存されたイメージが実行されるても、ネットワークライブラリへの
+アクセスはどれも失敗し、コアダンプが生じる。
+Xwindowもこのライブラリを使用している。
+それで、一度Xserverに接続されたプロセスイメージを保存することはできない。
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<PRE>
-(defun pprint-copy (infile outfile)
-  (with-open-file (in infile)
-     (with-open-file (out outfile :direction :output)
-        (let ((eof (cons nil nil)) (exp))
-           (while (not (eq (setq exp (read in nil eof)) eof))
-              (pprint exp out))))))
-(defun pprint-copy-top (&amp;rest argv)
-   (when (= (length argv) 2)
-      (pprint-copy (first argv) (second argv))))
-</PRE>
-
-<P>
-一度これらの関数をEuslispの中に定義すれば、
-<TT>(save "ppcopy" "" 'pprint-copy-top)</TT>で<TT>ppcopy</TT>という名のUNIXで実行
-可能な命令を作る。
-
-<P>
-Solaris上のEuslispにおいて、<B>save</B>がないので、
-最上位評価関数はこの手法では変更できない。
-代わりに、独自の最上位評価関数を定義するために<TT>lib/eusrt.l</TT>を
-修正し、<B>*toplevel*</B>に設定することができる。
-<TT>lib/eusrt.l</TT>には、Euslispの起動時に評価される初期化手続きを
-定義している。
-
-<P>
+             <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

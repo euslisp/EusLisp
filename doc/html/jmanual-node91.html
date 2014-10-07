@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>マルチスレッド</TITLE>
+<TITLE>ホスト側の起動</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="マルチスレッド">
+<META NAME="description" CONTENT="ホスト側の起動">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,104 +19,174 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
-<LINK REL="next" HREF="jmanual-node106.html">
-<LINK REL="previous" HREF="jmanual-node74.html">
-<LINK REL="up" HREF="jmanual-node73.html">
+<LINK REL="previous" HREF="jmanual-node90.html">
+<LINK REL="up" HREF="jmanual-node89.html">
 <LINK REL="next" HREF="jmanual-node92.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1774"
+<A NAME="tex2html1775"
   HREF="jmanual-node92.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1768"
-  HREF="jmanual-node73.html">
+<A NAME="tex2html1769"
+  HREF="jmanual-node89.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1762"
+<A NAME="tex2html1765"
   HREF="jmanual-node90.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1770"
+<A NAME="tex2html1771"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1772"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1773"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1775"
-  HREF="jmanual-node92.html">マルチスレッドEuslispの設計</A>
-<B> Up:</B> <A NAME="tex2html1769"
-  HREF="jmanual-node73.html">EusLisp 拡張</A>
-<B> Previous:</B> <A NAME="tex2html1763"
-  HREF="jmanual-node90.html">ホスト側の起動</A>
- &nbsp; <B>  <A NAME="tex2html1771"
+<B> Next:</B> <A NAME="tex2html1776"
+  HREF="jmanual-node92.html">マルチスレッド</A>
+<B> Up:</B> <A NAME="tex2html1770"
+  HREF="jmanual-node89.html">VxWorks</A>
+<B> Previous:</B> <A NAME="tex2html1766"
+  HREF="jmanual-node90.html">VxWorks側の起動</A>
+ &nbsp; <B>  <A NAME="tex2html1772"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1773"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1774"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION04020000000000000000"></A><A NAME="mthread"></A>
-<BR>
-マルチスレッド
-</H1>
+<H3><A NAME="SECTION04016200000000000000">
+ホスト側の起動</A>
+</H3>
+任意のマシンの上でeusを起動し、"vxworks/vxweus"をロードする。
+<B>connect-vxw</B>関数を用いて<B>vxwserv</B>に接続する。
+接続後、ソケットストリームが<B>*vxw-stream*</B>にバインドされる。
+以下に、コネクトの例を示す。この例では、VxWorks上のsin, vadd関数を
+euslispの関数VSIN,VADとして定義している。
 
 <P>
-マルチスレッドは、Solarisオペレーティングシステム上の
-並列プログラミングや非同期プログラミングの機能である。
-非同期プログラミングは、プログラムの状態と無関係に発生する
-様々なセンサを経由した外部イベントに応答するためのプログラムに要求される。
-並列プログラミングは、画像処理や経路計画の干渉チェックのような
-プロセス向きの計算の効率を改善する場合に効果的である。
+<PRE>
+(load "vxworks/vxweus")
+(setq s (connect-vxw :host "asvx0" :port 2200 :buffer-size 1024))
+(defvxw VSIN "_sin" (theta) :float)
+(defvxw VAD "_vadd" (v1 v2) (float-vector 3))
+</PRE>
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+VxWorks上に作成される関数が、vxwsを通じて呼び出されるためには、
+次の条件を満たさなければならない。
 
-<UL CLASS="ChildLinks">
-<LI><A NAME="tex2html1776"
-  HREF="jmanual-node92.html">マルチスレッドEuslispの設計</A>
-<UL>
-<LI><A NAME="tex2html1777"
-  HREF="jmanual-node93.html">Solaris 2 オペレーティングシステムのマルチスレッド</A>
-<LI><A NAME="tex2html1778"
-  HREF="jmanual-node94.html">Context Separation</A>
-<LI><A NAME="tex2html1779"
-  HREF="jmanual-node95.html">メモリ管理</A>
-</UL>
+<P>
+
+<OL>
+<LI>引数は、32個以内であること、引数に受け取るベクタの容量の合計が
+connect-vxwの:buffer-sizeで指定した値を越えないこと
+</LI>
+<LI>structを引数にしないこと、必ずstructへのポインタを引数にすること
+</LI>
+<LI>結果は、int, float, doubleまたは、それらの配列のアドレスであること
+</LI>
+<LI>配列のアドレスを結果とする場合、その配列の実体は、
+関数の外部に取られていること
+</LI>
+</OL>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="24811"></A>
 <BR>
-<LI><A NAME="tex2html1780"
-  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
-<UL>
-<LI><A NAME="tex2html1781"
-  HREF="jmanual-node97.html">スレッド作成とスレッドプール</A>
-<LI><A NAME="tex2html1782"
-  HREF="jmanual-node98.html">スレッドの並列実行</A>
-<LI><A NAME="tex2html1783"
-  HREF="jmanual-node99.html">同期の手法</A>
-<LI><A NAME="tex2html1784"
-  HREF="jmanual-node100.html">同期障壁</A>
-<LI><A NAME="tex2html1785"
-  HREF="jmanual-node101.html">同期メモリポート</A>
-<LI><A NAME="tex2html1786"
-  HREF="jmanual-node102.html">タイマー</A>
-</UL>
+<IMG
+ WIDTH="554" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img45.png"
+ ALT="\begin{emtabbing}
+{\bf connect-vxw}
+\it\&amp;key \= (:host ''asvx0'') \\lq  [関数] \...
+...ze 16384)\\
+\&gt; (:priority 1280)\\
+\&gt; (:option \char93 x1c)
+\rm
+\end{emtabbing}">
 <BR>
-<LI><A NAME="tex2html1787"
-  HREF="jmanual-node103.html">並列度の計測</A>
-<LI><A NAME="tex2html1788"
-  HREF="jmanual-node104.html">スレッド生成</A>
-<LI><A NAME="tex2html1789"
-  HREF="jmanual-node105.html">同期</A>
-</UL>
-<!--End of Table of Child-Links-->
+
+<DL COMPACT>
+<DT> 
+<DD><EM>:host</EM>に対してvxwsプロトコルによる通信のためのソケットストリームを作成し、そのストリームを返す。
+<EM>:host</EM>には、ネットワークにおけるVxWorksのアクセス番号あるいはアクセス名を指定する。
+<EM>:port</EM>には、VxWorks上の<B>vxwserv</B>がバインドしたポートを捜すための最初のポート番号を指定する。
+このポート番号から、増加方向に接続を試行する。
+<EM>:option</EM>のコードについては、VxWorksの、spawn関数を参照のこと。
+コネクションは、同時に複数張ってよい。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="24827"></A>
+<B>vxw</B> <EM>vxw-stream entry result-type args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>vxw</B>は、<EM>vxw-stream</EM>に接続されているVxWorksの関数<EM>entry</EM>を呼び出し、
+その関数に引き数<EM>args</EM>を与えて<EM>result-type</EM>で指定された結果を得る。
+<EM>vxw-stream</EM>には、<B>connect-vxw</B>で作成したソケットストリームを与える。
+<EM>entry</EM>には、VxWorksの関数名をストリングで指定するか、あるいは関数の
+アドレスを整数で指定する。
+関数のアドレスを知るには、VxWorksのfindsymbolを呼び出す。
+知りたいシンボルは、通常、"_"で始まることに注意。
+<EM>entry</EM>がストリングの場合、VxWorks上でシンボルテーブルの逐次探索が行われる。
+<EM>result-type</EM>には、結果のデータ型(<TT>:integer</TT>または<TT>:float</TT>)、
+あるいはデータを受け取るベクタ型を指定する。
+ベクタは、<TT>float-vector, integer-vector, string</TT>のインスタンスである。
+<TT>general vector</TT>(lispの任意のオブジェクトを要素とするベクタ)は指定できない。
+結果型は、必ず、実際のVxWorks関数の結果型と一致しなければならない。
+<EM>args</EM>には、<EM>entry</EM>に与える引き数を指定する。
+引数に許されるEusLispデータは、<TT>integer, float, string, integer-vector,
+float-vector, integer-matrix, float-matrix</TT>である。
+ポインタを含んだ一般のオブジェクト、一般のベクトルは送れない。
+また、送られたベクトルデータは、一旦<B>vxwserv</B>が獲得したバッファの中に蓄積される。
+例えば、VxWorksに定義された関数"sin"を呼び出すためには、次のように実行すればよい。
+<TT>(vxw *vxw-stream* "sin" :float 1.0)</TT>
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="24856"></A>
+<B>defvxw</B> <EM>eus-func-name entry args &amp;optional (result-type :integer) </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>defvxw</B>は、findsymbolを用いて<B>vxw</B>を呼び出して、VxWorksの関数の高速な呼び出しを
+実現するためのマクロである。
+VxWorksの関数<EM>entry</EM>を呼び出すためのEuslispの関数<EM>eus-func-name</EM>を定義する。
+このマクロを実行後は、<EM>eus-func-name</EM>を呼び出すことにより、VxWorksの関数を呼び出すことができる。
+このとき、呼び出しに使用されるソケットストリームは<B>*vxw-stream*</B>に固定されている。
+ただし、VxWorks側で、関数をコンパイルし直して再ロードした場合、
+新しい関数定義が呼ばれるようにするためには、eus側で、<B>defvxw</B>をもう一度
+実行し直して、最新のエントリアドレスが指定されるようにする必要がある。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

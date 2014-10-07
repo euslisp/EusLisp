@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>ソケット</TITLE>
+<TITLE>メッセージキューとFIFO</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="ソケット">
+<META NAME="description" CONTENT="メッセージキューとFIFO">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,171 +19,78 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
+<LINK REL="next" HREF="jmanual-node60.html">
 <LINK REL="previous" HREF="jmanual-node58.html">
-<LINK REL="up" HREF="jmanual-node56.html">
+<LINK REL="up" HREF="jmanual-node57.html">
 <LINK REL="next" HREF="jmanual-node60.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1221"
+<A NAME="tex2html1224"
   HREF="jmanual-node60.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1215"
-  HREF="jmanual-node56.html">
+<A NAME="tex2html1218"
+  HREF="jmanual-node57.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1211"
+<A NAME="tex2html1212"
   HREF="jmanual-node58.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1217"
+<A NAME="tex2html1220"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1219"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1222"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1222"
-  HREF="jmanual-node60.html">非同期入出力</A>
-<B> Up:</B> <A NAME="tex2html1216"
-  HREF="jmanual-node56.html">プロセス間通信とネットワーク</A>
-<B> Previous:</B> <A NAME="tex2html1212"
-  HREF="jmanual-node58.html">メッセージキューとFIFO</A>
- &nbsp; <B>  <A NAME="tex2html1218"
+<B> Next:</B> <A NAME="tex2html1225"
+  HREF="jmanual-node60.html">ソケット</A>
+<B> Up:</B> <A NAME="tex2html1219"
+  HREF="jmanual-node57.html">プロセス間通信とネットワーク</A>
+<B> Previous:</B> <A NAME="tex2html1213"
+  HREF="jmanual-node58.html">共有メモリ</A>
+ &nbsp; <B>  <A NAME="tex2html1221"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1220"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1223"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION03084300000000000000">
-ソケット</A>
+<H3><A NAME="SECTION03084200000000000000">
+メッセージキューとFIFO</A>
 </H3>
-ソケットは、他の通信手段に比べて多才な機能を持っている。
-なぜなら、UNIX領域の狭いホスト内とインターネット領域の
-広いネットーワーク内の両方で機能することができるためである。
-通信指向のソケット(SOCK_STREAM)と接続されない
-ソケット(SOCK_DGRAM)の2つがサポートされている。
-両方ともまず<B>make-socket-address</B>関数で
-ソケットアドレスのオブジェクトを作らなければならない。
-<B>make-socket-address</B>は、<TT>socket-address</TT>のインスタンスを返す。
-UNIX領域では、ソケットアドレスにUNIXファイルシステム内のパス名を
-入れる。
-インターネット内では、ソケットアドレスに
-ホスト名とポート番号と必要ならプロトコル番号を結合
-したものを入れる。
-もし、ポート番号が<TT>/etc/services</TT>に定義されていれば、
-service名によって指定されたsymbolを通して参照される。
-<B>unix:getservbyname</B>関数がsymbol化されたservice名からポート番号を
-引き出すために使用される。
-1024より小さいポート番号は、rootユーザーのために予約されている。
-特権のないユーザーは、1024より大きなポート番号を個人的なソケットとして
-使用することを推奨する。
+メッセージキューは、<B>make-msgq-input-stream</B>か<B>make-msgq-output-stream</B>で
+作られる。
+それぞれファイルストリームのインスタンスを返す。
+そのストリームは、ファイルに接続された他のストリームと同じように、
+読みだしや書き込み処理が許可されている。
+メッセージキューのストリームの<TT>fname</TT>は、作られるときに、keyから設定する。
 
 <P>
-接続されたストリームは、両方向通信チャンネルとして供給されるが、
-接続確定処理は、入力・出力で別々である。
-片方がサーバーとして参照され、もう一方がクライアントとして参照される。
-サーバーとなった端(service access point)は、最初に確定される。
-これは、<B>make-socket-port</B>関数により作成される。
-この関数は、<TT>socket-port</TT>のインスタンスを返す。
-ソケットポートのオブジェクトは、<B>make-server-socket-stream</B>によって
-１つまたは複数のクライアントからの接続を受けるために使用される。
-<B>make-server-socket-stream</B>への呼び出しは、クライアントからの
-接続要求が実際に起こるまで実行待ち状態となる。
-クライアントは、ソケットアドレスを指定することによって
-<B>make-client-socket-stream</B>でソケットストリーム
-を複数作ることができる。
+FIFOに対するストリームを作るために、
+最初に<B>unix:mknod</B>関数で、
+2番目の引数を<EM>mode</EM>=<TT>#o10000</TT>に設定した上で
+FIFOノードを作り、ノーマルファイルとしてオープンする。
+メッセージキューとFIFOは、機械の上でローカルに作られ、
+機械内での通信チャンネルとしてのみ与えられる。
 
 <P>
-<PRE>
-;;; an example of IPC through a socket stream:
-;;; server side
-(setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2000))
-(setq sport  (make-socket-port saddr))
-(setq sstream (make-server-socket-stream sport))
-;;;
-;;; client side
-(setq caddr (make-socket-address :domain af_inet :host "etlic2" :port 2000))
-(setq cstream (make-client-socket-stream caddr))
-</PRE>
-
-<P>
-データベースや移動ロボットの環境シミュレータのようなアプリケーション
-では、1つのサーバーと複数のクライアント間の
-<EM>multiple connection service</EM>（多重接続サービス）が要求される。
-この型のサーバーは、<B>open-server</B>関数によりプログラム
-することができる。
-カレントホスト名と与えられたポート番号から
-<B>open-server</B>は、接続要求にしたがってソケットポート(service access point)
-を作る。
-このポートは非同期なので、
-<B>open-server</B>は遮断されず、直ちに返信する。
-その後、接続要求はそれぞれEuslispのメインループを中断し、
-ソケットストリーム が非同期に作成される。
-このソケットストリームも非同期モードで働く。
-<B>open-server</B>の2番目の引き数にある非同期入力処理は、
-新しいデータがこのストリームに現れたときはいつでも呼び出される。
-30以上の接続が可能であるため、同時に多くのクライアントがサーバーの
-データにアクセスすることができる。
-
-<P>
-<PRE>
-;; server side
-(defun server-func (s) 
-   (case (read s) ...    ;do appropriate jobs according to inputs
-(open-server 3000 #'server-func)
-... do other jobs in parallel
-;; client-1 through client-N
-(setq s (connect-server "etlmmd" 3000))
-(format s "..." ...) (finish-output s)	;issue a command to the server
-(read s)                                ;receive response
-</PRE>
-
-<P>
-確実な通信チャンネルとして供給される<I>接続指向</I> ストリームと対照的に
-<I>非接続</I> ソケットは、不確実な通信チャンネルである。
-メッセージがなくなったり、重複したり、故障したりする可能性がある。
-しかしながら、<I>非接続</I> ソケットは、それぞれの接続にファイルディスクリプタを
-割り当てる必要が無いし、
-また、データやバッファのオーバーフローの読み込みをしないレシーバーでさえ
-送信処理を中断することができないという利点がある。
-
-<P>
-非接続ソケットを作るためには、以下の命令を使用する。
-メッセージは<B>unix:sendto</B>と<B>unix:recvfrom</B>によって変換される。
-<PRE>
-;;; receiver side
-(setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2001))
-(setq sock   (make-dgram-socket saddr))
-(unix:recvfrom sock)
-;;;
-;;; client side
-(setq caddr (make-socket-address :domain af_inet :host "etlic2" :port 2001))
-(setq sock (unix:socket (send caddr :domain) 2 0))
-(unix:sendto sock caddr "this is a message")
-;;;
-;;; how to use echo service which is registered in /etc/services.
-(setq caddr (make-socket-address :domain af_inet :host "etlic2"
-                                 :port (car (unix:getservbyname "echo"))))
-(setq echosock (unix:socket (send caddr :domain) 2 0))
-(unix:sendto echosock caddr "this is a message")
-(unix:recvfrom echosock)  --&gt; "this is a messge"
-</PRE>
+メッセージキューとFIFOは、自分のプロセスが終了した後でさえも
+システムから削除されない。
+削除するためには、<B>unix:msgctl</B>か<B>ipcrm</B>コマンドが必要である。
 
 <P>
 
  <BR>
-<BR> <P>
-
-<A NAME="15520"></A>
-<B>make-socket-address</B> <EM>&amp;key :domain :pathname :host :port :proto :service </EM>[関数]
+<BR> <A NAME="15536"></A>
+<B>make-msgq-input-stream</B> <EM>key &amp;optional (buffer-size 128) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-ソケットアドレスのオブジェクトを作る。
+<EM>key</EM>で示すメッセージキューに繋がる入力ファイルストリームを返す。
 </DD>
 </DL>
 <BR>
@@ -191,77 +98,13 @@ service名によって指定されたsymbolを通して参照される。
 
 <P>
 
-<A NAME="15530"></A>
-<B>make-socket-port</B> <EM>sockaddr </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> サーバー側のソケットポートを作る。
-この関数は、クライアントとの接続を確立するために使用される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="15540"></A>
-<B>make-server-socket-stream</B> <EM>sockport &amp;optional (size 100) </EM>[関数]
+<A NAME="15547"></A>
+<B>make-msgq-output-stream</B> <EM>key &amp;optional (buffer-size 128) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-クライアントからの接続要求を受けて、双方向ストリームを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="15550"></A>
-<B>make-client-socket-stream</B> <EM>sockaddr &amp;optional (size 100) </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-サーバーのポートと接続をし、双方向ストリームを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="15560"></A>
-<B>open-server</B> <EM>port remote-func </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-インターネット領域内でホスト名と<EM>port</EM>で指定されるソケットポートを
-準備し、非同期に接続要求を待つ。
-接続が要求されたとき、それを受け新しいソケットストリームがオープンされる。
-ソケットポートにメッセージが到着したとき、<EM>remote-func</EM>は、
-ソケットポートを引き数として呼び出される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="15572"></A>
-<B>connect-server</B> <EM>host port </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>make-socket-address</B>と<B>make-client-socket-stream</B>を連続的に呼び出しを
-行うための関数である。
-<EM>host</EM>と<EM>port</EM>で指定されるソケットストリームを返す。このソケットストリーム
-は、クライアントがサーバーと通信を行うためのものである。
-ポートは、インターネット領域内用に作られる。
+<EM>key</EM>で示すメッセージキューに繋がる出力ファイルストリームを返す。
 </DD>
 </DL>
 <BR>
@@ -272,7 +115,7 @@ service名によって指定されたsymbolを通して参照される。
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

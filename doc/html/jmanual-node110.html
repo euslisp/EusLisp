@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>座標系</TITLE>
+<TITLE>LU分解</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="座標系">
+<META NAME="description" CONTENT="LU分解">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,87 +21,73 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node111.html">
 <LINK REL="previous" HREF="jmanual-node109.html">
-<LINK REL="up" HREF="jmanual-node106.html">
+<LINK REL="up" HREF="jmanual-node107.html">
 <LINK REL="next" HREF="jmanual-node111.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2062"
+<A NAME="tex2html2063"
   HREF="jmanual-node111.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2056"
-  HREF="jmanual-node106.html">
+<A NAME="tex2html2057"
+  HREF="jmanual-node107.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2050"
+<A NAME="tex2html2051"
   HREF="jmanual-node109.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2058"
+<A NAME="tex2html2059"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2060"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2061"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2063"
-  HREF="jmanual-node111.html">連結座標系</A>
-<B> Up:</B> <A NAME="tex2html2057"
-  HREF="jmanual-node106.html">幾何学関数</A>
-<B> Previous:</B> <A NAME="tex2html2051"
-  HREF="jmanual-node109.html">LU分解</A>
- &nbsp; <B>  <A NAME="tex2html2059"
+<B> Next:</B> <A NAME="tex2html2064"
+  HREF="jmanual-node111.html">座標系</A>
+<B> Up:</B> <A NAME="tex2html2058"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2052"
+  HREF="jmanual-node109.html">行列と変換</A>
+ &nbsp; <B>  <A NAME="tex2html2060"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2061"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2062"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04034000000000000000"></A><A NAME="Coordinates"></A>
-<BR>
-座標系
+<H2><A NAME="SECTION04033000000000000000">
+LU分解</A>
 </H2>
-
-<P>
-座標系と座標変換は、<B>coordinates</B>クラスで表現される。
-4*4の同次行列表現の代わりに、
-Euslisp内で座標系は、高速性と一般性のために
-3*3の回転行列と3次元位置ベクトルの組で表現される。
+<B>lu-decompose</B>と<B>lu-solve</B>は、線形の連立方程式を
+解くために用意されている。
+最初に、<B>lu-decompose</B>は行列を下三角行列を上三角行列に分解する。
+もし、行列が特異値なら、<B>lu-decompose</B>はNILを返す。
+そうでなければ、<B>lu-solve</B>に与えるべき順列ベクトルを返す。
+<B>lu-solve</B>は、与えられた定数ベクトルの解をLU行列で計算する。
+この手法は、同じ係数行列と異なった定数ベクトルのたくさんの組に対して
+解を求めたいときに効果的である。
+<B>simultaneous-equation</B>は、1つの解だけを求めたいときにもっとも
+手軽な関数である。
+<B>lu-determinant</B>は、LU分解された行列の行列式を計算する。
+<B>inverse-matrix</B>関数は、<B>lu-decompose</B>を1回と<B>lu-solve</B>をn回
+使って逆行列を求める。
+3*3行列での計算時間は約4msである。
 
 <P>
 
  <BR>
 <BR> <P>
-	<BR> 
-<A NAME="27216"></A>
-<BIG CLASS="XLARGE"><B>coordinates </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>propertied-object</B> 
-<BR>  :slots 		 (pos :type float-vector 
-<BR>
-rot :type array) 
-</TT></PRE>
-<BR>
-<BR>
 
-<DL COMPACT>
-<DT> 
-<DD>位置ベクトルと3x3の回転行列の組みで座標系を定義する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27233"></A>
-<B>coordinates-p</B> <EM>obj </EM>[関数]
+<A NAME="27187"></A>
+<B>lu-decompose</B> <EM>matrix &amp;optional result </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>obj</EM>が<B>coordinates</B>クラスかまたはそのサブクラスのインスタンス
-のとき、Tを返す。
+<EM>matrix</EM>にLU分解を実行する。
 </DD>
 </DL>
 <BR>
@@ -109,13 +95,14 @@ rot :type array)
 
 <P>
 
-<A NAME="27245"></A>
-<B>:rot</B> [メソッド]
+<A NAME="27198"></A>
+<B>lu-solve</B> <EM>lu-mat perm-vector bvector [result] </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この座標系の3x3回転行列を返す。
+LU分解された1次連立方程式を解く。
+<EM>perm-vector</EM>は、<B>lu-decompose</B>で返された結果でなければならない。
 </DD>
 </DL>
 <BR>
@@ -123,13 +110,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27255"></A>
-<B>:pos</B> [メソッド]
+<A NAME="27210"></A>
+<B>lu-determinant</B> <EM>lu-mat perm-vector </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この座標系の3次元位置ベクトルを返す。
+LU分解された行列の行列式を求める。
 </DD>
 </DL>
 <BR>
@@ -137,18 +124,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27265"></A>
-<B>:newcoords</B> <EM>newrot &amp;optional newpos </EM>[メソッド]
+<A NAME="27220"></A>
+<B>simultaneous-equation</B> <EM>mat vec </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>newrot</EM>と<EM>newpos</EM>でこの座標系を更新する。
-<EM>newpos</EM>が省略された時は<EM>newrot</EM>にはcoordinatesのインスタンスを
-与える。
-この座標系の状態が変化するときはいつでも、このメソッドを用いて新しい
-回転行列と位置ベクトルに更新するべきである。
-このメッセージはイベントを伝えて他の<B>:update</B>メソッドを呼び出す。
+係数が<EM>mat</EM>で、定数が<EM>vec</EM>で記述される1次連立方程式を解く。
 </DD>
 </DL>
 <BR>
@@ -156,25 +138,13 @@ rot :type array)
 
 <P>
 
-<A NAME="27280"></A>
-<B>:replace-coords</B> <EM>newrot &amp;optional newpos </EM>[メソッド]
+<A NAME="27232"></A>
+<B>inverse-matrix</B> <EM>mat </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>:newcoords</EM>メソッドを呼び出さずに<TT>rot</TT>と<TT>pos</TT>スロットを変更する。
-<EM>newpos</EM>が省略された時は<EM>newrot</EM>にはcoordinatesのインスタンスを与える。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="27295"></A>
-<B>:coords</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD>  
+正方行列<EM>mat</EM>の逆行列を求める。
 </DD>
 </DL>
 <BR>
@@ -182,432 +152,26 @@ rot :type array)
 
 <P>
 
-<A NAME="27306"></A>
-<B>:copy-coords</B> <EM>&amp;optional dest </EM>[メソッド]
+<A NAME="27243"></A>
+<B>pseudo-inverse</B> <EM>mat </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-もし<EM>dest</EM>が与えられなかったとき、<B>:copy-coords</B>は同じ<TT>rot</TT>と<TT>pos</TT>
-スロットを持つ座標系オブジェクトを作る。
-もし、<EM>dest</EM>が与えられたとき、<EM>dest</EM>座標系にこの座標系のrotとposを
-コピーする。
+特異値分解を用いて擬似逆行列を求める。
 </DD>
 </DL>
 <BR>
 <BR>
 
 <P>
-
-<A NAME="27322"></A>
-<B>:reset-coords</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この座標系の回転行列を単位行列にし、位置ベクトルをすべてゼロにする。
-</DD>
-</DL>
-<BR>
-<BR>
+             <P>
 
 <P>
-
-<A NAME="27332"></A>
-<B>:worldpos</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="27343"></A>
-<B>:worldrot</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="27354"></A>
-<B>:worldcoords</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-このオブジェクトのワールド座標系における位置ベクトル・回転行列・座標系
-を計算する。
-その座標系は、いつもワールド座標系で表現されていると仮定され、
-これらのメソッドは簡単に<TT>pos</TT>と<TT>rot</TT>と<TT>self</TT>を返すことができる。
-これらのメソッドは<B>cascaded-coords</B>クラスと互換性がとられている。
-<B>cascaded-coords</B>ではワールド座標系での表現と仮定していない。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27369"></A>
-<B>:copy-worldcoords</B> <EM>&amp;optional dest </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-最初に、ワールド座標系が計算され、<EM>dest</EM>にコピーされる。
-もし、<EM>dest</EM>が指定されてないとき、新たに<B>coordinates</B>
-オブジェクトを作る。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27382"></A>
-<B>:rotate-vector</B> <EM>vec </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この座標系の回転行列によって<EM>vec</EM>を回転させる。すなわち、
-この座標系で表現される方向ベクトルをワールド座標系における表現
-に変換する。
-この座標系の位置は、回転に影響を与えない。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27393"></A>
-<B>:transform-vector</B> <EM>vec </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この座標系で表現される<EM>vec</EM>をワールド座標系の表現に変換する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27404"></A>
-<B>:inverse-transform-vector</B> <EM>vec </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-ワールド座標系における<EM>vec</EM>をローカル座標系の表現に逆変換する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27415"></A>
-<B>:transform</B> <EM>trans &amp;optional (wrt :local) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>wrt</EM>座標系で表現される<EM>trans</EM>によってこの座標系を変換する。
-<EM>trans</EM>は座標系の型でなければならないし、<EM>wrt</EM>は
-<TT>:local, :parent, :world</TT>のキーワードあるいは<B>coordinates</B>の
-インスタンスでなければならない。
-もし<EM>wrt</EM>が<TT>:local</TT>のとき、<EM>trans</EM>をこの座標系の右
-から適用する。もし<EM>wrt</EM>が<TT>:world, :parent</TT>のとき、
-<EM>trans</EM>を左から掛ける。
-もし<EM>wrt</EM>が<B>coordinates</B>の型であるとき、<EM>wrt</EM>座標系で表現される
-<EM>trans</EM>は最初にワールド座標系の表現に変換され、左から掛ける。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27441"></A>
-<B>:move-to</B> <EM>trans &amp;optional (wrt :local) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>wrt</EM>で表現される<EM>trans</EM>でこの座標系の<TT>rot</TT>と<TT>pos</TT>
-を置き換える。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27455"></A>
-<B>:translate</B> <EM>p &amp;optional (wrt :local) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-このオブジェクトの位置を<EM>wrt</EM>座標系で相対的に変更する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27466"></A>
-<B>:locate</B> <EM>p &amp;optional (wrt :local) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この座標系の位置を<EM>wrt</EM>座標系で絶対的に変更する。
-もし、<EM>wrt</EM>が<TT>:local</TT>のとき、<B>:translate</B>と同一な
-効果を生む。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27480"></A>
-<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>axis</EM>軸回りに<EM>theta</EM>ラジアンだけ相対的にこの座標系を回転させる。
-<EM>axis</EM>は、軸キーワード(<TT>:x, :y, :z</TT>)あるいは任意の<TT>float-vector</TT>
-である。
-<EM>axis</EM>は<EM>wrt</EM>座標系で表現されていると考える。
-よって、もし<EM>wrt</EM>が<TT>:local</TT>で<EM>axis</EM>が<TT>:z</TT>であるとき、
-座標系はローカル座標系のz軸回りに回転される。
-もし<EM>wrt</EM>が<TT>:world, :parent</TT>であるとき、ワールド座標系のz軸回りに
-回転される。
-言い換えると、もし<EM>wrt</EM>が<TT>:local</TT>のとき、
-回転行列はこの座標系の右から掛けられる。
-そして、もし<EM>wrt</EM>が<TT>:world</TT>あるいは<TT>:parent</TT>のとき、
-回転行列は左から掛けられる。
-<EM>wrt</EM>が<TT>:world</TT>あるいは<TT>:parent</TT>でさえ、
-この座標系の<TT>pos</TT>ベクトルは変化しない。
-本当にワールド座標系の軸回りに回転するためには、
-回転を表現する<B>coordinates</B>クラスのインスタンスを
-<B>:transform</B>メソッドに与えなければならない。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27514"></A>
-<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<TT>rot</TT>を強制的に変更する。<B>:rotate</B>メソッドの絶対値版である。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27526"></A>
-<B>:inverse-transformation</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この座標系の逆変換を持つ座標系を新しく作る。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27536"></A>
-<B>:transformation</B> <EM>coords (wrt :local) </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この座標系と引き数で与えられる<EM>coords</EM>との間の変換を作る。
-もし、<EM>wrt</EM>が<TT>:local</TT>であるとき、ローカル座標系で表現される。
-すなわち、もしこの<B>:transformation</B>の結果を<B>:transform</B>の引き数として
-<EM>wrt</EM>=<TT>:local</TT>と一緒に
-与えたとき、この座標系は<EM>coords</EM>と同一な座標系に変換される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27554"></A>
-<B>:Euler</B> <EM>az1 ay az2 </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-オイラー角(<EM>az1, ay, az2</EM>)で表現される回転行列を<TT>rot</TT>に
-設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27566"></A>
-<B>:roll-pitch-yaw</B> <EM>roll pitch yaw </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-ロール・ピッチ・ヨー角で表現される回転行列を<TT>rot</TT>に設定する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27577"></A>
-<B>:4x4</B> <EM>&amp;optional mat44 </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-もし、<EM>mat44</EM>として4x4行列が与えられるとき、3x3回転行列と3次元位置ベクトル
-の座標表現に変換される。
-もし、<EM>mat44</EM>が与えられないとき、この座標系の表現を
-4x4の同次行列表現に変換して返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27589"></A>
-<BR>
-<IMG
- WIDTH="553" HEIGHT="188" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img58.png"
- ALT="\begin{emtabbing}
-{\bf :init}
-\it\&amp;key \= :pos \hspace{8mm} \= \char93 f(0 0 0)...
-...ist of (ind . value) pair \\
-\&gt; :name \&gt; name property \\
-\rm
-\end{emtabbing}">
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>この<B>coordinates</B>オブジェクトを初期化し、<TT>rot</TT>と<TT>pos</TT>を設定する。
-それぞれのキーワードの意味は、以下に示す通りである。
-<DL>
-<DT><STRONG>:dimension</STRONG></DT>
-<DD>2あるいは3 (デフォルトは 3)
-</DD>
-<DT><STRONG>:pos</STRONG></DT>
-<DD>位置ベクトルを指定する (デフォルトは #f(0 0 0))
-</DD>
-<DT><STRONG>:rot</STRONG></DT>
-<DD>回転行列を指定する (デフォルトは単位行列)
-</DD>
-<DT><STRONG>:Euler</STRONG></DT>
-<DD>オイラー角として3つの要素の列を与える
-</DD>
-<DT><STRONG>:rpy</STRONG></DT>
-<DD>ロール・ピッチ・ヨー角として3つの要素の列を与える
-</DD>
-<DT><STRONG>:axis</STRONG></DT>
-<DD>回転軸 (<TT>:x,:y,:z</TT> あるいは任意の<TT>float-vector</TT>)
-</DD>
-<DT><STRONG>:angle</STRONG></DT>
-<DD>回転角 (<EM>:axis</EM>と一緒に使用)
-</DD>
-<DT><STRONG>:wrt</STRONG></DT>
-<DD>回転軸を示す座標系 (デフォルトは <TT>:local</TT>)
-</DD>
-<DT><STRONG>:4X4</STRONG></DT>
-<DD>4X4 行列(<TT>pos</TT>と<TT>rot</TT>を同時に指定)
-</DD>
-<DT><STRONG>:coords</STRONG></DT>
-<DD><EM>coords</EM>から<TT>rot</TT>と<TT>pos</TT>をコピーする
-</DD>
-<DT><STRONG>:name</STRONG></DT>
-<DD><TT>:name</TT>値を設定する。
-</DD>
-</DL>
-<EM>:angle</EM>は<EM>:axis</EM>と組みで唯一使用することができる。
-その軸は<EM>:wrt</EM>座標系で決定される。
-<EM>:wrt</EM>と関係なしに<EM>:Euler</EM>はローカル座標系で定義されるオイラー角
-（<EM>az1, ay</EM>と<EM>az2</EM>）をいつも指定する。
-また、<EM>:rpy</EM>はワールド座標系の<EM>z</EM>, <EM>y</EM>と<EM>x</EM>軸回りの角度
-を指定する。
-<EM>:rot, :Euler, :rpy, :axis, :4X4</EM>の中から２つ以上を連続で指定することは
-できない。しかしながら、指定してもエラーは返さない。
-<EM>axis</EM>と<EM>:angle</EM>パラメータには列を指定することができる。
-その意味は、与えられた軸回りの回転を連続的に処理する。
-属性とその値の組みのリストを<EM>:properties</EM>の引き数として
-与えることができる。これらの組みは、この座標系の<TT>plist</TT>にコピーされる。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html2062"
-  HREF="jmanual-node111.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2056"
-  HREF="jmanual-node106.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2050"
-  HREF="jmanual-node109.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2058"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2060"
-  HREF="jmanual-node156.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html2063"
-  HREF="jmanual-node111.html">連結座標系</A>
-<B> Up:</B> <A NAME="tex2html2057"
-  HREF="jmanual-node106.html">幾何学関数</A>
-<B> Previous:</B> <A NAME="tex2html2051"
-  HREF="jmanual-node109.html">LU分解</A>
- &nbsp; <B>  <A NAME="tex2html2059"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2061"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

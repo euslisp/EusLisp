@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>行列と変換</TITLE>
+<TITLE>実数ベクトル(float-vector)</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="行列と変換">
+<META NAME="description" CONTENT="実数ベクトル(float-vector)">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,96 +21,68 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node109.html">
 <LINK REL="previous" HREF="jmanual-node107.html">
-<LINK REL="up" HREF="jmanual-node106.html">
+<LINK REL="up" HREF="jmanual-node107.html">
 <LINK REL="next" HREF="jmanual-node109.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2034"
+<A NAME="tex2html2035"
   HREF="jmanual-node109.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2028"
-  HREF="jmanual-node106.html">
+<A NAME="tex2html2029"
+  HREF="jmanual-node107.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2022"
+<A NAME="tex2html2023"
   HREF="jmanual-node107.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2030"
+<A NAME="tex2html2031"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2032"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2033"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2035"
-  HREF="jmanual-node109.html">LU分解</A>
-<B> Up:</B> <A NAME="tex2html2029"
-  HREF="jmanual-node106.html">幾何学関数</A>
-<B> Previous:</B> <A NAME="tex2html2023"
-  HREF="jmanual-node107.html">実数ベクトル(float-vector)</A>
- &nbsp; <B>  <A NAME="tex2html2031"
+<B> Next:</B> <A NAME="tex2html2036"
+  HREF="jmanual-node109.html">行列と変換</A>
+<B> Up:</B> <A NAME="tex2html2030"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2024"
+  HREF="jmanual-node107.html">幾何学関数</A>
+ &nbsp; <B>  <A NAME="tex2html2032"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2033"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2034"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04032000000000000000">
-行列と変換</A>
+<H2><A NAME="SECTION04031000000000000000">
+実数ベクトル(float-vector)</A>
 </H2>
 
 <P>
-行列は、要素がすべて実数の2次元の配列である。
-ほとんどの関数において行列はどんなサイズでもよいが、
-<B>v*, v.*, euler-angle, rpy-angle</B>関数では3次元の行列のみ
-扱うことができる。
-<B>transform, m*</B>と<B>transpose</B>は、行列を正方行列に限定せず、
-一般のn*m行列に対して処理を行う。
-
-<P>
-<EM>result</EM>パラメータを受けた関数は、計算結果をそこに置く。
-そのため、ヒープは使用しない。
-すべての行列関数は、正規座標系における変換を考慮しており、
-同次座標系は考慮していない。
-
-<P>
-<B>rpy-angle</B>関数は、回転行列をワールド座標系におけるz,y,x軸回りの
-3つの回転角に分解する。
-<B>euler-angle</B>関数は<B>rpy-angle</B>と同様に分解するが、
-回転軸がローカル座標系のz,y,z軸となっている。
-角度が反対方向にも得られるため、これらの関数は2つの解を返す。
-
-<P>
-<PRE>
-; Mat is a 3X3 rotation matrix.
-(setq rots (rpy-angle mat))
-(setq r (unit-matrix 3))
-(rotate-matrix r (car rots) :x t r)
-(rotate-matrix r (cadr rots) :y t r)
-(rotate-matrix r (caddr rots) :z t r)
-;--&gt; resulted r is equivalent to mat
-</PRE>
-
-<P>
-3次元空間の位置と方向の組みを保つために、<A HREF="jmanual-node110.html#Coordinates">13.4</A>節に記載されている
-<B>coordinates</B>と<B>cascaded-coords</B>クラスを使用すること。
+float-vectorは、要素が実数である1次元ベクトルである。
+float-vectorは、どんなサイズでも良い。
+<EM>result</EM>が引き数リストで指定されているとき、
+その<EM>result</EM>はfloat-vectorであるべきである。
 
 <P>
 
  <BR>
-<BR> <A NAME="26900"></A>
-<B>matrix</B> <EM>&amp;rest elements </EM>[関数]
+<BR> <P>
+
+<A NAME="26669"></A>
+<B>float-vector</B> <EM>&amp;rest numbers </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>elements</EM>から行列を新しく作る。
-<TT>Row x Col = (elementsの数) x (最初のelementの長さ)</TT>
-<EM>elements</EM>は、どの型の列でもよい。
-それぞれの列は行列の行ベクトルとしてならべられる。
+<EM>numbers</EM>を要素とするfloat-vectorを新しく作る。
+<TT>(float-vector 1 2 3)</TT>と<TT>#F(1 2 3)</TT>の違いに注意すること。
+前者は、呼ばれたときはいつでもベクトルが生成されるが、
+後者は読み込まれたときのみ生成される。
 </DD>
 </DL>
 <BR>
@@ -118,19 +90,269 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="26913"></A>
-<B>make-matrix</B> <EM>rowsize columnsize &amp;optional init </EM>[関数]
+<A NAME="26682"></A>
+<B>float-vectorp</B> <EM>obj </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<!-- MATH
- $rowsize \times columnsize$
+<EM>obj</EM>がfloat-vectorであるならば、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26693"></A>
+<B>v+</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorを加える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26703"></A>
+<B>v-</B> <EM>fltvec1 &amp;optional fltvec2  result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorを差し引く。もし、<EM>fltvec2</EM>が省略されているならば、
+<EM>fltvec1</EM>の符号が反転される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26715"></A>
+<B>v.</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 2つのfloat-vectorの内積を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26725"></A>
+<B>v*</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの外積を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26735"></A>
+<B>v.*</B> <EM>fltvec1 fltvec2 fltvec3 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スカラー3重積を計算する。<TT>(v.* A B C)=(V. A (V* B C))=(V. (V* A B) C)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26746"></A>
+<B>v<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img9.png"
+ ALT="$&lt;$"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>fltvec1</EM>の要素が<EM>fltvec2</EM>の対応する要素よりすべて小さいとき、
+Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26758"></A>
+<B>v<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img18.png"
+ ALT="$&gt;$"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>fltvec1</EM>の要素が<EM>fltvec2</EM>の対応する要素よりすべて大きいとき、
+Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26770"></A>
+<B>vmin</B> <EM>&amp;rest fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>の中のそれぞれの次元における最小値を捜し、
+その値でfloat-vectorを新しく作る。<B>vmin</B>と<B>vmax</B>は、
+頂点の座標から最小のminimal-boxを見つけるために使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26783"></A>
+<B>vmax</B> <EM>&amp;rest fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>の中のそれぞれの次元における最大値を捜し、
+その値でfloat-vectorを新しく作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26794"></A>
+<B>minimal-box</B> <EM>v-list minvec maxvec [err] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+与えられた<EM>v-list</EM>に対して<TT>minimal bounding box</TT>を計算し、
+その結果を<EM>minvec</EM>と<EM>maxvec</EM>に蓄積する。
+もし、実数<EM>err</EM>が指定されているならば、<TT>minimal box</TT>はその比率によって
+成長する。すなわち、もし<EM>err</EM>が0.01のとき、<EM>minvec</EM>のそれぞれの
+要素は<EM>minvec</EM>と<EM>maxvec</EM>との距離の1%減少する。
+そして、<EM>maxvec</EM>のそれぞれの要素は1%増加する。
+<B>minimal-box</B>は、<EM>minvec</EM>と<EM>maxvec</EM>との距離を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26818"></A>
+<B>scale</B> <EM>number fltvec &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>のすべての要素をスカラー<EM>number</EM>倍する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26830"></A>
+<B>norm</B> <EM>fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>fltvec</EM>のノルムを求める。<TT><!-- MATH
+ $\Vert fltvec\Vert$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="160" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img56.png"
- ALT="$rowsize \times columnsize$"></SPAN>の大きさの行列を作る。
+ WIDTH="63" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img50.png"
+ ALT="$\Vert fltvec\Vert$"></SPAN></TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26842"></A>
+<B>norm2</B> <EM>fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>fltvec</EM>のノルムの２乗を求める。
+<TT><!-- MATH
+ $\Vert fltvec\Vert^2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="70" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img51.png"
+ ALT="$\Vert fltvec\Vert^2$"></SPAN>=(v. fltvec fltvec)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26854"></A>
+<B>normalize-vector</B> <EM>fltvec &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>のノルムが1.0となるように正規化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26865"></A>
+<B>distance</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの距離を返す。<!-- MATH
+ $|fltvec-fltvec2|$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="127" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img52.png"
+ ALT="$\vert fltvec-fltvec2\vert$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26875"></A>
+<B>distance2</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの距離の2乗を返す。<!-- MATH
+ $|fltvec-fltvec2|^2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="134" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img53.png"
+ ALT="$\vert fltvec-fltvec2\vert^2$"></SPAN>
 </DD>
 </DL>
 <BR>
@@ -138,14 +360,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="26923"></A>
-<B>matrixp</B> <EM>obj </EM>[関数]
+<A NAME="26885"></A>
+<B>homo2normal</B> <EM>homovec &amp;optional normalvec </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-もし、<EM>obj</EM>が行列のとき、すなわち、<EM>obj</EM>が2次元の配列で
-その要素が実数であるとき、Tを返す。
+同次ベクトル<EM>homovec</EM>を正規表現に変換する。
 </DD>
 </DL>
 <BR>
@@ -153,94 +374,41 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="26935"></A>
-<B>matrix-row</B> <EM>mat row-index </EM>[関数]
+<A NAME="26896"></A>
+<B>homogenize</B> <EM>normalvec &amp;optional homovec </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-行列<EM>mat</EM>から<EM>row-index</EM>で示される行ベクトルを抽出する。
-<B>matrix-row</B>は、<B>setf</B>を使用することにより
-行列の特定の行にベクトルを設定することにも使用される。
+正規ベクトル<EM>normalvec</EM>を同次表現に変換する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="26949"></A>
-<B>matrix-column</B> <EM>mat column-index </EM>[関数]
+<P>
+
+<A NAME="26907"></A>
+<B>midpoint</B> <EM>p p1 p2 &amp;optional result </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-行列<EM>mat</EM>から<EM>coloumn-index</EM>で示される列ベクトルを抽出する。
-<B>matrix-column</B>は、<B>setf</B>を使用することにより
-行列の特定の列にベクトルを設定することにも使用される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="26963"></A>
-<B>m*</B> <EM>matrix1 matrix2 &amp;optional result </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>matrix1</EM>と<EM>matrix2</EM>の積を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="26975"></A>
-<B>transpose</B> <EM>matrix &amp;optional result </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>matrix</EM>の転置行列を返す。すなわち、<EM>matrix</EM>の列と行を入れ替える。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="26987"></A>
-<B>unit-matrix</B> <EM>dim </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>dim</EM> <SPAN CLASS="MATH"><IMG
+<EM>p</EM>は実数で、<EM>p1,p2</EM>は同次元のfloat-vectorである。
+<EM>p1<SPAN CLASS="MATH"><IMG
  WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img57.png"
- ALT="$\times$"></SPAN> <EM>dim</EM>の単位行列を作る。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="26999"></A>
-<B>replace-matrix</B> <EM>dest src </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-行列<EM>dest</EM>のすべての要素を同一な行列<EM>src</EM>で置き換える。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27011"></A>
-<B>scale-matrix</B> <EM>scalar mat </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>mat</EM>のすべての要素に<EM>scaler</EM>を掛ける。
+ SRC="jmanual-img4.png"
+ ALT="$-$"></SPAN>p2</EM>を<SPAN CLASS="MATH"><IMG
+ WIDTH="74" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img54.png"
+ ALT="$p:(1-p)$"></SPAN>の比率で等分した点<!-- MATH
+ $(1-p)\cdot p1 + p\cdot p2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="135" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img55.png"
+ ALT="$(1-p)\cdot p1 + p\cdot p2$"></SPAN>
+を返す。
 </DD>
 </DL>
 <BR>
@@ -248,158 +416,18 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="27023"></A>
-<B>copy-matrix</B> <EM>matrix </EM>[関数]
+<A NAME="26920"></A>
+<B>rotate-vector</B> <EM>fltvec theta axis &amp;optional result </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>matrix</EM>のコピーを作る。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27034"></A>
-<B>transform</B> <EM>matrix fltvector &amp;optional result </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-行列<EM>matrix</EM>をベクトル<EM>fltvector</EM>の左から掛ける。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="27046"></A>
-<B>transform</B> <EM>fltvector matrix &amp;optional result </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-行列<EM>matrix</EM>をベクトル<EM>fltvector</EM>の右から掛ける。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27058"></A>
-<B>rotate-matrix</B> <EM>matrix theta axis &amp;optional world-p result </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>rotate-matrix</B>で行列<EM>matrix</EM>を回転させるとき、
-回転軸（<B>:x, :y, :z</B>または0,1,2）はワールド座標系あるいは
-ローカル座標系のどちらかを与えられる。
-もし、<EM>world-p</EM>にNILが指定されているとき、
-ローカル座標系の軸に沿った回転を意味し、回転行列を左から掛ける。
-もし、<EM>world-p</EM>がnon-NILのとき、
-ワールド座標系に対する回転行列を作り、回転行列を右から掛ける。
-もし、<EM>axis</EM>にNILが与えられたとき、行列<EM>matrix</EM>は2次元と仮定され、
-<EM>world-p</EM>の如何にかかわらず2次元空間の回転が与えられる。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27076"></A>
-<B>rotation-matrix</B> <EM>theta axis &amp;optional result </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>axis</EM>軸回りの2次元あるいは3次元の回転行列を作る。
-軸は:x,:y,:z,0,1,2,3次元ベクトルあるいはNILのどれかである。
-2次元回転行列を作るとき、<EM>axis</EM>はNILでなければならない。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27088"></A>
-<B>rotation-angle</B> <EM>rotation-matrix </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>rotation-matrix</EM>から等価な回転軸と角度を抽出し、
-実数とfloat-vectorのリストを返す。
-<EM>rotation-matrix</EM>が単位行列のとき、NILが返される。
-また、回転角が小さいとき、結果がエラーとなる。
-<EM>rotation-matrix</EM>が2次元のとき、1つの角度値が返される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27101"></A>
-<B>rpy-matrix</B> <EM>ang-z ang-y ang-x </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-ロール、ピッチ、ヨー角で定義される回転行列を作る。
-最初に、単位行列をx軸回りに<EM>ang-x</EM>ラジアン回転させる。
-次に、y軸回りに<EM>ang-y</EM>ラジアン、最後にｚ軸回りに<EM>ang-z</EM>
-ラジアン回転させる。
-すべての回転軸はワールド座標系で与えられる。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27114"></A>
-<B>rpy-angle</B> <EM>matrix </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>matrix</EM>の2組のロール、ピッチ、ヨー角を抽出する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27125"></A>
-<B>Euler-matrix</B> <EM>ang-z ang-y ang2-z </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-3つのオイラー角で定義される回転行列を作る。
-最初に単位行列をz軸回りに<EM>ang-z</EM>回転させ、次にy軸回りに<EM>ang-y</EM>
-回転させ、最後にz軸回りに<EM>ang2-z</EM>回転させる。
-すべての回転軸はローカル座標系で与えられる。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="27138"></A>
-<B>Euler-angle</B> <EM>matrix </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>matrix</EM>から2組のオイラー角を抽出する。
+2次元あるいは3次元の<EM>fltvec</EM>を<EM>axis</EM>回りに<EM>theta</EM>ラジアン
+回転する。
+<EM>axis</EM>は、<EM>:x, :y, :z, 0, 1, 2</EM>, または NILの内の一つである。
+<EM>axis</EM>がNILのとき、<EM>fltvec</EM>は2次元として扱われる。
+3次元空間の任意の軸の回りにベクトルを回転するためには、
+<B>rotation-matrix</B>で回転行列を作り、そのベクトルにかければよい。
 </DD>
 </DL>
 <BR>
@@ -410,36 +438,36 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2034"
+<A NAME="tex2html2035"
   HREF="jmanual-node109.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2028"
-  HREF="jmanual-node106.html">
+<A NAME="tex2html2029"
+  HREF="jmanual-node107.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2022"
+<A NAME="tex2html2023"
   HREF="jmanual-node107.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2030"
+<A NAME="tex2html2031"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2032"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2033"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2035"
-  HREF="jmanual-node109.html">LU分解</A>
-<B> Up:</B> <A NAME="tex2html2029"
-  HREF="jmanual-node106.html">幾何学関数</A>
-<B> Previous:</B> <A NAME="tex2html2023"
-  HREF="jmanual-node107.html">実数ベクトル(float-vector)</A>
- &nbsp; <B>  <A NAME="tex2html2031"
+<B> Next:</B> <A NAME="tex2html2036"
+  HREF="jmanual-node109.html">行列と変換</A>
+<B> Up:</B> <A NAME="tex2html2030"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2024"
+  HREF="jmanual-node107.html">幾何学関数</A>
+ &nbsp; <B>  <A NAME="tex2html2032"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2033"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
+ &nbsp; <B>  <A NAME="tex2html2034"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

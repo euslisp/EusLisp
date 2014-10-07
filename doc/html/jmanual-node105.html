@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>同期</TITLE>
+<TITLE>スレッド生成</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="同期">
+<META NAME="description" CONTENT="スレッド生成">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,67 +19,76 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
+<LINK REL="next" HREF="jmanual-node106.html">
 <LINK REL="previous" HREF="jmanual-node104.html">
-<LINK REL="up" HREF="jmanual-node91.html">
+<LINK REL="up" HREF="jmanual-node92.html">
 <LINK REL="next" HREF="jmanual-node106.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1987"
+<A NAME="tex2html1990"
   HREF="jmanual-node106.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1981"
-  HREF="jmanual-node91.html">
+<A NAME="tex2html1984"
+  HREF="jmanual-node92.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1977"
+<A NAME="tex2html1978"
   HREF="jmanual-node104.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1983"
+<A NAME="tex2html1986"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1985"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1988"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1988"
-  HREF="jmanual-node106.html">幾何学関数</A>
-<B> Up:</B> <A NAME="tex2html1982"
-  HREF="jmanual-node91.html">マルチスレッド</A>
-<B> Previous:</B> <A NAME="tex2html1978"
-  HREF="jmanual-node104.html">スレッド生成</A>
- &nbsp; <B>  <A NAME="tex2html1984"
+<B> Next:</B> <A NAME="tex2html1991"
+  HREF="jmanual-node106.html">同期</A>
+<B> Up:</B> <A NAME="tex2html1985"
+  HREF="jmanual-node92.html">マルチスレッド</A>
+<B> Previous:</B> <A NAME="tex2html1979"
+  HREF="jmanual-node104.html">並列度の計測</A>
+ &nbsp; <B>  <A NAME="tex2html1987"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1986"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1989"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04025000000000000000">
-同期</A>
+<H2><A NAME="SECTION04024000000000000000">
+スレッド生成</A>
 </H2>
-
-<P>
-Solarisオペレーティングシステム内には、マルチスレッドプログラムのために
-4つの同期手法がある。
-Euslispは、mutex-lockとcondition variableとセマフォを提供している。
-reader-writer lockは実現されてない。
-これらの手法に基づいて、同期メモリポートや同期障壁のような
-高レベルの同期機構が実現されている。
+スレッドは、計算を割り当てる単位であり、普通lisp書式を評価する
+ための単位である。
+Euslispのスレッドは、<B>thread</B>クラスのインスタンスによって
+表現される。
+このオブジェクトは、内容を表現するスレッド全体というよりはむしろ、
+実際に引き数と結果を渡すためのスレッドの
+制御ポートであり、評価を始めるものである。
 
 <P>
 
  <BR>
-<BR> <A NAME="25302"></A>
-<B>sys:make-mutex-lock</B> [関数]
+<BR> <P>
+
+<A NAME="25248"></A>
+<B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-mutex-lockを作り、返す。
-mutex-lockは、6つの要素を持つ整数ベクトルで表現されている。
+<EM>lsize</EM>ワードのlispスタックと<EM>csize</EM>ワードのC-スタックを持つ
+スレッドを<EM>num</EM>個だけ生成し、システムのスレッドプールに
+置く。
+スレッドプール内のすべてのスレッドは、sys:*threads*に束ねてあり、
+<B>make-thread</B>が呼び出されたときに拡張される。
+<B>thread</B>関数によって、計算はスレッドプールの中で空いたスレッドの
+１つに割り当てられる。
+したがって、指定された計算がどのスレッドに割り当てられるか
+制御できないため、スレッドのスタックサイズを変更する方法が無い。
 </DD>
 </DL>
 <BR>
@@ -87,15 +96,13 @@ mutex-lockは、6つの要素を持つ整数ベクトルで表現されている
 
 <P>
 
-<A NAME="25312"></A>
-<B>sys:mutex-lock</B> <EM>mlock </EM>[関数]
+<A NAME="25263"></A>
+<B>sys:*threads*</B> [変数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-mutex-lockの<EM>mlock</EM>をロックする。
-もし、<EM>mlock</EM>が既に他のスレッドからロックされているなら、
-<B>mutex-lock</B>はロックが外されるまで待つ。
+<B>make-thread</B>によって作成されたすべてのスレッドのリストを持つ。
 </DD>
 </DL>
 <BR>
@@ -103,13 +110,17 @@ mutex-lockの<EM>mlock</EM>をロックする。
 
 <P>
 
-<A NAME="25325"></A>
-<B>sys:mutex-unlock</B> <EM>mlock </EM>[関数]
+<A NAME="25274"></A>
+<B>sys::free-threads</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>mlock</EM>を解除し、このロックを待っている他のスレッドの内の１つが再び実行され始める。
+スレッドプール内の空いたスレッドのリストを返す。
+もし、結果がNILならば、スレッドへのタスクの新しい付託は現在実行されている
+スレッドのどれかの評価が終了するかあるいは
+<B>make-thread</B>によってスレッドプールに新しいスレッドを生成するまで
+停止される。
 </DD>
 </DL>
 <BR>
@@ -117,42 +128,42 @@ mutex-lockの<EM>mlock</EM>をロックする。
 
 <P>
 
-<A NAME="25336"></A>
-<B>sys:mutex</B> <EM>mlock &amp;rest forms </EM>[マクロ]
+<A NAME="25285"></A>
+<B>sys:thread</B> <EM>func &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-mutex-lockとmutex-unlockは、組みで使用されなければならない。
-<B>mutex</B>は、重要な部分をひとまとまりにしたマクロである。
-<EM>mlock</EM>は、評価する<EM>forms</EM>が評価される前にロックされる。
-そして、評価が終了したときに、ロックが解除される。
-このマクロは、以下のprogn formに展開される。
-<B>unwind-protect</B>は、<EM>forms</EM>の評価中にエラーが発生したとき
-でさえ、ロックの解除を保証するために使用されることに注意すること。
-
+スレッドプールから空いたスレッドを1つ取り出し、
+<EM>(func . args)</EM>の評価のためにそれを割り当てる。
+<B>sys:thread</B>は、<EM>args</EM>を展開したリストにfuncを適用
+するが、関数の適用結果を受け取らないため、
+非同期の<B>funcall</B>とみなすことができる。
+むしろ、<B>sys:thread</B>はfuncallに割り当てられたスレッド
+オブジェクトを返すので、実際の結果は<B>sys:wait-thread</B>によって
+後から得ることができる。
 </DD>
 </DL>
 <BR>
 <BR>
 <PRE>
-  (progn
-      (sys:mutex-lock mlock)
-      (unwind-protect
-          (progn . forms)
-          (sys:mutex-unlock mlock)))
+(defun compute-pi (digits) ...)
+(setq trd (sys:thread \#'compute-pi 1000)) ;assign compute-pi to a thread
+...  ;; other computation 
+(sys:wait-thread trd) ;get the result of (compute-pi 1000)
 </PRE>
 
 <P>
 
-<A NAME="25351"></A>
-<B>sys:make-cond</B> [関数]
+<A NAME="25302"></A>
+<B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-4つの要素を持つ整数ベクトルであるcondition variableオブジェクトを
-作る。condition variableの返り値としては、ロックされてない状態でである。
+空いたスレッドの1つに計算を割り当てる。
+スレッドは、<B>wait-thread</B>されることなしに、
+評価が終了したとき、スレッドプールに戻される。
 </DD>
 </DL>
 <BR>
@@ -160,15 +171,18 @@ mutex-lockとmutex-unlockは、組みで使用されなければならない。
 
 <P>
 
-<A NAME="25361"></A>
-<B>sys:cond-wait</B> <EM>condvar mlock </EM>[関数]
+<A NAME="25313"></A>
+<B>sys:wait-thread</B> <EM>thread </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>condvar</EM>に信号が出されるまで待つ。
-もし、<EM>condvar</EM>が他のスレッドによってすでに獲得されていたならば、
-<EM>mlock</EM>を解除し、<EM>condvar</EM>に信号が出されるまで待つ。
+<EM>thread</EM>に<B>sys:thread</B>関数によって与えられたfuncallの評価が
+終了するのを待ち、その結果を受け取り、返す。
+もし、スレッドに<B>sys:thread</B>によって評価が割り当てられたならば、
+<B>sys:wait-thread</B>は、必須である。
+なぜなら、スレッドは結果を転送し終わるまでスレッドプールに戻らない
+ためである。
 </DD>
 </DL>
 <BR>
@@ -176,193 +190,17 @@ mutex-lockとmutex-unlockは、組みで使用されなければならない。
 
 <P>
 
-<A NAME="25375"></A>
-<B>sys:cond-signal</B> <EM>condvar </EM>[関数]
+<A NAME="25327"></A>
+<B>sys:plist</B> <EM>&amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>condvar</EM>で示されるcondition variableに信号を出す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="25386"></A>
-<B>sys:make-semaphore</B> [関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-20の要素を持つ整数ベクトルによって表現されるセマフォオブジェクトを作る。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="25396"></A>
-<B>sys:sema-post</B> <EM>sem </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> <EM>sem</EM>に信号を出す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="25407"></A>
-<B>sys:sema-wait</B> <EM>sem </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>sem</EM>に信号が来るまで待つ。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-	<BR> 
-<A NAME="25419"></A>
-<BIG CLASS="XLARGE"><B>sys:barrier-synch </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>propertied-object</B> 
-<BR>  :slots 		 threads n-threads count barrier-cond threads-lock count-lock 
-</TT></PRE>
-<BR>
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>同期障壁のための構造を表現する。
-同期を待っているスレッドは、<EM>thread-lock</EM>によって
-相互に排除される<EM>thread</EM>に置かれる。
-<B>barrier-synch</B>オブジェクトが生成されたとき、
-<EM>count</EM>は、ゼロに初期化される。
-同期しているスレッドは、<TT>:add</TT>メッセージを送ることによって、
-<EM>threads</EM>リストに置かれる。
-このbarrier-synchオブジェクトに<TT>:wait</TT>を送ることは、
-<EM>count</EM>を増加させることの原因となり、
-送られたスレッドは待ち状態になる。
-<EM>threads</EM>の中のすべてのスレッドに<TT>:wait</TT>メッセージが送られたとき、
-待ちが解除され、すべてのスレッドの実行が再び始まる。
-同期は、<EM>count-lock</EM>のmutex-lockと<EM>barrier-cond</EM>のcondition-variable
-の組み合わせによって実行される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="25448"></A>
-<B>:init</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> このbarrier-synchオブジェクトを初期化する。
-2つのmutex-lockと1つのcondition-variableが生成される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="25458"></A>
-<B>:add</B> <EM>thr </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> <EM>threads</EM>リストの中に<EM>thr</EM>スレッドが追加される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="25470"></A>
-<B>:remove</B> <EM>thr </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> <EM>threads</EM>リストの中から<EM>thr</EM>スレッドを削除する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="25482"></A>
-<B>:wait</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> <EM>threads</EM>リストの中のすべてのスレッドに<TT>:wait</TT>
-が配布されるのを待つ。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-	<BR> 
-<A NAME="25495"></A>
-<BIG CLASS="XLARGE"><B>sys:synch-memory-port </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>propertied-object</B> 
-<BR>  :slots 		 sema-in sema-out buf empty lock 
-</TT></PRE>
-<BR>
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>1方向の同期されたメモリポートを実現する。
-このオブジェクトを通じてデータを転送するために、2つのスレッドを同期させる。
-転送制御は、セマフォを用いて実現されている。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="25512"></A>
-<B>:read</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この<B>synch-memory-port</B>にバッファされているデータを読む。
-もし、まだ書かれていなかったならば、<TT>:read</TT>は停止する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="25524"></A>
-<B>:write</B> <EM>datum </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-バッファに<EM>datum</EM>を書き込む。
-1ワードのバッファのみ存在するので、
-もし他のデータが既に書かれておりまだ読まれていなかったならば、
-<TT>:write</TT>は<TT>:read</TT>によってそのデータが読み込まれるまで待つ。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="25537"></A>
-<B>:init</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> この<B>sync-memory-port</B>を初期化する。
-これには2つのセマフォが生成され、<TT>:write</TT>動作が可能な状態になっている。
+異なったスレッドにより並列に<EM>forms</EM>を評価し、
+すべての評価が終了するのを待ち、
+結果のリストを返す。
+<B>sys:plist</B>は、リスト化されたそれぞれのformが関数呼び出しされる
+ことを除いて、<EM>parallel-list</EM>としてみなされるだろう。
 </DD>
 </DL>
 <BR>
@@ -370,40 +208,10 @@ mutex-lockとmutex-unlockは、組みで使用されなければならない。
 
 <P>
              <P>
-
-
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1987"
-  HREF="jmanual-node106.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1981"
-  HREF="jmanual-node91.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1977"
-  HREF="jmanual-node104.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1983"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1985"
-  HREF="jmanual-node156.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1988"
-  HREF="jmanual-node106.html">幾何学関数</A>
-<B> Up:</B> <A NAME="tex2html1982"
-  HREF="jmanual-node91.html">マルチスレッド</A>
-<B> Previous:</B> <A NAME="tex2html1978"
-  HREF="jmanual-node104.html">スレッド生成</A>
- &nbsp; <B>  <A NAME="tex2html1984"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1986"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

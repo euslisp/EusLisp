@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>エッジ抽出</TITLE>
+<TITLE>カラーピクセル画像</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="エッジ抽出">
+<META NAME="description" CONTENT="カラーピクセル画像">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,217 +21,65 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node148.html">
 <LINK REL="previous" HREF="jmanual-node146.html">
-<LINK REL="up" HREF="jmanual-node143.html">
+<LINK REL="up" HREF="jmanual-node144.html">
 <LINK REL="next" HREF="jmanual-node148.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2604"
+<A NAME="tex2html2605"
   HREF="jmanual-node148.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2598"
-  HREF="jmanual-node143.html">
+<A NAME="tex2html2599"
+  HREF="jmanual-node144.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2592"
+<A NAME="tex2html2593"
   HREF="jmanual-node146.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2600"
+<A NAME="tex2html2601"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2602"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2603"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2605"
-  HREF="jmanual-node148.html">トラッキング</A>
-<B> Up:</B> <A NAME="tex2html2599"
-  HREF="jmanual-node143.html">画像処理</A>
-<B> Previous:</B> <A NAME="tex2html2593"
-  HREF="jmanual-node146.html">カラーピクセル画像</A>
- &nbsp; <B>  <A NAME="tex2html2601"
+<B> Next:</B> <A NAME="tex2html2606"
+  HREF="jmanual-node148.html">エッジ抽出</A>
+<B> Up:</B> <A NAME="tex2html2600"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2594"
+  HREF="jmanual-node146.html">ピクセル画像</A>
+ &nbsp; <B>  <A NAME="tex2html2602"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2603"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2604"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04084000000000000000">
-エッジ抽出</A>
+<H2><A NAME="SECTION04083000000000000000">
+カラーピクセル画像</A>
 </H2>
-エッジ抽出機能は、<TT>"vision/edge/edge"</TT>に実現されている。
-
-<P>
-
- <BR>
-<BR> <A NAME="48811"></A>
-<BR>
-<IMG
- WIDTH="554" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img101.png"
- ALT="\begin{emtabbing}
-{\bf edge1}
-\it img \= \&amp;optional \= (method 1) \\lq  [関数]\\...
-... \&amp;aux (width (send img :width)) (height (send img :height))
-\rm
-\end{emtabbing}">
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD><EM>img</EM>のエッジピクセルを抽出する。
-<B>edge1</B>は、まずすべてのピクセルに微分オペレータを適用する。
-次の3つの微分オペレータが用意されている。
-<B>grad3</B>は、縦と横の隣接ピクセルの差を用いる。
-<B>prewitt</B>は、<B>grad3</B>に斜め方向のピクセルを考慮したものである。
-<B>sobel</B>は、<B>prewitt</B>において横と縦のピクセルに重みを付けて差を計算したものを用いる。
-<EM>method</EM>が0,1のとき<B>grad3</B>、2のとき<B>prewitt</B>、3のとき
-<B>sobel</B>を選択する。
-<EM>th1</EM>より大きな輝度を持つエッジピクセルが強いエッジピクセルとして
-指示される。
-薄いエッジはエッジの輝度と微分方向を参照した後、独立したピクセルに付けられる。
-これらの強いエッジの端から、強いエッジの方向に含まれる弱いエッジを捜し、
-線分を延長する。
-<EM>th2</EM>より大きなエッジ輝度を持つ弱いエッジは、無条件に繋げられる。
-また、<EM>th2</EM>より小さなエッジ輝度を持つかなり弱いエッジは、他のエッジ
-との距離が<EM>run</EM>以内であれば繋げられる。
-<B>edge1</B>は、強いエッジピクセルを1、弱いエッジあるいは
-延長されたエッジピクセルを2、孤立したピクセルを255と表現する
-<B>pixel-image</B>オブジェクトを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="48839"></A>
-<B>overlay-edge</B> <EM>ximg edgeimg </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-Xwindowに表示可能な<B>pixel-image</B>である<EM>ximg</EM>の最上位に
-<B>edge1</B>で得られた<EM>edgeimg</EM>を表示する。
-強いエッジピクセルは赤、弱いエッジピクセルは緑、孤立したピクセルを青
-で表現される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="48853"></A>
-<BR>
-<IMG
- WIDTH="554" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img102.png"
- ALT="\begin{emtabbing}
-{\bf edge2}
-\it img1 edge1result \&amp;key \= (:kvalue 8.0) \\lq  [�...
-...error 2.8)\\
-\&gt; (:curve-error 2.8)\\
-\&gt; (:plane-limit 0.3)
-\rm
-\end{emtabbing}">
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD><EM>edge1</EM>の結果から一致する直線あるいは楕円曲線を捜す。
-領域(region)、境界(boundary)、線分(line segment)の３つの要素の
-リストが返される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-             <P>
-<B>edge2</B>で出力される3つの要素は、以下のように定義される。
-
-<P>
+カラー画像は、<B>color-pixel-image</B>クラスで表現される。
+このクラスは、3つの<B>pixel-image</B>を持っており、RGB表現の
+red,green,blueあるいはHLSモデルの色合い,明るさ,濃さをそれぞれ表現する。
+RGBとHLS間の変換もサポートしている。
 
  <BR>
-<BR> <BR> 
-<A NAME="48866"></A>
-<BIG CLASS="XLARGE"><B>region </B></BIG> [クラス]  <PRE><TT>
+<BR> <P>
+	<BR> 
+<A NAME="48597"></A>
+<BIG CLASS="XLARGE"><B>color-pixel-image </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
-<BR>  :slots 		 contour area intensity std-deviation 
+<BR>  :slots 		 width height component1 component2 component3 
 </TT></PRE>
 <BR>
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>領域を表現。
-</DD>
-</DL>
-<BR>
-<BR>
-	<BR> 
-<A NAME="48884"></A>
-<BIG CLASS="XLARGE"><B>boundary </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>propertied-object</B> 
-<BR>  :slots 		 parent-region  hole  segments  intensity  topleft  bottomright  length 
-</TT></PRE>
-<BR>
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>境界を表現。
-</DD>
-</DL>
-<BR>
-<BR>
-	<BR> 
-<A NAME="48902"></A>
-<BIG CLASS="XLARGE"><B>edge-segment </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>propertied-object</B> 
-<BR>  :slots 		 prev next   wing ; the other half-edge  intensity std-deviation   start end 
-</TT></PRE>
-<BR>
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>エッジ線分を表現。
-</DD>
-</DL>
-<BR>
-<BR>
-	<BR> 
-<A NAME="48920"></A>
-<BIG CLASS="XLARGE"><B>line-edge-segment </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>edge-segment</B> 
-<BR>  :slots 		 la lb 
-</TT></PRE>
-<BR>
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>直線のエッジ線分を表現。
-</DD>
-</DL>
-<BR>
-<BR>
-	<BR> 
-<A NAME="48938"></A>
-<BIG CLASS="XLARGE"><B>curved-edge-segment </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>edge-segment</B> 
-<BR>  :slots 		 rotation total-rot side   a b c d e 
-</TT></PRE>
-<BR>
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>曲線のエッジ線分を表現。
+<DD>3つの<TT>pixel-image</TT>オブジェクトでカラー画像を表現する。
 </DD>
 </DL>
 <BR>
@@ -239,192 +87,318 @@ Xwindowに表示可能な<B>pixel-image</B>である<EM>ximg</EM>の最上位に
 
 <P>
 
-<A NAME="48955"></A>
-<B>draw-ellipse-segment</B> <EM>elp gc &amp;optional (vs *viewsurface*)
-				      (height (send vs :height))
-					(x 0) (y 0) </EM>[関数]
+<A NAME="48615"></A>
+<B>:width</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-<EM>vs</EM>で指定されるXwindowに<B>curved-edge-segment</B>オブジェクトである
-<EM>elp</EM>を描く。
+<DD> この画像の幅を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48968"></A>
-<B>draw-line-segment</B> <EM>s &amp;optional gc (vs *viewsurface*)
-				(height (send vs :height))
-				(x 0) (y 0) </EM>[関数]
+<A NAME="48625"></A>
+<B>:height</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-<EM>vs</EM>で指定されるXwindowに<B>line-edge-segment</B>オブジェクトである
-<EM>s</EM>を描く。
+<DD> この画像の高さを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48981"></A>
+<A NAME="48635"></A>
+<B>:size</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の幅<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img57.png"
+ ALT="$\times$"></SPAN>高さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48645"></A>
+<B>:red</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component1</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48656"></A>
+<B>:green</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component2</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48667"></A>
+<B>:blue</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component3</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48678"></A>
+<B>:hue</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component1</TT>を返す。
+色合い(hue)の値(0〜360)は、0〜255の1バイトで表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48689"></A>
+<B>:lightness</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component2</TT>を返す。
+正規化された明るさ(brightness)の値(0〜1)は、0〜255の整数で表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48700"></A>
+<B>:saturation</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component3</TT>返す。
+正規化された濃さ(saturation)の値(0〜1)は、0〜255の整数で表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48711"></A>
+<B>:pixel</B> <EM>x y </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>(x,y)</EM>における
+<TT>component1,component2,component3</TT>の値を3つの整数のリストとして返す。
+このリストは、RGB値あるいはHLS値のどちらでも解釈できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48723"></A>
+<B>:monochromize</B> <EM>&amp;optional (NTSC nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGB構成から明るさを計算し、新しい<TT>pixel-image</TT>を返す。
+もし、<EM>NTSC</EM>がNILなら、<TT>(R+G+B)/3</TT>が計算される。
+もし、Tなら、<TT>0.299*R+0.587*G+0.114*B</TT>が計算される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48737"></A>
+<B>:HLS</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像をRGB画像と仮定し、HLS表現に画像を変換する。
+それぞれのピクセルを変換するために<B>RGB2HLS</B>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48748"></A>
+<B>:RGB</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像をHLS画像と仮定し、RGB表現に画像を変換する。
+それぞれのピクセルを変換するために<B>HLS2RGB</B>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48759"></A>
+<B>:halve</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像を半分のサイズに縮小した<B>color-pixel-image</B>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48770"></A>
+<B>:display</B> <EM>&amp;optional (win *color-viewer*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:putimage</B>を用いて<EM>win</EM>で指定されるXwindowに
+このカラー画像を表示する。
+それぞれのピクセル値はXのカラーマップを参照する。
+希望する表現を得るためには、この画像を固有のLUTで
+変換すべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48782"></A>
+<B>:display-lut</B> <EM>&amp;optional (newlut1) (newlut2 newlut1) (newlut3 newlut2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ルックアップテーブル<EM>newlut1</EM>,<EM>newlut2</EM>,<EM>newlut3</EM>を
+<TT>display-lut</TT>にそれぞれ設定する。それから、このルックアップテーブルを
+使ってこの画像を変換し、<TT>xpicture</TT>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48797"></A>
 <BR>
 <IMG
- WIDTH="553" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img103.png"
+ WIDTH="553" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img100.png"
  ALT="\begin{emtabbing}
-{\bf draw-segments}
-\it segs \&amp;key \= (:line-gc image::*red-g...
-...ght (send vs :height))\\
-\&gt; (:step nil)\\
-\&gt; (:x 0) (:y 0)
+{\bf :edge1}
+\it\&amp;optional \= (method 1) \\lq  [メソッド]\ ...
+...
+\&gt; (run *edge-length-threshold*)\\
+\&gt; (win *color-viewer*)
 \rm
 \end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD><EM>vs</EM>で指定されるXwindowに<B>edge-segment</B>のリスト表現である
-<EM>segs</EM>を描く。
+<DD>この画像のエッジを抽出する。Xwindow上にこのエッジ画像を表示する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="48995"></A>
-<B>draw-boundary</B> <EM>b &amp;optional gc </EM>[関数]
+<A NAME="48808"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>vs</EM>で指定されるXwindowに<B>boundary</B>のオブジェクト<EM>b</EM>
-の中の線分を描く。
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49008"></A>
-<B>draw-boundaries</B> <EM>bs &amp;optional gc (step nil) </EM>[関数]
+<A NAME="48818"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>vs</EM>で指定されるXwindowに<B>boundary</B>のリスト表現である<EM>bs</EM>
-の中の線分を描く。
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="49021"></A>
-<B>*red-gc*</B> [変数]
+<A NAME="48828"></A>
+<B>:prin1</B> <EM>strm &amp;rest msg </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> #ff0000(赤色)の色を持つ<B>gcontext</B>。
+<DD> 
+この画像を名前と次元と一緒に表示する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49032"></A>
-<B>*blue-gc*</B> [変数]
+<A NAME="48838"></A>
+<B>:init</B> <EM>width height &amp;optional r g b </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> #0000ff(青色)の色を持つ<B>gcontext</B>。
+<DD> 
+カラー画像のサイズを定義し、<TT>pixel-image</TT>にそれぞれカラーの1構成
+を割り当てる。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49043"></A>
-<B>*green-gc*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> #00ff00(緑色)の色を持つ<B>gcontext</B>。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="49054"></A>
-<B>*yellow-gc*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> #ffff00(黄色)の色を持つ<B>gcontext</B>。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="49065"></A>
-<B>*cyan-gc*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> #00ffff(水色)の色を持つ<B>gcontext</B>。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
              <P>
-
-<DIV ALIGN="CENTER"><A NAME="47814"></A>
-<TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 19:</STRONG>
-Edge Finder and Overlaied Edges</CAPTION>
-<TR><TD><IMG
- WIDTH="435" HEIGHT="407" BORDER="0"
- SRC="jmanual-img104.png"
- ALT="\begin{figure}\begin{center}
-\epsfile{file=fig/block1.edg.ps,height=9cm}\end{center}\end{figure}"></TD></TR>
-</TABLE>
-</DIV>
+ppmファイルがあったとき、次のプログラムでカラー値を画像に展開し、
+Xwindowに表示をすることができる。<PRE>
+(setq ppmimg (read-pnm "xxx.ppm"))
+(send ppmimg :hls)   ; RGB to HLS conversion
+(make-ximage (send ppmimg :hue) *rainbow32*)
+</PRE>
 
 <P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2604"
+<A NAME="tex2html2605"
   HREF="jmanual-node148.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2598"
-  HREF="jmanual-node143.html">
+<A NAME="tex2html2599"
+  HREF="jmanual-node144.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2592"
+<A NAME="tex2html2593"
   HREF="jmanual-node146.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2600"
+<A NAME="tex2html2601"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2602"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2603"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2605"
-  HREF="jmanual-node148.html">トラッキング</A>
-<B> Up:</B> <A NAME="tex2html2599"
-  HREF="jmanual-node143.html">画像処理</A>
-<B> Previous:</B> <A NAME="tex2html2593"
-  HREF="jmanual-node146.html">カラーピクセル画像</A>
- &nbsp; <B>  <A NAME="tex2html2601"
+<B> Next:</B> <A NAME="tex2html2606"
+  HREF="jmanual-node148.html">エッジ抽出</A>
+<B> Up:</B> <A NAME="tex2html2600"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2594"
+  HREF="jmanual-node146.html">ピクセル画像</A>
+ &nbsp; <B>  <A NAME="tex2html2602"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2603"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
+ &nbsp; <B>  <A NAME="tex2html2604"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

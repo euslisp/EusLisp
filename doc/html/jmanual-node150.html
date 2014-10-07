@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>マニピュレータ</TITLE>
+<TITLE>画像ファイル入出力</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="マニピュレータ">
+<META NAME="description" CONTENT="画像ファイル入出力">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,79 +19,174 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
-<LINK REL="next" HREF="jmanual-node153.html">
-<LINK REL="previous" HREF="jmanual-node143.html">
-<LINK REL="up" HREF="jmanual-node73.html">
+<LINK REL="previous" HREF="jmanual-node149.html">
+<LINK REL="up" HREF="jmanual-node144.html">
 <LINK REL="next" HREF="jmanual-node151.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2644"
+<A NAME="tex2html2645"
   HREF="jmanual-node151.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2638"
-  HREF="jmanual-node73.html">
+<A NAME="tex2html2639"
+  HREF="jmanual-node144.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2632"
+<A NAME="tex2html2635"
   HREF="jmanual-node149.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2640"
+<A NAME="tex2html2641"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2642"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2643"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2645"
-  HREF="jmanual-node151.html">関節のモデル</A>
-<B> Up:</B> <A NAME="tex2html2639"
-  HREF="jmanual-node73.html">EusLisp 拡張</A>
-<B> Previous:</B> <A NAME="tex2html2633"
-  HREF="jmanual-node149.html">画像ファイル入出力</A>
- &nbsp; <B>  <A NAME="tex2html2641"
+<B> Next:</B> <A NAME="tex2html2646"
+  HREF="jmanual-node151.html">マニピュレータ</A>
+<B> Up:</B> <A NAME="tex2html2640"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2636"
+  HREF="jmanual-node149.html">トラッキング</A>
+ &nbsp; <B>  <A NAME="tex2html2642"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2643"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2644"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION04090000000000000000"></A><A NAME="ManipulatorModel"></A>
+<H2><A NAME="SECTION04086000000000000000"></A><A NAME="PBMfile"></A>
 <BR>
-マニピュレータ
-</H1>
-
-<EM>documented by Hiromu Onda</EM>
-
-<P>
-<B>rotational-joint</B>クラスと<B>manipulator</B>クラスのインスタンスからマニピュレータ
-モデルは構成される。<B>rotational-join</B>クラスは、<B>body</B>のサブクラスであり、
-マニピュレータの間接モデルを定義する。
-<B>manipulator</B>は、<B>cascaded-coords</B>のサブクラスであり、運動方程式と逆運動方程式の
-解を求めるメソッドを持っている。
+画像ファイル入出力
+</H2>
+<TT>"vision/pbmfile"</TT>は、Euslispとディスクファイルとの間の
+画像データを変換する関数を定義している。
+EusLispは、pgm(portable gray-scale map)とppm(portable pixmap)フォーマット
+のファイルの読み書きができる。
 
 <P>
-マニピュレータを定義するには、
-すべての関節を作成した後、<B>manipulator</B>にそれらを統合する。
+
+ <BR>
+<BR> <A NAME="49282"></A>
+<B>read-pnm</B> <EM>f &amp;optional buf0 buf1 buf2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>file-stream</B>の<EM>f</EM>で指定されるpgmあるいはppmファイル
+を読み込み、<B>pixel-image</B>あるいは<B>color-pixel-image</B>を返す。
+画像ファイルは、asciiでもバイナリーでも可能である。
+言い換えれば、P2,P3,P5,P6フォーマットは認識できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49296"></A>
+<B>read-pnm-file</B> <EM>file &amp;optional buf0 buf1 buf2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ファイル名<EM>file</EM>で指定されるpgmあるいはppmファイルを読み込む。
+
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL CLASS="ChildLinks">
-<LI><A NAME="tex2html2646"
-  HREF="jmanual-node151.html">関節のモデル</A>
-<LI><A NAME="tex2html2647"
-  HREF="jmanual-node152.html">多関節マニピュレータ</A>
-</UL>
-<!--End of Table of Child-Links-->
+<A NAME="49307"></A>
+<B>write-pgm</B> <EM>f image  &amp;optional (depth 255) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>image</EM>で指定される<B>pixel-image</B>を<B>file-stream</B>である<EM>f</EM>
+にバイナリーppmフォーマットで書き込む。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49321"></A>
+<B>write-ppm</B> <EM>f image  &amp;optional (depth 255) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>image</EM>で指定される<B>pixel-image</B>を<B>file-stream</B>である<EM>f</EM>
+にバイナリーpgmフォーマットで書き込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49335"></A>
+<B>write-pnm</B> <EM>f img </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>img</EM>で指定されるピクセル画像を<B>file-stream</B>である<EM>f</EM>に書き込む。
+もし、<EM>img</EM>が<B>pixel-image</B>であるなら、バイナリーpgmフォーマットで
+書き込み、<B>color-pixel-image</B>ならバイナリーppmフォーマットで書き込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49351"></A>
+<B>write-pnm-file</B> <EM>file img </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ファイル名<EM>file</EM>に<EM>img</EM>で指定されるピクセル画像を書き込む。
+この関数は、<B>write-pnm</B>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49364"></A>
+<B>image::read-raw-image</B> <EM>file &amp;optional (x 256) (y x) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+raw-imageファイルを読み込み、1次元の文字列ベクトルを返す。
+raw-imageの次元は、与えられた<EM>x</EM>と<EM>y</EM>に一致しなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49376"></A>
+<B>image::write-raw-image</B> <EM>file imgvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ピクセル値を1バイトのベクトル(文字列)に蓄積した<EM>imgvec</EM>を<EM>file</EM>
+に書き込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

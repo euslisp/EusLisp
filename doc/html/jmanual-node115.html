@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>平面と面</TITLE>
+<TITLE>線とエッジ</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="平面と面">
+<META NAME="description" CONTENT="線とエッジ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,71 +21,75 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node116.html">
 <LINK REL="previous" HREF="jmanual-node114.html">
-<LINK REL="up" HREF="jmanual-node112.html">
+<LINK REL="up" HREF="jmanual-node113.html">
 <LINK REL="next" HREF="jmanual-node116.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2139"
+<A NAME="tex2html2140"
   HREF="jmanual-node116.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2133"
-  HREF="jmanual-node112.html">
+<A NAME="tex2html2134"
+  HREF="jmanual-node113.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2127"
+<A NAME="tex2html2128"
   HREF="jmanual-node114.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2135"
+<A NAME="tex2html2136"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2137"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2138"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2140"
-  HREF="jmanual-node116.html">立体(body)</A>
-<B> Up:</B> <A NAME="tex2html2134"
-  HREF="jmanual-node112.html">幾何学モデリング</A>
-<B> Previous:</B> <A NAME="tex2html2128"
-  HREF="jmanual-node114.html">線とエッジ</A>
- &nbsp; <B>  <A NAME="tex2html2136"
+<B> Next:</B> <A NAME="tex2html2141"
+  HREF="jmanual-node116.html">平面と面</A>
+<B> Up:</B> <A NAME="tex2html2135"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2129"
+  HREF="jmanual-node114.html">種々の幾何学関数</A>
+ &nbsp; <B>  <A NAME="tex2html2137"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2138"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2139"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04043000000000000000">
-平面と面</A>
+<H2><A NAME="SECTION04042000000000000000">
+線とエッジ</A>
 </H2>
 
 <P>
-<B>plane</B>オブジェクトは、その平面の正規化ベクトルと座標原点から平面までの
-距離で表現される。
-2対の正規化ベクトルと距離が<B>plane</B>オブジェクトに記録される。
-1つは、変換後の現状を表現し、もう1つが平面を定義したときの
-正規化ベクトルと距離を表現する。
+頂点の順番やエッジの順番の向きは、<B>body</B>を外から見たときに反時計方向
+に整列するように定義される。
+<TT>pvertex</TT>や<TT>nvertex</TT>や<TT>pface</TT>や<TT>nface</TT>は、
+<TT>pface</TT>が外から見たときエッジの左側に位置しているとき、
+<TT>pvertex</TT>から<TT>nvertex</TT>に向かう方向にエッジを定義する。
 
 <P>
 
  <BR>
 <BR> <P>
 	<BR> 
-<A NAME="31564"></A>
-<BIG CLASS="XLARGE"><B>plane </B></BIG> [クラス]  <PRE><TT>
+<A NAME="31147"></A>
+<BIG CLASS="XLARGE"><B>line </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
-<BR>  :slots 		 ((normal :type float-vector) 
-<BR>(distance :float)) 
+<BR>  :slots 		 ((pvert :type floatvector)(nvert :type floatvector)) 
 </TT></PRE>
 <BR>
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>平面方程式を定義する。平面は境界がなく、無限に広がっているものとする。
+<DD><TT>pvert</TT>と<TT>nvert</TT>の上を通る線分を定義する。
+線分は、<EM>pvert</EM>から<EM>nvert</EM>に向かう方向を持つ。
+<TT>t <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img60.png"
+ ALT="$\cdot$"></SPAN> pvert +(1-t)nvert</TT>
 </DD>
 </DL>
 <BR>
@@ -93,49 +97,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="31581"></A>
-<B>:normal</B> [メソッド]
+<A NAME="31169"></A>
+<B>:vertices</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-この平面の正規化ベクトルを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31591"></A>
-<B>:distance</B> <EM>point </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この平面と<EM>point</EM>との間の距離を計算する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31602"></A>
-<B>:coplanar-point</B> <EM>point </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-もし、<EM>point</EM>がこの平面の上に置かれているならTを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31613"></A>
-<B>:coplanar-line</B> <EM>line </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-もし、<EM>line</EM>がこの平面の上に置かれているなら、Tを返す。
+<DD> <TT>pvert</TT>と<TT>nvert</TT>のリストを返す。
 </DD>
 </DL>
 <BR>
@@ -143,58 +110,237 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="31624"></A>
-<B>:intersection</B> <EM>point1 point2 </EM>[メソッド]
+<A NAME="31181"></A>
+<B>:point</B> <EM>p </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>point1</EM>と<EM>point2</EM>を端点とする線分とこの平面との交点
-を計算する。その線分の上の交点に対するパラメータを返す。
-もし、線分とこの平面が平行であるなら、<TT>:parallel</TT>を返す。
+この線分の上で<EM>p</EM>パラメータで示される位置の3次元のベクトルを返す。
+<TT>p <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img60.png"
+ ALT="$\cdot$"></SPAN> pvert + (1-p)nvert</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31637"></A>
-<B>:intersection-edge</B> <EM>edge </EM>[メソッド]
+<A NAME="31193"></A>
+<B>:parameter</B> <EM>point </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この平面と<EM>point1</EM>と<EM>point2</EM>で表現される線分あるいはエッジとの
-交点のパラメータを返す。
+この線分の上の<EM>point</EM>に対するパラメータを計算する。
+これは、<B>:point</B>メソッドの逆メソッドである。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31649"></A>
+<A NAME="31205"></A>
+<B>:direction</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>pvert</TT>から<TT>nvert</TT>へ向かう正規化ベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31217"></A>
+<B>:end-point</B> <EM>v </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この線分の他の端点を返す。すなわち、
+もし<EM>v</EM>が<TT>pvert</TT>に等しいとき、<TT>nvert</TT>を返す。
+もし<EM>v</EM>が<TT>nvert</TT>に等しいとき、<TT>pvert</TT>を返す。
+それ以外のとき、NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31233"></A>
+<B>:box</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この線分の<B>bounding-box</B>を作成し、返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31244"></A>
+<B>:boxtest</B> <EM>box </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>box</EM>とこの線分の<B>bounding-box</B>の共通部分をチェックする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31256"></A>
+<B>:length</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この線分の長さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31266"></A>
+<B>:distance</B> <EM>point-or-line </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この線分と<EM>point-or-line</EM>の間の距離を返す。
+もし点からこの線分におろした垂線の足が
+<TT>pvert</TT>と<TT>nvert</TT>の間になければ、
+最も近い端点までの距離を返す。
+このメソッドを使うことにより、2つの線分の間の距離を計算することができるため、
+2つの円柱の間の干渉をテストすることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31279"></A>
 <B>:foot</B> <EM>point </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この平面上に<EM>point</EM>を直角に投影した位置の３次元ベクトルを返す。
+<EM>point</EM>からこの線分へおろした垂線の足である点を示すパラメータ
+を見つける。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="31660"></A>
-<B>:init</B> <EM>normal point </EM>[メソッド]
+<A NAME="31290"></A>
+<B>:common-perpendicular</B> <EM>l </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>point</EM>を通り<EM>normal</EM>を面の正規化ベクトルとする平面を定義する。
-<EM>normal</EM>は、正規化されていなければならない。<SPAN CLASS="MATH"><IMG
- WIDTH="95" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img63.png"
- ALT="$\vert normal\vert=1$"></SPAN>
+この線分と<EM>l</EM>とに垂直な線分を見つけ、2つの3次元ベクトルのリスト
+として返す。
+2つの線分が平行で共通な垂線が一意に決定できないとき、<TT>:parallel</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31302"></A>
+<B>:project</B> <EM>plane </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>plane</EM>に<TT>pvert</TT>と<TT>nvert</TT>を投影した2つの点のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31315"></A>
+<B>:collinear-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>collinear-p</B>を用いて<EM>torelance</EM>の誤差範囲内で<EM>point</EM>がこの線分と
+一直線上にあるかどうかをチェックする。
+もし、<EM>point</EM>がこの線分と一直線上にあるとき、その線分のその点に
+対するパラメータを返す。そうでなければ、NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31329"></A>
+<B>:on-line-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>point</EM>がこの線分と一直線上にあり、<TT>pvert</TT>と<TT>nvert</TT>との間に
+あるかどうかをチェックする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31342"></A>
+<B>:collinear-line</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ln</EM>がこの線分と共通線上にあるとき、すなわち<EM>ln</EM>の両端がこの線分上に
+あるときTを返し、そうでないときNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31354"></A>
+<B>:coplanar</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ln</EM>とこの線分が共通平面上にあるかどうかをチェックする。
+この線分の両端と<EM>ln</EM>の1つの端点で平面が定義される。
+もし、<EM>ln</EM>の他の端点がその平面上にあるとき、Tを返す。
+そうでなければ、NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31367"></A>
+<B>:intersection</B> <EM>ln </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ln</EM>は、この線分と共通平面上にあるとする。
+<B>:intersection</B>は、これら2つの線分の交点に対する2つのパラメータの
+リストを返す。
+パラメータは0から1までの実数である。これは、両端で区切られた
+線分の内分点を示す。2つの線が平行であるときNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31379"></A>
+<B>:intersect-line</B> <EM>ln </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ln</EM>は、この線分と共通平面上にあるとする。
+交点のパラメータが<TT>:parallel, :collinear</TT>や<TT>:intersect</TT>のような
+シンボル情報と共に返される。
 </DD>
 </DL>
 <BR>
@@ -202,23 +348,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 	<BR> 
-<A NAME="31674"></A>
-<BIG CLASS="XLARGE"><B>polygon </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>plane</B> 
-<BR>  :slots 		 (convexp edges vertices 
-<BR>(model-normal float-vector) 
-<BR>(model-distance :float))
-<BR>
+<A NAME="31393"></A>
+<BIG CLASS="XLARGE"><B>edge </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>line</B> 
+<BR>  :slots 		 (pface nface 
+<BR>(angle :type float) 
+<BR>(flags :type integer)) 
 </TT></PRE>
 <BR>
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD><B>polygon</B>は、平面の上の輪で表現される。
-<TT>convexp</TT>は、その輪が凸面であるかどうかを示す論理フラグである。
-<TT>edges</TT>は、この輪の輪郭や頂点のリストである<TT>vertices</TT>で
-形成されるエッジのリストである。
+<DD>2つの面の間の交差線分として定義されるエッジを表現する。
+<TT>pface</TT>と<TT>nface</TT>がスロットの中に定義されているが、
+それらの解釈はこのエッジの方向によって相対的に決まる。
+例えば、このエッジが<TT>pvert</TT>から<TT>nvert</TT>に向かっていると
+考えたとき、<TT>pface</TT>が正しいpfaceを表現している。
+そのため、<B>:pface</B>や<B>:nface</B>メソッドで適当な面を選択するためには、
+pvertとnvertの解釈を与えなければならない。
+
 </DD>
 </DL>
 <BR>
@@ -226,179 +375,124 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="31695"></A>
-<B>:box</B> <EM>&amp;optional tolerance </EM>[メソッド]
+<A NAME="31417"></A>
+<B>make-line</B> <EM>point1 point2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この多角形のための<B>bounding-box</B>を返す。
+<EM>point1</EM>を<TT>pvert</TT>とし、<EM>point2</EM>を<TT>nvert</TT>とする
+<B>line</B>のインスタンスを作る。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31706"></A>
-<B>:boxtest</B> <EM>box2 &amp;optional tolerance </EM>[メソッド]
+<P>
+
+<A NAME="31432"></A>
+<B>:pvertex</B> <EM>pf </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この多角形のための<B>bounding-box</B>を作成し，
-その<B>boundign-box</B>と<EM>box2</EM>との共通領域を返す。
-もし，共通領域がなかった場合，NILを返す。
+<EM>pf</EM>をこのエッジの<TT>pface</TT>とみなした<TT>pvertex</TT>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31719"></A>
-<B>:edges</B> [メソッド]
+<P>
+
+<A NAME="31445"></A>
+<B>:nvertex</B> <EM>pf </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この多角形のエッジのリストを返す。
-そのリストは，この平面の正規化ベクトルに沿ってその多角形を見たとき，
-時計方向の順番になっている。
-もし，正規化ベクトルをねじと考えると，そのエッジは
-ねじを入れる方向に回転させる向きの順番になっている。
-多角形または面が立体オブジェクトの面を表現するために使用されているとき，
-その正規化ベクトルはその立体の外側に向かっている。
-多角形をそのオブジェクトの外側から見たとき，エッジは
-反時計方向の順番になっている。
+<EM>pf</EM>をこのエッジの<TT>pface</TT>とみなした<TT>nvertex</TT>を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31729"></A>
-<B>:edge</B> <EM>n </EM>[メソッド]
+<P>
+
+<A NAME="31458"></A>
+<B>:body</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> エッジの<EM>n</EM>番目の要素を返す。
+<DD> このエッジを定義する<B>body</B>オブジェクトを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31740"></A>
-<B>:vertices</B> [メソッド]
+<A NAME="31469"></A>
+<B>:pface</B> <EM>pv nv </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-この多角形の頂点をエッジと同じ順番にならべたものを返す。
-最初の頂点は，そのリストの最後に重複してコピーされているため，
-そのリストは実際の頂点の数より１だけ長くなっていることに注意すること。
-これは，頂点のリストを用いてエッジへの変換を簡単にするためである。
+<DD> 仮想的に<EM>pv</EM>と<EM>nv</EM>をこのエッジの
+pvertとnvertに解釈したときのpfaceを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31750"></A>
-<B>:vertex</B> <EM>n </EM>[メソッド]
+<A NAME="31481"></A>
+<B>:nface</B> <EM>pv nv </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> 頂点の<EM>n</EM>番目の要素を返す。
+<DD> 仮想的に<EM>pv</EM>と<EM>nv</EM>をこのエッジの
+pvertとnvertに解釈したときのnfaceを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31761"></A>
-<B>:insidep</B> <EM>point &amp;optional (tolerance *epsilon*) </EM>[メソッド]
+<A NAME="31493"></A>
+<B>:binormal</B> <EM>aface </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この領域に対して相対的に置かれた<EM>point</EM>の位置にしたがって
-<TT>:inside</TT>,<TT>:outside</TT>あるいは<TT>:border</TT>を返す。
+このエッジと<EM>aface</EM>の正規化ベクトルに垂直な方向ベクトルを見つける。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31775"></A>
-<B>:intersect-point-vector</B> <EM>point vnorm </EM>[メソッド]
+<A NAME="31504"></A>
+<B>:angle</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>point</EM>と正規化方向ベクトル<EM>vnorm</EM>によって定義される
-擬似線分との交点を計算する。
+このエッジでつながった2つの面の間の角度を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31787"></A>
-<B>:intersect-line</B> <EM>p1 p2 </EM>[メソッド]
+<A NAME="31514"></A>
+<B>:set-angle</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>p1</EM>と<EM>p2</EM>で指定される線分との交点を計算する。
-その結果は、交点がなければNILを返し，交点があればその交点の位置の
-パラメータのリストを返す。
+このエッジでつながった2つの面の間の角度を計算し、
+それを<TT>angle</TT>スロットに置く。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31799"></A>
-<B>:intersect-edge</B> <EM>edge </EM>[メソッド]
+<P>
 
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>edge</EM>で指定される線分との交点を計算する。
-その結果は，交点がなければNILを返し、交点があれば
-交点の位置のパラメータのリストを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31810"></A>
-<B>:intersect-face</B> <EM>aregion </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-もし，この領域が<EM>aregion</EM>と交差しているなら，Tを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31821"></A>
-<B>:transform-normal</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31832"></A>
-<B>:reset-normal</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この多角形の現在の<TT>vertices</TT>リストから面の正規化ベクトルを再計算する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31843"></A>
+<A NAME="31525"></A>
 <B>:invert</B> [メソッド]
 
 <DL COMPACT>
@@ -409,19 +503,78 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BR>
 <BR>
 
-<A NAME="31854"></A>
-<B>:area</B> [メソッド]
+<A NAME="31536"></A>
+<B>:set-face</B> <EM>pv nv f </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> この領域の面積を返す。
+<DD> 
+<EM>f</EM>を<TT>pface</TT>とし、<EM>pv</EM>を<TT>pvertex</TT>とし、<EM>nv</EM>を
+<TT>nvertex</TT>として設定する。
+このメソッドは、このエッジの<TT>pface</TT>あるいは<TT>nface</TT>を変更することに
+注意すること。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="31864"></A>
-<B>:init</B> <EM>&amp;key :vertices :edges :normal :distance </EM>[メソッド]
+<P>
+
+<A NAME="31554"></A>
+<B>:contourp</B> <EM>viewpoint </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、このエッジが輪郭エッジであれば、すなわち、このエッジの<TT>pface</TT>
+あるいは<TT>nface</TT>のどちらかが<EM>viewpoint</EM>から見え、もう一方が
+見えないならTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31567"></A>
+<B>:approximated-p</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このエッジが円柱の側面のような曲面を表現するための近似エッジであるならば、
+Tを返す。
+近似エッジは部分直線で曲線を表現するのに必要である。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31577"></A>
+<B>:set-approximated-flag</B> <EM>&amp;optional (threshold 0.7) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Euslispでは、どんな曲面もたくさんの平面で近似される。
+<TT>flags</TT>のLSBは、このエッジの両側の面が曲面であるかどうかを
+示すために使用される。
+
+<P>
+もし、2つの面の間の角度が<EM>threshold</EM>より大きいなら、
+<B>:set-approximated-flag</B>は、このフラグをTに設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31590"></A>
+<B>:init</B> <EM>&amp;key :pface :nface :pvertex :nvertex </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
@@ -432,273 +585,40 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BR>
 
 <P>
-	<BR> 
-<A NAME="31876"></A>
-<BIG CLASS="XLARGE"><B>face </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>polygon</B> 
-<BR>  :slots 		 (holes mbody primitive-face id) 
-</TT></PRE>
-<BR>
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>穴を持った面を定義する。
-<EM>mbody</EM>と<EM>type</EM>は、基本bodyとbody内の面の属性<TT>(:top, :bottom, :side)</TT>
-を表現する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="31896"></A>
-<B>:all-edges</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31907"></A>
-<B>:all-vertices</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この面および内部ループ（穴）の輪郭のエッジあるいは頂点をすべて返す。
-<B>:edges</B>と<B>:verticies</B>メソッドは，
-輪郭を構成するエッジと頂点のみを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31919"></A>
-<B>:insidep</B> <EM>point </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>point</EM>がこの面の内部にあるかどうかを決定する。
-もし<EM>point</EM>がこの面の外側の輪郭の中にあり，どれかの穴の
-範囲内にあるならば，外側として分類される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31931"></A>
-<B>:area</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この面の面積を返す。
-これは，外側のエッジで囲まれる面積から穴の面積を引いたものである。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31941"></A>
-<B>:centroid</B> <EM>&amp;optional point </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この面の重心を表現する実数と実数ベクトルのリストを返す。
-もし，<EM>point</EM>が与えられないならば，最初の数はこの多角形の
-面積を表わし，2番目のベクトルがこの多角形の重心の位置を示す。
-もし，<EM>point</EM>が与えられたならば，この多角形を底面としその点を頂点
-とするような多角錐を考え，その体積と重心のベクトルを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31953"></A>
-<B>:invert</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この面の向きをひっくり返す。
-正規化ベクトルが逆方向とされ，エッジループの順番も反転される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31963"></A>
-<B>:enter-hole</B> <EM>hole </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この面に穴<EM>hole</EM>を加える。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31974"></A>
-<B>:primitive-body</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この面を定義する基本<B>body</B>を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31985"></A>
-<B>:id</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<TT>(:bottom), (:top)</TT>や<TT>(:side seq-no.)</TT>の中の1つを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="31997"></A>
-<B>:face-id</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-基本<B>body</B>の型とこの面の型をリストで返す。
-例えば，円柱の側面は
-<TT>((:cylinder <EM>radius height segments</EM>) :side <EM>id</EM>)</TT>を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="32011"></A>
-<B>:body-type</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この面を定義する基本<B>body</B>を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="32022"></A>
-<B>:init</B> <EM>&amp;key :normal :distance :edges :vertices :holes </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-	<BR> 
-<A NAME="32034"></A>
-<BIG CLASS="XLARGE"><B>hole </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>polygon</B> 
-<BR>  :slots 		 (myface) 
-</TT></PRE>
-<BR>
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>穴は，面の内部ループを表現する多角形である。<B>face</B>のオブジェクトは、
-自分の<TT>holes</TT>スロット
-の中に<B>hole</B>のリストを持っている。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="32054"></A>
-<B>:face</B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> この<B>hole</B>を含む面を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="32065"></A>
-<B>:enter-face</B> <EM>face </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この<B>hole</B>を囲んでいる面<EM>face</EM>へリンクを作る。
-このメソッドは、<B>face</B>クラスの<TT>:enter-hole</TT>メソッドと共に
-使用されるものである。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="32079"></A>
-<B>:init</B> <EM>&amp;key :normal :distance :edges :vertices :face </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
+             <P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2139"
+<A NAME="tex2html2140"
   HREF="jmanual-node116.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2133"
-  HREF="jmanual-node112.html">
+<A NAME="tex2html2134"
+  HREF="jmanual-node113.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2127"
+<A NAME="tex2html2128"
   HREF="jmanual-node114.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2135"
+<A NAME="tex2html2136"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2137"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2138"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2140"
-  HREF="jmanual-node116.html">立体(body)</A>
-<B> Up:</B> <A NAME="tex2html2134"
-  HREF="jmanual-node112.html">幾何学モデリング</A>
-<B> Previous:</B> <A NAME="tex2html2128"
-  HREF="jmanual-node114.html">線とエッジ</A>
- &nbsp; <B>  <A NAME="tex2html2136"
+<B> Next:</B> <A NAME="tex2html2141"
+  HREF="jmanual-node116.html">平面と面</A>
+<B> Up:</B> <A NAME="tex2html2135"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2129"
+  HREF="jmanual-node114.html">種々の幾何学関数</A>
+ &nbsp; <B>  <A NAME="tex2html2137"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2138"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
+ &nbsp; <B>  <A NAME="tex2html2139"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

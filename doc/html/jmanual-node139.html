@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>テキスト表示パネル</TITLE>
+<TITLE>ファイルパネル</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="テキスト表示パネル">
+<META NAME="description" CONTENT="ファイルパネル">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,126 +19,81 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
+<LINK REL="next" HREF="jmanual-node140.html">
 <LINK REL="previous" HREF="jmanual-node138.html">
-<LINK REL="up" HREF="jmanual-node136.html">
+<LINK REL="up" HREF="jmanual-node137.html">
 <LINK REL="next" HREF="jmanual-node140.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2488"
+<A NAME="tex2html2491"
   HREF="jmanual-node140.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2482"
-  HREF="jmanual-node136.html">
+<A NAME="tex2html2485"
+  HREF="jmanual-node137.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2478"
+<A NAME="tex2html2479"
   HREF="jmanual-node138.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2484"
+<A NAME="tex2html2487"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2486"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2489"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2489"
-  HREF="jmanual-node140.html">パネルアイテム</A>
-<B> Up:</B> <A NAME="tex2html2483"
-  HREF="jmanual-node136.html">パネル</A>
-<B> Previous:</B> <A NAME="tex2html2479"
-  HREF="jmanual-node138.html">ファイルパネル</A>
- &nbsp; <B>  <A NAME="tex2html2485"
+<B> Next:</B> <A NAME="tex2html2492"
+  HREF="jmanual-node140.html">テキスト表示パネル</A>
+<B> Up:</B> <A NAME="tex2html2486"
+  HREF="jmanual-node137.html">パネル</A>
+<B> Previous:</B> <A NAME="tex2html2480"
+  HREF="jmanual-node138.html">サブパネル(メニューとメニューバー)</A>
+ &nbsp; <B>  <A NAME="tex2html2488"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2487"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2490"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04072300000000000000">
-テキスト表示パネル</A>
+<H3><A NAME="SECTION04072200000000000000">
+ファイルパネル</A>
 </H3>
-
-<P>
-TextViewPanelは、テキストファイルを表示するための
-アプリケーションwindowクラスである
-(図 <A HREF="#textviewpanel">17</A>)。
-プログラムテキストは、もっとも簡単なアプリケーションwindowの１つが
-どのように記述されているかを見れる。
-<TT>:create</TT>メソッドにおいて、quitボタンとfindボタンと
-ファイルの中を捜すための文字列を供給するためのtext-itemを
-作成する。
-view-windowは、縦と横にスクロールバーを持ちファイルを表示するための
-ScrollTextWindowである。
-TextViewPanelは、windowマネージャーにより一番外側のタイトルwindowの
-大きさを変えたときview-windowの大きさを変えるために
-<TT>:ConfigureNotify</TT>イベントを捕獲する。
+FilePanelは、ファイルやディレクトリを対話的に処理する
+アプリケーションwindowである。
+<TT>cd</TT>や<TT>go-up</TT>ボタンを使用することにより、
+どんなディレクトリも見に行くことができるし、
+以下の<TT>ScrollTextWindow</TT>の中にディレクトリ内に含まれるファイルを
+表示する。
+テキストファイルは、異なったwindow(TextViewPanel)の中に
+表示することができる。
+ファイルは、また印刷することができ、削除することができ、
+ボタンをクリックすることにより簡単にコンパイルすることができる。
+ファイルを印刷するとき、<TT>a2ps <EM>file</EM> | lpr</TT>コマンドがforkされたプロセスとして実行される。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="textviewpanel"></A><A NAME="44137"></A>
+<DIV ALIGN="CENTER"><A NAME="43768"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
-テキスト表示パネルwindow</CAPTION>
+ファイルパネルwindow</CAPTION>
 <TR><TD><IMG
- WIDTH="317" HEIGHT="317" BORDER="0"
- SRC="jmanual-img88.png"
+ WIDTH="430" HEIGHT="340" BORDER="0"
+ SRC="jmanual-img87.png"
  ALT="\begin{figure}\begin{center}
-\epsfile{file=fig/textviewpanel.ps,height=7cm}
+\epsfile{file=fig/filepanel.ps,height=7.5cm}
 \end{center}
 \end{figure}"></TD></TR>
 </TABLE>
 </DIV>
 
 <P>
-<PRE>
-(defclass TextViewPanel :super panel
-        :slots (quit-button find-button find-text view-window))
-
-(defmethod TextViewPanel
- (:create (file &amp;rest args &amp;key (width 400) &amp;allow-other-keys)
-    (send-super* :create :width width args)
-    (setq quit-button
-          (send self :create-item panel-button "quit" self :quit))
-    (setq find-button
-          (send self :create-item panel-button "find" self :find))
-    (setq find-text
-          (send self :create-item text-item "find: " self :find))
-    (setq view-window
-            (send self :locate-item
-                (instance ScrollTextWindow :create
-                   :width (setq width (- (send self :width) 10))
-                   :height (- (setq height (send self :height)) 38)
-                   :scroll-bar t :horizontal-scroll-bar t
-                   :map nil      :parent self)))
-    (send view-window :read-file file))
- (:quit (event)  (send self :destroy))
- (:find (event)
-    (let ((findstr (send find-text :value)) (found)
-          (nlines (send view-window :nlines)))
-        (do ((i 0 (1+ i)))
-            ((or (&gt;= i nlines) found))
-           (if (substringp findstr (send view-window :line i)) (setq found i)))
-        (when found
-           (send view-window :display-selection found)
-           (send view-window :locate found))))
- (:resize (w h)
-    (setq width w height h)
-    (send view-window :resize (- w 10) (- h 38)))
- (:configureNotify (event)
-   (let ((newwidth (send self :width))
-         (newheight (send self :height)))
-        (when (or (/= newwidth width) (/= newheight height))
-          (send self :resize newwidth newheight)))  ) )
-</PRE>
-
-<P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

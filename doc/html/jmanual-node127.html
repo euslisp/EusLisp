@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>描画</TITLE>
+<TITLE>Viewer</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="描画">
+<META NAME="description" CONTENT="Viewer">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,135 +21,411 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node128.html">
 <LINK REL="previous" HREF="jmanual-node126.html">
-<LINK REL="up" HREF="jmanual-node122.html">
+<LINK REL="up" HREF="jmanual-node123.html">
 <LINK REL="next" HREF="jmanual-node128.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2311"
+<A NAME="tex2html2312"
   HREF="jmanual-node128.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2305"
-  HREF="jmanual-node122.html">
+<A NAME="tex2html2306"
+  HREF="jmanual-node123.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2299"
+<A NAME="tex2html2300"
   HREF="jmanual-node126.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2307"
+<A NAME="tex2html2308"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2309"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2310"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2312"
-  HREF="jmanual-node128.html">アニメーション</A>
-<B> Up:</B> <A NAME="tex2html2306"
-  HREF="jmanual-node122.html">視界とグラフィックス</A>
-<B> Previous:</B> <A NAME="tex2html2300"
-  HREF="jmanual-node126.html">Viewer</A>
- &nbsp; <B>  <A NAME="tex2html2308"
+<B> Next:</B> <A NAME="tex2html2313"
+  HREF="jmanual-node128.html">描画</A>
+<B> Up:</B> <A NAME="tex2html2307"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2301"
+  HREF="jmanual-node126.html">Viewport</A>
+ &nbsp; <B>  <A NAME="tex2html2309"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2310"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2311"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04055000000000000000"></A><A NAME="Drawings"></A>
-<BR>
-描画
+<H2><A NAME="SECTION04054000000000000000">
+Viewer</A>
 </H2>
+画面の上に描画するためには、4つのオブジェクトが必要である。
+1つは描かれたオブジェクト、2つはviewing座標系と投影で定義される<B>viewing</B>、
+3つはNDCの中でのクリップ処理のための<B>viewport</B>とNDCから物理的画面座標系への
+変換、4つは
+物理的ディスプレイデバイスの上に描画関数を実行する<B>viewsurface</B>。
+<B>viewer</B>オブジェクトは、<B>viewing</B>と<B>viewport</B>と<B>viewsurface</B>
+オブジェクトを持ち、
+座標系変換を連続的に制御する。
+<A HREF="jmanual-node128.html#Drawings">15.5</A>節に記述される<B>draw</B>と<B>hid</B>関数は<B>viewer</B>の
+インスタンスを使用する。
 
 <P>
 
  <BR>
 <BR> <P>
+	<BR> 
+<A NAME="36823"></A>
+<BIG CLASS="XLARGE"><B>viewer </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (eye :type viewint) 
+<BR>(port :type viewport) 
+<BR>(surface :type viewsurface) 
+</TT></PRE>
+<BR>
+<BR>
 
-<A NAME="37147"></A>
-<B>draw</B> <EM>[viewer] &amp;rest thing </EM>[関数]
+<DL COMPACT>
+<DT> 
+<DD>viewingからviewportを経由してviewsurfaceへ移るCascaded Coordinatesの変換を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36840"></A>
+<B>:viewing</B> <EM>&amp;rest msg </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>viewer</EM>に<EM>thing</EM>を描く。
-<EM>thing</EM>は、座標系、立体、面、エッジ、ベクトル、2つのベクトルのリストのどれでも可能である。
-<TT>(progn (view) (draw (make-cube 10 20 30)))</TT>
-は、xwindowに立方体を描く。
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewing</B><TT>(eye)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewing</B><TT>(eye)</TT>オブジェクトが返される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="37161"></A>
-<B>draw-axis</B> <EM>[viewer] [size] &amp;rest thing </EM>[関数]
+<A NAME="36856"></A>
+<B>:viewport</B> <EM>&amp;rest msg </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>viewer</EM>の中に<EM>thing</EM>の座標系の軸を<EM>size</EM>の長さで描く。
-<EM>thing</EM>は、座標系から得られるどのオブジェクトでも可能である。
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewport</B><TT>(port)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewport</B><TT>(port)</TT>オブジェクトが返される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="37175"></A>
-<B>draw-arrow</B> <EM>p1 p2 </EM>[関数]
+<A NAME="36872"></A>
+<B>:viewsurface</B> <EM>&amp;rest msg </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>*viewer*</B>に<EM>p1</EM>から<EM>p2</EM>に向かう矢印を描く。
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewsurface</B><TT>(surface)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewsurface</B><TT>(surface)</TT>オブジェクトが返される。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="37188"></A>
-<B>hid</B> <EM>[viewer] &amp;rest thing  </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> <EM>viewer</EM>に陰線処理された画像を描く。
-<EM>thing</EM>は、<TT>face</TT>または<TT>body</TT>が可能である。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="37202"></A>
-<B>hidd</B> <EM>[viewer] &amp;rest thing  </EM>[関数]
+<A NAME="36888"></A>
+<B>:adjust-viewport</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-陰線を点線で描くことを除いて、<B>hid</B>と同じである。
+<B>viewsurface</B>の大きさが変えられたとき、<B>:adjust-viewport</B>は
+<TT>port</TT>に固有のメッセージを送ることにより<B>viewport</B>の変換を変える。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="37213"></A>
-<B>hid2</B> <EM>body-list viewing </EM>[関数]
+<A NAME="36902"></A>
+<B>:resize</B> <EM>width height </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-edge-imageオブジェクトで表現される陰線処理画像を生成する。
-その結果は<B>*hid*</B>に置かれる。
+<B>viewsurface</B>に<TT>:resize</TT>メッセージを送り、<B>viewport</B>に<TT>:size</TT>メッセージを送る
+ことによりviewsurfaceの大きさを変える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36916"></A>
+<B>:draw-line-ndc</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される2つの端点<EM>p1,p2</EM>を結ぶ線を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36927"></A>
+<B>:draw-polyline-ndc</B> <EM>polylines </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される端点を結ぶ多角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36937"></A>
+<B>:draw-star-ndc</B> <EM>center &amp;optional (size 0.01) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に十字マークを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36947"></A>
+<B>:draw-box-ndc</B> <EM>low-left up-right </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36957"></A>
+<B>:draw-arc-ndc</B> <EM>point width height angle1 angle2 &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に円弧を描く。
+この<B>viewer</B>に結び付く<B>viewsurface</B>オブジェクトは、<B>:arc</B>メッセージを
+受けなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36970"></A>
+<B>:draw-fill-arc-ndc</B> <EM>point width height angle1 angle2 &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に塗り潰し円弧を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36980"></A>
+<B>:draw-string-ndc</B> <EM>position string &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される<EM>position</EM>に<EM>string</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36992"></A>
+<B>:draw-image-string-ndc</B> <EM>position string &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37003"></A>
+<B>:draw-rectangle-ndc</B> <EM>position width height &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37014"></A>
+<B>:draw-fill-rectangle-ndc</B> <EM>point width height &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37025"></A>
+<B>:draw-line</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系に定義される2つの端点<EM>p1,p2</EM>を結ぶ線を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37036"></A>
+<B>:draw-star</B> <EM>position &amp;optional (size 0.01) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系の<EM>position</EM>位置に十字マークを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37047"></A>
+<B>:draw-box</B> <EM>center &amp;optional (size 0.01) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系の<EM>center</EM>に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37058"></A>
+<B>:draw-arrow</B> <EM>p1 p2 </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1</EM>から<EM>p2</EM>へ向けての矢印を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37070"></A>
+<B>:draw-edge</B> <EM>edge </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37081"></A>
+<B>:draw-edge-image</B> <EM>edge-image </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37092"></A>
+<B>:draw-faces</B> <EM>face-list &amp;optional (normal-clip nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37103"></A>
+<B>:draw-body</B> <EM>body &amp;optional (normal-clip nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37114"></A>
+<B>:draw-axis</B> <EM>coordinates &amp;optional size </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>coordinates</EM>で定義される軸を<EM>size</EM>の長さで描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37126"></A>
+<B>:draw</B> <EM>&amp;rest things </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+3次元の幾何学オブジェクトを描く。
+もし、オブジェクトが3次元ベクトルならば、その位置に小さな十字マークを描く。
+もし、3次元ベクトルのリストであれば、多角形を描く。
+もし、<EM>thing</EM>が<TT>:draw</TT>メッセージを受けたならば、
+この<B>viewer</B>を引き数としてそのメソッドが呼び出される。
+もし、オブジェクトが<TT>:drawners</TT>メソッドを定義しているならば、
+<B>:draw</B>メッセージは<TT>:drawners</TT>の結果に送られる。
+<TT>line, edge, polygon, face</TT>および<TT>body</TT>オブジェクトは、
+<B>viewer</B>に定義されている<B>:draw-xxx</B>(xxxにそのオブジェクトのクラス名が入る)
+メソッドによって描かれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37146"></A>
+<B>:erase</B> <EM>&amp;rest things </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+背景色で<EM>things</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37157"></A>
+<B>:init</B> <EM>&amp;key :viewing :viewport :viewsurface </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>viewing, viewport</EM>および<EM>viewsurface</EM>をこの<B>viewer</B>のスロット
+<TT>eye, port</TT>と<TT>surface</TT>に設定する。
 </DD>
 </DL>
 <BR>
@@ -157,162 +433,23 @@ edge-imageオブジェクトで表現される陰線処理画像を生成する�
 
 <P>
 
-<A NAME="37224"></A>
+<A NAME="37172"></A>
 <BR>
 <IMG
- WIDTH="554" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img73.png"
+ WIDTH="553" HEIGHT="169" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img72.png"
  ALT="\begin{emtabbing}
-{\bf render}
-\it\&amp;key \= :bodies :faces (:viewer *viewer*) \\lq ...
-... *light-sources*)\\
-\&gt; (colormap *render-colormap*) (y 1.0)
+{\bf view}
+\it\&amp;key \= (:size 500) (:width size) (:height siz...
+... (:screen-y screen) \\
+\&gt; (:xcenter 500) (:ycenter 400) \\
 \rm
 \end{emtabbing}">
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD><EM>bodies</EM>と<EM>faces</EM>にレイトレーシングを行い、陰面消去した画像を生成する。
-<B>viewing, viewport</B>および<B>viewsurfaceは</B>、<EM>viewer</EM>から得られる。
-<EM>lights</EM>は、<TT>light-source</TT>（光源）オブジェクトのリストである。
-<EM>colormap</EM>は、Xwindowの<B>colormap</B>オブジェクトである。
-それぞれの<EM>bodies</EM>と<EM>faces</EM>は、割り当てられるカラー属性を
-持たなければならない。
-<EM>colormap</EM>に定義されているカラーLUTの名前を<TT>:color</TT>メッセージで
-送ることによりカラー属性を設定できる。
-一般にこの関数は、Xlib環境下でのみ働く。
-<TT>demo/renderdemo.l</TT>のサンプルプログラムを見ること。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="37249"></A>
-<B>make-light-source</B> <EM>pos &amp;optional (intensity 1.0) </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>pos</EM>の位置に光源オブジェクトを作る。
-<EM>intensity</EM>は、デフォルトの光の強さを増す拡大比である。
-もっと正確に強さを決定するためには、光源の<TT>:intensity</TT>メソッドを
-使用する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="37262"></A>
-<B>tektro</B> <EM>file &amp;rest forms </EM>[マクロ]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<TT>*tektro-port*</TT>ストリームのために<EM>file</EM>をオープンし、
-<EM>forms</EM>を評価する。
-これは、tektro描画の出力を直接<EM>file</EM>に書き込むために使用される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="37276"></A>
-<B>kdraw</B> <EM>file &amp;rest forms </EM>[マクロ]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>kdraw</B>は、<TT>kdraw</TT>または<TT>idraw</TT>で読み込めるポストスクリプトファイルを
-生成するためのマクロ命令である。
-<B>kdraw</B>は、<TT>:output</TT>モードで<EM>file</EM>をオープンし、
-<TT>*viewer*</TT>を置き換えるためのkdraw-viewsurfaceとviewportを
-作り、<EM>forms</EM>を評価する。
-それぞれの<EM>forms</EM>は、<TT>draw</TT>や<TT>hid</TT>のような描画関数の
-どれかを呼び出す。
-これらの<EM>forms</EM>からの描画メッセージは、<TT>kdraw-viewsurface</TT>に
-直接出力される。この出力は<TT>idraw</TT>や<TT>kdraw</TT>で認識できる
-ポストスクリプト表現にメッセージを変換する。
-そして、<EM>file</EM>に蓄積する。
-<TT>idraw</TT>または<TT>kdraw</TT>が呼び出され<EM>file</EM>がオープンされたとき、
-EusViewer windowに書いたものと同一の図形を見ることができる。
-その図形は、<TT>idraw</TT>の機能で変更することができる。
-そして、最終描画は<TT>epsfile</TT>環境を用いることにより<SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN>ドキュメント
-に組み込むことができる。
-この機能は、"llib/kdraw.l"のファイルに記述されている。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="37307"></A>
-<B>pictdraw</B> <EM>file &amp;rest forms </EM>[マクロ]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>pictdraw</B>は、MacintoshのPICTフォーマットで画像ファイルを
-生成するためのマクロである。
-<B>pictdraw</B>は、<EM>file</EM>を<TT>:output</TT>モードでオープンし、
-pictdraw-viewsurfaceを作り、<TT>*viewer*</TT>のviewportに置き換え、
-<EM>forms</EM>を評価する。
-<EM>forms</EM>は、それぞれ<TT>draw</TT>あるいは<TT>hid</TT>のような描画関数のどれかを
-呼び出すものである。
-これらの書式からの描画メッセージは、<TT>kdraw-viewsurface</TT>に
-直接出力された後、PICTフォーマットへのメッセージに変換され,
-<EM>file</EM>へ蓄積される。
-このPICTフォーマットは、Macintoshの<TT>macdraw</TT>や<TT>teachtext</TT>で
-認識することができる。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="37330"></A>
-<B>hls2rgb</B> <EM>hue lightness saturation &amp;optional (range 255) </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-HLS(Hue, Lightness, Saturation)で表現される色を、RGB表現に変換する。
-HLSは、しばしばHSLとして参照される。
-<EM>hue</EM>は、rainbow circle(0から360)の色で表現される。
-0が赤で45が黄で120が緑で240が青で270が紫そして360が再び赤となる。
-<EM>lightness</EM>は、0.0から0.1の値を持ち、黒から白までの明るさを表現する。
-<EM>lightness</EM>が0のときは、<EM>hue</EM>や<EM>saturation</EM>にかかわらず
-黒となる。そして、<EM>lightness</EM>が1のときは、白となる。
-<EM>saturation</EM>は、0.0から1.0までの値を持ち、色の強さを表現する。
-<EM>saturation</EM>の値が大きいと鮮明な色調を生成し、小さい値は弱く濁った色調
-を生成する。
-<EM>range</EM>は、RGB値の限界を示す。
-もし、それぞれの色に8ビットの値が割り当てられているカラーディスプレイ
-を使っているならば、<EM>range</EM>は255とすべきである。
-もし、RGBに16ビットの整数が仮想的に割り当てられているXwindowを使って
-いるならば、<EM>range</EM>は65536とすべきである。
-HSVとHLSとの違いに注意すること。
-HLSでは、鮮明な(rainbow)色は<TT>lightness=0.5</TT>で定義されている。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="37352"></A>
-<B>rgb2hls</B> <EM>red green blue &amp;optional (range 255) </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-RGBの色表現を、HLS表現に変換する。
+<DD>新しい<B>viewer</B>を作り、<B>*viewer*</B>リストに置く。
 </DD>
 </DL>
 <BR>
@@ -323,36 +460,36 @@ RGBの色表現を、HLS表現に変換する。
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2311"
+<A NAME="tex2html2312"
   HREF="jmanual-node128.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2305"
-  HREF="jmanual-node122.html">
+<A NAME="tex2html2306"
+  HREF="jmanual-node123.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2299"
+<A NAME="tex2html2300"
   HREF="jmanual-node126.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2307"
+<A NAME="tex2html2308"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2309"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2310"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2312"
-  HREF="jmanual-node128.html">アニメーション</A>
-<B> Up:</B> <A NAME="tex2html2306"
-  HREF="jmanual-node122.html">視界とグラフィックス</A>
-<B> Previous:</B> <A NAME="tex2html2300"
-  HREF="jmanual-node126.html">Viewer</A>
- &nbsp; <B>  <A NAME="tex2html2308"
+<B> Next:</B> <A NAME="tex2html2313"
+  HREF="jmanual-node128.html">描画</A>
+<B> Up:</B> <A NAME="tex2html2307"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2301"
+  HREF="jmanual-node126.html">Viewport</A>
+ &nbsp; <B>  <A NAME="tex2html2309"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2310"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
+ &nbsp; <B>  <A NAME="tex2html2311"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

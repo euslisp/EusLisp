@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>低レベルメモリ管理</TITLE>
+<TITLE>マルチスレッド</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="低レベルメモリ管理">
+<META NAME="description" CONTENT="マルチスレッド">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,111 +21,148 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node83.html">
 <LINK REL="previous" HREF="jmanual-node81.html">
-<LINK REL="up" HREF="jmanual-node76.html">
+<LINK REL="up" HREF="jmanual-node77.html">
 <LINK REL="next" HREF="jmanual-node83.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1652"
+<A NAME="tex2html1653"
   HREF="jmanual-node83.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1646"
-  HREF="jmanual-node76.html">
+<A NAME="tex2html1647"
+  HREF="jmanual-node77.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1640"
+<A NAME="tex2html1641"
   HREF="jmanual-node81.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1648"
+<A NAME="tex2html1649"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1650"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1651"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1653"
-  HREF="jmanual-node83.html">IOCTL</A>
-<B> Up:</B> <A NAME="tex2html1647"
-  HREF="jmanual-node76.html">UNIXシステムコール</A>
-<B> Previous:</B> <A NAME="tex2html1641"
-  HREF="jmanual-node81.html">マルチスレッド</A>
- &nbsp; <B>  <A NAME="tex2html1649"
+<B> Next:</B> <A NAME="tex2html1654"
+  HREF="jmanual-node83.html">低レベルメモリ管理</A>
+<B> Up:</B> <A NAME="tex2html1648"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1642"
+  HREF="jmanual-node81.html">シグナル</A>
+ &nbsp; <B>  <A NAME="tex2html1650"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1651"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1652"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04012600000000000000">
-低レベルメモリ管理</A>
+<H3><A NAME="SECTION04012500000000000000">
+マルチスレッド</A>
 </H3>
+スレッド内でシグナルを生成することはできない。
+したがって、1つのシグナルスタックと1つのタイマーがEuslispのプロセスの
+中で実現されている。
+Solaris2の上では、メインの最上位レベルが分割されたスレッド内で実行する。
+
+<P>
 
  <BR>
-<BR> <A NAME="22126"></A>
-<B>unix:malloc</B> <EM>integer </EM>[関数]
+<BR> <A NAME="22090"></A>
+<B>unix:thr-self</B> [関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Euslispのメモリ空間の外にメモリを配置する。
+現在実行されているスレッドのID(整数)を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22136"></A>
-<B>unix:free</B> <EM>integer </EM>[関数]
+<P>
+
+<A NAME="22100"></A>
+<B>unix:thr-getprio</B> <EM>id </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>unix:malloc</B>で配置されたメモリブロックを開放する。
+<EM>id</EM>で指定されたスレッドの実行優先順位を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22147"></A>
-<B>unix:valloc</B> <EM>integer </EM>[関数]
+<A NAME="22111"></A>
+<B>unix:thr-setprio</B> <EM>id newprio </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<EM>id</EM>で指定されたスレッドの実行優先順位に<EM>newprio</EM>を設定する。
+<EM>newprio</EM>が小さい数値の場合、優先順位が高いことを意味する。
+言い替えれば、
+<EM>newprio</EM>よりも大きな数値を持つスレッドは、CPUにアクセスされることが
+少なくなる。
+ユーザーは、実行優先順位をプロセスの値（普通はゼロ）よりも高く
+することはできない。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22158"></A>
-<B>unix:mmap</B> <EM>address length protection share stream offset </EM>[関数]
+<P>
+
+<A NAME="22125"></A>
+<B>unix:thr-getconcurrency</B> [関数]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+並列に実行できるスレッドの数で表現される
+並列度(整数)を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22169"></A>
-<B>unix:munmap</B> <EM>address length </EM>[関数]
+<P>
+
+<A NAME="22135"></A>
+<B>unix:thr-setconcurrency</B> <EM>concurrency </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<EM>concurrency</EM>の値は、プロセス内のLWPの数である。
+もし、<EM>concurrensy</EM>がデフォルトの1ならば、
+生成されたたくさんのスレッドがすべて実行可能であったとしても
+順番に1つのLWPに割り当てられる。
+もし、プログラムがマルチプロセッサマシン上で実行され、
+同時に複数のCPUを利用したいならば、
+<EM>concurrency</EM>に1より大きい値を設定しなければならない。
+<EM>concurrency</EM>に大きな値を設定すると、オペレーティングシステムの
+リソースをたくさん消費する。普通、<EM>concurrency</EM>はプロセッサの数
+と同じかあるいは小さくすべきである。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="22180"></A>
-<B>unix:vadvise</B> <EM>integer </EM>[関数]
+<P>
+
+<A NAME="22150"></A>
+<B>unix:thr-create</B> <EM>func arg-list &amp;optional (size 64*1024) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<EM>size</EM>ワードのlispスタックを持ち、<EM>size</EM>バイトのCスタック持つ
+新しいスレッドを作成し、そのスレッド内で<EM>arg-list</EM>に<EM>func</EM>を適用する。
+スレッドは、どんな結果も呼びだし側に返すことができない。
+この関数の使用は避けること。
 </DD>
 </DL>
 <BR>
@@ -136,7 +173,7 @@ Euslispのメモリ空間の外にメモリを配置する。
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

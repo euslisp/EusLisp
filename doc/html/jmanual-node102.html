@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>タイマー</TITLE>
+<TITLE>同期メモリポート</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="タイマー">
+<META NAME="description" CONTENT="同期メモリポート">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,94 +19,66 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
+<LINK REL="next" HREF="jmanual-node103.html">
 <LINK REL="previous" HREF="jmanual-node101.html">
-<LINK REL="up" HREF="jmanual-node96.html">
+<LINK REL="up" HREF="jmanual-node97.html">
 <LINK REL="next" HREF="jmanual-node103.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1947"
+<A NAME="tex2html1950"
   HREF="jmanual-node103.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1941"
-  HREF="jmanual-node96.html">
+<A NAME="tex2html1944"
+  HREF="jmanual-node97.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1937"
+<A NAME="tex2html1938"
   HREF="jmanual-node101.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1943"
+<A NAME="tex2html1946"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1945"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1948"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1948"
-  HREF="jmanual-node103.html">並列度の計測</A>
-<B> Up:</B> <A NAME="tex2html1942"
-  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
-<B> Previous:</B> <A NAME="tex2html1938"
-  HREF="jmanual-node101.html">同期メモリポート</A>
- &nbsp; <B>  <A NAME="tex2html1944"
+<B> Next:</B> <A NAME="tex2html1951"
+  HREF="jmanual-node103.html">タイマー</A>
+<B> Up:</B> <A NAME="tex2html1945"
+  HREF="jmanual-node97.html">非同期プログラミングと並列プログラミングの構築</A>
+<B> Previous:</B> <A NAME="tex2html1939"
+  HREF="jmanual-node101.html">同期障壁</A>
+ &nbsp; <B>  <A NAME="tex2html1947"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1946"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1949"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04022600000000000000">
-タイマー</A>
+<H3><A NAME="SECTION04022500000000000000">
+同期メモリポート</A>
 </H3>
-実時間プログラムは、予定された時間に実行される関数や、
-特定の間隔で繰り返される関数をしばしば要求する。
-これまでのEusLispは、Unixのインターバルタイマーによって
-定期的に生成される信号によって発生するユーザー関数を
-実行することができた。
-MT-Eusにおいて、この実行はデッドロックを引き起こす。
-なぜなら、割り込みがmutex-lockされたブロック内から発生する可能性がある。
-したがって、制御は<TT>eval</TT>の最初のように安全な場所で渡されなければ
-ならない。
-上記の同期によって引き起こされる遅れを避けるために、
-MT-Eusはセマフォを経由して信号通知(signal-notification)も
-提供する。
-言い換えれば、信号関数は呼び出されるかあるいは信号の到着を知らせる
-関数あるいはセマフォのどちらかをとる。
-セマフォは、低レベルで告示されるので、
-同期により隠れているところは最小である。
-
-<P>
-以下に示すものは、マルチスレッド機能を用いた画像処理のプログラム例である。
-画像入力スレッドとフィルタースレッドが生成される。
-samp-imageは、33msec毎に通知されるsamp-semを待つことにより、
-定期的に画像データをとる。
-2つのスレッドはthread-portの読み書きを通じて同期する。
-filter-imageは、フィルターの並列計算のために複数のスレッドを使用している。
-
-<P><PRE>
-(make-threads 8)
-(defun samp-image (p)
-   (let ((samp-sem (make-semaphore)))
-        (periodic-sema-post 0.03 samp-sem)
-        (loop (sema-wait samp-sem)
-              (send p :write (read-image))))
-(defun filter-image (p)
-  (let (img)
-       (loop (setf img (send p :read))
-             (plist (filter-up-half img)
-                    (filter-low-half img)))))
-(setf port (make-thread-port))
-(setf sampler (thread #'samp-image port))
-(setf filter (thread #'filter-image port))
-</PRE>
+<B>同期メモリポート(synch-memory-port)</B>は、
+スレッド間でデータを交換するための1種のストリーム
+である(図 <A HREF="jmanual-node100.html#synchports">8</A>)。
+プロセス内のすべてのスレッドはヒープメモリを共有しているので、
+もし1つのスレッドがグローバル変数にオブジェクトを割り当てた場合、
+直ちに他のスレッドから見れるようになる。
+しかしながら、共有メモリはグローバルデータが更新されたという
+イベントを送るための能力が不足している。
+同期メモリポートは、共有オブジェクトをアクセスするための
+この同期機能を保証する。
+同期メモリポートオブジェクトは、1つのバッファスロットと同期読み書きの
+ために使用される2つのセマフォによって構成されている。
 
 <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

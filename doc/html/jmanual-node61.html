@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>パス名</TITLE>
+<TITLE>非同期入出力</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="パス名">
+<META NAME="description" CONTENT="非同期入出力">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,70 +20,70 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
 <LINK REL="next" HREF="jmanual-node62.html">
-<LINK REL="previous" HREF="jmanual-node60.html">
-<LINK REL="up" HREF="jmanual-node52.html">
+<LINK REL="previous" HREF="jmanual-node57.html">
+<LINK REL="up" HREF="jmanual-node53.html">
 <LINK REL="next" HREF="jmanual-node62.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1249"
+<A NAME="tex2html1250"
   HREF="jmanual-node62.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1243"
-  HREF="jmanual-node52.html">
+<A NAME="tex2html1244"
+  HREF="jmanual-node53.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1237"
+<A NAME="tex2html1238"
   HREF="jmanual-node60.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1245"
+<A NAME="tex2html1246"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1247"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1248"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1250"
-  HREF="jmanual-node62.html">ファイルシステムインターフェース</A>
-<B> Up:</B> <A NAME="tex2html1244"
-  HREF="jmanual-node52.html">ストリームと入出力</A>
-<B> Previous:</B> <A NAME="tex2html1238"
-  HREF="jmanual-node60.html">非同期入出力</A>
- &nbsp; <B>  <A NAME="tex2html1246"
+<B> Next:</B> <A NAME="tex2html1251"
+  HREF="jmanual-node62.html">パス名</A>
+<B> Up:</B> <A NAME="tex2html1245"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1239"
+  HREF="jmanual-node60.html">ソケット</A>
+ &nbsp; <B>  <A NAME="tex2html1247"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1248"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1249"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION03086000000000000000"></A><A NAME="Pathnames"></A>
-<BR>
-パス名
+<H2><A NAME="SECTION03085000000000000000">
+非同期入出力</A>
 </H2>
-
-<P>
-パス名は、OSに依存しないようにファイル名を解析あるいは構成する方法として
-与えられるものである。
-典型的なパス名は、次のような構成で成り立っていると仮定されている。
-host:device/directory1/.../directory-n/name.type.version。
-Euslispは、UNIXの上で動作している限り、ホスト・デバイス・バージョンを無視する。
-<B>pathname</B>関数は、文字列をディレクトリ要素・名前・型に分解し、パス名
-オブジェクトを返す。そのパス名は、<TT>#P</TT>を先頭につけた文字列として表示される。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="15622"></A>
-<B>pathnamep</B> <EM>name </EM>[関数]
+<A NAME="15624"></A>
+<B>select-stream</B> <EM>stream-list timeout </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-もし<EM>name</EM>がパス名ならば、Tを返す。
+<EM>stream-list</EM>の中で、入力処理が準備されているストリームを見つけリストで返す。
+もし、<EM>timeout</EM>秒が経つまでにどのストリームも準備が出来ないときは、
+NILを返す。
+<B>select-stream</B>は、入力ストリームのリストからアクティブなストリーム
+を選ぶときに役立つ。そのストリームでは、入力処理が非同期で可能となる。
+<EM>timeout</EM>は、選択処理が失敗するまでの時間を示す。
+これは、実数でもよい。
+もし、<EM>timeout</EM>の指定がないときは、最低１つのストリームから入力が到着するまで
+<B>select-stream</B>は続けられる。
+もし、<EM>timeout</EM>が指定されどのストリームからも入力が現れなかったならば、
+<B>select-stream</B>は失敗しNILを返す。
 </DD>
 </DL>
 <BR>
@@ -91,166 +91,33 @@ Euslispは、UNIXの上で動作している限り、ホスト・デバイス・
 
 <P>
 
-<A NAME="15633"></A>
-<B>pathname</B> <EM>name </EM>[関数]
+<A NAME="15642"></A>
+<B>def-async</B> <EM>stream function </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>name</EM>はパス名または文字列で、パス名に変換される。
-最後の名前がディレクトリ名を示すために<EM>name</EM>の最後に"/"をつけることを
-忘れないこと。
-逆変換は<B>namestring</B>で実現される。
+<EM>stream</EM>にデータが到着したときに呼び出される<EM>function</EM>
+を定義する。<EM>stream</EM>は、ファイルストリームかソケットストリームのどちらかである。
+ファイルストリームにデータが来たとき又はソケットポートに接続要求が現れたとき、
+そのストリームを引き数として<EM>function</EM>が呼び出される。
+このマクロは、SIGIO ハンドラーとして装備され、ユーザーから与えられる
+実際の入力処理を実行するための<EM>function</EM>に置き換えられる。
+そして、<EM>stream</EM>が読み込み可能となったとき、非同期にSIGIOを発する
+ために<EM>stream</EM>に関して<B>unix:fnctl</B>が使用される。
 </DD>
 </DL>
 <BR>
 <BR>
 
 <P>
-
-<A NAME="15646"></A>
-<B>pathname-directory</B> <EM>path </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>path</EM>からディレクトリ名のリストを返す。
-"/"ディレクトリは:ROOTと表現される。
-<EM>path</EM>は、文字列あるいはパス名である。
-</DD>
-</DL>
-<BR>
-<BR>
+             <P>
 
 <P>
-
-<A NAME="15658"></A>
-<B>pathname-name</B> <EM>path </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>path</EM>からファイル名の部分を返す。
-<EM>path</EM>は、文字列あるいはパス名である。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="15670"></A>
-<B>pathname-type</B> <EM>path </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>path</EM>からファイルの型の部分を取り出す。
-<EM>path</EM>は、文字列あるいはパス名である。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="15682"></A>
-<B>make-pathname</B> <EM>&amp;key :host :device :directory :name :type :version
-defaults </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>directiory</EM>,<EM>name</EM>と<EM>type</EM>から新しいパス名を作る。
-UNIX上では、他のパラメータは無視される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="15695"></A>
-<B>merge-pathnames</B> <EM>name
-&amp;optional (defaults *default-pathname-defaults*) </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="15706"></A>
-<B>namestring</B> <EM>path </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>path</EM>の文字列表現を返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="15717"></A>
-<B>parse-namestring</B> <EM>name </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="15728"></A>
-<B>truename</B> <EM>path </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>path</EM>で名前付けされているファイルの絶対パス名を見つける。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1249"
-  HREF="jmanual-node62.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1243"
-  HREF="jmanual-node52.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1237"
-  HREF="jmanual-node60.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1245"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1247"
-  HREF="jmanual-node156.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1250"
-  HREF="jmanual-node62.html">ファイルシステムインターフェース</A>
-<B> Up:</B> <A NAME="tex2html1244"
-  HREF="jmanual-node52.html">ストリームと入出力</A>
-<B> Previous:</B> <A NAME="tex2html1238"
-  HREF="jmanual-node60.html">非同期入出力</A>
- &nbsp; <B>  <A NAME="tex2html1246"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1248"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

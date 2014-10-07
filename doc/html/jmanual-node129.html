@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Xwindow インターフェース</TITLE>
+<TITLE>アニメーション</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="Xwindow インターフェース">
+<META NAME="description" CONTENT="アニメーション">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,114 +19,162 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
-<LINK REL="next" HREF="jmanual-node134.html">
-<LINK REL="previous" HREF="jmanual-node122.html">
-<LINK REL="up" HREF="jmanual-node73.html">
+<LINK REL="previous" HREF="jmanual-node128.html">
+<LINK REL="up" HREF="jmanual-node123.html">
 <LINK REL="next" HREF="jmanual-node130.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2337"
+<A NAME="tex2html2338"
   HREF="jmanual-node130.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2331"
-  HREF="jmanual-node73.html">
+<A NAME="tex2html2332"
+  HREF="jmanual-node123.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2325"
+<A NAME="tex2html2328"
   HREF="jmanual-node128.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2333"
+<A NAME="tex2html2334"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2335"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2336"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2338"
-  HREF="jmanual-node130.html">Xlibのグローバル変数とその他関数</A>
-<B> Up:</B> <A NAME="tex2html2332"
-  HREF="jmanual-node73.html">EusLisp 拡張</A>
-<B> Previous:</B> <A NAME="tex2html2326"
-  HREF="jmanual-node128.html">アニメーション</A>
- &nbsp; <B>  <A NAME="tex2html2334"
+<B> Next:</B> <A NAME="tex2html2339"
+  HREF="jmanual-node130.html">Xwindow インターフェース</A>
+<B> Up:</B> <A NAME="tex2html2333"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2329"
+  HREF="jmanual-node128.html">描画</A>
+ &nbsp; <B>  <A NAME="tex2html2335"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2336"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2337"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION04060000000000000000">
-Xwindow インターフェース</A>
-</H1>
-
-Euslisp上のXwindowインターフェースは、<TT>'eusx'</TT>という
-名前でEuslispが呼び出されたとき、実行可能となる。
-<A NAME="tex2html19"
-  HREF="jmanual-footnode.html#foot38842"><SUP><SPAN CLASS="arabic">3</SPAN></SUP></A>eusxは、起動時に環境変数"DISPLAY"を参照してXserverに接続を試みるため、
-自分のXseverに環境変数"DISPLAY"が正しく設定されていなければならない。
-
-<P>
-Euslispには、次の3つのレベルのXwindowインターフェースが定義されている。
-(1) Xlib関数, (2) Xlibクラスと(3) XToolKitクラスである。
-この節と次のXToolKitの節に記述されている
-全てのXwindow関数は、"X"パッケージの中に含まれている。
-それらの関数名は、元のXlib関数名から最初の"X"を省いき、全ての文字を大文字に
-変更したものとなっている。
-例えば<TT>XdefaultGC</TT>は<TT>X:DEFAULTGC</TT>と名付けられていて、
-<TT>X:XDEFAULTGC</TT>ではない。
+<H2><A NAME="SECTION04056000000000000000"></A>
+<A NAME="36188"></A>
+<BR>
+アニメーション
+</H2>
+EusLispのアニメーションは、グラフィックアクセラレータを持たない
+普通のワークステーション上での擬似リアルタイムグラフィックス機能を備えている。
+その基本的な考え方は、長い時間かかって生成された1連の画像を高速に
+再表示することである。
+画像は2つの方法で保存される。
+1つは、完全なピクセル画像を持つたくさんのXwindow pixmapを保存する。
+もう1つは、陰線処理で得られる線分データを保存する。
+前者は、高速で陰面処理された画像を表示するための方法であるが、
+長いアニメーションではたくさんのメモリーをX serverに要求するため
+適さない。
+後者は、メモリーが少なくて済み、データをディスクに蓄積するのに適する。
+しかし、線分の数が増加したならば、性能を悪化させる。
 
 <P>
-Xlib関数は、Xwindowシステムへの低レベルインターフェースで、
-foreign関数として定義されている。
-これらのXlib関数は、パラメータの型チェックあるいは
-パラメータの数のチェックを実行していないため、
-十分注意して使用しなければならない。
-例えば、すべてのXlibの呼び出しにおいてXserverとの接続を確認するために
-<TT>x:*display*</TT>を引き数として要求する。もし、指定し忘れたならば、Xlibは
-エラーを通知し、そのプロセスは死ぬ。
-このような不便を避け、オブジェクト指向のインターフェースを作るために、
-2番めのレベルのインターフェースであるXlibクラスが備わっている。
-この節では、この2番めのレベルのインターフェースに焦点を当てる。
-XToolKitと呼ばれるもっと高レベルのXwindowライブラリは、次節で
-説明されている。
+他の方法として、描かれるオブジェクトの構成を得て、
+<B>*viewer*</B>に描画を生成する関数をユーザーが作ることもできる。
+<B>pixmap-animation</B>は、<EM>count</EM>引数で指定された数と同じ回数この関数を呼び出す。
+それぞれの呼び出し後、Xwindowと仮定される<TT>viewsurface</TT>の内容は、
+新しく作られたXwindow pixmapにコピーされる。
+これらのpixmapは、<B>playback-pixmap</B>で再表示される。
+同様に、<B>hid-lines-animation</B>は<B>hid</B>の結果から見える線分を抜き出し、
+リストに蓄積する。
+そのリストは、<B>playback-hid-lines</B>によって再表示される。
 
 <P>
-この節に記述されているクラスは、以下の継承の階層を持っている。
-
-<P><PRE>
-propertied-object
-   viewsurface
-      x:xobject
-         x:gcontext
-         x:xdrawable
-             x:xpixmap
-             x:xwindow
-   colormap
-</PRE>
+以下に示す関数は、"llib/animation.l"に定義されており、
+"llib/animdemo.l"の中にはETA3 マニピュレータのモデルに関して
+<B>hid-lines-animation</B>を用いたアニメーションの
+サンプルプログラムを含んでいる。
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL CLASS="ChildLinks">
-<LI><A NAME="tex2html2339"
-  HREF="jmanual-node130.html">Xlibのグローバル変数とその他関数</A>
-<LI><A NAME="tex2html2340"
-  HREF="jmanual-node131.html">Xwindow</A>
-<LI><A NAME="tex2html2341"
-  HREF="jmanual-node132.html">Graphic Context</A>
-<LI><A NAME="tex2html2342"
-  HREF="jmanual-node133.html">色とカラーマップ</A>
-</UL>
-<!--End of Table of Child-Links-->
+ <BR>
+<BR> <A NAME="37400"></A>
+<B>pixmap-animation</B> <EM>count &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>は、<EM>count</EM>回評価される。
+それぞれの評価後、<TT>*viewsurface*</TT>の内容は新しいpixmapにコピーされる。
+<EM>count</EM>枚の<B>pixmap</B>のリストが、返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37415"></A>
+<B>playback-pixmaps</B> <EM>pixmaps &amp;optional (surf *viewsurface*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pixmaps</EM>リストのなかの<B>pixmap</B>はそれぞれ、
+<EM>surf</EM>に連続的にコピーされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37428"></A>
+<B>hid-lines-animation</B> <EM>count &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>hid</B>への呼び出しを含む<EM>forms</EM>が<EM>count</EM>回評価される。
+それぞれの評価後、<B>*hid*</B>が持つ<B>hid</B>の結果は検索され、
+見える線分は2点一組のリストの形で集められる。
+<EM>count</EM>長さのリストが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37444"></A>
+<B>playback-hid-lines</B> <EM>lines &amp;optional (view *viewer*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>lines</EM>は、2点一組のリストである。
+<EM>view</EM>の上に線分を連続的に描く。
+他のpixmapを割り当てるときにフリッカーフリーアニメーションを生成するために
+2重バッファ技法が使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37456"></A>
+<B>list-visible-segments</B> <EM>hid-result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>hid-result</EM>のedge画像のリストから見える線分を集める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

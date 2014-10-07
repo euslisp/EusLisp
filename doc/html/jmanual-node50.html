@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Foreign String</TITLE>
+<TITLE>日本語の扱い方</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="Foreign String">
+<META NAME="description" CONTENT="日本語の扱い方">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,90 +19,80 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
-<LINK REL="next" HREF="jmanual-node51.html">
 <LINK REL="previous" HREF="jmanual-node49.html">
-<LINK REL="up" HREF="jmanual-node45.html">
+<LINK REL="up" HREF="jmanual-node49.html">
 <LINK REL="next" HREF="jmanual-node51.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1086"
+<A NAME="tex2html1087"
   HREF="jmanual-node51.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1080"
-  HREF="jmanual-node45.html">
+<A NAME="tex2html1081"
+  HREF="jmanual-node49.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1074"
+<A NAME="tex2html1077"
   HREF="jmanual-node49.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1082"
+<A NAME="tex2html1083"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1084"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1085"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1087"
-  HREF="jmanual-node51.html">ハッシュテーブル</A>
-<B> Up:</B> <A NAME="tex2html1081"
-  HREF="jmanual-node45.html">列、行列とテーブル</A>
-<B> Previous:</B> <A NAME="tex2html1075"
+<B> Next:</B> <A NAME="tex2html1088"
+  HREF="jmanual-node51.html">Foreign String</A>
+<B> Up:</B> <A NAME="tex2html1082"
   HREF="jmanual-node49.html">文字と文字列</A>
- &nbsp; <B>  <A NAME="tex2html1083"
+<B> Previous:</B> <A NAME="tex2html1078"
+  HREF="jmanual-node49.html">文字と文字列</A>
+ &nbsp; <B>  <A NAME="tex2html1084"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1085"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1086"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION03075000000000000000">
-Foreign String</A>
-</H2>
-<B>foreign-string</B>は、EusLispのヒープ外にあるバイトベクトルの1種である。
-普通の文字列は、長さとバイトの列を持ったオブジェクトであるが、
-foreign-stringは、長さと文字列本体のアドレスを持っている。
-foreign-stringは文字列であるが、
-いくつかの文字列および列に対する関数は適用できない。
-<B>length</B>、<B>aref</B>、<B>replace</B>、<B>subseq</B>と<B>copy-seq</B>だけが
-foreign-stringを認識し、 
-その他の関数の適用はクラッシュの原因となる恐れがある。
+<H3><A NAME="SECTION03074100000000000000">
+日本語の扱い方</A>
+</H3>
+<B>euslisp</B>で日本語を扱いたい時、文字コードは<B>UTF-8</B>である必要がある。
 
 <P>
-foreign-stringは、/dev/a??d??(??は32あるいは16)の特殊ファイルで与えられる
-I/O空間を参照することがある。
-そのデバイスがバイトアクセスにのみ応答するI/O空間の一つに
-割り当てられた場合、
-<B>replace</B>は、いつもバイト毎に要素をコピーする。
-メモリのlarge chunkを連続的にアクセスしたとき、比較的に遅く動作する。。
+例えば<B>concatenate</B>を用いると、リストの中の日本語を連結することが出来る。
+<B>ROS</B>のトピックとして一つずつ取ってきた日本語を、連結することで一つの<B>string</B>型の言葉に変換したい時などに便利である。
 
 <P>
-
- <BR>
-<BR> <A NAME="11841"></A>
-<B>make-foreign-string</B> <EM>address length </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>address</EM>の位置から<EM>length</EM>バイトの
-<B>foreign-string</B>のインスタンスを作る。
-例えば、<TT>(make-foreign-string (unix:malloc 32) 32)</TT>は、
-EusLispのヒープ外に位置する32バイトメモリを参照部分として作る。
-</DD>
-</DL>
-<BR>
-<BR>
+(concatenate string "け" "ん" "し" "ろ" "う") 
+→ "けんしろう"
 
 <P>
+最初から全ての文字がリストに入っていて、文字を連結したい時はこのようにすればよい。
+
+<P>
+(reduce #'(lambda (val1 val2) (concatenate string val1 val2)) (list "我" "輩" "は" "ピ" "ー" "ア" "ー" "ル" "ツ" "ー" "で" "あ" "る"))
+
+<P>
+→ "我輩はピーアールツーである"
+
+<P>
+<B>coerce</B>を用いて、次のように書くことも出来る。
+
+<P>
+(coerce (append (coerce "私はナオより" cons) (coerce "背が高い" cons)) string)
+
+<P>
+→ "私はナオより背が高い"
 
 <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

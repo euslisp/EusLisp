@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>シグナル</TITLE>
+<TITLE>ファイルシステムと入出力</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="シグナル">
+<META NAME="description" CONTENT="ファイルシステムと入出力">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,63 +21,64 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node81.html">
 <LINK REL="previous" HREF="jmanual-node79.html">
-<LINK REL="up" HREF="jmanual-node76.html">
+<LINK REL="up" HREF="jmanual-node77.html">
 <LINK REL="next" HREF="jmanual-node81.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1624"
+<A NAME="tex2html1625"
   HREF="jmanual-node81.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1618"
-  HREF="jmanual-node76.html">
+<A NAME="tex2html1619"
+  HREF="jmanual-node77.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1612"
+<A NAME="tex2html1613"
   HREF="jmanual-node79.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1620"
+<A NAME="tex2html1621"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1622"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1623"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1625"
-  HREF="jmanual-node81.html">マルチスレッド</A>
-<B> Up:</B> <A NAME="tex2html1619"
-  HREF="jmanual-node76.html">UNIXシステムコール</A>
-<B> Previous:</B> <A NAME="tex2html1613"
-  HREF="jmanual-node79.html">ファイルシステムと入出力</A>
- &nbsp; <B>  <A NAME="tex2html1621"
+<B> Next:</B> <A NAME="tex2html1626"
+  HREF="jmanual-node81.html">シグナル</A>
+<B> Up:</B> <A NAME="tex2html1620"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1614"
+  HREF="jmanual-node79.html">プロセス</A>
+ &nbsp; <B>  <A NAME="tex2html1622"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1623"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1624"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04012400000000000000">
-シグナル</A>
+<H3><A NAME="SECTION04012300000000000000">
+ファイルシステムと入出力</A>
 </H3>
 
-<P>
-
  <BR>
-<BR> <A NAME="21919"></A>
-<B>unix:signal</B> <EM>signal func &amp;optional option </EM>[関数]
+<BR> <P>
+
+<A NAME="21546"></A>
+<B>unix:uread</B> <EM>stream [buffer] [size] </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>signal</EM>に対してシグナルハンドラー<EM>func</EM>をインストールする。
-BSD4.2システムにおいて、システムコール処理の間に捕まえたシグナルは、
-システムコールのリトライに起因する。
-これは、もしその処理がシステムコールの呼び出しを発行するならば、
-シグナルを無視することを意味する。
-もし、<EM>option=2</EM>が指定されたならば、シグナルはsystem-5の手法で
-処理される。そのシグナルは、システムコールの失敗に起因する。
+<EM>stream</EM>から<EM>size</EM>バイト読み込む。
+<EM>stream</EM>は、ストリームオブジェクトあるいはファイルディスクリプタ(fd)を
+表現する整数である。
+もし、<EM>buffer</EM>が与えられるとき、入力はそこに蓄積される。
+そうでないならば、入力は<EM>stream</EM>のバッファに蓄積される。
+したがって、もし<EM>stream</EM>がfdなら、<EM>buffer</EM>は与えられなければならない。
+<B>unix:uread</B>は、新しい文字列バッファを配置しない。
+<B>unix:uread</B>は、実際に読み込まれたバイト数を返す。
 </DD>
 </DL>
 <BR>
@@ -85,13 +86,14 @@ BSD4.2システムにおいて、システムコール処理の間に捕まえ�
 
 <P>
 
-<A NAME="21932"></A>
-<B>unix:kill</B> <EM>pid signal </EM>[関数]
+<A NAME="21565"></A>
+<B>unix:write</B> <EM>stream string &amp;optional size </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>pid</EM>で名前付けされるプロセスに<EM>signal</EM>を送る。
+<EM>stream</EM>に<EM>string</EM>の<EM>size</EM>バイトを書き込む。
+もし、<EM>size</EM>が省略されたならば、<EM>string</EM>の全部の長さが出力される。
 </DD>
 </DL>
 <BR>
@@ -99,13 +101,116 @@ BSD4.2システムにおいて、システムコール処理の間に捕まえ�
 
 <P>
 
-<A NAME="21944"></A>
-<B>unix:pause</B> [関数]
+<A NAME="21580"></A>
+<B>unix:fcntl</B> <EM>stream command argument </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21591"></A>
+<B>unix:ioctl</B> <EM>stream command buffer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21602"></A>
+<B>unix:ioctl_</B> <EM>stream command1 command2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21613"></A>
+<B>unix:ioctl_R</B> <EM>stream command1 command2 buffer [size] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21624"></A>
+<B>unix:ioctl_W</B> <EM>stream command1 command2 buffer [size] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21635"></A>
+<B>unix:ioctl_WR</B> <EM>stream command1 command2 buffer [size] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21646"></A>
+<B>unix:close</B> <EM>fd </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-シグナルが到着するまでこのプロセスの実行を一時停止する。
+<EM>fd</EM>で指定されるファイルをクローズする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21657"></A>
+<B>unix:dup</B> <EM>fd </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fd</EM>で指定されるファイルディスクリプタを２重化して返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21668"></A>
+<B>unix:pipe</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+パイプを作成する。このパイプの入出力ストリームを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21678"></A>
+<B>unix:lseek</B> <EM>stream position [whence 0] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>stream</EM>のファイルポインタを<EM>whence</EM>から<EM>position</EM>の
+位置に設定する。
 </DD>
 </DL>
 <BR>
@@ -113,14 +218,12 @@ BSD4.2システムにおいて、システムコール処理の間に捕まえ�
 
 <P>
 
-<A NAME="21954"></A>
-<B>unix:alarm</B> <EM>time </EM>[関数]
+<A NAME="21691"></A>
+<B>unix:link</B> <EM>path1 path2 </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-<EM>time</EM>秒後にアラーム時計シグナル(SIGALRM 14)を送る。
-<EM>time</EM>=0で<B>unix:alarm</B>を呼び出すと、アラーム時計をリセットする。
+<DD> hardリンクを作る。
 </DD>
 </DL>
 <BR>
@@ -128,14 +231,14 @@ BSD4.2システムにおいて、システムコール処理の間に捕まえ�
 
 <P>
 
-<A NAME="21967"></A>
-<B>unix:ualarm</B> <EM>time </EM>[関数]
+<A NAME="21701"></A>
+<B>unix:unlink</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>time</EM>がマイクロ秒単位であることを除いて<B>unix:alarm</B>と同じである。
-<B>ualarm</B>は、Solaris2あるいはSystem5系のシステムに実現されていない。
+<EM>path</EM>で指定されたファイルのhardリンクを取り去る。
+もし、ファイルに参照が残っていないなら、削除される。
 </DD>
 </DL>
 <BR>
@@ -143,32 +246,74 @@ BSD4.2システムにおいて、システムコール処理の間に捕まえ�
 
 <P>
 
-<A NAME="21980"></A>
-<B>unix:getitimer</B> <EM>timer </EM>[関数]
+<A NAME="21712"></A>
+<B>unix:mknod</B> <EM>path mode </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>timer</EM>は、0 (<TT>ITIMER_REAL</TT>), 1 (<TT>ITIMER_VIRTUAL</TT>),
-2(<TT>ITIMER_PROF</TT>)の内の１つである。
-秒単位の時間(timer)と間隔(interval)の2つの要素を持つリストを返す。
+ファイルシステムにinodeを作る。
+<EM>path</EM>は、<B>pathname</B>オブジェクトでなく文字列でなければならない。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="21994"></A>
-<B>unix:setitimer</B> <EM>timer value interval </EM>[関数]
+<A NAME="21724"></A>
+<B>unix:access</B> <EM>path mode </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>timer</EM>に<EM>value</EM>と<EM>interval</EM>を設定する。
-<EM>timer</EM>は、0 (<TT>ITIMER_REAL</TT>), 1 (<TT>ITIMER_VIRTUAL</TT>),
-2(<TT>ITIMER_PROF</TT>)の内の１つである。
-<TT>ITIMER_REAL</TT>は、<EM>value</EM>が終了したとき、SIGALRMを発行する。
-<TT>ITIMER_VIRTUAL</TT>は、SIGVTALRMを発行し、
-<TT>ITIMER_PROF</TT>は、SIGPROFを発行する。
+<EM>path</EM>へのアクセス権利をチェックする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21735"></A>
+<B>unix:stat</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>のinode情報を得て、以下に示す整数のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<PRE>
+  st_ctime	; file last status change time
+  st_mtime	; file last modify time
+  st_atime	; file last access time
+  st_size	; total size of file, in bytes
+  st_gid	; group ID of owne
+  st_uid	; user ID of owner
+  st_nlink	; number of hard links to the file
+  st_rdev	; the device identifier (special files only)
+  st_dev	; device file resides on
+  st_ino	; the file serial number
+  st_mode	; file mode
+</PRE>
+
+<A NAME="21746"></A>
+<B>unix:chdir</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 現在のディレクトリを<EM>path</EM>に変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21757"></A>
+<B>unix:getwd</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 現在のディレクトリを返す。
 </DD>
 </DL>
 <BR>
@@ -176,24 +321,25 @@ BSD4.2システムにおいて、システムコール処理の間に捕まえ�
 
 <P>
 
-<A NAME="22015"></A>
-<B>unix:select</B> <EM>inlist outlist exceptlist timeout </EM>[関数]
+<A NAME="21767"></A>
+<B>unix:chmod</B> <EM>path integer </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>inlist, outlist</EM>と<EM>exceptlist</EM>は、ファイルディスクリプタ
-を示すビットベクトルである。そのファイルディスクリプタの入出力イベント
-は、テストされなければならない。
-例えば、もし<EM>inlist</EM>=<TT>#b0110</TT>で<EM>outlist</EM>=<TT>#b100</TT>で
-<EM>exceptlist</EM>=NILであるなら、
-fd=1あるいはfd=2で読み込み可能かあるいはfd=2で書き込み可能であるかどうかをテストする。
-<EM>timeout</EM>は、<B>unix:select</B>が待つために許される秒数を指定する。
-<EM>inlist</EM>で指定されているポートの1つに入力データが現れるかあるいは
-<EM>outlist</EM>に指定されるポートの1つに書き込み可能となるかあるいは
-<EM>exceptlist</EM>で指定されるポートの1つに例外条件が起こるとすぐに
-<B>unix:select</B>は、<EM>inlist, outlist, exceptlist</EM>のそれぞれにおいて
-アクセス可能なポートとして設定されたポートの中で、入力処理可能なポート番号を返す。
+<EM>path</EM>のアクセスモード(permission)を変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21778"></A>
+<B>unix:chown</B> <EM>path integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>ファイルのオーナーを変更する。
 </DD>
 </DL>
 <BR>
@@ -201,16 +347,197 @@ fd=1あるいはfd=2で読み込み可能かあるいはfd=2で書き込み可�
 
 <P>
 
-<A NAME="22039"></A>
-<B>unix:select-read-fd</B> <EM>read-fdset timeout </EM>[関数]
+<A NAME="21789"></A>
+<B>unix:isatty</B> <EM>(stream <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> fd) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-入出力の選択は、ふつう入力処理のときのみ意味がある。
-<B>unix:select-read-fd</B>は、
-<TT>select fdset nil nil timeout</TT>の速記法である。
-<EM>read-fdset</EM>は、ビットベクトルでなく、設定された読み込みfdを指定する整数である。
+もし、<EM>stream</EM>がTTY型のデバイス(シリアルポートあるいは仮想TTY)に接続されているなら
+Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21800"></A>
+<B>unix:msgget</B> <EM>key mode </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>key</EM>によってアドレスされるメッセージキューを作成し、配置する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21811"></A>
+<B>unix:msgsnd</B> <EM>qid buf [mtype [flag]] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21822"></A>
+<B>unix:msgrcv</B> <EM>qid buf [size [mtype [flag]]] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21833"></A>
+<B>unix:socket</B> <EM>domain type &amp;optional proto </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>domain</EM>に定義されている名前を持ち<EM>type</EM>を抽象型とするソケットを作成する。
+<EM>type</EM>は、1 (SOCK_STREAM),
+2 (SOCK_DGRAM), 3 (SOCK_RAW), 4 (SOCK_RDM), 5 (SOCK_SEQPACKET)の内の1つである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21846"></A>
+<B>unix:bind</B> <EM>socket name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>name</EM>と<EM>socket</EM>を関連付ける。
+もし、ソケットがUNIX領域内で定義されているならば、<EM>name</EM>は、UNIXのパス名でなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21859"></A>
+<B>unix:connect</B> <EM>socket addr </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>socket</EM>と<EM>addr</EM>で指定される他のソケットを接続する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21871"></A>
+<B>unix:listen</B> <EM>socket &amp;optional backlog </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>socket</EM>から接続要求を受け始める。
+<EM>backlog</EM>は、接続の確定を待つためのキューの長さを指定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21883"></A>
+<B>unix:accept</B> <EM>socket </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>socket</EM>から接続要求を受け、両方向にメッセージを交換できるファイルディスクリプタ
+を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21894"></A>
+<B>unix:recvfrom</B> <EM>socket &amp;optional mesg from flag </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>socket</EM>からデータを書いたメッセージを受ける。
+そのソケットは、<B>unix:bind</B>により名前を割り当てられなければならない。
+<EM>mesg</EM>は、入ってきたメッセージが蓄積されるための文字列である。
+もし、<EM>mesg</EM>が与えられたならば、<B>unix:recvfrom</B>は受け取ったバイト数を返す。
+もし省略されたなら、メッセージを蓄積するための新しい文字列を作成し、
+その文字列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="21909"></A>
+<B>unix:sendto</B> <EM>socket addr mesg &amp;optional len flag </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>addr</EM>によって指定される他のソケットへデータの書かれたメッセージを送る。
+<EM>socket</EM>は、名前が割り当てられてないデータ書き込み型のソケットでなければならない。
+<EM>mesg</EM>は、送るための文字列であり、<EM>len</EM>は文字列の最初から
+数えたメッセージの長さである。
+もし、省略されたなら、すべての文字列を送る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21923"></A>
+<B>unix:getservbyname</B> <EM>servicename </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>/etc/services</TT>あるいはNISデータベースに記録されている<EM>servicename</EM>
+のサービス番号を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21935"></A>
+<B>unix:gethostbyname</B> <EM>hostname </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>hostname</EM>のipアドレスとアドレス型のリストを返す。
+(一般にいつも AF_INET==2).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21946"></A>
+<B>unix:syserrlist</B> <EM>errno </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>errno</EM>のエラーコードに対するエラー情報が記述された文字列を返す。
 </DD>
 </DL>
 <BR>
@@ -221,36 +548,36 @@ fd=1あるいはfd=2で読み込み可能かあるいはfd=2で書き込み可�
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1624"
+<A NAME="tex2html1625"
   HREF="jmanual-node81.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1618"
-  HREF="jmanual-node76.html">
+<A NAME="tex2html1619"
+  HREF="jmanual-node77.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1612"
+<A NAME="tex2html1613"
   HREF="jmanual-node79.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1620"
+<A NAME="tex2html1621"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1622"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1623"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1625"
-  HREF="jmanual-node81.html">マルチスレッド</A>
-<B> Up:</B> <A NAME="tex2html1619"
-  HREF="jmanual-node76.html">UNIXシステムコール</A>
-<B> Previous:</B> <A NAME="tex2html1613"
-  HREF="jmanual-node79.html">ファイルシステムと入出力</A>
- &nbsp; <B>  <A NAME="tex2html1621"
+<B> Next:</B> <A NAME="tex2html1626"
+  HREF="jmanual-node81.html">シグナル</A>
+<B> Up:</B> <A NAME="tex2html1620"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1614"
+  HREF="jmanual-node79.html">プロセス</A>
+ &nbsp; <B>  <A NAME="tex2html1622"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1623"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
+ &nbsp; <B>  <A NAME="tex2html1624"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

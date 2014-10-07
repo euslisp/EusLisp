@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>並列度の計測</TITLE>
+<TITLE>タイマー</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="並列度の計測">
+<META NAME="description" CONTENT="タイマー">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,125 +19,94 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
-<LINK REL="next" HREF="jmanual-node104.html">
-<LINK REL="previous" HREF="jmanual-node96.html">
-<LINK REL="up" HREF="jmanual-node91.html">
+<LINK REL="previous" HREF="jmanual-node102.html">
+<LINK REL="up" HREF="jmanual-node97.html">
 <LINK REL="next" HREF="jmanual-node104.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1961"
+<A NAME="tex2html1962"
   HREF="jmanual-node104.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1955"
-  HREF="jmanual-node91.html">
+<A NAME="tex2html1956"
+  HREF="jmanual-node97.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1949"
+<A NAME="tex2html1952"
   HREF="jmanual-node102.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1957"
+<A NAME="tex2html1958"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1959"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1960"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1962"
-  HREF="jmanual-node104.html">スレッド生成</A>
-<B> Up:</B> <A NAME="tex2html1956"
-  HREF="jmanual-node91.html">マルチスレッド</A>
-<B> Previous:</B> <A NAME="tex2html1950"
-  HREF="jmanual-node102.html">タイマー</A>
- &nbsp; <B>  <A NAME="tex2html1958"
+<B> Next:</B> <A NAME="tex2html1963"
+  HREF="jmanual-node104.html">並列度の計測</A>
+<B> Up:</B> <A NAME="tex2html1957"
+  HREF="jmanual-node97.html">非同期プログラミングと並列プログラミングの構築</A>
+<B> Previous:</B> <A NAME="tex2html1953"
+  HREF="jmanual-node102.html">同期メモリポート</A>
+ &nbsp; <B>  <A NAME="tex2html1959"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1960"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1961"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04023000000000000000">
-並列度の計測</A>
-</H2>
+<H3><A NAME="SECTION04022600000000000000">
+タイマー</A>
+</H3>
+実時間プログラムは、予定された時間に実行される関数や、
+特定の間隔で繰り返される関数をしばしば要求する。
+これまでのEusLispは、Unixのインターバルタイマーによって
+定期的に生成される信号によって発生するユーザー関数を
+実行することができた。
+MT-Eusにおいて、この実行はデッドロックを引き起こす。
+なぜなら、割り込みがmutex-lockされたブロック内から発生する可能性がある。
+したがって、制御は<TT>eval</TT>の最初のように安全な場所で渡されなければ
+ならない。
+上記の同期によって引き起こされる遅れを避けるために、
+MT-Eusはセマフォを経由して信号通知(signal-notification)も
+提供する。
+言い換えれば、信号関数は呼び出されるかあるいは信号の到着を知らせる
+関数あるいはセマフォのどちらかをとる。
+セマフォは、低レベルで告示されるので、
+同期により隠れているところは最小である。
 
 <P>
-表 <A HREF="#paragain">3</A>は、32CPUで構成されるCray Superserverの上で測定
-した並列実行効率を示したものである。
-コンパイルされたフィボナッチ関数において線形な並列度が得られた。
-なぜなら、共有メモリへのアクセスがなく、それぞれのプロセッサのキャッシュ
-メモリに十分ロードできるほどちいさなプログラムであったためである。
-それに反して、同じプログラムをインタープリターで実行したとき、
-キャッシュメモリを使い果たしたため、
-線形な高効率を達成することができなかった。
-さらにまた、頻繁に共有メモリを参照するようなプログラムや
-メモリ配置を要求するようなプログラムは1個のプロセッサで実行した
-ときよりも良い性能を得ることができなかった。
-これは、頻繁なキャッシュメモリの入れ替えが原因と考えられる。
+以下に示すものは、マルチスレッド機能を用いた画像処理のプログラム例である。
+画像入力スレッドとフィルタースレッドが生成される。
+samp-imageは、33msec毎に通知されるsamp-semを待つことにより、
+定期的に画像データをとる。
+2つのスレッドはthread-portの読み書きを通じて同期する。
+filter-imageは、フィルターの並列計算のために複数のスレッドを使用している。
 
-<P>
-<BR><P></P>
-<DIV ALIGN="CENTER">
-
-<DIV ALIGN="CENTER">
-<A NAME="25186"></A>
-<TABLE CELLPADDING=3 BORDER="1">
-<CAPTION><STRONG>Table:</STRONG>
-マルチプロセッサ上で実行されたプログラムの並列度</CAPTION>
-<TR><TD ALIGN="LEFT">processors</TD>
-<TD ALIGN="RIGHT">1</TD>
-<TD ALIGN="RIGHT">2</TD>
-<TD ALIGN="RIGHT">4</TD>
-<TD ALIGN="RIGHT">8</TD>
-<TD ALIGN="CENTER">GC (ratio)</TD>
-</TR>
-<TR><TD ALIGN="LEFT">(a) compiled Fibonacci</TD>
-<TD ALIGN="RIGHT">1.0</TD>
-<TD ALIGN="RIGHT">2.0</TD>
-<TD ALIGN="RIGHT">4.0</TD>
-<TD ALIGN="RIGHT">7.8</TD>
-<TD ALIGN="CENTER">0</TD>
-</TR>
-<TR><TD ALIGN="LEFT">(b) interpreted Fibonacci</TD>
-<TD ALIGN="RIGHT">1.0</TD>
-<TD ALIGN="RIGHT">1.7</TD>
-<TD ALIGN="RIGHT">2.7</TD>
-<TD ALIGN="RIGHT">4.4</TD>
-<TD ALIGN="CENTER">0</TD>
-</TR>
-<TR><TD ALIGN="LEFT">(c) copy-seq</TD>
-<TD ALIGN="RIGHT">1.0</TD>
-<TD ALIGN="RIGHT">1.3</TD>
-<TD ALIGN="RIGHT">0.76</TD>
-<TD ALIGN="RIGHT">0.71</TD>
-<TD ALIGN="CENTER">0.15</TD>
-</TR>
-<TR><TD ALIGN="LEFT">(d) make-cube</TD>
-<TD ALIGN="RIGHT">1.0</TD>
-<TD ALIGN="RIGHT">0.91</TD>
-<TD ALIGN="RIGHT">0.40</TD>
-<TD ALIGN="RIGHT">0.39</TD>
-<TD ALIGN="CENTER">0.15</TD>
-</TR>
-<TR><TD ALIGN="LEFT">(e) interference-check</TD>
-<TD ALIGN="RIGHT">1.0</TD>
-<TD ALIGN="RIGHT">0.88</TD>
-<TD ALIGN="RIGHT">0.55</TD>
-<TD ALIGN="RIGHT">0.34</TD>
-<TD ALIGN="CENTER">0.21</TD>
-</TR>
-</TABLE> 
-<BR>
-</DIV>
-</DIV>
-<BR>
+<P><PRE>
+(make-threads 8)
+(defun samp-image (p)
+   (let ((samp-sem (make-semaphore)))
+        (periodic-sema-post 0.03 samp-sem)
+        (loop (sema-wait samp-sem)
+              (send p :write (read-image))))
+(defun filter-image (p)
+  (let (img)
+       (loop (setf img (send p :read))
+             (plist (filter-up-half img)
+                    (filter-low-half img)))))
+(setf port (make-thread-port))
+(setf sampler (thread #'samp-image port))
+(setf filter (thread #'filter-image port))
+</PRE>
 
 <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

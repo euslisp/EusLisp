@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>スレッド作成とスレッドプール</TITLE>
+<TITLE>非同期プログラミングと並列プログラミングの構築</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="スレッド作成とスレッドプール">
+<META NAME="description" CONTENT="非同期プログラミングと並列プログラミングの構築">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,87 +19,71 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
-<LINK REL="next" HREF="jmanual-node98.html">
-<LINK REL="previous" HREF="jmanual-node96.html">
-<LINK REL="up" HREF="jmanual-node96.html">
+<LINK REL="next" HREF="jmanual-node104.html">
+<LINK REL="previous" HREF="jmanual-node93.html">
+<LINK REL="up" HREF="jmanual-node92.html">
 <LINK REL="next" HREF="jmanual-node98.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1879"
+<A NAME="tex2html1874"
   HREF="jmanual-node98.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1873"
-  HREF="jmanual-node96.html">
+<A NAME="tex2html1868"
+  HREF="jmanual-node92.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1867"
+<A NAME="tex2html1862"
   HREF="jmanual-node96.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1875"
+<A NAME="tex2html1870"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1877"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1872"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1880"
-  HREF="jmanual-node98.html">スレッドの並列実行</A>
-<B> Up:</B> <A NAME="tex2html1874"
-  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
-<B> Previous:</B> <A NAME="tex2html1868"
-  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
- &nbsp; <B>  <A NAME="tex2html1876"
+<B> Next:</B> <A NAME="tex2html1875"
+  HREF="jmanual-node98.html">スレッド作成とスレッドプール</A>
+<B> Up:</B> <A NAME="tex2html1869"
+  HREF="jmanual-node92.html">マルチスレッド</A>
+<B> Previous:</B> <A NAME="tex2html1863"
+  HREF="jmanual-node96.html">メモリ管理</A>
+ &nbsp; <B>  <A NAME="tex2html1871"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1878"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1873"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04022100000000000000">
-スレッド作成とスレッドプール</A>
-</H3>
-Solarisにおいて複数のプロセッサ上で並列にプログラムを実行するためには、
-そのプログラムは関数の集まりとして書かれる必要がある。
-その関数はそれぞれプロセスの中で動的に作成されるスレッドによって
-実行される。
-スレッドを作成するために要求される時間は、プロセスを作成するよりも
-速くなければならないが、スタックを配置しスタックのオーバーフローを
-発見するためのページ属性を設定した後にスレッドが動き始めるまでに
-Euslispにおいて数ミリ秒かかる。
-この遅れは関数実施と比較して我慢できないため、
-評価時間におけるシステムコールに対する所要時間を排除する目的で、
-あらかじめ<TT>make-thread</TT>関数により十分な数のスレッドが作られ、
-システムのスレッドプールに置かれる。
-スレッドプールの中のそれぞれのスレッドは、図<A HREF="#threadobj">7</A>で示されるように
-スレッドIDと同期のためのセマフォと引き数や評価結果を転送するためのスロット
-から構成されるスレッドオブジェクトにより表現される。
+<H2><A NAME="SECTION04022000000000000000">
+非同期プログラミングと並列プログラミングの構築</A>
+</H2>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
-
-<DIV ALIGN="CENTER"><A NAME="threadobj"></A><A NAME="25185"></A>
-<TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
-スレッド間で制御やデータを受け渡すためのスレッドオブジェクト（左）とスレッドプール内に置かれたスレッドの集まり（右）</CAPTION>
-<TR><TD><IMG
- WIDTH="693" HEIGHT="191" BORDER="0"
- SRC="jmanual-img48.png"
- ALT="\begin{figure}\begin{center}
-\begin{tabular}{c c}
-\epsfile{file=fig/threadobj.ps...
-...e{file=fig/threadpool.ps,width=7.5cm} \\
-\end{tabular}\end{center}
-\end{figure}"></TD></TR>
-</TABLE>
-</DIV>
-
-<P>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1876"
+  HREF="jmanual-node98.html">スレッド作成とスレッドプール</A>
+<LI><A NAME="tex2html1877"
+  HREF="jmanual-node99.html">スレッドの並列実行</A>
+<LI><A NAME="tex2html1878"
+  HREF="jmanual-node100.html">同期の手法</A>
+<LI><A NAME="tex2html1879"
+  HREF="jmanual-node101.html">同期障壁</A>
+<LI><A NAME="tex2html1880"
+  HREF="jmanual-node102.html">同期メモリポート</A>
+<LI><A NAME="tex2html1881"
+  HREF="jmanual-node103.html">タイマー</A>
+</UL>
+<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

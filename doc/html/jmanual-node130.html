@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Xlibのグローバル変数とその他関数</TITLE>
+<TITLE>Xwindow インターフェース</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="Xlibのグローバル変数とその他関数">
+<META NAME="description" CONTENT="Xwindow インターフェース">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,578 +19,114 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
-<LINK REL="next" HREF="jmanual-node131.html">
-<LINK REL="previous" HREF="jmanual-node129.html">
-<LINK REL="up" HREF="jmanual-node129.html">
+<LINK REL="next" HREF="jmanual-node135.html">
+<LINK REL="previous" HREF="jmanual-node123.html">
+<LINK REL="up" HREF="jmanual-node74.html">
 <LINK REL="next" HREF="jmanual-node131.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2355"
+<A NAME="tex2html2352"
   HREF="jmanual-node131.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2349"
-  HREF="jmanual-node129.html">
+<A NAME="tex2html2346"
+  HREF="jmanual-node74.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2343"
+<A NAME="tex2html2340"
   HREF="jmanual-node129.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2351"
+<A NAME="tex2html2348"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2353"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2350"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2356"
-  HREF="jmanual-node131.html">Xwindow</A>
-<B> Up:</B> <A NAME="tex2html2350"
-  HREF="jmanual-node129.html">Xwindow インターフェース</A>
-<B> Previous:</B> <A NAME="tex2html2344"
-  HREF="jmanual-node129.html">Xwindow インターフェース</A>
- &nbsp; <B>  <A NAME="tex2html2352"
+<B> Next:</B> <A NAME="tex2html2353"
+  HREF="jmanual-node131.html">Xlibのグローバル変数とその他関数</A>
+<B> Up:</B> <A NAME="tex2html2347"
+  HREF="jmanual-node74.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html2341"
+  HREF="jmanual-node129.html">アニメーション</A>
+ &nbsp; <B>  <A NAME="tex2html2349"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2354"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2351"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04061000000000000000"></A><A NAME="xvariables"></A>
-<BR>
-Xlibのグローバル変数とその他関数
-</H2>
-
- <BR>
-<BR> <A NAME="39591"></A>
-<B>x:*display*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> Xのdisplay ID（整数）
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39601"></A>
-<B>x:*root*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> デフォルトのroot windowオブジェクト
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39611"></A>
-<B>x:*screen*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> デフォルトのscreen ID（整数）
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39621"></A>
-<B>x:*visual*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> デフォルトのvisual ID（整数）
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39631"></A>
-<B>x:*blackpixel*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 黒色のpixel値 = 1
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39641"></A>
-<B>x:*whitepixel*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 白色のpixel値 = 0
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39651"></A>
-<B>x:*fg-pixel*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> window作成時に参照されるデフォルトの文字色のpixel値、ふつう<TT>*blackpixel*</TT>。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39662"></A>
-<B>x:*bg-pixel*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> window作成時に参照される背景色のpixel値、ふつう<TT>*whitepixel</TT>。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39673"></A>
-<B>x:*color-map*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> システムのデフォルトカラーマップ
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39683"></A>
-<B>x:*defaultGC*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> pixmap生成時に参照されるデフォルトgcontext
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39693"></A>
-<B>x:*whitegc*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 文字色が白色のgcontext
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39703"></A>
-<B>x:*blackgc*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 文字色が黒色のgcontext
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39713"></A>
-<B>*gray-pixmap*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(make-gray-pixmap 0.5)</TT>の結果。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39724"></A>
-<B>*gray25-pixmap*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-1/4のピクセルが<TT>*fg-pixel*</TT>であり、3/4が<TT>*bg-pixel*</TT>である16x16のpixmap。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39736"></A>
-<B>*gray50-pixmap*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 1/2のピクセルが<TT>*fg-pixel*</TT>である16x16のpixmap。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39747"></A>
-<B>*gray75-pixmap*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 3/4のピクセルが黒色である16x16のpixmap。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39757"></A>
-<B>*gray25-gc*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>*gray25-pixmap*</TT>から作る25%のグレーGC。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39768"></A>
-<B>*gray50-gc*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>*gray50-pixmap*</TT>から作る50%のグレーGC。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39779"></A>
-<B>*gray75-gc*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>*gray75-pixmap*</TT>から作る75%のグレーGC。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39790"></A>
-<B>*gray*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#b0b0b0"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39801"></A>
-<B>*bisque1*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#ffe4c4"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39812"></A>
-<B>*bisque2*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#eed5b7"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39823"></A>
-<B>*bisque3*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#cdb79e"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39834"></A>
-<B>*lightblue2*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#b2dfee"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39845"></A>
-<B>*lightpink1*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#ffaeb9"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39856"></A>
-<B>*maroon*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#b03060"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39867"></A>
-<B>*max-intensity*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 65535
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39877"></A>
-<B>font-cour8</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-8-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39888"></A>
-<B>font-cour10</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-10-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39899"></A>
-<B>font-cour12</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-12-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39910"></A>
-<B>font-cour14</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-14-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39921"></A>
-<B>font-cour18</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-18-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39932"></A>
-<B>font-courb12</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-bold-r-*-12-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39943"></A>
-<B>font-courb14</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-bold-r-*-14-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39954"></A>
-<B>font-courb18</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-bold-r-*-18-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39965"></A>
-<B>font-helvetica-12</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-Helvetica-Medium-R-Normal-*-12-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39976"></A>
-<B>font-lucidasans-bold-12</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "lucidasans-bold-12")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39987"></A>
-<B>font-lucidasans-bold-14</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "lucidasans-bold-14")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="39998"></A>
-<B>font-helvetica-bold-12</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-Helvetica-Bold-R-Normal-*-12-"
-)</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="40009"></A>
-<B>font-a14</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-fixed-medium-r-normal-*-14-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
+<H1><A NAME="SECTION04060000000000000000">
+Xwindow インターフェース</A>
+</H1>
+
+Euslisp上のXwindowインターフェースは、<TT>'eusx'</TT>という
+名前でEuslispが呼び出されたとき、実行可能となる。
+<A NAME="tex2html19"
+  HREF="jmanual-footnode.html#foot38880"><SUP><SPAN CLASS="arabic">3</SPAN></SUP></A>eusxは、起動時に環境変数"DISPLAY"を参照してXserverに接続を試みるため、
+自分のXseverに環境変数"DISPLAY"が正しく設定されていなければならない。
 
 <P>
-
-<A NAME="40020"></A>
-<B>x:*xwindows*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> Euslispによる子windowを含んだ全てのwindowのリストを
-保持する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="40030"></A>
-<B>x:*xwindow-hash-tab*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> drawable IDからxwindowオブジェクトを
-探すためのハッシュテーブル。
-<TT>x:nextevent</TT>で得られるイベント構造はwindow IDであるため、
-<TT>x:window-main-loop</TT>はこのテーブルを使用して一致するxwindowオブジェクト
-を知るために<TT>x:event-window</TT>を呼び出す。
-</DD>
-</DL>
-<BR>
-<BR>
+Euslispには、次の3つのレベルのXwindowインターフェースが定義されている。
+(1) Xlib関数, (2) Xlibクラスと(3) XToolKitクラスである。
+この節と次のXToolKitの節に記述されている
+全てのXwindow関数は、"X"パッケージの中に含まれている。
+それらの関数名は、元のXlib関数名から最初の"X"を省いき、全ての文字を大文字に
+変更したものとなっている。
+例えば<TT>XdefaultGC</TT>は<TT>X:DEFAULTGC</TT>と名付けられていて、
+<TT>X:XDEFAULTGC</TT>ではない。
 
 <P>
-
-<A NAME="40043"></A>
-<B>xflush</B> [関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-Xlibのコマンドバッファに保有するコマンドをすべてXserverに送る。
-XlibバッファがXserverに出力するため、
-Xserverに発行されたコマンドは、すぐに実行されない。
-これは、ネットワークの渋滞およびプロセスの切替え頻度を減少させるために
-必要である。
-コマンドの効果を見るためにコマンドバッファを掃き出す方法として、
-<B>xflush</B>を使用するかあるいは<B>:flush</B>メッセージをxwindowオブジェクトに
-送る。
-</DD>
-</DL>
-<BR>
-<BR>
+Xlib関数は、Xwindowシステムへの低レベルインターフェースで、
+foreign関数として定義されている。
+これらのXlib関数は、パラメータの型チェックあるいは
+パラメータの数のチェックを実行していないため、
+十分注意して使用しなければならない。
+例えば、すべてのXlibの呼び出しにおいてXserverとの接続を確認するために
+<TT>x:*display*</TT>を引き数として要求する。もし、指定し忘れたならば、Xlibは
+エラーを通知し、そのプロセスは死ぬ。
+このような不便を避け、オブジェクト指向のインターフェースを作るために、
+2番めのレベルのインターフェースであるXlibクラスが備わっている。
+この節では、この2番めのレベルのインターフェースに焦点を当てる。
+XToolKitと呼ばれるもっと高レベルのXwindowライブラリは、次節で
+説明されている。
 
 <P>
-             <P>
+この節に記述されているクラスは、以下の継承の階層を持っている。
 
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html2355"
-  HREF="jmanual-node131.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2349"
-  HREF="jmanual-node129.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2343"
-  HREF="jmanual-node129.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2351"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2353"
-  HREF="jmanual-node156.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html2356"
-  HREF="jmanual-node131.html">Xwindow</A>
-<B> Up:</B> <A NAME="tex2html2350"
-  HREF="jmanual-node129.html">Xwindow インターフェース</A>
-<B> Previous:</B> <A NAME="tex2html2344"
-  HREF="jmanual-node129.html">Xwindow インターフェース</A>
- &nbsp; <B>  <A NAME="tex2html2352"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2354"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
-<!--End of Navigation Panel-->
+<P><PRE>
+propertied-object
+   viewsurface
+      x:xobject
+         x:gcontext
+         x:xdrawable
+             x:xpixmap
+             x:xwindow
+   colormap
+</PRE>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html2354"
+  HREF="jmanual-node131.html">Xlibのグローバル変数とその他関数</A>
+<LI><A NAME="tex2html2355"
+  HREF="jmanual-node132.html">Xwindow</A>
+<LI><A NAME="tex2html2356"
+  HREF="jmanual-node133.html">Graphic Context</A>
+<LI><A NAME="tex2html2357"
+  HREF="jmanual-node134.html">色とカラーマップ</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

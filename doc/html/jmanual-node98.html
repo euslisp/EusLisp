@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>スレッドの並列実行</TITLE>
+<TITLE>スレッド作成とスレッドプール</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="スレッドの並列実行">
+<META NAME="description" CONTENT="スレッド作成とスレッドプール">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,64 +21,85 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node99.html">
 <LINK REL="previous" HREF="jmanual-node97.html">
-<LINK REL="up" HREF="jmanual-node96.html">
+<LINK REL="up" HREF="jmanual-node97.html">
 <LINK REL="next" HREF="jmanual-node99.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1893"
+<A NAME="tex2html1894"
   HREF="jmanual-node99.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1887"
-  HREF="jmanual-node96.html">
+<A NAME="tex2html1888"
+  HREF="jmanual-node97.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1881"
+<A NAME="tex2html1882"
   HREF="jmanual-node97.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1889"
+<A NAME="tex2html1890"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1891"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1892"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1894"
-  HREF="jmanual-node99.html">同期の手法</A>
-<B> Up:</B> <A NAME="tex2html1888"
-  HREF="jmanual-node96.html">非同期プログラミングと並列プログラミングの構築</A>
-<B> Previous:</B> <A NAME="tex2html1882"
-  HREF="jmanual-node97.html">スレッド作成とスレッドプール</A>
- &nbsp; <B>  <A NAME="tex2html1890"
+<B> Next:</B> <A NAME="tex2html1895"
+  HREF="jmanual-node99.html">スレッドの並列実行</A>
+<B> Up:</B> <A NAME="tex2html1889"
+  HREF="jmanual-node97.html">非同期プログラミングと並列プログラミングの構築</A>
+<B> Previous:</B> <A NAME="tex2html1883"
+  HREF="jmanual-node97.html">非同期プログラミングと並列プログラミングの構築</A>
+ &nbsp; <B>  <A NAME="tex2html1891"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1892"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1893"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION04022200000000000000">
-スレッドの並列実行</A>
+<H3><A NAME="SECTION04022100000000000000">
+スレッド作成とスレッドプール</A>
 </H3>
-スレッドによる並列実行の配置のために、スレッド関数が使用される。
-スレッドは、スレッドプールから1つの空きスレッドを取り、
-共有メモリを経由して引き数を渡し、図<A HREF="jmanual-node97.html#threadobj">7</A>に示されるような
-セマフォ信号によりスレッドを立ち上げ、
-停止することなしに呼出側へスレッドオブジェクトを返す。
-立ち上げられたスレッドは、呼び出したスレッドと並列に実行され、
-引き数を評価し始める。
-呼出側は、forkされたスレッドから評価結果を受けとるために<TT>wait-thread</TT>を
-使用する。
-<TT>plist</TT>マクロは、引き数の並列評価を記述するために大変便利な書式である。
-<TT>plist</TT>は、それぞれの引き数を評価するためにスレッドを割り当て、
-すべてのスレッドが評価し終わるのを待って結果をリストアップする。
+Solarisにおいて複数のプロセッサ上で並列にプログラムを実行するためには、
+そのプログラムは関数の集まりとして書かれる必要がある。
+その関数はそれぞれプロセスの中で動的に作成されるスレッドによって
+実行される。
+スレッドを作成するために要求される時間は、プロセスを作成するよりも
+速くなければならないが、スタックを配置しスタックのオーバーフローを
+発見するためのページ属性を設定した後にスレッドが動き始めるまでに
+Euslispにおいて数ミリ秒かかる。
+この遅れは関数実施と比較して我慢できないため、
+評価時間におけるシステムコールに対する所要時間を排除する目的で、
+あらかじめ<TT>make-thread</TT>関数により十分な数のスレッドが作られ、
+システムのスレッドプールに置かれる。
+スレッドプールの中のそれぞれのスレッドは、図<A HREF="#threadobj">7</A>で示されるように
+スレッドIDと同期のためのセマフォと引き数や評価結果を転送するためのスロット
+から構成されるスレッドオブジェクトにより表現される。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="threadobj"></A><A NAME="25223"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+スレッド間で制御やデータを受け渡すためのスレッドオブジェクト（左）とスレッドプール内に置かれたスレッドの集まり（右）</CAPTION>
+<TR><TD><IMG
+ WIDTH="693" HEIGHT="191" BORDER="0"
+ SRC="jmanual-img48.png"
+ ALT="\begin{figure}\begin{center}
+\begin{tabular}{c c}
+\epsfile{file=fig/threadobj.ps...
+...e{file=fig/threadpool.ps,width=7.5cm} \\
+\end{tabular}\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
 
 <P>
 <BR><HR>
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

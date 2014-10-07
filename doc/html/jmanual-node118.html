@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>bodyの合成関数</TITLE>
+<TITLE>基本bodyの作成関数</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="bodyの合成関数">
+<META NAME="description" CONTENT="基本bodyの作成関数">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,46 +21,46 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node119.html">
 <LINK REL="previous" HREF="jmanual-node117.html">
-<LINK REL="up" HREF="jmanual-node112.html">
+<LINK REL="up" HREF="jmanual-node113.html">
 <LINK REL="next" HREF="jmanual-node119.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2181"
+<A NAME="tex2html2182"
   HREF="jmanual-node119.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2175"
-  HREF="jmanual-node112.html">
+<A NAME="tex2html2176"
+  HREF="jmanual-node113.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2169"
+<A NAME="tex2html2170"
   HREF="jmanual-node117.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2177"
+<A NAME="tex2html2178"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2179"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2180"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2182"
-  HREF="jmanual-node119.html">座標軸</A>
-<B> Up:</B> <A NAME="tex2html2176"
-  HREF="jmanual-node112.html">幾何学モデリング</A>
-<B> Previous:</B> <A NAME="tex2html2170"
-  HREF="jmanual-node117.html">基本bodyの作成関数</A>
- &nbsp; <B>  <A NAME="tex2html2178"
+<B> Next:</B> <A NAME="tex2html2183"
+  HREF="jmanual-node119.html">bodyの合成関数</A>
+<B> Up:</B> <A NAME="tex2html2177"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2171"
+  HREF="jmanual-node117.html">立体(body)</A>
+ &nbsp; <B>  <A NAME="tex2html2179"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2180"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2181"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04046000000000000000"></A><A NAME="BodyComposition"></A>
+<H2><A NAME="SECTION04045000000000000000"></A><A NAME="primitive-body-creation"></A>
 <BR>
-bodyの合成関数
+基本bodyの作成関数
 </H2>
 
 <P>
@@ -68,8 +68,23 @@ bodyの合成関数
  <BR>
 <BR> <P>
 
-<A NAME="32712"></A>
-<B>face+</B> <EM>face1 face2 </EM>[関数]
+<A NAME="32544"></A>
+<B>make-plane</B> <EM>&amp;key :normal :point :distance </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>point</EM>を通り，<EM>normal</EM>の方向を向いた<B>plane</B>オブジェクトを作る。
+<EM>point</EM>を与える代わり<EM>distance</EM>を指定することもできる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32559"></A>
+<B>*xy-plane*</B> [変数]
 
 <DL COMPACT>
 <DT> 
@@ -79,39 +94,8 @@ bodyの合成関数
 <BR>
 <BR>
 
-<A NAME="32723"></A>
-<B>face*</B> <EM>face1 face2 </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>face1</EM>と<EM>face2</EM>は，3次元上で共通平面上にある。
-<B>face+</B>は，これらの面の結合を構築し，面のオブジェクトとして返す。
-もし，交差領域がないなら，元の2つの面が返される。
-<B>face*</B>は，これらの面の交差領域を返す。もし，交差領域がなければ，NILを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="32737"></A>
-<B>cut-body</B> <EM>body cutting-plane </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>body</EM>を<EM>cutting-plane</EM>で切断し，その切断面に作られる面のリストを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="32749"></A>
-<B>body+</B> <EM>body1 body2 &amp;rest more-bodies </EM>[関数]
+<A NAME="32570"></A>
+<B>*yz-plane*</B> [変数]
 
 <DL COMPACT>
 <DT> 
@@ -121,8 +105,8 @@ bodyの合成関数
 <BR>
 <BR>
 
-<A NAME="32760"></A>
-<B>body-</B> <EM>body1 body2 </EM>[関数]
+<A NAME="32581"></A>
+<B>*zx-plane*</B> [変数]
 
 <DL COMPACT>
 <DT> 
@@ -132,21 +116,32 @@ bodyの合成関数
 <BR>
 <BR>
 
-<A NAME="32771"></A>
-<B>body*</B> <EM>body1 body2 </EM>[関数]
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="30314"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+基本body</CAPTION>
+<TR><TD><IMG
+ WIDTH="580" HEIGHT="851" BORDER="0"
+ SRC="jmanual-img64.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/fig1.ps,height=19cm}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="32592"></A>
+<B>make-cube</B> <EM>xsize ysize zsize &amp;key :name :color </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-2つあるいはそれ以上の<B>body</B>の和，差あるいは積を計算する。
-それぞれのbodyは，<B>body+, body-, body*</B>の処理を行う前に
-コピーされ，元のbodyは変更されない。
-その結果のbodyの新しい座標系の位置・姿勢は，ワールド座標系のものと一致している。
-もし，しきい値パラメータ<TT>*coplanar-threshold*</TT>,<TT>*contact-threshold*</TT>,<TT>*parallel-threshold*</TT>
-を正確に設定するなら，2つの<B>body</B>が面同士で接触している場合でも
-これらの関数は正しく働くであろう。
-しかしながら，もし<B>body</B>の頂点が他の<B>body</B>の頂点あるいは面に接触している場合，
-どの処理も失敗する。
+x,y,z軸の方向に大きさが<EM>xsize</EM>,<EM>ysize</EM>,<EM>zsize</EM>である，直方体を作る。
+この直方体の原点は<B>body</B>の中心に置かれる。
 </DD>
 </DL>
 <BR>
@@ -154,14 +149,23 @@ bodyの合成関数
 
 <P>
 
-<A NAME="32789"></A>
-<B>body/</B> <EM>body plane </EM>[関数]
+<A NAME="32606"></A>
+<B>make-prism</B> <EM>bottom-points sweep-vector &amp;key :name :color </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<B>make-plane</B>で作られた<B>plane</B>クラスのインスタンスである<EM>plane</EM>で
-<EM>body</EM>を切断する。新しく作られた<B>body</B>が返される。
+<EM>sweep-vector</EM>に沿った<EM>bottom-points</EM>により定義される
+形状を積み上げることにより角柱を作る。
+もし、<EM>sweep-vector</EM>が実数ベクトルでなく数字であれば、<SPAN CLASS="MATH"><IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img65.png"
+ ALT="$z$"></SPAN>方向の
+角柱の高さとして扱われる。
+<EM>bottom-points</EM>は，この<B>body</B>の底面を定義する順番になっていなければならない。
+例えば，
+ <TT>(make-prism '(#f(1 1 0) #f(1 -1 0) #f(-1 -1 0) #f(-1 1 0)) 2.0)</TT>
+は，高さ2.0の直方体を作る。
 </DD>
 </DL>
 <BR>
@@ -169,14 +173,182 @@ bodyの合成関数
 
 <P>
 
-<A NAME="32804"></A>
-<B>body-interference</B> <EM>&amp;rest bodies </EM>[関数]
+<A NAME="32622"></A>
+<B>make-cylinder</B> <EM>radius height &amp;key (:segments 12) :name :color </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>bodies</EM>の中で1対1の組み合わせにおける干渉をチェックし，
-交差している2つの<B>body</B>のリストを返す。
+半径<EM>radius</EM>と高さ<EM>height</EM>で指定される円柱を作る。
+底面は，xy-平面に定義され，座標系の原点は底面の中心に置かれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32634"></A>
+<B>make-cone</B> <EM>top bottom &amp;key (:segments 16) :color :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+頂点が<EM>top</EM>で底面が<EM>bottom</EM>である角錐を作る。
+<EM>top</EM>は，3次元ベクトルである。
+<EM>bottom</EM>は，底面の頂点のリストあるいは半径である。
+もし，頂点のリストなら，順番を慎重にしなさい。
+&nbsp; (make-cone #f(0 0 10) (list #f(10 0 0) #f(0 10 0) #f(-10 0 0)
+#f(0 -10 0)))&nbsp; は，正方形の底面を持つ四角錐を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32648"></A>
+<B>make-solid-of-revolution</B> <EM>points &amp;key (:segments 16) :name :color </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>points</EM>は，z軸まわりの時計方向に回転される。
+もし、<EM>points</EM>のリストの2つの端点がz軸上に置かれてないならば，
+曲面を作る。したがって，
+<TT>(make-solid-of-revolution '(#f(0 0 1) #f(1 0 0)))</TT>
+は、円錐を作り、
+<TT>(make-solid-of-revolution '(#f(1 0 1) #f(1 0 0)))</TT>
+は、円柱を作る。
+<EM>points</EM>は、順番が重要であり、<SPAN CLASS="MATH"><IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img65.png"
+ ALT="$z$"></SPAN>軸の高い方から低い方へ
+整列しておくことが望まれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32663"></A>
+<B>make-torus</B> <EM>points &amp;key (:segments 16) :name :color </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ドーナッツのようなtorus形状を作る。
+<EM>points</EM>は，断面上の頂点のリストである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32674"></A>
+<B>make-icosahedron</B> <EM>&amp;optional (radius 1.0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+正20面体を作る。それぞれの面は正三角形である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32684"></A>
+<B>make-dodecahedron</B> <EM>&amp;optional (radius 1.0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+正12面体を作る。それぞれの面は，正五角形である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32694"></A>
+<B>make-gdome</B> <EM>abody </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>abody</EM>の三角面を4つの面に小分けすることにより
+測地ドームを新しく作る。
+<EM>abody</EM>は，最初正20面体とすべきである。
+それから，<B>make-gdome</B>の結果を再帰的に<B>make-gdome</B>に与えることができる。
+それぞれの呼び出しで，測地ドームの面の数は，4倍に増加する。すなわち，
+20, 80, 320, 1280, 5120などになる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P><PRE>
+(setq g0 (make-icosahedron 1.0))        ; 20 facets
+(setq g1 (make-gdome g0))               ; 80 facets
+(setq g2 (make-gdome g1))               ; 320 facets
+...
+</PRE>
+
+<P>
+
+<A NAME="32708"></A>
+<B>grahamhull</B> <EM>vertices &amp;optional (normal #f(0 0 1)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Grahamのアルゴリズムを用いて，2次元上で凸状の覆いを計算する。
+<B>quickhull</B>よりも遅い。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32719"></A>
+<B>quickhull</B> <EM>vertices &amp;optional (normal #f(0 0 1)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2分探索法を用いて2次元上で凸状の覆いを計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32729"></A>
+<B>convex-hull-3d</B> <EM>vertices </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gift-wrapping法を用いて3次元上で凸面の覆いを計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32739"></A>
+<B>make-body-from-vertices</B> <EM>vertices-list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+矛盾しない順番になっている面のループを定義する頂点のリストから<B>body</B>を返す。
 </DD>
 </DL>
 <BR>
@@ -184,10 +356,39 @@ bodyの合成関数
 
 <P>
              <P>
-<BR><HR>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2182"
+  HREF="jmanual-node119.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2176"
+  HREF="jmanual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2170"
+  HREF="jmanual-node117.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2178"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2180"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2183"
+  HREF="jmanual-node119.html">bodyの合成関数</A>
+<B> Up:</B> <A NAME="tex2html2177"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2171"
+  HREF="jmanual-node117.html">立体(body)</A>
+ &nbsp; <B>  <A NAME="tex2html2179"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2181"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

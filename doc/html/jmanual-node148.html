@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>トラッキング</TITLE>
+<TITLE>エッジ抽出</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="トラッキング">
+<META NAME="description" CONTENT="エッジ抽出">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,71 +21,217 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node149.html">
 <LINK REL="previous" HREF="jmanual-node147.html">
-<LINK REL="up" HREF="jmanual-node143.html">
+<LINK REL="up" HREF="jmanual-node144.html">
 <LINK REL="next" HREF="jmanual-node149.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html2618"
+<A NAME="tex2html2619"
   HREF="jmanual-node149.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2612"
-  HREF="jmanual-node143.html">
+<A NAME="tex2html2613"
+  HREF="jmanual-node144.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2606"
+<A NAME="tex2html2607"
   HREF="jmanual-node147.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2614"
+<A NAME="tex2html2615"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2616"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2617"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2619"
-  HREF="jmanual-node149.html">画像ファイル入出力</A>
-<B> Up:</B> <A NAME="tex2html2613"
-  HREF="jmanual-node143.html">画像処理</A>
-<B> Previous:</B> <A NAME="tex2html2607"
-  HREF="jmanual-node147.html">エッジ抽出</A>
- &nbsp; <B>  <A NAME="tex2html2615"
+<B> Next:</B> <A NAME="tex2html2620"
+  HREF="jmanual-node149.html">トラッキング</A>
+<B> Up:</B> <A NAME="tex2html2614"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2608"
+  HREF="jmanual-node147.html">カラーピクセル画像</A>
+ &nbsp; <B>  <A NAME="tex2html2616"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2617"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2618"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION04085000000000000000"></A><A NAME="tracking"></A>
-<BR>
-トラッキング
+<H2><A NAME="SECTION04084000000000000000">
+エッジ抽出</A>
 </H2>
-<TT>"vision/correlation"</TT>に元画像とトラッキングしたい画像との
-相関を求める関数が定義されている。
+エッジ抽出機能は、<TT>"vision/edge/edge"</TT>に実現されている。
+
+<P>
+
+ <BR>
+<BR> <A NAME="48849"></A>
+<BR>
+<IMG
+ WIDTH="554" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img101.png"
+ ALT="\begin{emtabbing}
+{\bf edge1}
+\it img \= \&amp;optional \= (method 1) \\lq  [関数]\\...
+... \&amp;aux (width (send img :width)) (height (send img :height))
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>img</EM>のエッジピクセルを抽出する。
+<B>edge1</B>は、まずすべてのピクセルに微分オペレータを適用する。
+次の3つの微分オペレータが用意されている。
+<B>grad3</B>は、縦と横の隣接ピクセルの差を用いる。
+<B>prewitt</B>は、<B>grad3</B>に斜め方向のピクセルを考慮したものである。
+<B>sobel</B>は、<B>prewitt</B>において横と縦のピクセルに重みを付けて差を計算したものを用いる。
+<EM>method</EM>が0,1のとき<B>grad3</B>、2のとき<B>prewitt</B>、3のとき
+<B>sobel</B>を選択する。
+<EM>th1</EM>より大きな輝度を持つエッジピクセルが強いエッジピクセルとして
+指示される。
+薄いエッジはエッジの輝度と微分方向を参照した後、独立したピクセルに付けられる。
+これらの強いエッジの端から、強いエッジの方向に含まれる弱いエッジを捜し、
+線分を延長する。
+<EM>th2</EM>より大きなエッジ輝度を持つ弱いエッジは、無条件に繋げられる。
+また、<EM>th2</EM>より小さなエッジ輝度を持つかなり弱いエッジは、他のエッジ
+との距離が<EM>run</EM>以内であれば繋げられる。
+<B>edge1</B>は、強いエッジピクセルを1、弱いエッジあるいは
+延長されたエッジピクセルを2、孤立したピクセルを255と表現する
+<B>pixel-image</B>オブジェクトを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48877"></A>
+<B>overlay-edge</B> <EM>ximg edgeimg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowに表示可能な<B>pixel-image</B>である<EM>ximg</EM>の最上位に
+<B>edge1</B>で得られた<EM>edgeimg</EM>を表示する。
+強いエッジピクセルは赤、弱いエッジピクセルは緑、孤立したピクセルを青
+で表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48891"></A>
+<BR>
+<IMG
+ WIDTH="554" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img102.png"
+ ALT="\begin{emtabbing}
+{\bf edge2}
+\it img1 edge1result \&amp;key \= (:kvalue 8.0) \\lq  [�...
+...error 2.8)\\
+\&gt; (:curve-error 2.8)\\
+\&gt; (:plane-limit 0.3)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>edge1</EM>の結果から一致する直線あるいは楕円曲線を捜す。
+領域(region)、境界(boundary)、線分(line segment)の３つの要素の
+リストが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<B>edge2</B>で出力される3つの要素は、以下のように定義される。
 
 <P>
 
  <BR>
 <BR> <BR> 
-<A NAME="49077"></A>
-<BIG CLASS="XLARGE"><B>tracking-window </B></BIG> [クラス]  <PRE><TT>
-  :super   <B>pixel-image</B> 
-<BR>  :slots 		 x-pos y-pos x-vel y-vel
-<BR>
-pattern-size window-size
-<BR>
-x-win y-win window window-margin
-<BR>
-update threshold half-pattern correlation 
+<A NAME="48904"></A>
+<BIG CLASS="XLARGE"><B>region </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 contour area intensity std-deviation 
 </TT></PRE>
 <BR>
 <BR>
 
 <DL COMPACT>
 <DT> 
-<DD>このクラスは、トラッキング画像を定義する。
+<DD>領域を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="48922"></A>
+<BIG CLASS="XLARGE"><B>boundary </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 parent-region  hole  segments  intensity  topleft  bottomright  length 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>境界を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="48940"></A>
+<BIG CLASS="XLARGE"><B>edge-segment </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 prev next   wing ; the other half-edge  intensity std-deviation   start end 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>エッジ線分を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="48958"></A>
+<BIG CLASS="XLARGE"><B>line-edge-segment </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>edge-segment</B> 
+<BR>  :slots 		 la lb 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>直線のエッジ線分を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="48976"></A>
+<BIG CLASS="XLARGE"><B>curved-edge-segment </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>edge-segment</B> 
+<BR>  :slots 		 rotation total-rot side   a b c d e 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>曲線のエッジ線分を表現。
 </DD>
 </DL>
 <BR>
@@ -93,99 +239,81 @@ update threshold half-pattern correlation
 
 <P>
 
-<A NAME="49094"></A>
-<B>:correlation</B> [メソッド]
+<A NAME="48993"></A>
+<B>draw-ellipse-segment</B> <EM>elp gc &amp;optional (vs *viewsurface*)
+				      (height (send vs :height))
+					(x 0) (y 0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-この画像と元画像との間の相関を返す。
+<EM>vs</EM>で指定されるXwindowに<B>curved-edge-segment</B>オブジェクトである
+<EM>elp</EM>を描く。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49104"></A>
-<B>:grab</B> <EM>&amp;optional (x x-pos) (y y-pos) (sampling 2) </EM>[メソッド]
+<A NAME="49006"></A>
+<B>draw-line-segment</B> <EM>s &amp;optional gc (vs *viewsurface*)
+				(height (send vs :height))
+				(x 0) (y 0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-画像入力装置から画像を取り込み、その画像の<B>pixel-image</B>を返す。
+<EM>vs</EM>で指定されるXwindowに<B>line-edge-segment</B>オブジェクトである
+<EM>s</EM>を描く。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49115"></A>
-<B>:window-rectangle</B> <EM>val </EM>[メソッド]
+<A NAME="49019"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img103.png"
+ ALT="\begin{emtabbing}
+{\bf draw-segments}
+\it segs \&amp;key \= (:line-gc image::*red-g...
+...ght (send vs :height))\\
+\&gt; (:step nil)\\
+\&gt; (:x 0) (:y 0)
+\rm
+\end{emtabbing}">
+<BR>
 
 <DL COMPACT>
 <DT> 
-<DD> 
-Xwindowの上に四角形を描く。
+<DD><EM>vs</EM>で指定されるXwindowに<B>edge-segment</B>のリスト表現である
+<EM>segs</EM>を描く。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49125"></A>
-<B>:rectangle</B> <EM>val </EM>[メソッド]
+<A NAME="49033"></A>
+<B>draw-boundary</B> <EM>b &amp;optional gc </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Xwindowの上に四角形を描く。
+<EM>vs</EM>で指定されるXwindowに<B>boundary</B>のオブジェクト<EM>b</EM>
+の中の線分を描く。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49135"></A>
-<B>:move</B> <EM>newpos &amp;aux (newx (aref newpos 0)) (newy (aref newpos 1)) </EM>[メソッド]
+<A NAME="49046"></A>
+<B>draw-boundaries</B> <EM>bs &amp;optional gc (step nil) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-トラッキングする位置を<EM>newpos</EM>に移動し、新しい画像を取り込む。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="49146"></A>
-<B>:track</B> <EM>display-window &amp;optional th </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-Xwindowの画像からこの画像をトラッキングする。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="49156"></A>
-<B>:serach</B> <EM>display-window &amp;optional th </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-Xwindowの画像からこの画像を捜す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="49166"></A>
-<B>:track-and-search</B> <EM>flag &amp;optional th </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-この画像をトラッキングする。
-もし、トラッキングを失敗したとき、Xwindowからこの画像を捜して
-位置を更新する。
+<EM>vs</EM>で指定されるXwindowに<B>boundary</B>のリスト表現である<EM>bs</EM>
+の中の線分を描く。
 </DD>
 </DL>
 <BR>
@@ -193,113 +321,110 @@ Xwindowの画像からこの画像を捜す。
 
 <P>
 
-<A NAME="49176"></A>
-<B>:pos</B> [メソッド]
+<A NAME="49059"></A>
+<B>*red-gc*</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-windowの左上位置を返す。
+<DD> #ff0000(赤色)の色を持つ<B>gcontext</B>。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49186"></A>
-<B>:vel</B> [メソッド]
+<A NAME="49070"></A>
+<B>*blue-gc*</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-トラッキング速度を返す。
+<DD> #0000ff(青色)の色を持つ<B>gcontext</B>。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49196"></A>
-<B>:insidep</B> <EM>pos &amp;aux (x (aref pos 0)) (y (aref pos 1)) </EM>[メソッド]
+<A NAME="49081"></A>
+<B>*green-gc*</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-<EM>pos</EM>が<B>tracking-window</B>の中に含まれるかどうかをチェックする。
+<DD> #00ff00(緑色)の色を持つ<B>gcontext</B>。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49208"></A>
-<B>:update</B> <EM>&amp;optional (flag :get) </EM>[メソッド]
+<A NAME="49092"></A>
+<B>*yellow-gc*</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-<TT>update</TT>に<EM>flag</EM>を設定する。もし、<EM>flag</EM>がなければ、
-<TT>update</TT>を返す。
+<DD> #ffff00(黄色)の色を持つ<B>gcontext</B>。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49222"></A>
-<B>:prin1</B> <EM>strm &amp;rest mesg </EM>[メソッド]
+<A NAME="49103"></A>
+<B>*cyan-gc*</B> [変数]
 
 <DL COMPACT>
 <DT> 
-<DD> 
-この<B>tracking-window</B>を名前と次元と一緒に表示する。
+<DD> #00ffff(水色)の色を持つ<B>gcontext</B>。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="49233"></A>
-<B>:init</B> <EM>x y size win-size </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>tracking-window</B>を作成する
-</DD>
-</DL>
-<BR>
-<BR>
-
+<P>
              <P>
+
+<DIV ALIGN="CENTER"><A NAME="47852"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 19:</STRONG>
+Edge Finder and Overlaied Edges</CAPTION>
+<TR><TD><IMG
+ WIDTH="435" HEIGHT="407" BORDER="0"
+ SRC="jmanual-img104.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/block1.edg.ps,height=9cm}\end{center}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2618"
+<A NAME="tex2html2619"
   HREF="jmanual-node149.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2612"
-  HREF="jmanual-node143.html">
+<A NAME="tex2html2613"
+  HREF="jmanual-node144.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2606"
+<A NAME="tex2html2607"
   HREF="jmanual-node147.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2614"
+<A NAME="tex2html2615"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html2616"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html2617"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html2619"
-  HREF="jmanual-node149.html">画像ファイル入出力</A>
-<B> Up:</B> <A NAME="tex2html2613"
-  HREF="jmanual-node143.html">画像処理</A>
-<B> Previous:</B> <A NAME="tex2html2607"
-  HREF="jmanual-node147.html">エッジ抽出</A>
- &nbsp; <B>  <A NAME="tex2html2615"
+<B> Next:</B> <A NAME="tex2html2620"
+  HREF="jmanual-node149.html">トラッキング</A>
+<B> Up:</B> <A NAME="tex2html2614"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2608"
+  HREF="jmanual-node147.html">カラーピクセル画像</A>
+ &nbsp; <B>  <A NAME="tex2html2616"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html2617"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
+ &nbsp; <B>  <A NAME="tex2html2618"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

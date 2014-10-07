@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>ファイルシステムインターフェース</TITLE>
+<TITLE>パス名</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="ファイルシステムインターフェース">
+<META NAME="description" CONTENT="パス名">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,98 +19,71 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="jmanual.css">
 
+<LINK REL="next" HREF="jmanual-node63.html">
 <LINK REL="previous" HREF="jmanual-node61.html">
-<LINK REL="up" HREF="jmanual-node52.html">
+<LINK REL="up" HREF="jmanual-node53.html">
 <LINK REL="next" HREF="jmanual-node63.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1261"
+<A NAME="tex2html1264"
   HREF="jmanual-node63.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1255"
-  HREF="jmanual-node52.html">
+<A NAME="tex2html1258"
+  HREF="jmanual-node53.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1251"
+<A NAME="tex2html1252"
   HREF="jmanual-node61.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1257"
+<A NAME="tex2html1260"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1259"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1262"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1262"
-  HREF="jmanual-node63.html">評価</A>
-<B> Up:</B> <A NAME="tex2html1256"
-  HREF="jmanual-node52.html">ストリームと入出力</A>
-<B> Previous:</B> <A NAME="tex2html1252"
-  HREF="jmanual-node61.html">パス名</A>
- &nbsp; <B>  <A NAME="tex2html1258"
+<B> Next:</B> <A NAME="tex2html1265"
+  HREF="jmanual-node63.html">ファイルシステムインターフェース</A>
+<B> Up:</B> <A NAME="tex2html1259"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1253"
+  HREF="jmanual-node61.html">非同期入出力</A>
+ &nbsp; <B>  <A NAME="tex2html1261"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1260"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1263"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION03087000000000000000">
-ファイルシステムインターフェース</A>
+<H2><A NAME="SECTION03086000000000000000"></A><A NAME="Pathnames"></A>
+<BR>
+パス名
 </H2>
+
+<P>
+パス名は、OSに依存しないようにファイル名を解析あるいは構成する方法として
+与えられるものである。
+典型的なパス名は、次のような構成で成り立っていると仮定されている。
+host:device/directory1/.../directory-n/name.type.version。
+Euslispは、UNIXの上で動作している限り、ホスト・デバイス・バージョンを無視する。
+<B>pathname</B>関数は、文字列をディレクトリ要素・名前・型に分解し、パス名
+オブジェクトを返す。そのパス名は、<TT>#P</TT>を先頭につけた文字列として表示される。
+
+<P>
 
  <BR>
 <BR> <P>
 
-<A NAME="15739"></A>
-<B>probe-file</B> <EM>path </EM>[関数]
+<A NAME="15660"></A>
+<B>pathnamep</B> <EM>name </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>path</EM>という名のファイルがあるかどうかをチェックする。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="15750"></A>
-<B>file-size</B> <EM>path </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>path</EM>という名のファイルのサイズをバイト数で返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="15761"></A>
-<B>directory-p</B> <EM>path </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>path</EM>がディレクトリならば、Tを返す。
-そうでなかったとき（<EM>path</EM>が存在しなかったときを含める）
-はNILを返す。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="15773"></A>
-<B>find-executable</B> <EM>file </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> U
-<EM>file</EM>という名のUNIXコマンドを探し、フルパス名で返す。
-<B>find-executable</B>は、自分のpath-listから実行できるファイルを探す
-UNIXのwhichコマンドとほとんど同じ関数である。
+もし<EM>name</EM>がパス名ならば、Tを返す。
 </DD>
 </DL>
 <BR>
@@ -118,15 +91,16 @@ UNIXのwhichコマンドとほとんど同じ関数である。
 
 <P>
 
-<A NAME="15785"></A>
-<B>file-write-date</B> <EM>file </EM>[関数]
+<A NAME="15671"></A>
+<B>pathname</B> <EM>name </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>file</EM>が最後に変更された日時を整数表現で返す。
-<TT>(unix:asctime (unix:localtime (file-write-date <EM>file</EM>)))</TT>
-で文字列表現が得られる。
+<EM>name</EM>はパス名または文字列で、パス名に変換される。
+最後の名前がディレクトリ名を示すために<EM>name</EM>の最後に"/"をつけることを
+忘れないこと。
+逆変換は<B>namestring</B>で実現される。
 </DD>
 </DL>
 <BR>
@@ -134,14 +108,15 @@ UNIXのwhichコマンドとほとんど同じ関数である。
 
 <P>
 
-<A NAME="15798"></A>
-<B>file-newer</B> <EM>new old </EM>[関数]
+<A NAME="15684"></A>
+<B>pathname-directory</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-もし、<EM>new</EM>ファイルが<EM>old</EM>ファイルよりも最近に変更されているならば、
-Tを返す。
+<EM>path</EM>からディレクトリ名のリストを返す。
+"/"ディレクトリは:ROOTと表現される。
+<EM>path</EM>は、文字列あるいはパス名である。
 </DD>
 </DL>
 <BR>
@@ -149,14 +124,14 @@ Tを返す。
 
 <P>
 
-<A NAME="15810"></A>
-<B>object-file-p</B> <EM>file </EM>[関数]
+<A NAME="15696"></A>
+<B>pathname-name</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-もし、<EM>file</EM>がヘッダー内のファイルのmagic numberを見ることにより
-オブジェクトファイルであったならば、Tを返す。
+<EM>path</EM>からファイル名の部分を返す。
+<EM>path</EM>は、文字列あるいはパス名である。
 </DD>
 </DL>
 <BR>
@@ -164,13 +139,14 @@ Tを返す。
 
 <P>
 
-<A NAME="15821"></A>
-<B>directory</B> <EM>&amp;optional (path ".") </EM>[関数]
+<A NAME="15708"></A>
+<B>pathname-type</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>path</EM>の中の全てのファイルのリストを作る。
+<EM>path</EM>からファイルの型の部分を取り出す。
+<EM>path</EM>は、文字列あるいはパス名である。
 </DD>
 </DL>
 <BR>
@@ -178,25 +154,103 @@ Tを返す。
 
 <P>
 
-<A NAME="15832"></A>
-<B>dir</B> <EM>&amp;optional (dir ".") </EM>[関数]
+<A NAME="15720"></A>
+<B>make-pathname</B> <EM>&amp;key :host :device :directory :name :type :version
+defaults </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>dir</EM>で指定されたディレクトリ内のファイル名を表示する。 
+<EM>directiory</EM>,<EM>name</EM>と<EM>type</EM>から新しいパス名を作る。
+UNIX上では、他のパラメータは無視される。
 </DD>
 </DL>
 <BR>
 <BR>
 
 <P>
-             <P>
 
-<BR><HR>
+<A NAME="15733"></A>
+<B>merge-pathnames</B> <EM>name
+&amp;optional (defaults *default-pathname-defaults*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15744"></A>
+<B>namestring</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>の文字列表現を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15755"></A>
+<B>parse-namestring</B> <EM>name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15766"></A>
+<B>truename</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>で名前付けされているファイルの絶対パス名を見つける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1264"
+  HREF="jmanual-node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1258"
+  HREF="jmanual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1252"
+  HREF="jmanual-node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1260"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1262"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1265"
+  HREF="jmanual-node63.html">ファイルシステムインターフェース</A>
+<B> Up:</B> <A NAME="tex2html1259"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1253"
+  HREF="jmanual-node61.html">非同期入出力</A>
+ &nbsp; <B>  <A NAME="tex2html1261"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1263"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>

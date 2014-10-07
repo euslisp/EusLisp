@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>コンパイル</TITLE>
+<TITLE>最上位レベルの対話</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="コンパイル">
+<META NAME="description" CONTENT="最上位レベルの対話">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,278 +21,346 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="jmanual-node67.html">
 <LINK REL="previous" HREF="jmanual-node65.html">
-<LINK REL="up" HREF="jmanual-node63.html">
+<LINK REL="up" HREF="jmanual-node64.html">
 <LINK REL="next" HREF="jmanual-node67.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html1324"
+<A NAME="tex2html1325"
   HREF="jmanual-node67.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1318"
-  HREF="jmanual-node63.html">
+<A NAME="tex2html1319"
+  HREF="jmanual-node64.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1312"
+<A NAME="tex2html1313"
   HREF="jmanual-node65.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1320"
+<A NAME="tex2html1321"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1322"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1323"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1325"
-  HREF="jmanual-node67.html">プログラムロード</A>
-<B> Up:</B> <A NAME="tex2html1319"
-  HREF="jmanual-node63.html">評価</A>
-<B> Previous:</B> <A NAME="tex2html1313"
-  HREF="jmanual-node65.html">最上位レベルの対話</A>
- &nbsp; <B>  <A NAME="tex2html1321"
+<B> Next:</B> <A NAME="tex2html1326"
+  HREF="jmanual-node67.html">コンパイル</A>
+<B> Up:</B> <A NAME="tex2html1320"
+  HREF="jmanual-node64.html">評価</A>
+<B> Previous:</B> <A NAME="tex2html1314"
+  HREF="jmanual-node65.html">評価関数</A>
+ &nbsp; <B>  <A NAME="tex2html1322"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1323"
-  HREF="jmanual-node156.html">Index</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1324"
+  HREF="jmanual-node157.html">Index</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION03093000000000000000"></A><A NAME="compiler"></A>
-<BR>
-コンパイル
+<H2><A NAME="SECTION03092000000000000000">
+最上位レベルの対話</A>
 </H2>
 
 <P>
-Euslispコンパイラは、Lispプログラムの実行を高速化するために使用される。
-実行時間の5〜30倍の高速化とマクロ展開によるガーベージコレクション
-時間の大幅な減少が期待できる。
+EusLispの標準の最上位レベルの入力−評価−出力のループ(loop)は、<B>eustop</B>
+により制御されている。
+euslispが呼び出されたとき、
+<B>eustop</B>は、ホームディレクトリから<TT>".eusrc"</TT>というファイルを
+あるいは<TT>EUSRC</TT>環境変数で指定されたファイルをロードする。
+それから、euslispは、引き数リストで指定されたファイルをロードする。
+これらのロードが終了後、<B>eustop</B>は、普通の対話セッション(session)に入る。
 
 <P>
-euscompは、計算処理とベクトル処理のための最適化を行う。
-ときどきコンパイラが最適化を効率良く実行するために、固有の型宣言が必要となる。
+<B>*standard-input*</B>にユーザーのTTYが接続されたとき、
+<B>eustop</B>は、<B>*prompt-string*</B>（デフォルトとして<TT>"eus$"</TT>が
+設定されている）に設定されたプロンプトを出力する。
+そして、<B>*terminal-io*</B>ストリームから命令を入力する。
+もし、その入力がカッコで括られた行ならば、
+<B>eval</B>によってlisp書式として扱われる。
+もし、入力行の最初のsymbolに関数定義があった場合、その行に自動的に
+カッコが入れられ、評価される。
+もし、関数定義が見つからなかった場合、その特殊値(special value)が
+調査され、その値が出力される。
+もし、そのsymbolになにも定義されてないならば、
+その行はUNIX命令とみなされ、sh(Bourn's shell)へ渡される。
+もし、shが一致するUNIX命令を捜せなかったとき、
+"command unrecognized"というメッセージを出力する。
+このように、<B>eustop</B>はlispのインタープリタおよびUNIXのシェルとして動作する。
+もし、入力をUNIX命令として実行したくないとき、
+行の最初にコンマ','を付ければよい。
+これは、対話実行(interpretive execution)でエラーが発生したとき、
+動的な値を見るときに役に立つ。
+Euslispはローカルなスコープ(lexical scope)を採用しているので
+ローカル変数の値をspecialとして宣言されていない限りスコープの外から
+調査することは出来ない。
 
 <P>
-<B>compile-function</B>は、1つずつ関数をコンパイルする。
-<B>compile-file</B>は、すべてのソースファイルをコンパイルする。
-<B>compile-file</B>を実行している間、ファイル内のすべての書式が読み込まれ
-評価される。
-これは、現在のEuslispの環境を変化させる。
-例えば、<B>defparameter</B>はsymbolに新しい値を設定するし、
-<B>defun</B>はコンパイルされていない関数をコンパイルされた関数に
-置き換える。
-これらの予期しない影響を避けるためには、<TT>compile</TT>指定のない<B>eval-when</B>を
-使用したり、<B>euscomp</B>を使用して別プロセスとしてコンパイラを実行したりする。
+入力は、それぞれ行番号とともに<B>*history*</B>ベクトルに記憶される。
+cshの上と同じ様に<B>!</B>関数を入力することにより入力の詳細を
+呼び出すことができる。
+cshの履歴との違いは、<B>!</B>が関数であるため<B>!</B>の次に最低１つの
+スペースが必要である。
+また、コントロールキーを用いることによりemacsのように対話的に
+行を編集することができる。
 
 <P>
-<B>euscomp</B>はUNIXのコマンドで、普通<B>eus</B>にシンボリックリンクされている。
-幾つかのオプションを持っている。
--OフラグはCコンパイラの最適化を指示し、
--O1,-O2, -O3 はそれぞれEuslispコンパイラの最適化のレベルを指示する。
-これは、<TT>(optimize 1 or 2 or 3)</TT>と宣言するのと同等である。
--S0, -S1, -S2, -S3は、<B>compiler:*safety*</B>に0,1,2,3を設定する。
-もし<B>*safety*</B>が2より小さければ、割り込みチェックのためのコードを発行しない。
-もし、プログラムが無限ループに入ったとき、制御を失うことになる。
-もし<B>*safety*</B>が0のときは、引き数の数をチェックしない。
--Vフラグは、コンパイルされている関数名を表示する。
--cフラグは、ccの実行やforkを防ぐ。
--Dは、<B>*features*</B>リストに続く引き数を置く。
-これは、読み込みマクロ<TT>#-</TT>と<TT>#+</TT>
-を用いた条件付きコンパイルのために使用することができる。
+通常<code>^</code>D (EOF)でEuslispは終了する。
+上位レベル(普通はcsh)に異常終了コードを返すためには、適当な条件コードをつけた
+<B>exit</B>を使用すること。
 
 <P>
-コンパイラは"xxx.l"という名のEuslispソースプログラムを
-中間Cプログラムファイル"xxx.c"
-とヘッダーファイル"xxx.h"に変換する。
-それから、Cコンパイラが実行され、"xxx.o"が生成される。
-中間ファイル"xxx.c"と"xxx.h"はクロスコンパイルの目的のために残される。
-したがって、違うアーキテクチャーの機械の上で使用したいとき、UNIX命令のccで
-"xxx.c"ファイルをコンパイルするだけでよい。
-コンパイルされたコードは、'<TT>(load "xxx")</TT>'によってEuslispにロードされる。
-
-<P>
-中間ファイルはそれぞれ、"eus.h"ヘッダーファイルを参照する。
-このファイルは、<TT>*eusdir*/c</TT>ディレクトリに置かれていると仮定している。
-<TT>*eusdir*</TT>は、<TT>EUSDIR</TT>環境変数からコピーされる。
-もし設定されてなければ、<TT>/usr/local/eus/</TT>がデフォルトディレクトリ
-として扱われる。
-
-<P>
-コンパイルされたとき、中間のCプログラムは普通元のソースコードよりも
-かなり大きくなる。例えば、1,161行のlispソースコード"l/common.l"は、
-8,194行の"l/common.c"と544行の"l/common.h"に展開される。
-1,000行のlispソースをコンパイルするのは、難しい作業ではないが、
-10,000行近いCのプログラムを最適コンパイルすることは、長い時間(数分)かかる
-とともに、たくさんのディスク空間を消費する。
-そのため、もし相対的に大きなプログラムのコンパイルをするならば、
-/var/tmpに十分なディスクがあるかどうかを確認すること。
-そうでなければ、CCは死ぬだろう。
-<TT>TMPDIR</TT>環境変数をもっと大きなディスク部分に設定することが助かる道である。
-
-<P>
-リンクがロード時または実行時に実行されるので、
-eusのカーネルがバージョンアップされても再コンパイルする必要はない。
-もう一方で、実行時リンクは不便なことがある。
-２つの関数AとBが"x.l"ファイルにありAがBを呼び出していると仮定する。
-"x.l"をコンパイル後、"x.o"をロードし内部でBを呼び出しているAを呼び出そうとする。
-それから、Bの中でbugを見つけると、たぶんBを再定義しようとするだろう。
-ここで、コンパイルされたAとコンパイルされていないBとができる。
-再びAを呼び出したとすると、Aはまだ古いコンパイルされているBを呼び出す。
-これは、Aが最初にBを呼び出したとき固定的にリンクされるからである。
-この問題を避けるためには、Aを再定義しなおすかあるいは"x.o"がロードされた直後で
-Aを呼び出す前にBを再定義しなければならない。
-
-<P>
-コンパイルされたコードがロードされるとき、一般的にdefunやdefmethodの
-列である最上位コードが実行される。
-この最上位コードはロードモジュールのエントリ関数として定義されている。
-コンパイラがそのエントリ関数の名前を付け、
-ローダがこの関数の名前を正確にわからなければならない。
-状況を簡単にするために、コンパイラとローダの両方とも
-そのエントリ関数の名前としてオブジェクトファイルのbasenameと同一のもの
-と仮定する。
-例えば、もし"fib.l"をコンパイルしたならば、
-コンパイラは"fib.c"のエントリ関数として"fib(...)"を生成する。
-そして、ローダはオブジェクトファイル"fib.o"の中から"fib"を探す。
-最終的にオブジェクトファイルはUnixの"cc"や"ld"で生成されるので、
-このエントリ関数名は、C関数の命名ルールを満足しなければならない。
-したがって、ファイル名としてCの予約キーワード（例えば、
-"int", "struct", "union", "register", "extern"など）や"c/eus.h"に
-定義されているプライベート指示語（例えば、"pointer", "cons",
-"makeint"など）を避けなければならない。
-もし、ソースファイルの名前としてこれらの予約語の内の１つを
-使用しなければならないならば、コンパイラやローダの
-<EM>:entry</EM>引数を別に指定すること。
-
-<P>
-closureの使用には制限がある。
-closureの中の<B>return-from</B>特殊書式と<B>unwind-protect</B>の中のclean-up書式は
-いつも正しくコンパイルされるわけではない。
-
-<P>
-<B>disassemble</B>は、実現されていない。
-コンパイルされたコードを解析するためには中間Cプログラムを見るかあるいは
-<B>adb</B>を使用する。
+<B>eustop</B>は、SIGINTとSIGPIPEのためにシグナルハンドラーを設定する。
+そして、他のシグナルはcatchしない。
+このため、SIGTERMやSIGQUITのようなシグナルでEuslispを終了できる。
+終了を避けたいとき、これらのシグナルをcatchするためには、
+<B>unix:signal</B>関数でユーザーで定義したシグナルハンドラーを設定すること。
 
 <P>
 
  <BR>
 <BR> <P>
 
-<A NAME="18300"></A>
-<B>euscomp</B> <EM>{filename}* </EM>[UNIXコマンド]
+<A NAME="18143"></A>
+<B>-</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 現在の入力
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18153"></A>
+<B>+</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 直前の入力
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18163"></A>
+<B>++</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> ２つ前の入力
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18173"></A>
+<B>+++</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> ３つ前の入力
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18183"></A>
+<B>*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 直前の結果
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18193"></A>
+<B>**</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> ２つ前の結果
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18203"></A>
+<B>***</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> ３つ前の結果
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18213"></A>
+<B>*prompt-string*</B> [変数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Euslispコンパイラを呼びだす。
+<B>eustop</B>で使用されるプロンプト文字列
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18224"></A>
+<B>*program-name*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このEuslispが呼び出された命令。例えば、<TT>eus,eusx,eusxview</TT>やユーザーで作った
+euslispなど。
 </DD>
 </DL>
 <BR>
 <BR>
 
 <P>
+
+<A NAME="18235"></A>
+<B>eustop</B> <EM>&amp;rest argv </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> デフォルトの最上位ループ
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18245"></A>
+<B>eussig</B> <EM>sig code </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+SIGPIPEのデフォルトシグナルハンドラー。
+<B>eussig</B>は、SIGPIPEが到着したり他の最上位レベルループに入るとき
+シグナル番号を出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18256"></A>
+<B>sigint-handler</B> <EM>sig code </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+SIGINT(control-C)のデフォルトシグナルハンドラー。
+このシグナルで新しい最上位セッションへ入る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18266"></A>
+<B>euserror</B> <EM>code message &amp;rest arg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトのエラーハンドラーで、
+<EM>message</EM>を出力し、新しいエラーセッションへ入る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18277"></A>
+<B>reset</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+エラーループから脱出して、最後の<B>eustop</B>セッションへ戻る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18288"></A>
+<B>exit</B> <EM>&amp;optional termination-code </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Euslispプロセスを終了し、プロセスの状態コードとして<EM>termination-code</EM>
+(0..255)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18299"></A>
+<B>h</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <B>*history*</B>の中に記憶されている入力履歴を
+関連する列番号とともに出力する。
+</DD>
+</DL>
+<BR>
+<BR>
 
 <A NAME="18310"></A>
-<BR>
-<IMG
- WIDTH="688" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img39.png"
- ALT="\begin{emtabbing}
-{\bf compile-file}
-\it srcfile \&amp;key \= (:verbose nil) \hspac...
-...m ; run c compiler} \\
-\&gt; (:entry (pathname-name file)) \\
-\rm
-\end{emtabbing}">
-<BR>
-
-<DL COMPACT>
-<DT> 
-<DD>ファイルをコンパイルする。
-".l"が<EM>srcfile</EM>の拡張子として仮定される。
-もし、<EM>:verbose</EM>がTならば、コンパイルされた関数やメソッド名が表示される。
-これは、エラーが発生した箇所を簡単に探すのに役立つ。
-<EM>:optimize, :c-optimize</EM>と<EM>:safety</EM>は、最適化のレベルを
-指定する。
-モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
-<EM>:pic</EM>は、Tに設定すべきである。
-
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18331"></A>
-<B>compile</B> <EM>funcname </EM>[関数]
+<B>!</B> <EM>&amp;optional (seq 0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-関数をコンパイルする。<B>compile</B>は、最初に関数定義をテンポラリファイルに
-出力する。そのファイルは、<B>compile-file</B>によってコンパイルされ、
-それから<B>load</B>によってロードされる。
-テンポラリファイルは削除される。
+列番号<EM>seq</EM>に関連する入力行を呼び出す。
+<EM>seq</EM>が0のとき、もっとも最近の命令が呼び出される。
+もし、<EM>seq</EM>が負の場合、現在行から相対的な位置にある行が
+呼び出される。
+呼び出された行が表示され、その行の最後にカーソルを移動する。
+次のコントロールキーが使用出来る。
+control-H (backspace)かcontrol-Bで１文字戻る。
+control-Fかcontrol-Kで１文字進む。
+control-Aで行の最初に移動する。
+control-Lで行の最後に移動する。
+control-Cで行の修正をキャンセルする。
+control-M (carriage-return)かcontrol-J (line-feed)で
+行修正を終了して、修正した行を評価する。
+もし、<EM>seq</EM>が番号でなくsymbolまたは文字列の場合、
+履歴リストを古い方に向かって検索し、
+symbolまたは文字列が含まれている命令行を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<P>
-
-<A NAME="18344"></A>
-<B>compile-file-if-src-newer</B> <EM>srcfile &amp;key compiler-options </EM>[関数]
+<A NAME="18324"></A>
+<B>new-history</B> <EM>depth </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>srcfile</EM>が対応するオブジェクトファイルよりも新しい（最近変更された）
-ならば、コンパイルする。そのオブジェクトファイルは、".o"拡張子を
-持っていると仮定される。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18355"></A>
-<B>*optimize*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> コンパイラの最適化レベルを制御する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18365"></A>
-<B>*verbose*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-non-NILが設定されたとき、コンパイルされている関数名やメソッド名そして
-コンパイルに要した時間を表示する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="18375"></A>
-<B>*safety*</B> [変数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-安全性レベルを制御する。
+<EM>depth</EM>の長さを持つように<B>*history*</B>を初期化する。
+<EM>depth</EM>行が記憶される。
+現在の<B>*history*</B>に記録された入力行は、すべて消滅する。
 </DD>
 </DL>
 <BR>
@@ -305,36 +373,36 @@ non-NILが設定されたとき、コンパイルされている関数名やメ�
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1324"
+<A NAME="tex2html1325"
   HREF="jmanual-node67.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1318"
-  HREF="jmanual-node63.html">
+<A NAME="tex2html1319"
+  HREF="jmanual-node64.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1312"
+<A NAME="tex2html1313"
   HREF="jmanual-node65.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1320"
+<A NAME="tex2html1321"
   HREF="jmanual-node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1322"
-  HREF="jmanual-node156.html">
+<A NAME="tex2html1323"
+  HREF="jmanual-node157.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1325"
-  HREF="jmanual-node67.html">プログラムロード</A>
-<B> Up:</B> <A NAME="tex2html1319"
-  HREF="jmanual-node63.html">評価</A>
-<B> Previous:</B> <A NAME="tex2html1313"
-  HREF="jmanual-node65.html">最上位レベルの対話</A>
- &nbsp; <B>  <A NAME="tex2html1321"
+<B> Next:</B> <A NAME="tex2html1326"
+  HREF="jmanual-node67.html">コンパイル</A>
+<B> Up:</B> <A NAME="tex2html1320"
+  HREF="jmanual-node64.html">評価</A>
+<B> Previous:</B> <A NAME="tex2html1314"
+  HREF="jmanual-node65.html">評価関数</A>
+ &nbsp; <B>  <A NAME="tex2html1322"
   HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1323"
-  HREF="jmanual-node156.html">Index</A></B> </DIV>
+ &nbsp; <B>  <A NAME="tex2html1324"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2014-09-30
+2014-10-07
 </ADDRESS>
 </BODY>
 </HTML>
