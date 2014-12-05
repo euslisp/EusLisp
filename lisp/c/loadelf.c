@@ -430,18 +430,18 @@ register context *ctx;
 pointer mod;
 { pointer p=Spevalof(PACKAGE);
   pointer_update(Spevalof(PACKAGE),syspkg);
-  defun(ctx,"SRCLOAD",mod,SRCLOAD);
+  defun(ctx,"SRCLOAD",mod,SRCLOAD,NULL);
 #if Solaris2 && !GCC
-  defun(ctx,"LIST-MODULE-INITIALIZERS",mod,list_module_initializers);
+  defun(ctx,"LIST-MODULE-INITIALIZERS",mod,list_module_initializers,NULL);
 #else
-  defun(ctx,"LIST-MODULE-INITIALIZERS",mod,list_module_initializers2);
+  defun(ctx,"LIST-MODULE-INITIALIZERS",mod,list_module_initializers2,NULL);
 #endif
-  defun(ctx,"FIND-ENTRY", mod, FIND_ENTRY);
-  defun(ctx,"FIND-ENTRY2", mod, FIND_ENTRY2);
-  defun(ctx,"SYSMOD", mod, SYSMOD);
-  defun(ctx,"BINLOAD",mod,BINLOAD);
-  defun(ctx,"UNBINLOAD",mod,UNBINLOAD);
-  defun(ctx,"SAVE",mod,SAVE); 
+  defun(ctx,"FIND-ENTRY", mod, FIND_ENTRY,NULL);
+  defun(ctx,"FIND-ENTRY2", mod, FIND_ENTRY2,NULL);
+  defun(ctx,"SYSMOD", mod, SYSMOD,NULL);
+  defun(ctx,"BINLOAD",mod,BINLOAD,NULL);
+  defun(ctx,"UNBINLOAD",mod,UNBINLOAD,NULL);
+  defun(ctx,"SAVE",mod,SAVE,NULL);
   pointer_update(Spevalof(PACKAGE),p);}
 
 

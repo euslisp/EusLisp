@@ -589,32 +589,32 @@ register context *ctx;
 pointer mod;
 {
   pointer_update(Spevalof(PACKAGE),syspkg);
-  defun(ctx,"OPENFILE",mod,OPENFILE);
+  defun(ctx,"OPENFILE",mod,OPENFILE,NULL);
   pointer_update(Spevalof(PACKAGE),lisppkg);
-/*  defun(ctx,"OPEN",mod,OPEN); */
-  defun(ctx,"CLOSE",mod,CLOSE);
-  defun(ctx,"READ",mod,READ);
-  defun(ctx,"READ-DELIMITED-LIST",mod,READ_DELIMITED_LIST);
-  defun(ctx,"READ-LINE",mod,READLINE);
-  defun(ctx,"READ-CHAR",mod,READCH);
-  defun(ctx,"UNREAD-CHAR",mod,UNREADCH);
-  defun(ctx,"PEEK-CHAR",mod,PEEKCH);
-  defun(ctx,"PRINT",mod,PRINT);
-  defun(ctx,"PRIN1",mod,PRIN1);
-  defun(ctx,"PRINC",mod,PRINC);
-  defun(ctx,"TERPRI",mod,TERPRI);
-  defun(ctx,"PRINT-SIZE",mod,PRNTSIZE);
-  defun(ctx,"FINISH-OUTPUT",mod,FINOUT);
-  defun(ctx,"WRITE-BYTE",mod,WRTBYTE);
-  defun(ctx,"WRITE-WORD",mod,WRTWORD);
-  defun(ctx,"WRITE-LONG",mod,WRTLONG);
-  defun(ctx,"SET-MACRO-CHARACTER",mod,SETMACROCH);
-  defun(ctx,"GET-MACRO-CHARACTER",mod,GETMACROCH);
-  defun(ctx,"SET-DISPATCH-MACRO-CHARACTER",mod,SETDISPMACRO);
-  defun(ctx,"GET-DISPATCH-MACRO-CHARACTER",mod,GETDISPMACRO);
+/*  defun(ctx,"OPEN",mod,OPEN,NULL); */
+  defun(ctx,"CLOSE",mod,CLOSE,NULL);
+  defun(ctx,"READ",mod,READ,NULL);
+  defun(ctx,"READ-DELIMITED-LIST",mod,READ_DELIMITED_LIST,NULL);
+  defun(ctx,"READ-LINE",mod,READLINE,NULL);
+  defun(ctx,"READ-CHAR",mod,READCH,NULL);
+  defun(ctx,"UNREAD-CHAR",mod,UNREADCH,NULL);
+  defun(ctx,"PEEK-CHAR",mod,PEEKCH,NULL);
+  defun(ctx,"PRINT",mod,PRINT,NULL);
+  defun(ctx,"PRIN1",mod,PRIN1,NULL);
+  defun(ctx,"PRINC",mod,PRINC,NULL);
+  defun(ctx,"TERPRI",mod,TERPRI,NULL);
+  defun(ctx,"PRINT-SIZE",mod,PRNTSIZE,NULL);
+  defun(ctx,"FINISH-OUTPUT",mod,FINOUT,NULL);
+  defun(ctx,"WRITE-BYTE",mod,WRTBYTE,NULL);
+  defun(ctx,"WRITE-WORD",mod,WRTWORD,NULL);
+  defun(ctx,"WRITE-LONG",mod,WRTLONG,NULL);
+  defun(ctx,"SET-MACRO-CHARACTER",mod,SETMACROCH,NULL);
+  defun(ctx,"GET-MACRO-CHARACTER",mod,GETMACROCH,NULL);
+  defun(ctx,"SET-DISPATCH-MACRO-CHARACTER",mod,SETDISPMACRO,NULL);
+  defun(ctx,"GET-DISPATCH-MACRO-CHARACTER",mod,GETDISPMACRO,NULL);
   defunpkg(ctx,"RESET-READTABLE",mod,RESETREADTABLE,syspkg);
-  defun(ctx,"FORMAT",mod,XFORMAT);
-  defun(ctx,"ERROR",mod,SIGERROR);
-  defun(ctx,"INSTALL-ERROR-HANDLER",mod,INSTALL_ERRHANDLER);
+  defun(ctx,"FORMAT",mod,XFORMAT,NULL);
+  defun(ctx,"ERROR",mod,SIGERROR,NULL);
+  defun(ctx,"INSTALL-ERROR-HANDLER",mod,INSTALL_ERRHANDLER,NULL);
   }
 
