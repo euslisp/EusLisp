@@ -37,6 +37,6 @@ pointer argv[];
 eusmain(mod)
 pointer mod;
 {
-  defun("FFT",mod,FFT);
-  defun("INVERSE-FFT",mod,INVFFT);
+  defun("FFT",mod,FFT,NULL);
+  defun("INVERSE-FFT",mod,INVFFT,NULL);
   }

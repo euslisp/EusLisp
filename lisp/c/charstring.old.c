@@ -180,23 +180,23 @@ charstring(ctx,mod)
 register context *ctx;
 register pointer mod;
 {
-  defun(ctx,"CHAR",mod,CHAR);
-  defun(ctx,"SCHAR",mod,CHAR);
-  defun(ctx,"SETCHAR",mod,SETCHAR);
-  defun(ctx,"ALPHA-CHAR-P",mod,ALPHAP);
-  defun(ctx,"UPPER-CASE-P",mod,UPCASEP);
-  defun(ctx,"LOWER-CASE-P",mod,LOWCASEP);
-  defun(ctx,"DIGIT-CHAR-P",mod,DIGITP);
-  defun(ctx,"ALPHANUMERICP",mod,ALNUMP);
-  defun(ctx,"CHAR-UPCASE",mod,CHUPCASE);
-  defun(ctx,"CHAR-DOWNCASE",mod,CHDOWNCASE);
-  defun(ctx,"STRINGEQ",mod,STRINGEQ);
-  defun(ctx,"STRINGEQUAL",mod,STRINGEQUAL);
-  defun(ctx,"STRING<",mod,STR_LT);
-  defun(ctx,"STRING<=",mod,STR_LE);
-  defun(ctx,"STRING=",mod,STR_EQ);
-  defun(ctx,"STRING>",mod,STR_GT);
-  defun(ctx,"STRING>=",mod,STR_GE);
+  defun(ctx,"CHAR",mod,CHAR,NULL);
+  defun(ctx,"SCHAR",mod,CHAR,NULL);
+  defun(ctx,"SETCHAR",mod,SETCHAR,NULL);
+  defun(ctx,"ALPHA-CHAR-P",mod,ALPHAP,NULL);
+  defun(ctx,"UPPER-CASE-P",mod,UPCASEP,NULL);
+  defun(ctx,"LOWER-CASE-P",mod,LOWCASEP,NULL);
+  defun(ctx,"DIGIT-CHAR-P",mod,DIGITP,NULL);
+  defun(ctx,"ALPHANUMERICP",mod,ALNUMP,NULL);
+  defun(ctx,"CHAR-UPCASE",mod,CHUPCASE,NULL);
+  defun(ctx,"CHAR-DOWNCASE",mod,CHDOWNCASE,NULL);
+  defun(ctx,"STRINGEQ",mod,STRINGEQ,NULL);
+  defun(ctx,"STRINGEQUAL",mod,STRINGEQUAL,NULL);
+  defun(ctx,"STRING<",mod,STR_LT,NULL);
+  defun(ctx,"STRING<=",mod,STR_LE,NULL);
+  defun(ctx,"STRING=",mod,STR_EQ,NULL);
+  defun(ctx,"STRING>",mod,STR_GT,NULL);
+  defun(ctx,"STRING>=",mod,STR_GE,NULL);
   
   }
 

@@ -76,7 +76,7 @@ extern void pixword(ctx,n,argv)
   int n;
   pointer argv[];
 { pointer mod=argv[0];
-  defun(ctx,"SPLIT-RGB",mod,SPLIT_RGB);
-  defun(ctx,"MERGE-RGB",mod,MERGE_RGB);
+  defun(ctx,"SPLIT-RGB",mod,SPLIT_RGB,NULL);
+  defun(ctx,"MERGE-RGB",mod,MERGE_RGB,NULL);
   }
 

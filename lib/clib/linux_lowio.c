@@ -42,9 +42,9 @@ pointer linux_lowio(context *ctx, int n, pointer argv[], pointer env)
 
   printf("ioperm, outb, inb\n");
 
-  defun(ctx,"IOPERM", mod, IOPERM);
-  defun(ctx,"OUTB", mod, OUTB);
-  defun(ctx,"INB", mod, INB);
+  defun(ctx,"IOPERM", mod, IOPERM,NULL);
+  defun(ctx,"OUTB", mod, OUTB,NULL);
+  defun(ctx,"INB", mod, INB,NULL);
 
   printf("linux low level IO functions defined.\n");
 
