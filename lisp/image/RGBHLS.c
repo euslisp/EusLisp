@@ -69,7 +69,7 @@ context *ctx;
 int n;
 pointer argv[];
 { pointer mod=argv[0];
-  defun(ctx,"RGB-TO-HLS", mod, RGB_TO_HLS);
+  defun(ctx,"RGB-TO-HLS", mod, RGB_TO_HLS,NULL);
   return(T);
   }
 
