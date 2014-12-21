@@ -18,19 +18,19 @@ Note: we strongly recommend you to check http://github.com/euslisp/jskeus for do
 
 
 ```
-$ svn co https://euslisp.svn.sourceforge.net/svnroot/euslisp/trunk/EusLisp euslisp
+$ git clone https://github.com/euslisp/EusLisp euslisp
 $ cd euslisp
-$ export ARCHDIR=Linux
+$ export ARCHDIR=Linux64
 $ export EUSDIR=`pwd`
 $ export PATH=$PATH:$EUSDIR/$ARCHDIR/bin
 $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EUSDIR/$ARCHDIR/lib
 $ cd lisp
-$ ln -sf Makefile.Linux.thread Makefile
+$ ln -sf Makefile.Linux64 Makefile
 $ make eus0 eus1 eus2 eusg eusx eusgl eus
 ```
 
 For cygwin sytem, set ARCHDIR=Cygwin and ln -sf Makefile.Cygwin Makefile<br>
-For 64bit Linux system, set ARCHDIR=Linux64 and ln -sf Makefile.Linux64 Makefile
+For 32bit Linux system, set ARCHDIR=Linux and ln -sf Makefile.Linux.thread Makefile
 
 ### Documnets
 
