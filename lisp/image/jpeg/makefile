@@ -38,8 +38,7 @@ LIBDIR=$(EUSDIR)/$(ARCH)/lib
 OBJDIR=$(EUSDIR)/$(ARCH)/obj
 OBJFILES= $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o
 $(LIBDIR)/jpegmemcd.$(LSFX):	$(OBJFILES)
-	$(LD) -o jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
-	mv jpegmemcd.$(LSFX) $(EUSDIR)/$(ARCHDIR)/lib
+	$(LD) -o $(LIBDIR)/jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
 
 $(OBJDIR)/jpegmemcd.o:	jpegmemcd.c
 	$(CC) -c -o $@ $^
