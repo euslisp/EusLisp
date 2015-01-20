@@ -1094,12 +1094,11 @@ pointer argv[];
   if (n<1) error(E_MISMATCHARG);
   if (n==1) return(a);
   if (isint(a)) is=(eusinteger_t)a;
-  else { fs=fltval(a); goto fmax;}
+  else { fs=ckfltval(a); goto fmax; }
   while (i<n) {
     a=argv[i];
-    if (isflt(a)) { fs=intval(is); goto fmax;}
     if (isint(a)) { if (is<(eusinteger_t)a) is=(eusinteger_t)a;}
-    else error(E_NONUMBER);
+    else { fs=intval(is); goto fmax; }
     i++;}
   return((pointer)is);
 fmax:
@@ -1121,12 +1120,11 @@ register pointer argv[];
   if (n<1) error(E_MISMATCHARG);
   if (n==1) return(a);
   if (isint(a)) is=(eusinteger_t)a;
-  else { fs=fltval(a); goto fmin;}
+  else { fs=ckfltval(a); goto fmin;}
   while (i<n) {
     a=argv[i];
-    if (isflt(a)) { fs=intval(is); goto fmin;}
     if (isint(a)) { if (is>(eusinteger_t)a) is=(eusinteger_t)a;}
-    else error(E_NONUMBER);
+    else { fs=intval(is); goto fmin;}
     i++;}
   return((pointer)is);
 fmin:
