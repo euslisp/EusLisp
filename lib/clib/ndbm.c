@@ -108,14 +108,14 @@ register pointer argv[];
 
 ndbm(context *ctx, int n, pointer argv[])
 { pointer mod=argv[0];
-  defun(ctx,"DBM-OPEN",mod,DBM_OPEN);
-  defun(ctx,"DBM-CLOSE",mod,DBM_CLOSE);
-  defun(ctx,"DBM-FETCH",mod,DBM_FETCH);
-  defun(ctx,"DBM-STORE",mod,DBM_STORE);
-  defun(ctx,"DBM-DELETE",mod,DBM_DELETE);
-  defun(ctx,"DBM-FIRSTKEY",mod,DBM_FIRSTKEY);
-  defun(ctx,"DBM-NEXTKEY",mod,DBM_NEXTKEY);
-  defun(ctx,"DBM-ERROR",mod,DBM_ERROR);
-  defun(ctx,"DBM-CLEARERR",mod,DBM_CLEARERR);
+  defun(ctx,"DBM-OPEN",mod,DBM_OPEN,NULL);
+  defun(ctx,"DBM-CLOSE",mod,DBM_CLOSE,NULL);
+  defun(ctx,"DBM-FETCH",mod,DBM_FETCH,NULL);
+  defun(ctx,"DBM-STORE",mod,DBM_STORE,NULL);
+  defun(ctx,"DBM-DELETE",mod,DBM_DELETE,NULL);
+  defun(ctx,"DBM-FIRSTKEY",mod,DBM_FIRSTKEY,NULL);
+  defun(ctx,"DBM-NEXTKEY",mod,DBM_NEXTKEY,NULL);
+  defun(ctx,"DBM-ERROR",mod,DBM_ERROR,NULL);
+  defun(ctx,"DBM-CLEARERR",mod,DBM_CLEARERR,NULL);
   }
 

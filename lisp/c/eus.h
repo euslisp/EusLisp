@@ -1054,7 +1054,7 @@ extern pointer makemodule(context *, int);
 extern pointer makebig1(long);
 extern pointer eusfloat_to_big(float);
 extern eusfloat_t big_to_float(pointer);
-extern pointer defun(context *, char *, pointer, pointer(*)());
+extern pointer defun(context *, char *, pointer, pointer(*)(), char *);
 extern pointer defmacro(context *, char *, pointer, pointer(*)());
 extern pointer defspecial(context *, char *, pointer, pointer(*)());
 extern pointer defunpkg(context *, char *, pointer, pointer(*)(),pointer);
