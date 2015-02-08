@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>逐次実行とLet</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="逐次実行とLet">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node27.html">
+<LINK REL="previous" HREF="jmanual-node25.html">
+<LINK REL="up" HREF="jmanual-node24.html">
+<LINK REL="next" HREF="jmanual-node27.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html742"
+  HREF="jmanual-node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html736"
+  HREF="jmanual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html730"
+  HREF="jmanual-node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html738"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html740"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html743"
+  HREF="jmanual-node27.html">ローカル関数</A>
+<B> Up:</B> <A NAME="tex2html737"
+  HREF="jmanual-node24.html">制御構造</A>
+<B> Previous:</B> <A NAME="tex2html731"
+  HREF="jmanual-node25.html">条件文</A>
+ &nbsp; <B>  <A NAME="tex2html739"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html741"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03032000000000000000">
+逐次実行とLet</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <A NAME="2212"></A>
+<B>prog1</B> <EM>form1 &amp;rest forms </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form1</EM>と<EM>forms</EM>は、次々と評価され、
+<EM>form1</EM>から返される値が<B>prog1</B>の値として返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2226"></A>
+<B>progn</B> <EM>{form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form</EM>は次々に評価され、最後の<EM>form</EM>の値が返される。
+<B>progn</B>は特殊書式である。なぜなら、ファイルの最初に現れたとき
+特別な意味を持つからである。
+そのような書式がコンパイルされたとき、内部書式はすべて最初に現れた
+として見なす。
+マクロが<B>defun</B>や<B>defmethod</B>の連続で拡張される場合、それが最初に
+現われなければならないときに役立つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2241"></A>
+<B>setf</B> <EM>{access-form value}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>value</EM>を一般化変数<EM>access-form</EM>に割り当てる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2253"></A>
+<B>let</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> (var [value])}*) {declare}* {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ローカル変数を生成する。
+すべての<EM>value</EM>は評価され、並行して<EM>var</EM>に割り当てられる。すなわち、
+<TT>(let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))</TT> の結果は
+(2 1)である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2266"></A>
+<B>let*</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> (var [value])}*) {declare}* {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ローカル変数を生成する。
+全ての<EM>value</EM>は次々に評価され、<EM>var</EM>に割り当てられる。すなわち、
+<TT>(let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))</TT>の結果は
+(2 2)である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

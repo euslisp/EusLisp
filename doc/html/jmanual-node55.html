@@ -1,0 +1,585 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>リーダ(reader)</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="リーダ(reader)">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node56.html">
+<LINK REL="previous" HREF="jmanual-node54.html">
+<LINK REL="up" HREF="jmanual-node53.html">
+<LINK REL="next" HREF="jmanual-node56.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1165"
+  HREF="jmanual-node56.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1159"
+  HREF="jmanual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1153"
+  HREF="jmanual-node54.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1161"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1163"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1166"
+  HREF="jmanual-node56.html">プリンタ(printer)</A>
+<B> Up:</B> <A NAME="tex2html1160"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1154"
+  HREF="jmanual-node54.html">ストリーム</A>
+ &nbsp; <B>  <A NAME="tex2html1162"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1164"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03082000000000000000">
+リーダ(reader)</A>
+</H2>
+
+<P>
+リーダのグローバル変数は：
+
+<P>
+<DL>
+<DT><STRONG>*read-base*</STRONG></DT>
+<DD>読み込時の基数；デフォルトは10
+</DD>
+<DT><STRONG>*readtable*</STRONG></DT>
+<DD>reader構文を決定するカレント読み込みテーブル
+</DD>
+</DL>
+
+<P>
+Readerのデフォルトマクロ文字は：
+<PRE><TT>
+<B>(</B>   リスト読み込み 
+<BR><B>"</B> 		  文字列読み込み 
+<BR><B>'</B> 		  引用符表現読み込み 
+<BR><B>#</B> 		  マクロ変換 
+<BR><B>;</B> 		  コメント
+<BR><B>`</B> 		  back-quote 
+<BR><B>,</B> 		  list-time eval 
+<BR><B>@</B> 		  追加 
+<BR><B>%</B> 		  C言語表記の数式読み込み 
+<BR>
+</TT></PRE>
+
+<P>
+エスケープ文字：
+
+<P>
+<PRE><TT>
+<B><SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN></B>   単一文字エスケープ
+<BR><B><SPAN CLASS="MATH"><IMG
+ WIDTH="27" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img33.png"
+ ALT="$\vert...\vert$"></SPAN></B> 		  多重文字エスケープ
+<BR>
+</TT></PRE>
+
+<P>
+エスケープされていないsymbolが読まれると、
+全ての構成される文字はデフォルトで大文字に変換され、
+そして大文字のsymbolは内部に蓄えられる。
+例えば、'abcと'ABCは同じsymbolとみなされる。
+エスケープは、それらを区別するのに必要である。
+'<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN>ABC<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN>, 'ABCと'abcは同一であるが、
+'<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN>abc<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN>と'abcは違うsymbolである。
+デフォルトとして、大文字のsymbolを入力したときでさえ、
+そのsymbolを表示するときは
+EusLispのプリンタが内部の大文字表現から小文字に変換する。
+この変換は、プリンタによって実行されている。
+この変換は、
+<TT>:UPCASE</TT>を<B>*print-case*</B>に設定することにより、禁止される。
+
+<P>
+10.は整数の10として読まれ、実数の10.0ではない。
+':'がパッケージマーカーとして予約されているので、
+'<SPAN CLASS="MATH"><IMG
+ WIDTH="73" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img37.png"
+ ALT="$\vert g:pcube\vert$"></SPAN>のようにsymbolを構成するものとして使うとき、エスケープ化しなければ
+ならない。
+この制限は、文字':'の構文により強制されないが、
+アルファベット順やletterの意味を決定する属性により強制される。
+その文字の属性は、リーダから堅く結ばれる(hardwired)。
+したがって、<B>copy-readtable</B>で新しいreadtableを作ったり、
+<B>set-syntax-from-char</B>で文字のための構文的意味を組み直したりすることにより、
+ある文字の構文を変更可能であるが、
+その属性はどのようにしても変更することができない。
+その一方で、数字はいつも数字であり、アルファベットはアルファベットで、
+数値を表現するために'<TT>#$%@</TT>'の様な文字を使用することはできない。
+
+<P>
+<B>%</B>は、EusLispで拡張read-macro文字となっている。
+挿入記述により書かれた数式の前に%を付けることにより、
+その数式はlisp用の式に変換される。
+具体例を上げると、
+<TT>%(1 + 2 * 3 / 4.0)</TT>は
+<TT>(+ 1 (/ (* 2 3) 4.0))</TT>に変換され、結果は<TT>2.5</TT>となる。
+Cの様な関数呼出や行列参照も、lisp形式に変換される。
+従って、<TT>%(sin(x) + a[1])</TT>は
+<TT>(+ (sin x) (aref a 1))</TT>として評価される。
+1つ以上の引数を持つ関数や2次元以上の行列は、
+<TT>func(a b c ...)</TT>や<TT>ary[1 2 3 ...]</TT>のように記述し、
+<TT>func(a,b,c)</TT>や<TT>ary[1][2][3]</TT>のように書かない。
+相対表現や割り当てもまた、正しく扱われる。
+それで、<TT>%(a <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img9.png"
+ ALT="$&lt;$"></SPAN> b)</TT>は<TT>(<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img9.png"
+ ALT="$&lt;$"></SPAN> a b)</TT>に変換され、
+<TT>%(a[0] = b[0] * c[0])</TT>は 
+<TT>(setf (aref a 0) (* (aref b 0) (aref c 0)))</TT>として得られる。
+単純な最適化は、重複した関数呼出や行列参照をなくすことである。
+<TT>%(sin(x) + cos(x) / sin(x))</TT>は
+<TT>(let* ((temp (sin x))) (+ temp (/ (cos x) temp)))</TT>のように変換される。
+
+<P>
+マクロ変換は<code>#</code>文字が前に付いている。
+数値(integer)引数は、<code>#</code>とマクロ変換文字の間に与えられる。
+これは、どの数字(0 .. 9)もマクロ変換文字として定義できないことを意味する。
+リーダの標準のマクロ変換文字は次の通り：
+<DL>
+<DT><STRONG><TT>#nA(..)</TT></STRONG></DT>
+<DD>行列
+</DD>
+<DT><STRONG><TT>#B</TT></STRONG></DT>
+<DD>2進数
+</DD>
+<DT><STRONG><TT>#D</TT></STRONG></DT>
+<DD>[度]から[ラジアン]への変換; #D180 = 3.14
+</DD>
+<DT><STRONG><TT>#F(...)</TT></STRONG></DT>
+<DD>実数ベクトル
+</DD>
+<DT><STRONG><TT>#nF((..))</TT></STRONG></DT>
+<DD>実数行列; #2F((..) (..)) is matrix
+</DD>
+<DT><STRONG><TT>#I(...)</TT></STRONG></DT>
+<DD>整数ベクトル
+</DD>
+<DT><STRONG><TT>#nI((...))</TT></STRONG></DT>
+<DD>整数行列
+</DD>
+<DT><STRONG><TT>#J(...)</TT></STRONG></DT>
+<DD>一般オブジェクト #J(myclass ....); 古い定義
+</DD>
+<DT><STRONG><TT>#O</TT></STRONG></DT>
+<DD>8進数
+</DD>
+<DT><STRONG><TT>#P</TT></STRONG></DT>
+<DD>パス名
+</DD>
+<DT><STRONG><TT>#R</TT></STRONG></DT>
+<DD>[ラジアン]から[度]への変換; #R3.14 = 180.0
+</DD>
+<DT><STRONG><TT>#S(classname slotname1 val1 slotname2 val2 ...)</TT></STRONG></DT>
+<DD>構造体 (あらゆるオブジェクト)
+</DD>
+<DT><STRONG><TT>#V(...)</TT></STRONG></DT>
+<DD>ベクトル #V(vectorclass ...)
+</DD>
+<DT><STRONG><TT>#X</TT></STRONG></DT>
+<DD>16進数
+</DD>
+<DT><STRONG><TT>#(...)</TT></STRONG></DT>
+<DD>ベクトル
+</DD>
+<DT><STRONG><TT>#n#</TT></STRONG></DT>
+<DD>ラベル参照
+</DD>
+<DT><STRONG><TT>#n=</TT></STRONG></DT>
+<DD>ラベル定義
+</DD>
+<DT><STRONG><TT>#'</TT></STRONG></DT>
+<DD>関数; コンパイルコードあるいはlambda-closure
+</DD>
+<DT><STRONG><TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN></TT></STRONG></DT>
+<DD>文字
+</DD>
+<DT><STRONG><TT>#,</TT></STRONG></DT>
+<DD>読み込み時に評価
+</DD>
+<DT><STRONG><TT>#+</TT></STRONG></DT>
+<DD>条件読みだし(positive)
+</DD>
+<DT><STRONG><TT>#-</TT></STRONG></DT>
+<DD>条件読みだし(negative)
+</DD>
+<DT><STRONG><TT>#*</TT></STRONG></DT>
+<DD>ビットベクトル
+</DD>
+<DT><STRONG><TT>#:</TT></STRONG></DT>
+<DD>収容されてないsymbol
+</DD>
+<DT><STRONG><TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN>...<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN>#</TT></STRONG></DT>
+<DD>コメント; 入れ子可能
+</DD>
+</DL>
+
+<P>
+いくつかのリーダ関数は、<EM>eof-error-p, eof-value</EM>や
+<EM>recursive-p</EM>のパラメータを持っている。
+最初の2つのパラメータは、リーダがend-of-fileに出会ったときの動作を制御する。
+<EM>eof-error-p</EM>のデフォルトは、Tである。これは、eof時のエラーの原因となる。
+eofの発生を知りたかったり、snatch controlにシステムエラーを渡したくないなら、
+<EM>eof-error-p</EM>にNILを指定すること。
+それで、読み込みの最中にeofが現れたとき、リーダはエラーループに入る代りに
+<EM>eof-value</EM>を返す。
+<EM>eof-value</EM>のデフォルトは、NILである。
+そのため、実際にNILが読まれたのかeofが現れたのか判別できない。
+それらを判別するためには、ストリームに決して現れない値を与えること。
+そのような特殊データオブジェクトを作るには、<B>cons</B>か<B>gensym</B>を
+使用すること。
+
+<P>
+<EM>recursive-p</EM>は、read-macro関数にしばしば使用される。
+それは、リーダを再帰的に呼び出す。
+<EM>recursive-p</EM>のnon-NIL値は、読み込み処理がどこかで始まっていて、
+<TT>#n=</TT>や<TT>#n#</TT>によってラベル付けされる書式の読み込みのために
+内部テーブルを初期化
+すべきでないことをリーダに告げている。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15122"></A>
+<B>read</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) recursive-p </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+s表現を1つ読み込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15132"></A>
+<B>read-delimited-list</B> <EM>delim-char &amp;optional stream recursive-p </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>delim-char</EM>で終了するs表現を読み込む。
+これは、コンマで区切られたリストや
+<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>]</TT>のような特殊文字で終る数列を読むために役立つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15144"></A>
+<B>read-line</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>newline</TT>(改行)で終了する1行を読み込む。
+返された文字列には、最後の改行文字を含まない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15155"></A>
+<B>read-char</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+1文字読み込み、その整数表現を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15165"></A>
+<B>read-from-string</B> <EM>string &amp;optional (eof-error-p t) (eof-value nil) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>からs表現を読み込む。
+最初のs表現のみ読み込むことができる。
+もし、複数のs表現を持つ<EM>string</EM>からの連続読み込み処理が必要であるならば、
+<B>make-string-input-stream</B>で作られるstring-streamを用いること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15178"></A>
+<B>unread-char</B> <EM>char &amp;optional stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>stream</EM>に<EM>char</EM>を戻す。
+1文字を越えて連続に戻すことはできない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15190"></A>
+<B>peek-char</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>stream</EM>から1文字を読み込むが、<EM>stream</EM>のバッファからその文字を削除しない。
+これは<B>read-char</B>に続いて<B>unread-char</B>を実行したものと
+同じである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15204"></A>
+<B>y-or-n-p</B> <EM>&amp;optional format-string &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>format-string</EM>と<EM>args</EM>を画面に表示して、``yかnか''を尋ねる。
+答えが``y''または``n''で始まらない場合、質問を繰り返す。
+yならTそしてnならNILを返す。 それ以外は起こらない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15216"></A>
+<B>yes-or-no-p</B> <EM>&amp;optional stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>format-string</EM>と<EM>args</EM>を画面に表示して、``yesかnoか''を尋ねる。
+答えが``yes''または``no''でない場合、質問を繰り返す。
+yesならTそしてnoならNILを返す。 それ以外は起こらない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+以下に示すreadtableの操作関数の中で、readtableのデフォルト値は
+グローバル変数<B>*readtable*</B>の値である。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15228"></A>
+<B>readtable-p</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>x</EM>がreadtableなら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15239"></A>
+<B>copy-readtable</B> <EM>&amp;optional from-readtable to-readtable </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>to-readtable</EM>が書かれていなければ、新しいreadtableを作る。
+<EM>from-readtable</EM>のすべての情報が<EM>to-readtable</EM>に移される。
+含まれる情報は、syntax table, read-macro tableと
+dispatch-macro tableでそれぞれ256個の要素を持つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15252"></A>
+<B>set-syntax-from-char</B> <EM>from-char to-char [from-readtable to-readtable] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>from-readtable</EM>の中の<EM>from-char</EM>のsyntaxとread-macro定義を
+<EM>to-readtable</EM>の中の<EM>to-char</EM>にコピーする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15266"></A>
+<B>set-macro-character</B> <EM>char func [non-teminating-p readtable] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>char</EM>のread-macro関数として<EM>func</EM>を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15278"></A>
+<B>get-macro-character</B> <EM>char [readtable] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>char</EM>のread-macro関数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15289"></A>
+<B>set-dispatch-macro-character</B> <EM>dispchar char func [readtable] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dispchar</EM>と<EM>char</EM>の組み合せの
+dispatch read-macro関数として<EM>func</EM>を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15302"></A>
+<B>get-dispatch-macro-character</B> <EM>dispchar char [readtable] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dispchar</EM>と<EM>char</EM>の組み合せの
+dispatch read-macro関数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1165"
+  HREF="jmanual-node56.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1159"
+  HREF="jmanual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1153"
+  HREF="jmanual-node54.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1161"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1163"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1166"
+  HREF="jmanual-node56.html">プリンタ(printer)</A>
+<B> Up:</B> <A NAME="tex2html1160"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1154"
+  HREF="jmanual-node54.html">ストリーム</A>
+ &nbsp; <B>  <A NAME="tex2html1162"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1164"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

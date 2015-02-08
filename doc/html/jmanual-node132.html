@@ -1,0 +1,1060 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Xwindow</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Xwindow">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node133.html">
+<LINK REL="previous" HREF="jmanual-node131.html">
+<LINK REL="up" HREF="jmanual-node130.html">
+<LINK REL="next" HREF="jmanual-node133.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2384"
+  HREF="jmanual-node133.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2378"
+  HREF="jmanual-node130.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2372"
+  HREF="jmanual-node131.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2380"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2382"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2385"
+  HREF="jmanual-node133.html">Graphic Context</A>
+<B> Up:</B> <A NAME="tex2html2379"
+  HREF="jmanual-node130.html">Xwindow インターフェース</A>
+<B> Previous:</B> <A NAME="tex2html2373"
+  HREF="jmanual-node131.html">Xlibのグローバル変数とその他関数</A>
+ &nbsp; <B>  <A NAME="tex2html2381"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2383"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04062000000000000000">
+Xwindow</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="40094"></A>
+<BIG CLASS="XLARGE"><B>Xobject </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>geometry:viewsurface</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>すべてのXwindowに関連するクラスの共通のスーパークラスである。
+現在、スロットもメソッドも定義されていない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="40112"></A>
+<BIG CLASS="XLARGE"><B>Xdrawable </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>Xobject</B> 
+<BR>  :slots 		 (drawable    ; drawable  ID 
+<BR>
+gcon 		  ; this drawable's default graphic context object
+<BR>
+bg-color 		 ; background color 
+<BR>
+width height 		 ; horizontal and vertical dimensions in dots 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Xdrawable</B>は、線分や文字列のようなグラフィックオブジェクト
+を描くための四角領域を定義する。
+<B>Xdrawable</B>は、xwindowやxpixmapのための共通メソッド
+を定義するための抽象クラスであり、
+このクラスのインスタンスは何の効果も持っていない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40132"></A>
+<B>:init</B> <EM>id </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>id</EM>は、このdrawableのIDとして<TT>drawable</TT>スロットに設定される。
+新しいGC(graphic context)が生成され、このdrawableオブジェクトの
+デフォルトGCとして<TT>gcon</TT>に設定される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40145"></A>
+<B>:drawable</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> drawable IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40155"></A>
+<B>:flush</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> Xlibのバッファに保有されるコマンドを掃き出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40165"></A>
+<B>:geometry</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+7つの幾何学属性のリストを返す。
+そのリストは、root-window-id, x座標, y座標,
+幅, 高さ, 枠線の幅, visualの深さである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40175"></A>
+<B>:height</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>の高さ（y軸方向のドット数）を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40186"></A>
+<B>:width</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>の幅（x軸方向のドット数）を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40197"></A>
+<B>:gc</B> <EM>&amp;rest newgc </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>newgc</EM>が与えられない場合、現在のGCオブジェクトを返す。
+もし、<EM>newgc</EM>が<B>gcontext</B>のインスタンスなら、
+この<B>Xdrawable</B>の<TT>gc</TT>に設定する。
+そうでなければ、<EM>newgc</EM>はメッセージとみなされ、
+現在の<TT>gc</TT>に送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40214"></A>
+<B>:pos</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>の位置を示す整数ベクトルを返す。
+位置は親windowの相対位置としていつも定義され、
+windowマネージャの仲介のもとにルートwindowの直接の子windowとして
+生成されたwindowは、ルートwindowの本当の位置に関わらず、環境の
+タイトルwindowの固定座標を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40225"></A>
+<B>:x</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xdrawable</B>の親windowとの相対的な現在のx座標を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40236"></A>
+<B>:y</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xdrawable</B>の親windowとの相対的な現在のy座標を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40247"></A>
+<B>:copy-from</B> <EM>drw </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>drw</EM>は、他の<B>drawable</B>オブジェクト(Xwindowまたはpixmap)である。
+<EM>drw</EM>の内容がこの<B>Xdrawable</B>にコピーされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="xdraw"></A><A NAME="39547"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+描画の基本</CAPTION>
+<TR><TD><IMG
+ WIDTH="441" HEIGHT="272" BORDER="0"
+ SRC="jmanual-img74.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/xdraw.ps,height=6cm}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="40261"></A>
+<B>:point</B> <EM>x y &amp;optional (gc gccon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<SPAN CLASS="MATH"><IMG
+ WIDTH="41" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img75.png"
+ ALT="$(x, y)$"></SPAN>の位置にオプションの<EM>gc</EM>で点を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40272"></A>
+<B>:line</B> <EM>x1 y1 x2 y2 &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>(x1,y1)</EM>から<EM>(x2,y2)</EM>へオプションの<EM>gc</EM>を用いて
+線分を描く。<EM>x1, y1, x2, y2</EM>は整数でなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40286"></A>
+<B>:rectangle</B> <EM>x y width height &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>(x,y)</EM>を中心として<EM>width</EM>の幅と<EM>height</EM>の高さを持つ
+四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40299"></A>
+<B>:arc</B> <EM>x y width height angle1 angle2 &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>(x,y)</EM>を中心として<EM>width</EM>の幅と<EM>height</EM>の高さを持つ
+四角形に内接する楕円の円弧を描く。<EM>angle1</EM>が始まりの角度を示し、
+<EM>angle2</EM>が終わりの角度を示す。これらの角度の単位はラジアンである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40314"></A>
+<B>:fill-rectangle</B> <EM>x y width height &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+四角領域を埋める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40324"></A>
+<B>:fill-arc</B> <EM>x y width height angle1 angle2 &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+円弧の中を埋める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40334"></A>
+<B>:string</B> <EM>x y str &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>(x,y)</EM>の位置から文字列<EM>str</EM>を表示する。背景は、書かない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40346"></A>
+<B>:image-string</B> <EM>x y str &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+文字列<EM>str</EM>を表示する。文字列は、背景色で満たされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40357"></A>
+<B>:getimage</B> <EM>&amp;key :x :y :width :height (:mask #ffffffff) (:format 2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+serverからximageを取り、ピクセルデータを文字列として返す。
+serverから送られるピクセルデータは、一端 Xlibのximage構造に蓄積される。
+その後、行毎に文字列にコピーされる。
+ximage構造は、自動的に破壊される。
+<TT>:getimage</TT>により得られた画像文字列は、<TT>pixel-image</TT>を作るために
+使用できる。また、<A HREF="jmanual-node150.html#PBMfile">18.6</A>節に書かれているようにpbmフォーマットのファイルに
+書き込むことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40370"></A>
+<B>:putimage</B> <EM>image &amp;key :src-x :src-y :dst-x :dst-y :width :height ((:gc g) gc) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>の指定された位置に<EM>image</EM>を表示する。
+<EM>image</EM>は、文字列あるいはximage構造へのアドレスポインターである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40383"></A>
+<B>:draw-line</B> <EM>from to </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:line</B>メソッドと同じである。
+他の<B>viewsurface</B>クラスとの互換性を提供できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40395"></A>
+<B>:line-width</B> <EM>&amp;optional dots </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>のデフォルトGCの線の幅を設定する。
+<TT>:gc :line-width</TT>メッセージの使用を推薦する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40407"></A>
+<B>:line-style</B> <EM>&amp;optional dash </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>のデフォルトGCの線スタイルを設定する。
+<TT>:gc :line-style</TT>の使用が好まれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40419"></A>
+<B>:color</B> <EM>&amp;optional c </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xdrawable</B>の色を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40430"></A>
+<B>:clear</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全画面を消去する。この関数は、<TT>:clear-area</TT>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40441"></A>
+<B>:clear-area</B> <EM>&amp;key :x  :y :width :height :gc </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:fill-rectangle</B>メソッドを用いて四角領域を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="40453"></A>
+<BIG CLASS="XLARGE"><B>Xpixmap </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>Xdrawable</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>pixmapは、画像バッファあるいは背景のパターンとしてしばしば用いられる
+drawableである。xwindowと異なり、xwindowにコピーされるまで
+pixmap自身を見ることはできないし、pixmapはどんなイベントも発生しない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40470"></A>
+<B>:init</B> <EM>id </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このpixmapを初期化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40480"></A>
+<B>:create</B> <EM>&amp;key (:width 500) (:height 500) (:depth 1) (:gc *defaultgc*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトGCとして<EM>:gc</EM>を持つ、<EM>width</EM><SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img57.png"
+ ALT="$\times$"></SPAN><EM>height</EM>のpixmapを作成する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40493"></A>
+<B>:create-from-bitmap-file</B> <EM>fname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>file</EM>で指定されるbitmapファイルからpixmapを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40504"></A>
+<B>:write-to-bitmap-file</B> <EM>fname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このpixmapの内容を<EM>fname</EM>で指定されるbitmapファイルに書き込む。
+このファイルは、<B>:create-from-bitmap-file</B>メソッドで
+pixmapを作り、読み戻すことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40516"></A>
+<B>:destroy</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このpixmapを破壊し、X resourceを開放する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="40527"></A>
+<BIG CLASS="XLARGE"><B>Xwindow </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>Xdrawable</B> 
+<BR>  :slots 		 (parent subwindows backing-store) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Xwindow</B>は、画面の見える四角領域を定義する。
+これは、<B>text-window</B>やグラフィックオブジェクトを描くための<B>canvas</B>
+だけでなく、windowというよりはむしろグラフィックオブジェクトのような
+たくさんの<B>panel-item</B>や<B>scroll-bars</B>からも継承される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40549"></A>
+<BR>
+<IMG
+ WIDTH="588" HEIGHT="149" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img76.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\&amp;key ( \= (:parent *root*) \\lq  [メソッド...
+...\&gt; :event-mask (:key :button :enterLeave :configure :motion)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>xwindow生成し、初期化する。
+<EM>:parent</EM>が与えられたとき、このwindowは<EM>:parent</EM>の子windowとして
+生成され、<EM>:parent</EM>の<TT>subwindows</TT>リストに蓄積される。
+<EM>:x, :y, :size, :width, :height</EM>と<EM>:border-width</EM>は、このwindow
+の位置と寸法を決定する。
+<EM>:save-under</EM>と<EM>:backing-store</EM>は、windowが再マップされたときに
+生じるXserverの行動を制御する。
+<EM>:backing-store</EM>は<TT>:notUseful, :WhenMapped, :Always</TT>のどれかであるが、
+<EM>:save-under</EM>はTあるいはNILである。
+<EM>:backing-pixmap</EM>がTのとき、このwindowと同じサイズのpixmapがEuslispにより
+生成され、もしXserverが<TT>backing-store</TT>の容量を持っていない場合は、
+backing-storeとして蓄積される。
+<EM>:border</EM>と<EM>:background</EM>は、<TT>border_pixel</TT>と
+<TT>background_pixel</TT>属性をそれぞれ指定する。
+もし、<B>panel</B>の中のpanel-buttonとしてたくさんの小さなwindowを
+作成するような場合で、このwindowが生成後にすぐ表示されるべきでないならば、
+<EM>:map</EM>はNILにセットされなければならない。
+<EM>:title</EM>は、windowのタイトルバーに現れるwindowのタイトルである。
+<EM>:name</EM>は、このwindowのplistに蓄積されるwindowの名前であり、
+プリンタにより表示される名前である。
+このwindowへのXのイベントは、<EM>:event-mask</EM>によって決定される。
+それはビットで構成されるevent-maskの整数表現あるいは次のsymbolのリスト
+である。
+<TT>:key, :button, :enterLeave, :motion</TT>と<TT>:configure</TT>。
+もし、もっと正確な制御が必要ならば、次のsymbolをそれぞれのイベントに
+指定することができる。<TT>:keyPress, :keyRelease, :ButtonPress, :ButtonRelease,</TT> 
+<TT>:EnterWindow, :LeaveWindow, :PointerMotion, :PointerMotionHint,</TT> 
+<TT>:ButtonMotion, :KeyMapState,
+<BR>:Exposure, :VisibilityChange,</TT>
+ <TT>:StructureNotify,
+:ResezeRedirect, :SubstructureNotify,
+<BR>:SubstructureRedirect,</TT> <TT>:FocusChange, :PropertyChange, :ColormapChange</TT>と
+<BR><TT>:OwnerGrabButton</TT>。
+<TT>:key</TT>は、<TT>:keyPress</TT>と<TT>:KeyRelease</TT>の両方が指定でき、
+<TT>:button</TT>は、<TT>:ButtonPress</TT>と<TT>:ButtonRelease</TT>の両方が指定できる。
+サーバからイベントが送られてきたとき、<B>window-main-loop</B>は、
+そのイベント構造を解析し、<TT>:KeyPress, :KeyRelease, :buttonPress,</TT> <TT>:ButtonRelease, :EnterNotify,</TT> <TT>:LeaveNotify, :MotionNotify, :ConfigureNotify</TT>
+メッセージをそのイベントが発生したwindowに送る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40600"></A>
+<B>:map</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>とその子windowを全て表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40611"></A>
+<B>:unmap</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>をとその子windowを全て非表示にする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40622"></A>
+<B>:selectinput</B> <EM>event-mask </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event-mask</EM>は、整数かあるいはイベントマスクsymbolのリストである。
+ビットが１となっているかあるいは<EM>event-mask</EM>リスト
+に列挙されているイベントは、それぞれこのwindowに通知される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40634"></A>
+<B>:destroy</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>を破壊し、X resourceを開放する。
+windowオブジェクトは、ガーベージコレクトされないため、
+<TT>*xwindow*</TT>や<TT>*xwindow-hash-tab*</TT>の中の一致するエントリも削除される。
+全ての子windowも<TT>:destroy</TT>を送ることにより削除する。
+このwindowは、親windowの子windowのリストから削除される。
+<TT>drawable</TT>IDは、NILに設定される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40649"></A>
+<B>:parent</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 親windowオブジェクトを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40659"></A>
+<B>:subwindows</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全ての子windowのリストを返す。
+子windowは、もっとも最近作られたものがリストの最初である。
+このwindowの直接の子windowだけがリストされ、子windowの子windowは
+リストされない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40669"></A>
+<B>:associate</B> <EM>child </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowの子windowとして<EM>child</EM> windowを登録する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40680"></A>
+<B>:dissociate</B> <EM>child </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+子windowのリストから<EM>child</EM> windowを削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40691"></A>
+<B>:title</B> <EM>title </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowのタイトル名を変更する。そのタイトル名はXserverに送られるため、
+一旦蓄積され、window managerによって表示される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40701"></A>
+<B>:attributes</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowの属性を表現する整数ベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40711"></A>
+<B>:visual</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>のvisual resource IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40722"></A>
+<B>:screen</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>のscreen resource IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40733"></A>
+<B>:root</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> root window IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40743"></A>
+<B>:location</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowのxとy座標を記述する2次元の整数ベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40753"></A>
+<B>:depth</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowの深さ(カラープレーンの数)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40763"></A>
+<B>:size</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowのサイズ(高さと幅)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40773"></A>
+<B>:colormap</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowのcolormap resource IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40783"></A>
+<B>:move</B> <EM>newx newy </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowの位置を<EM>(newx,newy)</EM>に変更する。
+位置は、親windowの相対位置で与えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40794"></A>
+<B>:resize</B> <EM>width height </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowのサイズを変更する。
+たぶん、大きさのパラメータがクライアント側のXlibに中にキャッシュされるため、
+<B>:resize</B>の直後に<TT>:geometry</TT>メッセージを
+送ると誤った（古い）結果を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40806"></A>
+<B>:raise</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowを前面に持ってくる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40816"></A>
+<B>:lower</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowを後ろに置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40826"></A>
+<B>:background</B> <EM>pixel </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+背景のピクセル値（カラーマップのインデックス）を<EM>pixel</EM>に変更する。
+<EM>pixel</EM>値は、<TT>bg-color</TT>スロットにも保存される。
+<TT>:clear</TT>処理は、現在の背景を指定された<EM>pixel</EM>で埋める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40841"></A>
+<B>:background-pixmap</B> <EM>pixmap </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+背景のpixmap値を<EM>pixmap</EM>に変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40852"></A>
+<B>:border</B> <EM>pixel </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowの枠線の色を<EM>pixel</EM>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40863"></A>
+<B>:set-colormap</B> <EM>cmap </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> colormapを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40873"></A>
+<B>:clear</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xwindow</B>内を全て消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40884"></A>
+<B>:clear-area</B> <EM>&amp;key :x :y :width :height </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xwindow</B>の指定された四角領域を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40895"></A>
+<B>make-xwindow</B> <EM>&amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+引き数<EM>args</EM>で示される<B>Xwindow</B>を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40907"></A>
+<B>init-xwindow</B> <EM>&amp;optional (display (getenv "DISPLAY")) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+eusxが起動するときに最初に呼び出される関数である。
+<B>init-xwindow</B>は、<EM>display</EM>で指定されるXserverに接続し、
+<A HREF="jmanual-node131.html#xvariables">16.1</A>節に記述されているデフォルト変数を初期化する。
+<B>init-xwindow</B>は、デフォルトフォントをロードし、
+グローバル変数に設定する。例えば、font-courb12, lucidasans-bold-12など。
+このフォントロードは、起動時に時間遅れを引き起こす。
+フォントロードの数を減らしたり、ワイルドカード文字"*"を使用せずに
+正確なフォント名を指定することにより、その遅れを短くできる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2384"
+  HREF="jmanual-node133.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2378"
+  HREF="jmanual-node130.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2372"
+  HREF="jmanual-node131.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2380"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2382"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2385"
+  HREF="jmanual-node133.html">Graphic Context</A>
+<B> Up:</B> <A NAME="tex2html2379"
+  HREF="jmanual-node130.html">Xwindow インターフェース</A>
+<B> Previous:</B> <A NAME="tex2html2373"
+  HREF="jmanual-node131.html">Xlibのグローバル変数とその他関数</A>
+ &nbsp; <B>  <A NAME="tex2html2381"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2383"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

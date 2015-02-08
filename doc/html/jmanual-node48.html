@@ -1,0 +1,458 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>ベクトルと行列</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="ベクトルと行列">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node49.html">
+<LINK REL="previous" HREF="jmanual-node47.html">
+<LINK REL="up" HREF="jmanual-node45.html">
+<LINK REL="next" HREF="jmanual-node49.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1060"
+  HREF="jmanual-node49.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1054"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1048"
+  HREF="jmanual-node47.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1056"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1058"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1061"
+  HREF="jmanual-node49.html">文字と文字列</A>
+<B> Up:</B> <A NAME="tex2html1055"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1049"
+  HREF="jmanual-node47.html">リスト</A>
+ &nbsp; <B>  <A NAME="tex2html1057"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1059"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03073000000000000000">
+ベクトルと行列</A>
+</H2>
+
+<P>
+７次元以内の行列が許可されている。
+１次元の行列は、ベクトルと呼ばれる。
+ベクトルとリストは、列としてグループ化される。
+もし、行列の要素がいろんな型であったとき、その行列は一般化されていると言う。
+もし、行列がfill-pointerを持ってなく、他の行列で置き換えられなく、
+拡張不可能であるなら、その行列は簡略化されたと言う。
+
+<P>
+全ての行列要素は、<B>aref</B>により取り出すことができ、<B>aref</B>を用いて<B>setf</B>
+により設定することができる。
+しかし、一次元ベクトルのために簡単で高速なアクセス関数がある。
+<B>svref</B>は一次元一般ベクトル、<B>char</B>と<B>schar</B>は
+一次元文字ベクトル（文字列）、<B>bit</B>と<B>sbit</B>は
+一次元ビットベクトルのための高速関数である。
+これらの関数はコンパイルされたとき、
+アクセスはin-lineを拡張し、型チェックと境界チェックなしに実行される。
+
+<P>
+ベクトルもまたオブジェクトであるため、
+別のベクトルクラスを派生させることができる。
+5種類の内部ベクトルクラスがある。
+<TT>vector, string, float-vector, integer-vector</TT>と<TT>bit-vector</TT>である。
+ベクトルの作成を容易にするために、make-array関数がある。
+要素の型は、<TT>:integer, :bit, :character, :float, :foreign</TT>
+かあるいはユーザーが定義したベクトルクラスの内の一つでなければならない。
+<EM>:initial-element</EM>と<EM>:initial-contents</EM>のキーワード引数は、
+行列の初期値を設定するために役に立つ。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="11262"></A>
+<B>array-rank-limit</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> 7。行列の最大次元を示す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11272"></A>
+<B>array-dimension-limit</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> #x1fffffff。各次元の最大要素数を示す。
+論理的な数であって、システムの物理メモリあるいは仮想メモリの大きさによって
+制限される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11282"></A>
+<B>vectorp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列は１次元であってもベクトルではない。
+<EM>object</EM>が<TT>vector, integer-vector, float-vector, string, bit-vector</TT>
+あるいはユーザーで定義したベクトルならTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11294"></A>
+<B>vector</B> <EM>&amp;rest elements </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>elements</EM>からなる一次元ベクトルを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11305"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="130" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img35.png"
+ ALT="\begin{emtabbing}
+{\bf make-array}
+\it
+dims \&amp;key \= (:element-type vector) \\lq  ...
+... \\
+\&gt; (:displaced-index-offset 0) \\
+\&gt; (:adjustable nil)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>ベクトルか行列を作る。
+<EM>dims</EM>は、整数かリストである。
+もし<EM>dims</EM>が整数なら、一次元ベクトルが作られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11318"></A>
+<B>svref</B> <EM>vector pos </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vector</EM>の<EM>pos</EM>番目の要素を返す。
+<EM>vector</EM>は、一次元一般ベクトルでなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11331"></A>
+<B>aref</B> <EM>vector &amp;rest (indices) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vector</EM>の<EM>indices</EM>によってインデックスされる要素を返す。
+<EM>indices</EM>は、整数であり、<EM>vector</EM>の次元の数だけ指定する。
+<B>aref</B>は、非効率的である。なぜなら、<EM>vector</EM>の型に従うように
+変更する必要があるためである。コンパイルコードの速度を改善する
+ため、できるだけ型の宣言を与えるべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11347"></A>
+<B>vector-push</B> <EM>val array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>array</EM>のfill-pointer番目のスロットに<EM>val</EM>を保管する。
+<EM>array</EM>は、fill-pointerを持っていなければならない。
+<EM>val</EM>が保管された後、
+fill-pointerは、次の位置にポイントを1つ進められる。
+もし、行列の境界よりも大きくなったとき、エラーが報告される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11361"></A>
+<B>vector-push-extend</B> <EM>val array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>array</EM>のfill-pointerが最後に到達したとき、自動的に<EM>array</EM>のサイズが
+拡張されることを除いては、<B>vector-push</B>と同じである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11374"></A>
+<B>arrayp</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> もし<EM>obj</EM>が行列またはベクトルのインスタンスであるならTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11385"></A>
+<B>array-total-size</B> <EM>array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+
+<P>
+<EM>array</EM>の要素数の合計を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11396"></A>
+<B>fill-pointer</B> <EM>array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>array</EM>のfill-pointerを返す。
+file-pointerを持っていなければNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11407"></A>
+<B>array-rank</B> <EM>array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>array</EM>の次元数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11418"></A>
+<B>array-dimensions</B> <EM>array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>array</EM>の各次元の要素数をリストで返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11429"></A>
+<B>array-dimension</B> <EM>array axis </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>array-dimension</B>は、<EM>array</EM>の<EM>axis</EM>
+番目の次元を返す。<EM>axis</EM>はゼロから始まる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11443"></A>
+<B>bit</B> <EM>bitvec index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>bitvec</EM>の<EM>index</EM>番目の要素を返す。
+ビットベクトルの要素を変更するには、<B>setf</B>と<B>bit</B>を使用すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11457"></A>
+<B>bit-and</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11468"></A>
+<B>bit-ior</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11479"></A>
+<B>bit-xor</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11490"></A>
+<B>bit-eqv</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11501"></A>
+<B>bit-nand</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11512"></A>
+<B>bit-nor</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11523"></A>
+<B>bit-not</B> <EM>bits1 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+同じ長さの<EM>bits1</EM>と<EM>bits2</EM>というビットベクトルにおいて、
+それらのand, inclusive-or,
+exclusive-or, 等価, not-and, not-orとnotがそれぞれ返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1060"
+  HREF="jmanual-node49.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1054"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1048"
+  HREF="jmanual-node47.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1056"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1058"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1061"
+  HREF="jmanual-node49.html">文字と文字列</A>
+<B> Up:</B> <A NAME="tex2html1055"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1049"
+  HREF="jmanual-node47.html">リスト</A>
+ &nbsp; <B>  <A NAME="tex2html1057"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1059"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

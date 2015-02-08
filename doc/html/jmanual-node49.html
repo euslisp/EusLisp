@@ -1,0 +1,543 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>文字と文字列</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="文字と文字列">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node51.html">
+<LINK REL="previous" HREF="jmanual-node48.html">
+<LINK REL="up" HREF="jmanual-node45.html">
+<LINK REL="next" HREF="jmanual-node50.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1074"
+  HREF="jmanual-node50.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1068"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1062"
+  HREF="jmanual-node48.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1070"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1072"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1075"
+  HREF="jmanual-node50.html">日本語の扱い方</A>
+<B> Up:</B> <A NAME="tex2html1069"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1063"
+  HREF="jmanual-node48.html">ベクトルと行列</A>
+ &nbsp; <B>  <A NAME="tex2html1071"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1073"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03074000000000000000">
+文字と文字列</A>
+</H2>
+
+<P>
+EusLispには、文字型がない。
+文字は、<TT>integer</TT>によって表現されている。
+ファイル名を現わす文字列を扱うためには、
+<A HREF="jmanual-node62.html#Pathnames">9.6</A>節に書かれている<B>pathname</B>を使うこと。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="11535"></A>
+<B>digit-char-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>0</TT>〜<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>9</TT>ならTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11548"></A>
+<B>alpha-char-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>A</TT>〜<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>Z</TT>または
+<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>a</TT>〜<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>z</TT>なら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11563"></A>
+<B>upper-case-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>A</TT>〜<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>Z</TT>なら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11576"></A>
+<B>lower-case-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>a</TT>〜<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>z</TT>なら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11589"></A>
+<B>alphanumeric-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>0</TT>〜<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>9</TT>、
+<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>A</TT>〜<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>Z</TT>または
+<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>a</TT>〜<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>z</TT>なら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11606"></A>
+<B>char-upcase</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ch</EM>を大文字に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11617"></A>
+<B>char-downcase</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ch</EM>を小文字に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11628"></A>
+<B>char</B> <EM>string index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>の<EM>index</EM>番目の文字を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11640"></A>
+<B>schar</B> <EM>string index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>から文字を抜き出す。
+<EM>string</EM>の型が明確に解っていて、型チェックを要しないときのみ、<B>schar</B>
+を使うこと。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11653"></A>
+<B>stringp</B> <EM>string </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>がバイト(256より小さい正の整数)のベクトルなら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11664"></A>
+<B>string-upcase</B> <EM>str &amp;key :start :end </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>を大文字の文字列に変換して、新しい文字列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11675"></A>
+<B>string-downcase</B> <EM>str &amp;key :start :end </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>を小文字の文字列に変換して、新しい文字列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11686"></A>
+<B>nstring-upcase</B> <EM>str </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>を大文字の文字列に変換し、元に置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11697"></A>
+<B>nstring-downcase</B> <EM>str &amp;key :start :end </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>を小文字の文字列に変換し、元に置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11708"></A>
+<B>string=</B> <EM>str1 str2 &amp;key :start1 :end1 :start2 :end2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>str1</EM>が<EM>str2</EM>と等しいとき、Tを返す。
+<B>string=</B>は、大文字・小文字を判別する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11721"></A>
+<B>string-equal</B> <EM>str1 str2 &amp;key :start1 :end1 :start2 :end2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str1</EM>と<EM>str2</EM>の等価性をテストする。
+<B>string-equal</B>は、大文字・小文字を判別しない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11734"></A>
+<B>string</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>の文字列表現を得る。
+もし<EM>object</EM>が文字列なら、<EM>object</EM>が返される。
+もし<EM>object</EM>がsymbolなら、その<TT>pname</TT>がコピーされ、返される。
+<TT>(equal (string 'a) (symbol-pname 'a))==T</TT>であるが、
+<TT>(eq (string 'a) (symbol-pname 'a))==NIL</TT>である。
+もし<EM>object</EM>が数値なら、それを文字列にしたものが返される
+(これはCommon Lispと非互換である)。
+もっと複雑なオブジェクトから文字列表現を得るためには、
+最初の引数をNILにした<B>format</B>関数を用いること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11753"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img9.png"
+ ALT="$&lt;$"></SPAN></B> <EM>str1 str2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11764"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img20.png"
+ ALT="$&lt;=$"></SPAN></B> <EM>str1 str2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11775"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img18.png"
+ ALT="$&gt;$"></SPAN></B> <EM>str1 str2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11786"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img19.png"
+ ALT="$&gt;=$"></SPAN></B> <EM>str1 str2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str1</EM>と<EM>str2</EM>を先頭から順番に比較して、比較演算が成立した位置
+を返す。もし、成立しなければ、NILを返す。文字の比較は、その文字のコードに
+に対して行なわれるため、<TT>A<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img9.png"
+ ALT="$&lt;$"></SPAN>Z</TT>である。。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11799"></A>
+<B>string-left-trim</B> <EM>bag str </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11810"></A>
+<B>string-right-trim</B> <EM>bag str </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>は、左（右）から探索され、もし<EM>bag</EM>リスト内の文字を含んでいるなら、
+その要素を削除する。
+一旦<EM>bag</EM>に含まれない文字が見つかると、その後の探索は中止され、
+<EM>str</EM>の残りが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11824"></A>
+<B>string-trim</B> <EM>bag str </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>bag</EM>は、文字コードの列である。
+両端に<EM>bag</EM>に書かれた文字を含まない<EM>str</EM>のコピーが作られ、返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11837"></A>
+<B>substringp</B> <EM>sub string </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sub</EM>文字列が<EM>string</EM>に部分文字列として含まれるなら、Tを返す。
+大文字・小文字を判別しない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1076"
+  HREF="jmanual-node50.html">日本語の扱い方</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1074"
+  HREF="jmanual-node50.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1068"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1062"
+  HREF="jmanual-node48.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1070"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1072"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1075"
+  HREF="jmanual-node50.html">日本語の扱い方</A>
+<B> Up:</B> <A NAME="tex2html1069"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1063"
+  HREF="jmanual-node48.html">ベクトルと行列</A>
+ &nbsp; <B>  <A NAME="tex2html1071"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1073"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>ファイルシステムインターフェース</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="ファイルシステムインターフェース">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node62.html">
+<LINK REL="up" HREF="jmanual-node53.html">
+<LINK REL="next" HREF="jmanual-node64.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1276"
+  HREF="jmanual-node64.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1270"
+  HREF="jmanual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1266"
+  HREF="jmanual-node62.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1272"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1274"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1277"
+  HREF="jmanual-node64.html">評価</A>
+<B> Up:</B> <A NAME="tex2html1271"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1267"
+  HREF="jmanual-node62.html">パス名</A>
+ &nbsp; <B>  <A NAME="tex2html1273"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1275"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03087000000000000000">
+ファイルシステムインターフェース</A>
+</H2>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15777"></A>
+<B>probe-file</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>という名のファイルがあるかどうかをチェックする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15788"></A>
+<B>file-size</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>という名のファイルのサイズをバイト数で返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15799"></A>
+<B>directory-p</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>がディレクトリならば、Tを返す。
+そうでなかったとき（<EM>path</EM>が存在しなかったときを含める）
+はNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15811"></A>
+<B>find-executable</B> <EM>file </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> U
+<EM>file</EM>という名のUNIXコマンドを探し、フルパス名で返す。
+<B>find-executable</B>は、自分のpath-listから実行できるファイルを探す
+UNIXのwhichコマンドとほとんど同じ関数である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15823"></A>
+<B>file-write-date</B> <EM>file </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>file</EM>が最後に変更された日時を整数表現で返す。
+<TT>(unix:asctime (unix:localtime (file-write-date <EM>file</EM>)))</TT>
+で文字列表現が得られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15836"></A>
+<B>file-newer</B> <EM>new old </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>new</EM>ファイルが<EM>old</EM>ファイルよりも最近に変更されているならば、
+Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15848"></A>
+<B>object-file-p</B> <EM>file </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>file</EM>がヘッダー内のファイルのmagic numberを見ることにより
+オブジェクトファイルであったならば、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15859"></A>
+<B>directory</B> <EM>&amp;optional (path ".") </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>の中の全てのファイルのリストを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15870"></A>
+<B>dir</B> <EM>&amp;optional (dir ".") </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dir</EM>で指定されたディレクトリ内のファイル名を表示する。 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

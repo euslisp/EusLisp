@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>スレッド生成</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="スレッド生成">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node106.html">
+<LINK REL="previous" HREF="jmanual-node104.html">
+<LINK REL="up" HREF="jmanual-node92.html">
+<LINK REL="next" HREF="jmanual-node106.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1990"
+  HREF="jmanual-node106.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1984"
+  HREF="jmanual-node92.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1978"
+  HREF="jmanual-node104.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1986"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1988"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1991"
+  HREF="jmanual-node106.html">同期</A>
+<B> Up:</B> <A NAME="tex2html1985"
+  HREF="jmanual-node92.html">マルチスレッド</A>
+<B> Previous:</B> <A NAME="tex2html1979"
+  HREF="jmanual-node104.html">並列度の計測</A>
+ &nbsp; <B>  <A NAME="tex2html1987"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1989"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04024000000000000000">
+スレッド生成</A>
+</H2>
+スレッドは、計算を割り当てる単位であり、普通lisp書式を評価する
+ための単位である。
+Euslispのスレッドは、<B>thread</B>クラスのインスタンスによって
+表現される。
+このオブジェクトは、内容を表現するスレッド全体というよりはむしろ、
+実際に引き数と結果を渡すためのスレッドの
+制御ポートであり、評価を始めるものである。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="25248"></A>
+<B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>lsize</EM>ワードのlispスタックと<EM>csize</EM>ワードのC-スタックを持つ
+スレッドを<EM>num</EM>個だけ生成し、システムのスレッドプールに
+置く。
+スレッドプール内のすべてのスレッドは、sys:*threads*に束ねてあり、
+<B>make-thread</B>が呼び出されたときに拡張される。
+<B>thread</B>関数によって、計算はスレッドプールの中で空いたスレッドの
+１つに割り当てられる。
+したがって、指定された計算がどのスレッドに割り当てられるか
+制御できないため、スレッドのスタックサイズを変更する方法が無い。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25263"></A>
+<B>sys:*threads*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>make-thread</B>によって作成されたすべてのスレッドのリストを持つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25274"></A>
+<B>sys::free-threads</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スレッドプール内の空いたスレッドのリストを返す。
+もし、結果がNILならば、スレッドへのタスクの新しい付託は現在実行されている
+スレッドのどれかの評価が終了するかあるいは
+<B>make-thread</B>によってスレッドプールに新しいスレッドを生成するまで
+停止される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25285"></A>
+<B>sys:thread</B> <EM>func &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スレッドプールから空いたスレッドを1つ取り出し、
+<EM>(func . args)</EM>の評価のためにそれを割り当てる。
+<B>sys:thread</B>は、<EM>args</EM>を展開したリストにfuncを適用
+するが、関数の適用結果を受け取らないため、
+非同期の<B>funcall</B>とみなすことができる。
+むしろ、<B>sys:thread</B>はfuncallに割り当てられたスレッド
+オブジェクトを返すので、実際の結果は<B>sys:wait-thread</B>によって
+後から得ることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+(defun compute-pi (digits) ...)
+(setq trd (sys:thread \#'compute-pi 1000)) ;assign compute-pi to a thread
+...  ;; other computation 
+(sys:wait-thread trd) ;get the result of (compute-pi 1000)
+</PRE>
+
+<P>
+
+<A NAME="25302"></A>
+<B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+空いたスレッドの1つに計算を割り当てる。
+スレッドは、<B>wait-thread</B>されることなしに、
+評価が終了したとき、スレッドプールに戻される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25313"></A>
+<B>sys:wait-thread</B> <EM>thread </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>thread</EM>に<B>sys:thread</B>関数によって与えられたfuncallの評価が
+終了するのを待ち、その結果を受け取り、返す。
+もし、スレッドに<B>sys:thread</B>によって評価が割り当てられたならば、
+<B>sys:wait-thread</B>は、必須である。
+なぜなら、スレッドは結果を転送し終わるまでスレッドプールに戻らない
+ためである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25327"></A>
+<B>sys:plist</B> <EM>&amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+異なったスレッドにより並列に<EM>forms</EM>を評価し、
+すべての評価が終了するのを待ち、
+結果のリストを返す。
+<B>sys:plist</B>は、リスト化されたそれぞれのformが関数呼び出しされる
+ことを除いて、<EM>parallel-list</EM>としてみなされるだろう。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

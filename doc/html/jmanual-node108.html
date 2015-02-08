@@ -1,0 +1,473 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>実数ベクトル(float-vector)</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="実数ベクトル(float-vector)">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node109.html">
+<LINK REL="previous" HREF="jmanual-node107.html">
+<LINK REL="up" HREF="jmanual-node107.html">
+<LINK REL="next" HREF="jmanual-node109.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2035"
+  HREF="jmanual-node109.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2029"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2023"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2031"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2033"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2036"
+  HREF="jmanual-node109.html">行列と変換</A>
+<B> Up:</B> <A NAME="tex2html2030"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2024"
+  HREF="jmanual-node107.html">幾何学関数</A>
+ &nbsp; <B>  <A NAME="tex2html2032"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2034"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04031000000000000000">
+実数ベクトル(float-vector)</A>
+</H2>
+
+<P>
+float-vectorは、要素が実数である1次元ベクトルである。
+float-vectorは、どんなサイズでも良い。
+<EM>result</EM>が引き数リストで指定されているとき、
+その<EM>result</EM>はfloat-vectorであるべきである。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="26669"></A>
+<B>float-vector</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>numbers</EM>を要素とするfloat-vectorを新しく作る。
+<TT>(float-vector 1 2 3)</TT>と<TT>#F(1 2 3)</TT>の違いに注意すること。
+前者は、呼ばれたときはいつでもベクトルが生成されるが、
+後者は読み込まれたときのみ生成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26682"></A>
+<B>float-vector-p</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>obj</EM>がfloat-vectorであるならば、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26693"></A>
+<B>v+</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorを加える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26703"></A>
+<B>v-</B> <EM>fltvec1 &amp;optional fltvec2  result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorを差し引く。もし、<EM>fltvec2</EM>が省略されているならば、
+<EM>fltvec1</EM>の符号が反転される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26715"></A>
+<B>v.</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 2つのfloat-vectorの内積を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26725"></A>
+<B>v*</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの外積を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26735"></A>
+<B>v.*</B> <EM>fltvec1 fltvec2 fltvec3 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スカラー3重積を計算する。<TT>(v.* A B C)=(V. A (V* B C))=(V. (V* A B) C)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26746"></A>
+<B>v<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img9.png"
+ ALT="$&lt;$"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>fltvec1</EM>の要素が<EM>fltvec2</EM>の対応する要素よりすべて小さいとき、
+Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26758"></A>
+<B>v<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img18.png"
+ ALT="$&gt;$"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>fltvec1</EM>の要素が<EM>fltvec2</EM>の対応する要素よりすべて大きいとき、
+Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26770"></A>
+<B>vmin</B> <EM>&amp;rest fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>の中のそれぞれの次元における最小値を捜し、
+その値でfloat-vectorを新しく作る。<B>vmin</B>と<B>vmax</B>は、
+頂点の座標から最小のminimal-boxを見つけるために使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26783"></A>
+<B>vmax</B> <EM>&amp;rest fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>の中のそれぞれの次元における最大値を捜し、
+その値でfloat-vectorを新しく作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26794"></A>
+<B>minimal-box</B> <EM>v-list minvec maxvec [err] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+与えられた<EM>v-list</EM>に対して<TT>minimal bounding box</TT>を計算し、
+その結果を<EM>minvec</EM>と<EM>maxvec</EM>に蓄積する。
+もし、実数<EM>err</EM>が指定されているならば、<TT>minimal box</TT>はその比率によって
+成長する。すなわち、もし<EM>err</EM>が0.01のとき、<EM>minvec</EM>のそれぞれの
+要素は<EM>minvec</EM>と<EM>maxvec</EM>との距離の1%減少する。
+そして、<EM>maxvec</EM>のそれぞれの要素は1%増加する。
+<B>minimal-box</B>は、<EM>minvec</EM>と<EM>maxvec</EM>との距離を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26818"></A>
+<B>scale</B> <EM>number fltvec &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>のすべての要素をスカラー<EM>number</EM>倍する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26830"></A>
+<B>norm</B> <EM>fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>fltvec</EM>のノルムを求める。<TT><!-- MATH
+ $\Vert fltvec\Vert$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="63" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img50.png"
+ ALT="$\Vert fltvec\Vert$"></SPAN></TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26842"></A>
+<B>norm2</B> <EM>fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>fltvec</EM>のノルムの２乗を求める。
+<TT><!-- MATH
+ $\Vert fltvec\Vert^2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="70" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img51.png"
+ ALT="$\Vert fltvec\Vert^2$"></SPAN>=(v. fltvec fltvec)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26854"></A>
+<B>normalize-vector</B> <EM>fltvec &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>のノルムが1.0となるように正規化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26865"></A>
+<B>distance</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの距離を返す。<!-- MATH
+ $|fltvec-fltvec2|$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="127" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img52.png"
+ ALT="$\vert fltvec-fltvec2\vert$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26875"></A>
+<B>distance2</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの距離の2乗を返す。<!-- MATH
+ $|fltvec-fltvec2|^2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="134" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img53.png"
+ ALT="$\vert fltvec-fltvec2\vert^2$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26885"></A>
+<B>homo2normal</B> <EM>homovec &amp;optional normalvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+同次ベクトル<EM>homovec</EM>を正規表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26896"></A>
+<B>homogenize</B> <EM>normalvec &amp;optional homovec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+正規ベクトル<EM>normalvec</EM>を同次表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26907"></A>
+<B>midpoint</B> <EM>p p1 p2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p</EM>は実数で、<EM>p1,p2</EM>は同次元のfloat-vectorである。
+<EM>p1<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="$-$"></SPAN>p2</EM>を<SPAN CLASS="MATH"><IMG
+ WIDTH="74" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img54.png"
+ ALT="$p:(1-p)$"></SPAN>の比率で等分した点<!-- MATH
+ $(1-p)\cdot p1 + p\cdot p2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="135" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img55.png"
+ ALT="$(1-p)\cdot p1 + p\cdot p2$"></SPAN>
+を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26920"></A>
+<B>rotate-vector</B> <EM>fltvec theta axis &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2次元あるいは3次元の<EM>fltvec</EM>を<EM>axis</EM>回りに<EM>theta</EM>ラジアン
+回転する。
+<EM>axis</EM>は、<EM>:x, :y, :z, 0, 1, 2</EM>, または NILの内の一つである。
+<EM>axis</EM>がNILのとき、<EM>fltvec</EM>は2次元として扱われる。
+3次元空間の任意の軸の回りにベクトルを回転するためには、
+<B>rotation-matrix</B>で回転行列を作り、そのベクトルにかければよい。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2035"
+  HREF="jmanual-node109.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2029"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2023"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2031"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2033"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2036"
+  HREF="jmanual-node109.html">行列と変換</A>
+<B> Up:</B> <A NAME="tex2html2030"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2024"
+  HREF="jmanual-node107.html">幾何学関数</A>
+ &nbsp; <B>  <A NAME="tex2html2032"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2034"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

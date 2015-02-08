@@ -1,0 +1,409 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>同期</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="同期">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node105.html">
+<LINK REL="up" HREF="jmanual-node92.html">
+<LINK REL="next" HREF="jmanual-node107.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2002"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1996"
+  HREF="jmanual-node92.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1992"
+  HREF="jmanual-node105.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1998"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2000"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2003"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Up:</B> <A NAME="tex2html1997"
+  HREF="jmanual-node92.html">マルチスレッド</A>
+<B> Previous:</B> <A NAME="tex2html1993"
+  HREF="jmanual-node105.html">スレッド生成</A>
+ &nbsp; <B>  <A NAME="tex2html1999"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2001"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04025000000000000000">
+同期</A>
+</H2>
+
+<P>
+Solarisオペレーティングシステム内には、マルチスレッドプログラムのために
+4つの同期手法がある。
+Euslispは、mutex-lockとcondition variableとセマフォを提供している。
+reader-writer lockは実現されてない。
+これらの手法に基づいて、同期メモリポートや同期障壁のような
+高レベルの同期機構が実現されている。
+
+<P>
+
+ <BR>
+<BR> <A NAME="25340"></A>
+<B>sys:make-mutex-lock</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+mutex-lockを作り、返す。
+mutex-lockは、6つの要素を持つ整数ベクトルで表現されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25350"></A>
+<B>sys:mutex-lock</B> <EM>mlock </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+mutex-lockの<EM>mlock</EM>をロックする。
+もし、<EM>mlock</EM>が既に他のスレッドからロックされているなら、
+<B>mutex-lock</B>はロックが外されるまで待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25363"></A>
+<B>sys:mutex-unlock</B> <EM>mlock </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>mlock</EM>を解除し、このロックを待っている他のスレッドの内の１つが再び実行され始める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25374"></A>
+<B>sys:mutex</B> <EM>mlock &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+mutex-lockとmutex-unlockは、組みで使用されなければならない。
+<B>mutex</B>は、重要な部分をひとまとまりにしたマクロである。
+<EM>mlock</EM>は、評価する<EM>forms</EM>が評価される前にロックされる。
+そして、評価が終了したときに、ロックが解除される。
+このマクロは、以下のprogn formに展開される。
+<B>unwind-protect</B>は、<EM>forms</EM>の評価中にエラーが発生したとき
+でさえ、ロックの解除を保証するために使用されることに注意すること。
+
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+  (progn
+      (sys:mutex-lock mlock)
+      (unwind-protect
+          (progn . forms)
+          (sys:mutex-unlock mlock)))
+</PRE>
+
+<P>
+
+<A NAME="25389"></A>
+<B>sys:make-cond</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+4つの要素を持つ整数ベクトルであるcondition variableオブジェクトを
+作る。condition variableの返り値としては、ロックされてない状態でである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25399"></A>
+<B>sys:cond-wait</B> <EM>condvar mlock </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>condvar</EM>に信号が出されるまで待つ。
+もし、<EM>condvar</EM>が他のスレッドによってすでに獲得されていたならば、
+<EM>mlock</EM>を解除し、<EM>condvar</EM>に信号が出されるまで待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25413"></A>
+<B>sys:cond-signal</B> <EM>condvar </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>condvar</EM>で示されるcondition variableに信号を出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25424"></A>
+<B>sys:make-semaphore</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+20の要素を持つ整数ベクトルによって表現されるセマフォオブジェクトを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25434"></A>
+<B>sys:sema-post</B> <EM>sem </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>sem</EM>に信号を出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25445"></A>
+<B>sys:sema-wait</B> <EM>sem </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sem</EM>に信号が来るまで待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="25457"></A>
+<BIG CLASS="XLARGE"><B>sys:barrier-synch </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 threads n-threads count barrier-cond threads-lock count-lock 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>同期障壁のための構造を表現する。
+同期を待っているスレッドは、<EM>thread-lock</EM>によって
+相互に排除される<EM>thread</EM>に置かれる。
+<B>barrier-synch</B>オブジェクトが生成されたとき、
+<EM>count</EM>は、ゼロに初期化される。
+同期しているスレッドは、<TT>:add</TT>メッセージを送ることによって、
+<EM>threads</EM>リストに置かれる。
+このbarrier-synchオブジェクトに<TT>:wait</TT>を送ることは、
+<EM>count</EM>を増加させることの原因となり、
+送られたスレッドは待ち状態になる。
+<EM>threads</EM>の中のすべてのスレッドに<TT>:wait</TT>メッセージが送られたとき、
+待ちが解除され、すべてのスレッドの実行が再び始まる。
+同期は、<EM>count-lock</EM>のmutex-lockと<EM>barrier-cond</EM>のcondition-variable
+の組み合わせによって実行される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25486"></A>
+<B>:init</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このbarrier-synchオブジェクトを初期化する。
+2つのmutex-lockと1つのcondition-variableが生成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25496"></A>
+<B>:add</B> <EM>thr </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>threads</EM>リストの中に<EM>thr</EM>スレッドが追加される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25508"></A>
+<B>:remove</B> <EM>thr </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>threads</EM>リストの中から<EM>thr</EM>スレッドを削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25520"></A>
+<B>:wait</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>threads</EM>リストの中のすべてのスレッドに<TT>:wait</TT>
+が配布されるのを待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="25533"></A>
+<BIG CLASS="XLARGE"><B>sys:synch-memory-port </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 sema-in sema-out buf empty lock 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>1方向の同期されたメモリポートを実現する。
+このオブジェクトを通じてデータを転送するために、2つのスレッドを同期させる。
+転送制御は、セマフォを用いて実現されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25550"></A>
+<B>:read</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>synch-memory-port</B>にバッファされているデータを読む。
+もし、まだ書かれていなかったならば、<TT>:read</TT>は停止する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25562"></A>
+<B>:write</B> <EM>datum </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+バッファに<EM>datum</EM>を書き込む。
+1ワードのバッファのみ存在するので、
+もし他のデータが既に書かれておりまだ読まれていなかったならば、
+<TT>:write</TT>は<TT>:read</TT>によってそのデータが読み込まれるまで待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25575"></A>
+<B>:init</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>sync-memory-port</B>を初期化する。
+これには2つのセマフォが生成され、<TT>:write</TT>動作が可能な状態になっている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2002"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1996"
+  HREF="jmanual-node92.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1992"
+  HREF="jmanual-node105.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1998"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2000"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2003"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Up:</B> <A NAME="tex2html1997"
+  HREF="jmanual-node92.html">マルチスレッド</A>
+<B> Previous:</B> <A NAME="tex2html1993"
+  HREF="jmanual-node105.html">スレッド生成</A>
+ &nbsp; <B>  <A NAME="tex2html1999"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2001"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

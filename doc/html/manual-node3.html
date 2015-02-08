@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node2.html">
+<LINK REL="up" HREF="manual-node2.html">
+<LINK REL="next" HREF="manual-node4.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html365"
+  HREF="manual-node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html359"
+  HREF="manual-node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html355"
+  HREF="manual-node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html361"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html363"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html366"
+  HREF="manual-node4.html">EusLisp's Object-Oriented Programming</A>
+<B> Up:</B> <A NAME="tex2html360"
+  HREF="manual-node2.html">EusLisp Basics</A>
+<B> Previous:</B> <A NAME="tex2html356"
+  HREF="manual-node2.html">EusLisp Basics</A>
+ &nbsp; <B>  <A NAME="tex2html362"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html364"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION02010000000000000000">
+Introduction</A>
+</H1>
+
+<P>
+EusLisp is an integrated programming system 
+for the research on intelligent robots
+based on Common Lisp and Object-Oriented programming.
+The principal subjects
+in the field of robotics research are  sensory data processing,
+visual environment recognition, collision avoiding motion planning,
+and task planning.
+In either problem, three dimensional shape models of robots and
+environment play crucial roles.
+A motivation to the development of EusLisp was a demand for an extensible
+solid modeler that can easily be made use of from higher level symbolic
+processing system.
+Investigations into traditional solid modelers proved that the vital
+requirement for their implementation language was the list processing
+capability to represent and manage topology among model components.
+Numerical computation power was also important, but locality of geometric
+computation suggested the provision of vector/matrix functions as
+built-ins would greatly ease programming.
+
+<P>
+Thus the primary decision to build a solid modeler in a Lisp
+equipped with a geometric computation package was obtained.
+Although a solid modeler provides facilities to define shapes of 3D
+objects, to simulate their behaviors, and to display them graphically,
+its applications are limited until it is incorporated in robot modules
+mentioned above. These modules also need to be tightly interconnected
+to achieve fully integrated robot systems.
+EusLisp sought for the framework of this integration
+in object-oriented programming (OOP).
+While OOP promotes modular programming, it facilitates incremental
+extension of existing functions by using inheritance of classes.
+In fact, components in the solid modeler, such as bodies, faces, and edges,
+can orderly be inplemented by extending one of the most basic class
+<EM>coordinates</EM>.
+These components may have further subclasses to provide individual functions
+for particular robot applications.
+
+<P>
+Based upon these considerations, EusLisp has been developped as an
+object-oriented Lisp which implements an extensible solid modeler[#!Eus7!#].
+Other features include intertask communication needed for the cooperative
+task coordination, graphics facilities on X-window for 
+visual user interface, and foreign language interface to support
+mixed language programming.
+
+<P>
+In the implementation of the language, two performance-effective techniques
+were invented in type discrimination and memory management
+[#!Eus4!#,#!Eus5!#,#!Eus6!#].
+The new type discrimination method guarantees 
+constant-time discrimination between
+types in tree structured hiearchy without regard to the depth of trees.
+Heap memory is managed in Fibonacci buddy method, which improves
+memory efficiency without sacrificing runtime or garbage-collection
+performance.
+
+<P>
+This reference manual describes EusLisp version 7.27 in two parts,
+<EM>EusLisp Basics and EusLisp Extensions</EM>.
+The first part describes Common Lisp features and object-oriented 
+programming. Since a number of literatures are available on both topics,
+the first part is rather indifferent except EusLisp's specific
+features as described in <EM>Interprocess Communication and Network</EM>,
+<EM>Toplevel Interaction</EM>, <EM>Disk Save</EM>, etc.
+Beginners of EusLisp are advised to get familiar with
+Common Lisp and object oriented programming in other ways
+[#!CLtL!#,#!CLOS:Keene!#].
+The second part deals with features more related with robot applications,
+such as
+<EM>Geometric Modelling</EM>, <EM>Image Processing</EM>, <EM>Manipulator Model</EM>
+and so on.
+Unfortunately, 
+the descriptions in this part may become incomplete or inaccurate
+because of EusLisp's rapid evolution.
+The update information is available via euslisp mailing list
+as mentioned in section <A HREF="manual-node9.html#License">1.6</A>.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html367"
+  HREF="manual-node4.html">EusLisp's Object-Oriented Programming</A>
+<LI><A NAME="tex2html368"
+  HREF="manual-node5.html">Features</A>
+<LI><A NAME="tex2html369"
+  HREF="manual-node6.html">Compatibility with Common Lisp</A>
+<LI><A NAME="tex2html370"
+  HREF="manual-node7.html">Revision History</A>
+<LI><A NAME="tex2html371"
+  HREF="manual-node8.html">Installation</A>
+<LI><A NAME="tex2html372"
+  HREF="manual-node9.html">License</A>
+<LI><A NAME="tex2html373"
+  HREF="manual-node10.html">Demonstrations</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html365"
+  HREF="manual-node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html359"
+  HREF="manual-node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html355"
+  HREF="manual-node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html361"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html363"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html366"
+  HREF="manual-node4.html">EusLisp's Object-Oriented Programming</A>
+<B> Up:</B> <A NAME="tex2html360"
+  HREF="manual-node2.html">EusLisp Basics</A>
+<B> Previous:</B> <A NAME="tex2html356"
+  HREF="manual-node2.html">EusLisp Basics</A>
+ &nbsp; <B>  <A NAME="tex2html362"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html364"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

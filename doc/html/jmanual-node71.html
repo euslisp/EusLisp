@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>プロセスイメージ保存</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="プロセスイメージ保存">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node72.html">
+<LINK REL="previous" HREF="jmanual-node70.html">
+<LINK REL="up" HREF="jmanual-node64.html">
+<LINK REL="next" HREF="jmanual-node72.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1395"
+  HREF="jmanual-node72.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1389"
+  HREF="jmanual-node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1383"
+  HREF="jmanual-node70.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1391"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1393"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1396"
+  HREF="jmanual-node72.html">最上位レベルのカスタマイズ</A>
+<B> Up:</B> <A NAME="tex2html1390"
+  HREF="jmanual-node64.html">評価</A>
+<B> Previous:</B> <A NAME="tex2html1384"
+  HREF="jmanual-node70.html">ダンプオブジェクト</A>
+ &nbsp; <B>  <A NAME="tex2html1392"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1394"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03097000000000000000">
+プロセスイメージ保存</A>
+</H2>
+このプロセスイメージ保存は、Solarisの動的ロード機能に深く依存しているため、
+Solaris2のEuslispにおいてサポートされていない。
+Solarisの動的ロード機能は、共有するオブジェクトを<TT>sbrk</TT>点の上の
+位置に依存した形でロードする。
+
+<P>
+
+ <BR>
+<BR> <A NAME="18832"></A>
+<B>save</B> <EM>path &amp;optional (symbol-file "") starter </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>save</B>は、現在のEuslisp処理の環境をファイルにダンプする。
+そのファイルは、後でUNIX命令として呼び出すことができる。
+もし関数名が<EM>starter</EM>によって指定されているなら、
+その関数はその命令の実行が始まるときに評価される。
+それぞれの命令行の引き数はEuslispの中で強制的に文字列にされ、
+引き数として<EM>starter</EM>に受け渡される。
+それで、命令行を解析できる。
+<B>*standard-input*</B>と<B>*standard-output*</B>を除くすべてのストリームを
+確実にクローズしていなければならない。
+ファイルがオープンされた状態を保存することはできない。
+また、<B>mmap</B>を試そうとしてはならない。
+<B>mmap</B>はインターネットのソケットストリームを作るとき、見えない所で実行されている。
+Sunのネットワークライブラリはhost-by-nameのようなNIS情報をメモリ上に
+いつも展開し、プロセスの最上位に置くため保存できない。
+そのため、保存されたイメージが実行されるても、ネットワークライブラリへの
+アクセスはどれも失敗し、コアダンプが生じる。
+Xwindowもこのライブラリを使用している。
+それで、一度Xserverに接続されたプロセスイメージを保存することはできない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>条件文</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="条件文">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node26.html">
+<LINK REL="previous" HREF="jmanual-node24.html">
+<LINK REL="up" HREF="jmanual-node24.html">
+<LINK REL="next" HREF="jmanual-node26.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html728"
+  HREF="jmanual-node26.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html722"
+  HREF="jmanual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html716"
+  HREF="jmanual-node24.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html724"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html726"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html729"
+  HREF="jmanual-node26.html">逐次実行とLet</A>
+<B> Up:</B> <A NAME="tex2html723"
+  HREF="jmanual-node24.html">制御構造</A>
+<B> Previous:</B> <A NAME="tex2html717"
+  HREF="jmanual-node24.html">制御構造</A>
+ &nbsp; <B>  <A NAME="tex2html725"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html727"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03031000000000000000">
+条件文</A>
+</H2>
+
+<P>
+<B>and,or</B>および<B>cond</B>は、Common Lispにおいてマクロとして知られているが、
+EusLispではインタプリタ時の効率を改善するために特殊書式として実行される。
+
+<P>
+
+ <BR>
+<BR> <A NAME="2109"></A>
+<B>and</B> <EM>{form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form</EM>は、NILが現れるまで左から右に評価される。
+もし、全ての書式がnon-NILとして評価されるならば、
+最後の値が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2120"></A>
+<B>or</B> <EM>{form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form</EM>は、non-NIL値が現れるまで左から右に評価される。
+そして、その値が返される。
+もし、全ての書式がNILとして評価されるならば、NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2131"></A>
+<B>if</B> <EM>test then [else] </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>if</B>は、１つの<I>then</I>と<I>else</I>書式のみを持つことができる。
+そこに多重書式を書きたいときは、<B>progn</B>を使って
+グループ化しなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2145"></A>
+<B>when</B> <EM>test forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>if</B>と違って、
+<B>when</B>と<B>unless</B>は、多重<EM>書式</EM>で書くことを許可している。
+<EM>test</EM>の評価がnon-NILのとき、<B>when</B>は実行され、
+評価がNILのとき、<EM>unless</EM>は実行される。
+もう一方で、これらのマクロは<EM>else</EM>書式を追加することを
+許可していない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2163"></A>
+<B>unless</B> <EM>test forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(when (not <EM>test</EM>) . <EM>forms</EM>)</TT>と同等である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2176"></A>
+<B>cond</B> <EM>(test {form}*)* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+任意の数の条件項は、<B>cond</B>の後に続けることができる。
+それぞれの条件項において、最初の書式<EM>test</EM>が評価される。
+もし、non-NILであったとき、その条件項の残りの書式は、続いて評価される。
+そして、最後の値が返される。
+もし、<EM>test</EM>のあとに書式がなかったならば、
+<EM>test</EM>の値が返される。
+<EM>test</EM>が失敗したとき、次の条件項は<EM>test</EM>がnon-NIL評価されるかまたは
+全ての条件項が尽きてしまうまで繰り返される。
+条件項が尽きてしまった場合、<B>cond</B>はNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2194"></A>
+<B>case</B> <EM>key {({label <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> ({lab}*) {form}*)}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>key</EM>と<EM>label</EM>が一致した条件項について、
+<EM>form</EM>が評価され、最後の値が返される。
+<EM>key</EM>と<EM>label</EM>の間の等価は、<B>eq</B>または
+<B>memq</B>で行われ、<B>equal</B>ではない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

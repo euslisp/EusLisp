@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>スコープ</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="スコープ">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node20.html">
+<LINK REL="previous" HREF="jmanual-node18.html">
+<LINK REL="up" HREF="jmanual-node17.html">
+<LINK REL="next" HREF="jmanual-node20.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html640"
+  HREF="jmanual-node20.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html634"
+  HREF="jmanual-node17.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html628"
+  HREF="jmanual-node18.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html636"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html638"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html641"
+  HREF="jmanual-node20.html">一般化変数</A>
+<B> Up:</B> <A NAME="tex2html635"
+  HREF="jmanual-node17.html">書式と評価</A>
+<B> Previous:</B> <A NAME="tex2html629"
+  HREF="jmanual-node18.html">アトム(atom)</A>
+ &nbsp; <B>  <A NAME="tex2html637"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html639"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03022000000000000000">
+スコープ</A>
+</H2>
+
+<P>
+すべてのsymbolは、値と結び付いている。
+symbolは、主にくくられた文脈から決定される値によって評価される。
+ここに2種類の変数バインドがある。それは、
+ローカルまたは静的バインドとスペシャルまたは動的バインドである。
+ローカルにバインドされた変数は<B>lambda</B>書式または
+<B>let</B>や<B>let*</B>の特殊書式においてspecialと宣言されない限り
+外から見ることはできない。
+ローカルバインドは入れ子が可能で、外側のローカルバインドやスペシャルバインドを隠して、
+最も内側のレベルで定義されている1つのバインドのみ見ることができる。
+スペシャル変数は2つの方法で使用される。
+1つは、グローバル変数として、もう1つは動的に覗けるローカル変数として用いる。
+このローカル変数は、バインドの効果の中にある限りローカルスコープの
+外にいてさえ見ることができる。
+後者の場合、スペシャル変数は<B>special</B>で宣言される必要がある。
+その宣言は、コンパイラだけでなくインタプリタでも認識される。
+Common Lispによると、スペシャル変数は不明瞭なスコープと動的な
+広さを持っていると言われている。
+
+<P>
+あるスコープのなかで、ローカル変数が存在するとしても、
+同じ変数名を内部スコープの中で<B>special</B>として再宣言することができる。
+<B>symbol-value</B>関数は、ローカルスコープに構わずspecial値を引き出す
+ために使用することができる。
+<B>set</B>関数は、スペシャル変数としてのみ働く。すなわち、
+specialとして宣言していない限り、lambdaやlet変数の値を
+変更するために使用することはできない。
+
+<P>
+<PRE>
+(let ((x 1))
+   (declare (special x))
+   (let* ((x (+ x x)) (y x))
+      (let* ((y (+ y y)) (z (+ x x)))
+         (declare (special x))
+         (format t "x=~S y=~s z=~s~%" x y z) ) ) )
+--&gt; x=1 y=4 z=2
+</PRE>
+
+<P>
+symbolは、<B>defconstant</B>マクロにより定数として宣言することができる。
+一旦宣言すると、その後値を変更しようとするとエラーが発生する。
+そのうえ、そのような定数symbolは、ローカル変数としてさえ変数名として
+使用されることを禁じられる。
+NILやTは、そのような定数の例である。
+keywordパッケージのsymbolは、いつも作成されるときに定数として宣言される。
+対照的に、<B>defvar</B>や<B>defparameter</B>マクロは、スペシャル変数として
+symbolを宣言する。
+<B>defvar</B>は、symbolがバインドされていない時のみ値の初期化を行い、
+値が既に割り当てられているときは何もしない。
+それに対して、<B>defparameter</B>はいつも値をリセットする。
+
+<P>
+symbolが参照され、symbolのためのローカルバインドがなかったとき、
+そのspecial値は、引き出される。
+しかしながら、そのspecial値にまだ値が割り当ててなかったならば、
+unbound variableエラーが発生する。
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

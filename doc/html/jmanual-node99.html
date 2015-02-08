@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>スレッドの並列実行</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="スレッドの並列実行">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node100.html">
+<LINK REL="previous" HREF="jmanual-node98.html">
+<LINK REL="up" HREF="jmanual-node97.html">
+<LINK REL="next" HREF="jmanual-node100.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1908"
+  HREF="jmanual-node100.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1902"
+  HREF="jmanual-node97.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1896"
+  HREF="jmanual-node98.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1904"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1906"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1909"
+  HREF="jmanual-node100.html">同期の手法</A>
+<B> Up:</B> <A NAME="tex2html1903"
+  HREF="jmanual-node97.html">非同期プログラミングと並列プログラミングの構築</A>
+<B> Previous:</B> <A NAME="tex2html1897"
+  HREF="jmanual-node98.html">スレッド作成とスレッドプール</A>
+ &nbsp; <B>  <A NAME="tex2html1905"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1907"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04022200000000000000">
+スレッドの並列実行</A>
+</H3>
+スレッドによる並列実行の配置のために、スレッド関数が使用される。
+スレッドは、スレッドプールから1つの空きスレッドを取り、
+共有メモリを経由して引き数を渡し、図<A HREF="jmanual-node98.html#threadobj">7</A>に示されるような
+セマフォ信号によりスレッドを立ち上げ、
+停止することなしに呼出側へスレッドオブジェクトを返す。
+立ち上げられたスレッドは、呼び出したスレッドと並列に実行され、
+引き数を評価し始める。
+呼出側は、forkされたスレッドから評価結果を受けとるために<TT>wait-thread</TT>を
+使用する。
+<TT>plist</TT>マクロは、引き数の並列評価を記述するために大変便利な書式である。
+<TT>plist</TT>は、それぞれの引き数を評価するためにスレッドを割り当て、
+すべてのスレッドが評価し終わるのを待って結果をリストアップする。
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

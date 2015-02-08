@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>キーインデックスファイル</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="キーインデックスファイル">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node84.html">
+<LINK REL="up" HREF="jmanual-node77.html">
+<LINK REL="next" HREF="jmanual-node86.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1693"
+  HREF="jmanual-node86.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1687"
+  HREF="jmanual-node77.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1683"
+  HREF="jmanual-node84.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1689"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1691"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1694"
+  HREF="jmanual-node86.html">UNIXプロセス</A>
+<B> Up:</B> <A NAME="tex2html1688"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Previous:</B> <A NAME="tex2html1684"
+  HREF="jmanual-node84.html">IOCTL</A>
+ &nbsp; <B>  <A NAME="tex2html1690"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1692"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04012800000000000000">
+キーインデックスファイル</A>
+</H3>
+近年UNIXは、キーインデックスファイルの管理のために<B>dbm</B>あるいは<B>ndbm</B>
+ライブラリを提供する。このライブラリを使用することにより、
+キーとデータの組みで構成されるデータベースを構築することができる。
+以下に示す関数は、<TT>clib/ndbm.c</TT>に定義されている。
+Sunにおいて、そのファイルは、<TT>cc -c -Dsun4 -Bstatic</TT>でコンパイルし、
+<TT>(load "clib/ndbm" :ld-option "-lc")</TT>でEuslispにロードすること。
+
+<P>
+
+ <BR>
+<BR> <A NAME="22495"></A>
+<B>dbm-open</B> <EM>dbname mode flag </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>dbm-open</B>は、データベースファイルを作るときと、そのデータベースに読み込み／書き込み
+をするとき、最初に呼び出されなければならない。
+<EM>dbname</EM>は、データベースの名前である。
+実際に、ndbm managerは<TT>".pag"</TT>と<TT>".dir"</TT>の拡張子を持つ
+2つのファイルを作成する。
+<EM>mode</EM>は、ファイルのオープンモードを指定する。0は読み込み専用、1は書き込み専用、
+2は読み書き用を示す。また、最初にファイルを作成するときは、<TT>#x200</TT>を論理和すべきである。
+<EM>flag</EM>は、<B>chmod</B>で変更されるアクセス許可を与える。
+<TT>#o666</TT>あるいは<TT>#o664</TT>が、<EM>flag</EM>に適している。
+<B>dbm-open</B>は、そのデータベースを確認するための整数を返す。
+この値は、他のdbm関数によってデータベースを確認するために使用される。
+言い換えれば、同時に幾つかのデータベースをオープンすることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22517"></A>
+<B>dbm-store</B> <EM>db key datum mode </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>key</EM>と<EM>datum</EM>の組み合わせを<EM>db</EM>に蓄積する。
+<EM>db</EM>は、データベースを確認するための整数である。
+<EM>key</EM>と<EM>datum</EM>は文字列である。
+<EM>mode</EM>は0(挿入)あるいは1(置き換え)のどちらかである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22534"></A>
+<B>dbm-fetch</B> <EM>db key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>db</EM>の中の<EM>key</EM>に関連付けられているデータを呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

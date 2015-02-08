@@ -1,0 +1,472 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>メモリ管理</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="メモリ管理">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node77.html">
+<LINK REL="previous" HREF="jmanual-node75.html">
+<LINK REL="up" HREF="jmanual-node75.html">
+<LINK REL="next" HREF="jmanual-node77.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1561"
+  HREF="jmanual-node77.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1555"
+  HREF="jmanual-node75.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1549"
+  HREF="jmanual-node75.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1557"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1559"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1562"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Up:</B> <A NAME="tex2html1556"
+  HREF="jmanual-node75.html">システム関数</A>
+<B> Previous:</B> <A NAME="tex2html1550"
+  HREF="jmanual-node75.html">システム関数</A>
+ &nbsp; <B>  <A NAME="tex2html1558"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1560"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04011000000000000000">
+メモリ管理</A>
+</H2>
+メモリ管理の設計は、オブジェクト指向言語の柔軟性と効率性にたいへん
+影響を及ぼす。
+Euslispは、<B>フィボナッチバディ法</B>を基本に統一した方法で
+オブジェクトをメモリに割り当てる。
+この方法は、chunkと呼ばれる大きなメモリのプールを小さなセルに分割する。
+それぞれのセルは、サイズが等しくなく、フィボナッチ数がそれぞれ割り当てられる。
+chunkメモリは、<TT>symbol, cons, string, float-vector</TT>などのような
+様々な型のオブジェクトのための同次なデータ容器である。
+それらのサイズはchunkと一致する長さである。
+chunkは、固定、動的、再配置可能、交替可能などのような
+どんな特別な属性も持っていない。
+EusLispのヒープメモリは、chunkの集合である。そして、
+ヒープはUNIXより新しいchunkを得ることにより動的に拡張することができる。
+拡張は、動作中に自動的に発生するかあるいはユーザーが<B>system:alloc</B>関数を
+呼び出すことにより発生する。
+自動的に処理されるとき、使用可能なメモリサイズは合計のヒープサイズの
+約25%に保つ。この比率は、<B>sys:*gc-margin*</B>パラメータに0.1から0.9までの値を設定
+することにより変更することができる。
+
+<P>
+すべてのヒープメモリを使いきったとき、mark-and-sweep型のガーベージコレクション(GC)
+を始める。
+ルート（パッケージ，クラスやスタック）からアクセス可能なセルは，
+同じアドレスのままである。
+他のアクセス不可能なセルは、矯正されfree-listsにリンクされる。
+GCの間にコピーやコンパクト化は発生しない。
+ガーベージされるセルが矯正されるとき、その隣接セルがfreeかどうかチェックされる。
+そして、できるだけ大きなセルを構成するようにマージされる。
+しかしながら、このマージは、ときどき意味の無いものになる。
+なぜなら、もっとも頻繁に呼び出されるメモリアロケータである<TT>cons</TT>が、
+そのマージされたセルを最も小さなセルに分割することを要求するからである。
+したがって、Euslispは<TT>cons</TT>の高速化のためにマージされないある特定の量の
+ヒープを残すことを許可している。
+この比率は、<B>sys:*gc-merge*</B>パラメータによって決定される。その値のデフォルトは
+0.3である。
+<B>sys:*gc-merge*</B>に大きな値を設定することにより、マージされないヒープを多く残す。
+これは、<TT>cons</TT>が要求されるとき、buddy-cellの分割が滅多に起こらないので、<TT>cons</TT>の性能を改善する。
+これは、また3次元ベクトルのような相対的に小さなセルのアロケーションについて
+すべて成り立つ。
+
+<P>
+<B>sys:gc</B>は、明示的にガーベージコレクターを呼び出す。
+そして、ヒープに配置された空いているワード数と全体のワード数（バイト数ではない）を示す2つの整数の
+リストを返す。
+
+<P>
+もし、実行中に"fatal error: stack overflow"が報告され、
+そのエラーが無限ループあるいは再帰処理によるものでないと確信するならば、
+<B>sys:newstack</B>でLispのスタックの大きさを拡張すれば回避できる。
+<B>sys:newstack</B>を設定する前には、<B>reset</B>を実行しなければならない。
+なぜなら、
+スペシャルバインドと<B>unwind-protect</B>の整理用の書式が
+現在のスタックの中からすべて捨てられるためである。
+
+<P>
+新しいスタックが配置された後、オープニングメッセージを表示するところから
+実行を始める。
+デフォルトのスタックサイズは、16Kwordである。
+Lispのスタックは、システムのスタックと別物である。
+前者は、ヒープ上に配置され、後者は、オペレーティングシステムによって
+スタックセグメント内に配置される。
+もし、"segmentation fault"エラーが発生したならば、システムのスタックが小さいことに
+より発生したことが考えられる。
+cshのコマンド<TT>limit</TT>で、システムのスタックサイズを増加することにより、
+解決できる可能性がある。
+
+<P>
+<B>sys:reclaim</B>と<B>sys:reclaim-tree</B>関数は、オブジェクトにより占有されているセルを
+メモリマネージャーに戻す。そのため、ガーベージコレクションを呼び出すことなしに
+その後も再使用をすることができる。
+しかし、それらのセルが他のセルから参照されていないことが確実でなければならない。
+
+<P>
+<B>memory-report</B>と<B>room</B>関数は、メモリの使用に関する統計を
+セルのサイズやクラスによりソートして表示する。
+
+<P>
+<B>address</B>は、オブジェクトのバイト換算したアドレスを返す。
+このアドレスはプロセスに独自のものであるから、
+この関数はハッシュテーブルが使用するハッシュ関数に有用である。
+
+<P>
+<B>peek</B>と<B>poke</B>は、メモリから直接データを読み書きできる関数である。
+アクセスする型は、<TT>:char, :byte, :short, :long, :integer, :float, :double</TT>
+のどれかにすべきである。
+例えば、<TT>(SYS:PEEK (+ 2 (SYS:ADDRESS '(a b))) :short)</TT>は、
+<TT>cons</TT>セルのクラスID（ふつう１である）を返す。
+
+<P>
+'<B>list-all-</B>'を名前の前に付けている幾つかの関数がある。
+これらの関数は、システムのリソースあるいは環境のリストを返し、
+動的なデバッグに有用である。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="21057"></A>
+<B>sys:gc</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ガーベージコレクションを実行する。割り当てられている中で空いているワード数および全体のワード数
+のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21067"></A>
+<B>sys:gctime</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+3つの整数のリストを返す。1つは、ＧＣを呼び出した回数。
+2つは、セルをマーキングするために使用した時間（1ユニットに1/60秒）。
+3つが、矯正（マーキングを外し、マージする）のために使用した時間。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21077"></A>
+<B>sys:alloc</B> <EM>size </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ヒープに少なくとも<EM>size</EM>ワードのメモリを配置し、
+実際に配置されたワード数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21088"></A>
+<B>sys:newstack</B> <EM>size </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+現在のスタックを廃棄し、<EM>size</EM>ワードの新しいスタックを配置する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21099"></A>
+<B>sys:*gc-merge*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+メモリ管理用のパラメータ。
+<B>*gc-merge*</B>は、GCによりマージされずに残すヒープメモリの比率を示す。
+このマージされない領域は、すぐに<B>cons</B>のような小さなセルに満たされる。
+デフォルトの値は、0.3である。
+この値を0.4のように大きくすると、マージされない空きヒープが40%であることを
+示し、consのためには役立つが、実数ベクトルやエッジや面などのような大きなセル
+の確保には、害を及ぼす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21111"></A>
+<B>sys:*gc-margin*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+メモリ管理用のパラメータ。
+<B>*gc-margin*</B>は、全体のヒープに対する空きヒープの比率を決定する。
+メモリは、UNIXから獲得したものであるため、空き空間はこの比率より
+小さくならない。
+デフォルトは、0.25であり、GCの際に25%以上の
+空き空間が維持されることを意味する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21122"></A>
+<B>sys:reclaim</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ごみとして<EM>object</EM>を廃棄する。
+そのオブジェクトは、他のどのオブジェクトからも絶対に参照されないことが
+保証されなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21133"></A>
+<B>sys:reclaim-tree</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>から通過できるsymbolを除いてすべてのオブジェクトを矯正する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21144"></A>
+<B>sys:btrace</B> <EM>num </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Lispのスタックの<EM>num</EM>番目の深さの情報をトレースして表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21155"></A>
+<B>sys:memory-report</B> <EM>&amp;optional strm </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+セルのサイズでソートしたメモリ使用のテーブルを<EM>strm</EM>ストリームに出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21166"></A>
+<B>sys:room</B> <EM>output-stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+クラスで整列したメモリ配置の情報を出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21176"></A>
+<B>sys:address</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+プロセスのメモリ空間内にある<EM>object</EM>のアドレスを返す。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21187"></A>
+<B>sys:peek</B> <EM>[vector] address type </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>address</EM>で指定されたメモリ位置のデータを読みだし、
+それを整数として返す。
+<EM>type</EM>は、<B>:char, :byte, :short, :long, :float, :double</B>の内の１つである。
+もし、<EM>vector</EM>が与えられなかったなら、
+そのアドレスは、UNIXの処理空間として扱われる。
+例えば、Sunにおいてa.outのヘッダーは<TT>#x2000</TT>に置かれるため、
+<TT>(sys:peek #x2000 :short)</TT>はmagic number（ふつうは<TT>#o403</TT>)を返す。
+Solaris2は、ELFヘッダーを<TT>#10000</TT>に置くため、
+<TT>(sys:peek #x10000 :long)</TT>が"ELF"を表現する文字列である
+<TT>#xff454c46</TT>を返す。
+もし、<EM>vector</EM>が与えられたならば、それは<B>foreign-string</B>であり、
+アドレスは<EM>vector</EM>の起点からのオフセットとして認識される。
+<TT>(sys:peek "123456" 2 :short)</TT>は、"34"を表現する
+short wordを返す。(<TT>#x3334(13108)</TT>である)
+
+<P>
+アドレス位置については十分注意すること。
+<TT>short, integer, long. float, double word</TT>を奇数アドレスから読み出すと、
+"bus error"になる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21213"></A>
+<B>sys:poke</B> <EM>value [vector] address value-type </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>value</EM>を<EM>address</EM>で指定された位置に書き込む。
+プロセスのメモリ空間内のどこでも書き込むことができるため、
+特に注意をしなければならない。
+プロセスの空間の外へ書き込んだなら、
+確実に"segmentation fault"が発生する。
+<TT>short, integer, long. float, double word</TT>を奇数アドレスに書き込んだ
+場合、"bus error"が発生する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21226"></A>
+<B>sys:list-all-chunks</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+配置されたすべてのヒープのchunkをリストアップする。
+他に有用な実行関数はない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21236"></A>
+<B>sys:object-size</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>obj</EM>からアクセス可能なセルとワードの数を計算する。
+<EM>obj</EM>から参照可能なすべてのオブジェクトが探索される。
+そして、3つの数のリストが返される。
+1つ目は、セルの数。2つ目は、これらのオブジェクトに論理的に配置されたワード数（
+すなわち、ユーザーからアクセスできるワード数）。
+3つ目は、物理的に配置されたワード数。
+これは、ヘッダーとメモリ管理のための特別なスロットを含む。
+探索は、symbolで停止する。すなわち、<TT>property-list</TT>あるいは<TT>print-name string</TT>のような
+symbolから参照されるオブジェクトは、カウントされない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1561"
+  HREF="jmanual-node77.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1555"
+  HREF="jmanual-node75.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1549"
+  HREF="jmanual-node75.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1557"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1559"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1562"
+  HREF="jmanual-node77.html">UNIXシステムコール</A>
+<B> Up:</B> <A NAME="tex2html1556"
+  HREF="jmanual-node75.html">システム関数</A>
+<B> Previous:</B> <A NAME="tex2html1550"
+  HREF="jmanual-node75.html">システム関数</A>
+ &nbsp; <B>  <A NAME="tex2html1558"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1560"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

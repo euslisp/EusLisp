@@ -1,0 +1,516 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>symbol</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="symbol">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node44.html">
+<LINK REL="previous" HREF="jmanual-node42.html">
+<LINK REL="up" HREF="jmanual-node42.html">
+<LINK REL="next" HREF="jmanual-node44.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html985"
+  HREF="jmanual-node44.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html979"
+  HREF="jmanual-node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html973"
+  HREF="jmanual-node42.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html981"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html983"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html986"
+  HREF="jmanual-node44.html">パッケージ</A>
+<B> Up:</B> <A NAME="tex2html980"
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
+<B> Previous:</B> <A NAME="tex2html974"
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
+ &nbsp; <B>  <A NAME="tex2html982"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html984"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03061000000000000000">
+symbol</A>
+</H2>
+symbolは、いつでも唯一であることが保証され、パッケージに収容される。
+1つのパッケージのなかに、その他の
+symbolとしておなじprint-nameを持っていることはあるが、symbol自体がコピーされることはない。
+symbolがリーダに読まれるとき、symbolオブジェクトは、自動的に生成され、
+1つのパッケージに収容される。
+そのパッケージは、パッケージ名にコロン（：）を付け加えた接頭語によって
+記すことができる。
+そのようなパッケージ接頭語がないならば、symbolは<B>lisp:*package*</B>
+の値にある主なパッケージに収容される。
+全てのsymbolは、1つのホームパッケージを持っている。
+もしsymbolがそのようなホームパッケージを持っていないならば、
+収容されていないsymbolと言われる。
+収容されていないsymbolは、<B>gensym</B>や<B>make-symbol</B>関数によって
+作ることができ、表示のときは、"<TT>#:</TT>"接頭語がつけられる。
+これらのsymbolは収容されていないので、そのような2つのsymbolが同じ
+print-nameを持っていた場合、等しいことが保証されない。
+
+<P>
+ふつう、lispリーダがsymbolに出会ったとき、リーダは自動的に
+symbolのprint-name文字列を大文字に変換する。
+したがって、例えば<TT>(symbol-name 'car)</TT>と入力したとすると、
+EusLispは、<TT>"car"</TT>の代りに<TT>"CAR"</TT>と答える。
+<TT>(make-symbol "car")</TT>は、<TT>car</TT>や<TT>CAR</TT>の代りに<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN><TT>car</TT><SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN>
+を返す。
+もし、小文字から構成されるsymbolをリーダに作らせたい場合、
+<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>や<SPAN CLASS="MATH"><IMG
+ WIDTH="27" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img33.png"
+ ALT="$\vert...\vert$"></SPAN>のようなエスケープを用いること。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="7776"></A>
+<B>symbolp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  <EM>object</EM>が
+クラスsymbolかそのサブクラスのインスタンスであったならば、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7787"></A>
+<B>symbol-value</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>の特殊値を得る。ローカル変数値は、この関数では取り出す
+ことはできない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7798"></A>
+<B>symbol-function</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>のグローバル関数定義を得る。
+ローカル関数は、この関数で得られない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7809"></A>
+<B>symbol-package</B> <EM>sym </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>が収容されているパッケージを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7820"></A>
+<B>symbol-name</B> <EM>sym </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>のprint-nameを返す。
+<B>symbol-name</B>は、<B>string</B>がコピーするのに反して、
+ pname文字列をコピーしない。
+したがって、もし<B>symbol-name</B>で返された文字列を変えるならば
+symbolは普通の内部手続きを通してアクセス不可能となる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7834"></A>
+<B>symbol-plist</B> <EM>sym </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>のproperty-list(plist)を返す。
+EusLispのplistは、関連リスト（association-list）と同じ様な書式を与える。
+それは、属性名とその値の組を点でつないだ構成である。
+これは、Common Lispの定義が要求するplist（属性名と値の線形リスト）
+と非互換である。
+EusLispにおいて、plistはsymbolに独特なものではない。
+<B>propertied-object</B>を継承するクラスから派生したどんなオブジェクトも、
+property-listを持つことができる。
+<B>propertied-object</B>の中のこれらのplistを設定したり、取りだしたりするために、
+<B>propertied-object-plist</B>マクロは、<B>symbol-plist</B>の代りに
+使用されるべきである。
+しかしながら、<B>get</B>と<B>putprop</B>はどのオブジェクトにも働く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7851"></A>
+<B>boundp</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>がグローバルな値を持っているかどうかを検査する。
+<BR>注意:ローカル変数やオブジェクト変数として使用されるsymbolは
+いつも値を持っているため、<EM>boundp</EM>はこれらのローカル変数の
+格納状態を検査することができない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7863"></A>
+<B>fboundp</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>がグローバルな関数定義を持っているかどうかを検査する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7874"></A>
+<B>makunbound</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>は、（特殊値を持たないように）強制的にunboundされる。
+ローカル変数は、いつも値が割り当てられ、<B>makunbound</B>できない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7886"></A>
+<B>get</B> <EM>sym attribute </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>のplistの中で<EM>attribute</EM>に関連する値を取り出す。
+<TT>(cdr (assoc <EM>attribute</EM> (symbol-plist <EM>sym</EM>)))</TT>と等価である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7901"></A>
+<B>putprop</B> <EM>sym val attribute </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>putprop</B>は、<B>setf</B>と<B>get</B>の組み合せで置き換えるべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7914"></A>
+<B>remprop</B> <EM>sym attr </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+属性値(<EM>attr</EM>)と<EM>sym</EM>の組をproperty-listから削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7926"></A>
+<B>setq</B> <EM>{var value}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>value</EM>を<EM>var</EM>に割り当てる。<EM>var</EM>は、symbolか点で継った組である。
+<EM>var</EM>は、ローカル変数・オブジェクト変数・特殊変数の順番にその名前の中から探される。
+ただし、明確にspecialと宣言されてないものに限る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7940"></A>
+<B>set</B> <EM>sym val </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>val</EM>を<EM>sym</EM>の特殊値として割り当てる。
+<B>set</B>は、ローカル変数やオブジェクト変数に値を
+割当てることはできない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7953"></A>
+<B>defun</B> <EM>symbol [documentation] lambda-list . body </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>にグローバル関数を定義する。
+ローカル関数を定義するためには、<B>flet</B>か<B>labels</B>を使用すること。
+もし、<EM>documentation</EM>が与えられない場合、lambda-listに書かれている
+デフォルトのdocumentation文字列が入力される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7967"></A>
+<B>defmacro</B> <EM>symbol [documentation] lambda-list . body </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+グローバルマクロを定義する。
+EusLispは、ローカルスコープマクロ定義の機能を持っていない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7977"></A>
+<B>defvar</B> <EM>var &amp;optional (init nil) doc </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>var</EM>が特殊値を持っていれば、<B>defvar</B> は何もしない。
+もし<EM>var</EM>がunboundならば、<TT>special</TT>として宣言し、
+<EM>init</EM>をその値として設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7992"></A>
+<B>defparameter</B> <EM>var init &amp;optional doc </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>defparameter</B>は、<EM>var</EM>を<TT>special</TT>として宣言し、
+<EM>var</EM>が既に値を持っていたとしても、<EM>init</EM>をその値として設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8007"></A>
+<B>defconstant</B> <EM>sym val &amp;optional doc </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>defconstant</B>は、<B>val</B>を<B>sym</B>の特殊値として設定する。
+<B>defvar, defparameter</B>や<B>setq</B>と違い、その値は
+<B>defconstant</B>でのみ設定され、これらの書式で変更することができない。
+もし定数symbolの値が、変更されようとしたならば、
+エラーが返される。
+しかし、<B>defconstant</B>は以前の
+定数値に上書きでき、上書きした場合は注意メッセージが出力される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8024"></A>
+<B>keywordp</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>obj</EM>がsymbolで、そのホームパッケージが<B>KEYWORD</B>のときTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8036"></A>
+<B>constantp</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もしsymbolが<B>defconstant</B>マクロで定数に宣言されているときTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8047"></A>
+<B>documentation</B> <EM>sym &amp;optional type </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>のために提示文字列(documentation string)を取り出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8058"></A>
+<B>gensym</B> <EM>&amp;optional x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>g001</TT>のような前置文字列と付属数字を組み合わせた新しい収容されていないsymbolを作る。
+収容されてないsymbolは、symbolに関連するパッケージがないため、パッケージ前置詞
+の部分に#:を示す。#:が前につくsymbolは、読めないsymbolで、
+リーダではこれらのsymbolへの参照を作成することができない。
+<EM>x</EM>は、整数か文字列が可能で、
+接頭(prefix)インデックスか接尾(suffix)値として使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8070"></A>
+<B>gentemp</B> <EM>&amp;optional (prefix "T") (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>に収容される新しいsymbolを作る。
+ほとんどのアプリケーションにおいて、<B>gensym</B>が<B>gentemp</B>よりも好まれる。
+なぜなら、収容されないsymbolの方が高速に作ることができ、
+ガーベージコレクトも可能であるため。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html985"
+  HREF="jmanual-node44.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html979"
+  HREF="jmanual-node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html973"
+  HREF="jmanual-node42.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html981"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html983"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html986"
+  HREF="jmanual-node44.html">パッケージ</A>
+<B> Up:</B> <A NAME="tex2html980"
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
+<B> Previous:</B> <A NAME="tex2html974"
+  HREF="jmanual-node42.html">symbolとパッケージ</A>
+ &nbsp; <B>  <A NAME="tex2html982"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html984"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

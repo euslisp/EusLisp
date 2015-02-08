@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>型指定</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="型指定">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node15.html">
+<LINK REL="up" HREF="jmanual-node12.html">
+<LINK REL="next" HREF="jmanual-node17.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html592"
+  HREF="jmanual-node17.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html586"
+  HREF="jmanual-node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html582"
+  HREF="jmanual-node15.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html588"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html590"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html593"
+  HREF="jmanual-node17.html">書式と評価</A>
+<B> Up:</B> <A NAME="tex2html587"
+  HREF="jmanual-node12.html">データ型</A>
+<B> Previous:</B> <A NAME="tex2html583"
+  HREF="jmanual-node15.html">クラス継承</A>
+ &nbsp; <B>  <A NAME="tex2html589"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html591"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03014000000000000000">
+型指定</A>
+</H2>
+Euslispは、<B>deftype</B>特殊書式を持っていないけれども、
+型名は宣言や結果あるいは中身の型の指定を要求する関数の中で
+使用される。
+例えば、<B>coerce, map, concatenate, make-array</B>など。
+一般に、クラス名は<TT>(concatenate cons "ab" "cd") = (97 98 99 100)</TT>のように
+型指定として使用することができる。このとき、Common Lispでは<TT>cons</TT>の代わりに
+<TT>(quote list)</TT>を使用する。
+
+<P>
+Euslispは、数を表現するクラスを持っていないので、数の型はキーワードによって
+与える必要がある。
+<B>:integer</B>, <B>integer</B>, <B>:int</B>, <B>fixnum</B>,
+あるいは<B>:fixnum</B>が整数型を表現するために使用され、
+<B>:float</B>あるいは<B>float</B>が実数型を表現するために使用される。
+<B>make-array</B>の<EM>element-type</EM>引数においては、文字列を作るために
+<B>:character</B>, <B>character</B>, <B>:byte</B>や<A NAME="1197"></A><B>b</B>yteを
+認識する。
+<B>defcstruct</B>, <B>sys:peek</B>や<B>sys:poke</B>のような低レベルの関数も、
+バイト毎にアクセスするために
+<B>:character</B>, <B>character</B>, <B>:byte</B>あるいは<B>byte</B>を認識し、
+short word毎にアクセスするために
+<B>:short</B>あるいは<B>short</B>を認識する。
+どの場合においても、キーワードはpnameと同じ名前を持つlispパッケージのsymbol
+を選ぶべきである。
+
+<P>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

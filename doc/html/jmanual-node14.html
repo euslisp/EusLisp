@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>オブジェクト</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="オブジェクト">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node15.html">
+<LINK REL="previous" HREF="jmanual-node13.html">
+<LINK REL="up" HREF="jmanual-node12.html">
+<LINK REL="next" HREF="jmanual-node15.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html566"
+  HREF="jmanual-node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html560"
+  HREF="jmanual-node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html554"
+  HREF="jmanual-node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html562"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html564"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html567"
+  HREF="jmanual-node15.html">クラス継承</A>
+<B> Up:</B> <A NAME="tex2html561"
+  HREF="jmanual-node12.html">データ型</A>
+<B> Previous:</B> <A NAME="tex2html555"
+  HREF="jmanual-node13.html">数値</A>
+ &nbsp; <B>  <A NAME="tex2html563"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html565"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03012000000000000000">
+オブジェクト</A>
+</H2>
+数値でない全てのデータは、ヒープにおかれるオブジェクトで表現される。
+それぞれのオブジェクトのメモリセルは、オブジェクトヘッダーと
+オブジェクト変数のための固定数のスロットを持っている。
+ベクトルは、任意の要素から構成されるため、
+sizeスロットをヘッダーのすぐ後に持っている。
+図<A HREF="#ObjectFig">3</A>はオブジェクトとベクトルおよび
+オブジェクトのヘッダーを描いたものである。
+ここに示す<EM>slot</EM>と<EM>element</EM>のワードだけがユーザーから
+アクセスすることができる。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="ObjectFig"></A><A NAME="958"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+オブジェクト・ベクトル・オブジェクトヘッダーの構造</CAPTION>
+<TR><TD><IMG
+ WIDTH="633" HEIGHT="185" BORDER="0"
+ SRC="jmanual-img5.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/object.ps}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+ヘッダーは、6つの部分で構成されている。
+MSBの2ビット<EM>m</EM>と<EM>b</EM>は、フィボナッチバディメモリ管理手法の中で、
+隣接セルの終端を示すために使用される。
+
+<P>
+<EM>mark</EM>部分には、3つのマークビットがあり、それぞれ
+ガーベージコレクタ用のアクセス可能セルの認識、
+プリンタ用の環状オブジェクトの認識（
+<TT>#n=</TT>や<TT>#n#</TT>表記法でプリントアウトさせた時）、
+<B>copy-object</B>用の分割オブジェクトのコピーとして使用される。
+<EM>elmt</EM>部分は、ベクトル要素として使用可能な７つのデータ型（
+<TT>pointer, bit, character, byte, integer, float, foreign-string</TT>）
+のうち1つを識別するために使用される。
+しかしながら、<EM>elmt</EM>はクラスの中で利用可能なため、
+クラスの構造と無関係なメモリ管理ができ、
+要素の高速なアクセスができる。
+<EM>bid</EM>部分は、メモリセルの物理的大きさを表現する。
+31の違った大きさ（16MB以上）のメモリセルをこの5ビットで表現する。
+下位のshort word (16ビット)は、クラスＩＤ(cid)として使用される。
+これは、システムのクラステーブルを経由してオブジェクトのクラスを
+引き出すために使用される。
+このクラスIDは、伝統的なLispの型tagとみなすことができる。
+cidは下位8ビットのみが使用され、上位8ビットは無視される。
+したがって、クラスの最大数は256が限界であるけれども、
+システムのクラステーブルにもっとメモリを配置するように
+EusLispを再構築することによって65536まで限界を引き上げることができる。
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

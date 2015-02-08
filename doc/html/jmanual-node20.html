@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>一般化変数</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="一般化変数">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node21.html">
+<LINK REL="previous" HREF="jmanual-node19.html">
+<LINK REL="up" HREF="jmanual-node17.html">
+<LINK REL="next" HREF="jmanual-node21.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html654"
+  HREF="jmanual-node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html648"
+  HREF="jmanual-node17.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html642"
+  HREF="jmanual-node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html650"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html652"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html655"
+  HREF="jmanual-node21.html">特殊書式</A>
+<B> Up:</B> <A NAME="tex2html649"
+  HREF="jmanual-node17.html">書式と評価</A>
+<B> Previous:</B> <A NAME="tex2html643"
+  HREF="jmanual-node19.html">スコープ</A>
+ &nbsp; <B>  <A NAME="tex2html651"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html653"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03023000000000000000">
+一般化変数</A>
+</H2>
+一般的に、どんな値および属性もオブジェクトのスロット（またはスタック）
+で表現される。
+スロットの値を引き出すかまたは変えるときは、
+2つの基本的な命令、<B>access</B>と<B>update</B>で行わなければならない。
+オブジェクトの全てのスロットに対して2つの異なった基本命令を定義する代りに
+EusLispでは、Common Lispのように、一般化変数コンセプトに基づいた
+画一的な更新命令を備えている。
+このコンセプトのなかで、共通書式は、値のアクセス書式あるいはスロットの位置指定
+として認識される。
+したがって、それぞれのスロットに対してアクセスする書式を覚えてさえおけば、更新は
+そのアクセス書式と<B>setf</B>マクロを組み合わせることにより
+実現できる。
+例えば、car値をリストの外に取り出すのと同じ様に<TT>(setf (car '(a b)) 'c)</TT>
+として<B>setf</B>を使用したとき、<TT>(car x)</TT>は<TT>x</TT>のcarスロットのなかの
+値を置き換えることに使用することができる。
+
+<P>
+この方法は、ユーザーが定義したオブジェクト全てに対して
+適用できる。
+クラスや構造体が定義されるとき、それぞれのスロットに対する
+accessやupdate書式は、自動的に定義される。
+それらの書式は、それぞれマクロとして定義されている。その名前は、
+クラス名とスロット名の連結となる。
+例えば、consのcarは<TT>(cons-car '(a b c))</TT>で処理することができる。
+
+<P>
+<PRE>
+(defclass person :super object :slots (name age))
+(defclass programmer :super person :slots (language machine))
+(setq x (instantiate programmer))
+(setf (programmer-name x) "MATSUI"
+      (person-age x) 30)
+(incf (programmer-age x))
+(programmer-age x)   --&gt; 31
+(setf (programmer-language x) 'EUSLISP
+      (programmer-machine x) 'SUN4)
+</PRE>
+
+<P>
+行列要素も同じ手法でアクセスすることができる。
+
+<P>
+<PRE>
+(setq a (make-array '(3 3) :element-type :float))
+(setf (aref a 0 0) 1.0 (aref a 1 1) 1.0 (aref a 2 2) 1.0)
+a --&gt; #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))
+
+(setq b (instantiate bit-vector 10))  --&gt; #*0000000000
+(setf (bit b 5) 1)
+b --&gt; #*0000010000
+</PRE>
+
+<P>
+特定のオブジェクトに特別なsetfメソッドを定義するために
+<B>defsetf</B>マクロを用意している。
+
+<P>
+<PRE>
+(defsetf symbol-value set)
+(defsetf get (sym prop) (val) `(putprop ,sym ,val ,prop))
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

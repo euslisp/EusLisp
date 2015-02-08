@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Functions</TITLE>
+<META NAME="description" CONTENT="Functions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node22.html">
+<LINK REL="up" HREF="manual-node17.html">
+<LINK REL="next" HREF="manual-node24.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html727"
+  HREF="manual-node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html721"
+  HREF="manual-node17.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html717"
+  HREF="manual-node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html723"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html725"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html728"
+  HREF="manual-node24.html">Control Structures</A>
+<B> Up:</B> <A NAME="tex2html722"
+  HREF="manual-node17.html">Forms and Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html718"
+  HREF="manual-node22.html">Macros</A>
+ &nbsp; <B>  <A NAME="tex2html724"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html726"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03026000000000000000">
+Functions</A>
+</H2>
+
+<P>
+A function is expressed by a lambda form which is merely a list
+whose first element is <B>lambda</B>.
+If a lambda form is defined for a symbol using <B>defun</B>, it can be referred
+as a global function name.
+Lambda form takes following syntax.
+
+<P><PRE><TT>
+ (lambda ({var}* <BR>)}*] <BR>
+<BR>) <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN> ((keyword var) [initform])}* <BR>] <BR>)}*]) 
+<BR>  {declaration}* 
+<BR>  {form}*) 
+<BR>
+</TT></PRE>
+<P>
+There is no function type such as EXPR, LEXPR, FEXPR, etc.:
+arguments to a function are always evaluated before its application,
+and the number of acceptable arguments is determined by lambda-list.
+Lambda-list specifies the sequence of parameters to the lambda form.
+Each of <B>&amp;optional, &amp;rest, &amp;key </B> and <B>&amp;aux</B> has special
+meaning in lambda-lists, and these symbols cannot be used as variable
+names.
+Supplied-p variables for &amp;optional or &amp;key parameters are not supported.
+
+<P>
+Since a lambda form is indistinguishable from normal list data,
+<B>function</B> special form must be used to inform the interpreter and
+compiler the form is intended to be a function.
+<A NAME="tex2html7"
+  HREF="manual-footnode.html#foot974"><SUP><SPAN CLASS="arabic">1</SPAN></SUP></A><B>Function</B> is also important to freeze the environment onto the function,
+so that all the lexical variables can be accessible in the function
+even the function is passed to another function of different lexical scope.
+The following program does not work either interpretedly nor after compiled,
+since <TT>sum</TT> from the <TT>let</TT> is invisible  inside lambda form.
+
+<P>
+<PRE>
+(let ((x '(1 2 3)) (sum 0))
+  (mapc '(lambda (x) (setq sum (+ sum x))) x))
+</PRE>
+
+<P>
+To get the expected result, it should be written as follows:
+<PRE>
+(let ((x '(1 2 3)) (sum 0))
+   (mapc #'(lambda (x) (setq sum (+ sum x))) x ))
+</PRE>
+
+<P>
+#' is the abbreviated notation of <B>function</B>,
+i.e. <TT>#'(lambda (x) x)</TT> is equivalent to
+<TT>(function (lambda (x) x))</TT>.
+Here is another example of what is called a funarg problem:
+
+<P>
+<PRE>
+(defun mapvector (f v)
+    (do ((i 0 (1+ i)))
+       ((&gt;= i (length v)))
+       (funcall f (aref v i))))
+(defun vector-sum (v)
+    (let ((i 0))
+       (mapvector #'(lambda (x) (setq i (+ i x))) v)
+       i))
+(vector-sum #(1 2 3 4)) --&gt; 10
+</PRE>
+
+<P>
+EusLisp's closure cannot have indefinite extent:
+i.e. a closure can only survive as long as its outer extent is in effect.
+This means that a closure cannot be used for programming of ``generators".
+The following program does not work.
+
+<P>
+<PRE>
+(proclaim '(special gen))
+(let ((index 0))
+   (setq gen #'(lambda () (setq index (1+ index)))))
+(funcall gen)
+</PRE>
+
+<P>
+However, the same purpose is accomplished by object oriented programming,
+because an object can hold its own static variables:
+<PRE>
+(defclass generator object (index))
+(defmethod generator
+ (:next () (setq index (1+ index)))
+ (:init (&amp;optional (start 0)) (setq index start) self))
+(defvar gen (instance generator :init 0))
+(send gen :next)
+</PRE>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html727"
+  HREF="manual-node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html721"
+  HREF="manual-node17.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html717"
+  HREF="manual-node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html723"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html725"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html728"
+  HREF="manual-node24.html">Control Structures</A>
+<B> Up:</B> <A NAME="tex2html722"
+  HREF="manual-node17.html">Forms and Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html718"
+  HREF="manual-node22.html">Macros</A>
+ &nbsp; <B>  <A NAME="tex2html724"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html726"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

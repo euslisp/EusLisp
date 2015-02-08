@@ -1,0 +1,401 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>他言語インターフェース</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="他言語インターフェース">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node89.html">
+<LINK REL="previous" HREF="jmanual-node87.html">
+<LINK REL="up" HREF="jmanual-node75.html">
+<LINK REL="next" HREF="jmanual-node89.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1735"
+  HREF="jmanual-node89.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1729"
+  HREF="jmanual-node75.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1723"
+  HREF="jmanual-node87.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1731"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1733"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1736"
+  HREF="jmanual-node89.html">VxWorks</A>
+<B> Up:</B> <A NAME="tex2html1730"
+  HREF="jmanual-node75.html">システム関数</A>
+<B> Previous:</B> <A NAME="tex2html1724"
+  HREF="jmanual-node87.html">Ｃで書かれたLisp関数の追加</A>
+ &nbsp; <B>  <A NAME="tex2html1732"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1734"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04015000000000000000">
+他言語インターフェース</A>
+</H2>
+
+<P>
+Euslispとのリンクを考慮していないCの関数もEuslispにロードすることができる。
+これらの関数は、他言語関数と呼ばれる。
+そのようなプログラムは<B>load-foreign</B>マクロによりロードされる。
+そのマクロは、<B>foreign-module</B>のインスタンスを返す。
+オブジェクトファイルの中の外部symbol定義は、モジュールオブジェクトの中に
+登録されている。
+<B>defforeign</B>は、Euslispから呼び出すための
+C関数に対するエントリーを作るために使用される。
+<B>defun-c-callable</B>は、Cから呼び出し可能なlisp関数を定義する。
+呼び出し可能なCの関数は、パラメータを変換し関連するEuslispの関数へ制御を移すために
+<EM>pod-code</EM>と呼ばれる特別なコードを持つ。
+<B>pod-address</B>は、この特別なコードのアドレスを返す。
+そのアドレスはCの関数に通知されるべきである。
+
+<P>
+これは、CのプログラムのサンプルとEuslispへの関数インターフェースである。
+<PRE>
+/* C program named cfunc.c*/
+
+static int (*g)();	/* variable to store Lisp function entry */
+
+double sync(x)
+double x;
+{ extern double sin();
+  return(sin(x)/x);}
+
+char *upperstring(s)
+char *s;
+{ char *ss=s;
+  while (*s) { if (islower(*s)) *s=toupper(*s); s++;}
+  return(ss);}
+
+int setlfunc(f)      /* remember the argument in g just to see */
+int (*f)();          /* how Lisp function can be called from C */
+{ g=f;}
+
+int callfunc(x)      /* apply the Lisp function saved in g to the arg.*/
+int x;
+{ return((*g)(x));}
+
+;;;; Example program for EusLisp's foreign language interface
+;;;; make foreign-module
+(setq m (load-foreign "cfunc.o"))
+
+;; define foreign functions so that they can be callable from lisp
+(defforeign sync m "sync" (:float) :float)
+(defforeign toupper m "upperstring" (:string) :string)
+(defforeign setlfunc m "setlfunc" (:integer) :integer)
+(defforeign callfunc m "callfunc" (:integer) :integer)
+
+;; call them
+(sync 1.0)	--&gt; 0.841471
+(print (toupper "abc123"))  --&gt; "ABC123"
+
+;; define a test function which is callable from C.
+(defun-c-callable TEST ((a :integer)) :integer
+      (format t "TEST is called, arg=~s~%" a)
+      (* a a))    ;; return the square of the arg
+;;  call it from C
+;;setlfunc remembers the entry address of Lisp TEST function.
+(setlfunc (pod-address (intern "TEST")))
+(callfunc 12)  --&gt; TEST is called, arg=12  144
+</PRE>
+
+<P>
+Euslispのデータ表現は、以下に示す方法でCのデータ表現に変換される。
+EusLispの30ビット整数（文字列を含む）は、符号拡張され、スタックを通してCの関数に渡される。
+30ビット実数は、倍精度実数(double)に拡張され、スタックを通して渡される。
+文字列と整数ベクトルと実数ベクトルについては、その最初の要素のアドレスのみが
+スタックに渡され、行列自体はコピーされない。
+Euslispには、2次元以上の配列を渡す方法がない。
+2次元以上の配列はすべての要素を線形に保持する1次元ベクトルを持つ。
+このベクトルは、<B>array-entity</B>マクロにより得られる。
+もし、2次元行列をFORTRANのサブルーチンに送る場合、FORTRANにおいて列と行が反対となっているため
+その行列を転置しなければならないことに注意すること。
+
+<P>
+実数のEuslisp表現は、いつも単精度であるので、倍精度の実数のベクトルに渡すとき変換を要する。
+変換関数、<B>double2float</B>と<B>float2double</B>は、この目的でclib/double.cの中に定義されている。
+例えば、もし3x3の実数行列があり、CFのいう名のCの関数にそれを倍精度実数の行列として渡したいなら、
+以下のように使用すればよい。
+<PRE>
+     (setq mat (make-matrix 3 3))
+     (CF (float2double (array-entity mat)))
+</PRE>
+
+<P>
+Cの構造体は、<B>defstruct</B>マクロにより定義することができる。
+<B>defstruct</B>は、次のようなフィールド定義書式によりstruct-nameを受け取る。
+
+<P>
+<PRE>
+     (defcstruct &lt;struct-name&gt;
+        {(&lt;field&gt; &lt;type&gt; [*] [size])}*)
+</PRE>
+たとえば、以下に示す構造体の定義は、つぎの<B>defstruct</B>によって表現される。
+<PRE>
+     /* C definition */
+     struct example {
+        char  a[2];
+        short b;
+        long  *c;
+        float *d[2];};
+
+     /* equivalent EusLisp definition */
+     (defcstruct example
+        (a :char 2)
+        (b :short)
+        (c :long *)
+        (d :float * 2))
+</PRE>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="22586"></A>
+<B>load-foreign</B> <EM>objfile &amp;key symbol-input symbol-output (symbol-file objfile) ld-option) </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> Euslisp以外の言語で書かれたオブジェクトモジュールをロードする。
+Solaris2において、<B>load-foreign</B>は<EM>:entry</EM>パラメータにnull文字列を
+与えた<B>load</B>を呼び出す。
+コンパイルされたコードのオブジェクトが返される。
+この結果は、後に<B>defforeign</B>を呼び出すことによって
+モジュールの中の関数のエントリーを作ることが
+必要である。
+ライブラリーは<EM>ld-option</EM>に指定することができる。
+しかしながら、ライブラリの中に定義されたsymbolはデフォルトのsymbol-outputファイルで
+獲得することができない。
+ライブラリで定義された関数の呼び出しをEuslispに許可するために、
+<EM>symbol-output</EM>と<EM>symbol-file</EM>が明示的に与えられなければならない。
+（もし、<EM>objfile</EM>からのみそれらを参照するならば、これらの引き数は必要ない。）
+<B>load-foreign</B>は、指定されたライブラリとグローバル変数と一緒に<EM>objfile</EM>をEuslispのコアにリンクし、
+リンクされたオブジェクトを<EM>symbol-output</EM>に書き込む。
+それから、<EM>symbol-file</EM>の中のsymbolは、検索され、他言語モジュールの中にリストアップされる。
+<EM>symbol-file</EM>のデフォルトが<EM>objfile</EM>であるので、もし<EM>symbol-file</EM>が与えられないなら、
+<EM>objfile</EM>に定義されているsymbolのみ認識される。
+<EM>objfile</EM>とライブラリの両方のグローバルエントリーをすべて見るために、
+<B>load-foreign</B>の最初のプロセスリンクの結果であるリンクされた(マージされた)symbolテーブル
+は確かめられなければならない。このような理由で、<EM>symbol-output</EM>と<EM>symbol-file</EM>の両方に
+同一のファイル名を与えなければならない。
+
+<P>
+以下に示されるように、中間のsymbolファイルは<B>unix:unlink</B>によって
+削除することができる。
+しかしながら、もし同じライブラリを参照する２つ以上の他言語モジュールをロードするとき、
+ライブラリの2重化を避けたいなら、<EM>symbol-output</EM>引き数を使用しなければならない。
+上記の例として、"linpack.a"のすべての関数をロードしており、
+次に"linpack.a"の関数を呼び出している他のファイル"linapp.o"を呼びだそうとしていると仮定する。
+次の<B>load-foreign</B>呼び出しは、"euslinpack"をunlinkする前に発行しなければならない
+<TT>(load-foreign "linapp.o" :symbol-input "euslinpack")</TT>。
+<B>load-foreign</B>と<B>defforeign</B>のもっと完全な例は、<TT>*eusdir*/llib/linpack.l</TT>で
+見ることができる。
+
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+(setq linpack-module
+    (load-foreign "/usr/local/eus/clib/linpackref.o"
+        :ld-option  "-L/usr/local/lib -llinpack -lF77 -lm -lc"
+        :symbol-output "euslinpack"
+        :symbol-file "euslinpack"
+        ))
+(unix:unlink "euslinpack")
+</PRE>
+
+<P>
+
+<A NAME="22623"></A>
+<B>defforeign</B> <EM>funcname module cname paramspec resulttype </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+他言語モジュールの中の関数エントリーを作る。
+<EM>funcname</EM>は、Euslispに作られるsymbolである。
+<EM>module</EM>は、<B>load-foreign</B>によって返されるコンパイルされたコードのオブジェクトである。
+<EM>cname</EM>は、他言語プログラムの中で定義されているCの関数の名前である。
+その名前は"_myfunc"のような文字列である。
+<EM>paramspec</EM>は、パラメータの型指定のリストである。
+それは、EuslispからCの関数に引き数を渡すときに、データの型変換と強制(coercion)を行うために使用される。
+データ変換がなかったり、あるいは型チェックが必要ないとき、<EM>paramspec</EM>はNILで構わない。
+<TT>:integer, :float, :string</TT>, <TT>(:string n)</TT>の内の１つが<EM>resulttype</EM>に与えられなければならない。
+<TT>:integer</TT>は、Cの関数がchar,short,int(long)のいずれかを返すことを意味する。
+<TT>:float</TT>は、返す値がfloatあるいはdoubleのときに指定する。
+<TT>:string</TT>は、C関数がstringへのポインターを返すことを意味し、
+EuslispはEuslispの文字列に変更するためにstringにlong-wordのヘッダーを追加する。
+文字列の長さは<B>strlen</B>によって見つけられる。
+stringの直前に書き込まれるヘッダーは、悲惨な結果を引き起こすことがあることに注意。
+もう一方で、<TT>(:string n)</TT>は、安全だが遅い。なぜなら、
+<B>n</B>の長さを持つEuslispの文字列が新しく作成され、Cの文字列の内容が
+そこにコピーされるからである。
+<TT>(:string 4)</TT>は、整数へのポインターを返すCの関数に使用できる。
+FORTRANユーザーは、FORTRANの関数あるいはサブルーチンのあらゆる引き数は、
+call-by-refferenceによって渡されることに注意すべきである。
+したがって、1つの整数あるいは実数型の引き数でさえFORTRANへ
+渡される前に整数ベクトルあるいは実数ベクトルに
+置かれなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22649"></A>
+<B>defun-c-callable</B> <EM>funcname paramspec resulttype . body </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+他言語のコードから呼び出すことができるEuslispの関数を定義する。
+<EM>funcname</EM>は、Euslispの関数として定義されているsymbolである。
+<EM>paramspec</EM>は、<B>defforeign</B>の中の型指定のリストである。
+<B>defforeign</B>のparamspecと違い、<B>defun-c-callable</B>のparamspecは、
+関数が引き数を全く受け取らない場合以外、省略することができない。
+<TT>:integer</TT>は、int,char,shortのすべての型に使用すべきである。
+<TT>:float</TT>は、floatとdoubleに使用する。
+<EM>resulttype</EM>は、Lisp関数の型である。
+<EM>resulttype</EM>は、型のチェックあるいは整数から実数に型の強制を
+必要とする場合を除いて、省略することができる。
+<EM>body</EM>は、この関数がCから呼び出されるとき、実行されるlisp表現である。
+<B>defun-c-callable</B>で定義されている関数は、Lisp表現からでも
+呼び出すことができる。
+<B>defun-c-callable</B>は<EM>funcname</EM>を返す。
+その返り値は、symbolのようであるが、そうではなく、symbolのサブクラスである
+<B>foreign-pod</B>のインスタンスである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22673"></A>
+<B>pod-address</B> <EM>funcname </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>defun-c-callable</B>で定義されたCで呼び出し可能なLisp関数<EM>funcname</EM>における
+他言語とEuslispとのインターフェースコードのアドレスを返す。
+これは、他言語プログラムにLisp関数の位置を知らせるために使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22685"></A>
+<B>array-entity</B> <EM>array-of-more-than-one-dimension </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+多次元配列の要素を保持する１次元ベクトルを返す。
+これは、多次元あるいは一般の配列を他言語に渡すために必要である。
+しかし、１次元のベクトルは直接渡すことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22695"></A>
+<B>float2double</B> <EM>float-vector [doublevector] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>float-vector</TT>を倍精度実数の表現に変換する。
+その結果は、<TT>float-vector</TT>であるが、最初の引き数の長さの２倍になっている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22707"></A>
+<B>double2float</B> <EM>doublevector [float-vector] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+倍精度実数表現が単精度の<TT>float-vector</TT>に変換される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1735"
+  HREF="jmanual-node89.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1729"
+  HREF="jmanual-node75.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1723"
+  HREF="jmanual-node87.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1731"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1733"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1736"
+  HREF="jmanual-node89.html">VxWorks</A>
+<B> Up:</B> <A NAME="tex2html1730"
+  HREF="jmanual-node75.html">システム関数</A>
+<B> Previous:</B> <A NAME="tex2html1724"
+  HREF="jmanual-node87.html">Ｃで書かれたLisp関数の追加</A>
+ &nbsp; <B>  <A NAME="tex2html1732"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1734"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

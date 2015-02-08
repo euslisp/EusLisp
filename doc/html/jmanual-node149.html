@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>トラッキング</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="トラッキング">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node150.html">
+<LINK REL="previous" HREF="jmanual-node148.html">
+<LINK REL="up" HREF="jmanual-node144.html">
+<LINK REL="next" HREF="jmanual-node150.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2633"
+  HREF="jmanual-node150.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2627"
+  HREF="jmanual-node144.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2621"
+  HREF="jmanual-node148.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2629"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2631"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2634"
+  HREF="jmanual-node150.html">画像ファイル入出力</A>
+<B> Up:</B> <A NAME="tex2html2628"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2622"
+  HREF="jmanual-node148.html">エッジ抽出</A>
+ &nbsp; <B>  <A NAME="tex2html2630"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2632"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04085000000000000000"></A><A NAME="tracking"></A>
+<BR>
+トラッキング
+</H2>
+<TT>"vision/correlation"</TT>に元画像とトラッキングしたい画像との
+相関を求める関数が定義されている。
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="49115"></A>
+<BIG CLASS="XLARGE"><B>tracking-window </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>pixel-image</B> 
+<BR>  :slots 		 x-pos y-pos x-vel y-vel
+<BR>
+pattern-size window-size
+<BR>
+x-win y-win window window-margin
+<BR>
+update threshold half-pattern correlation 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>このクラスは、トラッキング画像を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49132"></A>
+<B>:correlation</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像と元画像との間の相関を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49142"></A>
+<B>:grab</B> <EM>&amp;optional (x x-pos) (y y-pos) (sampling 2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+画像入力装置から画像を取り込み、その画像の<B>pixel-image</B>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49153"></A>
+<B>:window-rectangle</B> <EM>val </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowの上に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49163"></A>
+<B>:rectangle</B> <EM>val </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowの上に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49173"></A>
+<B>:move</B> <EM>newpos &amp;aux (newx (aref newpos 0)) (newy (aref newpos 1)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+トラッキングする位置を<EM>newpos</EM>に移動し、新しい画像を取り込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49184"></A>
+<B>:track</B> <EM>display-window &amp;optional th </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowの画像からこの画像をトラッキングする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49194"></A>
+<B>:serach</B> <EM>display-window &amp;optional th </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowの画像からこの画像を捜す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49204"></A>
+<B>:track-and-search</B> <EM>flag &amp;optional th </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像をトラッキングする。
+もし、トラッキングを失敗したとき、Xwindowからこの画像を捜して
+位置を更新する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49214"></A>
+<B>:pos</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+windowの左上位置を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49224"></A>
+<B>:vel</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+トラッキング速度を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49234"></A>
+<B>:insidep</B> <EM>pos &amp;aux (x (aref pos 0)) (y (aref pos 1)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pos</EM>が<B>tracking-window</B>の中に含まれるかどうかをチェックする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49246"></A>
+<B>:update</B> <EM>&amp;optional (flag :get) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>update</TT>に<EM>flag</EM>を設定する。もし、<EM>flag</EM>がなければ、
+<TT>update</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49260"></A>
+<B>:prin1</B> <EM>strm &amp;rest mesg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>tracking-window</B>を名前と次元と一緒に表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49271"></A>
+<B>:init</B> <EM>x y size win-size </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>tracking-window</B>を作成する
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2633"
+  HREF="jmanual-node150.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2627"
+  HREF="jmanual-node144.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2621"
+  HREF="jmanual-node148.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2629"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2631"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2634"
+  HREF="jmanual-node150.html">画像ファイル入出力</A>
+<B> Up:</B> <A NAME="tex2html2628"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2622"
+  HREF="jmanual-node148.html">エッジ抽出</A>
+ &nbsp; <B>  <A NAME="tex2html2630"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2632"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

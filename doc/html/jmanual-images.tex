@@ -1,0 +1,1701 @@
+\batchmode
+
+
+\documentclass{jarticle}
+\RequirePackage{ifthen}
+
+
+\usepackage{makeidx,mytabbing,fancyheadings}
+\usepackage[dvipdfm]{graphicx,color,epsfig}
+\let\epsfile=\epsfig{\usepackage}[dvipdfm,bookmarks=true,bookmarksnumbered=true,bookmarkstype=toc]{hyperref}
+\ifnum 42146=\euc"A4A2 \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}\else
+\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}\fi
+
+%
+\providecommand{\eusversion}{9.00} 
+
+
+\flushbottom
+\makeindex
+\pagestyle{myheadings}
+\oddsidemargin=0cm
+\evensidemargin=0cm
+
+
+\textwidth=16.5cm
+\textheight=24.6cm
+\topmargin=-0.8cm
+\oddsidemargin= 0.5cm
+\evensidemargin=0.5cm
+
+
+\parindent=10pt
+\parskip=1mm
+
+
+\setcounter{totalnumber}{3}
+%
+\renewcommand{\topfraction}{0.99}       % 85% of a page (from page
+                                        %
+\renewcommand{\bottomfraction}{0.99}    % 85% of a page (from page
+                                        %
+\renewcommand{\textfraction}{0.0}      % text shoud occupy 15% or
+                                        
+
+
+
+
+\pagecolor[gray]{.7}
+
+\usepackage[]{inputenc}
+
+
+
+\makeatletter
+
+\makeatletter
+\count@=\the\catcode`\_ \catcode`\_=8 
+\newenvironment{tex2html_wrap}{}{}%
+\catcode`\<=12\catcode`\_=\count@
+\newcommand{\providedcommand}[1]{\expandafter\providecommand\csname #1\endcsname}%
+\newcommand{\renewedcommand}[1]{\expandafter\providecommand\csname #1\endcsname{}%
+  \expandafter\renewcommand\csname #1\endcsname}%
+\newcommand{\newedenvironment}[1]{\newenvironment{#1}{}{}\renewenvironment{#1}}%
+\let\newedcommand\renewedcommand
+\let\renewedenvironment\newedenvironment
+\makeatother
+\let\mathon=$
+\let\mathoff=$
+\ifx\AtBeginDocument\undefined \newcommand{\AtBeginDocument}[1]{}\fi
+\newbox\sizebox
+\setlength{\hoffset}{0pt}\setlength{\voffset}{0pt}
+\addtolength{\textheight}{\footskip}\setlength{\footskip}{0pt}
+\addtolength{\textheight}{\topmargin}\setlength{\topmargin}{0pt}
+\addtolength{\textheight}{\headheight}\setlength{\headheight}{0pt}
+\addtolength{\textheight}{\headsep}\setlength{\headsep}{0pt}
+\setlength{\textwidth}{349pt}
+\newwrite\lthtmlwrite
+\makeatletter
+\let\realnormalsize=\normalsize
+\global\topskip=2sp
+\def\preveqno{}\let\real@float=\@float \let\realend@float=\end@float
+\def\@float{\let\@savefreelist\@freelist\real@float}
+\def\liih@math{\ifmmode$\else\bad@math\fi}
+\def\end@float{\realend@float\global\let\@freelist\@savefreelist}
+\let\real@dbflt=\@dbflt \let\end@dblfloat=\end@float
+\let\@largefloatcheck=\relax
+\let\if@boxedmulticols=\iftrue
+\def\@dbflt{\let\@savefreelist\@freelist\real@dbflt}
+\def\adjustnormalsize{\def\normalsize{\mathsurround=0pt \realnormalsize
+ \parindent=0pt\abovedisplayskip=0pt\belowdisplayskip=0pt}%
+ \def\phantompar{\csname par\endcsname}\normalsize}%
+\def\lthtmltypeout#1{{\let\protect\string \immediate\write\lthtmlwrite{#1}}}%
+\newcommand\lthtmlhboxmathA{\adjustnormalsize\setbox\sizebox=\hbox\bgroup\kern.05em }%
+\newcommand\lthtmlhboxmathB{\adjustnormalsize\setbox\sizebox=\hbox to\hsize\bgroup\hfill }%
+\newcommand\lthtmlvboxmathA{\adjustnormalsize\setbox\sizebox=\vbox\bgroup %
+ \let\ifinner=\iffalse \let\)\liih@math }%
+\newcommand\lthtmlboxmathZ{\@next\next\@currlist{}{\def\next{\voidb@x}}%
+ \expandafter\box\next\egroup}%
+\newcommand\lthtmlmathtype[1]{\gdef\lthtmlmathenv{#1}}%
+\newcommand\lthtmllogmath{\dimen0\ht\sizebox \advance\dimen0\dp\sizebox
+  \ifdim\dimen0>.95\vsize
+   \lthtmltypeout{%
+*** image for \lthtmlmathenv\space is too tall at \the\dimen0, reducing to .95 vsize ***}%
+   \ht\sizebox.95\vsize \dp\sizebox\z@ \fi
+  \lthtmltypeout{l2hSize %
+:\lthtmlmathenv:\the\ht\sizebox::\the\dp\sizebox::\the\wd\sizebox.\preveqno}}%
+\newcommand\lthtmlfigureA[1]{\let\@savefreelist\@freelist
+       \lthtmlmathtype{#1}\lthtmlvboxmathA}%
+\newcommand\lthtmlpictureA{\bgroup\catcode`\_=8 \lthtmlpictureB}%
+\newcommand\lthtmlpictureB[1]{\lthtmlmathtype{#1}\egroup
+       \let\@savefreelist\@freelist \lthtmlhboxmathB}%
+\newcommand\lthtmlpictureZ[1]{\hfill\lthtmlfigureZ}%
+\newcommand\lthtmlfigureZ{\lthtmlboxmathZ\lthtmllogmath\copy\sizebox
+       \global\let\@freelist\@savefreelist}%
+\newcommand\lthtmldisplayA{\bgroup\catcode`\_=8 \lthtmldisplayAi}%
+\newcommand\lthtmldisplayAi[1]{\lthtmlmathtype{#1}\egroup\lthtmlvboxmathA}%
+\newcommand\lthtmldisplayB[1]{\edef\preveqno{(\theequation)}%
+  \lthtmldisplayA{#1}\let\@eqnnum\relax}%
+\newcommand\lthtmldisplayZ{\lthtmlboxmathZ\lthtmllogmath\lthtmlsetmath}%
+\newcommand\lthtmlinlinemathA{\bgroup\catcode`\_=8 \lthtmlinlinemathB}
+\newcommand\lthtmlinlinemathB[1]{\lthtmlmathtype{#1}\egroup\lthtmlhboxmathA
+  \vrule height1.5ex width0pt }%
+\newcommand\lthtmlinlineA{\bgroup\catcode`\_=8 \lthtmlinlineB}%
+\newcommand\lthtmlinlineB[1]{\lthtmlmathtype{#1}\egroup\lthtmlhboxmathA}%
+\newcommand\lthtmlinlineZ{\egroup\expandafter\ifdim\dp\sizebox>0pt %
+  \expandafter\centerinlinemath\fi\lthtmllogmath\lthtmlsetinline}
+\newcommand\lthtmlinlinemathZ{\egroup\expandafter\ifdim\dp\sizebox>0pt %
+  \expandafter\centerinlinemath\fi\lthtmllogmath\lthtmlsetmath}
+\newcommand\lthtmlindisplaymathZ{\egroup %
+  \centerinlinemath\lthtmllogmath\lthtmlsetmath}
+\def\lthtmlsetinline{\hbox{\vrule width.1em \vtop{\vbox{%
+  \kern.1em\copy\sizebox}\ifdim\dp\sizebox>0pt\kern.1em\else\kern.3pt\fi
+  \ifdim\hsize>\wd\sizebox \hrule depth1pt\fi}}}
+\def\lthtmlsetmath{\hbox{\vrule width.1em\kern-.05em\vtop{\vbox{%
+  \kern.1em\kern0.8 pt\hbox{\hglue.17em\copy\sizebox\hglue0.8 pt}}\kern.3pt%
+  \ifdim\dp\sizebox>0pt\kern.1em\fi \kern0.8 pt%
+  \ifdim\hsize>\wd\sizebox \hrule depth1pt\fi}}}
+\def\centerinlinemath{%
+  \dimen1=\ifdim\ht\sizebox<\dp\sizebox \dp\sizebox\else\ht\sizebox\fi
+  \advance\dimen1by.5pt \vrule width0pt height\dimen1 depth\dimen1 
+ \dp\sizebox=\dimen1\ht\sizebox=\dimen1\relax}
+
+\def\lthtmlcheckvsize{\ifdim\ht\sizebox<\vsize 
+  \ifdim\wd\sizebox<\hsize\expandafter\hfill\fi \expandafter\vfill
+  \else\expandafter\vss\fi}%
+\providecommand{\selectlanguage}[1]{}%
+\makeatletter \tracingstats = 1 
+
+
+\begin{document}
+\pagestyle{empty}\thispagestyle{empty}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength hsize=\the\hsize}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength vsize=\the\vsize}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength hoffset=\the\hoffset}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength voffset=\the\voffset}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength topmargin=\the\topmargin}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength topskip=\the\topskip}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength headheight=\the\headheight}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength headsep=\the\headsep}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength parskip=\the\parskip}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength oddsidemargin=\the\oddsidemargin}\lthtmltypeout{}%
+\makeatletter
+\if@twoside\lthtmltypeout{latex2htmlLength evensidemargin=\the\evensidemargin}%
+\else\lthtmltypeout{latex2htmlLength evensidemargin=\the\oddsidemargin}\fi%
+\lthtmltypeout{}%
+\makeatother
+\setcounter{page}{1}
+\onecolumn
+
+% !!! IMAGES START HERE !!!
+
+{\newpage\clearpage
+\lthtmlpictureA{tex2html_wrap418}%
+\epsfig{\usepackage}%
+\lthtmlpictureZ
+\lthtmlcheckvsize\clearpage}
+
+\setcounter{totalnumber}{3}
+
+%
+\providecommand{\ptext}[1]{\tt \begin{quote} \begin{tabbing} #1 \end{tabbing} \end{quote} \rm}%
+
+
+%
+\providecommand{\desclist}[1]{
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item #1
+\end{list}
+\vspace{3mm}}%
+
+
+%
+\providecommand{\functiondescription}[4]{
+
+{\bf #1} \em #2 \rm \hfill [#3] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}#4
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\bfx}[1]{{\bf #1}}%
+
+
+%
+\providecommand{\emx}[1]{{\em #1}}%
+
+
+%
+\providecommand{\longdescription}[3]{
+
+\begin{emtabbing}
+{\bf #1} 
+\it #2
+\rm
+\end{emtabbing}
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item #3
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\funcdesc}[3]{
+
+{\bf #1} \em #2 \rm \hfill [関数] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}#3
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\macrodesc}[3]{
+
+{\bf #1} \em #2 \rm \hfill [マクロ] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}#3
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\specialdesc}[3]{
+
+{\bf #1} \em #2 \rm \hfill [特殊] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}#3
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\methoddesc}[3]{
+
+{\bf #1} \em #2 \rm \hfill [メソッド] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}#3
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\vardesc}[2]{
+
+{\bf #1} \em  \rm \hfill [変数] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}#2
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\fundesc}[2]{
+
+{\bf #1} \em #2 \rm \hfill [関数] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}\hspace{0mm}
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\macdesc}[2]{
+
+{\bf #1} \em #2 \rm \hfill [マクロ] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}\hspace{0mm}
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\spedesc}[2]{
+
+{\bf #1} \em #2 \rm \hfill [特殊] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}\hspace{0mm}
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\metdesc}[2]{
+
+{\bf #1} \em #2 \rm \hfill [メソッド] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}\hspace{0mm}
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\constdesc}[2]{
+
+{\bf #1} \em  \rm \hfill [定数] 
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item \hspace{0mm}#2
+\end{list}
+\vspace{3mm}
+}%
+
+
+%
+\providecommand{\classdesc}[4]{	%class, super slots description
+\vspace{2mm} 
+
+{\Large {\bf #1 }} \hfill [クラス]  %super
+\begin{tabbing}
+\hspace{30mm} :super \hspace{5mm} \= {\bf #2} \\
+\hspace{30mm} :slots \> #3 
+\end{tabbing}
+\vspace{4mm}
+
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item #4
+\end{list}
+\vspace{3mm}}%
+
+
+
+\newedenvironment{refdesc}{
+ \vspace{5mm} \parindent=0mm \topsep=0mm \parskip=0mm \leftmargin=10mm}{
+             \parindent=10mm \topsep=3mm \parskip=1mm \leftmargin=0mm }%
+
+\stepcounter{part}
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\setcounter{enumi}{3}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure597}%
+\begin{figure}\epsfile{file=fig/eta3colavo.ps,width=150mm}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+{\newpage\clearpage
+\lthtmlfigureA{figure720}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/pointer.ps}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1208}%
+$-$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure732}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/object.ps}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure751}%
+\begin{figure}\small
+\begin{verbatim}
+
+object
+     cons
+     propertied-object
+          symbol   -----  foreign-pod
+          package
+          stream
+               file-stream
+               broadcast-stream
+          io-stream ---- socket-stream
+          metaclass
+               vectorclass
+                    cstructclass
+          read-table
+          array
+          thread
+          barrier-synch
+          synch-memory-port
+          coordinates
+               cascaded-coords
+                    body
+                    sphere
+                    viewing
+                         projection
+                              viewing2d
+                              parallel-viewing
+                              perspective-viewing
+                    coordinates-axes
+               viewport
+          line --- edge --- winged-edge
+          plane
+               polygon
+                    face
+                    hole
+               semi-space
+          viewer
+          viewsurface  ----- tektro-viewsurface
+     compiled-code
+          foreign-code
+          closure
+          load-module
+     label-reference
+     vector
+          float-vector
+          integer-vector
+          string
+               socket-address
+               cstruct
+          bit-vector
+          foreign-string
+     socket-port
+     pathname
+     hash-table
+     surrounding-box
+     stereo-viewing\end{verbatim}
+
+\normalsize
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1212}%
+$|$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing3796}%
+\begin{emtabbing}
+{\bf defclass} 
+\it classname \&key \= :super object \` [マクロ] \\
+\> :slots (\{var $|$\  (var [:type type] [:forward selectors])\}*) \\
+\> :metaclass metaclass \\
+\> :element-type t \\
+\> :size -1\\
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline4443}%
+$<$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6496}%
+$\epsilon$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6498}%
+$2^{-21}= 4.768368 \times 10^{-7}$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6500}%
+$2^{-21}$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6504}%
+$\pi$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6506}%
+$2\times \pi$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6508}%
+$\pi/2$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6510}%
+$-2\times \pi$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6512}%
+$-\pi/2$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6514}%
+$>$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6522}%
+$>=$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6526}%
+$<=$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6530}%
+$integer-1$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6532}%
+$integer+1$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6536}%
+$\vert$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6540}%
+$\sin(theta)$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6542}%
+$\cos(theta)$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6544}%
+$\tan(theta)$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6546}%
+$\frac{e^{x}-e^{-x}}{2}$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6548}%
+$\frac{e^{x}+e^{-x}}{2}$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6550}%
+$\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6552}%
+$(y/x)$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline6554}%
+$e^{x}$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline8404}%
+$\backslash$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline8406}%
+$|...|$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline11980}%
+$N=0,1,\cdots$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing11301}%
+\begin{emtabbing}
+{\bf make-array} 
+\it
+dims \&key \= (:element-type vector) \` [関数] \\
+\> (:initial-contents nil) \\
+\> (:initial-element nil) \\
+\> (:fill-pointer nil)  \\
+\> (:displaced-to nil) \\
+\> (:displaced-index-offset 0) \\
+\> (:adjustable nil)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing14977}%
+\begin{emtabbing}
+{\bf open} 
+\it path \&key \= :direction :input \` [関数]\\
+\> :if-exists :new-version \\
+ \> :if-does-not-exist \\
+ \> :permission \#o644 \\
+ \> :buffer-size 512\\
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline15858}%
+$|g:pcube|$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline15876}%
+$\sim$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing18314}%
+\begin{emtabbing}
+{\bf compile-file} 
+\it srcfile \&key \= (:verbose nil) \hspace{43mm} \=
+\` [関数]\\
+\> (:optimize 2) (:c-optimize 1) (:safety 1) \> {\rm ;optimization level} \\
+\> (:pic t)  \> {\rm ;generate position independ-} \\
+\>\>{ \rm ent code to build library} \\
+\> (:cc t) \> {\rm ; run c compiler} \\
+\> (:entry (pathname-name file)) \\
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing18389}%
+\begin{emtabbing}
+{\bf load} 
+\it fname \&key \= :verbose \hspace{20mm} \= *load-verbose* \` [関数]\\
+ \> :package \>  *package* \\
+ \> :entry  \>  (pathname-name fname) \\
+ \> :symbol-input  \> "/usr/local/bin/eus" \\
+ \> :symbol-output \> "a.out" \\
+ \> :ld-option \> ""
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing18483}%
+\begin{emtabbing}
+{\bf system:binload} 
+\it opath qpath \&optional \=
+(entry (pathname-name opath)) \` [関数]\\
+\> (symfile "/usr/local/bin/eus")  \\
+\> (symout "a.out") \\
+\> (ldopt "")\\
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{part}
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline22683}%
+$which=0$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline22685}%
+$which=1$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline22687}%
+$which=2$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+
+
+\setlength{\itemsep}{0cm}%
+
+\setlength{\itemsep}{0cm}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing24777}%
+\begin{emtabbing}
+{\bf connect-vxw} 
+\it\&key \= (:host "asvx0") \` [関数] \\
+\> (:port 2200)\\
+\> (:buffer-size 16384)\\
+\> (:priority 1280)\\
+\> (:option \#x1c)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure24978}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/threadfig.ps,width=130mm}
+\end{center}
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsubsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure24990}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/parathreads.ps,width=120mm}
+\end{center}
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsubsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure25001}%
+\begin{figure}\begin{center}
+\begin{tabular}{c c}
+\epsfile{file=fig/threadobj.ps,width=7.5cm} &
+\epsfile{file=fig/threadpool.ps,width=7.5cm} \\
+\end{tabular}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure25018}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/synchports.ps,width=130mm}
+
+\end{center}
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline27930}%
+$\Vert fltvec\Vert$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline27932}%
+$\Vert fltvec\Vert^2$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline27934}%
+$|fltvec-fltvec2|$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline27936}%
+$|fltvec-fltvec2|^2$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline27940}%
+$p:(1-p)$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline27942}%
+$(1-p)\cdot p1 + p\cdot p2$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline27944}%
+$rowsize \times columnsize$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline27946}%
+$\times$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing27585}%
+\begin{emtabbing}
+{\bf :init} 
+\it\&key \= :pos \hspace{8mm} \= \#f(0 0 0)
+ \` [メソッド] \\
+\> :rot \> \#2f((1 0 0) (0 1 0) (0 0 1)) \\
+ \> :rpy \> roll pitch yaw \\
+ \> :Euler \> az ay az2 \\
+ \> :axis \>  rotation-axis \\
+ \> :angle \> rotation-angle \\
+ \> :4X4   \> 4x4 matrix \\
+ \> :coords \> another coordinates \\
+ \> :properties \>  a list of (ind . value) pair \\
+ \> :name \> name property \\
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{section}
+{\newpage\clearpage
+\lthtmlfigureA{figure29523}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/beam.ps,height=10cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline32817}%
+$\cdot$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline32823}%
+$0$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline32827}%
+$\Vert$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline32865}%
+$|normal|=1$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure30257}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/fig1.ps,height=19cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline32875}%
+$z$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure35399}%
+\begin{figure}\epsfile{file=fig/fig-peg-in-hole1.ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-in-hole2.ps,width=7.9cm}\\
+\epsfile{file=fig/fig-peg-in-hole3.ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-in-hole4.ps,width=7.9cm}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{figure35407}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/fig-peg-naname-m1.ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-naname-m2.ps,width=7.9cm}\\
+\epsfile{file=fig/fig-peg-naname-m3.ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-naname-m4.ps,width=7.9cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure35666}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/viewcoords.ps,height=10cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing36320}%
+\begin{emtabbing}
+{\bf :init} 
+\it
+\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \` [メソッド]\\
+       \> :view-direction \> nil \\
+       \> :view-up \>  \#f(0.0 0.0 1.0)) \\
+       \> :view-right \>  nil \\
+       \> \&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing36458}%
+\begin{emtabbing}
+{\bf :init} 
+\it
+\&key \= :hither  \hspace{5mm} \= 100.0 \` [メソッド]\\
+      \> :yon    \> 1000.0 \\
+      \> :aspect \> 1.0  \\
+      \> :screen \> 100.0 \\
+      \> :screen-x  \> screen \\
+      \> :screen-y \> (* screen-x aspect) \\
+      \>  \&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline37408}%
+$x=-1, x=1, y=-1, y=1, z=0, z=1$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing37114}%
+\begin{emtabbing}
+{\bf view} 
+\it\&key \= (:size 500) (:width size) (:height size)
+\` [関数] \\
+\> (:x 100) (:y 100) \\
+\> (:title "eusx") \\
+\> (:border-width 3) \\
+\> (:background 0) \\
+\> (:viewpoint \#f(300 200 100)) (:target \#f(0 0 0)) \\
+\> (:viewdistance 5.0)  (:hither 100.0) (:yon 10000.0) \\
+\> (:screen 1.0) (:screen-x screen) (:screen-y screen) \\
+\> (:xcenter 500) (:ycenter 400) \\
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing37204}%
+\begin{emtabbing}
+{\bf render} 
+\it\&key \= :bodies :faces (:viewer *viewer*) \` [関数]\\
+\> (:lights *light-sources*)\\
+\> (colormap *render-colormap*) (y 1.0)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure38979}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/xdraw.ps,height=6cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline41500}%
+$(x, y)$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing40491}%
+\begin{emtabbing}
+{\bf :create} 
+\it\&key ( \= (:parent *root*) \` [メソッド] \\
+\> (:x 0) (:y 0) (:size 256) (:width size) (:height size) (:border-width 2) \\
+\> (:save-under nil) (:backing-store :always) (:backing-pixmap nil)\\
+\> (:border *fg-pixel*) (:background *bg-pixel*) \\
+\> (:map T) (:gravity :northwest) \\
+\> (:title "WINDOW") (:name title) \\
+\> (:font) \\
+\> :event-mask (:key :button :enterLeave :configure :motion)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing40881}%
+\begin{emtabbing}
+{\bf :create} 
+\it\&key \= (:drawable defaultRootWindow) \` [メソッド]\\
+\> (:foreground *fg-pixel*) (:background *bg-pixel*) \\
+\> :function :plane-mask \\
+\> :line-width :line-style :cap-style :join-style \\
+\> :font :dash \\
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing41066}%
+\begin{emtabbing}
+{\bf :change-attributes} 
+\it\&key \= :function :plane-mask :foreground :background
+\`[メソッド]\\
+\>:line-width :line-style :cap-style :join-style :font :dash
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline41504}%
+$2^{2+2+2}=2^6=64$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing41297}%
+\begin{emtabbing}
+{\bf :define-rainbow-LUT} 
+\it\= LUT-name count \` [メソッド]\\
+\> (hue-start 0) (hue-end 360)\\
+\> (brightness 0.5)\\
+\> (saturation 1.0) (private nil)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline41506}%
+$-1$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44388}%
+\begin{emtabbing}
+{\bf :create} 
+\it\&rest args \= \&key \= ((:item-height iheight) 30)
+((:item-width iwidth) 50)
+\` [メソッド]\\
+\>\> (:font font-lucidasans-bold-12)  ((:background color) *bisque1*) \\
+\> \&allow-other-keys)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{figure43618}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/panellayout.ps,height=7cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44435}%
+\begin{emtabbing}
+{\bf :create-item} 
+\it klass label receiver method \= \&rest args
+\` [メソッド]\\
+\> \&key ((:font fontid)\\
+\> \&allow-other-keys)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44465}%
+\begin{emtabbing}
+{\bf :create-menubar} 
+\it\= \&rest args \`[メソッド]\\
+\> \&key (:font fontid)\\
+\> \&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsubsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44588}%
+\begin{emtabbing}
+{\bf :create} 
+\it\&rest args \= \&key\= (:items) (:border-width 0)
+   (:font font-courb12)
+\` [メソッド]\\
+\>\> (:width 100) (:height-offset 15) (:color *bisque1*)
+                      (:active *bisque2*) \\
+           \>\&allow-other-keys) 
+  
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsubsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure43705}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/filepanel.ps,height=7.5cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsubsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure43715}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/textviewpanel.ps,height=7cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44670}%
+\begin{emtabbing}
+{\bf :create} 
+\it name reciever method \= \&rest args
+\` [メソッド] \\
+\> \&key ((:width w) 100) ((:height h) 100) (:font font-courb12)\\
+\> \&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44714}%
+\begin{emtabbing}
+{\bf :create} 
+\it label revciever method \= \&rest args
+\` [メソッド]\\
+\>\&key\= :width :height (:font (send parent :gc :font))\\
+\>\> (:background (send parent :gc :background)) \\
+\>\> (:border-width 0) \\
+\>\> (:state :top)\\
+\>\&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44771}%
+\begin{emtabbing}
+{\bf :create} 
+\it\= label reciever method \` [メソッド]\\
+\>\&rest args\\
+\>\&key (:menu nil) (:items) (:state :flat)\\
+\>\&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44827}%
+\begin{emtabbing}
+{\bf :create} 
+\it bitmap-file reciever method \= \&rest args
+\` [メソッド]\\
+                 \>\&key :width :height\\
+                 \>\&allow-other-keys)
+
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44884}%
+\begin{emtabbing}
+{\bf :create} 
+\it label reciever method \= \&rest args
+\` [メソッド]\\
+           \>\&key \=(:choices '("0" "1")) (:initial-choice 0)\\
+\>\> (:font (send parent :gc :font))\\
+                \>\>(:button-size 13)\\
+                \>\>(:border-width 0)\\
+  
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing44972}%
+\begin{emtabbing}
+{\bf :create} 
+\it label reciever method \= \&rest args
+\` [メソッド]\\
+\>\&key (:min 0.0) (:max 1.0) (:parent)\\
+\>(:min-label "") (:max-label "") (:value-format "~4,2f")\\
+\>(:font font-courb12) (:span 100) (:border-width 0) (:initial-value min)  
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing45023}%
+\begin{emtabbing}
+{\bf :create} 
+\it name reciever method \= \&rest args
+\` [メソッド]\\
+           \>\&key \=(:stick-size 5) (:return nil)\\
+                \>\>(:min-x -1.0) (:max-x 1.0)\\
+                \>\>(:min-y -1.0) (:max-y 1.0)\\
+           \>\&allow-other-keys) 
+  
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{figure43873}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/panelitem.ps,height=5cm}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing45080}%
+\begin{emtabbing}
+{\bf :create} 
+\it label revciever method \= \&rest args \` [メソッド]\\
+\>\&key (:font font-courb12) (:columns 20) (:initial-value ) (:border-width 0)\\
+\>\&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing45157}%
+\begin{emtabbing}
+{\bf :create} 
+\it\=\&rest args \` [メソッド]\\
+\>\&key \=:width :height (:font font-courb14) :rows :columns\\
+\>(:show-cursor nil) (:notify-object nil) (:notify-method nil)\\
+\>\&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+\stepcounter{subsection}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing48527}%
+\begin{emtabbing}
+{\bf :edge1} 
+\it\&optional \= (method 1) \` [メソッド]\\
+\> (th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
+\> (run *edge-length-threshold*)\\
+\> (win geometry:*viewsurface*) (edgeimg1)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing48739}%
+\begin{emtabbing}
+{\bf :edge1} 
+\it\&optional \= (method 1) \` [メソッド]\\
+\> (th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
+\> (run *edge-length-threshold*)\\
+\> (win *color-viewer*)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing48791}%
+\begin{emtabbing}
+{\bf edge1} 
+\it img \= \&optional \= (method 1) \` [関数]\\
+\> \> (th1 *edge-intensity-threshold*)\\
+\> \> (th2 *weak-edge-threshold*) \\
+\> \> (run *edge-length-threshold*)\\
+\> \> result\\
+\> \&aux (width (send img :width)) (height (send img :height))
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing48833}%
+\begin{emtabbing}
+{\bf edge2} 
+\it img1 edge1result \&key \= (:kvalue 8.0) \` [関数]\\
+\> (:curve-threshold 0.8)\\
+\> (:line-error 2.8)\\
+\> (:curve-error 2.8)\\
+\> (:plane-limit 0.3)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing48961}%
+\begin{emtabbing}
+{\bf draw-segments} 
+\it segs \&key \= (:line-gc image::*red-gc*) \` [関数]\\
+\> (:ellipse-gc line-gc)\\
+\> (:vs geometry:*viewsurface*)\\
+\> (:height (send vs :height))\\
+\> (:step nil)\\
+\> (:x 0) (:y 0)
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{figure47790}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/block1.edg.ps,height=9cm}
+
+\end{center}
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+\stepcounter{subsection}
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing50879}%
+\begin{emtabbing}
+{\bf defjoint} 
+\it joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \` [マクロ]\\
+\> :color \> {\it color-id} \hspace{2cm} \= ;0-15 for MMD \\
+\> :parent \> {\it parent-joint} \\
+\> :axis \> {\it rotational-axis} \>  ; :x, :y or :z \\
+\> :offset \> {\it trans-from-parent-joint} \\
+\> :low-limit \> {\it joint-angle-limit-low} \\
+\> :high-limit \> {\it joint-angle-limit-hight}
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing50899}%
+\begin{emtabbing}
+{\bf defmanipulator} 
+\it manipulator-name \&key \= :class \hspace{2cm} \= {\it manipulator-class} \` [マクロ]\\
+\> :base \> {\it base-joint} \\
+\> :joints \>  {\it list-of-all-joints} \\
+\> :hand \> {\it handjoint} \\
+\> :left-finger \> {\it left-finger}\\
+\> :right-finger \> {\it right-finger}\\
+\> :handcoords \> {\it trans-from-hand-to-armsolcoords}\\
+\> :toolcoords \> {\it trans-from-armsolcoords-to-toolcoords} \\
+\> :open-direction \> {\it finger-open-direction}\\
+\> :right-handed  \> {\it righty-or-lefty}
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{emtabbing51180}%
+\begin{emtabbing}
+{\bf :create} 
+\it\= \&rest args \` [メソッド]\\
+\> \&key \= (:name nm) (:hand h) (:joints j)\\
+\> \> (:left-finger lf) (:right-finger rf)\\
+\> \> ((:toolcoords tc) (make-coords))\\
+\> \> ((:handcoords hc) (make-coords))\\
+\> \> ((:base bs) (make-cascoords))\\
+\> \> (open-direction (floatvector 0 1 0))\\
+\> \> ((:max-span mspan) 100.0)\\
+\> \> ((:lefty lft) t)\\
+\> \> ((:act a) nil)\\
+\> \&allow-other-keys
+\rm
+\end{emtabbing}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline51190}%
+$T$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline51194}%
+$
+\begin{array}{ll}
+T & = base \cdot J1 \cdot J2 \cdot \ldots 
+\cdot J6 \cdot handcoords \cdot toolcoords \\
+ & = (send \; eta3 \; :worldcoords) \\
+T_{Jn} & = base \cdot J1\cdot \ldots \cdot Jn \\
+ & = (send \; Jn \; :worldcoords) \\
+T_{arm} & = J1 \cdot J2 \cdot \ldots \cdot J6 \cdot handcoords \\
+ & = (send \; eta3 \; :armsol-coords) \\
+T_{tool} & = J1 \cdot J2 \cdot  \ldots \cdot J6 \cdot handcoords \cdot toolcoords \\
+ & = (send \; eta3 \; :copy-coords) \\
+T_{t} & = toolcoords \\
+ & = (manipulator-toolcoords \; eta3)\\
+T_{t}^{-1} & = toolcoords^{-1} \\
+ & = (manipulator-toolinverse \; eta3) \\
+T_{h} & = handcoords \\
+ & = (manipulator-handcoords \; eta3)\\
+\end{array}$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{figure50850}%
+\begin{figure}\begin{center}
+\epsfile{file=fig/eta3coords.ps,height=100mm}
+\end{center}
+
+\par
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline51674}%
+$\rightarrow$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlfigureA{figure51615}%
+\begin{figure}\begin{center}
+\begin{tabular}{c c}
+\epsfile{file=fig/mars.eps,width=0.4\columnwidth} & % I=;f$HF1$83($KJQ99$7$F!#
+\epsfile{file=fig/simst.ps,width=0.6\columnwidth} \\
+\end{tabular}
+
+\end{center}
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{figure51632}%
+\begin{figure}\begin{center}
+\begin{tabular}{c c}
+\epsfile{file=fig/robot-ui2.ps,width=0.5\columnwidth} &
+\epsfile{file=fig/robot-st2.ps,width=0.5\columnwidth} \\
+\end{tabular}
+\end{center}
+
+\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+
+\end{document}

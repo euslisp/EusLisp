@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>テキスト表示パネル</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="テキスト表示パネル">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node139.html">
+<LINK REL="up" HREF="jmanual-node137.html">
+<LINK REL="next" HREF="jmanual-node141.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2503"
+  HREF="jmanual-node141.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2497"
+  HREF="jmanual-node137.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2493"
+  HREF="jmanual-node139.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2499"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2501"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2504"
+  HREF="jmanual-node141.html">パネルアイテム</A>
+<B> Up:</B> <A NAME="tex2html2498"
+  HREF="jmanual-node137.html">パネル</A>
+<B> Previous:</B> <A NAME="tex2html2494"
+  HREF="jmanual-node139.html">ファイルパネル</A>
+ &nbsp; <B>  <A NAME="tex2html2500"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2502"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04072300000000000000">
+テキスト表示パネル</A>
+</H3>
+
+<P>
+TextViewPanelは、テキストファイルを表示するための
+アプリケーションwindowクラスである
+(図 <A HREF="#textviewpanel">17</A>)。
+プログラムテキストは、もっとも簡単なアプリケーションwindowの１つが
+どのように記述されているかを見れる。
+<TT>:create</TT>メソッドにおいて、quitボタンとfindボタンと
+ファイルの中を捜すための文字列を供給するためのtext-itemを
+作成する。
+view-windowは、縦と横にスクロールバーを持ちファイルを表示するための
+ScrollTextWindowである。
+TextViewPanelは、windowマネージャーにより一番外側のタイトルwindowの
+大きさを変えたときview-windowの大きさを変えるために
+<TT>:ConfigureNotify</TT>イベントを捕獲する。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="textviewpanel"></A><A NAME="44175"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+テキスト表示パネルwindow</CAPTION>
+<TR><TD><IMG
+ WIDTH="317" HEIGHT="317" BORDER="0"
+ SRC="jmanual-img88.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/textviewpanel.ps,height=7cm}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+<PRE>
+(defclass TextViewPanel :super panel
+        :slots (quit-button find-button find-text view-window))
+
+(defmethod TextViewPanel
+ (:create (file &amp;rest args &amp;key (width 400) &amp;allow-other-keys)
+    (send-super* :create :width width args)
+    (setq quit-button
+          (send self :create-item panel-button "quit" self :quit))
+    (setq find-button
+          (send self :create-item panel-button "find" self :find))
+    (setq find-text
+          (send self :create-item text-item "find: " self :find))
+    (setq view-window
+            (send self :locate-item
+                (instance ScrollTextWindow :create
+                   :width (setq width (- (send self :width) 10))
+                   :height (- (setq height (send self :height)) 38)
+                   :scroll-bar t :horizontal-scroll-bar t
+                   :map nil      :parent self)))
+    (send view-window :read-file file))
+ (:quit (event)  (send self :destroy))
+ (:find (event)
+    (let ((findstr (send find-text :value)) (found)
+          (nlines (send view-window :nlines)))
+        (do ((i 0 (1+ i)))
+            ((or (&gt;= i nlines) found))
+           (if (substringp findstr (send view-window :line i)) (setq found i)))
+        (when found
+           (send view-window :display-selection found)
+           (send view-window :locate found))))
+ (:resize (w h)
+    (setq width w height h)
+    (send view-window :resize (- w 10) (- h 38)))
+ (:configureNotify (event)
+   (let ((newwidth (send self :width))
+         (newheight (send self :height)))
+        (when (or (/= newwidth width) (/= newheight height))
+          (send self :resize newwidth newheight)))  ) )
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

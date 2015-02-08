@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>視界(viewing)</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="視界(viewing)">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node125.html">
+<LINK REL="previous" HREF="jmanual-node123.html">
+<LINK REL="up" HREF="jmanual-node123.html">
+<LINK REL="next" HREF="jmanual-node125.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2270"
+  HREF="jmanual-node125.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2264"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2258"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2266"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2268"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2271"
+  HREF="jmanual-node125.html">投影</A>
+<B> Up:</B> <A NAME="tex2html2265"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2259"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+ &nbsp; <B>  <A NAME="tex2html2267"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2269"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04051000000000000000">
+視界(viewing)</A>
+</H2>
+<B>viewing</B>オブジェクトは、viewing座標系を処理する。
+この座標系の原点は仮想カメラの位置に置かれる。
+<EM>-z</EM>軸方向がオブジェクトの視線方向で、xy平面が投影画面である。
+<B>viewing</B>が<B>cascaded-coords</B>クラスを継承するので、
+<B>:translate</B>や<B>:rotate</B>や<B>:transform</B>のような
+座標変換メッセージを受け付ける。
+また、<B>cascaded-coords</B>から得られる他のオブジェクトを張り付けることができる。
+したがって、移動物体上のカメラシステムのシミュレーションができる。
+<B>viewing</B>の主な目的は、ワールド座標系で表現されるベクトルを
+カメラ座標系に変換することである。
+変換は、一般の座標変換に対して逆方向で与えられる。
+このローカル座標系内のベクトルはワールド座標系における表現に変換される。
+したがって、<B>viewing</B>は<TT>viewcoords</TT>スロットに逆変換された左手系変換を持つ。
+このスロットは、viewing座標系として普通参照される。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="35729"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+viewing座標系と投影画面</CAPTION>
+<TR><TD><IMG
+ WIDTH="656" HEIGHT="443" BORDER="0"
+ SRC="jmanual-img68.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/viewcoords.ps,height=10cm}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="36302"></A>
+<BIG CLASS="XLARGE"><B>viewing </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (viewcoords) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>viewing変換を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36319"></A>
+<B>:viewpoint</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewing</B>の原点のベクトル位置を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36330"></A>
+<B>:view-direction</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>viewing</B>の原点から画面の中心までのベクトルを返す。
+これは、viewing座標系のz軸方向である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36341"></A>
+<B>:view-up</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系におけるこの<B>viewing</B>のy軸ベクトルを返す。
+y軸は、<B>viewport</B>の上方である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36353"></A>
+<B>:view-right</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系におけるこの<B>viewing</B>のx軸ベクトルを返す。
+x軸は、<B>viewport</B>の水平右方向である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36365"></A>
+<B>:look</B> <EM>from &amp;optional (to #f(0 0 0)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:look</B>は、その目が<EM>from</EM>に位置されており、<EM>to</EM>の位置を
+見ているとしてviewing座標系を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36378"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img69.png"
+ ALT="\begin{emtabbing}
+{\bf :init}
+\it
+\&amp;key \= :target \hspace{12mm} \= \char93 f(0...
+... 1.0)) \\
+\&gt; :view-right \&gt; nil \\
+\&gt; \&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>viewing</B>は、<B>cascaded-coords</B>を継承するので、<EM>:pos</EM>や<EM>:rot</EM>や<EM>:euler</EM>
+や<EM>:rpy</EM>などの<EM>:init</EM>のパラメータはすべてviewing座標系の位置や姿勢を
+指定することに使用できる。
+しかしながら、viewingの<EM>:init</EM>は回転を決定する簡単な方法を持っている。
+もし、<EM>:target</EM>だけが与えられたとき、視線方向は視点から<EM>target</EM>位置
+の方向に決定され、<EM>:view-right</EM>ベクトルはワールド座標系のxy平面に平行な
+x軸に決定される。
+<EM>:view-direction</EM>を<EM>:target</EM>の代わりに指定しても同じ様な
+効果を得られる。
+もし、<EM>:view-up</EM>または<EM>:view-right</EM>パラメータを<EM>:target</EM>あるいは
+<EM>:view-direction</EM>に加えて指定するならば、3つの回転パラメータをすべて
+自分自身で決定することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Numbers</TITLE>
+<META NAME="description" CONTENT="Numbers">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node14.html">
+<LINK REL="previous" HREF="manual-node12.html">
+<LINK REL="up" HREF="manual-node12.html">
+<LINK REL="next" HREF="manual-node14.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html585"
+  HREF="manual-node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html579"
+  HREF="manual-node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html573"
+  HREF="manual-node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html581"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html583"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html586"
+  HREF="manual-node14.html">Objects</A>
+<B> Up:</B> <A NAME="tex2html580"
+  HREF="manual-node12.html">Data Types</A>
+<B> Previous:</B> <A NAME="tex2html574"
+  HREF="manual-node12.html">Data Types</A>
+ &nbsp; <B>  <A NAME="tex2html582"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html584"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03011000000000000000">
+Numbers</A>
+</H2>
+
+<P>
+There are two kinds of numbers,
+integer and float (floating-point number), both are represented
+with 29 bits value and 1 bit sign.
+Thus, integers range from -536,870,912 to 536,870,911.
+Floats can represent plus/minus from 4.8E-38 to 3.8E38 with the
+approximate accuracy of 6 digits in decimal, i.e.,
+floating-point epsilon is approximately 1/1,000,000.
+
+<P>
+Numbers are always represented by immediate data, and not by objects.
+This is the only exception of EusLisp's object orientation.
+However, since numbers never waste heap memory, number crunching applications
+run efficiently without causing garbage collection.
+
+<P>
+EusLisp does not have the character type,
+and characters are represented by integers.
+In order to write a program independent of character code sets,
+<code>#\</code> reader dispatch macro is used.
+However, when the character is read,
+it is converted to numerical representation, and the printer does not
+know how to reconvert it to
+<code>#\</code> notation.
+
+<P>
+A number has two tag bits in a long word Figure <A HREF="manual-node12.html#Pointer">2</A>,
+which must be stripped off by shifting or masking 
+when used in arithmetic computation.
+Note that an integer should ignore two MSB bits by arithmetic shifting,
+while a float should ignore two LSB bits by masking.
+Byte swap is also necessary for an architecture like VAX which does not use
+the rightmost byte as the least-significant mantissa byte.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html585"
+  HREF="manual-node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html579"
+  HREF="manual-node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html573"
+  HREF="manual-node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html581"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html583"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html586"
+  HREF="manual-node14.html">Objects</A>
+<B> Up:</B> <A NAME="tex2html580"
+  HREF="manual-node12.html">Data Types</A>
+<B> Previous:</B> <A NAME="tex2html574"
+  HREF="manual-node12.html">Data Types</A>
+ &nbsp; <B>  <A NAME="tex2html582"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html584"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2015-02-08
+</ADDRESS>
+</BODY>
+</HTML>
