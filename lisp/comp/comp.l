@@ -1310,8 +1310,8 @@
 		   	 ((memq :sanyo *features*)  " -Dsanyo")
 		   	 ((memq :darwin *features*)
 			  (if (memq :x86_64 *features*)
-			      " -DDarwin -Dx86_64 -DLinux -w -malign-functions=8 "
-			    " -DDarwin -Di386 -DLinux -w -malign-functions=4 "))
+			      " -DDarwin -Dx86_64 -DLinux -w -falign-functions=8 "
+			    " -DDarwin -Di386 -DLinux -w -falign-functions=4 "))
 		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
 			  (cond
                            ((memq :x86_64 *features*)
