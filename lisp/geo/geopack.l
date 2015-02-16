@@ -66,7 +66,7 @@
 
 
 (defun vplus (vertices)
-   (let ((rv (float-vector 0 0 0)))
+   (let ((rv (instantiate float-vector  (length (car vertices)))))
       (dolist (v vertices) (v+ v rv rv))
       rv))
 
