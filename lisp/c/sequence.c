@@ -957,7 +957,7 @@ pointer *x, *y;
   switch (COMPTYPE) {
     case ELM_CHAR: case ELM_BYTE:
 		xx= makeint(*(char *)x); yy= makeint(*(char *)y); break;
-    case ELM_INT: xx=makeint(*x); yy=makeint(*y); break;
+    case ELM_INT: xx=makeint((eusinteger_t)(*x)); yy=makeint((eusinteger_t)(*y)); break;
     case ELM_FLOAT:
 		fx=(eusfloat_t *)x; fy=(eusfloat_t *)y;
 		xx=makeflt(*fx); yy=makeflt(*fy); break;
