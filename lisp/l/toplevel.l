@@ -300,8 +300,9 @@
 
 (defun eustop (&rest argv)
    (when (unix:isatty *standard-input*)
-      (warning-message 4 "~%~A" (lisp-implementation-version))
-      (terpri *error-output*) 
+      (when (null lisp::*quiet*)
+        (warning-message 4 "~%~A" (lisp-implementation-version))
+        (terpri *error-output*) )
       (unix:signal unix::sigint 'sigint-handler
 				2)	; not restart
       (unix:signal unix::sigpipe 'eussig)

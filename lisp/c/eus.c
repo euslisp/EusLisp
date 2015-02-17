@@ -60,6 +60,9 @@ pointer mainport;
   thread_t maintid;
 #endif
 
+int mainargc;
+char *mainargv[32];
+
 
 /****************************************************************/
 /* system defined (built-in) class index
@@ -120,7 +123,7 @@ pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
 pointer TOPLEVEL,QEVALHOOK,ERRHANDLER,FATALERROR;
 pointer QGCHOOK, QEXITHOOK;
-pointer QUNBOUND,QDEBUG;
+pointer QUNBOUND,QDEBUG,QQUIET;
 pointer QTHREADS;	/* system:*threads* */
 pointer QPARAGC;
 pointer QVERSION;
@@ -633,6 +636,10 @@ static void initsymbols()
   QFIXNUM=intern(ctx,"FIXNUM",6,lisppkg);
   QNUMBER=intern(ctx,"NUMBER",6,lisppkg);
   QDEBUG=defvar(ctx,"*DEBUG*",NIL,lisppkg);
+  if(mainargc>1){
+    QQUIET=defvar(ctx,"*QUIET*",T,lisppkg);}
+  else{
+    QQUIET=defvar(ctx,"*QUIET*",NIL,lisppkg);}
 /*  speval(QDEBUG)=NIL; */
   PRCASE=deflocal(ctx,"*PRINT-CASE*",K_DOWNCASE,lisppkg);
   PRCIRCLE=deflocal(ctx,"*PRINT-CIRCLE*",NIL,lisppkg);
@@ -1132,7 +1139,7 @@ register context *ctx;
   eusrt=(char *)getenv("EUSRT");
   if (eusrt==NULL)  sprintf(fname,"%s/lib/eusrt.l", eusdir);
   else strcpy(fname, eusrt);
-  if (isatty(0)!=0) {
+  if (isatty(0)!=0 && speval(QQUIET) == NIL ) {
     fprintf(stderr, "configuring by \"%s\"\n", fname); }
   mkcatchframe(ctx,makeint(0), topjbuf);
   argv=makestring(fname, strlen(fname));
@@ -1141,9 +1148,6 @@ register context *ctx;
   SRCLOAD(ctx, 1, ctx->vsp-1);
   }
 
-
-int mainargc;
-char *mainargv[32];
 
 
 void mainthread(ctx)

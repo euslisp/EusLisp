@@ -207,7 +207,7 @@
 
 (defun init-xwindow (&optional (display (unix:getenv "DISPLAY")))
  (cond ((not (zerop (setq *display* (OpenDisplay display))))
-	(if (unix:isatty *standard-input*)
+	(if (and (unix:isatty *standard-input*) (null lisp::*quiet*))
 	    (warn "connected to Xserver DISPLAY=~A~%"
 	    	 (unix:getenv "DISPLAY")))
 	;; load default fonts
@@ -329,7 +329,7 @@
 	;; initialization finished
 	(when lisp::*use-top-selector*
 	   (send *top-selector* :add-port (display-fd) #'window-main-one)
-	   (if (unix:isatty *standard-input*)
+	   (if (and (unix:isatty *standard-input*) (null lisp::*quiet*))
 	       (warn "X events are being asynchronously monitored.~%")))
 	)
        (t (warning-message 1 "Xserver connection failed"))))
