@@ -126,7 +126,7 @@ int lim;
   register int i,n,etype;
   numunion nu;
   if (prsize[thr_self()]>=lim) return;
-  else if (isint(s)) { sprintf(buf,"%d",intval(s)); prsize[thr_self()]+=strlen(buf);}
+  else if (isint(s)) { sprintf(buf,"%ld",intval(s)); prsize[thr_self()]+=strlen(buf);}
   else if (isflt(s)) prsize[thr_self()]+=7;
   else if (piscons(s)) {
     if (ccar(s)==QUOTE && islist(ccdr(s)) && ccdr(ccdr(s))==NIL) {

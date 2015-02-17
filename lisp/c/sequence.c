@@ -11,6 +11,7 @@
 static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
+#include <math.h> /* for round in coerceintval */
 
 #if (WORD_SIZE == 64)
 #define bitref(vec,index) (((vec)->c.ivec.iv[(index)/64] >> ((index)%64)) & 1L)

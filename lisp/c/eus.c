@@ -374,7 +374,7 @@ va_dcl
 	prinx(ctx,msg,ERROUT); flushstream(ERROUT); break;
     }
   if( ec == E_USER ) {
-      fprintf( stderr,"%s",msg ); flushstream(ERROUT); }
+      fprintf( stderr,"%p",msg ); flushstream(ERROUT); }
   else if (ispointer(msg)) {prinx(ctx,msg,ERROUT); flushstream(ERROUT); }
   if (ctx->callfp) {
     fprintf(stderr," in ");
@@ -957,7 +957,7 @@ eusinteger_t addr;
     goto sigfatal;
     break;
   case SIGPIPE:
-    fprintf(stderr,";; pipe broken %d %x %x\n",code,x,addr);
+    fprintf(stderr,";; pipe broken %d %x %lx\n",code,x,(unsigned long)addr);
     throw(mainctx,makeint(0),NIL);	/*nonsense*/
     break;
   case SIGSEGV:
@@ -975,7 +975,7 @@ eusinteger_t addr;
       flushstream(ERROUT);
       fprintf(stderr,"\n");}
     fprintf(stderr,";; You are still in a signal handler.\n;;Try reset or throw to upper level as soon as possible.\n");
-    fprintf(stderr,";; code=%d x=%x addr=%x\n",code,x,addr);
+    fprintf(stderr,";; code=%d x=%x addr=%lx\n",code,x,(unsigned long)addr);
     reploop(mainctx, "Fatal: ");
     fprintf(stderr,";; No, you cannot continue the previous evaluation.\n");
     /* goto sigfatal; */

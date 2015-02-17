@@ -575,7 +575,7 @@ register int prlevel;
         writestr(f,(byte *)ixbuf,strlen(ixbuf));
         fobj=ixvec[shareix]; }
       else {			/*use #n# expression for labeled obj*/
-        sprintf(ixbuf,"#%d#",intval(x->c.obj.iv[0]));
+        sprintf(ixbuf,"#%ld#",intval(x->c.obj.iv[0]));
         writestr(f,(byte *)ixbuf,strlen(ixbuf));
         return; }
     else fobj=x->c.obj.iv[0];
