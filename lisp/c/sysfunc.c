@@ -116,7 +116,7 @@ register pointer p;
 #if sun4 || vax || i386 
   if ((&ctx->stack[0]<=p) && (p<= &ctx->stack[MAXSTACK])) return(NULL);
 #endif
-  if (issymbol(p)) return(NULL);
+  if (issymbol(p)) return((long int)NULL);
 #if x86_64
   bp=(bpointer)((eusinteger_t)p & ~3L);
 #else
@@ -475,7 +475,7 @@ pointer *argv; /* unused argument */
   ckarg(0);
   for (cnk=chunklist; cnk!=NULL; cnk=cnk->nextchunk) {
     vpush(r);
-    p=cons(ctx,makeint(cnk),cons(ctx,makeint(buddysize[cnk->chunkbix]),NIL));
+    p=cons(ctx,makeint((eusinteger_t)cnk),cons(ctx,makeint(buddysize[cnk->chunkbix]),NIL));
     r=cons(ctx,p,vpop());}
   return(r);}
 
