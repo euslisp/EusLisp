@@ -774,8 +774,8 @@ struct fletframe *scp,*link;
   for (i=0; i<sizeof(struct fletframe)/sizeof(pointer); i++)
     vpush(makeint(0));
   ffp->name=nm;
-  p=cons(ctx,makeint(hide_ptr(scp)),def);
-  p=cons(ctx,makeint(hide_ptr(ctx->bindfp)),p);
+  p=cons(ctx,makeint(hide_ptr((pointer)scp)),def);
+  p=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),p);
   p=cons(ctx,nm,p);
   ffp->fclosure=cons(ctx,LAMCLOSURE,p);
   ffp->scope=scp;
