@@ -211,7 +211,7 @@ int n; pointer argv[];
   numunion nu;
 
   ckarg(1); who=ckintval(argv[0]);
-  getrusage(who,rusage);
+  getrusage(who,(struct rusage *)rusage);
   utime=rusage[0]+rusage[1]*1.0e-6;
   stime=rusage[2]+rusage[3]*1.0e-6;
   for (i=17; i>=4; i--) r=cons(ctx,makeint(rusage[i]),r);
@@ -1294,7 +1294,7 @@ pointer argv[];
   if (n==3) buf=get_string(argv[2]);
   else buf=NULL;
   stat=msgctl(qid,cmnd,(struct msqid_ds *)buf);
-  if (stat==(int)NULL) return(T); else  return(makeint(-errno));}
+  if (stat==(long int)NULL) return(T); else  return(makeint(-errno));}
 #endif
 #endif /*!vxworks*/
 
@@ -1325,7 +1325,7 @@ pointer argv[];
 { char buf[256];
   ckarg(0);
 #if Solaris2 || Linux || Cygwin
-  getcwd(buf,256);
+  char *r = getcwd(buf,256);
 #else
   getwd(buf);
 #endif
@@ -1704,12 +1704,12 @@ pointer argv[];
 pointer SBRK(ctx,n,argv)
 register context *ctx;
 int n; pointer argv[];
-{ return(makeint(sbrk(ckintval(argv[0]))));}
+ { return(makeint((eusinteger_t)sbrk(ckintval(argv[0]))));}
 
 pointer MALLOC(ctx,n,argv)
 register context *ctx;
 int n; pointer argv[];
-{ return(makeint(malloc(ckintval(argv[0]))));}
+ { return(makeint((eusinteger_t)malloc(ckintval(argv[0]))));}
 
 pointer FREE(ctx,n,argv)
 register context *ctx;

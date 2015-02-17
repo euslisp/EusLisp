@@ -94,7 +94,7 @@ struct corinfo *result;
 
       /* correlation factor for a window is obtained in corsum */
       if (corsum<threshold) {
-	if (debug) printf("cor=%d (%d, %d)\n", corsum, x, y);
+	if (debug) printf("cor=%ld (%d, %d)\n", corsum, x, y);
         found=1;
 	threshold=corsum;
 	result->corval=corsum;

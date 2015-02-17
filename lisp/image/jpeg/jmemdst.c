@@ -62,7 +62,7 @@ empty_output_buffer (j_compress_ptr cinfo)
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
 
   
-  fprintf(stderr, " : jpeg compression buffer overflow >%d\n",
+  fprintf(stderr, " : jpeg compression buffer overflow >%ld\n",
 	  *dest->data_count_ptr);
 
   dest->pub.next_output_byte = dest->buffer;

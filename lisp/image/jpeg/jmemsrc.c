@@ -108,7 +108,7 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
    */
   if (num_bytes > 0) {
     if (num_bytes > (long) src->pub.bytes_in_buffer) {
-      fprintf(stderr, "jpeg memory source: skip beyond end-of-data %d\n", num_bytes);
+      fprintf(stderr, "jpeg memory source: skip beyond end-of-data %ld\n", num_bytes);
     }
     src->pub.next_input_byte += (size_t) num_bytes;
     src->pub.bytes_in_buffer -= (size_t) num_bytes;
