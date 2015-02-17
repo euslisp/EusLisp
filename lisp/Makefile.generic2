@@ -320,25 +320,25 @@ $(LCOBJECTS):
 	 $(BINDIR)/gccls eusstart.l; \
         $(CC) -c $(CFLAGS) -o $(OBJDIR)/eusstart.l.o eusstart.l.c)
 $(LOBJECTS) $(MAPOPTION):
-	(echo $*; $(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l)
+	(echo $*; $(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l >/dev/null)
 $(COMPOBJECTS):	$(GCCLS)
-	($(BINDIR)/euscomp <$(TOOLDIR)/compile_comp.l ; \
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_comp.l >/dev/null ; \
 	cd $(COMPDIR); $(BINDIR)/gccls builtins.l; \
 	$(CC) -c $(CFLAGS) -o $(OBJDIR)/builtins.l.o -O builtins.l.c )
 $(GEOOBJECTS):
 	(echo compiling geoobjects; \
-	$(BINDIR)/euscomp <$(TOOLDIR)/compile_geo.l)
+	$(BINDIR)/euscomp <$(TOOLDIR)/compile_geo.l >/dev/null)
 $(XOBJECTS):
-	(cd $(XWINDOWDIR); $(BINDIR)/euscomp <../$(TOOLDIR)/compile_xwindow.l)
+	(cd $(XWINDOWDIR); $(BINDIR)/euscomp <../$(TOOLDIR)/compile_xwindow.l >/dev/null)
 $(XTKOBJECTS):
-	($(BINDIR)/euscomp <$(TOOLDIR)/compile_xwindow.l)
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_xwindow.l >/dev/null)
 $(GLOBJECTS):
-	($(BINDIR)/eusx <$(TOOLDIR)/compile_gl.l)
+	($(BINDIR)/eusx <$(TOOLDIR)/compile_gl.l >/dev/null)
 $(XWINDOWDIR)/Xlibfuncs.o:	$(XWINDOWDIR)/Xlibfuncs.c
 	(cd $(XWINDOWDIR) ; \
 	 $(CC) -c $(CFLAGS) -o $(OBJDIR)/Xlibfuncs.o $(OFLAGS) Xlibfuncs.c)
 $(IMGOBJECTS):
-	($(BINDIR)/euscomp <$(TOOLDIR)/compile_image.l)
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_image.l >/dev/null)
 $(IMGCOBJECTS):
 	(cd $(IMGDIR); \
 	 $(CC) -c -o $(OBJDIR)/$(*F).o $(CFLAGS) $(PIC) $(OFLAGS) $(*F).c)
