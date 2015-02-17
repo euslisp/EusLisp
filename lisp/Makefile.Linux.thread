@@ -55,7 +55,7 @@ DEBUG= # -g
 # In order to include thread library, libc.so.6 is preferrable.
 
 CFLAGS=$(WFLAGS) -D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" \
-	-DLIB6 $(ALIGN_FUNCTIONS) \
+	-DLIB6 $(ALIGN_FUNCTIONS) -fno-stack-protector \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	-DGCC $(GCC3) \
 	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/include
