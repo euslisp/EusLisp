@@ -28,9 +28,14 @@
     (if (= vtype 0) (error 11 self))
     (setq value val))
  (:constant (c &optional (doc nil))
-    (if (= vtype 0)
-	(format *error-output*
+    (when (= vtype 0)
+       (eval-when (eval load)
+	    (format *error-output*
 		"multiple defconstant for ~s: ~s --> ~s~%" self value c))
+       (eval-when (compile)
+            (unless (equal value c)
+                 (format *error-output*
+		    "multiple defconstant for ~s: ~s --> ~s~%" self value c))))
     (if doc (putprop self doc :variable-documentation))
     (setq vtype 0
 	  value c)
