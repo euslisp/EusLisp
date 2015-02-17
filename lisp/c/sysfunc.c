@@ -440,11 +440,11 @@ pointer argv[];
   for (i=0; i<MAXCLASS; i++) {
     klass=classtab[i].def;
     if (klass && isclass(klass)) {
-      sprintf(buf,"%32s%7d cells %7d words %6dKB\n", 
+      sprintf(buf,"%32s%7d cells %7d words %6ldKB\n", 
 	     klass->c.cls.name->c.sym.pname->c.str.chars,
 	     counts[i],sizes[i],sizes[i]*sizeof(pointer)/1024);
       writestr(strm,(byte *)buf,strlen(buf)); } }
-  sprintf(buf,"%32s%7d cells %7d words %6dKB\n","holes",holecount,
+  sprintf(buf,"%32s%7d cells %7d words %6ldKB\n","holes",holecount,
 	  holesize,holesize*sizeof(pointer)/1024);
   writestr(strm,(byte *)buf,strlen(buf));
   return(NIL);}
