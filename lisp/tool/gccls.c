@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 #define MAX_LINE_SIZE 256
 
 static char buf[MAX_LINE_SIZE];

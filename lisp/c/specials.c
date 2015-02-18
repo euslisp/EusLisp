@@ -146,8 +146,8 @@ pointer arg;
   if (iscode(arg)) return(arg);
   else if (ccar(arg)==LAMCLOSURE) return(arg);
   else if (ccar(arg)==LAMBDA) {
-    arg=cons(ctx,makeint(hide_ptr(ctx->fletfp)),ccdr(arg));
-    arg=cons(ctx,makeint(hide_ptr(ctx->bindfp)),arg);
+    arg=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),ccdr(arg));
+    arg=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),arg);
     arg=cons(ctx,funcname,arg);
     return(cons(ctx,LAMCLOSURE,arg));}
   else error(E_ILLFUNC);}
@@ -577,7 +577,7 @@ register pointer arg;
   fns=ccar(arg); ffpp=ctx->fletfp;
   while (iscons(fns)) {	/*allow mutual references between labels functions*/
     fn=ffpp->fclosure;
-    fn=ccdr(fn); fn=ccdr(fn); fn=ccdr(fn); ccar(fn)=makeint(hide_ptr(ctx->fletfp));
+    fn=ccdr(fn); fn=ccdr(fn); fn=ccdr(fn); ccar(fn)=makeint(hide_ptr((pointer)(ctx->fletfp)));
     fns=ccdr(fns); ffpp=ffpp->lexlink;}
   result=progn(ctx,ccdr(arg));
   ctx->fletfp=ffp;
@@ -700,8 +700,8 @@ pointer arg;
   protform=ccar(arg);
   if (islist(arg)) cleanupform=ccdr(arg); else cleanupform=NIL;
   cleaner=cons(ctx,NIL,cleanupform);
-  cleaner=cons(ctx,makeint(hide_ptr(ctx->fletfp)),cleaner);
-  cleaner=cons(ctx,makeint(hide_ptr(ctx->bindfp)),cleaner);
+  cleaner=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),cleaner);
+  cleaner=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),cleaner);
   cleaner=cons(ctx,NIL,cleaner);
   cleaner=cons(ctx,LAMCLOSURE,cleaner);
   /*(LAMDA-CLOSURE bindfp fletfp () . body) */

@@ -1098,7 +1098,7 @@ pointer argv[];
   while (i<n) {
     a=argv[i];
     if (isint(a)) { if (is<(eusinteger_t)a) is=(eusinteger_t)a;}
-    else { fs=intval(is); goto fmax; }
+    else { fs=intval((pointer)is); goto fmax; }
     i++;}
   return((pointer)is);
 fmax:
@@ -1124,7 +1124,7 @@ register pointer argv[];
   while (i<n) {
     a=argv[i];
     if (isint(a)) { if (is>(eusinteger_t)a) is=(eusinteger_t)a;}
-    else { fs=intval(is); goto fmin;}
+    else { fs=intval((pointer)is); goto fmin;}
     i++;}
   return((pointer)is);
 fmin:
@@ -1153,7 +1153,7 @@ pointer LOGAND(context *ctx, int n, pointer argv[])
     if (isint(p)) k &=intval(p);
     else if (isbignum(p)) {
       b=copy_big(p);
-      p=makeint(r);
+      p=makeint((eusinteger_t)r);
       r=b; rsize=bigsize(r); rbv=bigvec(r);
       goto bigand;}
     else error(E_NOINT);}
@@ -1398,7 +1398,7 @@ register pointer argv[];
 #elif Win32 || Cygwin
   randval=((double)rand())/RAND_MAX;
 #else
-  randval=erand48(state->c.ivec.iv);
+  randval=erand48((unsigned short *)(state->c.ivec.iv));
 #endif
 #endif
   if (isint(a)) {
