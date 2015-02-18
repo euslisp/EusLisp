@@ -66,11 +66,13 @@
 
 
 (defun vplus (vertices)
-   (let ((rv (float-vector 0 0 0)))
+  "returns a newly created float-vector that is the sum of all the elements of vector-list. The difference from v+ is that vplus computes the sum of more than two arguments and no result vector can be specified"
+   (let ((rv (instantiate float-vector  (length (car vertices)))))
       (dolist (v vertices) (v+ v rv rv))
       rv))
 
 (defun vector-mean (vertices)
+  "returns the mean vector of vector-list."
    (scale (/ 1.0 (length vertices)) (vplus vertices)))
 
 (defun direction-vector (org dest)
