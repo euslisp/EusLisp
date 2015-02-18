@@ -650,7 +650,7 @@
 	(format cfile "static pointer ___~a();~%" entry)
 	(format cfile "extern pointer ___~a();~%" entry))
     (format cfile "extern pointer build_quote_vector();~%")
-    (format cfile "static register_~a()~%" entry)
+    (format cfile "static int register_~a()~%" entry)
     (format cfile "  { add_module_initializer(~s, ___~a);}~%~%"
 		(concatenate string "___" (pathname-name source-name))
 		 entry)

@@ -602,14 +602,14 @@ register bpointer p;
   if (pisfilestream(s)) {
     if (!isint(s->c.fstream.fname) && s->c.fstream.direction!=NIL) {
       if (s->c.fstream.fd==makeint(0) || s->c.fstream.fd==makeint(1)) {
-	fprintf(stderr,";; gc! bogus stream at %x fd=%d\n",
-		(eusinteger_t)s,intval(s->c.fstream.fd));}
+	fprintf(stderr,";; gc! bogus stream at %lx fd=%ld\n",
+		(unsigned long int)s,intval(s->c.fstream.fd));}
 #if x86_64
       else if (s->c.fstream.fd == 0) {
         // Sometimes, s->c.fstream.fd is 0.
         // c.fstream.fd should be eus integer which least 2bits is 10.
         // So, the condition that s->c.fstream.fd is 0 is obviously bug.
-        fprintf(stderr, ";; closing fstream was failed, %.16X, %d\n", s, s->cix);
+        fprintf(stderr, ";; closing fstream was failed, %p, %d\n", s, s->cix);
       }
       else if ((s->c.stream.buffer == NULL) ||
                ((unsigned long)(s->c.stream.buffer) & 0x7L) != 0x0L ||
@@ -617,12 +617,12 @@ register bpointer p;
         // stream buffer already reclaimed?????
         // very dirty code for avoiding segmentation falut.
         // there are some bugs before here.
-        fprintf(stderr, ";; bad stream buffer, %.16X\n", s->c.stream.buffer);
+        fprintf(stderr, ";; bad stream buffer, %p\n", s->c.stream.buffer);
       }
 #endif
       else if ((closestream(s)==0) && debug)
-        fprintf(stderr,";; gc: dangling stream(address=%x fd=%d) is closed\n",
-	        (eusinteger_t)s,intval(s->c.fstream.fd)); } }
+        fprintf(stderr,";; gc: dangling stream(address=%lx fd=%ld) is closed\n",
+	        (unsigned long int)s,intval(s->c.fstream.fd)); } }
   p->h.cix= -1;
   rbix=p->h.bix;
   p->b.nextbcell=buddy[rbix].bp;
