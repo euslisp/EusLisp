@@ -25,7 +25,7 @@
   (export '(*print-case* *print-circle* *print-object* *print-structure*
 		*print-length* *print-level*
 		*readtable* *toplevel* *read-base* *print-base*
-		*error-handler* *evalhook* *debug* *exit-on-fatal-error*
+		*error-handler* *evalhook* *debug* *quiet* *exit-on-fatal-error*
 		*unbound* *random-state* *features*
 		*package*
 		*standard-input* *standard-output*
@@ -268,17 +268,19 @@
 	  (setq func (cadr (superassoc (concatenate string "___" name)
 				system::*load-entries* nil #'equal nil))))
       (cond (func
-	      (format *error-output* ";; ~a " name)
-	      (finish-output *error-output*)
+              (when (not *quiet*)
+                (format *error-output* ";; ~a " name)
+                (finish-output *error-output*))
 	      (funcall func func)
 	      t)
 	    ((and file 
 		(eq (unix::access (concatenate string *eusdir* "lisp/" file)) T))
-		(format *error-output* ";; ~A " file)
-		(finish-output *error-output*)
+                (when (not *quiet*)
+                  (format *error-output* ";; ~A " file)
+                  (finish-output *error-output*))
 		(system::srcload (concatenate string *eusdir* "lisp/" file))
 	        t)
-	    (t (format *error-output* ";; ~a-undefined " name) nil))))
+	    (t (when (not *quiet*) (format *error-output* ";; ~a-undefined " name)) nil))))
 (defun system::exec-module-init (name &optional (file))
    (let ((func (cadr (superassoc name system::*load-entries* nil #'equal nil))))
       (if (null func)

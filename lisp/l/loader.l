@@ -347,7 +347,7 @@
 	   (modinits (system::list-module-initializers libmod modules))
 	   (modnames))
       (dolist (m modinits)
-	(when (unix:isatty *standard-input*)
+	(when (and (unix:isatty *standard-input*) (null lisp::*quiet*))
 	  (format *error-output* "~a " (first m))
 	  (finish-output *error-output*))
 	(funcall (second m) (second m))
