@@ -70,7 +70,7 @@
 		  x::colormap))
 	(push :xwindow *features*)
 	(push :Xlib    *features*)
-	(terpri)
+        (if (unix:isatty 0) (terpri *error-output*))
         (when (unix:getenv "DISPLAY")
 	    (x::init-xwindow)
 	    (when  (and (unix:getenv "USE_FILEPANEL")
