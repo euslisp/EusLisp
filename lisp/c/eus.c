@@ -374,7 +374,7 @@ va_dcl
 	prinx(ctx,msg,ERROUT); flushstream(ERROUT); break;
     }
   if( ec == E_USER ) {
-      fprintf( stderr,"%p",msg ); flushstream(ERROUT); }
+      fprintf( stderr,"%p (%s)",msg,msg ); flushstream(ERROUT); }
   else if (ispointer(msg)) {prinx(ctx,msg,ERROUT); flushstream(ERROUT); }
   if (ctx->callfp) {
     fprintf(stderr," in ");
