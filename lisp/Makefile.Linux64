@@ -71,7 +71,8 @@ RAWLIB=-ldl -lm -lpthread
 XLIB= -L/usr/X11R6/lib $(ADD_LDFLAGS) -lX11
 
 # specify directories where euslisp's libraries are located.
-EUSLIB= -Xlinker -R$(ADLIBDIR) -L$(ADLIBDIR) $(ADD_LDFLAGS)
+EUSRPATH=-R$(ADLIBDIR)
+EUSLIB= -Xlinker $(EUSRPATH) -L$(ADLIBDIR) $(ADD_LDFLAGS)
 GLLIB= -L$(ADLIBDIR) $(ADD_LDFLAGS) -lGLU -lGL -lXext -leusgl
 
 # POSIX Thread 
