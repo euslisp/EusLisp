@@ -1373,9 +1373,9 @@
 				      ((memq :sh4 *features*)
 				       "; sh4-linux-gcc -shared -o ")
 				      ((memq :ia32 *features*)
-				       "; ld -melf_i386 -shared -o ")
+				       "; ld -melf_i386 -shared -build-id -o ")
 				      (t
-				       "; ld -shared -o "))
+				       "; ld -shared -build-id -o "))
 				(namestring file.so)
 				" "
 				(namestring file.o))
