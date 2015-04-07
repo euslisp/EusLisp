@@ -34,8 +34,9 @@ XVERSION=X_V11R6_1
 #
 # for ARM
 
-MACHINE=armv6
+#MACHINE=armv6
 #MACHINE=armv5te
+MACHINE=$(shell uname -m | sed 's/\(armv[0-9]\).*/\1/')
 
 GCC_VERSION=$(shell gcc -dumpversion | sed s/\\..\*//)
 ifeq ($(GCC_VERSION), 2)
