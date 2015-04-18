@@ -29,6 +29,11 @@ pointer (**fslot)();
 #else
     x= (eusinteger_t)(fn->c.code.entry); x &= ~3;
 #endif
+#if ARM
+    if (fn->c.code.entry2 != NIL) {
+      x = x | (intval(fn->c.code.entry2)&0x0000ffff);
+    }
+#endif
     subr=(pointer (*)())(x);
     *fslot= subr;
     return((*subr)(ctx,n,argv));

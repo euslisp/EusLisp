@@ -230,6 +230,9 @@ struct code {
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
     pointer entry;	/*offset from beginning of codevector*/
+#if ARM
+    pointer entry2;     /* some archtecture did not set code on 4 byte alignment */
+#endif
     };
 
 struct fcode {		/*foreign function code*/
@@ -246,6 +249,9 @@ struct ldmodule {	/*foreign language object module*/
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
     pointer entry;
+#if ARM
+    pointer entry2;     /* some archtecture did not set code on 4 byte alignment */
+#endif
     pointer symtab;
     pointer objname;
     pointer handle;};	/* dl's handle */
@@ -255,6 +261,9 @@ struct closure {
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
     pointer entry;	/*offset from beginning of codevector*/
+#if ARM
+    pointer entry2;     /* some archtecture did not set code on 4 byte alignment */
+#endif
     pointer env0;	/*upper closure link*/
     pointer *env1;	/*argument pointer:	argv*/
     pointer *env2;};	/*local variable frame:	local*/

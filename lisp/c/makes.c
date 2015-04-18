@@ -291,6 +291,9 @@ pointer (*f)();
   cd->c.code.subrtype=ftype;
   fentaddr= (eusinteger_t)f>>2;
   cd->c.code.entry=makeint(fentaddr);
+#if ARM
+  cd->c.code.entry2=makeint(f);
+#endif
   return(cd);}
 
 
@@ -491,6 +494,9 @@ int size;
   mod->c.ldmod.codevec=vpop();
   mod->c.ldmod.quotevec=NIL;
   mod->c.ldmod.entry=NIL;
+#if ARM
+  mod->c.ldmod.entry2=NIL;
+#endif
   mod->c.ldmod.subrtype=NIL;
   mod->c.ldmod.symtab=NIL;
   mod->c.ldmod.objname=NIL;
@@ -506,6 +512,9 @@ pointer (*f)();
   clo->c.clo.quotevec=quote;
   clo->c.clo.subrtype=SUBR_FUNCTION;
   clo->c.clo.entry=makeint((eusinteger_t)f>>2);
+#if ARM
+  clo->c.clo.entry2=makeint(f);
+#endif
   clo->c.clo.env0=e0;
   clo->c.clo.env1=e1; /*makeint((int)e1>>2);*/
   clo->c.clo.env2=e2; /*makeint((int)e2>>2);*/
