@@ -231,6 +231,12 @@
 	(setq font-helvetica-bold-12 (font-id "*-Helvetica-Bold-R-Normal-*-12-*"))
 	(setq font-helvetica-12 (font-id "*-Helvetica-Medium-R-Normal-*-12-*"))
 	(setq font-a14 (font-id "*-fixed-medium-r-normal-*-14-*"))
+
+	(when (zerop font-cour12)  ;; this is default gc
+	  (setq *display* 0)
+	  (warning-message 1 "~%Xserver connection failed due to missing font server, please try after computer restarts~%")
+	  (return-from init-xwindow))
+
 	(setq *screen-no* (defaultscreen *display*))
 	(setq *screen* (defaultscreenofdisplay *display*))
 	(setq *visual* (defaultvisualofscreen *screen*))
