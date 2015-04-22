@@ -106,6 +106,7 @@
   (defvar *funcdoc-public* nil)
   (defvar *funcdoc-private* nil)
 
+  (format *error-output* ";; Writing ~A document to ~A ..." file output-filename)(finish-output *error-output*)
   (cond ((equal (pathname-type output-filename) "md")
          (defvar *output-format* :md))
         (t
@@ -144,4 +145,5 @@
         (:md
          ))
   (setq *standard-output* t)
+  (format *error-output* "Done~%")
   )
