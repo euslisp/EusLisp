@@ -998,6 +998,11 @@ register int noarg;
 #else
   addr &= ~3;  /*0xfffffffc; ???? */
 #endif
+#if ARM
+  if (func->c.code.entry2 != NIL) {
+    addr = addr | (intval(func->c.code.entry2)&0x0000ffff);
+  }
+#endif
   subr=(pointer (*)())(addr);
 #ifdef FUNCODE_DEBUG
   printf( "funcode:func = " ); hoge_print( func );
@@ -1091,6 +1096,19 @@ int noarg;
     fn=func;
     if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_ILLFUNC);
     subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3 /*0xfffffffc ????*/);
+#if ARM
+    register eusinteger_t addr;
+    addr = (eusinteger_t)(fn->c.code.entry);
+#ifdef x86_64
+    addr &= ~3L;  /*0xfffffffc; ???? */
+#else
+    addr &= ~3;  /*0xfffffffc; ???? */
+#endif
+    if (fn->c.code.entry2 != NIL) {
+      addr = addr | (intval(fn->c.code.entry2)&0x0000ffff);
+    }
+    subr=(pointer (*)())(addr);
+#endif
 #if !Solaris2 && !SunOS4_1 && !Linux && !IRIX && !IRIX6 && !alpha && !Cygwin
     if ((char *)subr>maxmemory) {
 	prinx(ctx,clofunc, STDOUT);

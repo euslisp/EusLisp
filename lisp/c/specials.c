@@ -166,8 +166,22 @@ register pointer argv[];
   mac=ccar(argv[0]); args=ccdr(argv[0]);
   if (issymbol(mac)) mac=getfunc(ctx,mac);
   if (iscode(mac)) {
+#if ARM
+    eusinteger_t addr = (eusinteger_t)(mac->c.code.entry);
+#ifdef x86_64
+    addr &= ~3L;  /*0xfffffffc; ???? */
+#else
+    addr &= ~3;  /*0xfffffffc; ???? */
+#endif
+    addr = addr | (intval(mac->c.code.entry2)&0x0000ffff);
+#endif // ARM
     if (mac->c.code.subrtype!=(pointer)SUBR_MACRO) return(argv[0]);
+#if ARM
+    expander=makecode(mac,(pointer (*)())addr,SUBR_FUNCTION);
+    pointer_update(expander->c.code.entry2,mac->c.code.entry2)
+#else
     expander=makecode(mac,(pointer (*)())mac->c.code.entry,SUBR_FUNCTION);
+#endif
     pointer_update(expander->c.code.entry,mac->c.code.entry);}
   else if (carof(mac,E_NOLIST)==MACRO) expander=cons(ctx,LAMBDA,ccdr(mac));
   else return(argv[0]);

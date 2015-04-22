@@ -112,6 +112,9 @@ register context *ctx;
       addr = (eusinteger_t)initfunc;
       addr= addr>>2;
       mod->c.ldmod.entry=makeint(addr);
+#if ARM
+      mod->c.ldmod.entry2=makeint(initfunc);
+#endif
       mod->c.ldmod.subrtype=SUBR_ENTRY;
       (*initfunc)(ctx,1, &mod); }
     vpop();
@@ -176,6 +179,9 @@ pointer initnames;
       mod=makemodule(ctx,0);
       mod->c.ldmod.codevec=makeint(0);
       mod->c.ldmod.entry=makeint(addr);
+#if ARM
+      mod->c.ldmod.entry2=makeint(initfunc);
+#endif
       mod->c.ldmod.subrtype=SUBR_FUNCTION;
       p=cons(ctx,mod, NIL);
       p=cons(ctx,vpop(), p);	/* (list modname mod) */
@@ -224,6 +230,9 @@ pointer *argv;
       mod=makemodule(ctx,0);
       mod->c.ldmod.codevec=makeint(0);
       mod->c.ldmod.entry=makeint(addr);
+#if ARM
+      mod->c.ldmod.entry2=makeint(initfunc);
+#endif
       mod->c.ldmod.subrtype=SUBR_FUNCTION;
       p=cons(ctx,mod, NIL);
       p=cons(ctx,vpop(), p);	/* (list modname mod) */
@@ -399,6 +408,9 @@ pointer *argv;
     addr=(eusinteger_t)initfunc; addr >>=2;/* ???? */
     mod->c.ldmod.codevec=makeint(0);
     mod->c.ldmod.entry=makeint(addr);
+#if ARM
+    mod->c.ldmod.entry2=makeint(initfunc);
+#endif
     mod->c.ldmod.subrtype=SUBR_FUNCTION;
     (*initfunc)(ctx, 1, &mod); }
   else if (debug) fprintf(stderr,";; no initializer\n");

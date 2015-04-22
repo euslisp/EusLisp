@@ -38,14 +38,20 @@ XVERSION=X_V11R6_1
 #MACHINE=armv5te
 MACHINE=$(shell uname -m | sed 's/\(armv[0-9]\).*/\1/')
 
-GCC_VERSION=$(shell gcc -dumpversion | sed s/\\..\*//)
-ifeq ($(GCC_VERSION), 2)
+GCC_MAJOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\([\.0-9]*\)/\1/')
+GCC_MINOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\([\.0-9]*\)/\2/')
+ifeq ($(GCC_MAJOR_VERSION), 2)
  CPU_OPTIMIZE=
  ALIGN_FUNCTIONS="-malign-functions=4"
 else
  CPU_OPTIMIZE=-march=$(MACHINE)
  ALIGN_FUNCTIONS=-falign-functions=4
  GCC3=-DGCC3
+endif
+
+ADD_LDFLAGS=
+ifneq (,$(findstring t,$(shell if [ $(GCC_MAJOR_VERSION) -ge 4 -a $(GCC_MINOR_VERSION) -ge 5 ] ; then echo t ;fi )))
+ADD_LDFLAGS += -Wl,--no-as-needed
 endif
 
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
@@ -56,7 +62,7 @@ DEBUG= -g
 # In order to include thread library, libc.so.6 is preferrable.
 
 CFLAGS=$(WFLAGS) -D$(MACHINE) -DLinux -DARM -D_REENTRANT -DVERSION=\"$(VERSION)\" \
-	-DLIB6 $(ALIGN_FUNCTIONS) \
+	-DLIB6 $(ALIGN_FUNCTIONS) -fno-stack-protector -fpic \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	-DGCC $(GCC3) \
 	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/include
@@ -84,7 +90,7 @@ RAWLIB=-ldl -lm -lpthread
 XLIB= -L/usr/X11R6/lib -lX11
 
 # specify directories where euslisp's libraries are located.
-EUSLIB= -Xlinker -R$(ADLIBDIR):$(EUSDIR)/lib/ARM -L$(ADLIBDIR) 
+EUSLIB= -Xlinker -R$(ADLIBDIR):$(EUSDIR)/lib/LinuxARM -L$(ADLIBDIR) $(ADD_LDFLAGS)
 GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
 
 # POSIX Thread 

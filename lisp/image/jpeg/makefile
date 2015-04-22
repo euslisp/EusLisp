@@ -33,6 +33,9 @@ ifeq ($(ARCHDIR), Darwin)
 CC += -I/opt/local/lib/jpeg6b/include -I/opt/local/include
 LD += -L/opt/local/lib/jpeg6b/lib     -L/opt/local/lib
 endif
+ifeq ($(ARCHDIR), LinuxARM)
+CC += -fPIC
+endif
 ARCH=$(ARCHDIR)
 LIBDIR=$(EUSDIR)/$(ARCH)/lib
 OBJDIR=$(EUSDIR)/$(ARCH)/obj
