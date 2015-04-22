@@ -22,12 +22,23 @@
              (let (slots-str (doc-str ""))
                (dolist (slot slots)
                  (setq slots-str (concatenate string slots-str (format nil "~A " slot))))
-               (format t "~A" (escape-string (format nil "\\classdesc{~A}{~A}{~A}{}~%" (send cls :name) (send super :name) slots-str)))))
+               (case *output-format*
+                     (:html
+                      (format t "~A" (escape-string (format nil "\\classdesc{~A}{~A}{~A}{}~%" (send cls :name) (send super :name) slots-str))))
+                     (:md
+                      (format t "### ~A~%- :super **~A**~%- :slots ~A~%~%" (send cls :name) (send super :name) slots-str)))
+               ))
            (write-methoddesc (method args doc)
              (let (args-str)
                (dolist (arg args)
                  (setq args-str (concatenate string args-str (format nil "~A " arg))))
-               (format t "~A" (escape-string (format nil "~A{~A}{~A}{~A}~%" (if doc "\\methoddesc" "\\metdesc") method args-str doc)))
+               (case *output-format*
+                     (:html
+                      (format t "~A" (escape-string (format nil "~A{~A}{~A}{~A}~%" (if doc "\\methoddesc" "\\metdesc") method args-str doc))))
+                     (:md
+                      (if (not (equal doc ""))
+                          (format t "##### **~A** ~A~%- ~A~%~%" method args-str doc)
+                        (format t "~A ~A~%~%" method args-str))))
              )))
     (cond ((eq (class cls) metaclass)
            (write-classdesc cls super slots)
@@ -42,11 +53,23 @@
                       )))
              (dolist (method method-with-document)
                (write-methoddesc (first method) (second method) (third method)))
-             (format t "{\\footnotesize ~%")
+             (case *output-format*
+                   (:html
+                    (format t "{\\footnotesize ~%"))
+                   (:md
+                    ))
              (dolist (method method-without-document)
-               (write-methoddesc (first method) (second method) "")
-               (format t "\\vspace*{-5mm}~%"))
-             (format t "}~%")
+               (write-methoddesc (first method) (second method) ""))
+             (case *output-format*
+                   (:html
+                    (format t "\\vspace*{-5mm}~%"))
+                   (:md
+                    ))
+             (case *output-format*
+                   (:html
+                    (format t "}~%"))
+                   (:md
+                    ))
              )
            (format t "~%")
            ))
@@ -55,17 +78,38 @@
 (defun make-function-document (funcname args)
   (let (args-str doc)
     (if (stringp (documentation funcname)) (setq doc (documentation funcname)))
-    (if (null doc) (format t "{\\\footnotesize~%"))
+    (if (null doc)
+        (case *output-format*
+              (:html
+               (format t "{\\\footnotesize~%"))
+              (:md
+               )))
     (dolist (arg args)
       (setq args-str (concatenate string args-str (format nil "~A " arg))))
-    (format t "~A" (escape-string (format nil "~A{~A}{~A}{~A}~%" (if doc "\\funcdesc" "\\fundesc") funcname args-str doc)))
-    (if (null doc) (format t "\\vspace*{-5mm}~%}~%"))
+    (case *output-format*
+          (:html
+           (format t "~A" (escape-string (format nil "~A{~A}{~A}{~A}~%" (if doc "\\funcdesc" "\\fundesc") funcname args-str doc)))
+           (:md
+            (format t "##### **~A** ~A~%" funcname args-str)
+            (if (null (equal doc "")) (format t "- ~A~%" doc))
+            (format t "~%" ))))
+    (if (null doc) 
+        (case *output-format*
+              (:html
+               (format t "\\vspace*{-5mm}~%}~%"))
+              (:md
+               )))
     ))
 
 (defun make-document (file &optional output-filename)
   (defvar *classdoc* nil)
   (defvar *funcdoc-public* nil)
   (defvar *funcdoc-private* nil)
+
+  (cond ((equal (pathname-type output-filename) "md")
+         (defvar *output-format* :md))
+        (t
+         (defvar *output-format* :html)))
 
   (unless (fboundp 'defclass-org)
     (setf (symbol-function 'defclass-org) (symbol-function 'defclass)))
@@ -86,10 +130,18 @@
   (load file)
   (if output-filename
       (setq *standard-output* (open output-filename :direction :output)))
-  (format t "\\begin{refdesc}~%")
+  (case *output-format*
+        (:html
+         (format t "\\begin{refdesc}~%"))
+        (:md
+         ))
   (dolist (e (reverse *classdoc*)) (eval e))
   (dolist (e (reverse *funcdoc-public*)) (eval e))
   (dolist (e (reverse *funcdoc-private*)) (eval e))
-  (format t "\\end{refdesc}~%")
+  (case *output-format*
+        (:html
+         (format t "\\end{refdesc}~%"))
+        (:md
+         ))
   (setq *standard-output* t)
   )
