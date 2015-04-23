@@ -27,6 +27,7 @@ script: # All commands must exit with code 0 on success. Anything else is consid
   - make
   - source bashrc.eus
   - export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=$?; done; [ $EXIT_STATUS == 0 ]
+  - (cd doc; make)
 after_failure:
   - echo "failure"
 after_success:
