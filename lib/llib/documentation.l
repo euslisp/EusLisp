@@ -88,11 +88,11 @@
       (setq args-str (concatenate string args-str (format nil "~A " arg))))
     (case *output-format*
           (:html
-           (format t "~A" (escape-string (format nil "~A{~A}{~A}{~A}~%" (if doc "\\funcdesc" "\\fundesc") funcname args-str doc)))
+           (format t "~A" (escape-string (format nil "~A{~A}{~A}{~A}~%" (if doc "\\funcdesc" "\\fundesc") funcname args-str doc))))
            (:md
             (format t "##### **~A** ~A~%" funcname args-str)
             (if (null (equal doc "")) (format t "- ~A~%" doc))
-            (format t "~%" ))))
+            (format t "~%" )))
     (if (null doc) 
         (case *output-format*
               (:html
