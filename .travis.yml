@@ -12,6 +12,7 @@ notifications:
 env:
   - secure: "f5cLARB4jbydJ4AZVJ5LTgOIzOCCLd9cVgvM/jYU6Y3jPruv0z09jCIbcxSJfeFDxcw5AD6eUgI1UaA2gX3LOsL26rydNDRv2Hwesom3vOsov0SmNMNFKepxKnatDhNUNXtuEgxIJDWBfElPPIBAwKyQnF8laQbDH0tKfmOqGdM="
 before_install: # Use this to prepare the system to install prerequisites or dependencies
+  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   # Define some config vars
   - export CI_SOURCE_PATH=$(pwd)
   - export REPOSITORY_NAME=${PWD##*/}
@@ -51,5 +52,12 @@ after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git add -f .;                     fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git commit -m "Build documents from $TRAVIS_COMMIT" . ;   fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git push -f --quiet https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git gh-pages; fi
+# upload to euslisp-docs
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then git clone https://k-okada:$GH_TOKEN@github.com/jsk-ros-pkg/euslisp-docs.git /tmp/euslisp-docs; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then cd /tmp/euslisp-docs; git remote rm origin; git remote add origin https://k-okada:$GH_TOKEN@github.com/jsk-ros-pkg/euslisp-docs.git; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then cd ${CI_SOURCE_PATH}/doc/latex; ${CI_SOURCE_PATH}/.upload-doc.sh; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then mkdir -p /tmp/euslisp-docs/docs/euslisp; cd /tmp/euslisp-docs/docs/euslisp; cp /tmp/html/*.{md,png} .; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then git add *.md; git commit -m "Update euslisp form https://github.com/$TRAVIS_REPO_SLUG/tree/$TRAVIS_COMMIT"; git push -fq origin master; fi
+
 
 
