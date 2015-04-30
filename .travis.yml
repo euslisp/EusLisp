@@ -51,5 +51,7 @@ after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git add -f .;                     fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git commit -m "Build documents from $TRAVIS_COMMIT" . ;   fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then git push -f --quiet https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git gh-pages; fi
+# upload to euslisp-docs
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then cd ${CI_SOURCE_PATH}; ~/.upload-doc.sh; fi
 
 
