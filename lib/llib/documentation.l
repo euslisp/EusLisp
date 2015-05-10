@@ -12,10 +12,74 @@
              (setq ret (concatenate string ret "\\textless ")))
             ((eq (schar str i) #\>)
              (setq ret (concatenate string ret "\\textgreater ")))
+            ((eq (schar str i) #\\)
+	     (setq ret (concatenate string ret (format nil "~c" (schar str i))))(incf i)
+	     (setq ret (concatenate string ret (format nil "~c" (schar str i)))))
             (t
              (if (memq (schar str i) '(#\& #\# #\* #\_)) (setq ret (concatenate string ret "\\")))
              (setq ret (concatenate string ret (format nil "~c" (schar str i)))))))
     ret))
+
+(defun make-doc-string (doc)
+  (let ((ret ""))
+    (if (= (length doc) 0) (setq doc nil))
+    (case *output-format*
+	  (:html
+	   (cond ((null doc)
+		  doc)
+		 (t
+		  (dotimes (i (length doc))
+		    (cond ((eq (schar doc i) #\newline)
+			   (setq ret (concatenate string ret (format nil "\\\\~%"))))
+			  (t
+			   (setq ret (concatenate string ret (format nil "~c" (schar doc i)))))))
+		  ret)))
+	  (:md
+	   (cond ((null doc)
+		  doc)
+		 (t
+		  (dotimes (i (length doc))
+		    (cond ((eq (schar doc i) #\newline)
+			   (setq ret (concatenate string ret (format nil "<br>~%"))))
+			  (t
+			   (setq ret (concatenate string ret (format nil "~c" (schar doc i)))))))
+		  ret))))
+    ))
+
+(defun make-arg-string (doc args type)
+  (let (arg has-key (args-str ""))
+    (setq *has-key* nil)
+    (case *output-format*
+	  (:html
+	   (dotimes (i (length args))
+	     (setq arg (elt args i))
+	     (if has-key (setq args-str (format nil "~A\\\\~%\\> " args-str)))
+	     (setq args-str (concatenate string args-str (format nil "~A "  arg)))
+	     (when (and doc (eq arg '&key) (> (- (length args) i) 2))
+	       (setq args-str (format nil "~A\\= " args-str) has-key t)
+	       (incf i)
+	       (setq arg (elt args i))
+	       (setq args-str (concatenate string args-str (format nil "~A \\` [~A]" arg type)))))
+	   )
+	  (:md
+	   (cond ((null doc)
+		  (dolist (arg args)
+		    (setq args-str (concatenate string args-str (format nil "*~A* " arg)))))
+		 (t
+		  (if args (setq args-str "&nbsp;&nbsp;&nbsp;"))
+		  (dotimes (i (length args))
+		    (setq arg (elt args i))
+		    (if has-key (setq args-str (format nil "~A<br>&nbsp;&nbsp;&nbsp;" args-str)))
+		    (setq args-str (concatenate string args-str (format nil "*~A* "  arg)))
+		    (when (and doc (eq arg '&key) (> (- (length args) i) 2))
+		      (setq has-key t)
+		      (incf i)
+		      (setq arg (elt args i))
+		      (setq args-str (concatenate string args-str (format nil "*~A* " arg))))))
+		 )
+	   ))
+    (setq *has-key* has-key)
+    args-str))
 
 (defun make-class-document (cls super slots)
   (labels ((write-classdesc (cls super slots)
@@ -30,16 +94,23 @@
                ))
            (write-methoddesc (method args doc)
              (let (args-str)
-               (dolist (arg args)
-                 (setq args-str (concatenate string args-str (format nil "~A " arg))))
+	       (setq doc (make-doc-string doc))
+	       (setq args-str (make-arg-string doc args "method"))
                (case *output-format*
                      (:html
-                      (format t "~A" (escape-string (format nil "~A{~A}{~A}{~A}~%" (if doc "\\methoddesc" "\\metdesc") method args-str doc))))
+		      (cond ((null doc)
+			     (format t "~A" (escape-string (format nil "\\metdesc{~A}{~A}{}~%" method args-str))))
+			    (*has-key*
+			     (format t "~A" (escape-string (format nil "\\longdescription{~A}{~A}{~A}~%" method args-str doc))))
+			    (t
+			     (format t "~A" (escape-string (format nil "\\methoddesc{~A}{~A}{~A}~%" method args-str doc))))))
                      (:md
-                      (if (not (equal doc ""))
-                          (format t "##### **~A** ~A~%- ~A~%~%" method args-str doc)
-                        (format t "~A ~A~%~%" method args-str))))
-             )))
+                      (cond ((null doc)
+			     (format t "~A ~A~%~%" method args-str))
+			    (t
+			     (format t "#### ~A~%~A~%~%- ~A~%~%" method args-str doc))
+			    )));; case
+             ))) ;; label
     (cond ((eq (class cls) metaclass)
            (write-classdesc cls super slots)
            (let ((method-with-document) (method-without-document))
@@ -76,22 +147,31 @@
   ))
 
 (defun make-function-document (funcname args)
-  (let (args-str doc)
+  (let (args-str doc has-key)
     (if (stringp (documentation funcname)) (setq doc (documentation funcname)))
     (if (null doc)
         (case *output-format*
               (:html
-               (format t "{\\\footnotesize~%"))
+               (format t "{\\footnotesize~%"))
               (:md
                )))
-    (dolist (arg args)
-      (setq args-str (concatenate string args-str (format nil "~A " arg))))
+    (setq args-str (make-arg-string doc args "function"))
+    (setq doc (make-doc-string doc))
     (case *output-format*
           (:html
-           (format t "~A" (escape-string (format nil "~A{~A}{~A}{~A}~%" (if doc "\\funcdesc" "\\fundesc") funcname args-str doc))))
-           (:md
-            (format t "##### **~A** ~A~%" funcname args-str)
-            (if (null (equal doc "")) (format t "- ~A~%" doc))
+	   (cond ((null doc)
+		  (format t "~A" (escape-string (format nil "\\fundesc{~A}{~A}~%" funcname args-str))))
+		 (*has-key*
+		  (format t "~A" (escape-string (format nil "\\longdescription{~A}{~A}{~A}~%" funcname args-str doc))))
+		 (t
+		  (format t "~A" (escape-string (format nil "\\funcdesc{~A}{~A}{~A}~%" funcname args-str doc))))
+		 ))
+	  (:md
+	    (cond ((null doc)
+		   (format t "~A ~A~%" funcname args-str))
+		  (t
+		   (format t "### ~A ###~%~A~%~%" funcname args-str)
+		   (format t "- ~A~%" doc)))
             (format t "~%" )))
     (if (null doc) 
         (case *output-format*
