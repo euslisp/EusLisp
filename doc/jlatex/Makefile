@@ -6,10 +6,10 @@ toc:
 	makeindex jmanual.tex
 
 dvi:
-	nkf --in-place -e *.tex
+	platex --version | grep utf8 || nkf --in-place -e *.tex
 	platex jmanual.tex
 	platex jmanual.tex
-	nkf --in-place -u *.tex
+	platex --version | grep utf8 || nkf --in-place -u *.tex
 
 pdf:
 	dvipdfmx jmanual.dvi
