@@ -186,7 +186,7 @@
                )))
     ))
 
-(defun make-document (file &optional output-filename)
+(defun make-document (file &optional output-filename pkg)
   (defvar *classdoc* nil)
   (defvar *funcdoc-public* nil)
   (defvar *funcdoc-private* nil)
@@ -212,6 +212,10 @@
            (push '(make-function-document ',symbol ',args) *funcdoc-public*)
          (push '(make-function-document ',symbol ',args) *funcdoc-private*))
        ))
+  (if (and pkg (find-package pkg))
+      (do-symbols (v (find-package pkg))
+         (if (and (documentation v) (derivedp (send v :func) compiled-code))
+             (push `(make-function-document ',v nil) *funcdoc-public*))))
 
   (load file)
   (if output-filename
