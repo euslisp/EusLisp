@@ -38,11 +38,14 @@
 	   (cond ((null doc)
 		  doc)
 		 (t
-		  (dotimes (i (length doc))
-		    (cond ((eq (schar doc i) #\newline)
-			   (setq ret (concatenate string ret (format nil "<br>~%"))))
-			  (t
-			   (setq ret (concatenate string ret (format nil "~c" (schar doc i)))))))
+                  (let ((s (make-string-input-stream doc)) l pre)
+                    (while (setq l (read-line s nil nil))
+                      (cond ((and (> (length l) 0) (= (elt l 0) #\tab))
+                             (if (null pre) (setq ret (concatenate string ret (format nil "~%"))))
+                             (setq ret (concatenate string ret (format nil "        ~A~%" (subseq l 1)))) ;; 8 space is code block
+                             (setq pre t))
+                            (t
+                             (setq ret (concatenate string ret (format nil "~A <br>~%" l)) pre nil)))))
 		  ret))))
     ))
 
