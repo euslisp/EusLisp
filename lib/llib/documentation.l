@@ -38,11 +38,14 @@
 	   (cond ((null doc)
 		  doc)
 		 (t
-		  (dotimes (i (length doc))
-		    (cond ((eq (schar doc i) #\newline)
-			   (setq ret (concatenate string ret (format nil "<br>~%"))))
-			  (t
-			   (setq ret (concatenate string ret (format nil "~c" (schar doc i)))))))
+                  (let ((s (make-string-input-stream doc)) l pre)
+                    (while (setq l (read-line s nil nil))
+                      (cond ((and (> (length l) 0) (= (elt l 0) #\tab))
+                             (if (null pre) (setq ret (concatenate string ret (format nil "~%"))))
+                             (setq ret (concatenate string ret (format nil "        ~A~%" (subseq l 1)))) ;; 8 space is code block
+                             (setq pre t))
+                            (t
+                             (setq ret (concatenate string ret (format nil "~A <br>~%" l)) pre nil)))))
 		  ret))))
     ))
 
@@ -86,11 +89,13 @@
              (let (slots-str (doc-str ""))
                (dolist (slot slots)
                  (setq slots-str (concatenate string slots-str (format nil "~A " slot))))
+               (if (documentation cls)
+                   (setq doc-str (make-doc-string (documentation cls))))
                (case *output-format*
                      (:html
-                      (format t "~A" (escape-string (format nil "\\classdesc{~A}{~A}{~A}{}~%" (send cls :name) (send super :name) slots-str))))
+                      (format t "~A" (escape-string (format nil "\\classdesc{~A}{~A}{~A}{~A}~%" (send cls :name) (send super :name) slots-str doc-str))))
                      (:md
-                      (format t "### ~A~%- :super **~A**~%- :slots ~A~%~%" (send cls :name) (send super :name) slots-str)))
+                      (format t "### ~A~%- :super **~A**~%- :slots ~A~%~%~A~%~%" (send cls :name) (send super :name) slots-str doc-str)))
                ))
            (write-methoddesc (method args doc)
              (let (args-str)
@@ -196,9 +201,9 @@
     (setf (symbol-function 'defclass-org) (symbol-function 'defclass)))
   (unless (fboundp 'defun-org)
     (setf (symbol-function 'defun-org) (symbol-function 'defun)))
-  (defmacro defclass (cls &key super slots)
+  (defmacro defclass (cls &key super slots documentation (doc documentation))
     `(progn
-       (defclass-org ,cls :super ,super :slots ,slots)
+       (defclass-org ,cls :super ,super :slots ,slots :doc ,doc)
        (push '(make-class-document ,cls ,super '(,@slots)) *classdoc*)))
   (defmacro defun (symbol args &rest body)
     `(progn
