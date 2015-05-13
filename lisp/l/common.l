@@ -794,7 +794,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 ;;;     (proclaim (list 'special name))
 ;;      (set name classobj)
 ;;     (send name :global classobj)
-     (putprop name documentation :class-documentation)
+     (putprop classobj documentation :class-documentation)
 ;; define slot access functions and setf methods for all variables
      (setq variables (coerce  variables  cons))
      (dolist (v variables)
