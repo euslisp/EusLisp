@@ -140,7 +140,7 @@ extern eusinteger_t setjmp_val;
 	 fib(30) to 4M words*/
 #define MAXTHRBUDDY	6	/*small free cells cached thread-locally*/
 #define MAXSTACK	8388608	/* patched: default stack size 16bit -> 23bit, can be expanded by sys:newstack*/
-#define SYMBOLHASH	60	/*initial obvector size in package*/
+#define SYMBOLHASH	300	/*initial obvector size in package*/
 #define MAXCLASS	4096	/* by M.Inaba from 64 */
 #define KEYWORDPARAMETERLIMIT 128	/* patched: default keyword size 32->128 */
 #define ARRAYRANKLIMIT	7	/*minimal requirement for CommonLisp*/
