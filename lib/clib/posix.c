@@ -35,7 +35,7 @@ posix(context *ctx, int n, pointer argv[])
     spevalof(PACKAGE)=unixpkg;
 
 #if Solaris2
-    defun(ctx,"NANOSLEEP",mod,NANOSLEEP);
+    defun(ctx,"NANOSLEEP",mod,NANOSLEEP,NULL);
 #endif
 
 /* restore package*/  spevalof(PACKAGE)=p;
