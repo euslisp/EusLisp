@@ -925,7 +925,6 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 (defun minusp (n) (< n 0))
 (defun oddp (n) (logbitp 0 n))
 (defun evenp (n) (not (logbitp 0 n)))
-(defun /= (n1 n2) (not (= n1 n2)))
 (defun logandc1 (x y) (logand (lognot x) y))
 (defun logandc2 (x y) (logand x (lognot y)))
 (defmacro ecase (&rest x) (cons 'case x))
