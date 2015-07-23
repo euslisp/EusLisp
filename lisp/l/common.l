@@ -925,7 +925,20 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 (defun minusp (n) (< n 0))
 (defun oddp (n) (logbitp 0 n))
 (defun evenp (n) (not (logbitp 0 n)))
-(defun /= (n1 n2) (not (= n1 n2)))
+(defun /= (n1 n2 &rest more-numbers)
+  "Return T if no two of its arguments are numerically equal, NIL otherwise."
+  (if (null more-numbers)
+    (return-from /= (not (= n1 n2)))
+    (nconc more-numbers (list n2)))
+  (tagbody
+   start
+   (when more-numbers
+     (dolist (n more-numbers)
+       (when (= n1 n)
+         (return-from /= nil)))
+     (setq n1 (pop more-numbers))
+     (go start)))
+  t)
 (defun logandc1 (x y) (logand (lognot x) y))
 (defun logandc2 (x y) (logand x (lognot y)))
 (defmacro ecase (&rest x) (cons 'case x))
