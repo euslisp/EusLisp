@@ -2,6 +2,7 @@
 
 rm -fr /tmp/html
 mkdir -p /tmp/html
+sed -i 's@^\(\\tableofcontents\)@% \1@' manual.tex
 latex2html -dir /tmp/html/ -local_icons -auto_prefix -iso_language JP manual -split 1 -no_navigation
 # euslisp-docs, generate markdown from pandoc
 sudo apt-get install -qq -y pandoc

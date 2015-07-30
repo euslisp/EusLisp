@@ -57,7 +57,7 @@ after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then cd /tmp/euslisp-docs; git remote rm origin; git remote add origin https://k-okada:$GH_TOKEN@github.com/jsk-ros-pkg/euslisp-docs.git; fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then cd ${CI_SOURCE_PATH}/doc/latex; ${CI_SOURCE_PATH}/.upload-doc.sh; fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then mkdir -p /tmp/euslisp-docs/docs/euslisp; cd /tmp/euslisp-docs/docs/euslisp; cp /tmp/html/*.{md,png} .; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git add *.md; git commit -m "Update euslisp form https://github.com/$TRAVIS_REPO_SLUG/tree/$TRAVIS_COMMIT"; git push -fq origin master; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then git add *.md *.png; git commit -m "Update euslisp form https://github.com/$TRAVIS_REPO_SLUG/tree/$TRAVIS_COMMIT"; git push -fq origin master; fi
 
 
 
