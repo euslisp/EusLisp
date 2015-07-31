@@ -62,7 +62,7 @@ Arithmetic Predicates</A>
 </H2>
 
  <BR>
-<BR> <A NAME="5738"></A>
+<BR> <A NAME="5772"></A>
 <B>numberp</B> <EM>object </EM>[function]
 
 <DL COMPACT>
@@ -75,7 +75,7 @@ Note that characters are also represented by numbers.
 <BR>
 <BR>
 
-<A NAME="5749"></A>
+<A NAME="5783"></A>
 <B>integerp</B> <EM>object </EM>[function]
 
 <DL COMPACT>
@@ -89,7 +89,7 @@ A float can be converted to an integer by
 <BR>
 <BR>
 
-<A NAME="5762"></A>
+<A NAME="5796"></A>
 <B>floatp</B> <EM>object </EM>[function]
 
 <DL COMPACT>
@@ -103,7 +103,7 @@ An integer can be converted to a float by the <B>float</B> function.
 
 <P>
 
-<A NAME="5774"></A>
+<A NAME="5808"></A>
 <B>zerop</B> <EM>number </EM>[function]
 
 <DL COMPACT>
@@ -114,7 +114,7 @@ An integer can be converted to a float by the <B>float</B> function.
 <BR>
 <BR>
 
-<A NAME="5784"></A>
+<A NAME="5818"></A>
 <B>plusp</B> <EM>number </EM>[function]
 
 <DL COMPACT>
@@ -128,7 +128,7 @@ An integer can be converted to a float by the <B>float</B> function.
 <BR>
 <BR>
 
-<A NAME="5794"></A>
+<A NAME="5828"></A>
 <B>minusp</B> <EM>number </EM>[function]
 
 <DL COMPACT>
@@ -144,7 +144,7 @@ An integer can be converted to a float by the <B>float</B> function.
 
 <P>
 
-<A NAME="5804"></A>
+<A NAME="5838"></A>
 <B>oddp</B> <EM>integer </EM>[function]
 
 <DL COMPACT>
@@ -159,7 +159,7 @@ T if <EM>integer</EM> is odd.
 
 <P>
 
-<A NAME="5815"></A>
+<A NAME="5849"></A>
 <B>evenp</B> <EM>integer </EM>[function]
 
 <DL COMPACT>
@@ -174,14 +174,14 @@ T if <EM>integer</EM> is an even number.
 
 <P>
 
-<A NAME="5826"></A>
-<B>/=</B> <EM>n1 n2 </EM>[function]
+<A NAME="5860"></A>
+<B>/=</B> <EM>n1 n2 &amp;rest more-numbers </EM>[function]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Both <EM>n1</EM> and <EM>n2</EM> must be numbers.
-T if <EM>n1</EM> is not equal to <EM>n2</EM>.
+Both <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if no two of its arguments are numerically equal, NIL otherwise.
 </DD>
 </DL>
 <BR>
@@ -189,14 +189,14 @@ T if <EM>n1</EM> is not equal to <EM>n2</EM>.
 
 <P>
 
-<A NAME="5840"></A>
+<A NAME="5873"></A>
 <B>=</B> <EM>num1 num2 &amp;rest more-numbers </EM>[function]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Both <EM>n1</EM> and <EM>n2</EM> must be numbers.
-T if <EM>n1</EM> is equal to <EM>n2</EM>.
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are the same in value, NIL otherwise.
 </DD>
 </DL>
 <BR>
@@ -204,7 +204,7 @@ T if <EM>n1</EM> is equal to <EM>n2</EM>.
 
 <P>
 
-<A NAME="5854"></A>
+<A NAME="5889"></A>
 <B><SPAN CLASS="MATH"><IMG
  WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img14.png"
@@ -212,13 +212,19 @@ T if <EM>n1</EM> is equal to <EM>n2</EM>.
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are in monotonically decreasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry">16</A>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="5865"></A>
+<P>
+
+<A NAME="5907"></A>
 <B><SPAN CLASS="MATH"><IMG
  WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img7.png"
@@ -226,13 +232,19 @@ T if <EM>n1</EM> is equal to <EM>n2</EM>.
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are in monotonically increasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry">16</A>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="5876"></A>
+<P>
+
+<A NAME="5925"></A>
 <B><SPAN CLASS="MATH"><IMG
  WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img15.png"
@@ -240,13 +252,19 @@ T if <EM>n1</EM> is equal to <EM>n2</EM>.
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are in monotonically nonincreasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry">16</A>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="5887"></A>
+<P>
+
+<A NAME="5943"></A>
 <B><SPAN CLASS="MATH"><IMG
  WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img16.png"
@@ -255,7 +273,8 @@ T if <EM>n1</EM> is equal to <EM>n2</EM>.
 <DL COMPACT>
 <DT> 
 <DD> 
-These comparisons can only be applicable to numbers.
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are in monotonically nondecreasing order, NIL otherwise.
 For numerical comparisons with tolerance, use functions prefixed
 by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry">16</A>.
 </DD>
@@ -296,7 +315,7 @@ by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry"
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2015-07-30
+2015-07-31
 </ADDRESS>
 </BODY>
 </HTML>
