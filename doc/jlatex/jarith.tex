@@ -41,21 +41,37 @@
 \funcdesc{evenp}{integer}{
 {\em integer}が偶数のとき、Tを返す。引数は{\tt integer}のみ有効。}
 
-\funcdesc{/=}{num1 num2}{
-{\em num1}が{\em num2}と等しくないとき、Tを返す。
-{\em num1}と{\em num2}は数値であること。}
+\funcdesc{/=}{num1 num2 \&rest more-numbers}{
+{\em num1}と{\em num2}、{\em more-numbers}でどの2つの数値も等しくないとき、Tを返す。それ以外はNILを返す。
+{\em num1}と{\em num2}、{\em more-numbers}を構成する要素はすべて数値であること。}
 
 \funcdesc{=}{num1 num2 \&rest more-numbers}{
-{\em num1}と{\em num2}等しいときを、T返す。
-{\em num1}と{\em num2}は数値であること。}
+{\em num1}と{\em num2}、{\em more-numbers}がすべて等しいとき、Tを返す。
+{\em num1}と{\em num2}、{\em more-numbers}を構成する要素はすべて数値であること。}
 
-\fundesc{$>$}{num1 num2 \&rest more-numbers}
-\fundesc{$<$}{num1 num2 \&rest more-numbers}
-\fundesc{$>=$}{num1 num2 \&rest more-numbers}
+\funcdesc{$>$}{num1 num2 \&rest more-numbers}{
+{\em num1}、{\em num2}、{\em more-numbers}の全要素がこの順に単調減少であるとき、Tを返す。
+{\em num1}と{\em num2}、{\em more-numbers}を構成する要素はすべて数値であること。
+誤差を含めた数値比較に対しては、
+\ref{Geometry}章に書かれている関数（{\bf eps$>$}）を使用する。}
+
+\funcdesc{$<$}{num1 num2 \&rest more-numbers}{
+{\em num1}、{\em num2}、{\em more-numbers}の全要素がこの順に単調増加であるとき、Tを返す。
+{\em num1}と{\em num2}、{\em more-numbers}を構成する要素はすべて数値であること。
+誤差を含めた数値比較に対しては、
+\ref{Geometry}章に書かれている関数（{\bf eps$<$}）を使用する。}
+
+\funcdesc{$>=$}{num1 num2 \&rest more-numbers}{
+{\em num1}、{\em num2}、{\em more-numbers}の全要素がこの順に単調非増加であるとき、Tを返す。
+{\em num1}と{\em num2}、{\em more-numbers}を構成する要素はすべて数値であること。
+誤差を含めた数値比較に対しては、
+\ref{Geometry}章に書かれている関数（{\bf eps$>=$}）を使用する。}
+
 \funcdesc{$<=$}{num1 num2 \&rest more-numbers}{
-これらの比較演算は、数値のみ適用できる。誤差を含めた数値比較に対しては、
-\ref{Geometry}章に書かれている関数（これらの比較演算子の前に{\bf eps}が
-ついている）を使用する。}
+{\em num1}、{\em num2}、{\em more-numbers}の全要素がこの順に単調非減少であるとき、Tを返す。
+{\em num1}と{\em num2}、{\em more-numbers}を構成する要素はすべて数値であること。
+誤差を含めた数値比較に対しては、
+\ref{Geometry}章に書かれている関数（{\bf eps$<=$}）を使用する。}
 \end{refdesc}
 
 \subsection{整数とビット毎の操作関数}

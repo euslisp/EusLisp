@@ -82,6 +82,23 @@ flteqnum:
       return(T); }
   else error(E_NONUMBER);}
 
+pointer NUMNEQUAL(ctx,n,argv)
+register context *ctx;
+register int n;
+register pointer argv[];
+{ register i;
+  pointer cmparr[2];
+  numunion nu;
+
+  if (n<=1) error(E_MISMATCHARG);
+  while(--n>=0) {
+    cmparr[0] = argv[n];
+    for(i=0;i<n;++i){
+      cmparr[1]=argv[i];
+      if((NIL) != NUMEQUAL(ctx,2,cmparr))
+        return(NIL);}}
+  return(T);
+}
 
 pointer GREATERP(ctx,n,argv)
 register context *ctx;
@@ -1418,6 +1435,7 @@ register context *ctx;
 pointer mod;
 {
   defun(ctx,"=",mod,NUMEQUAL);
+  defun(ctx,"/=",mod,NUMNEQUAL);
   defun(ctx,">",mod,GREATERP);
   defun(ctx,"<",mod,LESSP);
   defun(ctx,">=",mod,GREQP);

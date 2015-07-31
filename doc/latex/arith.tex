@@ -44,19 +44,35 @@ T if {\em integer} is odd.}
 The argument must be an integer.
 T if {\em integer} is an even number.}
 
-\funcdesc{/=}{n1 n2}{
-Both {\em n1} and {\em n2} must be numbers.
-T if {\em n1} is not equal to {\em n2}.}
+\funcdesc{/=}{n1 n2 \&rest more-numbers}{
+Both {\em n1}, {\em n2} and all elements of {\em more-numbers} must be numbers.
+T if no two of its arguments are numerically equal, NIL otherwise.}
 
 \funcdesc{=}{num1 num2 \&rest more-numbers}{
-Both {\em n1} and {\em n2} must be numbers.
-T if {\em n1} is equal to {\em n2}.}
+Both {\em n1} and {\em n2} and all elements of {\em more-numbers} must be numbers.
+T if {\em n1}, {\em n2} and all elements of {\em more-numbers} are the same in value, NIL otherwise.}
 
-\fundesc{$>$}{num1 num2 \&rest more-numbers}
-\fundesc{$<$}{num1 num2 \&rest more-numbers}
-\fundesc{$>=$}{num1 num2 \&rest more-numbers}
+\funcdesc{$>$}{num1 num2 \&rest more-numbers}{
+Both {\em n1} and {\em n2} and all elements of {\em more-numbers} must be numbers.
+T if {\em n1}, {\em n2} and all elements of {\em more-numbers} are in monotonically decreasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by {\bf eps} as described in the section \ref{Geometry}.}
+
+\funcdesc{$<$}{num1 num2 \&rest more-numbers}{
+Both {\em n1} and {\em n2} and all elements of {\em more-numbers} must be numbers.
+T if {\em n1}, {\em n2} and all elements of {\em more-numbers} are in monotonically increasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by {\bf eps} as described in the section \ref{Geometry}.}
+
+\funcdesc{$>=$}{num1 num2 \&rest more-numbers}{
+Both {\em n1} and {\em n2} and all elements of {\em more-numbers} must be numbers.
+T if {\em n1}, {\em n2} and all elements of {\em more-numbers} are in monotonically nonincreasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by {\bf eps} as described in the section \ref{Geometry}.}
+
 \funcdesc{$<=$}{num1 num2 \&rest more-numbers}{
-These comparisons can only be applicable to numbers.
+Both {\em n1} and {\em n2} and all elements of {\em more-numbers} must be numbers.
+T if {\em n1}, {\em n2} and all elements of {\em more-numbers} are in monotonically nondecreasing order, NIL otherwise.
 For numerical comparisons with tolerance, use functions prefixed
 by {\bf eps} as described in the section \ref{Geometry}.}
 \end{refdesc}
