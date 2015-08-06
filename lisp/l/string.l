@@ -15,7 +15,7 @@
 	pathname-name pathname-type directory-namestring make-pathname
 	parse-namestring *default-pathname-defaults* null-string-p
 	merge-pathnames concatenate-pathnames truename
-	url-pathname parse-url
+	url-pathname parse-url escape-url escaped-url-string-from-namestring unescape-url unescaped-url-string-from-namestring
 	sequential-file-name dated-file-name timed-file-name digits-string
 	))
 
@@ -384,8 +384,14 @@
 		  (append '(:root ) (rest directory)))
 	    self)
 	      (t (error "cannot parse url ~a" url-string)) )) 
-      ))
-
+      )
+  (:percent-escape (&key (queryp t) (revert nil))
+   (send self :parse-namestring
+    (if revert
+        (unescaped-url-string-from-namestring
+         (send self :string) queryp)
+        (escaped-url-string-from-namestring
+         (send self :string) queryp)))))
 
 (defun url-pathname (p)
   (if (derivedp p url-pathname)
@@ -417,6 +423,66 @@
 	    (list protocol server port file))
 	      (t (error "cannot parse url ~a" url-string)) )) 
   )  
+
+(defvar *url-escape-unreserved-characters* "-_.~:/=?&")
+
+(defun escape-url (str &optional (ss *standard-output*) (queryp t))
+  "Return percent-escaped url string stream. If given with queryp to t, Space is escaped as '+'."
+  (labels ((url-escape-unreserved-char-p (c)
+             (or (<= #\A c #\Z)
+                 (<= #\a c #\z)
+                 (<= #\0 c #\9)
+                 (find c *url-escape-unreserved-characters*
+                       :test #'lisp::char=)))
+           (zero-padding (s desired-str-len)
+             (with-output-to-string (o)
+               (dotimes (i (- desired-str-len (length s)))
+                 (write-byte #\0 o))
+               (format o s)
+               (get-output-stream-string o))))
+    (dolist (c (coerce str cons))
+      (cond
+        ((url-escape-unreserved-char-p c)
+         (write-byte c ss))
+        ((lisp::char= c #\Return)
+         (write-byte #\Newline ss))
+        ((and queryp (lisp::char= c #\Space))
+         (write-byte #\+ ss))
+        (t
+         (format ss "%~A" (zero-padding
+                           (format nil "~X" c) 2)))))))
+
+(defun escaped-url-string-from-namestring (url-string &optional (queryp t))
+  (with-output-to-string (ss)
+    (escape-url url-string ss queryp)
+    (get-output-stream-string ss)))
+
+(defun unescape-url (str &optional (ss *standard-output*) (queryp t))
+  (with-input-from-string (is str)
+    (while (peek-char is nil)
+     (case (peek-char is)
+       (#\%
+        (read-char is) ;; skip #\%
+        (write-byte (read-from-string
+                     (coerce
+                      (list #\# #\x
+                            (read-char is)
+                            (read-char is))
+                      string))
+                    ss))
+       (#\+
+        (if queryp
+            (progn
+              (read-char is) ;; skip #\+
+              (write-byte #\Space ss))
+            (write-byte (read-char is) ss)))
+       (t
+        (write-byte (read-char is) ss))))))
+
+(defun unescaped-url-string-from-namestring (url-string &optional (queryp t))
+  (with-output-to-string (ss)
+    (unescape-url url-string ss queryp)
+    (get-output-stream-string ss)))
 
 ;****************************************************************
 ; file name generation
