@@ -338,10 +338,10 @@
 (defconstant *default-readtable* (copy-readtable))
 
 (setf (symbol-function 'char=) (symbol-function '=))
-(setf (symbol-function 'char<) (symbol-function '>))
-(setf (symbol-function 'char>) (symbol-function '<))
-(setf (symbol-function 'char<=) (symbol-function '>=))
-(setf (symbol-function 'char>=) (symbol-function '<=))
+(setf (symbol-function 'char<) (symbol-function '<))
+(setf (symbol-function 'char>) (symbol-function '>))
+(setf (symbol-function 'char<=) (symbol-function '<=))
+(setf (symbol-function 'char>=) (symbol-function '>=))
 (setf (symbol-function 'char/=) (symbol-function '/=))
 
 (setf (symbol-function 'quit) (symbol-function 'unix::exit))
