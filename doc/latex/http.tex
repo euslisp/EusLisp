@@ -8,10 +8,24 @@
 \classdesc{URL-pathname}{pathname}{server port protocol}{
 extends pathname to allow URL notation.}
 
-\funcdesc{url-pathname}{name}{}
+\funcdesc{url-pathname}{name}{
+instantiates url-pathname class object from url string or url-pathname class object.}
 
+\funcdesc{escape-url}{url \&optional (ss *standard-output*) (queryp t)}{
+writes percent-escaped {\tt url} to stream {\tt ss} (default: {\tt *standard-output*}).
+If {\tt queryp} is T, then {\tt Space} in {\tt url} is encoded to {\tt +}, otherwise escaped as {\tt Space}.
+This option is convenient for sending url query to server with separation.}
 
-\funcdesc{read-http}{url \&key (timeout 10) (retry 5))}
+\funcdesc{escaped-url-string-from-namestring}{url-string \&optional (queryp t)}{
+returns result of {\tt escape-url} as string.}
+
+\funcdesc{unescape-url}{url \&optional (ss *standard-output*) (queryp t)}{
+unescapes percent-escaped {\tt url} and writes unescaped url to stream {\tt ss}.}
+
+\funcdesc{unescaped-url-string-from-namestring}{url-string \&optional (queryp t)}{
+returns result of {\tt unescape-url} as string.}
+
+\funcdesc{read-http}{url \&key (timeout 10) (retry 5)}
 {makes a socket connection to the designated url, and
 read the html document.
 The result is a list of tags and plain strings.
