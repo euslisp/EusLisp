@@ -172,11 +172,18 @@
  (:days ()    days)
  (:total-days () (/ total-seconds 60.0 60.0 24.0))
  (:add (tint)
+  (let ((raw-micros (+ micros (send tint :micro))))
     (instance (class self) :init
-		(+ total-seconds (send tint :total-seconds))))
+     (+ total-seconds (send tint :total-seconds) (/ raw-micros 1000000))
+     (mod raw-micros 1000000))))
  (:subtract (tint)
+  (let ((raw-micros (- micros (send tint :micro)))
+        (raw-total-seconds (- total-seconds (send tint :total-seconds))))
+    (when (minusp raw-micros)
+      (dec raw-total-seconds (1+ (/ raw-micros -1000000)))
+      (setq raw-micros (+ 1000000 (mod raw-micros 1000000))))
     (instance (class self) :init
-		(- total-seconds (send tint :total-seconds))))
+     raw-total-seconds raw-micros)))
  )
   
 (defmethod interval-time
