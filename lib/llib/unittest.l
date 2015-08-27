@@ -28,6 +28,8 @@
 	     (setf (elt str2 i2) #\m) (incf i2)
 	     (setf (elt str2 i2) #\p) (incf i2)
 	     (setf (elt str2 i2) #\;))
+	    ((eq (elt str1 i1) 27)
+	     (setf (elt str2 i2) #\^))
 	    (t
 	     (setf (elt str2 i2) (elt str1 i1))))
       )
