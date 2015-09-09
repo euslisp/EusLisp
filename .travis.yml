@@ -1,4 +1,7 @@
 # Travis Continuous Integration Configuration File
+os:
+  - linux
+  - osx
 language:
   - cpp
 compiler:
@@ -18,8 +21,9 @@ before_install: # Use this to prepare the system to install prerequisites or dep
   - export CI_SOURCE_PATH=$(pwd)
   - export REPOSITORY_NAME=${PWD##*/}
   - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq -y subversion gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng12-dev xfonts-100dpi xfonts-75dpi msttcorefonts texlive-latex-base ptex-bin latex2html nkf
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -qq -y subversion gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng12-dev xfonts-100dpi xfonts-75dpi msttcorefonts texlive-latex-base ptex-bin latex2html nkf; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install jpeg libpng mesalib-glw wget; fi
 install: # Use this to install any prerequisites or dependencies necessary to run your build
   - cd ${HOME}
   - git clone http://github.com/euslisp/jskeus jskeus
@@ -29,7 +33,7 @@ script: # All commands must exit with code 0 on success. Anything else is consid
   - make
   - source bashrc.eus
   - export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=$?; done; [ $EXIT_STATUS == 0 ]
-  - (cd doc; make)
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then (cd doc; make) fi
 after_failure:
   - echo "failure"
 after_success:
