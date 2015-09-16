@@ -450,6 +450,227 @@ register pointer s;	/*input stream*/
     }
   vpop();
   return(result); }
+
+static int base64tobin (char c) {
+  if('A' <= c && c <= 'Z') return (c - 'A');
+  if('a' <= c && c <= 'z') return (c - 'a' + 26);
+  if('0' <= c && c <= '9') return (c - '0' + 52);
+  if(c == '+') return 62;
+  if(c == '/') return 63;
+  if(c == '=') return '=';
+  error(E_USER, (pointer)"invalid base64 character");
+}
+static pointer readbinaryarray(context *ctx, pointer s, pointer subchr, pointer val)
+{
+  register pointer elm;
+  numunion nu;
+  int i, ch;
+  unsigned long size;
+  int rank;
+  int dim[ARRAYRANKLIMIT];
+  unsigned char *buffer;
+  pointer entity;
+  pointer ret = NIL;
+
+  for (i = 0; i < ARRAYRANKLIMIT; i++) dim[i] = 0;
+  ch = nextch(ctx,s);
+  if (ch != '(') error(E_USER, (pointer)"invalid binary array form [(]");
+
+  rank = 0;
+  size = 1;
+  elm = read1(ctx,s); // read size list
+  while(elm != NIL) {
+    if( isint(elm->c.cons.car) ) {
+      dim[rank] = intval(elm->c.cons.car);
+      size *= dim[rank];
+      rank++;
+    }
+    elm = elm->c.cons.cdr;
+  }
+  elm = read1(ctx,s); // read elemtype
+  ch = nextch(ctx,s);
+  if (ch != '"') {
+    error(E_USER, (pointer)"invalid binary array form [\"]");
+  }
+
+  if (elm == K_FLOAT || elm == K_FLOAT32) {
+    entity = makefvector(size);
+#ifdef x86_64
+    buffer = malloc(sizeof(float) * size);
+#else
+    buffer = (unsigned char *) &(entity->c.fvec.fv[0]);
+#endif
+    size *= 4;
+  } else if (elm == K_DOUBLE) {
+    entity = makefvector(size);
+#ifdef x86_64
+    buffer = (unsigned char *) &(entity->c.fvec.fv[0]);
+#else
+    buffer = malloc(sizeof(double) * size);
+#endif
+    size *= 8;
+  } else if (elm == K_SHORT) {
+    entity = makeivector(size);
+    buffer = malloc(sizeof(short) * size);
+    size *= 2;
+  } else if (elm == K_INTEGER) {
+    entity = makeivector(size);
+#ifdef x86_64
+    buffer = malloc(sizeof(int) * size);
+#else
+    buffer = (unsigned char *) &(entity->c.ivec.iv[0]);
+#endif
+    size *= 4;
+  } else if (elm == K_LONG) {
+    entity = makeivector(size);
+#ifdef x86_64
+    buffer = (unsigned char *) &(entity->c.ivec.iv[0]);
+#else
+    buffer = malloc(sizeof(long long) * size);
+#endif
+    size *= 8;
+  } else {
+    error(E_USER, (pointer)"invalid binary element type");
+  }
+  vpush(entity);
+  if(rank == 1) {
+    // return vector
+    ret = entity;
+    vpop();
+    vpush(ret);
+  } else {
+    // make array
+    ret = alloc(vecsize(speval(ARRAY)->c.cls.vars), ELM_FIXED,
+                intval(speval(ARRAY)->c.cls.cix),
+                vecsize(speval(ARRAY)->c.cls.vars));
+    ret->c.ary.entity = entity;
+    vpop();
+    vpush(ret);
+    ret->c.ary.fillpointer = NIL;
+    ret->c.ary.rank = makeint(rank);
+    ret->c.ary.offset = makeint(0);
+    for (i = 0; i < ARRAYRANKLIMIT; i++) ret->c.ary.dim[i] = makeint(dim[i]);
+    ret->c.ary.plist = NIL;
+  }
+
+  int strsize = (size*8+5)/6;
+  strsize = ((strsize+3)/4)*4;
+  // read string
+  char *ascstr = malloc(strsize);
+  i = 0;
+  while((ch = readch(s)) != EOF) {
+    ascstr[i++] = ch;
+    if(i >= strsize) break;
+  }
+  if(i != strsize) {
+    free(ascstr);
+    vpop();
+    error(E_USER, (pointer)"invalid size of string");
+  }
+  ch = readch(s);
+  if (ch != '"') {
+    free(ascstr);
+    vpop();
+    error(E_USER, (pointer)"invalid binary array form / end of [\"]");
+  }
+
+  // decode base64
+  {
+    int asc_cntr = 0;
+    int buf_cntr = 0;
+    int mode = 0;
+    int current_bin;
+    while (asc_cntr < strsize) {
+      int base64char = base64tobin(ascstr[asc_cntr++]);
+      if (base64char != 77) {
+        switch (mode) {
+        case 0:
+          current_bin = (base64char << 2);
+           break;
+        case 1:
+          current_bin |= (base64char >> 4);
+          buffer[buf_cntr++] = current_bin;
+          current_bin = (base64char & 0x0f) << 4;
+          break;
+        case 2:
+          current_bin |= (base64char >> 2);
+          buffer[buf_cntr++] = current_bin;
+          current_bin = (base64char & 0x03) << 6;
+          break;
+        case 3:
+          current_bin |= base64char;
+          buffer[buf_cntr++] = current_bin;
+          break;
+        }
+        mode = (mode+1) % 4;
+      }
+    }
+    if(mode > 0) buffer[buf_cntr++] = current_bin;
+  }
+  free(ascstr);
+
+
+  if (elm == K_FLOAT || elm == K_FLOAT32) {
+#ifdef x86_64
+    float *src = (float *)buffer;
+    eusfloat_t *dst = (eusfloat_t *)&(entity->c.fvec.fv[0]);
+    for (i = 0; i < size/4; i++) {
+      *dst++ = *src++;
+    }
+    free(buffer);
+#else
+    // do nothing
+#endif
+  } else if (elm == K_DOUBLE) {
+#ifdef x86_64
+    // do nothing
+#else
+    double *src = (double *)buffer;
+    eusfloat_t *dst = (eusfloat_t *)&(entity->c.fvec.fv[0]);
+    for (i = 0; i < size/8; i++) {
+      *dst++ = *src++;
+    }
+    free(buffer);
+#endif
+  } else if (elm == K_SHORT) {
+    short *src = (short *)buffer;
+    eusinteger_t *dst = (eusinteger_t *)&(entity->c.ivec.iv[0]);
+    for (i = 0; i < size/2; i++) {
+      *dst++ = *src++;
+    }
+    free(buffer);
+  } else if (elm == K_INTEGER) {
+#ifdef x86_64
+    int *src = (int *)buffer;
+    eusinteger_t *dst = (eusinteger_t *)&(entity->c.ivec.iv[0]);
+    for (i = 0; i < size/4; i++) {
+      *dst++ = *src++;
+    }
+    free(buffer);
+#else
+    // do nothing
+#endif
+  } else if (elm == K_LONG) {
+#ifdef x86_64
+    // do nothing
+#else
+    long long *src = (long long *)buffer;
+    eusinteger_t *dst = (eusinteger_t *)&(entity->c.ivec.iv[0]);
+    for (i = 0; i < size/8; i++) {
+      *dst++ = *src++;
+    }
+    free(buffer);
+#endif
+  }
+  //
+  ch=nextch(ctx,s);
+  while (ch!=')' && ch!=EOF) {
+    ch=nextch(ctx,s);
+  }
+
+  return vpop();
+}
+
 
 /****************************************************************/
 /* read dispatch macro expression
@@ -1058,6 +1279,7 @@ register context *ctx;
   sharpmacro['I']=makeint((eusinteger_t)readivector);
   sharpmacro['J']=makeint((eusinteger_t)readobject);
   sharpmacro['V']=makeint((eusinteger_t)readobject);
+  sharpmacro['G']=makeint((eusinteger_t)readbinaryarray);
 
   /* make default readtable */
   rdtable=(pointer)makereadtable(ctx);
