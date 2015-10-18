@@ -1385,6 +1385,38 @@ pointer argv[];
   target=(target & ~mask) | (val<<pos);
   return(makeint(target));}
 
+pointer MAKERANDOMSTATE(ctx,n,argv)
+register context *ctx;
+int n;
+register pointer argv[];
+{ pointer state;
+  pointer randvec;
+  time_t tm;
+
+  ckarg2(0,1);
+  state=NIL;
+  randvec=makevector(C_INTVECTOR, 2);
+  if (n==1) {
+    state=argv[0];
+    if (state==NIL) { goto MAKERANDSTATENIL; }
+    else if (state==T) {
+      if (time(&tm)==-1){
+        error(E_USER,(pointer)"failed to fetch time"); }
+      srand((unsigned int)tm);
+      randvec->c.ivec.iv[0] = rand();
+      randvec->c.ivec.iv[1] = rand();
+      return (randvec); }
+    if (!isintvector(state) && !isstring(state)) error(E_NOVECTOR);
+    if (vecsize(state)<2) error(E_VECSIZE); }
+MAKERANDSTATENIL:
+  if (state==NIL) {
+    state=Spevalof(RANDSTATE);
+    if (state==UNBOUND) state=speval(RANDSTATE); }
+  randvec->c.ivec.iv[0] = state->c.ivec.iv[0];
+  randvec->c.ivec.iv[1] = state->c.ivec.iv[1];
+  return (randvec);
+  }
+
 pointer RANDOM(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1481,6 +1513,7 @@ pointer mod;
   defun(ctx,"ASH",mod,ASH);
   defun(ctx,"LDB",mod,LDB);
   defun(ctx,"DPB",mod,DPB);
+  defun(ctx,"MAKE-RANDOM-STATE",mod,MAKERANDOMSTATE);
   defun(ctx,"RANDOM",mod,RANDOM);
   defun(ctx,"FREXP",mod,FREXP);
 }

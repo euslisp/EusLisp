@@ -55,6 +55,7 @@ extern pointer LOGBITP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer ASH(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer LDB(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer DPB(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer MAKERANDOMSTATE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer RANDOM(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern void arith(context */*ctx*/, pointer /*mod*/);
 extern pointer FREXP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
