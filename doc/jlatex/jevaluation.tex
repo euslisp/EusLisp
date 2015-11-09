@@ -711,6 +711,51 @@ Solaris上のEuslispにおいて、{\bf save}がないので、
 このEuslispの名前、バージョン、作成日を返す。
 この文字列が起動時にも表示される。
 {\tt "MT-EusLisp 7.50 X 1.2 for Solaris Sat Jan  7 11:13:28 1995"}}
+\funcdesc{version-string-p}{str}{
+以下に定義されるバージョンを表す文字列strが与えられたときTを返す。そうでなければNILを返す。}
+\begin{quote}
+\begin{verbatim}
+VERSION := NUMBER (SEPARATOR NUMBER)*
+NUMBER  := (0|1|2|3|4|5|6|7|8|9)*
+SEPARATOR := .
+\end{verbatim}
+\end{quote}
+\funcdesc{version-string-to-list}{str}{
+バージョンを表す文字列strが与えられたとき、セパレータで区切られた各バージョン番号を要素として持つリストを返す。そうでなければエラーを出力し、NILを返す。}
+\begin{verbatim}
+  (version-string-to-list "1") ;; => (1)
+  (version-string-to-list "1.0.0") ;; => (1 0 0)
+\end{verbatim}
+\funcdesc{version$<$}{ver1 ver2}{
+  バージョンver1よりver2が小さい(古い)ときTを返す、そうでなければNILを返す。}
+\begin{verbatim}
+  (version< "1" "1.2") ;; => t
+  (version< "1.0" "1.0.0") ;; => nil
+\end{verbatim}
+\funcdesc{version=}{ver1 ver2}{
+  バージョンver1とver2が等しいときTを返す、そうでなければNILを返す。}
+\begin{verbatim}
+  (version= "1" "1") ;; => t
+  (version= "1.0" "1.0.0") ;; => t
+\end{verbatim}
+\funcdesc{version$>$}{ver1 ver2}{
+  バージョンver1よりver2が大きい(新しい)ときTを返す、そうでなければNILを返す。}
+\begin{verbatim}
+  (version> "1.2" "1") ;; => t
+  (version> "1.0" "1.0.0") ;; => nil
+\end{verbatim}
+\funcdesc{version$>=$}{ver1 ver2}{
+  バージョンver1よりver2が大きい(新しい)か等しいときTを返す、そうでなければNILを返す。}
+\begin{verbatim}
+  (version>= "1.2" "1") ;; => t
+  (version>= "1.0" "1.0.0") ;; => t
+\end{verbatim}
+\funcdesc{version$<=$}{ver1 ver2}{
+  バージョンver1よりver2が小さい(古い)か等しいときTを返す、そうでなければNILを返す。}
+\begin{verbatim}
+  (version<= "1" "1.2") ;; => t
+  (version<= "1.0" "1.0.0") ;; => t
+\end{verbatim}
 \end{refdesc}
 
 \newpage

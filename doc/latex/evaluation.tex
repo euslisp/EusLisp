@@ -770,6 +770,51 @@ at every invocation of the EusLisp.
 returns the name, the version and the make-date of this EusLisp.
 This string is also printed at the opening of a session.
 {\tt "MT-EusLisp 7.50 X 1.2 for Solaris Sat Jan  7 11:13:28 1995"}}
+\funcdesc{version-string-p}{str}{
+Return T if STR is string of version defined below, return NIL otherwise.}
+\begin{quote}
+\begin{verbatim}
+VERSION := NUMBER (SEPARATOR NUMBER)*
+NUMBER  := (0|1|2|3|4|5|6|7|8|9)*
+SEPARATOR := .
+\end{verbatim}
+\end{quote}
+\funcdesc{version-string-to-list}{str}{
+Return list of version numbers of version string STR}
+\begin{verbatim}
+  (version-string-to-list "1") ;; => (1)
+  (version-string-to-list "1.0.0") ;; => (1 0 0)
+\end{verbatim}
+\funcdesc{version$<$}{ver1 ver2}{
+Return T if version VER1 is lower (older) than VER2, return NIL otherwise}
+\begin{verbatim}
+  (version< "1" "1.2") ;; => t
+  (version< "1.0" "1.0.0") ;; => nil
+\end{verbatim}
+\funcdesc{version=}{ver1 ver2}{
+Return T if version VER1 is equal to VER2, return NIL otherwise}
+\begin{verbatim}
+  (version= "1" "1") ;; => t
+  (version= "1.0" "1.0.0") ;; => t
+\end{verbatim}
+\funcdesc{version$>$}{ver1 ver2}{
+Return T if version VER1 is higher (newer) than VER2, return NIL otherwise}
+\begin{verbatim}
+  (version> "1.2" "1") ;; => t
+  (version> "1.0" "1.0.0") ;; => nil
+\end{verbatim}
+\funcdesc{version$>=$}{ver1 ver2}{
+Return T if version VER1 is higher (newer) than or equal to VER2, return NIL otherwise}
+\begin{verbatim}
+  (version>= "1.2" "1") ;; => t
+  (version>= "1.0" "1.0.0") ;; => t
+\end{verbatim}
+\funcdesc{version$<=$}{ver1 ver2}{
+Return T if version VER1 is lower (older) than or equal to VER2, return NIL otherwise}
+\begin{verbatim}
+  (version<= "1" "1.2") ;; => t
+  (version<= "1.0" "1.0.0") ;; => t
+\end{verbatim}
 \end{refdesc}
 \newpage
 
