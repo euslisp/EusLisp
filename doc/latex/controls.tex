@@ -142,7 +142,20 @@ Also, if you had an error while executing {\em protected-form},
 While {\em test} is evaluated to non-nil,
 {\em form}s are evaluated repeatedly.
 {\bf While} special form automatically establishes a block by name of nil
-around {\em form}s, and {\bf return} can be used to exit from the loop.}
+around {\em form}s, and {\bf return} can be used to exit from the loop.
+To jump to next iteration, you can use following syntax with {\bf tagbody} and {\bf go} described below:}
+
+\begin{verbatim}
+(setq cnt 0)
+(while
+  (< cnt 10)
+  (tagbody while-top
+    (incf cnt)
+    (when (eq (mod cnt 3) 0)
+      (go while-top))  ;; jump to next iteraction
+    (print cnt)
+    )) ;; 1, 2, 4, 5, 7, 8, 10
+\end{verbatim}
 
 \specialdesc{tagbody}{\{tag $|$ statement\}*}{
 {\em tag}s are labels for {\bf go}.

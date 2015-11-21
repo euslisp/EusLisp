@@ -145,7 +145,20 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 {\em form}は、繰返し評価される。
 {\bf while}は、{\em form}のまわりにNILと名付けられるブロックを自動的に確定する
 特殊書式である。
-{\bf return}は、そのループから抜け出すために使用することができる。}
+{\bf return}は、そのループから抜け出すために使用することができる。
+次のイテレーションへ飛ぶときためには後に紹介する{\bf tagbody}と{\bf go}を次のように使う:}
+
+\begin{verbatim}
+(setq cnt 0)
+(while
+  (< cnt 10)
+  (tagbody while-top
+    (incf cnt)
+    (when (eq (mod cnt 3) 0)
+      (go while-top))  ;; jump to next iteraction
+    (print cnt)
+    )) ;; 1, 2, 4, 5, 7, 8, 10
+\end{verbatim}
 
 \specialdesc{tagbody}{\{tag $|$ statement\}*}{
 {\em tag}は、{\bf go}のために名付けられる。
