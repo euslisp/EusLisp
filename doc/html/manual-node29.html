@@ -66,7 +66,7 @@ Iteration</A>
  <BR>
 <BR> <P>
 
-<A NAME="2468"></A>
+<A NAME="2472"></A>
 <B>while</B> <EM>test {form}* </EM>[special]
 
 <DL COMPACT>
@@ -76,14 +76,28 @@ While <EM>test</EM> is evaluated to non-nil,
 <EM>form</EM>s are evaluated repeatedly.
 <B>While</B> special form automatically establishes a block by name of nil
 around <EM>form</EM>s, and <B>return</B> can be used to exit from the loop.
+To jump to next iteration, you can use following syntax with <B>tagbody</B> and <B>go</B> described below:
 </DD>
 </DL>
 <BR>
 <BR>
 
 <P>
+<PRE>
+(setq cnt 0)
+(while
+  (&lt; cnt 10)
+  (tagbody while-top
+    (incf cnt)
+    (when (eq (mod cnt 3) 0)
+      (go while-top))  ;; jump to next iteraction
+    (print cnt)
+    )) ;; 1, 2, 4, 5, 7, 8, 10
+</PRE>
 
-<A NAME="2483"></A>
+<P>
+
+<A NAME="2489"></A>
 <B>tagbody</B> <EM>{tag <SPAN CLASS="MATH"><IMG
  WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img5.png"
@@ -101,7 +115,7 @@ You can use <B>go</B> only in <B>tagbody</B>.
 
 <P>
 
-<A NAME="2497"></A>
+<A NAME="2503"></A>
 <B>go</B> <EM>tag </EM>[special]
 
 <DL COMPACT>
@@ -118,7 +132,7 @@ across the lexical scope is inhibited.
 
 <P>
 
-<A NAME="2511"></A>
+<A NAME="2517"></A>
 <B>prog</B> <EM>({var <SPAN CLASS="MATH"><IMG
  WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img5.png"
@@ -143,7 +157,7 @@ across the lexical scope is inhibited.
 
 <P>
 
-<A NAME="2531"></A>
+<A NAME="2537"></A>
 <B>do</B> <EM>({(var init [next])}*) (endtest [result]){declare} {form}
 * </EM>[macro]
 
@@ -163,7 +177,7 @@ reassigned to each <EM>var</EM>, and the next iteration starts.
 
 <P>
 
-<A NAME="2551"></A>
+<A NAME="2557"></A>
 <B>do*</B> <EM>({var init [next]}*) (endtest [result]){declare} {form}* </EM>[macro]
 
 <DL COMPACT>
@@ -177,7 +191,7 @@ and <EM>next</EM>, and their assignment to <EM>var</EM> occur sequentially.
 
 <P>
 
-<A NAME="2566"></A>
+<A NAME="2572"></A>
 <B>dotimes</B> <EM>(var count [result]) {forms}* </EM>[macro]
 
 <DL COMPACT>
@@ -194,7 +208,7 @@ In each evaluation, <EM>var</EM> increments from integer zero to
 
 <P>
 
-<A NAME="2581"></A>
+<A NAME="2587"></A>
 <B>dolist</B> <EM>(var list [result]) {forms}* </EM>[macro]
 
 <DL COMPACT>
@@ -213,7 +227,7 @@ and no new parameter binding is needed.
 
 <P>
 
-<A NAME="2597"></A>
+<A NAME="2603"></A>
 <B>until</B> <EM>condition {forms}* </EM>[macro]
 
 <DL COMPACT>
@@ -227,7 +241,7 @@ evaluates forms until <EM>condition</EM> holds.
 
 <P>
 
-<A NAME="2608"></A>
+<A NAME="2614"></A>
 <B>loop</B> <EM>{forms}* </EM>[macro]
 
 <DL COMPACT>
@@ -274,7 +288,7 @@ evaluated in <EM>forms</EM>.
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2015-10-31
+2015-11-21
 </ADDRESS>
 </BODY>
 </HTML>

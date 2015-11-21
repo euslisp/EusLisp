@@ -67,7 +67,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  <BR>
 <BR> <P>
 
-<A NAME="2390"></A>
+<A NAME="2394"></A>
 <B>while</B> <EM>test {form}* </EM>[特殊]
 
 <DL COMPACT>
@@ -78,14 +78,28 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B>while</B>は、<EM>form</EM>のまわりにNILと名付けられるブロックを自動的に確定する
 特殊書式である。
 <B>return</B>は、そのループから抜け出すために使用することができる。
+次のイテレーションへ飛ぶときためには後に紹介する<B>tagbody</B>と<B>go</B>を次のように使う:
 </DD>
 </DL>
 <BR>
 <BR>
 
 <P>
+<PRE>
+(setq cnt 0)
+(while
+  (&lt; cnt 10)
+  (tagbody while-top
+    (incf cnt)
+    (when (eq (mod cnt 3) 0)
+      (go while-top))  ;; jump to next iteraction
+    (print cnt)
+    )) ;; 1, 2, 4, 5, 7, 8, 10
+</PRE>
 
-<A NAME="2405"></A>
+<P>
+
+<A NAME="2411"></A>
 <B>tagbody</B> <EM>{tag <SPAN CLASS="MATH"><IMG
  WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="jmanual-img7.png"
@@ -103,7 +117,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="2419"></A>
+<A NAME="2425"></A>
 <B>go</B> <EM>tag </EM>[特殊]
 
 <DL COMPACT>
@@ -120,7 +134,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="2432"></A>
+<A NAME="2438"></A>
 <B>prog</B> <EM>({var <SPAN CLASS="MATH"><IMG
  WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="jmanual-img7.png"
@@ -145,7 +159,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="2452"></A>
+<A NAME="2458"></A>
 <B>do</B> <EM>({(var init [next])}*) (endtest [result]){declare} {form}
 * </EM>[マクロ]
 
@@ -166,7 +180,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="2472"></A>
+<A NAME="2478"></A>
 <B>do*</B> <EM>({var init [next]}*) (endtest [result]){declare} {form}* </EM>[マクロ]
 
 <DL COMPACT>
@@ -180,7 +194,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="2487"></A>
+<A NAME="2493"></A>
 <B>dotimes</B> <EM>(var count [result]) {forms}* </EM>[マクロ]
 
 <DL COMPACT>
@@ -197,7 +211,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="2502"></A>
+<A NAME="2508"></A>
 <B>dolist</B> <EM>(var list [result]) {forms}* </EM>[マクロ]
 
 <DL COMPACT>
@@ -216,7 +230,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="2518"></A>
+<A NAME="2524"></A>
 <B>until</B> <EM>condition {forms}* </EM>[マクロ]
 
 <DL COMPACT>
@@ -230,7 +244,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 
-<A NAME="2530"></A>
+<A NAME="2536"></A>
 <B>loop</B> <EM>{forms}* </EM>[マクロ]
 
 <DL COMPACT>
@@ -277,7 +291,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2015-10-31
+2015-11-21
 </ADDRESS>
 </BODY>
 </HTML>
