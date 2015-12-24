@@ -538,7 +538,23 @@ pointer argv[];
   numunion nu;
   r=makefvector(n);
   fv=r->c.fvec.fv;
-  for (i=0; i<n; i++) fv[i]=ckfltval(argv[i]);
+  for (i=0; i<n; i++) {
+    //fv[i]=ckfltval(argv[i]);
+    if ( isflt(argv[i]) ) fv[i] = fltval(argv[i]);
+    else if ( isint(argv[i]) ) fv[i] = intval(argv[i]);
+    else if ( pisbignum(argv[i]) ) fv[i] = big_to_float(argv[i]);
+    else if ( pisratio(argv[i]) ) fv[i] = ratio2flt(argv[i]);
+    else if ( issymbol(argv[i]) ) {
+        char *sym = get_string(argv[i]);
+        if ( strcmp(sym, "NAN") == 0 ) fv[i] = NAN;
+        else if ( strcmp(sym, "-NAN") == 0 ) fv[i] = -NAN;
+        else if ( strcmp(sym,  "INF") == 0 ) fv[i] = INFINITY;
+        else if ( strcmp(sym, "-INF") == 0 ) fv[i] = -INFINITY;
+        else { (eusinteger_t)error(E_NONUMBER); }
+    }
+    else { (eusinteger_t)error(E_NONUMBER); }
+  }
+
   return(r);
   }
 
