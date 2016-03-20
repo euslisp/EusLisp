@@ -639,6 +639,29 @@ EusLispのリーダとプリンタは、どのようなオブジェクトも再�
 その{\em file}は簡単にロードすることによって読み戻すことができる。}
 \end{refdesc}
 
+\begin{verbatim}
+(setq a (make-cube 1 2 3))
+
+;; sample for dump-object
+(dump-object "a-cube.ldump" a)
+(with-open-file
+  (f "a-cube.ldump" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-structure
+(dump-structure "a-cube.ldump" a)
+(with-open-file
+  (f "a-cube.ldump" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-loadable-structure
+(dump-loadable-structure "a-cube.l" a)
+(load "a-cube.l")
+(print a)
+\end{verbatim}
+
 \subsection{プロセスイメージ保存}
 このプロセスイメージ保存は、Solarisの動的ロード機能に深く依存しているため、
 Solaris2のEuslispにおいてサポートされていない。

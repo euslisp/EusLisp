@@ -694,6 +694,29 @@ dumps objects bound to symbols to {\em file}. The file can be read back
 again by simply loading it.}
 \end{refdesc}
 
+\begin{verbatim}
+(setq a (make-cube 1 2 3))
+
+;; sample for dump-object
+(dump-object "a-cube.ldump" a)
+(with-open-file
+  (f "a-cube.ldump" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-structure
+(dump-structure "a-cube.ldump" a)
+(with-open-file
+  (f "a-cube.ldump" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-loadable-structure
+(dump-loadable-structure "a-cube.l" a)
+(load "a-cube.l")
+(print a)
+\end{verbatim}
+
 \subsection{Process Image Saving}
 This process image saving is no longer supported on Solaris2 based
 EusLisp, since it heavily depends on Solaris's dynamic loading facility
