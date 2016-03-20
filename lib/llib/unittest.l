@@ -206,7 +206,7 @@
         (exit 1)))
   t)
 
-(defun init-unit-test (&key log-fname)
+(defun init-unit-test (&key log-fname trace)
   (let* ((p "--gtest_output=xml:")
          (s (find-if #'(lambda (tmpx) (substringp p tmpx)) lisp::*eustop-argument*))
          (xml-fname (if s (string-left-trim p s))))
@@ -218,6 +218,13 @@
     (unix:signal unix::sighup 'unittest-sigint-handler)
 
     (setq *unit-test* (instance unit-test-container :init :log-fname log-fname))
+
+    (when trace
+      (setf (symbol-function 'defun-org) (symbol-function 'defun))
+      (defmacro defun (name args &rest body)
+        `(prog1
+           (defun-org ,name ,args ,@body)
+           (trace ,name))))
 
     (defmacro assert (pred &optional (message "") &rest args)
       (with-gensyms
