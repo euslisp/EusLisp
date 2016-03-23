@@ -1,0 +1,437 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>CascadedCoords</TITLE>
+<META NAME="description" CONTENT="CascadedCoords">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node117.html">
+<LINK REL="up" HREF="manual-node113.html">
+<LINK REL="next" HREF="manual-node119.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2210"
+  HREF="manual-node119.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2204"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2200"
+  HREF="manual-node117.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2206"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2208"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2211"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Up:</B> <A NAME="tex2html2205"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2201"
+  HREF="manual-node117.html">Coordinates</A>
+ &nbsp; <B>  <A NAME="tex2html2207"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2209"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04035000000000000000">
+CascadedCoords</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="27896"></A>
+<BIG CLASS="XLARGE"><B>cascaded-coords </B></BIG> [class]  <PRE><TT>
+  :super   <B>coordinates</B> 
+<BR>  :slots 		 (parent descendants worldcoords manager changed) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a linked coordinates. <B>Cascaded-coords</B> is often abbreviated
+as <A NAME="27915"></A><B>c</B>ascoords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27917"></A>
+<B>:inheritance</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the inheritance tree list describing all the descendants of the
+cascoords.
+If <TT>a</TT> and <TT>b</TT> are the direct descendants of this coords,
+and <TT>c</TT> is a descendant of <TT>a</TT>, <TT>((a (c)) (b))</TT> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27932"></A>
+<B>:assoc</B> <EM>childcoords &amp;optional relative-coords </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>childcoords</EM> is associated to this cascoords as a descendant.
+If childcoords has been already assoc'ed to some other cascoords, first
+childcoords is dissoc'ed since each cascoords can have only one parent.
+The orientation or location of childcoords in the world does not change.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27943"></A>
+<B>:dissoc</B> <EM>childcoords </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+dissociates (removes) <EM>childcoords</EM> from the descendants list of this coords.
+The orientation or location of childcoords in the world does not change.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27954"></A>
+<B>:changed</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+informs this coords that the coordinates of parent has changed,
+and the re-computation of worldcoords is needed when it is requested later.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27964"></A>
+<B>:update</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is called by the <B>:worldcoords</B> method
+to recompute the current worldcoord.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27975"></A>
+<B>:worldcoords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a coordinates object which represents this coord in the world
+by concatenating all the cascoords from the root to this coords.
+The result is held in this object and reused later.
+Thus, you should not modify the resulted coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27985"></A>
+<B>:worldpos</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns rot of this coordinates represented in
+the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27995"></A>
+<B>:worldrot</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns pos of this coordinates represented in
+the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28005"></A>
+<B>:transform-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Regarding <EM>vec</EM> represented in this local coords,
+transforms it to the representation in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28016"></A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM> represented in the world is inversely transformed into the
+representation in this local coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28027"></A>
+<B>:inverse-transformation</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an instance of coordinates which represents inverse transformation
+of this coord.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28037"></A>
+<B>:transform</B> <EM>trans  &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28048"></A>
+<B>:translate</B> <EM>fltvec &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28059"></A>
+<B>:locate</B> <EM>fltvec &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28070"></A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28081"></A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Refer to the descriptions in class <B>coordinates</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28092"></A>
+<B>make-coords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28103"></A>
+<B>make-cascoords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28114"></A>
+<B>coords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28125"></A>
+<B>cascoords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis
+:4X4 :coords :name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+All these functions make new coordinates or cascaded-coordinates.
+For the keyword parameter, see <B>:init</B> method of class coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28136"></A>
+<B>transform-coords</B> <EM>coords1 coords2 &amp;optional (coords3 (coords)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Coords1 is applied (multiplied) to the coords2 from the left.
+The product is stored in coords3.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28146"></A>
+<B>transform-coords*</B> <EM>&amp;rest coords </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+concatenates transformations listed in <EM>coords</EM>.
+An instance of coordinates that represents the concatenated transformation
+is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28157"></A>
+<B>wrt</B> <EM>coords vec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+transforms <EM>vec</EM> into the representation in <EM>coords</EM>.
+The result is equivalent to
+<TT>(send <EM>coords</EM> :transform-vector <EM>vec</EM>)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2210"
+  HREF="manual-node119.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2204"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2200"
+  HREF="manual-node117.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2206"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2208"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2211"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Up:</B> <A NAME="tex2html2205"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2201"
+  HREF="manual-node117.html">Coordinates</A>
+ &nbsp; <B>  <A NAME="tex2html2207"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2209"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

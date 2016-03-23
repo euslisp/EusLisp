@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>XToolKit</TITLE>
+<META NAME="description" CONTENT="XToolKit">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node161.html">
+<LINK REL="previous" HREF="manual-node147.html">
+<LINK REL="up" HREF="manual-node83.html">
+<LINK REL="next" HREF="manual-node153.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2704"
+  HREF="manual-node153.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2698"
+  HREF="manual-node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2692"
+  HREF="manual-node151.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2700"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2702"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2705"
+  HREF="manual-node153.html">X Event</A>
+<B> Up:</B> <A NAME="tex2html2699"
+  HREF="manual-node83.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html2693"
+  HREF="manual-node151.html">Colors and Colormaps</A>
+ &nbsp; <B>  <A NAME="tex2html2701"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2703"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION04090000000000000000">
+XToolKit</A>
+</H1>
+
+<P>
+XToolKit is the highest level X window interface to facilitate composing
+GUI (Graphical User Interface) by using GUI components such as
+buttons, pulldown menus, textWindows, etc., as building blocks.
+The major differences from the Xlib classes are,
+the XToolKit invokes user-supplied interaction routines
+corresponding to the Xevents sent from the Xserver,
+and provides consistent appearance of those interaction-oriented
+window parts.
+Classes consisting the XToolKit has the following inheritance structure.
+<PRE>
+          xwindow
+               panel
+                    menubar-panel
+                    menu-panel
+                    filepanel
+                    textviewpanel
+                    confirmpanel
+               panel-item
+                    button-item
+                         menu-button-item
+                         bitmap-button-item
+                    text-item
+                    slider-item
+                    choice-item
+                    joystick-item
+               canvas
+               textwindow
+                    buffertextwindow
+                         scrolltextwindow
+                    textedit
+               scroll-bar
+                    horizontal-scroll-bar
+</PRE>
+
+<P>
+Just below the xwindow class are the five basic XToolKit classes:
+<TT>panel</TT>, <TT>panel-item</TT>,
+<TT>canvas</TT>, <TT>textWindow</TT> and <TT>scroll-bar</TT>.
+<TT>Menubar-panel</TT> and <TT>menu-panel</TT> are defined under the <TT>panel</TT>.
+A basic strategy to build a new application window and to make
+it run upon events is the following:
+
+<OL>
+<LI><B>define an application class</B> An application window class should be
+defined as a subclass of <B>panel</B> that has the capability to lay out
+XToolKit components.
+</LI>
+<LI><B>define event handlers</B> In the application class, event handlers
+that are called upon when buttons are pressed or menu items are selected
+are defined. An event handler ought to be defined as a method 
+with panel-item specific arguments.
+</LI>
+<LI><B>define subpanels</B> If you use a <TT>menubar-panel</TT>, it is placed at the
+top of the application window, therefore it should be created first
+by <TT>:create-menubar</TT>. Similarly <TT>menu-panel</TT>s needs to be
+defined before the <TT>menu-button-item</TT>s to which <TT>menu-panel</TT>s
+are associated.
+</LI>
+<LI><B>create panel-items</B> Panel-items such as <TT>button-item</TT>,
+<TT>text-item</TT>, <TT>slider-item</TT>, etc., can be created
+by <TT>(send-super :create-item <EM>class label object method</EM>)</TT>.
+Event handlers defined above are connected to each panel-item.
+These initialization procedures should be defined in the <TT>:create</TT>
+method of the application window class.
+Do not forget to define <TT>quit</TT> button to make the event
+dispatcher terminate whenever needed.
+Any <TT>textWindow</TT> and <TT>canvas</TT> can also be placed in the application
+window via the <TT>:locate-item</TT> method.
+</LI>
+<LI><B>create the entire window</B> Sending the <TT>:create</TT> message to
+the application class creates
+the application window with its XToolKit components properly placed 
+in the window.
+</LI>
+<LI><B>run the event dispatcher</B> In order to receive events from the
+Xserver and delivers them to the corresponding xwindow,
+run <TT>window-main-loop</TT>.
+On Solaris2, <TT>window-main-thread</TT>, which delivers events in a
+different thread, is available.
+<TT>Window-main-thread</TT> keeps the toplevel interaction alive.
+Do not run more than one <TT>window-main-thread</TT>.
+</LI>
+</OL>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html2706"
+  HREF="manual-node153.html">X Event</A>
+<LI><A NAME="tex2html2707"
+  HREF="manual-node154.html">Panel</A>
+<UL>
+<LI><A NAME="tex2html2708"
+  HREF="manual-node155.html">Subpanels (menu-panel and menubar-panel)</A>
+<LI><A NAME="tex2html2709"
+  HREF="manual-node156.html">File Panel</A>
+<LI><A NAME="tex2html2710"
+  HREF="manual-node157.html">Text View Panel</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html2711"
+  HREF="manual-node158.html">Panel Items</A>
+<LI><A NAME="tex2html2712"
+  HREF="manual-node159.html">Canvas</A>
+<LI><A NAME="tex2html2713"
+  HREF="manual-node160.html">Text Window</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2704"
+  HREF="manual-node153.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2698"
+  HREF="manual-node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2692"
+  HREF="manual-node151.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2700"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2702"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2705"
+  HREF="manual-node153.html">X Event</A>
+<B> Up:</B> <A NAME="tex2html2699"
+  HREF="manual-node83.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html2693"
+  HREF="manual-node151.html">Colors and Colormaps</A>
+ &nbsp; <B>  <A NAME="tex2html2701"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2703"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

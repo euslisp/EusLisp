@@ -1,0 +1,600 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Reader</TITLE>
+<META NAME="description" CONTENT="Reader">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node63.html">
+<LINK REL="previous" HREF="manual-node61.html">
+<LINK REL="up" HREF="manual-node60.html">
+<LINK REL="next" HREF="manual-node63.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1302"
+  HREF="manual-node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1296"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1290"
+  HREF="manual-node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1298"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1300"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1303"
+  HREF="manual-node63.html">Printer</A>
+<B> Up:</B> <A NAME="tex2html1297"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1291"
+  HREF="manual-node61.html">Streams</A>
+ &nbsp; <B>  <A NAME="tex2html1299"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1301"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030102000000000000000">
+Reader</A>
+</H2>
+
+<P>
+Reader's global variables:
+
+<P>
+<DL>
+<DT><STRONG>*read-base*</STRONG></DT>
+<DD>number base to be read; default is decimal ten
+</DD>
+<DT><STRONG>*readtable*</STRONG></DT>
+<DD>current readtable which determines reader syntax
+</DD>
+</DL>
+
+<P>
+Reader's default macro characters:
+<PRE><TT>
+<B>(</B>   read list 
+<BR><B>"</B> 		  read string 
+<BR><B>'</B> 		  read quoted expression 
+<BR><B>#</B> 		  dispatch macro 
+<BR><B>;</B> 		  comment until end of line 
+<BR><B>`</B> 		  back-quote 
+<BR><B>,</B> 		  list-time eval 
+<BR><B>@</B> 		  append 
+<BR><B>%</B> 		  read C-like mathematical forms 
+<BR>
+</TT></PRE>
+
+<P>
+Escape characters:
+
+<P>
+<PRE><TT>
+<B><SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN></B>   single character escape 
+<BR><B><SPAN CLASS="MATH"><IMG
+ WIDTH="27" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img28.png"
+ ALT="$\vert...\vert$"></SPAN></B> 		  multiple character escape 
+<BR>
+</TT></PRE>
+
+<P>
+When an unescaped symbol is read,
+all the constituent characters are converted to upcase by default,
+and upcase-character symbol is stored internally.
+For example, 'abc and 'ABC are regarded as the same symbol.
+Escape is necessary to distinguish between them.
+'<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN>ABC<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN>, 'ABC and 'abc are identical,
+while '<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN>abc<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN> and 'abc are different symbols.
+By default, even if you enter a symbol with upcase letters,
+When symbols are printed,
+EusLisp's printer converts them into lowercase from
+internal upcase representation.
+This conversion is
+suppressed by setting <B>*print-case*</B> to <B>:UPCASE</B>.
+
+<P>
+Note that 10. is read as integer 10, not floating 10.0.
+Since ':' is reserved for package marker, it must be escaped
+when used as a constituent of a symbol, like '<SPAN CLASS="MATH"><IMG
+ WIDTH="73" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img33.png"
+ ALT="$\vert g:pcube\vert$"></SPAN>.
+This restriction is imposed not by the syntax of the character ':',
+but by the attribute which determines the alphabetical order and the meaning of
+the letter.
+The attributes of characters are hardwired in the reader.
+Thus, although you may change the syntax of a certain character by
+creating a new readtable by <B>copy-readtable</B> and
+resetting the syntactic meaning for the character by <B>set-syntax-from-char</B>,
+you cannot change its attribute anyway. 
+In other words, digits are always digits, alphabets are alphabets,
+and we cannot use letters like '#$%@' to represent numbers.
+
+<P>
+String is denoted by two double quotes '"' at the beginning and at the end.
+No case conversion is taken inside the quotes.
+A back-slash '&#237;s used as an escape to include a double quote.
+Therefore, "He said, &#207; like Lisp.SPMquot;" is read as a string
+including two double quotes.
+To enter a back-slash, two back-slashes are needed.
+Note that shift-JIS encoding of Japanese text is inadequate for this
+read-string convention, since some characters happen to have the
+code of a back-slash (<code>#x5c</code>) as their second byte.
+Use of EUC coding is preferrable.
+
+<P>
+<B>%</B> is an extended read-macro character specific to EusLisp.
+Preceding % to a mathematical formula written in infix notation,
+the formula is converted to lisp's prefix form. For an instance,
+<TT>%(1 + 2 * 3 / 4.0)</TT> is transformed to
+<TT>(+ 1 (/ (* 2 3) 4.0))</TT> and <TT>2.5</TT> is resulted.
+C-like function calls and array references are converted to lisp forms, too,
+thus, <TT>%(sin(x) + a[1])</TT>
+is evaluated to <TT>(+ (sin x) (aref a 1))</TT>.
+Functions having more than one arguments and arrays of more than two
+dimeisions are notated as <TT>func(a b c ...)</TT> and <TT>ary[1 2 3 ...]</TT>,
+not <TT>func(a,b,c)</TT> nor <TT>ary[1][2][3]</TT>.
+Relative expressions and assignments are also properly handled, so,
+<TT>%(a <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img7.png"
+ ALT="$&lt;$"></SPAN> b)</TT> is converted to <TT>(<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img7.png"
+ ALT="$&lt;$"></SPAN> a b)</TT>,
+and <TT>%(a[0] = b[0] * c[0])</TT> is to
+<TT>(setf (aref b 0) (* (aref b 0) (aref c 0)))</TT>.
+A simple optimization is performed to reduce duplicated function calls and
+array references.
+<TT>%(sin(x) + cos(x) / sin(x))</TT> is converted into 
+<TT>(let* ((temp (sin x))) (+ temp (/ (cos x) temp)))</TT>.
+
+<P>
+Dispatch macros are  preceeded by the <code>#</code> character.
+A number (integer) argument can be given between <code>#</code> and a dispatch macro
+character.
+This means that any digits (0 .. 9) cannot be defined as dispatch
+macro characters.
+Reader's standard dispatch macro characters follow:
+<DL>
+<DT><STRONG><TT>#nA(..)</TT></STRONG></DT>
+<DD>array
+</DD>
+<DT><STRONG><TT>#B</TT></STRONG></DT>
+<DD>binary number
+</DD>
+<DT><STRONG><TT>#D</TT></STRONG></DT>
+<DD>degree to radian conversion; #D180 = 3.14
+</DD>
+<DT><STRONG><TT>#F(...)</TT></STRONG></DT>
+<DD>floatvector
+</DD>
+<DT><STRONG><TT>#nF((..))</TT></STRONG></DT>
+<DD>float array; #2F((..) (..)) is matrix
+</DD>
+<DT><STRONG><TT>#I(...)</TT></STRONG></DT>
+<DD>integer-vector
+</DD>
+<DT><STRONG><TT>#nI((...))</TT></STRONG></DT>
+<DD>integer array
+</DD>
+<DT><STRONG><TT>#J(...)</TT></STRONG></DT>
+<DD>general object #J(myclass ....); obsolete
+</DD>
+<DT><STRONG><TT>#O</TT></STRONG></DT>
+<DD>octal number
+</DD>
+<DT><STRONG><TT>#P</TT></STRONG></DT>
+<DD>pathname
+</DD>
+<DT><STRONG><TT>#R</TT></STRONG></DT>
+<DD>radian to degree conversion; #R3.14 = 180.0
+</DD>
+<DT><STRONG><TT>#S(classname slotname1 val1 slotname2 val2 ...)</TT></STRONG></DT>
+<DD>structure (any object)
+</DD>
+<DT><STRONG><TT>#V(...)</TT></STRONG></DT>
+<DD>vector #V(vectorclass ...)
+</DD>
+<DT><STRONG><TT>#X</TT></STRONG></DT>
+<DD>hexadecimal number
+</DD>
+<DT><STRONG><TT>#(...)</TT></STRONG></DT>
+<DD>vector
+</DD>
+<DT><STRONG><TT>#n#</TT></STRONG></DT>
+<DD>label reference
+</DD>
+<DT><STRONG><TT>#n=</TT></STRONG></DT>
+<DD>label definition	
+</DD>
+<DT><STRONG><TT>#'</TT></STRONG></DT>
+<DD>FUNCTION; compiled-code or lambda-closure
+</DD>
+<DT><STRONG><TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN></TT></STRONG></DT>
+<DD>character
+</DD>
+<DT><STRONG><TT>#,</TT></STRONG></DT>
+<DD>read-time evaluation
+</DD>
+<DT><STRONG><TT>#+</TT></STRONG></DT>
+<DD>conditional read (positive)
+</DD>
+<DT><STRONG><TT>#-</TT></STRONG></DT>
+<DD>conditional read (negative)
+</DD>
+<DT><STRONG><TT>#*</TT></STRONG></DT>
+<DD>bit vector
+</DD>
+<DT><STRONG><TT>#:</TT></STRONG></DT>
+<DD>uninterned symbol
+</DD>
+<DT><STRONG><TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN>...<SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN>#</TT></STRONG></DT>
+<DD>comment; can be nested
+</DD>
+</DL>
+
+<P>
+Some reader functions have <EM>eof-error-p, eof-value</EM> and
+<EM>recursive-p</EM> parameters.
+The first two parameters control the behavior when the reader encounters
+with end-of-file.
+The default of <EM>eof-error-p</EM> is t, which causes an error at eof.
+If you want to know the occurrence of eof and don't want the system's
+error-handler to snatch control, specify nil to <EM>eof-error-p</EM>.
+Thus, when an eof appears during reading, the reader returns
+the <EM>eof-value</EM> instead of entering an error loop.
+<EM>Eof-value</EM> is defaulted to nil.
+So, you cannot know if nil is actually read, or eof appears.
+To distinguish them, give a value which can never appear in the stream.
+Use <B>cons</B> or <B>gensym</B> to make such unique data object.
+
+<P>
+<EM>Recursive-p</EM> is often used in read-macro functions,
+which call reader recursively.
+Non-nil value of <EM>recursive-p</EM> tells the reader that the read operation
+has been started somewhere else and it should not reset
+the internal table for reading forms labeled by <TT>#n=</TT> and <TT>#n#</TT>.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15800"></A>
+<B>read</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) recursive-p </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads one S-expression.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15810"></A>
+<B>read-delimited-list</B> <EM>delim-char &amp;optional stream recursive-p </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads s-expression which is delimited by <EM>delim-char</EM>.
+This is useful to read comma-separated list, or to read a sequence
+terminated by a special character like <TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>]</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15822"></A>
+<B>read-line</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads a line which is terminated by a <TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>newline</TT>.
+The string returned does not contain the last newline character.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15833"></A>
+<B>read-char</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads one character and returns its integer representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15843"></A>
+<B>read-from-string</B> <EM>string &amp;optional (eof-error-p t) (eof-value nil) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads one s-expression from <EM>string</EM>.
+Only the first s-expression can be read.
+If successive read operations need to be performed on a string
+containing more than one expression,
+use string-stream made by <A NAME="15855"></A><B>m</B>ake-string-input-stream.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15857"></A>
+<B>unread-char</B> <EM>char &amp;optional stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+puts the <EM>char</EM> back to the <EM>stream</EM>.
+More than one characters cannot be put back successively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15869"></A>
+<B>peek-char</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads a character from the <EM>stream</EM> without removing it from the buffer
+of the <EM>stream</EM>.
+This is equivalent to a <EM>read-char</EM> followed by a <EM>unread-char</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15883"></A>
+<B>y-or-n-p</B> <EM>&amp;optional format-string &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints <EM>format-string</EM> and <EM>args</EM> on your terminal,
+and asks ``y-or-n''.
+Repeat query until your response begins with either of ``y'' or ``n'',
+and returns T or NIL. Case does not matter.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15895"></A>
+<B>yes-or-no-p</B> <EM>&amp;optional stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints <EM>format-string</EM> and <EM>args</EM> on your terminal,
+and asks ``yes-or-no''.
+Repeat query until your response is either of ``yes'' or ``no'',
+and returns T or NIL.
+Case does not matter.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+In the readtable manipulating functions, the default value of readtable
+is the value of the global variable <B>*readtable*</B>.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15907"></A>
+<B>readtable-p</B> <EM>x </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> T if <EM>x</EM> is an readtable.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15918"></A>
+<B>copy-readtable</B> <EM>&amp;optional from-readtable to-readtable </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If no <EM>to-readtable</EM> is specified, a new one is created.
+All the information in <EM>from-readtable</EM> is transferd to <EM>to-readtable</EM>.
+The information included is, syntax table, read-macro table and
+dispatch-macro table, each of which has 256 elements.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15931"></A>
+<B>set-syntax-from-char</B> <EM>to-char to-char [to-readtable from-readtable] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> copies syntax and read-macro definition of <EM>from-char</EM> in
+<EM>from-readtable</EM> to that of <EM>to-char</EM> in <EM>to-readtable</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15945"></A>
+<B>set-macro-character</B> <EM>char func [non-teminating-p readtable] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines <EM>func</EM> as the read-macro function for <EM>char</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15957"></A>
+<B>get-macro-character</B> <EM>char [readtable] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the read-macro function for <EM>char</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15968"></A>
+<B>set-dispatch-macro-character</B> <EM>dispchar char func [readtable] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines <EM>func</EM> as the dispatch read-macro function for 
+the combination of <EM>dispchar</EM> and <EM>char</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15981"></A>
+<B>get-dispatch-macro-character</B> <EM>dispchar char [readtable] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the dispatch read-macro function for 
+the combination of <EM>dispchar</EM> and <EM>char</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1302"
+  HREF="manual-node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1296"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1290"
+  HREF="manual-node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1298"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1300"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1303"
+  HREF="manual-node63.html">Printer</A>
+<B> Up:</B> <A NAME="tex2html1297"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1291"
+  HREF="manual-node61.html">Streams</A>
+ &nbsp; <B>  <A NAME="tex2html1299"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1301"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

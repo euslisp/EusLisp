@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>VxWorks側の起動</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="VxWorks側の起動">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node91.html">
+<LINK REL="previous" HREF="jmanual-node89.html">
+<LINK REL="up" HREF="jmanual-node89.html">
+<LINK REL="next" HREF="jmanual-node91.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1763"
+  HREF="jmanual-node91.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1757"
+  HREF="jmanual-node89.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1751"
+  HREF="jmanual-node89.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1759"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1761"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1764"
+  HREF="jmanual-node91.html">ホスト側の起動</A>
+<B> Up:</B> <A NAME="tex2html1758"
+  HREF="jmanual-node89.html">VxWorks</A>
+<B> Previous:</B> <A NAME="tex2html1752"
+  HREF="jmanual-node89.html">VxWorks</A>
+ &nbsp; <B>  <A NAME="tex2html1760"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1762"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04016100000000000000">
+VxWorks側の起動</A>
+</H3>
+VxWorksにログインし、"*eusdir*/vxworks/vxwserv.o"をロードする。
+その後、<B>vxwserv</B>タスクをspawnする。
+<B>vxwserv</B>はVxWorks上の2200番ポートをlistenする。
+2200が塞がっている場合、2201, 2202, ...を試す。
+正しくbindされたポート番号が表示される。
+
+<P>
+<PRE>
+% rlogin asvx0  (あるいはetlic2上であれば、% tip asvx[01] も可能)
+-&gt; cd "atom:/usr/share/src/eus/vxworks"
+-&gt; ld &lt;vxwserv.o
+-&gt; sp vxwserv
+port 2200 is bound.
+</PRE>
+
+<P>
+VxWorksのiコマンドで、<B>vxwserv</B>タスクが常駐したことを確かめる。
+同じ要領で、eusから呼び出したいVxWorksのプログラムをVxWorks上にロードする。
+その後、EuslispとVxWorksとの
+コネクションが張られると、<B>vxwserv</B>を走らせたTTYに、次のようなメッセージが
+出力される。
+
+<P>
+<PRE>
+CLIENT accepted: sock=9 port = 1129: family = 2: addr = c01fcc10:
+VxWserv started with 16394 byte buffer
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

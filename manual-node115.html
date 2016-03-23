@@ -1,0 +1,450 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Matrix and Transformation</TITLE>
+<META NAME="description" CONTENT="Matrix and Transformation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node116.html">
+<LINK REL="previous" HREF="manual-node114.html">
+<LINK REL="up" HREF="manual-node113.html">
+<LINK REL="next" HREF="manual-node116.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2170"
+  HREF="manual-node116.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2164"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2158"
+  HREF="manual-node114.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2166"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2168"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2171"
+  HREF="manual-node116.html">LU decomposition</A>
+<B> Up:</B> <A NAME="tex2html2165"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2159"
+  HREF="manual-node114.html">Float-vectors</A>
+ &nbsp; <B>  <A NAME="tex2html2167"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2169"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04032000000000000000">
+Matrix and Transformation</A>
+</H2>
+
+<P>
+A matrix is a two-dimensional array whose elements are all floats.
+In most functions a matrix can be of any size,
+but the <B>v*, v.*</B>, <B>Euler-angle</B> and <B>rpy-angle</B> functions
+can only handle three dimensional matrices.
+<B>Transform, m*</B> and <B>transpose</B> do not restrict
+the matrices to be square,
+and they operate on general n*m size matrices.
+
+<P>
+Functions that can accept result parameter
+places the computed result there, and no heap is wasted.
+All matrix functions are intended for the transformation in the normal
+coordinate systems, and not in the homogeneous coordinates.
+
+<P>
+The <B>rpy-angle</B> function decomposes a rotation matrix into three components
+of rotation angles around z, y and x axes of the world coordinates.
+The <B>Euler-angle</B> function is similar to <B>rpy-angle</B> but
+decomposes into rotation angles around local z, y and again z axes.
+Both of these functions return two solutions since angles can be
+taken in the opposite directions.
+
+<P>
+<PRE>
+; Mat is a 3X3 rotation matrix.
+(setq rots (rpy-angle mat))
+(setq r (unit-matrix 3))
+(rotate-matrix r (car rots) :x t r)
+(rotate-matrix r (cadr rots) :y t r)
+(rotate-matrix r (caddr rots) :z t r)
+;--&gt; resulted r is equivalent to mat
+</PRE>
+
+<P>
+To keep track of pairs of a position and a orientation in 3D space, use
+the <B>coordinates</B> and <B>cascaded-coords</B> classes
+detailed in the section <A HREF="manual-node117.html#Coordinates">15.4</A>.
+
+<P>
+
+ <BR>
+<BR> <A NAME="27235"></A>
+<B>matrix</B> <EM>&amp;rest elements </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new matrix from <EM>elements</EM>.
+Row x Col = (number of elements) x (length of the 1st element).
+Each of <EM>elements</EM> can be of any type of sequence.
+Each sequence is lined up as a row vector in the matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27247"></A>
+<B>make-matrix</B> <EM>rowsize columnsize &amp;optional init </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a matrix of <!-- MATH
+ $rowsize \times columnsize$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="160" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img51.png"
+ ALT="$rowsize \times columnsize$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27257"></A>
+<B>matrixp</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>obj</EM> is a matrix, i.e. <EM>obj</EM> is a two dimensional array
+and its elements are floats.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27269"></A>
+<B>matrix-row</B> <EM>mat row-index </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts a row vector out of matrix <EM>mat</EM>.
+<B>matrix-row</B> is also used to set a vector in a particular row
+of a matrix using in conjunction with <B>setf</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27282"></A>
+<B>matrix-column</B> <EM>mat column-index </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts a column vector out of <EM>mat</EM>.
+<B>matrix-column</B> is also used to set a vector in a particular
+column of a matrix using in conjunction with <B>setf</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27295"></A>
+<B>m*</B> <EM>matrix1 matrix2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+concatenates <EM>matrix1</EM> and <EM>matrix2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27307"></A>
+<B>transpose</B> <EM>matrix &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+transposes <EM>matrix</EM>, i.e. columns of <EM>matrix</EM> are exchanged with
+<EM>rows</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27320"></A>
+<B>unit-matrix</B> <EM>dim </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an identity matrix of <EM>dim</EM> <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img52.png"
+ ALT="$\times$"></SPAN> <EM>dim</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27332"></A>
+<B>replace-matrix</B> <EM>dest src </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+replaces all the elements of dest matrix with ones of src matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27342"></A>
+<B>scale-matrix</B> <EM>scalar mat </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies <EM>scaler</EM> to all the elements of <EM>mat</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27354"></A>
+<B>copy-matrix</B> <EM>matrix </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a copy of <EM>matrix</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27365"></A>
+<B>transform</B> <EM>matrix fltvector &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies <EM>matrix</EM> to <EM>fltvector</EM> from the left.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27377"></A>
+<B>transform</B> <EM>fltvector matrix &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies <EM>matrix</EM> to <EM>fltvector</EM> from the right.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27389"></A>
+<B>rotate-matrix</B> <EM>matrix theta axis &amp;optional world-p result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies a rotation matrix from the left (when world-p is non-nil)
+or from the right (when world-p is nil).
+When a matrix is rotated by <B>rotate-matrix</B>,
+the rotation axis <B>:x, :y, :z</B> or 0,1,2
+may be taken either in the world coordinates or in the local coordinates.
+If <EM>world-p</EM> is specified nil, it means rotation along the
+axis in the local coordinate system and the rotation matrix is multiplied
+from the right.
+Else if worldp is non-nil, the rotation is made in the
+world coordinates and the rotation matrix is multiplied from the left.
+If NIL is given to <EM>axis</EM>, <EM>matrix</EM> should be two dimensional and
+the rotation is taken in 2D space where <EM>world-p</EM> does not make sense.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27405"></A>
+<B>rotation-matrix</B> <EM>theta axis &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a 2D or 3D rotation matrix around <EM>axis</EM> which can be any of
+:x, :y, :z, 0, 1, 2, a 3D float-vector or NIL.
+When you make a 2D rotation matrix, axis should be NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27416"></A>
+<B>rotation-angle</B> <EM>rotation-matrix </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts a equivalent rotation axis and angle from <EM>rotation-matrix</EM>
+and a list of float and float-vector is returned.
+NIL is returned when <EM>rotation-matrix</EM> is a unit-matrix.
+Also if the rotation angle is too small, the result may have errors.
+When <EM>rotation-matrix</EM> is 2D,  the single angle value is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27429"></A>
+<B>rpy-matrix</B> <EM>ang-z ang-y ang-x </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a rotation matrix defined by roll-pitch-yaw angles.
+First, a unit-matrix is rotated by ang-x radian along X-axis.
+Next, ang-y around Y-axis and finally ang-z around Z-axis.
+All the rotation axes are taken in the world coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27439"></A>
+<B>rpy-angle</B> <EM>matrix </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts two triplets of roll-pitch-yaw angles of <EM>matrix</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27450"></A>
+<B>Euler-matrix</B> <EM>ang-z ang-y ang2-z </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a rotation matrix defined by three Euler angles.
+First, a unit-matrix is rotated <EM>ang-z</EM> around Z-axis, next, <EM>ang-y</EM>
+around Y-axis and finally <EM>ang2-z</EM> again around Z-axis.
+All the rotation axes are taken in the local coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27463"></A>
+<B>Euler-angle</B> <EM>matrix </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts two tuples of Euler angles.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2170"
+  HREF="manual-node116.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2164"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2158"
+  HREF="manual-node114.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2166"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2168"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2171"
+  HREF="manual-node116.html">LU decomposition</A>
+<B> Up:</B> <A NAME="tex2html2165"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2159"
+  HREF="manual-node114.html">Float-vectors</A>
+ &nbsp; <B>  <A NAME="tex2html2167"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2169"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

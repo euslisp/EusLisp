@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>X Event</TITLE>
+<META NAME="description" CONTENT="X Event">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node154.html">
+<LINK REL="previous" HREF="manual-node152.html">
+<LINK REL="up" HREF="manual-node152.html">
+<LINK REL="next" HREF="manual-node154.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2726"
+  HREF="manual-node154.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2720"
+  HREF="manual-node152.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2714"
+  HREF="manual-node152.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2722"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2724"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2727"
+  HREF="manual-node154.html">Panel</A>
+<B> Up:</B> <A NAME="tex2html2721"
+  HREF="manual-node152.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2715"
+  HREF="manual-node152.html">XToolKit</A>
+ &nbsp; <B>  <A NAME="tex2html2723"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2725"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04091000000000000000">
+X Event</A>
+</H2>
+
+<P>
+In the current implementation, 
+an event structure is received in a fixed event buffer (an integer-vector
+of 25 elements)
+and the same buffer is reused on all events.
+The event structure has to be copied when more than one events need to
+be referenced at the same time.
+
+<P>
+<TT>Window-main-loop</TT> is the function which captures all events sent
+from the X server and delivers them to each window where the event happened.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="47093"></A>
+<B>event</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> a 25-element integer-vector holding the most recent
+event structure.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47103"></A>
+<B>next-event</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+stores the event structure in <TT>event</TT> and returns it
+if there is at least one pending event,
+NIL if there is no pending event.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47114"></A>
+<B>event-type</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the keyword symbol representing the event-type in the <EM>event</EM>
+structure. The event-type keywords are:
+<TT>:KeyPress</TT> (2),
+<TT>:KeyRelease</TT> (3),
+<TT>:ButtonPress</TT> (4),
+<TT>:ButtonRelease</TT> (5),
+<TT>:MotionNotify</TT> (6),
+<TT>:EnterNotify</TT> (7),
+<TT>:LeaveNotify</TT> (8),
+<TT>:FocusIn</TT> (9),
+<TT>:FocusOut</TT> (0),
+<TT>:KeymapNotify</TT> (1),
+<TT>:Expose</TT> (12),
+<TT>:GraphicsExpose</TT> (13),
+<TT>:NoExpose</TT> (14),
+<TT>:VisibilityNotify</TT> (15),
+<TT>:CreateNotify</TT> (16),
+<TT>:DestroyNotify</TT> (17),
+<TT>:UnmapNotify</TT> (18),
+<TT>:MapNotify</TT> (19),
+<TT>:MapRequest</TT> (20),
+<TT>:ConfigureNotify</TT> (22),
+<TT>:ConfigureRequest</TT> (23),
+<TT>:GravityNotify</TT> (24),
+<TT>:ResizeRequest</TT> (25),
+<TT>:CirculateNotify</TT> (26),
+<TT>:CirculateRequest</TT> (27),
+<TT>:PropertyNotify</TT> (28),
+<TT>:SelectionClear</TT> (29),
+<TT>:SelectionRequest</TT> (30),
+<TT>:SelectionNotify</TT> (31),
+<TT>:ColormapNotify</TT> (32),
+<TT>:ClientMessage</TT> (33),
+<TT>:MappingNotify</TT> (34),
+<TT>:LASTEvent</TT> (35).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47158"></A>
+<B>event-window</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the window object where the <EM>event</EM> occurred.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47169"></A>
+<B>event-x</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> extracts the <EM>x</EM> coordinate,
+(i.e., the horizontal position of the mouse pointer relatively in the window)
+out of the <EM>event</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47181"></A>
+<B>event-y</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> extracts the <EM>x</EM> coordinate,
+(i.e., the vertical position of the mouse pointer relatively in the window)
+out of the <EM>event</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47193"></A>
+<B>event-width</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the eighth element of the <EM>event</EM> structure
+which represents the width parameter at the <TT>:configureNotify</TT> event.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47205"></A>
+<B>event-height</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the ninth element of the <EM>event</EM> structure
+which represents the height parameter at the <TT>:configureNotify</TT> event.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47217"></A>
+<B>event-state</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of keywords representing the mouse button 
+and modifier key state.
+Keywords are: <TT>:shift, :control, :meta, :left, :middle</TT> and <TT>:right</TT>.
+For example, if left mouse button is pressed while shift key is down,
+<TT>(:shift :left)</TT> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47230"></A>
+<B>display-events</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> displays all xwindow events captured by
+<TT>x:nextevent</TT>. Control-C is the only way to terminate this function.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47241"></A>
+<B>window-main-loop</B> <EM>&amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+receives Xevents and delivers them to window objects where the event
+occurred.
+According to the event-type, methods in the window's class named 
+<TT>:KeyPress, :KeyRelease, :ButtonPress,
+:ButtonRelease, :MotionNotify,
+:EnterNotify, :LeaveNotify</TT> and <TT>:ConfigureNotify</TT> 
+are invoked with <EM>event</EM> as the argument.
+If <EM>forms</EM> is given,
+evaluates them each time event arrival is checked.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47255"></A>
+<B>window-main-thread</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Do the same thing as <TT>window-main-loop</TT> in a different thread.
+<TT>Window-main-thread</TT> is only available on Solaris2.
+<TT>Window-main-thread</TT> installs an error handler which
+does not enter a read-eval-print loop.
+After printing the error information, the event
+processing continues.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2726"
+  HREF="manual-node154.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2720"
+  HREF="manual-node152.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2714"
+  HREF="manual-node152.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2722"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2724"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2727"
+  HREF="manual-node154.html">Panel</A>
+<B> Up:</B> <A NAME="tex2html2721"
+  HREF="manual-node152.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2715"
+  HREF="manual-node152.html">XToolKit</A>
+ &nbsp; <B>  <A NAME="tex2html2723"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2725"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

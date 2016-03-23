@@ -1,0 +1,495 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Viewer</TITLE>
+<META NAME="description" CONTENT="Viewer">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node134.html">
+<LINK REL="previous" HREF="manual-node132.html">
+<LINK REL="up" HREF="manual-node129.html">
+<LINK REL="next" HREF="manual-node134.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2433"
+  HREF="manual-node134.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2427"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2421"
+  HREF="manual-node132.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2429"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2431"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2434"
+  HREF="manual-node134.html">Drawings</A>
+<B> Up:</B> <A NAME="tex2html2428"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2422"
+  HREF="manual-node132.html">Viewport</A>
+ &nbsp; <B>  <A NAME="tex2html2430"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2432"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04054000000000000000">
+Viewer</A>
+</H2>
+To get a drawing  on a screen, four objects are needed:
+(1) objects to be drawn, (2) a viewing which defines the viewing coordinates
+and the projection, (3) a viewport for clipping in NDC and
+the transformation from NDC to physical screen coordinates,
+and (4) a viewsurface which performs drawing functions on
+a physical display device.
+A <B>viewer</B> object holds a viewing, a viewport and a viewsurface object,
+and controls successive coordinates transformation. 
+Functions <B>draw</B> and <B>hid</B> described in section <A HREF="manual-node134.html#Drawings">17.5</A>
+use the instances of viewer.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="36073"></A>
+<BIG CLASS="XLARGE"><B>viewer </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (eye :type viewint) 
+<BR>(port :type viewport) 
+<BR>(surface :type viewsurface) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines the cascaded coordinates transformation from the viewing via
+the viewport to the viewsurface.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36090"></A>
+<B>:viewing</B> <EM>&amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>msg</EM> is given, <EM>msg</EM> is sent to the viewing (eye) object,
+Otherwise, the viewing (eye) object is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36102"></A>
+<B>:viewport</B> <EM>&amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>msg</EM> is given, <EM>msg</EM> is sent to the viewport (port) object,
+Otherwise, the viewport (port) object is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36114"></A>
+<B>:viewsurface</B> <EM>&amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>msg</EM> is given, <EM>msg</EM> is sent to the viewsurface (surface) object,
+Otherwise, the viewsurface (surface) object is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36126"></A>
+<B>:adjust-viewport</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+When the size of viewsurface has been changed, <B>:adjust-viewport</B>
+changes viewport transformation sending a proper message to port.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36137"></A>
+<B>:resize</B> <EM>width height </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the size of viewsurface by sending :resize message to the viewsurface
+and :size message to viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36147"></A>
+<B>:draw-line-ndc</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a line whose two end points <EM>p1, p2</EM> are defined in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36158"></A>
+<B>:draw-polyline-ndc</B> <EM>polylines </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws polylines whose end points are defined in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36168"></A>
+<B>:draw-star-ndc</B> <EM>center &amp;optional (size 0.01) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a cross mark in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36178"></A>
+<B>:draw-box-ndc</B> <EM>low-left up-right </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a rectangle in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36188"></A>
+<B>:draw-arc-ndc</B> <EM>point width height angle1 angle2 [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws an arc in NDC.
+The viewsurface object bound in this viewer must accept <B>:arc</B> message.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36199"></A>
+<B>:draw-fill-arc-ndc</B> <EM>point width height angle1 angle2 [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a filled-arc in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36209"></A>
+<B>:draw-string-ndc</B> <EM>position string [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws <EM>string</EM> at <EM>position</EM> defined in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36221"></A>
+<B>:draw-image-string-ndc</B> <EM>position string [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36232"></A>
+<B>:draw-rectangle-ndc</B> <EM>position width height [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36243"></A>
+<B>:draw-fill-rectangle-ndc</B> <EM>point width height [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36254"></A>
+<B>:draw-line</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a line whose two end points <EM>p1, p2</EM> are defined in the world
+coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36265"></A>
+<B>:draw-star</B> <EM>position &amp;optional (size 0.01) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a cross at <EM>position</EM> located in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36276"></A>
+<B>:draw-box</B> <EM>center &amp;optional (size 0.01) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a rectangular at <EM>center</EM>in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36287"></A>
+<B>:draw-arrow</B> <EM>p1 p2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws an arrow from <EM>p1</EM> to <EM>p2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36299"></A>
+<B>:draw-edge</B> <EM>edge </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36310"></A>
+<B>:draw-edge-image</B> <EM>edge-image </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36321"></A>
+<B>:draw-faces</B> <EM>face-list &amp;optional (normal-clip nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36332"></A>
+<B>:draw-body</B> <EM>body &amp;optional (normal-clip nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36343"></A>
+<B>:draw-axis</B> <EM>coordinates &amp;optional size </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws coordinates axes whose length is <EM>size</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36354"></A>
+<B>:draw</B> <EM>&amp;rest things </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws 3D geometric objects.
+If the object is a 3D float-vector, a small cross is drawn at the position.
+If it is a list of 3D float-vectors, it is taken as a polyline.
+If <EM>thing</EM> accepts <TT>:draw</TT> message,
+the method is invoked with this viewer as its argument.
+If the object defines <TT>:drawners</TT> method,
+the <B>:draw</B> message is sent to the result of <TT>:drawners</TT>.
+<TT>Line, edge, polygon, face</TT>, and <TT>body</TT> objects are drawn
+by corresponding <EM>:draw-xxx</EM> methods defined in viewer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36372"></A>
+<B>:erase</B> <EM>&amp;rest things </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws <EM>things</EM> with background color.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36383"></A>
+<B>:init</B> <EM>&amp;key :viewing :viewport :viewsurface </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <EM>viewing, viewport</EM> and <EM>viewsurface</EM> to <TT>eye, port</TT>,
+and <TT>surface</TT> slots of this viewer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36397"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="169" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img84.png"
+ ALT="\begin{emtabbing}
+{\bf view}
+\it\&amp;key \= (size 500) (width size) (height size)
+...
+...en) (screen-y screen) \\
+\&gt; (xcenter 500) (ycenter 400) \\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>creates a new viewer and pushes it in *viewers* list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2433"
+  HREF="manual-node134.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2427"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2421"
+  HREF="manual-node132.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2429"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2431"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2434"
+  HREF="manual-node134.html">Drawings</A>
+<B> Up:</B> <A NAME="tex2html2428"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2422"
+  HREF="manual-node132.html">Viewport</A>
+ &nbsp; <B>  <A NAME="tex2html2430"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2432"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

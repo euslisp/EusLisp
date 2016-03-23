@@ -1,0 +1,421 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Color-Pixel-Image</TITLE>
+<META NAME="description" CONTENT="Color-Pixel-Image">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node140.html">
+<LINK REL="previous" HREF="manual-node138.html">
+<LINK REL="up" HREF="manual-node136.html">
+<LINK REL="next" HREF="manual-node140.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2522"
+  HREF="manual-node140.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2516"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2510"
+  HREF="manual-node138.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2518"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2520"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2523"
+  HREF="manual-node140.html">Edge Finder</A>
+<B> Up:</B> <A NAME="tex2html2517"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2511"
+  HREF="manual-node138.html">Pixel-Image</A>
+ &nbsp; <B>  <A NAME="tex2html2519"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2521"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04063000000000000000">
+Color-Pixel-Image</A>
+</H2>
+Color images are represented by <B>color-pixel-image</B> objects
+which have three <B>pixel-image</B> objects to represent red, green, and
+blue components in RGB representation,
+or hue, lightness, and saturation components in the HLS model.
+Conversion between RGB and HLS is supported.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="38964"></A>
+<BIG CLASS="XLARGE"><B>color-pixel-image </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 width height component1 component2 component3 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents color images with three <TT>pixel-image</TT> objects.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38982"></A>
+<B>:width</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the width of this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38992"></A>
+<B>:height</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the height of this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39002"></A>
+<B>:size</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns <!-- MATH
+ $width \times height$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="110" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img86.png"
+ ALT="$width \times height$"></SPAN> of this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39012"></A>
+<B>:red</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component1.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39022"></A>
+<B>:green</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component2.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39032"></A>
+<B>:blue</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component3.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39042"></A>
+<B>:hue</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component1. A hue value between 0 and 360 is
+represented by a byte value between 0 and 255.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39052"></A>
+<B>:lightness</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component2.
+The normalized brightness values (0..1) are mapped into integers between 0 and 255.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39062"></A>
+<B>:saturation</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component3.
+The normalized saturation values (0..1) are mapped into integers between 0 and 255.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39072"></A>
+<B>:pixel</B> <EM>x y </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a list of three integers each of which is
+taken from component1, component2 and component3 at (<EM>x</EM>,<EM>y</EM>).
+This triplet can be interpreted either as RGB values or HLS values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39084"></A>
+<B>:monochromize</B> <EM>&amp;optional (NTSC nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes brightness from RGB components and returns a new <TT>pixel-image</TT>.
+If <EM>NTSC</EM> is nil, <SPAN CLASS="MATH"><IMG
+ WIDTH="109" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img87.png"
+ ALT="$(R+G+B)/3$"></SPAN> is computed.
+If T, <!-- MATH
+ $0.299*R+0.587*G+0.114*B$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="235" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img88.png"
+ ALT="$0.299*R+0.587*G+0.114*B$"></SPAN> is computed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39096"></A>
+<B>:HLS</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> assuming this image is representing an RGB image,
+converts the image into HLS representation.
+<B>RGB2HLS</B> is called for the conversion of each pixel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39107"></A>
+<B>:RGB</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> assuming this image is representing an HLS image,
+converts the image into RGB representation.
+<B>HLS2RGB</B> is called for the conversion of each pixel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39118"></A>
+<B>:halve</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns color-pixel-image that is shrunk into half-size image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39128"></A>
+<B>:display</B> <EM>&amp;optional (win *color-viewer*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+displays this color-pixel-image in a xwindow
+designated by <EM>win</EM> by using <TT>:putimage</TT>.
+Each pixel value is referred as a index in x's color map.
+To get a desired appearance, this pixel-image must have been translated
+by proper LUTs.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39140"></A>
+<B>:display-lut</B> <EM>&amp;optional (newlut1) (newlut2 newlut1) (newlut3 newlut2) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets look-up tables <EM>newlut1</EM>, <EM>newlut1</EM> and <EM>newlut1</EM>
+as display-lut, respectively. Then translates this image using this look-up table
+and sets translated pixel-image object as xpicture.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39153"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img89.png"
+ ALT="\begin{emtabbing}
+{\bf :edge1}
+\it\&amp;optional \=(method 1) \\lq [method]\\
+\&gt;(th1 ...
+...ld*)\\
+\&gt;(run *edge-length-threshold*) (win *color-viewer*)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>detects edge of this image. And displays this edge on this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39164"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39174"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39184"></A>
+<B>:prin1</B> <EM>strm &amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints this image-pixel object with its name and dimensions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39194"></A>
+<B>:init</B> <EM>width height &amp;optional r g b </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines the size of a color image and allocates <TT>pixel-image</TT>s for each
+color component.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+Provided a ppm file, you can extract color (hue) values out of the image
+and display it in an xwindow by the following program.<PRE>
+(setq ppmimg (read-pnm "xxx.ppm"))
+(send ppmimg :hls)   ; RGB to HLS conversion
+(make-ximage (send ppmimg :hue) *rainbow32*)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2522"
+  HREF="manual-node140.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2516"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2510"
+  HREF="manual-node138.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2518"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2520"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2523"
+  HREF="manual-node140.html">Edge Finder</A>
+<B> Up:</B> <A NAME="tex2html2517"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2511"
+  HREF="manual-node138.html">Pixel-Image</A>
+ &nbsp; <B>  <A NAME="tex2html2519"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2521"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

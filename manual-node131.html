@@ -1,0 +1,463 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Projection</TITLE>
+<META NAME="description" CONTENT="Projection">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node132.html">
+<LINK REL="previous" HREF="manual-node130.html">
+<LINK REL="up" HREF="manual-node129.html">
+<LINK REL="next" HREF="manual-node132.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2405"
+  HREF="manual-node132.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2399"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2393"
+  HREF="manual-node130.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2401"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2403"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2406"
+  HREF="manual-node132.html">Viewport</A>
+<B> Up:</B> <A NAME="tex2html2400"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2394"
+  HREF="manual-node130.html">Viewing</A>
+ &nbsp; <B>  <A NAME="tex2html2402"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2404"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04052000000000000000">
+Projection</A>
+</H2>
+
+<P>
+Class <B>parallel-projection and perspective-projection</B> process
+projection transformation, which is represented with a 4X4 matrix,
+i.e., the transformation is taken in the three dimensional homogeneous
+coordinates.
+Class <B>projection</B> is an abstract class for both of these.
+Since these projection classes inherit the viewing class,
+two coordinates transformation, world-to-viewing and projection
+can be performed at the same time.
+By sending the <TT>:project3</TT> message with a 3D vector to a projection object,
+a float-vector of four elements is returned.
+<B>Homo2normal</B> function is used to convert this homogeneous vector
+to the normal representation.
+The result is a vector represented in so called normalized device coordinates
+(NDC), in which a visible vector ranges within -1 to 1
+in each of x,y, and z dimensions.
+For the simulation of real cameras in a robot world,
+the perspective projection is used more often than the parallel-projection.
+Perspective-projection defines a few more parameters.
+<TT>Screenx</TT> and <TT>screeny</TT> are the sizes of the window on the
+viewing plane on which observed objects are projected,
+and with the larger screen, the wider space is projected.
+<TT>Viewdistance</TT> which defines the distance between the viewpoint
+and the viewplane also concerns with the viewing angle.
+The larger viewdistance maps the smaller region to the window on the view plane.
+<TT>Hither</TT> and <TT>yon</TT> parameters determine the distance to the front and back
+depth clipping planes.
+Objects outside these two planes are clipped out.
+Actually, this clipping procedure is performed by the viewport object.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="35682"></A>
+<BIG CLASS="XLARGE"><B>projection </B></BIG> [class]  <PRE><TT>
+  :super   <B>viewing</B> 
+<BR>  :slots 		 (screenx screeny hither yon projection-matrix) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines projection transformation with a 4x4 matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35699"></A>
+<B>:projection</B> <EM>&amp;optional pmat </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+if <EM>pmat</EM> is given, it is set to the <EM>projection-matrix</EM> slot.
+<B>:projection</B> returns the current 4x4 projection matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35712"></A>
+<B>:project</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Vec</EM> is a three-dimensional homogeneous float-vector of four elements.
+<EM>Vec</EM> is transformed by projection-matrix,
+and the resulted homogeneous representation is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35724"></A>
+<B>:project3</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Vec</EM> is a normal 3D float-vector.
+<EM>Vec</EM> is homogenized and transformed by projection-matrix,
+and the resulted homogeneous representation is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35736"></A>
+<B>:view</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+applies viewing transformation and projection transformation to <EM>vec</EM>
+successively.
+The resulted homogeneous representation is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35747"></A>
+<B>:screen</B> <EM>xsize (&amp;optional (ysize xsize)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the size of the viewing screen.
+The larger the size, the wider view you get.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35757"></A>
+<B>:hither</B> <EM>depth-to-front-clip-plane </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+determines the distance from the viewpoint to the front-clipping plane.
+Objects before the front-clipping (hither) plane are clipped out.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35767"></A>
+<B>:yon</B> <EM>depth-to-back-clip-plane </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the distance between the viewpoint and
+the back-clipping plane.
+Objects behind the back-clipping (yon) plane are clipped out.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35777"></A>
+<B>:aspect</B> <EM>&amp;optional ratio </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Aspect ratio is the ratio between screen-y and screen-x.
+If <EM>ratio</EM> is given,
+the aspect ratio is changed by setting screen-y to screen-x * <EM>ratio</EM>.
+<B>:aspect</B> returns the current aspect ratio.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35790"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="130" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img82.png"
+ ALT="\begin{emtabbing}
+{\bf :init}
+\it
+\&amp;key \= :hither \hspace{5mm} \= 100.0 \\lq [met...
+... :screen-y \&gt; (* screen-x aspect) \\
+\&gt; \&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>initializes viewing and projection.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="35803"></A>
+<BIG CLASS="XLARGE"><B>parallel-viewing </B></BIG> [class]  <PRE><TT>
+  :super   <B>projection</B> 
+<BR>  :slots 		 () 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines parallel projection.
+<B>Hid</B> (the hidden-line elimination function)
+cannot handle parallel projection.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35821"></A>
+<B>:make-projection</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="35833"></A>
+<BIG CLASS="XLARGE"><B>perspective-viewing </B></BIG> [class]  <PRE><TT>
+  :super   <B>projection</B> 
+<BR>  :slots 		 (viewdistance) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a perspective projection transformation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35850"></A>
+<B>:make-projection</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35861"></A>
+<B>:ray</B> <EM>u v </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the normalized direction-vector pointing (u,v) on
+the normalized screen from the viewpoint.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35871"></A>
+<B>:viewdistance</B> <EM>&amp;optional vd </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Viewdistance is the distance between viewpoint and the screen.
+If <EM>vd</EM> is given, it is set to viewdistance.
+The viewdistance corresponds to the focal length of a camera.
+The greater the viewdistance, the more zoomed-up view you get.
+<B>:viewdistance</B> returns the current viewdistance.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35883"></A>
+<B>:view-angle</B> <EM>&amp;optional ang </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+set screen size so that the prospective angle of the diagonal of the
+screen becomes <EM>ang</EM> radian.
+Note that angles somewhat between 20 degree (approx. 0.4 rad.)
+and 50  degree  (0.9 rad.) can generate a natural perspective view.
+Wider angle generates a skewed view, and narrower a flat view like
+orthogonal (parallel) viewing.
+<B>:view-angle</B> returns current or new view angle in radian.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35895"></A>
+<B>:zoom</B> <EM>&amp;optional scale </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>scale</EM> is given, the screen is changed relatively to the
+current size by <EM>scale</EM>
+(the viewdistance is unchanged).
+If you give 0.5 for <EM>scale</EM>, you get two times as wide view as before.
+<B>:zoom</B> returns new view angle in radian.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35909"></A>
+<B>:lookaround</B> <EM>alfa beta </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates and rotates the viewpoint.
+The center of rotation is taken at 
+the midst of the hither plane and the yon plane on the viewline.
+The viewing coordinates is rotated <EM>alfa</EM> radian around world's z-axis
+and <EM>beta</EM> radian around x-axis locally.
+<B>:lookaround</B> allows you to move around the object in the center of
+viewing.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35922"></A>
+<B>:look-body</B> <EM>bodies </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes view direction, screen sizes, and hither/yon so that all the
+<EM>bodies</EM> fit in the viewport.
+Viewpoint does not change.
+View direction is chosen so that the viewing line penetrate the center
+of the bounding box of all bodies.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35933"></A>
+<B>:init</B> <EM>&amp;key (:viewdistance 100.0) &amp;allow-other-keys </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2405"
+  HREF="manual-node132.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2399"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2393"
+  HREF="manual-node130.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2401"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2403"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2406"
+  HREF="manual-node132.html">Viewport</A>
+<B> Up:</B> <A NAME="tex2html2400"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2394"
+  HREF="manual-node130.html">Viewing</A>
+ &nbsp; <B>  <A NAME="tex2html2402"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2404"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

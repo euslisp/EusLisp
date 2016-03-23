@@ -1,0 +1,516 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Body</TITLE>
+<META NAME="description" CONTENT="Body">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node124.html">
+<LINK REL="previous" HREF="manual-node122.html">
+<LINK REL="up" HREF="manual-node119.html">
+<LINK REL="next" HREF="manual-node124.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2289"
+  HREF="manual-node124.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2283"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2277"
+  HREF="manual-node122.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2285"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2287"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2290"
+  HREF="manual-node124.html">Primitive Body Creation</A>
+<B> Up:</B> <A NAME="tex2html2284"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2278"
+  HREF="manual-node122.html">Plane and Face</A>
+ &nbsp; <B>  <A NAME="tex2html2286"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2288"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04044000000000000000">
+Body</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="31872"></A>
+<BIG CLASS="XLARGE"><B>body </B></BIG> [class]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (faces edges vertices model-vertices box convexp evertedp csg) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a three dimensional shape.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31889"></A>
+<B>:magnify</B> <EM>rate </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the size of this body by <EM>rate</EM>.
+Magnification is recorded in csg list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31900"></A>
+<B>:translate-vertices</B> <EM>vector </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates model-vertices. <EM>Vector</EM> should be given in the local coordinates.
+Translation is recorded in csg list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31911"></A>
+<B>:rotate-vertices</B> <EM>angle axis </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+rotates model-vertices <EM>angle</EM> radian around <EM>axis</EM>.
+Rotation is recorded in csg list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31923"></A>
+<B>:reset-model-vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31934"></A>
+<B>:newcoords</B> <EM>rot &amp;optional pos </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes coordinates.
+If pos is not given, rot is given as a instance of coordinate class.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31944"></A>
+<B>:vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of all vertices of this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31954"></A>
+<B>:edges</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of all edges of this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31964"></A>
+<B>:faces</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of all the faces composing this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31974"></A>
+<B>:box</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the bounding-box of this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31984"></A>
+<B>:Euler</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+calculates Euler number of this body,
+that is <!-- MATH
+ $faces + vertices - edges - 2 - holes$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="262" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img67.png"
+ ALT="$faces + vertices - edges - 2 - holes$"></SPAN>.
+This should equal to <SPAN CLASS="MATH"><IMG
+ WIDTH="63" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img68.png"
+ ALT="$-2 rings$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31994"></A>
+<B>:perimeter</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the sum of length of all the edges.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32004"></A>
+<B>:volume</B> <EM>&amp;optional (reference-point #f(0 0 0)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the volume of this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32014"></A>
+<B>:centroid</B> <EM>&amp;optional (point #f(0 0 0) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the location of center-of-gravity
+assuming that this body is homogeneously solid.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32024"></A>
+<B>:possibly-interfering-faces</B> <EM>box </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32035"></A>
+<B>:common-box</B> <EM>body </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns common minimal box for this body and another body.
+If there is interference between two bodies, the intersection must
+exist in this common-box.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32045"></A>
+<B>:insidep</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns <B>:inside</B> if <EM>point</EM> resides in this body,
+<B>:border</B> if <EM>point</EM> lies on a surface of this body,
+and <B>:outside</B> otherwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32060"></A>
+<B>:intersect-face</B> <EM>face </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if there is an interference between the faces of this body
+and <EM>face</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32071"></A>
+<B>:intersectp</B> <EM>body </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Checks intersection with another body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32081"></A>
+<B>:evert</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> reverse the directions of all the faces and edges
+so that the inside of this body becomes outside.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32091"></A>
+<B>:faces-intersect-with-point-vector</B> <EM>point direction </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+collects all faces that intersect with a vector casted from <EM>point</EM>
+towards em direction.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32103"></A>
+<B>:distance</B> <EM>target </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>target</EM> may either be a float-vector or a plane object.
+<B>:distance</B> finds the closest face from <EM>target</EM> and returns a list of
+the face and the distance.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32116"></A>
+<B>:csg</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns csg body construction history.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32126"></A>
+<B>:primitive-body</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of primitive bodies which have constructed this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32136"></A>
+<B>:primitive-body-p</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> T if this body is a primitive body
+created by one of functions listed in <A HREF="manual-node124.html#primitive-body-creation">16.5</A>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32147"></A>
+<B>:creation-form</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a Lisp expression to create
+this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32157"></A>
+<B>:body-type</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a list of creation parameters
+if this body is a primitive body, or an expression indicating this
+body is a complex (composed) body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32167"></A>
+<B>:primitive-groups</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of two elements.
+The first is a list of primitive bodies that is added (body+) to compose
+this body.
+The latter is a list of subtracted primitive-bodies.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32177"></A>
+<B>:get-face</B> <EM>body [face [id]] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>body</EM> is an instance of body that has composed this body, 
+one of primitive-body types such as :cube, :cylinder, :prism, :cone,
+:solid-of-revolution, etc., or nil.
+If neither <EM>face</EM> nor <EM>id</EM> is given, all the faces that matches
+<EM>body</EM> is returned.
+If <EM>face</EM> is given, further filtering is performed.
+<EM>face</EM> must be one of <TT>:top, :bottom</TT> and <TT>:side</TT>.
+<TT>(send abody :get-face :cylinder :top)</TT> returns all the top faces
+of cylinders that compose <TT>abody</TT>.
+If <EM>face</EM> is <TT>:side</TT>, you can pick up faces that are numbered as 
+<EM>id</EM>.
+<TT>(send abody nil :side 2)</TT> returns
+all the third (id begins from zero) side faces for any primitive-type bodies.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32201"></A>
+<B>:init</B> <EM>&amp;key :faces :edges :vertices </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes this body from <EM>:faces</EM>.
+<EM>:face</EM> is a required argument.
+Since face, edge and vertex must maintain consistent relation to
+define a complete solid model, it is meaningless to call this method
+with inconsistent arguments.
+In order to create bodies, use the primitive body creating functions described
+in section <A HREF="manual-node124.html#primitive-body-creation">16.5</A> and the body composition functions
+in section <A HREF="manual-node125.html#BodyComposition">16.6</A>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2289"
+  HREF="manual-node124.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2283"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2277"
+  HREF="manual-node122.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2285"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2287"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2290"
+  HREF="manual-node124.html">Primitive Body Creation</A>
+<B> Up:</B> <A NAME="tex2html2284"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2278"
+  HREF="manual-node122.html">Plane and Face</A>
+ &nbsp; <B>  <A NAME="tex2html2286"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2288"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

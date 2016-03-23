@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>DES cryptography</TITLE>
+<META NAME="description" CONTENT="DES cryptography">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node57.html">
+<LINK REL="up" HREF="manual-node53.html">
+<LINK REL="next" HREF="manual-node59.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1234"
+  HREF="manual-node59.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1228"
+  HREF="manual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1224"
+  HREF="manual-node57.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1230"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1232"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1235"
+  HREF="manual-node59.html">Date and Time</A>
+<B> Up:</B> <A NAME="tex2html1229"
+  HREF="manual-node53.html">Text Processing</A>
+<B> Previous:</B> <A NAME="tex2html1225"
+  HREF="manual-node57.html">Base64 encoding</A>
+ &nbsp; <B>  <A NAME="tex2html1231"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1233"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03085000000000000000">
+DES cryptography</A>
+</H2>
+Linux and other UNIX employs the DES (Data Encryption Standard)
+to encrypt password strings.
+The function is provided in the libcrypt.so library.
+lib/llib/crypt.l links this library and provides the following
+functions for string encryption.
+Note that the <SPAN CLASS="MATH"><IMG
+ WIDTH="28" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img31.png"
+ ALT="$2^56$"></SPAN> key space of DES is not large enough to
+reject challenges by current powerful computers.  Note also
+that only the encrypting functions are provided and no
+rational decrypting is possible.
+
+<P>
+
+ <BR>
+<BR> <A NAME="14400"></A>
+<B>crypt</B> <EM>str salt </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The raw function provided by libcrypt.so.
+<I>Str</I> is encrypted by using the <I>salt</I> string.
+<I>Salt</I> is a string of two characters, and used to randamize
+the output of encryption in 4096 ways.
+The output string is always 13 characters regardless to the
+length of <I>str</I>.
+In other words, only the first eight characters from <I>str</I>
+are taken for encryption, and the rest are ignored.
+The same string encrypted with the same salt is the same.
+The same string yields different encryption result 
+with different salts.
+The salt becomes the first two characters of the resulted
+encrypted string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14415"></A>
+<B>rcrypt</B> <EM>str &amp;optional (salt (random-string 2)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The plain string, <I>str</I>, is converted into its encrypted
+representation.  The <I>salt</I> is randomly generated if
+not given.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14427"></A>
+<B>random-string</B> <EM>len &amp;optional random-string </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+This is a utility function to generate a random string
+which constitutes of elements in the <I>random-string</I>.
+By default, "A-Za-z0-9/." is taken for the <I>random-string</I>.
+In order not to make mistakes between i, I, l, 1, O, 0, and o,
+you can specify *safe-salt-string* for the <I>random-string</I>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14440"></A>
+<B>compcrypt</B> <EM>input cryption </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<I>Input</I> is a plain string and <I>cryption</I> is a encrypted
+string.  <I>Input</I> is encrypted with the salt found in the <I>cryption</I>
+and the result is compared with it.  If both are the same,
+T is returnd, NIL, otherwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1234"
+  HREF="manual-node59.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1228"
+  HREF="manual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1224"
+  HREF="manual-node57.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1230"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1232"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1235"
+  HREF="manual-node59.html">Date and Time</A>
+<B> Up:</B> <A NAME="tex2html1229"
+  HREF="manual-node53.html">Text Processing</A>
+<B> Previous:</B> <A NAME="tex2html1225"
+  HREF="manual-node57.html">Base64 encoding</A>
+ &nbsp; <B>  <A NAME="tex2html1231"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1233"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

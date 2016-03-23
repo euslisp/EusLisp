@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>File System Interface</TITLE>
+<META NAME="description" CONTENT="File System Interface">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node71.html">
+<LINK REL="up" HREF="manual-node60.html">
+<LINK REL="next" HREF="manual-node73.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1441"
+  HREF="manual-node73.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1435"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1431"
+  HREF="manual-node71.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1437"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1439"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1442"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Up:</B> <A NAME="tex2html1436"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1432"
+  HREF="manual-node71.html">File-name generation</A>
+ &nbsp; <B>  <A NAME="tex2html1438"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1440"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030109000000000000000">
+File System Interface</A>
+</H2>
+
+ <BR>
+<BR> <P>
+
+<A NAME="16503"></A>
+<B>probe-file</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> checks if a file named <EM>path</EM> exists.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16514"></A>
+<B>file-size</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the size of the file named <EM>path</EM> 
+in bytes.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16525"></A>
+<B>directory-p</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns T if <EM>path</EM> is a directory,
+NIL otherwise even <EM>path</EM> does not exist.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16537"></A>
+<B>find-executable</B> <EM>file </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the full pathname for the Unix command named <EM>file</EM>.
+<EM>Find-executable</EM> provides almost the same functionality with 
+Unix's 'which' command that searches the executable file in your path list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16549"></A>
+<B>file-write-date</B> <EM>file </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the integer representation of the time
+when the <EM>file</EM> was last modified.
+String representation can be obtained by
+<TT>(unix:asctime (unix:localtime (file-write-date <EM>file</EM>)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16562"></A>
+<B>file-newer</B> <EM>new old </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+returns T if the <EM>new</EM> file is modified more recently than
+the <EM>old</EM> file.
+
+<P>
+
+<A NAME="16573"></A>
+<B>object-file-p</B> <EM>file </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns T if the <EM>file</EM> is
+an object file by looking at the file's magic number in the header.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16584"></A>
+<B>directory</B> <EM>&amp;optional (path ".") </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a list of all the files in the <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16595"></A>
+<B>dir</B> <EM>&amp;optional (dir ".") </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints file names in the specified directory.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1441"
+  HREF="manual-node73.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1435"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1431"
+  HREF="manual-node71.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1437"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1439"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1442"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Up:</B> <A NAME="tex2html1436"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1432"
+  HREF="manual-node71.html">File-name generation</A>
+ &nbsp; <B>  <A NAME="tex2html1438"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1440"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

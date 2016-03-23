@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Date and Time</TITLE>
+<META NAME="description" CONTENT="Date and Time">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node60.html">
+<LINK REL="previous" HREF="manual-node53.html">
+<LINK REL="up" HREF="manual-node11.html">
+<LINK REL="next" HREF="manual-node60.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1248"
+  HREF="manual-node60.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1242"
+  HREF="manual-node11.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1236"
+  HREF="manual-node58.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1244"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1246"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1249"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Up:</B> <A NAME="tex2html1243"
+  HREF="manual-node11.html">Bibliography</A>
+<B> Previous:</B> <A NAME="tex2html1237"
+  HREF="manual-node58.html">DES cryptography</A>
+ &nbsp; <B>  <A NAME="tex2html1245"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1247"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION03090000000000000000">
+Date and Time</A>
+</H1>
+
+<P>
+The time class defines both calendar time and time period.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="14748"></A>
+<BIG CLASS="XLARGE"><B>time </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 (micro second minute hour day month weekday year 
+<BR>
+timezone dst seconds) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines time objects.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14765"></A>
+<B>:now</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<code>(instance time :now)</code>
+creates a time object for the current time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14775"></A>
+<B>:init</B> <EM>&amp;optional sec micro dst tzone </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a time object which represents <I>sec</I> second
+after January 1, 1970.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14786"></A>
+<B>:make</B> <EM>&amp;key (year 1970) (month 0) (day 1)
+	(weekday 4) (hour 0) (minute 0) (second 0)  (micro 0)
+	(timezone (* -9 3600))) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a time object which is represented
+by a calendar notation.
+The timezone is defaulted to JST.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14796"></A>
+<B>:year</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the year component of the
+time object.  Note that the year is represented in a full (four)
+digit notation, not the least two digits.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14806"></A>
+<B>:month</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the month component of the time object.
+Note that the month begins from 0 for January.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14816"></A>
+<B>:day</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the day component of the time object.
+Note that the day begins from 1 for the first of a month.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14826"></A>
+<B>:weekday</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the weekday component of the time object.
+Note that the weekday begins from 0 for Sunday.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14836"></A>
+<B>:hour</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the hour component of the time object
+in 24-hour representation.
+Note that the hour ranges from 0 to 23.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14846"></A>
+<B>:minute</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the minute component of the time object.
+Note that the hour ranges from 0 to 59.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14856"></A>
+<B>:second</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the second component of the time object.
+Note that the hour ranges from 0 to 59.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14866"></A>
+<B>:seconds</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the seconds component of the time object.
+Seconds represents time after the origin of the unix time, i.e.,
+the midnight of January 1, 1970.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14876"></A>
+<B>:year-day</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the number of days after the
+beginning of the year. For example, year-day of a time object representing
+February 2nd is 32.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14886"></A>
+<B>:difference</B> <EM>atime </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a new time object
+representing the time difference of self from atime.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14896"></A>
+<B>:add</B> <EM>atime </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a new time object
+representing the added time of self and atime.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1248"
+  HREF="manual-node60.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1242"
+  HREF="manual-node11.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1236"
+  HREF="manual-node58.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1244"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1246"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1249"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Up:</B> <A NAME="tex2html1243"
+  HREF="manual-node11.html">Bibliography</A>
+<B> Previous:</B> <A NAME="tex2html1237"
+  HREF="manual-node58.html">DES cryptography</A>
+ &nbsp; <B>  <A NAME="tex2html1245"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1247"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

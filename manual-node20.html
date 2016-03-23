@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Generalized Variables</TITLE>
+<META NAME="description" CONTENT="Generalized Variables">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node21.html">
+<LINK REL="previous" HREF="manual-node19.html">
+<LINK REL="up" HREF="manual-node17.html">
+<LINK REL="next" HREF="manual-node21.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html687"
+  HREF="manual-node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html681"
+  HREF="manual-node17.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html675"
+  HREF="manual-node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html683"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html685"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html688"
+  HREF="manual-node21.html">Special Forms</A>
+<B> Up:</B> <A NAME="tex2html682"
+  HREF="manual-node17.html">Forms and Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html676"
+  HREF="manual-node19.html">Scoping</A>
+ &nbsp; <B>  <A NAME="tex2html684"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html686"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03023000000000000000">
+Generalized Variables</A>
+</H2>
+Generally, any values or attributes are represented in slots of objects
+(or in stack frames).
+To retrieve and alter the value of a slot,
+two primitive operations, <EM>access</EM> and <EM>update</EM>, must be provided.
+Instead of defining two distinct primitives for every slot of objects,
+EusLisp, like Common Lisp, provides uniform update operations
+based on the generalized variable concept.
+In this concept, a common form is recognized  either as a value access form
+or as a slot location specifier.
+Thus, you only need to remember accessing form for each slot and
+update is achieved by <B>setf</B> macro used in conjunction with the access form.
+For example, <TT>(car x)</TT> can be used to replace the value
+in the car slot of <TT>x</TT> when used with <B>setf</B> as in <TT>(setf (car 
+'(a b) 'c)</TT>,
+as well as to take the car value out of the list.
+
+<P>
+This method is also applicable to all the user defined objects.
+When a class or a structure is defined, the access and update forms
+for each slot are automatically defined.
+Each of those forms is defined as a macro whose name is the concatenation of
+the class name and slot name.
+For example, car of a cons can be addressed by <TT>(cons-car '(a b c))</TT>.
+
+<P>
+<PRE>
+(defclass person :super object :slots (name age))
+(defclass programmer :super person :slots (language machine))
+(setq x (instantiate programmer))
+(setf (programmer-name x) "MATSUI"
+      (person-age x) 30)
+(incf (programmer-age x))
+(programmer-age x)   --&gt; 31
+(setf (programmer-language x) 'EUSLISP
+      (programmer-machine x) 'SUN4)
+</PRE>
+
+<P>
+Array elements can be accessed in the same manner.
+
+<P>
+<PRE>
+(setq a (make-array '(3 3) :element-type :float))
+(setf (aref a 0 0) 1.0 (aref a 1 1) 1.0 (aref a 2 2) 1.0)
+a --&gt; #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))
+
+(setq b (instantiate bit-vector 10))  --&gt; #*0000000000
+(setf (bit b 5) 1)
+b --&gt; #*0000010000
+</PRE>
+
+<P>
+In order to define special setf methods for particular objects,
+<B>defsetf</B> macro is provided.
+
+<P>
+<PRE>
+(defsetf symbol-value set)
+(defsetf get (sym prop) (val) `(putprop ,sym ,val ,prop))
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html687"
+  HREF="manual-node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html681"
+  HREF="manual-node17.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html675"
+  HREF="manual-node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html683"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html685"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html688"
+  HREF="manual-node21.html">Special Forms</A>
+<B> Up:</B> <A NAME="tex2html682"
+  HREF="manual-node17.html">Forms and Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html676"
+  HREF="manual-node19.html">Scoping</A>
+ &nbsp; <B>  <A NAME="tex2html684"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html686"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

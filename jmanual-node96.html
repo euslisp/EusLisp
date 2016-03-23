@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>メモリ管理</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="メモリ管理">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node95.html">
+<LINK REL="up" HREF="jmanual-node93.html">
+<LINK REL="next" HREF="jmanual-node97.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1860"
+  HREF="jmanual-node97.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1854"
+  HREF="jmanual-node93.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1850"
+  HREF="jmanual-node95.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1856"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1858"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1861"
+  HREF="jmanual-node97.html">非同期プログラミングと並列プログラミングの構築</A>
+<B> Up:</B> <A NAME="tex2html1855"
+  HREF="jmanual-node93.html">マルチスレッドEuslispの設計</A>
+<B> Previous:</B> <A NAME="tex2html1851"
+  HREF="jmanual-node95.html">Context Separation</A>
+ &nbsp; <B>  <A NAME="tex2html1857"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1859"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04021300000000000000">
+メモリ管理</A>
+</H3>
+EusLispは、すべての型のオブジェクトに対して単一のヒープの中で
+フィボナッチバディを用いたメモリ管理方法を採用している。
+異なったメモリ要求を持つプログラムを実行した後、
+フィボナッチバディが様々な大きさのオブジェクトを等しく高速に配置することができ、コピーなしに素早くガーベージコレクトができ、
+かつ、高いメモリ利用率（内部損失が10〜15%で外部損失は無視できる）
+を示すことを確信した。
+マルチスレッドのためには、2つ目のポイントすなわちコピーなしの
+ガーベージコレクトが重要である。
+もし、オブジェクトのアドレスがガーベージコレクトのコピーにより
+変化したならば、すべてのスレッド環境のスタックおよびCPUのレジスタ
+内のポインタを新しいアドレスに書き換えなければならない。
+しかし、この書き換えは不可能かあるいは大変困難である。
+
+<P>
+すべてのメモリ配置要求は、低レベルの<TT>alloc</TT>関数によって処理される。
+<TT>alloc</TT>は、mutex-lockingをする。なぜなら、大きさを持たないリストの
+グローバルデータベースを扱うからである。
+ガーベージコレクトの始まる時期およびどのスレッドによってガーベージコレクトが
+生じるのかを予言できないので、
+すべてのスレッドは突発的に起こるガーベージコレクトのために
+準備をしておかなければならない。
+生きているオブジェクトへのすべてのポインタは、ゴミとして掃除されない
+ように保護するためいつでもガーベージコレクトからアクセスできるよう
+調整されなければならない。
+これは、スタックの上に保存されていることを信用する代わりに、
+それぞれの環境の固定されたスロットの中に極最近に配置されたオブジェクトに
+対するポインタを蓄積することによって達成される。
+
+<P>
+図 <A HREF="#parathreads">6</A>は、スレッドのメモリ要求とforkされたガーベージコレクト
+内部でのmarkingおよびsweepingを並列に行っている流れ図を示したものである。
+メモリ要求およびポインタの処理を行わないスレッドはガーベージコレクトと並列に
+実行することができ、信号処理や画像獲得のような低レベルのタスクの
+実時間応答を改善することに注意すること。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="parathreads"></A><A NAME="25272"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+並列スレッドのメモリ要求とガーベージコレクトに並列実行</CAPTION>
+<TR><TD><IMG
+ WIDTH="521" HEIGHT="469" BORDER="0"
+ SRC="jmanual-img47.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/parathreads.ps,width=120mm}
+\end{center}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

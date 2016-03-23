@@ -1,0 +1,321 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Arithmetic Predicates</TITLE>
+<META NAME="description" CONTENT="Arithmetic Predicates">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node39.html">
+<LINK REL="previous" HREF="manual-node37.html">
+<LINK REL="up" HREF="manual-node36.html">
+<LINK REL="next" HREF="manual-node39.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html948"
+  HREF="manual-node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html942"
+  HREF="manual-node36.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html936"
+  HREF="manual-node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html944"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html946"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html949"
+  HREF="manual-node39.html">Integer and Bit-Wise Operations</A>
+<B> Up:</B> <A NAME="tex2html943"
+  HREF="manual-node36.html">Arithmetic Functions</A>
+<B> Previous:</B> <A NAME="tex2html937"
+  HREF="manual-node37.html">Arithmetic Constants</A>
+ &nbsp; <B>  <A NAME="tex2html945"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html947"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03052000000000000000">
+Arithmetic Predicates</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="5789"></A>
+<B>numberp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is number, namely integer or float.
+Note that characters are also represented by numbers.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5800"></A>
+<B>integerp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is an integer number.
+A float can be converted to an integer by
+<B>round, trunc</B> and <B>ceiling</B> functions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5813"></A>
+<B>floatp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> T if <EM>object</EM> is a floating-point number.
+An integer can be converted to a float by the <B>float</B> function.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5825"></A>
+<B>zerop</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> T if the number is integer zero or float 0.0.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5835"></A>
+<B>plusp</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> equivalent to (<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img14.png"
+ ALT="$&gt;$"></SPAN> number 0).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5845"></A>
+<B>minusp</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> equivalent to (<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img7.png"
+ ALT="$&lt;$"></SPAN> number 0).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5855"></A>
+<B>oddp</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The argument must be an integer.
+T if <EM>integer</EM> is odd.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5866"></A>
+<B>evenp</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The argument must be an integer.
+T if <EM>integer</EM> is an even number.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5877"></A>
+<B>/=</B> <EM>n1 n2 &amp;rest more-numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Both <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if no two of its arguments are numerically equal, NIL otherwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5890"></A>
+<B>=</B> <EM>num1 num2 &amp;rest more-numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are the same in value, NIL otherwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5906"></A>
+<B><SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img14.png"
+ ALT="$&gt;$"></SPAN></B> <EM>num1 num2 &amp;rest more-numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are in monotonically decreasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry">16</A>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5924"></A>
+<B><SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img7.png"
+ ALT="$&lt;$"></SPAN></B> <EM>num1 num2 &amp;rest more-numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are in monotonically increasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry">16</A>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5942"></A>
+<B><SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img15.png"
+ ALT="$&gt;=$"></SPAN></B> <EM>num1 num2 &amp;rest more-numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are in monotonically nonincreasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry">16</A>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5960"></A>
+<B><SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img16.png"
+ ALT="$&lt;=$"></SPAN></B> <EM>num1 num2 &amp;rest more-numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Both <EM>n1</EM> and <EM>n2</EM> and all elements of <EM>more-numbers</EM> must be numbers.
+T if <EM>n1</EM>, <EM>n2</EM> and all elements of <EM>more-numbers</EM> are in monotonically nondecreasing order, NIL otherwise.
+For numerical comparisons with tolerance, use functions prefixed
+by <B>eps</B> as described in the section <A HREF="manual-node119.html#Geometry">16</A>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html948"
+  HREF="manual-node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html942"
+  HREF="manual-node36.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html936"
+  HREF="manual-node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html944"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html946"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html949"
+  HREF="manual-node39.html">Integer and Bit-Wise Operations</A>
+<B> Up:</B> <A NAME="tex2html943"
+  HREF="manual-node36.html">Arithmetic Functions</A>
+<B> Previous:</B> <A NAME="tex2html937"
+  HREF="manual-node37.html">Arithmetic Constants</A>
+ &nbsp; <B>  <A NAME="tex2html945"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html947"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

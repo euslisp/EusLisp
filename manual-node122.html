@@ -1,0 +1,706 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Plane and Face</TITLE>
+<META NAME="description" CONTENT="Plane and Face">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node123.html">
+<LINK REL="previous" HREF="manual-node121.html">
+<LINK REL="up" HREF="manual-node119.html">
+<LINK REL="next" HREF="manual-node123.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2275"
+  HREF="manual-node123.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2269"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2263"
+  HREF="manual-node121.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2271"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2273"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2276"
+  HREF="manual-node123.html">Body</A>
+<B> Up:</B> <A NAME="tex2html2270"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2264"
+  HREF="manual-node121.html">Line and Edge</A>
+ &nbsp; <B>  <A NAME="tex2html2272"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2274"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04043000000000000000">
+Plane and Face</A>
+</H2>
+
+<P>
+A plane object is represented by the normal vector on the plane
+and the distance from the coordinates origin to the plane.
+Two pairs of such normal vectors and distances are recorded in a plane object.
+One represents the current status after transformations, while the other represents
+the original normal and distance when the plane is defined.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="31366"></A>
+<BIG CLASS="XLARGE"><B>plane </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 ((normal :type float-vector) 
+<BR>(distance :float) 
+<BR>
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines plane-equation. A plane is considered to have no boundaries
+and extend infinitely.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31383"></A>
+<B>:normal</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns this polygon's normal vector which is always normalized.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31393"></A>
+<B>:distance</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes distance between this plane and <EM>point</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31404"></A>
+<B>:coplanar-point</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>point</EM> lies on this plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31415"></A>
+<B>:coplanar-line</B> <EM>line </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>line</EM> lies on this plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31426"></A>
+<B>:intersection</B> <EM>point1 point2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the intersection point between this plane and the line 
+determined by two end points, <EM>point1</EM> and <EM>point2</EM>,
+and returns the parameter for the intersection on the line.
+If the line and this plane are parallel, <B>:parallel</B> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31439"></A>
+<B>:intersection-edge</B> <EM>edge </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns the parameter of the intersection point for this plane
+and a line represented by point1 and point2, or edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31449"></A>
+<B>:foot</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns a 3D vector which is the orthogonally projection of <EM>point</EM>
+onto this plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31460"></A>
+<B>:init</B> <EM>normal point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Defines a plane with the <EM>point</EM> on the plane and the <EM>normal</EM> vector.
+<EM>Normal</EM>must be a normalized vector, <SPAN CLASS="MATH"><IMG
+ WIDTH="95" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img66.png"
+ ALT="$\vert normal\vert=1$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="31474"></A>
+<BIG CLASS="XLARGE"><B>polygon </B></BIG> [class]  <PRE><TT>
+  :super   <B>plane</B> 
+<BR>  :slots 		 (convexp edges vertices 
+<BR>(model-normal float-vector) 
+<BR>(model-distance :float))
+<BR>
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Polygon</B> represents a loop on a plane.
+<EM>Convexp</EM> is a boolean flag representing the convexity of the loop.
+<EM>Edges</EM> is a list of edges forming the contour of this loop,
+and <EM>vertices</EM> is a list of vertices.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31495"></A>
+<B>:box</B> <EM>&amp;optional tolerance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a bounding-box for this polygon.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31505"></A>
+<B>:boxtest</B> <EM>box2 &amp;optional tolerance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a bounding-box for this polygon, 
+and returns the intersection of the bounding-box and <EM>box2</EM>.
+If there is no intersection, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31516"></A>
+<B>:edges</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of edges (circuit) of this polygon.
+The list is ordered clockwise when the polygon is 
+viewed along the normal vector of this plane.
+If you think of the normal vector as a screw, the edges are ordered
+in the rotation direction for the screw to screw in.
+When polygon or face is used for the surface representation of
+a solid object, the normal vector is directed to its outside region.
+When a polygon is viewed from the outside of the object,
+edges are ordered counter-clockwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31526"></A>
+<B>:edge</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the <EM>n</EM>-th element of edges.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31537"></A>
+<B>:vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the vertices of this polygon ordered in the same manner as edges.
+Note that the first vertex is copied duplicatedly at the end of the list
+and the list is always longer by one than the actual number of vertices.
+This is for the ease of edge traversal by using the vertices list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31547"></A>
+<B>:vertex</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the <EM>n</EM>-th element of vertices.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31558"></A>
+<B>:insidep</B> <EM>point &amp;optional (tolerance *epsilon*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns :inside, :outside or :border
+according to the location of <EM>point</EM> relative to this region.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31569"></A>
+<B>:intersect-point-vector</B> <EM>point vnorm </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes the intersection with the semi-line defined by the <EM>point</EM> and
+the normalized direction vector, <EM>vnorm</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31581"></A>
+<B>:intersect-line</B> <EM>p1 p2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes intersection point with a line specified by <EM>p1</EM> and <EM>p2</EM>.
+The result is nil(no intersection) or list of the parameter and
+the intersection position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31593"></A>
+<B>:intersect-edge</B> <EM>edge </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes intersection point with a line specified by the <EM>edge</EM>.
+The result is nil(no intersection) or list of the parameter and
+intersection position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31604"></A>
+<B>:intersect-face</B> <EM>aregion </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns T if this region intersects with aregion.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31614"></A>
+<B>:transform-normal</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31625"></A>
+<B>:reset-normal</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> recomputes the surface normal vector of this
+polygon from the current <EM>vertices</EM> list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31636"></A>
+<B>:invert</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31647"></A>
+<B>:area</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the area of this polygon.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31657"></A>
+<B>:init</B> <EM>&amp;key :vertices :edges :normal :distance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="31669"></A>
+<BIG CLASS="XLARGE"><B>face </B></BIG> [class]  <PRE><TT>
+  :super   <B>polygon</B> 
+<BR>  :slots 		 (holes mbody primitive-face id) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a face which may have holes.
+<EM>Pbody</EM> and <EM>type</EM> represent the primitive body and the type
+<TT>(:top, :bottom, :side)</TT> of the face in the body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31689"></A>
+<B>:all-edges</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31700"></A>
+<B>:all-vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns all the edges or vertices of the contour of this face
+and all the inner loops (holes).
+Note that <B>:edges</B> and <B>:vertices</B> methods
+only return edges and vertices composing the contour.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31712"></A>
+<B>:insidep</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+decides whether the point is inside of this face or not.
+If the point is inside the outer contour of this face but also inside
+the loop of any holes, it is classified as outside.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31722"></A>
+<B>:area</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the area of this face, that is
+the area surrounded by external edges subtracted by the areas of holes.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31732"></A>
+<B>:centroid</B> <EM>&amp;optional point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a list of the floating-point number and the float-vector
+representing the center-of-gravity of this face.
+If <EM>point</EM> is not given,
+the first number represents the area of this polygon, and the
+second float-vector the location of center-of-gravity of this polygon.
+If <EM>point</EM> is given, it is taken as the top vertex of the cone
+whose bottom face is formed by this polygon,
+and the volume of this cone and its center-of-gravity are returned. 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31744"></A>
+<B>:invert</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> flips the direction of this face.
+The normal vector is inverted, and the order of edge loop is reversed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31754"></A>
+<B>:enter-hole</B> <EM>hole </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> adds a hole in this face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31764"></A>
+<B>:primitive-body</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the primitive-body which has defined this face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31774"></A>
+<B>:id</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns one of <TT>(:bottom), (:top)</TT> and <TT>(:side seq-no.)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31786"></A>
+<B>:face-id</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of the type of primitive-body and the face type.
+For example, a side face of a cylinder returns 
+<TT>((:cylinder <EM>radius height segments</EM>) :side <EM>id</EM>)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31799"></A>
+<B>:body-type</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns primitive body which has defined this face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31809"></A>
+<B>:init</B> <EM>&amp;key :normal :distance :edges :vertices :holes </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="31821"></A>
+<BIG CLASS="XLARGE"><B>hole </B></BIG> [class]  <PRE><TT>
+  :super   <B>polygon</B> 
+<BR>  :slots 		 (myface) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>hole is a polygon representing an inner loop of a face.
+A face may have a list of holes in its <TT>holes</TT> slot.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31839"></A>
+<B>:face</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a face that contains this hole.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31849"></A>
+<B>:enter-face</B> <EM>face </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a link to a face which surrounds this hole.
+This method is only used in conjunction with the <TT>:enter-hole</TT> 
+method of the face class.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31860"></A>
+<B>:init</B> <EM>&amp;key :normal :distance :edges :vertices :face </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2275"
+  HREF="manual-node123.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2269"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2263"
+  HREF="manual-node121.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2271"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2273"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2276"
+  HREF="manual-node123.html">Body</A>
+<B> Up:</B> <A NAME="tex2html2270"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2264"
+  HREF="manual-node121.html">Line and Edge</A>
+ &nbsp; <B>  <A NAME="tex2html2272"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2274"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Memory Management</TITLE>
+<META NAME="description" CONTENT="Memory Management">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node86.html">
+<LINK REL="previous" HREF="manual-node84.html">
+<LINK REL="up" HREF="manual-node84.html">
+<LINK REL="next" HREF="manual-node86.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1724"
+  HREF="manual-node86.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1718"
+  HREF="manual-node84.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1712"
+  HREF="manual-node84.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1720"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1722"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1725"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Up:</B> <A NAME="tex2html1719"
+  HREF="manual-node84.html">System Functions</A>
+<B> Previous:</B> <A NAME="tex2html1713"
+  HREF="manual-node84.html">System Functions</A>
+ &nbsp; <B>  <A NAME="tex2html1721"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1723"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04011000000000000000">
+Memory Management</A>
+</H2>
+The design of  memory management scheme affects much to the flexibility and
+efficiency of object-oriented languages.
+EusLisp allocates memory to any sort of objects
+in a unified manner based on the <EM>Fibonacci buddy method</EM>.
+In this method, each of large memory pools called chunks is split into
+small cells which are unequally sized but aligned at Fibonacci numbers.
+A memory chunk is a homogeneous data container for any types of
+objects such as <TT>symbol, cons, string, float-vector</TT>, etc.
+as long as their sizes fit in the chunk.
+A chunk has no special attributes,
+like static, dynamic, relocatable, alternate, etc.
+EusLisp's heap memory is the collection of chunks, and 
+the heap can extend dynamically by getting new chunks from UNIX.
+The expansion occurs either automatically on the fly
+or on user's explicit demand by calling <B>system:alloc</B> function.
+When it is managed automatically, free memory size is kept
+about 25% of total heap size. This ratio can be changed by setting a value between 0.1 and 0.9 to
+the <B>sys:*gc-margin*</B> parameter.
+
+<P>
+When all the heap memory is exhausted, mark-and-sweep type garbage collection
+runs.
+Cells accessible from the root (packages, classes and stacks) remain at the
+same place where they were.
+Other inaccessible cells are reclaimed and linked to the free-lists.
+No copying or compactification occurs during GC.
+When a garbage cell is reclaimed, its neighbor is examined
+whether it is also free,
+and they are merged together to form a larger cell if possible.
+This merging, however, is sometimes meaningless,
+since <TT>cons</TT>, which is the most frequently called memory allocator,
+requests the merged cell to be divided to the smallest cell.
+Therefore, EusLisp allows to leave a particular amount of heap unmerged to speed up cons.
+This ratio is determined by <B>sys:*gc-merge*</B> parameter,
+which is set to 0.3 by default.
+With the larger <B>sys:*gc-merge*</B>, the greater portion of  heap is left unmerged.
+This improves the performance of consing,
+since buddy-cell splitting rarely occurs when conses are requested.
+This is also true for every allocation of relatively small cells,
+like three dimensional float-vectors.
+
+<P>
+<B>SYS:GC</B> invokes garbage collector explicitly, returning a list of two integers,
+numbers of free words and total words (not bytes) allocated in the heap.
+<B>SYS:*GC-HOOK*</B> is a variable to hold a function that is called upon the
+completion of a GC.  The hook function should receive two arguments
+representing the sizes of the free heap and the total heap.
+
+<P>
+If "fatal error: stack overflow" is reported during  execution,
+and you are convinced that the error is not caused by a infinite loop
+or recursion, 
+you can expand the size of the Lisp stack by <B>sys:newstack</B>.
+<B>reset</B> should be performed before <B>sys:newstack</B>,
+since it discards everything in the current stack such as
+special bindings and clean-up forms of <EM>unwind-protect</EM>.
+After a new stack is allocated, execution starts over from the point
+of printing the opening message.
+The default stack size is 65Kword.
+The Lisp stack is different from the system stack.
+The former is allocated in the heap, while the latter is allocated in
+the stack segment by the operating system.
+If you get "segmentation fault" error, it might be caused by the shortage
+of the system stack.
+You can increase the system stack size by the <TT>limit</TT> csh command.
+
+<P>
+<B>Sys:reclaim</B> and <B>sys:reclaim-tree</B> function put cells occupied by objects
+back to the memory manager, so that they can be reused later without
+invoking garbage collection.
+You must be assured that there remains no reference to the cell.
+
+<P>
+<B>memory-report</B> and <B>room</B> function display statistics on 
+memory usage sorted by cell sizes and classes respectively.
+
+<P>
+<B>address</B> returns the byte address of the object and is useful
+as a hash function when used with hash-table, since this address is
+unique in the process.
+
+<P>
+<B>Peek</B> and <B>poke</B> are the functions to read/write data directly
+from/to a memory location.
+The type of access should be either of
+<B>:char, :byte, :short, :long, :integer, :float</B> and <B>:double</B>.
+For an instance, <TT>(SYS:PEEK (+ 2 (SYS:ADDRESS '(a b))) :short)</TT>
+returns class id of a cons cell, normally 1.
+
+<P>
+There are  several functions prefixed with 'list-all-'.
+These functions returns the list of a system resource or environment,
+and are useful for dynamic debugging.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="21773"></A>
+<B>sys:gc</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+starts garbage collection, and returns a list of the numbers
+of free words and total words allocated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21783"></A>
+<B>sys:*gc-hook*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Defines a function that is called upon the completion of a GC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21793"></A>
+<B>sys:gctime</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of three integers: the count of gc invoked,
+the time elapsed for marking cells (in 1/60 sec. unit),
+and the time elapsed for reclamation (unmarking and merging).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21803"></A>
+<B>sys:alloc</B> <EM>size </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+allocates at least <EM>size</EM> words of memory in the heap,
+and returns the number of words really allocated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21814"></A>
+<B>sys:newstack</B> <EM>size </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+relinquishes the current stack,
+and allocates a new stack of <EM>size</EM> words.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21825"></A>
+<B>sys:*gc-merge*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is a memory management parameter.
+<B>*gc-merge*</B> is the ratio the ratio of heap memory  which is
+left unmerged at GC.
+This unmerged area will soon filled with smallest cells whose size is
+the same as a cons.
+The default value is 0.3.
+The larger values, like 0.4, which specifies 40% of free heap should be
+unmerged, favors for consing but do harm to instantiating
+bigger cells like float-vectors, edges, faces, etc.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21836"></A>
+<B>sys:*gc-margin*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is a memory management parameter.
+<B>*gc-margin</B> determines the ratio of
+free heap size versus the total heap.
+Memory is acquired from UNIX so that the free space does not go 
+below this ratio. The default value 0.25 means that 25% of free space is
+maintained at every GC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21847"></A>
+<B>sys:reclaim</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+relinquishes <EM>object</EM> as a garbage.
+It must be guaranteed that it is no longer referenced from any other objects.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21858"></A>
+<B>sys:reclaim-tree</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reclaims all the objects except symbols traversable from <EM>object</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21869"></A>
+<B>sys:btrace</B> <EM>num </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints the back-trace information of <EM>num</EM> depth on the Lisp stack.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21880"></A>
+<B>sys:memory-report</B> <EM>&amp;optional strm </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints a table of memory usage report sorted by cell sizes
+to the <I>strm</I> stream.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21891"></A>
+<B>sys:room</B> <EM>output-stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+outputs memory allocation information ordered by classes.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21901"></A>
+<B>sys:address</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the address of <I>object</I> in the process memory space.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21912"></A>
+<B>sys:peek</B> <EM>[vector] address type </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads data at the memory location specified by <EM>address</EM>
+and returns it as an integer.
+<EM>type</EM> is one of <B>:char, :byte, :short, :long, :integer, :float</B>,
+and <B>:double</B>.
+If no <EM>vector</EM> is given,
+the address is taken in the unix's process space.
+For example, since the a.out header is located at <TT>#x2000</TT> on SunOS4,
+<TT>(sys:peek #x2000 :short)</TT> returns the magic number (usually <TT>#o403</TT>).
+Solaris2 locates the ELF header at <TT>#10000</TT>,
+and <TT>(sys:peek #x10000 :long)</TT> returns <TT>#xff454c46</TT> whose
+string representation is "ELF".
+
+<P>
+If <EM>vector</EM>, which can be a foreign-string,
+is specified, address is recognized as an offset
+from the vector's origin.
+<TT>(sys:peek "123456" 2 :short)</TT> returns short word
+representation of "34", namely #x3334 (13108).
+
+<P>
+Be careful about the address alignment:
+reading short, integer, long, float, double word
+at odd address may cause bus error by most CPU architectures.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21935"></A>
+<B>sys:poke</B> <EM>value [vector] address value-type </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes <I>value</I> at the location specified by <I>address</I>.
+Special care should be taken since
+you can write to anywhere in the process memory space.
+Writing to outside the process space surely causes segmentation fault.
+Writing short, integer, long, float, double word
+at odd address causes bus error.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21947"></A>
+<B>sys:list-all-chunks</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+list up all allocated heap chunks. Not useful for other than the implementor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21957"></A>
+<B>sys:object-size</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+counts the number of cells and words accessible from <EM>obj</EM>.
+All the objects reference-able from obj are traversed,
+and a list of three numbers is returned:
+the number of cells, 
+the number of words logically allocated to these objects
+(i.e. accessible from users),
+and the number of words
+physically allocated including headers and extra slots for memory management.
+Traversing stops at symbols, i.e. objects referenced from a symbol such as
+property-list or print-name string are not counted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1724"
+  HREF="manual-node86.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1718"
+  HREF="manual-node84.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1712"
+  HREF="manual-node84.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1720"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1722"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1725"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Up:</B> <A NAME="tex2html1719"
+  HREF="manual-node84.html">System Functions</A>
+<B> Previous:</B> <A NAME="tex2html1713"
+  HREF="manual-node84.html">System Functions</A>
+ &nbsp; <B>  <A NAME="tex2html1721"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1723"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

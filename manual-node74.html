@@ -1,0 +1,444 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Evaluators</TITLE>
+<META NAME="description" CONTENT="Evaluators">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node75.html">
+<LINK REL="previous" HREF="manual-node73.html">
+<LINK REL="up" HREF="manual-node73.html">
+<LINK REL="next" HREF="manual-node75.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1476"
+  HREF="manual-node75.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1470"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1464"
+  HREF="manual-node73.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1472"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1474"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1477"
+  HREF="manual-node75.html">Top-level Interaction</A>
+<B> Up:</B> <A NAME="tex2html1471"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1465"
+  HREF="manual-node73.html">Evaluation</A>
+ &nbsp; <B>  <A NAME="tex2html1473"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1475"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030111000000000000000">
+Evaluators</A>
+</H2>
+
+<P>
+In order to specify the behaviors upon an error and an interrupt(signal),
+set an appropriate function to each of the special variables
+<B>*error-handler*</B> and <B>*signal-handler*</B> in advance.
+There is no correctable or continue-able error.
+After analyzing errors you must abort the current execution by
+<B>reset</B> or appropriate <B>throw</B> to upper level catchers.
+<B>reset</B> is equivalent to <TT>(throw 0 NIL)</TT>, since EusLisp's top-level
+creates catch frame named <TT>0</TT>.
+
+<P>
+Error handlers should be programmed as functions with three or four
+arguments:  <EM>code msg1 form &amp;optional (msg2)</EM>.
+<EM>Code</EM> is the error code which identifies system defined errors,
+such as 14 for 'mismatch argument' or 13 for 'undefined function'.
+These mappings are described in "c/eus.h".
+<EM>msg1</EM> and <EM>msg1</EM> are messages displayed to the user.
+<EM>form</EM> is the S-expression which caused the error.
+
+<P>
+Signal handlers should be programmed as functions receiving
+two arguments: <EM>sig</EM> and <EM>code</EM>. 
+<EM>Sig</EM> is the signal number ranging from 1 to 31, and <EM>code</EM>
+is the minor signal code defined in signal-number dependent manners.
+
+<P>
+<code>^</code>D (<EM>end-of-file</EM>) at the top-level terminates eus session.
+This is useful when eus is programmed as a filter.
+
+<P>
+<B>Eval-dynamic</B> is the function to find the dynamic value bound
+to a symbol used as a let or lambda variable.
+This is useful for debugging.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="18658"></A>
+<B>identity</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns obj itself.
+Note the difference between <B>identity</B> and <B>quote</B>.
+<B>identity</B> is a function whereas <B>quote</B> is a special form.
+Therefore, <TT>(identity 'abc)</TT> is evaluated to <TT>abc</TT> and
+<TT>(quote 'abc) == (quote (quote abc))</TT> is evaluated to <TT>'abc</TT>.
+<B>Identity</B> is often used as the default value for <TT>:key</TT> parameters
+of many generic sequence functions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18678"></A>
+<B>eval</B> <EM>form [environment] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+evaluates  form and returns its value.
+Hook function can be called before entering the evaluation,
+if <B>*evalhook*</B> is set to some function that accept form and environment.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18690"></A>
+<B>apply</B> <EM>func &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>func</EM> is applied to <EM>args</EM>.
+<EM>Func</EM> must be evaluated to be a function symbol (a symbol which has
+a function definition), a lambda form, or a closure.
+Macros and special forms cannot be applied.
+The last element of <EM>args</EM> must be a list of arguments while other args
+should be bare arguments.
+Thus, if the last <EM>args</EM> is NIL, then apply is almost equivalent to
+funcall, except that apply has one more arguments than funcall.
+<TT>(apply #'max 2 5 3 '(8 2)) -&gt; 8</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18706"></A>
+<B>funcall</B> <EM>func &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+applies <EM>func</EM> to <EM>args</EM>.
+The number of <EM>args</EM> must coincide to the number of arguments
+the <EM>func</EM> requests.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18720"></A>
+<B>quote</B> <EM>obj </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> evaluates to <EM>obj</EM> itself.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18731"></A>
+<B>function</B> <EM>func </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a function closure.
+If <EM>func</EM> is a symbol, its function definition is retrieved.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18742"></A>
+<B>evalhook</B> <EM>hookfunc form [env] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> evaluates <EM>form</EM> once after binding <EM>hookfunc</EM> to <B>*evalhook*</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18755"></A>
+<B>eval-dynamic</B> <EM>variable </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the value of <EM>variable</EM> (symbol) on the stack.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18766"></A>
+<B>macroexpand</B> <EM>form </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+expands <EM>form</EM> if it is a macro call.
+If <EM>form</EM> is expanded to a macro call again, 
+expansion is repeated until non macro call results.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18778"></A>
+<B>eval-when</B> <EM>situation {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Situation is a list of <TT>compile, load and eval</TT>.
+Forms are evaluated when the current
+execution mode matches with situation.
+<B>eval-when</B> is important to control the behavior and environment
+of the compiler.
+If <TT>compile</TT> is specified, <EM>forms</EM> are evaluated by the compiler
+so that the result will affect the consequent compilation.
+For example, <EM>defmacro</EM> should be evaluated by the compiler
+in order to let the compiler expand macro calls at compile time.
+If <TT>load</TT> is given in the <EM>situation</EM> list,
+<EM>forms</EM> are compiled to be loaded (evaluated) at load time,
+i.e., compiled functions are defined at load time.
+This is the normal effect that we expect to the compiler.
+<TT>load</TT> situation is used to control the compiler's environment.
+If <TT>eval</TT> is included in situation list, <EM>forms</EM>
+are evaluated when their source code is loaded.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18799"></A>
+<B>the</B> <EM>type form </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> Declares <EM>form</EM> is of <EM>type</EM>.
+<EM>type</EM> is either a class object, :integer, :fixnum, or :float.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18812"></A>
+<B>declare</B> <EM>declaration* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Each <EM>declaration</EM> is a list of a declaration specifier and an integer
+or target symbols.
+Declarations are important to let the compiler produce faster code.
+<DL>
+<DT></DT>
+<DD>special declares special variables
+</DD>
+<DT></DT>
+<DD>type declares the type of variables; <TT>(type integer count)</TT>;
+valid type specifiers are <A NAME="18845"></A><EM>i</EM>nteger, <A NAME="18847"></A><EM>:</EM>integer <A NAME="18849"></A><EM>f</EM>ixnum,
+<A NAME="18851"></A><EM>:</EM>float and  <A NAME="18853"></A><EM>f</EM>loat. The <B>type</B> keyword may be omitted
+if type specifier is either one listed here. So <TT>(integer count)</TT>
+is a correct declaration. Other types (classes) such as <EM>float-vector</EM>,
+<EM>integer-vector</EM>, etc. need to be preceded by <B>type</B>, as
+<TT>(type float-vector vec1)</TT>.
+</DD>
+<DT></DT>
+<DD>ftype declares the result type of functions
+</DD>
+<DT></DT>
+<DD>optimize set *optimize* parameter (0-3) of the compiler
+</DD>
+<DT></DT>
+<DD>safety set *safety* parameter (0-3) of the compiler
+</DD>
+<DT></DT>
+<DD>space  set *space* parameter (0-3) of the compiler
+</DD>
+<DT></DT>
+<DD>inline not recognized
+</DD>
+<DT></DT>
+<DD>not-inline not recognized
+</DD>
+</DL>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18855"></A>
+<B>proclaim</B> <EM>proclamation </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+globally declares the types of variables and compiler options.
+The same declarations are accepted as described for <B>declare</B> special form.
+However, <B>proclaim</B> is a function of one argument and proclamation 
+is evaluated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18867"></A>
+<B>warn</B> <EM>format-string &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints warning-message given as <EM>format-string</EM> and <EM>args</EM> to
+*error-output*.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18879"></A>
+<B>error</B> <EM>format-string &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+calls the current error-handler function bound to <B>*error-handler*</B>.
+The default error-handler 'euserror' first
+prints arguments to <B>*error-output*</B> using <B>format</B>,
+then enters a new top level session.
+The prompt shows you the depth of your error session.
+<B>Throw</B>ing to the number, you can go back to the lower level error
+session.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+In the multithread EusLisp, special variables are shared among threads
+and the same <B>*error-handler*</B> is referenced by different threads.
+To avoid this inconvenience, multithread EusLisp provides
+the <B>install-error-handler</B> function which installs different
+error handler for each thread.
+
+<P>
+
+ <BR>
+<BR> <A NAME="18893"></A>
+<B>install-error-handler</B> <EM>handler </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+installs the <EM>handler</EM> as the error handler of the current thread.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1476"
+  HREF="manual-node75.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1470"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1464"
+  HREF="manual-node73.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1472"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1474"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1477"
+  HREF="manual-node75.html">Top-level Interaction</A>
+<B> Up:</B> <A NAME="tex2html1471"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1465"
+  HREF="manual-node73.html">Evaluation</A>
+ &nbsp; <B>  <A NAME="tex2html1473"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1475"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

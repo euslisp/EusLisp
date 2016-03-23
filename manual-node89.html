@@ -1,0 +1,595 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>File Systems and I/O</TITLE>
+<META NAME="description" CONTENT="File Systems and I/O">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node90.html">
+<LINK REL="previous" HREF="manual-node88.html">
+<LINK REL="up" HREF="manual-node86.html">
+<LINK REL="next" HREF="manual-node90.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1788"
+  HREF="manual-node90.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1782"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1776"
+  HREF="manual-node88.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1784"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1786"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1789"
+  HREF="manual-node90.html">Signals</A>
+<B> Up:</B> <A NAME="tex2html1783"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1777"
+  HREF="manual-node88.html">Process</A>
+ &nbsp; <B>  <A NAME="tex2html1785"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1787"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04012300000000000000">
+File Systems and I/O</A>
+</H3>
+
+ <BR>
+<BR> <P>
+
+<A NAME="22272"></A>
+<B>unix:uread</B> <EM>stream [buffer] [size] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads <EM>size</EM> bytes from <EM>stream</EM>.
+<EM>stream</EM> may either be a stream object or an integer representing fd.
+If <EM>buffer</EM> is given, the input is stored there.
+Otherwise, input goes to the buffer-string in  <EM>stream</EM>.
+Therefore, if <EM>stream</EM> is fd, <EM>buffer</EM> must be given.
+<B>unix:uread</B> never allocates a new string buffer.
+<B>unix:uread</B> returns the byte count actually read.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22291"></A>
+<B>unix:write</B> <EM>stream string &amp;optional size </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes <EM>size</EM> bytes of <EM>string</EM> to <EM>stream</EM>.
+If <EM>size</EM> is omitted, the full length of <EM>string</EM> is output.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22306"></A>
+<B>unix:fcntl</B> <EM>stream command argument </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22317"></A>
+<B>unix:ioctl</B> <EM>stream command buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22328"></A>
+<B>unix:ioctl_</B> <EM>stream command1 command2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22339"></A>
+<B>unix:ioctl_R</B> <EM>stream command1 command2 buffer [size] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22350"></A>
+<B>unix:ioctl_W</B> <EM>stream command1 command2 buffer [size] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22361"></A>
+<B>unix:ioctl_WR</B> <EM>stream command1 command2 buffer [size] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22372"></A>
+<B>unix:close</B> <EM>fd </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+close a file specifying its file descriptor <EM>fd</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22383"></A>
+<B>unix:dup</B> <EM>fd </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the duplicated file descriptor for <EM>fd</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22394"></A>
+<B>unix:pipe</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> creates a pipe.
+An io-stream for this pipe is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22404"></A>
+<B>unix:lseek</B> <EM>stream position [whence 0] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets the file pointer for <EM>stream</EM> at <EM>position</EM> counted
+from <EM>whence</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22417"></A>
+<B>unix:link</B> <EM>path1 path2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a hard link.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22427"></A>
+<B>unix:unlink</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> removes a hard link to the file specified by <EM>path</EM>.
+If no reference to the file lefts, it is deleted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22438"></A>
+<B>unix:mknod</B> <EM>path mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes inode in a file system.
+<EM>path</EM> must be a string, not a pathname object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22449"></A>
+<B>unix:mkdir</B> <EM>path mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes directory in a file system.
+<EM>path</EM> must be a string, not a pathname object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22460"></A>
+<B>unix:access</B> <EM>path mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks the access rights to <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22471"></A>
+<B>unix:stat</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gets inode information of <EM>path</EM> and
+returns a list of integers  described below.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<PRE>
+  st_ctime	; file last status change time
+  st_mtime	; file last modify time
+  st_atime	; file last access time
+  st_size	; total size of file, in bytes
+  st_gid	; group ID of owne
+  st_uid	; user ID of owner
+  st_nlink	; number of hard links to the file
+  st_rdev	; the device identifier (special files only)
+  st_dev	; device file resides on
+  st_ino	; the file serial number
+  st_mode	; file mode
+</PRE>
+
+<A NAME="22482"></A>
+<B>unix:chdir</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> changes the current working directory to <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22493"></A>
+<B>unix:getwd</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> gets current working directory.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22503"></A>
+<B>unix:chmod</B> <EM>path integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes access mode (permission) for <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22514"></A>
+<B>unix:chown</B> <EM>path integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the owner of the file <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22525"></A>
+<B>unix:isatty</B> <EM>(stream <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN> fd) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>stream</EM> is connected to a tty-type
+device (a serial port or a pseudo tty) .
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22536"></A>
+<B>unix:msgget</B> <EM>key mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates or allocates a message queue which is addressed by <EM>key</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22547"></A>
+<B>unix:msgsnd</B> <EM>qid buf [mtype [flag]] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22558"></A>
+<B>unix:msgrcv</B> <EM>qid buf [size [mtype [flag]]] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22569"></A>
+<B>unix:socket</B> <EM>domain type &amp;optional proto </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> creates a socket
+whose name is defined in <I>domain</I> and whose abstract type is <EM>type</EM>.
+<EM>type</EM> should be one of 1 (SOCK_STREAM),
+2 (SOCK_DGRAM), 3 (SOCK_RAW), 4 (SOCK_RDM) and 5 (SOCK_SEQPACKET).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22582"></A>
+<B>unix:bind</B> <EM>socket name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+associates <EM>name</EM> to <EM>socket</EM>.
+<EM>name</EM> should be a unix path-name if the socket is defined in unix-domain.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22595"></A>
+<B>unix:connect</B> <EM>socket addr </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+connects <EM>socket</EM> to another socket specified by <EM>addr</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22607"></A>
+<B>unix:listen</B> <EM>socket &amp;optional backlog </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+begins to accept connection request on <EM>socket</EM>.
+<EM>backlog</EM> specifies the length of the queue waiting for the establishment
+of connection.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22619"></A>
+<B>unix:accept</B> <EM>socket </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> accepts the connection request on <EM>socket</EM>
+and returns a file-descriptor on which messages can be exchanged
+bidirectionally.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22630"></A>
+<B>unix:recvfrom</B> <EM>socket &amp;optional mesg from flag </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+receives a datagram message from <EM>socket</EM>.
+The socket must be assigned a name by <B>unix:bind</B>.
+<EM>mesg</EM> is a string in which the incoming message will be stored.
+If <EM>mesg</EM> is given, <B>recvfrom</B> returns the number of bytes received.
+If it is omitted, a new string is created for the storage of the message
+and returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22645"></A>
+<B>unix:sendto</B> <EM>socket addr mesg &amp;optional len flag </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sends a datagram message to another socket specified by <EM>addr</EM>.
+<EM>Socket</EM> must be a datagram-type socket which has no name assigned.
+<EM>Mesg</EM> is a string to be sent and <EM>len</EM> is the length of
+the message counting from the beginning of the string.
+If omitted, whole string is sent.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22659"></A>
+<B>unix:getservbyname</B> <EM>servicename </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the service number (integer) for <EM>servicename</EM> registered
+in <TT>/etc/services</TT> or in NIS database.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22671"></A>
+<B>unix:gethostbyname</B> <EM>hostname </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list  of ip address of <EM>hostname</EM> and its address type
+(currently always AF_INET==2).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22682"></A>
+<B>unix:syserrlist</B> <EM>errno </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a string describing the error information for the error code
+<EM>errno</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1788"
+  HREF="manual-node90.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1782"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1776"
+  HREF="manual-node88.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1784"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1786"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1789"
+  HREF="manual-node90.html">Signals</A>
+<B> Up:</B> <A NAME="tex2html1783"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1777"
+  HREF="manual-node88.html">Process</A>
+ &nbsp; <B>  <A NAME="tex2html1785"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1787"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

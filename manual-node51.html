@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Hash Tables</TITLE>
+<META NAME="description" CONTENT="Hash Tables">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node52.html">
+<LINK REL="previous" HREF="manual-node50.html">
+<LINK REL="up" HREF="manual-node45.html">
+<LINK REL="next" HREF="manual-node52.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1135"
+  HREF="manual-node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1129"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1123"
+  HREF="manual-node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1131"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1133"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1136"
+  HREF="manual-node52.html">Queue</A>
+<B> Up:</B> <A NAME="tex2html1130"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1124"
+  HREF="manual-node50.html">Foreign Strings</A>
+ &nbsp; <B>  <A NAME="tex2html1132"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1134"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03076000000000000000">
+Hash Tables</A>
+</H2>
+
+<P>
+Hash-table is a class to search for the value associated with a key,
+as accomplished by <B>assoc</B>.
+For a relatively large problem,
+hash-table performs better than assoc, since time required for searching remains constant even
+the number of key-value pairs increases.
+Roughly speaking, hash-table should be used in search spaces with
+more than 100 elements, and assoc in smaller spaces.
+
+<P>
+Hash-tables automatically expands if the number of elements
+in the table exceeds rehash-size.
+By default, expansion occurs when a half of the table is filled.
+<B>sxhash</B> function returns a hash value which is independent
+of memory address of an object, and hash values for <B>equal</B> objects
+are always the same.
+So, hash tables can be re-loadable since they use sxhash as their default
+hashing functions.
+While sxhash is robust and safe,
+it is relatively slow because it scans all the elements 
+in a sequence or a tree.
+For faster hashing, you may choose another hash function appropriate
+for your application.
+To change the hash function, send <TT>:hash-function</TT> message
+to the hash-table.
+In simple cases, it is useful to change hash function from #'<B>sxhash</B>
+to #'<B>sys:address</B>.
+This is possible because the addresses of any objects
+never change in a EusLisp process.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="11726"></A>
+<B>sxhash</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+calculates the hash value for <EM>obj</EM>.
+Two objects which are <B>equal</B> are guaranteed to yield
+the same hash value.
+For a symbol, hash value for its pname is returned.
+For numbers, their integer representations are returned.
+For a list, sum of hash values for all its elements is returned.
+For a string, shifted sum of each character code is returned.
+For any other objects, <B>sxhash</B> is recursively called to calculate
+the hash value of each slot, and the sum of them is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11739"></A>
+<B>make-hash-table</B> <EM>&amp;key (size 30) (test #'eq) (rehash-size 2.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a hash table and returns it.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11749"></A>
+<B>gethash</B> <EM>key htab </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gets the value that corresponds to <EM>key</EM> in <EM>htab</EM>.
+<B>Gethash</B> is also used to set a value to key by combining with <B>setf</B>.
+When a new entry is entered in a hash table, and the number of filled slots
+in the table exceeds 1/rehash-size, then the hash table is automatically
+expanded to twice larger size.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11763"></A>
+<B>remhash</B> <EM>key htab </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+removes a hash entry designated by <EM>key</EM> in <EM>htab</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11775"></A>
+<B>maphash</B> <EM>function htab  </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+maps <EM>function</EM> to all the elements of <EM>htab</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11787"></A>
+<B>hash-table-p</B> <EM>x </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> T if <EM>x</EM> is an instance of class hash-table.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="11799"></A>
+<BIG CLASS="XLARGE"><B>hash-table </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (key value count 
+<BR>
+hash-function test-function 
+<BR>
+rehash-size empty deleted) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines hash table.
+<EM>Key</EM> and <EM>value</EM> are simple-vectors of the same <EM>size</EM>.
+<EM>Count</EM> is the number of filled slots in <EM>key</EM> and <EM>value</EM>.
+<EM>Hash-function</EM> is defaulted to <B>sxhash</B> and
+<EM>test-function</EM> to <B>eq</B>.
+<EM>Empty</EM> and <EM>deleted</EM> are uninterned symbols to indicate
+slots are empty or deleted in the <EM>key</EM> vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11829"></A>
+<B>:hash-function</B> <EM>newhash </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the hash function of this hash table to <EM>newhash</EM>.
+<EM>Newhash</EM> must be a function with one argument and returns an integer.
+One of candidates for <EM>newhash</EM> is <B>system:address</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1135"
+  HREF="manual-node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1129"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1123"
+  HREF="manual-node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1131"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1133"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1136"
+  HREF="manual-node52.html">Queue</A>
+<B> Up:</B> <A NAME="tex2html1130"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1124"
+  HREF="manual-node50.html">Foreign Strings</A>
+ &nbsp; <B>  <A NAME="tex2html1132"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1134"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

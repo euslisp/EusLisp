@@ -1,0 +1,847 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>パネルアイテム</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="パネルアイテム">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node142.html">
+<LINK REL="previous" HREF="jmanual-node137.html">
+<LINK REL="up" HREF="jmanual-node135.html">
+<LINK REL="next" HREF="jmanual-node142.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2517"
+  HREF="jmanual-node142.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2511"
+  HREF="jmanual-node135.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2505"
+  HREF="jmanual-node140.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2513"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2515"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2518"
+  HREF="jmanual-node142.html">キャンバス</A>
+<B> Up:</B> <A NAME="tex2html2512"
+  HREF="jmanual-node135.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2506"
+  HREF="jmanual-node140.html">テキスト表示パネル</A>
+ &nbsp; <B>  <A NAME="tex2html2514"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2516"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04073000000000000000">
+パネルアイテム</A>
+</H2>
+
+ <BR>
+<BR> <BR> 
+<A NAME="44937"></A>
+<BIG CLASS="XLARGE"><B>panel-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (pos notify-object notify-method
+<BR>
+fontid label labeldots) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>panel-item</B>は、パネルアイテムwindowのすべての種類において、
+アイテムが指定するイベントが発生したとき
+<TT>notify-object</TT>の<TT>notify-method</TT>を呼び出すための
+抽象クラスである。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44957"></A>
+<B>:notify</B> <EM>&amp;rest args </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>notify-object</TT>の<TT>notify-method</TT>を呼び出す。
+イベント応答や<TT>notify-method</TT>へ送るための引き数が
+アイテムにより区別される。
+<DL>
+<DT><STRONG>button-item</STRONG></DT>
+<DD>ボタンは、同じbutton-itemの押し、外し時に応答。
+引き数はbutton-itemオブジェクトである。
+</DD>
+<DT><STRONG>menu-button-item</STRONG></DT>
+<DD>メニューアイテムの選択時に応答。
+引き数は、menu-button-itemオブジェクトである。
+</DD>
+<DT><STRONG>choice-item</STRONG></DT>
+<DD>新しい選択ボタンの選択時に応答。
+引き数は、choice-itemオブジェクトとその選択番号である。
+</DD>
+<DT><STRONG>text-item</STRONG></DT>
+<DD>改行あるいはリターンの入力時に応答。
+引き数は、text-itemオブジェクトと入力行（文字列）である。
+</DD>
+<DT><STRONG>slider-item</STRONG></DT>
+<DD>スライダーノブは、つかみと移動時に応答。
+引き数は、slider-itemオブジェクトと新たな値である。
+</DD>
+<DT><STRONG>joystick-item</STRONG></DT>
+<DD>ジョイスティックは、つかみと移動時に応答。
+引き数はslider-itemオブジェクトと新しいxとyの値である。
+</DD>
+</DL>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44972"></A>
+<BR>
+<IMG
+ WIDTH="639" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img89.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it name reciever method \= \&amp;rest args
+\\lq  [メ...
+...height h) 100) (:font font-courb12)\\
+\&gt; \&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>パネルアイテムを作成する。
+パネルアイテムは、抽象クラスである。
+このメソッドは、サブクラスによって<TT>send-super</TT>を通してのみ
+呼び出すべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="44985"></A>
+<BIG CLASS="XLARGE"><B>button-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>button-item</B>は、簡単なパネルアイテムである。
+button-itemは、四角ボックスとその中のラベル文字列を持っている。
+クリックされたとき、button-itemはpanel-itemオブジェクトを唯一の引き数として
+<TT>notify-object</TT>の<TT>notify-method</TT>
+を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45005"></A>
+<B>:draw-label</B> <EM>&amp;optional (state :top) (color bg-color) (border 2) (offset) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>button-item</B>のラベルを書く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45016"></A>
+<BR>
+<IMG
+ WIDTH="561" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img90.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it label revciever method \= \&amp;rest args
+\\lq  [�...
+...rder-width 0) \\
+\&gt;\&gt; (:state :top)\\
+\&gt;\&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>button-item</B>を作成する。
+もし、ボタンの幅と高さが与えられないなら、サイズは
+与えられたフォントを用いて書かれた
+ラベル文字列に合わせて自動的に設定される。
+<EM>:border-width</EM>はデフォルトで0であるが、
+擬似３次元表現でボタンを浮き出しにする。
+背景やフォントは親window(すなわち、panel)で定義されているものを
+デフォルトとする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45029"></A>
+<B>:ButtonPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、ボタンであれば、背景色をグレーにする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45039"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>の背景色を標準に変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45051"></A>
+<BIG CLASS="XLARGE"><B>menu-button-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		 (items item-dots item-labels
+<BR>
+charwidth charheight 
+<BR>
+menu-window window-pos high-light) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>プルダウンメニューを定義する。
+<B>menu-button-item</B>は、<TT>button-item</TT>のようであるが、
+<B>menu-button-item</B>は、ボタンの下の関連する<TT>menu-panel</TT>が
+押されたとき、
+<TT>notify-object</TT>にすぐにメッセージを送る代わりに、
+活性化させる。
+メニューアイテムの１つの上でマウスボタンが外されたときに、本当のメッセージが
+送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45073"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img91.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\= label reciever method \\lq  [メソッド]\\...
+... (:menu nil) (:items) (:state :flat)\\
+\&gt;\&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>プルダウンメニューを作成する。
+<EM>receiver</EM>と<EM>method</EM>引き数は、影響を与えない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45086"></A>
+<B>:ButtonPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+プルダウンメニューのボタンを反転させ、
+ボタンの下に関連するmenu-panelをさらす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45096"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このボタンの下の<TT>menu-panel</TT>を消し、
+このボタンを元に戻す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45108"></A>
+<BIG CLASS="XLARGE"><B>bitmap-button-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		 (pixmap-id bitmap-width bitmap-height) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>bitmap-button-item</B>の関数は、<TT>button-item</TT>に似ているが、
+表現が異なっている。
+<TT>button-item</TT>の場合にボタンの上に簡単なラベル文字列を描く代わりに、
+<TT>bitmap-button-item</TT>では、ボタンが作られたときにbitmapファイルから
+ロードされるpixmapを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45129"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img92.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it bitmap-file reciever method \= \&amp;rest args
+...
+...��ド]\\
+\&gt;\&amp;key :width :height\\
+\&gt;\&amp;allow-other-keys)\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>bitmap-button-item</B>を作成する。
+最初の引き数<EM>bitmap-file</EM>は、<TT>button-item</TT>の<EM>label</EM>引き数
+を置き換えたものである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45144"></A>
+<B>:draw-label</B> <EM>&amp;optional (state :flat) (color bg-color) (border 2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ボタンの上にbitmapかpixmapを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45154"></A>
+<B>:create-bitmap-from-file</B> <EM>fname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fname</EM>という名のbitmapファイルからpixmapを作り、
+<TT>pixmap-id</TT>にそのIDを入れる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45167"></A>
+<BIG CLASS="XLARGE"><B>choice-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		  (choice-list active-choice transient-choice 
+<BR>
+choice-dots choice-pos button-size) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>choice-item</B>は、丸い選択ボタンの集合である。
+１つの選択はいつも活性化しており、同時に１つの選択だけが
+活性化することができる。
+<B>choice-item</B>は、ラジオボタンと同様な機能を提供する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45186"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img93.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it label reciever method \= \&amp;rest args
+\\lq  [�...
+...t))\\
+\&gt;\&gt;(:button-size 13)\\
+\&gt;\&gt;(:border-width 0)\\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>choice-item-button</B>を作成する。
+それぞれの選択ボタンは<EM>:button-size</EM>の半径を持つ円である。
+新しい選択ボタンが選択されたとき、
+<TT>notify-object</TT>の<TT>notify-method</TT>が
+choice-itemオブジェクトと選択された選択ボタンの番号と一緒に呼び出される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45201"></A>
+<B>:value</B> <EM>&amp;optional (new-choice) (invocation) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>new-choice</EM>が与えられたならば、現在の活性化選択ボタンとして
+設定し、対応する円が黒色になる。
+もし<EM>invocation</EM>も指定されているなら、<TT>notify-object</TT>の
+<TT>notify-method</TT>が呼び出される。
+<TT>:value</TT>は、現在の（あるいは新しい）選択ボタンの番号を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45216"></A>
+<B>:draw-active-button</B> <EM>&amp;optional
+(old-choice active-choice) (new-choice active-choice) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ボタンを活性化として書く。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45226"></A>
+<B>:ButtonPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、選択ボタンのどこかでマウスボタンが押されているなら、
+その番号が<TT>transient-choice</TT>に記録される。
+マウスボタンが外されるまでそれ以上の行動は、起こさない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45237"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、既に押されていたところと同じボタンの上でマウスボタンが外されたなら、
+<TT>active-choice</TT>が更新され、
+<TT>notify-object</TT>の<TT>notify-method</TT>が呼び出される。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45251"></A>
+<BIG CLASS="XLARGE"><B>slider-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 (min-value max-value value
+<BR>
+minlabel maxlabel valueformat
+<BR>
+bar-x bar-y bar-width bar-height valuedots label-base
+<BR>
+nob-x nob-moving
+<BR>
+charwidth)  
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>choice-item</TT>が離散的な値の選択に使用されるのに対し、
+<B>slider-item</B>は<TT>min-value</TT>と<TT>max-value</TT>の間の範囲の
+連続的な値に対して使用される。
+それぞれ値が変化した瞬間、slider-itemオブジェクトと新しい値が引き数として
+一緒に<TT>notify-object</TT>の<TT>notify-method</TT>が呼び出される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45274"></A>
+<BR>
+<IMG
+ WIDTH="689" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img94.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it label reciever method \= \&amp;rest args
+\\lq  [�...
+...courb12) (:span 100) (:border-width 0) (:initial-value min)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>slider-item</B>を作成する。
+スライドのノブは、バーの上に小さな黒の四角として表示される。
+左端が<EM>:min</EM>値を表現し、右端が<EM>:max</EM>値を表現する。
+バーの長さは、<EM>:span</EM>ドットに引き伸ばす。
+現在の値は、<EM>:value-format</EM>でslider-itemの右に表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45290"></A>
+<B>:value</B> <EM>&amp;optional newval invocation </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>newval</EM>が与えられたなら、現在の値として設定され、
+ノブは対応する位置にスライドする。
+もし、<EM>invocation</EM>もnon NILに指定されていたなら、
+<TT>notify-object</TT>の<TT>notify-method</TT>が呼び出される。
+<TT>:value</TT>は、現在の（新しい）値を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45306"></A>
+<BIG CLASS="XLARGE"><B>joystick-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		  (stick-size min-x min-y max-x max-y
+<BR>
+center-x center-y stick-x stick-y
+<BR>
+value-x value-y
+<BR>
+stick-return stick-grabbed
+<BR>
+fraction-x fraction-y) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>joystick-item</B>は、2次元のslider-itemとしてみなすことができる。
+2つの連続値はクモの巣のような同心円図の上を動く黒い円によって
+指定することができる(図 <A HREF="#panelitem">18</A>)。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45325"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img95.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it name reciever method \= \&amp;rest args
+\\lq  [メ...
+... \&gt;\&gt;(:min-y -1.0) (:max-y 1.0)\\
+\&gt;\&amp;allow-other-keys)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>:stick-size</EM>は、スティックの黒い円の半径である。
+同心円図の円の大きさは、<B>joystick-item</B> windowの幅と高さ
+に合うように決定される。
+もし、<EM>:return</EM>がnon NILであるなら、
+ジョイスティックは、マウスボタンが外された時の原点に帰る。
+そうでないなら、ジョイスティックは、外された位置に残る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45339"></A>
+<B>:value</B> <EM>&amp;optional (newx) (newy) (invocation) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>newx</EM>と<EM>newy</EM>が与えられたなら、
+現在の位置として設定され、ジョイスティックは同心円図の
+対応する位置に移動する。
+もし、<EM>invocation</EM>もnon NILに指定されたなら、
+<TT>notify-object</TT>の<TT>notify-method</TT>が、
+<B>joystick-item</B>オブジェクトとx,y値を引き数として一緒に呼び出される。
+<TT>:value</TT>は、現在の（新しい）値のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+以下に上に記述されているpanel-itemを使った短いプログラムを示し、
+図 <A HREF="#panelitem">18</A>がパネルの中にどのように表示されるかを示したものである。
+
+<P>
+<PRE>
+(in-package "X")
+(defclass testPanel :super panel
+        :slots (quit joy choi sli))
+(defmethod testPanel
+ (:create (&amp;rest args)
+    (send-super* :create :width 210 :height 180 
+                 :font font-courb12 args)
+    (send-super :create-item button-item "quit" self :quit :font font-courb14)
+    (send-super :create-item choice-item "choice" self :choice
+                :choices '(" A " " B " " C ")
+                :font font-courb12)
+    (send-super :create-item slider-item "slider" self :slider
+                :span 90)
+    (send-super :create-item joystick-item "joy" self :joy)
+    self)
+ (:choice (obj c) (format t "choice: ~S ~d~%" obj c))
+ (:slider (obj val) (format t "slider: ~S ~s~%" obj val))
+ (:joy (obj x y) (format t "joy: ~S ~s ~s~%" obj x y)) )
+(instance testPanel :create)
+(window-main-thread)
+</PRE>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="panelitem"></A><A NAME="44444"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+panelの中に作成されたpanel-item</CAPTION>
+<TR><TD><IMG
+ WIDTH="264" HEIGHT="226" BORDER="0"
+ SRC="jmanual-img96.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/panelitem.ps,height=5cm}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="45357"></A>
+<BIG CLASS="XLARGE"><B>text-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 (textwin) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>text-item</B>は、ファイル名のような短いテキストを表示したり入力したり
+するために使用する。
+<B>text-item</B>は、ラベル文字列とその右側に小さなテキストwindowを持っている。
+テキストwindow内にポインタが置かれたとき、キー入力が可能となり、
+入力された文字がバッファに入れられる。
+テキストwindow内の行修正が可能である。
+<TT>control-F</TT>と<TT>control-B</TT>は前後に１文字動かし、
+<TT>del</TT>はカーソルの左の１文字を削除し、
+<TT>control-D</TT>はカーソル位置の文字を削除し、
+カーソル位置にはどんなグラフィック文字も挿入できる。
+マウスボタンをクリックすれば、クリックされた文字にカーソルを
+移動させる。
+enter（改行）キーを打つことにより、バッファされたテキストが
+<TT>notify-object</TT>の<TT>notify-method</TT>に送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45382"></A>
+<BR>
+<IMG
+ WIDTH="728" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img97.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it label revciever method \= \&amp;rest args \\lq  [�...
+... (:initial-value ) (:border-width 0)\\
+\&gt;\&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>text-item</B>を作成する。
+テキストwindowの行バッファには、長さの制限が無いけれども、
+見える部分は<EM>columns</EM>文字に制限されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45395"></A>
+<B>:getstring</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+キーバッファ内の文字列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2517"
+  HREF="jmanual-node142.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2511"
+  HREF="jmanual-node135.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2505"
+  HREF="jmanual-node140.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2513"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2515"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2518"
+  HREF="jmanual-node142.html">キャンバス</A>
+<B> Up:</B> <A NAME="tex2html2512"
+  HREF="jmanual-node135.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2506"
+  HREF="jmanual-node140.html">テキスト表示パネル</A>
+ &nbsp; <B>  <A NAME="tex2html2514"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2516"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

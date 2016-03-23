@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Adding Lisp Functions Coded in C</TITLE>
+<META NAME="description" CONTENT="Adding Lisp Functions Coded in C">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node97.html">
+<LINK REL="previous" HREF="manual-node95.html">
+<LINK REL="up" HREF="manual-node84.html">
+<LINK REL="next" HREF="manual-node97.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1884"
+  HREF="manual-node97.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1878"
+  HREF="manual-node84.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1872"
+  HREF="manual-node95.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1880"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1882"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1885"
+  HREF="manual-node97.html">Foreign Language Interface</A>
+<B> Up:</B> <A NAME="tex2html1879"
+  HREF="manual-node84.html">System Functions</A>
+<B> Previous:</B> <A NAME="tex2html1873"
+  HREF="manual-node95.html">Unix Processes</A>
+ &nbsp; <B>  <A NAME="tex2html1881"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1883"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04014000000000000000">
+Adding Lisp Functions Coded in C</A>
+</H2>
+
+<P>
+Programs that heavily refer to C include files or frequently access arrays
+perform better or are more clearly described
+if written in C or other languages rather than in EusLisp.
+EusLisp provides the way to link programs coded in C.
+
+<P>
+If you want to define EusLisp function written in C,
+each EusLisp-callable C-function must be coded to accept three arguments:
+the context pointer, the number of arguments and the pointer to the Lisp
+argument block.
+These arguments must be named as <TT>ctx, n</TT> and <TT>argv</TT>,
+since the macros in <TT>c/eus.h</TT> assume these names.
+The C program must include <TT>*eusdir*/c/eus.h</TT>.
+The programmer should be familiar with the types and macros
+described there.
+The entry function should be named by the basename of the source file.
+
+<P>
+A sample code for C function AVERAGE which computes the arithmetic
+average of arbitrary number of floats is shown below.
+In this example, you can see how to get float values from arguments,
+how to make the pointer of a float,
+how to set a pointer in the special variable AVERAGE,
+and how to define a function and a symbol in the entry function <TT>ave</TT>.
+Compile this program by <TT>'cc -c -Dsun4 -DSolaris2 -K pic'</TT>.
+<TT>-Dsun4</TT> and <TT>-DSolaris2</TT> are needed
+to chose proper definitions in <TT>c/eus.h</TT>.
+<TT>-K pic</TT> is needed to let the c compiler generate position independent
+code necessary for the loadable shared object. 
+Then the resulted '.o' file can be loaded into EusLisp.
+More complete examples can be found in <TT>*eusdir*/clib/*.c</TT>,
+which are defined and loaded in the same manner described here.
+
+<P>
+<PRE>
+/* ave.c */
+/* (average &amp;rest numbers) */
+#include "/usr/local/eus/c/eus.h"
+static pointer AVESYM;
+pointer AVERAGE(ctx,n,argv)
+context *ctx;
+int n;
+pointer argv[];
+{ register int i;
+  float sum=0.0, a, av;
+  pointer result;
+  numunion nu;
+  for (i=0; i&lt;n; i++) {
+    a=ckfltval(argv[i]);
+    sum += a;} /*get floating value from args*/
+  av=sum/n;
+  result=makeflt(av);
+  AVESYM-&gt;c.sym.speval=result;  /*kindly set the result in symbol*/
+  return(result);}
+
+ave(ctx,n,argv)
+context *ctx;
+int n;
+pointer argv[];
+{ char *p;
+  p="AVERAGE";
+  defun(ctx,p,argv[0],AVERAGE);
+  AVESYM=intern(ctx,p,strlen(p),userpkg); /* make a new symbol*/
+  }
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1884"
+  HREF="manual-node97.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1878"
+  HREF="manual-node84.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1872"
+  HREF="manual-node95.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1880"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1882"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1885"
+  HREF="manual-node97.html">Foreign Language Interface</A>
+<B> Up:</B> <A NAME="tex2html1879"
+  HREF="manual-node84.html">System Functions</A>
+<B> Previous:</B> <A NAME="tex2html1873"
+  HREF="manual-node95.html">Unix Processes</A>
+ &nbsp; <B>  <A NAME="tex2html1881"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1883"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

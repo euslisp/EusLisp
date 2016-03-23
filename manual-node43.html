@@ -1,0 +1,529 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Symbols</TITLE>
+<META NAME="description" CONTENT="Symbols">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node44.html">
+<LINK REL="previous" HREF="manual-node42.html">
+<LINK REL="up" HREF="manual-node42.html">
+<LINK REL="next" HREF="manual-node44.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1018"
+  HREF="manual-node44.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1012"
+  HREF="manual-node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1006"
+  HREF="manual-node42.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1014"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1016"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1019"
+  HREF="manual-node44.html">Packages</A>
+<B> Up:</B> <A NAME="tex2html1013"
+  HREF="manual-node42.html">Symbols and Packages</A>
+<B> Previous:</B> <A NAME="tex2html1007"
+  HREF="manual-node42.html">Symbols and Packages</A>
+ &nbsp; <B>  <A NAME="tex2html1015"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1017"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03061000000000000000">
+Symbols</A>
+</H2>
+A symbols is assured to be unique if it is interned in a package.
+The uniqueness is tested by symbol's print-names.
+There are no duplicated symbols in a package which have the same print-name
+as other symbols in the package.
+When EusLisp is running, there always is a special package called
+the current package, which is referred by <B>lisp:*package*</B>.
+When a symbol without a package name is read by the reader,
+the current package is searched for to locate the symbol with the same
+print-name.
+If no such symbol is found, search is continued in the packages listed
+in the package use list of the current package.
+If still no such symbol is found, 
+a new symbol object with the designated print-name is created
+and is interned in the current package.
+The package can be specified by prefixing the package name followd by a colon(:).
+If a symbol name is preceeded by a package name, the search begins
+in the designated package.
+
+<P>
+Every symbol may have at most one home package.
+If a symbol has no such home package, it is said to be an uninterned symbol.
+Uninterned symbols can be created by the <B>gensym</B> or <B>make-symbol</B>
+function, and they are prefixed by "#:" when printed.
+Since these symbols are not interned, two such symbols with the
+same print-name are not guaranteed to be equal.
+
+<P>
+Usually, when the lisp reader encounters a symbol,
+the reader converts the print-name string of the symbol to uppper case.
+Thus, for example, if you input <TT>(symbol-name 'car)</TT>,
+EusLisp responds <TT>"CAR"</TT> instead of <TT>"car"</TT>.
+Note that <TT>(make-symbol "car")</TT> returns <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN><TT>car</TT><SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN> instead of
+<TT>car</TT> or <TT>CAR</TT>.
+If you want the reader to make symbols constituted by lower case letters,
+use reader's escapes, <SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ WIDTH="27" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img28.png"
+ ALT="$\vert...\vert$"></SPAN>.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="7809"></A>
+<B>symbolp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  returns T if <EM>object</EM> is an
+instance of CLASS symbol or its subclasses.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7820"></A>
+<B>symbol-value</B> <EM>symbol </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gets <EM>symbol</EM>'s special value. Lexical (local) variables' 
+values cannot be retrieved by this function.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7831"></A>
+<B>symbol-function</B> <EM>symbol </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gets <EM>symbol</EM>'s global function definition.
+Lexical (local) function cannot be taken by this function.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7842"></A>
+<B>symbol-package</B> <EM>sym </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the package where <EM>sym</EM> is interned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7853"></A>
+<B>symbol-name</B> <EM>sym </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns <EM>sym</EM>'s print-name.
+Note that <B>symbol-name</B> does not copy the pname string,
+whereas <B>string</B> does.
+Thus, if you change the string returned by <B>symbol-name</B>,
+the symbol becomes inaccessible through normal intern procedure.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7867"></A>
+<B>symbol-plist</B> <EM>sym </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns <EM>sym</EM>'s property list (plist).
+EusLisp's plist takes the same form as an association list,
+which consists of dotted pairs of an attribute name and its value.
+This is incompatible with Common Lisp definition which requests a plist
+to have linear lists of attribute name and value.
+In EusLisp, plist is not the unique facility of symbols.
+Any objects instantiated from a class that inherits <B>propertied-object</B>
+can have property lists.
+To set and retrieve these plists in propertied-objects,
+<B>propertied-object-plist</B> macro should be used instead of 
+<B>symbol-plist</B>.
+However, <B>get</B> and <B>putprop</B> work for either object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7883"></A>
+<B>boundp</B> <EM>symbol </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Checks if <EM>symbol</EM> has a globally bound value.
+Note that symbols used for local and object variables
+always have bound value and <B>boundp</B> cannot test the bound state
+of these local variables.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7895"></A>
+<B>fboundp</B> <EM>symbol </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Checks if <EM>symbol</EM> has a globally bound function definition.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7906"></A>
+<B>makunbound</B> <EM>symbol </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM> is forced to be unbound (to have no special value).
+Note that lexical (local) variables always have values assigned and
+cannot be <EM>makunbound</EM>ed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7918"></A>
+<B>get</B> <EM>sym attribute </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+retrieves <EM>sym</EM>'s value associated with <EM>attribute</EM> in its plist.
+<TT>= (cdr (assoc <EM>attribute</EM> (symbol-plist <EM>sym</EM>)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7933"></A>
+<B>putprop</B> <EM>sym val attribute </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Putprop should be replaced with the combination of <B>setf</B> and <B>get</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="7945"></A>
+<B>remprop</B> <EM>sym attr </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+removes attribute-value pair from <EM>sym</EM>'s property list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7956"></A>
+<B>setq</B> <EM>{var value}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+assigns <EM>value</EM> to <EM>var</EM> which is either a symbol or a dotted-pair.
+<EM>Var</EM> is searched for in the name spaces of local variables,
+object variables, and special variables in this order unless explicitly
+declared special.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7969"></A>
+<B>set</B> <EM>sym val </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+assigns <EM>val</EM> to the special value of <EM>sym</EM>.
+<B>Set</B> cannot assign values to local or object
+variables.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7982"></A>
+<B>defun</B> <EM>symbol [documentation] lambda-list . body </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines a global function to <EM>symbol</EM>.
+Use <EM>flet</EM> or <EM>labels</EM> for defining local functions.
+If no <EM>documentation</EM> is given, a default documentation string
+describing the lambda-list is entered.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="7996"></A>
+<B>defmacro</B> <EM>symbol [documentation] lambda-list . body </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines a global macro.
+EusLisp does not have facilities for defining locally scoped macros.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8006"></A>
+<B>defvar</B> <EM>var &amp;optional (init nil) doc </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>var</EM> symbol has any special value, <B>defvar</B> does nothing.
+If <EM>var</EM> is unbound, it is declared to be special and
+<EM>init</EM> is set to its value.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8020"></A>
+<B>defparameter</B> <EM>var init &amp;optional doc </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>defparameter</EM> declares <EM>var</EM> to be special and 
+<EM>init</EM> is set to its value,
+even if <EM>var</EM> already has value.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8034"></A>
+<B>defconstant</B> <EM>sym val &amp;optional doc </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>defconstant</EM> sets <EM>val</EM> as <EM>sym</EM>'s special value.
+Unlike <EM>defvar, defparameter</EM> and <EM>setq</EM>, the value set by 
+<EM>defconstant</EM> cannot be altered by these forms.
+If the value of a constant symbol is tried to be changed,
+an error is reported.
+However, another <EM>defconstant</EM> can override the previous
+constant value, issuing a warning message.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8051"></A>
+<B>keywordp</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>obj</EM> is a symbol and its home package is <B>KEYWORD</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8063"></A>
+<B>constantp</B> <EM>symbol </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if the symbol is declared to be constant with defconstant macro.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8073"></A>
+<B>documentation</B> <EM>sym &amp;optional type </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+retrieves documentation string of <EM>sym</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8084"></A>
+<B>gensym</B> <EM>&amp;optional x </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a new uninterned symbol composed of a prefix string and a suffix
+number like <TT>g001</TT>.
+Uninterned symbols are denoted by the #: package prefix indicating
+no package is associated with the symbols.
+Symbols with #: prefix are unreadable symbols and
+the reader cannot create references to these uninterned symbols.
+<EM>X</EM> can either be a string or an integer,
+which is used as the prefix or the suffix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8096"></A>
+<B>gentemp</B> <EM>&amp;optional (prefix "T") (pkg *package*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a new symbol interned in <EM>pkg</EM>.
+In most applications, <B>gensym</B> is preferable to <B>gentemp</B>, because
+creation of uninterned symbols is faster and uninterned symbols are
+garbage collect-able.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1018"
+  HREF="manual-node44.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1012"
+  HREF="manual-node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1006"
+  HREF="manual-node42.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1014"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1016"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1019"
+  HREF="manual-node44.html">Packages</A>
+<B> Up:</B> <A NAME="tex2html1013"
+  HREF="manual-node42.html">Symbols and Packages</A>
+<B> Previous:</B> <A NAME="tex2html1007"
+  HREF="manual-node42.html">Symbols and Packages</A>
+ &nbsp; <B>  <A NAME="tex2html1015"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1017"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Subpanels (menu-panel and menubar-panel)</TITLE>
+<META NAME="description" CONTENT="Subpanels (menu-panel and menubar-panel)">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node156.html">
+<LINK REL="previous" HREF="manual-node154.html">
+<LINK REL="up" HREF="manual-node154.html">
+<LINK REL="next" HREF="manual-node156.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2757"
+  HREF="manual-node156.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2751"
+  HREF="manual-node154.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2745"
+  HREF="manual-node154.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2753"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2755"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2758"
+  HREF="manual-node156.html">File Panel</A>
+<B> Up:</B> <A NAME="tex2html2752"
+  HREF="manual-node154.html">Panel</A>
+<B> Previous:</B> <A NAME="tex2html2746"
+  HREF="manual-node154.html">Panel</A>
+ &nbsp; <B>  <A NAME="tex2html2754"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2756"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04092100000000000000">
+Subpanels (menu-panel and menubar-panel)</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="47458"></A>
+<BIG CLASS="XLARGE"><B>menu-panel </B></BIG> [class]  <PRE><TT>
+  :super   <B>panel</B> 
+<BR>  :slots 		  (items item-dots item-height
+<BR>
+charwidth charheight
+<BR>
+height-offset
+<BR>
+highlight-item
+<BR>
+color-pixels
+<BR>
+active-color) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>Menu-panel</TT> is a kind of panel that can locate only 
+<TT>button-item</TT>s and/or <TT>bitmap-button-item</TT>s.
+Unlike <TT>panel</TT>, however, <TT>menu-panel</TT> is normally invisible
+and is exposed when the <TT>button-item</TT> to which the <TT>menu-panel</TT> is
+associated is pressed.
+If a <TT>menu-panel</TT> is made always visible, it becomes a pinned menu.
+The response of each button-item to mouse events is slightly different from
+button-items in other panels,
+as the mouse button has been pressed somewhere outside the button-item.
+Creation of a <TT>menu-panel</TT> should follow the order described below:
+
+<OL>
+<LI>create a menu-panel by <TT>(instance menu-panel :create)</TT>.
+</LI>
+<LI>create button-items or/and bitmap-button-items and locate them in the
+menu-panel by <TT>(send aMenuPanel :create-item button-item "BTN" obj meth)</TT>.
+</LI>
+<LI>create a menu-button-item in another panel and associate the menu-panel
+with the menu-button-item by <TT>(instance menu-button-item :create
+"Option" obj meth :menu-window aMenuPanel)</TT>.
+</LI>
+</OL>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47489"></A>
+<BR>
+<IMG
+ WIDTH="639" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img110.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\&amp;rest args \= \&amp;key\= (items) (border-width...
+...*bisque1*)
+(active *bisque2*) \\
+\&gt;\&amp;allow-other-keys)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>create a menu-panel window. The size of the window is expanded each time
+new menu-item is added.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47500"></A>
+<B>:create-item</B> <EM>class label receiver method  &amp;rest mesg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+adds a menu item in this menu-panel window and attatches
+the corresponding action. 
+The <EM>receiver</EM> objects receives <EM>mesg</EM>
+when the mouse button is released on the item.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="47513"></A>
+<BIG CLASS="XLARGE"><B>menubar-panel </B></BIG> [class]  <PRE><TT>
+  :super   <B>panel</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>Menubar-panel</TT> is a subpanel always located at the top of the parent 
+panel. A menubar-panel resembles with the Macintosh desktop's menubar
+which lets out several pull-down menus.
+Panel-items placed in the menubar should be <TT>menu-button-item</TT>s.
+A menubar-panel is created by the panel's <TT>:create-menubar</TT> method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2757"
+  HREF="manual-node156.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2751"
+  HREF="manual-node154.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2745"
+  HREF="manual-node154.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2753"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2755"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2758"
+  HREF="manual-node156.html">File Panel</A>
+<B> Up:</B> <A NAME="tex2html2752"
+  HREF="manual-node154.html">Panel</A>
+<B> Previous:</B> <A NAME="tex2html2746"
+  HREF="manual-node154.html">Panel</A>
+ &nbsp; <B>  <A NAME="tex2html2754"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2756"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

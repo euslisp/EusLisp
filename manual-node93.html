@@ -1,0 +1,405 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>IOCTL</TITLE>
+<META NAME="description" CONTENT="IOCTL">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node94.html">
+<LINK REL="previous" HREF="manual-node92.html">
+<LINK REL="up" HREF="manual-node86.html">
+<LINK REL="next" HREF="manual-node94.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1844"
+  HREF="manual-node94.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1838"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1832"
+  HREF="manual-node92.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1840"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1842"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1845"
+  HREF="manual-node94.html">Keyed Indexed Files</A>
+<B> Up:</B> <A NAME="tex2html1839"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1833"
+  HREF="manual-node92.html">Low-Level Memory Management</A>
+ &nbsp; <B>  <A NAME="tex2html1841"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1843"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04012700000000000000">
+IOCTL</A>
+</H3>
+Although Unix controls terminal device by a set of commands (second argument) to 
+<TT>ioctl</TT>, EusLisp provides them in the forms of function to eliminate
+to reference the include files and or'ing argument with the command codes.
+For the detail, refer to the <EM>termio</EM> manual pages of Unix.
+
+<P>
+There are two sets of terminal io-controls: TIOC* and TC*.
+Be careful about the availability of these functions on your operating system.
+Basically, BSD supports TIOC* io-controls and Sys5 supports TC*.
+<DL>
+<DT></DT>
+<DD>SunOS 4.1 Both TIOC* and TC*
+</DD>
+<DT></DT>
+<DD>Solaris2 only TC*
+</DD>
+<DT></DT>
+<DD>mips, ultrix? only TIOC*
+</DD>
+</DL>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="22959"></A>
+<B>unix:tiocgetp</B> <EM>stream [sgttybuf] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> gets parameters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22969"></A>
+<B>unix:tiocsetp</B> <EM>stream sgttybuf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets parameters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22979"></A>
+<B>unix:tiocsetn</B> <EM>stream [sgttybuf] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22990"></A>
+<B>unix:tiocgetd</B> <EM>stream [sgttybuf] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23001"></A>
+<B>unix:tiocflush</B> <EM>stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> flushes output buffer
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23011"></A>
+<B>unix:tiocgpgrp</B> <EM>stream integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> gets process group id.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23021"></A>
+<B>unix:tiocspgrp</B> <EM>stream integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets process group id.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23031"></A>
+<B>unix:tiocoutq</B> <EM>stream integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23042"></A>
+<B>unix:fionread</B> <EM>stream integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23053"></A>
+<B>unix:tiocsetc</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23064"></A>
+<B>unix:tioclbis</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23075"></A>
+<B>unix:tioclbic</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23086"></A>
+<B>unix:tioclset</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23097"></A>
+<B>unix:tioclget</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23108"></A>
+<B>unix:tcseta</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets terminal parameters immediately.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23118"></A>
+<B>unix:tcsets</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets terminal parameters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23128"></A>
+<B>unix:tcsetsw</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets terminal parameters after all
+characters queued for output have been transmitted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23138"></A>
+<B>unix:tcsetsf</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets terminal parameters after all
+characters queued for output have been transmitted and all characters
+queued for input are discarded.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23148"></A>
+<B>unix:tiocsetc</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23159"></A>
+<B>unix:tcsetaf</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23170"></A>
+<B>unix:tcsetaw</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23181"></A>
+<B>unix:tcgeta</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23192"></A>
+<B>unix:tcgets</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23203"></A>
+<B>unix:tcgetattr</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23214"></A>
+<B>unix:tcsetattr</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1844"
+  HREF="manual-node94.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1838"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1832"
+  HREF="manual-node92.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1840"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1842"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1845"
+  HREF="manual-node94.html">Keyed Indexed Files</A>
+<B> Up:</B> <A NAME="tex2html1839"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1833"
+  HREF="manual-node92.html">Low-Level Memory Management</A>
+ &nbsp; <B>  <A NAME="tex2html1841"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1843"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

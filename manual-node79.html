@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Dump Objects</TITLE>
+<META NAME="description" CONTENT="Dump Objects">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node80.html">
+<LINK REL="previous" HREF="manual-node78.html">
+<LINK REL="up" HREF="manual-node73.html">
+<LINK REL="next" HREF="manual-node80.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1546"
+  HREF="manual-node80.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1540"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1534"
+  HREF="manual-node78.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1542"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1544"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1547"
+  HREF="manual-node80.html">Process Image Saving</A>
+<B> Up:</B> <A NAME="tex2html1541"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1535"
+  HREF="manual-node78.html">Debugging Aid</A>
+ &nbsp; <B>  <A NAME="tex2html1543"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1545"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030116000000000000000">
+Dump Objects</A>
+</H2>
+EusLisp's reader and printer are designed so that they can write any
+objects out to files in the forms that are rereadable.
+The objects may have mutual or recursive references.
+This feature is enabled when <TT>*print-circle*</TT> and <TT>*print-object*</TT>
+are set to T.
+Following functions set these variables to T, open a file, and
+print objects.
+The most important application of these functions is to dump the
+structures of 3D models that have mutual references.
+
+<P>
+
+ <BR>
+<BR> <A NAME="19556"></A>
+<B>dump-object</B> <EM>file &amp;rest objects </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="19567"></A>
+<B>dump-structure</B> <EM>file &amp;rest objects </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+dumps objects to <EM>file</EM> in a format as they can be read back again.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19578"></A>
+<B>dump-loadable-structure</B> <EM>file &amp;rest symbols </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+dumps objects bound to symbols to <EM>file</EM>. The file can be read back
+again by simply loading it.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+<PRE>
+(setq a (make-cube 1 2 3))
+
+;; sample for dump-object
+(dump-object "a-cube.l" a)
+(with-open-file
+  (f "a-cube.l" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-structure
+(dump-structure "a-cube.l" a)
+(with-open-file
+  (f "a-cube.l" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-loadable-structure
+(dump-loadable-structure "a-cube.l" a)
+(load "a-cube.l")
+(print a)
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

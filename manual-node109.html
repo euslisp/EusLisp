@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Timers</TITLE>
+<META NAME="description" CONTENT="Timers">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node108.html">
+<LINK REL="up" HREF="manual-node103.html">
+<LINK REL="next" HREF="manual-node110.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2083"
+  HREF="manual-node110.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2077"
+  HREF="manual-node103.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2073"
+  HREF="manual-node108.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2079"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2081"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2084"
+  HREF="manual-node110.html">Measured Parallel Gains</A>
+<B> Up:</B> <A NAME="tex2html2078"
+  HREF="manual-node103.html">Asynchronous and Parallel Programming</A>
+<B> Previous:</B> <A NAME="tex2html2074"
+  HREF="manual-node108.html">Synchronized memory port</A>
+ &nbsp; <B>  <A NAME="tex2html2080"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2082"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04022600000000000000">
+Timers</A>
+</H3>
+Real-time programs often require functions to execute at
+predetermined timing or to repeat in particular intervals.
+Sequential EusLisp could run user' functions triggered by
+signals generated periodically by Unix's interval timers.
+This preemption can cause deadlock in MT-Eus,
+because interruption may occur within a mutex-ed block.
+Therefore, control must be transferred at secured points
+such as at the beginning of <TT>eval</TT>.
+To avoid delays caused by the above synchronization,
+MT-Eus also provides signal-notification via semaphores.
+In other words, the signal function takes either a function or
+a semaphore that is called or posted upon the signal arrival.
+Since the semaphore is posted at the lowest level, latency
+for synchronization is minimal.
+
+<P>
+The following a example image processing program
+coded by using the multithread facilities.
+Image input thread and filtering
+threads are created. samp-image takes image data periodically
+by waiting for samp-sem to be posted every 33msec.
+Two threads synchronize via read-and-write of a thread-port.
+Filter-image employs two more threads for parallel computation
+of filtering.
+
+<P><PRE>
+(make-threads 8)
+(defun samp-image (p)
+   (let ((samp-sem (make-semaphore)))
+        (periodic-sema-post 0.03 samp-sem)
+        (loop (sema-wait samp-sem)
+              (send p :write (read-image))))
+(defun filter-image (p)
+  (let (img)
+       (loop (setf img (send p :read))
+             (plist (filter-up-half img)
+                    (filter-low-half img)))))
+(setf port (make-thread-port))
+(setf sampler (thread #'samp-image port))
+(setf filter (thread #'filter-image port))
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2083"
+  HREF="manual-node110.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2077"
+  HREF="manual-node103.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2073"
+  HREF="manual-node108.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2079"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2081"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2084"
+  HREF="manual-node110.html">Measured Parallel Gains</A>
+<B> Up:</B> <A NAME="tex2html2078"
+  HREF="manual-node103.html">Asynchronous and Parallel Programming</A>
+<B> Previous:</B> <A NAME="tex2html2074"
+  HREF="manual-node108.html">Synchronized memory port</A>
+ &nbsp; <B>  <A NAME="tex2html2080"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2082"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,642 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Colors and Colormaps</TITLE>
+<META NAME="description" CONTENT="Colors and Colormaps">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node150.html">
+<LINK REL="up" HREF="manual-node147.html">
+<LINK REL="next" HREF="manual-node152.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2690"
+  HREF="manual-node152.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2684"
+  HREF="manual-node147.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2680"
+  HREF="manual-node150.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2686"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2688"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2691"
+  HREF="manual-node152.html">XToolKit</A>
+<B> Up:</B> <A NAME="tex2html2685"
+  HREF="manual-node147.html">Xwindow Interface</A>
+<B> Previous:</B> <A NAME="tex2html2681"
+  HREF="manual-node150.html">Graphic Context</A>
+ &nbsp; <B>  <A NAME="tex2html2687"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2689"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04084000000000000000">
+Colors and Colormaps</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="44137"></A>
+<BIG CLASS="XLARGE"><B>colormap </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (cmapid planes pixels LUT-list) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines an xwindow colormap
+and application oriented color look-up tables.
+A color is represented by RGB values from 0 through 65535.
+Color cells in a color map are addressed by their indices,
+which are between 0 and 255 on 8-bit pseudo color display.
+</DD>
+</DL>
+<BR>
+<BR>
+             <P>
+Here we assume your display device has 8bit pseudo color capability
+which allows you to choose 256 colors at the same time.
+Basically there are two ways in the use of color maps:
+to share the system's default color map or to create private color maps.
+If you use the system's default color map, you have to
+be careful not to use up all the color cells in the map,
+since the map is shared among many processes.
+If you use private color maps, you can allocate all 256 color entries
+in the map without worrying about other processes,
+but  the map has to be explicitly attached to your private windows.
+The color map is activated by the window manager
+when the mouse pointer is moved somewhere in the window.
+
+<P>
+The system's default color map is set up in <TT>x:*color-map*</TT>
+which is an instance of the <TT>x:colormap</TT> class
+when eusx begins execution.
+If you use private color maps, you create instances of <TT>x:colormap</TT>.
+These instances 
+correspond to the colormap object defined in the x server and are identified by
+the <TT>cmapid</TT>  stored in each instance.
+
+<P>
+When you use the system's default color map, you can define <EM>read-only</EM>
+colors which are shared with other processes or define <EM>read-write</EM>
+colors which are private to your EusLisp.
+<EM>Read-only</EM> means that you can define arbitrary
+color when you allocate the color cell,
+but you cannot change it after the allocation.
+On the other hand,
+<EM>read-write</EM> colors can be altered even after you defined them. 
+Shared colors are <EM>read-only</EM> since other processes expect the colors to be
+unchanged.
+This <EM>read-only</EM> or <EM>read-write</EM> attribute is attached to each
+color entry (often referred to as color cell).
+
+<P>
+A colormap object defines translation from a color id to a physical
+representation that is a triplet of red, green and blue components.
+However, these logical color ids cannot be chosen arbitrarily, especially when
+you use the the system's default color map. The color id (often referred
+to as 'pixel') is an index of a particular color in a color map and Xlib
+chooses one of free indices for a shared color when allocation is requested.
+Therefore, there is no way, for example, to  guarantee  many levels of
+gray colors to be allocated contiguously or to begin from the first (zeroth)
+index.  
+
+<P>
+From the viewpoint of applications, more logical color naming is needed.
+For example,
+a number of gray levels should be referred to with their brightness as indices.
+A ray trace program may wish to assign contiguous indices to a group of colors
+of different brightness defined in HLS model.
+
+<P>
+To cope with this problem, EusLisp's colormap provides another translation table
+called LUT (look-up table). For a logical group of colors, you can define
+a LUT and attach a symbolic name to it. More than one LUTs can be defined
+in a colormap. 
+LUT is an integer vector for the translation of application specific 
+logical color indices into physical pixel values that the Xserver can recognize.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="44154"></A>
+<B>:id</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the cmap id.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44164"></A>
+<B>:query</B> <EM>pix </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> gets RGB values for the specific pixel number.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44174"></A>
+<B>:alloc</B> <EM>r g b </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> this method is the same as <TT>:store nil r g b</TT>.
+A new color cell is allocated in this colormap and is assigned with the
+specified RGB values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44185"></A>
+<B>:store</B> <EM>pix r g b </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets RGB values to the <EM>pix</EM>th color cell.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44196"></A>
+<B>:store</B> <EM>pix color-name </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:Store</B> is the lowest level method to set a color in a color map.
+In the first form, you specify the color with the red, green and blue components
+between 0 and 65535 inclusively.  In the second form, you
+specify the color by name like "red" or "navy-blue". If no such color-name is
+found, nil is returned.
+Pixel is either an integer which is the index in a color map or nil.
+If it is integer, the color cell must be read-write-able. 
+If it is nil, a shared read-only color cell is allocated.
+<TT>:Store</TT> returns the index of the color cell in the color map.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44208"></A>
+<B>:store-hls</B> <EM>pix hue lightness saturation </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+stores the color specified in HLS (Hue, Lightness and Saturation) model
+in the <EM>pix</EM>th entry  of this colormap.
+If <EM>pix</EM> is NIL, a shared read-only color cell is allocated.
+<TT>:Store-hls</TT> returns the index to the allocated color cell.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44221"></A>
+<B>:destroy</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> destroys this colormap and frees resource.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44231"></A>
+<B>:pixel</B> <EM>LUT-name id </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+looks up in the LUT for the id'th entry and returns its pixel value.
+<EM>LUT-name</EM> is the name of the look-up-table you defined by <TT>:define-LUT</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44243"></A>
+<B>:allocate-private-colors</B> <EM>num </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+allocates <EM>num</EM> color cells in the private color map.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44254"></A>
+<B>:allocate-colors</B> <EM>rgb-list [private] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Each element of <EM>rgb-list</EM> is a list of red, green and blue components.
+Color cells are allocated for each rgb value and an integer-vector
+whose elements are pixel values is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44265"></A>
+<B>:define-LUT</B> <EM>LUT-name rgb-list [private] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Colors described in <EM>rgb-list</EM> are allocated,
+and an LUT is registered by the symbolic name of <EM>LUT-name</EM>.
+In order to define private color cells, set <EM>private</EM> to T.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44278"></A>
+<B>:define-gray-scale-LUT</B> <EM>LUT-name levels [private] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+allocates <EM>levels</EM> of color cells that represent linear 
+gray scale colors and returns LUT.
+For example, <TT>(send x:*color-map* :define-gray-scale-LUT 'gray8 8)</TT>
+allocates eight gray colors in the system's default color map, and
+returns an integer vector such as <TT>#i(29 30 31 48 49 50 51 0)</TT>.
+Physical pixel values can be inquired by sending the <TT>:pixel</TT> message,
+for example, <TT>(send x:*color-map* :pixel 'gray8 2)</TT> returns 31.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44293"></A>
+<B>:define-rgb-LUT</B> <EM>LUT-name red green blue [private] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines an LUT for shrunk RGB representation.
+For example, if red=green=blue=2, totally <!-- MATH
+ $2^{2+2+2}=2^6=64$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="125" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img104.png"
+ ALT="$2^{2+2+2}=2^6=64$"></SPAN> color cells
+are allocated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44304"></A>
+<B>:define-hls-LUT</B> <EM>LUT-name count hue low-brightness
+high-brightness saturation [private] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+allocates <EM>count</EM> colors using the HLS model. Colors of the given <EM>hue</EM> (0..360),
+<EM>saturation</EM> (0..1), and different levels of brightness between
+<EM>low-brightness</EM>
+and <EM>high-brightness</EM> are stored in the color map. A LUT named LUT-name
+is also created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44319"></A>
+<B>:define-rainbow-LUT</B> <EM>LUT-name count (hue-start 0) (hue-end 360) (brightness 0.5) (saturation 1.0) (private nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+allocates <EM>count</EM> colors using the HLS model.
+Colors of the given <EM>brightness</EM> (0..1),
+<EM>saturation</EM> (0..1), and different hues between
+<EM>hue-start</EM> and <EM>hue-end</EM>
+are stored in the color map.
+A LUT named <EM>LUT-name</EM> is also created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44335"></A>
+<B>:LUT-list</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns all LUT list defined in this colormap.
+Each entry in the list is a pair of the LUT-name and an integer vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44345"></A>
+<B>:LUT-names</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the name list of all LUT in this colormap.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44355"></A>
+<B>:LUT</B> <EM>name </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the integer-vector (LUT) identified by <EM>name</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44366"></A>
+<B>:size</B> <EM>LUT-name </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the length of <EM>LUT</EM>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44377"></A>
+<B>:planes</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns planes of this colormap.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44387"></A>
+<B>:set-window</B> <EM>xwin </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+associates this colormap to the <EM>xwin</EM> window.
+This colormap is activated when the cursor enters in <EM>xwin</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44399"></A>
+<B>:free</B> <EM>pixel | LUT </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> frees a specific color cell
+addressed by pixel, or all the entries in LUT.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44409"></A>
+<B>:init</B> <EM>[cmapid] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes this color map with cmap id.
+All the LUTs registered are discarded.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44419"></A>
+<B>:create</B> <EM>&amp;key (planes 0) (colors 1) (visual *visual*) (contiguous nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> creates a new color map object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="44430"></A>
+<BIG CLASS="XLARGE"><B>XColor </B></BIG> [class]  <PRE><TT>
+  :super   <B>cstruct</B> 
+<BR>  :slots 		 ((pixel        :integer) 
+<BR>(red          :short) 
+<BR>(green        :short) 
+<BR>(blue         :short) 
+<BR>(flags        :byte) 
+<BR>(pad          :byte)) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a color in the RGB model.
+Use <B>setf</B> to assign value to each slots.
+The RGB values are sign extended and the greatest value is
+represented as <SPAN CLASS="MATH"><IMG
+ WIDTH="25" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img105.png"
+ ALT="$-1$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44448"></A>
+<B>:red</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the red value of this XColor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44458"></A>
+<B>:blue</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the blue value of this XColor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44468"></A>
+<B>:green</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the green value of this XColor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44478"></A>
+<B>:rgb</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of red, green and blue values
+of this XColor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44488"></A>
+<B>:init</B> <EM>pix R G B &amp;optional (f 7) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes XColor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44498"></A>
+<B>find-visual</B> <EM>type depth &amp;optional (screen 0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the visual-ID of the specified <EM>type</EM> and <EM>depth</EM>.
+<EM>Type</EM> should be either <TT>:StaticGray, :GrayScale,
+:StaticColor, :pseudoColor, :TrueColor</TT> or <TT>:DirectColor</TT>.
+Usually the <EM>depth</EM> should be either 1, 8 or 24.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2690"
+  HREF="manual-node152.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2684"
+  HREF="manual-node147.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2680"
+  HREF="manual-node150.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2686"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2688"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2691"
+  HREF="manual-node152.html">XToolKit</A>
+<B> Up:</B> <A NAME="tex2html2685"
+  HREF="manual-node147.html">Xwindow Interface</A>
+<B> Previous:</B> <A NAME="tex2html2681"
+  HREF="manual-node150.html">Graphic Context</A>
+ &nbsp; <B>  <A NAME="tex2html2687"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2689"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

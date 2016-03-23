@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Body Composition</TITLE>
+<META NAME="description" CONTENT="Body Composition">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node126.html">
+<LINK REL="previous" HREF="manual-node124.html">
+<LINK REL="up" HREF="manual-node119.html">
+<LINK REL="next" HREF="manual-node126.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2317"
+  HREF="manual-node126.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2311"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2305"
+  HREF="manual-node124.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2313"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2315"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2318"
+  HREF="manual-node126.html">Coordinates-axes</A>
+<B> Up:</B> <A NAME="tex2html2312"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2306"
+  HREF="manual-node124.html">Primitive Body Creation</A>
+ &nbsp; <B>  <A NAME="tex2html2314"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2316"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04046000000000000000"></A><A NAME="BodyComposition"></A>
+<BR>
+Body Composition
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="32409"></A>
+<B>face+</B> <EM>face1 face2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32420"></A>
+<B>face*</B> <EM>face1 face2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>face1</EM> and <EM>face2</EM> are coplanar faces in 3D space.
+<B>face+</B> composes union of these faces and returns a face object.
+If there is no intersection, original two faces are returned.
+<B>face*</B> returns intersection of these faces.
+If there is no intersection, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32434"></A>
+<B>cut-body</B> <EM>body cutting-plane </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Cuts a body by the <EM>cutting-plane</EM>
+and returns a list of faces made at the cross-section.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32445"></A>
+<B>body+</B> <EM>body1 body2 &amp;rest more-bodies </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32456"></A>
+<B>body-</B> <EM>body1 body2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32467"></A>
+<B>body*</B> <EM>body1 body2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes join, difference or intersection of two or more bodies.
+Each body is copied before each <B>body+, body-</B> and <B>body*</B> operation,
+and original bodies are unchanged.
+The new coordinates of the resulted body is located and oriented
+at the same location and orientation as the world coordinates.
+Even when two bodies are touching face by face,
+these functions are expected to work correctly
+if threshold parameters
+<TT>*coplanar-threshold*, *contact-threshold*,</TT> and <TT>*parallel-threshold*</TT>
+are properly set.
+However, if a vertex of a body is in contact with an edge or a face
+of the other body, any composition operation fails.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32481"></A>
+<B>body/</B> <EM>body plane </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Cut the body by a plane which is an instance of class plane
+(made by <B>make-plane</B>).
+A newly created body is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32492"></A>
+<B>body-interference</B> <EM>&amp;rest bodies </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Checks interference between each one-to-one combination in <EM>bodies</EM>.
+Returns a list of two bodies  that are intersecting.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2317"
+  HREF="manual-node126.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2311"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2305"
+  HREF="manual-node124.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2313"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2315"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2318"
+  HREF="manual-node126.html">Coordinates-axes</A>
+<B> Up:</B> <A NAME="tex2html2312"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2306"
+  HREF="manual-node124.html">Primitive Body Creation</A>
+ &nbsp; <B>  <A NAME="tex2html2314"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2316"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

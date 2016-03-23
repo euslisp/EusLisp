@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Generic Number Functions</TITLE>
+<META NAME="description" CONTENT="Generic Number Functions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node41.html">
+<LINK REL="previous" HREF="manual-node39.html">
+<LINK REL="up" HREF="manual-node36.html">
+<LINK REL="next" HREF="manual-node41.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html976"
+  HREF="manual-node41.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html970"
+  HREF="manual-node36.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html964"
+  HREF="manual-node39.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html972"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html974"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html977"
+  HREF="manual-node41.html">Trigonometric and Related Functions</A>
+<B> Up:</B> <A NAME="tex2html971"
+  HREF="manual-node36.html">Arithmetic Functions</A>
+<B> Previous:</B> <A NAME="tex2html965"
+  HREF="manual-node39.html">Integer and Bit-Wise Operations</A>
+ &nbsp; <B>  <A NAME="tex2html973"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html975"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03054000000000000000">
+Generic Number Functions</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="6155"></A>
+<B>+</B> <EM>&amp;rest numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the sum of <EM>numbers</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6166"></A>
+<B>-</B> <EM>num &amp;rest more-numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>more-numbers</EM> are given, they are subtracted from <EM>num</EM>.
+Otherwise, <EM>num</EM> is negated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6179"></A>
+<B>*</B> <EM>&amp;rest numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the product of <EM>numbers</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6190"></A>
+<B>/</B> <EM>num1 num2 &amp;rest more-numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM> is divided by <EM>num2</EM> and <EM>more-numbers</EM>.
+The result is an integer if all the arguments are integers,
+and an float if at least one of the arguments is a float.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6203"></A>
+<B>abs</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns absolute number.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6213"></A>
+<B>round</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+rounds to the nearest integer.
+<TT>(round 1.5)=2, (round -1.5)=2</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6224"></A>
+<B>floor</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+rounds to the nearest smaller integer.
+<TT>(floor 1.5)=1, (floor -1.5)=-2</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6235"></A>
+<B>ceiling</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+rounds to the nearest larger integer.
+<TT>(ceiling 1.5)=2, (ceiling -1.5)=-1</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6246"></A>
+<B>truncate</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+rounds to the absolutely smaller and nearest integer.
+<TT>(truncate 1.5)=1, (truncate -1.5)=-1</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6257"></A>
+<B>float</B> <EM>number </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns floating-point representation of <EM>number</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6268"></A>
+<B>max</B> <EM>&amp;rest numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the maximum value among <EM>numbers</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6279"></A>
+<B>min</B> <EM>&amp;rest numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the minimum number in <EM>numbers</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6290"></A>
+<B>make-random-state</B> <EM>&amp;optional state </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a fresh object of type random-state suitable for use as the value of *random-state*.
+If <EM>state</EM> is a random state object, the new-state is a copy of that object. If state is NIL, the new-state is a copy of the current <EM>*random-state*</EM>. If state is T, the new-state is a fresh random state object that has been randomly initialized.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6302"></A>
+<B>random</B> <EM>range &amp;optional (randstate *random-state*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns a random number between 0 or 0.0 and <EM>range</EM>.
+If <EM>range</EM> is an integer,
+the result is truncated to an integer.
+Otherwise, a floating value is returned.
+Optional <EM>randstate</EM> can be specified
+to get predictable random number sequence.
+There is no special data type for random-state,
+and it is represented with an integer vector of two elements.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6315"></A>
+<B>incf</B> <EM>variable &amp;optional (increment 1) </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>variable</EM> is a generalized variable.
+The value of <EM>variable</EM> is incremented by <EM>increment</EM>,
+and it is set back to <EM>variable</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6329"></A>
+<B>decf</B> <EM>variable &amp;optional decrement </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>variable</EM> is a generalized variable.
+The value of <EM>variable</EM> is decremented by <EM>decrement</EM>,
+and it is set back to <EM>variable</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6343"></A>
+<B>reduce</B> <EM>func seq </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+combines all the elements in <EM>seq</EM> using the binary operator <EM>func</EM>.
+For an example, <TT>(reduce #'expt '(2 3 4)) = (expt (expt 2 3) 4)=4096</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6356"></A>
+<B>rad2deg</B> <EM>radian </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> Radian value is converted to degree notation.
+#R does the same thing at read time.
+Note that the official representation of angle in EusLisp is radian
+and every EusLisp function that accepts angle argument
+requests it to be represented by radian.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6366"></A>
+<B>deg2rad</B> <EM>degree </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> Conversion from degree to radian.
+Also accomplished by #D reader's dispatch macros.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html976"
+  HREF="manual-node41.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html970"
+  HREF="manual-node36.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html964"
+  HREF="manual-node39.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html972"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html974"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html977"
+  HREF="manual-node41.html">Trigonometric and Related Functions</A>
+<B> Up:</B> <A NAME="tex2html971"
+  HREF="manual-node36.html">Arithmetic Functions</A>
+<B> Previous:</B> <A NAME="tex2html965"
+  HREF="manual-node39.html">Integer and Bit-Wise Operations</A>
+ &nbsp; <B>  <A NAME="tex2html973"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html975"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

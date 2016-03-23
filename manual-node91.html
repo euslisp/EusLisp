@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Multithread</TITLE>
+<META NAME="description" CONTENT="Multithread">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node92.html">
+<LINK REL="previous" HREF="manual-node90.html">
+<LINK REL="up" HREF="manual-node86.html">
+<LINK REL="next" HREF="manual-node92.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1816"
+  HREF="manual-node92.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1810"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1804"
+  HREF="manual-node90.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1812"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1814"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1817"
+  HREF="manual-node92.html">Low-Level Memory Management</A>
+<B> Up:</B> <A NAME="tex2html1811"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1805"
+  HREF="manual-node90.html">Signals</A>
+ &nbsp; <B>  <A NAME="tex2html1813"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1815"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04012500000000000000">
+Multithread</A>
+</H3>
+There is no way to create bound threads. Therefore only one signal stack
+and one interval timer are available in a EusLisp process.
+On Solaris2, the main top-level runs in a separated thread.
+
+<P>
+
+ <BR>
+<BR> <A NAME="22823"></A>
+<B>unix:thr-self</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the id (integer) of the thread currently
+running.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22833"></A>
+<B>unix:thr-getprio</B> <EM>id </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the execution priority of the thread
+specified by <EM>id</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22844"></A>
+<B>unix:thr-setprio</B> <EM>id newprio </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets the execution priority of
+the thread specified by <EM>id</EM> to <EM>newprio</EM>.
+The smaller numerical value of <EM>newprio</EM> means the higher priority.
+In other words,
+a thread with a numerically greater <EM>newprio</EM> gets less access to CPU.
+Users cannot raise the execution priority higher than
+the process's nice value, which is usually 0.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22858"></A>
+<B>unix:thr-getconcurrency</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the concurrency value (integer) which represents the number
+of threads that can run concurrently.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22868"></A>
+<B>unix:thr-setconcurrency</B> <EM>concurrency </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The concurrency value is the number of LWP in the process.
+If the concurrency is 1, which is the default, many threads you created
+are assigned to one LWP in turn even though all of them are runnable.
+If the program is running on a multi-processor machine and you want
+to utilize more than one CPU at the same time,
+you should set a value bigger than one to <EM>concurrency</EM>.
+Note that a big concurrency value let the operating system consume
+more resource. Usually <EM>concurrency</EM> should be smaller than or
+equal to the number of processors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22880"></A>
+<B>unix:thr-create</B> <EM>func arg-list &amp;optional (size 64*1024) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a new thread with <EM>size</EM> words of Lisp stack and
+<EM>size</EM> bytes of C stack,
+and let it apply <EM>func</EM> to <EM>arg-list</EM>.
+The thread cannot return any results to the caller.
+Use of this function is discouraged.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1816"
+  HREF="manual-node92.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1810"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1804"
+  HREF="manual-node90.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1812"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1814"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1817"
+  HREF="manual-node92.html">Low-Level Memory Management</A>
+<B> Up:</B> <A NAME="tex2html1811"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1805"
+  HREF="manual-node90.html">Signals</A>
+ &nbsp; <B>  <A NAME="tex2html1813"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1815"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

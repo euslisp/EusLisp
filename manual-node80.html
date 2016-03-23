@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Process Image Saving</TITLE>
+<META NAME="description" CONTENT="Process Image Saving">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node81.html">
+<LINK REL="previous" HREF="manual-node79.html">
+<LINK REL="up" HREF="manual-node73.html">
+<LINK REL="next" HREF="manual-node81.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1560"
+  HREF="manual-node81.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1554"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1548"
+  HREF="manual-node79.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1556"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1558"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1561"
+  HREF="manual-node81.html">Customization of Toplevel</A>
+<B> Up:</B> <A NAME="tex2html1555"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1549"
+  HREF="manual-node79.html">Dump Objects</A>
+ &nbsp; <B>  <A NAME="tex2html1557"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1559"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030117000000000000000">
+Process Image Saving</A>
+</H2>
+This process image saving is no longer supported on Solaris2 based
+EusLisp, since it heavily depends on Solaris's dynamic loading facility
+which loads shared objects position-independently above the <TT>sbrk</TT>
+point.
+
+<P>
+
+ <BR>
+<BR> <A NAME="19589"></A>
+<B>save</B> <EM>path &amp;optional (symbol-file "") starter </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Save</B> dumps the current EusLisp process environment to a file
+which can be invoked as a Unix command later.
+If a function name is specified for <EM>starter</EM>,
+the function is evaluated when the command begins execution.
+Each command line argument is coerced to string in EusLisp and
+they are passed to <EM>starter</EM> as its arguments, so that it can parse
+the command line.
+Be sure that you have closed all the streams except <B>*standard-input*</B>
+and <B>*standard-output*</B>.
+File open states cannot be saved.
+Also, be sure you have not attempted <B>mmap</B>,
+which unnoticeably happens when you make internetwork socket-stream.
+Sun's network library always memory-maps NIS information such as
+host-by-name table and locates them at the uppermost available location
+of a process that cannot be saved.
+When the saved image is run later, any access to the network library
+fails and causes core dump.
+Note that Xwindow also uses this library,
+thus you cannot save your process image once you opened connection
+to Xserver.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1560"
+  HREF="manual-node81.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1554"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1548"
+  HREF="manual-node79.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1556"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1558"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1561"
+  HREF="manual-node81.html">Customization of Toplevel</A>
+<B> Up:</B> <A NAME="tex2html1555"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1549"
+  HREF="manual-node79.html">Dump Objects</A>
+ &nbsp; <B>  <A NAME="tex2html1557"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1559"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

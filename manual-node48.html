@@ -1,0 +1,455 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Vectors and Arrays</TITLE>
+<META NAME="description" CONTENT="Vectors and Arrays">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node49.html">
+<LINK REL="previous" HREF="manual-node47.html">
+<LINK REL="up" HREF="manual-node45.html">
+<LINK REL="next" HREF="manual-node49.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1093"
+  HREF="manual-node49.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1087"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1081"
+  HREF="manual-node47.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1089"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1091"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1094"
+  HREF="manual-node49.html">Characters and Strings</A>
+<B> Up:</B> <A NAME="tex2html1088"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1082"
+  HREF="manual-node47.html">Lists</A>
+ &nbsp; <B>  <A NAME="tex2html1090"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1092"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03073000000000000000">
+Vectors and Arrays</A>
+</H2>
+
+<P>
+Up to seven dimensional arrays are allowed.
+A one-dimensional array is called vector.
+Vectors and lists are grouped as sequence.
+If the elements of an array is of any type, the array is said to be general.
+If an array does not have fill-pointer, is not displaced to
+another array, or is adjustable, the array is said to be simple.
+
+<P>
+Every array element can be recalled by <B>aref</B> and set by <B>setf</B> in
+conjunction with aref.
+But for simple vectors, there are simpler and faster access functions:
+<B>svref</B> for simple general vectors, <B>char</B> and <B>schar</B> for
+simple character vectors (string), <B>bit</B> and <B>sbit</B> for
+simple bit vectors.  When these functions are compiled,
+the access is expanded in-line and no type check and boundary check are 
+performed.
+
+<P>
+Since a vector is also an object,
+it can be made by instantiating some vector-class.
+There are five kinds of built-in vector-classes;
+vector, string, float-vector, integer-vector and bit-vector.
+In order to ease instantiation of vectors, the function make-array
+is provided.
+Element-type should be one of <B>:integer, :bit, :character, :float, :foreign</B>
+or user-defined vector class.
+<B>:initial-element</B> and <B>:initial-contents</B> key word arguments are
+available to set initial values of the array you make.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="11155"></A>
+<B>array-rank-limit</B> [constant]
+
+<DL COMPACT>
+<DT> 
+<DD> 7
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11165"></A>
+<B>array-dimension-limit</B> [constant]
+
+<DL COMPACT>
+<DT> 
+<DD> #x1fffffff, logically, but stricter
+limit is imposed by the physical or virtual memory size of the system.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11175"></A>
+<B>vectorp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+An array is not a vector even if it is one dimensional.
+T is returned for vectors, integer-vectors, float-vectors, strings,
+bit-vectors or other user-defined vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11185"></A>
+<B>vector</B> <EM>&amp;rest elements </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a simple vector from <EM>elements</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11196"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="130" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img29.png"
+ ALT="\begin{emtabbing}
+{\bf make-array}
+\it
+dims \&amp;key \= (element-type vector) \\lq  [...
+...l) \\
+\&gt; (displaced-index-offset 0) \\
+\&gt; (adjustable nil)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>makes a vector or array. 
+<EM>dims</EM> is either an integer or a list.
+If <EM>dims</EM> is an integer, a simple-vector is created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11209"></A>
+<B>svref</B> <EM>vector pos </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns <EM>pos</EM>th element of <EM>vector</EM>.
+<EM>Vector</EM> must be a simple general vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11222"></A>
+<B>aref</B> <EM>vector &amp;rest (indices) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the element indexed by <EM>indices</EM>.
+<B>Aref</B> is not very efficient
+because it needs to dispatch according to the type of <EM>vector</EM>.
+Type declarations should be given to improve the speed of compiled code
+whenever possible.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11235"></A>
+<B>vector-push</B> <EM>val array </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+store <EM>val</EM> at the <EM>fill-pointer</EM>th slot in <EM>array</EM>.
+<EM>array</EM> must have a <EM>fill-pointer</EM>.
+After val is stored,
+the fill-pointer is advanced by one to point to the next location.
+If it exceeds the array boundary, an error is reported.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11250"></A>
+<B>vector-push-extend</B> <EM>val array </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Similar to  <B>vector-push</B> except that
+the size of the array is automatically extended
+when <EM>array</EM>'s fill-pointer reaches  the end.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11262"></A>
+<B>arrayp</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> T if <EM>obj</EM> is an instance of array or vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11273"></A>
+<B>array-total-size</B> <EM>array </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the total number of elements
+of <EM>array</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11284"></A>
+<B>fill-pointer</B> <EM>array </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11295"></A>
+<B>array-rank</B> <EM>array </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11306"></A>
+<B>array-dimensions</B> <EM>array </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of array-dimensions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11316"></A>
+<B>array-dimension</B> <EM>array axis </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Axis starts from 0. <B>array-dimension</B> returns the <EM>axis</EM>th
+dimension of <EM>array</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11329"></A>
+<B>bit</B> <EM>bitvec index </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the <EM>index</EM>th element of <EM>bitvec</EM>.
+Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11343"></A>
+<B>bit-and</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11354"></A>
+<B>bit-ior</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11365"></A>
+<B>bit-xor</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11376"></A>
+<B>bit-eqv</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11387"></A>
+<B>bit-nand</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11398"></A>
+<B>bit-nor</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11409"></A>
+<B>bit-not</B> <EM>bits1 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+For bit vectors <EM>bits1</EM> and <EM>bits2</EM> of the same length,
+their boolean and, inclusive-or,
+exclusive-or, equivalence, not-and, not-or and not are returned, respectively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1093"
+  HREF="manual-node49.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1087"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1081"
+  HREF="manual-node47.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1089"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1091"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1094"
+  HREF="manual-node49.html">Characters and Strings</A>
+<B> Up:</B> <A NAME="tex2html1088"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1082"
+  HREF="manual-node47.html">Lists</A>
+ &nbsp; <B>  <A NAME="tex2html1090"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1092"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

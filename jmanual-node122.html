@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>多角形のVoronoi Diagram</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="多角形のVoronoi Diagram">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node121.html">
+<LINK REL="up" HREF="jmanual-node113.html">
+<LINK REL="next" HREF="jmanual-node123.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2236"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2230"
+  HREF="jmanual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2226"
+  HREF="jmanual-node121.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2232"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2234"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2237"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Up:</B> <A NAME="tex2html2231"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2227"
+  HREF="jmanual-node121.html">立体の接触状態解析</A>
+ &nbsp; <B>  <A NAME="tex2html2233"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2235"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04049000000000000000">
+多角形のVoronoi Diagram</A>
+</H2>
+
+<P>
+<EM>著者: Philippe PIGNON, 電総研ゲスト研究者</EM>
+
+<P>
+このプログラムは，Common Lispで書かれている。
+ "A sweepline algorithm for Voronoi diagrams", Proceedings of
+the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.を
+手法として用い、
+多角形の場合への応用を行った。これは，サンプルプログラム付きの簡単な説明である。
+このプログラムは，ETLのEuslisp環境で書かれているため，
+画像への出力もサポートしている。
+どのCommon Lisp上でも使用することはできるが，
+<TT>utilities.l</TT>で与えられている画像への関数を自分のディスプレイ環境へ
+合うように書き換える必要がある。この節の最後にその関数を示す。
+
+<P>
+<DL>
+<DT><STRONG>目的:</STRONG></DT>
+<DD>多角形の集合のvoronoi diagramの計算を行う。
+語彙を理解するために上記の文献を読んで、使用してください。
+ここでは、このプログラムに対する説明をしません。
+
+<P>
+</DD>
+<DT><STRONG>入力:</STRONG></DT>
+<DD>多角形のリストと囲むための枠は，次のように定義する。
+<PRE>
+DATA= (
+       (x11 y11 x12 y12 x13 y13 ...) first polygon,
+                                     counterclocwise enumeration of vertices
+       (x21 y21 x22 y22 x23 y23 ...) second polygon
+               ... 
+       (xn1 yn1 xn2 yn2 xn3 yn3 ...) nth polygon
+	     
+       (xf1 yf1 xf2 yf2 xf3 yf3 xf4 yf4) enclosing frame
+      )
+</PRE>
+囲む枠は，<B>DATA</B>内のどの位置にも配置することができる。また，
+内部と外部が矛盾しないように時計方向の順番でなければならない。
+多角形は交差の無い簡単な図形でなければならない。
+一直線あるいは平坦なエッジは受け付けない。
+独立した点あるいは線分も受け付けない。
+
+<P>
+</DD>
+<DT><STRONG>出力:</STRONG></DT>
+<DD><B>*diagram*</B>:2重に接続されたエッジリストのリスト
+(utilities.lファイルを参照)を返す。それぞれのエッジは，symbolであり，次に示す
+ようなfieldを含むproperty-listを持っている。
+<PRE>
+(start &lt;pointer to a vertex&gt;)
+       (end &lt;pointer to a vertex&gt;)
+       (pred &lt;pointer to an edge&gt;)
+       (succ &lt;pointer to an edge&gt;)
+       (left &lt;pointer to a site&gt;)
+       (right &lt;pointer to a site&gt;)
+       (type &lt;:endpoint or :point-point or :segment-segment or :point-segment&gt;)
+       (outflag &lt;t or nil&gt;)
+</PRE>
+<EM>vertex</EM>は，symbolで"<TT>pos</TT>"fieldを含むproperty-listを持つ。
+このfieldは，cons<EM>(x,y)</EM>を含み，<EM>vertex</EM>の平面座標を示す。
+<EM>pred</EM>と<EM>succ</EM>のfieldは，decl形式にしたがって反時計方向の
+前者と後者を与える(ShamosとPreparataの,
+Computational Geometry: An introduction, 1985, pp 15-17を参照)。
+<EM>site</EM>もsymbolであり，関連した情報を含むproperty-listを持つ。
+<EM>site</EM>は，元の入力データを記述しており，多角形の頂点であるpoint
+あるいは多角形のエッジであるsegmentを持つ。
+
+<P>
+<EM>type</EM>は，2等分線の中点であり，それを分割する<EM>site</EM>の型より
+決定される。
+規約により，外側はstart-endエッジの右側である。
+voronoi diagramは，2等分線の内部と同様に外側を計算する。
+必要とするoutflagを保つためにoutflagをソートする。
+
+<P>
+</DD>
+<DT><STRONG>サンプル:</STRONG></DT>
+<DD>サンプルプログラムを実行するためには，以下のようなステップを実施してください。
+
+<OL>
+<LI>自分の環境に以下のプログラムをコピーする。
+<BR><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT">utilities.l</TD>
+<TD ALIGN="LEFT">幾何学ユーティリティ関数とeusxの画像出力関数</TD>
+</TR>
+<TR><TD ALIGN="LEFT">polygonalvoronoi.l</TD>
+<TD ALIGN="LEFT">プログラム本体</TD>
+</TR>
+<TR><TD ALIGN="LEFT">testdata.l</TD>
+<TD ALIGN="LEFT">上記の書式によるデモデータ</TD>
+</TR>
+</TABLE>
+</LI>
+<LI>もし，Euslispを使用しないなら，命令にしたがって<TT>utilities.l</TT>を書き換え，
+"compatibility package"を修正する。。
+</LI>
+<LI>以下の3つのファイルをコンパイルしてロードするか、あるいはそのままロードする。
+<BR><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT">utilities.l</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT">polygonalvoronoi.l</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT">testdata.l</TD>
+<TD ALIGN="LEFT">上記の書式によるデモデータを含んでいる。</TD>
+</TR>
+</TABLE>
+</LI>
+<LI>(pv demoworld)でデモデータ上でプログラムが実行される。
+グローバル変数<B>*diagram*</B>には，voronoi diagramの2等分線が含まれている。
+</LI>
+</OL>
+</DD>
+</DL>
+
+<P>
+eusx(Xwindowインターフェースを持つEuslisp)のもとでは，以下の命令でdiagramの結果を画面上に表示することができる。
+<PRE>
+       (make-display)          ;;Initializes the *display* window object
+       (dps demoworld *thick*) ;; Shows original data in thick lines
+       (dbs *diagram*)         ;; Shows the result
+</PRE>
+
+<P>
+
+ <BR>
+<BR> <A NAME="35882"></A>
+<B>pv</B> <EM>data </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+上記の書式で書かれた<EM>data</EM>から多角形のvoronoi diagramを計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

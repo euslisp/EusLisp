@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>HTTP CGI Programming</TITLE>
+<META NAME="description" CONTENT="HTTP CGI Programming">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node166.html">
+<LINK REL="previous" HREF="manual-node164.html">
+<LINK REL="up" HREF="manual-node163.html">
+<LINK REL="next" HREF="manual-node166.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2893"
+  HREF="manual-node166.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2887"
+  HREF="manual-node163.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2881"
+  HREF="manual-node164.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2889"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2891"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2894"
+  HREF="manual-node166.html">Fast-CGI</A>
+<B> Up:</B> <A NAME="tex2html2888"
+  HREF="manual-node163.html">HTTP</A>
+<B> Previous:</B> <A NAME="tex2html2882"
+  HREF="manual-node164.html">HTTP Client</A>
+ &nbsp; <B>  <A NAME="tex2html2890"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2892"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION040112000000000000000">
+HTTP CGI Programming</A>
+</H2>
+
+<P>
+EusLisp can be used for  CGI programming.
+The following is a typical cgi entry to a EusLisp program.
+This code piece should be placed under .../cgi-bin/ or under
+any directories where ExecCGI is allowed.  The code piece
+must have execute permission by the `nobody' user.
+Note that CGI programs are executed by httpd whose owner is
+nobody. You also have to set up some environment variables in the
+code piece, for nobody does not know anything particular for EusLisp.
+
+<P>
+<PRE>
+#! /bin/csh
+setenv EUSDIR /usr/local/eus/
+setenv LD_LIBRARY_PATH /usr/local/eus/Linux/lib
+/usr/local/bin/eus /usr/local/eus/lib/demo/mycgi.l
+</PRE>
+
+<P>
+mycgi.l is a lisp source program, which should load
+"$EUSDIR/lib/llib/httpcgi.l" at the beginning.
+The CGI program is responsible for obtaining CGI arguments,
+generating an html header, and producing html contents.
+The arguments are obtained by the <TT>get-cgi-query</TT> function,
+and split to a list by the <TT>parse-cgi-query</TT> function.
+The parsed list contains pairs of argument-name and argument-value.
+For example, if the CGI is invoked by href to
+"/cgi-bin/eus.cgi?user=matsui&amp;age=43",
+the parsed list gives ((user matsui) (age 43)).
+
+<P>
+All normal CGI output should go to *cgi-out*.
+Before any html document, a header should be generated
+by the <TT>html-header</TT> function.
+If there is any error message written to *error-output*,
+it appears in the httpd's error-log.
+When the work is done and html document finishes by '&lt;/html&gt; tag,
+the process may close the connection (*cgi-out*) and may exit.
+Normal exit of the CGI process usually signals the httpd to
+send the data to http clients.
+
+<P>
+*cgi-out* is the output stream to which the generated html document
+should be sent.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="50783"></A>
+<B>gen</B> <EM>string </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  Outputs the string to *cgi-out* stream,
+which is then forwarded to to the client (browser).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50793"></A>
+<B>html</B> <EM>args ... </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> generates args as one string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50803"></A>
+<B>html-table</B> <EM>lst &amp;key heading (table-option "") </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+generates an html table.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50813"></A>
+<B>get-cgi-query</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> gets the argument to this CGI program.
+First, the REQUEST_METHOD environment variable is looked up, and
+the POST/GET method is determined. The query string is obtained
+from the QUERY_STRING environment variable or from the standard input.
+Anyways, the result is returned in one string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50823"></A>
+<B>parse-http-query</B> <EM>query-string </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<P>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50833"></A>
+<B>html-header</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> generates the html header, 
+usually a simple string of two lines,
+"Content-type: text/html~%~%".
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50843"></A>
+<B>qval</B> <EM>arg query </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+arg (symbol) is searched in the query list,
+and the value is returned if found.
+The result is converted to euc encoding from sjis encoding.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2893"
+  HREF="manual-node166.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2887"
+  HREF="manual-node163.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2881"
+  HREF="manual-node164.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2889"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2891"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2894"
+  HREF="manual-node166.html">Fast-CGI</A>
+<B> Up:</B> <A NAME="tex2html2888"
+  HREF="manual-node163.html">HTTP</A>
+<B> Previous:</B> <A NAME="tex2html2882"
+  HREF="manual-node164.html">HTTP Client</A>
+ &nbsp; <B>  <A NAME="tex2html2890"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2892"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

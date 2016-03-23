@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Fast-CGI</TITLE>
+<META NAME="description" CONTENT="Fast-CGI">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node165.html">
+<LINK REL="up" HREF="manual-node163.html">
+<LINK REL="next" HREF="manual-node167.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2905"
+  HREF="manual-node167.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2899"
+  HREF="manual-node163.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2895"
+  HREF="manual-node165.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2901"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2903"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2906"
+  HREF="manual-node167.html">Index</A>
+<B> Up:</B> <A NAME="tex2html2900"
+  HREF="manual-node163.html">HTTP</A>
+<B> Previous:</B> <A NAME="tex2html2896"
+  HREF="manual-node165.html">HTTP CGI Programming</A>
+ &nbsp; <B>  <A NAME="tex2html2902"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2904"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION040113000000000000000">
+Fast-CGI</A>
+</H2>
+
+<P>
+Whereas CGI is a convenient method to produce dynamic document on
+the server side, it is not the very best choice due to a performance reason:
+the cgi process must be spawned everytime a request arrives, and the
+process invocation time is not always negligible.  In my measurement, 
+the simplest CGI written in EusLisp needs 0.3 sec to respond.
+In this sense, EusLisp or any other programming system with rich runtime
+modules is not a very good choice for CGI writing.
+
+<P>
+Since this invocation load is a common problem for all CGI programs,
+there is a clever work around called Fast-CGI.
+The basic idea of the Fast-CGI is to allow
+CGI processes to keep alive even one CGI request is fulfilled.
+The httpd process communicates with a fast-cgi process via a TCP connection.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="50854"></A>
+<BIG CLASS="XLARGE"><B>fcgi-connection </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 cookie host 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50871"></A>
+<B>fcgi-loop</B> <EM>&amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+repeats evaluation of <I>forms</I> each time http connection request
+is accepted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2905"
+  HREF="manual-node167.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2899"
+  HREF="manual-node163.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2895"
+  HREF="manual-node165.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2901"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2903"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2906"
+  HREF="manual-node167.html">Index</A>
+<B> Up:</B> <A NAME="tex2html2900"
+  HREF="manual-node163.html">HTTP</A>
+<B> Previous:</B> <A NAME="tex2html2896"
+  HREF="manual-node165.html">HTTP CGI Programming</A>
+ &nbsp; <B>  <A NAME="tex2html2902"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2904"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

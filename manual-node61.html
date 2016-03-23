@@ -1,0 +1,314 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Streams</TITLE>
+<META NAME="description" CONTENT="Streams">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node62.html">
+<LINK REL="previous" HREF="manual-node60.html">
+<LINK REL="up" HREF="manual-node60.html">
+<LINK REL="next" HREF="manual-node62.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1288"
+  HREF="manual-node62.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1282"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1276"
+  HREF="manual-node60.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1284"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1286"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1289"
+  HREF="manual-node62.html">Reader</A>
+<B> Up:</B> <A NAME="tex2html1283"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1277"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+ &nbsp; <B>  <A NAME="tex2html1285"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1287"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030101000000000000000">
+Streams</A>
+</H2>
+
+<P>
+Echo-streams and concatenated-streams are not available.
+Predefined streams are following:
+
+<P>
+<DL>
+<DT><STRONG>*standard-input*</STRONG></DT>
+<DD>stdin fd=0
+</DD>
+<DT><STRONG>*standard-output*</STRONG></DT>
+<DD>stdout fd=1 
+</DD>
+<DT><STRONG>*error-output*</STRONG></DT>
+<DD>stderr fd=2 bufsize=1
+</DD>
+<DT><STRONG>*terminal-io*</STRONG></DT>
+<DD>two-way stream made of 
+<B>*standard-input*</B> and <B>*standard-output*</B>
+</DD>
+</DL>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15645"></A>
+<B>streamp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Any object created from <A NAME="15657"></A><B>s</B>tream, <A NAME="15659"></A><B>i</B>o-stream,
+or their subclasses returns T.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15661"></A>
+<B>input-stream-p</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is a stream and capable of reading.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15672"></A>
+<B>output-stream-p</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is a stream and capable of writing.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15683"></A>
+<B>io-stream-p</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is a two-way stream.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15694"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img32.png"
+ ALT="\begin{emtabbing}
+{\bf open}
+\it path \&amp;key \= :direction :input \\lq [function]\\...
+...\\
+\&gt; :permission \char93 o644 \\
+\&gt; :buffer-size 512\\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Open</B> makes a stream associated with a file designated by <EM>path</EM>.
+<EM>path</EM> may either be a string or a pathname.
+Direction should be one of <B>:input, :output</B> or <B>:io</B>.
+Several open options, <B>:append, :new-version, :overwrite, :error</B>
+and nil are allowed for <B>:if-exists</B> parameter.
+However, this parameter is ignored when <EM>direction</EM> is <B>:input</B>.
+Alternatives for <B>:if-does-not-exist</B> are
+<B>:error, :create</B> and nil.
+<B>:new-version</B>, <B>:rename</B> and <B>:supersede</B>
+are not recognized.
+By default, the file is overwritten if <EM>direction</EM> is either
+<B>:output</B> or <B>:io</B>  when the file exists.
+For :input files, an error is reported when the file does not exist.
+To know the existence of a file, <B>probe-file</B> can be used.
+Default value for <B>buffer-size</B> is 512 bytes,
+and #O644 for <B>:permission</B>.
+SunOS4 allows to open as many as sixty files at the same time.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15725"></A>
+<B>with-open-file</B> <EM>(svar path . open-options) &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A file named <EM>path</EM> is opened with <EM>open-options</EM> and the
+stream is bound to <EM>svar</EM>.
+Then <EM>forms</EM> are evaluated.
+The stream is automatically closed when evaluation of <EM>forms</EM> finishes
+or exits with <B>throw</B>, <B>return-from</B> or error.
+<B>With-open-file</B> is a macro defined by <B>unwind-protect</B> with <B>close</B>
+in its clean-up forms.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15745"></A>
+<B>close</B> <EM>stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> closes the <EM>stream</EM>, and returns T if successful.
+The stream may have already been closed, in which case nil is returned.
+Streams are automatically closed by GC if there is no reference to
+that stream object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15756"></A>
+<B>make-string-input-stream</B> <EM>string </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an input stream from a string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15766"></A>
+<B>make-string-output-stream</B> <EM>size </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an output stream to a string of <EM>size</EM> length.
+Actually, the length is automatically expanded, so <EM>size</EM> is only 
+advisory information to allocate string at initialization.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15778"></A>
+<B>get-output-stream-string</B> <EM>string-stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gets a string out of a <EM>string-stream</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15789"></A>
+<B>make-broadcast-stream</B> <EM>&amp;rest output-streams </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a broad-cast stream which forwards all the messages written to
+this stream to each of <EM>output-streams</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1288"
+  HREF="manual-node62.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1282"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1276"
+  HREF="manual-node60.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1284"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1286"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1289"
+  HREF="manual-node62.html">Reader</A>
+<B> Up:</B> <A NAME="tex2html1283"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1277"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+ &nbsp; <B>  <A NAME="tex2html1285"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1287"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

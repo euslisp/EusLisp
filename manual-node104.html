@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Thread Creation and Thread Pool</TITLE>
+<META NAME="description" CONTENT="Thread Creation and Thread Pool">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node105.html">
+<LINK REL="previous" HREF="manual-node103.html">
+<LINK REL="up" HREF="manual-node103.html">
+<LINK REL="next" HREF="manual-node105.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2015"
+  HREF="manual-node105.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2009"
+  HREF="manual-node103.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2003"
+  HREF="manual-node103.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2011"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2013"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2016"
+  HREF="manual-node105.html">Parallel Execution of Threads</A>
+<B> Up:</B> <A NAME="tex2html2010"
+  HREF="manual-node103.html">Asynchronous and Parallel Programming</A>
+<B> Previous:</B> <A NAME="tex2html2004"
+  HREF="manual-node103.html">Asynchronous and Parallel Programming</A>
+ &nbsp; <B>  <A NAME="tex2html2012"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2014"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04022100000000000000">
+Thread Creation and Thread Pool</A>
+</H3>
+In order for Solaris to execute a program in parallel on many
+processors, the program needs to be written as a collection
+of functions, each of which is executed by a thread dynamically
+created in a process.  Although the time required for thread
+creation is faster than process creation, it takes a few
+mili-seconds for EusLisp to start off a thread after allocating
+stacks and setting a page attribute for detecting stack-overflow.
+Since this delay, which should be compared to a function invocation,
+is intolerable, sufficient number of threads are created by
+the <TT>make-thread</TT> function beforehand and put in 
+the system's thread pool,
+eliminating the need for system calls at evaluation time.
+Each thread in the thread pool is represented by a thread object,
+as depicted in Fig.<A HREF="#threadobj">7</A>,
+consisted of thread-id, several semaphores for synchronization,
+and slots for argument and evaluation result transfer.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="threadobj"></A><A NAME="25675"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 7:</STRONG>
+Thread-object for transferring control and data between threads (left) and the collection of threads put in the thread-pool.</CAPTION>
+<TR><TD><IMG
+ WIDTH="693" HEIGHT="191" BORDER="0"
+ SRC="manual-img43.png"
+ ALT="\begin{figure}\begin{center}
+\begin{tabular}{c c}
+\epsfile{file=fig/threadobj.ps...
+...e{file=fig/threadpool.ps,width=7.5cm} \\
+\end{tabular}\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2015"
+  HREF="manual-node105.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2009"
+  HREF="manual-node103.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2003"
+  HREF="manual-node103.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2011"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2013"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2016"
+  HREF="manual-node105.html">Parallel Execution of Threads</A>
+<B> Up:</B> <A NAME="tex2html2010"
+  HREF="manual-node103.html">Asynchronous and Parallel Programming</A>
+<B> Previous:</B> <A NAME="tex2html2004"
+  HREF="manual-node103.html">Asynchronous and Parallel Programming</A>
+ &nbsp; <B>  <A NAME="tex2html2012"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2014"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,399 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Synchronization</TITLE>
+<META NAME="description" CONTENT="Synchronization">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node111.html">
+<LINK REL="up" HREF="manual-node98.html">
+<LINK REL="next" HREF="manual-node113.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2123"
+  HREF="manual-node113.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2117"
+  HREF="manual-node98.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2113"
+  HREF="manual-node111.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2119"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2121"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2124"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Up:</B> <A NAME="tex2html2118"
+  HREF="manual-node98.html">Multithread</A>
+<B> Previous:</B> <A NAME="tex2html2114"
+  HREF="manual-node111.html">Thread creation</A>
+ &nbsp; <B>  <A NAME="tex2html2120"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2122"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04025000000000000000">
+Synchronization</A>
+</H2>
+
+<P>
+Among Solaris operating systems four synchronization primitives for
+multithread programs, EusLisp provides mutex locks, conditional variables,
+and semaphores. Reader-writer lock is not available now.
+
+<P>
+Based on these primitives, higher level synchronization mechanisms,
+such as synchronized memory port and barrier synchronization, are realized.
+
+<P>
+
+ <BR>
+<BR> <A NAME="25791"></A>
+<B>sys:make-mutex-lock</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a mutex-lock and returns it. A mutex-lock is represented by an
+integer-vector of six elements.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25801"></A>
+<B>sys:mutex-lock</B> <EM>mlock </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+locks the mutex lock <EM>mlock</EM>.
+If the <EM>mlock</EM> is already locked by another thread,
+<EM>mutex-lock</EM> waits for the lock to be released.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25814"></A>
+<B>sys:mutex-unlock</B> <EM>mlock </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+releases <EM>mlock</EM> and let one of other threads waiting for this
+lock resume running.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25825"></A>
+<B>sys:mutex</B> <EM>mlock &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Mutex-lock and mutex-unlock have to be used as a pair.
+<B>Mutex</B> is a macro that brackets a critical section.
+<EM>Mlock</EM> is locked
+before evaluating <EM>forms</EM> are evaluated,
+and the lock is released when the evaluation finishes.
+This macro expands to the following progn form.
+Note that <B>unwind-protect</B> is used to ensure unlocking
+even an error occurs during the evaluation of <EM>forms</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+  (progn
+      (sys:mutex-lock mlock)
+      (unwind-protect
+          (progn . forms)
+          (sys:mutex-unlock mlock)))
+</PRE>
+
+<P>
+
+<A NAME="25840"></A>
+<B>sys:make-cond</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a condition variable object
+which is an integer vector of four elements.
+The returned condition variable is in unlocked state.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25850"></A>
+<B>sys:cond-wait</B> <EM>condvar mlock </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+waits for <EM>condvar</EM> to be signaled.
+If <EM>condvar</EM> has already been acquired by another thread,
+it releases <EM>mlock</EM> and waits for <EM>condvar</EM> to be signaled.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25864"></A>
+<B>sys:cond-signal</B> <EM>condvar </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> signals the <EM>condvar</EM> condition variable.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25875"></A>
+<B>sys:make-semaphore</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a semaphore object
+which is represented by an integer vector of twelve elements.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25885"></A>
+<B>sys:sema-post</B> <EM>sem </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  signals <EM>sem</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25896"></A>
+<B>sys:sema-wait</B> <EM>sem </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> waits for the <EM>sem</EM> semaphore to be posted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="25908"></A>
+<BIG CLASS="XLARGE"><B>sys:barrier-synch </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 threads n-threads count barrier-cond threads-lock count-lock 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents a structure for barrier-synchronization. Threads waiting
+for the synchronization are put in <EM>threads</EM> which is mutually excluded
+by <EM>threads-lock</EM>.
+When a <B>barrier-synch</B> object is created,
+<EM>count</EM> is initialized to zero.
+Synchronizing threads are put in the <EM>threads</EM> list by sending <TT>:add</TT>
+message.
+Sending <TT>:wait</TT> to this barrier-sync object causes <EM>count</EM> to be
+incremented, and the sending thread is put in the wait state.
+When all the threads in <EM>threads</EM> send the <TT>:wait</TT> message,
+the waits are unblocked and all threads resume execution.
+The synchronization is implemented by the combination of
+the <EM>count-lock</EM> mutex-lock and the <EM>barrier-cond</EM>
+condition-variable.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25937"></A>
+<B>:init</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> initializes this barrier-synch object. Two mutex-lock
+and one condition-variable are created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25947"></A>
+<B>:add</B> <EM>thr </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> adds the <EM>thr</EM> thread in the <EM>threads</EM> list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25959"></A>
+<B>:remove</B> <EM>thr </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> removes the <EM>thr</EM> thread of the <EM>threads</EM> list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25971"></A>
+<B>:wait</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> waits for all threads in the <EM>threads</EM> list
+to issue <TT>:wait</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="25984"></A>
+<BIG CLASS="XLARGE"><B>sys:synch-memory-port </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 sema-in sema-out buf empty lock 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>realizes the one-directional synchronized memory port,
+which synchronizes for two threads
+to transfer datum via this object.
+Control transfer is implemented by using semaphores.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26001"></A>
+<B>:read</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> reads datum buffered in this synch-memory-port.
+If it has not been written yet, the :read blocks.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26011"></A>
+<B>:write</B> <EM>datum </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> writes <EM>datum</EM> in the buffer.
+Since only one word of buffer is available,
+if another datum has already been written and not yet read out,
+:write waits for the datum to be transferred by :read.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26022"></A>
+<B>:init</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> initializes this synch-memory-port
+where two semaphores  are created and :write is made acceptable.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2123"
+  HREF="manual-node113.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2117"
+  HREF="manual-node98.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2113"
+  HREF="manual-node111.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2119"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2121"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2124"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Up:</B> <A NAME="tex2html2118"
+  HREF="manual-node98.html">Multithread</A>
+<B> Previous:</B> <A NAME="tex2html2114"
+  HREF="manual-node111.html">Thread creation</A>
+ &nbsp; <B>  <A NAME="tex2html2120"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2122"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

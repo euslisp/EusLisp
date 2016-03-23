@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Foreign String</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Foreign String">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node52.html">
+<LINK REL="previous" HREF="jmanual-node49.html">
+<LINK REL="up" HREF="jmanual-node45.html">
+<LINK REL="next" HREF="jmanual-node52.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1101"
+  HREF="jmanual-node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1095"
+  HREF="jmanual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1089"
+  HREF="jmanual-node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1097"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1099"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1102"
+  HREF="jmanual-node52.html">ハッシュテーブル</A>
+<B> Up:</B> <A NAME="tex2html1096"
+  HREF="jmanual-node45.html">列、行列とテーブル</A>
+<B> Previous:</B> <A NAME="tex2html1090"
+  HREF="jmanual-node50.html">日本語の扱い方</A>
+ &nbsp; <B>  <A NAME="tex2html1098"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1100"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03075000000000000000">
+Foreign String</A>
+</H2>
+<B>foreign-string</B>は、EusLispのヒープ外にあるバイトベクトルの1種である。
+普通の文字列は、長さとバイトの列を持ったオブジェクトであるが、
+foreign-stringは、長さと文字列本体のアドレスを持っている。
+foreign-stringは文字列であるが、
+いくつかの文字列および列に対する関数は適用できない。
+<B>length</B>、<B>aref</B>、<B>replace</B>、<B>subseq</B>と<B>copy-seq</B>だけが
+foreign-stringを認識し、 
+その他の関数の適用はクラッシュの原因となる恐れがある。
+
+<P>
+foreign-stringは、/dev/a??d??(??は32あるいは16)の特殊ファイルで与えられる
+I/O空間を参照することがある。
+そのデバイスがバイトアクセスにのみ応答するI/O空間の一つに
+割り当てられた場合、
+<B>replace</B>は、いつもバイト毎に要素をコピーする。
+メモリのlarge chunkを連続的にアクセスしたとき、比較的に遅く動作する。。
+
+<P>
+
+ <BR>
+<BR> <A NAME="12058"></A>
+<B>make-foreign-string</B> <EM>address length </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>address</EM>の位置から<EM>length</EM>バイトの
+<B>foreign-string</B>のインスタンスを作る。
+例えば、<TT>(make-foreign-string (unix:malloc 32) 32)</TT>は、
+EusLispのヒープ外に位置する32バイトメモリを参照部分として作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

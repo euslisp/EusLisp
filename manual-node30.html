@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Predicates</TITLE>
+<META NAME="description" CONTENT="Predicates">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node29.html">
+<LINK REL="up" HREF="manual-node24.html">
+<LINK REL="next" HREF="manual-node31.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html829"
+  HREF="manual-node31.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html823"
+  HREF="manual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html819"
+  HREF="manual-node29.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html825"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html827"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html830"
+  HREF="manual-node31.html">Object Oriented Programming</A>
+<B> Up:</B> <A NAME="tex2html824"
+  HREF="manual-node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html820"
+  HREF="manual-node29.html">Iteration</A>
+ &nbsp; <B>  <A NAME="tex2html826"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html828"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03036000000000000000">
+Predicates</A>
+</H2>
+
+<P>
+<B>Typep</B> and <B>subtypep</B> of Common Lisp are not provided, and should be
+simulated by <B>subclassp</B> and <B>derivedp</B>.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="2628"></A>
+<B>eq</B> <EM>obj1 obj2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns T,
+if <EM>obj1</EM> and <EM>obj2</EM> are pointers to the same object,
+or the same numbers.
+Examples: <TT>(eq 'a 'a)</TT> is T, <TT>(eq 1 1)</TT> is T,
+<TT>(eq 1. 1.0)</TT> is nil, <TT>(eq "a" "a")</TT> is nil.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2644"></A>
+<B>eql</B> <EM>obj1 obj2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Eq</B> and <B>eql</B> are identical since all the numbers in EusLisp are represented as
+immediate values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2656"></A>
+<B>equal</B> <EM>obj1 obj2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Checks the equality of any structured objects, such as strings, vectors or
+matrices, as long as they do not have recursive references.
+If there is recursive reference in <EM>obj1</EM> or <EM>obj2</EM>,
+<B>equal</B> loops infinitely.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2669"></A>
+<B>superequal</B> <EM>obj1 obj2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Slow but robust <B>equal</B>, since <B>superequal</B> checks circular reference.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2681"></A>
+<B>null</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> T if <EM>object</EM> is nil.
+Equivalent to (eq <EM>object</EM> nil).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2693"></A>
+<B>not</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>not</B> is identical to <B>null</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2705"></A>
+<B>atom</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns NIL only if object is a cons.
+<TT>(atom nil) = (atom '()) = T)</TT>.
+Note that <B>atom</B> returns T for vectors, strings, read-table, hash-table, 
+etc., no matter what complex objects they are.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2717"></A>
+<B>every</B> <EM>pred &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if all <EM>args</EM> return T for <EM>pred</EM>.
+<B>Every</B> is used to test whether <EM>pred</EM> holds for every <EM>args</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2732"></A>
+<B>some</B> <EM>pred &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if at least one of <EM>args</EM> return T for <EM>pred</EM>.
+<B>Some</B> is used to test whether <EM>pred</EM> holds for any of <EM>args</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <A NAME="2747"></A>
+<B>functionp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is a function object that can be given to
+<B>apply</B> and <B>funcall</B>.
+Note that macros cannot be <EM>apply</EM>'ed or <EM>funcall</EM>'ed.
+<B>Functionp</B> returns T, if <EM>object</EM> is
+either a compiled-code with type=0, a symbol that has function definition,
+a lambda-form, or a lambda-closure.
+Examples: (functionp 'car) = T, (functionp 'do) = NIL
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2764"></A>
+<B>compiled-function-p</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is an instance of compiled-code.
+In order to know the compiled-code is a function or a macro,
+send <TT>:type</TT> message to the object, and <TT>function</TT> or <TT>macro</TT>
+is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html829"
+  HREF="manual-node31.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html823"
+  HREF="manual-node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html819"
+  HREF="manual-node29.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html825"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html827"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html830"
+  HREF="manual-node31.html">Object Oriented Programming</A>
+<B> Up:</B> <A NAME="tex2html824"
+  HREF="manual-node24.html">Control Structures</A>
+<B> Previous:</B> <A NAME="tex2html820"
+  HREF="manual-node29.html">Iteration</A>
+ &nbsp; <B>  <A NAME="tex2html826"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html828"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,806 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Miscellaneous Geometric Functions</TITLE>
+<META NAME="description" CONTENT="Miscellaneous Geometric Functions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node121.html">
+<LINK REL="previous" HREF="manual-node119.html">
+<LINK REL="up" HREF="manual-node119.html">
+<LINK REL="next" HREF="manual-node121.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2247"
+  HREF="manual-node121.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2241"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2235"
+  HREF="manual-node119.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2243"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2245"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2248"
+  HREF="manual-node121.html">Line and Edge</A>
+<B> Up:</B> <A NAME="tex2html2242"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2236"
+  HREF="manual-node119.html">Geometric Modeling</A>
+ &nbsp; <B>  <A NAME="tex2html2244"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2246"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04041000000000000000">
+Miscellaneous Geometric Functions</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="30407"></A>
+<B>vplus</B> <EM>vector-list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a newly created float-vector that is the sum of
+all the elements of <EM>vector-list</EM>.
+The difference from <B>v+</B> is that <B>vplus</B> computes
+the sum of more than two arguments and no result vector can be specified.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30420"></A>
+<B>vector-mean</B> <EM>vector-list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the mean vector of <I>vector-list</I>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30431"></A>
+<B>triangle</B> <EM>a b c &amp;optional (normal #f(0 0 1)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>a, b, c</EM> are float-vectors representing 2 or 3 dimensional points.
+normal is the normal vector of the plane on which <EM>a,b</EM>, and <EM>c</EM>
+lie.
+<B>Triangle</B> returns 2*area of a triangle formed by <EM>a,b,c</EM>.
+<B>Triangle</B> is positive if <EM>a,b</EM>, and <EM>c</EM> turn clockwise
+when you are looking in the same direction as <EM>normal</EM>.
+In other words, if <B>triangle</B> is positive, <EM>c</EM> locates at the
+left hand side of line <EM>a-b</EM>,
+and <EM>b</EM> lies at the right side of <EM>ac</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30455"></A>
+<B>triangle-normal</B> <EM>a b c </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds a normal vector which is vertical to the triangle defined by
+three points <EM>a,b,</EM>and <EM>c</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30467"></A>
+<B>vector-angle</B> <EM>v1 v2 &amp;optional (normal (v* v1 v2)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes an angle between two vectors,
+denoted by <!-- MATH
+ $atan(normal \cdot (v1 \times v2), v1 \cdot v2)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="228" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img55.png"
+ ALT="$atan(normal \cdot (v1 \times v2), v1 \cdot v2)$"></SPAN>.
+<EM>v1,v2</EM> and <EM>normal</EM> must be normalized vectors.
+When <EM>normal</EM> is not given, a normalized vector commonly perpendicular to
+<EM>v1</EM> and <EM>v2</EM> is used, in which case the result is always a positive
+angle in the range between <SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img56.png"
+ ALT="$0$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img10.png"
+ ALT="$\pi$"></SPAN>.
+In order to obtain a signed angle, <EM>normal</EM> must be specified explicitly.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30483"></A>
+<B>face-normal-vector</B> <EM>vertices </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes surface normal vector from a list of float-vectors which lie
+on the same plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30493"></A>
+<B>farthest</B> <EM>p points </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the farthest point from <EM>p</EM> in the list of 3D float-vectors,
+<EM>points</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30505"></A>
+<B>farthest-pair</B> <EM>points </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the farthest point pair in the list of 3D float-vectors, <EM>points</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30516"></A>
+<B>maxindex</B> <EM>3D-floatvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Finds the index of the absolute maximum value of three elements.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30526"></A>
+<B>random-vector</B> <EM>&amp;optional (range 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Generates a random vector which is distributed homogeneously
+in 3D Cartesian space.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30536"></A>
+<B>random-normalized-vector</B> <EM>&amp;optional (range 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a normalized-3D random vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30546"></A>
+<B>random-vectors</B> <EM>count range </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of random vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30556"></A>
+<B>line-intersection</B> <EM>p1 p2 p3 p4 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1, p2, p3</EM> and <EM>p4</EM> are all float-vectors of more than two dimensions.
+<EM>p1-p2</EM> and <EM>p3-p4</EM> define two lines on a plane.
+<B>line-intersection</B> returns a list of two parameters of the
+intersection point for these two lines.
+When used in  three dimension,
+<EM>p1, p2, p3</EM> and <EM>p4</EM> must be coplanar.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30573"></A>
+<B>collinear-p</B> <EM>p1 p2 p3 &amp;optional tolerance </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1, p2, p3</EM> are all three-dimensional float-vectors representing
+three point locations.
+<B>Collinear-p</B> returns the parameter for <EM>p2</EM> on 
+the line <EM>p1-p3</EM> if <!-- MATH
+ $norm((p2-p1) \times (p3-p1))$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="203" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img57.png"
+ ALT="$norm((p2-p1) \times (p3-p1))$"></SPAN> is smaller than
+<TT>*coplanar-threshold*</TT>, otherwise NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30588"></A>
+<B>find-coplanar-vertices</B> <EM>p1 p2 p3 vlist </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1, p2, p3</EM> are all three-dimensional float-vectors representing
+a plane.
+<B>Find-coplanar-vertices</B> looks for coplanar points in <EM>vlist</EM>
+that lie on the plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30601"></A>
+<B>find-connecting-edge</B> <EM>vertex edgelist </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds an edge in <EM>edgelist</EM> that connects to <EM>vertex</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30613"></A>
+<B>make-vertex-edge-htab</B> <EM>bodfacs </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>bodfacs</EM> is a body or a list of faces.
+<B>make-vertex-edge-htab</B> makes a hash-table which allows retrieving of 
+edges connected to a vertex.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30625"></A>
+<B>left-points</B> <EM>points p1 p2 normal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Assume <EM>points, p1</EM>, and <EM>p2</EM>
+lie on the plane whose normal vector is <EM>normal</EM>.
+<B>Left-points</B> searches in <EM>points</EM> and collects ones
+lying in the left hand side of the line passing on <EM>p1, p2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30641"></A>
+<B>right-points</B> <EM>points p1 p2 normal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Assume <EM>points, p1</EM>, and <EM>p2</EM>
+lie on the plane whose normal vector is <EM>normal</EM>.
+<B>Right-points</B>  searches in <EM>points</EM> and collects ones
+lying in the right hand side of the line determined by <EM>p1, p2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30657"></A>
+<B>left-most-point</B> <EM>points p1 p2 normal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Assume <EM>points, p1</EM>, and <EM>p2</EM>
+lie on a plane whose normal vector is <EM>normal</EM>.
+<B>left-points</B> searches in <EM>points</EM> which lie in the left-hand
+side of the line determined by <EM>p1, p2</EM> and returns the farthest one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30673"></A>
+<B>right-most-point</B> <EM>points p1 p2 normal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Assume <EM>points, p1</EM>, and <EM>p2</EM>
+lie on a plane whose normal vector is <EM>normal</EM>.
+<B>right-most-point</B> searches in <EM>points</EM> which lie in the right-hand
+side of the line determined by <EM>p1, p2</EM> and returns the farthest one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30689"></A>
+<B>eps=</B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+compares two float numbers <EM>num1</EM> and <EM>num2</EM> for equality
+with the tolerance of <B>*epsilon*</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30702"></A>
+<B>eps<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img7.png"
+ ALT="$&lt;$"></SPAN></B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img58.png"
+ ALT="$num1$"></SPAN> is apparently less than <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img59.png"
+ ALT="$num2$"></SPAN>, i.e. <!-- MATH
+ $num1 < num2-tolerance$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="192" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img60.png"
+ ALT="$num1 &lt; num2-tolerance$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30712"></A>
+<B>eps<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img16.png"
+ ALT="$&lt;=$"></SPAN></B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img58.png"
+ ALT="$num1$"></SPAN> is possibly less than or equal to <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img59.png"
+ ALT="$num2$"></SPAN>,
+i.e. <!-- MATH
+ $num1 < num2+tolerance$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="192" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img61.png"
+ ALT="$num1 &lt; num2+tolerance$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30722"></A>
+<B>eps<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img14.png"
+ ALT="$&gt;$"></SPAN></B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img58.png"
+ ALT="$num1$"></SPAN> is apparently greater than <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img59.png"
+ ALT="$num2$"></SPAN>, i.e. <!-- MATH
+ $num1 > num2+tolerance$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="192" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img62.png"
+ ALT="$num1 &gt; num2+tolerance$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30732"></A>
+<B>eps<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img15.png"
+ ALT="$&gt;=$"></SPAN></B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img58.png"
+ ALT="$num1$"></SPAN> is possibly greater than or equal to <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img59.png"
+ ALT="$num2$"></SPAN>,
+i.e. <!-- MATH
+ $num1 > num2-tolerance$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="192" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img63.png"
+ ALT="$num1 &gt; num2-tolerance$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="30743"></A>
+<BIG CLASS="XLARGE"><B>bounding-box </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (minpoint maxpoint) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a minimal rectangular-parallel-piped which is bounded by
+the planes parallel to xy-, yz- and zx-planes.
+<B>Bounding-box</B> can be used in any dimension according to the
+dimension of vectors given at the initialization.
+Bounding-box had been defined by the name of surrounding-box.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30761"></A>
+<B>:box</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns this bounding-box object itself.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30771"></A>
+<B>:volume</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the volume of this bounding box.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30781"></A>
+<B>:grow</B> <EM>rate </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+increases or decreases the size of this box by the <EM>rate</EM>.
+When <EM>rate</EM> is 0.01, the box is enlarged by 1%.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30793"></A>
+<B>:inner</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>point</EM> lies in this box, otherwise nil.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30804"></A>
+<B>:intersection</B> <EM>box2 &amp;optional tolerance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the intersectional bounding box of this box and <EM>box2</EM>.
+If <EM>tolerance</EM> is given, the box is enlarged by it.
+If there is no intersection, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30816"></A>
+<B>:union</B> <EM>box2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the union of bounding box of this box and <EM>box2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30827"></A>
+<B>:intersectionp</B> <EM>box2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if this box has the intersection with the <EM>box2</EM>,
+NIL otherwise.
+This method is faster than <B>:intersection</B> because no new instance
+of bounding-box is created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30839"></A>
+<B>:extreme-point</B> <EM>direction </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns one of the eight corner points yielding the largest dot-product 
+with <EM>direction</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30850"></A>
+<B>:corners</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of all vertices of this box.
+If this box defines 2D bounding-box, then 4 points are returned,
+3D, 8, and so on.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30860"></A>
+<B>:below</B> <EM>box2 &amp;optional (direction #(0 0 1) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if this box is below <EM>box2</EM> in <EM>direction</EM>.
+This is used to check whether two box intersects when this box is
+moved toward <EM>direction</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30873"></A>
+<B>:body</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a body object that represents a cube bounded by this box.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30883"></A>
+<B>:init</B> <EM>vlist &amp;optional tolerance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets minpoint and maxpoint slots looking in <EM>vlist</EM>.
+If tolerance (float) is specified, the box is grown by the amount.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30894"></A>
+<B>make-bounding-box</B> <EM>points [tolerance] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> finds the minimum and maximum
+coordinates in the list of <EM>points</EM>, and make an instance of
+<TT>bounding-box</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30906"></A>
+<B>bounding-box-union</B> <EM>boxes [tolerance *contact-threshold*] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an instance of the surrounding-box representing the union
+of <EM>boxes</EM>. The resulted box is expanded by the <EM>tolerance</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30918"></A>
+<B>bounding-box-intersection</B> <EM>boxes [tolerance *contact-threshold*] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an instance of the surrounding-box representing the intersection 
+of <EM>boxes</EM>. The resulted box is expanded by the <EM>tolerance</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2247"
+  HREF="manual-node121.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2241"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2235"
+  HREF="manual-node119.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2243"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2245"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2248"
+  HREF="manual-node121.html">Line and Edge</A>
+<B> Up:</B> <A NAME="tex2html2242"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2236"
+  HREF="manual-node119.html">Geometric Modeling</A>
+ &nbsp; <B>  <A NAME="tex2html2244"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2246"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

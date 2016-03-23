@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>パス名</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="パス名">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node63.html">
+<LINK REL="previous" HREF="jmanual-node61.html">
+<LINK REL="up" HREF="jmanual-node53.html">
+<LINK REL="next" HREF="jmanual-node63.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1264"
+  HREF="jmanual-node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1258"
+  HREF="jmanual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1252"
+  HREF="jmanual-node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1260"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1262"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1265"
+  HREF="jmanual-node63.html">ファイルシステムインターフェース</A>
+<B> Up:</B> <A NAME="tex2html1259"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1253"
+  HREF="jmanual-node61.html">非同期入出力</A>
+ &nbsp; <B>  <A NAME="tex2html1261"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1263"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03086000000000000000"></A><A NAME="Pathnames"></A>
+<BR>
+パス名
+</H2>
+
+<P>
+パス名は、OSに依存しないようにファイル名を解析あるいは構成する方法として
+与えられるものである。
+典型的なパス名は、次のような構成で成り立っていると仮定されている。
+host:device/directory1/.../directory-n/name.type.version。
+Euslispは、UNIXの上で動作している限り、ホスト・デバイス・バージョンを無視する。
+<B>pathname</B>関数は、文字列をディレクトリ要素・名前・型に分解し、パス名
+オブジェクトを返す。そのパス名は、<TT>#P</TT>を先頭につけた文字列として表示される。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15871"></A>
+<B>pathnamep</B> <EM>name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>name</EM>がパス名ならば、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15882"></A>
+<B>pathname</B> <EM>name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>name</EM>はパス名または文字列で、パス名に変換される。
+最後の名前がディレクトリ名を示すために<EM>name</EM>の最後に"/"をつけることを
+忘れないこと。
+逆変換は<B>namestring</B>で実現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15895"></A>
+<B>pathname-directory</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>からディレクトリ名のリストを返す。
+"/"ディレクトリは:ROOTと表現される。
+<EM>path</EM>は、文字列あるいはパス名である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15907"></A>
+<B>pathname-name</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>からファイル名の部分を返す。
+<EM>path</EM>は、文字列あるいはパス名である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15919"></A>
+<B>pathname-type</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>からファイルの型の部分を取り出す。
+<EM>path</EM>は、文字列あるいはパス名である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15931"></A>
+<B>make-pathname</B> <EM>&amp;key :host :device :directory :name :type :version
+defaults </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>directiory</EM>,<EM>name</EM>と<EM>type</EM>から新しいパス名を作る。
+UNIX上では、他のパラメータは無視される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15944"></A>
+<B>merge-pathnames</B> <EM>name
+&amp;optional (defaults *default-pathname-defaults*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15955"></A>
+<B>namestring</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>の文字列表現を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15966"></A>
+<B>parse-namestring</B> <EM>name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15977"></A>
+<B>truename</B> <EM>path </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>path</EM>で名前付けされているファイルの絶対パス名を見つける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1264"
+  HREF="jmanual-node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1258"
+  HREF="jmanual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1252"
+  HREF="jmanual-node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1260"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1262"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1265"
+  HREF="jmanual-node63.html">ファイルシステムインターフェース</A>
+<B> Up:</B> <A NAME="tex2html1259"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1253"
+  HREF="jmanual-node61.html">非同期入出力</A>
+ &nbsp; <B>  <A NAME="tex2html1261"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1263"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

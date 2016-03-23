@@ -1,0 +1,636 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Line and Edge</TITLE>
+<META NAME="description" CONTENT="Line and Edge">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node122.html">
+<LINK REL="previous" HREF="manual-node120.html">
+<LINK REL="up" HREF="manual-node119.html">
+<LINK REL="next" HREF="manual-node122.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2261"
+  HREF="manual-node122.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2255"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2249"
+  HREF="manual-node120.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2257"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2259"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2262"
+  HREF="manual-node122.html">Plane and Face</A>
+<B> Up:</B> <A NAME="tex2html2256"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2250"
+  HREF="manual-node120.html">Miscellaneous Geometric Functions</A>
+ &nbsp; <B>  <A NAME="tex2html2258"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2260"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04042000000000000000">
+Line and Edge</A>
+</H2>
+
+<P>
+The direction of the vertex loop or the edge loop
+is defined so that the vertices or edges  are arranged
+in the counter-clockwise order when the body is observed from outside.
+<EM>Pvertex</EM> and <EM>nvertex</EM>, and <EM>pface</EM> and <EM>nface</EM>
+are determined so that an edge is
+oriented from <EM>pvertex</EM> toward <EM>nvertex</EM>
+when <EM>pface</EM> is located at the left
+of the edge observing them from outside.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="30931"></A>
+<BIG CLASS="XLARGE"><B>line </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 ((pvert :type float-vector)(nvert :type float-vector)) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a line passing on pvert and nvert.
+The line is directed from <EM>pvert</EM> to <EM>nvert</EM> in the parametric
+representation: <!-- MATH
+ $t \cdot pvert +(1-t)nvert$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="162" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img64.png"
+ ALT="$t \cdot pvert +(1-t)nvert $"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30950"></A>
+<B>:vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of <EM>pvert</EM> and <EM>nvert</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="30962"></A>
+<B>:point</B> <EM>p </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a three dimensional float-vector that corresponds to the 
+<EM>p</EM> parameter on this line.
+<!-- MATH
+ $parameter \cdot pvert + (1-parameter)nvert$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="300" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img65.png"
+ ALT="$parameter \cdot pvert + (1-parameter)nvert$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30973"></A>
+<B>:parameter</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes the parameter for <EM>point</EM> on this line.
+This is the inverse method of <TT>:point</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30985"></A>
+<B>:direction</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a normalized vector from <B>pvert</B> to <B>nvert</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="30997"></A>
+<B>:end-point</B> <EM>v </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the other end-point of this line, i.e.
+if <EM>v</EM> is <EM>eq</EM> to <TT>pvert</TT>, <TT>nvert</TT> is returned,
+if <EM>v</EM> is <EM>eq</EM> to <TT>nvert</TT>, <TT>pvert</TT> is returned,
+otherwise NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31015"></A>
+<B>:box</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> creates and returns a <B>bounding-box</B> of this line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31026"></A>
+<B>:boxtest</B> <EM>box </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks intersection between <EM>box</EM> and the bounding-box of this line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31037"></A>
+<B>:length</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the length of this line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31047"></A>
+<B>:distance</B> <EM>point-or-line </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the distance between the <EM>point-or-line</EM> and this line.
+If the foot of the vertical line from the <EM>point</EM>
+to this line does not lie between pvertex and nvertex,
+the distance to the closest end-point is returned.
+Using this method to calculate the distance between two lines,
+interference between two cylinders can be tested.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31059"></A>
+<B>:foot</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the parameter for the point which is the foot of the vertical
+line from <EM>point</EM> to this line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31070"></A>
+<B>:common-perpendicular</B> <EM>l </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the line which is vertical both to this line and to <EM>l</EM>
+and returns a list of two 3D float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31081"></A>
+<B>:project</B> <EM>plane </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of two points that are the projection of pvert of nvert
+onto <EM>plane</EM>.
+When  two lines are in parallel and a common perpendicular line cannot
+be determined uniquely, <TT>parallel</TT> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31093"></A>
+<B>:collinear-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks whether <EM>point</EM> is collinear to this line with the tolerance of
+<EM>tolerance</EM> using <B>collinear-p</B>.
+If <EM>point</EM> is collinear to this line,
+the parameter for the point on the line is returned, otherwise NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31107"></A>
+<B>:on-line-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks whether the <EM>point</EM> is collinear to this line,
+and the <EM>point</EM> lies on the part of the line
+between <EM>pvert</EM> and <EM>nvert</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31121"></A>
+<B>:collinear-line</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks if <EM>ln</EM> is collinear to this line, i.e. if the two end-points
+of <EM>ln</EM> lie on this line.
+T or NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31133"></A>
+<B>:coplanar</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks if this line and <EM>ln</EM> are coplanar.
+Two end-points of this line and one end-point of <EM>ln</EM> defines a plane.
+If another end-point of <EM>ln</EM> is on the plane, T is returned,
+otherwise NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31146"></A>
+<B>:intersection</B> <EM>ln </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ln</EM> is a line coplanar with this line.
+<B>:Intersection</B> returns a list of two parameters for the intersection
+point of these two lines.
+A parameter may be any float number, but a parameter between 0 and 1
+means an actual intersection on the line segmented by two end-points.
+NIL if they are in parallel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31158"></A>
+<B>:intersect-line</B> <EM>ln </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ln</EM> is a line coplanar with this line.
+Two parameters of the intersecting point
+is returned along with symbolic information such as
+<TT>:parallel, :collinear,</TT> and  <TT>:intersect</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="31172"></A>
+<BIG CLASS="XLARGE"><B>edge </B></BIG> [class]  <PRE><TT>
+  :super   <B>line</B> 
+<BR>  :slots 		 (pface nface 
+<BR>(angle :type float) 
+<BR>(flags :type integer)) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents an edge defined as the intersection between two faces.
+Though <EM>pface</EM> and <EM>nface</EM> are statically defined in the slots,
+their interpretations are relative to the direction of this edge.
+For example, <EM>pface</EM> represents the correct pface when this edge
+is considered to goes from <EM>pvert</EM> toward <EM>nvert</EM>.
+So,  pvert and nvert in your interpretation must be given to the <B>:pface</B>
+and <B>:nface</B> methods to select the appropriate face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31196"></A>
+<B>make-line</B> <EM>point1 point2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates an instance of <B>line</B> whose pvert is <EM>point1</EM> and
+nvert is <EM>point2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31209"></A>
+<B>:pvertex</B> <EM>pf </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns pvertex when <EM>face</EM> is regarded as the pface of this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31220"></A>
+<B>:nvertex</B> <EM>face </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns nvertex regarding <EM>face</EM> as the pface of this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31231"></A>
+<B>:body</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the body object that defines this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31241"></A>
+<B>:pface</B> <EM>pv nv </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns pface when the <EM>pv</EM> and <EM>nv</EM>
+are interpreted as the virtual pface and nface of this edge, respectively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31253"></A>
+<B>:nface</B> <EM>pv nv </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns nface when the <EM>pv</EM> and <EM>nv</EM>
+are interpreted as the virtual pface and nface of this edge, respectively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31265"></A>
+<B>:binormal</B> <EM>aface </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the direction vector which is perpendicular both to this line and to
+the normal of <EM>aface</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31276"></A>
+<B>:angle</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the angle between two faces connected with this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31286"></A>
+<B>:set-angle</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the angle between two faces connected with this edge and 
+stores it in the angle slot.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31296"></A>
+<B>:invert</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31307"></A>
+<B>:set-face</B> <EM>pv nv f </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets the <EM>f</EM> face as a pface regarding <EM>pv</EM> as the pvertex
+and <EM>nv</EM> as the nvertex.
+Note that this may change either pface or nface of this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31320"></A>
+<B>:contourp</B> <EM>viewpoint </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if this is a contour edge, i.e., either pface or nface of this edge is
+visible and the other is invisible from <EM>viewpoint</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31331"></A>
+<B>:approximated-p</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if this edge is an approximated edge representing curved surface
+like the side of a cylinder.
+Approximated edges are needed to represent curves by segmented straight
+lines.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31341"></A>
+<B>:set-approximated-flag</B> <EM>&amp;optional (threshold 0.7) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+In EusLisp, every curved surface is approximated with many planar faces.
+The LSB of <TT>flags</TT> is used to indicate that the faces on the both
+sides of this edge are curved faces.
+<B>:set-approximated-flag</B> sets this flag to T, if the angle between
+two faces is greater than <EM>threshold</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31354"></A>
+<B>:init</B> <EM>&amp;key :pface :nface :pvertex :nvertex </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2261"
+  HREF="manual-node122.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2255"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2249"
+  HREF="manual-node120.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2257"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2259"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2262"
+  HREF="manual-node122.html">Plane and Face</A>
+<B> Up:</B> <A NAME="tex2html2256"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2250"
+  HREF="manual-node120.html">Miscellaneous Geometric Functions</A>
+ &nbsp; <B>  <A NAME="tex2html2258"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2260"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>LU decomposition</TITLE>
+<META NAME="description" CONTENT="LU decomposition">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node117.html">
+<LINK REL="previous" HREF="manual-node115.html">
+<LINK REL="up" HREF="manual-node113.html">
+<LINK REL="next" HREF="manual-node117.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2184"
+  HREF="manual-node117.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2178"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2172"
+  HREF="manual-node115.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2180"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2182"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2185"
+  HREF="manual-node117.html">Coordinates</A>
+<B> Up:</B> <A NAME="tex2html2179"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2173"
+  HREF="manual-node115.html">Matrix and Transformation</A>
+ &nbsp; <B>  <A NAME="tex2html2181"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2183"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04033000000000000000">
+LU decomposition</A>
+</H2>
+<B>lu-decompose</B> and <B>lu-solve</B> are provided to solve
+simultaneous linear equations.
+First, <B>lu-decompose</B> decomposes a matrix into a lower triangle matrix
+and an upper triable matrix.
+If the given matrix is singular, <B>LU-decompose</B> returns NIL, otherwise
+it returns the permutation vector which should be supplied to <B>LU-solve</B>.
+<B>Lu-solve</B> computes the solution for a LU matrix with a given constant vector.
+This method is efficient if solutions for many combinations 
+of different constant vectors and the same factor matrix are required.
+<B>Simultaneous-equation</B> would be  more handy when you wish to get
+only one solution.
+<B>Lu-determinant</B> computes a determinant of a lu-decomposed matrix.
+<B>Inverse-matrix</B> function computes an inverse matrix using <B>lu-decompose</B>
+once, and <B>lu-solve</B> n times.
+Computation time for a 3*3 matrix is estimated to be 4 milli-sec.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="27473"></A>
+<B>lu-decompose</B> <EM>matrix &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+performs lu-decomposition of <EM>matrix</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27484"></A>
+<B>lu-solve</B> <EM>lu-mat perm-vector bvector [result] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+solves a linear simultaneous equations which has already been lu-decomposed.
+<EM>perm-vector</EM> should be the result returned by <B>lu-decompose</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27496"></A>
+<B>lu-determinant</B> <EM>lu-mat perm-vector </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the determinant value for a matrix which has already been 
+lu-decomposed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27506"></A>
+<B>simultaneous-equation</B> <EM>mat vec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+solves a linear simultaneous equations whose coefficients are described in
+<EM>mat</EM> and constant values in <EM>vec</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27518"></A>
+<B>inverse-matrix</B> <EM>mat </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes the inverse matrix of the square matrix, <EM>mat</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27529"></A>
+<B>pseudo-inverse</B> <EM>mat </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the pseudo inverse matrix using the singular value decomposition.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2184"
+  HREF="manual-node117.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2178"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2172"
+  HREF="manual-node115.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2180"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2182"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2185"
+  HREF="manual-node117.html">Coordinates</A>
+<B> Up:</B> <A NAME="tex2html2179"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2173"
+  HREF="manual-node115.html">Matrix and Transformation</A>
+ &nbsp; <B>  <A NAME="tex2html2181"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2183"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

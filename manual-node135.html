@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Animation</TITLE>
+<META NAME="description" CONTENT="Animation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node134.html">
+<LINK REL="up" HREF="manual-node129.html">
+<LINK REL="next" HREF="manual-node136.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2459"
+  HREF="manual-node136.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2453"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2449"
+  HREF="manual-node134.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2455"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2457"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2460"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Up:</B> <A NAME="tex2html2454"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2450"
+  HREF="manual-node134.html">Drawings</A>
+ &nbsp; <B>  <A NAME="tex2html2456"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2458"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04056000000000000000"></A>
+<A NAME="35482"></A>
+<BR>
+Animation
+</H2>
+EusLisp's animation facility provides the pseudo real-time
+graphics on stock workstations without graphics accelerators.
+The basic idea is the quick playback of a series of images which have been
+generated after long computation.
+Images are retained in two ways:
+one is to keep a number of xwindow pixmaps each of which holds a complete
+pixel image, and the other is to keep line segment data obtained by
+hidden-line elimination.
+The former is faster and the only way for rendered images,
+but not suitable for a long animation since it requires much memory
+in the X server.
+The latter is more memory efficient and suitable for storing data in disks,
+but the performance is degraded
+when the number of line segments increases.
+
+<P>
+In either way, the user provide a function which gives new configurations
+to the objects to be drawn and generates drawing on <TT>*viewer*</TT>.
+<B>pixmap-animation</B> calls this function as many times as
+specified by the <EM>count</EM> argument.
+After each call, the content of <TT>*viewsurface*</TT>, which is assumed to
+be an xwindow, is copied to a newly created Xwindow pixmap.
+These pixmaps are played back by <B>playback-pixmaps</B>.
+Similarly, <B>hid-lines-animation</B> extracts visible line segments
+from the result of <B>hid</B>, and accumulates them in a list.
+The list is then played back by <B>playback-hid-lines</B>.
+
+<P>
+Following functions are defined in <TT>llib/animation.l</TT>, and
+<TT>demo/animdemo.l</TT> contains a sample animation program
+using <B>hid-lines-animation</B> on the ETA3 manipulator model.
+
+<P>
+
+ <BR>
+<BR> <A NAME="36614"></A>
+<B>pixmap-animation</B> <EM>count &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM> are evaluated <EM>count</EM> times.
+After each evaluation, the content of <TT>*viewsurface*</TT> is copied 
+in a new pixmap. A list of <EM>count</EM> pixmaps is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36628"></A>
+<B>playback-pixmaps</B> <EM>pixmaps &amp;optional (surf *viewsurface*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Each pixmap in the <EM>pixmaps</EM> list is copied to <EM>surf</EM> successively.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36640"></A>
+<B>hid-lines-animation</B> <EM>count &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>, which are assumed to include call(s) to <B>hid</B>,
+are evaluated <EM>count</EM> times.
+After each evaluation, 
+the result of <B>hid</B> held in <B>*hid*</B> is scanned and visible segments
+are collected in a list of point pairs.
+A list of length <EM>count</EM> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36656"></A>
+<B>playback-hid-lines</B> <EM>lines &amp;optional (view *viewer*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>lines</EM> is a list of lists of point pairs.
+draws lines successively on <EM>view</EM>.
+Double buffering technique allocating another pixmap 
+is used to generate flicker-free animation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36668"></A>
+<B>list-visible-segments</B> <EM>hid-result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+collects visible segments from the list of edge-images <EM>hid-result</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2459"
+  HREF="manual-node136.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2453"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2449"
+  HREF="manual-node134.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2455"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2457"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2460"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Up:</B> <A NAME="tex2html2454"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2450"
+  HREF="manual-node134.html">Drawings</A>
+ &nbsp; <B>  <A NAME="tex2html2456"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2458"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

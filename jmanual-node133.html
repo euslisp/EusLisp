@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Graphic Context</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Graphic Context">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node134.html">
+<LINK REL="previous" HREF="jmanual-node132.html">
+<LINK REL="up" HREF="jmanual-node130.html">
+<LINK REL="next" HREF="jmanual-node134.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2398"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2392"
+  HREF="jmanual-node130.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2386"
+  HREF="jmanual-node132.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2394"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2396"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2399"
+  HREF="jmanual-node134.html">色とカラーマップ</A>
+<B> Up:</B> <A NAME="tex2html2393"
+  HREF="jmanual-node130.html">Xwindow インターフェース</A>
+<B> Previous:</B> <A NAME="tex2html2387"
+  HREF="jmanual-node132.html">Xwindow</A>
+ &nbsp; <B>  <A NAME="tex2html2395"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2397"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04063000000000000000">
+Graphic Context</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="41166"></A>
+<BIG CLASS="XLARGE"><B>gcontext </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>Xobject</B> 
+<BR>  :slots 		 (gcid GCValues) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>graphic context(GC)を定義する。
+Euslispの中で、全てのwindowはデフォルトGCを持っている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41183"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img77.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\&amp;key \= (:drawable defaultRootWindow) \\lq  [�...
+...th :line-style :cap-style :join-style \\
+\&gt; :font :dash \\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>与えられた属性でGCを作成する。
+<EM>drawable</EM>は、画面と画面の深さを知るためにXserverにより使用される。
+結果のGCは、同じ画面上で作成される限り、
+どのdrawableでも使用できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41195"></A>
+<B>:gc</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> XのGC IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41205"></A>
+<B>:free</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>GC</B>を開放する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41216"></A>
+<B>:copy</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>GC</B>のコピーを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41227"></A>
+<B>:foreground</B> <EM>&amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> もし、<EM>color</EM>が与えられたならば、
+文字色に<EM>color</EM>を設定する。<EM>color</EM>はピクセル値である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41240"></A>
+<B>:background</B> <EM>&amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> もし、<EM>color</EM>が与えられたならば、
+背景色に<EM>color</EM>を設定する。<EM>color</EM>はピクセル値である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41253"></A>
+<B>:foreback</B> <EM>fore back </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 一度に文字色と背景色を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41263"></A>
+<B>:planemask</B> <EM>&amp;optional plane-mask </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> plane-maskを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41273"></A>
+<B>:function</B> <EM>x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 描画機能を設定する。
+<EM>x</EM>は、以下に示す数字かキーワードの内の1つである。
+<TT>0=Clear, 1=And, 2=AndReverse, 3=Copy, 4=AndInverted, 5=NoOp, 6=Xor, 7=Or,
+8=Nor, 9=Equiv, 10=Invert,
+<BR>
+11=XorReverse, 12=CopyInverted, 13=OrInverted,
+14=Nand, 15=Set, :clear, :and,
+<BR>:andReverse, :copy, :andInverted,
+:NoOp, :Xor, :Or, :Nor, :Equiv, :Invert, :XorReverse,
+<BR>:CopyInverted,
+:OrInverted, :Nand, :Set</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41285"></A>
+<B>:font</B> <EM>x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このGCのフォント属性を設定する。
+<EM>x</EM>は、フォント名あるいはフォントIDである。
+もし、<EM>x</EM>がフォント名（文字列）であったならば、<B>:font</B>は
+フォントIDを決めるために<B>x:LoadQueryFont</B>を呼び出す。
+もし、見つからなかった場合、<TT>"no such font ..."</TT>が警告される。
+もし、<EM>x</EM>がNIL（与えられなかった）ならば、このGCの現在の
+フォントIDが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41301"></A>
+<B>:line-width</B> <EM>x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 線幅をピクセル数<EM>x</EM>で設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41312"></A>
+<B>:line-style</B> <EM>x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 線スタイル(実線、点線など)を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41322"></A>
+<B>:dash</B> <EM>&amp;rest x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>x</EM>のそれぞれの要素は、整数である。
+<B>:dash</B>は、線スタイルの点線パターンを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41334"></A>
+<B>:tile</B> <EM>pixmap </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>pixmap</EM>をこのGCのタイルパターンに設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41345"></A>
+<B>:stipple</B> <EM>pixmap </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>pixmap</EM>をこのGCの点画に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41356"></A>
+<B>:get-attribute</B> <EM>attr </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 属性値を得る。
+<EM>attr</EM>は、<TT>:function, :plane-mask, :foreground,
+:background, :line-width, :line-style, :cap-style, :join-style,
+:fill-style, :fill-rule, :font</TT>の内の１つである。
+属性値を表す整数が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41368"></A>
+<BR>
+<IMG
+ WIDTH="558" HEIGHT="35" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img78.png"
+ ALT="\begin{emtabbing}
+{\bf :change-attributes}
+\it\&amp;key \= :function :plane-mask :f...
+...\&gt;:line-width :line-style :cap-style :join-style :font :dash
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>属性値を変更する。
+同時に複数の属性値を変更できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41379"></A>
+<B>font-id</B> <EM>fontname </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>fontname</EM>が整数であるなら、フォントIDとみなしてその値を返す。
+もし、<EM>fontname</EM>が文字列であるなら、<B>x:LoadQueryFont</B>を使用して
+フォント構造を得て、そのフォントIDを返す。
+<EM>fontname</EM>は、正確な名前の略語でも良い。例えば、
+24ポイントのクーリエフォントとして<TT>"*-courier-24-*"</TT>を指定できる。
+もし、フォントが見つからなければ、<TT>can't load font</TT>の警告を
+出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41395"></A>
+<B>textdots</B> <EM>str font-id </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>文字列のascent descent widthをドット単位に示す3つの整数のリストを
+返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2398"
+  HREF="jmanual-node134.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2392"
+  HREF="jmanual-node130.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2386"
+  HREF="jmanual-node132.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2394"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2396"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2399"
+  HREF="jmanual-node134.html">色とカラーマップ</A>
+<B> Up:</B> <A NAME="tex2html2393"
+  HREF="jmanual-node130.html">Xwindow インターフェース</A>
+<B> Previous:</B> <A NAME="tex2html2387"
+  HREF="jmanual-node132.html">Xwindow</A>
+ &nbsp; <B>  <A NAME="tex2html2395"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2397"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

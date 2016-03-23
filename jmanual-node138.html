@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>サブパネル(メニューとメニューバー)</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="サブパネル(メニューとメニューバー)">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node139.html">
+<LINK REL="previous" HREF="jmanual-node137.html">
+<LINK REL="up" HREF="jmanual-node137.html">
+<LINK REL="next" HREF="jmanual-node139.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2477"
+  HREF="jmanual-node139.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2471"
+  HREF="jmanual-node137.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2465"
+  HREF="jmanual-node137.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2473"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2475"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2478"
+  HREF="jmanual-node139.html">ファイルパネル</A>
+<B> Up:</B> <A NAME="tex2html2472"
+  HREF="jmanual-node137.html">パネル</A>
+<B> Previous:</B> <A NAME="tex2html2466"
+  HREF="jmanual-node137.html">パネル</A>
+ &nbsp; <B>  <A NAME="tex2html2474"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2476"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04072100000000000000">
+サブパネル(メニューとメニューバー)</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="44862"></A>
+<BIG CLASS="XLARGE"><B>menu-panel </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel</B> 
+<BR>  :slots 		  (items item-dots item-height
+<BR>
+charwidth charheight
+<BR>
+height-offset
+<BR>
+highlight-item
+<BR>
+color-pixels
+<BR>
+active-color) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>menu-panel</B>は、<TT>panel-button</TT>と<TT>menu-item</TT>のみを
+含むことができるパネルの一種である。
+<TT>panel</TT>と異なり、<TT>menu-panel</TT>はふつう見えないし、
+<TT>menu-panel</TT>と関連した<TT>button-item</TT>が押された時に
+表示される。
+もし、menu-panelがいつも見えるように作られたならば、
+ピンを刺したメニューとなる。
+マウスイベントに対するmenu-itemの応答は、アイテムの外のどこかで
+押されたマウスボタンのようにふつうのmenu-buttonと
+全く異なっている。
+<TT>menu-panel</TT>を使用するためには、最初に作成し、
+その中にbutton-itemを置く。
+それから、<TT>menu-button-item</TT>がpanelの中あるいはmenubarの中に
+<EM>:menu</EM>の引数として<TT>menu-panel</TT>と一緒に作成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44890"></A>
+<BR>
+<IMG
+ WIDTH="659" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img86.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\&amp;rest args \= \&amp;key\= (:items) (:border-wid...
+...bisque1*)
+(:active *bisque2*) \\
+\&gt;\&amp;allow-other-keys)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>menu-panel</B> windowを作成する。
+そのwindowの大きさは、新しいmenu-itemが追加される時に
+拡張される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44902"></A>
+<B>:add-item</B> <EM>label name &amp;optional (receiver self)  &amp;rest mesg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>menu-panel</B> windowの中にmenuアイテムを追加し、
+対応する行動を張り付ける。
+マウスボタンがアイテムの上で外されたとき、
+<EM>receiver</EM>オブジェクトは<EM>mesg</EM>を受け取る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="44916"></A>
+<BIG CLASS="XLARGE"><B>menubar-panel </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>menubar-panel</TT>は、親panelの最上部にいつも置かれるサブパネルである。
+メニューバーに置かれるパネルアイテムは、<TT>menu-button-item</TT>で
+なければならない。
+menubar-panelは、panelの<TT>:create-menubar</TT>メソッドにより
+生成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

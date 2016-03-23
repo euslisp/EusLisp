@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>ダンプオブジェクト</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="ダンプオブジェクト">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node71.html">
+<LINK REL="previous" HREF="jmanual-node69.html">
+<LINK REL="up" HREF="jmanual-node64.html">
+<LINK REL="next" HREF="jmanual-node71.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1381"
+  HREF="jmanual-node71.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1375"
+  HREF="jmanual-node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1369"
+  HREF="jmanual-node69.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1377"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1379"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1382"
+  HREF="jmanual-node71.html">プロセスイメージ保存</A>
+<B> Up:</B> <A NAME="tex2html1376"
+  HREF="jmanual-node64.html">評価</A>
+<B> Previous:</B> <A NAME="tex2html1370"
+  HREF="jmanual-node69.html">デバッグ補助</A>
+ &nbsp; <B>  <A NAME="tex2html1378"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1380"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03096000000000000000">
+ダンプオブジェクト</A>
+</H2>
+EusLispのリーダとプリンタは、どのようなオブジェクトも再読みだし可能な書式
+でファイルに出力できるように設計されている。
+オブジェクトは相互参照あるいは再帰参照を持っていてもよい。
+<TT>*print-circle*</TT>と<TT>*print-object*</TT>にTを設定したとき、この特徴は
+は可能となる。
+次の関数はこれらの変数をTにし、ファイルをオープンし、オブジェクトを表示する。
+これらの関数のもっとも重要な用途は、相互参照を持つ3Dモデルの
+構造体をダンプすることである。
+
+<P>
+
+ <BR>
+<BR> <A NAME="19009"></A>
+<B>dump-object</B> <EM>file &amp;rest objects </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="19020"></A>
+<B>dump-structure</B> <EM>file &amp;rest objects </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+再び読み戻しができるような書式で<EM>file</EM>に<EM>objects</EM>をダンプする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19032"></A>
+<B>dump-loadable-structure</B> <EM>file &amp;rest symbols </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>にバインドされたオブジェクトを<EM>file</EM>にダンプする。
+その<EM>file</EM>は簡単にロードすることによって読み戻すことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+<PRE>
+(setq a (make-cube 1 2 3))
+
+;; sample for dump-object
+(dump-object "a-cube.l" a)
+(with-open-file
+  (f "a-cube.l" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-structure
+(dump-structure "a-cube.l" a)
+(with-open-file
+  (f "a-cube.l" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-loadable-structure
+(dump-loadable-structure "a-cube.l" a)
+(load "a-cube.l")
+(print a)
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

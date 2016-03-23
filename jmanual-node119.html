@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>bodyの合成関数</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="bodyの合成関数">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node120.html">
+<LINK REL="previous" HREF="jmanual-node118.html">
+<LINK REL="up" HREF="jmanual-node113.html">
+<LINK REL="next" HREF="jmanual-node120.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2196"
+  HREF="jmanual-node120.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2190"
+  HREF="jmanual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2184"
+  HREF="jmanual-node118.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2192"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2194"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2197"
+  HREF="jmanual-node120.html">座標軸</A>
+<B> Up:</B> <A NAME="tex2html2191"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2185"
+  HREF="jmanual-node118.html">基本bodyの作成関数</A>
+ &nbsp; <B>  <A NAME="tex2html2193"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2195"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04046000000000000000"></A><A NAME="BodyComposition"></A>
+<BR>
+bodyの合成関数
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="32994"></A>
+<B>face+</B> <EM>face1 face2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="33005"></A>
+<B>face*</B> <EM>face1 face2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>face1</EM>と<EM>face2</EM>は，3次元上で共通平面上にある。
+<B>face+</B>は，これらの面の結合を構築し，面のオブジェクトとして返す。
+もし，交差領域がないなら，元の2つの面が返される。
+<B>face*</B>は，これらの面の交差領域を返す。もし，交差領域がなければ，NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33019"></A>
+<B>cut-body</B> <EM>body cutting-plane </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>body</EM>を<EM>cutting-plane</EM>で切断し，その切断面に作られる面のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33031"></A>
+<B>body+</B> <EM>body1 body2 &amp;rest more-bodies </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="33042"></A>
+<B>body-</B> <EM>body1 body2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="33053"></A>
+<B>body*</B> <EM>body1 body2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つあるいはそれ以上の<B>body</B>の和，差あるいは積を計算する。
+それぞれのbodyは，<B>body+, body-, body*</B>の処理を行う前に
+コピーされ，元のbodyは変更されない。
+その結果のbodyの新しい座標系の位置・姿勢は，ワールド座標系のものと一致している。
+もし，しきい値パラメータ<TT>*coplanar-threshold*</TT>,<TT>*contact-threshold*</TT>,<TT>*parallel-threshold*</TT>
+を正確に設定するなら，2つの<B>body</B>が面同士で接触している場合でも
+これらの関数は正しく働くであろう。
+しかしながら，もし<B>body</B>の頂点が他の<B>body</B>の頂点あるいは面に接触している場合，
+どの処理も失敗する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33071"></A>
+<B>body/</B> <EM>body plane </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>make-plane</B>で作られた<B>plane</B>クラスのインスタンスである<EM>plane</EM>で
+<EM>body</EM>を切断する。新しく作られた<B>body</B>が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33086"></A>
+<B>body-interference</B> <EM>&amp;rest bodies </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>bodies</EM>の中で1対1の組み合わせにおける干渉をチェックし，
+交差している2つの<B>body</B>のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

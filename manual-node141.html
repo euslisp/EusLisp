@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Tracking</TITLE>
+<META NAME="description" CONTENT="Tracking">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node142.html">
+<LINK REL="previous" HREF="manual-node140.html">
+<LINK REL="up" HREF="manual-node136.html">
+<LINK REL="next" HREF="manual-node142.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2550"
+  HREF="manual-node142.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2544"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2538"
+  HREF="manual-node140.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2546"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2548"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2551"
+  HREF="manual-node142.html">Image File I/O</A>
+<B> Up:</B> <A NAME="tex2html2545"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2539"
+  HREF="manual-node140.html">Edge Finder</A>
+ &nbsp; <B>  <A NAME="tex2html2547"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2549"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04065000000000000000"></A><A NAME="tracking"></A>
+<BR>
+Tracking
+</H2>
+<TT>"vision/correlation"</TT> defines functions to find
+correlation between window-image and tracking-image.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="39462"></A>
+<BIG CLASS="XLARGE"><B>tracking-window </B></BIG> [class]  <PRE><TT>
+  :super   <B>pixel-image</B> 
+<BR>  :slots 		 x-pos y-pos x-vel y-vel
+<BR>
+pattern-size window-size
+<BR>
+x-win y-win window window-margin
+<BR>
+update threshold half-pattern correlation 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>This class defines tracking window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39479"></A>
+<B>:correlation</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns correlation between window-image and this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39489"></A>
+<B>:grab</B> <EM>&amp;optional (x x-pos) (y y-pos) (sampling 2) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+grabs video image and returns grabbed pixel-image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39499"></A>
+<B>:window-rectangle</B> <EM>val </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws rectangle on xwindow.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39509"></A>
+<B>:rectangle</B> <EM>val </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws rectangle on xwindow.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39519"></A>
+<B>:move</B> <EM>newpos &amp;aux (newx (aref newpos 0)) (newy (aref newpos 1)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves tracking-window to <EM>newpos</EM> and grabs video image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39530"></A>
+<B>:track</B> <EM>display-window &amp;optional th </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+tracks this image from window image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39540"></A>
+<B>:search</B> <EM>display-window &amp;optional th </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+searches this image from window image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39550"></A>
+<B>:track-and-search</B> <EM>flag &amp;optional th </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+tracks this image. If mistake tracking, searches this image from window image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39560"></A>
+<B>:pos</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns up-left position of window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39570"></A>
+<B>:vel</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns tracking velocity.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39580"></A>
+<B>:insidep</B> <EM>pos &amp;aux (x (aref pos 0)) (y (aref pos 1)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks <EM>pos</EM> that is contained with tracking window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39591"></A>
+<B>:update</B> <EM>&amp;optional (flag :get) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <EM>flag</EM> as update. if flag doesn't exist, returns update.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39602"></A>
+<B>:prin1</B> <EM>strm &amp;rest mesg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints this tracking-window object with its name and dimensions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39612"></A>
+<B>:init</B> <EM>x y size win-size </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates tracking-window object and sets slots.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2550"
+  HREF="manual-node142.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2544"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2538"
+  HREF="manual-node140.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2546"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2548"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2551"
+  HREF="manual-node142.html">Image File I/O</A>
+<B> Up:</B> <A NAME="tex2html2545"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2539"
+  HREF="manual-node140.html">Edge Finder</A>
+ &nbsp; <B>  <A NAME="tex2html2547"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2549"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

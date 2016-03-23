@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Viewing</TITLE>
+<META NAME="description" CONTENT="Viewing">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node131.html">
+<LINK REL="previous" HREF="manual-node129.html">
+<LINK REL="up" HREF="manual-node129.html">
+<LINK REL="next" HREF="manual-node131.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2391"
+  HREF="manual-node131.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2385"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2379"
+  HREF="manual-node129.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2387"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2389"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2392"
+  HREF="manual-node131.html">Projection</A>
+<B> Up:</B> <A NAME="tex2html2386"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2380"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+ &nbsp; <B>  <A NAME="tex2html2388"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2390"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04051000000000000000">
+Viewing</A>
+</H2>
+A viewing object manages viewing coordinate system
+whose origin is located at the position of a virtual camera,
+<EM>-z</EM> axis is oriented to the objects observed, and xy-plane is the
+projection screen.
+Since viewing inherits class cascaded-coords,
+it accepts coordinates transformation message
+such as <B>:translate, :rotate</B> and <B>:transform</B>.
+Also, it can be attached to another object derived from cascaded-coords,
+allowing the simulation of the camera-on-mobile-object system.
+The main purpose of viewing is to transform vectors represented in the world
+to the camera coordinates system.
+The transformation is taken in the opposite direction against usual coordinate
+transformation where vectors in the local coordinates are transformed into the
+representation in the world.
+Therefore, viewing holds the inversed left-handed transformation in
+the viewcoords slot, which is usually referred as the viewing coordinate system.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="35100"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 13:</STRONG>
+viewing coords and projection planes</CAPTION>
+<TR><TD><IMG
+ WIDTH="583" HEIGHT="395" BORDER="0"
+ SRC="manual-img80.png"
+ ALT="\begin{figure}\begin{center}
+\mbox{\epsfsize10cm
+\epsfbox{fig/viewcoords.ps}
+}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="35584"></A>
+<BIG CLASS="XLARGE"><B>viewing </B></BIG> [class]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (viewcoords) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines the viewing transformation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35601"></A>
+<B>:viewpoint</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the position vector of the origin of this viewing.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35611"></A>
+<B>:view-direction</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the vector from the origin of the viewing to the center of screen.
+This is the z-axis direction of the viewing coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35621"></A>
+<B>:view-up</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns y-axis vector of this viewing represented in the world coords.
+Y-axis is the upward direction in the viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35631"></A>
+<B>:view-right</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns x-axis vector of this viewing represented in the world coords.
+X-axis is in horizontal direction to the right in the viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35641"></A>
+<B>:look</B> <EM>from &amp;optional (to #f(0 0 0)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:look</B> conveniently sets the viewing coords as the eye is located
+at <EM>from</EM> and looking at <EM>to</EM> point.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35654"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img81.png"
+ ALT="\begin{emtabbing}
+{\bf :init}
+\it
+\&amp;key \= :target \hspace{12mm} \= \char93 f(0...
+... 1.0)) \\
+\&gt; :view-right \&gt; nil \\
+\&gt; \&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>Since viewing inherits cascaded-coords, all the <EM>:init</EM> parameters
+such as <EM>:pos</EM>, <EM>:rot</EM>, <EM>:Euler</EM>, <EM>:rpy</EM>, etc. can be
+used to specify the location and the orientation of the viewing coordinates.
+However, viewing's <EM>:init</EM> provides easier way to determine the
+rotation.
+If only <EM>:target</EM> is given, view-line (-z axis) is determined to
+pass the viewpoint and <EM>:target</EM> point, and the <EM>:view-right</EM>
+vector is determined so that the x-axis is parallel to the xy-plane of the
+world coordinates.
+You may specify <EM>:view-direction</EM> instead of <EM>:target</EM> to get the
+same effect.
+If you give <EM>:view-up</EM> or <EM>:view-right</EM> parameter in addition to
+<EM>:target</EM> or <EM>:view-direction</EM>,
+you can determine all the three rotation parameters by yourself.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2391"
+  HREF="manual-node131.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2385"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2379"
+  HREF="manual-node129.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2387"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2389"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2392"
+  HREF="manual-node131.html">Projection</A>
+<B> Up:</B> <A NAME="tex2html2386"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2380"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+ &nbsp; <B>  <A NAME="tex2html2388"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2390"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

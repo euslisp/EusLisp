@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Thread creation</TITLE>
+<META NAME="description" CONTENT="Thread creation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node112.html">
+<LINK REL="previous" HREF="manual-node110.html">
+<LINK REL="up" HREF="manual-node98.html">
+<LINK REL="next" HREF="manual-node112.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2111"
+  HREF="manual-node112.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2105"
+  HREF="manual-node98.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2099"
+  HREF="manual-node110.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2107"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2109"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2112"
+  HREF="manual-node112.html">Synchronization</A>
+<B> Up:</B> <A NAME="tex2html2106"
+  HREF="manual-node98.html">Multithread</A>
+<B> Previous:</B> <A NAME="tex2html2100"
+  HREF="manual-node110.html">Measured Parallel Gains</A>
+ &nbsp; <B>  <A NAME="tex2html2108"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2110"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04024000000000000000">
+Thread creation</A>
+</H2>
+A thread is a unit for assigning computation, usually evaluation
+of a lisp form.
+Threads in EusLisp are represented by instances of
+the <B>thread</B> class.
+This object is actually a control port of a thread 
+to pass arguments and result, and let it start evaluation,
+rather than the thread's entity representing the context.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="25698"></A>
+<B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates <EM>num</EM> threads with <EM>lsize</EM> words of Lisp stack
+and <EM>csize</EM> words of C stack, and put them in the system's
+thread pool.
+All the threads in the thread pool is bound to sys:*threads*,
+which is extended each time <B>make-thread</B> is called.
+By the <B>thread</B> function, a computation is assigned to one
+of free threads in the thread pool.
+Therefore it is not a good idea to change stack sizes
+from thread to thread,
+since you cannot control which thread is assigned to a specific
+computation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25713"></A>
+<B>sys:*threads*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of all the threads created by <B>make-threads</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25724"></A>
+<B>sys::free-threads</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of threads in the
+free thread pool.
+If the result is NIL, new commitment of a task to a thread
+is blocked until any currently running threads finish evaluation
+or new threads are created by <B>make-thread</B> in the free thread pool.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25735"></A>
+<B>sys:thread</B> <EM>func &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+picks up one free thread from the thread pool, and assigns it
+for evaluation of <EM>(func . args)</EM>.
+<B>Sys:thread</B> can be regarded as asynchronous <B>funcall</B>,
+since <B>sys:thread</B> applies <EM>func</EM> to the spread list
+of <EM>args</EM> but it does not accept the result of the
+function application.
+Rather, <B>sys:thread</B> returns the thread object assigned to
+the funcall, so that the real result can be obtained later
+by <B>sys:wait-thread</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+(defun compute-pi (digits) ...)
+(setq trd (sys:thread \#'compute-pi 1000)) ;assign compute-pi to a thread
+...  ;; other computation 
+(sys:wait-thread trd) ;get the result of (compute-pi 1000)
+</PRE>
+
+<P>
+
+<A NAME="25753"></A>
+<B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+assigns computation to one of free threads.
+The thread is reclaimed in the free thread pool when
+it finishes evaluation without being <B>wait-thread</B>'ed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25764"></A>
+<B>sys:wait-thread</B> <EM>thread </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+waits for <EM>thread</EM> to finish evaluation of funcall given
+by the <B>sys:thread</B> function, and retrieves the result
+and returns it.
+<B>Sys:wait-thread</B> is mandatory if the thread is assigned
+evaluation by <B>sys:thread</B> because the thread is not returned
+to the free thread pool until it finishes transferring the result.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25778"></A>
+<B>sys:plist</B> <EM>&amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> evaluates <EM>forms</EM> by different
+threads in parallel and waits for the completion of all evaluation,
+and the list of results is returned.
+<B>Sys:plist</B> may be regarded as <EM>parallel-list</EM> except that
+each form listed must be a function call.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2111"
+  HREF="manual-node112.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2105"
+  HREF="manual-node98.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2099"
+  HREF="manual-node110.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2107"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2109"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2112"
+  HREF="manual-node112.html">Synchronization</A>
+<B> Up:</B> <A NAME="tex2html2106"
+  HREF="manual-node98.html">Multithread</A>
+<B> Previous:</B> <A NAME="tex2html2100"
+  HREF="manual-node110.html">Measured Parallel Gains</A>
+ &nbsp; <B>  <A NAME="tex2html2108"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2110"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

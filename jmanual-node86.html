@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>UNIXプロセス</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="UNIXプロセス">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node87.html">
+<LINK REL="previous" HREF="jmanual-node77.html">
+<LINK REL="up" HREF="jmanual-node75.html">
+<LINK REL="next" HREF="jmanual-node87.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1707"
+  HREF="jmanual-node87.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1701"
+  HREF="jmanual-node75.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1695"
+  HREF="jmanual-node85.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1703"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1705"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1708"
+  HREF="jmanual-node87.html">Ｃで書かれたLisp関数の追加</A>
+<B> Up:</B> <A NAME="tex2html1702"
+  HREF="jmanual-node75.html">システム関数</A>
+<B> Previous:</B> <A NAME="tex2html1696"
+  HREF="jmanual-node85.html">キーインデックスファイル</A>
+ &nbsp; <B>  <A NAME="tex2html1704"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1706"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04013000000000000000"></A><A NAME="UnixProcess"></A>
+<BR>
+UNIXプロセス
+</H2>
+EuslispからUNIX命令を実行ために<B>unix:system</B>関数を使用すること。
+<B>piped-fork</B>は、標準出力を標準入力がパイプを通してEuslispの双方向ストリームに
+接続されるサブプロセスを作成する。
+<B>piped-fork</B>はストリームを返す。
+以下に示す関数は、<TT>"wc"</TT>を使用することにより、ファイルに含まれる行の数を
+数えるものである。
+<PRE>
+(defun count-lines (file) (read (piped-fork "wc" file)))
+</PRE>
+
+<P>
+次の例は、他のワークステーション"etlic0"の上にeusプロセスを作成し、
+分散計算をするためのポートを提供する。
+
+<P>
+<PRE>
+(setq ic0eus (piped-fork "rsh" "etlic0" "eus"))
+(format ic0eus "(list 1 2 3)~%")
+(read ic0eus) --&gt; (1 2 3)
+</PRE>
+
+<P>
+ソースコードを修正するために、Euslispから<TT>ez</TT>を呼び出すことができる。
+スクリーンエディターezは、メッセージキューを通してEuslispと接続する。
+もし、既にezプロセスをEuslispと並列に実行しているならば、
+<B>ez</B>はezプロセスを再スタートし、ターミナル制御を得る。
+ezの中で<TT>esc-P</TT>あるいは<TT>esc-M</TT>命令を発行することにより、
+テキストは戻され、Euslispで評価される。
+ファイルに少しの変更を加えたとき、全部のファイルをロードする必要がないので、
+デバッグするのにこれは便利である。
+emacsの上でも<TT>M-X run-lisp</TT>命令でおなじことが可能である。
+
+<P>
+
+ <BR>
+<BR> <A NAME="22778"></A>
+<B>cd</B> <EM>&amp;optional (dir (unix:getenv "HOME")) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+現在のディレクトリを変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22788"></A>
+<B>ez</B> <EM>&amp;optional key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ezエディターの画面に入る。それからLisp書式を読み込み、
+評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22798"></A>
+<B>piped-fork</B> <EM>&amp;optional (exec) &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+プロセスをforkし、両方向ストリームをEuslispとサブプロセスの間に作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22808"></A>
+<B>rusage</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> このプロセスのリソースの使用状況を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,312 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Look-Up Tables (LUT)</TITLE>
+<META NAME="description" CONTENT="Look-Up Tables (LUT)">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node138.html">
+<LINK REL="previous" HREF="manual-node136.html">
+<LINK REL="up" HREF="manual-node136.html">
+<LINK REL="next" HREF="manual-node138.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2494"
+  HREF="manual-node138.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2488"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2482"
+  HREF="manual-node136.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2490"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2492"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2495"
+  HREF="manual-node138.html">Pixel-Image</A>
+<B> Up:</B> <A NAME="tex2html2489"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2483"
+  HREF="manual-node136.html">Image Processing</A>
+ &nbsp; <B>  <A NAME="tex2html2491"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2493"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04061000000000000000">
+Look-Up Tables (LUT)</A>
+</H2>
+An LUT is a vector for the translation of pixel data.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="38413"></A>
+<B>make-equilevel-lut</B> <EM>levels &amp;optional (size 256) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a one-dimensional integer-vector that linearly maps values between
+0 and <EM>size</EM> into values between 0 and <EM>levels</EM>.
+For example, <TT>(make-equilevel-lut 3 12)</TT> returns
+<TT>#i(0 0 0 0 1 1 1 1 2 2 2 2)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38427"></A>
+<B>look-up</B> <EM>src dest lut </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates values stored in <EM>src</EM> vector into <EM>dest</EM> vector
+using <EM>lut</EM>. If <EM>dest</EM> is nil, a vector of the same class and
+size as <EM>src</EM> is created.
+For example, <TT>(look-up #i(1 2 3) nil #(10 20 30 40 50))</TT>
+returns <TT>#i(20 30 40)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38444"></A>
+<B>look-up2</B> <EM>src dest lut1 lut2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Src</EM> and <EM>dest</EM> are integer-vector or byte-vector (string) of the same
+size.
+<TT>:Look-up2</TT> translates <EM>src</EM> into <EM>dest</EM> looking-up <EM>lut1</EM> and <EM>lut2</EM>
+successively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38461"></A>
+<B>look-up*</B> <EM>src dest luts </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>luts</EM> is a list of look-up tables.
+<EM>src</EM> is translated into <EM>dest</EM> successively looking up look-up tables
+given in <EM>luts</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38475"></A>
+<B>concatenate-lut</B> <EM>lut1 lut2 &amp;optional (size 256) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+concatenates two look-up tables <EM>lut1</EM> and <EM>lut2</EM>,
+and returns a new look-up table which performs the same translation
+as <EM>lut1</EM> and <EM>lut2</EM> are looked-up successively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38489"></A>
+<B>*x-gray32-lut*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> LUT to translate 32-level gray-scale into
+the pixel values in the default color map <TT>x:*colormap*</TT>.
+<TT>(aref *x-gray32-lut* n)</TT> returns the pixel value for nth gray-level
+out of 32 levels.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38501"></A>
+<B>*x-gray16-lut*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> LUT to translate 16-level gray-scale pixel
+into the index of x's default color map  <TT>x:*colormap*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38512"></A>
+<B>*x-color-lut*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> LUT for several vivid colors defined in 
+<TT>x:*color-map*</TT>.
+Registered colors are "black", "red", "green", "lightblue", "yellow",
+"orange", "blue", "magenta", "white".
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38523"></A>
+<B>*256to8*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate integers in range of 0..255
+into 0..7. The levels are linearly mapped.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38533"></A>
+<B>*256to16*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate integers in range of 0..255
+into 0..15. The levels are linearly mapped.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38543"></A>
+<B>*256to32*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate integers in range of 0..255
+into 0..31. The levels are linearly mapped.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38553"></A>
+<B>*gray32*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate the raw gray-scale pixels 
+into X's color map indices.
+This is made by concatenating two LUTs, <TT>*256to32*</TT> and
+<TT>*x-gray32-lut*</TT>.
+An Xwindow display-able pixel-image with 32 gray-levels 
+can be obtained by translating
+the 256-level raw image by <B>*gray32*</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38566"></A>
+<B>*rainbow32*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate 256-level
+hue values into into X's rainbow color map indices.
+This is made by concatenating two LUTs, <TT>*256to32*</TT> and
+<TT>*x-rainbow32-lut*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2494"
+  HREF="manual-node138.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2488"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2482"
+  HREF="manual-node136.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2490"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2492"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2495"
+  HREF="manual-node138.html">Pixel-Image</A>
+<B> Up:</B> <A NAME="tex2html2489"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2483"
+  HREF="manual-node136.html">Image Processing</A>
+ &nbsp; <B>  <A NAME="tex2html2491"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2493"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

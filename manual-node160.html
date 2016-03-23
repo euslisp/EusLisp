@@ -1,0 +1,826 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Text Window</TITLE>
+<META NAME="description" CONTENT="Text Window">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node159.html">
+<LINK REL="up" HREF="manual-node152.html">
+<LINK REL="next" HREF="manual-node161.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2823"
+  HREF="manual-node161.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2817"
+  HREF="manual-node152.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2813"
+  HREF="manual-node159.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2819"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2821"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2824"
+  HREF="manual-node161.html">PostgreSQL Database</A>
+<B> Up:</B> <A NAME="tex2html2818"
+  HREF="manual-node152.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2814"
+  HREF="manual-node159.html">Canvas</A>
+ &nbsp; <B>  <A NAME="tex2html2820"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2822"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04095000000000000000">
+Text Window</A>
+</H2>
+
+<P>
+There are three textwindow classes, <TT>TextWindow</TT>, <TT>BufferTextWindow</TT>
+and <TT>ScrollTextWindow</TT>.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="48024"></A>
+<BIG CLASS="XLARGE"><B>textWindow </B></BIG> [class]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (fontid 
+<BR>
+charwidth charheight charascent dots 
+<BR>
+win-row-max win-col-max 
+<BR>
+win-row win-col   ;physical current position in window 
+<BR>
+x y
+<BR>
+charbuf 		; for charcode conversion 
+<BR>
+keybuf keycount 		 ;for key input
+<BR>
+echo 
+<BR>
+show-cursor cursor-on 		 ;boolean
+<BR>
+kill delete 		 ;control character 
+<BR>
+notify-object notify-method 
+<BR>) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>realizes virtual terminals usable for displaying messages.
+The displayed contents are not buffered and there is no way to retrieve
+a line or a character already displayed in the TextWindow.
+Basically, <TT>TextWindow</TT> has similar capabilities to the dumb terminals,
+that are, moving the cursor, erasing lines, erasing areas,
+scrolling displayed texts, inserting strings, etc.
+Also, the text cursor can be moved to the position designated by 
+the mouse pointer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48043"></A>
+<B>:init</B> <EM>id </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes <EM>id</EM>th text-window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48054"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img122.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\=\&amp;rest args \\lq  [method]\\
+\&gt;\&amp;key \=width...
+...tify-object nil) (notify-method nil)\\
+\&gt;\&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>creates text-window.
+The sizes of the window may be specified either by <EM>width</EM> and <EM>height</EM>
+or by <EM>rows</EM> and <EM>columns</EM>.
+<EM>Notify-object</EM>'s <EM>notify-method</EM> is invoked when a newline character
+is typed in.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48071"></A>
+<B>:cursor</B> <EM>flag </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The <EM>flag</EM> can either be <TT>:on, :off</TT> or <TT>:toggle</TT>.
+The text cursor is addressed by the <EM>win-row</EM> and <EM>win-col</EM>. 
+The text cursor is displayed if <EM>flag</EM> is <TT>:on</TT>,
+is erased if <EM>flag</EM> is <TT>:off</TT>,
+or is reversed if <EM>flag</EM> is <TT>:toggle</TT>.
+This method must be invoked frequently
+whenever the character at the cursor is updated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48092"></A>
+<B>:clear</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+clears text-window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48102"></A>
+<B>:clear-eol</B> <EM>&amp;optional (r win-row) (c win-col) (csr :on) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+clears the rest of the line after the character
+addressed by r and <EM>c</EM>, including the character at the cursor.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48114"></A>
+<B>:clear-lines</B> <EM>lines &amp;optional (r win-row) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+clears multiple lines after <EM>r</EM>-th row.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48125"></A>
+<B>:clear-eos</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+clears the region after the character addressed by <EM>r</EM> and <EM>c</EM>
+till the end-of-the-screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48137"></A>
+<B>:win-row-max</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the maximum number of lines
+displayable in this window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48147"></A>
+<B>:win-col-max</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the maximum number of columns
+displayable in this window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48157"></A>
+<B>:xy</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+calculates the pixel coordinates of the character 
+addressed by <EM>r</EM> and <EM>c</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48169"></A>
+<B>:goto</B> <EM>r c &amp;optional (cursor :on) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves the cursor to <EM>r</EM>-th row and <EM>c</EM>-th column.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48181"></A>
+<B>:goback</B> <EM>&amp;optional (csr :on) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves the cursor backward by one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48191"></A>
+<B>:advance</B> <EM>&amp;optional (n 1) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves the cursor forward by <EM>n</EM> characters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48202"></A>
+<B>:scroll</B> <EM>&amp;optional (n 1) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+scroll textwindow vertically by <EM>n</EM> lines.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48213"></A>
+<B>:horizontal-scroll</B> <EM>&amp;optional (n 1) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+horizontally scrolls the text by <EM>n</EM> columns.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48224"></A>
+<B>:newline</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves cursor to the beginning of the next line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48234"></A>
+<B>:putch</B> <EM>ch </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+inserts the character <EM>ch</EM> at the cursor position.
+The rest of the line is moved forward by one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48245"></A>
+<B>:putstring</B> <EM>str &amp;optional (e (length str)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+places <EM>str</EM> at the cursor position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48256"></A>
+<B>:event-row</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48266"></A>
+<B>:event-col</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the text cursor position designated by <SPAN CLASS="MATH"><IMG
+ WIDTH="41" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img100.png"
+ ALT="$(x, y)$"></SPAN> in the <EM>event</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48277"></A>
+<B>:KeyPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+inserts the character entered at the cursor position.
+If the character is newline, notification is sent to the <EM>notify-object</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48289"></A>
+<BIG CLASS="XLARGE"><B>textWindowStream </B></BIG> [class]  <PRE><TT>
+  :super   <B>stream</B> 
+<BR>  :slots 		 (textwin) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>TextWindowStream</TT> is an output stream connected to a TextWindow.
+Characters or strings output to this stream by using <TT>print, format,
+write-byte</TT>, etc., are displayed in the textwindow.
+As usual file streams, the output data are buffered.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48308"></A>
+<B>:flush</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+flushes buffered text string and send them to the textwindow.
+<TT>Finish-output</TT> or writing a newline character to this stream
+automatically calls this method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48319"></A>
+<B>make-text-window-stream</B> <EM>xwin </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes text-window-stream and returns the stream object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48330"></A>
+<BIG CLASS="XLARGE"><B>BufferTextWindow </B></BIG> [class]  <PRE><TT>
+  :super   <B>TextWindow</B> 
+<BR>  :slots 		 (linebuf expbuf max-line-length row col) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>maintains the line buffer representing the contents of the textwindow.
+Linebuf is the vector of lines. Expbuf holds tab-expanded text.
+Only lines displayable in the window are maintained.
+BufferTextWindows can be used as simple text editors
+which have several, often only one, lines of text.
+<TT>Text-item</TT> employs a BufferTextWindow as a displayable line buffer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48348"></A>
+<B>:line</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the contents of the <EM>n</EM>-th line as a
+string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48359"></A>
+<B>:nlines</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns number of lines in the linebuf.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48369"></A>
+<B>:all-lines</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the linebuf, which is a vector of strings.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48379"></A>
+<B>:refresh-line</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+redraws the <EM>r</EM>-th line after the <EM>c</EM>-th column.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48391"></A>
+<B>:refresh</B> <EM>&amp;optional (start 0) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+redraws the lines after the <EM>start</EM>-th line inclusively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48402"></A>
+<B>:insert-string</B> <EM>string </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+inserts <EM>string</EM> at the cursor position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48413"></A>
+<B>:insert</B> <EM>ch </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> inserts the character at the cursor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48423"></A>
+<B>:delete</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> deletes <EM>n</EM> characters after the cursor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48434"></A>
+<B>expand-tab</B> <EM>src &amp;optional (offset 0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Src</EM> is a string possibly containing tabs.
+These tabs are replaced by spaces assuming the tab stops at every 8th
+position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48446"></A>
+<BIG CLASS="XLARGE"><B>ScrollTextWindow </B></BIG> [class]  <PRE><TT>
+  :super   <B>BufferTextWindow</B> 
+<BR>  :slots 		 (top-row top-col   ;display-starting position 
+<BR>
+scroll-bar-window 
+<BR>
+horizontal-scroll-bar-window 
+<BR>
+selected-line) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>ScrollTextWindow</TT> defines buffertextwindow with unlimited number of lines,
+and vertical and horizontal scroll-bars can be attached.
+ScrollTextWindow can handle <TT>:configureNotify</TT> event to resize 
+itself and accompanying scroll-bar windows, and to redisplay texts.
+By clicking, a line can be selected.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48466"></A>
+<B>:create</B> <EM>&amp;rest args
+           &amp;key (scroll-bar nil)
+                (horizontal-scroll-bar nil)
+           &amp;allow-other-keys </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+When scroll-bars are needed, specify T to each keyword argument.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48476"></A>
+<B>:locate</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> displays the buffered text by placing the <EM>n</EM>-th
+line at the top of the window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48487"></A>
+<B>:display-selection</B> <EM>selection </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>Selection</EM> represents
+the location of the selected line. The entire seleced line is displayed
+highlighted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48498"></A>
+<B>:selection</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the selected line (string).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48508"></A>
+<B>:read-file</B> <EM>fname </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> reads the textfile specified by <EM>fname</EM>
+into the <EM>linebuf</EM>, expands tabs, and display in the window.
+The cursor is put at the beginning of the screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48520"></A>
+<B>:display-string</B> <EM>strings </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>Strings</EM> is a sequence
+of lines (strings). The <EM>strings</EM> are copied in the linebuf
+and displayed in the window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48532"></A>
+<B>:scroll</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> vertically scrolls <EM>n</EM> lines.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48543"></A>
+<B>:horizontal-scroll</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> horizontally scrolls <EM>n</EM> columns.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48554"></A>
+<B>:buttonRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The line where the mouse pointer is located is selected.
+If notification is specified when the window is created,
+<EM>notify-object</EM>'s <EM>notify-method</EM> is invoked.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48566"></A>
+<B>:resize</B> <EM>w h </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> changes the size of the window
+and redisplays the contents according to the new size.
+The same message is sent to scroll-bars if attached.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+ 
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2823"
+  HREF="manual-node161.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2817"
+  HREF="manual-node152.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2813"
+  HREF="manual-node159.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2819"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2821"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2824"
+  HREF="manual-node161.html">PostgreSQL Database</A>
+<B> Up:</B> <A NAME="tex2html2818"
+  HREF="manual-node152.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2814"
+  HREF="manual-node159.html">Canvas</A>
+ &nbsp; <B>  <A NAME="tex2html2820"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2822"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

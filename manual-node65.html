@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Shared Memory</TITLE>
+<META NAME="description" CONTENT="Shared Memory">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node66.html">
+<LINK REL="previous" HREF="manual-node64.html">
+<LINK REL="up" HREF="manual-node64.html">
+<LINK REL="next" HREF="manual-node66.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1347"
+  HREF="manual-node66.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1341"
+  HREF="manual-node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1335"
+  HREF="manual-node64.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1343"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1345"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1348"
+  HREF="manual-node66.html">Message Queues and FIFOs</A>
+<B> Up:</B> <A NAME="tex2html1342"
+  HREF="manual-node64.html">InterProcess Communication and Network</A>
+<B> Previous:</B> <A NAME="tex2html1336"
+  HREF="manual-node64.html">InterProcess Communication and Network</A>
+ &nbsp; <B>  <A NAME="tex2html1344"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1346"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION030104100000000000000">
+Shared Memory</A>
+</H3>
+EusLisp supports the shared memory provided by SunOS's mmap,
+not by System5's shmem.
+Shared memory is allocated by the <B>map-file</B> function.
+<B>Map-file</B> maps a file into the EusLisp process memory space
+and an instance of <B>foreign-string</B> is returned.
+Data can be written and retrieved using string functions on this
+foreign-string.
+Since shared memory is allocated at system-dependent page boundary, 
+you should not specify the map address.
+Mapping a file with the <B>:share</B> keyparameter set to NIL
+or <B>:private</B> set to T
+means the file should be accessed privately (exclusively).
+Since this is not useful for the purpose of memory sharing,
+the default value of <B>:share</B> key is T.
+When a file is shared between two users, the read/write permission
+must be properly set for both users.
+Unfortunately, SunOS does not support file sharing through networks 
+between different workstations.
+
+<P>
+Example programs to share a file of 64 byte length between two
+euslisp are shown below.
+
+<P>
+<PRE>
+;; Create a file of 64 bytes
+(with-open-file (f "afile" :direction :output)  (princ (make-string 64) f))
+;; Map it
+(setq shared-string1 (map-file "afile" :direction :io))
+;;
+;; In another process
+(setq shared-string2 (map-file "afile" :direction :io))
+</PRE>
+
+<P>
+Then, data written to <TT>shared-string1</TT>
+immediately appears in <TT>shared-string2</TT>, and vice versa.
+Writing to a foreign string can be made by 
+<B>replace</B> or <B>setf</B> in conjunction with <B>aref</B>.
+
+<P>
+
+ <BR>
+<BR> <A NAME="16194"></A>
+<B>map-file</B> <EM>filename &amp;key (direction :input) length (offset 0) (share t)
+(address 0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+maps the file named <EM>filename</EM> to memory space.
+<EM>Filename</EM> can be either of a local file, an NFS-mounted remote file,
+or a memory device in <TT>/dev</TT>.
+A <A NAME="16211"></A><B>f</B>oreign-string, whose elements can be accessed by <B>aref</B>,
+is returned.
+Writing data into a foreign-string mapped by <TT>map-file</TT> with 
+<EM>direction=:input</EM> will result a segmentation fault.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1347"
+  HREF="manual-node66.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1341"
+  HREF="manual-node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1335"
+  HREF="manual-node64.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1343"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1345"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1348"
+  HREF="manual-node66.html">Message Queues and FIFOs</A>
+<B> Up:</B> <A NAME="tex2html1342"
+  HREF="manual-node64.html">InterProcess Communication and Network</A>
+<B> Previous:</B> <A NAME="tex2html1336"
+  HREF="manual-node64.html">InterProcess Communication and Network</A>
+ &nbsp; <B>  <A NAME="tex2html1344"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1346"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

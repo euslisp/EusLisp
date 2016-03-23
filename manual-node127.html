@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Bodies in Contact</TITLE>
+<META NAME="description" CONTENT="Bodies in Contact">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node128.html">
+<LINK REL="previous" HREF="manual-node126.html">
+<LINK REL="up" HREF="manual-node119.html">
+<LINK REL="next" HREF="manual-node128.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2345"
+  HREF="manual-node128.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2339"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2333"
+  HREF="manual-node126.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2341"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2343"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2346"
+  HREF="manual-node128.html">Voronoi Diagram of Polygons</A>
+<B> Up:</B> <A NAME="tex2html2340"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2334"
+  HREF="manual-node126.html">Coordinates-axes</A>
+ &nbsp; <B>  <A NAME="tex2html2342"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2344"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04048000000000000000"></A><A NAME="Contact"></A>
+<BR>
+Bodies in Contact
+</H2>
+
+<P>
+The method and functions described in this subsection require
+<B>contact/model2const.l, contact/inequalities.l,
+ contact/drawconst.l</B>.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="34806"></A>
+<BIG CLASS="XLARGE"><B>body </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 () 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a three dimensional shape.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="34823"></A>
+<B>:constraint</B> <EM>b </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns self's constraint
+when self is in contact with <EM>b</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="34834"></A>
+<B>constrained-motion</B> <EM>c </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the possible motions
+which satisfy the constraint <EM>c</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="34845"></A>
+<B>constrained-force</B> <EM>m </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the force which is applicable
+from the constrained body to the constraining body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="34855"></A>
+<B>draw-constraint</B> <EM>c </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> draws the constraint <EM>c</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="34866"></A>
+<B>draw-motion</B> <EM>m a b </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> draws the possible motions of <EM>a</EM>
+in contact with <EM>b</EM>. Type the return key for drawing.
+</DD>
+</DL>
+<BR>
+<BR>
+Example
+<BR><PRE>
+;;
+;;      peg in a hole with 6 contact points
+;;
+(in-package "GEOMETRY")
+(load "view")
+(load "../model2const.l" :package "GEOMETRY")
+(load "../inequalities.l" :package "GEOMETRY")
+(load "../drawconst.l" :package "GEOMETRY")
+
+(setq x (make-prism '(#f(50 50 0) #f(50 -50 0) #f(-50 -50 0) #f(-50 50 0))
+                    #f(0 0 200)))
+(setq x1 (copy-object x))
+(send x1 :translate #f(0 0 -100))
+(send x1 :worldcoords)
+(setq a1 (make-prism '(#f(100 100 -150) #f(100 -100 -150)
+                       #f(-100 -100 -150) #f(-100 100 -150))
+                     #f(0 0 150)))
+(setq ana (body- a1 x1))
+(send x :translate #f(0 -18.30127 -18.30127))
+(send x :rotate -0.523599 :x)
+(send x :worldcoords)
+
+(setq c (list (send x :constraint ana)))
+(setq m (constrained-motion c))
+(setq f (constrained-force m))
+
+(hidd x ana)
+(draw-constraint c)
+(draw-motion m)
+</PRE>
+
+The following figures shows examples of constraints.
+The small arrows in the figures designate the constraints for the pegs.
+
+<BR>
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="fig:peg-in-hole"></A><A NAME="34778"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 11:</STRONG>
+Constraints for a peg in a hole.</CAPTION>
+<TR><TD><IMG
+ WIDTH="232" HEIGHT="1334" BORDER="0"
+ SRC="manual-img71.png"
+ ALT="\begin{figure}\mbox{\epsfxsize =7.5cm
+\epsfbox{fig/fig-peg-in-hole1.ps}
+}
+\mbo...
+...s}
+}
+\mbox{\epsfxsize =7.5cm
+\epsfbox{fig/fig-peg-in-hole4.ps}
+}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<P>
+The following figures shows an example of the possible motions
+of a peg in a hole.
+The example corresponds to the above program.
+<BR>
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="fig:peg-in-a-hole"></A><A NAME="34788"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 12:</STRONG>
+Possible motions of a peg in a hole</CAPTION>
+<TR><TD><IMG
+ WIDTH="239" HEIGHT="1338" BORDER="0"
+ SRC="manual-img72.png"
+ ALT="\begin{figure}\begin{center}
+\mbox{\epsfxsize =7.5cm
+\epsfbox{fig/fig-peg-nana...
+...\epsfxsize =7.5cm
+\epsfbox{fig/fig-peg-naname-m4.ps}
+}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2345"
+  HREF="manual-node128.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2339"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2333"
+  HREF="manual-node126.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2341"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2343"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2346"
+  HREF="manual-node128.html">Voronoi Diagram of Polygons</A>
+<B> Up:</B> <A NAME="tex2html2340"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2334"
+  HREF="manual-node126.html">Coordinates-axes</A>
+ &nbsp; <B>  <A NAME="tex2html2342"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2344"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

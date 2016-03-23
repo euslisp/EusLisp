@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Queue</TITLE>
+<META NAME="description" CONTENT="Queue">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node51.html">
+<LINK REL="up" HREF="manual-node45.html">
+<LINK REL="next" HREF="manual-node53.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1147"
+  HREF="manual-node53.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1141"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1137"
+  HREF="manual-node51.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1143"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1145"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1148"
+  HREF="manual-node53.html">Text Processing</A>
+<B> Up:</B> <A NAME="tex2html1142"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1138"
+  HREF="manual-node51.html">Hash Tables</A>
+ &nbsp; <B>  <A NAME="tex2html1144"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1146"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03077000000000000000">
+Queue</A>
+</H2>
+
+<P>
+A queue is a data structure that allows insertion and retrieval of data
+in the FIFO manner, i.e. the first-in first-out order.
+Since the queue class is defined by extending the cons class,
+ordinary list functions can be applied to a queue.
+For example, caar retrieves the next element to be dequeued,
+and cadr gets the element that is queued most recently.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="11844"></A>
+<BIG CLASS="XLARGE"><B>queue </B></BIG> [class]  <PRE><TT>
+  :super   <B>cons</B> 
+<BR>  :slots 		 (car cdr) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines queue (FIFO) objects.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11861"></A>
+<B>:init</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes the queue to have no elements.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11871"></A>
+<B>:enqueue</B> <EM>val </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+puts val in the queue as the most recent element.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11881"></A>
+<B>:dequeue</B> <EM>&amp;optional (error-p nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+retrieves the oldest value in the queue, and removes it of the queue.
+If the queue is empty, it reports an error when error-p is non-nil,
+or returns NIL otherwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11891"></A>
+<B>:empty?</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns T if the queue is empty.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11901"></A>
+<B>:length</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the length of the queue.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1147"
+  HREF="manual-node53.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1141"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1137"
+  HREF="manual-node51.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1143"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1145"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1148"
+  HREF="manual-node53.html">Text Processing</A>
+<B> Up:</B> <A NAME="tex2html1142"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1138"
+  HREF="manual-node51.html">Hash Tables</A>
+ &nbsp; <B>  <A NAME="tex2html1144"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1146"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

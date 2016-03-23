@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Xwindow インターフェース</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Xwindow インターフェース">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node135.html">
+<LINK REL="previous" HREF="jmanual-node123.html">
+<LINK REL="up" HREF="jmanual-node74.html">
+<LINK REL="next" HREF="jmanual-node131.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2352"
+  HREF="jmanual-node131.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2346"
+  HREF="jmanual-node74.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2340"
+  HREF="jmanual-node129.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2348"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2350"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2353"
+  HREF="jmanual-node131.html">Xlibのグローバル変数とその他関数</A>
+<B> Up:</B> <A NAME="tex2html2347"
+  HREF="jmanual-node74.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html2341"
+  HREF="jmanual-node129.html">アニメーション</A>
+ &nbsp; <B>  <A NAME="tex2html2349"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2351"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION04060000000000000000">
+Xwindow インターフェース</A>
+</H1>
+
+Euslisp上のXwindowインターフェースは、<TT>'eusx'</TT>という
+名前でEuslispが呼び出されたとき、実行可能となる。
+<A NAME="tex2html19"
+  HREF="jmanual-footnode.html#foot39124"><SUP><SPAN CLASS="arabic">3</SPAN></SUP></A>eusxは、起動時に環境変数"DISPLAY"を参照してXserverに接続を試みるため、
+自分のXseverに環境変数"DISPLAY"が正しく設定されていなければならない。
+
+<P>
+Euslispには、次の3つのレベルのXwindowインターフェースが定義されている。
+(1) Xlib関数, (2) Xlibクラスと(3) XToolKitクラスである。
+この節と次のXToolKitの節に記述されている
+全てのXwindow関数は、"X"パッケージの中に含まれている。
+それらの関数名は、元のXlib関数名から最初の"X"を省いき、全ての文字を大文字に
+変更したものとなっている。
+例えば<TT>XdefaultGC</TT>は<TT>X:DEFAULTGC</TT>と名付けられていて、
+<TT>X:XDEFAULTGC</TT>ではない。
+
+<P>
+Xlib関数は、Xwindowシステムへの低レベルインターフェースで、
+foreign関数として定義されている。
+これらのXlib関数は、パラメータの型チェックあるいは
+パラメータの数のチェックを実行していないため、
+十分注意して使用しなければならない。
+例えば、すべてのXlibの呼び出しにおいてXserverとの接続を確認するために
+<TT>x:*display*</TT>を引き数として要求する。もし、指定し忘れたならば、Xlibは
+エラーを通知し、そのプロセスは死ぬ。
+このような不便を避け、オブジェクト指向のインターフェースを作るために、
+2番めのレベルのインターフェースであるXlibクラスが備わっている。
+この節では、この2番めのレベルのインターフェースに焦点を当てる。
+XToolKitと呼ばれるもっと高レベルのXwindowライブラリは、次節で
+説明されている。
+
+<P>
+この節に記述されているクラスは、以下の継承の階層を持っている。
+
+<P><PRE>
+propertied-object
+   viewsurface
+      x:xobject
+         x:gcontext
+         x:xdrawable
+             x:xpixmap
+             x:xwindow
+   colormap
+</PRE>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html2354"
+  HREF="jmanual-node131.html">Xlibのグローバル変数とその他関数</A>
+<LI><A NAME="tex2html2355"
+  HREF="jmanual-node132.html">Xwindow</A>
+<LI><A NAME="tex2html2356"
+  HREF="jmanual-node133.html">Graphic Context</A>
+<LI><A NAME="tex2html2357"
+  HREF="jmanual-node134.html">色とカラーマップ</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

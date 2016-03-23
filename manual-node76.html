@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Compilation</TITLE>
+<META NAME="description" CONTENT="Compilation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node77.html">
+<LINK REL="previous" HREF="manual-node75.html">
+<LINK REL="up" HREF="manual-node73.html">
+<LINK REL="next" HREF="manual-node77.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1504"
+  HREF="manual-node77.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1498"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1492"
+  HREF="manual-node75.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1500"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1502"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1505"
+  HREF="manual-node77.html">Program Loading</A>
+<B> Up:</B> <A NAME="tex2html1499"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1493"
+  HREF="manual-node75.html">Top-level Interaction</A>
+ &nbsp; <B>  <A NAME="tex2html1501"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1503"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030113000000000000000"></A><A NAME="compiler"></A>
+<BR>
+Compilation
+</H2>
+
+<P>
+EusLisp compiler is used to speed the execution of Lisp programs.
+You can expect 5 to 30 times faster execution and notable reduction of garbage
+collection time elapsed by macro expansion.
+
+<P>
+Euscomp does optimization for arithmetic operation and vector access.
+Sometimes proper type declarations are needed to inform
+the compiler applicability of optimization.
+
+<P>
+<B>Compile-function</B> compiles functions one by one.
+<B>Compile-file</B>  compiles an entire source file.
+During the execution of <B>Compile-file</B>, each form in a file
+is read and evaluated.
+This may change the current EusLisp environment.
+For examples, <B>defparameter</B>
+may set a new value to a symbol and <B>defun</B> may substitute the existing
+compiled function with its non-compiled version.
+To avoid these unexpected effects, use the <B>eval-when</B> special form
+without compile time situation,
+or use <B>euscomp</B> command to run the compiler as a separate process.
+
+<P>
+<B>Euscomp</B> is a unix command, which is usually a symbolic link to <B>eus</B>.
+It recognizes several options.
+-O flag indicates optimization of the C compiler.
+Each of -O1,-O2, -O3 indicates optimization level of EusLisp compiler,
+which is equivalent to proclaiming (optimize 1 or 2 or 3).
+Each of -S0, -S1, -S2, -S3 set 0,1,2 and 3 to compiler:*safety*.
+If *safety* is less than 2, no code for checking interrupt is emitted,
+and you will lose control if the program enters an infinite loop.
+If *safety* is zero, the number of required arguments is not checked.
+-V flag is used to print function names when they are compiled (verbose).
+-c flag prevents from forking and exec'ing cc.
+-D pushes next argument to the <B>*features*</B> list, which can be used for
+conditional compilation in conjunction with #- and #+ read-macro.
+
+<P>
+The compiler translates EusLisp source program named as "xxx.l" 
+into the intermediate C program file named "xxx.c" and the  header file
+named "xxx.h".
+Then the C compiler is run and "xxx.o" is generated.
+Intermediate files "xxx.c" and "xxx.h" are left
+for the purpose of cross compilation:
+usually you only need to compile "xxx.c" files by cc unix command
+when you wish to use the code on machines of different architecture.
+Compiled code is loaded to EusLisp by '(load "xxx")'.
+
+<P>
+Each intermediate file refers to the "eus.h" header file, which is
+supposed to be located in the <TT>*eusdir*/c</TT> directory.
+<TT>*eusdir*</TT> is copied from the <TT>EUSDIR</TT> environment variable.
+If none is set, <TT>/usr/local/eus/</TT> is taken as the default directory.
+
+<P>
+When compiled, intermediate C programs are usually much bigger than
+the original source code. For example, 1,161 lines of "l/common.l"
+lisp source expands to 8,194 lines of "l/common.c" and 544 lines of "l/common.h".
+Compiling 1,000 lines of lisp source is not a hard task, but 
+optimized compililation of nearly 10,000 lines of C program not only takes
+long time (several minutes), but also consumes much disk space.
+So if you are compiling relatively big programs, be sure your machine has
+sufficient /var/tmp disk, otherwise CC may die.
+Setting the <TT>TEMPDIR</TT> environment variable to a bigger disk slice may help.
+
+<P>
+As the linkage is performed at load-time or at run-time,
+no recompilation  is required even the eus kernel is updated.
+On the other hand, run-time linkage may impose you another inconvenience.
+Suppose you have two functions A and B in a file "x.l" and A calls B.
+After compiling "x.l", you load "x.o" and tries to call A which internally
+calles B.
+Then you find a bug in B, and probably you would redefine B.
+Here, you have compiled A and non-compiled B.
+You may call A again, but nothing will change, since A still calls
+old compiled B which is linked regidly when A first called B.
+To avoid this problem, A must be redefined again,
+or B must be redefined just after "x.o" is loaded and before A is called.
+
+<P>
+When a compiled-code is loaded, its top level code, which is normally
+a series of defun, defmethod, etc.,  is excuted. This top level code
+is defined as the entry function of the load module.
+The compiler names the entry function,
+and the loader has to know the exact name of this function.
+To make the situation simple, both the compiler and the loader assume
+the entry function name is identical to the basename of the object file.
+For example, if you are compile and load "fib.l",
+the compiler produce "fib(...)" as the entry function of "fib.c",
+and the loader looks for "fib" in the "fib.o" object file.
+Since the final object file is produced by "cc" and "ld" of unix, 
+this entry function name has to satisfy the naming rule of C functions.
+Therefore, you have to avoid C's reserved keywords
+such as "int", "struct", "union", "register", "extern", etc., or
+the private identifiers defined in "c/eus.h" such as "pointer", "cons",
+"makeint", etc., to be used as the name of the file.
+If you have to use one of these reserved words as the name of the
+source file, you specify it for <EM>:entry</EM> arguments of
+the compiler and the loader.
+
+<P>
+A restriction exists for the usage of closure:
+<B>return-from</B> special form in closures and clean-up forms in 
+unwind-protect is not always correctly compiled.
+
+<P>
+<B>Disassemble</B> is not implemented.
+In order to analyze compiled code, see the intermediate C program
+or use <TT>adb</TT>.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="19107"></A>
+<B>euscomp</B> <EM>{filename}* </EM>[unix-command]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Invokes EusLisp compiler.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19117"></A>
+<BR>
+<IMG
+ WIDTH="688" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img35.png"
+ ALT="\begin{emtabbing}
+{\bf compile-file}
+\it srcfile \&amp;key \= (:verbose nil) \hspac...
+...m ; run c compiler} \\
+\&gt; (:entry (pathname-name file)) \\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>compiles a file.
+".l" is assumed for the suffix of the <EM>srcfile</EM>.
+If <EM>:verbose</EM> is T, names of functions and methods being compiled
+are printed to make it easy to find the expressions where errors occurred.
+<EM>:Optimize, :c-optimize</EM> and <EM>:safety</EM> specifies the optimization
+levels. 
+<EM>:Pic</EM> should be set T, unless the module is hard-linked in the
+EusLisp core during the make stage.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19138"></A>
+<B>compile</B> <EM>funcname </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> compiles a function. <B>Compile</B> first
+prints the function definition into a temporary file.
+The file is compiled by <B>compile-file</B> and then is loaded by <B>load</B>.
+Temporary files are deleted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19151"></A>
+<B>compile-file-if-src-newer</B> <EM>srcfile &amp;key compiler-options </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+compiles the <EM>srcfile</EM> if it is newer (more recently modified) than
+its corresponding object file. The object file is supposed to have
+the ".o" suffix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19162"></A>
+<B>*optimize*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> controls optimization level.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19172"></A>
+<B>*verbose*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+When set to non-nil, the name of a function or a method being compiled,
+and the time required for the compilation are displayed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19182"></A>
+<B>*safety*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+controls safety level.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1504"
+  HREF="manual-node77.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1498"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1492"
+  HREF="manual-node75.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1500"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1502"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1505"
+  HREF="manual-node77.html">Program Loading</A>
+<B> Up:</B> <A NAME="tex2html1499"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1493"
+  HREF="manual-node75.html">Top-level Interaction</A>
+ &nbsp; <B>  <A NAME="tex2html1501"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1503"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

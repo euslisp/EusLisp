@@ -1,0 +1,627 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Multi-Joint Manipulators
+</TITLE>
+<META NAME="description" CONTENT="Multi-Joint Manipulators
+">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node145.html">
+<LINK REL="up" HREF="manual-node144.html">
+<LINK REL="next" HREF="manual-node147.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2618"
+  HREF="manual-node147.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2612"
+  HREF="manual-node144.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2608"
+  HREF="manual-node145.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2614"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2616"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2619"
+  HREF="manual-node147.html">Xwindow Interface</A>
+<B> Up:</B> <A NAME="tex2html2613"
+  HREF="manual-node144.html">Manipulators</A>
+<B> Previous:</B> <A NAME="tex2html2609"
+  HREF="manual-node145.html">Rotational Joint</A>
+ &nbsp; <B>  <A NAME="tex2html2615"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2617"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04072000000000000000">
+
+Multi-Joint Manipulators
+</A>
+</H2>
+
+<P>
+A model of a manipulator is described by <B>manipulator</B>. 
+<B>defmanipulator</B> macro below creates an instance of <B>manipulator</B>. 
+
+<P><PRE><TT>
+ (defmanipulator <I>manipulator-name</I> 
+<BR>  :class   <I>manipulator-class</I> 
+<BR>:base 		 <I>base-joint</I> 
+<BR>:joints 		  <I>list-of-all-joints</I> 
+<BR>:hand 		 <I>handjoint</I> 
+<BR>:left-finger 		 <I>left-finger</I>
+<BR>:right-finger 		 <I>right-finger</I>
+<BR>:handcoords 		 <I>trans-from-hand-to-armsolcoords</I>
+<BR>:toolcoords 		 <I>trans-from-armsolcoords-to-toolcoords</I> 
+<BR>:open-direction 		 <I>finger-open-direction</I>
+<BR>:right-handed 		 <I>righty-or-lefty</I> 
+<BR>) 
+<BR>
+</TT></PRE>
+ <BR>
+<BR> <BR> 
+<A NAME="41224"></A>
+<BIG CLASS="XLARGE"><B>rotational-joint </B></BIG> [class]  <PRE><TT>
+  :super   <B>body</B> 
+<BR>  :slots 		 (axis offset high-limit low-limit) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>describes each rotational joint of a 6 D.O.Fs manipulator.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="41242"></A>
+<BIG CLASS="XLARGE"><B>manipulator </B></BIG> [class]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (base baseinverse joint
+<BR>
+angles right-handed hand handcoords right-finger left-finger
+<BR>
+openvec max-span toolcoords toolinverse armsolcoords
+<BR>
+toolinverse armsocoords approach grasp affix) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>manages kinematics of a manipulator from base to hand.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41259"></A>
+<B>:newcoords</B> <EM>newrot &amp;optional newpos </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+updates the coords with newrot and newpos if new joint angles are within the 
+limit.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41269"></A>
+<B>:armsolcoords </B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes and makes transformation (an instance coords) 
+between the coords of the 
+base and those of the hand. 
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41279"></A>
+<B>:tool</B> <EM>&amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+modifies or gets toolcoords.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41289"></A>
+<B>:set-tool</B> <EM>newtool &amp;optional offset copy </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets new toolcoords.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41299"></A>
+<B>:reset-tool </B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forces this coords to be default-toolcoords.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41309"></A>
+<B>:worldcoords </B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the position vector, the rotation matrix, and the coordinates of the 
+toolcoords represented in the world coordinates. 
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41319"></A>
+<B>:set-coords </B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forces setting coords according to the forward kinematic solution.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41329"></A>
+<B>:config </B> <EM>&amp;optional (a newangles) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets joint angles of the manipulator.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41339"></A>
+<B>:park </B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forces all the joint angles to be zero.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41349"></A>
+<B>:hand</B> <EM>&amp;optional (h nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets or returns the object of its hand.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41359"></A>
+<B>:handcoords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the position vector, the rotation matrix, and the coordinates of the 
+handcoords represented in the world coordinates. 
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41369"></A>
+<B>:span</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the current distance between fingers.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41379"></A>
+<B>:open-fingers</B> <EM>s &amp;optional abs &amp;aux (current (send self :span)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> moves fingers relatively or absolutely.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41389"></A>
+<B>:close-fingers</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+closes fingers completely.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41399"></A>
+<B>:angles</B> <EM>&amp;optional flag </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of current joint angles.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41409"></A>
+<B>:get-approach </B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the object to which the hand is approaching.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41419"></A>
+<B>:set-approach </B> <EM>a </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <I>a</I> as the object to which the hand will approach.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41430"></A>
+<B>:get-grasp</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+(:get-grasp () grasp-config)
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41440"></A>
+<B>:set-grasp</B> <EM>g </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <I>g</I> as the object which the hand will grasp.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41451"></A>
+<B>:get-affix</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the object which the hand grasps.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41461"></A>
+<B>:affix</B> <EM>&amp;optional (grasp) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <B>affixed-object</B> <B>grasp</B>.
+<B>grasp</B> is associated to the handcoords as a descendant. 
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41474"></A>
+<B>:unfix</B> <EM>&amp;optional (margin 10.0) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <B>affixed-object</B> nil.
+<B>grasp</B> is dissociated (removed) from the descendants list of the handcoords.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41486"></A>
+<BR>
+<IMG
+ WIDTH="615" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img95.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\=\&amp;rest args \\lq [method]\\
+\&gt;\&amp;key \=((:na...
+...)
+((:lefty lft) t)
+((:act a) nil)\\
+\&gt;\&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>creates and initializes a new manipulator object.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <B>manipulator</B> manages the linkage of the coords of 
+<B>base, joints(J1...J6), handcoords, toolcoords</B>. 
+<B>manipulator</B> has <B>cascaded-coords</B> as super-class. 
+<B>manipulator</B> is connected with <B>base</B> which is <B>cascaded-coords</B>
+(or subclasses of <B>body</B>). <B>manipulator</B> manages the transformation from 
+the base frame to the toolcoords. Messages sent to <B>manipulator</B> 
+(i.e. <B>:translate, :locate, :rotate, :orient, :transform</B> etc.) effect 
+the end effector of the manipulator. If WRT parameter is set one of keywords 
+(i.e. :local, :parent, :world or an instance of coordinates) in this message, 
+the end-effector  moves with respect to the WRT parameter. 
+In the next program <B>eta3</B> is a instance of <B>manipulator</B>.
+
+<P>
+<PRE>
+　(send eta3 :translate #f(0 0 -100))        ;put back the end-effector by 10cm
+　(send eta3 :translate #f(0 0 -100) :world) ;move down the end-effector by 10cm
+　(send eta3 :translate #f(0 0 -100)
+             (manipulator-base eta3))  ;move down the end-effector with respect 
+                                       ;to the coords of the base by 10cm
+</PRE>
+
+<P>
+When <B>manipulator</B> receives these messages, it calculates the arm solution 
+and 6 joint angles are determined. Generally, more solutions than one exist.
+In that case, one appropriate solution is chosen of them according to the 
+criteria (i.e. the distinction between <B>right-handed</B> and <B>left-handed</B>,
+and the consistency with current joint angles). If there is no solution for 
+a given configuration or the calculated joint angles exceed its limits, 
+<B>manipulator</B> does not move and it gives a warning.
+
+<P>
+Arm-solution method <B>:armsol</B> must be defined for respective manipulator 
+classes which correspond to real manipulators. This method calculates the 
+transformation between the base-coords and the hand-coords. Thus this allow us 
+to put a manipulator wherever with respect to the world-coords. The arm solution 
+is independent of the <B>base, toolcoords</B>.
+
+<P>
+Fig. <A HREF="#JointCoords">15</A> shows the relation between coordinate systems 
+(<B>base, J1, J2,..., handcoords</B> and <B>toolcoords</B>). <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img96.png"
+ ALT="$T$"></SPAN> and other 
+transformations are calculated as follows.
+
+<P>
+<!-- MATH
+ $\begin{array}{ll}
+T & = base \cdot J1 \cdot J2 \cdot \ldots
+\cdot J6 \cdot handcoords \cdot toolcoords \\
+ & = (send \; eta3 \; :worldcoords) \\
+T_{Jn} & = base \cdot J1\cdot \ldots \cdot Jn \\
+ & = (send \; Jn \; :worldcoords) \\
+T_{arm} & = J1 \cdot J2 \cdot \ldots \cdot J6 \cdot handcoords \\
+ & = (send \; eta3 \; :armsol-coords) \\
+T_{tool} & = J1 \cdot J2 \cdot  \ldots \cdot J6 \cdot handcoords \cdot toolcoords \\
+ & = (send \; eta3 \; :copy-coords) \\
+T_{t} & = toolcoords \\
+ & = (manipulator-toolcoords \; eta3)\\
+T_{t}^{-1} & = toolcoords^{-1} \\
+ & = (manipulator-toolinverse \; eta3) \\
+T_{h} & = handcoords \\
+ & = (manipulator-handcoords \; eta3)\\
+\end{array}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="413" HEIGHT="284" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img97.png"
+ ALT="$
+\begin{array}{ll}
+T &amp; = base \cdot J1 \cdot J2 \cdot \ldots
+\cdot J6 \cdot ha...
+...
+T_{h} &amp; = handcoords \\
+&amp; = (manipulator-handcoords \; eta3)\\
+\end{array}$"></SPAN>
+
+<P>
+where <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img96.png"
+ ALT="$T$"></SPAN> is the transformation between the world-coords and the toolcoords.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="JointCoords"></A><A NAME="41190"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 15:</STRONG>
+relation between coordinate systems in a manipulator</CAPTION>
+<TR><TD><IMG
+ WIDTH="454" HEIGHT="442" BORDER="0"
+ SRC="manual-img98.png"
+ ALT="\begin{figure}\begin{center}
+\mbox{\epsfysize =10cm
+\epsfbox{fig/eta3coords.ps}
+}
+\end{center}
+\par
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Each joint has a geometric model represented by Breps (Boundary Representation).
+The coordinates of the vertices and the equations of the planes are not always 
+current ones. Messages sent to <B>manipulator</B> for translation or rotation only
+update the coordinate systems, these do not update the coordinates of the 
+vertices. This is why we can reduce the calculation time when translation or 
+rotation occurs successively. If <B>:worldcoords</B> message is sent to 
+<B>manipulator</B>, it updates the data such as the coordinates of the vertices.
+
+<P>
+Mainly toolcoords are used for specify the motion of a manipulator in 
+this <B>manipulator</B>. There is a method (<B>:config</B>) for specifying the 
+configuration of the manipulator by joint angles. The arguments are a 
+float-vector whose elements are 6.
+
+<P>
+<PRE>
+  (send eta3 :config (float-vector pi/2 pi/2 0 1 0 1))
+</PRE>
+
+<P>
+<B>:config</B> rotates joints of the manipulator if the joint angles are in the 
+limit. As a result, the coordinates which <B>manipulator</B> manages and the 
+current toolcoords which given joint angles determines become inconsistent.
+<B>:set-coords</B> message must be sent if you need consistency. <B>:set-coords</B>
+calculates a forward kinematic solution and calculates the arm solution using the 
+forward kinematic solution.
+
+<P>
+Example: create the manipulator model (ETA3) and draw this on a Xwindow system.
+<PRE>
+;EusLisp 7.27 with Xlib created on Thu Sep 17 14:33:30 1992
+(load "view.l")                                ;open a window
+(load "/usr/local/eus/robot/eta3/eta3build.l") ;create the model of ETA3
+(send *viewing* :look #f(2000 2000 2000))      ;change the viewpoint
+(send-all (eta3arm-components eta3) :color 1)  ;change the color of lines
+(send eta3 :config (float-vector 0 (/ -Pi 4.0) Pi/2 0 (/ -Pi 4.0) 0 ))
+					       ;set joint angles of ETA3
+(send eta3 :set-coords)                        ;refer to the above explanation
+(draw eta3)                                    ;draw ETA3
+</PRE>
+
+<P>
+
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2618"
+  HREF="manual-node147.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2612"
+  HREF="manual-node144.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2608"
+  HREF="manual-node145.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2614"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2616"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2619"
+  HREF="manual-node147.html">Xwindow Interface</A>
+<B> Up:</B> <A NAME="tex2html2613"
+  HREF="manual-node144.html">Manipulators</A>
+<B> Previous:</B> <A NAME="tex2html2609"
+  HREF="manual-node145.html">Rotational Joint</A>
+ &nbsp; <B>  <A NAME="tex2html2615"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2617"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

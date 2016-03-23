@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Pathnames</TITLE>
+<META NAME="description" CONTENT="Pathnames">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node70.html">
+<LINK REL="previous" HREF="manual-node68.html">
+<LINK REL="up" HREF="manual-node60.html">
+<LINK REL="next" HREF="manual-node70.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1401"
+  HREF="manual-node70.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1395"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1389"
+  HREF="manual-node68.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1397"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1399"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1402"
+  HREF="manual-node70.html">URL-Pathnames</A>
+<B> Up:</B> <A NAME="tex2html1396"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1390"
+  HREF="manual-node68.html">Asynchronous Input/Output</A>
+ &nbsp; <B>  <A NAME="tex2html1398"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1400"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030106000000000000000"></A><A NAME="Pathnames"></A>
+<BR>
+Pathnames
+</H2>
+
+<P>
+Pathnames give the way to analyze and compose file names OS-independently.
+A typical path name is assumed to be consisted of following components:
+host:device/directory1/.../directory-n/name.type.version.
+Since EusLisp only runs on Unix, host, device and version fields are ignored.
+The <B>pathname</B> function decomposes a string into a list of directory
+components, name and type, and returns a pathname object, which
+is printed as a string prefixed by <TT>#P</TT>.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="16332"></A>
+<B>pathnamep</B> <EM>name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>name</EM> is a pathname.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16343"></A>
+<B>pathname</B> <EM>name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>name</EM> is pathname or string.
+<EM>name</EM> is converted to pathname.
+To indicate the last name is a directory name, don't forget to suffix with "/".
+The inverse conversion is performed by <EM>namestring</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16356"></A>
+<B>pathname-directory</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of directory names of <EM>path</EM>.
+Root directory (/) is represented by :ROOT.
+<EM>path</EM> can be either of string or pathname.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16368"></A>
+<B>pathname-name</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the file-name portion of <EM>path</EM>.
+<EM>path</EM> can be either of string or pathname.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16380"></A>
+<B>pathname-type</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts the file-type portion out of <EM>path</EM>.
+<EM>path</EM> can be either of string or pathname.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16392"></A>
+<B>make-pathname</B> <EM>&amp;key host device directory name type version
+defaults </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new pathname from <EM>directory</EM>, <EM>name</EM> and <EM>type</EM>.
+On unix, other parameters are ignored.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16405"></A>
+<B>merge-pathnames</B> <EM>name
+&amp;optional (defaults *default-pathname-defaults*)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16416"></A>
+<B>namestring</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns string representation of <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16427"></A>
+<B>parse-namestring</B> <EM>name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16438"></A>
+<B>truename</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+tries to find the absolute pathname for the file named <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1401"
+  HREF="manual-node70.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1395"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1389"
+  HREF="manual-node68.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1397"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1399"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1402"
+  HREF="manual-node70.html">URL-Pathnames</A>
+<B> Up:</B> <A NAME="tex2html1396"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1390"
+  HREF="manual-node68.html">Asynchronous Input/Output</A>
+ &nbsp; <B>  <A NAME="tex2html1398"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1400"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

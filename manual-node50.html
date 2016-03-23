@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Foreign Strings</TITLE>
+<META NAME="description" CONTENT="Foreign Strings">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node51.html">
+<LINK REL="previous" HREF="manual-node49.html">
+<LINK REL="up" HREF="manual-node45.html">
+<LINK REL="next" HREF="manual-node51.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1121"
+  HREF="manual-node51.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1115"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1109"
+  HREF="manual-node49.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1117"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1119"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1122"
+  HREF="manual-node51.html">Hash Tables</A>
+<B> Up:</B> <A NAME="tex2html1116"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1110"
+  HREF="manual-node49.html">Characters and Strings</A>
+ &nbsp; <B>  <A NAME="tex2html1118"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1120"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03075000000000000000">
+Foreign Strings</A>
+</H2>
+A foreign-string is a kind of byte-vector whose entity is held somewhere
+outside EusLisp's heap.
+While a normal string is represented by a sequence of bytes and its length,
+a foreign-string holds the length and the address of the string entity.
+Although foreign-string is a string,
+some string and  sequence functions cannot be applicable.
+Only <B>length</B>, <B>aref</B>, <B>replace</B>, <B>subseq</B> and <B>copy-seq</B>
+recognize the foreign-string, 
+and application of other functions may cause a crash.
+
+<P>
+A foreign-string may refer to a part of I/O space usually
+taken in /dev/a??d?? special file where ?? is either 32 or 16.
+In case the device attached in one of these I/O space only responds
+to byte access, <B>replace</B> always copies element byte by byte,
+which is relatively slow when a large chunk of memory is accessed
+consecutively.
+
+<P>
+
+ <BR>
+<BR> <A NAME="11713"></A>
+<B>make-foreign-string</B> <EM>address length </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an instance of foreign-string located at <EM>address</EM> 
+and spanning for <EM>length</EM> bytes.
+For example, <TT>(make-foreign-string (unix:malloc 32) 32)</TT>
+makes a reference to a 32-byte memory located outside EusLisp's heap.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1121"
+  HREF="manual-node51.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1115"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1109"
+  HREF="manual-node49.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1117"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1119"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1122"
+  HREF="manual-node51.html">Hash Tables</A>
+<B> Up:</B> <A NAME="tex2html1116"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1110"
+  HREF="manual-node49.html">Characters and Strings</A>
+ &nbsp; <B>  <A NAME="tex2html1118"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1120"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

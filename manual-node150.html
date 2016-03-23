@@ -1,0 +1,390 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Graphic Context</TITLE>
+<META NAME="description" CONTENT="Graphic Context">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node151.html">
+<LINK REL="previous" HREF="manual-node149.html">
+<LINK REL="up" HREF="manual-node147.html">
+<LINK REL="next" HREF="manual-node151.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2678"
+  HREF="manual-node151.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2672"
+  HREF="manual-node147.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2666"
+  HREF="manual-node149.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2674"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2676"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2679"
+  HREF="manual-node151.html">Colors and Colormaps</A>
+<B> Up:</B> <A NAME="tex2html2673"
+  HREF="manual-node147.html">Xwindow Interface</A>
+<B> Previous:</B> <A NAME="tex2html2667"
+  HREF="manual-node149.html">Xwindow</A>
+ &nbsp; <B>  <A NAME="tex2html2675"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2677"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04083000000000000000">
+Graphic Context</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="43901"></A>
+<BIG CLASS="XLARGE"><B>gcontext </B></BIG> [class]  <PRE><TT>
+  :super   <B>Xobject</B> 
+<BR>  :slots 		 (gcid GCValues) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines the graphic context.
+In EusLisp, every xwindow has its default GC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="43918"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="92" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img102.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\&amp;key \= (drawable defaultRootWindow) \\lq  [me...
+...e-width line-style cap-style join-style \\
+\&gt; font dash \\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>creates a gc with given attributes. <EM>Drawable</EM> is used by the Xserver
+to know the screen and depth of the screen. 
+The resulted GC can be used in any drawables as long as they are
+created on the same screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="43930"></A>
+<B>:gc</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns X's GC id.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="43940"></A>
+<B>:free</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> frees this GC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="43950"></A>
+<B>:copy</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a copy of this GC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="43960"></A>
+<B>:foreground</B> <EM>&amp;optional color </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> if <EM>color</EM> is given,
+it is set to the foreground color. <EM>Color</EM> is a pixel value.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="43972"></A>
+<B>:background</B> <EM>&amp;optional color </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> if <EM>color</EM> is given,
+it is set to the background color. <EM>Color</EM> is a pixel value.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="43984"></A>
+<B>:foreback</B> <EM>fore back </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets foreground and background colors at once.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="43994"></A>
+<B>:planemask</B> <EM>&amp;optional plane-mask </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets plane-mask.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44004"></A>
+<B>:function</B> <EM>x </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets drawing function.
+<EM>X</EM> should either be one of the following numbers or keywords:
+<TT>0=Clear, 1=And, 2=AndReverse, 3=Copy, 4=AndInverted, 5=NoOp, 6=Xor, 7=Or,
+8=Nor, 9=Equiv, 
+<BR>
+10=Invert, 11=XorReverse, 12=CopyInverted, 13=OrInverted,
+14=Nand, 15=Set, :clear, :and, :andReverse, :copy, :andInverted,
+:NoOp, :Xor, :Or, :Nor, :Equiv, :Invert, 
+<BR>:XorReverse, :CopyInverted,
+:OrInverted, :Nand, :Set</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44016"></A>
+<B>:font</B> <EM>x </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets the font attribute of this GC. <EM>X</EM> is
+either a font-name or a font-ID.
+If <EM>x</EM> is a font name (string), <TT>:font</TT> calls <TT>x:LoadQueryFont</TT>
+to decide the font-id. If not found, <TT>"no such font ..."</TT> is warned.
+If <EM>x</EM> is NIL (not given), the current font-ID of this GC is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44032"></A>
+<B>:line-width</B> <EM>x </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets the line width in pixel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44042"></A>
+<B>:line-style</B> <EM>x </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets the line-style (solid, dashed, etc.).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44052"></A>
+<B>:dash</B> <EM>&amp;rest x </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> Each component of <EM>X</EM> is an integer.
+<TT>:Dash</TT> sets the dash pattern of the line-style.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44064"></A>
+<B>:tile</B> <EM>pixmap </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets the tile of this GC to <EM>pixmap</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44075"></A>
+<B>:stipple</B> <EM>pixmap </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> sets the stipple of this GC to <EM>pixmap</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44086"></A>
+<B>:get-attribute</B> <EM>attr </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> gets attribute.
+<EM>Attr</EM> is one of <TT>:function, :plane-mask, :foreground,
+:background, :line-width, :line-style, :cap-style, :join-style,
+:fill-style, :fill-rule, :font</TT>.
+An integer value representing the attribute is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="44098"></A>
+<BR>
+<IMG
+ WIDTH="560" HEIGHT="35" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img103.png"
+ ALT="\begin{emtabbing}
+{\bf :change-attributes}
+\it\&amp;key \= function plane-mask fore...
+...d]\\
+\&gt;line-width line-style cap-style join-style font dash
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>change attributes.
+More than one attributes are changed at the same time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<A NAME="44109"></A>
+<B>font-id</B> <EM>fontname </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>fontname</EM> is integer, it is returned regarding it as font-id.
+If <EM>fontname</EM> is string, font-structure is inquired by
+using <TT>x:LoadQueryFont</TT>, and its font-id is returned.
+<EM>Fontname</EM> can be a shorthand of exact name, such as
+<TT>"*-courier-24-*"</TT> for any 24-point courier font.
+If the font could not be found, <TT>can't load font</TT> warning
+is printed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44125"></A>
+<B>textdots</B> <EM>str font-id </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of three integers representing (ascent descent width)
+of the <EM>str</EM> (string) in dots.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2678"
+  HREF="manual-node151.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2672"
+  HREF="manual-node147.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2666"
+  HREF="manual-node149.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2674"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2676"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2679"
+  HREF="manual-node151.html">Colors and Colormaps</A>
+<B> Up:</B> <A NAME="tex2html2673"
+  HREF="manual-node147.html">Xwindow Interface</A>
+<B> Previous:</B> <A NAME="tex2html2667"
+  HREF="manual-node149.html">Xwindow</A>
+ &nbsp; <B>  <A NAME="tex2html2675"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2677"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

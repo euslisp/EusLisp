@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Viewport</TITLE>
+<META NAME="description" CONTENT="Viewport">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node133.html">
+<LINK REL="previous" HREF="manual-node131.html">
+<LINK REL="up" HREF="manual-node129.html">
+<LINK REL="next" HREF="manual-node133.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2419"
+  HREF="manual-node133.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2413"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2407"
+  HREF="manual-node131.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2415"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2417"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2420"
+  HREF="manual-node133.html">Viewer</A>
+<B> Up:</B> <A NAME="tex2html2414"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2408"
+  HREF="manual-node131.html">Projection</A>
+ &nbsp; <B>  <A NAME="tex2html2416"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2418"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04053000000000000000">
+Viewport</A>
+</H2>
+
+<P>
+Class <B>viewport</B> performs three-dimensional viewport clipping in
+the normalized device coordinates, and maps the result into the device
+dependent coordinates.
+The viewport is the term representing the visible rectangular area
+on a screen.
+The physical size (dots in x and y) of a viewport should be given with 
+<B>:init</B> message as the <EM>:width</EM> and <EM>:height</EM> arguments.
+<EM>:xcenter</EM> and <EM>:ycenter</EM> arguments determine
+the physical location of the viewport.
+These two parameters actually decide the location where objects are drawn
+on the screen when you are using a primitive display device like tektronics
+4014 on which every dimension must be given absolutely to the origin of the
+screen.
+If you are using more sophisticated display device like Xwindows where
+locations can be determined relatively to the parent window, you need not
+to change viewport's parameters to move the viewport.
+These parameters are independent of the actual display location.
+
+<P>
+Viewport class assumes the origin of the viewport at the lower-left corner of
+the rectangular area and y-axis extends to the upper direction.
+Unfortunately, in many window systems and display devices, the origin is taken
+at the upper-left corner and y-axis extends to the lower direction.
+To work around this problem, a negative value should be given to the
+<EM>:height</EM> parameter.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="35944"></A>
+<B>homo-viewport-clip</B> <EM>v1 v2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>V1</EM> and <EM>v2</EM>, which are two homogeneous vectors with four elements,
+represent a line in 3-D space.
+The line is clipped at the boundary of <!-- MATH
+ $x=-1, x=1, y=-1, y=1, z=0, z=1$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="291" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img83.png"
+ ALT="$x=-1, x=1, y=-1, y=1, z=0, z=1$"></SPAN>,
+and a list of two vectors are returned.
+If the line lies completely outside the viewport, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="35957"></A>
+<BIG CLASS="XLARGE"><B>viewport </B></BIG> [class]  <PRE><TT>
+  :super   <B>coordinates</B> 
+<BR>  :slots 		 () 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>viewport transformation maps the NDC (normalized device coordinates)
+ to device specific coordinates.
+Inheriting the <B>coordinates</B> class, the <TT>viewport</TT> defines
+the size and the relative position of the projection screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35976"></A>
+<B>:xcenter</B> <EM>&amp;optional xcenter </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+X coordinates of the center of this viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35986"></A>
+<B>:ycenter</B> <EM>&amp;optional ycenter </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Y coordinates of the center of this viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="35996"></A>
+<B>:size</B> <EM>&amp;optional size </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+List of sizes in x direction and y direction.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36006"></A>
+<B>:width</B> <EM>&amp;optional width </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> width of this viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36016"></A>
+<B>:height</B> <EM>&amp;optional height </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> height of this viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36026"></A>
+<B>:screen-point-to-ndc</B> <EM>p </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p</EM> is a float-vector representing the location in the physical screen.
+<EM>p</EM> is transformed into the representation in the normalized-device
+coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36038"></A>
+<B>:ndc-point-to-screen</B> <EM>p </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDC representation in this viewport, <EM>p</EM>, is transformed into
+the physical address on the screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36049"></A>
+<B>:ndc-line-to-screen</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Two 3D float-vectors, <EM>p1</EM> and <EM>p2</EM>, define a line in NDC.
+These two end points are transformed to the representation in 
+the screen space.
+If <EM>do-clip</EM> is non-nil, the line is clipped.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36062"></A>
+<B>:init</B> <EM>&amp;key (xcenter 100) (ycenter 100) (size 100)
+(width 100) (height 100) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a new viewport object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2419"
+  HREF="manual-node133.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2413"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2407"
+  HREF="manual-node131.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2415"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2417"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2420"
+  HREF="manual-node133.html">Viewer</A>
+<B> Up:</B> <A NAME="tex2html2414"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2408"
+  HREF="manual-node131.html">Projection</A>
+ &nbsp; <B>  <A NAME="tex2html2416"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2418"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

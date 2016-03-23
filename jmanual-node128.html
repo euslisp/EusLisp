@@ -1,0 +1,358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>描画</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="描画">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node129.html">
+<LINK REL="previous" HREF="jmanual-node127.html">
+<LINK REL="up" HREF="jmanual-node123.html">
+<LINK REL="next" HREF="jmanual-node129.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2326"
+  HREF="jmanual-node129.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2320"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2314"
+  HREF="jmanual-node127.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2322"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2324"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2327"
+  HREF="jmanual-node129.html">アニメーション</A>
+<B> Up:</B> <A NAME="tex2html2321"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2315"
+  HREF="jmanual-node127.html">Viewer</A>
+ &nbsp; <B>  <A NAME="tex2html2323"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2325"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04055000000000000000"></A><A NAME="Drawings"></A>
+<BR>
+描画
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="37429"></A>
+<B>draw</B> <EM>[viewer] &amp;rest thing </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>viewer</EM>に<EM>thing</EM>を描く。
+<EM>thing</EM>は、座標系、立体、面、エッジ、ベクトル、2つのベクトルのリストのどれでも可能である。
+<TT>(progn (view) (draw (make-cube 10 20 30)))</TT>
+は、xwindowに立方体を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37443"></A>
+<B>draw-axis</B> <EM>[viewer] [size] &amp;rest thing </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>viewer</EM>の中に<EM>thing</EM>の座標系の軸を<EM>size</EM>の長さで描く。
+<EM>thing</EM>は、座標系から得られるどのオブジェクトでも可能である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37457"></A>
+<B>draw-arrow</B> <EM>p1 p2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>*viewer*</B>に<EM>p1</EM>から<EM>p2</EM>に向かう矢印を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37470"></A>
+<B>hid</B> <EM>[viewer] &amp;rest thing  </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>viewer</EM>に陰線処理された画像を描く。
+<EM>thing</EM>は、<TT>face</TT>または<TT>body</TT>が可能である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37484"></A>
+<B>hidd</B> <EM>[viewer] &amp;rest thing  </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+陰線を点線で描くことを除いて、<B>hid</B>と同じである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37495"></A>
+<B>hid2</B> <EM>body-list viewing </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+edge-imageオブジェクトで表現される陰線処理画像を生成する。
+その結果は<B>*hid*</B>に置かれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37506"></A>
+<BR>
+<IMG
+ WIDTH="554" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img73.png"
+ ALT="\begin{emtabbing}
+{\bf render}
+\it\&amp;key \= :bodies :faces (:viewer *viewer*) \\lq ...
+... *light-sources*)\\
+\&gt; (colormap *render-colormap*) (y 1.0)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>bodies</EM>と<EM>faces</EM>にレイトレーシングを行い、陰面消去した画像を生成する。
+<B>viewing, viewport</B>および<B>viewsurfaceは</B>、<EM>viewer</EM>から得られる。
+<EM>lights</EM>は、<TT>light-source</TT>（光源）オブジェクトのリストである。
+<EM>colormap</EM>は、Xwindowの<B>colormap</B>オブジェクトである。
+それぞれの<EM>bodies</EM>と<EM>faces</EM>は、割り当てられるカラー属性を
+持たなければならない。
+<EM>colormap</EM>に定義されているカラーLUTの名前を<TT>:color</TT>メッセージで
+送ることによりカラー属性を設定できる。
+一般にこの関数は、Xlib環境下でのみ働く。
+<TT>demo/renderdemo.l</TT>のサンプルプログラムを見ること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37531"></A>
+<B>make-light-source</B> <EM>pos &amp;optional (intensity 1.0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pos</EM>の位置に光源オブジェクトを作る。
+<EM>intensity</EM>は、デフォルトの光の強さを増す拡大比である。
+もっと正確に強さを決定するためには、光源の<TT>:intensity</TT>メソッドを
+使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37544"></A>
+<B>tektro</B> <EM>file &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>*tektro-port*</TT>ストリームのために<EM>file</EM>をオープンし、
+<EM>forms</EM>を評価する。
+これは、tektro描画の出力を直接<EM>file</EM>に書き込むために使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37558"></A>
+<B>kdraw</B> <EM>file &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>kdraw</B>は、<TT>kdraw</TT>または<TT>idraw</TT>で読み込めるポストスクリプトファイルを
+生成するためのマクロ命令である。
+<B>kdraw</B>は、<TT>:output</TT>モードで<EM>file</EM>をオープンし、
+<TT>*viewer*</TT>を置き換えるためのkdraw-viewsurfaceとviewportを
+作り、<EM>forms</EM>を評価する。
+それぞれの<EM>forms</EM>は、<TT>draw</TT>や<TT>hid</TT>のような描画関数の
+どれかを呼び出す。
+これらの<EM>forms</EM>からの描画メッセージは、<TT>kdraw-viewsurface</TT>に
+直接出力される。この出力は<TT>idraw</TT>や<TT>kdraw</TT>で認識できる
+ポストスクリプト表現にメッセージを変換する。
+そして、<EM>file</EM>に蓄積する。
+<TT>idraw</TT>または<TT>kdraw</TT>が呼び出され<EM>file</EM>がオープンされたとき、
+EusViewer windowに書いたものと同一の図形を見ることができる。
+その図形は、<TT>idraw</TT>の機能で変更することができる。
+そして、最終描画は<TT>epsfile</TT>環境を用いることにより<SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN>ドキュメント
+に組み込むことができる。
+この機能は、"llib/kdraw.l"のファイルに記述されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37589"></A>
+<B>pictdraw</B> <EM>file &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>pictdraw</B>は、MacintoshのPICTフォーマットで画像ファイルを
+生成するためのマクロである。
+<B>pictdraw</B>は、<EM>file</EM>を<TT>:output</TT>モードでオープンし、
+pictdraw-viewsurfaceを作り、<TT>*viewer*</TT>のviewportに置き換え、
+<EM>forms</EM>を評価する。
+<EM>forms</EM>は、それぞれ<TT>draw</TT>あるいは<TT>hid</TT>のような描画関数のどれかを
+呼び出すものである。
+これらの書式からの描画メッセージは、<TT>kdraw-viewsurface</TT>に
+直接出力された後、PICTフォーマットへのメッセージに変換され,
+<EM>file</EM>へ蓄積される。
+このPICTフォーマットは、Macintoshの<TT>macdraw</TT>や<TT>teachtext</TT>で
+認識することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37612"></A>
+<B>hls2rgb</B> <EM>hue lightness saturation &amp;optional (range 255) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+HLS(Hue, Lightness, Saturation)で表現される色を、RGB表現に変換する。
+HLSは、しばしばHSLとして参照される。
+<EM>hue</EM>は、rainbow circle(0から360)の色で表現される。
+0が赤で45が黄で120が緑で240が青で270が紫そして360が再び赤となる。
+<EM>lightness</EM>は、0.0から0.1の値を持ち、黒から白までの明るさを表現する。
+<EM>lightness</EM>が0のときは、<EM>hue</EM>や<EM>saturation</EM>にかかわらず
+黒となる。そして、<EM>lightness</EM>が1のときは、白となる。
+<EM>saturation</EM>は、0.0から1.0までの値を持ち、色の強さを表現する。
+<EM>saturation</EM>の値が大きいと鮮明な色調を生成し、小さい値は弱く濁った色調
+を生成する。
+<EM>range</EM>は、RGB値の限界を示す。
+もし、それぞれの色に8ビットの値が割り当てられているカラーディスプレイ
+を使っているならば、<EM>range</EM>は255とすべきである。
+もし、RGBに16ビットの整数が仮想的に割り当てられているXwindowを使って
+いるならば、<EM>range</EM>は65536とすべきである。
+HSVとHLSとの違いに注意すること。
+HLSでは、鮮明な(rainbow)色は<TT>lightness=0.5</TT>で定義されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37634"></A>
+<B>rgb2hls</B> <EM>red green blue &amp;optional (range 255) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGBの色表現を、HLS表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2326"
+  HREF="jmanual-node129.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2320"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2314"
+  HREF="jmanual-node127.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2322"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2324"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2327"
+  HREF="jmanual-node129.html">アニメーション</A>
+<B> Up:</B> <A NAME="tex2html2321"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2315"
+  HREF="jmanual-node127.html">Viewer</A>
+ &nbsp; <B>  <A NAME="tex2html2323"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2325"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

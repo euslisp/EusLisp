@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>LU分解</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="LU分解">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node111.html">
+<LINK REL="previous" HREF="jmanual-node109.html">
+<LINK REL="up" HREF="jmanual-node107.html">
+<LINK REL="next" HREF="jmanual-node111.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2063"
+  HREF="jmanual-node111.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2057"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2051"
+  HREF="jmanual-node109.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2059"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2061"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2064"
+  HREF="jmanual-node111.html">座標系</A>
+<B> Up:</B> <A NAME="tex2html2058"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2052"
+  HREF="jmanual-node109.html">行列と変換</A>
+ &nbsp; <B>  <A NAME="tex2html2060"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2062"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04033000000000000000">
+LU分解</A>
+</H2>
+<B>lu-decompose</B>と<B>lu-solve</B>は、線形の連立方程式を
+解くために用意されている。
+最初に、<B>lu-decompose</B>は行列を下三角行列を上三角行列に分解する。
+もし、行列が特異値なら、<B>lu-decompose</B>はNILを返す。
+そうでなければ、<B>lu-solve</B>に与えるべき順列ベクトルを返す。
+<B>lu-solve</B>は、与えられた定数ベクトルの解をLU行列で計算する。
+この手法は、同じ係数行列と異なった定数ベクトルのたくさんの組に対して
+解を求めたいときに効果的である。
+<B>simultaneous-equation</B>は、1つの解だけを求めたいときにもっとも
+手軽な関数である。
+<B>lu-determinant</B>は、LU分解された行列の行列式を計算する。
+<B>inverse-matrix</B>関数は、<B>lu-decompose</B>を1回と<B>lu-solve</B>をn回
+使って逆行列を求める。
+3*3行列での計算時間は約4msである。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="27431"></A>
+<B>lu-decompose</B> <EM>matrix &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>にLU分解を実行する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27442"></A>
+<B>lu-solve</B> <EM>lu-mat perm-vector bvector [result] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+LU分解された1次連立方程式を解く。
+<EM>perm-vector</EM>は、<B>lu-decompose</B>で返された結果でなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27454"></A>
+<B>lu-determinant</B> <EM>lu-mat perm-vector </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+LU分解された行列の行列式を求める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27464"></A>
+<B>simultaneous-equation</B> <EM>mat vec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+係数が<EM>mat</EM>で、定数が<EM>vec</EM>で記述される1次連立方程式を解く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27476"></A>
+<B>inverse-matrix</B> <EM>mat </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+正方行列<EM>mat</EM>の逆行列を求める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27487"></A>
+<B>pseudo-inverse</B> <EM>mat </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+特異値分解を用いて擬似逆行列を求める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

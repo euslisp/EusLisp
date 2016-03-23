@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Keyed Indexed Files</TITLE>
+<META NAME="description" CONTENT="Keyed Indexed Files">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node93.html">
+<LINK REL="up" HREF="manual-node86.html">
+<LINK REL="next" HREF="manual-node95.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1856"
+  HREF="manual-node95.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1850"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1846"
+  HREF="manual-node93.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1852"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1854"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1857"
+  HREF="manual-node95.html">Unix Processes</A>
+<B> Up:</B> <A NAME="tex2html1851"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1847"
+  HREF="manual-node93.html">IOCTL</A>
+ &nbsp; <B>  <A NAME="tex2html1853"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1855"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04012800000000000000">
+Keyed Indexed Files</A>
+</H3>
+Recent Unix provides with the <EM>dbm</EM> or <EM>ndbm</EM> library
+for the management of keyed index files.
+Making use of this library, you can build a data base  that is composed
+of many pairs  of key and datum association.
+Following functions are defined in clib/ndbm.c.
+On Sun, it should be compiled by <TT>cc -c -Dsun4 -Bstatic</TT>,
+and loaded into EusLisp by <TT>(load "clib/ndbm" :ld-option "-lc")</TT>.
+
+<P>
+
+ <BR>
+<BR> <A NAME="23225"></A>
+<B>dbm-open</B> <EM>dbname mode flag </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Dbm-open</B> must be called first to create a data base file,
+and to begin read/write operations to the data base.
+<EM>Dbname</EM> is the name of the data base.
+Actually, ndbm manager creates two files which have suffixes <TT>".pag"</TT>
+and <TT>".dir"</TT>.
+<EM>Mode</EM> specifies file-open mode; 0 for read-only access, 1 for write-only,
+and 2 for read-write; also #x200 should be <EM>or</EM>ed when you create
+the file  at the first time.
+<EM>Flag</EM> gives access permission that is changed by chmod.
+#o666 or #o664 is good for <EM>flag</EM>.
+<B>Dbm-open</B> returns an integer that identifies the data base in the process.
+This value is used by other dbm functions to identify the data base.
+In other words, you can open several data bases at the same time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23244"></A>
+<B>dbm-store</B> <EM>db key datum mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+stores <EM>key-datum</EM> association in <EM>db</EM>.
+<EM>Db</EM> is an integer to identify the data base.
+<EM>Key and datum</EM> are strings.
+<EM>Mode</EM> is 0 (insert) or 1 (replace).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23259"></A>
+<B>dbm-fetch</B> <EM>db key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+retrieves datum that is associated with <EM>key</EM> in <EM>db</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1856"
+  HREF="manual-node95.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1850"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1846"
+  HREF="manual-node93.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1852"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1854"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1857"
+  HREF="manual-node95.html">Unix Processes</A>
+<B> Up:</B> <A NAME="tex2html1851"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1847"
+  HREF="manual-node93.html">IOCTL</A>
+ &nbsp; <B>  <A NAME="tex2html1853"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1855"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

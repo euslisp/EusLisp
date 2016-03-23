@@ -1,0 +1,626 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Coordinates</TITLE>
+<META NAME="description" CONTENT="Coordinates">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node118.html">
+<LINK REL="previous" HREF="manual-node116.html">
+<LINK REL="up" HREF="manual-node113.html">
+<LINK REL="next" HREF="manual-node118.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2198"
+  HREF="manual-node118.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2192"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2186"
+  HREF="manual-node116.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2194"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2196"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2199"
+  HREF="manual-node118.html">CascadedCoords</A>
+<B> Up:</B> <A NAME="tex2html2193"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2187"
+  HREF="manual-node116.html">LU decomposition</A>
+ &nbsp; <B>  <A NAME="tex2html2195"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2197"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04034000000000000000"></A><A NAME="Coordinates"></A>
+<BR>
+Coordinates
+</H2>
+
+<P>
+Coordinate systems and their transformations are represented by
+the <B>coordinates</B> class.
+Instead of 4*4 (homogeneous) matrix representation,
+coordinate system in EusLisp is represented by a combination of
+a 3*3 rotation matrix and a 3D position vector
+mainly for speed and generality.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="27540"></A>
+<BIG CLASS="XLARGE"><B>coordinates </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 (pos :type float-vector 
+<BR>
+rot :type array) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a coordinate system with a pair of a position vector and a 3x3
+rotation matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27557"></A>
+<B>coordinates-p</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T when obj is an instance of coordinates class or its subclasses.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27567"></A>
+<B>:rot</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the 3X3 rotation matrix of this coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27577"></A>
+<B>:pos</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the 3-D position vector of this coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27587"></A>
+<B>:newcoords</B> <EM>newrot &amp;optional newpos </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+updates the coords with newrot and newpos. Whenever a condition that changes
+the state of this coords occurs,
+this method should be called with the new rotation
+matrix and the position vector.
+This message may invoke another :update method to propagate the event.
+If newpos is not given, newrot is given as a instance of coordinate class.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27597"></A>
+<B>:replace-coords</B> <EM>newrot &amp;optional newpos </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the rot and pos slots to be updated without calling newcoords method.
+If newpos is not given, newrot is given as a instance of coordinate class.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27607"></A>
+<B>:coords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27618"></A>
+<B>:copy-coords</B> <EM>&amp;optional dest </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If dest is not given, :copy-coords makes another coordinates object
+which has the same rot and pos slots. If dest is given, rot and pos of
+this coordinates is copied to the dest coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27628"></A>
+<B>:reset-coords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forces the rotation matrix of this coords to be identity matrix, and pos
+vector to be all zero.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27638"></A>
+<B>:worldpos</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27649"></A>
+<B>:worldrot</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27660"></A>
+<B>:worldcoords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes the position vector, the rotation matrix and the coordinates
+of this object represented in the world coordinates. The coordinates class
+is always assumed to be represented in world, these method can simply return
+pos, rot and self.  These methods are provided for the compatibility with
+cascaded-coords class which cannot be assumed to be represented in world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27670"></A>
+<B>:copy-worldcoords</B> <EM>&amp;optional dest </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+First, worldcoords is computed, and it is copied to dest. If no dest
+is specified, a coordinates object to store the result is newly created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27680"></A>
+<B>:rotate-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A vector is rotated by the rotation of this coords, i.e., an orientation
+vector represented in this coords is converted to the representation
+in the world.
+The position of this coords does not affect rotation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27690"></A>
+<B>:transform-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A vector in this local coords is transformed to the representation in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27700"></A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A vector in the world is inversely transformed to the representation in this
+local coordinate system.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27710"></A>
+<B>:transform</B> <EM>trans &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Transform this coords by the trans represented in wrt coords.
+Trans must be of type coordinates, and wrt must be one of keywords
+<TT>:local, :parent, :world</TT> or an instance of coordinates.
+If wrt is <TT>:local</TT>, the trans is applied from the right to this coords,
+and if wrt is <TT>:world</TT> or <TT>:parent</TT>,
+the trans is multiplied from the left.
+Else, if wrt is of type coordinates, the trans represented in the wrt
+coords is first transformed to the representation in the world, and  it
+is applied from the left.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27724"></A>
+<B>:move-to</B> <EM>trans &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Replaces the rot and pos of the coords with trans represented in wrt.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27734"></A>
+<B>:translate</B> <EM>p &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the position of this object
+relatively with respective to wrt coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27744"></A>
+<B>:locate</B> <EM>p &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Changes the location of this coords with the parameter represented in wrt.
+If wrt is <TT>:local</TT>, then the effect is identical to 
+<B>:translate</B> with <EM>wrt</EM>=<TT>:local</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27758"></A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Rotates this coords relatively by <EM>theta</EM> radian around the <EM>axis</EM>.
+<EM>Axis</EM> is one of axis-keywords (<TT>:x, :y</TT> and <TT>:z</TT>) or an arbitrary float-vector.
+<EM>Axis</EM> is considered to be represented in the <EM>wrt</EM> coords.
+Thus, if <EM>wrt</EM>=<TT>:local</TT> and <EM>axis</EM>=<TT>:z</TT>,
+the coordinates is rotated around the z
+axis of this local coords, and <EM>wrt</EM>=<TT>:world</TT> or <TT>:parent</TT>,
+the coords is rotated around the z axis of world coords.
+In other words, if <EM>wrt</EM>=<TT>:local</TT>,
+a rotation matrix is multiplied from the right of this coords,
+and if <EM>wrt</EM>=<TT>:world</TT> or <TT>:parent</TT>,
+a rotation matrix is multiplied from the left.
+Note that even <EM>wrt</EM> is either <TT>:world</TT> or <TT>:parent</TT>,
+the <EM>pos</EM> vector of this coordinates does not change.
+For the true rotation around the world axis,
+an instance of coordinates class representing the
+rotation should be given to <B>:transform</B> method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27792"></A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forces setting rot.
+This is an absolute version of :<B>rotate</B> method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27803"></A>
+<B>:inverse-transformation</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new coords that is inverse to self.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27813"></A>
+<B>:transformation</B> <EM>coords (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes the transformation (an instance of coordinates) between this coords
+and the coords given as the argument.
+If <EM>wrt</EM>=<TT>:local</TT>,
+the result is represented in local coords,
+i.e., if the resulted transformation is given
+as an argument to :transform with <EM>wrt</EM>=<TT>:local</TT>,
+this coords is transformed
+to be identical with the coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27827"></A>
+<B>:Euler</B> <EM>az1 ay az2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets rot with Euler angles, that are,
+rotation angles around z (<EM>az1</EM>,
+y (<EM>ay</EM>) and again z <EM>az2</EM> axis of
+this local coordinates system.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27840"></A>
+<B>:roll-pitch-yaw</B> <EM>roll pitch yaw </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets rot with roll-pitch-yaw angles:
+rotation angles around x (<EM>yaw</EM>), y (<EM>pitch</EM>) and z (<EM>roll</EM>)
+axes of the world coordinate system.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27853"></A>
+<B>:4x4</B> <EM>&amp;optional mat44 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If a matrix of 4x4 is given as <EM>mat44</EM>,
+it is converted to coordinates representation with a 3x3 rotation matrix and
+a 3D position vector.
+If <EM>mat44</EM> is not given, this coordinates is converted to 4x4
+matrix representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27865"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="188" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img53.png"
+ ALT="\begin{emtabbing}
+{\bf :init}
+\it\&amp;key \= :pos \hspace{8mm} \= \char93 f(0 0 0)...
+...ist of (ind . value) pair \\
+\&gt; :name \&gt; name property \\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>initializes this coordinates object and sets rot and pos.
+The meaning of each keyword follows:
+<DL>
+<DT><STRONG>:dimension</STRONG></DT>
+<DD>2 or 3 (default is 3)
+</DD>
+<DT><STRONG>:pos</STRONG></DT>
+<DD>specifies a position vector (defaulted to #f(0 0 0))
+</DD>
+<DT><STRONG>:rot</STRONG></DT>
+<DD>specifies a rotation matrix (defaulted to a unit-matrix)
+</DD>
+<DT><STRONG>:Euler</STRONG></DT>
+<DD>gives a sequence of three elements for Euler angles
+</DD>
+<DT><STRONG>:rpy</STRONG></DT>
+<DD>gives a sequence of three elements for roll-pitch-yaw
+</DD>
+<DT><STRONG>:axis</STRONG></DT>
+<DD>rotation axis (:x,:y,:z or an arbitrary float-vector)
+</DD>
+<DT><STRONG>:angle</STRONG></DT>
+<DD>rotation angle (used with :axis)
+</DD>
+<DT><STRONG>:wrt</STRONG></DT>
+<DD>where the rotation axis is taken (default is :local)
+</DD>
+<DT><STRONG>:4X4</STRONG></DT>
+<DD>4X4 matrix is used to specify both pos and rot
+</DD>
+<DT><STRONG>:coords</STRONG></DT>
+<DD>copies pos and rot from coords
+</DD>
+<DT><STRONG>:name</STRONG></DT>
+<DD>set :name property 
+</DD>
+</DL>
+<TT>:Angle</TT> can only be used in conjunction with the <TT>:axis</TT>
+that is determined in the <TT>:wrt</TT> coordinates.
+Without regard to <TT>:wrt</TT>, <TT>:Euler</TT> always specifies
+the Euler angles, <EM>az1, ay</EM> and <EM>az2</EM>, 
+defined in the local coordinates,
+and <TT>:rpy</TT> specifies the angles around
+<EM>z</EM>, <EM>y</EM> and <EM>x</EM> axes of the world coordinates.
+Two or more of <TT>:rot, :Euler, :rpy, :axis</TT> and <TT>:4X4</TT>
+cannot be specified simultaneously, although no error is reported.
+Sequences can be supplied to the <TT>:axis</TT> and <TT>:angle</TT> parameters,
+which mean successive rotations around the given axes.
+List of pairs of an attribute and its value can be given as <TT>:properties</TT>
+argument. These pairs are copied in the plist of this coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2198"
+  HREF="manual-node118.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2192"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2186"
+  HREF="manual-node116.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2194"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2196"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2199"
+  HREF="manual-node118.html">CascadedCoords</A>
+<B> Up:</B> <A NAME="tex2html2193"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2187"
+  HREF="manual-node116.html">LU decomposition</A>
+ &nbsp; <B>  <A NAME="tex2html2195"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2197"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

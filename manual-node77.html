@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Program Loading</TITLE>
+<META NAME="description" CONTENT="Program Loading">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node78.html">
+<LINK REL="previous" HREF="manual-node76.html">
+<LINK REL="up" HREF="manual-node73.html">
+<LINK REL="next" HREF="manual-node78.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1518"
+  HREF="manual-node78.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1512"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1506"
+  HREF="manual-node76.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1514"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1516"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1519"
+  HREF="manual-node78.html">Debugging Aid</A>
+<B> Up:</B> <A NAME="tex2html1513"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1507"
+  HREF="manual-node76.html">Compilation</A>
+ &nbsp; <B>  <A NAME="tex2html1515"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1517"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030114000000000000000">
+Program Loading</A>
+</H2>
+
+ <BR>
+<BR> <P>
+
+<A NAME="19192"></A>
+<BR>
+<IMG
+ WIDTH="464" HEIGHT="129" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img36.png"
+ ALT="\begin{emtabbing}
+{\bf load}
+\it fname \&amp;key \= :verbose \hspace{20mm} \= *load...
+...&gt; ''a.out'' \\
+\&gt; :print \&gt; nil \\
+\&gt; :ld-option \&gt; ''''
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Load</B> is the function
+to read either a source file or an compiled object file into the
+EusLisp process.
+If the file specified by <EM>fname</EM> exists, it is loaded.
+Whether the file is source or binary is automatically checked by seeing
+its magic number.
+If the file does not exist but a file with the file type '.o' exists,
+the file is loaded as an object file.
+on Sun based systems.
+Else if a file with the '.l' suffix is found, it is loaded as a 
+source program.
+Therefore, there is a case where you specified "foo.so"
+expecting "foo.l" is already compiled, but "foo.l" is 
+actually loaded, since it has not yet been compiled in reality.
+In other words, if you just specify a base-name of a file,
+its compiled version is first tried to be loaded, and the source
+file suffixed by ".l" is tried later.
+If the file name is not specified in the absolute path by prefixing
+the name with a slash "/",
+
+<P>
+<B>load</B> searches for the file in the directories specified
+by the <B>*load-path*</B> global variable.
+For example, if <TT>*load-path*</TT> is <TT>("/user/eus/" "/usr/lisp/")</TT>,
+and <TT>"llib/math"</TT> is given as <EM>fname</EM>,
+<B>load</B> tries to find <TT>"/user/eus/llib/math.o", 
+"/usr/lisp/llib/math.o", "/user/eus/llib/math.l"</TT> and
+<TT>"/usr/lisp/llib/math.l"</TT>
+in this order.
+If no appropriate file could be found, an error is reported.
+
+<P>
+<I>:entry</I> option specifies the entry address to initialize the load module.
+For example, <TT>:entry "_myfunc"</TT> option means that the execution begins
+at <TT>_myfunc</TT>.
+Default entry is the basename of the file loaded as described
+in the section <A HREF="manual-node76.html#compiler">12.3</A>.
+Library module names can be specified in <B>:ld-option</B> option string.
+For example, in order to link a module which uses suncore libraries,
+<B>:ld-option</B> <TT>"-lsuncore -lsunwindow -lpixrect -lm -lc"</TT>
+should be given. 
+On non Solaris systems, ld runs twice when libraries are included;
+once to determine the size of the linked module,
+and again to link them actually with a proper memory allocation.
+
+<P>
+<B>:symbol-input</B> and <B>:symbol-output</B> options are used to 
+solve references from one object module to another or to avoid duplicated
+loading of libraries.
+Suppose you have two object modules A and B which has reference to symbols
+defined in A. You first load the module A specifying <TT>:symbol-output =
+"a.out"</TT>.
+Symbol information generated by this linking is written to <TT>a.out</TT>.
+In order to load the module B, you have to specify
+<TT>:symbol-input = "a.out"</TT> to solve the references from B to A.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+On Solaris2 OS, the loading of compiled code is done by calling <EM>dlopen</EM>
+in the dynamic loader library.
+Application of <EM>dlopen</EM> is restricted to shared objects which are
+compiled position independently with "-K pic" option.
+Also,  since <EM>dlopen</EM> cannot open the same file twice,
+load first does <EM>dlclose</EM> on the file already loaded.
+
+<P>
+<B>:print</B> option decides whether load should produce output
+to *standard-output* for each input expression.  This option is provided
+to find which expression (usually defun, defmethod, etc.) results error
+in loading.
+
+<P>
+
+<A NAME="19227"></A>
+<B>load-files</B> <EM>&amp;rest files </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> loads <EM>files</EM> successively
+with setting <TT>:verbose</TT> to T.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19239"></A>
+<B>*modules*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> holds a list of names of the modules that
+have been loaded so far.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="19249"></A>
+<B>provide</B> <EM>module-name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> adds <EM>module-name</EM> in <TT>*modules*</TT>
+as the name of the module being loaded. <EM>module-name</EM> should be
+a symbol or a string. Calls to <B>require</B> should appear at the beginning
+of files that compose a complete modules.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="19263"></A>
+<B>require</B> <EM>module-name &amp;optional file </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+loads <EM>file</EM> unless <EM>module-name</EM> is found in <TT>*modules*</TT>.
+<B>provide</B> and <B>require</B> control dependency among modules and
+are used to avoid duplicated loading of basic modules.
+Suppose you have one basic module named "A" and two application modules
+named "B" and "C" which are independent from each other but rely on 
+"A" module. At the beginning of each file, module name is declared
+by <B>provide</B>. Since "A" module does not depend on any other modules
+it does not <B>require</B> anything. 
+<TT>(require "A" "a.o")</TT> follows  calls to <B>provide</B> in "B" and "C".
+If you load "B" (more precisely, "b.o"), "a.o" is also loaded since
+it is found in <TT>*modules*</TT> and
+two module names "A" and "B" are added to <TT>*modules*</TT>.
+Then if you load "C", "A" module is not loaded and "C" is added to
+<TT>*modules*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19285"></A>
+<BR>
+<IMG
+ WIDTH="577" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img37.png"
+ ALT="\begin{emtabbing}
+{\bf system:binload}
+\it opath qpath \&amp;optional \=
+(entry (pa...
+.../bin/eus'') \\
+\&gt; (symout ''a.out'') \\
+\&gt; (ldopt '''')\\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>link-load a binary file.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19296"></A>
+<B>system:txtload</B> <EM>fname </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1518"
+  HREF="manual-node78.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1512"
+  HREF="manual-node73.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1506"
+  HREF="manual-node76.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1514"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1516"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1519"
+  HREF="manual-node78.html">Debugging Aid</A>
+<B> Up:</B> <A NAME="tex2html1513"
+  HREF="manual-node73.html">Evaluation</A>
+<B> Previous:</B> <A NAME="tex2html1507"
+  HREF="manual-node76.html">Compilation</A>
+ &nbsp; <B>  <A NAME="tex2html1515"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1517"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

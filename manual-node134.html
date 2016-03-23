@@ -1,0 +1,367 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Drawings</TITLE>
+<META NAME="description" CONTENT="Drawings">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node135.html">
+<LINK REL="previous" HREF="manual-node133.html">
+<LINK REL="up" HREF="manual-node129.html">
+<LINK REL="next" HREF="manual-node135.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2447"
+  HREF="manual-node135.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2441"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2435"
+  HREF="manual-node133.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2443"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2445"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2448"
+  HREF="manual-node135.html">Animation</A>
+<B> Up:</B> <A NAME="tex2html2442"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2436"
+  HREF="manual-node133.html">Viewer</A>
+ &nbsp; <B>  <A NAME="tex2html2444"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2446"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04055000000000000000"></A><A NAME="Drawings"></A>
+<BR>
+Drawings
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="36408"></A>
+<B>draw</B> <EM>[viewer] &amp;rest thing </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws <EM>thing</EM>s in <EM>viewer</EM>.
+<EM>Thing</EM> can be any of coordinates, body, face, edge, float-vector,
+list of two float-vectors.
+If you are running <TT>eusx</TT>, 
+<TT>(progn (view) (draw (make-cube 10 20 30)))</TT>
+ draws a cube in a xwindow.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36423"></A>
+<B>draw-axis</B> <EM>[viewer] [size] &amp;rest thing </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws coordinate-axes of <EM>thing</EM>s in <EM>viewer</EM> with <EM>size</EM>
+as the length of each coordinates-axis.
+<EM>Thing</EM> can be any object derived from coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36437"></A>
+<B>draw-arrow</B> <EM>p1 p2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws an arrow pointing from p1 to p2 in <TT>*viewer*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36448"></A>
+<B>hid</B> <EM>[viewer] &amp;rest thing  </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> draws hidden-line eliminated image in <EM>viewer</EM>.
+<EM>Thing</EM> can be of face or body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36460"></A>
+<B>hidd</B> <EM>[viewer] &amp;rest thing  </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is same as <B>hid</B>, except that <B>hidd</B> draws hidden lines
+with dashed-lines.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36472"></A>
+<B>hid2</B> <EM>body-list viewing </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Generate hidden-line eliminated image represented by edge-image objects.
+The result is bound to <B>*hid*</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36483"></A>
+<B>render</B> <EM>&amp;key bodies faces (viewer *viewer*) (lights *light-sources*)
+<BR>(colormap *render-colormap*) (y 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+does ray-tracing for <EM>bodies</EM> and <EM>faces</EM> and generates
+hidden-surface removed images.
+viewing, viewport, and viewsurface are taken from <EM>viewer</EM>.
+<EM>lights</EM> is a list of <TT>light-source</TT> objects.
+<EM>colormap</EM> is xwindow's colormap object.
+Each of bodies and faces must have color attribute assigned.
+This can be done by sending <TT>:color</TT> message with the name of
+color LUT defined in the <EM>colormap</EM>.
+Currently this function works only in Xlib environment.
+See examples in <TT>demo/renderdemo.l</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36502"></A>
+<B>make-light-source</B> <EM>pos &amp;optional (intensity 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+make a light-source object located at <EM>pos</EM>.
+<EM>intensity</EM> is magnifying ratio which multiplies default light
+intensity. In order to determine the intensity more precisely,
+use <TT>:intensity</TT> method of a light-source.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36515"></A>
+<B>tektro</B> <EM>file &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+opens file for <TT>*tektro-port*</TT> stream, and evaluates forms.
+This is used in order to redirect the output of tektro drawings to a file.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36526"></A>
+<B>kdraw</B> <EM>file &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Kdraw</B> is a macro to produce a [ik]draw-readable postscript file.
+<B>Kdraw</B> opens <EM>file</EM> in <TT>:output</TT> mode,
+makes a kdraw-viewsurface and a viewport with which <TT>*viewer*</TT> is replaced,
+and evaluates <EM>forms</EM>.
+Each of <EM>forms</EM> is a call to any of drawing functions like <TT>draw</TT> or <TT>hid</TT>.
+Drawing messages from these forms are redirected to a <TT>kdraw-viewsurface</TT>, 
+which transforms the messages into postscript representations
+that <TT>idraw</TT> or <TT>kdraw</TT> can recognize, and stores them in <EM>file</EM>.
+When  <TT>idraw</TT> or <TT>kdraw</TT> is invoked and <EM>file</EM> is opened,
+you see the identical figure you drew in a EusViewer window.
+The figure can be modified by <TT>idraw</TT>'s facilities,
+and the final drawing can be incorporated into a <SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN>document
+using the <TT>epsfile</TT> environment.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36554"></A>
+<B>pictdraw</B> <EM>file &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Pictdraw</B> is a macro to produce picture files in the Macintosh
+PICT format. 
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36565"></A>
+<B>pictdraw</B> <EM>file &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Pictdraw</B> is a macro to produce picture files for Macintosh
+in PICT format. 
+<B>Pictdraw</B> opens <EM>file</EM> in <TT>:output</TT> mode
+makes a pictdraw-viewsurface and a viewport with which <TT>*viewer*</TT> is replaced,
+and evaluates <EM>forms</EM>.
+Each of <EM>forms</EM> is a call to any of drawing functions like <TT>draw</TT> or <TT>hid</TT>.
+Drawing messages from these forms are redirected to a <TT>kdraw-viewsurface</TT>, 
+which transforms the messages into PICT format
+that <TT>macdraw</TT> or <TT>teachtext</TT> of Macintosh can recognize,
+and stores them in <EM>file</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36588"></A>
+<B>hls2rgb</B> <EM>hue lightness saturation &amp;optional (range 255) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Color representation in HLS (Hue, Lightness, and Saturation)
+is converted to RGB representation.
+HLS is often referred to as HSL.
+<EM>Hue</EM> represents a color around a rainbow circle (from 0 to 360).
+0 for red, 45 for yellow, 120 for green, 240 for blue, 270 for magenta, 
+and 360 again for red, etc.
+<EM>Lightness</EM> is a value between 0.0 and 1.0, representing
+from black to white.
+The color of lightness value of 0 is always black regardless to
+the hue and saturation, and the lightness value 1.0 is always white.
+<EM>Saturation</EM> is a value between 0.0 and 1.0, and represents the
+strength of the color. 
+The greater the saturation value, the divider the color,
+and small saturation values generate weak, dull tone colors.
+<EM>Range</EM> limits the RGB values.
+If you are using a color display which can assign 8bit value to each of
+red, green and blue, <EM>range</EM> should be 255.
+If you use Xwindow, which virtually assigns 16bits integers to RGB,
+you should specify <EM>range</EM> to 65535.
+Note the difference between HSV and HLS.
+In HLS, vivid (rainbow) colors are defined with lightness=0.5.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36604"></A>
+<B>rgb2hls</B> <EM>red green blue &amp;optional (range 255) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGB representation of a color is converted into the corresponding
+representation in HLS.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2447"
+  HREF="manual-node135.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2441"
+  HREF="manual-node129.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2435"
+  HREF="manual-node133.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2443"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2445"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2448"
+  HREF="manual-node135.html">Animation</A>
+<B> Up:</B> <A NAME="tex2html2442"
+  HREF="manual-node129.html">Viewing and Graphics</A>
+<B> Previous:</B> <A NAME="tex2html2436"
+  HREF="manual-node133.html">Viewer</A>
+ &nbsp; <B>  <A NAME="tex2html2444"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2446"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

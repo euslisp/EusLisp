@@ -1,0 +1,528 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Characters and Strings</TITLE>
+<META NAME="description" CONTENT="Characters and Strings">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node50.html">
+<LINK REL="previous" HREF="manual-node48.html">
+<LINK REL="up" HREF="manual-node45.html">
+<LINK REL="next" HREF="manual-node50.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1107"
+  HREF="manual-node50.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1101"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1095"
+  HREF="manual-node48.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1103"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1105"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1108"
+  HREF="manual-node50.html">Foreign Strings</A>
+<B> Up:</B> <A NAME="tex2html1102"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1096"
+  HREF="manual-node48.html">Vectors and Arrays</A>
+ &nbsp; <B>  <A NAME="tex2html1104"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1106"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03074000000000000000">
+Characters and Strings</A>
+</H2>
+
+<P>
+There is no character type in EusLisp;
+a character is represented by an integer.
+In order to handle strings representing file names,
+use <B>pathname</B>s described in <A HREF="manual-node69.html#Pathnames">11.6</A>.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="11421"></A>
+<B>digit-char-p</B> <EM>ch </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>ch</EM> is #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>0 through #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>9.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11432"></A>
+<B>alpha-char-p</B> <EM>ch </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>ch</EM> is #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>A through #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>Z or
+#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>a through #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>z.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11443"></A>
+<B>upper-case-p</B> <EM>ch </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>ch</EM> is #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>A through #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>Z.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11454"></A>
+<B>lower-case-p</B> <EM>ch </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>ch</EM> is  #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>a through #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>z.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11465"></A>
+<B>alphanumeric-p</B> <EM>ch </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>ch</EM> is  #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>0 through #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>9,
+#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>A through #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>Z
+or #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>a through #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>z.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11476"></A>
+<B>char-upcase</B> <EM>ch </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+convert the case of <EM>ch</EM> to upper.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11487"></A>
+<B>char-downcase</B> <EM>ch </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+convert the case of <EM>ch</EM> to lower.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11498"></A>
+<B>char</B> <EM>string index </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns <EM>index</EM>th character in <EM>string</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11510"></A>
+<B>schar</B> <EM>string index </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts a character from <EM>string</EM>. Use <B>schar</B> only if the
+type of <EM>string</EM> is definitely known and no type check is required.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11523"></A>
+<B>stringp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM> is a vector of bytes (integers less than 256).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11534"></A>
+<B>string-upcase</B> <EM>str &amp;key start end </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+converts <EM>str</EM> to upper case string and returns a new string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11545"></A>
+<B>string-downcase</B> <EM>str &amp;key start end </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+converts <EM>str</EM> to lower case string and returns a new string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11556"></A>
+<B>nstring-upcase</B> <EM>str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+converts <EM>str</EM> to upper case string destructively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11567"></A>
+<B>nstring-downcase</B> <EM>str &amp;key start end </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+converts <EM>str</EM> to lower case string destructively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11578"></A>
+<B>string=</B> <EM>str1 str2 &amp;key start1 end1 start2 end2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>str1</EM> is equal to <EM>str2</EM>.
+<EM>string=</EM> is case sensitive.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11591"></A>
+<B>string-equal</B> <EM>str1 str2 &amp;key start1 end1 start2 end2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+tests equality of <EM>str1</EM> and <EM>str2</EM>.
+<B>string-equal</B> is not case sensitive.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11604"></A>
+<B>string</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gets string notation of <EM>object</EM>. If <EM>object</EM> is a string, the <EM>object</EM>
+is returned. If <EM>object</EM> is a symbol, its pname is copied and returned.
+Note that (equal (string 'a) (symbol-pname 'a))==T, but
+(eq (string 'a) (symbol-pname 'a))==NIL.
+If object is number its string representation is returned
+(this is incompatible with Common Lisp).
+In order to get string representation for more complex objects,
+use <B>format</B> with NIL in the first argument.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11619"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img7.png"
+ ALT="$&lt;$"></SPAN></B> <EM>str1 str2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11630"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img16.png"
+ ALT="$&lt;=$"></SPAN></B> <EM>str1 str2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11641"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img14.png"
+ ALT="$&gt;$"></SPAN></B> <EM>str1 str2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11652"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img15.png"
+ ALT="$&gt;=$"></SPAN></B> <EM>str1 str2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11663"></A>
+<B>string-left-trim</B> <EM>bag str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11674"></A>
+<B>string-right-trim</B> <EM>bag str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM> is scanned from the left(or right),
+and its elements are removed if
+it is included in the <EM>bag</EM> list.
+Once a character other than the ones in the <EM>bag</EM> is found,
+further scan is aborted and the rest of <EM>str</EM>
+is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11688"></A>
+<B>string-trim</B> <EM>bag str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Bag</EM> is a sequence of character codes.
+A new copy of <EM>str</EM> which does not contain characters specified in <EM>bag</EM>
+in its both end is made and returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11701"></A>
+<B>substringp</B> <EM>sub string </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if string <EM>sub</EM> is contained in <EM>string</EM> as a substring.
+Not case sensitive.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1107"
+  HREF="manual-node50.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1101"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1095"
+  HREF="manual-node48.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1103"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1105"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1108"
+  HREF="manual-node50.html">Foreign Strings</A>
+<B> Up:</B> <A NAME="tex2html1102"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1096"
+  HREF="manual-node48.html">Vectors and Arrays</A>
+ &nbsp; <B>  <A NAME="tex2html1104"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1106"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

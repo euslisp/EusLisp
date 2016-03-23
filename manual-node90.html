@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Signals</TITLE>
+<META NAME="description" CONTENT="Signals">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node91.html">
+<LINK REL="previous" HREF="manual-node89.html">
+<LINK REL="up" HREF="manual-node86.html">
+<LINK REL="next" HREF="manual-node91.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1802"
+  HREF="manual-node91.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1796"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1790"
+  HREF="manual-node89.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1798"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1800"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1803"
+  HREF="manual-node91.html">Multithread</A>
+<B> Up:</B> <A NAME="tex2html1797"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1791"
+  HREF="manual-node89.html">File Systems and I/O</A>
+ &nbsp; <B>  <A NAME="tex2html1799"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1801"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04012400000000000000">
+Signals</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <A NAME="22693"></A>
+<B>unix:signal</B> <EM>signal func [option] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+installs the signal handler <EM>func</EM> for <EM>signal</EM>.
+In BSD4.2 systems, signals caught during system call processing
+cause the system call to be retried.
+This means that if the process is issuing a read system call,
+signals are ignored.
+If <EM>option=2</EM> is specified,
+signals are handled in the system-5 manner,
+which causes the system call to fail. 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22706"></A>
+<B>unix:kill</B> <EM>pid signal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sends a signal to a process named by <EM>pid</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22717"></A>
+<B>unix:pause</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+suspends execution of this process until a signal arrives.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22727"></A>
+<B>unix:alarm</B> <EM>time </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sends an alarm clock signal (SIGALRM 14) after <EM>time</EM> seconds.
+Calling <B>unix:alarm</B> with <EM>time</EM>=0 resets the alarm clock.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22740"></A>
+<B>unix:ualarm</B> <EM>time </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+same as <B>unix:alarm</B> except that the unit of <EM>time</EM> is micro seconds.
+<B>ualarm</B> is not available on Solaris2 or on other Sys5 based systems.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22753"></A>
+<B>unix:getitimer</B> <EM>timer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+One Unix process is attached with three interval timers, i.e.,
+a real-time timer that decrements as the real time passes,
+a virtual-timer that decrements as the process executes in the user space,
+and a prof-timer that decrements as the kernel executes on behalf of
+the user process.
+<EM>timer</EM> is either  0 (<TT>ITIMER_REAL</TT>), 1 (<TT>ITIMER_VIRTUAL</TT>),
+or 2(<TT>ITIMER_PROF</TT>).
+A list of two elements is returned,  the value of the timer in second
+and the interval. Both are floating-point numbers.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22767"></A>
+<B>unix:setitimer</B> <EM>timer value interval </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <EM>value</EM> and <EM>interval</EM> in <EM>timer</EM>.
+<EM>timer</EM> is eiterh  0 (<TT>ITIMER_REAL</TT>), 1 (<TT>ITIMER_VIRTUAL</TT>),
+or 2(<TT>ITIMER_PROF</TT>).
+<TT>ITIMER_REAL</TT> delivers SIGALRM when <EM>value</EM> expires.
+<TT>ITIMER_VIRTUAL</TT> delivers SIGVTALRM, and 
+<TT>ITIMER_PROF</TT> delivers SIGPROF.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22788"></A>
+<B>unix:select</B> <EM>inlist outlist exceptlist timeout </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>inlist, outlist</EM> and <EM>exceptlist</EM> are bitvectors
+indicating file descriptors whose I/O events should be tested.
+For example, if <EM>inlist</EM>=#b0110, <EM>outlist</EM>=#b100,
+and <EM>exceptlist</EM>=NIL,
+then whether it is possible to read on fd=1 or 2, or to write on fd=2
+is tested.
+<EM>Timeout</EM> specifies seconds for which <B>select</B> is allowed to
+wait.
+Immediately after
+incoming data appear on one of the ports specified in <EM>inlist</EM>,
+or writing become available on one of the ports specified in <EM>outlist</EM>,
+or exceptional condition arises in one of the ports specified in
+<EM>exceptlist</EM>,
+<B>select</B> returns the number of ports that are available for I/O
+operation, setting ones for the possible port s
+in each of <EM>inlist, outlist and exceptlist</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22810"></A>
+<B>unix:select-read-fd</B> <EM>read-fdset timeout </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+I/O selection is usually meaningful only for input operation.
+<B>unix:select-read-fd</B> is a short-hand for
+<TT>select fdset nil nil timeout</TT>.
+<EM>Read-fdset</EM> is not a bit-vector,
+ but an integer that specifies the reading fd set.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1802"
+  HREF="manual-node91.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1796"
+  HREF="manual-node86.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1790"
+  HREF="manual-node89.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1798"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1800"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1803"
+  HREF="manual-node91.html">Multithread</A>
+<B> Up:</B> <A NAME="tex2html1797"
+  HREF="manual-node86.html">Unix System Calls</A>
+<B> Previous:</B> <A NAME="tex2html1791"
+  HREF="manual-node89.html">File Systems and I/O</A>
+ &nbsp; <B>  <A NAME="tex2html1799"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1801"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

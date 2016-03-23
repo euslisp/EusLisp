@@ -1,0 +1,340 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>コンパイル</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="コンパイル">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node68.html">
+<LINK REL="previous" HREF="jmanual-node66.html">
+<LINK REL="up" HREF="jmanual-node64.html">
+<LINK REL="next" HREF="jmanual-node68.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1339"
+  HREF="jmanual-node68.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1333"
+  HREF="jmanual-node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1327"
+  HREF="jmanual-node66.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1335"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1337"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1340"
+  HREF="jmanual-node68.html">プログラムロード</A>
+<B> Up:</B> <A NAME="tex2html1334"
+  HREF="jmanual-node64.html">評価</A>
+<B> Previous:</B> <A NAME="tex2html1328"
+  HREF="jmanual-node66.html">最上位レベルの対話</A>
+ &nbsp; <B>  <A NAME="tex2html1336"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1338"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03093000000000000000"></A><A NAME="compiler"></A>
+<BR>
+コンパイル
+</H2>
+
+<P>
+Euslispコンパイラは、Lispプログラムの実行を高速化するために使用される。
+実行時間の5〜30倍の高速化とマクロ展開によるガーベージコレクション
+時間の大幅な減少が期待できる。
+
+<P>
+euscompは、計算処理とベクトル処理のための最適化を行う。
+ときどきコンパイラが最適化を効率良く実行するために、固有の型宣言が必要となる。
+
+<P>
+<B>compile-function</B>は、1つずつ関数をコンパイルする。
+<B>compile-file</B>は、すべてのソースファイルをコンパイルする。
+<B>compile-file</B>を実行している間、ファイル内のすべての書式が読み込まれ
+評価される。
+これは、現在のEuslispの環境を変化させる。
+例えば、<B>defparameter</B>はsymbolに新しい値を設定するし、
+<B>defun</B>はコンパイルされていない関数をコンパイルされた関数に
+置き換える。
+これらの予期しない影響を避けるためには、<TT>compile</TT>指定のない<B>eval-when</B>を
+使用したり、<B>euscomp</B>を使用して別プロセスとしてコンパイラを実行したりする。
+
+<P>
+<B>euscomp</B>はUNIXのコマンドで、普通<B>eus</B>にシンボリックリンクされている。
+幾つかのオプションを持っている。
+-OフラグはCコンパイラの最適化を指示し、
+-O1,-O2, -O3 はそれぞれEuslispコンパイラの最適化のレベルを指示する。
+これは、<TT>(optimize 1 or 2 or 3)</TT>と宣言するのと同等である。
+-S0, -S1, -S2, -S3は、<B>compiler:*safety*</B>に0,1,2,3を設定する。
+もし<B>*safety*</B>が2より小さければ、割り込みチェックのためのコードを発行しない。
+もし、プログラムが無限ループに入ったとき、制御を失うことになる。
+もし<B>*safety*</B>が0のときは、引き数の数をチェックしない。
+-Vフラグは、コンパイルされている関数名を表示する。
+-cフラグは、ccの実行やforkを防ぐ。
+-Dは、<B>*features*</B>リストに続く引き数を置く。
+これは、読み込みマクロ<TT>#-</TT>と<TT>#+</TT>
+を用いた条件付きコンパイルのために使用することができる。
+
+<P>
+コンパイラは"xxx.l"という名のEuslispソースプログラムを
+中間Cプログラムファイル"xxx.c"
+とヘッダーファイル"xxx.h"に変換する。
+それから、Cコンパイラが実行され、"xxx.o"が生成される。
+中間ファイル"xxx.c"と"xxx.h"はクロスコンパイルの目的のために残される。
+したがって、違うアーキテクチャーの機械の上で使用したいとき、UNIX命令のccで
+"xxx.c"ファイルをコンパイルするだけでよい。
+コンパイルされたコードは、'<TT>(load "xxx")</TT>'によってEuslispにロードされる。
+
+<P>
+中間ファイルはそれぞれ、"eus.h"ヘッダーファイルを参照する。
+このファイルは、<TT>*eusdir*/c</TT>ディレクトリに置かれていると仮定している。
+<TT>*eusdir*</TT>は、<TT>EUSDIR</TT>環境変数からコピーされる。
+もし設定されてなければ、<TT>/usr/local/eus/</TT>がデフォルトディレクトリ
+として扱われる。
+
+<P>
+コンパイルされたとき、中間のCプログラムは普通元のソースコードよりも
+かなり大きくなる。例えば、1,161行のlispソースコード"l/common.l"は、
+8,194行の"l/common.c"と544行の"l/common.h"に展開される。
+1,000行のlispソースをコンパイルするのは、難しい作業ではないが、
+10,000行近いCのプログラムを最適コンパイルすることは、長い時間(数分)かかる
+とともに、たくさんのディスク空間を消費する。
+そのため、もし相対的に大きなプログラムのコンパイルをするならば、
+/var/tmpに十分なディスクがあるかどうかを確認すること。
+そうでなければ、CCは死ぬだろう。
+<TT>TMPDIR</TT>環境変数をもっと大きなディスク部分に設定することが助かる道である。
+
+<P>
+リンクがロード時または実行時に実行されるので、
+eusのカーネルがバージョンアップされても再コンパイルする必要はない。
+もう一方で、実行時リンクは不便なことがある。
+２つの関数AとBが"x.l"ファイルにありAがBを呼び出していると仮定する。
+"x.l"をコンパイル後、"x.o"をロードし内部でBを呼び出しているAを呼び出そうとする。
+それから、Bの中でbugを見つけると、たぶんBを再定義しようとするだろう。
+ここで、コンパイルされたAとコンパイルされていないBとができる。
+再びAを呼び出したとすると、Aはまだ古いコンパイルされているBを呼び出す。
+これは、Aが最初にBを呼び出したとき固定的にリンクされるからである。
+この問題を避けるためには、Aを再定義しなおすかあるいは"x.o"がロードされた直後で
+Aを呼び出す前にBを再定義しなければならない。
+
+<P>
+コンパイルされたコードがロードされるとき、一般的にdefunやdefmethodの
+列である最上位コードが実行される。
+この最上位コードはロードモジュールのエントリ関数として定義されている。
+コンパイラがそのエントリ関数の名前を付け、
+ローダがこの関数の名前を正確にわからなければならない。
+状況を簡単にするために、コンパイラとローダの両方とも
+そのエントリ関数の名前としてオブジェクトファイルのbasenameと同一のもの
+と仮定する。
+例えば、もし"fib.l"をコンパイルしたならば、
+コンパイラは"fib.c"のエントリ関数として"fib(...)"を生成する。
+そして、ローダはオブジェクトファイル"fib.o"の中から"fib"を探す。
+最終的にオブジェクトファイルはUnixの"cc"や"ld"で生成されるので、
+このエントリ関数名は、C関数の命名ルールを満足しなければならない。
+したがって、ファイル名としてCの予約キーワード（例えば、
+"int", "struct", "union", "register", "extern"など）や"c/eus.h"に
+定義されているプライベート指示語（例えば、"pointer", "cons",
+"makeint"など）を避けなければならない。
+もし、ソースファイルの名前としてこれらの予約語の内の１つを
+使用しなければならないならば、コンパイラやローダの
+<EM>:entry</EM>引数を別に指定すること。
+
+<P>
+closureの使用には制限がある。
+closureの中の<B>return-from</B>特殊書式と<B>unwind-protect</B>の中のclean-up書式は
+いつも正しくコンパイルされるわけではない。
+
+<P>
+<B>disassemble</B>は、実現されていない。
+コンパイルされたコードを解析するためには中間Cプログラムを見るかあるいは
+<B>adb</B>を使用する。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="18551"></A>
+<B>euscomp</B> <EM>{filename}* </EM>[UNIXコマンド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Euslispコンパイラを呼びだす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18561"></A>
+<BR>
+<IMG
+ WIDTH="688" HEIGHT="111" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img39.png"
+ ALT="\begin{emtabbing}
+{\bf compile-file}
+\it srcfile \&amp;key \= (:verbose nil) \hspac...
+...m ; run c compiler} \\
+\&gt; (:entry (pathname-name file)) \\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>ファイルをコンパイルする。
+".l"が<EM>srcfile</EM>の拡張子として仮定される。
+もし、<EM>:verbose</EM>がTならば、コンパイルされた関数やメソッド名が表示される。
+これは、エラーが発生した箇所を簡単に探すのに役立つ。
+<EM>:optimize, :c-optimize</EM>と<EM>:safety</EM>は、最適化のレベルを
+指定する。
+モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
+<EM>:pic</EM>は、Tに設定すべきである。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18582"></A>
+<B>compile</B> <EM>funcname </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+関数をコンパイルする。<B>compile</B>は、最初に関数定義をテンポラリファイルに
+出力する。そのファイルは、<B>compile-file</B>によってコンパイルされ、
+それから<B>load</B>によってロードされる。
+テンポラリファイルは削除される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18595"></A>
+<B>compile-file-if-src-newer</B> <EM>srcfile &amp;key compiler-options </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>srcfile</EM>が対応するオブジェクトファイルよりも新しい（最近変更された）
+ならば、コンパイルする。そのオブジェクトファイルは、".o"拡張子を
+持っていると仮定される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18606"></A>
+<B>*optimize*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> コンパイラの最適化レベルを制御する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18616"></A>
+<B>*verbose*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+non-NILが設定されたとき、コンパイルされている関数名やメソッド名そして
+コンパイルに要した時間を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18626"></A>
+<B>*safety*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+安全性レベルを制御する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1339"
+  HREF="jmanual-node68.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1333"
+  HREF="jmanual-node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1327"
+  HREF="jmanual-node66.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1335"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1337"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1340"
+  HREF="jmanual-node68.html">プログラムロード</A>
+<B> Up:</B> <A NAME="tex2html1334"
+  HREF="jmanual-node64.html">評価</A>
+<B> Previous:</B> <A NAME="tex2html1328"
+  HREF="jmanual-node66.html">最上位レベルの対話</A>
+ &nbsp; <B>  <A NAME="tex2html1336"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1338"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

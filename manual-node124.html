@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Primitive Body Creation</TITLE>
+<META NAME="description" CONTENT="Primitive Body Creation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node125.html">
+<LINK REL="previous" HREF="manual-node123.html">
+<LINK REL="up" HREF="manual-node119.html">
+<LINK REL="next" HREF="manual-node125.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2303"
+  HREF="manual-node125.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2297"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2291"
+  HREF="manual-node123.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2299"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2301"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2304"
+  HREF="manual-node125.html">Body Composition</A>
+<B> Up:</B> <A NAME="tex2html2298"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2292"
+  HREF="manual-node123.html">Body</A>
+ &nbsp; <B>  <A NAME="tex2html2300"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2302"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04045000000000000000"></A><A NAME="primitive-body-creation"></A>
+<BR>
+Primitive Body Creation
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="32215"></A>
+<B>make-plane</B> <EM>&amp;key normal point distance </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a plane object which is oriented to <EM>normal</EM>, and passes <EM>point</EM>.
+Instead of giving <EM>point</EM>, <EM>distance</EM> can be specified.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32229"></A>
+<B>*xy-plane*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32240"></A>
+<B>*yz-plane*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32251"></A>
+<B>*zx-plane*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="30194"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 10:</STRONG>
+primitive bodies</CAPTION>
+<TR><TD><IMG
+ WIDTH="692" HEIGHT="1016" BORDER="0"
+ SRC="manual-img69.png"
+ ALT="\begin{figure}\begin{center}
+\mbox{\epsfsize10cm
+\epsfbox{fig/fig1.ps}
+}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="32262"></A>
+<B>make-cube</B> <EM>xsize ysize zsize &amp;key name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a cuboid whose sizes in x, y and z directions are <EM>xsize, ysize</EM>
+and <EM>zsize</EM>.
+The coordinates origin of this cuboid locates at the center of the body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32274"></A>
+<B>make-prism</B> <EM>bottom-points sweep-vector &amp;key name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a prism by lifting the shape defined by <EM>bottom-points</EM>
+along <EM>sweep-vector</EM>.
+If the <EM>sweep-vector</EM> is a number, not a float-vector,
+it is taken as the height of the prism in the <SPAN CLASS="MATH"><IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img70.png"
+ ALT="$z$"></SPAN> direction.
+Bottom points must be ordered as they define the bottom face of the body.
+For example,
+ (make-prism '(#f(1 1 0) #f(1 -1 0) #f(-1 -1 0) #f(-1 1 0)) 2.0)
+makes a cube of height 2.0.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32287"></A>
+<B>make-cylinder</B> <EM>radius height &amp;key (segments 12) name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a cylinder with specified <EM>radius</EM> and <EM>height</EM>.
+The bottom face is defined on xy-plane and the coordinates origin is
+located at the center of the bottom face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32299"></A>
+<B>make-cone</B> <EM>top bottom &amp;key (segments 16) color name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a cone body whose summit is the <EM>top</EM>
+and bottom face is the <EM>bottom</EM>.
+<EM>Top</EM> is a 3D float-vector.
+<EM>Bottom</EM> is either a list of vertices of the bottom face or a radius
+(scalar). If it is the vertices list, it is order sensitive.
+&nbsp; (make-cone #f(0 0 10) (list #f(10 0 0) #f(0 10 0) #f(-10 0 0) 
+#f(0 -10 0)))&nbsp; makes a cone of a square bottom.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32313"></A>
+<B>make-solid-of-revolution</B> <EM>points &amp;key (segments 16) name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Points</EM> are revolted along z-axis in the clock wise direction.
+If two end points in the <EM>points</EM> list do not lie on z axis,
+those points make circular faces. Thus,
+<TT>(make-solid-of-revolution '(#f(0 0 1) #f(1 0 0)))</TT>
+makes a cone, and 
+<TT>(make-solid-of-revolution '(#f(1 0 1) #f(1 0 0)))</TT>
+makes a cylinder.
+The <EM>points</EM> are order-sensitive,
+and are expected to be arranged from higher <SPAN CLASS="MATH"><IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img70.png"
+ ALT="$z$"></SPAN> coordinate
+to lower <SPAN CLASS="MATH"><IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img70.png"
+ ALT="$z$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32328"></A>
+<B>make-torus</B> <EM>points &amp;key (segments 16) name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a torus, a donuts like object.
+<EM>Points</EM> is a list of vertices on a cross-section.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32339"></A>
+<B>make-icosahedron</B> <EM>&amp;optional (radius 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a regular body of twenty faces.
+Each face is a regular triangle.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32349"></A>
+<B>make-dodecahedron</B> <EM>&amp;optional (radius 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a regular body of twelve faces.
+Each face is a regular pentagon.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32359"></A>
+<B>make-gdome</B> <EM>abody </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+By subdividing triangle faces of abody into four subfacets,
+makes a geodesic dome as a new body. Abody should be an icosahedron
+initially, and then the result of make-gdome can be given to make-gdome
+recursively.
+At each call, the number of faces of the Gdome increases
+by the factor of four,
+i.e. 20, 80, 320, 1280, 5120, etc.
+
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+(setq g0 (make-icosahedron 1.0))	; 20 facets
+(setq g1 (make-gdome g0))		; 80 facets
+(setq g2 (make-gdome g1))		; 320 facets
+...
+</PRE>
+
+<P>
+
+<A NAME="32369"></A>
+<B>grahamhull</B> <EM>vertices &amp;optional (normal #f(0 0 1)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes convex-hull for 2D points by Graham's algorithm. Slower than
+quickhull.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32379"></A>
+<B>quickhull</B> <EM>vertices &amp;optional (normal #f(0 0 1)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes convex-hull for 2D points by the binary search method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32389"></A>
+<B>convex-hull-3d</B> <EM>vertices </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes convex-hull for 3D points by gift-wrapping method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32399"></A>
+<B>make-body-from-vertices</B> <EM>vertices-list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a body from lists of vertices each of which define
+a loop of a face in the consistent order.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2303"
+  HREF="manual-node125.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2297"
+  HREF="manual-node119.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2291"
+  HREF="manual-node123.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2299"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2301"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2304"
+  HREF="manual-node125.html">Body Composition</A>
+<B> Up:</B> <A NAME="tex2html2298"
+  HREF="manual-node119.html">Geometric Modeling</A>
+<B> Previous:</B> <A NAME="tex2html2292"
+  HREF="manual-node123.html">Body</A>
+ &nbsp; <B>  <A NAME="tex2html2300"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2302"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

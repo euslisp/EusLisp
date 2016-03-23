@@ -1,0 +1,447 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>プリンタ(printer)</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="プリンタ(printer)">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node57.html">
+<LINK REL="previous" HREF="jmanual-node55.html">
+<LINK REL="up" HREF="jmanual-node53.html">
+<LINK REL="next" HREF="jmanual-node57.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1179"
+  HREF="jmanual-node57.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1173"
+  HREF="jmanual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1167"
+  HREF="jmanual-node55.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1175"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1177"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1180"
+  HREF="jmanual-node57.html">プロセス間通信とネットワーク</A>
+<B> Up:</B> <A NAME="tex2html1174"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1168"
+  HREF="jmanual-node55.html">リーダ(reader)</A>
+ &nbsp; <B>  <A NAME="tex2html1176"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1178"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03083000000000000000">
+プリンタ(printer)</A>
+</H2>
+
+<P>
+以下に示すものは、プリンタの行動を制御するための特殊変数である。
+
+<P>
+<DL>
+<DT><STRONG>*print-case*</STRONG></DT>
+<DD>この定数が<TT>:downcase</TT>なら、
+全てのsymbolは小文字で印刷される。
+しかし、symbolは内部的に大文字で表現されたままである。
+</DD>
+<DT><STRONG>*print-circle*</STRONG></DT>
+<DD>再帰的参照を残したオブジェクトを印刷する。
+</DD>
+<DT><STRONG>*print-object*</STRONG></DT>
+<DD>全てのオブジェクトの詳細を印刷する。
+</DD>
+<DT><STRONG>*print-structure*</STRONG></DT>
+<DD><TT>#</TT>書式を使ってオブジェクトを印刷する。
+</DD>
+<DT><STRONG>*print-level*</STRONG></DT>
+<DD>数列の印刷可能深さ
+</DD>
+<DT><STRONG>*print-length*</STRONG></DT>
+<DD>数列の印刷可能長さ
+</DD>
+<DT><STRONG>*print-escape*</STRONG></DT>
+<DD>現在使用されていない。
+</DD>
+<DT><STRONG>*print-pretty*</STRONG></DT>
+<DD>現在使用されていない。
+</DD>
+<DT><STRONG>*print-base*</STRONG></DT>
+<DD>印刷時の基数；デフォルトは10進数
+</DD>
+</DL>
+
+<P>
+再帰的参照を持つオブジェクトを印刷するためには、
+再度読み戻しが必要なため、
+<B>*print-circle*</B>と
+<B>*print-structure*</B>を両方Tに設定し、オブジェクトを印刷すること。
+ユーザーが定義するほとんどのオブジェクトは再読み込み可能な書式に
+表示されるが、
+クラス, オブジェクトモジュールやパッケージをその方法でdumpすることはできない。
+なぜなら、クラスとオブジェクトモジュールは再配置不可能な実行コードを含み、
+パッケージの再読みだしは、構成されるsymbol中に影響があるからである。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15525"></A>
+<B>print</B> <EM>obj &amp;optional stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>prin1</B>に続いて<B>terpri</B>を行う。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15537"></A>
+<B>prin1</B> <EM>obj &amp;optional stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+書式に沿ってs表現を1つ出力する。その出力は、
+<B>read</B>によって再度読み戻しが可能である。
+書式には、スラッシュ（エスケープ）や引用符を含んでいる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15548"></A>
+<B>princ</B> <EM>obj &amp;optional stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+エスケープ（escape）や引用符（quote）の追加(add)がないことを除いて、
+<B>print</B>と同じである。
+<B>princ</B>によるオブジェクト表示は、読み戻しできない。
+例えば、<TT>(princ 'abc)</TT>の出力は、<TT>(princ "abc")</TT>の出力と
+同じであるため、リーダはそれらを区別することができない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15562"></A>
+<B>terpri</B> <EM>&amp;optional stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>#<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img32.png"
+ ALT="$\backslash$"></SPAN>newline</TT>(改行)を出力して、
+<EM>stream</EM>を空にする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15574"></A>
+<B>finish-output</B> <EM>&amp;optional stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+出力<EM>stream</EM>を空にする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15585"></A>
+<B>princ-to-string</B> <EM>x &amp;optional (l 16) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15596"></A>
+<B>prin1-to-string</B> <EM>x &amp;optional (l 16) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 文字列への出力ストリームを作り、<EM>x</EM>を書き込む。そして、
+<B>get-output-stream-string</B>を実行する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15608"></A>
+<B>format</B> <EM>stream format-string &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>A(ascii), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>S(S-表現), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>D(10進数),
+<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>X(16進数), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>O(8進数), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>C(文字), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>F(実数表現), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>E(指数表現),
+<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>G(general float), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>V(dynamic number parameter), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>T(タブ)
+ と<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img38.png"
+ ALT="$\sim$"></SPAN>% (改行)のフォーマット識別子のみ認識する。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<PRE>
+       (format t "~s ~s ~a ~a ~10,3f~%" "abc" 'a#b "abc" 'a#b 1.2)
+       ---&gt;  "abc" |A#B| abc a#b     1.200
+</PRE>
+
+<P>
+
+<A NAME="15618"></A>
+<B>pprint</B> <EM>obj &amp;optional (stream *standard-output*) (tab 0) (platen 75) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>obj</EM>の最後の空白を除いたものを整形表示する。.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15629"></A>
+<B>print-functions</B> <EM>file &amp;rest fns </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>file</EM>に<EM>fns</EM>の関数定義の"defun"書式を書き出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15641"></A>
+<B>write-byte</B> <EM>integer stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15652"></A>
+<B>write-word</B> <EM>integer stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15663"></A>
+<B>write-long</B> <EM>integer stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>integer</EM>を1, 2または4バイトにして書く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15674"></A>
+<B>spaces</B> <EM>n &amp;optional stream </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+空白を<EM>n</EM>回出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15685"></A>
+<B>pf</B> <EM>func &amp;optional stream *standard-output*) </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+関数<EM>func</EM>を整形表示する。コンパイルされた関数は、印刷できない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15696"></A>
+<B>pp-method</B> <EM>class selector &amp;optional (stream *standard-output*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>class</EM>クラスの中に定義された<EM>selector</EM>メソッドを整形表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="15708"></A>
+<B>tprint</B> <EM>obj tab &amp;optional (indent 0) (platen 79) (cpos 0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 表形式で<EM>obj</EM>を印刷する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15719"></A>
+<B>print-size</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+印刷のときの<EM>obj</EM>の大体の長さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1179"
+  HREF="jmanual-node57.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1173"
+  HREF="jmanual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1167"
+  HREF="jmanual-node55.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1175"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1177"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1180"
+  HREF="jmanual-node57.html">プロセス間通信とネットワーク</A>
+<B> Up:</B> <A NAME="tex2html1174"
+  HREF="jmanual-node53.html">ストリームと入出力</A>
+<B> Previous:</B> <A NAME="tex2html1168"
+  HREF="jmanual-node55.html">リーダ(reader)</A>
+ &nbsp; <B>  <A NAME="tex2html1176"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1178"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

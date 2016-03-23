@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Object Oriented Programming</TITLE>
+<META NAME="description" CONTENT="Object Oriented Programming">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node36.html">
+<LINK REL="previous" HREF="manual-node24.html">
+<LINK REL="up" HREF="manual-node11.html">
+<LINK REL="next" HREF="manual-node32.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html843"
+  HREF="manual-node32.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html837"
+  HREF="manual-node11.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html831"
+  HREF="manual-node30.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html839"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html841"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html844"
+  HREF="manual-node32.html">Classes and Methods</A>
+<B> Up:</B> <A NAME="tex2html838"
+  HREF="manual-node11.html">Bibliography</A>
+<B> Previous:</B> <A NAME="tex2html832"
+  HREF="manual-node30.html">Predicates</A>
+ &nbsp; <B>  <A NAME="tex2html840"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html842"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION03040000000000000000">
+Object Oriented Programming</A>
+</H1>
+
+<P>
+The structures and behaviors of objects are described in
+classes, which are defined by
+<B>defclass</B> macro and <B>defmethod</B> special form.
+<B>defclass</B> defines the name of the class, its super class, and
+slot variable names, optionally with their types and message forwarding.
+<B>defmethod</B> defines methods which will invoked when
+corresponding messages are sent.
+Class definition is assigned to the symbol's special value.
+You may think of <B>class</B> as 
+the counter part of Common Lisp's <B>structure</B>.
+Slot accessing functions and <B>setf</B> methods are automatically defined
+for each slot by <B>defclass</B>.
+
+<P>
+Most classes are instantiated from the built-in class <B>metaclass</B>.
+Class <B>vector-class</B>, which is a subclass of <B>metaclass</B>,
+is a metaclass for vectors.
+If you need to use class-variables and class-methods,
+you may make your own metaclass by subclassing <B>metaclass</B>,
+and the metaclass name should be given to <B>defclass</B> with
+<TT>:metaclass</TT> keyword.
+
+<P>
+Vectors are different from other record-like objects
+because an instance of the vector can have arbitrary number of elements,
+while record-like objects have fixed number of slots.
+EusLisp's object is either a record-like object or a vector, not both
+at the same time.
+
+<P>
+Vectors whose elements are typed or the number of elements are
+unchangeable can also be defined by <B>defclass</B>.
+In the following example,
+class <TT>intvec5</TT> which has five integer elements is defined.
+Automatic type check and conversion are performed when the elements are
+accessed by the interpreter.
+When compiled with proper declaration, faster accessing code is produced.
+
+<P>
+<PRE>
+(defclass intvec5 :super vector :element-type :integer :size 5)
+(setq x (instantiate intvec5))  --&gt; #i(0 0 0 0 0)
+</PRE>
+
+<P>
+When a message is sent to an object, 
+the corresponding method is searched for, first in its class,
+and next in its superclasses toward <B>object</B>,
+until all superclasses are exhausted.
+If the method is undefined, forward list is searched.
+This forwarding mechanism is introduced to simulate multiple inheritance.
+If the search fails again, a method named <TT>:nomethod</TT> is searched,
+and the method is invoked with a list of all the arguments.
+In the following example, the messages <TT>:telephone</TT> and <TT>:mail</TT> are
+sent to <TT>secretary</TT> slot object which is typed <TT>person</TT>,
+and <TT>:go-home</TT> message is sent to <TT>chauffeur</TT> slot.
+
+<P>
+<PRE>
+(defclass president :super object
+                    :slots ((name :type string)
+                            (age  :type :integer)
+                            (secretary  :type person
+                                        :forward (:telephone :mail))
+                            (chauffeur  :forward (:go-home))))
+</PRE>
+
+<P>
+In a method, two more local variables,
+<B>class</B> and <B>self</B>, become accessible.
+You should not change either of these variables.
+If you do that, the ones supplied by the system are hidden,
+and <B>send-super</B> and <B>send self</B> are confused.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html845"
+  HREF="manual-node32.html">Classes and Methods</A>
+<LI><A NAME="tex2html846"
+  HREF="manual-node33.html">Message Sending</A>
+<LI><A NAME="tex2html847"
+  HREF="manual-node34.html">Instance Management</A>
+<LI><A NAME="tex2html848"
+  HREF="manual-node35.html">Basic Classes</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html843"
+  HREF="manual-node32.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html837"
+  HREF="manual-node11.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html831"
+  HREF="manual-node30.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html839"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html841"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html844"
+  HREF="manual-node32.html">Classes and Methods</A>
+<B> Up:</B> <A NAME="tex2html838"
+  HREF="manual-node11.html">Bibliography</A>
+<B> Previous:</B> <A NAME="tex2html832"
+  HREF="manual-node30.html">Predicates</A>
+ &nbsp; <B>  <A NAME="tex2html840"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html842"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

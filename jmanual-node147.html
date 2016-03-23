@@ -1,0 +1,404 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>カラーピクセル画像</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="カラーピクセル画像">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node148.html">
+<LINK REL="previous" HREF="jmanual-node146.html">
+<LINK REL="up" HREF="jmanual-node144.html">
+<LINK REL="next" HREF="jmanual-node148.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2605"
+  HREF="jmanual-node148.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2599"
+  HREF="jmanual-node144.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2593"
+  HREF="jmanual-node146.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2601"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2603"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2606"
+  HREF="jmanual-node148.html">エッジ抽出</A>
+<B> Up:</B> <A NAME="tex2html2600"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2594"
+  HREF="jmanual-node146.html">ピクセル画像</A>
+ &nbsp; <B>  <A NAME="tex2html2602"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2604"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04083000000000000000">
+カラーピクセル画像</A>
+</H2>
+カラー画像は、<B>color-pixel-image</B>クラスで表現される。
+このクラスは、3つの<B>pixel-image</B>を持っており、RGB表現の
+red,green,blueあるいはHLSモデルの色合い,明るさ,濃さをそれぞれ表現する。
+RGBとHLS間の変換もサポートしている。
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="48841"></A>
+<BIG CLASS="XLARGE"><B>color-pixel-image </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 width height component1 component2 component3 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>3つの<TT>pixel-image</TT>オブジェクトでカラー画像を表現する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48859"></A>
+<B>:width</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の幅を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48869"></A>
+<B>:height</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の高さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48879"></A>
+<B>:size</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の幅<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img57.png"
+ ALT="$\times$"></SPAN>高さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48889"></A>
+<B>:red</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component1</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48900"></A>
+<B>:green</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component2</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48911"></A>
+<B>:blue</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component3</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48922"></A>
+<B>:hue</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component1</TT>を返す。
+色合い(hue)の値(0〜360)は、0〜255の1バイトで表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48933"></A>
+<B>:lightness</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component2</TT>を返す。
+正規化された明るさ(brightness)の値(0〜1)は、0〜255の整数で表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48944"></A>
+<B>:saturation</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component3</TT>返す。
+正規化された濃さ(saturation)の値(0〜1)は、0〜255の整数で表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48955"></A>
+<B>:pixel</B> <EM>x y </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>(x,y)</EM>における
+<TT>component1,component2,component3</TT>の値を3つの整数のリストとして返す。
+このリストは、RGB値あるいはHLS値のどちらでも解釈できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48967"></A>
+<B>:monochromize</B> <EM>&amp;optional (NTSC nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGB構成から明るさを計算し、新しい<TT>pixel-image</TT>を返す。
+もし、<EM>NTSC</EM>がNILなら、<TT>(R+G+B)/3</TT>が計算される。
+もし、Tなら、<TT>0.299*R+0.587*G+0.114*B</TT>が計算される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48981"></A>
+<B>:HLS</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像をRGB画像と仮定し、HLS表現に画像を変換する。
+それぞれのピクセルを変換するために<B>RGB2HLS</B>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48992"></A>
+<B>:RGB</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像をHLS画像と仮定し、RGB表現に画像を変換する。
+それぞれのピクセルを変換するために<B>HLS2RGB</B>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49003"></A>
+<B>:halve</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像を半分のサイズに縮小した<B>color-pixel-image</B>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49014"></A>
+<B>:display</B> <EM>&amp;optional (win *color-viewer*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:putimage</B>を用いて<EM>win</EM>で指定されるXwindowに
+このカラー画像を表示する。
+それぞれのピクセル値はXのカラーマップを参照する。
+希望する表現を得るためには、この画像を固有のLUTで
+変換すべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49026"></A>
+<B>:display-lut</B> <EM>&amp;optional (newlut1) (newlut2 newlut1) (newlut3 newlut2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ルックアップテーブル<EM>newlut1</EM>,<EM>newlut2</EM>,<EM>newlut3</EM>を
+<TT>display-lut</TT>にそれぞれ設定する。それから、このルックアップテーブルを
+使ってこの画像を変換し、<TT>xpicture</TT>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49041"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img100.png"
+ ALT="\begin{emtabbing}
+{\bf :edge1}
+\it\&amp;optional \= (method 1) \\lq  [メソッド]\ ...
+...
+\&gt; (run *edge-length-threshold*)\\
+\&gt; (win *color-viewer*)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>この画像のエッジを抽出する。Xwindow上にこのエッジ画像を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49052"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49062"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49072"></A>
+<B>:prin1</B> <EM>strm &amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像を名前と次元と一緒に表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49082"></A>
+<B>:init</B> <EM>width height &amp;optional r g b </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カラー画像のサイズを定義し、<TT>pixel-image</TT>にそれぞれカラーの1構成
+を割り当てる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+ppmファイルがあったとき、次のプログラムでカラー値を画像に展開し、
+Xwindowに表示をすることができる。<PRE>
+(setq ppmimg (read-pnm "xxx.ppm"))
+(send ppmimg :hls)   ; RGB to HLS conversion
+(make-ximage (send ppmimg :hue) *rainbow32*)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2605"
+  HREF="jmanual-node148.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2599"
+  HREF="jmanual-node144.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2593"
+  HREF="jmanual-node146.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2601"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2603"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2606"
+  HREF="jmanual-node148.html">エッジ抽出</A>
+<B> Up:</B> <A NAME="tex2html2600"
+  HREF="jmanual-node144.html">画像処理</A>
+<B> Previous:</B> <A NAME="tex2html2594"
+  HREF="jmanual-node146.html">ピクセル画像</A>
+ &nbsp; <B>  <A NAME="tex2html2602"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2604"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

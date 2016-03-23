@@ -1,0 +1,553 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Packages</TITLE>
+<META NAME="description" CONTENT="Packages">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node43.html">
+<LINK REL="up" HREF="manual-node42.html">
+<LINK REL="next" HREF="manual-node45.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1030"
+  HREF="manual-node45.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1024"
+  HREF="manual-node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1020"
+  HREF="manual-node43.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1026"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1028"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1031"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Up:</B> <A NAME="tex2html1025"
+  HREF="manual-node42.html">Symbols and Packages</A>
+<B> Previous:</B> <A NAME="tex2html1021"
+  HREF="manual-node43.html">Symbols</A>
+ &nbsp; <B>  <A NAME="tex2html1027"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1029"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03062000000000000000">
+Packages</A>
+</H2>
+
+<P>
+Packages provide separate name spaces for groups of symbols.
+Common Lisp introduced the package system in order to reduce the
+symbol (function and variable name) conflict problems 
+in the course of developing huge software systems
+which require more than one programmer to work together.
+Each package may have internal symbols and external symbols.
+When a symbol is created in a package, it is always internal,
+and it becomes external by <B>export</B>. External symbols in different
+packages are referenced by prefixing the package name and a single colon,
+as <TT>x:*display*</TT>, while referencing internal symbols in other packages
+requires double colons, as <TT>sys::free-threads</TT>.
+In order to omit this package prefixing, a package may <A NAME="8109"></A><B>i</B>mport symbols
+from other packages.
+Moreover, <A NAME="8111"></A><B>u</B>se-package allows importing all external symbols
+from another package at once.
+When symbols are exported or imported, symbol name conflicts can be detected,
+since every symbol in any packages must have the unique print name.
+<A NAME="8113"></A><B>S</B>hadow allows creating a symbol with the same print name as the
+existing symbol in a package by virtually removing the old symbol from 
+the package.
+
+<P>
+EusLisp defines following eight packages;
+<DL>
+<DT><STRONG>lisp:</STRONG></DT>
+<DD>All the lisp functions, macros, constants, etc.
+</DD>
+<DT><STRONG>keyword:</STRONG></DT>
+<DD>keyword symbols 
+</DD>
+<DT><STRONG>unix:</STRONG></DT>
+<DD>unix system calls and library functions
+</DD>
+<DT><STRONG>system:</STRONG></DT>
+<DD>system management or dangerous functions; nicknames=sys,si
+</DD>
+<DT><STRONG>compiler:</STRONG></DT>
+<DD>EusLisp compiler; nicknames=comp
+</DD>
+<DT><STRONG>user:</STRONG></DT>
+<DD>User's work space
+</DD>
+<DT><STRONG>geometry:</STRONG></DT>
+<DD>geometric classes and functions
+</DD>
+<DT><STRONG>xwindow:</STRONG></DT>
+<DD>X-window interface; nickname=x
+</DD>
+</DL>
+
+<P>
+These packages and user-defined packages are linked in the system's 
+package list, which can be obtained by <B>list-all-packages</B>.
+Each package manages two hash tables to find and locate internal and
+external symbols.
+Also, a package records its name (string or symbol) and a list of nick names,
+and a list of other packages that the package is using.
+<B>*Package*</B> is a special variable
+that holds the current package for read and print.
+If <A NAME="8115"></A><B>*</B>package* is not <TT>user:</TT>,
+top-level prompt changes to indicate the current package,
+like <TT>mypkg:eus</TT>$.
+
+<P>
+
+ <BR>
+<BR> <A NAME="8117"></A>
+<B>*lisp-package*</B> [constant]
+
+<DL COMPACT>
+<DT> 
+<DD>  Lisp package.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8127"></A>
+<B>*user-package*</B> [constant]
+
+<DL COMPACT>
+<DT> 
+<DD>  User package.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8137"></A>
+<B>*unix-package*</B> [constant]
+
+<DL COMPACT>
+<DT> 
+<DD>  Unix package.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8147"></A>
+<B>*system-package*</B> [constant]
+
+<DL COMPACT>
+<DT> 
+<DD>  System Package.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8157"></A>
+<B>*keyword-package*</B> [constant]
+
+<DL COMPACT>
+<DT> 
+<DD>  Keyword Package.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8167"></A>
+<B>find-symbol</B> <EM>string &amp;optional (package *package*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds and locates the symbol which has <EM>string</EM> as its print name
+in <EM>pacakge</EM>. If found, the symbol is returned, NIL otherwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8179"></A>
+<B>make-symbol</B> <EM>string </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new uninterned symbol by the print name of <EM>string</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8190"></A>
+<B>intern</B> <EM>string &amp;optional (package *package*) (klass symbol) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+tries to find a symbol whose print-name is same with <EM>string</EM>.
+If the search succeeds, the symbol is returned.
+If fails, a symbol whose print-name is <EM>string</EM> is newly made,
+and is located in <EM>package</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8203"></A>
+<B>list-all-packages</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of all packages ever made.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8213"></A>
+<B>find-package</B> <EM>name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+find the package whose name or nickname is equal to the <EM>name</EM> string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8224"></A>
+<B>make-package</B> <EM>name &amp;key nicknames (use '(lisp)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new package by the name of <EM>name</EM>.
+<EM>Name</EM> can either be a string or a symbol.
+If the package already exists, error is reported.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8236"></A>
+<B>in-package</B> <EM>pkg &amp;key nicknames (uses '(lisp)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the current pacakge (the value of <B>*pacakge*</B>)
+to <EM>pkg</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8248"></A>
+<B>package-name</B> <EM>pkg </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the string name of the <EM>pkg</EM> package.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8259"></A>
+<B>package-nicknames</B> <EM>pkg </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of nicknames of <EM>pkg</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8270"></A>
+<B>rename-package</B> <EM>pkg new-name &amp;optional new-nicknames </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the name of <EM>pkg</EM> to <EM>new-name</EM> and its nicknames 
+to <EM>new-nicknames</EM>, which can either be a symbol, a string,
+or a list of symbols or strings.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8283"></A>
+<B>package-use-list</B> <EM>pkg </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of packages which are used by <EM>pkg</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8294"></A>
+<B>packagep</B> <EM>pkg </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>pkg</EM> is a package.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8305"></A>
+<B>use-package</B> <EM>pkg &amp;optional (curpkg *package*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+adds <EM>pkg</EM> to <EM>curpkg</EM>'s use-list.
+Once added, symbols in <EM>pkg</EM> become visible from <EM>curpkg</EM>
+without package prefix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8319"></A>
+<B>unuse-package</B> <EM>pkg &amp;optional (curpkg *package*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+removes <EM>pkg</EM> from <EM>curpkg</EM>'s use-list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8331"></A>
+<B>shadow</B> <EM>sym &amp;optional(pkg *package*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a symbol interned in <EM>pkg</EM>, 
+by hiding existing <EM>sym</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8343"></A>
+<B>export</B> <EM>sym &amp;optional (pkg *package*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM> is a symbol or a list of symbols.
+<B>export</B> makes <EM>sym</EM> accessible from other packages as
+external symbol(s).
+Actually, <EM>sym</EM> is registered as an external symbol in <EM>pkg</EM>.
+If a symbol is exported, it becomes accessible using a single colon ":"
+as package marker, whereas unexported symbols require double colons.
+In addition, exported symbols do not need colons when they are used
+by <B>use-package</B> or they are imported into the package.
+Whether a symbol is exported or not is attributed to packages where
+it is interned, not to each symbol.
+So, a symbol can be internal in a package and external in another.
+<B>Export</B> checks <EM>sym</EM> to have name conflict with
+symbols in other packages using <EM>pkg</EM>.
+If there is  a symbol having the same print name with <EM>sym</EM>,
+``symbol conflict" error is reported.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8363"></A>
+<B>unexport</B> <EM>sym &amp;optional pkg </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>sym</EM> is an external symbol in <EM>pkg</EM>, it is unexported
+and becomes an internal symbol.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8375"></A>
+<B>import</B> <EM>sym &amp;optional (pkg *package*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM> is a symbol or a list of symbols.
+<B>import</B> makes symbols defined in other packages
+visible in <EM>pkg</EM> as an internal symbol without package prefix.
+If there is already a symbol that has the same print name as <EM>sym</EM>,
+then an ``name conflict" error is reported.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8389"></A>
+<B>do-symbols</B> <EM>(var pkg) &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+repeats evaluatiing  forms for each binding of <EM>var</EM>
+to symbols (internal or external) in <EM>pkg</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8401"></A>
+<B>do-external-symbols</B> <EM>(var pkg) &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+repeats evaluating forms for each binding of <EM>var</EM>
+to external symbols in <EM>pkg</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8413"></A>
+<B>do-all-symbols</B> <EM>(var [result]) &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+repeats evaluating forms for each binding of <EM>var</EM>
+to symbols in all packages.
+Note that forms may be evaluated more than once to a symbol if it
+appears more than one package.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1030"
+  HREF="manual-node45.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1024"
+  HREF="manual-node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1020"
+  HREF="manual-node43.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1026"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1028"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1031"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Up:</B> <A NAME="tex2html1025"
+  HREF="manual-node42.html">Symbols and Packages</A>
+<B> Previous:</B> <A NAME="tex2html1021"
+  HREF="manual-node43.html">Symbols</A>
+ &nbsp; <B>  <A NAME="tex2html1027"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1029"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

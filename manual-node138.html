@@ -1,0 +1,567 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Pixel-Image</TITLE>
+<META NAME="description" CONTENT="Pixel-Image">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node139.html">
+<LINK REL="previous" HREF="manual-node137.html">
+<LINK REL="up" HREF="manual-node136.html">
+<LINK REL="next" HREF="manual-node139.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2508"
+  HREF="manual-node139.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2502"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2496"
+  HREF="manual-node137.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2504"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2506"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2509"
+  HREF="manual-node139.html">Color-Pixel-Image</A>
+<B> Up:</B> <A NAME="tex2html2503"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2497"
+  HREF="manual-node137.html">Look-Up Tables (LUT)</A>
+ &nbsp; <B>  <A NAME="tex2html2505"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2507"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04062000000000000000">
+Pixel-Image</A>
+</H2>
+
+<P>
+A single plane of 
+image data is represented by  <B>pixel-image</B> object.
+<B>pixel-image</B> is a two-dimensional array of bytes.
+The interpretation of each byte is application dependent.
+Although it is most commonly used to represent brightness of a pixel,
+it may be used to represent edge intensity, gradient direction,
+color component intensity, bar graph, or whatever.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="38579"></A>
+<BIG CLASS="XLARGE"><B>pixel-image </B></BIG> [class]  <PRE><TT>
+  :super   <B>array</B> 
+<BR>  :slots 		 xpicture display-lut histogram
+<BR>
+brightness-distribution0
+<BR>
+brightness-distribution1
+<BR>
+brightness-covariance 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>Pixel-image</TT> is the two dimensional array with displaying facility
+in xwindows. The pixel conversion is performed by <EM>display-lut</EM> and
+the resulted image is stored in <EM>xpicture</EM>.
+Major axis is taken vertically. The pixel of <TT>img</TT> at <TT>(x, y)</TT>
+should be accessed by <TT>(aref img y x)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38602"></A>
+<B>:width</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the horizontal size of a pixel-image,
+which is the second dimension.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38612"></A>
+<B>:height</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the vertical size of a pixel-image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38622"></A>
+<B>:size</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> is equivalent to array-total-size.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38632"></A>
+<B>:transpose</B> <EM>&amp;optional (result (instance (class self) :init dim0 dim1)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+exchanges x and y coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38642"></A>
+<B>:map-picture</B> <EM>lut &amp;optional (result (send self :duplicate)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+This pixel-image is translated by the <EM>lut</EM> and stored in <EM>result</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38654"></A>
+<B>:map</B> <EM>fn &amp;optional (result (send self :duplicate)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+applies function <EM>fn</EM> to all the pixels in the image,
+and put the result in the <EM>result</EM> pixel-image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38666"></A>
+<B>:brightest-pixel</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> finds the brightest pixel value in this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38676"></A>
+<B>:darkest-pixel</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> finds the darkest pixel value in this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38686"></A>
+<B>:average-pixel</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> calculates the average intensity of all 
+the pixels in this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38696"></A>
+<B>:halve</B> <EM>&amp;optional simage </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns pixel-image that is shrunk into half-size image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38706"></A>
+<B>:subimage</B> <EM>x y subwidth subheight </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+cuts out a <EM>subwidth</EM> x <EM>subheight</EM> rectangular region
+with its top-left corner at <EM>(x,y)</EM> of this image.
+The origin of the image is taken at the top-left corner.
+<TT>:Subimage</TT> returns a  new pixel-image object.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38720"></A>
+<B>:xpicture</B> <EM>&amp;optional lut </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image using the look-up table <EM>lut</EM>
+and sets translated pixel-image object to <EM>xpicture</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38732"></A>
+<B>:display-lut</B> <EM>&amp;optional newlut </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets look-up table <EM>newlut</EM> as display-lut.Then 
+translates this image using this look-up table
+and sets translated pixel-image object as xpicture.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38743"></A>
+<B>:display</B> <EM>(xwin geometry:*viewsurface*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+displays this pixel-image in the <EM>xwin</EM> xwindow by using <TT>:putimage</TT>.
+Each pixel value is referred as a index in x's color map.
+To get a desired appearance, this pixel-image must have been translated
+by proper LUTs.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38755"></A>
+<B>:duplicate</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> makes an instance of the same class
+as this image object with the same width and height.
+The pixel data are not copied.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38765"></A>
+<B>:copy-from</B> <EM>src </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> copies pixel data from another
+image object specified by <EM>src</EM>. <EM>src</EM> must be of the
+same dimension as this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38777"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38787"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38797"></A>
+<B>:grin1</B> <EM>strm &amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints this image-pixel object with its name and dimensions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38807"></A>
+<B>:init</B> <EM>w h &amp;optional imgvec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes a pixel-image object to have <EM>w</EM> width and <EM>h</EM> height.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38819"></A>
+<B>:amplify</B> <EM>rate &amp;optional (result (send self :duplicate) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies <EM>rate</EM> to each pixel value.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38830"></A>
+<B>:compress-gray-scale</B> <EM>levels &amp;optional result  &amp;aux pict2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image into range of 0..<EM>levels</EM>
+and returns translated pixel-image object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38841"></A>
+<B>:lut</B> <EM>lut1 &amp;optional (result (send self :duplicate)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image using the look-up table <EM>lut1</EM>
+and returns translated pixel-image object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38852"></A>
+<B>:lut2</B> <EM>lut1 lut2 &amp;optional (result (send self :duplicate)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image using a look-up table that concatenated <EM>lut1</EM> 
+and <EM>lut1</EM>. And returns translated pixel-image object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38864"></A>
+<B>:histogram</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+counts the occurrence of each pixel value in this image and returns 
+an integer-vector representing the histogram.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38874"></A>
+<B>:brightness-distribution</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns brightness-distribution.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38884"></A>
+<B>:optimum-threshold</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns levels that is maximum of this image's brightness-distribution.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38894"></A>
+<B>:project-x</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> adds all pixel values of the same x coordinate
+and returns a vector of these values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38904"></A>
+<B>:project-y</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> adds all pixel values of the same y coordinate
+and returns a vector of these values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38914"></A>
+<B>:digitize</B> <EM>threshold &amp;optional (val0 0) (val1 255) result </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image into 2 levels image <EM>val0</EM> and <EM>val1</EM>
+using <EM>threshold</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38927"></A>
+<B>:and</B> <EM>img2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+bit-and operates between this image and <EM>img2</EM>,
+ and returns operated pixel-image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38938"></A>
+<B>:plot</B> <EM>min max &amp;optional color viewsurface </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+plots pixels having values between <EM>min</EM> and <EM>max</EM> inclusively
+with <EM>color</EM> (gc) on <EM>viewsurface</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38952"></A>
+<BR>
+<IMG
+ WIDTH="622" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img85.png"
+ ALT="\begin{emtabbing}
+{\bf :edge1}
+\it\&amp;optional \=(method 1) \\lq [method]\\
+\&gt;(th1 ...
+...e-length-threshold*) (win geometry:*viewsurface*) (edgeimg1)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>detects edge of this image. And displays this edge on this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2508"
+  HREF="manual-node139.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2502"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2496"
+  HREF="manual-node137.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2504"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2506"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2509"
+  HREF="manual-node139.html">Color-Pixel-Image</A>
+<B> Up:</B> <A NAME="tex2html2503"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2497"
+  HREF="manual-node137.html">Look-Up Tables (LUT)</A>
+ &nbsp; <B>  <A NAME="tex2html2505"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2507"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Image File I/O</TITLE>
+<META NAME="description" CONTENT="Image File I/O">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node143.html">
+<LINK REL="previous" HREF="manual-node141.html">
+<LINK REL="up" HREF="manual-node136.html">
+<LINK REL="next" HREF="manual-node143.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2564"
+  HREF="manual-node143.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2558"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2552"
+  HREF="manual-node141.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2560"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2562"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2565"
+  HREF="manual-node143.html">JPEG compression/decompression</A>
+<B> Up:</B> <A NAME="tex2html2559"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2553"
+  HREF="manual-node141.html">Tracking</A>
+ &nbsp; <B>  <A NAME="tex2html2561"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2563"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04066000000000000000"></A><A NAME="PBMfile"></A>
+<BR>
+Image File I/O
+</H2>
+<TT>"vision/pbmfile"</TT> defines functions to transfer
+image data between EusLisp and disk files.
+EusLisp can read and write pgm
+(portable gray-scale map) 
+and ppm (portable pixmap) format files.
+
+<P>
+
+ <BR>
+<BR> <A NAME="39622"></A>
+<B>read-pnm</B> <EM>f &amp;optional buf0 buf1 buf2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads a pgm or ppm file specified by file-stream <EM>f</EM> 
+and returns a pixel-image or color-pixel-image object.
+The image file can be either in ascii (P2 and P3) or in binary (P5 and P6) 
+format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39633"></A>
+<B>read-pnm-file</B> <EM>file &amp;optional buf0 buf1 buf2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads a pgm or ppm file specified by filename <EM>file</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39644"></A>
+<B>write-pgm</B> <EM>f image  &amp;optional (depth 255) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes a pixel-image specified by <EM>image</EM> into <EM>f</EM> file-stream
+in the binary ppm format.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39656"></A>
+<B>write-ppm</B> <EM>f image  &amp;optional (depth 255) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes a pixel-image specified by <EM>image</EM> into <EM>f</EM> file-stream
+in the binary pgm format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39668"></A>
+<B>write-pnm</B> <EM>f img </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes a pixel-image specified by <EM>img</EM> into <EM>f</EM> file-stream.
+If <EM>img</EM> is <B>pixel-image</B>, it is written in the binary pgm format.
+If <EM>img</EM> is <B>color-pixel-image</B>, written in the binary
+ppm format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39684"></A>
+<B>write-pnm-file</B> <EM>file img </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes the pixel-image specified by <EM>img</EM> into <EM>file</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39696"></A>
+<B>image::read-raw-image</B> <EM>file &amp;optional (x 256) (y x) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads a raw-image file and returns a one-dimensional byte-vector (string).
+The dimensions of the raw-image must match with give <EM>x</EM> and <EM>y</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39708"></A>
+<B>image::write-raw-image</B> <EM>file imgvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes pixel-values stored in a byte vector (string), <EM>imgvec</EM>,
+in <EM>file</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2564"
+  HREF="manual-node143.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2558"
+  HREF="manual-node136.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2552"
+  HREF="manual-node141.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2560"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2562"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2565"
+  HREF="manual-node143.html">JPEG compression/decompression</A>
+<B> Up:</B> <A NAME="tex2html2559"
+  HREF="manual-node136.html">Image Processing</A>
+<B> Previous:</B> <A NAME="tex2html2553"
+  HREF="manual-node141.html">Tracking</A>
+ &nbsp; <B>  <A NAME="tex2html2561"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2563"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

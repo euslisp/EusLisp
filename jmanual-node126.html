@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Viewport</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Viewport">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node127.html">
+<LINK REL="previous" HREF="jmanual-node125.html">
+<LINK REL="up" HREF="jmanual-node123.html">
+<LINK REL="next" HREF="jmanual-node127.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2298"
+  HREF="jmanual-node127.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2292"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2286"
+  HREF="jmanual-node125.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2294"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2296"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2299"
+  HREF="jmanual-node127.html">Viewer</A>
+<B> Up:</B> <A NAME="tex2html2293"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2287"
+  HREF="jmanual-node125.html">投影</A>
+ &nbsp; <B>  <A NAME="tex2html2295"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2297"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04053000000000000000">
+Viewport</A>
+</H2>
+
+<P>
+<B>viewport</B>クラスは、正規デバイス座標系(NDC)の中の3次元viewportのクリップ
+を実行する。そして、デバイスに依存する座標系に結果を作る。
+<B>viewport</B>は、画面上の見える四角領域の境界表現である。
+<B>viewport</B>の物理的な大きさ（x軸とy軸方向のドット数）は、
+<B>:init</B>メッセージの中の<EM>:width</EM>と<EM>:height</EM>との引き数
+で与えられなければならない。
+<EM>:xcenter</EM>と<EM>:ycenter</EM>引き数は、viewportの物理的な位置を決定する。
+画面の原点からのそれぞれの次元が絶対的に与えられているテクトロニクス4014
+のような基本的なディスプレイデバイスを使っているとき、これら2つのパラメータは、実際に画面の上にオブジェクトを描く位置を決定する。
+もし、位置が親windowから相対的に決まるXwindowのような精巧なディスプレイ
+デバイスを使っているなら、
+viewportを動かすためにviewportのパラメータを変える必要はない。
+なぜなら、これらのパラメータは、実際のディスプレイ位置に依存しないからである。。
+
+<P>
+<B>viewport</B>クラスは、四角領域の左下をviewportの原点と仮定している。
+そして、y軸は上方向に伸びているとする。
+しかし、多くのwindowシステムやディスプレイデバイスでは原点を左上とし、
+y軸が下方向に伸びているとしている。
+この問題を回避するために、<EM>:height</EM>パラメータに負の値を与えればよい。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="36927"></A>
+<B>homo-viewport-clip</B> <EM>v1 v2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>v1</EM>と<EM>v2</EM>は、4要素を持つ同次ベクトルであって、
+3次元空間の線分として表現される。
+その線分は、<!-- MATH
+ $x=-1, x=1, y=-1, y=1, z=0, z=1$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="291" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img71.png"
+ ALT="$x=-1, x=1, y=-1, y=1, z=0, z=1$"></SPAN>の境界でクリップされる。
+そして、2つのベクトルのリストを返す。
+もし、その線分が<B>viewport</B>の外側に完全に置かれているならば、
+NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="36941"></A>
+<BIG CLASS="XLARGE"><B>viewport </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>coordinates</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>viewport変換は、デバイスで指定される座標系にNDC（正規化デバイス座標系）を作る。
+<B>coordinates</B>クラスを継承しているため、<B>viewport</B>はサイズと投影画面の
+相対位置を定義している。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36960"></A>
+<B>:xcenter</B> <EM>&amp;optional xcenter </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewport</B>のx軸の中心を返す。
+もし、<EM>xcenter</EM>が与えられていれば、設定を行う。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36972"></A>
+<B>:ycenter</B> <EM>&amp;optional ycenter </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewport</B>のy軸の中心を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36983"></A>
+<B>:size</B> <EM>&amp;optional size </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewport</B>のx軸とy軸方向の大きさのリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36994"></A>
+<B>:width</B> <EM>&amp;optional width </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>viewport</B>の幅を<EM>width</EM>に
+設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37006"></A>
+<B>:height</B> <EM>&amp;optional height </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>viewport</B>の高さを
+<EM>height</EM>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37018"></A>
+<B>:screen-point-to-ndc</B> <EM>p </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p</EM>は、物理的画面の中の位置を表現する実数ベクトルである。
+<EM>p</EM>は、正規化デバイス座標系(NDC)の中での表現に変換される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37030"></A>
+<B>:ndc-point-to-screen</B> <EM>p </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewport</B>のNDC表現である<EM>p</EM>を画面の物理的位置に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37042"></A>
+<B>:ndc-line-to-screen</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つの3次元ベクトル<EM>p1</EM>と<EM>p2</EM>は、NDCの中の線分を定義する。
+これらの2つの端点は、画面空間の表現に変換される。
+もし、<EM>do-clip</EM>がnon-NILなら、その線分はクリップされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37055"></A>
+<B>:init</B> <EM>&amp;key (:xcenter 100) (:ycenter 100) (:size 100)
+(width 100) (height 100) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 新しい<B>viewport</B>オブジェクトを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2298"
+  HREF="jmanual-node127.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2292"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2286"
+  HREF="jmanual-node125.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2294"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2296"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2299"
+  HREF="jmanual-node127.html">Viewer</A>
+<B> Up:</B> <A NAME="tex2html2293"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2287"
+  HREF="jmanual-node125.html">投影</A>
+ &nbsp; <B>  <A NAME="tex2html2295"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2297"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

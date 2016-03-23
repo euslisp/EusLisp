@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Sockets</TITLE>
+<META NAME="description" CONTENT="Sockets">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node66.html">
+<LINK REL="up" HREF="manual-node64.html">
+<LINK REL="next" HREF="manual-node68.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1373"
+  HREF="manual-node68.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1367"
+  HREF="manual-node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1363"
+  HREF="manual-node66.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1369"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1371"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1374"
+  HREF="manual-node68.html">Asynchronous Input/Output</A>
+<B> Up:</B> <A NAME="tex2html1368"
+  HREF="manual-node64.html">InterProcess Communication and Network</A>
+<B> Previous:</B> <A NAME="tex2html1364"
+  HREF="manual-node66.html">Message Queues and FIFOs</A>
+ &nbsp; <B>  <A NAME="tex2html1370"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1372"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION030104300000000000000">
+Sockets</A>
+</H3>
+The socket is more versatile than other communication mechanisms
+because it can operate either host-locally (in unix domain) or
+network-widely (in internet domain).
+Connection-oriented socket (SOCK_STREAM) and
+unconnected socket (SOCK_DGRAM) are supported.
+In both cases,
+you must first create a socket address object
+by <B>make-socket-address</B> function,
+which returns an instance of <TT>socket-address</TT>.
+In unix domain, a socket address is specified by a path-name
+in the unix file system.
+In internet domain, the address is specified by combining
+the host machine name, the port number, and optionally the protocol number.
+If the port number is defined in <TT>/etc/services</TT>, it can be referred through
+the symbol specified by the service name.
+The function <B>unix:getservbyname</B> can be used 
+to retrieve the port number from the symbolic service name.
+Port numbers less than 1024 are reserved for root users,
+and non-priviledged users are advised to use port numbers greater than 1024 
+for their private sockets.
+
+<P>
+Although connected streams provide bidirectional communication channels,
+the connection establishment operation is asymmetric.
+One endpoint is refered
+to server and other to client.
+The endpoint on the behalf of the server
+(service access point) must be first established.
+It is created by <B>make-socket-port</B> function which returns an instance
+of <TT>socket-port</TT>.
+The socket-port object is then used to accept connections from
+one or more clients by <B>make-server-socket-stream</B>.
+A call to <B>make-server-socket-stream</B> may be blocked
+until a connection request from a client really happens.
+Clients can make socket streams by
+<B>make-client-socket-stream</B> specifying a socket-address.
+
+<P>
+<PRE>
+;;; an example of IPC through a socket stream:
+;;; server side
+(setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2000))
+(setq sport  (make-socket-port saddr))
+(setq sstream (make-server-socket-stream sport))
+;;;
+;;; client side
+(setq caddr (make-socket-address :domain af_inet :host "etlic2" :port 2000))
+(setq cstream (make-client-socket-stream caddr))
+</PRE>
+
+<P>
+In applications like a database or an environment simulator for mobile
+robots, <EM>multiple connection service</EM>
+between one server and many clients is required.
+This type of server can be programmed by the <B>open-server</B> function.
+From the current host name and given port number,
+<B>open-server</B> creates a socket port (service access point)
+on which connection requests are listened for.
+Since this port is attributed to be asynchronous,
+<B>open-server</B> is not blocked and returns immediately.
+Thereafter, each connection request interrupts EusLisp's main loop,
+and an socket-stream is created asynchronously.
+This socket-stream also works in asynchronous mode:
+the asynchronous input processing function which is the second argument
+to <B>open-server</B> is invoked whenever new data appear in this stream.
+Up to 30 connections can be established so that
+as many clients can access the server's data at the same time.
+
+<P>
+<PRE>
+;; server side
+(defun server-func (s) 
+   (case (read s) ...    ;do appropriate jobs according to inputs
+(open-server 3000 #'server-func)
+... do other jobs in parallel
+;; client-1 through client-N
+(setq s (connect-server "etlmmd" 3000))
+(format s "..." ...) (finish-output s)	;issue a command to the server
+(read s)                                ;receive response
+</PRE>
+
+<P>
+In contrast to the <I>connection-oriented</I> streams which provide reliable
+communication channels,
+the <I>connectionless</I> sockets are unreliable: messages may be lost,
+duplicated, and may arrive out-of-order.
+The <I>connectionless</I> sockets, however, have advantages that they
+do not need to assign file descriptor to each connection,
+and sending process is never blocked even if the receiver is not
+reading data and the buffer overflows.
+
+<P>
+To make connectionless sockets, use the following procedures.
+Messages are transferred by the <B>unix:sendto</B> and <B>unix:recvfrom</B>.
+<PRE>
+;;; receiver side
+(setq saddr  (make-socket-address :domain af_inet :host "etlic2" :port 2001))
+(setq sock   (make-dgram-socket saddr))
+(unix:recvfrom sock)
+;;;
+;;; client side
+(setq caddr (make-socket-address :domain af_inet :host "etlic2" :port 2001))
+(setq sock (unix:socket (send caddr :domain) 2 0))
+(unix:sendto sock caddr "this is a message")
+;;;
+;;; how to use echo service which is registered in /etc/services.
+(setq caddr (make-socket-address :domain af_inet :host "etlic2"
+                                 :port (car (unix:getservbyname "echo"))))
+(setq echosock (unix:socket (send caddr :domain) 2 0))
+(unix:sendto echosock caddr "this is a message")
+(unix:recvfrom echosock)  --&gt; "this is a message"
+</PRE>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="16235"></A>
+<B>make-socket-address</B> <EM>&amp;key domain pathname host port proto service </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a sockaddr structure.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16245"></A>
+<B>make-socket-port</B> <EM>sockaddr </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a server-side socket port
+which is used to establish a connection with a client.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16255"></A>
+<B>make-server-socket-stream</B> <EM>sockport &amp;optional (size 100) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+accepts a connection from a client and returns a two-way stream.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16265"></A>
+<B>make-client-socket-stream</B> <EM>sockaddr &amp;optional (size 100) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+connects to a server port and returns a two-way stream.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16275"></A>
+<B>open-server</B> <EM>port remote-func </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prepares a socket port designated by the host name and <EM>port</EM> 
+in internetnet domain, and waits for the connection requests
+asynchronously.
+Each time a connection is requested, it is accepted and a new
+socket-stream is opened.
+When a message arrives at the socket-port, <EM>remote-func</EM>
+is invoked with the socket port as the argument.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16287"></A>
+<B>connect-server</B> <EM>host port </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+This is a shorhand of successive calls to make-socket-address and
+make-client-socket-stream.
+A socket-stream for a client to communicate with the server
+specified by <EM>host</EM> and <EM>port</EM> is returned.
+The port is made in internet domain.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1373"
+  HREF="manual-node68.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1367"
+  HREF="manual-node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1363"
+  HREF="manual-node66.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1369"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1371"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1374"
+  HREF="manual-node68.html">Asynchronous Input/Output</A>
+<B> Up:</B> <A NAME="tex2html1368"
+  HREF="manual-node64.html">InterProcess Communication and Network</A>
+<B> Previous:</B> <A NAME="tex2html1364"
+  HREF="manual-node66.html">Message Queues and FIFOs</A>
+ &nbsp; <B>  <A NAME="tex2html1370"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1372"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

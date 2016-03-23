@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>インスタンス管理</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="インスタンス管理">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node35.html">
+<LINK REL="previous" HREF="jmanual-node33.html">
+<LINK REL="up" HREF="jmanual-node31.html">
+<LINK REL="next" HREF="jmanual-node35.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html856"
+  HREF="jmanual-node35.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html850"
+  HREF="jmanual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html844"
+  HREF="jmanual-node33.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html852"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html854"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html857"
+  HREF="jmanual-node35.html">基本クラス</A>
+<B> Up:</B> <A NAME="tex2html851"
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
+<B> Previous:</B> <A NAME="tex2html845"
+  HREF="jmanual-node33.html">メッセージ送信</A>
+ &nbsp; <B>  <A NAME="tex2html853"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html855"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03043000000000000000">
+インスタンス管理</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="4013"></A>
+<B>instantiate</B> <EM>class &amp;optional size </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>class</EM>から新しいオブジェクトを作る低レベル命令である。
+もし<EM>class</EM>が<B>vector-class</B>ならば、<EM>size</EM>がなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4027"></A>
+<B>instance</B> <EM>class &amp;rest message </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+インスタンスが作られ、そこに<EM>message</EM>が送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4038"></A>
+<B>make-instance</B> <EM>class &amp;rest var-val-pairs </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>class</EM>のインスタンスを作成し、スロット変数を
+<EM>var-val-pairs</EM>のように設定する。
+例えば、<TT>(make-instance cons :car 1 :cdr 2)</TT>
+は、<TT>(cons 1 2)</TT>と同等である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4052"></A>
+<B>copy-object</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>copy-object</B>関数は、参照トポロジー（再帰参照でも構わない）を保ったまま
+コピーするために使用する。
+<B>copy-object</B>は、独自性の保存に触れないsymbolやパッケージを除いて、
+<EM>object</EM>からアクセス可能などんなオブジェクトもコピーする。
+<B>copy-object</B>は、オブジェクトの中の全ての参照を2度妨害する。
+1度が、新しいオブジェクトを作り既にコピーされたオブジェクトのオリジナルに
+マークを付けるとき、そしてマークを消すときにもう1度。
+この2段階の処理は、<B>copy-object</B>を<B>copy-seq</B>よりも遅くする。
+もし順番にコピーをしたいならば、
+<B>copy-seq</B>か<B>copy-tree</B>を使用することを薦める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4070"></A>
+<B>become</B> <EM>object class </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>のクラスを<EM>class</EM>に変更する。
+古いクラスと新しいクラス両方のスロット構造は、一致しなければならない。
+普通、２要素ベクトル間のクラス変更にのみ安全に使用することができる。
+例えば、整数ベクトルからビットベクトルへの変更。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4082"></A>
+<B>replace-object</B> <EM>dest src </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dest</EM>は、<EM>src</EM>のサブクラスのインスタンスでなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4094"></A>
+<B>class</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>のクラスオブジェクトを返す。
+クラス名を得るために、クラスオブジェクトに<TT>:name</TT>メッセージを送る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4106"></A>
+<B>derivedp</B> <EM>object class </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>derivedp</B>は、<EM>object</EM>が<EM>class</EM>またはそのサブクラスから
+インスタンス化されているかどうかを判定する。
+<B>subclassp</B>と<B>derivedp</B>関数は、クラス継承のなかを探索できない。
+したがって、一定時間内に型のチェックがいつも終了する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4121"></A>
+<B>slot</B> <EM>object class (index <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> slot-name) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スロット値の名前かインデックスを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4131"></A>
+<B>setslot</B> <EM>object class (index <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="$\vert$"></SPAN> slot-name) value </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>setslot</B>は、内部処理関数でユーザーが使用できない。
+代りに、<B>setf</B>と<B>slot</B>の組み合せを使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html856"
+  HREF="jmanual-node35.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html850"
+  HREF="jmanual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html844"
+  HREF="jmanual-node33.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html852"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html854"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html857"
+  HREF="jmanual-node35.html">基本クラス</A>
+<B> Up:</B> <A NAME="tex2html851"
+  HREF="jmanual-node31.html">オブジェクト指向プログラミング</A>
+<B> Previous:</B> <A NAME="tex2html845"
+  HREF="jmanual-node33.html">メッセージ送信</A>
+ &nbsp; <B>  <A NAME="tex2html853"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html855"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

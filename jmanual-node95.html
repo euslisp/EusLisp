@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Context Separation</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Context Separation">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node96.html">
+<LINK REL="previous" HREF="jmanual-node94.html">
+<LINK REL="up" HREF="jmanual-node93.html">
+<LINK REL="next" HREF="jmanual-node96.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1848"
+  HREF="jmanual-node96.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1842"
+  HREF="jmanual-node93.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1836"
+  HREF="jmanual-node94.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1844"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1846"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1849"
+  HREF="jmanual-node96.html">メモリ管理</A>
+<B> Up:</B> <A NAME="tex2html1843"
+  HREF="jmanual-node93.html">マルチスレッドEuslispの設計</A>
+<B> Previous:</B> <A NAME="tex2html1837"
+  HREF="jmanual-node94.html">Solaris 2 オペレーティングシステムのマルチスレッド</A>
+ &nbsp; <B>  <A NAME="tex2html1845"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1847"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04021200000000000000">
+Context Separation</A>
+</H3>
+MT-Eusは、それぞれのスレッドに対し個別にスタックと環境を配置する。
+そのため、他のスレッドと独立に実行することができる。
+symbolやconsのようなオブジェクトは、これまでのEuslispのように
+共有ヒープメモリ上に配置される。
+したがって、block labelやcatch tagやローカル変数のような
+スレッドの個別データは、他のスレッドから保護される。
+ところが、グローバル変数によって示される値（オブジェクト）は、
+情報の変更が許可されているすべてのスレッドから見ることができる。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="threadmodel"></A><A NAME="25260"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
+Solarisオペレーティングシステムのスレッドモデル</CAPTION>
+<TR><TD><IMG
+ WIDTH="574" HEIGHT="251" BORDER="0"
+ SRC="jmanual-img46.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/threadfig.ps,width=130mm}
+\end{center}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+環境はC-stackとbinding-stackおよび<TT>lambda, block, catch, let, flet</TT>
+などのローカルブロックに繋がるフレームポインタにより構成されており、
+新しいスレッドが作成されたときに設置される。
+複数の環境が本当のマルチプロセッサマシンの上で同時に
+動作できるので、グローバル変数の中の現在の環境に対して単一なポインタ
+を持つことができない。
+むしろ、環境のポインタを最上位の評価から低レベルのメモリ管理に変換するために、
+すべての内部関数にもう一つ引き数を付け加えなければならない。
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

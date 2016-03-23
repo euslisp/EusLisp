@@ -1,0 +1,537 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Basic Classes</TITLE>
+<META NAME="description" CONTENT="Basic Classes">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="manual-node34.html">
+<LINK REL="up" HREF="manual-node31.html">
+<LINK REL="next" HREF="manual-node36.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html901"
+  HREF="manual-node36.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html895"
+  HREF="manual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html891"
+  HREF="manual-node34.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html897"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html899"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html902"
+  HREF="manual-node36.html">Arithmetic Functions</A>
+<B> Up:</B> <A NAME="tex2html896"
+  HREF="manual-node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html892"
+  HREF="manual-node34.html">Instance Management</A>
+ &nbsp; <B>  <A NAME="tex2html898"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html900"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03044000000000000000">
+Basic Classes</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="4184"></A>
+<BIG CLASS="XLARGE"><B>object </B></BIG> [class]  <PRE><TT>
+  :super    
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>Object is the most basic class that is located at the top of class hierarchy.
+Since it defines no slot variables, it is no use to make an instance of
+<B>object</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4202"></A>
+<B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints the object in the standard re-readable object format,
+that is, the class name and the address, enclosed by angle brackets and
+preceded by a pound sign.
+Any subclasses of <B>object</B> can use this method to print itself with
+more comprehensive information  by using
+<B>send-super</B> macro specifying <EM>mesg</EM> string.
+An object is re-readable if it begins with #<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img7.png"
+ ALT="$&lt;$"></SPAN>,
+followed by its class name, correct address, any lisp-readable information,
+and <code>&gt;</code>.
+Since every data object except numbers inherits <B>object</B>,
+you can get print forms in this notation, even for symbols or strings.
+Specifying this notation, you can catch data objects that you forgot
+to <B>setq</B> to a symbol, as long as there happened no garbage collection
+after it is printed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4217"></A>
+<B>:slots</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of variable-name and value pair of all the slots of the
+object.
+You can get the value of a specific slot by applying <B>assoc</B> to this
+list, although you cannot alter them.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="4229"></A>
+<BIG CLASS="XLARGE"><B>propertied-object </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 plist 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines objects that have property list.
+Unlike other Common Lisp, 
+EusLisp allows any objects that inherit propertied-object to have property
+lists, even if they are not symbols.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4246"></A>
+<B>:plist</B> <EM>&amp;optional plist </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+if <EM>plist</EM> is specified, it is set to the plist slot of this object.
+Previous plist, if there had been one, is lost.
+Legal plist should be of the form of
+<code>((indicator1 . value1) (indicator2 . value2) ...)</code>.
+Each <code>indicator</code> can be any lisp form that are tested its equality
+with the <B>eq</B> function.
+When a symbol is used for an indicator, use of keyword is recommended
+to ensure the equality check will be performed interpacakge-widely.
+<B>:plist</B> returns the current plist.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4259"></A>
+<B>:get</B> <EM>indicator </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the value associated with <EM>indicator</EM> in the property list.
+<code>(send x :get :y) == (cdr (assoc :y (send x :plist)))</code>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4270"></A>
+<B>:put</B> <EM>indicator value </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+associates <EM>value</EM> to <EM>indicator</EM> in the plist.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4282"></A>
+<B>:remprop</B> <EM>indicator </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+removes <EM>indicator</EM> and value pair from the plist.
+Further attempt to <EM>:get</EM> the value returns nil.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4294"></A>
+<B>:name</B> <EM>&amp;optional name </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines and retrieves the <TT>:name</TT> property in the plist.
+This property is used for printing.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4305"></A>
+<B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints the object in the re-readable form.
+If the object has <B>:name</B> property, it is printed after
+the address of the object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4316"></A>
+<B>:slots</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of variable and value pairs of this object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4326"></A>
+<B>:methods</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of all method names defined for this object.
+In other words, this object can accept method calls listed by :methods. 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4336"></A>
+<B>:get-val</B> <EM>variable-name </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the value of the slot designated by <I>variable-name</I>.
+If the object does not have the variable-name slot, an error is reported.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4347"></A>
+<B>:set-val</B> <EM>variable-name value </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <I>value</I> in the variable-name slot of this object.
+If the object does not have the variable-name slot, an error is reported.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="4359"></A>
+<BIG CLASS="XLARGE"><B>metaclass </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 name super cix vars types forwards methods 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>Metaclass defines classes. Classes that have own class variables
+should be defined with <B>metaclass</B> as their superclass.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4377"></A>
+<B>:new</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> creates an instance of this class and returns it
+after filling all the slots with NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4387"></A>
+<B>:super</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the super class object of this class.
+You cannot alter superclass once defclassed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4397"></A>
+<B>:methods</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of all the methods defined in this class.
+The list is composed of lists each of which describes the name of
+the method, parameters, and body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4407"></A>
+<B>:method</B> <EM>name </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the method definition associated with <EM>name</EM>.
+If not found, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4418"></A>
+<B>:method-names</B> <EM>subname </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of all the method names each of which contains
+<EM>subname</EM> in its method name.
+Methods are searched only in this class.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4429"></A>
+<B>:all-methods</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of all methods that are defined in this class and
+its all the super classes.
+In other words, an instance of this class can execute each of these
+methods.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4439"></A>
+<B>:all-method-names</B> <EM>subname </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of all the method names each of which matches with
+<EM>subname</EM>.
+The search is made from  this class up to <B>object</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4451"></A>
+<B>:slots</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the slot-name vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4461"></A>
+<B>:name</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the name symbol of this class.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4471"></A>
+<B>:cid</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns an integer that is assigned to every
+instance of this class to identify its class.
+This is an index to the system-internal class table, and is changed
+when a new subclass is defined under this class.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4481"></A>
+<B>:subclasses</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of the direct subclass of this class.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4491"></A>
+<B>:hierarchy</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of all the subclasses defined under this class.
+You can also call the <B>class-hierarchy</B> function to get a comprehensive
+listing of all the class hierarchy.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="4502"></A>
+<B>find-method</B> <EM>object selector </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+searches for the method identified by <EM>selector</EM> in <EM>object</EM>'s
+class and its super classes. This function is useful when object's
+class is uncertain and you want to know whether the object can handle
+the message without causing nomethod error.
+</DD>
+</DL>
+<BR>
+<BR>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html901"
+  HREF="manual-node36.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html895"
+  HREF="manual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html891"
+  HREF="manual-node34.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html897"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html899"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html902"
+  HREF="manual-node36.html">Arithmetic Functions</A>
+<B> Up:</B> <A NAME="tex2html896"
+  HREF="manual-node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html892"
+  HREF="manual-node34.html">Instance Management</A>
+ &nbsp; <B>  <A NAME="tex2html898"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html900"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

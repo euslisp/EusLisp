@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>HTTP Client</TITLE>
+<META NAME="description" CONTENT="HTTP Client">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node165.html">
+<LINK REL="previous" HREF="manual-node163.html">
+<LINK REL="up" HREF="manual-node163.html">
+<LINK REL="next" HREF="manual-node165.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2879"
+  HREF="manual-node165.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2873"
+  HREF="manual-node163.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2867"
+  HREF="manual-node163.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2875"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2877"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2880"
+  HREF="manual-node165.html">HTTP CGI Programming</A>
+<B> Up:</B> <A NAME="tex2html2874"
+  HREF="manual-node163.html">HTTP</A>
+<B> Previous:</B> <A NAME="tex2html2868"
+  HREF="manual-node163.html">HTTP</A>
+ &nbsp; <B>  <A NAME="tex2html2876"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2878"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION040111000000000000000">
+HTTP Client</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="50674"></A>
+<BIG CLASS="XLARGE"><B>URL-pathname </B></BIG> [class]  <PRE><TT>
+  :super   <B>pathname</B> 
+<BR>  :slots 		 server port protocol 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>extends pathname to allow URL notation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50691"></A>
+<B>url-pathname</B> <EM>name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+instantiates url-pathname class object from url string or url-pathname class object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50701"></A>
+<B>escape-url</B> <EM>url &amp;optional (ss *standard-output*) (queryp t) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes percent-escaped <TT>url</TT> to stream <TT>ss</TT> (default: <TT>*standard-output*</TT>).
+If <TT>queryp</TT> is T, then <TT>Space</TT> in <TT>url</TT> is encoded to <TT>+</TT>, otherwise escaped as <TT>Space</TT>.
+This option is convenient for sending url query to server with separation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50719"></A>
+<B>escaped-url-string-from-namestring</B> <EM>url-string &amp;optional (queryp t) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns result of <TT>escape-url</TT> as string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50730"></A>
+<B>unescape-url</B> <EM>url &amp;optional (ss *standard-output*) (queryp t) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+unescapes percent-escaped <TT>url</TT> and writes unescaped url to stream <TT>ss</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50742"></A>
+<B>unescaped-url-string-from-namestring</B> <EM>url-string &amp;optional (queryp t) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns result of <TT>unescape-url</TT> as string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50753"></A>
+<B>read-http</B> <EM>url &amp;key (timeout 10) (retry 5) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a socket connection to the designated url, and
+read the html document.
+The result is a list of tags and plain strings.
+HTML tags are converted as lists consisting of the tag-name
+and argument lists.
+For example, the following html document,
+results in the following list.
+Note that tags are represented as lists, in which
+the directive is represented as a symbol
+followed by symbols or strings.
+Whether an argument is represented as symbol or string
+reflects how the original argument is described.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<PRE>
+&lt;body bgcolor=#ffa080&gt;
+&lt;h1&gt; EusLisp Title&lt;/h1&gt;
+&lt;li&gt; item1 &lt;/li&gt;
+&lt;a href="http://www.etl.go.jp/~matsui/eus/euslisp.html"&gt; euslisp&lt;/a&gt;
+&lt;/body&gt;
+</PRE>
+
+<P>
+<PRE>
+("HTTP/1.1 200 OK"
+ "Date: Sun, 21 May 2000 11:47:00 GMT"
+ "Server: Apache/1.3.9 (Unix)"
+ "Last-Modified: Sun, 21 May 2000 11:19:35 GMT"
+ "ETag: \"4f014-c7-3927c647\""
+ "Accept-Ranges: bytes"
+ "Content-Length: 199"
+ "Content-Type: text/html"
+ (head) (title) " Toshihiro Matsui on t570" (/title) (/head)
+ (body bgcolor |#FFA080|)
+ (h1) " Title Line" (/h1)
+ (li) " item1 " (/li)
+ (a href "http://www.etl.go.jp/~matsui/eus/euslisp.html")
+ " euslisp"
+ (/a)
+ (/body))
+</PRE>
+
+<P>
+
+<A NAME="50763"></A>
+<B>extract-html</B> <EM>tag html-list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of strings (and tags) sandwitched by tag and /tag.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50773"></A>
+<B>remove-html-tags</B> <EM>html-list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+removes tags from the html-list leaving only texts (strings).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2879"
+  HREF="manual-node165.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2873"
+  HREF="manual-node163.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2867"
+  HREF="manual-node163.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2875"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2877"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2880"
+  HREF="manual-node165.html">HTTP CGI Programming</A>
+<B> Up:</B> <A NAME="tex2html2874"
+  HREF="manual-node163.html">HTTP</A>
+<B> Previous:</B> <A NAME="tex2html2868"
+  HREF="manual-node163.html">HTTP</A>
+ &nbsp; <B>  <A NAME="tex2html2876"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2878"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Parallel Execution of Threads</TITLE>
+<META NAME="description" CONTENT="Parallel Execution of Threads">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node106.html">
+<LINK REL="previous" HREF="manual-node104.html">
+<LINK REL="up" HREF="manual-node103.html">
+<LINK REL="next" HREF="manual-node106.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2029"
+  HREF="manual-node106.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2023"
+  HREF="manual-node103.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2017"
+  HREF="manual-node104.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2025"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2027"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2030"
+  HREF="manual-node106.html">Synchronization primitives</A>
+<B> Up:</B> <A NAME="tex2html2024"
+  HREF="manual-node103.html">Asynchronous and Parallel Programming</A>
+<B> Previous:</B> <A NAME="tex2html2018"
+  HREF="manual-node104.html">Thread Creation and Thread</A>
+ &nbsp; <B>  <A NAME="tex2html2026"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2028"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04022200000000000000">
+Parallel Execution of Threads</A>
+</H3>
+For the allocation of parallel computation to threads, the thread function
+is used.
+Thread takes one free thread out of the thread pool,
+transfers arguments via shared memory, wakes up the thread by signaling
+the semaphore as indicated in fig. <A HREF="manual-node104.html#threadobj">7</A>,
+and returns a thread object to the caller without blocking.
+The woken-up thread begins evaluation of
+the argument running in parallel to the calling thread.
+The caller uses
+<TT>wait-thread</TT> to receive the evaluation result from the forked thread.
+The <TT>plist</TT> macro is a more convenient form to describe parallel 
+evaluation of arguments.
+<TT>Plist</TT> attaches threads to evaluate each argument
+and lists up results after waiting for all threads to finish evaluation.
+
+<P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

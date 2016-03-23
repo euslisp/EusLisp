@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Message Sending</TITLE>
+<META NAME="description" CONTENT="Message Sending">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node34.html">
+<LINK REL="previous" HREF="manual-node32.html">
+<LINK REL="up" HREF="manual-node31.html">
+<LINK REL="next" HREF="manual-node34.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html875"
+  HREF="manual-node34.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html869"
+  HREF="manual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html863"
+  HREF="manual-node32.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html871"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html873"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html876"
+  HREF="manual-node34.html">Instance Management</A>
+<B> Up:</B> <A NAME="tex2html870"
+  HREF="manual-node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html864"
+  HREF="manual-node32.html">Classes and Methods</A>
+ &nbsp; <B>  <A NAME="tex2html872"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html874"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03042000000000000000">
+Message Sending</A>
+</H2>
+
+ <BR>
+<BR> <P>
+
+<A NAME="3984"></A>
+<B>send</B> <EM>object selector {arg}* </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+send a message consisting of <EM>selector</EM> and <EM>arg</EM> to <EM>object</EM>.
+<EM>object</EM> can be anything but number.
+<EM>selector</EM> must be evaluated to be a keyword.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="3999"></A>
+<B>send-message</B> <EM>target search selector {arg}* </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Low level primitive to implement <B>send-super</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4010"></A>
+<B>send*</B> <EM>object selector &amp;rest msg-list </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>send*</B> applies <B>send-message</B> to a list of arguments.
+The relation between <B>send</B> and <B>send*</B> is like the one
+between <B>funcall</B> and <B>apply</B>, or <B>list</B> and <B>list*</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4028"></A>
+<B>send-all</B> <EM>receivers selector &amp;rest mesg </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sends the same message to all the receivers, and collects the result
+in a list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4038"></A>
+<B>send-super</B> <EM>selector &amp;rest msgs </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sends <EM>msgs</EM> to self, but
+begins method searching at the superclass of the class
+where the method currently being executed is defined.
+It is an error to <EM>send-super</EM> outside a method (i.e. in a function).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4050"></A>
+<B>send-super*</B> <EM>selector &amp;rest msg-list </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>send-super*</B> is apply version of send-super.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html875"
+  HREF="manual-node34.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html869"
+  HREF="manual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html863"
+  HREF="manual-node32.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html871"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html873"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html876"
+  HREF="manual-node34.html">Instance Management</A>
+<B> Up:</B> <A NAME="tex2html870"
+  HREF="manual-node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html864"
+  HREF="manual-node32.html">Classes and Methods</A>
+ &nbsp; <B>  <A NAME="tex2html872"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html874"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

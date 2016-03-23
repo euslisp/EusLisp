@@ -1,0 +1,438 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>連結座標系</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="連結座標系">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node111.html">
+<LINK REL="up" HREF="jmanual-node107.html">
+<LINK REL="next" HREF="jmanual-node113.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2089"
+  HREF="jmanual-node113.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2083"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2079"
+  HREF="jmanual-node111.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2085"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2087"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2090"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Up:</B> <A NAME="tex2html2084"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2080"
+  HREF="jmanual-node111.html">座標系</A>
+ &nbsp; <B>  <A NAME="tex2html2086"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2088"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04035000000000000000">
+連結座標系</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="27915"></A>
+<BIG CLASS="XLARGE"><B>cascaded-coords </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>coordinates</B> 
+<BR>  :slots 		 (parent descendants worldcoords manager changed) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>連結された座標系を定義する。<B>cascaded-coords</B>は、
+しばしば<B>cascoords</B>と略す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27934"></A>
+<B>:inheritance</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>cascaded-coords</B>の子孫をすべて記述した継承treeリストを返す。
+もし、<TT>a</TT>と<TT>b</TT>がこの座標系の直下の子孫で<TT>c</TT>が<TT>a</TT>の
+子孫であるとき、<TT>((a (c)) (b))</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27950"></A>
+<B>:assoc</B> <EM>childcoords &amp;optional relative-coords </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>childcoords</EM>は、この座標系の子孫として関係している。
+もし、<EM>childcoords</EM>が既に他の<B>cascaded-coords</B>に<B>assoc</B>されて
+いるとき、<EM>childcoords</EM>はそれぞれの<B>cascaded-coords</B>が1つの親しか
+持っていないなら<B>dessoc</B>される。
+ワールド座標系における<EM>childcoords</EM>の方向あるいは位置は変更されない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27968"></A>
+<B>:dissoc</B> <EM>childcoords </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の子孫リストから<EM>childcoords</EM>を外す。
+ワールド座標系における<EM>childcoords</EM>の方向あるいは位置は変更されない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27980"></A>
+<B>:changed</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の親座標系が変更されていることを通知する。
+また、もっとあとでワールド座標系が要求されたとき、ワールド座標系を再計算する
+必要がある。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27990"></A>
+<B>:update</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+現在のワールド座標系を再計算するために<B>:worldcoords</B>メソッド
+を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28001"></A>
+<B>:worldcoords</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ルートの座標系からこの座標系までの全ての座標系を連結させることにより、
+この座標系をワールド座標系で表現した<B>coordinates</B>オブジェクトで返す。
+その結果は、このオブジェクトが持ち、後に再利用される。
+よって、この結果の座標系を変更すべきでない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28012"></A>
+<B>:worldpos</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系で表現したこの座標系の<TT>rot</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28023"></A>
+<B>:worldrot</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系で表現したこの座標系の<TT>pos</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28034"></A>
+<B>:transform-vector</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM>をこのローカル座標系での表現とみなして、ワールド座標系での
+表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28045"></A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系で表現される<EM>vec</EM>をこのローカル座標系の表現に逆変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28056"></A>
+<B>:inverse-transformation</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の逆変換を表現する<B>coordinates</B>のインスタンスを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28067"></A>
+<B>:transform</B> <EM>trans  &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28078"></A>
+<B>:translate</B> <EM>fltvec &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28089"></A>
+<B>:locate</B> <EM>fltvec &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28100"></A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28111"></A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>coordinates</B>クラスの記述を参照すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28122"></A>
+<B>make-coords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28133"></A>
+<B>make-cascoords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28144"></A>
+<B>coords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28155"></A>
+<B>cascoords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis
+:4X4 :coords :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+これらの関数は、すべて<B>coordinates</B>あるいは<B>cascaded-coords</B>を
+新しく作る。
+キーワードパラメータについては、<B>coordinates</B>クラスの<B>:init</B>メソッドを
+見ること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28169"></A>
+<B>transform-coords</B> <EM>coords1 coords2 &amp;optional (coords3 (coords)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>coords1</EM>が<EM>coords2</EM>に左から適用（乗算）される。
+その積は<EM>coords3</EM>に蓄積される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28182"></A>
+<B>transform-coords*</B> <EM>&amp;rest coords </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>coords</EM>にリスト表現されている変換を連結させる。
+連結された変換で表現される<B>coordinates</B>のインスタンスを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28194"></A>
+<B>wrt</B> <EM>coords vec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM>を<EM>coords</EM>における表現に変換する。
+その結果は<TT>(send <EM>coords</EM> :transform-vector <EM>vec</EM>)</TT>と同一である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2089"
+  HREF="jmanual-node113.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2083"
+  HREF="jmanual-node107.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2079"
+  HREF="jmanual-node111.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2085"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2087"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2090"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Up:</B> <A NAME="tex2html2084"
+  HREF="jmanual-node107.html">幾何学関数</A>
+<B> Previous:</B> <A NAME="tex2html2080"
+  HREF="jmanual-node111.html">座標系</A>
+ &nbsp; <B>  <A NAME="tex2html2086"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2088"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

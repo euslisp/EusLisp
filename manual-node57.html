@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Base64 encoding</TITLE>
+<META NAME="description" CONTENT="Base64 encoding">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node58.html">
+<LINK REL="previous" HREF="manual-node56.html">
+<LINK REL="up" HREF="manual-node53.html">
+<LINK REL="next" HREF="manual-node58.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1222"
+  HREF="manual-node58.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1216"
+  HREF="manual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1210"
+  HREF="manual-node56.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1218"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1220"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1223"
+  HREF="manual-node58.html">DES cryptography</A>
+<B> Up:</B> <A NAME="tex2html1217"
+  HREF="manual-node53.html">Text Processing</A>
+<B> Previous:</B> <A NAME="tex2html1211"
+  HREF="manual-node56.html">Regular Expression</A>
+ &nbsp; <B>  <A NAME="tex2html1219"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1221"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03084000000000000000">
+Base64 encoding</A>
+</H2>
+
+<P>
+Base64 is an encoding scheme to represent binary data using only
+printable graphic characters.  The scheme is applied to
+uuencode/uudecode.  The following functions are defined in
+lib/llib/base64.l.
+
+<P>
+
+ <BR>
+<BR> <A NAME="14378"></A>
+<B>base64encode</B> <EM>binstr </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A binary string, <I>binstr </I> is converted to an ASCII string
+consisting only of <BR><P></P>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+<!-- MATH
+ \begin{displaymath}
+A-Za-z0-9+/=
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="159" HEIGHT="28" BORDER="0"
+ SRC="manual-img30.png"
+ ALT="\begin{displaymath}A-Za-z0-9+/=\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+letters
+according to the base-64 encoding rule.
+The resulted string is 33% longer than the original.
+A newline is inserted every 76 characters.
+One or two '=' characters are padded at the end to adjust the
+length of the result to be a multiple of four.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14389"></A>
+<B>base64decode</B> <EM>ascstr </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+An ASCII string, <I>ascstr</I>, is converted to a binary string
+according to the base-64 encodeing.
+Error is reported if ascstr includes an invalid character.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

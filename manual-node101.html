@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Context Separation</TITLE>
+<META NAME="description" CONTENT="Context Separation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node102.html">
+<LINK REL="previous" HREF="manual-node100.html">
+<LINK REL="up" HREF="manual-node99.html">
+<LINK REL="next" HREF="manual-node102.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1969"
+  HREF="manual-node102.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1963"
+  HREF="manual-node99.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1957"
+  HREF="manual-node100.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1965"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1967"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1970"
+  HREF="manual-node102.html">Memory Management</A>
+<B> Up:</B> <A NAME="tex2html1964"
+  HREF="manual-node99.html">Design of Multithread EusLisp</A>
+<B> Previous:</B> <A NAME="tex2html1958"
+  HREF="manual-node100.html">Multithread in Solaris 2</A>
+ &nbsp; <B>  <A NAME="tex2html1966"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1968"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION04021200000000000000">
+Context Separation</A>
+</H3>
+MT-Eus allocates private stacks and contexts  to each threads
+so that they can run independently of each other. Objects
+such as symbols and conses are allocated in the shared heap
+memory as in sequential EusLisp.
+Therefore, thread-private data such as block labels,
+catch tags, and local variables 
+are protected from other threads, whereas  values (objects) 
+pointed by global variables are visible to all threads allowing
+information exchange among threads.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="threadmodel"></A><A NAME="25469"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 5:</STRONG>
+Solaris operating system's thread model</CAPTION>
+<TR><TD><IMG
+ WIDTH="575" HEIGHT="251" BORDER="0"
+ SRC="manual-img41.png"
+ ALT="\begin{figure}\begin{center}
+\mbox{\epsfxsize =13cm
+\epsfbox{fig/threadfig.ps}
+}
+\par
+\end{center}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+A context consists of a C-stack, a binding-stack and frame 
+pointers that chain lexical blocks such as <TT>lambda, block, catch,
+let, flet</TT>, and so on,  and is established when a new thread
+is created. Since more than one context can be active at
+the same time on a real multi-processor machine, we cannot
+hold a single pointer to the current context in a global variable.
+Rather we have to add one more argument to every internal
+function to transfer the context pointer  from the topmost eval
+to the memory manager at the bottom.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1969"
+  HREF="manual-node102.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1963"
+  HREF="manual-node99.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1957"
+  HREF="manual-node100.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1965"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1967"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1970"
+  HREF="manual-node102.html">Memory Management</A>
+<B> Up:</B> <A NAME="tex2html1964"
+  HREF="manual-node99.html">Design of Multithread EusLisp</A>
+<B> Previous:</B> <A NAME="tex2html1958"
+  HREF="manual-node100.html">Multithread in Solaris 2</A>
+ &nbsp; <B>  <A NAME="tex2html1966"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1968"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

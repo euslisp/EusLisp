@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Instance Management</TITLE>
+<META NAME="description" CONTENT="Instance Management">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node35.html">
+<LINK REL="previous" HREF="manual-node33.html">
+<LINK REL="up" HREF="manual-node31.html">
+<LINK REL="next" HREF="manual-node35.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html889"
+  HREF="manual-node35.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html883"
+  HREF="manual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html877"
+  HREF="manual-node33.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html885"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html887"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html890"
+  HREF="manual-node35.html">Basic Classes</A>
+<B> Up:</B> <A NAME="tex2html884"
+  HREF="manual-node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html878"
+  HREF="manual-node33.html">Message Sending</A>
+ &nbsp; <B>  <A NAME="tex2html886"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html888"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03043000000000000000">
+Instance Management</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="4061"></A>
+<B>instantiate</B> <EM>class &amp;optional size </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+the lowest primitive to create a new object from a class.
+If the class is a vector-class, <EM>size</EM> should be supplied.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4072"></A>
+<B>instance</B> <EM>class &amp;rest message </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+An instance is created, and the message is sent to it.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4082"></A>
+<B>make-instance</B> <EM>class &amp;rest var-val-pairs </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates an instance of <EM>class</EM> and sets its slot variables
+according to <EM>var-val-pairs</EM>.
+For example, <TT>(make-instance cons :car 1 :cdr 2)</TT>
+is equivalent to <TT>(cons 1 2)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4096"></A>
+<B>copy-object</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>copy-object</B> function is used to copy objects keeping the referencing
+topologies even they have recursive references.
+<B>Copy-object</B> copies any objects accessible from <EM>object</EM>
+except symbols and packages, which are untouched to keep the uniqueness
+of symbols.
+<B>copy-object</B> traverses all the references in an object twice:
+once to create new objects and to mark original objects that they have
+already copied, and again to remove marks.
+This two-step process makes copy-object work slower than copy-seq.
+If what you wish to copy is definitely a sequence,
+use of <B>copy-seq</B> or <B>copy-tree</B> is recommended.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4112"></A>
+<B>become</B> <EM>object class </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the class of <EM>object</EM> to <EM>class</EM>.
+The slot structure of both the old class and the new class must be
+consistent. Usually, this can be safely used only for changing
+class between binary vectors, for example from an integer-vector
+to a bit-vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4124"></A>
+<B>replace-object</B> <EM>dest src </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+dest must be an instance of the subclass of src.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4134"></A>
+<B>class</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the class object of <EM>object</EM>.
+To get the name of the class, send :name message to the class object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4145"></A>
+<B>derivedp</B> <EM>object class </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>derivedp</B> checks if an object is instantiated from <EM>class</EM>
+or <EM>class</EM>'s subclasses.
+<B>subclassp</B> and <B>derivedp</B> functions do not search in class hierarchy:
+type check always finishes within a constant time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4160"></A>
+<B>slot</B> <EM>object class (index <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN> slot-name) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns the named or indexed slot value.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4170"></A>
+<B>setslot</B> <EM>object class (index <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$\vert$"></SPAN> slot-name) value </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Setslot</B> is a internal function and users should not use it.
+Use, instead, combination of <B>setf</B> and <B>slot</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html889"
+  HREF="manual-node35.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html883"
+  HREF="manual-node31.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html877"
+  HREF="manual-node33.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html885"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html887"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html890"
+  HREF="manual-node35.html">Basic Classes</A>
+<B> Up:</B> <A NAME="tex2html884"
+  HREF="manual-node31.html">Object Oriented Programming</A>
+<B> Previous:</B> <A NAME="tex2html878"
+  HREF="manual-node33.html">Message Sending</A>
+ &nbsp; <B>  <A NAME="tex2html886"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html888"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

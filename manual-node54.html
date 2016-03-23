@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Japanese Text</TITLE>
+<META NAME="description" CONTENT="Japanese Text">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node55.html">
+<LINK REL="previous" HREF="manual-node53.html">
+<LINK REL="up" HREF="manual-node53.html">
+<LINK REL="next" HREF="manual-node55.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1180"
+  HREF="manual-node55.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1174"
+  HREF="manual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1168"
+  HREF="manual-node53.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1176"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1178"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1181"
+  HREF="manual-node55.html">ICONV - Character Code</A>
+<B> Up:</B> <A NAME="tex2html1175"
+  HREF="manual-node53.html">Text Processing</A>
+<B> Previous:</B> <A NAME="tex2html1169"
+  HREF="manual-node53.html">Text Processing</A>
+ &nbsp; <B>  <A NAME="tex2html1177"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1179"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03081000000000000000">
+Japanese Text</A>
+</H2>
+Japanese characters are encoded in 16-bit, i.e. two bytes.
+Inside EusLisp, there is no provision to handle Japanese 16-bit
+character as a representation of Japanese.  They are just regarded
+as a series of byte-encoded characters.
+The following code will print a Japanese character "AI" that
+means <I>love</I> in English, if you are using a terminal
+that can display EUC kanji, like kterm.
+<PRE>
+(setq AI-str 
+      (let ((jstr (make-string 2)))
+          (setf (aref jstr 0) #xb0
+	        (aref jstr 1) #xa6)
+	  jstr))
+(print AI-str)
+</PRE>
+
+<P>
+In a similar manner, (intern AI-str) will create a symbol
+with its printname "AI".
+<PRE>
+(set (intern AI-str) "love")
+</PRE>
+
+<P>
+Conversion functions for different character codes and
+Roman-ji representation are provided.
+
+<P>
+
+ <BR>
+<BR> <A NAME="14264"></A>
+<B>romkan</B> <EM>romanji-str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> Roman-ji representation is 
+converted into EUC coded Japanese.
+Numbers are converted into pronunciation in hiragana.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14274"></A>
+<B>romanji</B> <EM>kana-str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> kana-str which represents
+Japanese in hiragana or in katakana coded in EUC
+is converted into a roman-ji representation.
+English alphabets and numbers are unchanged.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14284"></A>
+<B>sjis2euc</B> <EM>kana-str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> kana-str coded in shift-jis
+is converted into EUC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14294"></A>
+<B>euc2sjis</B> <EM>kana-str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> kana-str coded in EUC
+is converted into shift-JIS.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14304"></A>
+<B>jis2euc</B> <EM>kana-str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> kana-str coded in EUC
+is converted into JIS coding, which enters kana mode by
+<code>ESC\$B</code> and exits by <code>ESC(J</code>.
+Note that there is no euc2jis function is provided yet.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14314"></A>
+<B>kana-date</B> <EM>time </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> time is converted a Japanese
+date pronunciation represented in roman-ji. The default time
+is the current time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14324"></A>
+<B>kana-date</B> <EM>time </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> time is converted a Japanese
+time pronunciation represented in roman-ji. The default time
+is the current time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14334"></A>
+<B>hira2kata</B> <EM>hiragana-str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+hiragana-str is converted into katakana representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14344"></A>
+<B>kata2hira</B> <EM>katakana-str </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+katakana-str is converted into hiragana representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1180"
+  HREF="manual-node55.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1174"
+  HREF="manual-node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1168"
+  HREF="manual-node53.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1176"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1178"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1181"
+  HREF="manual-node55.html">ICONV - Character Code</A>
+<B> Up:</B> <A NAME="tex2html1175"
+  HREF="manual-node53.html">Text Processing</A>
+<B> Previous:</B> <A NAME="tex2html1169"
+  HREF="manual-node53.html">Text Processing</A>
+ &nbsp; <B>  <A NAME="tex2html1177"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1179"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

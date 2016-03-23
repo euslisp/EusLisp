@@ -1,0 +1,495 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Viewer</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="Viewer">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node128.html">
+<LINK REL="previous" HREF="jmanual-node126.html">
+<LINK REL="up" HREF="jmanual-node123.html">
+<LINK REL="next" HREF="jmanual-node128.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2312"
+  HREF="jmanual-node128.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2306"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2300"
+  HREF="jmanual-node126.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2308"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2310"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2313"
+  HREF="jmanual-node128.html">描画</A>
+<B> Up:</B> <A NAME="tex2html2307"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2301"
+  HREF="jmanual-node126.html">Viewport</A>
+ &nbsp; <B>  <A NAME="tex2html2309"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2311"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04054000000000000000">
+Viewer</A>
+</H2>
+画面の上に描画するためには、4つのオブジェクトが必要である。
+1つは描かれたオブジェクト、2つはviewing座標系と投影で定義される<B>viewing</B>、
+3つはNDCの中でのクリップ処理のための<B>viewport</B>とNDCから物理的画面座標系への
+変換、4つは
+物理的ディスプレイデバイスの上に描画関数を実行する<B>viewsurface</B>。
+<B>viewer</B>オブジェクトは、<B>viewing</B>と<B>viewport</B>と<B>viewsurface</B>
+オブジェクトを持ち、
+座標系変換を連続的に制御する。
+<A HREF="jmanual-node128.html#Drawings">15.5</A>節に記述される<B>draw</B>と<B>hid</B>関数は<B>viewer</B>の
+インスタンスを使用する。
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="37067"></A>
+<BIG CLASS="XLARGE"><B>viewer </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (eye :type viewint) 
+<BR>(port :type viewport) 
+<BR>(surface :type viewsurface) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>viewingからviewportを経由してviewsurfaceへ移るCascaded Coordinatesの変換を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37084"></A>
+<B>:viewing</B> <EM>&amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewing</B><TT>(eye)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewing</B><TT>(eye)</TT>オブジェクトが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37100"></A>
+<B>:viewport</B> <EM>&amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewport</B><TT>(port)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewport</B><TT>(port)</TT>オブジェクトが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37116"></A>
+<B>:viewsurface</B> <EM>&amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewsurface</B><TT>(surface)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewsurface</B><TT>(surface)</TT>オブジェクトが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37132"></A>
+<B>:adjust-viewport</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>viewsurface</B>の大きさが変えられたとき、<B>:adjust-viewport</B>は
+<TT>port</TT>に固有のメッセージを送ることにより<B>viewport</B>の変換を変える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37146"></A>
+<B>:resize</B> <EM>width height </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>viewsurface</B>に<TT>:resize</TT>メッセージを送り、<B>viewport</B>に<TT>:size</TT>メッセージを送る
+ことによりviewsurfaceの大きさを変える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37160"></A>
+<B>:draw-line-ndc</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される2つの端点<EM>p1,p2</EM>を結ぶ線を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37171"></A>
+<B>:draw-polyline-ndc</B> <EM>polylines </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される端点を結ぶ多角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37181"></A>
+<B>:draw-star-ndc</B> <EM>center &amp;optional (size 0.01) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に十字マークを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37191"></A>
+<B>:draw-box-ndc</B> <EM>low-left up-right </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37201"></A>
+<B>:draw-arc-ndc</B> <EM>point width height angle1 angle2 &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に円弧を描く。
+この<B>viewer</B>に結び付く<B>viewsurface</B>オブジェクトは、<B>:arc</B>メッセージを
+受けなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37214"></A>
+<B>:draw-fill-arc-ndc</B> <EM>point width height angle1 angle2 &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に塗り潰し円弧を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37224"></A>
+<B>:draw-string-ndc</B> <EM>position string &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される<EM>position</EM>に<EM>string</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37236"></A>
+<B>:draw-image-string-ndc</B> <EM>position string &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37247"></A>
+<B>:draw-rectangle-ndc</B> <EM>position width height &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37258"></A>
+<B>:draw-fill-rectangle-ndc</B> <EM>point width height &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37269"></A>
+<B>:draw-line</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系に定義される2つの端点<EM>p1,p2</EM>を結ぶ線を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37280"></A>
+<B>:draw-star</B> <EM>position &amp;optional (size 0.01) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系の<EM>position</EM>位置に十字マークを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37291"></A>
+<B>:draw-box</B> <EM>center &amp;optional (size 0.01) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系の<EM>center</EM>に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37302"></A>
+<B>:draw-arrow</B> <EM>p1 p2 </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1</EM>から<EM>p2</EM>へ向けての矢印を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37314"></A>
+<B>:draw-edge</B> <EM>edge </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37325"></A>
+<B>:draw-edge-image</B> <EM>edge-image </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37336"></A>
+<B>:draw-faces</B> <EM>face-list &amp;optional (normal-clip nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37347"></A>
+<B>:draw-body</B> <EM>body &amp;optional (normal-clip nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37358"></A>
+<B>:draw-axis</B> <EM>coordinates &amp;optional size </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>coordinates</EM>で定義される軸を<EM>size</EM>の長さで描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37370"></A>
+<B>:draw</B> <EM>&amp;rest things </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+3次元の幾何学オブジェクトを描く。
+もし、オブジェクトが3次元ベクトルならば、その位置に小さな十字マークを描く。
+もし、3次元ベクトルのリストであれば、多角形を描く。
+もし、<EM>thing</EM>が<TT>:draw</TT>メッセージを受けたならば、
+この<B>viewer</B>を引き数としてそのメソッドが呼び出される。
+もし、オブジェクトが<TT>:drawners</TT>メソッドを定義しているならば、
+<B>:draw</B>メッセージは<TT>:drawners</TT>の結果に送られる。
+<TT>line, edge, polygon, face</TT>および<TT>body</TT>オブジェクトは、
+<B>viewer</B>に定義されている<B>:draw-xxx</B>(xxxにそのオブジェクトのクラス名が入る)
+メソッドによって描かれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37390"></A>
+<B>:erase</B> <EM>&amp;rest things </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+背景色で<EM>things</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37401"></A>
+<B>:init</B> <EM>&amp;key :viewing :viewport :viewsurface </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>viewing, viewport</EM>および<EM>viewsurface</EM>をこの<B>viewer</B>のスロット
+<TT>eye, port</TT>と<TT>surface</TT>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37416"></A>
+<BR>
+<IMG
+ WIDTH="553" HEIGHT="169" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img72.png"
+ ALT="\begin{emtabbing}
+{\bf view}
+\it\&amp;key \= (:size 500) (:width size) (:height siz...
+... (:screen-y screen) \\
+\&gt; (:xcenter 500) (:ycenter 400) \\
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>新しい<B>viewer</B>を作り、<B>*viewer*</B>リストに置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2312"
+  HREF="jmanual-node128.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2306"
+  HREF="jmanual-node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2300"
+  HREF="jmanual-node126.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2308"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2310"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2313"
+  HREF="jmanual-node128.html">描画</A>
+<B> Up:</B> <A NAME="tex2html2307"
+  HREF="jmanual-node123.html">視界とグラフィックス</A>
+<B> Previous:</B> <A NAME="tex2html2301"
+  HREF="jmanual-node126.html">Viewport</A>
+ &nbsp; <B>  <A NAME="tex2html2309"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2311"
+  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

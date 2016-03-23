@@ -1,0 +1,467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Float-vectors</TITLE>
+<META NAME="description" CONTENT="Float-vectors">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node115.html">
+<LINK REL="previous" HREF="manual-node113.html">
+<LINK REL="up" HREF="manual-node113.html">
+<LINK REL="next" HREF="manual-node115.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2156"
+  HREF="manual-node115.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2150"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2144"
+  HREF="manual-node113.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2152"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2154"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2157"
+  HREF="manual-node115.html">Matrix and Transformation</A>
+<B> Up:</B> <A NAME="tex2html2151"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2145"
+  HREF="manual-node113.html">Geometric Functions</A>
+ &nbsp; <B>  <A NAME="tex2html2153"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2155"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04031000000000000000">
+Float-vectors</A>
+</H2>
+
+<P>
+A float-vector is a simple vector whose elements are specialized to
+floating point numbers.
+A float-vector can be of any size.
+When <EM>result</EM> is specified in an argument list,
+it should be a float-vector that holds the result.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="26987"></A>
+<B>float-vector</B> <EM>&amp;rest numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new float-vector whose elements are <EM>numbers</EM>.
+Note the difference between <TT>(float-vector 1 2 3)</TT> and <TT>#F(1 2 3)</TT>.
+While the former create a vector each time it is called, the latter
+does when it is read.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27000"></A>
+<B>float-vector-p</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>obj</EM> is a float-vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27011"></A>
+<B>v+</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+adds two float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27021"></A>
+<B>v-</B> <EM>fltvec1 &amp;optional fltvec2  result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+subtract float-vectors. If fltvec2 is omitted, fltvec1 is negated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27031"></A>
+<B>v.</B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> computes the inner product of two float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27041"></A>
+<B>v*</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the outer product of two float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27051"></A>
+<B>v.*</B> <EM>fltvec1 fltvec2 fltvec3 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the scaler triple product [A,B,C]=(V. A (V* B C))=(V. (V* A B) C).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27061"></A>
+<B>v<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img7.png"
+ ALT="$&lt;$"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if every element of fltvec1 is smaller  than
+the corresponding element of fltvec2.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27071"></A>
+<B>v<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img14.png"
+ ALT="$&gt;$"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if every element of fltvec1 is larger than
+the corresponding element of fltvec2.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27081"></A>
+<B>vmin</B> <EM>&amp;rest fltvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the smallest values for each dimension in <EM>fltvec</EM>,
+and makes a float-vector from the values.
+<B>Vmin</B> and <B>vmax</B> are used to find the minimal bounding box
+from coordinates of vertices.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27094"></A>
+<B>vmax</B> <EM>&amp;rest fltvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the greatest values for each dimension in <EM>fltvec</EM>,
+and makes a float-vector from the values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27105"></A>
+<B>minimal-box</B> <EM>v-list minvec maxvec [err] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the minimal bounding box for a given vertex-list,
+and stores results in <EM>minvec</EM> and <EM>maxvec</EM>.
+If a floating number err is specified, the minimal box is grown
+by the ratio, i.e. if the err is 0.01, each element of minvec is decreased
+by 1% of the distance between minvec and maxvec,
+and each element of maxvec is increased by 1%.
+<B>Minimal-box</B> returns the distance between minvec and maxvec.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27118"></A>
+<B>scale</B> <EM>number fltvec &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+the scaler <EM>number</EM> is multiplied to the every element of fltvec.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27129"></A>
+<B>norm</B> <EM>fltvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> <SPAN CLASS="MATH"><IMG
+ WIDTH="56" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img45.png"
+ ALT="$\vert fltvec\vert$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27139"></A>
+<B>norm2</B> <EM>fltvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> <!-- MATH
+ $|fltvec|^2=({\bf v.} fltvec fltvec)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="197" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img46.png"
+ ALT="$\vert fltvec\vert^2=({\bf v.} fltvec fltvec)$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27150"></A>
+<B>normalize-vector</B> <EM>fltvec [result] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+normalizes <EM>fltvec</EM> to have the norm 1.0.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27161"></A>
+<B>distance</B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the distance <!-- MATH
+ $|fltvec-fltvec2|$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="127" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img47.png"
+ ALT="$\vert fltvec-fltvec2\vert$"></SPAN> between two float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27171"></A>
+<B>distance2</B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $|fltvec-fltvec2|^2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="134" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img48.png"
+ ALT="$\vert fltvec-fltvec2\vert^2$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27181"></A>
+<B>homo2normal</B> <EM>homovec &amp;optional normalvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A homogeneous vector <EM>homovec</EM> is converted to its normal representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27192"></A>
+<B>homogenize</B> <EM>normalvec &amp;optional homovec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A normal vector <EM>normalvec</EM> is converted to its homogenous representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27203"></A>
+<B>midpoint</B> <EM>p p1 p2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>P</EM> is float, and <EM>p1</EM> and <EM>p2</EM> are float-vectors of the same
+dimension.
+A point <!-- MATH
+ $(1-p) p1 + p p2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="112" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img49.png"
+ ALT="$(1-p) p1 + p p2$"></SPAN>, which is the point
+that breaks <EM>p1-p2</EM> by the ratio <SPAN CLASS="MATH"><IMG
+ WIDTH="74" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img50.png"
+ ALT="$p:(1-p)$"></SPAN>, is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27217"></A>
+<B>rotate-vector</B> <EM>fltvec theta axis &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+rotates 2D or 3D <EM>fltvec</EM> by <EM>theta</EM> radian around <EM>axis</EM>.
+<EM>Axis</EM> can be one of <EM>:x, :y, :z, 0, 1, 2</EM> or NIL.
+When <EM>axis</EM> is NIL, <EM>fltvec</EM> is taken to be two dimensional.
+To rotate a vector around an arbitrary axis in 3D space, 
+make a rotation matrix by the <B>rotation-matrix</B> function and
+multiply it to the vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2156"
+  HREF="manual-node115.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2150"
+  HREF="manual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2144"
+  HREF="manual-node113.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2152"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2154"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2157"
+  HREF="manual-node115.html">Matrix and Transformation</A>
+<B> Up:</B> <A NAME="tex2html2151"
+  HREF="manual-node113.html">Geometric Functions</A>
+<B> Previous:</B> <A NAME="tex2html2145"
+  HREF="manual-node113.html">Geometric Functions</A>
+ &nbsp; <B>  <A NAME="tex2html2153"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2155"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

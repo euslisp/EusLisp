@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>立体の接触状態解析</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="立体の接触状態解析">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node122.html">
+<LINK REL="previous" HREF="jmanual-node120.html">
+<LINK REL="up" HREF="jmanual-node113.html">
+<LINK REL="next" HREF="jmanual-node122.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2224"
+  HREF="jmanual-node122.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2218"
+  HREF="jmanual-node113.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2212"
+  HREF="jmanual-node120.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2220"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2222"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2225"
+  HREF="jmanual-node122.html">多角形のVoronoi Diagram</A>
+<B> Up:</B> <A NAME="tex2html2219"
+  HREF="jmanual-node113.html">幾何学モデリング</A>
+<B> Previous:</B> <A NAME="tex2html2213"
+  HREF="jmanual-node120.html">座標軸</A>
+ &nbsp; <B>  <A NAME="tex2html2221"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2223"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04048000000000000000"></A><A NAME="Contact"></A>
+<BR>
+立体の接触状態解析
+</H2>
+
+<P>
+この節のメソッドおよび関数は、次のファイルに記述されている。
+<B>contact/model2const.l, contact/inequalities.l, contact/drawconst.l</B>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="35726"></A>
+<B>constrained-motion</B> <EM>c </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 拘束<EM>c</EM>を満たしている
+動作のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35737"></A>
+<B>constrained-force</B> <EM>m </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 拘束されている<B>body</B>から
+拘束している<B>body</B>に加わる力を返す。<EM>m</EM>は、<B>constrained-motion</B>
+から返される動作のリストである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35751"></A>
+<B>draw-constraint</B> <EM>c </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 拘束<EM>c</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35762"></A>
+<B>draw-motion</B> <EM>m a b </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>a</EM>が<EM>b</EM>に接触しているときに
+取り得る動作を描く。リターンキーを押すことにより描画を始める。
+</DD>
+</DL>
+<BR>
+<BR>
+Example
+<BR><PRE>
+;;
+;;      peg in a hole with 6 contact points
+;;
+(in-package "GEOMETRY")
+(load "view")
+(load "../model2const.l" :package "GEOMETRY")
+(load "../inequalities.l" :package "GEOMETRY")
+(load "../drawconst.l" :package "GEOMETRY")
+
+(setq x (make-prism '(#f(50 50 0) #f(50 -50 0) #f(-50 -50 0) #f(-50 50 0))
+                    #f(0 0 200)))
+(setq x1 (copy-object x))
+(send x1 :translate #f(0 0 -100))
+(send x1 :worldcoords)
+(setq a1 (make-prism '(#f(100 100 -150) #f(100 -100 -150)
+                       #f(-100 -100 -150) #f(-100 100 -150))
+                     #f(0 0 150)))
+(setq ana (body- a1 x1))
+(send x :translate #f(0 -18.30127 -18.30127))
+(send x :rotate -0.523599 :x)
+(send x :worldcoords)
+
+(setq c (list (send x :constraint ana)))
+(setq m (constrained-motion c))
+(setq f (constrained-force m))
+
+(hidd x ana)
+(draw-constraint c)
+(draw-motion m)
+</PRE>
+
+拘束の例を次の図で示す。図の小さな矢印は，ペグに対する拘束を示す。
+
+<BR>
+<DIV ALIGN="CENTER"><A NAME="fig:peg-in-hole"></A><A NAME="35707"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 11:</STRONG>
+Constraints for a peg in a hole.</CAPTION>
+<TR><TD><IMG
+ WIDTH="244" HEIGHT="1406" BORDER="0"
+ SRC="jmanual-img66.png"
+ ALT="\begin{figure}\epsfile{file=fig/fig-peg-in-hole1.ps,width=7.9cm}
+\epsfile{file=f...
+...ps,width=7.9cm}
+\epsfile{file=fig/fig-peg-in-hole4.ps,width=7.9cm}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+ペグを穴に入れる作業において取り得る動作の例を次の図で示す。
+この例は，上記のプログラムと一致している。
+
+<DIV ALIGN="CENTER"><A NAME="fig:peg-in-a-hole"></A><A NAME="35717"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 12:</STRONG>
+Possible motions of a peg in a hole</CAPTION>
+<TR><TD><IMG
+ WIDTH="251" HEIGHT="1409" BORDER="0"
+ SRC="jmanual-img67.png"
+ ALT="\begin{figure}\begin{center}
+\epsfile{file=fig/fig-peg-naname-m1.ps,width=7.9cm}...
+...m}
+\epsfile{file=fig/fig-peg-naname-m4.ps,width=7.9cm}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

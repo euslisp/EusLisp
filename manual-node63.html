@@ -1,0 +1,447 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Printer</TITLE>
+<META NAME="description" CONTENT="Printer">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node64.html">
+<LINK REL="previous" HREF="manual-node62.html">
+<LINK REL="up" HREF="manual-node60.html">
+<LINK REL="next" HREF="manual-node64.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1316"
+  HREF="manual-node64.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1310"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1304"
+  HREF="manual-node62.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1312"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1314"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1317"
+  HREF="manual-node64.html">InterProcess Communication and Network</A>
+<B> Up:</B> <A NAME="tex2html1311"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1305"
+  HREF="manual-node62.html">Reader</A>
+ &nbsp; <B>  <A NAME="tex2html1313"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1315"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION030103000000000000000">
+Printer</A>
+</H2>
+
+<P>
+The followings are special variables controlling printer's behaviors.
+
+<P>
+<DL>
+<DT><STRONG>*print-case*</STRONG></DT>
+<DD>if this is <TT>:downcase</TT>,
+all symbols are printed in lowercase
+althought symbols are represented in uppercase
+internally unless they are escaped.
+</DD>
+<DT><STRONG>*print-circle*</STRONG></DT>
+<DD>print objects preserving recursive refernce
+</DD>
+<DT><STRONG>*print-object*</STRONG></DT>
+<DD>print the details of all objects
+</DD>
+<DT><STRONG>*print-structure*</STRONG></DT>
+<DD>print objects using #s format.
+</DD>
+<DT><STRONG>*print-level*</STRONG></DT>
+<DD>printable depth of a sequence
+</DD>
+<DT><STRONG>*print-length*</STRONG></DT>
+<DD>printable length of a sequence
+</DD>
+<DT><STRONG>*print-escape*</STRONG></DT>
+<DD>currently not used
+</DD>
+<DT><STRONG>*print-pretty*</STRONG></DT>
+<DD>currently not used
+</DD>
+<DT><STRONG>*print-base*</STRONG></DT>
+<DD>number base in printing; defaulted to decimal ten
+</DD>
+</DL>
+
+<P>
+In order to print objects containing recursive references 
+so that they can be read back again,
+print the objects with both <B>*print-circle*</B> and
+<B>*print-structure*</B> set to T.
+Although most of the user defined objects can be printed in re-readable forms,
+classes, compiled-codes and packages cannot be dumped in that way,
+because classes and compiled-code include unrelocatable
+executable codes, and the rereading packages 
+damages the consistency among symbols.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="15993"></A>
+<B>print</B> <EM>obj &amp;optional stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is <B>prin1</B> followed by <B>terpri</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16005"></A>
+<B>prin1</B> <EM>obj &amp;optional stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+outputs one s-expression in the format that they can be read back again
+by <B>read</B>.
+The format includes slashes (escapes) and quotation marks.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16016"></A>
+<B>princ</B> <EM>obj &amp;optional stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+same as <B>print</B> except that <B>princ</B> does not add escape or quote.
+Objects printed by <B>princ</B> cannot be read back.
+For example, the output of <TT>(princ 'abc)</TT> is identical with that of
+<TT>(princ "abc")</TT> and the reader cannot distinguish between them.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16031"></A>
+<B>terpri</B> <EM>&amp;optional stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> outputs #<SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>newline and
+flush <EM>stream</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16042"></A>
+<B>finish-output</B> <EM>&amp;optional stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> flushes output stream.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16052"></A>
+<B>princ-to-string</B> <EM>x &amp;optional (l 16) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16063"></A>
+<B>prin1-to-string</B> <EM>x &amp;optional (l 16) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a string-output-stream, writes to it, and get-output-stream-string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16073"></A>
+<B>format</B> <EM>stream format-string &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Format</B> only recognizes <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>A(ascii), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>S(S-expression), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>D(decimal),
+<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>X(hexadicimal), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>O(octal), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>C(character), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>F(floating), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>E(exponential),
+<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>G(general float), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>V(dynamic number parameter), <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>T(tab)
+ and <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$\sim$"></SPAN>%(newline) format specifiers.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<PRE>
+       (format t "~s ~s ~a ~a ~10,3f~%" "abc" 'a#b "abc" 'a#b 1.2)
+       ---&gt;  "abc" |A#B| abc a#b     1.200
+</PRE>
+
+<P>
+
+<A NAME="16084"></A>
+<B>pprint</B> <EM>obj &amp;optional (stream *standard-output*) (tab 0) (platen 75) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> pretty-prints <EM>obj</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16095"></A>
+<B>print-functions</B> <EM>file &amp;rest fns </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+write the "defun" forms of function definitions of <EM>fns</EM> out to <EM>file</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16107"></A>
+<B>write-byte</B> <EM>integer stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16118"></A>
+<B>write-word</B> <EM>integer stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="16129"></A>
+<B>write-long</B> <EM>integer stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+write <EM>integer</EM> as a one-, two- or four-byte binary.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16140"></A>
+<B>spaces</B> <EM>n &amp;optional stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+outputs spaces <EM>n</EM> times.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16151"></A>
+<B>pf</B> <EM>func &amp;optional stream *standard-output*) </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+pretty-prints a function. Compiled function cannot be printed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16161"></A>
+<B>pp-method</B> <EM>class selector &amp;optional (stream *standard-output*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+pretty-prints the method defined in <EM>class</EM> by the name of
+<EM>selector</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16173"></A>
+<B>tprint</B> <EM>obj tab &amp;optional (indent 0) (platen 79) (cpos 0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> print <EM>obj</EM> in tabular format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16184"></A>
+<B>print-size</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns inexact length of obj when it is printed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1316"
+  HREF="manual-node64.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1310"
+  HREF="manual-node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1304"
+  HREF="manual-node62.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1312"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1314"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1317"
+  HREF="manual-node64.html">InterProcess Communication and Network</A>
+<B> Up:</B> <A NAME="tex2html1311"
+  HREF="manual-node60.html">Streams and Input/Output</A>
+<B> Previous:</B> <A NAME="tex2html1305"
+  HREF="manual-node62.html">Reader</A>
+ &nbsp; <B>  <A NAME="tex2html1313"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1315"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

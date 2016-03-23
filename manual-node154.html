@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Panel</TITLE>
+<META NAME="description" CONTENT="Panel">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node158.html">
+<LINK REL="previous" HREF="manual-node153.html">
+<LINK REL="up" HREF="manual-node152.html">
+<LINK REL="next" HREF="manual-node155.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html2740"
+  HREF="manual-node155.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2734"
+  HREF="manual-node152.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2728"
+  HREF="manual-node153.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2736"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2738"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2741"
+  HREF="manual-node155.html">Subpanels (menu-panel and menubar-panel)</A>
+<B> Up:</B> <A NAME="tex2html2735"
+  HREF="manual-node152.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2729"
+  HREF="manual-node153.html">X Event</A>
+ &nbsp; <B>  <A NAME="tex2html2737"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2739"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04092000000000000000">
+Panel</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="47269"></A>
+<BIG CLASS="XLARGE"><B>panel </B></BIG> [class]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (pos items fontid
+<BR>
+rows columns ;total number of rows and columns
+<BR>
+next-x next-y
+<BR>
+item-width item-height) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>Panel is a xwindow with the capability to lay out panel-items or any
+xwindows including other panel objects.
+A panel object supplies the default font for every panel-item
+created in the panel.
+Application windows should be defined as subclasses of the <TT>Panel</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47287"></A>
+<BR>
+<IMG
+ WIDTH="614" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img106.png"
+ ALT="\begin{emtabbing}
+{\bf :create}
+\it\&amp;rest args \= \&amp;key \= ((:item-height iheig...
+...) ((:background color) *bisque1*) \\
+\&gt; \&amp;allow-other-keys)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>creates and initializes a panel.
+Since superclass's <TT>:create</TT> is invoked,
+all creation parameters for <B>xwindow</B>, such as <EM>width, height, 
+border-width</EM>, etc., are allowed.
+<EM>Item-height</EM> and item-width give the minimum height and width
+for each panel-item.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47303"></A>
+<B>:items</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of all items associated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47313"></A>
+<B>:locate-item</B> <EM>item &amp;optional x y </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Item</EM> is any xwindow object, normally a panel-item.
+If <EM>x</EM> and <EM>y</EM> are given, the item is located there.
+Otherwise, <EM>item</EM> is located adjacent to the most recently located item.
+Items are located from top to bottom, from left to right,
+as shown in <B>Fig.</B> <A HREF="#panellayout">17</A>.
+<TT>:Locate-item</TT> also adds <EM>item</EM> in the <EM>items</EM> and <EM>subwindows</EM>
+ list, and makes it visible by sending <TT>:map</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="panellayout"></A><A NAME="47012"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 17:</STRONG>
+Item lay-out in panel</CAPTION>
+<TR><TD><IMG
+ WIDTH="423" HEIGHT="302" BORDER="0"
+ SRC="manual-img107.png"
+ ALT="\begin{figure}\begin{center}
+\mbox{\epsfysize =7cm
+\epsfbox{fig/panellayout.ps}
+}
+\end{center}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="47334"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img108.png"
+ ALT="\begin{emtabbing}
+{\bf :create-item}
+\it klass label receiver method \= \&amp;rest ...
+...method]\\
+\&gt; \&amp;key ((font fontid)\\
+\&gt; \&amp;allow-other-keys)
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>creates an instance of the panel-item class specified by <EM>klass</EM>
+(i.e., <TT>button-item,  menu-button-item, slider-item, joystick-item</TT>, etc.),
+and place the item in the panel using <TT>:locate-item</TT>.
+<EM>Args</EM> are passed to <TT>klass</TT>'s <TT>:create</TT> method.
+<EM>Label</EM> is the identification string drawn in the panel item.
+<EM>Receiver</EM> and <EM>method</EM> specify the event handler called upon
+the corresponding event.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47354"></A>
+<B>:delete-items</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> delete all panel-items.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47364"></A>
+<BR>
+<IMG
+ WIDTH="552" HEIGHT="54" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img109.png"
+ ALT="\begin{emtabbing}
+{\bf :create-menubar}
+\it\= \&amp;rest args \\lq [method]\\
+\&gt; \&amp;key (font fontid)\\
+\&gt; \&amp;allow-other-keys
+\rm
+\end{emtabbing}">
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>creates a <EM>menubar-panel</EM> and  locates it at the top of the panel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+The following methods are provided to avoid "subclass's responsibility"
+warning message when events are sent to panels without event handlers.
+User applications should override these methods.
+
+<P>
+
+ <BR>
+<BR> <A NAME="47376"></A>
+<B>:quit</B> <EM>&amp;rest a </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+throws <TT>:window-main-loop</TT> and terminates event processing.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47387"></A>
+<B>:KeyPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47397"></A>
+<B>:KeyRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47407"></A>
+<B>:ButtonPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47417"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47427"></A>
+<B>:MotionNotify</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47437"></A>
+<B>:EnterNotify</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47447"></A>
+<B>:LeaveNotify</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html2742"
+  HREF="manual-node155.html">Subpanels (menu-panel and menubar-panel)</A>
+<LI><A NAME="tex2html2743"
+  HREF="manual-node156.html">File Panel</A>
+<LI><A NAME="tex2html2744"
+  HREF="manual-node157.html">Text View Panel</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2740"
+  HREF="manual-node155.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2734"
+  HREF="manual-node152.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2728"
+  HREF="manual-node153.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2736"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html2738"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html2741"
+  HREF="manual-node155.html">Subpanels (menu-panel and menubar-panel)</A>
+<B> Up:</B> <A NAME="tex2html2735"
+  HREF="manual-node152.html">XToolKit</A>
+<B> Previous:</B> <A NAME="tex2html2729"
+  HREF="manual-node153.html">X Event</A>
+ &nbsp; <B>  <A NAME="tex2html2737"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html2739"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Unix Processes</TITLE>
+<META NAME="description" CONTENT="Unix Processes">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node96.html">
+<LINK REL="previous" HREF="manual-node86.html">
+<LINK REL="up" HREF="manual-node84.html">
+<LINK REL="next" HREF="manual-node96.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1870"
+  HREF="manual-node96.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1864"
+  HREF="manual-node84.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1858"
+  HREF="manual-node94.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1866"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1868"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1871"
+  HREF="manual-node96.html">Adding Lisp Functions Coded</A>
+<B> Up:</B> <A NAME="tex2html1865"
+  HREF="manual-node84.html">System Functions</A>
+<B> Previous:</B> <A NAME="tex2html1859"
+  HREF="manual-node94.html">Keyed Indexed Files</A>
+ &nbsp; <B>  <A NAME="tex2html1867"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1869"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION04013000000000000000"></A><A NAME="UnixProcess"></A>
+<BR>
+Unix Processes
+</H2>
+
+<P>
+In order to launch unix commands from EusLisp,
+use the <B>unix:system</B> function.
+<B>Piped-fork</B> creates a subprocess whose standard input and standard output
+are connected to EusLisp's bidirectional stream through pipes.
+<B>Piped-fork</B> returns the stream.
+Following is a function to count the number of lines contained in a file
+by using <TT>"wc"</TT>.
+<PRE>
+(defun count-lines (file) (read (piped-fork "wc" file)))
+</PRE>
+
+<P>
+The next example creates eus process on another workstation identified by "etlic0"
+and provides a port for distributed computation.
+
+<P>
+<PRE>
+(setq ic0eus (piped-fork "rsh" "etlic0" "eus"))
+(format ic0eus "(list 1 2 3)~%")
+(read ic0eus) --&gt; (1 2 3)
+</PRE>
+
+<P>
+For source code editing, you can call <TT>ez</TT> from the EusLisp.
+The screen editor ez communicates with EusLisp through message-queues.
+If you have an ez process already running in parallel with the EusLisp,
+<B>ez</B> restarts ez and it gains the terminal control. 
+By issuing esc-P or esc-M commands in ez,
+texts are sent back and evaluated by EusLisp.
+This is useful for the debugging since entire file does not need to be
+loaded when you add a little modification to the file.
+Similar function is available on emacs by M-X run-lisp command.
+
+<P>
+
+ <BR>
+<BR> <A NAME="23271"></A>
+<B>cd</B> <EM>&amp;optional (dir (unix:getenv "HOME")) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the current working directory.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23281"></A>
+<B>ez</B> <EM>&amp;optional key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+enters display editor ez, and reads Lisp forms from it, and evaluates
+them.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23291"></A>
+<B>piped-fork</B> <EM>&amp;optional (exec) &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forks a process, and makes a two-way stream between the current EusLisp and the
+subprocess. Exec is the file name of a unix command and args are arguments
+to the command.  If exec (string) includes one or more space, it is
+assumed a shell command, and executed by /bin/sh calling the unix:system function.
+If no exec is given, another euslisp is created as the subprocess.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23301"></A>
+<B>xfork</B> <EM>exec &amp;key (stdin *standard-input*) (stdout *standard-output*) 
+<BR>(stderr *error-output*) (args nil) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forks a process, replaces its stdin, stdout, and stderr streams to specified ones,
+and exec's "exec" with the args arguments.
+piped-fork is roughly equivalent to
+<code> (xfork exec :stdin (unix:pipe) :stdout (unix:pipe))</code>
+Though xfork returns an io-stream to stdin and stdout with their
+directions reversed,
+it is not always useful unless they are pipes. 
+The name of this function, xfork (cross-fork), comes from this reversed io-stream,
+namely, the io-stream's input comes from the stdout of the subprocess and the output
+comes from the stdin. 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23311"></A>
+<B>rusage</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> prints resource usage of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1870"
+  HREF="manual-node96.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1864"
+  HREF="manual-node84.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1858"
+  HREF="manual-node94.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1866"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1868"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1871"
+  HREF="manual-node96.html">Adding Lisp Functions Coded</A>
+<B> Up:</B> <A NAME="tex2html1865"
+  HREF="manual-node84.html">System Functions</A>
+<B> Previous:</B> <A NAME="tex2html1859"
+  HREF="manual-node94.html">Keyed Indexed Files</A>
+ &nbsp; <B>  <A NAME="tex2html1867"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1869"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

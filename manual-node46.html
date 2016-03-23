@@ -1,0 +1,694 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>General Sequences</TITLE>
+<META NAME="description" CONTENT="General Sequences">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="manual-node47.html">
+<LINK REL="previous" HREF="manual-node45.html">
+<LINK REL="up" HREF="manual-node45.html">
+<LINK REL="next" HREF="manual-node47.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html1065"
+  HREF="manual-node47.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1059"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1053"
+  HREF="manual-node45.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1061"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1063"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1066"
+  HREF="manual-node47.html">Lists</A>
+<B> Up:</B> <A NAME="tex2html1060"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1054"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+ &nbsp; <B>  <A NAME="tex2html1062"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1064"
+  HREF="manual-node167.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION03071000000000000000">
+General Sequences</A>
+</H2>
+
+<P>
+Vectors (one dimensional arrays) and lists are generic sequences.
+A string is a sequence, since it is a vector of characters.
+
+<P>
+For the specification of result type in
+<B>map, concatenate</B> and <B>coerce</B>,
+use class name symbol, such as <TT>cons, string, integer-vector, float-vector</TT>,
+etc. without quotes, 
+since the class object is bound to the symbol.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="10000"></A>
+<B>elt</B> <EM>sequence pos </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>elt</B> is the most general function to get and put (in conjunction with
+<B>setf</B>) value at the specific position <EM>pos</EM> in <EM>sequence</EM>.
+<EM>Sequence</EM> may be a list, or a vector of arbitrary
+object, bit, char, integer, or float.
+<B>Elt</B> cannot be applied to a multi-dimensional array.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10016"></A>
+<B>length</B> <EM>sequence </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the length of <EM>sequence</EM>.
+For vectors, <B>length</B> finishes in constant time, but
+time proportional to the length is required for a list.
+<B>Length</B> never terminates if <EM>sequence</EM> is a circular list.
+Use <A NAME="10034"></A><B>l</B>ist-length, instead.
+If <EM>sequence</EM> is an array with a fill-pointer, <B>length</B>
+returns the fill-pointer, not the entire size of the array entity.
+Use <B>array-total-size</B> to know the entire size of those arrays.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10036"></A>
+<B>subseq</B> <EM>sequence start [end] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a copy of the subsequence from <EM>start</EM>th through  (<EM>end</EM>-1)th inclusively
+out of <EM>sequence</EM>.
+<EM>end</EM> is defaulted to the length of <EM>sequence</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10051"></A>
+<B>copy-seq</B> <EM>sequence </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+does shallow-copying of <EM>sequence</EM>, that is, 
+only the top-level references in <EM>sequence</EM> are copied.
+Use <B>copy-tree</B> to copy a nested list,
+or <B>copy-object</B> for deep-copying of a sequence
+containing recursive references.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10065"></A>
+<B>reverse</B> <EM>sequence </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reverse the order of  <EM>sequence</EM> and returns a new sequence of the
+same type as <EM>sequence</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10077"></A>
+<B>nreverse</B> <EM>sequence </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Nreverse</B> is the destructive version of <B>reverse</B>.
+<B>Nreverse</B> does not allocate memory, while <B>reverse</B> does.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10091"></A>
+<B>concatenate</B> <EM>result-type sequence* </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+concatenates all <EM>sequence</EM>s.
+Each <EM>sequence</EM> may be of any sequence type.
+Unlike <B>append</B>, all the sequences including the last one are copied.
+<EM>Result-type</EM> should be a class such as cons, string,
+vector, float-vector etc.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10106"></A>
+<B>coerce</B> <EM>sequence result-type </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the type of <EM>sequence</EM>.
+For examples, <TT>(coerce '(a b c) vector) = #(a b c)</TT>  and 
+<TT>(coerce "ABC" cons) = (a b c)</TT>.
+A new sequence of type <EM>result-type</EM> is created, and each element of
+<EM>sequence</EM> is copied to it.
+<EM>result-type</EM> should be one of vector, integer-vector, float-vector,
+bit-vector, string, cons or other user-defined classes inheriting 
+one of these.
+Note that <EM>sequence</EM> is copied even if its type equals to <EM>result-type</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10124"></A>
+<B>map</B> <EM>result-type function seq &amp;rest more-seqs </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>function</EM> is applied to a list of arguments taken from <EM>seq</EM>
+and <EM>more-seqs</EM> orderly, and the result is accumulated in a sequence
+of type <EM>result-type</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10138"></A>
+<B>fill</B> <EM>sequence item &amp;key (:start 0) (:end (length sequence)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+fills <EM>item</EM> from <EM>start</EM>th through (<EM>end</EM>-1)th in <EM>sequence</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10152"></A>
+<B>replace</B> <EM>dest source &amp;key :start1 :end1 :start2 :end2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+elements in <EM>dest</EM> sequence indexed between <EM>start1</EM> and <EM>end1</EM>
+are replaced with elements in <EM>source</EM> indexed between 
+<EM>start2</EM> and <EM>end2</EM>.
+<EM>start1</EM> and <EM>start2</EM> are defaulted to zero, and
+<EM>end1</EM> and <EM>end2</EM> to the length of each sequence.
+If the one of subsequences is longer than the other,
+its end is truncated to match with the shorter subsequence.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10172"></A>
+<B>sort</B> <EM>sequence compare &amp;optional key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM> is destructively sorted using Unix's quick-sort subroutine.
+<EM>key</EM> is not a keyword parameter.
+Be careful with the sorting of a sequence which have same elements.
+For example, <TT>(sort '(1 1) #'&gt;)</TT> fails because comparisons
+between 1 and 1 in both direction fail.
+To avoid this problem, use functions like #'<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img15.png"
+ ALT="$&gt;=$"></SPAN> or #'<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img16.png"
+ ALT="$&lt;=$"></SPAN> for comparison.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10185"></A>
+<B>merge</B> <EM>result-type seq1 seq2 pred &amp;key (key #'identity) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+two sequences <EM>seq1</EM> and <EM>seq2</EM> are merged to form a single
+sequence of <EM>result-type</EM> whose elements 
+satisfy the comparison specified by <EM>pred</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10199"></A>
+<B>merge-list</B> <EM>list1 list2 pred key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+merges two lists. Unlike <B>merge</B> no general sequences are allowed 
+for the arguments, but <B>merge-list</B> runs faster than <B>merge</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+Following functions consist of one basic function and its variants
+suffixed by -if and -if-not.
+The basic form takes at least the item and sequence arguments,
+and compares item with each element in the sequence,
+and do some processing,
+such as finding the index,
+counting the number of appearances, removing the item, etc.
+Variant forms take predicate and sequence arguments,
+applies the predicate to each element of sequence, and do something
+if the predicate returns non-nil (-if version), or nil (-if-not version).
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="10212"></A>
+<B>position</B> <EM>item seq &amp;key :start :end :test :test-not :key (:count 1) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds <EM>count</EM>th appearance of <EM>item</EM> in <EM>seq</EM> and returns
+its index.
+The search begins from the <EM>start</EM>th element, ignoring elements before it.
+By default, the search is performed by <B>eql</B>, which can be altered
+by the <EM>test</EM> or <EM>test-not</EM> parameter.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10229"></A>
+<B>position-if</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10240"></A>
+<B>position-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10251"></A>
+<B>find</B> <EM>item seq &amp;key :start :end :test :test-not :key (:count 1) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds <EM>count</EM>th element between the <EM>start</EM>th element
+and the <EM>end</EM>th element in <EM>seq</EM>.
+The element found, which is eql to <EM>item</EM> if no <EM>test</EM> or
+<EM>test-not</EM> other than #'eql is specified, is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10268"></A>
+<B>find-if</B> <EM>predicate seq &amp;key :start :end :key (:count 1) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds <EM>count</EM>th element in <EM>seq</EM> for which <EM>pred</EM>
+returns non nil.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10281"></A>
+<B>find-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10292"></A>
+<B>count</B> <EM>item seq &amp;key :start :end :test :test-not :key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+counts the number of <EM>item</EM>s which appear between the <EM>start</EM>th element
+and the <EM>end</EM>th element in <EM>seq</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10306"></A>
+<B>count-if</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+count the number of elements in <EM>seq</EM> for which <EM>pred</EM> returns
+non nil.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10318"></A>
+<B>count-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10329"></A>
+<B>remove</B> <EM>item seq &amp;key :start :end :test :test-not :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a new sequence which has eliminated <EM>count</EM> (defaulted to infinity)
+occurrences of of <EM>item</EM>(s) between the <EM>start</EM>th element
+and the <EM>end</EM>th element in <EM>seq</EM>.
+If you are sure that there is only one occurrence of <EM>item</EM>,
+<EM>count=1</EM> should be specified to avoid meaningless scan over the whole
+sequence.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10346"></A>
+<B>remove-if</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10357"></A>
+<B>remove-if-not</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10368"></A>
+<B>remove-duplicates</B> <EM>seq &amp;key :start :end :key :test :test-not :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+removes duplicated items in <EM>seq</EM> and creates a new sequence.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10379"></A>
+<B>delete</B> <EM>item seq &amp;key :start :end :test :test-not :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is same with <B>remove</B> except that <B>delete</B> modifies <EM>seq</EM>
+destructively and does not create a new sequence.
+If you are sure that there is only one occurrence of <EM>item</EM>,
+<EM>count=1</EM> should be specified to avoid meaningless scan over the whole
+sequence.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10394"></A>
+<B>delete-if</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10405"></A>
+<B>delete-if-not</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>count</EM> for <EM>remove</EM>s and <EM>delete</EM>s is defaulted to 1,000,000.
+If you have a long sequence and you want to delete an element which
+appears only once, :count should be specified as 1.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10418"></A>
+<B>substitute</B> <EM>newitem olditem seq
+ &amp;key :start :end :test :test-not :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a new sequence which has 
+substituted the <EM>count</EM> occurrence(s)
+of <EM>olditem</EM> in <EM>seq</EM> with <EM>newitem</EM>.
+By default, all the <EM>olditems</EM> are substituted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<PRE>
+(substitute #\Space #\_ "Euslisp_euslisp") ;; =&gt; "Euslisp euslisp"
+</PRE>
+
+<P>
+
+<A NAME="10433"></A>
+<B>substitute-if</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10444"></A>
+<B>substitute-if-not</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10455"></A>
+<B>nsubstitute</B> <EM>newitem olditem seq &amp;key :start :end :test :test-not :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> substitute the <EM>count</EM> occurrences of <EM>olditem</EM> in <EM>seq</EM> with <EM>newitem</EM>
+destructively. By default, all the <EM>olditem</EM>s are substituted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10470"></A>
+<B>nsubstitute-if</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10481"></A>
+<B>nsubstitute-if-not</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1065"
+  HREF="manual-node47.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1059"
+  HREF="manual-node45.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1053"
+  HREF="manual-node45.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1061"
+  HREF="manual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1063"
+  HREF="manual-node167.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1066"
+  HREF="manual-node47.html">Lists</A>
+<B> Up:</B> <A NAME="tex2html1060"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+<B> Previous:</B> <A NAME="tex2html1054"
+  HREF="manual-node45.html">Sequences, Arrays and Tables</A>
+ &nbsp; <B>  <A NAME="tex2html1062"
+  HREF="manual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1064"
+  HREF="manual-node167.html">Index</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>

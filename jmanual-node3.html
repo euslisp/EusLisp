@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
+
+<!--Converted with LaTeX2HTML 2008 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>はじめに</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="description" CONTENT="はじめに">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="previous" HREF="jmanual-node2.html">
+<LINK REL="up" HREF="jmanual-node2.html">
+<LINK REL="next" HREF="jmanual-node4.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html341"
+  HREF="jmanual-node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html335"
+  HREF="jmanual-node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html331"
+  HREF="jmanual-node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html337"
+  HREF="jmanual-node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html339"
+  HREF="jmanual-node157.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html342"
+  HREF="jmanual-node4.html">EusLispにおけるオブジェクト指向プログラミング</A>
+<B> Up:</B> <A NAME="tex2html336"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html332"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+ &nbsp; <B>  <A NAME="tex2html338"
+  HREF="jmanual-node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html340"
+  HREF="jmanual-node157.html">Index</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION02010000000000000000">
+はじめに</A>
+</H1>
+
+EusLispは、知能ロボットの研究を目的とした言語で、Common Lispと
+オブジェクト指向型プログラミングをベースとしている。ロボットの研究では、
+センサデータの処理、環境認識、障害物回避動作計画、作業計画などが
+重要なテーマとして取り上げられるが、これらに共通するのは、ロボットと
+外界の3次元幾何モデルである。EusLispを開発する動機となったのは、
+記号処理システムから簡単に使えて拡張性の高いソリッドモデラーの
+必要性を痛感したからである。既存のソリッドモデラーを調べてわかったことは、
+その実現にとって最も重要な機能は、数値演算ではなくモデル要素の
+トポロジーを表現、管理するためのリスト処理能力であった。もちろん、
+幾何演算も重要ではあるが、ベクトル・行列を操作する関数を組み込めば
+十分であることがわかった。
+
+<P>
+こうして、ソリッドモデラーはLispの上に実現されるべきであると言う
+基本方針が得られた。さらに、ソリッドモデラーは、3次元物体モデルを
+定義し、動きをシミュレートし、物体の相互関係を表現し、グラフィックスを
+表示する機能を提供するが、先に述べた各種のロボット問題と結合されなけ
+れば意味がない。また、ロボットを完成されたシステムとして実現するには、
+これらのロボット問題を解くモジュールが効果的に統合されなければならない。
+EusLispは、この統合の枠組をオブジェクト指向に求めた。オブジェクト指向は、
+モジュラープログラミングを促進し、継承機能により既存の機能を段階的に
+拡張することが容易になる。実際、上記のソリッドモデラーは、物体、面、
+エッジなどの物理的実体の振舞いをクラスに定義し、ロボット問題に依存する
+機能は、これらをサブクラスに拡張することで効率よく発展させられる。
+これは、ソフトウェア資源の再利用にもつながる。
+
+<P>
+こうしてEusLispは、オブジェクト指向とCommonLispをベースとして3次元幾何モデラー
+を実現し、複数ロボットの協調動作に必要なタスク間通信機能、マンマシン
+インタフェースに重要なウィンドウ、グラフィックス、複合的プログラミングに
+必要な他言語インタフェース等を備え、さまざまなロボット問題への適用を
+可能にしたプログラミングシステムとして構築された。このほか、メモリ管理にも
+工夫を凝らし、メモリ容量以外に生じる領域の大きさに関する制約を極力
+排除し、ガーベージコレクションが効率的に行なわれ、ユーザがメモリ管理に関する
+パラメータを操作する必要がないように努めた。
+
+<P>
+このリファレンスマニュアルは、EusLispの基礎と拡張に分かれ、
+前者がCommon Lispの機能とオブジェクト指向型プログラミングを、後者が
+幾何モデル、ロボットモデル、ウィンドウ、画像処理など、よりロボット
+応用に近い部分を扱っている。アップデート情報は、<A HREF="jmanual-node9.html#License">1.6</A>節に書かれ
+ているとおり、Euslispのメーリングリストから入手することができる。
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html343"
+  HREF="jmanual-node4.html">EusLispにおけるオブジェクト指向プログラミング</A>
+<LI><A NAME="tex2html344"
+  HREF="jmanual-node5.html">Euslispの特徴</A>
+<LI><A NAME="tex2html345"
+  HREF="jmanual-node6.html">Common Lispとの互換性</A>
+<LI><A NAME="tex2html346"
+  HREF="jmanual-node7.html">開発履歴</A>
+<LI><A NAME="tex2html347"
+  HREF="jmanual-node8.html">インストール</A>
+<LI><A NAME="tex2html348"
+  HREF="jmanual-node9.html">ライセンス</A>
+<LI><A NAME="tex2html349"
+  HREF="jmanual-node10.html">デモプログラム</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+
+2016-03-23
+</ADDRESS>
+</BODY>
+</HTML>
