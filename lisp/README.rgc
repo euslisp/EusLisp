@@ -1,88 +1,88 @@
 Snapshot Return-Barrier GC -  R.Hanai 2004/5/18
 
 
-<$B<g$J%3%s%Q%$%k%*%W%7%g%s(B>
-__USE_POLLING: GC$B$r3+;O$9$k$?$a$NF14|$K%9%l%C%I$rMQ$$$k!#I,$:;XDj$9$k!#(B
+<主なコンパイルオプション>
+__USE_POLLING: GCを開始するための同期にスレッドを用いる。必ず指定する。
 
-__GC_SEPARATE_THREAD: GC$B$N=hM}$rJL%9%l%C%I$G9T$&!#(B
-__GC_ALLOC_DRIVEN: GC$B$N=hM}$r%a%b%jMW5a;~$K9T$&!#(BGC$B%9%l%C%I$O@8@.$5$l$J$$!#(B
-    __GC_SEPARATE_THREAD$B$+(B__GC_ALLOC_DRIVEN$B$N$I$A$i$+$r;XDj$9$k!#(B
+__GC_SEPARATE_THREAD: GCの処理を別スレッドで行う。
+__GC_ALLOC_DRIVEN: GCの処理をメモリ要求時に行う。GCスレッドは生成されない。
+    __GC_SEPARATE_THREADか__GC_ALLOC_DRIVENのどちらかを指定する。
 
-__USE_MARK_BITMAP: $B%^!<%/%S%C%H$H$7$F%S%C%H%^%C%W$r;HMQ$9$k!#(B
-$B;XDj$7$J$1$l$P!"%*%V%8%'%/%H$N%X%C%@$K$"$k%^!<%/%S%C%H$r;H$&!#(B
-$B85!9!"%P%02sHr$N$?$a$KF3F~$7$?$,!"%P%0$rDI5Z$7$?7k2L!"%*%V%8%'%/%H%X%C%@$K$"$k(B
-$B%^!<%/%S%C%H$r;H$C$F$bLdBj$J$/$J$C$?!#@-G=E*$J0c$$$OL$D4::!#(B
+__USE_MARK_BITMAP: マークビットとしてビットマップを使用する。
+指定しなければ、オブジェクトのヘッダにあるマークビットを使う。
+元々、バグ回避のために導入したが、バグを追及した結果、オブジェクトヘッダにある
+マークビットを使っても問題なくなった。性能的な違いは未調査。
 
-__HEAP_EXPANDABLE: $B%R!<%W$r3HD%2DG=$K$9$k!#$3$l$r;HMQ$9$k$H$-$K$O!"(B
-__USE_MARK_BITMAP$B$r;XDj$7$F$O$$$1$J$$!#%F%9%H$,IT==J,$J$N$G!"3HD%;~$K(B
-$B%H%i%V%k$,$"$k$+$b$7$l$J$$!#(B
+__HEAP_EXPANDABLE: ヒープを拡張可能にする。これを使用するときには、
+__USE_MARK_BITMAPを指定してはいけない。テストが不十分なので、拡張時に
+トラブルがあるかもしれない。
 
-__RETURN_BARRIER: $B%9%?%C%/$N%9%-%c%s$r%$%s%/%j%a%s%?%k$K9T$&!#(B
-$B$h$j>.$5$$Dd;_;~4V$rDI5Z$9$k>l9g$K;XDj$9$k!#(B
+__RETURN_BARRIER: スタックのスキャンをインクリメンタルに行う。
+より小さい停止時間を追及する場合に指定する。
 
 
-<$BE57?E*$J%*%W%7%g%s;XDjNc(B>
-$B%R!<%W$r3HD%2DG=$K$7$?$$>l9g!'(B
+<典型的なオプション指定例>
+ヒープを拡張可能にしたい場合：
 RGCFLAGS= -D__RGC -D__PROFILE_GC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD
 
-$B3HD%2DG=$K$9$kI,MW$,$J$$>l9g!'(B($B$I$A$i$+$H$$$&$H$3$A$i$NJ}$,0BDj$7$F$$$k$H;W$o$l$k(B)
+拡張可能にする必要がない場合：(どちらかというとこちらの方が安定していると思われる)
 RGCFLAGS= -D__RGC -D__PROFILE_GC -D__USE_POLLING -D__USE_MARK_BITMAP -D__GC_SEPARATE_THREAD -D__RETURN_BARRIER
 
-$B:G8e$N(B -D_RETURN_BARRIER $B%j%?!<%s%P%j%"$r;H$$$?$$$+$I$&$+$K$h$k!#(B
-$B$?$@$7!":#$N$H$3$m(B -D__HEAP_EXPANDABLE $B$H(B -D__RETURN_BARRIER $B$rN>J};XDj$9$k$H(B
-$B>e<j$/F0$+$J$$$N$GCm0U!#(B
+最後の -D_RETURN_BARRIER リターンバリアを使いたいかどうかによる。
+ただし、今のところ -D__HEAP_EXPANDABLE と -D__RETURN_BARRIER を両方指定すると
+上手く動かないので注意。
 
 
-<$B$=$NB>(B>
-$B=i4|%R!<%W%5%$%:$O(B collector.h $B$K$"$k(B INITIAL_HEAP_SIZE $B$G;XDj!#(B
-GC$B$r3+;O$9$k%?%$%_%s%0$O:#$N$H$3$m!"C1=c$K!"6u$-NN0h$N%5%$%:$,(B
-$B%R!<%W%5%$%:$N0lDj3d9g$r2<$^$o$C$?$H$-!#$3$N3d9g$O(B DEFAULT_GC_THRESHOLD
-$B$G;XDj!#(B
+<その他>
+初期ヒープサイズは collector.h にある INITIAL_HEAP_SIZE で指定。
+GCを開始するタイミングは今のところ、単純に、空き領域のサイズが
+ヒープサイズの一定割合を下まわったとき。この割合は DEFAULT_GC_THRESHOLD
+で指定。
 
-$B%R!<%W$N3HD%$K$D$$$F$b!":#$O!"6u$-$,$J$$>l9g$K8GDj%5%$%:$N(B chunk $B$r%7%9%F%`$+$i(B
-$B$H$C$F$/$k$@$1!#$3$N%5%$%:$O(BDEFAULT_EXPAND_SIZE_INDEX$B$G;XDj!#(B
+ヒープの拡張についても、今は、空きがない場合に固定サイズの chunk をシステムから
+とってくるだけ。このサイズはDEFAULT_EXPAND_SIZE_INDEXで指定。
 
-(gc) $B:#$N$H$3$m!"L@<(E*$K(BGC$B$r9T$o$;$k4X?t$O;H$($^$;$s!#(B
-
-
-<GC$B$NFbIt>pJs$NI=<((B>
-
-$B:#$^$G$HF1$8$h$&$K!"(B
-eus $B5/F08e$K(B (setq *debug* t) $B$H$9$k$H!"(B
-GC$B=*N;;~$N!"%R!<%W$N%5%$%:$H6u$-NN0h$N%5%$%:$,I=<($5$l$k!#(B
-
-$B$^$?!"%3%s%Q%$%k%*%W%7%g%s$K(B __DEBUG $B$r;XDj$9$k$H(BGC$B$N3F%U%'!<%:$N$b$&>/$7>\:Y$J(B
-$B>pJs$,=PNO$5$l$k!#(B
-
-GCHOOK$B$GG$0U$N(BLisp$B4X?t$r<B9T$G$-$k$h$&$K$7$h$&$H9M$($?$,!"(BGC$B$rJL%9%l%C%I$G(B
-$B9T$C$F$$$k>l9g!"(BGC$B$r9T$C$?%9%l%C%I$,(BLisp$B$N%3%s%F%-%9%H$r;}$C$F$$$J$$$?$a!"(B
-$B85$N(B eus $B$N$h$&$K<BAu$9$k$3$H$O$G$-$J$$!#(B
-$B$7$?$,$C$F!"$3$N5!G=$O$^$@%5%]!<%H$7$F$$$J$$!#(B
+(gc) 今のところ、明示的にGCを行わせる関数は使えません。
 
 
-<$B<g$JJQ998D=j(B>
-Makefile => Makefile.Linux.rgc $B$r%$%s%/%k!<%I$9$k$h$&$K=$@5(B
-c/eus.h => $B>/$7JQ99(B(#ifdef RGC) 
-c/eus.c => $B>/$7JQ99(B(#ifdef RGC)
-c/memory.c => $B>/$7JQ99(B(#ifdef RGC)
+<GCの内部情報の表示>
 
-$B$=$NB>$N$$$/$D$+$N%U%!%$%k$K6&DL$9$kJQ99(B
-$B%i%$%H%P%j%"!'(B $BFCDj$NBeF~J8(B l = r  =>  pointer_update(l,r) $B$HJQ99(B
-$B%]!<%j%s%0!'(BGC_POINT; $B$rA^F~(B
-$B%$%Y%s%HBT$A2U=j!'J#J8(B  =>  GC_REGION($BJ#J8(B) $B$HJQ99(B
+今までと同じように、
+eus 起動後に (setq *debug* t) とすると、
+GC終了時の、ヒープのサイズと空き領域のサイズが表示される。
 
-comp/comp.l $B%i%$%H%P%j%"%3!<%I$rA^F~$9$k$h$&$K!$JQ99(B
-($B%-!<%o!<%I!'(BnoticeCollector,#+:rgc,#-rgc)
+また、コンパイルオプションに __DEBUG を指定するとGCの各フェーズのもう少し詳細な
+情報が出力される。
 
-$B0J2<$N%U%!%$%k$rDI2C(B
+GCHOOKで任意のLisp関数を実行できるようにしようと考えたが、GCを別スレッドで
+行っている場合、GCを行ったスレッドがLispのコンテキストを持っていないため、
+元の eus のように実装することはできない。
+したがって、この機能はまだサポートしていない。
+
+
+<主な変更個所>
+Makefile => Makefile.Linux.rgc をインクルードするように修正
+c/eus.h => 少し変更(#ifdef RGC) 
+c/eus.c => 少し変更(#ifdef RGC)
+c/memory.c => 少し変更(#ifdef RGC)
+
+その他のいくつかのファイルに共通する変更
+ライトバリア： 特定の代入文 l = r  =>  pointer_update(l,r) と変更
+ポーリング：GC_POINT; を挿入
+イベント待ち箇所：複文  =>  GC_REGION(複文) と変更
+
+comp/comp.l ライトバリアコードを挿入するように，変更
+(キーワード：noticeCollector,#+:rgc,#-rgc)
+
+以下のファイルを追加
 
 Makefile.Linux.rgc
 c/collector.h
-c/collector.c => GC$BK\BN(B
-c/rgc_mem.c => $B85$N(Bmemory.c$B$N0lIt$N4X?t$r=$@58D=j$,B?$/$J$k$N$G%3%T!<$7!"=$@5$7$?!#(B
+c/collector.c => GC本体
+c/rgc_mem.c => 元のmemory.cの一部の関数を修正個所が多くなるのでコピーし、修正した。
 c/rgc_util.h 
-c/rgc_util.c => $B<g$K!$%G%P%C%0!$@-G=B,DjMQ%D!<%k72(B
+c/rgc_util.c => 主に，デバッグ，性能測定用ツール群
 c/external_markbits.h
-c/external_markbits.c => $B%^!<%/MQ%S%C%H%^%C%W(B
-c/xccmem.h => GCC$B$N(Basm$BJ8$rMQ$$$?!$6&M-%a%b%jL?Na5-=R%^%/%m(B
+c/external_markbits.c => マーク用ビットマップ
+c/xccmem.h => GCCのasm文を用いた，共有メモリ命令記述マクロ
 
