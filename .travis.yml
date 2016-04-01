@@ -1,11 +1,11 @@
 # Travis Continuous Integration Configuration File
-os:
-  - linux
-  - osx
-language:
-  - cpp
-compiler:
-  - gcc
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+    - os: osx
 notifications:
   email:
     recipients:
@@ -13,8 +13,6 @@ notifications:
     on_success: always #[always|never|change] # default: change
     on_failure: always #[always|never|change] # default: always
   slack: jsk-robotics:Av7tc8wj3IWkLYvlTzHE7x2g
-env:
-  - secure: "f5cLARB4jbydJ4AZVJ5LTgOIzOCCLd9cVgvM/jYU6Y3jPruv0z09jCIbcxSJfeFDxcw5AD6eUgI1UaA2gX3LOsL26rydNDRv2Hwesom3vOsov0SmNMNFKepxKnatDhNUNXtuEgxIJDWBfElPPIBAwKyQnF8laQbDH0tKfmOqGdM="
 before_install: # Use this to prepare the system to install prerequisites or dependencies
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   # Define some config vars
