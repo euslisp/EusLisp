@@ -5,6 +5,12 @@ matrix:
       dist: trusty
       sudo: required
       cache: apt
+      env: DISTRO=trusty
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DISTRO=xenial
     - os: osx
 notifications:
   email:
@@ -21,7 +27,8 @@ install:
   - export REPOSITORY_NAME=${PWD##*/}
 script:
   - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
-  - source .travis.sh
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $CI_SOURCE_PATH:$CI_SOURCE_PATH -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -t ubuntu:$DISTRO sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then  source ./.travis.sh; fi
 after_failure:
   - echo "failure"
 after_success:
