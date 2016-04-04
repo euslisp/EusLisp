@@ -56,7 +56,7 @@ make
 source bashrc.eus
 export DISPLAY=
 set +e
-export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=$?; done; [ $EXIT_STATUS == 0 ]
+export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
 travis_time_end
 
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then 
