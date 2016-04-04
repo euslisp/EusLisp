@@ -1,11 +1,17 @@
 # Travis Continuous Integration Configuration File
-os:
-  - linux
-  - osx
-language:
-  - cpp
-compiler:
-  - gcc
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DISTRO=trusty
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DISTRO=xenial
+    - os: osx
 notifications:
   email:
     recipients:
@@ -13,56 +19,20 @@ notifications:
     on_success: always #[always|never|change] # default: change
     on_failure: always #[always|never|change] # default: always
   slack: jsk-robotics:Av7tc8wj3IWkLYvlTzHE7x2g
-env:
-  - secure: "f5cLARB4jbydJ4AZVJ5LTgOIzOCCLd9cVgvM/jYU6Y3jPruv0z09jCIbcxSJfeFDxcw5AD6eUgI1UaA2gX3LOsL26rydNDRv2Hwesom3vOsov0SmNMNFKepxKnatDhNUNXtuEgxIJDWBfElPPIBAwKyQnF8laQbDH0tKfmOqGdM="
 before_install: # Use this to prepare the system to install prerequisites or dependencies
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   # Define some config vars
+install:
   - export CI_SOURCE_PATH=$(pwd)
   - export REPOSITORY_NAME=${PWD##*/}
+script:
   - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -qq -y subversion gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng12-dev xfonts-100dpi xfonts-75dpi msttcorefonts texlive-latex-base ptex-bin latex2html nkf; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install jpeg libpng mesalib-glw wget; fi
-install: # Use this to install any prerequisites or dependencies necessary to run your build
-  - cd ${HOME}
-  - git clone http://github.com/euslisp/jskeus jskeus
-  - ln -s $CI_SOURCE_PATH jskeus/eus
-script: # All commands must exit with code 0 on success. Anything else is considered failure.
-  - cd jskeus
-  - make
-  - source bashrc.eus
-  - export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=$?; done; [ $EXIT_STATUS == 0 ]
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then (cd doc; make) fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $CI_SOURCE_PATH:$CI_SOURCE_PATH -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -t ubuntu:$DISTRO sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then  source ./.travis.sh; fi
 after_failure:
   - echo "failure"
 after_success:
-  - export GIT_COMMITTER_NAME=$GIT_NAME
-  - export GIT_COMMITTER_EMAIL=$GIT_EMAIL
-  - export GIT_AUTHOR_NAME=$GIT_NAME
-  - export GIT_AUTHOR_EMAIL=$GIT_EMAIL
   - (cd eus/doc/latex;  make)
   - (cd eus/doc/jlatex; make)
   - (cd eus/doc/html;   make)
   - cd eus/doc/html
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git diff --exit-code *.html || (git add -f . ../*latex/*.{pdf,dvi}; git commit -m "add documents for $TRAVIS_COMMIT"); fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git checkout master;      fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git merge HEAD@{1};       fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git push --quiet https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git master; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then cd ~/;    fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git clone --branch gh-pages https://github.com/$TRAVIS_REPO_SLUG doc;     fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then cd doc;   fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git reset --hard 0ba2d70cd5d9e844de3c349551f41d8051bf99f8;                  fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then cp -r ~/jskeus/eus/doc/html/* ./;     fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git add -f .;                     fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git commit -m "Build documents from $TRAVIS_COMMIT" . ;   fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git push -f --quiet https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git gh-pages; fi
-# upload to euslisp-docs
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git clone https://k-okada:$GH_TOKEN@github.com/jsk-ros-pkg/euslisp-docs.git /tmp/euslisp-docs; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then cd /tmp/euslisp-docs; git remote rm origin; git remote add origin https://k-okada:$GH_TOKEN@github.com/jsk-ros-pkg/euslisp-docs.git; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then cd ${CI_SOURCE_PATH}/doc/latex; ${CI_SOURCE_PATH}/.upload-doc.sh; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then mkdir -p /tmp/euslisp-docs/docs/euslisp; cd /tmp/euslisp-docs/docs/euslisp; cp /tmp/html/*.{md,png} .; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then git add *.md *.png; git commit -m "Update euslisp form https://github.com/$TRAVIS_REPO_SLUG/tree/$TRAVIS_COMMIT"; git push -fq origin master; fi
-
-
-
