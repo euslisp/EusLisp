@@ -42,7 +42,7 @@ else
 endif
 
 ADD_LDFLAGS=
-ifneq (,$(findstring t,$(shell if [ $(GCC_MAJOR_VERSION) -ge 4 -a $(GCC_MINOR_VERSION) -ge 5 ] ; then echo t ;fi )))
+ifneq (,$(findstring t,$(shell if [ \( $(GCC_MAJOR_VERSION) -eq 4 -a $(GCC_MINOR_VERSION) -ge 5 \) -o  $(GCC_MAJOR_VERSION) -ge 5 ] ; then echo t ;fi )))
 ADD_LDFLAGS += -Wl,--no-as-needed
 endif
 
@@ -80,12 +80,12 @@ LD=ld
 
 # Linux
 RAWLIB=-ldl -lm -lpthread
-XLIB= -L/usr/X11R6/lib $(ADD_LDFLAGS) -lX11
+XLIB= -L/usr/X11R6/lib -lX11
 
 # specify directories where euslisp's libraries are located.
 EUSRPATH=-R$(ADLIBDIR):$(EUSDIR)/lib/Linux
-EUSLIB= -Xlinker $(EUSRPATH) -L$(ADLIBDIR) $(ADD_LDFLAGS)
-GLLIB= -L$(ADLIBDIR) $(ADD_LDFLAGS) -lGLU -lGL -lXext -leusgl
+EUSLIB= -Xlinker $(EUSRPATH) -L$(ADLIBDIR)
+GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
 
 # POSIX Thread 
 THREADDEP=mthread_posix.c
@@ -101,7 +101,7 @@ OFLAGS=-O2
 
 # link-editor's default flags ?-rdynamic 
 SOFLAGS= -shared -build-id
-LDFLAGS= -rdynamic -fno-stack-protector -z execstack
+LDFLAGS= -rdynamic -fno-stack-protector -z execstack $(ADD_LDFLAGS)
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 #MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/pthreads.o
 MAPOPTION=  $(OBJDIR)/par.o
