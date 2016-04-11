@@ -25,6 +25,15 @@ include Makefile.generic1
 #
 # for Linux
 
+GCC_MAJOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\+\).*/\1/')
+GCC_MINOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\+\).*/\2/')
+# GCC_PATCH_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\.\([0-9]\)/\3/')
+
+ADD_LDFLAGS=
+ifneq (,$(findstring t,$(shell if [ \( $(GCC_MAJOR_VERSION) -eq 4 -a $(GCC_MINOR_VERSION) -ge 5 \) -o  $(GCC_MAJOR_VERSION) -ge 5 ] ; then echo t ;fi )))
+ADD_LDFLAGS += -Wl,--no-as-needed
+endif
+
 CPU_OPTIMIZE=-march=i586
 
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
@@ -79,7 +88,7 @@ GLLIB= -L$(ADLIBDIR)  -L/usr/local/lib -lGLU -lGL -lXext -leusgl
 
 # link-editor's default flags ?-rdynamic 
 SOFLAGS= -shared -build-id
-LDFLAGS= -rdynamic
+LDFLAGS= -rdynamic $(ADD_LDFLAGS)
 MTOBJECTS=
 MTCOBJECTS=
 MAPOPTION=-Xlinker -Map -Xlinker $(ADLIBDIR)/eusmap 
