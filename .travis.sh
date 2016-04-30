@@ -24,10 +24,8 @@ function travis_time_end {
 
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then 
 
-    if [ ! -e /usr/bin/sudo ] ; then apt-get install -y sudo; fi
-
     travis_time_start setup.apt-get_update
-    sudo apt-get update
+    if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y sudo;  else sudo apt-get update; fi
     travis_time_end
 
     travis_time_start setup.apt-get_install
