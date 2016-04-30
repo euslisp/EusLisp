@@ -43,9 +43,17 @@ GCC_MINOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\([\.
 ifeq ($(GCC_MAJOR_VERSION), 2)
  CPU_OPTIMIZE=
  ALIGN_FUNCTIONS="-malign-functions=4"
+ ADD_CFLAGS=-fno-stack-protector -fpic
 else
- CPU_OPTIMIZE=-march=$(MACHINE)
- ALIGN_FUNCTIONS=-falign-functions=4
+ ifeq ($(MACHINE), aarch64)
+   CPU_OPTIMIZE=-march=armv8-a
+   ALIGN_FUNCTIONS=-falign-functions=8
+   ADD_CFLAGS=-fPIC -Darmv8
+ else
+   CPU_OPTIMIZE=-march=$(MACHINE)
+   ALIGN_FUNCTIONS=-falign-functions=4
+   ADD_CFLAGS=-fno-stack-protector -fpic
+ endif
  GCC3=-DGCC3
 endif
 
@@ -62,7 +70,7 @@ DEBUG= -g
 # In order to include thread library, libc.so.6 is preferrable.
 
 CFLAGS=$(WFLAGS) -D$(MACHINE) -DLinux -DARM -D_REENTRANT -DVERSION=\"$(VERSION)\" \
-	-DLIB6 $(ALIGN_FUNCTIONS) -fno-stack-protector -fpic \
+	-DLIB6 $(ALIGN_FUNCTIONS) $(ADD_CFLAGS) \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	-DGCC $(GCC3) \
 	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/include

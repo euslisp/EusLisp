@@ -844,7 +844,11 @@ pointer args[];
   double f;
   
   if (code->c.fcode.entry2 != NIL) {
+#if (WORD_SIZE == 64)
+    ifunc = (((eusinteger_t)ifunc)&0xffffffff00000000) | (intval(code->c.fcode.entry2)&0x00000000ffffffff);
+#else
     ifunc = (((int)ifunc)&0xffff0000) | (intval(code->c.fcode.entry2)&0x0000ffff);    /* kanehiro's patch 2000.12.13 */
+#endif
   }
   ffunc=(double (*)())ifunc;
   while (iscons(paramtypes)) {
@@ -993,7 +997,7 @@ register int noarg;
   register eusinteger_t addr;
   pointer tmp;
   addr=(eusinteger_t)(func->c.code.entry);
-#ifdef x86_64
+#if (defined x86_64) || (defined aarch64)
   addr &= ~3L;  /*0xfffffffc; ???? */
 #else
   addr &= ~3;  /*0xfffffffc; ???? */
