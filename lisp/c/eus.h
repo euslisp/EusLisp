@@ -9,7 +9,7 @@
 /****************************************************************/
 
 
-#if (alpha || IRIX6 || x86_64)
+#if (alpha || IRIX6 || x86_64 || aarch64)
 #define WORD_SIZE 64
 #else
 #define WORD_SIZE 32

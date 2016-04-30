@@ -914,6 +914,9 @@ static void initfeatures()
 #if ARM
   p=cons(ctx,intern(ctx,"ARM",3,keywordpkg),p);
 #endif
+#if aarch64
+  p=cons(ctx,intern(ctx,"AARCH64",7,keywordpkg),p);
+#endif
 
   defvar(ctx,"*FEATURES*",p,lisppkg);
 

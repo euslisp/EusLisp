@@ -1316,6 +1316,8 @@
 			  (cond
                            ((memq :x86_64 *features*)
                             " -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                           ((memq :aarch64 *features*)
+                            " -Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
                            ((memq :arm *features*)
                             " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
                            (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -fno-stack-protector -DGCC3 ")))
