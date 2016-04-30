@@ -5,12 +5,42 @@ matrix:
       dist: trusty
       sudo: required
       cache: apt
-      env: DISTRO=trusty
+      env: DOCKER_IMAGE=ubuntu:trusty
     - os: linux
       dist: trusty
       sudo: required
       cache: apt
-      env: DISTRO=xenial
+      env: DOCKER_IMAGE=ubuntu:xenial
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=osrf/ubuntu_armhf:trusty
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=osrf/ubuntu_armhf:xenial
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=osrf/ubuntu_arm64:trusty
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=osrf/ubuntu_arm64:xenial
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=debian:jessie
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=osrf/debian_arm64:jessie
     - os: osx
 env:
   global:
@@ -28,9 +58,10 @@ before_install: # Use this to prepare the system to install prerequisites or dep
 install:
   - export CI_SOURCE_PATH=$(pwd)
   - export REPOSITORY_NAME=${PWD##*/}
+  - if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
 script:
   - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $CI_SOURCE_PATH:$CI_SOURCE_PATH -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -t ubuntu:$DISTRO sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $CI_SOURCE_PATH:$CI_SOURCE_PATH -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then  source ./.travis.sh; fi
 after_failure:
   - echo "failure"
