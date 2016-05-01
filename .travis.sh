@@ -44,7 +44,7 @@ fi
 
 travis_time_start install # Use this to install any prerequisites or dependencies necessary to run your build
 cd ${HOME}
-git clone http://github.com/euslisp/jskeus jskeus
+[ -e jskeus ] || git clone http://github.com/euslisp/jskeus jskeus
 ln -s $CI_SOURCE_PATH jskeus/eus
 travis_time_end
 
