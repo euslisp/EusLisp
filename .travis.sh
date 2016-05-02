@@ -51,13 +51,21 @@ travis_time_end
 travis_time_start script.make # All commands must exit with code 0 on success. Anything else is considered failure.
 cd jskeus
 make
+
+travis_time_end
+travis_time_start script.test
+
 source bashrc.eus
 export DISPLAY=
 set +e
-export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
+    export EXIT_STATUS=0; for test_l in irteus/test/geo.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+else
+    export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+fi
 travis_time_end
 
-if [ "$TRAVIS_OS_NAME" == "linux" ]; then 
+if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" ]; then
 
     travis_time_start script.doc
     set +e
