@@ -180,7 +180,7 @@ eus:	$(BINDIR)/eus
 
 eusxv:	$(BINDIR)/eusxv
 
-eusgl:  $(BINDIR)/eusgl
+eusgl:  eusx $(BINDIR)/eusgl
 
 raweus.so:	$(BINDIR)/raweus.so
 
@@ -247,7 +247,7 @@ $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
 		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB);)
 
-$(BINDIR)/eus:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
+$(BINDIR)/eus:	 $(BINDIR)/eusx $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS)  $(COMPOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) $(MAPOPTION) \
 		$(ADLIBDIR)/$(LIBEUSGEO) $(ADLIBDIR)/$(LIBEUSX) 
@@ -314,31 +314,35 @@ $(GCCLS):
 	(cd $(TOOLDIR); \
 	$(CC) -o $(BINDIR)/gccls gccls.c ;\
 	cd $(EUSDIR) )
-$(LCOBJECTS):
+$(LCOBJECTS): $(GCCLS)
 	(cd $(LDIR); $(BINDIR)/gccls constants.l; \
         $(CC) -c -o $(OBJDIR)/constants.l.o $(CFLAGS) constants.l.c; \
 	 $(BINDIR)/gccls eusstart.l; \
         $(CC) -c $(CFLAGS) -o $(OBJDIR)/eusstart.l.o eusstart.l.c)
-$(LOBJECTS) $(MAPOPTION):
-	(echo $*; $(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l >/dev/null)
-$(COMPOBJECTS):	$(GCCLS)
-	($(BINDIR)/euscomp <$(TOOLDIR)/compile_comp.l >/dev/null ; \
-	cd $(COMPDIR); $(BINDIR)/gccls builtins.l; \
-	$(CC) -c $(CFLAGS) -o $(OBJDIR)/builtins.l.o -O builtins.l.c )
-$(GEOOBJECTS):
+$(LOBJECTS) $(MAPOPTION): $(OBJDIR)/compile_l.log
+$(OBJDIR)/compile_l.log: eus0
+	(echo $(LOBJECTS) $(MAPOPTION); $(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l > $(OBJDIR)/compile_l.log)
+$(COMPOBJECTS):	$(OBJDIR)/compile_comp.log
+$(OBJDIR)/compile_comp.log: $(GCCLS) eus1
+	(cd $(COMPDIR); $(BINDIR)/gccls builtins.l; \
+	$(CC) -c $(CFLAGS) -o $(OBJDIR)/builtins.l.o -O builtins.l.c)
+	$(BINDIR)/euscomp <$(TOOLDIR)/compile_comp.l > $(OBJDIR)/compile_comp.log
+$(GEOOBJECTS): $(OBJDIR)/compile_geo.log
+$(OBJDIR)/compile_geo.log: eus2
 	(echo compiling geoobjects; \
-	$(BINDIR)/euscomp <$(TOOLDIR)/compile_geo.l >/dev/null)
-$(XOBJECTS):
-	(cd $(XWINDOWDIR); $(BINDIR)/euscomp <../$(TOOLDIR)/compile_xwindow.l >/dev/null)
-$(XTKOBJECTS):
-	($(BINDIR)/euscomp <$(TOOLDIR)/compile_xwindow.l >/dev/null)
-$(GLOBJECTS):
-	($(BINDIR)/eusx <$(TOOLDIR)/compile_gl.l >/dev/null)
+	$(BINDIR)/euscomp <$(TOOLDIR)/compile_geo.l > $(OBJDIR)/compile_geo.log)
+$(XOBJECTS) $(XTKOBJECTS): $(OBJDIR)/compile_xwindow.log
+$(OBJDIR)/compile_xwindow.log: eusg
+	(cd $(XWINDOWDIR); $(BINDIR)/euscomp <../$(TOOLDIR)/compile_xwindow.l > $(OBJDIR)/compile_xwindow.log)
+$(GLOBJECTS): $(OBJDIR)/compile_gl.log
+$(OBJDIR)/compile_gl.log: eusx
+	($(BINDIR)/eusx <$(TOOLDIR)/compile_gl.l > $(OBJDIR)/compile_gl.log)
 $(XWINDOWDIR)/Xlibfuncs.o:	$(XWINDOWDIR)/Xlibfuncs.c
 	(cd $(XWINDOWDIR) ; \
 	 $(CC) -c $(CFLAGS) -o $(OBJDIR)/Xlibfuncs.o $(OFLAGS) Xlibfuncs.c)
-$(IMGOBJECTS):
-	($(BINDIR)/euscomp <$(TOOLDIR)/compile_image.l >/dev/null)
+$(IMGOBJECTS): $(OBJDIR)/compile_image.log
+$(OBJDIR)/compile_image.log: $(BINDIR)/eus2
+	($(BINDIR)/euscomp <$(TOOLDIR)/compile_image.l > $(OBJDIR)/compile_image.log)
 $(IMGCOBJECTS):
 	(cd $(IMGDIR); \
 	 $(CC) -c -o $(OBJDIR)/$(*F).o $(CFLAGS) $(PIC) $(OFLAGS) $(*F).c)
