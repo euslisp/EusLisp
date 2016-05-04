@@ -29,8 +29,8 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     travis_time_end
 
     travis_time_start setup.apt-get_install
-    sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng12-dev xfonts-100dpi xfonts-75dpi  # msttcorefonts could not install on 14.04 travis
-    sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils || echo "ok" # 16.04 does ont have ptex bin
+    ret=1; while [ $ret != 0 ]; do sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng12-dev xfonts-100dpi xfonts-75dpi && ret=0 || echo "failed, retry"; done # msttcorefonts could not install on 14.04 travis
+    if [ "`uname -m`" == "x86_64" ] ; then sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils || echo "ok"; fi # 16.04 does ont have ptex bin
     travis_time_end
 
 fi
@@ -44,20 +44,28 @@ fi
 
 travis_time_start install # Use this to install any prerequisites or dependencies necessary to run your build
 cd ${HOME}
-git clone http://github.com/euslisp/jskeus jskeus
+[ -e jskeus ] || git clone http://github.com/euslisp/jskeus jskeus
 ln -s $CI_SOURCE_PATH jskeus/eus
 travis_time_end
 
 travis_time_start script.make # All commands must exit with code 0 on success. Anything else is considered failure.
 cd jskeus
 make
+
+travis_time_end
+travis_time_start script.test
+
 source bashrc.eus
 export DISPLAY=
 set +e
-export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
+    export EXIT_STATUS=0; for test_l in irteus/test/geo.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+else
+    export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+fi
 travis_time_end
 
-if [ "$TRAVIS_OS_NAME" == "linux" ]; then 
+if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" ]; then
 
     travis_time_start script.doc
     set +e
