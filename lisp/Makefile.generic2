@@ -320,22 +320,22 @@ $(LCOBJECTS): $(GCCLS)
 	 $(BINDIR)/gccls eusstart.l; \
         $(CC) -c $(CFLAGS) -o $(OBJDIR)/eusstart.l.o eusstart.l.c)
 $(LOBJECTS) $(MAPOPTION): $(OBJDIR)/compile_l.log
-$(OBJDIR)/compile_l.log: eus0
+$(OBJDIR)/compile_l.log: $(BINDIR)/eus0
 	(echo $(LOBJECTS) $(MAPOPTION); $(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l > $(OBJDIR)/compile_l.log)
 $(COMPOBJECTS):	$(OBJDIR)/compile_comp.log
-$(OBJDIR)/compile_comp.log: $(GCCLS) eus1
+$(OBJDIR)/compile_comp.log: $(GCCLS) $(BINDIR)/eus1
 	(cd $(COMPDIR); $(BINDIR)/gccls builtins.l; \
 	$(CC) -c $(CFLAGS) -o $(OBJDIR)/builtins.l.o -O builtins.l.c)
 	$(BINDIR)/euscomp <$(TOOLDIR)/compile_comp.l > $(OBJDIR)/compile_comp.log
 $(GEOOBJECTS): $(OBJDIR)/compile_geo.log
-$(OBJDIR)/compile_geo.log: eus2
+$(OBJDIR)/compile_geo.log: $(BINDIR)/eus2
 	(echo compiling geoobjects; \
 	$(BINDIR)/euscomp <$(TOOLDIR)/compile_geo.l > $(OBJDIR)/compile_geo.log)
 $(XOBJECTS) $(XTKOBJECTS): $(OBJDIR)/compile_xwindow.log
-$(OBJDIR)/compile_xwindow.log: eusg
+$(OBJDIR)/compile_xwindow.log: $(BINDIR)/eusg
 	(cd $(XWINDOWDIR); $(BINDIR)/euscomp <../$(TOOLDIR)/compile_xwindow.l > $(OBJDIR)/compile_xwindow.log)
 $(GLOBJECTS): $(OBJDIR)/compile_gl.log
-$(OBJDIR)/compile_gl.log: eusx
+$(OBJDIR)/compile_gl.log: $(BINDIR)/eusx
 	($(BINDIR)/eusx <$(TOOLDIR)/compile_gl.l > $(OBJDIR)/compile_gl.log)
 $(XWINDOWDIR)/Xlibfuncs.o:	$(XWINDOWDIR)/Xlibfuncs.c
 	(cd $(XWINDOWDIR) ; \
