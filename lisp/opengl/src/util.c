@@ -82,13 +82,16 @@ void gluLookAtfv(v)
 	    (GLdouble)v[6], (GLdouble)v[7], (GLdouble)v[8]);
 }
 
-void gluTessCallbackl(tobj, which, fn)
+void gluTessCallbackl(tobj, which, fn, fn2)
   eusinteger_t *tobj;
   eusinteger_t which;
   eusinteger_t fn;
+  eusinteger_t fn2;
 {
+  eusinteger_t addr = fn << 2;
+  if ( fn2 != 0 ) addr = addr | (fn2 & 0x0000ffff);
   gluTessCallback((GLUtriangulatorObj *)tobj, (GLenum)which,
-		  (void (*)()) ( (fn << 2)));
+		  (void (*)()) ( addr ));
 }
 
 void glClearAccumfv(v)
