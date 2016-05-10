@@ -596,9 +596,12 @@ pointer argv[];
   defoglforeign(ctx,"gluTessBeginPolygon");
   defoglforeign(ctx,"gluTessEndPolygon");
 
-#if GL_EXT_texture_object
+#if GL_EXT_texture_object && !Darwin
   defoglforeign(ctx,"glGenTexturesEXT");
   defoglforeign(ctx,"glBindTextureEXT");
+#else
+  defoglforeign(ctx,"glGenTextures");
+  defoglforeign(ctx,"glBindTexture");
 #endif
 #if 0 /* GL_EXT_polygon_offset */
   defoglforeign(ctx,"glPolygonOffsetEXT");

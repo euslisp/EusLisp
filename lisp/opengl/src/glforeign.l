@@ -348,6 +348,14 @@
         (symbol-function 'glGetMaterialfv))
   (setf (symbol-function 'glMaterialfv-org)
         (symbol-function 'glMaterialfv))
+  ;; #if GL_EXT_texture_object && !Darwin
+  (if (not (fboundp 'glGenTexturesEXT))
+      (setf (symbol-function 'glGenTexturesEXT)
+	    (symbol-function 'glGenTextures)))
+  (if (not (fboundp 'glBindTextureEXT))
+      (setf (symbol-function 'glBindTextureEXT)
+	    (symbol-function 'glBindTexture)))
+  ;; #endif  GL_EXT_texture_object && !Darwin
   (if (fboundp 'glGenTexturesEXT)
       (setf (symbol-function 'glGenTexturesEXT-org)
 	    (symbol-function 'glGenTexturesEXT)))
