@@ -320,28 +320,28 @@ $(LCOBJECTS): $(GCCLS)
 	 $(BINDIR)/gccls eusstart.l; \
         $(CC) -c $(CFLAGS) -o $(OBJDIR)/eusstart.l.o eusstart.l.c)
 $(LOBJECTS) $(MAPOPTION): $(OBJDIR)/compile_l.log
-$(OBJDIR)/compile_l.log: eus0
+$(OBJDIR)/compile_l.log: $(BINDIR)/eus0 $(patsubst $(OBJDIR)/%.o,$(LDIR)/%.l,$(LOBJECTS))
 	(echo $(LOBJECTS) $(MAPOPTION); $(BINDIR)/euscomp <$(TOOLDIR)/compile_l.l > $(OBJDIR)/compile_l.log)
 $(COMPOBJECTS):	$(OBJDIR)/compile_comp.log
-$(OBJDIR)/compile_comp.log: $(GCCLS) eus1
+$(OBJDIR)/compile_comp.log: $(GCCLS) $(BINDIR)/eus1 $(patsubst $(OBJDIR)/%.o,$(COMPDIR)/%.l,$(COMPOBJECTS:.l.o=.o))
 	(cd $(COMPDIR); $(BINDIR)/gccls builtins.l; \
 	$(CC) -c $(CFLAGS) -o $(OBJDIR)/builtins.l.o -O builtins.l.c)
 	$(BINDIR)/euscomp <$(TOOLDIR)/compile_comp.l > $(OBJDIR)/compile_comp.log
 $(GEOOBJECTS): $(OBJDIR)/compile_geo.log
-$(OBJDIR)/compile_geo.log: eus2
+$(OBJDIR)/compile_geo.log: $(BINDIR)/eus2 $(patsubst $(OBJDIR)/%.o,$(GEODIR)/%.l,$(GEOOBJECTS))
 	(echo compiling geoobjects; \
 	$(BINDIR)/euscomp <$(TOOLDIR)/compile_geo.l > $(OBJDIR)/compile_geo.log)
 $(XOBJECTS) $(XTKOBJECTS): $(OBJDIR)/compile_xwindow.log
-$(OBJDIR)/compile_xwindow.log: eusg
+$(OBJDIR)/compile_xwindow.log: $(BINDIR)/eusg $(patsubst $(OBJDIR)/%.o,$(XWINDOWDIR)/%.l,$(XOBJECTS)) $(patsubst $(OBJDIR)/%.o,$(XWINDOWDIR)/%.l,$(XTKOBJECTS))
 	(cd $(XWINDOWDIR); $(BINDIR)/euscomp <../$(TOOLDIR)/compile_xwindow.l > $(OBJDIR)/compile_xwindow.log)
 $(GLOBJECTS): $(OBJDIR)/compile_gl.log
-$(OBJDIR)/compile_gl.log: eusx
+$(OBJDIR)/compile_gl.log: $(BINDIR)/eusx $(patsubst $(OBJDIR)/%.o,$(GLDIR)/%.l,$(GLOBJECTS))
 	($(BINDIR)/eusx <$(TOOLDIR)/compile_gl.l > $(OBJDIR)/compile_gl.log)
 $(XWINDOWDIR)/Xlibfuncs.o:	$(XWINDOWDIR)/Xlibfuncs.c
 	(cd $(XWINDOWDIR) ; \
 	 $(CC) -c $(CFLAGS) -o $(OBJDIR)/Xlibfuncs.o $(OFLAGS) Xlibfuncs.c)
 $(IMGOBJECTS): $(OBJDIR)/compile_image.log
-$(OBJDIR)/compile_image.log: $(BINDIR)/eus2
+$(OBJDIR)/compile_image.log: $(BINDIR)/eus2 $(patsubst $(OBJDIR)/%.o,$(IMGDIR)/%.l,$(IMGOBJECTS))
 	($(BINDIR)/euscomp <$(TOOLDIR)/compile_image.l > $(OBJDIR)/compile_image.log)
 $(IMGCOBJECTS):
 	(cd $(IMGDIR); \
