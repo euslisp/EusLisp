@@ -6,7 +6,7 @@
 (defclass gifuplastic-900-cart-object
   :super cascaded-link
   :slots (sensors
-         handle0 handle1
+         handle0 handle1 handle2
          ))
 (defmethod gifuplastic-900-cart-object
   (:init
@@ -339,6 +339,8 @@
      (send blink0 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector 80.0 -240.0 850.0) :rot #2f((1.0 0.0 0.0) (0.0 0.707107 0.707107) (0.0 -0.707107 0.707107)) :name ":rarm"))
      (send blink0 :assoc handle1)
+     (setq handle2 (make-cascoords :pos (float-vector 540.0 60.0 220.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name ":top-face"))
+     (send blink0 :assoc handle2)
 
      ;; init-ending 
      (setq links (list blink0))
@@ -349,9 +351,10 @@
 
      self))
 
-  (:handle (&rest args) (forward-message-to-all (list  handle0 handle1) args))
+  (:handle (&rest args) (forward-message-to-all (list  handle0 handle1 handle2) args))
   (:handle-larm (&rest args) (forward-message-to handle0 args))
   (:handle-rarm (&rest args) (forward-message-to handle1 args))
+  (:handle-top-face (&rest args) (forward-message-to handle2 args))
   (:attention (&rest args) (forward-message-to-all (list ) args))
   (:button (&rest args) (forward-message-to-all (list ) args))
   )
