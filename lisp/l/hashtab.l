@@ -221,7 +221,7 @@
  (:length () (length car))
  (:empty? () (null car))
  (:trim (s) ;; discard old entries to keep the size of this queue to 's'
-     (dotimes (i (- s (length car))) (send self :dequeue)))
+     (dotimes (i (- (length car) s)) (send self :dequeue)))
  (:dequeue (&optional (error-p nil))
      (cond ((null car)
 		(if error-p
