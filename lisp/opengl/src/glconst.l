@@ -465,6 +465,40 @@
 	  GL_TEXTURE_WRAP_T
 	  GL_CLAMP
 	  GL_REPEAT
+	  GL_COLOR_ATTACHMENT0
+	  GL_COLOR_ATTACHMENT1
+	  GL_COLOR_ATTACHMENT2
+	  GL_COLOR_ATTACHMENT3
+	  GL_COLOR_ATTACHMENT4
+	  GL_COLOR_ATTACHMENT5
+	  GL_COLOR_ATTACHMENT6
+	  GL_COLOR_ATTACHMENT7
+	  GL_COLOR_ATTACHMENT8
+	  GL_COLOR_ATTACHMENT9
+	  GL_COLOR_ATTACHMENT10
+	  GL_COLOR_ATTACHMENT11
+	  GL_COLOR_ATTACHMENT12
+	  GL_COLOR_ATTACHMENT13
+	  GL_COLOR_ATTACHMENT14
+	  GL_COLOR_ATTACHMENT15
+	  GL_COLOR_ATTACHMENT16
+	  GL_COLOR_ATTACHMENT17
+	  GL_COLOR_ATTACHMENT18
+	  GL_COLOR_ATTACHMENT19
+	  GL_COLOR_ATTACHMENT20
+	  GL_COLOR_ATTACHMENT21
+	  GL_COLOR_ATTACHMENT22
+	  GL_COLOR_ATTACHMENT23
+	  GL_COLOR_ATTACHMENT24
+	  GL_COLOR_ATTACHMENT25
+	  GL_COLOR_ATTACHMENT26
+	  GL_COLOR_ATTACHMENT27
+	  GL_COLOR_ATTACHMENT28
+	  GL_COLOR_ATTACHMENT29
+	  GL_COLOR_ATTACHMENT30
+	  GL_COLOR_ATTACHMENT31
+	  GL_DEPTH_ATTACHMENT
+	  GL_STENCIL_ATTACHMENT
 	  ))
 
 ;;; ***********************************************************
@@ -1232,6 +1266,42 @@
 ;;;  TextureWrapMode 
 (defconstant GL_CLAMP                             #x2900)
 (defconstant GL_REPEAT                            #x2901)
+
+;;;  Attachment
+(defconstant GL_COLOR_ATTACHMENT0              #x8CE0)
+(defconstant GL_COLOR_ATTACHMENT1              #x8CE1)
+(defconstant GL_COLOR_ATTACHMENT2              #x8CE2)
+(defconstant GL_COLOR_ATTACHMENT3              #x8CE3)
+(defconstant GL_COLOR_ATTACHMENT4              #x8CE4)
+(defconstant GL_COLOR_ATTACHMENT5              #x8CE5)
+(defconstant GL_COLOR_ATTACHMENT6              #x8CE6)
+(defconstant GL_COLOR_ATTACHMENT7              #x8CE7)
+(defconstant GL_COLOR_ATTACHMENT8              #x8CE8)
+(defconstant GL_COLOR_ATTACHMENT9              #x8CE9)
+(defconstant GL_COLOR_ATTACHMENT10             #x8CEA)
+(defconstant GL_COLOR_ATTACHMENT11             #x8CEB)
+(defconstant GL_COLOR_ATTACHMENT12             #x8CEC)
+(defconstant GL_COLOR_ATTACHMENT13             #x8CED)
+(defconstant GL_COLOR_ATTACHMENT14             #x8CEE)
+(defconstant GL_COLOR_ATTACHMENT15             #x8CEF)
+(defconstant GL_COLOR_ATTACHMENT16             #x8CF0)
+(defconstant GL_COLOR_ATTACHMENT17             #x8CF1)
+(defconstant GL_COLOR_ATTACHMENT18             #x8CF2)
+(defconstant GL_COLOR_ATTACHMENT19             #x8CF3)
+(defconstant GL_COLOR_ATTACHMENT20             #x8CF4)
+(defconstant GL_COLOR_ATTACHMENT21             #x8CF5)
+(defconstant GL_COLOR_ATTACHMENT22             #x8CF6)
+(defconstant GL_COLOR_ATTACHMENT23             #x8CF7)
+(defconstant GL_COLOR_ATTACHMENT24             #x8CF8)
+(defconstant GL_COLOR_ATTACHMENT25             #x8CF9)
+(defconstant GL_COLOR_ATTACHMENT26             #x8CFA)
+(defconstant GL_COLOR_ATTACHMENT27             #x8CFB)
+(defconstant GL_COLOR_ATTACHMENT28             #x8CFC)
+(defconstant GL_COLOR_ATTACHMENT29             #x8CFD)
+(defconstant GL_COLOR_ATTACHMENT30             #x8CFE)
+(defconstant GL_COLOR_ATTACHMENT31             #x8CFF)
+(defconstant GL_DEPTH_ATTACHMENT               #x8D00)
+(defconstant GL_STENCIL_ATTACHMENT             #x8D20)
 
 ;;;;;;;;;;;;;;;;;;;;;;
 
