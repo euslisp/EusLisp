@@ -1225,7 +1225,7 @@
 		 (cc *do-cc*)	;nil skips c-compilation
 		 (pic *pic*)	;t forces position independent code 
 		 (verbose *verbose*)
-		 (entry (pathname-name file))
+		 (entry (send self :gencname-tail (pathname-name file)))
 		 (o))
    (if (and (integerp c-optimize)
 	    (> c-optimize 0)
