@@ -718,4 +718,42 @@ hash-tableを定義する。
 \end{refdesc}
 
 \newpage
+\subsection{キュー}
 
+\begin{refdesc}
+
+queue はFIFO(first-in first-out)形式で要素の追加や検索を可能にするデー
+タ構造である。
+carがqueueの実体であり、このqueueのインスタンスをqとすると，その配列
+は(print (car q))で表示できる。cdrに最も最近に追加された要素が確保される。
+
+\classdesc{queue}{cons}{(car cdr)}{
+FIFO queueを定義する。}
+
+
+\methoddesc{:init}{}{queueを初期化する。}
+
+\methoddesc{:enqueue}{val}{このqueueにxを最新の要素として追加する。}
+\methoddesc{:dequeue}{\&optional (error-p nil)}{このqueueの最も過去に
+  追加された要素を返し、queueから削除する。queueが空の場合，error-pが
+  NILでない場合はエラーを表示し、それ以外の場合はNILを返す。}
+
+
+\methoddesc{:length}{}{このqueueの長さを返す。}
+\methoddesc{:empty?}{}{このqueueが空の場合、Tを返す。}
+
+\methoddesc{:trim}{s}{このqueueの要素のうち古いものを破棄し、queueの長さをsとする。}
+\methoddesc{:search}{item \&optional (test \#'equal)}{このqueueにitem
+  が存在するか調べる。もし無ければNILを返す。}
+
+\methoddesc{:delete}{item \&optional (test \#'equal) (count 1)}{この
+  queueからitemと同一の要素を探し、:count番目までの要素を削除する。}
+\methoddesc{:first}{}{このqueueの先頭の要素（最も過去に追加された要素）を返す。}
+\methoddesc{:last}{}{このqueueの最後の要素（最も最近に追加された要素）を返す。}
+
+
+
+\end{refdesc}
+
+
+\newpage
