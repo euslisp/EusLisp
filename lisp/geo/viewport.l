@@ -197,13 +197,13 @@
     (setq width (send port :ndc-width-to-screen width))
     (setq height (send port :ndc-height-to-screen height))
     (send surface :draw-fill-arc point width height angle1 angle2))
-  (:draw-polyline-NDC (polyline)
+  (:draw-polyline-NDC (polyline &optional color)
     (let ((p1 (pop polyline)) p2)
       (while polyline
 	 (setq p2 (pop polyline))
-	 (send self :draw-line-NDC p1 p2 t)
+	 (send self :draw-line-NDC p1 p2 t color)
 	 (setq p1 p2))))
-  (:draw-box-NDC (lower-left upper-right)
+  (:draw-box-NDC (lower-left upper-right &optional color)
     (declare (float-vector lower-left upper-right))
     (let ((x1 (aref lower-left 0))   (y1 (aref lower-left 1))
 	  (x2 (aref upper-right 0)) (y2 (aref upper-right 1)))
@@ -212,13 +212,13 @@
 		   (float-vector x1 y1 0) (float-vector x2 y1 0)
 		   (float-vector x2 y2 0) (float-vector x1 y2 0)
 		   (float-vector x1 y1 0)))))
-  (:draw-star-NDC (point &optional (size 0.02))
+  (:draw-star-NDC (point &optional (size 0.02) (color nil))
     (send self :draw-line-NDC
 	(float-vector (- (aref point 0) size) (aref point 1) 0)
-	(float-vector (+ (aref point 0) size) (aref point 1) 0))
+	(float-vector (+ (aref point 0) size) (aref point 1) 0) t color)
     (send self :draw-line-NDC
 	(float-vector (aref point 0) (- (aref point 1) size) 0)
-	(float-vector (aref point 0) (+ (aref point 1) size) 0))) )
+	(float-vector (aref point 0) (+ (aref point 1) size) 0) t color)) )
 
 ;; drawing primitives which work in world coordinates
 ;; First, viewing and projective transformations are applied,
@@ -234,9 +234,9 @@
     (setq size (float-vector size size 0.0))
     (setq v (homo2normal (send eye :view v)))
     (send self :draw-box-NDC (v- v size) (v+ v size)))
-  (:draw-polyline (vlist)
+  (:draw-polyline (vlist &optional color)
     (send self :draw-polyline-ndc
-		(mapcar #'(lambda (x) (send eye :view x)) vlist)))
+		(mapcar #'(lambda (x) (send eye :view x)) vlist) color))
   (:draw-arc (point width height
 		&optional (angle1 0) (angle2 2pi) color
 		&aux v)
@@ -275,9 +275,9 @@
        (sys:reclaim p1) (sys:reclaim p2)
        (sys:reclaim pn) (sys:reclaim pa) (sys:reclaim pb)))
   (:pane () (send self :draw-box-NDC #f(-1 -1 0) #f(1 1 0)))
-  (:draw-star (v &optional size)
+  (:draw-star (v &optional size color)
       (if (null size) (setq size 0.02))
-      (send self :draw-star-NDC (homo2normal (send eye :view v)) size))
+      (send self :draw-star-NDC (homo2normal (send eye :view v)) size color))
   (:draw-2dlnseg   (l)
      (send self :draw-line (send l :spos) (send l :epos))) )
 
