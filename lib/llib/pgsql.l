@@ -99,7 +99,9 @@
                ((probe-file "/usr/lib/i386-linux-gnu/libpq.so") (load "/usr/lib/i386-linux-gnu/libpq.so"))
                (t nil)))
 #+:cygwin
-(setq *libpq* (load "/usr/bin/cygpq.dll"))
+(setq *libpq* (cond
+               ((probe-file "/usr/bin/cygpq.dll") (load "/usr/bin/cygpq.dll"))
+               (t nil)))
 
 (when *libpq*
 (defforeign setdbLogin *libpq* "PQsetdbLogin"
