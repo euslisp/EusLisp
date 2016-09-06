@@ -201,6 +201,7 @@
     (setf (symbol-function 'defclass-org) (symbol-function 'defclass)))
   (unless (fboundp 'defun-org)
     (setf (symbol-function 'defun-org) (symbol-function 'defun)))
+  (defmacro require (&rest args) (format *error-output* ";; skip require ~A ..." args))
   (defmacro defclass (cls &key super slots documentation (doc documentation))
     `(progn
        (defclass-org ,cls :super ,super :slots ,slots :doc ,doc)
