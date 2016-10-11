@@ -552,8 +552,8 @@ The result is equivalent to
 \subsection{Relationship between transformation matrix and coordinates class}
 
 \noindent
-Relationship between transformation matrix and coordinates class are described,
-when a transformation matrix T is represented a $4\times4$(homogeneous) matrix as below.
+Relationship between transformation matrix and coordinates class is described,
+where a transformation matrix T represents a $4\times4$(homogeneous) matrix as below.
 \[
 T = \begin{pmatrix}
 \mathbf{R}_T & \mathbf{p}_T \\
@@ -561,7 +561,7 @@ T = \begin{pmatrix}
 \end{pmatrix}
 \]
 
-$\mathbf{R}_T$ is $3\times3$ matrix, and $\mathbf{p}_T$ is $3\times1$ matrix
+$\mathbf{R}_T$ is a $3\times3$ matrix, and $\mathbf{p}_T$ is a $3\times1$ matrix
 (a float-vector which has 3 elements in euslisp).
 Coordinates class has
 slot variables rot and pos. They are $\mathbf{R}_T$ and $\mathbf{p}_T$ respectively.
@@ -570,10 +570,10 @@ slot variables rot and pos. They are $\mathbf{R}_T$ and $\mathbf{p}_T$ respectiv
 \noindent {\underline {\bf {\sf Getter method for rotation matrix and position}}}
 
 \noindent
-$\mathbf{R}$ and $\mathbf{p}$ can be taken out by a method in coordinates class.
+$\mathbf{R}$ and $\mathbf{p}$ can be obtained using methods of the coordinates class.
 
 \noindent
-T is a instance of coordinate class.
+T is an instance of the coordinate class.
 
 \noindent
 (send T :rot)
@@ -586,7 +586,7 @@ $\Rightarrow$ $\mathbf{R}_T$
 $\Rightarrow$ $\mathbf{p}_T$
 
 \vspace{1ex}
-\noindent {\underline {\bf {\sf Converting method for vector}}}
+\noindent {\underline {\bf {\sf Methods for transforming vectors}}}
 
 \noindent
 $\mathbf{v}$ is 3-D position vector.
@@ -606,7 +606,7 @@ $\Rightarrow$ $\mathbf{v}^T \mathbf{R}_T$
 
 $\Rightarrow$ $\mathbf{R}_T\mathbf{v} + \mathbf{p}_T$
 
-It converts a vector represented in a local coordinate system T
+Converts a vector represented in a local coordinate system T
 to a vector represented in the world coordinate system.
 
 \noindent
@@ -614,7 +614,7 @@ to a vector represented in the world coordinate system.
 
 $\Rightarrow$ $\mathbf{R}_T^{-1}\left( \mathbf{v} - \mathbf{p}_T \right)$
 
-It converts a vector represented in the world coordinate system.
+Converts a vector represented in the world coordinate system.
 to a vector represented in a local coordinate system T.
 
 \vspace{1ex}
@@ -625,7 +625,7 @@ to a vector represented in a local coordinate system T.
 
 $\Rightarrow$ $T^{-1}$
 
-It returns inverse matrix.
+Returns inverse matrix.
 \[
 T^{-1} = \begin{pmatrix}
  \mathbf{R}_T^{-1} & -\mathbf{R}_T^{-1}\mathbf{p}_T \\
@@ -647,13 +647,13 @@ when wrt == W (coordinates class), $W^{-1}AT^{-1}W$ is returned.
 \noindent {\underline {\bf {\sf Methods modifying itself}}}
 
 \noindent
-A is a instance of coordinates.
+A is an instance of the coordinates class.
 
 \noindent
 
 $\Leftrightarrow$ represents that
-slot variables (pos or rot) refer a given instance (matrix or float vector).
-Please note that when one is changed, it reflects to the other.
+slot variables (pos or rot) refer to a given instance (matrix or float vector).
+Please note that when one is changed, the other also reflects the change.
 
 
 \noindent
