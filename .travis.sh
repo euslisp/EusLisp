@@ -37,6 +37,7 @@ fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
     travis_time_start setup.install
+    brew tap homebrew/x11
     brew install jpeg libpng mesalib-glw wget;
     travis_time_end
 

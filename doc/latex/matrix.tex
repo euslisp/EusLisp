@@ -548,4 +548,172 @@ The result is equivalent to
 {\tt (send {\em coords} :trans\-form-\-vec\-tor {\em vec})}.}
 \end{refdesc}
 
+\newpage
+\subsection{Relationship between transformation matrix and coordinates class}
+
+\noindent
+Relationship between transformation matrix and coordinates class is described,
+where a transformation matrix T represents a $4\times4$(homogeneous) matrix as below.
+\[
+T = \begin{pmatrix}
+\mathbf{R}_T & \mathbf{p}_T \\
+\mathbf{0} & 1
+\end{pmatrix}
+\]
+
+$\mathbf{R}_T$ is a $3\times3$ matrix, and $\mathbf{p}_T$ is a $3\times1$ matrix
+(a float-vector which has 3 elements in euslisp).
+Coordinates class has
+slot variables rot and pos. They are $\mathbf{R}_T$ and $\mathbf{p}_T$ respectively.
+
+\vspace{1ex}
+\noindent {\underline {\bf {\sf Getter method for rotation matrix and position}}}
+
+\noindent
+$\mathbf{R}$ and $\mathbf{p}$ can be obtained using methods of the coordinates class.
+
+\noindent
+T is an instance of the coordinate class.
+
+\noindent
+(send T :rot)
+
+$\Rightarrow$ $\mathbf{R}_T$
+
+\noindent
+(send T :pos)
+
+$\Rightarrow$ $\mathbf{p}_T$
+
+\vspace{1ex}
+\noindent {\underline {\bf {\sf Methods for transforming vectors}}}
+
+\noindent
+$\mathbf{v}$ is 3-D position vector.
+
+\noindent
+(send T :rotate-vector $\mathbf{v}$)
+
+$\Rightarrow$  $\mathbf{R}_T \mathbf{v}$
+
+\noindent
+(send T :inverse-rotate-vector $\mathbf{v}$)
+
+$\Rightarrow$ $\mathbf{v}^T \mathbf{R}_T$
+
+\noindent
+(send T :transform-vector $\mathbf{v}$)
+
+$\Rightarrow$ $\mathbf{R}_T\mathbf{v} + \mathbf{p}_T$
+
+Converts a vector represented in a local coordinate system T
+to a vector represented in the world coordinate system.
+
+\noindent
+(send T :inverse-transform-vector $\mathbf{v}$)
+
+$\Rightarrow$ $\mathbf{R}_T^{-1}\left( \mathbf{v} - \mathbf{p}_T \right)$
+
+Converts a vector represented in the world coordinate system.
+to a vector represented in a local coordinate system T.
+
+\vspace{1ex}
+\noindent {\underline {\bf {\sf Methods returing coordinates without modifying itself}}}
+
+\noindent
+(send T :inverse-transformation)
+
+$\Rightarrow$ $T^{-1}$
+
+Returns inverse matrix.
+\[
+T^{-1} = \begin{pmatrix}
+ \mathbf{R}_T^{-1} & -\mathbf{R}_T^{-1}\mathbf{p}_T \\
+ \mathbf{0} & 1
+\end{pmatrix}
+\]
+
+\noindent
+(send T :transformation A (\&optional (wrt :local)))
+
+when wrt == :local, $T^{-1}A$ is returned.
+
+when wrt == :world, $AT^{-1}$ is returned.
+
+when wrt == W (coordinates class), $W^{-1}AT^{-1}W$ is returned.
+
+
+\vspace{1ex}
+\noindent {\underline {\bf {\sf Methods modifying itself}}}
+
+\noindent
+A is an instance of the coordinates class.
+
+\noindent
+
+$\Leftrightarrow$ represents that
+slot variables (pos or rot) refer to a given instance (matrix or float vector).
+Please note that when one is changed, the other also reflects the change.
+
+
+\noindent
+$\leftarrow$ represents substitution.
+
+\noindent
+(send T :newcoords A)
+
+$\mathbf{R}_T \Leftrightarrow \mathbf{R}_A$
+
+$\mathbf{p}_T \Leftrightarrow \mathbf{p}_A$
+
+\noindent
+(send T :newcoords $\mathbf{R}$ $\mathbf{p}$)
+
+$\mathbf{R}_T \Leftrightarrow \mathbf{R}$
+
+$\mathbf{p}_T \Leftrightarrow \mathbf{p}$
+
+\noindent
+(send T :move-to A (\&optional (wrt :local)))
+
+when wrt == :local,$T \leftarrow TA$
+
+when wrt == :world,$T \Leftrightarrow A$
+
+when wrt == W (coordinates class), $T \leftarrow WA$
+
+\noindent
+(send T :translate $\mathbf{v}$ (\&optional (wrt :local)))
+
+when wrt == :local,
+$\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T}\mathbf{v}$
+
+when wrt == :world,
+$\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{v}$
+
+when wrt == W (coordinates class),
+$\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{W}\mathbf{v}$
+
+\noindent
+(send T :locate $\mathbf{v}$ (\&optional (wrt :local)))
+
+when wrt == :local,
+$\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T} \mathbf{v}$
+
+when wrt == :world,
+$\mathbf{p}_{T} \leftarrow \mathbf{v}$
+
+when wrt == W (coordinates class),
+$\mathbf{p}_{T} \leftarrow \mathbf{p}_{W} + \mathbf{R}_{W}\mathbf{v}$
+
+\noindent
+(send T :transform A (\&optional (wrt :local)))
+
+when wrt == :local, $T \leftarrow TA$
+
+when wrt == :world, $T \leftarrow AT$
+
+when wrt == W (coordinates class), $T \leftarrow$ $\left( WAW \right)^{-1} T$
+
+\newpage
 
