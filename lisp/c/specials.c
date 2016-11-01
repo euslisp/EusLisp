@@ -94,8 +94,7 @@ register pointer argv[];
   printf( "\n" );
 #endif
   if (issymbol(fun)) {
-    fun=fun->c.sym.spefunc;
-    if (fun==UNBOUND) error(E_UNDEF,argv[0]);}
+    if (fun->c.sym.spefunc==UNBOUND) error(E_UNDEF,argv[0]);}
   while (i<n-1) ckpush(argv[i++]);
   a=argv[i];
   while (islist(a)) {
