@@ -230,7 +230,9 @@ Unit is 1/60 second.}
 
 \funcdesc{unix:localtime}{}{
 Current time and date is returned in an integer vector.
-Elements are second, minute, hour, day-of-a-month, year, weekday.}
+Elements are second, minute, hour, day-of-a-month, month (zero-based), year (the number of years since 1900), weekday (the number of days since Sunday, in the range 0 to 6), day-in-the-year (the number of days since January 1, in the range 0 to 365), daylight-saving-time-is-set (a flag that indicates whether daylight saving time is in effect at the time described) and supported-time-zone.
+
+{\tt ex.) unix:localtime => \#(10 27 12 8 10 116 2 312 nil (``JST'' ``JST''))}}
 
 \funcdesc{unix:asctime}{ tm\_intvector}{
 Converts localtime represented with an integer-vector into a string notation.\\
