@@ -175,6 +175,7 @@ pointer K_PRIN1;
 pointer K_FUNCTION_DOCUMENTATION, K_VARIABLE_DOCUMENTATION,
 	K_CLASS_DOCUMENTATION, K_METHOD_DOCUMENTATION, K_CLASS;
 pointer QLOADED_MODULES;
+pointer MAXCALLSTACKDEPTH;
 
 static pointer PROPOBJ,C_PROPOBJ;
 
@@ -304,7 +305,9 @@ va_dcl
   register char *errstr;
   register int argc;
   register context *ctx;
+  register struct callframe *vf;
   pointer msg;
+  int i, n;
 
 #ifdef USE_STDARG
   va_start(args,ec);
@@ -316,6 +319,19 @@ va_dcl
 #endif
 
   ctx=euscontexts[thr_self()];
+
+  /* print call stack */
+  n=intval(Spevalof(MAXCALLSTACKDEPTH));
+  if (n > 0) {
+    fprintf( stderr, "Call Stack (max depth: %d):\n", n );
+    vf=(struct callframe *)(ctx->callfp);
+    for (i = 0; vf->vlink != NULL && i < n; ++i, vf = vf->vlink) {
+      fprintf( stderr, "  %d: at ", i );
+      prinx(ctx, vf->form, ERROUT);
+      flushstream(ERROUT);
+      fprintf( stderr, "\n" ); }
+    if (vf->vlink != NULL) {
+      fprintf (stderr, "  And more...\n"); }}
 
   /* error(errstr) must be error(E_USER,errstr) */
   if ((int)ec < E_END) errstr=errmsg[(int)ec];
@@ -649,6 +665,7 @@ static void initsymbols()
   FEATURES=defvar(ctx,"*FEATURES*",NIL,lisppkg);
   READBASE=deflocal(ctx,"*READ-BASE*",makeint(10),lisppkg);
   PRINTBASE=deflocal(ctx,"*PRINT-BASE*",makeint(10),lisppkg);
+  MAXCALLSTACKDEPTH=deflocal(ctx, "*MAX-CALLSTACK-DEPTH*",makeint(20),lisppkg);
   /*initialize i/o stream*/
   STDIN=mkfilestream(ctx,K_IN,makebuffer(128),0,NIL);
   QSTDIN=deflocal(ctx,"*STANDARD-INPUT*",STDIN,lisppkg);
