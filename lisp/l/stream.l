@@ -214,7 +214,8 @@
 
 (defmacro with-output-to-string (vstring &rest forms)
   `(let ((,(car vstring) (make-string-output-stream . ,(cdr vstring))))
-	. ,forms))
+     ,@forms
+     (get-output-stream-string ,(car vstring))))
 
 (defun get-output-stream-string (s)
    (subseq (stream-buffer s) 0 (stream-count s)))
