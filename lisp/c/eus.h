@@ -722,7 +722,7 @@ extern int export_all;
 #define ccar(p) ((p)->c.cons.car)
 #define ccdr(p) ((p)->c.cons.cdr)
 #define cixof(p) ((p)->cix)
-#define classof(p) (classtab[(p)->cix].def)
+#define classof(p) (ispointer(p)?classtab[(p)->cix].def:(pointer)error(E_NOOBJECT))
 #define subcixof(p) (classtab[(p)->cix].subcix)
 #define speval(p) ((p)->c.sym.speval)
 #define spevalof(p,x) (ctx->specials->c.vec.v[x])
