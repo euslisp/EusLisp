@@ -381,6 +381,7 @@ pointer argv[];
   if (!iscons(a)) {
     if (a==NIL) return(NIL);
     else error(E_NOLIST); }
+  if (n<0) error(E_USER,(pointer)"The second argument must be non-negative number");
   while (iscons(a)) { ckpush(ccar(a)); a=ccdr(a); count++;}
   n=min(count,n);
   ctx->vsp -= n;
@@ -398,6 +399,7 @@ pointer argv[];
   if (!iscons(a)) {
     if (a==NIL) return(NIL);
     else error(E_NOLIST); }
+  if (n<0) error(E_USER,(pointer)"The second argument must be non-negative number");
   while (iscons(a)) { ckpush(a); a=ccdr(a); count++;}
   n=min(count,n);
   b= *(ctx->vsp - n - 1);
