@@ -11,6 +11,6 @@ manual2:
 #	latex manual ; dvi2ps manual.dvi >manual.ps
 
 html:
-	 latex2html -dir ../html/ -local_icons -auto_prefix -iso_language JP manual
+	 latex2html -dir ../html/ -local_icons -split +3 -auto_prefix -iso_language JP manual
 
 
