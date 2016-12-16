@@ -22,8 +22,8 @@ distclean: clean
 	rm -f *.dvi *.pdf
 
 html:
-	charset="UTF-8" latex2html -dir ../html/ -local_icons -auto_prefix -iso_language JP jmanual
-	(cd ../html; sed -i 's@</TITLE>@</TITLE>\n<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">@' j*.html)
+	charset="UTF-8" latex2html -dir ../html/ -local_icons -split +3 -auto_prefix -init_file ../latex/.latex2html-init -iso_language JP jmanual
+	(cd ../html; sed -i 's@"jmanual.css"@"manual.css"@' j*.html)
 
 
 
