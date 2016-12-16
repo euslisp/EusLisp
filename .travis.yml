@@ -67,5 +67,16 @@ script:
 after_failure:
   - echo "failure"
 after_success:
-  - (cd eus/doc/latex;  make)
-  - (cd eus/doc/jlatex; make)
+  - sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils
+  - (cd doc/latex;  make; make html)
+  - (cd doc/jlatex; make; make html)
+deploy:
+  skip_cleanup: true
+  on:
+    tags: true
+after_deploy:
+  - echo "OK"
+  - if [ "$DOCKER_IMAGE" == "ubuntu:trusty" ]; then git config --global user.email k-okada@jsk.t.u--tokyo.ac.jp; fi
+  - if [ "$DOCKER_IMAGE" == "ubuntu:trusty" ]; then git config --global user.name "Kei Okada"; fi
+  - if [ "$DOCKER_IMAGE" == "ubuntu:trusty" ]; then git clone --branch gh-pages https://github.com/$TRAVIS_REPO_SLUG gh-pages;     fi
+  - if [ "$DOCKER_IMAGE" == "ubuntu:trusty" ]; then cd gh-pages; git rm -f *; cp $CI_SOURCE_PATH/doc/html/* ./; git add -f .; git commit -m "Build documents from $TRAVIS_TAG@$TRAVIS_COMMIT" .; git push --quiet https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git gh-pages; fi
