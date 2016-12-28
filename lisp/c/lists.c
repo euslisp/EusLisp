@@ -204,10 +204,10 @@ register pointer argv[];
   r=argv[--n];
   while (n>0) {
     a=argv[--n];
-    if (islist(a)) {
-      i=0;
-      while (islist(a)) { ckpush(ccar(a)); a=ccdr(a); i++;}
-      while (i-->0) r=cons(ctx,vpop(),r);}}
+    if (!islist(a) && a != NIL) error(E_NOLIST);
+    i=0;
+    while (islist(a)) { ckpush(ccar(a)); a=ccdr(a); i++;}
+    while (i-->0) r=cons(ctx,vpop(),r);}
   return(r);}
 
 pointer NCONC(ctx,n,argv)
