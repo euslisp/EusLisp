@@ -67,7 +67,41 @@ script:
 after_failure:
   - echo "failure"
 after_success:
-  - (cd eus/doc/latex;  make)
-  - (cd eus/doc/jlatex; make)
-  - (cd eus/doc/html;   make)
-  - cd eus/doc/html
+  - sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils
+  - (cd doc/latex;  make; make html)
+  - (cd doc/jlatex; make; make html)
+  - git checkout doc/html/index.html # do not overwrite
+deploy:
+  provider: releases
+  api_key: "$GH_TOKEN"
+  file:
+    - doc/latex/manual.pdf
+    - doc/jlatex/jmanual.pdf
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: "$DOCKER_IMAGE = ubuntu:trusty"
+after_deploy:
+  # set user info
+  - git config --global user.email k-okada@jsk.t.u-tokyo.ac.jp
+  - git config --global user.name "Kei Okada"
+  # recover from detached
+  - git remote add upstream https://github.com/$TRAVIS_REPO_SLUG
+  - git fetch --all
+  - git checkout -b $(git name-rev --name-only $(git rev-parse $TRAVIS_BRANCH) | sed 's@remotes/upstream/@@')
+  # send doc to current repo
+  - git rm -f doc/{latex,jlatex,html}/*.{pdf,ps,dvi,html,png}
+  - git add doc/{latex,jlatex}/*.{pdf,ps,dvi} doc/html/*.{html,png}
+  - git status
+  - git branch
+  - git commit -m "Build documents from $TRAVIS_TAG@$TRAVIS_COMMIT" doc/
+  - git push https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git $(git rev-parse --abbrev-ref HEAD)
+  # send html to gh-pages
+  - git clone --branch gh-pages https://github.com/$TRAVIS_REPO_SLUG gh-pages
+  - cd gh-pages
+  - git rm -f *
+  - cp $CI_SOURCE_PATH/doc/html/* ./
+  - git add -f .
+  - git commit -m "Build documents from $TRAVIS_TAG@$TRAVIS_COMMIT" .
+  - git push https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git gh-pages
+
