@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Atoms</TITLE>
-<META NAME="description" CONTENT="Atoms">
+<TITLE>Geometric Functions</TITLE>
+<META NAME="description" CONTENT="Geometric Functions">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,60 +20,2434 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="manual-node19.html">
 <LINK REL="previous" HREF="manual-node17.html">
-<LINK REL="up" HREF="manual-node17.html">
+<LINK REL="up" HREF="manual-node15.html">
 <LINK REL="next" HREF="manual-node19.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html659"
-  HREF="manual-node19.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html653"
-  HREF="manual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html647"
-  HREF="manual-node17.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html655"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html657"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html660"
-  HREF="manual-node19.html">Scoping</A>
-<B> Up:</B> <A NAME="tex2html654"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Previous:</B> <A NAME="tex2html648"
-  HREF="manual-node17.html">Forms and Evaluation</A>
- &nbsp; <B>  <A NAME="tex2html656"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html658"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html832"
+  HREF="manual-node19.html">Geometric Modeling</A>
+<B>Up:</B> <A NAME="tex2html826"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html820"
+  HREF="manual-node17.html">Multithread</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03021000000000000000">
-Atoms</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html833"
+  HREF="manual-node18.html#SECTION03031000000000000000">Float-vectors</A>
+<LI><A NAME="tex2html834"
+  HREF="manual-node18.html#SECTION03032000000000000000">Matrix and Transformation</A>
+<LI><A NAME="tex2html835"
+  HREF="manual-node18.html#SECTION03033000000000000000">LU decomposition</A>
+<LI><A NAME="tex2html836"
+  HREF="manual-node18.html#SECTION03034000000000000000">Coordinates</A>
+<LI><A NAME="tex2html837"
+  HREF="manual-node18.html#SECTION03035000000000000000">CascadedCoords</A>
+<LI><A NAME="tex2html838"
+  HREF="manual-node18.html#SECTION03036000000000000000">Relationship between transformation matrix and coordinates class</A>
+<LI><A NAME="tex2html839"
+  HREF="manual-node18.html#SECTION03037000000000000000">Getter method for rotation matrix and position</A>
+<UL>
+<LI><A NAME="tex2html840"
+  HREF="manual-node18.html#SECTION03037100000000000000">Methods for transforming vectors</A>
+<LI><A NAME="tex2html841"
+  HREF="manual-node18.html#SECTION03037200000000000000">Methods returing coordinates without modifying itself</A>
+<LI><A NAME="tex2html842"
+  HREF="manual-node18.html#SECTION03037300000000000000">Methods modifying itself</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03030000000000000000">
+Geometric Functions</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION03031000000000000000">
+Float-vectors</A>
 </H2>
 
 <P>
-A data object other than a cons is always an atom, no matter what complex
-structure it may have.
-Note that NIL, which is sometimes noted as () to represent an empty
-list, is also an atom.
-Every atom except a symbol is always evaluated to itself,
-although quoting is required in some other Common Lisp implementations.
+A float-vector is a simple vector whose elements are specialized to
+floating point numbers.
+A float-vector can be of any size.
+When <EM>result</EM> is specified in an argument list,
+it should be a float-vector that holds the result.
 
 <P>
-<BR><HR>
-<ADDRESS>
 
-2016-03-23
+ <BR>
+<BR> <P>
+
+<A NAME="27268"></A>
+<B>float-vector</B> <EM>&amp;rest numbers </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new float-vector whose elements are <EM>numbers</EM>.
+Note the difference between <TT>(float-vector 1 2 3)</TT> and <TT>#F(1 2 3)</TT>.
+While the former create a vector each time it is called, the latter
+does when it is read.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27281"></A>
+<B>float-vector-p</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>obj</EM> is a float-vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27292"></A>
+<B>v+</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+adds two float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27302"></A>
+<B>v-</B> <EM>fltvec1 &amp;optional fltvec2  result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+subtract float-vectors. If fltvec2 is omitted, fltvec1 is negated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27312"></A>
+<B>v.</B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> computes the inner product of two float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27322"></A>
+<B>v*</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the outer product of two float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27332"></A>
+<B>v.*</B> <EM>fltvec1 fltvec2 fltvec3 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the scaler triple product [A,B,C]=(V. A (V* B C))=(V. (V* A B) C).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27342"></A>
+<B>v<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img6.png"
+ ALT="$ &lt;$"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if every element of fltvec1 is smaller  than
+the corresponding element of fltvec2.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27352"></A>
+<B>v<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img13.png"
+ ALT="$ &gt;$"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if every element of fltvec1 is larger than
+the corresponding element of fltvec2.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27362"></A>
+<B>vmin</B> <EM>&amp;rest fltvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the smallest values for each dimension in <EM>fltvec</EM>,
+and makes a float-vector from the values.
+<B>Vmin</B> and <B>vmax</B> are used to find the minimal bounding box
+from coordinates of vertices.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27375"></A>
+<B>vmax</B> <EM>&amp;rest fltvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the greatest values for each dimension in <EM>fltvec</EM>,
+and makes a float-vector from the values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27386"></A>
+<B>minimal-box</B> <EM>v-list minvec maxvec [err] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the minimal bounding box for a given vertex-list,
+and stores results in <EM>minvec</EM> and <EM>maxvec</EM>.
+If a floating number err is specified, the minimal box is grown
+by the ratio, i.e. if the err is 0.01, each element of minvec is decreased
+by 1% of the distance between minvec and maxvec,
+and each element of maxvec is increased by 1%.
+<B>Minimal-box</B> returns the distance between minvec and maxvec.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27399"></A>
+<B>scale</B> <EM>number fltvec &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+the scaler <EM>number</EM> is multiplied to the every element of fltvec.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27410"></A>
+<B>norm</B> <EM>fltvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> <SPAN CLASS="MATH"><IMG
+ WIDTH="56" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img40.png"
+ ALT="$ \vert fltvec\vert$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27420"></A>
+<B>norm2</B> <EM>fltvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> <!-- MATH
+ $|fltvec|^2=({\bf v.} fltvec fltvec)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="197" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img41.png"
+ ALT="$ \vert fltvec\vert^2=({\bf v.} fltvec fltvec)$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27431"></A>
+<B>normalize-vector</B> <EM>fltvec [result] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+normalizes <EM>fltvec</EM> to have the norm 1.0.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27442"></A>
+<B>distance</B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the distance <!-- MATH
+ $|fltvec-fltvec2|$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="127" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img42.png"
+ ALT="$ \vert fltvec-fltvec2\vert$"></SPAN> between two float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27452"></A>
+<B>distance2</B> <EM>fltvec1 fltvec2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $|fltvec-fltvec2|^2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="134" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img43.png"
+ ALT="$ \vert fltvec-fltvec2\vert^2$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27462"></A>
+<B>homo2normal</B> <EM>homovec &amp;optional normalvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A homogeneous vector <EM>homovec</EM> is converted to its normal representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27473"></A>
+<B>homogenize</B> <EM>normalvec &amp;optional homovec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A normal vector <EM>normalvec</EM> is converted to its homogenous representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27484"></A>
+<B>midpoint</B> <EM>p p1 p2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>P</EM> is float, and <EM>p1</EM> and <EM>p2</EM> are float-vectors of the same
+dimension.
+A point <!-- MATH
+ $(1-p) p1 + p p2$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="112" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img44.png"
+ ALT="$ (1-p) p1 + p p2$"></SPAN>, which is the point
+that breaks <EM>p1-p2</EM> by the ratio <SPAN CLASS="MATH"><IMG
+ WIDTH="74" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img45.png"
+ ALT="$ p:(1-p)$"></SPAN>, is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27498"></A>
+<B>rotate-vector</B> <EM>fltvec theta axis &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+rotates 2D or 3D <EM>fltvec</EM> by <EM>theta</EM> radian around <EM>axis</EM>.
+<EM>Axis</EM> can be one of <EM>:x, :y, :z, 0, 1, 2</EM> or NIL.
+When <EM>axis</EM> is NIL, <EM>fltvec</EM> is taken to be two dimensional.
+To rotate a vector around an arbitrary axis in 3D space, 
+make a rotation matrix by the <B>rotation-matrix</B> function and
+multiply it to the vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03032000000000000000">
+Matrix and Transformation</A>
+</H2>
+
+<P>
+A matrix is a two-dimensional array whose elements are all floats.
+In most functions a matrix can be of any size,
+but the <B>v*, v.*</B>, <B>Euler-angle</B> and <B>rpy-angle</B> functions
+can only handle three dimensional matrices.
+<B>Transform, m*</B> and <B>transpose</B> do not restrict
+the matrices to be square,
+and they operate on general n*m size matrices.
+
+<P>
+Functions that can accept result parameter
+places the computed result there, and no heap is wasted.
+All matrix functions are intended for the transformation in the normal
+coordinate systems, and not in the homogeneous coordinates.
+
+<P>
+The <B>rpy-angle</B> function decomposes a rotation matrix into three components
+of rotation angles around z, y and x axes of the world coordinates.
+The <B>Euler-angle</B> function is similar to <B>rpy-angle</B> but
+decomposes into rotation angles around local z, y and again z axes.
+Both of these functions return two solutions since angles can be
+taken in the opposite directions.
+
+<P>
+<PRE>
+; Mat is a 3X3 rotation matrix.
+(setq rots (rpy-angle mat))
+(setq r (unit-matrix 3))
+(rotate-matrix r (car rots) :x t r)
+(rotate-matrix r (cadr rots) :y t r)
+(rotate-matrix r (caddr rots) :z t r)
+;--&gt; resulted r is equivalent to mat
+</PRE>
+
+<P>
+To keep track of pairs of a position and a orientation in 3D space, use
+the <B>coordinates</B> and <B>cascaded-coords</B> classes
+detailed in the section <A HREF="#Coordinates">15.4</A>.
+
+<P>
+
+ <BR>
+<BR> <A NAME="27516"></A>
+<B>matrix</B> <EM>&amp;rest elements </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new matrix from <EM>elements</EM>.
+Row x Col = (number of elements) x (length of the 1st element).
+Each of <EM>elements</EM> can be of any type of sequence.
+Each sequence is lined up as a row vector in the matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27528"></A>
+<B>make-matrix</B> <EM>rowsize columnsize &amp;optional init </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a matrix of <!-- MATH
+ $rowsize \times columnsize$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="160" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img46.png"
+ ALT="$ rowsize \times columnsize$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27538"></A>
+<B>matrixp</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>obj</EM> is a matrix, i.e. <EM>obj</EM> is a two dimensional array
+and its elements are floats.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27550"></A>
+<B>matrix-row</B> <EM>mat row-index </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts a row vector out of matrix <EM>mat</EM>.
+<B>matrix-row</B> is also used to set a vector in a particular row
+of a matrix using in conjunction with <B>setf</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27563"></A>
+<B>matrix-column</B> <EM>mat column-index </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts a column vector out of <EM>mat</EM>.
+<B>matrix-column</B> is also used to set a vector in a particular
+column of a matrix using in conjunction with <B>setf</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27576"></A>
+<B>m*</B> <EM>matrix1 matrix2 &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+concatenates <EM>matrix1</EM> and <EM>matrix2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27588"></A>
+<B>transpose</B> <EM>matrix &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+transposes <EM>matrix</EM>, i.e. columns of <EM>matrix</EM> are exchanged with
+<EM>rows</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27601"></A>
+<B>unit-matrix</B> <EM>dim </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an identity matrix of <EM>dim</EM> <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img47.png"
+ ALT="$ \times$"></SPAN> <EM>dim</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27613"></A>
+<B>replace-matrix</B> <EM>dest src </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+replaces all the elements of dest matrix with ones of src matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27623"></A>
+<B>scale-matrix</B> <EM>scalar mat </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies <EM>scaler</EM> to all the elements of <EM>mat</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27635"></A>
+<B>copy-matrix</B> <EM>matrix </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a copy of <EM>matrix</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27646"></A>
+<B>transform</B> <EM>matrix fltvector &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies <EM>matrix</EM> to <EM>fltvector</EM> from the left.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27658"></A>
+<B>transform</B> <EM>fltvector matrix &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies <EM>matrix</EM> to <EM>fltvector</EM> from the right.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27670"></A>
+<B>rotate-matrix</B> <EM>matrix theta axis &amp;optional world-p result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies a rotation matrix from the left (when world-p is non-nil)
+or from the right (when world-p is nil).
+When a matrix is rotated by <B>rotate-matrix</B>,
+the rotation axis <B>:x, :y, :z</B> or 0,1,2
+may be taken either in the world coordinates or in the local coordinates.
+If <EM>world-p</EM> is specified nil, it means rotation along the
+axis in the local coordinate system and the rotation matrix is multiplied
+from the right.
+Else if worldp is non-nil, the rotation is made in the
+world coordinates and the rotation matrix is multiplied from the left.
+If NIL is given to <EM>axis</EM>, <EM>matrix</EM> should be two dimensional and
+the rotation is taken in 2D space where <EM>world-p</EM> does not make sense.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27686"></A>
+<B>rotation-matrix</B> <EM>theta axis &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a 2D or 3D rotation matrix around <EM>axis</EM> which can be any of
+:x, :y, :z, 0, 1, 2, a 3D float-vector or NIL.
+When you make a 2D rotation matrix, axis should be NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27697"></A>
+<B>rotation-angle</B> <EM>rotation-matrix </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts a equivalent rotation axis and angle from <EM>rotation-matrix</EM>
+and a list of float and float-vector is returned.
+NIL is returned when <EM>rotation-matrix</EM> is a unit-matrix.
+Also if the rotation angle is too small, the result may have errors.
+When <EM>rotation-matrix</EM> is 2D,  the single angle value is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27710"></A>
+<B>rpy-matrix</B> <EM>ang-z ang-y ang-x </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a rotation matrix defined by roll-pitch-yaw angles.
+First, a unit-matrix is rotated by ang-x radian along X-axis.
+Next, ang-y around Y-axis and finally ang-z around Z-axis.
+All the rotation axes are taken in the world coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27720"></A>
+<B>rpy-angle</B> <EM>matrix </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts two triplets of roll-pitch-yaw angles of <EM>matrix</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27731"></A>
+<B>Euler-matrix</B> <EM>ang-z ang-y ang2-z </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a rotation matrix defined by three Euler angles.
+First, a unit-matrix is rotated <EM>ang-z</EM> around Z-axis, next, <EM>ang-y</EM>
+around Y-axis and finally <EM>ang2-z</EM> again around Z-axis.
+All the rotation axes are taken in the local coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27744"></A>
+<B>Euler-angle</B> <EM>matrix </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+extracts two tuples of Euler angles.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03033000000000000000">
+LU decomposition</A>
+</H2>
+<B>lu-decompose</B> and <B>lu-solve</B> are provided to solve
+simultaneous linear equations.
+First, <B>lu-decompose</B> decomposes a matrix into a lower triangle matrix
+and an upper triable matrix.
+If the given matrix is singular, <B>LU-decompose</B> returns NIL, otherwise
+it returns the permutation vector which should be supplied to <B>LU-solve</B>.
+<B>Lu-solve</B> computes the solution for a LU matrix with a given constant vector.
+This method is efficient if solutions for many combinations 
+of different constant vectors and the same factor matrix are required.
+<B>Simultaneous-equation</B> would be  more handy when you wish to get
+only one solution.
+<B>Lu-determinant</B> computes a determinant of a lu-decomposed matrix.
+<B>Inverse-matrix</B> function computes an inverse matrix using <B>lu-decompose</B>
+once, and <B>lu-solve</B> n times.
+Computation time for a 3*3 matrix is estimated to be 4 milli-sec.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="27754"></A>
+<B>lu-decompose</B> <EM>matrix &amp;optional result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+performs lu-decomposition of <EM>matrix</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27765"></A>
+<B>lu-solve</B> <EM>lu-mat perm-vector bvector [result] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+solves a linear simultaneous equations which has already been lu-decomposed.
+<EM>perm-vector</EM> should be the result returned by <B>lu-decompose</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27777"></A>
+<B>lu-determinant</B> <EM>lu-mat perm-vector </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the determinant value for a matrix which has already been 
+lu-decomposed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27787"></A>
+<B>simultaneous-equation</B> <EM>mat vec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+solves a linear simultaneous equations whose coefficients are described in
+<EM>mat</EM> and constant values in <EM>vec</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27799"></A>
+<B>inverse-matrix</B> <EM>mat </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes the inverse matrix of the square matrix, <EM>mat</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27810"></A>
+<B>pseudo-inverse</B> <EM>mat </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the pseudo inverse matrix using the singular value decomposition.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION03034000000000000000"></A><A NAME="Coordinates"></A>
+<BR>
+Coordinates
+</H2>
+
+<P>
+Coordinate systems and their transformations are represented by
+the <B>coordinates</B> class.
+Instead of 4*4 (homogeneous) matrix representation,
+coordinate system in EusLisp is represented by a combination of
+a 3*3 rotation matrix and a 3D position vector
+mainly for speed and generality.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="27821"></A>
+<BIG CLASS="XLARGE"><B>coordinates </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 (pos :type float-vector 
+<BR>
+rot :type array) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a coordinate system with a pair of a position vector and a 3x3
+rotation matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27838"></A>
+<B>coordinates-p</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T when obj is an instance of coordinates class or its subclasses.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27848"></A>
+<B>:rot</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the 3X3 rotation matrix of this coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27858"></A>
+<B>:pos</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the 3-D position vector of this coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27868"></A>
+<B>:newcoords</B> <EM>newrot &amp;optional newpos </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+updates the coords with newrot and newpos. Whenever a condition that changes
+the state of this coords occurs,
+this method should be called with the new rotation
+matrix and the position vector.
+This message may invoke another :update method to propagate the event.
+If newpos is not given, newrot is given as a instance of coordinate class.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27878"></A>
+<B>:replace-coords</B> <EM>newrot &amp;optional newpos </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the rot and pos slots to be updated without calling newcoords method.
+If newpos is not given, newrot is given as a instance of coordinate class.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27888"></A>
+<B>:coords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27899"></A>
+<B>:copy-coords</B> <EM>&amp;optional dest </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If dest is not given, :copy-coords makes another coordinates object
+which has the same rot and pos slots. If dest is given, rot and pos of
+this coordinates is copied to the dest coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27909"></A>
+<B>:reset-coords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forces the rotation matrix of this coords to be identity matrix, and pos
+vector to be all zero.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27919"></A>
+<B>:worldpos</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27930"></A>
+<B>:worldrot</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27941"></A>
+<B>:worldcoords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes the position vector, the rotation matrix and the coordinates
+of this object represented in the world coordinates. The coordinates class
+is always assumed to be represented in world, these method can simply return
+pos, rot and self.  These methods are provided for the compatibility with
+cascaded-coords class which cannot be assumed to be represented in world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27951"></A>
+<B>:copy-worldcoords</B> <EM>&amp;optional dest </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+First, worldcoords is computed, and it is copied to dest. If no dest
+is specified, a coordinates object to store the result is newly created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27961"></A>
+<B>:rotate-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A vector is rotated by the rotation of this coords, i.e., an orientation
+vector represented in this coords is converted to the representation
+in the world.
+The position of this coords does not affect rotation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27971"></A>
+<B>:transform-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A vector in this local coords is transformed to the representation in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27981"></A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A vector in the world is inversely transformed to the representation in this
+local coordinate system.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27991"></A>
+<B>:transform</B> <EM>trans &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Transform this coords by the trans represented in wrt coords.
+Trans must be of type coordinates, and wrt must be one of keywords
+<TT>:local, :parent, :world</TT> or an instance of coordinates.
+If wrt is <TT>:local</TT>, the trans is applied from the right to this coords,
+and if wrt is <TT>:world</TT> or <TT>:parent</TT>,
+the trans is multiplied from the left.
+Else, if wrt is of type coordinates, the trans represented in the wrt
+coords is first transformed to the representation in the world, and  it
+is applied from the left.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28005"></A>
+<B>:move-to</B> <EM>trans &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Replaces the rot and pos of the coords with trans represented in wrt.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28015"></A>
+<B>:translate</B> <EM>p &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the position of this object
+relatively with respective to wrt coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28025"></A>
+<B>:locate</B> <EM>p &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Changes the location of this coords with the parameter represented in wrt.
+If wrt is <TT>:local</TT>, then the effect is identical to 
+<B>:translate</B> with <EM>wrt</EM>=<TT>:local</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28039"></A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Rotates this coords relatively by <EM>theta</EM> radian around the <EM>axis</EM>.
+<EM>Axis</EM> is one of axis-keywords (<TT>:x, :y</TT> and <TT>:z</TT>) or an arbitrary float-vector.
+<EM>Axis</EM> is considered to be represented in the <EM>wrt</EM> coords.
+Thus, if <EM>wrt</EM>=<TT>:local</TT> and <EM>axis</EM>=<TT>:z</TT>,
+the coordinates is rotated around the z
+axis of this local coords, and <EM>wrt</EM>=<TT>:world</TT> or <TT>:parent</TT>,
+the coords is rotated around the z axis of world coords.
+In other words, if <EM>wrt</EM>=<TT>:local</TT>,
+a rotation matrix is multiplied from the right of this coords,
+and if <EM>wrt</EM>=<TT>:world</TT> or <TT>:parent</TT>,
+a rotation matrix is multiplied from the left.
+Note that even <EM>wrt</EM> is either <TT>:world</TT> or <TT>:parent</TT>,
+the <EM>pos</EM> vector of this coordinates does not change.
+For the true rotation around the world axis,
+an instance of coordinates class representing the
+rotation should be given to <B>:transform</B> method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28073"></A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forces setting rot.
+This is an absolute version of :<B>rotate</B> method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28084"></A>
+<B>:inverse-transformation</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a new coords that is inverse to self.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28094"></A>
+<B>:transformation</B> <EM>coords (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes the transformation (an instance of coordinates) between this coords
+and the coords given as the argument.
+If <EM>wrt</EM>=<TT>:local</TT>,
+the result is represented in local coords,
+i.e., if the resulted transformation is given
+as an argument to :transform with <EM>wrt</EM>=<TT>:local</TT>,
+this coords is transformed
+to be identical with the coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28108"></A>
+<B>:Euler</B> <EM>az1 ay az2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets rot with Euler angles, that are,
+rotation angles around z (<EM>az1</EM>,
+y (<EM>ay</EM>) and again z <EM>az2</EM> axis of
+this local coordinates system.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28121"></A>
+<B>:roll-pitch-yaw</B> <EM>roll pitch yaw </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets rot with roll-pitch-yaw angles:
+rotation angles around x (<EM>yaw</EM>), y (<EM>pitch</EM>) and z (<EM>roll</EM>)
+axes of the world coordinate system.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28134"></A>
+<B>:4x4</B> <EM>&amp;optional mat44 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If a matrix of 4x4 is given as <EM>mat44</EM>,
+it is converted to coordinates representation with a 3x3 rotation matrix and
+a 3D position vector.
+If <EM>mat44</EM> is not given, this coordinates is converted to 4x4
+matrix representation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28146"></A>
+<PRE><TT>
+<B>:init</B> <I>&amp;key :pos   #f(0 0 0) [method] 
+<BR>:rot 		 #2f((1 0 0) (0 1 0) (0 0 1)) 
+<BR>:rpy 		 roll pitch yaw 
+<BR>:Euler 		 az ay az2 
+<BR>:axis 		  rotation-axis 
+<BR>:angle 		 rotation-angle 
+<BR>:4X4 		 4x4 matrix 
+<BR>:coords 		 another coordinates 
+<BR>:properties 		  a list of (ind . value) pair 
+<BR>:name 		 name property 
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>initializes this coordinates object and sets rot and pos.
+The meaning of each keyword follows:
+<DL>
+<DT><STRONG>:dimension</STRONG></DT>
+<DD>2 or 3 (default is 3)
+</DD>
+<DT><STRONG>:pos</STRONG></DT>
+<DD>specifies a position vector (defaulted to #f(0 0 0))
+</DD>
+<DT><STRONG>:rot</STRONG></DT>
+<DD>specifies a rotation matrix (defaulted to a unit-matrix)
+</DD>
+<DT><STRONG>:Euler</STRONG></DT>
+<DD>gives a sequence of three elements for Euler angles
+</DD>
+<DT><STRONG>:rpy</STRONG></DT>
+<DD>gives a sequence of three elements for roll-pitch-yaw
+</DD>
+<DT><STRONG>:axis</STRONG></DT>
+<DD>rotation axis (:x,:y,:z or an arbitrary float-vector)
+</DD>
+<DT><STRONG>:angle</STRONG></DT>
+<DD>rotation angle (used with :axis)
+</DD>
+<DT><STRONG>:wrt</STRONG></DT>
+<DD>where the rotation axis is taken (default is :local)
+</DD>
+<DT><STRONG>:4X4</STRONG></DT>
+<DD>4X4 matrix is used to specify both pos and rot
+</DD>
+<DT><STRONG>:coords</STRONG></DT>
+<DD>copies pos and rot from coords
+</DD>
+<DT><STRONG>:name</STRONG></DT>
+<DD>set :name property 
+</DD>
+</DL>
+<TT>:Angle</TT> can only be used in conjunction with the <TT>:axis</TT>
+that is determined in the <TT>:wrt</TT> coordinates.
+Without regard to <TT>:wrt</TT>, <TT>:Euler</TT> always specifies
+the Euler angles, <EM>az1, ay</EM> and <EM>az2</EM>, 
+defined in the local coordinates,
+and <TT>:rpy</TT> specifies the angles around
+<EM>z</EM>, <EM>y</EM> and <EM>x</EM> axes of the world coordinates.
+Two or more of <TT>:rot, :Euler, :rpy, :axis</TT> and <TT>:4X4</TT>
+cannot be specified simultaneously, although no error is reported.
+Sequences can be supplied to the <TT>:axis</TT> and <TT>:angle</TT> parameters,
+which mean successive rotations around the given axes.
+List of pairs of an attribute and its value can be given as <TT>:properties</TT>
+argument. These pairs are copied in the plist of this coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION03035000000000000000">
+CascadedCoords</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="28177"></A>
+<BIG CLASS="XLARGE"><B>cascaded-coords </B></BIG> [class]  <PRE><TT>
+  :super   <B>coordinates</B> 
+<BR>  :slots 		 (parent descendants worldcoords manager changed) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a linked coordinates. <B>Cascaded-coords</B> is often abbreviated
+as <A NAME="28196"></A><B>c</B>ascoords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28198"></A>
+<B>:inheritance</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the inheritance tree list describing all the descendants of the
+cascoords.
+If <TT>a</TT> and <TT>b</TT> are the direct descendants of this coords,
+and <TT>c</TT> is a descendant of <TT>a</TT>, <TT>((a (c)) (b))</TT> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28213"></A>
+<B>:assoc</B> <EM>childcoords &amp;optional relative-coords </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>childcoords</EM> is associated to this cascoords as a descendant.
+If childcoords has been already assoc'ed to some other cascoords, first
+childcoords is dissoc'ed since each cascoords can have only one parent.
+The orientation or location of childcoords in the world does not change.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28224"></A>
+<B>:dissoc</B> <EM>childcoords </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+dissociates (removes) <EM>childcoords</EM> from the descendants list of this coords.
+The orientation or location of childcoords in the world does not change.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28235"></A>
+<B>:changed</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+informs this coords that the coordinates of parent has changed,
+and the re-computation of worldcoords is needed when it is requested later.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28245"></A>
+<B>:update</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is called by the <B>:worldcoords</B> method
+to recompute the current worldcoord.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28256"></A>
+<B>:worldcoords</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a coordinates object which represents this coord in the world
+by concatenating all the cascoords from the root to this coords.
+The result is held in this object and reused later.
+Thus, you should not modify the resulted coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28266"></A>
+<B>:worldpos</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns rot of this coordinates represented in
+the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28276"></A>
+<B>:worldrot</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns pos of this coordinates represented in
+the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28286"></A>
+<B>:transform-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Regarding <EM>vec</EM> represented in this local coords,
+transforms it to the representation in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28297"></A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM> represented in the world is inversely transformed into the
+representation in this local coords.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28308"></A>
+<B>:inverse-transformation</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an instance of coordinates which represents inverse transformation
+of this coord.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28318"></A>
+<B>:transform</B> <EM>trans  &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28329"></A>
+<B>:translate</B> <EM>fltvec &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28340"></A>
+<B>:locate</B> <EM>fltvec &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28351"></A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28362"></A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Refer to the descriptions in class <B>coordinates</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28373"></A>
+<B>make-coords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28384"></A>
+<B>make-cascoords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28395"></A>
+<B>coords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28406"></A>
+<B>cascoords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis
+:4X4 :coords :name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+All these functions make new coordinates or cascaded-coordinates.
+For the keyword parameter, see <B>:init</B> method of class coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28417"></A>
+<B>transform-coords</B> <EM>coords1 coords2 &amp;optional (coords3 (coords)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Coords1 is applied (multiplied) to the coords2 from the left.
+The product is stored in coords3.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28427"></A>
+<B>transform-coords*</B> <EM>&amp;rest coords </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+concatenates transformations listed in <EM>coords</EM>.
+An instance of coordinates that represents the concatenated transformation
+is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28438"></A>
+<B>wrt</B> <EM>coords vec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+transforms <EM>vec</EM> into the representation in <EM>coords</EM>.
+The result is equivalent to
+<TT>(send <EM>coords</EM> :transform-vector <EM>vec</EM>)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION03036000000000000000">
+Relationship between transformation matrix and coordinates class</A>
+</H2>
+
+<P>
+Relationship between transformation matrix and coordinates class is described,
+where a transformation matrix T represents a <SPAN CLASS="MATH"><IMG
+ WIDTH="40" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img48.png"
+ ALT="$ 4\times4$"></SPAN>(homogeneous) matrix as below.
+<P><!-- MATH
+ \begin{displaymath}
+T = \begin{pmatrix}
+\mathbf{R}_T & \mathbf{p}_T \\
+\mathbf{0} & 1
+\end{pmatrix}
+\end{displaymath}
+ -->
+</P>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+<IMG
+ WIDTH="121" HEIGHT="54" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img49.png"
+ ALT="$\displaystyle T = \begin{pmatrix}
+\mathbf{R}_T &amp; \mathbf{p}_T \\
+\mathbf{0} &amp; 1
+\end{pmatrix}$">
+</DIV><P></P>
+
+<P>
+<!-- MATH
+ $\mathbf{R}_T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="28" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img50.png"
+ ALT="$ \mathbf{R}_T$"></SPAN> is a <SPAN CLASS="MATH"><IMG
+ WIDTH="40" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img51.png"
+ ALT="$ 3\times3$"></SPAN> matrix, and <!-- MATH
+ $\mathbf{p}_T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="25" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img52.png"
+ ALT="$ \mathbf{p}_T$"></SPAN> is a <SPAN CLASS="MATH"><IMG
+ WIDTH="40" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img53.png"
+ ALT="$ 3\times1$"></SPAN> matrix
+(a float-vector which has 3 elements in euslisp).
+Coordinates class has
+slot variables rot and pos. They are <!-- MATH
+ $\mathbf{R}_T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="28" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img50.png"
+ ALT="$ \mathbf{R}_T$"></SPAN> and <!-- MATH
+ $\mathbf{p}_T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="25" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img52.png"
+ ALT="$ \mathbf{p}_T$"></SPAN> respectively.
+
+<P>
+
+<H2><A NAME="SECTION03037000000000000000">
+Getter method for rotation matrix and position</A>
+</H2>
+
+<P>
+<!-- MATH
+ $\mathbf{R}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img54.png"
+ ALT="$ \mathbf{R}$"></SPAN> and <!-- MATH
+ $\mathbf{p}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img55.png"
+ ALT="$ \mathbf{p}$"></SPAN> can be obtained using methods of the coordinates class.
+
+<P>
+T is an instance of the coordinate class.
+
+<P>
+
+ <BR>
+<BR> <P>
+<B>(send T :rot)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img56.png"
+ ALT="$ \Rightarrow$"></SPAN> <!-- MATH
+ $\mathbf{R}_T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="28" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img50.png"
+ ALT="$ \mathbf{R}_T$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :pos)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img56.png"
+ ALT="$ \Rightarrow$"></SPAN> <!-- MATH
+ $\mathbf{p}_T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="25" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img52.png"
+ ALT="$ \mathbf{p}_T$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03037100000000000000">
+Methods for transforming vectors</A>
+</H3>
+
+<P>
+<!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img57.png"
+ ALT="$ \mathbf{v}$"></SPAN> is 3-D position vector.
+
+<P>
+
+ <BR>
+<BR> <P>
+<B>(send T :rotate-vector <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img57.png"
+ ALT="$ \mathbf{v}$"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img56.png"
+ ALT="$ \Rightarrow$"></SPAN> <!-- MATH
+ $\mathbf{R}_T \mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="38" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img58.png"
+ ALT="$ \mathbf{R}_T \mathbf{v}$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :inverse-rotate-vector <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img57.png"
+ ALT="$ \mathbf{v}$"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img56.png"
+ ALT="$ \Rightarrow$"></SPAN> <!-- MATH
+ $\mathbf{v}^T \mathbf{R}_T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="48" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img59.png"
+ ALT="$ \mathbf{v}^T \mathbf{R}_T$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :transform-vector <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img57.png"
+ ALT="$ \mathbf{v}$"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img56.png"
+ ALT="$ \Rightarrow$"></SPAN> <!-- MATH
+ $\mathbf{R}_T\mathbf{v} + \mathbf{p}_T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="78" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img60.png"
+ ALT="$ \mathbf{R}_T\mathbf{v} + \mathbf{p}_T$"></SPAN>
+
+<P>
+Converts a vector represented in a local coordinate system T
+to a vector represented in the world coordinate system.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :inverse-transform-vector <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img57.png"
+ ALT="$ \mathbf{v}$"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img56.png"
+ ALT="$ \Rightarrow$"></SPAN> <!-- MATH
+ $\mathbf{R}_T^{-1}\left( \mathbf{v} - \mathbf{p}_T \right)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="100" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img61.png"
+ ALT="$ \mathbf{R}_T^{-1}\left( \mathbf{v} - \mathbf{p}_T \right)$"></SPAN>
+
+<P>
+Converts a vector represented in the world coordinate system.
+to a vector represented in a local coordinate system T.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03037200000000000000">
+Methods returing coordinates without modifying itself</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <P>
+<B>(send T :inverse-transformation)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img56.png"
+ ALT="$ \Rightarrow$"></SPAN> <SPAN CLASS="MATH"><IMG
+ WIDTH="33" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img62.png"
+ ALT="$ T^{-1}$"></SPAN>
+
+<P>
+Returns inverse matrix.
+<P><!-- MATH
+ \begin{displaymath}
+T^{-1} = \begin{pmatrix}
+ \mathbf{R}_T^{-1} & -\mathbf{R}_T^{-1}\mathbf{p}_T \\
+ \mathbf{0} & 1
+\end{pmatrix}
+\end{displaymath}
+ -->
+</P>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+<IMG
+ WIDTH="188" HEIGHT="55" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img63.png"
+ ALT="$\displaystyle T^{-1} = \begin{pmatrix}
+\mathbf{R}_T^{-1} &amp; -\mathbf{R}_T^{-1}\mathbf{p}_T \\
+\mathbf{0} &amp; 1
+\end{pmatrix}$">
+</DIV><P></P>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :transformation A (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+when wrt == :local, <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img64.png"
+ ALT="$ T^{-1}A$"></SPAN> is returned.
+
+<P>
+when wrt == :world, <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img65.png"
+ ALT="$ AT^{-1}$"></SPAN> is returned.
+
+<P>
+when wrt == W (coordinates class), <!-- MATH
+ $W^{-1}AT^{-1}W$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="97" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img66.png"
+ ALT="$ W^{-1}AT^{-1}W$"></SPAN> is returned.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03037300000000000000">
+Methods modifying itself</A>
+</H3>
+
+<P>
+A is an instance of the coordinates class.
+
+<P>
+<!-- MATH
+ $\Leftrightarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img67.png"
+ ALT="$ \Leftrightarrow$"></SPAN> represents that
+slot variables (pos or rot) refer to a given instance (matrix or float vector).
+Please note that when one is changed, the other also reflects the change.
+
+<P>
+<!-- MATH
+ $\leftarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img68.png"
+ ALT="$ \leftarrow$"></SPAN> represents substitution.
+
+<P>
+
+ <BR>
+<BR> <P>
+<B>(send T :newcoords A)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\mathbf{R}_T \Leftrightarrow \mathbf{R}_A$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="77" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img69.png"
+ ALT="$ \mathbf{R}_T \Leftrightarrow \mathbf{R}_A$"></SPAN>
+
+<P>
+<!-- MATH
+ $\mathbf{p}_T \Leftrightarrow \mathbf{p}_A$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="70" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img70.png"
+ ALT="$ \mathbf{p}_T \Leftrightarrow \mathbf{p}_A$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :newcoords <!-- MATH
+ $\mathbf{R}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img54.png"
+ ALT="$ \mathbf{R}$"></SPAN> <!-- MATH
+ $\mathbf{p}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img55.png"
+ ALT="$ \mathbf{p}$"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\mathbf{R}_T \Leftrightarrow \mathbf{R}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="67" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img71.png"
+ ALT="$ \mathbf{R}_T \Leftrightarrow \mathbf{R}$"></SPAN>
+
+<P>
+<!-- MATH
+ $\mathbf{p}_T \Leftrightarrow \mathbf{p}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="60" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img72.png"
+ ALT="$ \mathbf{p}_T \Leftrightarrow \mathbf{p}$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :move-to A (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+when wrt == :local,<!-- MATH
+ $T \leftarrow TA$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="64" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img73.png"
+ ALT="$ T \leftarrow TA$"></SPAN>
+
+<P>
+when wrt == :world,<!-- MATH
+ $T \Leftrightarrow A$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="53" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img74.png"
+ ALT="$ T \Leftrightarrow A$"></SPAN>
+
+<P>
+when wrt == W (coordinates class), <!-- MATH
+ $T \leftarrow WA$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="70" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img75.png"
+ ALT="$ T \leftarrow WA$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :translate <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img57.png"
+ ALT="$ \mathbf{v}$"></SPAN> (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+when wrt == :local,
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T}\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="123" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img76.png"
+ ALT="$ \mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T}\mathbf{v}$"></SPAN>
+
+<P>
+when wrt == :world,
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="99" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img77.png"
+ ALT="$ \mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{v}$"></SPAN>
+
+<P>
+when wrt == W (coordinates class),
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{W}\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="127" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img78.png"
+ ALT="$ \mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{W}\mathbf{v}$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :locate <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img57.png"
+ ALT="$ \mathbf{v}$"></SPAN> (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+when wrt == :local,
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T} \mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="123" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img76.png"
+ ALT="$ \mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T}\mathbf{v}$"></SPAN>
+
+<P>
+when wrt == :world,
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="59" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img79.png"
+ ALT="$ \mathbf{p}_{T} \leftarrow \mathbf{v}$"></SPAN>
+
+<P>
+when wrt == W (coordinates class),
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{W} + \mathbf{R}_{W}\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="132" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img80.png"
+ ALT="$ \mathbf{p}_{T} \leftarrow \mathbf{p}_{W} + \mathbf{R}_{W}\mathbf{v}$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :transform A (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+when wrt == :local, <!-- MATH
+ $T \leftarrow TA$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="64" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img73.png"
+ ALT="$ T \leftarrow TA$"></SPAN>
+
+<P>
+when wrt == :world, <!-- MATH
+ $T \leftarrow AT$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="64" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img81.png"
+ ALT="$ T \leftarrow AT$"></SPAN>
+
+<P>
+when wrt == W (coordinates class), <!-- MATH
+ $T \leftarrow$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="36" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img82.png"
+ ALT="$ T \leftarrow$"></SPAN> <!-- MATH
+ $\left( WAW \right)^{-1} T$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="95" HEIGHT="40" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img83.png"
+ ALT="$ \left( WAW \right)^{-1} T$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html832"
+  HREF="manual-node19.html">Geometric Modeling</A>
+<B>Up:</B> <A NAME="tex2html826"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html820"
+  HREF="manual-node17.html">Multithread</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

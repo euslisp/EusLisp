@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Type Specifier</TITLE>
-<META NAME="description" CONTENT="Type Specifier">
+<TITLE>System Functions</TITLE>
+<META NAME="description" CONTENT="System Functions">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,107 +18,2756 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="manual.css">
 
+<LINK REL="next" HREF="manual-node17.html">
 <LINK REL="previous" HREF="manual-node15.html">
-<LINK REL="up" HREF="manual-node12.html">
+<LINK REL="up" HREF="manual-node15.html">
 <LINK REL="next" HREF="manual-node17.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html625"
-  HREF="manual-node17.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html619"
-  HREF="manual-node12.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html615"
-  HREF="manual-node15.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html621"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html623"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html626"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Up:</B> <A NAME="tex2html620"
-  HREF="manual-node12.html">Data Types</A>
-<B> Previous:</B> <A NAME="tex2html616"
-  HREF="manual-node15.html">Class Hierarchy</A>
- &nbsp; <B>  <A NAME="tex2html622"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html624"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html777"
+  HREF="manual-node17.html">Multithread</A>
+<B>Up:</B> <A NAME="tex2html771"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html765"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html778"
+  HREF="manual-node16.html#SECTION03011000000000000000">Memory Management</A>
+<LI><A NAME="tex2html779"
+  HREF="manual-node16.html#SECTION03012000000000000000">Unix System Calls</A>
+<UL>
+<LI><A NAME="tex2html780"
+  HREF="manual-node16.html#SECTION03012100000000000000">Times</A>
+<LI><A NAME="tex2html781"
+  HREF="manual-node16.html#SECTION03012200000000000000">Process</A>
+<LI><A NAME="tex2html782"
+  HREF="manual-node16.html#SECTION03012300000000000000">File Systems and I/O</A>
+<LI><A NAME="tex2html783"
+  HREF="manual-node16.html#SECTION03012400000000000000">Signals</A>
+<LI><A NAME="tex2html784"
+  HREF="manual-node16.html#SECTION03012500000000000000">Multithread</A>
+<LI><A NAME="tex2html785"
+  HREF="manual-node16.html#SECTION03012600000000000000">Low-Level Memory Management</A>
+<LI><A NAME="tex2html786"
+  HREF="manual-node16.html#SECTION03012700000000000000">IOCTL</A>
+<LI><A NAME="tex2html787"
+  HREF="manual-node16.html#SECTION03012800000000000000">Keyed Indexed Files</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html788"
+  HREF="manual-node16.html#SECTION03013000000000000000">Unix Processes</A>
+<LI><A NAME="tex2html789"
+  HREF="manual-node16.html#SECTION03014000000000000000">Adding Lisp Functions Coded in C</A>
+<LI><A NAME="tex2html790"
+  HREF="manual-node16.html#SECTION03015000000000000000">Foreign Language Interface</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03010000000000000000">
+System Functions</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION03011000000000000000">
+Memory Management</A>
+</H2>
+The design of  memory management scheme affects much to the flexibility and
+efficiency of object-oriented languages.
+EusLisp allocates memory to any sort of objects
+in a unified manner based on the <EM>Fibonacci buddy method</EM>.
+In this method, each of large memory pools called chunks is split into
+small cells which are unequally sized but aligned at Fibonacci numbers.
+A memory chunk is a homogeneous data container for any types of
+objects such as <TT>symbol, cons, string, float-vector</TT>, etc.
+as long as their sizes fit in the chunk.
+A chunk has no special attributes,
+like static, dynamic, relocatable, alternate, etc.
+EusLisp's heap memory is the collection of chunks, and 
+the heap can extend dynamically by getting new chunks from UNIX.
+The expansion occurs either automatically on the fly
+or on user's explicit demand by calling <B>system:alloc</B> function.
+When it is managed automatically, free memory size is kept
+about 25% of total heap size. This ratio can be changed by setting a value between 0.1 and 0.9 to
+the <B>sys:*gc-margin*</B> parameter.
+
+<P>
+When all the heap memory is exhausted, mark-and-sweep type garbage collection
+runs.
+Cells accessible from the root (packages, classes and stacks) remain at the
+same place where they were.
+Other inaccessible cells are reclaimed and linked to the free-lists.
+No copying or compactification occurs during GC.
+When a garbage cell is reclaimed, its neighbor is examined
+whether it is also free,
+and they are merged together to form a larger cell if possible.
+This merging, however, is sometimes meaningless,
+since <TT>cons</TT>, which is the most frequently called memory allocator,
+requests the merged cell to be divided to the smallest cell.
+Therefore, EusLisp allows to leave a particular amount of heap unmerged to speed up cons.
+This ratio is determined by <B>sys:*gc-merge*</B> parameter,
+which is set to 0.3 by default.
+With the larger <B>sys:*gc-merge*</B>, the greater portion of  heap is left unmerged.
+This improves the performance of consing,
+since buddy-cell splitting rarely occurs when conses are requested.
+This is also true for every allocation of relatively small cells,
+like three dimensional float-vectors.
+
+<P>
+<B>SYS:GC</B> invokes garbage collector explicitly, returning a list of two integers,
+numbers of free words and total words (not bytes) allocated in the heap.
+<B>SYS:*GC-HOOK*</B> is a variable to hold a function that is called upon the
+completion of a GC.  The hook function should receive two arguments
+representing the sizes of the free heap and the total heap.
+
+<P>
+If "fatal error: stack overflow" is reported during  execution,
+and you are convinced that the error is not caused by a infinite loop
+or recursion, 
+you can expand the size of the Lisp stack by <B>sys:newstack</B>.
+<B>reset</B> should be performed before <B>sys:newstack</B>,
+since it discards everything in the current stack such as
+special bindings and clean-up forms of <EM>unwind-protect</EM>.
+After a new stack is allocated, execution starts over from the point
+of printing the opening message.
+The default stack size is 65Kword.
+The Lisp stack is different from the system stack.
+The former is allocated in the heap, while the latter is allocated in
+the stack segment by the operating system.
+If you get "segmentation fault" error, it might be caused by the shortage
+of the system stack.
+You can increase the system stack size by the <TT>limit</TT> csh command.
+
+<P>
+<B>Sys:reclaim</B> and <B>sys:reclaim-tree</B> function put cells occupied by objects
+back to the memory manager, so that they can be reused later without
+invoking garbage collection.
+You must be assured that there remains no reference to the cell.
+
+<P>
+<B>memory-report</B> and <B>room</B> function display statistics on 
+memory usage sorted by cell sizes and classes respectively.
+
+<P>
+<B>address</B> returns the byte address of the object and is useful
+as a hash function when used with hash-table, since this address is
+unique in the process.
+
+<P>
+<B>Peek</B> and <B>poke</B> are the functions to read/write data directly
+from/to a memory location.
+The type of access should be either of
+<B>:char, :byte, :short, :long, :integer, :float</B> and <B>:double</B>.
+For an instance, <TT>(SYS:PEEK (+ 2 (SYS:ADDRESS '(a b))) :short)</TT>
+returns class id of a cons cell, normally 1.
+
+<P>
+There are  several functions prefixed with 'list-all-'.
+These functions returns the list of a system resource or environment,
+and are useful for dynamic debugging.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="21903"></A>
+<B>sys:gc</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+starts garbage collection, and returns a list of the numbers
+of free words and total words allocated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21913"></A>
+<B>sys:*gc-hook*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Defines a function that is called upon the completion of a GC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21923"></A>
+<B>sys:gctime</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of three integers: the count of gc invoked,
+the time elapsed for marking cells (in 1/60 sec. unit),
+and the time elapsed for reclamation (unmarking and merging).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21933"></A>
+<B>sys:alloc</B> <EM>size </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+allocates at least <EM>size</EM> words of memory in the heap,
+and returns the number of words really allocated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21944"></A>
+<B>sys:newstack</B> <EM>size </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+relinquishes the current stack,
+and allocates a new stack of <EM>size</EM> words.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21955"></A>
+<B>sys:*gc-merge*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is a memory management parameter.
+<B>*gc-merge*</B> is the ratio the ratio of heap memory  which is
+left unmerged at GC.
+This unmerged area will soon filled with smallest cells whose size is
+the same as a cons.
+The default value is 0.3.
+The larger values, like 0.4, which specifies 40% of free heap should be
+unmerged, favors for consing but do harm to instantiating
+bigger cells like float-vectors, edges, faces, etc.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21966"></A>
+<B>sys:*gc-margin*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is a memory management parameter.
+<B>*gc-margin</B> determines the ratio of
+free heap size versus the total heap.
+Memory is acquired from UNIX so that the free space does not go 
+below this ratio. The default value 0.25 means that 25% of free space is
+maintained at every GC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21977"></A>
+<B>sys:reclaim</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+relinquishes <EM>object</EM> as a garbage.
+It must be guaranteed that it is no longer referenced from any other objects.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21988"></A>
+<B>sys:reclaim-tree</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reclaims all the objects except symbols traversable from <EM>object</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="21999"></A>
+<B>sys:btrace</B> <EM>num </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints the back-trace information of <EM>num</EM> depth on the Lisp stack.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22010"></A>
+<B>sys:memory-report</B> <EM>&amp;optional strm </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints a table of memory usage report sorted by cell sizes
+to the <I>strm</I> stream.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22021"></A>
+<B>sys:room</B> <EM>output-stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+outputs memory allocation information ordered by classes.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22031"></A>
+<B>sys:address</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the address of <I>object</I> in the process memory space.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22042"></A>
+<B>sys:peek</B> <EM>[vector] address type </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads data at the memory location specified by <EM>address</EM>
+and returns it as an integer.
+<EM>type</EM> is one of <B>:char, :byte, :short, :long, :integer, :float</B>,
+and <B>:double</B>.
+If no <EM>vector</EM> is given,
+the address is taken in the unix's process space.
+For example, since the a.out header is located at <TT>#x2000</TT> on SunOS4,
+<TT>(sys:peek #x2000 :short)</TT> returns the magic number (usually <TT>#o403</TT>).
+Solaris2 locates the ELF header at <TT>#10000</TT>,
+and <TT>(sys:peek #x10000 :long)</TT> returns <TT>#xff454c46</TT> whose
+string representation is "ELF".
+
+<P>
+If <EM>vector</EM>, which can be a foreign-string,
+is specified, address is recognized as an offset
+from the vector's origin.
+<TT>(sys:peek "123456" 2 :short)</TT> returns short word
+representation of "34", namely #x3334 (13108).
+
+<P>
+Be careful about the address alignment:
+reading short, integer, long, float, double word
+at odd address may cause bus error by most CPU architectures.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22065"></A>
+<B>sys:poke</B> <EM>value [vector] address value-type </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes <I>value</I> at the location specified by <I>address</I>.
+Special care should be taken since
+you can write to anywhere in the process memory space.
+Writing to outside the process space surely causes segmentation fault.
+Writing short, integer, long, float, double word
+at odd address causes bus error.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22077"></A>
+<B>sys:list-all-chunks</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+list up all allocated heap chunks. Not useful for other than the implementor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22087"></A>
+<B>sys:object-size</B> <EM>obj </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+counts the number of cells and words accessible from <EM>obj</EM>.
+All the objects reference-able from obj are traversed,
+and a list of three numbers is returned:
+the number of cells, 
+the number of words logically allocated to these objects
+(i.e. accessible from users),
+and the number of words
+physically allocated including headers and extra slots for memory management.
+Traversing stops at symbols, i.e. objects referenced from a symbol such as
+property-list or print-name string are not counted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03012000000000000000">
+Unix System Calls</A>
+</H2>
+
+<P>
+EusLisp assorts functions which directly correspond to
+the system calls and library functions of UNIX operating system.
+For further detail of these functions, consult UNIX system interface
+reference (2).
+These low-level functions defined in <TT>*unix-package*</TT> are sometimes dangerous.
+Use higher level functions defined in other packages if possible.
+For example, use IPC facilities described in the section <A HREF="manual-node13.html#IPC">11.4</A>
+instead of <TT>unix:socket, unix:bind, unix:connect</TT>, and so on.
+
+<P>
+
+<H3><A NAME="SECTION03012100000000000000">
+Times</A>
+</H3>
+
+ <BR>
+<BR> <A NAME="22098"></A>
+<B>unix:ptimes</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+a list of five elements, elapsed time, system time, user time,
+subprocess's system time, subprocess's user time, is returned.
+Unit is always one sixtieth second.
+This function is obsolete and use of <B>unix:getrusage</B> is recommended.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22109"></A>
+<B>unix:runtime</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Sum of the process's system and user time is returned.
+Unit is 1/60 second.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22119"></A>
+<B>unix:localtime</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Current time and date is returned in an integer vector.
+Elements are second, minute, hour, day-of-a-month, month (zero-based), year (the number of years since 1900), weekday (the number of days since Sunday, in the range 0 to 6), day-in-the-year (the number of days since January 1, in the range 0 to 365), daylight-saving-time-is-set (a flag that indicates whether daylight saving time is in effect at the time described) and supported-time-zone.
+
+<P>
+<TT>ex.) unix:localtime =&gt; #(10 27 12 8 10 116 2 312 nil (``JST'' ``JST''))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22130"></A>
+<B>unix:asctime</B> <EM>tm_intvector </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Converts localtime represented with an integer-vector into a string notation.
+<BR><TT>(unix:asctime (unix:localtime))</TT> returns a string representation of
+the current real time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03012200000000000000">
+Process</A>
+</H3>
+
+ <BR>
+<BR> <A NAME="22141"></A>
+<B>unix:getpid</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the process id (16bit integer) of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22151"></A>
+<B>unix:getppid</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the process id of the parent process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22161"></A>
+<B>unix:getpgrp</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the process group id.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22171"></A>
+<B>unix:setpgrp</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets a new process group id.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22181"></A>
+<B>unix:getuid</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> gets user id of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22191"></A>
+<B>unix:geteuid</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the effective user id of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22201"></A>
+<B>unix:getgid</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the group id of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22211"></A>
+<B>unix:getegid</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the effective group id of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22221"></A>
+<B>unix:setuid</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets effective user id of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22231"></A>
+<B>unix:setgid</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets the effective group id of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22241"></A>
+<B>unix:fork</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates another EusLisp. 0 is returned to the subprocess and the pid of
+the forked process is returned to the parent process.
+Use <B>system:piped-fork</B> described in section <A HREF="#UnixProcess">13.3</A>
+to make a process connected via pipes.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22253"></A>
+<B>unix:vfork</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forks another EusLisp, and suspends the parent process from execution
+until the new EusLisp process terminates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22263"></A>
+<B>unix:exec</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+replaces executing EusLisp with another program.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22273"></A>
+<B>unix:wait</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+waits for the completion of one of subprocesses.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22283"></A>
+<B>unix:exit</B> <EM>code </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+terminates execution and returns <EM>code</EM> as its completion status.
+Zero means normal termination.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22294"></A>
+<B>sys:*exit-hook*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Defines a function that is called just before the process is exited.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22304"></A>
+<B>unix:getpriority</B> <EM>which who </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the highest priority (nice value) enjoyed by this process.
+<EM>Which</EM> is one of 0(process), 1(process-group) or 2(user).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22315"></A>
+<B>unix:setpriority</B> <EM>which who priority </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets priority 
+of the resource determined by <EM>which</EM> and <EM>who</EM>.
+<EM>which</EM> is one of 0(process), 1(process-group) or 2(user).
+<EM>who</EM>  is  interpreted relative to <EM>which</EM>
+(a process identifier
+for <SPAN CLASS="MATH"><IMG
+ WIDTH="76" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img32.png"
+ ALT="$ which=0$"></SPAN>, process group  identifier  for  <SPAN CLASS="MATH"><IMG
+ WIDTH="76" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img33.png"
+ ALT="$ which=1$"></SPAN>,
+and  a  user ID for <SPAN CLASS="MATH"><IMG
+ WIDTH="76" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img34.png"
+ ALT="$ which=2$"></SPAN>.
+A zero value of who denotes
+the current process, process group, or user.
+To lower the priority  (nice value) of your EusLisp process,
+<TT>(unix:setpriority 0 0 10)</TT> will sets the nice value to 10.
+Bigger nice value makes your process get less favored.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22331"></A>
+<B>unix:getrusage</B> <EM>who </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns list of system resource usage information about <EM>who</EM> process.
+Elements are ordered as follows:
+More comprehensive display is obtained by <B>lisp:rusage</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<PRE>
+    float ru_utime (sec.) /* user time used */
+    float ru_stime (sec.) /* system time used */
+    int  ru_maxrss;       /* maximum resident set size */
+    int  ru_ixrss;        /* currently 0 */
+    int  ru_idrss;        /* integral resident set size */
+    int  ru_isrss;        /* currently 0 */
+    int  ru_minflt;       /* page faults without physical I/O */
+    int  ru_majflt;       /* page faults with physical I/O */
+    int  ru_nswap;        /* number of swaps */
+    int  ru_inblock;      /* block input operations */
+    int  ru_oublock;      /* block output operations */
+    int  ru_msgsnd;       /* messages sent */
+    int  ru_msgrcv;       /* messages received */
+    int  ru_nsignals;     /* signals received */
+    int  ru_nvcsw;        /* voluntary context switches */
+    int  ru_nivcsw;       /* involuntary context switches */
+</PRE>
+
+<P>
+
+<A NAME="22343"></A>
+<B>unix:system</B> <EM>[command] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+executes <EM>command</EM> in a sub shell.
+<EM>command</EM> must be recognizable by Bourn-shell.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22355"></A>
+<B>unix:getenv</B> <EM>env-var </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gets the value for the environment variable <EM>env-var</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22366"></A>
+<B>unix:putenv</B> <EM>env </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+adds <EM>env</EM> in the process's environment variable list.
+<EM>env</EM> is a string which equates var to value
+like <TT>"VARIABLE=value"</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22379"></A>
+<B>unix:sleep</B> <EM>time </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+suspends execution of this process for <EM>time</EM> seconds.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22390"></A>
+<B>unix:usleep</B> <EM>time </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+suspends execution of this process for <EM>time</EM> micro-seconds
+(<B>u</B> represents micro).
+<B>Usleep</B> is not available on Solaris2 or other Sys5 based systems.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03012300000000000000">
+File Systems and I/O</A>
+</H3>
+
+ <BR>
+<BR> <P>
+
+<A NAME="22403"></A>
+<B>unix:uread</B> <EM>stream [buffer] [size] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads <EM>size</EM> bytes from <EM>stream</EM>.
+<EM>stream</EM> may either be a stream object or an integer representing fd.
+If <EM>buffer</EM> is given, the input is stored there.
+Otherwise, input goes to the buffer-string in  <EM>stream</EM>.
+Therefore, if <EM>stream</EM> is fd, <EM>buffer</EM> must be given.
+<B>unix:uread</B> never allocates a new string buffer.
+<B>unix:uread</B> returns the byte count actually read.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22422"></A>
+<B>unix:write</B> <EM>stream string &amp;optional size </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes <EM>size</EM> bytes of <EM>string</EM> to <EM>stream</EM>.
+If <EM>size</EM> is omitted, the full length of <EM>string</EM> is output.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22437"></A>
+<B>unix:fcntl</B> <EM>stream command argument </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22448"></A>
+<B>unix:ioctl</B> <EM>stream command buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22459"></A>
+<B>unix:ioctl_</B> <EM>stream command1 command2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22470"></A>
+<B>unix:ioctl_R</B> <EM>stream command1 command2 buffer [size] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22481"></A>
+<B>unix:ioctl_W</B> <EM>stream command1 command2 buffer [size] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22492"></A>
+<B>unix:ioctl_WR</B> <EM>stream command1 command2 buffer [size] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22503"></A>
+<B>unix:close</B> <EM>fd </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+close a file specifying its file descriptor <EM>fd</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22514"></A>
+<B>unix:dup</B> <EM>fd </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the duplicated file descriptor for <EM>fd</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22525"></A>
+<B>unix:pipe</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> creates a pipe.
+An io-stream for this pipe is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22535"></A>
+<B>unix:lseek</B> <EM>stream position [whence 0] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets the file pointer for <EM>stream</EM> at <EM>position</EM> counted
+from <EM>whence</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22548"></A>
+<B>unix:link</B> <EM>path1 path2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a hard link.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22558"></A>
+<B>unix:unlink</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> removes a hard link to the file specified by <EM>path</EM>.
+If no reference to the file lefts, it is deleted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22569"></A>
+<B>unix:mknod</B> <EM>path mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes inode in a file system.
+<EM>path</EM> must be a string, not a pathname object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22580"></A>
+<B>unix:mkdir</B> <EM>path mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes directory in a file system.
+<EM>path</EM> must be a string, not a pathname object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22591"></A>
+<B>unix:access</B> <EM>path mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks the access rights to <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22602"></A>
+<B>unix:stat</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+gets inode information of <EM>path</EM> and
+returns a list of integers  described below.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<PRE>
+  st_ctime	; file last status change time
+  st_mtime	; file last modify time
+  st_atime	; file last access time
+  st_size	; total size of file, in bytes
+  st_gid	; group ID of owne
+  st_uid	; user ID of owner
+  st_nlink	; number of hard links to the file
+  st_rdev	; the device identifier (special files only)
+  st_dev	; device file resides on
+  st_ino	; the file serial number
+  st_mode	; file mode
+</PRE>
+
+<A NAME="22613"></A>
+<B>unix:chdir</B> <EM>path </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> changes the current working directory to <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22624"></A>
+<B>unix:getwd</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> gets current working directory.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22634"></A>
+<B>unix:chmod</B> <EM>path integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes access mode (permission) for <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22645"></A>
+<B>unix:chown</B> <EM>path integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the owner of the file <EM>path</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22656"></A>
+<B>unix:isatty</B> <EM>(stream <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$ \vert$"></SPAN> fd) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>stream</EM> is connected to a tty-type
+device (a serial port or a pseudo tty) .
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22667"></A>
+<B>unix:msgget</B> <EM>key mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates or allocates a message queue which is addressed by <EM>key</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22678"></A>
+<B>unix:msgsnd</B> <EM>qid buf [mtype [flag]] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22689"></A>
+<B>unix:msgrcv</B> <EM>qid buf [size [mtype [flag]]] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22700"></A>
+<B>unix:socket</B> <EM>domain type &amp;optional proto </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> creates a socket
+whose name is defined in <I>domain</I> and whose abstract type is <EM>type</EM>.
+<EM>type</EM> should be one of 1 (SOCK_STREAM),
+2 (SOCK_DGRAM), 3 (SOCK_RAW), 4 (SOCK_RDM) and 5 (SOCK_SEQPACKET).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22713"></A>
+<B>unix:bind</B> <EM>socket name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+associates <EM>name</EM> to <EM>socket</EM>.
+<EM>name</EM> should be a unix path-name if the socket is defined in unix-domain.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22726"></A>
+<B>unix:connect</B> <EM>socket addr </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+connects <EM>socket</EM> to another socket specified by <EM>addr</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22738"></A>
+<B>unix:listen</B> <EM>socket &amp;optional backlog </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+begins to accept connection request on <EM>socket</EM>.
+<EM>backlog</EM> specifies the length of the queue waiting for the establishment
+of connection.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22750"></A>
+<B>unix:accept</B> <EM>socket </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> accepts the connection request on <EM>socket</EM>
+and returns a file-descriptor on which messages can be exchanged
+bidirectionally.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22761"></A>
+<B>unix:recvfrom</B> <EM>socket &amp;optional mesg from flag </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+receives a datagram message from <EM>socket</EM>.
+The socket must be assigned a name by <B>unix:bind</B>.
+<EM>mesg</EM> is a string in which the incoming message will be stored.
+If <EM>mesg</EM> is given, <B>recvfrom</B> returns the number of bytes received.
+If it is omitted, a new string is created for the storage of the message
+and returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22776"></A>
+<B>unix:sendto</B> <EM>socket addr mesg &amp;optional len flag </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sends a datagram message to another socket specified by <EM>addr</EM>.
+<EM>Socket</EM> must be a datagram-type socket which has no name assigned.
+<EM>Mesg</EM> is a string to be sent and <EM>len</EM> is the length of
+the message counting from the beginning of the string.
+If omitted, whole string is sent.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22790"></A>
+<B>unix:getservbyname</B> <EM>servicename </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the service number (integer) for <EM>servicename</EM> registered
+in <TT>/etc/services</TT> or in NIS database.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22802"></A>
+<B>unix:gethostbyname</B> <EM>hostname </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list  of ip address of <EM>hostname</EM> and its address type
+(currently always AF_INET==2).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22813"></A>
+<B>unix:syserrlist</B> <EM>errno </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a string describing the error information for the error code
+<EM>errno</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03012400000000000000">
+Signals</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <A NAME="22824"></A>
+<B>unix:signal</B> <EM>signal func [option] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+installs the signal handler <EM>func</EM> for <EM>signal</EM>.
+In BSD4.2 systems, signals caught during system call processing
+cause the system call to be retried.
+This means that if the process is issuing a read system call,
+signals are ignored.
+If <EM>option=2</EM> is specified,
+signals are handled in the system-5 manner,
+which causes the system call to fail. 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22837"></A>
+<B>unix:kill</B> <EM>pid signal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sends a signal to a process named by <EM>pid</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22848"></A>
+<B>unix:pause</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+suspends execution of this process until a signal arrives.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22858"></A>
+<B>unix:alarm</B> <EM>time </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sends an alarm clock signal (SIGALRM 14) after <EM>time</EM> seconds.
+Calling <B>unix:alarm</B> with <EM>time</EM>=0 resets the alarm clock.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22871"></A>
+<B>unix:ualarm</B> <EM>time </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+same as <B>unix:alarm</B> except that the unit of <EM>time</EM> is micro seconds.
+<B>ualarm</B> is not available on Solaris2 or on other Sys5 based systems.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22884"></A>
+<B>unix:getitimer</B> <EM>timer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+One Unix process is attached with three interval timers, i.e.,
+a real-time timer that decrements as the real time passes,
+a virtual-timer that decrements as the process executes in the user space,
+and a prof-timer that decrements as the kernel executes on behalf of
+the user process.
+<EM>timer</EM> is either  0 (<TT>ITIMER_REAL</TT>), 1 (<TT>ITIMER_VIRTUAL</TT>),
+or 2(<TT>ITIMER_PROF</TT>).
+A list of two elements is returned,  the value of the timer in second
+and the interval. Both are floating-point numbers.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22898"></A>
+<B>unix:setitimer</B> <EM>timer value interval </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <EM>value</EM> and <EM>interval</EM> in <EM>timer</EM>.
+<EM>timer</EM> is eiterh  0 (<TT>ITIMER_REAL</TT>), 1 (<TT>ITIMER_VIRTUAL</TT>),
+or 2(<TT>ITIMER_PROF</TT>).
+<TT>ITIMER_REAL</TT> delivers SIGALRM when <EM>value</EM> expires.
+<TT>ITIMER_VIRTUAL</TT> delivers SIGVTALRM, and 
+<TT>ITIMER_PROF</TT> delivers SIGPROF.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22919"></A>
+<B>unix:select</B> <EM>inlist outlist exceptlist timeout </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>inlist, outlist</EM> and <EM>exceptlist</EM> are bitvectors
+indicating file descriptors whose I/O events should be tested.
+For example, if <EM>inlist</EM>=#b0110, <EM>outlist</EM>=#b100,
+and <EM>exceptlist</EM>=NIL,
+then whether it is possible to read on fd=1 or 2, or to write on fd=2
+is tested.
+<EM>Timeout</EM> specifies seconds for which <B>select</B> is allowed to
+wait.
+Immediately after
+incoming data appear on one of the ports specified in <EM>inlist</EM>,
+or writing become available on one of the ports specified in <EM>outlist</EM>,
+or exceptional condition arises in one of the ports specified in
+<EM>exceptlist</EM>,
+<B>select</B> returns the number of ports that are available for I/O
+operation, setting ones for the possible port s
+in each of <EM>inlist, outlist and exceptlist</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22941"></A>
+<B>unix:select-read-fd</B> <EM>read-fdset timeout </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+I/O selection is usually meaningful only for input operation.
+<B>unix:select-read-fd</B> is a short-hand for
+<TT>select fdset nil nil timeout</TT>.
+<EM>Read-fdset</EM> is not a bit-vector,
+ but an integer that specifies the reading fd set.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03012500000000000000">
+Multithread</A>
+</H3>
+There is no way to create bound threads. Therefore only one signal stack
+and one interval timer are available in a EusLisp process.
+On Solaris2, the main top-level runs in a separated thread.
+
+<P>
+
+ <BR>
+<BR> <A NAME="22954"></A>
+<B>unix:thr-self</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the id (integer) of the thread currently
+running.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22964"></A>
+<B>unix:thr-getprio</B> <EM>id </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the execution priority of the thread
+specified by <EM>id</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22975"></A>
+<B>unix:thr-setprio</B> <EM>id newprio </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets the execution priority of
+the thread specified by <EM>id</EM> to <EM>newprio</EM>.
+The smaller numerical value of <EM>newprio</EM> means the higher priority.
+In other words,
+a thread with a numerically greater <EM>newprio</EM> gets less access to CPU.
+Users cannot raise the execution priority higher than
+the process's nice value, which is usually 0.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="22989"></A>
+<B>unix:thr-getconcurrency</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the concurrency value (integer) which represents the number
+of threads that can run concurrently.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="22999"></A>
+<B>unix:thr-setconcurrency</B> <EM>concurrency </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The concurrency value is the number of LWP in the process.
+If the concurrency is 1, which is the default, many threads you created
+are assigned to one LWP in turn even though all of them are runnable.
+If the program is running on a multi-processor machine and you want
+to utilize more than one CPU at the same time,
+you should set a value bigger than one to <EM>concurrency</EM>.
+Note that a big concurrency value let the operating system consume
+more resource. Usually <EM>concurrency</EM> should be smaller than or
+equal to the number of processors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23011"></A>
+<B>unix:thr-create</B> <EM>func arg-list &amp;optional (size 64*1024) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a new thread with <EM>size</EM> words of Lisp stack and
+<EM>size</EM> bytes of C stack,
+and let it apply <EM>func</EM> to <EM>arg-list</EM>.
+The thread cannot return any results to the caller.
+Use of this function is discouraged.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03012600000000000000">
+Low-Level Memory Management</A>
+</H3>
+
+ <BR>
+<BR> <A NAME="23025"></A>
+<B>unix:malloc</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+allocates memory outside EusLisp memory space.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23035"></A>
+<B>unix:free</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+deallocates a  memory block allocated by <EM>unix:malloc</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23046"></A>
+<B>unix:valloc</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23057"></A>
+<B>unix:mmap</B> <EM>address length protection share stream offset </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23068"></A>
+<B>unix:munmap</B> <EM>address length </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23079"></A>
+<B>unix:vadvise</B> <EM>integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03012700000000000000">
+IOCTL</A>
+</H3>
+Although Unix controls terminal device by a set of commands (second argument) to 
+<TT>ioctl</TT>, EusLisp provides them in the forms of function to eliminate
+to reference the include files and or'ing argument with the command codes.
+For the detail, refer to the <EM>termio</EM> manual pages of Unix.
+
+<P>
+There are two sets of terminal io-controls: TIOC* and TC*.
+Be careful about the availability of these functions on your operating system.
+Basically, BSD supports TIOC* io-controls and Sys5 supports TC*.
+<DL>
+<DT></DT>
+<DD>SunOS 4.1 Both TIOC* and TC*
+</DD>
+<DT></DT>
+<DD>Solaris2 only TC*
+</DD>
+<DT></DT>
+<DD>mips, ultrix? only TIOC*
+</DD>
+</DL>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="23090"></A>
+<B>unix:tiocgetp</B> <EM>stream [sgttybuf] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> gets parameters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23100"></A>
+<B>unix:tiocsetp</B> <EM>stream sgttybuf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets parameters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23110"></A>
+<B>unix:tiocsetn</B> <EM>stream [sgttybuf] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23121"></A>
+<B>unix:tiocgetd</B> <EM>stream [sgttybuf] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23132"></A>
+<B>unix:tiocflush</B> <EM>stream </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> flushes output buffer
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23142"></A>
+<B>unix:tiocgpgrp</B> <EM>stream integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> gets process group id.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23152"></A>
+<B>unix:tiocspgrp</B> <EM>stream integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets process group id.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23162"></A>
+<B>unix:tiocoutq</B> <EM>stream integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23173"></A>
+<B>unix:fionread</B> <EM>stream integer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23184"></A>
+<B>unix:tiocsetc</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23195"></A>
+<B>unix:tioclbis</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23206"></A>
+<B>unix:tioclbic</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23217"></A>
+<B>unix:tioclset</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23228"></A>
+<B>unix:tioclget</B> <EM>stream buf </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23239"></A>
+<B>unix:tcseta</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets terminal parameters immediately.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23249"></A>
+<B>unix:tcsets</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets terminal parameters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23259"></A>
+<B>unix:tcsetsw</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets terminal parameters after all
+characters queued for output have been transmitted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23269"></A>
+<B>unix:tcsetsf</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> sets terminal parameters after all
+characters queued for output have been transmitted and all characters
+queued for input are discarded.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23279"></A>
+<B>unix:tiocsetc</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23290"></A>
+<B>unix:tcsetaf</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23301"></A>
+<B>unix:tcsetaw</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23312"></A>
+<B>unix:tcgeta</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23323"></A>
+<B>unix:tcgets</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23334"></A>
+<B>unix:tcgetattr</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="23345"></A>
+<B>unix:tcsetattr</B> <EM>stream buffer </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H3><A NAME="SECTION03012800000000000000">
+Keyed Indexed Files</A>
+</H3>
+Recent Unix provides with the <EM>dbm</EM> or <EM>ndbm</EM> library
+for the management of keyed index files.
+Making use of this library, you can build a data base  that is composed
+of many pairs  of key and datum association.
+Following functions are defined in clib/ndbm.c.
+On Sun, it should be compiled by <TT>cc -c -Dsun4 -Bstatic</TT>,
+and loaded into EusLisp by <TT>(load "clib/ndbm" :ld-option "-lc")</TT>.
+
+<P>
+
+ <BR>
+<BR> <A NAME="23356"></A>
+<B>dbm-open</B> <EM>dbname mode flag </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Dbm-open</B> must be called first to create a data base file,
+and to begin read/write operations to the data base.
+<EM>Dbname</EM> is the name of the data base.
+Actually, ndbm manager creates two files which have suffixes <TT>".pag"</TT>
+and <TT>".dir"</TT>.
+<EM>Mode</EM> specifies file-open mode; 0 for read-only access, 1 for write-only,
+and 2 for read-write; also #x200 should be <EM>or</EM>ed when you create
+the file  at the first time.
+<EM>Flag</EM> gives access permission that is changed by chmod.
+#o666 or #o664 is good for <EM>flag</EM>.
+<B>Dbm-open</B> returns an integer that identifies the data base in the process.
+This value is used by other dbm functions to identify the data base.
+In other words, you can open several data bases at the same time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23375"></A>
+<B>dbm-store</B> <EM>db key datum mode </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+stores <EM>key-datum</EM> association in <EM>db</EM>.
+<EM>Db</EM> is an integer to identify the data base.
+<EM>Key and datum</EM> are strings.
+<EM>Mode</EM> is 0 (insert) or 1 (replace).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23390"></A>
+<B>dbm-fetch</B> <EM>db key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+retrieves datum that is associated with <EM>key</EM> in <EM>db</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03013000000000000000"></A><A NAME="UnixProcess"></A>
+<BR>
+Unix Processes
+</H2>
+
+<P>
+In order to launch unix commands from EusLisp,
+use the <B>unix:system</B> function.
+<B>Piped-fork</B> creates a subprocess whose standard input and standard output
+are connected to EusLisp's bidirectional stream through pipes.
+<B>Piped-fork</B> returns the stream.
+Following is a function to count the number of lines contained in a file
+by using <TT>"wc"</TT>.
+<PRE>
+(defun count-lines (file) (read (piped-fork "wc" file)))
+</PRE>
+
+<P>
+The next example creates eus process on another workstation identified by "etlic0"
+and provides a port for distributed computation.
+
+<P>
+<PRE>
+(setq ic0eus (piped-fork "rsh" "etlic0" "eus"))
+(format ic0eus "(list 1 2 3)~%")
+(read ic0eus) --&gt; (1 2 3)
+</PRE>
+
+<P>
+For source code editing, you can call <TT>ez</TT> from the EusLisp.
+The screen editor ez communicates with EusLisp through message-queues.
+If you have an ez process already running in parallel with the EusLisp,
+<B>ez</B> restarts ez and it gains the terminal control. 
+By issuing esc-P or esc-M commands in ez,
+texts are sent back and evaluated by EusLisp.
+This is useful for the debugging since entire file does not need to be
+loaded when you add a little modification to the file.
+Similar function is available on emacs by M-X run-lisp command.
+
+<P>
+
+ <BR>
+<BR> <A NAME="23402"></A>
+<B>cd</B> <EM>&amp;optional (dir (unix:getenv "HOME")) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the current working directory.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23412"></A>
+<B>ez</B> <EM>&amp;optional key </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+enters display editor ez, and reads Lisp forms from it, and evaluates
+them.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23422"></A>
+<B>piped-fork</B> <EM>&amp;optional (exec) &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forks a process, and makes a two-way stream between the current EusLisp and the
+subprocess. Exec is the file name of a unix command and args are arguments
+to the command.  If exec (string) includes one or more space, it is
+assumed a shell command, and executed by /bin/sh calling the unix:system function.
+If no exec is given, another euslisp is created as the subprocess.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23432"></A>
+<B>xfork</B> <EM>exec &amp;key (stdin *standard-input*) (stdout *standard-output*) 
+<BR>(stderr *error-output*) (args nil) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+forks a process, replaces its stdin, stdout, and stderr streams to specified ones,
+and exec's "exec" with the args arguments.
+piped-fork is roughly equivalent to
+<code> (xfork exec :stdin (unix:pipe) :stdout (unix:pipe))</code>
+Though xfork returns an io-stream to stdin and stdout with their
+directions reversed,
+it is not always useful unless they are pipes. 
+The name of this function, xfork (cross-fork), comes from this reversed io-stream,
+namely, the io-stream's input comes from the stdout of the subprocess and the output
+comes from the stdin. 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23442"></A>
+<B>rusage</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> prints resource usage of this process.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<P>
 
 <H2><A NAME="SECTION03014000000000000000">
-Type Specifier</A>
+Adding Lisp Functions Coded in C</A>
 </H2>
-Though EusLisp does not have the <A NAME="1234"></A><B>d</B>eftype special form,
-type names are used in declarations and functions requesting
-to specify the type of results or contents,
-as in <B>coerce, map, concatenate, make-array</B>, etc.
-Usually, class names can be used as type specifiers, as in
-<TT>(concatenate cons "ab" "cd") = (97 98 99 100)</TT>,
-where Common Lisp uses <TT>(quote list)</TT> instead of <TT>cons</TT>.
 
 <P>
-As EusLisp does not have classes to represent numbers,
-types for numbers need to be given by keywords.
-<A NAME="1236"></A><B>:</B>integer, <A NAME="1238"></A><B>i</B>nteger, <A NAME="1240"></A><B>:</B>int, <A NAME="1242"></A><B>f</B>ixnum,
-or <A NAME="1244"></A><B>:</B>fixnum is used to represent the integer type,
-<A NAME="1246"></A><B>:</B>float or <A NAME="1248"></A><B>f</B>loat, the floating point number type.
-As the <A NAME="1250"></A><EM>e</EM>lement-type argument of <A NAME="1252"></A><B>m</B>ake-array,
-<A NAME="1254"></A><B>:</B>character, <A NAME="1256"></A><B>c</B>haracter, <A NAME="1258"></A><B>:</B>byte, and <A NAME="1260"></A><B>b</B>yte
-are recognized to make strings.
-Low level functions such as <A NAME="1262"></A><B>d</B>efcstruct, <A NAME="1264"></A><B>s</B>ys:peek,
-and <A NAME="1266"></A><B>s</B>ys:poke, also recognize
-<A NAME="1268"></A><B>:</B>character, <A NAME="1270"></A><B>c</B>haracter, <A NAME="1272"></A><B>:</B>byte, or <A NAME="1274"></A><B>b</B>yte
-for the byte access, and <A NAME="1276"></A><B>:</B>short or <A NAME="1278"></A><B>s</B>hort for short word access.
-In any cases, keywords are preferable to lisp package symbols with the
-same pname.
+Programs that heavily refer to C include files or frequently access arrays
+perform better or are more clearly described
+if written in C or other languages rather than in EusLisp.
+EusLisp provides the way to link programs coded in C.
+
+<P>
+If you want to define EusLisp function written in C,
+each EusLisp-callable C-function must be coded to accept three arguments:
+the context pointer, the number of arguments and the pointer to the Lisp
+argument block.
+These arguments must be named as <TT>ctx, n</TT> and <TT>argv</TT>,
+since the macros in <TT>c/eus.h</TT> assume these names.
+The C program must include <TT>*eusdir*/c/eus.h</TT>.
+The programmer should be familiar with the types and macros
+described there.
+The entry function should be named by the basename of the source file.
+
+<P>
+A sample code for C function AVERAGE which computes the arithmetic
+average of arbitrary number of floats is shown below.
+In this example, you can see how to get float values from arguments,
+how to make the pointer of a float,
+how to set a pointer in the special variable AVERAGE,
+and how to define a function and a symbol in the entry function <TT>ave</TT>.
+Compile this program by <TT>'cc -c -Dsun4 -DSolaris2 -K pic'</TT>.
+<TT>-Dsun4</TT> and <TT>-DSolaris2</TT> are needed
+to chose proper definitions in <TT>c/eus.h</TT>.
+<TT>-K pic</TT> is needed to let the c compiler generate position independent
+code necessary for the loadable shared object. 
+Then the resulted '.o' file can be loaded into EusLisp.
+More complete examples can be found in <TT>*eusdir*/clib/*.c</TT>,
+which are defined and loaded in the same manner described here.
+
+<P>
+<PRE>
+/* ave.c */
+/* (average &amp;rest numbers) */
+#include "/usr/local/eus/c/eus.h"
+static pointer AVESYM;
+pointer AVERAGE(ctx,n,argv)
+context *ctx;
+int n;
+pointer argv[];
+{ register int i;
+  float sum=0.0, a, av;
+  pointer result;
+  numunion nu;
+  for (i=0; i&lt;n; i++) {
+    a=ckfltval(argv[i]);
+    sum += a;} /*get floating value from args*/
+  av=sum/n;
+  result=makeflt(av);
+  AVESYM-&gt;c.sym.speval=result;  /*kindly set the result in symbol*/
+  return(result);}
+
+ave(ctx,n,argv)
+context *ctx;
+int n;
+pointer argv[];
+{ char *p;
+  p="AVERAGE";
+  defun(ctx,p,argv[0],AVERAGE);
+  AVESYM=intern(ctx,p,strlen(p),userpkg); /* make a new symbol*/
+  }
+</PRE>
 
 <P>
 
+<H2><A NAME="SECTION03015000000000000000">
+Foreign Language Interface</A>
+</H2>
+
+<P>
+Functions written in C without concern about linking with EusLisp
+can be loaded onto EusLisp, too.
+These functions are called foreign functions.
+Such programs are loaded by
+<B>load-foreign</B> macro which returns an instance of <B>foreign-module</B>.
+External symbol definitions in the object file is registered
+in the module object.
+<B>Defforeign</B> is used to make entries to  C functions
+to be called from EusLisp.
+<B>Defun-c-callable</B> defines lisp functions callable from C.
+C-callable functions have special code piece called <EM>pod-code</EM>
+for converting parameters and transferring control to the corresponding
+EusLisp function.
+<B>Pod-address</B> returns the address of this code piece which
+should be informed to C functions.
+
+<P>
+Here is an example of C program and its interface functions to EusLisp.
+<PRE>
+/* C program named cfunc.c*/
+
+static int (*g)();	/* variable to store Lisp function entry */
+
+double sync(x)
+double x;
+{ extern double sin();
+  return(sin(x)/x);}
+
+char *upperstring(s)
+char *s;
+{ char *ss=s;
+  while (*s) { if (islower(*s)) *s=toupper(*s); s++;}
+  return(ss);}
+
+int setlfunc(f)      /* remember the argument in g just to see */
+int (*f)();          /* how Lisp function can be called from C */
+{ g=f;}
+
+int callfunc(x)      /* apply the Lisp function saved in g to the arg.*/
+int x;
+{ return((*g)(x));}
+
+;;;; Example program for EusLisp's foreign language interface
+;;;; make foreign-module
+(setq m (load-foreign "cfunc.o"))
+
+;; define foreign functions so that they can be callable from lisp
+(defforeign sync m "sync" (:float) :float)
+(defforeign toupper m "upperstring" (:string) :string)
+(defforeign setlfunc m "setlfunc" (:integer) :integer)
+(defforeign callfunc m "callfunc" (:integer) :integer)
+
+;; call them
+(sync 1.0)	--&gt; 0.841471
+(print (toupper "abc123"))  --&gt; "ABC123"
+
+;; define a test function which is callable from C.
+(defun-c-callable TEST ((a :integer)) :integer
+      (format t "TEST is called, arg=~s~%" a)
+      (* a a))    ;; return the square of the arg
+;;  call it from C
+;;setlfunc remembers the entry address of Lisp TEST function.
+(setlfunc (pod-address (intern "TEST")))
+(callfunc 12)  --&gt; TEST is called, arg=12  144
+</PRE>
+
+<P>
+Data representations in EusLisp are converted to those of C in the following
+manners:
+EusLisp's 30-bits integer (including character)
+is sign-extended and passed to a C function via stack.
+30-bit float is extended to double and passed via stack.
+As for string, integer-vector and float-vector,
+only the address of the first element is passed on the stack,
+and the entire array remains uncopied.
+The string can either be a normal string or a foreign-string.
+A string may contain null codes, though it is guaranteed
+that the string also has a null code at the end.
+EusLisp does not know how to pass arrays of more than one dimension.
+Every array of more than one dimension has correspoiding one dimensional
+vector that holds the entire elements linearly.
+This vector is obtained by the <B>array-entity</B> macro.
+Also, note that a two-dimensional matrix should be transposed
+if it is sent to the FORTRAN subroutines, since rows and columns
+are ordered oppositely in FORTRAN.
+
+<P>
+Since EusLisp's representation of floating-point numbers is always single
+precision, conversion is required when you pass a vector of double precision
+floating point numbers.
+For this purpose, the conversion functions,
+<B>double2float</B> and <B>float2double</B> are provided
+by <TT>clib/double.c</TT>.
+For an instance, if you have a 3x3 float-matrix and want to pass it to a C
+function named cfun as a matrix of double, use the following forms.
+<PRE>
+     (setq mat (make-matrix 3 3))
+     (cfun (float2double (array-entity mat)))
+</PRE>
+
+<P>
+Struct in C can be defined by the <B>defcstruct</B> macro.
+<B>Defcstruct</B> accepts struct-name followed by 
+field definition forms.
+
+<P>
+<PRE>
+     (defcstruct &lt;struct-name&gt;
+        {(&lt;field&gt; &lt;type&gt; [*] [size])}*)
+</PRE>
+For example, following struct definition is represented by the next defcstruct.
+<PRE>
+     /* C definition */
+     struct example {
+        char  a[2];
+        short b;
+        long  *c;
+        float *d[2];};
+
+     /* equivalent EusLisp definition */
+     (defcstruct example
+        (a :char 2)
+        (b :short)
+        (c :long *)
+        (d :float * 2))
+</PRE>
+
 <P>
 
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html625"
-  HREF="manual-node17.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html619"
-  HREF="manual-node12.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html615"
-  HREF="manual-node15.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html621"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html623"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+ <BR>
+<BR> <P>
+
+<A NAME="23452"></A>
+<B>load-foreign</B> <EM>objfile &amp;key symbol-input symbol-output (symbol-file objfile) ld-option) </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> loads an object module written in languages other than EusLisp.
+In Solaris2, <B>load-foreign</B> just calls <B>load</B> with a null string
+as its <EM>:entry</EM> parameter.
+A compiled-code object is returned.
+This result is necessary to make entries to the functions in the module by
+<B>defforeign</B> called later on.
+Libraries can be specified in <EM>ld-option</EM>.
+However, the symbols defined in the libraries cannot be captured
+in the default symbol-output file.
+In order to allow EusLisp to call functions defined in the libraries,
+<EM>symbol-output</EM> and <EM>symbol-file</EM> must be given explicitly.
+(These arguments are not needed if you are not going to call the library
+functions directly from EusLisp, i.e. if you are  referring them only from
+functions in <EM>objfile</EM>).
+<B>Load-foreign</B> links <EM>objfile</EM> with libraries specified and global
+symbols in EusLisp which is in core, and writes the linked object in
+<EM>symbol-output</EM>.
+Then, symbols in <EM>symbol-file</EM> are searched and listed in the
+foreign-module. Since <EM>symbol-file</EM> is defaulted to be <EM>objfile</EM>,
+only the symbols defined in <EM>objfile</EM> are  recognized if <EM>symbol-file</EM>
+is not given. To find all the global entries both in <EM>objfile</EM> and
+libraries, the linked (merged) symbol table resulted from the first link
+process of load-foreign must be examined.
+For this reason, an identical file name must be given both to <EM>symbol-output</EM>
+and to <EM>symbol-file</EM>.
+
+<P>
+As shown below, the intermediate symbol file can be removed
+by <B>unix:unlink</B>.
+However, if you are loading more than one foreign modules both of which 
+refer to the same library, and if you want to avoid loading
+the library duplicatedly, you have to use <EM>symbol-input</EM> argument.
+Suppose you have loaded all the functions in "linpack.a" in the above
+example and you are going to load another file "linapp.o" that calls functions
+in "linpack.a".
+The following call of load-foreign should be issued before you
+unlink "euslinpack".
+<TT>(load-foreign "linapp.o" :symbol-input "euslinpack")</TT>
+See <TT>*eusdir*/llib/linpack.l</TT> for more complete examples of
+<B>load-foreign</B> and <B>defforeign</B>.
+
+</DD>
+</DL>
 <BR>
-<B> Next:</B> <A NAME="tex2html626"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Up:</B> <A NAME="tex2html620"
-  HREF="manual-node12.html">Data Types</A>
-<B> Previous:</B> <A NAME="tex2html616"
-  HREF="manual-node15.html">Class Hierarchy</A>
- &nbsp; <B>  <A NAME="tex2html622"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html624"
-  HREF="manual-node167.html">Index</A></B> </DIV>
+<BR>
+<PRE>
+(setq linpack-module
+    (load-foreign "/usr/local/eus/clib/linpackref.o"
+        :ld-option  "-L/usr/local/lib -llinpack -lF77 -lm -lc"
+        :symbol-output "euslinpack"
+        :symbol-file "euslinpack"
+        ))
+(unix:unlink "euslinpack")
+</PRE>
+
+<P>
+
+<A NAME="23487"></A>
+<B>defforeign</B> <EM>funcname module cname paramspec resulttype </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a function entry in a foreign language module.
+<EM>funcname</EM> is a symbol to be created in EusLisp.
+<EM>module</EM> is  a compiled-code object returned by <B>load-foreign</B>.
+<EM>cname</EM> is the name of the C-function defined in the foreign program.
+It is a string like "_myfunc". 
+<EM>paramspec</EM> is a list of parameter type specifications
+which is used for the data type conversion and coercion when arguments are
+passed from EusLisp to the C function.
+<EM>Paramspec</EM> can be NIL if no data conversion or type check is required.
+One of <B>:integer, :float , :string</B>, or <EM>(:string n)</EM> must be
+given to <EM>resulttype</EM>.
+<B>:Integer</B> means that the c function returns either char, short or
+int (long).
+<B>:Float</B> should be specified both for float and double.
+<B>:String</B> means the C function returns a pointer to a string,
+and EusLisp should add a long-word header to the  string to accomodate it
+as a EusLisp string.
+The length of the string is found by <EM>strlen</EM>.
+Note that the writing a header just before the string may cause
+a disastrous result.
+On the other hand, <B>(:string n)</B> is safer but slower because
+a EusLisp string of length <B>n</B> is newly created and the contents of
+C string is copied there.
+<TT>(:string 4)</TT> should be used for a C function that returns a pointer
+to an integer.  The resulted integer value of the result can be obtained by
+<TT>(sys:peek result :long)</TT>, where result is a variable set to the
+result of the C function.
+You may also specify <TT>(:foreign-string [n])</TT> for C functions
+that return a string or a struct.
+The result is a foreign-string whose content is held somewhere outside
+EusLisp control.
+If the result string is null-terminated and the length of the string
+is known by strlen, you don't need to specify the length [n].
+However, if the result contains null codes, which is usual for structs,
+the length of the foreign-string should be explicitly given.
+Whether you should use (:string n) or (:foreign-string n) is not
+only the matter of speed, but the matter of structure sharing.
+The difference is whether the result is copied or not.
+
+<P>
+Fortran users should note that every argument to a Fortran function or a
+subroutine is passed by call-by-reference.
+Therefore, even a simple integer or float type argument must be  put
+in a integer-vector or a float-vector before it is passed to Fortran.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23515"></A>
+<B>defun-c-callable</B> <EM>funcname paramspec resulttype . body </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines a EusLisp function that can be called from foreign language code.
+<EM>funcname</EM> is a symbol for which a EusLisp function is defined.
+<EM>paramspec</EM> is a list of type specifiers as in <B>defforeign</B>.
+Unlike <B>defforeign</B>'s paramspec, <B>defun-c-callable</B>'s paramspec
+cannot be omitted unless the function does not receive any argument.
+<EM>:integer</EM> should be used for all of int, short and char types
+and <EM>:float</EM> for both of float and double.
+<EM>resulttype</EM> is the type of the Lisp function.
+<EM>resulttype</EM> can be omitted unless you need type check or type coercion from integer
+to float.
+<EM>body</EM> is lisp expressions that are executed when this function is
+called from C.
+The function defined by <B>defun-c-callable</B> can be called from Lisp
+expressions, too.
+<B>Defun-c-callable</B> returns <EM>funcname</EM>.
+It looks like a symbol, but it is not, but an instance of <A NAME="23539"></A><B>f</B>oreign-pod
+which is a subclass of symbol.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23541"></A>
+<B>pod-address</B> <EM>funcname </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the address of a foreign-to-EusLisp interface code of the
+c-callable Lisp function <EM>funcname</EM> defined by <B>defun-c-callable</B>.
+This is used to inform a foreign language program of the
+location of a Lisp function.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23553"></A>
+<B>array-entity</B> <EM>array-of-more-than-one-dimension </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns one-dimensional vector which holds all the elements of
+a multi-dimensional array.
+This is needed to pass a multi-dimensional or general array to a foreign function,
+although a simple vector can be passed directly.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23563"></A>
+<B>float2double</B> <EM>float-vector [doublevector] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+converts a float-vector to double precision representation.
+The result is of type float-vector but the length is twice as much as the
+first argument.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="23573"></A>
+<B>double2float</B> <EM>doublevector [float-vector] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+A vector of double precision numbers is converted to single precision
+float-vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html777"
+  HREF="manual-node17.html">Multithread</A>
+<B>Up:</B> <A NAME="tex2html771"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html765"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+</DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

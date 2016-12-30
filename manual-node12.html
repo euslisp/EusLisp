@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Data Types</TITLE>
-<META NAME="description" CONTENT="Data Types">
+<TITLE>Date and Time</TITLE>
+<META NAME="description" CONTENT="Date and Time">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,104 +18,279 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="manual.css">
 
-<LINK REL="next" HREF="manual-node17.html">
+<LINK REL="next" HREF="manual-node13.html">
 <LINK REL="previous" HREF="manual-node11.html">
-<LINK REL="up" HREF="manual-node11.html">
+<LINK REL="up" HREF="manual-node2.html">
 <LINK REL="next" HREF="manual-node13.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html567"
-  HREF="manual-node13.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html561"
-  HREF="manual-node11.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html555"
-  HREF="manual-node11.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html563"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html565"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html568"
-  HREF="manual-node13.html">Numbers</A>
-<B> Up:</B> <A NAME="tex2html562"
-  HREF="manual-node11.html">Bibliography</A>
-<B> Previous:</B> <A NAME="tex2html556"
-  HREF="manual-node11.html">Bibliography</A>
- &nbsp; <B>  <A NAME="tex2html564"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html566"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html614"
+  HREF="manual-node13.html">Streams and Input/Output</A>
+<B>Up:</B> <A NAME="tex2html608"
+  HREF="manual-node2.html">EusLisp Basics</A>
+<B> Previous:</B> <A NAME="tex2html602"
+  HREF="manual-node11.html">Text Processing</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION03010000000000000000">
-Data Types</A>
+<H1><A NAME="SECTION020100000000000000000">
+Date and Time</A>
 </H1>
 
-Like other Lisps, it is data objects that are typed, not variables.
-Any variable can have any object as its value.
-Although it is possible to
-declare the type of object which is bound to a variable, but usually
-it is only advisory information to the compiler to generate faster code.
-Numbers are represented as immediate values in pointers and all the others
-are represented by objects referenced by pointers.
-
 <P>
-In the implementation of Sun4, a pointer or a number is represented by
-a long word as depicted in fig.<A HREF="#Pointer">2</A>.
-Two bits at LSB of a pointer are used as tag bits to discriminate
-between a pointer, an integer, and a float.
-Since a pointer's tags are all zero and it can use all 32 bits for
-addressing an object, EusLisp can utilize up to 4GB of process
-address space.
+The time class defines both calendar time and time period.
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="Pointer"></A><A NAME="993"></A>
-<TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 2:</STRONG>
-Pointer and Immediate Value</CAPTION>
-<TR><TD><IMG
- WIDTH="445" HEIGHT="161" BORDER="0"
- SRC="manual-img2.png"
- ALT="\begin{figure}\begin{center}
-\mbox{\epsfxsize =10cm
-\epsfbox{fig/pointer.ps}
-}
-\end{center}
-\end{figure}"></TD></TR>
-</TABLE>
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="14877"></A>
+<BIG CLASS="XLARGE"><B>time </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 (micro second minute hour day month weekday year 
+<BR>
+timezone dst seconds) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines time objects.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14894"></A>
+<B>:now</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<code>(instance time :now)</code>
+creates a time object for the current time.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14904"></A>
+<B>:init</B> <EM>&amp;optional sec micro dst tzone </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a time object which represents <I>sec</I> second
+after January 1, 1970.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14915"></A>
+<B>:make</B> <EM>&amp;key (year 1970) (month 0) (day 1)
+	(weekday 4) (hour 0) (minute 0) (second 0)  (micro 0)
+	(timezone (* -9 3600))) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a time object which is represented
+by a calendar notation.
+The timezone is defaulted to JST.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14925"></A>
+<B>:year</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the year component of the
+time object.  Note that the year is represented in a full (four)
+digit notation, not the least two digits.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14935"></A>
+<B>:month</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the month component of the time object.
+Note that the month begins from 0 for January.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14945"></A>
+<B>:day</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the day component of the time object.
+Note that the day begins from 1 for the first of a month.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14955"></A>
+<B>:weekday</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the weekday component of the time object.
+Note that the weekday begins from 0 for Sunday.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14965"></A>
+<B>:hour</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the hour component of the time object
+in 24-hour representation.
+Note that the hour ranges from 0 to 23.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14975"></A>
+<B>:minute</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the minute component of the time object.
+Note that the hour ranges from 0 to 59.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14985"></A>
+<B>:second</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the second component of the time object.
+Note that the hour ranges from 0 to 59.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="14995"></A>
+<B>:seconds</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the seconds component of the time object.
+Seconds represents time after the origin of the unix time, i.e.,
+the midnight of January 1, 1970.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15005"></A>
+<B>:year-day</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the number of days after the
+beginning of the year. For example, year-day of a time object representing
+February 2nd is 32.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15015"></A>
+<B>:difference</B> <EM>atime </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a new time object
+representing the time difference of self from atime.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="15025"></A>
+<B>:add</B> <EM>atime </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a new time object
+representing the added time of self and atime.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html614"
+  HREF="manual-node13.html">Streams and Input/Output</A>
+<B>Up:</B> <A NAME="tex2html608"
+  HREF="manual-node2.html">EusLisp Basics</A>
+<B> Previous:</B> <A NAME="tex2html602"
+  HREF="manual-node11.html">Text Processing</A>
 </DIV>
-
-<P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL CLASS="ChildLinks">
-<LI><A NAME="tex2html569"
-  HREF="manual-node13.html">Numbers</A>
-<LI><A NAME="tex2html570"
-  HREF="manual-node14.html">Objects</A>
-<LI><A NAME="tex2html571"
-  HREF="manual-node15.html">Class Hierarchy</A>
-<LI><A NAME="tex2html572"
-  HREF="manual-node16.html">Type Specifier</A>
-</UL>
-<!--End of Table of Child-Links-->
-<BR><HR>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

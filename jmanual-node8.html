@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>インストール</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="インストール">
+<TITLE>数値演算</TITLE>
+<META NAME="description" CONTENT="数値演算">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,208 +16,1131 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node9.html">
 <LINK REL="previous" HREF="jmanual-node7.html">
-<LINK REL="up" HREF="jmanual-node3.html">
+<LINK REL="up" HREF="jmanual-node2.html">
 <LINK REL="next" HREF="jmanual-node9.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html418"
-  HREF="jmanual-node9.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html412"
-  HREF="jmanual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html406"
-  HREF="jmanual-node7.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html414"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html416"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html419"
-  HREF="jmanual-node9.html">ライセンス</A>
-<B> Up:</B> <A NAME="tex2html413"
-  HREF="jmanual-node3.html">はじめに</A>
-<B> Previous:</B> <A NAME="tex2html407"
-  HREF="jmanual-node7.html">開発履歴</A>
- &nbsp; <B>  <A NAME="tex2html415"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html417"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html508"
+  HREF="jmanual-node9.html">symbolとパッケージ</A>
+<B>Up:</B> <A NAME="tex2html502"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html496"
+  HREF="jmanual-node7.html">オブジェクト指向プログラミング</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION02015000000000000000">
-インストール</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html509"
+  HREF="jmanual-node8.html#SECTION02061000000000000000">数値演算定数</A>
+<LI><A NAME="tex2html510"
+  HREF="jmanual-node8.html#SECTION02062000000000000000">比較演算関数</A>
+<LI><A NAME="tex2html511"
+  HREF="jmanual-node8.html#SECTION02063000000000000000">整数とビット毎の操作関数</A>
+<LI><A NAME="tex2html512"
+  HREF="jmanual-node8.html#SECTION02064000000000000000">一般数値関数</A>
+<LI><A NAME="tex2html513"
+  HREF="jmanual-node8.html#SECTION02065000000000000000">基本関数</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION02060000000000000000">
+数値演算</A>
+</H1>
+
+<H2><A NAME="SECTION02061000000000000000">
+数値演算定数</A>
 </H2>
-インストールの手続きは、<TT>README</TT>に記述されている。
-インストールされるディレクトリ（<TT>"/usr/local/eus/"</TT>を仮定する）は、
-グローバル変数<TT>*eusdir*</TT>に設定される。この場所は、<B>load</B>やコンパイラ
-が参照する。
 
-<P>
-<TT>*eusdir*</TT>のサブディレクトリは 、表<A HREF="#Directories">1</A>に書いてあるとおり。
-これらの中で、
-<TT>c/, l/, comp/, geo/, clib/, lib/</TT> や<TT>xwindow/</TT>は、eusやeusxを作成するときの
-基本ファイルを含んでいる。
-その他は、付属ライブラリ・デモプログラム・ユーザーからの寄贈品である。
+ <BR>
+<BR> <A NAME="5683"></A>
+<B>most-positive-fixnum</B> [定数]
 
-<P>
-<BR><P></P>
-<DIV ALIGN="CENTER">
+<DL COMPACT>
+<DT> 
+<DD> #x1fffffff=536,870,911。<TT>integer</TT>の正の最大値。
+</DD>
+</DL>
+<BR>
+<BR>
 
-<DIV ALIGN="CENTER">
-<A NAME="600"></A>
-<TABLE CELLPADDING=3 BORDER="1">
-<CAPTION><STRONG>Table:</STRONG>
-<TT>*eusdir*</TT>のディレクトリ</CAPTION>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-FILES </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  このドキュメント </SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-README </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  ライセンス・インストール・サンプル実行のガイド</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-VERSION </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  EusLisp のバージョン</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-bin/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  実行ファイル(eus, euscompとeusx)</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-c/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  Cで書かれたEusLispのカーネル</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-l/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  EusLispで書かれたカーネル関数</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-comp/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  EusLispで書かれたEusLispコンパイラ</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-clib/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  Cで書かれたライブラリ関数</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-doc/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  ドキュメント(latexとjlatexのテキストとメモ)</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-geo/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  幾何学関数とグラフィックプログラム</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-lib/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 共有ライブラリ(.so)とスタートアップファイル</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-llib/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  Lispライブラリ</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-llib2/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  Lispライブラリ2（UTYOで開発）</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-xwindow/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  X11インターフェース</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-makefile@ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  makefile.sun[34]os[34],.vax等へのシンボリックリンク</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-pprolog/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  tiny prologのインタープリタ</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-xview/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  xview tool kitインターフェース</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-tool/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> </SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-vxworks/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> リアルタイムOS VxWorksとのインターフェース</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-robot/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> ロボットモデルとロボットシミュレータ(MARS)</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-vision/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  画像処理プログラム</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-contact/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 拘束動作解析　比留川氏作
-[#!Hirukawa:1991a!#,#!Hirukawa:1991b!#,#!Hirukawa:1991c!#]</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-demo/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  デモプログラム</SMALL></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE"> 
-bench/ </SMALL></TD>
-<TD ALIGN="LEFT"><SMALL CLASS="FOOTNOTESIZE">  ベンチマークテスト用プログラム</SMALL></TD>
-</TR>
-</TABLE>
+<A NAME="5694"></A>
+<B>most-negative-fixnum</B> [定数]
 
-</DIV>
-</DIV>
+<DL COMPACT>
+<DT> 
+<DD> -#x20000000= -536,870,912。<TT>integer</TT>の負の最大値
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5705"></A>
+<B>short-float-epsilon</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> IEEEの浮動小数点表現形式である<TT>float</TT>は、
+21ビットの固定小数(うち符号
+が1ビット)と7ビットの指数(うち符号が1ビット)で構成されている。
+したがって、浮動小数点誤差<SPAN CLASS="MATH"></SPAN>は <!-- MATH
+ $2^{-21}= 4.768368 \times 10^{-7}$
+ -->
+<SPAN CLASS="MATH"></SPAN>となる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5718"></A>
+<B>single-float-epsilon</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> <B>short-float-epsilon</B>と同様に <SPAN CLASS="MATH"></SPAN>である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5730"></A>
+<B>long-float-epsilon</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> Euslispには、doubleもlong floatもないため、
+<B>short-float-epsilon</B>と同様に<SPAN CLASS="MATH"></SPAN>である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5742"></A>
+<B>pi</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> <SPAN CLASS="MATH"></SPAN>。 実際には 3.14159203で、 3.14159265ではない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5752"></A>
+<B>2pi</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> <!-- MATH
+ $2\times \pi$
+ -->
+<SPAN CLASS="MATH"></SPAN>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5762"></A>
+<B>pi/2</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> <SPAN CLASS="MATH"></SPAN>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5772"></A>
+<B>-pi</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> -3.14159203。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5782"></A>
+<B>-2pi</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> <!-- MATH
+ $-2\times \pi$
+ -->
+<SPAN CLASS="MATH"></SPAN>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5792"></A>
+<B>-pi/2</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> <SPAN CLASS="MATH"></SPAN>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION02062000000000000000">
+比較演算関数</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="5802"></A>
+<B>numberp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>が<TT>integer</TT>か<TT>float</TT>の時、Tを返す。
+その文字が数字で構成されているときも同様である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5815"></A>
+<B>integerp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>が<TT>integer</TT>の時、Tを返す。
+<TT>float</TT>は<B>round, trunc</B>および<B>ceiling</B>関数で<TT>integer</TT>に変換できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5831"></A>
+<B>floatp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  <EM>object</EM> が <TT>float</TT> の時 T を返す。
+<TT>integer</TT>は<B>float</B>関数で<TT>float</TT>に変換できる。
+</DD>
+</DL>
+<BR>
 <BR>
 
 <P>
+
+<A NAME="5846"></A>
+<B>zerop</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  <EM>number</EM>が<TT>integer</TT>のゼロまたは
+<TT>float</TT>の0.0の時、 Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5859"></A>
+<B>plusp</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>number</EM>が正(ゼロは含まない)のとき、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="5870"></A>
+<B>minusp</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>number</EM>が負のとき、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5881"></A>
+<B>oddp</B> <EM>integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>integer</EM>が奇数のとき、Tを返す。引数は<TT>integer</TT>のみ有効。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5893"></A>
+<B>evenp</B> <EM>integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>integer</EM>が偶数のとき、Tを返す。引数は<TT>integer</TT>のみ有効。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5905"></A>
+<B>/=</B> <EM>num1 num2 &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM>と<EM>num2</EM>、<EM>more-numbers</EM>でどの2つの数値も等しくないとき、Tを返す。それ以外はNILを返す。
+<EM>num1</EM>と<EM>num2</EM>、<EM>more-numbers</EM>を構成する要素はすべて数値であること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5921"></A>
+<B>=</B> <EM>num1 num2 &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM>と<EM>num2</EM>、<EM>more-numbers</EM>がすべて等しいとき、Tを返す。
+<EM>num1</EM>と<EM>num2</EM>、<EM>more-numbers</EM>を構成する要素はすべて数値であること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5937"></A>
+<B><SPAN CLASS="MATH"></SPAN></B> <EM>num1 num2 &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM>、<EM>num2</EM>、<EM>more-numbers</EM>の全要素がこの順に単調減少であるとき、Tを返す。
+<EM>num1</EM>と<EM>num2</EM>、<EM>more-numbers</EM>を構成する要素はすべて数値であること。
+誤差を含めた数値比較に対しては、
+<A HREF="jmanual-node17.html#Geometry">14</A>章に書かれている関数（<B>eps<SPAN CLASS="MATH"></SPAN></B>）を使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5955"></A>
+<B><SPAN CLASS="MATH"></SPAN></B> <EM>num1 num2 &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM>、<EM>num2</EM>、<EM>more-numbers</EM>の全要素がこの順に単調増加であるとき、Tを返す。
+<EM>num1</EM>と<EM>num2</EM>、<EM>more-numbers</EM>を構成する要素はすべて数値であること。
+誤差を含めた数値比較に対しては、
+<A HREF="jmanual-node17.html#Geometry">14</A>章に書かれている関数（<B>eps<SPAN CLASS="MATH"></SPAN></B>）を使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5973"></A>
+<B><SPAN CLASS="MATH"></SPAN></B> <EM>num1 num2 &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM>、<EM>num2</EM>、<EM>more-numbers</EM>の全要素がこの順に単調非増加であるとき、Tを返す。
+<EM>num1</EM>と<EM>num2</EM>、<EM>more-numbers</EM>を構成する要素はすべて数値であること。
+誤差を含めた数値比較に対しては、
+<A HREF="jmanual-node17.html#Geometry">14</A>章に書かれている関数（<B>eps<SPAN CLASS="MATH"></SPAN></B>）を使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="5991"></A>
+<B><SPAN CLASS="MATH"></SPAN></B> <EM>num1 num2 &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM>、<EM>num2</EM>、<EM>more-numbers</EM>の全要素がこの順に単調非減少であるとき、Tを返す。
+<EM>num1</EM>と<EM>num2</EM>、<EM>more-numbers</EM>を構成する要素はすべて数値であること。
+誤差を含めた数値比較に対しては、
+<A HREF="jmanual-node17.html#Geometry">14</A>章に書かれている関数（<B>eps<SPAN CLASS="MATH"></SPAN></B>）を使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION02063000000000000000">
+整数とビット毎の操作関数</A>
+</H2>
+以下の関数の引数は、すべて<TT>integer</TT>とする。
+
+<P>
+
+ <BR>
+<BR> <A NAME="6009"></A>
+<B>mod</B> <EM>dividend divisor </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dividend</EM> を <EM>divisor</EM>で割った余りを返す。
+<TT>(mod 6 5)=1, (mod -6 5)=-1, (mod 6 -5)=1, (mod -6 -5)=-1</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6022"></A>
+<B>1-</B> <EM>integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<SPAN CLASS="MATH"></SPAN> を返す。コンパイラでは、引数を <TT>integer</TT> と仮定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6033"></A>
+<B>1+</B> <EM>integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<SPAN CLASS="MATH"></SPAN> を返す。
+<B>1+</B> と <B>1<SPAN CLASS="MATH"><IMG
+ WIDTH="408" HEIGHT="874" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+queue
+propertied-object
+s...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></SPAN></B> の引数は、<TT>integer</TT> でなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6046"></A>
+<B>logand</B> <EM>&amp;rest integers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>integers</EM>のビット単位ＡＮＤ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6057"></A>
+<B>logior</B> <EM>&amp;rest integers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>integers</EM>のビット単位ＯＲ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6068"></A>
+<B>logxor</B> <EM>&amp;rest integers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>integers</EM>のビット単位ＸＯＲ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6079"></A>
+<B>logeqv</B> <EM>&amp;rest integers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>logeqv</B>は<TT>(lognot (logxor ...))</TT>と同等である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6091"></A>
+<B>lognand</B> <EM>&amp;rest integers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>integers</EM>のビット単位ＮＡＮＤ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6102"></A>
+<B>lognor</B> <EM>&amp;rest integers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>integers</EM>のビット単位ＮＯＲ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6113"></A>
+<B>lognot</B> <EM>integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>integer</EM>のビット反転。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6124"></A>
+<B>logtest</B> <EM>integer1 integer2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(logand <EM>integer1 integer2</EM>)</TT>がゼロでないとき T を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6136"></A>
+<B>logbitp</B> <EM>index integer </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>integer</EM>がNILでなければ、LSBから数えて <EM>index</EM>番目の 
+ビットが 1 のとき T を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6148"></A>
+<B>ash</B> <EM>integer count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+数値演算左シフト。
+もし <EM>count</EM> が正のとき、<EM>integer</EM>を左にシフトする。
+もし <EM>count</EM> が負のとき、
+<EM>integer</EM> を <SPAN CLASS="MATH"></SPAN><EM>count</EM><SPAN CLASS="MATH"></SPAN> ビット右にシフトする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6163"></A>
+<B>ldb</B> <EM>target position width </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+LoaD Byte.
+<B>ldb</B> や <B>dpb</B> のByte型は、 EusLispにないため、代りに
+2個の <TT>integer</TT> を使用する。
+<EM>target</EM> のLSBより<EM>position</EM>番目の位置からMSBへ <EM>width</EM> ビットの
+範囲を抜き出す。例えば、 <TT>(ldb #x1234 4 4)</TT> は 3となる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6180"></A>
+<B>dpb</B> <EM>value target position width </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+DePosit Byte.
+<EM>target</EM>のLSBより<EM>position</EM>番目の位置へ<EM>value</EM>を
+<EM>width</EM>ビット置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION02064000000000000000">
+一般数値関数</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="6194"></A>
+<B>+</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>numbers</EM>の和を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6205"></A>
+<B>-</B> <EM>num &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし <EM>more-numbers</EM> が与えられたとき、<EM>num</EM>より引く。
+そうでないとき、<EM>num</EM> は符号反転される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6218"></A>
+<B>*</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>numbers</EM>の積を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6229"></A>
+<B>/</B> <EM>num1 num2 &amp;rest more-numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>num1</EM> を、<EM>num2</EM> や <EM>more-numbers</EM>で割り算する。
+全ての引数が<TT>integer</TT>のとき、<TT>integer</TT>を返し、
+引数に1つでも<TT>float</TT>があったときは、<TT>float</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6246"></A>
+<B>abs</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>number</EM>の絶対値を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6257"></A>
+<B>round</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>number</EM>の小数第1位を四捨五入し <TT>integer</TT>を返す。
+<TT>(round 1.5)=2, (round -1.5)=2</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6270"></A>
+<B>floor</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>number</EM>の小数を切捨てる。
+<TT>(floor 1.5)=1, (floor -1.5)=-2</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6282"></A>
+<B>ceiling</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>number</EM>の小数を切り上げる。
+<TT>(ceiling 1.5)=2, (ceiling -1.5)=-1</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6294"></A>
+<B>truncate</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>number</EM>が正のときは切捨て、負のときは切り上げる。
+<TT>(truncate 1.5)=1, (truncate -1.5)=-1</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6306"></A>
+<B>float</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ <EM>number</EM>を<TT>float</TT>にして返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6318"></A>
+<B>max</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ <EM>numbers</EM>の中から、最大値をさがす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6329"></A>
+<B>min</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>numbers</EM>の中から、最小値をさがす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6340"></A>
+<B>make-random-state</B> <EM>&amp;optional state </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+  <EM>random</EM>関数の<EM>randstate</EM>のための<EM>random-state</EM>オブジェクトを返す。
+もし <EM>state</EM> が<EM>random-state</EM>のとき、そのオブジェクトのコピーを返す。
+<EM>state</EM>がTのとき、ランダムに初期化された新たなオブジェクトを返す。
+そうでないとき、現在の<EM>*random-state*</EM>のコピーを返す。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6357"></A>
+<B>random</B> <EM>range &amp;optional (randstate *random-state*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 0あるいは0.0 から <EM>range</EM>までの乱数を返す。
+もし <EM>range</EM> が <TT>integer</TT>のとき、
+<TT>integer</TT> に変換して返す。
+そうでないとき、<TT>float</TT> を返す。
+オプションの<EM>randstate</EM> は、決まった乱数列で表される。
+<EM>randstate</EM>に特別なデータの型はなく、
+2つの要素からなる 整数ベクトルで表される。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6374"></A>
+<B>incf</B> <EM>variable &amp;optional (increment 1) </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>variable</EM> は一般の変数である。
+<EM>variable</EM> は、<EM>increment</EM>だけ増加され、
+<EM>variable</EM>に戻される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6388"></A>
+<B>decf</B> <EM>variable &amp;optional decrement </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>variable</EM> は一般の変数である。
+<EM>variable</EM> は、<EM>decrement</EM>だけ減少され、
+<EM>variable</EM>に戻される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6402"></A>
+<B>reduce</B> <EM>func seq </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2変数操作の<EM>func</EM>関数を用いて、<EM>seq</EM>の中の全ての要素を結合させる。
+例えば、<TT>(reduce #'expt '(2 3 4)) = (expt (expt 2 3) 4)=4096</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6415"></A>
+<B>rad2deg</B> <EM>radian </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> ラジアン値を 度数表現に変換する。
+#R は同じものである。
+EusLisp の中での角度の表記はラジアンであり、
+EusLisp 内の全ての関数が要求する角度引数は、ラジアン表現である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6425"></A>
+<B>deg2rad</B> <EM>degree </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 角度値をラジアン表現に変換する。
+また #D でも実行できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION02065000000000000000">
+基本関数</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="6435"></A>
+<B>sin</B> <EM>theta </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>theta</EM> はラジアンで表される <TT>float</TT> 値。
+<!-- MATH
+ $\sin(theta)$
+ -->
+<SPAN CLASS="MATH"></SPAN>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6447"></A>
+<B>cos</B> <EM>theta </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>theta</EM> はラジアンで表される <TT>float</TT> 値。
+<!-- MATH
+ $\cos(theta)$
+ -->
+<SPAN CLASS="MATH"></SPAN>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6459"></A>
+<B>tan</B> <EM>theta </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>theta</EM> はラジアンで表される <TT>float</TT> 値。
+<!-- MATH
+ $\tan(theta)$
+ -->
+<SPAN CLASS="MATH"></SPAN>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6471"></A>
+<B>sinh</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  hyperbolic sine、
+<!-- MATH
+ $\frac{e^{x}-e^{-x}}{2}$
+ -->
+<SPAN CLASS="MATH"></SPAN>で表される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6485"></A>
+<B>cosh</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  hyperbolic cosine、
+<!-- MATH
+ $\frac{e^{x}+e^{-x}}{2}$
+ -->
+<SPAN CLASS="MATH"></SPAN>で表される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6499"></A>
+<B>tanh</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  hyperbolic tangent、
+<!-- MATH
+ $\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$
+ -->
+<SPAN CLASS="MATH"></SPAN>で表される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6515"></A>
+<B>asin</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>number</EM>のarc sineを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6526"></A>
+<B>acos</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>number</EM>のarc cosineを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6537"></A>
+<B>atan</B> <EM>y &amp;optional x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>atan</B> が1つの引数だけのとき、arctangent を計算する。
+2つの引数のとき、<TT>atan</TT><SPAN CLASS="MATH"></SPAN> を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6549"></A>
+<B>asinh</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> hyperbolic arc sine.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6559"></A>
+<B>acosh</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> hyperbolic arc cosine.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="6569"></A>
+<B>atanh</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> hyperbolic arc tangent.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6579"></A>
+<B>sqrt</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>number</EM> の平方根を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6590"></A>
+<B>log</B> <EM>number </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>number</EM> の自然対数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6601"></A>
+<B>exp</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <SPAN CLASS="MATH"></SPAN>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="6612"></A>
+<B>expt</B> <EM>a x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>a</EM>の<EM>x</EM>乗を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
 
 <DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html418"
-  HREF="jmanual-node9.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html412"
-  HREF="jmanual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html406"
-  HREF="jmanual-node7.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html414"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html416"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html419"
-  HREF="jmanual-node9.html">ライセンス</A>
-<B> Up:</B> <A NAME="tex2html413"
-  HREF="jmanual-node3.html">はじめに</A>
-<B> Previous:</B> <A NAME="tex2html407"
-  HREF="jmanual-node7.html">開発履歴</A>
- &nbsp; <B>  <A NAME="tex2html415"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html417"
-  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<B> Next:</B> <A NAME="tex2html508"
+  HREF="jmanual-node9.html">symbolとパッケージ</A>
+<B>Up:</B> <A NAME="tex2html502"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html496"
+  HREF="jmanual-node7.html">オブジェクト指向プログラミング</A>
+</DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

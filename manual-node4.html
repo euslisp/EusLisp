@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>EusLisp's Object-Oriented Programming</TITLE>
-<META NAME="description" CONTENT="EusLisp's Object-Oriented Programming">
+<TITLE>Data Types</TITLE>
+<META NAME="description" CONTENT="Data Types">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,112 +20,514 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="manual-node5.html">
 <LINK REL="previous" HREF="manual-node3.html">
-<LINK REL="up" HREF="manual-node3.html">
+<LINK REL="up" HREF="manual-node2.html">
 <LINK REL="next" HREF="manual-node5.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html386"
-  HREF="manual-node5.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html380"
-  HREF="manual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html374"
-  HREF="manual-node3.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html382"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html384"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html387"
-  HREF="manual-node5.html">Features</A>
-<B> Up:</B> <A NAME="tex2html381"
+<B> Next:</B> <A NAME="tex2html463"
+  HREF="manual-node5.html">Forms and Evaluation</A>
+<B>Up:</B> <A NAME="tex2html457"
+  HREF="manual-node2.html">EusLisp Basics</A>
+<B> Previous:</B> <A NAME="tex2html451"
   HREF="manual-node3.html">Introduction</A>
-<B> Previous:</B> <A NAME="tex2html375"
-  HREF="manual-node3.html">Introduction</A>
- &nbsp; <B>  <A NAME="tex2html383"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html385"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION02011000000000000000">
-EusLisp's Object-Oriented Programming</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html464"
+  HREF="manual-node4.html#SECTION02021000000000000000">Numbers</A>
+<LI><A NAME="tex2html465"
+  HREF="manual-node4.html#SECTION02022000000000000000">Objects</A>
+<LI><A NAME="tex2html466"
+  HREF="manual-node4.html#SECTION02023000000000000000">Class Hierarchy</A>
+<LI><A NAME="tex2html467"
+  HREF="manual-node4.html#SECTION02024000000000000000">Type Specifier</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION02020000000000000000">
+Data Types</A>
+</H1>
+
+Like other Lisps, it is data objects that are typed, not variables.
+Any variable can have any object as its value.
+Although it is possible to
+declare the type of object which is bound to a variable, but usually
+it is only advisory information to the compiler to generate faster code.
+Numbers are represented as immediate values in pointers and all the others
+are represented by objects referenced by pointers.
+
+<P>
+In the implementation of Sun4, a pointer or a number is represented by
+a long word as depicted in fig.<A HREF="#Pointer">2</A>.
+Two bits at LSB of a pointer are used as tag bits to discriminate
+between a pointer, an integer, and a float.
+Since a pointer's tags are all zero and it can use all 32 bits for
+addressing an object, EusLisp can utilize up to 4GB of process
+address space.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="Pointer"></A><A NAME="1002"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 2:</STRONG>
+Pointer and Immediate Value</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="445" HEIGHT="161" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img2.png"
+ ALT="\includegraphics[width=10cm]{fig/pointer.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H2><A NAME="SECTION02021000000000000000">
+Numbers</A>
 </H2>
-Unlike other Lisp-based object-oriented programming languages like
-CLOS [#!CLOS:Keene!#],
-EusLisp is a Lisp system built on the basis of object-orientation.
-In the former approach, Lisp is used as an
-implementation language for the object-oriented programming,
-and there is apparent distinction between system defined objects
-and user defined objects, since system data types do not have 
-corresponding classes.
-On the other hand, every data structure in EusLisp except number is 
-represented by an object, and there is no inherent difference between
-built-in data types, such as <TT>cons</TT> and <TT>symbols</TT>,
-and user defined classes.
-This implies that even the system built-in data types
-can be extended (inherited) by user-defined classes.
-Also, when a user defines his own class as a subclass of a built-in class,
-he can use built-in methods and functions for the new class,
-and the amount of description for a new program can be reduced.
-For example, you may extend the <TT>cons</TT> class to have extra field other
-than <TT>car</TT> and <TT>cdr</TT> to define queues, trees, stacks, etc.
-Even for these instances, built-in functions for
-built-in cons are also applicable without any loss of efficiency,
-since those functions recognize type hierarchy in a constant time.
-Thus, EusLisp makes all the system built-in facilities open to programmers
-in the form of extensible data types.
-This uniformity is also beneficial to the implementation of EusLisp,
-because, after defining a few kernel functions
-such as <B>defclass</B>, <B>send</B>, and <B>instantiate</B>,
-in the implementation language,
-most of house-keeping functions to access the internal structure of built-in
-data types can be coded in EusLisp itself.
-This has much improved the reliability and maintainability of EusLisp.
+
+<P>
+There are two kinds of numbers,
+integer and float (floating-point number), both are represented
+with 29 bits value and 1 bit sign.
+Thus, integers range from -536,870,912 to 536,870,911.
+Floats can represent plus/minus from 4.8E-38 to 3.8E38 with the
+approximate accuracy of 6 digits in decimal, i.e.,
+floating-point epsilon is approximately 1/1,000,000.
+
+<P>
+Numbers are always represented by immediate data, and not by objects.
+This is the only exception of EusLisp's object orientation.
+However, since numbers never waste heap memory, number crunching applications
+run efficiently without causing garbage collection.
+
+<P>
+EusLisp does not have the character type,
+and characters are represented by integers.
+In order to write a program independent of character code sets,
+<code>#\</code> reader dispatch macro is used.
+However, when the character is read,
+it is converted to numerical representation, and the printer does not
+know how to reconvert it to
+<code>#\</code> notation.
+
+<P>
+A number has two tag bits in a long word Figure <A HREF="#Pointer">2</A>,
+which must be stripped off by shifting or masking 
+when used in arithmetic computation.
+Note that an integer should ignore two MSB bits by arithmetic shifting,
+while a float should ignore two LSB bits by masking.
+Byte swap is also necessary for an architecture like VAX which does not use
+the rightmost byte as the least-significant mantissa byte.
+
+<P>
+
+<H2><A NAME="SECTION02022000000000000000">
+Objects</A>
+</H2>
+Every data  other than number is represented by an object which is allocated
+in heap. 
+Each memory cell of an object has the object header and fixed number of 
+slots for object variables.
+Since vectors may consist of arbitrary number of elements,
+they have 'size' slot immediately after the header.
+Fig. <A HREF="#ObjectFig">3</A> depicts the structures of object and vector, and their
+header word.
+Only the words indicated as <EM>slot</EM> and <EM>element</EM>
+are accessible from users.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="ObjectFig"></A><A NAME="1004"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 3:</STRONG>
+Structures of object, vector, and object header</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="633" HEIGHT="184" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img3.png"
+ ALT="\includegraphics{fig/object.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+A header is composed of six fields.
+Two MSB bits, <EM>m</EM> and <EM>b</EM>,
+are used to indicate the side of the neighbor cell
+in Fibonacci-buddy memory management.
+There are three mark bits in the <EM>mark</EM> field, each of which
+is used by the garbage collector to identify accessible cells,
+by the printer to recognize circular objects in printing in <TT>#n=</TT> and
+<TT>#n#</TT> notations,
+and by <B>copy-object</B> to copy shared objects.
+The <EM>elmt</EM> field discriminates one of seven possible data types
+of vector elements, <EM>pointer, bit, character, byte, integer, float</EM>
+and <EM>foreign-string</EM>.
+Although <EM>elmt</EM> can be available in the class, 
+it is provided in the header to make the memory manager independent of
+the structure of a class and to make the element accessing faster.
+The <EM>bid</EM> field represents the physical size of a memory cell.
+31 different sizes up to 16 MB are represented by the five bits in this field.
+The lower short word (16 bits) is used for the class id.
+This is used to retrieve the class of an object via the system's class table.
+This class id can be regarded as the type tag of traditional Lisps.
+Currently only the lower 8 bits of the cid are used and the upper 8 bits
+are ignored.
+Therefore, the maximum number of classes is limited to 256, though
+this limit can be raised up to 65536 by reconfiguring the EusLisp to allocate
+more memory to the system's class table.
+
+<P>
+
+<H2><A NAME="SECTION02023000000000000000">
+Class Hierarchy</A>
+</H2>
+
+<P>
+The data structure of objects are defined by classes,
+and their behaviors are defined by methods in the classes.
+In EusLisp, a few dozens of classes have already been 
+defined in tree structured
+hierarchy as depicted in fig. <A HREF="#ClassHierarchy">4</A>.
+You can browse the real inheritance structure by the 
+<B>class-hierarchy</B> function.
+The class 'object' at the leftmost is the ultimate super-class of
+all the classes in EusLisp.
+User-defined classes can inherit any of these built-in classes.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="ClassHierarchy"></A><A NAME="1005"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 4:</STRONG>
+Hierarchy of Predefined Classes</CAPTION>
+<TR><TD><IMG
+ WIDTH="368" HEIGHT="958" BORDER="0"
+ SRC="manual-img4.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+queue
+propertied-object
+s...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+A class is defined the <B>defclass</B> macro or by the <B>defstruct</B> macro.
+
+<P><PRE><TT>
+ (defclass class-name &amp;key :super   class 
+<BR>:slots 		 () 
+<BR>:metaclass 		 metaclass 
+<BR>:element-type 		 t 
+<BR>:size  -1
+<BR>) 
+<BR>(defstruct struct-name slots...) 
+<BR>(defstruct (struct-name [struct-options ...]) 
+<BR>         (slot-name1 [slot-option...]) 
+<BR>         (slot-name2 [slot-option...]) 
+<BR>          ...) 
+<BR>
+</TT></PRE>
+<P>
+Methods are defined by the <B>defmethod</B> special form.
+<B>Defmethod</B> can appear any times for a particular class.
+
+<P><PRE><TT>
+ (defmethod class-name  
+<BR>(:method-name1 (parameter...) . body1) 
+<BR>(:method-name2 (parameter...) . body2) 
+<BR>...) 
+</TT></PRE>
+<P>
+Field definitions for most of built-in classes are found in
+<TT>*eusdir*/c/eus.h</TT> header file.
+<TT>(describe)</TT> <EM>class</EM>) gives the description
+of all the slots in <EM>class</EM>, namely, super class, slot names,
+slot types, method list, and so on.
+Definitions of built-in classes follow.
+Note that the superclass of class <B>object</B> is NIL
+since it has no super class.
+
+<P><PRE><TT>
+ (defclass <B>object</B> :super <B>NIL</B> :slots ()) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>cons</B> :super <B>object</B> :slots (car cdr)) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>propertied-object</B> :super <B>object</B> 
+<BR>  :slots (plist))   ;property list 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>symbol</B> :super <B>propertied-object</B> 
+<BR>  :slots (value   ;specially bound value 
+<BR>
+vtype 		                ;const(0),var(1),special(2)  
+<BR>
+function 		             ;global func def 
+<BR>
+pname 		  ;print name string 
+<BR>
+homepkg)) 		            ;home package 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>foreign-pod</B> :super <B>symbol</B> 
+<BR>  :slots (podcode   ;entry code 
+<BR>
+paramtypes 		      ;type of arguments  
+<BR>
+resulttype)) 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>package</B> :super <B>propertied-object</B> 
+<BR>  :slots (names   ;list of package name and nicknames
+<BR>
+uses 		  ;spread use-package list 
+<BR>
+symvector 		 ;hashed obvector 
+<BR>
+symcount 		  ;number of interned symbols 
+<BR>
+intsymvector 		 ;hashed obvector of internal symbols 
+<BR>
+intsymcount 		  ;number of interned internal symbols 
+<BR>
+shadows 		 ;shadowed symbols 
+<BR>
+used-by)) 		  ;packages using this package 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>stream</B> :super <B>propertied-object</B>   
+<BR>  :slots (direction   ;:input or :output, nil if closed 
+<BR>
+buffer 		  ;buffer string 
+<BR>
+count 		 ;current character index 
+<BR>
+tail)) 		  ;last character index 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>file-stream</B> :super <B>stream</B> 
+<BR>  :slots (fd   ;file descriptor (integer)
+<BR>
+fname))		 ;file name str; qid for msgq 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>broadcast-stream</B> :super <B>stream</B>
+<BR>  :slots (destinations))   ;streams to which output is delivered 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>io-stream</B> :super <B>propertied-object</B>
+<BR>:slots (instream outstream)) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>socket-stream</B> :super <B>io-stream</B>
+<BR>:slots (address))   ; socket address 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>read-table</B>  :super <B>propertied-object</B> 
+<BR>       :slots (syntax   ; byte vector representing character types 
+<BR>; 0:illegal, 1:white, 2:comment, 3:macro
+<BR>; 4:constituent, 5:single_escape
+<BR>; 6:multi_escape, 7:term_macro, 8:nonterm_macro 
+<BR>
+macro 		 ;character macro expansion function
+<BR>
+dispatch-macro)) 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>array</B> :super <B>propertied-object</B> 
+<BR>  :slots (entity  ;simple vector storing array entity 
+<BR>
+rank 		 ;number of dimensions: 0-7 
+<BR>
+fillpointer 		    ;pointer to push next element 
+<BR>
+offset 		    ;offset for displaced array 
+<BR>
+dim0,dim1,dim2,dim3,dim4,dim5,dim6))  ;dimensions 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>metaclass</B> :super <B>propertied-object</B> 
+<BR>    :slots   (name    ;class name symbol 
+<BR>
+super 		   ;super class 
+<BR>
+cix 		      ;class id 
+<BR>
+vars 		     ;var name vector including inherited vars 
+<BR>
+types 		    ;type vector of object variables 
+<BR>
+forwards 		  ;components to which messages are forwarded 
+<BR>
+methods)) 		  ;method list 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>vectorclass</B> :super <B>metaclass</B>  
+<BR>  :slots (element-type    ;vector element type 0-7
+<BR>
+size)) 		  ;vector size; 0 if unspecified 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>cstructclass</B> :super <B>vectorclass</B>  
+<BR>  :slots (slotlist))    ;cstruct slot descriptors
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>vector</B> :super <B>object</B> :slots (size)) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>float-vector</B> :super <B>vector</B> :element-type :float) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>string</B> :super <B>vector</B> :element-type :char) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>hash-table</B> :super <B>propertied-object</B> 
+<BR>   :slots   (lisp::key  ;hashed key vector
+<BR>
+value 		 ; value vector
+<BR>
+size 		 ; the size of the hash table
+<BR>
+count 		 ; number of elements entered in the table
+<BR>
+lisp::hash-function 		 
+<BR>
+lisp::test-function 
+<BR>
+lisp::rehash-size 
+<BR>
+lisp::empty  lisp::deleted 		) 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>queue</B> :super <B>cons</B>) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>pathname</B> :super <B>propertied-object</B> 
+<BR>   :slots   (lisp::host device  ; not used
+<BR>
+directory 		 ; list of directories
+<BR>
+name 		 ; file name before the last "."
+<BR>
+type 		 ; type field after the last "."
+<BR>
+lisp::version) 		 ; not used 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>label-reference</B>    ;for reading #n=, #n# objects 
+<BR>  :super <B>object</B> 
+<BR>:slots (label value unsolved next)) 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>compiled-code</B> :super <B>object</B> 
+<BR>   :slots   (codevector 
+<BR>
+quotevector 
+<BR>
+type   ;0=func, 1=macro, 2=special 
+<BR>
+entry)) 		  ;entry offset  
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>closure</B> :super <B>compiled-code</B> 
+<BR>:slots (env1 env2));environment 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>foreign-code</B>  :super <B>compiled-code</B>  
+<BR>   :slots   (paramtypes    ;list of parameter types
+<BR>
+resulttype)) 		 ;function result type 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>load-module</B>  :super <B>compiled-code</B>  
+<BR>   :slots  (symbol-table   ;hashtable of symbols defined 
+<BR>
+object-file 		 ;name of the object file loaded, needed for unloading 
+<BR>
+handle 		 ;file handle returned by ''dlopen'' 
+</TT></PRE>
+<P>
+
+<H2><A NAME="SECTION02024000000000000000">
+Type Specifier</A>
+</H2>
+Though EusLisp does not have the <A NAME="1250"></A><B>d</B>eftype special form,
+type names are used in declarations and functions requesting
+to specify the type of results or contents,
+as in <B>coerce, map, concatenate, make-array</B>, etc.
+Usually, class names can be used as type specifiers, as in
+<TT>(concatenate cons "ab" "cd") = (97 98 99 100)</TT>,
+where Common Lisp uses <TT>(quote list)</TT> instead of <TT>cons</TT>.
+
+<P>
+As EusLisp does not have classes to represent numbers,
+types for numbers need to be given by keywords.
+<A NAME="1252"></A><B>:</B>integer, <A NAME="1254"></A><B>i</B>nteger, <A NAME="1256"></A><B>:</B>int, <A NAME="1258"></A><B>f</B>ixnum,
+or <A NAME="1260"></A><B>:</B>fixnum is used to represent the integer type,
+<A NAME="1262"></A><B>:</B>float or <A NAME="1264"></A><B>f</B>loat, the floating point number type.
+As the <A NAME="1266"></A><EM>e</EM>lement-type argument of <A NAME="1268"></A><B>m</B>ake-array,
+<A NAME="1270"></A><B>:</B>character, <A NAME="1272"></A><B>c</B>haracter, <A NAME="1274"></A><B>:</B>byte, and <A NAME="1276"></A><B>b</B>yte
+are recognized to make strings.
+Low level functions such as <A NAME="1278"></A><B>d</B>efcstruct, <A NAME="1280"></A><B>s</B>ys:peek,
+and <A NAME="1282"></A><B>s</B>ys:poke, also recognize
+<A NAME="1284"></A><B>:</B>character, <A NAME="1286"></A><B>c</B>haracter, <A NAME="1288"></A><B>:</B>byte, or <A NAME="1290"></A><B>b</B>yte
+for the byte access, and <A NAME="1292"></A><B>:</B>short or <A NAME="1294"></A><B>s</B>hort for short word access.
+In any cases, keywords are preferable to lisp package symbols with the
+same pname.
+
+<P>
 
 <P>
 
 <DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html386"
-  HREF="manual-node5.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html380"
-  HREF="manual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html374"
-  HREF="manual-node3.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html382"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html384"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html387"
-  HREF="manual-node5.html">Features</A>
-<B> Up:</B> <A NAME="tex2html381"
+<B> Next:</B> <A NAME="tex2html463"
+  HREF="manual-node5.html">Forms and Evaluation</A>
+<B>Up:</B> <A NAME="tex2html457"
+  HREF="manual-node2.html">EusLisp Basics</A>
+<B> Previous:</B> <A NAME="tex2html451"
   HREF="manual-node3.html">Introduction</A>
-<B> Previous:</B> <A NAME="tex2html375"
-  HREF="manual-node3.html">Introduction</A>
- &nbsp; <B>  <A NAME="tex2html383"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html385"
-  HREF="manual-node167.html">Index</A></B> </DIV>
+</DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

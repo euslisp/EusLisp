@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Common Lispとの互換性</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="Common Lispとの互換性">
+<TITLE>制御構造</TITLE>
+<META NAME="description" CONTENT="制御構造">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,88 +16,815 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node7.html">
 <LINK REL="previous" HREF="jmanual-node5.html">
-<LINK REL="up" HREF="jmanual-node3.html">
+<LINK REL="up" HREF="jmanual-node2.html">
 <LINK REL="next" HREF="jmanual-node7.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html390"
-  HREF="jmanual-node7.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html384"
-  HREF="jmanual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html378"
-  HREF="jmanual-node5.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html386"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html388"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html391"
-  HREF="jmanual-node7.html">開発履歴</A>
-<B> Up:</B> <A NAME="tex2html385"
-  HREF="jmanual-node3.html">はじめに</A>
-<B> Previous:</B> <A NAME="tex2html379"
-  HREF="jmanual-node5.html">Euslispの特徴</A>
- &nbsp; <B>  <A NAME="tex2html387"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html389"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html470"
+  HREF="jmanual-node7.html">オブジェクト指向プログラミング</A>
+<B>Up:</B> <A NAME="tex2html464"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html458"
+  HREF="jmanual-node5.html">書式と評価</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION02013000000000000000">
-Common Lispとの互換性</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html471"
+  HREF="jmanual-node6.html#SECTION02041000000000000000">条件文</A>
+<LI><A NAME="tex2html472"
+  HREF="jmanual-node6.html#SECTION02042000000000000000">逐次実行とLet</A>
+<LI><A NAME="tex2html473"
+  HREF="jmanual-node6.html#SECTION02043000000000000000">ローカル関数</A>
+<LI><A NAME="tex2html474"
+  HREF="jmanual-node6.html#SECTION02044000000000000000">ブロックとExit</A>
+<LI><A NAME="tex2html475"
+  HREF="jmanual-node6.html#SECTION02045000000000000000">繰返し</A>
+<LI><A NAME="tex2html476"
+  HREF="jmanual-node6.html#SECTION02046000000000000000">述語</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION02040000000000000000">
+制御構造</A>
+</H1>
+
+<H2><A NAME="SECTION02041000000000000000">
+条件文</A>
 </H2>
 
 <P>
-Common Lispは、よく本となっていて広く入手できる標準的なLisp[#!CLtL!#,#!CLtL2!#]
-となっている。
-そのため、EusLispはCommon Lispの特徴をたくさん採用している。例えば、
-変数スコープルール・パッケージ・列・一般変数・ブロック・構造体・
-キーワードパラメータなどであるが、非互換もまだ残っている。
-実現されていない特徴を次に列挙する。
+<B>and,or</B>および<B>cond</B>は、Common Lispにおいてマクロとして知られているが、
+EusLispではインタプリタ時の効率を改善するために特殊書式として実行される。
 
 <P>
 
-<OL>
-<LI>多値変数:
-      multiple-value-call, multiple-value-prog1, etc.
-</LI>
-<LI>いくつかのデータ型:
-      complex number, bignum, ratio, character, deftype
-</LI>
-<LI>いくつかの特殊書式:
-      progv, compiler-let,macrolet
-</LI>
-</OL>
+ <BR>
+<BR> <A NAME="2137"></A>
+<B>and</B> <EM>{form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form</EM>は、NILが現れるまで左から右に評価される。
+もし、全ての書式がnon-NILとして評価されるならば、
+最後の値が返される。
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-次の特徴は、まだ完全でない。：
 
-<OL>
-<LI>closure - 動的範囲のみ有効である。
-</LI>
-<LI>declare,proclaim - inlineとignoreは認識されない。
-</LI>
-</OL>
+<A NAME="2148"></A>
+<B>or</B> <EM>{form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form</EM>は、non-NIL値が現れるまで左から右に評価される。
+そして、その値が返される。
+もし、全ての書式がNILとして評価されるならば、NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<BR><HR>
+
+<A NAME="2159"></A>
+<B>if</B> <EM>test then [else] </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>if</B>は、１つの<I>then</I>と<I>else</I>書式のみを持つことができる。
+そこに多重書式を書きたいときは、<B>progn</B>を使って
+グループ化しなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2173"></A>
+<B>when</B> <EM>test forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>if</B>と違って、
+<B>when</B>と<B>unless</B>は、多重<EM>書式</EM>で書くことを許可している。
+<EM>test</EM>の評価がnon-NILのとき、<B>when</B>は実行され、
+評価がNILのとき、<EM>unless</EM>は実行される。
+もう一方で、これらのマクロは<EM>else</EM>書式を追加することを
+許可していない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2191"></A>
+<B>unless</B> <EM>test forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(when (not <EM>test</EM>) . <EM>forms</EM>)</TT>と同等である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2204"></A>
+<B>cond</B> <EM>(test {form}*)* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+任意の数の条件項は、<B>cond</B>の後に続けることができる。
+それぞれの条件項において、最初の書式<EM>test</EM>が評価される。
+もし、non-NILであったとき、その条件項の残りの書式は、続いて評価される。
+そして、最後の値が返される。
+もし、<EM>test</EM>のあとに書式がなかったならば、
+<EM>test</EM>の値が返される。
+<EM>test</EM>が失敗したとき、次の条件項は<EM>test</EM>がnon-NIL評価されるかまたは
+全ての条件項が尽きてしまうまで繰り返される。
+条件項が尽きてしまった場合、<B>cond</B>はNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2222"></A>
+<B>case</B> <EM>key {({label <SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> ({lab}*) {form}*)}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>key</EM>と<EM>label</EM>が一致した条件項について、
+<EM>form</EM>が評価され、最後の値が返される。
+<EM>key</EM>と<EM>label</EM>の間の等価は、<B>eq</B>または
+<B>memq</B>で行われ、<B>equal</B>ではない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION02042000000000000000">
+逐次実行とLet</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <A NAME="2240"></A>
+<B>prog1</B> <EM>form1 &amp;rest forms </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form1</EM>と<EM>forms</EM>は、次々と評価され、
+<EM>form1</EM>から返される値が<B>prog1</B>の値として返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2254"></A>
+<B>progn</B> <EM>{form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form</EM>は次々に評価され、最後の<EM>form</EM>の値が返される。
+<B>progn</B>は特殊書式である。なぜなら、ファイルの最初に現れたとき
+特別な意味を持つからである。
+そのような書式がコンパイルされたとき、内部書式はすべて最初に現れた
+として見なす。
+マクロが<B>defun</B>や<B>defmethod</B>の連続で拡張される場合、それが最初に
+現われなければならないときに役立つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2269"></A>
+<B>setf</B> <EM>{access-form value}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>value</EM>を一般化変数<EM>access-form</EM>に割り当てる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2281"></A>
+<B>let</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> (var [value])}*) {declare}* {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ローカル変数を生成する。
+すべての<EM>value</EM>は評価され、並行して<EM>var</EM>に割り当てられる。すなわち、
+<TT>(let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))</TT> の結果は
+(2 1)である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2294"></A>
+<B>let*</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> (var [value])}*) {declare}* {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ローカル変数を生成する。
+全ての<EM>value</EM>は次々に評価され、<EM>var</EM>に割り当てられる。すなわち、
+<TT>(let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))</TT>の結果は
+(2 2)である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION02043000000000000000">
+ローカル関数</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="2307"></A>
+<B>flet</B> <EM>({(fname lambda-list . body)}*) {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ローカル関数を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2317"></A>
+<B>labels</B> <EM>({(fname lambda-list . body)}*) {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ローカルなスコープとなる関数を定義する。
+<B>flet</B>と<B>labels</B>との違いは、
+<B>flet</B>で定義されたローカル関数は、その他の関数を参照または再帰できないが、
+<B>labels</B>は相互の参照を許可する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION02044000000000000000">
+ブロックとExit</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="2331"></A>
+<B>block</B> <EM>tag {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>return-from</B>によって脱出可能なローカルブロックを作る。
+<EM>tag</EM>は、ローカルにスコープされ、評価されない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2343"></A>
+<B>return-from</B> <EM>tag value </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>tag</EM>によって示されたブロックを脱出する。
+<B>return-from</B>は、関数やメソッドから脱出するときに使用される。
+関数やメソッドは、その本体をすべて取り囲んだ部分をブロックとして
+自動的に確定され、その関数またはメソッドの名前を付ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2355"></A>
+<B>return</B> <EM>value </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(return x)</TT>は、<TT>(return-from nil x)</TT>と同等である。
+<B>loop, while, do, dolist, dotimes</B>は、暗黙的にNILと名前が付けられた
+ブロックとして確定されるため、これらの特殊書式と組み合わせて使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2368"></A>
+<B>catch</B> <EM>tag {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>throw</B>によって脱出または値を返すための動的なブロックを確定する。
+<EM>tag</EM>は評価される。
+
+<P>
+全て見える<B>catch</B>の<EM>tag</EM>は、<TT>sys:list-all-catchers</TT>から得ることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2383"></A>
+<B>throw</B> <EM>tag value </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>catch</B>ブロックから脱出または<EM>value</EM>を返す。
+<EM>tag</EM>と<EM>value</EM>は評価される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2397"></A>
+<B>unwind-protect</B> <EM>protected-form {cleanup-form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>protected-form</EM>の評価が終った後、
+<EM>cleanup-form</EM>が評価される。
+<B>unwind-protect</B>の外側にブロックまたは<B>catch</B>
+ブロックを作っても構わない。
+
+<P>
+<B>return-from</B>や<B>throw</B>でさえ、そのようなブロックから
+抜け出すためには<EM>protected-form</EM>の中で実行される。
+<EM>cleanup-form</EM>は、評価されることが保証されている。
+また、もし<EM>protected-form</EM>が実行されている間にエラーが起こったならば、
+<EM>cleanup-form</EM>はいつも<B>reset</B>によって実行される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION02045000000000000000">
+繰返し</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="2418"></A>
+<B>while</B> <EM>test {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>test</EM>がnon-NILと評価されている間、
+<EM>form</EM>は、繰返し評価される。
+<B>while</B>は、<EM>form</EM>のまわりにNILと名付けられるブロックを自動的に確定する
+特殊書式である。
+<B>return</B>は、そのループから抜け出すために使用することができる。
+次のイテレーションへ飛ぶときためには後に紹介する<B>tagbody</B>と<B>go</B>を次のように使う:
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<PRE>
+(setq cnt 0)
+(while
+  (&lt; cnt 10)
+  (tagbody while-top
+    (incf cnt)
+    (when (eq (mod cnt 3) 0)
+      (go while-top))  ;; jump to next iteraction
+    (print cnt)
+    )) ;; 1, 2, 4, 5, 7, 8, 10
+</PRE>
+
+<P>
+
+<A NAME="2435"></A>
+<B>tagbody</B> <EM>{tag <SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> statement}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>tag</EM>は、<B>go</B>のために名付けられる。
+<B>tagbody</B>の中のみ<B>go</B>を使用することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2449"></A>
+<B>go</B> <EM>tag </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ローカルにスコープされた<B>tagbody</B>のなかに現れる<EM>tag</EM>の直後の
+書式に制御を移す。
+ローカルスコープを横切って違う<B>tagbody</B>のtagに制御を移すことは
+禁止されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2462"></A>
+<B>prog</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> (var [init])}*) {tag <SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> statement}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>prog</B>はマクロで、以下のように展開される。<PRE><TT>
+ (block nil     (let <EM>var</EM> (tagbody  <EM>tag <SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> statement</EM>))) 
+</TT></PRE>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2482"></A>
+<B>do</B> <EM>({(var init [next])}*) (endtest [result]){declare} {form}
+* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>var</EM>はローカル変数である。
+それぞれの<EM>var</EM>に、<EM>init</EM>は並行に評価され、割り当てられる。
+つぎに、<EM>endtest</EM>が評価され、もし真のとき<B>do</B>は<EM>result</EM>を返す。
+ (そうでないときは、NILを返す)
+もし<EM>endtest</EM>がNILを返したならば、それぞれの<EM>form</EM>は、
+順番に評価される。
+書式の評価後、<EM>next</EM>が評価され、その値は
+それぞれの<EM>var</EM>に再割当され、次の繰返しが始まる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2502"></A>
+<B>do*</B> <EM>({var init [next]}*) (endtest [result]){declare} {form}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> <B>do*</B>は、<EM>init</EM>と<EM>next</EM>の評価と
+<EM>var</EM>への割り当てが連続的に起こることを除いて、<B>do</B>と同様である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2517"></A>
+<B>dotimes</B> <EM>(var count [result]) {forms}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>の評価を<EM>count</EM>回行う。
+<EM>count</EM>は、一回のみ評価される。
+それぞれの評価の中で、<EM>var</EM>は整数のゼロから
+<EM>count</EM>-1まで増加する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2532"></A>
+<B>dolist</B> <EM>(var list [result]) {forms}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>のそれぞれの要素は、<EM>var</EM>に連続的に与えられる。
+そして<EM>forms</EM>は、それぞれの値で評価される。
+<B>dolist</B>は、他の繰返しより早く実行される。たとえば、
+<B>mapcar</B>や再帰的関数のようなものより。
+それは、<B>dolist</B>が関数のclosureを作ったり適用したりする必要が
+なく、新しいパラメータのバインドが必要でないため。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2548"></A>
+<B>until</B> <EM>condition {forms}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>condition</EM>が満たされている間、<EM>forms</EM>を評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2560"></A>
+<B>loop</B> <EM>{forms}* </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>を永遠に評価する。
+実行を止めるためには、<B>return-from, throw</B>または<B>go</B>が
+<EM>forms</EM>のなかで評価されなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION02046000000000000000">
+述語</A>
+</H2>
+
+<P>
+Common Lispの<B>typep</B>と<B>subtypep</B>はないので、
+<B>subclassp</B>や<B>derivedp</B>で疑似実現すること。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="2574"></A>
+<B>eq</B> <EM>obj1 obj2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>obj1</EM>と<EM>obj2</EM>が同じオブジェクトを指すポインタあるいは同じ
+数値のときTを返す。
+例えば:<TT>(eq 'a 'a)</TT>はT、<TT>(eq 1 1)</TT>はT、<TT>(eq 1. 1.0)</TT>はNIL、
+<TT>(eq "a" "a")</TT>はNILである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2590"></A>
+<B>eql</B> <EM>obj1 obj2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+EusLispの中で数値は全て直接値で表現されるため、<B>eq</B>と<B>eql</B>は
+同一である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2602"></A>
+<B>equal</B> <EM>obj1 obj2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+いろんな構造のオブジェクトの等価性をチェックする。オブジェクトは、文字列・ベクトル・
+行列などで再帰的に参照してないことが保証されなければならない。
+<EM>obj1</EM>や<EM>obj2</EM>が再帰的に参照されていたとすると、
+<B>equal</B>は無限ループとなる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2615"></A>
+<B>superequal</B> <EM>obj1 obj2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>superequal</B>は、環状参照をチェックするので遅い。しかしロバストな等価が得られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2626"></A>
+<B>null</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>object</EM>がNILのとき、Tを返す。
+<TT>(eq <EM>object</EM> nil)</TT>を評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2639"></A>
+<B>not</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>not</B>は、<B>null</B>と同一である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2651"></A>
+<B>atom</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+オブジェクトがconsのインスタンスである時のみ、NILを返す。
+<TT>(atom nil) = (atom '()) = T)</TT>
+<BR>注意:vectors, strings, read-table, hash-tableなどに対しては、それらがどんなに
+複雑なオブジェクトとなっていても<B>atom</B>はTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2663"></A>
+<B>every</B> <EM>pred &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全ての<EM>args</EM>が<EM>pred</EM>についてTを返した時のみ
+Tを返す。<B>every</B>は、<EM>pred</EM>が全ての<EM>args</EM>に対して効力があるかどうかを
+検査する時に使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2678"></A>
+<B>some</B> <EM>pred &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>args</EM>のうちどれか1つが<EM>pred</EM>についてTを返したとき
+Tを返す。<B>some</B>は、<EM>pred</EM>が<EM>args</EM>のどれかに対して効力があるかどうかを
+検査する時に使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <A NAME="2693"></A>
+<B>functionp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>が<B>apply</B>や<B>funcall</B>で与えられる関数オブジェクトであるならTを返す。
+<BR>注意:マクロは<B>apply</B>や<B>funcall</B>を適用することができない。
+<B>functionp</B>は、<EM>object</EM>が、type=0のコンパイルコードか、関数定義を持つsymbolか、
+lambda-formかあるいはlambda-closureであったとき、Tを返す。
+<TT>Examples: (functionp 'car) = T, (functionp 'do) = NIL</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2711"></A>
+<B>compiled-function-p</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>が、コンパイルコードのインスタンスであったとき、Tを返す。
+そのコンパイルコードが関数かまたはマクロかを知るためには、
+そのオブジェクトに<TT>:type</TT>メッセージを送り、その返り値が
+<TT>function</TT>と<TT>macro</TT>のどちらになっているかを調べる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html470"
+  HREF="jmanual-node7.html">オブジェクト指向プログラミング</A>
+<B>Up:</B> <A NAME="tex2html464"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html458"
+  HREF="jmanual-node5.html">書式と評価</A>
+</DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

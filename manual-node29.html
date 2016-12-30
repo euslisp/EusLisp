@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Iteration</TITLE>
-<META NAME="description" CONTENT="Iteration">
+<TITLE>About this document ...</TITLE>
+<META NAME="description" CONTENT="About this document ...">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,277 +18,55 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="manual.css">
 
-<LINK REL="next" HREF="manual-node30.html">
 <LINK REL="previous" HREF="manual-node28.html">
-<LINK REL="up" HREF="manual-node24.html">
-<LINK REL="next" HREF="manual-node30.html">
+<LINK REL="up" HREF="manual.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html817"
-  HREF="manual-node30.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html811"
-  HREF="manual-node24.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html805"
-  HREF="manual-node28.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html813"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html815"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html818"
-  HREF="manual-node30.html">Predicates</A>
-<B> Up:</B> <A NAME="tex2html812"
-  HREF="manual-node24.html">Control Structures</A>
-<B> Previous:</B> <A NAME="tex2html806"
-  HREF="manual-node28.html">Blocks and Exits</A>
- &nbsp; <B>  <A NAME="tex2html814"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html816"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
-<!--End of Navigation Panel-->
-
-<H2><A NAME="SECTION03035000000000000000">
-Iteration</A>
-</H2>
-
-<P>
-
- <BR>
+<B>Up:</B> <A NAME="tex2html1024"
+  HREF="manual.html">EusLisp version 9.22 Reference</A>
+<B> Previous:</B> <A NAME="tex2html1020"
+  HREF="manual-node28.html">Index</A>
 <BR> <P>
-
-<A NAME="2472"></A>
-<B>while</B> <EM>test {form}* </EM>[special]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-While <EM>test</EM> is evaluated to non-nil,
-<EM>form</EM>s are evaluated repeatedly.
-<B>While</B> special form automatically establishes a block by name of nil
-around <EM>form</EM>s, and <B>return</B> can be used to exit from the loop.
-To jump to next iteration, you can use following syntax with <B>tagbody</B> and <B>go</B> described below:
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-<PRE>
-(setq cnt 0)
-(while
-  (&lt; cnt 10)
-  (tagbody while-top
-    (incf cnt)
-    (when (eq (mod cnt 3) 0)
-      (go while-top))  ;; jump to next iteraction
-    (print cnt)
-    )) ;; 1, 2, 4, 5, 7, 8, 10
-</PRE>
-
-<P>
-
-<A NAME="2489"></A>
-<B>tagbody</B> <EM>{tag <SPAN CLASS="MATH"><IMG
- WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img5.png"
- ALT="$\vert$"></SPAN> statement}* </EM>[special]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>tag</EM>s are labels for <B>go</B>.
-You can use <B>go</B> only in <B>tagbody</B>.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="2503"></A>
-<B>go</B> <EM>tag </EM>[special]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-transfers control to the form just after <EM>tag</EM>
-which appears in a lexically scoped <B>tagbody</B>.
-<B>Go</B> to the tag in a different <B>tagbody</B>
-across the lexical scope is inhibited.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="2517"></A>
-<B>prog</B> <EM>({var <SPAN CLASS="MATH"><IMG
- WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img5.png"
- ALT="$\vert$"></SPAN> (var [init])}*) {tag <SPAN CLASS="MATH"><IMG
- WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img5.png"
- ALT="$\vert$"></SPAN> statement}* </EM>[macro]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<B>prog</B> is a macro, which expands as follows:<PRE><TT>
- (block nil     (let <EM>var</EM> (tagbody  <EM>tag <SPAN CLASS="MATH"><IMG
- WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img5.png"
- ALT="$\vert$"></SPAN> statement</EM>))) 
-</TT></PRE>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="2537"></A>
-<B>do</B> <EM>({(var init [next])}*) (endtest [result]){declare} {form}
-* </EM>[macro]
-
-<DL COMPACT>
-<DT> 
-<DD> <EM>var</EM>s are local variables.
-To each <EM>var</EM>, <EM>init</EM> is evaluated in parallel and assigned.
-Next, <EM>endtest</EM> is evaluated and if it is true, <B>do</B> returns
-<EM>result</EM> (defaulted to NIL).
-If <EM>endtest</EM> returns NIL, each <EM>form</EM> is evaluated sequentially.
-After the evaluation of forms, <EM>next</EM> is evaluated and the value is
-reassigned to each <EM>var</EM>, and the next iteration starts.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="2557"></A>
-<B>do*</B> <EM>({var init [next]}*) (endtest [result]){declare} {form}* </EM>[macro]
-
-<DL COMPACT>
-<DT> 
-<DD> <B>do*</B> is same as <B>do</B> except that the evaluation of <EM>init</EM>
-and <EM>next</EM>, and their assignment to <EM>var</EM> occur sequentially.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="2572"></A>
-<B>dotimes</B> <EM>(var count [result]) {forms}* </EM>[macro]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-evaluates <EM>forms</EM> <EM>count</EM> times.
-<EM>count</EM> is evaluated only once.
-In each evaluation, <EM>var</EM> increments from integer zero to
-<EM>count</EM> minus one.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="2587"></A>
-<B>dolist</B> <EM>(var list [result]) {forms}* </EM>[macro]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-Each element of <EM>list</EM> is  sequentially bound to <EM>var</EM>,
-and <EM>forms</EM> are evaluated for each binding.
-<B>Dolist</B> runs faster than other iteration constructs
-such as <B>mapcar</B> and recursive functions,
-since <B>dolist</B> does not have to create a function closure or to apply it,
-and no new parameter binding is needed.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="2603"></A>
-<B>until</B> <EM>condition {forms}* </EM>[macro]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-evaluates forms until <EM>condition</EM> holds.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="2614"></A>
-<B>loop</B> <EM>{forms}* </EM>[macro]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-evaluates <EM>forms</EM> forever.
-To terminate execution, <B>return-from, throw</B> or <B>go</B> needed to be
-evaluated in <EM>forms</EM>.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html817"
-  HREF="manual-node30.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html811"
-  HREF="manual-node24.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html805"
-  HREF="manual-node28.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html813"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html815"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html818"
-  HREF="manual-node30.html">Predicates</A>
-<B> Up:</B> <A NAME="tex2html812"
-  HREF="manual-node24.html">Control Structures</A>
-<B> Previous:</B> <A NAME="tex2html806"
-  HREF="manual-node28.html">Blocks and Exits</A>
- &nbsp; <B>  <A NAME="tex2html814"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html816"
-  HREF="manual-node167.html">Index</A></B> </DIV>
+</DIV>
 <!--End of Navigation Panel-->
-<ADDRESS>
 
-2016-03-23
+<H1><A NAME="SECTION06000000000000000000">
+About this document ...</A>
+</H1><SMALL CLASS="FOOTNOTESIZE">
+ </SMALL><STRONG><BIG CLASS="XHUGE"><B>EusLisp</B></BIG> 
+<BR><BIG CLASS="XLARGE"><B>version 9.22</B></BIG> 
+<BR><BIG CLASS="XXLARGE"><B>Reference Manual</B></BIG> 
+<BR><BIG CLASS="LARGE">Featuring Multithread and XToolKit</BIG> 
+<BR>
+<BR>
+<BR>
+<BR>
+<BIG CLASS="LARGE">ETL-TR-95-2</BIG> 
+<BR><BIG CLASS="LARGE">January, 1995</BIG>  
+<BR></STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2008 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+Nikos Drakos, 
+Computer Based Learning Unit, University of Leeds.
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>-dir ../html/ -transparent -local_icons -split +3 -auto_prefix -iso_language JP manual</TT>
+<P>
+The translation was initiated by Travis CI User on 2016-12-30
+<BR><HR>
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Compatibility with Common Lisp</TITLE>
-<META NAME="description" CONTENT="Compatibility with Common Lisp">
+<TITLE>Control Structures</TITLE>
+<META NAME="description" CONTENT="Control Structures">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,85 +20,805 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="manual-node7.html">
 <LINK REL="previous" HREF="manual-node5.html">
-<LINK REL="up" HREF="manual-node3.html">
+<LINK REL="up" HREF="manual-node2.html">
 <LINK REL="next" HREF="manual-node7.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html414"
-  HREF="manual-node7.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html408"
-  HREF="manual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html402"
-  HREF="manual-node5.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html410"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html412"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html415"
-  HREF="manual-node7.html">Revision History</A>
-<B> Up:</B> <A NAME="tex2html409"
-  HREF="manual-node3.html">Introduction</A>
-<B> Previous:</B> <A NAME="tex2html403"
-  HREF="manual-node5.html">Features</A>
- &nbsp; <B>  <A NAME="tex2html411"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html413"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html501"
+  HREF="manual-node7.html">Object Oriented Programming</A>
+<B>Up:</B> <A NAME="tex2html495"
+  HREF="manual-node2.html">EusLisp Basics</A>
+<B> Previous:</B> <A NAME="tex2html489"
+  HREF="manual-node5.html">Forms and Evaluation</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION02013000000000000000">
-Compatibility with Common Lisp</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html502"
+  HREF="manual-node6.html#SECTION02041000000000000000">Conditionals</A>
+<LI><A NAME="tex2html503"
+  HREF="manual-node6.html#SECTION02042000000000000000">Sequencing and Lets</A>
+<LI><A NAME="tex2html504"
+  HREF="manual-node6.html#SECTION02043000000000000000">Local Functions</A>
+<LI><A NAME="tex2html505"
+  HREF="manual-node6.html#SECTION02044000000000000000">Blocks and Exits</A>
+<LI><A NAME="tex2html506"
+  HREF="manual-node6.html#SECTION02045000000000000000">Iteration</A>
+<LI><A NAME="tex2html507"
+  HREF="manual-node6.html#SECTION02046000000000000000">Predicates</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION02040000000000000000">
+Control Structures</A>
+</H1>
+
+<H2><A NAME="SECTION02041000000000000000">
+Conditionals</A>
 </H2>
 
 <P>
-Common Lisp has become the well-documented and widely-available standard Lisp
-[#!CLtL!#,#!CLtL2!#].
-Although EusLisp has introduced lots of Common Lisp features
-such as variable scoping rules, packages, sequences, generalized variables,
-blocks, structures, keyword parameters, etc.,
-incompatibilities still remain.
-Here is a list of missing features:
+Although <B>and, or</B> and <B>cond</B> are advised to be macros by Common Lisp,
+they are implemented as special forms in EusLisp to improve
+the interpreting performance.
 
 <P>
 
-<OL>
-<LI>multiple values:
-      multiple-value-call,multiple-value-prog1, etc.
-</LI>
-<LI>some of data types:
-      complex number, bignum, ratio, character and deftype
-</LI>
-<LI>some of special forms:
-      progv, compiler-let,macrolet
-</LI>
-</OL>
+ <BR>
+<BR> <A NAME="2215"></A>
+<B>and</B> <EM>{form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Form</EM>s are evaluated from left to right until NIL appears.
+If all forms are evaluated to non-NIL, the last value is returned.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-Following features are incomplete:
 
-<OL>
-<LI>closure - only valid for dynamic extent
-</LI>
-<LI>declare,proclaim - inline and ignore are unrecognized
-</LI>
-</OL>
+<A NAME="2226"></A>
+<B>or</B> <EM>{form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Form</EM>s are evaluated from left to right until non-NIL appears,
+and the value is returned. If all forms are evaluated to NIL, 
+NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<BR><HR>
+
+<A NAME="2237"></A>
+<B>if</B> <EM>test then [else] </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>if</B> can only have single <I>then</I> and <I>else</I> forms.
+To allow multiple <EM>then</EM> or <EM>else</EM> forms,
+they must be grouped by <B>progn</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2253"></A>
+<B>when</B> <EM>test forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Unlike <B>if</B>,
+<B>when</B> and <B>unless</B> allow you to write multiple <EM>forms</EM>
+which are executed when <EM>test</EM> holds (<B>when</B>) or
+does not <EM>unless</EM>.
+On the other hand, these macros
+cannot have the <EM>else</EM> forms.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2271"></A>
+<B>unless</B> <EM>test forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is equivalent to <TT>(when (not <EM>test</EM>) . <EM>forms</EM>)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2284"></A>
+<B>cond</B> <EM>(test {form}*)* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Arbitrary number of  cond-clauses can follow <B>cond</B>.
+In each clause, the first form, that is <EM>test</EM>, is evaluated.
+If it is non-nil, the rest of the forms in that clause are evaluated sequentially,
+and the last value is returned. 
+If no forms are given after the <EM>test</EM>, the value of the <EM>test</EM> is returned.
+When the <EM>test</EM> fails, next clause is tried until a <EM>test</EM> which is evaluated
+to non-nil is found or all clauses are exhausted.
+In the latter case, <B>cond</B> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2302"></A>
+<B>case</B> <EM>key {({label <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$ \vert$"></SPAN> ({lab}*) {form}*)}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+For the clause whose <EM>label</EM> matches with <EM>key</EM>,
+<EM>form</EM>s are evaluated and the last value is returned.
+Equality between <EM>key</EM> and <EM>label</EM> is tested with <B>eq</B>
+or <B>memq</B>, not with <B>equal</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION02042000000000000000">
+Sequencing and Lets</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <A NAME="2320"></A>
+<B>prog1</B> <EM>form1 &amp;rest forms </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form1</EM> and <EM>forms</EM> are evaluated sequentially, 
+and the value returned by <EM>form1</EM> is returned as the value of <B>prog1</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2334"></A>
+<B>progn</B> <EM>{form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Form</EM>s are evaluated sequentially, and the value of the rightmost form
+is returned.
+<B>Progn</B> is a special form because it has a special meaning when it
+appeared at top level in a file.
+When such a form is compiled, all inner forms are regarded as they appear
+at top level.
+This is useful for a macro which expands to a series of
+<B>defun</B>s or <B>defmethod</B>s, which must appear at top level.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2348"></A>
+<B>setf</B> <EM>{access-form value}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+assigns <EM>value</EM> to a generalized-variable <EM>access-form</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2360"></A>
+<B>let</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$ \vert$"></SPAN> (var [value])}*) {declare}* {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+introduces local variables.
+All <EM>value</EM>s are evaluated and assigned to <EM>var</EM>s in parallel, i.e.,
+<TT>(let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))</TT> produces
+(2 1).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2373"></A>
+<B>let*</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$ \vert$"></SPAN> (var [value])}*) {declare}* {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+introduces local variables.
+All <EM>value</EM>s are evaluated sequentially, and assigned to <EM>var</EM>s
+i.e.,
+<TT>(let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))</TT> produces
+(2 2).
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION02043000000000000000">
+Local Functions</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="2386"></A>
+<B>flet</B> <EM>({(fname lambda-list . body)}*) {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines local functions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2396"></A>
+<B>labels</B> <EM>({(fname lambda-list . body)}*) {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines locally scoped functions. 
+The difference between <EM>flet</EM> and <EM>labels</EM> is,
+the local functions defined by <EM>flet</EM> cannot reference
+each other or recursively, whereas <EM>labels</EM> allows such mutual references.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION02044000000000000000">
+Blocks and Exits</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="2410"></A>
+<B>block</B> <EM>tag {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a lexical block from which you can exit by <B>return-from</B>.
+<EM>Tag</EM> is lexically scoped and is not evaluated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2422"></A>
+<B>return-from</B> <EM>tag value </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+exits the block labeled by <EM>tag</EM>.
+<B>return-from</B> can be used to exit from a function or a method which
+automatically establishes block labeled by its function or method name
+surrounding the entire body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2434"></A>
+<B>return</B> <EM>value </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(return x)</TT> is equivalent to <TT>(return-from nil x)</TT>. This is
+convenient to use in conjunction with <B>loop, while, do, dolist,</B>
+and <B>dotimes</B> which implicitly establish blocks labeled NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2448"></A>
+<B>catch</B> <EM>tag {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+establishes a dynamic block from which you can exit and return a value
+by <B>throw</B>. <EM>Tag</EM> is evaluated.
+The list of all visible catch tags can be obtained by <TT>sys:list-all-catchers</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2461"></A>
+<B>throw</B> <EM>tag value </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+exits and returns <EM>value</EM> from a catch block.
+<EM>tag</EM> and <EM>value</EM> are evaluated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2474"></A>
+<B>unwind-protect</B> <EM>protected-form {cleanup-form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+After the evaluation of <EM>protected-form</EM> finishes,
+<EM>cleanup-form</EM> is evaluated.
+You may make a block or a catch block outside the <TT>unwind-protect</TT>.
+Even <B>return-from</B> or <B>throw</B> is executed in <EM>protected-form</EM>
+to escape from such blocks, <EM>cleanup-form</EM> is assured to be evaluated.
+Also, if you had an error while executing <EM>protected-form</EM>,
+<EM>cleanup-form</EM> would always be executed by <EM>reset</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION02045000000000000000">
+Iteration</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="2494"></A>
+<B>while</B> <EM>test {form}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+While <EM>test</EM> is evaluated to non-nil,
+<EM>form</EM>s are evaluated repeatedly.
+<B>While</B> special form automatically establishes a block by name of nil
+around <EM>form</EM>s, and <B>return</B> can be used to exit from the loop.
+To jump to next iteration, you can use following syntax with <B>tagbody</B> and <B>go</B> described below:
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<PRE>
+(setq cnt 0)
+(while
+  (&lt; cnt 10)
+  (tagbody while-top
+    (incf cnt)
+    (when (eq (mod cnt 3) 0)
+      (go while-top))  ;; jump to next iteraction
+    (print cnt)
+    )) ;; 1, 2, 4, 5, 7, 8, 10
+</PRE>
+
+<P>
+
+<A NAME="2511"></A>
+<B>tagbody</B> <EM>{tag <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$ \vert$"></SPAN> statement}* </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>tag</EM>s are labels for <B>go</B>.
+You can use <B>go</B> only in <B>tagbody</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2525"></A>
+<B>go</B> <EM>tag </EM>[special]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+transfers control to the form just after <EM>tag</EM>
+which appears in a lexically scoped <B>tagbody</B>.
+<B>Go</B> to the tag in a different <B>tagbody</B>
+across the lexical scope is inhibited.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2539"></A>
+<B>prog</B> <EM>({var <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$ \vert$"></SPAN> (var [init])}*) {tag <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$ \vert$"></SPAN> statement}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>prog</B> is a macro, which expands as follows:<PRE><TT>
+ (block nil     (let <EM>var</EM> (tagbody  <EM>tag <SPAN CLASS="MATH"><IMG
+ WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img5.png"
+ ALT="$ \vert$"></SPAN> statement</EM>))) 
+</TT></PRE>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2559"></A>
+<B>do</B> <EM>({(var init [next])}*) (endtest [result]){declare} {form}
+* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>var</EM>s are local variables.
+To each <EM>var</EM>, <EM>init</EM> is evaluated in parallel and assigned.
+Next, <EM>endtest</EM> is evaluated and if it is true, <B>do</B> returns
+<EM>result</EM> (defaulted to NIL).
+If <EM>endtest</EM> returns NIL, each <EM>form</EM> is evaluated sequentially.
+After the evaluation of forms, <EM>next</EM> is evaluated and the value is
+reassigned to each <EM>var</EM>, and the next iteration starts.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2579"></A>
+<B>do*</B> <EM>({var init [next]}*) (endtest [result]){declare} {form}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> <B>do*</B> is same as <B>do</B> except that the evaluation of <EM>init</EM>
+and <EM>next</EM>, and their assignment to <EM>var</EM> occur sequentially.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2594"></A>
+<B>dotimes</B> <EM>(var count [result]) {forms}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+evaluates <EM>forms</EM> <EM>count</EM> times.
+<EM>count</EM> is evaluated only once.
+In each evaluation, <EM>var</EM> increments from integer zero to
+<EM>count</EM> minus one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2609"></A>
+<B>dolist</B> <EM>(var list [result]) {forms}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Each element of <EM>list</EM> is  sequentially bound to <EM>var</EM>,
+and <EM>forms</EM> are evaluated for each binding.
+<B>Dolist</B> runs faster than other iteration constructs
+such as <B>mapcar</B> and recursive functions,
+since <B>dolist</B> does not have to create a function closure or to apply it,
+and no new parameter binding is needed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2625"></A>
+<B>until</B> <EM>condition {forms}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+evaluates forms until <EM>condition</EM> holds.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2636"></A>
+<B>loop</B> <EM>{forms}* </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+evaluates <EM>forms</EM> forever.
+To terminate execution, <B>return-from, throw</B> or <B>go</B> needed to be
+evaluated in <EM>forms</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION02046000000000000000">
+Predicates</A>
+</H2>
+
+<P>
+<B>Typep</B> and <B>subtypep</B> of Common Lisp are not provided, and should be
+simulated by <B>subclassp</B> and <B>derivedp</B>.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="2650"></A>
+<B>eq</B> <EM>obj1 obj2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns T,
+if <EM>obj1</EM> and <EM>obj2</EM> are pointers to the same object,
+or the same numbers.
+Examples: <TT>(eq 'a 'a)</TT> is T, <TT>(eq 1 1)</TT> is T,
+<TT>(eq 1. 1.0)</TT> is nil, <TT>(eq "a" "a")</TT> is nil.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2666"></A>
+<B>eql</B> <EM>obj1 obj2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Eq</B> and <B>eql</B> are identical since all the numbers in EusLisp are represented as
+immediate values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2678"></A>
+<B>equal</B> <EM>obj1 obj2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Checks the equality of any structured objects, such as strings, vectors or
+matrices, as long as they do not have recursive references.
+If there is recursive reference in <EM>obj1</EM> or <EM>obj2</EM>,
+<B>equal</B> loops infinitely.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2691"></A>
+<B>superequal</B> <EM>obj1 obj2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Slow but robust <B>equal</B>, since <B>superequal</B> checks circular reference.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="2703"></A>
+<B>null</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> T if <EM>object</EM> is nil.
+Equivalent to (eq <EM>object</EM> nil).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2715"></A>
+<B>not</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>not</B> is identical to <B>null</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2727"></A>
+<B>atom</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns NIL only if object is a cons.
+<TT>(atom nil) = (atom '()) = T)</TT>.
+Note that <B>atom</B> returns T for vectors, strings, read-table, hash-table, 
+etc., no matter what complex objects they are.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2739"></A>
+<B>every</B> <EM>pred &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if all <EM>args</EM> return T for <EM>pred</EM>.
+<B>Every</B> is used to test whether <EM>pred</EM> holds for every <EM>args</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2754"></A>
+<B>some</B> <EM>pred &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if at least one of <EM>args</EM> return T for <EM>pred</EM>.
+<B>Some</B> is used to test whether <EM>pred</EM> holds for any of <EM>args</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <A NAME="2769"></A>
+<B>functionp</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is a function object that can be given to
+<B>apply</B> and <B>funcall</B>.
+Note that macros cannot be <EM>apply</EM>'ed or <EM>funcall</EM>'ed.
+<B>Functionp</B> returns T, if <EM>object</EM> is
+either a compiled-code with type=0, a symbol that has function definition,
+a lambda-form, or a lambda-closure.
+Examples: (functionp 'car) = T, (functionp 'do) = NIL
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="2786"></A>
+<B>compiled-function-p</B> <EM>object </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if <EM>object</EM> is an instance of compiled-code.
+In order to know the compiled-code is a function or a macro,
+send <TT>:type</TT> message to the object, and <TT>function</TT> or <TT>macro</TT>
+is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html501"
+  HREF="manual-node7.html">Object Oriented Programming</A>
+<B>Up:</B> <A NAME="tex2html495"
+  HREF="manual-node2.html">EusLisp Basics</A>
+<B> Previous:</B> <A NAME="tex2html489"
+  HREF="manual-node5.html">Forms and Evaluation</A>
+</DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

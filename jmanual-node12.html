@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>データ型</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="データ型">
+<TITLE>評価</TITLE>
+<META NAME="description" CONTENT="評価">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,101 +16,1700 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
-<LINK REL="next" HREF="jmanual-node17.html">
 <LINK REL="previous" HREF="jmanual-node11.html">
-<LINK REL="up" HREF="jmanual-node11.html">
+<LINK REL="up" HREF="jmanual-node2.html">
 <LINK REL="next" HREF="jmanual-node13.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html534"
-  HREF="jmanual-node13.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html528"
-  HREF="jmanual-node11.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html522"
-  HREF="jmanual-node11.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html530"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html532"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html535"
-  HREF="jmanual-node13.html">数値</A>
-<B> Up:</B> <A NAME="tex2html529"
-  HREF="jmanual-node11.html">Bibliography</A>
-<B> Previous:</B> <A NAME="tex2html523"
-  HREF="jmanual-node11.html">Bibliography</A>
- &nbsp; <B>  <A NAME="tex2html531"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html533"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
-<!--End of Navigation Panel-->
-
-<H1><A NAME="SECTION03010000000000000000">
-データ型</A>
-</H1>
-
-他のLispと同様に、型の決まったデータオブジェクトは変数ではない。
-どの変数もその値として、どんなオブジェクトも持つことができる。
-変数にオブジェクトの型を宣言することが可能であるが、
-一般的にコンパイラで高速なコードを生成するための情報としてのみ
-使用される。
-数値は、ポインタの中で直接値として表現され、
-そのほかは、ポインタにより参照されるオブジェクトにより表現される。
-Sun4で実行する場合、ポインタおよび数値は図<A HREF="#Pointer">2</A>で描かれているように
-long wordで表現される。
-ポインタのLSBの2ビットは、ポインタ・integer・floatを識別するための
-tagビットとして使用されている。
-ポインタはtagビットが全てゼロであり、オブジェクトのアドレスとして32ビット全て
-使用できるので、EusLispは4GB以上のアドレス空間を利用することができる。
-
-<P>
-
-<DIV ALIGN="CENTER"><A NAME="Pointer"></A><A NAME="957"></A>
-<TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
-ポインタと直接値</CAPTION>
-<TR><TD><IMG
- WIDTH="392" HEIGHT="140" BORDER="0"
- SRC="jmanual-img3.png"
- ALT="\begin{figure}\begin{center}
-\epsfile{file=fig/pointer.ps}
-\end{center}
-\end{figure}"></TD></TR>
-</TABLE>
+<B> Next:</B> <A NAME="tex2html587"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B>Up:</B> <A NAME="tex2html581"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html577"
+  HREF="jmanual-node11.html">ストリームと入出力</A>
+<BR> <P>
 </DIV>
-
-<P>
-<BR><HR>
+<!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html536"
-  HREF="jmanual-node13.html">数値</A>
-<LI><A NAME="tex2html537"
-  HREF="jmanual-node14.html">オブジェクト</A>
-<LI><A NAME="tex2html538"
-  HREF="jmanual-node15.html">クラス継承</A>
-<LI><A NAME="tex2html539"
-  HREF="jmanual-node16.html">型指定</A>
+<LI><A NAME="tex2html588"
+  HREF="jmanual-node12.html#SECTION020101000000000000000">評価関数</A>
+<LI><A NAME="tex2html589"
+  HREF="jmanual-node12.html#SECTION020102000000000000000">最上位レベルの対話</A>
+<LI><A NAME="tex2html590"
+  HREF="jmanual-node12.html#SECTION020103000000000000000">コンパイル</A>
+<LI><A NAME="tex2html591"
+  HREF="jmanual-node12.html#SECTION020104000000000000000">プログラムロード</A>
+<LI><A NAME="tex2html592"
+  HREF="jmanual-node12.html#SECTION020105000000000000000">デバッグ補助</A>
+<LI><A NAME="tex2html593"
+  HREF="jmanual-node12.html#SECTION020106000000000000000">ダンプオブジェクト</A>
+<LI><A NAME="tex2html594"
+  HREF="jmanual-node12.html#SECTION020107000000000000000">プロセスイメージ保存</A>
+<LI><A NAME="tex2html595"
+  HREF="jmanual-node12.html#SECTION020108000000000000000">最上位レベルのカスタマイズ</A>
+<LI><A NAME="tex2html596"
+  HREF="jmanual-node12.html#SECTION020109000000000000000">その他の関数</A>
 </UL>
 <!--End of Table of Child-Links-->
-<BR><HR>
-<ADDRESS>
+<HR>
 
-2016-03-23
+<H1><A NAME="SECTION020100000000000000000">
+評価</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION020101000000000000000">
+評価関数</A>
+</H2>
+
+<P>
+エラーやシグナル(signal)に関する振る舞いを示すために、
+あらかじめそれぞれ特別の変数<B>*error-handler*</B>と<B>*signal-handler*</B>
+に適当な関数を設定する。
+修正あるいは続行できるエラーはない。
+エラーを解析後、現在の実行を<B>reset</B>または上位レベルへの適当な<B>throw</B>
+によって停止しなければならない。
+Euslispの最上位レベルで<TT>0</TT>と名付けられたcatch frameを作成しているので、
+<B>reset</B>は、<TT>(throw 0 NIL)</TT>と同等である。
+
+<P>
+エラーハンドラーは、<EM>code msg1 form &amp;optional (msg2)</EM>
+という3つあるいは4つの引き数を持つ関数として定義しなければならない。
+<EM>code</EM>はエラーコードで、システムで定義されたエラーを示す。
+例えば、14が'引き数が合わない'、13が'関数が定義されていない'となる。
+これらの定義は、"c/eus.h"の中に定義されている。
+<EM>msg1</EM>と<EM>msg2</EM>は、ユーザーに示されるメッセージである。
+<EM>form</EM>は、エラーによって生じたs表現である。
+
+<P>
+シグナルハンドラーは、<EM>sig</EM>と<EM>code</EM>の2つの引き数を受ける関数として
+定義されなければならない。
+<EM>sig</EM>は、1から30までのシグナル番号である。
+<EM>code</EM>は、シグナル番号の中に定義された補助番号である。
+
+<P>
+最上位レベルでの<code>^</code>D(<EM>end-of-file</EM>)は、Euslispの活動を停止させる。
+これは、Euslispをフィルターとしてプログラムされているとき
+役に立つ。
+
+<P>
+<B>eval-dynamic</B>は、letやlambda変数として使用されるsymbolに結び付く
+動的な変数を捜す関数である。
+デバッグするときに役に立つ。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="18393"></A>
+<B>identity</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>obj</EM>自身を返す。
+<B>idnetity</B>と<B>quote</B>との違いに注意すること。
+<B>identity</B>が関数であるのに対して<B>quote</B>は、特殊書式(special form)
+である。
+したがって、<TT>(identity 'abc)</TT>は<TT>abc</TT>と評価されるが、
+<TT>(quote 'abc) == (quote (quote abc))</TT>は<TT>'abc</TT>と評価される。
+<B>identity</B>は、多くの一般列関数の<EM>:key</EM>パラメータのデフォルト値
+としてしばしば用いられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18414"></A>
+<B>eval</B> <EM>form [environment] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form</EM>を評価して、その値を返す。
+もし、<B>*evalhook*</B>に<EM>form</EM>や<EM>environment</EM>を受ける関数を
+設定するならば、hook関数を評価に入る前に呼び出すことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18428"></A>
+<B>apply</B> <EM>func &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>args</EM>に<EM>func</EM>を適用する。
+<EM>func</EM>は、関数symbolかlambda書式かclosureでなければならない。
+マクロと特殊書式(special form)は適用出来ない。
+<EM>args</EM>の最後の要素は、他の<EM>args</EM>が空の引き数であるなら
+引き数のリストでなければならない。
+このように、もし、<EM>args</EM>の最後がNILであったならば、
+<B>apply</B>はほとんど<B>funcall</B>と同じである。
+ただし、<B>apply</B>は<B>funcall</B>より1つ多くの引き数を持つことができる。
+<TT>(apply #'max 2 5 3 '(8 2)) -&gt; 8</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18449"></A>
+<B>funcall</B> <EM>func &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>args</EM>に<EM>func</EM>を適用する。
+<EM>args</EM>の数は、<EM>func</EM>で要求されている引き数の数と一致しなければ
+ならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18463"></A>
+<B>quote</B> <EM>obj </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>obj</EM>自身を評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18474"></A>
+<B>function</B> <EM>func </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> closure関数を作る。
+もし、<EM>func</EM>がsymbolならば、その関数定義が検索される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18485"></A>
+<B>evalhook</B> <EM>hookfunc form [env] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>hookfun</EM>を<B>*evalhook*</B>に結び付けた後、<EM>form</EM>を一度評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18498"></A>
+<B>eval-dynamic</B> <EM>variable </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スタックにある<EM>variable</EM>(symbol)の値を捜す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18509"></A>
+<B>macroexpand</B> <EM>form </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>form</EM>がマクロcallであるなら、それを展開する。
+もし、展開したものがまだマクロcallを含んでいるならば、
+マクロcallのない結果となるまでくり返し展開する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18520"></A>
+<B>eval-when</B> <EM>situation {form}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>situation</EM>は<TT>compile, load, eval</TT>のリストである。
+<EM>form</EM>は、現在の実行モードが<EM>situation</EM>と一致するときに評価される。
+<B>eval-when</B>は、コンパイラでの動作や環境を制御するために重要なものである。
+もし、<TT>compile</TT>が指定されたならば、<EM>form</EM>はコンパイラによって
+評価されるので、その結果はコンパイル結果に影響を及ぼすことになる。
+例えば、<B>defmacro</B>はコンパイル時にマクロcallを展開するためにコンパイラで
+評価されなければならない。
+もし、<TT>load</TT>が<EM>situation</EM>のリストに与えられたならば、
+<EM>form</EM>はload時にloadまたは評価されるためにコンパイルされる。
+すなわち、load時にコンパイルされた関数が定義される。
+これは、コンパイラに期待される一般的な機能である。
+<TT>load</TT>は、コンパイラの環境を制御するために使用される。
+もし、<TT>eval</TT>が<EM>situation</EM>のリストに含まれているならば、
+<EM>form</EM>はソースコードがloadされるときに評価される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18545"></A>
+<B>the</B> <EM>type form </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>form</EM>を<EM>type</EM>として宣言する。
+<EM>type</EM>は、<TT>:integer, :fixnum, :float</TT>で示されるクラスオブジェクト
+のどれかである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18559"></A>
+<B>declare</B> <EM>declaration* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+それぞれ<EM>declaration</EM>は、宣言指定や整数あるいは目的のsymbolのリストである。
+宣言は、コンパイラが高速なコードを生成するために重要である。
+<DL>
+<DT></DT>
+<DD>special 特殊変数を宣言する。
+</DD>
+<DT></DT>
+<DD>type 変数の型を宣言する。; <TT>(type integer count)</TT>;
+有効な型指定子は<EM>integer</EM>, <EM>:integer</EM>, <EM>fixnum</EM>,
+<EM>:float</EM>と<EM>float</EM>である。型指定子がここに示したものの１つである
+ならば、<B>type</B>キーワードを削除しても良い。そのため、
+<TT>(integer count)</TT>は正しい宣言である。
+<EM>float-vector</EM>,<EM>integer-vector</EM>などのような、その他の型（クラス）では、
+<TT>(type float-vector vec1)</TT>のように<B>type</B>を前に付ける必要がある。
+</DD>
+<DT></DT>
+<DD>ftype 関数の結果の型を宣言する。
+</DD>
+<DT></DT>
+<DD>optimize コンパイラの*optimize*パラメータに値(0-3)を設定する。
+</DD>
+<DT></DT>
+<DD>safety コンパイラの*safety*パラメータに値(0-3)を設定する。
+</DD>
+<DT></DT>
+<DD>space  コンパイラの*space*パラメータに値(0-3)を設定する。
+</DD>
+<DT></DT>
+<DD>inline 認識しない。
+</DD>
+<DT></DT>
+<DD>not-inline 認識しない。
+</DD>
+</DL>
+
+<P>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18592"></A>
+<B>proclaim</B> <EM>proclamation </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+変数やコンパイラオプションをグローバルに宣言する。
+同様な宣言は、<B>declare</B>特殊書式によって記述することができる。
+しかしながら、<B>proclaim</B>は、1つの引数を持つ関数であり、
+宣言を評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18604"></A>
+<B>warn</B> <EM>format-string &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>format-string</EM>と<EM>args</EM>で与えられる警告メッセージを
+<B>*error-output*</B>に出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18617"></A>
+<B>error</B> <EM>format-string &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>*error-handler*</B>に結び付く現在のエラーハンドラー関数を呼び出す。
+デフォルトのエラーハンドラー'euserror'を<B>*error-output*</B>に最初に出力し
+<EM>format-string</EM>と<EM>args</EM>を<B>format</B>を用いて出力する。
+その後、新しい最上位レベルのセッション(session)に入る。
+プロンプトには、エラーセッションの深さを示す。
+<B>throw</B>にその番号を与えることにより、低いエラーレベルのセッションへ戻ることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+マルチスレッドEuslispにおいて、特殊変数はスレッド間で共有され、
+同じ<B>*error-handler*</B>が異なったスレッドから参照される。
+この不自由を避けるために、マルチスレッドEuslispは<B>install-error-handler</B>
+関数を備えている。その関数は、それぞれのスレッドに対して
+異なったエラーハンドラーをインストールする。
+
+<P>
+
+ <BR>
+<BR> <A NAME="18633"></A>
+<B>install-error-handler</B> <EM>handler </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>handler</EM>を現在のスレッドのエラーハンドラーとしてインストールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION020102000000000000000">
+最上位レベルの対話</A>
+</H2>
+
+<P>
+EusLispの標準の最上位レベルの入力−評価−出力のループ(loop)は、<B>eustop</B>
+により制御されている。
+euslispが呼び出されたとき、
+<B>eustop</B>は、ホームディレクトリから<TT>".eusrc"</TT>というファイルを
+あるいは<TT>EUSRC</TT>環境変数で指定されたファイルをロードする。
+それから、euslispは、引き数リストで指定されたファイルをロードする。
+これらのロードが終了後、<B>eustop</B>は、普通の対話セッション(session)に入る。
+
+<P>
+<B>*standard-input*</B>にユーザーのTTYが接続されたとき、
+<B>eustop</B>は、<B>*prompt-string*</B>（デフォルトとして<TT>"eus$"</TT>が
+設定されている）に設定されたプロンプトを出力する。
+そして、<B>*terminal-io*</B>ストリームから命令を入力する。
+もし、その入力がカッコで括られた行ならば、
+<B>eval</B>によってlisp書式として扱われる。
+もし、入力行の最初のsymbolに関数定義があった場合、その行に自動的に
+カッコが入れられ、評価される。
+もし、関数定義が見つからなかった場合、その特殊値(special value)が
+調査され、その値が出力される。
+もし、そのsymbolになにも定義されてないならば、
+その行はUNIX命令とみなされ、sh(Bourn's shell)へ渡される。
+もし、shが一致するUNIX命令を捜せなかったとき、
+"command unrecognized"というメッセージを出力する。
+このように、<B>eustop</B>はlispのインタープリタおよびUNIXのシェルとして動作する。
+もし、入力をUNIX命令として実行したくないとき、
+行の最初にコンマ','を付ければよい。
+これは、対話実行(interpretive execution)でエラーが発生したとき、
+動的な値を見るときに役に立つ。
+Euslispはローカルなスコープ(lexical scope)を採用しているので
+ローカル変数の値をspecialとして宣言されていない限りスコープの外から
+調査することは出来ない。
+
+<P>
+入力は、それぞれ行番号とともに<B>*history*</B>ベクトルに記憶される。
+cshの上と同じ様に<B>!</B>関数を入力することにより入力の詳細を
+呼び出すことができる。
+cshの履歴との違いは、<B>!</B>が関数であるため<B>!</B>の次に最低１つの
+スペースが必要である。
+また、コントロールキーを用いることによりemacsのように対話的に
+行を編集することができる。
+
+<P>
+通常<code>^</code>D (EOF)でEuslispは終了する。
+上位レベル(普通はcsh)に異常終了コードを返すためには、適当な条件コードをつけた
+<B>exit</B>を使用すること。
+
+<P>
+<B>eustop</B>は、SIGINTとSIGPIPEのためにシグナルハンドラーを設定する。
+そして、他のシグナルはcatchしない。
+このため、SIGTERMやSIGQUITのようなシグナルでEuslispを終了できる。
+終了を避けたいとき、これらのシグナルをcatchするためには、
+<B>unix:signal</B>関数でユーザーで定義したシグナルハンドラーを設定すること。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="18644"></A>
+<B>-</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 現在の入力
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18654"></A>
+<B>+</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 直前の入力
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18664"></A>
+<B>++</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> ２つ前の入力
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18674"></A>
+<B>+++</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> ３つ前の入力
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18684"></A>
+<B>*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 直前の結果
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18694"></A>
+<B>**</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> ２つ前の結果
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18704"></A>
+<B>***</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> ３つ前の結果
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18714"></A>
+<B>*prompt-string*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>eustop</B>で使用されるプロンプト文字列
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18725"></A>
+<B>*program-name*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このEuslispが呼び出された命令。例えば、<TT>eus,eusx,eusxview</TT>やユーザーで作った
+euslispなど。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18736"></A>
+<B>eustop</B> <EM>&amp;rest argv </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> デフォルトの最上位ループ
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18746"></A>
+<B>eussig</B> <EM>sig code </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+SIGPIPEのデフォルトシグナルハンドラー。
+<B>eussig</B>は、SIGPIPEが到着したり他の最上位レベルループに入るとき
+シグナル番号を出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18757"></A>
+<B>sigint-handler</B> <EM>sig code </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+SIGINT(control-C)のデフォルトシグナルハンドラー。
+このシグナルで新しい最上位セッションへ入る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18767"></A>
+<B>euserror</B> <EM>code message &amp;rest arg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトのエラーハンドラーで、
+<EM>message</EM>を出力し、新しいエラーセッションへ入る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18778"></A>
+<B>reset</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+エラーループから脱出して、最後の<B>eustop</B>セッションへ戻る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18789"></A>
+<B>exit</B> <EM>&amp;optional termination-code </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Euslispプロセスを終了し、プロセスの状態コードとして<EM>termination-code</EM>
+(0..255)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18800"></A>
+<B>h</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <B>*history*</B>の中に記憶されている入力履歴を
+関連する列番号とともに出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18811"></A>
+<B>!</B> <EM>&amp;optional (seq 0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+列番号<EM>seq</EM>に関連する入力行を呼び出す。
+<EM>seq</EM>が0のとき、もっとも最近の命令が呼び出される。
+もし、<EM>seq</EM>が負の場合、現在行から相対的な位置にある行が
+呼び出される。
+呼び出された行が表示され、その行の最後にカーソルを移動する。
+次のコントロールキーが使用出来る。
+control-H (backspace)かcontrol-Bで１文字戻る。
+control-Fかcontrol-Kで１文字進む。
+control-Aで行の最初に移動する。
+control-Lで行の最後に移動する。
+control-Cで行の修正をキャンセルする。
+control-M (carriage-return)かcontrol-J (line-feed)で
+行修正を終了して、修正した行を評価する。
+もし、<EM>seq</EM>が番号でなくsymbolまたは文字列の場合、
+履歴リストを古い方に向かって検索し、
+symbolまたは文字列が含まれている命令行を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18825"></A>
+<B>new-history</B> <EM>depth </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>depth</EM>の長さを持つように<B>*history*</B>を初期化する。
+<EM>depth</EM>行が記憶される。
+現在の<B>*history*</B>に記録された入力行は、すべて消滅する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION020103000000000000000"></A><A NAME="compiler"></A>
+<BR>
+コンパイル
+</H2>
+
+<P>
+Euslispコンパイラは、Lispプログラムの実行を高速化するために使用される。
+実行時間の5〜30倍の高速化とマクロ展開によるガーベージコレクション
+時間の大幅な減少が期待できる。
+
+<P>
+euscompは、計算処理とベクトル処理のための最適化を行う。
+ときどきコンパイラが最適化を効率良く実行するために、固有の型宣言が必要となる。
+
+<P>
+<B>compile-function</B>は、1つずつ関数をコンパイルする。
+<B>compile-file</B>は、すべてのソースファイルをコンパイルする。
+<B>compile-file</B>を実行している間、ファイル内のすべての書式が読み込まれ
+評価される。
+これは、現在のEuslispの環境を変化させる。
+例えば、<B>defparameter</B>はsymbolに新しい値を設定するし、
+<B>defun</B>はコンパイルされていない関数をコンパイルされた関数に
+置き換える。
+これらの予期しない影響を避けるためには、<TT>compile</TT>指定のない<B>eval-when</B>を
+使用したり、<B>euscomp</B>を使用して別プロセスとしてコンパイラを実行したりする。
+
+<P>
+<B>euscomp</B>はUNIXのコマンドで、普通<B>eus</B>にシンボリックリンクされている。
+幾つかのオプションを持っている。
+-OフラグはCコンパイラの最適化を指示し、
+-O1,-O2, -O3 はそれぞれEuslispコンパイラの最適化のレベルを指示する。
+これは、<TT>(optimize 1 or 2 or 3)</TT>と宣言するのと同等である。
+-S0, -S1, -S2, -S3は、<B>compiler:*safety*</B>に0,1,2,3を設定する。
+もし<B>*safety*</B>が2より小さければ、割り込みチェックのためのコードを発行しない。
+もし、プログラムが無限ループに入ったとき、制御を失うことになる。
+もし<B>*safety*</B>が0のときは、引き数の数をチェックしない。
+-Vフラグは、コンパイルされている関数名を表示する。
+-cフラグは、ccの実行やforkを防ぐ。
+-Dは、<B>*features*</B>リストに続く引き数を置く。
+これは、読み込みマクロ<TT>#-</TT>と<TT>#+</TT>
+を用いた条件付きコンパイルのために使用することができる。
+
+<P>
+コンパイラは"xxx.l"という名のEuslispソースプログラムを
+中間Cプログラムファイル"xxx.c"
+とヘッダーファイル"xxx.h"に変換する。
+それから、Cコンパイラが実行され、"xxx.o"が生成される。
+中間ファイル"xxx.c"と"xxx.h"はクロスコンパイルの目的のために残される。
+したがって、違うアーキテクチャーの機械の上で使用したいとき、UNIX命令のccで
+"xxx.c"ファイルをコンパイルするだけでよい。
+コンパイルされたコードは、'<TT>(load "xxx")</TT>'によってEuslispにロードされる。
+
+<P>
+中間ファイルはそれぞれ、"eus.h"ヘッダーファイルを参照する。
+このファイルは、<TT>*eusdir*/c</TT>ディレクトリに置かれていると仮定している。
+<TT>*eusdir*</TT>は、<TT>EUSDIR</TT>環境変数からコピーされる。
+もし設定されてなければ、<TT>/usr/local/eus/</TT>がデフォルトディレクトリ
+として扱われる。
+
+<P>
+コンパイルされたとき、中間のCプログラムは普通元のソースコードよりも
+かなり大きくなる。例えば、1,161行のlispソースコード"l/common.l"は、
+8,194行の"l/common.c"と544行の"l/common.h"に展開される。
+1,000行のlispソースをコンパイルするのは、難しい作業ではないが、
+10,000行近いCのプログラムを最適コンパイルすることは、長い時間(数分)かかる
+とともに、たくさんのディスク空間を消費する。
+そのため、もし相対的に大きなプログラムのコンパイルをするならば、
+/var/tmpに十分なディスクがあるかどうかを確認すること。
+そうでなければ、CCは死ぬだろう。
+<TT>TMPDIR</TT>環境変数をもっと大きなディスク部分に設定することが助かる道である。
+
+<P>
+リンクがロード時または実行時に実行されるので、
+eusのカーネルがバージョンアップされても再コンパイルする必要はない。
+もう一方で、実行時リンクは不便なことがある。
+２つの関数AとBが"x.l"ファイルにありAがBを呼び出していると仮定する。
+"x.l"をコンパイル後、"x.o"をロードし内部でBを呼び出しているAを呼び出そうとする。
+それから、Bの中でbugを見つけると、たぶんBを再定義しようとするだろう。
+ここで、コンパイルされたAとコンパイルされていないBとができる。
+再びAを呼び出したとすると、Aはまだ古いコンパイルされているBを呼び出す。
+これは、Aが最初にBを呼び出したとき固定的にリンクされるからである。
+この問題を避けるためには、Aを再定義しなおすかあるいは"x.o"がロードされた直後で
+Aを呼び出す前にBを再定義しなければならない。
+
+<P>
+コンパイルされたコードがロードされるとき、一般的にdefunやdefmethodの
+列である最上位コードが実行される。
+この最上位コードはロードモジュールのエントリ関数として定義されている。
+コンパイラがそのエントリ関数の名前を付け、
+ローダがこの関数の名前を正確にわからなければならない。
+状況を簡単にするために、コンパイラとローダの両方とも
+そのエントリ関数の名前としてオブジェクトファイルのbasenameと同一のもの
+と仮定する。
+例えば、もし"fib.l"をコンパイルしたならば、
+コンパイラは"fib.c"のエントリ関数として"fib(...)"を生成する。
+そして、ローダはオブジェクトファイル"fib.o"の中から"fib"を探す。
+最終的にオブジェクトファイルはUnixの"cc"や"ld"で生成されるので、
+このエントリ関数名は、C関数の命名ルールを満足しなければならない。
+したがって、ファイル名としてCの予約キーワード（例えば、
+"int", "struct", "union", "register", "extern"など）や"c/eus.h"に
+定義されているプライベート指示語（例えば、"pointer", "cons",
+"makeint"など）を避けなければならない。
+もし、ソースファイルの名前としてこれらの予約語の内の１つを
+使用しなければならないならば、コンパイラやローダの
+<EM>:entry</EM>引数を別に指定すること。
+
+<P>
+closureの使用には制限がある。
+closureの中の<B>return-from</B>特殊書式と<B>unwind-protect</B>の中のclean-up書式は
+いつも正しくコンパイルされるわけではない。
+
+<P>
+<B>disassemble</B>は、実現されていない。
+コンパイルされたコードを解析するためには中間Cプログラムを見るかあるいは
+<B>adb</B>を使用する。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="18839"></A>
+<B>euscomp</B> <EM>{filename}* </EM>[UNIXコマンド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Euslispコンパイラを呼びだす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18849"></A>
+<PRE><TT>
+<B>compile-file</B> <I>srcfile &amp;key (:verbose nil)   [関数]
+<BR>(:optimize 2) (:c-optimize 1) (:safety 1) 		 </I>;optimization level<I> 
+<BR>(:pic t) 		 </I>;generate position independ-<I> 
+<BR> </I>ent code to build library<I> 
+<BR>(:cc t) 		 </I>; run c compiler<I> 
+<BR>(:entry (pathname-name file)) 
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>ファイルをコンパイルする。
+".l"が<EM>srcfile</EM>の拡張子として仮定される。
+もし、<EM>:verbose</EM>がTならば、コンパイルされた関数やメソッド名が表示される。
+これは、エラーが発生した箇所を簡単に探すのに役立つ。
+<EM>:optimize, :c-optimize</EM>と<EM>:safety</EM>は、最適化のレベルを
+指定する。
+モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
+<EM>:pic</EM>は、Tに設定すべきである。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18870"></A>
+<B>compile</B> <EM>funcname </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+関数をコンパイルする。<B>compile</B>は、最初に関数定義をテンポラリファイルに
+出力する。そのファイルは、<B>compile-file</B>によってコンパイルされ、
+それから<B>load</B>によってロードされる。
+テンポラリファイルは削除される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18883"></A>
+<B>compile-file-if-src-newer</B> <EM>srcfile &amp;key compiler-options </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>srcfile</EM>が対応するオブジェクトファイルよりも新しい（最近変更された）
+ならば、コンパイルする。そのオブジェクトファイルは、".o"拡張子を
+持っていると仮定される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18894"></A>
+<B>*optimize*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> コンパイラの最適化レベルを制御する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18904"></A>
+<B>*verbose*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+non-NILが設定されたとき、コンパイルされている関数名やメソッド名そして
+コンパイルに要した時間を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18914"></A>
+<B>*safety*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+安全性レベルを制御する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION020104000000000000000">
+プログラムロード</A>
+</H2>
+
+ <BR>
+<BR> <P>
+
+<A NAME="18924"></A>
+<PRE><TT>
+<B>load</B> <I>fname &amp;key :verbose   *load-verbose* [関数]
+<BR>:package 		  *package* 
+<BR>:entry 		  (pathname-name fname) 
+<BR>:symbol-input 		 "/usr/local/bin/eus" 
+<BR>:symbol-output 		 "a.out" 
+<BR>:ld-option 		 ""</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>load</B>はソースファイルあるいはコンパイルされたオブジェクトファイル
+をEuslispに読み込むための関数である。
+もし、<EM>fname</EM>で指定されたファイルが存在するとき、
+Euslispはロードする。
+そのファイルがソースとバイナリーの内どちらかは、magic numberを見ることにより
+自動的にチェックされる。
+もし、そのファイルが存在しないが'.o'の型のファイルが存在する場合、
+そのファイルをオブジェクトファイルとしてロードする。
+その他、'.l'のファイルが見つかったならば、ソースプログラムとしてロードする。
+もし、ファイル名の最初に"/"を付ける絶対パスを指定していない場合、
+<B>load</B>は、グローバル変数<TT>*load-path*</TT>に指定されているディレクトリ
+の中からファイルを検索する。
+例えば、<TT>*load-path*</TT>が<TT>("/user/eus/" "/usr/lisp/")</TT>であり、
+<EM>fname</EM>として<TT>"llib/math"</TT>が与えられたとき、
+<B>load</B>は<TT>"/user/eus/llib/math.o", 
+"/usr/lisp/llib/math.o", "/user/eus/llib/math.l"</TT>,
+<TT>"/usr/lisp/llib/math.l"</TT>をこの順番に捜す。
+適当なファイルが見つからなければ、エラーを返す。
+
+<P>
+<I>:entry</I>オプションは、ロードモジュールを初期化する入力アドレスを
+指定する。
+たとえば、<TT>:entry "_myfunc"</TT>オプションは<TT>_myfunc</TT>から実行を始める
+ことを意味する。
+デフォルト入力アドレスは、<A HREF="#compiler">10.3</A>節に記述されているように
+ロードされたファイル名のbasenameである。
+ライブラリモジュール名は<EM>:ld-option</EM>オプション文字列の中に指定
+することができる。
+たとえば、suncoreライブラリを使用するモジュールをリンクするために、
+<EM>:ld-option</EM>には <TT>"-lsuncore -lsunwindow -lpixrect -lm -lc"</TT>
+を与える必要がある。Solarisシステム以外では、
+ライブラリがリンクされるとき<B>ld</B>は2度実行される。
+１度はサイズを決定するため、2度目は固有のメモリーに実際にリンクするため。
+
+<P>
+<EM>:symbol-input</EM>と<EM>:symbol-output</EM>オプションはあるオブジェクト
+モジュールから他のモジュールへの参照を解決するため、あるいは
+ライブラリーの2重ロードを避けるために使用される。
+A,B２つのオブジェクトモジュールがあり,BがAの中で定義されているsymbolを
+参照しているとする。
+<TT>:symbol-output ="a.out"</TT>を指定してモジュールAをロードする。
+このリンクによって生成されたsymbol情報は、<TT>a.out</TT>に書き込まれる。
+モジュールBをロードするためには、BからAへの参照を解決する
+<TT>:symbol-input = "a.out"</TT>を指定しなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+Solaris2 OSにおいて、コンパイルコードのロードは、動的ロードライブラリの中の
+<EM>dlopen</EM>を呼び出すことにより実行している。
+<EM>dlopen</EM>の使用は、共有オブジェクトに制限されている。
+そのオブジェクトは、位置に依存するようにコンパイルされるために、
+"-K pic"オプションを指定する。
+また、<EM>dlopen</EM>は同じファイルを2度オープンすることができないので、
+既にロードされているファイルに関しては、<EM>dlclose</EM>を最初に
+実行する。
+
+ <BR>
+<BR> <P>
+
+<A NAME="18960"></A>
+<B>load-files</B> <EM>&amp;rest files </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>:verbose</TT>にTを設定し、
+<EM>files</EM>を連続的にロードする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="18972"></A>
+<B>*modules*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> これまでにロードされたモジュールの名前の
+リストを持つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18982"></A>
+<B>provide</B> <EM>module-name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>module-name</EM>をすでにロードされた
+モジュールの名前として<TT>*modules*</TT>の中に加える。
+<EM>module-name</EM>はsymbolあるいは文字列でなければならない。
+<B>require</B>の呼び出しは、完全なモジュールを構成するファイルの最初に
+存在しなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="18996"></A>
+<B>require</B> <EM>module-name &amp;optional file </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>*modules*</TT>の中に<EM>module-name</EM>が見つからなかったとき
+<EM>file</EM>をロードする。
+<B>provide</B>と<B>require</B>は、モジュールの中の依存を制御し、
+基本モジュールの2重ロードを避けるために使用される。
+1つの基本モジュール"A"と2つの応用モジュール"B"と"C"があったとし、
+"B"と"C"は互いに依存しないが"A"に依存しているとする。
+それぞれのファイルの最初に<B>provide</B>でモジュール名を宣言する。
+"A"モジュールがどのモジュールにも依存していないなら、なにも<B>require</B>
+しなくてよい。
+"B"や"C"の中の<B>provide</B>呼び出しに続いて<TT>(require "A" "a.o")</TT>が
+実行される。
+もし"B"をロードするとき、<TT>*modules*</TT>の中に"A"が見つからなければ
+"a.o"もロードし、<TT>*modules*</TT>に"A"と"B"のモジュール名を追加する。
+その後、もし"C"がロードされるなら、"A"モジュールはロードされず、"C"が
+<TT>*modules*</TT>に追加されるのみである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19018"></A>
+<PRE><TT>
+<B>system:binload</B> <I>opath qpath &amp;optional (entry (pathname-name opath)) [関数]
+<BR>(symfile "/usr/local/bin/eus")  
+<BR>(symout "a.out") 
+<BR>(ldopt "")
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>バイナリファイルをロードしリンクする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19029"></A>
+<B>system:txtload</B> <EM>fname </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION020105000000000000000">
+デバッグ補助</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="19040"></A>
+<B>describe</B> <EM>obj &amp;optional (stream *standard-output*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>describe</B>はオブジェクトのslotごとの中身を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19051"></A>
+<B>describe-list</B> <EM>list &amp;optional (stream *standard-output*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>内のそれぞれの要素に<B>describe</B>を実行する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19063"></A>
+<B>inspect</B> <EM>obj </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>inspect</B>は<B>describe</B>の対話版である。
+オブジェクトのそれぞれのslotを表示するためにサブ命令を受けたとき、
+slotの中に深く入ったりあるいは新しい値をslotに設定したりする。
+'?'命令でサブ命令のメニューを見ることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19075"></A>
+<B>more</B> <EM>&amp;rest forms </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>*standard-output*</B>にテンポラリーファイルを結び付けて
+<EM>forms</EM>を評価した後、そのテンポラリーファイルをUNIXの'more'命令
+を使用して<B>*standard-output*</B>に出力する。
+<B>more</B>は<B>describe</B>のような関数によって発生した長い出力を
+見るときに役に立つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19090"></A>
+<B>break</B> <EM>&amp;optional (prompt ":: ") </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+breakループに入る。
+現在バインドされている環境が実施されている間、入力の前に","を付ける
+ことによりローカル変数を見ることができる。
+breakを終了したいとき、control-Dを入力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19100"></A>
+<B>help</B> <EM>topic </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>help</B>は、<EM>topic</EM>に関して短い説明を表示する。
+<EM>topic</EM>は、ふつう関数symbolである。
+文章はKCLのマニュアルから借りているため、説明がEuslisp関数のものといつも
+合っているとは限らない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19113"></A>
+<B>apropos</B> <EM>key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>apropos</B>は、関数や変数の正確な名前を忘れていて、その一部あるいは
+不確かな名前しか知らないときに役に立つ。
+symbol-nameの中に部分文字列として<EM>key</EM>を含むすべてのsymbolを表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19125"></A>
+<B>apropos-list</B> <EM>key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>apropos</B>と似ているが表示はしない、しかしリストとして結果を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19136"></A>
+<B>constants</B> <EM>&amp;optional (string  "") (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>の中に定数として定義され<EM>string</EM>と合うsymbolをすべてリスト
+出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19148"></A>
+<B>variables</B> <EM>&amp;optional (string  "") (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>の中にグローバル値として割り当てられ<EM>string</EM>と合う
+symbolをすべてリスト出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19160"></A>
+<B>functions</B> <EM>&amp;optional (string  "") (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>の中にグローバル関数として定義され<EM>string</EM>と合う
+symbolをすべてリスト出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19172"></A>
+<B>btrace</B> <EM>&amp;optional (depth 10) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>depth</EM>レベルの履歴を呼び出し表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="19183"></A>
+<B>step-hook</B> <EM>form env </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="19194"></A>
+<B>step</B> <EM>form </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>step</B>と<B>trace</B>は関数の上でのみ正確に働く。マクロや特殊書式では
+働かない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19206"></A>
+<B>trace</B> <EM>&amp;rest functions </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>functions</EM>のトレースを始める。
+<EM>functions</EM>が呼び出されたときはいつでも、その引き数と結果を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19218"></A>
+<B>untrace</B> <EM>&amp;rest functions </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> トレースを終了する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19228"></A>
+<B>timing</B> <EM>count &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>を<EM>count</EM>回実行し、<EM>forms</EM>の1回の実行に要する
+時間を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19241"></A>
+<B>time</B> <EM>function </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>function</EM>によって経過した時間を測定し始める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19252"></A>
+<B>sys:list-all-catchers</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+すべての<B>catch</B>タグを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19263"></A>
+<B>sys:list-all-instances</B> <EM>aclass [scan-sub] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+すべてのヒープの中から<EM>aclass</EM>で指定されるインスタンスをすべて
+探し、集める。
+もし、<EM>scan-sub</EM>がNILなら、<EM>aclass</EM>の確実なインスタンスを
+リストする。そうでなければ、<EM>aclass</EM>のインスタンスあるいはサブクラス
+が集められる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19277"></A>
+<B>sys:list-all-bindings</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> バインドされるスタックを探し、
+アクセス可能な値すべてをリストで返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19287"></A>
+<B>sys:list-all-special-bindings</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スタックを捜し、値をすべてリストアップする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION020106000000000000000">
+ダンプオブジェクト</A>
+</H2>
+EusLispのリーダとプリンタは、どのようなオブジェクトも再読みだし可能な書式
+でファイルに出力できるように設計されている。
+オブジェクトは相互参照あるいは再帰参照を持っていてもよい。
+<TT>*print-circle*</TT>と<TT>*print-object*</TT>にTを設定したとき、この特徴は
+は可能となる。
+次の関数はこれらの変数をTにし、ファイルをオープンし、オブジェクトを表示する。
+これらの関数のもっとも重要な用途は、相互参照を持つ3Dモデルの
+構造体をダンプすることである。
+
+<P>
+
+ <BR>
+<BR> <A NAME="19297"></A>
+<B>dump-object</B> <EM>file &amp;rest objects </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="19308"></A>
+<B>dump-structure</B> <EM>file &amp;rest objects </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+再び読み戻しができるような書式で<EM>file</EM>に<EM>objects</EM>をダンプする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="19320"></A>
+<B>dump-loadable-structure</B> <EM>file &amp;rest symbols </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>にバインドされたオブジェクトを<EM>file</EM>にダンプする。
+その<EM>file</EM>は簡単にロードすることによって読み戻すことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+<PRE>
+(setq a (make-cube 1 2 3))
+
+;; sample for dump-object
+(dump-object "a-cube.l" a)
+(with-open-file
+  (f "a-cube.l" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-structure
+(dump-structure "a-cube.l" a)
+(with-open-file
+  (f "a-cube.l" :direction :input)
+  (setq a (read f)))
+(print a)
+
+;; sample for dump-loadable-structure
+(dump-loadable-structure "a-cube.l" a)
+(load "a-cube.l")
+(print a)
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION020107000000000000000">
+プロセスイメージ保存</A>
+</H2>
+このプロセスイメージ保存は、Solarisの動的ロード機能に深く依存しているため、
+Solaris2のEuslispにおいてサポートされていない。
+Solarisの動的ロード機能は、共有するオブジェクトを<TT>sbrk</TT>点の上の
+位置に依存した形でロードする。
+
+<P>
+
+ <BR>
+<BR> <A NAME="19333"></A>
+<B>save</B> <EM>path &amp;optional (symbol-file "") starter </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>save</B>は、現在のEuslisp処理の環境をファイルにダンプする。
+そのファイルは、後でUNIX命令として呼び出すことができる。
+もし関数名が<EM>starter</EM>によって指定されているなら、
+その関数はその命令の実行が始まるときに評価される。
+それぞれの命令行の引き数はEuslispの中で強制的に文字列にされ、
+引き数として<EM>starter</EM>に受け渡される。
+それで、命令行を解析できる。
+<B>*standard-input*</B>と<B>*standard-output*</B>を除くすべてのストリームを
+確実にクローズしていなければならない。
+ファイルがオープンされた状態を保存することはできない。
+また、<B>mmap</B>を試そうとしてはならない。
+<B>mmap</B>はインターネットのソケットストリームを作るとき、見えない所で実行されている。
+Sunのネットワークライブラリはhost-by-nameのようなNIS情報をメモリ上に
+いつも展開し、プロセスの最上位に置くため保存できない。
+そのため、保存されたイメージが実行されるても、ネットワークライブラリへの
+アクセスはどれも失敗し、コアダンプが生じる。
+Xwindowもこのライブラリを使用している。
+それで、一度Xserverに接続されたプロセスイメージを保存することはできない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION020108000000000000000">
+最上位レベルのカスタマイズ</A>
+</H2>
+EuslispがUNIXから呼び出されるとき、<B>*toplevel*</B>にバインドされる
+最上位関数によって実行が始められる。
+この関数は、<TT>eus</TT>の中の<TT>eustop</TT>と<TT>eusx</TT>の中の<TT>xtop</TT>である。
+<B>save</B>の3番目の引き数に独自の関数を指定することによりこの最上位
+関数を変更することができる。<A NAME="18305"></A>
+
+<P>
+この最上位関数は、任意の数の引き数を受け取れるようにプログラムすべきである。
+その命令行の上の引き数はそれぞれ、強制的に文字列にされ、最上位関数に渡される。
+以下に示すプログラムは、最初の引き数に与えられたファイルからくり返し読み込み、
+2番目の引き数のファイルに整形表示する。
+
+<P>
+<PRE>
+(defun pprint-copy (infile outfile)
+  (with-open-file (in infile)
+     (with-open-file (out outfile :direction :output)
+        (let ((eof (cons nil nil)) (exp))
+           (while (not (eq (setq exp (read in nil eof)) eof))
+              (pprint exp out))))))
+(defun pprint-copy-top (&amp;rest argv)
+   (when (= (length argv) 2)
+      (pprint-copy (first argv) (second argv))))
+</PRE>
+
+<P>
+一度これらの関数をEuslispの中に定義すれば、
+<TT>(save "ppcopy" "" 'pprint-copy-top)</TT>で<TT>ppcopy</TT>という名のUNIXで実行
+可能な命令を作る。
+
+<P>
+Solaris上のEuslispにおいて、<B>save</B>がないので、
+最上位評価関数はこの手法では変更できない。
+代わりに、独自の最上位評価関数を定義するために<TT>lib/eusrt.l</TT>を
+修正し、<B>*toplevel*</B>に設定することができる。
+<TT>lib/eusrt.l</TT>には、Euslispの起動時に評価される初期化手続きを
+定義している。
+
+<P>
+
+<H2><A NAME="SECTION020109000000000000000">
+その他の関数</A>
+</H2>
+
+ <BR>
+<BR> <A NAME="19350"></A>
+<B>lisp-implementation-type</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>"EusLisp"</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="19361"></A>
+<B>lisp-implementation-version</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このEuslispの名前、バージョン、作成日を返す。
+この文字列が起動時にも表示される。
+<TT>"MT-EusLisp 7.50 X 1.2 for Solaris Sat Jan  7 11:13:28 1995"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html587"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B>Up:</B> <A NAME="tex2html581"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html577"
+  HREF="jmanual-node11.html">ストリームと入出力</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>
