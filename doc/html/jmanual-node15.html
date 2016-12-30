@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>クラス継承</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="クラス継承">
+<TITLE>マルチスレッド</TITLE>
+<META NAME="description" CONTENT="マルチスレッド">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,364 +16,933 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node16.html">
 <LINK REL="previous" HREF="jmanual-node14.html">
-<LINK REL="up" HREF="jmanual-node12.html">
+<LINK REL="up" HREF="jmanual-node13.html">
 <LINK REL="next" HREF="jmanual-node16.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html580"
-  HREF="jmanual-node16.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html574"
-  HREF="jmanual-node12.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html568"
-  HREF="jmanual-node14.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html576"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html578"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html581"
-  HREF="jmanual-node16.html">型指定</A>
-<B> Up:</B> <A NAME="tex2html575"
-  HREF="jmanual-node12.html">データ型</A>
-<B> Previous:</B> <A NAME="tex2html569"
-  HREF="jmanual-node14.html">オブジェクト</A>
- &nbsp; <B>  <A NAME="tex2html577"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html579"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html741"
+  HREF="jmanual-node16.html">幾何学関数</A>
+<B>Up:</B> <A NAME="tex2html735"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html729"
+  HREF="jmanual-node14.html">システム関数</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03013000000000000000">
-クラス継承</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html742"
+  HREF="jmanual-node15.html#SECTION03021000000000000000">マルチスレッドEuslispの設計</A>
+<UL>
+<LI><A NAME="tex2html743"
+  HREF="jmanual-node15.html#SECTION03021100000000000000">Solaris 2 オペレーティングシステムのマルチスレッド</A>
+<LI><A NAME="tex2html744"
+  HREF="jmanual-node15.html#SECTION03021200000000000000">Context Separation</A>
+<LI><A NAME="tex2html745"
+  HREF="jmanual-node15.html#SECTION03021300000000000000">メモリ管理</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html746"
+  HREF="jmanual-node15.html#SECTION03022000000000000000">非同期プログラミングと並列プログラミングの構築</A>
+<UL>
+<LI><A NAME="tex2html747"
+  HREF="jmanual-node15.html#SECTION03022100000000000000">スレッド作成とスレッドプール</A>
+<LI><A NAME="tex2html748"
+  HREF="jmanual-node15.html#SECTION03022200000000000000">スレッドの並列実行</A>
+<LI><A NAME="tex2html749"
+  HREF="jmanual-node15.html#SECTION03022300000000000000">同期の手法</A>
+<LI><A NAME="tex2html750"
+  HREF="jmanual-node15.html#SECTION03022400000000000000">同期障壁</A>
+<LI><A NAME="tex2html751"
+  HREF="jmanual-node15.html#SECTION03022500000000000000">同期メモリポート</A>
+<LI><A NAME="tex2html752"
+  HREF="jmanual-node15.html#SECTION03022600000000000000">タイマー</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html753"
+  HREF="jmanual-node15.html#SECTION03023000000000000000">並列度の計測</A>
+<LI><A NAME="tex2html754"
+  HREF="jmanual-node15.html#SECTION03024000000000000000">スレッド生成</A>
+<LI><A NAME="tex2html755"
+  HREF="jmanual-node15.html#SECTION03025000000000000000">同期</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03020000000000000000"></A><A NAME="mthread"></A>
+<BR>
+マルチスレッド
+</H1>
+
+<P>
+マルチスレッドは、Solarisオペレーティングシステム上の
+並列プログラミングや非同期プログラミングの機能である。
+非同期プログラミングは、プログラムの状態と無関係に発生する
+様々なセンサを経由した外部イベントに応答するためのプログラムに要求される。
+並列プログラミングは、画像処理や経路計画の干渉チェックのような
+プロセス向きの計算の効率を改善する場合に効果的である。
+
+<P>
+
+<H2><A NAME="SECTION03021000000000000000">
+マルチスレッドEuslispの設計</A>
 </H2>
 
-<P>
-オブジェクトのデータ構造はクラスによって定義され、そして、それらの動作は
-クラス内のメソッドに定義されている。
-EusLispにおいて、数ダースのクラスが図<A HREF="#ClassHierarchy">4</A>に書かれているように
-木構造化された継承のなかにすでに定義されている。
-<B>class-hierarchy</B>関数を用いれば、実際の継承構造を見ることができる。
-左端のクラスobjectは、EusLisp内の全てのクラスの根幹となるスーパークラスである。
-ユーザーが定義したクラスは、これらの内部クラスのどれでも継承することができる。
+<H3><A NAME="SECTION03021100000000000000">
+ Solaris 2 オペレーティングシステムのマルチスレッド</A>
+</H3>
+マルチスレッドEuslisp(MT-Eus)は、複数のプロセッサを持ったSolaris 2 
+オペレーティングシステム上で動作する。
+Solarisのスレッドは、 共有メモリと異なった環境を持つような従来の
+UNIXプロセスをCPUに配置するためのユニットである。Solaris OSによって提供されるスレッドのライブラリは、
+それぞれのスレッドを単一のLWP(light weight process)に配置する。
+このプロセスがカーネルのリソースである。
+UNIXのカーネルは、それぞれのスレッドに割り当てられたスレッドの優先権に
+基づいて複数の物理CPUにLWPの配置を計画する。
+図<A HREF="#threadmodel">5</A>は、スレッドとLWPとCPUの関係を表わしたものである。
+Euslispの環境およびメモリ管理の設計について、
+マルチスレッドの能力を引き出すために２つの大きな変更がされた。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="ClassHierarchy"></A><A NAME="959"></A>
+<H3><A NAME="SECTION03021200000000000000">
+Context Separation</A>
+</H3>
+MT-Eusは、それぞれのスレッドに対し個別にスタックと環境を配置する。
+そのため、他のスレッドと独立に実行することができる。
+symbolやconsのようなオブジェクトは、これまでのEuslispのように
+共有ヒープメモリ上に配置される。
+したがって、block labelやcatch tagやローカル変数のような
+スレッドの個別データは、他のスレッドから保護される。
+ところが、グローバル変数によって示される値（オブジェクト）は、
+情報の変更が許可されているすべてのスレッドから見ることができる。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="threadmodel"></A><A NAME="25554"></A>
 <TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
-定義済みのクラス継承</CAPTION>
-<TR><TD><IMG
- WIDTH="368" HEIGHT="940" BORDER="0"
- SRC="jmanual-img6.png"
- ALT="\begin{figure}\small
-\begin{verbatim}object
-cons
-propertied-object
-symbol -...
-...h-table
-surrounding-box
-stereo-viewing\end{verbatim}
-\normalsize\end{figure}"></TD></TR>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 5:</STRONG>
+Solarisオペレーティングシステムのスレッドモデル</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="574" HEIGHT="252" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img5.png"
+ ALT="\includegraphics[width=130mm]{fig/threadfig.ps}">
+
+</DIV></TD></TR>
 </TABLE>
 </DIV>
 
 <P>
-クラスは、<B>defclass</B>マクロか<B>defstruct</B>マクロで定義される。
-
-<P><PRE><TT>
- (defclass class-name &amp;key :super   class 
-<BR>:slots 		 () 
-<BR>:metaclass 		 metaclass 
-<BR>:element-type 		 t 
-<BR>:size  -1
-<BR>) 
-<BR>(defstruct struct-name slots...) 
-<BR>(defstruct (struct-name [struct-options ...]) 
-<BR>         (slot-name1 [slot-option...]) 
-<BR>         (slot-name2 [slot-option...]) 
-<BR>          ...) 
-<BR>
-</TT></PRE>
-<P>
-メソッドは、<B>defmethod</B>により定義される。
-<B>defmethod</B>は、特定のクラスについて何度でも存在することができる。
-
-<P><PRE><TT>
- (defmethod class-name  
-<BR>(:method-name1 (parameter...) . body1) 
-<BR>(:method-name2 (parameter...) . body2) 
-<BR>...) 
-</TT></PRE>
-<P>
-内部クラスにおけるfield定義は、大部分が
-<TT>*eusdir*/c/eus.h</TT>のヘッダーファイルの中にある。
+環境はC-stackとbinding-stackおよび<TT>lambda, block, catch, let, flet</TT>
+などのローカルブロックに繋がるフレームポインタにより構成されており、
+新しいスレッドが作成されたときに設置される。
+複数の環境が本当のマルチプロセッサマシンの上で同時に
+動作できるので、グローバル変数の中の現在の環境に対して単一なポインタ
+を持つことができない。
+むしろ、環境のポインタを最上位の評価から低レベルのメモリ管理に変換するために、
+すべての内部関数にもう一つ引き数を付け加えなければならない。
 
 <P>
-<EM>クラス</EM>は、<TT>(describe)</TT>関数によりクラス内の全てのスロット、
-名前、スーパークラス、スロット名、スロット型、メソッドリスト、
-などを表示することができる。
-内部クラスの定義は次の通りである。
-クラスobjectはスーパークラスを持たないため、このスーパークラスはNILである。
 
-<P><PRE><TT>
- (defclass <B>object</B> :super <B>NIL</B> :slots ()) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>cons</B> :super <B>object</B> :slots (car cdr)) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>propertied-object</B> :super <B>object</B> 
-<BR>  :slots (plist))   ;property list 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>symbol</B> :super <B>propertied-object</B> 
-<BR>  :slots (value   ;specially bound value 
-<BR>
-vtype 		                ;const(0),var(1),special(2)  
-<BR>
-function 		             ;global func def 
-<BR>
-pname 		  ;print name string 
-<BR>
-homepkg)) 		            ;home package 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>foreign-pod</B> :super <B>symbol</B> 
-<BR>  :slots (podcode   ;entry code 
-<BR>
-paramtypes 		      ;type of arguments  
-<BR>
-resulttype)) 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>package</B> :super <B>propertied-object</B> 
-<BR>  :slots (names   ;list of package name and nicknames
-<BR>
-uses 		  ;spread use-package list 
-<BR>
-symvector 		 ;hashed obvector 
-<BR>
-symcount 		  ;number of interned symbols 
-<BR>
-intsymvector 		 ;hashed obvector of internal symbols 
-<BR>
-intsymcount 		  ;number of interned internal symbols 
-<BR>
-shadows 		 ;shadowed symbols 
-<BR>
-used-by)) 		  ;packages using this package 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>stream</B> :super <B>propertied-object</B>   
-<BR>  :slots (direction   ;:input or :output, nil if closed 
-<BR>
-buffer 		  ;buffer string 
-<BR>
-count 		 ;current character index 
-<BR>
-tail)) 		  ;last character index 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>file-stream</B> :super <B>stream</B> 
-<BR>  :slots (fd   ;file descriptor (integer)
-<BR>
-fname))		 ;file name str; qid for msgq 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>broadcast-stream</B> :super <B>stream</B>
-<BR>  :slots (destinations))   ;streams to which output is elivered 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>io-stream</B> :super <B>propertied-object</B>
-<BR>:slots (instream outstream)) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>socket-stream</B> :super <B>io-stream</B>
-<BR>:slots (address))   ; socket address 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>read-table</B>  :super <B>propertied-object</B> 
-<BR>       :slots (syntax   ; byte vector representing character types 
-<BR>; 0:illegal, 1:white, 2:comment, 3:macro
-<BR>; 4:constituent, 5:single_escape
-<BR>; 6:multi_escape, 7:term_macro, 8:nonterm_macro 
-<BR>
-macro 		 ;character macro expansion function
-<BR>
-dispatch-macro)) 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>array</B> :super <B>propertied-object</B> 
-<BR>  :slots (entity  ;simple vector storing array entity 
-<BR>
-rank 		 ;number of dimensions: 0-7 
-<BR>
-fillpointer 		    ;pointer to push next element 
-<BR>
-offset 		    ;offset for displaced array 
-<BR>
-dim0,dim1,dim2,dim3,dim4,dim5,dim6))  ;dimensions 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>metaclass</B> :super <B>propertied-object</B> 
-<BR>    :slots   (name    ;class name symbol 
-<BR>
-super 		   ;super class 
-<BR>
-cix 		      ;class id 
-<BR>
-vars 		     ;var name vector including inherited vars 
-<BR>
-types 		    ;type vector of object variables 
-<BR>
-forwards 		  ;components to which messages are forwarded 
-<BR>
-methods)) 		  ;method list 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>vectorclass</B> :super <B>metaclass</B>  
-<BR>  :slots (element-type    ;vector element type 0-7
-<BR>
-size)) 		  ;vector size; 0 if unspecified 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>cstructclass</B> :super <B>vectorclass</B>  
-<BR>  :slots (slotlist))    ;cstruct slot descriptors
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>vector</B> :super <B>object</B> :slots (size)) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>float-vector</B> :super <B>vector</B> :element-type :float) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>string</B> :super <B>vector</B> :element-type :char) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>hash-table</B> :super <B>propertied-object</B> 
-<BR>   :slots   (lisp::key  ;hashed key vector
-<BR>
-value 		 ; value vector
-<BR>
-size 		 ; the size of the hash table
-<BR>
-count 		 ; number of elements entered in the table
-<BR>
-lisp::hash-function 		 
-<BR>
-lisp::test-function 
-<BR>
-lisp::rehash-size 
-<BR>
-lisp::empty  lisp::deleted )) 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>pathname</B> :super <B>propertied-object</B> 
-<BR>   :slots   (lisp::host device  ; not used
-<BR>
-directory 		 ; list of directories
-<BR>
-name 		 ; file name before the last "."
-<BR>
-type 		 ; type field after the last "."
-<BR>
-lisp::version)) 		 ; not used 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>label-reference</B>    ;for reading #n=, #n# objects 
-<BR>  :super <B>object</B> 
-<BR>:slots (label value unsolved next)) 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>compiled-code</B> :super <B>object</B> 
-<BR>   :slots   (codevector 
-<BR>
-quotevector 
-<BR>
-type   ;0=func, 1=macro, 2=special 
-<BR>
-entry)) 		  ;entry offset  
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>closure</B> :super <B>compiled-code</B> 
-<BR>:slots (env1 env2));environment 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>foreign-code</B>  :super <B>compiled-code</B>  
-<BR>   :slots   (paramtypes    ;list of parameter types
-<BR>
-resulttype)) 		 ;function result type 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>load-module</B>  :super <B>compiled-code</B>  
-<BR>   :slots  (symbol-table   ;hashtable of symbols defined 
-<BR>
-object-file 		 ;name of the object file loaded, needed for unloadin
-<BR>
-handle)) 		 ;file handle returned by ''dlopen'' 
-</TT></PRE>
+<H3><A NAME="SECTION03021300000000000000">
+メモリ管理</A>
+</H3>
+EusLispは、すべての型のオブジェクトに対して単一のヒープの中で
+フィボナッチバディを用いたメモリ管理方法を採用している。
+異なったメモリ要求を持つプログラムを実行した後、
+フィボナッチバディが様々な大きさのオブジェクトを等しく高速に配置することができ、コピーなしに素早くガーベージコレクトができ、
+かつ、高いメモリ利用率（内部損失が10〜15%で外部損失は無視できる）
+を示すことを確信した。
+マルチスレッドのためには、2つ目のポイントすなわちコピーなしの
+ガーベージコレクトが重要である。
+もし、オブジェクトのアドレスがガーベージコレクトのコピーにより
+変化したならば、すべてのスレッド環境のスタックおよびCPUのレジスタ
+内のポインタを新しいアドレスに書き換えなければならない。
+しかし、この書き換えは不可能かあるいは大変困難である。
+
 <P>
+すべてのメモリ配置要求は、低レベルの<TT>alloc</TT>関数によって処理される。
+<TT>alloc</TT>は、mutex-lockingをする。なぜなら、大きさを持たないリストの
+グローバルデータベースを扱うからである。
+ガーベージコレクトの始まる時期およびどのスレッドによってガーベージコレクトが
+生じるのかを予言できないので、
+すべてのスレッドは突発的に起こるガーベージコレクトのために
+準備をしておかなければならない。
+生きているオブジェクトへのすべてのポインタは、ゴミとして掃除されない
+ように保護するためいつでもガーベージコレクトからアクセスできるよう
+調整されなければならない。
+これは、スタックの上に保存されていることを信用する代わりに、
+それぞれの環境の固定されたスロットの中に極最近に配置されたオブジェクトに
+対するポインタを蓄積することによって達成される。
+
+<P>
+図 <A HREF="#parathreads">6</A>は、スレッドのメモリ要求とforkされたガーベージコレクト
+内部でのmarkingおよびsweepingを並列に行っている流れ図を示したものである。
+メモリ要求およびポインタの処理を行わないスレッドはガーベージコレクトと並列に
+実行することができ、信号処理や画像獲得のような低レベルのタスクの
+実時間応答を改善することに注意すること。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="parathreads"></A><A NAME="25566"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 6:</STRONG>
+並列スレッドのメモリ要求とガーベージコレクトに並列実行</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="521" HEIGHT="469" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img6.png"
+ ALT="\includegraphics[width=120mm]{fig/parathreads.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H2><A NAME="SECTION03022000000000000000">
+非同期プログラミングと並列プログラミングの構築</A>
+</H2>
+
+<H3><A NAME="SECTION03022100000000000000">
+スレッド作成とスレッドプール</A>
+</H3>
+Solarisにおいて複数のプロセッサ上で並列にプログラムを実行するためには、
+そのプログラムは関数の集まりとして書かれる必要がある。
+その関数はそれぞれプロセスの中で動的に作成されるスレッドによって
+実行される。
+スレッドを作成するために要求される時間は、プロセスを作成するよりも
+速くなければならないが、スタックを配置しスタックのオーバーフローを
+発見するためのページ属性を設定した後にスレッドが動き始めるまでに
+Euslispにおいて数ミリ秒かかる。
+この遅れは関数実施と比較して我慢できないため、
+評価時間におけるシステムコールに対する所要時間を排除する目的で、
+あらかじめ<TT>make-thread</TT>関数により十分な数のスレッドが作られ、
+システムのスレッドプールに置かれる。
+スレッドプールの中のそれぞれのスレッドは、図<A HREF="#threadobj">7</A>で示されるように
+スレッドIDと同期のためのセマフォと引き数や評価結果を転送するためのスロット
+から構成されるスレッドオブジェクトにより表現される。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="threadobj"></A><A NAME="25761"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 7:</STRONG>
+スレッド間で制御やデータを受け渡すためのスレッドオブジェクト（左）とスレッドプール内に置かれたスレッドの集まり（右）</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<TABLE CELLPADDING=3 ALIGN="CENTER">
+<TR><TD ALIGN="CENTER"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></TD>
+<TD></TD>
+</TR>
+</TABLE>
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H3><A NAME="SECTION03022200000000000000">
+スレッドの並列実行</A>
+</H3>
+スレッドによる並列実行の配置のために、スレッド関数が使用される。
+スレッドは、スレッドプールから1つの空きスレッドを取り、
+共有メモリを経由して引き数を渡し、図<A HREF="#threadobj">7</A>に示されるような
+セマフォ信号によりスレッドを立ち上げ、
+停止することなしに呼出側へスレッドオブジェクトを返す。
+立ち上げられたスレッドは、呼び出したスレッドと並列に実行され、
+引き数を評価し始める。
+呼出側は、forkされたスレッドから評価結果を受けとるために<TT>wait-thread</TT>を
+使用する。
+<TT>plist</TT>マクロは、引き数の並列評価を記述するために大変便利な書式である。
+<TT>plist</TT>は、それぞれの引き数を評価するためにスレッドを割り当て、
+すべてのスレッドが評価し終わるのを待って結果をリストアップする。
+
+<P>
+
+<H3><A NAME="SECTION03022300000000000000">
+同期の手法</A>
+</H3>
+MT-Eusは、<B>mutex lock, condition variable, セマフォ</B>と呼ばれる
+3種類の同期手法を持っている。
+mutex lockは、スレッド間の共有変数の連続アクセスのために使用される。
+condition variableは、ロックの仮開放あるいは再獲得によってmutex-lockされた
+部分の条件がtrueになることを待つことをスレッドに許可する。
+セマフォは、イベントの発生を通知するためあるいはリソースの分割を制御するために
+使用される。
+Solarisのカーネルが時間分割スケージューリングを基本として何気なしにタスク
+切り替えを発生するのと異なり、
+これらの同期手法は、任意の環境切り替えを引き起こす。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="synchports"></A><A NAME="25594"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 8:</STRONG>
+同期障壁と同期メモリポート</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H3><A NAME="SECTION03022400000000000000">
+同期障壁</A>
+</H3>
+<B>barrier-synch</B>は、複数のスレッドを同時に同期させるための機構である
+(図 <A HREF="#synchports">8</A>)。
+この目的において、<B>barrier</B>クラスのインスタンスが作成され、
+同期に関係するスレッドがオブジェクトに登録される。
+その後、それぞれのスレッドはbarrierオブジェクトに<TT>:wait</TT>メッセージを
+送り、そのスレッドは停止する。
+オブジェクトに登録された最後のスレッドが<TT>:wait</TT>メッセージを送ったとき、
+待ちが解除され、すべての待ちスレッドがTの返り値を得る。
+barrier-syncは、マルチロボットシミュレーションのグローバルタイムという
+重要な役割を演じている。
+
+<P>
+
+<H3><A NAME="SECTION03022500000000000000">
+同期メモリポート</A>
+</H3>
+<B>同期メモリポート(synch-memory-port)</B>は、
+スレッド間でデータを交換するための1種のストリーム
+である(図 <A HREF="#synchports">8</A>)。
+プロセス内のすべてのスレッドはヒープメモリを共有しているので、
+もし1つのスレッドがグローバル変数にオブジェクトを割り当てた場合、
+直ちに他のスレッドから見れるようになる。
+しかしながら、共有メモリはグローバルデータが更新されたという
+イベントを送るための能力が不足している。
+同期メモリポートは、共有オブジェクトをアクセスするための
+この同期機能を保証する。
+同期メモリポートオブジェクトは、1つのバッファスロットと同期読み書きの
+ために使用される2つのセマフォによって構成されている。
+
+<P>
+
+<H3><A NAME="SECTION03022600000000000000">
+タイマー</A>
+</H3>
+実時間プログラムは、予定された時間に実行される関数や、
+特定の間隔で繰り返される関数をしばしば要求する。
+これまでのEusLispは、Unixのインターバルタイマーによって
+定期的に生成される信号によって発生するユーザー関数を
+実行することができた。
+MT-Eusにおいて、この実行はデッドロックを引き起こす。
+なぜなら、割り込みがmutex-lockされたブロック内から発生する可能性がある。
+したがって、制御は<TT>eval</TT>の最初のように安全な場所で渡されなければ
+ならない。
+上記の同期によって引き起こされる遅れを避けるために、
+MT-Eusはセマフォを経由して信号通知(signal-notification)も
+提供する。
+言い換えれば、信号関数は呼び出されるかあるいは信号の到着を知らせる
+関数あるいはセマフォのどちらかをとる。
+セマフォは、低レベルで告示されるので、
+同期により隠れているところは最小である。
+
+<P>
+以下に示すものは、マルチスレッド機能を用いた画像処理のプログラム例である。
+画像入力スレッドとフィルタースレッドが生成される。
+samp-imageは、33msec毎に通知されるsamp-semを待つことにより、
+定期的に画像データをとる。
+2つのスレッドはthread-portの読み書きを通じて同期する。
+filter-imageは、フィルターの並列計算のために複数のスレッドを使用している。
+
+<P><PRE>
+(make-threads 8)
+(defun samp-image (p)
+   (let ((samp-sem (make-semaphore)))
+        (periodic-sema-post 0.03 samp-sem)
+        (loop (sema-wait samp-sem)
+              (send p :write (read-image))))
+(defun filter-image (p)
+  (let (img)
+       (loop (setf img (send p :read))
+             (plist (filter-up-half img)
+                    (filter-low-half img)))))
+(setf port (make-thread-port))
+(setf sampler (thread #'samp-image port))
+(setf filter (thread #'filter-image port))
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION03023000000000000000">
+並列度の計測</A>
+</H2>
+
+<P>
+表 <A HREF="#paragain">3</A>は、32CPUで構成されるCray Superserverの上で測定
+した並列実行効率を示したものである。
+コンパイルされたフィボナッチ関数において線形な並列度が得られた。
+なぜなら、共有メモリへのアクセスがなく、それぞれのプロセッサのキャッシュ
+メモリに十分ロードできるほどちいさなプログラムであったためである。
+それに反して、同じプログラムをインタープリターで実行したとき、
+キャッシュメモリを使い果たしたため、
+線形な高効率を達成することができなかった。
+さらにまた、頻繁に共有メモリを参照するようなプログラムや
+メモリ配置を要求するようなプログラムは1個のプロセッサで実行した
+ときよりも良い性能を得ることができなかった。
+これは、頻繁なキャッシュメモリの入れ替えが原因と考えられる。
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER">
+
+<DIV ALIGN="CENTER">
+<A NAME="25762"></A>
+<TABLE CELLPADDING=3 BORDER="1">
+<CAPTION><STRONG>Table 3:</STRONG>
+マルチプロセッサ上で実行されたプログラムの並列度</CAPTION>
+<TR><TD ALIGN="LEFT">processors</TD>
+<TD ALIGN="RIGHT">1</TD>
+<TD ALIGN="RIGHT">2</TD>
+<TD ALIGN="RIGHT">4</TD>
+<TD ALIGN="RIGHT">8</TD>
+<TD ALIGN="CENTER">GC (ratio)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(a) compiled Fibonacci</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">2.0</TD>
+<TD ALIGN="RIGHT">4.0</TD>
+<TD ALIGN="RIGHT">7.8</TD>
+<TD ALIGN="CENTER">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(b) interpreted Fibonacci</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">1.7</TD>
+<TD ALIGN="RIGHT">2.7</TD>
+<TD ALIGN="RIGHT">4.4</TD>
+<TD ALIGN="CENTER">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(c) copy-seq</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">1.3</TD>
+<TD ALIGN="RIGHT">0.76</TD>
+<TD ALIGN="RIGHT">0.71</TD>
+<TD ALIGN="CENTER">0.15</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(d) make-cube</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">0.91</TD>
+<TD ALIGN="RIGHT">0.40</TD>
+<TD ALIGN="RIGHT">0.39</TD>
+<TD ALIGN="CENTER">0.15</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(e) interference-check</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">0.88</TD>
+<TD ALIGN="RIGHT">0.55</TD>
+<TD ALIGN="RIGHT">0.34</TD>
+<TD ALIGN="CENTER">0.21</TD>
+</TR>
+</TABLE> 
+<BR>
+</DIV>
+</DIV>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION03024000000000000000">
+スレッド生成</A>
+</H2>
+スレッドは、計算を割り当てる単位であり、普通lisp書式を評価する
+ための単位である。
+Euslispのスレッドは、<B>thread</B>クラスのインスタンスによって
+表現される。
+このオブジェクトは、内容を表現するスレッド全体というよりはむしろ、
+実際に引き数と結果を渡すためのスレッドの
+制御ポートであり、評価を始めるものである。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="25786"></A>
+<B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>lsize</EM>ワードのlispスタックと<EM>csize</EM>ワードのC-スタックを持つ
+スレッドを<EM>num</EM>個だけ生成し、システムのスレッドプールに
+置く。
+スレッドプール内のすべてのスレッドは、sys:*threads*に束ねてあり、
+<B>make-thread</B>が呼び出されたときに拡張される。
+<B>thread</B>関数によって、計算はスレッドプールの中で空いたスレッドの
+１つに割り当てられる。
+したがって、指定された計算がどのスレッドに割り当てられるか
+制御できないため、スレッドのスタックサイズを変更する方法が無い。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25801"></A>
+<B>sys:*threads*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>make-thread</B>によって作成されたすべてのスレッドのリストを持つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25812"></A>
+<B>sys::free-threads</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スレッドプール内の空いたスレッドのリストを返す。
+もし、結果がNILならば、スレッドへのタスクの新しい付託は現在実行されている
+スレッドのどれかの評価が終了するかあるいは
+<B>make-thread</B>によってスレッドプールに新しいスレッドを生成するまで
+停止される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25823"></A>
+<B>sys:thread</B> <EM>func &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スレッドプールから空いたスレッドを1つ取り出し、
+<EM>(func . args)</EM>の評価のためにそれを割り当てる。
+<B>sys:thread</B>は、<EM>args</EM>を展開したリストにfuncを適用
+するが、関数の適用結果を受け取らないため、
+非同期の<B>funcall</B>とみなすことができる。
+むしろ、<B>sys:thread</B>はfuncallに割り当てられたスレッド
+オブジェクトを返すので、実際の結果は<B>sys:wait-thread</B>によって
+後から得ることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+(defun compute-pi (digits) ...)
+(setq trd (sys:thread \#'compute-pi 1000)) ;assign compute-pi to a thread
+...  ;; other computation 
+(sys:wait-thread trd) ;get the result of (compute-pi 1000)
+</PRE>
+
+<P>
+
+<A NAME="25840"></A>
+<B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+空いたスレッドの1つに計算を割り当てる。
+スレッドは、<B>wait-thread</B>されることなしに、
+評価が終了したとき、スレッドプールに戻される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25851"></A>
+<B>sys:wait-thread</B> <EM>thread </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>thread</EM>に<B>sys:thread</B>関数によって与えられたfuncallの評価が
+終了するのを待ち、その結果を受け取り、返す。
+もし、スレッドに<B>sys:thread</B>によって評価が割り当てられたならば、
+<B>sys:wait-thread</B>は、必須である。
+なぜなら、スレッドは結果を転送し終わるまでスレッドプールに戻らない
+ためである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25865"></A>
+<B>sys:plist</B> <EM>&amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+異なったスレッドにより並列に<EM>forms</EM>を評価し、
+すべての評価が終了するのを待ち、
+結果のリストを返す。
+<B>sys:plist</B>は、リスト化されたそれぞれのformが関数呼び出しされる
+ことを除いて、<EM>parallel-list</EM>としてみなされるだろう。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03025000000000000000">
+同期</A>
+</H2>
+
+<P>
+Solarisオペレーティングシステム内には、マルチスレッドプログラムのために
+4つの同期手法がある。
+Euslispは、mutex-lockとcondition variableとセマフォを提供している。
+reader-writer lockは実現されてない。
+これらの手法に基づいて、同期メモリポートや同期障壁のような
+高レベルの同期機構が実現されている。
+
+<P>
+
+ <BR>
+<BR> <A NAME="25878"></A>
+<B>sys:make-mutex-lock</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+mutex-lockを作り、返す。
+mutex-lockは、6つの要素を持つ整数ベクトルで表現されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25888"></A>
+<B>sys:mutex-lock</B> <EM>mlock </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+mutex-lockの<EM>mlock</EM>をロックする。
+もし、<EM>mlock</EM>が既に他のスレッドからロックされているなら、
+<B>mutex-lock</B>はロックが外されるまで待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25901"></A>
+<B>sys:mutex-unlock</B> <EM>mlock </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>mlock</EM>を解除し、このロックを待っている他のスレッドの内の１つが再び実行され始める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25912"></A>
+<B>sys:mutex</B> <EM>mlock &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+mutex-lockとmutex-unlockは、組みで使用されなければならない。
+<B>mutex</B>は、重要な部分をひとまとまりにしたマクロである。
+<EM>mlock</EM>は、評価する<EM>forms</EM>が評価される前にロックされる。
+そして、評価が終了したときに、ロックが解除される。
+このマクロは、以下のprogn formに展開される。
+<B>unwind-protect</B>は、<EM>forms</EM>の評価中にエラーが発生したとき
+でさえ、ロックの解除を保証するために使用されることに注意すること。
+
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+  (progn
+      (sys:mutex-lock mlock)
+      (unwind-protect
+          (progn . forms)
+          (sys:mutex-unlock mlock)))
+</PRE>
+
+<P>
+
+<A NAME="25927"></A>
+<B>sys:make-cond</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+4つの要素を持つ整数ベクトルであるcondition variableオブジェクトを
+作る。condition variableの返り値としては、ロックされてない状態でである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25937"></A>
+<B>sys:cond-wait</B> <EM>condvar mlock </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>condvar</EM>に信号が出されるまで待つ。
+もし、<EM>condvar</EM>が他のスレッドによってすでに獲得されていたならば、
+<EM>mlock</EM>を解除し、<EM>condvar</EM>に信号が出されるまで待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25951"></A>
+<B>sys:cond-signal</B> <EM>condvar </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>condvar</EM>で示されるcondition variableに信号を出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25962"></A>
+<B>sys:make-semaphore</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+20の要素を持つ整数ベクトルによって表現されるセマフォオブジェクトを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25972"></A>
+<B>sys:sema-post</B> <EM>sem </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>sem</EM>に信号を出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25983"></A>
+<B>sys:sema-wait</B> <EM>sem </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sem</EM>に信号が来るまで待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="25995"></A>
+<BIG CLASS="XLARGE"><B>sys:barrier-synch </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 threads n-threads count barrier-cond threads-lock count-lock 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>同期障壁のための構造を表現する。
+同期を待っているスレッドは、<EM>thread-lock</EM>によって
+相互に排除される<EM>thread</EM>に置かれる。
+<B>barrier-synch</B>オブジェクトが生成されたとき、
+<EM>count</EM>は、ゼロに初期化される。
+同期しているスレッドは、<TT>:add</TT>メッセージを送ることによって、
+<EM>threads</EM>リストに置かれる。
+このbarrier-synchオブジェクトに<TT>:wait</TT>を送ることは、
+<EM>count</EM>を増加させることの原因となり、
+送られたスレッドは待ち状態になる。
+<EM>threads</EM>の中のすべてのスレッドに<TT>:wait</TT>メッセージが送られたとき、
+待ちが解除され、すべてのスレッドの実行が再び始まる。
+同期は、<EM>count-lock</EM>のmutex-lockと<EM>barrier-cond</EM>のcondition-variable
+の組み合わせによって実行される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26024"></A>
+<B>:init</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このbarrier-synchオブジェクトを初期化する。
+2つのmutex-lockと1つのcondition-variableが生成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26034"></A>
+<B>:add</B> <EM>thr </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>threads</EM>リストの中に<EM>thr</EM>スレッドが追加される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26046"></A>
+<B>:remove</B> <EM>thr </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>threads</EM>リストの中から<EM>thr</EM>スレッドを削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26058"></A>
+<B>:wait</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>threads</EM>リストの中のすべてのスレッドに<TT>:wait</TT>
+が配布されるのを待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="26071"></A>
+<BIG CLASS="XLARGE"><B>sys:synch-memory-port </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 sema-in sema-out buf empty lock 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>1方向の同期されたメモリポートを実現する。
+このオブジェクトを通じてデータを転送するために、2つのスレッドを同期させる。
+転送制御は、セマフォを用いて実現されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26088"></A>
+<B>:read</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>synch-memory-port</B>にバッファされているデータを読む。
+もし、まだ書かれていなかったならば、<TT>:read</TT>は停止する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26100"></A>
+<B>:write</B> <EM>datum </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+バッファに<EM>datum</EM>を書き込む。
+1ワードのバッファのみ存在するので、
+もし他のデータが既に書かれておりまだ読まれていなかったならば、
+<TT>:write</TT>は<TT>:read</TT>によってそのデータが読み込まれるまで待つ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26113"></A>
+<B>:init</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>sync-memory-port</B>を初期化する。
+これには2つのセマフォが生成され、<TT>:write</TT>動作が可能な状態になっている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
 
 <DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html580"
-  HREF="jmanual-node16.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html574"
-  HREF="jmanual-node12.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html568"
-  HREF="jmanual-node14.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html576"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html578"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html581"
-  HREF="jmanual-node16.html">型指定</A>
-<B> Up:</B> <A NAME="tex2html575"
-  HREF="jmanual-node12.html">データ型</A>
-<B> Previous:</B> <A NAME="tex2html569"
-  HREF="jmanual-node14.html">オブジェクト</A>
- &nbsp; <B>  <A NAME="tex2html577"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html579"
-  HREF="jmanual-node157.html">Index</A></B> </DIV>
+<B> Next:</B> <A NAME="tex2html741"
+  HREF="jmanual-node16.html">幾何学関数</A>
+<B>Up:</B> <A NAME="tex2html735"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html729"
+  HREF="jmanual-node14.html">システム関数</A>
+</DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

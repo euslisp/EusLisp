@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>デモプログラム</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="デモプログラム">
+<TITLE>列、行列とテーブル</TITLE>
+<META NAME="description" CONTENT="列、行列とテーブル">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,89 +16,2626 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
+<LINK REL="next" HREF="jmanual-node11.html">
 <LINK REL="previous" HREF="jmanual-node9.html">
-<LINK REL="up" HREF="jmanual-node3.html">
+<LINK REL="up" HREF="jmanual-node2.html">
 <LINK REL="next" HREF="jmanual-node11.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html444"
-  HREF="jmanual-node11.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html438"
-  HREF="jmanual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html434"
-  HREF="jmanual-node9.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html440"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html442"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html445"
-  HREF="jmanual-node11.html">Bibliography</A>
-<B> Up:</B> <A NAME="tex2html439"
-  HREF="jmanual-node3.html">はじめに</A>
-<B> Previous:</B> <A NAME="tex2html435"
-  HREF="jmanual-node9.html">ライセンス</A>
- &nbsp; <B>  <A NAME="tex2html441"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html443"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html543"
+  HREF="jmanual-node11.html">ストリームと入出力</A>
+<B>Up:</B> <A NAME="tex2html537"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html531"
+  HREF="jmanual-node9.html">symbolとパッケージ</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION02017000000000000000">
-デモプログラム</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html544"
+  HREF="jmanual-node10.html#SECTION02081000000000000000">一般列</A>
+<LI><A NAME="tex2html545"
+  HREF="jmanual-node10.html#SECTION02082000000000000000">リスト</A>
+<LI><A NAME="tex2html546"
+  HREF="jmanual-node10.html#SECTION02083000000000000000">ベクトルと行列</A>
+<LI><A NAME="tex2html547"
+  HREF="jmanual-node10.html#SECTION02084000000000000000">文字と文字列</A>
+<UL>
+<LI><A NAME="tex2html548"
+  HREF="jmanual-node10.html#SECTION02084100000000000000">日本語の扱い方</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html549"
+  HREF="jmanual-node10.html#SECTION02085000000000000000">Foreign String</A>
+<LI><A NAME="tex2html550"
+  HREF="jmanual-node10.html#SECTION02086000000000000000">ハッシュテーブル</A>
+<LI><A NAME="tex2html551"
+  HREF="jmanual-node10.html#SECTION02087000000000000000">キュー</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION02080000000000000000">
+列、行列とテーブル</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION02081000000000000000">
+一般列</A>
 </H2>
-デモプログラムは、サブディレクトリ<TT>demo</TT>の中にある。
-<TT>*eusdir*</TT>へ<TT>cd</TT>した後、eusx上で実行できる。
-<DL>
-<DT><STRONG>ロボットアニメーション</STRONG></DT>
-<DD><A NAME="586"></A>
-eusxより<TT>demo/animdemo.l</TT>をロードする。
-約20分の計算の後、ETA3マニピュレータの滑らかなアニメーションが表示される。
-(図<A HREF="#animdemo">1</A>)
-</DD>
-<DT><STRONG>レートレーシング</STRONG></DT>
-<DD><A NAME="589"></A>
-もし、8ビットの疑似カラーディスプレイを持っているなら、
-<TT>demo/renderdemo.l</TT>をロードしてレイトレーシング画像を楽しむことができる。
-<TT>geo/render.l</TT>が先にコンパイルされていることが必要。
-</DD>
-<DT><STRONG>エッジ抽出</STRONG></DT>
-<DD><TT>demo/edgedemo.l</TT>をロードすると、サンプル単色画像が表示される。
-微分オペレータとしきい値を選ぶためのパラメータを入力する。
-エッジが数秒のうちに探され、元の画像に上書きされる。
+
+<P>
+ベクトル(1次元行列)とリストは、一般の列である。
+文字列(string)は、文字(character)のベクトルなので、列である。
+
+<P>
+<B>map, concatenate</B>や<B>coerce</B>における結果の型を明記するためには、
+クラスオブジェクトがsymbolにバインドされていないので、引用符なしで
+<TT>cons, string, integer-vector, float-vector</TT>などのクラス名symbolを使う。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="10355"></A>
+<B>elt</B> <EM>sequence pos </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>elt</B>は、<EM>sequence</EM>の中の<EM>pos</EM>番目の位置の値を得たり、(<B>setf</B>と
+ともに)置いたりする最も一般的な関数である。
+<EM>sequence</EM>は、リストまたは任意のオブジェクト、<TT>bit, char, integer, float</TT>の
+ベクトルである。
+<B>elt</B>は、多次元の行列に適用できない。
 </DD>
 </DL>
+<BR>
+<BR>
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="animdemo"></A><A NAME="603"></A>
-<TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure:</STRONG>
-衝突回避経路計画のアニメーション</CAPTION>
-<TR><TD><IMG
- WIDTH="678" HEIGHT="336" BORDER="0"
- SRC="jmanual-img2.png"
- ALT="\begin{figure}\epsfile{file=fig/eta3colavo.ps,width=150mm}\end{figure}"></TD></TR>
-</TABLE>
+<A NAME="10372"></A>
+<B>length</B> <EM>sequence </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の長さを返す。
+ベクトルにおいて、<B>length</B>は一定の時間で終了する。
+しかし、リスト型においては、長さに比例した時間がかかる。
+<B>length</B>が、もし環状リストに適用されたとき、決して終了しない。
+代わりに<B>list-length</B>を使用すること。
+もし、<EM>sequence</EM>がfill-pointerを持つ行列ならば、
+<B>length</B>は行列全体のサイズを返すのではなくfill-pointerを返す。
+このような行列のサイズを知りたい場合には、<B>array-total-size</B>を
+使用すること。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10389"></A>
+<B>subseq</B> <EM>sequence start [end] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の<EM>start</EM>番目から(<EM>end</EM><SPAN CLASS="MATH"><IMG
+ WIDTH="408" HEIGHT="874" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+queue
+propertied-object
+s...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></SPAN>1)番目までをそっくりコピーした
+列を作る。
+<EM>end</EM>は、デフォルト値として<EM>sequence</EM>の長さをとる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10404"></A>
+<B>copy-seq</B> <EM>sequence </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>のコピーした列を作る。
+このコピーでは、<EM>sequence</EM>のトップレベルの参照のみがコピーされる。
+入れこリストのコピーには<B>copy-tree</B>を使い、
+再帰参照を持つような列のコピーには
+<B>copy-object</B>を使うこと。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10418"></A>
+<B>reverse</B> <EM>sequence </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の順番を逆にし、<EM>sequence</EM>と同じ型の新しい列を
+返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10430"></A>
+<B>nreverse</B> <EM>sequence </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>nreverse</B>は、<B>reverse</B>の破壊(destructive)バージョンである。
+<B>reverse</B>はメモリを確保するが、<B>nreverse</B>はしない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10444"></A>
+<B>concatenate</B> <EM>result-type {sequence}* </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全ての<EM>sequence</EM>を連結させる。
+それぞれの<EM>sequence</EM>は、なにかの列型である。
+<B>append</B>と違って、最後の一つまで含めた全ての列がコピーされる。
+<EM>result-type</EM>は、<TT>cons,string,vector,float-vector</TT>などの
+クラスである。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10459"></A>
+<B>coerce</B> <EM>sequence result-type </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の型を変更する。
+例えば、<TT>(coerce '(a b c) vector) = #(a b c)</TT>や
+<TT>(coerce "ABC" cons) = (a b c)</TT>である。
+<EM>result-type</EM>型の新しい列が作られ、
+<EM>sequence</EM>のそれぞれの要素はその列にコピーされる。
+<EM>result-type</EM>は、<TT>vector, integer-vector, float-vector, bit-vector, string, cons</TT>
+またはそれらの1つを継承したユーザー定義クラス
+のうちの1つである。
+<B>coerce</B>は、<EM>sequence</EM>の型が<EM>result-type</EM>と同一である場合、コピーをする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10479"></A>
+<B>map</B> <EM>result-type function seq &amp;rest more-seqs </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>function</EM>は、<EM>seq</EM>と<EM>more-seqs</EM>のそれぞれのN番目(<!-- MATH
+ $N=0,1,\cdots$
+ -->
+<SPAN CLASS="MATH"></SPAN>)の要素
+からなるリストに
+対して適用され、その結果は<EM>result-type</EM>の型の列に蓄積される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10493"></A>
+<B>fill</B> <EM>sequence item &amp;key (:start 0) (:end (length sequence)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>の<EM>start</EM>番目から(<EM>end</EM><SPAN CLASS="MATH"><IMG
+ WIDTH="408" HEIGHT="874" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+queue
+propertied-object
+s...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></SPAN>1)番目まで、<EM>item</EM>で満たす。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10507"></A>
+<B>replace</B> <EM>dest source &amp;key :start1 :end1 :start2 :end2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dest</EM>列の中の<EM>start1</EM>から<EM>end1</EM>までの要素が、
+<EM>source</EM>列の中の<EM>start2</EM>から<EM>end2</EM>までの要素に置き換えられる。
+<EM>start1</EM>と<EM>start2</EM>のデフォルト値はゼロで、
+<EM>end1</EM>と<EM>end2</EM>のデフォルト値はそれぞれの列の長さである。
+もし片方の列がもう一方よりも長いならば、
+endは短い列の長さに一致するように縮められる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10527"></A>
+<B>sort</B> <EM>sequence compare &amp;optional key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sequence</EM>は、Unixのquick-sortサブルーチンを使って破壊的に(destructively)
+にソートされる。
+<EM>key</EM>は、キーワードパラメータでなく、比較用のパラメータである。
+同じ要素を持った列のソートをするときは十分気をつけること。
+例えば、<TT>(sort '(1 1) #'&gt;)</TT>は失敗する。なぜなら、1と1の比較は
+どちらからでも失敗するからである。
+この問題を避けるために、比較として<TT>#'<SPAN CLASS="MATH"></SPAN></TT>か<TT>#'<SPAN CLASS="MATH"></SPAN></TT>のような関数を用いる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10542"></A>
+<B>merge</B> <EM>result-type seq1 seq2 pred &amp;key (:key #'identity) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+２つの列<EM>seq1</EM>と<EM>seq2</EM>は、<EM>result-type</EM>型の１つの列に
+合併され、それらの要素は<EM>pred</EM>に記述された比較を満足する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10556"></A>
+<B>merge-list</B> <EM>list1 list2 pred key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+２つのリストを合併させる。<B>merge</B>と違って、一般列は引数として
+許可されないが、<B>merge-list</B>は<B>merge</B>より実行が速い
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+次の関数は、1つの基本関数と-ifや-if-notを後に付けた変形関数から成る。
+基本形は、少なくともitemとsequenceの引数を持つ。
+sequenceの中のそれぞれの要素とitemを比較し、
+何かの処理をする。
+例えば、インデックスを探したり、
+現れる回数を数えたり、itemを削除したりなど。
+変形関数は、predicateとsequenceの引数を持つ。
+sequenceのそれぞれの要素にpredicateを適用し、
+もしpredicateがnon-NILを返したとき(-if version)、
+またはNILを返したとき(-if-not version)に何かをする。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="10569"></A>
+<B>position</B> <EM>item seq &amp;key :start :end :test :test-not :key (:count 1) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中から<EM>item</EM>と同一な要素を探し、
+その要素の中で<EM>:count</EM>番目に現れた要素の
+インデックスを返す。
+その探索は、<EM>:start</EM>番目の要素から始め、それ以前の要素は無視する。
+デフォルトの探索は、<TT>eql</TT>で実行されるが、
+<EM>test</EM>か<EM>test-not</EM>パラメータで変更できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10586"></A>
+<B>position-if</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10597"></A>
+<B>position-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10608"></A>
+<B>find</B> <EM>item seq &amp;key :start :end :test :test-not :key (:count 1) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中の<EM>start</EM>番目の要素から
+<EM>:end</EM>番目の要素までの間で要素を探し、
+その探された要素の内、<EM>:count</EM>番目の要素を返す。
+その要素は、<EM>:test</EM>か<EM>:test-not</EM>に<TT>#'eql</TT>
+以外のものが記述されていないなら、<EM>item</EM>と同じものである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10626"></A>
+<B>find-if</B> <EM>predicate seq &amp;key :start :end :key (:count 1) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の要素の中で<EM>predicate</EM>がnon-NILを返す要素の内、
+<EM>:count</EM>番目の要素を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10639"></A>
+<B>find-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10650"></A>
+<B>count</B> <EM>item seq &amp;key :start :end :test :test-not :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中の<EM>:start</EM>番目から<EM>:end</EM>番目までの要素に<EM>item</EM>が
+何回現れるか数える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10664"></A>
+<B>count-if</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>predicate</EM>がnon-NILを返す<EM>seq</EM>内の要素数を数える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10676"></A>
+<B>count-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10687"></A>
+<B>remove</B> <EM>item seq &amp;key :start :end :test :test-not :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中の<EM>:start</EM>番目から<EM>:end</EM>番目までの要素のなかで、
+<EM>item</EM>と同一の要素を探し、<EM>:count</EM>
+（デフォルト値は∞）番目までの要素を削除した新しい列を作る。
+もし、<EM>item</EM>が一回のみ現れることが確定しているなら、
+無意味な探索を避けるために、<EM>:count=1</EM>を指定すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10704"></A>
+<B>remove-if</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10715"></A>
+<B>remove-if-not</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10726"></A>
+<B>remove-duplicates</B> <EM>seq &amp;key :start :end :key :test :test-not :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中から複数存在するitemを探し、その中の1つだけを残した新しい列を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10737"></A>
+<B>delete</B> <EM>item seq &amp;key :start :end :test :test-not :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>delete</EM>は、<EM>seq</EM>自体を修正し、新しい列を作らないことを除いては、
+<B>remove</B>同じである。
+もし、<EM>item</EM>が一回のみ現れることが確定しているなら、
+無意味な探索を避けるために、<EM>:count=1</EM>を指定すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10752"></A>
+<B>delete-if</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10763"></A>
+<B>delete-if-not</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>remove</B>や<B>delete</B>の<EM>:count</EM>デフォルト値は、1,000,000である。
+もし列が長く、削除したい要素が一回しか現れないときは、
+<EM>:count</EM>を1と記述すべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10777"></A>
+<B>substitute</B> <EM>newitem olditem seq
+ &amp;key :start :end :test :test-not :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>seq</EM>の中で<EM>:count</EM>番目に現れた<EM>olditem</EM>を<EM>newitem</EM>に置き換えた
+新しい列を返す。
+デフォルトでは、全ての<EM>olditem</EM>を置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<PRE>
+(substitute #\Space #\_ "Euslisp_euslisp") ;; =&gt; "Euslisp euslisp"
+</PRE>
+
+<P>
+
+<A NAME="10792"></A>
+<B>substitute-if</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10803"></A>
+<B>substitute-if-not</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10814"></A>
+<B>nsubstitute</B> <EM>newitem olditem seq &amp;key :start :end :test :test-not :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>seq</EM>の中で<EM>count</EM>番目に現れた<EM>olditem</EM>を<EM>newitem</EM>に置き換え、
+元の列<EM>seq</EM>に返す。デフォルトでは、全ての<EM>olditem</EM>を置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10830"></A>
+<B>nsubstitute-if</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10841"></A>
+<B>nsubstitute-if-not</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION02082000000000000000">
+リスト</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <A NAME="10852"></A>
+<B>listp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+オブジェクトがconsのインスタンスかもしくはNILならば、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10862"></A>
+<B>consp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(not (atom object))</TT>と同一である。<TT>(consp '())</TT>はNILである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10874"></A>
+<B>car</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>の最初の要素を返す。NILの<B>car</B>はNILである。
+atomの<B>car</B>はエラーとなる。<TT>(car '(1 2 3)) = 1</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10888"></A>
+<B>cdr</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>の最初の要素を削除した残りのリストを返す。NILの<B>cdr</B>はNILである。
+atomの<B>cdr</B>はエラーとなる。<TT>(cdr '(1 2 3)) = (2 3)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10902"></A>
+<B>cadr</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(cadr list) = (car (cdr list))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10913"></A>
+<B>cddr</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(cddr list) = (cdr (cdr list))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10924"></A>
+<B>cdar</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(cdar list) = (cdr (car list))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10935"></A>
+<B>caar</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(caar list) = (car (car list))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10946"></A>
+<B>caddr</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(caddr list) = (car (cdr (cdr list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10957"></A>
+<B>caadr</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(caadr list) = (car (car (cdr list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10968"></A>
+<B>cadar</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(cadar list) = (car (cdr (car list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10979"></A>
+<B>caaar</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(caaar list) = (car (car (car list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="10990"></A>
+<B>cdadr</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(cdadr list) = (cdr (car (cdr list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11001"></A>
+<B>cdaar</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(cdaar list) = (cdr (car (car list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11012"></A>
+<B>cdddr</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(cdddr list) = (cdr (cdr (cdr list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11023"></A>
+<B>cddar</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(cddar list) = (cdr (cdr (car list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11034"></A>
+<B>first</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>list</EM>の最初の要素を取り出す。
+<B>second, third, fourth, fifth, sixth, seventh, eighth</B>もまた定義されている。<TT>(first list) = (car list)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11047"></A>
+<B>nth</B> <EM>count list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>内の<EM>count</EM>番目の要素を返す。
+<TT>(nth 1 list)</TT>は、<TT>(second list)</TT>あるいは<TT>(elt list 1)</TT>と等価である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11062"></A>
+<B>nthcdr</B> <EM>count list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>に<B>cdr</B>を<EM>count</EM>回適用した後のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11075"></A>
+<B>last</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>の最後の要素でなく、最後のconsを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11086"></A>
+<B>butlast</B> <EM>list &amp;optional (n 1) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>list</EM>の最後から<EM>n</EM>個の要素を削除したリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11098"></A>
+<B>cons</B> <EM>car cdr </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>car</TT>が<EM>car</EM>で<TT>cdr</TT>が<EM>cdr</EM>であるような新しいconsを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11112"></A>
+<B>list</B> <EM>{element}* </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>element</EM>を要素とするリストを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11123"></A>
+<B>list*</B> <EM>{element}* </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>element</EM>を要素とするリストを作る。しかし、最後の要素は<B>cons</B>されるため、
+atomであってはならない。
+例えば、<TT>(list* 1 2 3 '(4 5)) = (1 2 3 4 5)</TT>である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11136"></A>
+<B>list-length</B> <EM>list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>の長さを返す。<EM>list</EM>は、環状リストでも良い。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11148"></A>
+<B>make-list</B> <EM>size &amp;key (:initial-element nil) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>size</EM>長さで要素が全て<EM>:initial-element</EM>のリストを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11160"></A>
+<B>rplaca</B> <EM>cons a </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>cons</EM>の<B>car</B>を<EM>a</EM>に置き換える。
+<B>setf</B>と<B>car</B>の使用を推薦する。
+<TT>(rplaca cons a) = (setf (car cons) a)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11176"></A>
+<B>rplacd</B> <EM>cons d </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>cons</EM>の<B>cdr</B>を<EM>d</EM>に置き換える。
+<B>setf</B>と<B>cdr</B>の使用を推薦する。
+<TT>(rplacd cons d) = (setf (cdr cons) d)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11192"></A>
+<B>memq</B> <EM>item list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>member</B>に似ている。しかしテストはいつも<TT>eq</TT>で行う。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11204"></A>
+<B>member</B> <EM>item list &amp;key :key :test :test-not </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>list</EM>の中から条件にあった要素を探す。
+<EM>list</EM>の中から<EM>item</EM>を探索し、<EM>:test</EM>の条件にあったものがなければNILを返す。
+見つかったならば、それ以降をリストとして返す。この探索は、最上位のリストに対して
+行なわれる。<EM>:test</EM>のデフォルトは<TT>#'eq</TT>である。
+<TT>(member 'a '(g (a y) b a d g e a y))=(a d g e a y)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11221"></A>
+<B>assq</B> <EM>item alist </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11232"></A>
+<B>assoc</B> <EM>item alist &amp;key :key :test :test-not </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>alist</EM>の要素の<B>car</B>が<EM>:test</EM>の条件にあった最初のものを返す。
+合わなければ、NILを返す。
+<EM>:test</EM>のデフォルトは<TT>#'eq</TT>である。
+<TT>(assoc '2 '((1 d t y)(2 g h t)(3 e x g))=(2 g h t)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11248"></A>
+<B>rassoc</B> <EM>item alist </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>cdr</B>が<EM>item</EM>に等しい<EM>alist</EM>のなかの最初の組を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11261"></A>
+<B>pairlis</B> <EM>l1 l2 &amp;optional alist </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>l1</EM>と<EM>l2</EM>の中の一致する要素を対にしたリストを作る。
+もし<EM>alist</EM>が与えられたとき、
+<EM>l1</EM>と<EM>l2</EM>から作られた対リストの最後に連結させる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11276"></A>
+<B>acons</B> <EM>key val alist </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>alist</EM>に<EM>key val</EM>の組を付け加える。
+<TT>(cons (cons key val) alist)</TT>と同等である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11289"></A>
+<B>append</B> <EM>{list}* </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+新しいリストを形成するために<EM>list</EM>を連結させる。
+最後のリストを除いて、<EM>list</EM>のなかの全ての要素はコピーされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11301"></A>
+<B>nconc</B> <EM>{list}* </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+それぞれの<EM>list</EM>の最後の<B>cdr</B>を置き換える事によって、<EM>list</EM>を
+破壊的に(destructively)連結する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11314"></A>
+<B>subst</B> <EM>new old tree </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>tree</EM>の中のすべての<EM>old</EM>を<EM>new</EM>に置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11327"></A>
+<B>flatten</B> <EM>complex-list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+atomやいろんな深さのリストを含んだ<EM>complex-list</EM>を、
+１つの線形リストに変換する。そのリストは、
+<EM>complex-list</EM>の中のトップレベルに全ての要素を置く。
+<TT>(flatten '(a (b (c d) e))) = (a b c d e)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11340"></A>
+<B>push</B> <EM>item place </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>place</EM>にバインドされたスタック(リスト)に<EM>item</EM>を置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11352"></A>
+<B>pop</B> <EM>stack </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>stack</EM>から最初の要素を削除し、それを返す。
+もし<EM>stack</EM>が空(NIL)ならば、NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11364"></A>
+<B>pushnew</B> <EM>item place &amp;key :test :test-not :key </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>item</EM>が<EM>place</EM>のメンバーでないなら、
+<EM>place</EM>リストに<EM>item</EM>を置く。
+<EM>:test</EM>, <EM>:test-not</EM>と<EM>:key</EM>引数は、
+<B>member</B>関数に送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11382"></A>
+<B>adjoin</B> <EM>item list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>item</EM>が<EM>list</EM>に含まれてないなら、<EM>list</EM>の最初に付け加える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11395"></A>
+<B>union</B> <EM>list1 list2 &amp;key (:test #'eq) (:test-not) (:key #'identity) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのリストの和集合を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11405"></A>
+<B>subsetp</B> <EM>list1 list2 &amp;key (:test #'eq) (:test-not) (:key #'identity) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>list1</EM>が<EM>list2</EM>の部分集合であること、すなわち、
+<EM>list1</EM>のそれぞれの要素が<EM>list2</EM>のメンバーであることをテストする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11419"></A>
+<B>intersection</B> <EM>list1 list2
+ &amp;key (:test #'eq) (:test-not) (:key #'identity) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのリスト<EM>list1</EM>と<EM>list2</EM>の積集合を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11431"></A>
+<B>set-difference</B> <EM>list1 list2
+&amp;key (:test #'eq) (:test-not) (:key #'identity) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list1</EM>にのみ含まれていて
+<EM>list2</EM>に含まれていない要素からなるリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11443"></A>
+<B>set-exclusive-or</B> <EM>list1 list2
+ &amp;key (:test #'eq) (:test-not) (:key #'identity) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list1</EM>および<EM>list2</EM>にのみ現れる要素からなるリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11455"></A>
+<B>list-insert</B> <EM>item pos list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>list</EM>の<EM>pos</EM>番目の要素として<EM>item</EM>を挿入する
+（元のリストを変化させる）。
+もし<EM>pos</EM>が<EM>list</EM>の長さより大きいなら、<EM>item</EM>は最後に
+<B>nconc</B>される。
+<TT>(list-insert 'x 2 '(a b c d)) = (a b x c d)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11473"></A>
+<B>copy-tree</B> <EM>tree </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+入れこリストである<EM>tree</EM>のコピーを返す。
+しかし、環状参照はできない。環状リストは、
+<B>copy-object</B>でコピーできる。
+実際に、<B>copy-tree</B>は<TT>(subst t t tree)</TT>と簡単に記述される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11487"></A>
+<B>mapc</B> <EM>func arg-list &amp;rest more-arg-lists </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>arg-list</EM>や<EM>more-arg-lists</EM>それぞれのN番目(<!-- MATH
+ $N=0,1,\cdots$
+ -->
+<SPAN CLASS="MATH"></SPAN>)の要素からなるリストに
+<EM>func</EM>を適用する。
+適用結果は無視され、<EM>arg-list</EM>が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11501"></A>
+<B>mapcar</B> <EM>func &amp;rest arg-list </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>arg-list</EM>のそれぞれの要素に<EM>func</EM>を<B>map</B>し、
+その全ての結果のリストを作る。
+<B>mapcar</B>を使う前に、<B>dolist</B>を試すこと。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11516"></A>
+<B>mapcan</B> <EM>func arg-list &amp;rest more-arg-lists </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>arg-list</EM>のそれぞれの要素に<EM>func</EM>を<B>map</B>し、
+<B>nconc</B>を用いてその全ての結果のリストを作る。
+<B>nconc</B>はNILに対して何もしないため、
+<B>mapcan</B>は、<EM>arg-list</EM>の要素にフィルタをかける（選択する）
+のに合っている。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION02083000000000000000">
+ベクトルと行列</A>
+</H2>
+
+<P>
+７次元以内の行列が許可されている。
+１次元の行列は、ベクトルと呼ばれる。
+ベクトルとリストは、列としてグループ化される。
+もし、行列の要素がいろんな型であったとき、その行列は一般化されていると言う。
+もし、行列がfill-pointerを持ってなく、他の行列で置き換えられなく、
+拡張不可能であるなら、その行列は簡略化されたと言う。
+
+<P>
+全ての行列要素は、<B>aref</B>により取り出すことができ、<B>aref</B>を用いて<B>setf</B>
+により設定することができる。
+しかし、一次元ベクトルのために簡単で高速なアクセス関数がある。
+<B>svref</B>は一次元一般ベクトル、<B>char</B>と<B>schar</B>は
+一次元文字ベクトル（文字列）、<B>bit</B>と<B>sbit</B>は
+一次元ビットベクトルのための高速関数である。
+これらの関数はコンパイルされたとき、
+アクセスはin-lineを拡張し、型チェックと境界チェックなしに実行される。
+
+<P>
+ベクトルもまたオブジェクトであるため、
+別のベクトルクラスを派生させることができる。
+5種類の内部ベクトルクラスがある。
+<TT>vector, string, float-vector, integer-vector</TT>と<TT>bit-vector</TT>である。
+ベクトルの作成を容易にするために、make-array関数がある。
+要素の型は、<TT>:integer, :bit, :character, :float, :foreign</TT>
+かあるいはユーザーが定義したベクトルクラスの内の一つでなければならない。
+<EM>:initial-element</EM>と<EM>:initial-contents</EM>のキーワード引数は、
+行列の初期値を設定するために役に立つ。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="11533"></A>
+<B>array-rank-limit</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> 7。行列の最大次元を示す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11543"></A>
+<B>array-dimension-limit</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD> #x1fffffff。各次元の最大要素数を示す。
+論理的な数であって、システムの物理メモリあるいは仮想メモリの大きさによって
+制限される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11553"></A>
+<B>vectorp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列は１次元であってもベクトルではない。
+<EM>object</EM>が<TT>vector, integer-vector, float-vector, string, bit-vector</TT>
+あるいはユーザーで定義したベクトルならTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11565"></A>
+<B>vector</B> <EM>&amp;rest elements </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>elements</EM>からなる一次元ベクトルを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11576"></A>
+<PRE><TT>
+<B>make-array</B> <I>dims &amp;key (:element-type vector) [関数] 
+<BR>(:initial-contents nil) 
+<BR>(:initial-element nil) 
+<BR>(:fill-pointer nil)  
+<BR>(:displaced-to nil) 
+<BR>(:displaced-index-offset 0) 
+<BR>(:adjustable nil)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>ベクトルか行列を作る。
+<EM>dims</EM>は、整数かリストである。
+もし<EM>dims</EM>が整数なら、一次元ベクトルが作られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11589"></A>
+<B>svref</B> <EM>vector pos </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vector</EM>の<EM>pos</EM>番目の要素を返す。
+<EM>vector</EM>は、一次元一般ベクトルでなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11602"></A>
+<B>aref</B> <EM>vector &amp;rest (indices) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vector</EM>の<EM>indices</EM>によってインデックスされる要素を返す。
+<EM>indices</EM>は、整数であり、<EM>vector</EM>の次元の数だけ指定する。
+<B>aref</B>は、非効率的である。なぜなら、<EM>vector</EM>の型に従うように
+変更する必要があるためである。コンパイルコードの速度を改善する
+ため、できるだけ型の宣言を与えるべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11618"></A>
+<B>vector-push</B> <EM>val array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>array</EM>のfill-pointer番目のスロットに<EM>val</EM>を保管する。
+<EM>array</EM>は、fill-pointerを持っていなければならない。
+<EM>val</EM>が保管された後、
+fill-pointerは、次の位置にポイントを1つ進められる。
+もし、行列の境界よりも大きくなったとき、エラーが報告される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11632"></A>
+<B>vector-push-extend</B> <EM>val array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>array</EM>のfill-pointerが最後に到達したとき、自動的に<EM>array</EM>のサイズが
+拡張されることを除いては、<B>vector-push</B>と同じである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11645"></A>
+<B>arrayp</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> もし<EM>obj</EM>が行列またはベクトルのインスタンスであるならTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11656"></A>
+<B>array-total-size</B> <EM>array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+
+<P>
+<EM>array</EM>の要素数の合計を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11667"></A>
+<B>fill-pointer</B> <EM>array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>array</EM>のfill-pointerを返す。
+file-pointerを持っていなければNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11678"></A>
+<B>array-rank</B> <EM>array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>array</EM>の次元数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11689"></A>
+<B>array-dimensions</B> <EM>array </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>array</EM>の各次元の要素数をリストで返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11700"></A>
+<B>array-dimension</B> <EM>array axis </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>array-dimension</B>は、<EM>array</EM>の<EM>axis</EM>
+番目の次元を返す。<EM>axis</EM>はゼロから始まる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11714"></A>
+<B>bit</B> <EM>bitvec index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>bitvec</EM>の<EM>index</EM>番目の要素を返す。
+ビットベクトルの要素を変更するには、<B>setf</B>と<B>bit</B>を使用すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11728"></A>
+<B>bit-and</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11739"></A>
+<B>bit-ior</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11750"></A>
+<B>bit-xor</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11761"></A>
+<B>bit-eqv</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11772"></A>
+<B>bit-nand</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11783"></A>
+<B>bit-nor</B> <EM>bits1 bits2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="11794"></A>
+<B>bit-not</B> <EM>bits1 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+同じ長さの<EM>bits1</EM>と<EM>bits2</EM>というビットベクトルにおいて、
+それらのand, inclusive-or,
+exclusive-or, 等価, not-and, not-orとnotがそれぞれ返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION02084000000000000000">
+文字と文字列</A>
+</H2>
+
+<P>
+EusLispには、文字型がない。
+文字は、<TT>integer</TT>によって表現されている。
+ファイル名を現わす文字列を扱うためには、
+<A HREF="jmanual-node11.html#Pathnames">9.6</A>節に書かれている<B>pathname</B>を使うこと。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="11806"></A>
+<B>digit-char-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>0</TT>〜<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>9</TT>ならTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11819"></A>
+<B>alpha-char-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>A</TT>〜<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>Z</TT>または
+<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>a</TT>〜<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>z</TT>なら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11834"></A>
+<B>upper-case-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>A</TT>〜<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>Z</TT>なら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11847"></A>
+<B>lower-case-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>a</TT>〜<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>z</TT>なら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11860"></A>
+<B>alphanumeric-p</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>ch</EM>が<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>0</TT>〜<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>9</TT>、
+<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>A</TT>〜<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>Z</TT>または
+<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>a</TT>〜<TT>#<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>z</TT>なら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11877"></A>
+<B>char-upcase</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ch</EM>を大文字に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11888"></A>
+<B>char-downcase</B> <EM>ch </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ch</EM>を小文字に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11899"></A>
+<B>char</B> <EM>string index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>の<EM>index</EM>番目の文字を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11911"></A>
+<B>schar</B> <EM>string index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>から文字を抜き出す。
+<EM>string</EM>の型が明確に解っていて、型チェックを要しないときのみ、<B>schar</B>
+を使うこと。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11924"></A>
+<B>stringp</B> <EM>string </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>がバイト(256より小さい正の整数)のベクトルなら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11935"></A>
+<B>string-upcase</B> <EM>str &amp;key :start :end </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>を大文字の文字列に変換して、新しい文字列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11946"></A>
+<B>string-downcase</B> <EM>str &amp;key :start :end </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>を小文字の文字列に変換して、新しい文字列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11957"></A>
+<B>nstring-upcase</B> <EM>str </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>を大文字の文字列に変換し、元に置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11968"></A>
+<B>nstring-downcase</B> <EM>str &amp;key :start :end </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>を小文字の文字列に変換し、元に置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11979"></A>
+<B>string=</B> <EM>str1 str2 &amp;key :start1 :end1 :start2 :end2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>str1</EM>が<EM>str2</EM>と等しいとき、Tを返す。
+<B>string=</B>は、大文字・小文字を判別する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11992"></A>
+<B>string-equal</B> <EM>str1 str2 &amp;key :start1 :end1 :start2 :end2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str1</EM>と<EM>str2</EM>の等価性をテストする。
+<B>string-equal</B>は、大文字・小文字を判別しない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12005"></A>
+<B>string</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>object</EM>の文字列表現を得る。
+もし<EM>object</EM>が文字列なら、<EM>object</EM>が返される。
+もし<EM>object</EM>がsymbolなら、その<TT>pname</TT>がコピーされ、返される。
+<TT>(equal (string 'a) (symbol-pname 'a))==T</TT>であるが、
+<TT>(eq (string 'a) (symbol-pname 'a))==NIL</TT>である。
+もし<EM>object</EM>が数値なら、それを文字列にしたものが返される
+(これはCommon Lispと非互換である)。
+もっと複雑なオブジェクトから文字列表現を得るためには、
+最初の引数をNILにした<B>format</B>関数を用いること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12024"></A>
+<B>string<SPAN CLASS="MATH"></SPAN></B> <EM>str1 str2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12035"></A>
+<B>string<SPAN CLASS="MATH"></SPAN></B> <EM>str1 str2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12046"></A>
+<B>string<SPAN CLASS="MATH"></SPAN></B> <EM>str1 str2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12057"></A>
+<B>string<SPAN CLASS="MATH"></SPAN></B> <EM>str1 str2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str1</EM>と<EM>str2</EM>を先頭から順番に比較して、比較演算が成立した位置
+を返す。もし、成立しなければ、NILを返す。文字の比較は、その文字のコードに
+に対して行なわれるため、<TT>A<SPAN CLASS="MATH"></SPAN>Z</TT>である。。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12070"></A>
+<B>string-left-trim</B> <EM>bag str </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12081"></A>
+<B>string-right-trim</B> <EM>bag str </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>は、左（右）から探索され、もし<EM>bag</EM>リスト内の文字を含んでいるなら、
+その要素を削除する。
+一旦<EM>bag</EM>に含まれない文字が見つかると、その後の探索は中止され、
+<EM>str</EM>の残りが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12095"></A>
+<B>string-trim</B> <EM>bag str </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>bag</EM>は、文字コードの列である。
+両端に<EM>bag</EM>に書かれた文字を含まない<EM>str</EM>のコピーが作られ、返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12108"></A>
+<B>substringp</B> <EM>sub string </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sub</EM>文字列が<EM>string</EM>に部分文字列として含まれるなら、Tを返す。
+大文字・小文字を判別しない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION02084100000000000000">
+日本語の扱い方</A>
+</H3>
+<B>euslisp</B>で日本語を扱いたい時、文字コードは<B>UTF-8</B>である必要がある。
+
+<P>
+例えば<B>concatenate</B>を用いると、リストの中の日本語を連結することが出来る。
+<B>ROS</B>のトピックとして一つずつ取ってきた日本語を、連結することで一つの<B>string</B>型の言葉に変換したい時などに便利である。
+
+<P>
+(concatenate string "け" "ん" "し" "ろ" "う") 
+→ "けんしろう"
+
+<P>
+最初から全ての文字がリストに入っていて、文字を連結したい時はこのようにすればよい。
+
+<P>
+(reduce #'(lambda (val1 val2) (concatenate string val1 val2)) (list "我" "輩" "は" "ピ" "ー" "ア" "ー" "ル" "ツ" "ー" "で" "あ" "る"))
+
+<P>
+→ "我輩はピーアールツーである"
+
+<P>
+<B>coerce</B>を用いて、次のように書くことも出来る。
+
+<P>
+(coerce (append (coerce "私はナオより" cons) (coerce "背が高い" cons)) string)
+
+<P>
+→ "私はナオより背が高い"
+
+<P>
+
+<H2><A NAME="SECTION02085000000000000000">
+Foreign String</A>
+</H2>
+<B>foreign-string</B>は、EusLispのヒープ外にあるバイトベクトルの1種である。
+普通の文字列は、長さとバイトの列を持ったオブジェクトであるが、
+foreign-stringは、長さと文字列本体のアドレスを持っている。
+foreign-stringは文字列であるが、
+いくつかの文字列および列に対する関数は適用できない。
+<B>length</B>、<B>aref</B>、<B>replace</B>、<B>subseq</B>と<B>copy-seq</B>だけが
+foreign-stringを認識し、 
+その他の関数の適用はクラッシュの原因となる恐れがある。
+
+<P>
+foreign-stringは、/dev/a??d??(??は32あるいは16)の特殊ファイルで与えられる
+I/O空間を参照することがある。
+そのデバイスがバイトアクセスにのみ応答するI/O空間の一つに
+割り当てられた場合、
+<B>replace</B>は、いつもバイト毎に要素をコピーする。
+メモリのlarge chunkを連続的にアクセスしたとき、比較的に遅く動作する。。
+
+<P>
+
+ <BR>
+<BR> <A NAME="12120"></A>
+<B>make-foreign-string</B> <EM>address length </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>address</EM>の位置から<EM>length</EM>バイトの
+<B>foreign-string</B>のインスタンスを作る。
+例えば、<TT>(make-foreign-string (unix:malloc 32) 32)</TT>は、
+EusLispのヒープ外に位置する32バイトメモリを参照部分として作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<P>
+
+<H2><A NAME="SECTION02086000000000000000">
+ハッシュテーブル</A>
+</H2>
+
+<P>
+hash-tableは、キーで連想される値を探すためのクラスである（<B>assoc</B>でもできる）。
+比較的大きな問題において、hash-tableはassocより良い性能を出す。
+キーと値の組数が増加しても探索に要する時間は、一定のままである。
+簡単に言うと、hash-tableは100以上の要素から探す場合に用い、
+それより小さい場合はassocを用いるべきである。
+
+<P>
+hash-tableは、テーブルの要素数がrehash-sizeを越えたなら、自動的に拡張される。
+デフォルトとして、テーブルの半分が満たされたとき拡張が起こるようになっている。
+<B>sxhash</B>関数は、オブジェクトのメモリアドレスと無関係なハッシュ値を
+返し、オブジェクトが等しい(equal)ときのハッシュ値はいつも同じである。
+それで、hash-tableはデフォルトのハッシュ関数に<B>sxhash</B>を使用している
+ので、再ロード可能である。
+<B>sxhash</B>がロバストで安全な間は、
+列やtreeの中のすべての要素を探索するため、比較的に遅い。
+高速なハッシュのためには、アプリケーションにより他の特定のハッシュ関数を
+選んだ方がよい。
+ハッシュ関数を変えるためには、hash-tableに<TT>:hash-function</TT>メッセージを
+送信すれば良い。
+簡単な場合、ハッシュ関数を<TT>#'sxhash</TT>から
+<TT>#'sys:address</TT>に変更すればよい。
+EusLisp内のオブジェクトのアドレスは
+決して変更されないため、<TT>#'sys:address</TT>を設定することができる。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="12134"></A>
+<B>sxhash</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>obj</EM>のハッシュ値を計算する。
+<B>equal</B>な2つのオブジェクトでは、同じハッシュ値を生じること
+が保証されている。
+symbolなら、そのpnameに対するハッシュ値を返す。
+numberなら、その<TT>integer</TT>表現を返す。
+listなら、その要素全てのハッシュ値の合計が返される。
+stringなら、それぞれの文字コードの合計をシフトしたものが返される。
+その他どんなオブジェクトでも、<B>sxhash</B>はそれぞれのスロットのハッシュ値を
+再帰的呼出しで計算し、それらの合計を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12148"></A>
+<B>make-hash-table</B> <EM>&amp;key (:size 30) (:test #'eq) (:rehash-size 2.0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+hash-tableを作り、返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12158"></A>
+<B>gethash</B> <EM>key htab </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>htab</EM>の中から<EM>key</EM>と一致する値を得る。
+<B>gethash</B>は、<B>setf</B>を組み合せることにより<EM>key</EM>に値を設定する
+ことにも使用される。
+hash-tableに新しい値が登録され、そのテーブルの埋まったスロットの数が
+1/rehash-sizeを越えたとき、hash-tableは自動的に2倍の大きさに拡張される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12173"></A>
+<B>remhash</B> <EM>key htab </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>htab</EM>の中から<EM>key</EM>で指定されたハッシュ登録を削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12185"></A>
+<B>maphash</B> <EM>function htab  </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>htab</EM>の要素全てを<EM>function</EM>で<B>map</B>する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12198"></A>
+<B>hash-table-p</B> <EM>x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>x</EM>がhash-tableクラスのインスタンスなら、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="12210"></A>
+<BIG CLASS="XLARGE"><B>hash-table </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (key value count 
+<BR>
+hash-function test-function 
+<BR>
+rehash-size empty deleted) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>hash-tableを定義する。
+<EM>key</EM>と<EM>value</EM>は大きさが等しい一次元ベクトルである。
+<EM>count</EM>は、<EM>key</EM>や<EM>value</EM>が埋まっている数である。
+<EM>hash-function</EM>のデフォルトは<B>sxhash</B>である。
+<EM>test-function</EM>のデフォルトは<B>eq</B>である。
+<EM>empty</EM>と<EM>deleted</EM>は、<EM>key</EM>ベクトルのなかで空または削除された
+数を示すsymbol(パッケージに収容されていない）である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12239"></A>
+<B>:hash-function</B> <EM>newhash </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このhash-tableのハッシュ関数を<EM>newhash</EM>に変更する。
+<EM>newhash</EM>は、1つの引数を持ち、<TT>integer</TT>を返す関数でなければならない。
+<EM>newhash</EM>の1つの候補として<B>sys:address</B>がある。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION02087000000000000000">
+キュー</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+queue はFIFO(first-in first-out)形式で要素の追加や検索を可能にするデー
+タ構造である。
+carがqueueの実体であり、このqueueのインスタンスをqとすると，その配列
+は(print (car q))で表示できる。cdrに最も最近に追加された要素が確保される。
+
+<P>
+	<BR> 
+<A NAME="12255"></A>
+<BIG CLASS="XLARGE"><B>queue </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>cons</B> 
+<BR>  :slots 		 (car cdr) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>FIFO queueを定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12272"></A>
+<B>:init</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> queueを初期化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12282"></A>
+<B>:enqueue</B> <EM>val </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このqueueにxを最新の要素として追加する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12292"></A>
+<B>:dequeue</B> <EM>&amp;optional (error-p nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このqueueの最も過去に
+  追加された要素を返し、queueから削除する。queueが空の場合，error-pが
+  NILでない場合はエラーを表示し、それ以外の場合はNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12302"></A>
+<B>:length</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このqueueの長さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12312"></A>
+<B>:empty?</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このqueueが空の場合、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12322"></A>
+<B>:trim</B> <EM>s </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このqueueの要素のうち古いものを破棄し、queueの長さをsとする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12332"></A>
+<B>:search</B> <EM>item &amp;optional (test #'equal) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このqueueにitem
+  が存在するか調べる。もし無ければNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12342"></A>
+<B>:delete</B> <EM>item &amp;optional (test #'equal) (count 1) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この
+  queueからitemと同一の要素を探し、:count番目までの要素を削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12352"></A>
+<B>:first</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このqueueの先頭の要素（最も過去に追加された要素）を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="12362"></A>
+<B>:last</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このqueueの最後の要素（最も最近に追加された要素）を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html543"
+  HREF="jmanual-node11.html">ストリームと入出力</A>
+<B>Up:</B> <A NAME="tex2html537"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html531"
+  HREF="jmanual-node9.html">symbolとパッケージ</A>
 </DIV>
-
-<P>
-<BR><HR>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

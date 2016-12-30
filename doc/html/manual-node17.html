@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Forms and Evaluation</TITLE>
-<META NAME="description" CONTENT="Forms and Evaluation">
+<TITLE>Multithread</TITLE>
+<META NAME="description" CONTENT="Multithread">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,72 +18,943 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="manual.css">
 
-<LINK REL="next" HREF="manual-node24.html">
-<LINK REL="previous" HREF="manual-node12.html">
-<LINK REL="up" HREF="manual-node11.html">
+<LINK REL="next" HREF="manual-node18.html">
+<LINK REL="previous" HREF="manual-node16.html">
+<LINK REL="up" HREF="manual-node15.html">
 <LINK REL="next" HREF="manual-node18.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html639"
-  HREF="manual-node18.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html633"
-  HREF="manual-node11.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html627"
-  HREF="manual-node16.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html635"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html637"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html640"
-  HREF="manual-node18.html">Atoms</A>
-<B> Up:</B> <A NAME="tex2html634"
-  HREF="manual-node11.html">Bibliography</A>
-<B> Previous:</B> <A NAME="tex2html628"
-  HREF="manual-node16.html">Type Specifier</A>
- &nbsp; <B>  <A NAME="tex2html636"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html638"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html804"
+  HREF="manual-node18.html">Geometric Functions</A>
+<B>Up:</B> <A NAME="tex2html798"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html792"
+  HREF="manual-node16.html">System Functions</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
-
-<H1><A NAME="SECTION03020000000000000000">
-Forms and Evaluation</A>
-</H1>
-
-<BR><HR>
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html641"
-  HREF="manual-node18.html">Atoms</A>
-<LI><A NAME="tex2html642"
-  HREF="manual-node19.html">Scoping</A>
-<LI><A NAME="tex2html643"
-  HREF="manual-node20.html">Generalized Variables</A>
-<LI><A NAME="tex2html644"
-  HREF="manual-node21.html">Special Forms</A>
-<LI><A NAME="tex2html645"
-  HREF="manual-node22.html">Macros</A>
-<LI><A NAME="tex2html646"
-  HREF="manual-node23.html">Functions</A>
+<LI><A NAME="tex2html805"
+  HREF="manual-node17.html#SECTION03021000000000000000">Design of Multithread EusLisp</A>
+<UL>
+<LI><A NAME="tex2html806"
+  HREF="manual-node17.html#SECTION03021100000000000000">Multithread in Solaris 2 operating system</A>
+<LI><A NAME="tex2html807"
+  HREF="manual-node17.html#SECTION03021200000000000000">Context Separation</A>
+<LI><A NAME="tex2html808"
+  HREF="manual-node17.html#SECTION03021300000000000000">Memory Management</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html809"
+  HREF="manual-node17.html#SECTION03022000000000000000">Asynchronous and Parallel Programming Constructs</A>
+<UL>
+<LI><A NAME="tex2html810"
+  HREF="manual-node17.html#SECTION03022100000000000000">Thread Creation and Thread Pool</A>
+<LI><A NAME="tex2html811"
+  HREF="manual-node17.html#SECTION03022200000000000000">Parallel Execution of Threads</A>
+<LI><A NAME="tex2html812"
+  HREF="manual-node17.html#SECTION03022300000000000000">Synchronization primitives</A>
+<LI><A NAME="tex2html813"
+  HREF="manual-node17.html#SECTION03022400000000000000">Barrier synchronization</A>
+<LI><A NAME="tex2html814"
+  HREF="manual-node17.html#SECTION03022500000000000000">Synchronized memory port</A>
+<LI><A NAME="tex2html815"
+  HREF="manual-node17.html#SECTION03022600000000000000">Timers</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html816"
+  HREF="manual-node17.html#SECTION03023000000000000000">Measured Parallel Gains</A>
+<LI><A NAME="tex2html817"
+  HREF="manual-node17.html#SECTION03024000000000000000">Thread creation</A>
+<LI><A NAME="tex2html818"
+  HREF="manual-node17.html#SECTION03025000000000000000">Synchronization</A>
 </UL>
 <!--End of Table of Child-Links-->
-<BR><HR>
-<ADDRESS>
+<HR>
 
-2016-03-23
+<H1><A NAME="SECTION03020000000000000000"></A><A NAME="mthread"></A>
+<BR>
+Multithread
+</H1>
+
+<P>
+The multithread is the concurrent and asynchronous programming facility
+on the Solaris operating system. 
+Asynchronous programming is required for programs to respond to
+external events via multiple sensors occurring independently of
+the program's state.
+Parallel programming is effective to improve performance of
+computation bound processing such as image processing and interference
+checking in path planning.
+
+<P>
+
+<H2><A NAME="SECTION03021000000000000000">
+Design of Multithread EusLisp</A>
+</H2>
+
+<H3><A NAME="SECTION03021100000000000000">
+ Multithread in Solaris 2 operating system</A>
+</H3>
+Multithread EusLisp (MT-Eus) runs on the Solaris 2 operating system
+with one or more processors.  Solaris's threads are units for allocating
+CPU in a traditional UNIX process, having shared memory and different
+contexts. The thread library provided by the Solaris OS allocates each
+thread to a single LWP (light weight process), which is a kernel
+resource.
+The Unix kernel schedules the allocation of  LWPs to one or more
+physical CPUs based on thread priorities assigned to each thread. 
+Fig.<A HREF="#threadmodel">5</A> depicts the relations between threads, LWPs, and CPUs.
+Two major changes in the design of the contexts and the memory management
+of EusLisp have been made to upgrade it to multithread capabilities.
+
+<P>
+
+<H3><A NAME="SECTION03021200000000000000">
+Context Separation</A>
+</H3>
+MT-Eus allocates private stacks and contexts  to each threads
+so that they can run independently of each other. Objects
+such as symbols and conses are allocated in the shared heap
+memory as in sequential EusLisp.
+Therefore, thread-private data such as block labels,
+catch tags, and local variables 
+are protected from other threads, whereas  values (objects) 
+pointed by global variables are visible to all threads allowing
+information exchange among threads.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="threadmodel"></A><A NAME="25604"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 5:</STRONG>
+Solaris operating system's thread model</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="574" HEIGHT="252" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img35.png"
+ ALT="\includegraphics[width=13cm]{fig/threadfig.ps}">
+</DIV>
+<P>
+<DIV ALIGN="CENTER">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+A context consists of a C-stack, a binding-stack and frame 
+pointers that chain lexical blocks such as <TT>lambda, block, catch,
+let, flet</TT>, and so on,  and is established when a new thread
+is created. Since more than one context can be active at
+the same time on a real multi-processor machine, we cannot
+hold a single pointer to the current context in a global variable.
+Rather we have to add one more argument to every internal
+function to transfer the context pointer  from the topmost eval
+to the memory manager at the bottom.
+
+<P>
+
+<H3><A NAME="SECTION03021300000000000000">
+Memory Management</A>
+</H3>
+EusLisp adopts a Fibonacci buddy memory management scheme in a
+single heap for every type of object. 
+After running programs having
+different memory request characteristics, we have been convinced that
+Fibonacci buddy can allocate objects of various sizes equally fast,
+garbage-collects quickly without copying , and exhibits high memory
+utilization (the internal loss is 10 to 15% and the
+external loss is negligible).
+For multithreading, the second point, i.e., non-copying GC, is very
+important.
+If addresses of objects were changed by copying-GC, pointers in the
+stack and CPU registers of all thread contexts would have to be
+redirected to new locations, which is impossible or very difficult. 
+
+<P>
+All memory allocation requests are handled by the <TT>alloc</TT> function at the
+lowest level.
+<TT>Alloc</TT> does mutex-locking because it manipulates the global
+database of free lists.
+Since we cannot predict when a garbage
+collection begins and which thread causes it, every thread must prepare
+for sporadic GCs.  All pointers to living objects have to be arranged
+to be accessible by the GC anytime to prevent them from being reclaimed
+as garbage.  This is done by storing the pointers to the most recently
+allocated objects in fixed slots of each context, instead of trusting
+they are maintained on the stacks.
+
+<P>
+Fig. <A HREF="#parathreads">6</A> illustrates flow of threads requesting memory and forked inside
+GC to process marking and sweeping in parallel.
+Note that threads that do not request memory or manipulate pointers
+can run in parallel with the GC,
+improving real-time response of the low-level tasks such as signal
+processing and image acquisition.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="parathreads"></A><A NAME="25616"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 6:</STRONG>
+Parallel threads requesting memory and GC running in parallel</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="521" HEIGHT="469" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img36.png"
+ ALT="\includegraphics[width=120mm]{fig/parathreads.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H2><A NAME="SECTION03022000000000000000">
+Asynchronous and Parallel Programming Constructs</A>
+</H2>
+
+<H3><A NAME="SECTION03022100000000000000">
+Thread Creation and Thread Pool</A>
+</H3>
+In order for Solaris to execute a program in parallel on many
+processors, the program needs to be written as a collection
+of functions, each of which is executed by a thread dynamically
+created in a process.  Although the time required for thread
+creation is faster than process creation, it takes a few
+mili-seconds for EusLisp to start off a thread after allocating
+stacks and setting a page attribute for detecting stack-overflow.
+Since this delay, which should be compared to a function invocation,
+is intolerable, sufficient number of threads are created by
+the <TT>make-thread</TT> function beforehand and put in 
+the system's thread pool,
+eliminating the need for system calls at evaluation time.
+Each thread in the thread pool is represented by a thread object,
+as depicted in Fig.<A HREF="#threadobj">7</A>,
+consisted of thread-id, several semaphores for synchronization,
+and slots for argument and evaluation result transfer.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="threadobj"></A><A NAME="25809"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 7:</STRONG>
+Thread-object for transferring control and data between threads (left) and the collection of threads put in the thread-pool.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<TABLE CELLPADDING=3 ALIGN="CENTER">
+<TR><TD ALIGN="CENTER"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img37.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></TD>
+<TD ALIGN="CENTER"><IMG
+ WIDTH="335" HEIGHT="182" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img38.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadpool.ps}"></TD>
+</TR>
+</TABLE>
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H3><A NAME="SECTION03022200000000000000">
+Parallel Execution of Threads</A>
+</H3>
+For the allocation of parallel computation to threads, the thread function
+is used.
+Thread takes one free thread out of the thread pool,
+transfers arguments via shared memory, wakes up the thread by signaling
+the semaphore as indicated in fig. <A HREF="#threadobj">7</A>,
+and returns a thread object to the caller without blocking.
+The woken-up thread begins evaluation of
+the argument running in parallel to the calling thread.
+The caller uses
+<TT>wait-thread</TT> to receive the evaluation result from the forked thread.
+The <TT>plist</TT> macro is a more convenient form to describe parallel 
+evaluation of arguments.
+<TT>Plist</TT> attaches threads to evaluate each argument
+and lists up results after waiting for all threads to finish evaluation.
+
+<P>
+
+<H3><A NAME="SECTION03022300000000000000">
+Synchronization primitives</A>
+</H3>
+MT-Eus has three kinds of synchronization primitives,
+namely <EM>mutex locks, condition variables</EM>, and <EM>semaphores</EM>.
+Mutex locks  are used to serialize accesses to shared variables
+between threads.
+Condition variables allow a thread to wait for a condition to become
+true in a mutex-locked section by temporarily releasing and re-acquiring 
+the lock.
+Semaphores are used to inform occurrences of events, or to control
+sharing of finite resources.
+These synchronization primitives cause voluntary context switching,
+while the Solaris kernel generates involuntary task switching
+on a time-sliced scheduling basis.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="synchports"></A><A NAME="25645"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 8:</STRONG>
+Barrier synchronization and synchronozed memory port</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="554" HEIGHT="255" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img39.png"
+ ALT="\includegraphics[width=130mm]{fig/synchports.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H3><A NAME="SECTION03022400000000000000">
+Barrier synchronization</A>
+</H3>
+<EM>Barrier-synch</EM> is a mechanism for more than two threads to synchronize
+at the same time (Fig. <A HREF="#synchports">8</A>).
+For this purpose, an instance of the barrier class
+is created and threads that participate in
+the synchronization register themselves in the object.
+Then, each thread sends the <TT>:wait</TT> message to the barrier object,
+and the thread is blocked.
+When the last thread registered in the object sends its
+<TT>:wait</TT> message, the waits are released and all waiting
+threads get a return value of T.
+Barrier-sync plays an important role of global clocking in a
+multi-robot simulation.
+
+<P>
+
+<H3><A NAME="SECTION03022500000000000000">
+Synchronized memory port</A>
+</H3>
+Synchronized memory port is a kind of stream to exchange data
+between threads (Fig. <A HREF="#synchports">8</A>).
+Since all threads in a process share the
+heap memory, if one thread binds an object to a global variable,
+it  instantly becomes visible to other threads.
+However, shared memory lacks capability to send events that the
+global data is updated. Synchronized memory port ensures this 
+synchronization for accessing a shared object. A synchronized
+memory port object consists of one buffer slot and two semaphores
+used for synchronizing  read and write.
+
+<P>
+
+<H3><A NAME="SECTION03022600000000000000">
+Timers</A>
+</H3>
+Real-time programs often require functions to execute at
+predetermined timing or to repeat in particular intervals.
+Sequential EusLisp could run user' functions triggered by
+signals generated periodically by Unix's interval timers.
+This preemption can cause deadlock in MT-Eus,
+because interruption may occur within a mutex-ed block.
+Therefore, control must be transferred at secured points
+such as at the beginning of <TT>eval</TT>.
+To avoid delays caused by the above synchronization,
+MT-Eus also provides signal-notification via semaphores.
+In other words, the signal function takes either a function or
+a semaphore that is called or posted upon the signal arrival.
+Since the semaphore is posted at the lowest level, latency
+for synchronization is minimal.
+
+<P>
+The following a example image processing program
+coded by using the multithread facilities.
+Image input thread and filtering
+threads are created. samp-image takes image data periodically
+by waiting for samp-sem to be posted every 33msec.
+Two threads synchronize via read-and-write of a thread-port.
+Filter-image employs two more threads for parallel computation
+of filtering.
+
+<P><PRE>
+(make-threads 8)
+(defun samp-image (p)
+   (let ((samp-sem (make-semaphore)))
+        (periodic-sema-post 0.03 samp-sem)
+        (loop (sema-wait samp-sem)
+              (send p :write (read-image))))
+(defun filter-image (p)
+  (let (img)
+       (loop (setf img (send p :read))
+             (plist (filter-up-half img)
+                    (filter-low-half img)))))
+(setf port (make-thread-port))
+(setf sampler (thread #'samp-image port))
+(setf filter (thread #'filter-image port))
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION03023000000000000000">
+Measured Parallel Gains</A>
+</H2>
+
+<P>
+Table. <A HREF="#paragain">3</A> shows the parallel execution performance
+measured on a Cray Supserserver configured with 32 CPUs.
+Linear parallel gain was obtained for the compiled Fibonacci function,
+because there is no shared memory access and  the program code
+is small enough to be fully loaded onto the cache memory of
+each processor.
+Contrally, when the same program was interpreted, linearly
+high performance could not be attained, since memory access
+scatters. Further, some programs that frequently refer to 
+shared memory and request memory allocation cannot exhibit better
+performance than a single processor execution.
+This can be understood as the result of frequent  cache memory
+purging.
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER"><A NAME="25810"></A>
+<TABLE>
+<CAPTION><STRONG>Table 3:</STRONG>
+Parallel gains of programs executed on multi-processors</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<TABLE CELLPADDING=3 BORDER="1" ALIGN="CENTER">
+<TR><TD ALIGN="LEFT">processors</TD>
+<TD ALIGN="RIGHT">1</TD>
+<TD ALIGN="RIGHT">2</TD>
+<TD ALIGN="RIGHT">4</TD>
+<TD ALIGN="RIGHT">8</TD>
+<TD ALIGN="CENTER">GC (ratio)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(a) compiled Fibonacci</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">2.0</TD>
+<TD ALIGN="RIGHT">4.0</TD>
+<TD ALIGN="RIGHT">7.8</TD>
+<TD ALIGN="CENTER">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(b) interpreted Fibonacci</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">1.7</TD>
+<TD ALIGN="RIGHT">2.7</TD>
+<TD ALIGN="RIGHT">4.4</TD>
+<TD ALIGN="CENTER">0</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(c) copy-seq</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">1.3</TD>
+<TD ALIGN="RIGHT">0.76</TD>
+<TD ALIGN="RIGHT">0.71</TD>
+<TD ALIGN="CENTER">0.15</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(d) make-cube</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">0.91</TD>
+<TD ALIGN="RIGHT">0.40</TD>
+<TD ALIGN="RIGHT">0.39</TD>
+<TD ALIGN="CENTER">0.15</TD>
+</TR>
+<TR><TD ALIGN="LEFT">(e) interference-check</TD>
+<TD ALIGN="RIGHT">1.0</TD>
+<TD ALIGN="RIGHT">0.88</TD>
+<TD ALIGN="RIGHT">0.55</TD>
+<TD ALIGN="RIGHT">0.34</TD>
+<TD ALIGN="CENTER">0.21</TD>
+</TR>
+</TABLE> 
+<BR>
+</DIV></TD></TR>
+</TABLE>
+</DIV><P></P>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION03024000000000000000">
+Thread creation</A>
+</H2>
+A thread is a unit for assigning computation, usually evaluation
+of a lisp form.
+Threads in EusLisp are represented by instances of
+the <B>thread</B> class.
+This object is actually a control port of a thread 
+to pass arguments and result, and let it start evaluation,
+rather than the thread's entity representing the context.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="25832"></A>
+<B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates <EM>num</EM> threads with <EM>lsize</EM> words of Lisp stack
+and <EM>csize</EM> words of C stack, and put them in the system's
+thread pool.
+All the threads in the thread pool is bound to sys:*threads*,
+which is extended each time <B>make-thread</B> is called.
+By the <B>thread</B> function, a computation is assigned to one
+of free threads in the thread pool.
+Therefore it is not a good idea to change stack sizes
+from thread to thread,
+since you cannot control which thread is assigned to a specific
+computation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25847"></A>
+<B>sys:*threads*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of all the threads created by <B>make-threads</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25858"></A>
+<B>sys::free-threads</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of threads in the
+free thread pool.
+If the result is NIL, new commitment of a task to a thread
+is blocked until any currently running threads finish evaluation
+or new threads are created by <B>make-thread</B> in the free thread pool.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25869"></A>
+<B>sys:thread</B> <EM>func &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+picks up one free thread from the thread pool, and assigns it
+for evaluation of <EM>(func . args)</EM>.
+<B>Sys:thread</B> can be regarded as asynchronous <B>funcall</B>,
+since <B>sys:thread</B> applies <EM>func</EM> to the spread list
+of <EM>args</EM> but it does not accept the result of the
+function application.
+Rather, <B>sys:thread</B> returns the thread object assigned to
+the funcall, so that the real result can be obtained later
+by <B>sys:wait-thread</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+(defun compute-pi (digits) ...)
+(setq trd (sys:thread \#'compute-pi 1000)) ;assign compute-pi to a thread
+...  ;; other computation 
+(sys:wait-thread trd) ;get the result of (compute-pi 1000)
+</PRE>
+
+<P>
+
+<A NAME="25887"></A>
+<B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+assigns computation to one of free threads.
+The thread is reclaimed in the free thread pool when
+it finishes evaluation without being <B>wait-thread</B>'ed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25898"></A>
+<B>sys:wait-thread</B> <EM>thread </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+waits for <EM>thread</EM> to finish evaluation of funcall given
+by the <B>sys:thread</B> function, and retrieves the result
+and returns it.
+<B>Sys:wait-thread</B> is mandatory if the thread is assigned
+evaluation by <B>sys:thread</B> because the thread is not returned
+to the free thread pool until it finishes transferring the result.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25912"></A>
+<B>sys:plist</B> <EM>&amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> evaluates <EM>forms</EM> by different
+threads in parallel and waits for the completion of all evaluation,
+and the list of results is returned.
+<B>Sys:plist</B> may be regarded as <EM>parallel-list</EM> except that
+each form listed must be a function call.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03025000000000000000">
+Synchronization</A>
+</H2>
+
+<P>
+Among Solaris operating systems four synchronization primitives for
+multithread programs, EusLisp provides mutex locks, conditional variables,
+and semaphores. Reader-writer lock is not available now.
+
+<P>
+Based on these primitives, higher level synchronization mechanisms,
+such as synchronized memory port and barrier synchronization, are realized.
+
+<P>
+
+ <BR>
+<BR> <A NAME="25925"></A>
+<B>sys:make-mutex-lock</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a mutex-lock and returns it. A mutex-lock is represented by an
+integer-vector of six elements.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25935"></A>
+<B>sys:mutex-lock</B> <EM>mlock </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+locks the mutex lock <EM>mlock</EM>.
+If the <EM>mlock</EM> is already locked by another thread,
+<EM>mutex-lock</EM> waits for the lock to be released.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25948"></A>
+<B>sys:mutex-unlock</B> <EM>mlock </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+releases <EM>mlock</EM> and let one of other threads waiting for this
+lock resume running.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25959"></A>
+<B>sys:mutex</B> <EM>mlock &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Mutex-lock and mutex-unlock have to be used as a pair.
+<B>Mutex</B> is a macro that brackets a critical section.
+<EM>Mlock</EM> is locked
+before evaluating <EM>forms</EM> are evaluated,
+and the lock is released when the evaluation finishes.
+This macro expands to the following progn form.
+Note that <B>unwind-protect</B> is used to ensure unlocking
+even an error occurs during the evaluation of <EM>forms</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+<PRE>
+  (progn
+      (sys:mutex-lock mlock)
+      (unwind-protect
+          (progn . forms)
+          (sys:mutex-unlock mlock)))
+</PRE>
+
+<P>
+
+<A NAME="25974"></A>
+<B>sys:make-cond</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a condition variable object
+which is an integer vector of four elements.
+The returned condition variable is in unlocked state.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="25984"></A>
+<B>sys:cond-wait</B> <EM>condvar mlock </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+waits for <EM>condvar</EM> to be signaled.
+If <EM>condvar</EM> has already been acquired by another thread,
+it releases <EM>mlock</EM> and waits for <EM>condvar</EM> to be signaled.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="25998"></A>
+<B>sys:cond-signal</B> <EM>condvar </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> signals the <EM>condvar</EM> condition variable.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26009"></A>
+<B>sys:make-semaphore</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a semaphore object
+which is represented by an integer vector of twelve elements.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26019"></A>
+<B>sys:sema-post</B> <EM>sem </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  signals <EM>sem</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26030"></A>
+<B>sys:sema-wait</B> <EM>sem </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> waits for the <EM>sem</EM> semaphore to be posted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="26042"></A>
+<BIG CLASS="XLARGE"><B>sys:barrier-synch </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 threads n-threads count barrier-cond threads-lock count-lock 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents a structure for barrier-synchronization. Threads waiting
+for the synchronization are put in <EM>threads</EM> which is mutually excluded
+by <EM>threads-lock</EM>.
+When a <B>barrier-synch</B> object is created,
+<EM>count</EM> is initialized to zero.
+Synchronizing threads are put in the <EM>threads</EM> list by sending <TT>:add</TT>
+message.
+Sending <TT>:wait</TT> to this barrier-sync object causes <EM>count</EM> to be
+incremented, and the sending thread is put in the wait state.
+When all the threads in <EM>threads</EM> send the <TT>:wait</TT> message,
+the waits are unblocked and all threads resume execution.
+The synchronization is implemented by the combination of
+the <EM>count-lock</EM> mutex-lock and the <EM>barrier-cond</EM>
+condition-variable.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26071"></A>
+<B>:init</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> initializes this barrier-synch object. Two mutex-lock
+and one condition-variable are created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26081"></A>
+<B>:add</B> <EM>thr </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> adds the <EM>thr</EM> thread in the <EM>threads</EM> list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26093"></A>
+<B>:remove</B> <EM>thr </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> removes the <EM>thr</EM> thread of the <EM>threads</EM> list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26105"></A>
+<B>:wait</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> waits for all threads in the <EM>threads</EM> list
+to issue <TT>:wait</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="26118"></A>
+<BIG CLASS="XLARGE"><B>sys:synch-memory-port </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 sema-in sema-out buf empty lock 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>realizes the one-directional synchronized memory port,
+which synchronizes for two threads
+to transfer datum via this object.
+Control transfer is implemented by using semaphores.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="26135"></A>
+<B>:read</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> reads datum buffered in this synch-memory-port.
+If it has not been written yet, the :read blocks.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26145"></A>
+<B>:write</B> <EM>datum </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> writes <EM>datum</EM> in the buffer.
+Since only one word of buffer is available,
+if another datum has already been written and not yet read out,
+:write waits for the datum to be transferred by :read.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="26156"></A>
+<B>:init</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> initializes this synch-memory-port
+where two semaphores  are created and :write is made acceptable.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html804"
+  HREF="manual-node18.html">Geometric Functions</A>
+<B>Up:</B> <A NAME="tex2html798"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html792"
+  HREF="manual-node16.html">System Functions</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

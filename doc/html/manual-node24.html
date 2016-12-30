@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Control Structures</TITLE>
-<META NAME="description" CONTENT="Control Structures">
+<TITLE>XToolKit</TITLE>
+<META NAME="description" CONTENT="XToolKit">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,72 +18,2340 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="manual.css">
 
-<LINK REL="next" HREF="manual-node31.html">
-<LINK REL="previous" HREF="manual-node17.html">
-<LINK REL="up" HREF="manual-node11.html">
+<LINK REL="next" HREF="manual-node25.html">
+<LINK REL="previous" HREF="manual-node23.html">
+<LINK REL="up" HREF="manual-node15.html">
 <LINK REL="next" HREF="manual-node25.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html741"
-  HREF="manual-node25.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html735"
-  HREF="manual-node11.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html729"
-  HREF="manual-node23.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html737"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html739"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html742"
-  HREF="manual-node25.html">Conditionals</A>
-<B> Up:</B> <A NAME="tex2html736"
-  HREF="manual-node11.html">Bibliography</A>
-<B> Previous:</B> <A NAME="tex2html730"
-  HREF="manual-node23.html">Functions</A>
- &nbsp; <B>  <A NAME="tex2html738"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html740"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html954"
+  HREF="manual-node25.html">PostgreSQL Database</A>
+<B>Up:</B> <A NAME="tex2html948"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html942"
+  HREF="manual-node23.html">Xwindow Interface</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
-
-<H1><A NAME="SECTION03030000000000000000">
-Control Structures</A>
-</H1>
-
-<BR><HR>
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html743"
-  HREF="manual-node25.html">Conditionals</A>
-<LI><A NAME="tex2html744"
-  HREF="manual-node26.html">Sequencing and Lets</A>
-<LI><A NAME="tex2html745"
-  HREF="manual-node27.html">Local Functions</A>
-<LI><A NAME="tex2html746"
-  HREF="manual-node28.html">Blocks and Exits</A>
-<LI><A NAME="tex2html747"
-  HREF="manual-node29.html">Iteration</A>
-<LI><A NAME="tex2html748"
-  HREF="manual-node30.html">Predicates</A>
+<LI><A NAME="tex2html955"
+  HREF="manual-node24.html#SECTION03091000000000000000">X Event</A>
+<LI><A NAME="tex2html956"
+  HREF="manual-node24.html#SECTION03092000000000000000">Panel</A>
+<UL>
+<LI><A NAME="tex2html957"
+  HREF="manual-node24.html#SECTION03092100000000000000">Subpanels (menu-panel and menubar-panel)</A>
+<LI><A NAME="tex2html958"
+  HREF="manual-node24.html#SECTION03092200000000000000">File Panel</A>
+<LI><A NAME="tex2html959"
+  HREF="manual-node24.html#SECTION03092300000000000000">Text View Panel</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html960"
+  HREF="manual-node24.html#SECTION03093000000000000000">Panel Items</A>
+<LI><A NAME="tex2html961"
+  HREF="manual-node24.html#SECTION03094000000000000000">Canvas</A>
+<LI><A NAME="tex2html962"
+  HREF="manual-node24.html#SECTION03095000000000000000">Text Window</A>
 </UL>
 <!--End of Table of Child-Links-->
-<BR><HR>
-<ADDRESS>
+<HR>
 
-2016-03-23
+<H1><A NAME="SECTION03090000000000000000">
+XToolKit</A>
+</H1>
+
+<P>
+XToolKit is the highest level X window interface to facilitate composing
+GUI (Graphical User Interface) by using GUI components such as
+buttons, pulldown menus, textWindows, etc., as building blocks.
+The major differences from the Xlib classes are,
+the XToolKit invokes user-supplied interaction routines
+corresponding to the Xevents sent from the Xserver,
+and provides consistent appearance of those interaction-oriented
+window parts.
+Classes consisting the XToolKit has the following inheritance structure.
+<PRE>
+          xwindow
+               panel
+                    menubar-panel
+                    menu-panel
+                    filepanel
+                    textviewpanel
+                    confirmpanel
+               panel-item
+                    button-item
+                         menu-button-item
+                         bitmap-button-item
+                    text-item
+                    slider-item
+                    choice-item
+                    joystick-item
+               canvas
+               textwindow
+                    buffertextwindow
+                         scrolltextwindow
+                    textedit
+               scroll-bar
+                    horizontal-scroll-bar
+</PRE>
+
+<P>
+Just below the xwindow class are the five basic XToolKit classes:
+<TT>panel</TT>, <TT>panel-item</TT>,
+<TT>canvas</TT>, <TT>textWindow</TT> and <TT>scroll-bar</TT>.
+<TT>Menubar-panel</TT> and <TT>menu-panel</TT> are defined under the <TT>panel</TT>.
+A basic strategy to build a new application window and to make
+it run upon events is the following:
+
+<OL>
+<LI><B>define an application class</B> An application window class should be
+defined as a subclass of <B>panel</B> that has the capability to lay out
+XToolKit components.
+</LI>
+<LI><B>define event handlers</B> In the application class, event handlers
+that are called upon when buttons are pressed or menu items are selected
+are defined. An event handler ought to be defined as a method 
+with panel-item specific arguments.
+</LI>
+<LI><B>define subpanels</B> If you use a <TT>menubar-panel</TT>, it is placed at the
+top of the application window, therefore it should be created first
+by <TT>:create-menubar</TT>. Similarly <TT>menu-panel</TT>s needs to be
+defined before the <TT>menu-button-item</TT>s to which <TT>menu-panel</TT>s
+are associated.
+</LI>
+<LI><B>create panel-items</B> Panel-items such as <TT>button-item</TT>,
+<TT>text-item</TT>, <TT>slider-item</TT>, etc., can be created
+by <TT>(send-super :create-item <EM>class label object method</EM>)</TT>.
+Event handlers defined above are connected to each panel-item.
+These initialization procedures should be defined in the <TT>:create</TT>
+method of the application window class.
+Do not forget to define <TT>quit</TT> button to make the event
+dispatcher terminate whenever needed.
+Any <TT>textWindow</TT> and <TT>canvas</TT> can also be placed in the application
+window via the <TT>:locate-item</TT> method.
+</LI>
+<LI><B>create the entire window</B> Sending the <TT>:create</TT> message to
+the application class creates
+the application window with its XToolKit components properly placed 
+in the window.
+</LI>
+<LI><B>run the event dispatcher</B> In order to receive events from the
+Xserver and delivers them to the corresponding xwindow,
+run <TT>window-main-loop</TT>.
+On Solaris2, <TT>window-main-thread</TT>, which delivers events in a
+different thread, is available.
+<TT>Window-main-thread</TT> keeps the toplevel interaction alive.
+Do not run more than one <TT>window-main-thread</TT>.
+</LI>
+</OL>
+
+<P>
+
+<H2><A NAME="SECTION03091000000000000000">
+X Event</A>
+</H2>
+
+<P>
+In the current implementation, 
+an event structure is received in a fixed event buffer (an integer-vector
+of 25 elements)
+and the same buffer is reused on all events.
+The event structure has to be copied when more than one events need to
+be referenced at the same time.
+
+<P>
+<TT>Window-main-loop</TT> is the function which captures all events sent
+from the X server and delivers them to each window where the event happened.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="47782"></A>
+<B>event</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> a 25-element integer-vector holding the most recent
+event structure.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47792"></A>
+<B>next-event</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+stores the event structure in <TT>event</TT> and returns it
+if there is at least one pending event,
+NIL if there is no pending event.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47803"></A>
+<B>event-type</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the keyword symbol representing the event-type in the <EM>event</EM>
+structure. The event-type keywords are:
+<TT>:KeyPress</TT> (2),
+<TT>:KeyRelease</TT> (3),
+<TT>:ButtonPress</TT> (4),
+<TT>:ButtonRelease</TT> (5),
+<TT>:MotionNotify</TT> (6),
+<TT>:EnterNotify</TT> (7),
+<TT>:LeaveNotify</TT> (8),
+<TT>:FocusIn</TT> (9),
+<TT>:FocusOut</TT> (0),
+<TT>:KeymapNotify</TT> (1),
+<TT>:Expose</TT> (12),
+<TT>:GraphicsExpose</TT> (13),
+<TT>:NoExpose</TT> (14),
+<TT>:VisibilityNotify</TT> (15),
+<TT>:CreateNotify</TT> (16),
+<TT>:DestroyNotify</TT> (17),
+<TT>:UnmapNotify</TT> (18),
+<TT>:MapNotify</TT> (19),
+<TT>:MapRequest</TT> (20),
+<TT>:ConfigureNotify</TT> (22),
+<TT>:ConfigureRequest</TT> (23),
+<TT>:GravityNotify</TT> (24),
+<TT>:ResizeRequest</TT> (25),
+<TT>:CirculateNotify</TT> (26),
+<TT>:CirculateRequest</TT> (27),
+<TT>:PropertyNotify</TT> (28),
+<TT>:SelectionClear</TT> (29),
+<TT>:SelectionRequest</TT> (30),
+<TT>:SelectionNotify</TT> (31),
+<TT>:ColormapNotify</TT> (32),
+<TT>:ClientMessage</TT> (33),
+<TT>:MappingNotify</TT> (34),
+<TT>:LASTEvent</TT> (35).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47847"></A>
+<B>event-window</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the window object where the <EM>event</EM> occurred.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47858"></A>
+<B>event-x</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> extracts the <EM>x</EM> coordinate,
+(i.e., the horizontal position of the mouse pointer relatively in the window)
+out of the <EM>event</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47870"></A>
+<B>event-y</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> extracts the <EM>x</EM> coordinate,
+(i.e., the vertical position of the mouse pointer relatively in the window)
+out of the <EM>event</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47882"></A>
+<B>event-width</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the eighth element of the <EM>event</EM> structure
+which represents the width parameter at the <TT>:configureNotify</TT> event.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47894"></A>
+<B>event-height</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the ninth element of the <EM>event</EM> structure
+which represents the height parameter at the <TT>:configureNotify</TT> event.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47906"></A>
+<B>event-state</B> <EM>event </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of keywords representing the mouse button 
+and modifier key state.
+Keywords are: <TT>:shift, :control, :meta, :left, :middle</TT> and <TT>:right</TT>.
+For example, if left mouse button is pressed while shift key is down,
+<TT>(:shift :left)</TT> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="47919"></A>
+<B>display-events</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> displays all xwindow events captured by
+<TT>x:nextevent</TT>. Control-C is the only way to terminate this function.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47930"></A>
+<B>window-main-loop</B> <EM>&amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+receives Xevents and delivers them to window objects where the event
+occurred.
+According to the event-type, methods in the window's class named 
+<TT>:KeyPress, :KeyRelease, :ButtonPress,
+:ButtonRelease, :MotionNotify,
+:EnterNotify, :LeaveNotify</TT> and <TT>:ConfigureNotify</TT> 
+are invoked with <EM>event</EM> as the argument.
+If <EM>forms</EM> is given,
+evaluates them each time event arrival is checked.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47944"></A>
+<B>window-main-thread</B> [function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Do the same thing as <TT>window-main-loop</TT> in a different thread.
+<TT>Window-main-thread</TT> is only available on Solaris2.
+<TT>Window-main-thread</TT> installs an error handler which
+does not enter a read-eval-print loop.
+After printing the error information, the event
+processing continues.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03092000000000000000">
+Panel</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="47958"></A>
+<BIG CLASS="XLARGE"><B>panel </B></BIG> [class]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (pos items fontid
+<BR>
+rows columns ;total number of rows and columns
+<BR>
+next-x next-y
+<BR>
+item-width item-height) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>Panel is a xwindow with the capability to lay out panel-items or any
+xwindows including other panel objects.
+A panel object supplies the default font for every panel-item
+created in the panel.
+Application windows should be defined as subclasses of the <TT>Panel</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47976"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;rest args &amp;key ((:item-height iheight) 30)((:item-width iwidth) 50)[method]
+<BR>(font font-lucidasans-bold-12)  ((:background color) *bisque1*) 
+<BR>&amp;allow-other-keys)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates and initializes a panel.
+Since superclass's <TT>:create</TT> is invoked,
+all creation parameters for <B>xwindow</B>, such as <EM>width, height, 
+border-width</EM>, etc., are allowed.
+<EM>Item-height</EM> and item-width give the minimum height and width
+for each panel-item.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="47992"></A>
+<B>:items</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of all items associated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48002"></A>
+<B>:locate-item</B> <EM>item &amp;optional x y </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Item</EM> is any xwindow object, normally a panel-item.
+If <EM>x</EM> and <EM>y</EM> are given, the item is located there.
+Otherwise, <EM>item</EM> is located adjacent to the most recently located item.
+Items are located from top to bottom, from left to right,
+as shown in <B>Fig.</B> <A HREF="#panellayout">17</A>.
+<TT>:Locate-item</TT> also adds <EM>item</EM> in the <EM>items</EM> and <EM>subwindows</EM>
+ list, and makes it visible by sending <TT>:map</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="panellayout"></A><A NAME="47704"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 17:</STRONG>
+Item lay-out in panel</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="423" HEIGHT="302" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img128.png"
+ ALT="\includegraphics[height=7cm]{fig/panellayout.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="48023"></A>
+<PRE><TT>
+<B>:create-item</B> <I>klass label receiver method &amp;rest args[method]
+<BR>&amp;key ((font fontid)
+<BR>&amp;allow-other-keys)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates an instance of the panel-item class specified by <EM>klass</EM>
+(i.e., <TT>button-item,  menu-button-item, slider-item, joystick-item</TT>, etc.),
+and place the item in the panel using <TT>:locate-item</TT>.
+<EM>Args</EM> are passed to <TT>klass</TT>'s <TT>:create</TT> method.
+<EM>Label</EM> is the identification string drawn in the panel item.
+<EM>Receiver</EM> and <EM>method</EM> specify the event handler called upon
+the corresponding event.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48043"></A>
+<B>:delete-items</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> delete all panel-items.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48053"></A>
+<PRE><TT>
+<B>:create-menubar</B> <I>&amp;rest args [method]
+<BR>&amp;key (font fontid)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates a <EM>menubar-panel</EM> and  locates it at the top of the panel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+The following methods are provided to avoid "subclass's responsibility"
+warning message when events are sent to panels without event handlers.
+User applications should override these methods.
+
+<P>
+
+ <BR>
+<BR> <A NAME="48065"></A>
+<B>:quit</B> <EM>&amp;rest a </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+throws <TT>:window-main-loop</TT> and terminates event processing.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48076"></A>
+<B>:KeyPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48086"></A>
+<B>:KeyRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48096"></A>
+<B>:ButtonPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48106"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48116"></A>
+<B>:MotionNotify</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48126"></A>
+<B>:EnterNotify</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48136"></A>
+<B>:LeaveNotify</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H3><A NAME="SECTION03092100000000000000">
+Subpanels (menu-panel and menubar-panel)</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="48147"></A>
+<BIG CLASS="XLARGE"><B>menu-panel </B></BIG> [class]  <PRE><TT>
+  :super   <B>panel</B> 
+<BR>  :slots 		  (items item-dots item-height
+<BR>
+charwidth charheight
+<BR>
+height-offset
+<BR>
+highlight-item
+<BR>
+color-pixels
+<BR>
+active-color) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>Menu-panel</TT> is a kind of panel that can locate only 
+<TT>button-item</TT>s and/or <TT>bitmap-button-item</TT>s.
+Unlike <TT>panel</TT>, however, <TT>menu-panel</TT> is normally invisible
+and is exposed when the <TT>button-item</TT> to which the <TT>menu-panel</TT> is
+associated is pressed.
+If a <TT>menu-panel</TT> is made always visible, it becomes a pinned menu.
+The response of each button-item to mouse events is slightly different from
+button-items in other panels,
+as the mouse button has been pressed somewhere outside the button-item.
+Creation of a <TT>menu-panel</TT> should follow the order described below:
+
+<OL>
+<LI>create a menu-panel by <TT>(instance menu-panel :create)</TT>.
+</LI>
+<LI>create button-items or/and bitmap-button-items and locate them in the
+menu-panel by <TT>(send aMenuPanel :create-item button-item "BTN" obj meth)</TT>.
+</LI>
+<LI>create a menu-button-item in another panel and associate the menu-panel
+with the menu-button-item by <TT>(instance menu-button-item :create
+"Option" obj meth :menu-window aMenuPanel)</TT>.
+</LI>
+</OL>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48178"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;rest args &amp;key(items) (border-width 0)   (font font-courb12)[method]
+<BR>(width 100) (height-offset 15) (color *bisque1*)                      (active *bisque2*) 
+<BR>&amp;allow-other-keys)  </I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>create a menu-panel window. The size of the window is expanded each time
+new menu-item is added.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48189"></A>
+<B>:create-item</B> <EM>class label receiver method  &amp;rest mesg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+adds a menu item in this menu-panel window and attatches
+the corresponding action. 
+The <EM>receiver</EM> objects receives <EM>mesg</EM>
+when the mouse button is released on the item.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48202"></A>
+<BIG CLASS="XLARGE"><B>menubar-panel </B></BIG> [class]  <PRE><TT>
+  :super   <B>panel</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>Menubar-panel</TT> is a subpanel always located at the top of the parent 
+panel. A menubar-panel resembles with the Macintosh desktop's menubar
+which lets out several pull-down menus.
+Panel-items placed in the menubar should be <TT>menu-button-item</TT>s.
+A menubar-panel is created by the panel's <TT>:create-menubar</TT> method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03092200000000000000">
+File Panel</A>
+</H3>
+The FilePanel is an application window for the interactive  manipulation
+of files and directories.
+Using <TT>cd</TT> and <TT>go-up</TT> buttons, any directory can be visited
+and files contained in the directory are displayed in the <TT>ScrollTextWindow</TT>
+below.
+Text files can be displayed in different windows (textViewPanel).
+Files can also be printed, removed, and compiled by simply cliking buttons.
+When a file is printed, <TT>a2ps <EM>file</EM> | lpr</TT> commands are executed
+in a forked process.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="47319"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 18:</STRONG>
+FilePanel window</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="430" HEIGHT="340" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img129.png"
+ ALT="\includegraphics[height=7.5cm]{fig/filepanel.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H3><A NAME="SECTION03092300000000000000">
+Text View Panel</A>
+</H3>
+
+<P>
+TextViewPanel is an application window class to display text files
+(Fig. <A HREF="#textviewpanel">19</A>).
+The program text is shown to demonstrate how 
+one of the simplest application windows is described.
+In the <TT>:create</TT> method, the quit button and find button,
+and a text-item to feed the string to be searched for in the file
+are created.
+The view-window is a ScrollTextWindow that displays the file
+with the vertical and horizontal scroll-bars.
+The TextViewPanel captures <TT>:ConfigureNotify</TT> event
+to resize the view-window when the outermost title window is resized
+by the window manager.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="textviewpanel"></A><A NAME="47712"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 19:</STRONG>
+TextViewPanel window</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="317" HEIGHT="317" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img130.png"
+ ALT="\includegraphics[height=7cm]{fig/textviewpanel.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+<PRE>
+(defclass TextViewPanel :super panel
+        :slots (quit-button find-button find-text view-window))
+
+(defmethod TextViewPanel
+ (:create (file &amp;rest args &amp;key (width 400) &amp;allow-other-keys)
+    (send-super* :create :width width args)
+    (setq quit-button
+          (send self :create-item panel-button "quit" self :quit))
+    (setq find-button
+          (send self :create-item panel-button "find" self :find))
+    (setq find-text
+          (send self :create-item text-item "find: " self :find))
+    (setq view-window
+            (send self :locate-item
+                (instance ScrollTextWindow :create
+                   :width (setq width (- (send self :width) 10))
+                   :height (- (setq height (send self :height)) 38)
+                   :scroll-bar t :horizontal-scroll-bar t
+                   :map nil      :parent self)))
+    (send view-window :read-file file))
+ (:quit (event)  (send self :destroy))
+ (:find (event)
+    (let ((findstr (send find-text :value)) (found)
+          (nlines (send view-window :nlines)))
+        (do ((i 0 (1+ i)))
+            ((or (&gt;= i nlines) found))
+           (if (substringp findstr (send view-window :line i)) (setq found i)))
+        (when found
+           (send view-window :display-selection found)
+           (send view-window :locate found))))
+ (:resize (w h)
+    (setq width w height h)
+    (send view-window :resize (- w 10) (- h 38)))
+ (:configureNotify (event)
+   (let ((newwidth (send self :width))
+         (newheight (send self :height)))
+        (when (or (/= newwidth width) (/= newheight height))
+          (send self :resize newwidth newheight)))  ) )
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION03093000000000000000">
+Panel Items</A>
+</H2>
+
+ <BR>
+<BR> <BR> 
+<A NAME="48223"></A>
+<BIG CLASS="XLARGE"><B>panel-item </B></BIG> [class]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (pos notify-object notify-method
+<BR>
+fontid label labeldots) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Panel-item</B> is an abstract class for all kinds of panel-item windows
+to invoke <EM>notify-object</EM>'s  <EM>notify-method</EM> when item-specific
+event occurs.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48243"></A>
+<B>:notify</B> <EM>&amp;rest args </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+invokes <EM>notify-object</EM>'s  <EM>notify-method</EM>.
+Responsive events and arguments passed to <EM>notify-method</EM>
+are item specific:
+<DL>
+<DT><STRONG>button-item</STRONG></DT>
+<DD>The button is pressed and released
+in the same button-item;
+the argument is the button-item object.
+</DD>
+<DT><STRONG>menu-button-item</STRONG></DT>
+<DD>A menu item is selected;
+the argument is the menu-button-item object.
+</DD>
+<DT><STRONG>choice-item</STRONG></DT>
+<DD>A new choice button is selected; the arguments are
+the choice-item object and the index number of the choice.
+</DD>
+<DT><STRONG>text-item</STRONG></DT>
+<DD>A newline or return is entered; the arguments are
+the text-item object and the entire line (string).
+</DD>
+<DT><STRONG>slider-item</STRONG></DT>
+<DD>The slider nob is grabbed and moved; the arguments are
+the slider-item object and the new value.
+</DD>
+<DT><STRONG>joystick-item</STRONG></DT>
+<DD>The joystick is grabbed and moved; the arguments are
+the slider-item object, the new x and y values.
+</DD>
+</DL>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48258"></A>
+<PRE><TT>
+<B>:create</B> <I>name reciever method &amp;rest args[method] 
+<BR>&amp;key ((:width w) 100) ((:height h) 100) (font font-courb12)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates a panel-item.
+As panel-item is an abstract class,
+this method should only be called by the subclasses
+via <TT>send-super</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48271"></A>
+<BIG CLASS="XLARGE"><B>button-item </B></BIG> [class]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>button-item</B> is the simplest panel-item.
+Button-item has a rectangular box and a label string in it.
+When clicked, button-item invokes <EM>notify-object</EM>'s <EM>notify-method</EM>
+with the panel-item object as the only argument.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48291"></A>
+<B>:draw-label</B> <EM>&amp;optional (state :top) (color bg-color) (border 2) (offset) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws button-item's label.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48301"></A>
+<PRE><TT>
+<B>:create</B> <I>label revciever method &amp;rest args[method]
+<BR>&amp;keywidth height (font (send parent :gc :font))
+<BR>(background (send parent :gc :background)) 
+<BR>(border-width 0) 
+<BR>(state :top)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates a button-item.
+If button's width and height are not given,
+the sizes are automatically set to accomodate the label string
+drawn with the given font.
+Though the border-width is defaulted to 0,
+pseudo 3D representation embosses the button.
+The background color and font are defaulted to the ones defined for
+the parent window, i.e. a panel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48312"></A>
+<B>:ButtonPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the background color to gray, as if the button.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48322"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes <EM>event</EM>'s background color to normal.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48334"></A>
+<BIG CLASS="XLARGE"><B>menu-button-item </B></BIG> [class]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		 (items item-dots item-labels
+<BR>
+charwidth charheight 
+<BR>
+menu-window window-pos high-light) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a pulldown menu.
+Though a <TT>menu-button-item</TT> looks like a <TT>button-item</TT>,
+the <TT>menu-button-item</TT> activates associated <TT>menu-panel</TT>
+below the button when it is pressed,
+instead of sending an immediate message to the <EM>notify-object</EM>.
+The actual message is sent when the mouse button is released on
+one of the menu items.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48356"></A>
+<PRE><TT>
+<B>:create</B> <I>label reciever method [method]
+<BR>&amp;rest args
+<BR>&amp;key (menu nil) (items) (state :flat)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates a pulldown menu button.
+<EM>Receiver</EM> and <EM>method</EM> arguments has no effect.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48369"></A>
+<B>:ButtonPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reverses the appearance of the pulldown-menu
+and exposes the associated menu-panel below the button.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48379"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+unmaps the <TT>menu-panel</TT> below this button
+and reverts the appearance of the button.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48391"></A>
+<BIG CLASS="XLARGE"><B>bitmap-button-item </B></BIG> [class]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		 (pixmap-id bitmap-width bitmap-height) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>Though <TT>bitmap-button-item</TT>'s function is similar to
+the <TT>button-item</TT>, its appearance is different.
+Instead of drawing a simple label string on the button, as is the
+case for <TT>button-item</TT>,
+<TT>bitmap-button-item</TT> is drawn by a pixmap which is loaded
+from a bitmap-file when the button is created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48412"></A>
+<B>:draw-label</B> <EM>&amp;optional (state :flat) (color bg-color) (border 2) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a bitmap/pixmap on the button.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48422"></A>
+<PRE><TT>
+<B>:create</B> <I>bitmap-file reciever method &amp;rest args[method]
+<BR>&amp;key width height
+<BR>&amp;allow-other-keys)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates bitmap-button-item.
+The first argument, <EM>bitmap-file</EM>  replaces the <EM>label</EM> argument
+of <TT>button-item</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48436"></A>
+<B>:draw-label</B> <EM>&amp;optional (state :flat) (color bg-color) (border 2) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draw a bitmap/pixmap on the button.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48446"></A>
+<B>:create-bitmap-from-file</B> <EM>fname </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates pixmap from the bitmap file named <EM>fname</EM>, 
+and stores its id in <EM>pixmap-id</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48459"></A>
+<BIG CLASS="XLARGE"><B>choice-item </B></BIG> [class]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		  (choice-list active-choice transient-choice 
+<BR>
+choice-dots choice-pos button-size) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>choice-item</TT> is a set of round choice buttons.
+One choice is always active, and only one choice can become active at
+the same time.
+<TT>choice-item</TT> provides the similar function as radio-buttons.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48478"></A>
+<PRE><TT>
+<B>:create</B> <I>label reciever method &amp;rest args[method]
+<BR>&amp;key (choices '("0" "1")) (initial-choice 0)
+<BR>(font (send parent :gc :font))
+<BR>(button-size 13)
+<BR>(border-width 0)
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>create a choice-item-button. Each choice button is a circle of
+radius <EM>button-size</EM>.
+When a new choice is selected, <EM>notify-object</EM>'s <EM>notify-method</EM>
+is invoked with the choice-item object and the index of the choice selected.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48492"></A>
+<B>:value</B> <EM>&amp;optional (new-choice) (invocation) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>new-choice</EM> is given, it is set as the current active choice,
+and the corresponding circle is filled black.
+If <EM>invocation</EM> is also specified, <EM>notify-object</EM>'s <EM>notify-method</EM>
+is invoked.
+<TT>:Value</TT> returns the current (or new) choice index.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48507"></A>
+<B>:draw-active-button</B> <EM>&amp;optional
+(old-choice active-choice) (new-choice active-choice) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draw active button.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48517"></A>
+<B>:buttonPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If the mouse button is pressed on any of the choice buttons,
+its index is recorded in <EM>transient-choice</EM>.
+No further action is taken until the mouse button is released.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48528"></A>
+<B>:buttonRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If the mouse button is released on the same button which is already pressed,
+the <EM>active-choice</EM> is updated and
+<EM>notify-object</EM>'s <EM>notify-method</EM> is invoked.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48542"></A>
+<BIG CLASS="XLARGE"><B>slider-item </B></BIG> [class]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 (min-value max-value value
+<BR>
+minlabel maxlabel valueformat
+<BR>
+bar-x bar-y bar-width bar-height valuedots label-base
+<BR>
+nob-x nob-moving
+<BR>
+charwidth)  
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>While <TT>choice-item</TT> is used to select a discrete value,
+<TT>slider-item</TT> is used for the continuous value in the range
+between <EM>min-value</EM> and <EM>max-value</EM>.
+Each moment the value is changed, <EM>notify-object</EM>'s <EM>notify-method</EM>
+is invoked with the slider-item object and the new value as the arguments.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48565"></A>
+<PRE><TT>
+<B>:create</B> <I>label reciever method &amp;rest args[method]
+<BR>&amp;key (min 0.0) (max 1.0) (parent)
+<BR>(min-label "") (max-label "") (value-format "&nbsp;4,2f")
+<BR>(font font-courb12) (span 100) (border-width 0) (initial-value min) </I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates slider-item.
+The sliding knob is displayed as a small black rectangle on a bar.
+The left end represents the <EM>min</EM> value and the right end <EM>max</EM> value.
+The length of the bar stretches for the <EM>span</EM> dots.
+The current value is displayed to the right of the slider-item label
+in the <EM>value-format</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48580"></A>
+<B>:value</B> <EM>&amp;optional newval invocation </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>newval</EM> is given, it is set as the current value,
+and the knob is slided to the corresponding location.
+If <EM>invocation</EM> is also specified non nil,
+<EM>notify-object</EM>'s <EM>notify-method</EM> is invoked.
+<TT>:Value</TT> returns the current (or new) value.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48596"></A>
+<BIG CLASS="XLARGE"><B>joystick-item </B></BIG> [class]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		  (stick-size min-x min-y max-x max-y
+<BR>
+center-x center-y stick-x stick-y
+<BR>
+value-x value-y
+<BR>
+stick-return stick-grabbed
+<BR>
+fraction-x fraction-y) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>joystick-item</TT> can be regarded as the two-dimensional slider-item.
+Two continuous values can be specified by the moving black circle
+on the coaxial chart that looks like a web (Fig. <A HREF="#panelitem">20</A>).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48615"></A>
+<PRE><TT>
+<B>:create</B> <I>name reciever method &amp;rest args[method]
+<BR>&amp;key (stick-size 5) (return nil)
+<BR>(min-x -1.0) (max-x 1.0)
+<BR>(min-y -1.0) (max-y 1.0)
+<BR>&amp;allow-other-keys)  </I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>Stick-size</EM> is the radius of the stick's black circle.
+The sizes of the circles in the coaxial chart are determined
+according to the width and height of the joystick-item window.
+If <EM>return</EM> is non-NIL, 
+the joystick returns to the origin when the mouse button is released.
+Otherwise, the joystick remains at the released position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48628"></A>
+<B>:value</B> <EM>&amp;optional (newx) (newy) (invocation) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If both <EM>newx</EM> and <EM>newy</EM> are given, they are
+set as the current values,
+and the joystick moves to the corresponding location
+on the coaxial chart.
+If <EM>invocation</EM> is also specified non nil,
+<EM>notify-object</EM>'s <EM>notify-method</EM> is invoked
+with the joystick-item object and x and y values as the arguments.
+<TT>:Value</TT> returns the list of current (or new) values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+The following short program shows how to use panel-items 
+described above, and Fig. <A HREF="#panelitem">20</A> depicts how they
+appear in a panel.
+
+<P>
+<PRE>
+(in-package "X")
+(defclass testPanel :super panel
+        :slots (quit joy choi sli))
+(defmethod testPanel
+ (:create (&amp;rest args)
+    (send-super* :create :width 210 :height 180 
+                 :font font-courb12 args)
+    (send-super :create-item button-item "quit" self :quit :font font-courb14)
+    (send-super :create-item choice-item "choice" self :choice
+                :choices '(" A " " B " " C ")
+                :font font-courb12)
+    (send-super :create-item slider-item "slider" self :slider
+                :span 90)
+    (send-super :create-item joystick-item "joy" self :joy)
+    self)
+ (:choice (obj c) (format t "choice: ~S ~d~%" obj c))
+ (:slider (obj val) (format t "slider: ~S ~s~%" obj val))
+ (:joy (obj x y) (format t "joy: ~S ~s ~s~%" obj x y)) )
+(instance testPanel :create)
+(window-main-thread)
+</PRE>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="panelitem"></A><A NAME="47735"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 20:</STRONG>
+Panel items created in a panel</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="264" HEIGHT="226" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img131.png"
+ ALT="\includegraphics[height=5cm]{fig/panelitem.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="48645"></A>
+<BIG CLASS="XLARGE"><B>text-item </B></BIG> [class]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 (textwin) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>Text-item</TT> is used to display or to input one short line of text,
+such as a file name.
+A <TT>text-item</TT> has a label string followed by
+a small textwindow on the right.
+When the pointer is put in the textwindow, key input is enabled
+and the characters typed are buffered.
+Line editing is available in the textwindow: 
+<TT>control-F</TT> and <TT>control-B</TT> to move forward/backward by one character,
+<TT>del</TT> to delete the character on the left of the cursor,
+<TT>control-D</TT> to delete the character on the cursor, and
+any graphical character to insert it at the cursor position.
+Clicking a mouse button moves the cursor to the clicked character.
+Hitting an enter (newline) key causes the buffered text to be sent to
+the <EM>notify-object</EM>'s <EM>notify-method</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48670"></A>
+<PRE><TT>
+<B>:create</B> <I>label revciever method &amp;rest args [method]
+<BR>&amp;key (font font-courb12) (columns 20) (initial-value ) (border-width 0)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates text-item.
+Though the linebuffer of the textwindow may have unlimited length,
+visible portion is restricted to the <EM>columns</EM> characters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48682"></A>
+<B>:getstring</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the string in the key buffer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03094000000000000000">
+Canvas</A>
+</H2>
+
+ <BR>
+<BR> <BR> 
+<A NAME="48693"></A>
+<BIG CLASS="XLARGE"><B>canvas </B></BIG> [class]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (topleft bottomright) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>Canvas is a xwindow to interact with figures or images.
+Currently, only the region selection capability has been implemented.
+At the buttonPress event, the canvas begins to draw a rectangle
+with the topleft corner at the pressed position and bottomright corner
+at the current pointer.
+ButtonRelease causes the <TT>notify-method</TT> to be sent to the <TT>notify-object</TT>.
+Use Xdrawable's methods to draw figures or images in the canvas.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03095000000000000000">
+Text Window</A>
+</H2>
+
+<P>
+There are three textwindow classes, <TT>TextWindow</TT>, <TT>BufferTextWindow</TT>
+and <TT>ScrollTextWindow</TT>.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="48713"></A>
+<BIG CLASS="XLARGE"><B>textWindow </B></BIG> [class]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (fontid 
+<BR>
+charwidth charheight charascent dots 
+<BR>
+win-row-max win-col-max 
+<BR>
+win-row win-col   ;physical current position in window 
+<BR>
+x y
+<BR>
+charbuf 		; for charcode conversion 
+<BR>
+keybuf keycount 		 ;for key input
+<BR>
+echo 
+<BR>
+show-cursor cursor-on 		 ;boolean
+<BR>
+kill delete 		 ;control character 
+<BR>
+notify-object notify-method 
+<BR>) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>realizes virtual terminals usable for displaying messages.
+The displayed contents are not buffered and there is no way to retrieve
+a line or a character already displayed in the TextWindow.
+Basically, <TT>TextWindow</TT> has similar capabilities to the dumb terminals,
+that are, moving the cursor, erasing lines, erasing areas,
+scrolling displayed texts, inserting strings, etc.
+Also, the text cursor can be moved to the position designated by 
+the mouse pointer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48732"></A>
+<B>:init</B> <EM>id </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes <EM>id</EM>th text-window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48743"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;rest args [method]
+<BR>&amp;key width height (font font-courb14) rows columns
+<BR>(show-cursor nil) (notify-object nil) (notify-method nil)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates text-window.
+The sizes of the window may be specified either by <EM>width</EM> and <EM>height</EM>
+or by <EM>rows</EM> and <EM>columns</EM>.
+<EM>Notify-object</EM>'s <EM>notify-method</EM> is invoked when a newline character
+is typed in.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48760"></A>
+<B>:cursor</B> <EM>flag </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The <EM>flag</EM> can either be <TT>:on, :off</TT> or <TT>:toggle</TT>.
+The text cursor is addressed by the <EM>win-row</EM> and <EM>win-col</EM>. 
+The text cursor is displayed if <EM>flag</EM> is <TT>:on</TT>,
+is erased if <EM>flag</EM> is <TT>:off</TT>,
+or is reversed if <EM>flag</EM> is <TT>:toggle</TT>.
+This method must be invoked frequently
+whenever the character at the cursor is updated.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48781"></A>
+<B>:clear</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+clears text-window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48791"></A>
+<B>:clear-eol</B> <EM>&amp;optional (r win-row) (c win-col) (csr :on) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+clears the rest of the line after the character
+addressed by r and <EM>c</EM>, including the character at the cursor.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48803"></A>
+<B>:clear-lines</B> <EM>lines &amp;optional (r win-row) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+clears multiple lines after <EM>r</EM>-th row.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48814"></A>
+<B>:clear-eos</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+clears the region after the character addressed by <EM>r</EM> and <EM>c</EM>
+till the end-of-the-screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48826"></A>
+<B>:win-row-max</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the maximum number of lines
+displayable in this window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48836"></A>
+<B>:win-col-max</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the maximum number of columns
+displayable in this window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48846"></A>
+<B>:xy</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+calculates the pixel coordinates of the character 
+addressed by <EM>r</EM> and <EM>c</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48858"></A>
+<B>:goto</B> <EM>r c &amp;optional (cursor :on) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves the cursor to <EM>r</EM>-th row and <EM>c</EM>-th column.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48870"></A>
+<B>:goback</B> <EM>&amp;optional (csr :on) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves the cursor backward by one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48880"></A>
+<B>:advance</B> <EM>&amp;optional (n 1) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves the cursor forward by <EM>n</EM> characters.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48891"></A>
+<B>:scroll</B> <EM>&amp;optional (n 1) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+scroll textwindow vertically by <EM>n</EM> lines.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48902"></A>
+<B>:horizontal-scroll</B> <EM>&amp;optional (n 1) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+horizontally scrolls the text by <EM>n</EM> columns.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48913"></A>
+<B>:newline</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves cursor to the beginning of the next line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48923"></A>
+<B>:putch</B> <EM>ch </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+inserts the character <EM>ch</EM> at the cursor position.
+The rest of the line is moved forward by one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48934"></A>
+<B>:putstring</B> <EM>str &amp;optional (e (length str)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+places <EM>str</EM> at the cursor position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48945"></A>
+<B>:event-row</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48955"></A>
+<B>:event-col</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the text cursor position designated by <SPAN CLASS="MATH"><IMG
+ WIDTH="41" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img125.png"
+ ALT="$ (x, y)$"></SPAN> in the <EM>event</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="48966"></A>
+<B>:KeyPress</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+inserts the character entered at the cursor position.
+If the character is newline, notification is sent to the <EM>notify-object</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="48978"></A>
+<BIG CLASS="XLARGE"><B>textWindowStream </B></BIG> [class]  <PRE><TT>
+  :super   <B>stream</B> 
+<BR>  :slots 		 (textwin) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>TextWindowStream</TT> is an output stream connected to a TextWindow.
+Characters or strings output to this stream by using <TT>print, format,
+write-byte</TT>, etc., are displayed in the textwindow.
+As usual file streams, the output data are buffered.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="48997"></A>
+<B>:flush</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+flushes buffered text string and send them to the textwindow.
+<TT>Finish-output</TT> or writing a newline character to this stream
+automatically calls this method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49008"></A>
+<B>make-text-window-stream</B> <EM>xwin </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes text-window-stream and returns the stream object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="49019"></A>
+<BIG CLASS="XLARGE"><B>BufferTextWindow </B></BIG> [class]  <PRE><TT>
+  :super   <B>TextWindow</B> 
+<BR>  :slots 		 (linebuf expbuf max-line-length row col) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>maintains the line buffer representing the contents of the textwindow.
+Linebuf is the vector of lines. Expbuf holds tab-expanded text.
+Only lines displayable in the window are maintained.
+BufferTextWindows can be used as simple text editors
+which have several, often only one, lines of text.
+<TT>Text-item</TT> employs a BufferTextWindow as a displayable line buffer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49037"></A>
+<B>:line</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the contents of the <EM>n</EM>-th line as a
+string.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49048"></A>
+<B>:nlines</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns number of lines in the linebuf.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49058"></A>
+<B>:all-lines</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the linebuf, which is a vector of strings.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49068"></A>
+<B>:refresh-line</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+redraws the <EM>r</EM>-th line after the <EM>c</EM>-th column.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49080"></A>
+<B>:refresh</B> <EM>&amp;optional (start 0) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+redraws the lines after the <EM>start</EM>-th line inclusively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49091"></A>
+<B>:insert-string</B> <EM>string </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+inserts <EM>string</EM> at the cursor position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49102"></A>
+<B>:insert</B> <EM>ch </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> inserts the character at the cursor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49112"></A>
+<B>:delete</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> deletes <EM>n</EM> characters after the cursor.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49123"></A>
+<B>expand-tab</B> <EM>src &amp;optional (offset 0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Src</EM> is a string possibly containing tabs.
+These tabs are replaced by spaces assuming the tab stops at every 8th
+position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="49135"></A>
+<BIG CLASS="XLARGE"><B>ScrollTextWindow </B></BIG> [class]  <PRE><TT>
+  :super   <B>BufferTextWindow</B> 
+<BR>  :slots 		 (top-row top-col   ;display-starting position 
+<BR>
+scroll-bar-window 
+<BR>
+horizontal-scroll-bar-window 
+<BR>
+selected-line) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>ScrollTextWindow</TT> defines buffertextwindow with unlimited number of lines,
+and vertical and horizontal scroll-bars can be attached.
+ScrollTextWindow can handle <TT>:configureNotify</TT> event to resize 
+itself and accompanying scroll-bar windows, and to redisplay texts.
+By clicking, a line can be selected.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49155"></A>
+<B>:create</B> <EM>&amp;rest args
+           &amp;key (scroll-bar nil)
+                (horizontal-scroll-bar nil)
+           &amp;allow-other-keys </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+When scroll-bars are needed, specify T to each keyword argument.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49165"></A>
+<B>:locate</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> displays the buffered text by placing the <EM>n</EM>-th
+line at the top of the window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49176"></A>
+<B>:display-selection</B> <EM>selection </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>Selection</EM> represents
+the location of the selected line. The entire seleced line is displayed
+highlighted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49187"></A>
+<B>:selection</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the selected line (string).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49197"></A>
+<B>:read-file</B> <EM>fname </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> reads the textfile specified by <EM>fname</EM>
+into the <EM>linebuf</EM>, expands tabs, and display in the window.
+The cursor is put at the beginning of the screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49209"></A>
+<B>:display-string</B> <EM>strings </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>Strings</EM> is a sequence
+of lines (strings). The <EM>strings</EM> are copied in the linebuf
+and displayed in the window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49221"></A>
+<B>:scroll</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> vertically scrolls <EM>n</EM> lines.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49232"></A>
+<B>:horizontal-scroll</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> horizontally scrolls <EM>n</EM> columns.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49243"></A>
+<B>:buttonRelease</B> <EM>event </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+The line where the mouse pointer is located is selected.
+If notification is specified when the window is created,
+<EM>notify-object</EM>'s <EM>notify-method</EM> is invoked.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49255"></A>
+<B>:resize</B> <EM>w h </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> changes the size of the window
+and redisplays the contents according to the new size.
+The same message is sent to scroll-bars if attached.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+ 
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html954"
+  HREF="manual-node25.html">PostgreSQL Database</A>
+<B>Up:</B> <A NAME="tex2html948"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html942"
+  HREF="manual-node23.html">Xwindow Interface</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

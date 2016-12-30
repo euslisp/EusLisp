@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>型指定</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="型指定">
+<TITLE>幾何学関数</TITLE>
+<META NAME="description" CONTENT="幾何学関数">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,81 +16,2225 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
+<LINK REL="next" HREF="jmanual-node17.html">
 <LINK REL="previous" HREF="jmanual-node15.html">
-<LINK REL="up" HREF="jmanual-node12.html">
+<LINK REL="up" HREF="jmanual-node13.html">
 <LINK REL="next" HREF="jmanual-node17.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html592"
-  HREF="jmanual-node17.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html586"
-  HREF="jmanual-node12.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html582"
-  HREF="jmanual-node15.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html588"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html590"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html593"
-  HREF="jmanual-node17.html">書式と評価</A>
-<B> Up:</B> <A NAME="tex2html587"
-  HREF="jmanual-node12.html">データ型</A>
-<B> Previous:</B> <A NAME="tex2html583"
-  HREF="jmanual-node15.html">クラス継承</A>
- &nbsp; <B>  <A NAME="tex2html589"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html591"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html769"
+  HREF="jmanual-node17.html">幾何学モデリング</A>
+<B>Up:</B> <A NAME="tex2html763"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html757"
+  HREF="jmanual-node15.html">マルチスレッド</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03014000000000000000">
-型指定</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html770"
+  HREF="jmanual-node16.html#SECTION03031000000000000000">実数ベクトル(float-vector)</A>
+<LI><A NAME="tex2html771"
+  HREF="jmanual-node16.html#SECTION03032000000000000000">行列と変換</A>
+<LI><A NAME="tex2html772"
+  HREF="jmanual-node16.html#SECTION03033000000000000000">LU分解</A>
+<LI><A NAME="tex2html773"
+  HREF="jmanual-node16.html#SECTION03034000000000000000">座標系</A>
+<LI><A NAME="tex2html774"
+  HREF="jmanual-node16.html#SECTION03035000000000000000">連結座標系</A>
+<LI><A NAME="tex2html775"
+  HREF="jmanual-node16.html#SECTION03036000000000000000">変換行列とcoordinates classとの関係</A>
+<UL>
+<LI><A NAME="tex2html776"
+  HREF="jmanual-node16.html#SECTION03036100000000000000">回転行列と３次元位置の取り出し</A>
+<LI><A NAME="tex2html777"
+  HREF="jmanual-node16.html#SECTION03036200000000000000">ベクトルを変換するメソッド</A>
+<LI><A NAME="tex2html778"
+  HREF="jmanual-node16.html#SECTION03036300000000000000">座標系を返すメソッド (座標系を変更しない)</A>
+<LI><A NAME="tex2html779"
+  HREF="jmanual-node16.html#SECTION03036400000000000000">座標系を変更するメソッド</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03030000000000000000">
+幾何学関数</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION03031000000000000000">
+実数ベクトル(float-vector)</A>
 </H2>
-Euslispは、<B>deftype</B>特殊書式を持っていないけれども、
-型名は宣言や結果あるいは中身の型の指定を要求する関数の中で
-使用される。
-例えば、<B>coerce, map, concatenate, make-array</B>など。
-一般に、クラス名は<TT>(concatenate cons "ab" "cd") = (97 98 99 100)</TT>のように
-型指定として使用することができる。このとき、Common Lispでは<TT>cons</TT>の代わりに
-<TT>(quote list)</TT>を使用する。
 
 <P>
-Euslispは、数を表現するクラスを持っていないので、数の型はキーワードによって
-与える必要がある。
-<B>:integer</B>, <B>integer</B>, <B>:int</B>, <B>fixnum</B>,
-あるいは<B>:fixnum</B>が整数型を表現するために使用され、
-<B>:float</B>あるいは<B>float</B>が実数型を表現するために使用される。
-<B>make-array</B>の<EM>element-type</EM>引数においては、文字列を作るために
-<B>:character</B>, <B>character</B>, <B>:byte</B>や<A NAME="1197"></A><B>b</B>yteを
-認識する。
-<B>defcstruct</B>, <B>sys:peek</B>や<B>sys:poke</B>のような低レベルの関数も、
-バイト毎にアクセスするために
-<B>:character</B>, <B>character</B>, <B>:byte</B>あるいは<B>byte</B>を認識し、
-short word毎にアクセスするために
-<B>:short</B>あるいは<B>short</B>を認識する。
-どの場合においても、キーワードはpnameと同じ名前を持つlispパッケージのsymbol
-を選ぶべきである。
+float-vectorは、要素が実数である1次元ベクトルである。
+float-vectorは、どんなサイズでも良い。
+<EM>result</EM>が引き数リストで指定されているとき、
+その<EM>result</EM>はfloat-vectorであるべきである。
 
 <P>
 
+ <BR>
+<BR> <P>
+
+<A NAME="27359"></A>
+<B>float-vector</B> <EM>&amp;rest numbers </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>numbers</EM>を要素とするfloat-vectorを新しく作る。
+<TT>(float-vector 1 2 3)</TT>と<TT>#F(1 2 3)</TT>の違いに注意すること。
+前者は、呼ばれたときはいつでもベクトルが生成されるが、
+後者は読み込まれたときのみ生成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
 <P>
-<BR><HR>
+
+<A NAME="27372"></A>
+<B>float-vector-p</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>obj</EM>がfloat-vectorであるならば、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27383"></A>
+<B>v+</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorを加える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27393"></A>
+<B>v-</B> <EM>fltvec1 &amp;optional fltvec2  result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorを差し引く。もし、<EM>fltvec2</EM>が省略されているならば、
+<EM>fltvec1</EM>の符号が反転される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27405"></A>
+<B>v.</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 2つのfloat-vectorの内積を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27415"></A>
+<B>v*</B> <EM>fltvec1 fltvec2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの外積を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27425"></A>
+<B>v.*</B> <EM>fltvec1 fltvec2 fltvec3 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スカラー3重積を計算する。<TT>(v.* A B C)=(V. A (V* B C))=(V. (V* A B) C)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27436"></A>
+<B>v<SPAN CLASS="MATH"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>fltvec1</EM>の要素が<EM>fltvec2</EM>の対応する要素よりすべて小さいとき、
+Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27448"></A>
+<B>v<SPAN CLASS="MATH"></SPAN></B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>fltvec1</EM>の要素が<EM>fltvec2</EM>の対応する要素よりすべて大きいとき、
+Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27460"></A>
+<B>vmin</B> <EM>&amp;rest fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>の中のそれぞれの次元における最小値を捜し、
+その値でfloat-vectorを新しく作る。<B>vmin</B>と<B>vmax</B>は、
+頂点の座標から最小のminimal-boxを見つけるために使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27473"></A>
+<B>vmax</B> <EM>&amp;rest fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>の中のそれぞれの次元における最大値を捜し、
+その値でfloat-vectorを新しく作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27484"></A>
+<B>minimal-box</B> <EM>v-list minvec maxvec [err] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+与えられた<EM>v-list</EM>に対して<TT>minimal bounding box</TT>を計算し、
+その結果を<EM>minvec</EM>と<EM>maxvec</EM>に蓄積する。
+もし、実数<EM>err</EM>が指定されているならば、<TT>minimal box</TT>はその比率によって
+成長する。すなわち、もし<EM>err</EM>が0.01のとき、<EM>minvec</EM>のそれぞれの
+要素は<EM>minvec</EM>と<EM>maxvec</EM>との距離の1%減少する。
+そして、<EM>maxvec</EM>のそれぞれの要素は1%増加する。
+<B>minimal-box</B>は、<EM>minvec</EM>と<EM>maxvec</EM>との距離を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27508"></A>
+<B>scale</B> <EM>number fltvec &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>のすべての要素をスカラー<EM>number</EM>倍する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27520"></A>
+<B>norm</B> <EM>fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>fltvec</EM>のノルムを求める。<TT><!-- MATH
+ $\Vert fltvec\Vert$
+ -->
+<SPAN CLASS="MATH"></SPAN></TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27532"></A>
+<B>norm2</B> <EM>fltvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>fltvec</EM>のノルムの２乗を求める。
+<TT><!-- MATH
+ $\Vert fltvec\Vert^2$
+ -->
+<SPAN CLASS="MATH"></SPAN>=(v. fltvec fltvec)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27544"></A>
+<B>normalize-vector</B> <EM>fltvec &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fltvec</EM>のノルムが1.0となるように正規化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27555"></A>
+<B>distance</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの距離を返す。<!-- MATH
+ $|fltvec-fltvec2|$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27565"></A>
+<B>distance2</B> <EM>fltvec1 fltvec2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのfloat-vectorの距離の2乗を返す。<!-- MATH
+ $|fltvec-fltvec2|^2$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27575"></A>
+<B>homo2normal</B> <EM>homovec &amp;optional normalvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+同次ベクトル<EM>homovec</EM>を正規表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27586"></A>
+<B>homogenize</B> <EM>normalvec &amp;optional homovec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+正規ベクトル<EM>normalvec</EM>を同次表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27597"></A>
+<B>midpoint</B> <EM>p p1 p2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p</EM>は実数で、<EM>p1,p2</EM>は同次元のfloat-vectorである。
+<EM>p1<SPAN CLASS="MATH"><IMG
+ WIDTH="408" HEIGHT="874" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+queue
+propertied-object
+s...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></SPAN>p2</EM>を<SPAN CLASS="MATH"></SPAN>の比率で等分した点<!-- MATH
+ $(1-p)\cdot p1 + p\cdot p2$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27610"></A>
+<B>rotate-vector</B> <EM>fltvec theta axis &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2次元あるいは3次元の<EM>fltvec</EM>を<EM>axis</EM>回りに<EM>theta</EM>ラジアン
+回転する。
+<EM>axis</EM>は、<EM>:x, :y, :z, 0, 1, 2</EM>, または NILの内の一つである。
+<EM>axis</EM>がNILのとき、<EM>fltvec</EM>は2次元として扱われる。
+3次元空間の任意の軸の回りにベクトルを回転するためには、
+<B>rotation-matrix</B>で回転行列を作り、そのベクトルにかければよい。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03032000000000000000">
+行列と変換</A>
+</H2>
+
+<P>
+行列は、要素がすべて実数の2次元の配列である。
+ほとんどの関数において行列はどんなサイズでもよいが、
+<B>v*, v.*, euler-angle, rpy-angle</B>関数では3次元の行列のみ
+扱うことができる。
+<B>transform, m*</B>と<B>transpose</B>は、行列を正方行列に限定せず、
+一般のn*m行列に対して処理を行う。
+
+<P>
+<EM>result</EM>パラメータを受けた関数は、計算結果をそこに置く。
+そのため、ヒープは使用しない。
+すべての行列関数は、正規座標系における変換を考慮しており、
+同次座標系は考慮していない。
+
+<P>
+<B>rpy-angle</B>関数は、回転行列をワールド座標系におけるz,y,x軸回りの
+3つの回転角に分解する。
+<B>euler-angle</B>関数は<B>rpy-angle</B>と同様に分解するが、
+回転軸がローカル座標系のz,y,z軸となっている。
+角度が反対方向にも得られるため、これらの関数は2つの解を返す。
+
+<P>
+<PRE>
+; Mat is a 3X3 rotation matrix.
+(setq rots (rpy-angle mat))
+(setq r (unit-matrix 3))
+(rotate-matrix r (car rots) :x t r)
+(rotate-matrix r (cadr rots) :y t r)
+(rotate-matrix r (caddr rots) :z t r)
+;--&gt; resulted r is equivalent to mat
+</PRE>
+
+<P>
+3次元空間の位置と方向の組みを保つために、<A HREF="#Coordinates">13.4</A>節に記載されている
+<B>coordinates</B>と<B>cascaded-coords</B>クラスを使用すること。
+
+<P>
+
+ <BR>
+<BR> <A NAME="27628"></A>
+<B>matrix</B> <EM>&amp;rest elements </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>elements</EM>から行列を新しく作る。
+<TT>Row x Col = (elementsの数) x (最初のelementの長さ)</TT>
+<EM>elements</EM>は、どの型の列((list 1 2 3)や(vector 1 2 3)や
+(float-vector 1 2 3))でもよい。
+それぞれの列は行列の行ベクトルとしてならべられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27641"></A>
+<B>make-matrix</B> <EM>rowsize columnsize &amp;optional init </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $rowsize \times columnsize$
+ -->
+<SPAN CLASS="MATH"></SPAN>の大きさの行列を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27651"></A>
+<B>matrixp</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>obj</EM>が行列のとき、すなわち、<EM>obj</EM>が2次元の配列で
+その要素が実数であるとき、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27663"></A>
+<B>matrix-row</B> <EM>mat row-index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>mat</EM>から<EM>row-index</EM>で示される行ベクトルを抽出する。
+<B>matrix-row</B>は、<B>setf</B>を使用することにより
+行列の特定の行にベクトルを設定することにも使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27677"></A>
+<B>matrix-column</B> <EM>mat column-index </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>mat</EM>から<EM>coloumn-index</EM>で示される列ベクトルを抽出する。
+<B>matrix-column</B>は、<B>setf</B>を使用することにより
+行列の特定の列にベクトルを設定することにも使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27691"></A>
+<B>m*</B> <EM>matrix1 matrix2 &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix1</EM>と<EM>matrix2</EM>の積を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27703"></A>
+<B>transpose</B> <EM>matrix &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>の転置行列を返す。すなわち、<EM>matrix</EM>の列と行を入れ替える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27715"></A>
+<B>unit-matrix</B> <EM>dim </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>dim</EM> <SPAN CLASS="MATH"></SPAN> <EM>dim</EM>の単位行列を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27727"></A>
+<B>replace-matrix</B> <EM>dest src </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>dest</EM>のすべての要素を同一な行列<EM>src</EM>で置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27739"></A>
+<B>scale-matrix</B> <EM>scalar mat </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>mat</EM>のすべての要素に<EM>scaler</EM>を掛ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27751"></A>
+<B>copy-matrix</B> <EM>matrix </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>のコピーを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27762"></A>
+<B>transform</B> <EM>matrix fltvector &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>matrix</EM>をベクトル<EM>fltvector</EM>の左から掛ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="27774"></A>
+<B>transform</B> <EM>fltvector matrix &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+行列<EM>matrix</EM>をベクトル<EM>fltvector</EM>の右から掛ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27786"></A>
+<B>rotate-matrix</B> <EM>matrix theta axis &amp;optional world-p result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>rotate-matrix</B>で行列<EM>matrix</EM>を回転させるとき、
+回転軸（<B>:x, :y, :z</B>または0,1,2）はワールド座標系あるいは
+ローカル座標系のどちらかを与えられる。
+もし、<EM>world-p</EM>にNILが指定されているとき、
+ローカル座標系の軸に沿った回転を意味し、回転行列を左から掛ける。
+もし、<EM>world-p</EM>がnon-NILのとき、
+ワールド座標系に対する回転行列を作り、回転行列を右から掛ける。
+もし、<EM>axis</EM>にNILが与えられたとき、行列<EM>matrix</EM>は2次元と仮定され、
+<EM>world-p</EM>の如何にかかわらず2次元空間の回転が与えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27804"></A>
+<B>rotation-matrix</B> <EM>theta axis &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>axis</EM>軸回りの2次元あるいは3次元の回転行列を作る。
+軸は:x,:y,:z,0,1,2,3次元ベクトルあるいはNILのどれかである。
+2次元回転行列を作るとき、<EM>axis</EM>はNILでなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27816"></A>
+<B>rotation-angle</B> <EM>rotation-matrix </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>rotation-matrix</EM>から等価な回転軸と角度を抽出し、
+実数とfloat-vectorのリストを返す。
+<EM>rotation-matrix</EM>が単位行列のとき、NILが返される。
+また、回転角が小さいとき、結果がエラーとなる。
+<EM>rotation-matrix</EM>が2次元のとき、1つの角度値が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27829"></A>
+<B>rpy-matrix</B> <EM>ang-z ang-y ang-x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ロール、ピッチ、ヨー角で定義される回転行列を作る。
+最初に、単位行列をx軸回りに<EM>ang-x</EM>ラジアン回転させる。
+次に、y軸回りに<EM>ang-y</EM>ラジアン、最後にｚ軸回りに<EM>ang-z</EM>
+ラジアン回転させる。
+すべての回転軸はワールド座標系で与えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27842"></A>
+<B>rpy-angle</B> <EM>matrix </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>の2組のロール、ピッチ、ヨー角を抽出する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27853"></A>
+<B>Euler-matrix</B> <EM>ang-z ang-y ang2-z </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+3つのオイラー角で定義される回転行列を作る。
+最初に単位行列をz軸回りに<EM>ang-z</EM>回転させ、次にy軸回りに<EM>ang-y</EM>
+回転させ、最後にz軸回りに<EM>ang2-z</EM>回転させる。
+すべての回転軸はローカル座標系で与えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27866"></A>
+<B>Euler-angle</B> <EM>matrix </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>から2組のオイラー角を抽出する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03033000000000000000">
+LU分解</A>
+</H2>
+<B>lu-decompose</B>と<B>lu-solve</B>は、線形の連立方程式を
+解くために用意されている。
+最初に、<B>lu-decompose</B>は行列を下三角行列を上三角行列に分解する。
+もし、行列が特異値なら、<B>lu-decompose</B>はNILを返す。
+そうでなければ、<B>lu-solve</B>に与えるべき順列ベクトルを返す。
+<B>lu-solve</B>は、与えられた定数ベクトルの解をLU行列で計算する。
+この手法は、同じ係数行列と異なった定数ベクトルのたくさんの組に対して
+解を求めたいときに効果的である。
+<B>simultaneous-equation</B>は、1つの解だけを求めたいときにもっとも
+手軽な関数である。
+<B>lu-determinant</B>は、LU分解された行列の行列式を計算する。
+<B>inverse-matrix</B>関数は、<B>lu-decompose</B>を1回と<B>lu-solve</B>をn回
+使って逆行列を求める。
+3*3行列での計算時間は約4msである。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="27877"></A>
+<B>lu-decompose</B> <EM>matrix &amp;optional result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>matrix</EM>にLU分解を実行する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27888"></A>
+<B>lu-solve</B> <EM>lu-mat perm-vector bvector [result] </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+LU分解された1次連立方程式を解く。
+<EM>perm-vector</EM>は、<B>lu-decompose</B>で返された結果でなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27900"></A>
+<B>lu-determinant</B> <EM>lu-mat perm-vector </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+LU分解された行列の行列式を求める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27910"></A>
+<B>simultaneous-equation</B> <EM>mat vec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+係数が<EM>mat</EM>で、定数が<EM>vec</EM>で記述される1次連立方程式を解く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27922"></A>
+<B>inverse-matrix</B> <EM>mat </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+正方行列<EM>mat</EM>の逆行列を求める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27933"></A>
+<B>pseudo-inverse</B> <EM>mat </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+特異値分解を用いて擬似逆行列を求める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<P>
+
+<H2><A NAME="SECTION03034000000000000000"></A><A NAME="Coordinates"></A>
+<BR>
+座標系
+</H2>
+
+<P>
+座標系と座標変換は、<B>coordinates</B>クラスで表現される。
+4*4の同次行列表現の代わりに、
+Euslisp内で座標系は、高速性と一般性のために
+3*3の回転行列と3次元位置ベクトルの組で表現される。
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="27944"></A>
+<BIG CLASS="XLARGE"><B>coordinates </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 (pos :type float-vector 
+<BR>
+rot :type array) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>位置ベクトルと3x3の回転行列の組みで座標系を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27961"></A>
+<B>coordinates-p</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>obj</EM>が<B>coordinates</B>クラスかまたはそのサブクラスのインスタンス
+のとき、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27973"></A>
+<B>:rot</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の3x3回転行列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27983"></A>
+<B>:pos</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の3次元位置ベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="27993"></A>
+<B>:newcoords</B> <EM>newrot &amp;optional newpos </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>newrot</EM>と<EM>newpos</EM>でこの座標系を更新する。
+<EM>newpos</EM>が省略された時は<EM>newrot</EM>にはcoordinatesのインスタンスを
+与える。
+この座標系の状態が変化するときはいつでも、このメソッドを用いて新しい
+回転行列と位置ベクトルに更新するべきである。
+このメッセージはイベントを伝えて他の<B>:update</B>メソッドを呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28008"></A>
+<B>:replace-coords</B> <EM>newrot &amp;optional newpos </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>:newcoords</EM>メソッドを呼び出さずに<TT>rot</TT>と<TT>pos</TT>スロットを変更する。
+<EM>newpos</EM>が省略された時は<EM>newrot</EM>にはcoordinatesのインスタンスを与える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28023"></A>
+<B>:coords</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28034"></A>
+<B>:copy-coords</B> <EM>&amp;optional dest </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>dest</EM>が与えられなかったとき、<B>:copy-coords</B>は同じ<TT>rot</TT>と<TT>pos</TT>
+スロットを持つ座標系オブジェクトを作る。
+もし、<EM>dest</EM>が与えられたとき、<EM>dest</EM>座標系にこの座標系のrotとposを
+コピーする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28050"></A>
+<B>:reset-coords</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の回転行列を単位行列にし、位置ベクトルをすべてゼロにする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28060"></A>
+<B>:worldpos</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28071"></A>
+<B>:worldrot</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28082"></A>
+<B>:worldcoords</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このオブジェクトのワールド座標系における位置ベクトル・回転行列・座標系
+を計算する。
+その座標系は、いつもワールド座標系で表現されていると仮定され、
+これらのメソッドは簡単に<TT>pos</TT>と<TT>rot</TT>と<TT>self</TT>を返すことができる。
+これらのメソッドは<B>cascaded-coords</B>クラスと互換性がとられている。
+<B>cascaded-coords</B>ではワールド座標系での表現と仮定していない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28097"></A>
+<B>:copy-worldcoords</B> <EM>&amp;optional dest </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+最初に、ワールド座標系が計算され、<EM>dest</EM>にコピーされる。
+もし、<EM>dest</EM>が指定されてないとき、新たに<B>coordinates</B>
+オブジェクトを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28110"></A>
+<B>:rotate-vector</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の回転行列によって<EM>vec</EM>を回転させる。すなわち、
+この座標系で表現される方向ベクトルをワールド座標系における表現
+に変換する。
+この座標系の位置は、回転に影響を与えない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28121"></A>
+<B>:transform-vector</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系で表現される<EM>vec</EM>をワールド座標系の表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28132"></A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系における<EM>vec</EM>をローカル座標系の表現に逆変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28143"></A>
+<B>:transform</B> <EM>trans &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>wrt</EM>座標系で表現される<EM>trans</EM>によってこの座標系を変換する。
+<EM>trans</EM>は座標系の型でなければならないし、<EM>wrt</EM>は
+<TT>:local, :parent, :world</TT>のキーワードあるいは<B>coordinates</B>の
+インスタンスでなければならない。
+もし<EM>wrt</EM>が<TT>:local</TT>のとき、<EM>trans</EM>をこの座標系の右
+から適用する。もし<EM>wrt</EM>が<TT>:world, :parent</TT>のとき、
+<EM>trans</EM>を左から掛ける。
+もし<EM>wrt</EM>が<B>coordinates</B>の型であるとき、<EM>wrt</EM>座標系で表現される
+<EM>trans</EM>は最初にワールド座標系の表現に変換され、左から掛ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28169"></A>
+<B>:move-to</B> <EM>trans &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>wrt</EM>で表現される<EM>trans</EM>でこの座標系の<TT>rot</TT>と<TT>pos</TT>
+を置き換える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28183"></A>
+<B>:translate</B> <EM>p &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このオブジェクトの位置を<EM>wrt</EM>座標系で相対的に変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28194"></A>
+<B>:locate</B> <EM>p &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の位置を<EM>wrt</EM>座標系で絶対的に変更する。
+もし、<EM>wrt</EM>が<TT>:local</TT>のとき、<B>:translate</B>と同一な
+効果を生む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28208"></A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>axis</EM>軸回りに<EM>theta</EM>ラジアンだけ相対的にこの座標系を回転させる。
+<EM>axis</EM>は、軸キーワード(<TT>:x, :y, :z</TT>)あるいは任意の<TT>float-vector</TT>
+である。
+<EM>axis</EM>は<EM>wrt</EM>座標系で表現されていると考える。
+よって、もし<EM>wrt</EM>が<TT>:local</TT>で<EM>axis</EM>が<TT>:z</TT>であるとき、
+座標系はローカル座標系のz軸回りに回転される。
+もし<EM>wrt</EM>が<TT>:world, :parent</TT>であるとき、ワールド座標系のz軸回りに
+回転される。
+言い換えると、もし<EM>wrt</EM>が<TT>:local</TT>のとき、
+回転行列はこの座標系の右から掛けられる。
+そして、もし<EM>wrt</EM>が<TT>:world</TT>あるいは<TT>:parent</TT>のとき、
+回転行列は左から掛けられる。
+<EM>wrt</EM>が<TT>:world</TT>あるいは<TT>:parent</TT>でさえ、
+この座標系の<TT>pos</TT>ベクトルは変化しない。
+本当にワールド座標系の軸回りに回転するためには、
+回転を表現する<B>coordinates</B>クラスのインスタンスを
+<B>:transform</B>メソッドに与えなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28242"></A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>rot</TT>を強制的に変更する。<B>:rotate</B>メソッドの絶対値版である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28254"></A>
+<B>:inverse-transformation</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の逆変換を持つ座標系を新しく作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28264"></A>
+<B>:transformation</B> <EM>coords (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系と引き数で与えられる<EM>coords</EM>との間の変換を作る。
+もし、<EM>wrt</EM>が<TT>:local</TT>であるとき、ローカル座標系で表現される。
+すなわち、もしこの<B>:transformation</B>の結果を<B>:transform</B>の引き数として
+<EM>wrt</EM>=<TT>:local</TT>と一緒に
+与えたとき、この座標系は<EM>coords</EM>と同一な座標系に変換される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28282"></A>
+<B>:Euler</B> <EM>az1 ay az2 </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+オイラー角(<EM>az1, ay, az2</EM>)で表現される回転行列を<TT>rot</TT>に
+設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28294"></A>
+<B>:roll-pitch-yaw</B> <EM>roll pitch yaw </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ロール・ピッチ・ヨー角で表現される回転行列を<TT>rot</TT>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28305"></A>
+<B>:4x4</B> <EM>&amp;optional mat44 </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>mat44</EM>として4x4行列が与えられるとき、3x3回転行列と3次元位置ベクトル
+の座標表現に変換される。
+もし、<EM>mat44</EM>が与えられないとき、この座標系の表現を
+4x4の同次行列表現に変換して返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28317"></A>
+<PRE><TT>
+<B>:init</B> <I>&amp;key :pos   #f(0 0 0) [メソッド] 
+<BR>:rot 		 #2f((1 0 0) (0 1 0) (0 0 1)) 
+<BR>:rpy 		 roll pitch yaw 
+<BR>:Euler 		 az ay az2 
+<BR>:axis 		  rotation-axis 
+<BR>:angle 		 rotation-angle 
+<BR>:4X4 		 4x4 matrix 
+<BR>:coords 		 another coordinates 
+<BR>:properties 		  a list of (ind . value) pair 
+<BR>:name 		 name property 
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>この<B>coordinates</B>オブジェクトを初期化し、<TT>rot</TT>と<TT>pos</TT>を設定する。
+それぞれのキーワードの意味は、以下に示す通りである。
+<DL>
+<DT><STRONG>:dimension</STRONG></DT>
+<DD>2あるいは3 (デフォルトは 3)
+</DD>
+<DT><STRONG>:pos</STRONG></DT>
+<DD>位置ベクトルを指定する (デフォルトは #f(0 0 0))
+</DD>
+<DT><STRONG>:rot</STRONG></DT>
+<DD>回転行列を指定する (デフォルトは単位行列)
+</DD>
+<DT><STRONG>:Euler</STRONG></DT>
+<DD>オイラー角として3つの要素の列を与える
+</DD>
+<DT><STRONG>:rpy</STRONG></DT>
+<DD>ロール・ピッチ・ヨー角として3つの要素の列を与える
+</DD>
+<DT><STRONG>:axis</STRONG></DT>
+<DD>回転軸 (<TT>:x,:y,:z</TT> あるいは任意の<TT>float-vector</TT>)
+</DD>
+<DT><STRONG>:angle</STRONG></DT>
+<DD>回転角 (<EM>:axis</EM>と一緒に使用)
+</DD>
+<DT><STRONG>:wrt</STRONG></DT>
+<DD>回転軸を示す座標系 (デフォルトは <TT>:local</TT>)
+</DD>
+<DT><STRONG>:4X4</STRONG></DT>
+<DD>4X4 行列(<TT>pos</TT>と<TT>rot</TT>を同時に指定)
+</DD>
+<DT><STRONG>:coords</STRONG></DT>
+<DD><EM>coords</EM>から<TT>rot</TT>と<TT>pos</TT>をコピーする
+</DD>
+<DT><STRONG>:name</STRONG></DT>
+<DD><TT>:name</TT>値を設定する。
+</DD>
+</DL>
+<EM>:angle</EM>は<EM>:axis</EM>と組みで唯一使用することができる。
+その軸は<EM>:wrt</EM>座標系で決定される。
+<EM>:wrt</EM>と関係なしに<EM>:Euler</EM>はローカル座標系で定義されるオイラー角
+（<EM>az1, ay</EM>と<EM>az2</EM>）をいつも指定する。
+また、<EM>:rpy</EM>はワールド座標系の<EM>z</EM>, <EM>y</EM>と<EM>x</EM>軸回りの角度
+を指定する。
+<EM>:rot, :Euler, :rpy, :axis, :4X4</EM>の中から２つ以上を連続で指定することは
+できない。しかしながら、指定してもエラーは返さない。
+<EM>axis</EM>と<EM>:angle</EM>パラメータには列を指定することができる。
+その意味は、与えられた軸回りの回転を連続的に処理する。
+属性とその値の組みのリストを<EM>:properties</EM>の引き数として
+与えることができる。これらの組みは、この座標系の<TT>plist</TT>にコピーされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION03035000000000000000">
+連結座標系</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="28361"></A>
+<BIG CLASS="XLARGE"><B>cascaded-coords </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>coordinates</B> 
+<BR>  :slots 		 (parent descendants worldcoords manager changed) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>連結された座標系を定義する。<B>cascaded-coords</B>は、
+しばしば<B>cascoords</B>と略す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28380"></A>
+<B>:inheritance</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>cascaded-coords</B>の子孫をすべて記述した継承treeリストを返す。
+もし、<TT>a</TT>と<TT>b</TT>がこの座標系の直下の子孫で<TT>c</TT>が<TT>a</TT>の
+子孫であるとき、<TT>((a (c)) (b))</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28396"></A>
+<B>:assoc</B> <EM>childcoords &amp;optional relative-coords </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>childcoords</EM>は、この座標系の子孫として関係している。
+もし、<EM>childcoords</EM>が既に他の<B>cascaded-coords</B>に<B>assoc</B>されて
+いるとき、<EM>childcoords</EM>はそれぞれの<B>cascaded-coords</B>が1つの親しか
+持っていないなら<B>dessoc</B>される。
+ワールド座標系における<EM>childcoords</EM>の方向あるいは位置は変更されない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28414"></A>
+<B>:dissoc</B> <EM>childcoords </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の子孫リストから<EM>childcoords</EM>を外す。
+ワールド座標系における<EM>childcoords</EM>の方向あるいは位置は変更されない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28426"></A>
+<B>:changed</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の親座標系が変更されていることを通知する。
+また、もっとあとでワールド座標系が要求されたとき、ワールド座標系を再計算する
+必要がある。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28436"></A>
+<B>:update</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+現在のワールド座標系を再計算するために<B>:worldcoords</B>メソッド
+を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28447"></A>
+<B>:worldcoords</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ルートの座標系からこの座標系までの全ての座標系を連結させることにより、
+この座標系をワールド座標系で表現した<B>coordinates</B>オブジェクトで返す。
+その結果は、このオブジェクトが持ち、後に再利用される。
+よって、この結果の座標系を変更すべきでない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28458"></A>
+<B>:worldpos</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系で表現したこの座標系の<TT>rot</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28469"></A>
+<B>:worldrot</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系で表現したこの座標系の<TT>pos</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28480"></A>
+<B>:transform-vector</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM>をこのローカル座標系での表現とみなして、ワールド座標系での
+表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28491"></A>
+<B>:inverse-transform-vector</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系で表現される<EM>vec</EM>をこのローカル座標系の表現に逆変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28502"></A>
+<B>:inverse-transformation</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この座標系の逆変換を表現する<B>coordinates</B>のインスタンスを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28513"></A>
+<B>:transform</B> <EM>trans  &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28524"></A>
+<B>:translate</B> <EM>fltvec &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28535"></A>
+<B>:locate</B> <EM>fltvec &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28546"></A>
+<B>:rotate</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28557"></A>
+<B>:orient</B> <EM>theta axis &amp;optional (wrt :local) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>coordinates</B>クラスの記述を参照すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28568"></A>
+<B>make-coords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="28579"></A>
+<B>make-cascoords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28590"></A>
+<B>coords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28601"></A>
+<B>cascoords</B> <EM>&amp;key :pos :rot :rpy :Euler :angle :axis
+:4X4 :coords :name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+これらの関数は、すべて<B>coordinates</B>あるいは<B>cascaded-coords</B>を
+新しく作る。
+キーワードパラメータについては、<B>coordinates</B>クラスの<B>:init</B>メソッドを
+見ること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28615"></A>
+<B>transform-coords</B> <EM>coords1 coords2 &amp;optional (coords3 (coords)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>coords1</EM>が<EM>coords2</EM>に左から適用（乗算）される。
+その積は<EM>coords3</EM>に蓄積される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28628"></A>
+<B>transform-coords*</B> <EM>&amp;rest coords </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>coords</EM>にリスト表現されている変換を連結させる。
+連結された変換で表現される<B>coordinates</B>のインスタンスを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="28640"></A>
+<B>wrt</B> <EM>coords vec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM>を<EM>coords</EM>における表現に変換する。
+その結果は<TT>(send <EM>coords</EM> :transform-vector <EM>vec</EM>)</TT>と同一である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION03036000000000000000">
+変換行列とcoordinates classとの関係</A>
+</H2>
+
+<P>
+変換行列Tを<SPAN CLASS="MATH"></SPAN>の同次行列表現として以下のように表したした時の、
+coordinatesとの関係を説明する。
+<P><!-- MATH
+ \begin{displaymath}
+T = \begin{pmatrix}
+\mathbf{R}_T & \mathbf{p}_T \\
+\mathbf{0} & 1
+\end{pmatrix}
+\end{displaymath}
+ -->
+</P>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+
+</DIV><P></P>
+
+<P>
+<!-- MATH
+ $\mathbf{R}_T$
+ -->
+<SPAN CLASS="MATH"></SPAN>は<SPAN CLASS="MATH"></SPAN>行列、<!-- MATH
+ $\mathbf{p}_T$
+ -->
+<SPAN CLASS="MATH"></SPAN>は<SPAN CLASS="MATH"></SPAN>行列(eus内部処理
+では要素数3のfloat-vector)であって、
+EusLispにおけるcoordinatesクラスは<!-- MATH
+ $\mathbf{R}$
+ -->
+<SPAN CLASS="MATH"></SPAN>は<SPAN CLASS="MATH"></SPAN> の回転行列と
+3 次元位置ベクトルの組で表現されており、
+スロット変数のrotとposは、それぞれ、<!-- MATH
+ $\mathbf{R}_T$
+ -->
+<SPAN CLASS="MATH"></SPAN>、<!-- MATH
+ $\mathbf{p}_T$
+ -->
+<SPAN CLASS="MATH"></SPAN>に対応する。
+
+<P>
+
+<H3><A NAME="SECTION03036100000000000000">
+回転行列と３次元位置の取り出し</A>
+</H3>
+
+<P>
+coordinates classのメソッドを用いて、以下のように<!-- MATH
+ $\mathbf{R}$
+ -->
+<SPAN CLASS="MATH"></SPAN>と<!-- MATH
+ $\mathbf{p}$
+ -->
+<SPAN CLASS="MATH"></SPAN>を取り出せる。
+
+<P>
+以下、Tはcoordinateクラスのインスタンスである。
+
+<P>
+
+ <BR>
+<BR> <P>
+<B>(send T :rot)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> <!-- MATH
+ $\mathbf{R}_T$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :pos)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> <!-- MATH
+ $\mathbf{p}_T$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03036200000000000000">
+ベクトルを変換するメソッド</A>
+</H3>
+
+<P>
+以下、<!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>は3次元ベクトルである。
+
+<P>
+
+ <BR>
+<BR> <P>
+<B>(send T :rotate-vector <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> <!-- MATH
+ $\mathbf{R}_T \mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :inverse-rotate-vector <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> <!-- MATH
+ $\mathbf{v}^T \mathbf{R}_T$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :transform-vector <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> <!-- MATH
+ $\mathbf{R}_T\mathbf{v} + \mathbf{p}_T$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+ローカル座標系Tで表されたベクトルをワールド座標系で表されたベクトルに変換する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :inverse-transform-vector <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> <!-- MATH
+ $\mathbf{R}_T^{-1}\left( \mathbf{v} - \mathbf{p}_T \right)$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+ワールド座標系で表されたベクトルをローカル座標系Tで表されたベクトルに変換する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03036300000000000000">
+座標系を返すメソッド (座標系を変更しない)</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <P>
+<B>(send T :inverse-transformation)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\Rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> <SPAN CLASS="MATH"></SPAN>
+
+<P>
+逆行列を返す。<P><!-- MATH
+ \begin{displaymath}
+T^{-1} = \begin{pmatrix}
+ \mathbf{R}_T^{-1} & -\mathbf{R}_T^{-1}\mathbf{p}_T \\
+ \mathbf{0} & 1
+\end{pmatrix}
+\end{displaymath}
+ -->
+</P>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+
+</DIV><P></P>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :transformation A (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+wrt == :local のとき、<SPAN CLASS="MATH"></SPAN> を返す
+
+<P>
+wrt == :world のとき、<SPAN CLASS="MATH"></SPAN> を返す
+
+<P>
+wrt == W (coordinates class) のとき、<!-- MATH
+ $W^{-1}AT^{-1}W$
+ -->
+<SPAN CLASS="MATH"></SPAN> を返す
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03036400000000000000">
+座標系を変更するメソッド</A>
+</H3>
+
+<P>
+以下、A は coordinatesクラスのインスタンスである。
+
+<P>
+<!-- MATH
+ $\Leftrightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> はスロット変数と与えられたインスタンス（行列またはベクトル）が同一になることを表す。
+一方の変更が、他方の変更に反映されるため、注意して使用すること。
+
+<P>
+<!-- MATH
+ $\leftarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> は代入を表す。
+
+<P>
+
+ <BR>
+<BR> <P>
+<B>(send T :newcoords A)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\mathbf{R}_T \Leftrightarrow \mathbf{R}_A$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+<!-- MATH
+ $\mathbf{p}_T \Leftrightarrow \mathbf{p}_A$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :newcoords <!-- MATH
+ $\mathbf{R}$
+ -->
+<SPAN CLASS="MATH"></SPAN> <!-- MATH
+ $\mathbf{p}$
+ -->
+<SPAN CLASS="MATH"></SPAN>)</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<!-- MATH
+ $\mathbf{R}_T \Leftrightarrow \mathbf{R}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+<!-- MATH
+ $\mathbf{p}_T \Leftrightarrow \mathbf{p}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :move-to A (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+wrt == :local のとき、<!-- MATH
+ $T \leftarrow TA$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+wrt == :world のとき、<!-- MATH
+ $T \Leftrightarrow A$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+wrt == W (coordinates class) のとき、<!-- MATH
+ $T \leftarrow WA$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :translate <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN> (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+wrt == :local のとき、
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T}\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+wrt == :world のとき、
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+wrt == W (coordinates class) のとき、
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{W}\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :locate <!-- MATH
+ $\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN> (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+wrt == :local のとき、
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T} \mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+wrt == :world のとき、
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+wrt == W (coordinates class) のとき、
+<!-- MATH
+ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{W} + \mathbf{R}_{W}\mathbf{v}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>(send T :transform A (&amp;optional (wrt :local)))</B>
+
+<DL COMPACT>
+<DT> 
+<DD> 
+wrt == :local のとき、 <!-- MATH
+ $T \leftarrow TA$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+wrt == :world のとき、 <!-- MATH
+ $T \leftarrow AT$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+wrt == W (coordinates class) のとき、<!-- MATH
+ $T \leftarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN> <!-- MATH
+ $\left( WAW \right)^{-1} T$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html769"
+  HREF="jmanual-node17.html">幾何学モデリング</A>
+<B>Up:</B> <A NAME="tex2html763"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html757"
+  HREF="jmanual-node15.html">マルチスレッド</A>
+</DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

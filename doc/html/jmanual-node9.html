@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>ライセンス</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="ライセンス">
+<TITLE>symbolとパッケージ</TITLE>
+<META NAME="description" CONTENT="symbolとパッケージ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,121 +16,935 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node10.html">
 <LINK REL="previous" HREF="jmanual-node8.html">
-<LINK REL="up" HREF="jmanual-node3.html">
+<LINK REL="up" HREF="jmanual-node2.html">
 <LINK REL="next" HREF="jmanual-node10.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html432"
-  HREF="jmanual-node10.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html426"
-  HREF="jmanual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html420"
-  HREF="jmanual-node8.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html428"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html430"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html433"
-  HREF="jmanual-node10.html">デモプログラム</A>
-<B> Up:</B> <A NAME="tex2html427"
-  HREF="jmanual-node3.html">はじめに</A>
-<B> Previous:</B> <A NAME="tex2html421"
-  HREF="jmanual-node8.html">インストール</A>
- &nbsp; <B>  <A NAME="tex2html429"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html431"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html527"
+  HREF="jmanual-node10.html">列、行列とテーブル</A>
+<B>Up:</B> <A NAME="tex2html521"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html515"
+  HREF="jmanual-node8.html">数値演算</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION02016000000000000000"></A><A NAME="License"></A>
-<BR>
-ライセンス
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html528"
+  HREF="jmanual-node9.html#SECTION02071000000000000000">symbol</A>
+<LI><A NAME="tex2html529"
+  HREF="jmanual-node9.html#SECTION02072000000000000000">パッケージ</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION02070000000000000000">
+symbolとパッケージ</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION02071000000000000000">
+symbol</A>
 </H2>
-EusLispは以下の修正BSDライセンスの元配布されている．
+symbolは、いつでも唯一であることが保証され、パッケージに収容される。
+1つのパッケージのなかに、その他の
+symbolとしておなじprint-nameを持っていることはあるが、symbol自体がコピーされることはない。
+symbolがリーダに読まれるとき、symbolオブジェクトは、自動的に生成され、
+1つのパッケージに収容される。
+そのパッケージは、パッケージ名にコロン（：）を付け加えた接頭語によって
+記すことができる。
+そのようなパッケージ接頭語がないならば、symbolは<B>lisp:*package*</B>
+の値にある主なパッケージに収容される。
+全てのsymbolは、1つのホームパッケージを持っている。
+もしsymbolがそのようなホームパッケージを持っていないならば、
+収容されていないsymbolと言われる。
+収容されていないsymbolは、<B>gensym</B>や<B>make-symbol</B>関数によって
+作ることができ、表示のときは、"<TT>#:</TT>"接頭語がつけられる。
+これらのsymbolは収容されていないので、そのような2つのsymbolが同じ
+print-nameを持っていた場合、等しいことが保証されない。
 
 <P>
-<PRE>
-Copyright (c) 1984-2001, National Institute of Advanced Industrial Science
-All rights reserved.
-ソースコード形式かバイナリ形式か、変更するかしないかを問わず、以下の条
-件を満たす場合に限り、再頒布および使用が許可されます。
-
-ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、および下記
-免責条項を含めること。
-バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の資料に、上
-記の著作権表示、本条件一覧、および下記免責条項を含めること。
-書面による特別の許可なしに、本ソフトウェアから派生した製品の宣伝または
-販売促進に、&lt;組織&gt;の名前またはコントリビューターの名前を使用してはなら
-ない。
-本ソフトウェアは、著作権者およびコントリビューターによって「現状のまま」
-提供されており、明示黙示を問わず、商業的な使用可能性、および特定の目的
-に対する適合性に関する暗黙の保証も含め、またそれに限定されない、いかな
-る保証もありません。著作権者もコントリビューターも、事由のいかんを問わ
-ず、 損害発生の原因いかんを問わず、かつ責任の根拠が契約であるか厳格責
-任であるか（過失その他の）不法行為であるかを問わず、仮にそのような損害
-が発生する可能性を知らされていたとしても、本ソフトウェアの使用によって
-発生した（代替品または代用サービスの調達、使用の喪失、データの喪失、利
-  益の喪失、業務の中断も含め、またそれに限定されない）直接損害、間接損
-害、偶発的な損害、特別損害、懲罰的損害、または結果損害について、一切責
-任を負わないものとします。
-</PRE>
-
-<P>
-なお8.25版までは以下のライセンスで配布されていた．
-
-<P>
-ユーザーは、メーリングリスト(euslisp@etl.go.jp)に登録され、そこにＱ＆Ａ・バグ・
-アップデート情報を流す。
-この情報は、<TT>*eusdir*/doc/mails</TT>に蓄積されている。
+ふつう、lispリーダがsymbolに出会ったとき、リーダは自動的に
+symbolのprint-name文字列を大文字に変換する。
+したがって、例えば<TT>(symbol-name 'car)</TT>と入力したとすると、
+EusLispは、<TT>"car"</TT>の代りに<TT>"CAR"</TT>と答える。
+<TT>(make-symbol "car")</TT>は、<TT>car</TT>や<TT>CAR</TT>の代りに<SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN><TT>car</TT><SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN>
+を返す。
+もし、小文字から構成されるsymbolをリーダに作らせたい場合、
+<!-- MATH
+ $\backslash$
+ -->
+<SPAN CLASS="MATH"></SPAN>や<SPAN CLASS="MATH"></SPAN>のようなエスケープを用いること。
 
 <P>
 
-<OL>
-<LI>EusLispの著作権は作者（松井俊浩）および電子技術総合研究所に属する。
-ユーザーは、作者より使用許可を得る必要がある。
-</LI>
-<LI>軍事目的以外であればどんな目的のためにEusLispを使用してもよい。
-</LI>
-<LI>EusLispはftp経由で電子技術総合研究所から自由に得ることができる。
-</LI>
-<LI>EusLispはここの条項を守る限りにおいてコピーまたは販売しても構わない。
-ただし、販売する際、販売者はオリジナルのEusLispが無料であることを消費者に
-通知しなければならない。
-</LI>
-<LI>ライセンス取得者がEsuLispを使用して研究・学習した結果を公表する際、
-EusLispの使用を特定参考文献として引用しなければならない。
-</LI>
-<LI>ライセンス取得者は、EusLispのソースコードを追加・変更してもよい。
-プログラム結果は、コードの50%以上が変更されない限りEusLispであり、
-変更していない部分については、これらの条項を守る必要がある。
-</LI>
-<LI>EusLispで開発されたプログラムの著作権は、開発者に属する。
-しかしながら、EusLisp本体の著作権に付け加えることはできない。
-</LI>
-<LI>作者および電総研は使用に際して、どんな保証もしない。
-</LI>
-</OL>
+ <BR>
+<BR> <P>
+
+<A NAME="8007"></A>
+<B>symbolp</B> <EM>object </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD>  <EM>object</EM>が
+クラスsymbolかそのサブクラスのインスタンスであったならば、Tを返す。
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<BR><HR>
+
+<A NAME="8018"></A>
+<B>symbol-value</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>の特殊値を得る。ローカル変数値は、この関数では取り出す
+ことはできない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8029"></A>
+<B>symbol-function</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>のグローバル関数定義を得る。
+ローカル関数は、この関数で得られない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8040"></A>
+<B>symbol-package</B> <EM>sym </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>が収容されているパッケージを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8051"></A>
+<B>symbol-name</B> <EM>sym </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>のprint-nameを返す。
+<B>symbol-name</B>は、<B>string</B>がコピーするのに反して、
+ pname文字列をコピーしない。
+したがって、もし<B>symbol-name</B>で返された文字列を変えるならば
+symbolは普通の内部手続きを通してアクセス不可能となる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8065"></A>
+<B>symbol-plist</B> <EM>sym </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>のproperty-list(plist)を返す。
+EusLispのplistは、関連リスト（association-list）と同じ様な書式を与える。
+それは、属性名とその値の組を点でつないだ構成である。
+これは、Common Lispの定義が要求するplist（属性名と値の線形リスト）
+と非互換である。
+EusLispにおいて、plistはsymbolに独特なものではない。
+<B>propertied-object</B>を継承するクラスから派生したどんなオブジェクトも、
+property-listを持つことができる。
+<B>propertied-object</B>の中のこれらのplistを設定したり、取りだしたりするために、
+<B>propertied-object-plist</B>マクロは、<B>symbol-plist</B>の代りに
+使用されるべきである。
+しかしながら、<B>get</B>と<B>putprop</B>はどのオブジェクトにも働く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8082"></A>
+<B>boundp</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>がグローバルな値を持っているかどうかを検査する。
+<BR>注意:ローカル変数やオブジェクト変数として使用されるsymbolは
+いつも値を持っているため、<EM>boundp</EM>はこれらのローカル変数の
+格納状態を検査することができない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8094"></A>
+<B>fboundp</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>がグローバルな関数定義を持っているかどうかを検査する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8105"></A>
+<B>makunbound</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>は、（特殊値を持たないように）強制的にunboundされる。
+ローカル変数は、いつも値が割り当てられ、<B>makunbound</B>できない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8117"></A>
+<B>get</B> <EM>sym attribute </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>のplistの中で<EM>attribute</EM>に関連する値を取り出す。
+<TT>(cdr (assoc <EM>attribute</EM> (symbol-plist <EM>sym</EM>)))</TT>と等価である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8132"></A>
+<B>putprop</B> <EM>sym val attribute </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>putprop</B>は、<B>setf</B>と<B>get</B>の組み合せで置き換えるべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8145"></A>
+<B>remprop</B> <EM>sym attr </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+属性値(<EM>attr</EM>)と<EM>sym</EM>の組をproperty-listから削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8157"></A>
+<B>setq</B> <EM>{var value}* </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>value</EM>を<EM>var</EM>に割り当てる。<EM>var</EM>は、symbolか点で継った組である。
+<EM>var</EM>は、ローカル変数・オブジェクト変数・特殊変数の順番にその名前の中から探される。
+ただし、明確にspecialと宣言されてないものに限る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8171"></A>
+<B>set</B> <EM>sym val </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>val</EM>を<EM>sym</EM>の特殊値として割り当てる。
+<B>set</B>は、ローカル変数やオブジェクト変数に値を
+割当てることはできない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8184"></A>
+<B>defun</B> <EM>symbol [documentation] lambda-list . body </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>symbol</EM>にグローバル関数を定義する。
+ローカル関数を定義するためには、<B>flet</B>か<B>labels</B>を使用すること。
+もし、<EM>documentation</EM>が与えられない場合、lambda-listに書かれている
+デフォルトのdocumentation文字列が入力される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8198"></A>
+<B>defmacro</B> <EM>symbol [documentation] lambda-list . body </EM>[特殊]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+グローバルマクロを定義する。
+EusLispは、ローカルスコープマクロ定義の機能を持っていない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8208"></A>
+<B>defvar</B> <EM>var &amp;optional (init nil) doc </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>var</EM>が特殊値を持っていれば、<B>defvar</B> は何もしない。
+もし<EM>var</EM>がunboundならば、<TT>special</TT>として宣言し、
+<EM>init</EM>をその値として設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8223"></A>
+<B>defparameter</B> <EM>var init &amp;optional doc </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>defparameter</B>は、<EM>var</EM>を<TT>special</TT>として宣言し、
+<EM>var</EM>が既に値を持っていたとしても、<EM>init</EM>をその値として設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8238"></A>
+<B>defconstant</B> <EM>sym val &amp;optional doc </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>defconstant</B>は、<B>val</B>を<B>sym</B>の特殊値として設定する。
+<B>defvar, defparameter</B>や<B>setq</B>と違い、その値は
+<B>defconstant</B>でのみ設定され、これらの書式で変更することができない。
+もし定数symbolの値が、変更されようとしたならば、
+エラーが返される。
+しかし、<B>defconstant</B>は以前の
+定数値に上書きでき、上書きした場合は注意メッセージが出力される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8255"></A>
+<B>keywordp</B> <EM>obj </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>obj</EM>がsymbolで、そのホームパッケージが<B>KEYWORD</B>のときTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8267"></A>
+<B>constantp</B> <EM>symbol </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もしsymbolが<B>defconstant</B>マクロで定数に宣言されているときTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8278"></A>
+<B>documentation</B> <EM>sym &amp;optional type </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>のために提示文字列(documentation string)を取り出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8289"></A>
+<B>gensym</B> <EM>&amp;optional x </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>g001</TT>のような前置文字列と付属数字を組み合わせた新しい収容されていないsymbolを作る。
+収容されてないsymbolは、symbolに関連するパッケージがないため、パッケージ前置詞
+の部分に#:を示す。#:が前につくsymbolは、読めないsymbolで、
+リーダではこれらのsymbolへの参照を作成することができない。
+<EM>x</EM>は、整数か文字列が可能で、
+接頭(prefix)インデックスか接尾(suffix)値として使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8301"></A>
+<B>gentemp</B> <EM>&amp;optional (prefix "T") (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>に収容される新しいsymbolを作る。
+ほとんどのアプリケーションにおいて、<B>gensym</B>が<B>gentemp</B>よりも好まれる。
+なぜなら、収容されないsymbolの方が高速に作ることができ、
+ガーベージコレクトも可能であるため。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION02072000000000000000">
+パッケージ</A>
+</H2>
+
+<P>
+パッケージは、symbolをグループ化するための区分された名前の付いた空間を与える。
+複数のプログラマが要求されるような膨大なソフトウェアシステム
+を開発しようとするとき、symbol（関数および変数名）が重複する問題を減少させるために
+Common Lispでパッケージシステムが生まれた。
+それぞれのパッケージは、内部symbolと外部symbolを持つ。
+パッケージの中でsymbolが作成されたとき、いつでも内部symbolとなる。
+<B>export</B>を使用することにより外部symbolにすることができる。
+異なったパッケージの外部symbolは、symbolの前にパッケージ名とコロン(:)を
+つけることにより参照することができる。例えば、<TT>x:*display*</TT>となる。
+他のパッケージの内部symbolを参照する場合には、<TT>sys::free-threads</TT>のように
+ダブルコロン(::)を使用する。
+前にパッケージ名をつけることを省略するためには、<B>import</B>を用いる。
+その上、<B>use-package</B>を使用すれば、他のパッケージの全ての
+外部symbolをimportすることができる。
+symbolをexportあるいはimportするとき、あらゆるパッケージ内の
+全てのsymbolが独自の
+print-nameを持つ必要があるため、symbol名の重複を発見することができる。
+<A NAME="8314"></A><B>s</B>hadowは、パッケージからsymbolを仮想的に削除することにより、
+存在するsymbolと同じ名前のsymbolを作成することができる。
+
+<P>
+Euslispは次の8つのパッケージを定義する。
+<DL>
+<DT><STRONG>lisp:</STRONG></DT>
+<DD>全てのlisp関数、マクロ、定数、など
+</DD>
+<DT><STRONG>keyword:</STRONG></DT>
+<DD>キーワードsymbol
+</DD>
+<DT><STRONG>unix:</STRONG></DT>
+<DD>UNIXシステムコールとライブラリ関数
+</DD>
+<DT><STRONG>system:</STRONG></DT>
+<DD>システム管理または危険な関数; nicknames=sys,si
+</DD>
+<DT><STRONG>compiler:</STRONG></DT>
+<DD>EusLispコンパイラ; nicknames=comp
+</DD>
+<DT><STRONG>user:</STRONG></DT>
+<DD>ユーザー領域
+</DD>
+<DT><STRONG>geometry:</STRONG></DT>
+<DD>幾何学クラスとその関数
+</DD>
+<DT><STRONG>xwindow:</STRONG></DT>
+<DD>X-windowインターフェース; nickname=x
+</DD>
+</DL>
+
+<P>
+これらのパッケージとユーザー定義パッケージは、システムの
+package-listに繋げられている。
+それは、<B>list-all-packages</B>よって得ることができる。
+それぞれのパッケージは、内部および外部symbolを探索・位置付けするために2つの
+ハッシュテーブルを管理する。
+また、パッケージは、その名前(stringまたはsymbol)とnick nameのリストと
+そのパッケージが使う他のパッケージリストを記憶している。
+<B>*package*</B>は、読み込み・印刷のための主なパッケージを持つ
+グローバル変数である。
+もし<B>*package*</B>が<TT>user:</TT>でないならば、
+top-levelプロンプトは、現在のパッケージを示すために<TT>mypkg:eus</TT>$のように変更される。
+
+<P>
+
+ <BR>
+<BR> <A NAME="8316"></A>
+<B>*lisp-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  Lispパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8326"></A>
+<B>*user-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  ユーザーパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8336"></A>
+<B>*unix-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  UNIXパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8346"></A>
+<B>*system-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  システムパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8356"></A>
+<B>*keyword-package*</B> [定数]
+
+<DL COMPACT>
+<DT> 
+<DD>  キーワードパッケージ。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8366"></A>
+<B>find-symbol</B> <EM>string &amp;optional (package *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>package</EM>のなかでprint-nameとして<EM>string</EM>をもつsymbolを
+見つける。
+もし見つかったとき、そのsymbolが返され、そうでないときNILが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8378"></A>
+<B>make-symbol</B> <EM>string </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>で示される名前の新しい収容されていないsymbolを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8389"></A>
+<B>intern</B> <EM>string &amp;optional (package *package*) (klass symbol) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>string</EM>と同じprint-nameのsymbolを見つけようとする。
+もし探索成功のとき、そのsymbolが返される。
+もし失敗したとき、<EM>string</EM>というprint-nameを持つsymbolが新しく作られ、
+<EM>package</EM>の中におかれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8402"></A>
+<B>list-all-packages</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+今までに作られた全てのパッケージのリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8412"></A>
+<B>find-package</B> <EM>name </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+パッケージの名前またはnicknameが<EM>name</EM>と同じものを探す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="8423"></A>
+<B>make-package</B> <EM>name &amp;key :nicknames (:use '(lisp)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>name</EM>で示される名前の新しいパッケージを作る。
+<EM>name</EM>は、stringあるいはsymbolでよい。
+もしパッケージが既に存在している場合、エラーが報告される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8435"></A>
+<B>in-package</B> <EM>pkg &amp;key :nicknames (:uses '(lisp)) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+現在のパッケージ(<B>*pacakge*</B>の値)を
+<EM>pkg</EM>に変える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8447"></A>
+<B>package-name</B> <EM>pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>パッケージの名前を文字列として返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8458"></A>
+<B>package-nicknames</B> <EM>pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>のnicknameのリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8469"></A>
+<B>rename-package</B> <EM>pkg new-name &amp;optional new-nicknames </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>の名前を<EM>new-name</EM>に変更し、そのnicknameを 
+<EM>new-nicknames</EM>に変更する。
+それらは、symbolかstringまたはsymbolかstringのリストのどれでも可能である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8482"></A>
+<B>package-use-list</B> <EM>pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>で使用されるパッケージリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8493"></A>
+<B>packagep</B> <EM>pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>pkg</EM>がパッケージのときTを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8504"></A>
+<B>use-package</B> <EM>pkg &amp;optional (curpkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>を<EM>curpkg</EM>のuse-listに付け加える。
+一旦追加すると、<EM>pkg</EM>のなかのsymbolは、パッケージの前置詞なしで
+<EM>curpkg</EM>を見ることが可能になる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8518"></A>
+<B>unuse-package</B> <EM>pkg &amp;optional (curpkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>curpkg</EM>のuse-listから<EM>pkg</EM>を削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8530"></A>
+<B>shadow</B> <EM>sym &amp;optional(pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+存在する<EM>sym</EM>を隠すことによって、
+<EM>pkg</EM>内に内部symbolを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8542"></A>
+<B>export</B> <EM>sym &amp;optional (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>は、symbolかsymbolのリストである。
+<B>export</B>は、<EM>sym</EM>を他のパッケージから
+外部symbolとしてアクセス可能とする。
+実際に、<EM>sym</EM>は、<EM>pkg</EM>のなかの外部symbolとして記録される。
+もしsymbolが<B>export</B>されると、パッケージマークとしてsingle colon ":"を使って
+アクセス可能となる。これに対して、<B>export</B>されていないsymbolはdouble colon "::"
+で得られる。
+そのうえ、<B>export</B>されたsymbolは、
+<B>use-package</B>を使用したり、パッケージに<B>import</B>されたとき、コロンの
+必要がない。
+symbolがexportされたかどうかは、それぞれのsymbolにでなくそれが収容されている
+パッケージに属性付けられる。
+それで、symbolは1つのパッケージの内部にあり、その他の外部となる。
+<B>export</B>は、<EM>pkg</EM>が使用している他のパッケージの中の
+symbol名と<EM>sym</EM>が重複していないかどうかを検査する。
+もし<EM>sym</EM>と同じprint nameをもつsymbolがあったならば、
+"symbol conflict"とエラーを報告する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8566"></A>
+<B>unexport</B> <EM>sym &amp;optional pkg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし<EM>sym</EM>が<EM>pkg</EM>の外部symbolであったならば、unexportされ、
+内部symbolとなる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8578"></A>
+<B>import</B> <EM>sym &amp;optional (pkg *package*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>sym</EM>は、symbolまたはsymbolのリストである。
+<B>import</B>は、他のパッケージで定義されたsymbolを
+<EM>pkg</EM>からパッケージの前置詞なしで内部symbolとして見えるようにする。
+もし<EM>sym</EM>と同じprint-nameを持ったsymbolが既にあったとき、
+"name conflict"とエラーを報告する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8592"></A>
+<B>do-symbols</B> <EM>(var pkg) &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>において、（内部あるいは外部）symbolに対して繰り返しをする。
+そのときの<EM>forms</EM>の評価が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8604"></A>
+<B>do-external-symbols</B> <EM>(var pkg) &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pkg</EM>において、外部symbolに対して繰り返しをする。
+そのときの<EM>forms</EM>の評価が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="8616"></A>
+<B>do-all-symbols</B> <EM>(var [result]) &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全てのパッケージにおいて、symbolに対して繰り返しをする。そのときの<EM>forms</EM>の評価が返される。
+もし、1つ以上のパッケージの中にそのsymbolが現れたならば、<EM>forms</EM>は、
+1度以上評価される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html527"
+  HREF="jmanual-node10.html">列、行列とテーブル</A>
+<B>Up:</B> <A NAME="tex2html521"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html515"
+  HREF="jmanual-node8.html">数値演算</A>
+</DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

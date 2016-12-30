@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Euslispの特徴</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="Euslispの特徴">
+<TITLE>書式と評価</TITLE>
+<META NAME="description" CONTENT="書式と評価">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,124 +16,410 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node6.html">
 <LINK REL="previous" HREF="jmanual-node4.html">
-<LINK REL="up" HREF="jmanual-node3.html">
+<LINK REL="up" HREF="jmanual-node2.html">
 <LINK REL="next" HREF="jmanual-node6.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html376"
-  HREF="jmanual-node6.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html370"
-  HREF="jmanual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html364"
-  HREF="jmanual-node4.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html372"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html374"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html377"
-  HREF="jmanual-node6.html">Common Lispとの互換性</A>
-<B> Up:</B> <A NAME="tex2html371"
-  HREF="jmanual-node3.html">はじめに</A>
-<B> Previous:</B> <A NAME="tex2html365"
-  HREF="jmanual-node4.html">EusLispにおけるオブジェクト指向プログラミング</A>
- &nbsp; <B>  <A NAME="tex2html373"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html375"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html450"
+  HREF="jmanual-node6.html">制御構造</A>
+<B>Up:</B> <A NAME="tex2html444"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html438"
+  HREF="jmanual-node4.html">データ型</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION02012000000000000000">
-Euslispの特徴</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html451"
+  HREF="jmanual-node5.html#SECTION02031000000000000000">アトム(atom)</A>
+<LI><A NAME="tex2html452"
+  HREF="jmanual-node5.html#SECTION02032000000000000000">スコープ</A>
+<LI><A NAME="tex2html453"
+  HREF="jmanual-node5.html#SECTION02033000000000000000">一般化変数</A>
+<LI><A NAME="tex2html454"
+  HREF="jmanual-node5.html#SECTION02034000000000000000">特殊書式</A>
+<LI><A NAME="tex2html455"
+  HREF="jmanual-node5.html#SECTION02035000000000000000">マクロ</A>
+<LI><A NAME="tex2html456"
+  HREF="jmanual-node5.html#SECTION02036000000000000000">関数</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION02030000000000000000">
+書式と評価</A>
+</H1>
+
+<H2><A NAME="SECTION02031000000000000000">
+アトム(atom)</A>
 </H2>
 
 <P>
-<DL>
-<DT><STRONG>オブジェクト指向プログラミング</STRONG></DT>
-<DD>EusLispは、単一継承オブジェクト指向プログラミングである。
-数値を除いた全てのデータ型は、オブジェクトで表現され、その動作は
-それらのクラスの中に定義されている。
-</DD>
-<DT><STRONG>Common Lisp</STRONG></DT>
-<DD>EusLispは、EusLispのゴールやオブジェクト指向と一致する限りにおいて、
-[#!CLtL!#]や[#!CLtL2!#]に書かれているCommon Lispの文法に従う。
-次の節に互換性について記述する。
-</DD>
-<DT><STRONG>コンパイラ</STRONG></DT>
-<DD>EusLispのコンパイラは、インタプリタによる実行よりも5〜30倍実行速度を
-上げることができる。
-コンパイラは、インタプリタと同一の構文を持っている。
-</DD>
-<DT><STRONG>メモリ管理</STRONG></DT>
-<DD>フィボナッチバディ方法は、メモリ制御・GC・ロバスト制御に有効なため、
-メモリ管理手法として、使用されている。
-EusLisp は、比較的に平均的な量のメモリを持つシステムで動作できる。
-ユーザーは、それぞれのデータ型毎のページアロケーションの最適化
-を考える必要がない。
-</DD>
-<DT><STRONG>幾何学関数</STRONG></DT>
-<DD>数値は、いつも直接データとして表現されるため、
-数値計算によってゴミは発生しない。
-任意の大きさのベクトル・行列におけるたくさんの幾何学関数は、
-内部関数となっている。
-</DD>
-<DT><STRONG>幾何学モデラー</STRONG></DT>
-<DD>立体モデルは、CSGの処理を使用して、基本的な形から定義することができる。
-質量や干渉チェックや接触判別等を備えている。
-</DD>
-<DT><STRONG>グラフィックス</STRONG></DT>
-<DD>描画時の陰線処理やレンダリング時の陰面処理を備えている。
-画像をポストスクリプトデータとして出力できる。
-</DD>
-<DT><STRONG>画像処理</STRONG></DT>
-<DD>エッジ抽出機能を備えている。
-</DD>
-<DT><STRONG>マニピュレータモデル</STRONG></DT>
-<DD>６自由度を持つロボットマニピュレータを簡単にモデル化できる。
-</DD>
-<DT><STRONG>Xwindowインターフェース</STRONG></DT>
-<DD>Xlibの関数呼び出しとXlibのクラスおよび独自のXToolKitクラスの3つの
-レベルのXwindowインターフェースを備えている。
-</DD>
-<DT><STRONG>他言語インターフェース</STRONG></DT>
-<DD>Ｃや他の言語で書かれた関数をEusLispの中から呼び出すことができる。
-EusLispと他言語間の両方向呼びだしを備えている。
-LINPACKのようなライブラリ内の関数は、このインターフェースを通して実行される。
-X toolkitのCall-back関数はLispへ定義することができる。
-</DD>
-<DT><STRONG>UNIX依存関数</STRONG></DT>
-<DD>ほとんどのUNIXのシステム呼びだしおよびライブラリ関数は、Lisp関数として
-揃っている。
-通信処理や非同期入出力も可能である。
-</DD>
-<DT><STRONG>マルチスレッド</STRONG></DT>
-<DD>グローバルデータを分割してマルチ処理を実現するマルチスレッドプログラミングが
-Solaris 2オペレーティングシステムの上で可能となった。
-マルチスレッドは、非同期プログラミングを容易にし、実時間応答を改善する[#!MTEus1!#,#!MTEus2!#]。
-もし、マルチプロセッサのマシン上でEuslispを実行するならば、並列プロセッサの
-高い計算能力を利用することができる。
-</DD>
-</DL>
+cons以外のデータオブジェクトは、たとえ複雑な構造をしていたとしても、
+すべてatomである。
+空リストとして（）でしばしば書かれるNILもatomである。
+すべてのatomは、symbolを除いていつもそれ自身評価されている。
+しかしながら、他のCommon Lispの実行のなかでは、atomの評価に引用符を要求されることがある。
 
 <P>
-<BR><HR>
-<ADDRESS>
 
-2016-03-23
+<H2><A NAME="SECTION02032000000000000000">
+スコープ</A>
+</H2>
+
+<P>
+すべてのsymbolは、値と結び付いている。
+symbolは、主にくくられた文脈から決定される値によって評価される。
+ここに2種類の変数バインドがある。それは、
+ローカルまたは静的バインドとスペシャルまたは動的バインドである。
+ローカルにバインドされた変数は<B>lambda</B>書式または
+<B>let</B>や<B>let*</B>の特殊書式においてspecialと宣言されない限り
+外から見ることはできない。
+ローカルバインドは入れ子が可能で、外側のローカルバインドやスペシャルバインドを隠して、
+最も内側のレベルで定義されている1つのバインドのみ見ることができる。
+スペシャル変数は2つの方法で使用される。
+1つは、グローバル変数として、もう1つは動的に覗けるローカル変数として用いる。
+このローカル変数は、バインドの効果の中にある限りローカルスコープの
+外にいてさえ見ることができる。
+後者の場合、スペシャル変数は<B>special</B>で宣言される必要がある。
+その宣言は、コンパイラだけでなくインタプリタでも認識される。
+Common Lispによると、スペシャル変数は不明瞭なスコープと動的な
+広さを持っていると言われている。
+
+<P>
+あるスコープのなかで、ローカル変数が存在するとしても、
+同じ変数名を内部スコープの中で<B>special</B>として再宣言することができる。
+<B>symbol-value</B>関数は、ローカルスコープに構わずspecial値を引き出す
+ために使用することができる。
+<B>set</B>関数は、スペシャル変数としてのみ働く。すなわち、
+specialとして宣言していない限り、lambdaやlet変数の値を
+変更するために使用することはできない。
+
+<P>
+<PRE>
+(let ((x 1))
+   (declare (special x))
+   (let* ((x (+ x x)) (y x))
+      (let* ((y (+ y y)) (z (+ x x)))
+         (declare (special x))
+         (format t "x=~S y=~s z=~s~%" x y z) ) ) )
+--&gt; x=1 y=4 z=2
+</PRE>
+
+<P>
+symbolは、<B>defconstant</B>マクロにより定数として宣言することができる。
+一旦宣言すると、その後値を変更しようとするとエラーが発生する。
+そのうえ、そのような定数symbolは、ローカル変数としてさえ変数名として
+使用されることを禁じられる。
+NILやTは、そのような定数の例である。
+keywordパッケージのsymbolは、いつも作成されるときに定数として宣言される。
+対照的に、<B>defvar</B>や<B>defparameter</B>マクロは、スペシャル変数として
+symbolを宣言する。
+<B>defvar</B>は、symbolがバインドされていない時のみ値の初期化を行い、
+値が既に割り当てられているときは何もしない。
+それに対して、<B>defparameter</B>はいつも値をリセットする。
+
+<P>
+symbolが参照され、symbolのためのローカルバインドがなかったとき、
+そのspecial値は、引き出される。
+しかしながら、そのspecial値にまだ値が割り当ててなかったならば、
+unbound variableエラーが発生する。
+
+<P>
+
+<H2><A NAME="SECTION02033000000000000000">
+一般化変数</A>
+</H2>
+一般的に、どんな値および属性もオブジェクトのスロット（またはスタック）
+で表現される。
+スロットの値を引き出すかまたは変えるときは、
+2つの基本的な命令、<B>access</B>と<B>update</B>で行わなければならない。
+オブジェクトの全てのスロットに対して2つの異なった基本命令を定義する代りに
+EusLispでは、Common Lispのように、一般化変数コンセプトに基づいた
+画一的な更新命令を備えている。
+このコンセプトのなかで、共通書式は、値のアクセス書式あるいはスロットの位置指定
+として認識される。
+したがって、それぞれのスロットに対してアクセスする書式を覚えてさえおけば、更新は
+そのアクセス書式と<B>setf</B>マクロを組み合わせることにより
+実現できる。
+例えば、car値をリストの外に取り出すのと同じ様に<TT>(setf (car '(a b)) 'c)</TT>
+として<B>setf</B>を使用したとき、<TT>(car x)</TT>は<TT>x</TT>のcarスロットのなかの
+値を置き換えることに使用することができる。
+
+<P>
+この方法は、ユーザーが定義したオブジェクト全てに対して
+適用できる。
+クラスや構造体が定義されるとき、それぞれのスロットに対する
+accessやupdate書式は、自動的に定義される。
+それらの書式は、それぞれマクロとして定義されている。その名前は、
+クラス名とスロット名の連結となる。
+例えば、consのcarは<TT>(cons-car '(a b c))</TT>で処理することができる。
+
+<P>
+<PRE>
+(defclass person :super object :slots (name age))
+(defclass programmer :super person :slots (language machine))
+(setq x (instantiate programmer))
+(setf (programmer-name x) "MATSUI"
+      (person-age x) 30)
+(incf (programmer-age x))
+(programmer-age x)   --&gt; 31
+(setf (programmer-language x) 'EUSLISP
+      (programmer-machine x) 'SUN4)
+</PRE>
+
+<P>
+行列要素も同じ手法でアクセスすることができる。
+
+<P>
+<PRE>
+(setq a (make-array '(3 3) :element-type :float))
+(setf (aref a 0 0) 1.0 (aref a 1 1) 1.0 (aref a 2 2) 1.0)
+a --&gt; #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))
+
+(setq b (instantiate bit-vector 10))  --&gt; #*0000000000
+(setf (bit b 5) 1)
+b --&gt; #*0000010000
+</PRE>
+
+<P>
+特定のオブジェクトに特別なsetfメソッドを定義するために
+<B>defsetf</B>マクロを用意している。
+
+<P>
+<PRE>
+(defsetf symbol-value set)
+(defsetf get (sym prop) (val) `(putprop ,sym ,val ,prop))
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION02034000000000000000">
+特殊書式</A>
+</H2>
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER">
+
+<DIV ALIGN="CENTER">
+<A NAME="996"></A>
+<TABLE CELLPADDING=3 BORDER="1">
+<CAPTION><STRONG>Table 2:</STRONG>
+EusLispの特殊書式</CAPTION>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+and </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> flet </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> quote </BIG></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+block </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> function </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> return-from</BIG></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+catch </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> go </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> setq </BIG></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+cond </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> if </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> tagbody </BIG></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+declare </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> labels </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> the </BIG></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+defmacro </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> let </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> throw </BIG></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+defmethod </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> let* </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> unwind-protect </BIG></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+defun </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> progn </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> while </BIG></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
+eval-when </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> or </BIG></TD>
+<TD ALIGN="LEFT"><BIG CLASS="LARGE"> </BIG></TD>
+</TR>
+</TABLE>
+
+</DIV>
+</DIV>
+<BR>
+
+<P>
+全ての特殊書式は、表<A HREF="#SpecialForms">2</A>にリストされている。
+<B>macrolet, compiler-let,</B>や<B>progv</B>は、該当しない。
+特殊書式は、文脈の評価および制御フローの管理のための
+基本的な言語構造である。
+インタプリタとコンパイラは、これらの構造をそれぞれ正しく処理する
+ために特殊な知識を持っている。それに対して、アプリケーションメソッド
+は全ての関数に対し画一的である。
+ユーザーは、独自の特殊書式定義を追加することはできない。
+
+<P>
+
+<H2><A NAME="SECTION02035000000000000000">
+マクロ</A>
+</H2>
+
+<P>
+マクロは、言語構造を拡張するために役立つメソッドである。
+マクロが呼び出されたとき、引数は評価されずに
+マクロの本体（マクロ拡張関数）へ受け渡される。
+それから、マクロ拡張関数は、引数を拡張し、新しい書式を返す。
+結果となった書式は、マクロの外側で再び評価される。
+引数のリストにマクロまたは特殊書式を用いるとエラーになる。
+<B>macroexpand</B>関数は、マクロ展開のために使用することができる。
+
+<P>
+インタプリタのときマクロはゆっくりと実行されるが、
+コンパイルすることにより実行速度の向上を図ることができる。
+なぜなら、マクロ展開はコンパイル時に一度だけ行われ、
+実行時にそのオーバーヘッドは残らない。
+しかし、マクロ関数の中におけるevalあるいはapplyの呼出は、
+インタプリタの実行とコンパイル後の実行との間に違う結果をもたらす。
+
+<P>
+
+<H2><A NAME="SECTION02036000000000000000">
+関数</A>
+</H2>
+
+<P>
+関数は、単にリストの最初の要素が<B>lambda</B>であるようなlambda書式によって
+表現される。
+もしlambda書式が<B>defun</B>を使ってsymbolを定義するとき、
+グローバル関数名として参照することができる。
+lambda書式は、次の文法で与えられる。
+
+<P><PRE><TT>
+ (lambda ({var}* <BR>)}*] <BR>
+<BR>) <SPAN CLASS="MATH"><IMG
+ WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img7.png"
+ ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> ((keyword var) [initform])}* <BR>] <BR>)}*]) 
+<BR>  {declaration}* 
+<BR>  {form}*) 
+<BR>
+</TT></PRE>
+<P>
+ここにEXPR,LEXPR,FEXPRなどのような型の関数はない。
+関数への引数は、いつもその関数を実行する前に評価される。
+受ける引数の数は、lambda-listによって決定される。
+lambda-listは、lambda書式のためにパラメータの列を記す。
+
+<P>
+<B>&amp;optional, &amp;rest, &amp;key </B>や<B>&amp;aux</B> はそれぞれ、lambda-list
+のなかに特殊な意味を持っていて、これらのsymbolは、変数名として使用
+することはできない。
+&amp;optionalや&amp;keyパラメータのsupplied-p変数は、サポートされていない。
+
+<P>
+lambda書式は、普通のリストデータと区別できないため、
+<B>function</B>特殊書式を用いて、インタプリタやコンパイラに関数として
+認識するように知らせなければならない。
+<A NAME="tex2html7"
+  HREF="jmanual-footnode.html#foot946"><SUP><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="footnote.png"></SUP></A><B>function</B>は、関数の上に環境を固定するために重要である。
+そのため、すべてのローカル変数はその関数が違ったローカルスコープの他の関数を
+通ってきたとしてさえ、アクセスすることができる。
+次のプログラムは、<TT>let</TT>の<TT>sum</TT>がlambda書式の中に見えるため、
+インタプリタとコンパイル後のどちらも何もしない。
+
+<P>
+<PRE>
+(let ((x '(1 2 3)) (sum 0))
+  (mapc '(lambda (x) (setq sum (+ sum x))) x))
+</PRE>
+
+<P>
+予想した結果が得られるためには、次のように書くべきである。
+<PRE>
+(let ((x '(1 2 3)) (sum 0))
+   (mapc #'(lambda (x) (setq sum (+ sum x))) x ))
+</PRE>
+
+<P>
+#'は、<B>function</B>の略語である。
+すなわち、<TT>#'(lambda (x) x)</TT>は
+<TT>(function (lambda (x) x))</TT>と同等である。
+ここは、funarg問題と呼ばれる別の例を示す。
+
+<P>
+<PRE>
+(defun mapvector (f v)
+    (do ((i 0 (1+ i)))
+       ((&gt;= i (length v)))
+       (funcall f (aref v i))))
+(defun vector-sum (v)
+    (let ((i 0))
+       (mapvector #'(lambda (x) (setq i (+ i x))) v)
+       i))
+(vector-sum #(1 2 3 4)) --&gt; 10
+</PRE>
+
+<P>
+EusLispのclosureは、不定な大きさを持つことができない。
+すなわち、closureはその外側の大きさで可能な大きさまで持つことができる。
+これはclosureが'generators'のプログラミングのために使用されないことを意味する。
+次のプログラムは何もしない。
+
+<P>
+<PRE>
+(proclaim '(special gen))
+(let ((index 0))
+   (setq gen #'(lambda () (setq index (1+ index)))))
+(funcall gen)
+</PRE>
+
+<P>
+しかしながら、その同じ目的がオブジェクト指向プログラミングで実現できる。
+なぜなら、オブジェクトはそれ自身の固定変数を持つことができるためである。
+<PRE>
+(defclass generator object (index))
+(defmethod generator
+ (:next () (setq index (1+ index)))
+ (:init (&amp;optional (start 0)) (setq index start) self))
+(defvar gen (instance generator :init 0))
+(send gen :next)
+</PRE>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html450"
+  HREF="jmanual-node6.html">制御構造</A>
+<B>Up:</B> <A NAME="tex2html444"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html438"
+  HREF="jmanual-node4.html">データ型</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

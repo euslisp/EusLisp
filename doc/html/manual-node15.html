@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Class Hierarchy</TITLE>
-<META NAME="description" CONTENT="Class Hierarchy">
+<TITLE>EusLisp Extensions</TITLE>
+<META NAME="description" CONTENT="EusLisp Extensions">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,364 +18,251 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="manual.css">
 
-<LINK REL="next" HREF="manual-node16.html">
-<LINK REL="previous" HREF="manual-node14.html">
-<LINK REL="up" HREF="manual-node12.html">
+<LINK REL="next" HREF="manual-node27.html">
+<LINK REL="previous" HREF="manual-node2.html">
+<LINK REL="up" HREF="manual.html">
 <LINK REL="next" HREF="manual-node16.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html613"
-  HREF="manual-node16.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html607"
-  HREF="manual-node12.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html601"
-  HREF="manual-node14.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html609"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html611"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html614"
-  HREF="manual-node16.html">Type Specifier</A>
-<B> Up:</B> <A NAME="tex2html608"
-  HREF="manual-node12.html">Data Types</A>
-<B> Previous:</B> <A NAME="tex2html602"
-  HREF="manual-node14.html">Objects</A>
- &nbsp; <B>  <A NAME="tex2html610"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html612"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
-<!--End of Navigation Panel-->
-
-<H2><A NAME="SECTION03013000000000000000">
-Class Hierarchy</A>
-</H2>
-
-<P>
-The data structure of objects are defined by classes,
-and their behaviors are defined by methods in the classes.
-In EusLisp, a few dozens of classes have already been 
-defined in tree structured
-hierarchy as depicted in fig. <A HREF="#ClassHierarchy">4</A>.
-You can browse the real inheritance structure by the 
-<B>class-hierarchy</B> function.
-The class 'object' at the leftmost is the ultimate super-class of
-all the classes in EusLisp.
-User-defined classes can inherit any of these built-in classes.
-
-<P>
-
-<DIV ALIGN="CENTER"><A NAME="ClassHierarchy"></A><A NAME="996"></A>
-<TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 4:</STRONG>
-Hierarchy of Predefined Classes</CAPTION>
-<TR><TD><IMG
- WIDTH="368" HEIGHT="940" BORDER="0"
- SRC="manual-img4.png"
- ALT="\begin{figure}\small
-\begin{verbatim}object
-cons
-propertied-object
-symbol -...
-...h-table
-surrounding-box
-stereo-viewing\end{verbatim}
-\normalsize\end{figure}"></TD></TR>
-</TABLE>
+<B> Next:</B> <A NAME="tex2html675"
+  HREF="manual-node16.html">System Functions</A>
+<B>Up:</B> <A NAME="tex2html669"
+  HREF="manual.html">EusLisp version 9.22 Reference</A>
+<B> Previous:</B> <A NAME="tex2html663"
+  HREF="manual-node14.html">Evaluation</A>
+<BR> <P>
 </DIV>
-
-<P>
-A class is defined the <B>defclass</B> macro or by the <B>defstruct</B> macro.
-
-<P><PRE><TT>
- (defclass class-name &amp;key :super   class 
-<BR>:slots 		 () 
-<BR>:metaclass 		 metaclass 
-<BR>:element-type 		 t 
-<BR>:size  -1
-<BR>) 
-<BR>(defstruct struct-name slots...) 
-<BR>(defstruct (struct-name [struct-options ...]) 
-<BR>         (slot-name1 [slot-option...]) 
-<BR>         (slot-name2 [slot-option...]) 
-<BR>          ...) 
-<BR>
-</TT></PRE>
-<P>
-Methods are defined by the <B>defmethod</B> special form.
-<B>Defmethod</B> can appear any times for a particular class.
-
-<P><PRE><TT>
- (defmethod class-name  
-<BR>(:method-name1 (parameter...) . body1) 
-<BR>(:method-name2 (parameter...) . body2) 
-<BR>...) 
-</TT></PRE>
-<P>
-Field definitions for most of built-in classes are found in
-<TT>*eusdir*/c/eus.h</TT> header file.
-<TT>(describe)</TT> <EM>class</EM>) gives the description
-of all the slots in <EM>class</EM>, namely, super class, slot names,
-slot types, method list, and so on.
-Definitions of built-in classes follow.
-Note that the superclass of class <B>object</B> is NIL
-since it has no super class.
-
-<P><PRE><TT>
- (defclass <B>object</B> :super <B>NIL</B> :slots ()) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>cons</B> :super <B>object</B> :slots (car cdr)) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>propertied-object</B> :super <B>object</B> 
-<BR>  :slots (plist))   ;property list 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>symbol</B> :super <B>propertied-object</B> 
-<BR>  :slots (value   ;specially bound value 
-<BR>
-vtype 		                ;const(0),var(1),special(2)  
-<BR>
-function 		             ;global func def 
-<BR>
-pname 		  ;print name string 
-<BR>
-homepkg)) 		            ;home package 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>foreign-pod</B> :super <B>symbol</B> 
-<BR>  :slots (podcode   ;entry code 
-<BR>
-paramtypes 		      ;type of arguments  
-<BR>
-resulttype)) 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>package</B> :super <B>propertied-object</B> 
-<BR>  :slots (names   ;list of package name and nicknames
-<BR>
-uses 		  ;spread use-package list 
-<BR>
-symvector 		 ;hashed obvector 
-<BR>
-symcount 		  ;number of interned symbols 
-<BR>
-intsymvector 		 ;hashed obvector of internal symbols 
-<BR>
-intsymcount 		  ;number of interned internal symbols 
-<BR>
-shadows 		 ;shadowed symbols 
-<BR>
-used-by)) 		  ;packages using this package 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>stream</B> :super <B>propertied-object</B>   
-<BR>  :slots (direction   ;:input or :output, nil if closed 
-<BR>
-buffer 		  ;buffer string 
-<BR>
-count 		 ;current character index 
-<BR>
-tail)) 		  ;last character index 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>file-stream</B> :super <B>stream</B> 
-<BR>  :slots (fd   ;file descriptor (integer)
-<BR>
-fname))		 ;file name str; qid for msgq 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>broadcast-stream</B> :super <B>stream</B>
-<BR>  :slots (destinations))   ;streams to which output is delivered 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>io-stream</B> :super <B>propertied-object</B>
-<BR>:slots (instream outstream)) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>socket-stream</B> :super <B>io-stream</B>
-<BR>:slots (address))   ; socket address 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>read-table</B>  :super <B>propertied-object</B> 
-<BR>       :slots (syntax   ; byte vector representing character types 
-<BR>; 0:illegal, 1:white, 2:comment, 3:macro
-<BR>; 4:constituent, 5:single_escape
-<BR>; 6:multi_escape, 7:term_macro, 8:nonterm_macro 
-<BR>
-macro 		 ;character macro expansion function
-<BR>
-dispatch-macro)) 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>array</B> :super <B>propertied-object</B> 
-<BR>  :slots (entity  ;simple vector storing array entity 
-<BR>
-rank 		 ;number of dimensions: 0-7 
-<BR>
-fillpointer 		    ;pointer to push next element 
-<BR>
-offset 		    ;offset for displaced array 
-<BR>
-dim0,dim1,dim2,dim3,dim4,dim5,dim6))  ;dimensions 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>metaclass</B> :super <B>propertied-object</B> 
-<BR>    :slots   (name    ;class name symbol 
-<BR>
-super 		   ;super class 
-<BR>
-cix 		      ;class id 
-<BR>
-vars 		     ;var name vector including inherited vars 
-<BR>
-types 		    ;type vector of object variables 
-<BR>
-forwards 		  ;components to which messages are forwarded 
-<BR>
-methods)) 		  ;method list 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>vectorclass</B> :super <B>metaclass</B>  
-<BR>  :slots (element-type    ;vector element type 0-7
-<BR>
-size)) 		  ;vector size; 0 if unspecified 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>cstructclass</B> :super <B>vectorclass</B>  
-<BR>  :slots (slotlist))    ;cstruct slot descriptors
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>vector</B> :super <B>object</B> :slots (size)) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>float-vector</B> :super <B>vector</B> :element-type :float) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>string</B> :super <B>vector</B> :element-type :char) 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>hash-table</B> :super <B>propertied-object</B> 
-<BR>   :slots   (lisp::key  ;hashed key vector
-<BR>
-value 		 ; value vector
-<BR>
-size 		 ; the size of the hash table
-<BR>
-count 		 ; number of elements entered in the table
-<BR>
-lisp::hash-function 		 
-<BR>
-lisp::test-function 
-<BR>
-lisp::rehash-size 
-<BR>
-lisp::empty  lisp::deleted 		) 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>pathname</B> :super <B>propertied-object</B> 
-<BR>   :slots   (lisp::host device  ; not used
-<BR>
-directory 		 ; list of directories
-<BR>
-name 		 ; file name before the last "."
-<BR>
-type 		 ; type field after the last "."
-<BR>
-lisp::version) 		 ; not used 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>label-reference</B>    ;for reading #n=, #n# objects 
-<BR>  :super <B>object</B> 
-<BR>:slots (label value unsolved next)) 
-<BR>
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>compiled-code</B> :super <B>object</B> 
-<BR>   :slots   (codevector 
-<BR>
-quotevector 
-<BR>
-type   ;0=func, 1=macro, 2=special 
-<BR>
-entry)) 		  ;entry offset  
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>closure</B> :super <B>compiled-code</B> 
-<BR>:slots (env1 env2));environment 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>foreign-code</B>  :super <B>compiled-code</B>  
-<BR>   :slots   (paramtypes    ;list of parameter types
-<BR>
-resulttype)) 		 ;function result type 
-</TT></PRE>
-<P><PRE><TT>
- (defclass <B>load-module</B>  :super <B>compiled-code</B>  
-<BR>   :slots  (symbol-table   ;hashtable of symbols defined 
-<BR>
-object-file 		 ;name of the object file loaded, needed for unloading 
-<BR>
-handle 		 ;file handle returned by ''dlopen'' 
-</TT></PRE>
-<P>
-
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html613"
-  HREF="manual-node16.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html607"
-  HREF="manual-node12.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html601"
-  HREF="manual-node14.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html609"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html611"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html614"
-  HREF="manual-node16.html">Type Specifier</A>
-<B> Up:</B> <A NAME="tex2html608"
-  HREF="manual-node12.html">Data Types</A>
-<B> Previous:</B> <A NAME="tex2html602"
-  HREF="manual-node14.html">Objects</A>
- &nbsp; <B>  <A NAME="tex2html610"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html612"
-  HREF="manual-node167.html">Index</A></B> </DIV>
 <!--End of Navigation Panel-->
-<ADDRESS>
 
-2016-03-23
+<H1><A NAME="SECTION03000000000000000000"></A>
+<BR>
+EusLisp Extensions
+</H1>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><UL>
+<LI><A NAME="tex2html676"
+  HREF="manual-node16.html">System Functions</A>
+<UL>
+<LI><A NAME="tex2html677"
+  HREF="manual-node16.html#SECTION03011000000000000000">Memory Management</A>
+<LI><A NAME="tex2html678"
+  HREF="manual-node16.html#SECTION03012000000000000000">Unix System Calls</A>
+<UL>
+<LI><A NAME="tex2html679"
+  HREF="manual-node16.html#SECTION03012100000000000000">Times</A>
+<LI><A NAME="tex2html680"
+  HREF="manual-node16.html#SECTION03012200000000000000">Process</A>
+<LI><A NAME="tex2html681"
+  HREF="manual-node16.html#SECTION03012300000000000000">File Systems and I/O</A>
+<LI><A NAME="tex2html682"
+  HREF="manual-node16.html#SECTION03012400000000000000">Signals</A>
+<LI><A NAME="tex2html683"
+  HREF="manual-node16.html#SECTION03012500000000000000">Multithread</A>
+<LI><A NAME="tex2html684"
+  HREF="manual-node16.html#SECTION03012600000000000000">Low-Level Memory Management</A>
+<LI><A NAME="tex2html685"
+  HREF="manual-node16.html#SECTION03012700000000000000">IOCTL</A>
+<LI><A NAME="tex2html686"
+  HREF="manual-node16.html#SECTION03012800000000000000">Keyed Indexed Files</A>
+</UL>
+<LI><A NAME="tex2html687"
+  HREF="manual-node16.html#SECTION03013000000000000000">Unix Processes</A>
+<LI><A NAME="tex2html688"
+  HREF="manual-node16.html#SECTION03014000000000000000">Adding Lisp Functions Coded in C</A>
+<LI><A NAME="tex2html689"
+  HREF="manual-node16.html#SECTION03015000000000000000">Foreign Language Interface</A>
+</UL>
+<LI><A NAME="tex2html690"
+  HREF="manual-node17.html">Multithread</A>
+<UL>
+<LI><A NAME="tex2html691"
+  HREF="manual-node17.html#SECTION03021000000000000000">Design of Multithread EusLisp</A>
+<UL>
+<LI><A NAME="tex2html692"
+  HREF="manual-node17.html#SECTION03021100000000000000">Multithread in Solaris 2 operating system</A>
+<LI><A NAME="tex2html693"
+  HREF="manual-node17.html#SECTION03021200000000000000">Context Separation</A>
+<LI><A NAME="tex2html694"
+  HREF="manual-node17.html#SECTION03021300000000000000">Memory Management</A>
+</UL>
+<LI><A NAME="tex2html695"
+  HREF="manual-node17.html#SECTION03022000000000000000">Asynchronous and Parallel Programming Constructs</A>
+<UL>
+<LI><A NAME="tex2html696"
+  HREF="manual-node17.html#SECTION03022100000000000000">Thread Creation and Thread Pool</A>
+<LI><A NAME="tex2html697"
+  HREF="manual-node17.html#SECTION03022200000000000000">Parallel Execution of Threads</A>
+<LI><A NAME="tex2html698"
+  HREF="manual-node17.html#SECTION03022300000000000000">Synchronization primitives</A>
+<LI><A NAME="tex2html699"
+  HREF="manual-node17.html#SECTION03022400000000000000">Barrier synchronization</A>
+<LI><A NAME="tex2html700"
+  HREF="manual-node17.html#SECTION03022500000000000000">Synchronized memory port</A>
+<LI><A NAME="tex2html701"
+  HREF="manual-node17.html#SECTION03022600000000000000">Timers</A>
+</UL>
+<LI><A NAME="tex2html702"
+  HREF="manual-node17.html#SECTION03023000000000000000">Measured Parallel Gains</A>
+<LI><A NAME="tex2html703"
+  HREF="manual-node17.html#SECTION03024000000000000000">Thread creation</A>
+<LI><A NAME="tex2html704"
+  HREF="manual-node17.html#SECTION03025000000000000000">Synchronization</A>
+</UL>
+<LI><A NAME="tex2html705"
+  HREF="manual-node18.html">Geometric Functions</A>
+<UL>
+<LI><A NAME="tex2html706"
+  HREF="manual-node18.html#SECTION03031000000000000000">Float-vectors</A>
+<LI><A NAME="tex2html707"
+  HREF="manual-node18.html#SECTION03032000000000000000">Matrix and Transformation</A>
+<LI><A NAME="tex2html708"
+  HREF="manual-node18.html#SECTION03033000000000000000">LU decomposition</A>
+<LI><A NAME="tex2html709"
+  HREF="manual-node18.html#SECTION03034000000000000000">Coordinates</A>
+<LI><A NAME="tex2html710"
+  HREF="manual-node18.html#SECTION03035000000000000000">CascadedCoords</A>
+<LI><A NAME="tex2html711"
+  HREF="manual-node18.html#SECTION03036000000000000000">Relationship between transformation matrix and coordinates class</A>
+<LI><A NAME="tex2html712"
+  HREF="manual-node18.html#SECTION03037000000000000000">Getter method for rotation matrix and position</A>
+<UL>
+<LI><A NAME="tex2html713"
+  HREF="manual-node18.html#SECTION03037100000000000000">Methods for transforming vectors</A>
+<LI><A NAME="tex2html714"
+  HREF="manual-node18.html#SECTION03037200000000000000">Methods returing coordinates without modifying itself</A>
+<LI><A NAME="tex2html715"
+  HREF="manual-node18.html#SECTION03037300000000000000">Methods modifying itself</A>
+</UL>
+</UL>
+<LI><A NAME="tex2html716"
+  HREF="manual-node19.html">Geometric Modeling</A>
+<UL>
+<LI><A NAME="tex2html717"
+  HREF="manual-node19.html#SECTION03041000000000000000">Miscellaneous Geometric Functions</A>
+<LI><A NAME="tex2html718"
+  HREF="manual-node19.html#SECTION03042000000000000000">Line and Edge</A>
+<LI><A NAME="tex2html719"
+  HREF="manual-node19.html#SECTION03043000000000000000">Plane and Face</A>
+<LI><A NAME="tex2html720"
+  HREF="manual-node19.html#SECTION03044000000000000000">Body</A>
+<LI><A NAME="tex2html721"
+  HREF="manual-node19.html#SECTION03045000000000000000">Primitive Body Creation</A>
+<LI><A NAME="tex2html722"
+  HREF="manual-node19.html#SECTION03046000000000000000">Body Composition</A>
+<LI><A NAME="tex2html723"
+  HREF="manual-node19.html#SECTION03047000000000000000">Coordinates-axes</A>
+<LI><A NAME="tex2html724"
+  HREF="manual-node19.html#SECTION03048000000000000000">Bodies in Contact</A>
+<LI><A NAME="tex2html725"
+  HREF="manual-node19.html#SECTION03049000000000000000">Voronoi Diagram of Polygons</A>
+</UL>
+<LI><A NAME="tex2html726"
+  HREF="manual-node20.html">Viewing and Graphics</A>
+<UL>
+<LI><A NAME="tex2html727"
+  HREF="manual-node20.html#SECTION03051000000000000000">Viewing</A>
+<LI><A NAME="tex2html728"
+  HREF="manual-node20.html#SECTION03052000000000000000">Projection</A>
+<LI><A NAME="tex2html729"
+  HREF="manual-node20.html#SECTION03053000000000000000">Viewport</A>
+<LI><A NAME="tex2html730"
+  HREF="manual-node20.html#SECTION03054000000000000000">Viewer</A>
+<LI><A NAME="tex2html731"
+  HREF="manual-node20.html#SECTION03055000000000000000">Drawings</A>
+<LI><A NAME="tex2html732"
+  HREF="manual-node20.html#SECTION03056000000000000000">Animation</A>
+</UL>
+<LI><A NAME="tex2html733"
+  HREF="manual-node21.html">Image Processing</A>
+<UL>
+<LI><A NAME="tex2html734"
+  HREF="manual-node21.html#SECTION03061000000000000000">Look-Up Tables (LUT)</A>
+<LI><A NAME="tex2html735"
+  HREF="manual-node21.html#SECTION03062000000000000000">Pixel-Image</A>
+<LI><A NAME="tex2html736"
+  HREF="manual-node21.html#SECTION03063000000000000000">Color-Pixel-Image</A>
+<LI><A NAME="tex2html737"
+  HREF="manual-node21.html#SECTION03064000000000000000">Edge Finder</A>
+<LI><A NAME="tex2html738"
+  HREF="manual-node21.html#SECTION03065000000000000000">Tracking</A>
+<LI><A NAME="tex2html739"
+  HREF="manual-node21.html#SECTION03066000000000000000">Image File I/O</A>
+<LI><A NAME="tex2html740"
+  HREF="manual-node21.html#SECTION03067000000000000000">JPEG compression/decompression</A>
+</UL>
+<LI><A NAME="tex2html741"
+  HREF="manual-node22.html">Manipulators</A>
+<UL>
+<LI><A NAME="tex2html742"
+  HREF="manual-node22.html#SECTION03071000000000000000">Rotational Joint
+</A>
+<LI><A NAME="tex2html743"
+  HREF="manual-node22.html#SECTION03072000000000000000">Multi-Joint Manipulators
+</A>
+</UL>
+<LI><A NAME="tex2html744"
+  HREF="manual-node23.html">Xwindow Interface</A>
+<UL>
+<LI><A NAME="tex2html745"
+  HREF="manual-node23.html#SECTION03081000000000000000">Xlib global variables and misc functions</A>
+<LI><A NAME="tex2html746"
+  HREF="manual-node23.html#SECTION03082000000000000000">Xwindow</A>
+<LI><A NAME="tex2html747"
+  HREF="manual-node23.html#SECTION03083000000000000000">Graphic Context</A>
+<LI><A NAME="tex2html748"
+  HREF="manual-node23.html#SECTION03084000000000000000">Colors and Colormaps</A>
+</UL>
+<LI><A NAME="tex2html749"
+  HREF="manual-node24.html">XToolKit</A>
+<UL>
+<LI><A NAME="tex2html750"
+  HREF="manual-node24.html#SECTION03091000000000000000">X Event</A>
+<LI><A NAME="tex2html751"
+  HREF="manual-node24.html#SECTION03092000000000000000">Panel</A>
+<UL>
+<LI><A NAME="tex2html752"
+  HREF="manual-node24.html#SECTION03092100000000000000">Subpanels (menu-panel and menubar-panel)</A>
+<LI><A NAME="tex2html753"
+  HREF="manual-node24.html#SECTION03092200000000000000">File Panel</A>
+<LI><A NAME="tex2html754"
+  HREF="manual-node24.html#SECTION03092300000000000000">Text View Panel</A>
+</UL>
+<LI><A NAME="tex2html755"
+  HREF="manual-node24.html#SECTION03093000000000000000">Panel Items</A>
+<LI><A NAME="tex2html756"
+  HREF="manual-node24.html#SECTION03094000000000000000">Canvas</A>
+<LI><A NAME="tex2html757"
+  HREF="manual-node24.html#SECTION03095000000000000000">Text Window</A>
+</UL>
+<LI><A NAME="tex2html758"
+  HREF="manual-node25.html">PostgreSQL Database</A>
+<UL>
+<LI><A NAME="tex2html759"
+  HREF="manual-node25.html#SECTION030101000000000000000">PostgreSQL</A>
+</UL>
+<LI><A NAME="tex2html760"
+  HREF="manual-node26.html">HTTP</A>
+<UL>
+<LI><A NAME="tex2html761"
+  HREF="manual-node26.html#SECTION030111000000000000000">HTTP Client</A>
+<LI><A NAME="tex2html762"
+  HREF="manual-node26.html#SECTION030112000000000000000">HTTP CGI Programming</A>
+<LI><A NAME="tex2html763"
+  HREF="manual-node26.html#SECTION030113000000000000000">Fast-CGI</A>
+</UL></UL></UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

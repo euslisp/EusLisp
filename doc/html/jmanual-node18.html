@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>アトム(atom)</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="アトム(atom)">
+<TITLE>視界とグラフィックス</TITLE>
+<META NAME="description" CONTENT="視界とグラフィックス">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,63 +16,1556 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node19.html">
 <LINK REL="previous" HREF="jmanual-node17.html">
-<LINK REL="up" HREF="jmanual-node17.html">
+<LINK REL="up" HREF="jmanual-node13.html">
 <LINK REL="next" HREF="jmanual-node19.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html626"
-  HREF="jmanual-node19.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html620"
-  HREF="jmanual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html614"
-  HREF="jmanual-node17.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html622"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html624"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html627"
-  HREF="jmanual-node19.html">スコープ</A>
-<B> Up:</B> <A NAME="tex2html621"
-  HREF="jmanual-node17.html">書式と評価</A>
-<B> Previous:</B> <A NAME="tex2html615"
-  HREF="jmanual-node17.html">書式と評価</A>
- &nbsp; <B>  <A NAME="tex2html623"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html625"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html816"
+  HREF="jmanual-node19.html">Xwindow インターフェース</A>
+<B>Up:</B> <A NAME="tex2html810"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html804"
+  HREF="jmanual-node17.html">幾何学モデリング</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03021000000000000000">
-アトム(atom)</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html817"
+  HREF="jmanual-node18.html#SECTION03051000000000000000">視界(viewing)</A>
+<LI><A NAME="tex2html818"
+  HREF="jmanual-node18.html#SECTION03052000000000000000">投影</A>
+<LI><A NAME="tex2html819"
+  HREF="jmanual-node18.html#SECTION03053000000000000000">Viewport</A>
+<LI><A NAME="tex2html820"
+  HREF="jmanual-node18.html#SECTION03054000000000000000">Viewer</A>
+<LI><A NAME="tex2html821"
+  HREF="jmanual-node18.html#SECTION03055000000000000000">描画</A>
+<LI><A NAME="tex2html822"
+  HREF="jmanual-node18.html#SECTION03056000000000000000">アニメーション</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03050000000000000000">
+視界とグラフィックス</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION03051000000000000000">
+視界(viewing)</A>
+</H2>
+<B>viewing</B>オブジェクトは、viewing座標系を処理する。
+この座標系の原点は仮想カメラの位置に置かれる。
+<EM>-z</EM>軸方向がオブジェクトの視線方向で、xy平面が投影画面である。
+<B>viewing</B>が<B>cascaded-coords</B>クラスを継承するので、
+<B>:translate</B>や<B>:rotate</B>や<B>:transform</B>のような
+座標変換メッセージを受け付ける。
+また、<B>cascaded-coords</B>から得られる他のオブジェクトを張り付けることができる。
+したがって、移動物体上のカメラシステムのシミュレーションができる。
+<B>viewing</B>の主な目的は、ワールド座標系で表現されるベクトルを
+カメラ座標系に変換することである。
+変換は、一般の座標変換に対して逆方向で与えられる。
+このローカル座標系内のベクトルはワールド座標系における表現に変換される。
+したがって、<B>viewing</B>は<TT>viewcoords</TT>スロットに逆変換された左手系変換を持つ。
+このスロットは、viewing座標系として普通参照される。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="36875"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 13:</STRONG>
+viewing座標系と投影画面</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="37452"></A>
+<BIG CLASS="XLARGE"><B>viewing </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (viewcoords) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>viewing変換を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37469"></A>
+<B>:viewpoint</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewing</B>の原点のベクトル位置を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37480"></A>
+<B>:view-direction</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>viewing</B>の原点から画面の中心までのベクトルを返す。
+これは、viewing座標系のz軸方向である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37491"></A>
+<B>:view-up</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系におけるこの<B>viewing</B>のy軸ベクトルを返す。
+y軸は、<B>viewport</B>の上方である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37503"></A>
+<B>:view-right</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系におけるこの<B>viewing</B>のx軸ベクトルを返す。
+x軸は、<B>viewport</B>の水平右方向である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37515"></A>
+<B>:look</B> <EM>from &amp;optional (to #f(0 0 0)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:look</B>は、その目が<EM>from</EM>に位置されており、<EM>to</EM>の位置を
+見ているとしてviewing座標系を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37528"></A>
+<PRE><TT>
+<B>:init</B> <I>&amp;key  :target   #f(0 0 0) [メソッド]
+<BR>:view-direction 		 nil 
+<BR>:view-up 		  #f(0.0 0.0 1.0)) 
+<BR>:view-right 		  nil 
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>viewing</B>は、<B>cascaded-coords</B>を継承するので、<EM>:pos</EM>や<EM>:rot</EM>や<EM>:euler</EM>
+や<EM>:rpy</EM>などの<EM>:init</EM>のパラメータはすべてviewing座標系の位置や姿勢を
+指定することに使用できる。
+しかしながら、viewingの<EM>:init</EM>は回転を決定する簡単な方法を持っている。
+もし、<EM>:target</EM>だけが与えられたとき、視線方向は視点から<EM>target</EM>位置
+の方向に決定され、<EM>:view-right</EM>ベクトルはワールド座標系のxy平面に平行な
+x軸に決定される。
+<EM>:view-direction</EM>を<EM>:target</EM>の代わりに指定しても同じ様な
+効果を得られる。
+もし、<EM>:view-up</EM>または<EM>:view-right</EM>パラメータを<EM>:target</EM>あるいは
+<EM>:view-direction</EM>に加えて指定するならば、3つの回転パラメータをすべて
+自分自身で決定することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03052000000000000000">
+投影</A>
 </H2>
 
 <P>
-cons以外のデータオブジェクトは、たとえ複雑な構造をしていたとしても、
-すべてatomである。
-空リストとして（）でしばしば書かれるNILもatomである。
-すべてのatomは、symbolを除いていつもそれ自身評価されている。
-しかしながら、他のCommon Lispの実行のなかでは、atomの評価に引用符を要求されることがある。
+<B>parallel-projection</B>と<B>perspective-projection</B>クラスは、
+投影変換を処理する。この変換は4X4の行列で表現される。すなわち、変換は
+3次元の同次座標系で与えられる。
+<B>projection</B>クラスは、両方のクラスの抽象クラスである。
+これらの投影クラスは、viewingクラスを継承しているので、
+2つの座標変換（ワールド座標からviewing座標系への変換と投影変換）を
+同時に実行することができる。
+3Dベクトルと<TT>:project3</TT>メッセージを投影オブジェクトに送ることにより、
+4要素の実数ベクトル返す。
+<B>homo2normal</B>関数は、この同次ベクトルを標準のベクトル表現に変換
+するために使用される。
+その結果は、標準デバイス座標系(NDC)と呼ばれる座標系上に表現される
+ベクトルである。
+その中で、見えるベクトルはそれぞれのx,y,z次元において-1から1までの
+範囲で表される。
+ロボット世界の本当のカメラをシミュレートするために、
+<B>perspective-projection</B>は<B>parallel-projection</B>よりも多く使用される。
+<B>perspective-projection</B>は、定義されているパラメータが少し多い。
+<TT>screenx</TT>と<TT>screeny</TT>は、見える物体が投影されるviewing平面の上のwindowの大きさで、
+大きな画面と広い空間が投影される。
+<TT>viewdistance</TT>は、視点とview平面との距離を定義しているが、
+視角にも関係する。
+<TT>viewdistance</TT>を大きくすると、view平面のwindowに狭い範囲が投影される。
+<TT>hither</TT>と<TT>yon</TT>パラメータは、クリップする平面の前面と後面の距離を
+定義する。
+これら2つの平面の外側に位置するオブジェクトは、クリップから除外される。
+実際に、このクリップ処理は<B>viewport</B>オブジェクトによって実現されている。
 
 <P>
-<BR><HR>
-<ADDRESS>
 
-2016-03-23
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="37558"></A>
+<BIG CLASS="XLARGE"><B>projection </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>viewing</B> 
+<BR>  :slots 		 (screenx screeny hither yon projection-matrix) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>4x4行列であらわされる投影変換を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37575"></A>
+<B>:projection</B> <EM>&amp;optional pmat </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>pmat</EM>が与えられたならば、
+<TT>projection-matrix</TT>のスロットに設定する。
+<B>:projection</B>は、現在の4x4投影行列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37588"></A>
+<B>:project</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM>は、4要素を持つ3次元同次ベクトルである。
+<EM>vec</EM>は、投影行列により変換される。
+そして、変換された結果である同次表現が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37600"></A>
+<B>:project3</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM>は、標準の3Dベクトル。
+<EM>vec</EM>は、投影行列により同次化され変換される。
+そして、変換された結果である同次表現が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37612"></A>
+<B>:view</B> <EM>vec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vec</EM>にviewing変換と投影変換を連続的に適用する。
+そして、変換された結果である同次表現が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37623"></A>
+<B>:screen</B> <EM>xsize (&amp;optional (ysize xsize)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+viewing画面の大きさを変える。
+大きくすると、広いviewが得られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37633"></A>
+<B>:hither</B> <EM>depth-to-front-clip-plane </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+視点からクリップ前面までの距離を決定する。
+このクリップ前面よりも前にあるオブジェクトはクリップから除外される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37643"></A>
+<B>:yon</B> <EM>depth-to-back-clip-plane </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+視点からクリップ後面までの距離を変える。
+このクリップ後面よりも後ろにあるオブジェクトはクリップから除外される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37653"></A>
+<B>:aspect</B> <EM>&amp;oiptional ratio </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+アスペクト比は、screen-yとscreen-xとの比である。
+もし、<EM>ratio</EM>が与えられたならば、
+アスペクト比は変えられ、screen-yはscreen-x * <EM>ratio</EM>に設定される。
+<B>:aspect</B>は、現在のアスペクト比を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37666"></A>
+<PRE><TT>
+<B>:init</B> <I>&amp;key :hither    100.0 [メソッド]
+<BR>:yon 		 1000.0 
+<BR>:aspect 		 1.0  
+<BR>:screen 		 100.0 
+<BR>:screen-x 		 screen 
+<BR>:screen-y 		 (* screen-x aspect) 
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>viewing</B>と<B>projection</B>を初期化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="37681"></A>
+<BIG CLASS="XLARGE"><B>parallel-viewing </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>projection</B> 
+<BR>  :slots 		 () 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>平行投影を定義する。
+<B>hid</B>(陰線消去関数)は平行投影では扱うことが出来ない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37699"></A>
+<B>:make-projection</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="37711"></A>
+<BIG CLASS="XLARGE"><B>perspective-viewing </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>projection</B> 
+<BR>  :slots 		 (viewdistance) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>透視投影変換を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37728"></A>
+<B>:make-projection</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37739"></A>
+<B>:ray</B> <EM>u v </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+視点から正規化画面の上にある<EM>(u,v)</EM>への単位方向ベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37750"></A>
+<B>:viewdistance</B> <EM>&amp;optional vd </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>viewdistance</TT>は、視点から画面迄の距離である。
+もし、<EM>vd</EM>が与えられたならば、<TT>viewdistance</TT>に設定される。
+<TT>viewdistance</TT>は、カメラの焦点距離と一致する。
+<EM>vd</EM>を大きくすれば、ズームアップされたviewを得ることができる。
+<B>:viewdistance</B>は、現在の<TT>viewdistance</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37767"></A>
+<B>:view-angle</B> <EM>&amp;optional ang </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+画面の対角線を見込む角度が<EM>ang</EM>ラジアンであるように画面の大きさを設定する。
+20度(約0.4ラジアン)から50度(約0.9ラジアン)までの角度が自然な透視view
+を生成することができる。
+角度を大きくすると歪んだviewを生成する。
+そして、狭くすると直角(平行)viewingのような平坦なviewが生成される。
+<B>:view-angle</B>は、現在の視角あるいは新しい視角をラジアンで返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37779"></A>
+<B>:zoom</B> <EM>&amp;optional scale </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>scale</EM>が与えられたならば、画面は<EM>scale</EM>によって
+現在の大きさを相対的に変化させる（<TT>viewdistance</TT>は変化しない）。
+もし、<EM>scale</EM>に0.5を与えるならば、以前のviewより2倍広いviewを得られる。
+<B>:zoom</B>は、新しい視角をラジアンで返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37794"></A>
+<B>:lookaround</B> <EM>alfa beta </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+視点を移動し回転させる。
+回転中心は、視線の上で<TT>hither</TT>平面と<TT>yon</TT>平面の中間点
+に与えられる。
+viewing座標系は、ワールド座標系のz軸回りに<EM>alfa</EM>ラジアン回転し、
+ローカル座標系のx軸回りに<EM>beta</EM>ラジアン回転される。
+<B>:lookaround</B>は、<B>viewing</B>の中心にあるオブジェクト回りに視線を
+動かすことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37810"></A>
+<B>:look-body</B> <EM>bodies </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+視線、画面の大きさおよびhither/yonをすべての<EM>bodies</EM>に適合するviewport
+となるよう変える。視点は変化しない。
+視線は、すべての<EM>bodies</EM>のbounding boxの中心を通る視線から選択される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37822"></A>
+<B>:init</B> <EM>&amp;key (:viewdistance 100.0) &amp;allow-other-keys </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03053000000000000000">
+Viewport</A>
+</H2>
+
+<P>
+<B>viewport</B>クラスは、正規デバイス座標系(NDC)の中の3次元viewportのクリップ
+を実行する。そして、デバイスに依存する座標系に結果を作る。
+<B>viewport</B>は、画面上の見える四角領域の境界表現である。
+<B>viewport</B>の物理的な大きさ（x軸とy軸方向のドット数）は、
+<B>:init</B>メッセージの中の<EM>:width</EM>と<EM>:height</EM>との引き数
+で与えられなければならない。
+<EM>:xcenter</EM>と<EM>:ycenter</EM>引き数は、viewportの物理的な位置を決定する。
+画面の原点からのそれぞれの次元が絶対的に与えられているテクトロニクス4014
+のような基本的なディスプレイデバイスを使っているとき、これら2つのパラメータは、実際に画面の上にオブジェクトを描く位置を決定する。
+もし、位置が親windowから相対的に決まるXwindowのような精巧なディスプレイ
+デバイスを使っているなら、
+viewportを動かすためにviewportのパラメータを変える必要はない。
+なぜなら、これらのパラメータは、実際のディスプレイ位置に依存しないからである。。
+
+<P>
+<B>viewport</B>クラスは、四角領域の左下をviewportの原点と仮定している。
+そして、y軸は上方向に伸びているとする。
+しかし、多くのwindowシステムやディスプレイデバイスでは原点を左上とし、
+y軸が下方向に伸びているとしている。
+この問題を回避するために、<EM>:height</EM>パラメータに負の値を与えればよい。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="37833"></A>
+<B>homo-viewport-clip</B> <EM>v1 v2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>v1</EM>と<EM>v2</EM>は、4要素を持つ同次ベクトルであって、
+3次元空間の線分として表現される。
+その線分は、<!-- MATH
+ $x=-1, x=1, y=-1, y=1, z=0, z=1$
+ -->
+<SPAN CLASS="MATH"></SPAN>の境界でクリップされる。
+そして、2つのベクトルのリストを返す。
+もし、その線分が<B>viewport</B>の外側に完全に置かれているならば、
+NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="37847"></A>
+<BIG CLASS="XLARGE"><B>viewport </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>coordinates</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>viewport変換は、デバイスで指定される座標系にNDC（正規化デバイス座標系）を作る。
+<B>coordinates</B>クラスを継承しているため、<B>viewport</B>はサイズと投影画面の
+相対位置を定義している。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37866"></A>
+<B>:xcenter</B> <EM>&amp;optional xcenter </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewport</B>のx軸の中心を返す。
+もし、<EM>xcenter</EM>が与えられていれば、設定を行う。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37878"></A>
+<B>:ycenter</B> <EM>&amp;optional ycenter </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewport</B>のy軸の中心を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37889"></A>
+<B>:size</B> <EM>&amp;optional size </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewport</B>のx軸とy軸方向の大きさのリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37900"></A>
+<B>:width</B> <EM>&amp;optional width </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>viewport</B>の幅を<EM>width</EM>に
+設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37912"></A>
+<B>:height</B> <EM>&amp;optional height </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>viewport</B>の高さを
+<EM>height</EM>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37924"></A>
+<B>:screen-point-to-ndc</B> <EM>p </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p</EM>は、物理的画面の中の位置を表現する実数ベクトルである。
+<EM>p</EM>は、正規化デバイス座標系(NDC)の中での表現に変換される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37936"></A>
+<B>:ndc-point-to-screen</B> <EM>p </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>viewport</B>のNDC表現である<EM>p</EM>を画面の物理的位置に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37948"></A>
+<B>:ndc-line-to-screen</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つの3次元ベクトル<EM>p1</EM>と<EM>p2</EM>は、NDCの中の線分を定義する。
+これらの2つの端点は、画面空間の表現に変換される。
+もし、<EM>do-clip</EM>がnon-NILなら、その線分はクリップされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37961"></A>
+<B>:init</B> <EM>&amp;key (:xcenter 100) (:ycenter 100) (:size 100)
+(width 100) (height 100) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 新しい<B>viewport</B>オブジェクトを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03054000000000000000">
+Viewer</A>
+</H2>
+画面の上に描画するためには、4つのオブジェクトが必要である。
+1つは描かれたオブジェクト、2つはviewing座標系と投影で定義される<B>viewing</B>、
+3つはNDCの中でのクリップ処理のための<B>viewport</B>とNDCから物理的画面座標系への
+変換、4つは
+物理的ディスプレイデバイスの上に描画関数を実行する<B>viewsurface</B>。
+<B>viewer</B>オブジェクトは、<B>viewing</B>と<B>viewport</B>と<B>viewsurface</B>
+オブジェクトを持ち、
+座標系変換を連続的に制御する。
+<A HREF="#Drawings">15.5</A>節に記述される<B>draw</B>と<B>hid</B>関数は<B>viewer</B>の
+インスタンスを使用する。
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="37973"></A>
+<BIG CLASS="XLARGE"><B>viewer </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (eye :type viewint) 
+<BR>(port :type viewport) 
+<BR>(surface :type viewsurface) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>viewingからviewportを経由してviewsurfaceへ移るCascaded Coordinatesの変換を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37990"></A>
+<B>:viewing</B> <EM>&amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewing</B><TT>(eye)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewing</B><TT>(eye)</TT>オブジェクトが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38006"></A>
+<B>:viewport</B> <EM>&amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewport</B><TT>(port)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewport</B><TT>(port)</TT>オブジェクトが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38022"></A>
+<B>:viewsurface</B> <EM>&amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>msg</EM>が与えられたならば、<EM>msg</EM>は<B>viewsurface</B><TT>(surface)</TT>オブジェクト
+に送られる。そうでなければ、<B>viewsurface</B><TT>(surface)</TT>オブジェクトが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38038"></A>
+<B>:adjust-viewport</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>viewsurface</B>の大きさが変えられたとき、<B>:adjust-viewport</B>は
+<TT>port</TT>に固有のメッセージを送ることにより<B>viewport</B>の変換を変える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38052"></A>
+<B>:resize</B> <EM>width height </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>viewsurface</B>に<TT>:resize</TT>メッセージを送り、<B>viewport</B>に<TT>:size</TT>メッセージを送る
+ことによりviewsurfaceの大きさを変える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38066"></A>
+<B>:draw-line-ndc</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される2つの端点<EM>p1,p2</EM>を結ぶ線を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38077"></A>
+<B>:draw-polyline-ndc</B> <EM>polylines &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される端点を結ぶ多角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38087"></A>
+<B>:draw-star-ndc</B> <EM>center &amp;optional (size 0.01) color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に十字マークを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38097"></A>
+<B>:draw-box-ndc</B> <EM>low-left up-right &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38107"></A>
+<B>:draw-arc-ndc</B> <EM>point width height angle1 angle2 &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に円弧を描く。
+この<B>viewer</B>に結び付く<B>viewsurface</B>オブジェクトは、<B>:arc</B>メッセージを
+受けなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38120"></A>
+<B>:draw-fill-arc-ndc</B> <EM>point width height angle1 angle2 &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に塗り潰し円弧を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38130"></A>
+<B>:draw-string-ndc</B> <EM>position string &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDCの中に定義される<EM>position</EM>に<EM>string</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38142"></A>
+<B>:draw-image-string-ndc</B> <EM>position string &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38153"></A>
+<B>:draw-rectangle-ndc</B> <EM>position width height &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38164"></A>
+<B>:draw-fill-rectangle-ndc</B> <EM>point width height &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38175"></A>
+<B>:draw-line</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系に定義される2つの端点<EM>p1,p2</EM>を結ぶ線を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38186"></A>
+<B>:draw-star</B> <EM>position &amp;optional (size 0.01) color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系の<EM>position</EM>位置に十字マークを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38197"></A>
+<B>:draw-polyline</B> <EM>vlist &amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系の<EM>vlist</EM>端点を結ぶ多角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38208"></A>
+<B>:draw-box</B> <EM>center &amp;optional (size 0.01) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ワールド座標系の<EM>center</EM>に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38219"></A>
+<B>:draw-arrow</B> <EM>p1 p2 </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1</EM>から<EM>p2</EM>へ向けての矢印を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38231"></A>
+<B>:draw-edge</B> <EM>edge </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38242"></A>
+<B>:draw-edge-image</B> <EM>edge-image </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38253"></A>
+<B>:draw-faces</B> <EM>face-list &amp;optional (normal-clip nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38264"></A>
+<B>:draw-body</B> <EM>body &amp;optional (normal-clip nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38275"></A>
+<B>:draw-axis</B> <EM>coordinates &amp;optional size </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>coordinates</EM>で定義される軸を<EM>size</EM>の長さで描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38287"></A>
+<B>:draw</B> <EM>&amp;rest things </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+3次元の幾何学オブジェクトを描く。
+もし、オブジェクトが3次元ベクトルならば、その位置に小さな十字マークを描く。
+もし、3次元ベクトルのリストであれば、多角形を描く。
+もし、<EM>thing</EM>が<TT>:draw</TT>メッセージを受けたならば、
+この<B>viewer</B>を引き数としてそのメソッドが呼び出される。
+もし、オブジェクトが<TT>:drawners</TT>メソッドを定義しているならば、
+<B>:draw</B>メッセージは<TT>:drawners</TT>の結果に送られる。
+<TT>line, edge, polygon, face</TT>および<TT>body</TT>オブジェクトは、
+<B>viewer</B>に定義されている<B>:draw-xxx</B>(xxxにそのオブジェクトのクラス名が入る)
+メソッドによって描かれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38307"></A>
+<B>:erase</B> <EM>&amp;rest things </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+背景色で<EM>things</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38318"></A>
+<B>:init</B> <EM>&amp;key :viewing :viewport :viewsurface </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>viewing, viewport</EM>および<EM>viewsurface</EM>をこの<B>viewer</B>のスロット
+<TT>eye, port</TT>と<TT>surface</TT>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38333"></A>
+<PRE><TT>
+<B>view</B> <I>&amp;key (:size 500) (:width size) (:height size)[関数] 
+<BR>(:x 100) (:y 100) 
+<BR>(:title "eusx") 
+<BR>(:border-width 3) 
+<BR>(:background 0) 
+<BR>(:viewpoint #f(300 200 100)) (:target #f(0 0 0)) 
+<BR>(:viewdistance 5.0)  (:hither 100.0) (:yon 10000.0) 
+<BR>(:screen 1.0) (:screen-x screen) (:screen-y screen) 
+<BR>(:xcenter 500) (:ycenter 400) 
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>新しい<B>viewer</B>を作り、<B>*viewer*</B>リストに置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03055000000000000000"></A><A NAME="Drawings"></A>
+<BR>
+描画
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="38346"></A>
+<B>draw</B> <EM>[viewer] &amp;rest thing </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>viewer</EM>に<EM>thing</EM>を描く。
+<EM>thing</EM>は、座標系、立体、面、エッジ、ベクトル、2つのベクトルのリストのどれでも可能である。
+<TT>(progn (view) (draw (make-cube 10 20 30)))</TT>
+は、xwindowに立方体を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38360"></A>
+<B>draw-axis</B> <EM>[viewer] [size] &amp;rest thing </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>viewer</EM>の中に<EM>thing</EM>の座標系の軸を<EM>size</EM>の長さで描く。
+<EM>thing</EM>は、座標系から得られるどのオブジェクトでも可能である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38374"></A>
+<B>draw-arrow</B> <EM>p1 p2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>*viewer*</B>に<EM>p1</EM>から<EM>p2</EM>に向かう矢印を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38387"></A>
+<B>hid</B> <EM>[viewer] &amp;rest thing  </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>viewer</EM>に陰線処理された画像を描く。
+<EM>thing</EM>は、<TT>face</TT>または<TT>body</TT>が可能である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38401"></A>
+<B>hidd</B> <EM>[viewer] &amp;rest thing  </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+陰線を点線で描くことを除いて、<B>hid</B>と同じである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38412"></A>
+<B>hid2</B> <EM>body-list viewing </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+edge-imageオブジェクトで表現される陰線処理画像を生成する。
+その結果は<B>*hid*</B>に置かれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38423"></A>
+<PRE><TT>
+<B>render</B> <I>&amp;key :bodies :faces (:viewer *viewer*) [関数]
+<BR>(:lights *light-sources*)
+<BR>(colormap *render-colormap*) (y 1.0)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>bodies</EM>と<EM>faces</EM>にレイトレーシングを行い、陰面消去した画像を生成する。
+<B>viewing, viewport</B>および<B>viewsurfaceは</B>、<EM>viewer</EM>から得られる。
+<EM>lights</EM>は、<TT>light-source</TT>（光源）オブジェクトのリストである。
+<EM>colormap</EM>は、Xwindowの<B>colormap</B>オブジェクトである。
+それぞれの<EM>bodies</EM>と<EM>faces</EM>は、割り当てられるカラー属性を
+持たなければならない。
+<EM>colormap</EM>に定義されているカラーLUTの名前を<TT>:color</TT>メッセージで
+送ることによりカラー属性を設定できる。
+一般にこの関数は、Xlib環境下でのみ働く。
+<TT>demo/renderdemo.l</TT>のサンプルプログラムを見ること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38448"></A>
+<B>make-light-source</B> <EM>pos &amp;optional (intensity 1.0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pos</EM>の位置に光源オブジェクトを作る。
+<EM>intensity</EM>は、デフォルトの光の強さを増す拡大比である。
+もっと正確に強さを決定するためには、光源の<TT>:intensity</TT>メソッドを
+使用する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38461"></A>
+<B>tektro</B> <EM>file &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>*tektro-port*</TT>ストリームのために<EM>file</EM>をオープンし、
+<EM>forms</EM>を評価する。
+これは、tektro描画の出力を直接<EM>file</EM>に書き込むために使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38475"></A>
+<B>kdraw</B> <EM>file &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>kdraw</B>は、<TT>kdraw</TT>または<TT>idraw</TT>で読み込めるポストスクリプトファイルを
+生成するためのマクロ命令である。
+<B>kdraw</B>は、<TT>:output</TT>モードで<EM>file</EM>をオープンし、
+<TT>*viewer*</TT>を置き換えるためのkdraw-viewsurfaceとviewportを
+作り、<EM>forms</EM>を評価する。
+それぞれの<EM>forms</EM>は、<TT>draw</TT>や<TT>hid</TT>のような描画関数の
+どれかを呼び出す。
+これらの<EM>forms</EM>からの描画メッセージは、<TT>kdraw-viewsurface</TT>に
+直接出力される。この出力は<TT>idraw</TT>や<TT>kdraw</TT>で認識できる
+ポストスクリプト表現にメッセージを変換する。
+そして、<EM>file</EM>に蓄積する。
+<TT>idraw</TT>または<TT>kdraw</TT>が呼び出され<EM>file</EM>がオープンされたとき、
+EusViewer windowに書いたものと同一の図形を見ることができる。
+その図形は、<TT>idraw</TT>の機能で変更することができる。
+そして、最終描画は<TT>epsfile</TT>環境を用いることにより<SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN>ドキュメント
+に組み込むことができる。
+この機能は、"llib/kdraw.l"のファイルに記述されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38506"></A>
+<B>pictdraw</B> <EM>file &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>pictdraw</B>は、MacintoshのPICTフォーマットで画像ファイルを
+生成するためのマクロである。
+<B>pictdraw</B>は、<EM>file</EM>を<TT>:output</TT>モードでオープンし、
+pictdraw-viewsurfaceを作り、<TT>*viewer*</TT>のviewportに置き換え、
+<EM>forms</EM>を評価する。
+<EM>forms</EM>は、それぞれ<TT>draw</TT>あるいは<TT>hid</TT>のような描画関数のどれかを
+呼び出すものである。
+これらの書式からの描画メッセージは、<TT>kdraw-viewsurface</TT>に
+直接出力された後、PICTフォーマットへのメッセージに変換され,
+<EM>file</EM>へ蓄積される。
+このPICTフォーマットは、Macintoshの<TT>macdraw</TT>や<TT>teachtext</TT>で
+認識することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38529"></A>
+<B>hls2rgb</B> <EM>hue lightness saturation &amp;optional (range 255) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+HLS(Hue, Lightness, Saturation)で表現される色を、RGB表現に変換する。
+HLSは、しばしばHSLとして参照される。
+<EM>hue</EM>は、rainbow circle(0から360)の色で表現される。
+0が赤で45が黄で120が緑で240が青で270が紫そして360が再び赤となる。
+<EM>lightness</EM>は、0.0から0.1の値を持ち、黒から白までの明るさを表現する。
+<EM>lightness</EM>が0のときは、<EM>hue</EM>や<EM>saturation</EM>にかかわらず
+黒となる。そして、<EM>lightness</EM>が1のときは、白となる。
+<EM>saturation</EM>は、0.0から1.0までの値を持ち、色の強さを表現する。
+<EM>saturation</EM>の値が大きいと鮮明な色調を生成し、小さい値は弱く濁った色調
+を生成する。
+<EM>range</EM>は、RGB値の限界を示す。
+もし、それぞれの色に8ビットの値が割り当てられているカラーディスプレイ
+を使っているならば、<EM>range</EM>は255とすべきである。
+もし、RGBに16ビットの整数が仮想的に割り当てられているXwindowを使って
+いるならば、<EM>range</EM>は65536とすべきである。
+HSVとHLSとの違いに注意すること。
+HLSでは、鮮明な(rainbow)色は<TT>lightness=0.5</TT>で定義されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38551"></A>
+<B>rgb2hls</B> <EM>red green blue &amp;optional (range 255) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGBの色表現を、HLS表現に変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03056000000000000000"></A>
+<A NAME="37337"></A>
+<BR>
+アニメーション
+</H2>
+EusLispのアニメーションは、グラフィックアクセラレータを持たない
+普通のワークステーション上での擬似リアルタイムグラフィックス機能を備えている。
+その基本的な考え方は、長い時間かかって生成された1連の画像を高速に
+再表示することである。
+画像は2つの方法で保存される。
+1つは、完全なピクセル画像を持つたくさんのXwindow pixmapを保存する。
+もう1つは、陰線処理で得られる線分データを保存する。
+前者は、高速で陰面処理された画像を表示するための方法であるが、
+長いアニメーションではたくさんのメモリーをX serverに要求するため
+適さない。
+後者は、メモリーが少なくて済み、データをディスクに蓄積するのに適する。
+しかし、線分の数が増加したならば、性能を悪化させる。
+
+<P>
+他の方法として、描かれるオブジェクトの構成を得て、
+<B>*viewer*</B>に描画を生成する関数をユーザーが作ることもできる。
+<B>pixmap-animation</B>は、<EM>count</EM>引数で指定された数と同じ回数この関数を呼び出す。
+それぞれの呼び出し後、Xwindowと仮定される<TT>viewsurface</TT>の内容は、
+新しく作られたXwindow pixmapにコピーされる。
+これらのpixmapは、<B>playback-pixmap</B>で再表示される。
+同様に、<B>hid-lines-animation</B>は<B>hid</B>の結果から見える線分を抜き出し、
+リストに蓄積する。
+そのリストは、<B>playback-hid-lines</B>によって再表示される。
+
+<P>
+以下に示す関数は、"llib/animation.l"に定義されており、
+"llib/animdemo.l"の中にはETA3 マニピュレータのモデルに関して
+<B>hid-lines-animation</B>を用いたアニメーションの
+サンプルプログラムを含んでいる。
+
+<P>
+
+ <BR>
+<BR> <A NAME="38561"></A>
+<B>pixmap-animation</B> <EM>count &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>は、<EM>count</EM>回評価される。
+それぞれの評価後、<TT>*viewsurface*</TT>の内容は新しいpixmapにコピーされる。
+<EM>count</EM>枚の<B>pixmap</B>のリストが、返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38576"></A>
+<B>playback-pixmaps</B> <EM>pixmaps &amp;optional (surf *viewsurface*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pixmaps</EM>リストのなかの<B>pixmap</B>はそれぞれ、
+<EM>surf</EM>に連続的にコピーされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38589"></A>
+<B>hid-lines-animation</B> <EM>count &amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>hid</B>への呼び出しを含む<EM>forms</EM>が<EM>count</EM>回評価される。
+それぞれの評価後、<B>*hid*</B>が持つ<B>hid</B>の結果は検索され、
+見える線分は2点一組のリストの形で集められる。
+<EM>count</EM>長さのリストが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="38605"></A>
+<B>playback-hid-lines</B> <EM>lines &amp;optional (view *viewer*) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>lines</EM>は、2点一組のリストである。
+<EM>view</EM>の上に線分を連続的に描く。
+他のpixmapを割り当てるときにフリッカーフリーアニメーションを生成するために
+2重バッファ技法が使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="38617"></A>
+<B>list-visible-segments</B> <EM>hid-result </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>hid-result</EM>のedge画像のリストから見える線分を集める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html816"
+  HREF="jmanual-node19.html">Xwindow インターフェース</A>
+<B>Up:</B> <A NAME="tex2html810"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html804"
+  HREF="jmanual-node17.html">幾何学モデリング</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>
