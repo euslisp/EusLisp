@@ -211,7 +211,7 @@
 	   (list 
 		   (float-vector x1 y1 0) (float-vector x2 y1 0)
 		   (float-vector x2 y2 0) (float-vector x1 y2 0)
-		   (float-vector x1 y1 0)))))
+		   (float-vector x1 y1 0)) color)))
   (:draw-star-NDC (point &optional (size 0.02) (color nil))
     (send self :draw-line-NDC
 	(float-vector (- (aref point 0) size) (aref point 1) 0)
@@ -229,11 +229,11 @@
      (setq p1 (send eye :view p1) p2 (send eye :view p2))
      (send self :draw-line-NDC p1 p2 do-clip color)
      (sys:reclaim p1) (sys:reclaim p2))
-  (:draw-box (v &optional (size (/ (send surface :width) 300.0)))
+  (:draw-box (v &optional (size (/ (send surface :width) 300.0)) color)
     ;draw a small mark at v (defined in world)
     (setq size (float-vector size size 0.0))
     (setq v (homo2normal (send eye :view v)))
-    (send self :draw-box-NDC (v- v size) (v+ v size)))
+    (send self :draw-box-NDC (v- v size) (v+ v size) color))
   (:draw-polyline (vlist &optional color)
     (send self :draw-polyline-ndc
 		(mapcar #'(lambda (x) (send eye :view x)) vlist) color))
