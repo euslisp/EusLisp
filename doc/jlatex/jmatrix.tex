@@ -529,7 +529,6 @@ Euslisp内で座標系は、高速性と一般性のために
 \newpage
 \subsection{変換行列とcoordinates classとの関係}
 
-\noindent
 変換行列Tを$4\times4$の同次行列表現として以下のように表したした時の、
 coordinatesとの関係を説明する。
 \[
@@ -545,61 +544,64 @@ EusLispにおけるcoordinatesクラスは$\mathbf{R}$は$3\times3$ の回転行
 3 次元位置ベクトルの組で表現されており、
 スロット変数のrotとposは、それぞれ、$\mathbf{R}_T$、$\mathbf{p}_T$に対応する。
 
-\vspace{1ex}
-\noindent {\underline {\bf {\gt 回転行列と３次元位置の取り出し}}}
+\subsubsection*{回転行列と３次元位置の取り出し}
 
-\noindent
 coordinates classのメソッドを用いて、以下のように$\mathbf{R}$と$\mathbf{p}$を取り出せる。
 
-\noindent
 以下、Tはcoordinateクラスのインスタンスである。
 
-\noindent
-(send T :rot)
+\begin{refdesc}
 
+{\bf (send T :rot)}
+\desclist{\hspace{0mm}
 $\Rightarrow$ $\mathbf{R}_T$
+}
 
-\noindent
-(send T :pos)
-
+{\bf (send T :pos)}
+\desclist{\hspace{0mm}
 $\Rightarrow$ $\mathbf{p}_T$
+}
 
-\vspace{1ex}
-\noindent {\underline {\bf {\gt ベクトルを変換するメソッド}}}
+\end{refdesc}
 
-\noindent
+\subsubsection*{ベクトルを変換するメソッド}
+
 以下、$\mathbf{v}$は3次元ベクトルである。
 
-\noindent
-(send T :rotate-vector $\mathbf{v}$)
+\begin{refdesc}
 
+{\bf (send T :rotate-vector $\mathbf{v}$)}
+\desclist{\hspace{0mm}
 $\Rightarrow$  $\mathbf{R}_T \mathbf{v}$
+}
 
-\noindent
-(send T :inverse-rotate-vector $\mathbf{v}$)
-
+{\bf (send T :inverse-rotate-vector $\mathbf{v}$)}
+\desclist{\hspace{0mm}
 $\Rightarrow$ $\mathbf{v}^T \mathbf{R}_T$
+}
 
-\noindent
-(send T :transform-vector $\mathbf{v}$)
-
+{\bf (send T :transform-vector $\mathbf{v}$)}
+\desclist{\hspace{0mm}
 $\Rightarrow$ $\mathbf{R}_T\mathbf{v} + \mathbf{p}_T$
 
 ローカル座標系Tで表されたベクトルをワールド座標系で表されたベクトルに変換する
+}
 
-\noindent
-(send T :inverse-transform-vector $\mathbf{v}$)
-
+{\bf (send T :inverse-transform-vector $\mathbf{v}$)}
+\desclist{\hspace{0mm}
 $\Rightarrow$ $\mathbf{R}_T^{-1}\left( \mathbf{v} - \mathbf{p}_T \right)$
 
 ワールド座標系で表されたベクトルをローカル座標系Tで表されたベクトルに変換する
+}
 
-\vspace{1ex}
-\noindent {\underline {\bf {\gt 座標系を返すメソッド (座標系を変更しない)}}}
+\end{refdesc}
 
-\noindent
-(send T :inverse-transformation)
+\subsubsection*{座標系を返すメソッド (座標系を変更しない)}
 
+\begin{refdesc}
+
+{\bf (send T :inverse-transformation)}
+\desclist{\hspace{0mm}
 $\Rightarrow$ $T^{-1}$
 
 逆行列を返す。\[
@@ -608,56 +610,55 @@ T^{-1} = \begin{pmatrix}
  \mathbf{0} & 1
 \end{pmatrix}
 \]
+}
 
-\noindent
-(send T :transformation A (\&optional (wrt :local)))
-
+{\bf (send T :transformation A (\&optional (wrt :local)))}
+\desclist{\hspace{0mm}
 wrt == :local のとき、$T^{-1}A$ を返す
 
 wrt == :world のとき、$AT^{-1}$ を返す
 
 wrt == W (coordinates class) のとき、$W^{-1}AT^{-1}W$ を返す
+}
 
+\end{refdesc}
 
-\vspace{1ex}
-\noindent {\underline {\bf {\gt 座標系を変更するメソッド}}}
+\subsubsection*{座標系を変更するメソッド}
 
-\noindent
 以下、A は coordinatesクラスのインスタンスである。
 
-\noindent
 $\Leftrightarrow$ はスロット変数と与えられたインスタンス（行列またはベクトル）が同一になることを表す。
 一方の変更が、他方の変更に反映されるため、注意して使用すること。
 
-\noindent
 $\leftarrow$ は代入を表す。
 
-\noindent
-(send T :newcoords A)
+\begin{refdesc}
 
+{\bf (send T :newcoords A)}
+\desclist{\hspace{0mm}
 $\mathbf{R}_T \Leftrightarrow \mathbf{R}_A$
 
 $\mathbf{p}_T \Leftrightarrow \mathbf{p}_A$
+}
 
-\noindent
-(send T :newcoords $\mathbf{R}$ $\mathbf{p}$)
-
+{\bf (send T :newcoords $\mathbf{R}$ $\mathbf{p}$)}
+\desclist{\hspace{0mm}
 $\mathbf{R}_T \Leftrightarrow \mathbf{R}$
 
 $\mathbf{p}_T \Leftrightarrow \mathbf{p}$
+}
 
-\noindent
-(send T :move-to A (\&optional (wrt :local)))
-
+{\bf (send T :move-to A (\&optional (wrt :local)))}
+\desclist{\hspace{0mm}
 wrt == :local のとき、$T \leftarrow TA$
 
 wrt == :world のとき、$T \Leftrightarrow A$
 
 wrt == W (coordinates class) のとき、$T \leftarrow WA$
+}
 
-\noindent
-(send T :translate $\mathbf{v}$ (\&optional (wrt :local)))
-
+{\bf (send T :translate $\mathbf{v}$ (\&optional (wrt :local)))}
+\desclist{\hspace{0mm}
 wrt == :local のとき、
 $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T}\mathbf{v}$
 
@@ -666,10 +667,10 @@ $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{v}$
 
 wrt == W (coordinates class) のとき、
 $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{W}\mathbf{v}$
+}
 
-\noindent
-(send T :locate $\mathbf{v}$ (\&optional (wrt :local)))
-
+{\bf (send T :locate $\mathbf{v}$ (\&optional (wrt :local)))}
+\desclist{\hspace{0mm}
 wrt == :local のとき、
 $\mathbf{p}_{T} \leftarrow \mathbf{p}_{T} + \mathbf{R}_{T} \mathbf{v}$
 
@@ -678,14 +679,17 @@ $\mathbf{p}_{T} \leftarrow \mathbf{v}$
 
 wrt == W (coordinates class) のとき、
 $\mathbf{p}_{T} \leftarrow \mathbf{p}_{W} + \mathbf{R}_{W}\mathbf{v}$
+}
 
-\noindent
-(send T :transform A (\&optional (wrt :local)))
-
+{\bf (send T :transform A (\&optional (wrt :local)))}
+\desclist{\hspace{0mm}
 wrt == :local のとき、 $T \leftarrow TA$
 
 wrt == :world のとき、 $T \leftarrow AT$
 
 wrt == W (coordinates class) のとき、$T \leftarrow$ $\left( WAW \right)^{-1} T$
+}
+
+\end{refdesc}
 
 \newpage

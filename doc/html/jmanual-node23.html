@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>関数</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="関数">
+<TITLE>MARS: マルチ自律ロボットシミュレータ</TITLE>
+<META NAME="description" CONTENT="MARS: マルチ自律ロボットシミュレータ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,152 +16,238 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="previous" HREF="jmanual-node22.html">
-<LINK REL="up" HREF="jmanual-node17.html">
+<LINK REL="up" HREF="jmanual-node13.html">
 <LINK REL="next" HREF="jmanual-node24.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html694"
-  HREF="jmanual-node24.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html688"
-  HREF="jmanual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html684"
-  HREF="jmanual-node22.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html690"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html692"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html695"
-  HREF="jmanual-node24.html">制御構造</A>
-<B> Up:</B> <A NAME="tex2html689"
-  HREF="jmanual-node17.html">書式と評価</A>
-<B> Previous:</B> <A NAME="tex2html685"
-  HREF="jmanual-node22.html">マクロ</A>
- &nbsp; <B>  <A NAME="tex2html691"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html693"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html910"
+  HREF="jmanual-node24.html">Bibliography</A>
+<B>Up:</B> <A NAME="tex2html904"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html900"
+  HREF="jmanual-node22.html">マニピュレータ</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03026000000000000000">
-関数</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html911"
+  HREF="jmanual-node23.html#SECTION030101000000000000000">始め方</A>
+<LI><A NAME="tex2html912"
+  HREF="jmanual-node23.html#SECTION030102000000000000000">システム概要</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION030100000000000000000"></A><A NAME="MARS"></A>
+<BR>
+MARS: マルチ自律ロボットシミュレータ
+</H1>
+
+<BIG CLASS="XLARGE"><EM>(予告)</EM></BIG>
+
+<P>
+<EM>著者: 国吉 康夫,電総研</EM>
+
+<P>
+<B>MARS</B>は、平面空間内における
+マルチ自律移動ロボットのためのシミュレーション環境である。
+このプログラムは、Euslispで記述されている。
+
+<P>
+<B>開発状況:</B>
+1995年1月、MARSの発表直前バージョンが電総研内で用いられている。
+システムの改善を活発に行い、1995年の上期内に最初のバージョンを
+発表する計画である。
+その後も、システムの向上をはかり、1996年3月までに安定した状態を
+達成したいと望んでいる。
+発表の告示はEuslispのメーリングリストや他のインターネットサービス
+を通じて行われる予定である。
+恐らくライセンスの条件をEuslispから分けるであろう。
+
+<P>
+<B>目的:</B>
+MARSは、単一あるいは複数の移動ロボットで知的ロボットの研究に使用することを
+意図してつくられている。たとえば、行動学習やマップ構築や知能収集や
+複数ロボット協調や協調学習などである。
+
+<P>
+
+<H2><A NAME="SECTION030101000000000000000">
+始め方</A>
+</H2>
+MARSプログラムは、<B>robot/MARS/ver.XXX</B>にある。
+最初に、".eusrc"ファイルを自分のホームディレクトリにコピーする。
+必要があれば変更すること。
+(MARSがインストールされているディレクトリのパス名など)
+
+<P>
+このディレクトリから<B>eusx</B>を呼び出す。
+すべてのファイルが自動的にロードされ、シミュレータが動作し始める。
+windowがオープンされ、初期メッセージが下部windowに現れるまで待つこと。
+
+<P>
+例:
+<PRE>
+Try "SYSTEM"-&gt;"Load" menu.
+Load "example.bbs".
+And "SCL"-&gt;"On" menu.
+</PRE>
+
+<P>
+注意:
+<BR>
+SCL<!-- MATH
+ $\rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN>"Off" シミュレーションは一時停止するが、GUI処理は続行される。
+<BR>
+SYSTEM<!-- MATH
+ $\rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN>"Quit" 最上位のループから抜ける。(mars-loop)により再開できる。
+<BR>
+SYSTEM<!-- MATH
+ $\rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN>"Save" 現在の状態をファイルにセーブする。
+<BR>
+SYSTEM<!-- MATH
+ $\rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN>"All-Clear" すべてを消し、システムを初期化する。
+<BR>
+SYSTEM<!-- MATH
+ $\rightarrow$
+ -->
+<SPAN CLASS="MATH"></SPAN>"Reset" ロボットの内部状態をリセットするために使用する(特殊目的)。
+<BR>
+<P>
+
+<H2><A NAME="SECTION030102000000000000000">
+システム概要</A>
 </H2>
 
 <P>
-関数は、単にリストの最初の要素が<B>lambda</B>であるようなlambda書式によって
-表現される。
-もしlambda書式が<B>defun</B>を使ってsymbolを定義するとき、
-グローバル関数名として参照することができる。
-lambda書式は、次の文法で与えられる。
 
-<P><PRE><TT>
- (lambda ({var}* <BR>)}*] <BR>
-<BR>) <SPAN CLASS="MATH"><IMG
- WIDTH="9" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img7.png"
- ALT="$\vert$"></SPAN> ((keyword var) [initform])}* <BR>] <BR>)}*]) 
-<BR>  {declaration}* 
-<BR>  {form}*) 
-<BR>
-</TT></PRE>
-<P>
-ここにEXPR,LEXPR,FEXPRなどのような型の関数はない。
-関数への引数は、いつもその関数を実行する前に評価される。
-受ける引数の数は、lambda-listによって決定される。
-lambda-listは、lambda書式のためにパラメータの列を記す。
+<DIV ALIGN="CENTER"><A NAME="MARSOverview"></A><A NAME="52929"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 21:</STRONG>
+MARS windowの表示例（左）と
+プログラムの構造（右）</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<TABLE CELLPADDING=3 ALIGN="CENTER">
+<TR><TD></TD>
+<TD></TD>
+</TR>
+</TABLE>
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
 
 <P>
-<B>&amp;optional, &amp;rest, &amp;key </B>や<B>&amp;aux</B> はそれぞれ、lambda-list
-のなかに特殊な意味を持っていて、これらのsymbolは、変数名として使用
-することはできない。
-&amp;optionalや&amp;keyパラメータのsupplied-p変数は、サポートされていない。
+MARSを始めたとき、図&nbsp;<A HREF="#MARSOverview">21</A>(左)に示されるような
+メインwindowを見ることができる。MARSは、図&nbsp;<A HREF="#MARSOverview">21</A>(右)
+のようなモジュールアーキテクチャを採用している。
+それは、物理シミュレーションモジュールとロボット制御モジュールと
+ユーザーインターフェースモジュールとユーザーが定義したグローバル
+制御ループにより構成されている。
 
 <P>
-lambda書式は、普通のリストデータと区別できないため、
-<B>function</B>特殊書式を用いて、インタプリタやコンパイラに関数として
-認識するように知らせなければならない。
-<A NAME="tex2html7"
-  HREF="jmanual-footnode.html#foot939"><SUP><SPAN CLASS="arabic">1</SPAN></SUP></A><B>function</B>は、関数の上に環境を固定するために重要である。
-そのため、すべてのローカル変数はその関数が違ったローカルスコープの他の関数を
-通ってきたとしてさえ、アクセスすることができる。
-次のプログラムは、<TT>let</TT>の<TT>sum</TT>がlambda書式の中に見えるため、
-インタプリタとコンパイル後のどちらも何もしない。
+<B>物理シミュレーション:</B>
+現在の物理シミュレーションモジュールは、4つのタイプのオブジェクトを
+処理している。
+<B>wall</B> (固定障害物), <B>block</B> (移動障害物), <B>robot-body</B> (活動オブジェクト)と<B>magic-block</B> (経験学習するための
+特別な報酬を与えるオブジェクト)である。
 
 <P>
-<PRE>
-(let ((x '(1 2 3)) (sum 0))
-  (mapc '(lambda (x) (setq sum (+ sum x))) x))
-</PRE>
+
+<DIV ALIGN="CENTER"><A NAME="fig:robotst"></A><A NAME="52930"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 22:</STRONG>
+ロボットの内部構造（左）と
+ビヘービアベーストロボットの構成例（右）</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<TABLE CELLPADDING=3 ALIGN="CENTER">
+<TR><TD></TD>
+<TD></TD>
+</TR>
+</TABLE>
+</DIV></TD></TR>
+</TABLE>
+</DIV>
 
 <P>
-予想した結果が得られるためには、次のように書くべきである。
-<PRE>
-(let ((x '(1 2 3)) (sum 0))
-   (mapc #'(lambda (x) (setq sum (+ sum x))) x ))
-</PRE>
+<B>ロボットモデル:</B>
+物理的シミュレーションモジュールとロボット制御モジュールとの
+間のインターフェースである。
+いくつもの<B>robot</B>モデルを生成することができ、
+擬似並列でシミュレートできる。
+<B>robot</B>はそれぞれ、<B>robot-body</B>と<B>robot-brain</B>の
+のモジュールの組みで構成される。
+<B>robot-body</B>は、ロボットの物理的な性質を定義し、
+<B>robot-brain</B>はロボットの行動を定義する。
 
 <P>
-#'は、<B>function</B>の略語である。
-すなわち、<TT>#'(lambda (x) x)</TT>は
-<TT>(function (lambda (x) x))</TT>と同等である。
-ここは、funarg問題と呼ばれる別の例を示す。
+<B>センサモデル:</B>
+ユーザーは、<B>robot-body</B>のどこにでもいくつものセンサを
+選択して取り付けることができる。
+現在、実現されているセンサモデルは、以下のものである。
+<B>距離センサ</B> (走行距離), <B>角度センサ</B> (回転角),
+<B>接触センサ</B>, <B>赤外線センサ</B>, <B>レーザセンサ</B> (超音波), 
+<B>視覚センサ</B> (object-name-sensor)。
+現在のバージョンでは、ノイズや不確定要素について考えていない。
 
 <P>
-<PRE>
-(defun mapvector (f v)
-    (do ((i 0 (1+ i)))
-       ((&gt;= i (length v)))
-       (funcall f (aref v i))))
-(defun vector-sum (v)
-    (let ((i 0))
-       (mapvector #'(lambda (x) (setq i (+ i x))) v)
-       i))
-(vector-sum #(1 2 3 4)) --&gt; 10
-</PRE>
+<B>ロボット知能:</B>
+<B>robot-brain</B>は、シミュレートしたセンサデータを処理したり
+行動命令を生成するためにユーザーで定義されたモジュールである。
+センサデータを受け、行動命令を出力しなければならない。
+付け加えて、リエントラントプログラムとして書かれていて、
+グローバル制御ループによって送られる<B>:step</B>メッセージ
+によって時間分割されなければならない。
+これらの拘束に合う限り、ユーザーはどんな認識アーキテクチャも
+採用することができる。
+システムは、デフォルトとしてビヘービアベースト型のアーキテクチャ
+の例を備えている。
 
 <P>
-EusLispのclosureは、不定な大きさを持つことができない。
-すなわち、closureはその外側の大きさで可能な大きさまで持つことができる。
-これはclosureが'generators'のプログラミングのために使用されないことを意味する。
-次のプログラムは何もしない。
+<B>GUI:</B>
+<B>MARS</B>のメインwindowは、システムを制御するためにいくつかのボタンを
+持つメニューバーを持っている。
+また、システムは物理環境を生成／変更するための内部グラフィックエディタ
+を持っている。
+ファイルに対してエージェント定義と一緒に物理環境を読み書きできる。
 
 <P>
-<PRE>
-(proclaim '(special gen))
-(let ((index 0))
-   (setq gen #'(lambda () (setq index (1+ index)))))
-(funcall gen)
-</PRE>
+<B>ネットワーク拡張:</B>
+<B>robot-brain</B>は、非同期ソケット通信を通して外部プロセス
+との接続を構築することができる。
+この場合、ユーザーは<B>remote-brain</B>を記述するために任意の言語(C,
+Prolog, Scheme, Perl, etc...)を使用することができる。
+非同期接続のおかげで、ユーザーは時間分割について少しも気にする必要が無い。
 
 <P>
-しかしながら、その同じ目的がオブジェクト指向プログラミングで実現できる。
-なぜなら、オブジェクトはそれ自身の固定変数を持つことができるためである。
-<PRE>
-(defclass generator object (index))
-(defmethod generator
- (:next () (setq index (1+ index)))
- (:init (&amp;optional (start 0)) (setq index start) self))
-(defvar gen (instance generator :init 0))
-(send gen :next)
-</PRE>
-
+<B>経験学習機能:</B>
+<B>MARS</B>は、ロボットが経験学習するための幾つかの特殊機能を備えている。
+報酬を与えるオブジェクトや報酬センサ（報酬値をロボットに送るもの）
+や報酬ログ（システム全体の報酬の統計を計算するもの）である。
 <BR><HR>
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

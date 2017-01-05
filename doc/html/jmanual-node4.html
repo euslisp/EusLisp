@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>EusLispにおけるオブジェクト指向プログラミング</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="EusLispにおけるオブジェクト指向プログラミング">
+<TITLE>データ型</TITLE>
+<META NAME="description" CONTENT="データ型">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,84 +16,532 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node5.html">
 <LINK REL="previous" HREF="jmanual-node3.html">
-<LINK REL="up" HREF="jmanual-node3.html">
+<LINK REL="up" HREF="jmanual-node2.html">
 <LINK REL="next" HREF="jmanual-node5.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html362"
-  HREF="jmanual-node5.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html356"
-  HREF="jmanual-node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html350"
-  HREF="jmanual-node3.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html358"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html360"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html363"
-  HREF="jmanual-node5.html">Euslispの特徴</A>
-<B> Up:</B> <A NAME="tex2html357"
+<B> Next:</B> <A NAME="tex2html432"
+  HREF="jmanual-node5.html">書式と評価</A>
+<B>Up:</B> <A NAME="tex2html426"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html420"
   HREF="jmanual-node3.html">はじめに</A>
-<B> Previous:</B> <A NAME="tex2html351"
-  HREF="jmanual-node3.html">はじめに</A>
- &nbsp; <B>  <A NAME="tex2html359"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html361"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION02011000000000000000">
-EusLispにおけるオブジェクト指向プログラミング</A>
-</H2>
-EusLisp は、その他のLispを基礎としたオブジェクト指向プログラム言語（
-例えばCLOS [#!CLOS:Keene!#]）と異なり、オブジェクト指向を基礎とした
-Lispシステムである。
-以前の考え方として、Lispはオブジェクト指向プログラミングを実現するための
-言語として使用され、その中でシステムのデータ型がそれ相応のクラスを
-持っていなかったので、システム定義オブジェクトとユーザー定義
-オブジェクトとの間に明らかな区別があった。
-一方、EusLisp内の数値を除く全てのデータ構造は
-オブジェクトで表現されている。
-そして、内部データ型（例えば<TT>cons</TT>や<TT>symbols</TT>）とユーザー定義クラス
-との間に特別な違いはない。
-これは、システムの内部データ型でさえユーザー定義のクラスによって
-拡張（継承）できることを意味する。
-また、ユーザーが内部クラスのサブクラスとして自分独自のクラスを定義したとき、
-その新しいクラスに対して内部メソッドおよび内部関数を使用することができ、
-新しいプログラムを記述する量を減らすことができる。
-例えば、キューやtreeやスタックなどを定義するために、<TT>car</TT>や<TT>cdr</TT>
-と異なった特別な部分を持つように<TT>cons</TT>クラスを拡張したとする。
-これらのインスタンスでさえ、
-<TT>cons</TT>クラスの内部関数が型の継承を一定時間で認識するため、
-それらの関数をのロス時間なしで適用できる。
-したがって、EusLispはシステムの全ての内部機能（拡張可能なデータ型の形式）を
-プログラマーに公開している。
-この画一性もまた、EusLispの実行のために役に立つ。なぜなら、実行言語の中で
-<B>defclass</B>や<B>send</B>や<B>instantiate</B>のような僅かな核になる関数を
-定義した後は、内部データ型の内部構造にアクセスするための大部分の関数を
-EusLisp自身で書くことができる。
-これは、EusLispの確実性および維持性を改善するものである。
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html433"
+  HREF="jmanual-node4.html#SECTION02021000000000000000">数値</A>
+<LI><A NAME="tex2html434"
+  HREF="jmanual-node4.html#SECTION02022000000000000000">オブジェクト</A>
+<LI><A NAME="tex2html435"
+  HREF="jmanual-node4.html#SECTION02023000000000000000">クラス継承</A>
+<LI><A NAME="tex2html436"
+  HREF="jmanual-node4.html#SECTION02024000000000000000">型指定</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION02020000000000000000">
+データ型</A>
+</H1>
+
+他のLispと同様に、型の決まったデータオブジェクトは変数ではない。
+どの変数もその値として、どんなオブジェクトも持つことができる。
+変数にオブジェクトの型を宣言することが可能であるが、
+一般的にコンパイラで高速なコードを生成するための情報としてのみ
+使用される。
+数値は、ポインタの中で直接値として表現され、
+そのほかは、ポインタにより参照されるオブジェクトにより表現される。
+Sun4で実行する場合、ポインタおよび数値は図<A HREF="#Pointer">2</A>で描かれているように
+long wordで表現される。
+ポインタのLSBの2ビットは、ポインタ・integer・floatを識別するための
+tagビットとして使用されている。
+ポインタはtagビットが全てゼロであり、オブジェクトのアドレスとして32ビット全て
+使用できるので、EusLispは4GB以上のアドレス空間を利用することができる。
 
 <P>
-<BR><HR>
-<ADDRESS>
 
-2016-03-23
+<DIV ALIGN="CENTER"><A NAME="Pointer"></A><A NAME="964"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 2:</STRONG>
+ポインタと直接値</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="392" HEIGHT="140" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img2.png"
+ ALT="\includegraphics{fig/pointer.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H2><A NAME="SECTION02021000000000000000">
+数値</A>
+</H2>
+数値には、integerとfloat（浮動小数点）の2種類があり、
+両方とも29ビットの値と１ビットの符号で表現される。
+したがって、integerは<SPAN CLASS="MATH"><IMG
+ WIDTH="408" HEIGHT="874" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+queue
+propertied-object
+s...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></SPAN>536,870,912から536,870,911までの範囲となる。
+floatは、正および負で4.8E<SPAN CLASS="MATH"><IMG
+ WIDTH="408" HEIGHT="874" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+queue
+propertied-object
+s...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></SPAN>38から3.8E38までの範囲を表現でき、
+その有効数字は、十進数で約6桁すなわち浮動小数点誤差は1/1,000,000程度である。
+
+<P>
+数値は、いつもオブジェクトでなくポインタで表現される。
+これは、EusLispのオブジェクト指向の唯一の例外事項である。
+しかしながら、数値は決してヒープメモリを無駄にすることがないため、
+数値を扱うアプリケーションでは、ガーベージコレクション
+の原因とならず有効に動作する。
+
+<P>
+EusLispは、文字型を持たないため、文字列はintegerで表現される。
+文字コード表と無関係なプログラムを書くためには、
+<code>#\</code> 読みだしマクロが役に立つ。しかし、文字が読まれるとき、
+数値表現に変換されるため、プリンタは
+<code>#\</code> の表記法に対してどのように再変換すればよいのか解らない。
+
+<P>
+数値は、図<A HREF="#Pointer">2</A>のlong wordの中に2つのtagビットを持っている。
+それで、数値計算に使用するときは、シフトまたはマスクすることにより
+このビットを消す必要がある。
+integerは数値シフトによりMSBの2ビットを無視し、floatはマスクにより
+LSBの2ビットを無視する。
+VAXのようなアーキテクチャのためにByte swapも必要である。なぜなら、
+意味を持つ最小の大きさのByteとして右端の1Byteが使用できないためである。
+
+<P>
+
+<H2><A NAME="SECTION02022000000000000000">
+オブジェクト</A>
+</H2>
+数値でない全てのデータは、ヒープにおかれるオブジェクトで表現される。
+それぞれのオブジェクトのメモリセルは、オブジェクトヘッダーと
+オブジェクト変数のための固定数のスロットを持っている。
+ベクトルは、任意の要素から構成されるため、
+sizeスロットをヘッダーのすぐ後に持っている。
+図<A HREF="#ObjectFig">3</A>はオブジェクトとベクトルおよび
+オブジェクトのヘッダーを描いたものである。
+ここに示す<EM>slot</EM>と<EM>element</EM>のワードだけがユーザーから
+アクセスすることができる。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="ObjectFig"></A><A NAME="965"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 3:</STRONG>
+オブジェクト・ベクトル・オブジェクトヘッダーの構造</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="633" HEIGHT="184" ALIGN="BOTTOM" BORDER="0"
+ SRC="jmanual-img3.png"
+ ALT="\includegraphics{fig/object.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+ヘッダーは、6つの部分で構成されている。
+MSBの2ビット<EM>m</EM>と<EM>b</EM>は、フィボナッチバディメモリ管理手法の中で、
+隣接セルの終端を示すために使用される。
+
+<P>
+<EM>mark</EM>部分には、3つのマークビットがあり、それぞれ
+ガーベージコレクタ用のアクセス可能セルの認識、
+プリンタ用の環状オブジェクトの認識（
+<TT>#n=</TT>や<TT>#n#</TT>表記法でプリントアウトさせた時）、
+<B>copy-object</B>用の分割オブジェクトのコピーとして使用される。
+<EM>elmt</EM>部分は、ベクトル要素として使用可能な７つのデータ型（
+<TT>pointer, bit, character, byte, integer, float, foreign-string</TT>）
+のうち1つを識別するために使用される。
+しかしながら、<EM>elmt</EM>はクラスの中で利用可能なため、
+クラスの構造と無関係なメモリ管理ができ、
+要素の高速なアクセスができる。
+<EM>bid</EM>部分は、メモリセルの物理的大きさを表現する。
+31の違った大きさ（16MB以上）のメモリセルをこの5ビットで表現する。
+下位のshort word (16ビット)は、クラスＩＤ(cid)として使用される。
+これは、システムのクラステーブルを経由してオブジェクトのクラスを
+引き出すために使用される。
+このクラスIDは、伝統的なLispの型tagとみなすことができる。
+cidは下位8ビットのみが使用され、上位8ビットは無視される。
+したがって、クラスの最大数は256が限界であるけれども、
+システムのクラステーブルにもっとメモリを配置するように
+EusLispを再構築することによって65536まで限界を引き上げることができる。
+
+<P>
+
+<H2><A NAME="SECTION02023000000000000000">
+クラス継承</A>
+</H2>
+
+<P>
+オブジェクトのデータ構造はクラスによって定義され、そして、それらの動作は
+クラス内のメソッドに定義されている。
+EusLispにおいて、数ダースのクラスが図<A HREF="#ClassHierarchy">4</A>に書かれているように
+木構造化された継承のなかにすでに定義されている。
+<B>class-hierarchy</B>関数を用いれば、実際の継承構造を見ることができる。
+左端のクラスobjectは、EusLisp内の全てのクラスの根幹となるスーパークラスである。
+ユーザーが定義したクラスは、これらの内部クラスのどれでも継承することができる。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="ClassHierarchy"></A><A NAME="966"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 4:</STRONG>
+定義済みのクラス継承</CAPTION>
+<TR><TD><IMG
+ WIDTH="408" HEIGHT="874" BORDER="0"
+ SRC="jmanual-img4.png"
+ ALT="\begin{figure}\small
+\begin{verbatim}object
+cons
+queue
+propertied-object
+s...
+...h-table
+surrounding-box
+stereo-viewing\end{verbatim}
+\normalsize\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+クラスは、<B>defclass</B>マクロか<B>defstruct</B>マクロで定義される。
+
+<P><PRE><TT>
+ (defclass class-name &amp;key :super   class 
+<BR>:slots 		 () 
+<BR>:metaclass 		 metaclass 
+<BR>:element-type 		 t 
+<BR>:size  -1
+<BR>) 
+<BR>(defstruct struct-name slots...) 
+<BR>(defstruct (struct-name [struct-options ...]) 
+<BR>         (slot-name1 [slot-option...]) 
+<BR>         (slot-name2 [slot-option...]) 
+<BR>          ...) 
+<BR>
+</TT></PRE>
+<P>
+メソッドは、<B>defmethod</B>により定義される。
+<B>defmethod</B>は、特定のクラスについて何度でも存在することができる。
+
+<P><PRE><TT>
+ (defmethod class-name  
+<BR>(:method-name1 (parameter...) . body1) 
+<BR>(:method-name2 (parameter...) . body2) 
+<BR>...) 
+</TT></PRE>
+<P>
+内部クラスにおけるfield定義は、大部分が
+<TT>*eusdir*/c/eus.h</TT>のヘッダーファイルの中にある。
+
+<P>
+<EM>クラス</EM>は、<TT>(describe)</TT>関数によりクラス内の全てのスロット、
+名前、スーパークラス、スロット名、スロット型、メソッドリスト、
+などを表示することができる。
+内部クラスの定義は次の通りである。
+クラスobjectはスーパークラスを持たないため、このスーパークラスはNILである。
+
+<P><PRE><TT>
+ (defclass <B>object</B> :super <B>NIL</B> :slots ()) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>cons</B> :super <B>object</B> :slots (car cdr)) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>propertied-object</B> :super <B>object</B> 
+<BR>  :slots (plist))   ;property list 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>symbol</B> :super <B>propertied-object</B> 
+<BR>  :slots (value   ;specially bound value 
+<BR>
+vtype 		                ;const(0),var(1),special(2)  
+<BR>
+function 		             ;global func def 
+<BR>
+pname 		  ;print name string 
+<BR>
+homepkg)) 		            ;home package 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>foreign-pod</B> :super <B>symbol</B> 
+<BR>  :slots (podcode   ;entry code 
+<BR>
+paramtypes 		      ;type of arguments  
+<BR>
+resulttype)) 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>package</B> :super <B>propertied-object</B> 
+<BR>  :slots (names   ;list of package name and nicknames
+<BR>
+uses 		  ;spread use-package list 
+<BR>
+symvector 		 ;hashed obvector 
+<BR>
+symcount 		  ;number of interned symbols 
+<BR>
+intsymvector 		 ;hashed obvector of internal symbols 
+<BR>
+intsymcount 		  ;number of interned internal symbols 
+<BR>
+shadows 		 ;shadowed symbols 
+<BR>
+used-by)) 		  ;packages using this package 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>stream</B> :super <B>propertied-object</B>   
+<BR>  :slots (direction   ;:input or :output, nil if closed 
+<BR>
+buffer 		  ;buffer string 
+<BR>
+count 		 ;current character index 
+<BR>
+tail)) 		  ;last character index 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>file-stream</B> :super <B>stream</B> 
+<BR>  :slots (fd   ;file descriptor (integer)
+<BR>
+fname))		 ;file name str; qid for msgq 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>broadcast-stream</B> :super <B>stream</B>
+<BR>  :slots (destinations))   ;streams to which output is elivered 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>io-stream</B> :super <B>propertied-object</B>
+<BR>:slots (instream outstream)) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>socket-stream</B> :super <B>io-stream</B>
+<BR>:slots (address))   ; socket address 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>read-table</B>  :super <B>propertied-object</B> 
+<BR>       :slots (syntax   ; byte vector representing character types 
+<BR>; 0:illegal, 1:white, 2:comment, 3:macro
+<BR>; 4:constituent, 5:single_escape
+<BR>; 6:multi_escape, 7:term_macro, 8:nonterm_macro 
+<BR>
+macro 		 ;character macro expansion function
+<BR>
+dispatch-macro)) 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>array</B> :super <B>propertied-object</B> 
+<BR>  :slots (entity  ;simple vector storing array entity 
+<BR>
+rank 		 ;number of dimensions: 0-7 
+<BR>
+fillpointer 		    ;pointer to push next element 
+<BR>
+offset 		    ;offset for displaced array 
+<BR>
+dim0,dim1,dim2,dim3,dim4,dim5,dim6))  ;dimensions 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>metaclass</B> :super <B>propertied-object</B> 
+<BR>    :slots   (name    ;class name symbol 
+<BR>
+super 		   ;super class 
+<BR>
+cix 		      ;class id 
+<BR>
+vars 		     ;var name vector including inherited vars 
+<BR>
+types 		    ;type vector of object variables 
+<BR>
+forwards 		  ;components to which messages are forwarded 
+<BR>
+methods)) 		  ;method list 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>vectorclass</B> :super <B>metaclass</B>  
+<BR>  :slots (element-type    ;vector element type 0-7
+<BR>
+size)) 		  ;vector size; 0 if unspecified 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>cstructclass</B> :super <B>vectorclass</B>  
+<BR>  :slots (slotlist))    ;cstruct slot descriptors
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>vector</B> :super <B>object</B> :slots (size)) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>float-vector</B> :super <B>vector</B> :element-type :float) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>string</B> :super <B>vector</B> :element-type :char) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>hash-table</B> :super <B>propertied-object</B> 
+<BR>   :slots   (lisp::key  ;hashed key vector
+<BR>
+value 		 ; value vector
+<BR>
+size 		 ; the size of the hash table
+<BR>
+count 		 ; number of elements entered in the table
+<BR>
+lisp::hash-function 		 
+<BR>
+lisp::test-function 
+<BR>
+lisp::rehash-size 
+<BR>
+lisp::empty  lisp::deleted )) 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>queue</B> :super <B>cons</B>) 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>pathname</B> :super <B>propertied-object</B> 
+<BR>   :slots   (lisp::host device  ; not used
+<BR>
+directory 		 ; list of directories
+<BR>
+name 		 ; file name before the last "."
+<BR>
+type 		 ; type field after the last "."
+<BR>
+lisp::version)) 		 ; not used 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>label-reference</B>    ;for reading #n=, #n# objects 
+<BR>  :super <B>object</B> 
+<BR>:slots (label value unsolved next)) 
+<BR>
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>compiled-code</B> :super <B>object</B> 
+<BR>   :slots   (codevector 
+<BR>
+quotevector 
+<BR>
+type   ;0=func, 1=macro, 2=special 
+<BR>
+entry)) 		  ;entry offset  
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>closure</B> :super <B>compiled-code</B> 
+<BR>:slots (env1 env2));environment 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>foreign-code</B>  :super <B>compiled-code</B>  
+<BR>   :slots   (paramtypes    ;list of parameter types
+<BR>
+resulttype)) 		 ;function result type 
+</TT></PRE>
+<P><PRE><TT>
+ (defclass <B>load-module</B>  :super <B>compiled-code</B>  
+<BR>   :slots  (symbol-table   ;hashtable of symbols defined 
+<BR>
+object-file 		 ;name of the object file loaded, needed for unloadin
+<BR>
+handle)) 		 ;file handle returned by ''dlopen'' 
+</TT></PRE>
+<P>
+
+<H2><A NAME="SECTION02024000000000000000">
+型指定</A>
+</H2>
+Euslispは、<B>deftype</B>特殊書式を持っていないけれども、
+型名は宣言や結果あるいは中身の型の指定を要求する関数の中で
+使用される。
+例えば、<B>coerce, map, concatenate, make-array</B>など。
+一般に、クラス名は<TT>(concatenate cons "ab" "cd") = (97 98 99 100)</TT>のように
+型指定として使用することができる。このとき、Common Lispでは<TT>cons</TT>の代わりに
+<TT>(quote list)</TT>を使用する。
+
+<P>
+Euslispは、数を表現するクラスを持っていないので、数の型はキーワードによって
+与える必要がある。
+<B>:integer</B>, <B>integer</B>, <B>:int</B>, <B>fixnum</B>,
+あるいは<B>:fixnum</B>が整数型を表現するために使用され、
+<B>:float</B>あるいは<B>float</B>が実数型を表現するために使用される。
+<B>make-array</B>の<EM>element-type</EM>引数においては、文字列を作るために
+<B>:character</B>, <B>character</B>, <B>:byte</B>や<A NAME="1211"></A><B>b</B>yteを
+認識する。
+<B>defcstruct</B>, <B>sys:peek</B>や<B>sys:poke</B>のような低レベルの関数も、
+バイト毎にアクセスするために
+<B>:character</B>, <B>character</B>, <B>:byte</B>あるいは<B>byte</B>を認識し、
+short word毎にアクセスするために
+<B>:short</B>あるいは<B>short</B>を認識する。
+どの場合においても、キーワードはpnameと同じ名前を持つlispパッケージのsymbol
+を選ぶべきである。
+
+<P>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html432"
+  HREF="jmanual-node5.html">書式と評価</A>
+<B>Up:</B> <A NAME="tex2html426"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<B> Previous:</B> <A NAME="tex2html420"
+  HREF="jmanual-node3.html">はじめに</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

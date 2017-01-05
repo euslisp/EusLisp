@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>一般化変数</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="一般化変数">
+<TITLE>XToolKit</TITLE>
+<META NAME="description" CONTENT="XToolKit">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,117 +16,2327 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node21.html">
 <LINK REL="previous" HREF="jmanual-node19.html">
-<LINK REL="up" HREF="jmanual-node17.html">
+<LINK REL="up" HREF="jmanual-node13.html">
 <LINK REL="next" HREF="jmanual-node21.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html654"
-  HREF="jmanual-node21.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html648"
-  HREF="jmanual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html642"
-  HREF="jmanual-node19.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html650"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html652"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html655"
-  HREF="jmanual-node21.html">特殊書式</A>
-<B> Up:</B> <A NAME="tex2html649"
-  HREF="jmanual-node17.html">書式と評価</A>
-<B> Previous:</B> <A NAME="tex2html643"
-  HREF="jmanual-node19.html">スコープ</A>
- &nbsp; <B>  <A NAME="tex2html651"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html653"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html854"
+  HREF="jmanual-node21.html">画像処理</A>
+<B>Up:</B> <A NAME="tex2html848"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html842"
+  HREF="jmanual-node19.html">Xwindow インターフェース</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03023000000000000000">
-一般化変数</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html855"
+  HREF="jmanual-node20.html#SECTION03071000000000000000">Xイベント</A>
+<LI><A NAME="tex2html856"
+  HREF="jmanual-node20.html#SECTION03072000000000000000">パネル</A>
+<UL>
+<LI><A NAME="tex2html857"
+  HREF="jmanual-node20.html#SECTION03072100000000000000">サブパネル(メニューとメニューバー)</A>
+<LI><A NAME="tex2html858"
+  HREF="jmanual-node20.html#SECTION03072200000000000000">ファイルパネル</A>
+<LI><A NAME="tex2html859"
+  HREF="jmanual-node20.html#SECTION03072300000000000000">テキスト表示パネル</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html860"
+  HREF="jmanual-node20.html#SECTION03073000000000000000">パネルアイテム</A>
+<LI><A NAME="tex2html861"
+  HREF="jmanual-node20.html#SECTION03074000000000000000">キャンバス</A>
+<LI><A NAME="tex2html862"
+  HREF="jmanual-node20.html#SECTION03075000000000000000">テキストwindow</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03070000000000000000">
+XToolKit</A>
+</H1>
+
+<P>
+XToolKitは、
+ボタン、プルダウンメニュ、テキストwindowなどのGUI要素を使用して
+GUI (Graphical User Interface)を作成するのを容易にするための
+高レベルXwindowインターフェースである。
+Xlibクラスとの大きな違いは、XToolKitがXserverから送られる
+Xeventと一致するユーザーが定義した対話ルーチンを呼び出し、
+それらの対話指向windowパーツと一致した外観を提供することである。
+XToolKitに含まれるクラスは、以下の継承構造を持っている。
+<PRE>
+          xwindow
+               panel
+                    menubar-panel
+                    menu-panel
+                    filepanel
+                    textviewpanel
+                    confirmpanel
+               panel-item
+                    button-item
+                         menu-button-item
+                         bitmap-button-item
+                         menu-item
+                    text-item
+                    slider-item
+                    choice-item
+                    joystick-item
+               canvas
+               textwindow
+                    buffertextwindow
+                         scrolltextwindow
+                    textedit
+               scroll-bar
+                    horizontal-scroll-bar
+</PRE>
+
+<P>
+以下に示すxwindowクラスはXToolKitの5つの基本クラスである。
+<TT>panel</TT>, <TT>panel-item</TT>,
+<TT>canvas</TT>, <TT>textWindow</TT>と<TT>scroll-bar</TT>。
+<TT>menubar-panel</TT>と<TT>menu-panel</TT>は、<TT>panel</TT>の下に定義される。
+新しいアプリケーションwindowを作り、イベントの上でそれを実行させるための
+基本的な方策は、以下の通りである。
+
+<OL>
+<LI><B>アプリケーションクラスの定義</B> アプリケーションクラスwindowは、
+XToolKitの要素を置く能力を持つ<B>panel</B>のサブクラスとして
+定義されなければならない。
+</LI>
+<LI><B>イベントハンドラの定義</B> アプリケーションクラスにおいて、
+ボタンが押されたり、メニューアイテムが選択されたりしたときに
+呼び出されるイベントハンドラを定義する。
+イベントハンドラは、panel-itemの指定された引数を持つメソッドとして
+定義すべきである。
+</LI>
+<LI><B>サブパネルの定義</B> もし、<TT>menubar-panel</TT>を使用するなら、
+アプリケーションwindowの一番上におかれる。
+したがって、<TT>:create-menubar</TT>によって最初に作成されなければ
+ならない。
+同様に、<TT>menu-panel</TT>は、その<TT>menu-panel</TT>と関連する
+<TT>menu-button-item</TT>より前に定義する必要がある。
+</LI>
+<LI><B>パネルアイテムの作成</B> <TT>button-item</TT>,
+<TT>text-item</TT>, <TT>slider-item</TT>などのようなパネルアイテムは、
+<TT>(send-super :create-item <EM>class label object method</EM>)</TT>によって
+作成することができる。
+上記で定義されたイベントハンドラは、それぞれのパネルアイテムと
+接続される。
+これらの初期化手続きは、アプリケーションwindowクラスの
+<TT>:create</TT>メソッドの中で定義すべきである。
+必要なときはいつでもイベント送信を停止するための<TT>quit</TT>ボタンを
+定義することを忘れないこと。
+どんな<TT>textWindow</TT>と<TT>canvas</TT>も、<TT>:locate-item</TT>メソッドを経由して
+アプリケーションwindowの中に置くことができる。
+</LI>
+<LI><B>window全体の作成</B> <TT>:create</TT>メッセージをアプリケーション
+クラスに送ることで、windowにXToolKitの要素を正しく置いたアプリケーション
+windowを作成する。
+</LI>
+<LI><B>イベント送信の実行</B> Xserverからイベントを受け、一致する
+windowに配るためには、<TT>window-main-loop</TT>を実行すること。
+Solaris2上では、イベントを配るための異なったスレッドである
+<TT>window-main-thread</TT>で実行する。
+<TT>window-main-thread</TT>では、最上位レベルの対話が活きている。
+<TT>window-main-thread</TT>を２回以上実行してはならない。
+</LI>
+</OL>
+
+<P>
+
+<H2><A NAME="SECTION03071000000000000000">
+Xイベント</A>
 </H2>
-一般的に、どんな値および属性もオブジェクトのスロット（またはスタック）
-で表現される。
-スロットの値を引き出すかまたは変えるときは、
-2つの基本的な命令、<B>access</B>と<B>update</B>で行わなければならない。
-オブジェクトの全てのスロットに対して2つの異なった基本命令を定義する代りに
-EusLispでは、Common Lispのように、一般化変数コンセプトに基づいた
-画一的な更新命令を備えている。
-このコンセプトのなかで、共通書式は、値のアクセス書式あるいはスロットの位置指定
-として認識される。
-したがって、それぞれのスロットに対してアクセスする書式を覚えてさえおけば、更新は
-そのアクセス書式と<B>setf</B>マクロを組み合わせることにより
-実現できる。
-例えば、car値をリストの外に取り出すのと同じ様に<TT>(setf (car '(a b)) 'c)</TT>
-として<B>setf</B>を使用したとき、<TT>(car x)</TT>は<TT>x</TT>のcarスロットのなかの
-値を置き換えることに使用することができる。
 
 <P>
-この方法は、ユーザーが定義したオブジェクト全てに対して
-適用できる。
-クラスや構造体が定義されるとき、それぞれのスロットに対する
-accessやupdate書式は、自動的に定義される。
-それらの書式は、それぞれマクロとして定義されている。その名前は、
-クラス名とスロット名の連結となる。
-例えば、consのcarは<TT>(cons-car '(a b c))</TT>で処理することができる。
+現在の実行において、
+イベント構造は固定イベントバッファ（25要素の整数ベクトル）から受け、
+同じバッファが全てのイベントに関して再使用される。
+イベント構造は、同時に2つ以上のイベントを参照する必要があるとき、
+コピーされなければならない。
+
+<P>
+<B>window-main-loop</B>は、Xserverから送られる全てのイベントを
+捕獲し、イベントが発生したwindowに配るための関数である。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="45421"></A>
+<B>event</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> もっとも最近のイベント構造を持つ25要素の整数ベクトル
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45431"></A>
+<B>next-event</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>event</B>の中にイベント構造を蓄積し、
+もし１つでも未決定のイベントがあればそれを返し、
+なければNILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45442"></A>
+<B>event-type</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>のイベント型を表現するキーワードsymbol返す。
+イベント型キーワードは、
+<TT>:KeyPress</TT> (2),
+<TT>:KeyRelease</TT> (3),
+<TT>:ButtonPress</TT> (4),
+<TT>:ButtonRelease</TT> (5),
+<TT>:MotionNotify</TT> (6),
+<TT>:EnterNotify</TT> (7),
+<TT>:LeaveNotify</TT> (8),
+<TT>:FocusIn</TT> (9),
+<TT>:FocusOut</TT> (0),
+<TT>:KeymapNotify</TT> (1),
+<TT>:Expose</TT> (12),
+<TT>:GraphicsExpose</TT> (13),
+<TT>:NoExpose</TT> (14),
+<TT>:VisibilityNotify</TT> (15),
+<TT>:CreateNotify</TT> (16),
+<TT>:DestroyNotify</TT> (17), 
+<BR><TT>:UnmapNotify</TT> (18),  
+<TT>:MapNotify</TT> (19),  
+<TT>:MapRequest</TT> (20),  
+<TT>:ConfigureNotify</TT> (22),  
+<TT>:ConfigureRequest</TT> (23),  
+<TT>:GravityNotify</TT> (24),  
+<TT>:ResizeRequest</TT> (25),  
+<TT>:CirculateNotify</TT> (26),  
+<TT>:CirculateRequest</TT> (27),  
+<TT>:PropertyNotify</TT> (28),  
+<TT>:SelectionClear</TT> (29),  
+<TT>:SelectionRequest</TT> (30),  
+<TT>:SelectionNotify</TT> (31),  
+<TT>:ColormapNotify</TT> (32),  
+<TT>:ClientMessage</TT> (33),  
+<TT>:MappingNotify</TT> (34),  
+<TT>:LASTEvent</TT> (35)である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45486"></A>
+<B>event-window</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>が発生したwindowオブジェクトを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45497"></A>
+<B>event-x</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>からそのイベントが発生した<TT>x</TT>座標を抜き出す。
+(すなわち、window内におけるマウスポインタの横方向の相対的な位置)
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45509"></A>
+<B>event-y</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>からそのイベントが発生した<TT>y</TT>座標を抜き出す。
+(すなわち、window内におけるマウスポインタの縦方向の相対的な位置)
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45521"></A>
+<B>event-width</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>:configureNotify</TT>イベントに幅パラメータを表現する
+<EM>event</EM>の８つの要素を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45533"></A>
+<B>event-height</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>:configureNotify</TT>イベントに高さパラメータを表現する
+<EM>event</EM>の8つの要素を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45545"></A>
+<B>event-state</B> <EM>event </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+キーの状態で変更されたマウスボタンを表現するキーワードのリストを返す。
+キーワードは、<TT>:shift, :control, :meta, :left, :middle</TT>と<TT>:right</TT>である。
+例えば、もしシフトキーが押されている状態で左のボタンが押されたならば、
+<TT>(:shift :left)</TT>が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45558"></A>
+<B>display-events</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>x:nextevent</B>によって捕獲された全てのxwindowイベントを表示する。
+Control-Cは、この関数を停止させる唯一の方法である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45569"></A>
+<B>window-main-loop</B> <EM>&amp;rest forms </EM>[マクロ]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xeventを受け、イベントが発生したwindowオブジェクトにそれを
+配る。
+イベントの型に沿って、
+<TT>:KeyPress, :KeyRelease, :ButtonPress,
+:ButtonRelease, :MotionNotify,
+:EnterNotify, :LeaveNotify</TT>
+<BR>や <TT>:ConfigureNotify</TT>と名付けられた
+ windowクラスのメソッドが<EM>event</EM>を引数として
+呼び出される。
+もし、<EM>forms</EM>が与えられたならば、
+到着したイベントがチェックされるとき毎にそれらを評価する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45583"></A>
+<B>window-main-thread</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スレッドであることを除いて<B>window-main-loop</B>と同じことをする。
+<B>window-main-thread</B>は、Solaris2でのみ実現されている。
+<B>window-main-thread</B>は、read-eval-printが入力されない
+エラーハンドラをインストールしている。
+エラー情報を表示した後、そのイベントは処理を続ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03072000000000000000">
+パネル</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="45597"></A>
+<BIG CLASS="XLARGE"><B>panel </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (pos items fontid
+<BR>
+rows columns ;total number of rows and columns
+<BR>
+next-x next-y
+<BR>
+item-width item-height) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>panel</B>は、パネルアイテムや他のpanelを含んだどんなxwindowも置くこと
+ができるxwindowである。
+<B>panel</B>オブジェクトは、panelの中で生成されたパネルアイテムへの
+デフォルトフォントを供給する。
+アプリケーションwindowは、<B>panel</B>のサブクラスとして定義
+去れなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45617"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;rest args &amp;key ((:item-height iheight) 30)((:item-width iwidth) 50)[メソッド]
+<BR>(:font font-lucidasans-bold-12)  ((:background color) *bisque1*) 
+<BR>&amp;allow-other-keys)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>panel</B>を生成し、初期化する。
+スーパークラスの<TT>:create</TT>が呼び出されるため、
+<B>xwindow</B>に対する全ての生成用パラメータ（<EM>:width, :height, 
+:border-width</EM>など）が許される。
+<EM>:item-height</EM>と<EM>:item-width</EM>は、最小の高さと幅をそれぞれのパネルアイテムに
+与える。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45634"></A>
+<B>:items</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 関連するアイテムを全てリストで返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45644"></A>
+<B>:locate-item</B> <EM>item &amp;optional x y </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>item</EM>は、xwindowオブジェクト（ふつうはパネルアイテム）である。
+もし<EM>x</EM>と<EM>y</EM>が与えられたならば、アイテムはそこに置かれる。
+そうでなければ、<EM>item</EM>は、もっとも最近に置かれたアイテムに
+隣接するように置かれる。
+アイテムは、
+図 <A HREF="#panellayout">15</A>のように
+上から下に向かって、また左から右に向かって置かれていく。
+<B>:locate-item</B>は、また<TT>items</TT>や<TT>subwindows</TT>リストに
+<EM>item</EM>を追加し、<TT>:map</TT>を送ることにより見えるようにする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="panellayout"></A><A NAME="45337"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 15:</STRONG>
+panelのアイテムレイアウト</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="45664"></A>
+<PRE><TT>
+<B>:create-item</B> <I>klass label receiver method &amp;rest args[メソッド]
+<BR>&amp;key ((:font fontid)
+<BR>&amp;allow-other-keys)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>klass</EM>で指定されるパネルアイテムのクラス
+（すなわち、<TT>button-item,  menu-button-item, slider-item, joystick-item</TT>など),
+のインスタンスを作り、<TT>:locate-item</TT>を用いてpanelにアイテムを置く。
+<EM>args</EM>は、<EM>klass</EM>の<TT>:create</TT>メソッドに送られる。
+<EM>label</EM>は、パネルアイテムの中に書かれる識別文字列である。
+<EM>receiver</EM>と<EM>method</EM>は、一致するイベントを呼び出すイベントハンドラを
+指定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45684"></A>
+<B>:delete-items</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> パネルアイテムを全て削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45694"></A>
+<PRE><TT>
+<B>:create-menubar</B> <I>&amp;rest args [メソッド]
+<BR>&amp;key (:font fontid)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>menubar-panel</EM>を作成し、panelの最上部に置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+以下に示すメソッドは、イベントがイベントハンドラのないpanelに送られたとき、
+"subclass's responsibility"警告メッセージを避けるために提供されている。
+ユーザーのアプリケーションでは、これらのメソッドを上書きしなければならない。
+
+<P>
+
+ <BR>
+<BR> <A NAME="45706"></A>
+<B>:quit</B> <EM>&amp;rest a </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>window-main-loop</B>に<TT>:quit</TT>メッセージを送り、
+イベント処理を停止する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45718"></A>
+<B>:KeyPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45728"></A>
+<B>:KeyRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45738"></A>
+<B>:ButtonPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45748"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45758"></A>
+<B>:MotionNotify</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45768"></A>
+<B>:EnterNotify</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="45778"></A>
+<B>:LeaveNotify</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> NILを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H3><A NAME="SECTION03072100000000000000">
+サブパネル(メニューとメニューバー)</A>
+</H3>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="45789"></A>
+<BIG CLASS="XLARGE"><B>menu-panel </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel</B> 
+<BR>  :slots 		  (items item-dots item-height
+<BR>
+charwidth charheight
+<BR>
+height-offset
+<BR>
+highlight-item
+<BR>
+color-pixels
+<BR>
+active-color) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>menu-panel</B>は、<TT>panel-button</TT>と<TT>menu-item</TT>のみを
+含むことができるパネルの一種である。
+<TT>panel</TT>と異なり、<TT>menu-panel</TT>はふつう見えないし、
+<TT>menu-panel</TT>と関連した<TT>button-item</TT>が押された時に
+表示される。
+もし、menu-panelがいつも見えるように作られたならば、
+ピンを刺したメニューとなる。
+マウスイベントに対するmenu-itemの応答は、アイテムの外のどこかで
+押されたマウスボタンのようにふつうのmenu-buttonと
+全く異なっている。
+<TT>menu-panel</TT>を使用するためには、最初に作成し、
+その中にbutton-itemを置く。
+それから、<TT>menu-button-item</TT>がpanelの中あるいはmenubarの中に
+<EM>:menu</EM>の引数として<TT>menu-panel</TT>と一緒に作成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45817"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;rest args &amp;key(:items) (:border-width 0)   (:font font-courb12)[メソッド]
+<BR>(:width 100) (:height-offset 15) (:color *bisque1*)                      (:active *bisque2*) 
+<BR>&amp;allow-other-keys)  </I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>menu-panel</B> windowを作成する。
+そのwindowの大きさは、新しいmenu-itemが追加される時に
+拡張される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45829"></A>
+<B>:add-item</B> <EM>label name &amp;optional (receiver self)  &amp;rest mesg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>menu-panel</B> windowの中にmenuアイテムを追加し、
+対応する行動を張り付ける。
+マウスボタンがアイテムの上で外されたとき、
+<EM>receiver</EM>オブジェクトは<EM>mesg</EM>を受け取る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45843"></A>
+<BIG CLASS="XLARGE"><B>menubar-panel </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>menubar-panel</TT>は、親panelの最上部にいつも置かれるサブパネルである。
+メニューバーに置かれるパネルアイテムは、<TT>menu-button-item</TT>で
+なければならない。
+menubar-panelは、panelの<TT>:create-menubar</TT>メソッドにより
+生成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H3><A NAME="SECTION03072200000000000000">
+ファイルパネル</A>
+</H3>
+FilePanelは、ファイルやディレクトリを対話的に処理する
+アプリケーションwindowである。
+<TT>cd</TT>や<TT>go-up</TT>ボタンを使用することにより、
+どんなディレクトリも見に行くことができるし、
+以下の<TT>ScrollTextWindow</TT>の中にディレクトリ内に含まれるファイルを
+表示する。
+テキストファイルは、異なったwindow(TextViewPanel)の中に
+表示することができる。
+ファイルは、また印刷することができ、削除することができ、
+ボタンをクリックすることにより簡単にコンパイルすることができる。
+ファイルを印刷するとき、<TT>a2ps <EM>file</EM> | lpr</TT>コマンドがforkされたプロセスとして実行される。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="44939"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 16:</STRONG>
+ファイルパネルwindow</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H3><A NAME="SECTION03072300000000000000">
+テキスト表示パネル</A>
+</H3>
+
+<P>
+TextViewPanelは、テキストファイルを表示するための
+アプリケーションwindowクラスである
+(図 <A HREF="#textviewpanel">17</A>)。
+プログラムテキストは、もっとも簡単なアプリケーションwindowの１つが
+どのように記述されているかを見れる。
+<TT>:create</TT>メソッドにおいて、quitボタンとfindボタンと
+ファイルの中を捜すための文字列を供給するためのtext-itemを
+作成する。
+view-windowは、縦と横にスクロールバーを持ちファイルを表示するための
+ScrollTextWindowである。
+TextViewPanelは、windowマネージャーにより一番外側のタイトルwindowの
+大きさを変えたときview-windowの大きさを変えるために
+<TT>:ConfigureNotify</TT>イベントを捕獲する。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="textviewpanel"></A><A NAME="45346"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 17:</STRONG>
+テキスト表示パネルwindow</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
 
 <P>
 <PRE>
-(defclass person :super object :slots (name age))
-(defclass programmer :super person :slots (language machine))
-(setq x (instantiate programmer))
-(setf (programmer-name x) "MATSUI"
-      (person-age x) 30)
-(incf (programmer-age x))
-(programmer-age x)   --&gt; 31
-(setf (programmer-language x) 'EUSLISP
-      (programmer-machine x) 'SUN4)
+(defclass TextViewPanel :super panel
+        :slots (quit-button find-button find-text view-window))
+
+(defmethod TextViewPanel
+ (:create (file &amp;rest args &amp;key (width 400) &amp;allow-other-keys)
+    (send-super* :create :width width args)
+    (setq quit-button
+          (send self :create-item panel-button "quit" self :quit))
+    (setq find-button
+          (send self :create-item panel-button "find" self :find))
+    (setq find-text
+          (send self :create-item text-item "find: " self :find))
+    (setq view-window
+            (send self :locate-item
+                (instance ScrollTextWindow :create
+                   :width (setq width (- (send self :width) 10))
+                   :height (- (setq height (send self :height)) 38)
+                   :scroll-bar t :horizontal-scroll-bar t
+                   :map nil      :parent self)))
+    (send view-window :read-file file))
+ (:quit (event)  (send self :destroy))
+ (:find (event)
+    (let ((findstr (send find-text :value)) (found)
+          (nlines (send view-window :nlines)))
+        (do ((i 0 (1+ i)))
+            ((or (&gt;= i nlines) found))
+           (if (substringp findstr (send view-window :line i)) (setq found i)))
+        (when found
+           (send view-window :display-selection found)
+           (send view-window :locate found))))
+ (:resize (w h)
+    (setq width w height h)
+    (send view-window :resize (- w 10) (- h 38)))
+ (:configureNotify (event)
+   (let ((newwidth (send self :width))
+         (newheight (send self :height)))
+        (when (or (/= newwidth width) (/= newheight height))
+          (send self :resize newwidth newheight)))  ) )
 </PRE>
 
 <P>
-行列要素も同じ手法でアクセスすることができる。
+
+<H2><A NAME="SECTION03073000000000000000">
+パネルアイテム</A>
+</H2>
+
+ <BR>
+<BR> <BR> 
+<A NAME="45864"></A>
+<BIG CLASS="XLARGE"><B>panel-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (pos notify-object notify-method
+<BR>
+fontid label labeldots) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>panel-item</B>は、パネルアイテムwindowのすべての種類において、
+アイテムが指定するイベントが発生したとき
+<TT>notify-object</TT>の<TT>notify-method</TT>を呼び出すための
+抽象クラスである。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45884"></A>
+<B>:notify</B> <EM>&amp;rest args </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>notify-object</TT>の<TT>notify-method</TT>を呼び出す。
+イベント応答や<TT>notify-method</TT>へ送るための引き数が
+アイテムにより区別される。
+<DL>
+<DT><STRONG>button-item</STRONG></DT>
+<DD>ボタンは、同じbutton-itemの押し、外し時に応答。
+引き数はbutton-itemオブジェクトである。
+</DD>
+<DT><STRONG>menu-button-item</STRONG></DT>
+<DD>メニューアイテムの選択時に応答。
+引き数は、menu-button-itemオブジェクトである。
+</DD>
+<DT><STRONG>choice-item</STRONG></DT>
+<DD>新しい選択ボタンの選択時に応答。
+引き数は、choice-itemオブジェクトとその選択番号である。
+</DD>
+<DT><STRONG>text-item</STRONG></DT>
+<DD>改行あるいはリターンの入力時に応答。
+引き数は、text-itemオブジェクトと入力行（文字列）である。
+</DD>
+<DT><STRONG>slider-item</STRONG></DT>
+<DD>スライダーノブは、つかみと移動時に応答。
+引き数は、slider-itemオブジェクトと新たな値である。
+</DD>
+<DT><STRONG>joystick-item</STRONG></DT>
+<DD>ジョイスティックは、つかみと移動時に応答。
+引き数はslider-itemオブジェクトと新しいxとyの値である。
+</DD>
+</DL>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45899"></A>
+<PRE><TT>
+<B>:create</B> <I>name reciever method &amp;rest args[メソッド] 
+<BR>&amp;key ((:width w) 100) ((:height h) 100) (:font font-courb12)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>パネルアイテムを作成する。
+パネルアイテムは、抽象クラスである。
+このメソッドは、サブクラスによって<TT>send-super</TT>を通してのみ
+呼び出すべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45912"></A>
+<BIG CLASS="XLARGE"><B>button-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>button-item</B>は、簡単なパネルアイテムである。
+button-itemは、四角ボックスとその中のラベル文字列を持っている。
+クリックされたとき、button-itemはpanel-itemオブジェクトを唯一の引き数として
+<TT>notify-object</TT>の<TT>notify-method</TT>
+を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45932"></A>
+<B>:draw-label</B> <EM>&amp;optional (state :top) (color bg-color) (border 2) (offset) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>button-item</B>のラベルを書く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45943"></A>
+<PRE><TT>
+<B>:create</B> <I>label revciever method &amp;rest args[メソッド]
+<BR>&amp;key:width :height (:font (send parent :gc :font))
+<BR>(:background (send parent :gc :background)) 
+<BR>(:border-width 0) 
+<BR>(:state :top)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>button-item</B>を作成する。
+もし、ボタンの幅と高さが与えられないなら、サイズは
+与えられたフォントを用いて書かれた
+ラベル文字列に合わせて自動的に設定される。
+<EM>:border-width</EM>はデフォルトで0であるが、
+擬似３次元表現でボタンを浮き出しにする。
+背景やフォントは親window(すなわち、panel)で定義されているものを
+デフォルトとする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45956"></A>
+<B>:ButtonPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、ボタンであれば、背景色をグレーにする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45966"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>の背景色を標準に変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="45978"></A>
+<BIG CLASS="XLARGE"><B>menu-button-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		 (items item-dots item-labels
+<BR>
+charwidth charheight 
+<BR>
+menu-window window-pos high-light) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>プルダウンメニューを定義する。
+<B>menu-button-item</B>は、<TT>button-item</TT>のようであるが、
+<B>menu-button-item</B>は、ボタンの下の関連する<TT>menu-panel</TT>が
+押されたとき、
+<TT>notify-object</TT>にすぐにメッセージを送る代わりに、
+活性化させる。
+メニューアイテムの１つの上でマウスボタンが外されたときに、本当のメッセージが
+送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46000"></A>
+<PRE><TT>
+<B>:create</B> <I>label reciever method [メソッド]
+<BR>&amp;rest args
+<BR>&amp;key (:menu nil) (:items) (:state :flat)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>プルダウンメニューを作成する。
+<EM>receiver</EM>と<EM>method</EM>引き数は、影響を与えない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46013"></A>
+<B>:ButtonPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+プルダウンメニューのボタンを反転させ、
+ボタンの下に関連するmenu-panelをさらす。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46023"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このボタンの下の<TT>menu-panel</TT>を消し、
+このボタンを元に戻す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="46035"></A>
+<BIG CLASS="XLARGE"><B>bitmap-button-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		 (pixmap-id bitmap-width bitmap-height) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>bitmap-button-item</B>の関数は、<TT>button-item</TT>に似ているが、
+表現が異なっている。
+<TT>button-item</TT>の場合にボタンの上に簡単なラベル文字列を描く代わりに、
+<TT>bitmap-button-item</TT>では、ボタンが作られたときにbitmapファイルから
+ロードされるpixmapを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46056"></A>
+<PRE><TT>
+<B>:create</B> <I>bitmap-file reciever method &amp;rest args[メソッド]
+<BR>&amp;key :width :height
+<BR>&amp;allow-other-keys)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>bitmap-button-item</B>を作成する。
+最初の引き数<EM>bitmap-file</EM>は、<TT>button-item</TT>の<EM>label</EM>引き数
+を置き換えたものである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46071"></A>
+<B>:draw-label</B> <EM>&amp;optional (state :flat) (color bg-color) (border 2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ボタンの上にbitmapかpixmapを描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46081"></A>
+<B>:create-bitmap-from-file</B> <EM>fname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fname</EM>という名のbitmapファイルからpixmapを作り、
+<TT>pixmap-id</TT>にそのIDを入れる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="46094"></A>
+<BIG CLASS="XLARGE"><B>choice-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>button-item</B> 
+<BR>  :slots 		  (choice-list active-choice transient-choice 
+<BR>
+choice-dots choice-pos button-size) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>choice-item</B>は、丸い選択ボタンの集合である。
+１つの選択はいつも活性化しており、同時に１つの選択だけが
+活性化することができる。
+<B>choice-item</B>は、ラジオボタンと同様な機能を提供する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46113"></A>
+<PRE><TT>
+<B>:create</B> <I>label reciever method &amp;rest args[メソッド]
+<BR>&amp;key (:choices '("0" "1")) (:initial-choice 0)
+<BR>(:font (send parent :gc :font))
+<BR>(:button-size 13)
+<BR>(:border-width 0)
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>choice-item-button</B>を作成する。
+それぞれの選択ボタンは<EM>:button-size</EM>の半径を持つ円である。
+新しい選択ボタンが選択されたとき、
+<TT>notify-object</TT>の<TT>notify-method</TT>が
+choice-itemオブジェクトと選択された選択ボタンの番号と一緒に呼び出される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46128"></A>
+<B>:value</B> <EM>&amp;optional (new-choice) (invocation) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>new-choice</EM>が与えられたならば、現在の活性化選択ボタンとして
+設定し、対応する円が黒色になる。
+もし<EM>invocation</EM>も指定されているなら、<TT>notify-object</TT>の
+<TT>notify-method</TT>が呼び出される。
+<TT>:value</TT>は、現在の（あるいは新しい）選択ボタンの番号を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46143"></A>
+<B>:draw-active-button</B> <EM>&amp;optional
+(old-choice active-choice) (new-choice active-choice) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ボタンを活性化として書く。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46153"></A>
+<B>:ButtonPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、選択ボタンのどこかでマウスボタンが押されているなら、
+その番号が<TT>transient-choice</TT>に記録される。
+マウスボタンが外されるまでそれ以上の行動は、起こさない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46164"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、既に押されていたところと同じボタンの上でマウスボタンが外されたなら、
+<TT>active-choice</TT>が更新され、
+<TT>notify-object</TT>の<TT>notify-method</TT>が呼び出される。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="46178"></A>
+<BIG CLASS="XLARGE"><B>slider-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 (min-value max-value value
+<BR>
+minlabel maxlabel valueformat
+<BR>
+bar-x bar-y bar-width bar-height valuedots label-base
+<BR>
+nob-x nob-moving
+<BR>
+charwidth)  
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>choice-item</TT>が離散的な値の選択に使用されるのに対し、
+<B>slider-item</B>は<TT>min-value</TT>と<TT>max-value</TT>の間の範囲の
+連続的な値に対して使用される。
+それぞれ値が変化した瞬間、slider-itemオブジェクトと新しい値が引き数として
+一緒に<TT>notify-object</TT>の<TT>notify-method</TT>が呼び出される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46201"></A>
+<PRE><TT>
+<B>:create</B> <I>label reciever method &amp;rest args[メソッド]
+<BR>&amp;key (:min 0.0) (:max 1.0) (:parent)
+<BR>(:min-label "") (:max-label "") (:value-format "&nbsp;4,2f")
+<BR>(:font font-courb12) (:span 100) (:border-width 0) (:initial-value min) </I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>slider-item</B>を作成する。
+スライドのノブは、バーの上に小さな黒の四角として表示される。
+左端が<EM>:min</EM>値を表現し、右端が<EM>:max</EM>値を表現する。
+バーの長さは、<EM>:span</EM>ドットに引き伸ばす。
+現在の値は、<EM>:value-format</EM>でslider-itemの右に表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46217"></A>
+<B>:value</B> <EM>&amp;optional newval invocation </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>newval</EM>が与えられたなら、現在の値として設定され、
+ノブは対応する位置にスライドする。
+もし、<EM>invocation</EM>もnon NILに指定されていたなら、
+<TT>notify-object</TT>の<TT>notify-method</TT>が呼び出される。
+<TT>:value</TT>は、現在の（新しい）値を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="46233"></A>
+<BIG CLASS="XLARGE"><B>joystick-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		  (stick-size min-x min-y max-x max-y
+<BR>
+center-x center-y stick-x stick-y
+<BR>
+value-x value-y
+<BR>
+stick-return stick-grabbed
+<BR>
+fraction-x fraction-y) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>joystick-item</B>は、2次元のslider-itemとしてみなすことができる。
+2つの連続値はクモの巣のような同心円図の上を動く黒い円によって
+指定することができる(図 <A HREF="#panelitem">18</A>)。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46252"></A>
+<PRE><TT>
+<B>:create</B> <I>name reciever method &amp;rest args[メソッド]
+<BR>&amp;key (:stick-size 5) (:return nil)
+<BR>(:min-x -1.0) (:max-x 1.0)
+<BR>(:min-y -1.0) (:max-y 1.0)
+<BR>&amp;allow-other-keys)  </I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>:stick-size</EM>は、スティックの黒い円の半径である。
+同心円図の円の大きさは、<B>joystick-item</B> windowの幅と高さ
+に合うように決定される。
+もし、<EM>:return</EM>がnon NILであるなら、
+ジョイスティックは、マウスボタンが外された時の原点に帰る。
+そうでないなら、ジョイスティックは、外された位置に残る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46266"></A>
+<B>:value</B> <EM>&amp;optional (newx) (newy) (invocation) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>newx</EM>と<EM>newy</EM>が与えられたなら、
+現在の位置として設定され、ジョイスティックは同心円図の
+対応する位置に移動する。
+もし、<EM>invocation</EM>もnon NILに指定されたなら、
+<TT>notify-object</TT>の<TT>notify-method</TT>が、
+<B>joystick-item</B>オブジェクトとx,y値を引き数として一緒に呼び出される。
+<TT>:value</TT>は、現在の（新しい）値のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+以下に上に記述されているpanel-itemを使った短いプログラムを示し、
+図 <A HREF="#panelitem">18</A>がパネルの中にどのように表示されるかを示したものである。
 
 <P>
 <PRE>
-(setq a (make-array '(3 3) :element-type :float))
-(setf (aref a 0 0) 1.0 (aref a 1 1) 1.0 (aref a 2 2) 1.0)
-a --&gt; #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))
-
-(setq b (instantiate bit-vector 10))  --&gt; #*0000000000
-(setf (bit b 5) 1)
-b --&gt; #*0000010000
+(in-package "X")
+(defclass testPanel :super panel
+        :slots (quit joy choi sli))
+(defmethod testPanel
+ (:create (&amp;rest args)
+    (send-super* :create :width 210 :height 180 
+                 :font font-courb12 args)
+    (send-super :create-item button-item "quit" self :quit :font font-courb14)
+    (send-super :create-item choice-item "choice" self :choice
+                :choices '(" A " " B " " C ")
+                :font font-courb12)
+    (send-super :create-item slider-item "slider" self :slider
+                :span 90)
+    (send-super :create-item joystick-item "joy" self :joy)
+    self)
+ (:choice (obj c) (format t "choice: ~S ~d~%" obj c))
+ (:slider (obj val) (format t "slider: ~S ~s~%" obj val))
+ (:joy (obj x y) (format t "joy: ~S ~s ~s~%" obj x y)) )
+(instance testPanel :create)
+(window-main-thread)
 </PRE>
 
 <P>
-特定のオブジェクトに特別なsetfメソッドを定義するために
-<B>defsetf</B>マクロを用意している。
+
+<DIV ALIGN="CENTER"><A NAME="panelitem"></A><A NAME="45371"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 18:</STRONG>
+panelの中に作成されたpanel-item</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
 
 <P>
-<PRE>
-(defsetf symbol-value set)
-(defsetf get (sym prop) (val) `(putprop ,sym ,val ,prop))
-</PRE>
+
+ <BR>
+<BR> <BR> 
+<A NAME="46284"></A>
+<BIG CLASS="XLARGE"><B>text-item </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>panel-item</B> 
+<BR>  :slots 		 (textwin) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>text-item</B>は、ファイル名のような短いテキストを表示したり入力したり
+するために使用する。
+<B>text-item</B>は、ラベル文字列とその右側に小さなテキストwindowを持っている。
+テキストwindow内にポインタが置かれたとき、キー入力が可能となり、
+入力された文字がバッファに入れられる。
+テキストwindow内の行修正が可能である。
+<TT>control-F</TT>と<TT>control-B</TT>は前後に１文字動かし、
+<TT>del</TT>はカーソルの左の１文字を削除し、
+<TT>control-D</TT>はカーソル位置の文字を削除し、
+カーソル位置にはどんなグラフィック文字も挿入できる。
+マウスボタンをクリックすれば、クリックされた文字にカーソルを
+移動させる。
+enter（改行）キーを打つことにより、バッファされたテキストが
+<TT>notify-object</TT>の<TT>notify-method</TT>に送られる。
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<BR><HR>
+
+<A NAME="46309"></A>
+<PRE><TT>
+<B>:create</B> <I>label revciever method &amp;rest args [メソッド]
+<BR>&amp;key (:font font-courb12) (:columns 20) (:initial-value ) (:border-width 0)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><B>text-item</B>を作成する。
+テキストwindowの行バッファには、長さの制限が無いけれども、
+見える部分は<EM>columns</EM>文字に制限されている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46322"></A>
+<B>:getstring</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+キーバッファ内の文字列を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03074000000000000000">
+キャンバス</A>
+</H2>
+
+ <BR>
+<BR> <BR> 
+<A NAME="46333"></A>
+<BIG CLASS="XLARGE"><B>canvas </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (topleft bottomright) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>canvas</B>は、図や画像を入れるためのXwindowである。
+現在、領域選択機能のみ実現されている。
+ButtonPressイベントにより、<B>canvas</B>は押された位置を左上の端とし、
+現在の位置を右下の端とする四角を描き始める。
+ButtonReleaseにより、<TT>notify-object</TT>の<TT>notify-method</TT>が
+送られる。
+canvas内に図や画像を描くためにはXdrawableのメソッドが使用される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03075000000000000000">
+テキストwindow</A>
+</H2>
+
+<P>
+<TT>TextWindow</TT>と<TT>BufferTextWidnow</TT>と<TT>ScrollTextWindow</TT>の
+３つのテキストwindowがある。
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="46355"></A>
+<BIG CLASS="XLARGE"><B>textWindow </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>xwindow</B> 
+<BR>  :slots 		 (fontid 
+<BR>
+charwidth charheight charascent dots 
+<BR>
+win-row-max win-col-max 
+<BR>
+win-row win-col   ;physical current position in window 
+<BR>
+x y
+<BR>
+charbuf 		; for charcode conversion 
+<BR>
+keybuf keycount 		 ;for key input
+<BR>
+echo 
+<BR>
+show-cursor cursor-on 		 ;boolean
+<BR>
+kill delete 		 ;control character 
+<BR>
+notify-object notify-method 
+<BR>) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>メッセージを表示するために使用可能な仮想端末を実現する。
+表示される内容は、バッファされないし、<B>TextWindow</B>に既に表示された
+文字や行を引き出す方法はない。
+基本的に、<B>TextWindow</B>は
+カーソル移動、行削除、領域削除、表示テキストのスクロール、文字列挿入
+などを持つダンプ端末と似た能力を持っている。
+また、テキストカーソルはマウスポインタで指示された位置に
+移動することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46375"></A>
+<B>:init</B> <EM>id </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>id</EM>番目のテキストwindowを初期化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46386"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;rest args [メソッド]
+<BR>&amp;key :width :height (:font font-courb14) :rows :columns
+<BR>(:show-cursor nil) (:notify-object nil) (:notify-method nil)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>text-windowを作成する。
+windowの大きさは、<EM>:width</EM>と<EM>:height</EM>かあるいは<EM>:rows</EM>と
+<EM>:columns</EM>で指定されたものとなる。
+<EM>:notify-object</EM>の<EM>:notify-method</EM>は、改行文字が入力された
+ときに呼び出される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46403"></A>
+<B>:cursor</B> <EM>flag </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>flag</EM>は、<TT>:on, :off, :toggle</TT>のどれかが可能である。
+テキストカーソルは、<TT>win-row</TT>と<TT>win-col</TT>の位置である。
+もし、<EM>flag</EM>が<TT>:on</TT>であれば、テキストカーソルは表示され、
+<EM>flag</EM>が<TT>:off</TT>ならば、消される。
+また、<EM>flag</EM>が<TT>toggle</TT>ならば、反対になる。
+このメソッドは、カーソルの位置の文字を更新するときはいつでも、
+呼び出されなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46423"></A>
+<B>:clear</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+テキストwindow内を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46433"></A>
+<B>:clear-eol</B> <EM>&amp;optional (r win-row) (c win-col) (csr :on) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>と<EM>c</EM>で指定される位置の文字以降の残りの行を
+消去する。カーソル位置の文字も含む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46445"></A>
+<B>:clear-lines</B> <EM>lines &amp;optional (r win-row) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>番目の行以降の複数行を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46456"></A>
+<B>:clear-eos</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>と<EM>c</EM>で指定される位置から画面の最後までの領域を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46468"></A>
+<B>:win-row-max</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowに表示可能な最大行数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46478"></A>
+<B>:win-col-max</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowに表示可能な最大列数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46488"></A>
+<B>:xy</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>と<EM>c</EM>で指定される位置の文字のピクセル座標を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46500"></A>
+<B>:goto</B> <EM>r c &amp;optional (cursor :on) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>番目の行の<EM>c</EM>番目の列にカーソルを移動する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46512"></A>
+<B>:goback</B> <EM>&amp;optional (csr :on) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソルを１文字戻す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46522"></A>
+<B>:advance</B> <EM>&amp;optional (n 1) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>n</EM>文字だけカーソルを進める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46533"></A>
+<B>:scroll</B> <EM>&amp;optional (n 1) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>n</EM>行だけ縦方向にテキストwindowをスクロールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46544"></A>
+<B>:horizontal-scroll</B> <EM>&amp;optional (n 1) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>n</EM>列だけ横方向にテキストをスクロールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46555"></A>
+<B>:newline</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+次の行の最初にカーソルを移動する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46565"></A>
+<B>:putch</B> <EM>ch </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソル位置に文字<EM>ch</EM>を挿入する。
+行の残りは、１文字前方に進められる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46576"></A>
+<B>:putstring</B> <EM>str &amp;optional (e (length str)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソル位置に<EM>str</EM>を置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46587"></A>
+<B>:event-row</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46597"></A>
+<B>:event-col</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event</EM>における、テキストカーソルの位置をを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46608"></A>
+<B>:KeyPress</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソル位置に入力された文字を挿入する。
+もし、文字が改行であったなら、<TT>notify-object</TT>に通知する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="46620"></A>
+<BIG CLASS="XLARGE"><B>TextWindowStream </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>stream</B> 
+<BR>  :slots 		 (textwin) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>TextWindowStream</TT>は、TextWdinowに接続された出力ストリームである。
+<TT>print, format, write-byte</TT>などによってこのストリームに出力
+される文字や文字列がTextWdindowに表示される。
+通常のファイルストリームとしては、
+出力データはバッファされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46639"></A>
+<B>:flush</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+バッファされたテキスト文字列を掃き出し、TextWindowに送る。
+<TT>finish-output</TT>やこのストリームへの改行文字の書き込みは、
+このメソッドを自動的に呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46650"></A>
+<B>make-text-window-stream</B> <EM>xwin </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>text-window-stream</B>を作り、そのストリームオブジェクトを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="46662"></A>
+<BIG CLASS="XLARGE"><B>BufferTextWindow </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>TextWindow</B> 
+<BR>  :slots 		 (linebuf expbuf max-line-length row col) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>TextWindow</B>の内容を表現する行バッファを保持する。
+<TT>linebuf</TT>は、行のベクトルである。<TT>exbuf</TT>は、
+タブ拡張されたテキストを持つ。
+windowに表示可能な行のみが保持される。
+<B>BufferTextWindow</B>は、数行のテキストを持つ
+簡単なテキストエディタとして使用することができる。
+<TT>text-item</TT>は、表示可能な行バッファとして<B>BufferTextWindow</B>を
+使う。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46685"></A>
+<B>:line</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>n</EM>番目の行の内容を文字列として返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46696"></A>
+<B>:nlines</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>linebuf</TT>の行数を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46707"></A>
+<B>:all-lines</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 文字列のベクトルである<TT>linebuf</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46718"></A>
+<B>:refresh-line</B> <EM>&amp;optional (r win-row) (c win-col) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>r</EM>番目の行の<EM>c</EM>番目の列以降を再書き込みする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46730"></A>
+<B>:refresh</B> <EM>&amp;optional (start 0) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>start</EM>番目の行以降の行を再書き込みする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46741"></A>
+<B>:insert-string</B> <EM>string </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カーソル位置に<EM>string</EM>を挿入する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46752"></A>
+<B>:insert</B> <EM>ch </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> カーソル位置に文字を挿入する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46762"></A>
+<B>:delete</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> カーソル以降の<EM>n</EM>文字を削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46773"></A>
+<B>expand-tab</B> <EM>src &amp;optional (offset 0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>src</EM>は、タブを含んだ可能性のある文字列である。
+これらのタブは、タブの停止位置が8の倍数であると仮定して空白文字に
+置き換えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="46785"></A>
+<BIG CLASS="XLARGE"><B>ScrollTextWindow </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>BufferTextWindow</B> 
+<BR>  :slots 		 (top-row top-col   ;display-starting position 
+<BR>
+scroll-bar-window 
+<BR>
+horizontal-scroll-bar-window 
+<BR>
+selected-line) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>ScrollTextWindow</B>は、行数制限がなく、縦と横にスクロールバーを持った
+<TT>BufferTextWindow</TT>を定義する。
+<B>ScrollTextWindow</B>は、スクロールバーを伴ってwindowの大きさを変更するため、
+あるいはテキストを再表示するために<TT>:configureNotify</TT>イベントを
+扱うことができる。
+クリックすることによって、行を選択することができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46807"></A>
+<B>:create</B> <EM>&amp;rest args
+           &amp;key (scroll-bar nil)
+                (horizontal-scroll-bar nil)
+           &amp;allow-other-keys </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+スクロールバーが必要なとき、それぞれのキーワードの引き数にTを指定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46817"></A>
+<B>:locate</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> windowの上部から<EM>n</EM>番目の行に
+バッファされたテキストを表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46828"></A>
+<B>:display-selection</B> <EM>selection </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>selection</EM>は、選択された行の位置を表現する。
+選択された行がすべて高輝度で表示される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46839"></A>
+<B>:selection</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 選択された行（文字列）を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46849"></A>
+<B>:read-file</B> <EM>fname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>fname</EM>で指定されるテキストファイルを<TT>linebuf</TT>に読み込み、
+タブを拡張し、windowに表示する。
+カーソルは、画面の最初に置かれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46861"></A>
+<B>:display-string</B> <EM>strings </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>strings</EM>は、行（文字列）の列である。
+<EM>strings</EM>は、<TT>linebuf</TT>にコピーされ、windowに表示される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46874"></A>
+<B>:scroll</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>n</EM>行、縦にスクロールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46885"></A>
+<B>:horizontal-scroll</B> <EM>n </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>n</EM>列、横にスクロールする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="46896"></A>
+<B>:ButtonRelease</B> <EM>event </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+マウスポインタが置かれている行が選択される。
+もし、windowが作成されたときに<TT>notification</TT>が指定されている
+ならば、<TT>notify-object</TT>の<TT>notify-method</TT>が呼び出される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46909"></A>
+<B>:resize</B> <EM>w h </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+windowの大きさを変更し、新しいサイズに合うように
+内容を再表示する。
+もし、スクロールバーがあれば、同じメッセージが送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html854"
+  HREF="jmanual-node21.html">画像処理</A>
+<B>Up:</B> <A NAME="tex2html848"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html842"
+  HREF="jmanual-node19.html">Xwindow インターフェース</A>
+</DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

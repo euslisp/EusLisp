@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Special Forms</TITLE>
-<META NAME="description" CONTENT="Special Forms">
+<TITLE>Image Processing</TITLE>
+<META NAME="description" CONTENT="Image Processing">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,153 +20,1733 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="manual-node22.html">
 <LINK REL="previous" HREF="manual-node20.html">
-<LINK REL="up" HREF="manual-node17.html">
+<LINK REL="up" HREF="manual-node15.html">
 <LINK REL="next" HREF="manual-node22.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html701"
-  HREF="manual-node22.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html695"
-  HREF="manual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html689"
-  HREF="manual-node20.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html697"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html699"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html702"
-  HREF="manual-node22.html">Macros</A>
-<B> Up:</B> <A NAME="tex2html696"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Previous:</B> <A NAME="tex2html690"
-  HREF="manual-node20.html">Generalized Variables</A>
- &nbsp; <B>  <A NAME="tex2html698"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html700"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html899"
+  HREF="manual-node22.html">Manipulators</A>
+<B>Up:</B> <A NAME="tex2html893"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html887"
+  HREF="manual-node20.html">Viewing and Graphics</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03024000000000000000">
-Special Forms</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html900"
+  HREF="manual-node21.html#SECTION03061000000000000000">Look-Up Tables (LUT)</A>
+<LI><A NAME="tex2html901"
+  HREF="manual-node21.html#SECTION03062000000000000000">Pixel-Image</A>
+<LI><A NAME="tex2html902"
+  HREF="manual-node21.html#SECTION03063000000000000000">Color-Pixel-Image</A>
+<LI><A NAME="tex2html903"
+  HREF="manual-node21.html#SECTION03064000000000000000">Edge Finder</A>
+<LI><A NAME="tex2html904"
+  HREF="manual-node21.html#SECTION03065000000000000000">Tracking</A>
+<LI><A NAME="tex2html905"
+  HREF="manual-node21.html#SECTION03066000000000000000">Image File I/O</A>
+<LI><A NAME="tex2html906"
+  HREF="manual-node21.html#SECTION03067000000000000000">JPEG compression/decompression</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03060000000000000000">
+Image Processing</A>
+</H1>
+
+<P>
+Image processing facilities are defined in <TT>"vision/piximage"</TT>.
+For the representations of image data, two classes,
+<B>pixel-image</B> and <B>color-pixel-image</B>, are defined.
+Pixel by pixel translations through look-up tables,
+edge-finder, and image data transfer in pbm formats are realized.
+
+<P>
+
+<H2><A NAME="SECTION03061000000000000000">
+Look-Up Tables (LUT)</A>
+</H2>
+An LUT is a vector for the translation of pixel data.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="39116"></A>
+<B>make-equilevel-lut</B> <EM>levels &amp;optional (size 256) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a one-dimensional integer-vector that linearly maps values between
+0 and <EM>size</EM> into values between 0 and <EM>levels</EM>.
+For example, <TT>(make-equilevel-lut 3 12)</TT> returns
+<TT>#i(0 0 0 0 1 1 1 1 2 2 2 2)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39130"></A>
+<B>look-up</B> <EM>src dest lut </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates values stored in <EM>src</EM> vector into <EM>dest</EM> vector
+using <EM>lut</EM>. If <EM>dest</EM> is nil, a vector of the same class and
+size as <EM>src</EM> is created.
+For example, <TT>(look-up #i(1 2 3) nil #(10 20 30 40 50))</TT>
+returns <TT>#i(20 30 40)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39147"></A>
+<B>look-up2</B> <EM>src dest lut1 lut2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Src</EM> and <EM>dest</EM> are integer-vector or byte-vector (string) of the same
+size.
+<TT>:Look-up2</TT> translates <EM>src</EM> into <EM>dest</EM> looking-up <EM>lut1</EM> and <EM>lut2</EM>
+successively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39164"></A>
+<B>look-up*</B> <EM>src dest luts </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>luts</EM> is a list of look-up tables.
+<EM>src</EM> is translated into <EM>dest</EM> successively looking up look-up tables
+given in <EM>luts</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39178"></A>
+<B>concatenate-lut</B> <EM>lut1 lut2 &amp;optional (size 256) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+concatenates two look-up tables <EM>lut1</EM> and <EM>lut2</EM>,
+and returns a new look-up table which performs the same translation
+as <EM>lut1</EM> and <EM>lut2</EM> are looked-up successively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39192"></A>
+<B>*x-gray32-lut*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> LUT to translate 32-level gray-scale into
+the pixel values in the default color map <TT>x:*colormap*</TT>.
+<TT>(aref *x-gray32-lut* n)</TT> returns the pixel value for nth gray-level
+out of 32 levels.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39204"></A>
+<B>*x-gray16-lut*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> LUT to translate 16-level gray-scale pixel
+into the index of x's default color map  <TT>x:*colormap*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39215"></A>
+<B>*x-color-lut*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> LUT for several vivid colors defined in 
+<TT>x:*color-map*</TT>.
+Registered colors are "black", "red", "green", "lightblue", "yellow",
+"orange", "blue", "magenta", "white".
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39226"></A>
+<B>*256to8*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate integers in range of 0..255
+into 0..7. The levels are linearly mapped.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39236"></A>
+<B>*256to16*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate integers in range of 0..255
+into 0..15. The levels are linearly mapped.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39246"></A>
+<B>*256to32*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate integers in range of 0..255
+into 0..31. The levels are linearly mapped.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39256"></A>
+<B>*gray32*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate the raw gray-scale pixels 
+into X's color map indices.
+This is made by concatenating two LUTs, <TT>*256to32*</TT> and
+<TT>*x-gray32-lut*</TT>.
+An Xwindow display-able pixel-image with 32 gray-levels 
+can be obtained by translating
+the 256-level raw image by <B>*gray32*</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39269"></A>
+<B>*rainbow32*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 256-entry LUT to translate 256-level
+hue values into into X's rainbow color map indices.
+This is made by concatenating two LUTs, <TT>*256to32*</TT> and
+<TT>*x-rainbow32-lut*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03062000000000000000">
+Pixel-Image</A>
 </H2>
 
 <P>
-<BR><P></P>
-<DIV ALIGN="CENTER"><A NAME="1026"></A>
+A single plane of 
+image data is represented by  <B>pixel-image</B> object.
+<B>pixel-image</B> is a two-dimensional array of bytes.
+The interpretation of each byte is application dependent.
+Although it is most commonly used to represent brightness of a pixel,
+it may be used to represent edge intensity, gradient direction,
+color component intensity, bar graph, or whatever.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="39282"></A>
+<BIG CLASS="XLARGE"><B>pixel-image </B></BIG> [class]  <PRE><TT>
+  :super   <B>array</B> 
+<BR>  :slots 		 xpicture display-lut histogram
+<BR>
+brightness-distribution0
+<BR>
+brightness-distribution1
+<BR>
+brightness-covariance 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><TT>Pixel-image</TT> is the two dimensional array with displaying facility
+in xwindows. The pixel conversion is performed by <EM>display-lut</EM> and
+the resulted image is stored in <EM>xpicture</EM>.
+Major axis is taken vertically. The pixel of <TT>img</TT> at <TT>(x, y)</TT>
+should be accessed by <TT>(aref img y x)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39305"></A>
+<B>:width</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the horizontal size of a pixel-image,
+which is the second dimension.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39315"></A>
+<B>:height</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the vertical size of a pixel-image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39325"></A>
+<B>:size</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> is equivalent to array-total-size.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39335"></A>
+<B>:transpose</B> <EM>&amp;optional (result (instance (class self) :init dim0 dim1)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+exchanges x and y coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39345"></A>
+<B>:map-picture</B> <EM>lut &amp;optional (result (send self :duplicate)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+This pixel-image is translated by the <EM>lut</EM> and stored in <EM>result</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39357"></A>
+<B>:map</B> <EM>fn &amp;optional (result (send self :duplicate)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+applies function <EM>fn</EM> to all the pixels in the image,
+and put the result in the <EM>result</EM> pixel-image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39369"></A>
+<B>:brightest-pixel</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> finds the brightest pixel value in this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39379"></A>
+<B>:darkest-pixel</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> finds the darkest pixel value in this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39389"></A>
+<B>:average-pixel</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> calculates the average intensity of all 
+the pixels in this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39399"></A>
+<B>:halve</B> <EM>&amp;optional simage </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns pixel-image that is shrunk into half-size image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39409"></A>
+<B>:subimage</B> <EM>x y subwidth subheight </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+cuts out a <EM>subwidth</EM> x <EM>subheight</EM> rectangular region
+with its top-left corner at <EM>(x,y)</EM> of this image.
+The origin of the image is taken at the top-left corner.
+<TT>:Subimage</TT> returns a  new pixel-image object.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39423"></A>
+<B>:xpicture</B> <EM>&amp;optional lut </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image using the look-up table <EM>lut</EM>
+and sets translated pixel-image object to <EM>xpicture</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39435"></A>
+<B>:display-lut</B> <EM>&amp;optional newlut </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets look-up table <EM>newlut</EM> as display-lut.Then 
+translates this image using this look-up table
+and sets translated pixel-image object as xpicture.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39446"></A>
+<B>:display</B> <EM>(xwin geometry:*viewsurface*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+displays this pixel-image in the <EM>xwin</EM> xwindow by using <TT>:putimage</TT>.
+Each pixel value is referred as a index in x's color map.
+To get a desired appearance, this pixel-image must have been translated
+by proper LUTs.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39458"></A>
+<B>:duplicate</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> makes an instance of the same class
+as this image object with the same width and height.
+The pixel data are not copied.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39468"></A>
+<B>:copy-from</B> <EM>src </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> copies pixel data from another
+image object specified by <EM>src</EM>. <EM>src</EM> must be of the
+same dimension as this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39480"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39490"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39500"></A>
+<B>:grin1</B> <EM>strm &amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints this image-pixel object with its name and dimensions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39510"></A>
+<B>:init</B> <EM>w h &amp;optional imgvec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes a pixel-image object to have <EM>w</EM> width and <EM>h</EM> height.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39522"></A>
+<B>:amplify</B> <EM>rate &amp;optional (result (send self :duplicate) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+multiplies <EM>rate</EM> to each pixel value.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39533"></A>
+<B>:compress-gray-scale</B> <EM>levels &amp;optional result  &amp;aux pict2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image into range of 0..<EM>levels</EM>
+and returns translated pixel-image object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39544"></A>
+<B>:lut</B> <EM>lut1 &amp;optional (result (send self :duplicate)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image using the look-up table <EM>lut1</EM>
+and returns translated pixel-image object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39555"></A>
+<B>:lut2</B> <EM>lut1 lut2 &amp;optional (result (send self :duplicate)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image using a look-up table that concatenated <EM>lut1</EM> 
+and <EM>lut1</EM>. And returns translated pixel-image object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39567"></A>
+<B>:histogram</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+counts the occurrence of each pixel value in this image and returns 
+an integer-vector representing the histogram.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39577"></A>
+<B>:brightness-distribution</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns brightness-distribution.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39587"></A>
+<B>:optimum-threshold</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns levels that is maximum of this image's brightness-distribution.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39597"></A>
+<B>:project-x</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> adds all pixel values of the same x coordinate
+and returns a vector of these values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39607"></A>
+<B>:project-y</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> adds all pixel values of the same y coordinate
+and returns a vector of these values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39617"></A>
+<B>:digitize</B> <EM>threshold &amp;optional (val0 0) (val1 255) result </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates this image into 2 levels image <EM>val0</EM> and <EM>val1</EM>
+using <EM>threshold</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39630"></A>
+<B>:and</B> <EM>img2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+bit-and operates between this image and <EM>img2</EM>,
+ and returns operated pixel-image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39641"></A>
+<B>:plot</B> <EM>min max &amp;optional color viewsurface </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+plots pixels having values between <EM>min</EM> and <EM>max</EM> inclusively
+with <EM>color</EM> (gc) on <EM>viewsurface</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39655"></A>
+<PRE><TT>
+<B>:edge1</B> <I>&amp;optional (method 1) [method]
+<BR>(th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)
+<BR>(run *edge-length-threshold*) (win geometry:*viewsurface*) (edgeimg1)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>detects edge of this image. And displays this edge on this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION03063000000000000000">
+Color-Pixel-Image</A>
+</H2>
+Color images are represented by <B>color-pixel-image</B> objects
+which have three <B>pixel-image</B> objects to represent red, green, and
+blue components in RGB representation,
+or hue, lightness, and saturation components in the HLS model.
+Conversion between RGB and HLS is supported.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="39667"></A>
+<BIG CLASS="XLARGE"><B>color-pixel-image </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 width height component1 component2 component3 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents color images with three <TT>pixel-image</TT> objects.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39685"></A>
+<B>:width</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the width of this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39695"></A>
+<B>:height</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the height of this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39705"></A>
+<B>:size</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns <!-- MATH
+ $width \times height$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="110" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img117.png"
+ ALT="$ width \times height$"></SPAN> of this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39715"></A>
+<B>:red</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component1.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39725"></A>
+<B>:green</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component2.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39735"></A>
+<B>:blue</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component3.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39745"></A>
+<B>:hue</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component1. A hue value between 0 and 360 is
+represented by a byte value between 0 and 255.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39755"></A>
+<B>:lightness</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component2.
+The normalized brightness values (0..1) are mapped into integers between 0 and 255.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39765"></A>
+<B>:saturation</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns component3.
+The normalized saturation values (0..1) are mapped into integers between 0 and 255.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39775"></A>
+<B>:pixel</B> <EM>x y </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a list of three integers each of which is
+taken from component1, component2 and component3 at (<EM>x</EM>,<EM>y</EM>).
+This triplet can be interpreted either as RGB values or HLS values.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39787"></A>
+<B>:monochromize</B> <EM>&amp;optional (NTSC nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes brightness from RGB components and returns a new <TT>pixel-image</TT>.
+If <EM>NTSC</EM> is nil, <SPAN CLASS="MATH"><IMG
+ WIDTH="109" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img118.png"
+ ALT="$ (R+G+B)/3$"></SPAN> is computed.
+If T, <!-- MATH
+ $0.299*R+0.587*G+0.114*B$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="235" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img119.png"
+ ALT="$ 0.299*R+0.587*G+0.114*B$"></SPAN> is computed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39799"></A>
+<B>:HLS</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> assuming this image is representing an RGB image,
+converts the image into HLS representation.
+<B>RGB2HLS</B> is called for the conversion of each pixel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39810"></A>
+<B>:RGB</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> assuming this image is representing an HLS image,
+converts the image into RGB representation.
+<B>HLS2RGB</B> is called for the conversion of each pixel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39821"></A>
+<B>:halve</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns color-pixel-image that is shrunk into half-size image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39831"></A>
+<B>:display</B> <EM>&amp;optional (win *color-viewer*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+displays this color-pixel-image in a xwindow
+designated by <EM>win</EM> by using <TT>:putimage</TT>.
+Each pixel value is referred as a index in x's color map.
+To get a desired appearance, this pixel-image must have been translated
+by proper LUTs.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39843"></A>
+<B>:display-lut</B> <EM>&amp;optional (newlut1) (newlut2 newlut1) (newlut3 newlut2) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets look-up tables <EM>newlut1</EM>, <EM>newlut1</EM> and <EM>newlut1</EM>
+as display-lut, respectively. Then translates this image using this look-up table
+and sets translated pixel-image object as xpicture.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39856"></A>
+<PRE><TT>
+<B>:edge1</B> <I>&amp;optional (method 1) [method]
+<BR>(th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)
+<BR>(run *edge-length-threshold*) (win *color-viewer*)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>detects edge of this image. And displays this edge on this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39867"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39877"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints pixel data in the specified rectangular region
+in the hexadecimal format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39887"></A>
+<B>:prin1</B> <EM>strm &amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints this image-pixel object with its name and dimensions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="39897"></A>
+<B>:init</B> <EM>width height &amp;optional r g b </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+defines the size of a color image and allocates <TT>pixel-image</TT>s for each
+color component.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+Provided a ppm file, you can extract color (hue) values out of the image
+and display it in an xwindow by the following program.<PRE>
+(setq ppmimg (read-pnm "xxx.ppm"))
+(send ppmimg :hls)   ; RGB to HLS conversion
+(make-ximage (send ppmimg :hue) *rainbow32*)
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION03064000000000000000">
+Edge Finder</A>
+</H2>
+
+<P>
+Edge Finding facilities are provided by <TT>"vision/edge/edge"</TT>.
+
+<P>
+
+ <BR>
+<BR> <A NAME="39908"></A>
+<PRE><TT>
+<B>edge1</B> <I>img &amp;optional (method 1) [function]
+<BR>(th1 *edge-intensity-threshold*)      (th2 *weak-edge-threshold*) 
+<BR>(run *edge-length-threshold*)      result
+<BR>&amp;aux (width (send img :width)) (height (send img :height))</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>finds edge pixels in this image.
+<B>edge1</B> first applies a gradient operator to every pixel.
+There are three kinds of gradient operators provided:
+<B>grad3</B> which takes difference between horizontally and vertically 
+neighboring pixels,
+<B>prewitt</B> and <B>sobel</B>.
+<EM>method</EM>=0,1 selects <B>grad3</B>, 2 selects <B>prewitt</B> and 3 selects
+<B>sobel</B>.
+Pixels that have edge intensity greater than <EM>th1</EM> are identified as
+strong edge pixels.
+After thinning edges referring to edge intensities and
+directions of gradient, isolated edge pixels are marked.
+Starting from end points of these strong edges, weak edge pixels
+that are consistent with the strong edge's direction are searched for and linked
+to compose elongated lines.
+Weak edge pixels that have greater edge intensity than <EM>th2</EM> are
+unconditionally linked.
+Even very weak edge pixels that have less edge intensity than <EM>th2</EM>
+can be linked as long as they connect to another weak or strong edge
+within <EM>run</EM> length.
+<B>edge1</B> returns a pixel-image object
+each pixel of which represents either a strong edge pixel (=1),
+a weak and elongated edge pixel (=2),
+or an isolated pixel (=255).
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39932"></A>
+<B>overlay-edge</B> <EM>ximg edgeimg </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+displays <EM>edgeimg</EM> obtained by <B>edge1</B> on top of
+x-display-able pixel image <EM>ximg</EM>.
+Strong edge pixels are colored in red, weak pixels in green, and
+isolated pixels in blue.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="39945"></A>
+<PRE><TT>
+<B>edge2</B> <I>img1 edge1result &amp;key (kvalue 8.0) [function]
+<BR>(curve-threshold 0.8) (line-error 2.8)
+<BR>(curve-error 2.8) (plane-limit 0.3)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>tries to fit straight lines and elliptic curves to the
+result obtained by <B>edge1</B>.
+A list of three elements, which represents regions, boundaries, and
+line segments is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+Three elements represented by <B>edge2</B> are defined as follow.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="39958"></A>
+<BIG CLASS="XLARGE"><B>region </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 contour area intensity std-deviation 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents region.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="39976"></A>
+<BIG CLASS="XLARGE"><B>boundary </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 parent-region  hole  segments  intensity  top-left  bottom-right  length 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents boundary.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="39994"></A>
+<BIG CLASS="XLARGE"><B>edge-segment </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 prev next   wing ; the other half-edge  intensity std-deviation   start end 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents edge-segment.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="40012"></A>
+<BIG CLASS="XLARGE"><B>line-edge-segment </B></BIG> [class]  <PRE><TT>
+  :super   <B>edge-segment</B> 
+<BR>  :slots 		 la lb 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents line-edge-segment.
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="40030"></A>
+<BIG CLASS="XLARGE"><B>curved-edge-segment </B></BIG> [class]  <PRE><TT>
+  :super   <B>edge-segment</B> 
+<BR>  :slots 		 rotation total-rot side   a b c d e 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents curved-edge-segment.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40047"></A>
+<PRE><TT>
+<B>draw-ellipse-segment</B> <I>elp gc &amp;optional (vs *viewsurface*) (height (send vs :height)) [function]
+<BR>(x 0) (y 0)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>draws <B>curved-edge-segment</B> object <EM>elp</EM> on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40061"></A>
+<B>draw-line-segment</B> <EM>s &amp;optional gc (vs *viewsurface*)
+				(height (send vs :height))
+				(x 0) (y 0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws <B>line-edge-segment</B> object <EM>s</EM> on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40074"></A>
+<PRE><TT>
+<B>draw-segments</B> <I>segs &amp;key (line-gc image::*red-gc*)      (ellipse-gc line-gc) [function]
+<BR>(vs geometry:*viewsurface*)      (height (send vs :height))      (step nil)
+<BR>(x 0) (y 0)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>draws <EM>s</EM>, a list of <B>edge-segment</B> objects on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40088"></A>
+<B>draw-boundary</B> <EM>b &amp;optional gc </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws segments of <B>boundary</B> object <EM>b</EM> on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40101"></A>
+<B>draw-boundaries</B> <EM>bs &amp;optional gc (step nil) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws segments of <B>boundary</B> objects <EM>bs</EM> on xwindow <EM>vs</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40114"></A>
+<B>*red-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #ff0000
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40124"></A>
+<B>*blue-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #0000ff
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40134"></A>
+<B>*green-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #00ff00
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40144"></A>
+<B>*yellow-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #ffff00
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40154"></A>
+<B>*cyan-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> GC whose foreground color is #00ffff
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <DIV ALIGN="CENTER"><A NAME="38961"></A>
 <TABLE>
-<CAPTION><STRONG>Table 2:</STRONG>
-EusLisp's special forms</CAPTION>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 14:</STRONG>
+Edge Finder and Overlaid Edges</CAPTION>
 <TR><TD>
 <DIV ALIGN="CENTER">
-<TABLE CELLPADDING=3 BORDER="1" ALIGN="CENTER">
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-and </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> flet </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> quote </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-block </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> function </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> return-from</BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-catch </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> go </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> setq </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-cond </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> if </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> tagbody </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-declare </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> labels </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> the </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-defmacro </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> let </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> throw </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-defmethod </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> let* </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> unwind-protect </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-defun </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> progn </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> while </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-eval-when </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> or </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> </BIG></TD>
-</TR>
-</TABLE>
+<IMG
+ WIDTH="435" HEIGHT="407" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img120.png"
+ ALT="\includegraphics[height=9cm]{fig/block1.edg.ps}">
 
-</DIV>
-</TD></TR>
+</DIV></TD></TR>
 </TABLE>
-</DIV><P></P>
+</DIV>
+
+<H2><A NAME="SECTION03065000000000000000"></A><A NAME="tracking"></A>
+<BR>
+Tracking
+</H2>
+<TT>"vision/correlation"</TT> defines functions to find
+correlation between window-image and tracking-image.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="40165"></A>
+<BIG CLASS="XLARGE"><B>tracking-window </B></BIG> [class]  <PRE><TT>
+  :super   <B>pixel-image</B> 
+<BR>  :slots 		 x-pos y-pos x-vel y-vel
+<BR>
+pattern-size window-size
+<BR>
+x-win y-win window window-margin
+<BR>
+update threshold half-pattern correlation 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>This class defines tracking window.
+</DD>
+</DL>
+<BR>
 <BR>
 
 <P>
-All the special forms are listed in Table <A HREF="#SpecialForms">2</A>.
-<B>macrolet, compiler-let,</B> and <B>progv</B> have not been implemented.
-Special forms are essential language constructs for the management of
-evaluation contexts and control flows.
-The interpreter and compiler have special knowledge to
-process each of these constructs properly, while the application
-method is uniform for all functions.
-Users cannot add their own special form definition.
+
+<A NAME="40182"></A>
+<B>:correlation</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns correlation between window-image and this image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40192"></A>
+<B>:grab</B> <EM>&amp;optional (x x-pos) (y y-pos) (sampling 2) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+grabs video image and returns grabbed pixel-image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40202"></A>
+<B>:window-rectangle</B> <EM>val </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws rectangle on xwindow.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40212"></A>
+<B>:rectangle</B> <EM>val </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws rectangle on xwindow.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40222"></A>
+<B>:move</B> <EM>newpos &amp;aux (newx (aref newpos 0)) (newy (aref newpos 1)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+moves tracking-window to <EM>newpos</EM> and grabs video image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40233"></A>
+<B>:track</B> <EM>display-window &amp;optional th </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+tracks this image from window image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40243"></A>
+<B>:search</B> <EM>display-window &amp;optional th </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+searches this image from window image.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40253"></A>
+<B>:track-and-search</B> <EM>flag &amp;optional th </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+tracks this image. If mistake tracking, searches this image from window image.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
+
+<A NAME="40263"></A>
+<B>:pos</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns up-left position of window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40273"></A>
+<B>:vel</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns tracking velocity.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40283"></A>
+<B>:insidep</B> <EM>pos &amp;aux (x (aref pos 0)) (y (aref pos 1)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks <EM>pos</EM> that is contained with tracking window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40294"></A>
+<B>:update</B> <EM>&amp;optional (flag :get) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <EM>flag</EM> as update. if flag doesn't exist, returns update.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40305"></A>
+<B>:prin1</B> <EM>strm &amp;rest mesg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+prints this tracking-window object with its name and dimensions.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40315"></A>
+<B>:init</B> <EM>x y size win-size </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates tracking-window object and sets slots.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION03066000000000000000"></A><A NAME="PBMfile"></A>
+<BR>
+Image File I/O
+</H2>
+<TT>"vision/pbmfile"</TT> defines functions to transfer
+image data between EusLisp and disk files.
+EusLisp can read and write pgm
+(portable gray-scale map) 
+and ppm (portable pixmap) format files.
+
+<P>
+
+ <BR>
+<BR> <A NAME="40325"></A>
+<B>read-pnm</B> <EM>f &amp;optional buf0 buf1 buf2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads a pgm or ppm file specified by file-stream <EM>f</EM> 
+and returns a pixel-image or color-pixel-image object.
+The image file can be either in ascii (P2 and P3) or in binary (P5 and P6) 
+format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40336"></A>
+<B>read-pnm-file</B> <EM>file &amp;optional buf0 buf1 buf2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads a pgm or ppm file specified by filename <EM>file</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="40347"></A>
+<B>write-pgm</B> <EM>f image  &amp;optional (depth 255) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes a pixel-image specified by <EM>image</EM> into <EM>f</EM> file-stream
+in the binary ppm format.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40359"></A>
+<B>write-ppm</B> <EM>f image  &amp;optional (depth 255) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes a pixel-image specified by <EM>image</EM> into <EM>f</EM> file-stream
+in the binary pgm format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40371"></A>
+<B>write-pnm</B> <EM>f img </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes a pixel-image specified by <EM>img</EM> into <EM>f</EM> file-stream.
+If <EM>img</EM> is <B>pixel-image</B>, it is written in the binary pgm format.
+If <EM>img</EM> is <B>color-pixel-image</B>, written in the binary
+ppm format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40387"></A>
+<B>write-pnm-file</B> <EM>file img </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes the pixel-image specified by <EM>img</EM> into <EM>file</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40399"></A>
+<B>image::read-raw-image</B> <EM>file &amp;optional (x 256) (y x) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+reads a raw-image file and returns a one-dimensional byte-vector (string).
+The dimensions of the raw-image must match with give <EM>x</EM> and <EM>y</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40411"></A>
+<B>image::write-raw-image</B> <EM>file imgvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+writes pixel-values stored in a byte vector (string), <EM>imgvec</EM>,
+in <EM>file</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03067000000000000000">
+JPEG compression/decompression</A>
+</H2>
+
+<P>
+EusLisp can link libjpeg.so in order to handle JPEG images.
+Loading "eusjpeg.l" will define JPEG-compression and -decompression
+functions.
 
 <DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html701"
-  HREF="manual-node22.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html695"
-  HREF="manual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html689"
-  HREF="manual-node20.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html697"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html699"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html702"
-  HREF="manual-node22.html">Macros</A>
-<B> Up:</B> <A NAME="tex2html696"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Previous:</B> <A NAME="tex2html690"
-  HREF="manual-node20.html">Generalized Variables</A>
- &nbsp; <B>  <A NAME="tex2html698"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html700"
-  HREF="manual-node167.html">Index</A></B> </DIV>
+<B> Next:</B> <A NAME="tex2html899"
+  HREF="manual-node22.html">Manipulators</A>
+<B>Up:</B> <A NAME="tex2html893"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html887"
+  HREF="manual-node20.html">Viewing and Graphics</A>
+</DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

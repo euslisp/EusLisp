@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>特殊書式</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="特殊書式">
+<TITLE>画像処理</TITLE>
+<META NAME="description" CONTENT="画像処理">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,126 +16,1725 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node22.html">
 <LINK REL="previous" HREF="jmanual-node20.html">
-<LINK REL="up" HREF="jmanual-node17.html">
+<LINK REL="up" HREF="jmanual-node13.html">
 <LINK REL="next" HREF="jmanual-node22.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html668"
-  HREF="jmanual-node22.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html662"
-  HREF="jmanual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html656"
-  HREF="jmanual-node20.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html664"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html666"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html669"
-  HREF="jmanual-node22.html">マクロ</A>
-<B> Up:</B> <A NAME="tex2html663"
-  HREF="jmanual-node17.html">書式と評価</A>
-<B> Previous:</B> <A NAME="tex2html657"
-  HREF="jmanual-node20.html">一般化変数</A>
- &nbsp; <B>  <A NAME="tex2html665"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html667"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html876"
+  HREF="jmanual-node22.html">マニピュレータ</A>
+<B>Up:</B> <A NAME="tex2html870"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html864"
+  HREF="jmanual-node20.html">XToolKit</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03024000000000000000">
-特殊書式</A>
-</H2>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html877"
+  HREF="jmanual-node21.html#SECTION03081000000000000000">ルックアップテーブル (LUT)</A>
+<LI><A NAME="tex2html878"
+  HREF="jmanual-node21.html#SECTION03082000000000000000">ピクセル画像</A>
+<LI><A NAME="tex2html879"
+  HREF="jmanual-node21.html#SECTION03083000000000000000">カラーピクセル画像</A>
+<LI><A NAME="tex2html880"
+  HREF="jmanual-node21.html#SECTION03084000000000000000">エッジ抽出</A>
+<LI><A NAME="tex2html881"
+  HREF="jmanual-node21.html#SECTION03085000000000000000">トラッキング</A>
+<LI><A NAME="tex2html882"
+  HREF="jmanual-node21.html#SECTION03086000000000000000">画像ファイル入出力</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03080000000000000000">
+画像処理</A>
+</H1>
 
 <P>
-<BR><P></P>
-<DIV ALIGN="CENTER">
 
-<DIV ALIGN="CENTER">
-<A NAME="988"></A>
-<TABLE CELLPADDING=3 BORDER="1">
-<CAPTION><STRONG>Table:</STRONG>
-EusLispの特殊書式</CAPTION>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-and </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> flet </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> quote </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-block </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> function </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> return-from</BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-catch </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> go </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> setq </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-cond </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> if </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> tagbody </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-declare </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> labels </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> the </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-defmacro </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> let </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> throw </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-defmethod </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> let* </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> unwind-protect </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-defun </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> progn </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> while </BIG></TD>
-</TR>
-<TR><TD ALIGN="LEFT"><BIG CLASS="LARGE"> 
-eval-when </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> or </BIG></TD>
-<TD ALIGN="LEFT"><BIG CLASS="LARGE"> </BIG></TD>
-</TR>
-</TABLE>
+画像処理の諸機能は，<TT>"vision/piximage"</TT>ファイルに格納されている。
+画像データを表現するために2つのクラス
+<B>pixel-image</B>と<B>color-pixel-image</B>が定義されている。
+ルックアップテーブル(LUT)を用いたピクセル(pixel)毎の変換，
+エッジ抽出，pbmファイルへの画像データの変換が実現されている。
 
-</DIV>
-</DIV>
+<P>
+
+<H2><A NAME="SECTION03081000000000000000">
+ルックアップテーブル (LUT)</A>
+</H2>
+LUTは，ピクセル(pixel)データを変換するためのベクトルデータである。 
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="49204"></A>
+<B>make-equilevel-lut</B> <EM>levels &amp;optional (size 256) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+１次元の整数ベクトル(integer-vector)を返す。
+そのベクトルは，0から<EM>size</EM>までの値を0から<EM>levels</EM>までの値に
+線形的にマップする。
+例えば，<TT>(make-equilevel-lut 3 12)</TT>は，
+<TT>#i(0 0 0 0 1 1 1 1 2 2 2 2)</TT>を返す。
+</DD>
+</DL>
+<BR>
 <BR>
 
 <P>
-全ての特殊書式は、表<A HREF="#SpecialForms">2</A>にリストされている。
-<B>macrolet, compiler-let,</B>や<B>progv</B>は、該当しない。
-特殊書式は、文脈の評価および制御フローの管理のための
-基本的な言語構造である。
-インタプリタとコンパイラは、これらの構造をそれぞれ正しく処理する
-ために特殊な知識を持っている。それに対して、アプリケーションメソッド
-は全ての関数に対し画一的である。
-ユーザーは、独自の特殊書式定義を追加することはできない。
+
+<A NAME="49218"></A>
+<B>look-up</B> <EM>src dest lut </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ルックアップテーブル<EM>lut</EM>を用いて<EM>src</EM>ベクトルを<EM>dest</EM>ベクトルに
+値を変換して置き換える。 もし<EM>dest</EM>ベクトルがNILのときは，
+<EM>src</EM>ベクトルと同じクラスで同じサイズのベクトルを作る。
+例えば， <TT>(look-up #i(1 2 3) nil #(10 20 30 40 50))</TT>は，
+<TT>#i(20 30 40)</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<BR><HR>
-<ADDRESS>
 
-2016-03-23
+<A NAME="49235"></A>
+<B>look-up2</B> <EM>src dest lut1 lut2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>look-up2</B>は、ルックアップテーブル<EM>lut1</EM>および<EM>lut2</EM>を連続的に使用して
+<EM>src</EM>ベクトルを<EM>dest</EM>ベクトルに変換する。
+<EM>src</EM>とdestは、同じサイズの整数ベクトルあるいはバイトベクトル（文字列）である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49252"></A>
+<B>look-up*</B> <EM>src dest luts </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>luts</EM>は，ルックアップテーブルのリストである。
+<EM>luts</EM>から与えられるルックアップテーブルを連続的に使用して，
+<EM>src</EM>ベクトルを<EM>dest</EM>ベクトルに変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49266"></A>
+<B>concatenate-lut</B> <EM>lut1 lut2 &amp;optional (size 256) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+2つのルックアップテーブル<EM>lut1</EM>と<EM>lut2</EM>をつないだ
+新しいルックアップテーブルを返す。その新しいテーブルを使用することは，
+<EM>lut1</EM>と<EM>lut2</EM>を連続的に使用することと同じである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49280"></A>
+<B>make-colors</B> <EM>default-color-map </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+以下に示すデフォルトのカラーマップを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49290"></A>
+<B>*x-gray32-lut*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトカラーマップ<TT>x:*colormap*</TT>
+に定義されている32階調のグレースケールのLUTである。
+<TT>(aref *x-gray32-lut* n)</TT>は，32階調の内のn番目のグレー階調を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49302"></A>
+<B>*x-gray16-lut*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトカラーマップ<TT>x:*colormap*</TT>
+に定義されている16階調のグレースケールのLUTである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49313"></A>
+<B>*x-color-lut*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトカラーマップ<TT>x:*colormap*</TT>
+に定義されている幾つかの鮮明なカラーのLUTである。
+登録されているカラーは， "black", "red", "green", "lightblue", "yellow",
+"orange", "blue", "magenta", "white"である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49324"></A>
+<B>*256to8*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+0..255の範囲の整数を0..7の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49334"></A>
+<B>*256to16*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+0..255の範囲の整数を0..15の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49344"></A>
+<B>*256to32*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+0..255の範囲の整数を0..31の範囲に変換する256入力のLUTである。
+その階調は，線形にマップされている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49354"></A>
+<B>*gray32*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+グレースケールピクセルをXのカラーマップに変換するための256入力のLUTである。
+これは、<TT>*256to32*</TT>と<TT>*x-gray32-lut*</TT>を連結して作られる。
+グレー32階調のXwindowの表示可能なピクセル画像は<B>*gray32*</B>によって
+グレー256階調の画像を変換することにより得ることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49367"></A>
+<B>*rainbow32*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+256階調のhue値をXのレインボーカラーマップに変換する
+ための256入力のLUTである。
+これは、<TT>*256to32*</TT>と<TT>*x-rainbow32-lut*</TT>を連結して作られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03082000000000000000">
+ピクセル画像</A>
+</H2>
+１枚の画像データは、<B>pixel-image</B>クラスで表現される。<B>pixel-image</B>は、
+バイト型データを要素とする2次元配列である。それぞれのデータの内容は、
+アプリケーションに依存している。一般的にピクセルの明るさを表現するために
+使われるが、エッジ輝度や微分方向やカラー輝度やbarグラフのようなものにも用いることができる。
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="49380"></A>
+<BIG CLASS="XLARGE"><B>pixel-image </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>array</B> 
+<BR>  :slots 		 xpicture display-lut histogram
+<BR>
+brightness-distribution0
+<BR>
+brightness-distribution1
+<BR>
+brightness-covariance 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>pixel-image</B>は、xwindowへの表示機能を持つ2次元の行列である。
+pixelの変換は、<B>display-lut</B>によって実現され、
+その結果の画像は<EM>xpicture</EM>に蓄積される。
+主な軸は縦方向にとる。<TT>(x,y)</TT>の<TT>img</TT>のピクセルは
+<TT>(aref img y x)</TT>でアクセスすることができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49403"></A>
+<B>:width</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> ピクセル画像の横サイズを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49413"></A>
+<B>:height</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> ピクセル画像の縦サイズを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49423"></A>
+<B>:size</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 配列の大きさを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49433"></A>
+<B>:transpose</B> <EM>&amp;optional (result (instance (class self) :init dim0 dim1)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+x軸とy軸を交換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49443"></A>
+<B>:map-picture</B> <EM>lut &amp;optional (result (send self :duplicate)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像を<EM>lut</EM>で変換し、その画像データを<EM>result</EM>に蓄積する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49455"></A>
+<B>:map</B> <EM>fn &amp;optional (result (send self :duplicate)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像のすべてのピクセルに<EM>fn</EM>を適用して、
+<EM>result</EM>のピクセルに置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49467"></A>
+<B>:brightest-pixel</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の一番明るいピクセル値を見つける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49477"></A>
+<B>:darkest-pixel</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の一番暗いピクセル値を見つける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49487"></A>
+<B>:average-pixel</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像のすべてのピクセルの平均輝度を計算する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49497"></A>
+<B>:halve</B> <EM>&amp;optional simage </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+半分の大きさの画像に縮小したピクセル画像を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49507"></A>
+<B>:subimage</B> <EM>x y subwidth subheight </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像に<EM>(x,y)</EM>を左上角とし、幅が<EM>subwidth</EM>で高さが<EM>subheight</EM>
+である四角形を切り出す。
+その画像の原点は<EM>(x,y)</EM>に置かれる。
+<TT>:subimage</TT>は、この四角形で囲まれた画像を表現するピクセル画像を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49522"></A>
+<B>:xpicture</B> <EM>&amp;optional lut </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像を<EM>lut</EM>を用いて変換し、<TT>xpicture</TT>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49534"></A>
+<B>:display-lut</B> <EM>&amp;optional newlut </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>display-lut</TT>にルックアップテーブル<EM>newlut</EM>を設定する。
+その後、このルックアップテーブルを用いて画像を変換し、
+<TT>xpicture</TT>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49547"></A>
+<B>:display</B> <EM>(xwin geometry:*viewsurface*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:putimage</B>を用いて<EM>xwin</EM>で指定されるXwindowにこの画像を
+表示する。
+それぞれのピクセル値はXのカラーマップを参照する。
+希望する表現を得るためには、このピクセル画像を固有のLUTで
+変換すべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49559"></A>
+<B>:duplicate</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像オブジェクトと同じ幅と高さを持つ同じクラスの
+インスタンスを作る。ピクセルデータはコピーされない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49569"></A>
+<B>:copy-from</B> <EM>src </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>src</EM>で指定される他の画像からピクセルデータをコピーする。
+<EM>src</EM>とこの画像は同一の次元でなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49581"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+四角領域で示されるピクセルデータを16進数フォーマットで表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49591"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+四角領域で示されるピクセルデータを16進数フォーマットで表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49601"></A>
+<B>:prin1</B> <EM>strm &amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このピクセル画像を名前と次元とともに表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49611"></A>
+<B>:init</B> <EM>w h &amp;optional imgvec </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+幅<EM>w</EM>、高さ<EM>h</EM>を持つピクセル画像を初期化する。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49623"></A>
+<B>:amplify</B> <EM>rate &amp;optional (result (send self :duplicate) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>rate</EM>をそれぞれのピクセル値に掛ける。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49634"></A>
+<B>:compress-gray-scale</B> <EM>levels &amp;optional result  &amp;aux pict2 </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像のピクセル値を0から<EM>levels</EM>までの範囲に変換をし、
+その変換された画像を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49645"></A>
+<B>:lut</B> <EM>lut1 &amp;optional (result (send self :duplicate)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ルックアップテーブル<EM>lut1</EM>を用いてこの画像を変換し、
+その変換された画像を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49656"></A>
+<B>:lut2</B> <EM>lut1 lut2 &amp;optional (result (send self :duplicate)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>lut1</EM>と<EM>lut2</EM>を連結したルックアップテーブルを用いてこの画像を
+変換し、その変換された画像を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49668"></A>
+<B>:histogram</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像のそれぞれのピクセル値の発生回数を数え、そのヒストグラム
+を整数ベクトル表現で返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49678"></A>
+<B>:brightness-distribution</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+明るさの分散を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49688"></A>
+<B>:optimum-threshold</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像の明るさの分散値が最大となっている階調を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49698"></A>
+<B>:project-x</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+同じx座標のピクセル値をすべて加算し、これらの値のベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49708"></A>
+<B>:project-y</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+同じy座標のピクセル値をすべて加算し、これらの値のベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49718"></A>
+<B>:digitize</B> <EM>threshold &amp;optional (val0 0) (val1 255) result </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>threshold</EM>を用いてこの画像を<EM>val0</EM>と<EM>val1</EM>の２値画像に
+変換する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49731"></A>
+<B>:and</B> <EM>img2 </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像と<EM>img2</EM>のビット論理積をとり、処理した画像を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49742"></A>
+<B>:plot</B> <EM>min max &amp;optional color viewsurface </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>min</EM>と<EM>max</EM>の間の値を持つピクセルをすべて<EM>color</EM>(gc)
+で<EM>viewsurface</EM>にプロットする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49756"></A>
+<PRE><TT>
+<B>:edge1</B> <I>&amp;optional (method 1) [メソッド]
+<BR>(th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)
+<BR>(run *edge-length-threshold*)
+<BR>(win geometry:*viewsurface*) (edgeimg1)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>この画像のエッジを抽出し、Xwindow上にエッジ画像を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION03083000000000000000">
+カラーピクセル画像</A>
+</H2>
+カラー画像は、<B>color-pixel-image</B>クラスで表現される。
+このクラスは、3つの<B>pixel-image</B>を持っており、RGB表現の
+red,green,blueあるいはHLSモデルの色合い,明るさ,濃さをそれぞれ表現する。
+RGBとHLS間の変換もサポートしている。
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="49768"></A>
+<BIG CLASS="XLARGE"><B>color-pixel-image </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 width height component1 component2 component3 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>3つの<TT>pixel-image</TT>オブジェクトでカラー画像を表現する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="49786"></A>
+<B>:width</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の幅を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49796"></A>
+<B>:height</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の高さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49806"></A>
+<B>:size</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像の幅<SPAN CLASS="MATH"></SPAN>高さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49816"></A>
+<B>:red</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component1</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49827"></A>
+<B>:green</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component2</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49838"></A>
+<B>:blue</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component3</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49849"></A>
+<B>:hue</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component1</TT>を返す。
+色合い(hue)の値(0〜360)は、0〜255の1バイトで表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49860"></A>
+<B>:lightness</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component2</TT>を返す。
+正規化された明るさ(brightness)の値(0〜1)は、0〜255の整数で表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49871"></A>
+<B>:saturation</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>component3</TT>返す。
+正規化された濃さ(saturation)の値(0〜1)は、0〜255の整数で表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49882"></A>
+<B>:pixel</B> <EM>x y </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>(x,y)</EM>における
+<TT>component1,component2,component3</TT>の値を3つの整数のリストとして返す。
+このリストは、RGB値あるいはHLS値のどちらでも解釈できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49894"></A>
+<B>:monochromize</B> <EM>&amp;optional (NTSC nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGB構成から明るさを計算し、新しい<TT>pixel-image</TT>を返す。
+もし、<EM>NTSC</EM>がNILなら、<TT>(R+G+B)/3</TT>が計算される。
+もし、Tなら、<TT>0.299*R+0.587*G+0.114*B</TT>が計算される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49908"></A>
+<B>:HLS</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像をRGB画像と仮定し、HLS表現に画像を変換する。
+それぞれのピクセルを変換するために<B>RGB2HLS</B>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49919"></A>
+<B>:RGB</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この画像をHLS画像と仮定し、RGB表現に画像を変換する。
+それぞれのピクセルを変換するために<B>HLS2RGB</B>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49930"></A>
+<B>:halve</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像を半分のサイズに縮小した<B>color-pixel-image</B>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49941"></A>
+<B>:display</B> <EM>&amp;optional (win *color-viewer*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:putimage</B>を用いて<EM>win</EM>で指定されるXwindowに
+このカラー画像を表示する。
+それぞれのピクセル値はXのカラーマップを参照する。
+希望する表現を得るためには、この画像を固有のLUTで
+変換すべきである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49953"></A>
+<B>:display-lut</B> <EM>&amp;optional (newlut1) (newlut2 newlut1) (newlut3 newlut2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ルックアップテーブル<EM>newlut1</EM>,<EM>newlut2</EM>,<EM>newlut3</EM>を
+<TT>display-lut</TT>にそれぞれ設定する。それから、このルックアップテーブルを
+使ってこの画像を変換し、<TT>xpicture</TT>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49968"></A>
+<PRE><TT>
+<B>:edge1</B> <I>&amp;optional (method 1) [メソッド]
+<BR>(th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)
+<BR>(run *edge-length-threshold*)
+<BR>(win *color-viewer*)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>この画像のエッジを抽出する。Xwindow上にこのエッジ画像を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49979"></A>
+<B>:hex</B> <EM>&amp;optional (x 0) (y 0) (w 16) (h 16) (strm t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49989"></A>
+<B>:hex1</B> <EM>&amp;optional (x 0) (y 0) (w 64) (h 16) (strm t) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+四角領域で指定されるピクセルデータを16進数フォーマットで表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="49999"></A>
+<B>:prin1</B> <EM>strm &amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像を名前と次元と一緒に表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50009"></A>
+<B>:init</B> <EM>width height &amp;optional r g b </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+カラー画像のサイズを定義し、<TT>pixel-image</TT>にそれぞれカラーの1構成
+を割り当てる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+ppmファイルがあったとき、次のプログラムでカラー値を画像に展開し、
+Xwindowに表示をすることができる。<PRE>
+(setq ppmimg (read-pnm "xxx.ppm"))
+(send ppmimg :hls)   ; RGB to HLS conversion
+(make-ximage (send ppmimg :hue) *rainbow32*)
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION03084000000000000000">
+エッジ抽出</A>
+</H2>
+エッジ抽出機能は、<TT>"vision/edge/edge"</TT>に実現されている。
+
+<P>
+
+ <BR>
+<BR> <A NAME="50020"></A>
+<PRE><TT>
+<B>edge1</B> <I>img &amp;optional (method 1) [関数]
+<BR>(th1 *edge-intensity-threshold*)
+<BR>(th2 *weak-edge-threshold*) 
+<BR>(run *edge-length-threshold*)
+<BR>
+result
+<BR>&amp;aux (width (send img :width)) (height (send img :height))</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>img</EM>のエッジピクセルを抽出する。
+<B>edge1</B>は、まずすべてのピクセルに微分オペレータを適用する。
+次の3つの微分オペレータが用意されている。
+<B>grad3</B>は、縦と横の隣接ピクセルの差を用いる。
+<B>prewitt</B>は、<B>grad3</B>に斜め方向のピクセルを考慮したものである。
+<B>sobel</B>は、<B>prewitt</B>において横と縦のピクセルに重みを付けて差を計算したものを用いる。
+<EM>method</EM>が0,1のとき<B>grad3</B>、2のとき<B>prewitt</B>、3のとき
+<B>sobel</B>を選択する。
+<EM>th1</EM>より大きな輝度を持つエッジピクセルが強いエッジピクセルとして
+指示される。
+薄いエッジはエッジの輝度と微分方向を参照した後、独立したピクセルに付けられる。
+これらの強いエッジの端から、強いエッジの方向に含まれる弱いエッジを捜し、
+線分を延長する。
+<EM>th2</EM>より大きなエッジ輝度を持つ弱いエッジは、無条件に繋げられる。
+また、<EM>th2</EM>より小さなエッジ輝度を持つかなり弱いエッジは、他のエッジ
+との距離が<EM>run</EM>以内であれば繋げられる。
+<B>edge1</B>は、強いエッジピクセルを1、弱いエッジあるいは
+延長されたエッジピクセルを2、孤立したピクセルを255と表現する
+<B>pixel-image</B>オブジェクトを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50048"></A>
+<B>overlay-edge</B> <EM>ximg edgeimg </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowに表示可能な<B>pixel-image</B>である<EM>ximg</EM>の最上位に
+<B>edge1</B>で得られた<EM>edgeimg</EM>を表示する。
+強いエッジピクセルは赤、弱いエッジピクセルは緑、孤立したピクセルを青
+で表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50062"></A>
+<PRE><TT>
+<B>edge2</B> <I>img1 edge1result &amp;key (:kvalue 8.0) [関数]
+<BR>(:curve-threshold 0.8)
+<BR>(:line-error 2.8)
+<BR>(:curve-error 2.8)
+<BR>(:plane-limit 0.3)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>edge1</EM>の結果から一致する直線あるいは楕円曲線を捜す。
+領域(region)、境界(boundary)、線分(line segment)の３つの要素の
+リストが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+<B>edge2</B>で出力される3つの要素は、以下のように定義される。
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="50075"></A>
+<BIG CLASS="XLARGE"><B>region </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 contour area intensity std-deviation 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>領域を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="50093"></A>
+<BIG CLASS="XLARGE"><B>boundary </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 parent-region  hole  segments  intensity  topleft  bottomright  length 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>境界を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="50111"></A>
+<BIG CLASS="XLARGE"><B>edge-segment </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 prev next   wing ; the other half-edge  intensity std-deviation   start end 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>エッジ線分を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="50129"></A>
+<BIG CLASS="XLARGE"><B>line-edge-segment </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>edge-segment</B> 
+<BR>  :slots 		 la lb 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>直線のエッジ線分を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+	<BR> 
+<A NAME="50147"></A>
+<BIG CLASS="XLARGE"><B>curved-edge-segment </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>edge-segment</B> 
+<BR>  :slots 		 rotation total-rot side   a b c d e 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>曲線のエッジ線分を表現。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50164"></A>
+<B>draw-ellipse-segment</B> <EM>elp gc &amp;optional (vs *viewsurface*)
+				      (height (send vs :height))
+					(x 0) (y 0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vs</EM>で指定されるXwindowに<B>curved-edge-segment</B>オブジェクトである
+<EM>elp</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50177"></A>
+<B>draw-line-segment</B> <EM>s &amp;optional gc (vs *viewsurface*)
+				(height (send vs :height))
+				(x 0) (y 0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vs</EM>で指定されるXwindowに<B>line-edge-segment</B>オブジェクトである
+<EM>s</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50190"></A>
+<PRE><TT>
+<B>draw-segments</B> <I>segs &amp;key (:line-gc image::*red-gc*) [関数]
+<BR>(:ellipse-gc line-gc)
+<BR>(:vs geometry:*viewsurface*)
+<BR>(:height (send vs :height))
+<BR>(:step nil)
+<BR>(:x 0) (:y 0)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD><EM>vs</EM>で指定されるXwindowに<B>edge-segment</B>のリスト表現である
+<EM>segs</EM>を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50204"></A>
+<B>draw-boundary</B> <EM>b &amp;optional gc </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vs</EM>で指定されるXwindowに<B>boundary</B>のオブジェクト<EM>b</EM>
+の中の線分を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50217"></A>
+<B>draw-boundaries</B> <EM>bs &amp;optional gc (step nil) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>vs</EM>で指定されるXwindowに<B>boundary</B>のリスト表現である<EM>bs</EM>
+の中の線分を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50230"></A>
+<B>*red-gc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> #ff0000(赤色)の色を持つ<B>gcontext</B>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50241"></A>
+<B>*blue-gc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> #0000ff(青色)の色を持つ<B>gcontext</B>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50252"></A>
+<B>*green-gc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> #00ff00(緑色)の色を持つ<B>gcontext</B>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50263"></A>
+<B>*yellow-gc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> #ffff00(黄色)の色を持つ<B>gcontext</B>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50274"></A>
+<B>*cyan-gc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> #00ffff(水色)の色を持つ<B>gcontext</B>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<DIV ALIGN="CENTER"><A NAME="49023"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 19:</STRONG>
+Edge Finder and Overlaied Edges</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H2><A NAME="SECTION03085000000000000000"></A><A NAME="tracking"></A>
+<BR>
+トラッキング
+</H2>
+<TT>"vision/correlation"</TT>に元画像とトラッキングしたい画像との
+相関を求める関数が定義されている。
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="50286"></A>
+<BIG CLASS="XLARGE"><B>tracking-window </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>pixel-image</B> 
+<BR>  :slots 		 x-pos y-pos x-vel y-vel
+<BR>
+pattern-size window-size
+<BR>
+x-win y-win window window-margin
+<BR>
+update threshold half-pattern correlation 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>このクラスは、トラッキング画像を定義する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50303"></A>
+<B>:correlation</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像と元画像との間の相関を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50313"></A>
+<B>:grab</B> <EM>&amp;optional (x x-pos) (y y-pos) (sampling 2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+画像入力装置から画像を取り込み、その画像の<B>pixel-image</B>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50324"></A>
+<B>:window-rectangle</B> <EM>val </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowの上に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50334"></A>
+<B>:rectangle</B> <EM>val </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowの上に四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50344"></A>
+<B>:move</B> <EM>newpos &amp;aux (newx (aref newpos 0)) (newy (aref newpos 1)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+トラッキングする位置を<EM>newpos</EM>に移動し、新しい画像を取り込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50355"></A>
+<B>:track</B> <EM>display-window &amp;optional th </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowの画像からこの画像をトラッキングする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50365"></A>
+<B>:serach</B> <EM>display-window &amp;optional th </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xwindowの画像からこの画像を捜す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50375"></A>
+<B>:track-and-search</B> <EM>flag &amp;optional th </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この画像をトラッキングする。
+もし、トラッキングを失敗したとき、Xwindowからこの画像を捜して
+位置を更新する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50385"></A>
+<B>:pos</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+windowの左上位置を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50395"></A>
+<B>:vel</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+トラッキング速度を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50405"></A>
+<B>:insidep</B> <EM>pos &amp;aux (x (aref pos 0)) (y (aref pos 1)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>pos</EM>が<B>tracking-window</B>の中に含まれるかどうかをチェックする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50417"></A>
+<B>:update</B> <EM>&amp;optional (flag :get) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>update</TT>に<EM>flag</EM>を設定する。もし、<EM>flag</EM>がなければ、
+<TT>update</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50431"></A>
+<B>:prin1</B> <EM>strm &amp;rest mesg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>tracking-window</B>を名前と次元と一緒に表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50442"></A>
+<B>:init</B> <EM>x y size win-size </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>tracking-window</B>を作成する
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION03086000000000000000"></A><A NAME="PBMfile"></A>
+<BR>
+画像ファイル入出力
+</H2>
+<TT>"vision/pbmfile"</TT>は、Euslispとディスクファイルとの間の
+画像データを変換する関数を定義している。
+EusLispは、pgm(portable gray-scale map)とppm(portable pixmap)フォーマット
+のファイルの読み書きができる。
+
+<P>
+
+ <BR>
+<BR> <A NAME="50453"></A>
+<B>read-pnm</B> <EM>f &amp;optional buf0 buf1 buf2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>file-stream</B>の<EM>f</EM>で指定されるpgmあるいはppmファイル
+を読み込み、<B>pixel-image</B>あるいは<B>color-pixel-image</B>を返す。
+画像ファイルは、asciiでもバイナリーでも可能である。
+言い換えれば、P2,P3,P5,P6フォーマットは認識できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50467"></A>
+<B>read-pnm-file</B> <EM>file &amp;optional buf0 buf1 buf2 </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ファイル名<EM>file</EM>で指定されるpgmあるいはppmファイルを読み込む。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50478"></A>
+<B>write-pgm</B> <EM>f image  &amp;optional (depth 255) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>image</EM>で指定される<B>pixel-image</B>を<B>file-stream</B>である<EM>f</EM>
+にバイナリーppmフォーマットで書き込む。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50492"></A>
+<B>write-ppm</B> <EM>f image  &amp;optional (depth 255) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>image</EM>で指定される<B>pixel-image</B>を<B>file-stream</B>である<EM>f</EM>
+にバイナリーpgmフォーマットで書き込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50506"></A>
+<B>write-pnm</B> <EM>f img </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>img</EM>で指定されるピクセル画像を<B>file-stream</B>である<EM>f</EM>に書き込む。
+もし、<EM>img</EM>が<B>pixel-image</B>であるなら、バイナリーpgmフォーマットで
+書き込み、<B>color-pixel-image</B>ならバイナリーppmフォーマットで書き込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50522"></A>
+<B>write-pnm-file</B> <EM>file img </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ファイル名<EM>file</EM>に<EM>img</EM>で指定されるピクセル画像を書き込む。
+この関数は、<B>write-pnm</B>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="50535"></A>
+<B>image::read-raw-image</B> <EM>file &amp;optional (x 256) (y x) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+raw-imageファイルを読み込み、1次元の文字列ベクトルを返す。
+raw-imageの次元は、与えられた<EM>x</EM>と<EM>y</EM>に一致しなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="50547"></A>
+<B>image::write-raw-image</B> <EM>file imgvec </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ピクセル値を1バイトのベクトル(文字列)に蓄積した<EM>imgvec</EM>を<EM>file</EM>
+に書き込む。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html876"
+  HREF="jmanual-node22.html">マニピュレータ</A>
+<B>Up:</B> <A NAME="tex2html870"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html864"
+  HREF="jmanual-node20.html">XToolKit</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Generalized Variables</TITLE>
-<META NAME="description" CONTENT="Generalized Variables">
+<TITLE>Viewing and Graphics</TITLE>
+<META NAME="description" CONTENT="Viewing and Graphics">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,141 +20,1592 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="manual-node21.html">
 <LINK REL="previous" HREF="manual-node19.html">
-<LINK REL="up" HREF="manual-node17.html">
+<LINK REL="up" HREF="manual-node15.html">
 <LINK REL="next" HREF="manual-node21.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html687"
-  HREF="manual-node21.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html681"
-  HREF="manual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html675"
-  HREF="manual-node19.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html683"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html685"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html688"
-  HREF="manual-node21.html">Special Forms</A>
-<B> Up:</B> <A NAME="tex2html682"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Previous:</B> <A NAME="tex2html676"
-  HREF="manual-node19.html">Scoping</A>
- &nbsp; <B>  <A NAME="tex2html684"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html686"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html879"
+  HREF="manual-node21.html">Image Processing</A>
+<B>Up:</B> <A NAME="tex2html873"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html867"
+  HREF="manual-node19.html">Geometric Modeling</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03023000000000000000">
-Generalized Variables</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html880"
+  HREF="manual-node20.html#SECTION03051000000000000000">Viewing</A>
+<LI><A NAME="tex2html881"
+  HREF="manual-node20.html#SECTION03052000000000000000">Projection</A>
+<LI><A NAME="tex2html882"
+  HREF="manual-node20.html#SECTION03053000000000000000">Viewport</A>
+<LI><A NAME="tex2html883"
+  HREF="manual-node20.html#SECTION03054000000000000000">Viewer</A>
+<LI><A NAME="tex2html884"
+  HREF="manual-node20.html#SECTION03055000000000000000">Drawings</A>
+<LI><A NAME="tex2html885"
+  HREF="manual-node20.html#SECTION03056000000000000000">Animation</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03050000000000000000">
+Viewing and Graphics</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION03051000000000000000">
+Viewing</A>
 </H2>
-Generally, any values or attributes are represented in slots of objects
-(or in stack frames).
-To retrieve and alter the value of a slot,
-two primitive operations, <EM>access</EM> and <EM>update</EM>, must be provided.
-Instead of defining two distinct primitives for every slot of objects,
-EusLisp, like Common Lisp, provides uniform update operations
-based on the generalized variable concept.
-In this concept, a common form is recognized  either as a value access form
-or as a slot location specifier.
-Thus, you only need to remember accessing form for each slot and
-update is achieved by <B>setf</B> macro used in conjunction with the access form.
-For example, <TT>(car x)</TT> can be used to replace the value
-in the car slot of <TT>x</TT> when used with <B>setf</B> as in <TT>(setf (car 
-'(a b) 'c)</TT>,
-as well as to take the car value out of the list.
+A viewing object manages viewing coordinate system
+whose origin is located at the position of a virtual camera,
+<EM>-z</EM> axis is oriented to the objects observed, and xy-plane is the
+projection screen.
+Since viewing inherits class cascaded-coords,
+it accepts coordinates transformation message
+such as <B>:translate, :rotate</B> and <B>:transform</B>.
+Also, it can be attached to another object derived from cascaded-coords,
+allowing the simulation of the camera-on-mobile-object system.
+The main purpose of viewing is to transform vectors represented in the world
+to the camera coordinates system.
+The transformation is taken in the opposite direction against usual coordinate
+transformation where vectors in the local coordinates are transformed into the
+representation in the world.
+Therefore, viewing holds the inversed left-handed transformation in
+the viewcoords slot, which is usually referred as the viewing coordinate system.
 
 <P>
-This method is also applicable to all the user defined objects.
-When a class or a structure is defined, the access and update forms
-for each slot are automatically defined.
-Each of those forms is defined as a macro whose name is the concatenation of
-the class name and slot name.
-For example, car of a cons can be addressed by <TT>(cons-car '(a b c))</TT>.
+
+<DIV ALIGN="CENTER"><A NAME="35783"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 13:</STRONG>
+viewing coords and projection planes</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="655" HEIGHT="443" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img115.png"
+ ALT="\includegraphics[height=10cm]{fig/viewcoords.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
 
 <P>
-<PRE>
-(defclass person :super object :slots (name age))
-(defclass programmer :super person :slots (language machine))
-(setq x (instantiate programmer))
-(setf (programmer-name x) "MATSUI"
-      (person-age x) 30)
-(incf (programmer-age x))
-(programmer-age x)   --&gt; 31
-(setf (programmer-language x) 'EUSLISP
-      (programmer-machine x) 'SUN4)
-</PRE>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="36270"></A>
+<BIG CLASS="XLARGE"><B>viewing </B></BIG> [class]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (viewcoords) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines the viewing transformation.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-Array elements can be accessed in the same manner.
+
+<A NAME="36287"></A>
+<B>:viewpoint</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the position vector of the origin of this viewing.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<PRE>
-(setq a (make-array '(3 3) :element-type :float))
-(setf (aref a 0 0) 1.0 (aref a 1 1) 1.0 (aref a 2 2) 1.0)
-a --&gt; #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))
 
-(setq b (instantiate bit-vector 10))  --&gt; #*0000000000
-(setf (bit b 5) 1)
-b --&gt; #*0000010000
-</PRE>
+<A NAME="36297"></A>
+<B>:view-direction</B> [method]
 
-<P>
-In order to define special setf methods for particular objects,
-<B>defsetf</B> macro is provided.
-
-<P>
-<PRE>
-(defsetf symbol-value set)
-(defsetf get (sym prop) (val) `(putprop ,sym ,val ,prop))
-</PRE>
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the vector from the origin of the viewing to the center of screen.
+This is the z-axis direction of the viewing coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
+
+<A NAME="36307"></A>
+<B>:view-up</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns y-axis vector of this viewing represented in the world coords.
+Y-axis is the upward direction in the viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36317"></A>
+<B>:view-right</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns x-axis vector of this viewing represented in the world coords.
+X-axis is in horizontal direction to the right in the viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36327"></A>
+<B>:look</B> <EM>from &amp;optional (to #f(0 0 0)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:look</B> conveniently sets the viewing coords as the eye is located
+at <EM>from</EM> and looking at <EM>to</EM> point.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36340"></A>
+<PRE><TT>
+<B>:init</B> <I>&amp;key  :target   #f(0 0 0) [method]
+<BR>:view-direction 		 nil 
+<BR>:view-up 		  #f(0.0 0.0 1.0)) 
+<BR>:view-right 		  nil 
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>Since viewing inherits cascaded-coords, all the <EM>:init</EM> parameters
+such as <EM>:pos</EM>, <EM>:rot</EM>, <EM>:Euler</EM>, <EM>:rpy</EM>, etc. can be
+used to specify the location and the orientation of the viewing coordinates.
+However, viewing's <EM>:init</EM> provides easier way to determine the
+rotation.
+If only <EM>:target</EM> is given, view-line (-z axis) is determined to
+pass the viewpoint and <EM>:target</EM> point, and the <EM>:view-right</EM>
+vector is determined so that the x-axis is parallel to the xy-plane of the
+world coordinates.
+You may specify <EM>:view-direction</EM> instead of <EM>:target</EM> to get the
+same effect.
+If you give <EM>:view-up</EM> or <EM>:view-right</EM> parameter in addition to
+<EM>:target</EM> or <EM>:view-direction</EM>,
+you can determine all the three rotation parameters by yourself.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03052000000000000000">
+Projection</A>
+</H2>
+
+<P>
+Class <B>parallel-projection and perspective-projection</B> process
+projection transformation, which is represented with a 4X4 matrix,
+i.e., the transformation is taken in the three dimensional homogeneous
+coordinates.
+Class <B>projection</B> is an abstract class for both of these.
+Since these projection classes inherit the viewing class,
+two coordinates transformation, world-to-viewing and projection
+can be performed at the same time.
+By sending the <TT>:project3</TT> message with a 3D vector to a projection object,
+a float-vector of four elements is returned.
+<B>Homo2normal</B> function is used to convert this homogeneous vector
+to the normal representation.
+The result is a vector represented in so called normalized device coordinates
+(NDC), in which a visible vector ranges within -1 to 1
+in each of x,y, and z dimensions.
+For the simulation of real cameras in a robot world,
+the perspective projection is used more often than the parallel-projection.
+Perspective-projection defines a few more parameters.
+<TT>Screenx</TT> and <TT>screeny</TT> are the sizes of the window on the
+viewing plane on which observed objects are projected,
+and with the larger screen, the wider space is projected.
+<TT>Viewdistance</TT> which defines the distance between the viewpoint
+and the viewplane also concerns with the viewing angle.
+The larger viewdistance maps the smaller region to the window on the view plane.
+<TT>Hither</TT> and <TT>yon</TT> parameters determine the distance to the front and back
+depth clipping planes.
+Objects outside these two planes are clipped out.
+Actually, this clipping procedure is performed by the viewport object.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="36368"></A>
+<BIG CLASS="XLARGE"><B>projection </B></BIG> [class]  <PRE><TT>
+  :super   <B>viewing</B> 
+<BR>  :slots 		 (screenx screeny hither yon projection-matrix) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines projection transformation with a 4x4 matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36385"></A>
+<B>:projection</B> <EM>&amp;optional pmat </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+if <EM>pmat</EM> is given, it is set to the <EM>projection-matrix</EM> slot.
+<B>:projection</B> returns the current 4x4 projection matrix.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36398"></A>
+<B>:project</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Vec</EM> is a three-dimensional homogeneous float-vector of four elements.
+<EM>Vec</EM> is transformed by projection-matrix,
+and the resulted homogeneous representation is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36410"></A>
+<B>:project3</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Vec</EM> is a normal 3D float-vector.
+<EM>Vec</EM> is homogenized and transformed by projection-matrix,
+and the resulted homogeneous representation is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36422"></A>
+<B>:view</B> <EM>vec </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+applies viewing transformation and projection transformation to <EM>vec</EM>
+successively.
+The resulted homogeneous representation is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36433"></A>
+<B>:screen</B> <EM>xsize (&amp;optional (ysize xsize)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the size of the viewing screen.
+The larger the size, the wider view you get.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36443"></A>
+<B>:hither</B> <EM>depth-to-front-clip-plane </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+determines the distance from the viewpoint to the front-clipping plane.
+Objects before the front-clipping (hither) plane are clipped out.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36453"></A>
+<B>:yon</B> <EM>depth-to-back-clip-plane </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the distance between the viewpoint and
+the back-clipping plane.
+Objects behind the back-clipping (yon) plane are clipped out.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36463"></A>
+<B>:aspect</B> <EM>&amp;optional ratio </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Aspect ratio is the ratio between screen-y and screen-x.
+If <EM>ratio</EM> is given,
+the aspect ratio is changed by setting screen-y to screen-x * <EM>ratio</EM>.
+<B>:aspect</B> returns the current aspect ratio.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36476"></A>
+<PRE><TT>
+<B>:init</B> <I>&amp;key :hither    100.0 [method]
+<BR>:yon 		 1000.0 
+<BR>:aspect 		 1.0  
+<BR>:screen 		 100.0 
+<BR>:screen-x 		 screen 
+<BR>:screen-y 		 (* screen-x aspect) 
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>initializes viewing and projection.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="36489"></A>
+<BIG CLASS="XLARGE"><B>parallel-viewing </B></BIG> [class]  <PRE><TT>
+  :super   <B>projection</B> 
+<BR>  :slots 		 () 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines parallel projection.
+<B>Hid</B> (the hidden-line elimination function)
+cannot handle parallel projection.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36507"></A>
+<B>:make-projection</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="36519"></A>
+<BIG CLASS="XLARGE"><B>perspective-viewing </B></BIG> [class]  <PRE><TT>
+  :super   <B>projection</B> 
+<BR>  :slots 		 (viewdistance) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a perspective projection transformation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36536"></A>
+<B>:make-projection</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36547"></A>
+<B>:ray</B> <EM>u v </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the normalized direction-vector pointing (u,v) on
+the normalized screen from the viewpoint.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36557"></A>
+<B>:viewdistance</B> <EM>&amp;optional vd </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Viewdistance is the distance between viewpoint and the screen.
+If <EM>vd</EM> is given, it is set to viewdistance.
+The viewdistance corresponds to the focal length of a camera.
+The greater the viewdistance, the more zoomed-up view you get.
+<B>:viewdistance</B> returns the current viewdistance.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36569"></A>
+<B>:view-angle</B> <EM>&amp;optional ang </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+set screen size so that the prospective angle of the diagonal of the
+screen becomes <EM>ang</EM> radian.
+Note that angles somewhat between 20 degree (approx. 0.4 rad.)
+and 50  degree  (0.9 rad.) can generate a natural perspective view.
+Wider angle generates a skewed view, and narrower a flat view like
+orthogonal (parallel) viewing.
+<B>:view-angle</B> returns current or new view angle in radian.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36581"></A>
+<B>:zoom</B> <EM>&amp;optional scale </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>scale</EM> is given, the screen is changed relatively to the
+current size by <EM>scale</EM>
+(the viewdistance is unchanged).
+If you give 0.5 for <EM>scale</EM>, you get two times as wide view as before.
+<B>:zoom</B> returns new view angle in radian.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36595"></A>
+<B>:lookaround</B> <EM>alfa beta </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates and rotates the viewpoint.
+The center of rotation is taken at 
+the midst of the hither plane and the yon plane on the viewline.
+The viewing coordinates is rotated <EM>alfa</EM> radian around world's z-axis
+and <EM>beta</EM> radian around x-axis locally.
+<B>:lookaround</B> allows you to move around the object in the center of
+viewing.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36608"></A>
+<B>:look-body</B> <EM>bodies </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes view direction, screen sizes, and hither/yon so that all the
+<EM>bodies</EM> fit in the viewport.
+Viewpoint does not change.
+View direction is chosen so that the viewing line penetrate the center
+of the bounding box of all bodies.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36619"></A>
+<B>:init</B> <EM>&amp;key (:viewdistance 100.0) &amp;allow-other-keys </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03053000000000000000">
+Viewport</A>
+</H2>
+
+<P>
+Class <B>viewport</B> performs three-dimensional viewport clipping in
+the normalized device coordinates, and maps the result into the device
+dependent coordinates.
+The viewport is the term representing the visible rectangular area
+on a screen.
+The physical size (dots in x and y) of a viewport should be given with 
+<B>:init</B> message as the <EM>:width</EM> and <EM>:height</EM> arguments.
+<EM>:xcenter</EM> and <EM>:ycenter</EM> arguments determine
+the physical location of the viewport.
+These two parameters actually decide the location where objects are drawn
+on the screen when you are using a primitive display device like tektronics
+4014 on which every dimension must be given absolutely to the origin of the
+screen.
+If you are using more sophisticated display device like Xwindows where
+locations can be determined relatively to the parent window, you need not
+to change viewport's parameters to move the viewport.
+These parameters are independent of the actual display location.
+
+<P>
+Viewport class assumes the origin of the viewport at the lower-left corner of
+the rectangular area and y-axis extends to the upper direction.
+Unfortunately, in many window systems and display devices, the origin is taken
+at the upper-left corner and y-axis extends to the lower direction.
+To work around this problem, a negative value should be given to the
+<EM>:height</EM> parameter.
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="36630"></A>
+<B>homo-viewport-clip</B> <EM>v1 v2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>V1</EM> and <EM>v2</EM>, which are two homogeneous vectors with four elements,
+represent a line in 3-D space.
+The line is clipped at the boundary of <!-- MATH
+ $x=-1, x=1, y=-1, y=1, z=0, z=1$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="291" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img116.png"
+ ALT="$ x=-1, x=1, y=-1, y=1, z=0, z=1$"></SPAN>,
+and a list of two vectors are returned.
+If the line lies completely outside the viewport, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="36643"></A>
+<BIG CLASS="XLARGE"><B>viewport </B></BIG> [class]  <PRE><TT>
+  :super   <B>coordinates</B> 
+<BR>  :slots 		 () 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>viewport transformation maps the NDC (normalized device coordinates)
+ to device specific coordinates.
+Inheriting the <B>coordinates</B> class, the <TT>viewport</TT> defines
+the size and the relative position of the projection screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36662"></A>
+<B>:xcenter</B> <EM>&amp;optional xcenter </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+X coordinates of the center of this viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36672"></A>
+<B>:ycenter</B> <EM>&amp;optional ycenter </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Y coordinates of the center of this viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36682"></A>
+<B>:size</B> <EM>&amp;optional size </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+List of sizes in x direction and y direction.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36692"></A>
+<B>:width</B> <EM>&amp;optional width </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> width of this viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36702"></A>
+<B>:height</B> <EM>&amp;optional height </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> height of this viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36712"></A>
+<B>:screen-point-to-ndc</B> <EM>p </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p</EM> is a float-vector representing the location in the physical screen.
+<EM>p</EM> is transformed into the representation in the normalized-device
+coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36724"></A>
+<B>:ndc-point-to-screen</B> <EM>p </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+NDC representation in this viewport, <EM>p</EM>, is transformed into
+the physical address on the screen.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36735"></A>
+<B>:ndc-line-to-screen</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Two 3D float-vectors, <EM>p1</EM> and <EM>p2</EM>, define a line in NDC.
+These two end points are transformed to the representation in 
+the screen space.
+If <EM>do-clip</EM> is non-nil, the line is clipped.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36748"></A>
+<B>:init</B> <EM>&amp;key (xcenter 100) (ycenter 100) (size 100)
+(width 100) (height 100) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> makes a new viewport object.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03054000000000000000">
+Viewer</A>
+</H2>
+To get a drawing  on a screen, four objects are needed:
+(1) objects to be drawn, (2) a viewing which defines the viewing coordinates
+and the projection, (3) a viewport for clipping in NDC and
+the transformation from NDC to physical screen coordinates,
+and (4) a viewsurface which performs drawing functions on
+a physical display device.
+A <B>viewer</B> object holds a viewing, a viewport and a viewsurface object,
+and controls successive coordinates transformation. 
+Functions <B>draw</B> and <B>hid</B> described in section <A HREF="#Drawings">17.5</A>
+use the instances of viewer.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="36759"></A>
+<BIG CLASS="XLARGE"><B>viewer </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (eye :type viewint) 
+<BR>(port :type viewport) 
+<BR>(surface :type viewsurface) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines the cascaded coordinates transformation from the viewing via
+the viewport to the viewsurface.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="36776"></A>
+<B>:viewing</B> <EM>&amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>msg</EM> is given, <EM>msg</EM> is sent to the viewing (eye) object,
+Otherwise, the viewing (eye) object is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36788"></A>
+<B>:viewport</B> <EM>&amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>msg</EM> is given, <EM>msg</EM> is sent to the viewport (port) object,
+Otherwise, the viewport (port) object is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36800"></A>
+<B>:viewsurface</B> <EM>&amp;rest msg </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+If <EM>msg</EM> is given, <EM>msg</EM> is sent to the viewsurface (surface) object,
+Otherwise, the viewsurface (surface) object is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36812"></A>
+<B>:adjust-viewport</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+When the size of viewsurface has been changed, <B>:adjust-viewport</B>
+changes viewport transformation sending a proper message to port.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36823"></A>
+<B>:resize</B> <EM>width height </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the size of viewsurface by sending :resize message to the viewsurface
+and :size message to viewport.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36833"></A>
+<B>:draw-line-ndc</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a line whose two end points <EM>p1, p2</EM> are defined in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36844"></A>
+<B>:draw-polyline-ndc</B> <EM>polylines &amp;optional color </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws polylines whose end points are defined in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36854"></A>
+<B>:draw-star-ndc</B> <EM>center &amp;optional (size 0.01) color </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a cross mark in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36864"></A>
+<B>:draw-box-ndc</B> <EM>low-left up-right &amp;optional color </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a rectangle in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36874"></A>
+<B>:draw-arc-ndc</B> <EM>point width height angle1 angle2 [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws an arc in NDC.
+The viewsurface object bound in this viewer must accept <B>:arc</B> message.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36885"></A>
+<B>:draw-fill-arc-ndc</B> <EM>point width height angle1 angle2 [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a filled-arc in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36895"></A>
+<B>:draw-string-ndc</B> <EM>position string [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws <EM>string</EM> at <EM>position</EM> defined in NDC.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36907"></A>
+<B>:draw-image-string-ndc</B> <EM>position string [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36918"></A>
+<B>:draw-rectangle-ndc</B> <EM>position width height [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36929"></A>
+<B>:draw-fill-rectangle-ndc</B> <EM>point width height [color] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36940"></A>
+<B>:draw-line</B> <EM>p1 p2 &amp;optional (do-clip t) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a line whose two end points <EM>p1, p2</EM> are defined in the world
+coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36951"></A>
+<B>:draw-star</B> <EM>position &amp;optional (size 0.01) color </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a cross at <EM>position</EM> located in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36962"></A>
+<B>:draw-polyline</B> <EM>vlist &amp;optional color </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws polylines whose end points <EM>vlist</EM> are defined in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36973"></A>
+<B>:draw-box</B> <EM>center &amp;optional (size 0.01) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws a rectangular at <EM>center</EM>in the world.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36984"></A>
+<B>:draw-arrow</B> <EM>p1 p2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws an arrow from <EM>p1</EM> to <EM>p2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="36996"></A>
+<B>:draw-edge</B> <EM>edge </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37007"></A>
+<B>:draw-edge-image</B> <EM>edge-image </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37018"></A>
+<B>:draw-faces</B> <EM>face-list &amp;optional (normal-clip nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37029"></A>
+<B>:draw-body</B> <EM>body &amp;optional (normal-clip nil) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37040"></A>
+<B>:draw-axis</B> <EM>coordinates &amp;optional size </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws coordinates axes whose length is <EM>size</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37051"></A>
+<B>:draw</B> <EM>&amp;rest things </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws 3D geometric objects.
+If the object is a 3D float-vector, a small cross is drawn at the position.
+If it is a list of 3D float-vectors, it is taken as a polyline.
+If <EM>thing</EM> accepts <TT>:draw</TT> message,
+the method is invoked with this viewer as its argument.
+If the object defines <TT>:drawners</TT> method,
+the <B>:draw</B> message is sent to the result of <TT>:drawners</TT>.
+<TT>Line, edge, polygon, face</TT>, and <TT>body</TT> objects are drawn
+by corresponding <EM>:draw-xxx</EM> methods defined in viewer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37069"></A>
+<B>:erase</B> <EM>&amp;rest things </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws <EM>things</EM> with background color.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37080"></A>
+<B>:init</B> <EM>&amp;key :viewing :viewport :viewsurface </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets <EM>viewing, viewport</EM> and <EM>viewsurface</EM> to <TT>eye, port</TT>,
+and <TT>surface</TT> slots of this viewer.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37094"></A>
+<PRE><TT>
+<B>view</B> <I>&amp;key (size 500) (width size) (height size)[function] 
+<BR>(x 100) (y 100) 
+<BR>(title "eusx") 
+<BR>(border-width 3) 
+<BR>(background 0) 
+<BR>(viewpoint #f(300 200 100)) (target #f(0 0 0)) 
+<BR>(viewdistance 5.0)  (hither 100.0) (yon 10000.0) 
+<BR>(screen 1.0) (screen-x screen) (screen-y screen) 
+<BR>(xcenter 500) (ycenter 400) 
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>creates a new viewer and pushes it in *viewers* list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03055000000000000000"></A><A NAME="Drawings"></A>
+<BR>
+Drawings
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="37105"></A>
+<B>draw</B> <EM>[viewer] &amp;rest thing </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws <EM>thing</EM>s in <EM>viewer</EM>.
+<EM>Thing</EM> can be any of coordinates, body, face, edge, float-vector,
+list of two float-vectors.
+If you are running <TT>eusx</TT>, 
+<TT>(progn (view) (draw (make-cube 10 20 30)))</TT>
+ draws a cube in a xwindow.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37120"></A>
+<B>draw-axis</B> <EM>[viewer] [size] &amp;rest thing </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws coordinate-axes of <EM>thing</EM>s in <EM>viewer</EM> with <EM>size</EM>
+as the length of each coordinates-axis.
+<EM>Thing</EM> can be any object derived from coordinates.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37134"></A>
+<B>draw-arrow</B> <EM>p1 p2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+draws an arrow pointing from p1 to p2 in <TT>*viewer*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37145"></A>
+<B>hid</B> <EM>[viewer] &amp;rest thing  </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> draws hidden-line eliminated image in <EM>viewer</EM>.
+<EM>Thing</EM> can be of face or body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37157"></A>
+<B>hidd</B> <EM>[viewer] &amp;rest thing  </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+is same as <B>hid</B>, except that <B>hidd</B> draws hidden lines
+with dashed-lines.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37169"></A>
+<B>hid2</B> <EM>body-list viewing </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Generate hidden-line eliminated image represented by edge-image objects.
+The result is bound to <B>*hid*</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37180"></A>
+<B>render</B> <EM>&amp;key bodies faces (viewer *viewer*) (lights *light-sources*)
+<BR>(colormap *render-colormap*) (y 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+does ray-tracing for <EM>bodies</EM> and <EM>faces</EM> and generates
+hidden-surface removed images.
+viewing, viewport, and viewsurface are taken from <EM>viewer</EM>.
+<EM>lights</EM> is a list of <TT>light-source</TT> objects.
+<EM>colormap</EM> is xwindow's colormap object.
+Each of bodies and faces must have color attribute assigned.
+This can be done by sending <TT>:color</TT> message with the name of
+color LUT defined in the <EM>colormap</EM>.
+Currently this function works only in Xlib environment.
+See examples in <TT>demo/renderdemo.l</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37199"></A>
+<B>make-light-source</B> <EM>pos &amp;optional (intensity 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+make a light-source object located at <EM>pos</EM>.
+<EM>intensity</EM> is magnifying ratio which multiplies default light
+intensity. In order to determine the intensity more precisely,
+use <TT>:intensity</TT> method of a light-source.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37212"></A>
+<B>tektro</B> <EM>file &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+opens file for <TT>*tektro-port*</TT> stream, and evaluates forms.
+This is used in order to redirect the output of tektro drawings to a file.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37223"></A>
+<B>kdraw</B> <EM>file &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Kdraw</B> is a macro to produce a [ik]draw-readable postscript file.
+<B>Kdraw</B> opens <EM>file</EM> in <TT>:output</TT> mode,
+makes a kdraw-viewsurface and a viewport with which <TT>*viewer*</TT> is replaced,
+and evaluates <EM>forms</EM>.
+Each of <EM>forms</EM> is a call to any of drawing functions like <TT>draw</TT> or <TT>hid</TT>.
+Drawing messages from these forms are redirected to a <TT>kdraw-viewsurface</TT>, 
+which transforms the messages into postscript representations
+that <TT>idraw</TT> or <TT>kdraw</TT> can recognize, and stores them in <EM>file</EM>.
+When  <TT>idraw</TT> or <TT>kdraw</TT> is invoked and <EM>file</EM> is opened,
+you see the identical figure you drew in a EusViewer window.
+The figure can be modified by <TT>idraw</TT>'s facilities,
+and the final drawing can be incorporated into a <SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN>document
+using the <TT>epsfile</TT> environment.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37251"></A>
+<B>pictdraw</B> <EM>file &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Pictdraw</B> is a macro to produce picture files in the Macintosh
+PICT format. 
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37262"></A>
+<B>pictdraw</B> <EM>file &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>Pictdraw</B> is a macro to produce picture files for Macintosh
+in PICT format. 
+<B>Pictdraw</B> opens <EM>file</EM> in <TT>:output</TT> mode
+makes a pictdraw-viewsurface and a viewport with which <TT>*viewer*</TT> is replaced,
+and evaluates <EM>forms</EM>.
+Each of <EM>forms</EM> is a call to any of drawing functions like <TT>draw</TT> or <TT>hid</TT>.
+Drawing messages from these forms are redirected to a <TT>kdraw-viewsurface</TT>, 
+which transforms the messages into PICT format
+that <TT>macdraw</TT> or <TT>teachtext</TT> of Macintosh can recognize,
+and stores them in <EM>file</EM>.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37285"></A>
+<B>hls2rgb</B> <EM>hue lightness saturation &amp;optional (range 255) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Color representation in HLS (Hue, Lightness, and Saturation)
+is converted to RGB representation.
+HLS is often referred to as HSL.
+<EM>Hue</EM> represents a color around a rainbow circle (from 0 to 360).
+0 for red, 45 for yellow, 120 for green, 240 for blue, 270 for magenta, 
+and 360 again for red, etc.
+<EM>Lightness</EM> is a value between 0.0 and 1.0, representing
+from black to white.
+The color of lightness value of 0 is always black regardless to
+the hue and saturation, and the lightness value 1.0 is always white.
+<EM>Saturation</EM> is a value between 0.0 and 1.0, and represents the
+strength of the color. 
+The greater the saturation value, the divider the color,
+and small saturation values generate weak, dull tone colors.
+<EM>Range</EM> limits the RGB values.
+If you are using a color display which can assign 8bit value to each of
+red, green and blue, <EM>range</EM> should be 255.
+If you use Xwindow, which virtually assigns 16bits integers to RGB,
+you should specify <EM>range</EM> to 65535.
+Note the difference between HSV and HLS.
+In HLS, vivid (rainbow) colors are defined with lightness=0.5.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37301"></A>
+<B>rgb2hls</B> <EM>red green blue &amp;optional (range 255) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGB representation of a color is converted into the corresponding
+representation in HLS.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03056000000000000000"></A>
+<A NAME="36168"></A>
+<BR>
+Animation
+</H2>
+EusLisp's animation facility provides the pseudo real-time
+graphics on stock workstations without graphics accelerators.
+The basic idea is the quick playback of a series of images which have been
+generated after long computation.
+Images are retained in two ways:
+one is to keep a number of xwindow pixmaps each of which holds a complete
+pixel image, and the other is to keep line segment data obtained by
+hidden-line elimination.
+The former is faster and the only way for rendered images,
+but not suitable for a long animation since it requires much memory
+in the X server.
+The latter is more memory efficient and suitable for storing data in disks,
+but the performance is degraded
+when the number of line segments increases.
+
+<P>
+In either way, the user provide a function which gives new configurations
+to the objects to be drawn and generates drawing on <TT>*viewer*</TT>.
+<B>pixmap-animation</B> calls this function as many times as
+specified by the <EM>count</EM> argument.
+After each call, the content of <TT>*viewsurface*</TT>, which is assumed to
+be an xwindow, is copied to a newly created Xwindow pixmap.
+These pixmaps are played back by <B>playback-pixmaps</B>.
+Similarly, <B>hid-lines-animation</B> extracts visible line segments
+from the result of <B>hid</B>, and accumulates them in a list.
+The list is then played back by <B>playback-hid-lines</B>.
+
+<P>
+Following functions are defined in <TT>llib/animation.l</TT>, and
+<TT>demo/animdemo.l</TT> contains a sample animation program
+using <B>hid-lines-animation</B> on the ETA3 manipulator model.
+
+<P>
+
+ <BR>
+<BR> <A NAME="37311"></A>
+<B>pixmap-animation</B> <EM>count &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM> are evaluated <EM>count</EM> times.
+After each evaluation, the content of <TT>*viewsurface*</TT> is copied 
+in a new pixmap. A list of <EM>count</EM> pixmaps is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37325"></A>
+<B>playback-pixmaps</B> <EM>pixmaps &amp;optional (surf *viewsurface*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Each pixmap in the <EM>pixmaps</EM> list is copied to <EM>surf</EM> successively.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37337"></A>
+<B>hid-lines-animation</B> <EM>count &amp;rest forms </EM>[macro]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>forms</EM>, which are assumed to include call(s) to <B>hid</B>,
+are evaluated <EM>count</EM> times.
+After each evaluation, 
+the result of <B>hid</B> held in <B>*hid*</B> is scanned and visible segments
+are collected in a list of point pairs.
+A list of length <EM>count</EM> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="37353"></A>
+<B>playback-hid-lines</B> <EM>lines &amp;optional (view *viewer*) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>lines</EM> is a list of lists of point pairs.
+draws lines successively on <EM>view</EM>.
+Double buffering technique allocating another pixmap 
+is used to generate flicker-free animation.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="37365"></A>
+<B>list-visible-segments</B> <EM>hid-result </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+collects visible segments from the list of edge-images <EM>hid-result</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
 
 <DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html687"
-  HREF="manual-node21.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html681"
-  HREF="manual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html675"
-  HREF="manual-node19.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html683"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html685"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html688"
-  HREF="manual-node21.html">Special Forms</A>
-<B> Up:</B> <A NAME="tex2html682"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Previous:</B> <A NAME="tex2html676"
-  HREF="manual-node19.html">Scoping</A>
- &nbsp; <B>  <A NAME="tex2html684"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html686"
-  HREF="manual-node167.html">Index</A></B> </DIV>
+<B> Next:</B> <A NAME="tex2html879"
+  HREF="manual-node21.html">Image Processing</A>
+<B>Up:</B> <A NAME="tex2html873"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html867"
+  HREF="manual-node19.html">Geometric Modeling</A>
+</DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

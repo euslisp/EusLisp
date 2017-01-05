@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>マクロ</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="マクロ">
+<TITLE>マニピュレータ</TITLE>
+<META NAME="description" CONTENT="マニピュレータ">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,73 +16,624 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node23.html">
 <LINK REL="previous" HREF="jmanual-node21.html">
-<LINK REL="up" HREF="jmanual-node17.html">
+<LINK REL="up" HREF="jmanual-node13.html">
 <LINK REL="next" HREF="jmanual-node23.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html682"
-  HREF="jmanual-node23.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html676"
-  HREF="jmanual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html670"
-  HREF="jmanual-node21.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html678"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html680"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html683"
-  HREF="jmanual-node23.html">関数</A>
-<B> Up:</B> <A NAME="tex2html677"
-  HREF="jmanual-node17.html">書式と評価</A>
-<B> Previous:</B> <A NAME="tex2html671"
-  HREF="jmanual-node21.html">特殊書式</A>
- &nbsp; <B>  <A NAME="tex2html679"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html681"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html896"
+  HREF="jmanual-node23.html">MARS: マルチ自律ロボットシミュレータ</A>
+<B>Up:</B> <A NAME="tex2html890"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html884"
+  HREF="jmanual-node21.html">画像処理</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03025000000000000000">
-マクロ</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html897"
+  HREF="jmanual-node22.html#SECTION03091000000000000000">関節のモデル</A>
+<LI><A NAME="tex2html898"
+  HREF="jmanual-node22.html#SECTION03092000000000000000">多関節マニピュレータ</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03090000000000000000"></A><A NAME="ManipulatorModel"></A>
+<BR>
+マニピュレータ
+</H1>
+
+<EM>documented by Hiromu Onda</EM>
+
+<P>
+<B>rotational-joint</B>クラスと<B>manipulator</B>クラスのインスタンスからマニピュレータ
+モデルは構成される。<B>rotational-join</B>クラスは、<B>body</B>のサブクラスであり、
+マニピュレータの間接モデルを定義する。
+<B>manipulator</B>は、<B>cascaded-coords</B>のサブクラスであり、運動方程式と逆運動方程式の
+解を求めるメソッドを持っている。
+
+<P>
+マニピュレータを定義するには、
+すべての関節を作成した後、<B>manipulator</B>にそれらを統合する。
+
+<P>
+
+<H2><A NAME="SECTION03091000000000000000">
+
+関節のモデル</A>
 </H2>
 
 <P>
-マクロは、言語構造を拡張するために役立つメソッドである。
-マクロが呼び出されたとき、引数は評価されずに
-マクロの本体（マクロ拡張関数）へ受け渡される。
-それから、マクロ拡張関数は、引数を拡張し、新しい書式を返す。
-結果となった書式は、マクロの外側で再び評価される。
-引数のリストにマクロまたは特殊書式を用いるとエラーになる。
-<B>macroexpand</B>関数は、マクロ展開のために使用することができる。
+クラス<B>rotational-joint</B>が関節のモデルを記述する。
+クラス<B>rotational-joint</B>は、<B>body</B>をスーパクラスに持ち、
+その形状モデル、座標系に加えて
+関節回転軸、回転角度、可動角度範囲、などを管理している。
+次の<B>defjoint</B>マクロによって<B>rotational-joint</B>
+のインスタンスが作成され、<EM>joint-name</EM>にバインドされる。
+<B>parent</B>には、親の関節を指定する。
+ベースと指には可動軸を指定する必要はない。
 
 <P>
-インタプリタのときマクロはゆっくりと実行されるが、
-コンパイルすることにより実行速度の向上を図ることができる。
-なぜなら、マクロ展開はコンパイル時に一度だけ行われ、
-実行時にそのオーバーヘッドは残らない。
-しかし、マクロ関数の中におけるevalあるいはapplyの呼出は、
-インタプリタの実行とコンパイル後の実行との間に違う結果をもたらす。
+
+ <BR>
+<BR> <A NAME="52108"></A>
+<PRE><TT>
+<B>defjoint</B> <I>joint-name &amp;key :shape  <I>body-object</I> [マクロ]
+<BR>:color 		 <I>color-id</I>   ;0-15 for MMD 
+<BR>:parent 		 <I>parent-joint</I> 
+<BR>:axis 		 <I>rotational-axis</I> 		  ; :x, :y or :z 
+<BR>:offset 		 <I>trans-from-parent-joint</I> 
+<BR>:low-limit 		 <I>joint-angle-limit-low</I> 
+<BR>:high-limit 		 <I>joint-angle-limit-hight</I></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>関節のモデルを記述する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION03092000000000000000">
+
+多関節マニピュレータ</A>
+</H2>
 
 <P>
-<BR><HR>
+マニピュレータモデルはクラス<B>manipulator</B>によって記述される。
+マニピュレータモデルを作成するには、
+次の<B>defmanipulator</B>マクロを用いる。
+
+<P>
+
+ <BR>
+<BR> <A NAME="52128"></A>
+<PRE><TT>
+<B>defmanipulator</B> <I>manipulator-name &amp;key :class   <I>manipulator-class</I> [マクロ]
+<BR>:base 		 <I>base-joint</I> 
+<BR>:joints 		  <I>list-of-all-joints</I> 
+<BR>:hand 		 <I>handjoint</I> 
+<BR>:left-finger 		 <I>left-finger</I>
+<BR>:right-finger 		 <I>right-finger</I>
+<BR>:handcoords 		 <I>trans-from-hand-to-armsolcoords</I>
+<BR>:toolcoords 		 <I>trans-from-armsolcoords-to-toolcoords</I> 
+<BR>:open-direction 		 <I>finger-open-direction</I>
+<BR>:right-handed 		 <I>righty-or-lefty</I></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>マニピュレータモデルを作成する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="52151"></A>
+<BIG CLASS="XLARGE"><B>rotational-joint </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>body</B> 
+<BR>  :slots 		 (axis offset high-limit low-limit) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>6自由度マニピュレータの間接を記述する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="52169"></A>
+<BIG CLASS="XLARGE"><B>manipulator </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (base baseinverse joint angles right-handed hand handcoords
+<BR>
+right-finger left-finger openvec max-span
+<BR>
+toolcoords toolinverse armsolcoords toolinverse armsocoords
+<BR>
+approach grasp affix) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>ベースからハンドまでのマニピュレータの運動を管理する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="52186"></A>
+<B>:newcoords</B> <EM>newrot &amp;optional newpos </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+関節角度が限度に収まっていれば座標系を
+<EM>newrot</EM>と<EM>newpos</EM>に更新する 
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52198"></A>
+<B>:armsolcoords </B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ベース座標系からハンド座標系への変換（座標系のインスタンス）を計算し、作成する。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52208"></A>
+<B>:tool</B> <EM>&amp;rest msg </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 工具座標系を返す、または変更する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52218"></A>
+<B>:set-tool</B> <EM>newtool &amp;optional offset copy </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 工具座標系<TT>toolcoords</TT>に<EM>newtool</EM>を設定する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52230"></A>
+<B>:reset-tool </B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 工具座標系を初期値に戻す
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52240"></A>
+<B>:worldcoords </B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 工具座標系の位置ベクトル、回転行列、座標系のワールド表現を求める
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52250"></A>
+<B>:set-coords </B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+順運動の解を求めるために、座標系を強制的に設定する。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52260"></A>
+<B>:config </B> <EM>&amp;optional (a newangles) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 6つの関節角度を直接に設定する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52270"></A>
+<B>:park </B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 初期姿勢に戻す
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52280"></A>
+<B>:hand</B> <EM>&amp;optional (h nil) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ ハンドオブジェクトを返す
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52290"></A>
+<B>:handcoords</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ ハンド座標系の位置ベクトル、回転行列、座標系のワールド表現を求める
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52300"></A>
+<B>:span</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 現在の指の間隔を返す
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52310"></A>
+<B>:open-fingers</B> <EM>s &amp;optional abs &amp;aux (current (send self :span)) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 指幅を相対的、絶対的に指定する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52320"></A>
+<B>:close-fingers</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 指を完全に閉じる 
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52330"></A>
+<B>:angles</B> <EM>&amp;optional flag </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 現在の姿勢の関節角度のリストを返す
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="52340"></A>
+<B>:get-approach </B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 現在アプローチしている対象を返す
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52350"></A>
+<B>:set-approach </B> <EM>a </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ アプローチ対象<I>a</I>を設定する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52361"></A>
+<B>:set-grasp</B> <EM>g </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 把握対象物<I>g</I>を指定する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52372"></A>
+<B>:get-affix</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+ 把握している物体を返す
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52382"></A>
+<B>:affix</B> <EM>&amp;optional (grasp) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>affixed-object</B>に<TT>grasp</TT>を設定する。
+<TT>grasp</TT>は、子孫として<TT>handcoords</TT>に関連付けられる。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52396"></A>
+<B>:unfix</B> <EM>&amp;optional (margin 10.0) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>affixed-object</B>にNILを設定する。
+<TT>grasp</TT>は、<TT>handcoords</TT>の子孫リストから外される。
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="52409"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;rest args [メソッド]
+<BR>&amp;key (:name nm) (:hand h) (:joints j)
+<BR>(:left-finger lf) (:right-finger rf)
+<BR>((:toolcoords tc) (make-coords))
+<BR>((:handcoords hc) (make-coords))
+<BR>((:base bs) (make-cascoords))
+<BR>(open-direction (floatvector 0 1 0))
+<BR>((:max-span mspan) 100.0)
+<BR>((:lefty lft) t)
+<BR>((:act a) nil)
+<BR>&amp;allow-other-keys</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>新しいマニピュレータオブジェクトを作成、初期化する
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+<B>manipulator</B>オブジェクトは、
+<B>base、joints(J1...J6)、handcoords、toolcoords</B>
+の座標系の繋がりを管理する。
+<B>manipulator</B>クラスは、<B>cascaded-coords</B>のサブクラスであり、
+やはり、<B>cascaded-coords</B>(または<B>body</B>などのサブクラス)
+である<B>base</B>に結合され、
+<B>base</B>から<B>toolcoords</B>(手先座標系)への変換を管理している。
+したがって、<B>manipulator</B>オブジェクトに対して送られる
+<B>:translate、:locate、:rotate、:orient、:transform</B>
+などのメッセージは、手先点に対して作用する。
+そのとき同時にWRTパラメータを指定すれば、
+手先はWRT座標系に対して動く。
+次のプログラムでは、<B>eta3</B>を<B>manipulator</B>のインスタンスと仮定している。
+
+<P>
+<PRE>
+　(send eta3 :translate #f(0 0 -100))        ;手先を10cm引っ込める　
+　(send eta3 :translate #f(0 0 -100) :world) ;10cm下げる
+　(send eta3 :translate #f(0 0 -100)
+             (manipulator-base eta3))     ;手先をベース座標系で10cm下げる
+</PRE>
+
+<P>
+これらのメッセージに対して、manipulatorはアーム解を計算して6つの
+関節角度を決定する。
+一般に解は複数存在するが、<B>right-handed</B>(右手系、左手系)
+の区別、および現在の関節角度との連続性により適当な解が選択される。
+しかし、指定された位置、姿勢に対する解が存在しない場合や関節角が
+限界を越える場合は移動、回転は起こらず、警告が発せられる。
+
+<P>
+アーム解の計算は、実際のマニピュレータに対応した
+個々のmanipulatorクラスに定義された<B>:armsol</B>メソッドが行う。
+マニピュレータがワールド座標系のどこに置かれてもよいように、
+また、どのような工具を用いてもよいように、アーム解は、
+<B>base、toolcoords</B>とは独立に、base座標系中でのハンドの位置、姿勢に
+対して与えられる。
+
+<P>
+<B>base、J1、J2、...、handcoords、toolcoords</B>の関係を図<A HREF="#JointCoords">20</A>
+に示す。
+ワールドから手先への変換を<SPAN CLASS="MATH"></SPAN>とすると、<SPAN CLASS="MATH"></SPAN>および各部分変換は次のようにし
+て得られる。
+
+<P>
+<!-- MATH
+ $\begin{array}{ll}
+T & = base \cdot J1 \cdot J2 \cdot \ldots
+\cdot J6 \cdot handcoords \cdot toolcoords \\
+ & = (send \; eta3 \; :worldcoords) \\
+T_{Jn} & = base \cdot J1\cdot \ldots \cdot Jn \\
+ & = (send \; Jn \; :worldcoords) \\
+T_{arm} & = J1 \cdot J2 \cdot \ldots \cdot J6 \cdot handcoords \\
+ & = (send \; eta3 \; :armsol-coords) \\
+T_{tool} & = J1 \cdot J2 \cdot  \ldots \cdot J6 \cdot handcoords \cdot toolcoords \\
+ & = (send \; eta3 \; :copy-coords) \\
+T_{t} & = toolcoords \\
+ & = (manipulator-toolcoords \; eta3)\\
+T_{t}^{-1} & = toolcoords^{-1} \\
+ & = (manipulator-toolinverse \; eta3) \\
+T_{h} & = handcoords \\
+ & = (manipulator-handcoords \; eta3)\\
+\end{array}$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+
+<P>
+ここで、<SPAN CLASS="MATH"></SPAN>はワールド座標系から工具座標系まで変換する。
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="JointCoords"></A><A NAME="52105"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 20:</STRONG>
+relation between coordinate systems in a manipulator</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV>
+
+<P></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+各関節は、Brepで表現された幾何モデルを保持している。しかし、頂点の座標、
+平面の方程式は常に現状を反映しているとは限らない。マニピュレータに対する
+移動、回転などのメッセージでは座標系の更新だけを行い、頂点の座標は変化し
+ない。これは、移動、回転が複数回続けて起こった場合の計算量を減らすためで
+ある。更新は、マニピュレータに<B>:worldcoords</B>メッセージを送る
+ことで引き起こされる。
+
+<P>
+マニピュレータは、手先座標系で動作を指定することを主な目的としている。
+関節角による指定には <B>:config</B> を用いる。
+引き数には6要素の列を与える。
+
+<P>
+<PRE>
+　 (send eta3 :config (float-vector pi/2 pi/2 0 1 0 1))
+</PRE>
+
+<P>
+<B>:config</B>は、各関節角度が可動範囲に収まっていることを検査した後、
+それらを回転させる。
+この結果、マニピュレータの管理している座標系と
+関節角度から定まる実際の手先の位置姿勢とが一致しなくなる。
+両者を一致させるためには、<B>:set-coords</B>メッセージを送る。
+<B>:set-coords</B>は、関節角度から順方向のキネマティクスを計算し、
+最終的な手先座標系に対してさらにアーム解を解く。
+
+<P>
+例 ETA3のモデル生成とその描画
+<PRE>
+EusLisp 7.27 with Xlib created on Thu Sep 17 14:33:30 1992
+(load "view.l")                                ;ウィンドウを開く
+(load "/usr/local/eus/robot/eta3/eta3build.l") ;ETA3のモデルを生成する
+(send *viewing* :look #f(2000 2000 2000))      ;視点を変える
+(send-all (eta3arm-components eta3) :color 1)  ;物体の線の色を黒に変える
+(send eta3 :config (float-vector 0 (/ -Pi 4.0) Pi/2 0 (/ -Pi 4.0) 0 ))
+					       ;ETA3を関節角度の指定で動かす
+(send eta3 :set-coords)                        ;上記参照
+(draw eta3)                                    ;ETA3を描画する
+</PRE>
+
+<P>
+
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html896"
+  HREF="jmanual-node23.html">MARS: マルチ自律ロボットシミュレータ</A>
+<B>Up:</B> <A NAME="tex2html890"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html884"
+  HREF="jmanual-node21.html">画像処理</A>
+</DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

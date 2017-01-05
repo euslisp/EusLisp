@@ -7,9 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>スコープ</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<META NAME="description" CONTENT="スコープ">
+<TITLE>Xwindow インターフェース</TITLE>
+<META NAME="description" CONTENT="Xwindow インターフェース">
 <META NAME="keywords" CONTENT="jmanual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -17,114 +16,2405 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="jmanual.css">
+<LINK REL="STYLESHEET" HREF="manual.css">
 
 <LINK REL="next" HREF="jmanual-node20.html">
 <LINK REL="previous" HREF="jmanual-node18.html">
-<LINK REL="up" HREF="jmanual-node17.html">
+<LINK REL="up" HREF="jmanual-node13.html">
 <LINK REL="next" HREF="jmanual-node20.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html640"
-  HREF="jmanual-node20.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html634"
-  HREF="jmanual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html628"
-  HREF="jmanual-node18.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html636"
-  HREF="jmanual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html638"
-  HREF="jmanual-node157.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html641"
-  HREF="jmanual-node20.html">一般化変数</A>
-<B> Up:</B> <A NAME="tex2html635"
-  HREF="jmanual-node17.html">書式と評価</A>
-<B> Previous:</B> <A NAME="tex2html629"
-  HREF="jmanual-node18.html">アトム(atom)</A>
- &nbsp; <B>  <A NAME="tex2html637"
-  HREF="jmanual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html639"
-  HREF="jmanual-node157.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html836"
+  HREF="jmanual-node20.html">XToolKit</A>
+<B>Up:</B> <A NAME="tex2html830"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html824"
+  HREF="jmanual-node18.html">視界とグラフィックス</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03022000000000000000">
-スコープ</A>
-</H2>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html837"
+  HREF="jmanual-node19.html#SECTION03061000000000000000">Xlibのグローバル変数とその他関数</A>
+<LI><A NAME="tex2html838"
+  HREF="jmanual-node19.html#SECTION03062000000000000000">Xwindow</A>
+<LI><A NAME="tex2html839"
+  HREF="jmanual-node19.html#SECTION03063000000000000000">Graphic Context</A>
+<LI><A NAME="tex2html840"
+  HREF="jmanual-node19.html#SECTION03064000000000000000">色とカラーマップ</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
 
-<P>
-すべてのsymbolは、値と結び付いている。
-symbolは、主にくくられた文脈から決定される値によって評価される。
-ここに2種類の変数バインドがある。それは、
-ローカルまたは静的バインドとスペシャルまたは動的バインドである。
-ローカルにバインドされた変数は<B>lambda</B>書式または
-<B>let</B>や<B>let*</B>の特殊書式においてspecialと宣言されない限り
-外から見ることはできない。
-ローカルバインドは入れ子が可能で、外側のローカルバインドやスペシャルバインドを隠して、
-最も内側のレベルで定義されている1つのバインドのみ見ることができる。
-スペシャル変数は2つの方法で使用される。
-1つは、グローバル変数として、もう1つは動的に覗けるローカル変数として用いる。
-このローカル変数は、バインドの効果の中にある限りローカルスコープの
-外にいてさえ見ることができる。
-後者の場合、スペシャル変数は<B>special</B>で宣言される必要がある。
-その宣言は、コンパイラだけでなくインタプリタでも認識される。
-Common Lispによると、スペシャル変数は不明瞭なスコープと動的な
-広さを持っていると言われている。
+<H1><A NAME="SECTION03060000000000000000">
+Xwindow インターフェース</A>
+</H1>
 
-<P>
-あるスコープのなかで、ローカル変数が存在するとしても、
-同じ変数名を内部スコープの中で<B>special</B>として再宣言することができる。
-<B>symbol-value</B>関数は、ローカルスコープに構わずspecial値を引き出す
-ために使用することができる。
-<B>set</B>関数は、スペシャル変数としてのみ働く。すなわち、
-specialとして宣言していない限り、lambdaやlet変数の値を
-変更するために使用することはできない。
+Euslisp上のXwindowインターフェースは、<TT>'eusx'</TT>という
+名前でEuslispが呼び出されたとき、実行可能となる。
+<A NAME="tex2html19"
+  HREF="jmanual-footnode.html#foot40051"><SUP><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="footnote.png"></SUP></A>eusxは、起動時に環境変数"DISPLAY"を参照してXserverに接続を試みるため、
+自分のXseverに環境変数"DISPLAY"が正しく設定されていなければならない。
 
 <P>
-<PRE>
-(let ((x 1))
-   (declare (special x))
-   (let* ((x (+ x x)) (y x))
-      (let* ((y (+ y y)) (z (+ x x)))
-         (declare (special x))
-         (format t "x=~S y=~s z=~s~%" x y z) ) ) )
---&gt; x=1 y=4 z=2
+Euslispには、次の3つのレベルのXwindowインターフェースが定義されている。
+(1) Xlib関数, (2) Xlibクラスと(3) XToolKitクラスである。
+この節と次のXToolKitの節に記述されている
+全てのXwindow関数は、"X"パッケージの中に含まれている。
+それらの関数名は、元のXlib関数名から最初の"X"を省いき、全ての文字を大文字に
+変更したものとなっている。
+例えば<TT>XdefaultGC</TT>は<TT>X:DEFAULTGC</TT>と名付けられていて、
+<TT>X:XDEFAULTGC</TT>ではない。
+
+<P>
+Xlib関数は、Xwindowシステムへの低レベルインターフェースで、
+foreign関数として定義されている。
+これらのXlib関数は、パラメータの型チェックあるいは
+パラメータの数のチェックを実行していないため、
+十分注意して使用しなければならない。
+例えば、すべてのXlibの呼び出しにおいてXserverとの接続を確認するために
+<TT>x:*display*</TT>を引き数として要求する。もし、指定し忘れたならば、Xlibは
+エラーを通知し、そのプロセスは死ぬ。
+このような不便を避け、オブジェクト指向のインターフェースを作るために、
+2番めのレベルのインターフェースであるXlibクラスが備わっている。
+この節では、この2番めのレベルのインターフェースに焦点を当てる。
+XToolKitと呼ばれるもっと高レベルのXwindowライブラリは、次節で
+説明されている。
+
+<P>
+この節に記述されているクラスは、以下の継承の階層を持っている。
+
+<P><PRE>
+propertied-object
+   viewsurface
+      x:xobject
+         x:gcontext
+         x:xdrawable
+             x:xpixmap
+             x:xwindow
+   colormap
 </PRE>
 
 <P>
-symbolは、<B>defconstant</B>マクロにより定数として宣言することができる。
-一旦宣言すると、その後値を変更しようとするとエラーが発生する。
-そのうえ、そのような定数symbolは、ローカル変数としてさえ変数名として
-使用されることを禁じられる。
-NILやTは、そのような定数の例である。
-keywordパッケージのsymbolは、いつも作成されるときに定数として宣言される。
-対照的に、<B>defvar</B>や<B>defparameter</B>マクロは、スペシャル変数として
-symbolを宣言する。
-<B>defvar</B>は、symbolがバインドされていない時のみ値の初期化を行い、
-値が既に割り当てられているときは何もしない。
-それに対して、<B>defparameter</B>はいつも値をリセットする。
+
+<H2><A NAME="SECTION03061000000000000000"></A><A NAME="xvariables"></A>
+<BR>
+Xlibのグローバル変数とその他関数
+</H2>
+
+ <BR>
+<BR> <A NAME="40800"></A>
+<B>x:*display*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> Xのdisplay ID（整数）
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40810"></A>
+<B>x:*root*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> デフォルトのroot windowオブジェクト
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40820"></A>
+<B>x:*screen*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> デフォルトのscreen ID（整数）
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40830"></A>
+<B>x:*visual*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> デフォルトのvisual ID（整数）
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40840"></A>
+<B>x:*blackpixel*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 黒色のpixel値 = 1
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40850"></A>
+<B>x:*whitepixel*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 白色のpixel値 = 0
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40860"></A>
+<B>x:*fg-pixel*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> window作成時に参照されるデフォルトの文字色のpixel値、ふつう<TT>*blackpixel*</TT>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40871"></A>
+<B>x:*bg-pixel*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> window作成時に参照される背景色のpixel値、ふつう<TT>*whitepixel</TT>。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40882"></A>
+<B>x:*color-map*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> システムのデフォルトカラーマップ
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40892"></A>
+<B>x:*defaultGC*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> pixmap生成時に参照されるデフォルトgcontext
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40902"></A>
+<B>x:*whitegc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 文字色が白色のgcontext
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40912"></A>
+<B>x:*blackgc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 文字色が黒色のgcontext
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40922"></A>
+<B>*gray-pixmap*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(make-gray-pixmap 0.5)</TT>の結果。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40933"></A>
+<B>*gray25-pixmap*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+1/4のピクセルが<TT>*fg-pixel*</TT>であり、3/4が<TT>*bg-pixel*</TT>である16x16のpixmap。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40945"></A>
+<B>*gray50-pixmap*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 1/2のピクセルが<TT>*fg-pixel*</TT>である16x16のpixmap。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40956"></A>
+<B>*gray75-pixmap*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 3/4のピクセルが黒色である16x16のpixmap。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40966"></A>
+<B>*gray25-gc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>*gray25-pixmap*</TT>から作る25%のグレーGC。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40977"></A>
+<B>*gray50-gc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>*gray50-pixmap*</TT>から作る50%のグレーGC。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40988"></A>
+<B>*gray75-gc*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>*gray75-pixmap*</TT>から作る75%のグレーGC。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="40999"></A>
+<B>*gray*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>"#b0b0b0"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41010"></A>
+<B>*bisque1*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>"#ffe4c4"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41021"></A>
+<B>*bisque2*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>"#eed5b7"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41032"></A>
+<B>*bisque3*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>"#cdb79e"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41043"></A>
+<B>*lightblue2*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>"#b2dfee"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41054"></A>
+<B>*lightpink1*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>"#ffaeb9"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41065"></A>
+<B>*maroon*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>"#b03060"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41076"></A>
+<B>*max-intensity*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> 65535
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41086"></A>
+<B>font-cour8</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-courier-medium-r-*-8-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41097"></A>
+<B>font-cour10</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-courier-medium-r-*-10-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41108"></A>
+<B>font-cour12</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-courier-medium-r-*-12-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41119"></A>
+<B>font-cour14</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-courier-medium-r-*-14-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41130"></A>
+<B>font-cour18</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-courier-medium-r-*-18-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41141"></A>
+<B>font-courb12</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-courier-bold-r-*-12-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41152"></A>
+<B>font-courb14</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-courier-bold-r-*-14-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41163"></A>
+<B>font-courb18</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-courier-bold-r-*-18-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41174"></A>
+<B>font-helvetica-12</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-Helvetica-Medium-R-Normal-*-12-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41185"></A>
+<B>font-lucidasans-bold-12</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "lucidasans-bold-12")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41196"></A>
+<B>font-lucidasans-bold-14</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "lucidasans-bold-14")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41207"></A>
+<B>font-helvetica-bold-12</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-Helvetica-Bold-R-Normal-*-12-"
+)</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41218"></A>
+<B>font-a14</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>(font-id "*-fixed-medium-r-normal-*-14-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-symbolが参照され、symbolのためのローカルバインドがなかったとき、
-そのspecial値は、引き出される。
-しかしながら、そのspecial値にまだ値が割り当ててなかったならば、
-unbound variableエラーが発生する。
+
+<A NAME="41229"></A>
+<B>x:*xwindows*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> Euslispによる子windowを含んだ全てのwindowのリストを
+保持する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41239"></A>
+<B>x:*xwindow-hash-tab*</B> [変数]
+
+<DL COMPACT>
+<DT> 
+<DD> drawable IDからxwindowオブジェクトを
+探すためのハッシュテーブル。
+<TT>x:nextevent</TT>で得られるイベント構造はwindow IDであるため、
+<TT>x:window-main-loop</TT>はこのテーブルを使用して一致するxwindowオブジェクト
+を知るために<TT>x:event-window</TT>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-<BR><HR>
+
+<A NAME="41252"></A>
+<B>xflush</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Xlibのコマンドバッファに保有するコマンドをすべてXserverに送る。
+XlibバッファがXserverに出力するため、
+Xserverに発行されたコマンドは、すぐに実行されない。
+これは、ネットワークの渋滞およびプロセスの切替え頻度を減少させるために
+必要である。
+コマンドの効果を見るためにコマンドバッファを掃き出す方法として、
+<B>xflush</B>を使用するかあるいは<B>:flush</B>メッセージをxwindowオブジェクトに
+送る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03062000000000000000">
+Xwindow</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="41265"></A>
+<BIG CLASS="XLARGE"><B>Xobject </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>geometry:viewsurface</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>すべてのXwindowに関連するクラスの共通のスーパークラスである。
+現在、スロットもメソッドも定義されていない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="41283"></A>
+<BIG CLASS="XLARGE"><B>Xdrawable </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>Xobject</B> 
+<BR>  :slots 		 (drawable    ; drawable  ID 
+<BR>
+gcon 		  ; this drawable's default graphic context object
+<BR>
+bg-color 		 ; background color 
+<BR>
+width height 		 ; horizontal and vertical dimensions in dots 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Xdrawable</B>は、線分や文字列のようなグラフィックオブジェクト
+を描くための四角領域を定義する。
+<B>Xdrawable</B>は、xwindowやxpixmapのための共通メソッド
+を定義するための抽象クラスであり、
+このクラスのインスタンスは何の効果も持っていない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41303"></A>
+<B>:init</B> <EM>id </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>id</EM>は、このdrawableのIDとして<TT>drawable</TT>スロットに設定される。
+新しいGC(graphic context)が生成され、このdrawableオブジェクトの
+デフォルトGCとして<TT>gcon</TT>に設定される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41316"></A>
+<B>:drawable</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> drawable IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41326"></A>
+<B>:flush</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> Xlibのバッファに保有されるコマンドを掃き出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41336"></A>
+<B>:geometry</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+7つの幾何学属性のリストを返す。
+そのリストは、root-window-id, x座標, y座標,
+幅, 高さ, 枠線の幅, visualの深さである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41346"></A>
+<B>:height</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>の高さ（y軸方向のドット数）を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41357"></A>
+<B>:width</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>の幅（x軸方向のドット数）を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41368"></A>
+<B>:gc</B> <EM>&amp;rest newgc </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>newgc</EM>が与えられない場合、現在のGCオブジェクトを返す。
+もし、<EM>newgc</EM>が<B>gcontext</B>のインスタンスなら、
+この<B>Xdrawable</B>の<TT>gc</TT>に設定する。
+そうでなければ、<EM>newgc</EM>はメッセージとみなされ、
+現在の<TT>gc</TT>に送られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41385"></A>
+<B>:pos</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>の位置を示す整数ベクトルを返す。
+位置は親windowの相対位置としていつも定義され、
+windowマネージャの仲介のもとにルートwindowの直接の子windowとして
+生成されたwindowは、ルートwindowの本当の位置に関わらず、環境の
+タイトルwindowの固定座標を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41396"></A>
+<B>:x</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xdrawable</B>の親windowとの相対的な現在のx座標を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41407"></A>
+<B>:y</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xdrawable</B>の親windowとの相対的な現在のy座標を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41418"></A>
+<B>:copy-from</B> <EM>drw </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>drw</EM>は、他の<B>drawable</B>オブジェクト(Xwindowまたはpixmap)である。
+<EM>drw</EM>の内容がこの<B>Xdrawable</B>にコピーされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="xdraw"></A><A NAME="40718"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 14:</STRONG>
+描画の基本</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="41432"></A>
+<B>:point</B> <EM>x y &amp;optional (gc gccon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<SPAN CLASS="MATH"></SPAN>の位置にオプションの<EM>gc</EM>で点を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41443"></A>
+<B>:line</B> <EM>x1 y1 x2 y2 &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>(x1,y1)</EM>から<EM>(x2,y2)</EM>へオプションの<EM>gc</EM>を用いて
+線分を描く。<EM>x1, y1, x2, y2</EM>は整数でなければならない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41457"></A>
+<B>:rectangle</B> <EM>x y width height &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>(x,y)</EM>を中心として<EM>width</EM>の幅と<EM>height</EM>の高さを持つ
+四角形を描く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41470"></A>
+<B>:arc</B> <EM>x y width height angle1 angle2 &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>(x,y)</EM>を中心として<EM>width</EM>の幅と<EM>height</EM>の高さを持つ
+四角形に内接する楕円の円弧を描く。<EM>angle1</EM>が始まりの角度を示し、
+<EM>angle2</EM>が終わりの角度を示す。これらの角度の単位はラジアンである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41485"></A>
+<B>:fill-rectangle</B> <EM>x y width height &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+四角領域を埋める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41495"></A>
+<B>:fill-arc</B> <EM>x y width height angle1 angle2 &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+円弧の中を埋める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41505"></A>
+<B>:string</B> <EM>x y str &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>(x,y)</EM>の位置から文字列<EM>str</EM>を表示する。背景は、書かない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41517"></A>
+<B>:image-string</B> <EM>x y str &amp;optional (gc gcon) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+文字列<EM>str</EM>を表示する。文字列は、背景色で満たされる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41528"></A>
+<B>:getimage</B> <EM>&amp;key :x :y :width :height (:mask #ffffffff) (:format 2) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+serverからximageを取り、ピクセルデータを文字列として返す。
+serverから送られるピクセルデータは、一端 Xlibのximage構造に蓄積される。
+その後、行毎に文字列にコピーされる。
+ximage構造は、自動的に破壊される。
+<TT>:getimage</TT>により得られた画像文字列は、<TT>pixel-image</TT>を作るために
+使用できる。また、<A HREF="jmanual-node21.html#PBMfile">18.6</A>節に書かれているようにpbmフォーマットのファイルに
+書き込むことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41541"></A>
+<B>:putimage</B> <EM>image &amp;key :src-x :src-y :dst-x :dst-y :width :height ((:gc g) gc) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>の指定された位置に<EM>image</EM>を表示する。
+<EM>image</EM>は、文字列あるいはximage構造へのアドレスポインターである。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41554"></A>
+<B>:draw-line</B> <EM>from to </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:line</B>メソッドと同じである。
+他の<B>viewsurface</B>クラスとの互換性を提供できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41566"></A>
+<B>:line-width</B> <EM>&amp;optional dots </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>のデフォルトGCの線の幅を設定する。
+<TT>:gc :line-width</TT>メッセージの使用を推薦する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41578"></A>
+<B>:line-style</B> <EM>&amp;optional dash </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xdrawable</B>のデフォルトGCの線スタイルを設定する。
+<TT>:gc :line-style</TT>の使用が好まれる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41590"></A>
+<B>:color</B> <EM>&amp;optional c </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xdrawable</B>の色を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41601"></A>
+<B>:clear</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全画面を消去する。この関数は、<TT>:clear-area</TT>を呼び出す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41612"></A>
+<B>:clear-area</B> <EM>&amp;key :x  :y :width :height :gc </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:fill-rectangle</B>メソッドを用いて四角領域を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="41624"></A>
+<BIG CLASS="XLARGE"><B>Xpixmap </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>Xdrawable</B> 
+<BR>  :slots 		 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>pixmapは、画像バッファあるいは背景のパターンとしてしばしば用いられる
+drawableである。xwindowと異なり、xwindowにコピーされるまで
+pixmap自身を見ることはできないし、pixmapはどんなイベントも発生しない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41641"></A>
+<B>:init</B> <EM>id </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このpixmapを初期化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41651"></A>
+<B>:create</B> <EM>&amp;key (:width 500) (:height 500) (:depth 1) (:gc *defaultgc*) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+デフォルトGCとして<EM>:gc</EM>を持つ、<EM>width</EM><SPAN CLASS="MATH"></SPAN><EM>height</EM>のpixmapを作成する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41664"></A>
+<B>:create-from-bitmap-file</B> <EM>fname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>file</EM>で指定されるbitmapファイルからpixmapを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41675"></A>
+<B>:write-to-bitmap-file</B> <EM>fname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このpixmapの内容を<EM>fname</EM>で指定されるbitmapファイルに書き込む。
+このファイルは、<B>:create-from-bitmap-file</B>メソッドで
+pixmapを作り、読み戻すことができる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41687"></A>
+<B>:destroy</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このpixmapを破壊し、X resourceを開放する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="41698"></A>
+<BIG CLASS="XLARGE"><B>Xwindow </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>Xdrawable</B> 
+<BR>  :slots 		 (parent subwindows backing-store) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Xwindow</B>は、画面の見える四角領域を定義する。
+これは、<B>text-window</B>やグラフィックオブジェクトを描くための<B>canvas</B>
+だけでなく、windowというよりはむしろグラフィックオブジェクトのような
+たくさんの<B>panel-item</B>や<B>scroll-bars</B>からも継承される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41720"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;key ( (:parent *root*) [メソッド] 
+<BR>(:x 0) (:y 0) (:size 256) (:width size) (:height size) (:border-width 2) 
+<BR>(:save-under nil) (:backing-store :always) (:backing-pixmap nil)
+<BR>(:border *fg-pixel*) (:background *bg-pixel*) 
+<BR>(:map T) (:gravity :northwest) 
+<BR>(:title "WINDOW") (:name title) 
+<BR>(:font) 
+<BR>:event-mask (:key :button :enterLeave :configure :motion)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>xwindow生成し、初期化する。
+<EM>:parent</EM>が与えられたとき、このwindowは<EM>:parent</EM>の子windowとして
+生成され、<EM>:parent</EM>の<TT>subwindows</TT>リストに蓄積される。
+<EM>:x, :y, :size, :width, :height</EM>と<EM>:border-width</EM>は、このwindow
+の位置と寸法を決定する。
+<EM>:save-under</EM>と<EM>:backing-store</EM>は、windowが再マップされたときに
+生じるXserverの行動を制御する。
+<EM>:backing-store</EM>は<TT>:notUseful, :WhenMapped, :Always</TT>のどれかであるが、
+<EM>:save-under</EM>はTあるいはNILである。
+<EM>:backing-pixmap</EM>がTのとき、このwindowと同じサイズのpixmapがEuslispにより
+生成され、もしXserverが<TT>backing-store</TT>の容量を持っていない場合は、
+backing-storeとして蓄積される。
+<EM>:border</EM>と<EM>:background</EM>は、<TT>border_pixel</TT>と
+<TT>background_pixel</TT>属性をそれぞれ指定する。
+もし、<B>panel</B>の中のpanel-buttonとしてたくさんの小さなwindowを
+作成するような場合で、このwindowが生成後にすぐ表示されるべきでないならば、
+<EM>:map</EM>はNILにセットされなければならない。
+<EM>:title</EM>は、windowのタイトルバーに現れるwindowのタイトルである。
+<EM>:name</EM>は、このwindowのplistに蓄積されるwindowの名前であり、
+プリンタにより表示される名前である。
+このwindowへのXのイベントは、<EM>:event-mask</EM>によって決定される。
+それはビットで構成されるevent-maskの整数表現あるいは次のsymbolのリスト
+である。
+<TT>:key, :button, :enterLeave, :motion</TT>と<TT>:configure</TT>。
+もし、もっと正確な制御が必要ならば、次のsymbolをそれぞれのイベントに
+指定することができる。<TT>:keyPress, :keyRelease, :ButtonPress, :ButtonRelease,</TT> 
+<TT>:EnterWindow, :LeaveWindow, :PointerMotion, :PointerMotionHint,</TT> 
+<TT>:ButtonMotion, :KeyMapState,
+<BR>:Exposure, :VisibilityChange,</TT>
+ <TT>:StructureNotify,
+:ResezeRedirect, :SubstructureNotify,
+<BR>:SubstructureRedirect,</TT> <TT>:FocusChange, :PropertyChange, :ColormapChange</TT>と
+<BR><TT>:OwnerGrabButton</TT>。
+<TT>:key</TT>は、<TT>:keyPress</TT>と<TT>:KeyRelease</TT>の両方が指定でき、
+<TT>:button</TT>は、<TT>:ButtonPress</TT>と<TT>:ButtonRelease</TT>の両方が指定できる。
+サーバからイベントが送られてきたとき、<B>window-main-loop</B>は、
+そのイベント構造を解析し、<TT>:KeyPress, :KeyRelease, :buttonPress,</TT> <TT>:ButtonRelease, :EnterNotify,</TT> <TT>:LeaveNotify, :MotionNotify, :ConfigureNotify</TT>
+メッセージをそのイベントが発生したwindowに送る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41771"></A>
+<B>:map</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>とその子windowを全て表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41782"></A>
+<B>:unmap</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>をとその子windowを全て非表示にする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41793"></A>
+<B>:selectinput</B> <EM>event-mask </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>event-mask</EM>は、整数かあるいはイベントマスクsymbolのリストである。
+ビットが１となっているかあるいは<EM>event-mask</EM>リスト
+に列挙されているイベントは、それぞれこのwindowに通知される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41805"></A>
+<B>:destroy</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>を破壊し、X resourceを開放する。
+windowオブジェクトは、ガーベージコレクトされないため、
+<TT>*xwindow*</TT>や<TT>*xwindow-hash-tab*</TT>の中の一致するエントリも削除される。
+全ての子windowも<TT>:destroy</TT>を送ることにより削除する。
+このwindowは、親windowの子windowのリストから削除される。
+<TT>drawable</TT>IDは、NILに設定される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41820"></A>
+<B>:parent</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 親windowオブジェクトを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41830"></A>
+<B>:subwindows</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+全ての子windowのリストを返す。
+子windowは、もっとも最近作られたものがリストの最初である。
+このwindowの直接の子windowだけがリストされ、子windowの子windowは
+リストされない。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41840"></A>
+<B>:associate</B> <EM>child </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowの子windowとして<EM>child</EM> windowを登録する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41851"></A>
+<B>:dissociate</B> <EM>child </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+子windowのリストから<EM>child</EM> windowを削除する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41862"></A>
+<B>:title</B> <EM>title </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowのタイトル名を変更する。そのタイトル名はXserverに送られるため、
+一旦蓄積され、window managerによって表示される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41872"></A>
+<B>:attributes</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowの属性を表現する整数ベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41882"></A>
+<B>:visual</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>のvisual resource IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41893"></A>
+<B>:screen</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>Xwindow</B>のscreen resource IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41904"></A>
+<B>:root</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> root window IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="41914"></A>
+<B>:location</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowのxとy座標を記述する2次元の整数ベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41924"></A>
+<B>:depth</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowの深さ(カラープレーンの数)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41934"></A>
+<B>:size</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowのサイズ(高さと幅)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41944"></A>
+<B>:colormap</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowのcolormap resource IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41954"></A>
+<B>:move</B> <EM>newx newy </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowの位置を<EM>(newx,newy)</EM>に変更する。
+位置は、親windowの相対位置で与えられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41965"></A>
+<B>:resize</B> <EM>width height </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowのサイズを変更する。
+たぶん、大きさのパラメータがクライアント側のXlibに中にキャッシュされるため、
+<B>:resize</B>の直後に<TT>:geometry</TT>メッセージを
+送ると誤った（古い）結果を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41977"></A>
+<B>:raise</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowを前面に持ってくる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41987"></A>
+<B>:lower</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このwindowを後ろに置く。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="41997"></A>
+<B>:background</B> <EM>pixel </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+背景のピクセル値（カラーマップのインデックス）を<EM>pixel</EM>に変更する。
+<EM>pixel</EM>値は、<TT>bg-color</TT>スロットにも保存される。
+<TT>:clear</TT>処理は、現在の背景を指定された<EM>pixel</EM>で埋める。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42012"></A>
+<B>:background-pixmap</B> <EM>pixmap </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+背景のpixmap値を<EM>pixmap</EM>に変更する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42023"></A>
+<B>:border</B> <EM>pixel </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このwindowの枠線の色を<EM>pixel</EM>に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42034"></A>
+<B>:set-colormap</B> <EM>cmap </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> colormapを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42044"></A>
+<B>:clear</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xwindow</B>内を全て消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42055"></A>
+<B>:clear-area</B> <EM>&amp;key :x :y :width :height </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+この<B>Xwindow</B>の指定された四角領域を消去する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42066"></A>
+<B>make-xwindow</B> <EM>&amp;rest args </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+引き数<EM>args</EM>で示される<B>Xwindow</B>を作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42078"></A>
+<B>init-xwindow</B> <EM>&amp;optional (display (getenv "DISPLAY")) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+eusxが起動するときに最初に呼び出される関数である。
+<B>init-xwindow</B>は、<EM>display</EM>で指定されるXserverに接続し、
+<A HREF="#xvariables">16.1</A>節に記述されているデフォルト変数を初期化する。
+<B>init-xwindow</B>は、デフォルトフォントをロードし、
+グローバル変数に設定する。例えば、font-courb12, lucidasans-bold-12など。
+このフォントロードは、起動時に時間遅れを引き起こす。
+フォントロードの数を減らしたり、ワイルドカード文字"*"を使用せずに
+正確なフォント名を指定することにより、その遅れを短くできる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION03063000000000000000">
+Graphic Context</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="42093"></A>
+<BIG CLASS="XLARGE"><B>gcontext </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>Xobject</B> 
+<BR>  :slots 		 (gcid GCValues) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>graphic context(GC)を定義する。
+Euslispの中で、全てのwindowはデフォルトGCを持っている。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42110"></A>
+<PRE><TT>
+<B>:create</B> <I>&amp;key (:drawable defaultRootWindow) [メソッド]
+<BR>(:foreground *fg-pixel*) (:background *bg-pixel*) 
+<BR>:function :plane-mask 
+<BR>:line-width :line-style :cap-style :join-style 
+<BR>:font :dash 
+<BR></I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>与えられた属性でGCを作成する。
+<EM>drawable</EM>は、画面と画面の深さを知るためにXserverにより使用される。
+結果のGCは、同じ画面上で作成される限り、
+どのdrawableでも使用できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42122"></A>
+<B>:gc</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> XのGC IDを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42132"></A>
+<B>:free</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>GC</B>を開放する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42143"></A>
+<B>:copy</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>GC</B>のコピーを作る。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42154"></A>
+<B>:foreground</B> <EM>&amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> もし、<EM>color</EM>が与えられたならば、
+文字色に<EM>color</EM>を設定する。<EM>color</EM>はピクセル値である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42167"></A>
+<B>:background</B> <EM>&amp;optional color </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> もし、<EM>color</EM>が与えられたならば、
+背景色に<EM>color</EM>を設定する。<EM>color</EM>はピクセル値である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42180"></A>
+<B>:foreback</B> <EM>fore back </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 一度に文字色と背景色を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42190"></A>
+<B>:planemask</B> <EM>&amp;optional plane-mask </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> plane-maskを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42200"></A>
+<B>:function</B> <EM>x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 描画機能を設定する。
+<EM>x</EM>は、以下に示す数字かキーワードの内の1つである。
+<TT>0=Clear, 1=And, 2=AndReverse, 3=Copy, 4=AndInverted, 5=NoOp, 6=Xor, 7=Or,
+8=Nor, 9=Equiv, 10=Invert,
+<BR>
+11=XorReverse, 12=CopyInverted, 13=OrInverted,
+14=Nand, 15=Set, :clear, :and,
+<BR>:andReverse, :copy, :andInverted,
+:NoOp, :Xor, :Or, :Nor, :Equiv, :Invert, :XorReverse,
+<BR>:CopyInverted,
+:OrInverted, :Nand, :Set</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42212"></A>
+<B>:font</B> <EM>x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このGCのフォント属性を設定する。
+<EM>x</EM>は、フォント名あるいはフォントIDである。
+もし、<EM>x</EM>がフォント名（文字列）であったならば、<B>:font</B>は
+フォントIDを決めるために<B>x:LoadQueryFont</B>を呼び出す。
+もし、見つからなかった場合、<TT>"no such font ..."</TT>が警告される。
+もし、<EM>x</EM>がNIL（与えられなかった）ならば、このGCの現在の
+フォントIDが返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42228"></A>
+<B>:line-width</B> <EM>x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 線幅をピクセル数<EM>x</EM>で設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42239"></A>
+<B>:line-style</B> <EM>x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 線スタイル(実線、点線など)を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42249"></A>
+<B>:dash</B> <EM>&amp;rest x </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>x</EM>のそれぞれの要素は、整数である。
+<B>:dash</B>は、線スタイルの点線パターンを設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42261"></A>
+<B>:tile</B> <EM>pixmap </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>pixmap</EM>をこのGCのタイルパターンに設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42272"></A>
+<B>:stipple</B> <EM>pixmap </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>pixmap</EM>をこのGCの点画に設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42283"></A>
+<B>:get-attribute</B> <EM>attr </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 属性値を得る。
+<EM>attr</EM>は、<TT>:function, :plane-mask, :foreground,
+:background, :line-width, :line-style, :cap-style, :join-style,
+:fill-style, :fill-rule, :font</TT>の内の１つである。
+属性値を表す整数が返される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42295"></A>
+<PRE><TT>
+<B>:change-attributes</B> <I>&amp;key :function :plane-mask :foreground :background[メソッド]
+<BR>:line-width :line-style :cap-style :join-style :font :dash</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>属性値を変更する。
+同時に複数の属性値を変更できる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42306"></A>
+<B>font-id</B> <EM>fontname </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+もし、<EM>fontname</EM>が整数であるなら、フォントIDとみなしてその値を返す。
+もし、<EM>fontname</EM>が文字列であるなら、<B>x:LoadQueryFont</B>を使用して
+フォント構造を得て、そのフォントIDを返す。
+<EM>fontname</EM>は、正確な名前の略語でも良い。例えば、
+24ポイントのクーリエフォントとして<TT>"*-courier-24-*"</TT>を指定できる。
+もし、フォントが見つからなければ、<TT>can't load font</TT>の警告を
+出力する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42322"></A>
+<B>textdots</B> <EM>str font-id </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>str</EM>文字列のascent descent widthをドット単位に示す3つの整数のリストを
+返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03064000000000000000">
+色とカラーマップ</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="42334"></A>
+<BIG CLASS="XLARGE"><B>colormap </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (cmapid planes pixels LUT-list) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Xwindow</B>のカラーマップおよびアプリケーション指向のカラールックアップテーブル
+を定義する。
+カラーはRGB値で表現され、その範囲は0〜65535である。
+カラーマップのカラーセルは、8ビットの擬似カラーディスプレイの上の
+0〜255の範囲の値に設定される。
+</DD>
+</DL>
+<BR>
+<BR>
+             <P>
+ここで、８ビットの擬似カラーディスプレイの機能があり、
+256色を選択することができると仮定する。
+基本的にカラーマップを使用する２つの方法がある。
+１つは、システムデフォルトのカラーマップを共有する方法で、
+もう１つはプロセスに独自のカラーマップを作成する方法である。
+もし、システムのデフォルトカラーマップを使用する場合、
+マップのすべてのカラーセルを使いきらないように注意しなければならない。
+なぜなら、マップは多くののプロセスから共有されているからである。
+もし、独自のカラーマップを使用する場合、
+他のプロセスを気にすることなく256色すべてを使用することができる。
+しかし、そのマップは明確に独自のwindowに設定しなければならない。
+マウスのポインターがwindow内のどこかに動かされたとき、
+カラーマップはwindow managerにより活性化される。
+
+<P>
+システムデフォルトのカラーマップは
+eusxが実行される最初に<B>x:colormap</B>のクラスのインスタンスとして、
+<B>x:*color-map*</B>に設定されている。
+もし、独自のカラーマップを使用するとき、<B>x:colormap</B>のインスタンスを
+作る。
+これらのインスタンスは、x serverで定義されたcolormapオブジェクトと
+一致しており、それぞれのインスタンスの<TT>cmapid</TT>に示されている。
+
+<P>
+システムデフォルトのカラーマップを使用するとき、
+他のプロセスと共有するカラーを読み込み専用(<EM>read-only</EM>)に、
+Euslispの独自カラーを読み書き可能(<EM>read-write</EM>)に定義することができる。
+"読み込み専用"は、カラーセルに割り当てられる
+任意のカラーに定義することができる。
+しかし、割り当てた後変更することができない。
+もう一方で、"読み書き可能"カラーは定義した後でさえ、変更することができる。
+共有カラーは、他のプロセスが変更を予期していないため"読み込み専用"である。
+この"読み込み専用"と"読み書き可能"の属性は、それぞれのカラーに付けられる。
+（しばしば、カラーセルとして参照される）
+
+<P>
+<B>colormap</B>オブジェクトは、color IDからRGBの物理的な表現への変換を
+定義する。
+しかしながら、これらの論理的なcolor IDは、任意に選択することができない。
+特に、システムのデフォルトのカラーマップを使用しているとき、使用できない。
+color ID（しばしば'pixel'として参照される）は、カラーマップの特別な色
+のインデックスである。
+Xlibは、割り当ての要求があると、共有カラーのために空いたインデックスの
+１つを選択する。
+したがって、たくさんのグレー階調のカラーを連続的に割り当てることを
+保証することあるいは最初（0番目）のインデックスから始めることはできない。
+
+<P>
+アプリケーションの観点から、もっと論理的なカラー名が必要とされる。
+例えば、グレー階調の数は明るさをインデックスとして参照すべきである。
+レイトレーシングプログラムは、
+HLSで定義される違った明るさのカラーのグループのために
+連続的なインデックスの割り当てを要求する。
+
+<P>
+この問題に対処するために、Euslispのカラーマップはルックアップテーブル(LUT)
+と呼ばれる別の変換テーブルを提供している。
+論理的なカラーグループのために、LUTを定義でき、symbol名を付けることができる。
+１つ以上のLUTをカラーマップとして定義できる。
+LUTは、Xserverが認識できるように、アプリケーションが指定した論理カラーの
+インデックスを物理ピクセル値に変換するために整数ベクトルである。
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="42352"></A>
+<B>:id</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <TT>cmapid</TT>を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42363"></A>
+<B>:query</B> <EM>pix </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 指定されたピクセル数のRGB値を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42373"></A>
+<B>:alloc</B> <EM>pix r g b </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このメソッドは、<TT>:store nil r g b</TT>と同一である。
+新しいカラーセルがこのカラーマップに配置され、指定されたRGB値に割り当てられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42384"></A>
+<B>:store</B> <EM>pix r g b </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>pix</EM>番目のカラーセルのRGB値を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42395"></A>
+<B>:store</B> <EM>pix color-name </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>:store</B>は、カラーマップに色を設定する低レベルメソッドである。
+１つの書式として、RGB値を0〜65535で指定する方法である。
+他の書式として、"red" や"navy-blue"のようなカラー名で指定する。
+もし、<EM>color-name</EM>がなければ、NILを返す。
+ピクセルはカラーマップのインデックスあるいはNILである。
+もし整数なら、カラーセルは読み書き可能でなければならない。
+もしNILなら、共有の読み込み専用カラーセルが割り当てられている。
+<B>:store</B>は、カラーマップ内のカラーセルのインデックスを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42408"></A>
+<B>:store-hls</B> <EM>pix hue lightness saturation </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+HLS(Hue, Lightness and Saturation)で
+指定される色をカラーマップの<EM>pix</EM>番目に蓄積する。
+もし、<EM>pix</EM>がNILなら、共有の読み込み専用のカラーセルが割り当てられる。
+<B>:store-hls</B>は、カラーセルに割り当てられるインデックスを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42421"></A>
+<B>:destroy</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>colormap</B>を破壊し、リソースを空にする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42432"></A>
+<B>:pixel</B> <EM>LUT-name id </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>LUT</EM>の中から<EM>id</EM>番目を調べて、ピクセル値を返す。
+<EM>LUT-name</EM>は、<TT>:define-LUT</TT>で定義されたルックアップテーブルの名前である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42446"></A>
+<B>:allocate-private-colors</B> <EM>num </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+独自のカラーマップに<EM>num</EM>個のカラーセルを割り当てる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42457"></A>
+<B>:allocate-colors</B> <EM>rgb-list [private] </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>rgb-list</EM>のそれぞれの要素は、red,green,blueのリストである。
+カラーセルは、それぞれのRGB値が割り当てられ、ピクセル値を要素とする
+整数ベクトルを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42468"></A>
+<B>:define-LUT</B> <EM>LUT-name rgb-list [private] </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>rgb-list</EM>に記述されたカラーが割り当てられ、
+LUTが<EM>LUT-name</EM>のシンボリック名で登録される。
+独自のカラーセルを定義するためには、<EM>private</EM>をTに設定すること。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42481"></A>
+<B>:define-gray-scale-LUT</B> <EM>LUT-name levels [private] </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+線形のグレースケールカラーで表現される<EM>levels</EM>階調の
+カラーセルを割り当て、LUTを返す。
+例えば、<TT>(send x:*color-map* :define-gray-scale-LUT 'gray8 8)</TT>
+は、システムのデフォルトカラーマップの中に８つのグレーカラーを配置し、
+<TT>#i(29 30 31 48 49 50 51 0)</TT>のような整数ベクトルを返す。
+物理ピクセル値は、<TT>:pixel</TT>メッセージを送ることにより得られる。
+例えば、<TT>(send x:*color-map* :pixel 'gray8 2)</TT>は、31を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42496"></A>
+<B>:define-rgb-LUT</B> <EM>LUT-name red green blue [private] </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+RGB表現を縮小したLUTを定義する。
+例えば、もし、<EM>red</EM>=<EM>green</EM>=<EM>blue</EM>=2なら、カラーセルには<!-- MATH
+ $2^{2+2+2}=2^6=64$
+ -->
+<SPAN CLASS="MATH"></SPAN>
+が割り当てられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42510"></A>
+<B>:define-hls-LUT</B> <EM>LUT-name count hue low-brightness
+high-brightness saturation [private] </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+HLSで使用する<EM>count</EM>数のカラーを配置する。
+<EM>hue</EM> (0..360),<EM>saturation</EM> (0..1),<EM>low-brightness</EM>
+と<EM>high-brightness</EM>の明るさの差をカラーマップに蓄積される。
+<EM>LUT-name</EM>で名付けられるLUTも作られる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42526"></A>
+<PRE><TT>
+<B>:define-rainbow-LUT</B> <I>LUT-name count [メソッド]
+<BR>(hue-start 0) (hue-end 360)
+<BR>(brightness 0.5)
+<BR>(saturation 1.0) (private nil)</I>
+</TT></PRE>
+
+<DL COMPACT>
+<DT> 
+<DD>HLSモデルを用いて<EM>count</EM>の色を配置する。
+<EM>brightness</EM> (0..1)と
+<EM>saturation</EM> (0..1)と,
+<EM>hue-start</EM>と<EM>hue-end</EM>間の異なったhueを持つ色を
+カラーマップに蓄積する。
+<EM>LUT-name</EM>を名付けられたLUTも生成される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42543"></A>
+<B>:LUT-list</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このカラーマップに定義されている全てのLUTのリストを返す。
+リストのそれぞれのエントリは、LUT名と整数ベクトルの組である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42553"></A>
+<B>:LUT-names</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このカラーマップの全てのLUTの名前のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42563"></A>
+<B>:LUT</B> <EM>name </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>name</EM>で指定される整数ベクトル(LUT)を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42574"></A>
+<B>:size</B> <EM>LUT </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>LUT</EM>の長さを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42585"></A>
+<B>:planes</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> このカラーマップのプレーンを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42595"></A>
+<B>:set-window</B> <EM>xwin </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このカラーマップを<EM>xwin</EM>のwindowと関連付ける。
+このカラーマップは、<EM>xwin</EM>にカーソルが入ったとき活性化される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42607"></A>
+<B>:free</B> <EM>pixel | LUT </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> <EM>pixel</EM>の場所にあるカラーセルを開放するか
+あるいは<EM>LUT</EM>のすべてを開放する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42619"></A>
+<B>:init</B> <EM>[cmapid] </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このカラーマップをcmapidで初期化する。
+登録されたLUTはすべて捨てられる。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42630"></A>
+<B>:create</B> <EM>&amp;key (planes 0) (colors 1) (visual *visual*) (contiguous i
+l) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 新しいカラーマップを作成する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="42641"></A>
+<BIG CLASS="XLARGE"><B>XColor </B></BIG> [クラス]  <PRE><TT>
+  :super   <B>cstruct</B> 
+<BR>  :slots 		 ((pixel        :integer) 
+<BR>(red          :short) 
+<BR>(green        :short) 
+<BR>(blue         :short) 
+<BR>(flags        :byte) 
+<BR>(pad          :byte)) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>RGBモデルのカラーを定義する。
+それぞれのスロットに値を割り当てるには、<B>setf</B>を用いる。
+RGB値は、符合拡張され、最大値は<SPAN CLASS="MATH"></SPAN>と表現される。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42659"></A>
+<B>:red</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>XColor</B>の赤色の値を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42670"></A>
+<B>:blue</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>XColor</B>の青色の値を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42681"></A>
+<B>:green</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>XColor</B>の緑色の値を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42692"></A>
+<B>:color</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> この<B>XColor</B>のRGB値のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="42703"></A>
+<B>:init</B> <EM>pix R G B &amp;optional (f 7) </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<B>XColor</B>を初期化する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="42714"></A>
+<B>find-visual</B> <EM>type depth &amp;optional (screen 0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>type</EM>と<EM>depth</EM>で指定されるvisual-IDを見つける。
+<EM>type</EM>は、<TT>:StaticGray, :GrayScale,
+:StaticColor, :pseudoColor, :TrueColor</TT>あるいは<TT>:DirectColor</TT>のどれかである。
+ふつう、<EM>depth</EM>は1, 8 または 24である。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+
+<DIV CLASS="navigation"><HR>
+<BR>
+<B> Next:</B> <A NAME="tex2html836"
+  HREF="jmanual-node20.html">XToolKit</A>
+<B>Up:</B> <A NAME="tex2html830"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<B> Previous:</B> <A NAME="tex2html824"
+  HREF="jmanual-node18.html">視界とグラフィックス</A>
+</DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>

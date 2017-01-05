@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Scoping</TITLE>
-<META NAME="description" CONTENT="Scoping">
+<TITLE>Geometric Modeling</TITLE>
+<META NAME="description" CONTENT="Geometric Modeling">
 <META NAME="keywords" CONTENT="manual">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,142 +20,3232 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="manual-node20.html">
 <LINK REL="previous" HREF="manual-node18.html">
-<LINK REL="up" HREF="manual-node17.html">
+<LINK REL="up" HREF="manual-node15.html">
 <LINK REL="next" HREF="manual-node20.html">
 </HEAD>
 
 <BODY >
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html673"
-  HREF="manual-node20.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html667"
-  HREF="manual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html661"
-  HREF="manual-node18.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html669"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html671"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html674"
-  HREF="manual-node20.html">Generalized Variables</A>
-<B> Up:</B> <A NAME="tex2html668"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Previous:</B> <A NAME="tex2html662"
-  HREF="manual-node18.html">Atoms</A>
- &nbsp; <B>  <A NAME="tex2html670"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html672"
-  HREF="manual-node167.html">Index</A></B> 
-<BR>
-<BR></DIV>
+<B> Next:</B> <A NAME="tex2html856"
+  HREF="manual-node20.html">Viewing and Graphics</A>
+<B>Up:</B> <A NAME="tex2html850"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html844"
+  HREF="manual-node18.html">Geometric Functions</A>
+<BR> <P>
+</DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<H2><A NAME="SECTION03022000000000000000">
-Scoping</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html857"
+  HREF="manual-node19.html#SECTION03041000000000000000">Miscellaneous Geometric Functions</A>
+<LI><A NAME="tex2html858"
+  HREF="manual-node19.html#SECTION03042000000000000000">Line and Edge</A>
+<LI><A NAME="tex2html859"
+  HREF="manual-node19.html#SECTION03043000000000000000">Plane and Face</A>
+<LI><A NAME="tex2html860"
+  HREF="manual-node19.html#SECTION03044000000000000000">Body</A>
+<LI><A NAME="tex2html861"
+  HREF="manual-node19.html#SECTION03045000000000000000">Primitive Body Creation</A>
+<LI><A NAME="tex2html862"
+  HREF="manual-node19.html#SECTION03046000000000000000">Body Composition</A>
+<LI><A NAME="tex2html863"
+  HREF="manual-node19.html#SECTION03047000000000000000">Coordinates-axes</A>
+<LI><A NAME="tex2html864"
+  HREF="manual-node19.html#SECTION03048000000000000000">Bodies in Contact</A>
+<LI><A NAME="tex2html865"
+  HREF="manual-node19.html#SECTION03049000000000000000">Voronoi Diagram of Polygons</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION03040000000000000000"></A><A NAME="Geometry"></A>
+<BR>
+Geometric Modeling
+</H1>
+
+<P>
+EusLisp adopts <A NAME="31136"></A><EM>B</EM>rep (Boundary Representation) as the internal
+representation of 3D geometric models.
+Components in Breps are represented by classes
+<B>edge, plane, polygon, face, hole,</B> and <B>body</B>.
+Primitive body creating functions and body composition functions
+create new instances of these classes.
+In order to use your private geometric classes having
+more attributes,
+set special variables
+<B>*edge-class*, *face-class*</B> and <B>*body-class*</B>
+to your class objects.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="30292"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 9:</STRONG>
+Arrangements of vertices, edges, and faces</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="505" HEIGHT="444" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img84.png"
+ ALT="\includegraphics[height=10cm]{fig/beam.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H2><A NAME="SECTION03041000000000000000">
+Miscellaneous Geometric Functions</A>
 </H2>
 
 <P>
-Every symbol may have associated value.
-A symbol is evaluated to its value determined in the current binding context.
-There are two kinds of variable bindings;
-the lexical or static binding and the special or dynamic binding.
-Lexically bound variables are introduced by <B>lambda</B> form or
-<B>let</B> and <B>let*</B> special forms
-unless they are declared special.
-Lexical binding can be nested and the only one binding which is introduced
-innermost level is visible, hiding outer lexical bindings and the special 
-binding.
-Special variables are used in two ways:
-one is for global variables, and the other is for dynamically scoped
-local variables which are visible even at the outside of
-the lexical scope as long as the binding is in effect.
-In the latter case, special variables are needed to be declared special.
-The declaration is recognized not only by the compiler, but also by
-the interpreter.
-According to the Common Lisp's terms, special variables are said to have
-indefinite scope and dynamic extent.
+
+ <BR>
+<BR> <P>
+
+<A NAME="31138"></A>
+<B>vplus</B> <EM>vector-list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a newly created float-vector that is the sum of
+all the elements of <EM>vector-list</EM>.
+The difference from <B>v+</B> is that <B>vplus</B> computes
+the sum of more than two arguments and no result vector can be specified.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-Even if there exists a lexical variable in a certain scope,
-the same variable name can be redeclared to be special in inner scope.
-Function <B>symbol-value</B> can be used to retrieve  the special values
-regardless to the lexical scopes.
-Note that <B>set</B> function works only for special variable, i.e.
-it cannot be used to change the value of lambda or let variables
-unless they are declared special.
+
+<A NAME="31151"></A>
+<B>vector-mean</B> <EM>vector-list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the mean vector of <I>vector-list</I>.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
+
+<A NAME="31162"></A>
+<B>triangle</B> <EM>a b c &amp;optional (normal #f(0 0 1)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>a, b, c</EM> are float-vectors representing 2 or 3 dimensional points.
+normal is the normal vector of the plane on which <EM>a,b</EM>, and <EM>c</EM>
+lie.
+<B>Triangle</B> returns 2*area of a triangle formed by <EM>a,b,c</EM>.
+<B>Triangle</B> is positive if <EM>a,b</EM>, and <EM>c</EM> turn clockwise
+when you are looking in the same direction as <EM>normal</EM>.
+In other words, if <B>triangle</B> is positive, <EM>c</EM> locates at the
+left hand side of line <EM>a-b</EM>,
+and <EM>b</EM> lies at the right side of <EM>ac</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31186"></A>
+<B>triangle-normal</B> <EM>a b c </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds a normal vector which is vertical to the triangle defined by
+three points <EM>a,b,</EM>and <EM>c</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31198"></A>
+<B>vector-angle</B> <EM>v1 v2 &amp;optional (normal (v* v1 v2)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes an angle between two vectors,
+denoted by <!-- MATH
+ $atan(normal \cdot (v1 \times v2), v1 \cdot v2)$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="228" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img85.png"
+ ALT="$ atan(normal \cdot (v1 \times v2), v1 \cdot v2)$"></SPAN>.
+<EM>v1,v2</EM> and <EM>normal</EM> must be normalized vectors.
+When <EM>normal</EM> is not given, a normalized vector commonly perpendicular to
+<EM>v1</EM> and <EM>v2</EM> is used, in which case the result is always a positive
+angle in the range between <SPAN CLASS="MATH">0</SPAN> and <SPAN CLASS="MATH"><IMG
+ WIDTH="14" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img9.png"
+ ALT="$ \pi$"></SPAN>.
+In order to obtain a signed angle, <EM>normal</EM> must be specified explicitly.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31214"></A>
+<B>face-normal-vector</B> <EM>vertices </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes surface normal vector from a list of float-vectors which lie
+on the same plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31224"></A>
+<B>farthest</B> <EM>p points </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the farthest point from <EM>p</EM> in the list of 3D float-vectors,
+<EM>points</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31236"></A>
+<B>farthest-pair</B> <EM>points </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the farthest point pair in the list of 3D float-vectors, <EM>points</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31247"></A>
+<B>maxindex</B> <EM>3D-floatvec </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Finds the index of the absolute maximum value of three elements.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31257"></A>
+<B>random-vector</B> <EM>&amp;optional (range 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Generates a random vector which is distributed homogeneously
+in 3D Cartesian space.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31267"></A>
+<B>random-normalized-vector</B> <EM>&amp;optional (range 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a normalized-3D random vector.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31277"></A>
+<B>random-vectors</B> <EM>count range </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of random vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31287"></A>
+<B>line-intersection</B> <EM>p1 p2 p3 p4 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1, p2, p3</EM> and <EM>p4</EM> are all float-vectors of more than two dimensions.
+<EM>p1-p2</EM> and <EM>p3-p4</EM> define two lines on a plane.
+<B>line-intersection</B> returns a list of two parameters of the
+intersection point for these two lines.
+When used in  three dimension,
+<EM>p1, p2, p3</EM> and <EM>p4</EM> must be coplanar.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31304"></A>
+<B>collinear-p</B> <EM>p1 p2 p3 &amp;optional tolerance </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1, p2, p3</EM> are all three-dimensional float-vectors representing
+three point locations.
+<B>Collinear-p</B> returns the parameter for <EM>p2</EM> on 
+the line <EM>p1-p3</EM> if <!-- MATH
+ $norm((p2-p1) \times (p3-p1))$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="203" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img86.png"
+ ALT="$ norm((p2-p1) \times (p3-p1))$"></SPAN> is smaller than
+<TT>*coplanar-threshold*</TT>, otherwise NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31319"></A>
+<B>find-coplanar-vertices</B> <EM>p1 p2 p3 vlist </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>p1, p2, p3</EM> are all three-dimensional float-vectors representing
+a plane.
+<B>Find-coplanar-vertices</B> looks for coplanar points in <EM>vlist</EM>
+that lie on the plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31332"></A>
+<B>find-connecting-edge</B> <EM>vertex edgelist </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds an edge in <EM>edgelist</EM> that connects to <EM>vertex</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31344"></A>
+<B>make-vertex-edge-htab</B> <EM>bodfacs </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>bodfacs</EM> is a body or a list of faces.
+<B>make-vertex-edge-htab</B> makes a hash-table which allows retrieving of 
+edges connected to a vertex.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31356"></A>
+<B>left-points</B> <EM>points p1 p2 normal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Assume <EM>points, p1</EM>, and <EM>p2</EM>
+lie on the plane whose normal vector is <EM>normal</EM>.
+<B>Left-points</B> searches in <EM>points</EM> and collects ones
+lying in the left hand side of the line passing on <EM>p1, p2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31372"></A>
+<B>right-points</B> <EM>points p1 p2 normal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Assume <EM>points, p1</EM>, and <EM>p2</EM>
+lie on the plane whose normal vector is <EM>normal</EM>.
+<B>Right-points</B>  searches in <EM>points</EM> and collects ones
+lying in the right hand side of the line determined by <EM>p1, p2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31388"></A>
+<B>left-most-point</B> <EM>points p1 p2 normal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Assume <EM>points, p1</EM>, and <EM>p2</EM>
+lie on a plane whose normal vector is <EM>normal</EM>.
+<B>left-points</B> searches in <EM>points</EM> which lie in the left-hand
+side of the line determined by <EM>p1, p2</EM> and returns the farthest one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31404"></A>
+<B>right-most-point</B> <EM>points p1 p2 normal </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Assume <EM>points, p1</EM>, and <EM>p2</EM>
+lie on a plane whose normal vector is <EM>normal</EM>.
+<B>right-most-point</B> searches in <EM>points</EM> which lie in the right-hand
+side of the line determined by <EM>p1, p2</EM> and returns the farthest one.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31420"></A>
+<B>eps=</B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+compares two float numbers <EM>num1</EM> and <EM>num2</EM> for equality
+with the tolerance of <B>*epsilon*</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31433"></A>
+<B>eps<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img6.png"
+ ALT="$ &lt;$"></SPAN></B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img87.png"
+ ALT="$ num1$"></SPAN> is apparently less than <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img88.png"
+ ALT="$ num2$"></SPAN>, i.e. <!-- MATH
+ $num1 < num2-tolerance$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="192" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img89.png"
+ ALT="$ num1 &lt; num2-tolerance$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31443"></A>
+<B>eps<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img15.png"
+ ALT="$ &lt;=$"></SPAN></B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img87.png"
+ ALT="$ num1$"></SPAN> is possibly less than or equal to <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img88.png"
+ ALT="$ num2$"></SPAN>,
+i.e. <!-- MATH
+ $num1 < num2+tolerance$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="192" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img90.png"
+ ALT="$ num1 &lt; num2+tolerance$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31453"></A>
+<B>eps<SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img13.png"
+ ALT="$ &gt;$"></SPAN></B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img87.png"
+ ALT="$ num1$"></SPAN> is apparently greater than <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img88.png"
+ ALT="$ num2$"></SPAN>, i.e. <!-- MATH
+ $num1 > num2+tolerance$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="192" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img91.png"
+ ALT="$ num1 &gt; num2+tolerance$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31463"></A>
+<B>eps<SPAN CLASS="MATH"><IMG
+ WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img14.png"
+ ALT="$ &gt;=$"></SPAN></B> <EM>num1 num2 [(tolerance *epsilon*)] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img87.png"
+ ALT="$ num1$"></SPAN> is possibly greater than or equal to <SPAN CLASS="MATH"><IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img88.png"
+ ALT="$ num2$"></SPAN>,
+i.e. <!-- MATH
+ $num1 > num2-tolerance$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="192" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img92.png"
+ ALT="$ num1 &gt; num2-tolerance$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="31474"></A>
+<BIG CLASS="XLARGE"><B>bounding-box </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 (minpoint maxpoint) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a minimal rectangular-parallel-piped which is bounded by
+the planes parallel to xy-, yz- and zx-planes.
+<B>Bounding-box</B> can be used in any dimension according to the
+dimension of vectors given at the initialization.
+Bounding-box had been defined by the name of surrounding-box.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31492"></A>
+<B>:box</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns this bounding-box object itself.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31502"></A>
+<B>:volume</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the volume of this bounding box.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31512"></A>
+<B>:grow</B> <EM>rate </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+increases or decreases the size of this box by the <EM>rate</EM>.
+When <EM>rate</EM> is 0.01, the box is enlarged by 1%.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31524"></A>
+<B>:inner</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>point</EM> lies in this box, otherwise nil.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31535"></A>
+<B>:intersection</B> <EM>box2 &amp;optional tolerance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the intersectional bounding box of this box and <EM>box2</EM>.
+If <EM>tolerance</EM> is given, the box is enlarged by it.
+If there is no intersection, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31547"></A>
+<B>:union</B> <EM>box2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the union of bounding box of this box and <EM>box2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31558"></A>
+<B>:intersectionp</B> <EM>box2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if this box has the intersection with the <EM>box2</EM>,
+NIL otherwise.
+This method is faster than <B>:intersection</B> because no new instance
+of bounding-box is created.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31570"></A>
+<B>:extreme-point</B> <EM>direction </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns one of the eight corner points yielding the largest dot-product 
+with <EM>direction</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31581"></A>
+<B>:corners</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of all vertices of this box.
+If this box defines 2D bounding-box, then 4 points are returned,
+3D, 8, and so on.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31591"></A>
+<B>:below</B> <EM>box2 &amp;optional (direction #(0 0 1) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if this box is below <EM>box2</EM> in <EM>direction</EM>.
+This is used to check whether two box intersects when this box is
+moved toward <EM>direction</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31604"></A>
+<B>:body</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a body object that represents a cube bounded by this box.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31614"></A>
+<B>:init</B> <EM>vlist &amp;optional tolerance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets minpoint and maxpoint slots looking in <EM>vlist</EM>.
+If tolerance (float) is specified, the box is grown by the amount.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31625"></A>
+<B>make-bounding-box</B> <EM>points [tolerance] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> finds the minimum and maximum
+coordinates in the list of <EM>points</EM>, and make an instance of
+<TT>bounding-box</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31637"></A>
+<B>bounding-box-union</B> <EM>boxes [tolerance *contact-threshold*] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an instance of the surrounding-box representing the union
+of <EM>boxes</EM>. The resulted box is expanded by the <EM>tolerance</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31649"></A>
+<B>bounding-box-intersection</B> <EM>boxes [tolerance *contact-threshold*] </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes an instance of the surrounding-box representing the intersection 
+of <EM>boxes</EM>. The resulted box is expanded by the <EM>tolerance</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+             <P>
+
+<H2><A NAME="SECTION03042000000000000000">
+Line and Edge</A>
+</H2>
+
+<P>
+The direction of the vertex loop or the edge loop
+is defined so that the vertices or edges  are arranged
+in the counter-clockwise order when the body is observed from outside.
+<EM>Pvertex</EM> and <EM>nvertex</EM>, and <EM>pface</EM> and <EM>nface</EM>
+are determined so that an edge is
+oriented from <EM>pvertex</EM> toward <EM>nvertex</EM>
+when <EM>pface</EM> is located at the left
+of the edge observing them from outside.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="31662"></A>
+<BIG CLASS="XLARGE"><B>line </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 ((pvert :type float-vector)(nvert :type float-vector)) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a line passing on pvert and nvert.
+The line is directed from <EM>pvert</EM> to <EM>nvert</EM> in the parametric
+representation: <!-- MATH
+ $t \cdot pvert +(1-t)nvert$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="162" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img93.png"
+ ALT="$ t \cdot pvert +(1-t)nvert $"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31681"></A>
+<B>:vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of <EM>pvert</EM> and <EM>nvert</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31693"></A>
+<B>:point</B> <EM>p </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a three dimensional float-vector that corresponds to the 
+<EM>p</EM> parameter on this line.
+<!-- MATH
+ $parameter \cdot pvert + (1-parameter)nvert$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="300" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img94.png"
+ ALT="$ parameter \cdot pvert + (1-parameter)nvert$"></SPAN>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31704"></A>
+<B>:parameter</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes the parameter for <EM>point</EM> on this line.
+This is the inverse method of <TT>:point</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31716"></A>
+<B>:direction</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a normalized vector from <B>pvert</B> to <B>nvert</B>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31728"></A>
+<B>:end-point</B> <EM>v </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the other end-point of this line, i.e.
+if <EM>v</EM> is <EM>eq</EM> to <TT>pvert</TT>, <TT>nvert</TT> is returned,
+if <EM>v</EM> is <EM>eq</EM> to <TT>nvert</TT>, <TT>pvert</TT> is returned,
+otherwise NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31746"></A>
+<B>:box</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> creates and returns a <B>bounding-box</B> of this line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31757"></A>
+<B>:boxtest</B> <EM>box </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks intersection between <EM>box</EM> and the bounding-box of this line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31768"></A>
+<B>:length</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the length of this line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31778"></A>
+<B>:distance</B> <EM>point-or-line </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the distance between the <EM>point-or-line</EM> and this line.
+If the foot of the vertical line from the <EM>point</EM>
+to this line does not lie between pvertex and nvertex,
+the distance to the closest end-point is returned.
+Using this method to calculate the distance between two lines,
+interference between two cylinders can be tested.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31790"></A>
+<B>:foot</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the parameter for the point which is the foot of the vertical
+line from <EM>point</EM> to this line.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31801"></A>
+<B>:common-perpendicular</B> <EM>l </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the line which is vertical both to this line and to <EM>l</EM>
+and returns a list of two 3D float-vectors.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31812"></A>
+<B>:project</B> <EM>plane </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of two points that are the projection of pvert of nvert
+onto <EM>plane</EM>.
+When  two lines are in parallel and a common perpendicular line cannot
+be determined uniquely, <TT>parallel</TT> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31824"></A>
+<B>:collinear-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks whether <EM>point</EM> is collinear to this line with the tolerance of
+<EM>tolerance</EM> using <B>collinear-p</B>.
+If <EM>point</EM> is collinear to this line,
+the parameter for the point on the line is returned, otherwise NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31838"></A>
+<B>:on-line-point</B> <EM>point &amp;optional (tolerance *coplanar-threshold*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks whether the <EM>point</EM> is collinear to this line,
+and the <EM>point</EM> lies on the part of the line
+between <EM>pvert</EM> and <EM>nvert</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31852"></A>
+<B>:collinear-line</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks if <EM>ln</EM> is collinear to this line, i.e. if the two end-points
+of <EM>ln</EM> lie on this line.
+T or NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31864"></A>
+<B>:coplanar</B> <EM>ln &amp;optional (tolerance *coplanar-threshold*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+checks if this line and <EM>ln</EM> are coplanar.
+Two end-points of this line and one end-point of <EM>ln</EM> defines a plane.
+If another end-point of <EM>ln</EM> is on the plane, T is returned,
+otherwise NIL.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31877"></A>
+<B>:intersection</B> <EM>ln </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ln</EM> is a line coplanar with this line.
+<B>:Intersection</B> returns a list of two parameters for the intersection
+point of these two lines.
+A parameter may be any float number, but a parameter between 0 and 1
+means an actual intersection on the line segmented by two end-points.
+NIL if they are in parallel.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31889"></A>
+<B>:intersect-line</B> <EM>ln </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>ln</EM> is a line coplanar with this line.
+Two parameters of the intersecting point
+is returned along with symbolic information such as
+<TT>:parallel, :collinear,</TT> and  <TT>:intersect</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="31903"></A>
+<BIG CLASS="XLARGE"><B>edge </B></BIG> [class]  <PRE><TT>
+  :super   <B>line</B> 
+<BR>  :slots 		 (pface nface 
+<BR>(angle :type float) 
+<BR>(flags :type integer)) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>represents an edge defined as the intersection between two faces.
+Though <EM>pface</EM> and <EM>nface</EM> are statically defined in the slots,
+their interpretations are relative to the direction of this edge.
+For example, <EM>pface</EM> represents the correct pface when this edge
+is considered to goes from <EM>pvert</EM> toward <EM>nvert</EM>.
+So,  pvert and nvert in your interpretation must be given to the <B>:pface</B>
+and <B>:nface</B> methods to select the appropriate face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31927"></A>
+<B>make-line</B> <EM>point1 point2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates an instance of <B>line</B> whose pvert is <EM>point1</EM> and
+nvert is <EM>point2</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31940"></A>
+<B>:pvertex</B> <EM>pf </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns pvertex when <EM>face</EM> is regarded as the pface of this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31951"></A>
+<B>:nvertex</B> <EM>face </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns nvertex regarding <EM>face</EM> as the pface of this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="31962"></A>
+<B>:body</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the body object that defines this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31972"></A>
+<B>:pface</B> <EM>pv nv </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns pface when the <EM>pv</EM> and <EM>nv</EM>
+are interpreted as the virtual pface and nface of this edge, respectively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31984"></A>
+<B>:nface</B> <EM>pv nv </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns nface when the <EM>pv</EM> and <EM>nv</EM>
+are interpreted as the virtual pface and nface of this edge, respectively.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="31996"></A>
+<B>:binormal</B> <EM>aface </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+finds the direction vector which is perpendicular both to this line and to
+the normal of <EM>aface</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32007"></A>
+<B>:angle</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the angle between two faces connected with this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32017"></A>
+<B>:set-angle</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the angle between two faces connected with this edge and 
+stores it in the angle slot.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32027"></A>
+<B>:invert</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32038"></A>
+<B>:set-face</B> <EM>pv nv f </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+sets the <EM>f</EM> face as a pface regarding <EM>pv</EM> as the pvertex
+and <EM>nv</EM> as the nvertex.
+Note that this may change either pface or nface of this edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32051"></A>
+<B>:contourp</B> <EM>viewpoint </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if this is a contour edge, i.e., either pface or nface of this edge is
+visible and the other is invisible from <EM>viewpoint</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32062"></A>
+<B>:approximated-p</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+T if this edge is an approximated edge representing curved surface
+like the side of a cylinder.
+Approximated edges are needed to represent curves by segmented straight
+lines.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32072"></A>
+<B>:set-approximated-flag</B> <EM>&amp;optional (threshold 0.7) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+In EusLisp, every curved surface is approximated with many planar faces.
+The LSB of <TT>flags</TT> is used to indicate that the faces on the both
+sides of this edge are curved faces.
+<B>:set-approximated-flag</B> sets this flag to T, if the angle between
+two faces is greater than <EM>threshold</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32085"></A>
+<B>:init</B> <EM>&amp;key :pface :nface :pvertex :nvertex </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03043000000000000000">
+Plane and Face</A>
+</H2>
+
+<P>
+A plane object is represented by the normal vector on the plane
+and the distance from the coordinates origin to the plane.
+Two pairs of such normal vectors and distances are recorded in a plane object.
+One represents the current status after transformations, while the other represents
+the original normal and distance when the plane is defined.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="32097"></A>
+<BIG CLASS="XLARGE"><B>plane </B></BIG> [class]  <PRE><TT>
+  :super   <B>propertied-object</B> 
+<BR>  :slots 		 ((normal :type float-vector) 
+<BR>(distance :float) 
+<BR>
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines plane-equation. A plane is considered to have no boundaries
+and extend infinitely.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32114"></A>
+<B>:normal</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns this polygon's normal vector which is always normalized.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32124"></A>
+<B>:distance</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes distance between this plane and <EM>point</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32135"></A>
+<B>:coplanar-point</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>point</EM> lies on this plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32146"></A>
+<B>:coplanar-line</B> <EM>line </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if <EM>line</EM> lies on this plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32157"></A>
+<B>:intersection</B> <EM>point1 point2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+computes the intersection point between this plane and the line 
+determined by two end points, <EM>point1</EM> and <EM>point2</EM>,
+and returns the parameter for the intersection on the line.
+If the line and this plane are parallel, <B>:parallel</B> is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32170"></A>
+<B>:intersection-edge</B> <EM>edge </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns the parameter of the intersection point for this plane
+and a line represented by point1 and point2, or edge.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32180"></A>
+<B>:foot</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns a 3D vector which is the orthogonally projection of <EM>point</EM>
+onto this plane.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32191"></A>
+<B>:init</B> <EM>normal point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Defines a plane with the <EM>point</EM> on the plane and the <EM>normal</EM> vector.
+<EM>Normal</EM>must be a normalized vector, <!-- MATH
+ $|normal|=1$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="95" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img95.png"
+ ALT="$ \vert normal\vert=1$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="32205"></A>
+<BIG CLASS="XLARGE"><B>polygon </B></BIG> [class]  <PRE><TT>
+  :super   <B>plane</B> 
+<BR>  :slots 		 (convexp edges vertices 
+<BR>(model-normal float-vector) 
+<BR>(model-distance :float))
+<BR>
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD><B>Polygon</B> represents a loop on a plane.
+<EM>Convexp</EM> is a boolean flag representing the convexity of the loop.
+<EM>Edges</EM> is a list of edges forming the contour of this loop,
+and <EM>vertices</EM> is a list of vertices.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32226"></A>
+<B>:box</B> <EM>&amp;optional tolerance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a bounding-box for this polygon.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32236"></A>
+<B>:boxtest</B> <EM>box2 &amp;optional tolerance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a bounding-box for this polygon, 
+and returns the intersection of the bounding-box and <EM>box2</EM>.
+If there is no intersection, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32247"></A>
+<B>:edges</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of edges (circuit) of this polygon.
+The list is ordered clockwise when the polygon is 
+viewed along the normal vector of this plane.
+If you think of the normal vector as a screw, the edges are ordered
+in the rotation direction for the screw to screw in.
+When polygon or face is used for the surface representation of
+a solid object, the normal vector is directed to its outside region.
+When a polygon is viewed from the outside of the object,
+edges are ordered counter-clockwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32257"></A>
+<B>:edge</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the <EM>n</EM>-th element of edges.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32268"></A>
+<B>:vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the vertices of this polygon ordered in the same manner as edges.
+Note that the first vertex is copied duplicatedly at the end of the list
+and the list is always longer by one than the actual number of vertices.
+This is for the ease of edge traversal by using the vertices list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32278"></A>
+<B>:vertex</B> <EM>n </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the <EM>n</EM>-th element of vertices.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32289"></A>
+<B>:insidep</B> <EM>point &amp;optional (tolerance *epsilon*) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns :inside, :outside or :border
+according to the location of <EM>point</EM> relative to this region.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32300"></A>
+<B>:intersect-point-vector</B> <EM>point vnorm </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes the intersection with the semi-line defined by the <EM>point</EM> and
+the normalized direction vector, <EM>vnorm</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32312"></A>
+<B>:intersect-line</B> <EM>p1 p2 </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes intersection point with a line specified by <EM>p1</EM> and <EM>p2</EM>.
+The result is nil(no intersection) or list of the parameter and
+the intersection position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32324"></A>
+<B>:intersect-edge</B> <EM>edge </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes intersection point with a line specified by the <EM>edge</EM>.
+The result is nil(no intersection) or list of the parameter and
+intersection position.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32335"></A>
+<B>:intersect-face</B> <EM>aregion </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns T if this region intersects with aregion.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32345"></A>
+<B>:transform-normal</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32356"></A>
+<B>:reset-normal</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> recomputes the surface normal vector of this
+polygon from the current <EM>vertices</EM> list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32367"></A>
+<B>:invert</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32378"></A>
+<B>:area</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the area of this polygon.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32388"></A>
+<B>:init</B> <EM>&amp;key :vertices :edges :normal :distance </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="32400"></A>
+<BIG CLASS="XLARGE"><B>face </B></BIG> [class]  <PRE><TT>
+  :super   <B>polygon</B> 
+<BR>  :slots 		 (holes mbody primitive-face id) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a face which may have holes.
+<EM>Pbody</EM> and <EM>type</EM> represent the primitive body and the type
+<TT>(:top, :bottom, :side)</TT> of the face in the body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32420"></A>
+<B>:all-edges</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32431"></A>
+<B>:all-vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns all the edges or vertices of the contour of this face
+and all the inner loops (holes).
+Note that <B>:edges</B> and <B>:vertices</B> methods
+only return edges and vertices composing the contour.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32443"></A>
+<B>:insidep</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+decides whether the point is inside of this face or not.
+If the point is inside the outer contour of this face but also inside
+the loop of any holes, it is classified as outside.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32453"></A>
+<B>:area</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the area of this face, that is
+the area surrounded by external edges subtracted by the areas of holes.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32463"></A>
+<B>:centroid</B> <EM>&amp;optional point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a list of the floating-point number and the float-vector
+representing the center-of-gravity of this face.
+If <EM>point</EM> is not given,
+the first number represents the area of this polygon, and the
+second float-vector the location of center-of-gravity of this polygon.
+If <EM>point</EM> is given, it is taken as the top vertex of the cone
+whose bottom face is formed by this polygon,
+and the volume of this cone and its center-of-gravity are returned. 
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32475"></A>
+<B>:invert</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> flips the direction of this face.
+The normal vector is inverted, and the order of edge loop is reversed.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32485"></A>
+<B>:enter-hole</B> <EM>hole </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> adds a hole in this face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32495"></A>
+<B>:primitive-body</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the primitive-body which has defined this face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32505"></A>
+<B>:id</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns one of <TT>(:bottom), (:top)</TT> and <TT>(:side seq-no.)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32517"></A>
+<B>:face-id</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of the type of primitive-body and the face type.
+For example, a side face of a cylinder returns 
+<TT>((:cylinder <EM>radius height segments</EM>) :side <EM>id</EM>)</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32530"></A>
+<B>:body-type</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns primitive body which has defined this face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32540"></A>
+<B>:init</B> <EM>&amp;key :normal :distance :edges :vertices :holes </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+	<BR> 
+<A NAME="32552"></A>
+<BIG CLASS="XLARGE"><B>hole </B></BIG> [class]  <PRE><TT>
+  :super   <B>polygon</B> 
+<BR>  :slots 		 (myface) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>hole is a polygon representing an inner loop of a face.
+A face may have a list of holes in its <TT>holes</TT> slot.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32570"></A>
+<B>:face</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a face that contains this hole.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32580"></A>
+<B>:enter-face</B> <EM>face </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a link to a face which surrounds this hole.
+This method is only used in conjunction with the <TT>:enter-hole</TT> 
+method of the face class.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32591"></A>
+<B>:init</B> <EM>&amp;key :normal :distance :edges :vertices :face </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION03044000000000000000">
+Body</A>
+</H2>
+
+<P>
+	<BR> 
+<A NAME="32603"></A>
+<BIG CLASS="XLARGE"><B>body </B></BIG> [class]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (faces edges vertices model-vertices box convexp evertedp csg) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a three dimensional shape.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32620"></A>
+<B>:magnify</B> <EM>rate </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes the size of this body by <EM>rate</EM>.
+Magnification is recorded in csg list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32631"></A>
+<B>:translate-vertices</B> <EM>vector </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+translates model-vertices. <EM>Vector</EM> should be given in the local coordinates.
+Translation is recorded in csg list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32642"></A>
+<B>:rotate-vertices</B> <EM>angle axis </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+rotates model-vertices <EM>angle</EM> radian around <EM>axis</EM>.
+Rotation is recorded in csg list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32654"></A>
+<B>:reset-model-vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32665"></A>
+<B>:newcoords</B> <EM>rot &amp;optional pos </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+changes coordinates.
+If pos is not given, rot is given as a instance of coordinate class.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32675"></A>
+<B>:vertices</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of all vertices of this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32685"></A>
+<B>:edges</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the list of all edges of this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32695"></A>
+<B>:faces</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the list of all the faces composing this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32705"></A>
+<B>:box</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the bounding-box of this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32715"></A>
+<B>:Euler</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+calculates Euler number of this body,
+that is <!-- MATH
+ $faces + vertices - edges - 2 - holes$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="262" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img96.png"
+ ALT="$ faces + vertices - edges - 2 - holes$"></SPAN>.
+This should equal to <SPAN CLASS="MATH"><IMG
+ WIDTH="63" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img97.png"
+ ALT="$ -2 rings$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32725"></A>
+<B>:perimeter</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the sum of length of all the edges.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32735"></A>
+<B>:volume</B> <EM>&amp;optional (reference-point #f(0 0 0)) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the volume of this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32745"></A>
+<B>:centroid</B> <EM>&amp;optional (point #f(0 0 0) </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the location of center-of-gravity
+assuming that this body is homogeneously solid.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32755"></A>
+<B>:possibly-interfering-faces</B> <EM>box </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32766"></A>
+<B>:common-box</B> <EM>body </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Returns common minimal box for this body and another body.
+If there is interference between two bodies, the intersection must
+exist in this common-box.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32776"></A>
+<B>:insidep</B> <EM>point </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns <B>:inside</B> if <EM>point</EM> resides in this body,
+<B>:border</B> if <EM>point</EM> lies on a surface of this body,
+and <B>:outside</B> otherwise.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32791"></A>
+<B>:intersect-face</B> <EM>face </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns T if there is an interference between the faces of this body
+and <EM>face</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32802"></A>
+<B>:intersectp</B> <EM>body </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Checks intersection with another body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32812"></A>
+<B>:evert</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> reverse the directions of all the faces and edges
+so that the inside of this body becomes outside.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32822"></A>
+<B>:faces-intersect-with-point-vector</B> <EM>point direction </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+collects all faces that intersect with a vector casted from <EM>point</EM>
+towards em direction.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32834"></A>
+<B>:distance</B> <EM>target </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>target</EM> may either be a float-vector or a plane object.
+<B>:distance</B> finds the closest face from <EM>target</EM> and returns a list of
+the face and the distance.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32847"></A>
+<B>:csg</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns csg body construction history.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32857"></A>
+<B>:primitive-body</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of primitive bodies which have constructed this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32867"></A>
+<B>:primitive-body-p</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> T if this body is a primitive body
+created by one of functions listed in <A HREF="#primitive-body-creation">16.5</A>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32878"></A>
+<B>:creation-form</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a Lisp expression to create
+this body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32888"></A>
+<B>:body-type</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns a list of creation parameters
+if this body is a primitive body, or an expression indicating this
+body is a complex (composed) body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32898"></A>
+<B>:primitive-groups</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns a list of two elements.
+The first is a list of primitive bodies that is added (body+) to compose
+this body.
+The latter is a list of subtracted primitive-bodies.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32908"></A>
+<B>:get-face</B> <EM>body [face [id]] </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>body</EM> is an instance of body that has composed this body, 
+one of primitive-body types such as :cube, :cylinder, :prism, :cone,
+:solid-of-revolution, etc., or nil.
+If neither <EM>face</EM> nor <EM>id</EM> is given, all the faces that matches
+<EM>body</EM> is returned.
+If <EM>face</EM> is given, further filtering is performed.
+<EM>face</EM> must be one of <TT>:top, :bottom</TT> and <TT>:side</TT>.
+<TT>(send abody :get-face :cylinder :top)</TT> returns all the top faces
+of cylinders that compose <TT>abody</TT>.
+If <EM>face</EM> is <TT>:side</TT>, you can pick up faces that are numbered as 
+<EM>id</EM>.
+<TT>(send abody nil :side 2)</TT> returns
+all the third (id begins from zero) side faces for any primitive-type bodies.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32932"></A>
+<B>:init</B> <EM>&amp;key :faces :edges :vertices </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+initializes this body from <EM>:faces</EM>.
+<EM>:face</EM> is a required argument.
+Since face, edge and vertex must maintain consistent relation to
+define a complete solid model, it is meaningless to call this method
+with inconsistent arguments.
+In order to create bodies, use the primitive body creating functions described
+in section <A HREF="#primitive-body-creation">16.5</A> and the body composition functions
+in section <A HREF="#BodyComposition">16.6</A>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<H2><A NAME="SECTION03045000000000000000"></A><A NAME="primitive-body-creation"></A>
+<BR>
+Primitive Body Creation
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="32946"></A>
+<B>make-plane</B> <EM>&amp;key normal point distance </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a plane object which is oriented to <EM>normal</EM>, and passes <EM>point</EM>.
+Instead of giving <EM>point</EM>, <EM>distance</EM> can be specified.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="32960"></A>
+<B>*xy-plane*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32971"></A>
+<B>*yz-plane*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="32982"></A>
+<B>*zx-plane*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="30927"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 10:</STRONG>
+primitive bodies</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="429" HEIGHT="630" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img98.png"
+ ALT="\includegraphics[width=10cm]{fig/fig1.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<A NAME="32993"></A>
+<B>make-cube</B> <EM>xsize ysize zsize &amp;key name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a cuboid whose sizes in x, y and z directions are <EM>xsize, ysize</EM>
+and <EM>zsize</EM>.
+The coordinates origin of this cuboid locates at the center of the body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33005"></A>
+<B>make-prism</B> <EM>bottom-points sweep-vector &amp;key name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a prism by lifting the shape defined by <EM>bottom-points</EM>
+along <EM>sweep-vector</EM>.
+If the <EM>sweep-vector</EM> is a number, not a float-vector,
+it is taken as the height of the prism in the <SPAN CLASS="MATH"><IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img99.png"
+ ALT="$ z$"></SPAN> direction.
+Bottom points must be ordered as they define the bottom face of the body.
+For example,
+ (make-prism '(#f(1 1 0) #f(1 -1 0) #f(-1 -1 0) #f(-1 1 0)) 2.0)
+makes a cube of height 2.0.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33018"></A>
+<B>make-cylinder</B> <EM>radius height &amp;key (segments 12) name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a cylinder with specified <EM>radius</EM> and <EM>height</EM>.
+The bottom face is defined on xy-plane and the coordinates origin is
+located at the center of the bottom face.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33030"></A>
+<B>make-cone</B> <EM>top bottom &amp;key (segments 16) color name </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a cone body whose summit is the <EM>top</EM>
+and bottom face is the <EM>bottom</EM>.
+<EM>Top</EM> is a 3D float-vector.
+<EM>Bottom</EM> is either a list of vertices of the bottom face or a radius
+(scalar). If it is the vertices list, it is order sensitive.
+&nbsp; (make-cone #f(0 0 10) (list #f(10 0 0) #f(0 10 0) #f(-10 0 0) 
+#f(0 -10 0)))&nbsp; makes a cone of a square bottom.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33044"></A>
+<B>make-solid-of-revolution</B> <EM>points &amp;key (segments 16) name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>Points</EM> are revolted along z-axis in the clock wise direction.
+If two end points in the <EM>points</EM> list do not lie on z axis,
+those points make circular faces. Thus,
+<TT>(make-solid-of-revolution '(#f(0 0 1) #f(1 0 0)))</TT>
+makes a cone, and 
+<TT>(make-solid-of-revolution '(#f(1 0 1) #f(1 0 0)))</TT>
+makes a cylinder.
+The <EM>points</EM> are order-sensitive,
+and are expected to be arranged from higher <SPAN CLASS="MATH"><IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img99.png"
+ ALT="$ z$"></SPAN> coordinate
+to lower <SPAN CLASS="MATH"><IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img99.png"
+ ALT="$ z$"></SPAN>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33059"></A>
+<B>make-torus</B> <EM>points &amp;key (segments 16) name color </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+makes a torus, a donuts like object.
+<EM>Points</EM> is a list of vertices on a cross-section.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33070"></A>
+<B>make-icosahedron</B> <EM>&amp;optional (radius 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a regular body of twenty faces.
+Each face is a regular triangle.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33080"></A>
+<B>make-dodecahedron</B> <EM>&amp;optional (radius 1.0) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Makes a regular body of twelve faces.
+Each face is a regular pentagon.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33090"></A>
+<B>make-gdome</B> <EM>abody </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+By subdividing triangle faces of abody into four subfacets,
+makes a geodesic dome as a new body. Abody should be an icosahedron
+initially, and then the result of make-gdome can be given to make-gdome
+recursively.
+At each call, the number of faces of the Gdome increases
+by the factor of four,
+i.e. 20, 80, 320, 1280, 5120, etc.
+
+</DD>
+</DL>
+<BR>
+<BR>
 <PRE>
-(let ((x 1))
-   (declare (special x))
-   (let* ((x (+ x x)) (y x))
-      (let* ((y (+ y y)) (z (+ x x)))
-         (declare (special x))
-         (format t "x=~S y=~s z=~s~%" x y z) ) ) )
---&gt; x=1 y=4 z=2
+(setq g0 (make-icosahedron 1.0))	; 20 facets
+(setq g1 (make-gdome g0))		; 80 facets
+(setq g2 (make-gdome g1))		; 320 facets
+...
 </PRE>
 
 <P>
-A symbol can be declared to be a constant by <B>defconstant</B> macro.
-Once declared, an attempt to change the value signals an error thereafter.
-Moreover, such a constant symbol is inhibited to be used as
-the name of a variable even for a local variable.
-NIL and T are examples of such constants.
-Symbols in the keyword package are always declared to be constants
-when they are created.
-In contrast, <B>defvar</B> and <B>defparameter</B> macro declare
-symbols to be special variables.
-<B>defvar</B> initializes the value only if the symbol is unbound,
-and does nothing when it already has a value assigned,
-while <B>defparameter</B> always resets the value.
+
+<A NAME="33100"></A>
+<B>grahamhull</B> <EM>vertices &amp;optional (normal #f(0 0 1)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes convex-hull for 2D points by Graham's algorithm. Slower than
+quickhull.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
-When a symbol is referenced and there is no lexical binding for the symbol,
-its special value is retrieved.
-However, if no value has been assigned to its special value yet,
-unbound variable error is signaled.
+
+<A NAME="33110"></A>
+<B>quickhull</B> <EM>vertices &amp;optional (normal #f(0 0 1)) </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes convex-hull for 2D points by the binary search method.
+</DD>
+</DL>
+<BR>
+<BR>
 
 <P>
+
+<A NAME="33120"></A>
+<B>convex-hull-3d</B> <EM>vertices </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes convex-hull for 3D points by gift-wrapping method.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="33130"></A>
+<B>make-body-from-vertices</B> <EM>vertices-list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+creates a body from lists of vertices each of which define
+a loop of a face in the consistent order.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03046000000000000000"></A><A NAME="BodyComposition"></A>
+<BR>
+Body Composition
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+
+<A NAME="33140"></A>
+<B>face+</B> <EM>face1 face2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="33151"></A>
+<B>face*</B> <EM>face1 face2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>face1</EM> and <EM>face2</EM> are coplanar faces in 3D space.
+<B>face+</B> composes union of these faces and returns a face object.
+If there is no intersection, original two faces are returned.
+<B>face*</B> returns intersection of these faces.
+If there is no intersection, NIL is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33165"></A>
+<B>cut-body</B> <EM>body cutting-plane </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Cuts a body by the <EM>cutting-plane</EM>
+and returns a list of faces made at the cross-section.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33176"></A>
+<B>body+</B> <EM>body1 body2 &amp;rest more-bodies </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="33187"></A>
+<B>body-</B> <EM>body1 body2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<A NAME="33198"></A>
+<B>body*</B> <EM>body1 body2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Computes join, difference or intersection of two or more bodies.
+Each body is copied before each <B>body+, body-</B> and <B>body*</B> operation,
+and original bodies are unchanged.
+The new coordinates of the resulted body is located and oriented
+at the same location and orientation as the world coordinates.
+Even when two bodies are touching face by face,
+these functions are expected to work correctly
+if threshold parameters
+<TT>*coplanar-threshold*, *contact-threshold*,</TT> and <TT>*parallel-threshold*</TT>
+are properly set.
+However, if a vertex of a body is in contact with an edge or a face
+of the other body, any composition operation fails.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33212"></A>
+<B>body/</B> <EM>body plane </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Cut the body by a plane which is an instance of class plane
+(made by <B>make-plane</B>).
+A newly created body is returned.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="33223"></A>
+<B>body-interference</B> <EM>&amp;rest bodies </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Checks interference between each one-to-one combination in <EM>bodies</EM>.
+Returns a list of two bodies  that are intersecting.
+
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+             <P>
+
+<H2><A NAME="SECTION03047000000000000000">
+Coordinates-axes</A>
+</H2>
+Class coordinates-axes defines 3D coordinates-axes drawable on a screen.
+Each axis and an arrow at the tip of z-axis are defined by line objects.
+Since the coordinates-axes class inherits cascaded-coords,
+a coordinates-axes object can be attached
+to another cascaded-coords originated object such as a body.
+This object is used to see the coordinates-axes of a body or a
+relative coordinates to another coordinates.
+
+<P>
+
+ <BR>
+<BR> <BR> 
+<A NAME="33235"></A>
+<BIG CLASS="XLARGE"><B>coordinates-axes </B></BIG> [class]  <PRE><TT>
+  :super   <B>cascaded-coords</B> 
+<BR>  :slots 		 (size model-points points lines) 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>Defines drawable 3-D coordinates-axes.
+</DD>
+</DL>
+<BR>
+<BR>
+             <P>
+
+
+<H2><A NAME="SECTION03048000000000000000"></A><A NAME="Contact"></A>
+<BR>
+Bodies in Contact
+</H2>
+
+<P>
+The method and functions described in this subsection require
+<B>contact/model2const.l, contact/inequalities.l,
+ contact/drawconst.l</B>.
+
+<P>
+
+ <BR>
+<BR> <P>
+	<BR> 
+<A NAME="35521"></A>
+<BIG CLASS="XLARGE"><B>body </B></BIG> [class]  <PRE><TT>
+  :super   <B>object</B> 
+<BR>  :slots 		 () 
+</TT></PRE>
+<BR>
+<BR>
+
+<DL COMPACT>
+<DT> 
+<DD>defines a three dimensional shape.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35538"></A>
+<B>:constraint</B> <EM>b </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> returns self's constraint
+when self is in contact with <EM>b</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35549"></A>
+<B>constrained-motion</B> <EM>c </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the possible motions
+which satisfy the constraint <EM>c</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35560"></A>
+<B>constrained-force</B> <EM>m </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> returns the force which is applicable
+from the constrained body to the constraining body.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35570"></A>
+<B>draw-constraint</B> <EM>c </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> draws the constraint <EM>c</EM>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="35581"></A>
+<B>draw-motion</B> <EM>m a b </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> draws the possible motions of <EM>a</EM>
+in contact with <EM>b</EM>. Type the return key for drawing.
+</DD>
+</DL>
+<BR>
+<BR>
+Example
+<BR><PRE>
+;;
+;;      peg in a hole with 6 contact points
+;;
+(in-package "GEOMETRY")
+(load "view")
+(load "../model2const.l" :package "GEOMETRY")
+(load "../inequalities.l" :package "GEOMETRY")
+(load "../drawconst.l" :package "GEOMETRY")
+
+(setq x (make-prism '(#f(50 50 0) #f(50 -50 0) #f(-50 -50 0) #f(-50 50 0))
+                    #f(0 0 200)))
+(setq x1 (copy-object x))
+(send x1 :translate #f(0 0 -100))
+(send x1 :worldcoords)
+(setq a1 (make-prism '(#f(100 100 -150) #f(100 -100 -150)
+                       #f(-100 -100 -150) #f(-100 100 -150))
+                     #f(0 0 150)))
+(setq ana (body- a1 x1))
+(send x :translate #f(0 -18.30127 -18.30127))
+(send x :rotate -0.523599 :x)
+(send x :worldcoords)
+
+(setq c (list (send x :constraint ana)))
+(setq m (constrained-motion c))
+(setq f (constrained-force m))
+
+(hidd x ana)
+(draw-constraint c)
+(draw-motion m)
+</PRE>
+
+The following figures shows examples of constraints.
+The small arrows in the figures designate the constraints for the pegs.
+
+<BR>
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="fig:peg-in-hole"></A><A NAME="35501"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 11:</STRONG>
+Constraints for a peg in a hole.</CAPTION>
+<TR><TD><IMG
+ WIDTH="244" HEIGHT="328" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img100.png"
+ ALT="\includegraphics[width=7.9cm]{fig/fig-peg-in-hole1.ps}">
+<IMG
+ WIDTH="242" HEIGHT="331" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img101.png"
+ ALT="\includegraphics[width=7.9cm]{fig/fig-peg-in-hole2.ps}">
+<IMG
+ WIDTH="238" HEIGHT="316" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img102.png"
+ ALT="\includegraphics[width=7.9cm]{fig/fig-peg-in-hole3.ps}">
+<IMG
+ WIDTH="238" HEIGHT="275" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img103.png"
+ ALT="\includegraphics[width=7.9cm]{fig/fig-peg-in-hole4.ps}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<P>
+The following figures shows an example of the possible motions
+of a peg in a hole.
+The example corresponds to the above program.
+<BR>
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="fig:peg-in-a-hole"></A><A NAME="35511"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 12:</STRONG>
+Possible motions of a peg in a hole</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="251" HEIGHT="331" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img104.png"
+ ALT="\includegraphics[width=7.9cm]{fig/fig-peg-naname-m1.ps}">
+<IMG
+ WIDTH="243" HEIGHT="341" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img105.png"
+ ALT="\includegraphics[width=7.9cm]{fig/fig-peg-naname-m2.ps}">
+<IMG
+ WIDTH="243" HEIGHT="338" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img106.png"
+ ALT="\includegraphics[width=7.9cm]{fig/fig-peg-naname-m3.ps}">
+<IMG
+ WIDTH="249" HEIGHT="331" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img107.png"
+ ALT="\includegraphics[width=7.9cm]{fig/fig-peg-naname-m4.ps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+
+<H2><A NAME="SECTION03049000000000000000">
+Voronoi Diagram of Polygons</A>
+</H2>
+
+<P>
+
+ <BR>
+<BR> <P>
+<EM>Author: Philippe PIGNON, ETL Guest Researcher</EM>
+
+<P>
+The program is written in COMMON LISP. I used the method of Fortune, 
+ "A sweepline algorithm for Voronoi diagrams", in Proceedings of
+the 2nd Annual ACM symposium on computational geometry, 1986, 313-322.
+I adapted it to the polygonal case. This is a sample file with short
+explanations
+This program was written under Electrotechnical EUSLISP environment,
+so graphic connections are provided for it. 
+However, you can use it with any COMMON-LISP; you'll then have to write your
+own display functions to replace those given in utilities.l file (see below)
+
+<P>
+<B>PURPOSE:</B> Computation of the voronoi diagram of a set of polygons.
+Please read the above quoted reference to understand the vocabulary and
+method used. No explanations about the program itself  will be given here.
+
+<P>
+<B>INPUT:</B> A list of polygons coordinates plus an enclosing frame.
+<PRE>
+DATA= (
+       (x11 y11 x12 y12 x13 y13 ...) first polygon,
+                                     counterclocwise enumeration of vertices
+       (x21 y21 x22 y22 x23 y23 ...) second polygon
+               ... 
+       (xn1 yn1 xn2 yn2 xn3 yn3 ...) nth polygon
+	     
+       (xf1 yf1 xf2 yf2 xf3 yf3 xf4 yf4) enclosing frame
+      )
+</PRE>
+Enclosing frame can occur anywhere in data, and should be clockwise enumerated
+for outside-inside marking consistency (see below). Polygons must be simple,
+non intersecting. Aligned or flat edges are not accepted. 
+Neither are isolated points or segments.
+
+<P>
+<B>OUTPUT:</B> *diagram*: a list of doubly connected edges list
+(cf utilities.l file). Each edge is a symbol, with  property list
+including the following fields:
+<PRE>
+(start &lt;pointer to a vertex&gt;)
+       (end &lt;pointer to a vertex&gt;)
+       (pred &lt;pointer to an edge&gt;)
+       (succ &lt;pointer to an edge&gt;)
+       (left &lt;pointer to a site&gt;)
+       (right &lt;pointer to a site&gt;)
+       (type &lt;:endpoint or :point-point or :segment-segment or :point-segment&gt;)
+       (outflag &lt;t or nil&gt;)
+</PRE>
+A <SPAN CLASS="MATH"><IMG
+ WIDTH="50" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img108.png"
+ ALT="$ vertex$"></SPAN> is a symbol whose property list contains the field "pos".
+This field itself contains a cons <SPAN CLASS="MATH"><IMG
+ WIDTH="34" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img109.png"
+ ALT="$ (x y)$"></SPAN>, (real) planar coordinates
+of the vertex.
+<SPAN CLASS="MATH"><IMG
+ WIDTH="40" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img110.png"
+ ALT="$ Pred$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ WIDTH="35" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img111.png"
+ ALT="$ succ$"></SPAN> field give counterclockwise predecessor and successor
+according to the dcel formalism (see Shamos and Preparata,
+Computational Geometry: An introduction, 1985, pp 15-17).
+A <SPAN CLASS="MATH"><IMG
+ WIDTH="31" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img112.png"
+ ALT="$ site$"></SPAN> is also a symbol, whose property list also contains relevant
+information.
+Sites describe original input data; they can be of type
+:point (a polygon vertex) or segment (a polygon edge).
+
+<P>
+<SPAN CLASS="MATH"><IMG
+ WIDTH="40" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img113.png"
+ ALT="$ Type$"></SPAN> is the gender of the bisector, determined by the type of the sites
+it separates.
+By convention, outside is the right side of a start-end edge.
+The voronoi diagram computes ouside as well as inside bisectors.
+Sort on outflag to keep the ones you want.
+
+<P>
+
+<A NAME="35707"></A>
+<B>pv</B> <EM>data </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+Compute the Voronoi diagram of polygons from the <SPAN CLASS="MATH"><IMG
+ WIDTH="35" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img114.png"
+ ALT="$ data$"></SPAN> with the above format.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+<B>SAMPLE:</B>
+In order to run the program on a short  sample, 
+please perform the following steps:
+
+<BR>
+0- Copy the following files in your environment:
+
+<BR><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT">utilities.l</TD>
+<TD ALIGN="LEFT">Geometric utility functions, plus EUSX graphic functions</TD>
+</TR>
+<TR><TD ALIGN="LEFT">polygonalvoronoi.l</TD>
+<TD ALIGN="LEFT">The program.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">testdata.l</TD>
+<TD ALIGN="LEFT">Demonstration data, with the above format.</TD>
+</TR>
+</TABLE>
+
+<BR>
+1- If you do not use EUS, edit the utilities.l file and
+modify the "compatibility package" according to the instructions.
+
+<BR>
+2- Compile and/or load the following 3 files:
+
+<BR><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT">utilities.l</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT">polygonalvoronoi.l</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT">testdata.l</TD>
+<TD ALIGN="LEFT">This file contains demonstration data,with the above format</TD>
+</TR>
+</TABLE>
+
+<BR>
+3- (pv demoworld)  run the program on demonstration data. 
+The global variable *diagram* contains the bisectors of the voronoi diagram.
+
+<P>
+Under EUSX only (eus with XWindow interface), do the following
+to display the resulting diagram:
+<PRE>
+       (make-display)          ;;Initializes the *display* window object
+       (dps demoworld *thick*) ;; Shows original data in thick lines
+       (dbs *diagram*)         ;; Shows the result
+</PRE>
+
+<P>
+             <P>
+
 
 <DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html673"
-  HREF="manual-node20.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html667"
-  HREF="manual-node17.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html661"
-  HREF="manual-node18.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html669"
-  HREF="manual-node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html671"
-  HREF="manual-node167.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html674"
-  HREF="manual-node20.html">Generalized Variables</A>
-<B> Up:</B> <A NAME="tex2html668"
-  HREF="manual-node17.html">Forms and Evaluation</A>
-<B> Previous:</B> <A NAME="tex2html662"
-  HREF="manual-node18.html">Atoms</A>
- &nbsp; <B>  <A NAME="tex2html670"
-  HREF="manual-node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html672"
-  HREF="manual-node167.html">Index</A></B> </DIV>
+<B> Next:</B> <A NAME="tex2html856"
+  HREF="manual-node20.html">Viewing and Graphics</A>
+<B>Up:</B> <A NAME="tex2html850"
+  HREF="manual-node15.html">EusLisp Extensions</A>
+<B> Previous:</B> <A NAME="tex2html844"
+  HREF="manual-node18.html">Geometric Functions</A>
+</DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2016-03-23
+Travis CI User
+2016-12-30
 </ADDRESS>
 </BODY>
 </HTML>
