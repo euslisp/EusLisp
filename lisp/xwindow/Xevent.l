@@ -107,13 +107,13 @@
     (same-screen	:integer)	;14
     (focus		:integer)	;15
     (alt-state		:integer)	;16
-#-(or :alpha :irix6 :x86_64)
+#-(or :alpha :irix6 :x86_64 :aarch64)
     (pad		:char 28)	;xevent is required to hold 24 longs
 #+:irix6
     (pad		:char 84)
 #+:alpha
     (pad		:char 88)
-#+:x86_64
+#+(or :x86_64 :aarch64)
     (pad		:char 92)      ;xevent is required to hold xx longs at x86-64
 )
 
@@ -179,14 +179,14 @@
 (defun event-root-pos (e)
     (integer-vector (XEvent-x-root e) (XEvent-y-root e)))
 
-#-:x86_64
+#-(or :x86_64 :aarch64)
 (defun event-width (e) (XEvent-x e))
-#-:x86_64
+#-(or :x86_64 :aarch64)
 (defun event-height (e) (XEvent-y e))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (defun event-width (e) (sys::peek ;; for width of XConfigureEvent
                         (+ (sys::address e) 16 (* 4 14)) :integer))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (defun event-height (e) (sys::peek  ;; for height of XConfigureEvent
                          (+ (sys::address e) 16 (* 4 15)) :integer))
 
@@ -442,11 +442,11 @@ instead of 12th of motoinNotify events."
   (defun window-main-thread ()
      (sys::thread-no-wait #'window-main-thread2)))
 
-#-(or :alpha :irix6 :x86_64)
+#-(or :alpha :irix6 :x86_64 :aarch64)
 (defun display-fd (&optional (disp *display*))
    (if disp
        (sys:peek (+ disp 8) :long)))
-#+(or :alpha :irix6 :x86_64)
+#+(or :alpha :irix6 :x86_64 :aarch64)
 (defun display-fd (&optional (disp *display*))
    (if disp
        (sys:peek (+ disp 16) :integer)))
