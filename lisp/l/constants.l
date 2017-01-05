@@ -31,7 +31,7 @@
 (nconc *features* '(:m68020))
 ;
 
-#+(or :alpha :irix6 :x86_64)
+#+(or :alpha :irix6 :x86_64 :aarch64)
 (progn
   (defconstant sizeof-* 8)
   (defconstant sizeof-long 8)
@@ -50,7 +50,7 @@
   (defconstant pi 3.14159265358979323846)
   (defconstant pi/2 1.57079632679489661923)
   )
-#-(or :alpha :irix6 :x86_64)
+#-(or :alpha :irix6 :x86_64 :aarch64)
 (progn
   (defconstant sizeof-* 4)
   (defconstant sizeof-long 4)
