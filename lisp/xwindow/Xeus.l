@@ -535,11 +535,7 @@
     (setf (SetWindowAttributes-win_gravity swa)	(gravity-to-value gravity))
     (unless color-map
 	(cond ((= vi *visual*)		;use parent's colormap for the default
-		(setq color-map  (send parent :colormap))
-		(unless (derivedp color-map colormap)
-		    (warning-message 2 "~s's parent ~s does not have cmap; root cmap is used."
-				self parent)
-		    (setq color-map *color-map*)))
+		(setq color-map  (send parent :colormap)))
 	      (t					;make private cmap
 		(setq color-map (instance colormap :create :visual vi))
 	        (send color-map :copy-colors *color-map* 0 32)) ))
@@ -635,8 +631,13 @@
     (integer-vector (send attr :get 'width) (send attr :get 'height)))
  (:depth () (send (send self :attributes) :get 'depth))
  (:screen () (send (send self :attributes) :get 'screen))
- (:ColorMap () (gethash (send (send self :attributes) :get 'colormap)
-			*xwindows-hash-tab*))
+ (:ColorMap () (let ((color-map (gethash (send (send self :attributes) :get 'colormap)
+			*xwindows-hash-tab*)))
+		(unless (derivedp color-map colormap)
+		    (warning-message 2 "~s's parent ~s does not have cmap; root cmap is used.~%"
+				self parent)
+		    (setq color-map *color-map*))
+		color-map))
  (:root () (send (send self :attributes) :get 'root))	;drawable id of the root
  (:title (title)
     ;(send self :unmap)
