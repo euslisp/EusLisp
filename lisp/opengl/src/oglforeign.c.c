@@ -41,7 +41,7 @@ char *xentry;
   dlhandle=(eusinteger_t)dlopen(0, RTLD_LAZY);
   entry=(eusinteger_t)dlsym(dlhandle, xentry);
 #else
-#if x86_64
+#if (WORD_SIZE == 64)
   entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3L), xentry);
 #else
   entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3), xentry);
@@ -585,7 +585,7 @@ pointer argv[];
   defoglforeign(ctx,"alloctessinfo");
   defoglforeign(ctx,"tess_vertex_cb");
   defoglforeign(ctx,"glDepthRangefv");
-#if x86_64
+#if (WORD_SIZE == 64)
   defoglforeign(ctx,"glPointSized");
   defoglforeign(ctx,"glLineWidthd");
   defoglforeign(ctx,"gluNurbsPropertyd");

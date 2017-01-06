@@ -24,7 +24,7 @@ pointer (**fslot)();
   fn=getfunc(ctx,sym);
 
   if (ispointer(fn) && (fn->cix==codecp.cix)) {
-#if x86_64
+#if (WORD_SIZE == 64)
     x= (eusinteger_t)(fn->c.code.entry); x &= ~3L;
 #else
     x= (eusinteger_t)(fn->c.code.entry); x &= ~3;

@@ -802,7 +802,7 @@ extern eusinteger_t intval(pointer p);
 #endif
 
 #if sun3 || sun4 || system5 || apollo || news || sanyo || vxworks || mips || NEXT || i386 || i486 || i586 || x86_64 || ARM
-#if x86_64
+#if (WORD_SIZE == 64)
 #define fltval(p) (nu.ival=((eusinteger_t)(p) & ~3L), nu.fval)
 #define makeflt(f) (nu.fval=(eusfloat_t)(f), (pointer)((nu.ival & ~3L) | 1L))
 #else

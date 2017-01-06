@@ -27,7 +27,7 @@
 	  glXUseXFont
 	  glXWaitGL
 	  glXWaitX))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (eval-when (load)
   (setf (symbol-function 'glxchoosevisual-for-wrap)
         (symbol-function 'glxchoosevisual))
