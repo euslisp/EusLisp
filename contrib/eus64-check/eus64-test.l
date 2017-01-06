@@ -27,8 +27,27 @@
                                                           :integer :integer) :float)
   (defforeign call-ifunc *testmod* "call_ifunc" () :integer)
   (defforeign call-ffunc *testmod* "call_ffunc" () :float)
+
+  (defforeign get-size-pointer *testmod* "get_size_of_pointer" () :integer)
+  (defforeign get-size-float32 *testmod* "get_size_of_float32" () :integer)
+  (defforeign get-size-double  *testmod* "get_size_of_double" ()  :integer)
+  (defforeign get-size-long    *testmod* "get_size_of_long" () :integer)
+  (defforeign get-size-int     *testmod* "get_size_of_int" () :integer)
   )
 
+(format t "~%;;;; pointer size check ;;;;~%")
+
+(format t "pointer size ~D ~D~%"
+	lisp::sizeof-* (get-size-pointer))
+(format t "double size ~D ~D~%"
+	lisp::sizeof-double (get-size-double))
+(format t "long integer size ~D ~D~%"
+	(cadr (assoc :long lisp::sizeof-types))
+	(get-size-long))
+(format t "integer size ~D ~D~%"
+	lisp::sizeof-int (get-size-int))
+(format t "float size ~D ~D~%"
+	lisp::sizeof-float (get-size-float32))
 
 (format t "~%multiple arguments passing~%")
 (format t "expected result~%")
