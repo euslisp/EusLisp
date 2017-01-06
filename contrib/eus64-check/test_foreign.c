@@ -194,3 +194,23 @@ double call_ffunc() {
             2080.0, 2090.0,
             206, 207);
 }
+
+long get_size_of_pointer() {
+  return (sizeof(void *));
+}
+
+long get_size_of_float32() {
+  return (sizeof(float));
+}
+
+long get_size_of_double() {
+  return (sizeof(double));
+}
+
+long get_size_of_long() {
+  return (sizeof(long));
+}
+
+long get_size_of_int() {
+  return (sizeof(int));
+}
