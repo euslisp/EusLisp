@@ -156,9 +156,9 @@
 
 (defmethod foreign-pod
  (:pod-address () 
-#-:x86_64
+#-(or :x86_64 :aarch64)
 	(+ 8 (sys:address podcode))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 	(+ 16 (sys:address podcode))
 	)
  (:init (param result func)

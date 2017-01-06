@@ -208,7 +208,7 @@ pointer *argv;
   ckarg(2);
   if (!isldmod(argv[0])) error(E_USER,(pointer)"not a LOAD-MODULE");
   if (!iscons(argv[1])) error(E_NOLIST);
-#if x86_64
+#if (WORD_SIZE == 64)
   dlhandle=(void *)((eusinteger_t)(argv[0]->c.ldmod.handle) & ~3L);
 #else
   dlhandle=(void *)((eusinteger_t)(argv[0]->c.ldmod.handle) & ~3);
@@ -313,7 +313,7 @@ pointer argv[];
   else mod=sysmod;
   if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
   entry_string=(char *)get_string(argv[0]);
-#if x86_64
+#if (WORD_SIZE == 64)
   entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L), entry_string);
 #else
   entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3), entry_string);
@@ -334,7 +334,7 @@ pointer argv[];
   else mod=sysmod;
   if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
   entry_string=(char *)get_string(argv[0]);
-#if x86_64
+#if (WORD_SIZE == 64)
   entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L), entry_string);
 #else
   entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3), entry_string);
@@ -358,7 +358,7 @@ pointer *argv;
   register int stat;
   ckarg(1);
   if (!isldmod(mod)) error(E_USER,(pointer)"not a compiled-module");
-#if x86_64
+#if (WORD_SIZE == 64)
   stat=dlclose((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L));
 #else
   stat=dlclose((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3));

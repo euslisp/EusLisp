@@ -610,7 +610,7 @@ pointer args[];
 #else /* IRIX */
 
 /* not IRIS */
-#if (x86_64 || aarch64)
+#if (defined(x86_64) || defined(aarch64))
 extern long exec_function_i(void (*)(), long *, long *, long, long *);
 extern long exec_function_f(void (*)(), long *, long *, long, long *);
 
@@ -1262,7 +1262,7 @@ int noarg;
 #if ARM
     register eusinteger_t addr;
     addr = (eusinteger_t)(fn->c.code.entry);
-#ifdef x86_64
+#if (WORD_SIZE == 64)
     addr &= ~3L;  /*0xfffffffc; ???? */
 #else
     addr &= ~3;  /*0xfffffffc; ???? */

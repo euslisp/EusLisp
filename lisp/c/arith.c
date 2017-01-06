@@ -1307,7 +1307,7 @@ register pointer argv[];
     val=intval(argv[0]);
     if (count<=0) return(makeint(val>>(-count)));
     if (val<=0) { return(makeint(val<<count));}
-#ifdef x86_64
+#if (WORD_SIZE == 64)
     firstone=ffsl(val);
 #else
     firstone=ffs(val);
