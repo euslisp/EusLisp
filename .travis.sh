@@ -60,7 +60,7 @@ source bashrc.eus
 export DISPLAY=
 set +e
 if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
-    export EXIT_STATUS=0; for test_l in irteus/test/geo.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+    export EXIT_STATUS=0; for test_l in irteus/test/*.l; do [[ $test_l =~ geo.l|interpolator.l|irteus-demo.l|test-irt-motion.l|object.l|coords.l ]] && continue; irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ] 
 else
     export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
 fi
