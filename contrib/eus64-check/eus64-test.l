@@ -31,14 +31,16 @@
 
 
 (format t "~%multiple arguments passing~%")
-(format t "expected result~%") 
+(format t "expected result~%")
 (format t "100 101 102
 103 104 105
 1000.000000 1010.000000 1020.000000 1030.000000
 1040.000000 1050.000000 1060.000000 1070.000000
 2080.000000 2090.000000
-206 207~%")
-(format t "exec in eus64~%")
+206 207
+test-testd = 1.23456
+~%")
+(format t "exec in eus~%")
 (format t "test-testd = ~A~%"
         (test-testd 100 101 102
             103 104 105
@@ -47,30 +49,30 @@
             2080.0 2090.0
             206 207))
 
-(format t "~%float-test~%")
+(format t "~%~%float-test~%")
 (format t "expected result~%")
 (format t "0: 1.000000e-01 ..~%")
 (format t "0: 2.000000e-01 ..~%")
 (format t "0: 3.000000e-01 ..~%")
 (format t "0: 4.000000e-01 ..~%")
-(format t "exec in eus64~%")
+(format t "~%float-test(success, exec in eus)~%")
 (float-test 0 0.1 0.2 0.3 0.4)
-(format t "~%float2-test~%")
+(format t "~%float2-test(fail, exec in eus)~%")
 (float2-test 0 0.1 0.2 0.3 0.4)
-(format t "~%float3-test~%")
+(format t "~%float3-test(depend on architecture, exec in eus)~%")
 (float3-test 0 0.1 0.2 0.3 0.4)
 
-(format t "~%double-test~%")
+(format t "~%~%double-test~%")
 (format t "expected result~%")
 (format t "1: 1.000000e-01 ..~%")
 (format t "1: 2.000000e-01 ..~%")
 (format t "1: 3.000000e-01 ..~%")
 (format t "1: 4.000000e-01 ..~%")
-(format t "exec in eus64~%")
+(format t "~%double-test(success, exec in eus)~%")
 (double-test 1 0.1 0.2 0.3 0.4)
-(format t "~%double2-test~%")
+(format t "~%double2-test(fail, exec in eus)~%")
 (double2-test 1 0.1 0.2 0.3 0.4)
-(format t "~%double3-test~%")
+(format t "~%double3-test(depend on architecture, exec in eus)~%")
 (double3-test 1 0.1 0.2 0.3 0.4)
 
 (setq iv (integer-vector 0 100 10000 1000000 100000000 10000000000))
@@ -88,7 +90,7 @@
 3: 1000000 F4240
 4: 100000000 5F5E100
 5: 10000000000 2540BE400~%")
-(format t "exec in eus64~%")
+(format t "~%lv-test(exec in eus)~%")
 (lv-test (length iv) iv)
 
 (setq fv (float-vector 0.1 0.2 0.3 0.5 0.7))
@@ -105,28 +107,30 @@
 2: 3.000000e-01 3FD3333333333330
 3: 5.000000e-01 3FE0000000000000
 4: 7.000000e-01 3FE6666666666664~%")
-(format t "exec in eus64~%")
+(format t "~%dv-test(exec in eus)~%")
 (dv-test (length fv) fv)
+
 
 (setq str "input : test64 string")
 (format t "~%str-test~%")
-(format t "expected result~%")
-(format t "print : ~S~%" str)
-(format t "exec in eus64~%")
+;;(format t "expected result~%")
+(format t "input string : ~S~%" str)
+(format t "~%str-test(exec in eus)~%")
 (str-test (length str) str)
 
 
 (format t "~%return double test~%")
 (format t "expected result~%")
-(format t "ret-double ~8,8e~%" (+ 0.55555 133.0))
-(format t "exec in eus64~%")
-(format t "ret-double ~8,8e~%" (ret-double 0.55555 133.0))
+(format t "  ret-double ~8,8e~%" (+ 0.55555 133.0))
+(format t "~%ret-double(exec in eus)~%")
+(format t "  ret-double ~8,8e~%" (ret-double 0.55555 133.0))
+
 
 (format t "~%return long test~%")
 (format t "expected result~%")
-(format t "ret-long ~D~%" (+ 123 645000))
-(format t "exec in eus64~%")
-(format t "ret-long ~D~%" (ret-long 123 645000))
+(format t "  ret-long ~D~%" (+ 123 645000))
+(format t "~%ret-long(exec in eus)~%")
+(format t "  ret-long ~D~%" (ret-long 123 645000))
 
 ;; ret-int
 ;; ret-short
@@ -138,9 +142,10 @@
   1234)
 ;;
 (format t "~%callback function test(integer)~%")
-(format t "callback function is set~%")
+(format t "  callback function is set~%")
 (set-ifunc (pod-address 'LISP-IFUNC))
-(format t "call-ifunc = ~A~%" (call-ifunc))
+(format t "  expected result: LISP-INTFUNC is called, return 1234~%")
+(format t "  call-ifunc = ~A~%" (call-ifunc))
 
 (defun-c-callable LISP-FFUNC ((i0 :integer) (i1 :integer) (i2 :integer)
                               (i3 :integer) (i4 :integer) (i5 :integer)
@@ -158,6 +163,14 @@
   (format t "return ~A~%" 0.12345)
   0.12345)
 (format t "~%callback function test(float)~%")
-(format t "callback function is set~%")
+(format t "  callback function is set~%")
 (set-ffunc (pod-address 'LISP-FFUNC))
+(format t "  expected result: LISP-FFUNC is called
+  100 101 102
+  103 104 105
+  1000.0 1010.0 1020.0 1030.0
+  1040.0 1050.0 1060.0 1070.0
+  2080.0 2090.0
+  206 207
+  return 0.12345~%")
 (format t "call-ffunc = ~A~%" (call-ffunc))
