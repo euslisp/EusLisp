@@ -65,6 +65,8 @@ if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
 else
     export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + $EXIT_STATUS`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ] || exit 1
 fi
+
+make -C eus/contrib/eus64-check/ || exit 1 # check eus64-check
 travis_time_end
 
 if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" ]; then
