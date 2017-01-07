@@ -81,7 +81,7 @@ int str_test(int n, char *src) {
   int i;
   printf("size = %d\n", n);
   for(i=0;i<n ;i++){
-    printf("%d: %c %X\n", i, src[i], src[i]);
+    printf("%d: %c %x\n", i, src[i], src[i]);
   }
   return -1;
 }

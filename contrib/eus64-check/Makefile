@@ -1,5 +1,5 @@
 
-all : test_foreign.so
+all : test
 
 MARCH=$(shell uname -m)
 
@@ -25,6 +25,9 @@ else
 	gcc -m32 -shared -fpic -falign-functions=4 -o $@ test_foreign.o
 endif
 endif
+
+test: test_foreign.so
+	irteusgl eus64-test.l
 
 clean :
 	\rm -f *.o *.so
