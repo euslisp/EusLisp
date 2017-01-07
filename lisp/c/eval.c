@@ -610,9 +610,11 @@ pointer args[];
 #else /* IRIX */
 
 /* not IRIS */
-#if x86_64
+#if (defined(x86_64) || defined(aarch64))
 extern long exec_function_i(void (*)(), long *, long *, long, long *);
 extern long exec_function_f(void (*)(), long *, long *, long, long *);
+
+#if x86_64
 // func  %rdi
 // iargv %rsi
 // fargv %rdx
@@ -708,6 +710,157 @@ __asm__ (".align 8\n"
          "pop %rbx\n\t"
          "retq"
          );
+#endif
+
+#if aarch64
+__asm__ (".align 8\n"
+         "exec_function_i:\n\t"
+	 "sub	sp, sp, #192\n\t" // 128(8x16) + 64
+	 "stp	x29, x30, [sp, 128]\n\t"
+	 "add	x29, sp, 128\n\t"
+	 "str	x0, [x29, 56]\n\t" // fc
+	 "str	x1, [x29, 48]\n\t" // iargv
+	 "str	x2, [x29, 40]\n\t" // fargv
+	 "str	x3, [x29, 32]\n\t" // vargc
+	 "str	x4, [x29, 24]\n\t" // vargv
+	 // vargv -> stack
+	 "mov	x1, 0\n\t"
+	 "ldr	x2, [x29, 24]\n\t"
+	 "b	.FUNCII_LPCK\n\t"
+	 ".FUNCII_LP:\n\t"
+	 "lsl	x0, x1, 3\n\t"
+	 "add	x3, x2, x0\n\t" // vargv[i]
+	 "add	x4, sp, x0\n\t" // stack[i]
+	 "ldr	x0, [x3]\n\t"
+	 "str	x0, [x4]\n\t" // push stack
+	 "add	x1, x1, 1\n\t"
+	 ".FUNCII_LPCK:\n\t"
+	 "ldr	x5, [x29, 32]\n\t"
+	 "cmp	x1, x5\n\t"
+	 "blt	.FUNCII_LP\n\t"
+	 // fargv -> register
+	 "ldr	x0, [x29, 40]\n\t" // fargv
+	 "ldr	d0, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d1, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d2, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d3, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d4, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d5, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d6, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d7, [x0]\n\t"
+	 // iargv -> register
+	 "ldr	x0, [x29, 48]\n\t" // iargv
+	 "ldr	x9, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x1, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x2, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x3, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x4, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x5, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x6, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x7, [x0]\n\t"
+	 // function call
+	 "ldr	x8, [x29, 56]\n\t"
+	 "mov	x0, x9\n\t"
+	 "blr	x8\n\t"
+	 "add	sp, x29, 0\n\t"
+	 "ldp	x29, x30, [sp], 64\n\t"
+	 "ret"
+	 );
+
+__asm__ (".align 8\n"
+         "exec_function_f:\n\t"
+	 "sub	sp, sp, #192\n\t" // 128(8x16) + 64
+	 "stp	x29, x30, [sp, 128]\n\t"
+	 "add	x29, sp, 128\n\t"
+	 "str	x0, [x29, 56]\n\t" // fc
+	 "str	x1, [x29, 48]\n\t" // iargv
+	 "str	x2, [x29, 40]\n\t" // fargv
+	 "str	x3, [x29, 32]\n\t" // vargc
+	 "str	x4, [x29, 24]\n\t" // vargv
+	 // vargv -> stack
+	 "mov	x1, 0\n\t"
+	 "ldr	x2, [x29, 24]\n\t"
+	 "b	.FUNCFF_LPCK\n\t"
+	 ".FUNCFF_LP:\n\t"
+	 "lsl	x0, x1, 3\n\t"
+	 "add	x3, x2, x0\n\t" // vargv[i]
+	 "add	x4, sp, x0\n\t" // stack[i]
+	 "ldr	x0, [x3]\n\t"
+	 "str	x0, [x4]\n\t" // push stack
+	 "add	x1, x1, 1\n\t"
+	 ".FUNCFF_LPCK:\n\t"
+	 "ldr	x5, [x29, 32]\n\t"
+	 "cmp	x1, x5\n\t"
+	 "blt	.FUNCFF_LP\n\t"
+	 // fargv -> register
+	 "ldr	x0, [x29, 40]\n\t" // fargv
+	 "ldr	d0, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d1, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d2, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d3, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d4, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d5, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d6, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	d7, [x0]\n\t"
+	 // iargv -> register
+	 "ldr	x0, [x29, 48]\n\t" // iargv
+	 "ldr	x9, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x1, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x2, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x3, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x4, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x5, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x6, [x0]\n\t"
+	 "add	x0, x0, 8\n\t"
+	 "ldr	x7, [x0]\n\t"
+	 // function call
+	 "ldr	x8, [x29, 56]\n\t"
+	 "mov	x0, x9\n\t"
+	 "blr	x8\n\t"
+	 "str	d0, [x29, 56]\n\t"
+	 "ldr	x0, [x29, 56]\n\t"
+	 "add	sp, x29, 0\n\t"
+	 "ldp	x29, x30, [sp], 64\n\t"
+	 "ret"
+	 );
+#endif
+
+#if x86_64
+#define NUM_INT_ARGUMENTS 6
+#define NUM_FLT_ARGUMENTS 8
+#define NUM_EXTRA_ARGUMENTS 16
+#elif aarch64
+#define NUM_INT_ARGUMENTS 8
+#define NUM_FLT_ARGUMENTS 8
+#define NUM_EXTRA_ARGUMENTS 16
+#endif
 
 pointer call_foreign(ifunc,code,n,args)
 eusinteger_t (*ifunc)(); /* ???? */
@@ -718,9 +871,9 @@ pointer args[];
   pointer paramtypes=code->c.fcode.paramtypes;
   pointer resulttype=code->c.fcode.resulttype;
   pointer p,lisparg;
-  eusinteger_t iargv[6];
-  eusinteger_t fargv[8];
-  eusinteger_t vargv[16];
+  eusinteger_t iargv[NUM_INT_ARGUMENTS];
+  eusinteger_t fargv[NUM_FLT_ARGUMENTS];
+  eusinteger_t vargv[NUM_EXTRA_ARGUMENTS];
   int icntr = 0, fcntr = 0, vcntr = 0;
 
   numunion nu;
@@ -746,46 +899,52 @@ pointer args[];
     lisparg=args[j++];
     if (p==K_INTEGER) {
       c = isint(lisparg)?intval(lisparg):bigintval(lisparg); 
-      if(icntr < 6) iargv[icntr++] = c; else vargv[vcntr++] = c;
+      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     }  else if (p==K_STRING) {
       if (elmtypeof(lisparg)==ELM_FOREIGN) c=lisparg->c.ivec.iv[0];
       else  c=(eusinteger_t)(lisparg->c.str.chars);
-      if(icntr < 6) iargv[icntr++] = c; else vargv[vcntr++] = c;
+      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     } else if (p==K_FLOAT32) {
       numbox.f=(float)ckfltval(lisparg);
       c=((eusinteger_t)numbox.i.i1) & 0x00000000FFFFFFFF;
-      if(fcntr < 8) fargv[fcntr++] = c; else vargv[vcntr++] = c;
+      if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
     } else if (p==K_DOUBLE || p==K_FLOAT) {
       numbox.d=ckfltval(lisparg);
       c=numbox.l;
-      if(fcntr < 8) fargv[fcntr++] = c; else vargv[vcntr++] = c;
+      if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
     } else error(E_USER,(pointer)"unknown type specifier");
+    if (vcntr >= NUM_EXTRA_ARGUMENTS) {
+      error(E_USER,(pointer)"too many number of arguments");
+    }
   }
   /* &rest arguments?  */
   while (j<n) {	/* j is the counter for the actual arguments*/
     lisparg=args[j++];
     if (isint(lisparg)) {
       c=intval(lisparg);
-      if(icntr < 6) iargv[icntr++] = c; else vargv[vcntr++] = c;
+      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     } else if (isflt(lisparg)) {
       numbox.d=ckfltval(lisparg);	/* i advances independently */
       c=numbox.l;
-      if(fcntr < 8) fargv[fcntr++] = c; else vargv[vcntr++] = c;
+      if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
     } else if (isvector(lisparg)) {
       if (elmtypeof(lisparg)==ELM_FOREIGN) c=lisparg->c.ivec.iv[0];
       else c=(eusinteger_t)(lisparg->c.str.chars); 
-      if(icntr < 6) iargv[icntr++] = c; else vargv[vcntr++] = c;
+      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     } else if (isbignum(lisparg)){
       if (bigsize(lisparg)==1){
 	eusinteger_t *xv = bigvec(lisparg);
 	c=(eusinteger_t)xv[0];
-        if(icntr < 6) iargv[icntr++] = c; else vargv[vcntr++] = c;
+        if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
       }else{
 	fprintf(stderr, "bignum size!=1\n");
       }
     } else {
       c=(eusinteger_t)(lisparg->c.obj.iv);
-      if(icntr < 6) iargv[icntr++] = c; else vargv[vcntr++] = c;
+      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
+    }
+    if (vcntr >= NUM_EXTRA_ARGUMENTS) {
+      error(E_USER,(pointer)"too many number of arguments");
     }
   }
   /**/
@@ -1103,7 +1262,7 @@ int noarg;
 #if ARM
     register eusinteger_t addr;
     addr = (eusinteger_t)(fn->c.code.entry);
-#ifdef x86_64
+#if (WORD_SIZE == 64)
     addr &= ~3L;  /*0xfffffffc; ???? */
 #else
     addr &= ~3;  /*0xfffffffc; ???? */

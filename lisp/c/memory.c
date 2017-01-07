@@ -416,7 +416,7 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #define out_of_heap(p) ((int)p<(int)_end || (pointer)0x20000000<p)
 #else /* Solaris2 */
 #if Linux
-#if x86_64
+#if (WORD_SIZE == 64)
 #define out_of_heap(p) ((unsigned long)p<(unsigned long)_end || (pointer)maxmemory <p)
 #else
 #define out_of_heap(p) ((unsigned int)p<(unsigned int)_end || (pointer)maxmemory <p)
@@ -554,7 +554,7 @@ void markall()
       /* mark from thread's stack */
       for (p=ctx->stack; p<ctx->vsp; p++) {
 	mark_state=(long)p;
-#ifdef x86_64
+#if (WORD_SIZE == 64)
 	if ((((eusinteger_t)(*p) & 7L)==0L) && 
 #else
 	if ((((eusinteger_t)(*p) & 3)==0) && 
@@ -605,7 +605,7 @@ register bpointer p;
       if (s->c.fstream.fd==makeint(0) || s->c.fstream.fd==makeint(1)) {
 	fprintf(stderr,";; gc! bogus stream at %lx fd=%ld\n",
 		(unsigned long int)s,intval(s->c.fstream.fd));}
-#if x86_64
+#if (WORD_SIZE == 64)
       else if (s->c.fstream.fd == 0) {
         // Sometimes, s->c.fstream.fd is 0.
         // c.fstream.fd should be eus integer which least 2bits is 10.

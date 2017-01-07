@@ -170,9 +170,9 @@
  (:GetImage (&key (xy nil) (x 0) (y 0)
 		  (width (- (send self :width) x))
 		  (height (- (send self :height) y))
-#-(or :alpha :irix6 :x86_64)		 
+#-(or :alpha :irix6 :x86_64 :aarch64)
 		  (mask #xffffffff)
-#+(or :alpha :irix6 :x86_64)
+#+(or :alpha :irix6 :x86_64 :aarch64)
 		  (mask #xfffffffffffffff)
 		  (format 2))
 	;; #define XYBitmap      0       /* depth 1, XYFormat */
@@ -180,13 +180,13 @@
 	;; #define ZPixmap       2       /* depth == drawable depth */
     (if xy (setq x (aref xy 0) y (aref xy 1)))
     (let* ((ximg (getimage *display* drawable x y width height mask format)) 
-#-(or :alpha :irix6 :x86_64)
+#-(or :alpha :irix6 :x86_64 :aarch64)
 	   (pixsize (/ (sys:peek (+ ximg #x2c) :integer) 8))
-#+(or :alpha :irix6 :x86_64)
+#+(or :alpha :irix6 :x86_64 :aarch64)
 	   (pixsize (/ (sys:peek (+ ximg #x30) :integer) 8))
-#-(or :alpha :irix6 :x86_64)
+#-(or :alpha :irix6 :x86_64 :aarch64)
 	   (rowsize (sys:peek (+ ximg #x28) :integer))
-#+(or :alpha :irix6 :x86_64)
+#+(or :alpha :irix6 :x86_64 :aarch64)
 	   (rowsize (sys:peek (+ ximg #x2c) :integer))
 	   (xoffset (sys:peek (+ ximg 8) :integer))
 	   (ximgdata (sys:peek (+ ximg #x10) :long))
@@ -535,11 +535,7 @@
     (setf (SetWindowAttributes-win_gravity swa)	(gravity-to-value gravity))
     (unless color-map
 	(cond ((= vi *visual*)		;use parent's colormap for the default
-		(setq color-map  (send parent :colormap))
-		(unless (derivedp color-map colormap)
-		    (warning-message 2 "~s's parent ~s does not have cmap; root cmap is used."
-				self parent)
-		    (setq color-map *color-map*)))
+		(setq color-map  (send parent :colormap)))
 	      (t					;make private cmap
 		(setq color-map (instance colormap :create :visual vi))
 	        (send color-map :copy-colors *color-map* 0 32)) ))
@@ -635,8 +631,13 @@
     (integer-vector (send attr :get 'width) (send attr :get 'height)))
  (:depth () (send (send self :attributes) :get 'depth))
  (:screen () (send (send self :attributes) :get 'screen))
- (:ColorMap () (gethash (send (send self :attributes) :get 'colormap)
-			*xwindows-hash-tab*))
+ (:ColorMap () (let ((color-map (gethash (send (send self :attributes) :get 'colormap)
+			*xwindows-hash-tab*)))
+		(unless (derivedp color-map colormap)
+		    (warning-message 2 "~s's parent ~s does not have cmap; root cmap is used.~%"
+				self parent)
+		    (setq color-map *color-map*))
+		color-map))
  (:root () (send (send self :attributes) :get 'root))	;drawable id of the root
  (:title (title)
     ;(send self :unmap)

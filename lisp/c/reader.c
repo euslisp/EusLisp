@@ -254,7 +254,7 @@ eusinteger_t labx;
 #endif
 #if sun4 || vax || news || mips || alpha || i386
     unsolp=(pointer *)((eusinteger_t)unsol & ~3);/*???? */
-#elif x86_64
+#elif (WORD_SIZE == 64)
     unsolp=(pointer *)((eusinteger_t)unsol & ~3L);/*???? */
 #endif
     unsol= *unsolp;
