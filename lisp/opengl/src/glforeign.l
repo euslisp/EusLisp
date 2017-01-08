@@ -317,7 +317,7 @@
           glVertex4sv
           glViewport))
 
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (defmacro set-function-fv-as-dv (funcfv funcdv)
   `(progn
      (setf (symbol-function ',(read-from-string
@@ -326,7 +326,7 @@
      (setf (symbol-function ',funcfv)
            (symbol-function ',funcdv))
      ))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (eval-when (load)
   ;; func_fv has to work as func_dv in x86_64
   (set-function-fv-as-dv glColor3fv glColor3dv)
@@ -360,23 +360,23 @@
       (setf (symbol-function 'glGenTexturesEXT-org)
 	    (symbol-function 'glGenTexturesEXT)))
   )
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (defun glMaterialfv (face pname fv)
   (let ((tmp (user::dvector2float-bytestring fv)))
     (glMaterialfv-org face pname tmp)
     ))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (defun glGetMaterialfv (face pname fv)
   (let ((tmp (user::dvector2float-bytestring fv)) ret)
     (setq ret (glGetMaterialfv-org face pname tmp))
     (user::float-bytestring2dvector tmp fv)
     ret))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (defun glLightfv (light pname fv)
   (let ((tmp (user::dvector2float-bytestring fv)))
     (glLightfv-org light pname tmp)
     ))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (if (fboundp 'glGenTexturesEXT-org)
     (setf (symbol-function 'glGenTexturesEXT)
 	  #'(lambda (len iv)

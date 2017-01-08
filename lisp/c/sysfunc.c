@@ -117,7 +117,7 @@ register pointer p;
   if ((&ctx->stack[0]<=p) && (p<= &ctx->stack[MAXSTACK])) return(NULL);
 #endif
   if (issymbol(p)) return((long int)NULL);
-#if x86_64
+#if (WORD_SIZE == 64)
   bp=(bpointer)((eusinteger_t)p & ~3L);
 #else
   bp=(bpointer)((eusinteger_t)p & ~3);
@@ -152,7 +152,7 @@ register pointer p;
 #if sun
   if (p<(pointer)0x10000) return(NULL);
 #endif
-#if x86_64
+#if (WORD_SIZE == 64)
   bp=(bpointer)((eusinteger_t)p & ~3L/*0xfffffffc*/);/* ???? */
 #else
   bp=(bpointer)((eusinteger_t)p & ~3/*0xfffffffc*/);/* ???? */

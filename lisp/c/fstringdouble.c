@@ -3,7 +3,7 @@
 */
 
 #include "eus.h"
-#ifdef x86_64
+#if (WORD_SIZE == 64)
 extern pointer makefvector();
 /*
   string converted by DV2FSTRING convert to float-vector(vector of 64bit float)
@@ -398,7 +398,7 @@ context *ctx;
 int n;
 pointer argv[];
 { pointer mod=argv[0];
-#ifdef x86_64
+#if (WORD_SIZE == 64)
   defun(ctx,"FLOAT-BYTESTRING2DVECTOR",mod,FSTRING2DV);
   defun(ctx,"DVECTOR2FLOAT-BYTESTRING",mod,DV2FSTRING);
   defun(ctx,"INTEGER-BYTESTRING2LVECTOR",mod,ISTRING2LV);

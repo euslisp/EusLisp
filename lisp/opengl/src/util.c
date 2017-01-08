@@ -264,7 +264,7 @@ void glPolygonOffsetEXTfv(v)
 }
 #endif
 
-#if x86_64
+#if (WORD_SIZE == 64)
 void glPointSized (double d) {
   glPointSize((float)d);
 }

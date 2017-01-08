@@ -47,6 +47,7 @@ travis_time_start install # Use this to install any prerequisites or dependencie
 cd ${HOME}
 [ -e jskeus ] || git clone http://github.com/euslisp/jskeus jskeus
 ln -s $CI_SOURCE_PATH jskeus/eus
+ln -s `pwd`/jskeus/irteus   jskeus/eus/irteus
 travis_time_end
 
 travis_time_start script.make # All commands must exit with code 0 on success. Anything else is considered failure.
@@ -60,9 +61,15 @@ source bashrc.eus
 export DISPLAY=
 set +e
 if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
-    export EXIT_STATUS=0; for test_l in irteus/test/geo.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+    export EXIT_STATUS=0; for test_l in irteus/test/*.l; do [[ $test_l =~ geo.l|interpolator.l|irteus-demo.l|test-irt-motion.l|object.l|coords.l|bignum.l|mathtest.l ]] && continue; irteusgl $test_l; export EXIT_STATUS=`expr $? + $EXIT_STATUS`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ] || exit 1
 else
-    export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + 1`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ]
+    export EXIT_STATUS=0; for test_l in irteus/test/*.l; do irteusgl $test_l; export EXIT_STATUS=`expr $? + $EXIT_STATUS`; done;echo "Exit status : $EXIT_STATUS"; [ $EXIT_STATUS == 0 ] || exit 1
+fi
+
+if [[ "$TRAVIS_OS_NAME" == "osx" || "`uname -m`" == "arm"* ]]; then
+    uname -a
+else
+    make -C eus/contrib/eus64-check/ || exit 1 # check eus64-check
 fi
 travis_time_end
 

@@ -69,7 +69,7 @@
           gluGetNurbsProperty
           gluNurbsCallback
           ))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (eval-when (load)
   ;; define wrapped functions later
   (setf (symbol-function 'gluNurbsProperty-org)
@@ -83,13 +83,13 @@
   (setf (symbol-function 'gluNurbsSurface-org)
         (symbol-function 'gluNurbsSurface))
   )
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (defun gluNurbsCurve (nobj nknots knot stride ctlarray order type)
   (let ((fknot (user::dvector2float-bytestring knot))
         (fctlarray (user::dvector2float-bytestring ctlarray)))
     (gluNurbsCurve-org nobj nknots fknot stride fctlarray order type)
     ))
-#+:x86_64
+#+(or :x86_64 :aarch64)
 (defun gluNurbsSurface (nurb sknotcount sknots tknotCount tknots
                              sstride tstride control sorder torder type)
   (let ((fsknots (user::dvector2float-bytestring sknots))

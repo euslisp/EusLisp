@@ -81,7 +81,7 @@ int str_test(int n, char *src) {
   int i;
   printf("size = %d\n", n);
   for(i=0;i<n ;i++){
-    printf("%d: %c %X\n", i, src[i], src[i]);
+    printf("%d: %c %x\n", i, src[i], src[i]);
   }
   return -1;
 }
@@ -166,6 +166,7 @@ static double (*gf) (long i0, long i1, long i2,
 long set_ifunc(long (*f) ())
 {
   g = f;
+  printf("set_ifunc, g = %lX\n", g);
 }
 
 long set_ffunc(double (*f) ())
@@ -176,19 +177,40 @@ long set_ffunc(double (*f) ())
                     double d4, double d5, double d6, double d7,
                     double d8, double d9,
                     long i6, long i7))f;
+  printf("set_ffunc, gf = %lX\n", gf);
 }
 
 long call_ifunc() {
-  printf("g = %lX\n", g);
+  printf("call_ifunc, g = %lX\n", g);
   return g();
 }
 
 double call_ffunc() {
-  printf("gf = %lX\n", gf);
+  printf("call_ffunc, gf = %lX\n", gf);
   return gf(100,101,102,
             103,104,105,
             1000.0, 1010.0, 1020.0, 1030.0,
             1040.0, 1050.0, 1060.0, 1070.0,
             2080.0, 2090.0,
             206, 207);
+}
+
+long get_size_of_pointer() {
+  return (sizeof(void *));
+}
+
+long get_size_of_float32() {
+  return (sizeof(float));
+}
+
+long get_size_of_double() {
+  return (sizeof(double));
+}
+
+long get_size_of_long() {
+  return (sizeof(long));
+}
+
+long get_size_of_int() {
+  return (sizeof(int));
 }
