@@ -620,7 +620,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray40)
      (send (elt bc 1) :set-color :gray90)
-     (setq blink14 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rleg-ankle-p :weight 69.4757 :centroid (float-vector 2.004510e-14 6.81706 -0.716175) :inertia-tensor #2f((25637.4 3.949228e-13 1.614467e-13) (3.949228e-13 13306.5 -1862.85) (1.614467e-13 -1862.85 20488.3))))
+     (setq blink14 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rleg-ankle-p :weight 69.4757 :centroid (float-vector 2.004510e-14 6.81706 -0.716175) :inertia-tensor #2f((25637.4 3.949266e-13 1.614477e-13) (3.949266e-13 13306.5 -1862.85) (1.614477e-13 -1862.85 20488.3))))
 
      ;; definition of :rleg-ankle-r
      (setq bc (list
@@ -883,7 +883,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray40)
      (send (elt bc 1) :set-color :gray90)
-     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :lleg-ankle-p :weight 69.4757 :centroid (float-vector 2.711415e-14 6.81706 0.716175) :inertia-tensor #2f((25637.4 -1.076070e-12 5.947383e-13) (-1.076070e-12 13306.5 1862.85) (5.947383e-13 1862.85 20488.3))))
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :lleg-ankle-p :weight 69.4757 :centroid (float-vector 2.711415e-14 6.81706 0.716175) :inertia-tensor #2f((25637.4 -1.076066e-12 5.947374e-13) (-1.076066e-12 13306.5 1862.85) (5.947374e-13 1862.85 20488.3))))
 
      ;; definition of :lleg-ankle-r
      (setq bc (list
@@ -1014,7 +1014,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
      (send (elt bc 1) :set-color :gray40)
-     (setq blink17 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rarm-shoulder-y :weight 70.5557 :centroid (float-vector 4.902009e-15 33.3309 4.84035) :inertia-tensor #2f((16352.5 -9.572925e-13 -6.557035e-14) (-9.572925e-13 20134.1 -570.036) (-6.557035e-14 -570.036 13822.1))))
+     (setq blink17 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rarm-shoulder-y :weight 70.5557 :centroid (float-vector 4.902009e-15 33.3309 4.84035) :inertia-tensor #2f((16352.5 -9.573001e-13 -6.557242e-14) (-9.573001e-13 20134.1 -570.036) (-6.557242e-14 -570.036 13822.1))))
 
      ;; definition of :rarm-shoulder-r
      (setq bc (list
@@ -1058,7 +1058,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
      (send (elt bc 1) :set-color :gray90)
-     (setq blink18 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rarm-shoulder-r :weight 14.2714 :centroid (float-vector -2.913225e-13 31.3675 1.120887e-14) :inertia-tensor #2f((12573.4 3.532220e-13 1.239632e-26) (3.532220e-13 6926.48 -2.377971e-13) (1.239632e-26 -2.377971e-13 6598.3))))
+     (setq blink18 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rarm-shoulder-r :weight 14.2714 :centroid (float-vector -2.913225e-13 31.3675 1.120894e-14) :inertia-tensor #2f((12573.4 3.532121e-13 1.230786e-26) (3.532121e-13 6926.48 -2.377971e-13) (1.230786e-26 -2.377971e-13 6598.3))))
 
      ;; definition of :rarm-elbow-p
      (setq bc (list
@@ -1261,7 +1261,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
      (send (elt bc 1) :set-color :gray40)
-     (setq blink9 (instance bodyset-link :init (make-cascoords) :bodies bc :name :larm-shoulder-y :weight 70.5557 :centroid (float-vector -2.235002e-15 33.3309 -4.84035) :inertia-tensor #2f((16352.5 -7.818237e-13 1.779692e-14) (-7.818237e-13 20134.1 570.036) (1.779692e-14 570.036 13822.1))))
+     (setq blink9 (instance bodyset-link :init (make-cascoords) :bodies bc :name :larm-shoulder-y :weight 70.5557 :centroid (float-vector -2.234982e-15 33.3309 -4.84035) :inertia-tensor #2f((16352.5 -7.818271e-13 1.779784e-14) (-7.818271e-13 20134.1 570.036) (1.779784e-14 570.036 13822.1))))
 
      ;; definition of :larm-shoulder-r
      (setq bc (list
@@ -1305,7 +1305,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
      (send (elt bc 1) :set-color :gray90)
-     (setq blink10 (instance bodyset-link :init (make-cascoords) :bodies bc :name :larm-shoulder-r :weight 14.2714 :centroid (float-vector -1.207923e-13 31.3675 -3.139660e-14) :inertia-tensor #2f((12573.4 3.532220e-13 -6.547214e-26) (3.532220e-13 6926.48 -2.377971e-13) (-6.547214e-26 -2.377971e-13 6598.3))))
+     (setq blink10 (instance bodyset-link :init (make-cascoords) :bodies bc :name :larm-shoulder-r :weight 14.2714 :centroid (float-vector -1.207923e-13 31.3675 -3.139661e-14) :inertia-tensor #2f((12573.4 3.532121e-13 -6.542023e-26) (3.532121e-13 6926.48 -2.377971e-13) (-6.542023e-26 -2.377971e-13 6598.3))))
 
      ;; definition of :larm-elbow-p
      (setq bc (list
@@ -1508,7 +1508,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
      (send (elt bc 1) :set-color :gray40)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :head-neck-y :weight 25.9856 :centroid (float-vector -6.540343e-17 6.64517 24.5521) :inertia-tensor #2f((5529.21 -4.332160e-15 1.254351e-13) (-4.332160e-15 5600.87 -77.9133) (1.254351e-13 -77.9133 3161.47))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :head-neck-y :weight 25.9856 :centroid (float-vector -6.543031e-17 6.64517 24.5521) :inertia-tensor #2f((5529.21 -4.332317e-15 1.254293e-13) (-4.332317e-15 5600.87 -77.9133) (1.254293e-13 -77.9133 3161.47))))
 
      ;; definition of :head-neck-p
      (setq bc (list
@@ -1562,7 +1562,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
      (send (elt bc 1) :set-color :gray40)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :head-neck-p :weight 174.593 :centroid (float-vector 1.28885 32.3725 1.238376e-14) :inertia-tensor #2f((35765.0 2738.82 -5.636444e-11) (2738.82 2.144233e+05 3.078153e-13) (-5.636444e-11 3.078153e-13 2.161517e+05))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :head-neck-p :weight 174.593 :centroid (float-vector 1.28885 32.3725 1.238382e-14) :inertia-tensor #2f((35765.0 2738.82 -5.636479e-11) (2738.82 2.144233e+05 3.078171e-13) (-5.636479e-11 3.078171e-13 2.161517e+05))))
 
      ;; definition of assoc
      (send blink13 :newcoords (make-coords :pos (float-vector 4.440892e-16 -40.0 -10.0) :rot #2f((1.110223e-16 5.551115e-16 1.0) (1.0 5.551115e-16 -1.110223e-16) (-5.551115e-16 1.0 -5.551115e-16))))
@@ -1599,7 +1599,7 @@
      (send blink4 :assoc blink2)
      (send blink4 :newcoords (make-coords :pos (float-vector -6.0 -3.0 5.0) :rot #2f((2.220446e-16 -1.0 -1.232595e-32) (1.0 2.220446e-16 -1.570092e-16) (1.570092e-16 1.232595e-32 1.0))))
      (send blink0 :assoc blink4)
-     (send blink9 :newcoords (make-coords :pos (float-vector -3.0 47.0 -5.0) :rot #2f((-1.0 9.613726e-33 -1.224606e-16) (-9.613726e-33 1.0 1.570092e-16) (1.224606e-16 1.570092e-16 -1.0))))
+     (send blink9 :newcoords (make-coords :pos (float-vector -3.0 47.0 -5.0) :rot #2f((-1.0 9.614044e-33 -1.224647e-16) (-9.614044e-33 1.0 1.570092e-16) (1.224647e-16 1.570092e-16 -1.0))))
      (send blink0 :assoc blink9)
      (send blink17 :newcoords (make-coords :pos (float-vector -3.0 -53.0 -5.0) :rot #2f((-1.0 -2.220446e-16 -5.105576e-33) (2.220446e-16 -1.0 -1.570092e-16) (2.975748e-32 -1.570092e-16 1.0))))
      (send blink0 :assoc blink17)

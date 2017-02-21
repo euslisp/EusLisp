@@ -318,7 +318,7 @@
      (send (elt bc 1) :set-color :gray90)
      (send (elt bc 2) :set-color (list))
      (send (elt bc 3) :set-color :papayawhip)
-     (setq blink14 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rleg-thigh :weight 152.441 :centroid (float-vector 2.025621e-15 -18.885 -87.9989) :inertia-tensor #2f((3.378152e+05 1.997128e-12 1.255305e-11) (1.997128e-12 2.614091e+05 -1.031670e+05) (1.255305e-11 -1.031670e+05 80373.2))))
+     (setq blink14 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rleg-thigh :weight 152.441 :centroid (float-vector 2.025621e-15 -18.885 -87.9989) :inertia-tensor #2f((3.378152e+05 1.997328e-12 1.255328e-11) (1.997328e-12 2.614091e+05 -1.031670e+05) (1.255328e-11 -1.031670e+05 80373.2))))
 
      ;; definition of :rleg-shank
      (setq bc (list
@@ -560,7 +560,7 @@
      (send (elt bc 4) :set-color :white)
      (send (elt bc 5) :set-color :papayawhip)
      (send (elt bc 6) :set-color :papayawhip)
-     (setq blink13 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rleg-shank :weight 60 :centroid (float-vector 15.6998 5.138898e-15 -58.4474) :inertia-tensor #2f((1.213007e+05 -1.023443e-12 19801.3) (-1.023443e-12 1.189323e+05 -7.752714e-12) (19801.3 -7.752714e-12 15425.8))))
+     (setq blink13 (instance bodyset-link :init (make-cascoords) :bodies bc :name :rleg-shank :weight 60 :centroid (float-vector 15.6998 5.138898e-15 -58.4474) :inertia-tensor #2f((1.213007e+05 -1.023431e-12 19801.3) (-1.023431e-12 1.189323e+05 -7.753066e-12) (19801.3 -7.753066e-12 15425.8))))
 
      ;; definition of :rleg-ankle
      (setq bc (list
@@ -915,7 +915,7 @@
      (send (elt bc 1) :set-color :gray90)
      (send (elt bc 2) :set-color (list))
      (send (elt bc 3) :set-color :papayawhip)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :lleg-thigh :weight 152.441 :centroid (float-vector 1.253442e-15 18.885 -87.9989) :inertia-tensor #2f((3.378152e+05 -4.842383e-12 1.171192e-11) (-4.842383e-12 2.614091e+05 1.031670e+05) (1.171192e-11 1.031670e+05 80373.2))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :lleg-thigh :weight 152.441 :centroid (float-vector 1.253442e-15 18.885 -87.9989) :inertia-tensor #2f((3.378152e+05 -4.842583e-12 1.171215e-11) (-4.842583e-12 2.614091e+05 1.031670e+05) (1.171215e-11 1.031670e+05 80373.2))))
 
      ;; definition of :lleg-shank
      (setq bc (list
@@ -1157,7 +1157,7 @@
      (send (elt bc 4) :set-color :white)
      (send (elt bc 5) :set-color :papayawhip)
      (send (elt bc 6) :set-color :papayawhip)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :lleg-shank :weight 60 :centroid (float-vector 15.6998 5.138898e-15 -58.4474) :inertia-tensor #2f((1.213007e+05 -1.023443e-12 19801.3) (-1.023443e-12 1.189323e+05 -7.752714e-12) (19801.3 -7.752714e-12 15425.8))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :lleg-shank :weight 60 :centroid (float-vector 15.6998 5.138898e-15 -58.4474) :inertia-tensor #2f((1.213007e+05 -1.023431e-12 19801.3) (-1.023431e-12 1.189323e+05 -7.753066e-12) (19801.3 -7.753066e-12 15425.8))))
 
      ;; definition of :lleg-ankle
      (setq bc (list
@@ -1278,36 +1278,36 @@
          (instance face :init :vertices (list (float-vector 54.0 -13.5 -48.0) (float-vector 54.0 -13.5 0.0) (float-vector 54.0 -9.54594 9.54594) (float-vector 54.0 0.0 13.5) (float-vector 54.0 9.54594 9.54594) (float-vector 54.0 13.5 0.0) (float-vector 54.0 13.5 -48.0)))
        ))
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 54.0 -3.330202e-15 -16.0) (float-vector 42.0 -2.859175e-15 -16.0) (float-vector 42.0 8.0 -13.8564) (float-vector 54.0 8.0 -13.8564)))
+         (instance face :init :vertices (list (float-vector 54.0 -3.330180e-15 -16.0) (float-vector 42.0 -2.859152e-15 -16.0) (float-vector 42.0 8.0 -13.8564) (float-vector 54.0 8.0 -13.8564)))
          (instance face :init :vertices (list (float-vector 42.0 8.0 -13.8564) (float-vector 42.0 13.8564 -8.0) (float-vector 54.0 13.8564 -8.0) (float-vector 54.0 8.0 -13.8564)))
          (instance face :init :vertices (list (float-vector 42.0 13.8564 -8.0) (float-vector 42.0 16.0 0.0) (float-vector 54.0 16.0 0.0) (float-vector 54.0 13.8564 -8.0)))
          (instance face :init :vertices (list (float-vector 42.0 16.0 0.0) (float-vector 42.0 13.8564 8.0) (float-vector 54.0 13.8564 8.0) (float-vector 54.0 16.0 0.0)))
          (instance face :init :vertices (list (float-vector 42.0 13.8564 8.0) (float-vector 42.0 8.0 13.8564) (float-vector 54.0 8.0 13.8564) (float-vector 54.0 13.8564 8.0)))
-         (instance face :init :vertices (list (float-vector 42.0 8.0 13.8564) (float-vector 42.0 2.029659e-14 16.0) (float-vector 54.0 1.982556e-14 16.0) (float-vector 54.0 8.0 13.8564)))
-         (instance face :init :vertices (list (float-vector 42.0 2.029659e-14 16.0) (float-vector 42.0 -8.0 13.8564) (float-vector 54.0 -8.0 13.8564) (float-vector 54.0 1.982556e-14 16.0)))
+         (instance face :init :vertices (list (float-vector 42.0 8.0 13.8564) (float-vector 42.0 2.029661e-14 16.0) (float-vector 54.0 1.982558e-14 16.0) (float-vector 54.0 8.0 13.8564)))
+         (instance face :init :vertices (list (float-vector 42.0 2.029661e-14 16.0) (float-vector 42.0 -8.0 13.8564) (float-vector 54.0 -8.0 13.8564) (float-vector 54.0 1.982558e-14 16.0)))
          (instance face :init :vertices (list (float-vector 42.0 -8.0 13.8564) (float-vector 42.0 -13.8564 8.0) (float-vector 54.0 -13.8564 8.0) (float-vector 54.0 -8.0 13.8564)))
          (instance face :init :vertices (list (float-vector 42.0 -13.8564 8.0) (float-vector 42.0 -16.0 5.684342e-14) (float-vector 54.0 -16.0 5.684342e-14) (float-vector 54.0 -13.8564 8.0)))
          (instance face :init :vertices (list (float-vector 42.0 -16.0 5.684342e-14) (float-vector 42.0 -13.8564 -8.0) (float-vector 54.0 -13.8564 -8.0) (float-vector 54.0 -16.0 5.684342e-14)))
          (instance face :init :vertices (list (float-vector 42.0 -13.8564 -8.0) (float-vector 42.0 -8.0 -13.8564) (float-vector 54.0 -8.0 -13.8564) (float-vector 54.0 -13.8564 -8.0)))
-         (instance face :init :vertices (list (float-vector 54.0 -8.0 -13.8564) (float-vector 54.0 -3.330202e-15 -16.0) (float-vector 54.0 8.0 -13.8564) (float-vector 54.0 13.8564 -8.0) (float-vector 54.0 16.0 0.0) (float-vector 54.0 13.8564 8.0) (float-vector 54.0 8.0 13.8564) (float-vector 54.0 1.982556e-14 16.0) (float-vector 54.0 -8.0 13.8564) (float-vector 54.0 -13.8564 8.0) (float-vector 54.0 -16.0 5.684342e-14) (float-vector 54.0 -13.8564 -8.0)))
-         (instance face :init :vertices (list (float-vector 42.0 -8.0 -13.8564) (float-vector 42.0 -2.859175e-15 -16.0) (float-vector 54.0 -3.330202e-15 -16.0) (float-vector 54.0 -8.0 -13.8564)))
-         (instance face :init :vertices (list (float-vector 42.0 -3.742352e-15 -20.5) (float-vector 32.0 -3.349828e-15 -20.5) (float-vector 32.0 10.25 -17.7535) (float-vector 42.0 10.25 -17.7535)))
+         (instance face :init :vertices (list (float-vector 54.0 -8.0 -13.8564) (float-vector 54.0 -3.330180e-15 -16.0) (float-vector 54.0 8.0 -13.8564) (float-vector 54.0 13.8564 -8.0) (float-vector 54.0 16.0 0.0) (float-vector 54.0 13.8564 8.0) (float-vector 54.0 8.0 13.8564) (float-vector 54.0 1.982558e-14 16.0) (float-vector 54.0 -8.0 13.8564) (float-vector 54.0 -13.8564 8.0) (float-vector 54.0 -16.0 5.684342e-14) (float-vector 54.0 -13.8564 -8.0)))
+         (instance face :init :vertices (list (float-vector 42.0 -8.0 -13.8564) (float-vector 42.0 -2.859152e-15 -16.0) (float-vector 54.0 -3.330180e-15 -16.0) (float-vector 54.0 -8.0 -13.8564)))
+         (instance face :init :vertices (list (float-vector 42.0 -3.742329e-15 -20.5) (float-vector 32.0 -3.349806e-15 -20.5) (float-vector 32.0 10.25 -17.7535) (float-vector 42.0 10.25 -17.7535)))
          (instance face :init :vertices (list (float-vector 32.0 10.25 -17.7535) (float-vector 32.0 17.7535 -10.25) (float-vector 42.0 17.7535 -10.25) (float-vector 42.0 10.25 -17.7535)))
          (instance face :init :vertices (list (float-vector 32.0 17.7535 -10.25) (float-vector 32.0 20.5 0.0) (float-vector 42.0 20.5 0.0) (float-vector 42.0 17.7535 -10.25)))
          (instance face :init :vertices (list (float-vector 32.0 20.5 0.0) (float-vector 32.0 17.7535 10.25) (float-vector 42.0 17.7535 10.25) (float-vector 42.0 20.5 0.0)))
          (instance face :init :vertices (list (float-vector 32.0 17.7535 10.25) (float-vector 32.0 10.25 17.7535) (float-vector 42.0 10.25 17.7535) (float-vector 42.0 17.7535 10.25)))
-         (instance face :init :vertices (list (float-vector 32.0 10.25 17.7535) (float-vector 32.0 2.956589e-14 20.5) (float-vector 42.0 2.917337e-14 20.5) (float-vector 42.0 10.25 17.7535)))
-         (instance face :init :vertices (list (float-vector 32.0 2.956589e-14 20.5) (float-vector 32.0 -10.25 17.7535) (float-vector 42.0 -10.25 17.7535) (float-vector 42.0 2.917337e-14 20.5)))
+         (instance face :init :vertices (list (float-vector 32.0 10.25 17.7535) (float-vector 32.0 2.956591e-14 20.5) (float-vector 42.0 2.917339e-14 20.5) (float-vector 42.0 10.25 17.7535)))
+         (instance face :init :vertices (list (float-vector 32.0 2.956591e-14 20.5) (float-vector 32.0 -10.25 17.7535) (float-vector 42.0 -10.25 17.7535) (float-vector 42.0 2.917339e-14 20.5)))
          (instance face :init :vertices (list (float-vector 32.0 -10.25 17.7535) (float-vector 32.0 -17.7535 10.25) (float-vector 42.0 -17.7535 10.25) (float-vector 42.0 -10.25 17.7535)))
          (instance face :init :vertices (list (float-vector 32.0 -17.7535 10.25) (float-vector 32.0 -20.5 5.684342e-14) (float-vector 42.0 -20.5 5.684342e-14) (float-vector 42.0 -17.7535 10.25)))
          (instance face :init :vertices (list (float-vector 32.0 -20.5 5.684342e-14) (float-vector 32.0 -17.7535 -10.25) (float-vector 42.0 -17.7535 -10.25) (float-vector 42.0 -20.5 5.684342e-14)))
          (instance face :init :vertices (list (float-vector 32.0 -17.7535 -10.25) (float-vector 32.0 -10.25 -17.7535) (float-vector 42.0 -10.25 -17.7535) (float-vector 42.0 -17.7535 -10.25)))
-         (instance face :init :vertices (list (float-vector 42.0 -10.25 -17.7535) (float-vector 42.0 -3.742352e-15 -20.5) (float-vector 42.0 10.25 -17.7535) (float-vector 42.0 17.7535 -10.25) (float-vector 42.0 20.5 0.0) (float-vector 42.0 17.7535 10.25) (float-vector 42.0 10.25 17.7535) (float-vector 42.0 2.917337e-14 20.5) (float-vector 42.0 -10.25 17.7535) (float-vector 42.0 -17.7535 10.25) (float-vector 42.0 -20.5 5.684342e-14) (float-vector 42.0 -17.7535 -10.25))
+         (instance face :init :vertices (list (float-vector 42.0 -10.25 -17.7535) (float-vector 42.0 -3.742329e-15 -20.5) (float-vector 42.0 10.25 -17.7535) (float-vector 42.0 17.7535 -10.25) (float-vector 42.0 20.5 0.0) (float-vector 42.0 17.7535 10.25) (float-vector 42.0 10.25 17.7535) (float-vector 42.0 2.917339e-14 20.5) (float-vector 42.0 -10.25 17.7535) (float-vector 42.0 -17.7535 10.25) (float-vector 42.0 -20.5 5.684342e-14) (float-vector 42.0 -17.7535 -10.25))
                               :holes (list
-         (instance hole :init :vertices (list (float-vector 42.0 -2.859175e-15 -16.0) (float-vector 42.0 -8.0 -13.8564) (float-vector 42.0 -13.8564 -8.0) (float-vector 42.0 -16.0 5.684342e-14) (float-vector 42.0 -13.8564 8.0) (float-vector 42.0 -8.0 13.8564) (float-vector 42.0 2.029659e-14 16.0) (float-vector 42.0 8.0 13.8564) (float-vector 42.0 13.8564 8.0) (float-vector 42.0 16.0 0.0) (float-vector 42.0 13.8564 -8.0) (float-vector 42.0 8.0 -13.8564)))
+         (instance hole :init :vertices (list (float-vector 42.0 -2.859152e-15 -16.0) (float-vector 42.0 -8.0 -13.8564) (float-vector 42.0 -13.8564 -8.0) (float-vector 42.0 -16.0 5.684342e-14) (float-vector 42.0 -13.8564 8.0) (float-vector 42.0 -8.0 13.8564) (float-vector 42.0 2.029661e-14 16.0) (float-vector 42.0 8.0 13.8564) (float-vector 42.0 13.8564 8.0) (float-vector 42.0 16.0 0.0) (float-vector 42.0 13.8564 -8.0) (float-vector 42.0 8.0 -13.8564)))
 ))
-         (instance face :init :vertices (list (float-vector 32.0 -10.25 -17.7535) (float-vector 32.0 -3.349828e-15 -20.5) (float-vector 42.0 -3.742352e-15 -20.5) (float-vector 42.0 -10.25 -17.7535)))
-         (instance face :init :vertices (list (float-vector 32.0 -3.349828e-15 -20.5) (float-vector 32.0 -10.25 -17.7535) (float-vector 32.0 -17.7535 -10.25) (float-vector 32.0 -20.5 5.684342e-14) (float-vector 32.0 -17.7535 10.25) (float-vector 32.0 -10.25 17.7535) (float-vector 32.0 2.956589e-14 20.5) (float-vector 32.0 10.25 17.7535) (float-vector 32.0 17.7535 10.25) (float-vector 32.0 20.5 0.0) (float-vector 32.0 17.7535 -10.25) (float-vector 32.0 10.25 -17.7535)))
+         (instance face :init :vertices (list (float-vector 32.0 -10.25 -17.7535) (float-vector 32.0 -3.349806e-15 -20.5) (float-vector 42.0 -3.742329e-15 -20.5) (float-vector 42.0 -10.25 -17.7535)))
+         (instance face :init :vertices (list (float-vector 32.0 -3.349806e-15 -20.5) (float-vector 32.0 -10.25 -17.7535) (float-vector 32.0 -17.7535 -10.25) (float-vector 32.0 -20.5 5.684342e-14) (float-vector 32.0 -17.7535 10.25) (float-vector 32.0 -10.25 17.7535) (float-vector 32.0 2.956591e-14 20.5) (float-vector 32.0 10.25 17.7535) (float-vector 32.0 17.7535 10.25) (float-vector 32.0 20.5 0.0) (float-vector 32.0 17.7535 -10.25) (float-vector 32.0 10.25 -17.7535)))
        ))
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 64.5 101.416 -80.0) (float-vector 59.208 101.416 -99.75) (float-vector 25.0 112.0 -80.0)))
@@ -2006,7 +2006,7 @@
      (send (elt bc 27) :set-color :linen)
      (send (elt bc 28) :set-color :linen)
      (send (elt bc 29) :set-color :linen)
-     (setq blink23 (instance bodyset-link :init (make-cascoords) :bodies bc :name :torso-uppertorso :weight 631.093 :centroid (float-vector 6.7624 4.372244e-15 68.0037) :inertia-tensor #2f((1.125727e+05 3.048527e-12 -8847.57) (3.048527e-12 68090.5 4.945765e-11) (-8847.57 4.945765e-11 50791.2))))
+     (setq blink23 (instance bodyset-link :init (make-cascoords) :bodies bc :name :torso-uppertorso :weight 631.093 :centroid (float-vector 6.7624 4.372244e-15 68.0037) :inertia-tensor #2f((1.125727e+05 3.048463e-12 -8847.57) (3.048463e-12 68090.5 4.945785e-11) (-8847.57 4.945785e-11 50791.2))))
 
      ;; definition of :larm-shoulder-p
      (setq bc (list
@@ -3885,7 +3885,7 @@
      (setq sensor19
        (make-cascoords
 	:coords (send (send blink21 :copy-worldcoords) :transform 
-		      (make-coords :pos (float-vector 70.0 0.0 -55.0) :rot #2f((1.0 0.0 0.0) (0.0 -1.0 -1.224606e-16) (0.0 1.224606e-16 -1.0))))
+		      (make-coords :pos (float-vector 70.0 0.0 -55.0) :rot #2f((1.0 0.0 0.0) (0.0 -1.0 -1.224647e-16) (0.0 1.224647e-16 -1.0))))
         :name "torso-adxl(list)"))
      (send blink21 :assoc sensor19)
 
@@ -4285,7 +4285,7 @@
      (setq sensor69
        (make-cascoords
 	:coords (send (send blink25 :copy-worldcoords) :transform 
-		      (make-coords :pos (float-vector -25.9619 -17.85 34.0381) :rot #2f((0.707107 -1.224606e-16 -0.707107) (-8.659275e-17 -1.0 8.659275e-17) (-0.707107 0.0 -0.707107))))
+		      (make-coords :pos (float-vector -25.9619 -17.85 34.0381) :rot #2f((0.707107 -1.224647e-16 -0.707107) (-8.659561e-17 -1.0 8.659561e-17) (-0.707107 0.0 -0.707107))))
         :name "head-force-sensor(list)"))
      (send blink25 :assoc sensor69)
 
@@ -4333,7 +4333,7 @@
      (setq sensor75
        (make-cascoords
 	:coords (send (send blink25 :copy-worldcoords) :transform 
-		      (make-coords :pos (float-vector -45.0 -17.85 80.0) :rot #2f((2.220446e-16 -1.224606e-16 -1.0) (-1.232595e-32 -1.0 1.224606e-16) (-1.0 -1.232595e-32 -2.220446e-16))))
+		      (make-coords :pos (float-vector -45.0 -17.85 80.0) :rot #2f((2.220446e-16 -1.224647e-16 -1.0) (-1.232595e-32 -1.0 1.224647e-16) (-1.0 -1.232595e-32 -2.220446e-16))))
         :name "head-force-sensor(list)"))
      (send blink25 :assoc sensor75)
 
@@ -4381,7 +4381,7 @@
      (setq sensor81
        (make-cascoords
 	:coords (send (send blink25 :copy-worldcoords) :transform 
-		      (make-coords :pos (float-vector -25.9619 -17.85 125.962) :rot #2f((-0.707107 -1.224606e-16 -0.707107) (8.659275e-17 -1.0 8.659275e-17) (-0.707107 0.0 0.707107))))
+		      (make-coords :pos (float-vector -25.9619 -17.85 125.962) :rot #2f((-0.707107 -1.224647e-16 -0.707107) (8.659561e-17 -1.0 8.659561e-17) (-0.707107 0.0 0.707107))))
         :name "head-force-sensor(list)"))
      (send blink25 :assoc sensor81)
 

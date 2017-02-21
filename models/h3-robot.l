@@ -488,7 +488,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
-     (setq blink13 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3rarm-hand-y :weight 10 :centroid (float-vector -1.17482 31.8335 -1.939792e-14) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
+     (setq blink13 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3rarm-hand-y :weight 10 :centroid (float-vector -1.17482 31.8335 -1.939732e-14) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
 
      ;; definition of :h3larm-shoulder-y
      (setq bc (list
@@ -750,7 +750,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
      (send (elt bc 1) :set-color :gray90)
-     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3larm-elbow-p :weight 100 :centroid (float-vector -38.9702 2.576820e-15 -15.0484) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3larm-elbow-p :weight 100 :centroid (float-vector -38.9702 2.576881e-15 -15.0484) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
 
      ;; definition of :h3larm-wrist-r
      (setq bc (list
@@ -813,7 +813,7 @@
      (send (elt bc 0) :set-color :gray50)
      (send (elt bc 1) :set-color :gray60)
      (send (elt bc 2) :set-color :gray90)
-     (setq blink7 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3larm-wrist-r :weight 70 :centroid (float-vector -6.38476 7.866384e-16 14.3166) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
+     (setq blink7 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3larm-wrist-r :weight 70 :centroid (float-vector -6.38476 7.866975e-16 14.3166) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
 
      ;; definition of :h3larm-hand-y
      (setq bc (list
@@ -836,7 +836,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray90)
-     (setq blink8 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3larm-hand-y :weight 10 :centroid (float-vector -1.17482 31.8335 5.384333e-15) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
+     (setq blink8 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3larm-hand-y :weight 10 :centroid (float-vector -1.17482 31.8335 5.383698e-15) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
 
      ;; definition of :h3head-neck-y
      (setq bc (list
@@ -1134,7 +1134,7 @@
      (send (elt bc 0) :set-color :gray90)
      (send (elt bc 1) :set-color :gray30)
      (send (elt bc 2) :set-color :gray30)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3head-neck-p :weight 250 :centroid (float-vector -32.2712 -0.497244 -1.696808e-14) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :h3head-neck-p :weight 250 :centroid (float-vector -32.2712 -0.497244 -1.696767e-14) :inertia-tensor #2f((0.0 0.0 0.0) (0.0 0.0 0.0) (0.0 0.0 0.0))))
 
      ;; definition of assoc
      (send blink13 :newcoords (make-coords :pos (float-vector 21.0 1.776357e-14 -24.0) :rot #2f((-1.0 2.355139e-16 7.850462e-17) (-7.850462e-17 0.0 -1.0) (-2.355139e-16 -1.0 0.0))))
@@ -1147,11 +1147,11 @@
      (send blink9 :assoc blink10)
      (send blink8 :newcoords (make-coords :pos (float-vector -21.0 -1.776357e-14 24.0) :rot #2f((1.0 7.850462e-17 1.570092e-16) (1.570092e-16 6.162976e-33 -1.0) (-7.850462e-17 1.0 -6.162976e-33))))
      (send blink7 :assoc blink8)
-     (send blink7 :newcoords (make-coords :pos (float-vector -140.0 7.105427e-15 0.0) :rot #2f((2.220446e-16 -4.788946e-17 -1.0) (-2.661290e-16 1.0 -4.788946e-17) (1.0 2.661290e-16 2.220446e-16))))
+     (send blink7 :newcoords (make-coords :pos (float-vector -140.0 7.105427e-15 0.0) :rot #2f((2.220446e-16 -4.788845e-17 -1.0) (-2.661300e-16 1.0 -4.788845e-17) (1.0 2.661300e-16 2.220446e-16))))
      (send blink6 :assoc blink7)
      (send blink6 :newcoords (make-coords :pos (float-vector -150.0 0.0 21.0) :rot #2f((1.0 0.0 -4.440892e-16) (0.0 1.0 0.0) (4.440892e-16 0.0 1.0))))
      (send blink5 :assoc blink6)
-     (send blink5 :newcoords (make-coords :pos (float-vector 75.0 0.0 -10.0) :rot #2f((-2.220446e-16 7.850462e-17 -1.0) (1.397349e-16 -1.0 -7.850462e-17) (-1.0 -1.397349e-16 2.220446e-16))))
+     (send blink5 :newcoords (make-coords :pos (float-vector 75.0 0.0 -10.0) :rot #2f((-2.220446e-16 7.850462e-17 -1.0) (1.397370e-16 -1.0 -7.850462e-17) (-1.0 -1.397370e-16 2.220446e-16))))
      (send blink4 :assoc blink5)
      (send blink3 :newcoords (make-coords :pos (float-vector -1.065814e-14 -28.0 1.776357e-14) :rot #2f((3.885781e-16 0.0 1.0) (1.0 1.665335e-16 -3.885781e-16) (-2.220446e-16 1.0 5.551115e-17))))
      (send blink2 :assoc blink3)
@@ -1159,7 +1159,7 @@
      (send blink1 :assoc blink2)
      (send blink1 :newcoords (make-coords :pos (float-vector 23.0 -23.0 304.0) :rot #2f((2.220446e-16 1.0 0.0) (-1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
      (send blink0 :assoc blink1)
-     (send blink4 :newcoords (make-coords :pos (float-vector 23.0 54.0 254.0) :rot #2f((-2.220446e-16 1.0 -2.465190e-32) (1.0 2.220446e-16 1.224606e-16) (1.224606e-16 0.0 -1.0))))
+     (send blink4 :newcoords (make-coords :pos (float-vector 23.0 54.0 254.0) :rot #2f((-2.220446e-16 1.0 -2.465190e-32) (1.0 2.220446e-16 1.224647e-16) (1.224647e-16 0.0 -1.0))))
      (send blink0 :assoc blink4)
      (send blink9 :newcoords (make-coords :pos (float-vector 23.0 -100.0 254.0) :rot #2f((2.220446e-16 1.0 0.0) (-1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
      (send blink0 :assoc blink9)

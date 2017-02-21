@@ -110,13 +110,13 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector -600.0 300.0 665.0) :rot #2f((1.0 2.465190e-32 -2.449213e-16) (-2.449213e-16 2.220446e-16 -1.0) (2.465190e-32 1.0 2.220446e-16)) :name "handle-l"))
+     (setq handle0 (make-cascoords :pos (float-vector -600.0 300.0 665.0) :rot #2f((1.0 2.465190e-32 -2.449294e-16) (-2.449294e-16 2.220446e-16 -1.0) (2.465190e-32 1.0 2.220446e-16)) :name "handle-l"))
      (send blink0 :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector -600.0 -300.0 665.0) :rot #2f((1.0 -7.498304e-33 6.842278e-49) (6.842278e-49 2.220446e-16 1.0) (-7.498304e-33 -1.0 2.220446e-16)) :name "handle-r"))
+     (setq handle1 (make-cascoords :pos (float-vector -600.0 -300.0 665.0) :rot #2f((1.0 -7.498799e-33 6.842278e-49) (6.842278e-49 2.220446e-16 1.0) (-7.498799e-33 -1.0 2.220446e-16)) :name "handle-r"))
      (send blink0 :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector 600.0 -300.0 665.0) :rot #2f((-1.0 1.232595e-32 1.224606e-16) (1.224606e-16 2.220446e-16 1.0) (-1.232595e-32 1.0 -2.220446e-16)) :name "handle-l"))
+     (setq handle2 (make-cascoords :pos (float-vector 600.0 -300.0 665.0) :rot #2f((-1.0 1.232595e-32 1.224647e-16) (1.224647e-16 2.220446e-16 1.0) (-1.232595e-32 1.0 -2.220446e-16)) :name "handle-l"))
      (send blink0 :assoc handle2)
-     (setq handle3 (make-cascoords :pos (float-vector 600.0 300.0 665.0) :rot #2f((-1.0 1.232595e-32 -1.224606e-16) (1.224606e-16 2.220446e-16 -1.0) (1.232595e-32 -1.0 -2.220446e-16)) :name "handle-r"))
+     (setq handle3 (make-cascoords :pos (float-vector 600.0 300.0 665.0) :rot #2f((-1.0 1.232595e-32 -1.224647e-16) (1.224647e-16 2.220446e-16 -1.0) (1.232595e-32 -1.0 -2.220446e-16)) :name "handle-r"))
      (send blink0 :assoc handle3)
 
      ;; init-ending 

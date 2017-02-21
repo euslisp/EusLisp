@@ -18,9 +18,9 @@
   :slots ())
 (defmethod drcbox-scene
   (:init
-   (&rest args &key (name "drcbox"))
+   (&rest args &key (name "drcbox") &allow-other-keys)
    (let ()
-     (send-super
+     (send-super*
       :init :name name :objects
       (list
  (send (drcbox-hose-reel) :transform (make-coords :pos (float-vector 312.0 462.0 1006.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
@@ -31,8 +31,9 @@
  (send (drcbox-valve-large) :transform (make-coords :pos (float-vector -196.75 -60.0 1268.0) :rot #2f((2.220446e-16 0.0 -1.0) (0.0 1.0 0.0) (1.0 0.0 2.220446e-16))))
  (send (drcbox-valve-small) :transform (make-coords :pos (float-vector -141.75 385.0 1065.0) :rot #2f((2.220446e-16 0.0 -1.0) (0.0 1.0 0.0) (1.0 0.0 2.220446e-16))))
  (send (drcbox-drcbox-base) :transform (make-coords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
-       ))
+       )
+      args)
      ))
   )
 
-(defun drcbox () (setq *drcbox* (instance drcbox-scene :init)))
+(defun drcbox (&rest args) (setq *drcbox* (instance* drcbox-scene :init args)))

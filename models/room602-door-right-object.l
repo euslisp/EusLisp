@@ -154,9 +154,9 @@
      (send blink1 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector -135.0 730.0 910.0) :rot #2f((1.0 0.0 0.0) (0.0 0.866025 0.5) (0.0 -0.5 0.866025)) :name "rear-knob"))
      (send blink2 :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector 100.0 730.0 910.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.060540e-16 -0.866025 0.5) (-6.123032e-17 0.5 0.866025)) :name "front-knob"))
+     (setq handle2 (make-cascoords :pos (float-vector 100.0 730.0 910.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.060575e-16 -0.866025 0.5) (-6.123234e-17 0.5 0.866025)) :name "front-knob"))
      (send blink2 :assoc handle2)
-     (setq handle3 (make-cascoords :pos (float-vector 67.5 760.0 1010.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "lock"))
+     (setq handle3 (make-cascoords :pos (float-vector 67.5 760.0 1010.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "lock"))
      (send blink3 :assoc handle3)
 
      ;; init-ending 

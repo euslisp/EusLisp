@@ -1006,7 +1006,7 @@
      (send (elt bc 2) :set-color :gainsboro)
      (send (elt bc 3) :set-color :lightgray)
      (send (elt bc 4) :set-color :lightgray)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :patra-lower-limb-patra-front-link :weight 401 :centroid (float-vector 156.518 -378.478 -7.398834e-13) :inertia-tensor #2f((1.640875e+05 59238.7 1.148941e-10) (59238.7 45339.6 -2.778267e-10) (1.148941e-10 -2.778267e-10 1.677604e+05))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :patra-lower-limb-patra-front-link :weight 401 :centroid (float-vector 156.518 -378.478 -7.398842e-13) :inertia-tensor #2f((1.640875e+05 59238.7 1.148942e-10) (59238.7 45339.6 -2.778270e-10) (1.148942e-10 -2.778270e-10 1.677604e+05))))
 
      ;; definition of :patra-back-limb-patra-back-link
      (setq bc (list
@@ -1258,7 +1258,7 @@
      (send (elt bc 0) :set-color :green)
      (gl::transparent (elt bc 0) 0.0)
      (send (elt bc 1) :set-color :dimgray)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :patra-foot-limb-patra-foot-link :weight 101 :centroid (float-vector 200.83 -337.754 1.616886e-14) :inertia-tensor #2f((1.274191e+05 67831.1 -5.073734e-12) (67831.1 53674.4 8.532940e-12) (-5.073734e-12 8.532940e-12 1.544269e+05))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :patra-foot-limb-patra-foot-link :weight 101 :centroid (float-vector 200.83 -337.754 1.616818e-14) :inertia-tensor #2f((1.274191e+05 67831.1 -5.073597e-12) (67831.1 53674.4 8.532709e-12) (-5.073597e-12 8.532709e-12 1.544269e+05))))
 
      ;; definition of assoc
      (send blink3 :newcoords (make-coords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 8.673617e-19 -4.336809e-19) (-8.673617e-19 1.0 1.880791e-37) (4.336809e-19 1.880791e-37 1.0))))
