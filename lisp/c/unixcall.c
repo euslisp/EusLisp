@@ -1680,13 +1680,11 @@ pointer argv[];
   width = width+1;
      
   timeout=ckfltval(argv[1]);
-  if (timeout==0.0) {GC_REGION(n=select(width, fdvec, 0, 0, 0););}
-  else {
-    to.tv_sec=timeout;
-    timeout=timeout-to.tv_sec;
-    timeout=timeout*1000000;
-    to.tv_usec=timeout;
-    GC_REGION(n=select(width, fdvec, 0, 0, &to););}
+  to.tv_sec=timeout;
+  timeout=timeout-to.tv_sec;
+  timeout=timeout*1000000;
+  to.tv_usec=timeout;
+  GC_REGION(n=select(width, fdvec, 0, 0, &to);)
   if (n<0) return(makeint(-errno));
   if (isint(argv[0])) {
     /*fds=fdvec-> __fds_bits[0];*/
