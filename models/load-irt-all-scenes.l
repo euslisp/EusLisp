@@ -5,6 +5,12 @@
 ;;
 (provide :irt-all-scene "models/load-irt-all-scenes.l")
 
+(warning-message 2 "loading eng2-7f-elevatorhall-scene.l	(eng2-7f-elevatorhall) for make model~%")
+(load "models/eng2-7f-elevatorhall-scene.l")
+
+(warning-message 2 "loading eng2-7f-southwing-scene.l	(eng2-7f-southwing) for make model~%")
+(load "models/eng2-7f-southwing-scene.l")
+
 (warning-message 2 "loading drcbox-scene.l	(drcbox) for make model~%")
 (load "models/drcbox-scene.l")
 
@@ -24,4 +30,4 @@
 (load "models/room602-scene.l")
 ;;
 ;;
-(setq *irt-all-scenes* '( (room602) (room610) (room73a3) (room73b2) (room83b1) (drcbox)))
+(setq *irt-all-scenes* '( (room602) (room610) (room73a3) (room73b2) (room83b1) (drcbox) (eng2-7f-southwing) (eng2-7f-elevatorhall)))

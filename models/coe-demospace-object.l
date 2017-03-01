@@ -463,10 +463,10 @@
        ))
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 2005.0 1000.0 -60.0) (float-vector 2005.0 1000.0 60.0) (float-vector 3375.0 1000.0 -60.0)))
-         (instance face :init :vertices (list (float-vector 2005.0 -8.659740e-14 60.0) (float-vector 2005.0 0.0 -60.0) (float-vector 3375.0 -2.601380e-12 -60.0)))
+         (instance face :init :vertices (list (float-vector 2005.0 -8.659740e-14 60.0) (float-vector 2005.0 0.0 -60.0) (float-vector 3375.0 -2.601385e-12 -60.0)))
          (instance face :init :vertices (list (float-vector 2005.0 1000.0 -60.0) (float-vector 2005.0 0.0 -60.0) (float-vector 2005.0 -8.659740e-14 60.0) (float-vector 2005.0 1000.0 60.0)))
-         (instance face :init :vertices (list (float-vector 3375.0 1000.0 -60.0) (float-vector 3375.0 -2.601380e-12 -60.0) (float-vector 2005.0 0.0 -60.0) (float-vector 2005.0 1000.0 -60.0)))
-         (instance face :init :vertices (list (float-vector 2005.0 1000.0 60.0) (float-vector 2005.0 -8.659740e-14 60.0) (float-vector 3375.0 -2.601380e-12 -60.0) (float-vector 3375.0 1000.0 -60.0)))
+         (instance face :init :vertices (list (float-vector 3375.0 1000.0 -60.0) (float-vector 3375.0 -2.601385e-12 -60.0) (float-vector 2005.0 0.0 -60.0) (float-vector 2005.0 1000.0 -60.0)))
+         (instance face :init :vertices (list (float-vector 2005.0 1000.0 60.0) (float-vector 2005.0 -8.659740e-14 60.0) (float-vector 3375.0 -2.601385e-12 -60.0) (float-vector 3375.0 1000.0 -60.0)))
        ))
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 2000.0 2500.0 60.0) (float-vector -2000.0 2500.0 60.0) (float-vector -2000.0 -2500.0 60.0) (float-vector 2000.0 -2500.0 60.0)))

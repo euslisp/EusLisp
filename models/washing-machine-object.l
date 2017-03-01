@@ -288,7 +288,7 @@
      (send blink2 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector 150.0 -230.0 290.0) :rot #2f((0.0 -1.0 -2.220446e-16) (2.220446e-16 2.220446e-16 -1.0) (1.0 0.0 2.220446e-16)) :name "close-l"))
      (send blink2 :assoc handle2)
-     (setq handle3 (make-cascoords :pos (float-vector 150.0 0.0 240.0) :rot #2f((-1.0 1.232595e-32 1.224606e-16) (1.224606e-16 2.220446e-16 1.0) (-1.232595e-32 1.0 -2.220446e-16)) :name "button"))
+     (setq handle3 (make-cascoords :pos (float-vector 150.0 0.0 240.0) :rot #2f((-1.0 1.232595e-32 1.224647e-16) (1.224647e-16 2.220446e-16 1.0) (-1.232595e-32 1.0 -2.220446e-16)) :name "button"))
      (send blink2 :assoc handle3)
      (setq handle4 (make-cascoords :pos (float-vector 100.0 50.0 160.0) :rot #2f((-0.707107 0.707107 5.551115e-17) (-1.665335e-16 -1.110223e-16 -1.0) (-0.707107 -0.707107 2.220446e-16)) :name "lower-shelf"))
      (send blink4 :assoc handle4)

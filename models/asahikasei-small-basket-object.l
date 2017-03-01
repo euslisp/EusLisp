@@ -37,17 +37,17 @@
                               :holes (list
          (instance hole :init :vertices (list (float-vector -142.308 202.5 120.0) (float-vector 142.308 202.5 120.0) (float-vector 142.308 -202.5 120.0) (float-vector -142.308 -202.5 120.0)))
 ))
-         (instance face :init :vertices (list (float-vector -147.5 207.5 120.0) (float-vector 147.5 207.5 120.0) (float-vector 117.5 175.0 1.668526e-14) (float-vector -117.5 175.0 2.296137e-15))
+         (instance face :init :vertices (list (float-vector -147.5 207.5 120.0) (float-vector 147.5 207.5 120.0) (float-vector 117.5 175.0 1.668581e-14) (float-vector -117.5 175.0 2.296213e-15))
                               :holes (list
          (instance hole :init :vertices (list (float-vector 30.0 200.458 94.0) (float-vector 30.0 203.708 106.0) (float-vector -30.0 203.708 106.0) (float-vector -30.0 200.458 94.0)))
 ))
-         (instance face :init :vertices (list (float-vector -117.5 175.0 2.296137e-15) (float-vector 117.5 175.0 1.668526e-14) (float-vector 117.5 -175.0 1.668526e-14) (float-vector -117.5 -175.0 2.296137e-15)))
-         (instance face :init :vertices (list (float-vector 117.5 -175.0 1.668526e-14) (float-vector 117.5 175.0 1.668526e-14) (float-vector 147.5 207.5 120.0) (float-vector 147.5 -207.5 120.0)))
-         (instance face :init :vertices (list (float-vector -117.5 -175.0 2.296137e-15) (float-vector 117.5 -175.0 1.668526e-14) (float-vector 147.5 -207.5 120.0) (float-vector -147.5 -207.5 120.0))
+         (instance face :init :vertices (list (float-vector -117.5 175.0 2.296213e-15) (float-vector 117.5 175.0 1.668581e-14) (float-vector 117.5 -175.0 1.668581e-14) (float-vector -117.5 -175.0 2.296213e-15)))
+         (instance face :init :vertices (list (float-vector 117.5 -175.0 1.668581e-14) (float-vector 117.5 175.0 1.668581e-14) (float-vector 147.5 207.5 120.0) (float-vector 147.5 -207.5 120.0)))
+         (instance face :init :vertices (list (float-vector -117.5 -175.0 2.296213e-15) (float-vector 117.5 -175.0 1.668581e-14) (float-vector 147.5 -207.5 120.0) (float-vector -147.5 -207.5 120.0))
                               :holes (list
          (instance hole :init :vertices (list (float-vector -30.0 -200.458 94.0) (float-vector -30.0 -203.708 106.0) (float-vector 30.0 -203.708 106.0) (float-vector 30.0 -200.458 94.0)))
 ))
-         (instance face :init :vertices (list (float-vector -147.5 -207.5 120.0) (float-vector -147.5 207.5 120.0) (float-vector -117.5 175.0 2.296137e-15) (float-vector -117.5 -175.0 2.296137e-15)))
+         (instance face :init :vertices (list (float-vector -147.5 -207.5 120.0) (float-vector -147.5 207.5 120.0) (float-vector -117.5 175.0 2.296213e-15) (float-vector -117.5 -175.0 2.296213e-15)))
          (instance face :init :vertices (list (float-vector -30.0 -194.818 94.0) (float-vector -30.0 -198.364 106.0) (float-vector -30.0 -203.708 106.0) (float-vector -30.0 -200.458 94.0)))
          (instance face :init :vertices (list (float-vector -30.0 200.458 94.0) (float-vector -30.0 203.708 106.0) (float-vector -30.0 198.364 106.0) (float-vector -30.0 194.818 94.0)))
          (instance face :init :vertices (list (float-vector 30.0 198.364 106.0) (float-vector -30.0 198.364 106.0) (float-vector -30.0 203.708 106.0) (float-vector 30.0 203.708 106.0)))

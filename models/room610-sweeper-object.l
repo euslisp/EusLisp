@@ -141,9 +141,9 @@
      (send blink2 :assoc handle0)
      (setq handle1 (make-cascoords :pos (float-vector 0.0 0.0 1150.0) :rot #2f((0.707107 0.707107 0.0) (-0.707107 0.707107 0.0) (0.0 0.0 1.0)) :name ":larm"))
      (send blink2 :assoc handle1)
-     (setq handle2 (make-cascoords :pos (float-vector 0.0 0.0 700.0) :rot #2f((1.0 0.0 0.0) (0.0 -1.0 -1.224606e-16) (0.0 1.224606e-16 -1.0)) :name ":side-rarm"))
+     (setq handle2 (make-cascoords :pos (float-vector 0.0 0.0 700.0) :rot #2f((1.0 0.0 0.0) (0.0 -1.0 -1.224647e-16) (0.0 1.224647e-16 -1.0)) :name ":side-rarm"))
      (send blink2 :assoc handle2)
-     (setq handle3 (make-cascoords :pos (float-vector 0.0 0.0 1150.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name ":side-larm"))
+     (setq handle3 (make-cascoords :pos (float-vector 0.0 0.0 1150.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0)) :name ":side-larm"))
      (send blink2 :assoc handle3)
 
      ;; init-ending 

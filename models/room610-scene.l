@@ -26,15 +26,20 @@
 (load "models/room610-table-object.l")
 (load "models/room610-chair-object.l")
 (load "models/room610-laundry-machine-object.l")
+(load "models/room610-external-wall-4-object.l")
+(load "models/room610-external-wall-3-object.l")
+(load "models/room610-external-wall-2-object.l")
+(load "models/room610-external-wall-1-object.l")
+(load "models/room610-external-wall-0-object.l")
 
 (defclass room610-scene
   :super scene-model
   :slots ())
 (defmethod room610-scene
   (:init
-   (&rest args &key (name "room610"))
+   (&rest args &key (name "room610") &allow-other-keys)
    (let ()
-     (send-super
+     (send-super*
       :init :name name :objects
       (list
  (send (room610-bears-panel) :transform (make-coords :pos (float-vector 7150.0 -1000.0 0.0) :rot #2f((-0.5 -0.866025 0.0) (0.866025 -0.5 0.0) (0.0 0.0 1.0))))
@@ -59,8 +64,14 @@
  (send (room610-table) :transform (make-coords :pos (float-vector 4650.0 -110.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
  (send (room610-chair) :transform (make-coords :pos (float-vector 4300.0 -260.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
  (send (room610-laundry-machine) :transform (make-coords :pos (float-vector 3500.0 2640.0 0.0) :rot #2f((2.220446e-16 1.0 0.0) (-1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
-       ))
+ (send (room610-external-wall-4) :transform (make-coords :pos (float-vector 9160.0 0.0 1375.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
+ (send (room610-external-wall-3) :transform (make-coords :pos (float-vector 4580.0 -3870.0 1375.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+ (send (room610-external-wall-2) :transform (make-coords :pos (float-vector 4580.0 3840.0 1375.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+ (send (room610-external-wall-1) :transform (make-coords :pos (float-vector 0.0 2330.0 1375.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
+ (send (room610-external-wall-0) :transform (make-coords :pos (float-vector 0.0 -2345.0 1375.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
+       )
+      args)
      ))
   )
 
-(defun room610 () (setq *room610* (instance room610-scene :init)))
+(defun room610 (&rest args) (setq *room610* (instance* room610-scene :init args)))

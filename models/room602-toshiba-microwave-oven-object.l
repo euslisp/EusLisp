@@ -182,7 +182,7 @@
      (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :room602-toshiba-microwave-oven-bodyset3 :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
      ;; definition of assoc
-     (send blink2 :newcoords (make-coords :pos (float-vector 210.0 210.0 85.0) :rot #2f((7.216450e-16 8.715764e-33 -1.0) (-8.715764e-33 1.0 8.715764e-33) (1.0 8.715764e-33 7.216450e-16))))
+     (send blink2 :newcoords (make-coords :pos (float-vector 210.0 210.0 85.0) :rot #2f((7.216450e-16 0.0 -1.0) (0.0 1.0 0.0) (1.0 0.0 7.216450e-16))))
      (send blink0 :assoc blink2)
      (send blink1 :newcoords (make-coords :pos (float-vector 175.0 -225.0 50.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
      (send blink0 :assoc blink1)
@@ -204,9 +204,9 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 235.0 -30.0 335.0) :rot #2f((1.0 8.715764e-33 -8.715764e-33) (-8.715764e-33 7.216450e-16 -1.0) (-8.715764e-33 1.0 7.216450e-16)) :name "door"))
+     (setq handle0 (make-cascoords :pos (float-vector 235.0 -30.0 335.0) :rot #2f((1.0 0.0 0.0) (0.0 7.216450e-16 -1.0) (0.0 1.0 7.216450e-16)) :name "door"))
      (send blink1 :assoc handle0)
-     (setq handle1 (make-cascoords :pos (float-vector 210.0 210.0 85.0) :rot #2f((7.216450e-16 -8.715764e-33 1.0) (8.715764e-33 1.0 8.715764e-33) (-1.0 8.715764e-33 7.216450e-16)) :name "knob"))
+     (setq handle1 (make-cascoords :pos (float-vector 210.0 210.0 85.0) :rot #2f((7.216450e-16 -1.743153e-32 1.0) (6.842278e-48 1.0 1.743153e-32) (-1.0 -6.842278e-48 7.216450e-16)) :name "knob"))
      (send blink2 :assoc handle1)
 
      ;; init-ending 

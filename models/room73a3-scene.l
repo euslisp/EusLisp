@@ -37,15 +37,19 @@
 (load "models/room73a3-shelf-0-object.l")
 (load "models/room73a3-shelf-1-object.l")
 (load "models/room73a3-shelf-2-object.l")
+(load "models/room73a3-external-wall-3-object.l")
+(load "models/room73a3-external-wall-2-object.l")
+(load "models/room73a3-external-wall-1-object.l")
+(load "models/room73a3-external-wall-0-object.l")
 
 (defclass room73a3-scene
   :super scene-model
   :slots ())
 (defmethod room73a3-scene
   (:init
-   (&rest args &key (name "room73a3"))
+   (&rest args &key (name "room73a3") &allow-other-keys)
    (let ()
-     (send-super
+     (send-super*
       :init :name name :objects
       (list
  (send (room73a3-73a3-ground) :transform (make-coords :pos (float-vector 4210.0 1725.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
@@ -62,7 +66,7 @@
  (send (room73a3-askul-1200x700-desk-0) :transform (make-coords :pos (float-vector 7600.0 3050.0 0.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room73a3-officeprinter) :transform (make-coords :pos (float-vector 3400.0 3200.0 0.0) :rot #2f((2.220446e-16 1.0 0.0) (-1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room73a3-askul-1200x700-desk-1) :transform (make-coords :pos (float-vector 2200.0 3000.0 0.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
- (send (room73a3-village-chair-0) :transform (make-coords :pos (float-vector 2200.0 2600.0 0.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0))))
+ (send (room73a3-village-chair-0) :transform (make-coords :pos (float-vector 2200.0 2600.0 0.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0))))
  (send (room73a3-bariera-1400-middle-5) :transform (make-coords :pos (float-vector 2800.0 30.0 35.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room73a3-bariera-1400-middle-6) :transform (make-coords :pos (float-vector 4200.0 30.0 35.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room73a3-bariera-1400-middle-7) :transform (make-coords :pos (float-vector 5600.0 30.0 35.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
@@ -78,15 +82,20 @@
  (send (room73a3-askul-1400-desk-1) :transform (make-coords :pos (float-vector 4600.0 400.0 0.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room73a3-askul-1400-desk-2) :transform (make-coords :pos (float-vector 3200.0 400.0 0.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
  (send (room73a3-unknown-1200-desk) :transform (make-coords :pos (float-vector 1900.0 400.0 0.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
- (send (room73a3-shelf-0) :transform (make-coords :pos (float-vector 8271.0 2000.0 0.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0))))
- (send (room73a3-shelf-1) :transform (make-coords :pos (float-vector 8271.0 2585.0 0.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0))))
+ (send (room73a3-shelf-0) :transform (make-coords :pos (float-vector 8271.0 2000.0 0.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0))))
+ (send (room73a3-shelf-1) :transform (make-coords :pos (float-vector 8271.0 2585.0 0.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0))))
  (send (room73a3-shelf-2) :transform (make-coords :pos (float-vector 150.0 2000.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
- (make-cascoords :name "door-spot" :pos (float-vector 675.0 210.0 0.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)))
+ (send (room73a3-external-wall-3) :transform (make-coords :pos (float-vector 8571.0 1725.0 1350.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
+ (send (room73a3-external-wall-2) :transform (make-coords :pos (float-vector 4210.0 -150.0 1350.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+ (send (room73a3-external-wall-1) :transform (make-coords :pos (float-vector 4210.0 3600.0 1350.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+ (send (room73a3-external-wall-0) :transform (make-coords :pos (float-vector -70.0 2275.0 1350.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0))))
+ (make-cascoords :name "door-spot" :pos (float-vector 675.0 210.0 0.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0)))
  (make-cascoords :name "table-spot" :pos (float-vector 5000.0 1250.0 0.0) :rot #2f((2.220446e-16 -1.0 0.0) (1.0 2.220446e-16 0.0) (0.0 0.0 1.0)))
- (make-cascoords :name "cook-spot" :pos (float-vector 1100.0 1600.0 0.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)))
+ (make-cascoords :name "cook-spot" :pos (float-vector 1100.0 1600.0 0.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0)))
  (make-cascoords :name "init-spot" :pos (float-vector 500.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)))
-       ))
+       )
+      args)
      ))
   )
 
-(defun room73a3 () (setq *room73a3* (instance room73a3-scene :init)))
+(defun room73a3 (&rest args) (setq *room73a3* (instance* room73a3-scene :init args)))

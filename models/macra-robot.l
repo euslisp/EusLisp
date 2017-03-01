@@ -1025,7 +1025,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray40)
-     (setq blink7 (instance bodyset-link :init (make-cascoords) :bodies bc :name :arm-shoulder-p-0 :weight 174 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((1.649890e-31 7.886992e-48 -1.641520e-47) (7.886992e-48 1.340447e-31 6.440430e-32) (-1.641520e-47 6.440430e-32 3.094425e-32))))
+     (setq blink7 (instance bodyset-link :init (make-cascoords) :bodies bc :name :arm-shoulder-p-0 :weight 174 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((1.649890e-31 7.887252e-48 -1.641574e-47) (7.887252e-48 1.340447e-31 6.440430e-32) (-1.641574e-47 6.440430e-32 3.094425e-32))))
 
      ;; definition of :arm-shoulder-r-0
      (setq bc (list
@@ -1040,7 +1040,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray40)
-     (setq blink8 (instance bodyset-link :init (make-cascoords) :bodies bc :name :arm-shoulder-r-0 :weight 33 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((3.129101e-32 1.495809e-48 -3.113228e-48) (1.495809e-48 2.542228e-32 1.221461e-32) (-3.113228e-48 1.221461e-32 5.868738e-33))))
+     (setq blink8 (instance bodyset-link :init (make-cascoords) :bodies bc :name :arm-shoulder-r-0 :weight 33 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((3.129101e-32 1.495858e-48 -3.113331e-48) (1.495858e-48 2.542228e-32 1.221461e-32) (-3.113331e-48 1.221461e-32 5.868738e-33))))
 
      ;; definition of :arm-upperarm-0
      (setq bc (list
@@ -1210,7 +1210,7 @@
      (send (elt bc 3) :set-color :gray40)
      (send (elt bc 4) :set-color :gray40)
      (send (elt bc 5) :set-color :darkgreen)
-     (setq blink9 (instance bodyset-link :init (make-cascoords) :bodies bc :name :arm-upperarm-0 :weight 144 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((1.365426e-31 6.527165e-48 -1.358499e-47) (6.527165e-48 1.109336e-31 5.330011e-32) (-1.358499e-47 5.330011e-32 2.560904e-32))))
+     (setq blink9 (instance bodyset-link :init (make-cascoords) :bodies bc :name :arm-upperarm-0 :weight 144 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((1.365426e-31 6.527381e-48 -1.358544e-47) (6.527381e-48 1.109336e-31 5.330011e-32) (-1.358544e-47 5.330011e-32 2.560904e-32))))
 
      ;; definition of :arm-forearm-0
      (setq bc (list
@@ -1463,7 +1463,7 @@
      (send (elt bc 4) :set-color :gray40)
      (send (elt bc 5) :set-color :darkgreen)
      (send (elt bc 6) :set-color :darkgreen)
-     (setq blink10 (instance bodyset-link :init (make-cascoords) :bodies bc :name :arm-forearm-0 :weight 196 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((1.858497e-31 8.884197e-48 -1.849069e-47) (8.884197e-48 1.509929e-31 7.254737e-32) (-1.849069e-47 7.254737e-32 3.485675e-32))))
+     (setq blink10 (instance bodyset-link :init (make-cascoords) :bodies bc :name :arm-forearm-0 :weight 196 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((1.858497e-31 8.884491e-48 -1.849130e-47) (8.884491e-48 1.509929e-31 7.254737e-32) (-1.849130e-47 7.254737e-32 3.485675e-32))))
 
      ;; definition of :leg-crotch-bracket-1
      (setq bc (list
@@ -2030,7 +2030,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray40)
      (send (elt bc 1) :set-color :gray40)
-     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-crotch-bracket-0 :weight 50 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((4.741063e-32 2.266377e-48 -4.717012e-48) (2.266377e-48 3.851860e-32 1.850698e-32) (-4.717012e-48 1.850698e-32 8.892027e-33))))
+     (setq blink1 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-crotch-bracket-0 :weight 50 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((4.741063e-32 2.266452e-48 -4.717168e-48) (2.266452e-48 3.851860e-32 1.850698e-32) (-4.717168e-48 1.850698e-32 8.892027e-33))))
 
      ;; definition of :leg-crotch-0
      (setq bc (list
@@ -2045,7 +2045,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray40)
-     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-crotch-0 :weight 217 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((2.057621e-31 9.836076e-48 -2.047183e-47) (9.836076e-48 1.671707e-31 8.032031e-32) (-2.047183e-47 8.032031e-32 3.859140e-32))))
+     (setq blink2 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-crotch-0 :weight 217 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((2.057621e-31 9.836401e-48 -2.047251e-47) (9.836401e-48 1.671707e-31 8.032031e-32) (-2.047251e-47 8.032031e-32 3.859140e-32))))
 
      ;; definition of :leg-thigh-0
      (setq bc (list
@@ -2215,7 +2215,7 @@
      (send (elt bc 3) :set-color :gray40)
      (send (elt bc 4) :set-color :gray40)
      (send (elt bc 5) :set-color :darkgreen)
-     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-thigh-0 :weight 550 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((5.215169e-31 2.493015e-47 -5.188713e-47) (2.493015e-47 4.237046e-31 2.035768e-31) (-5.188713e-47 2.035768e-31 9.781230e-32))))
+     (setq blink3 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-thigh-0 :weight 550 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((5.215169e-31 2.493097e-47 -5.188885e-47) (2.493097e-47 4.237046e-31 2.035768e-31) (-5.188885e-47 2.035768e-31 9.781230e-32))))
 
      ;; definition of :leg-shank-0
      (setq bc (list
@@ -2468,7 +2468,7 @@
      (send (elt bc 4) :set-color :gray40)
      (send (elt bc 5) :set-color :darkgreen)
      (send (elt bc 6) :set-color :darkgreen)
-     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-shank-0 :weight 340 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((3.223923e-31 1.541136e-47 -3.207568e-47) (1.541136e-47 2.619265e-31 1.258475e-31) (-3.207568e-47 1.258475e-31 6.046578e-32))))
+     (setq blink4 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-shank-0 :weight 340 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((3.223923e-31 1.541187e-47 -3.207674e-47) (1.541187e-47 2.619265e-31 1.258475e-31) (-3.207674e-47 1.258475e-31 6.046578e-32))))
 
      ;; definition of :leg-ankle-0
      (setq bc (list
@@ -2500,7 +2500,7 @@
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :gray40)
      (send (elt bc 1) :set-color :gray40)
-     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-ankle-0 :weight 230 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((2.180889e-31 1.042533e-47 -2.169826e-47) (1.042533e-47 1.771856e-31 8.513212e-32) (-2.169826e-47 8.513212e-32 4.090332e-32))))
+     (setq blink5 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-ankle-0 :weight 230 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((2.180889e-31 1.042568e-47 -2.169897e-47) (1.042568e-47 1.771856e-31 8.513212e-32) (-2.169897e-47 8.513212e-32 4.090332e-32))))
 
      ;; definition of :leg-foot-0
      (setq bc (list
@@ -2533,7 +2533,7 @@
      (send (elt bc 0) :set-color :gray40)
      (send (elt bc 1) :set-color :gray40)
      (send (elt bc 2) :set-color :darkgreen)
-     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-foot-0 :weight 125 :centroid (float-vector -3.398965e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((1.185266e-31 5.665942e-48 -1.179253e-47) (5.665942e-48 9.629650e-32 4.626746e-32) (-1.179253e-47 4.626746e-32 2.223007e-32))))
+     (setq blink6 (instance bodyset-link :init (make-cascoords) :bodies bc :name :leg-foot-0 :weight 125 :centroid (float-vector -3.399078e-33 1.333569e-17 -2.775558e-17) :inertia-tensor #2f((1.185266e-31 5.666129e-48 -1.179292e-47) (5.666129e-48 9.629650e-32 4.626746e-32) (-1.179292e-47 4.626746e-32 2.223007e-32))))
 
      ;; definition of :head-neck
      (setq bc (list
@@ -2685,11 +2685,11 @@
      (send blink21 :assoc blink22)
      (send blink21 :newcoords (make-coords :pos (float-vector 0.0 0.0 200.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
      (send blink0 :assoc blink21)
-     (send blink1 :newcoords (make-coords :pos (float-vector 24.82 -57.0 -64.0) :rot #2f((-1.0 0.0 1.224606e-16) (0.0 1.0 0.0) (-1.224606e-16 0.0 -1.0))))
+     (send blink1 :newcoords (make-coords :pos (float-vector 24.82 -57.0 -64.0) :rot #2f((-1.0 0.0 1.224647e-16) (0.0 1.0 0.0) (-1.224647e-16 0.0 -1.0))))
      (send blink0 :assoc blink1)
      (send blink11 :newcoords (make-coords :pos (float-vector 24.82 57.0 -64.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
      (send blink0 :assoc blink11)
-     (send blink7 :newcoords (make-coords :pos (float-vector 3.5 -97.0 170.5) :rot #2f((-1.0 0.0 1.224606e-16) (0.0 1.0 0.0) (-1.224606e-16 0.0 -1.0))))
+     (send blink7 :newcoords (make-coords :pos (float-vector 3.5 -97.0 170.5) :rot #2f((-1.0 0.0 1.224647e-16) (0.0 1.0 0.0) (-1.224647e-16 0.0 -1.0))))
      (send blink0 :assoc blink7)
      (send blink17 :newcoords (make-coords :pos (float-vector 3.5 97.0 170.5) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
      (send blink0 :assoc blink17)
@@ -3043,7 +3043,7 @@
      (setq sensor22
        (make-cascoords
 	:coords (send (send blink9 :copy-worldcoords) :transform 
-		      (make-coords :pos (float-vector -3.9 -26.5 80.9) :rot #2f((1.0 2.449213e-16 2.465190e-32) (2.465190e-32 4.105367e-48 -1.0) (-2.449213e-16 1.0 -4.105367e-48))))
+		      (make-coords :pos (float-vector -3.9 -26.5 80.9) :rot #2f((1.0 2.449294e-16 2.465190e-32) (2.465190e-32 2.736911e-48 -1.0) (-2.449294e-16 1.0 -2.736911e-48))))
         :name "arm-0-force-sensor30"))
      (send blink9 :assoc sensor22)
 
@@ -3059,7 +3059,7 @@
      (setq sensor24
        (make-cascoords
 	:coords (send (send blink9 :copy-worldcoords) :transform 
-		      (make-coords :pos (float-vector -3.9 16.5 80.9) :rot #2f((-1.0 1.224606e-16 -2.465190e-32) (-2.465190e-32 0.0 1.0) (1.224606e-16 1.0 0.0))))
+		      (make-coords :pos (float-vector -3.9 16.5 80.9) :rot #2f((-1.0 1.224647e-16 -2.465190e-32) (-2.465190e-32 0.0 1.0) (1.224647e-16 1.0 0.0))))
         :name "arm-0-force-sensor32"))
      (send blink9 :assoc sensor24)
 
@@ -3107,7 +3107,7 @@
      (setq sensor30
        (make-cascoords
 	:coords (send (send blink19 :copy-worldcoords) :transform 
-		      (make-coords :pos (float-vector 3.9 26.5 -80.9) :rot #2f((-1.0 -1.224606e-16 1.232595e-32) (1.232595e-32 0.0 1.0) (-1.224606e-16 1.0 0.0))))
+		      (make-coords :pos (float-vector 3.9 26.5 -80.9) :rot #2f((-1.0 -1.224647e-16 0.0) (0.0 0.0 1.0) (-1.224647e-16 1.0 0.0))))
         :name "arm-1-force-sensor34"))
      (send blink19 :assoc sensor30)
 

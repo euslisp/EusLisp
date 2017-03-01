@@ -585,7 +585,7 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 195.0) :rot #2f((1.0 1.743153e-32 -1.743153e-32) (-1.743153e-32 2.220446e-16 -1.0) (-1.743153e-32 1.0 2.220446e-16)) :name "handle0"))
+     (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 195.0) :rot #2f((1.0 -1.743153e-32 -1.743153e-32) (-1.743153e-32 2.220446e-16 -1.0) (1.743153e-32 1.0 2.220446e-16)) :name "handle0"))
      (send blink0 :assoc handle0)
 
      ;; definition of :attention

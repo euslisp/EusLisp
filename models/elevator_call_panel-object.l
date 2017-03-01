@@ -44,9 +44,9 @@
 
 
      ;; definition of :button
-     (setq button0 (make-cascoords :pos (float-vector 0.0 -50.0 -45.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "down"))
+     (setq button0 (make-cascoords :pos (float-vector 0.0 -50.0 -45.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "down"))
      (send blink0 :assoc button0)
-     (setq button1 (make-cascoords :pos (float-vector 0.0 -50.0 20.0) :rot #2f((-1.0 -1.224606e-16 0.0) (1.224606e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "up"))
+     (setq button1 (make-cascoords :pos (float-vector 0.0 -50.0 20.0) :rot #2f((-1.0 -1.224647e-16 0.0) (1.224647e-16 -1.0 0.0) (0.0 0.0 1.0)) :name "up"))
      (send blink0 :assoc button1)
 
      ;; init-ending 
