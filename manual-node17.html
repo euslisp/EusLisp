@@ -132,7 +132,7 @@ information exchange among threads.
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="threadmodel"></A><A NAME="25604"></A>
+<DIV ALIGN="CENTER"><A NAME="threadmodel"></A><A NAME="25588"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 5:</STRONG>
 Solaris operating system's thread model</CAPTION>
@@ -202,7 +202,7 @@ processing and image acquisition.
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="parathreads"></A><A NAME="25616"></A>
+<DIV ALIGN="CENTER"><A NAME="parathreads"></A><A NAME="25600"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 6:</STRONG>
 Parallel threads requesting memory and GC running in parallel</CAPTION>
@@ -245,7 +245,7 @@ and slots for argument and evaluation result transfer.
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="threadobj"></A><A NAME="25809"></A>
+<DIV ALIGN="CENTER"><A NAME="threadobj"></A><A NAME="25793"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 7:</STRONG>
 Thread-object for transferring control and data between threads (left) and the collection of threads put in the thread-pool.</CAPTION>
@@ -306,7 +306,7 @@ on a time-sliced scheduling basis.
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="synchports"></A><A NAME="25645"></A>
+<DIV ALIGN="CENTER"><A NAME="synchports"></A><A NAME="25629"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 8:</STRONG>
 Barrier synchronization and synchronozed memory port</CAPTION>
@@ -425,7 +425,7 @@ purging.
 
 <P>
 <BR><P></P>
-<DIV ALIGN="CENTER"><A NAME="25810"></A>
+<DIV ALIGN="CENTER"><A NAME="25794"></A>
 <TABLE>
 <CAPTION><STRONG>Table 3:</STRONG>
 Parallel gains of programs executed on multi-processors</CAPTION>
@@ -499,7 +499,7 @@ rather than the thread's entity representing the context.
  <BR>
 <BR> <P>
 
-<A NAME="25832"></A>
+<A NAME="25816"></A>
 <B>sys:make-thread</B> <EM>num &amp;optional (lsize 32*1024) (csize lsize) </EM>[function]
 
 <DL COMPACT>
@@ -523,7 +523,7 @@ computation.
 
 <P>
 
-<A NAME="25847"></A>
+<A NAME="25831"></A>
 <B>sys:*threads*</B> [variable]
 
 <DL COMPACT>
@@ -537,7 +537,7 @@ returns the list of all the threads created by <B>make-threads</B>.
 
 <P>
 
-<A NAME="25858"></A>
+<A NAME="25842"></A>
 <B>sys::free-threads</B> [function]
 
 <DL COMPACT>
@@ -555,7 +555,7 @@ or new threads are created by <B>make-thread</B> in the free thread pool.
 
 <P>
 
-<A NAME="25869"></A>
+<A NAME="25853"></A>
 <B>sys:thread</B> <EM>func &amp;rest args </EM>[function]
 
 <DL COMPACT>
@@ -583,7 +583,7 @@ by <B>sys:wait-thread</B>.
 
 <P>
 
-<A NAME="25887"></A>
+<A NAME="25871"></A>
 <B>sys:thread-no-wait</B> <EM>func &amp;rest args </EM>[function]
 
 <DL COMPACT>
@@ -599,7 +599,7 @@ it finishes evaluation without being <B>wait-thread</B>'ed.
 
 <P>
 
-<A NAME="25898"></A>
+<A NAME="25882"></A>
 <B>sys:wait-thread</B> <EM>thread </EM>[function]
 
 <DL COMPACT>
@@ -618,7 +618,7 @@ to the free thread pool until it finishes transferring the result.
 
 <P>
 
-<A NAME="25912"></A>
+<A NAME="25896"></A>
 <B>sys:plist</B> <EM>&amp;rest forms </EM>[macro]
 
 <DL COMPACT>
@@ -652,7 +652,7 @@ such as synchronized memory port and barrier synchronization, are realized.
 <P>
 
  <BR>
-<BR> <A NAME="25925"></A>
+<BR> <A NAME="25909"></A>
 <B>sys:make-mutex-lock</B> [function]
 
 <DL COMPACT>
@@ -665,7 +665,7 @@ integer-vector of six elements.
 <BR>
 <BR>
 
-<A NAME="25935"></A>
+<A NAME="25919"></A>
 <B>sys:mutex-lock</B> <EM>mlock </EM>[function]
 
 <DL COMPACT>
@@ -681,7 +681,7 @@ If the <EM>mlock</EM> is already locked by another thread,
 
 <P>
 
-<A NAME="25948"></A>
+<A NAME="25932"></A>
 <B>sys:mutex-unlock</B> <EM>mlock </EM>[function]
 
 <DL COMPACT>
@@ -696,7 +696,7 @@ lock resume running.
 
 <P>
 
-<A NAME="25959"></A>
+<A NAME="25943"></A>
 <B>sys:mutex</B> <EM>mlock &amp;rest forms </EM>[macro]
 
 <DL COMPACT>
@@ -725,7 +725,7 @@ even an error occurs during the evaluation of <EM>forms</EM>.
 
 <P>
 
-<A NAME="25974"></A>
+<A NAME="25958"></A>
 <B>sys:make-cond</B> [function]
 
 <DL COMPACT>
@@ -740,7 +740,7 @@ The returned condition variable is in unlocked state.
 
 <P>
 
-<A NAME="25984"></A>
+<A NAME="25968"></A>
 <B>sys:cond-wait</B> <EM>condvar mlock </EM>[function]
 
 <DL COMPACT>
@@ -754,7 +754,7 @@ it releases <EM>mlock</EM> and waits for <EM>condvar</EM> to be signaled.
 <BR>
 <BR>
 
-<A NAME="25998"></A>
+<A NAME="25982"></A>
 <B>sys:cond-signal</B> <EM>condvar </EM>[function]
 
 <DL COMPACT>
@@ -765,7 +765,7 @@ it releases <EM>mlock</EM> and waits for <EM>condvar</EM> to be signaled.
 <BR>
 <BR>
 
-<A NAME="26009"></A>
+<A NAME="25993"></A>
 <B>sys:make-semaphore</B> [function]
 
 <DL COMPACT>
@@ -777,7 +777,7 @@ which is represented by an integer vector of twelve elements.
 <BR>
 <BR>
 
-<A NAME="26019"></A>
+<A NAME="26003"></A>
 <B>sys:sema-post</B> <EM>sem </EM>[function]
 
 <DL COMPACT>
@@ -788,7 +788,7 @@ which is represented by an integer vector of twelve elements.
 <BR>
 <BR>
 
-<A NAME="26030"></A>
+<A NAME="26014"></A>
 <B>sys:sema-wait</B> <EM>sem </EM>[function]
 
 <DL COMPACT>
@@ -801,7 +801,7 @@ which is represented by an integer vector of twelve elements.
 
 <P>
 	<BR> 
-<A NAME="26042"></A>
+<A NAME="26026"></A>
 <BIG CLASS="XLARGE"><B>sys:barrier-synch </B></BIG> [class]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 threads n-threads count barrier-cond threads-lock count-lock 
@@ -832,7 +832,7 @@ condition-variable.
 
 <P>
 
-<A NAME="26071"></A>
+<A NAME="26055"></A>
 <B>:init</B> [method]
 
 <DL COMPACT>
@@ -844,7 +844,7 @@ and one condition-variable are created.
 <BR>
 <BR>
 
-<A NAME="26081"></A>
+<A NAME="26065"></A>
 <B>:add</B> <EM>thr </EM>[method]
 
 <DL COMPACT>
@@ -855,7 +855,7 @@ and one condition-variable are created.
 <BR>
 <BR>
 
-<A NAME="26093"></A>
+<A NAME="26077"></A>
 <B>:remove</B> <EM>thr </EM>[method]
 
 <DL COMPACT>
@@ -866,7 +866,7 @@ and one condition-variable are created.
 <BR>
 <BR>
 
-<A NAME="26105"></A>
+<A NAME="26089"></A>
 <B>:wait</B> [method]
 
 <DL COMPACT>
@@ -880,7 +880,7 @@ to issue <TT>:wait</TT>.
 
 <P>
 	<BR> 
-<A NAME="26118"></A>
+<A NAME="26102"></A>
 <BIG CLASS="XLARGE"><B>sys:synch-memory-port </B></BIG> [class]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 sema-in sema-out buf empty lock 
@@ -901,7 +901,7 @@ Control transfer is implemented by using semaphores.
 
 <P>
 
-<A NAME="26135"></A>
+<A NAME="26119"></A>
 <B>:read</B> [method]
 
 <DL COMPACT>
@@ -913,7 +913,7 @@ If it has not been written yet, the :read blocks.
 <BR>
 <BR>
 
-<A NAME="26145"></A>
+<A NAME="26129"></A>
 <B>:write</B> <EM>datum </EM>[method]
 
 <DL COMPACT>
@@ -927,7 +927,7 @@ if another datum has already been written and not yet read out,
 <BR>
 <BR>
 
-<A NAME="26156"></A>
+<A NAME="26140"></A>
 <B>:init</B> [method]
 
 <DL COMPACT>
@@ -954,7 +954,7 @@ where two semaphores  are created and :write is made acceptable.
 <!--End of Navigation Panel-->
 <ADDRESS>
 Travis CI User
-2016-12-30
+2017-03-07
 </ADDRESS>
 </BODY>
 </HTML>
