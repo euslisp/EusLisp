@@ -84,8 +84,7 @@
     (setq *has-key* has-key)
     args-str))
 
-(defun make-class-document (cls super slots)
-  (labels ((write-classdesc (cls super slots)
+(defun write-classdesc (cls &optional (super (send cls :super)) (slots (cdr (coerce (send cls :slots) cons))))
              (let (slots-str (doc-str ""))
                (dolist (slot slots)
                  (setq slots-str (concatenate string slots-str (format nil "~A " slot))))
@@ -97,7 +96,10 @@
                      (:md
                       (format t "### ~A~%- :super **~A**~%- :slots ~A~%~%~A~%~%" (send cls :name) (send super :name) slots-str doc-str)))
                ))
-           (write-methoddesc (method args doc)
+           
+
+(defun make-method-document (cls methods)
+  (labels ((write-methoddesc (method args doc)
              (let (args-str)
 	       (setq doc (make-doc-string doc))
 	       (setq args-str (make-arg-string doc args "method"))
@@ -115,11 +117,9 @@
 			    (t
 			     (format t "#### ~A~%~A~%~%- ~A~%~%" method args-str doc))
 			    )));; case
-             ))) ;; label
-    (cond ((eq (class cls) metaclass)
-           (write-classdesc cls super slots)
+               )));; label
            (let ((method-with-document) (method-without-document))
-             (dolist (method (reverse (send cls :methods)))
+             (dolist (method methods)
                (cond ((stringp (third method))
                       (push method method-with-document))
                      ((listp (second method))
@@ -148,6 +148,14 @@
                     ))
              )
            (format t "~%")
+           ))
+
+
+(defun make-class-document (cls super slots)
+  (let ()
+    (cond ((eq (class cls) metaclass)
+           (write-classdesc cls super slots)
+           (make-method-document cls (reverse (send cls :methods)))
            ))
   ))
 
@@ -199,6 +207,8 @@
 
   (unless (fboundp 'defclass-org)
     (setf (symbol-function 'defclass-org) (symbol-function 'defclass)))
+  (unless (fboundp 'defmethod-org)
+    (setf (symbol-function 'defmethod-org) (symbol-function 'defmethod)))
   (unless (fboundp 'defun-org)
     (setf (symbol-function 'defun-org) (symbol-function 'defun)))
   (defmacro require (&rest args) (format *error-output* ";; skip require ~A ..." args))
@@ -206,6 +216,12 @@
     `(progn
        (defclass-org ,cls :super ,super :slots ,slots :doc ,doc)
        (push '(make-class-document ,cls ,super '(,@slots)) *classdoc*)))
+  (defmacro defmethod (cls &rest methods)
+    `(progn
+       (defmethod-org ,cls ,@methods)
+       (unless (member ,cls *classdoc* :test #'(lambda (a b) (and (equal (car b) 'make-class-document) (equal (send a :name) (cadr b))))) ;; if defclass is already loaded
+         (push '(write-classdesc ,cls)  *classdoc*))
+       (push '(make-method-document ,cls '(,@methods)) *classdoc*)))
   (defmacro defun (symbol args &rest body)
     `(progn
        (defun-org ,symbol ,args ,@body)
