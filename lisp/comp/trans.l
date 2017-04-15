@@ -631,7 +631,7 @@
     (format cfile "#include \"eus.h\"~%")	;should specify -I opt.
     #+:rgc
     (format cfile "#include \"collector.h\"~%")
-    (format cfile "#include \"~A\"~%" (namestring hname))
+    (format cfile "#include \"~A.~A\"~%" (pathname-name hname) (pathname-type hname))
 #-:alpha
     (format cfile "#pragma init (register_~a)~%" entry)
     (format cfile "extern double fabs();~%")
