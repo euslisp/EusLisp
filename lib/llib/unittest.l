@@ -241,7 +241,49 @@
 		    (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer)))))))
 	  )))
 
+    (defmacro assert-eq (arg1 arg2 &optional (message "") &rest args)
+      (with-gensyms
+       (ret)
+       `(let ((ret (eq ,arg1 ,arg2)))
+          (when (not ret)
+            (send *unit-test* :increment-failure
+                  '(eq ,arg1 ,arg2)
+                  (format nil "~A must be `eq` to ~A" ,arg1 ,arg2)
+                  (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer))))))
+                  ))))
 
+    (defmacro assert-neq (arg1 arg2 &optional (message "") &rest args)
+      (with-gensyms
+       (ret)
+       `(let ((ret (not (eq ,arg1 ,arg2))))
+          (when (not ret)
+            (send *unit-test* :increment-failure
+                  '(not (eq ,arg1 ,arg2))
+                  (format nil "~A must NOT be `eq` to ~A" ,arg1 ,arg2)
+                  (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer))))))
+            ))))
+
+    (defmacro assert-equal (arg1 arg2 &optional (message "") &rest args)
+      (with-gensyms
+       (ret)
+       `(let ((ret (equal ,arg1 ,arg2)))
+          (when (not ret)
+            (send *unit-test* :increment-failure
+                  '(equal ,arg1 ,arg2)
+                  (format nil "~A must be `equal` to ~A" ,arg1 ,arg2)
+                  (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer))))))
+            ))))
+
+    (defmacro assert-nequal (arg1 arg2 &optional (message "") &rest args)
+      (with-gensyms
+       (ret)
+       `(let ((ret (not (equal ,arg1 ,arg2))))
+          (when (not ret)
+            (send *unit-test* :increment-failure
+                  '(not (equal ,arg1 ,arg2))
+                  (format nil "~A must NOT be `equal` to ~A" ,arg1 ,arg2)
+                  (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer))))))
+            ))))
     t))
 
 (provide :unittest)
