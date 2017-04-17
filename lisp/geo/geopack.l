@@ -139,8 +139,10 @@ Normal must be given if the sign of the angle is needed."
 (defun maxindex (fv)
    (declare (type float-vector fv))
    (let ((index 0))
-      (if (> (abs (aref fv 1)) (abs (aref fv 0))) (setq index 1)) 
-      (if (> (abs (aref fv 2)) (abs (aref fv index))) (setq index 2)) 
+      (dotimes (i (- (length fv) 1))
+         (if (> (abs (aref fv (+ i 1))) (abs (aref fv i)))
+           (setq index (+ i 1))
+           (setq index i)))
       index))
 
 ;
