@@ -5,7 +5,7 @@
 /*	1987-Feb	dup,isatty
 /*	1987-Apr	getwd,stat,time
 /*	1988-Jan,Feb	socket, select
-/*	1988-Dec	ioctl		
+/*	1988-Dec	ioctl
 /*	1990-Mar	VxWorks
 /*	Copyright(c) 1988 MATSUI Toshihiro, Electrotechnical Laboratory.
 /****************************************************************/
@@ -154,11 +154,11 @@ pointer argv[];
   tz=cons(ctx, tz1, NIL);
   tz=cons(ctx, tz0, tz);
   tv=timevec->c.vec.v;
-  tv[0]=makeint(tms->tm_sec); 
+  tv[0]=makeint(tms->tm_sec);
   tv[1]=makeint(tms->tm_min);
   tv[2]=makeint(tms->tm_hour);
   tv[3]=makeint(tms->tm_mday);
-  tv[4]=makeint(tms->tm_mon); 
+  tv[4]=makeint(tms->tm_mon);
   tv[5]=makeint(tms->tm_year);
   tv[6]=makeint(tms->tm_wday);
   tv[7]=makeint(tms->tm_yday);
@@ -343,7 +343,7 @@ pointer argv[];
 	((elmtypeof(argv[1])==ELM_INT) || (elmtypeof(argv[1])==ELM_BIT))) {
     set=(sigset_t *)argv[1]->c.ivec.iv;
     if (isvector(argv[2]) &&
-	((elmtypeof(argv[2])==ELM_INT) || (elmtypeof(argv[2])==ELM_BIT))) 
+	((elmtypeof(argv[2])==ELM_INT) || (elmtypeof(argv[2])==ELM_BIT)))
       oset=(sigset_t *)argv[2]->c.ivec.iv;
     else oset=(sigset_t *)0;
     stat=sigprocmask(how, set, oset);
@@ -367,7 +367,7 @@ pointer argv[];
 { register int s,i;eusinteger_t f;
   struct sigaction sv;
   register pointer a=argv[1],oldval;
-  extern void eusint();	
+  extern void eusint();
 
   ckarg2(1,3);
   s=min(ckintval(argv[0]),NSIG-1);
@@ -379,11 +379,11 @@ pointer argv[];
 #if Linux || Cygwin
 
 #if LIB6 && !Darwin
-  for (i=0; i< _SIGSET_NWORDS; i++)   sv.sa_mask.__val[i]=0; 
+  for (i=0; i< _SIGSET_NWORDS; i++)   sv.sa_mask.__val[i]=0;
 #else
   /* old type sigmask */
   sv.sa_mask=0;
-#endif 
+#endif
 /*LIB6*/
 
 #elif (IRIX || IRIX6) && !IRIX6_2
@@ -460,7 +460,7 @@ int n; pointer argv[];
 #endif /*!vxworks*/
 
 /**********************************************/
-/* process, user, and group identification 
+/* process, user, and group identification
 /**********************************************/
 
 pointer GETPID(ctx,n,argv)
@@ -564,7 +564,7 @@ pointer *argv;
 #endif
 
 /****************************************************************/
-/* process creation and deletion 
+/* process creation and deletion
 /****************************************************************/
 #if !vxworks
 #if !Solaris2 || !THREADED
@@ -627,7 +627,7 @@ register context *ctx;
 int n;
 pointer *argv;
 { ckarg(0);
-  return(makeint(vfork()));} 
+  return(makeint(vfork()));}
 #endif
 
 pointer EXEC(ctx,n,argv)
@@ -642,7 +642,7 @@ pointer *argv;
     i++;}
   exeargv[i]=0;
   stat=execvp(exeargv[0],(char **)exeargv);
-  return(makeint(-errno));}	  
+  return(makeint(-errno));}
 
 #if !Solaris2
 static pointer SETPRIORITY(ctx,n,argv)
@@ -651,7 +651,7 @@ int n;
 pointer *argv;
 /* (SETPRIORITY which who priority)
 	which 0:process,  1:process-group,  2:user
-	who   0:self, others pid, pgrp-id user-id */ 
+	who   0:self, others pid, pgrp-id user-id */
 { ckarg(3);
   return(makeint(setpriority(ckintval(argv[0]),
 			     ckintval(argv[1]),
@@ -673,7 +673,7 @@ int n;
 pointer *argv;
 { pointer exithook=speval(QEXITHOOK);
 /*
-  Exit function can not finish threads which create in Euslisp 
+  Exit function can not finish threads which create in Euslisp
 on SunOS 4.1. So we use thr_exit function on SunOS 4.1.
 */
 #if SunOS4_1 /* changed by H.Nakagaki at 28-Jun-1995 */
@@ -714,7 +714,7 @@ pointer argv[];
 #endif
   register pointer strm,buf,count;
   byte *bufp;
-  
+
   ckarg2(1,4);
   strm=argv[0];
   if (isiostream(strm)) strm=strm->c.iostream.in;
@@ -729,7 +729,7 @@ pointer argv[];
   else if (isint(strm)) {
     fd=intval(strm);
     buf=argv[1];
-    if (isvector(buf) && (elmtypeof(buf)==ELM_FOREIGN)) 
+    if (isvector(buf) && (elmtypeof(buf)==ELM_FOREIGN))
       bufp=buf->c.foreign.chars;
     else if (isstring(buf)) bufp=buf->c.str.chars;
     else error(E_NOSTRING);
@@ -748,7 +748,7 @@ pointer UNIXWRITE(ctx,n,argv)
 register context *ctx;
 register int n;
 pointer *argv;
-/* (unix:write fd string [count]) 
+/* (unix:write fd string [count])
    (unix:write stream string [count]) */
 { register pointer strm,buf;
   register int size,fd;
@@ -763,12 +763,12 @@ pointer *argv;
   else if (isint(strm)) fd=intval(strm);
   else error(E_STREAM);
   buf=argv[1];
-  if (isvector(buf) && (elmtypeof(buf)==ELM_FOREIGN)) 
+  if (isvector(buf) && (elmtypeof(buf)==ELM_FOREIGN))
     bufp=buf->c.foreign.chars;
   else if (isstring(buf)) bufp=buf->c.str.chars;
   else error(E_NOSTRING);
   size=strlength(buf);
-  if (n==3) size=min(size,ckintval(argv[2])); 
+  if (n==3) size=min(size,ckintval(argv[2]));
   size=write(fd,bufp,size);
   return(makeint(size));}
 
@@ -918,6 +918,7 @@ int n;
 register pointer argv[];
 { register pointer strm;
   int size,x,y,fd;
+  int check_directive;
   eusinteger_t addr;
   ckarg2(4,5);
   strm=argv[0];
@@ -932,10 +933,11 @@ register pointer argv[];
   if (n==5) size=ckintval(argv[4]);
   else size=bytesize(argv[3]);
 #if alpha || Linux_ppc
-  if (ioctl(fd,_IOC(IOC_IN, x, y, size), addr))
+  check_directive = (ioctl(fd,_IOC(IOC_IN, x, y, size), addr));
 #else
-  if (ioctl(fd,IOC_IN | (size<<16) | (x<<8) | y, addr))
+  check_directive = (ioctl(fd,IOC_IN | (size<<16) | (x<<8) | y, addr));
 #endif
+  if (check_directive)
     return(makeint(-errno));
   else return(T);  }
 
@@ -949,6 +951,7 @@ register pointer argv[];
 { register pointer strm=argv[0];
   int size,x,y,fd;
   eusinteger_t addr;
+  int check_directive;
 
   ckarg2(4,5);
   if (isiostream(strm)) strm=strm->c.iostream.out;
@@ -962,10 +965,11 @@ register pointer argv[];
   if (n==5) size=ckintval(argv[4]);
   else size=bytesize(argv[3]);
 #if alpha || Linux_ppc
-  if (ioctl(fd,_IOC(IOC_INOUT, x, y, size), addr))
+  check_directive = (ioctl(fd,_IOC(IOC_INOUT, x, y, size), addr));
 #else
-  if (ioctl(fd,IOC_INOUT | (size <<16) | (x<<8) | y, addr))
+  check_directive = (ioctl(fd,IOC_INOUT | (size <<16) | (x<<8) | y, addr));
 #endif
+  if (check_directive)
     return(makeint(-errno)) ;
   else return(T);  }
 #endif /*Cygwin*/
@@ -1129,7 +1133,7 @@ pointer argv[];
   if (n==1)  s=get_string(argv[0]); else s=(byte *)".";
   if ( (dirp = opendir((char *)s)) == NULL ) return (NIL);
   while ( (direntp = readdir( dirp )) != NULL ){
-     str=direntp->d_name; 
+     str=direntp->d_name;
      if(flag) a=cons(ctx,makestring(str,strlen(str)),a);
      else { a=cons(ctx,makestring(str,strlen(str)),NIL); flag++;}
    }
@@ -1258,7 +1262,7 @@ pointer *argv;
   buf->c.str.length=lsave;
   if (stat<0) return(makeint(-errno));
   else return(cons(ctx,makeint(mtype),cons(ctx,makeint(stat),NIL)));}
-  
+
 pointer MSGSND(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1346,7 +1350,7 @@ pointer PUTENV(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ 
+{
   char *b;
   pointer a=argv[0];
   ckarg(1);
@@ -1395,7 +1399,7 @@ pointer ERRNO(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];
-{ 
+{
   return(makeint(errno));
   }
 
@@ -1403,7 +1407,7 @@ pointer PERROR(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];
-{ 
+{
   ckarg(1);
   char *s=Getstring(argv[0])->c.str.chars;
   fprintf(stderr, "%c[3%cm;; ERROR ", 0x1b, 49);
@@ -1446,7 +1450,7 @@ pointer argv[];
   else fd=ckintval(a);
   /*
 #if Cygwin
-  if (getenv("EMACS") && (strcmp (getenv("EMACS"), "t")) == 0 ) return(T); 
+  if (getenv("EMACS") && (strcmp (getenv("EMACS"), "t")) == 0 ) return(T);
 #endif
   */
   if (isatty(fd)) return(T); else return(NIL);}
@@ -1487,7 +1491,7 @@ register pointer argv[];
   else l=sizeof(struct sockaddr_in);
   s=(int)bind(s, sa, l);
   if (s) return(makeint(-errno)); else return(makeint(0));}
-  
+
 pointer CONNECT(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1524,7 +1528,7 @@ pointer argv[];
   pointer sockname;
 #if vxworks || Cygwin || Linux || Solaris2
   struct sockaddr sockun;
-#else 
+#else
   struct sockaddr_un sockun;	// ??? why not sockaddr or sockaddr_in ???
 #endif
 
@@ -1603,7 +1607,7 @@ pointer argv[];
   else return(makestring(name,namelen));}
 #endif /*!Solaris2*/
 
-#if !vxworks 
+#if !vxworks
 
 eusinteger_t *checkbitvec(pointer a, long *size)
 { if (a==NIL) { *size=0; return(0);}
@@ -1633,7 +1637,7 @@ register pointer argv[];
   readfds=(fd_set *)checkbitvec(argv[0], &size0);
   writefds=(fd_set *)checkbitvec(argv[1], &size1);
   exceptfds=(fd_set *)checkbitvec(argv[2], &size2);
-  maxwidth=min(256, max(max(size0, size1), size2)); 
+  maxwidth=min(256, max(max(size0, size1), size2));
 
 /*  printf("SELECT: readfds=%x\n", readfds);
   printf("SELECT: writefds=%x\n", writefds);
@@ -1678,7 +1682,7 @@ pointer argv[];
   size=min(256,size);
   for (i=0; i<size; i++) if (FD_ISSET(i, fdvec)) width=i;
   width = width+1;
-     
+
   timeout=ckfltval(argv[1]);
   if (timeout==0.0) {GC_REGION(n=select(width, fdvec, 0, 0, 0););}
   else {
@@ -1738,7 +1742,7 @@ int n; register pointer argv[];
   if (isfilestream(strm)) fd=intval(strm->c.fstream.fd);
   else fd=ckintval(strm);
   len=ckintval(argv[1]);
-  if (isintvector(argv[5])) 
+  if (isintvector(argv[5]))
     offset=((argv[5]->c.ivec.iv[0])<<16) + argv[5]->c.ivec.iv[1];
   else offset=ckintval(argv[5]);
   result=(eusinteger_t)mmap((caddr_t)ckintval(argv[0]), len,
@@ -1787,7 +1791,7 @@ register pointer *argv;
   s=cons(ctx,makeint(hp->h_addrtype),NIL);
   s=cons(ctx,makestring(hp->h_addr,hp->h_length),s);
   return(s);}	/*list of 32bit address and address type*/
-  
+
 pointer GETHOSTBYADDR(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1800,7 +1804,7 @@ pointer *argv;
   if (host==NULL) return(makeint(-errno));
   else return(makestring(host->h_name, strlen(host->h_name)));}
 
-#if !Cygwin /* Cygwin does not hvae getnetbyname */ 
+#if !Cygwin /* Cygwin does not hvae getnetbyname */
 pointer GETNETBYNAME(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1831,7 +1835,7 @@ register pointer *argv;
   pointer s;
   byte *p;
   long int port;
-  
+
   ckarg2(1,2);
   if (n==2 && argv[1]!=NIL)  p=Getstring(argv[1])->c.str.chars;
   else p=NULL;
@@ -1874,7 +1878,7 @@ register pointer *argv;
 
 
 #ifdef DBM
-/* ndbm --- data base 
+/* ndbm --- data base
 	1988-May
 	(c) T.Matsui
 */
