@@ -63,6 +63,7 @@
        ))
      (dolist (b (cdr bc)) (send (car bc) :assoc b))
      (send (elt bc 0) :set-color :brown)
+     (send (elt bc 0) :paste-texture-to-face (elt (send (elt bc 0) :faces) 0) :file "models/turtlebot_big.jpg")
      (send (elt bc 1) :set-color :brown)
      (send (elt bc 2) :set-color :brown)
      (send (elt bc 3) :set-color :brown)
