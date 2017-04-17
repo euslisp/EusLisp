@@ -10,7 +10,9 @@
 
 (list "@(#)$Id: common.l,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $")
 
-(export '(lisp-implementation-type lisp-implementation-version))
+(export '(lisp-implementation-type lisp-implementation-version
+          version-string-p
+          version< version> version= version<= version>=))
 
 (export '(macroexpand prog1 loop unless until
 	  pop push pushnew inc dec incf decf))
@@ -69,6 +71,57 @@
 		(cadr lisp-implementation-version)
                 (caddr lisp-implementation-version)
                 ))
+(defun version-string-p (str)
+  "Return T if STR is string of version defined below, return NIL otherwise.
+VERSION := NUMBER (DOT NUMBER)*
+NUMBER := (0|1|2|3|4|5|6|7|8|9)*"
+  (null (find-if-not #'(lambda (x)
+                         (and (integerp x) (not (minusp x))))
+                     (read-from-string (format nil "(~A)" (substitute #\Space #\. str))))))
+(defun version-string-to-list (str)
+"Return list of version numbers of version string STR"
+  (unless (version-string-p str)
+    (error "version string must be number or dot: ~A~%" str))
+  (read-from-string (format nil "(~A)" (substitute #\Space #\. str))))
+(defun version-list-not-zero (lst)
+  "Return the first non-zero element of LST, which is a list of integers"
+  (while (and lst (zerop (car lst)))
+    (setq lst (cdr lst)))
+  (if lst (car lst) 0))
+(defun version< (ver1 ver2)
+  "Return T if version VER1 is lower (older) than VER2, return NIL otherwise"
+  (let ((l1 (version-string-to-list ver1))
+        (l2 (version-string-to-list ver2)))
+    (while (and l1 l2 (= (car l1) (car l2)))
+      (setq l1 (cdr l1) l2 (cdr l2)))
+    (cond
+     ((and l1 l2) (< (car l1) (car l2)))
+     ((and (null l1) (null l2)) nil)
+     (l1 (< (version-list-not-zero l1) 0))
+     (t (< 0 (version-list-not-zero l2))))))
+(defun version= (ver1 ver2)
+  "Return T if version VER1 is equal to VER2, return NIL otherwise"
+  (let ((l1 (version-string-to-list ver1))
+        (l2 (version-string-to-list ver2)))
+    (while (and l1 l2 (= (car l1) (car l2)))
+      (setq l1 (cdr l1) l2 (cdr l2)))
+    (cond
+     ((and l1 l2) nil)
+     ((and (null l1) (null l2)))
+     (l1 (zerop (version-list-not-zero l1)))
+     (t (zerop (version-list-not-zero l2))))))
+(defun version> (ver1 ver2)
+  "Return T if version VER1 is higher (newer) than VER2, return NIL otherwise"
+  (and (not (version= ver1 ver2)
+            (version< ver1 ver2))))
+(defun version>= (ver1 ver2)
+  "Return T if version VER1 is higher (newer) than or equal to VER2, return NIL otherwise"
+  (not (version< ver1 ver2)))
+(defun version<= (ver1 ver2)
+  "Return T if version VER1 is lower (older) than or equal to VER2, return NIL otherwise"
+  (or (version= ver1 ver2)
+      (version< ver1 ver2)))
+
 (setq euserror nil)
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
