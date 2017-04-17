@@ -1152,7 +1152,7 @@ register pointer argv[];
 
 pointer gensym(ctx)
 register context *ctx;
-{ byte buf[64];
+{ byte buf[128];
   sprintf((char *)buf,"%s%d",genhead->c.str.chars,genindex++);
   return(makesymbol(ctx,(char *)buf,strlen(buf),NIL));}
 
@@ -1173,7 +1173,7 @@ pointer argv[];
     if (n==1) {
     n--;
     if (isstring(argv[0])) {
-      if (intval(argv[0]->c.str.length)>50) error(E_LONGSTRING);
+      if (intval(argv[0]->c.str.length)>114) error(E_LONGSTRING);
       genhead=argv[0];}
     else if (isint(argv[0])) genindex=intval(argv[0]);
     else error(E_NOSTRING);
