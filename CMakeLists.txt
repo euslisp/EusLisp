@@ -61,13 +61,19 @@ install(DIRECTORY contrib lib lisp models ${ARCHDIR}
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   USE_SOURCE_PERMISSIONS)
 install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink lisp/c include WORKING_DIRECTORY \${DESTDIR}${CMAKE_INSTALL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION})")
+install(CODE "execute_process(COMMAND make html WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc/latex)")
+install(CODE "execute_process(COMMAND make html WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc/jlatex)")
 install(DIRECTORY doc
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   USE_SOURCE_PERMISSIONS
-  PATTERN "doc/html" EXCLUDE
+  FILES_MATCHING PATTERN "doc/*/*.{pdf,hlp}"
+  PATTERN "doc/html/*"
+  PATTERN "doc/algorithm" EXCLUDE
+  PATTERN "licence-old" EXCLUDE
   PATTERN "doc/mails" EXCLUDE
   PATTERN "doc/hirukawa" EXCLUDE
   PATTERN "doc/help.cltl" EXCLUDE
+  PATTERN "doc/help.eus" EXCLUDE
   PATTERN "doc/publications" EXCLUDE
   PATTERN "doc/latex/fig" EXCLUDE
   PATTERN "doc/jlatex/fig" EXCLUDE
