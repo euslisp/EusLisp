@@ -33,9 +33,22 @@ message(STATUS "MAKEFILE : ${MAKEFILE}")
 add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/lisp/Makefile
   COMMAND cmake -E create_symlink ${MAKEFILE} Makefile
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/lisp/)
-add_custom_target(compile_euslisp ALL
+add_custom_target(compile_euslisp
   DEPENDS ${PROJECT_SOURCE_DIR}/lisp/Makefile
   COMMAND export EUSDIR=${PROJECT_SOURCE_DIR} lt_cv_sys_lib_dlsearch_path_spec=${lt_cv_sys_lib_dlsearch_path_spec} LD_LIBRARY_PATH=${PROJECT_SOURCE_DIR}/${ARCHDIR}/lib:\$LD_LIBRARY_PATH && \$\(MAKE\) -C ${PROJECT_SOURCE_DIR}/lisp -f Makefile EUSRPATH=)
+add_custom_target(clean_euslisp
+  DEPENDS compile_euslisp
+  COMMAND sh tool/clean-ch.sh
+  COMMAND rm -f l/constants.l.[co] l/eusstart.l.[co] comp/builtins.l.[co] c/makedate.c
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/lisp)
+add_custom_target(doc_euslisp
+  DEPENDS compile_euslisp
+  COMMAND make -C latex  manual clean
+  COMMAND make -C jlatex all clean
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc)
+add_custom_target(build_euslisp ALL
+  DEPENDS compile_euslisp doc_euslisp
+  clean_euslisp)
 
 # catkin
 find_package(catkin)
