@@ -52,8 +52,8 @@ add_custom_target(build_euslisp ALL
 
 # catkin
 find_package(catkin)
-catkin_package(CFG_EXTRAS euslisp-extras.cmake)
 set(ENV{ARCHDIR} ${ARCHDIR}) ## for add_env_hook
+catkin_package(CFG_EXTRAS euslisp-extras.cmake)
 catkin_add_env_hooks(99.euslisp SHELLS sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
 
 # install
