@@ -60,7 +60,8 @@ catkin_add_env_hooks(99.euslisp SHELLS sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
 install(DIRECTORY contrib lib lisp models ${ARCHDIR}
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   USE_SOURCE_PERMISSIONS)
-install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink lisp/c include WORKING_DIRECTORY \${DESTDIR}${CMAKE_INSTALL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION})")
+install(CODE "message(STATUS \"execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink lisp/c include WORKING_DIRECTORY \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION})\")")
+install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink lisp/c include WORKING_DIRECTORY \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION})")
 install(CODE "execute_process(COMMAND make html WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc/latex)")
 install(CODE "execute_process(COMMAND make html WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc/jlatex)")
 install(DIRECTORY doc
