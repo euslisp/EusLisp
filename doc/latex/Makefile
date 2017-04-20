@@ -1,4 +1,5 @@
-manual:	arith.tex contact.tex controls.tex evaluation.tex generals.tex \
+manual:	manual.pdf
+manual.pdf: arith.tex contact.tex controls.tex evaluation.tex generals.tex \
 	geometry.tex graphics.tex image.tex intro.tex \
 	io.tex manipulator.tex manual.tex \
 	mars-pre.tex matrix.tex methods.tex  mthread.tex objects.tex \
@@ -9,6 +10,9 @@ manual:	arith.tex contact.tex controls.tex evaluation.tex generals.tex \
 manual2:
 	latex manual ; dvips -o manual.ps manual.pdf
 #	latex manual ; dvi2ps manual.dvi >manual.ps
+
+clean:
+	rm -f *~ *.aux *.log *.toc *.out *.ind *.ilg manual.idx
 
 html:
 	rm -f ../html/manual*.{old,html,png,pl} ../html/manual-images.*

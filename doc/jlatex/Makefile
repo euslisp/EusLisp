@@ -1,17 +1,18 @@
 all:
-	make toc dvi pdf
+	make jmanual.toc jmanual.dvi jmanual.pdf
 
 
-toc:
+jmanual.toc: jmanual.tex
 	makeindex jmanual.tex
 
-dvi:
+
+jmanual.dvi: $(wildcard *.tex)
 	platex --version | grep utf8 || nkf --in-place -e *.tex
 	platex jmanual.tex
 	platex jmanual.tex
 	platex --version | grep utf8 || nkf --in-place -u *.tex
 
-pdf:
+jmanual.pdf: jmanual.dvi
 	dvipdfmx jmanual.dvi
 
 
