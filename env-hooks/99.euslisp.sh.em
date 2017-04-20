@@ -1,0 +1,9 @@
+export ARCHDIR="@{import os; print(os.environ['ARCHDIR']),}"
+@[if DEVELSPACE]@
+export EUSDIR="@(PROJECT_SOURCE_DIR)"
+@[else]@
+export EUSDIR="@(CMAKE_INSTALL_PREFIX)/@(CATKIN_PACKAGE_SHARE_DESTINATION)"
+@[end if]@
+export LD_LIBRARY_PATH=$EUSDIR/$ARCHDIR/lib:$LD_LIBRARY_PATH
+export PATH=$EUSDIR/$ARCHDIR/bin:$PATH
+
