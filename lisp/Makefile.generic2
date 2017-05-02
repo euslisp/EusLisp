@@ -184,6 +184,8 @@ eusgl:  eusx $(BINDIR)/eusgl
 
 raweus.so:	$(BINDIR)/raweus.so
 
+euslint:	$(BINDIR)/euslint
+
 $(LIBEUSX):	$(ADLIBDIR)/$(LIBEUSX)
 $(LIBEUSGEO):	$(ADLIBDIR)/$(LIBEUSGEO)
 $(LIBEUSGL):	$(ADLIBDIR)/$(LIBEUSGL)
@@ -288,6 +290,9 @@ $(BINDIR)/raweus.so:	$(NOKOBJECTS) $(KOBJECTS)  $(LOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
 		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB))
 
+$(BINDIR)/euslint:
+	(cp $(TOOLDIR)/euslint $(BINDIR))
+
 $(CDIR)/eus.h: $(CDIR)/eus_proto.h
 $(KOBJECTS) $(DMYOBJECTS) $(MTCOBJECTS):	$(CDIR)/eus.h
 	(cd $(CDIR); \
@@ -357,10 +362,11 @@ doc/latex/manual.dvi:	$(DOC)
 	(cd doc/latex; jlatex manual ; makeindex manual.idx ; jlatex manual)
 
 install:
-	(rm -f $(PUBBINDIR)/eus $(PUBBINDIR)/eusx $(PUBBINDIR)/euscomp;\
+	(rm -f $(PUBBINDIR)/eus $(PUBBINDIR)/eusx $(PUBBINDIR)/euscomp $(PUBBINDIR)/euslint;\
 	 cp $(BINDIR)/eus $(PUBBINDIR);\
 	 cp $(BINDIR)/eusx $(PUBBINDIR);\
-	 ln -sf eus $(PUBBINDIR)/euscomp)
+	 ln -sf eus $(PUBBINDIR)/euscomp;\
+	 cp $(BINDIR)/euslint $(PUBBINDIR))
 clean:
 	-rm -fr $(EUSDIR)/data/* 
 	-rm -f $(OBJDIR)/* $(ADLIBDIR)/libeus* $(BINDIR)/* $(LDIR)/constants.l.[co]\

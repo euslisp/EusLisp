@@ -1,0 +1,168 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+import argparse
+import os
+import sys
+
+
+def parse(source_code, max_line_length):
+    is_block_comment = False
+    result = {
+        'parenthesis_open': 0,
+        'parenthesis_close': 0,
+        'tab': [],
+        'whitespace': [],
+        'line_length': [],
+    }
+    for line_num, line in enumerate(source_code.splitlines()):
+        if line.startswith('#|'):
+            is_block_comment = True
+        elif line.startswith('|#'):
+            is_block_comment = False
+        if is_block_comment:
+            continue
+        is_beginning = True
+        is_line_comment = False
+        is_inline_comment = False
+        has_quote = False
+        in_quote = False
+        whitespace = 0
+        for char in line:
+            if char == ';':
+                if in_quote is False:
+                    if is_beginning:
+                        is_line_comment = True
+                    else:
+                        is_inline_comment = True
+                    break
+            if char == ' ':
+                if is_beginning is not True:
+                    whitespace += 1
+            else:
+                if is_beginning:
+                    is_beginning = False
+            if char == '(':
+                result['parenthesis_open'] += 1
+            if char == ')':
+                result['parenthesis_close'] += 1
+            if char == '"':
+                in_quote = not in_quote
+                has_quote = True
+            if char == '\t':
+                result['tab'].append(line_num)
+        is_comment = is_line_comment or is_inline_comment
+        if len(line.split()) != 0 and is_comment is not True \
+           and has_quote is not True and whitespace != len(line.split())-1:
+            result['whitespace'].append(line_num)
+        if is_line_comment is not True \
+           and has_quote is not True and len(line) > max_line_length:
+            result['line_length'].append([line_num, len(line)])
+    return result
+
+
+def test_parenthesis(result, filepath):
+    if result['parenthesis_open'] != result['parenthesis_close']:
+        print(
+            '{0}: parenthesis: # of open/close parenthesises doesn\'t match: {1} != {2}'  # NOQA
+            .format(
+                filepath, result['parenthesis_open'],
+                result['parenthesis_close']),
+            file=sys.stderr)
+        return 1
+    return 0
+
+
+def test_tab(result, filepath):
+    if len(result['tab']) != 0:
+        for tab_result in result['tab']:
+            print(
+                '{0}:{1}: tab: line contains tab'
+                .format(filepath, tab_result),
+                file=sys.stderr)
+        return 1
+    return 0
+
+
+def test_whitespace(result, filepath):
+    if len(result['whitespace']) != 0:
+        for whitespace_result in result['whitespace']:
+            print(
+                '{0}:{1}: whitespace: line contains invalid whitespace'
+                .format(filepath, whitespace_result),
+                file=sys.stderr)
+        return 1
+    return 0
+
+
+def test_line_length(result, max_line_length, filepath):
+    if len(result['line_length']) != 0:
+        for line_length_result in result['line_length']:
+            print(
+                '{0}:{1}: line_length: line too long ({2} > {3} characters)'
+                .format(
+                    filepath, line_length_result[0]+1,
+                    line_length_result[1], max_line_length),
+                file=sys.stderr)
+        return 1
+    return 0
+
+
+def lint(filepath, ignore_list, max_line_length):
+    source_code = open(filepath).read()
+    result = parse(source_code, max_line_length)
+
+    test_list = []
+    if 'parenthesis' not in ignore_list:
+        test_list.append(test_parenthesis(result, filepath))
+    if 'line_length' not in ignore_list:
+        test_list.append(test_line_length(result, max_line_length, filepath))
+    if 'tab' not in ignore_list:
+        test_list.append(test_tab(result, filepath))
+    if 'whitespace' not in ignore_list:
+        test_list.append(test_whitespace(result, filepath))
+
+    return sum(test_list)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('path', type=str, help='checking dir or file path')
+    parser.add_argument(
+        '-e', '--extension', type=str, help='file extension, defalut: l')
+    parser.add_argument(
+        '-l', '--max-line-length', type=int,
+        help='maximum line length, defalut: 100')
+    parser.add_argument(
+        '-i', '--ignore', type=str, help='list of ignoring check ids.')
+    args = parser.parse_args()
+
+    path = args.path
+    if args.extension is None:
+        extension = 'l'
+    else:
+        extension = args.extension
+    extension = '.' + extension
+    max_line_length = args.max_line_length
+    if max_line_length is None:
+        max_line_length = 100
+    if args.ignore is None:
+        ignore_list = []
+    else:
+        ignore_list = args.ignore.split(',')
+    retcode = 0
+    if os.path.isfile(path):
+        if lint(path, ignore_list, max_line_length) > 0:
+            retcode = 1
+    else:
+        for root, dirs, files in os.walk(path):
+            for file_ in files:
+                filepath = os.path.join(root, file_)
+                if filepath.endswith(extension):
+                    if lint(filepath, ignore_list, max_line_length) > 0:
+                        retcode = 1
+    sys.exit(retcode)
+
+
+if __name__ == '__main__':
+    main()
