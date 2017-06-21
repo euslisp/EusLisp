@@ -1251,6 +1251,11 @@
 	 (file.dll (if o (merge-pathnames ".dll" o)
 		         (merge-pathnames ".dll" file)))
 	 (cpack *package*))
+      (unless (eq (unix:access (send (pathname file) :directory-string) unix::O_RDWR) t) ;; source directory is not writable
+        (warn ";; ~A is write protected, use temporary compile directory to ~A~%" file (send o :directory-string))
+        (setq file.c (merge-pathnames ".c" o)
+              file.h (merge-pathnames ".h" o)
+              file.q (merge-pathnames ".q" o)))
       (when (null (probe-file file))
 	 (setq file (merge-pathnames ".l" file))
          (if (null (probe-file  file)) 
