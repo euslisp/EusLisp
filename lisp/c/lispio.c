@@ -226,7 +226,7 @@ pointer argv[];
       if (eoferrorp==NIL) return(eofvalue);
       else error(E_EOF);}
     cb[i++]=ch;}
-  if (cb[i-1]=='\r' && (i>=1)) i=i-1;
+  if ((i>=1) && cb[i-1]=='\r') i=i-1;
   return(makestring((char *)cb,i));}
 
 pointer READCH(ctx,n,argv)
