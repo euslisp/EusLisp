@@ -206,28 +206,44 @@ pointer argv[];
   else result=read_delimited_list(ctx,strm,delim_char,token); /*preserve #n= scope*/
   return(result);}
 
+#define READLINE_BUF_LENGTH 8192
 pointer READLINE(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
 { register pointer strm;
-  pointer eoferrorp=T,eofvalue=NIL;
-  byte cb[8192];
-  register int i=0,ch;
+  pointer eoferrorp=T,eofvalue=NIL,ret=NIL;
+  byte *cb = (byte *) malloc(READLINE_BUF_LENGTH);
+  register int i=0,ch,buflength=READLINE_BUF_LENGTH;
   ckarg2(0,3);
   strm=getinstream(ctx,n,argv[0]);
   if (n>=2) eoferrorp=argv[1];
   if (n==3) eofvalue=argv[2];
-  while (i<8192) {
+  while (1) {
     ch=readch(strm);
     if (ch=='\n') break;
     else if (ch==EOF) {
       if (i>0) break;
+      free(cb);
       if (eoferrorp==NIL) return(eofvalue);
       else error(E_EOF);}
-    cb[i++]=ch;}
+    cb[i++]=ch;
+    if (i >= buflength) {
+      byte *newcb = malloc(buflength+READLINE_BUF_LENGTH);
+      if (newcb == NULL) {
+        fprintf(stderr, ";; malloc returns NULL by %d byte\n", buflength+READLINE_BUF_LENGTH);
+        break;
+      }
+      memcpy(newcb, cb, buflength);
+      buflength += READLINE_BUF_LENGTH;
+      free(cb);
+      cb = newcb;
+    }
+  }
   if ((i>=1) && cb[i-1]=='\r') i=i-1;
-  return(makestring((char *)cb,i));}
+  ret = makestring((char *)cb,i);
+  free(cb);
+  return(ret);}
 
 pointer READCH(ctx,n,argv)
 register context *ctx;
