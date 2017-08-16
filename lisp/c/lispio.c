@@ -231,7 +231,8 @@ pointer argv[];
     if (i >= buflength) {
       byte *newcb = malloc(buflength+READLINE_BUF_LENGTH);
       if (newcb == NULL) {
-        fprintf(stderr, ";; malloc returns NULL by %d byte\n", buflength+READLINE_BUF_LENGTH);
+        free(cb);
+        error(E_USER, (pointer)"Memory allocation error by read-line");
         break;
       }
       memcpy(newcb, cb, buflength);
