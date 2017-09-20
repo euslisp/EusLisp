@@ -212,9 +212,9 @@
   (unless (fboundp 'defun-org)
     (setf (symbol-function 'defun-org) (symbol-function 'defun)))
   (defmacro require (&rest args) (format *error-output* ";; skip require ~A ..." args))
-  (defmacro defclass (cls &key super slots documentation (doc documentation))
+  (defmacro defclass (cls &rest args &key element-type super slots documentation (doc documentation) &allow-other-keys)
     `(progn
-       (defclass-org ,cls :super ,super :slots ,slots :doc ,doc)
+       (defclass-org ,cls :super ,super :slots ,slots ,@args :doc ,doc)
        (push '(make-class-document ,cls ,super '(,@slots)) *classdoc*)))
   (defmacro defmethod (cls &rest methods)
     `(progn
