@@ -202,8 +202,9 @@
     (replace-to-cchars lnames)))
 
 (defun load (fname  &key (quote-file  nil)
-			  (entry (concatenate string "___"
-						(pathname-name fname)))
+			  (entry (gencname-tail
+			          (concatenate string "___"
+			                       (pathname-name fname))))
 			  (symbol-input)
 			  (symbol-output "")
 			  (ld-option "")
