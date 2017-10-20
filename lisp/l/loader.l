@@ -182,9 +182,29 @@
 (defvar *loaded-modules* nil)
 (defun load-module-file-name (lm) (pathname-name (load-module-object-file lm )))
 
+(defun gencname-tail (&rest lnames)
+  "Make symbol name C-language safe."
+  ;; moved from comp/comp.l (2017/10/19 furushchev)
+  (labels ((cchar-p (c) 
+             (or (and (<= #\a c) (<= c #\z)) 
+                 (and (<= #\A c) (<= c #\Z)) 
+                 (and (<= #\0 c) (<= c #\9)) 
+                 (= c #\_)))
+           (replace-to-cchars 
+               (lnames)
+             (let ((lnamestr (reduce 
+                              #'(lambda (u v) (format nil "~a~a" u v)) 
+                              lnames :initial-value "")))
+               (coerce 
+                (mapcar 
+                 #'(lambda (c) (if (cchar-p c) c #\_)) 
+                 (coerce lnamestr cons)) string))))
+    (replace-to-cchars lnames)))
+
 (defun load (fname  &key (quote-file  nil)
-			  (entry (concatenate string "___"
-						(pathname-name fname)))
+			  (entry (gencname-tail
+			          (concatenate string "___"
+			                       (pathname-name fname))))
 			  (symbol-input)
 			  (symbol-output "")
 			  (ld-option "")
