@@ -273,20 +273,24 @@ pointer formal;
 pointer *argp;
 int noarg;
 struct bindframe *env,*bf;
-{ pointer fvar,initform;
+{ pointer fvar,initform,svar;
   register pointer fkeyvar,akeyvar;
   pointer keys[KEYWORDPARAMETERLIMIT],
 	  vars[KEYWORDPARAMETERLIMIT],
-	  inits[KEYWORDPARAMETERLIMIT];
+	  inits[KEYWORDPARAMETERLIMIT],
+	  supplied[KEYWORDPARAMETERLIMIT];
   register int nokeys=0,i,n,allowotherkeys=0;
 
   /*parse lambda list and make keyword tables*/
   while (iscons(formal)) {
-      fkeyvar=ccar(formal); formal=ccdr(formal);
+      fkeyvar=ccar(formal); formal=ccdr(formal); svar=UNBOUND;
       if (iscons(fkeyvar)) {
 	fvar=ccar(fkeyvar);
         initform=ccdr(fkeyvar);
-	if (iscons(initform)) initform=ccar(initform); else initform=NIL;
+        if (iscons(initform)) {
+          if (ccdr(initform)!=NIL) svar=ccar(ccdr(initform));
+          initform=ccar(initform);}
+        else initform=NIL;
 	if (iscons(fvar)) {
 	  fkeyvar=ccar(fvar); fvar=ccdr(fvar);
 	  if (!iscons(fvar)) error(E_KEYPARAM);
@@ -317,6 +321,7 @@ struct bindframe *env,*bf;
       keys[nokeys]=fkeyvar;
       vars[nokeys]=fvar;
       inits[nokeys]=initform;
+      supplied[nokeys]=svar;
       nokeys++;
       if (nokeys>=KEYWORDPARAMETERLIMIT) {
 	error(E_USER, "Too many keyword parameters >32"); 
@@ -334,12 +339,16 @@ struct bindframe *env,*bf;
       if (i<nokeys) {
 	if (inits[i]!=UNBOUND) {
           env=vbind(ctx,vars[i],argp[n],env,bf);
-	  inits[i]=UNBOUND;} }
+          if (supplied[i]!=UNBOUND) env=vbind(ctx,supplied[i],T,env,bf);
+          inits[i]=UNBOUND; supplied[i]=UNBOUND;}
+        else if (supplied[i]!=UNBOUND) {
+          env=vbind(ctx,supplied[i],NIL,env,bf); supplied[i]=UNBOUND;}}
       else if (!allowotherkeys) error(E_NOKEYPARAM,akeyvar);
       n++;  }
   i=0;
   while (i<nokeys) {
     if (inits[i]!=UNBOUND) env=vbind(ctx,vars[i],eval(ctx,inits[i]),env,bf);
+    if (supplied[i]!=UNBOUND) env=vbind(ctx,supplied[i],NIL,env,bf);
     i++;}
   return(env);}
 
@@ -385,11 +394,19 @@ bindopt:
       if (fvar==AUX) goto bindaux;
       if (n<noarg) { /*an actual arg is supplied*/
         aval=argp[n];
-        if (iscons(fvar)) fvar=ccar(fvar);}
+        if (iscons(fvar)) {
+          initform=ccdr(fvar);
+          fvar=ccar(fvar);
+        if (iscons(initform) && ccdr(initform)!=NIL){ /* supplied-p */
+          env=vbind(ctx,ccar(ccdr(initform)),T,env,bf);}}}
       else if (iscons(fvar)) {
         initform=ccdr(fvar);
         fvar=ccar(fvar);
-        if (iscons(initform)) {GC_POINT;aval=eval(ctx,ccar(initform));}
+        if (iscons(initform)) {
+          GC_POINT;
+          aval=eval(ctx,ccar(initform));
+         if (ccdr(initform)!=NIL) { /* supplied-p */
+           env=vbind(ctx,ccar(ccdr(initform)),NIL,env,bf);}}
         else aval=NIL;}
       else aval=NIL;
       env=vbind(ctx,fvar,aval,env,bf);
