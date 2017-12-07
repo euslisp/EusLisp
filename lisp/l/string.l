@@ -128,7 +128,7 @@
        (j 0 (1+ j)))
       ((> j i) nil)
     (when (string-equal sub str :start2 j  :end2 (+ j l))
-          (return-from substringp t))))
+          (return-from substringp j))))
 
 (defmethod string
   (:get (pos type) (sys:peek self pos type) )
