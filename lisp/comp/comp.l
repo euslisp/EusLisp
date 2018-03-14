@@ -1004,8 +1004,8 @@
 	(nreverse key-vars)
 	(nreverse key-inits)
 	;(format t ";key-names length=~d ~s~%" (length key-names)  key-names)
-	(if (>= (length key-names) 32)
-	    (send self :error "Too many keyword parameters>32 ~s" key-names))
+	(if (>= (length key-names) 128)
+	    (send self :error "Too many keyword parameters>128 ~s" key-names))
         ) )
 ;; declaration
      (while (and forms (consp (car forms)) (eq (caar forms) 'declare))
