@@ -1004,7 +1004,7 @@
 	(nreverse key-vars)
 	(nreverse key-inits)
 	;(format t ";key-names length=~d ~s~%" (length key-names)  key-names)
-	(if (>= (length key-names) 128)
+	(if (>= (length key-names) 128) ;; KEYWORDPARAMETERLIMIT
 	    (send self :error "Too many keyword parameters>128 ~s" key-names))
         ) )
 ;; declaration
