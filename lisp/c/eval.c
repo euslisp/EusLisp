@@ -319,7 +319,7 @@ struct bindframe *env,*bf;
       inits[nokeys]=initform;
       nokeys++;
       if (nokeys>=KEYWORDPARAMETERLIMIT) {
-	error(E_USER, "Too many keyword parameters >32"); 
+	error(E_USER, "Too many keyword parameters >%d",KEYWORDPARAMETERLIMIT);
 	}
       }	
   n=0;
