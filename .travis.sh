@@ -36,7 +36,12 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
 fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     travis_time_start setup.install
-    brew install jpeg libpng mesalib-glw;
+    # skip if already installed
+    # https://discourse.brew.sh/t/skip-ignore-brew-install-if-package-is-already-installed/633/2
+    # brew install jpeg libpng mesalib-glw;
+    brew list jpeg &>/dev/null || brew install jpeg
+    brew list libpng &>/dev/null || brew install libpng
+    brew list mesalib-glw &>/dev/null || brew install mesalib-glw
     travis_time_end
 
 fi
