@@ -1223,6 +1223,8 @@
    (setq *optimize* optimize
 	 *safety* safety
 	 *verbose* verbose)
+   (unless (send (pathname file) :directory)
+     (setq file (namestring (merge-pathnames "./" file))))
    (when o
 	   (setq o (pathname o))
 	   (setq o (merge-pathnames o file))
