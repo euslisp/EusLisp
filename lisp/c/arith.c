@@ -989,7 +989,7 @@ register pointer argv[];
   ckarg(1);
   a=argv[0];
   if (a==makeint(MINNEGFIXNUM)) return(makebig1(-MINNEGFIXNUM));
-  if (isint(a)) return(makeint(abs(intval(a))));
+  if (isint(a)) return(makeint(labs(intval(a))));
   else if (isflt(a)) return(makeflt(fabs(fltval(a))));
   else if (pisbignum(a)) {
     if (big_sign(a)<0) {

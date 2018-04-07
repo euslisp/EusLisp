@@ -407,8 +407,8 @@
 			(send trans :nullx) 'symbol)
 	    ((eq) (check-arg 2 argcount 'eq) (send trans :eqx) 'symbol)
 	    ((memq) (check-arg 2 argcount 'memq) (send trans :memqx) t)
-	    ((1+) (check-arg 1 argcount '1+) (send trans :1+) 'integer)
-	    ((1-) (check-arg 1 argcount '1-) (send trans :1-) 'integer)
+	    ((1+) (check-arg 1 argcount '1+) (if (integerp (car args)) (progn (send trans :1+) 'integer) (progn (send trans :call sym argcount) 'float)))
+	    ((1-) (check-arg 1 argcount '1-) (if (integerp (car args)) (progn (send trans :1-) 'integer) (progn (send trans :call sym argcount) 'float)))
 	    ((car first) (check-arg 1 argcount sym) (send trans :car) t)
 	    ((cdr rest) (check-arg 1 argcount sym) (send trans :cdr) t)
 	    ((cadr second) (check-arg 1 argcount sym) (send trans :cadr) t)
@@ -1223,6 +1223,8 @@
    (setq *optimize* optimize
 	 *safety* safety
 	 *verbose* verbose)
+   (unless (send (pathname file) :directory)
+     (setq file (namestring (merge-pathnames "./" file))))
    (when o
 	   (setq o (pathname o))
 	   (setq o (merge-pathnames o file))
