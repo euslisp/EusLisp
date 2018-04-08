@@ -308,6 +308,9 @@ register pointer argv[];
   for (i=0; i<s; i++) sum+= a[i]*a[i];
   sum=sqrt(sum);
   for (i=0; i<s; i++) r[i]=a[i]/sum;
+  int all_nan=1; /* if all element is nan, return 0 vector */
+  for (i=0; i<s; i++) if (!isnan(r[i])) all_nan=0; // false
+  if (all_nan) for (i=0; i<s; i++) r[i]=0;
   return(result);}
   
 pointer VDISTANCE(ctx,n,argv)
