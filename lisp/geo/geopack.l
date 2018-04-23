@@ -1164,11 +1164,15 @@ Normal must be given if the sign of the angle is needed."
  (:distance (point)
     (let (foot (sign (signum (send self :plane-distance point))))
        (setq foot (send self :foot point))
-       (* sign 
-	  (if (memq (send self :insidep foot) '(:inside :parallel))
-	      (distance foot point)
+       (if (= sign 0.0)	;; on the same plane
+	   (if (memq (send self :insidep foot) '(:inside :parallel))
+	       0.0
+	       (apply #'min (send-all (send self :all-edges) :distance point)))
+         (* sign
+            (if (memq (send self :insidep foot) '(:inside :parallel))
+                (distance foot point)
 	      (apply #'min (send-all (send self :all-edges)
-				     :distance point))))) )
+				     :distance point))))) ))
  (:area ()
     (- (send-super :area) (apply #'+ (send-all holes :area))))
 #|

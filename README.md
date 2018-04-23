@@ -1,6 +1,6 @@
-## [EusLisp](http://euslisp.sourceforge.net) [![Build Status](https://travis-ci.org/euslisp/EusLisp.png?branch=master)](https://travis-ci.org/euslisp/EusLisp)
+## [EusLisp] [![Build Status](https://travis-ci.org/euslisp/EusLisp.png?branch=master)](https://travis-ci.org/euslisp/EusLisp)
 
-EusLisp was originally developed by [Dr. Toshihiro Matusi at AIST](http://staff.aist.go.jp/t.matsui/ )
+EusLisp was originally developed by [Dr. Toshihiro Matsui at AIST](http://staff.aist.go.jp/t.matsui/ )
 
 This page and repository are maintained by [JSK](http://www.jsk.t.u-tokyo.ac.jp ) at The University of Tokyo.
 
@@ -8,13 +8,18 @@ This page and repository are maintained by [JSK](http://www.jsk.t.u-tokyo.ac.jp 
 
 EusLisp is an integrated programming system for the research on intelligent robots based on Common Lisp and Object-Oriented programming. The principal subjects in the field of robotics research are sensory data processing, visual environment recognition, collision avoiding motion planning, and task planning. In either problem, three dimensional shape models of robots and environment play crucial roles. A motivation to the development of EusLisp was a demand for an extensible solid modeler that can easily be made use of from higher level symbolic processing system. Investigations into traditional solid modelers proved that the vital requirement for their implementation language was the list processing capability to represent and manage topology among model components. Numerical computation power was also important, but locality of geometric computation suggested the provision of vector/matrix functions as built-ins would greatly ease programming. (From [EusLisp Manual, Part I, EusLisp Basics, 1. Introduction](http://staff.aist.go.jp/t.matsui/eus/intro/eusintro.html ))
 
-### Easy Installation and Demo Program
-
-Please check http://jskeus.sourceforge.net for easy installation and current demo programs. Most of programs in euslisp/eus/lib/ euslisp/eus/contrib/ directories are out-dated.
-
 ### How To Download and Compile
 
-Note: we strongly recommend you to check http://github.com/euslisp/jskeus for download and compile euslisp and irteus; humanoid model description and other useful function layer on euslisp . Following description is only for euslisp hard-core developers.
+### Installation
+
+#### Binary Installation (Recommended)
+
+Please check http://github.com/euslisp/jskeus for easy binary installation and how to run current
+demo programs. Most of programs in EusLisp/lib/ EusLisp/contrib/ directories are outdated.
+
+#### Source Installation (Experts Only)
+
+Note: we strongly recommend you to check http://github.com/euslisp/jskeus for download and compile euslisp and irteus; humanoid model description and other useful function layer on euslisp. Following description is only for euslisp hard-core developers.
 
 
 ```
