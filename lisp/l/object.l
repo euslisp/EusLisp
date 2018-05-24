@@ -26,7 +26,10 @@
 	(dotimes (i (length vars))
 	   (push (cons (elt vars i) (slot self (class self) i)) slots))
 	(nreverse slots)))
- (:methods () (apply #'append (mapcar #'cadr (send (class self) :all-method-names))))
+ (:methods (&optional (pattern ""))
+    "(self class &optional (pattern \"\"))
+Returns the list of all methods callable by the object. If pattern is given, returns only methods with names that include pattern."
+    (mapcan #'cadr (send (class self) :all-method-names pattern)))
 ;; (:all-methods () (send (class self) :all-method-names))
  (:super () (send (class self) :super))
  (:get-val (s) (slot self (class self) s))
