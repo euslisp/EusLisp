@@ -312,9 +312,10 @@ register context *ctx;
 register pointer p;
 { register int i,s;
 
-  if (isnum(p) || pissymbol(p)) return; 
+  if (isnum(p) || (pissymbol(p) && p->c.sym.homepkg != NIL) ) return;
   if (!p_marked(p)) {
     p_mark_on(p);
+    if (pissymbol(p)) return;
     if (pisvector(p)) {
       if (elmtypeof(p)<ELM_POINTER) return;
       s=vecsize(p);
@@ -560,8 +561,7 @@ register int prlevel;
   if ((x<(pointer)(ctx->stack)) && ((pointer)(ctx->stacklimit)<x)){
 	printint(ctx,(eusinteger_t)x,f,intval(Spevalof(PRINTBASE)),0,0); return;}
 #endif
-  if (pissymbol(x)) { printsym(ctx,x,f); return;}
-  else if (pisratio(x)) {
+  if (pisratio(x)) {
     printnum(ctx,x,f,intval(Spevalof(PRINTBASE)),0,0); return;}
   else if (pisbignum(x)) {
     printnum(ctx,x,f,intval(Spevalof(PRINTBASE)),0,0);
@@ -580,6 +580,7 @@ register int prlevel;
         return; }
     else fobj=x->c.obj.iv[0];
     if (classof(x)==C_CONS) printlist(ctx,x,f,fobj,prlevel-1);
+    else if (pissymbol(x)) { printsym(ctx,x,f); return;}
     else if (pisvector(x))  printvector(ctx,x,f,fobj,prlevel-1);
     else if (Spevalof(PROBJECT)!=NIL)    prinxobj(ctx,x,f,fobj,prlevel-1);
     else if (pisarray(x) && (classof(x)==C_ARRAY))  printarray(ctx,x,f,prlevel-1);
