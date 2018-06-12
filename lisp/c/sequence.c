@@ -142,7 +142,9 @@ pointer argv[];
     a=a->c.ary.entity;}
   if (isvector(a)) {
     count=vecsize(a);
-    if (n==3) e=min(e,count);
+    if (s>count) error(E_STARTEND);
+    if (n==3) {
+      if (e>count) error(E_STARTEND); }
     else e=count;
     count=e-s;
     switch(elmtypeof(a)) {
