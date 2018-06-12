@@ -41,7 +41,7 @@ typedef float eusfloat_t;
 #define	USE_STDARG
 #endif
 
-#ifdef Darwin
+#if defined(Darwin) || defined(Linux) || defined(Linux64)
 #define cfree free
 #endif
 
