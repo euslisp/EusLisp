@@ -42,7 +42,7 @@
 
 ;; #B and #* macro
 
-(defun read-binary (f n ch)
+(defun read-binary (f ch n)
   (let ((val 0) )
     (setq ch (read-char f))
     (while (find ch "01")
@@ -51,12 +51,13 @@
     (if (integerp ch)  (unread-char ch f))
     val))
 
-(defun read-bit-vector (f n ch)
+(defun read-bit-vector (f ch n)
    (let  ((ba (make-array '(8) :element-type :bit :fill-pointer 0)))
       (setq ch (read-char f))
       (while (find ch "01")
 	(vector-push-extend (- ch #\0) ba)
 	(setq ch (read-char f nil nil)))
+      (if (integerp ch)  (unread-char ch f))
       (subseq (array-entity ba) 0 (fill-pointer ba))))
 
 
