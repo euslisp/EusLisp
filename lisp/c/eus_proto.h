@@ -558,6 +558,7 @@ extern pointer SEQLET(context */*ctx*/, pointer /*args*/);
 extern pointer CATCH(context */*ctx*/, pointer /*arg*/);
 extern void throw(context */*ctx*/, pointer /*tag*/, pointer /*result*/);
 extern pointer THROW(context */*ctx*/, pointer /*arg*/);
+extern pointer MACROLET(context */*ctx*/, pointer /*arg*/);
 extern pointer FLET(context */*ctx*/, pointer /*arg*/);
 extern pointer LABELS(context */*ctx*/, pointer /*arg*/);
 extern pointer RESET(context */*ctx*/, int /*n*/, pointer */*argv*/);
