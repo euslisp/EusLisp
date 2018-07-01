@@ -555,6 +555,24 @@ register pointer arg;
   throw(ctx,tag,result);
   error(E_NOCATCHER,tag);}
 
+pointer MACROLET(ctx,arg)
+register context *ctx;
+register pointer arg;
+{ register pointer fns, fn;
+  register struct fletframe *ffp=ctx->fletfp;
+  pointer result;
+#ifdef SPEC_DEBUG
+  printf( "MACROLET:" ); hoge_print(arg);
+#endif
+  GC_POINT;
+  fns=ccar(arg);
+  while (iscons(fns)) {
+    fn=ccar(fns); fns=ccdr(fns);
+    makemacrolet(ctx,ccar(fn),ccdr(fn),ffp,ctx->fletfp);}
+  result=progn(ctx,ccdr(arg));
+  ctx->fletfp=ffp;
+  return(result);}
+
 pointer FLET(ctx,arg)
 register context *ctx;
 register pointer arg;
@@ -1305,6 +1323,7 @@ pointer mod;
   defspecial(ctx,"UNWIND-PROTECT",mod,UNWINDPROTECT);
   defspecial(ctx,"CATCH",mod,CATCH);
   defspecial(ctx,"THROW",mod,THROW);
+  defspecial(ctx,"MACROLET",mod,MACROLET);
   defspecial(ctx,"FLET",mod,FLET);
   defspecial(ctx,"LABELS",mod,LABELS);
   defspecial(ctx,"BLOCK",mod,BLOCK);

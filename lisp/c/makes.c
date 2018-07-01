@@ -16,7 +16,7 @@ static char *rcsid="@(#)$Id$";
 #define nextbuddy(p) ((bpointer)((eusinteger_t)p+(buddysize[p->h.bix]*sizeof(pointer))))
 #endif
 
-extern pointer LAMCLOSURE, K_FUNCTION_DOCUMENTATION;
+extern pointer LAMCLOSURE, MACRO, K_FUNCTION_DOCUMENTATION;
 
 /****************************************************************/
 /* boxing and unboxing
@@ -787,6 +787,22 @@ struct fletframe *scp,*link;
   p=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),p);
   p=cons(ctx,nm,p);
   ffp->fclosure=cons(ctx,LAMCLOSURE,p);
+  ffp->scope=scp;
+  ffp->lexlink=link; ffp->dynlink=ctx->fletfp;	/*dynlink is not used*/
+  ctx->fletfp=ffp;
+  return(ffp);}
+
+struct fletframe *makemacrolet(ctx,nm,def,scp,link)
+register context *ctx;
+pointer nm,def;
+struct fletframe *scp,*link;
+{ register struct fletframe *ffp=(struct fletframe *)(ctx->vsp);
+  register pointer p;
+  int i;
+  for (i=0; i<sizeof(struct fletframe)/sizeof(pointer); i++)
+    vpush(makeint(0));
+  ffp->name=nm;
+  ffp->fclosure=cons(ctx,MACRO,def);
   ffp->scope=scp;
   ffp->lexlink=link; ffp->dynlink=ctx->fletfp;	/*dynlink is not used*/
   ctx->fletfp=ffp;
