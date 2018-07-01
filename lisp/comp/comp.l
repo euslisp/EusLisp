@@ -1316,7 +1316,7 @@
                             " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
                            (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -fno-stack-protector -DGCC3 ")))
 		   	 ((memq :linux *features*)
-			  (if (memq :x86_64 *features)
+			  (if (memq :x86_64 *features*)
 				" -Dx86_64 -DLinux -Wimplicit -malign-functions=8 "
 				" -Di386 -DLinux -Wimplicit -malign-functions=4 "))
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
