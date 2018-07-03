@@ -68,7 +68,7 @@
 ;; define a legal shell command.
 (set-dispatch-macro-character #\# #\! (get-macro-character #\;))
 
-(defun read-pathname (f n ch)
+(defun read-pathname (f ch n)
   (pathname (read f)))
 
 (set-dispatch-macro-character #\# #\P 'read-pathname)
