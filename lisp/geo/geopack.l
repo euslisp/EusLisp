@@ -98,11 +98,14 @@ left hand side of line a-b, and b lies at the right side of ac."
 "normal vector for the plane on which three points (a b c) lie."
    (normalize-vector (v* (v- b a) (v- c a))))
 
-(defun vector-angle (v1 v2 &optional (normal (v* v1 v2)))
+(defun vector-angle (v1 v2 &optional (normal (normalize-vector (v* v1 v2))))
 "Compute angle (radian) between two vectors, v1 and v2.
 Normal is vertical to both v1 and v2.
 v1, v2 and normal must be normalized in advance.
 Normal must be given if the sign of the angle is needed."
+    (if (or (= (norm normal) 0.0) ;; for irteus
+            (equal (norm normal) *nan*)) ;; for eus
+        (return-from vector-angle (if (>= (v. v1 v2) 0) 0.0 pi)))
     (atan (v.* normal v1 v2) (v. v1 v2)) )
 
 (defun face-normal-vector (vertices)
