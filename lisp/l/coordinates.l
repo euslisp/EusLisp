@@ -222,7 +222,7 @@
 	 ((or (memq wrt '(:parent parent :world world nil))
 	      (eq wrt *world-coords*)) v)
 	 ((coordinates-p wrt)   (transform  (send wrt :worldrot) v))
-	 (t (send self :error ":parent-orientation wrt?" wrt))))
+	 (t (send self :error ":parent-orientation wrt? wrt must be :world, :local, :parent or coordinates instance" wrt))))
   (:translate (vec &optional (wrt :local))
      (send self :newcoords
 	   rot (v+ (send self :parent-orientation vec wrt) pos pos)))

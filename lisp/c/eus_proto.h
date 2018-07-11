@@ -345,7 +345,7 @@ extern pointer makeratio(int /*num*/, int /*denom*/);
 extern pointer makebig(int /*n*/);
 extern pointer makebig1(long /*x*/);
 extern pointer makebig2(long /*hi*/, long /*lo*/);
-extern pointer defun(context */*ctx*/, char */*name*/, pointer /*mod*/, pointer (*/*f*/)());
+extern pointer defun(context */*ctx*/, char */*name*/, pointer /*mod*/, pointer (*/*f*/)(), char * /*doc*/);
 extern pointer defunpkg(context */*ctx*/, char */*name*/, pointer /*mod*/, pointer (*/*f*/)(), pointer /*pkg*/);
 extern pointer defmacro(context */*ctx*/, char */*name*/, pointer /*mod*/, pointer (*/*f*/)());
 extern int special_index(void);

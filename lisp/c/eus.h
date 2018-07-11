@@ -41,7 +41,7 @@ typedef float eusfloat_t;
 #define	USE_STDARG
 #endif
 
-#ifdef Darwin
+#if defined(Darwin) || defined(Linux) || defined(Linux64)
 #define cfree free
 #endif
 
@@ -1063,7 +1063,7 @@ extern pointer makemodule(context *, int);
 extern pointer makebig1(long);
 extern pointer eusfloat_to_big(float);
 extern eusfloat_t big_to_float(pointer);
-extern pointer defun(context *, char *, pointer, pointer(*)());
+extern pointer defun(context *, char *, pointer, pointer(*)(), char *);
 extern pointer defmacro(context *, char *, pointer, pointer(*)());
 extern pointer defspecial(context *, char *, pointer, pointer(*)());
 extern pointer defunpkg(context *, char *, pointer, pointer(*)(),pointer);
@@ -1075,6 +1075,8 @@ extern pointer deflocal(context *, char *, pointer, pointer);
 extern pointer defconst(context *, char *, pointer, pointer);
 extern pointer stacknlist(context *, int);
 #endif
+/* for old style defun */
+#define defun(a, b, c, d) defun(a, b, c, d, NULL)
 
 #if THREADED
 extern pointer makethreadport(context *);

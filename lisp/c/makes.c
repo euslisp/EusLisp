@@ -603,13 +603,14 @@ long hi, lo;
 /****************************************************************/
 /* defines
 /****************************************************************/
-
-pointer defun(ctx,name,mod,f)
+#undef defun /* remove macro for reading correct defun */
+pointer defun(ctx,name,mod,f,doc)
 register context *ctx;
 char *name;
 pointer mod;
 pointer (*f)();
-{ register pointer sym,pkg;
+char *doc;
+{ register pointer sym,pkg,pdoc;
 #if defined(DEFUN_DEBUG) || defined(DEBUG_COUNT)
   static int count=0;
 
@@ -621,11 +622,18 @@ pointer (*f)();
 
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
-  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_FUNCTION));
+  if (doc != NULL) {
+    pdoc = makestring(doc,strlen(doc));
+    vpush(pdoc);
+  }
+  compfun(ctx, sym, mod, f, pdoc);
+  if (doc != NULL) vpop();
 #ifdef DEFUN_DEBUG
   printf( "0x%lx\n", sym->c.sym.spefunc->c.code.entry );
 #endif
   return(sym);}
+/* restore macro */
+#define defun(a, b, c, d) defun(a, b, c, d, NULL)
 
 pointer defunpkg(ctx,name,mod,f,pkg)
 register context *ctx;
