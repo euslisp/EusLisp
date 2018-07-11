@@ -1,17 +1,18 @@
 all:
-	make toc dvi pdf
+	make jmanual.toc jmanual.dvi jmanual.pdf
 
 
-toc:
+jmanual.toc: jmanual.tex
 	makeindex jmanual.tex
 
-dvi:
+
+jmanual.dvi: $(wildcard *.tex)
 	platex --version | grep utf8 || nkf --in-place -e *.tex
 	platex jmanual.tex
 	platex jmanual.tex
 	platex --version | grep utf8 || nkf --in-place -u *.tex
 
-pdf:
+jmanual.pdf: jmanual.dvi
 	dvipdfmx jmanual.dvi
 
 
@@ -24,7 +25,7 @@ distclean: clean
 html:
 	rm -f ../html/jmanual*.
 	TRANSPARENT_COLOR="#ffffff" charset="UTF-8" latex2html -dir ../html/ -transparent -local_icons -split +3 -auto_prefix -init_file ../latex/.latex2html-init -iso_language JP jmanual
-	(cd ../html; sed -i 's@"jmanual.css"@"manual.css"@' j*.html)
+	(cd ../html; sed -i 's@"jmanual.css">@"manual.css"><meta charset="utf-8">@' j*.html)
 
 
 
