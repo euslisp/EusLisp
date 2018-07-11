@@ -220,21 +220,8 @@
    (concatenate string (string (gensym head)) suffix))
  (:gencname-tail 
   (&rest lnames)
-  (labels ((cchar-p (c) 
-                    (or (and (<= #\a c) (<= c #\z)) 
-                        (and (<= #\A c) (<= c #\Z)) 
-                        (and (<= #\0 c) (<= c #\9)) 
-                        (= c #\_)))
-           (replace-to-cchars 
-            (lnames)
-            (let ((lnamestr (reduce 
-                             #'(lambda (u v) (format nil "~a~a" u v)) 
-                             lnames :initial-value "")))
-              (coerce 
-               (mapcar 
-                #'(lambda (c) (if (cchar-p c) c #\_)) 
-                (coerce lnamestr cons)) string))))
-          (replace-to-cchars lnames)))
+  ;; NOTE: Deprecated. Use lisp::gencname-tail instead. (2017/10/19 furushchev)
+  (apply #'lisp::gencname-tail lnames))
  (:progn (bodies)
     (if bodies
       (while bodies
@@ -420,8 +407,8 @@
 			(send trans :nullx) 'symbol)
 	    ((eq) (check-arg 2 argcount 'eq) (send trans :eqx) 'symbol)
 	    ((memq) (check-arg 2 argcount 'memq) (send trans :memqx) t)
-	    ((1+) (check-arg 1 argcount '1+) (send trans :1+) 'integer)
-	    ((1-) (check-arg 1 argcount '1-) (send trans :1-) 'integer)
+	    ((1+) (check-arg 1 argcount '1+) (if (integerp (car args)) (progn (send trans :1+) 'integer) (progn (send trans :call sym argcount) 'float)))
+	    ((1-) (check-arg 1 argcount '1-) (if (integerp (car args)) (progn (send trans :1-) 'integer) (progn (send trans :call sym argcount) 'float)))
 	    ((car first) (check-arg 1 argcount sym) (send trans :car) t)
 	    ((cdr rest) (check-arg 1 argcount sym) (send trans :cdr) t)
 	    ((cadr second) (check-arg 1 argcount sym) (send trans :cadr) t)
@@ -1017,8 +1004,8 @@
 	(nreverse key-vars)
 	(nreverse key-inits)
 	;(format t ";key-names length=~d ~s~%" (length key-names)  key-names)
-	(if (>= (length key-names) 32)
-	    (send self :error "Too many keyword parameters>32 ~s" key-names))
+	(if (>= (length key-names) 128) ;; KEYWORDPARAMETERLIMIT
+	    (send self :error "Too many keyword parameters>128 ~s" key-names))
         ) )
 ;; declaration
      (while (and forms (consp (car forms)) (eq (caar forms) 'declare))
@@ -1104,7 +1091,7 @@
    (if (eq (car form) 'defun)
      (let* ((name (cadr form))
             (cname (send self :genlabel "F"
-                         (send self :gencname-tail name)
+                         (lisp::gencname-tail name)
                         )))
        (putprop name cname 'user-function-entry)
        (push name *defun-list*))))
@@ -1142,7 +1129,7 @@
 	       param (cons 'self (cons 'class (cadr method)))
 	       bodies (cddr method) )
          (setq entry (send self :genlabel "M"
-                           (send self :gencname-tail myclass selector)))
+                           (lisp::gencname-tail myclass selector)))
 	 (setq doc 
 	       (if (and (stringp (car bodies))  (cdr bodies))
 		   (pop bodies)
@@ -1225,7 +1212,7 @@
 		 (cc *do-cc*)	;nil skips c-compilation
 		 (pic *pic*)	;t forces position independent code 
 		 (verbose *verbose*)
-		 (entry (send self :gencname-tail (pathname-name file)))
+		 (entry (lisp::gencname-tail (pathname-name file)))
 		 (o))
    (if (and (integerp c-optimize)
 	    (> c-optimize 0)
@@ -1236,6 +1223,8 @@
    (setq *optimize* optimize
 	 *safety* safety
 	 *verbose* verbose)
+   (unless (send (pathname file) :directory)
+     (setq file (namestring (merge-pathnames "./" file))))
    (when o
 	   (setq o (pathname o))
 	   (setq o (merge-pathnames o file))
@@ -1327,7 +1316,7 @@
                             " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
                            (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -fno-stack-protector -DGCC3 ")))
 		   	 ((memq :linux *features*)
-			  (if (memq :x86_64 *features)
+			  (if (memq :x86_64 *features*)
 				" -Dx86_64 -DLinux -Wimplicit -malign-functions=8 "
 				" -Di386 -DLinux -Wimplicit -malign-functions=4 "))
 			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")

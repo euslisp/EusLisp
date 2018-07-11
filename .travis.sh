@@ -35,10 +35,13 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
 
 fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    rvm get head || true # hotfix until rvm stable release (refer: https://github.com/travis-ci/travis-ci/issues/6307)
     travis_time_start setup.install
-    brew tap homebrew/x11
-    brew install jpeg libpng mesalib-glw wget;
+    # skip if already installed
+    # https://discourse.brew.sh/t/skip-ignore-brew-install-if-package-is-already-installed/633/2
+    # brew install jpeg libpng mesalib-glw;
+    brew list jpeg &>/dev/null || brew install jpeg
+    brew list libpng &>/dev/null || brew install libpng
+    brew list mesalib-glw &>/dev/null || brew install mesalib-glw
     travis_time_end
 
 fi
