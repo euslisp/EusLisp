@@ -622,6 +622,7 @@ char *doc;
 
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
+  pdoc = NIL;
   if (doc != NULL) {
     pdoc = makestring(doc,strlen(doc));
     vpush(pdoc);
