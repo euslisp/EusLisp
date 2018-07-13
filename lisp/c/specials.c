@@ -562,17 +562,17 @@ register pointer arg;
 pointer MACROLET(ctx,arg)
 register context *ctx;
 register pointer arg;
-{ register pointer fns, fn;
+{ register pointer macs, mac;
   register struct fletframe *ffp=ctx->fletfp;
   pointer result;
 #ifdef SPEC_DEBUG
   printf( "MACROLET:" ); hoge_print(arg);
 #endif
   GC_POINT;
-  fns=ccar(arg);
-  while (iscons(fns)) {
-    fn=ccar(fns); fns=ccdr(fns);
-    makemacrolet(ctx,ccar(fn),ccdr(fn),ffp,ctx->fletfp);}
+  macs=ccar(arg);
+  while (iscons(macs)) {
+    mac=ccar(macs); macs=ccdr(macs);
+    makemacrolet(ctx,ccar(mac),ccdr(mac),ffp,ctx->fletfp);}
   result=progn(ctx,ccdr(arg));
   ctx->fletfp=ffp;
   return(result);}
