@@ -18,11 +18,13 @@ static char *rcsid="@(#)$Id$";
 #define bitset(vec,index,val) \
 	(val?((vec)->c.ivec.iv[(index)/64] |= (1L<<((index)%64))): \
 	     ((vec)->c.ivec.iv[(index)/64] &= ~(1L<<((index)%64))))
+#define MAX_SEQUENCE_COUNT 100000000
 #else
 #define bitref(vec,index) (((vec)->c.ivec.iv[(index)/32] >> ((index)%32)) & 1)
 #define bitset(vec,index,val) \
 	(val?((vec)->c.ivec.iv[(index)/32] |= (1<<((index)%32))): \
 	     ((vec)->c.ivec.iv[(index)/32] &= ~(1<<((index)%32))))
+#define MAX_SEQUENCE_COUNT 1000000
 #endif
 
 extern pointer QEQ;
@@ -392,7 +394,7 @@ register pointer argv[];
 { register int i,argc=1,resultlen=0;
   if (n<=1) return(NIL);
   if (!isclass(argv[0])) error(E_NOCLASS,argv[0]);
-  while (argc<n) resultlen+=pushsequence(ctx,argv[argc++],0,1000000);
+  while (argc<n) resultlen+=pushsequence(ctx,argv[argc++],0,MAX_SEQUENCE_COUNT);
   return(makesequence(ctx,resultlen,argv[0]));}
 
 pointer COERCE(ctx,n,argv)
@@ -408,7 +410,7 @@ register pointer argv[];
     offset=intval(a->c.ary.offset);
     count=intval(a->c.ary.dim[0]);
     a=a->c.ary.entity;}
-  else { offset=0; count=1000000;}
+  else { offset=0; count=MAX_SEQUENCE_COUNT;}
   len=pushsequence(ctx,a,offset,count);
   return(makesequence(ctx,len,argv[1])); }
   
@@ -673,7 +675,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,1000000);
+    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer REMOVE_DUPLICATES(ctx,n,argv)
@@ -715,7 +717,7 @@ pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,1000000);
+    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer DELETE(ctx,n,argv)
@@ -807,7 +809,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,1000000);
+    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer NSUBSTITUTE(ctx,n,argv)
