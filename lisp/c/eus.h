@@ -1075,8 +1075,6 @@ extern pointer deflocal(context *, char *, pointer, pointer);
 extern pointer defconst(context *, char *, pointer, pointer);
 extern pointer stacknlist(context *, int);
 #endif
-/* for old style defun */
-#define defun(a, b, c, d) defun(a, b, c, d, NULL)
 
 #if THREADED
 extern pointer makethreadport(context *);

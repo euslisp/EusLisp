@@ -92,9 +92,9 @@ context *ctx;
 int n;
 pointer argv[];
 { pointer mod=argv[0];
-  defun(ctx,"FLOAT2DOUBLE",mod,F2D); 
-  defun(ctx,"DOUBLE2FLOAT",mod,D2F);
-  defun(ctx,"SHORT2FLOAT",mod,S2F);
+  defun(ctx,"FLOAT2DOUBLE",mod,F2D,NULL);
+  defun(ctx,"DOUBLE2FLOAT",mod,D2F,NULL);
+  defun(ctx,"SHORT2FLOAT",mod,S2F,NULL);
   }
 
 

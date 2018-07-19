@@ -27,7 +27,7 @@ eglfunc(ctx, n, argv)
   int n;
   pointer argv[];
 { 
-  defun(ctx, "EGLGETSTRING", argv[0], EGLGETSTRING);
+  defun(ctx, "EGLGETSTRING", argv[0], EGLGETSTRING,NULL);
 }
 
 static init_object_module()

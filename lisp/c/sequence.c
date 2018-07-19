@@ -1071,15 +1071,15 @@ void sequence(ctx,mod)
 register context *ctx;
 pointer mod;
 {
-  QIDENTITY=defun(ctx,"IDENTITY",mod,IDENTITY);
+  QIDENTITY=defun(ctx,"IDENTITY",mod,IDENTITY,NULL);
   QIDENTITY=QIDENTITY->c.sym.spefunc;
-  defun(ctx,"SUBSEQ",mod,SUBSEQ);
-  defun(ctx,"COPY-SEQ",mod,COPYSEQ);
-  defun(ctx,"REVERSE",mod,REVERSE);
-  defun(ctx,"NREVERSE",mod,NREVERSE);
-  defun(ctx,"CONCATENATE",mod,CONCATENATE);
-  defun(ctx,"COERCE",mod,COERCE);
-  defun(ctx,"MAP",mod,MAP);
+  defun(ctx,"SUBSEQ",mod,SUBSEQ,NULL);
+  defun(ctx,"COPY-SEQ",mod,COPYSEQ,NULL);
+  defun(ctx,"REVERSE",mod,REVERSE,NULL);
+  defun(ctx,"NREVERSE",mod,NREVERSE,NULL);
+  defun(ctx,"CONCATENATE",mod,CONCATENATE,NULL);
+  defun(ctx,"COERCE",mod,COERCE,NULL);
+  defun(ctx,"MAP",mod,MAP,NULL);
   defunpkg(ctx,"RAW-FILL",mod,FILL,syspkg);
   defunpkg(ctx,"RAW-POSITION",mod,POSITION,syspkg);
   defunpkg(ctx,"RAW-FIND",mod,FIND,syspkg);
@@ -1090,8 +1090,8 @@ pointer mod;
   defunpkg(ctx,"RAW-SUBSTITUTE",mod,SUBSTITUTE,syspkg);
   defunpkg(ctx,"RAW-NSUBSTITUTE",mod,NSUBSTITUTE,syspkg);
   defunpkg(ctx,"VECTOR-REPLACE",mod,VECREPLACE,syspkg);
-  defun(ctx,"SORT",mod,SORT);
-  defun(ctx,"LENGTH",mod,LENGTH);
-  defun(ctx,"ELT",mod,ELT);
-  defun(ctx,"SETELT",mod,SETELT);
+  defun(ctx,"SORT",mod,SORT,NULL);
+  defun(ctx,"LENGTH",mod,LENGTH,NULL);
+  defun(ctx,"ELT",mod,ELT,NULL);
+  defun(ctx,"SETELT",mod,SETELT,NULL);
   }

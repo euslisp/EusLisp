@@ -291,12 +291,12 @@ pointer argv[];
   printf("compfun=%x\n", compfun);
 */
 
-  x=defun(ctx,"LINE-INTERSECTION",mod,LINEINTERSECTION);
-  defun(ctx,"LINE-INTERSECTION3",mod,LINEINTERSECTION3);
+  x=defun(ctx,"LINE-INTERSECTION",mod,LINEINTERSECTION,NULL);
+  defun(ctx,"LINE-INTERSECTION3",mod,LINEINTERSECTION3,NULL);
   /* clippers*/
-  defun(ctx,"VIEWPORTCLIP",mod,VPCLIP);
-  defun(ctx,"HOMO-VIEWPORT-CLIP",mod,HOMO_VPCLIP);
-  defun(ctx,"HOMO2NORMAL",mod,HOMO2NORMAL); 
-  defun(ctx,"HOMOGENIZE",mod,HOMOGENIZE);
+  defun(ctx,"VIEWPORTCLIP",mod,VPCLIP,NULL);
+  defun(ctx,"HOMO-VIEWPORT-CLIP",mod,HOMO_VPCLIP,NULL);
+  defun(ctx,"HOMO2NORMAL",mod,HOMO2NORMAL,NULL);
+  defun(ctx,"HOMOGENIZE",mod,HOMOGENIZE,NULL);
   return(T); }
 

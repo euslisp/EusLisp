@@ -1286,15 +1286,15 @@ pointer mod;
   sysobj=cons(ctx,genhead,sysobj);
 
   QUOTE=defspecial(ctx,"QUOTE",mod,quote);
-  QEVAL=defun(ctx,"EVAL",mod,EVAL);
-  defun(ctx,"APPLY",mod,APPLY);
-  defun(ctx,"FUNCALL",mod,FUNCALL);
+  QEVAL=defun(ctx,"EVAL",mod,EVAL,NULL);
+  defun(ctx,"APPLY",mod,APPLY,NULL);
+  defun(ctx,"FUNCALL",mod,FUNCALL,NULL);
   QPROGN=defspecial(ctx,"PROGN",mod,progn);
-  defun(ctx,"PROG1",mod,PROG1); 
+  defun(ctx,"PROG1",mod,PROG1,NULL);
   FUNCTION=defspecial(ctx,"FUNCTION",mod,FUNCTION_CLOSURE);
-  defun(ctx,"MAPC",mod,MAPC);
-  defun(ctx,"MAPCAR",mod,MAPCAR);
-  defun(ctx,"MAPCAN",mod,MAPCAN);
+  defun(ctx,"MAPC",mod,MAPC,NULL);
+  defun(ctx,"MAPCAR",mod,MAPCAR,NULL);
+  defun(ctx,"MAPCAN",mod,MAPCAN,NULL);
   defspecial(ctx,"SETQ",mod,SETQ);
   QIF=defspecial(ctx,"IF",mod,IF);
   defmacro(ctx,"WHEN",mod,WHEN);
@@ -1312,37 +1312,37 @@ pointer mod;
   defmacro(ctx,"RETURN",mod,RETURN);
   defspecial(ctx,"TAGBODY",mod,TAGBODY);
   defspecial(ctx,"GO",mod,GO);
-  defun(ctx,"RESET",mod,RESET);
-  defun(ctx,"EVALHOOK",mod,EVALHOOK);
-  defun(ctx,"MACROEXPAND2",mod,MACEXPAND2);
+  defun(ctx,"RESET",mod,RESET,NULL);
+  defun(ctx,"EVALHOOK",mod,EVALHOOK,NULL);
+  defun(ctx,"MACROEXPAND2",mod,MACEXPAND2,NULL);
   defspecial(ctx,"EVAL-WHEN",mod,EVALWHEN);
   defspecial(ctx,"THE",mod,THE);
   QAND=defspecial(ctx,"AND",mod,AND);
   QOR=defspecial(ctx,"OR",mod,OR);
-  defun(ctx,"PROCLAIM",mod,PROCLAIM);
+  defun(ctx,"PROCLAIM",mod,PROCLAIM,NULL);
   defspecial(ctx,"DECLARE",mod,DECLARE);
-  defun(ctx,"SETFUNC",mod,SETFUNC);
-  defun(ctx,"SYMBOL-VALUE",mod,SYMVALUE);
-  defun(ctx,"SYMBOL-BOUND-VALUE",mod,SYMBNDVALUE);
-  defun(ctx,"SYMBOL-FUNCTION",mod,SYMFUNC); 
-  defun(ctx,"MAKUNBOUND",mod,MAKUNBOUND);
-  defun(ctx,"SET",mod,SETSPECIAL);
+  defun(ctx,"SETFUNC",mod,SETFUNC,NULL);
+  defun(ctx,"SYMBOL-VALUE",mod,SYMVALUE,NULL);
+  defun(ctx,"SYMBOL-BOUND-VALUE",mod,SYMBNDVALUE,NULL);
+  defun(ctx,"SYMBOL-FUNCTION",mod,SYMFUNC,NULL);
+  defun(ctx,"MAKUNBOUND",mod,MAKUNBOUND,NULL);
+  defun(ctx,"SET",mod,SETSPECIAL,NULL);
   defspecial(ctx,"DEFUN",mod,DEFUN);
   defspecial(ctx,"DEFMACRO",mod,DEFMACRO);
-  defun(ctx,"FIND-SYMBOL",mod,FINDSYMBOL);
-  defun(ctx,"INTERN",mod,INTERN);
-  defun(ctx,"GENSYM",mod,GENSYM);
-  defun(ctx,"LIST-ALL-PACKAGES",mod,ALLPACKAGES);
-  defun(ctx,"FIND-PACKAGE",mod,FINDPACKAGE);
+  defun(ctx,"FIND-SYMBOL",mod,FINDSYMBOL,NULL);
+  defun(ctx,"INTERN",mod,INTERN,NULL);
+  defun(ctx,"GENSYM",mod,GENSYM,NULL);
+  defun(ctx,"LIST-ALL-PACKAGES",mod,ALLPACKAGES,NULL);
+  defun(ctx,"FIND-PACKAGE",mod,FINDPACKAGE,NULL);
   defunpkg(ctx,"MAKEPACKAGE",mod,MAKEPACKAGE,syspkg);
-/*  defun(ctx,"IN-PACKAGE",mod,INPACKAGE); */
-  defun(ctx,"SXHASH",mod,SXHASH);
-  defun(ctx,"GET",mod,GETPROP);
-  defun(ctx,"EXPORT",mod,EXPORT);
-  defun(ctx,"PUTPROP",mod,PUTPROP);
+/*  defun(ctx,"IN-PACKAGE",mod,INPACKAGE,NULL); */
+  defun(ctx,"SXHASH",mod,SXHASH,NULL);
+  defun(ctx,"GET",mod,GETPROP,NULL);
+  defun(ctx,"EXPORT",mod,EXPORT,NULL);
+  defun(ctx,"PUTPROP",mod,PUTPROP,NULL);
 
 #ifdef EVAL_DEBUG
-  defun(ctx,"EVALDEBUG",mod,EVALDEBUG);
+  defun(ctx,"EVALDEBUG",mod,EVALDEBUG,NULL);
 #endif
   }
 

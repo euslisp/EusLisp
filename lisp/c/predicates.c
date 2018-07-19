@@ -215,22 +215,22 @@ void predicates(ctx,mod)
 register context *ctx;
 register pointer mod;
 { /* preds*/
-  defun(ctx,"ATOM",mod,ATOM);
-  QEQ=defun(ctx,"EQ",mod,EQ);
+  defun(ctx,"ATOM",mod,ATOM,NULL);
+  QEQ=defun(ctx,"EQ",mod,EQ,NULL);
   QEQ=QEQ->c.sym.spefunc;
-  defun(ctx,"EQL",mod,EQ);
-  defun(ctx,"NULL",mod,NILP);
-  QNOT=defun(ctx,"NOT",mod,NILP);
-  QEQUAL=defun(ctx,"EQUAL",mod,EQUAL);
-  defun(ctx,"SUPEREQUAL",mod,SUPEREQUAL);
-  defun(ctx,"SYMBOLP",mod,SYMBOLP);
-  defun(ctx,"STRINGP",mod,STRINGP);
-  defun(ctx,"LISTP",mod,LISTP);
-  defun(ctx,"CONSP",mod,CONSP);
-  defun(ctx,"ENDP",mod,ENDP);
-  defun(ctx,"NUMBERP",mod,NUMBERP);
-  defun(ctx,"INTEGERP",mod,INTEGERP);
-  defun(ctx,"FLOATP",mod,FLOATP);
-  defun(ctx,"BOUNDP",mod,BOUNDP);
-  defun(ctx,"FBOUNDP",mod,FBOUNDP);
-  defun(ctx,"STREAMP",mod,STREAMP); }
+  defun(ctx,"EQL",mod,EQ,NULL);
+  defun(ctx,"NULL",mod,NILP,NULL);
+  QNOT=defun(ctx,"NOT",mod,NILP,NULL);
+  QEQUAL=defun(ctx,"EQUAL",mod,EQUAL,NULL);
+  defun(ctx,"SUPEREQUAL",mod,SUPEREQUAL,NULL);
+  defun(ctx,"SYMBOLP",mod,SYMBOLP,NULL);
+  defun(ctx,"STRINGP",mod,STRINGP,NULL);
+  defun(ctx,"LISTP",mod,LISTP,NULL);
+  defun(ctx,"CONSP",mod,CONSP,NULL);
+  defun(ctx,"ENDP",mod,ENDP,NULL);
+  defun(ctx,"NUMBERP",mod,NUMBERP,NULL);
+  defun(ctx,"INTEGERP",mod,INTEGERP,NULL);
+  defun(ctx,"FLOATP",mod,FLOATP,NULL);
+  defun(ctx,"BOUNDP",mod,BOUNDP,NULL);
+  defun(ctx,"FBOUNDP",mod,FBOUNDP,NULL);
+  defun(ctx,"STREAMP",mod,STREAMP,NULL); }

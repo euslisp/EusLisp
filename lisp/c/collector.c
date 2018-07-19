@@ -1236,10 +1236,10 @@ void rgcfunc(register context *ctx, pointer mod)
 {
   pointer p = Spevalof(PACKAGE);
   pointer_update(Spevalof(PACKAGE), syspkg);
-  defun(ctx, "RGCCOUNT", mod, RGCCOUNT);
-  defun(ctx, "RGCTIME", mod, RGC_GCTIME);
+  defun(ctx, "RGCCOUNT", mod, RGCCOUNT,NULL);
+  defun(ctx, "RGCTIME", mod, RGC_GCTIME,NULL);
 #ifdef __PROFILE_GC
-  defun(ctx, "RGCALLOCATED", mod, RGCALLOCATED);
+  defun(ctx, "RGCALLOCATED", mod, RGCALLOCATED,NULL);
 #endif
   pointer_update(Spevalof(PACKAGE), p);
 }

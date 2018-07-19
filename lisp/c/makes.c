@@ -603,7 +603,6 @@ long hi, lo;
 /****************************************************************/
 /* defines
 /****************************************************************/
-#undef defun /* remove macro for reading correct defun */
 pointer defun(ctx,name,mod,f,doc)
 register context *ctx;
 char *name;
@@ -633,8 +632,6 @@ char *doc;
   printf( "0x%lx\n", sym->c.sym.spefunc->c.code.entry );
 #endif
   return(sym);}
-/* restore macro */
-#define defun(a, b, c, d) defun(a, b, c, d, NULL)
 
 pointer defunpkg(ctx,name,mod,f,pkg)
 register context *ctx;
