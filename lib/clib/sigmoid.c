@@ -47,7 +47,7 @@ context *ctx;
 int n;
 pointer argv[];
 { pointer mod=argv[0];
-  defun(ctx,"SIGMOID",mod,SIGMOID);
-  defun(ctx,"SIGMOIDX",mod,SIGMOIDX);
-  defun(ctx,"OFFSET-VECTOR",mod,OFFSET_VECTOR);}
+  defun(ctx,"SIGMOID",mod,SIGMOID,NULL);
+  defun(ctx,"SIGMOIDX",mod,SIGMOIDX,NULL);
+  defun(ctx,"OFFSET-VECTOR",mod,OFFSET_VECTOR,NULL);}
 

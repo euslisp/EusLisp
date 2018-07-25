@@ -18,11 +18,13 @@ static char *rcsid="@(#)$Id$";
 #define bitset(vec,index,val) \
 	(val?((vec)->c.ivec.iv[(index)/64] |= (1L<<((index)%64))): \
 	     ((vec)->c.ivec.iv[(index)/64] &= ~(1L<<((index)%64))))
+#define MAX_SEQUENCE_COUNT 100000000
 #else
 #define bitref(vec,index) (((vec)->c.ivec.iv[(index)/32] >> ((index)%32)) & 1)
 #define bitset(vec,index,val) \
 	(val?((vec)->c.ivec.iv[(index)/32] |= (1<<((index)%32))): \
 	     ((vec)->c.ivec.iv[(index)/32] &= ~(1<<((index)%32))))
+#define MAX_SEQUENCE_COUNT 1000000
 #endif
 
 extern pointer QEQ;
@@ -392,7 +394,7 @@ register pointer argv[];
 { register int i,argc=1,resultlen=0;
   if (n<=1) return(NIL);
   if (!isclass(argv[0])) error(E_NOCLASS,argv[0]);
-  while (argc<n) resultlen+=pushsequence(ctx,argv[argc++],0,1000000);
+  while (argc<n) resultlen+=pushsequence(ctx,argv[argc++],0,MAX_SEQUENCE_COUNT);
   return(makesequence(ctx,resultlen,argv[0]));}
 
 pointer COERCE(ctx,n,argv)
@@ -408,7 +410,7 @@ register pointer argv[];
     offset=intval(a->c.ary.offset);
     count=intval(a->c.ary.dim[0]);
     a=a->c.ary.entity;}
-  else { offset=0; count=1000000;}
+  else { offset=0; count=MAX_SEQUENCE_COUNT;}
   len=pushsequence(ctx,a,offset,count);
   return(makesequence(ctx,len,argv[1])); }
   
@@ -673,7 +675,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,1000000);
+    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer REMOVE_DUPLICATES(ctx,n,argv)
@@ -715,7 +717,7 @@ pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,1000000);
+    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer DELETE(ctx,n,argv)
@@ -807,7 +809,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,1000000);
+    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer NSUBSTITUTE(ctx,n,argv)
@@ -1069,15 +1071,15 @@ void sequence(ctx,mod)
 register context *ctx;
 pointer mod;
 {
-  QIDENTITY=defun(ctx,"IDENTITY",mod,IDENTITY);
+  QIDENTITY=defun(ctx,"IDENTITY",mod,IDENTITY,NULL);
   QIDENTITY=QIDENTITY->c.sym.spefunc;
-  defun(ctx,"SUBSEQ",mod,SUBSEQ);
-  defun(ctx,"COPY-SEQ",mod,COPYSEQ);
-  defun(ctx,"REVERSE",mod,REVERSE);
-  defun(ctx,"NREVERSE",mod,NREVERSE);
-  defun(ctx,"CONCATENATE",mod,CONCATENATE);
-  defun(ctx,"COERCE",mod,COERCE);
-  defun(ctx,"MAP",mod,MAP);
+  defun(ctx,"SUBSEQ",mod,SUBSEQ,NULL);
+  defun(ctx,"COPY-SEQ",mod,COPYSEQ,NULL);
+  defun(ctx,"REVERSE",mod,REVERSE,NULL);
+  defun(ctx,"NREVERSE",mod,NREVERSE,NULL);
+  defun(ctx,"CONCATENATE",mod,CONCATENATE,NULL);
+  defun(ctx,"COERCE",mod,COERCE,NULL);
+  defun(ctx,"MAP",mod,MAP,NULL);
   defunpkg(ctx,"RAW-FILL",mod,FILL,syspkg);
   defunpkg(ctx,"RAW-POSITION",mod,POSITION,syspkg);
   defunpkg(ctx,"RAW-FIND",mod,FIND,syspkg);
@@ -1088,8 +1090,8 @@ pointer mod;
   defunpkg(ctx,"RAW-SUBSTITUTE",mod,SUBSTITUTE,syspkg);
   defunpkg(ctx,"RAW-NSUBSTITUTE",mod,NSUBSTITUTE,syspkg);
   defunpkg(ctx,"VECTOR-REPLACE",mod,VECREPLACE,syspkg);
-  defun(ctx,"SORT",mod,SORT);
-  defun(ctx,"LENGTH",mod,LENGTH);
-  defun(ctx,"ELT",mod,ELT);
-  defun(ctx,"SETELT",mod,SETELT);
+  defun(ctx,"SORT",mod,SORT,NULL);
+  defun(ctx,"LENGTH",mod,LENGTH,NULL);
+  defun(ctx,"ELT",mod,ELT,NULL);
+  defun(ctx,"SETELT",mod,SETELT,NULL);
   }

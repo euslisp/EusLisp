@@ -715,27 +715,27 @@ void leo(ctx,mod)
 register context *ctx;
 pointer mod;
 {
-  defun(ctx,"CLASS",mod,GETCLASS);
-  defun(ctx,"ENTER-CLASS",mod,ENTERCLASS);
+  defun(ctx,"CLASS",mod,GETCLASS,NULL);
+  defun(ctx,"ENTER-CLASS",mod,ENTERCLASS,NULL);
 /*  defspecial("DEFCLASS",mod,DEFCLASS); */
   defspecial(ctx,"DEFMETHOD",mod,DEFMETHOD);
-  defun(ctx,"SEND",mod,SEND);
-  defun(ctx,"SEND-MSG",mod,SEND);
-  defun(ctx,"SEND-IF-FOUND",mod,SEND_IF_FOUND);
-  defun(ctx,"SEND-MESSAGE",mod,SENDMESSAGE); 
-  defun(ctx,"INSTANTIATE",mod,INSTANTIATE);
-  defun(ctx,"CLASSP",mod,CLASSP);
-  defun(ctx,"SUBCLASSP",mod,SUBCLASSP);
-  defun(ctx,"DERIVEDP",mod,DERIVEDP);
-  defun(ctx,"CLONE",mod,CLONE);
-  defun(ctx,"SLOT",mod,SLOT);
-  defun(ctx,"SETSLOT",mod,SETSLOT);
-  defun(ctx,"FIND-METHOD",mod,FINDMETHOD);
+  defun(ctx,"SEND",mod,SEND,NULL);
+  defun(ctx,"SEND-MSG",mod,SEND,NULL);
+  defun(ctx,"SEND-IF-FOUND",mod,SEND_IF_FOUND,NULL);
+  defun(ctx,"SEND-MESSAGE",mod,SENDMESSAGE,NULL);
+  defun(ctx,"INSTANTIATE",mod,INSTANTIATE,NULL);
+  defun(ctx,"CLASSP",mod,CLASSP,NULL);
+  defun(ctx,"SUBCLASSP",mod,SUBCLASSP,NULL);
+  defun(ctx,"DERIVEDP",mod,DERIVEDP,NULL);
+  defun(ctx,"CLONE",mod,CLONE,NULL);
+  defun(ctx,"SLOT",mod,SLOT,NULL);
+  defun(ctx,"SETSLOT",mod,SETSLOT,NULL);
+  defun(ctx,"FIND-METHOD",mod,FINDMETHOD,NULL);
   defunpkg(ctx,"METHOD-CACHE",mod,METHCACHE,syspkg);
   addcmethod(ctx,mod,CONSCAR,defkeyword(ctx,"CAR"),QCONS,NIL);
   addcmethod(ctx,mod,CONSCDR,defkeyword(ctx,"CDR"),QCONS,NIL);
-  defun(ctx,"COPY-OBJECT",mod,COPYOBJ);
-  defun(ctx,"BECOME",mod,BECOME);
-  defun(ctx,"REPLACE-OBJECT",mod,REPLACEOBJECT);
+  defun(ctx,"COPY-OBJECT",mod,COPYOBJ,NULL);
+  defun(ctx,"BECOME",mod,BECOME,NULL);
+  defun(ctx,"REPLACE-OBJECT",mod,REPLACEOBJECT,NULL);
   }
 

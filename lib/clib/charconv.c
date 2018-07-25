@@ -88,10 +88,10 @@ pointer ICONV(context *ctx, int n, pointer *argv)
 
 charconv(context *ctx, int n, pointer argv[])
 { pointer mod=argv[0];
-  defun(ctx,"CHARCONV",mod,cconv); 
-  defun(ctx,"ICONV-OPEN", mod, ICONVOPEN);
-  defun(ctx,"ICONV-CLOSE", mod, ICONVCLOSE);
-  defun(ctx, "ICONV", mod, ICONV);
+  defun(ctx,"CHARCONV",mod,cconv,NULL);
+  defun(ctx,"ICONV-OPEN", mod, ICONVOPEN,NULL);
+  defun(ctx,"ICONV-CLOSE", mod, ICONVCLOSE,NULL);
+  defun(ctx, "ICONV", mod, ICONV,NULL);
   }
 
 

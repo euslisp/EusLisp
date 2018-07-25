@@ -1103,14 +1103,14 @@ pointer argv[];
     printf("rotation-angle1: %f %f %f\n",kx,ky,kz);
   if ((fabs(kx) > fabs(ky)) && (fabs(kx) > fabs(kz))) {
     ky=(m[size]+m[1])/(2*kx*vers); kz=(m[2]+m[size+size])/(2*kx*vers);
-    norm=sqrt((ky*ky+kz*kz)/(1.0-kx*kx)); ky/=norm; kz/=norm;}
+    norm=sqrt((ky*ky+kz*kz)/(1.0-kx*kx)); if (!isnan(norm)) {ky/=norm; kz/=norm;}}
   else if ((fabs(ky) > fabs(kx)) && (fabs(ky) > fabs(kz))) {
     kx=(m[size]+m[1])/(2*ky*vers); kz=(m[size+2]+m[size+size+1])/(2*ky*vers);
-    norm=sqrt((kx*kx+kz*kz)/(1.0-ky*ky)); kx/=norm; kz/=norm;}
+    norm=sqrt((kx*kx+kz*kz)/(1.0-ky*ky)); if (!isnan(norm)) {kx/=norm; kz/=norm;}}
   else {
     kx=(m[2]+m[size+size])/(2*kz*vers);
     ky=(m[size+2]+m[size+size+1])/(2*kz*vers);
-    norm=sqrt((kx*kx+ky*ky)/(1.0-kz*kz)); kx/=norm; ky/=norm;}
+    norm=sqrt((kx*kx+ky*ky)/(1.0-kz*kz)); if (!isnan(norm)) {kx/=norm; ky/=norm;}}
   /**/
   norm=sqrt(kx*kx + ky*ky + kz*kz);
   if (debug) 
@@ -1356,38 +1356,38 @@ register pointer mod;
   MK_Y=defkeyword(ctx,"-Y");
   MK_Z=defkeyword(ctx,"-Z");
 
-  defun(ctx,"V+",mod,VPLUS);
-  defun(ctx,"V++",mod,VPLUSPLUS);
-  defun(ctx,"V-",mod,VMINUS);
-  defun(ctx,"V-ABS",mod,VMINUS_ABS);
-  defun(ctx,"V.",mod,VINNERPRODUCT);
-  defun(ctx,"V*",mod,VCROSSPRODUCT);
-  defun(ctx,"V.*",mod,SCA3PROD);
-  defun(ctx,"V<",mod,VLESSP);
-  defun(ctx,"V>",mod,VGREATERP);
-  defun(ctx,"VMIN",mod,VMIN);
-  defun(ctx,"VMAX",mod,VMAX);
-  defun(ctx,"MINIMAL-BOX",mod,MINIMALBOX);
-  defun(ctx,"SCALE",mod,SCALEVEC);
-  defun(ctx,"NORM",mod,VNORM); 
-  defun(ctx,"NORM2",mod,VNORM2);
-  defun(ctx,"NORMALIZE-VECTOR",mod,VNORMALIZE);
-  defun(ctx,"DISTANCE",mod,VDISTANCE);
-  defun(ctx,"DISTANCE2",mod,VDISTANCE2);
-  defun(ctx,"DIRECTION",mod,VDIRECTION);
-  defun(ctx,"MIDPOINT",mod,MIDPOINT);
-/*  defun(ctx,"TRIANGLE",mod,TRIANGLE); */
-  defun(ctx,"FLOATVECTOR",mod,MKFLTVEC);
-  defun(ctx,"FLOAT-VECTOR",mod,MKFLTVEC);
-  defun(ctx,"TRANSFORM",mod,TRANSFORM);
-  defun(ctx,"M*",mod,MATTIMES);
-  defun(ctx,"ROTATE-VECTOR",mod,ROTVEC);
-  defun(ctx,"ROTATE-MATRIX",mod,ROTMAT);
-  defun(ctx,"ROTATION-MATRIX",mod,ROTATION_MATRIX);
-  defun(ctx,"ROTATION-ANGLE",mod,ROTANGLE);
-  defun(ctx,"TRANSPOSE",mod,TRANSPOSE);
-  defun(ctx,"RPY-ANGLE",mod,INV_RPY);
-  defun(ctx,"EULER-ANGLE",mod,INV_EULER);
-  defun(ctx,"LU-DECOMPOSE",mod,LU_DECOMPOSE);
-  defun(ctx,"LU-SOLVE",mod,LU_SOLVE);
-  defun(ctx,"LU-DETERMINANT",mod,LU_DETERMINANT);}
+  defun(ctx,"V+",mod,VPLUS,NULL);
+  defun(ctx,"V++",mod,VPLUSPLUS,NULL);
+  defun(ctx,"V-",mod,VMINUS,NULL);
+  defun(ctx,"V-ABS",mod,VMINUS_ABS,NULL);
+  defun(ctx,"V.",mod,VINNERPRODUCT,NULL);
+  defun(ctx,"V*",mod,VCROSSPRODUCT,NULL);
+  defun(ctx,"V.*",mod,SCA3PROD,NULL);
+  defun(ctx,"V<",mod,VLESSP,NULL);
+  defun(ctx,"V>",mod,VGREATERP,NULL);
+  defun(ctx,"VMIN",mod,VMIN,NULL);
+  defun(ctx,"VMAX",mod,VMAX,NULL);
+  defun(ctx,"MINIMAL-BOX",mod,MINIMALBOX,NULL);
+  defun(ctx,"SCALE",mod,SCALEVEC,NULL);
+  defun(ctx,"NORM",mod,VNORM,NULL);
+  defun(ctx,"NORM2",mod,VNORM2,NULL);
+  defun(ctx,"NORMALIZE-VECTOR",mod,VNORMALIZE,NULL);
+  defun(ctx,"DISTANCE",mod,VDISTANCE,NULL);
+  defun(ctx,"DISTANCE2",mod,VDISTANCE2,NULL);
+  defun(ctx,"DIRECTION",mod,VDIRECTION,NULL);
+  defun(ctx,"MIDPOINT",mod,MIDPOINT,NULL);
+/*  defun(ctx,"TRIANGLE",mod,TRIANGLE,NULL); */
+  defun(ctx,"FLOATVECTOR",mod,MKFLTVEC,NULL);
+  defun(ctx,"FLOAT-VECTOR",mod,MKFLTVEC,NULL);
+  defun(ctx,"TRANSFORM",mod,TRANSFORM,NULL);
+  defun(ctx,"M*",mod,MATTIMES,NULL);
+  defun(ctx,"ROTATE-VECTOR",mod,ROTVEC,NULL);
+  defun(ctx,"ROTATE-MATRIX",mod,ROTMAT,NULL);
+  defun(ctx,"ROTATION-MATRIX",mod,ROTATION_MATRIX,NULL);
+  defun(ctx,"ROTATION-ANGLE",mod,ROTANGLE,NULL);
+  defun(ctx,"TRANSPOSE",mod,TRANSPOSE,NULL);
+  defun(ctx,"RPY-ANGLE",mod,INV_RPY,NULL);
+  defun(ctx,"EULER-ANGLE",mod,INV_EULER,NULL);
+  defun(ctx,"LU-DECOMPOSE",mod,LU_DECOMPOSE,NULL);
+  defun(ctx,"LU-SOLVE",mod,LU_SOLVE,NULL);
+  defun(ctx,"LU-DETERMINANT",mod,LU_DETERMINANT,NULL);}

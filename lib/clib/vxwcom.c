@@ -117,7 +117,7 @@ pointer CALL_VXW(context *ctx, int n, pointer argv[])
 
 pointer vxwcom(context *ctx, int n, pointer argv[], pointer env)
 { pointer mod = argv[0];
-  defun(ctx, "VXW",mod,CALL_VXW);
+  defun(ctx, "VXW",mod,CALL_VXW,NULL);
   return(T);
   }
 

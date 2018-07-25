@@ -61,5 +61,5 @@ context *ctx;
 int n;
 pointer argv[];
 {
-  defun(ctx,"SSVDC",argv[0],SSVDC);}
+  defun(ctx,"SSVDC",argv[0],SSVDC,NULL);}
 	

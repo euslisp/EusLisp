@@ -775,35 +775,35 @@ pointer mod;
 
   pointer_update(Spevalof(PACKAGE),syspkg);
 
-  defun(ctx,"SBCOUNT",mod,SBCOUNT);
-  defun(ctx,"GC",mod,GEESEE);
-  defun(ctx,"GCTIME",mod,GCTIME);
-  defun(ctx,"ALLOC",mod,ALLOC);
-  defun(ctx,"NEWSTACK",mod,NEWSTACK);
-  defun(ctx,"RECLAIM",mod,RECLAIM);
-  defun(ctx,"RECLAIM-TREE",mod,RECLTREE);
-  defun(ctx,"OBJECT-SIZE",mod,OBJSIZE);
-  defun(ctx,"BKTRACE",mod,BKTRACE);
-  defun(ctx,"MEMORY-REPORT",mod,MEMORY_REPORT);
-  defun(ctx,"CLEAR-MEMORY-REPORT",mod,CLEAR_ALLOCCOUNT);
-  defun(ctx,"ROOM",mod,ROOM);
-  defun(ctx,"FREE-COUNT",mod,FREE_COUNTS);
-  defun(ctx,"LIST-ALL-CHUNKS",mod,LIST_ALL_CHUNKS);
-  defun(ctx,"LIST-ALL-INSTANCES",mod,INSTANCELIST);
-  defun(ctx,"ADDRESS",mod,ADDRESS);
-  defun(ctx,"PEEK",mod,PEEK);
-  defun(ctx,"POKE",mod,POKE);
-/*  defun(ctx,"MALLOC_DEBUG",mod,MALLOC_DEBUG);
-/*  defun(ctx,"MALLOC_VERIFY",mod,MALLOC_VERIFY); */
-  defun(ctx,"LIST-ALL-REFERENCES",mod,LISTALLREFERENCES);
-  defun(ctx,"LIST-ALL-CATCHERS",mod,LISTALLCATCHERS);
-  defun(ctx,"LIST-ALL-BINDINGS",mod,LISTBINDINGS);
-  defun(ctx,"LIST-ALL-SPECIAL-BINDINGS",mod,LISTSPECIALBINDINGS);
-  defun(ctx,"LIST-ALL-CLASSES",mod,LISTALLCLASSES);
-  defun(ctx,"EXPORT-ALL-SYMBOLS", mod, EXPORTALL);
-  defun(ctx,"NEXT-SPECIAL-INDEX", mod, NEXT_SPECIAL_INDEX);
-  defun(ctx,"THREAD-SPECIALS", mod, THREAD_SPECIALS);
-  defun(ctx,"DISPOSE-HOOK", mod, DISPOSE_HOOK);
+  defun(ctx,"SBCOUNT",mod,SBCOUNT,NULL);
+  defun(ctx,"GC",mod,GEESEE,NULL);
+  defun(ctx,"GCTIME",mod,GCTIME,NULL);
+  defun(ctx,"ALLOC",mod,ALLOC,NULL);
+  defun(ctx,"NEWSTACK",mod,NEWSTACK,NULL);
+  defun(ctx,"RECLAIM",mod,RECLAIM,NULL);
+  defun(ctx,"RECLAIM-TREE",mod,RECLTREE,NULL);
+  defun(ctx,"OBJECT-SIZE",mod,OBJSIZE,NULL);
+  defun(ctx,"BKTRACE",mod,BKTRACE,NULL);
+  defun(ctx,"MEMORY-REPORT",mod,MEMORY_REPORT,NULL);
+  defun(ctx,"CLEAR-MEMORY-REPORT",mod,CLEAR_ALLOCCOUNT,NULL);
+  defun(ctx,"ROOM",mod,ROOM,NULL);
+  defun(ctx,"FREE-COUNT",mod,FREE_COUNTS,NULL);
+  defun(ctx,"LIST-ALL-CHUNKS",mod,LIST_ALL_CHUNKS,NULL);
+  defun(ctx,"LIST-ALL-INSTANCES",mod,INSTANCELIST,NULL);
+  defun(ctx,"ADDRESS",mod,ADDRESS,NULL);
+  defun(ctx,"PEEK",mod,PEEK,NULL);
+  defun(ctx,"POKE",mod,POKE,NULL);
+/*  defun(ctx,"MALLOC_DEBUG",mod,MALLOC_DEBUG,NULL);
+/*  defun(ctx,"MALLOC_VERIFY",mod,MALLOC_VERIFY,NULL); */
+  defun(ctx,"LIST-ALL-REFERENCES",mod,LISTALLREFERENCES,NULL);
+  defun(ctx,"LIST-ALL-CATCHERS",mod,LISTALLCATCHERS,NULL);
+  defun(ctx,"LIST-ALL-BINDINGS",mod,LISTBINDINGS,NULL);
+  defun(ctx,"LIST-ALL-SPECIAL-BINDINGS",mod,LISTSPECIALBINDINGS,NULL);
+  defun(ctx,"LIST-ALL-CLASSES",mod,LISTALLCLASSES,NULL);
+  defun(ctx,"EXPORT-ALL-SYMBOLS", mod, EXPORTALL,NULL);
+  defun(ctx,"NEXT-SPECIAL-INDEX", mod, NEXT_SPECIAL_INDEX,NULL);
+  defun(ctx,"THREAD-SPECIALS", mod, THREAD_SPECIALS,NULL);
+  defun(ctx,"DISPOSE-HOOK", mod, DISPOSE_HOOK,NULL);
 
 /* restore package*/  pointer_update(Spevalof(PACKAGE),p);
 }

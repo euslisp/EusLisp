@@ -162,5 +162,5 @@ context *ctx;
 int n;
 pointer argv[];
 { pointer mod=argv[0];
-  defun(ctx, "READ-TEX", mod, READ_TEX);
+  defun(ctx, "READ-TEX", mod, READ_TEX,NULL);
  }

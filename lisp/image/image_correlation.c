@@ -196,8 +196,8 @@ context *ctx;
 int n;
 pointer argv[];
 { pointer mod=argv[0];
-  defun(ctx,"IMAGE-CORRELATION1",mod,IMAGE_CORRELATION1);
-  defun(ctx,"IMAGE-CORRELATION",mod,IMAGE_CORRELATION);
-  defun(ctx,"CIRCULAR-CORRELATION",mod,CIRCULAR_CORRELATION);
+  defun(ctx,"IMAGE-CORRELATION1",mod,IMAGE_CORRELATION1,NULL);
+  defun(ctx,"IMAGE-CORRELATION",mod,IMAGE_CORRELATION,NULL);
+  defun(ctx,"CIRCULAR-CORRELATION",mod,CIRCULAR_CORRELATION,NULL);
   return(NIL);
   }

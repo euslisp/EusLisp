@@ -1,4 +1,9 @@
-;;Sparc330  memory=24MB, 16mips
+;;Sparc330  memory=24MB, 16mips (1995?)
+;; Dhryston
+;;; Pentium-M 1.4GHz dhryston =1,272K
+;;; atom d2700 memory=2GB (2012) dhryston=1,635,806
+;;; raspberry-pi memory=500MB (2013) dhryston=538,192
+;;;
 ;;
 ;; 1990/Oct/3
 ;; 1997/Nov/15
@@ -74,7 +79,10 @@
 (fib 20)	1.8ms	Celeron-M 1.4GHz
 (fib 20)	1.13ms	Pentium-4/2.8GHz Feb2003 
 (fib 20)	2.4ms	Atom/1.6GHz 2008
-	
+(fib 20)	1.9ms	Atom D2700 4-cores/2.3GHz (2012.8)
+(fib 20)	10ms	Raspberry Pi (2013)
+(fib 20)	0.45ms	core-i5 2500 3.3GHz (2012)
+
 ------------------------------
 (fib 30)	4.2s	MkLinux PPC/120MHz (8500)
 (fib 30)	2.8s	PC/Pentium 100MHz
@@ -93,6 +101,9 @@
 (fib 30)	0.22s	Celeron-M 1.4GHz
 (fib 30)	0.131	Pentium-4 (2.8GHz) Feb 2003
 (fib 30)	0.30s	Atom/1.6GHz, 2008
+(fib 30)	0.235s	Atom D2700 4-cores/2.3GHz (2012.8)
+(fib 30)	1.13s	Raspberry Pi (2013)
+(fib 30)	0.0475s core-i5 2500 3.3GHz (2012)
 
 ----------------------------------
 ifib: fibonacci with integer declarations
@@ -115,22 +126,28 @@ ifib: fibonacci with integer declarations
 (ifib 20)	 0.83ms		Cygwin, Centrino 1GHz, 2004
 (ifib 20)	 0.6ms		Athlon XP1800+ VMware
 (ifib 20)	 0.43ms		Peintium-iv 2800MHz
+(ifib 20)	 0.6ms		Atom D2700 2.3GHz (2012)
+(ifib 20)	 0.2ms		core-i5 2500 3.3GHz (2014)
 
 --------------------------------------
+Interpreted fib
 (etafib 20)     4500ms		sun4/330  interpreted by etalisp
 (fib 20)        4400ms		Sun4/330  interpreted by euslisp
 (fib 20)         315ms		Ultra Sparc  interpreted by euslisp
 (fib 20)	2610ms		DEC3100 interpreted
-(fib 20)	 949ms		DX4/100MHz interpreted
+(fib 20)	 949ms		486DX4/100MHz interpreted
 (fib 20)	 174ms		PPro/166MHz interpreter
 (fib 20)	 155ms		Sparc/LT (-O2)
 (fib 20)	  79ms		Pentium-II mobile 366MHz Thinkpad 570
 (fib 20)	  70ms		Pentium-II 400MHz
 (fig 20)	  27ms		Interpreted, Cygwin Centrino 1GHz, 2004
 (fib 20)	  17ms		Athlon XP1800+
-(fib 20)	  14ms		Pentium-4 2800MHz (interpreted)
+(fib 20)	  14ms		Pentium-4 2800MHz (interpreted, 2003)
 (fib 20)	  18ms		Celeron-M 1.4GHz (interpret, 2007)
 (fib 20)	  28ms		atom 1.6GHz (interpreted, 2008)
+(fib 20)	  21ms		atom 2.3GHz (interpreted, ATOM D2700, 2012)
+(fib 20)	 113ms		Raspberry Pi (2013) probably cache is weak
+(fib 20)	   5.1ms	core-i5 2500 3.3GHz (2012)
 	
 (prime 1000000)	865ms		Pen-II/400
 
