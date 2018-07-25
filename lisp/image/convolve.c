@@ -203,10 +203,10 @@ pointer argv[];
 { pointer mod=argv[0];
 
 /*  printf("convolve is being initialized. mod=%x\n",mod); */
-  defun(ctx,"CONVOLVE3",mod,CONVOLVE3);
-  defun(ctx,"LOOK-UP",mod,LOOK_UP);
-  defun(ctx,"HALVE-IMAGE",mod,HALVE_IMAGE);
-  defun(ctx,"DOUBLE-IMAGE",mod,DOUBLE_IMAGE);
-  defun(ctx,"MEDIAN-IMAGE",mod,MEDIAN_IMAGE);
+  defun(ctx,"CONVOLVE3",mod,CONVOLVE3,NULL);
+  defun(ctx,"LOOK-UP",mod,LOOK_UP,NULL);
+  defun(ctx,"HALVE-IMAGE",mod,HALVE_IMAGE,NULL);
+  defun(ctx,"DOUBLE-IMAGE",mod,DOUBLE_IMAGE,NULL);
+  defun(ctx,"MEDIAN-IMAGE",mod,MEDIAN_IMAGE,NULL);
 }
 

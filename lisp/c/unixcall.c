@@ -1994,161 +1994,161 @@ pointer mod;
   Spevalof(PACKAGE)=unixpkg;
 
 /* common to unix and to vxworks */
-  defun(ctx,"SIGADDSET",mod,SIGADDSET);
-  defun(ctx,"SIGDELSET",mod,SIGDELSET);
-  defun(ctx,"SIGPROCMASK",mod,SIGPROCMASK);
-  defun(ctx,"KILL",mod,KILL);
-  defun(ctx,"SIGNAL",mod,SIGNAL);
-  defun(ctx,"EXIT",mod,EXIT);
-  defun(ctx,"_EXIT",mod,_EXIT);
-  defun(ctx,"GETPID",mod,GETPID);
-  defun(ctx,"UREAD",mod,UNIXREAD);
-  defun(ctx,"WRITE",mod,UNIXWRITE);
-  defun(ctx,"UCLOSE",mod,UNIXCLOSE);
-  defun(ctx,"IOCTL",mod,IOCTL);
-  defun(ctx,"LSEEK",mod,LSEEK);
-  defun(ctx,"SBRK",mod,SBRK);
-  defun(ctx,"MALLOC",mod,MALLOC);
-  defun(ctx,"FREE",mod,FREE);
+  defun(ctx,"SIGADDSET",mod,SIGADDSET,NULL);
+  defun(ctx,"SIGDELSET",mod,SIGDELSET,NULL);
+  defun(ctx,"SIGPROCMASK",mod,SIGPROCMASK,NULL);
+  defun(ctx,"KILL",mod,KILL,NULL);
+  defun(ctx,"SIGNAL",mod,SIGNAL,NULL);
+  defun(ctx,"EXIT",mod,EXIT,NULL);
+  defun(ctx,"_EXIT",mod,_EXIT,NULL);
+  defun(ctx,"GETPID",mod,GETPID,NULL);
+  defun(ctx,"UREAD",mod,UNIXREAD,NULL);
+  defun(ctx,"WRITE",mod,UNIXWRITE,NULL);
+  defun(ctx,"UCLOSE",mod,UNIXCLOSE,NULL);
+  defun(ctx,"IOCTL",mod,IOCTL,NULL);
+  defun(ctx,"LSEEK",mod,LSEEK,NULL);
+  defun(ctx,"SBRK",mod,SBRK,NULL);
+  defun(ctx,"MALLOC",mod,MALLOC,NULL);
+  defun(ctx,"FREE",mod,FREE,NULL);
 
-  defun(ctx,"SOCKET",mod,SOCKET);
-  defun(ctx,"BIND",mod,BIND);
-  defun(ctx,"CONNECT",mod,CONNECT);
-  defun(ctx,"LISTEN",mod,LISTEN);
-  defun(ctx,"ACCEPT",mod,ACCEPT);
-  defun(ctx,"SENDTO",mod,SENDTO);
-  defun(ctx,"RECVFROM",mod,RECVFROM);
+  defun(ctx,"SOCKET",mod,SOCKET,NULL);
+  defun(ctx,"BIND",mod,BIND,NULL);
+  defun(ctx,"CONNECT",mod,CONNECT,NULL);
+  defun(ctx,"LISTEN",mod,LISTEN,NULL);
+  defun(ctx,"ACCEPT",mod,ACCEPT,NULL);
+  defun(ctx,"SENDTO",mod,SENDTO,NULL);
+  defun(ctx,"RECVFROM",mod,RECVFROM,NULL);
 #if !Solaris2
-  defun(ctx,"GETPEERNAME",mod,GETPEERNAME);
+  defun(ctx,"GETPEERNAME",mod,GETPEERNAME,NULL);
 #endif
 /* #endif /*socket*/
 
 /*not supported by vxworks*/
 #if !vxworks
-  defun(ctx,"PTIMES",mod,PTIMES);
-  defun(ctx,"RUNTIME",mod,RUNTIME);
-  defun(ctx,"LOCALTIME",mod,LOCALTIME);
-  defun(ctx,"ASCTIME",mod,ASCTIME);
-  defun(ctx,"GETITIMER",mod,GETITIMER);
-  defun(ctx,"SETITIMER",mod,SETITIMER);
+  defun(ctx,"PTIMES",mod,PTIMES,NULL);
+  defun(ctx,"RUNTIME",mod,RUNTIME,NULL);
+  defun(ctx,"LOCALTIME",mod,LOCALTIME,NULL);
+  defun(ctx,"ASCTIME",mod,ASCTIME,NULL);
+  defun(ctx,"GETITIMER",mod,GETITIMER,NULL);
+  defun(ctx,"SETITIMER",mod,SETITIMER,NULL);
 
 #if !Solaris2
-  defun(ctx,"GETRUSAGE",mod,GETRUSAGE);
-  defun(ctx,"GETPAGESIZE",mod,GETPAGESIZE);
+  defun(ctx,"GETRUSAGE",mod,GETRUSAGE,NULL);
+  defun(ctx,"GETPAGESIZE",mod,GETPAGESIZE,NULL);
 #endif
 
-  defun(ctx,"GETTIMEOFDAY",mod,GETTIMEOFDAY);
-  defun(ctx,"ALARM",mod,ALARM);
+  defun(ctx,"GETTIMEOFDAY",mod,GETTIMEOFDAY,NULL);
+  defun(ctx,"ALARM",mod,ALARM,NULL);
 
 #if sun3 || sun4 || news || sanyo || alpha || x86_64 || ARM /* why i386 does not exist? */
 #if !Solaris2
-  defun(ctx,"UALARM",mod,UALARM);
+  defun(ctx,"UALARM",mod,UALARM,NULL);
 #endif
 #endif
 
-  defun(ctx,"WAIT",mod,WAIT);
-  defun(ctx,"FORK",mod,FORK);
+  defun(ctx,"WAIT",mod,WAIT,NULL);
+  defun(ctx,"FORK",mod,FORK,NULL);
 #if Solaris2
-  defun(ctx,"FORK1",mod,FORK1);
+  defun(ctx,"FORK1",mod,FORK1,NULL);
 #endif
-  defun(ctx,"GETPPID",mod,GETPPID);
-  defun(ctx,"GETPGRP",mod,GETPGRP);
-  defun(ctx,"SETPGRP",mod,SETPGRP);
-  defun(ctx,"GETUID",mod,GETUID);
-  defun(ctx,"GETEUID",mod,GETEUID);
-  defun(ctx,"GETGID",mod,GETGID);
-  defun(ctx,"GETEGID",mod,GETEGID);
-  defun(ctx,"SETUID",mod,SETUID);
-  defun(ctx,"SETGID",mod,SETGID);
-  defun(ctx,"MKNOD",mod,MKNOD);
-  defun(ctx,"MKDIR",mod,MKDIR);
+  defun(ctx,"GETPPID",mod,GETPPID,NULL);
+  defun(ctx,"GETPGRP",mod,GETPGRP,NULL);
+  defun(ctx,"SETPGRP",mod,SETPGRP,NULL);
+  defun(ctx,"GETUID",mod,GETUID,NULL);
+  defun(ctx,"GETEUID",mod,GETEUID,NULL);
+  defun(ctx,"GETGID",mod,GETGID,NULL);
+  defun(ctx,"GETEGID",mod,GETEGID,NULL);
+  defun(ctx,"SETUID",mod,SETUID,NULL);
+  defun(ctx,"SETGID",mod,SETGID,NULL);
+  defun(ctx,"MKNOD",mod,MKNOD,NULL);
+  defun(ctx,"MKDIR",mod,MKDIR,NULL);
 #if !Cygwin /* Cygwin does not have LOCKF */
-  defun(ctx,"LOCKF",mod,LOCKF);
+  defun(ctx,"LOCKF",mod,LOCKF,NULL);
 #endif
-  defun(ctx,"FCNTL",mod,FCNTL);
+  defun(ctx,"FCNTL",mod,FCNTL,NULL);
 #if !Solaris2
-  defun(ctx,"IOCTL_",mod,IOCTL_);
-  defun(ctx,"IOCTL_R",mod,IOCTL_R);
-  defun(ctx,"IOCTL_W",mod,IOCTL_W);
+  defun(ctx,"IOCTL_",mod,IOCTL_,NULL);
+  defun(ctx,"IOCTL_R",mod,IOCTL_R,NULL);
+  defun(ctx,"IOCTL_W",mod,IOCTL_W,NULL);
 #if !Cygwin /* Cygwin does not have IOCTL_WR */
-  defun(ctx,"IOCTL_WR",mod,IOCTL_WR);
+  defun(ctx,"IOCTL_WR",mod,IOCTL_WR,NULL);
 #endif
 #endif
-  defun(ctx,"DUP",mod,DUP);
-  defun(ctx,"DUP2",mod,DUP2);
-  defun(ctx,"SYSTEM",mod,SYSTEM);
-  defun(ctx,"GETWD",mod,GETWD);
-  defun(ctx,"GETENV",mod,GETENV);
-  defun(ctx,"ENVIRON",mod,ENVIRON);
-  defun(ctx,"SLEEP",mod,SLEEP);
-  defun(ctx,"ERRNO",mod,ERRNO);
-  defun(ctx,"PERROR",mod,PERROR);
-  defun(ctx,"SYSERRLIST",mod,SYSERRLIST);
-  defun(ctx,"PAUSE",mod,PAUSE);
-  defun(ctx,"ISATTY",mod,ISATTY);
-  defun(ctx,"LINK",mod,LINK);
-  defun(ctx,"UNLINK",mod,UNLINK);
-  defun(ctx,"RMDIR",mod,RMDIR);
-  defun(ctx,"RENAME",mod,RENAME);
-  defun(ctx,"ACCESS",mod,ACCESS);
-/*   defun(ctx,"FLOCK",mod,FLOCK); */
-  defun(ctx,"STAT",mod,STAT);
-  defun(ctx,"CHDIR",mod,CHDIR);
-  defun(ctx,"CHMOD",mod,CHMOD);
-  defun(ctx,"CHOWN",mod,CHOWN);
-  defun(ctx,"PIPE",mod,PIPE);
-  defun(ctx,"SELECT",mod,SELECT);
-  defun(ctx,"SELECT-READ-FD",mod,SELECT_READ);
-  defun(ctx,"READDIR",mod,DIRECTORY);
+  defun(ctx,"DUP",mod,DUP,NULL);
+  defun(ctx,"DUP2",mod,DUP2,NULL);
+  defun(ctx,"SYSTEM",mod,SYSTEM,NULL);
+  defun(ctx,"GETWD",mod,GETWD,NULL);
+  defun(ctx,"GETENV",mod,GETENV,NULL);
+  defun(ctx,"ENVIRON",mod,ENVIRON,NULL);
+  defun(ctx,"SLEEP",mod,SLEEP,NULL);
+  defun(ctx,"ERRNO",mod,ERRNO,NULL);
+  defun(ctx,"PERROR",mod,PERROR,NULL);
+  defun(ctx,"SYSERRLIST",mod,SYSERRLIST,NULL);
+  defun(ctx,"PAUSE",mod,PAUSE,NULL);
+  defun(ctx,"ISATTY",mod,ISATTY,NULL);
+  defun(ctx,"LINK",mod,LINK,NULL);
+  defun(ctx,"UNLINK",mod,UNLINK,NULL);
+  defun(ctx,"RMDIR",mod,RMDIR,NULL);
+  defun(ctx,"RENAME",mod,RENAME,NULL);
+  defun(ctx,"ACCESS",mod,ACCESS,NULL);
+/*   defun(ctx,"FLOCK",mod,FLOCK,NULL); */
+  defun(ctx,"STAT",mod,STAT,NULL);
+  defun(ctx,"CHDIR",mod,CHDIR,NULL);
+  defun(ctx,"CHMOD",mod,CHMOD,NULL);
+  defun(ctx,"CHOWN",mod,CHOWN,NULL);
+  defun(ctx,"PIPE",mod,PIPE,NULL);
+  defun(ctx,"SELECT",mod,SELECT,NULL);
+  defun(ctx,"SELECT-READ-FD",mod,SELECT_READ,NULL);
+  defun(ctx,"READDIR",mod,DIRECTORY,NULL);
 
 #if !vxworks
-  defun(ctx,"GETHOSTNAME",mod,GETHOSTNAME);
-  defun(ctx,"GETHOSTBYNAME",mod,GETHOSTBYNAME);
-  defun(ctx,"GETHOSTBYADDR",mod,GETHOSTBYADDR);
+  defun(ctx,"GETHOSTNAME",mod,GETHOSTNAME,NULL);
+  defun(ctx,"GETHOSTBYNAME",mod,GETHOSTBYNAME,NULL);
+  defun(ctx,"GETHOSTBYADDR",mod,GETHOSTBYADDR,NULL);
 #if !Cygwin /* Cygwin does not have GETNETBYNMAE */
-  defun(ctx,"GETNETBYNAME",mod,GETNETBYNAME);
+  defun(ctx,"GETNETBYNAME",mod,GETNETBYNAME,NULL);
 #endif
-  defun(ctx,"GETPROTOBYNAME",mod,GETPROTOBYNAME);
-  defun(ctx,"GETSERVBYNAME",mod,GETSERVBYNAME);
+  defun(ctx,"GETPROTOBYNAME",mod,GETPROTOBYNAME,NULL);
+  defun(ctx,"GETSERVBYNAME",mod,GETSERVBYNAME,NULL);
 /* Append by I.Hara for IPC */
-  defun(ctx,"HTONS",mod,H2NS);
-  defun(ctx,"NTOHS",mod,N2HS);
+  defun(ctx,"HTONS",mod,H2NS,NULL);
+  defun(ctx,"NTOHS",mod,N2HS,NULL);
 #endif
 
 #if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64 || ARM
-  defun(ctx,"VFORK",mod,VFORK);
+  defun(ctx,"VFORK",mod,VFORK,NULL);
 #endif
-  defun(ctx,"EXEC",mod,EXEC);
+  defun(ctx,"EXEC",mod,EXEC,NULL);
 #if !Solaris2 && !Cygwin
-  defun(ctx,"GETPRIORITY",mod,GETPRIORITY);
-  defun(ctx,"SETPRIORITY",mod,SETPRIORITY);
+  defun(ctx,"GETPRIORITY",mod,GETPRIORITY,NULL);
+  defun(ctx,"SETPRIORITY",mod,SETPRIORITY,NULL);
 #endif
 
 #if sun3 || sun4 || vax || mips || i386 || alpha || x86_64 || ARM
-  defun(ctx,"PUTENV",mod,PUTENV);
+  defun(ctx,"PUTENV",mod,PUTENV,NULL);
 #endif
 #if sun3 || sun4 && !Solaris2 || Linux || alpha || Cygwin
-  defun(ctx,"USLEEP",mod,USLEEP);
+  defun(ctx,"USLEEP",mod,USLEEP,NULL);
 #endif
 
 #if !news
-  defun(ctx,"MSGGET",mod,MSGGET);
-  defun(ctx,"MSGSND",mod,MSGSND);
-  defun(ctx,"MSGRCV",mod,MSGRCV);
-  defun(ctx,"MSGCTL",mod,MSGCTL);
+  defun(ctx,"MSGGET",mod,MSGGET,NULL);
+  defun(ctx,"MSGSND",mod,MSGSND,NULL);
+  defun(ctx,"MSGRCV",mod,MSGRCV,NULL);
+  defun(ctx,"MSGCTL",mod,MSGCTL,NULL);
 #endif
 
 #if sun3 || sun4 || news || alpha
-  defun(ctx,"VALLOC",mod,VALLOC);
+  defun(ctx,"VALLOC",mod,VALLOC,NULL);
 #endif
 #if sun3 || sun4 || news || alpha || Linux || Cygwin
-  defun(ctx,"MMAP",mod,MMAP);
-  defun(ctx,"MUNMAP",mod,MUNMAP);
-/*  defun(ctx,"VADVISE",mod,VADVISE); */
+  defun(ctx,"MMAP",mod,MMAP,NULL);
+  defun(ctx,"MUNMAP",mod,MUNMAP,NULL);
+/*  defun(ctx,"VADVISE",mod,VADVISE,NULL); */
 #endif
 
 #if system5 || Linux || Cygwin
-  defun(ctx,"UNAME",mod,UNAME);
+  defun(ctx,"UNAME",mod,UNAME,NULL);
 #endif
 
 #endif /*socket*/
@@ -2156,15 +2156,15 @@ pointer mod;
 /*ndbm libraries*/
 #ifdef DBM
 #if sun3 || sun4
-  defun(ctx,"DBM-OPEN",mod,DBM_OPEN);
-  defun(ctx,"DBM-CLOSE",mod,DBM_CLOSE);
-  defun(ctx,"DBM-FETCH",mod,DBM_FETCH);
-  defun(ctx,"DBM-STORE",mod,DBM_STORE);
-  defun(ctx,"DBM-DELETE",mod,DBM_DELETE);
-  defun(ctx,"DBM-FIRSTKEY",mod,DBM_FIRSTKEY);
-  defun(ctx,"DBM-NEXTKEY",mod,DBM_NEXTKEY);
-  defun(ctx,"DBM-ERROR",mod,DBM_ERROR);
-  defun(ctx,"DBM-CLEARERR",mod,DBM_CLEARERR);
+  defun(ctx,"DBM-OPEN",mod,DBM_OPEN,NULL);
+  defun(ctx,"DBM-CLOSE",mod,DBM_CLOSE,NULL);
+  defun(ctx,"DBM-FETCH",mod,DBM_FETCH,NULL);
+  defun(ctx,"DBM-STORE",mod,DBM_STORE,NULL);
+  defun(ctx,"DBM-DELETE",mod,DBM_DELETE,NULL);
+  defun(ctx,"DBM-FIRSTKEY",mod,DBM_FIRSTKEY,NULL);
+  defun(ctx,"DBM-NEXTKEY",mod,DBM_NEXTKEY,NULL);
+  defun(ctx,"DBM-ERROR",mod,DBM_ERROR,NULL);
+  defun(ctx,"DBM-CLEARERR",mod,DBM_CLEARERR,NULL);
 #endif
 
 #endif
