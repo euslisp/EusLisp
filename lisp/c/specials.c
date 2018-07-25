@@ -822,7 +822,7 @@ pointer arg;
 pointer AND(ctx,arg)	/*special form (should be macro)*/
 register context *ctx;
 register pointer arg;
-{ register pointer r;
+{ register pointer r = T;
 #ifdef SPEC_DEBUG
   printf( "AND:" ); hoge_print( arg );
 #endif
