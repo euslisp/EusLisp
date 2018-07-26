@@ -814,7 +814,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
+    pushcount+=pushsequence(ctx,seq,pushcount,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer NSUBSTITUTE(ctx,n,argv)
