@@ -989,7 +989,7 @@ pointer argv[];
   if (seq==NIL) return(NIL);
 
 #if THREADED
-  mutex_lock(&qsort_lock);
+  mutex_trylock(&qsort_lock);
 #endif
   qsortctx=ctx;
   COMPAR=argv[1];
