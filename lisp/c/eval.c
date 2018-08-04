@@ -12,7 +12,7 @@ static char *rcsid="@(#)$Id$";
 #define TRUE 1
 
 extern pointer ALLOWOTHERKEYS,K_ALLOWOTHERKEYS;
-extern pointer OPTIONAL,REST,KEY,AUX,MACRO,LAMBDA,LAMCLOSURE;
+extern pointer OPTIONAL,REST,BODY,KEY,AUX,MACRO,LAMBDA,LAMCLOSURE;
 extern char *maxmemory;
 
 #ifdef EVAL_DEBUG
@@ -369,7 +369,7 @@ int noarg;
     while (iscons(formal)) {
       fvar=ccar(formal); formal=ccdr(formal);
       if (fvar==OPTIONAL) goto bindopt;
-      if (fvar==REST) goto bindrest;
+      if (fvar==REST || fvar==BODY) goto bindrest;
       if (fvar==KEY) { keyno=n; goto bindkey;}
       if (fvar==AUX) goto bindaux;
       if (n>=noarg) error(E_MISMATCHARG);
@@ -380,7 +380,7 @@ int noarg;
 bindopt:
     while (iscons(formal)) {
       fvar=ccar(formal); formal=ccdr(formal);	/*take one formal*/
-      if (fvar==REST) goto bindrest;
+      if (fvar==REST || fvar==BODY) goto bindrest;
       if (fvar==KEY) { keyno=n; goto bindkey;}
       if (fvar==AUX) goto bindaux;
       if (n<noarg) { /*an actual arg is supplied*/
@@ -914,7 +914,7 @@ pointer args[];
       if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
     } else error(E_USER,(pointer)"unknown type specifier");
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_USER,(pointer)"too many arguments");
     }
   }
   /* &rest arguments?  */
@@ -944,7 +944,7 @@ pointer args[];
       if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     }
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_USER,(pointer)"too many arguments");
     }
   }
   /**/

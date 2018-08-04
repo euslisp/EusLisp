@@ -16,7 +16,7 @@
 
 ;; eus.c
   (export '(nil t))
-  (export '(&optional &rest &key &aux &allow-other-keys
+  (export '(&optional &rest &body &key &aux &allow-other-keys
 		lambda macro lambda-closure compiled-closure
 		declare special))
   (export '(compile eval load))		;eval-when indicators

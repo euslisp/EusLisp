@@ -167,7 +167,7 @@ extern pointer defvector();
 static pointer reploop(context *, char *);
 
 pointer ALLOWOTHERKEYS,K_ALLOWOTHERKEYS;
-pointer OPTIONAL,REST,KEY,AUX,MACRO,LAMBDA,LAMCLOSURE,COMCLOSURE;
+pointer OPTIONAL,REST,BODY,KEY,AUX,MACRO,LAMBDA,LAMCLOSURE,COMCLOSURE;
 pointer PRCIRCLE,PROBJECT,PRSTRUCTURE,PRCASE,PRLENGTH,PRLEVEL;
 pointer RANDSTATE,FEATURES,READBASE,PRINTBASE,QREADTABLE,QTERMIO;
 pointer GCMERGE,GCMARGIN, QLDENT;
@@ -594,6 +594,7 @@ static void initsymbols()
   PACKAGE=deflocal(ctx,"*PACKAGE*",lisppkg,lisppkg);
   OPTIONAL=intern(ctx,"&OPTIONAL",9,lisppkg);
   REST=intern(ctx,"&REST",5,lisppkg);
+  BODY=intern(ctx,"&BODY",5,lisppkg);
   KEY=intern(ctx,"&KEY",4,lisppkg);
   AUX=intern(ctx,"&AUX",4,lisppkg);
   ALLOWOTHERKEYS=intern(ctx,"&ALLOW-OTHER-KEYS",17,lisppkg);
