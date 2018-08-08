@@ -933,7 +933,7 @@ int colon;
         /*float or symbol*/
         while (is_digit(token[j],base)) j++;
         c=to_upper(token[j]);
-        if (c=='E' || c=='D' || c=='F' || c=='L') {
+        if (c=='E' || c=='D' || c=='F' || c=='L' || c=='S') {
 	  c=j;  j++;
           if ((token[j]=='+') || (token[j]=='-')) j++;
           while (is_digit(token[j],base)) j++;
@@ -951,7 +951,7 @@ int colon;
       else if (j==i) return(readint(ctx,token,i));
       else {
         c=to_upper(token[j]);
-        if (c=='E' || c=='D' || c=='F' || c=='L') {
+        if (c=='E' || c=='D' || c=='F' || c=='L' || c=='S') {
 	  c=j;  j++;
           if ((token[j]=='+') || (token[j]=='-')) j++;
           while (is_digit(token[j],base)) j++;
