@@ -675,7 +675,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
+    pushcount+=pushsequence(ctx,seq,start,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer REMOVE_DUPLICATES(ctx,n,argv)
@@ -767,7 +767,12 @@ pointer argv[];
 	lastindex++;} }
     else error(E_SEQINDEX);
     start++; }
-  if (isvector(result)) result->c.vec.size=makeint(lastindex);
+  if (isvector(result)) {
+    end=vecsize(seq);
+    while (start<end) {
+      fastvset(seq,lastindex,fastvref(seq,start));
+      lastindex++; start++;}
+    result->c.vec.size=makeint(lastindex);}
   return(result);}
 
 pointer SUBSTITUTE(ctx,n,argv)
@@ -809,7 +814,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
+    pushcount+=pushsequence(ctx,seq,pushcount,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer NSUBSTITUTE(ctx,n,argv)
