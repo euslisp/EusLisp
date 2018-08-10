@@ -26,7 +26,8 @@
 	cadddr cddddr cadddr caaddr cdaddr caddddr
 	flatten list-insert list-delete adjoin union intersection
 	set-difference set-exclusive-or rotate-list last copy-tree
-	copy-list nreconc rassoc acons member assoc subsetp maplist mapcon))
+	copy-list nreconc acons member assoc assoc-if assoc-if-not
+        rassoc rassoc-if rassoc-if-not subsetp maplist mapcon))
 
 (export '(find find-if find-if-not position position-if position-if-not
 	count count-if count-if-not member-if member-if-not 
@@ -436,14 +437,21 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 (defun copy-tree (x) (subst t t x))
 (defun copy-list (x) (nreverse (reverse x)))
 (defun nreconc (x y) (nconc (nreverse x) y))
-(defun rassoc (item alist)
-  (dolist (a alist)
-     (if (equal item (cdr a)) (return-from rassoc a))))
 (defun acons (key datum alist) (cons (cons key datum) alist))
 (defun member (item list &key key test test-not)
-   (supermember item list key test test-not))
+   (system::raw-member item list key test test-not))
 (defun assoc (item alist &key key test test-not)
-   (superassoc item alist key test test-not))
+  (system::raw-assoc item alist key test test-not nil nil nil))
+(defun assoc-if (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil nil pred nil))
+(defun assoc-if-not (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil nil nil pred))
+(defun rassoc (item alist &key key test test-not)
+  (system::raw-assoc item alist key test test-not t nil nil))
+(defun rassoc-if (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil t pred nil))
+(defun rassoc-if-not (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil t nil pred))
 (defun subsetp (sub super &key key test test-not)
    (every #'(lambda (s) (member s super :key key :test test :test-not test-not))
 	  sub))
