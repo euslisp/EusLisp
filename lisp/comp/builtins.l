@@ -51,7 +51,7 @@
 (def-builtin-entry 'LISP:ASH "ASH")
 (def-builtin-entry 'LISP:LDB "LDB")
 (def-builtin-entry 'LISP:DPB "DPB")
-(def-builtin-entry 'LISP:MAKE-RANDOM-STATE "MAKE-RANDOM-STATE")
+(def-builtin-entry 'LISP:MAKE-RANDOM-STATE "MAKERANDOMSTATE")
 (def-builtin-entry 'LISP:RANDOM "RANDOM")
 (def-builtin-entry 'LISP:AREF "AREF")
 (def-builtin-entry 'LISP:ASET "ASET")
