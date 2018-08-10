@@ -89,7 +89,7 @@
 	  NTH  NTHCDR  CONS  RPLACA  RPLACA2  RPLACD  RPLACD2
 	  APPEND  NCONC  SUBST  NSUBST
 	  ATOM  EQ  EQL  NULL  NOT  LIST  LIST*  EQUAL  SUPEREQUAL
-	  MEMQ  MEMBER  SUPERMEMBER  ASSQ  ASSOC  SUPERASSOC
+	  MEMQ  MEMBER  ASSQ  ASSOC
 	  BUTLAST  NBUTLAST  SYMBOLP  STRINGP  LISTP  CONSP
 	  ENDP  NUMBERP  INTEGERP  FLOATP  BOUNDP  FBOUNDP  STREAMP))
 
@@ -263,10 +263,10 @@
 
 (if (unix::isatty 0)
 (defun system::exec-module-init (name &optional (file))
-   (let ((func (cadr (superassoc name system::*load-entries* nil #'equal nil))))
+   (let ((func (cadr (system::raw-assoc name system::*load-entries* nil #'equal nil nil nil nil))))
       (if (null func)
-	  (setq func (cadr (superassoc (concatenate string "___" name)
-				system::*load-entries* nil #'equal nil))))
+	  (setq func (cadr (system::raw-assoc (concatenate string "___" name)
+				system::*load-entries* nil #'equal nil nil nil nil))))
       (cond (func
 	      (format *error-output* ";; ~a " name)
 	      (finish-output *error-output*)
@@ -280,10 +280,10 @@
 	        t)
 	    (t (format *error-output* ";; ~a-undefined " name) nil))))
 (defun system::exec-module-init (name &optional (file))
-   (let ((func (cadr (superassoc name system::*load-entries* nil #'equal nil))))
+   (let ((func (cadr (system::raw-assoc name system::*load-entries* nil #'equal nil nil nil nil))))
       (if (null func)
-	  (setq func (cadr (superassoc (concatenate string "___" name)
-				system::*load-entries* nil #'equal nil))))
+	  (setq func (cadr (system::raw-assoc (concatenate string "___" name)
+				system::*load-entries* nil #'equal nil nil nil nil))))
       (cond (func
 	      (funcall func func)
 	      t)
