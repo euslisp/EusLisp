@@ -2,6 +2,20 @@
 ;;; based on euslib/jsk/unittest.l by R.Ueda
 ;;;
 
+(load "lib/llib/time.l")
+(defmethod interval-time
+  (:elapsed (tint)
+     (let ((sub (send self :subtract tint)))
+       (+ (float (send sub :second)) (* 0.000001 (send sub :micro))))))
+
+;; with-gensyms copy from irtutil.l
+(defmacro with-gensyms (syms &rest bodies)
+  `(let ,(mapcar #'(lambda (s)
+                     `(,s (gensym)))
+                 syms)
+     ,@bodies))
+
+
 (defvar *unit-test* nil)
 
 (defun escape-xml-string (str1)
@@ -189,10 +203,9 @@
     (format t "TEST-NAME: ~A~%" func-sym)
     (format t "  now testing...~%")
     (send *unit-test* :increment-test func-sym)
-    (setq tm (instance mtimer :init))
-    (send tm :start)
+    (setq tm (now))
     (funcall func)
-    (send *unit-test* :set-time-to-current-result (send tm :stop))))
+    (send *unit-test* :set-time-to-current-result (send (now) :elapsed tm))))
 
 (defun run-all-tests ()
   ;; initalize *unit-test-result*
