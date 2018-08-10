@@ -1225,6 +1225,8 @@
 	 *verbose* verbose)
    (unless (send (pathname file) :directory)
      (setq file (namestring (merge-pathnames "./" file))))
+   (when (and (null o) (send (pathname file) :directory))
+     (setq o (send (pathname file) :directory-string)))
    (when o
 	   (setq o (pathname o))
 	   (setq o (merge-pathnames o file))
