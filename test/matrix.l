@@ -90,5 +90,6 @@
 -- See jskeus/irteus/matrix.l~%")
 
 
-(run-all-tests)
-(exit)
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))

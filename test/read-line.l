@@ -23,5 +23,6 @@
      (apply #'eq (read-from-string (format nil "~S" (list g g))))
      "Unable to read uninterned symbol")))
 
-(run-all-tests)
-(exit)
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))

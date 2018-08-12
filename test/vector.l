@@ -119,5 +119,6 @@
     (assert (not (= (elt v2 2) (elt v2 2)))) ;; check if v2[2] is nan;
     t))
 
-(run-all-tests)
-(exit)
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))

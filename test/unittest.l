@@ -31,7 +31,9 @@
 (setf (symbol-function 'org-exit) (symbol-function 'exit))
 (setf (symbol-function 'exit) #'(lambda (a) (print a)))
 ;; Test all cases including intentinal failure.
-(run-all-tests)
+(eval-when (load eval)
+  (run-all-tests)
+
 ;; Revert exit function
 (setf (symbol-function 'exit) (symbol-function 'org-exit))
 
@@ -49,4 +51,6 @@
     (setq ret 0))
 (format t "return code = ~A~%" ret)
 (exit ret)
+
+);; eval-when
 

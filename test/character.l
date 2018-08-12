@@ -45,5 +45,7 @@
   (assert (eq t (lisp::char>= #\d #\d #\c #\a)) "(lisp::char>= #\d #\d #\c #\a)")
 )
 
-(run-all-tests)
-(exit) ;; end of character.l
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))
+;; end of character.l

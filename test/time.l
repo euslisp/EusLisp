@@ -62,5 +62,7 @@
 
 )
 
-(run-all-tests)
-(exit)  ;; end of time.l
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))
+;; end of time.l

@@ -45,5 +45,7 @@
   (assert (eq (= 0 -0.0) t)            "(= 0 -0.0) is true.")
   )
 
-(run-all-tests)
-(exit) ;; end of number.l
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))
+;; end of number.l

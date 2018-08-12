@@ -48,5 +48,7 @@
 
 )
 
-(run-all-tests)
-(exit) ;; end of string.l
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))
+; end of string.l

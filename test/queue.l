@@ -49,5 +49,6 @@
     (assert (send q :empty?) "queue is empty" (car q))
     ))
 
-(run-all-tests)
-(exit)
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))

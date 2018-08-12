@@ -38,6 +38,6 @@
     (assert (eps= (send f :distance (float-vector 200 0 100)) (norm #f(100 100))))
     ))
 
-(run-all-tests)
-(exit)
-
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))

@@ -102,5 +102,6 @@
     (format *error-output* "~A gc:~A, vmrss:~A -> ~A~%" j (sys::gc) vmrss-orig vmrss)
     (assert (< vmrss (* 10 vmrss-orig)) "copy-object matrix")))
 
-(run-all-tests)
-(exit)
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))

@@ -47,5 +47,6 @@
 -- See jskeus/irteus/coords.l~%")
 
 
-(run-all-tests)
-(exit)
+(eval-when (load eval)
+  (run-all-tests)
+  (exit))
