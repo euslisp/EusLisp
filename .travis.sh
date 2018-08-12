@@ -81,6 +81,24 @@ if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
 fi
 
 travis_time_end
+travis_time_start euslisp.compiled.test
+
+if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
+    # run test in EusLisp/test
+    export EXIT_STATUS=0;
+    for test_l in $CI_SOURCE_PATH/test/*.l; do
+
+        travis_time_end
+        travis_time_start compiled.${test_l////_}.test
+
+        eusgl "(progn (compile-file \"$test_l\" :o (namestring (merge-pathnames \".o\" \"$test_l\"))) (load (namestring (merge-pathnames \".so\" \"$test_l\"))))"
+        export EXIT_STATUS=`expr $? + $EXIT_STATUS`;
+    done;
+    echo "Exit status : $EXIT_STATUS";
+    [ $EXIT_STATUS == 0 ] || exit 1
+fi
+
+travis_time_end
 travis_time_start jskeus.test
 
 if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
