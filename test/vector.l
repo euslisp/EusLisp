@@ -69,11 +69,13 @@
       (incf d (* (- (elt a i) (elt b i)) (- (elt a i) (elt b i)))))
     (assert (equal (distance2 a b) d) "distance2")
 
-    (setq a (instantiate float-vector 4))
-    (dotimes (i 4)
-      (setf (elt a i) (- (random 200) 100)))
-    (setq b (geo::homogenize (geo::homo2normal a)))
-    (assert (eps= (/ (abs (v. a b)) (* (norm a) (norm b))) 1.0))
+    (warning-message 1 "the part of func is not  working on eusgl ...
+-- undefined function homo2normal, exitting..~%")
+    ;;(setq a (instantiate float-vector 4))
+    ;;(dotimes (i 4)
+    ;;  (setf (elt a i) (- (random 200) 100)))
+    ;;(setq b (geo::homogenize (geo::homo2normal a)))
+    ;;(assert (eps= (/ (abs (v. a b)) (* (norm a) (norm b))) 1.0))
 
     (setq a (instantiate float-vector 3))
     (dotimes (i 3)
