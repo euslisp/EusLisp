@@ -1,5 +1,9 @@
 ;; test code for unittest
 
+(eval-when (compile)
+  (warning-message 1 "unittest.l can not run on compile mode....")
+  (exit 0))
+
 (require :unittest "lib/llib/unittest.l")
 (init-unit-test)
 
