@@ -91,7 +91,7 @@ if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
         travis_time_end
         travis_time_start compiled.${test_l////_}.test
 
-        eusgl "(progn (compile-file \"$test_l\" :o (namestring (merge-pathnames \".o\" \"$test_l\"))) (load (namestring (merge-pathnames \".so\" \"$test_l\"))))"
+        eusgl "(let ((o (namestring (merge-pathnames \".o\" \"$test_l\"))) (so (namestring (merge-pathnames \".so\" \"$test_l\")))) (compile-file \"$test_l\" :o o) (if (probe-file so) (load so) (exit 1))))"
         export EXIT_STATUS=`expr $? + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
