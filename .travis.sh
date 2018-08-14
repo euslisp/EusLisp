@@ -61,75 +61,75 @@ travis_time_end
 
 source bashrc.eus
 export DISPLAY=
+export EXIT_STATUS=0;
 set +e
 
-travis_time_start euslisp.test
-
 if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
     # run test in EusLisp/test
-    export EXIT_STATUS=0;
     for test_l in $CI_SOURCE_PATH/test/*.l; do
 
-        travis_time_end
-        travis_time_start ${test_l////_}.test
+        travis_time_start euslisp.${test_l##*/}.test
 
         eusgl $test_l;
-        export EXIT_STATUS=`expr $? + $EXIT_STATUS`;
+        export TMP_EXIT_STATUS=$?
+
+        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+
+        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-    [ $EXIT_STATUS == 0 ] || exit 1
 fi
 
 travis_time_end
-travis_time_start euslisp.compiled.test
 
 if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
     # run test in EusLisp/test
-    export EXIT_STATUS=0;
     for test_l in $CI_SOURCE_PATH/test/*.l; do
 
-        travis_time_end
-        travis_time_start compiled.${test_l////_}.test
+        travis_time_start compiled.${test_l##*/}.test
 
         eusgl "(let ((o (namestring (merge-pathnames \".o\" \"$test_l\"))) (so (namestring (merge-pathnames \".so\" \"$test_l\")))) (compile-file \"$test_l\" :o o) (if (probe-file so) (load so) (exit 1))))"
-        export EXIT_STATUS=`expr $? + $EXIT_STATUS`;
+        export TMP_EXIT_STATUS=$?
+
+        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+
+        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-    [ $EXIT_STATUS == 0 ] || exit 1
 fi
 
-travis_time_end
-travis_time_start jskeus.test
-
 if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
-    export EXIT_STATUS=0;
     for test_l in irteus/test/*.l; do
         [[ $test_l =~ geo.l|interpolator.l|irteus-demo.l|test-irt-motion.l|object.l|coords.l|bignum.l|mathtest.l ]] && continue;
 
-        travis_time_end
-        travis_time_start ${test_l////_}.test
+        travis_time_start irteus.${test_l##*/}.test
 
         irteusgl $test_l;
-        export EXIT_STATUS=`expr $? + $EXIT_STATUS`;
+        export TMP_EXIT_STATUS=$?
+
+        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+
+        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-    [ $EXIT_STATUS == 0 ] || exit 1
 else
     # run test in jskeus/irteus
-    export EXIT_STATUS=0;
     for test_l in irteus/test/*.l; do
 
-        travis_time_end
-        travis_time_start ${test_l////_}.test
+        travis_time_start irteus.${test_l##*/}.test
 
         irteusgl $test_l;
-        export EXIT_STATUS=`expr $? + $EXIT_STATUS`;
+        export TMP_EXIT_STATUS=$?
+
+        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+
+        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-    [ $EXIT_STATUS == 0 ] || exit 1
 fi
 
-travis_time_end
+[ $EXIT_STATUS == 0 ] || exit 1
+
 travis_time_start eus64.test
 
 if [[ "$TRAVIS_OS_NAME" == "osx" || "`uname -m`" == "arm"* ]]; then
