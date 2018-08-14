@@ -85,6 +85,7 @@ travis_time_end
 if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
     # run test in EusLisp/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
+        [[ $test_l =~ const.l ]] && continue;
 
         travis_time_start compiled.${test_l##*/}.test
 
