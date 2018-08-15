@@ -77,6 +77,32 @@
     (assert (eps-v= (lu-solve m5 (lu-decompose m5) #f( 3 2 1)) #f(-7 11 -12)) "lu-solve") ;; this changes m5
     (setq m5 #2f((1 2 1)(4 6 3)(9 8 2)))
 
+    ;; test for 1+/1-
+    ;; https://github.com/euslisp/EusLisp/pull/312
+    (labels ((== (a b)
+                 (if (integerp a)
+                     (= a b)
+                   (eps= a (float b))))
+             (1+-test (flag) ;; flag should be 1
+                      (assert (== flag 1) (format nil "flag = ~A~%" flag))
+                      (assert (== (* (1+ flag) pi/2) 3.14)
+                              (format nil "(* (1+ flag) pi/2) -> ~A~%"
+                                      (* (1+ flag) pi/2)))
+                      (assert (== (1+ flag) 2)
+                              (format nil "(1+ flag) -> ~A~%" (1+ flag)))
+                      (assert (== (1+ (float flag)) 2)
+                              (format nil "(1+ (float flag)) -> ~A~%" (1+ (float flag))))
+                      (assert (== (1+ 1.5) 2.5)
+                              (format nil "(1+ 1.5) -> ~A~%" (1+ 1.5)))
+                      (assert (== (1+ 1) 2)
+                              (format nil "(1+ 1) -> ~A~%" (1+ 1)))
+                      (assert (== (1+ (float 3)) 4)
+                              (format nil "(1+ (float 3)) -> ~A~%" (1+ (float 3))))
+                      (assert (== (1+ (floor 4.5)) 5)
+                              (format nil "(1+ (floor 4.5)) -> ~A~%" (1+ (floor 4.5))))
+                      ))
+            (1+-test 1)
+            (1+-test 1.0))
     ))
 
 (eval-when (load eval)
