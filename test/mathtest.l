@@ -80,9 +80,12 @@
     ;; test for 1+/1-
     ;; https://github.com/euslisp/EusLisp/pull/312
     (labels ((== (a b)
-                 (if (integerp a)
-                     (= a b)
-                   (eps= a (float b))))
+                 (cond ((integerp a)
+                        (= a b))
+                       ((and (< a 0) (>= a 0)) ;; check if a is nan
+                        nil)
+                       (t
+                        (eps= a (float b)))))
              (1+-test (flag) ;; flag should be 1
                       (assert (== flag 1) (format nil "flag = ~A~%" flag))
                       (assert (== (* (1+ flag) pi/2) 3.14)
