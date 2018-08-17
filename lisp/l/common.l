@@ -22,8 +22,9 @@
 	case classcase otherwise
 	string alias
 	caaar caadr cadar cdaar cdadr cddar cdddr
-	fourth fifth sixth seventh eighth 
-	cadddr cddddr cadddr caaddr cdaddr caddddr
+	fourth fifth sixth seventh eighth ninth tenth
+	caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr
+	cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr caddddr
 	flatten list-insert list-delete adjoin union intersection
 	set-difference set-exclusive-or rotate-list last copy-tree
 	copy-list nreconc rassoc acons member assoc subsetp maplist mapcon))
@@ -346,19 +347,31 @@
 (alias 'first 'car)
 (alias 'second 'cadr)
 (alias 'third 'caddr)
-(defun fourth (x) (cadr (cddr x)))
-(defun fifth  (x) (caddr (cddr x)))
-(defun sixth  (x) (caddr (cdddr x)))
-(defun seventh  (x) (caddr (cddddr x)))
+(defun fourth  (x) (cadr (cddr x)))
+(defun fifth   (x) (caddr (cddr x)))
+(defun sixth   (x) (caddr (cdddr x)))
+(defun seventh (x) (caddr (cddddr x)))
 (defun eighth  (x) (cadddr (cddddr x)))
-#|
-(defun cadddr (x) (car (cdddr x)))
-|#
-(defun cddddr (x) (cddr (cddr x)))
-(defun cadddr (x) (cadr (cddr x)))
+(defun ninth   (x) (car (cddddr (cddddr x))))
+(defun tenth   (x) (cadr (cddddr (cddddr x))))
+(defun caaaar (x) (caar (caar x)))
+(defun caaadr (x) (caar (cadr x)))
+(defun caadar (x) (caar (cdar x)))
 (defun caaddr (x) (caar (cddr x)))
+(defun cadaar (x) (cadr (caar x)))
+(defun cadadr (x) (cadr (cadr x)))
+(defun caddar (x) (cadr (cdar x)))
+(defun cadddr (x) (cadr (cddr x)))
+(defun cdaaar (x) (cdar (caar x)))
+(defun cdaadr (x) (cdar (cadr x)))
+(defun cdadar (x) (cdar (cdar x)))
 (defun cdaddr (x) (cdar (cddr x)))
+(defun cddaar (x) (cddr (caar x)))
+(defun cddadr (x) (cddr (cadr x)))
+(defun cdddar (x) (cddr (cdar x)))
+(defun cddddr (x) (cddr (cddr x)))
 (defun caddddr (x) (cadr (cdddr x)))
+
 (defun flatten (l &optional accumulator)
   (cond
    ((null l) accumulator)
