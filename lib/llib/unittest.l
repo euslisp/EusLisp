@@ -8,14 +8,6 @@
      (let ((sub (send self :subtract tint)))
        (+ (float (send sub :second)) (* 0.000001 (send sub :micro))))))
 
-;; with-gensyms copy from irtutil.l
-(defmacro with-gensyms (syms &rest bodies)
-  `(let ,(mapcar #'(lambda (s)
-                     `(,s (gensym)))
-                 syms)
-     ,@bodies))
-
-
 (defvar *unit-test* nil)
 
 (defun escape-xml-string (str1)
@@ -240,8 +232,8 @@
            (trace ,name))))
 
     (defmacro assert (pred &optional (message "") &rest args)
-      (with-gensyms
-       (ret)
+      (let
+        ((ret (gensym)))
        `(let* (failure (ret ,pred))
 	  ;; lisp::step could not work with macros..
 	  ;;     (if (and (listp ',pred) (functionp (car ',pred)))
