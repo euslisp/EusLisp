@@ -757,6 +757,13 @@ extern pointer BITNAND(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BITNOR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BITNOT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern void vectorarray(context */*ctx*/, pointer /*mod*/);
+/* intersection.c */
+extern pointer LINEINTERSECTION(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer LINEINTERSECTION3(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer VPCLIP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer HOMO_VPCLIP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer HOMO2NORMAL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer HOMOGENIZE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 /* setjmp.c */
 extern pointer psetjmp(jmp_buf);
 extern void plongjmp(jmp_buf,pointer);
