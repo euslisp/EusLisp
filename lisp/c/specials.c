@@ -513,7 +513,7 @@ pointer arg;
 
   tag=carof(arg,E_MISMATCHARG); tag=eval(ctx,tag);
   body=ccdr(arg);
-  mkcatchframe(ctx,tag,catchbuf);
+  mkcatchframe(ctx,tag,&catchbuf);
   if ((val=(pointer)eussetjmp(catchbuf))==0) val=progn(ctx,body);
   else if ((eusinteger_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
   ctx->callfp=ctx->catchfp->cf;
