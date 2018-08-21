@@ -393,7 +393,7 @@ pointer argv[];
   return (vpop());
 }
 #endif
-fstringdouble(ctx,n,argv)
+void fstringdouble(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];

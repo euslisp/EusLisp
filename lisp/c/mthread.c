@@ -533,7 +533,7 @@ pointer argv[];
   }
 #endif  
 
-mthread(ctx,mod)
+int mthread(ctx,mod)
 register context *ctx;
 pointer mod;
 {

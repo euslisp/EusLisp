@@ -8,7 +8,7 @@ static char *rcsid="@(#)$Id$";
 
 #pragma init (init_object_module)
 extern pointer helpsub();
-static init_object_module()
+static void init_object_module()
   { add_module_initializer("helpsub", helpsub);}
 
 

@@ -33,6 +33,10 @@ unsigned int thr_self() { return(1);}
 int _end;
 #endif
 
+#if Linux && !OLD_LINUX && !Darwin
+#include <malloc.h>  // for mallopt
+#endif
+
 /*variables*/
 /* process id and program name*/
 eusinteger_t mypid;

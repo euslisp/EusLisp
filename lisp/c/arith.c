@@ -86,7 +86,7 @@ pointer NUMNEQUAL(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer argv[];
-{ register i;
+{ register int i;
   pointer cmparr[2];
   numunion nu;
 
@@ -1104,7 +1104,7 @@ register context *ctx;
 register int  n;
 pointer argv[];
 { eusfloat_t fs,fm;
-  register i=1;
+  register int i=1;
   register eusinteger_t is;
   register pointer a=argv[0];
   numunion nu;
