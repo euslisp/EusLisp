@@ -1260,7 +1260,7 @@ register context *ctx;
 #endif
   }
 
-main(argc,argv)
+int main(argc,argv)
 int argc;
 char *argv[];
 { int i, stat=0;
