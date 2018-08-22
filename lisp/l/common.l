@@ -139,11 +139,15 @@
 
 (defmacro defparameter (var init &optional (doc nil))
    (unless (symbolp var) (error 20))
-   `(send ',var :global ,init ,doc))
+   `(progn
+	(send ',var :global ,init ,doc)
+	',var))
 
 (defmacro defconstant (sym val &optional doc)
    (unless (symbolp sym) (error 20))
-   `(send ',sym :constant ,val ,doc) )
+   `(progn
+	(send ',sym :constant ,val ,doc)
+	',sym))
   
 
 (defmacro dotimes (vars &rest forms)
