@@ -3,8 +3,8 @@
 #include "../c/eus.h"
 
 #pragma init (init_object_module)
-extern void convolve(context *, int, pointer *);
-static init_object_module()
+extern pointer convolve(context *, int, pointer *);
+static void init_object_module()
   { add_module_initializer("convolve", convolve);}
 
 #define is2Dstring(a) (isarray(a) && \
@@ -129,7 +129,7 @@ pointer argv[];
   return(double_imgp);}
 
 /* (median img1 grid scale imgr) */
-static median_img(img, width, height, x, y, size)
+static int median_img(img, width, height, x, y, size)
 unsigned char *img;
 register int width, height, x, y, size;
 { register int med, p, q, r;
@@ -196,7 +196,7 @@ pointer argv[];
       }}
   return(img2);}
 
-void convolve(ctx,n,argv)
+pointer convolve(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];
