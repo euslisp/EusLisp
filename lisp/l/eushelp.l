@@ -16,6 +16,7 @@
 
 (export '(help help-method load-help))
 
+(eval-when (load-eveal)
 (defconstant *type-CLASS*  0)
 (defconstant *type-METHOD* 1)
 (defconstant *type-FUNC*   2)
@@ -23,6 +24,7 @@
 (defconstant *type-CONST*  4)
 (defconstant *type-VAR*    5)
 (defconstant *type-SPEC*   6)
+)
 
 (defvar *help-hash* nil)
 (defvar *method-hash-list*)
