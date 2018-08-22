@@ -17,6 +17,16 @@
 ;    (float-vector (/ (aref v 0) w) (/ (aref v 1) w) (/ (aref v 2) w))))
 ;
 
+(in-package "COMPILER")
+(labels ((def-builtin-entry (sym lab) ;; copy from comp/builtins.l
+          (putprop sym lab 'builtin-function-entry )))
+  (def-builtin-entry 'GEO::LINE-INTERSECTION3 "LINEINTERSECTION3")
+  (def-builtin-entry 'GEO::LINE-INTERSECTION "LINEINTERSECTION")
+  (def-builtin-entry 'GEO::VIEWPORTCLIP "VPCLIP")
+  (def-builtin-entry 'GEO::HOMO-VIEWPORT-CLIP "HOMO_VPCLIP")
+  (def-builtin-entry 'GEO::HOMO2NORMAL "HOMO2NORMAL")
+  (def-builtin-entry 'GEO::HOMOGENIZE "HOMOGENIZE"))
+
 (in-package "GEOMETRY")
 
 (defvar  *viewer*)
