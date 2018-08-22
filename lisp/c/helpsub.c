@@ -36,10 +36,11 @@ static char READ_CHAR(fd)
 int fd;
 {
   char c;
+  int r;
 
   if ((bp == -1) || (bp == BUFSIZE)){
     bp=0;
-    GC_REGION(read(fd, &buf[0], BUFSIZE););
+    GC_REGION(r=read(fd, &buf[0], BUFSIZE););
   }
   c=buf[bp];
   bp++;
