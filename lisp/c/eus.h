@@ -72,7 +72,7 @@ typedef float eusfloat_t;
 #if (WORD_SIZE == 64)
 extern eusinteger_t setjmp_val;
 #define eussetjmp(buf) (_setjmp(buf)?setjmp_val:(eusinteger_t)0)
-#define euslongjmp(buf,val) (setjmp_val=(eusinteger_t)(val),_longjmp(buf,1))
+#define euslongjmp(buf,val) (setjmp_val=(eusinteger_t)(val),_longjmp(((struct __jmp_buf_tag *)(buf)),1))
 #else
 #if (Solaris2 || vxworks)
 #define eussetjmp(buf) (eusinteger_t)setjmp(buf)
