@@ -815,9 +815,7 @@ pointer argv[];
   else if (pisbignum(a)) { rs=copy_big(a); goto bquo;}
   else error(E_NONUMBER);
 
-  if (n==1) {
-    fs=fltval(a);
-    return(makeflt(1.0/fs));}
+  if (n==1) return(makeflt(1.0/is));
 
   while (i<n) {
     a=argv[i];
