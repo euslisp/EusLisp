@@ -703,6 +703,8 @@ register pointer argv[];
   for (i=0; i<n; i++) fprintf(stderr, "%x ", argv[i]);
   fprintf(stderr, "\n"); */
   
+  if (n==0) return(makeint(1));
+
   i=1;  
   a=argv[0];
   if (isint(a)) { is=intval(a); goto ITIMES;}
