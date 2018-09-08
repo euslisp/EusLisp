@@ -1374,11 +1374,11 @@ pointer argv[];
 #else
   register unsigned int val,target,mask=~0;
 #endif
-  ckarg(4);
+  ckarg2(3,4);
   val=ckintval(argv[0]);
   target=ckintval(argv[1]);
   pos=ckintval(argv[2]);
-  width=ckintval(argv[3]);
+  if (n==4) width=ckintval(argv[3]);
   mask=mask<<(WORD_SIZE-(pos+width));
   mask=mask>>(WORD_SIZE-width); 
   val &= mask;
