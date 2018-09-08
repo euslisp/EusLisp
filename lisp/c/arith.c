@@ -1157,6 +1157,8 @@ pointer LOGAND(context *ctx, int n, pointer argv[])
   eusinteger_t *rbv, *bbv, *pbv;
   pointer b,p,r=argv[0];
 
+  if (n==0) return(makeint(~0));
+
   if (isbignum(r)) {
     r=copy_big(r); rsize=bigsize(r); rbv=bigvec(r);
     p=argv[i++];
