@@ -60,7 +60,7 @@
 			      "jmanipulator"))
 
 (defun addition-to-help(fp2 tex-dir fname)
-  (let ((fp (open (make-pathname :directory (parse-directory (pathname tex-dir))
+  (let ((fp (open (make-pathname :directory (list tex-dir)
                                  :name fname :type "tex") :direction :input))
 	buf c name class seek type args)
     (format t "~s file is included in help-file.~%" fname)
