@@ -702,6 +702,8 @@ register pointer argv[];
   for (i=0; i<n; i++) fprintf(stderr, "%x ", argv[i]);
   fprintf(stderr, "\n"); */
   
+  if (n==0) return(makeint(1));
+
   i=1;  
   a=argv[0];
   if (isint(a)) { is=intval(a); goto ITIMES;}
@@ -815,9 +817,7 @@ pointer argv[];
   else if (pisbignum(a)) { rs=copy_big(a); goto bquo;}
   else error(E_NONUMBER);
 
-  if (n==1) {
-    fs=fltval(a);
-    return(makeflt(1.0/fs));}
+  if (n==1) return(makeflt(1.0/is));
 
   while (i<n) {
     a=argv[i];
@@ -1159,6 +1159,8 @@ pointer LOGAND(context *ctx, int n, pointer argv[])
   eusinteger_t *rbv, *bbv, *pbv;
   pointer b,p,r=argv[0];
 
+  if (n==0) return(makeint(~0));
+
   if (isbignum(r)) {
     r=copy_big(r); rsize=bigsize(r); rbv=bigvec(r);
     p=argv[i++];
@@ -1373,11 +1375,11 @@ pointer argv[];
 #else
   register unsigned int val,target,mask=~0;
 #endif
-  ckarg(4);
+  ckarg2(3,4);
   val=ckintval(argv[0]);
   target=ckintval(argv[1]);
   pos=ckintval(argv[2]);
-  width=ckintval(argv[3]);
+  if (n==4) width=ckintval(argv[3]);
   mask=mask<<(WORD_SIZE-(pos+width));
   mask=mask>>(WORD_SIZE-width); 
   val &= mask;
