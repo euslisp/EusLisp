@@ -2,6 +2,7 @@
 
 (init-unit-test)
 
+#|
 (defun test-read-line
   (max-char)
   (length (read-line
@@ -9,11 +10,26 @@
             (apply #'concatenate string
                    (make-list max-char :initial-element "a")))))
   )
+|#
+
+(defun test-read-line
+  (max-char)
+  (let ((sm (make-string-output-stream)))
+    (dotimes (i max-char)
+      (format sm "~C" #\a))
+    (length (read-line
+             (make-string-input-stream (get-output-stream-string sm))))
+    )
+  )
+
+
 
 (deftest test-read-line-all
   (format *error-output* " read-line test~%")
   (assert (= (test-read-line 8191) 8191) "read-line with ~A char" 8191)
-  ;; (assert (= (test-read-line 8192) 8192) "read-line with ~A char" 8192) ;; tempolarily comment out
+  (assert (= (test-read-line 8192) 8192) "read-line with ~A char" 8192) ;; tempolarily comment out
+  (assert (= (test-read-line (- 1000000 8192)) (- 1000000 8192)) "read-line with ~A char" (- 1000000 8192))
+  (assert (/= (test-read-line 1000000) 1000000) "read-line with ~A char" 1000000) ;; may print 'line length exceeds MAX_READLINE_LNEGHT(1000000)'
   )
 
 (deftest test-read-gensym
