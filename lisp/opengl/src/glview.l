@@ -286,6 +286,7 @@
 					  0.0 0.0 500.0
 					  0.0 0.0 1.0))
 	    |#
+	    (glPopMatrix)
 	    (glEnable GL_DEPTH_TEST)
 	    (glEnable GL_LIGHTING)
 	    (glMatrixMode GL_MODELVIEW)
@@ -293,6 +294,7 @@
   (:2d-mode ()
 	    (glViewport 0 0 x::width x::height)
 	    (glMatrixMode GL_PROJECTION)
+	    (glPushMatrix)
 	    (glLoadIdentity)
 	    (glorthofv (float-vector 0 x::width 0 x::height -1.0 1.0))
 	    (glDisable GL_DEPTH_TEST)
