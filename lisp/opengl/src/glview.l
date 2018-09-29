@@ -302,10 +302,10 @@
 	    (if apush (glPushMatrix))
 	    (glLoadIdentity))
    (:pop-mode ()
-	    (glMatrixMode GL_PROJECTION)
-            (glPopMatrix)
-	    (glMatrixMode GL_MODELVIEW)
-            (glPopMatrix))
+	      (glMatrixMode GL_PROJECTION)
+	      (glPopMatrix)
+	      (glMatrixMode GL_MODELVIEW)
+	      (glPopMatrix))
 
 ;  (:clear (mask &key (color))
 ;	  (if color
@@ -343,6 +343,7 @@
 	  (glBegin GL_POINTS)
 	  (glVertex2fv (float-vector x (- x::height y)))
 	  (glEnd)
+	  (send self :3d-mode)
 	  (send self :pop-mode))
   (:line (x1 y1 x2 y2)
 	 (send self :2d-mode :push t)
@@ -350,6 +351,7 @@
 	 (glvertex2fv (float-vector x1 (- x::height y1)))
 	 (glVertex2fv (float-vector x2 (- x::height y2)))
 	 (glEnd)
+	 (send self :3d-mode)
 	 (send self :pop-mode))
   (:3d-point (pos)
 	    (glDisable GL_DEPTH_TEST)
@@ -380,6 +382,7 @@
 	      (glVertex2fv (float-vector (+ x w) (+ y h)))
 	      (glVertex2fv (float-vector (+ x w) y))
 	      (glEnd)
+	      (send self :3d-mode)
 	      (send self :pop-mode))
   )
 
