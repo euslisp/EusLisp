@@ -906,6 +906,7 @@ int bs_size;
   return(cntx);}
 
 void deletecontext(id,ctx)
+int id;
 register context *ctx;
 { if (id<MAXTHREAD) euscontexts[id]=NULL;
   cfree(ctx->stack);

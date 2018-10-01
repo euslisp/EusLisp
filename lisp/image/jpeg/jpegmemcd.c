@@ -12,6 +12,8 @@
 #include "jpeglib.h"
 #include <setjmp.h>
 
+extern void jpeg_memio_dest (j_compress_ptr cinfo, JOCTET *jpegimgbuf, long *size);
+extern void jpeg_memio_src (j_decompress_ptr cinfo, JOCTET *buf, long size);
 
 int JPEG_compress(JSAMPLE *image_buffer, long width, long height,
                   unsigned char *jpeg_image_buffer, long size, int quality)
