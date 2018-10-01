@@ -430,7 +430,7 @@ bindaux:
 evbody:
     GC_POINT;
     /*create block around lambda*/
-    myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,fn,(jmp_buf *)funjmp,NULL);
+    myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,fn,&funjmp,NULL);
     /*evaluate body*/
     if ((result=(pointer)eussetjmp(funjmp))==0) {GC_POINT;result=progn(ctx,body);}
     else if (result==(pointer)1) result=makeint(0);
@@ -889,8 +889,8 @@ pointer args[];
   double f;
 
   if (code->c.fcode.entry2 != NIL) {
-    ifunc = (((eusinteger_t)ifunc)&0xffffffff00000000) 
-      | (intval(code->c.fcode.entry2)&0x00000000ffffffff);
+    ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffffffff00000000)
+      | (intval(code->c.fcode.entry2)&0x00000000ffffffff));
     /* R.Hanai 090726 */
   }
   

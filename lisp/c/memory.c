@@ -33,7 +33,7 @@ static char *rcsid="@(#)$Id$";
 
 /* Written by I.Hara 01/12/95 */
 #if Solaris2 || Linux
-extern _end();
+extern eusinteger_t _end();
 #elif SunOS4_1
 extern edata;
 #else
@@ -62,7 +62,7 @@ long alloccount[MAXBUDDY];
 static  pointer dispose[MAXDISPOSE];
 static  int dispose_count;
 
-newchunk(k)
+int newchunk(k)
 register int k;
 { register int s;
   register struct chunk *cp;  
@@ -708,7 +708,7 @@ register int gcmerge;
         p=np;} } }
   }  
 
-call_disposers()
+void call_disposers()
 { int i;
   context *ctx=current_ctx;
   pointer p,a,curclass;
@@ -744,7 +744,7 @@ void sweepall()
   }
 
 #if THREADED
-suspend_all_threads()
+void suspend_all_threads()
 { register int i, self, stat;
   
   self=thr_self();
@@ -754,7 +754,7 @@ suspend_all_threads()
       if (stat) fprintf(stderr, "gc cannot suspend thread %d\n",i);  }
   }
 
-resume_all_threads()
+void resume_all_threads()
 { register int i, self, stat;
   
   self=thr_self();

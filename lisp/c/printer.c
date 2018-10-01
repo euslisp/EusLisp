@@ -31,7 +31,7 @@ static char ixbuf[16];
 extern enum ch_type chartype[256];
 extern enum ch_attr charattr[256];
 
-static print_symbol_prefix(ctx,f,pkg,colon)
+static void print_symbol_prefix(ctx,f,pkg,colon)
 context *ctx;
 register pointer f,pkg;
 char *colon;
@@ -47,7 +47,7 @@ char *colon;
   writestr(f,(byte *)colon,strlen(colon));}
 
 
-static pointer symprefix(sym,f)
+static void symprefix(sym,f)
 register pointer sym,f;
 { register int l,c;
   register byte *s;
@@ -209,14 +209,14 @@ pointer f;
       while (len>2 && work[len-1]=='0' && work[len-2]!='.') len--;} 
     writestr(f,(byte *)work,len); }}
 
-static printhex(val,f)
+static void printhex(val,f)
 int val;
 pointer f;
 { char work[20];
   sprintf(work,"#x%x",val);
   writestr(f,(byte *)work,strlen(work));}
 
-static printratio(ctx,rat,f, base)
+static void printratio(ctx,rat,f, base)
 context *ctx;
 pointer rat,f;
 int base;
@@ -227,7 +227,7 @@ int base;
 
 extern pointer big_minus(), copy_big();
 
-static printbig(ctx, big, f, base, field1,field2)
+static void printbig(ctx, big, f, base, field1,field2)
 context *ctx;
 pointer big,f;
 int base, field1,field2;
@@ -454,9 +454,10 @@ int prlevel,rank,axis,index;
   writech(f,')');
   return(n);}
 
-static printarray(ctx,a,f,prlevel)
+static void printarray(ctx,a,f,prlevel)
 register context *ctx;
 register pointer a,f;
+register int prlevel;
 { char buf[16];
   register int i,j,rank,etype,size=1,index;
   register pointer p,v;
