@@ -68,7 +68,7 @@ pointer s;
 /* read primitive
 /****************************************************************/
 
-static fillstream(s)
+static int fillstream(s)
 register pointer s;
 { register int c;
   pointer lsave;

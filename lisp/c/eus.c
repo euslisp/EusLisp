@@ -26,8 +26,8 @@ unsigned int thr_self() { return(1);}
 #endif
 
 
-#if Linux
-#define M_MMAP_MAX (-4)
+#if Linux && !OLD_LINUX && !Darwin
+#include <malloc.h> // define mallopt, M_MMAP_MAX
 #endif
 #if Darwin
 int _end;
@@ -1023,7 +1023,7 @@ char *prompt;
 { jmp_buf brkjmp;
   pointer val;
   int i;
-  mkcatchframe(ctx,T,brkjmp);
+  mkcatchframe(ctx,T,&brkjmp);
   Spevalof(QSTDOUT)=STDOUT;
   Spevalof(QSTDIN)=STDIN;
   Spevalof(QERROUT)=ERROUT;
@@ -1105,7 +1105,7 @@ char *argv[];
       ufuncall(ctx,topform,topform,(pointer)(ctx->vsp-argc),0,argc);}
     else ufuncall(ctx,topform,topform,(pointer)(ctx->vsp),0,0);}
   else { /*TOPLEVEL not yet defined-- try built-in toplevel*/
-    mkcatchframe(ctx,makeint(0),topjbuf);
+    mkcatchframe(ctx,makeint(0),&topjbuf);
     fprintf(stderr, "entering reploop\n");
     reploop(ctx,": ");}
   }
@@ -1154,7 +1154,7 @@ register context *ctx;
   else strcpy(fname, eusrt);
   if (isatty(0)!=0) {
     fprintf(stderr, "configuring by \"%s\"\n", fname); }
-  mkcatchframe(ctx,makeint(0), topjbuf);
+  mkcatchframe(ctx,makeint(0),&topjbuf);
   argv=makestring(fname, strlen(fname));
   vpush(argv);
   eusstart(ctx);
@@ -1256,7 +1256,7 @@ register context *ctx;
 #endif
   }
 
-main(argc,argv)
+int main(argc,argv)
 int argc;
 char *argv[];
 { int i, stat=0;

@@ -610,5 +610,5 @@ pointer argv[];
 
   return(argv[0]);}
 
-static init_object_module()
+static void init_object_module()
   { add_module_initializer("oglforeign", oglforeign);}
