@@ -172,7 +172,11 @@ register pointer argv[];
 #else
     addr &= ~3;  /*0xfffffffc; ???? */
 #endif
+#if (WORD_SIZE == 64)
+    addr = addr | (intval(mac->c.code.entry2)&0x00000000ffffffff);
+#else
     addr = addr | (intval(mac->c.code.entry2)&0x0000ffff);
+#endif
 #endif // ARM
     if (mac->c.code.subrtype!=(pointer)SUBR_MACRO) return(argv[0]);
 #if ARM
