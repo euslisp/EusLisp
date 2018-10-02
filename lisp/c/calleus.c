@@ -55,7 +55,7 @@ cixpair foreignpodcp;
 			    		  ((p)->cix)<=foreignpodcp.sub)
 #define isforeignpod(p) (ispointer(p) && pisforeignpod(p))
 
-#if x86_64
+#if (defined x86_64) || (defined aarch64)
 // Linux, x64
 /* development version of euscall written by Y.Kakiuchi */
 union NUMCONVBUF {
