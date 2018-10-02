@@ -1163,7 +1163,11 @@ register int noarg;
 #endif
 #if ARM
   if (func->c.code.entry2 != NIL) {
+#if (WORD_SIZE == 64)
+    addr = addr | (intval(func->c.code.entry2)&0x00000000ffffffff);
+#else
     addr = addr | (intval(func->c.code.entry2)&0x0000ffff);
+#endif
   }
 #endif
   subr=(pointer (*)())(addr);
@@ -1258,7 +1262,11 @@ int noarg;
     clofunc=func;
     fn=func;
     if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_ILLFUNC);
+#if (WORD_SIZE == 64)
+    subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3L /*0xfffffffc ????*/);
+#else
     subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3 /*0xfffffffc ????*/);
+#endif
 #if ARM
     register eusinteger_t addr;
     addr = (eusinteger_t)(fn->c.code.entry);
@@ -1268,7 +1276,11 @@ int noarg;
     addr &= ~3;  /*0xfffffffc; ???? */
 #endif
     if (fn->c.code.entry2 != NIL) {
+#if (WORD_SIZE == 64)
+      addr = addr | (intval(fn->c.code.entry2)&0x00000000ffffffff);
+#else
       addr = addr | (intval(fn->c.code.entry2)&0x0000ffff);
+#endif
     }
     subr=(pointer (*)())(addr);
 #endif
