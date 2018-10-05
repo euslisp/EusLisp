@@ -20,6 +20,21 @@ matrix:
       dist: trusty
       sudo: required
       cache: apt
+      env: DOCKER_IMAGE=ubuntu:trusty ROS_DISTRO=indigo
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=ubuntu:xenial ROS_DISTRO=kinetic
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=ubuntu:bionic ROS_DISTRO=melodic
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
       env: DOCKER_IMAGE=osrf/ubuntu_armhf:trusty
     - os: linux
       dist: trusty
@@ -70,7 +85,7 @@ install:
   - if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/euslisp/jskeus ${HOME}/jskeus; fi
 script:
   - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $HOME:$HOME -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $HOME:$HOME -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "ROS_DISTRO=$ROS_DISTRO" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then  source ./.travis.sh; fi
 after_failure:
   - echo "failure"
