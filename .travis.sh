@@ -57,6 +57,61 @@ make
 
 travis_time_end
 
+if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" -a "$ROS_DISTRO" != "" ]; then
+
+    travis_time_start setup.ros
+
+    apt-get install -qq -y lsb-release gnupg
+    sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+    ret=1; while [ $ret != 0 ]; do apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 && ret=0; done
+    apt-get update -qq
+    apt-get install -qq -y wget python-rosdep python-wstool python-catkin-tools ros-$ROS_DISTRO-rosbash ros-$ROS_DISTRO-rospack
+    mkdir -p ~/ws/src
+    cd ~/ws/src
+    source /opt/ros/$ROS_DISTRO/setup.bash
+
+    travis_time_end
+    travis_time_start setup.workspace
+
+    # setup roseus
+    git clone http://github.com/jsk-ros-pkg/jsk_roseus
+    # setup euslisp
+    ln -sf ~/jskeus/eus ./euslisp
+    wget https://raw.githubusercontent.com/tork-a/euslisp-release/release/kinetic/euslisp/package.xml -O euslisp/package.xml
+    mkdir -p euslisp/cmake
+    mkdir -p euslisp/env-hooks
+    for file in CMakeLists.txt cmake/euslisp-extras.cmake.in env-hooks/99.euslisp.sh.in; do
+        wget https://raw.githubusercontent.com/tork-a/euslisp-release/master/patches/${file} -O euslisp/${file}
+    done
+    # setup jskeus
+    mkdir -p jskeus
+    cp -r ~/jskeus/doc ./jskeus/doc # FIX file INSTALL cannot duplicate symlink "/home/travis/ws/src/jskeus/doc"
+    ln -sf ~/jskeus/images ./jskeus/images
+    ln -sf ~/jskeus/irteus ./jskeus/irteus
+    wget https://raw.githubusercontent.com/tork-a/jskeus-release/release/$ROS_DISTRO/jskeus/package.xml -O jskeus/package.xml
+    wget https://raw.githubusercontent.com/tork-a/jskeus-release/master/patches/CMakeLists.txt -O jskeus/CMakeLists.txt
+    #
+    rosdep init
+    rosdep update
+    rosdep install -q -y --from-paths . --ignore-src
+    #
+    travis_time_end
+    travis_time_start compile.roseus
+
+    cd ~/ws
+    catkin build roseus
+
+    travis_time_end
+    travis_time_start compile.roseus
+
+    catkin run_tests roseus
+    catkin_test_results --verbose --all build
+
+    travis_time_end
+
+    exit 0
+fi
+
 source bashrc.eus
 export DISPLAY=
 export EXIT_STATUS=0;
