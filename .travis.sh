@@ -100,6 +100,7 @@ fi
 if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
     for test_l in irteus/test/*.l; do
         [[ $test_l =~ geo.l|interpolator.l|irteus-demo.l|test-irt-motion.l|object.l|coords.l|bignum.l|mathtest.l ]] && continue;
+        [[ "`uname -m`" == "aarch"* && $test_l =~ test-pointcloud.l ]] && continue;
 
         travis_time_start irteus.${test_l##*/}.test
 
