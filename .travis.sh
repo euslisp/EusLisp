@@ -53,6 +53,7 @@ travis_time_end
 
 travis_time_start script.make # All commands must exit with code 0 on success. Anything else is considered failure.
 cd jskeus
+make eus-installed MAKE='make -j4' ## try to run parallel, specially for arm
 make
 
 travis_time_end
