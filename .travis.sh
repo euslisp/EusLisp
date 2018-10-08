@@ -63,6 +63,11 @@ export DISPLAY=
 export EXIT_STATUS=0;
 set +e
 
+# arm target (ubuntu_arm64/trusty) takes too long time (>50min) for test
+if [[ "`uname -m`" == "aarch"* ]]; then
+    sed -i 's@00000@0000@' $CI_SOURCE_PATH/test/object.l $CI_SOURCE_PATH/test/coords.l
+fi
+
     # run test in EusLisp/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
 
