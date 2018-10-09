@@ -90,10 +90,10 @@ script:
 after_failure:
   - echo "failure"
 after_success:
-  - sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils
-  - (cd doc/latex;  make; make html)
-  - (cd doc/jlatex; make; make html)
-  - git checkout doc/html/index.html # do not overwrite
+  - [[ "$DOCKER_IMAGE" == "ubuntu"* && "$ROS_DISTRO" == "" ]] && sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils
+  - [[ "$DOCKER_IMAGE" == "ubuntu"* && "$ROS_DISTRO" == "" ]] && (cd doc/latex;  make; make html)
+  - [[ "$DOCKER_IMAGE" == "ubuntu"* && "$ROS_DISTRO" == "" ]] && (cd doc/jlatex; make; make html)
+  - [[ "$DOCKER_IMAGE" == "ubuntu"* && "$ROS_DISTRO" == "" ]] && git checkout doc/html/index.html # do not overwrite
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
