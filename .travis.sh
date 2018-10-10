@@ -53,6 +53,9 @@ travis_time_end
 
 travis_time_start script.make # All commands must exit with code 0 on success. Anything else is considered failure.
 cd jskeus
+if [[ "$DOCKER_IMAGE" == *"trusty"* ]]; then
+   make eus-installed WFLAGS="-Werror=implicit-int -Werror=implicit-function-declaration -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=unused-result"
+fi
 make
 
 travis_time_end
