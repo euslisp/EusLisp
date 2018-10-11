@@ -1006,7 +1006,7 @@ pointer args[];
 #if (WORD_SIZE == 64)
     ifunc = (((eusinteger_t)ifunc)&0xffffffff00000000) | (intval(code->c.fcode.entry2)&0x00000000ffffffff);
 #else
-    ifunc = (((int)ifunc)&0xffff0000) | (intval(code->c.fcode.entry2)&0x0000ffff);    /* kanehiro's patch 2000.12.13 */
+    ifunc = (eusinteger_t (*)())((((int)ifunc)&0xffff0000) | (intval(code->c.fcode.entry2)&0x0000ffff));    /* kanehiro's patch 2000.12.13 */
 #endif
   }
   ffunc=(double (*)())ifunc;
