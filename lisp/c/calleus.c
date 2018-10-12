@@ -170,6 +170,7 @@ eusinteger_t
 calleus(fsym,cargv,a2,a3,a4,a5,a6,a7,a8)
 register pointer fsym;	/*foreign-symbol*/
 register eusinteger_t cargv[];	/*arguments vector passed from C function*/
+register int a2, a3, a4, a5, a6, a7, a8;
 { register pointer param,resulttype,p,result;
   double *dp;
   float f;
