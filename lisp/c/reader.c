@@ -26,6 +26,8 @@ static char *rcsid="@(#)$Id$";
 
 #define syntaxtype(ch) ((enum ch_type)(current_syntax[thr_self()][ch]))
 
+int read_suppress = FALSE;
+
 extern pointer FEATURES,READBASE,QREADTABLE;
 extern pointer QNOT, QAND, QOR;	/*eval_read_cond, Jan/1995*/
 
@@ -238,7 +240,8 @@ static pointer readlabdef(ctx,f,labx)
 context *ctx;
 pointer f;	/*stream*/
 eusinteger_t labx;
-{ pointer  unsol, *unsolp, result,newlab;
+{ if (read_suppress) return(read1(ctx,f));
+  pointer  unsol, *unsolp, result,newlab;
 
   if (findlabel(labx)!=NIL)  error(E_READLABEL,makeint(labx));	/*already defined*/
   newlab=(pointer)makelabref(makeint(labx),UNBOUND,oblabels[thr_self()]->c.lab.next);
@@ -279,7 +282,8 @@ static pointer readlabref(ctx,f,val,subchar)
 pointer f;
 eusinteger_t val;
 int subchar;
-{ register pointer obj,element;
+{ if (read_suppress) return(NIL);
+  register pointer obj,element;
   obj=findlabel(val);
   if (obj==NIL) error(E_READLABEL,makeint(val));	/*undefined label*/
   if ((element=obj->c.lab.value)==UNBOUND) return(obj);
@@ -298,7 +302,7 @@ register int size;
   register int i=0;
   Char ch;
   ch=nextch(ctx,f);
-  if (size>0) {
+  if (size>0 && !read_suppress) {
     result=makevector(C_VECTOR,size);
     vpush(result);
     while ((ch!=')') && (ch!=EOF) && (i<size)) {
@@ -421,7 +425,8 @@ register pointer s;	/*input stream*/
 static pointer readstructure(ctx,s)
 register context *ctx;
 register pointer s;	/*input stream*/
-{ register pointer name, klass, slot, elem, result, varvec, *slotp;
+{ if (read_suppress) return(read1(ctx,s));
+  register pointer name, klass, slot, elem, result, varvec, *slotp;
   Char ch;
 
   ch=nextch(ctx,s);
@@ -519,7 +524,8 @@ register context *ctx;
 pointer f;
 eusinteger_t val;
 int subchar;
-{ register int i=0;
+{ if (read_suppress) return(read1(ctx,f));
+  register int i=0;
   char buf[WORD_SIZE/2], ch;
   ch=readch(f); val=0;
   while (i<WORD_SIZE/2 && ch>='0' && ch<'8') { buf[i++] = ch; ch=readch(f);}
@@ -554,6 +560,7 @@ pointer f;
 { pointer p;
   p=read1(ctx,f);
 /*  if (debug) prinx(ctx,p,Spevalof(QSTDOUT)); */
+  if (read_suppress) return(UNBOUND);
   return(eval(ctx,p));}
 
 static pointer eval_read_cond(ctx,expr)
@@ -587,6 +594,7 @@ register pointer f;
 { register pointer flag,result;
   flag=read1(ctx,f);
   vpush(flag);
+  read_suppress=TRUE;
   result=read1(ctx,f);
   if (eval_read_cond(ctx,flag)==NIL) result=(pointer)UNBOUND;
   vpop();
@@ -598,6 +606,7 @@ register pointer f;
 { register pointer flag,result;
   flag=read1(ctx,f);
   vpush(flag);
+  read_suppress=TRUE;
   result=read1(ctx,f);
   if (eval_read_cond(ctx,flag)!=NIL) result=(pointer)UNBOUND;
   vpop();
@@ -638,7 +647,9 @@ char token[];
     if (ch==EOF) return(UNBOUND);}
   subchar=to_upper(ch);
   macrofunc=Spevalof(QREADTABLE)->c.rdtab.dispatch->c.vec.v[subchar];
-  if (macrofunc==NIL) error(E_USER,(pointer)"no # macro defined");
+  if (macrofunc==NIL) {
+    if (read_suppress) return(read1(ctx,f));
+    error(E_USER,(pointer)"no # macro defined");}
   if (isint(macrofunc)) {	/*internal macro*/
     intmac=(pointer (*)())(intval(macrofunc));
     result=(*intmac)(ctx,f,val,subchar,token);}
@@ -693,6 +704,7 @@ char token[];
       doublecolon=0;
       pkg=(pointer)searchpkg((byte *)token,colon);}
     if (pkg==(pointer)NULL) {
+      if (read_suppress) return(NIL);
       if (doublecolon) colon--;
       pkgstr=makestring(token,colon);
       vpush(pkgstr);
@@ -1014,6 +1026,7 @@ register context *ctx;
 register pointer f,recursivep;
 { register pointer val;
   Char ch;
+  read_suppress=FALSE;
   current_syntax[thr_self()]=Spevalof(QREADTABLE)->c.rdtab.syntax->c.str.chars;
   ch=nextch(ctx,f);
   if (ch==EOF) return((pointer)EOF);
