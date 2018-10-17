@@ -4,8 +4,8 @@ manual:	arith.tex contact.tex controls.tex evaluation.tex generals.tex \
 	mars-pre.tex matrix.tex methods.tex  mthread.tex objects.tex \
 	preface.tex sequences.tex  symbols.tex sysfunc.tex \
 	types.tex voronoi.tex xtoolkit.tex xwindow.tex 
-	(latex manual ; makeindex manual.idx; latex manual; \
-		dvipdfm manual.dvi >manual.pdf)
+	(latex manual ; makeindex manual.idx; latex manual; dvipdfm manual.dvi >manual.pdf; \
+	eus ../help.eus/makehelp.l "(progn (make-help) (quit))" )
 manual2:
 	latex manual ; dvips -o manual.ps manual.pdf
 #	latex manual ; dvi2ps manual.dvi >manual.ps
