@@ -16,6 +16,7 @@
 	most-negative-float 
 	least-positive-float
 	least-negative-float
+	char= char< char> char<= char>= char/=
 	quit bye
         ))
 (export '(af_unix af_inet sock_stream sock_dgram))
