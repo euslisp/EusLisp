@@ -595,9 +595,10 @@ register pointer f;
 { register pointer flag,result;
   flag=read1(ctx,f);
   vpush(flag);
-  read_suppress=TRUE;
-  result=read1(ctx,f);
-  if (eval_read_cond(ctx,flag)==NIL) result=(pointer)UNBOUND;
+  if (eval_read_cond(ctx,flag)==NIL) {
+    read_suppress=TRUE; read1(ctx,f);
+    result=(pointer)UNBOUND;}
+  else result=read1(ctx,f);
   vpop();
   return(result);}
 
@@ -607,9 +608,10 @@ register pointer f;
 { register pointer flag,result;
   flag=read1(ctx,f);
   vpush(flag);
-  read_suppress=TRUE;
-  result=read1(ctx,f);
-  if (eval_read_cond(ctx,flag)!=NIL) result=(pointer)UNBOUND;
+  if (eval_read_cond(ctx,flag)!=NIL) {
+    read_suppress=TRUE; read1(ctx,f);
+    result=(pointer)UNBOUND;}
+  else result=read1(ctx,f);
   vpop();
   return(result);}
 
