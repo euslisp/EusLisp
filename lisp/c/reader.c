@@ -712,7 +712,7 @@ char token[];
       error(E_EXTSYMBOL,pkgstr);}
   } }
 
-/* STUPID news does not have strtol routine!*/
+/* news does not have strtol routine! */
 #if news || sanyo
 int strtol(str,ptr,base)
 register char *str,**ptr;
