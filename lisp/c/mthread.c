@@ -53,7 +53,7 @@ pointer port;
   ctx=(context *)((eusinteger_t)port->c.thrp.contex & ~2L);
   euscontexts[tid]=ctx;
 /*  fprintf(stderr, "new thread %d port=%x ctx=%x\n", tid, port, ctx); */
-  mkcatchframe(ctx, makeint(0), thjmp);
+  mkcatchframe(ctx, makeint(0),&thjmp);
   mutex_lock(&free_thread_lock);
     free_threads=cons(ctx,port, free_threads);
   mutex_unlock(&free_thread_lock);
@@ -425,7 +425,7 @@ struct thread_arg *ta;
   tid=thr_self();
   euscontexts[tid]=ta->newctx;
   fprintf(stderr,"new thread_id=%d\n",tid);
-  mkcatchframe(ta->newctx, makeint(0), thjmp);
+  mkcatchframe(ta->newctx, makeint(0),&thjmp);
   if ((val=(pointer)eussetjmp(thjmp))==0) {
     argv[0]=ta->arg;
     result=ufuncall(ta->newctx, ta->form, ta->func,(pointer)argv,NULL,1);}
@@ -533,7 +533,7 @@ pointer argv[];
   }
 #endif  
 
-mthread(ctx,mod)
+int mthread(ctx,mod)
 register context *ctx;
 pointer mod;
 {

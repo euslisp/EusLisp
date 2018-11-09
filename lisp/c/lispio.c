@@ -379,6 +379,7 @@ pointer argv[];
 
 pointer GETMACROCH(ctx,n,argv)
 register context *ctx;
+int n;
 pointer argv[];
 { pointer rdtable;
   ckarg2(1,2);

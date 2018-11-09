@@ -292,7 +292,7 @@ pointer (*f)();
   fentaddr= (eusinteger_t)f>>2;
   cd->c.code.entry=makeint(fentaddr);
 #if ARM
-  cd->c.code.entry2=makeint(f);
+  cd->c.code.entry2=makeint((eusinteger_t)f);
 #endif
   return(cd);}
 
@@ -513,7 +513,7 @@ pointer (*f)();
   clo->c.clo.subrtype=SUBR_FUNCTION;
   clo->c.clo.entry=makeint((eusinteger_t)f>>2);
 #if ARM
-  clo->c.clo.entry2=makeint(f);
+  clo->c.clo.entry2=makeint((eusinteger_t)f);
 #endif
   clo->c.clo.env0=e0;
   clo->c.clo.env1=e1; /*makeint((int)e1>>2);*/
@@ -906,6 +906,7 @@ int bs_size;
   return(cntx);}
 
 void deletecontext(id,ctx)
+int id;
 register context *ctx;
 { if (id<MAXTHREAD) euscontexts[id]=NULL;
   cfree(ctx->stack);

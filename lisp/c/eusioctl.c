@@ -38,6 +38,7 @@ pointer x;
 
 static pointer ioctl_struct(n,argv,ctlcode,bufsize)
 int n,bufsize;
+unsigned long  ctlcode;
 pointer argv[];
 { int fd,stat;
   pointer buf;
@@ -50,6 +51,7 @@ pointer argv[];
 
 static pointer ioctl_int(n,argv,ctlcode)
 int n;
+unsigned long  ctlcode;
 pointer argv[];
 { int fd,stat,intarg;
   pointer buf;
