@@ -129,7 +129,11 @@ export DISPLAY=
 export EXIT_STATUS=0;
 set +e
 
-if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
+# arm target (ubuntu_arm64/trusty) takes too long time (>50min) for test
+if [[ "`uname -m`" == "aarch"* ]]; then
+    sed -i 's@00000@0000@' $CI_SOURCE_PATH/test/object.l $CI_SOURCE_PATH/test/coords.l
+fi
+
     # run test in EusLisp/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
 
@@ -143,13 +147,13 @@ if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-fi
 
-travis_time_end
 
-if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
-    # run test in EusLisp/test
+    # run test in compiled EusLisp/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
+        # bignum test fails on armhf
+        [[ "`uname -m`" == "arm"* && $test_l =~ bignum.l ]] && continue;
+        # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
         [[ $test_l =~ const.l ]] && continue;
 
         travis_time_start compiled.${test_l##*/}.test
@@ -162,26 +166,12 @@ if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-fi
 
-if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
-    for test_l in irteus/test/*.l; do
-        [[ $test_l =~ geo.l|interpolator.l|irteus-demo.l|test-irt-motion.l|object.l|coords.l|bignum.l|mathtest.l ]] && continue;
-
-        travis_time_start irteus.${test_l##*/}.test
-
-        irteusgl $test_l;
-        export TMP_EXIT_STATUS=$?
-
-        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
-
-        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
-    done;
-    echo "Exit status : $EXIT_STATUS";
-else
     # run test in jskeus/irteus
     for test_l in irteus/test/*.l; do
 
+        [[ ("`uname -m`" == "arm"* || "`uname -m`" == "aarch"*) && $test_l =~ geo.l|mathtest.l|interpolator.l|test-irt-motion.l|test-pointcloud.l|irteus-demo.l ]] && continue;
+
         travis_time_start irteus.${test_l##*/}.test
 
         irteusgl $test_l;
@@ -192,7 +182,7 @@ else
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-fi
+
 
 [ $EXIT_STATUS == 0 ] || exit 1
 

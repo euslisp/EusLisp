@@ -60,7 +60,17 @@ matrix:
       dist: trusty
       sudo: required
       cache: apt
+      env: DOCKER_IMAGE=debian:stretch
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
       env: DOCKER_IMAGE=osrf/debian_arm64:jessie
+    - os: linux
+      dist: trusty
+      sudo: required
+      cache: apt
+      env: DOCKER_IMAGE=osrf/debian_arm64:stretch
     - os: osx
 env:
   global:
@@ -90,10 +100,10 @@ script:
 after_failure:
   - echo "failure"
 after_success:
-  - sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils
-  - (cd doc/latex;  make; make html)
-  - (cd doc/jlatex; make; make html)
-  - git checkout doc/html/index.html # do not overwrite
+  - if [[ "$DOCKER_IMAGE" == "ubuntu"* && "$ROS_DISTRO" == "" ]]; then sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils; fi
+  - if [[ "$DOCKER_IMAGE" == "ubuntu"* && "$ROS_DISTRO" == "" ]]; then (cd doc/latex;  make; make html); fi
+  - if [[ "$DOCKER_IMAGE" == "ubuntu"* && "$ROS_DISTRO" == "" ]]; then (cd doc/jlatex; make; make html); fi
+  - if [[ "$DOCKER_IMAGE" == "ubuntu"* && "$ROS_DISTRO" == "" ]]; then git checkout doc/html/index.html; fi # do not overwrite
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
