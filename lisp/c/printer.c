@@ -457,7 +457,7 @@ int prlevel,rank,axis,index;
 static void printarray(ctx,a,f,prlevel)
 register context *ctx;
 register pointer a,f;
-int prlevel;
+register int prlevel;
 { char buf[16];
   register int i,j,rank,etype,size=1,index;
   register pointer p,v;

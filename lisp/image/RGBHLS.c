@@ -46,7 +46,7 @@ int *h, *l, *s;
   *h /= 6;}
 
 
-float hls_to_rgb(h,l,s,r,g,b)
+void hls_to_rgb(h,l,s,r,g,b)
 int h,l,s;
 int *r, *g, *b;
 { float v; }

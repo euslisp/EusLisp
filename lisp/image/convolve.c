@@ -3,7 +3,7 @@
 #include "../c/eus.h"
 
 #pragma init (init_object_module)
-extern pointer convolve(context *, int, pointer *);
+pointer convolve();
 static void init_object_module()
   { add_module_initializer("convolve", convolve);}
 
@@ -48,7 +48,8 @@ int n;
 pointer argv[];
 { pointer imgp, tablep, resultp;
   register unsigned char *img, *ctable, *result;
-  register long size, i, *itable;
+  register long size, i;
+  register eusinteger_t *itable;
 
   ckarg(3);
   imgp=argv[0];  resultp= argv[1]; tablep=argv[2];

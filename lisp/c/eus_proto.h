@@ -91,7 +91,7 @@ extern pointer normalize_bignum(pointer /*x*/);
 extern eusfloat_t big_to_float(pointer /*x*/);
 /* big2.c */
 /* calleus.c */
-#if x86_64
+#if (defined(x86_64) || defined(aarch64))
 extern eusinteger_t calleus(pointer /*fsym*/, eusinteger_t /*cargv*/*);
 #else
 extern eusinteger_t calleus(pointer /*fsym*/, eusinteger_t /*cargv*/*, int /*a2*/, int /*a3*/, int /*a4*/, int /*a5*/, int /*a6*/, int /*a7*/, int /*a8*/);
@@ -757,6 +757,13 @@ extern pointer BITNAND(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BITNOR(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer BITNOT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern void vectorarray(context */*ctx*/, pointer /*mod*/);
+/* intersection.c */
+extern pointer LINEINTERSECTION(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer LINEINTERSECTION3(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer VPCLIP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer HOMO_VPCLIP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer HOMO2NORMAL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer HOMOGENIZE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 /* setjmp.c */
 extern pointer psetjmp(jmp_buf);
 extern void plongjmp(jmp_buf,pointer);

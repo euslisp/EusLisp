@@ -148,7 +148,7 @@ pointer argv[];
           }
         }
   }
-  *sp=(char)0;
+  *sp=0;
   j=strlen(str);
   s=makestring(&str[0],j);
   return(s);

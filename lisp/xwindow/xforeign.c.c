@@ -175,7 +175,7 @@ extern int XInstallColormap;
 extern int XInternAtom;
 
 #ifdef X_V11R2
-extern MatchEvent;
+extern int MatchEvent;
 #endif 
 
 extern int XKeycodeToKeysym;
@@ -265,7 +265,7 @@ extern int XMoveWindow;
 extern int XNextEvent;
 extern int XOpenDisplay;
 extern int XParseColor;
-/* extern ReadInteger; */
+/* extern int ReadInteger; */
 extern int XParseGeometry;
 extern int XPeekEvent;
 extern int XPeekIfEvent;
@@ -309,7 +309,7 @@ extern int XSubtractRegion;
 extern int XUnionRectWithRegion;
 extern int XUnionRegion;
 extern int XXorRegion;
-/* extern combineRegs; */
+/* extern int combineRegs; */
 extern int XReparentWindow;
 extern int XRestackWindows;
 extern int XRotateWindowProperties;

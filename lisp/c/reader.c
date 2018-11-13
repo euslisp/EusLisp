@@ -276,7 +276,7 @@ pointer *addr;
 }
 
 static pointer readlabref(ctx,f,val,subchar)
-context *ctx;
+register context *ctx;
 pointer f;
 eusinteger_t val;
 int subchar;
@@ -712,7 +712,7 @@ char token[];
       error(E_EXTSYMBOL,pkgstr);}
   } }
 
-/* STUPID news does not have strtol routine!*/
+/* news does not have strtol routine! */
 #if news || sanyo
 int strtol(str,ptr,base)
 register char *str,**ptr;

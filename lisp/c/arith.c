@@ -15,6 +15,7 @@ static char *rcsid="@(#)$Id$";
 #if Cygwin
 #include <stdlib.h>
 #endif
+extern int ffsl(long int i); // #include <string.h> // ffsl
 
 extern pointer RANDSTATE;
 extern int gcd();

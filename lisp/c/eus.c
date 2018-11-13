@@ -26,8 +26,8 @@ unsigned int thr_self() { return(1);}
 #endif
 
 
-#if Linux
-#define M_MMAP_MAX (-4)
+#if Linux && !OLD_LINUX && !Darwin
+#include <malloc.h> // define mallopt, M_MMAP_MAX
 #endif
 #if Darwin
 int _end;
@@ -1158,7 +1158,7 @@ register context *ctx;
   else strcpy(fname, eusrt);
   if (isatty(0)!=0) {
     fprintf(stderr, "configuring by \"%s\"\n", fname); }
-  mkcatchframe(ctx,makeint(0), &topjbuf);
+  mkcatchframe(ctx,makeint(0),&topjbuf);
   argv=makestring(fname, strlen(fname));
   vpush(argv);
   eusstart(ctx);

@@ -20,7 +20,8 @@ static void init_object_module()
 
 
 
-static int set_pixparams(piximg, eusary)
+
+static void set_pixparams(piximg, eusary)
 pixel_image *piximg;
 pointer eusary;
 { pointer imgp;
@@ -41,7 +42,7 @@ pointer eusary;
 
 static int img_correlation1(image,pattern,x,y)
 register pixel_image *image, *pattern;
-int x, y;
+register int x, y;
 { register unsigned char *img=image->imgary, *pat=pattern->imgary;
   register int i, j;
   register int ww=pattern->width;
