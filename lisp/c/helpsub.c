@@ -8,7 +8,7 @@ static char *rcsid="@(#)$Id$";
 
 #pragma init (init_object_module)
 extern pointer helpsub();
-static init_object_module()
+static void init_object_module()
   { add_module_initializer("helpsub", helpsub);}
 
 
@@ -36,10 +36,11 @@ static char READ_CHAR(fd)
 int fd;
 {
   char c;
+  int r;
 
   if ((bp == -1) || (bp == BUFSIZE)){
     bp=0;
-    GC_REGION(read(fd, &buf[0], BUFSIZE););
+    GC_REGION(r=read(fd, &buf[0], BUFSIZE););
   }
   c=buf[bp];
   bp++;
@@ -147,7 +148,7 @@ pointer argv[];
           }
         }
   }
-  *sp=NULL;
+  *sp=0;
   j=strlen(str);
   s=makestring(&str[0],j);
   return(s);

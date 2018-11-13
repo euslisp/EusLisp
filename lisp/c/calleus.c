@@ -55,7 +55,7 @@ cixpair foreignpodcp;
 			    		  ((p)->cix)<=foreignpodcp.sub)
 #define isforeignpod(p) (ispointer(p) && pisforeignpod(p))
 
-#if x86_64
+#if (defined x86_64) || (defined aarch64)
 // Linux, x64
 /* development version of euscall written by Y.Kakiuchi */
 union NUMCONVBUF {
@@ -170,6 +170,7 @@ eusinteger_t
 calleus(fsym,cargv,a2,a3,a4,a5,a6,a7,a8)
 register pointer fsym;	/*foreign-symbol*/
 register eusinteger_t cargv[];	/*arguments vector passed from C function*/
+register int a2, a3, a4, a5, a6, a7, a8;
 { register pointer param,resulttype,p,result;
   double *dp;
   float f;

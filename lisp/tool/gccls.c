@@ -25,7 +25,7 @@
 
 static char buf[MAX_LINE_SIZE];
 
-main(argc,argv)
+int main(argc,argv)
 int argc;
 char *argv[];
 {
@@ -56,7 +56,7 @@ char *argv[];
   fprintf(out, "extern void add_module_initializer();\n");
 #endif
   fprintf(out, "extern void %s();\n", entryname);
-  fprintf(out, "static init_object_module()\n");
+  fprintf(out, "static void init_object_module()\n");
   fprintf(out, "  {add_module_initializer(\"%s\", (pointer (*)())%s);}\n", entryname, entryname);
   fprintf(out, "const static char *sexp_strings[NUM_LINES]={\n");
 

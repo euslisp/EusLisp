@@ -91,7 +91,7 @@ extern pointer normalize_bignum(pointer /*x*/);
 extern eusfloat_t big_to_float(pointer /*x*/);
 /* big2.c */
 /* calleus.c */
-#if x86_64
+#if (defined(x86_64) || defined(aarch64))
 extern eusinteger_t calleus(pointer /*fsym*/, eusinteger_t /*cargv*/*);
 #else
 extern eusinteger_t calleus(pointer /*fsym*/, eusinteger_t /*cargv*/*, int /*a2*/, int /*a3*/, int /*a4*/, int /*a5*/, int /*a6*/, int /*a7*/, int /*a8*/);
