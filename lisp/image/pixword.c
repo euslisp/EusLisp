@@ -7,9 +7,9 @@ static char *rcsid= "@(#)$Id: pixword.c,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $"
 #include "../c/eus.h"
 
 #pragma init (init_object_module)
-extern void pixword(context *, int, pointer *);
+pointer pixword();
 
-static init_object_module()
+static void init_object_module()
   { add_module_initializer("pixword", pixword);}
 
 pointer SPLIT_RGB(ctx,n,argv)
@@ -71,7 +71,7 @@ pointer *argv;
     rgb[s3++]=b[s1+offset];}
   return(argv[0]);}
 
-extern void pixword(ctx,n,argv)
+pointer pixword(ctx,n,argv)
   context *ctx;
   int n;
   pointer argv[];

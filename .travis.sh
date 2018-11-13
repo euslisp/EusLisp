@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+export DEBIAN_FRONTEND=noninteractive
 
 function travis_time_start {
     TRAVIS_START_TIME=$(date +%s%N)
@@ -53,16 +54,86 @@ travis_time_end
 
 travis_time_start script.make # All commands must exit with code 0 on success. Anything else is considered failure.
 cd jskeus
+if [[ "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ]]; then
+    make eus-installed WFLAGS="-Werror=implicit-int -Werror=implicit-function-declaration -Werror=unused-result"
+else
+    make eus-installed WFLAGS="-Werror=implicit-int -Werror=implicit-function-declaration -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=unused-result"
+fi
 make
 
 travis_time_end
+
+if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" -a "$ROS_DISTRO" != "" ]; then
+
+    travis_time_start setup.ros
+
+    export TZ=Asia/Tokyo
+    echo "${TZ}" > /etc/timezone
+    apt-get install -qq -y lsb-release gnupg
+    sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+    ret=1; while [ $ret != 0 ]; do apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 && ret=0; done
+    apt-get update -qq
+    apt-get install -qq -y wget python-rosdep python-wstool python-catkin-tools ros-$ROS_DISTRO-rosbash ros-$ROS_DISTRO-rospack
+    mkdir -p ~/ws/src
+    cd ~/ws/src
+
+    travis_time_end
+    travis_time_start setup.workspace
+
+    # setup roseus
+    git clone http://github.com/jsk-ros-pkg/jsk_roseus
+    # setup euslisp
+    ln -sf ~/jskeus/eus ./euslisp
+    wget https://raw.githubusercontent.com/tork-a/euslisp-release/release/kinetic/euslisp/package.xml -O euslisp/package.xml
+    mkdir -p euslisp/cmake euslisp/env-hooks
+    for file in CMakeLists.txt cmake/euslisp-extras.cmake.in env-hooks/99.euslisp.sh.in; do
+        wget https://raw.githubusercontent.com/tork-a/euslisp-release/master/patches/${file} -O euslisp/${file}
+    done
+    # setup jskeus
+    mkdir jskeus
+    ln -sf ~/jskeus/irteus ./jskeus/irteus
+    cp -r ~/jskeus/doc ~/jskeus/images ./jskeus/
+    wget https://raw.githubusercontent.com/tork-a/jskeus-release/release/$ROS_DISTRO/jskeus/package.xml -O jskeus/package.xml
+    wget https://raw.githubusercontent.com/tork-a/jskeus-release/master/patches/CMakeLists.txt -O jskeus/CMakeLists.txt
+    #
+    travis_time_end
+    travis_time_start rosdep.update
+
+    cd ~/ws
+    source /opt/ros/$ROS_DISTRO/setup.bash
+    sudo rosdep init
+    rosdep update
+    rosdep install -y -q -r --from-paths ./src  --ignore-src
+
+    travis_time_end
+    travis_time_start compile.roseus
+
+    catkin build roseus
+
+    travis_time_end
+    travis_time_start run_tests.roseus
+
+    catkin run_tests -p1 -j1 roseus
+    source devel/setup.bash
+    rospack find roseus
+    (roscd roseus; rostest -t test/test-roseus.test)
+    catkin_test_results --verbose --all build
+
+    travis_time_end
+
+    exit 0
+fi
 
 source bashrc.eus
 export DISPLAY=
 export EXIT_STATUS=0;
 set +e
 
-if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
+# arm target (ubuntu_arm64/trusty) takes too long time (>50min) for test
+if [[ "`uname -m`" == "aarch"* ]]; then
+    sed -i 's@00000@0000@' $CI_SOURCE_PATH/test/object.l $CI_SOURCE_PATH/test/coords.l
+fi
+
     # run test in EusLisp/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
 
@@ -76,13 +147,13 @@ if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-fi
 
-travis_time_end
 
-if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
-    # run test in EusLisp/test
+    # run test in compiled EusLisp/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
+        # bignum test fails on armhf
+        [[ "`uname -m`" == "arm"* && $test_l =~ bignum.l ]] && continue;
+        # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
         [[ $test_l =~ const.l ]] && continue;
 
         travis_time_start compiled.${test_l##*/}.test
@@ -95,26 +166,12 @@ if [[ "`uname -m`" != "arm"* && "`uname -m`" != "aarch"* ]]; then
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-fi
 
-if [[ "`uname -m`" == "arm"* || "`uname -m`" == "aarch"* ]]; then
-    for test_l in irteus/test/*.l; do
-        [[ $test_l =~ geo.l|interpolator.l|irteus-demo.l|test-irt-motion.l|object.l|coords.l|bignum.l|mathtest.l ]] && continue;
-
-        travis_time_start irteus.${test_l##*/}.test
-
-        irteusgl $test_l;
-        export TMP_EXIT_STATUS=$?
-
-        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
-
-        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
-    done;
-    echo "Exit status : $EXIT_STATUS";
-else
     # run test in jskeus/irteus
     for test_l in irteus/test/*.l; do
 
+        [[ ("`uname -m`" == "arm"* || "`uname -m`" == "aarch"*) && $test_l =~ geo.l|mathtest.l|interpolator.l|test-irt-motion.l|test-pointcloud.l|irteus-demo.l ]] && continue;
+
         travis_time_start irteus.${test_l##*/}.test
 
         irteusgl $test_l;
@@ -125,7 +182,7 @@ else
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
-fi
+
 
 [ $EXIT_STATUS == 0 ] || exit 1
 
