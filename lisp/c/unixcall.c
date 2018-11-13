@@ -126,6 +126,7 @@ pointer argv[];
 
 pointer LOCALTIME(ctx,n,argv)
 register context *ctx;
+int n;
 pointer argv[];
 { long clock;
   struct tm *tms;

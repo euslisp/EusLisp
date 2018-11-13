@@ -430,7 +430,7 @@ bindaux:
 evbody:
     GC_POINT;
     /*create block around lambda*/
-    myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,fn,(jmp_buf *)funjmp,NULL);
+    myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,fn,&funjmp,NULL);
     /*evaluate body*/
     if ((result=(pointer)eussetjmp(funjmp))==0) {GC_POINT;result=progn(ctx,body);}
     else if (result==(pointer)1) result=makeint(0);
@@ -889,8 +889,8 @@ pointer args[];
   double f;
 
   if (code->c.fcode.entry2 != NIL) {
-    ifunc = (((eusinteger_t)ifunc)&0xffffffff00000000) 
-      | (intval(code->c.fcode.entry2)&0x00000000ffffffff);
+    ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffffffff00000000)
+      | (intval(code->c.fcode.entry2)&0x00000000ffffffff));
     /* R.Hanai 090726 */
   }
   
@@ -1006,7 +1006,7 @@ pointer args[];
 #if (WORD_SIZE == 64)
     ifunc = (((eusinteger_t)ifunc)&0xffffffff00000000) | (intval(code->c.fcode.entry2)&0x00000000ffffffff);
 #else
-    ifunc = (((int)ifunc)&0xffff0000) | (intval(code->c.fcode.entry2)&0x0000ffff);    /* kanehiro's patch 2000.12.13 */
+    ifunc = (eusinteger_t (*)())((((int)ifunc)&0xffff0000) | (intval(code->c.fcode.entry2)&0x0000ffff));    /* kanehiro's patch 2000.12.13 */
 #endif
   }
   ffunc=(double (*)())ifunc;
@@ -1156,14 +1156,18 @@ register int noarg;
   register eusinteger_t addr;
   pointer tmp;
   addr=(eusinteger_t)(func->c.code.entry);
-#if (defined x86_64) || (defined aarch64)
-  addr &= ~3L;  /*0xfffffffc; ???? */
+#if (WORD_SIZE == 64)
+  addr &= ~3L;  /*0xfffffffffffffffc; ???? */
 #else
   addr &= ~3;  /*0xfffffffc; ???? */
 #endif
 #if ARM
   if (func->c.code.entry2 != NIL) {
+#if (WORD_SIZE == 64)
+    addr = addr | (intval(func->c.code.entry2)&0x00000000ffffffff);
+#else
     addr = addr | (intval(func->c.code.entry2)&0x0000ffff);
+#endif
   }
 #endif
   subr=(pointer (*)())(addr);
@@ -1258,7 +1262,11 @@ int noarg;
     clofunc=func;
     fn=func;
     if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_ILLFUNC);
+#if (WORD_SIZE == 64)
+    subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3L /*0xfffffffc ????*/);
+#else
     subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3 /*0xfffffffc ????*/);
+#endif
 #if ARM
     register eusinteger_t addr;
     addr = (eusinteger_t)(fn->c.code.entry);
@@ -1268,7 +1276,11 @@ int noarg;
     addr &= ~3;  /*0xfffffffc; ???? */
 #endif
     if (fn->c.code.entry2 != NIL) {
+#if (WORD_SIZE == 64)
+      addr = addr | (intval(fn->c.code.entry2)&0x00000000ffffffff);
+#else
       addr = addr | (intval(fn->c.code.entry2)&0x0000ffff);
+#endif
     }
     subr=(pointer (*)())(addr);
 #endif

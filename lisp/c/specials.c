@@ -172,7 +172,11 @@ register pointer argv[];
 #else
     addr &= ~3;  /*0xfffffffc; ???? */
 #endif
+#if (WORD_SIZE == 64)
+    addr = addr | (intval(mac->c.code.entry2)&0x00000000ffffffff);
+#else
     addr = addr | (intval(mac->c.code.entry2)&0x0000ffff);
+#endif
 #endif // ARM
     if (mac->c.code.subrtype!=(pointer)SUBR_MACRO) return(argv[0]);
 #if ARM
@@ -373,7 +377,7 @@ pointer arg;
   if (!islist(arg)) return(NIL);
   cond=ccar(arg); body=ccdr(arg);
   myblock=(struct blockframe *)
-		makeblock(ctx,BLOCKFRAME,NIL,(jmp_buf *)whilejmp,ctx->blkfp); /* ???? */
+		makeblock(ctx,BLOCKFRAME,NIL,&whilejmp,ctx->blkfp); /* ???? */
   if ((result=(pointer)eussetjmp(whilejmp))==0) {
     while (eval(ctx,cond)!=NIL) {GC_POINT;progn(ctx,body);}
     result=NIL;}
@@ -513,7 +517,7 @@ pointer arg;
 
   tag=carof(arg,E_MISMATCHARG); tag=eval(ctx,tag);
   body=ccdr(arg);
-  mkcatchframe(ctx,tag,catchbuf);
+  mkcatchframe(ctx,tag,&catchbuf);
   if ((val=(pointer)eussetjmp(catchbuf))==0) val=progn(ctx,body);
   else if ((eusinteger_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
   ctx->callfp=ctx->catchfp->cf;
@@ -654,7 +658,7 @@ register pointer arg;		/*must be called via ufuncall*/
   GC_POINT;
   name=carof(arg,E_MISMATCHARG); arg=ccdr(arg);
   if (!issymbol(name)) error(E_NOSYMBOL);
-  myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,name,(jmp_buf *)blkjmp,ctx->blkfp); /* ???? */
+  myblock=(struct blockframe *)makeblock(ctx,BLOCKFRAME,name,&blkjmp,ctx->blkfp); /* ???? */
   if ((result=(pointer)eussetjmp(blkjmp))==0) result=progn(ctx,arg);
   else if ((eusinteger_t)result==1) result=makeint(0);
   ctx->blkfp=myblock->dynklink;
@@ -746,7 +750,7 @@ pointer arg;
     if (!iscons(ccar(p))) golist=cons(ctx,p,golist);
     p=ccdr(p);}
   tagblock=(struct blockframe *)
-	makeblock(ctx,TAGBODYFRAME,golist,(jmp_buf*)tagjmp,ctx->blkfp); /* ???? */
+	makeblock(ctx,TAGBODYFRAME,golist,&tagjmp,ctx->blkfp); /* ???? */
   tagspsave=ctx->vsp;
 repeat:
   if ((p=(pointer)eussetjmp(tagjmp))==0) 
@@ -775,7 +779,7 @@ pointer arg;
     if (ctx->blkfp->kind==TAGBODYFRAME &&
 	(body=(pointer)assq(tag,ctx->blkfp->name))!=NIL) {
       unwind(ctx,(pointer *)ctx->blkfp);
-      euslongjmp(ctx->blkfp->jbp,body);}/* ???? */
+      euslongjmp(*(ctx->blkfp->jbp),body);}/* ???? */
       /* euslongjmp(*(ctx->blkfp->jbp),body);} *//* ??? eus_rbar */
     ctx->blkfp=ctx->blkfp->lexklink;}
   error(E_USER,(pointer)"go tag not found");}
