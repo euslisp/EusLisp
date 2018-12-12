@@ -44,8 +44,8 @@ T if {\em integer} is odd.}
 The argument must be an integer.
 T if {\em integer} is an even number.}
 
-\funcdesc{/=}{n1 n2 \&rest more-numbers}{
-Both {\em n1}, {\em n2} and all elements of {\em more-numbers} must be numbers.
+\funcdesc{/=}{num1 num2 \&rest more-numbers}{
+Both {\em num1}, {\em num2} and all elements of {\em more-numbers} must be numbers.
 T if no two of its arguments are numerically equal, NIL otherwise.}
 
 \funcdesc{=}{num1 num2 \&rest more-numbers}{
@@ -85,13 +85,11 @@ Following functions request arguments to be integers.
 returns remainder when {\em dividend} is divided by {\em divisor}.
 {\tt (mod 6 5)=1, (mod -6 5)=-1, (mod 6 -5)=1, (mod -6 -5)=-1}.}
 
-\funcdesc{1-}{integer}{
-The compiler assumes the argument to be an integer.
-$integer-1$ is returned.}
+\funcdesc{1-}{number}{
+$number-1$ is returned.}
 
-\funcdesc{1+}{integer}{
-Arguments to 1+ and 1- must be an integer.
-$integer+1$ is returned.}
+\funcdesc{1+}{number}{
+$number+1$ is returned.}
 \funcdesc{logand}{\&rest integers}{bitwise-and of {\em integers}.}
 \funcdesc{logior}{\&rest integers}{bitwise-inclusive-or of {\em integers}.}
 \funcdesc{logxor}{\&rest integers}{bitwise-exclusive-or of {\em integers}.}
@@ -113,14 +111,14 @@ If {\em count} is positive, shift direction is left,
 and if {\em count} is negative,
 {\em integer} is shifted to right by abs({\em count}) bits.}
 
-\funcdesc{ldb}{target position width}{
+\funcdesc{ldb}{target position \&optional (width 8)}{
 LoaD Byte.
 Byte specifier for {\bf ldb} and {\bf dpb} does not exist in EusLisp.
 Use a pair of integers instead.
 The field of {\em width} bits at {\em position} within {\em target}
 is extracted. For example, {\tt (ldb \#x1234 4 4)} is 3.}
 
-\funcdesc{dpb}{value integer position width}{
+\funcdesc{dpb}{value integer position \&optional (width 8)}{
 DePosit byte.
 {\em Width} bits of {\em value} is put in {\em integer}
 at {\em position}th bits from LSB.}
@@ -135,10 +133,11 @@ at {\em position}th bits from LSB.}
 If {\em more-numbers} are given, they are subtracted from {\em num}.
 Otherwise, {\em num} is negated.}
 \funcdesc{*}{\&rest numbers}{returns the product of {\em numbers}.}
-\funcdesc{/}{num1 num2 \&rest more-numbers}{
-{\em num1} is divided by {\em num2} and {\em more-numbers}.
+\funcdesc{/}{num \&rest more-numbers}{
+{\em num} is divided by {\em more-numbers}.
+If only one argument is given, 1.0 is divided by {\em num}.
 The result is an integer if all the arguments are integers,
-and an float if at least one of the arguments is a float.}
+and a float if at least one of the arguments is a float.}
 \funcdesc{abs}{number}{returns absolute number.}
 \funcdesc{round}{number}{
 rounds to the nearest integer.
@@ -159,23 +158,23 @@ rounds to the absolutely smaller and nearest integer.
 \funcdesc{float}{number}{
 returns floating-point representation of {\em number}.}
 
-\funcdesc{max}{\&rest numbers}{
-finds the maximum value among {\em numbers}.}
+\funcdesc{max}{num \&rest more-numbers}{
+finds the maximum value among {\em num} and {\em more-numbers}.}
 
-\funcdesc{min}{\&rest numbers}{
-finds the minimum number in {\em numbers}.}
+\funcdesc{min}{num \&rest more-numbers}{
+finds the minimum value among {\em num} and {\em more-numbers}.}
 
-\funcdesc{make-random-state}{\&optional state}{
+\funcdesc{make-random-state}{\&optional (state *random-state*)}{
 creates a fresh object of type random-state suitable for use as the value of *random-state*.
 If {\em state} is a random state object, the new-state is a copy of that object. If state is NIL, the new-state is a copy of the current {\em *random-state*}. If state is T, the new-state is a fresh random state object that has been randomly initialized.
 }
 
-\funcdesc{random}{range \&optional (randstate *random-state*)}{
+\funcdesc{random}{range \&optional (state *random-state*)}{
 Returns a random number between 0 or 0.0 and {\em range}.
 If {\em range} is an integer,
 the result is truncated to an integer.
 Otherwise, a floating value is returned.
-Optional {\em randstate} can be specified
+Optional {\em state} can be specified
 to get predictable random number sequence.
 There is no special data type for random-state,
 and it is represented with an integer vector of two elements.
@@ -185,7 +184,7 @@ and it is represented with an integer vector of two elements.
 {\em variable} is a generalized variable.
 The value of {\em variable} is incremented by {\em increment},
 and it is set back to {\em variable}.}
-\macrodesc{decf}{variable \&optional decrement}{
+\macrodesc{decf}{variable \&optional (decrement 1)}{
 {\em variable} is a generalized variable.
 The value of {\em variable} is decremented by {\em decrement},
 and it is set back to {\em variable}.}
@@ -217,8 +216,8 @@ $\frac{e^{x}-e^{-x}}{2}$.}
 $\frac{e^{x}+e^{-x}}{2}$.}
 \funcdesc{tanh}{x}{ hyperbolic tangent, that is,
 $\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$.}
-\funcdesc{asin}{number}{arc sine of {\em number}.}
-\funcdesc{acos}{number}{arc cosine of {\em number}.}
+\funcdesc{asin}{x}{arc sine.}
+\funcdesc{acos}{x}{arc cosine.}
 \funcdesc{atan}{y \&optional x}{
 When {\bf atan} is called with one argument, its arctangent is calculated.
 When called with two arguments, $atan(y/x)$ is returned.}
@@ -228,12 +227,13 @@ When called with two arguments, $atan(y/x)$ is returned.}
 
 \funcdesc{sqrt}{number}{returns square root of {\em number}.}
 
-\funcdesc{log}{number}{returns natural logarithm of {\em number}.}
+\funcdesc{log}{number \&optional base}{returns natural logarithm of {\em number}.
+If {\em base} is provided, return the logarithm of {\em number} in the given base instead.}
 
 \funcdesc{exp}{x}{returns exponential, $e^{x}$.}
 
-\funcdesc{expt}{a x}{
-returns {\em x}th power to {\em a}.}
+\funcdesc{expt}{a x}{returns $a^{x}$.}
+
 \end{refdesc}
 
 \newpage
