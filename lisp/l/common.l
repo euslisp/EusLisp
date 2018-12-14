@@ -449,8 +449,8 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 
 (defun rotate-list (l) (append (cdr l) (list (car l))))
 (defun last (x &optional (n 1))
-  (unless (integerp n)
-    (error "last &optional n must be integer"))
+  (unless (and (integerp n) (>= n 0))
+    (error "last &optional n must be a non negative integer"))
   (nthcdr (max (- (length x) n) 0) x))
 (defun copy-tree (x) (subst t t x))
 (defun copy-list (x) (nreverse (reverse x)))
