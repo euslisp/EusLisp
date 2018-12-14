@@ -4,7 +4,7 @@ set -e
 export DEBIAN_FRONTEND=noninteractive
 
 function travis_time_start {
-    TRAVIS_START_TIME=$(date +%s%N)
+    TRAVIS_START_TIME=$(date +%s)
     TRAVIS_TIME_ID=$(cat /dev/urandom | LC_ALL=C LC_CTYPE=C tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
     TRAVIS_FOLD_NAME=$1
     echo -e "\e[0Ktravis_fold:start:$TRAVIS_FOLD_NAME"
@@ -14,7 +14,7 @@ function travis_time_start {
 function travis_time_end {
     set +x # disable debug information
     _COLOR=${1:-32}
-    TRAVIS_END_TIME=$(date +%s%N)
+    TRAVIS_END_TIME=$(date +%s)
     TIME_ELAPSED_SECONDS=$(( ($TRAVIS_END_TIME - $TRAVIS_START_TIME)/1000000000 ))
     echo -e "travis_time:end:$TRAVIS_TIME_ID:start=$TRAVIS_START_TIME,finish=$TRAVIS_END_TIME,duration=$(($TRAVIS_END_TIME - $TRAVIS_START_TIME))\n\e[0K"
     echo -e "travis_fold:end:$TRAVIS_FOLD_NAME"
