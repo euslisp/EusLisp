@@ -3,6 +3,11 @@
 set -e
 export DEBIAN_FRONTEND=noninteractive
 
+if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    export LC_CTYPE=C
+    export LC_ALL=C
+fi
+
 function travis_time_start {
     TRAVIS_START_TIME=$(date +%s%N)
     TRAVIS_TIME_ID=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
