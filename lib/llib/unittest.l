@@ -2,6 +2,12 @@
 ;;; based on euslib/jsk/unittest.l by R.Ueda
 ;;;
 
+(load "lib/llib/time.l")
+(defmethod interval-time
+  (:elapsed (tint)
+     (let ((sub (send self :subtract tint)))
+       (+ (float (send sub :second)) (* 0.000001 (send sub :micro))))))
+
 (defvar *unit-test* nil)
 
 (defun escape-xml-string (str1)
@@ -189,10 +195,9 @@
     (format t "TEST-NAME: ~A~%" func-sym)
     (format t "  now testing...~%")
     (send *unit-test* :increment-test func-sym)
-    (setq tm (instance mtimer :init))
-    (send tm :start)
+    (setq tm (now))
     (funcall func)
-    (send *unit-test* :set-time-to-current-result (send tm :stop))))
+    (send *unit-test* :set-time-to-current-result (send (now) :elapsed tm))))
 
 (defun run-all-tests ()
   ;; initalize *unit-test-result*
@@ -227,8 +232,8 @@
            (trace ,name))))
 
     (defmacro assert (pred &optional (message "") &rest args)
-      (with-gensyms
-       (ret)
+      (let
+        ((ret (gensym)))
        `(let* (failure (ret ,pred))
 	  ;; lisp::step could not work with macros..
 	  ;;     (if (and (listp ',pred) (functionp (car ',pred)))

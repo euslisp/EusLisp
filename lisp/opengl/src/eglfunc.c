@@ -22,7 +22,7 @@ pointer EGLGETSTRING(ctx, n, argv)
     return(NIL);
 }
 
-eglfunc(ctx, n, argv)
+pointer eglfunc(ctx, n, argv)
   register context *ctx;
   int n;
   pointer argv[];
@@ -30,7 +30,7 @@ eglfunc(ctx, n, argv)
   defun(ctx, "EGLGETSTRING", argv[0], EGLGETSTRING,NULL);
 }
 
-static init_object_module()
+static void init_object_module()
 { 
   add_module_initializer("eglfunc", eglfunc);
 }

@@ -31,7 +31,11 @@ pointer (**fslot)();
 #endif
 #if ARM
     if (fn->c.code.entry2 != NIL) {
+#if (WORD_SIZE == 64)
+      x = x | (intval(fn->c.code.entry2)&0x00000000ffffffff);
+#else
       x = x | (intval(fn->c.code.entry2)&0x0000ffff);
+#endif
     }
 #endif
     subr=(pointer (*)())(x);

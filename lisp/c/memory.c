@@ -33,7 +33,7 @@ static char *rcsid="@(#)$Id$";
 
 /* Written by I.Hara 01/12/95 */
 #if Solaris2 || Linux
-extern _end();
+extern eusinteger_t _end();
 #elif SunOS4_1
 extern edata;
 #else
@@ -47,8 +47,10 @@ static eusinteger_t top_addr, bottom_addr;
 extern pointer QPARAGC;
 extern pointer K_DISPOSE;
 
-char *maxmemory=(char *)0x100000;
-#if Cygwin
+char *maxmemory=(char *)0x0;
+#if (WORD_SIZE == 64)
+char *minmemory=(char *)0xffffffffffffffff;
+#else
 char *minmemory=(char *)0xffffffff;
 #endif
 long freeheap=0,totalheap=0;	/*size of heap left and allocated*/
@@ -62,7 +64,7 @@ long alloccount[MAXBUDDY];
 static  pointer dispose[MAXDISPOSE];
 static  int dispose_count;
 
-newchunk(k)
+int newchunk(k)
 register int k;
 { register int s;
   register struct chunk *cp;  
@@ -81,11 +83,8 @@ register int k;
   set_heap_range((unsigned int)cp,
       (unsigned int)cp + (s+2)*sizeof(pointer)+(sizeof(pointer)-1));
 #endif
-#if Cygwin
+#if Linux || Cygwin || Darwin
   if (minmemory > (char *)cp) minmemory = (char *)cp;
-  if (maxmemory < (char *)sbrk(0)) maxmemory = (char *)sbrk(0);
-  if (maxmemory < (char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1)) maxmemory = ((char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1));
-#elif Linux
   if (maxmemory < (char *)sbrk(0)) maxmemory = (char *)sbrk(0);
   if (maxmemory < (char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1)) maxmemory = ((char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1));
 #else
@@ -415,16 +414,13 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #if Solaris2 
 #define out_of_heap(p) ((int)p<(int)_end || (pointer)0x20000000<p)
 #else /* Solaris2 */
-#if Linux
+#if Linux || Cygwin || Darwin
 #if (WORD_SIZE == 64)
-#define out_of_heap(p) ((unsigned long)p<(unsigned long)_end || (pointer)maxmemory <p)
+#define out_of_heap(p) ((unsigned long)p<(unsigned long)minmemory || (pointer)maxmemory <p)
 #else
-#define out_of_heap(p) ((unsigned int)p<(unsigned int)_end || (pointer)maxmemory <p)
-#endif
-#else /* Linux */
-#if Cygwin /* Cygwin does not have _end */ || Darwin
 #define out_of_heap(p) ((unsigned int)p<(unsigned int)minmemory || (pointer)maxmemory <p)
-#else /* Cygwin */
+#endif
+#else /* Linux || Cygwin || Darwin */
 #if alpha
 #if THREADED
 #define out_of_heap(p) ((long)p<4 || bottom_addr<(long)p)
@@ -442,8 +438,7 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #endif
 #endif /* SunOS4_1 */
 #endif /* alpha */
-#endif /* Linux */
-#endif /* Cygwin */
+#endif /* Linux || Cygwin || Darwin */
 #endif /* Solaris2 */
 
 
@@ -708,7 +703,7 @@ register int gcmerge;
         p=np;} } }
   }  
 
-call_disposers()
+void call_disposers()
 { int i;
   context *ctx=current_ctx;
   pointer p,a,curclass;
@@ -744,7 +739,7 @@ void sweepall()
   }
 
 #if THREADED
-suspend_all_threads()
+void suspend_all_threads()
 { register int i, self, stat;
   
   self=thr_self();
@@ -754,7 +749,7 @@ suspend_all_threads()
       if (stat) fprintf(stderr, "gc cannot suspend thread %d\n",i);  }
   }
 
-resume_all_threads()
+void resume_all_threads()
 { register int i, self, stat;
   
   self=thr_self();

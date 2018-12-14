@@ -82,12 +82,11 @@
 {\em dividend} を {\em divisor}で割った余りを返す。
 {\tt (mod 6 5)=1, (mod -6 5)=-1, (mod 6 -5)=1, (mod -6 -5)=-1}.}
 
-\funcdesc{1-}{integer}{
-$integer-1$ を返す。コンパイラでは、引数を {\tt integer} と仮定する。}
+\funcdesc{1-}{number}{
+$number-1$ を返す。}
 
-\funcdesc{1+}{integer}{
-$integer+1$ を返す。
-{\bf 1+} と {\bf 1$-$} の引数は、{\tt integer} でなければならない。}
+\funcdesc{1+}{number}{
+$number+1$ を返す。}
 \funcdesc{logand}{\&rest integers}{{\em integers}のビット単位ＡＮＤ。}
 \funcdesc{logior}{\&rest integers}{{\em integers}のビット単位ＯＲ。}
 \funcdesc{logxor}{\&rest integers}{{\em integers}のビット単位ＸＯＲ。}
@@ -109,14 +108,14 @@ $integer+1$ を返す。
 もし {\em count} が負のとき、
 {\em integer} を $\vert${\em count}$\vert$ ビット右にシフトする。}
 
-\funcdesc{ldb}{target position width}{
+\funcdesc{ldb}{target position \&optional (width 8)}{
 LoaD Byte.
 {\bf ldb} や {\bf dpb} のByte型は、 EusLispにないため、代りに
 2個の {\tt integer} を使用する。
 {\em target} のLSBより{\em position}番目の位置からMSBへ {\em width} ビットの
 範囲を抜き出す。例えば、 {\tt (ldb \#x1234 4 4)} は 3となる。}
 
-\funcdesc{dpb}{value target position width}{
+\funcdesc{dpb}{value target position \&optional (width 8)}{
 DePosit Byte.
 {\em target}のLSBより{\em position}番目の位置へ{\em value}を
 {\em width}ビット置き換える。}
@@ -131,8 +130,9 @@ DePosit Byte.
 もし {\em more-numbers} が与えられたとき、{\em num}より引く。
 そうでないとき、{\em num} は符号反転される。}
 \funcdesc{*}{\&rest numbers}{{\em numbers}の積を返す。}
-\funcdesc{/}{num1 num2 \&rest more-numbers}{
-{\em num1} を、{\em num2} や {\em more-numbers}で割り算する。
+\funcdesc{/}{num \&rest more-numbers}{
+{\em num} を、{\em more-numbers}で割り算する。
+{\em num} のみ渡された場合、1.0を{\em num}で割り算する。
 全ての引数が{\tt integer}のとき、{\tt integer}を返し、
 引数に1つでも{\tt float}があったときは、{\tt float}を返す。}
 \funcdesc{abs}{number}{{\em number}の絶対値を返す。}
@@ -155,25 +155,25 @@ DePosit Byte.
 \funcdesc{float}{number}{
  {\em number}を{\tt float}にして返す。}
 
-\funcdesc{max}{\&rest numbers}{
- {\em numbers}の中から、最大値をさがす。}
+\funcdesc{max}{num \&rest more-numbers}{
+ {\em num}と{\em more-numbers}の中から、最大値をさがす。}
 
-\funcdesc{min}{\&rest numbers}{
-{\em numbers}の中から、最小値をさがす。}
+\funcdesc{min}{num \&rest more-numbers}{
+ {\em num}と{\em more-numbers}の中から、最小値をさがす。}
 
-\funcdesc{make-random-state}{\&optional state}{
+\funcdesc{make-random-state}{\&optional (state *random-state*)}{
   {\em random}関数の{\em randstate}のための{\em random-state}オブジェクトを返す。
 もし {\em state} が{\em random-state}のとき、そのオブジェクトのコピーを返す。
 {\em state}がTのとき、ランダムに初期化された新たなオブジェクトを返す。
 そうでないとき、現在の{\em *random-state*}のコピーを返す。
 }
 
-\funcdesc{random}{range \&optional (randstate *random-state*)}{
+\funcdesc{random}{range \&optional (state *random-state*)}{
  0あるいは0.0 から {\em range}までの乱数を返す。
 もし {\em range} が {\tt integer}のとき、
 {\tt integer} に変換して返す。
 そうでないとき、{\tt float} を返す。
-オプションの{\em randstate} は、決まった乱数列で表される。
+オプションの{\em state} は、決まった乱数列で表される。
 {\em randstate}に特別なデータの型はなく、
 2つの要素からなる 整数ベクトルで表される。
 }
@@ -182,7 +182,7 @@ DePosit Byte.
 {\em variable} は一般の変数である。
 {\em variable} は、{\em increment}だけ増加され、
 {\em variable}に戻される。}
-\macrodesc{decf}{variable \&optional decrement}{
+\macrodesc{decf}{variable \&optional (decrement 1)}{
 {\em variable} は一般の変数である。
 {\em variable} は、{\em decrement}だけ減少され、
 {\em variable}に戻される。}
@@ -214,8 +214,8 @@ $\frac{e^{x}-e^{-x}}{2}$で表される。}
 $\frac{e^{x}+e^{-x}}{2}$で表される。}
 \funcdesc{tanh}{x}{ hyperbolic tangent、
 $\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$で表される。}
-\funcdesc{asin}{number}{{\em number}のarc sineを返す。}
-\funcdesc{acos}{number}{{\em number}のarc cosineを返す。}
+\funcdesc{asin}{x}{arc sine.}
+\funcdesc{acos}{x}{arc cosine.}
 \funcdesc{atan}{y \&optional x}{
 {\bf atan} が1つの引数だけのとき、arctangent を計算する。
 2つの引数のとき、{\tt atan}$(y/x)$ を計算する。}
@@ -225,12 +225,13 @@ $\frac{e^{x}+e^{-x}}{e^{x}-e^{-x}}$で表される。}
 
 \funcdesc{sqrt}{number}{{\em number} の平方根を返す。}
 
-\funcdesc{log}{number}{{\em number} の自然対数を返す。}
+\funcdesc{log}{number \&optional base}{{\em number} の自然対数を返す。
+{\em base}が渡された時、{\em base}に対する{\em number}の対数を返す。}
 
 \funcdesc{exp}{x}{$e^{x}$を返す。}
 
-\funcdesc{expt}{a x}{
-{\em a}の{\em x}乗を返す。}
+\funcdesc{expt}{a x}{$a^{x}$を返す。}
+
 \end{refdesc}
 
 \newpage

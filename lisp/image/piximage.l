@@ -662,15 +662,17 @@
 	   (sheight (/ (send self :height) 2)))
 	 (if (null simage)
 	     (setq simage (instance class :init swidth sheight)))
-	(halve-image self simage pixel-bytes)
+	 ;;(halve-image self simage pixel-bytes)
+	 (halve-image self simage) ;; inaba 2018.11.16
         simage))
  (:double (&optional (simage)) 	;256x256 -> 512*512
     (let* ((swidth (* (send self :width) 2))
 	   (sheight (* (send self :height) 2)))
 	 (if (null simage)
 	     (setq simage (instance (class self) :init swidth sheight)))
-	(double-image self simage pixel-bytes)
-        simage))
+	 ;; (double-image self simage pixel-bytes)
+	 (double-image self simage) ;;  inaba 2018.11.16
+	 simage))
  (:display (&optional (xw geometry:*viewsurface*) (x 0) (y 0))
     (let ((bpp (send xw :depth)))
       (case bpp

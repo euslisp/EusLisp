@@ -902,7 +902,7 @@ pointer argv[];
 /*		worldp: nil--local(mult rot mat from the right)
 /*			t----world(mult rot mat from the left)
 /****************************************************************/
-static copymat(dest,src,size)
+static void copymat(dest,src,size)
 pointer dest,src;
 register int size;
 { register int i;
@@ -1285,7 +1285,7 @@ pointer argv[];
   if (stat<0) return(NIL);
   else return(pv);}
 
-static solve(a,pv,s,b,x)
+static void solve(a,pv,s,b,x)
 register eusfloat_t *a;
 pointer b,x,pv;
 int s;

@@ -261,7 +261,7 @@ eusinteger_t labx;
     pointer_update(*unsolp,result); }
   return(result);}
 
-static addunsolved(labp,addr)
+static void addunsolved(labp,addr)
 pointer labp;
 pointer *addr;
 { pointer_update(*addr,labp->c.lab.unsolved);
@@ -276,6 +276,7 @@ pointer *addr;
 }
 
 static pointer readlabref(ctx,f,val,subchar)
+register context *ctx;
 pointer f;
 eusinteger_t val;
 int subchar;
@@ -711,7 +712,7 @@ char token[];
       error(E_EXTSYMBOL,pkgstr);}
   } }
 
-/* STUPID news does not have strtol routine!*/
+/* news does not have strtol routine! */
 #if news || sanyo
 int strtol(str,ptr,base)
 register char *str,**ptr;
@@ -766,7 +767,7 @@ int len;
   ctx->lastalloc= vpop();
   return(b);}
 
-is_digit(ch,base)
+int is_digit(ch,base)
 register int ch,base;
 { if (ch<'0') return(FALSE);
   if (base<=10)
@@ -823,12 +824,15 @@ pointer f;
   return(cons(ctx,QUOTE,cons(ctx,q,NIL)));}
 
 static pointer readcomment(ctx,f)
+register context *ctx;
 pointer f;
 { register Char ch;
   do { ch=readch(f);} while (ch!='\n' && ch!=EOF);
   return(UNBOUND);}
 
 static pointer readrparen(ctx,f)
+register context *ctx;
+pointer f;
 { return(UNBOUND);}
 
 
