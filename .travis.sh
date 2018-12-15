@@ -5,7 +5,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 function travis_time_start {
     TRAVIS_START_TIME=$(date +%s%N)
-    TRAVIS_TIME_ID=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
+    TRAVIS_TIME_ID=$(cat /dev/urandom | LC_ALL=C LC_CTYPE=C tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
     TRAVIS_FOLD_NAME=$1
     echo -e "\e[0Ktravis_fold:start:$TRAVIS_FOLD_NAME"
     echo -e "\e[0Ktravis_time:start:$TRAVIS_TIME_ID"
