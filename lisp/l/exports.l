@@ -39,7 +39,7 @@
 ;; specials.c
   (export '(quote eval apply funcall progn prog1 function))
   (export '(mapc mapcar mapcan setq if when cond while let let* 
-		unwind-protect catch throw flet labels block return-from
+		unwind-protect catch throw macrolet flet labels block return-from
 		return reset go tagbody evalhook macroexpand2 eval-when
 		the and or proclaim declare symbol-value symbol-function
 		makunbound defun defmacro find-symbol intern gensym
@@ -87,7 +87,7 @@
 	  NTH  NTHCDR  CONS  RPLACA  RPLACA2  RPLACD  RPLACD2
 	  APPEND  NCONC  SUBST  NSUBST
 	  ATOM  EQ  EQL  NULL  NOT  LIST  LIST*  EQUAL  SUPEREQUAL
-	  MEMQ  MEMBER  SUPERMEMBER  ASSQ  ASSOC  SUPERASSOC
+	  MEMQ  MEMBER  ASSQ  ASSOC
 	  BUTLAST  NBUTLAST  SYMBOLP  STRINGP  LISTP  CONSP
 	  ENDP  NUMBERP  INTEGERP  FLOATP  BOUNDP  FBOUNDP  STREAMP))
 

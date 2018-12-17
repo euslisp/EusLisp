@@ -22,11 +22,13 @@
 	case classcase otherwise
 	string alias
 	caaar caadr cadar cdaar cdadr cddar cdddr
-	fourth fifth sixth seventh eighth 
-	cadddr cddddr cadddr caaddr cdaddr caddddr
+	fourth fifth sixth seventh eighth ninth tenth
+	caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr
+	cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr caddddr
 	flatten list-insert list-delete adjoin union intersection
 	set-difference set-exclusive-or rotate-list last copy-tree
-	copy-list nreconc rassoc acons member assoc subsetp maplist mapcon))
+	copy-list nreconc acons member assoc assoc-if assoc-if-not
+        rassoc rassoc-if rassoc-if-not subsetp maplist mapcon))
 
 (export '(find find-if find-if-not position position-if position-if-not
 	count count-if count-if-not member-if member-if-not 
@@ -137,11 +139,15 @@
 
 (defmacro defparameter (var init &optional (doc nil))
    (unless (symbolp var) (error 20))
-   `(send ',var :global ,init ,doc))
+   `(progn
+	(send ',var :global ,init ,doc)
+	',var))
 
 (defmacro defconstant (sym val &optional doc)
    (unless (symbolp sym) (error 20))
-   `(send ',sym :constant ,val ,doc) )
+   `(progn
+	(send ',sym :constant ,val ,doc)
+	',sym))
   
 
 (defmacro dotimes (vars &rest forms)
@@ -346,19 +352,31 @@
 (alias 'first 'car)
 (alias 'second 'cadr)
 (alias 'third 'caddr)
-(defun fourth (x) (cadr (cddr x)))
-(defun fifth  (x) (caddr (cddr x)))
-(defun sixth  (x) (caddr (cdddr x)))
-(defun seventh  (x) (caddr (cddddr x)))
+(defun fourth  (x) (cadr (cddr x)))
+(defun fifth   (x) (caddr (cddr x)))
+(defun sixth   (x) (caddr (cdddr x)))
+(defun seventh (x) (caddr (cddddr x)))
 (defun eighth  (x) (cadddr (cddddr x)))
-#|
-(defun cadddr (x) (car (cdddr x)))
-|#
-(defun cddddr (x) (cddr (cddr x)))
-(defun cadddr (x) (cadr (cddr x)))
+(defun ninth   (x) (car (cddddr (cddddr x))))
+(defun tenth   (x) (cadr (cddddr (cddddr x))))
+(defun caaaar (x) (caar (caar x)))
+(defun caaadr (x) (caar (cadr x)))
+(defun caadar (x) (caar (cdar x)))
 (defun caaddr (x) (caar (cddr x)))
+(defun cadaar (x) (cadr (caar x)))
+(defun cadadr (x) (cadr (cadr x)))
+(defun caddar (x) (cadr (cdar x)))
+(defun cadddr (x) (cadr (cddr x)))
+(defun cdaaar (x) (cdar (caar x)))
+(defun cdaadr (x) (cdar (cadr x)))
+(defun cdadar (x) (cdar (cdar x)))
 (defun cdaddr (x) (cdar (cddr x)))
+(defun cddaar (x) (cddr (caar x)))
+(defun cddadr (x) (cddr (cadr x)))
+(defun cdddar (x) (cddr (cdar x)))
+(defun cddddr (x) (cddr (cddr x)))
 (defun caddddr (x) (cadr (cdddr x)))
+
 (defun flatten (l &optional accumulator)
   (cond
    ((null l) accumulator)
@@ -436,14 +454,21 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 (defun copy-tree (x) (subst t t x))
 (defun copy-list (x) (nreverse (reverse x)))
 (defun nreconc (x y) (nconc (nreverse x) y))
-(defun rassoc (item alist)
-  (dolist (a alist)
-     (if (equal item (cdr a)) (return-from rassoc a))))
 (defun acons (key datum alist) (cons (cons key datum) alist))
 (defun member (item list &key key test test-not)
-   (supermember item list key test test-not))
+   (system::raw-member item list key test test-not))
 (defun assoc (item alist &key key test test-not)
-   (superassoc item alist key test test-not))
+  (system::raw-assoc item alist key test test-not nil nil nil))
+(defun assoc-if (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil nil pred nil))
+(defun assoc-if-not (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil nil nil pred))
+(defun rassoc (item alist &key key test test-not)
+  (system::raw-assoc item alist key test test-not t nil nil))
+(defun rassoc-if (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil t pred nil))
+(defun rassoc-if-not (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil t nil pred))
 (defun subsetp (sub super &key key test test-not)
    (every #'(lambda (s) (member s super :key key :test test :test-not test-not))
 	  sub))
