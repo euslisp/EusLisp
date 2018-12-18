@@ -11,10 +11,10 @@ static char *rcsid= "@(#)$Id: RGBHLS.c,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $";
 #pragma init (init_object_module)
 pointer RGBHLS();
 
-static init_object_module()
+static void init_object_module()
   { add_module_initializer("RGBHLS", RGBHLS);}
 
-rgb_to_hls(r,g,b,h,l,s)
+void rgb_to_hls(r,g,b,h,l,s)
 int r,g,b;	/* inputs 0..255*/
 int *h, *l, *s;
 { 
@@ -46,7 +46,7 @@ int *h, *l, *s;
   *h /= 6;}
 
 
-hls_to_rgb(h,l,s,r,g,b)
+void hls_to_rgb(h,l,s,r,g,b)
 int h,l,s;
 int *r, *g, *b;
 { float v; }

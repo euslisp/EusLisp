@@ -66,6 +66,7 @@ pointer argv[];
 
 pointer NEWSTACK(ctx,n,argv)
 context *ctx;
+int n;
 pointer argv[];
 { eusinteger_t newsize;
   if (n==0) return(makeint((ctx->stacklimit+100-ctx->stack)));
@@ -78,6 +79,7 @@ pointer argv[];
 
 pointer DISPOSE_HOOK(ctx,n,argv)
 context *ctx;
+int n;
 pointer argv[];
 { 
 #ifndef RGC
@@ -97,10 +99,10 @@ pointer argv[];
 #if Solaris2
 extern _end();
 #else
-extern edata();
+extern eusinteger_t edata();
 #endif
 
-xmark(ctx,p)
+int xmark(ctx,p)
 register context *ctx;
 register pointer p;
 { register int s;
@@ -287,6 +289,7 @@ pointer x;
 
 pointer OBJSIZE(ctx,n,argv)
 register context *ctx;
+int n;
 pointer argv[];
 { register pointer a=argv[0];
   ckarg2(1,2);

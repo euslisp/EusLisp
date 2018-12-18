@@ -11,7 +11,7 @@ static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
-maerror()
+int maerror()
 { error(E_MISMATCHARG);}
 
 pointer loadglobal(s)
