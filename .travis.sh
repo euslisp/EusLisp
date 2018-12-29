@@ -170,7 +170,7 @@ fi
     # run test in jskeus/irteus
     for test_l in irteus/test/*.l; do
 
-        [[ ("`uname -m`" == "arm"* || "`uname -m`" == "aarch"*) && $test_l =~ geo.l|mathtest.l|interpolator.l|test-irt-motion.l|test-pointcloud.l|irteus-demo.l ]] && continue;
+        [[ ("`uname -m`" == "arm"* || "`uname -m`" == "aarch"*) && $test_l =~ geo.l|mathtest.l|interpolator.l|test-irt-motion.l|irteus-demo.l ]] && continue;
 
         travis_time_start irteus.${test_l##*/}.test
 
