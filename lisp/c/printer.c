@@ -20,7 +20,7 @@ static char *rcsid="@(#)$Id$";
 #define to_upper(c) (islower(c) ? ((c)-'a'+'A') : (c))
 #define to_lower(c) (isupper(c) ? ((c)-'A'+'a') : (c))
 
-extern pointer PRCIRCLE,PROBJECT,PRSTRUCTURE,PRCASE,PRLENGTH,PRLEVEL,PRINTBASE;
+extern pointer PRCIRCLE,PROBJECT,PRSTRUCTURE,PRCASE,PRLENGTH,PRLEVEL,PRINTBASE,PRPRECISION;
 extern pointer QREADTABLE;
 extern pointer K_PRIN1;
 static void prin1(context *, pointer, pointer, int);
@@ -182,6 +182,20 @@ int base, field1, field2;
   writestr(f,(byte *)&work[i],65-i);
   }
 
+static pointer printfltpre(num,f,p)
+double num;
+pointer f;
+int p;
+{ char* work;
+  register int len;
+  if (num==0.0) writestr(f,(byte *)"0.0",3);
+  else{
+    work=(char *)malloc((p+6)*sizeof(char));
+    sprintf(work,"%1.*g",p,num);
+    len=strlen(work);
+    writestr(f,(byte *)work,len);
+    free(work);}}
+
 static pointer printflt(num,f)
 double num;
 pointer f;
@@ -279,6 +293,7 @@ int field1, field2;
 { numunion nu;
 
   if (isint(nump)) printint(ctx,intval(nump), strm, base, field1, field2);
+  else if (isflt(nump) && Spevalof(PRPRECISION)!=NIL && isint(Spevalof(PRPRECISION))) printfltpre(fltval(nump),strm,intval(Spevalof(PRPRECISION)));
   else if (isflt(nump)) printflt(fltval(nump),strm);
   else if (pisbignum(nump)) printbig(ctx,nump, strm, base, field1, field2);
   else if (pisratio(nump)) printratio(ctx, nump, strm, base);
@@ -377,7 +392,10 @@ int prlevel;
     case ELM_FLOAT:
 	  writestr(f,(byte *)"#f(",3);
 	  while (i<n && prlength>0) {
-	    printflt(vec->c.fvec.fv[i++],f);
+	    if (Spevalof(PRPRECISION)!=NIL && isint(Spevalof(PRPRECISION)))
+	      printfltpre(vec->c.fvec.fv[i++],f,intval(Spevalof(PRPRECISION)));
+	    else
+	      printflt(vec->c.fvec.fv[i++],f);
 	    if(i<n) writech(f,' ');
 	    prlength--; }
 	  if (i<n) writestr(f,(byte *)"... ",4);
@@ -427,7 +445,11 @@ int prlevel,index;
 			0,0);
 	  break;
     case ELM_FLOAT:
-	  printflt(vec->c.fvec.fv[index],f); break;
+	  if (Spevalof(PRPRECISION)!=NIL && isint(Spevalof(PRPRECISION)))
+	    printfltpre(vec->c.fvec.fv[index],f,intval(Spevalof(PRPRECISION)));
+	  else
+	    printflt(vec->c.fvec.fv[index],f);
+	  break;
     default:
 	  prin1(ctx,vec->c.vec.v[index],f,prlevel);
     }}
