@@ -31,7 +31,7 @@
 使用すること。
 }
 
-\funcdesc{subseq}{sequence start [end]}{
+\funcdesc{subseq}{sequence start \&optional end}{
 {\em sequence}の{\em start}番目から({\em end}$-$1)番目までをそっくりコピーした
 列を作る。
 {\em end}は、デフォルト値として{\em sequence}の長さをとる。}
@@ -51,7 +51,7 @@
 {\bf nreverse}は、{\bf reverse}の破壊(destructive)バージョンである。
 {\bf reverse}はメモリを確保するが、{\bf nreverse}はしない。}
 
-\funcdesc{concatenate}{result-type \{sequence\}*}{
+\funcdesc{concatenate}{result-type \&rest sequences}{
 全ての{\em sequence}を連結させる。
 それぞれの{\em sequence}は、なにかの列型である。
 {\bf append}と違って、最後の一つまで含めた全ての列がコピーされる。
@@ -245,9 +245,9 @@ atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 \funcdesc{cons}{car cdr}{
 {\tt car}が{\em car}で{\tt cdr}が{\em cdr}であるような新しいconsを作る。}
 
-\funcdesc{list}{\{element\}*}{{\em element}を要素とするリストを作る。}
+\funcdesc{list}{\&rest elements}{makes a list of {\em elements}.}
 
-\funcdesc{list*}{\{element\}*}{
+\funcdesc{list*}{\&rest elements}{
 {\em element}を要素とするリストを作る。しかし、最後の要素は{\bf cons}されるため、
 atomであってはならない。
 例えば、{\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}である。}
@@ -298,11 +298,11 @@ atomであってはならない。
 {\em alist}に{\em key val}の組を付け加える。
 {\tt (cons (cons key val) alist)}と同等である。}
 
-\funcdesc{append}{\{list\}*}{
+\funcdesc{append}{\&rest list}{
 新しいリストを形成するために{\em list}を連結させる。
 最後のリストを除いて、{\em list}のなかの全ての要素はコピーされる。}
 
-\funcdesc{nconc}{\{list\}*}{
+\funcdesc{nconc}{\&rest list}{
 それぞれの{\em list}の最後の{\bf cdr}を置き換える事によって、{\em list}を
 破壊的に(destructively)連結する。}
 
@@ -337,16 +337,13 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 {{\em list1}が{\em list2}の部分集合であること、すなわち、
 {\em list1}のそれぞれの要素が{\em list2}のメンバーであることをテストする。}
 
-\funcdesc{intersection}{list1 list2
- \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
+\funcdesc{intersection}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
 2つのリスト{\em list1}と{\em list2}の積集合を返す。}
 
-\funcdesc{set-difference}{list1 list2
-\&key (:test \#'eq) (:test-not) (:key \#'identity)}{
+\funcdesc{set-difference}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
 {\em list1}にのみ含まれていて
 {\em list2}に含まれていない要素からなるリストを返す。}
-\funcdesc{set-exclusive-or}{list1 list2
- \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
+\funcdesc{set-exclusive-or}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
 {\em list1}および{\em list2}にのみ現れる要素からなるリストを返す。}
 \funcdesc{list-insert}{item pos list}{
 {\em list}の{\em pos}番目の要素として{\em item}を挿入する
@@ -440,7 +437,7 @@ dims \&key \= (:element-type vector) \` [関数] \\
 {\em vector}の{\em pos}番目の要素を返す。
 {\em vector}は、一次元一般ベクトルでなければならない。}
 
-\funcdesc{aref}{vector \&rest (indices)}{
+\funcdesc{aref}{vector \&rest indices}{
 {\em vector}の{\em indices}によってインデックスされる要素を返す。
 {\em indices}は、整数であり、{\em vector}の次元の数だけ指定する。
 {\bf aref}は、非効率的である。なぜなら、{\em vector}の型に従うように

@@ -45,7 +45,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 {\bf identity}は、多くの一般列関数の{\em :key}パラメータのデフォルト値
 としてしばしば用いられる。}
 
-\funcdesc{eval}{form [environment]}{
+\funcdesc{eval}{form \&optional environment}{
 {\em form}を評価して、その値を返す。
 もし、{\bf *evalhook*}に{\em form}や{\em environment}を受ける関数を
 設定するならば、hook関数を評価に入る前に呼び出すことができる。}
@@ -71,7 +71,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 \specialdesc{function}{func}{closure関数を作る。
 もし、{\em func}がsymbolならば、その関数定義が検索される。}
 
-\funcdesc{evalhook}{hookfunc form [env]}{
+\funcdesc{evalhook}{hookfunc form \&optional env}{
 {\em hookfun}を{\bf *evalhook*}に結び付けた後、{\em form}を一度評価する。}
 
 \funcdesc{eval-dynamic}{variable}{
@@ -82,7 +82,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 もし、展開したものがまだマクロcallを含んでいるならば、
 マクロcallのない結果となるまでくり返し展開する。}
 
-\specialdesc{eval-when}{situation \{form\}*}{
+\specialdesc{eval-when}{situation \&rest forms}{
 {\em situation}は{\tt compile, load, eval}のリストである。
 {\em form}は、現在の実行モードが{\em situation}と一致するときに評価される。
 {\bf eval-when}は、コンパイラでの動作や環境を制御するために重要なものである。
@@ -103,7 +103,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 {\em type}は、{\tt :integer, :fixnum, :float}で示されるクラスオブジェクト
 のどれかである。}
 
-\specialdesc{declare}{declaration*}{
+\specialdesc{declare}{\&rest declarations}{
 それぞれ{\em declaration}は、宣言指定や整数あるいは目的のsymbolのリストである。
 宣言は、コンパイラが高速なコードを生成するために重要である。
 \begin{description}
@@ -377,7 +377,7 @@ closureの中の{\bf return-from}特殊書式と{\bf unwind-protect}の中のcle
 
 \begin{refdesc}
 
-\functiondescription{euscomp}{\{filename\}*}{UNIXコマンド}{
+\functiondescription{euscomp}{\&rest filename}{UNIXコマンド}{
 Euslispコンパイラを呼びだす。}
 
 \longdescription{compile-file}{srcfile \&key \= (:verbose nil) \hspace{43mm} \=
@@ -540,7 +540,7 @@ Solaris2 OSにおいて、コンパイルコードのロードは、動的ロー
 slotの中に深く入ったりあるいは新しい値をslotに設定したりする。
 '?'命令でサブ命令のメニューを見ることができる。}
 
-\funcdesc{more} {\&rest forms}{
+\funcdesc{more}{\&rest forms}{
 {\bf *standard-output*}にテンポラリーファイルを結び付けて
 {\em forms}を評価した後、そのテンポラリーファイルをUNIXの'more'命令
 を使用して{\bf *standard-output*}に出力する。
@@ -602,7 +602,7 @@ symbolをすべてリスト出力する。}
 \funcdesc{sys:list-all-catchers}{}{
 すべての{\bf catch}タグを返す。}
 
-\funcdesc{sys:list-all-instances}{aclass [scan-sub]}{
+\funcdesc{sys:list-all-instances}{aclass \&optional scan-sub}{
 すべてのヒープの中から{\em aclass}で指定されるインスタンスをすべて
 探し、集める。
 もし、{\em scan-sub}がNILなら、{\em aclass}の確実なインスタンスを

@@ -82,11 +82,11 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 メソッドが新しいスロット配置を仮定するため、
 以前のクラスを継承する古いオブジェクトは予想できない振舞いをする。}
 
-\specialdesc{defmethod}{classname \{(selector lambda-list . body)\}*}{
+\specialdesc{defmethod}{classname \&rest (selector lambda-list \&rest body)}{
 {\em classname}の1つ以上のメソッドを定義する。
 それぞれの{\em selector}は、キーワードsymbolでなければならない。}
 
-\macdesc{defclassmethod}{classname \{(selector lambda-list . body)\}*}
+\macdesc{defclassmethod}{classname \&rest (selector lambda-list \&rest body)}
 
 \funcdesc{classp}{object}{{\em object}がクラスオブジェクトのときTを返す。
 そのオブジェクトは、クラス{\bf metaclass}かそのサブクラスの
@@ -125,12 +125,12 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 \subsection{メッセージ送信}
 \begin{refdesc}
 
-\funcdesc{send}{object selector \{arg\}*}{
+\funcdesc{send}{object selector \&rest args}{
 {\em object}に{\em selector}と{\em arg}で構成されるメッセージを送信する。
 {\em object}は、何でもよいが数値はいけない。
 {\em selector}はキーワードとして評価されなければならない。}
 
-\funcdesc{send-message}{target search selector \{arg\}*}{
+\funcdesc{send-message}{target search selector \&rest args}{
 {\bf send-super}を実行するための低レベル命令である。}
 
 \macrodesc{send*}{object selector \&rest msg-list}{
@@ -201,10 +201,10 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 {\bf subclassp}と{\bf derivedp}関数は、クラス継承のなかを探索できない。
 したがって、一定時間内に型のチェックがいつも終了する。}
 
-\funcdesc{slot}{object class (index $|$ slot-name)}{
+\funcdesc{slot}{object class idex-or-name}{
 スロット値の名前かインデックスを返す。}
 
-\funcdesc{setslot}{object class (index $|$ slot-name) value}{
+\funcdesc{setslot}{object class index-or-name value}{
 {\bf setslot}は、内部処理関数でユーザーが使用できない。
 代りに、{\bf setf}と{\bf slot}の組み合せを使用する。}
 

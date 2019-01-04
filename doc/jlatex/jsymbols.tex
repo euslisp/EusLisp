@@ -84,9 +84,9 @@ property-listを持つことができる。
 \funcdesc{remprop}{sym attr}{
 属性値({\em attr})と{\em sym}の組をproperty-listから削除する。}
 
-\specialdesc{setq}{\{var value\}*}{
-{\em value}を{\em var}に割り当てる。{\em var}は、symbolか点で継った組である。
-{\em var}は、ローカル変数・オブジェクト変数・特殊変数の順番にその名前の中から探される。
+\specialdesc{setq}{\&rest forms}{
+{\em forms}中の各formにおいて、第二要素をsymbolか点で継った組である第一要素に割り当てる。
+第一要素は、ローカル変数・オブジェクト変数・特殊変数の順番にその名前の中から探される。
 ただし、明確にspecialと宣言されてないものに限る。}
 
 \funcdesc{set}{sym val}{
@@ -94,13 +94,12 @@ property-listを持つことができる。
 {\bf set}は、ローカル変数やオブジェクト変数に値を
 割当てることはできない。}
 
-\specialdesc{defun}{symbol [documentation] lambda-list . body}{
+\specialdesc{defun}{symbol lambda-list \&rest body}{
 {\em symbol}にグローバル関数を定義する。
-ローカル関数を定義するためには、{\bf flet}か{\bf labels}を使用すること。
-もし、{\em documentation}が与えられない場合、lambda-listに書かれている
-デフォルトのdocumentation文字列が入力される。}
+{\em body}の第一要素がstringであれば、documentationとして使用される。
+ローカル関数を定義するためには、{\bf flet}か{\bf labels}を使用すること。}
 
-\specialdesc{defmacro}{symbol [documentation] lambda-list . body}{
+\specialdesc{defmacro}{symbol lambda-list \&rest body}{
 グローバルマクロを定義する。
 EusLispは、ローカルスコープマクロ定義の機能を持っていない。}
 
@@ -295,7 +294,7 @@ symbol名と{\em sym}が重複していないかどうかを検査する。
 そのときの{\em forms}の評価が返される。}
 
 
-\macrodesc{do-all-symbols}{(var [result]) \&rest forms}{
+\macrodesc{do-all-symbols}{(var \&optional result) \&rest forms}{
 全てのパッケージにおいて、symbolに対して繰り返しをする。そのときの{\em forms}の評価が返される。
 もし、1つ以上のパッケージの中にそのsymbolが現れたならば、{\em forms}は、
 1度以上評価される。}

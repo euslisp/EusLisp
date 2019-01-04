@@ -93,9 +93,9 @@ Putprop should be replaced with the combination of {\bf setf} and {\bf get}.}
 \funcdesc{remprop}{sym attr}{
 removes attribute-value pair from {\em sym}'s property list.}
 
-\specialdesc{setq}{\{var value\}*}{
-assigns {\em value} to {\em var} which is either a symbol or a dotted-pair.
-{\em Var} is searched for in the name spaces of local variables,
+\specialdesc{setq}{\&rest forms}{
+for each form in {\em forms}, assigns the second element to the first element, which is either a symbol or a dotted-pair.
+The first element is searched for in the name spaces of local variables,
 object variables, and special variables in this order unless explicitly
 declared special.}
 
@@ -104,13 +104,12 @@ assigns {\em val} to the special value of {\em sym}.
 {\bf Set} cannot assign values to local or object
 variables.}
 
-\specialdesc{defun}{symbol [documentation] lambda-list . body}{
+\specialdesc{defun}{symbol lambda-list \&rest body}{
 defines a global function to {\em symbol}.
-Use {\em flet} or {\em labels} for defining local functions.
-If no {\em documentation} is given, a default documentation string
-describing the lambda-list is entered.}
+First element in {\em body} can be a documentation string.
+Use {\em flet} or {\em labels} for defining local functions.}
 
-\specialdesc{defmacro}{symbol [documentation] lambda-list . body}{
+\specialdesc{defmacro}{symbol lambda-list \&rest body}{
 defines a global macro.
 EusLisp does not have facilities for defining locally scoped macros.}
 
@@ -306,7 +305,7 @@ to symbols (internal or external) in {\em pkg}.}
 repeats evaluating forms for each binding of {\em var}
 to external symbols in {\em pkg}.}
 
-\macrodesc{do-all-symbols}{(var [result]) \&rest forms}{
+\macrodesc{do-all-symbols}{(var \&optional result) \&rest forms}{
 repeats evaluating forms for each binding of {\em var}
 to symbols in all packages.
 Note that forms may be evaluated more than once to a symbol if it

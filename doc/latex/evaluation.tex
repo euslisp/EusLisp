@@ -43,7 +43,7 @@ Therefore, {\tt (identity 'abc)} is evaluated to {\tt abc} and
 {\bf Identity} is often used as the default value for {\tt :key} parameters
 of many generic sequence functions.}
 
-\funcdesc{eval}{form [environment]}{
+\funcdesc{eval}{form \&optional environment}{
 evaluates {\em} form and returns its value.
 Hook function can be called before entering the evaluation,
 if {\bf *evalhook*} is set to some function that accept form and environment.}
@@ -69,8 +69,8 @@ the {\em func} requests.}
 \specialdesc{function}{func}{makes a function closure.
 If {\em func} is a symbol, its function definition is retrieved.}
 
-\funcdesc{evalhook}{hookfunc form [env]}
-{evaluates {\em form} once after binding {\em hookfunc} to {\bf *evalhook*}.}
+\funcdesc{evalhook}{hookfunc form \&optional env}{
+evaluates {\em form} once after binding {\em hookfunc} to {\bf *evalhook*}.}
 
 \funcdesc{eval-dynamic}{variable}{
 finds the value of {\em variable} (symbol) on the stack.}
@@ -80,7 +80,7 @@ expands {\em form} if it is a macro call.
 If {\em form} is expanded to a macro call again, 
 expansion is repeated until non macro call results.}
 
-\specialdesc{eval-when}{situation \{form\}*}{
+\specialdesc{eval-when}{situation \&rest forms}{
 Situation is a list of {\tt compile, load and eval}.
 Forms are evaluated when the current
 execution mode matches with situation.
@@ -102,7 +102,7 @@ are evaluated when their source code is loaded.}
 {Declares {\em form} is of {\em type}.
 {\em type} is either a class object, :integer, :fixnum, or :float.}
 
-\specialdesc{declare}{declaration*}{
+\specialdesc{declare}{\&rest declarations}{
 Each {\em declaration} is a list of a declaration specifier and an integer
 or target symbols.
 Declarations are important to let the compiler produce faster code.
@@ -264,7 +264,8 @@ or user-saved euslisp.}
 
 \funcdesc{eustop}{\&rest argv}{is the default toplevel loop.}
 
-\funcdesc{eussig}{sig code}{is the default signal hander for SIGPIPE.
+\funcdesc{eussig}{sig code}{
+is the default signal hander for SIGPIPE.
 {\bf eussig} prints signal number upon its arrival and enters
 another toplevel loop.}
 
@@ -419,7 +420,7 @@ or use {\tt adb}.
 
 \begin{refdesc}
 
-\functiondescription{euscomp}{\{filename\}*}{unix-command}{
+\functiondescription{euscomp}{\&rest filename}{unix-command}{
 Invokes EusLisp compiler.}
 
 \longdescription{compile-file}{srcfile \&key \= (:verbose nil) \hspace{43mm} \=  \`[function]\\
@@ -438,8 +439,8 @@ levels.
 EusLisp core during the make stage.
 }
 
-\funcdesc{compile}{funcname}{compiles a function. {\bf Compile} first
-prints the function definition into a temporary file.
+\funcdesc{compile}{funcname}{compiles a function. {
+\bf Compile} first prints the function definition into a temporary file.
 The file is compiled by {\bf compile-file} and then is loaded by {\bf load}.
 Temporary files are deleted.}
 
@@ -588,7 +589,7 @@ It accepts subcommands to print each slot of an object,
 to go deeper into a slot, or set a new value to a slot, etc.
 Use '?' command to see the subcommand menu.}
 
-\funcdesc{more} {\&rest forms}{
+\funcdesc{more}{\&rest forms}{
 After evaluating forms
 with the binding of *standard-output* to a temporary file,
 the temporary file is output to *standard-output* with Unix's 'more' command.
@@ -659,7 +660,7 @@ begins measurement of time elapsed by {\em function}.}
 \funcdesc{sys:list-all-catchers}{}{
 returns a list of all {\bf catch} tags.}
 
-\funcdesc{sys:list-all-instances}{aclass [scan-sub]}{
+\funcdesc{sys:list-all-instances}{aclass \&optional scan-sub}{
 scans in the overall heap, and collects all the instances of the specified class.
 If {\em scan-sub} is NIL, then instances of exactly the {\em aclass} are
 listed, otherwise, instances of {\em aclass} or its subclasses are collected.}

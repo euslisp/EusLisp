@@ -124,19 +124,19 @@ Brep内の要素は{\bf edge, plane, polygon, face, hole,}や{\bf body}クラス
 {\bf right-most-points}は、{\em p1, p2}で決定される線分の右側に置かれている点を
 {\em points}の中から捜し、その中でもっとも遠い点を返す。}
 
-\funcdesc{eps=}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps=}{num1 num2 \&optional (tolerance *epsilon*)}{
 2つの実数{\em num1}と{\em num2}を比較して、{\em torelance}の誤差範囲内で
 等しいかどうかを返す。}
-\funcdesc{eps$<$}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps$<$}{num1 num2 \&optional (tolerance *epsilon*)}{
 {\em num1}が明らかに{\em num2}よりも小さいときTを返す。すなわち、
 {\tt num1$<$num2-tolerance}である。}
-\funcdesc{eps$<=$}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps$<=$}{num1 num2 \&optional (tolerance *epsilon*)}{
 {\em num1}が多分{\em num2}よりも小さいときあるいは等しいときTを返す。すなわち、
 {\tt num1$<$num2+tolerance}である。}
-\funcdesc{eps$>$}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps$>$}{num1 num2 \&optional (tolerance *epsilon*)}{
 {\em num1}が明らかに{\em num2}よりも大きいときTを返す。すなわち、
 {\tt num1$>$num2+tolerance}である。}
-\funcdesc{eps$>=$}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps$>=$}{num1 num2 \&optional (tolerance *epsilon*)}{
 {\em num1}が多分{\em num2}よりも大きいときあるいは等しいときTを返す。すなわち、
 {\tt num1$>$num2-tolerance}である。}
 
@@ -186,13 +186,13 @@ Brep内の要素は{\bf edge, plane, polygon, face, hole,}や{\bf body}クラス
 もし、{\em torelance}が指定されたなら、この{\bf bounding-box}は
 その量で増大される。}
 
-\funcdesc{make-bounding-box}{points [tolerance]}{
+\funcdesc{make-bounding-box}{points \&optional tolerance}{
 {\em points}のリストの中から最小と最大の座標値を見つけ、
 {\tt bounding-box}のインスタンスを作る。}
-\funcdesc{bounding-box-union}{boxes [tolerance *contact-threshold*]}{
+\funcdesc{bounding-box-union}{boxes \&optional (tolerance *contact-threshold*)}{
 {\em boxes}の結合で表現されるbounding-boxのインスタンスを作る。
 その結果は、{\em tolerance}によって拡張される。}
-\funcdesc{bounding-box-intersection}{boxes [tolerance *contact-threshold*]}{
+\funcdesc{bounding-box-intersection}{boxes \&optional (tolerance *contact-threshold*)}{
 {\em boxes}の共通領域を表現するbounding-boxのインスタンスを作る。
 その結果は、{\em tolerance}によって拡張される。}
 \end{refdesc}
@@ -571,7 +571,7 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 2つの要素をもつリストを返す。
 最初の要素は，この{\bf body}を構成するために追加(body+)された基本{\bf body}
 のリストである。次の要素は，差し引かれた基本{\bf body}のリストである。}
-\methoddesc{:get-face}{body \&optional face id}{
+\methoddesc{:get-face}{\&optional body face id}{
 {\em body}は，この{\bf body}を構成している{\bf body}のインスタンスであり，
 基本{\bf body}型の1つである。例えば，{\tt :cube, :prism, :cone, :solid-of-resolution}などか
 あるいはNILである。

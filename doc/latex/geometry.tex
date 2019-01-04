@@ -141,17 +141,17 @@ lie on a plane whose normal vector is {\em normal}.
 {\bf right-most-point} searches in {\em points} which lie in the right-hand
 side of the line determined by {\em p1, p2} and returns the farthest one.}
 
-\funcdesc{eps=}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps=}{num1 num2 \&optional (tolerance *epsilon*)}{
 compares two float numbers {\em num1} and {\em num2} for equality
 with the tolerance of {\bf *epsilon*}.}
-\funcdesc{eps$<$}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps$<$}{num1 num2 \&optional (tolerance *epsilon*)}{
 returns T if $num1$ is apparently less than $num2$, i.e. $num1 < num2-tolerance$.}
-\funcdesc{eps$<=$}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps$<=$}{num1 num2 \&optional (tolerance *epsilon*)}{
 returns T if $num1$ is possibly less than or equal to $num2$,
 i.e. $num1 < num2+tolerance$.}
-\funcdesc{eps$>$}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps$>$}{num1 num2 \&optional (tolerance *epsilon*)}{
 returns T if $num1$ is apparently greater than $num2$, i.e. $num1 > num2+tolerance$.}
-\funcdesc{eps$>=$}{num1 num2 [(tolerance *epsilon*)]}{
+\funcdesc{eps$>=$}{num1 num2 \&optional (tolerance *epsilon*)}{
 returns T if $num1$ is possibly greater than or equal to $num2$,
 i.e. $num1 > num2-tolerance$.}
 
@@ -198,13 +198,13 @@ returns a body object that represents a cube bounded by this box.}
 sets minpoint and maxpoint slots looking in {\em vlist}.
 If tolerance (float) is specified, the box is grown by the amount.}
 
-\funcdesc{make-bounding-box}{points [tolerance]}{finds the minimum and maximum
+\funcdesc{make-bounding-box}{points \&optional tolerance}{finds the minimum and maximum
 coordinates in the list of {\em points}, and make an instance of
 {\tt bounding-box}.}
-\funcdesc{bounding-box-union}{boxes [tolerance *contact-threshold*]}{
+\funcdesc{bounding-box-union}{boxes \&optional (tolerance *contact-threshold*)}{
 makes an instance of the surrounding-box representing the union
 of {\em boxes}. The resulted box is expanded by the {\em tolerance}.}
-\funcdesc{bounding-box-intersection}{boxes [tolerance *contact-threshold*]}{
+\funcdesc{bounding-box-intersection}{boxes \&optional (tolerance *contact-threshold*)}{
 makes an instance of the surrounding-box representing the intersection 
 of {\em boxes}. The resulted box is expanded by the {\em tolerance}.}
 \end{refdesc}
@@ -598,7 +598,7 @@ returns a list of two elements.
 The first is a list of primitive bodies that is added (body+) to compose
 this body.
 The latter is a list of subtracted primitive-bodies.}
-\methoddesc{:get-face}{body [face [id]]}{
+\methoddesc{:get-face}{\&optional body face id}{
 {\em body} is an instance of body that has composed this body, 
 one of primitive-body types such as :cube, :cylinder, :prism, :cone,
 :solid-of-revolution, etc., or nil.

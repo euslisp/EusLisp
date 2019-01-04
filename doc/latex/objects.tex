@@ -85,11 +85,11 @@ old objects instantiated from the previous class definition will
 behave unexpectedly, since method definitions assume the new slots
 disposition.}
 
-\specialdesc{defmethod}{classname \{(selector lambda-list . body)\}*}{
+\specialdesc{defmethod}{classname \&rest (selector lambda-list \&rest body)}{
 defines one or more methods of {\em classname}. Each {\em selector}
 must be a keyword symbol.}
 
-\macdesc{defclassmethod}{classname \{(selector lambda-list . body)\}*}
+\macdesc{defclassmethod}{classname \&rest (selector lambda-list \&rest body)}
 
 \funcdesc{classp}{object}{T if {\em object} is a class object, that is,
 an instance of class {\bf metaclass} or its subclasses.}
@@ -113,7 +113,7 @@ tries to find a method specified by {\em selector} in the class of {\em object}
 and in its superclass.
 This is used to know whether {\em object} can respond to {\em selector}.}
 
-\funcdesc{system:method-cache}{[flag]}{
+\funcdesc{system:method-cache}{\&optional flag}{
 Interrogates the hit ratio of the method cache,
 and returns a list of two numbers, hit and miss.
 If {\em flag} is NIL, method caching is disabled.
@@ -124,12 +124,12 @@ If non-nil flag is given, method cache is purged and caching is enabled.}
 \subsection{Message Sending}
 \begin{refdesc}
 
-\funcdesc{send}{object selector \{arg\}*}{
-send a message consisting of {\em selector} and {\em arg} to {\em object}.
+\funcdesc{send}{object selector \&rest args}{
+send a message consisting of {\em selector} and {\em args} to {\em object}.
 {\em object} can be anything but number.
 {\em selector} must be evaluated to be a keyword.}
 
-\funcdesc{send-message}{target search selector \{arg\}*}{
+\funcdesc{send-message}{target search selector \&rest args}{
 Low level primitive to implement {\bf send-super}.}
 
 \macrodesc{send*}{object selector \&rest msg-list}{
@@ -202,10 +202,10 @@ or {\em class}'s subclasses.
 {\bf subclassp} and {\bf derivedp} functions do not search in class hierarchy:
 type check always finishes within a constant time.}
 
-\funcdesc{slot}{object class (index $|$ slot-name)}{
+\funcdesc{slot}{object class idex-or-name}{
 Returns the named or indexed slot value.}
 
-\funcdesc{setslot}{object class (index $|$ slot-name) value}{
+\funcdesc{setslot}{object class index-or-name value}{
 {\bf Setslot} is a internal function and users should not use it.
 Use, instead, combination of {\bf setf} and {\bf slot}.}
 

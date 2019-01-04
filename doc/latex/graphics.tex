@@ -157,7 +157,7 @@ initializes viewing and projection.}
 
 \vspace{5mm}
 
-\classdesc{parallel-viewing}{projection}{()}{
+\classdesc{parallel-viewing}{projection}{}{
 defines parallel projection.
 {\bf Hid} (the hidden-line elimination function)
 cannot handle parallel projection.}
@@ -245,7 +245,7 @@ The line is clipped at the boundary of $x=-1, x=1, y=-1, y=1, z=0, z=1$,
 and a list of two vectors are returned.
 If the line lies completely outside the viewport, NIL is returned.}
 
-\classdesc{viewport}{coordinates}{()}
+\classdesc{viewport}{coordinates}{}
 {viewport transformation maps the NDC (normalized device coordinates)
  to device specific coordinates.
 Inheriting the {\bf coordinates} class, the {\tt viewport} defines
@@ -321,16 +321,16 @@ draws polylines whose end points are defined in NDC.}
 draws a cross mark in NDC.}
 \methoddesc{:draw-box-ndc}{low-left up-right \&optional color}{
 draws a rectangle in NDC.}
-\methoddesc{:draw-arc-ndc}{point width height angle1 angle2 [color]}{
+\methoddesc{:draw-arc-ndc}{point width height angle1 angle2 \&optional color}{
 draws an arc in NDC.
 The viewsurface object bound in this viewer must accept {\bf :arc} message.}
-\methoddesc{:draw-fill-arc-ndc}{ point width height angle1 angle2 [color]}{
+\methoddesc{:draw-fill-arc-ndc}{ point width height angle1 angle2 \&optional color}{
 draws a filled-arc in NDC.}
-\methoddesc{:draw-string-ndc}{position string [color]}{
+\methoddesc{:draw-string-ndc}{position string \&optional color}{
 draws {\em string} at {\em position} defined in NDC.}
-\metdesc{:draw-image-string-ndc}{position string [color]}
-\metdesc{:draw-rectangle-ndc}{position width height [color]}
-\metdesc{:draw-fill-rectangle-ndc}{point width height [color]}
+\metdesc{:draw-image-string-ndc}{position string \&optional color}
+\metdesc{:draw-rectangle-ndc}{position width height \&optional color}
+\metdesc{:draw-fill-rectangle-ndc}{point width height \&optional color}
 \methoddesc{:draw-line}{p1 p2 \&optional (do-clip t)}{
 draws a line whose two end points {\em p1, p2} are defined in the world
 coordinates.}
@@ -383,7 +383,7 @@ and {\tt surface} slots of this viewer.}
 
 \begin{refdesc}
 
-\funcdesc{draw}{[viewer] \&rest thing}{
+\funcdesc{draw}{\&optional viewer \&rest thing}{
 draws {\em thing}s in {\em viewer}.
 {\em Thing} can be any of coordinates, body, face, edge, float-vector,
 list of two float-vectors.
@@ -391,7 +391,7 @@ If you are running {\tt eusx},
 {\tt (progn (view) (draw (make-cube 10 20 30)))}
  draws a cube in a xwindow.}
 
-\funcdesc{draw-axis}{[viewer] [size] \&rest thing}{
+\funcdesc{draw-axis}{\&optional viewer size \&rest thing}{
 draws coordinate-axes of {\em thing}s in {\em viewer} with {\em size}
 as the length of each coordinates-axis.
 {\em Thing} can be any object derived from coordinates.}
@@ -399,11 +399,11 @@ as the length of each coordinates-axis.
 \funcdesc{draw-arrow}{p1 p2}{
 draws an arrow pointing from p1 to p2 in {\tt *viewer*}.}
 
-\funcdesc{hid}{[viewer] \&rest thing }
+\funcdesc{hid}{\&optional viewer \&rest thing }
 {draws hidden-line eliminated image in {\em viewer}.
 {\em Thing} can be of face or body.}
 
-\funcdesc{hidd}{[viewer] \&rest thing }{
+\funcdesc{hidd}{\&optional viewer \&rest thing }{
 is same as {\bf hid}, except that {\bf hidd} draws hidden lines
 with dashed-lines.}
 

@@ -31,7 +31,7 @@ If {\em sequence} is an array with a fill-pointer, {\bf length}
 returns the fill-pointer, not the entire size of the array entity.
 Use {\bf array-total-size} to know the entire size of those arrays.}
 
-\funcdesc{subseq}{sequence start [end]}{
+\funcdesc{subseq}{sequence start \&optional end}{
 makes a copy of the subsequence from {\em start}th through  ({\em end}-1)th inclusively
 out of {\em sequence}.
 {\em end} is defaulted to the length of {\em sequence}.}
@@ -51,8 +51,8 @@ same type as {\em sequence}.}
 {\bf Nreverse} is the destructive version of {\bf reverse}.
 {\bf Nreverse} does not allocate memory, while {\bf reverse} does.}
 
-\funcdesc{concatenate}{result-type {sequence*}}{
-concatenates all {\em sequence}s.
+\funcdesc{concatenate}{result-type \&rest sequences}{
+concatenates all {\em sequences}.
 Each {\em sequence} may be of any sequence type.
 Unlike {\bf append}, all the sequences including the last one are copied.
 {\em Result-type} should be a class such as cons, string,
@@ -246,10 +246,10 @@ the last cons is returned, not the last element.}
 \funcdesc{cons}{car cdr}{
 makes a new cons whose car is {\em car} and cdr is {\em cdr}.}
 
-\funcdesc{list}{\{element\}*}{makes a list of {\em element}s.}
+\funcdesc{list}{\&rest elements}{makes a list of {\em elements}.}
 
-\funcdesc{list*}{\{element\}*}{
-makes a list of {\em element}s, but the last element is consed in cdr:
+\funcdesc{list*}{\&rest elements}{
+makes a list of {\em elements}, but the last element is consed in cdr:
 for example, {\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}.}
 
 \funcdesc{list-length}{list}{
@@ -275,7 +275,7 @@ If none is found, NIL is returned; otherwise, the tail of {\em list} beginning
 with the first element that satisfied the test is returned. The {\em list}
 is searched on the top level only.}
 
-\fundesc{assq}{item alist }
+\fundesc{assq}{item alist}
 \funcdesc{assoc}{item alist \&key :key (:test \#'eq) :test-not}
 { searches the association list {\em alist}. The value returned is the
 first pair in the {\em alist} such that the {\em car} of the pair satisfies
@@ -293,11 +293,11 @@ made from {\em l1} and {\em l2}.}
 add the {\em key val} pair to {\em alist}, that is,
 {\tt (cons (cons key val) alist)}.}
 
-\funcdesc{append}{\{list\}*}{
+\funcdesc{append}{\&rest list}{
 appends {\em list} to form a new list.
 All the elements in {\em list}, except the last list, are copied.}
 
-\funcdesc{nconc}{\{list\}*}{
+\funcdesc{nconc}{\&rest list}{
 concatenates {\em list} destructively by replacing the last cdr of each
 {\em list}.}
 
@@ -333,16 +333,13 @@ returns union set of two lists.}
 {tests if {\em list1} is a subset of {\em list2}, i.e. if each element
 of {\em list1} is a member of {\em list2}.}
 
-\funcdesc{intersection}{list1 list2
- \&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{intersection}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
 returns the intersection of two sets, {\em list1} and {\em list2}.}
 
-\funcdesc{set-difference}{list1 list2
-\&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{set-difference}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
 returns the list whose elements are only contained in {\em list1}
 and not in {\em list2}.}
-\funcdesc{set-exclusive-or}{list1 list2
- \&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{set-exclusive-or}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
 returns the list of elements that appear only either in {\em list1} or {\em list2}.}
 \funcdesc{list-insert}{item pos list}{
 Insert {\em item} as the {\em pos}'th element in {\em list} destructively.
@@ -366,8 +363,8 @@ maps {\em func} to each element of {\em arg-list},
 and makes a list from all the results.
 Before using {\bf mapcar}, try {\bf dolist}.}
 
-\funcdesc{mapcan}{func arg-list \&rest more-arg-lists}
-{maps {\em func} to each element of {\em arg-list},
+\funcdesc{mapcan}{func arg-list \&rest more-arg-lists}{
+maps {\em func} to each element of {\em arg-list},
 and makes a list from all the results by {\bf nconc}.
 {\bf Mapcan} is suitable for filtering (selecting) elements
 in {\em arg-list}, since nconc does nothing with NIL.}
@@ -433,7 +430,7 @@ If {\em dims} is an integer, a simple-vector is created.}
 returns {\em pos}th element of {\em vector}.
 {\em Vector} must be a simple general vector.}
 
-\funcdesc{aref}{vector \&rest (indices)}{
+\funcdesc{aref}{vector \&rest indices}{
 returns the element indexed by {\em indices}.
 {\bf Aref} is not very efficient
 because it needs to dispatch according to the type of {\em vector}.
@@ -455,8 +452,8 @@ when {\em array}'s fill-pointer reaches  the end.}
 \funcdesc{arrayp}{obj}
 {T if {\em obj} is an instance of array or vector.}
 
-\funcdesc{array-total-size}{array}{returns the total number of elements
-of {\em array}.}
+\funcdesc{array-total-size}{array}{
+returns the total number of elements of {\em array}.}
 \fundesc{fill-pointer}{array}
 \fundesc{array-rank}{array}
 \funcdesc{array-dimensions}{array}{
@@ -667,10 +664,11 @@ expanded to twice larger size.}
 \funcdesc{remhash}{key htab}{
 removes a hash entry designated by {\em key} in {\em htab}.}
 
-\funcdesc{maphash}{function htab }{
+\funcdesc{maphash}{function htab}{
 maps {\em function} to all the elements of {\em htab}.}
 
-\funcdesc{hash-table-p}{x}{T if {\em x} is an instance of class hash-table.}
+\funcdesc{hash-table-p}{x}{
+T if {\em x} is an instance of class hash-table.}
 
 \classdesc{hash-table}{object}
 {(key value count \\

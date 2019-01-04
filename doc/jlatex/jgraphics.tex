@@ -131,7 +131,7 @@ viewing画面の大きさを変える。
 \methoddesc{:yon}{ depth-to-back-clip-plane}{
 視点からクリップ後面までの距離を変える。
 このクリップ後面よりも後ろにあるオブジェクトはクリップから除外される。}
-\methoddesc{:aspect}{\&oiptional ratio}{
+\methoddesc{:aspect}{\&optional ratio}{
 アスペクト比は、screen-yとscreen-xとの比である。
 もし、{\em ratio}が与えられたならば、
 アスペクト比は変えられ、screen-yはscreen-x * {\em ratio}に設定される。
@@ -149,7 +149,7 @@ viewing画面の大きさを変える。
 
 \vspace{5mm}
 
-\classdesc{parallel-viewing}{projection}{()}{
+\classdesc{parallel-viewing}{projection}{}{
 平行投影を定義する。
 {\bf hid}(陰線消去関数)は平行投影では扱うことが出来ない。}
 
@@ -367,25 +367,25 @@ NDCの中に定義される{\em position}に{\em string}を描く。}
 
 \begin{refdesc}
 
-\funcdesc{draw}{[viewer] \&rest thing}{
+\funcdesc{draw}{\&optional viewer \&rest thing}{
 {\em viewer}に{\em thing}を描く。
 {\em thing}は、座標系、立体、面、エッジ、ベクトル、2つのベクトルのリストのどれでも可能である。
 {\tt (progn (view) (draw (make-cube 10 20 30)))}
 は、xwindowに立方体を描く。}
 
 
-\funcdesc{draw-axis}{[viewer] [size] \&rest thing}{
+\funcdesc{draw-axis}{\&optional viewer size \&rest thing}{
 {\em viewer}の中に{\em thing}の座標系の軸を{\em size}の長さで描く。
 {\em thing}は、座標系から得られるどのオブジェクトでも可能である。}
 
 \funcdesc{draw-arrow}{p1 p2}{
 {\bf *viewer*}に{\em p1}から{\em p2}に向かう矢印を描く。}
 
-\funcdesc{hid}{[viewer] \&rest thing }
+\funcdesc{hid}{\&optional viewer \&rest thing }
 {{\em viewer}に陰線処理された画像を描く。
 {\em thing}は、{\tt face}または{\tt body}が可能である。}
 
-\funcdesc{hidd}{[viewer] \&rest thing }{
+\funcdesc{hidd}{\&optional viewer \&rest thing }{
 陰線を点線で描くことを除いて、{\bf hid}と同じである。}
 
 \funcdesc{hid2}{body-list viewing}{
