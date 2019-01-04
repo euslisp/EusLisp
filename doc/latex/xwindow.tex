@@ -243,7 +243,7 @@ default GC. Use of the {\tt :gc :line-style} is preferable.}
 %sets xor mode. this function usually uses for monochrome display.}
 \methoddesc{:clear}{}{
 clears full screen. this method calls {\tt :clear-area}}
-\methoddesc{:clear-area}{\&key :x  :y :width :height :gc}{
+\methoddesc{:clear-area}{\&key x  y width height gc}{
 clears a rectangle using the {\tt :fill-rectangle} method.}
 
 \classdesc{Xpixmap}{Xdrawable}{}{Pixmap is a drawable that is often used
@@ -390,7 +390,7 @@ changes the background with given pixmap.}
 %a line is drawn in both this window and the backing-store.}
 \methoddesc{:set-colormap}{cmap}{sets colormap.}
 \methoddesc{:clear}{}{clears the entire xwindow.}
-\methoddesc{:clear-area}{\&key :x :y :width :height}{
+\methoddesc{:clear-area}{\&key x y width height}{
 clears the specified rectangular area of this xwindow.}
 
 %\methoddesc{:who-is-parent}{\&optional obj}{
@@ -644,8 +644,8 @@ addressed by pixel, or all the entries in LUT.}
 \methoddesc{:init}{[cmapid]}{
 initializes this color map with cmap id.
 All the LUTs registered are discarded.}
-\methoddesc{:create}{\&key (planes 0) (colors 1) (visual *visual*) (contiguous nil)}
-{creates a new color map object.}
+\methoddesc{:create}{\&key (planes 0) (colors 1) (visual *visual*) contiguous}{
+creates a new color map object.}
 
 \classdesc{XColor}{cstruct}
 {((pixel        :integer) \\

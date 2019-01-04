@@ -343,7 +343,7 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 もし、2つの面の間の角度が{\em threshold}より大きいなら、
 {\bf :set-approximated-flag}は、このフラグをTに設定する。}
 
-\metdesc{:init}{\&key :pface :nface :pvertex :nvertex}
+\metdesc{:init}{\&key pface nface pvertex nvertex}
 
 \end{refdesc}
 
@@ -441,7 +441,7 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 この多角形の現在の{\tt vertices}リストから面の正規化ベクトルを再計算する。}
 \metdesc{:invert}{}
 \methoddesc{:area}{}{この領域の面積を返す。}
-\metdesc{:init}{\&key :vertices :edges :normal :distance}
+\metdesc{:init}{\&key vertices edges normal distance}
 
 \classdesc{face}{polygon}
 {(holes mbody primitive-face id)}{穴を持った面を定義する。
@@ -460,7 +460,7 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 \methoddesc{:area}{}{
 この面の面積を返す。
 これは，外側のエッジで囲まれる面積から穴の面積を引いたものである。}
-\methoddesc{:centroid}{ \&optional point}{
+\methoddesc{:centroid}{\&optional point}{
 この面の重心を表現する実数と実数ベクトルのリストを返す。
 もし，{\em point}が与えられないならば，最初の数はこの多角形の
 面積を表わし，2番目のベクトルがこの多角形の重心の位置を示す。
@@ -481,7 +481,7 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 {\tt ((:cylinder {\em radius height segments}) :side {\em id})}を返す。}
 \methoddesc{:body-type}{}{
 この面を定義する基本{\bf body}を返す。}
-\metdesc{:init}{ \&key :normal :distance :edges :vertices :holes}
+\metdesc{:init}{\&key normal distance edges vertices holes}
 
 \classdesc{hole}{polygon}
 {(myface)}
@@ -495,7 +495,7 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 この{\bf hole}を囲んでいる面{\em face}へリンクを作る。
 このメソッドは、{\bf face}クラスの{\tt :enter-hole}メソッドと共に
 使用されるものである。}
-\metdesc{:init}{ \&key :normal :distance :edges :vertices :face}
+\metdesc{:init}{\&key normal distance edges vertices face}
 
 \newpage
 \subsection{立体(body)}
@@ -530,9 +530,9 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 これは，{\tt $-$2rings}と等しくなるべきである。}
 \methoddesc{:perimeter}{}{
 すべてのエッジの長さの合計を返す。}
-\methoddesc{:volume}{ \&optional (reference-point \#f(0 0 0))}{
+\methoddesc{:volume}{\&optional (reference-point \#f(0 0 0))}{
 この{\bf body}の体積を返す。}
-\methoddesc{:centroid}{ \&optional (point \#f(0 0 0)}{
+\methoddesc{:centroid}{\&optional (point \#f(0 0 0)}{
 この{\bf body}が均質な立体と仮定し，重心の位置を返す。}
 \metdesc{:possibly-interfering-faces}{box}
 \methoddesc{:common-box}{body}{
@@ -582,7 +582,7 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 もし，{\em face}が{\tt :side}なら，{\em id}で番号付けされた面を取り出すことができる。
 {\tt (send abody nil :side 2)}は，{\em id}が0から始まるため，{\tt abody}を構成する
 {\bf body}の側面から３番目の面をすべて返す。}
-\methoddesc{:init}{ \&key :faces :edges :vertices}{
+\methoddesc{:init}{\&key faces edges vertices}{
 {\em :faces}よりこの{\bf body}を初期化する。
 {\em :faces}は，必要な引き数である。
 {\em :faces},{\em :edges}と{\em :vertices}は完全な立体モデルを定義するために
@@ -600,7 +600,7 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 
 \begin{refdesc}
 
-\funcdesc{make-plane}{\&key :normal :point :distance}{
+\funcdesc{make-plane}{\&key normal point distance}{
 {\em point}を通り，{\em normal}の方向を向いた{\bf plane}オブジェクトを作る。
 {\em point}を与える代わり{\em distance}を指定することもできる。}
 
@@ -616,11 +616,11 @@ Euslispでは、どんな曲面もたくさんの平面で近似される。
 \caption{基本body}
 \end{figure}
 
-\funcdesc{make-cube}{xsize ysize zsize \&key :name :color}{
+\funcdesc{make-cube}{xsize ysize zsize \&key name color}{
 x,y,z軸の方向に大きさが{\em xsize},{\em ysize},{\em zsize}である，直方体を作る。
 この直方体の原点は{\bf body}の中心に置かれる。}
 
-\funcdesc{make-prism}{bottom-points sweep-vector \&key :name :color}{
+\funcdesc{make-prism}{bottom-points sweep-vector \&key name color}{
 {\em sweep-vector}に沿った{\em bottom-points}により定義される
 形状を積み上げることにより角柱を作る。
 もし、{\em sweep-vector}が実数ベクトルでなく数字であれば、$z$方向の
@@ -630,11 +630,11 @@ x,y,z軸の方向に大きさが{\em xsize},{\em ysize},{\em zsize}である，�
  {\tt (make-prism '(\#f(1 1 0) \#f(1 -1 0) \#f(-1 -1 0) \#f(-1 1 0)) 2.0)}
 は，高さ2.0の直方体を作る。}
 
-\funcdesc{make-cylinder}{radius height \&key (:segments 12) :name :color}{
+\funcdesc{make-cylinder}{radius height \&key (segments 12) name color}{
 半径{\em radius}と高さ{\em height}で指定される円柱を作る。
 底面は，xy-平面に定義され，座標系の原点は底面の中心に置かれる。}
 
-\funcdesc{make-cone}{top bottom \&key (:segments 16) :color :name}{
+\funcdesc{make-cone}{top bottom \&key (segments 16) color name}{
 頂点が{\em top}で底面が{\em bottom}である角錐を作る。
 {\em top}は，3次元ベクトルである。
 {\em bottom}は，底面の頂点のリストあるいは半径である。
@@ -644,7 +644,7 @@ x,y,z軸の方向に大きさが{\em xsize},{\em ysize},{\em zsize}である，�
 \verb~ (make-cone \#f(0 0 10) (list \#f(10 0 0) \#f(0 10 0) \#f(-10 0 0)
 \#f(0 -10 0)))~ は，正方形の底面を持つ四角錐を作る。}
 
-\funcdesc{make-solid-of-revolution}{points \&key (:segments 16) :name :color}{
+\funcdesc{make-solid-of-revolution}{points \&key (segments 16) name color}{
 {\em points}は，z軸まわりの時計方向に回転される。
 もし、{\em points}のリストの2つの端点がz軸上に置かれてないならば，
 曲面を作る。したがって，
@@ -655,7 +655,7 @@ x,y,z軸の方向に大きさが{\em xsize},{\em ysize},{\em zsize}である，�
 {\em points}は、順番が重要であり、$z$軸の高い方から低い方へ
 整列しておくことが望まれる。}
 
-\funcdesc{make-torus}{points \&key (:segments 16) :name :color}{
+\funcdesc{make-torus}{points \&key (segments 16) name color}{
 ドーナッツのようなtorus形状を作る。
 {\em points}は，断面上の頂点のリストである。}
 

@@ -74,11 +74,11 @@ Note that {\em sequence} is copied even if its type equals to {\em result-type}.
 and {\em more-seqs} orderly, and the result is accumulated in a sequence
 of type {\em result-type}.}
 
-\funcdesc{fill}{sequence item \&key (:start 0) (:end (length sequence))}{
+\funcdesc{fill}{sequence item \&key (start 0) (end (length sequence))}{
 fills {\em item} from {\em start}th through ({\em end}-1)th in {\em sequence}.
 }
 
-\funcdesc{replace}{dest source \&key :start1 :end1 :start2 :end2}{
+\funcdesc{replace}{dest source \&key start1 end1 start2 end2}{
 elements in {\em dest} sequence indexed between {\em start1} and {\em end1}
 are replaced with elements in {\em source} indexed between 
 {\em start2} and {\em end2}.
@@ -119,38 +119,38 @@ if the predicate returns non-nil (-if version), or nil (-if-not version).
 
 \begin{refdesc}
 
-\funcdesc{position}{item seq \&key :start :end :test :test-not :key (:count 1)}{
+\funcdesc{position}{item seq \&key start end test test-not key (count 1)}{
 finds {\em count}th appearance of {\em item} in {\em seq} and returns
 its index.
 The search begins from the {\em start}th element, ignoring elements before it.
 By default, the search is performed by {\bf eql}, which can be altered
 by the {\em test} or {\em test-not} parameter.}
 
-\fundesc{position-if}{predicate seq \&key :start :end :key}
+\fundesc{position-if}{predicate seq \&key start end key}
 
-\fundesc{position-if-not}{predicate seq \&key :start :end :key}
+\fundesc{position-if-not}{predicate seq \&key start end key}
 
-\funcdesc{find}{item seq \&key :start :end :test :test-not :key (:count 1)}{
+\funcdesc{find}{item seq \&key start end test test-not key (count 1)}{
 finds {\em count}th element between the {\em start}th element
 and the {\em end}th element in {\em seq}.
 The element found, which is eql to {\em item} if no {\em test} or
 {\em test-not} other than \#'eql is specified, is returned.}
 
-\funcdesc{find-if}{predicate seq \&key :start :end :key (:count 1)}{
+\funcdesc{find-if}{predicate seq \&key start end key (count 1)}{
 finds {\em count}th element in {\em seq} for which {\em pred}
 returns non nil.}
-\fundesc{find-if-not}{predicate seq \&key :start :end :key}
+\fundesc{find-if-not}{predicate seq \&key start end key}
 
-\funcdesc{count}{item seq \&key :start :end :test :test-not :key}{
+\funcdesc{count}{item seq \&key start end test test-not key}{
 counts the number of {\em item}s which appear between the {\em start}th element
 and the {\em end}th element in {\em seq}.}
 
-\funcdesc{count-if}{predicate seq \&key :start :end :key}{
+\funcdesc{count-if}{predicate seq \&key start end key}{
 count the number of elements in {\em seq} for which {\em pred} returns
 non nil.}
-\fundesc{count-if-not}{predicate seq \&key :start :end :key}
+\fundesc{count-if-not}{predicate seq \&key start end key}
 
-\funcdesc{remove}{item seq \&key :start :end :test :test-not :key :count}{
+\funcdesc{remove}{item seq \&key start end test test-not key count}{
 creates a new sequence which has eliminated {\em count} (defaulted to infinity)
 occurrences of of {\em item}(s) between the {\em start}th element
 and the {\em end}th element in {\em seq}.
@@ -158,26 +158,25 @@ If you are sure that there is only one occurrence of {\em item},
 {\em count=1} should be specified to avoid meaningless scan over the whole
 sequence.}
 
-\fundesc{remove-if}{predicate seq \&key :start :end :key :count}
-\fundesc{remove-if-not}{predicate seq \&key :start :end :key :count}
-\funcdesc{remove-duplicates}{seq \&key :start :end :key :test :test-not :count}{
+\fundesc{remove-if}{predicate seq \&key start end key count}
+\fundesc{remove-if-not}{predicate seq \&key start end key count}
+\funcdesc{remove-duplicates}{seq \&key start end key test test-not count}{
 removes duplicated items in {\em seq} and creates a new sequence.}
 
-\funcdesc{delete}{item seq \&key :start :end :test :test-not :key :count}{
+\funcdesc{delete}{item seq \&key start end test test-not key count}{
 is same with {\bf remove} except that {\bf delete} modifies {\em seq}
 destructively and does not create a new sequence.
 If you are sure that there is only one occurrence of {\em item},
 {\em count=1} should be specified to avoid meaningless scan over the whole
 sequence.}
 
-\fundesc{delete-if}{predicate seq \&key :start :end :key :count}
-\funcdesc{delete-if-not}{predicate seq \&key :start :end :key :count}{
+\fundesc{delete-if}{predicate seq \&key start end key count}
+\funcdesc{delete-if-not}{predicate seq \&key start end key count}{
 {\em count} for {\em remove}s and {\em delete}s is defaulted to 1,000,000.
 If you have a long sequence and you want to delete an element which
 appears only once, :count should be specified as 1.}
 
-\funcdesc{substitute}{newitem olditem seq
- \&key :start :end :test :test-not :key :count}{
+\funcdesc{substitute}{newitem olditem seq \&key start end test test-not key count}{
 returns a new sequence which has 
 substituted the {\em count} occurrence(s)
 of {\em olditem} in {\em seq} with {\em newitem}.
@@ -187,14 +186,14 @@ By default, all the {\em olditems} are substituted.}
 (substitute #\Space #\_ "Euslisp_euslisp") ;; => "Euslisp euslisp"
 \end{verbatim}
 
-\fundesc{substitute-if}{newitem predicate seq \&key :start :end :key :count}
-\fundesc{substitute-if-not}{newitem predicate seq \&key :start :end :key :count}
+\fundesc{substitute-if}{newitem predicate seq \&key start end key count}
+\fundesc{substitute-if-not}{newitem predicate seq \&key start end key count}
 
-\funcdesc{nsubstitute}{newitem olditem seq \&key :start :end :test :test-not :key :count}
+\funcdesc{nsubstitute}{newitem olditem seq \&key start end test test-not key count}
 {substitute the {\em count} occurrences of {\em olditem} in {\em seq} with {\em newitem}
 destructively. By default, all the {\em olditem}s are substituted.}
-\fundesc{nsubstitute-if}{newitem predicate seq \&key :start :end :key :count}
-\fundesc{nsubstitute-if-not}{newitem predicate seq \&key :start :end :key :count}
+\fundesc{nsubstitute-if}{newitem predicate seq \&key start end key count}
+\fundesc{nsubstitute-if-not}{newitem predicate seq \&key start end key count}
 
 \end{refdesc}
 
@@ -255,7 +254,7 @@ for example, {\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}.}
 \funcdesc{list-length}{list}{
 returns the length of the {\em list}. {\em List} can be circular.}
 
-\funcdesc{make-list}{size \&key (initial-element nil)}{
+\funcdesc{make-list}{size \&key initial-element}{
 makes a list whose length is {\em size} and elements are {\em initial-element}.}
 
 \funcdesc{rplaca}{cons a}{
@@ -269,14 +268,14 @@ Use of {\bf setf} to {\bf cdr} is recommended.}
 \funcdesc{memq}{item list}{
 resembles {\bf member}, but test is always done by {\bf eq}.}
 
-\funcdesc{member}{item list \&key :key (:test \#'eq) :test-not}
+\funcdesc{member}{item list \&key key (test \#'eq) test-not}
 {The {\em list} is searched for an element that satisfies the {\em test}.
 If none is found, NIL is returned; otherwise, the tail of {\em list} beginning
 with the first element that satisfied the test is returned. The {\em list}
 is searched on the top level only.}
 
 \fundesc{assq}{item alist}
-\funcdesc{assoc}{item alist \&key :key (:test \#'eq) :test-not}
+\funcdesc{assoc}{item alist \&key key (test \#'eq) test-not}
 { searches the association list {\em alist}. The value returned is the
 first pair in the {\em alist} such that the {\em car} of the pair satisfies
 the {\em test}, or NIL if there is no such pair in the {\em alist}.}
@@ -327,19 +326,19 @@ passed to the member function.}
 The item is added at the head of the list if it is not included
 in the list.}
 
-\funcdesc{union}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{union}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 returns union set of two lists.}
-\funcdesc{subsetp}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}
+\funcdesc{subsetp}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}
 {tests if {\em list1} is a subset of {\em list2}, i.e. if each element
 of {\em list1} is a member of {\em list2}.}
 
-\funcdesc{intersection}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{intersection}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 returns the intersection of two sets, {\em list1} and {\em list2}.}
 
-\funcdesc{set-difference}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{set-difference}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 returns the list whose elements are only contained in {\em list1}
 and not in {\em list2}.}
-\funcdesc{set-exclusive-or}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{set-exclusive-or}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 returns the list of elements that appear only either in {\em list1} or {\em list2}.}
 \funcdesc{list-insert}{item pos list}{
 Insert {\em item} as the {\em pos}'th element in {\em list} destructively.

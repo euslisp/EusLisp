@@ -75,11 +75,11 @@
 からなるリストに
 対して適用され、その結果は{\em result-type}の型の列に蓄積される。}
 
-\funcdesc{fill}{sequence item \&key (:start 0) (:end (length sequence))}{
+\funcdesc{fill}{sequence item \&key (start 0) (end (length sequence))}{
 {\em sequence}の{\em start}番目から({\em end}$-$1)番目まで、{\em item}で満たす。
 }
 
-\funcdesc{replace}{dest source \&key :start1 :end1 :start2 :end2}{
+\funcdesc{replace}{dest source \&key start1 end1 start2 end2}{
 {\em dest}列の中の{\em start1}から{\em end1}までの要素が、
 {\em source}列の中の{\em start2}から{\em end2}までの要素に置き換えられる。
 {\em start1}と{\em start2}のデフォルト値はゼロで、
@@ -96,7 +96,7 @@ endは短い列の長さに一致するように縮められる。}
 どちらからでも失敗するからである。
 この問題を避けるために、比較として{\tt \#'$>=$}か{\tt \#'$<=$}のような関数を用いる。}
 
-\funcdesc{merge}{result-type seq1 seq2 pred \&key (:key \#'identity)}{
+\funcdesc{merge}{result-type seq1 seq2 pred \&key (key \#'identity)}{
 ２つの列{\em seq1}と{\em seq2}は、{\em result-type}型の１つの列に
 合併され、それらの要素は{\em pred}に記述された比較を満足する。}
 
@@ -119,7 +119,7 @@ sequenceのそれぞれの要素にpredicateを適用し、
 
 \begin{refdesc}
 
-\funcdesc{position}{item seq \&key :start :end :test :test-not :key (:count 1)}{
+\funcdesc{position}{item seq \&key start end test test-not key (count 1)}{
 {\em seq}の中から{\em item}と同一な要素を探し、
 その要素の中で{\em :count}番目に現れた要素の
 インデックスを返す。
@@ -127,56 +127,55 @@ sequenceのそれぞれの要素にpredicateを適用し、
 デフォルトの探索は、{\tt eql}で実行されるが、
 {\em test}か{\em test-not}パラメータで変更できる。}
 
-\fundesc{position-if}{predicate seq \&key :start :end :key}
+\fundesc{position-if}{predicate seq \&key start end key}
 
-\fundesc{position-if-not}{predicate seq \&key :start :end :key}
+\fundesc{position-if-not}{predicate seq \&key start end key}
 
-\funcdesc{find}{item seq \&key :start :end :test :test-not :key (:count 1)}{
+\funcdesc{find}{item seq \&key start end test test-not key (count 1)}{
 {\em seq}の中の{\em start}番目の要素から
 {\em :end}番目の要素までの間で要素を探し、
 その探された要素の内、{\em :count}番目の要素を返す。
 その要素は、{\em :test}か{\em :test-not}に{\tt \#'eql}
 以外のものが記述されていないなら、{\em item}と同じものである。}
 
-\funcdesc{find-if}{predicate seq \&key :start :end :key (:count 1)}{
+\funcdesc{find-if}{predicate seq \&key start end key (count 1)}{
 {\em seq}の要素の中で{\em predicate}がnon-NILを返す要素の内、
 {\em :count}番目の要素を返す。}
-\fundesc{find-if-not}{predicate seq \&key :start :end :key}
+\fundesc{find-if-not}{predicate seq \&key start end key}
 
-\funcdesc{count}{item seq \&key :start :end :test :test-not :key}{
+\funcdesc{count}{item seq \&key start end test test-not key}{
 {\em seq}の中の{\em :start}番目から{\em :end}番目までの要素に{\em item}が
 何回現れるか数える。}
 
-\funcdesc{count-if}{predicate seq \&key :start :end :key}{
+\funcdesc{count-if}{predicate seq \&key start end key}{
 {\em predicate}がnon-NILを返す{\em seq}内の要素数を数える。}
-\fundesc{count-if-not}{predicate seq \&key :start :end :key}
+\fundesc{count-if-not}{predicate seq \&key start end key}
 
-\funcdesc{remove}{item seq \&key :start :end :test :test-not :key :count}{
+\funcdesc{remove}{item seq \&key start end test test-not key count}{
 {\em seq}の中の{\em :start}番目から{\em :end}番目までの要素のなかで、
 {\em item}と同一の要素を探し、{\em :count}
 （デフォルト値は∞）番目までの要素を削除した新しい列を作る。
 もし、{\em item}が一回のみ現れることが確定しているなら、
 無意味な探索を避けるために、{\em :count=1}を指定すること。}
 
-\fundesc{remove-if}{predicate seq \&key :start :end :key :count}
-\fundesc{remove-if-not}{predicate seq \&key :start :end :key :count}
-\funcdesc{remove-duplicates}{seq \&key :start :end :key :test :test-not :count}{
+\fundesc{remove-if}{predicate seq \&key start end key count}
+\fundesc{remove-if-not}{predicate seq \&key start end key count}
+\funcdesc{remove-duplicates}{seq \&key start end key test test-not count}{
 {\em seq}の中から複数存在するitemを探し、その中の1つだけを残した新しい列を作る。}
 
-\funcdesc{delete}{item seq \&key :start :end :test :test-not :key :count}{
+\funcdesc{delete}{item seq \&key start end test test-not key count}{
 {\em delete}は、{\em seq}自体を修正し、新しい列を作らないことを除いては、
 {\bf remove}同じである。
 もし、{\em item}が一回のみ現れることが確定しているなら、
 無意味な探索を避けるために、{\em :count=1}を指定すること。}
 
-\fundesc{delete-if}{predicate seq \&key :start :end :key :count}
-\funcdesc{delete-if-not}{predicate seq \&key :start :end :key :count}{
+\fundesc{delete-if}{predicate seq \&key start end key count}
+\funcdesc{delete-if-not}{predicate seq \&key start end key count}{
 {\bf remove}や{\bf delete}の{\em :count}デフォルト値は、1,000,000である。
 もし列が長く、削除したい要素が一回しか現れないときは、
 {\em :count}を1と記述すべきである。}
 
-\funcdesc{substitute}{newitem olditem seq
- \&key :start :end :test :test-not :key :count}{
+\funcdesc{substitute}{newitem olditem seq \&key start end test test-not key count}{
 {\em seq}の中で{\em :count}番目に現れた{\em olditem}を{\em newitem}に置き換えた
 新しい列を返す。
 デフォルトでは、全ての{\em olditem}を置き換える。}
@@ -185,14 +184,14 @@ sequenceのそれぞれの要素にpredicateを適用し、
 (substitute #\Space #\_ "Euslisp_euslisp") ;; => "Euslisp euslisp"
 \end{verbatim}
 
-\fundesc{substitute-if}{newitem predicate seq \&key :start :end :key :count}
-\fundesc{substitute-if-not}{newitem predicate seq \&key :start :end :key :count}
+\fundesc{substitute-if}{newitem predicate seq \&key start end key count}
+\fundesc{substitute-if-not}{newitem predicate seq \&key start end key count}
 
-\funcdesc{nsubstitute}{newitem olditem seq \&key :start :end :test :test-not :key :count}
+\funcdesc{nsubstitute}{newitem olditem seq \&key start end test test-not key count}
 {{\em seq}の中で{\em count}番目に現れた{\em olditem}を{\em newitem}に置き換え、
 元の列{\em seq}に返す。デフォルトでは、全ての{\em olditem}を置き換える。}
-\fundesc{nsubstitute-if}{newitem predicate seq \&key :start :end :key :count}
-\fundesc{nsubstitute-if-not}{newitem predicate seq \&key :start :end :key :count}
+\fundesc{nsubstitute-if}{newitem predicate seq \&key start end key count}
+\fundesc{nsubstitute-if-not}{newitem predicate seq \&key start end key count}
 
 \end{refdesc}
 
@@ -255,7 +254,7 @@ atomであってはならない。
 \funcdesc{list-length}{list}{
 {\em list}の長さを返す。{\em list}は、環状リストでも良い。}
 
-\funcdesc{make-list}{size \&key (:initial-element nil)}{
+\funcdesc{make-list}{size \&key initial-element}{
 {\em size}長さで要素が全て{\em :initial-element}のリストを作る。}
 
 \funcdesc{rplaca}{cons a}{
@@ -271,7 +270,7 @@ atomであってはならない。
 \funcdesc{memq}{item list}{
 {\bf member}に似ている。しかしテストはいつも{\tt eq}で行う。}
 
-\funcdesc{member}{item list \&key :key :test :test-not}
+\funcdesc{member}{item list \&key key test test-not}
 {{\em list}の中から条件にあった要素を探す。
 {\em list}の中から{\em item}を探索し、{\em :test}の条件にあったものがなければNILを返す。
 見つかったならば、それ以降をリストとして返す。この探索は、最上位のリストに対して
@@ -280,7 +279,7 @@ atomであってはならない。
 
 \fundesc{assq}{item alist}
 
-\funcdesc{assoc}{item alist \&key :key :test :test-not}
+\funcdesc{assoc}{item alist \&key key test test-not}
 {{\em alist}の要素の{\bf car}が{\em :test}の条件にあった最初のものを返す。
 合わなければ、NILを返す。
 {\em :test}のデフォルトは{\tt \#'eq}である。
@@ -322,7 +321,7 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 {\em stack}から最初の要素を削除し、それを返す。
 もし{\em stack}が空(NIL)ならば、NILを返す。}
 
-\macrodesc{pushnew}{item place \&key :test :test-not :key}{
+\macrodesc{pushnew}{item place \&key test test-not key}{
 もし{\em item}が{\em place}のメンバーでないなら、
 {\em place}リストに{\em item}を置く。
 {\em :test}, {\em :test-not}と{\em :key}引数は、
@@ -331,19 +330,19 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 \funcdesc{adjoin}{item list}{
 もし{\em item}が{\em list}に含まれてないなら、{\em list}の最初に付け加える。}
 
-\funcdesc{union}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
+\funcdesc{union}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 2つのリストの和集合を返す。}
-\funcdesc{subsetp}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}
+\funcdesc{subsetp}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}
 {{\em list1}が{\em list2}の部分集合であること、すなわち、
 {\em list1}のそれぞれの要素が{\em list2}のメンバーであることをテストする。}
 
-\funcdesc{intersection}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
+\funcdesc{intersection}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 2つのリスト{\em list1}と{\em list2}の積集合を返す。}
 
-\funcdesc{set-difference}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
+\funcdesc{set-difference}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 {\em list1}にのみ含まれていて
 {\em list2}に含まれていない要素からなるリストを返す。}
-\funcdesc{set-exclusive-or}{list1 list2 \&key (:test \#'eq) (:test-not) (:key \#'identity)}{
+\funcdesc{set-exclusive-or}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 {\em list1}および{\em list2}にのみ現れる要素からなるリストを返す。}
 \funcdesc{list-insert}{item pos list}{
 {\em list}の{\em pos}番目の要素として{\em item}を挿入する
@@ -533,23 +532,23 @@ EusLispには、文字型がない。
 \funcdesc{stringp}{string}{
 {\em string}がバイト(256より小さい正の整数)のベクトルなら、Tを返す。}
 
-\funcdesc{string-upcase}{str \&key :start :end}{
+\funcdesc{string-upcase}{str \&key start end}{
 {\em str}を大文字の文字列に変換して、新しい文字列を返す。}
 
-\funcdesc{string-downcase}{str \&key :start :end}{
+\funcdesc{string-downcase}{str \&key start end}{
 {\em str}を小文字の文字列に変換して、新しい文字列を返す。}
 
 \funcdesc{nstring-upcase}{str}{
 {\em str}を大文字の文字列に変換し、元に置き換える。}
 
-\funcdesc{nstring-downcase}{str \&key :start :end}{
+\funcdesc{nstring-downcase}{str \&key start end}{
 {\em str}を小文字の文字列に変換し、元に置き換える。}
 
-\funcdesc{string=}{str1 str2 \&key :start1 :end1 :start2 :end2}{
+\funcdesc{string=}{str1 str2 \&key start1 end1 start2 end2}{
 もし{\em str1}が{\em str2}と等しいとき、Tを返す。
 {\bf string=}は、大文字・小文字を判別する。}
 
-\funcdesc{string-equal}{str1 str2 \&key :start1 :end1 :start2 :end2}{
+\funcdesc{string-equal}{str1 str2 \&key start1 end1 start2 end2}{
 {\em str1}と{\em str2}の等価性をテストする。
 {\bf string-equal}は、大文字・小文字を判別しない。}
 
@@ -675,7 +674,7 @@ stringなら、それぞれの文字コードの合計をシフトしたもの�
 その他どんなオブジェクトでも、{\bf sxhash}はそれぞれのスロットのハッシュ値を
 再帰的呼出しで計算し、それらの合計を返す。}
 
-\funcdesc{make-hash-table}{\&key (:size 30) (:test \#'eq) (:rehash-size 2.0)}{
+\funcdesc{make-hash-table}{\&key (size 30) (test \#'eq) (rehash-size 2.0)}{
 hash-tableを作り、返す。}
 
 

@@ -362,7 +362,7 @@ sides of this edge are curved faces.
 {\bf :set-approximated-flag} sets this flag to T, if the angle between
 two faces is greater than {\em threshold}.}
 
-\metdesc{:init}{\&key :pface :nface :pvertex :nvertex}
+\metdesc{:init}{\&key pface nface pvertex nvertex}
 
 \end{refdesc}
 
@@ -464,7 +464,7 @@ Returns T if this region intersects with aregion.}
 polygon from the current {\em vertices} list.}
 \metdesc{:invert}{}
 \methoddesc{:area}{}{returns the area of this polygon.}
-\metdesc{:init}{\&key :vertices :edges :normal :distance}
+\metdesc{:init}{\&key vertices edges normal distance}
 
 \classdesc{face}{polygon}
 {(holes mbody primitive-face id)}{defines a face which may have holes.
@@ -505,7 +505,7 @@ For example, a side face of a cylinder returns
 {\tt ((:cylinder {\em radius height segments}) :side {\em id})}.}
 \methoddesc{:body-type}{}{
 returns primitive body which has defined this face.}
-\metdesc{:init}{ \&key :normal :distance :edges :vertices :holes}
+\metdesc{:init}{ \&key normal distance edges vertices holes}
 
 \classdesc{hole}{polygon}
 {(myface)}
@@ -518,7 +518,7 @@ A face may have a list of holes in its {\tt holes} slot.}
 makes a link to a face which surrounds this hole.
 This method is only used in conjunction with the {\tt :enter-hole} 
 method of the face class.}
-\metdesc{:init}{ \&key :normal :distance :edges :vertices :face}
+\metdesc{:init}{ \&key normal distance edges vertices face}
 
 \newpage
 \subsection{Body}
@@ -612,7 +612,7 @@ If {\em face} is {\tt :side}, you can pick up faces that are numbered as
 {\em id}.
 {\tt (send abody nil :side 2)} returns
 all the third (id begins from zero) side faces for any primitive-type bodies.}
-\methoddesc{:init}{ \&key :faces :edges :vertices}{
+\methoddesc{:init}{ \&key faces edges vertices}{
 initializes this body from {\em :faces}.
 {\em :face} is a required argument.
 Since face, edge and vertex must maintain consistent relation to

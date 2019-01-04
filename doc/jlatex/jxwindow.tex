@@ -196,7 +196,7 @@ $(x, y)$の位置にオプションの{\em gc}で点を描く。}
 {\em (x,y)}の位置から文字列{\em str}を表示する。背景は、書かない。}
 \methoddesc{:image-string}{x y str \&optional (gc gcon)}{
 文字列{\em str}を表示する。文字列は、背景色で満たされる。}
-\methoddesc{:getimage}{\&key :x :y :width :height (:mask \#ffffffff) (:format 2)}{
+\methoddesc{:getimage}{\&key x y width height (mask \#ffffffff) (format 2)}{
 serverからximageを取り、ピクセルデータを文字列として返す。
 serverから送られるピクセルデータは、一端 Xlibのximage構造に蓄積される。
 その後、行毎に文字列にコピーされる。
@@ -204,7 +204,7 @@ ximage構造は、自動的に破壊される。
 {\tt :getimage}により得られた画像文字列は、{\tt pixel-image}を作るために
 使用できる。また、\ref{PBMfile}節に書かれているようにpbmフォーマットのファイルに
 書き込むことができる。}
-\methoddesc{:putimage}{image \&key :src-x :src-y :dst-x :dst-y :width :height ((:gc g) gc)}{
+\methoddesc{:putimage}{image \&key src-x src-y dst-x dst-y width height ((gc g) gc)}{
 この{\bf Xdrawable}の指定された位置に{\em image}を表示する。
 {\em image}は、文字列あるいはximage構造へのアドレスポインターである。}
 \methoddesc{:draw-line}{from to}{
@@ -225,7 +225,7 @@ ximage構造は、自動的に破壊される。
 %反転モードを設定する。この関数は、ふつう白黒ディスプレイで使用される。}
 \methoddesc{:clear}{}{
 全画面を消去する。この関数は、{\tt :clear-area}を呼び出す。}
-\methoddesc{:clear-area}{\&key :x  :y :width :height :gc}{
+\methoddesc{:clear-area}{\&key x y width height gc}{
 {\bf :fill-rectangle}メソッドを用いて四角領域を消去する。}
 
 \classdesc{Xpixmap}{Xdrawable}{}{
@@ -234,7 +234,7 @@ drawableである。xwindowと異なり、xwindowにコピーされるまで
 pixmap自身を見ることはできないし、pixmapはどんなイベントも発生しない。}
 
 \methoddesc{:init}{id}{このpixmapを初期化する。}
-\methoddesc{:create}{\&key (:width 500) (:height 500) (:depth 1) (:gc *defaultgc*)}{
+\methoddesc{:create}{\&key (width 500) (height 500) (depth 1) (gc *defaultgc*)}{
 デフォルトGCとして{\em :gc}を持つ、{\em width}$\times${\em height}のpixmapを作成する。}
 \methoddesc{:create-from-bitmap-file}{fname}{
 {\em file}で指定されるbitmapファイルからpixmapを作る。}
@@ -370,7 +370,7 @@ windowオブジェクトは、ガーベージコレクトされないため、
 \methoddesc{:set-colormap}{cmap}{colormapを設定する。}
 \methoddesc{:clear}{}{
 この{\bf Xwindow}内を全て消去する。}
-\methoddesc{:clear-area}{\&key :x :y :width :height}{
+\methoddesc{:clear-area}{\&key x y width height}{
 この{\bf Xwindow}の指定された四角領域を消去する。}
 %\methoddesc{:who-is-parent}{\&optional obj}{
 %{\em obj}の親windowを返す。もし、{\em obj}がなければ、この{\bf Xwindow}の
@@ -634,9 +634,8 @@ HLSモデルを用いて{\em count}の色を配置する。
 \methoddesc{:init}{[cmapid]}{
 このカラーマップを{\rm cmapid}で初期化する。
 登録されたLUTはすべて捨てられる。}
-\methoddesc{:create}{\&key (planes 0) (colors 1) (visual *visual*) (contiguous i
-l)}
-{新しいカラーマップを作成する。}
+\methoddesc{:create}{\&key (planes 0) (colors 1) (visual *visual*) contiguous}{
+新しいカラーマップを作成する。}
 
 \classdesc{XColor}{cstruct}
 {((pixel        :integer) \\
