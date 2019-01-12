@@ -30,8 +30,8 @@ $\backslash$や$|...|$のようなエスケープを用いること。
 
 \begin{refdesc}
 
-\funcdesc{symbolp}{object}{ {\em object}が
-クラスsymbolかそのサブクラスのインスタンスであったならば、Tを返す。}
+\funcdesc{symbolp}{object}{
+{\em object}がクラスsymbolかそのサブクラスのインスタンスであったならば、Tを返す。}
 
 \funcdesc{symbol-value}{symbol}{
 {\em symbol}の特殊値を得る。ローカル変数値は、この関数では取り出す
@@ -70,8 +70,10 @@ property-listを持つことができる。
 注意:ローカル変数やオブジェクト変数として使用されるsymbolは
 いつも値を持っているため、{\em boundp}はこれらのローカル変数の
 格納状態を検査することができない。}
+
 \funcdesc{fboundp}{symbol}{
 {\em symbol}がグローバルな関数定義を持っているかどうかを検査する。}
+
 \funcdesc{makunbound}{symbol}{
 {\em symbol}は、（特殊値を持たないように）強制的にunboundされる。
 ローカル変数は、いつも値が割り当てられ、{\bf makunbound}できない。}
@@ -79,8 +81,10 @@ property-listを持つことができる。
 \funcdesc{get}{sym attribute}{
 {\em sym}のplistの中で{\em attribute}に関連する値を取り出す。
 {\tt (cdr (assoc {\em attribute} (symbol-plist {\em sym})))}と等価である。}
+
 \funcdesc{putprop}{sym val attribute}{
 {\bf putprop}は、{\bf setf}と{\bf get}の組み合せで置き換えるべきである。}
+
 \funcdesc{remprop}{sym attr}{
 属性値({\em attr})と{\em sym}の組をproperty-listから削除する。}
 
@@ -123,6 +127,7 @@ EusLispは、ローカルスコープマクロ定義の機能を持っていな�
 
 \funcdesc{keywordp}{obj}{
 もし{\em obj}がsymbolで、そのホームパッケージが{\bf KEYWORD}のときTを返す。}
+
 \funcdesc{constantp}{symbol}{
 もしsymbolが{\bf defconstant}マクロで定数に宣言されているときTを返す。}
 
@@ -192,11 +197,20 @@ package-listに繋げられている。
 top-levelプロンプトは、現在のパッケージを示すために{\tt mypkg:eus}\$のように変更される。
 
 \begin{refdesc}
-\constdesc{*lisp-package*}{ Lispパッケージ。}
-\constdesc{*user-package*}{ ユーザーパッケージ。}
-\constdesc{*unix-package*}{ UNIXパッケージ。}
-\constdesc{*system-package*}{ システムパッケージ。}
-\constdesc{*keyword-package*}{ キーワードパッケージ。}
+\constdesc{*lisp-package*}{
+Lispパッケージ。}
+
+\constdesc{*user-package*}{
+ユーザーパッケージ。}
+
+\constdesc{*unix-package*}{
+UNIXパッケージ。}
+
+\constdesc{*system-package*}{
+システムパッケージ。}
+
+\constdesc{*keyword-package*}{
+キーワードパッケージ。}
 
 \funcdesc{find-symbol}{string \&optional (package *package*)}{
 {\em package}のなかでprint-nameとして{\em string}をもつsymbolを
@@ -217,6 +231,7 @@ top-levelプロンプトは、現在のパッケージを示すために{\tt myp
 
 \funcdesc{find-package}{name}{
 パッケージの名前またはnicknameが{\em name}と同じものを探す。}
+
 \funcdesc{make-package}{name \&key nicknames (use '(lisp))}{
 {\em name}で示される名前の新しいパッケージを作る。
 {\em name}は、stringあるいはsymbolでよい。
@@ -292,7 +307,6 @@ symbol名と{\em sym}が重複していないかどうかを検査する。
 \macrodesc{do-external-symbols}{(var pkg) \&rest forms}{
 {\em pkg}において、外部symbolに対して繰り返しをする。
 そのときの{\em forms}の評価が返される。}
-
 
 \macrodesc{do-all-symbols}{(var \&optional result) \&rest forms}{
 全てのパッケージにおいて、symbolに対して繰り返しをする。そのときの{\em forms}の評価が返される。

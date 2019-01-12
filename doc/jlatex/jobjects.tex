@@ -88,7 +88,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 \macdesc{defclassmethod}{classname \&rest (selector lambda-list \&rest body)}
 
-\funcdesc{classp}{object}{{\em object}がクラスオブジェクトのときTを返す。
+\funcdesc{classp}{object}{
+{\em object}がクラスオブジェクトのときTを返す。
 そのオブジェクトは、クラス{\bf metaclass}かそのサブクラスの
 インスタンスである。}
 
@@ -213,9 +214,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 \subsection{基本クラス}
 
 \begin{refdesc}
-\classdesc{object}{}
-{}
-{objectは、最も基本のクラスである。それは、クラス継承の最上位に位置する。
+\classdesc{object}{}{}{
+objectは、最も基本のクラスである。それは、クラス継承の最上位に位置する。
 スロット変数が定義されていないため、{\bf object}はインスタンスを作るために
 使用しない。}
 
@@ -234,8 +234,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 この構文で書式の表示が得られる。（symbolや文字列でも構わない）
 この構文で述べることは、symbolに{\bf setq}し忘れたデータオブジェクトを
 把握することができる。
-ただし、表示された後にガーベージコレクションが起こらない限りである。
-}
+ただし、表示された後にガーベージコレクションが起こらない限りである。}
 
 \methoddesc{:slots}{}{
 変数名のリストおよびオブジェクトの全てのスロットと対になる値を返す。
@@ -246,9 +245,16 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 このオブジェクトから呼べる全てのメソッドのリストを返す。
 {\em subname}を指定すると、メソッド名のなかにそれを含むメソッドのみ返す。}
 
-\classdesc{propertied-object}{object}
-{plist}
-{property-listを持つオブジェクトを定義する。
+\methoddesc{:get-val}{variable-name}{
+{\em variable-name}に該当するスロットの値を返す。
+スロットが存在しない時、エラーを報告する。}
+
+\methoddesc{:set-val}{variable-name value}{
+{\em variable-name}に該当するスロットに{\em value}を代入する。
+スロットが存在しない時、エラーを報告する。}
+
+\classdesc{propertied-object}{object}{plist}{
+property-listを持つオブジェクトを定義する。
 他のCommon Lispと違って、
 EusLispは、たとえ、symbolでなかったとしても、property-listを持つ
 {\bf propertied-object}を継承するどんなオブジェクトも
@@ -267,70 +273,88 @@ lisp書式も可能である。
 symbolが{\tt indicator}として用いられたとき、内部パッケージを広く実行される
 等価性のチェックを確実にするためにキーワードの使用を推薦する。
 {\bf :plist}は、主な{\tt plist}を返す。}
+
 \methoddesc{:get}{indicator}{
 {\tt plist}のなかで{\em indicator}と結び付く値を返す。
 %%% change 2004.12.14 \verb+(send x :get :y) == (cdr (assoc :y (send x :plist)))+}
 \verb~(send x :get :y) == (cdr (assoc :y (send x :plist)))~}
+
 \methoddesc{:put}{indicator value}{
 {\tt plist}のなかで、{\em value}と{\em indicator}を結び付ける。}
+
 \methoddesc{:remprop}{indicator}{
 {\tt plist}から{\em indicator}とvalueの組を削除する。
 さらに、{\bf :get}を試すとvalueとしてNILを返す。}
+
 \methoddesc{:name}{\&optional name}{
 {\tt plist}のなかの{\tt :name}特性を定義し、取り出す。
 この特性は、表示のために使用される。}
+
 \methoddesc{:prin1}{\&optional stream \&rest mesg}{
 再読み込み可能な書式のオブジェクトを表示する。
 もしオブジェクトが{\tt :name}特性を持っているならば、
 オブジェクトのアドレスの後に特性を表示する。}
 
-\classdesc{metaclass}{propertied-object}
-{name super cix vars types forwards methods}
-{{\bf metaclass}は、複数クラスを定義する。独自のクラス変数を持つ複数クラスは、
+\classdesc{metaclass}{propertied-object}{name super cix vars types forwards methods}{
+{\bf metaclass}は、複数クラスを定義する。独自のクラス変数を持つ複数クラスは、
 それらのスーパークラスとして{\bf metaclass}を定義しなければならない。}
+
 \methoddesc{:new}{}
 {このクラスのインスタンスを生成し、全てのスロットをNILにした後、
 それを返す。}
+
 \methoddesc{:super}{}{
 このクラスのスーパークラスオブジェクトを返す。
 一旦クラス定義したスーパークラスを変更することはできない。}
+
 \methoddesc{:methods}{}{
 このクラスで定義された全てのメソッドのリストを返す。
 そのリストは、メソッド名とパラメータと本体を組みにしたリスト
 によって構成されたリストである。}
+
 \methoddesc{:method}{name}{
 {\em name}で関連づけられたメソッド定義を返す。
 もし見つからなければ、NILを返す。}
+
 \methoddesc{:method-names}{subname}{
 メソッド名のなかに{\em subname}を含む全てのメソッド名のリストを返す。
 メソッドは、このクラスのなかのみ探索される。}
+
 \methoddesc{:all-methods}{}{
 このクラスとその全てのスーパークラスのなかで定義されているすべてのメソッドの
 リストを返す。
 言い替えると、このクラスのインスタンスは、これらのメソッドを
 実行することができる。}
+
 \methoddesc{:all-method-names}{subname}{
 {\em subname}と一致する全てのメソッド名のリストを返す。
 その探索は、このクラスから{\bf object}まで実行される。}
+
 \methoddesc{:slots}{}{
 スロット名のベクトルを返す。}
+
 \methoddesc{:name}{}{
 このクラスのsymbol名を返す。}
+
 \methoddesc{:cid}{}{
 このクラスと同一であることを示すために、このクラスのインスタンスすべてに
 割り当てられた整数を返す。
 これは、システム内部のクラステーブルへのインデックスで、
 このクラスの下に新しいサブクラスが定義されたとき、変更される。}
+
 \methoddesc{:subclasses}{}{
 このクラスの直接のサブクラスのリストを返す。}
+
 \methoddesc{:hierarchy}{}{
 このクラスの下に定義された全てのサブクラスのリストを返す。
 全てのクラス継承の広範囲なリストを得るためには、{\bf class-hierarchy}関数
 を呼び出す。}
+
 \funcdesc{find-method}{object selector}{
 {\em object}のクラスやそのスーパークラスのなかで、{\em selector}と一致する
 メソッドを探索する。
 この関数は、{\em object}のクラスが不確かで、その{\em object}が
 エラーなしにメッセージを受け取ってくれるかどうかを知りたい時に役立つ。}
+
 \end{refdesc}
 \newpage

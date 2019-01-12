@@ -28,8 +28,7 @@
 もし、{\em sequence}がfill-pointerを持つ行列ならば、
 {\bf length}は行列全体のサイズを返すのではなくfill-pointerを返す。
 このような行列のサイズを知りたい場合には、{\bf array-total-size}を
-使用すること。
-}
+使用すること。}
 
 \funcdesc{subseq}{sequence start \&optional end}{
 {\em sequence}の{\em start}番目から({\em end}$-$1)番目までをそっくりコピーした
@@ -56,8 +55,7 @@
 それぞれの{\em sequence}は、なにかの列型である。
 {\bf append}と違って、最後の一つまで含めた全ての列がコピーされる。
 {\em result-type}は、{\tt cons,string,vector,float-vector}などの
-クラスである。
-}
+クラスである。}
 
 \funcdesc{coerce}{sequence result-type}{
 {\em sequence}の型を変更する。
@@ -76,8 +74,7 @@
 対して適用され、その結果は{\em result-type}の型の列に蓄積される。}
 
 \funcdesc{fill}{sequence item \&key (start 0) (end (length sequence))}{
-{\em sequence}の{\em start}番目から({\em end}$-$1)番目まで、{\em item}で満たす。
-}
+{\em sequence}の{\em start}番目から({\em end}$-$1)番目まで、{\em item}で満たす。}
 
 \funcdesc{replace}{dest source \&key start1 end1 start2 end2}{
 {\em dest}列の中の{\em start1}から{\em end1}までの要素が、
@@ -141,6 +138,7 @@ sequenceのそれぞれの要素にpredicateを適用し、
 \funcdesc{find-if}{predicate seq \&key start end key (count 1)}{
 {\em seq}の要素の中で{\em predicate}がnon-NILを返す要素の内、
 {\em :count}番目の要素を返す。}
+
 \fundesc{find-if-not}{predicate seq \&key start end key}
 
 \funcdesc{count}{item seq \&key start end test test-not key}{
@@ -149,6 +147,7 @@ sequenceのそれぞれの要素にpredicateを適用し、
 
 \funcdesc{count-if}{predicate seq \&key start end key}{
 {\em predicate}がnon-NILを返す{\em seq}内の要素数を数える。}
+
 \fundesc{count-if-not}{predicate seq \&key start end key}
 
 \funcdesc{remove}{item seq \&key start end test test-not key count}{
@@ -159,7 +158,9 @@ sequenceのそれぞれの要素にpredicateを適用し、
 無意味な探索を避けるために、{\em :count=1}を指定すること。}
 
 \fundesc{remove-if}{predicate seq \&key start end key count}
+
 \fundesc{remove-if-not}{predicate seq \&key start end key count}
+
 \funcdesc{remove-duplicates}{seq \&key start end key test test-not count}{
 {\em seq}の中から複数存在するitemを探し、その中の1つだけを残した新しい列を作る。}
 
@@ -170,6 +171,7 @@ sequenceのそれぞれの要素にpredicateを適用し、
 無意味な探索を避けるために、{\em :count=1}を指定すること。}
 
 \fundesc{delete-if}{predicate seq \&key start end key count}
+
 \funcdesc{delete-if-not}{predicate seq \&key start end key count}{
 {\bf remove}や{\bf delete}の{\em :count}デフォルト値は、1,000,000である。
 もし列が長く、削除したい要素が一回しか現れないときは、
@@ -185,12 +187,15 @@ sequenceのそれぞれの要素にpredicateを適用し、
 \end{verbatim}
 
 \fundesc{substitute-if}{newitem predicate seq \&key start end key count}
+
 \fundesc{substitute-if-not}{newitem predicate seq \&key start end key count}
 
-\funcdesc{nsubstitute}{newitem olditem seq \&key start end test test-not key count}
-{{\em seq}の中で{\em count}番目に現れた{\em olditem}を{\em newitem}に置き換え、
+\funcdesc{nsubstitute}{newitem olditem seq \&key start end test test-not key count}{
+{\em seq}の中で{\em count}番目に現れた{\em olditem}を{\em newitem}に置き換え、
 元の列{\em seq}に返す。デフォルトでは、全ての{\em olditem}を置き換える。}
+
 \fundesc{nsubstitute-if}{newitem predicate seq \&key start end key count}
+
 \fundesc{nsubstitute-if-not}{newitem predicate seq \&key start end key count}
 
 \end{refdesc}
@@ -200,34 +205,66 @@ sequenceのそれぞれの要素にpredicateを適用し、
 \subsection{リスト}
 
 \begin{refdesc}
+
 \funcdesc{listp}{object}{
 オブジェクトがconsのインスタンスかもしくはNILならば、Tを返す。}
+
 \funcdesc{consp}{object}{
 {\tt (not (atom object))}と同一である。{\tt (consp '())}はNILである。}
+
 \funcdesc{car}{list}{
 {\em list}の最初の要素を返す。NILの{\bf car}はNILである。
 atomの{\bf car}はエラーとなる。{\tt (car '(1 2 3)) = 1}}
+
 \funcdesc{cdr}{list}{
 {\em list}の最初の要素を削除した残りのリストを返す。NILの{\bf cdr}はNILである。
 atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
-\funcdesc{cadr}{list}{{\tt (cadr list) = (car (cdr list))}}
-\funcdesc{cddr}{list}{{\tt (cddr list) = (cdr (cdr list))}}
-\funcdesc{cdar}{list}{{\tt (cdar list) = (cdr (car list))}}
-\funcdesc{caar}{list}{{\tt (caar list) = (car (car list))}}
-\funcdesc{caddr}{list}{{\tt (caddr list) = (car (cdr (cdr list)))}}
-\funcdesc{caadr}{list}{{\tt (caadr list) = (car (car (cdr list)))}}
-\funcdesc{cadar}{list}{{\tt (cadar list) = (car (cdr (car list)))}}
-\funcdesc{caaar}{list}{{\tt (caaar list) = (car (car (car list)))}}
-\funcdesc{cdadr}{list}{{\tt (cdadr list) = (cdr (car (cdr list)))}}
-\funcdesc{cdaar}{list}{{\tt (cdaar list) = (cdr (car (car list)))}}
-\funcdesc{cdddr}{list}{{\tt (cdddr list) = (cdr (cdr (cdr list)))}}
-\funcdesc{cddar}{list}{{\tt (cddar list) = (cdr (cdr (car list)))}}
-\funcdesc{first}{list}{{\em list}の最初の要素を取り出す。
+
+\funcdesc{cadr}{list}{
+{\tt (cadr list) = (car (cdr list))}}
+
+\funcdesc{cddr}{list}{
+{\tt (cddr list) = (cdr (cdr list))}}
+
+\funcdesc{cdar}{list}{
+{\tt (cdar list) = (cdr (car list))}}
+
+\funcdesc{caar}{list}{
+{\tt (caar list) = (car (car list))}}
+
+\funcdesc{caddr}{list}{
+{\tt (caddr list) = (car (cdr (cdr list)))}}
+
+\funcdesc{caadr}{list}{
+{\tt (caadr list) = (car (car (cdr list)))}}
+
+\funcdesc{cadar}{list}{
+{\tt (cadar list) = (car (cdr (car list)))}}
+
+\funcdesc{caaar}{list}{
+{\tt (caaar list) = (car (car (car list)))}}
+
+\funcdesc{cdadr}{list}{
+{\tt (cdadr list) = (cdr (car (cdr list)))}}
+
+\funcdesc{cdaar}{list}{
+{\tt (cdaar list) = (cdr (car (car list)))}}
+
+\funcdesc{cdddr}{list}{
+{\tt (cdddr list) = (cdr (cdr (cdr list)))}}
+
+\funcdesc{cddar}{list}{
+{\tt (cddar list) = (cdr (cdr (car list)))}}
+
+\funcdesc{first}{list}{
+{\em list}の最初の要素を取り出す。
 {\bf second, third, fourth, fifth, sixth, seventh, eighth}もまた定義されている。{\tt (first list) = (car list)}}
+
 %\funcdesc{second}{list}{{\tt (second list) = (cadr list)}}
 %\funcdesc{third}{list}{{\tt (third list) = (caddr list)}}
 %\funcdesc{fourth}{list}{{\tt (fourth list) = (car (cdddr list))}}
 %\funcdesc{fifth}{list}{{\tt (fifth list) = (cadr (cdddr list))}}
+
 \funcdesc{nth}{count list}{
 {\em list}内の{\em count}番目の要素を返す。
 {\tt (nth 1 list)}は、{\tt (second list)}あるいは{\tt (elt list 1)}と等価である。}
@@ -238,13 +275,14 @@ atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 \funcdesc{last}{list}{
 {\em list}の最後の要素でなく、最後のconsを返す。}
 
-\funcdesc{butlast}{list \&optional (n 1)}
-{{\em list}の最後から{\em n}個の要素を削除したリストを返す。}
+\funcdesc{butlast}{list \&optional (n 1)}{
+{\em list}の最後から{\em n}個の要素を削除したリストを返す。}
 
 \funcdesc{cons}{car cdr}{
 {\tt car}が{\em car}で{\tt cdr}が{\em cdr}であるような新しいconsを作る。}
 
-\funcdesc{list}{\&rest elements}{makes a list of {\em elements}.}
+\funcdesc{list}{\&rest elements}{
+makes a list of {\em elements}.}
 
 \funcdesc{list*}{\&rest elements}{
 {\em element}を要素とするリストを作る。しかし、最後の要素は{\bf cons}されるため、
@@ -270,8 +308,8 @@ atomであってはならない。
 \funcdesc{memq}{item list}{
 {\bf member}に似ている。しかしテストはいつも{\tt eq}で行う。}
 
-\funcdesc{member}{item list \&key key test test-not}
-{{\em list}の中から条件にあった要素を探す。
+\funcdesc{member}{item list \&key key (test \#'eq) test-not}{
+{\em list}の中から条件にあった要素を探す。
 {\em list}の中から{\em item}を探索し、{\em :test}の条件にあったものがなければNILを返す。
 見つかったならば、それ以降をリストとして返す。この探索は、最上位のリストに対して
 行なわれる。{\em :test}のデフォルトは{\tt \#'eq}である。
@@ -279,8 +317,8 @@ atomであってはならない。
 
 \fundesc{assq}{item alist}
 
-\funcdesc{assoc}{item alist \&key key test test-not}
-{{\em alist}の要素の{\bf car}が{\em :test}の条件にあった最初のものを返す。
+\funcdesc{assoc}{item alist \&key key (test \#'eq) test-not}{
+{\em alist}の要素の{\bf car}が{\em :test}の条件にあった最初のものを返す。
 合わなければ、NILを返す。
 {\em :test}のデフォルトは{\tt \#'eq}である。
 {\tt (assoc '2 '((1 d t y)(2 g h t)(3 e x g))=(2 g h t)}}
@@ -332,8 +370,9 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 
 \funcdesc{union}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 2つのリストの和集合を返す。}
-\funcdesc{subsetp}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}
-{{\em list1}が{\em list2}の部分集合であること、すなわち、
+
+\funcdesc{subsetp}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
+{\em list1}が{\em list2}の部分集合であること、すなわち、
 {\em list1}のそれぞれの要素が{\em list2}のメンバーであることをテストする。}
 
 \funcdesc{intersection}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
@@ -342,8 +381,10 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 \funcdesc{set-difference}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 {\em list1}にのみ含まれていて
 {\em list2}に含まれていない要素からなるリストを返す。}
+
 \funcdesc{set-exclusive-or}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 {\em list1}および{\em list2}にのみ現れる要素からなるリストを返す。}
+
 \funcdesc{list-insert}{item pos list}{
 {\em list}の{\em pos}番目の要素として{\em item}を挿入する
 （元のリストを変化させる）。
@@ -372,8 +413,8 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 {\bf nconc}を用いてその全ての結果のリストを作る。
 {\bf nconc}はNILに対して何もしないため、
 {\bf mapcan}は、{\em arg-list}の要素にフィルタをかける（選択する）
-のに合っている。
-}
+のに合っている。}
+
 \end{refdesc}
 \newpage
 
@@ -407,8 +448,11 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 
 \begin{refdesc}
 
-\constdesc{array-rank-limit}{7。行列の最大次元を示す。}
-\constdesc{array-dimension-limit}{\#x1fffffff。各次元の最大要素数を示す。
+\constdesc{array-rank-limit}{
+7。行列の最大次元を示す。}
+
+\constdesc{array-dimension-limit}{
+\#x1fffffff。各次元の最大要素数を示す。
 論理的な数であって、システムの物理メモリあるいは仮想メモリの大きさによって
 制限される。}
 
@@ -416,6 +460,7 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 行列は１次元であってもベクトルではない。
 {\em object}が{\tt vector, integer-vector, float-vector, string, bit-vector}
 あるいはユーザーで定義したベクトルならTを返す。}
+
 \funcdesc{vector}{\&rest elements}{
 {\em elements}からなる一次元ベクトルを作る。}
 
@@ -454,15 +499,19 @@ fill-pointerは、次の位置にポイントを1つ進められる。
 {\em array}のfill-pointerが最後に到達したとき、自動的に{\em array}のサイズが
 拡張されることを除いては、{\bf vector-push}と同じである。}
 
-\funcdesc{arrayp}{obj}
-{もし{\em obj}が行列またはベクトルのインスタンスであるならTを返す。}
+\funcdesc{arrayp}{obj}{
+もし{\em obj}が行列またはベクトルのインスタンスであるならTを返す。}
 
 \funcdesc{array-total-size}{array}{
-
 {\em array}の要素数の合計を返す。}
-\funcdesc{fill-pointer}{array}{{\em array}のfill-pointerを返す。
-file-pointerを持っていなければNILを返す。}
-\funcdesc{array-rank}{array}{{\em array}の次元数を返す。}
+
+\funcdesc{fill-pointer}{array}{
+{\em array}のfill-pointerを返す。
+fill-pointerを持っていなければNILを返す。}
+
+\funcdesc{array-rank}{array}{
+{\em array}の次元数を返す。}
+
 \funcdesc{array-dimensions}{array}{
 {\em array}の各次元の要素数をリストで返す。}
 
@@ -473,12 +522,19 @@ file-pointerを持っていなければNILを返す。}
 \funcdesc{bit}{bitvec index}{
 {\em bitvec}の{\em index}番目の要素を返す。
 ビットベクトルの要素を変更するには、{\bf setf}と{\bf bit}を使用すること。}
+
 \fundesc{bit-and}{bits1 bits2 \&optional result}
+
 \fundesc{bit-ior}{bits1 bits2 \&optional result}
+
 \fundesc{bit-xor}{bits1 bits2 \&optional result}
+
 \fundesc{bit-eqv}{bits1 bits2 \&optional result}
+
 \fundesc{bit-nand}{bits1 bits2 \&optional result}
+
 \fundesc{bit-nor}{bits1 bits2 \&optional result}
+
 \funcdesc{bit-not}{bits1 \&optional result}{
 同じ長さの{\em bits1}と{\em bits2}というビットベクトルにおいて、
 それらのand, inclusive-or,
@@ -529,8 +585,8 @@ EusLispには、文字型がない。
 {\em string}の型が明確に解っていて、型チェックを要しないときのみ、{\bf schar}
 を使うこと。}
 
-\funcdesc{stringp}{string}{
-{\em string}がバイト(256より小さい正の整数)のベクトルなら、Tを返す。}
+\funcdesc{stringp}{object}{
+{\em object}がバイト(256より小さい正の整数)のベクトルなら、Tを返す。}
 
 \funcdesc{string-upcase}{str \&key start end}{
 {\em str}を大文字の文字列に変換して、新しい文字列を返す。}
@@ -564,14 +620,15 @@ EusLispには、文字型がない。
 最初の引数をNILにした{\bf format}関数を用いること。}
 
 \fundesc{string$<$}{str1 str2}
+
 \fundesc{string$<=$}{str1 str2}
+
 \fundesc{string$>$}{str1 str2}
-\funcdesc{string$>=$}{str1 str2}{
-{\em str1}と{\em str2}を先頭から順番に比較して、比較演算が成立した位置
-を返す。もし、成立しなければ、NILを返す。文字の比較は、その文字のコードに
-に対して行なわれるため、{\tt A$<$Z}である。。}
+
+\fundesc{string$>=$}{str1 str2}
 
 \fundesc{string-left-trim}{bag str}
+
 \funcdesc{string-right-trim}{bag str}{
 {\em str}は、左（右）から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
 その要素を削除する。
@@ -627,6 +684,7 @@ I/O空間を参照することがある。
 メモリのlarge chunkを連続的にアクセスしたとき、比較的に遅く動作する。。
 
 \begin{refdesc}
+
 \funcdesc{make-foreign-string}{address length}{
 {\em address}の位置から{\em length}バイトの
 {\bf foreign-string}のインスタンスを作る。
@@ -688,14 +746,13 @@ hash-tableに新しい値が登録され、そのテーブルの埋まったス�
 \funcdesc{remhash}{key htab}{
 {\em htab}の中から{\em key}で指定されたハッシュ登録を削除する。}
 
-\funcdesc{maphash}{function htab }{
+\funcdesc{maphash}{function htab}{
 {\em htab}の要素全てを{\em function}で{\bf map}する。}
 
 \funcdesc{hash-table-p}{x}{
 もし{\em x}がhash-tableクラスのインスタンスなら、Tを返す。}
 
-\classdesc{hash-table}{object}
-{(key value count \\
+\classdesc{hash-table}{object}{(key value count \\
 \> hash-function test-function \\
 \> rehash-size empty deleted)}{
 hash-tableを定義する。
@@ -727,29 +784,37 @@ carがqueueの実体であり、このqueueのインスタンスをqとすると
 FIFO queueを定義する。}
 
 
-\methoddesc{:init}{}{queueを初期化する。}
+\methoddesc{:init}{}{
+queueを初期化する。}
 
-\methoddesc{:enqueue}{val}{このqueueにxを最新の要素として追加する。}
-\methoddesc{:dequeue}{\&optional (error-p nil)}{このqueueの最も過去に
-  追加された要素を返し、queueから削除する。queueが空の場合，error-pが
-  NILでない場合はエラーを表示し、それ以外の場合はNILを返す。}
+\methoddesc{:enqueue}{val}{
+このqueueにxを最新の要素として追加する。}
 
+\methoddesc{:dequeue}{\&optional (error-p nil)}{
+このqueueの最も過去に追加された要素を返し、
+queueから削除する。queueが空の場合，error-pが
+NILでない場合はエラーを表示し、それ以外の場合はNILを返す。}
 
-\methoddesc{:length}{}{このqueueの長さを返す。}
-\methoddesc{:empty?}{}{このqueueが空の場合、Tを返す。}
+\methoddesc{:empty?}{}{
+このqueueが空の場合、Tを返す。}
 
-\methoddesc{:trim}{s}{このqueueの要素のうち古いものを破棄し、queueの長さをsとする。}
-\methoddesc{:search}{item \&optional (test \#'equal)}{このqueueにitem
-  が存在するか調べる。もし無ければNILを返す。}
+\methoddesc{:length}{}{
+このqueueの長さを返す。}
 
-\methoddesc{:delete}{item \&optional (test \#'equal) (count 1)}{この
-  queueからitemと同一の要素を探し、:count番目までの要素を削除する。}
-\methoddesc{:first}{}{このqueueの先頭の要素（最も過去に追加された要素）を返す。}
-\methoddesc{:last}{}{このqueueの最後の要素（最も最近に追加された要素）を返す。}
+\methoddesc{:trim}{s}{
+このqueueの要素のうち古いものを破棄し、queueの長さをsとする。}
 
+\methoddesc{:search}{item \&optional (test \#'equal)}{
+このqueueにitemが存在するか調べる。もし無ければNILを返す。}
 
+\methoddesc{:delete}{item \&optional (test \#'equal) (count 1)}{
+このqueueからitemと同一の要素を探し、:count番目までの要素を削除する。}
+
+\methoddesc{:first}{}{
+このqueueの先頭の要素（最も過去に追加された要素）を返す。}
+
+\methoddesc{:last}{}{
+このqueueの最後の要素（最も最近に追加された要素）を返す。}
 
 \end{refdesc}
-
-
 \newpage

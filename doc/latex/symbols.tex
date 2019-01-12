@@ -38,8 +38,8 @@ use reader's escapes, $\backslash$ and $|...|$.
 
 \begin{refdesc}
 
-\funcdesc{symbolp}{object}{ returns T if {\em object} is an
-instance of CLASS symbol or its subclasses.}
+\funcdesc{symbolp}{object}{
+returns T if {\em object} is an instance of CLASS symbol or its subclasses.}
 
 \funcdesc{symbol-value}{symbol}{
 gets {\em symbol}'s special value. Lexical (local) variables' 
@@ -78,8 +78,10 @@ Checks if {\em symbol} has a globally bound value.
 Note that symbols used for local and object variables
 always have bound value and {\bf boundp} cannot test the bound state
 of these local variables.}
+
 \funcdesc{fboundp}{symbol}{
 Checks if {\em symbol} has a globally bound function definition.}
+
 \funcdesc{makunbound}{symbol}{
 {\em symbol} is forced to be unbound (to have no special value).
 Note that lexical (local) variables always have values assigned and
@@ -88,8 +90,10 @@ cannot be {\em makunbound}ed.}
 \funcdesc{get}{sym attribute}{
 retrieves {\em sym}'s value associated with {\em attribute} in its plist.
 {\tt = (cdr (assoc {\em attribute} (symbol-plist {\em sym})))}}
+
 \funcdesc{putprop}{sym val attribute}{
 Putprop should be replaced with the combination of {\bf setf} and {\bf get}.}
+
 \funcdesc{remprop}{sym attr}{
 removes attribute-value pair from {\em sym}'s property list.}
 
@@ -101,8 +105,7 @@ declared special.}
 
 \funcdesc{set}{sym val}{
 assigns {\em val} to the special value of {\em sym}.
-{\bf Set} cannot assign values to local or object
-variables.}
+{\bf Set} cannot assign values to local or object variables.}
 
 \specialdesc{defun}{symbol lambda-list \&rest body}{
 defines a global function to {\em symbol}.
@@ -134,6 +137,7 @@ constant value, issuing a warning message.}
 
 \funcdesc{keywordp}{obj}{
 T if {\em obj} is a symbol and its home package is {\bf KEYWORD}.}
+
 \funcdesc{constantp}{symbol}{
 T if the symbol is declared to be constant with defconstant macro.}
 
@@ -206,11 +210,20 @@ top-level prompt changes to indicate the current package,
 like {\tt mypkg:eus}\$.
 
 \begin{refdesc}
-\constdesc{*lisp-package*}{ Lisp package.}
-\constdesc{*user-package*}{ User package.}
-\constdesc{*unix-package*}{ Unix package.}
-\constdesc{*system-package*}{ System Package.}
-\constdesc{*keyword-package*}{ Keyword Package.}
+\constdesc{*lisp-package*}{
+Lisp package.}
+
+\constdesc{*user-package*}{
+User package.}
+
+\constdesc{*unix-package*}{
+Unix package.}
+
+\constdesc{*system-package*}{
+System Package.}
+
+\constdesc{*keyword-package*}{
+Keyword Package.}
 
 \funcdesc{find-symbol}{string \&optional (package *package*)}{
 finds and locates the symbol which has {\em string} as its print name
