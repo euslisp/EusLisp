@@ -1116,8 +1116,8 @@
           (push name *defun-list*))
        (setq doc 
 	     (if (and (stringp (car bodies))  (cdr bodies))
-		 (pop bodies)
-		 (format nil "~s" arglist)))
+                 (cons (format nil "~a" (or arglist "()")) (pop bodies))
+                 (cons (format nil "~a" (or arglist "()")) "")))
        (send self :lambda-block name arglist bodies cname)
        (send self :add-initcode (list fun-macro cname name doc))))
  (:defmethod (methods) 
@@ -1144,8 +1144,8 @@
                            (lisp::gencname-tail myclass selector)))
 	 (setq doc 
 	       (if (and (stringp (car bodies))  (cdr bodies))
-		   (pop bodies)
-		   (format nil "~s" param)))
+                   (cons (format nil "~a" (or (cadr method) "()")) (pop bodies))
+                   (cons (format nil "~a" (or (cadr method) "()")) "")))
 	 (send self :lambda-block selector param bodies entry)
          (send self :add-initcode
 		 (list 'defmethod myclass selector entry doc) ))

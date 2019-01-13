@@ -1098,7 +1098,7 @@ pointer *argv;
 pointer DEFUN(ctx,arg)
 register context *ctx;
 pointer arg;
-{ pointer funcname;
+{ pointer funcname,doc;
   extern pointer putprop();
 #ifdef SPEC_DEBUG
   printf( "DEFUN:" ); hoge_print( arg );
@@ -1107,15 +1107,24 @@ pointer arg;
   arg=ccdr(arg);
   if (issymbol(funcname)) {pointer_update(funcname->c.sym.spefunc,cons(ctx,LAMBDA,arg));}
   else error(E_NOSYMBOL);
-  putprop(ctx,funcname,
-	 (isstring(ccar(ccdr(arg))))?(ccar(ccdr(arg))):(ccar(arg)),
-	 K_FUNCTION_DOCUMENTATION);
+  // Add documentation in the form (arglist . docstring)
+  if (ccar(arg) == NIL) {
+    doc=makestring("()",2);}
+  else {
+    doc=(pointer)mkstream(ctx,K_OUT,makebuffer(256));
+    prinx(ctx,ccar(arg),doc); // arglist
+    doc=makestring((char *)doc->c.stream.buffer->c.str.chars,intval(doc->c.stream.count));}
+  if (isstring(ccar(ccdr(arg))) && ccdr(ccdr(arg)) != NIL) {
+    doc=cons(ctx,doc,ccar(ccdr(arg)));}
+  else {
+    doc=cons(ctx,doc,makestring("",0));}
+  putprop(ctx,funcname,doc,K_FUNCTION_DOCUMENTATION);
   return(funcname);}
  
 pointer DEFMACRO(ctx,arg)
 register context *ctx;
 pointer arg;
-{ pointer macname;
+{ pointer macname,doc;
 #ifdef SPEC_DEBUG
   printf("DEFMACRO:" ); hoge_print(arg);
 #endif
@@ -1123,6 +1132,18 @@ pointer arg;
   arg=ccdr(arg);
   if (issymbol(macname)) {pointer_update(macname->c.sym.spefunc,cons(ctx,MACRO,arg));}
   else error(E_NOSYMBOL);
+  // Add documentation in the form (arglist . docstring)
+  if (ccar(arg) == NIL) {
+    doc=makestring("()",2);}
+  else {
+    doc=(pointer)mkstream(ctx,K_OUT,makebuffer(256));
+    prinx(ctx,ccar(arg),doc); // arglist
+    doc=makestring((char *)doc->c.stream.buffer->c.str.chars,intval(doc->c.stream.count));}
+  if (isstring(ccar(ccdr(arg))) && ccdr(ccdr(arg)) != NIL) {
+    doc=cons(ctx,doc,ccar(ccdr(arg)));}
+  else {
+    doc=cons(ctx,doc,makestring("",0));}
+  putprop(ctx,macname,doc,K_FUNCTION_DOCUMENTATION);
   return(macname);}
 
 pointer FINDSYMBOL(ctx,n,argv)

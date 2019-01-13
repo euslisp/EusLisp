@@ -144,18 +144,28 @@ pointer (*cfunc)();
 pointer DEFMETHOD(ctx,arg)	/*special form*/
 register context *ctx;
 pointer arg;
-{ register pointer class,selector,classsym,body,doc;
+{ register pointer class,classsym,method,arglist,doc;
   classsym=carof(arg,E_MISMATCHARG); arg=ccdr(arg);
   if (!issymbol(classsym)) error(E_NOSYMBOL);
   class=speval(classsym);
   if (class==UNBOUND) error(E_UNBOUND,classsym);
   if (!isclass(class)) error(E_NOCLASS,class);
   while (islist(arg)) {
-    body=ccar(arg);	/* (:selector (args) . body) */
-    if (!iscons(body)) error(E_NOLIST);
-    doc=ccdr(ccdr(body));
-    if (isstring(ccar(doc))) doc=ccar(doc); else doc=NIL;
-    addmethod(ctx,body,class,doc); arg=ccdr(arg);}
+    method=ccar(arg);	/* (:selector arglist . body) */
+    if (!iscons(method)) error(E_NOLIST);
+    // Add documentation in the form (arglist . docstring)
+    if (ccar(ccdr(method)) == NIL) {
+      arglist = makestring("()",2);}
+    else {
+      arglist=(pointer)mkstream(ctx,K_OUT,makebuffer(256));
+      prinx(ctx,ccar(ccdr(method)),arglist);
+      arglist=makestring((char *)arglist->c.stream.buffer->c.str.chars,intval(arglist->c.stream.count));}
+    doc=ccdr(ccdr(method)); /* body */
+    if (isstring(ccar(doc)) && ccdr(doc) != NIL) {
+      doc=cons(ctx,arglist,ccar(doc));}
+    else {
+      doc=cons(ctx,arglist,makestring("",0));}
+    addmethod(ctx,method,class,doc); arg=ccdr(arg);}
   return(classsym);}
 
 pointer INSTANTIATE(ctx,n,argv)
