@@ -157,8 +157,11 @@ pointer arg;
     if (ccar(ccdr(method)) == NIL) {
       arglist = makestring("()",2);}
     else {
+      pointer osf=ctx->slashflag;
       arglist=(pointer)mkstream(ctx,K_OUT,makebuffer(256));
+      ctx->slashflag=1;
       prinx(ctx,ccar(ccdr(method)),arglist);
+      ctx->slashflag=osf;
       arglist=makestring((char *)arglist->c.stream.buffer->c.str.chars,intval(arglist->c.stream.count));}
     doc=ccdr(ccdr(method)); /* body */
     if (isstring(ccar(doc)) && ccdr(doc) != NIL) {

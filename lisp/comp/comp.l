@@ -1114,10 +1114,11 @@
        (when (> *optimize* 1)
           (putprop name cname 'user-function-entry)
           (push name *defun-list*))
-       (setq doc 
-	     (if (and (stringp (car bodies))  (cdr bodies))
-                 (cons (format nil "~a" (or arglist "()")) (pop bodies))
-                 (cons (format nil "~a" (or arglist "()")) "")))
+       (let ((arglist (if arglist (format nil "~s" arglist) "()")))
+         (setq doc
+               (if (and (stringp (car bodies))  (cdr bodies))
+                   (cons arglist (pop bodies))
+                   (cons arglist ""))))
        (send self :lambda-block name arglist bodies cname)
        (send self :add-initcode (list fun-macro cname name doc))))
  (:defmethod (methods) 
@@ -1142,10 +1143,11 @@
 	       bodies (cddr method) )
          (setq entry (send self :genlabel "M"
                            (lisp::gencname-tail myclass selector)))
-	 (setq doc 
-	       (if (and (stringp (car bodies))  (cdr bodies))
-                   (cons (format nil "~a" (or (cadr method) "()")) (pop bodies))
-                   (cons (format nil "~a" (or (cadr method) "()")) "")))
+         (let ((arglist (if (cadr method) (format nil "~s" (cadr method)) "()")))
+           (setq doc
+                 (if (and (stringp (car bodies))  (cdr bodies))
+                     (cons arglist (pop bodies))
+                     (cons arglist ""))))
 	 (send self :lambda-block selector param bodies entry)
          (send self :add-initcode
 		 (list 'defmethod myclass selector entry doc) ))

@@ -1111,8 +1111,11 @@ pointer arg;
   if (ccar(arg) == NIL) {
     doc=makestring("()",2);}
   else {
+    pointer osf=ctx->slashflag;
     doc=(pointer)mkstream(ctx,K_OUT,makebuffer(256));
+    ctx->slashflag=1;
     prinx(ctx,ccar(arg),doc); // arglist
+    ctx->slashflag=osf;
     doc=makestring((char *)doc->c.stream.buffer->c.str.chars,intval(doc->c.stream.count));}
   if (isstring(ccar(ccdr(arg))) && ccdr(ccdr(arg)) != NIL) {
     doc=cons(ctx,doc,ccar(ccdr(arg)));}
@@ -1136,8 +1139,11 @@ pointer arg;
   if (ccar(arg) == NIL) {
     doc=makestring("()",2);}
   else {
+    pointer osf=ctx->slashflag;
     doc=(pointer)mkstream(ctx,K_OUT,makebuffer(256));
+    ctx->slashflag=1;
     prinx(ctx,ccar(arg),doc); // arglist
+    ctx->slashflag=osf;
     doc=makestring((char *)doc->c.stream.buffer->c.str.chars,intval(doc->c.stream.count));}
   if (isstring(ccar(ccdr(arg))) && ccdr(ccdr(arg)) != NIL) {
     doc=cons(ctx,doc,ccar(ccdr(arg)));}
