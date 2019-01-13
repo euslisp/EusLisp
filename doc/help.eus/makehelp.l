@@ -64,7 +64,8 @@
                                  :name fname :type "tex") :direction :input))
 	buf c name class seek type args)
     (format t "~s file is included in help-file.~%" fname)
-    (loop (setf c (peek-char fp nil))
+    (while t
+	  (setf c (peek-char fp nil))
 	  (if (eq c nil) (return))
 	  (setf seek (+ (- (unix:lseek fp 0 1) (file-stream-tail fp)) (file-stream-count fp)))
 	  (setf buf (read-line fp))
