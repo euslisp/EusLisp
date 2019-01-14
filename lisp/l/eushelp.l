@@ -76,7 +76,7 @@
 	(help-usage hs)
         (if (eq class nil)
 	    (if (eq (aref cmd 0) #\:)
-		(help-method-list cmd)
+		(help-method-list cmd hs)
 	        (if (eq (setf item (gethash cmd *help-hash*)) nil)
 		    (progn (format hs "~a command not found.  Commands alike are:~%" cmd)
 			   (pprint (apropos-list cmd) hs))
