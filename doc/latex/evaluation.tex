@@ -576,14 +576,14 @@ with setting {\tt :verbose} to T.}
 holds a list of names of the modules that
 have been loaded so far.}
 
-\funcdesc{provide}{module-name}{
-adds {\em module-name} in {\tt *modules*}
-as the name of the module being loaded. {\em module-name} should be
-a symbol or a string. Calls to {\bf require} should appear at the beginning
+\funcdesc{provide}{module-name \&rest version-info}{
+adds the concatenation of {\em module-name} and {\em version-info} to {\tt *modules*} as the name of the module being loaded.
+{\em module-name} should be a symbol or a string.
+Calls to {\bf require} should appear at the beginning
 of files that compose a complete modules.}
 
-\funcdesc{require}{module-name \&optional file}{
-loads {\em file} unless {\em module-name} is found in {\tt *modules*}.
+\funcdesc{require}{module-name \&rest load-arg}{
+loads file given by {\em module-name} or the first argument or {\em load-arg} unless {\em module-name} is found in {\tt *modules*}.
 {\bf provide} and {\bf require} control dependency among modules and
 are used to avoid duplicated loading of basic modules.
 Suppose you have one basic module named "A" and two application modules

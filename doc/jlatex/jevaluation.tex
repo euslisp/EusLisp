@@ -520,16 +520,17 @@ Solaris2 OSにおいて、コンパイルコードのロードは、動的ロー
 \vardesc{*modules*}{
 これまでにロードされたモジュールの名前のリストを持つ。}
 
-\funcdesc{provide}{module-name}{
-{\em module-name}をすでにロードされた
+\funcdesc{provide}{module-name \&rest version-info}{
+{\em module-name}と{\em version-info}のconsを、すでにロードされた
 モジュールの名前として{\tt *modules*}の中に加える。
 {\em module-name}はsymbolあるいは文字列でなければならない。
 {\bf require}の呼び出しは、完全なモジュールを構成するファイルの最初に
 存在しなければならない。}
 
-\funcdesc{require}{module-name \&optional file}{
-{\tt *modules*}の中に{\em module-name}が見つからなかったとき
-{\em file}をロードする。
+\funcdesc{require}{module-name \&rest load-arg}{
+{\tt *modules*}の中に{\em module-name}が見つからなかったとき、
+{\em module-name}か{\em load-arg}の第一要素によって
+示されているファイルをロードする。
 {\bf provide}と{\bf require}は、モジュールの中の依存を制御し、
 基本モジュールの2重ロードを避けるために使用される。
 1つの基本モジュール"A"と2つの応用モジュール"B"と"C"があったとし、
