@@ -104,7 +104,7 @@
 				(setf name (subseq buf (1+ (position #\{ buf)) (position #\} buf)))
 				(if (eq type *type-CLASS*)
 				    (setf class name))
-				(format fp2 "~s ~d ~s ~d ~d ~%" name type fname seek args)))
+				(format fp2 "~s ~d ~s ~d ~d~%" name type fname seek args)))
 		     )
 	    ))
     (close fp)
