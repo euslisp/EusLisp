@@ -30,8 +30,7 @@ This instance is bound to {\em joint-name}. Assign a ancestor joint to
 fingers. 
 
 \begin{refdesc}
-\longdescription{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \`[macro]\\
-% \hspace{70mm} [マクロ]\\
+\longdescription{macro}{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \\
 \> :color \> {\it color-id} \hspace{2cm} \= ;0-15 for MMD \\
 \> :parent \> {\it parent-joint} \\
 \> :axis \> {\it rotational-axis} \>  ; :x, :y or :z \\
@@ -50,8 +49,8 @@ A model of a manipulator is described by {\bf manipulator}.
 {\bf defmanipulator} macro below creates an instance of {\bf manipulator}. 
 
 \begin{refdesc}
-\longdescription{defmanipulator}{manipulator-name \&key \= :class \hspace{2cm} \= {\it manipulator-class} \`[macro]\\
-%manipulator-class} \hspace{25mm} [マクロ]\\
+\longdescription{macro}{defmanipulator}{manipulator-name \&key \= \\
+\> :class \hspace{2cm} \= {\it manipulator-class} \\
 \> :base \> {\it base-joint} \\
 \> :joints \>  {\it list-of-all-joints} \\
 \> :hand \> {\it handjoint} \\
@@ -179,16 +178,16 @@ sets {\bf affixed-object} nil.
 % 把握物体を解放したことを指示する
 }
 
-\longdescription{:create}{\= \&rest args \`[method]\\
-\> \&key \= (:name nm) (:hand h) (:joints j)\\
-\> \> (:left-finger lf) (:right-finger rf)\\
-\> \> ((:toolcoords tc) (make-coords))\\
-\> \> ((:handcoords hc) (make-coords))\\
-\> \> ((:base bs) (make-cascoords))\\
+\longdescription{method}{:create}{\= \&rest args \\
+\> \&key \= (name nm) (hand h) (joints j)\\
+\> \> (left-finger lf) (right-finger rf)\\
+\> \> ((toolcoords tc) (make-coords))\\
+\> \> ((handcoords hc) (make-coords))\\
+\> \> ((base bs) (make-cascoords))\\
 \> \> (open-direction (floatvector 0 1 0))\\
-\> \> ((:max-span mspan) 100.0)\\
-\> \> ((:lefty lft) t)\\
-\> \> ((:act a) nil)\\
+\> \> ((max-span mspan) 100.0)\\
+\> \> ((lefty lft) t)\\
+\> \> ((act a) nil)\\
 \> \&allow-other-keys}{
 creates and initializes a new manipulator object.
 % 新しいマニピュレータオブジェクトを作成、初期化する

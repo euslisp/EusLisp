@@ -407,13 +407,11 @@ closureの中の{\bf return-from}特殊書式と{\bf unwind-protect}の中のcle
 \functiondescription{euscomp}{\&rest filename}{UNIXコマンド}{
 Euslispコンパイラを呼びだす。}
 
-\longdescription{compile-file}{srcfile \&key \= (:verbose nil) \hspace{43mm} \=
-\` [関数]\\
-\> (:optimize 2) (:c-optimize 1) (:safety 1) \> {\rm ;optimization level} \\
-\> (:pic t)  \> {\rm ;generate position independ-} \\
-\>\>{ \rm ent code to build library} \\
-\> (:cc t) \> {\rm ; run c compiler} \\
-\> (:entry (pathname-name file)) \\}{
+\longdescription{関数}{compile-file}{srcfile \&key \= (verbose nil) \hspace{43mm} \= \\
+\> (optimize 2) (c-optimize 1) (safety 1) \> {\rm ; optimization level} \\
+\> (pic t)  \> {\rm ; position independent code} \\
+\> (cc t) \> {\rm ; run c compiler} \\
+\> (entry (pathname-name file))}{
 ファイルをコンパイルする。
 ".l"が{\em srcfile}の拡張子として仮定される。
 もし、{\em :verbose}がTならば、コンパイルされた関数やメソッド名が表示される。
@@ -421,8 +419,7 @@ Euslispコンパイラを呼びだす。}
 {\em :optimize, :c-optimize}と{\em :safety}は、最適化のレベルを
 指定する。
 モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
-{\em :pic}は、Tに設定すべきである。
-}
+{\em :pic}は、Tに設定すべきである。}
 
 \funcdesc{compile}{funcname}{
 関数をコンパイルする。{\bf compile}は、最初に関数定義をテンポラリファイルに
@@ -452,12 +449,13 @@ non-NILが設定されたとき、コンパイルされている関数名やメ�
 \subsection{プログラムロード}
 \begin{refdesc}
 
-\longdescription{load}{fname \&key \= :verbose \hspace{20mm} \= *load-verbose* \` [関数]\\
- \> :package \>  *package* \\
- \> :entry  \>  (pathname-name fname) \\
- \> :symbol-input  \> "/usr/local/bin/eus" \\
- \> :symbol-output \> "a.out" \\
- \> :ld-option \> ""}{
+\longdescription{関数}{load}{fname \&key \= (verbose *load-verbose*) \\
+ \> (package *package*) \\
+ \> (entry (pathname-name fname)) \\
+ \> (symbol-input nil) \\
+ \> (symbol-output "") \\
+ \> (print nil) \\
+ \> (ld-option "")}{
 {\bf load}はソースファイルあるいはコンパイルされたオブジェクトファイル
 をEuslispに読み込むための関数である。
 もし、{\em fname}で指定されたファイルが存在するとき、
@@ -545,11 +543,10 @@ Solaris2 OSにおいて、コンパイルコードのロードは、動的ロー
 その後、もし"C"がロードされるなら、"A"モジュールはロードされず、"C"が
 {\tt *modules*}に追加されるのみである。}
 
-\longdescription{system:binload}{opath qpath \&optional \=
-(entry (pathname-name opath)) \` [関数]\\
+\longdescription{関数}{system:binload}{opath qpath \&optional \= (entry (pathname-name opath)) \\
 \> (symfile "/usr/local/bin/eus")  \\
 \> (symout "a.out") \\
-\> (ldopt "")\\}{
+\> (ldopt "")}{
 バイナリファイルをロードしリンクする。}
 
 \fundesc{system::txtload}{fname}

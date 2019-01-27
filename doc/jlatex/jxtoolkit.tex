@@ -204,10 +204,9 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 アプリケーションwindowは、{\bf panel}のサブクラスとして定義
 去れなければならない。}
 
-\longdescription{:create}{\&rest args \= \&key \= ((:item-height iheight) 30)
-((:item-width iwidth) 50) \`[メソッド]\\
-\>\> (:font font-lucidasans-bold-12)  ((:background color) *bisque1*) \\
-\> \&allow-other-keys)}{
+\longdescription{メソッド}{:create}{\&rest args \= \&key \= ((:item-height iheight) 30) ((:item-width iwidth) 50) \\
+\>\> (font font-lucidasans-bold-12)  ((:background color) *bisque1*) \\
+\> \&allow-other-keys}{
 {\bf panel}を生成し、初期化する。
 スーパークラスの{\tt :create}が呼び出されるため、
 {\bf xwindow}に対する全ての生成用パラメータ（{\em :width, :height, 
@@ -237,9 +236,9 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 \caption{panelのアイテムレイアウト\label{panellayout}}
 \end{figure}
 
-\longdescription{:create-item}{klass label receiver method \= \&rest args \`[メソッド]\\
-\> \&key ((:font fontid)\\
-\> \&allow-other-keys)}{
+\longdescription{メソッド}{:create-item}{klass label receiver method \= \&rest args \\
+\> \&key (font fontid)\\
+\> \&allow-other-keys}{
 {\em klass}で指定されるパネルアイテムのクラス
 （すなわち、{\tt button-item,  menu-button-item, slider-item, joystick-item}など),
 のインスタンスを作り、{\tt :locate-item}を用いてpanelにアイテムを置く。
@@ -251,8 +250,8 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 \methoddesc{:delete-items}{}{
 パネルアイテムを全て削除する。}
 
-\longdescription{:create-menubar}{\= \&rest args \`[メソッド]\\
-\> \&key (:font fontid)\\
+\longdescription{メソッド}{:create-menubar}{\= \&rest args \\
+\> \&key (font fontid)\\
 \> \&allow-other-keys}{
 {\em menubar-panel}を作成し、panelの最上部に置く。}
 
@@ -317,11 +316,9 @@ NILを返す。}
 それから、{\tt menu-button-item}がpanelの中あるいはmenubarの中に
 {\em :menu}の引数として{\tt menu-panel}と一緒に作成される。}
 
-\longdescription{:create}{\&rest args \= \&key\= items (border-width 0) (font font-courb12) \`[メソッド]\\
-\>\> (:width 100) (:height-offset 15) (:color *bisque1*)
-                      (:active *bisque2*) \\
-           \>\&allow-other-keys) 
-  }{
+\longdescription{メソッド}{:create}{\&rest args \= \&key\= items (border-width 0) (font font-courb12) \\
+\>\> (width 100) (height-offset 15) (color *bisque1*) (active *bisque2*) \\
+\> \&allow-other-keys}{
 {\bf menu-panel} windowを作成する。
 そのwindowの大きさは、新しいmenu-itemが追加される時に
 拡張される。}
@@ -464,7 +461,7 @@ TextViewPanelは、windowマネージャーにより一番外側のタイトルw
 \end{description}
 }
 
-\longdescription{:create}{name reciever method \= \&rest args \`[メソッド] \\
+\longdescription{メソッド}{:create}{name reciever method \= \&rest args \\
 \> \&key ((width w) 100) ((height h) 100) (font font-courb12)\\
 \> \&allow-other-keys}{
 パネルアイテムを作成する。
@@ -482,12 +479,12 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 \methoddesc{:draw-label}{\&optional (state :top) (color bg-color) (border 2) offset}{
 {\bf button-item}のラベルを書く。}
 
-\longdescription{:create}{label revciever method \= \&rest args \`[メソッド]\\
-\>\&key\= :width :height (:font (send parent :gc :font))\\
-\>\> (:background (send parent :gc :background)) \\
-\>\> (:border-width 0) \\
-\>\> (:state :top)\\
-\>\&allow-other-keys}{
+\longdescription{メソッド}{:create}{label revciever method \= \&rest args \\
+\> \&key\= width height (font (send parent :gc :font))\\
+\>\> (background (send parent :gc :background)) \\
+\>\> (border-width 0) \\
+\>\> (state :top)\\
+\> \&allow-other-keys}{
 {\bf button-item}を作成する。
 もし、ボタンの幅と高さが与えられないなら、サイズは
 与えられたフォントを用いて書かれた
@@ -517,10 +514,10 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 メニューアイテムの１つの上でマウスボタンが外されたときに、本当のメッセージが
 送られる。}
 
-\longdescription{:create}{\= label reciever method \`[メソッド]\\
-\>\&rest args\\
-\>\&key (:menu nil) (:items) (:state :flat)\\
-\>\&allow-other-keys}{
+\longdescription{メソッド}{:create}{\= label reciever method \\
+\> \&rest args\\
+\> \&key menu items (state :flat)\\
+\> \&allow-other-keys}{
 プルダウンメニューを作成する。
 {\em receiver}と{\em method}引き数は、影響を与えない。}
 
@@ -540,9 +537,9 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 {\tt bitmap-button-item}では、ボタンが作られたときにbitmapファイルから
 ロードされるpixmapを描く。}
 
-\longdescription{:create}{bitmap-file reciever method \= \&rest args \`[メソッド]\\
-\>\&key width height\\
-\>\&allow-other-keys)}{
+\longdescription{メソッド}{:create}{bitmap-file reciever method \= \&rest args \\
+\> \&key width height\\
+\> \&allow-other-keys)}{
 {\bf bitmap-button-item}を作成する。
 最初の引き数{\em bitmap-file}は、{\tt button-item}の{\em label}引き数
 を置き換えたものである。}
@@ -563,12 +560,11 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 活性化することができる。
 {\bf choice-item}は、ラジオボタンと同様な機能を提供する。}
 
-\longdescription{:create}{label reciever method \= \&rest args \`[メソッド]\\
-           \>\&key \=(:choices '("0" "1")) (:initial-choice 0)\\
-\>\> (:font (send parent :gc :font))\\
-                \>\>(:button-size 13)\\
-                \>\>(:border-width 0)\\
-  }{
+\longdescription{メソッド}{:create}{label reciever method \= \&rest args \\
+\> \&key \= (choices '("0" "1")) (initial-choice 0)\\
+\>\> (font (send parent :gc :font))\\
+\>\> (button-size 13)\\
+\>\> (border-width 0)}{
 {\bf choice-item-button}を作成する。
 それぞれの選択ボタンは{\em :button-size}の半径を持つ円である。
 新しい選択ボタンが選択されたとき、
@@ -608,10 +604,10 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
 それぞれ値が変化した瞬間、slider-itemオブジェクトと新しい値が引き数として
 一緒に{\tt notify-object}の{\tt notify-method}が呼び出される。}
 
-\longdescription{:create}{label reciever method \= \&rest args \`[メソッド]\\
-\>\&key (:min 0.0) (:max 1.0) (:parent)\\
-\>(min-label "") (max-label "") (value-format "~4,2f")\\
-\>(font font-courb12) (span 100) (border-width 0) (initial-value min)}{
+\longdescription{メソッド}{:create}{label reciever method \= \&rest args \\
+\> \&key (min 0.0) (max 1.0) parent\\
+\> (min-label "") (max-label "") (value-format "~4,2f")\\
+\> (font font-courb12) (span 100) (border-width 0) (initial-value min)}{
 {\bf slider-item}を作成する。
 スライドのノブは、バーの上に小さな黒の四角として表示される。
 左端が{\em :min}値を表現し、右端が{\em :max}値を表現する。
@@ -636,12 +632,11 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
 2つの連続値はクモの巣のような同心円図の上を動く黒い円によって
 指定することができる(図 \ref{panelitem})。}
 
-\longdescription{:create}{name reciever method \= \&rest args \`[メソッド]\\
-           \>\&key \=(:stick-size 5) (:return nil)\\
-                \>\>(:min-x -1.0) (:max-x 1.0)\\
-                \>\>(:min-y -1.0) (:max-y 1.0)\\
-           \>\&allow-other-keys) 
-  }{
+\longdescription{メソッド}{:create}{name reciever method \= \&rest args \\
+\> \&key \= (stick-size 5) return\\
+\>\> (min-x -1.0) (max-x 1.0)\\
+\>\> (min-y -1.0) (max-y 1.0)\\
+\> \&allow-other-keys}{
 {\em :stick-size}は、スティックの黒い円の半径である。
 同心円図の円の大きさは、{\bf joystick-item} windowの幅と高さ
 に合うように決定される。
@@ -719,9 +714,9 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
 enter（改行）キーを打つことにより、バッファされたテキストが
 {\tt notify-object}の{\tt notify-method}に送られる。}
 
-\longdescription{:create}{label revciever method \= \&rest args \`[メソッド]\\
-\>\&key (:font font-courb12) (:columns 20) (:initial-value ) (:border-width 0)\\
-\>\&allow-other-keys}{
+\longdescription{メソッド}{:create}{label revciever method \= \&rest args \\
+\> \&key (font font-courb12) (columns 20) initial-value (border-width 0)\\
+\> \&allow-other-keys}{
 {\bf text-item}を作成する。
 テキストwindowの行バッファには、長さの制限が無いけれども、
 見える部分は{\em columns}文字に制限されている。}
@@ -802,10 +797,10 @@ canvas内に図や画像を描くためにはXdrawableのメソッドが使用�
 \methoddesc{:init}{id}{
 {\em id}番目のテキストwindowを初期化する。}
 
-\longdescription{:create}{\=\&rest args \`[メソッド]\\
-\>\&key \=:width :height (:font font-courb14) :rows :columns\\
-\>(:show-cursor nil) (:notify-object nil) (:notify-method nil)\\
-\>\&allow-other-keys}{
+\longdescription{メソッド}{:create}{\=\&rest args \\
+\> \&key \= width height (font font-courb14) rows columns\\
+\> show-cursor notify-object notify-method\\
+\> \&allow-other-keys}{
 text-windowを作成する。
 windowの大きさは、{\em :width}と{\em :height}かあるいは{\em :rows}と
 {\em :columns}で指定されたものとなる。
@@ -1032,7 +1027,7 @@ windowの大きさを変更し、新しいサイズに合うように
 %\methoddesc{:draw-label}{}{
 %draws xitem's label.}
 
-%\longdescription{:create}{label \= \&rest args \hspace{120mm} [method]\\
+%\longdescription{method}{:create}{label \= \&rest args \hspace{120mm} \\
 %\>\&key width height (font font-cour10)\\
 %\>\&allow-other-keys}{
 %creates xitem.}

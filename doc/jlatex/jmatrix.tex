@@ -420,25 +420,23 @@ Euslisp内で座標系は、高速性と一般性のために
 もし、{\em mat44}が与えられないとき、この座標系の表現を
 4x4の同次行列表現に変換して返す。}
 
-\longdescription{:init}{\&key \= :pos \hspace{8mm} \= \#f(0 0 0)
- \` [メソッド] \\
-% \hspace{95mm} [メソッド] \\
- \> :rot \> \#2f((1 0 0) (0 1 0) (0 0 1)) \\
- \> :rpy \> roll pitch yaw \\
- \> :Euler \> az ay az2 \\
- \> :axis \>  rotation-axis \\
- \> :angle \> rotation-angle \\
- \> :4X4   \> 4x4 matrix \\
- \> :coords \> another coordinates \\
- \> :properties \>  a list of (ind . value) pair \\
- \> :name \> name property \\}{
+\longdescription{メソッド}{:init}{\&key \= (pos \#f(0 0 0)) \hspace{8mm} \= \\
+ \> (rot \#2f((1 0 0) (0 1 0) (0 0 1))) \\
+ \> rpy \>\> {\rm ; roll pitch yaw} \\
+ \> euler \>\> {\rm ; az ay az2} \\
+ \> axis \>\>  {\rm ; rotation-axis} \\
+ \> angle \>\> {\rm ; rotation-angle} \\
+ \> 4X4   \>\> {\rm ; 4x4 matrix} \\
+ \> coords \>\> {\rm ; another coordinates} \\
+ \> properties \>\> {\rm ; list of (ind . value) pair} \\
+ \> name \>\> {\rm ; name property}}{
 この{\bf coordinates}オブジェクトを初期化し、{\tt rot}と{\tt pos}を設定する。
 それぞれのキーワードの意味は、以下に示す通りである。
 \begin{description}
 \item[:dimension] 2あるいは3 (デフォルトは 3)
 \item[:pos] 位置ベクトルを指定する (デフォルトは \#f(0 0 0))
 \item[:rot] 回転行列を指定する (デフォルトは単位行列)
-\item[:Euler] オイラー角として3つの要素の列を与える
+\item[:euler] オイラー角として3つの要素の列を与える
 \item[:rpy] ロール・ピッチ・ヨー角として3つの要素の列を与える
 \item[:axis] 回転軸 ({\tt :x,:y,:z} あるいは任意の{\tt float-vector})
 \item[:angle] 回転角 ({\em :axis}と一緒に使用)

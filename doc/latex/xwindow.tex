@@ -391,7 +391,7 @@ It is inherited not only by {\bfx text-window} and {\bf canvas} where
 any graphics objects can be drawn, but also by many {\bf panel-items}
 and {\bf scroll-bars}, which look like graphics objects rather than windows.}
 
-\longdescription{:create}{\&key (\= (parent *root*) \`[method] \\
+\longdescription{method}{:create}{\&key (\= (parent *root*) \\
 \> (x 0) (y 0) (size 256) (width size) (height size) (border-width 2) \\
 \> (save-under nil) (backing-store :always) (backing-pixmap nil)\\
 \> (border *fg-pixel*) (background *bg-pixel*) \\
@@ -583,11 +583,11 @@ font-names without using the wild-card character "*" will shorten the delay.}
 defines the graphic context.
 In EusLisp, every xwindow has its default GC.}
 
-\longdescription{:create}{\&key \= (drawable defaultRootWindow) \`[method]\\
+\longdescription{method}{:create}{\&key \= (drawable defaultRootWindow) \\
 \> (foreground *fg-pixel* (background *bg-pixel*) \\
 \> function plane-mask \\
 \> line-width line-style cap-style join-style \\
-\> font dash \\}{
+\> font dash}{
 creates a gc with given attributes. {\em Drawable} is used by the Xserver
 to know the screen and depth of the screen. 
 The resulted GC can be used in any drawables as long as they are
@@ -657,8 +657,7 @@ gets attribute.
 :fill-style, :fill-rule, :font}.
 An integer value representing the attribute is returned.}
 
-\longdescription{:change-attributes}{\&key \= function plane-mask foreground background
-\`[method]\\
+\longdescription{method}{:change-attributes}{\&key \= function plane-mask foreground background \\
 \>line-width line-style cap-style join-style font dash}{
 change attributes.
 More than one attributes are changed at the same time.}

@@ -207,10 +207,9 @@ A panel object supplies the default font for every panel-item
 created in the panel.
 Application windows should be defined as subclasses of the {\tt Panel}.}
 
-\longdescription{:create}{\&rest args \= \&key \= ((:item-height iheight) 30)
-((:item-width iwidth) 50) \`[method]\\
-\>\> (font font-lucidasans-bold-12)  ((:background color) *bisque1*) \\
-\> \&allow-other-keys)}{
+\longdescription{method}{:create}{\&rest args \= \&key \= ((item-height iheight) 30) ((item-width iwidth) 50) \\
+\>\> (font font-lucidasans-bold-12)  ((background color) *bisque1*) \\
+\> \&allow-other-keys}{
 creates and initializes a panel.
 Since superclass's {\tt :create} is invoked,
 all creation parameters for {\bf xwindow}, such as {\em width, height, 
@@ -242,9 +241,9 @@ as shown in {\bf Fig.} \ref{panellayout}.
 \caption{Item lay-out in panel\label{panellayout}}
 \end{figure}
 
-\longdescription{:create-item}{klass label receiver method \= \&rest args \`[method]\\
-\> \&key ((font fontid)\\
-\> \&allow-other-keys)}{
+\longdescription{method}{:create-item}{klass label receiver method \= \&rest args \\
+\> \&key (font fontid)\\
+\> \&allow-other-keys}{
 creates an instance of the panel-item class specified by {\em klass}
 (i.e., {\tt button-item,  menu-button-item, slider-item, joystick-item}, etc.),
 and place the item in the panel using {\tt :locate-item}.
@@ -256,7 +255,7 @@ the corresponding event.}
 \methoddesc{:delete-items}{}{
 delete all panel-items.}
 
-\longdescription{:create-menubar}{\= \&rest args \`[method]\\
+\longdescription{method}{:create-menubar}{\= \&rest args \\
 \> \&key (font fontid)\\
 \> \&allow-other-keys}{
 creates a {\em menubar-panel} and  locates it at the top of the panel.}
@@ -325,11 +324,9 @@ with the menu-button-item by {\tt (instance menu-button-item :create
 }
 
 
-\longdescription{:create}{\&rest args \= \&key\= items (border-width 0) (font font-courb12) \`[method]\\
-\>\> (width 100) (height-offset 15) (color *bisque1*)
-                      (active *bisque2*) \\
-           \>\&allow-other-keys) 
-  }{
+\longdescription{method}{:create}{\&rest args \= \&key\= items (border-width 0) (font font-courb12) \\
+\>\> (width 100) (height-offset 15) (color *bisque1*) (active *bisque2*) \\
+\> \&allow-other-keys}{
 create a menu-panel window. The size of the window is expanded each time
 new menu-item is added.}
 
@@ -474,8 +471,8 @@ the slider-item object and the new value.
 the slider-item object, the new x and y values.
 \end{description}}
 
-\longdescription{:create}{name reciever method \= \&rest args \`[method] \\
-\> \&key ((:width w) 100) ((:height h) 100) (font font-courb12)\\
+\longdescription{method}{:create}{name reciever method \= \&rest args \\
+\> \&key ((width w) 100) ((height h) 100) (font font-courb12)\\
 \> \&allow-other-keys}{
 creates a panel-item.
 As panel-item is an abstract class,
@@ -491,12 +488,12 @@ with the panel-item object as the only argument.}
 \methoddesc{:draw-label}{\&optional (state :top) (color bg-color) (border 2) offset}{
 draws button-item's label.}
 
-\longdescription{:create}{label revciever method \= \&rest args \`[method]\\
-\>\&key\= width height (font (send parent :gc :font))\\
+\longdescription{method}{:create}{label revciever method \= \&rest args \\
+\> \&key\= width height (font (send parent :gc :font))\\
 \>\> (background (send parent :gc :background)) \\
 \>\> (border-width 0) \\
 \>\> (state :top)\\
-\>\&allow-other-keys}{
+\> \&allow-other-keys}{
 creates a button-item.
 If button's width and height are not given,
 the sizes are automatically set to accomodate the label string
@@ -525,10 +522,10 @@ instead of sending an immediate message to the {\em notify-object}.
 The actual message is sent when the mouse button is released on
 one of the menu items.}
 
-\longdescription{:create}{\= label reciever method \`[method]\\
-\>\&rest args\\
-\>\&key (menu nil) (items) (state :flat)\\
-\>\&allow-other-keys}{
+\longdescription{method}{:create}{\= label reciever method \\
+\> \&rest args\\
+\> \&key menu items (state :flat)\\
+\> \&allow-other-keys}{
 creates a pulldown menu button.
 {\em Receiver} and {\em method} arguments has no effect.}
 
@@ -552,9 +549,9 @@ from a bitmap-file when the button is created.}
 \methoddesc{:draw-label}{\&optional (state :flat) color bg-color (border 2)}{
 draws a bitmap/pixmap on the button.}
 
-\longdescription{:create}{bitmap-file reciever method \= \&rest args \`[method]\\
-\>\&key width height\\
-\>\&allow-other-keys)}{
+\longdescription{method}{:create}{bitmap-file reciever method \= \&rest args \\
+\> \&key width height\\
+\> \&allow-other-keys}{
 creates bitmap-button-item.
 The first argument, {\em bitmap-file}  replaces the {\em label} argument
 of {\tt button-item}.} 
@@ -574,12 +571,11 @@ One choice is always active, and only one choice can become active at
 the same time.
 {\tt choice-item} provides the similar function as radio-buttons.}
 
-\longdescription{:create}{label reciever method \= \&rest args \`[method]\\
+\longdescription{method}{:create}{label reciever method \= \&rest args \\
            \>\&key \=(choices '("0" "1")) (initial-choice 0)\\
 \>\> (font (send parent :gc :font))\\
-                \>\>(button-size 13)\\
-                \>\>(border-width 0)\\
-  }{
+\>\> (button-size 13)\\
+\>\> (border-width 0)}{
 create a choice-item-button. Each choice button is a circle of
 radius {\em button-size}.
 When a new choice is selected, {\em notify-object}'s {\em notify-method}
@@ -618,10 +614,10 @@ between {\em min-value} and {\em max-value}.
 Each moment the value is changed, {\em notify-object}'s {\em notify-method}
 is invoked with the slider-item object and the new value as the arguments.}
 
-\longdescription{:create}{label reciever method \= \&rest args \`[method]\\
-\>\&key (min 0.0) (max 1.0) (parent)\\
-\>(min-label "") (max-label "") (value-format "~4,2f")\\
-\>(font font-courb12) (span 100) (border-width 0) (initial-value min)}{
+\longdescription{method}{:create}{label reciever method \= \&rest args \\
+\> \&key (min 0.0) (max 1.0) parent\\
+\> (min-label "") (max-label "") (value-format "~4,2f")\\
+\> (font font-courb12) (span 100) (border-width 0) (initial-value min)}{
 creates slider-item.
 The sliding knob is displayed as a small black rectangle on a bar.
 The left end represents the {\em min} value and the right end {\em max} value.
@@ -647,12 +643,11 @@ If {\em invocation} is also specified non nil,
 Two continuous values can be specified by the moving black circle
 on the coaxial chart that looks like a web (Fig. \ref{panelitem}).}
 
-\longdescription{:create}{name reciever method \= \&rest args \`[method]\\
-           \>\&key \=(stick-size 5) (return nil)\\
-                \>\>(min-x -1.0) (max-x 1.0)\\
-                \>\>(min-y -1.0) (max-y 1.0)\\
-           \>\&allow-other-keys) 
-  }{
+\longdescription{method}{:create}{name reciever method \= \&rest args \\
+\> \&key \=(stick-size 5) return\\
+\>\> (min-x -1.0) (max-x 1.0)\\
+\>\> (min-y -1.0) (max-y 1.0)\\
+\> \&allow-other-keys}{
 {\em Stick-size} is the radius of the stick's black circle.
 The sizes of the circles in the coaxial chart are determined
 according to the width and height of the joystick-item window.
@@ -738,9 +733,9 @@ Clicking a mouse button moves the cursor to the clicked character.
 Hitting an enter (newline) key causes the buffered text to be sent to
 the {\em notify-object}'s {\em notify-method}.}
 
-\longdescription{:create}{label revciever method \= \&rest args \`[method]\\
-\>\&key (font font-courb12) (columns 20) (initial-value ) (border-width 0)\\
-\>\&allow-other-keys}{
+\longdescription{method}{:create}{label revciever method \= \&rest args \\
+\> \&key (font font-courb12) (columns 20) initial-value (border-width 0)\\
+\> \&allow-other-keys}{
 creates text-item.
 Though the linebuffer of the textwindow may have unlimited length,
 visible portion is restricted to the {\em columns} characters.}
@@ -821,10 +816,10 @@ the mouse pointer.}
 \methoddesc{:init}{id}{
 initializes {\em id}th text-window.}
 
-\longdescription{:create}{\=\&rest args \`[method]\\
-\>\&key \=width height (font font-courb14) rows columns\\
-\>(show-cursor nil) (notify-object nil) (notify-method nil)\\
-\>\&allow-other-keys}{
+\longdescription{method}{:create}{\=\&rest args \\
+\> \&key \= width height (font font-courb14) rows columns\\
+\> show-cursor notify-object notify-method\\
+\> \&allow-other-keys}{
 creates text-window.
 The sizes of the window may be specified either by {\em width} and {\em height}
 or by {\em rows} and {\em columns}.
@@ -1048,7 +1043,7 @@ The same message is sent to scroll-bars if attached.}
 %\methoddesc{:draw-label}{}{
 %draws xitem's label.}
 
-%\longdescription{:create}{label \= \&rest args \hspace{120mm} [method]\\
+%\longdescription{method}{:create}{label \= \&rest args \hspace{120mm} \\
 %\>\&key width height (font font-cour10)\\
 %\>\&allow-other-keys}{
 %creates xitem.}

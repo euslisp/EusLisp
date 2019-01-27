@@ -29,13 +29,11 @@ echo-streamとconcatenated-streamは利用できない。
 \funcdesc{io-stream-p}{object}{
 {\em object}が読み書き可能なストリームであれば、Tを返す。}
 
-\longdescription{open}
-{path \&key \= :direction :input \` [関数]\\
-%{path \&key \= :direction :input \hspace{98mm} [関数]\\
- \> :if-exists :new-version \\
- \> :if-does-not-exist \\
- \> :permission \#o644 \\
- \> :buffer-size 512\\}{
+\longdescription{関数}{open}{path \&key \= (direction :input) \\
+ \> (if-exists :new-version) \\
+ \> (if-does-not-exist 'default) \\
+ \> (permission \#o644) \\
+ \> (buffer-size 512)}{
 {\bf open}は、{\em path}で指定されたファイルと結合されるストリームを作る。
 {\em path}は、文字列かパス名でよい。
 {\em :direction}は、{\tt :input, :output}または{\tt :io}のどれか

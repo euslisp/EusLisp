@@ -73,13 +73,12 @@ and {\bf send-super} and {\bf send self} are confused.
 
 \begin{refdesc}
 
-\longdescription{defclass}
-{classname \&key \= :super object \` [macro] \\
-\> :slots (\{var $|$ (var [:type type] [:forward selectors])\}*) \\
-\> :metaclass metaclass \\
-\> :element-type t \\
-\> :size -1\\}
-{creates or redefine a class.
+\longdescription{macro}{defclass}{classname \&key \= (super object) \\
+\> slots \hspace{40mm} {\rm ; (var \&optional type \&rest forward selectors)*} \\
+\> (metaclass metaclass) \\
+\> (element-type t) \\
+\> (size -1)}{
+creates or redefine a class.
 When a class is redefined to have different superclass or slot variables,
 old objects instantiated from the previous class definition will 
 behave unexpectedly, since method definitions assume the new slots

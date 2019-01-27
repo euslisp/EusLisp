@@ -29,12 +29,11 @@ T if {\em object} is a stream and capable of writing.}
 \funcdesc{io-stream-p}{object}{
 T if {\em object} is a two-way stream.}
 
-\longdescription{open}
-{path \&key \= :direction :input \`[function]\\
- \> :if-exists :new-version \\
- \> :if-does-not-exist \\
- \> :permission \#o644 \\
- \> :buffer-size 512\\}{
+\longdescription{function}{open}{path \&key \= (direction :input) \\
+ \> (if-exists :new-version) \\
+ \> (if-does-not-exist 'default) \\
+ \> (permission \#o644) \\
+ \> (buffer-size 512)}{
 {\bf Open} makes a stream associated with a file designated by {\em path}.
 {\em path} may either be a string or a pathname.
 Direction should be one of {\bf :input, :output} or {\bf :io}.
@@ -51,8 +50,7 @@ For :input files, an error is reported when the file does not exist.
 To know the existence of a file, {\bf probe-file} can be used.
 Default value for {\bf buffer-size} is 512 bytes,
 and \#O644 for {\bf :permission}.
-SunOS4 allows to open as many as sixty files at the same time.
-}
+SunOS4 allows to open as many as sixty files at the same time.}
 
 \macrodesc{with-open-file}{(svar path \&rest open-options) \&rest forms}{
 A file named {\em path} is opened with {\em open-options} and the

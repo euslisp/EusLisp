@@ -372,7 +372,7 @@ pixmapを作り、読み戻すことができる。}
 だけでなく、windowというよりはむしろグラフィックオブジェクトのような
 たくさんの{\bf panel-item}や{\bf scroll-bars}からも継承される。}
 
-\longdescription{:create}{\&key (\= (parent *root*) \`[メソッド] \\
+\longdescription{メソッド}{:create}{\&key \= (parent *root*) \\
 \> (x 0) (y 0) (size 256) (width size) (height size) (border-width 2) \\
 \> (save-under nil) (backing-store :always) (backing-pixmap nil)\\
 \> (border *fg-pixel*) (background *bg-pixel*) \\
@@ -559,11 +559,11 @@ eusxが起動するときに最初に呼び出される関数である。
 graphic context(GC)を定義する。
 Euslispの中で、全てのwindowはデフォルトGCを持っている。}
 
-\longdescription{:create}{\&key \= (drawable defaultRootWindow) \`[メソッド]\\
+\longdescription{メソッド}{:create}{\&key \= (drawable defaultRootWindow) \\
 \> (foreground *fg-pixel*) (background *bg-pixel*) \\
 \> function plane-mask \\
 \> line-width line-style cap-style join-style \\
-\> font dash \\}{
+\> font dash}{
 与えられた属性でGCを作成する。
 {\em drawable}は、画面と画面の深さを知るためにXserverにより使用される。
 結果のGCは、同じ画面上で作成される限り、
@@ -635,8 +635,7 @@ plane-maskを設定する。}
 :fill-style, :fill-rule, :font}の内の１つである。
 属性値を表す整数が返される。}
 
-\longdescription{:change-attributes}{\&key \= function plane-mask foreground background
-\`[メソッド]\\
+\longdescription{メソッド}{:change-attributes}{\&key \= function plane-mask foreground background \\
 \>line-width line-style cap-style join-style font dash}{
 属性値を変更する。
 同時に複数の属性値を変更できる。}

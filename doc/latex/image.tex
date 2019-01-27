@@ -239,7 +239,7 @@ bit-and operates between this image and {\em img2},
 plots pixels having values between {\em min} and {\em max} inclusively
 with {\em color} (gc) on {\em viewsurface}.}
 
-\longdescription{:edge1}{\&optional \= (method 1) \`[method]\\
+\longdescription{method}{:edge1}{\&optional \= (method 1) \\
 \> (th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
 \> (run *edge-length-threshold*)\\
 \> (win geometry:*viewsurface*) (edgeimg1)}{
@@ -324,7 +324,7 @@ sets look-up tables {\em newlut1}, {\em newlut1} and {\em newlut1}
 as display-lut, respectively. Then translates this image using this look-up table
 and sets translated pixel-image object as xpicture.}
 
-\longdescription{:edge1}{\&optional \= (method 1) \`[method]\\
+\longdescription{method}{:edge1}{\&optional \= (method 1) \\
 \>(th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
 \>(run *edge-length-threshold*) (win *color-viewer*)}{
 detects edge of this image. And displays this edge on this image.}
@@ -362,7 +362,7 @@ Edge Finding facilities are provided by {\tt "vision/edge/edge"}.
 
 \begin{refdesc}
 
-\longdescription{edge1}{img \= \&optional \= (method 1) \`[function]\\
+\longdescription{function}{edge1}{img \= \&optional \= (method 1) \\
 \> \> (th1 *edge-intensity-threshold*)\\
 \> \> (th2 *weak-edge-threshold*) \\
 \> \> (run *edge-length-threshold*)\\
@@ -399,11 +399,11 @@ x-display-able pixel image {\em ximg}.
 Strong edge pixels are colored in red, weak pixels in green, and
 isolated pixels in blue.}
 
-\longdescription{edge2}{img1 edge1result \&key \= (:kvalue 8.0) \`[function]\\
-\> (:curve-threshold 0.8)\\
-\> (:line-error 2.8)\\
-\> (:curve-error 2.8)\\
-\> (:plane-limit 0.3)}{
+\longdescription{function}{edge2}{img1 edge1result \&key \= (kvalue 8.0) \\
+\> (curve-threshold 0.8)\\
+\> (line-error 2.8)\\
+\> (curve-error 2.8)\\
+\> (plane-limit 0.3)}{
 tries to fit straight lines and elliptic curves to the
 result obtained by {\bf edge1}.
 A list of three elements, which represents regions, boundaries, and
@@ -448,12 +448,12 @@ draws {\bf curved-edge-segment} object {\em elp} on xwindow {\em vs}.}
 				(x 0) (y 0)}{
 draws {\bf line-edge-segment} object {\em s} on xwindow {\em vs}.}
 
-\longdescription{draw-segments}{segs \&key \= (:line-gc image::*red-gc*) \`[関数]\\
-\> (:ellipse-gc line-gc)\\
-\> (:vs geometry:*viewsurface*)\\
-\> (:height (send vs :height))\\
-\> (:step nil)\\
-\> (:x 0) (:y 0)}{
+\longdescription{function}{draw-segments}{segs \&key \= (line-gc image::*red-gc*) \\
+\> (ellipse-gc line-gc)\\
+\> (vs geometry:*viewsurface*)\\
+\> (height (send vs :height))\\
+\> (step nil)\\
+\> (x 0) (y 0)}{
 draws {\em s}, a list of {\bf edge-segment} objects on xwindow {\em vs}.}
 
 \funcdesc{draw-boundary}{b \&optional gc}{

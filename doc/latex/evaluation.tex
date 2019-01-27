@@ -450,13 +450,11 @@ or use {\tt adb}.
 \functiondescription{euscomp}{\&rest filename}{unix-command}{
 Invokes EusLisp compiler.}
 
-\longdescription{compile-file}{srcfile \&key \= (:verbose nil) \hspace{43mm} \=
-\` [function]\\
-\> (:optimize 2) (:c-optimize 1) (:safety 1) \> {\rm ;optimization level} \\
-\> (:pic t)  \> {\rm ;generate position independ-} \\
-\>\>{ \rm ent code to build library} \\
-\> (:cc t) \> {\rm ; run c compiler} \\
-\> (:entry (pathname-name file)) \\}{
+\longdescription{function}{compile-file}{srcfile \&key \= (verbose nil) \hspace{33mm} \= \\
+\> (optimize 2) (c-optimize 1) (safety 1) \>\> {\rm ; optimization level} \\
+\> (pic t)  \>\> {\rm ; position independent code} \\
+\> (cc t) \>\> {\rm ; run c compiler} \\
+\> (entry (pathname-name file))}{
 compiles a file.
 ".l" is assumed for the suffix of the {\em srcfile}.
 If {\em :verbose} is T, names of functions and methods being compiled
@@ -464,8 +462,7 @@ are printed to make it easy to find the expressions where errors occurred.
 {\em :Optimize, :c-optimize} and {\em :safety} specifies the optimization
 levels. 
 {\em :Pic} should be set T, unless the module is hard-linked in the
-EusLisp core during the make stage.
-}
+EusLisp core during the make stage.}
 
 \funcdesc{compile}{funcname}{
 compiles a function.
@@ -494,13 +491,13 @@ controls safety level.}
 \subsection{Program Loading}
 \begin{refdesc}
 
-\longdescription{load}{fname \&key \= :verbose \hspace{20mm} \= *load-verbose* \` [function]\\
- \> :package \>  *package* \\
- \> :entry  \>  (pathname-name fname) \\
- \> :symbol-input  \> "/usr/local/bin/eus" \\
- \> :symbol-output \> "a.out" \\
- \> :print \> nil \\
- \> :ld-option \> ""}{
+\longdescription{function}{load}{fname \&key \= (verbose *load-verbose*) \\
+ \> (package *package*) \\
+ \> (entry (pathname-name fname)) \\
+ \> (symbol-input nil) \\
+ \> (symbol-output "") \\
+ \> (print nil) \\
+ \> (ld-option "")}{
 {\bf Load} is the function
 to read either a source file or a compiled object file into the
 EusLisp process.
@@ -598,8 +595,7 @@ two module names "A" and "B" are added to {\tt *modules*}.
 Then if you load "C", "A" module is not loaded and "C" is added to
 {\tt *modules*}.}
 
-\longdescription{system:binload}{opath qpath \&optional \=
-(entry (pathname-name opath)) \`[function] \\
+\longdescription{function}{system:binload}{opath qpath \&optional \= (entry (pathname-name opath)) \\
 \> (symfile "/usr/local/bin/eus")  \\
 \> (symout "a.out") \\
 \> (ldopt "")\\}{

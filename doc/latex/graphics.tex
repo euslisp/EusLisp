@@ -56,12 +56,11 @@ X-axis is in horizontal direction to the right in the viewport.}
 at {\em from} and looking at {\em to} point.}
 
 % \metdesc{:makeviewcoords}{ ax ay az vpoint}
-\longdescription{:init}{
-\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \` [method]\\
-       \> :view-direction \> nil \\
-       \> :view-up \>  \#f(0.0 0.0 1.0)) \\
-       \> :view-right \>  nil \\
-       \> \&allow-other-keys}{
+\longdescription{method}{:init}{\&key \= (target \#f(0 0 0)) \\
+\> (view-direction nil) \\
+\> (view-up \#f(0.0 0.0 1.0)) \\
+\> (view-right nil) \\
+\> \&allow-other-keys}{
 Since viewing inherits cascaded-coords, all the {\em :init} parameters
 such as {\em :pos}, {\em :rot}, {\em :Euler}, {\em :rpy}, etc. can be
 used to specify the location and the orientation of the viewing coordinates.
@@ -153,14 +152,13 @@ If {\em ratio} is given,
 the aspect ratio is changed by setting screen-y to screen-x * {\em ratio}.
 {\bf :aspect} returns the current aspect ratio.}
 
-\longdescription{:init}{
-\&key \= :hither  \hspace{5mm} \= 100.0 \`[method]\\
-      \> :yon    \> 1000.0 \\
-      \> :aspect \> 1.0  \\
-      \> :screen \> 100.0 \\
-      \> :screen-x  \> screen \\
-      \> :screen-y \> (* screen-x aspect) \\
-      \>  \&allow-other-keys}{
+\longdescription{method}{:init}{\&key \= (hither 100.0) \\
+\> (yon 1000.0) \\
+\> (aspect 1.0) \\
+\> (screen 100.0) \\
+\> (screen-x screen) \\
+\> (screen-y (* screen-x aspect)) \\
+\> \&allow-other-keys}{
 initializes viewing and projection.}
 
 \vspace{5mm}
@@ -414,17 +412,16 @@ draws {\em things} with background color.}
 sets {\em viewing, viewport} and {\em viewsurface} to {\tt eye, port},
 and {\tt surface} slots of this viewer.}
 
-\longdescription{view}{\&key \= (size 500) (width size) (height size)
-\`[function] \\
+\longdescription{function}{view}{\&key \= (size 500) (width size) (height size) \\
 \> (x 100) (y 100) \\
 \> (title "eusx") \\
 \> (border-width 3) \\
 \> (background 0) \\
 \> (viewpoint \#f(300 200 100)) (target \#f(0 0 0)) \\
-\> (viewdistance 5.0)  (hither 100.0) (yon 10000.0) \\
+\> (viewdistance 5.0) (hither 100.0) (yon 10000.0) \\
 \> (screen 1.0) (screen-x screen) (screen-y screen) \\
-\> (xcenter 500) (ycenter 400) \\}
-{creates a new viewer and pushes it in *viewers* list.}
+\> (xcenter 500) (ycenter 400)}{
+creates a new viewer and pushes it in *viewers* list.}
 
 \end{refdesc}
 

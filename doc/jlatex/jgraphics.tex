@@ -50,13 +50,11 @@ x軸は、{\bf viewport}の水平右方向である。}
 見ているとしてviewing座標系を設定する。}
 
 % \metdesc{:makeviewcoords}{ ax ay az vpoint}
-\longdescription{:init}{
-%\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \hspace{85mm} [メソッド]\\
-\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \` [メソッド]\\
-       \> :view-direction \> nil \\
-       \> :view-up \>  \#f(0.0 0.0 1.0)) \\
-       \> :view-right \>  nil \\
-       \> \&allow-other-keys}{
+\longdescription{メソッド}{:init}{\&key \= (target \#f(0 0 0)) \\
+\> (view-direction nil) \\
+\> (view-up \#f(0.0 0.0 1.0)) \\
+\> (view-right nil) \\
+\> \&allow-other-keys}{
 {\bf viewing}は、{\bf cascaded-coords}を継承するので、{\em :pos}や{\em :rot}や{\em :euler}
 や{\em :rpy}などの{\em :init}のパラメータはすべてviewing座標系の位置や姿勢を
 指定することに使用できる。
@@ -143,15 +141,13 @@ viewing画面の大きさを変える。
 もし、{\em ratio}が与えられたならば、
 アスペクト比は変えられ、screen-yはscreen-x * {\em ratio}に設定される。
 {\bf :aspect}は、現在のアスペクト比を返す。}
-\longdescription{:init}{
-%\&key \= :hither  \hspace{5mm} \= 100.0 \hspace{100mm}[メソッド]\\
-\&key \= :hither  \hspace{5mm} \= 100.0 \` [メソッド]\\
-      \> :yon    \> 1000.0 \\
-      \> :aspect \> 1.0  \\
-      \> :screen \> 100.0 \\
-      \> :screen-x  \> screen \\
-      \> :screen-y \> (* screen-x aspect) \\
-      \>  \&allow-other-keys}{
+\longdescription{メソッド}{:init}{\&key \= (hither 100.0) \\
+\> (yon 1000.0) \\
+\> (aspect 1.0) \\
+\> (screen 100.0) \\
+\> (screen-x screen) \\
+\> (screen-y (* screen-x aspect)) \\
+\> \&allow-other-keys}{
 {\bf viewing}と{\bf projection}を初期化する。}
 
 \vspace{5mm}
@@ -392,18 +388,16 @@ NDCの中に定義される{\em position}に{\em string}を描く。}
 {\em viewing, viewport}および{\em viewsurface}をこの{\bf viewer}のスロット
 {\tt eye, port}と{\tt surface}に設定する。}
 
-\longdescription{view}{\&key \= (size 500) (width size) (height size)
-\` [関数] \\
-%\hspace{74mm} [関数] \\
-\> (:x 100) (:y 100) \\
-\> (:title "eusx") \\
-\> (:border-width 3) \\
-\> (:background 0) \\
-\> (:viewpoint \#f(300 200 100)) (:target \#f(0 0 0)) \\
-\> (:viewdistance 5.0)  (:hither 100.0) (:yon 10000.0) \\
-\> (:screen 1.0) (:screen-x screen) (:screen-y screen) \\
-\> (:xcenter 500) (:ycenter 400) \\}
-{新しい{\bf viewer}を作り、{\bf *viewer*}リストに置く。}
+\longdescription{関数}{view}{\&key \= (size 500) (width size) (height size) \\
+\> (x 100) (y 100) \\
+\> (title "eusx") \\
+\> (border-width 3) \\
+\> (background 0) \\
+\> (viewpoint \#f(300 200 100)) (target \#f(0 0 0)) \\
+\> (viewdistance 5.0) (hither 100.0) (yon 10000.0) \\
+\> (screen 1.0) (screen-x screen) (screen-y screen) \\
+\> (xcenter 500) (ycenter 400)}{
+新しい{\bf viewer}を作り、{\bf *viewer*}リストに置く。}
 
 \end{refdesc}
 

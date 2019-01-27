@@ -25,8 +25,7 @@
 ベースと指には可動軸を指定する必要はない。
 
 \begin{refdesc}
-\longdescription{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \`[マクロ]\\
-% \hspace{70mm} [マクロ]\\
+\longdescription{マクロ}{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \\
 \> :color \> {\it color-id} \hspace{2cm} \= ;0-15 for MMD \\
 \> :parent \> {\it parent-joint} \\
 \> :axis \> {\it rotational-axis} \>  ; :x, :y or :z \\
@@ -45,8 +44,8 @@
 次の{\bf defmanipulator}マクロを用いる。
 
 \begin{refdesc}
-\longdescription{defmanipulator}{manipulator-name \&key \= :class \hspace{2cm} \= {\it manipulator-class} \`[マクロ]\\
-%manipulator-class} \hspace{25mm} [マクロ]\\
+  \longdescription{マクロ}{defmanipulator}{manipulator-name \&key \= \\
+\> :class \hspace{2cm} \= {\it manipulator-class} \\
 \> :base \> {\it base-joint} \\
 \> :joints \>  {\it list-of-all-joints} \\
 \> :hand \> {\it handjoint} \\
@@ -152,16 +151,16 @@
 % 把握物体を解放したことを指示する
 }
 
-\longdescription{:create}{\= \&rest args \`[メソッド]\\
-\> \&key \= (:name nm) (:hand h) (:joints j)\\
-\> \> (:left-finger lf) (:right-finger rf)\\
-\> \> ((:toolcoords tc) (make-coords))\\
-\> \> ((:handcoords hc) (make-coords))\\
-\> \> ((:base bs) (make-cascoords))\\
+\longdescription{メソッド}{:create}{\= \&rest args \\
+\> \&key \= (name nm) (hand h) (joints j)\\
+\> \> (left-finger lf) (right-finger rf)\\
+\> \> ((toolcoords tc) (make-coords))\\
+\> \> ((handcoords hc) (make-coords))\\
+\> \> ((base bs) (make-cascoords))\\
 \> \> (open-direction (floatvector 0 1 0))\\
-\> \> ((:max-span mspan) 100.0)\\
-\> \> ((:lefty lft) t)\\
-\> \> ((:act a) nil)\\
+\> \> ((max-span mspan) 100.0)\\
+\> \> ((lefty lft) t)\\
+\> \> ((act a) nil)\\
 \> \&allow-other-keys}{
 新しいマニピュレータオブジェクトを作成、初期化する。}
 

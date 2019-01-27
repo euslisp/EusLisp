@@ -70,14 +70,12 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 \begin{refdesc}
 
-\longdescription{defclass}
-%{classname \&key \= :super object \hspace{85mm} [マクロ] \\
-{classname \&key \= :super object \` [マクロ] \\
-\> :slots (\{var $|$ (var [:type type] [:forward selectors])\}*) \\
-\> :metaclass metaclass \\
-\> :element-type t \\
-\> :size -1\\}
-{クラスを生成または再定義する。
+\longdescription{マクロ}{defclass}{classname \&key \= (super object) \\
+\> slots \hspace{40mm} {\rm ; (var \&optional type \&rest forward selectors)*} \\
+\> (metaclass metaclass) \\
+\> (element-type t) \\
+\> (size -1)}{
+クラスを生成または再定義する。
 異なったスーパークラスやスロットを持つクラスに再定義したとき、
 メソッドが新しいスロット配置を仮定するため、
 以前のクラスを継承する古いオブジェクトは予想できない振舞いをする。}

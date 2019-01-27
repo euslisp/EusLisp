@@ -439,24 +439,23 @@ a 3D position vector.
 If {\em mat44} is not given, this coordinates is converted to 4x4
 matrix representation.}
 
-\longdescription{:init}{\&key \= :pos \hspace{8mm} \= \#f(0 0 0)
- \`[method] \\
- \> :rot \> \#2f((1 0 0) (0 1 0) (0 0 1)) \\
- \> :rpy \> roll pitch yaw \\
- \> :Euler \> az ay az2 \\
- \> :axis \>  rotation-axis \\
- \> :angle \> rotation-angle \\
- \> :4X4   \> 4x4 matrix \\
- \> :coords \> another coordinates \\
- \> :properties \>  a list of (ind . value) pair \\
- \> :name \> name property \\}{
+\longdescription{method}{:init}{\&key \= (pos \#f(0 0 0)) \hspace{8mm} \= \\
+ \> (rot \#2f((1 0 0) (0 1 0) (0 0 1))) \\
+ \> rpy \>\> {\rm ; roll pitch yaw} \\
+ \> euler \>\> {\rm ; az ay az2} \\
+ \> axis \>\>  {\rm ; rotation-axis} \\
+ \> angle \>\> {\rm ; rotation-angle} \\
+ \> 4X4   \>\> {\rm ; 4x4 matrix} \\
+ \> coords \>\> {\rm ; another coordinates} \\
+ \> properties \>\> {\rm ; list of (ind . value) pair} \\
+ \> name \>\> {\rm ; name property}}{
 initializes this coordinates object and sets rot and pos.
 The meaning of each keyword follows:
 \begin{description}
 \item[:dimension] 2 or 3 (default is 3)
 \item[:pos] specifies a position vector (defaulted to \#f(0 0 0))
 \item[:rot] specifies a rotation matrix (defaulted to a unit-matrix)
-\item[:Euler] gives a sequence of three elements for Euler angles
+\item[:euler] gives a sequence of three elements for Euler angles
 \item[:rpy] gives a sequence of three elements for roll-pitch-yaw
 \item[:axis] rotation axis (:x,:y,:z or an arbitrary float-vector)
 \item[:angle] rotation angle (used with :axis)
