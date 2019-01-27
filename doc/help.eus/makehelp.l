@@ -59,6 +59,12 @@
 			      "jimage"
 			      "jmanipulator"))
 
+(defun parse-tex (str)
+  "Parses a TEX string into a LISP one, downcasing and quoting $-expressions"
+  (let ((*readtable* (copy-readtable)))
+    (set-syntax-from-char #\$ #\|)
+    (format nil "~a" (read-from-string (concatenate string "|" str "|")))))
+
 (defun addition-to-help(fp2 tex-dir fname)
   (let ((fp (open (make-pathname :directory (list tex-dir)
                                  :name fname :type "tex") :direction :input))
@@ -101,7 +107,8 @@
 			   )
 		     (if (not (eq type -1))
 			 (progn (setf seek (+ seek (position #\} buf) 1))
-				(setf name (subseq buf (1+ (position #\{ buf)) (position #\} buf)))
+				(setf name (parse-tex (subseq buf (1+ (position #\{ buf))
+				                                  (position #\} buf))))
 				(if (eq type *type-CLASS*)
 				    (setf class name))
 				(format fp2 "~s ~d ~s ~d ~d~%" name type fname seek args)))
