@@ -23,6 +23,7 @@
 	*timer-job*
 	*top-selector-interval*
 	evaluate-stream  reploop
+	eussig
 	euserror
 	eustop reset
 	toplevel-prompt

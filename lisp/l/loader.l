@@ -19,7 +19,8 @@
 	read-lines-till-eof
 	do-file-line do-file-form
 	dump-object dump-structure dump-loadable-structure
-	file-size map-file *modules* provide require *loaded-modules*))
+	file-size directory-p map-file
+	*modules* provide require *loaded-modules*))
 
 
 ;;****************************************************************
