@@ -291,8 +291,8 @@
    (format *error-output* "~C[0m~%"  #x1b)
    (let ((*replevel* (1+ *replevel*))
 	 (*reptype* "E"))
-      (catch *replevel* (reploop #'toplevel-prompt)))
-   (throw *replevel* nil))
+     (while (catch *replevel* (reploop #'toplevel-prompt))))
+   (throw *replevel* t))
 
 ;;;
 ;;; default toplevel
