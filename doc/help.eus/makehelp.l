@@ -61,6 +61,7 @@
 
 (defun parse-tex (str)
   "Parses a TEX string into a LISP one, downcasing and quoting $-expressions"
+  ;; TODO: use read::read-tex?
   (let ((*readtable* (copy-readtable)))
     (set-syntax-from-char #\$ #\|)
     (format nil "~a" (read-from-string (concatenate string "|" str "|")))))

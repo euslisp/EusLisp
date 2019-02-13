@@ -57,9 +57,11 @@
 	   (param2 "")
 	   (param3 ""))
 
-       (setf param1 (read-tex fp seek))
-       (if (> count 2) (setf param2 (read-tex fp -1)))
-       (if (> count 3) (setf param3 (read-tex fp -1)))
+       (flet ((trim-read-tex (file off)
+                (string-trim (list #\space) (read-tex file off))))
+         (setf param1 (trim-read-tex fp seek))
+         (if (> count 2) (setf param2 (trim-read-tex fp -1)))
+         (if (> count 3) (setf param3 (trim-read-tex fp -1))))
        (close fp)
        (list param1 param2 param3)))
 
