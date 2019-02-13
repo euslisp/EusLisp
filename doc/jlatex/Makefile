@@ -14,6 +14,8 @@ dvi:
 pdf:
 	dvipdfmx jmanual.dvi
 
+help:
+	eus ../help.eus/makehelp.l "(let ((*eus-jtex-dir* (pwd))) (make-jhelp) (quit))"
 
 clean:
 	rm -f *~ *.aux *.idx *.log *.toc *.out *.ind *.ilg
