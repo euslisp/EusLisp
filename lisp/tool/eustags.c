@@ -901,9 +901,9 @@ C_entries ()
 		      if (linestart != linecharno)
 			{
 #ifdef VMS
-			  getline (vmslinestart);
+			  e_getline (vmslinestart);
 #else
-			  getline (linestart);
+			  e_getline (linestart);
 #endif
 			  strncpy (tok, token + (lb1.buffer - buf),
 				   tp-token+1);
@@ -1061,7 +1061,7 @@ ret:
   return !bad && win;
 }
 
-getline (atchar)
+e_getline (atchar)
      long atchar;
 {
   long saveftell = ftell (inf);
