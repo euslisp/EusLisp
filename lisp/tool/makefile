@@ -1,8 +1,8 @@
 all: eustags
 
 eustags:
-	gcc -o eustags eustags.c
-	mv -f eustags /usr/local/bin
+	gcc -DGCC3 -w -o eustags eustags.c
+	sudo mv -f eustags /usr/local/bin
 
 sockstd:
 	cc -o sockstd sockstd.c -lsocket -lnsl
