@@ -7,7 +7,7 @@ sockstd:
 	cc -o sockstd sockstd.c -lsocket -lnsl
 
 install:
-	mv -f eustags /usr/local/bin
+	mv -f eustags ${EUSDIR}/${ARCHDIR}/bin
 
 clean:
 	rm -f *~ eustags sockstd *.exe
