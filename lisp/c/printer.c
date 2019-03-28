@@ -372,21 +372,19 @@ int prlevel;
 	  printstr(ctx,n,vec->c.str.chars,f);  break;
     case ELM_INT:
 	  writestr(f,(byte *)"#i(",3);
-	  while (i<n && (nullprlen || prlength>0)) {
+	  while (i<n && (nullprlen || prlength-->0)) {
 	    printint(ctx,vec->c.ivec.iv[i++],f,intval(Spevalof(PRINTBASE)),
 			0,0);
-	    if(i<n) writech(f,' ');
-	    prlength--; }
-	  if (i<n) writestr(f,(byte *)"... ",4);
+	    if(i<n) writech(f,' '); }
+	  if (i<n) writestr(f,(byte *)"...",3);
           writech(f,')');
 	  break;
     case ELM_FLOAT:
 	  writestr(f,(byte *)"#f(",3);
-	  while (i<n && (nullprlen || prlength>0)) {
+	  while (i<n && (nullprlen || prlength-->0)) {
 	    printflt(vec->c.fvec.fv[i++],f);
-	    if(i<n) writech(f,' ');
-	    prlength--; }
-	  if (i<n) writestr(f,(byte *)"... ",4);
+	    if(i<n) writech(f,' '); }
+	  if (i<n) writestr(f,(byte *)"...",3);
           writech(f,')');
 	  break;
     case ELM_FOREIGN:
@@ -401,11 +399,10 @@ int prlevel;
 	    writech(f,' ');
 	    printint(ctx,(eusinteger_t)vec->c.vec.size,f,intval(Spevalof(PRINTBASE)),0,0);
 	    writech(f,' ');}
-	  while (i<n && (nullprlen || prlength>0)) {
+	  while (i<n && (nullprlen || prlength-->0)) {
 	    prin1(ctx,vec->c.vec.v[i++],f,prlevel);
-	    if (i<n) writech(f,' ');
-            prlength--; }
-	  if (i<n) writestr(f,(byte *)"... ",4);
+	    if (i<n) writech(f,' '); }
+	  if (i<n) writestr(f,(byte *)"...",3);
 	  writech(f,')');}
   return(vec);}
 
@@ -495,16 +492,14 @@ register int prlevel;
     prin1(ctx,ccar(rest),f,prlevel-1);
     return;}
   writech(f,'(');
-  prin1(ctx,fobj,f,prlevel);
-  x=rest;
   while (islist(x) && !s_marked(x)) {
-    if (!nullprlen && --prlength<=0) {
-      writestr(f,(byte *)" ...",4);
+    if (!nullprlen && prlength--<=0) {
+      writestr(f,(byte *)"...",3);
       x=NIL;   break;}
     else {
-      writech(f,' ');
       prin1(ctx,ccar(x),f,prlevel);
-      x=ccdr(x);} }
+      x=ccdr(x);
+      if (islist(x)) writech(f,' ');} }
   if (x!=NIL) { writestr(f,(byte *)" . ",3); prin1(ctx,x,f,prlevel);}
   writech(f,')'); }
 
