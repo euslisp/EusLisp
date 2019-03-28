@@ -403,7 +403,8 @@ int prlevel;
 	    writech(f,' ');}
 	  while (i<n && (nullprlen || prlength>0)) {
 	    prin1(ctx,vec->c.vec.v[i++],f,prlevel);
-	    if (i<n) writech(f,' '); }
+	    if (i<n) writech(f,' ');
+            prlength--; }
 	  if (i<n) writestr(f,(byte *)"... ",4);
 	  writech(f,')');}
   return(vec);}
