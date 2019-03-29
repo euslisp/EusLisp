@@ -515,8 +515,8 @@ int prlevel;
   writestr(f,(byte *)"#s(",3);
   klass=classof(x);
   printsym(ctx,klass->c.cls.name,f);
+  // structure name is always printed, and do not consume *print-length*
   s=objsize(x); varvec=klass->c.cls.vars->c.vec.v;
-  prlength--;
   while (i<s && (nullprlen || prlength>0)) {
     writech(f,' ');
     printsym(ctx,varvec[i],f);
