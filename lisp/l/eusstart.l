@@ -313,6 +313,7 @@
 (system::exec-module-init "mathtran" "l/mathtran.l")
 (system::exec-module-init "eusdebug" "l/eusdebug.l")
 (system::exec-module-init "eusforeign" "l/eusforeign.l")
+(system::exec-module-init "extnum" "l/extnum.l")
 (unless (find-package "GEOMETRY")
 	(make-package "GEOMETRY" :nicknames '("GEO"))
 	(in-package "GEOMETRY"))
