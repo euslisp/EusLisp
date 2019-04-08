@@ -45,6 +45,9 @@
   (assert (eq (= 0 -0.0) t)            "(= 0 -0.0) is true.")
   )
 
+(deftest init-ratio
+  (assert (= 1/2 (instance ratio :init 1 2))))
+
 (eval-when (load eval)
   (run-all-tests)
   (exit))
