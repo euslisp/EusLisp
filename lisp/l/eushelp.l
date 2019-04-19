@@ -96,7 +96,7 @@
 				  (print-item cmd item param-list hs))
 				 (4 ;*type-CONST*
 				  (format hs "constant~%")
-				  (print-item2 cmd item param-list))
+				  (print-item2 cmd item param-list hs))
 				 (5 ;*type-VAR*
 				  (format hs "variable~%")
 				  (print-item2 cmd item param-list hs))
