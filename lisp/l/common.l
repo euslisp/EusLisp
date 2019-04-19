@@ -236,14 +236,17 @@
    `(block nil
      (let
       ,(mapcar
-	  #'(lambda (v) (list (car v) (cadr v)))
+	  #'(lambda (v) (if (consp v)
+                            (list (car v) (cadr v))
+                            v))
 	  vars)
       ,decl
       (tagbody
 	 ,tag
 	 (if ,(car endtest) (return (progn . ,(cdr endtest))))
 	 ,@body
-	 (psetq . ,(mapcan #'(lambda (v) (if (cddr v) (list (car v) (caddr v))))
+	 (psetq . ,(mapcan #'(lambda (v) (if (and (consp v) (cddr v))
+                                             (list (car v) (caddr v))))
 		       vars))
 	 (go ,tag))) )))
 
@@ -255,14 +258,17 @@
    `(block nil
      (let*
       ,(mapcar
-	  #'(lambda (v) (list (car v) (cadr v)))
+	  #'(lambda (v) (if (consp v)
+                            (list (car v) (cadr v))
+                            v))
 	  vars)
       ,decl
       (tagbody
 	 ,tag
 	 (if ,(car endtest) (return (progn . ,(cdr endtest))))
 	 ,@body
-	 (setq . ,(mapcan #'(lambda (v) (if (cddr v) (list (car v) (caddr v))))
+	 (setq . ,(mapcan #'(lambda (v) (if (and (consp v) (cddr v))
+                                            (list (car v) (caddr v))))
 		       vars))
 	(go ,tag))) )))
 
