@@ -74,7 +74,7 @@ SunOS4は、同時に60ファイルのオープンを許可している。
 \funcdesc{make-string-input-stream}{string}{
 {\em string}から入力ストリームを作る。}
 
-\funcdesc{make-string-output-stream}{size}{
+\funcdesc{make-string-output-stream}{\&optional size}{
 {\em size}長さの文字列のために出力ストリームを作る。
 その長さは自動的に拡張される。そのため、{\em size}は初期化時に配置する
 文字列のための補助情報である。}
@@ -620,7 +620,7 @@ service名によって指定されたsymbolを通して参照される。
 \funcdesc{make-server-socket-stream}{sockport \&optional (size 100)}{
 クライアントからの接続要求を受けて、双方向ストリームを返す。}
 
-\funcdesc{make-client-socket-stream}{sockaddr \&optional (size 100)}{
+\funcdesc{make-client-socket-stream}{sockaddr \&optional (timeout 5) (size 512)}{
 サーバーのポートと接続をし、双方向ストリームを返す。}
 
 \funcdesc{open-server}{port remote-func}{
