@@ -6,22 +6,22 @@
 EusLispではインタプリタ時の効率を改善するために特殊書式として実行される。
 
 \begin{refdesc}
-\specialdesc{and}{\{form\}*}{
+\specialdesc{and}{\&rest forms}{
 {\em form}は、NILが現れるまで左から右に評価される。
 もし、全ての書式がnon-NILとして評価されるならば、
 最後の値が返される。}
 
-\specialdesc{or}{\{form\}*}{
+\specialdesc{or}{\&rest forms}{
 {\em form}は、non-NIL値が現れるまで左から右に評価される。
 そして、その値が返される。
 もし、全ての書式がNILとして評価されるならば、NILを返す。}
 
-\specialdesc{if}{test then [else]}{
+\specialdesc{if}{test then \&optional else}{
 {\bf if}は、１つの{\it then}と{\it else}書式のみを持つことができる。
 そこに多重書式を書きたいときは、{\bf progn}を使って
 グループ化しなければならない。}
 
-\macrodesc{when}{test forms}{
+\macrodesc{when}{test \&rest forms}{
 {\bf if}と違って、
 {\bf when}と{\bf unless}は、多重{\em 書式}で書くことを許可している。
 {\em test}の評価がnon-NILのとき、{\bf when}は実行され、
@@ -29,10 +29,10 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 もう一方で、これらのマクロは{\em else}書式を追加することを
 許可していない。}
 
-\macrodesc{unless}{test forms}{
+\macrodesc{unless}{test \&rest forms}{
 {\tt(when (not {\em test}) . {\em forms})}と同等である。}
 
-\specialdesc{cond}{{(test \{form\}*)}*}{
+\specialdesc{cond}{\&rest (test \&rest forms)}{
 任意の数の条件項は、{\bf cond}の後に続けることができる。
 それぞれの条件項において、最初の書式{\em test}が評価される。
 もし、non-NILであったとき、その条件項の残りの書式は、続いて評価される。
@@ -43,7 +43,7 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 全ての条件項が尽きてしまうまで繰り返される。
 条件項が尽きてしまった場合、{\bf cond}はNILを返す。}
 
-\macrodesc{case}{key \{(\{label $|$ (\{lab\}*) \{form\}*)\}*}{
+\macrodesc{case}{key \&rest (label \&rest forms)}{
 {\em key}と{\em label}が一致した条件項について、
 {\em form}が評価され、最後の値が返される。
 {\em key}と{\em label}の間の等価は、{\bf eq}または
@@ -58,7 +58,7 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 {\em form1}と{\em forms}は、次々と評価され、
 {\em form1}から返される値が{\bf prog1}の値として返される。}
 
-\specialdesc{progn}{\{form\}*}{
+\specialdesc{progn}{\&rest forms}{
 {\em form}は次々に評価され、最後の{\em form}の値が返される。
 {\bf progn}は特殊書式である。なぜなら、ファイルの最初に現れたとき
 特別な意味を持つからである。
@@ -67,16 +67,16 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 マクロが{\bf defun}や{\bf defmethod}の連続で拡張される場合、それが最初に
 現われなければならないときに役立つ。}
 
-\macrodesc{setf}{\{access-form value\}*}{
-{\em value}を一般化変数{\em access-form}に割り当てる。}
+\macrodesc{setf}{\&rest forms}{
+{\em forms}中の各formにおいて、第二要素を一般化変数である第一要素に割り当てる。}
 
-\specialdesc{let}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
+\specialdesc{let}{(\&rest (var \&optional value)) \&rest forms}{
 ローカル変数を生成する。
 すべての{\em value}は評価され、並行して{\em var}に割り当てられる。すなわち、
 {\tt (let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))} の結果は
 (2 1)である。}
 
-\specialdesc{let*}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
+\specialdesc{let*}{(\&rest (var \&optional value)) \&rest forms}{
 ローカル変数を生成する。
 全ての{\em value}は次々に評価され、{\em var}に割り当てられる。すなわち、
 {\tt (let ((a 1)) (let* ((a (1+ a)) (b a)) (list a b)))}の結果は
@@ -85,34 +85,35 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 
 \subsection{ローカル関数}
 \begin{refdesc}
-\specialdesc{flet}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
+\specialdesc{flet}{(\&rest (fname lambda-list \&rest body)) \&rest forms}{
 ローカル関数を定義する。}
 
-\specialdesc{labels}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
+\specialdesc{labels}{(\&rest (fname lambda-list \&rest body)) \&rest forms}{
 ローカルなスコープとなる関数を定義する。
 {\bf flet}と{\bf labels}との違いは、
 {\bf flet}で定義されたローカル関数は、その他の関数を参照または再帰できないが、
 {\bf labels}は相互の参照を許可する。}
+
 \end{refdesc}
 
 \subsection{ブロックとExit}
 \begin{refdesc}
-\specialdesc{block}{tag \{form\}*}{
+\specialdesc{block}{tag \&rest forms}{
 {\bf return-from}によって脱出可能なローカルブロックを作る。
 {\em tag}は、ローカルにスコープされ、評価されない。}
 
-\specialdesc{return-from}{tag value}{
+\specialdesc{return-from}{tag \&optional value}{
 {\em tag}によって示されたブロックを脱出する。
 {\bf return-from}は、関数やメソッドから脱出するときに使用される。
 関数やメソッドは、その本体をすべて取り囲んだ部分をブロックとして
 自動的に確定され、その関数またはメソッドの名前を付ける。}
 
-\macrodesc{return}{value}{
+\macrodesc{return}{\&optional value}{
 {\tt  (return x)}は、{\tt (return-from nil x)}と同等である。
 {\bf loop, while, do, dolist, dotimes}は、暗黙的にNILと名前が付けられた
 ブロックとして確定されるため、これらの特殊書式と組み合わせて使用する。}
 
-\specialdesc{catch}{ tag \{form\}*}{
+\specialdesc{catch}{tag \&rest forms}{
 {\bf throw}によって脱出または値を返すための動的なブロックを確定する。
 {\em tag}は評価される。
 
@@ -122,7 +123,7 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 {\bf catch}ブロックから脱出または{\em value}を返す。
 {\em tag}と{\em value}は評価される。}
 
-\specialdesc{unwind-protect}{protected-form \{cleanup-form\}*}{
+\specialdesc{unwind-protect}{protected-form \&rest cleanup-forms}{
 {\em protected-form}の評価が終った後、
 {\em cleanup-form}が評価される。
 {\bf unwind-protect}の外側にブロックまたは{\bf catch}
@@ -140,7 +141,7 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 
 \begin{refdesc}
 
-\specialdesc{while}{test \{form\}*}{
+\specialdesc{while}{test \&rest forms}{
 {\em test}がnon-NILと評価されている間、
 {\em form}は、繰返し評価される。
 {\bf while}は、{\em form}のまわりにNILと名付けられるブロックを自動的に確定する
@@ -160,7 +161,7 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
     )) ;; 1, 2, 4, 5, 7, 8, 10
 \end{verbatim}
 
-\specialdesc{tagbody}{\{tag $|$ statement\}*}{
+\specialdesc{tagbody}{\&rest tag-or-statement}{
 {\em tag}は、{\bf go}のために名付けられる。
 {\bf tagbody}の中のみ{\bf go}を使用することができる。}
 
@@ -170,18 +171,17 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 ローカルスコープを横切って違う{\bf tagbody}のtagに制御を移すことは
 禁止されている。}
 
-\macrodesc{prog}{(\{var $|$ (var [init])\}*) \{tag $|$ statement\}*}{
+\macrodesc{prog}{varlist \&rest tag-or-statement}{
 {\bf prog}はマクロで、以下のように展開される。
 \ptext{
 (block nil 
-    (let {\em var}
+    (let {\em varlist}
 	(tagbody
-		{\em tag $|$ statement})))}
+		{\em tag-or-statement})))}
 }
 
-\macrodesc{do}{(\{(var init [next])\}*) (endtest [result])\{declare\} \{form\}
-*}
-{{\em var}はローカル変数である。
+\macrodesc{do}{(\&rest (var \&optional optional init next)) (endtest \&optional result) \&rest forms}{
+{\em var}はローカル変数である。
 それぞれの{\em var}に、{\em init}は並行に評価され、割り当てられる。
 つぎに、{\em endtest}が評価され、もし真のとき{\bf do}は{\em result}を返す。
  (そうでないときは、NILを返す)
@@ -190,17 +190,17 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 書式の評価後、{\em next}が評価され、その値は
 それぞれの{\em var}に再割当され、次の繰返しが始まる。}
 
-\macrodesc{do*}{(\{var init [next]\}*) (endtest [result])\{declare\} \{form\}*}
-{{\bf do*}は、{\em init}と{\em next}の評価と
+\macrodesc{do*}{(\&rest (var \&optional optional init next)) (endtest \&optional result) \&rest forms}{
+{\bf do*}は、{\em init}と{\em next}の評価と
 {\em var}への割り当てが連続的に起こることを除いて、{\bf do}と同様である。}
 
-\macrodesc{dotimes}{(var count [result]) \{forms\}*}{
+\macrodesc{dotimes}{(var count \&optional result) \&rest forms}{
 {\em forms}の評価を{\em count}回行う。
 {\em count}は、一回のみ評価される。
 それぞれの評価の中で、{\em var}は整数のゼロから
 {\em count}-1まで増加する。}
 
-\macrodesc{dolist}{(var list [result]) \{forms\}*}{
+\macrodesc{dolist}{(var list \&optional result) \&rest forms}{
 {\em list}のそれぞれの要素は、{\em var}に連続的に与えられる。
 そして{\em forms}は、それぞれの値で評価される。
 {\bf dolist}は、他の繰返しより早く実行される。たとえば、
@@ -208,10 +208,10 @@ EusLispではインタプリタ時の効率を改善するために特殊書式�
 それは、{\bf dolist}が関数のclosureを作ったり適用したりする必要が
 なく、新しいパラメータのバインドが必要でないため。}
 
-\macrodesc{until}{condition \{forms\}*}{
+\macrodesc{until}{condition \&rest forms}{
 {\em condition}が満たされている間、{\em forms}を評価する。}
 
-\macrodesc{loop}{\{forms\}*}{
+\macrodesc{loop}{\&rest forms}{
 {\em forms}を永遠に評価する。
 実行を止めるためには、{\bf return-from, throw}または{\bf go}が
 {\em forms}のなかで評価されなければならない。}
@@ -223,8 +223,9 @@ Common Lispの{\bf typep}と{\bf subtypep}はないので、
 
 \begin{refdesc}
 
-\funcdesc{eq}{obj1 obj2}{{\em obj1}と{\em obj2}が同じオブジェクトを指すポインタあるいは同じ
-数値のときTを返す。
+\funcdesc{eq}{obj1 obj2}{
+{\em obj1}と{\em obj2}が同じオブジェクトを指すポインタ
+あるいは同じ数値のときTを返す。
 例えば:{\tt (eq 'a 'a)}はT、{\tt (eq 1 1)}はT、{\tt (eq 1. 1.0)}はNIL、
 {\tt (eq "a" "a")}はNILである。}
 \funcdesc{eql}{obj1 obj2}{
@@ -238,7 +239,8 @@ EusLispの中で数値は全て直接値で表現されるため、{\bf eq}と{\
 \funcdesc{superequal}{obj1 obj2}{
 {\bf superequal}は、環状参照をチェックするので遅い。しかしロバストな等価が得られる。}
 
-\funcdesc{null}{object}{{\em object}がNILのとき、Tを返す。
+\funcdesc{null}{object}{
+{\em object}がNILのとき、Tを返す。
 {\tt (eq {\em object} nil)}を評価する。}
 \funcdesc{not}{object}{
 {\bf not}は、{\bf null}と同一である。}

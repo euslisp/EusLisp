@@ -7,21 +7,21 @@ they are implemented as special forms in EusLisp to improve
 the interpreting performance.
 
 \begin{refdesc}
-\specialdesc{and}{\{form\}*}{
+\specialdesc{and}{\&rest forms}{
 {\em Form}s are evaluated from left to right until NIL appears.
 If all forms are evaluated to non-NIL, the last value is returned.}
 
-\specialdesc{or}{\{form\}*}{
+\specialdesc{or}{\&rest forms}{
 {\em Form}s are evaluated from left to right until non-NIL appears,
 and the value is returned. If all forms are evaluated to NIL, 
 NIL is returned.}
 
-\specialdesc{if}{test then [else]}{
+\specialdesc{if}{test then \&optional else}{
 {\bf if} can only have single {\it then} and {\it else} forms.
 To allow multiple {\em then} or {\em else} forms,
 they must be grouped by {\bf progn}.}
 
-\macrodesc{when}{test forms}{
+\macrodesc{when}{test \&rest forms}{
 Unlike {\bf if},
 {\bf when} and {\bf unless} allow you to write multiple {\em forms}
 which are executed when {\em test} holds ({\bf when}) or
@@ -29,10 +29,10 @@ does not {\em unless}.
 On the other hand, these macros
 cannot have the {\em else} forms.}
 
-\macrodesc{unless}{test forms}{
+\macrodesc{unless}{test \&rest forms}{
 is equivalent to {\tt(when (not {\em test}) . {\em forms})}.}
 
-\specialdesc{cond}{{(test \{form\}*)}*}{
+\specialdesc{cond}{\&rest (test \&rest forms)}{
 Arbitrary number of  cond-clauses can follow {\bf cond}.
 In each clause, the first form, that is {\em test}, is evaluated.
 If it is non-nil, the rest of the forms in that clause are evaluated sequentially,
@@ -42,7 +42,7 @@ When the {\em test} fails, next clause is tried until a {\em test} which is eval
 to non-nil is found or all clauses are exhausted.
 In the latter case, {\bf cond} returns NIL.}
 
-\macrodesc{case}{key \{(\{label $|$ (\{lab\}*) \{form\}*)\}*}{
+\macrodesc{case}{key \&rest (label \&rest forms)}{
 For the clause whose {\em label} matches with {\em key},
 {\em form}s are evaluated and the last value is returned.
 Equality between {\em key} and {\em label} is tested with {\bf eq}
@@ -57,7 +57,7 @@ or {\bf memq}, not with {\bf equal}.}
 {\em form1} and {\em forms} are evaluated sequentially, 
 and the value returned by {\em form1} is returned as the value of {\bf prog1}.}
 
-\specialdesc{progn}{\{form\}*}{
+\specialdesc{progn}{\&rest forms}{
 {\em Form}s are evaluated sequentially, and the value of the rightmost form
 is returned.
 {\bf Progn} is a special form because it has a special meaning when it
@@ -67,16 +67,17 @@ at top level.
 This is useful for a macro which expands to a series of
 {\bf defun}s or {\bf defmethod}s, which must appear at top level.}
 
-\macrodesc{setf}{\{access-form value\}*}{
-assigns {\em value} to a generalized-variable {\em access-form}.}
+\macrodesc{setf}{\&rest forms}{
+for each form in {\em forms}, assigns the second element to the generalized-variable signilized by the first element.}
 
-\specialdesc{let}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
+\specialdesc{let}{(\&rest (var \&optional value)) \&rest forms}{
 introduces local variables.
 All {\em value}s are evaluated and assigned to {\em var}s in parallel, i.e.,
 {\tt (let ((a 1)) (let ((a (1+ a)) (b a)) (list a b)))} produces
-(2 1).}
+(2 1).
+The first statements of {\em forms} can be declarations.}
 
-\specialdesc{let*}{(\{var $|$ (var [value])\}*) \{declare\}* \{form\}*}{
+\specialdesc{let*}{(\&rest (var \&optional value)) \&rest forms}{
 introduces local variables.
 All {\em value}s are evaluated sequentially, and assigned to {\em var}s
 i.e.,
@@ -86,34 +87,35 @@ i.e.,
 
 \subsection{Local Functions}
 \begin{refdesc}
-\specialdesc{flet}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
+\specialdesc{flet}{(\&rest (fname lambda-list \&rest body)) \&rest forms}{
 defines local functions.}
 
-\specialdesc{labels}{ (\{(fname lambda-list . body)\}*) \{form\}*}{
+\specialdesc{labels}{(\&rest (fname lambda-list \&rest body)) \&rest forms}{
 defines locally scoped functions. 
 The difference between {\em flet} and {\em labels} is,
 the local functions defined by {\em flet} cannot reference
 each other or recursively, whereas {\em labels} allows such mutual references.}
+
 \end{refdesc}
 
 \subsection{Blocks and Exits}
 \begin{refdesc}
-\specialdesc{block}{tag \{form\}*}{
+\specialdesc{block}{tag \&rest forms}{
 makes a lexical block from which you can exit by {\bf return-from}.
 {\em Tag} is lexically scoped and is not evaluated.}
 
-\specialdesc{return-from}{tag value}{
+\specialdesc{return-from}{tag \&optional value}{
 exits the block labeled by {\em tag}.
 {\bf return-from} can be used to exit from a function or a method which
 automatically establishes block labeled by its function or method name
 surrounding the entire body.}
 
-\macrodesc{return}{value}{
+\macrodesc{return}{\&optional value}{
 {\tt  (return x)} is equivalent to {\tt (return-from nil x)}. This is
 convenient to use in conjunction with {\bf loop, while, do, dolist,}
 and {\bf dotimes} which implicitly establish blocks labeled NIL.}
 
-\specialdesc{catch}{ tag \{form\}*}{
+\specialdesc{catch}{tag \&rest forms}{
 establishes a dynamic block from which you can exit and return a value
 by {\bf throw}. {\em Tag} is evaluated.
 The list of all visible catch tags can be obtained by {\tt
@@ -123,12 +125,12 @@ sys:list-all-catchers}.}
 exits and returns {\em value} from a catch block.
 {\em tag} and {\em value} are evaluated.}
 
-\specialdesc{unwind-protect}{protected-form \{cleanup-form\}*}{
+\specialdesc{unwind-protect}{protected-form \&rest cleanup-forms}{
 After the evaluation of {\em protected-form} finishes,
 {\em cleanup-form} is evaluated.
 You may make a block or a catch block outside the {\tt unwind-protect}.
 Even {\bf return-from} or {\bf throw} is executed in {\em protected-form}
-to escape from such blocks, {\em cleanup-form} is assured to be evaluated.
+to escape from such blocks, {\em cleanup-forms} are assured to be evaluated.
 Also, if you had an error while executing {\em protected-form},
 {\em cleanup-form} would always be executed by {\em reset}.}
 
@@ -138,7 +140,7 @@ Also, if you had an error while executing {\em protected-form},
 
 \begin{refdesc}
 
-\specialdesc{while}{test \{form\}*}{
+\specialdesc{while}{test \&rest forms}{
 While {\em test} is evaluated to non-nil,
 {\em form}s are evaluated repeatedly.
 {\bf While} special form automatically establishes a block by name of nil
@@ -157,8 +159,8 @@ To jump to next iteration, you can use following syntax with {\bf tagbody} and {
     )) ;; 1, 2, 4, 5, 7, 8, 10
 \end{verbatim}
 
-\specialdesc{tagbody}{\{tag $|$ statement\}*}{
-{\em tag}s are labels for {\bf go}.
+\specialdesc{tagbody}{\&rest tag-or-statement}{
+tags can be used as labels for {\bf go}.
 You can use {\bf go} only in {\bf tagbody}.}
 
 \specialdesc{go}{tag}{
@@ -167,18 +169,17 @@ which appears in a lexically scoped {\bf tagbody}.
 {\bf Go} to the tag in a different {\bf tagbody}
 across the lexical scope is inhibited.}
 
-\macrodesc{prog}{(\{var $|$ (var [init])\}*) \{tag $|$ statement\}*}{
+\macrodesc{prog}{varlist \&rest tag-or-statement}{
 {\bf prog} is a macro, which expands as follows:
 \ptext{
 (block nil 
-    (let {\em var}
+    (let {\em varlist}
 	(tagbody
-		{\em tag $|$ statement})))}
+		{\em tag-or-statement})))}
 }
 
-\macrodesc{do}{(\{(var init [next])\}*) (endtest [result])\{declare\} \{form\}
-*}
-{{\em var}s are local variables.
+\macrodesc{do}{(\&rest (var \&optional optional init next)) (endtest \&optional result) \&rest forms}{
+{\em var}s are local variables.
 To each {\em var}, {\em init} is evaluated in parallel and assigned.
 Next, {\em endtest} is evaluated and if it is true, {\bf do} returns
 {\em result} (defaulted to NIL).
@@ -186,17 +187,17 @@ If {\em endtest} returns NIL, each {\em form} is evaluated sequentially.
 After the evaluation of forms, {\em next} is evaluated and the value is
 reassigned to each {\em var}, and the next iteration starts.}
 
-\macrodesc{do*}{(\{var init [next]\}*) (endtest [result])\{declare\} \{form\}*}
-{{\bf do*} is same as {\bf do} except that the evaluation of {\em init}
+\macrodesc{do*}{(\&rest (var \&optional optional init next)) (endtest \&optional result) \&rest forms}{
+{\bf do*} is same as {\bf do} except that the evaluation of {\em init}
 and {\em next}, and their assignment to {\em var} occur sequentially.}
 
-\macrodesc{dotimes}{(var count [result]) \{forms\}*}{
+\macrodesc{dotimes}{(var count \&optional result) \&rest forms}{
 evaluates {\em forms} {\em count} times.
 {\em count} is evaluated only once.
 In each evaluation, {\em var} increments from integer zero to
 {\em count} minus one.}
 
-\macrodesc{dolist}{(var list [result]) \{forms\}*}{
+\macrodesc{dolist}{(var list \&optional result) \&rest forms}{
 Each element of {\em list} is  sequentially bound to {\em var},
 and {\em forms} are evaluated for each binding.
 {\bf Dolist} runs faster than other iteration constructs
@@ -204,10 +205,10 @@ such as {\bf mapcar} and recursive functions,
 since {\bf dolist} does not have to create a function closure or to apply it,
 and no new parameter binding is needed.}
 
-\macrodesc{until}{condition \{forms\}*}{
+\macrodesc{until}{condition \&rest forms}{
 evaluates forms until {\em condition} holds.}
 
-\macrodesc{loop}{\{forms\}*}{
+\macrodesc{loop}{\&rest forms}{
 evaluates {\em forms} forever.
 To terminate execution, {\bf return-from, throw} or {\bf go} needed to be
 evaluated in {\em forms}.}
@@ -219,8 +220,8 @@ simulated by {\bf subclassp} and {\bf derivedp}.
 
 \begin{refdesc}
 
-\funcdesc{eq}{obj1 obj2}{returns T,
-if {\em obj1} and {\em obj2} are pointers to the same object,
+\funcdesc{eq}{obj1 obj2}{
+returns T if {\em obj1} and {\em obj2} are pointers to the same object
 or the same numbers.
 Examples: {\tt (eq 'a 'a)} is T, {\tt (eq 1 1)} is T,
 {\tt (eq 1. 1.0)} is nil, {\tt (eq "a" "a")} is nil.}
@@ -235,7 +236,8 @@ If there is recursive reference in {\em obj1} or {\em obj2},
 \funcdesc{superequal}{obj1 obj2}{
 Slow but robust {\bf equal}, since {\bf superequal} checks circular reference.}
 
-\funcdesc{null}{object}{T if {\em object} is nil.
+\funcdesc{null}{object}{
+T if {\em object} is nil.
 Equivalent to (eq {\em object} nil).}
 \funcdesc{not}{object}{
 {\bf not} is identical to {\bf null}.}

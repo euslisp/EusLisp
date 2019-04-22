@@ -344,7 +344,8 @@
 		 ;; unix::exit
 		  ))
 	)
-	(export '(compile comfile compile-file gc alloc runtime))
+	(export '(compile comfile compile-file compile-file-if-src-newer
+                  gc alloc runtime))
 	(setf (symbol-function 'exit) (symbol-function 'unix::exit))    
 ;;
 ;(when (substringp "P" (string-upcase *program-name*))
