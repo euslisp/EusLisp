@@ -1,5 +1,5 @@
 all:
-	make toc dvi pdf
+	make toc dvi pdf help
 
 
 toc:
