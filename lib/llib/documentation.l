@@ -49,7 +49,7 @@
 		  ret))))
     ))
 
-(defun make-arg-string (doc args type)
+(defun make-arg-string (doc args)
   (let (arg has-key (args-str ""))
     (setq *has-key* nil)
     (case *output-format*
@@ -62,7 +62,7 @@
 	       (setq args-str (format nil "~A\\= " args-str) has-key t)
 	       (incf i)
 	       (setq arg (elt args i))
-	       (setq args-str (concatenate string args-str (format nil "~A \\` [~A]" arg type)))))
+	       (setq args-str (concatenate string args-str (format nil "~A \\" arg)))))
 	   )
 	  (:md
 	   (cond ((null doc)
@@ -102,13 +102,13 @@
   (labels ((write-methoddesc (method args doc)
              (let (args-str)
 	       (setq doc (make-doc-string doc))
-	       (setq args-str (make-arg-string doc args "method"))
+	       (setq args-str (make-arg-string doc args))
                (case *output-format*
                      (:html
 		      (cond ((null doc)
 			     (format t "~A" (escape-string (format nil "\\metdesc{~A}{~A}{}~%" method args-str))))
 			    (*has-key*
-			     (format t "~A" (escape-string (format nil "\\longdescription{~A}{~A}{~A}~%" method args-str doc))))
+			     (format t "~A" (escape-string (format nil "\\longdescription{method}{~A}{~A}{~%~A}~%" method args-str doc))))
 			    (t
 			     (format t "~A" (escape-string (format nil "\\methoddesc{~A}{~A}{~A}~%" method args-str doc))))))
                      (:md
@@ -168,14 +168,14 @@
                (format t "{\\footnotesize~%"))
               (:md
                )))
-    (setq args-str (make-arg-string doc args "function"))
+    (setq args-str (make-arg-string doc args))
     (setq doc (make-doc-string doc))
     (case *output-format*
           (:html
 	   (cond ((null doc)
 		  (format t "~A" (escape-string (format nil "\\fundesc{~A}{~A}~%" funcname args-str))))
 		 (*has-key*
-		  (format t "~A" (escape-string (format nil "\\longdescription{~A}{~A}{~A}~%" funcname args-str doc))))
+		  (format t "~A" (escape-string (format nil "\\longdescription{function}{~A}{~A}{~%~A}~%" funcname args-str doc))))
 		 (t
 		  (format t "~A" (escape-string (format nil "\\funcdesc{~A}{~A}{~A}~%" funcname args-str doc))))
 		 ))
