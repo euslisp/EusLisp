@@ -72,7 +72,7 @@ Note that {\em sequence} is copied even if its type equals to {\em result-type}.
 \funcdesc{map}{result-type function seq \&rest more-seqs}{
 {\em function} is applied to a list of arguments taken from {\em seq}
 and {\em more-seqs} orderly, and the result is accumulated in a sequence
-of type {\em result-type}.}
+of type {\em result-type}. For example, you can write as follows: {\tt (map float-vector \#'(lambda (x) (* x x)) (float-vector 1 2 3))}}
 
 \funcdesc{fill}{sequence item \&key (start 0) (end (length sequence))}{
 fills {\em item} from {\em start}th through ({\em end}-1)th in {\em sequence}.}
@@ -402,7 +402,7 @@ The results of application are ignored and {\em arg-list} is returned.}
 
 \funcdesc{mapcar}{func \&rest arg-list}{
 maps {\em func} to each element of {\em arg-list},
-and makes a list from all the results.
+and makes a list from all the results. For example, you can write as follows: {\tt (mapcar \#'(lambda (x) (* x x)) '(1 2 3))}.
 Before using {\bf mapcar}, try {\bf dolist}.}
 
 \funcdesc{mapcan}{func arg-list \&rest more-arg-lists}{
