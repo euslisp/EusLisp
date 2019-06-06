@@ -45,7 +45,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 {\bf identity}は、多くの一般列関数の{\em :key}パラメータのデフォルト値
 としてしばしば用いられる。}
 
-\funcdesc{eval}{form [environment]}{
+\funcdesc{eval}{form \&optional environment}{
 {\em form}を評価して、その値を返す。
 もし、{\bf *evalhook*}に{\em form}や{\em environment}を受ける関数を
 設定するならば、hook関数を評価に入る前に呼び出すことができる。}
@@ -66,12 +66,14 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 {\em args}の数は、{\em func}で要求されている引き数の数と一致しなければ
 ならない。}
 
-\specialdesc{quote}{obj}{{\em obj}自身を評価する。}
+\specialdesc{quote}{obj}{
+{\em obj}自身を評価する。}
 
-\specialdesc{function}{func}{closure関数を作る。
+\specialdesc{function}{func}{
+closure関数を作る。
 もし、{\em func}がsymbolならば、その関数定義が検索される。}
 
-\funcdesc{evalhook}{hookfunc form [env]}{
+\funcdesc{evalhook}{hookfunc form \&optional env}{
 {\em hookfun}を{\bf *evalhook*}に結び付けた後、{\em form}を一度評価する。}
 
 \funcdesc{eval-dynamic}{variable}{
@@ -82,7 +84,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 もし、展開したものがまだマクロcallを含んでいるならば、
 マクロcallのない結果となるまでくり返し展開する。}
 
-\specialdesc{eval-when}{situation \{form\}*}{
+\specialdesc{eval-when}{situation \&rest forms}{
 {\em situation}は{\tt compile, load, eval}のリストである。
 {\em form}は、現在の実行モードが{\em situation}と一致するときに評価される。
 {\bf eval-when}は、コンパイラでの動作や環境を制御するために重要なものである。
@@ -103,7 +105,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 {\em type}は、{\tt :integer, :fixnum, :float}で示されるクラスオブジェクト
 のどれかである。}
 
-\specialdesc{declare}{declaration*}{
+\specialdesc{declare}{\&rest declarations}{
 それぞれ{\em declaration}は、宣言指定や整数あるいは目的のsymbolのリストである。
 宣言は、コンパイラが高速なコードを生成するために重要である。
 \begin{description}
@@ -121,9 +123,8 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 \item {space}  コンパイラの*space*パラメータに値(0--3)を設定する。
 \item {inline} 認識しない。
 \item {not-inline} 認識しない。
-\end{description}
+\end{description}}
 
-}
 \funcdesc{proclaim}{proclamation}{
 変数やコンパイラオプションをグローバルに宣言する。
 同様な宣言は、{\bf declare}特殊書式によって記述することができる。
@@ -133,6 +134,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 \funcdesc{warn}{format-string \&rest args}{
 {\em format-string}と{\em args}で与えられる警告メッセージを
 {\bf *error-output*}に出力する。}
+
 \funcdesc{error}{format-string \&rest args}{
 {\bf *error-handler*}に結び付く現在のエラーハンドラー関数を呼び出す。
 デフォルトのエラーハンドラー'euserror'を{\bf *error-output*}に最初に出力し
@@ -140,6 +142,7 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 その後、新しい最上位レベルのセッション(session)に入る。
 プロンプトには、エラーセッションの深さを示す。
 {\bf throw}にその番号を与えることにより、低いエラーレベルのセッションへ戻ることができる。}
+
 \end{refdesc}
 
 マルチスレッドEuslispにおいて、特殊変数はスレッド間で共有され、
@@ -149,8 +152,10 @@ Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成�
 異なったエラーハンドラーをインストールする。
 
 \begin{refdesc}
-\funcdesc{install-error-handler}{handler}{
+
+\funcdesc{lisp::install-error-handler}{handler}{
 {\em handler}を現在のスレッドのエラーハンドラーとしてインストールする。}
+
 \end{refdesc}
 
 \newpage
@@ -209,20 +214,39 @@ cshの履歴との違いは、{\bf !}が関数であるため{\bf !}の次に最
 
 \begin{refdesc}
 
-\vardesc{-}{現在の入力}
-\vardesc{+}{直前の入力}
-\vardesc{++}{２つ前の入力}
-\vardesc{+++}{３つ前の入力}
-\vardesc{*}{直前の結果}
-\vardesc{**}{２つ前の結果}
-\vardesc{***}{３つ前の結果}
+%% Use functiondescription to avoid being added to the help function,
+%% which would shadow basic operator functions
+
+\functiondescription{-}{}{変数}{
+現在の入力}
+
+\functiondescription{+}{}{変数}{
+直前の入力}
+
+\functiondescription{++}{}{変数}{
+２つ前の入力}
+
+\functiondescription{+++}{}{変数}{
+３つ前の入力}
+
+\functiondescription{*}{}{変数}{
+直前の結果}
+
+\functiondescription{**}{}{変数}{
+２つ前の結果}
+
+\functiondescription{***}{}{変数}{
+３つ前の結果}
+
 \vardesc{*prompt-string*}{
 {\bf eustop}で使用されるプロンプト文字列}
+
 \vardesc{*program-name*}{
 このEuslispが呼び出された命令。例えば、{\tt eus,eusx,eusxview}やユーザーで作った
 euslispなど。}
 
-\funcdesc{eustop}{\&rest argv}{デフォルトの最上位ループ}
+\funcdesc{eustop}{\&rest argv}{
+デフォルトの最上位ループ}
 
 \funcdesc{eussig}{sig code}{
 SIGPIPEのデフォルトシグナルハンドラー。
@@ -244,8 +268,13 @@ SIGINT(control-C)のデフォルトシグナルハンドラー。
 Euslispプロセスを終了し、プロセスの状態コードとして{\em termination-code}
 (0..255)を返す。}
 
-\funcdesc{h}{}{{\bf *history*}の中に記憶されている入力履歴を
+\vardesc{*top-selector*}{
+複数のストリームによる非同時関数呼び出しを管理するport-selectorオブジェクト。}
+
+\funcdesc{h}{}{
+{\bf *history*}の中に記憶されている入力履歴を
 関連する列番号とともに出力する。}
+
 \funcdesc{!}{\&optional (seq 0)}{
 列番号{\em seq}に関連する入力行を呼び出す。
 {\em seq}が0のとき、もっとも最近の命令が呼び出される。
@@ -263,6 +292,7 @@ control-M (carriage-return)かcontrol-J (line-feed)で
 もし、{\em seq}が番号でなくsymbolまたは文字列の場合、
 履歴リストを古い方に向かって検索し、
 symbolまたは文字列が含まれている命令行を返す。}
+
 \funcdesc{new-history}{depth}{
 {\em depth}の長さを持つように{\bf *history*}を初期化する。
 {\em depth}行が記憶される。
@@ -377,16 +407,14 @@ closureの中の{\bf return-from}特殊書式と{\bf unwind-protect}の中のcle
 
 \begin{refdesc}
 
-\functiondescription{euscomp}{\{filename\}*}{UNIXコマンド}{
+\functiondescription{euscomp}{\&rest filename}{UNIXコマンド}{
 Euslispコンパイラを呼びだす。}
 
-\longdescription{compile-file}{srcfile \&key \= (:verbose nil) \hspace{43mm} \=
-\` [関数]\\
-\> (:optimize 2) (:c-optimize 1) (:safety 1) \> {\rm ;optimization level} \\
-\> (:pic t)  \> {\rm ;generate position independ-} \\
-\>\>{ \rm ent code to build library} \\
-\> (:cc t) \> {\rm ; run c compiler} \\
-\> (:entry (pathname-name file)) \\}{
+\longdescription{関数}{compile-file}{srcfile \&key \= (verbose nil) \hspace{43mm} \= \\
+\> (optimize 2) (c-optimize 1) (safety 1) \> {\rm ; optimization level} \\
+\> (pic t)  \> {\rm ; position independent code} \\
+\> (cc t) \> {\rm ; run c compiler} \\
+\> (entry (pathname-name file))}{
 ファイルをコンパイルする。
 ".l"が{\em srcfile}の拡張子として仮定される。
 もし、{\em :verbose}がTならば、コンパイルされた関数やメソッド名が表示される。
@@ -394,8 +422,7 @@ Euslispコンパイラを呼びだす。}
 {\em :optimize, :c-optimize}と{\em :safety}は、最適化のレベルを
 指定する。
 モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
-{\em :pic}は、Tに設定すべきである。
-}
+{\em :pic}は、Tに設定すべきである。}
 
 \funcdesc{compile}{funcname}{
 関数をコンパイルする。{\bf compile}は、最初に関数定義をテンポラリファイルに
@@ -408,13 +435,14 @@ Euslispコンパイラを呼びだす。}
 ならば、コンパイルする。そのオブジェクトファイルは、".o"拡張子を
 持っていると仮定される。}
 
-\vardesc{*optimize*}{コンパイラの最適化レベルを制御する。}
+\vardesc{compiler:*optimize*}{
+コンパイラの最適化レベルを制御する。}
 
-\vardesc{*verbose*}{
+\vardesc{compiler:*verbose*}{
 non-NILが設定されたとき、コンパイルされている関数名やメソッド名そして
 コンパイルに要した時間を表示する。}
 
-\vardesc{*safety*}{
+\vardesc{compiler:*safety*}{
 安全性レベルを制御する。}
 
 \end{refdesc}
@@ -424,12 +452,13 @@ non-NILが設定されたとき、コンパイルされている関数名やメ�
 \subsection{プログラムロード}
 \begin{refdesc}
 
-\longdescription{load}{fname \&key \= :verbose \hspace{20mm} \= *load-verbose* \` [関数]\\
- \> :package \>  *package* \\
- \> :entry  \>  (pathname-name fname) \\
- \> :symbol-input  \> "/usr/local/bin/eus" \\
- \> :symbol-output \> "a.out" \\
- \> :ld-option \> ""}{
+\longdescription{関数}{load}{fname \&key \= (verbose *load-verbose*) \\
+ \> (package *package*) \\
+ \> (entry (pathname-name fname)) \\
+ \> (symbol-input nil) \\
+ \> (symbol-output "") \\
+ \> (print nil) \\
+ \> (ld-option "")}{
 {\bf load}はソースファイルあるいはコンパイルされたオブジェクトファイル
 をEuslispに読み込むための関数である。
 もし、{\em fname}で指定されたファイルが存在するとき、
@@ -486,19 +515,23 @@ Solaris2 OSにおいて、コンパイルコードのロードは、動的ロー
 実行する。
 \begin{refdesc}
 
-\funcdesc{load-files}{\&rest files}{{\tt :verbose}にTを設定し、
-{\em files}を連続的にロードする。}
+\funcdesc{load-files}{\&rest files}{
+{\tt :verbose}にTを設定し、{\em files}を連続的にロードする。}
 
-\vardesc{*modules*}{これまでにロードされたモジュールの名前の
-リストを持つ。}
-\funcdesc{provide}{module-name}{{\em module-name}をすでにロードされた
+\vardesc{*modules*}{
+これまでにロードされたモジュールの名前のリストを持つ。}
+
+\funcdesc{provide}{module-name \&rest version-info}{
+{\em module-name}と{\em version-info}のconsを、すでにロードされた
 モジュールの名前として{\tt *modules*}の中に加える。
 {\em module-name}はsymbolあるいは文字列でなければならない。
 {\bf require}の呼び出しは、完全なモジュールを構成するファイルの最初に
 存在しなければならない。}
-\funcdesc{require}{module-name \&optional file}{
-{\tt *modules*}の中に{\em module-name}が見つからなかったとき
-{\em file}をロードする。
+
+\funcdesc{require}{module-name \&rest load-arg}{
+{\tt *modules*}の中に{\em module-name}が見つからなかったとき、
+{\em module-name}か{\em load-arg}の第一要素によって
+示されているファイルをロードする。
 {\bf provide}と{\bf require}は、モジュールの中の依存を制御し、
 基本モジュールの2重ロードを避けるために使用される。
 1つの基本モジュール"A"と2つの応用モジュール"B"と"C"があったとし、
@@ -513,13 +546,14 @@ Solaris2 OSにおいて、コンパイルコードのロードは、動的ロー
 その後、もし"C"がロードされるなら、"A"モジュールはロードされず、"C"が
 {\tt *modules*}に追加されるのみである。}
 
-\longdescription{system:binload}{opath qpath \&optional \=
-(entry (pathname-name opath)) \` [関数]\\
+\longdescription{関数}{system:binload}{opath qpath \&optional \= (entry (pathname-name opath)) \\
 \> (symfile "/usr/local/bin/eus")  \\
 \> (symout "a.out") \\
-\> (ldopt "")\\}{バイナリファイルをロードしリンクする。}
+\> (ldopt "")}{
+バイナリファイルをロードしリンクする。}
 
-\fundesc{system:txtload}{fname}
+\fundesc{system::txtload}{fname}
+
 \end{refdesc}
 
 \newpage
@@ -540,7 +574,7 @@ Solaris2 OSにおいて、コンパイルコードのロードは、動的ロー
 slotの中に深く入ったりあるいは新しい値をslotに設定したりする。
 '?'命令でサブ命令のメニューを見ることができる。}
 
-\funcdesc{more} {\&rest forms}{
+\funcdesc{more}{\&rest forms}{
 {\bf *standard-output*}にテンポラリーファイルを結び付けて
 {\em forms}を評価した後、そのテンポラリーファイルをUNIXの'more'命令
 を使用して{\bf *standard-output*}に出力する。
@@ -559,12 +593,13 @@ breakを終了したいとき、control-Dを入力する。}
 文章はKCLのマニュアルから借りているため、説明がEuslisp関数のものといつも
 合っているとは限らない。}
 
-\funcdesc{apropos}{key}{
+\funcdesc{apropos}{strng \&optional pack}{
 {\bf apropos}は、関数や変数の正確な名前を忘れていて、その一部あるいは
 不確かな名前しか知らないときに役に立つ。
-symbol-nameの中に部分文字列として{\em key}を含むすべてのsymbolを表示する。}
+symbol-nameの中に部分文字列として{\em strng}を含むすべてのsymbolを表示する。
+{\em pack}が与えられた時、そのパッケージに属するシンボルのみ表示する。}
 
-\funcdesc{apropos-list}{key}{
+\funcdesc{apropos-list}{strng \&optional pack}{
 {\bf apropos}と似ているが表示はしない、しかしリストとして結果を返す。}
 
 \funcdesc{constants}{\&optional (string  "") (pkg *package*)}{
@@ -581,7 +616,9 @@ symbolをすべてリスト出力する。}
 
 \funcdesc{btrace}{\&optional (depth 10)}{
 {\em depth}レベルの履歴を呼び出し表示する。}
+
 \fundesc{step-hook}{form env}
+
 \funcdesc{step}{form}{
 {\bf step}と{\bf trace}は関数の上でのみ正確に働く。マクロや特殊書式では
 働かない。}
@@ -590,7 +627,8 @@ symbolをすべてリスト出力する。}
 {\em functions}のトレースを始める。
 {\em functions}が呼び出されたときはいつでも、その引き数と結果を表示する。}
 
-\funcdesc{untrace}{\&rest functions}{トレースを終了する。}
+\funcdesc{untrace}{\&rest functions}{
+トレースを終了する。}
 
 \macrodesc{timing}{count \&rest forms}{
 {\em forms}を{\em count}回実行し、{\em forms}の1回の実行に要する
@@ -602,14 +640,15 @@ symbolをすべてリスト出力する。}
 \funcdesc{sys:list-all-catchers}{}{
 すべての{\bf catch}タグを返す。}
 
-\funcdesc{sys:list-all-instances}{aclass [scan-sub]}{
+\funcdesc{sys:list-all-instances}{aclass \&optional scan-sub}{
 すべてのヒープの中から{\em aclass}で指定されるインスタンスをすべて
 探し、集める。
 もし、{\em scan-sub}がNILなら、{\em aclass}の確実なインスタンスを
 リストする。そうでなければ、{\em aclass}のインスタンスあるいはサブクラス
 が集められる。}
 
-\funcdesc{sys:list-all-bindings}{}{バインドされるスタックを探し、
+\funcdesc{sys:list-all-bindings}{}{
+バインドされるスタックを探し、
 アクセス可能な値すべてをリストで返す。}
 
 \funcdesc{sys:list-all-special-bindings}{}{
@@ -630,13 +669,16 @@ EusLispのリーダとプリンタは、どのようなオブジェクトも再�
 構造体をダンプすることである。
 
 \begin{refdesc}
+
 \fundesc{dump-object}{file \&rest objects}
+
 \funcdesc{dump-structure}{file \&rest objects}{
 再び読み戻しができるような書式で{\em file}に{\em objects}をダンプする。}
 
 \funcdesc{dump-loadable-structure}{file \&rest symbols}{
 {\em symbol}にバインドされたオブジェクトを{\em file}にダンプする。
 その{\em file}は簡単にロードすることによって読み戻すことができる。}
+
 \end{refdesc}
 
 \begin{verbatim}
@@ -669,7 +711,8 @@ Solarisの動的ロード機能は、共有するオブジェクトを{\tt sbrk}
 位置に依存した形でロードする。
 
 \begin{refdesc}
-\funcdesc{save}{path \&optional (symbol-file "") starter}{
+
+\funcdesc{sys:save}{path \&optional (symbol-file "") starter}{
 {\bf save}は、現在のEuslisp処理の環境をファイルにダンプする。
 そのファイルは、後でUNIX命令として呼び出すことができる。
 もし関数名が{\em starter}によって指定されているなら、
@@ -727,13 +770,17 @@ Solaris上のEuslispにおいて、{\bf save}がないので、
 定義している。
 
 \subsection{その他の関数}
+
 \begin{refdesc}
-\funcdesc{lisp-implementation-type}{}
-{{\tt "EusLisp"}を返す。}
+
+\funcdesc{lisp-implementation-type}{}{
+{\tt "EusLisp"}を返す。}
+
 \funcdesc{lisp-implementation-version}{}{
 このEuslispの名前、バージョン、作成日を返す。
 この文字列が起動時にも表示される。
 {\tt "MT-EusLisp 7.50 X 1.2 for Solaris Sat Jan  7 11:13:28 1995"}}
+
 \end{refdesc}
 
 \newpage

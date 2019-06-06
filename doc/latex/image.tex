@@ -41,29 +41,39 @@ concatenates two look-up tables {\em lut1} and {\em lut2},
 and returns a new look-up table which performs the same translation
 as {\em lut1} and {\em lut2} are looked-up successively.}
 
-\vardesc{*x-gray32-lut*}{LUT to translate 32-level gray-scale into
+\funcdesc{make-colors}{default-color-map}{
+Creates a color map as described in the following.}
+
+\vardesc{*x-gray32-lut*}{
+LUT to translate 32-level gray-scale into
 the pixel values in the default color map {\tt x:*colormap*}.
 {\tt (aref *x-gray32-lut* n)} returns the pixel value for nth gray-level
 out of 32 levels.}
 
-\vardesc{*x-gray16-lut*}{LUT to translate 16-level gray-scale pixel
+\vardesc{*x-gray16-lut*}{
+LUT to translate 16-level gray-scale pixel
 into the index of x's default color map  {\tt x:*colormap*}.}
 
-\vardesc{*x-color-lut*}{LUT for several vivid colors defined in 
+\vardesc{*x-color-lut*}{
+LUT for several vivid colors defined in 
 {\tt x:*color-map*}.
 Registered colors are "black", "red", "green", "lightblue", "yellow",
 "orange", "blue", "magenta", "white".}
 
-\vardesc{*256to8*}{256-entry LUT to translate integers in range of 0..255
+\vardesc{*256to8*}{
+256-entry LUT to translate integers in range of 0..255
 into 0..7. The levels are linearly mapped.}
 
-\vardesc{*256to16*}{256-entry LUT to translate integers in range of 0..255
+\vardesc{*256to16*}{
+256-entry LUT to translate integers in range of 0..255
 into 0..15. The levels are linearly mapped.}
 
-\vardesc{*256to32*}{256-entry LUT to translate integers in range of 0..255
+\vardesc{*256to32*}{
+256-entry LUT to translate integers in range of 0..255
 into 0..31. The levels are linearly mapped.}
 
-\vardesc{*gray32*}{256-entry LUT to translate the raw gray-scale pixels 
+\vardesc{*gray32*}{
+256-entry LUT to translate the raw gray-scale pixels 
 into X's color map indices.
 This is made by concatenating two LUTs, {\tt *256to32*} and
 {\tt *x-gray32-lut*}.
@@ -71,7 +81,8 @@ An Xwindow display-able pixel-image with 32 gray-levels
 can be obtained by translating
 the 256-level raw image by {\bf *gray32*}.}
 
-\vardesc{*rainbow32*}{256-entry LUT to translate 256-level
+\vardesc{*rainbow32*}{
+256-entry LUT to translate 256-level
 hue values into into X's rainbow color map indices.
 This is made by concatenating two LUTs, {\tt *256to32*} and
 {\tt *x-rainbow32-lut*}.}
@@ -101,97 +112,137 @@ Major axis is taken vertically. The pixel of {\tt img} at {\tt (x, y)}
 should be accessed by {\tt (aref img y x)}.}
 %
 
-\methoddesc{:width}{}{returns the horizontal size of a pixel-image,
-which is the second dimension.}
-\methoddesc{:height}{}{returns the vertical size of a pixel-image.}
-\methoddesc{:size}{}{is equivalent to array-total-size.}
+\methoddesc{:width}{}{
+returns the horizontal size of a pixel-image, which is the second dimension.}
+
+\methoddesc{:height}{}{
+returns the vertical size of a pixel-image.}
+
+\methoddesc{:size}{}{
+is equivalent to array-total-size.}
+
 \methoddesc{:transpose}{
 \&optional (result (instance (class self) :init dim0 dim1))}{
 exchanges x and y coordinates.}
+
 \methoddesc{:map-picture}{lut \&optional (result (send self :duplicate))}{
 This pixel-image is translated by the {\em lut} and stored in {\em result}.
 }
+
 \methoddesc{:map}{fn \&optional (result (send self :duplicate))}{
 applies function {\em fn} to all the pixels in the image,
 and put the result in the {\em result} pixel-image.}
-\methoddesc{:brightest-pixel}{}{finds the brightest pixel value in this image.}
-\methoddesc{:darkest-pixel}{}{finds the darkest pixel value in this image.}
-\methoddesc{:average-pixel}{}{calculates the average intensity of all 
-the pixels in this image.}
+
+\methoddesc{:brightest-pixel}{}{
+finds the brightest pixel value in this image.}
+
+\methoddesc{:darkest-pixel}{}{
+finds the darkest pixel value in this image.}
+
+\methoddesc{:average-pixel}{}{
+calculates the average intensity of all the pixels in this image.}
+
 \methoddesc{:halve}{\&optional simage}{
 returns pixel-image that is shrunk into half-size image.}
 % (:expand (rate) )
+
 \methoddesc{:subimage}{x y subwidth subheight}{
 cuts out a {\em subwidth} x {\em subheight} rectangular region
 with its top-left corner at {\em (x,y)} of this image.
 The origin of the image is taken at the top-left corner.
-{\tt :Subimage} returns a  new pixel-image object.
-}
+{\tt :Subimage} returns a  new pixel-image object.}
+
 \methoddesc{:xpicture}{\&optional lut}{
 translates this image using the look-up table {\em lut}
 and sets translated pixel-image object to {\em xpicture}.}
+
 \methoddesc{:display-lut}{\&optional newlut}{
 sets look-up table {\em newlut} as display-lut.Then 
 translates this image using this look-up table
 and sets translated pixel-image object as xpicture.}
+
 \methoddesc{:display}{(xwin geometry:*viewsurface*)}{
 displays this pixel-image in the {\em xwin} xwindow by using {\tt :putimage}.
 Each pixel value is referred as a index in x's color map.
 To get a desired appearance, this pixel-image must have been translated
 by proper LUTs.}
-\methoddesc{:duplicate}{}{makes an instance of the same class
+
+\methoddesc{:duplicate}{}{
+makes an instance of the same class
 as this image object with the same width and height.
 The pixel data are not copied.}
-\methoddesc{:copy-from}{src}{copies pixel data from another
+
+\methoddesc{:copy-from}{src}{
+copies pixel data from another
 image object specified by {\em src}. {\em src} must be of the
 same dimension as this image.}
+
 \methoddesc{:hex}{\&optional (x 0) (y 0) (w 16) (h 16) (strm t)}{
 prints pixel data in the specified rectangular region
 in the hexadecimal format.}
+
 \methoddesc{:hex1}{\&optional (x 0) (y 0) (w 64) (h 16) (strm t)}{
 prints pixel data in the specified rectangular region
 in the hexadecimal format.}
-\methoddesc{:grin1}{strm \&rest msg}{
+
+\methoddesc{:prin1}{strm \&rest msg}{
 prints this image-pixel object with its name and dimensions.}
+
 \methoddesc{:init}{w h \&optional imgvec}{
 initializes a pixel-image object to have {\em w} width and {\em h} height.
 %If {\em imgvec} which is a character vector representing all the pixel values
 %in the image is given, its length must be {\em w*h}.
 }
+
 \methoddesc{:amplify}{rate \&optional (result (send self :duplicate)}{
 multiplies {\em rate} to each pixel value.}
-\methoddesc{:compress-gray-scale}{levels \&optional result  \&aux pict2}{
+
+\methoddesc{:compress-gray-scale}{levels \&optional result \&aux pict2}{
 translates this image into range of 0..{\em levels}
 and returns translated pixel-image object.}
+
 \methoddesc{:lut}{lut1 \&optional (result (send self :duplicate))}{
 translates this image using the look-up table {\em lut1}
 and returns translated pixel-image object.}
+
 \methoddesc{:lut2}{lut1 lut2 \&optional (result (send self :duplicate))}{
 translates this image using a look-up table that concatenated {\em lut1} 
 and {\em lut1}. And returns translated pixel-image object.}
+
 \methoddesc{:histogram}{}{
 counts the occurrence of each pixel value in this image and returns 
 an integer-vector representing the histogram.}
+
 \methoddesc{:brightness-distribution}{}{
 returns brightness-distribution.}
+
 \methoddesc{:optimum-threshold}{}{
 returns levels that is maximum of this image's brightness-distribution.}
-\methoddesc{:project-x}{}{adds all pixel values of the same x coordinate
+
+\methoddesc{:project-x}{}{
+adds all pixel values of the same x coordinate
 and returns a vector of these values.}
-\methoddesc{:project-y}{}{adds all pixel values of the same y coordinate
+
+\methoddesc{:project-y}{}{
+adds all pixel values of the same y coordinate
 and returns a vector of these values.}
+
 \methoddesc{:digitize}{threshold \&optional (val0 0) (val1 255) result}{
 translates this image into 2 levels image {\em val0} and {\em val1}
 using {\em threshold}.}
+
 \methoddesc{:and}{img2}{
 bit-and operates between this image and {\em img2},
  and returns operated pixel-image.}
+
 \methoddesc{:plot}{min max \&optional color viewsurface}{
 plots pixels having values between {\em min} and {\em max} inclusively
 with {\em color} (gc) on {\em viewsurface}.}
-\longdescription{:edge1}{\&optional \=(method 1) \`[method]\\
-\>(th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
-\>(run *edge-length-threshold*) (win geometry:*viewsurface*) (edgeimg1)}{
+
+\longdescription{method}{:edge1}{\&optional \= (method 1) \\
+\> (th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
+\> (run *edge-length-threshold*)\\
+\> (win geometry:*viewsurface*) (edgeimg1)}{
 detects edge of this image. And displays this edge on this image.}
 \end{refdesc}
 
@@ -203,59 +254,92 @@ or hue, lightness, and saturation components in the HLS model.
 Conversion between RGB and HLS is supported.
 
 \begin{refdesc}
-\classdesc{color-pixel-image}{propertied-object}
-{width height component1 component2 component3}{
+
+\classdesc{color-pixel-image}{propertied-object}{width height component1 component2 component3}{
 represents color images with three {\tt pixel-image} objects.}
 
-\methoddesc{:width}{}{returns the width of this image.}
-\methoddesc{:height}{}{returns the height of this image.}
-\methoddesc{:size}{}{returns $width \times height$ of this image.}
-\methoddesc{:red}{}{returns component1.}
-\methoddesc{:green}{}{returns component2.}
-\methoddesc{:blue}{}{returns component3.}
-\methoddesc{:hue}{}{returns component1. A hue value between 0 and 360 is
+\methoddesc{:width}{}{
+returns the width of this image.}
+
+\methoddesc{:height}{}{
+returns the height of this image.}
+
+\methoddesc{:size}{}{
+returns $width \times height$ of this image.}
+
+\methoddesc{:red}{}{
+returns {\tt component1}.}
+
+\methoddesc{:green}{}{
+returns {\tt component2}.}
+
+\methoddesc{:blue}{}{
+returns {\tt component3}.}
+
+\methoddesc{:hue}{}{
+returns {\tt component1}.
+ A hue value between 0 and 360 is
 represented by a byte value between 0 and 255.}
-\methoddesc{:lightness}{}{returns component2.
+
+\methoddesc{:lightness}{}{
+returns {\tt component2}.
 The normalized brightness values (0..1) are mapped into integers between 0 and 255.}
-\methoddesc{:saturation}{}{returns component3.
+
+\methoddesc{:saturation}{}{
+returns {\tt component3}.
 The normalized saturation values (0..1) are mapped into integers between 0 and 255.}
-\methoddesc{:pixel}{x y}{returns a list of three integers each of which is
+
+\methoddesc{:pixel}{x y}{
+returns a list of three integers each of which is
 taken from component1, component2 and component3 at ({\em x},{\em y}).
 This triplet can be interpreted either as RGB values or HLS values.}
+
 \methoddesc{:monochromize}{\&optional (NTSC nil)}{
 computes brightness from RGB components and returns a new {\tt pixel-image}.
 If {\em NTSC} is nil, $(R+G+B)/3$ is computed.
 If T, $0.299*R+0.587*G+0.114*B$ is computed.}
-\methoddesc{:HLS}{}{assuming this image is representing an RGB image,
+
+\methoddesc{:HLS}{}{
+assuming this image is representing an RGB image,
 converts the image into HLS representation.
 {\bf RGB2HLS} is called for the conversion of each pixel.}
-\methoddesc{:RGB}{}{assuming this image is representing an HLS image,
+
+\methoddesc{:RGB}{}{
+assuming this image is representing an HLS image,
 converts the image into RGB representation.
 {\bf HLS2RGB} is called for the conversion of each pixel.}
+
 \methoddesc{:halve}{}{
 returns color-pixel-image that is shrunk into half-size image.}
+
 \methoddesc{:display}{\&optional (win *color-viewer*)}{
 displays this color-pixel-image in a xwindow
 designated by {\em win} by using {\tt :putimage}.
 Each pixel value is referred as a index in x's color map.
 To get a desired appearance, this pixel-image must have been translated
 by proper LUTs.}
+
 \methoddesc{:display-lut}{\&optional (newlut1) (newlut2 newlut1) (newlut3 newlut2)}{
 sets look-up tables {\em newlut1}, {\em newlut1} and {\em newlut1}
 as display-lut, respectively. Then translates this image using this look-up table
 and sets translated pixel-image object as xpicture.}
-\longdescription{:edge1}{\&optional \=(method 1) \`[method]\\
+
+\longdescription{method}{:edge1}{\&optional \= (method 1) \\
 \>(th1 *edge-intensity-threshold*) (th2 *weak-edge-threshold*)\\
 \>(run *edge-length-threshold*) (win *color-viewer*)}{
 detects edge of this image. And displays this edge on this image.}
+
 \methoddesc{:hex}{\&optional (x 0) (y 0) (w 16) (h 16) (strm t)}{
 prints pixel data in the specified rectangular region
 in the hexadecimal format.}
+
 \methoddesc{:hex1}{\&optional (x 0) (y 0) (w 64) (h 16) (strm t)}{
 prints pixel data in the specified rectangular region
 in the hexadecimal format.}
+
 \methoddesc{:prin1}{strm \&rest msg}{
 prints this image-pixel object with its name and dimensions.}
+
 \methoddesc{:init}{width height \&optional r g b}{
 defines the size of a color image and allocates {\tt pixel-image}s for each
 color component.}
@@ -277,12 +361,13 @@ and display it in an xwindow by the following program.
 Edge Finding facilities are provided by {\tt "vision/edge/edge"}.
 
 \begin{refdesc}
-\longdescription{edge1}{img \=\&optional \=(method 1) \`[function]\\
-		    \>\>(th1 *edge-intensity-threshold*)
-		    (th2 *weak-edge-threshold*) \\
-		    \>\>(run *edge-length-threshold*)
-		    result\\
-	\>\&aux (width (send img :width)) (height (send img :height))}{
+
+\longdescription{function}{edge1}{img \= \&optional \= (method 1) \\
+\> \> (th1 *edge-intensity-threshold*)\\
+\> \> (th2 *weak-edge-threshold*) \\
+\> \> (run *edge-length-threshold*)\\
+\> \> result\\
+\> \&aux (width (send img :width)) (height (send img :height))}{
 finds edge pixels in this image.
 {\bf edge1} first applies a gradient operator to every pixel.
 There are three kinds of gradient operators provided:
@@ -314,9 +399,11 @@ x-display-able pixel image {\em ximg}.
 Strong edge pixels are colored in red, weak pixels in green, and
 isolated pixels in blue.}
 
-\longdescription{edge2}{img1 edge1result \&key \=(kvalue 8.0) \`[function]\\
- 		\>(curve-threshold 0.8) (line-error 2.8)\\
-                \>(curve-error 2.8) (plane-limit 0.3)}{
+\longdescription{function}{edge2}{img1 edge1result \&key \= (kvalue 8.0) \\
+\> (curve-threshold 0.8)\\
+\> (line-error 2.8)\\
+\> (curve-error 2.8)\\
+\> (plane-limit 0.3)}{
 tries to fit straight lines and elliptic curves to the
 result obtained by {\bf edge1}.
 A list of three elements, which represents regions, boundaries, and
@@ -327,8 +414,10 @@ line segments is returned.}
 Three elements represented by {\bf edge2} are defined as follow.
 
 \begin{refdesc}
+
 \classdesc{region}{propertied-object}{contour area intensity std-deviation}{
 represents region.}
+
 \classdesc{boundary}{propertied-object}{parent-region
 		hole
 		segments
@@ -337,42 +426,56 @@ represents region.}
 		bottom-right
 		length}{
 represents boundary.}
+
 \classdesc{edge-segment}{propertied-object}{prev next 
 		wing	; the other half-edge
 		intensity std-deviation 
 		start end}{
 represents edge-segment.}
+
 \classdesc{line-edge-segment}{edge-segment}{la lb}{
 represents line-edge-segment.}
+
 \classdesc{curved-edge-segment}{edge-segment}{rotation total-rot side
 			a b c d e}{
 represents curved-edge-segment.}
 
-\longdescription{draw-ellipse-segment}{elp gc \&optional \=(vs *viewsurface*)
- (height (send vs :height)) \`[function]\\
-\>(x 0) (y 0)}{
+\funcdesc{draw-ellipse-segment}{elp gc \&optional (vs *viewsurface*) (height (send vs :height)) (x 0) (y 0)}{
 draws {\bf curved-edge-segment} object {\em elp} on xwindow {\em vs}.}
+
 \funcdesc{draw-line-segment}{s \&optional gc (vs *viewsurface*)
 				(height (send vs :height))
 				(x 0) (y 0)}{
 draws {\bf line-edge-segment} object {\em s} on xwindow {\em vs}.}
-\longdescription{draw-segments}{segs \&key \=(line-gc image::*red-gc*)
-			   (ellipse-gc line-gc) \`[function]\\
-			   \>(vs geometry:*viewsurface*)
-			   (height (send vs :height))
-			   (step nil)\\
-			   \>(x 0) (y 0)}{
+
+\longdescription{function}{draw-segments}{segs \&key \= (line-gc image::*red-gc*) \\
+\> (ellipse-gc line-gc)\\
+\> (vs geometry:*viewsurface*)\\
+\> (height (send vs :height))\\
+\> (step nil)\\
+\> (x 0) (y 0)}{
 draws {\em s}, a list of {\bf edge-segment} objects on xwindow {\em vs}.}
+
 \funcdesc{draw-boundary}{b \&optional gc}{
 draws segments of {\bf boundary} object {\em b} on xwindow {\em vs}.}
+
 \funcdesc{draw-boundaries}{bs \&optional gc (step nil)}{
 draws segments of {\bf boundary} objects {\em bs} on xwindow {\em vs}.}
 
-\vardesc{*red-gc*}{GC whose foreground color is \#ff0000}
-\vardesc{*blue-gc*}{GC whose foreground color is \#0000ff}
-\vardesc{*green-gc*}{GC whose foreground color is \#00ff00}
-\vardesc{*yellow-gc*}{GC whose foreground color is \#ffff00}
-\vardesc{*cyan-gc*}{GC whose foreground color is \#00ffff}
+\vardesc{*red-gc*}{
+GC whose foreground color is \#ff0000}
+
+\vardesc{*blue-gc*}{
+GC whose foreground color is \#0000ff}
+
+\vardesc{*green-gc*}{
+GC whose foreground color is \#00ff00}
+
+\vardesc{*yellow-gc*}{
+GC whose foreground color is \#ffff00}
+
+\vardesc{*cyan-gc*}{
+GC whose foreground color is \#00ffff}
 
 \end{refdesc}
 \begin{figure}[tb]
@@ -393,6 +496,7 @@ draws segments of {\bf boundary} objects {\em bs} on xwindow {\em vs}.}
 correlation between window-image and tracking-image.
 
 \begin{refdesc}
+
 \classdesc{tracking-window}{pixel-image}{x-pos y-pos x-vel y-vel\\
 \>pattern-size window-size\\
 \>x-win y-win window window-margin\\
@@ -401,31 +505,43 @@ This class defines tracking window.}
 
 \methoddesc{:correlation}{}{
 returns correlation between window-image and this image.}
+
 \methoddesc{:grab}{\&optional (x x-pos) (y y-pos) (sampling 2)}{
 grabs video image and returns grabbed pixel-image.}
+
 \methoddesc{:window-rectangle}{val}{
 draws rectangle on xwindow.}
+
 \methoddesc{:rectangle}{val}{
 draws rectangle on xwindow.}
+
 \methoddesc{:move}{newpos \&aux (newx (aref newpos 0)) (newy (aref newpos 1))}{
 moves tracking-window to {\em newpos} and grabs video image.}
+
 \methoddesc{:track}{display-window \&optional th}{
 tracks this image from window image.}
+
 \methoddesc{:search}{display-window \&optional th}{
 searches this image from window image.}
+
 \methoddesc{:track-and-search}{flag \&optional th}{
 tracks this image. If mistake tracking, searches this image from window image.}
 
 \methoddesc{:pos}{}{
 returns up-left position of window.}
+
 \methoddesc{:vel}{}{
 returns tracking velocity.}
+
 \methoddesc{:insidep}{pos \&aux (x (aref pos 0)) (y (aref pos 1))}{
 checks {\em pos} that is contained with tracking window.}
+
 \methoddesc{:update}{\&optional (flag :get)}{
 sets {\em flag} as update. if flag doesn't exist, returns update.}
+
 \methoddesc{:prin1}{strm \&rest mesg}{
 prints this tracking-window object with its name and dimensions.}
+
 \methoddesc{:init}{x y size win-size}{
 creates tracking-window object and sets slots.}
 \end{refdesc}

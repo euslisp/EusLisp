@@ -15,7 +15,6 @@ The way of the definition of a manipulator is that i) Make all the
 joints of the manipulator, ii) Integrate these joints into {\bf manipulator}.
 
 
-
 \subsection{
 Rotational Joint
 %\label{JointModel}Rotational Joint
@@ -30,16 +29,16 @@ This instance is bound to {\em joint-name}. Assign a ancestor joint to
 {\bf parent}. It is not necessary to assign rotational axes to base nor 
 fingers. 
 
-\ptext{
-(defjoint \= {\it joint-name} \hspace{0.5cm} \=  \\ % \hspace{4cm} \=\\
-\>        :shape \> {\it body-object} \\
-\>        :color \> {\it color-id} \hspace{2cm} \= ;0-15 for MMD \\
-\>        :parent \> {\it parent-joint} \\
-\>        :axis \> {\it rotational-axis} \>  ; :x, :y or :z \\
-\>        :offset \> {\it trans-from-parent-joint} \\
-\>        :low-limit \> {\it joint-angle-limit-low} \\
-\>	  :high-limit \> {\it joint-angle-limit-hight} \\
-\>        ) \\}
+\begin{refdesc}
+\longdescription{macro}{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \\
+\> :color \> {\it color-id} \hspace{2cm} \= ;0-15 for MMD \\
+\> :parent \> {\it parent-joint} \\
+\> :axis \> {\it rotational-axis} \>  ; :x, :y or :z \\
+\> :offset \> {\it trans-from-parent-joint} \\
+\> :low-limit \> {\it joint-angle-limit-low} \\
+\> :high-limit \> {\it joint-angle-limit-hight}}{
+Defines a joint model.}
+\end{refdesc}
 
 \subsection{
 Multi-Joint Manipulators
@@ -49,9 +48,9 @@ Multi-Joint Manipulators
 A model of a manipulator is described by {\bf manipulator}. 
 {\bf defmanipulator} macro below creates an instance of {\bf manipulator}. 
 
-\ptext{
-(defmanipulator {\it manipulator-name} \\
-\hspace{2cm} \= :class \hspace{2cm} \= {\it manipulator-class} \\
+\begin{refdesc}
+\longdescription{macro}{defmanipulator}{manipulator-name \&key \= \\
+\> :class \hspace{2cm} \= {\it manipulator-class} \\
 \> :base \> {\it base-joint} \\
 \> :joints \>  {\it list-of-all-joints} \\
 \> :hand \> {\it handjoint} \\
@@ -60,120 +59,136 @@ A model of a manipulator is described by {\bf manipulator}.
 \> :handcoords \> {\it trans-from-hand-to-armsolcoords}\\
 \> :toolcoords \> {\it trans-from-armsolcoords-to-toolcoords} \\
 \> :open-direction \> {\it finger-open-direction}\\
-\> :right-handed  \> {\it righty-or-lefty} \\
-\>        ) \\
-}
-\begin{refdesc}	
+\> :right-handed  \> {\it righty-or-lefty}}{
+Defines a manipulator model.}
+
 \classdesc{rotational-joint}{body}{(axis offset high-limit low-limit)}{
 describes each rotational joint of a 6 D.O.Fs manipulator.}
+
 \classdesc{manipulator}{cascaded-coords}{(\= base baseinverse joint\\
 \> angles right-handed hand handcoords right-finger left-finger\\
-\>openvec max-span toolcoords toolinverse armsolcoords\\
-\> toolinverse armsocoords approach grasp affix)}
-{manages kinematics of a manipulator from base to hand.}
-\methoddesc{:newcoords} {newrot \&optional newpos}{ 
+\> openvec max-span toolcoords toolinverse armsolcoords\\
+\> toolinverse armsocoords approach grasp affix)}{
+manages kinematics of a manipulator from base to hand.}
+
+\methoddesc{:newcoords}{newrot \&optional newpos}{ 
 updates the coords with newrot and newpos if new joint angles are within the 
-limit.
-}
- \methoddesc{:armsolcoords } {}{
+limit.}
+
+\methoddesc{:armsolcoords}{}{
 computes and makes transformation (an instance coords) 
 between the coords of the 
-base and those of the hand. 
-}
- \methoddesc{:tool} {\&rest msg}{
-modifies or gets toolcoords.
-}
- \methoddesc{:set-tool} {newtool \&optional offset copy}{
-sets new toolcoords.
-}
- \methoddesc{:reset-tool } {}{
-forces this coords to be default-toolcoords.
-}
- \methoddesc{:worldcoords } {}{
+base and those of the hand.}
+
+\methoddesc{:tool}{\&rest msg}{
+modifies or gets toolcoords.}
+
+\methoddesc{:set-tool}{newtool \&optional offset copy}{
+sets new toolcoords.}
+
+\methoddesc{:reset-tool}{}{
+forces this coords to be default-toolcoords.}
+
+\methoddesc{:worldcoords}{}{
 computes the position vector, the rotation matrix, and the coordinates of the 
-toolcoords represented in the world coordinates. 
-}
- \methoddesc{:set-coords } {}{
-forces setting coords according to the forward kinematic solution.
-}
- \methoddesc{:config } {\&optional (a newangles)}{
-sets joint angles of the manipulator.
-}
- \methoddesc{:park } {}{
+toolcoords represented in the world coordinates.}
+
+\methoddesc{:set-coords}{}{
+forces setting coords according to the forward kinematic solution.}
+
+\methoddesc{:config}{\&optional (a newangles)}{
+sets joint angles of the manipulator.}
+
+\methoddesc{:park}{}{
 forces all the joint angles to be zero.
 % 初期姿勢に戻す
 }
+
 \methoddesc{:hand}{\&optional (h nil)}{
 sets or returns the object of its hand.
 %  ハンドオブジェクトを返す
 }
+
 \methoddesc{:handcoords}{}{
 computes the position vector, the rotation matrix, and the coordinates of the 
 handcoords represented in the world coordinates. 
 % ハンド座標系ののワールド表現を求める
 }
+
 \methoddesc{:span}{}{
 returns the current distance between fingers.
 %  現在の指の間隔を返す
 }
-\methoddesc{:open-fingers}{s \&optional abs \&aux (current (send self :span))}
-{moves fingers relatively or absolutely.
+
+\methoddesc{:open-fingers}{s \&optional abs \&aux (current (send self :span))}{
+moves fingers relatively or absolutely.
 % 指幅を相対的、絶対的に指定する
 }
-\methoddesc{:close-fingers} {}{
+
+\methoddesc{:close-fingers}{}{
 closes fingers completely.
 % 指を完全に閉じる 
 }
-\methoddesc{:angles} {\&optional flag}{
+
+\methoddesc{:angles}{\&optional flag}{
 returns the list of current joint angles.
 % 現在の姿勢の関節角度のリストを返す
 }
-% \methoddesc{:right-handed} {}{
+
+% \methoddesc{:right-handed}{}{
 %% ソースそのものがありませんでした。
 % 右手姿勢、左手姿勢を選択する
 %}
- \methoddesc{:get-approach } {}{
+
+\methoddesc{:get-approach}{}{
 returns the object to which the hand is approaching.
 % 現在アプローチしている対象を返す
 }
- \methoddesc{:set-approach } {a}{
+
+\methoddesc{:set-approach}{a}{
 sets {\it a} as the object to which the hand will approach.
 % アプローチ対象を設定する
 }
- \methoddesc{:get-grasp} {}{
+
+\methoddesc{:get-grasp}{}{
 (:get-grasp () grasp-config)
 %??? 
 % 把握姿勢にある対象物を返す
 }
- \methoddesc{:set-grasp} {g}{
+
+\methoddesc{:set-grasp}{g}{
 sets {\it g} as the object which the hand will grasp.
 % 把握対象物を指定する
 }
- \methoddesc{:get-affix} {}{
+
+\methoddesc{:get-affix}{}{
 returns the object which the hand grasps.
 % 把握している物体を返す
 }
- \methoddesc{:affix} {\&optional (grasp)}{
-sets {\bf affixed-object} {\bf grasp}.
+
+\methoddesc{:affix}{\&optional (grasp)}{
+sets {\tt grasp} to {\bf affixed-object}.
 {\bf grasp} is associated to the handcoords as a descendant. 
 % 把握を指示する
 }
- \methoddesc{:unfix} {\&optional (margin 10.0)}{
+
+\methoddesc{:unfix}{\&optional (margin 10.0)}{
 sets {\bf affixed-object} nil.
 {\bf grasp} is dissociated (removed) from the descendants list of the handcoords.
 % 把握物体を解放したことを指示する
 }
-\longdescription{:create}{\=\&rest args \`[method]\\
-           \>\&key \=((:name nm)) ((:hand h)) ((:joints j))
-                ((:left-finger lf)) ((:right-finger rf))\\
-               \>\> ((:toolcoords tc) (make-coords))
-                ((:handcoords hc) (make-coords))\\
-                \>\>((:base bs) (make-cascoords))
-                (open-direction (floatvector 0 1 0))\\
-                \>\>((:max-span mspan) 100.0)
-                ((:lefty lft) t)
-                ((:act a) nil)\\
-            \>\&allow-other-keys}{
+
+\longdescription{method}{:create}{\= \&rest args \\
+\> \&key \= (name nm) (hand h) (joints j)\\
+\> \> (left-finger lf) (right-finger rf)\\
+\> \> ((toolcoords tc) (make-coords))\\
+\> \> ((handcoords hc) (make-coords))\\
+\> \> ((base bs) (make-cascoords))\\
+\> \> (open-direction (floatvector 0 1 0))\\
+\> \> ((max-span mspan) 100.0)\\
+\> \> ((lefty lft) t)\\
+\> \> ((act a) nil)\\
+\> \&allow-other-keys}{
 creates and initializes a new manipulator object.
 % 新しいマニピュレータオブジェクトを作成、初期化する
 }

@@ -23,6 +23,7 @@
 	*timer-job*
 	*top-selector-interval*
 	evaluate-stream  reploop
+	eussig
 	euserror
 	eustop reset
 	toplevel-prompt
@@ -279,6 +280,7 @@
     
 
 (defun euserror (code msg1 form &optional (msg2))
+  (if (and msg2 (zerop (length msg1))) (setq msg1 msg2 msg2 nil))
 #+(or :solaris2 :SunOS4.1 :thread)
    (format *error-output* "~C[1;3~Cm~A ~d error: ~A"
 		#x1b (+ 1 48) *program-name*

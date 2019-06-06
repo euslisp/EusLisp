@@ -26,7 +26,8 @@ float-vectorは、どんなサイズでも良い。
 2つのfloat-vectorを差し引く。もし、{\em fltvec2}が省略されているならば、
 {\em fltvec1}の符号が反転される。}
 
-\funcdesc{v.}{fltvec1 fltvec2}{2つのfloat-vectorの内積を計算する。}
+\funcdesc{v.}{fltvec1 fltvec2}{
+2つのfloat-vectorの内積を計算する。}
 
 \funcdesc{v*}{fltvec1 fltvec2 \&optional result}{
 2つのfloat-vectorの外積を計算する。}
@@ -51,7 +52,7 @@ Tを返す。}
 {\em fltvec}の中のそれぞれの次元における最大値を捜し、
 その値でfloat-vectorを新しく作る。}
 
-\funcdesc{minimal-box}{v-list minvec maxvec [err]}{
+\funcdesc{minimal-box}{v-list minvec maxvec \&optional err}{
 与えられた{\em v-list}に対して{\tt minimal bounding box}を計算し、
 その結果を{\em minvec}と{\em maxvec}に蓄積する。
 もし、実数{\em err}が指定されているならば、{\tt minimal box}はその比率によって
@@ -63,13 +64,19 @@ Tを返す。}
 \funcdesc{scale}{number fltvec \&optional result}{
 {\em fltvec}のすべての要素をスカラー{\em number}倍する。}
 
-\funcdesc{norm}{fltvec}{{\em fltvec}のノルムを求める。{\tt $\Vert fltvec\Vert$}}
-\funcdesc{norm2}{fltvec}{{\em fltvec}のノルムの２乗を求める。
+\funcdesc{norm}{fltvec}{
+{\em fltvec}のノルムを求める。{\tt $\Vert fltvec\Vert$}}
+
+\funcdesc{norm2}{fltvec}{
+{\em fltvec}のノルムの２乗を求める。
 {\tt $\Vert fltvec\Vert^2$=(v. fltvec fltvec)}}
+
 \funcdesc{normalize-vector}{fltvec \&optional result}{
 {\em fltvec}のノルムが1.0となるように正規化する。}
+
 \funcdesc{distance}{fltvec1 fltvec2}{
 2つのfloat-vectorの距離を返す。$|fltvec-fltvec2|$}
+
 \funcdesc{distance2}{fltvec1 fltvec2}{
 2つのfloat-vectorの距離の2乗を返す。$|fltvec-fltvec2|^2$}
 
@@ -128,6 +135,7 @@ Tを返す。}
 {\bf coordinates}と{\bf cascaded-coords}クラスを使用すること。
 
 \begin{refdesc}
+
 \funcdesc{matrix}{\&rest elements}{
 {\em elements}から行列を新しく作る。
 {\tt Row x Col = (elementsの数) x (最初のelementの長さ)}
@@ -146,16 +154,21 @@ $rowsize \times columnsize$の大きさの行列を作る。}
 行列{\em mat}から{\em row-index}で示される行ベクトルを抽出する。
 {\bf matrix-row}は、{\bf setf}を使用することにより
 行列の特定の行にベクトルを設定することにも使用される。}
+
 \funcdesc{matrix-column}{mat column-index}{
 行列{\em mat}から{\em coloumn-index}で示される列ベクトルを抽出する。
 {\bf matrix-column}は、{\bf setf}を使用することにより
 行列の特定の列にベクトルを設定することにも使用される。}
+
 \funcdesc{m*}{matrix1 matrix2 \&optional result}{
 {\em matrix1}と{\em matrix2}の積を返す。}
+
 \funcdesc{transpose}{matrix \&optional result}{
 {\em matrix}の転置行列を返す。すなわち、{\em matrix}の列と行を入れ替える。}
+
 \funcdesc{unit-matrix}{dim}{
 {\em dim} $\times$ {\em dim}の単位行列を作る。}
+
 \funcdesc{replace-matrix}{dest src}{
 行列{\em dest}のすべての要素を同一な行列{\em src}で置き換える。}
 
@@ -167,6 +180,7 @@ $rowsize \times columnsize$の大きさの行列を作る。}
 
 \funcdesc{transform}{matrix fltvector \&optional result}{
 行列{\em matrix}をベクトル{\em fltvector}の左から掛ける。}
+
 \funcdesc{transform}{fltvector matrix \&optional result}{
 行列{\em matrix}をベクトル{\em fltvector}の右から掛ける。}
 
@@ -243,7 +257,7 @@ $rowsize \times columnsize$の大きさの行列を作る。}
 \funcdesc{lu-decompose}{matrix \&optional result}{
 {\em matrix}にLU分解を実行する。}
 
-\funcdesc{lu-solve}{lu-mat perm-vector bvector [result]}{
+\funcdesc{lu-solve}{lu-mat perm-vector bvector \&optional result}{
 LU分解された1次連立方程式を解く。
 {\em perm-vector}は、{\bf lu-decompose}で返された結果でなければならない。}
 
@@ -272,10 +286,9 @@ Euslisp内で座標系は、高速性と一般性のために
 
 \begin{refdesc}
 
-\classdesc{coordinates}{propertied-object}
-{(pos :type float-vector \\
-\>  rot :type array)}
-{位置ベクトルと3x3の回転行列の組みで座標系を定義する。}
+\classdesc{coordinates}{propertied-object}{(pos :type float-vector \\
+                                         \> rot :type array)}{
+位置ベクトルと3x3の回転行列の組みで座標系を定義する。}
 
 \funcdesc{coordinates-p}{obj}{
 {\em obj}が{\bf coordinates}クラスかまたはそのサブクラスのインスタンス
@@ -298,6 +311,7 @@ Euslisp内で座標系は、高速性と一般性のために
 \methoddesc{:replace-coords}{newrot \&optional newpos}{
 {\em :newcoords}メソッドを呼び出さずに{\tt rot}と{\tt pos}スロットを変更する。
 {\em newpos}が省略された時は{\em newrot}にはcoordinatesのインスタンスを与える。}
+
 \metdesc{:coords}{}
 
 \methoddesc{:copy-coords}{\&optional dest}{
@@ -310,7 +324,9 @@ Euslisp内で座標系は、高速性と一般性のために
 この座標系の回転行列を単位行列にし、位置ベクトルをすべてゼロにする。}
 
 \metdesc{:worldpos}{}
+
 \metdesc{:worldrot}{}
+
 \methoddesc{:worldcoords}{}{
 このオブジェクトのワールド座標系における位置ベクトル・回転行列・座標系
 を計算する。
@@ -336,7 +352,7 @@ Euslisp内で座標系は、高速性と一般性のために
 \methoddesc{:inverse-transform-vector}{vec}{
 ワールド座標系における{\em vec}をローカル座標系の表現に逆変換する。}
 
-\methoddesc{:transform}{ trans \&optional (wrt :local)}{
+\methoddesc{:transform}{trans \&optional (wrt :local)}{
 {\em wrt}座標系で表現される{\em trans}によってこの座標系を変換する。
 {\em trans}は座標系の型でなければならないし、{\em wrt}は
 {\tt :local, :parent, :world}のキーワードあるいは{\bf coordinates}の
@@ -384,14 +400,14 @@ Euslisp内で座標系は、高速性と一般性のために
 \methoddesc{:inverse-transformation}{}{
 この座標系の逆変換を持つ座標系を新しく作る。}
 
-\methoddesc{:transformation}{ coords (wrt :local)}{
+\methoddesc{:transformation}{coords (wrt :local)}{
 この座標系と引き数で与えられる{\em coords}との間の変換を作る。
 もし、{\em wrt}が{\tt :local}であるとき、ローカル座標系で表現される。
 すなわち、もしこの{\bf :transformation}の結果を{\bf :transform}の引き数として
 {\em wrt}={\tt :local}と一緒に
 与えたとき、この座標系は{\em coords}と同一な座標系に変換される。}
 
-\methoddesc{:Euler}{ az1 ay az2}{
+\methoddesc{:Euler}{az1 ay az2}{
 オイラー角({\em az1, ay, az2})で表現される回転行列を{\tt rot}に
 設定する。}
 
@@ -404,25 +420,23 @@ Euslisp内で座標系は、高速性と一般性のために
 もし、{\em mat44}が与えられないとき、この座標系の表現を
 4x4の同次行列表現に変換して返す。}
 
-\longdescription{:init}{\&key \= :pos \hspace{8mm} \= \#f(0 0 0)
- \` [メソッド] \\
-% \hspace{95mm} [メソッド] \\
- \> :rot \> \#2f((1 0 0) (0 1 0) (0 0 1)) \\
- \> :rpy \> roll pitch yaw \\
- \> :Euler \> az ay az2 \\
- \> :axis \>  rotation-axis \\
- \> :angle \> rotation-angle \\
- \> :4X4   \> 4x4 matrix \\
- \> :coords \> another coordinates \\
- \> :properties \>  a list of (ind . value) pair \\
- \> :name \> name property \\}{
+\longdescription{メソッド}{:init}{\&key \= (pos \#f(0 0 0)) \hspace{8mm} \= \\
+ \> (rot \#2f((1 0 0) (0 1 0) (0 0 1))) \\
+ \> rpy \>\> {\rm ; roll pitch yaw} \\
+ \> euler \>\> {\rm ; az ay az2} \\
+ \> axis \>\>  {\rm ; rotation-axis} \\
+ \> angle \>\> {\rm ; rotation-angle} \\
+ \> 4X4   \>\> {\rm ; 4x4 matrix} \\
+ \> coords \>\> {\rm ; another coordinates} \\
+ \> properties \>\> {\rm ; list of (ind . value) pair} \\
+ \> name \>\> {\rm ; name property}}{
 この{\bf coordinates}オブジェクトを初期化し、{\tt rot}と{\tt pos}を設定する。
 それぞれのキーワードの意味は、以下に示す通りである。
 \begin{description}
 \item[:dimension] 2あるいは3 (デフォルトは 3)
 \item[:pos] 位置ベクトルを指定する (デフォルトは \#f(0 0 0))
 \item[:rot] 回転行列を指定する (デフォルトは単位行列)
-\item[:Euler] オイラー角として3つの要素の列を与える
+\item[:euler] オイラー角として3つの要素の列を与える
 \item[:rpy] ロール・ピッチ・ヨー角として3つの要素の列を与える
 \item[:axis] 回転軸 ({\tt :x,:y,:z} あるいは任意の{\tt float-vector})
 \item[:angle] 回転角 ({\em :axis}と一緒に使用)
@@ -446,12 +460,11 @@ Euslisp内で座標系は、高速性と一般性のために
 
 \subsection{連結座標系}
 
-\classdesc{cascaded-coords}{coordinates}
-{(parent descendants worldcoords manager changed)}
-{連結された座標系を定義する。{\bf cascaded-coords}は、
+\classdesc{cascaded-coords}{coordinates}{(parent descendants worldcoords manager changed)}{
+連結された座標系を定義する。{\bf cascaded-coords}は、
 しばしば{\bf cascoords}と略す。}
 
-\methoddesc{:inheritance}{ }{
+\methoddesc{:inheritance}{}{
 この{\bf cascaded-coords}の子孫をすべて記述した継承treeリストを返す。
 もし、{\tt a}と{\tt b}がこの座標系の直下の子孫で{\tt c}が{\tt a}の
 子孫であるとき、{\tt ((a (c)) (b))}を返す。}
@@ -472,7 +485,7 @@ Euslisp内で座標系は、高速性と一般性のために
 また、もっとあとでワールド座標系が要求されたとき、ワールド座標系を再計算する
 必要がある。}
 
-\methoddesc{:update}{ }{
+\methoddesc{:update}{}{
 現在のワールド座標系を再計算するために{\bf :worldcoords}メソッド
 を呼び出す。}
 
@@ -499,28 +512,36 @@ Euslisp内で座標系は、高速性と一般性のために
 この座標系の逆変換を表現する{\bf coordinates}のインスタンスを作る。}
 
 \metdesc{:transform}{trans  \&optional (wrt :local)}
+
 \metdesc{:translate}{fltvec \&optional (wrt :local)}
+
 \metdesc{:locate}{fltvec \&optional (wrt :local)}
+
 \metdesc{:rotate}{theta axis \&optional (wrt :local)}
+
 \methoddesc{:orient}{theta axis \&optional (wrt :local)}{
 {\bf coordinates}クラスの記述を参照すること。}
 
-\fundesc{make-coords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
+\fundesc{make-coords}{\&key pos rot rpy Euler angle axis 4X4 coords name}
 
-\fundesc{make-cascoords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
-\fundesc{coords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
-\funcdesc{cascoords}{\&key :pos :rot :rpy :Euler :angle :axis
-:4X4 :coords :name}{
+\fundesc{make-cascoords}{\&key pos rot rpy Euler angle axis 4X4 coords name}
+
+\fundesc{coords}{\&key pos rot rpy Euler angle axis 4X4 coords name}
+
+\funcdesc{cascoords}{\&key pos rot rpy Euler angle axis 4X4 coords name}{
 これらの関数は、すべて{\bf coordinates}あるいは{\bf cascaded-coords}を
 新しく作る。
 キーワードパラメータについては、{\bf coordinates}クラスの{\bf :init}メソッドを
 見ること。}
+
 \funcdesc{transform-coords}{coords1 coords2 \&optional (coords3 (coords))}{
 {\em coords1}が{\em coords2}に左から適用（乗算）される。
 その積は{\em coords3}に蓄積される。}
+
 \funcdesc{transform-coords*}{\&rest coords}{
 {\em coords}にリスト表現されている変換を連結させる。
 連結された変換で表現される{\bf coordinates}のインスタンスを返す。}
+
 \funcdesc{wrt}{coords vec}{
 {\em vec}を{\em coords}における表現に変換する。
 その結果は{\tt  (send {\em coords} :trans\-form-\-vec\-tor {\em vec})}と同一である。}
