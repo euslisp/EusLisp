@@ -108,7 +108,7 @@
 		      (cond ((null doc)
 			     (format t "~A" (escape-string (format nil "\\metdesc{~A}{~A}{}~%" method args-str))))
 			    (*has-key*
-			     (format t "~A" (escape-string (format nil "\\longdescription{~A}{~A}{~A}~%" method args-str doc))))
+			     (format t "~A" (escape-string (format nil "\\longdescription{method}{~A}{~A}{~A}~%" method args-str doc))))
 			    (t
 			     (format t "~A" (escape-string (format nil "\\methoddesc{~A}{~A}{~A}~%" method args-str doc))))))
                      (:md
@@ -175,7 +175,7 @@
 	   (cond ((null doc)
 		  (format t "~A" (escape-string (format nil "\\fundesc{~A}{~A}~%" funcname args-str))))
 		 (*has-key*
-		  (format t "~A" (escape-string (format nil "\\longdescription{~A}{~A}{~A}~%" funcname args-str doc))))
+		  (format t "~A" (escape-string (format nil "\\longdescription{function}{~A}{~A}{~A}~%" funcname args-str doc))))
 		 (t
 		  (format t "~A" (escape-string (format nil "\\funcdesc{~A}{~A}{~A}~%" funcname args-str doc))))
 		 ))
