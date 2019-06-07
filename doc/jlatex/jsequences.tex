@@ -71,7 +71,7 @@
 \funcdesc{map}{result-type function seq \&rest more-seqs}{
 {\em function}は、{\em seq}と{\em more-seqs}のそれぞれのN番目($N=0,1,\cdots$)の要素
 からなるリストに
-対して適用され、その結果は{\em result-type}の型の列に蓄積される。}
+対して適用され、その結果は{\em result-type}の型の列に蓄積される。例えば、{\tt (map float-vector \#'(lambda (x) (* x x)) (float-vector 1 2 3))}のように書く。}
 
 \funcdesc{fill}{sequence item \&key (start 0) (end (length sequence))}{
 {\em sequence}の{\em start}番目から({\em end}$-$1)番目まで、{\em item}で満たす。}
@@ -405,7 +405,7 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 
 \funcdesc{mapcar}{func \&rest arg-list}{
 {\em arg-list}のそれぞれの要素に{\em func}を{\bf map}し、
-その全ての結果のリストを作る。
+その全ての結果のリストを作る。例えば、{\tt (mapcar \#'(lambda (x) (* x x)) '(1 2 3))}のように書く。
 {\bf mapcar}を使う前に、{\bf dolist}を試すこと。}
 
 \funcdesc{mapcan}{func arg-list \&rest more-arg-lists}{
