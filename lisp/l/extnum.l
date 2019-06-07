@@ -2,5 +2,10 @@
  (:init (num denom)
   (setq numerator num
         denominator denom)
-  self)
-)
+  self))
+
+(defmethod complex
+ (:init (re im)
+  (setq real re
+        imaginary im)
+  self))
