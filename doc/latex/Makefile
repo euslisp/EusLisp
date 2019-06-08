@@ -26,3 +26,4 @@ distclean: clean
 html:
 	rm -f ../html/manual*.{old,html,png,pl} ../html/manual-images.*
 	TRANSPARENT_COLOR="#ffffff" latex2html -dir ../html/ -transparent -local_icons -split +3 -auto_prefix -iso_language JP -html_version="4.0,unicode" manual
+	(cd ../html; for imgfile in manual-img*.png; do pngtopnm $$imgfile > /tmp/$$imgfile.pnm; pnmtopng -transparent white /tmp/$$imgfile.pnm > $$imgfile; done)
