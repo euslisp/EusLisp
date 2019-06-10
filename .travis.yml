@@ -114,7 +114,7 @@ after_deploy:
   - git checkout -b $(git name-rev --name-only $(git rev-parse $TRAVIS_BRANCH) | sed 's@remotes/upstream/@@')
   # send doc to current repo
   - git rm -f doc/{latex,jlatex,html}/*.{pdf,ps,dvi,html,png}
-  - git add doc/{latex,jlatex}/*.{pdf,ps,dvi} doc/html/*.{html,png}
+  - git add doc/{latex,jlatex}/*.{pdf,ps,dvi,hlp} doc/html/*.{html,png}
   - git status
   - git branch
   - git commit -m "Build documents from $TRAVIS_TAG@$TRAVIS_COMMIT" doc/
