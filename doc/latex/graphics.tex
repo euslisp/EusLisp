@@ -33,8 +33,8 @@ the viewcoords slot, which is usually referred as the viewing coordinate system.
 
 \begin{refdesc}
 
-\classdesc{viewing}{cascaded-coords}{(viewcoords)}
-{defines the viewing transformation.}
+\classdesc{viewing}{cascaded-coords}{(viewcoords)}{
+defines the viewing transformation.}
 
 \methoddesc{:viewpoint}{}{
 returns the position vector of the origin of this viewing.}
@@ -46,6 +46,7 @@ This is the z-axis direction of the viewing coordinates.}
 \methoddesc{:view-up}{}{
 returns y-axis vector of this viewing represented in the world coords.
 Y-axis is the upward direction in the viewport.}
+
 \methoddesc{:view-right}{}{
 returns x-axis vector of this viewing represented in the world coords.
 X-axis is in horizontal direction to the right in the viewport.}
@@ -55,12 +56,11 @@ X-axis is in horizontal direction to the right in the viewport.}
 at {\em from} and looking at {\em to} point.}
 
 % \metdesc{:makeviewcoords}{ ax ay az vpoint}
-\longdescription{:init}{
-\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \` [method]\\
-       \> :view-direction \> nil \\
-       \> :view-up \>  \#f(0.0 0.0 1.0)) \\
-       \> :view-right \>  nil \\
-       \> \&allow-other-keys}{
+\longdescription{method}{:init}{\&key \= (target \#f(0 0 0)) \\
+\> (view-direction nil) \\
+\> (view-up \#f(0.0 0.0 1.0)) \\
+\> (view-right nil) \\
+\> \&allow-other-keys}{
 Since viewing inherits cascaded-coords, all the {\em :init} parameters
 such as {\em :pos}, {\em :rot}, {\em :Euler}, {\em :rpy}, etc. can be
 used to specify the location and the orientation of the viewing coordinates.
@@ -111,72 +111,81 @@ Actually, this clipping procedure is performed by the viewport object.
 
 \begin{refdesc}
 
-\classdesc{projection}{viewing}
-{(screenx screeny hither yon projection-matrix)}
-{defines projection transformation with a 4x4 matrix.}
+\classdesc{projection}{viewing}{(screenx screeny hither yon projection-matrix)}{
+defines projection transformation with a 4x4 matrix.}
 
 \methoddesc{:projection}{\&optional pmat}{
 if {\em pmat} is given, it is set to the {\em projection-matrix} slot.
 {\bf :projection} returns the current 4x4 projection matrix.}
+
 \methoddesc{:project}{vec}{
 {\em Vec} is a three-dimensional homogeneous float-vector of four elements.
 {\em Vec} is transformed by projection-matrix,
 and the resulted homogeneous representation is returned.}
+
 \methoddesc{:project3}{vec}{
 {\em Vec} is a normal 3D float-vector.
 {\em Vec} is homogenized and transformed by projection-matrix,
 and the resulted homogeneous representation is returned.}
-\methoddesc{:view}{ vec}{
+
+\methoddesc{:view}{vec}{
 applies viewing transformation and projection transformation to {\em vec}
 successively.
 The resulted homogeneous representation is returned.}
+
 \methoddesc{:screen}{xsize (\&optional (ysize xsize))}{
 changes the size of the viewing screen.
 The larger the size, the wider view you get.}
-\methoddesc{:hither}{ depth-to-front-clip-plane}{
+
+\methoddesc{:hither}{depth-to-front-clip-plane}{
 determines the distance from the viewpoint to the front-clipping plane.
 Objects before the front-clipping (hither) plane are clipped out.}
-\methoddesc{:yon}{ depth-to-back-clip-plane}{
+
+\methoddesc{:yon}{depth-to-back-clip-plane}{
 changes the distance between the viewpoint and
 the back-clipping plane.
 Objects behind the back-clipping (yon) plane are clipped out.}
+
 \methoddesc{:aspect}{\&optional ratio}{
 Aspect ratio is the ratio between screen-y and screen-x.
 If {\em ratio} is given,
 the aspect ratio is changed by setting screen-y to screen-x * {\em ratio}.
 {\bf :aspect} returns the current aspect ratio.}
-\longdescription{:init}{
-\&key \= :hither  \hspace{5mm} \= 100.0 \`[method]\\
-      \> :yon    \> 1000.0 \\
-      \> :aspect \> 1.0  \\
-      \> :screen \> 100.0 \\
-      \> :screen-x  \> screen \\
-      \> :screen-y \> (* screen-x aspect) \\
-      \>  \&allow-other-keys}{
+
+\longdescription{method}{:init}{\&key \= (hither 100.0) \\
+\> (yon 1000.0) \\
+\> (aspect 1.0) \\
+\> (screen 100.0) \\
+\> (screen-x screen) \\
+\> (screen-y (* screen-x aspect)) \\
+\> \&allow-other-keys}{
 initializes viewing and projection.}
 
 \vspace{5mm}
 
-\classdesc{parallel-viewing}{projection}{()}{
+\classdesc{parallel-viewing}{projection}{}{
 defines parallel projection.
 {\bf Hid} (the hidden-line elimination function)
 cannot handle parallel projection.}
 
 \metdesc{:make-projection}{}
 
-\classdesc{perspective-viewing}{projection}
-{(viewdistance)}{defines a perspective projection transformation.}
+\classdesc{perspective-viewing}{projection}{(viewdistance)}{
+defines a perspective projection transformation.}
 
-\metdesc{:make-projection}{ }
+\metdesc{:make-projection}{}
+
 \methoddesc{:ray}{u v}{
 returns the normalized direction-vector pointing (u,v) on
 the normalized screen from the viewpoint.}
+
 \methoddesc{:viewdistance}{\&optional vd}{
 Viewdistance is the distance between viewpoint and the screen.
 If {\em vd} is given, it is set to viewdistance.
 The viewdistance corresponds to the focal length of a camera.
 The greater the viewdistance, the more zoomed-up view you get.
 {\bf :viewdistance} returns the current viewdistance.}
+
 \methoddesc{:view-angle}{\&optional ang}{
 set screen size so that the prospective angle of the diagonal of the
 screen becomes {\em ang} radian.
@@ -185,12 +194,14 @@ and 50  degree  (0.9 rad.) can generate a natural perspective view.
 Wider angle generates a skewed view, and narrower a flat view like
 orthogonal (parallel) viewing.
 {\bf :view-angle} returns current or new view angle in radian.}
+
 \methoddesc{:zoom}{\&optional scale}{
 If {\em scale} is given, the screen is changed relatively to the
 current size by {\em scale}
 (the viewdistance is unchanged).
 If you give 0.5 for {\em scale}, you get two times as wide view as before.
 {\bf :zoom} returns new view angle in radian.}
+
 \methoddesc{:lookaround}{alfa beta}{
 translates and rotates the viewpoint.
 The center of rotation is taken at 
@@ -199,13 +210,15 @@ The viewing coordinates is rotated {\em alfa} radian around world's z-axis
 and {\em beta} radian around x-axis locally.
 {\bf :lookaround} allows you to move around the object in the center of
 viewing.}
+
 \methoddesc{:look-body}{bodies}{
 changes view direction, screen sizes, and hither/yon so that all the
 {\em bodies} fit in the viewport.
 Viewpoint does not change.
 View direction is chosen so that the viewing line penetrate the center
 of the bounding box of all bodies.}
-\metdesc{:init}{ \&key (:viewdistance 100.0) \&allow-other-keys}
+
+\metdesc{:init}{\&key (viewdistance 100.0) \&allow-other-keys}
 
 \end{refdesc}
 
@@ -245,35 +258,44 @@ The line is clipped at the boundary of $x=-1, x=1, y=-1, y=1, z=0, z=1$,
 and a list of two vectors are returned.
 If the line lies completely outside the viewport, NIL is returned.}
 
-\classdesc{viewport}{coordinates}{()}
-{viewport transformation maps the NDC (normalized device coordinates)
- to device specific coordinates.
+\classdesc{viewport}{coordinates}{}{
+viewport transformation maps the NDC (normalized device coordinates)
+to device specific coordinates.
 Inheriting the {\bf coordinates} class, the {\tt viewport} defines
 the size and the relative position of the projection screen.}
 
 \methoddesc{:xcenter}{\&optional xcenter}{
 X coordinates of the center of this viewport.}
+
 \methoddesc{:ycenter}{\&optional ycenter}{
 Y coordinates of the center of this viewport.}
+
 \methoddesc{:size}{\&optional size}{
 List of sizes in x direction and y direction.}
-\methoddesc{:width}{ \&optional width}{width of this viewport.}
-\methoddesc{:height}{ \&optional height}{height of this viewport.}
+
+\methoddesc{:width}{\&optional width}{
+width of this viewport.}
+
+\methoddesc{:height}{\&optional height}{
+height of this viewport.}
+
 \methoddesc{:screen-point-to-ndc}{p}{
 {\em p} is a float-vector representing the location in the physical screen.
 {\em p} is transformed into the representation in the normalized-device
 coordinates.}
+
 \methoddesc{:ndc-point-to-screen}{p}{
 NDC representation in this viewport, {\em p}, is transformed into
 the physical address on the screen.}
+
 \methoddesc{:ndc-line-to-screen}{p1 p2 \&optional (do-clip t)}{
 Two 3D float-vectors, {\em p1} and {\em p2}, define a line in NDC.
 These two end points are transformed to the representation in 
 the screen space.
 If {\em do-clip} is non-nil, the line is clipped.}
-\methoddesc{:init}{\&key (xcenter 100) (ycenter 100) (size 100)
-(width 100) (height 100)}
-{makes a new viewport object.}
+
+\methoddesc{:init}{\&key (xcenter 100) (ycenter 100) (size 100) (width 100) (height 100)}{
+makes a new viewport object.}
 
 \end{refdesc}
 
@@ -291,63 +313,87 @@ use the instances of viewer.
 
 \begin{refdesc}
 
-\classdesc{viewer}{object}
-{(eye :type viewint) \\
-\> (port :type viewport) \\
-\> (surface :type viewsurface)} 
-{defines the cascaded coordinates transformation from the viewing via
+\classdesc{viewer}{object}{(eye :type viewint) \\
+                        \> (port :type viewport) \\
+                        \> (surface :type viewsurface)}{
+defines the cascaded coordinates transformation from the viewing via
 the viewport to the viewsurface.}
 
 \methoddesc{:viewing}{\&rest msg}{
-If {\em msg} is given, {\em msg} is sent to the viewing (eye) object,
-Otherwise, the viewing (eye) object is returned.}
+If {\em msg} is given, {\em msg} is sent to the {\bf viewing}{\tt (eye)} object,
+Otherwise, the {\bf viewing}{\tt (eye)} object is returned.}
+
 \methoddesc{:viewport}{\&rest msg}{
-If {\em msg} is given, {\em msg} is sent to the viewport (port) object,
-Otherwise, the viewport (port) object is returned.}
+If {\em msg} is given, {\em msg} is sent to the {\bf viewport}{\tt (port)} object,
+Otherwise, the {\bf viewport}{\tt (port)} object is returned.}
+
 \methoddesc{:viewsurface}{\&rest msg}{
-If {\em msg} is given, {\em msg} is sent to the viewsurface (surface) object,
-Otherwise, the viewsurface (surface) object is returned.}
+If {\em msg} is given, {\em msg} is sent to the {\bf viewsurface}{\tt (surface)} object,
+Otherwise, the {\bf viewsurface}{\tt (surface)} object is returned.}
+
 \methoddesc{:adjust-viewport}{}{
 When the size of viewsurface has been changed, {\bf :adjust-viewport}
 changes viewport transformation sending a proper message to port.}
+
 \methoddesc{:resize}{width height}{
 changes the size of viewsurface by sending :resize message to the viewsurface
 and :size message to viewport.}
-\methoddesc{:draw-line-ndc}{ p1 p2 \&optional (do-clip t)}{
+
+\methoddesc{:draw-line-ndc}{p1 p2 \&optional (do-clip t)}{
 draws a line whose two end points {\em p1, p2} are defined in NDC.}
+
 \methoddesc{:draw-polyline-ndc}{polylines \&optional color}{
 draws polylines whose end points are defined in NDC.}
+
 \methoddesc{:draw-star-ndc}{center \&optional (size 0.01) color}{
 draws a cross mark in NDC.}
+
 \methoddesc{:draw-box-ndc}{low-left up-right \&optional color}{
 draws a rectangle in NDC.}
-\methoddesc{:draw-arc-ndc}{point width height angle1 angle2 [color]}{
+
+\methoddesc{:draw-arc-ndc}{point width height angle1 angle2 \&optional color}{
 draws an arc in NDC.
 The viewsurface object bound in this viewer must accept {\bf :arc} message.}
-\methoddesc{:draw-fill-arc-ndc}{ point width height angle1 angle2 [color]}{
+
+\methoddesc{:draw-fill-arc-ndc}{point width height angle1 angle2 \&optional color}{
 draws a filled-arc in NDC.}
-\methoddesc{:draw-string-ndc}{position string [color]}{
+
+\methoddesc{:draw-string-ndc}{position string \&optional color}{
 draws {\em string} at {\em position} defined in NDC.}
-\metdesc{:draw-image-string-ndc}{position string [color]}
-\metdesc{:draw-rectangle-ndc}{position width height [color]}
-\metdesc{:draw-fill-rectangle-ndc}{point width height [color]}
+
+\metdesc{:draw-image-string-ndc}{position string \&optional color}
+
+\metdesc{:draw-rectangle-ndc}{position width height \&optional color}
+
+\metdesc{:draw-fill-rectangle-ndc}{point width height \&optional color}
+
 \methoddesc{:draw-line}{p1 p2 \&optional (do-clip t)}{
 draws a line whose two end points {\em p1, p2} are defined in the world
 coordinates.}
+
 \methoddesc{:draw-star}{position \&optional (size 0.01) color}{
 draws a cross at {\em position} located in the world.}
+
 \methoddesc{:draw-polyline}{vlist \&optional color}{
 draws polylines whose end points {\em vlist} are defined in the world.}
+
 \methoddesc{:draw-box}{center \&optional (size 0.01)}{
 draws a rectangular at {\em center}in the world.}
+
 \methoddesc{:draw-arrow}{p1 p2}{
 draws an arrow from {\em p1} to {\em p2}.}
+
 \metdesc{:draw-edge}{edge}
+
 \metdesc{:draw-edge-image}{edge-image}
+
 \metdesc{:draw-faces}{face-list \&optional (normal-clip nil)}
+
 \metdesc{:draw-body}{body \&optional (normal-clip nil)}
+
 \methoddesc{:draw-axis}{coordinates \&optional size}{
 draws coordinates axes whose length is {\em size}.}
+
 \methoddesc{:draw}{\&rest things}{
 draws 3D geometric objects.
 If the object is a 3D float-vector, a small cross is drawn at the position.
@@ -358,23 +404,24 @@ If the object defines {\tt :drawners} method,
 the {\bf :draw} message is sent to the result of {\tt :drawners}.
 {\tt Line, edge, polygon, face}, and {\tt body} objects are drawn
 by corresponding {\em :draw-xxx} methods defined in viewer.}
+
 \methoddesc{:erase}{\&rest things}{
 draws {\em things} with background color.}
-\methoddesc{:init}{\&key :viewing :viewport :viewsurface}{
+
+\methoddesc{:init}{\&key viewing viewport viewsurface}{
 sets {\em viewing, viewport} and {\em viewsurface} to {\tt eye, port},
 and {\tt surface} slots of this viewer.}
 
-\longdescription{view}{\&key \= (size 500) (width size) (height size)
-\`[function] \\
+\longdescription{function}{view}{\&key \= (size 500) (width size) (height size) \\
 \> (x 100) (y 100) \\
 \> (title "eusx") \\
 \> (border-width 3) \\
 \> (background 0) \\
 \> (viewpoint \#f(300 200 100)) (target \#f(0 0 0)) \\
-\> (viewdistance 5.0)  (hither 100.0) (yon 10000.0) \\
+\> (viewdistance 5.0) (hither 100.0) (yon 10000.0) \\
 \> (screen 1.0) (screen-x screen) (screen-y screen) \\
-\> (xcenter 500) (ycenter 400) \\}
-{creates a new viewer and pushes it in *viewers* list.}
+\> (xcenter 500) (ycenter 400)}{
+creates a new viewer and pushes it in *viewers* list.}
 
 \end{refdesc}
 
@@ -383,7 +430,7 @@ and {\tt surface} slots of this viewer.}
 
 \begin{refdesc}
 
-\funcdesc{draw}{[viewer] \&rest thing}{
+\funcdesc{draw}{\&optional viewer \&rest thing}{
 draws {\em thing}s in {\em viewer}.
 {\em Thing} can be any of coordinates, body, face, edge, float-vector,
 list of two float-vectors.
@@ -391,7 +438,7 @@ If you are running {\tt eusx},
 {\tt (progn (view) (draw (make-cube 10 20 30)))}
  draws a cube in a xwindow.}
 
-\funcdesc{draw-axis}{[viewer] [size] \&rest thing}{
+\funcdesc{draw-axis}{\&optional viewer size \&rest thing}{
 draws coordinate-axes of {\em thing}s in {\em viewer} with {\em size}
 as the length of each coordinates-axis.
 {\em Thing} can be any object derived from coordinates.}
@@ -399,11 +446,11 @@ as the length of each coordinates-axis.
 \funcdesc{draw-arrow}{p1 p2}{
 draws an arrow pointing from p1 to p2 in {\tt *viewer*}.}
 
-\funcdesc{hid}{[viewer] \&rest thing }
-{draws hidden-line eliminated image in {\em viewer}.
+\funcdesc{hid}{\&optional viewer \&rest thing}{
+draws hidden-line eliminated image in {\em viewer}.
 {\em Thing} can be of face or body.}
 
-\funcdesc{hidd}{[viewer] \&rest thing }{
+\funcdesc{hidd}{\&optional viewer \&rest thing}{
 is same as {\bf hid}, except that {\bf hidd} draws hidden lines
 with dashed-lines.}
 
@@ -450,15 +497,6 @@ and the final drawing can be incorporated into a \LaTeX document
 using the {\tt epsfile} environment.}
 
 \macrodesc{pictdraw}{file \&rest forms}{
-{\bf Pictdraw} is a macro to produce picture files in the Macintosh
-PICT format. 
-% {\bf Pictdraw} opens {\em file} in {\tt :output} mode,
-% \mbox{
-% \epsfsize=10cm
-% \epsfbox{environment}}
-}
-
-\macrodesc{pictdraw}{file \&rest forms}{
 {\bf Pictdraw} is a macro to produce picture files for Macintosh
 in PICT format. 
 {\bf Pictdraw} opens {\em file} in {\tt :output} mode
@@ -468,8 +506,7 @@ Each of {\em forms} is a call to any of drawing functions like {\tt draw} or {\t
 Drawing messages from these forms are redirected to a {\tt kdraw-viewsurface}, 
 which transforms the messages into PICT format
 that {\tt macdraw} or {\tt teachtext} of Macintosh can recognize,
-and stores them in {\em file}.
-}
+and stores them in {\em file}.}
 
 \funcdesc{hls2rgb}{hue lightness saturation \&optional (range 255)}{
 Color representation in HLS (Hue, Lightness, and Saturation)
@@ -532,10 +569,12 @@ Following functions are defined in {\tt llib/animation.l}, and
 using {\bf hid-lines-animation} on the ETA3 manipulator model.
 
 \begin{refdesc}
+
 \macrodesc{pixmap-animation}{count \&rest forms}{
 {\em forms} are evaluated {\em count} times.
 After each evaluation, the content of {\tt *viewsurface*} is copied 
 in a new pixmap. A list of {\em count} pixmaps is returned.}
+
 \funcdesc{playback-pixmaps}{pixmaps \&optional (surf *viewsurface*)}{
 Each pixmap in the {\em pixmaps} list is copied to {\em surf} successively.
 % placing {\em wait} micro seconds interval in-between.
@@ -548,6 +587,7 @@ After each evaluation,
 the result of {\bf hid} held in {\bf *hid*} is scanned and visible segments
 are collected in a list of point pairs.
 A list of length {\em count} is returned.}
+
 \funcdesc{playback-hid-lines}{lines \&optional (view *viewer*)}{
 {\em lines} is a list of lists of point pairs.
 draws lines successively on {\em view}.

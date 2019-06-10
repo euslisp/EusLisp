@@ -57,9 +57,11 @@
 	   (param2 "")
 	   (param3 ""))
 
-       (setf param1 (read-tex fp seek))
-       (if (> count 2) (setf param2 (read-tex fp -1)))
-       (if (> count 3) (setf param3 (read-tex fp -1)))
+       (flet ((trim-read-tex (file off)
+                (string-trim (list #\space) (read-tex file off))))
+         (setf param1 (trim-read-tex fp seek))
+         (if (> count 2) (setf param2 (trim-read-tex fp -1)))
+         (if (> count 3) (setf param3 (trim-read-tex fp -1))))
        (close fp)
        (list param1 param2 param3)))
 
@@ -76,7 +78,7 @@
 	(help-usage hs)
         (if (eq class nil)
 	    (if (eq (aref cmd 0) #\:)
-		(help-method-list cmd)
+		(help-method-list cmd hs)
 	        (if (eq (setf item (gethash cmd *help-hash*)) nil)
 		    (progn (format hs "~a command not found.  Commands alike are:~%" cmd)
 			   (pprint (apropos-list cmd) hs))
@@ -94,7 +96,7 @@
 				  (print-item cmd item param-list hs))
 				 (4 ;*type-CONST*
 				  (format hs "constant~%")
-				  (print-item2 cmd item param-list))
+				  (print-item2 cmd item param-list hs))
 				 (5 ;*type-VAR*
 				  (format hs "variable~%")
 				  (print-item2 cmd item param-list hs))

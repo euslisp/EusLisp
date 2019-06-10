@@ -313,6 +313,7 @@
 (system::exec-module-init "mathtran" "l/mathtran.l")
 (system::exec-module-init "eusdebug" "l/eusdebug.l")
 (system::exec-module-init "eusforeign" "l/eusforeign.l")
+(system::exec-module-init "extnum" "l/extnum.l")
 (unless (find-package "GEOMETRY")
 	(make-package "GEOMETRY" :nicknames '("GEO"))
 	(in-package "GEOMETRY"))
@@ -344,7 +345,8 @@
 		 ;; unix::exit
 		  ))
 	)
-	(export '(compile comfile compile-file gc alloc runtime))
+	(export '(compile comfile compile-file compile-file-if-src-newer
+                  gc alloc runtime))
 	(setf (symbol-function 'exit) (symbol-function 'unix::exit))    
 ;;
 ;(when (substringp "P" (string-upcase *program-name*))

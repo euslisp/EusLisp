@@ -94,8 +94,8 @@ from the X server and delivers them to each window where the event happened.
 
 \begin{refdesc}
 
-\vardesc{event}{a 25-element integer-vector holding the most recent
-event structure.}
+\vardesc{event}{
+a 25-element integer-vector holding the most recent event structure.}
 
 \funcdesc{next-event}{}{
 stores the event structure in {\tt event} and returns it
@@ -142,25 +142,33 @@ structure. The event-type keywords are:
 \funcdesc{event-window}{event}{
 returns the window object where the {\em event} occurred.}
 
-\funcdesc{event-x}{event}{extracts the {\em x} coordinate,
+\funcdesc{event-x}{event}{
+extracts the {\em x} coordinate,
 (i.e., the horizontal position of the mouse pointer relatively in the window)
 out of the {\em event}.}
-\funcdesc{event-y}{event}{extracts the {\em x} coordinate,
+
+\funcdesc{event-y}{event}{
+extracts the {\em x} coordinate,
 (i.e., the vertical position of the mouse pointer relatively in the window)
 out of the {\em event}.}
+
 \funcdesc{event-width}{event}{
 returns the eighth element of the {\em event} structure
 which represents the width parameter at the {\tt :configureNotify} event.}
+
 \funcdesc{event-height}{event}{
 returns the ninth element of the {\em event} structure
 which represents the height parameter at the {\tt :configureNotify} event.}
+
 \funcdesc{event-state}{event}{
 returns a list of keywords representing the mouse button 
 and modifier key state.
 Keywords are: {\tt :shift, :control, :meta, :left, :middle} and {\tt :right}.
 For example, if left mouse button is pressed while shift key is down,
 {\tt (:shift :left)} is returned.}
-\funcdesc{display-events}{}{displays all xwindow events captured by
+
+\funcdesc{display-events}{}{
+displays all xwindow events captured by
 {\tt x:nextevent}. Control-C is the only way to terminate this function.}
 
 \macrodesc{window-main-loop}{\&rest forms}{
@@ -187,8 +195,9 @@ processing continues.}
 \subsection{Panel}
 
 \begin{refdesc}
-\classdesc{panel}{xwindow}
-{(pos items fontid\\
+
+\classdesc{panel}{xwindow}{
+(pos items fontid\\
 \>rows columns	;total number of rows and columns\\
 \>next-x next-y\\
 \>item-width item-height)}{
@@ -198,18 +207,19 @@ A panel object supplies the default font for every panel-item
 created in the panel.
 Application windows should be defined as subclasses of the {\tt Panel}.}
 
-\longdescription{:create}{\&rest args \= \&key \= ((:item-height iheight) 30)
-((:item-width iwidth) 50)
-\` [method]\\
-\>\> (font font-lucidasans-bold-12)  ((:background color) *bisque1*) \\
-\> \&allow-other-keys)}{creates and initializes a panel.
+\longdescription{method}{:create}{\&rest args \= \&key \= (item-height 30) (item-width 50) \\
+\>\> (font font-lucidasans-bold-12) (background *bisque1*) \\
+\> \&allow-other-keys}{
+creates and initializes a panel.
 Since superclass's {\tt :create} is invoked,
 all creation parameters for {\bf xwindow}, such as {\em width, height, 
 border-width}, etc., are allowed.
 {\em Item-height} and {item-width} give the minimum height and width
 for each panel-item.}
 
-\methoddesc{:items}{}{returns the list of all items associated.}
+\methoddesc{:items}{}{
+returns the list of all items associated.}
+
 \methoddesc{:locate-item}{item \&optional x y}{
 {\em Item} is any xwindow object, normally a panel-item.
 If {\em x} and {\em y} are given, the item is located there.
@@ -231,10 +241,9 @@ as shown in {\bf Fig.} \ref{panellayout}.
 \caption{Item lay-out in panel\label{panellayout}}
 \end{figure}
 
-\longdescription{:create-item}{klass label receiver method \= \&rest args
-\` [method]\\
-\> \&key ((font fontid)\\
-\> \&allow-other-keys)}{
+\longdescription{method}{:create-item}{klass label receiver method \= \&rest args \\
+\> \&key (font fontid)\\
+\> \&allow-other-keys}{
 creates an instance of the panel-item class specified by {\em klass}
 (i.e., {\tt button-item,  menu-button-item, slider-item, joystick-item}, etc.),
 and place the item in the panel using {\tt :locate-item}.
@@ -243,8 +252,10 @@ and place the item in the panel using {\tt :locate-item}.
 {\em Receiver} and {\em method} specify the event handler called upon
 the corresponding event.}
 
-\methoddesc{:delete-items}{}{delete all panel-items.}
-\longdescription{:create-menubar}{ \= \&rest args \`[method]\\
+\methoddesc{:delete-items}{}{
+delete all panel-items.}
+
+\longdescription{method}{:create-menubar}{\= \&rest args \\
 \> \&key (font fontid)\\
 \> \&allow-other-keys}{
 creates a {\em menubar-panel} and  locates it at the top of the panel.}
@@ -255,15 +266,30 @@ warning message when events are sent to panels without event handlers.
 User applications should override these methods.
 
 \begin{refdesc}
+
 \methoddesc{:quit}{\&rest a}{
 throws {\tt :window-main-loop} and terminates event processing.}
-\methoddesc{:KeyPress}{event}{returns NIL.}
-\methoddesc{:KeyRelease}{event}{returns NIL.}
-\methoddesc{:ButtonPress}{event}{returns NIL.}
-\methoddesc{:ButtonRelease}{event}{returns NIL.}
-\methoddesc{:MotionNotify}{event}{returns NIL.}
-\methoddesc{:EnterNotify}{event}{returns NIL.}
-\methoddesc{:LeaveNotify}{event}{returns NIL.}
+
+\methoddesc{:KeyPress}{event}{
+returns NIL.}
+
+\methoddesc{:KeyRelease}{event}{
+returns NIL.}
+
+\methoddesc{:ButtonPress}{event}{
+returns NIL.}
+
+\methoddesc{:ButtonRelease}{event}{
+returns NIL.}
+
+\methoddesc{:MotionNotify}{event}{
+returns NIL.}
+
+\methoddesc{:EnterNotify}{event}{
+returns NIL.}
+
+\methoddesc{:LeaveNotify}{event}{
+returns NIL.}
 \end{refdesc}
 
 \subsubsection{Subpanels (menu-panel and menubar-panel)}
@@ -271,13 +297,12 @@ throws {\tt :window-main-loop} and terminates event processing.}
 \begin{refdesc}
 % menu-panel
 \classdesc{menu-panel}{panel}{
- (items item-dots item-height\\
+(items item-dots item-height\\
                 \>charwidth charheight\\
                 \>height-offset\\
                 \>highlight-item\\
                 \>color-pixels\\
-                \>active-color)
-}{
+                \>active-color)}{
 {\tt Menu-panel} is a kind of panel that can locate only 
 {\tt button-item}s and/or {\tt bitmap-button-item}s.
 Unlike {\tt panel}, however, {\tt menu-panel} is normally invisible
@@ -299,17 +324,13 @@ with the menu-button-item by {\tt (instance menu-button-item :create
 }
 
 
-\longdescription{:create}{\&rest args \= \&key\= (items) (border-width 0)
-   (font font-courb12)
-\` [method]\\
-\>\> (width 100) (height-offset 15) (color *bisque1*)
-                      (active *bisque2*) \\
-           \>\&allow-other-keys) 
-  }{
+\longdescription{method}{:create}{\&rest args \= \&key\= items (border-width 0) (font font-courb12) \\
+\>\> (width 100) (height-offset 15) (color *bisque1*) (active *bisque2*) \\
+\> \&allow-other-keys}{
 create a menu-panel window. The size of the window is expanded each time
 new menu-item is added.}
 
-\methoddesc{:create-item}{class label receiver method  \&rest mesg}{
+\methoddesc{:create-item}{class label receiver method \&rest mesg}{
 adds a menu item in this menu-panel window and attatches
 the corresponding action. 
 The {\em receiver} objects receives {\em mesg}
@@ -425,13 +446,10 @@ by the window manager.
 
 \subsection{Panel Items}
 \begin{refdesc}
-\classdesc{panel-item}{xwindow}
-{(pos notify-object notify-method\\
-\>fontid label labeldots)}{
+\classdesc{panel-item}{xwindow}{(pos notify-object notify-method fontid label labeldots)}{
 {\bf Panel-item} is an abstract class for all kinds of panel-item windows
 to invoke {\em notify-object}'s  {\em notify-method} when item-specific
-event occurs.
-}
+event occurs.}
 
 \methoddesc{:notify}{\&rest args}{
 invokes {\em notify-object}'s  {\em notify-method}.
@@ -451,12 +469,10 @@ the text-item object and the entire line (string).
 the slider-item object and the new value.
 \item [joystick-item] The joystick is grabbed and moved; the arguments are
 the slider-item object, the new x and y values.
-\end{description}
-}
+\end{description}}
 
-\longdescription{:create}{name reciever method \= \&rest args
-\` [method] \\
-\> \&key ((:width w) 100) ((:height h) 100) (font font-courb12)\\
+\longdescription{method}{:create}{name reciever method \= \&rest args \\
+\> \&key (width 100) (height 100) (font font-courb12)\\
 \> \&allow-other-keys}{
 creates a panel-item.
 As panel-item is an abstract class,
@@ -467,19 +483,17 @@ via {\tt send-super}.}
 {\bf button-item} is the simplest panel-item.
 Button-item has a rectangular box and a label string in it.
 When clicked, button-item invokes {\em notify-object}'s {\em notify-method}
-with the panel-item object as the only argument.
-}
+with the panel-item object as the only argument.}
 
-\methoddesc{:draw-label}{\&optional (state :top) (color bg-color) (border 2) (offset)}{
+\methoddesc{:draw-label}{\&optional (state :top) (color bg-color) (border 2) offset}{
 draws button-item's label.}
 
-\longdescription{:create}{label revciever method \= \&rest args
-\` [method]\\
-\>\&key\= width height (font (send parent :gc :font))\\
+\longdescription{method}{:create}{label revciever method \= \&rest args \\
+\> \&key\= width height (font (send parent :gc :font))\\
 \>\> (background (send parent :gc :background)) \\
 \>\> (border-width 0) \\
 \>\> (state :top)\\
-\>\&allow-other-keys}{
+\> \&allow-other-keys}{
 creates a button-item.
 If button's width and height are not given,
 the sizes are automatically set to accomodate the label string
@@ -496,23 +510,22 @@ changes the background color to gray, as if the button.}
 changes {\em event}'s background color to normal.}
 
 
-\classdesc{menu-button-item}{button-item}{(\= items item-dots item-labels\\
+\classdesc{menu-button-item}{button-item}{
+(\= items item-dots item-labels\\
 \>charwidth charheight \\
-\>menu-window window-pos high-light)
-}{
+\>menu-window window-pos high-light)}{
 defines a pulldown menu.
 Though a {\tt menu-button-item} looks like a {\tt button-item},
 the {\tt menu-button-item} activates associated {\tt menu-panel}
 below the button when it is pressed,
 instead of sending an immediate message to the {\em notify-object}.
 The actual message is sent when the mouse button is released on
-one of the menu items.
-}
+one of the menu items.}
 
-\longdescription{:create}{\= label reciever method \` [method]\\
-\>\&rest args\\
-\>\&key (menu nil) (items) (state :flat)\\
-\>\&allow-other-keys}{
+\longdescription{method}{:create}{\= label reciever method \\
+\> \&rest args\\
+\> \&key menu items (state :flat)\\
+\> \&allow-other-keys}{
 creates a pulldown menu button.
 {\em Receiver} and {\em method} arguments has no effect.}
 
@@ -525,9 +538,7 @@ unmaps the {\tt menu-panel} below this button
 and reverts the appearance of the button.}
 
 % Bitmap-button-item
-\classdesc{bitmap-button-item}{button-item}{
-(pixmap-id bitmap-width bitmap-height)
-}{
+\classdesc{bitmap-button-item}{button-item}{(pixmap-id bitmap-width bitmap-height)}{
 Though {\tt bitmap-button-item}'s function is similar to
 the {\tt button-item}, its appearance is different.
 Instead of drawing a simple label string on the button, as is the
@@ -535,67 +546,60 @@ case for {\tt button-item},
 {\tt bitmap-button-item} is drawn by a pixmap which is loaded
 from a bitmap-file when the button is created.}
 
-\methoddesc{:draw-label}{\&optional (state :flat) (color bg-color) (border 2)}{
-draws a bitmap/pixmap on the button.
-}
-\longdescription{:create}{ bitmap-file reciever method \= \&rest args
-\` [method]\\
-                 \>\&key width height\\
-                 \>\&allow-other-keys)
-}{
+\methoddesc{:draw-label}{\&optional (state :flat) color bg-color (border 2)}{
+draws a bitmap/pixmap on the button.}
+
+\longdescription{method}{:create}{bitmap-file reciever method \= \&rest args \\
+\> \&key width height\\
+\> \&allow-other-keys}{
 creates bitmap-button-item.
 The first argument, {\em bitmap-file}  replaces the {\em label} argument
 of {\tt button-item}.} 
 \methoddesc{:draw-label}{\&optional (state :flat) (color bg-color) (border 2)}{
-draw a bitmap/pixmap on the button.
-}
+draw a bitmap/pixmap on the button.}
+
 \methoddesc{:create-bitmap-from-file}{fname}{
 creates pixmap from the bitmap file named {\em fname}, 
 and stores its id in {\em pixmap-id}.}
 
 % choice-item
 \classdesc{choice-item}{button-item}{
- (choice-list active-choice transient-choice \\
-                \>choice-dots choice-pos button-size)
-}{
+(choice-list active-choice transient-choice \\
+\> choice-dots choice-pos button-size)}{
 {\tt choice-item} is a set of round choice buttons.
 One choice is always active, and only one choice can become active at
 the same time.
 {\tt choice-item} provides the similar function as radio-buttons.}
 
-\longdescription{:create}{label reciever method \= \&rest args
-\` [method]\\
+\longdescription{method}{:create}{label reciever method \= \&rest args \\
            \>\&key \=(choices '("0" "1")) (initial-choice 0)\\
 \>\> (font (send parent :gc :font))\\
-                \>\>(button-size 13)\\
-                \>\>(border-width 0)\\
-  }{
+\>\> (button-size 13)\\
+\>\> (border-width 0)}{
 create a choice-item-button. Each choice button is a circle of
 radius {\em button-size}.
 When a new choice is selected, {\em notify-object}'s {\em notify-method}
-is invoked with the choice-item object and the index of the choice selected.
-}
-\methoddesc{:value}{\&optional (new-choice) (invocation)}{
+is invoked with the choice-item object and the index of the choice selected.}
+
+\methoddesc{:value}{\&optional new-choice invocation}{
 If {\em new-choice} is given, it is set as the current active choice,
 and the corresponding circle is filled black.
 If {\em invocation} is also specified, {\em notify-object}'s {\em notify-method}
 is invoked.
 {\tt :Value} returns the current (or new) choice index.}
 
-\methoddesc{:draw-active-button}{\&optional
-(old-choice active-choice) (new-choice active-choice)}{
-draw active button.
-}
-\methoddesc{:buttonPress}{event}{
+\methoddesc{:draw-active-button}{\&optional (old-choice active-choice) (new-choice active-choice)}{
+draw active button.}
+
+\methoddesc{:ButtonPress}{event}{
 If the mouse button is pressed on any of the choice buttons,
 its index is recorded in {\em transient-choice}.
 No further action is taken until the mouse button is released.}
 
-\methoddesc{:buttonRelease}{event}{
+\methoddesc{:ButtonRelease}{event}{
 If the mouse button is released on the same button which is already pressed,
 the {\em active-choice} is updated and
-{\em notify-object}'s {\em notify-method} is invoked.
-}
+{\em notify-object}'s {\em notify-method} is invoked.}
 
 % Slider-item
 \classdesc{slider-item}{panel-item}{
@@ -603,19 +607,17 @@ the {\em active-choice} is updated and
                 \>minlabel maxlabel valueformat\\
                 \>bar-x bar-y bar-width bar-height valuedots label-base\\
                 \>nob-x nob-moving\\
-                \>charwidth) 
-}{
+                \>charwidth)}{
 While {\tt choice-item} is used to select a discrete value,
 {\tt slider-item} is used for the continuous value in the range
 between {\em min-value} and {\em max-value}.
 Each moment the value is changed, {\em notify-object}'s {\em notify-method}
 is invoked with the slider-item object and the new value as the arguments.}
 
-\longdescription{:create}{label reciever method \= \&rest args
-\` [method]\\
-\>\&key (min 0.0) (max 1.0) (parent)\\
-\>(min-label "") (max-label "") (value-format "~4,2f")\\
-\>(font font-courb12) (span 100) (border-width 0) (initial-value min)  }{
+\longdescription{method}{:create}{label reciever method \= \&rest args \\
+\> \&key (min 0.0) (max 1.0) parent\\
+\> (min-label "") (max-label "") (value-format "~4,2f")\\
+\> (font font-courb12) (span 100) (border-width 0) (initial-value min)}{
 creates slider-item.
 The sliding knob is displayed as a small black rectangle on a bar.
 The left end represents the {\em min} value and the right end {\em max} value.
@@ -632,23 +634,20 @@ If {\em invocation} is also specified non nil,
 
 % JoyStick-item
 \classdesc{joystick-item}{panel-item}{
- (stick-size min-x min-y max-x max-y\\
+(stick-size min-x min-y max-x max-y\\
                 \>center-x center-y stick-x stick-y\\
                 \>value-x value-y\\
                 \>stick-return stick-grabbed\\
-                \>fraction-x fraction-y)
-}{
+                \>fraction-x fraction-y)}{
 {\tt joystick-item} can be regarded as the two-dimensional slider-item.
 Two continuous values can be specified by the moving black circle
 on the coaxial chart that looks like a web (Fig. \ref{panelitem}).}
 
-\longdescription{:create}{name reciever method \= \&rest args
-\` [method]\\
-           \>\&key \=(stick-size 5) (return nil)\\
-                \>\>(min-x -1.0) (max-x 1.0)\\
-                \>\>(min-y -1.0) (max-y 1.0)\\
-           \>\&allow-other-keys) 
-  }{
+\longdescription{method}{:create}{name reciever method \= \&rest args \\
+\> \&key \=(stick-size 5) return\\
+\>\> (min-x -1.0) (max-x 1.0)\\
+\>\> (min-y -1.0) (max-y 1.0)\\
+\> \&allow-other-keys}{
 {\em Stick-size} is the radius of the stick's black circle.
 The sizes of the circles in the coaxial chart are determined
 according to the width and height of the joystick-item window.
@@ -663,7 +662,8 @@ Otherwise, the joystick remains at the released position.}
 %}
 %\methoddesc{:draw-stick}{\&optional (x value-x) (y value-y) (erase t)}{
 %}
-\methoddesc{:value}{\&optional (newx) (newy) (invocation)}{
+
+\methoddesc{:value}{\&optional newx newy invocation}{
 If both {\em newx} and {\em newy} are given, they are
 set as the current values,
 and the joystick moves to the corresponding location
@@ -717,8 +717,7 @@ appear in a panel.
 
 
 \begin{refdesc}
-\classdesc{text-item}{panel-item}
-{(textwin)}{
+\classdesc{text-item}{panel-item}{(textwin)}{
 {\tt Text-item} is used to display or to input one short line of text,
 such as a file name.
 A {\tt text-item} has a label string followed by
@@ -734,9 +733,9 @@ Clicking a mouse button moves the cursor to the clicked character.
 Hitting an enter (newline) key causes the buffered text to be sent to
 the {\em notify-object}'s {\em notify-method}.}
 
-\longdescription{:create}{label revciever method \= \&rest args \` [method]\\
-\>\&key (font font-courb12) (columns 20) (initial-value ) (border-width 0)\\
-\>\&allow-other-keys}{
+\longdescription{method}{:create}{label revciever method \= \&rest args \\
+\> \&key (font font-courb12) (columns 20) initial-value (border-width 0)\\
+\> \&allow-other-keys}{
 creates text-item.
 Though the linebuffer of the textwindow may have unlimited length,
 visible portion is restricted to the {\em columns} characters.}
@@ -792,8 +791,8 @@ There are three textwindow classes, {\tt TextWindow}, {\tt BufferTextWindow}
 and {\tt ScrollTextWindow}.
 
 \begin{refdesc}
-\classdesc{textWindow}{xwindow}
-{(fontid \\
+\classdesc{textWindow}{xwindow}{
+(fontid \\
 \>charwidth charheight charascent dots \\
 \>win-row-max win-col-max \\
 \>win-row win-col \hspace{20mm} \= ;physical current position in window \\
@@ -817,10 +816,10 @@ the mouse pointer.}
 \methoddesc{:init}{id}{
 initializes {\em id}th text-window.}
 
-\longdescription{:create}{\=\&rest args \` [method]\\
-\>\&key \=width height (font font-courb14) rows columns\\
-\>(show-cursor nil) (notify-object nil) (notify-method nil)\\
-\>\&allow-other-keys}{
+\longdescription{method}{:create}{\=\&rest args \\
+\> \&key \= width height (font font-courb14) rows columns\\
+\> show-cursor notify-object notify-method\\
+\> \&allow-other-keys}{
 creates text-window.
 The sizes of the window may be specified either by {\em width} and {\em height}
 or by {\em rows} and {\em columns}.
@@ -844,8 +843,7 @@ clears text-window.}
 
 \methoddesc{:clear-eol}{\&optional (r win-row) (c win-col) (csr :on)}{
 clears the rest of the line after the character
-addressed by {\rm r} and {\em c}, including the character at the cursor.
-}
+addressed by {\rm r} and {\em c}, including the character at the cursor.}
 
 \methoddesc{:clear-lines}{lines \&optional (r win-row)}{
 clears multiple lines after {\em r}-th row.}
@@ -854,19 +852,18 @@ clears multiple lines after {\em r}-th row.}
 clears the region after the character addressed by {\em r} and {\em c}
 till the end-of-the-screen.}
 
-\methoddesc{:win-row-max}{}{returns the maximum number of lines
-displayable in this window.}
+\methoddesc{:win-row-max}{}{
+returns the maximum number of lines displayable in this window.}
 
-\methoddesc{:win-col-max}{}{returns the maximum number of columns
-displayable in this window.}
+\methoddesc{:win-col-max}{}{
+returns the maximum number of columns displayable in this window.}
 
 \methoddesc{:xy}{\&optional (r win-row) (c win-col)}{
 calculates the pixel coordinates of the character 
 addressed by {\em r} and {\em c}.}
 
 \methoddesc{:goto}{r c \&optional (cursor :on)}{
-moves the cursor to {\em r}-th row and {\em c}-th column.
-}
+moves the cursor to {\em r}-th row and {\em c}-th column.}
 
 \methoddesc{:goback}{\&optional (csr :on)}{
 moves the cursor backward by one.}
@@ -896,6 +893,7 @@ places {\em str} at the cursor position.}
 %\methoddesc{:getstring}{}{gets key-buffer.}
 
 \methoddesc{:event-row}{event}{}
+
 \methoddesc{:event-col}{event}{
 returns the text cursor position designated by $(x, y)$ in the {\em event}.}
 %\methoddesc{:EnterNotify}{event}{}
@@ -906,6 +904,7 @@ returns the text cursor position designated by $(x, y)$ in the {\em event}.}
 %\methoddesc{:keyrelease}{}{nob}
 %\methoddesc{:enterNotify}{event}{}
 %\methoddesc{:LeaveNotify}{event}{}
+
 \methoddesc{:KeyPress}{event}{
 inserts the character entered at the cursor position.
 If the character is newline, notification is sent to the {\em notify-object}.}
@@ -939,20 +938,31 @@ which have several, often only one, lines of text.
 %\methoddesc{:create}{\&rest args}{}
 %\methoddesc{:clear}{}{}
 %\methoddesc{:goto}{r c \&optional (csr :on)}{}
-\methoddesc{:line}{n}{returns the contents of the {\em n}-th line as a
-string.}
 
-\methoddesc{:nlines}{}{returns number of lines in the linebuf.}
-\methoddesc{:all-lines}{}{returns the linebuf, which is a vector of strings.}
+\methoddesc{:line}{n}{
+returns the contents of the {\em n}-th line as a string.}
+
+\methoddesc{:nlines}{}{
+returns number of lines in the linebuf.}
+
+\methoddesc{:all-lines}{}{
+returns the linebuf, which is a vector of strings.}
+
 \methoddesc{:refresh-line}{\&optional (r win-row) (c win-col)}{
 redraws the {\em r}-th line after the {\em c}-th column.}
+
 \methoddesc{:refresh}{\&optional (start 0)}{
 redraws the lines after the {\em start}-th line inclusively.}
+
 \methoddesc{:insert-string}{string}{
 inserts {\em string} at the cursor position.}
-\methoddesc{:insert}{ch}{inserts the character at the cursor.}
-\methoddesc{:delete}{n}{deletes {\em n} characters after the cursor.}
-%\methoddesc{:keyEnter}{ch \&optional event}{}
+
+\methoddesc{:insert}{ch}{
+inserts the character at the cursor.}
+
+\methoddesc{:delete}{n}{
+deletes {\em n} characters after the cursor.}
+%\methoddesc{:KeyEnter}{ch \&optional event}{}
 %\methoddesc{:ButtonRelease}{event}{}
 
 \funcdesc{expand-tab}{src \&optional (offset 0)}{
@@ -971,10 +981,7 @@ ScrollTextWindow can handle {\tt :configureNotify} event to resize
 itself and accompanying scroll-bar windows, and to redisplay texts.
 By clicking, a line can be selected.}
 
-\methoddesc{:create}{\&rest args
-           \&key (scroll-bar nil)
-                (horizontal-scroll-bar nil)
-           \&allow-other-keys}{
+\methoddesc{:create}{\&rest args \&key scroll-bar horizontal-scroll-bar \&allow-other-keys}{
 When scroll-bars are needed, specify T to each keyword argument.}
 
 %\methoddesc{:locate-scroll-bar}{}{}
@@ -983,38 +990,48 @@ When scroll-bars are needed, specify T to each keyword argument.}
 %\methoddesc{:max-line-length}{}{}
 %\methoddesc{:refresh}{\&optional (offset 0) (lines (- win-row-max offset))}{}
 %\methoddesc{:line-in-window-p}{ln}{}
-%\methoddesc{:refresh-line}{ln \&optional (highlight nil) \&aux fg-save bg-save}{
-%}
-\methoddesc{:locate}{n}{displays the buffered text by placing the {\em n}-th
+%\methoddesc{:refresh-line}{ln \&optional (highlight nil) \&aux fg-save bg-save}{}
+
+\methoddesc{:locate}{n}{
+displays the buffered text by placing the {\em n}-th
 line at the top of the window.}
-\methoddesc{:display-selection}{selection}{{\em Selection} represents
-the location of the selected line. The entire seleced line is displayed
-highlighted.}
 
-\methoddesc{:selection}{}{returns the selected line (string).}
+\methoddesc{:display-selection}{selection}{
+{\em Selection} represents the location of the selected line.
+The entire seleced line is displayed highlighted.}
 
-\methoddesc{:read-file}{fname}{reads the textfile specified by {\em fname}
+\methoddesc{:selection}{}{
+returns the selected line (string).}
+
+\methoddesc{:read-file}{fname}{
+reads the textfile specified by {\em fname}
 into the {\em linebuf}, expands tabs, and display in the window.
 The cursor is put at the beginning of the screen.}
 
-\methoddesc{:display-string}{strings}{{\em Strings} is a sequence
-of lines (strings). The {\em strings} are copied in the linebuf
-and displayed in the window.}
+\methoddesc{:display-string}{strings}{
+{\em Strings} is a sequence of lines (strings).
+The {\em strings} are copied in the linebuf and displayed in the window.}
 
 %\methoddesc{:scroll-fraction}{}{}
 %\methoddesc{:horizontal-scroll-fraction}{}{}
 
-\methoddesc{:scroll}{n}{vertically scrolls {\em n} lines.}
-\methoddesc{:horizontal-scroll}{n}{horizontally scrolls {\em n} columns.}
+\methoddesc{:scroll}{n}{
+vertically scrolls {\em n} lines.}
+
+\methoddesc{:horizontal-scroll}{n}{
+horizontally scrolls {\em n} columns.}
 %\methoddesc{:insert-char}{c \&optional (refresh t)}{}
 %\methoddesc{:insert-newline}{\&optional (refresh t)}{}
 %\methoddesc{:insert}{thing \&optional (refresh t)}{}
 %\methoddesc{:buttonPress}{event}{}
+
 \methoddesc{:buttonRelease}{event}{
 The line where the mouse pointer is located is selected.
 If notification is specified when the window is created,
 {\em notify-object}'s {\em notify-method} is invoked.}
-\methoddesc{:resize}{w h}{changes the size of the window
+
+\methoddesc{:resize}{w h}{
+changes the size of the window
 and redisplays the contents according to the new size.
 The same message is sent to scroll-bars if attached.}
 %\methoddesc{:ConfigureNotify}{event}{}
@@ -1026,7 +1043,7 @@ The same message is sent to scroll-bars if attached.}
 %\methoddesc{:draw-label}{}{
 %draws xitem's label.}
 
-%\longdescription{:create}{label \= \&rest args \hspace{120mm} [method]\\
+%\longdescription{method}{:create}{label \= \&rest args \hspace{120mm} \\
 %\>\&key width height (font font-cour10)\\
 %\>\&allow-other-keys}{
 %creates xitem.}

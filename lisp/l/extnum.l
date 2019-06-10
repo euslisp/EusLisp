@@ -1,4 +1,11 @@
 (defmethod ratio
- (:prin1 (&optional (strm t))
-    (format strm "~d/~d" numerator denominator))
-)
+ (:init (num denom)
+  (setq numerator num
+        denominator denom)
+  self))
+
+(defmethod complex
+ (:init (re im)
+  (setq real re
+        imaginary im)
+  self))

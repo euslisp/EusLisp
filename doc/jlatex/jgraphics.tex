@@ -27,8 +27,8 @@
 
 \begin{refdesc}
 
-\classdesc{viewing}{cascaded-coords}{(viewcoords)}
-{viewing変換を定義する。}
+\classdesc{viewing}{cascaded-coords}{(viewcoords)}{
+viewing変換を定義する。}
 
 \methoddesc{:viewpoint}{}{
 この{\bf viewing}の原点のベクトル位置を返す。}
@@ -40,6 +40,7 @@
 \methoddesc{:view-up}{}{
 ワールド座標系におけるこの{\bf viewing}のy軸ベクトルを返す。
 y軸は、{\bf viewport}の上方である。}
+
 \methoddesc{:view-right}{}{
 ワールド座標系におけるこの{\bf viewing}のx軸ベクトルを返す。
 x軸は、{\bf viewport}の水平右方向である。}
@@ -49,13 +50,11 @@ x軸は、{\bf viewport}の水平右方向である。}
 見ているとしてviewing座標系を設定する。}
 
 % \metdesc{:makeviewcoords}{ ax ay az vpoint}
-\longdescription{:init}{
-%\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \hspace{85mm} [メソッド]\\
-\&key  \= :target \hspace{12mm} \=  \#f(0 0 0) \` [メソッド]\\
-       \> :view-direction \> nil \\
-       \> :view-up \>  \#f(0.0 0.0 1.0)) \\
-       \> :view-right \>  nil \\
-       \> \&allow-other-keys}{
+\longdescription{メソッド}{:init}{\&key \= (target \#f(0 0 0)) \\
+\> (view-direction nil) \\
+\> (view-up \#f(0.0 0.0 1.0)) \\
+\> (view-right nil) \\
+\> \&allow-other-keys}{
 {\bf viewing}は、{\bf cascaded-coords}を継承するので、{\em :pos}や{\em :rot}や{\em :euler}
 や{\em :rpy}などの{\em :init}のパラメータはすべてviewing座標系の位置や姿勢を
 指定することに使用できる。
@@ -103,70 +102,77 @@ x軸に決定される。
 
 \begin{refdesc}
 
-\classdesc{projection}{viewing}
-{(screenx screeny hither yon projection-matrix)}
-{4x4行列であらわされる投影変換を定義する。}
+\classdesc{projection}{viewing}{(screenx screeny hither yon projection-matrix)}{
+4x4行列であらわされる投影変換を定義する。}
 
 \methoddesc{:projection}{\&optional pmat}{
 もし、{\em pmat}が与えられたならば、
 {\tt projection-matrix}のスロットに設定する。
 {\bf :projection}は、現在の4x4投影行列を返す。}
+
 \methoddesc{:project}{vec}{
 {\em vec}は、4要素を持つ3次元同次ベクトルである。
 {\em vec}は、投影行列により変換される。
 そして、変換された結果である同次表現が返される。}
+
 \methoddesc{:project3}{vec}{
 {\em vec}は、標準の3Dベクトル。
 {\em vec}は、投影行列により同次化され変換される。
 そして、変換された結果である同次表現が返される。}
-\methoddesc{:view}{ vec}{
+
+\methoddesc{:view}{vec}{
 {\em vec}にviewing変換と投影変換を連続的に適用する。
 そして、変換された結果である同次表現が返される。}
+
 \methoddesc{:screen}{xsize (\&optional (ysize xsize))}{
 viewing画面の大きさを変える。
 大きくすると、広いviewが得られる。}
-\methoddesc{:hither}{ depth-to-front-clip-plane}{
+
+\methoddesc{:hither}{depth-to-front-clip-plane}{
 視点からクリップ前面までの距離を決定する。
 このクリップ前面よりも前にあるオブジェクトはクリップから除外される。}
-\methoddesc{:yon}{ depth-to-back-clip-plane}{
+
+\methoddesc{:yon}{depth-to-back-clip-plane}{
 視点からクリップ後面までの距離を変える。
 このクリップ後面よりも後ろにあるオブジェクトはクリップから除外される。}
-\methoddesc{:aspect}{\&oiptional ratio}{
+
+\methoddesc{:aspect}{\&optional ratio}{
 アスペクト比は、screen-yとscreen-xとの比である。
 もし、{\em ratio}が与えられたならば、
 アスペクト比は変えられ、screen-yはscreen-x * {\em ratio}に設定される。
 {\bf :aspect}は、現在のアスペクト比を返す。}
-\longdescription{:init}{
-%\&key \= :hither  \hspace{5mm} \= 100.0 \hspace{100mm}[メソッド]\\
-\&key \= :hither  \hspace{5mm} \= 100.0 \` [メソッド]\\
-      \> :yon    \> 1000.0 \\
-      \> :aspect \> 1.0  \\
-      \> :screen \> 100.0 \\
-      \> :screen-x  \> screen \\
-      \> :screen-y \> (* screen-x aspect) \\
-      \>  \&allow-other-keys}{
+\longdescription{メソッド}{:init}{\&key \= (hither 100.0) \\
+\> (yon 1000.0) \\
+\> (aspect 1.0) \\
+\> (screen 100.0) \\
+\> (screen-x screen) \\
+\> (screen-y (* screen-x aspect)) \\
+\> \&allow-other-keys}{
 {\bf viewing}と{\bf projection}を初期化する。}
 
 \vspace{5mm}
 
-\classdesc{parallel-viewing}{projection}{()}{
+\classdesc{parallel-viewing}{projection}{}{
 平行投影を定義する。
 {\bf hid}(陰線消去関数)は平行投影では扱うことが出来ない。}
 
 \metdesc{:make-projection}{}
 
-\classdesc{perspective-viewing}{projection}
-{(viewdistance)}{透視投影変換を定義する。}
+\classdesc{perspective-viewing}{projection}{(viewdistance)}{
+透視投影変換を定義する。}
 
-\metdesc{:make-projection}{ }
+\metdesc{:make-projection}{}
+
 \methoddesc{:ray}{u v}{
 視点から正規化画面の上にある{\em (u,v)}への単位方向ベクトルを返す。}
+
 \methoddesc{:viewdistance}{\&optional vd}{
 {\tt viewdistance}は、視点から画面迄の距離である。
 もし、{\em vd}が与えられたならば、{\tt viewdistance}に設定される。
 {\tt viewdistance}は、カメラの焦点距離と一致する。
 {\em vd}を大きくすれば、ズームアップされたviewを得ることができる。
 {\bf :viewdistance}は、現在の{\tt viewdistance}を返す。}
+
 \methoddesc{:view-angle}{\&optional ang}{
 画面の対角線を見込む角度が{\em ang}ラジアンであるように画面の大きさを設定する。
 20度(約0.4ラジアン)から50度(約0.9ラジアン)までの角度が自然な透視view
@@ -174,11 +180,13 @@ viewing画面の大きさを変える。
 角度を大きくすると歪んだviewを生成する。
 そして、狭くすると直角(平行)viewingのような平坦なviewが生成される。
 {\bf :view-angle}は、現在の視角あるいは新しい視角をラジアンで返す。}
+
 \methoddesc{:zoom}{\&optional scale}{
 もし、{\em scale}が与えられたならば、画面は{\em scale}によって
 現在の大きさを相対的に変化させる（{\tt viewdistance}は変化しない）。
 もし、{\em scale}に0.5を与えるならば、以前のviewより2倍広いviewを得られる。
 {\bf :zoom}は、新しい視角をラジアンで返す。}
+
 \methoddesc{:lookaround}{alfa beta}{
 視点を移動し回転させる。
 回転中心は、視線の上で{\tt hither}平面と{\tt yon}平面の中間点
@@ -187,12 +195,13 @@ viewing座標系は、ワールド座標系のz軸回りに{\em alfa}ラジア�
 ローカル座標系のx軸回りに{\em beta}ラジアン回転される。
 {\bf :lookaround}は、{\bf viewing}の中心にあるオブジェクト回りに視線を
 動かすことができる。}
+
 \methoddesc{:look-body}{bodies}{
 視線、画面の大きさおよびhither/yonをすべての{\em bodies}に適合するviewport
 となるよう変える。視点は変化しない。
 視線は、すべての{\em bodies}のbounding boxの中心を通る視線から選択される。}
 
-\metdesc{:init}{ \&key (:viewdistance 100.0) \&allow-other-keys}
+\metdesc{:init}{\&key (viewdistance 100.0) \&allow-other-keys}
 
 \end{refdesc}
 
@@ -228,35 +237,41 @@ y軸が下方向に伸びているとしている。
 もし、その線分が{\bf viewport}の外側に完全に置かれているならば、
 NILを返す。}
 
-\classdesc{viewport}{coordinates}{}
-{viewport変換は、デバイスで指定される座標系にNDC（正規化デバイス座標系）を作る。
+\classdesc{viewport}{coordinates}{}{
+viewport変換は、デバイスで指定される座標系にNDC（正規化デバイス座標系）を作る。
 {\bf coordinates}クラスを継承しているため、{\bf viewport}はサイズと投影画面の
 相対位置を定義している。}
 
 \methoddesc{:xcenter}{\&optional xcenter}{
 この{\bf viewport}のx軸の中心を返す。
 もし、{\em xcenter}が与えられていれば、設定を行う。}
+
 \methoddesc{:ycenter}{\&optional ycenter}{
 この{\bf viewport}のy軸の中心を返す。}
+
 \methoddesc{:size}{\&optional size}{
 この{\bf viewport}のx軸とy軸方向の大きさのリストを返す。}
 
-\methoddesc{:width}{ \&optional width}{この{\bf viewport}の幅を{\em width}に
-設定する。}
-\methoddesc{:height}{ \&optional height}{この{\bf viewport}の高さを
-{\em height}に設定する。}
+\methoddesc{:width}{\&optional width}{
+この{\bf viewport}の幅を{\em width}に設定する。}
+
+\methoddesc{:height}{\&optional height}{
+この{\bf viewport}の高さを{\em height}に設定する。}
+
 \methoddesc{:screen-point-to-ndc}{p}{
 {\em p}は、物理的画面の中の位置を表現する実数ベクトルである。
 {\em p}は、正規化デバイス座標系(NDC)の中での表現に変換される。}
+
 \methoddesc{:ndc-point-to-screen}{p}{
 この{\bf viewport}のNDC表現である{\em p}を画面の物理的位置に変換する。}
+
 \methoddesc{:ndc-line-to-screen}{p1 p2 \&optional (do-clip t)}{
 2つの3次元ベクトル{\em p1}と{\em p2}は、NDCの中の線分を定義する。
 これらの2つの端点は、画面空間の表現に変換される。
 もし、{\em do-clip}がnon-NILなら、その線分はクリップされる。}
-\methoddesc{:init}{\&key (:xcenter 100) (:ycenter 100) (:size 100)
-(width 100) (height 100)}
-{新しい{\bf viewport}オブジェクトを作る。}
+
+\methoddesc{:init}{\&key (xcenter 100) (ycenter 100) (size 100) (width 100) (height 100)}{
+新しい{\bf viewport}オブジェクトを作る。}
 
 \end{refdesc}
 
@@ -274,62 +289,86 @@ NILを返す。}
 
 \begin{refdesc}
 
-\classdesc{viewer}{object}
-{(eye :type viewint) \\
-\> (port :type viewport) \\
-\> (surface :type viewsurface)} 
-{viewingからviewportを経由してviewsurfaceへ移るCascaded Coordinatesの変換を定義する。}
+\classdesc{viewer}{object}{(eye :type viewint) \\
+                        \> (port :type viewport) \\
+                        \> (surface :type viewsurface)}{
+viewingからviewportを経由してviewsurfaceへ移るCascaded Coordinatesの変換を定義する。}
 
 \methoddesc{:viewing}{\&rest msg}{
 もし、{\em msg}が与えられたならば、{\em msg}は{\bf viewing}{\tt (eye)}オブジェクト
 に送られる。そうでなければ、{\bf viewing}{\tt (eye)}オブジェクトが返される。}
+
 \methoddesc{:viewport}{\&rest msg}{
 もし、{\em msg}が与えられたならば、{\em msg}は{\bf viewport}{\tt (port)}オブジェクト
 に送られる。そうでなければ、{\bf viewport}{\tt (port)}オブジェクトが返される。}
+
 \methoddesc{:viewsurface}{\&rest msg}{
 もし、{\em msg}が与えられたならば、{\em msg}は{\bf viewsurface}{\tt (surface)}オブジェクト
 に送られる。そうでなければ、{\bf viewsurface}{\tt (surface)}オブジェクトが返される。}
+
 \methoddesc{:adjust-viewport}{}{
 {\bf viewsurface}の大きさが変えられたとき、{\bf :adjust-viewport}は
 {\tt port}に固有のメッセージを送ることにより{\bf viewport}の変換を変える。}
+
 \methoddesc{:resize}{width height}{
 {\bf viewsurface}に{\tt :resize}メッセージを送り、{\bf viewport}に{\tt :size}メッセージを送る
 ことによりviewsurfaceの大きさを変える。}
-\methoddesc{:draw-line-ndc}{ p1 p2 \&optional (do-clip t)}{
+
+\methoddesc{:draw-line-ndc}{p1 p2 \&optional (do-clip t)}{
 NDCの中に定義される2つの端点{\em p1,p2}を結ぶ線を描く。}
+
 \methoddesc{:draw-polyline-ndc}{polylines \&optional color}{
 NDCの中に定義される端点を結ぶ多角形を描く。}
+
 \methoddesc{:draw-star-ndc}{center \&optional (size 0.01) color}{
 NDCの中に十字マークを描く。}
+
 \methoddesc{:draw-box-ndc}{low-left up-right \&optional color}{
 NDCの中に四角形を描く。}
+
 \methoddesc{:draw-arc-ndc}{point width height angle1 angle2 \&optional color}{
 NDCの中に円弧を描く。
 この{\bf viewer}に結び付く{\bf viewsurface}オブジェクトは、{\bf :arc}メッセージを
 受けなければならない。}
-\methoddesc{:draw-fill-arc-ndc}{ point width height angle1 angle2 \&optional color}{
+
+\methoddesc{:draw-fill-arc-ndc}{point width height angle1 angle2 \&optional color}{
 NDCの中に塗り潰し円弧を描く。}
+
 \methoddesc{:draw-string-ndc}{position string \&optional color}{
 NDCの中に定義される{\em position}に{\em string}を描く。}
+
 \metdesc{:draw-image-string-ndc}{position string \&optional color}
+
 \metdesc{:draw-rectangle-ndc}{position width height \&optional color}
+
 \metdesc{:draw-fill-rectangle-ndc}{point width height \&optional color}
+
 \methoddesc{:draw-line}{p1 p2 \&optional (do-clip t)}{
 ワールド座標系に定義される2つの端点{\em p1,p2}を結ぶ線を描く。}
+
 \methoddesc{:draw-star}{position \&optional (size 0.01) color}{
 ワールド座標系の{\em position}位置に十字マークを描く。}
+
 \methoddesc{:draw-polyline}{vlist \&optional color}{
 ワールド座標系の{\em vlist}端点を結ぶ多角形を描く。}
+
 \methoddesc{:draw-box}{center \&optional (size 0.01)}{
 ワールド座標系の{\em center}に四角形を描く。}
+
 \methoddesc{:draw-arrow}{p1 p2}{
 {\em p1}から{\em p2}へ向けての矢印を描く。}
+
 \metdesc{:draw-edge}{edge}
+
 \metdesc{:draw-edge-image}{edge-image}
+
 \metdesc{:draw-faces}{face-list \&optional (normal-clip nil)}
+
 \metdesc{:draw-body}{body \&optional (normal-clip nil)}
+
 \methoddesc{:draw-axis}{coordinates \&optional size}{
 {\em coordinates}で定義される軸を{\em size}の長さで描く。}
+
 \methoddesc{:draw}{\&rest things}{
 3次元の幾何学オブジェクトを描く。
 もし、オブジェクトが3次元ベクトルならば、その位置に小さな十字マークを描く。
@@ -341,24 +380,24 @@ NDCの中に定義される{\em position}に{\em string}を描く。}
 {\tt line, edge, polygon, face}および{\tt body}オブジェクトは、
 {\bf viewer}に定義されている{\bf :draw-xxx}(xxxにそのオブジェクトのクラス名が入る)
 メソッドによって描かれる。}
+
 \methoddesc{:erase}{\&rest things}{
 背景色で{\em things}を描く。}
-\methoddesc{:init}{\&key :viewing :viewport :viewsurface}{
+
+\methoddesc{:init}{\&key viewing viewport viewsurface}{
 {\em viewing, viewport}および{\em viewsurface}をこの{\bf viewer}のスロット
 {\tt eye, port}と{\tt surface}に設定する。}
 
-\longdescription{view}{\&key \= (:size 500) (:width size) (:height size)
-\` [関数] \\
-%\hspace{74mm} [関数] \\
-\> (:x 100) (:y 100) \\
-\> (:title "eusx") \\
-\> (:border-width 3) \\
-\> (:background 0) \\
-\> (:viewpoint \#f(300 200 100)) (:target \#f(0 0 0)) \\
-\> (:viewdistance 5.0)  (:hither 100.0) (:yon 10000.0) \\
-\> (:screen 1.0) (:screen-x screen) (:screen-y screen) \\
-\> (:xcenter 500) (:ycenter 400) \\}
-{新しい{\bf viewer}を作り、{\bf *viewer*}リストに置く。}
+\longdescription{関数}{view}{\&key \= (size 500) (width size) (height size) \\
+\> (x 100) (y 100) \\
+\> (title "eusx") \\
+\> (border-width 3) \\
+\> (background 0) \\
+\> (viewpoint \#f(300 200 100)) (target \#f(0 0 0)) \\
+\> (viewdistance 5.0) (hither 100.0) (yon 10000.0) \\
+\> (screen 1.0) (screen-x screen) (screen-y screen) \\
+\> (xcenter 500) (ycenter 400)}{
+新しい{\bf viewer}を作り、{\bf *viewer*}リストに置く。}
 
 \end{refdesc}
 
@@ -367,34 +406,33 @@ NDCの中に定義される{\em position}に{\em string}を描く。}
 
 \begin{refdesc}
 
-\funcdesc{draw}{[viewer] \&rest thing}{
+\funcdesc{draw}{\&optional viewer \&rest thing}{
 {\em viewer}に{\em thing}を描く。
 {\em thing}は、座標系、立体、面、エッジ、ベクトル、2つのベクトルのリストのどれでも可能である。
 {\tt (progn (view) (draw (make-cube 10 20 30)))}
 は、xwindowに立方体を描く。}
 
 
-\funcdesc{draw-axis}{[viewer] [size] \&rest thing}{
+\funcdesc{draw-axis}{\&optional viewer size \&rest thing}{
 {\em viewer}の中に{\em thing}の座標系の軸を{\em size}の長さで描く。
 {\em thing}は、座標系から得られるどのオブジェクトでも可能である。}
 
 \funcdesc{draw-arrow}{p1 p2}{
 {\bf *viewer*}に{\em p1}から{\em p2}に向かう矢印を描く。}
 
-\funcdesc{hid}{[viewer] \&rest thing }
-{{\em viewer}に陰線処理された画像を描く。
+\funcdesc{hid}{\&optional viewer \&rest thing}{
+{\em viewer}に陰線処理された画像を描く。
 {\em thing}は、{\tt face}または{\tt body}が可能である。}
 
-\funcdesc{hidd}{[viewer] \&rest thing }{
+\funcdesc{hidd}{\&optional viewer \&rest thing}{
 陰線を点線で描くことを除いて、{\bf hid}と同じである。}
 
 \funcdesc{hid2}{body-list viewing}{
 edge-imageオブジェクトで表現される陰線処理画像を生成する。
 その結果は{\bf *hid*}に置かれる。}
 
-\longdescription{render}{\&key \= :bodies :faces (:viewer *viewer*) \` [関数]\\
-\> (:lights *light-sources*)\\
-\> (colormap *render-colormap*) (y 1.0)}{
+\funcdesc{render}{\&key bodies faces (viewer *viewer*) (lights *light-sources*)\\
+(colormap *render-colormap*) (y 1.0)}{
 {\em bodies}と{\em faces}にレイトレーシングを行い、陰面消去した画像を生成する。
 {\bf viewing, viewport}および{\bf viewsurfaceは}、{\em viewer}から得られる。
 {\em lights}は、{\tt light-source}（光源）オブジェクトのリストである。
@@ -468,6 +506,7 @@ HLSは、しばしばHSLとして参照される。
 いるならば、{\em range}は65536とすべきである。
 HSVとHLSとの違いに注意すること。
 HLSでは、鮮明な(rainbow)色は{\tt lightness=0.5}で定義されている。}
+
 \funcdesc{rgb2hls}{red green blue \&optional (range 255)}{
 RGBの色表現を、HLS表現に変換する。}
 
@@ -504,10 +543,12 @@ EusLispのアニメーションは、グラフィックアクセラレータを�
 サンプルプログラムを含んでいる。
 
 \begin{refdesc}
+
 \macrodesc{pixmap-animation}{count \&rest forms}{
 {\em forms}は、{\em count}回評価される。
 それぞれの評価後、{\tt *viewsurface*}の内容は新しいpixmapにコピーされる。
 {\em count}枚の{\bf pixmap}のリストが、返される。}
+
 \funcdesc{playback-pixmaps}{pixmaps \&optional (surf *viewsurface*)}{
 {\em pixmaps}リストのなかの{\bf pixmap}はそれぞれ、
 %{\em wait}$\mu$秒の間隔をおいて
@@ -518,6 +559,7 @@ EusLispのアニメーションは、グラフィックアクセラレータを�
 それぞれの評価後、{\bf *hid*}が持つ{\bf hid}の結果は検索され、
 見える線分は2点一組のリストの形で集められる。
 {\em count}長さのリストが返される。}
+
 \funcdesc{playback-hid-lines}{lines \&optional (view *viewer*)}{
 {\em lines}は、2点一組のリストである。
 {\em view}の上に線分を連続的に描く。

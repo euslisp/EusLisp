@@ -97,6 +97,9 @@ cshのコマンド{\tt limit}で、システムのスタックサイズを増加
 ガーベージコレクションを実行する。割り当てられている中で空いているワード数および全体のワード数
 のリストを返す。}
 
+\vardesc{sys:*gc-hook*}{
+ガーベージコレクションを実行する時に呼ばれる関数を定義する。}
+
 \funcdesc{sys:gctime}{}{
 3つの整数のリストを返す。1つは、ＧＣを呼び出した回数。
 2つは、セルをマーキングするために使用した時間（1ユニットに1/60秒）。
@@ -134,7 +137,7 @@ cshのコマンド{\tt limit}で、システムのスタックサイズを増加
 \funcdesc{sys:reclaim-tree}{object}{
 {\em object}から通過できるsymbolを除いてすべてのオブジェクトを矯正する。}
 
-\funcdesc{sys:btrace}{num}{
+\funcdesc{sys::bktrace}{num}{
 Lispのスタックの{\em num}番目の深さの情報をトレースして表示する。}
 
 \funcdesc{sys:memory-report}{\&optional strm}{
@@ -208,6 +211,7 @@ EusLispは、UNIXオペレーティングシステムのシステムコールと
 
 \subsubsection{時間}
 \begin{refdesc}
+
 \funcdesc{unix:ptimes}{}{
 経過時間、システム時間、ユーザー時間、サブプロセスのシステム時間とサブプロセスのユーザー時間
 の5つの要素を持つリストを返す。
@@ -224,7 +228,7 @@ EusLispは、UNIXオペレーティングシステムのシステムコールと
 {\tt ex.) unix:localtime => \#(10 27 12 8 10 116 2 312 nil (``JST'' ``JST''))}
 }
 
-\funcdesc{unix:asctime}{ tm\_intvector}{
+\funcdesc{unix:asctime}{tm\_intvector}{
 整数ベクトルで表現されるローカル時間を文字列表現に変換する。
 {\tt (unix:asctime (unix:localtime))}は、現在の実際の時間の文字列
 表現を返す。}
@@ -233,6 +237,7 @@ EusLispは、UNIXオペレーティングシステムのシステムコールと
 
 \subsubsection{プロセス}
 \begin{refdesc}
+
 \funcdesc{unix:getpid}{}{
 このプロセスのプロセスID(16ビット整数)を返す。}
 
@@ -242,11 +247,11 @@ EusLispは、UNIXオペレーティングシステムのシステムコールと
 \funcdesc{unix:getpgrp}{}{
 このプロセスのグループIDを返す。}
 
-\funcdesc{unix:setpgrp}{integer}{
+\funcdesc{unix:setpgrp}{}{
 新しいプロセスのグループIDを設定する。}
 
-\funcdesc{unix:getuid}{}
-{このプロセスのユーザーIDを返す。}
+\funcdesc{unix:getuid}{}{
+このプロセスのユーザーIDを返す。}
 
 \funcdesc{unix:geteuid}{}{
 このプロセスの使用可能なユーザーIDを返す。}
@@ -280,9 +285,12 @@ Euslispから他のプログラムへ実行を移す。}
 \funcdesc{unix:wait}{}{
 サブプロセスの中の１つのプロセスの終了を待つ。}
 
-\funcdesc{unix:exit}{code}{
+\funcdesc{unix::exit}{code}{
 実行を終了し、{\em code}を終了状態として返す。
 ゼロは通常の終了を意味する。}
+
+\vardesc{sys:*exit-hook*}{
+プロセスが終了する直前に呼ばれる関数を定義する。}
 
 \funcdesc{unix:getpriority}{which who}{
 このプロセスが持つ最大の優先順位を返す。
@@ -325,7 +333,7 @@ Euslispプロセスに低い優先順位を指定することは、大きい値�
 \end{verbatim}
 }
 
-\funcdesc{unix:system}{[command]}{
+\funcdesc{unix:system}{\&optional command}{
 サブシェルで{\em command}を実行する。
 {\em command}は、Bourn-shellで認識されるものでなければならない。}
 
@@ -349,7 +357,7 @@ Euslispプロセスに低い優先順位を指定することは、大きい値�
 \subsubsection{ファイルシステムと入出力}
 \begin{refdesc}
 
-\funcdesc{unix:uread}{stream [buffer] [size]}{
+\funcdesc{unix:uread}{stream \&optional buffer size}{
 {\em stream}から{\em size}バイト読み込む。
 {\em stream}は、ストリームオブジェクトあるいはファイルディスクリプタ(fd)を
 表現する整数である。
@@ -364,22 +372,32 @@ Euslispプロセスに低い優先順位を指定することは、大きい値�
 もし、{\em size}が省略されたならば、{\em string}の全部の長さが出力される。}
 
 \fundesc{unix:fcntl}{stream command argument}
+
 \fundesc{unix:ioctl}{stream command buffer}
+
 \fundesc{unix:ioctl\_}{stream command1 command2}
-\fundesc{unix:ioctl\_R}{stream command1 command2 buffer [size]}
-\fundesc{unix:ioctl\_W}{stream command1 command2 buffer [size]}
-\fundesc{unix:ioctl\_WR}{stream command1 command2 buffer [size]}
-\funcdesc{unix:close}{fd}{
+
+\fundesc{unix:ioctl\_R}{stream command1 command2 buffer \&optional size}
+
+\fundesc{unix:ioctl\_W}{stream command1 command2 buffer \&optional size}
+
+\fundesc{unix:ioctl\_WR}{stream command1 command2 buffer \&optional size}
+
+\funcdesc{unix:uclose}{fd}{
 {\em fd}で指定されるファイルをクローズする。}
+
 \funcdesc{unix:dup}{fd}{
 {\em fd}で指定されるファイルディスクリプタを２重化して返す。}
+
 \funcdesc{unix:pipe}{}{
 パイプを作成する。このパイプの入出力ストリームを返す。}
-\funcdesc{unix:lseek}{stream position [whence 0]}{
+
+\funcdesc{unix:lseek}{stream position \&optional (whence 0)}{
 {\em stream}のファイルポインタを{\em whence}から{\em position}の
 位置に設定する。}
 
-\funcdesc{unix:link}{path1 path2}{hardリンクを作る。}
+\funcdesc{unix:link}{path1 path2}{
+hardリンクを作る。}
 
 \funcdesc{unix:unlink}{path}{
 {\em path}で指定されたファイルのhardリンクを取り去る。
@@ -388,11 +406,14 @@ Euslispプロセスに低い優先順位を指定することは、大きい値�
 \funcdesc{unix:mknod}{path mode}{
 ファイルシステムにinodeを作る。
 {\em path}は、{\bf pathname}オブジェクトでなく文字列でなければならない。}
+
 \funcdesc{unix:mkdir}{path mode}{
 ファイルシステムにディレクトリを作る。
 {\em path}は、{\bf pathname}オブジェクトでなく文字列でなければならない。}
+
 \funcdesc{unix:access}{path mode}{
 {\em path}へのアクセス権利をチェックする。}
+
 \funcdesc{unix:stat}{path}{
 {\em path}のinode情報を得て、以下に示す整数のリストを返す。}
 {\small
@@ -410,38 +431,50 @@ Euslispプロセスに低い優先順位を指定することは、大きい値�
   st_mode	; file mode
 \end{verbatim}
 }
-\funcdesc{unix:chdir}{path}{現在のディレクトリを{\em path}に変更する。}
-\funcdesc{unix:getwd}{}{現在のディレクトリを返す。}
+
+\funcdesc{unix:chdir}{path}{
+現在のディレクトリを{\em path}に変更する。}
+
+\funcdesc{unix:getwd}{}{
+現在のディレクトリを返す。}
 
 \funcdesc{unix:chmod}{path integer}{
 {\em path}のアクセスモード(permission)を変更する。}
+
 \funcdesc{unix:chown}{path integer}{
 {\em path}ファイルのオーナーを変更する。}
 
-\funcdesc{unix:isatty}{(stream $|$ fd)}{
-もし、{\em stream}がTTY型のデバイス(シリアルポートあるいは仮想TTY)に接続されているなら
+\funcdesc{unix:isatty}{stream-or-fd}{
+もし、{\em stream-or-fd}がTTY型のデバイス(シリアルポートあるいは仮想TTY)に接続されているなら
 Tを返す。}
 
 \funcdesc{unix:msgget}{key mode}{
 {\em key}によってアドレスされるメッセージキューを作成し、配置する。}
-\fundesc{unix:msgsnd}{qid buf [mtype [flag]]}
-\fundesc{unix:msgrcv}{qid buf [size [mtype [flag]]]}
+
+\fundesc{unix:msgsnd}{qid buf \&optional msize mtype flag}
+
+\fundesc{unix:msgrcv}{qid buf \&optional mtype flag}
 
 \funcdesc{unix:socket}{domain type \&optional proto}{
 {\em domain}に定義されている名前を持ち{\em type}を抽象型とするソケットを作成する。
 {\em type}は、1 (SOCK\_STREAM),
 2 (SOCK\_DGRAM), 3 (SOCK\_RAW), 4 (SOCK\_RDM), 5 (SOCK\_SEQPACKET)の内の1つである。}
+
 \funcdesc{unix:bind}{socket name}{
 {\em name}と{\em socket}を関連付ける。
 もし、ソケットがUNIX領域内で定義されているならば、{\em name}は、UNIXのパス名でなければならない。}
+
 \funcdesc{unix:connect}{socket addr}{
 {\em socket}と{\em addr}で指定される他のソケットを接続する。}
+
 \funcdesc{unix:listen}{socket \&optional backlog}{
 {\em socket}から接続要求を受け始める。
 {\em backlog}は、接続の確定を待つためのキューの長さを指定する。}
+
 \funcdesc{unix:accept}{socket}{
 {\em socket}から接続要求を受け、両方向にメッセージを交換できるファイルディスクリプタ
 を返す。}
+
 \funcdesc{unix:recvfrom}{socket \&optional mesg from flag}{
 {\em socket}からデータを書いたメッセージを受ける。
 そのソケットは、{\bf unix:bind}により名前を割り当てられなければならない。
@@ -449,6 +482,7 @@ Tを返す。}
 もし、{\em mesg}が与えられたならば、{\bf unix:recvfrom}は受け取ったバイト数を返す。
 もし省略されたなら、メッセージを蓄積するための新しい文字列を作成し、
 その文字列を返す。}
+
 \funcdesc{unix:sendto}{socket addr mesg \&optional len flag}{
 {\em addr}によって指定される他のソケットへデータの書かれたメッセージを送る。
 {\em socket}は、名前が割り当てられてないデータ書き込み型のソケットでなければならない。
@@ -473,6 +507,7 @@ Tを返す。}
 \subsubsection{シグナル}
 
 \begin{refdesc}
+
 \funcdesc{unix:signal}{signal func \&optional option}{
 {\em signal}に対してシグナルハンドラー{\em func}をインストールする。
 BSD4.2システムにおいて、システムコール処理の間に捕まえたシグナルは、
@@ -500,6 +535,7 @@ BSD4.2システムにおいて、システムコール処理の間に捕まえ�
 {\em timer}は、0 ({\tt ITIMER\_REAL}), 1 ({\tt ITIMER\_VIRTUAL}),
 2({\tt ITIMER\_PROF})の内の１つである。
 秒単位の時間(timer)と間隔(interval)の2つの要素を持つリストを返す。}
+
 \funcdesc{unix:setitimer}{timer value interval}{
 {\em timer}に{\em value}と{\em interval}を設定する。
 {\em timer}は、0 ({\tt ITIMER\_REAL}), 1 ({\tt ITIMER\_VIRTUAL}),
@@ -537,11 +573,13 @@ fd=1あるいはfd=2で読み込み可能かあるいはfd=2で書き込み可�
 Solaris2の上では、メインの最上位レベルが分割されたスレッド内で実行する。
 
 \begin{refdesc}
+
 \funcdesc{unix:thr-self}{}{
 現在実行されているスレッドのID(整数)を返す。}
 
 \funcdesc{unix:thr-getprio}{id}{
 {\em id}で指定されたスレッドの実行優先順位を返す。}
+
 \funcdesc{unix:thr-setprio}{id newprio}{
 {\em id}で指定されたスレッドの実行優先順位に{\em newprio}を設定する。
 {\em newprio}が小さい数値の場合、優先順位が高いことを意味する。
@@ -578,13 +616,19 @@ Solaris2の上では、メインの最上位レベルが分割されたスレッ
 
 \subsubsection{低レベルメモリ管理}
 \begin{refdesc}
+
 \funcdesc{unix:malloc}{integer}{
 Euslispのメモリ空間の外にメモリを配置する。}
+
 \funcdesc{unix:free}{integer}{
 {\bf unix:malloc}で配置されたメモリブロックを開放する。}
+
 \fundesc{unix:valloc}{integer}
+
 \fundesc{unix:mmap}{address length protection share stream offset}
+
 \fundesc{unix:munmap}{address length}
+
 \fundesc{unix:vadvise}{integer}
 
 \end{refdesc}
@@ -607,34 +651,65 @@ Unixはターミナルデバイスを{\tt ioctl}の2番目の引数に命令を�
 \end{description}
 \begin{refdesc}
 
-\funcdesc{unix:tiocgetp}{stream [sgttybuf]}{パラメータを得る。}
-\funcdesc{unix:tiocsetp}{stream sgttybuf}{パラメータを設定する。}
-\fundesc{unix:tiocsetn}{stream [sgttybuf]}
-\fundesc{unix:tiocgetd}{stream [sgttybuf]}
-\funcdesc{unix:tiocflush}{stream}{バッファをすべて出力する。}
-\funcdesc{unix:tiocgpgrp}{stream integer}{プロセスのグループIDを得る。}
-\funcdesc{unix:tiocspgrp}{stream integer}{プロセスのグループIDを設定する。}
+\funcdesc{unix:tiocgetp}{stream \&optional sgttybuf}{
+パラメータを得る。}
+
+\funcdesc{unix:tiocsetp}{stream sgttybuf}{
+パラメータを設定する。}
+
+\fundesc{unix:tiocsetn}{stream \&optional sgttybuf}
+
+\fundesc{unix:tiocgetd}{stream \&optional sgttybuf}
+
+\funcdesc{unix:tiocflush}{stream}{
+バッファをすべて出力する。}
+
+\funcdesc{unix:tiocgpgrp}{stream integer}{
+プロセスのグループIDを得る。}
+
+\funcdesc{unix:tiocspgrp}{stream integer}{
+プロセスのグループIDを設定する。}
+
 \fundesc{unix:tiocoutq}{stream integer}
+
 \fundesc{unix:fionread}{stream integer}
+
 \fundesc{unix:tiocsetc}{stream buf}
+
 \fundesc{unix:tioclbis}{stream buf}
+
 \fundesc{unix:tioclbic}{stream buf}
+
 \fundesc{unix:tioclset}{stream buf}
+
 \fundesc{unix:tioclget}{stream buf}
 
-\funcdesc{unix:tcseta}{stream buffer}{ターミナルパラメータをすぐに設定する。}
-\funcdesc{unix:tcsets}{stream buffer}{ターミナルパラメータを設定する。}
-\funcdesc{unix:tcsetsw}{stream buffer}{出力として列をなす全ての文字を転送した
-後、ターミナルパラメータを設定する。}
-\funcdesc{unix:tcsetsf}{stream buffer}{出力として列をなす全ての文字を転送し、
+\funcdesc{unix:tcseta}{stream buffer}{
+ターミナルパラメータをすぐに設定する。}
+
+\funcdesc{unix:tcsets}{stream buffer}{
+ターミナルパラメータを設定する。}
+
+\funcdesc{unix:tcsetsw}{stream buffer}{
+出力として列をなす全ての文字を転送した後、ターミナルパラメータを設定する。}
+
+\funcdesc{unix:tcsetsf}{stream buffer}{
+出力として列をなす全ての文字を転送し、
 入力として列をなす全ての文字列を廃棄した
 後、ターミナルパラメータを設定する。}
+
 \fundesc{unix:tiocsetc}{stream buffer}
+
 \fundesc{unix:tcsetaf}{stream buffer}
+
 \fundesc{unix:tcsetaw}{stream buffer}
+
 \fundesc{unix:tcgeta}{stream buffer}
+
 \fundesc{unix:tcgets}{stream buffer}
+
 \fundesc{unix:tcgetattr}{stream buffer}
+
 \fundesc{unix:tcsetattr}{stream buffer}
 
 \end{refdesc}
@@ -648,6 +723,7 @@ Sunにおいて、そのファイルは、{\tt cc -c -Dsun4 -Bstatic}でコン�
 {\tt (load "clib/ndbm" :ld-option "-lc")}でEuslispにロードすること。
 
 \begin{refdesc}
+
 \funcdesc{dbm-open}{dbname mode flag}{
 {\bf dbm-open}は、データベースファイルを作るときと、そのデータベースに読み込み／書き込み
 をするとき、最初に呼び出されなければならない。
@@ -705,6 +781,7 @@ ezの中で{\tt esc-P}あるいは{\tt esc-M}命令を発行することによ�
 emacsの上でも{\tt M-X run-lisp}命令でおなじことが可能である。
 
 \begin{refdesc}
+
 \funcdesc{cd}{\&optional (dir (unix:getenv "HOME"))}{
 現在のディレクトリを変更する。}
 
@@ -715,7 +792,9 @@ ezエディターの画面に入る。それからLisp書式を読み込み、
 \funcdesc{piped-fork}{\&optional (exec) \&rest args}{
 プロセスをforkし、両方向ストリームをEuslispとサブプロセスの間に作る。}
 
-\funcdesc{rusage}{}{このプロセスのリソースの使用状況を表示する。}
+\funcdesc{rusage}{}{
+このプロセスのリソースの使用状況を表示する。}
+
 \end{refdesc}
 
 \newpage
@@ -895,8 +974,8 @@ Cの構造体は、{\bf defstruct}マクロにより定義することができ�
 
 \begin{refdesc}
 
-\macrodesc{load-foreign}{objfile \&key symbol-input symbol-output (symbol-file objfile) ld-option)}
-{Euslisp以外の言語で書かれたオブジェクトモジュールをロードする。
+\macrodesc{load-foreign}{objfile \&key symbol-input symbol-output (symbol-file objfile) ld-option)}{
+Euslisp以外の言語で書かれたオブジェクトモジュールをロードする。
 Solaris2において、{\bf load-foreign}は{\em :entry}パラメータにnull文字列を
 与えた{\bf load}を呼び出す。
 コンパイルされたコードのオブジェクトが返される。
@@ -969,7 +1048,7 @@ call-by-refferenceによって渡されることに注意すべきである。
 渡される前に整数ベクトルあるいは実数ベクトルに
 置かれなければならない。}
 
-\macrodesc{defun-c-callable}{funcname paramspec resulttype . body}{
+\macrodesc{defun-c-callable}{funcname paramspec resulttype \&rest body}{
 他言語のコードから呼び出すことができるEuslispの関数を定義する。
 {\em funcname}は、Euslispの関数として定義されているsymbolである。
 {\em paramspec}は、{\bf defforeign}の中の型指定のリストである。
@@ -997,11 +1076,11 @@ call-by-refferenceによって渡されることに注意すべきである。
 これは、多次元あるいは一般の配列を他言語に渡すために必要である。
 しかし、１次元のベクトルは直接渡すことができる。}
 
-\funcdesc{float2double}{float-vector [doublevector]}{
+\funcdesc{float2double}{float-vector \&optional doublevector}{
 {\tt float-vector}を倍精度実数の表現に変換する。
 その結果は、{\tt float-vector}であるが、最初の引き数の長さの２倍になっている。}
 
-\funcdesc{double2float}{doublevector [float-vector]}{
+\funcdesc{double2float}{doublevector \&optional float-vector}{
 倍精度実数表現が単精度の{\tt float-vector}に変換される。}
 
 \end{refdesc}
