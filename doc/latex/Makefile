@@ -43,7 +43,7 @@ PSFILES=$(wildcard fig/*.ps)
 PNGFILES=$(PSFILES:%.ps=%.png)
 %.png : %.ps
 	#ps2png $^ $@
-	pstopnm -stdout $^ | pnmtopng - > $@
+	pstopnm -stdout $^ | pnmflip -rotate270 | pnmtopng - > $@
 
 
 rst: manual.rst
