@@ -42,7 +42,9 @@ RSTFILES=$(TEXFILES:%.tex=%.rst)
 PSFILES=$(wildcard fig/*.ps)
 PNGFILES=$(PSFILES:%.ps=%.png)
 %.png : %.ps
-	ps2png $^ $@
+	#ps2png $^ $@
+	pstopnm -stdout $^ | pnmtopng - > $@
+
 
 rst: manual.rst
 manual.rst: latex.py $(RSTFILES) $(PNGFILES)
