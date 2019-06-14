@@ -314,6 +314,7 @@
 (system::exec-module-init "eusdebug" "l/eusdebug.l")
 (system::exec-module-init "eusforeign" "l/eusforeign.l")
 (system::exec-module-init "extnum" "l/extnum.l")
+(system::exec-module-init "conditions" "l/conditions.l")
 (unless (find-package "GEOMETRY")
 	(make-package "GEOMETRY" :nicknames '("GEO"))
 	(in-package "GEOMETRY"))

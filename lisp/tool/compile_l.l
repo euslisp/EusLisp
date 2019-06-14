@@ -45,6 +45,7 @@
 (comp::compile-file-if-src-newer "hashtab.l" *objdir*)
 (comp::compile-file-if-src-newer "eusforeign.l" *objdir*)
 (comp::compile-file-if-src-newer "extnum.l" *objdir*)
+(comp::compile-file-if-src-newer "conditions.l" *objdir*)
 (comp::compile-file-if-src-newer "mathtran.l" *objdir*)
 (comp::compile-file-if-src-newer "toplevel.l" *objdir*)
 (comp::compile-file-if-src-newer "tty.l" *objdir*) 
