@@ -14,7 +14,7 @@
 (	"readmacro" "object" "packsym" "common"
 	"constants"
 	"stream" "string" "loader" "pprint" "process"
-	"hashtab" "array" "mathtran" "eusdebug" "eusforeign"
+	"hashtab" "array" "mathtran" "eusdebug" "eusforeign" "extnum"
 	"par" 
 	;; TOPLEVEL
 	"tty" "history" "toplevel"

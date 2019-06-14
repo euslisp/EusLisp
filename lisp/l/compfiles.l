@@ -9,7 +9,7 @@
 (compile-file "process.l"    :cc nil)
 (compile-file "hashtab.l"    :cc nil)
 (compile-file "array.l"    :cc nil)
-(compile-file "mathtran.l"    :cc nil)
+(compile-file "extnum.l"    :cc nil)
 (compile-file "mathtran.l"    :cc nil)
 (compile-file "eusdebug.l"    :cc nil)
 (in-package "GEO")

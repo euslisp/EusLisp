@@ -94,7 +94,8 @@ Solaris2上では、イベントを配るための異なったスレッドであ
 
 \begin{refdesc}
 
-\vardesc{event}{もっとも最近のイベント構造を持つ25要素の整数ベクトル}
+\vardesc{event}{
+もっとも最近のイベント構造を持つ25要素の整数ベクトル}
 
 \funcdesc{next-event}{}{
 {\bf event}の中にイベント構造を蓄積し、
@@ -190,8 +191,9 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 \subsection{パネル}
 
 \begin{refdesc}
-\classdesc{panel}{xwindow}
-{(pos items fontid\\
+
+\classdesc{panel}{xwindow}{
+(pos items fontid\\
 \>rows columns	;total number of rows and columns\\
 \>next-x next-y\\
 \>item-width item-height)}{
@@ -202,11 +204,9 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 アプリケーションwindowは、{\bf panel}のサブクラスとして定義
 去れなければならない。}
 
-\longdescription{:create}{\&rest args \= \&key \= ((:item-height iheight) 30)
-((:item-width iwidth) 50)
-\` [メソッド]\\
-\>\> (:font font-lucidasans-bold-12)  ((:background color) *bisque1*) \\
-\> \&allow-other-keys)}{
+\longdescription{メソッド}{:create}{\&rest args \= \&key \= (item-height 30) (item-width 50) \\
+\>\> (font font-lucidasans-bold-12)  ((:background color) *bisque1*) \\
+\> \&allow-other-keys}{
 {\bf panel}を生成し、初期化する。
 スーパークラスの{\tt :create}が呼び出されるため、
 {\bf xwindow}に対する全ての生成用パラメータ（{\em :width, :height, 
@@ -214,7 +214,9 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 {\em :item-height}と{\em :item-width}は、最小の高さと幅をそれぞれのパネルアイテムに
 与える。}
 
-\methoddesc{:items}{}{関連するアイテムを全てリストで返す。}
+\methoddesc{:items}{}{
+関連するアイテムを全てリストで返す。}
+
 \methoddesc{:locate-item}{item \&optional x y}{
 {\em item}は、xwindowオブジェクト（ふつうはパネルアイテム）である。
 もし{\em x}と{\em y}が与えられたならば、アイテムはそこに置かれる。
@@ -234,10 +236,9 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 \caption{panelのアイテムレイアウト\label{panellayout}}
 \end{figure}
 
-\longdescription{:create-item}{klass label receiver method \= \&rest args
-\` [メソッド]\\
-\> \&key ((:font fontid)\\
-\> \&allow-other-keys)}{
+\longdescription{メソッド}{:create-item}{klass label receiver method \= \&rest args \\
+\> \&key (font fontid)\\
+\> \&allow-other-keys}{
 {\em klass}で指定されるパネルアイテムのクラス
 （すなわち、{\tt button-item,  menu-button-item, slider-item, joystick-item}など),
 のインスタンスを作り、{\tt :locate-item}を用いてpanelにアイテムを置く。
@@ -246,11 +247,14 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 {\em receiver}と{\em method}は、一致するイベントを呼び出すイベントハンドラを
 指定する。}
 
-\methoddesc{:delete-items}{}{パネルアイテムを全て削除する。}
-\longdescription{:create-menubar}{ \= \&rest args \`[メソッド]\\
-\> \&key (:font fontid)\\
+\methoddesc{:delete-items}{}{
+パネルアイテムを全て削除する。}
+
+\longdescription{メソッド}{:create-menubar}{\= \&rest args \\
+\> \&key (font fontid)\\
 \> \&allow-other-keys}{
 {\em menubar-panel}を作成し、panelの最上部に置く。}
+
 \end{refdesc}
 
 以下に示すメソッドは、イベントがイベントハンドラのないpanelに送られたとき、
@@ -258,16 +262,32 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 ユーザーのアプリケーションでは、これらのメソッドを上書きしなければならない。
 
 \begin{refdesc}
+
 \methoddesc{:quit}{\&rest a}{
 {\bf window-main-loop}に{\tt :quit}メッセージを送り、
 イベント処理を停止する。}
-\methoddesc{:KeyPress}{event}{NILを返す。}
-\methoddesc{:KeyRelease}{event}{NILを返す。}
-\methoddesc{:ButtonPress}{event}{NILを返す。}
-\methoddesc{:ButtonRelease}{event}{NILを返す。}
-\methoddesc{:MotionNotify}{event}{NILを返す。}
-\methoddesc{:EnterNotify}{event}{NILを返す。}
-\methoddesc{:LeaveNotify}{event}{NILを返す。}
+
+\methoddesc{:KeyPress}{event}{
+NILを返す。}
+
+\methoddesc{:KeyRelease}{event}{
+NILを返す。}
+
+\methoddesc{:ButtonPress}{event}{
+NILを返す。}
+
+\methoddesc{:ButtonRelease}{event}{
+NILを返す。}
+
+\methoddesc{:MotionNotify}{event}{
+NILを返す。}
+
+\methoddesc{:EnterNotify}{event}{
+NILを返す。}
+
+\methoddesc{:LeaveNotify}{event}{
+NILを返す。}
+
 \end{refdesc}
 
 \subsubsection{サブパネル(メニューとメニューバー)}
@@ -275,13 +295,12 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 \begin{refdesc}
 % menu-panel
 \classdesc{menu-panel}{panel}{
- (items item-dots item-height\\
+(items item-dots item-height\\
                 \>charwidth charheight\\
                 \>height-offset\\
                 \>highlight-item\\
                 \>color-pixels\\
-                \>active-color)
-}{
+                \>active-color)}{
 {\bf menu-panel}は、{\tt panel-button}と{\tt menu-item}のみを
 含むことができるパネルの一種である。
 {\tt panel}と異なり、{\tt menu-panel}はふつう見えないし、
@@ -297,18 +316,14 @@ Xeventを受け、イベントが発生したwindowオブジェクトにそれ�
 それから、{\tt menu-button-item}がpanelの中あるいはmenubarの中に
 {\em :menu}の引数として{\tt menu-panel}と一緒に作成される。}
 
-\longdescription{:create}{\&rest args \= \&key\= (:items) (:border-width 0)
-   (:font font-courb12)
-\` [メソッド]\\
-\>\> (:width 100) (:height-offset 15) (:color *bisque1*)
-                      (:active *bisque2*) \\
-           \>\&allow-other-keys) 
-  }{
+\longdescription{メソッド}{:create}{\&rest args \= \&key\= items (border-width 0) (font font-courb12) \\
+\>\> (width 100) (height-offset 15) (color *bisque1*) (active *bisque2*) \\
+\> \&allow-other-keys}{
 {\bf menu-panel} windowを作成する。
 そのwindowの大きさは、新しいmenu-itemが追加される時に
 拡張される。}
 
-\methoddesc{:add-item}{label name \&optional (receiver self)  \&rest mesg}{
+\methoddesc{:add-item}{label name \&optional (receiver self) \&rest mesg}{
 この{\bf menu-panel} windowの中にmenuアイテムを追加し、
 対応する行動を張り付ける。
 マウスボタンがアイテムの上で外されたとき、
@@ -419,9 +434,7 @@ TextViewPanelは、windowマネージャーにより一番外側のタイトルw
 
 \subsection{パネルアイテム}
 \begin{refdesc}
-\classdesc{panel-item}{xwindow}
-{(pos notify-object notify-method\\
-\>fontid label labeldots)}{
+\classdesc{panel-item}{xwindow}{(pos notify-object notify-method fontid label labeldots)}{
 {\bf panel-item}は、パネルアイテムwindowのすべての種類において、
 アイテムが指定するイベントが発生したとき
 {\tt notify-object}の{\tt notify-method}を呼び出すための
@@ -448,9 +461,8 @@ TextViewPanelは、windowマネージャーにより一番外側のタイトルw
 \end{description}
 }
 
-\longdescription{:create}{name reciever method \= \&rest args
-\` [メソッド] \\
-\> \&key ((:width w) 100) ((:height h) 100) (:font font-courb12)\\
+\longdescription{メソッド}{:create}{name reciever method \= \&rest args \\
+\> \&key (width 100) (height 100) (font font-courb12)\\
 \> \&allow-other-keys}{
 パネルアイテムを作成する。
 パネルアイテムは、抽象クラスである。
@@ -464,16 +476,15 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 {\tt notify-object}の{\tt notify-method}
 を呼び出す。}
 
-\methoddesc{:draw-label}{\&optional (state :top) (color bg-color) (border 2) (offset)}{
+\methoddesc{:draw-label}{\&optional (state :top) (color bg-color) (border 2) offset}{
 {\bf button-item}のラベルを書く。}
 
-\longdescription{:create}{label revciever method \= \&rest args
-\` [メソッド]\\
-\>\&key\= :width :height (:font (send parent :gc :font))\\
-\>\> (:background (send parent :gc :background)) \\
-\>\> (:border-width 0) \\
-\>\> (:state :top)\\
-\>\&allow-other-keys}{
+\longdescription{メソッド}{:create}{label revciever method \= \&rest args \\
+\> \&key\= width height (font (send parent :gc :font))\\
+\>\> (background (send parent :gc :background)) \\
+\>\> (border-width 0) \\
+\>\> (state :top)\\
+\> \&allow-other-keys}{
 {\bf button-item}を作成する。
 もし、ボタンの幅と高さが与えられないなら、サイズは
 与えられたフォントを用いて書かれた
@@ -490,10 +501,10 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 {\em event}の背景色を標準に変更する。}
 
 
-\classdesc{menu-button-item}{button-item}{(\= items item-dots item-labels\\
+\classdesc{menu-button-item}{button-item}{
+(\= items item-dots item-labels\\
 \>charwidth charheight \\
-\>menu-window window-pos high-light)
-}{
+\>menu-window window-pos high-light)}{
 プルダウンメニューを定義する。
 {\bf menu-button-item}は、{\tt button-item}のようであるが、
 {\bf menu-button-item}は、ボタンの下の関連する{\tt menu-panel}が
@@ -503,10 +514,10 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 メニューアイテムの１つの上でマウスボタンが外されたときに、本当のメッセージが
 送られる。}
 
-\longdescription{:create}{\= label reciever method \` [メソッド]\\
-\>\&rest args\\
-\>\&key (:menu nil) (:items) (:state :flat)\\
-\>\&allow-other-keys}{
+\longdescription{メソッド}{:create}{\= label reciever method \\
+\> \&rest args\\
+\> \&key menu items (state :flat)\\
+\> \&allow-other-keys}{
 プルダウンメニューを作成する。
 {\em receiver}と{\em method}引き数は、影響を与えない。}
 
@@ -519,20 +530,16 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 このボタンを元に戻す。}
 
 % Bitmap-button-item
-\classdesc{bitmap-button-item}{button-item}{
-(pixmap-id bitmap-width bitmap-height)
-}{
+\classdesc{bitmap-button-item}{button-item}{(pixmap-id bitmap-width bitmap-height)}{
 {\bf bitmap-button-item}の関数は、{\tt button-item}に似ているが、
 表現が異なっている。
 {\tt button-item}の場合にボタンの上に簡単なラベル文字列を描く代わりに、
 {\tt bitmap-button-item}では、ボタンが作られたときにbitmapファイルから
 ロードされるpixmapを描く。}
 
-\longdescription{:create}{ bitmap-file reciever method \= \&rest args
-\` [メソッド]\\
-                 \>\&key :width :height\\
-                 \>\&allow-other-keys)
-}{
+\longdescription{メソッド}{:create}{bitmap-file reciever method \= \&rest args \\
+\> \&key width height\\
+\> \&allow-other-keys)}{
 {\bf bitmap-button-item}を作成する。
 最初の引き数{\em bitmap-file}は、{\tt button-item}の{\em label}引き数
 を置き換えたものである。}
@@ -546,38 +553,33 @@ button-itemは、四角ボックスとその中のラベル文字列を持って
 
 % choice-item
 \classdesc{choice-item}{button-item}{
- (choice-list active-choice transient-choice \\
-                \>choice-dots choice-pos button-size)
-}{
+(choice-list active-choice transient-choice \\
+\> choice-dots choice-pos button-size)}{
 {\bf choice-item}は、丸い選択ボタンの集合である。
 １つの選択はいつも活性化しており、同時に１つの選択だけが
 活性化することができる。
 {\bf choice-item}は、ラジオボタンと同様な機能を提供する。}
 
-\longdescription{:create}{label reciever method \= \&rest args
-\` [メソッド]\\
-           \>\&key \=(:choices '("0" "1")) (:initial-choice 0)\\
-\>\> (:font (send parent :gc :font))\\
-                \>\>(:button-size 13)\\
-                \>\>(:border-width 0)\\
-  }{
+\longdescription{メソッド}{:create}{label reciever method \= \&rest args \\
+\> \&key \= (choices '("0" "1")) (initial-choice 0)\\
+\>\> (font (send parent :gc :font))\\
+\>\> (button-size 13)\\
+\>\> (border-width 0)}{
 {\bf choice-item-button}を作成する。
 それぞれの選択ボタンは{\em :button-size}の半径を持つ円である。
 新しい選択ボタンが選択されたとき、
 {\tt notify-object}の{\tt notify-method}が
 choice-itemオブジェクトと選択された選択ボタンの番号と一緒に呼び出される。}
 
-\methoddesc{:value}{\&optional (new-choice) (invocation)}{
+\methoddesc{:value}{\&optional new-choice invocation}{
 もし、{\em new-choice}が与えられたならば、現在の活性化選択ボタンとして
 設定し、対応する円が黒色になる。
 もし{\em  invocation}も指定されているなら、{\tt notify-object}の
 {\tt notify-method}が呼び出される。
 {\tt :value}は、現在の（あるいは新しい）選択ボタンの番号を返す。}
 
-\methoddesc{:draw-active-button}{\&optional
-(old-choice active-choice) (new-choice active-choice)}{
-ボタンを活性化として書く。
-}
+\methoddesc{:draw-active-button}{\&optional (old-choice active-choice) (new-choice active-choice)}{
+ボタンを活性化として書く。}
 
 \methoddesc{:ButtonPress}{event}{
 もし、選択ボタンのどこかでマウスボタンが押されているなら、
@@ -587,8 +589,7 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
 \methoddesc{:ButtonRelease}{event}{
 もし、既に押されていたところと同じボタンの上でマウスボタンが外されたなら、
 {\tt active-choice}が更新され、
-{\tt notify-object}の{\tt notify-method}が呼び出される。
-}
+{\tt notify-object}の{\tt notify-method}が呼び出される。}
 
 % Slider-item
 \classdesc{slider-item}{panel-item}{
@@ -596,19 +597,17 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
                 \>minlabel maxlabel valueformat\\
                 \>bar-x bar-y bar-width bar-height valuedots label-base\\
                 \>nob-x nob-moving\\
-                \>charwidth) 
-}{
+                \>charwidth)}{
 {\tt choice-item}が離散的な値の選択に使用されるのに対し、
 {\bf slider-item}は{\tt min-value}と{\tt max-value}の間の範囲の
 連続的な値に対して使用される。
 それぞれ値が変化した瞬間、slider-itemオブジェクトと新しい値が引き数として
 一緒に{\tt notify-object}の{\tt notify-method}が呼び出される。}
 
-\longdescription{:create}{label reciever method \= \&rest args
-\` [メソッド]\\
-\>\&key (:min 0.0) (:max 1.0) (:parent)\\
-\>(:min-label "") (:max-label "") (:value-format "~4,2f")\\
-\>(:font font-courb12) (:span 100) (:border-width 0) (:initial-value min)  }{
+\longdescription{メソッド}{:create}{label reciever method \= \&rest args \\
+\> \&key (min 0.0) (max 1.0) parent\\
+\> (min-label "") (max-label "") (value-format "~4,2f")\\
+\> (font font-courb12) (span 100) (border-width 0) (initial-value min)}{
 {\bf slider-item}を作成する。
 スライドのノブは、バーの上に小さな黒の四角として表示される。
 左端が{\em :min}値を表現し、右端が{\em :max}値を表現する。
@@ -624,23 +623,20 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
 
 % JoyStick-item
 \classdesc{joystick-item}{panel-item}{
- (stick-size min-x min-y max-x max-y\\
+(stick-size min-x min-y max-x max-y\\
                 \>center-x center-y stick-x stick-y\\
                 \>value-x value-y\\
                 \>stick-return stick-grabbed\\
-                \>fraction-x fraction-y)
-}{
+                \>fraction-x fraction-y)}{
 {\bf joystick-item}は、2次元のslider-itemとしてみなすことができる。
 2つの連続値はクモの巣のような同心円図の上を動く黒い円によって
 指定することができる(図 \ref{panelitem})。}
 
-\longdescription{:create}{name reciever method \= \&rest args
-\` [メソッド]\\
-           \>\&key \=(:stick-size 5) (:return nil)\\
-                \>\>(:min-x -1.0) (:max-x 1.0)\\
-                \>\>(:min-y -1.0) (:max-y 1.0)\\
-           \>\&allow-other-keys) 
-  }{
+\longdescription{メソッド}{:create}{name reciever method \= \&rest args \\
+\> \&key \= (stick-size 5) return\\
+\>\> (min-x -1.0) (max-x 1.0)\\
+\>\> (min-y -1.0) (max-y 1.0)\\
+\> \&allow-other-keys}{
 {\em :stick-size}は、スティックの黒い円の半径である。
 同心円図の円の大きさは、{\bf joystick-item} windowの幅と高さ
 に合うように決定される。
@@ -655,7 +651,8 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
 %}
 %\methoddesc{:draw-stick}{\&optional (x value-x) (y value-y) (erase t)}{
 %}
-\methoddesc{:value}{\&optional (newx) (newy) (invocation)}{
+
+\methoddesc{:value}{\&optional newx newy invocation}{
 もし、{\em newx}と{\em newy}が与えられたなら、
 現在の位置として設定され、ジョイスティックは同心円図の
 対応する位置に移動する。
@@ -701,8 +698,7 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
 \end{figure}
 
 \begin{refdesc}
-\classdesc{text-item}{panel-item}
-{(textwin)}{
+\classdesc{text-item}{panel-item}{(textwin)}{
 {\bf text-item}は、ファイル名のような短いテキストを表示したり入力したり
 するために使用する。
 {\bf text-item}は、ラベル文字列とその右側に小さなテキストwindowを持っている。
@@ -718,9 +714,9 @@ choice-itemオブジェクトと選択された選択ボタンの番号と一緒
 enter（改行）キーを打つことにより、バッファされたテキストが
 {\tt notify-object}の{\tt notify-method}に送られる。}
 
-\longdescription{:create}{label revciever method \= \&rest args \` [メソッド]\\
-\>\&key (:font font-courb12) (:columns 20) (:initial-value ) (:border-width 0)\\
-\>\&allow-other-keys}{
+\longdescription{メソッド}{:create}{label revciever method \= \&rest args \\
+\> \&key (font font-courb12) (columns 20) initial-value (border-width 0)\\
+\> \&allow-other-keys}{
 {\bf text-item}を作成する。
 テキストwindowの行バッファには、長さの制限が無いけれども、
 見える部分は{\em columns}文字に制限されている。}
@@ -776,8 +772,8 @@ canvas内に図や画像を描くためにはXdrawableのメソッドが使用�
 ３つのテキストwindowがある。
 
 \begin{refdesc}
-\classdesc{textWindow}{xwindow}
-{(fontid \\
+\classdesc{textWindow}{xwindow}{
+(fontid \\
 \>charwidth charheight charascent dots \\
 \>win-row-max win-col-max \\
 \>win-row win-col \hspace{20mm} \= ;physical current position in window \\
@@ -801,10 +797,10 @@ canvas内に図や画像を描くためにはXdrawableのメソッドが使用�
 \methoddesc{:init}{id}{
 {\em id}番目のテキストwindowを初期化する。}
 
-\longdescription{:create}{\=\&rest args \` [メソッド]\\
-\>\&key \=:width :height (:font font-courb14) :rows :columns\\
-\>(:show-cursor nil) (:notify-object nil) (:notify-method nil)\\
-\>\&allow-other-keys}{
+\longdescription{メソッド}{:create}{\=\&rest args \\
+\> \&key \= width height (font font-courb14) rows columns\\
+\> show-cursor notify-object notify-method\\
+\> \&allow-other-keys}{
 text-windowを作成する。
 windowの大きさは、{\em :width}と{\em :height}かあるいは{\em :rows}と
 {\em :columns}で指定されたものとなる。
@@ -836,9 +832,11 @@ windowの大きさは、{\em :width}と{\em :height}かあるいは{\em :rows}�
 \methoddesc{:clear-eos}{\&optional (r win-row) (c win-col)}{
 {\em r}と{\em c}で指定される位置から画面の最後までの領域を消去する。}
 
-\methoddesc{:win-row-max}{}{このwindowに表示可能な最大行数を返す。}
+\methoddesc{:win-row-max}{}{
+このwindowに表示可能な最大行数を返す。}
 
-\methoddesc{:win-col-max}{}{このwindowに表示可能な最大列数を返す。}
+\methoddesc{:win-col-max}{}{
+このwindowに表示可能な最大列数を返す。}
 
 \methoddesc{:xy}{\&optional (r win-row) (c win-col)}{
 {\em r}と{\em c}で指定される位置の文字のピクセル座標を計算する。}
@@ -874,6 +872,7 @@ windowの大きさは、{\em :width}と{\em :height}かあるいは{\em :rows}�
 %\methoddesc{:getstring}{}{gets key-buffer.}
 
 \methoddesc{:event-row}{event}{}
+
 \methoddesc{:event-col}{event}{
 {\em event}における、テキストカーソルの位置をを返す。}
 %\methoddesc{:EnterNotify}{event}{}
@@ -884,6 +883,7 @@ windowの大きさは、{\em :width}と{\em :height}かあるいは{\em :rows}�
 %\methoddesc{:keyrelease}{}{nob}
 %\methoddesc{:enterNotify}{event}{}
 %\methoddesc{:LeaveNotify}{event}{}
+
 \methoddesc{:KeyPress}{event}{
 カーソル位置に入力された文字を挿入する。
 もし、文字が改行であったなら、{\tt notify-object}に通知する。}
@@ -891,7 +891,7 @@ windowの大きさは、{\em :width}と{\em :height}かあるいは{\em :rows}�
 %\methoddesc{:LineEnter}{ch}{}
 %\methoddesc{:clear-text}{item}{clear text-window.}
 
-\classdesc{TextWindowStream}{stream}{(textwin)}{
+\classdesc{textWindowStream}{stream}{(textwin)}{
 {\tt TextWindowStream}は、TextWdinowに接続された出力ストリームである。
 {\tt print, format, write-byte}などによってこのストリームに出力
 される文字や文字列がTextWdindowに表示される。
@@ -920,19 +920,31 @@ windowに表示可能な行のみが保持される。
 %\methoddesc{:create}{\&rest args}{}
 %\methoddesc{:clear}{}{}
 %\methoddesc{:goto}{r c \&optional (csr :on)}{}
+
 \methoddesc{:line}{n}{
 {\em n}番目の行の内容を文字列として返す。}
 
-\methoddesc{:nlines}{}{{\tt linebuf}の行数を返す。}
-\methoddesc{:all-lines}{}{文字列のベクトルである{\tt linebuf}を返す。}
+\methoddesc{:nlines}{}{
+{\tt linebuf}の行数を返す。}
+
+\methoddesc{:all-lines}{}{
+文字列のベクトルである{\tt linebuf}を返す。}
+
 \methoddesc{:refresh-line}{\&optional (r win-row) (c win-col)}{
 {\em r}番目の行の{\em c}番目の列以降を再書き込みする。}
+
 \methoddesc{:refresh}{\&optional (start 0)}{
 {\em start}番目の行以降の行を再書き込みする。}
+
 \methoddesc{:insert-string}{string}{
 カーソル位置に{\em string}を挿入する。}
-\methoddesc{:insert}{ch}{カーソル位置に文字を挿入する。}
-\methoddesc{:delete}{n}{カーソル以降の{\em n}文字を削除する。}
+
+\methoddesc{:insert}{ch}{
+カーソル位置に文字を挿入する。}
+
+\methoddesc{:delete}{n}{
+カーソル以降の{\em n}文字を削除する。}
+
 %\methoddesc{:KeyEnter}{ch \&optional event}{}
 %\methoddesc{:ButtonRelease}{event}{}
 
@@ -953,10 +965,7 @@ windowに表示可能な行のみが保持される。
 扱うことができる。
 クリックすることによって、行を選択することができる。}
 
-\methoddesc{:create}{\&rest args
-           \&key (scroll-bar nil)
-                (horizontal-scroll-bar nil)
-           \&allow-other-keys}{
+\methoddesc{:create}{\&rest args \&key scroll-bar horizontal-scroll-bar \&allow-other-keys}{
 スクロールバーが必要なとき、それぞれのキーワードの引き数にTを指定する。}
 
 %\methoddesc{:locate-scroll-bar}{}{}
@@ -965,15 +974,17 @@ windowに表示可能な行のみが保持される。
 %\methoddesc{:max-line-length}{}{}
 %\methoddesc{:refresh}{\&optional (offset 0) (lines (- win-row-max offset))}{}
 %\methoddesc{:line-in-window-p}{ln}{}
-%\methoddesc{:refresh-line}{ln \&optional (highlight nil) \&aux fg-save bg-save}{
-%}
-\methoddesc{:locate}{n}{windowの上部から{\em n}番目の行に
-バッファされたテキストを表示する。}
+%\methoddesc{:refresh-line}{ln \&optional (highlight nil) \&aux fg-save bg-save}{}
+
+\methoddesc{:locate}{n}{
+windowの上部から{\em n}番目の行にバッファされたテキストを表示する。}
+
 \methoddesc{:display-selection}{selection}{
 {\em selection}は、選択された行の位置を表現する。
 選択された行がすべて高輝度で表示される。}
 
-\methoddesc{:selection}{}{選択された行（文字列）を返す。}
+\methoddesc{:selection}{}{
+選択された行（文字列）を返す。}
 
 \methoddesc{:read-file}{fname}{
 {\em fname}で指定されるテキストファイルを{\tt linebuf}に読み込み、
@@ -987,13 +998,18 @@ windowに表示可能な行のみが保持される。
 %\methoddesc{:scroll-fraction}{}{}
 %\methoddesc{:horizontal-scroll-fraction}{}{}
 
-\methoddesc{:scroll}{n}{{\em n}行、縦にスクロールする。}
-\methoddesc{:horizontal-scroll}{n}{{\em n}列、横にスクロールする。}
+\methoddesc{:scroll}{n}{
+{\em n}行、縦にスクロールする。}
+
+\methoddesc{:horizontal-scroll}{n}{
+{\em n}列、横にスクロールする。}
+
 %\methoddesc{:insert-char}{c \&optional (refresh t)}{}
 %\methoddesc{:insert-newline}{\&optional (refresh t)}{}
 %\methoddesc{:insert}{thing \&optional (refresh t)}{}
 %\methoddesc{:buttonPress}{event}{}
-\methoddesc{:ButtonRelease}{event}{
+
+\methoddesc{:buttonRelease}{event}{
 マウスポインタが置かれている行が選択される。
 もし、windowが作成されたときに{\tt notification}が指定されている
 ならば、{\tt notify-object}の{\tt notify-method}が呼び出される。}
@@ -1011,7 +1027,7 @@ windowの大きさを変更し、新しいサイズに合うように
 %\methoddesc{:draw-label}{}{
 %draws xitem's label.}
 
-%\longdescription{:create}{label \= \&rest args \hspace{120mm} [method]\\
+%\longdescription{method}{:create}{label \= \&rest args \hspace{120mm} \\
 %\>\&key width height (font font-cour10)\\
 %\>\&allow-other-keys}{
 %creates xitem.}

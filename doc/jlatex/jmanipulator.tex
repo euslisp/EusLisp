@@ -25,8 +25,7 @@
 ベースと指には可動軸を指定する必要はない。
 
 \begin{refdesc}
-\longdescription{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \` [マクロ]\\
-% \hspace{70mm} [マクロ]\\
+\longdescription{マクロ}{defjoint}{joint-name \&key \= :shape \hspace{10mm}\= {\it body-object} \\
 \> :color \> {\it color-id} \hspace{2cm} \= ;0-15 for MMD \\
 \> :parent \> {\it parent-joint} \\
 \> :axis \> {\it rotational-axis} \>  ; :x, :y or :z \\
@@ -45,8 +44,8 @@
 次の{\bf defmanipulator}マクロを用いる。
 
 \begin{refdesc}
-\longdescription{defmanipulator}{manipulator-name \&key \= :class \hspace{2cm} \= {\it manipulator-class} \` [マクロ]\\
-%manipulator-class} \hspace{25mm} [マクロ]\\
+  \longdescription{マクロ}{defmanipulator}{manipulator-name \&key \= \\
+\> :class \hspace{2cm} \= {\it manipulator-class} \\
 \> :base \> {\it base-joint} \\
 \> :joints \>  {\it list-of-all-joints} \\
 \> :hand \> {\it handjoint} \\
@@ -58,111 +57,113 @@
 \> :right-handed  \> {\it righty-or-lefty}}{
 マニピュレータモデルを作成する。}
 
-\classdesc{rotational-joint}{body}{(axis offset high-limit low-limit)}
-{6自由度マニピュレータの間接を記述する。}
+\classdesc{rotational-joint}{body}{(axis offset high-limit low-limit)}{
+6自由度マニピュレータの間接を記述する。}
 
-\classdesc{manipulator}{cascaded-coords}{(base baseinverse joint angles right-handed hand handcoords\\
-\> right-finger left-finger openvec max-span\\
-\> toolcoords toolinverse armsolcoords toolinverse armsocoords\\
-\> approach grasp affix)}
-{ベースからハンドまでのマニピュレータの運動を管理する。}
+\classdesc{manipulator}{cascaded-coords}{(\= base baseinverse joint\\
+\> angles right-handed hand handcoords right-finger left-finger\\
+\> openvec max-span toolcoords toolinverse armsolcoords\\
+\> toolinverse armsocoords approach grasp affix)}{
+ベースからハンドまでのマニピュレータの運動を管理する。}
 
 \methoddesc{:newcoords}{newrot \&optional newpos}{ 
 関節角度が限度に収まっていれば座標系を
-{\em newrot}と{\em newpos}に更新する 
-}
-\methoddesc{:armsolcoords }{}{
+{\em newrot}と{\em newpos}に更新する。}
+
+\methoddesc{:armsolcoords}{}{
 ベース座標系からハンド座標系への変換（座標系のインスタンス）を計算し、作成する。
 %  ベースからハンドに至る変換を求める
 }
+
 \methoddesc{:tool}{\&rest msg}{
- 工具座標系を返す、または変更する
-}
+工具座標系を返す、または変更する。}
+
 \methoddesc{:set-tool}{newtool \&optional offset copy}{
- 工具座標系{\tt toolcoords}に{\em newtool}を設定する
-}
-\methoddesc{:reset-tool }{}{
- 工具座標系を初期値に戻す
-}
-\methoddesc{:worldcoords }{}{
- 工具座標系の位置ベクトル、回転行列、座標系のワールド表現を求める
-}
-\methoddesc{:set-coords }{}{
+工具座標系{\tt toolcoords}に{\em newtool}を設定する。}
+
+\methoddesc{:reset-tool}{}{
+工具座標系を初期値に戻す。}
+
+\methoddesc{:worldcoords}{}{
+工具座標系の位置ベクトル、回転行列、座標系のワールド表現を求める。}
+
+\methoddesc{:set-coords}{}{
 順運動の解を求めるために、座標系を強制的に設定する。
 % 一旦順キネマを計算し、そこからさらに各関節角度を求める
 }
-\methoddesc{:config }{\&optional (a newangles)}{
- 6つの関節角度を直接に設定する
-}
-\methoddesc{:park }{}{
- 初期姿勢に戻す
-}
+
+\methoddesc{:config}{\&optional (a newangles)}{
+6つの関節角度を直接に設定する。}
+
+\methoddesc{:park}{}{
+初期姿勢に戻す。}
+
 \methoddesc{:hand}{\&optional (h nil)}{
- ハンドオブジェクトを返す
-}
+ハンドオブジェクトを返す。}
+
 \methoddesc{:handcoords}{}{
- ハンド座標系の位置ベクトル、回転行列、座標系のワールド表現を求める
-}
+ハンド座標系の位置ベクトル、回転行列、座標系のワールド表現を求める。}
+
 \methoddesc{:span}{}{
- 現在の指の間隔を返す
-}
-\methoddesc{:open-fingers}{s \&optional abs \&aux (current (send self :span))}
-{
- 指幅を相対的、絶対的に指定する
-}
+現在の指の間隔を返す。}
+
+\methoddesc{:open-fingers}{s \&optional abs \&aux (current (send self :span))}{
+指幅を相対的、絶対的に指定する。}
+
 \methoddesc{:close-fingers}{}{
- 指を完全に閉じる 
-}
+指を完全に閉じる。}
+
 \methoddesc{:angles}{\&optional flag}{
- 現在の姿勢の関節角度のリストを返す
-}
+現在の姿勢の関節角度のリストを返す。}
 
 % \methoddesc{:right-handed}{}{
 %% ソースそのものがありませんでした。
 % 右手姿勢、左手姿勢を選択する
 %}
 
-\methoddesc{:get-approach }{}{
- 現在アプローチしている対象を返す
-}
-\methoddesc{:set-approach }{a}{
- アプローチ対象{\it a}を設定する
-}
-%\methoddesc{:get-grasp}{}{
-%(:get-grasp () grasp-config)
+\methoddesc{:get-approach}{}{
+現在アプローチしている対象を返す。}
+
+\methoddesc{:set-approach}{a}{
+アプローチ対象{\it a}を設定する。}
+
+\methoddesc{:get-grasp}{}{
+(:get-grasp () grasp-config)
 %??? 
 % 把握姿勢にある対象物を返す
-%}
+}
+
 \methoddesc{:set-grasp}{g}{
- 把握対象物{\it g}を指定する
-}
+把握対象物{\it g}を指定する。}
+
 \methoddesc{:get-affix}{}{
- 把握している物体を返す
-}
+把握している物体を返す。}
+
 \methoddesc{:affix}{\&optional (grasp)}{
 {\bf affixed-object}に{\tt grasp}を設定する。
 {\tt grasp}は、子孫として{\tt handcoords}に関連付けられる。
 % 把握を指示する
 }
+
 \methoddesc{:unfix}{\&optional (margin 10.0)}{
 {\bf affixed-object}にNILを設定する。
 {\tt grasp}は、{\tt handcoords}の子孫リストから外される。
 % 把握物体を解放したことを指示する
 }
-\longdescription{:create}{\= \&rest args \` [メソッド]\\
-%\longdescription{:create}{\= \&rest args \hspace{111mm} [メソッド]\\
-\> \&key \= (:name nm) (:hand h) (:joints j)\\
-\> \> (:left-finger lf) (:right-finger rf)\\
-\> \> ((:toolcoords tc) (make-coords))\\
-\> \> ((:handcoords hc) (make-coords))\\
-\> \> ((:base bs) (make-cascoords))\\
+
+\longdescription{メソッド}{:create}{\= \&rest args \\
+\> \&key \= (name nm) (hand h) (joints j)\\
+\> \> (left-finger lf) (right-finger rf)\\
+\> \> ((toolcoords tc) (make-coords))\\
+\> \> ((handcoords hc) (make-coords))\\
+\> \> ((base bs) (make-cascoords))\\
 \> \> (open-direction (floatvector 0 1 0))\\
-\> \> ((:max-span mspan) 100.0)\\
-\> \> ((:lefty lft) t)\\
-\> \> ((:act a) nil)\\
+\> \> ((max-span mspan) 100.0)\\
+\> \> ((lefty lft) t)\\
+\> \> ((act a) nil)\\
 \> \&allow-other-keys}{
-新しいマニピュレータオブジェクトを作成、初期化する
-}
+新しいマニピュレータオブジェクトを作成、初期化する。}
+
 \end{refdesc}
 
 {\bf manipulator}オブジェクトは、
