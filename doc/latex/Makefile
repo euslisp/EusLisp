@@ -52,6 +52,7 @@ manual.rst: latex.py $(RSTFILES) $(PNGFILES)
 	sed -i 's@\\input{\(.*\)}@..include:: \1\n@g' /tmp/manual.tex  # convert \input in tex to bypass pandoc
 	sed -i 's@\\part{\(.*\)}@.. toctree:: \1@' /tmp/manual.tex  # convert \part in tex to bypass pandoc
 	sed -i ':a;/^[^%].*\\\\$$/{N;s/\\\\\n//;ba}' /tmp/manual.tex # concatinate title/author multi lines
+	sed -i '/^\\vspace{10mm}$$/d' /tmp/manual.tex # remove vspace{10mm} within title to pass pandoc
 	pandoc --no-wrap -s /tmp/manual.tex -o manual.rst -V documentclass=ltjarticle --latex-engine=lualatex
 	sed -i 's@..include:: \(.*\)@   \1@' manual.rst # restore ..include for rst
 	sed -i 's@.. toctree:: \(.*\)@.. toctree::\n   :maxdepth: 1\n   :caption: \1@' manual.rst  # restore ..toctree for rst
