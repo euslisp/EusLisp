@@ -2,7 +2,7 @@
 
 (in-package "LISP")
 
-(export '(condition error fatal-error handler-bind handler-case signals))
+(export '(condition error fatal-error handler-bind handler-case signals continue))
 
 (defclass condition :super propertied-object)
 (defclass error :super condition)
@@ -57,10 +57,13 @@
   (warning-message 1 "~A" (metaclass-name (class err)))
   (if (get err :msg) (warning-message 1 ": ~A" (get err :msg)))
   (terpri *error-output*)
-  (let ((*replevel* (1+ *replevel*))
+  (catch (- (1+ *replevel*))
+    (let ((*replevel* (1+ *replevel*))
         (*reptype* "E"))
     (while (catch *replevel* (reploop #'toplevel-prompt))))
-  (throw *replevel* t))
+  (throw *replevel* t)))
+
+(defun continue (val) (throw (- *replevel*) val))
 
 (add-handler error #'myerror)
 )
