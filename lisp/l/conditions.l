@@ -44,4 +44,23 @@
   (let* ((inst (instantiate class))
          (handle (assoc inst *condition-handlers* :test #'derivedp)))
     (if handle (funcall (cdr handle) (send* inst :init init-args)))))
+
+(defun myerror (err)
+  (when (and (plusp *max-callstack-depth*) (get err :callstack))
+    (format *error-output* "Call Stack (most recent call last):~%")
+    (let ((i 0))
+      (dolist (form
+                (nthcdr (max 0 (- (length (get err :callstack)) *max-callstack-depth*))
+                        (get err :callstack)))
+        (format *error-output* "~3D: at ~A~%" (incf i) form))))
+
+  (warning-message 1 "~A" (metaclass-name (class err)))
+  (if (get err :msg) (warning-message 1 ": ~A" (get err :msg)))
+  (terpri *error-output*)
+  (let ((*replevel* (1+ *replevel*))
+        (*reptype* "E"))
+    (while (catch *replevel* (reploop #'toplevel-prompt))))
+  (throw *replevel* t))
+
+(add-handler error #'myerror)
 )

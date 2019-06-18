@@ -307,7 +307,6 @@ va_dcl
   register context *ctx;
   register struct callframe *vf;
   pointer msg;
-  int i, n;
 
 #ifdef USE_STDARG
   va_start(args,ec);
@@ -320,18 +319,11 @@ va_dcl
 
   ctx=euscontexts[thr_self()];
 
-  /* print call stack */
-  n=intval(Spevalof(MAXCALLSTACKDEPTH));
-  if (n > 0) {
-    fprintf( stderr, "Call Stack (max depth: %d):\n", n );
-    vf=(struct callframe *)(ctx->callfp);
-    for (i = 0; vf->vlink != NULL && i < n; ++i, vf = vf->vlink) {
-      fprintf( stderr, "  %d: at ", i );
-      prinx(ctx, vf->form, ERROUT);
-      flushstream(ERROUT);
-      fprintf( stderr, "\n" ); }
-    if (vf->vlink != NULL) {
-      fprintf (stderr, "  And more...\n"); }}
+  /* get call stack */
+  pointer callstack=NIL;
+  vf=(struct callframe *)(ctx->callfp);
+  for (; vf->vlink != NULL; vf=vf->vlink) {
+    callstack = cons(ctx,vf->form,callstack);}
 
   /* error(errstr) must be error(E_USER,errstr) */
   if ((int)ec < E_END) errstr=errmsg[(int)ec];
@@ -348,58 +340,46 @@ va_dcl
 	fprintf(stderr, "exiting\n"); exit(ec);}
     else throw(ctx,makeint(0),NIL);}
 
-  /* get extra message */
+  /* get message */
+  pointer dest;
+  char *msgstr;
     switch((unsigned int)ec) {
       case E_UNBOUND: case E_UNDEF: case E_NOCLASS: case E_PKGNAME:
       case E_NOOBJ: case E_NOOBJVAR: case E_NOPACKAGE: case E_NOMETHOD:
       case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
       case E_NOVARIABLE: case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
-      case E_USER:
-	msg = va_arg(args,pointer);	break;
-    }
+        dest=(pointer)mkstream(ctx,K_OUT,makebuffer(64));
+        prinx(ctx,va_arg(args,pointer),dest);
+        msgstr=(char*)malloc(2+ strlen(errstr) + intval(dest->c.stream.count));
+        strcpy(msgstr,errstr);
+        strcat(msgstr,(char*)" ");
+        strcat(msgstr,makestring((char *)dest->c.stream.buffer->c.str.chars,
+                                 intval(dest->c.stream.count))->c.str.chars);
+        msg=makestring(msgstr,strlen(msgstr));
+        free(msgstr);
+	break;
+    case E_USER:
+      errstr = (char*)va_arg(args,pointer);
+    default:
+      msg=makestring(errstr,strlen(errstr));}
 
   /* call user's error handler function */
-  errhandler=ctx->errhandler;
-  if (errhandler==NIL || errhandler==NULL)  errhandler=Spevalof(ERRHANDLER);
+  errhandler=getfunc(ctx, intern(ctx,"SIGNALS",7,lisppkg));
+  argc = 9;
+  pointer arglst[argc];
   Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
   if (errhandler!=NIL) {
-    vpush(makeint((unsigned int)ec));
-    vpush(makestring(errstr,strlen(errstr)));
-    if (ctx->callfp) vpush(ctx->callfp->form); else vpush(NIL);
-    switch((unsigned int)ec) {
-      case E_UNBOUND: case E_UNDEF: case E_NOCLASS: case E_PKGNAME:
-      case E_NOOBJ: case E_NOOBJVAR: case E_NOPACKAGE: case E_NOMETHOD:
-      case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
-      case E_NOVARIABLE: case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
-	vpush(msg); argc=4; break;
-      case E_USER:
-	vpush(makestring((char*)msg,strlen((char*)msg))); argc=4; break;
-    default: argc=3; break;}
-    ufuncall(ctx,errhandler,errhandler,(pointer)(ctx->vsp-argc),ctx->bindfp,argc);
-    ctx->vsp-=argc;
-    }
-
-  /*default error handler*/
-  flushstream(ERROUT);
-  fprintf(stderr,"%s: ERROR th=%d %s ",progname,thr_self(),errstr);
-  switch((int)ec) {
-      case E_UNBOUND: case E_UNDEF: case E_NOCLASS: case E_PKGNAME:
-      case E_NOOBJ: case E_NOOBJVAR: case E_NOPACKAGE: case E_NOMETHOD:
-      case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
-      case E_NOVARIABLE: case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
-	prinx(ctx,msg,ERROUT); flushstream(ERROUT); break;
-    }
-  if( ec == E_USER ) {
-    fprintf( stderr,"%s",(char*)msg ); flushstream(ERROUT); }
-  else if (ispointer(msg)) {prinx(ctx,msg,ERROUT); flushstream(ERROUT); }
-  if (ctx->callfp) {
-    fprintf(stderr," in ");
-    prinx(ctx,ctx->callfp->form,ERROUT);
-    flushstream(ERROUT);}
-  /*enter break loop*/
-  brkloop(ctx,"E: ");
-  throw(ctx,makeint(0),T);	/*throw to toplevel*/
-  }
+    arglst[0]=speval(intern(ctx,"ERROR",5,lisppkg));
+    arglst[1]=defkeyword(ctx,"ERROR-CODE");
+    arglst[2]=makeint((unsigned int)ec);
+    arglst[3]=defkeyword(ctx,"MSG");
+    arglst[4]=msg;
+    arglst[5]=defkeyword(ctx,"CALLSTACK");
+    arglst[6]=callstack;
+    arglst[7]=defkeyword(ctx,"FORM");
+    if (ctx->callfp) arglst[8]=ctx->callfp->form; else arglst[8]=NIL;
+    return(ufuncall(ctx,errhandler,errhandler,(pointer)&arglst,ctx->bindfp,argc));}
+}
 
 #ifdef USE_STDARG
 pointer basicclass(char *name, ...)
