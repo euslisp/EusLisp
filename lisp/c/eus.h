@@ -228,6 +228,7 @@ struct package {
     };
 
 struct code {
+    pointer plist;
     pointer codevec;
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
@@ -238,6 +239,7 @@ struct code {
     };
 
 struct fcode {		/*foreign function code*/
+    pointer plist;
     pointer codevec;
     pointer quotevec;
     pointer subrtype;
@@ -247,6 +249,7 @@ struct fcode {		/*foreign function code*/
     pointer resulttype;};
 
 struct ldmodule {	/*foreign language object module*/
+    pointer plist;
     pointer codevec;
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
@@ -259,6 +262,7 @@ struct ldmodule {	/*foreign language object module*/
     pointer handle;};	/* dl's handle */
 
 struct closure {
+    pointer plist;
     pointer codevec;
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
@@ -1050,7 +1054,7 @@ extern pointer makebuffer(int);
 extern pointer makevector(pointer, int);
 extern pointer makeclass(context *, pointer, pointer, pointer,pointer, pointer,
 			int, pointer);
-extern pointer makecode(pointer, pointer(*)(), pointer);
+extern pointer makecode(context *, pointer, pointer(*)(), pointer, pointer);
 extern pointer makematrix(context *, int, int);
 extern pointer makeobject(pointer);
 extern pointer rawcons(context *, pointer, pointer);

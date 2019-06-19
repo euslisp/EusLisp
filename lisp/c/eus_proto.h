@@ -324,7 +324,7 @@ extern pointer makepkg(context */*ctx*/, pointer /*namestr*/, pointer /*nicks*/,
 extern pointer mkstream(context */*ctx*/, pointer /*dir*/, pointer /*string*/);
 extern pointer mkfilestream(context */*ctx*/, pointer /*dir*/, pointer /*string*/, int /*fno*/, pointer /*fname*/);
 extern pointer mkiostream(context */*ctx*/, pointer /*in*/, pointer /*out*/);
-extern pointer makecode(pointer /*mod*/, pointer (*/*f*/)(), pointer /*ftype*/);
+  extern pointer makecode(context */*ctx*/,pointer /*mod*/, pointer (*/*f*/)(), pointer /*ftype*/, pointer /*name*/);
 extern void bumpcix(int /*m*/, int /*n*/);
 extern void recixobj(int /*newcix*/);
 extern void resetcix(pointer /*class*/, cixpair */*p*/);

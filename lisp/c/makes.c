@@ -279,8 +279,9 @@ register pointer in,out;
   ctx->vsp -= 2;
   return(ios);}
 
-pointer makecode(mod,f,ftype)
-register pointer mod,ftype;
+pointer makecode(ctx,mod,f,ftype,name)
+register context *ctx;
+register pointer mod,ftype,name;
 pointer (*f)();
 /*actually, f is a pointer to a function returning a pointer*/
 { register pointer cd;
@@ -294,6 +295,7 @@ pointer (*f)();
 #if ARM
   cd->c.code.entry2=makeint(((eusinteger_t)f)&0x3);
 #endif
+  if (name!=NULL) putprop(ctx,cd,name,intern(ctx,"NAME",4,keywordpkg));
   return(cd);}
 
 
@@ -640,7 +642,7 @@ pointer mod,pkg;
 pointer (*f)();
 { pointer sym;
   sym=intern(ctx,name,strlen(name),pkg);
-  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_FUNCTION));
+  pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,f,SUBR_FUNCTION,sym));
   return(sym);}
 
 pointer defmacro(ctx,name,mod,f)
@@ -651,7 +653,7 @@ pointer (*f)();
 { register pointer sym,pkg;
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
-  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_MACRO));
+  pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,f,SUBR_MACRO,sym));
   return(sym);}
 
 #if Solaris2 || PTHREAD
@@ -687,7 +689,7 @@ pointer (*f)();
 { register pointer sym,pkg;
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
-  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_SPECIAL));
+  pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,f,SUBR_SPECIAL,sym));
   return(sym);}
 
 pointer defconst(ctx,name,val,pkg)
@@ -747,7 +749,7 @@ pointer compfun(ctx,sym,mod,entry,doc)
 register context *ctx;
 register pointer sym,mod,doc;
 pointer (*entry)();
-{ pointer_update(sym->c.sym.spefunc,makecode(mod,entry,SUBR_FUNCTION));
+{ pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,entry,SUBR_FUNCTION,sym));
   if (doc!=NIL) putprop(ctx,sym,doc,K_FUNCTION_DOCUMENTATION); 
   return(sym);}
 
@@ -755,7 +757,7 @@ pointer compmacro(ctx,sym,mod,entry,doc)
 register context *ctx;
 register pointer sym,mod,doc;
 pointer (* entry)();
-{ pointer_update(sym->c.sym.spefunc,makecode(mod,entry,SUBR_MACRO));
+{ pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,entry,SUBR_MACRO,sym));
   if (doc!=NIL) putprop(ctx,sym, doc, K_FUNCTION_DOCUMENTATION); 
   return(sym);}
 

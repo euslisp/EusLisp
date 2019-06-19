@@ -748,7 +748,7 @@ static void initclasses()
 			   "IDLE", "WAIT");
   C_THREAD=speval(THREAD);
 /*13*/
-  CODE=basicclass("COMPILED-CODE",C_OBJECT,&codecp,4,"CODEVECTOR","QUOTEVECTOR",
+  CODE=basicclass("COMPILED-CODE",C_PROPOBJ,&codecp,4,"CODEVECTOR","QUOTEVECTOR",
 		  "TYPE","ENTRY");
   C_CODE=speval(CODE);
 /*14*/

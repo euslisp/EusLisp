@@ -180,10 +180,10 @@ register pointer argv[];
 #endif // ARM
     if (mac->c.code.subrtype!=(pointer)SUBR_MACRO) return(argv[0]);
 #if ARM
-    expander=makecode(mac,(pointer (*)())addr,SUBR_FUNCTION);
+    expander=makecode(ctx,mac,(pointer (*)())addr,SUBR_FUNCTION,NULL);
     pointer_update(expander->c.code.entry2,mac->c.code.entry2)
 #else
-    expander=makecode(mac,(pointer (*)())mac->c.code.entry,SUBR_FUNCTION);
+    expander=makecode(ctx,mac,(pointer (*)())mac->c.code.entry,SUBR_FUNCTION,NULL);
 #endif
     pointer_update(expander->c.code.entry,mac->c.code.entry);}
   else if (carof(mac,E_NOLIST)==MACRO) expander=cons(ctx,LAMBDA,ccdr(mac));

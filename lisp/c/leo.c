@@ -138,7 +138,7 @@ pointer (*cfunc)();
   class=speval(class);
   if (class==UNBOUND || !isclass(class)) error(E_NOCLASS,class);
   addmethod(ctx,cons(ctx,sel,
-			cons(ctx,makecode(mod,cfunc,SUBR_FUNCTION),NIL)),
+                     cons(ctx,makecode(ctx,mod,cfunc,SUBR_FUNCTION,sel),NIL)),
 		class,doc);}
 
 pointer DEFMETHOD(ctx,arg)	/*special form*/
