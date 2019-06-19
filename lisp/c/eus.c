@@ -119,6 +119,7 @@ pointer CLASS;
 pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
 pointer TOPLEVEL,QEVALHOOK,ERRHANDLER,FATALERROR;
+pointer CONDITIONHANDLER;
 pointer QGCHOOK, QEXITHOOK;
 pointer QUNBOUND,QDEBUG;
 pointer QTHREADS;	/* system:*threads* */
@@ -639,6 +640,7 @@ static void initsymbols()
   QREADTABLE=deflocal(ctx,"*READTABLE*",NIL,lisppkg);
   TOPLEVEL=defvar(ctx,"*TOPLEVEL*",NIL,lisppkg);
   ERRHANDLER=deflocal(ctx,"*ERROR-HANDLER*",NIL,lisppkg);
+  CONDITIONHANDLER=deflocal(ctx,"*CONDITION-HANDLER*",NIL,lisppkg);
   QEVALHOOK=deflocal(ctx,"*EVALHOOK*",NIL,lisppkg);
   QUNBOUND=intern(ctx,"*UNBOUND*",9,lisppkg);
   RANDSTATE=deflocal(ctx,"*RANDOM-STATE*",UNBOUND,lisppkg);

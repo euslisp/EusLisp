@@ -2,13 +2,11 @@
 
 (in-package "LISP")
 
-(export '(condition error fatal-error handler-bind handler-case signals continue))
+(export '(condition error fatal-error handler-bind handler-case signals continue next-handler))
 
 (defclass condition :super propertied-object)
 (defclass error :super condition)
 (defclass fatal-error :super error)
-
-(defvar *condition-handlers* nil)
 
 (defmethod condition
   (:init (&rest init-args &key &allow-other-keys)
@@ -22,10 +20,10 @@
   (assert (and (classp label) (derivedp (instantiate label) condition))
           "Condition class expected!")
   (assert (functionp callback) "Function expected!")
-  (push (cons label callback) *condition-handlers*))
+  (push (cons label callback) *condition-handler*))
 
 (defmacro handler-bind (bindings &rest forms)
-  `(let ((*condition-handlers* (copy-list *condition-handlers*)))
+  `(let ((*condition-handler* (copy-list *condition-handler*)))
      ,@(mapcar #'(lambda (bind) `(add-handler ,@bind)) (reverse bindings))
      ,@forms))
 
@@ -40,10 +38,15 @@
            ,(mapcar #'(lambda (cs) (apply #'expand-case cs)) cases)
          ,form))))
 
-(defun signals (class &rest init-args)
-  (let* ((inst (instantiate class))
-         (handle (assoc inst *condition-handlers* :test #'derivedp)))
-    (if handle (funcall (cdr handle) (send* inst :init init-args)))))
+(defun signals (obj &rest init-args)
+  (if (classp obj) (setq obj (instantiate obj)))
+  (if init-args (send* obj :init init-args))
+  (assert (derivedp obj condition) "Condition class expected!")
+  (block signals
+    (dolist (handle *condition-handler*)
+      (when (derivedp obj (car handle))
+        (catch :next-handler
+          (return-from signals (funcall (cdr handle) obj)))))))
 
 (defun myerror (err)
   (when (and (plusp *max-callstack-depth*) (get err :callstack))
@@ -54,16 +57,21 @@
                         (get err :callstack)))
         (format *error-output* "~3D: at ~A~%" (incf i) form))))
 
-  (warning-message 1 "~A" (metaclass-name (class err)))
-  (if (get err :msg) (warning-message 1 ": ~A" (get err :msg)))
+  (warning-message 1 "~A" (string-upcase (metaclass-name (class err))))
+  (if (get err :msg) (format *error-output* ": ~A" (get err :msg)))
   (terpri *error-output*)
   (catch (- (1+ *replevel*))
     (let ((*replevel* (1+ *replevel*))
-        (*reptype* "E"))
-    (while (catch *replevel* (reploop #'toplevel-prompt))))
-  (throw *replevel* t)))
+          (*reptype* "E"))
+      ;; do not carry handlers through the error stack
+      ;; i.e. restore previous global `*condition-handler*'
+      (let ((old (assoc '*condition-handler* (sys:list-all-special-bindings))))
+        (if old (setq *condition-handler* (cdr old))))
+      (while (catch *replevel* (reploop #'toplevel-prompt))))
+    (throw *replevel* t)))
 
 (defun continue (val) (throw (- *replevel*) val))
+(defun next-handler () (throw :next-handler nil))
 
 (add-handler error #'myerror)
 )
