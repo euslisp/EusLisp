@@ -718,14 +718,12 @@ extern int export_all;
 /****************************************************************/
 
 #ifdef RGC
-#define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error(E_DUMMY5,(pointer)(err)))
-#define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error(E_DUMMY5,(pointer)(err)))
 #define alloc rgc_alloc
 #else
-#define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error(E_DUMMY3,(pointer)(err)))
-#define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error(E_DUMMY3,(pointer)(err)))
 #define alloc gc_alloc
 #endif
+#define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error((enum errorcode)(err)))
+#define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error((enum errorcode)(err)))
 #define ccar(p) ((p)->c.cons.car)
 #define ccdr(p) ((p)->c.cons.cdr)
 #define cixof(p) ((p)->cix)
