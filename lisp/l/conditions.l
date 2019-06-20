@@ -2,7 +2,7 @@
 
 (in-package "LISP")
 
-(export '(condition error fatal-error handler-bind handler-case signals continue next-handler))
+(export '(handler-bind handler-case signals continue next-handler))
 
 (defmethod condition
   (:init (&rest init-args &key &allow-other-keys)
@@ -53,9 +53,11 @@
                         (get err :callstack)))
         (format *error-output* "~3D: at ~A~%" (incf i) form))))
 
-  (warning-message 1 "~A" (string-upcase (metaclass-name (class err))))
-  (if (get err :msg) (format *error-output* ": ~A" (get err :msg)))
-  (terpri *error-output*)
+  (if (get err :msg)
+      (format *error-output* "~C[1;3~Cm~A~C[0m: ~A~%"
+              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (get err :msg))
+      (format *error-output* "~C[1;3~Cm~A~C[0m~%"
+              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b))
   (catch (- (1+ *replevel*))
     (let ((*replevel* (1+ *replevel*))
           (*reptype* "E"))

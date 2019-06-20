@@ -99,6 +99,9 @@ cixpair bignumcp;
 cixpair conditioncp;
 cixpair errorcp;
 cixpair fatalerrorcp;
+/* errors */
+cixpair syntaxerrorcp, programerrorcp, nameerrorcp;
+cixpair typeerrorcp, indexerrorcp, ioerrorcp;
 
 
 struct built_in_cid  builtinclass[64];
@@ -160,6 +163,10 @@ pointer THREAD;
 pointer VECTOR,VECCLASS,FLTVECTOR,INTVECTOR,OBJECT,READTABLE;
 pointer FOREIGNCODE,ARRAY,BITVECTOR;
 pointer EXTNUM, RATIO, COMPLEX, BIGNUM;
+
+/*error classes*/
+pointer C_SYNTAXERROR, C_PROGRAMERROR, C_NAMEERROR;
+pointer C_TYPEERROR, C_INDEXERROR, C_IOERROR;
 
 /*toplevel & evaluation control*/
 int intsig,intcode;
@@ -375,7 +382,40 @@ va_dcl
   errhandler=getfunc(ctx, intern(ctx,"SIGNALS",7,lisppkg));
 
   pointer errobj,arglst;
-  errobj=makeobject(C_ERROR);
+  switch((unsigned int)ec) {
+    // SYNTAX ERROR
+      case E_ILLFUNC: case E_ILLCH: case E_READ: case E_WRITE:
+      case E_LAMBDA: case E_PARAMETER: case E_FORMATSTRING: case E_NOOBJ:
+      case E_DECLARE: case E_DECLFORM: case E_KEYPARAM: case E_NOKEYPARAM:
+        errobj=makeobject(C_SYNTAXERROR); break;
+    // PROGRAM ERROR
+      case E_MISMATCHARG: case E_NOCATCHER: case E_NOBLOCK: case E_PKGNAME:
+      case E_MULTIDECL: case E_SYMBOLCONFLICT: case E_LONGSTRING: case E_CHARRANGE:
+      case E_CLASSOVER: case E_DUPOBJVAR: case E_INSTANTIATE: case E_CIRCULAR:
+        errobj=makeobject(C_PROGRAMERROR); break;
+    // NAME ERROR
+      case E_UNBOUND: case E_UNDEF: case E_EXTSYMBOL: case E_NOMETHOD:
+      case E_NOPACKAGE: case E_NOOBJVAR: case E_SHARPMACRO:
+        errobj=makeobject(C_NAMEERROR); break;
+    // TYPE ERROR
+      case E_NOSYMBOL: case E_NOLIST: case E_STREAM: case E_NOSTRING:
+      case E_NONUMBER: case E_NOINT: case E_NOCLASS: case E_NOOBJECT:
+      case E_NOMACRO: case E_NOSEQ: case E_NOARRAY: case E_NOVECTOR:
+      case E_NOINTVECTOR: case E_FLOATVECTOR: case E_BITVECTOR:
+      case E_TYPEMISMATCH: case E_SETCONST: case E_NOVARIABLE:
+      case E_ALIST: case E_NOSUPER: case E_ROTAXIS: case E_SOCKET:
+        errobj=makeobject(C_TYPEERROR); break;
+    // INDEX ERROR
+      case E_ARRAYINDEX: case E_VECINDEX: case E_SEQINDEX:
+      case E_STARTEND: case E_VECSIZE: case E_ARRAYDIMENSION:
+        errobj=makeobject(C_INDEXERROR); break;
+    // IO ERROR
+      case E_IODIRECTION: case E_OPENFILE: case E_EOF:
+      case E_READLABEL: case E_READFVECTOR: case E_READOBJECT:
+        errobj=makeobject(C_IOERROR); break;
+  default:
+    errobj=makeobject(C_ERROR);}
+
   putprop(ctx,errobj,msg,defkeyword(ctx,"MSG"));
   putprop(ctx,errobj,callstack,defkeyword(ctx,"CALLSTACK"));
   putprop(ctx,errobj,form,defkeyword(ctx,"FORM"));
@@ -812,6 +852,12 @@ static void initclasses()
   C_CONDITION=speval(basicclass("CONDITION",C_PROPOBJ,&conditioncp,0));
   C_ERROR=speval(basicclass("ERROR",C_CONDITION,&errorcp,0));
   C_FATALERROR=speval(basicclass("FATAL-ERROR",C_ERROR,&fatalerrorcp,0));
+  C_SYNTAXERROR=speval(basicclass("SYNTAX-ERROR",C_ERROR,&syntaxerrorcp,0));
+  C_PROGRAMERROR=speval(basicclass("PROGRAM-ERROR",C_ERROR,&programerrorcp,0));
+  C_NAMEERROR=speval(basicclass("NAME-ERROR",C_ERROR,&nameerrorcp,0));
+  C_TYPEERROR=speval(basicclass("TYPE-ERROR",C_ERROR,&typeerrorcp,0));
+  C_INDEXERROR=speval(basicclass("INDEX-ERROR",C_ERROR,&indexerrorcp,0));
+  C_IOERROR=speval(basicclass("IO-ERROR",C_ERROR,&ioerrorcp,0));
 
   for (i=0;i<MAXTHREAD;i++) {
     oblabels[i]=(pointer)makelabref(makeint(-1),UNBOUND,NIL);
