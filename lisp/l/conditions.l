@@ -4,10 +4,6 @@
 
 (export '(condition error fatal-error handler-bind handler-case signals continue next-handler))
 
-(defclass condition :super propertied-object)
-(defclass error :super condition)
-(defclass fatal-error :super error)
-
 (defmethod condition
   (:init (&rest init-args &key &allow-other-keys)
     (while init-args

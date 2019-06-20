@@ -95,6 +95,10 @@ cixpair extnumcp;
 cixpair ratiocp;
 cixpair complexcp;
 cixpair bignumcp;
+/* conditions */
+cixpair conditioncp;
+cixpair errorcp;
+cixpair fatalerrorcp;
 
 
 struct built_in_cid  builtinclass[64];
@@ -147,6 +151,7 @@ pointer C_THREAD;
 pointer C_VCLASS, C_FLTVECTOR, C_INTVECTOR, C_STRING, C_BITVECTOR;
 pointer C_FOREIGNCODE,C_ARRAY,C_READTABLE;
 pointer C_EXTNUM, C_RATIO, C_BIGNUM, C_COMPLEX;
+pointer C_CONDITION, C_ERROR, C_FATALERROR;
 
 /*class names*/
 pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
@@ -304,10 +309,9 @@ va_dcl
   va_list args;
   pointer errhandler;
   register char *errstr;
-  register int argc;
   register context *ctx;
   register struct callframe *vf;
-  pointer msg;
+  pointer msg,form,callstack;
 
 #ifdef USE_STDARG
   va_start(args,ec);
@@ -321,7 +325,7 @@ va_dcl
   ctx=euscontexts[thr_self()];
 
   /* get call stack */
-  pointer callstack=NIL;
+  callstack=NIL;
   vf=(struct callframe *)(ctx->callfp);
   for (; vf->vlink != NULL; vf=vf->vlink) {
     callstack = cons(ctx,vf->form,callstack);}
@@ -364,22 +368,22 @@ va_dcl
     default:
       msg=makestring(errstr,strlen(errstr));}
 
+  /* get form */
+  if (ctx->callfp) form=ctx->callfp->form; else form=NIL;
+
   /* call user's error handler function */
   errhandler=getfunc(ctx, intern(ctx,"SIGNALS",7,lisppkg));
-  argc = 9;
-  pointer arglst[argc];
+
+  pointer errobj,arglst;
+  errobj=makeobject(C_ERROR);
+  putprop(ctx,errobj,msg,defkeyword(ctx,"MSG"));
+  putprop(ctx,errobj,callstack,defkeyword(ctx,"CALLSTACK"));
+  putprop(ctx,errobj,form,defkeyword(ctx,"FORM"));
+  arglst=cons(ctx,errobj,NIL);
+
   Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
   if (errhandler!=NIL) {
-    arglst[0]=speval(intern(ctx,"ERROR",5,lisppkg));
-    arglst[1]=defkeyword(ctx,"ERROR-CODE");
-    arglst[2]=makeint((unsigned int)ec);
-    arglst[3]=defkeyword(ctx,"MSG");
-    arglst[4]=msg;
-    arglst[5]=defkeyword(ctx,"CALLSTACK");
-    arglst[6]=callstack;
-    arglst[7]=defkeyword(ctx,"FORM");
-    if (ctx->callfp) arglst[8]=ctx->callfp->form; else arglst[8]=NIL;
-    return(ufuncall(ctx,errhandler,errhandler,(pointer)&arglst,ctx->bindfp,argc));}
+    return(ufuncall(ctx,errhandler,errhandler,arglst,ctx->bindfp,-1));}
 }
 
 #ifdef USE_STDARG
@@ -803,6 +807,11 @@ static void initclasses()
   C_COMPLEX=speval(COMPLEX);
   BIGNUM=basicclass("BIGNUM", C_EXTNUM, &bignumcp, 2, "SIZE", "BV");
   C_BIGNUM=speval(BIGNUM);
+
+/* conditions */
+  C_CONDITION=speval(basicclass("CONDITION",C_PROPOBJ,&conditioncp,0));
+  C_ERROR=speval(basicclass("ERROR",C_CONDITION,&errorcp,0));
+  C_FATALERROR=speval(basicclass("FATAL-ERROR",C_ERROR,&fatalerrorcp,0));
 
   for (i=0;i<MAXTHREAD;i++) {
     oblabels[i]=(pointer)makelabref(makeint(-1),UNBOUND,NIL);
