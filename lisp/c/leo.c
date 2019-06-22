@@ -428,7 +428,7 @@ pointer argv[];
     take_care(x);
 #endif
     return(x);}
-  else error(E_INSTANTIATE);}
+  else error(E_NOCLASS);}
 
 pointer METHCACHE(ctx,n,argv)
 register context *ctx;
@@ -493,9 +493,9 @@ register pointer obj,klass,varid;
 	if (equal(vvec->c.vec.v[index]->c.sym.pname, varid)==T) break;
 	else index++;}
     else error(E_NOINT);
-    if (index>=vecsize(vvec)) error(E_NOOBJVAR,varid);
+    if (index>=vecsize(vvec)) error(E_NOSLOT,varid);
     return(index);}
-  else error(E_NOOBJVAR,varid);}
+  else error(E_NOSLOT,varid);}
 
 pointer SLOT(ctx,n,argv)
 register context *ctx;

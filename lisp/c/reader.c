@@ -318,7 +318,7 @@ register int size;
       while (i<size) {pointer_update(result->c.vec.v[i],element);i++;}
     else {
       while (ch!=')' && ch!=EOF) ch=nextch(ctx,f);
-      error(E_READ); }
+      error(E_NODELIMITER); }
     return(result);}
   else {
     while ((ch!=')') && (ch!=EOF)) {
@@ -344,7 +344,7 @@ register pointer s;
   register pointer rvec;
   Char ch;
   ch=nextch(ctx,s);
-  if (ch!='(') error(E_READFVECTOR);
+  if (ch!='(') error(E_NODELIMITER);
   ch=nextch(ctx,s);
   while (ch!=')' && ch!=EOF) {
     unreadch(s,ch);
@@ -370,12 +370,12 @@ register pointer s;
   numunion nu;
 
   ch=nextch(ctx,s);
-  if (ch!='(') error(E_READFVECTOR);
+  if (ch!='(') error(E_NODELIMITER);
   ch=nextch(ctx,s);
   while (ch!=')' && ch!=EOF) {
     unreadch(s,ch);
     elm=read1(ctx,s);
-    if (!isnum(elm)) error(E_READFVECTOR);
+    if (!isnum(elm)) error(E_NONUMBER);
     if (isint(elm)) { f=intval(elm); elm=makeflt(f);}
     ckpush(elm);
     i++;
@@ -394,15 +394,15 @@ register pointer s;	/*input stream*/
   Char ch;
 
   ch=nextch(ctx,s);
-  if (ch!='(') error(E_READOBJECT);
+  if (ch!='(') error(E_NODELIMITER);
   name=read1(ctx,s);
-  if (!issymbol(name)) error(E_READOBJECT);
+  if (!issymbol(name)) error(E_NOSYMBOL);
   klass=speval(name);
   if (klass==UNBOUND) error(E_NOCLASS,name);
-  if (!isclass(klass)) error(E_READOBJECT);
+  if (!isclass(klass)) error(E_NOCLASS);
   if (isvecclass(klass)) {
     elem=read1(ctx,s);
-    if (!isint(elem)) error(E_READOBJECT);	/*vector size*/
+    if (!isint(elem)) error(E_NOINT);	/*vector size*/
     sz=intval(elem);
     result=makevector(klass,sz);
     i=1;}
@@ -431,12 +431,12 @@ register pointer s;	/*input stream*/
   Char ch;
 
   ch=nextch(ctx,s);
-  if (ch!='(') error(E_READOBJECT);
+  if (ch!='(') error(E_NODELIMITER);
   name=read1(ctx,s);
-  if (!issymbol(name)) error(E_READOBJECT);
+  if (!issymbol(name)) error(E_NOSYMBOL);
   klass=speval(name);
   if (klass==UNBOUND) error(E_NOCLASS,name);
-  if (!isclass(klass)) error(E_READOBJECT);
+  if (!isclass(klass)) error(E_NOCLASS);
   if (isvecclass(klass)) { error(E_NOCLASS,name);}
   else if (isclass(klass)) result=(pointer)makeobject(klass);
   else error(E_NOCLASS,name);
@@ -810,9 +810,9 @@ char token[];
       else if (syntaxtype(ch)==ch_white) {
 	result=read1(ctx,f);
 	ch=nextch(ctx,f);
-	if (ch!=delim_char) error(E_READ);
+	if (ch!=delim_char) error(E_NODELIMITER);
 	break;}
-      else error(E_READ);}
+      else error(E_NODELIMITER);}
     else { unreadch(f,ch);  element=read1(ctx,f);}
     if (element!=UNBOUND && element!=(pointer)EOF) ckpush(element);
     ch=nextch(ctx,f);}

@@ -309,7 +309,7 @@ register pointer item,alist;
     if (iscons(temp)) {
       if (ccar(temp)==item) return(temp);
       else alist=ccdr(alist);}
-    else error(E_ALIST);}
+    else error(E_NOLIST);}
   return(NIL);}
 
 pointer ASSQ(ctx,n,argv)

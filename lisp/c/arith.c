@@ -388,7 +388,7 @@ pointer argv[];
     return(makeflt(x-1.0)); }
   else if (isbignum(a)) {
     a=copy_big(a); sub_int_big(1,a); return(normalize_bignum(a));}
-  else error(E_NOINT);
+  else error(E_NONUMBER);
   }
 
 
@@ -408,7 +408,7 @@ pointer argv[];
     return(makeflt(x+1.0)); }
   else if (isbignum(a)) {
     a=copy_big(a); add_int_big(1,a); return(a);}
-  else error(E_NOINT);
+  else error(E_NONUMBER);
   }
 
 /* extended numbers */

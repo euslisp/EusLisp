@@ -120,11 +120,11 @@ register pointer sym,func;
 pointer *ovafptr(o,v)
 register pointer o,v;
 { register pointer c,*vaddr;
-  if (!ispointer(o)) error(E_NOOBJ,o,v);
+  if (!ispointer(o)) error(E_NOOBJECT);
   c=classof(o);
   vaddr=getobjv(v,c->c.cls.vars,o);
   if (vaddr) return(vaddr);
-  else error(E_NOOBJVAR,o,v);}
+  else error(E_NOSLOT,o,v);}
 
 /***** special variable binding *****/
 
@@ -197,7 +197,7 @@ register pointer var,val;
 struct bindframe *lex,*declscope;
 { register struct bindframe *p;
   if (!issymbol(var)) error(E_NOSYMBOL);
-  if (var->c.sym.vtype==V_CONSTANT) error(E_NOVARIABLE,var);
+  if (var->c.sym.vtype==V_CONSTANT) error(E_ILLVARIABLE,var);
   p=ctx->bindfp;
   while (p>declscope) {
     if (p->sym==var) 
@@ -225,7 +225,7 @@ struct bindframe *env;
 
   while (iscons(decllist)) {
     decl=ccar(decllist); decllist=ccdr(decllist);
-    if (!iscons(decl)) error(E_DECLARE);
+    if (!iscons(decl)) error(E_NOLIST);
     if (ccar(decl)==QSPECIAL) {	/*special binding*/
       decl=ccdr(decl);
       while (iscons(decl)) {
@@ -1467,19 +1467,19 @@ register int noarg;
 	      else return((*subr)(ctx,noarg,args,0));
 	      break;
       case (eusinteger_t)SUBR_MACRO:/* ???? */
-	      if (noarg>=0) error(E_ILLFUNC);
+	      if (noarg>=0) error(E_NOFUNCTION);
 	      while (iscons(args)) { vpush(ccar(args)); args=ccdr(args); n++;}
           GC_POINT;
           tmp = (*subr)(ctx,n,argp);
           GC_POINT;
 	      return(eval(ctx,tmp));
       case (eusinteger_t)SUBR_SPECIAL: /* ???? */
-	      if (noarg>=0) error(E_ILLFUNC);
+	      if (noarg>=0) error(E_NOFUNCTION);
 	      else return((*subr)(ctx,args));
 /*      case (int)SUBR_ENTRY:
 	      func=(*subr)(func);
 	      return(makeint(func)); */
-      default: error(E_ILLFUNC); break;}
+      default: error(E_NOFUNCTION); break;}
   }
 
 pointer clofunc;
@@ -1525,7 +1525,7 @@ int noarg;
   else {
     if (islist(fn)) env=ctx->bindfp;
     func=fn;}
-  if (!ispointer(func)) error(E_ILLFUNC);
+  if (!ispointer(func)) error(E_NOFUNCTION);
 
   /*make a new stack frame*/
   stackck;	/*stack overflow?*/
@@ -1539,7 +1539,7 @@ int noarg;
   if (pisclosure(func)) {
     clofunc=func;
     fn=func;
-    if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_ILLFUNC);
+    if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_NOFUNCTION);
 #if (WORD_SIZE == 64)
     subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3L /*0xfffffffc ????*/);
 #else
@@ -1595,7 +1595,7 @@ int noarg;
   else if (piscons(func)) {
     ftype=ccar(func);
     func=ccdr(func);
-    if (!issymbol(ftype)) error(E_LAMBDA);
+    if (!issymbol(ftype)) error(E_NOFUNCTION);
     if (ftype->c.sym.homepkg==keywordpkg) fn=ftype;	/*blockname=selector*/
     else if (ftype==LAMCLOSURE) {
       fn=ccar(func); func=ccdr(func);
@@ -1606,9 +1606,9 @@ int noarg;
       /* ctx->fletfp=(struct fletframe *)intval(ccar(func)); */
       fenv=(struct fletframe *)intval(ccar(func)); 
       func=ccdr(func);}
-    else if (ftype!=LAMBDA && ftype!=MACRO) error(E_LAMBDA);
+    else if (ftype!=LAMBDA && ftype!=MACRO) error(E_NOFUNCTION);
     else env=NULL /*0 ????*/; 
-    formal=carof(func,E_LAMBDA);
+    formal=carof(func,E_NOFUNCTION);
     func=ccdr(func);
     if (noarg<0) {	/*spread args on stack*/
       noarg=0;
@@ -1619,7 +1619,7 @@ int noarg;
 	vpush(aval); noarg++;}}
     else {
       argp=(pointer *)args;
-      if (ftype==MACRO) error(E_ILLFUNC);}
+      if (ftype==MACRO) error(E_NOFUNCTION);}
     GC_POINT;
     if (ftype==LAMCLOSURE) { ctx->fletfp=fenv; }
     result=funlambda(ctx,fn,formal,func,argp,env,noarg);
@@ -1633,7 +1633,7 @@ int noarg;
     /* check return barrier */
 #endif
     return(result);}
-  else error(E_ILLFUNC);
+  else error(E_NOFUNCTION);
   }
 
 pointer eval(ctx,form)

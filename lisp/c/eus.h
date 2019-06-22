@@ -939,71 +939,79 @@ enum errorcode {
   E_DUMMY10,
 #define E_FATAL 10
 /* followings are not fatal errors */
-  E_SETCONST,		/*11 attempt to set to constant*/
+
+/* ARGUMENT ERROR */
+  E_ARGUMENT_ERROR,
+  E_MISMATCHARG,
+  E_PARAMETER,
+  E_KEYPARAM,
+  E_NOKEYPARAM,
+  E_MULTIDECL,
+
+/* PROGRAM ERROR */
+  E_PROGRAM_ERROR,
+  E_LONGSTRING,
+  E_CLASSOVER,
+  E_DECLARE,
+  E_NOCATCHER,
+  E_NOBLOCK,
+
+/* NAME ERROR */
+  E_NAME_ERROR,
   E_UNBOUND,
   E_UNDEF,
-  E_MISMATCHARG,
-  E_ILLFUNC,
-  E_ILLCH,
-  E_READ,
-  E_WRITE,
-  E_LONGSTRING,		/*19: string too long*/
-  E_NOSYMBOL,		/*20: symbol expected*/
-  E_NOLIST,		/*list expected*/
-  E_LAMBDA,		/*illegal lambda form*/
-  E_PARAMETER,		/*illegal lambda parameter syntax*/  
-  E_NOCATCHER,		/*no catch block */
-  E_NOBLOCK,		/*no block to return*/
-  E_STREAM,		/*stream expected*/
-  E_IODIRECTION,	/*io stream direction keyword*/
-  E_NOINT,		/*integer value expected*/
-  E_NOSTRING,		/*string expected*/
-  E_OPENFILE,		/*30: error in open*/
-  E_EOF,		/*EOF encountered*/
-  E_NONUMBER,		/*number expected*/
-  E_CLASSOVER,		/*class table overflow*/
-  E_NOCLASS,		/*class expected*/
-  E_NOVECTOR,		/*vector expected*/
-  E_VECSIZE,		/*error of vector size*/
-  E_DUPOBJVAR,		/*duplicated object variable name*/
-  E_INSTANTIATE,	/*38: cannot make an instance*/
-  E_ARRAYINDEX,
-  E_NOMETHOD,		/*40*/
+  E_NOPACKAGE,
+  E_NOMETHOD,
+  E_NOSLOT,
+  E_EXTSYMBOL,
+  E_ILLVARIABLE,
+  E_PKGNAME,
+  E_SYMBOLCONFLICT,
+
+/* TYPE ERROR */
+  E_TYPE_ERROR,
+  E_SETCONST,
+  E_NOSYMBOL,
+  E_NOLIST,
+  E_NOFUNCTION,
+  E_STREAM,
+  E_NOSTRING,
+  E_NOINT,
+  E_NONUMBER,
+  E_NOCLASS,
+  E_NOOBJECT,
+  E_NOSEQ,
+  E_NOARRAY,
+  E_NOVECTOR,
+  E_FLOATVECTOR,
+  E_NOINTVECTOR,
+  E_BITVECTOR,
+  E_TYPEMISMATCH,
+
+/* VALUE ERROR */
+  E_VALUE_ERROR,
+  E_ROTAXIS,
+  E_CHARRANGE,
   E_CIRCULAR,
-  E_SHARPMACRO,		/*unknown sharp macro*/
-  E_ALIST,		/*list expected for an element of an alist*/
-  E_NOMACRO,		/*macro expected*/
-  E_NOPACKAGE,		/*no such package */
-  E_PKGNAME,		/*the package already exists*/
-  E_NOOBJ,		/*invalid form*/
-  E_NOOBJVAR,		/*48: not an object variable*/
-  E_NOSEQ,		/*sequence(list,string,vector) expected*/
-  E_STARTEND,		/*illegal subsequence index*/
-  E_NOSUPER,		/*no superclass*/
-  E_FORMATSTRING,	/*invalid format string character*/
-  E_FLOATVECTOR,	/*float vector expected*/
-  E_CHARRANGE,		/*0..255*/
-  E_VECINDEX,		/*vector index mismatch*/
-  E_NOOBJECT,		/*other than numbers expected*/
-  E_TYPEMISMATCH,	/*the: type mismatch*/
-  E_DECLARE,		/*illegal declaration*/
-  E_DECLFORM,		/*invalid declaration form*/
-  E_NOVARIABLE,		/*constant is used in let or lambda*/
-  E_ROTAXIS,		/*illegal rotation axis spec*/
-  E_MULTIDECL,
-  E_READLABEL,		/*illegal #n= or #n# label*/
-  E_READFVECTOR,	/*error of #f( expression*/
-  E_READOBJECT,		/*error in #V or #J format*/
-  E_SOCKET,		/*error of socket address*/
-  E_NOARRAY,		/*array expected*/
-  E_ARRAYDIMENSION,	/*array dimension mismatch*/
-  E_KEYPARAM,		/*keyword parameter expected*/
-  E_NOKEYPARAM,		/*no such keyword*/
-  E_NOINTVECTOR,	/*integer vector expected*/
-  E_SEQINDEX,		/*sequence index out of range*/
-  E_BITVECTOR,		/*not a bit vector*/
-  E_EXTSYMBOL,		/*no such external symbol*/
-  E_SYMBOLCONFLICT,	/*symbol conflict in a package*/
+
+/* INDEX ERROR */
+  E_INDEX_ERROR,
+  E_STARTEND,
+  E_ARRAYDIMENSION,
+  E_ARRAYINDEX,
+  E_VECSIZE,
+  E_VECINDEX,
+  E_SEQINDEX,
+
+/* IO ERROR */
+  E_IO_ERROR,
+  E_IODIRECTION,
+  E_OPENFILE,
+  E_EOF,
+  E_ILLCH,
+  E_NODELIMITER,
+  E_FORMATSTRING,
+  E_READLABEL,
 
 /* the following error is added by APT */
     E_USER,

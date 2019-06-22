@@ -100,8 +100,8 @@ cixpair conditioncp;
 cixpair errorcp;
 cixpair fatalerrorcp;
 /* errors */
-cixpair syntaxerrorcp, programerrorcp, nameerrorcp;
-cixpair typeerrorcp, indexerrorcp, ioerrorcp;
+cixpair argumenterrorcp, programerrorcp, nameerrorcp;
+cixpair typeerrorcp, valueerrorcp, indexerrorcp, ioerrorcp;
 
 
 struct built_in_cid  builtinclass[64];
@@ -165,8 +165,8 @@ pointer FOREIGNCODE,ARRAY,BITVECTOR;
 pointer EXTNUM, RATIO, COMPLEX, BIGNUM;
 
 /*error classes*/
-pointer C_SYNTAXERROR, C_PROGRAMERROR, C_NAMEERROR;
-pointer C_TYPEERROR, C_INDEXERROR, C_IOERROR;
+pointer C_ARGUMENTERROR, C_PROGRAMERROR, C_NAMEERROR;
+pointer C_TYPEERROR, C_VALUEERROR, C_INDEXERROR, C_IOERROR;
 
 /*toplevel & evaluation control*/
 int intsig,intcode;
@@ -202,6 +202,7 @@ jmp_buf topjbuf;
 */
 
 char *errmsg[100]={
+/* FATAL ERROR */
 	"",				/*0*/
 	"stack overflow",		/*1 errcode=1..10 are fatal errors*/
 	"allocation",			/*2*/
@@ -212,72 +213,74 @@ char *errmsg[100]={
 	"",				/*7*/
 	"",				/*8*/
 	"",				/*9*/
+/* ARGUMENT ERROR */
 	"",				/*10	end of fatal error*/
-	"attempt to set to constant",	/*11 E_SETCONST */
-	"unbound variable",		/*12 E_UNBOUND  */
-	"undefined function",		/*13 E_UNDEF    */
-	"mismatch argument",		/*14 E_MISMATCHARG */
-	"illegal function",		/*15 E_ILLFUNC */
-	"illegal character",		/*16 E_ILLCH */
-	"illegal delimiter",		/*17 E_READ */
-	"write?",			/*18 E_WRITE*/
-	"too long string",		/*19 E_LONGSTRING */
-	"symbol expected",
-	"list expected",
-	"illegal lambda form",
-        "illegal lambda parameter syntax",
-	"no catcher found",
-	"no such block",
-	"stream expected",
-	"illegal stream direction keyword",
-	"integer expected",
-	"string expected",
-	"error in open file",
-	"EOF hit",
-	"number expected",
-	"class table overflow",
-	"class expected",
-	"vector expected",
-	"array size must be positive",
-	"duplicated object variable name",
-	"cannot make instance",
-	"array index out of range",		/*  E_ARRAYINDEX */
-	"cannot find method",
-	"circular list",
-	"unknown sharp macro",
-	"list expected for an element of an alist",
-	"macro expected",
-	"no such package",
-	"package name",
-	"invalid lisp object form",
-	"no such object variable",
-	"sequence expected",
-	"illegal start/end index",
-	"no super class",
-	"invalid format string",
-	"float vector expected",
-	"char code out of range",
-	"vector dimension mismatch",
-	"object expected",
-	"type mismatch",
-	"declaration is not allowed here",
-	"illegal declaration form",
-	"cannot be used for a variable",
-	"illegal rotation axis",
-	"multiple variable declaration",
-	"illegal #n= or #n= label",
-	"illegal #f( expression",
-	"illegal #v or #j expression", 
-	"invalid socket address",
-	"array expected",
-	"array dimension mismatch",
+	"",
+	"mismatch argument",
+	"illegal parameter syntax",
 	"keyword expected for arguments",
 	"no such keyword",
-	"integer vector expected",
-	"sequence index out of range",
-	"not a bit vector",
+	"multiple variable declaration",
+/* ARGUMENT ERROR */
+	"",
+	"string is too long",
+	"class table overflow",
+	"declaration is not allowed here",
+	"no catcher found",
+	"no such block",
+/* NAME ERROR */
+	"",
+	"unbound variable",
+	"undefined function",
+	"no such package",
+	"cannot find method",
+	"cannot find slot",
 	"no such external symbol",
+	"cannot be used for a variable",
+	"package already exists",
 	"symbol conflict",
+/* TYPE ERROR */
+	"",
+	"attempt to set to constant",
+	"symbol expected",
+	"list expected",
+	"function expected",
+	"stream expected",
+	"string expected",
+	"integer expected",
+	"number expected",
+	"class expected",
+	"object expected",
+	"sequence expected",
+	"array expected",
+	"vector expected",
+	"float vector expected",
+	"integer vector expected",
+	"bit vector expected",
+	"type mismatch",
+/* VALUE ERROR */
+	"",
+	"illegal rotation axis",
+	"char code out of range",
+	"searching a circular list",
+/* INDEX ERROR */
+	"",
+	"illegal start/end index",
+	"array dimension mismatch",
+	"array index out of range",
+	"vector dimension mismatch",
+	"vector index out of range",
+        "sequence index out of range",
+/* IO ERROR */
+	"",
+	"illegal stream direction",
+	"error in open file",
+	"EOF hit",
+	"illegal character",
+	"delimiter expected",
+	"invalid format string",
+	"illegal #n= or #n# label",
+/* USER ERROR */
 	"",
 	"E_END",
 	};
@@ -357,9 +360,9 @@ va_dcl
   char *msgstr;
     switch((unsigned int)ec) {
       case E_UNBOUND: case E_UNDEF: case E_NOCLASS: case E_PKGNAME:
-      case E_NOOBJ: case E_NOOBJVAR: case E_NOPACKAGE: case E_NOMETHOD:
+      case E_NOSLOT: case E_NOPACKAGE: case E_NOMETHOD:
       case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
-      case E_NOVARIABLE: case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
+      case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
         dest=(pointer)mkstream(ctx,K_OUT,makebuffer(64));
         prinx(ctx,va_arg(args,pointer),dest);
         msgstr=(char*)malloc(2+ strlen(errstr) + intval(dest->c.stream.count));
@@ -383,36 +386,37 @@ va_dcl
 
   pointer errobj,arglst;
   switch((unsigned int)ec) {
-    // SYNTAX ERROR
-      case E_ILLFUNC: case E_ILLCH: case E_READ: case E_WRITE:
-      case E_LAMBDA: case E_PARAMETER: case E_FORMATSTRING: case E_NOOBJ:
-      case E_DECLARE: case E_DECLFORM: case E_KEYPARAM: case E_NOKEYPARAM:
-        errobj=makeobject(C_SYNTAXERROR); break;
+    // ARGUMENT ERROR
+      case E_ARGUMENT_ERROR: case E_MISMATCHARG: case E_PARAMETER:
+      case E_KEYPARAM: case E_NOKEYPARAM: case E_MULTIDECL: 
+        errobj=makeobject(C_ARGUMENTERROR);  break;
     // PROGRAM ERROR
-      case E_MISMATCHARG: case E_NOCATCHER: case E_NOBLOCK: case E_PKGNAME:
-      case E_MULTIDECL: case E_SYMBOLCONFLICT: case E_LONGSTRING: case E_CHARRANGE:
-      case E_CLASSOVER: case E_DUPOBJVAR: case E_INSTANTIATE: case E_CIRCULAR:
-        errobj=makeobject(C_PROGRAMERROR); break;
+      case E_PROGRAM_ERROR: case E_LONGSTRING: case E_CLASSOVER:
+      case E_DECLARE: case E_NOCATCHER: case E_NOBLOCK: 
+        errobj=makeobject(C_PROGRAMERROR);  break;
     // NAME ERROR
-      case E_UNBOUND: case E_UNDEF: case E_EXTSYMBOL: case E_NOMETHOD:
-      case E_NOPACKAGE: case E_NOOBJVAR: case E_SHARPMACRO:
-        errobj=makeobject(C_NAMEERROR); break;
+      case E_NAME_ERROR: case E_UNBOUND: case E_UNDEF: case E_NOPACKAGE:
+      case E_NOMETHOD: case E_NOSLOT: case E_EXTSYMBOL: case E_ILLVARIABLE:
+      case E_PKGNAME: case E_SYMBOLCONFLICT: 
+        errobj=makeobject(C_NAMEERROR);  break;
     // TYPE ERROR
-      case E_NOSYMBOL: case E_NOLIST: case E_STREAM: case E_NOSTRING:
-      case E_NONUMBER: case E_NOINT: case E_NOCLASS: case E_NOOBJECT:
-      case E_NOMACRO: case E_NOSEQ: case E_NOARRAY: case E_NOVECTOR:
-      case E_NOINTVECTOR: case E_FLOATVECTOR: case E_BITVECTOR:
-      case E_TYPEMISMATCH: case E_SETCONST: case E_NOVARIABLE:
-      case E_ALIST: case E_NOSUPER: case E_ROTAXIS: case E_SOCKET:
-        errobj=makeobject(C_TYPEERROR); break;
+      case E_TYPE_ERROR: case E_SETCONST: case E_NOSYMBOL: case E_NOLIST:
+      case E_NOFUNCTION: case E_STREAM: case E_NOSTRING: case E_NOINT:
+      case E_NONUMBER: case E_NOCLASS: case E_NOOBJECT: case E_NOSEQ:
+      case E_NOARRAY: case E_NOVECTOR: case E_FLOATVECTOR: case E_NOINTVECTOR:
+      case E_BITVECTOR: case E_TYPEMISMATCH: 
+        errobj=makeobject(C_TYPEERROR);  break;
+    // VALUE ERROR
+      case E_VALUE_ERROR: case E_ROTAXIS: case E_CHARRANGE: case E_CIRCULAR:
+        errobj=makeobject(C_VALUEERROR);  break;
     // INDEX ERROR
-      case E_ARRAYINDEX: case E_VECINDEX: case E_SEQINDEX:
-      case E_STARTEND: case E_VECSIZE: case E_ARRAYDIMENSION:
-        errobj=makeobject(C_INDEXERROR); break;
+      case E_INDEX_ERROR: case E_STARTEND: case E_ARRAYDIMENSION: case E_ARRAYINDEX:
+      case E_VECSIZE: case E_VECINDEX: case E_SEQINDEX:
+        errobj=makeobject(C_INDEXERROR);  break;
     // IO ERROR
-      case E_IODIRECTION: case E_OPENFILE: case E_EOF:
-      case E_READLABEL: case E_READFVECTOR: case E_READOBJECT:
-        errobj=makeobject(C_IOERROR); break;
+      case E_IO_ERROR: case E_IODIRECTION: case E_OPENFILE: case E_EOF:
+      case E_ILLCH: case E_NODELIMITER: case E_FORMATSTRING: case E_READLABEL: 
+        errobj=makeobject(C_IOERROR);  break;
   default:
     errobj=makeobject(C_ERROR);}
 
@@ -852,10 +856,11 @@ static void initclasses()
   C_CONDITION=speval(basicclass("CONDITION",C_PROPOBJ,&conditioncp,0));
   C_ERROR=speval(basicclass("ERROR",C_CONDITION,&errorcp,0));
   C_FATALERROR=speval(basicclass("FATAL-ERROR",C_ERROR,&fatalerrorcp,0));
-  C_SYNTAXERROR=speval(basicclass("SYNTAX-ERROR",C_ERROR,&syntaxerrorcp,0));
+  C_ARGUMENTERROR=speval(basicclass("ARGUMENT-ERROR",C_ERROR,&argumenterrorcp,0));
   C_PROGRAMERROR=speval(basicclass("PROGRAM-ERROR",C_ERROR,&programerrorcp,0));
   C_NAMEERROR=speval(basicclass("NAME-ERROR",C_ERROR,&nameerrorcp,0));
   C_TYPEERROR=speval(basicclass("TYPE-ERROR",C_ERROR,&typeerrorcp,0));
+  C_VALUEERROR=speval(basicclass("VALUE-ERROR",C_ERROR,&valueerrorcp,0));
   C_INDEXERROR=speval(basicclass("INDEX-ERROR",C_ERROR,&indexerrorcp,0));
   C_IOERROR=speval(basicclass("IO-ERROR",C_ERROR,&ioerrorcp,0));
 

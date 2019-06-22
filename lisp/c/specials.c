@@ -149,7 +149,7 @@ pointer arg;
     arg=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),arg);
     arg=cons(ctx,funcname,arg);
     return(cons(ctx,LAMCLOSURE,arg));}
-  else error(E_ILLFUNC);}
+  else error(E_NOFUNCTION);}
 
 pointer MACEXPAND2(ctx,n,argv)
 register context *ctx;
@@ -215,6 +215,7 @@ register pointer *argv;
 }
   printf( "\n" );
 #endif
+  if(!iscons(argv[1])) error(E_NOLIST);
   while (islist(argv[1])) {
     i=1;
     while (i<n) {
@@ -883,7 +884,7 @@ pointer argv[];
   GC_POINT;
   while (i<n) {
     decl=argv[i++];
-    if (!islist(decl)) error(E_DECLFORM);
+    if (!islist(decl)) error(E_NOLIST);
     if (ccar(decl)==QSPECIAL) {
       decl=ccdr(decl);
       while (islist(decl)) {
