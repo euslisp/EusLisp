@@ -124,7 +124,7 @@
    (list 'setf var h))
 
 (defmacro defvar (var &optional (init nil) (doc nil))
-   (unless (symbolp var) (error 20))
+   (unless (symbolp var) (error "symbol expected"))
   `(when (eql (send ',var :vtype) 1) 
 	(send ',var :vtype 2)
         (if (not (boundp ',var))
@@ -132,19 +132,19 @@
 	',var))
 
 (defmacro deflocal (var &optional (init nil) (doc nil))
-   (unless (symbolp var) (error 20))
+   (unless (symbolp var) (error "symbol expected"))
    `(progn
 	(send ',var :special ,init ,doc)
 	',var))
 
 (defmacro defparameter (var init &optional (doc nil))
-   (unless (symbolp var) (error 20))
+   (unless (symbolp var) (error "symbol expected"))
    `(progn
 	(send ',var :global ,init ,doc)
 	',var))
 
 (defmacro defconstant (sym val &optional doc)
-   (unless (symbolp sym) (error 20))
+   (unless (symbolp sym) (error "symbol expected"))
    `(progn
 	(send ',sym :constant ,val ,doc)
 	',sym))

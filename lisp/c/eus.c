@@ -322,6 +322,7 @@ va_dcl
   register context *ctx;
   register struct callframe *vf;
   pointer msg,form,callstack;
+  pointer errobj,arglst;
 
 #ifdef USE_STDARG
   va_start(args,ec);
@@ -374,6 +375,9 @@ va_dcl
         free(msgstr);
 	break;
     case E_USER:
+      errobj = (pointer)va_arg(args,pointer);
+    case E_ARGUMENT_ERROR: case E_PROGRAM_ERROR: case E_NAME_ERROR: case E_TYPE_ERROR:
+    case E_VALUE_ERROR: case E_INDEX_ERROR: case E_IO_ERROR:
       errstr = (char*)va_arg(args,pointer);
     default:
       msg=makestring(errstr,strlen(errstr));}
@@ -384,7 +388,6 @@ va_dcl
   /* call user's error handler function */
   errhandler=getfunc(ctx, intern(ctx,"SIGNALS",7,lisppkg));
 
-  pointer errobj,arglst;
   switch((unsigned int)ec) {
     // ARGUMENT ERROR
       case E_ARGUMENT_ERROR: case E_MISMATCHARG: case E_PARAMETER:
@@ -417,8 +420,7 @@ va_dcl
       case E_IO_ERROR: case E_IODIRECTION: case E_OPENFILE: case E_EOF:
       case E_ILLCH: case E_NODELIMITER: case E_FORMATSTRING: case E_READLABEL: 
         errobj=makeobject(C_IOERROR);  break;
-  default:
-    errobj=makeobject(C_ERROR);}
+  }
 
   putprop(ctx,errobj,msg,defkeyword(ctx,"MSG"));
   putprop(ctx,errobj,callstack,defkeyword(ctx,"CALLSTACK"));

@@ -14,8 +14,8 @@
 
 (defun add-handler (label callback)
   (assert (and (classp label) (derivedp (instantiate label) condition))
-          "Condition class expected!")
-  (assert (functionp callback) "Function expected!")
+          "condition class expected")
+  (assert (functionp callback) "function expected")
   (push (cons label callback) *condition-handler*))
 
 (defmacro handler-bind (bindings &rest forms)
@@ -37,7 +37,7 @@
 (defun signals (obj &rest init-args)
   (if (classp obj) (setq obj (instantiate obj)))
   (if init-args (send* obj :init init-args))
-  (assert (derivedp obj condition) "Condition class expected!")
+  (assert (derivedp obj condition) "condition class expected")
   (block signals
     (dolist (handle *condition-handler*)
       (when (derivedp obj (car handle))

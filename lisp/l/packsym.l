@@ -25,7 +25,7 @@
  (:pname () pname)
  (:func () function)
  (:value (val)
-    (if (= vtype 0) (error 11 self))
+    (if (= vtype 0) (error "attempted to set constant ~a" self))
     (setq value val))
  (:constant (c &optional (doc nil))
     (when (= vtype 0)
@@ -41,7 +41,7 @@
 	  value c)
     self)
  (:special (v &optional (doc nil))	;thread local special var
-    (if (= vtype 0) (error 11 self))
+    (if (= vtype 0) (error "attempted to set constant ~a" self))
     (if doc (putprop self doc :variable-documentation))
     (setq vtype (system::next-special-index))	; originally, 2
     (set self v)	;(setq value v) is wrong
@@ -67,7 +67,7 @@
 (defun symbol-plist (sym) (send sym :plist))
 (defun remprop (sym attr) (send sym :remprop attr))
 ;(defun set (var val)
-;  (if (symbolp var) (send var :value val) (error 11 var)))
+;  (if (symbolp var) (send var :value val) (error "attempted to set constant ~a" var)))
 (defun symbol-package (sym) (send sym :home-package))
 (defun symbol-name (sym) (declare (symbol sym))
    (if (symbolp sym) (sym . pname) (error "not a symbol")))
