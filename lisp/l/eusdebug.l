@@ -167,7 +167,7 @@
       (catch *replevel* (reploop prompt)	 )))
 
 (defun setbreak (func)
-   (unless (fboundp func) (error "no func def. for setbreak"))
+   (unless (fboundp func) (error name-error "no func def. for setbreak"))
    (when (not (get func 'broken-function))
       (setf (get func 'broken-function) (symbol-function func)
     	    (symbol-function func)
@@ -404,7 +404,7 @@
 		    (setf (get ',func :call-count) 0 
 		          (get ',func :elapsed-time) 0))))
 	   ((or (not (fboundp ',func)) (macro-function ',func))
-	    (error "not a function"))
+	    (error type-error "function expected"))
 	   (t
 	    (let ((fdef (symbol-function ',func)) )
 		(setf (get ',func :call-count) 0 

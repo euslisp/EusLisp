@@ -30,7 +30,7 @@
 	  )
       (setq rgb-image (send rgb-image :to24))
       (if (not (derivedp rgb-image color-image24))
-	  (error "jpeg-compress expected 24-bit color-image, but ~s~%"
+	  (error value-error "jpeg-compress expected 24-bit color-image, but ~s~%"
 		 rgb-image))
       ;; We cannot predict exact size of the compressed file.
       ;; So, prepare a buffer for no compression.

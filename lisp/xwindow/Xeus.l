@@ -480,7 +480,7 @@
 		  (:northeast . 3) (:west . 4) (:center . 5)
 		  (:east . 6) (:southwest . 7) (:south . 8)
 		  (:southeast . 9) (:static . 10))))) )
-    (unless (integerp g) (error "invalid gravity name" g))
+    (unless (integerp g) (error type-error "invalid gravity name" g))
     g)
 
 

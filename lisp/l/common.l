@@ -124,7 +124,7 @@
    (list 'setf var h))
 
 (defmacro defvar (var &optional (init nil) (doc nil))
-   (unless (symbolp var) (error "symbol expected"))
+   (unless (symbolp var) (error type-error "symbol expected"))
   `(when (eql (send ',var :vtype) 1) 
 	(send ',var :vtype 2)
         (if (not (boundp ',var))
@@ -132,19 +132,19 @@
 	',var))
 
 (defmacro deflocal (var &optional (init nil) (doc nil))
-   (unless (symbolp var) (error "symbol expected"))
+   (unless (symbolp var) (error type-error "symbol expected"))
    `(progn
 	(send ',var :special ,init ,doc)
 	',var))
 
 (defmacro defparameter (var init &optional (doc nil))
-   (unless (symbolp var) (error "symbol expected"))
+   (unless (symbolp var) (error type-error "symbol expected"))
    `(progn
 	(send ',var :global ,init ,doc)
 	',var))
 
 (defmacro defconstant (sym val &optional doc)
-   (unless (symbolp sym) (error "symbol expected"))
+   (unless (symbolp sym) (error type-error "symbol expected"))
    `(progn
 	(send ',sym :constant ,val ,doc)
 	',sym))
@@ -332,10 +332,10 @@
 ;; string
 
 (defun string (x)
-  (if (stringp x) x
-      (if (symbolp x) (copy-seq (x . pname))
-	  (if (numberp x) (format nil "~d" x)
-	      (error x)))))
+  (cond ((stringp x) x)
+	((symbolp x) (copy-seq (symbol-pname x)))
+	((numberp x) (princ-to-string x))
+	(t (error type-error "cannot coerce to string ~a" x))))
 
 ;
 ; more list functions
@@ -568,7 +568,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 
 (defun make-list (leng &key initial-element)
   (let (r)
-   (unless (integerp leng) (error "integer required for length of make-list"))
+   (unless (integerp leng) (error type-error "integer required for length of make-list"))
    (dotimes (i leng r)
 	(push initial-element r))))
 
@@ -790,7 +790,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
      (dolist (v varlist)
 	(cond ((consp v)
 		(if (member (car v) variables)
-		    (error "duplicated object variable name"))
+		    (error name-error "duplicated object variable name"))
 		(push (car v) variables)
 		(setq p (position :type v))
 		(push (if p (elt v (1+ p)) t) types)
@@ -798,11 +798,11 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 		(push (if p (elt v (1+ p)) nil) forwards))
 	      ((symbolp v)
 		(if (member v variables)
-		    (error "duplicated object variable name"))
+		    (error name-error "duplicated object variable name"))
 		(push v variables)
 		(push t types)
 		(push nil forwards))
-	      (t (error "variable name expected for :slots"))))
+	      (t (error name-error "variable name expected for :slots"))))
      (setq variables (coerce (nreverse variables) vector)
 	   types (coerce (nreverse types) vector)
 	   forwards (coerce (nreverse forwards) vector))
@@ -877,7 +877,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 	    (readtable-macro to) (instantiate vector 256)
 	    (readtable-dispatch-macro to) (instantiate vector 256)))
    (if (or (null (readtablep from)) (null (readtablep to))) 
-       (error "readtable expected"))
+       (error type-error "readtable expected"))
    (replace (readtable-syntax to) (readtable-syntax from))
    (replace (readtable-macro to) (readtable-macro from))
    (replace (readtable-dispatch-macro to) (readtable-dispatch-macro from))
@@ -1074,9 +1074,9 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
                  (putprop ',access-fn
                              ,(when (not (endp (cdr rest)))
                                     (unless (stringp (cadr rest))
-                                            (error "A doc-string expected."))
+                                            (error type-error "doc-string expected"))
                                     (unless (endp (cddr rest))
-                                            (error "Extra arguments."))
+                                            (error argument-error "extra arguments"))
                                     (cadr rest))
                              'setf-documentation)
                  ',access-fn))

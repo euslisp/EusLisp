@@ -50,7 +50,7 @@
 		 (cadr code)
 		 (if (= (length (mnemonic . pname)) 1)
 		     ch
-		     (error "unknown #\ code"))))
+		     (error io-error "unknown #\ code"))))
 	    (t ch))))
 
 (set-dispatch-macro-character #\# #\\ 'read_sharp_backslash)
@@ -63,12 +63,6 @@
 (eval-when (load eval)
 (defun true-string (s)
    (if (symbolp s) (symbol-pname s) s))
-
-(defun string (x)
-  (cond ((stringp x) x)
-	((symbolp x) (copy-seq (symbol-pname x)))
-	((numberp x) (princ-to-string x))
-	(t (error "cannot coerce to string " x))))
 
 (defun make-string (size) (instantiate string size))
 
@@ -92,7 +86,7 @@
 
 (defun nstring-downcase (str &key (start 0) (end (length str)))
    (declare (type integer start end) (string str))
-   (if (not (stringp str)) (error "no string"))
+   (if (not (stringp str)) (error type-error "string expected"))
    (while (< start end)
 	(setchar str start (char-downcase (char str start)))
 	(inc start))
@@ -100,7 +94,7 @@
 
 (defun nstring-upcase (str &key (start 0) (end (length str)))
    (declare (type integer start end))
-   (if (not (stringp str)) (error "no string"))
+   (if (not (stringp str)) (error type-error "string expected"))
    (while (< start end)
 	(setchar str start (char-upcase (char str start)))
 	(inc start))
@@ -280,7 +274,7 @@
    (cond ((symbolp p) (string p))
 	 ((stringp p) p)
 	 ((pathnamep p) (send p :namestring))
-	 (t (error "not a pathname ~s" p))))
+	 (t (error type-error "pathname expected ~s" p))))
 
 (defun pathname-directory (s) ((pathname s) . directory))
 (defun pathname-name (s) ((pathname s) . name))
@@ -334,7 +328,7 @@
 ;		(merge-pathnames
 ;			 (pathname-name pathnam) target-dir)
 		)
-	    (t (error "cannot locate the file"))))  )
+	    (t (error io-error "cannot locate the file"))))  )
 
 )
 
@@ -383,7 +377,7 @@
 	    (setq directory 
 		  (append '(:root ) (rest directory)))
 	    self)
-	      (t (error "cannot parse url ~a" url-string)) )) 
+	      (t (error value-error "cannot parse url ~a" url-string)) ))
       )
   (:percent-escape (&key (queryp t) (revert nil))
    (send self :parse-namestring
@@ -421,7 +415,7 @@
 	    (send file :directory (append '(:root #| "usr" "www" "data" |#)
 				  (rest (send file :directory))))
 	    (list protocol server port file))
-	      (t (error "cannot parse url ~a" url-string)) )) 
+	      (t (error value-error "cannot parse url ~a" url-string)) ))
   )  
 
 (defvar *url-escape-unreserved-characters* "-_.~:/=?&")

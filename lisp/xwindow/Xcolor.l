@@ -47,7 +47,7 @@
 
 (defun find-visual (type depth &optional (screen 0))
     (setq type (visual-type type))
-    (unless (integerp type) (error "illegal visual type ~A" type))
+    (unless (integerp type) (error type-error "illegal visual type ~A" type))
     (let ((vinfo (make-array 16 :element-type :integer)))
 	(if (= (MatchVisualInfo *display* screen depth type vinfo) 0)
 	    nil		; specified visual not found
@@ -156,7 +156,7 @@ or a list of three short (not byte) integers representing red, green and blue."
 	   )
 	  ((and (integerp r) (integerp g) (integerp b))
 	   (setq colordef (instance Xcolor :init 0 r g b)))
-	  (t (error "invalid color specification")))
+	  (t (error value-error "invalid color specification")))
     ;; RGB description is obtained in colordef
     (cond ((null pix)	;pixel is not specified --> allocate color cell
 	   (AllocColor *display* cmapid colordef)
@@ -168,7 +168,7 @@ or a list of three short (not byte) integers representing red, green and blue."
 	   (if (= 0 (StoreColor *display* cmapid colordef))
 	       nil
 	       pix))
-	  (t (error "invalid pixel"))))
+	  (t (error value-error "invalid pixel"))))
  (:store-hls (pix hue lightness saturation)
     (let ((rgb (geo:hls2rgb hue lightness saturation 65536)))
 	(send self :store pix (first rgb) (second rgb) (third rgb))
@@ -252,7 +252,7 @@ or a list of three short (not byte) integers representing red, green and blue."
 			      (send self :store nil rgb)))
 		    (when (null pix)
 			(send self :free (subseq lut 0 index))
-			(error "color allocation"))
+			(error program-error "color allocation"))
 		    (setf (aref lut index) pix))
 		    )
 	   (incf index))
@@ -261,12 +261,12 @@ or a list of three short (not byte) integers representing red, green and blue."
     (let ((lut (assoc LUT-name LUT-list)) (new-lut))
        (cond ((null lut)
 	      (setq new-lut (send self :allocate-colors rgb-list private))
-	      (if (null new-lut) (error "colorcells allocation failure"))
+	      (if (null new-lut) (error program-error "colorcells allocation failure"))
 	      (setq LUT-list  (cons (cons LUT-name new-lut) LUT-list))
 	      new-lut)
 	     ((= (length rgb-list) (length (cdr lut)))  (cdr lut))
 		;already created
-	     (t  (error "size mismatch with the LUT already created")))
+	     (t  (error value-error "size mismatch with the LUT already created")))
     ))
  (:define-gray-scale-LUT (LUT-name levels &optional (private nil))
     (let* ((pixels)

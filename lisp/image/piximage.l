@@ -182,7 +182,7 @@
 		 (cond ((= deepth 1) :bit)
 		       ((<= deepth 8) :byte)
 		       ((<= deepth 32) :integer)
-		       (t (error "image depth > 32 is not supported"))))))
+		       (t (error value-error "image depth > 32 is not supported"))))))
     (setq rank 2
 	  displaced-index-offset 0)
     (setq depth deepth dim1 w dim0 h entity imgvec)
@@ -736,7 +736,7 @@
     (let ((pix (send self :pixel x y)))
        (list (ldb pix 11 5) (ldb pix 5 6) (ldb pix 0 5))))
  (:to16 () self)
- (:component (n) (error "component of 16bpp image is not yet implemented"))
+ (:component (n) (error value-error "component of 16bpp image is not yet implemented"))
 )
 
 (defmethod color-image24

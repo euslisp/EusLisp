@@ -225,7 +225,7 @@
  (:dequeue (&optional (error-p nil))
      (cond ((null car)
 		(if error-p
-		    (error "nothing queued ~s" self)
+		    (error value-error "nothing queued ~s" self)
 		    nil))
 	   ((eq car cdr)	;last element
 	    (prog1 (car car) (setq car nil cdr nil)))

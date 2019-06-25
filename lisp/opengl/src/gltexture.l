@@ -14,7 +14,7 @@
 	(ob (send img :entity))
 	(b (make-string (* ow oh od))))
     (when (not (= od 3))
-	  (error "not supported depth"))
+	  (error value-error "not supported depth"))
     (dotimes (x ow)
 	     (dotimes (y oh)
 		      (dotimes (z od)
@@ -31,7 +31,7 @@
 	 (th (ash 1 (ceiling (log oh 2))))
 	 (td od))
     (when (not (= od 3))
-	  (error "not supported depth"))
+	  (error value-error "not supported depth"))
     (cond ((not (and (= ow tw) (= oh th)))
 	   ;; rescale to boundary
 	   (let ((b (make-string (* tw th td))))
@@ -73,7 +73,7 @@
 		 (not (= texture-width (ash 1 (ceiling (log texture-width 2))))))
 	    (and texture-height
 		 (not (= texture-height (ash 1 (ceiling (log texture-height 2)))))))
-	(error "make-cube-with-texture: argument error"))
+	(error argument-error "make-cube-with-texture: argument error"))
 
   (let* ((c (apply #'user::make-cube (append (list xsize ysize zsize) args)))
 	 (faces (list (car (send c :get-face nil :top))

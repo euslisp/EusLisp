@@ -77,7 +77,7 @@
 (defmacro def-async-method (class-name &rest methods)
   (let ((class (symbol-value class-name)))
     (if (not (subclassp class asynchronous-object))
-      (error "not a class of asynchronous object"))
+      (error type-error "not a class of asynchronous object"))
     (dolist (method methods)
       (send-msg class :add-async-method (car method)))
     `(defmethod ,class-name

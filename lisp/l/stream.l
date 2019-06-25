@@ -154,7 +154,7 @@
 				  (offset 0))
    (let* (uread-length)
 	(if (and (not (stringp buf)) (< (length buf) n-bytes))
-	    (error "buffer string is too short for :read-bytes"))
+	    (error index-error "buffer string is too short for :read-bytes"))
         (when (plusp (setq uread-length (send self :chars-left)))
 	   (replace buf (send self :tail-string) :end1 n-bytes)
 	   (setq uread-length (min n-bytes uread-length))
@@ -163,7 +163,7 @@
 	(while (< offset n-bytes)
 	   (setq uread-length
 		(unix:uread fd buf (- n-bytes offset) offset) )
-	   (if (<= uread-length 0) (error "EOF hit"))
+	   (if (<= uread-length 0) (error io-error "EOF hit"))
 	   (incf offset uread-length)	   )
 	buf
 	))
@@ -194,7 +194,7 @@
 ;
 (eval-when (load eval)
 (defun make-string-input-stream (s &optional start end)
-    (if (null (stringp s)) (error "non string"))
+    (if (null (stringp s)) (error type-error "string expected"))
     (setq s (instance stream :init :input s start end))
     s)
 
@@ -641,8 +641,8 @@
 	     (cond ((streamp strm) (send strm :infd))
 		   ((numberp strm) strm)
 		   ((find-method strm :fd) (send strm :fd))
-		   (t (error "stream or fd expected for select port")) ))
-       (if (>= fd *max-port-fd*) (error "too many streams for selection"))
+		   (t (error type-error "stream or fd expected for select port")) ))
+       (if (>= fd *max-port-fd*) (error value-error "too many streams for selection"))
       fd))
  (:add-port (strm handler &rest arglist)
     (let ((fd (send self :get-stream-fd strm)))
