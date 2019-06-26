@@ -154,7 +154,7 @@ pointer C_THREAD;
 pointer C_VCLASS, C_FLTVECTOR, C_INTVECTOR, C_STRING, C_BITVECTOR;
 pointer C_FOREIGNCODE,C_ARRAY,C_READTABLE;
 pointer C_EXTNUM, C_RATIO, C_BIGNUM, C_COMPLEX;
-pointer C_CONDITION, C_ERROR, C_FATALERROR;
+pointer C_CONDITION, C_ERROR;
 
 /*class names*/
 pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
@@ -857,7 +857,6 @@ static void initclasses()
 /* conditions */
   C_CONDITION=speval(basicclass("CONDITION",C_PROPOBJ,&conditioncp,0));
   C_ERROR=speval(basicclass("ERROR",C_CONDITION,&errorcp,0));
-  C_FATALERROR=speval(basicclass("FATAL-ERROR",C_ERROR,&fatalerrorcp,0));
   C_ARGUMENTERROR=speval(basicclass("ARGUMENT-ERROR",C_ERROR,&argumenterrorcp,0));
   C_PROGRAMERROR=speval(basicclass("PROGRAM-ERROR",C_ERROR,&programerrorcp,0));
   C_NAMEERROR=speval(basicclass("NAME-ERROR",C_ERROR,&nameerrorcp,0));

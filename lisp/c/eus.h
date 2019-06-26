@@ -692,7 +692,7 @@ extern pointer C_THREAD;
 extern pointer C_VCLASS, C_FLTVECTOR, C_INTVECTOR, C_STRING, C_BITVECTOR;
 extern pointer C_FOREIGNCODE,C_ARRAY,C_READTABLE;
 extern pointer C_EXTNUM, C_RATIO, C_COMPLEX, C_BIGNUM;
-extern pointer C_CONDITION, C_ERROR, C_FATALERROR;
+extern pointer C_CONDITION, C_ERROR;
 
 /*class names*/
 extern pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
