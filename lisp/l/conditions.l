@@ -2,7 +2,8 @@
 
 (in-package "LISP")
 
-(export '(handler-bind handler-case signals continue next-handler))
+(export '(install-handler remove-handler signals
+          handler-bind handler-case continue next-handler))
 
 (defmethod condition
   (:init (&rest init-args &key &allow-other-keys)
@@ -12,15 +13,21 @@
         (setf (get self name) value)))
     self))
 
-(defun add-handler (label callback)
+(defun install-handler (label handler)
   (assert (and (classp label) (derivedp (instantiate label) condition))
           "condition class expected")
-  (assert (functionp callback) "function expected")
-  (push (cons label callback) *condition-handler*))
+  (assert (functionp handler) "function expected")
+  (push (cons label handler) *condition-handler*))
+
+(defun remove-handler (label &optional handler)
+  (setq *condition-handler*
+        (if handler
+            (remove (cons label handler) *condition-handler* :test #'equal :count 1)
+            (remove label *condition-handler* :key #'car :count 1))))
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
-     ,@(mapcar #'(lambda (bind) `(add-handler ,@bind)) (reverse bindings))
+     ,@(mapcar #'(lambda (bind) `(install-handler ,@bind)) (reverse bindings))
      ,@forms))
 
 (defmacro handler-case (form &rest cases)
@@ -44,7 +51,7 @@
         (catch :next-handler
           (return-from signals (funcall (cdr handle) obj)))))))
 
-(defun myerror (err)
+(defun euserror (err)
   (when (and (plusp *max-callstack-depth*) (get err :callstack))
     (format *error-output* "Call Stack (most recent call last):~%")
     (let ((i 0))
@@ -71,5 +78,5 @@
 (defun continue (val) (throw (- *replevel*) val))
 (defun next-handler () (throw :next-handler nil))
 
-(add-handler error #'myerror)
+(install-handler error #'euserror)
 )

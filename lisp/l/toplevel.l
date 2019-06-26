@@ -279,24 +279,6 @@
       (if *use-top-selector*
           (reploop-select repstream ttyp)
           (reploop-non-select repstream ttyp))) )
-    
-
-(defun euserror (code msg1 form &optional (msg2))
-  (if (and msg2 (zerop (length msg1))) (setq msg1 msg2 msg2 nil))
-#+(or :solaris2 :SunOS4.1 :thread)
-   (format *error-output* "~C[1;3~Cm~A ~d error: ~A"
-		#x1b (+ 1 48) *program-name*
-		(unix::thr-self) msg1)	; thr-self is in unix pkg
-#-(or :solaris2 :SunOS4.1 :thread)
-   (format *error-output* "~C[1;3~Cm~A error: ~A"
-		#x1b (+ 1 48)   *program-name* msg1)
-   (if msg2 (format *error-output* " ~A" msg2))
-   (if form (format *error-output* " in ~s" form))
-   (format *error-output* "~C[0m~%"  #x1b)
-   (let ((*replevel* (1+ *replevel*))
-	 (*reptype* "E"))
-      (catch *replevel* (reploop #'toplevel-prompt)))
-   (throw *replevel* nil))
 
 ;;;
 ;;; default toplevel

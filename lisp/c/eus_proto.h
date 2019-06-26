@@ -257,7 +257,6 @@ extern pointer GETDISPMACRO(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer RESETREADTABLE(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer XFORMAT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SIGERROR(context */*ctx*/, int /*n*/, pointer */*argv*/);
-extern pointer INSTALL_ERRHANDLER(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern void lispio(context */*ctx*/, pointer /*mod*/);
 /* lists.c */
 extern pointer CAR(context */*ctx*/, int /*n*/, pointer */*argv*/);

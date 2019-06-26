@@ -538,7 +538,6 @@ typedef struct {
 	struct	protectframe	*protfp;
 	struct  fletframe	*fletfp, *newfletfp;
 	pointer lastalloc;
-	pointer errhandler;
 	pointer threadobj;
 	struct  methdef		*methcache;
 	struct  buddyfree	*thr_buddy;

@@ -104,12 +104,11 @@
 
 
 
-(defun thread-error (code msg1 form &optional (msg2))
+(defun thread-error (err)
    (let* ((thr (system::thread-self))
 	  (s (get thr :stdio)))
-     (format s "~A ~d error: ~A" *program-name*	(send thr :id) msg1)
-     (if msg2 (format s " ~A" msg2))
-     (if form (format s " in ~s" form))
+     (format s "~A ~d error: ~A" *program-name*	(send thr :id) (get err :msg))
+     (if (get err :form) (format s " in ~s" (get err :form)))
      (terpri s)
      (throw :thread-loop-again nil)) )
 
@@ -118,7 +117,7 @@
    (let* ((thr (system::thread-self))
 	  (id (send thr :id)))
       (setf (get thr :stdio) s)
-      (lisp::install-error-handler 'thread-error)
+      (install-handler error 'thread-error)
       (catch :thread-loop
 	(while t
 	   (catch :thread-loop-again
