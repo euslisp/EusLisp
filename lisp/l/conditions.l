@@ -2,8 +2,8 @@
 
 (in-package "LISP")
 
-(export '(install-handler remove-handler signals
-          handler-bind handler-case continue next-handler))
+(export '(install-handler remove-handler handler-bind handler-case
+          signals continue retry next-handler))
 
 (defmethod condition
   (:init (&rest init-args &key &allow-other-keys)
@@ -51,23 +51,31 @@
         (catch :next-handler
           (return-from signals (funcall (cdr handle) obj)))))))
 
-(defun euserror (err)
+(defun print-error-callstack (err)
   (when (and (plusp *max-callstack-depth*) (get err :callstack))
     (format *error-output* "Call Stack (most recent call last):~%")
     (let ((i 0))
       (dolist (form
                 (nthcdr (max 0 (- (length (get err :callstack)) *max-callstack-depth*))
                         (get err :callstack)))
-        (format *error-output* "~3D: at ~A~%" (incf i) form))))
+        (format *error-output* "~3D: at ~A~%" (incf i) form)))))
 
+(defun print-error-msg (err)
   (if (get err :msg)
       (format *error-output* "~C[1;3~Cm~A~C[0m: ~A~%"
               #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (get err :msg))
       (format *error-output* "~C[1;3~Cm~A~C[0m~%"
-              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b))
+              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b)))
+
+(defvar *current-error* nil)
+
+(defun euserror (err)
+  (print-error-callstack err)
+  (print-error-msg err)
   (catch (- (1+ *replevel*))
     (let ((*replevel* (1+ *replevel*))
-          (*reptype* "E"))
+          (*reptype* "E")
+          (*current-error* err))
       ;; do not carry handlers through the error stack
       ;; i.e. restore previous global `*condition-handler*'
       (let ((old (assoc '*condition-handler* (sys:list-all-special-bindings))))
@@ -76,6 +84,7 @@
     (throw *replevel* t)))
 
 (defun continue (val) (throw (- *replevel*) val))
+(defun retry () (throw (- *replevel*) (eval (get *current-error* :form))))
 (defun next-handler () (throw :next-handler nil))
 
 (install-handler error #'euserror)
