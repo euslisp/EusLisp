@@ -824,11 +824,8 @@ jmp_buf *jbuf;
   cfp=(struct catchframe *)ctx->vsp;
   cfp->nextcatch=ctx->catchfp;
   cfp->cf=ctx->callfp;
-  cfp->bf=ctx->bindfp;
-/*  cfp->blkf=blkfp; */
   cfp->jbp=(jmp_buf *)jbuf;
   cfp->label=lab;
-  cfp->ff=ctx->fletfp;
   ctx->vsp += (sizeof(struct catchframe)/sizeof(pointer));
   ctx->catchfp=cfp;}
 
