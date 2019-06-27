@@ -43,7 +43,7 @@
   (export '(quote eval apply funcall progn prog1 function))
   (export '(mapc mapcar mapcan setq if when cond while let let* 
 		unwind-protect catch throw macrolet flet labels block return-from
-		return reset go tagbody evalhook macroexpand2 eval-when
+		return resume reset go tagbody evalhook macroexpand2 eval-when
 		the and or proclaim declare symbol-value symbol-function
 		makunbound defun defmacro find-symbol intern gensym
 		list-all-packages find-package 
@@ -176,7 +176,7 @@
 	  OBJECT-SIZE  MEMORY-REPORT  CLEAR-MEMORY-REPORT
 	  ROOM  LIST-ALL-CHUNKS  LIST-ALL-INSTANCES  ADDRESS  PEEK  POKE
 	  LIST-ALL-REFERENCES  LIST-ALL-CATCHERS  LIST-ALL-BINDINGS
-	  LIST-ALL-SPECIAL-BINDINGS  LIST-ALL-CLASSES))
+	  LIST-ALL-SPECIAL-BINDINGS  LIST-ALL-CLASSES  PRINT-STACK))
 
   (export '*threads*)
 

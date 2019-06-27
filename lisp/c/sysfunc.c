@@ -687,6 +687,23 @@ pointer argv[];
 /* stack frame access
 /* 1988-Apr-26
 /****************************************************************/
+pointer PRINTSTACK(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ register struct callframe *vf;
+  int i,max=-1;
+  ckarg2(0,1);
+  if(n) max=max(0,intval(argv[0]));
+  vf=(struct callframe *)(ctx->callfp);
+  for (i=0; vf->vlink && max; vf=vf->vlink, i++, max--) {
+    prinx(ctx,makeint(i),STDOUT);
+    int osf=ctx->slashflag;
+    ctx->slashflag=1; prinx(ctx,makestring(": ",2),STDOUT); ctx->slashflag=osf;
+    prinx(ctx,vf->form,STDOUT);
+    terpri(STDOUT);}
+  return(NIL);}
+
 pointer LISTALLCATCHERS(ctx,n,argv)
 register context *ctx;
 int n;
@@ -799,6 +816,7 @@ pointer mod;
 /*  defun(ctx,"MALLOC_DEBUG",mod,MALLOC_DEBUG,NULL);
 /*  defun(ctx,"MALLOC_VERIFY",mod,MALLOC_VERIFY,NULL); */
   defun(ctx,"LIST-ALL-REFERENCES",mod,LISTALLREFERENCES,NULL);
+  defun(ctx,"PRINT-STACK",mod,PRINTSTACK,NULL);
   defun(ctx,"LIST-ALL-CATCHERS",mod,LISTALLCATCHERS,NULL);
   defun(ctx,"LIST-ALL-BINDINGS",mod,LISTBINDINGS,NULL);
   defun(ctx,"LIST-ALL-SPECIAL-BINDINGS",mod,LISTSPECIALBINDINGS,NULL);
