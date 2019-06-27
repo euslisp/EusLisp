@@ -623,15 +623,17 @@ pointer RESUME(ctx,n,argv)
 register context *ctx;
 int n;
 pointer *argv;
-{ register struct callframe *vf;
-  ckarg(2);
+{ ckarg2(1,2);
   int depth=ckintval(argv[0]);
-  pointer result=argv[1];
-  vf=(struct callframe *)(ctx->callfp);
-
+  register struct callframe *vf=(struct callframe *)(ctx->callfp);
+  pointer result;
+  /* unwind stack */
   for(;depth> 0 && vf->vlink; depth--, vf=vf->vlink) {};
   ctx->callfp=vf;
   unwind(ctx,(pointer *)ctx->callfp);
+  /* resume with value */
+  if (n==1) result=eval(ctx,vf->form);
+  else result=argv[1];
   euslongjmp(*(vf->jbp),result);}
 
 pointer RESET(ctx,n,argv)

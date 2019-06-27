@@ -429,7 +429,7 @@ va_dcl
 
   Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
   if (errhandler!=NIL) {
-    return(ufuncall(ctx,errhandler,errhandler,arglst,ctx->bindfp,-1));}
+    ufuncall(ctx,errhandler,errhandler,arglst,ctx->bindfp,-1);}
 }
 
 #ifdef USE_STDARG

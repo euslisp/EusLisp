@@ -2,8 +2,8 @@
 
 (in-package "LISP")
 
-(export '(install-handler remove-handler handler-bind handler-case
-          signals continue retry next-handler))
+(export '(install-handler remove-handler signals
+          handler-bind handler-case next-handler))
 
 (defmethod condition
   (:init (&rest init-args &key &allow-other-keys)
@@ -67,25 +67,18 @@
       (format *error-output* "~C[1;3~Cm~A~C[0m~%"
               #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b)))
 
-(defvar *current-error* nil)
-
 (defun euserror (err)
   (print-error-callstack err)
   (print-error-msg err)
-  (catch (- (1+ *replevel*))
-    (let ((*replevel* (1+ *replevel*))
-          (*reptype* "E")
-          (*current-error* err))
-      ;; do not carry handlers through the error stack
-      ;; i.e. restore previous global `*condition-handler*'
-      (let ((old (assoc '*condition-handler* (sys:list-all-special-bindings))))
-        (if old (setq *condition-handler* (cdr old))))
-      (while (catch *replevel* (reploop #'toplevel-prompt))))
-    (throw *replevel* t)))
+  (let ((*replevel* (1+ *replevel*))
+        (*reptype* "E"))
+    ;; do not carry handlers through the error stack
+    ;; i.e. restore previous global `*condition-handler*'
+    (let ((old (assoc '*condition-handler* (sys:list-all-special-bindings))))
+      (if old (setq *condition-handler* (cdr old))))
+    (while (catch *replevel* (reploop #'toplevel-prompt))))
+  (throw *replevel* t))
 
-(defun continue (val) (throw (- *replevel*) val))
-(defun retry () (throw (- *replevel*) (eval (get *current-error* :form))))
 (defun next-handler () (throw :next-handler nil))
-
 (install-handler error #'euserror)
 )
