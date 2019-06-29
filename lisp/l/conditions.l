@@ -2,7 +2,7 @@
 
 (in-package "LISP")
 
-(export '(install-handler remove-handler signals
+(export '(install-handler remove-handler signals euserror
           handler-bind handler-case next-handler))
 
 (defmethod condition
@@ -61,11 +61,11 @@
         (format *error-output* "~3D: at ~A~%" (incf i) form)))))
 
 (defun print-error-msg (err)
-  (if (get err :msg)
-      (format *error-output* "~C[1;3~Cm~A~C[0m: ~A~%"
+  (when (get err :msg)
+      (format *error-output* "~C[1;3~Cm~A~C[0m: ~A"
               #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (get err :msg))
-      (format *error-output* "~C[1;3~Cm~A~C[0m~%"
-              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b)))
+      (if (get err :form) (format *error-output* " in ~A" (get err :form)))
+      (terpri *error-output*)))
 
 (defun euserror (err)
   (print-error-callstack err)
