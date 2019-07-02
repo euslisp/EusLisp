@@ -86,7 +86,7 @@ install:
 script:
   - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $HOME:$HOME -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then  source ./.travis.sh; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then ./.travis.sh; fi
 after_failure:
   - echo "failure"
 after_success:
