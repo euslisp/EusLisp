@@ -139,7 +139,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == master ]; then exit 0; fi
             echo "Check if there is commit in doc directory"
             git diff origin/master --name-only --relative doc
-            if [ "`git diff origin/master  --name-only --relative doc`" == "" ]; then echo "No update in doc directory found, exitting... "; exit 0 ; fi
+            if [ "`git diff origin/master  --name-only --relative doc`" == "" ]; then echo "No update in doc directory found, exitting... ";  circleci step halt; fi
             echo "Found new commit on doc directory"
       - run: cd .circleci/ && git clone https://github.com/themadcreator/circle-github-bot.git
       - run: cd .circleci/circle-github-bot && npm install
