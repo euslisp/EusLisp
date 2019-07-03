@@ -51,24 +51,24 @@
         (catch :next-handler
           (return-from signals (funcall (cdr handle) obj)))))))
 
-(defun print-error-callstack (err)
-  (when (and (plusp *max-callstack-depth*) (get err :callstack))
-    (format *error-output* "Call Stack (most recent call last):~%")
-    (let ((i 0))
-      (dolist (form
-                (nthcdr (max 0 (- (length (get err :callstack)) *max-callstack-depth*))
-                        (get err :callstack)))
-        (format *error-output* "~3D: at ~A~%" (incf i) form)))))
+(defun print-callstack (stack &optional max (os *error-output*))
+  (let ((tms (if max
+                 (min max (length stack))
+                 (length stack))))
+    (when (plusp tms)
+      (format os "Call Stack~A:~%" (if max (format nil " (max depth ~A)" max) ""))
+      (dotimes (i tms)
+        (format os "~3D: at ~A~%" i (nth i stack))))))
 
-(defun print-error-msg (err)
+(defun print-error-msg (err &optional (os *error-output*))
   (when (get err :msg)
-      (format *error-output* "~C[1;3~Cm~A~C[0m: ~A"
+      (format os "~C[1;3~Cm~A~C[0m: ~A"
               #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (get err :msg))
-      (if (get err :form) (format *error-output* " in ~A" (get err :form)))
-      (terpri *error-output*)))
+      (if (get err :form) (format os " in ~A" (get err :form)))
+      (terpri os)))
 
 (defun euserror (err)
-  (print-error-callstack err)
+  (print-callstack (get err :callstack) *max-callstack-depth*)
   (print-error-msg err)
   (let ((*replevel* (1+ *replevel*))
         (*reptype* "E"))

@@ -624,7 +624,8 @@ extern pointer LISTALLREFERENCES(context */*ctx*/, int /*n*/, pointer /*argv*/*)
 extern pointer ADDRESS(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer PEEK(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer POKE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
-extern pointer PRINTSTACK(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer list_callstack(context */*ctx*/, int /*max*/);
+extern pointer LISTCALLSTACK(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer LISTALLCATCHERS(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer LISTBINDINGS(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer LISTSPECIALBINDINGS(context */*ctx*/, int /*n*/, pointer */*argv*/);

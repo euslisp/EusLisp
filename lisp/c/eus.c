@@ -336,10 +336,7 @@ va_dcl
   ctx=euscontexts[thr_self()];
 
   /* get call stack */
-  callstack=NIL;
-  vf=(struct callframe *)(ctx->callfp);
-  for (; vf->vlink != NULL; vf=vf->vlink) {
-    callstack = cons(ctx,vf->form,callstack);}
+  callstack=list_callstack(ctx,-1);
 
   /* error(errstr) must be error(E_USER,errstr) */
   if ((int)ec < E_END) errstr=errmsg[(int)ec];
