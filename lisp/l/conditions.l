@@ -64,7 +64,7 @@
   (when (get err :msg)
       (format os "~C[1;3~Cm~A~C[0m: ~A"
               #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (get err :msg))
-      (if (get err :form) (format os " in ~A" (get err :form)))
+      (if (get err :form) (format os " in ~S" (get err :form)))
       (terpri os)))
 
 (defun euserror (err)
