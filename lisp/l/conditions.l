@@ -51,7 +51,7 @@
         (catch :next-handler
           (return-from signals (funcall (cdr handle) obj)))))))
 
-(defun print-callstack (stack &optional max (os *error-output*))
+(defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
   (let ((tms (if max
                  (min max (length stack))
                  (length stack))))
@@ -68,7 +68,8 @@
       (terpri os)))
 
 (defun euserror (err)
-  (print-callstack (get err :callstack) *max-callstack-depth*)
+  (when (get err :callstack)
+    (print-callstack (get err :callstack) *max-callstack-depth*))
   (print-error-msg err)
   (let ((*replevel* (1+ *replevel*))
         (*reptype* "E"))
