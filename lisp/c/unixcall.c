@@ -1374,7 +1374,7 @@ int n;
 pointer *argv;
 { ckarg(1);
   struct timespec treq;
-  GC_REGION(treq.tv_sec=ckintval(argv[0]));;
+  GC_REGION(treq.tv_sec=ckintval(argv[0]));
   treq.tv_nsec = 0;
   if (nanosleep(&treq, NULL)<0) return(NIL);
   return(T);}

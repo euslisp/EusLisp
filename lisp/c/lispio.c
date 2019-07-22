@@ -550,7 +550,7 @@ pointer argv[];
 	case '~':	/*tilda*/
 	  writech(dest,'~'); break;
 	case 'T': 	/*tabulate*/
-	  writech(dest,9); break;;
+	  writech(dest,9); break;
 	default:	break;
         }  
       }
