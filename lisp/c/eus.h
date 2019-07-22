@@ -1013,8 +1013,11 @@ enum errorcode {
   E_FORMATSTRING,
   E_READLABEL,
 
-/* the following error is added by APT */
+/* custom error */
     E_USER,
+
+/* error from the lisp REPL */
+    E_REPL,
 
 /*  E_END must locate at the end of the error list */
     E_END

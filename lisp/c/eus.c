@@ -282,6 +282,9 @@ char *errmsg[100]={
 	"illegal #n= or #n# label",
 /* USER ERROR */
 	"",
+/* REPL ERROR */
+        "",
+/* END ERROR */
 	"E_END",
 	};
 
@@ -371,10 +374,10 @@ va_dcl
         msg=makestring(msgstr,strlen(msgstr));
         free(msgstr);
 	break;
-    case E_USER:
+    case E_REPL:
       errobj = (pointer)va_arg(args,pointer);
     case E_ARGUMENT_ERROR: case E_PROGRAM_ERROR: case E_NAME_ERROR: case E_TYPE_ERROR:
-    case E_VALUE_ERROR: case E_INDEX_ERROR: case E_IO_ERROR:
+    case E_VALUE_ERROR: case E_INDEX_ERROR: case E_IO_ERROR: case E_USER:
       errstr = (char*)va_arg(args,pointer);
     default:
       msg=makestring(errstr,strlen(errstr));}
@@ -417,6 +420,9 @@ va_dcl
       case E_IO_ERROR: case E_IODIRECTION: case E_OPENFILE: case E_EOF:
       case E_ILLCH: case E_NODELIMITER: case E_FORMATSTRING: case E_READLABEL: 
         errobj=makeobject(C_IOERROR);  break;
+    // USER ERROR
+      case E_USER:
+        errobj=makeobject(C_ERROR);  break;
   }
 
   putprop(ctx,errobj,msg,defkeyword(ctx,"MSG"));

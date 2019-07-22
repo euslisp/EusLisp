@@ -588,7 +588,7 @@ register pointer *argv;
      for (; i<n; i++) vpush(argv[i]);
      msg=XFORMAT(ctx,n+1,argb);}
   else error(E_NOSTRING);
-  error(E_USER,errobj,(pointer)(msg->c.str.chars));}
+  error(E_REPL,errobj,(pointer)(msg->c.str.chars));}
 
 
 void lispio(ctx,mod)
