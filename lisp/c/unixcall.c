@@ -1373,12 +1373,13 @@ register context *ctx;
 int n;
 pointer *argv;
 { ckarg(1);
-  struct timespec treq;
+  struct timespec treq,trem;
   GC_REGION(treq.tv_sec=ckintval(argv[0]));
   treq.tv_nsec = 0;
-  if (nanosleep(&treq, NULL)<0) return(NIL);
+  while (nanosleep(&treq, &trem)<0) {
+    breakck;	/*signal exists?*/
+    treq=trem;}
   return(T);}
-
 
 #if sun3 || sun4 && !Solaris2 || Linux || alpha || Cygwin
 pointer USLEEP(ctx,n,argv)
@@ -1386,10 +1387,12 @@ register context *ctx;
 int n;
 pointer *argv;
 { ckarg(1);
-  struct timespec treq;
+  struct timespec treq,trem;
   GC_REGION(treq.tv_sec  =  ckintval(argv[0])/1000000;
             treq.tv_nsec = (ckintval(argv[0])%1000000)*1000);
-  if (nanosleep(&treq, NULL)<0) return(NIL);
+  while (nanosleep(&treq, &trem)<0) {
+    breakck;
+    treq=trem;}
   return(T);}
 #endif
 
