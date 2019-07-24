@@ -380,7 +380,10 @@ pointer arg;
   myblock=(struct blockframe *)
 		makeblock(ctx,BLOCKFRAME,NIL,&whilejmp,ctx->blkfp); /* ???? */
   if ((result=(pointer)eussetjmp(whilejmp))==0) {
-    while (eval(ctx,cond)!=NIL) {GC_POINT;progn(ctx,body);}
+    while (eval(ctx,cond)!=NIL) {
+      GC_POINT;
+      breakck;
+      progn(ctx,body);}
     result=NIL;}
   else if ((eusinteger_t)result==1) result=makeint(0);
   ctx->blkfp=myblock->dynklink;
