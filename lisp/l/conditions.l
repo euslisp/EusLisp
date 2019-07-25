@@ -1,8 +1,8 @@
-(eval-when(load eval)
+(eval-when (load eval)
 
 (in-package "LISP")
 
-(export '(install-handler remove-handler signals euserror
+(export '(install-handler remove-handler signals euserror sigint-handler
           handler-bind handler-case next-handler))
 
 (defmethod condition
@@ -51,6 +51,8 @@
         (catch :next-handler
           (return-from signals (funcall (cdr handle) obj)))))))
 
+(defun next-handler () (throw :next-handler nil))
+
 (defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
   (let ((tms (if max
                  (min max (length stack))
@@ -67,6 +69,11 @@
       (if (get err :form) (format os " in ~S" (get err :form)))
       (terpri os)))
 
+
+;;;
+;;; error handling
+;;;
+
 (defun euserror (err)
   (when (get err :callstack)
     (print-callstack (get err :callstack) *max-callstack-depth*))
@@ -80,6 +87,33 @@
     (while (catch *replevel* (reploop #'toplevel-prompt))))
   (throw *replevel* t))
 
-(defun next-handler () (throw :next-handler nil))
+
+;;;
+;;; unix:signal handling
+;;;
+
+(defclass unix::signal-received :super condition)
+(defclass unix::sigint-received :super unix::signal-received)
+(defclass unix::sigcont-received :super unix::signal-received)
+
+(defmacro unix::with-alarm-interrupt (&rest body)
+  (let ((interval (gensym)) (value (gensym)))
+    `(multiple-value-bind ,(list interval value) (unix:setitimer 0 0 0)
+       ,@body
+       (unix:setitimer 0 ,value ,interval))))
+
+(defun sigint-handler (c)
+  (unix::with-alarm-interrupt
+    (print-error-msg c)
+    (let* ((*replevel* (1+ *replevel*))
+           (*reptype* "B"))
+      (catch *replevel* (reploop #'toplevel-prompt)))))
+
+(defun sigcont-handler (c)
+  (reset *replevel*))
+
+;; install handlers
 (install-handler error #'euserror)
+(install-handler unix::sigint-received #'sigint-handler)
+(install-handler unix::sigcont-received #'sigcont-handler)
 )

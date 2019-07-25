@@ -16,7 +16,7 @@
 	*prompt*
 	*prompt-string*
 	*history* *try-unix*
-	skip-blank read-list-from-line sigint-handler *signal-handlers*
+	skip-blank read-list-from-line *signal-handlers*
 	*eustop-hook*
 	*toplevel-hook*
 	*top-selector*
@@ -95,16 +95,6 @@
 		)
 	  (if (eq *input-line* eof) (return-from read-list-from-line eof))
 	  (make-string-input-stream *input-line*)))))
-
-
-(defun sigint-handler (sig code)
-   (warning-message 1 "interrupt")
-   (if (fboundp 'unix:ualarm)
-       (unix:ualarm 0 0)
-       (unix:alarm 0))
-   (let* ((*replevel* (1+ *replevel*))
-	  (*reptype* "B"))
-      (catch *replevel* (reploop #'toplevel-prompt))))
 
 (defvar *signal-handlers* (make-sequence vector 32))
 
@@ -287,8 +277,10 @@
    (when (unix:isatty *standard-input*)
       (warning-message 4 "~%~A" (lisp-implementation-version))
       (terpri *error-output*) 
-      (unix:signal unix::sigint 'sigint-handler
-				2)	; not restart
+      (unix:signal unix::sigint
+        #'(lambda (sig code) (signals unix::sigint-received :msg "keyboard interrupt")))
+      (unix:signal unix::sigcont
+        #'(lambda (sig code) (signals unix::sigcont-received)))
       (unix:signal unix::sigpipe 'eussig)
       ; setup for history
 #+(or :sun :linux :alpha :solaris2 :mips)
