@@ -1,5 +1,5 @@
 ;;;;
-;;;;	euslisp toplevel loop and error/signal handler
+;;;;	euslisp toplevel loop
 ;;;;
 ;;;;	Copyright 1987,1991, Toshihiro MATSUI, Electrotechnical Laboratory
 ;;;	1987-Oct
@@ -16,14 +16,13 @@
 	*prompt*
 	*prompt-string*
 	*history* *try-unix*
-	skip-blank read-list-from-line *signal-handlers*
+	skip-blank read-list-from-line
 	*eustop-hook*
 	*toplevel-hook*
 	*top-selector*
 	*timer-job*
 	*top-selector-interval*
 	evaluate-stream  reploop
-	eussig
 	eustop reset
 	toplevel-prompt
 	))
@@ -95,20 +94,6 @@
 		)
 	  (if (eq *input-line* eof) (return-from read-list-from-line eof))
 	  (make-string-input-stream *input-line*)))))
-
-(defvar *signal-handlers* (make-sequence vector 32))
-
-(defun eussig (sig &rest code &aux (handler (aref *signal-handlers* sig)))
-   (cond (handler (funcall handler sig code))
-	 (t 
-	   (if (fboundp 'unix:ualarm)
-	       (unix:ualarm 0 0)
-	       (unix:alarm 0))
-	  (warning-message 1 "signal ~s ~s~%" sig code)
-	  (let* ((*replevel* (1+ *replevel*))
-		 (*reptype* "S"))
-	      (catch *replevel*
-		  (reploop #'toplevel-prompt))))))
 
 (defun evaluate-stream (input)
   (let* ((eof (cons nil nil))
@@ -281,7 +266,6 @@
         #'(lambda (sig code) (signals unix::sigint-received :msg "keyboard interrupt")))
       (unix:signal unix::sigcont
         #'(lambda (sig code) (signals unix::sigcont-received)))
-      (unix:signal unix::sigpipe 'eussig)
       ; setup for history
 #+(or :sun :linux :alpha :solaris2 :mips)
       (when (fboundp 'unix:tcgets)
