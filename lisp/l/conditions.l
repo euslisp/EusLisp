@@ -95,6 +95,9 @@
 (defclass unix::signal-received :super condition)
 (defclass unix::sigint-received :super unix::signal-received)
 (defclass unix::sigcont-received :super unix::signal-received)
+(defmacro unix::install-signal-handler (sig obj &rest init-args)
+  `(unix:signal ,sig '(lambda-closure ,(gensym) 0 0 (sig code)
+                       (signals ,obj ,@init-args))))
 
 (defmacro unix::with-alarm-interrupt (&rest body)
   (let ((interval (gensym)) (value (gensym)))
@@ -109,11 +112,9 @@
            (*reptype* "B"))
       (catch *replevel* (reploop #'toplevel-prompt)))))
 
-(defun sigcont-handler (c)
-  (reset *replevel*))
-
 ;; install handlers
 (install-handler error #'euserror)
 (install-handler unix::sigint-received #'sigint-handler)
-(install-handler unix::sigcont-received #'sigcont-handler)
+;; in order to remain in the same stack, reset command must not be compiled
+(install-handler unix::sigcont-received `(lambda-closure ,(gensym) 0 0 (c) (reset *replevel*)))
 )
