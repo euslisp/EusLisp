@@ -60,7 +60,7 @@
     (when (plusp tms)
       (format os "Call Stack~A:~%" (if max (format nil " (max depth ~A)" max) ""))
       (dotimes (i tms)
-        (format os "~3D: at ~A~%" i (nth i stack))))))
+        (format os "~3D: at ~S~%" i (nth i stack))))))
 
 (defun print-error-msg (err &optional (os *error-output*))
   (when (get err :msg)
