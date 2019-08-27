@@ -112,9 +112,10 @@
            (*reptype* "B"))
       (catch *replevel* (reploop #'toplevel-prompt)))))
 
+;; TODO: fix sigcont-handler (avoid compilation?)
 ;; install handlers
 (install-handler error #'euserror)
-(install-handler unix::sigint-received #'sigint-handler)
+(install-handler unix::sigint-received 'sigint-handler)
 ;; in order to remain in the same stack, reset command must not be compiled
 (install-handler unix::sigcont-received `(lambda-closure ,(gensym) 0 0 (c) (reset *replevel*)))
 )
