@@ -261,8 +261,6 @@
    (when (unix:isatty *standard-input*)
       (warning-message 4 "~%~A" (lisp-implementation-version))
       (terpri *error-output*) 
-      (unix:install-signal-handler unix::sigint unix::sigint-received :msg "keyboard interrupt")
-      (unix:install-signal-handler unix::sigcont unix::sigcont-received)
       ; setup for history
 #+(or :sun :linux :alpha :solaris2 :mips)
       (when (fboundp 'unix:tcgets)
