@@ -112,7 +112,7 @@
     (print-error-msg c)
     (let* ((*replevel* (1+ *replevel*))
            (*reptype* "B"))
-      (catch *replevel* (reploop #'toplevel-prompt)))))
+      (while (catch *replevel* (reploop #'toplevel-prompt))))))
 
 ;; install handlers
 (unix:install-signal-handler unix::sigint unix::sigint-received :msg "keyboard interrupt")
