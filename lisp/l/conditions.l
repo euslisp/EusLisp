@@ -3,7 +3,7 @@
 (in-package "LISP")
 
 (export '(install-handler remove-handler signals euserror sigint-handler
-          handler-bind handler-case next-handler))
+          interruption-event handler-bind handler-case next-handler))
 
 (defmethod condition
   (:init (&rest init-args &key &allow-other-keys)
@@ -107,15 +107,21 @@
        ,@body
        (unix:setitimer 0 ,value ,interval))))
 
+(defclass interruption-event :super condition)
 (defun sigint-handler (c)
   (unix::with-alarm-interrupt
-    (print-error-msg c)
-    (let* ((*replevel* (1+ *replevel*))
-           (*reptype* "B"))
-      (while (catch *replevel* (reploop #'toplevel-prompt))))))
+    (signals interruption-event :msg "keyboard interrupt")))
+
+(defun interruption-handler (c)
+  (print-error-msg c)
+  (let* ((*replevel* (1+ *replevel*))
+         (*reptype* "B"))
+    (while (catch *replevel* (reploop #'toplevel-prompt)))))
+
+(install-handler interruption-event 'interruption-handler)
 
 ;; install handlers
-(unix:install-signal-handler unix::sigint unix::sigint-received :msg "keyboard interrupt")
+(unix:install-signal-handler unix::sigint unix::sigint-received)
 (unix:install-signal-handler unix::sigcont unix::sigcont-received))
 (install-handler error #'euserror)
 (install-handler unix::sigint-received 'sigint-handler)
