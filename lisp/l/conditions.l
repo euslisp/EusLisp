@@ -125,7 +125,10 @@
 (unix:install-signal-handler unix::sigcont unix::sigcont-received))
 (install-handler error #'euserror)
 (install-handler unix::sigint-received 'sigint-handler)
-(install-handler unix::sigcont-received `(lambda-closure ,(gensym) 0 0 (c) (reset *replevel*)))
+(install-handler unix::sigcont-received
+  `(lambda-closure ,(gensym) 0 0 (c)
+     (when (memq *replevel* (sys::list-all-catchers))
+       (reset *replevel*))))
 ;; in order to remain in the same stack, reset command must not be compiled
 ;; TODO: find out why this happens
 )
