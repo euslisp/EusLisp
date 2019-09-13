@@ -6,12 +6,12 @@
           interruption-event handler-bind handler-case next-handler))
 
 (defmethod condition
-  (:init (&rest init-args &key &allow-other-keys)
-    (while init-args
-      (let* ((name (pop init-args))
-             (value (pop init-args)))
-        (setf (get self name) value)))
-    self))
+  (:init (&optional msg) (send self :msg msg) self)
+  (:msg (&optional val) (if val (setq msg val) msg)))
+
+(defmethod error
+  (:callstack (&optional val) (if val (setq callstack val) callstack))
+  (:form (&optional val) (if val (setq form val) form)))
 
 (defun install-handler (label handler)
   (assert (and (classp label) (derivedp (instantiate label) condition))
@@ -63,10 +63,10 @@
         (format os "~3D: at ~S~%" i (nth i stack))))))
 
 (defun print-error-msg (err &optional (os *error-output*))
-  (when (get err :msg)
+  (when (send err :msg)
       (format os "~C[1;3~Cm~A~C[0m: ~A"
-              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (get err :msg))
-      (if (get err :form) (format os " in ~S" (get err :form)))
+              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (send err :msg))
+      (if (send err :form) (format os " in ~S" (send err :form)))
       (terpri os)))
 
 
@@ -75,8 +75,8 @@
 ;;;
 
 (defun euserror (err)
-  (when (get err :callstack)
-    (print-callstack (get err :callstack) *max-callstack-depth*))
+  (when (send err :callstack)
+    (print-callstack (send err :callstack) *max-callstack-depth*))
   (print-error-msg err)
   (let ((*replevel* (1+ *replevel*))
         (*reptype* "E"))

@@ -425,9 +425,9 @@ va_dcl
         errobj=makeobject(C_ERROR);  break;
   }
 
-  putprop(ctx,errobj,msg,defkeyword(ctx,"MSG"));
-  putprop(ctx,errobj,callstack,defkeyword(ctx,"CALLSTACK"));
-  putprop(ctx,errobj,form,defkeyword(ctx,"FORM"));
+  pointer_update(errobj->c.obj.iv[0],msg);
+  pointer_update(errobj->c.obj.iv[1],callstack);
+  pointer_update(errobj->c.obj.iv[2],form);
   arglst=cons(ctx,errobj,NIL);
 
   Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
@@ -858,8 +858,8 @@ static void initclasses()
   C_BIGNUM=speval(BIGNUM);
 
 /* conditions */
-  C_CONDITION=speval(basicclass("CONDITION",C_PROPOBJ,&conditioncp,0));
-  C_ERROR=speval(basicclass("ERROR",C_CONDITION,&errorcp,0));
+  C_CONDITION=speval(basicclass("CONDITION",C_OBJECT,&conditioncp,1,"MSG"));
+  C_ERROR=speval(basicclass("ERROR",C_CONDITION,&errorcp,2,"CALLSTACK","FORM"));
   C_ARGUMENTERROR=speval(basicclass("ARGUMENT-ERROR",C_ERROR,&argumenterrorcp,0));
   C_PROGRAMERROR=speval(basicclass("PROGRAM-ERROR",C_ERROR,&programerrorcp,0));
   C_NAMEERROR=speval(basicclass("NAME-ERROR",C_ERROR,&nameerrorcp,0));
