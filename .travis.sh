@@ -87,6 +87,7 @@ if [ "$QEMU" != "" ]; then
     export EXIT_STATUS=0;
     set +e
     # run test in EusLisp/test
+    make -C test
     for test_l in test/*.l; do
 
         travis_time_start euslisp.${test_l##*/}.test
@@ -235,6 +236,7 @@ if [[ "`uname -m`" == "aarch"* ]]; then
 fi
 
     # run test in EusLisp/test
+    make -C $CI_SOURCE_PATH/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
 
         travis_time_start euslisp.${test_l##*/}.test
