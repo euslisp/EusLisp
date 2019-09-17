@@ -5,13 +5,7 @@
 (export '(set-logger-level log-debug log-info log-warn log-error log-fatal))
 
 ;; Condition instance for logger messages
-(defclass logger-message :super condition :slots (lvl args))
-(defmethod logger-message
-  (:init (&key msg lvl args)
-    (send self :set-val 'msg msg)
-    (send self :set-val 'lvl lvl)
-    (send self :set-val 'args args)
-    self))
+(defcondition logger-message :slots (lvl args))
 
 ;; Logger level related
 (defconstant logger-table

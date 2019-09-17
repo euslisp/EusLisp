@@ -2,8 +2,9 @@
 
 (in-package "LISP")
 
-(export '(install-handler remove-handler signals euserror sigint-handler
-          interruption-event handler-bind handler-case next-handler))
+(export '(defcondition install-handler remove-handler signals euserror
+          sigint-handler interruption-event handler-bind handler-case
+          next-handler))
 
 (defmethod condition
   (:init (&optional msg) (send self :msg msg) self)
@@ -12,6 +13,18 @@
 (defmethod error
   (:callstack (&optional val) (if val (setq callstack val) callstack))
   (:form (&optional val) (if val (setq form val) form)))
+
+(defmacro defcondition (name &key slots (super condition))
+  (let ((all-slots (append (coerce (send super :slots) cons) slots)))
+    `(progn
+       (defclass ,name :slots ,slots :super ,super)
+       (defmethod ,name
+         (:init (&key ,@all-slots)
+           ,@(mapcar #'(lambda (place) `(send self :set-val ',place ,place)) all-slots)
+           self)
+         ,@(mapcar #'(lambda (s) `(,(intern (send s :pname) *keyword-package*) (&optional val)
+                                    (if val (send self :set-val ',s val) ,s)))
+                   slots)))))
 
 (defun install-handler (label handler)
   (unless (and (classp label) (derivedp (instantiate label) condition))
