@@ -14,9 +14,9 @@
   (:form (&optional val) (if val (setq form val) form)))
 
 (defun install-handler (label handler)
-  (assert (and (classp label) (derivedp (instantiate label) condition))
-          "condition class expected")
-  (assert (functionp handler) "function expected")
+  (unless (and (classp label) (derivedp (instantiate label) condition))
+    (error type-error "condition class expected"))
+  (unless (functionp handler) type-error "function expected")
   (push (cons label handler) *condition-handler*))
 
 (defun remove-handler (label &optional handler)
@@ -44,7 +44,7 @@
 (defun signals (obj &rest init-args)
   (if (classp obj) (setq obj (instantiate obj)))
   (if init-args (send* obj :init init-args))
-  (assert (derivedp obj condition) "condition class expected")
+  (unless (derivedp obj condition) (error type-error "condition class expected"))
   (block signals
     (dolist (handle *condition-handler*)
       (when (derivedp obj (car handle))
@@ -63,6 +63,7 @@
         (format os "~3D: at ~S~%" i (nth i stack))))))
 
 (defun print-error-msg (err &optional (os *error-output*))
+  (unless (derivedp err error) (error type-error "error class expected"))
   (when (send err :msg)
       (format os "~C[1;3~Cm~A~C[0m: ~A"
               #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (send err :msg))
