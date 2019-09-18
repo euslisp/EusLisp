@@ -7,7 +7,7 @@
           next-handler))
 
 (defmethod condition
-  (:init (&optional msg) (send self :msg msg) self)
+  (:init (&key msg) (send self :msg msg) self)
   (:msg (&optional val) (if val (setq msg val) msg)))
 
 (defmethod error
@@ -15,7 +15,7 @@
   (:form (&optional val) (if val (setq form val) form)))
 
 (defmacro defcondition (name &key slots (super condition))
-  (let ((all-slots (append (coerce (send super :slots) cons) slots)))
+  (let ((all-slots (append (coerce (send (symbol-value super) :slots) cons) slots)))
     `(progn
        (defclass ,name :slots ,slots :super ,super)
        (defmethod ,name
@@ -76,11 +76,12 @@
         (format os "~3D: at ~S~%" i (nth i stack))))))
 
 (defun print-error-msg (err &optional (os *error-output*))
-  (unless (derivedp err error) (error type-error "error class expected"))
+  (unless (derivedp err condition) (error type-error "condition class expected"))
   (when (send err :msg)
       (format os "~C[1;3~Cm~A~C[0m: ~A"
               #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (send err :msg))
-      (if (send err :form) (format os " in ~S" (send err :form)))
+      (if (and (derivedp err error) (send err :form))
+          (format os " in ~S" (send err :form)))
       (terpri os)))
 
 
