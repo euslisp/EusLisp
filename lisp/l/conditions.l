@@ -31,7 +31,8 @@
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
   (unless (functionp handler) type-error "function expected")
-  (push (cons label handler) *condition-handler*))
+  (push (cons label handler) *condition-handler*)
+  t)
 
 (defun remove-handler (label &optional handler)
   (setq *condition-handler*
