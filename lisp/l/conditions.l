@@ -15,7 +15,8 @@
   (:form (&optional val) (if val (setq form val) form)))
 
 (defmacro defcondition (name &key slots (super condition))
-  (let ((all-slots (append (coerce (send (symbol-value super) :slots) cons) slots)))
+  (let* ((super (if (symbolp super) (symbol-value super) super))
+         (all-slots (append (coerce (send super :slots) cons) slots)))
     `(progn
        (defclass ,name :slots ,slots :super ,super)
        (defmethod ,name
