@@ -116,7 +116,7 @@
   (let ((fname (intern (format nil "~A-SIGNALIZE-CONDITION" (symbol-pname sig)) *unix-package*)))
     `(progn
        (defun ,fname (sig code) (signals ,obj ,@init-args))
-       (unix:signal ,sig #',fname))))
+       (unix:signal ,sig ',fname))))
 
 (defmacro unix::with-alarm-interrupt (&rest body)
   (let ((interval (gensym)) (value (gensym)))
