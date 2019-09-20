@@ -15,17 +15,18 @@
   (:form (&optional val) (if val (setq form val) form)))
 
 (defmacro defcondition (name &key slots (super condition))
-  (let* ((super (if (symbolp super) (symbol-value super) super))
-         (all-slots (append (coerce (send super :slots) cons) slots)))
-    `(progn
-       (defclass ,name :slots ,slots :super ,super)
-       (defmethod ,name
-         (:init (&key ,@all-slots)
-           ,@(mapcar #'(lambda (place) `(send self :set-val ',place ,place)) all-slots)
-           self)
+  `(progn
+     (defclass ,name :slots ,slots :super ,super)
+     (defmethod ,name
          ,@(mapcar #'(lambda (s) `(,(intern (send s :pname) *keyword-package*) (&optional val)
                                     (if val (send self :set-val ',s val) ,s)))
-                   slots)))))
+                   slots))
+     (let ((all-slots (coerce (send ,name :slots) cons)))
+       (eval
+        `(defmethod ,',name
+             (:init (&key ,@all-slots)
+                       ,@(mapcar #'(lambda (place) `(send self :set-val ',place ,place)) all-slots)
+                       self))))))
 
 (defun install-handler (label handler)
   (unless (and (classp label) (derivedp (instantiate label) condition))
