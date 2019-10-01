@@ -491,10 +491,11 @@ pointer argv[];
 	if (islower(cch)) cch=toupper(cch);}
       switch(cch) {
 	case 'A':	/*Ascii*/
+	  a=nextfarg();
 	  osf=ctx->slashflag;
 	  ctx->slashflag=1;
 	  written_count[thr_self()]=0;
-	  prinx(ctx,(pointer)nextfarg(),dest);
+	  prinx(ctx,a,dest);
 	  while (param[0]>written_count[thr_self()]) writech(dest,' ');
 	  ctx->slashflag=osf;
 	  break;
