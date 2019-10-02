@@ -1212,17 +1212,23 @@ pointer argv[];
   }
     printf( "\n" );
 #endif
-
-    if (n==1) {
-    n--;
+    ckarg2(0,1);
+    if (n==0) return(gensym(ctx));
+    char* prefix;
+    int counter;
     if (isstring(argv[0])) {
       if (intval(argv[0]->c.str.length)>50) error(E_LONGSTRING);
-      genhead=argv[0];}
-    else if (isint(argv[0])) genindex=intval(argv[0]);
+      prefix=argv[0]->c.str.chars;
+      counter=genindex++;}
+    else if (isint(argv[0])) {
+      prefix=genhead->c.str.chars;
+      counter=intval(argv[0]);}
     else error(E_NOSTRING);
-    }
-  ckarg(0);
-  return(gensym(ctx));}
+
+    byte buf[64];
+    sprintf((char *)buf,"%s%d",prefix,counter);
+    return(makesymbol(ctx,(char *)buf,strlen(buf),NIL));
+}
 
 pointer GETPROP(ctx,n,argv)
 register context *ctx;
