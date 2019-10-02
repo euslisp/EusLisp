@@ -477,6 +477,7 @@ register pointer obj,klass,varid;
   register pointer vvec;
   extern pointer equal();
 
+  if (isnum(obj)) error(E_NOOBJECT);
   if (!isclass(klass)) error(E_NOCLASS,klass);
   objcix=obj->cix;
   klasscix=intval(klass->c.cls.cix);
