@@ -721,7 +721,7 @@ char token[];
     if (sym) return(sym);
     else {
       pkgstr=makestring(token,leng);
-	fprintf(stderr,"%s ",token);
+      // fprintf(stderr,"%s ",token);
       vpush(pkgstr);
       error(E_EXTSYMBOL,pkgstr);}
   } }
