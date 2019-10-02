@@ -981,15 +981,15 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 
 (eval-when (load eval)
 (defun reduce (func seq &key (start 0) (end (length seq))
-			     from-end initial-value)
+			     from-end (initial-value nil initial-value-p))
    (let ((length (- end start)))
       (when from-end (setq seq (reverse seq)))
       (cond
-	 ((and (= length 1) (null initial-value)) (elt seq start))
+	 ((and (= length 1) (null initial-value-p)) (elt seq start))
 	 ((= length 0)
-	  (if initial-value initial-value (funcall func)))
+	  (if initial-value-p initial-value (funcall func)))
 	 (t
-	   (unless initial-value
+	   (unless initial-value-p
 		(setq initial-value
 		      (funcall func (elt seq start) (elt seq (inc start))))
 		(dec length 2) (inc start))
