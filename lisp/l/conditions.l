@@ -7,26 +7,27 @@
           next-handler))
 
 (defmethod condition
-  (:init (&key msg) (send self :msg msg) self)
+  (:init (&rest init-args &key msg &allow-other-keys)
+    ;; Initialize slots
+    (do* ((key (pop init-args) (pop init-args))
+          (val (pop init-args) (pop init-args)))
+         ((null key))
+      (send self :set-val (symbol-pname key) val))
+    self)
   (:msg (&optional val) (if val (setq msg val) msg)))
 
 (defmethod error
   (:callstack (&optional val) (if val (setq callstack val) callstack))
   (:form (&optional val) (if val (setq form val) form)))
 
-(defmacro defcondition (name &key slots (super condition))
+(defmacro defcondition (name &key slots (super 'condition))
   `(progn
      (defclass ,name :slots ,slots :super ,super)
      (defmethod ,name
+         (:init (&rest init-args) (send-super* :init init-args))
          ,@(mapcar #'(lambda (s) `(,(intern (send s :pname) *keyword-package*) (&optional val)
                                     (if val (send self :set-val ',s val) ,s)))
-                   slots))
-     (let ((all-slots (coerce (send ,name :slots) cons)))
-       (eval
-        `(defmethod ,',name
-             (:init (&key ,@all-slots)
-                       ,@(mapcar #'(lambda (place) `(send self :set-val ',place ,place)) all-slots)
-                       self))))))
+                   slots))))
 
 (defun install-handler (label handler)
   (unless (and (classp label) (derivedp (instantiate label) condition))
