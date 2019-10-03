@@ -695,7 +695,12 @@ int max;
   vf=(struct callframe *)(ctx->callfp);
   // list whole stack for negative max values
   for (i=0; vf->vlink && max; vf=vf->vlink, i++, max--) {
-    vpush(vf->form);}
+    vpush(vf->form);
+    // Check for recursive stacks
+    if ((pointer)vf == (pointer)vf->vlink) {
+      fprintf(stderr,";; recursive callstack detected in %p\n", (pointer)vf);
+      i++;
+      break;}}
   return(stacknlist(ctx,i));}
 
 pointer LISTCALLSTACK(ctx,n,argv)
