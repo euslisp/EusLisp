@@ -892,7 +892,7 @@
 	  (setq newcomp (send self :copy-compiler))
 	  (send self :add-closure (list entry fn newcomp))
          )))
- (:flet (funcs bodies recursive-scope &aux (flets-save flets))
+ (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
      (let (entry newcomp newcomps flets-exchange)
         (dolist (fn funcs)
