@@ -954,6 +954,8 @@
 	 (reqn 0)
 	 (optn 0)
 	 (keyn 0)
+         (svar-base 0)
+         (opt-supplied-vars)
          (opt-vars (memq '&optional param))
          (rest-var (memq '&rest param))
 	 (key-forms (memq '&key param))
@@ -993,6 +995,15 @@
            (push (send self :genlabel "ENT") labels)
    	   (inc i))
 	(if rest-var (setq labels (list (send self :genlabel "RST")))))
+;; extract optional supplied-p variables
+     (dolist (opt opt-vars)
+       (let (svar)
+         (when (and (listp opt) (cddr opt))
+           (setq svar (caddr opt))
+           (unless (and (symbolp (caddr opt)) (not (constantp svar)))
+             (send self :error "optional supplied variable")))
+         (push svar opt-supplied-vars)))
+     (nreverse opt-supplied-vars)
 ;; extract optional variable names
      (setq opt-vars (mapcar #'(lambda (x) (if (listp x) (car x) x)) opt-vars))
      (send self :create-frame)
@@ -1045,8 +1056,19 @@
      (dolist (v req-vars)		;for all required arguments
 	(send self :bind v 'arg i)
 	(inc i))
+     ;; initialize all supplied-p variables to t
+     (dolist (svar opt-supplied-vars)
+       (when svar
+         (send trans :load-t)
+         (send self :bind svar 'local (1- (send trans :offset-from-fp)))))
      (while (cdr labels)
 	(send trans :check-opt-arg i (car labels))
+        ;; set supplied-p variables to nil
+        (when (pop opt-supplied-vars)
+          (send trans :load-nil)
+          (send trans :store-local svar-base 0)
+          (inc svar-base))
+        ;; set init value
         (send self :eval (pop opt-forms))
 	(send trans :label (pop labels))
 	(send self :bind (pop opt-vars) 'local 
@@ -1085,7 +1107,6 @@
 	   (when svar
              (send trans :load-nil)
              (send trans :store-local svar-key-base 0)
-             ;; (send self :bind svar 'local svar-key-base)
              (inc svar-key-base))
 	   (send self :eval (pop key-inits))
 	   ;; set default values
