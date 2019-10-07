@@ -961,16 +961,14 @@
 	 (key-forms (memq '&key param))
 	 (aux-vars (memq '&aux param))
 	 (key-vars)
+	 (key-supplied-vars)
          (req-vars nil)
 	 (opt-forms nil)
 	 (key-names nil)
 	 (key-inits nil)
-	 (key-base 0)
 	 (specially-bound nil)
 	 (allowotherkeys (memq '&allow-other-keys param))
-	 (unwind-save unwind-frames)
-	 (vname nil)
-	 (label2))
+	 (unwind-save unwind-frames))
      (setq req-vars
            (reverse 
 		  (nthcdr (length (cond (opt-vars)
@@ -1002,9 +1000,15 @@
      (send self :create-frame)
 ;; parse keyword variables
      (if key-forms
-	 (let (init key var)
+	 (let (init key var svar)
             (dolist (k key-forms)
 		(cond ((listp k)
+			;; key-supplied-vars
+			(when (cddr k)
+                          (setq svar (caddr k))
+                          (unless (and (symbolp svar) (not (constantp svar)))
+                            (send self :error "keyword supplied variable")))
+			;; key-inits / key-names
 			(setq init (cadr k) k (car k))
 			(cond ((listp k)
 			       (setq key (car k) var (cadr k))
@@ -1021,10 +1025,12 @@
 					   *keyword-package*))))
 	  (setq key-names (cons key key-names)
 		key-vars  (cons var key-vars)
+		key-supplied-vars  (cons svar key-supplied-vars)
 		key-inits (cons init key-inits)))   ;end dolist
 	(nreverse key-names)
 	(nreverse key-vars)
 	(nreverse key-inits)
+	(nreverse key-supplied-vars)
 	;(format t ";key-names length=~d ~s~%" (length key-names)  key-names)
 	(if (>= (length key-names) 128) ;; KEYWORDPARAMETERLIMIT
 	    (send self :error "Too many keyword parameters>128 ~s" key-names))
@@ -1057,16 +1063,34 @@
 				 (1- (send trans :offset-from-fp))))
 	((and (> optn 0) (null key-forms)) (send trans :check-rest-arg i)))
      (when key-forms
-	(setq key-base  (send trans :offset-from-fp))
-	(send trans :parse-key-params (coerce key-names vector)
-				      (+ reqn optn)
-				      keyn  allowotherkeys)
-	(dotimes (i keyn)
+       (let* ((key-base (send trans :offset-from-fp))
+              (svar-key-base key-base)
+              vname svar label2)
+         ;; reset vsp
+         (send trans :reset-vsp)
+         ;; initialize all supplied-p variables to t
+         (dolist (svar key-supplied-vars)
+           (when svar
+             (send trans :load-t)
+             (send self :bind svar 'local key-base)
+             (inc key-base)))
+         (send trans :parse-key-params (coerce key-names vector)
+               (+ reqn optn)
+               keyn allowotherkeys)
+         (dotimes (i keyn)
 	   (setq labels (send self :genlabel "KEY"))
 	   (send trans :check-key-arg i labels)
 	   ; go around evaluating default for a key-var
-	   (send self :eval (pop key-inits))
 	   (setq vname (pop key-vars))
+	   (setq svar (pop key-supplied-vars))
+	   ;; set supplied-p variables to nil
+	   (when svar
+             (send trans :load-nil)
+             (send trans :store-local svar-key-base 0)
+             ;; (send self :bind svar 'local svar-key-base)
+             (inc svar-key-base))
+	   (send self :eval (pop key-inits))
+	   ;; set default values
 	   (cond ((send self :special-variable-p vname)
 		  (setq label2 (send self :genlabel "KEY"))
 		  (send trans :jump label2)
@@ -1078,7 +1102,7 @@
 	         (t	;non-special
 		  (send self :bind vname 'local (+ key-base i))
 		  (send trans :store-local (+ key-base i) 0)
-		  (send trans :label labels)	)   )
+		  (send trans :label labels))))
 	)   )
 ;;; bind aux variables
      (dolist (av aux-vars)

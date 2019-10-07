@@ -145,7 +145,6 @@
    (send self :push (format nil "minilist(ctx,&argv[n],n-~d)"  pcnt)))
  (:parse-key-params (keyvec req+opt keyn allowotherkeys)
    (send self :clearpush)
-   (send self :reset-vsp)
    (format cfile
 	   "	n=parsekeyparams(fqv[~d], &argv[~d], n-~d, local+~d, ~A);~%"
 	   (send self :quote-entry keyvec) req+opt req+opt
