@@ -42,23 +42,23 @@
        ,@body)))
 
 (defun format-log-message (log)
-  (with-slots (msg lvl args) log
+  (with-slots (message lvl args) log
     (format nil "[~A] ~A"
             (symbol-pname (get-level-name lvl))
-            (apply #'format nil msg args))))
+            (apply #'format nil message args))))
 
 
 ;; Loggers signalers
 (defun log-debug (msg &rest format-args)
-  (signals logger-message :msg msg :lvl (get-level :debug) :args format-args))
+  (signals logger-message :message msg :lvl (get-level :debug) :args format-args))
 (defun log-info (msg &rest format-args)
-  (signals logger-message :msg msg :lvl (get-level :info) :args format-args))
+  (signals logger-message :message msg :lvl (get-level :info) :args format-args))
 (defun log-warn (msg &rest format-args)
-  (signals logger-message :msg msg :lvl (get-level :warn) :args format-args))
+  (signals logger-message :message msg :lvl (get-level :warn) :args format-args))
 (defun log-error (msg &rest format-args)
-  (signals logger-message :msg msg :lvl (get-level :error) :args format-args))
+  (signals logger-message :message msg :lvl (get-level :error) :args format-args))
 (defun log-fatal (msg &rest format-args)
-  (signals logger-message :msg msg :lvl (get-level :fatal) :args format-args))
+  (signals logger-message :message msg :lvl (get-level :fatal) :args format-args))
 
 
 ;; Printing callback
