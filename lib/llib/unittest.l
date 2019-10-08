@@ -232,19 +232,17 @@
            (trace ,name))))
 
     (defmacro assert (pred &optional (message "") &rest args)
-      (let
-        ((ret (gensym)))
-       `(let* (failure (ret ,pred))
-	  ;; lisp::step could not work with macros..
-	  ;;     (if (and (listp ',pred) (functionp (car ',pred)))
-	  ;;	 (setq ret (lisp::step ,pred))
-	  ;;       (setq ret ,pred))
-	  ;;
-	  (if (not ret)
-	      ;; escape <> for xml
-	      (send *unit-test* :increment-failure ',pred (format nil ,message ,@args)
-		    (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer)))))))
-	  )))
+      `(let (failure (ret ,pred))
+         ;; lisp::step could not work with macros..
+         ;;     (if (and (listp ',pred) (functionp (car ',pred)))
+         ;;	 (setq ret (lisp::step ,pred))
+         ;;       (setq ret ,pred))
+         ;;
+         (if (not ret)
+             ;; escape <> for xml
+             (send *unit-test* :increment-failure ',pred (format nil ,message ,@args)
+                   (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer)))))))
+         ))
 
 
     t))
