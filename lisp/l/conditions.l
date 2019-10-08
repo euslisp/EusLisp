@@ -6,6 +6,9 @@
           sigint-handler interruption-event handler-bind handler-case
           next-handler))
 
+(defvar *current-condition*)
+(defvar *current-condition-handler*) ;; for next-handler
+
 (defmethod condition
   (:init (&rest init-args &key msg &allow-other-keys)
     ;; Initialize slots
@@ -62,13 +65,19 @@
   (if (classp obj) (setq obj (instantiate obj)))
   (if init-args (send* obj :init init-args))
   (unless (derivedp obj condition) (error type-error "condition class expected"))
-  (block signals
-    (dolist (handle *condition-handler*)
-      (when (derivedp obj (car handle))
-        (catch :next-handler
-          (return-from signals (funcall (cdr handle) obj)))))))
+  (do ((*current-condition-handler* *condition-handler* (cdr *current-condition-handler*))
+       (*current-condition* obj))
+      ((null *current-condition-handler*))
+    (when (derivedp obj (caar *current-condition-handler*))
+      (return (funcall (cdar *current-condition-handler*) obj)))))
 
-(defun next-handler () (throw :next-handler nil))
+(defun next-handler (&optional (obj *current-condition*))
+  (do ((*current-condition-handler*
+        (cdr *current-condition-handler*)
+        (cdr *current-condition-handler*)))
+      ((null *current-condition-handler*))
+    (when (derivedp obj (caar *current-condition-handler*))
+      (return (funcall (cdar *current-condition-handler*) obj)))))
 
 (defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
   (let ((tms (if max
