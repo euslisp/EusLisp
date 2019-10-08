@@ -253,6 +253,7 @@
 		(lambda  (send self :funcall (car form) (cdr form)))
 		(special (send self :special-form (car form) (cdr form)))
 		(macro   (send self :eval (macroexpand form)))
+		(macrolet (send self :eval (eval `(,(third fdef) ,@(cdr form)))))
 		(closure (send self :call-closure fdef (cdr form)))
 		(t (send self :error "unknown func type" form))) ))))
  (:get-function (fn)
@@ -587,6 +588,7 @@
 	((go) (send self :go (car args)) t)
 	((flet) (send self :flet (car args) (cdr args) nil) t)
 	((labels) (send self :flet (car args) (cdr args) t) t)
+	((macrolet) (send self :macrolet (car args) (cdr args)) t)
 	((unwind-protect)
 		(send self :unwind-protect (car args) (cdr args)) t)
 	((progn) (send self :progn args) t)
@@ -888,7 +890,7 @@
 	  (setq newcomp (send self :copy-compiler))
 	  (send self :add-closure (list entry fn newcomp))
          )))
- (:flet (funcs bodies recursive-scope &aux (flets-save flets))
+ (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
      (let (entry newcomp newcomps flets-exchange)
         (dolist (fn funcs)
@@ -909,6 +911,12 @@
         (send self :progn bodies)
         (setq flets (nthcdr (length funcs) flets))
         (send trans :del-frame 0 (length funcs))))
+ (:macrolet (funcs bodies)
+   (dolist (fn funcs)
+     (push (list (car fn) 'macrolet `(lambda ,@(cdr fn)))
+           flets))
+   (send self :progn bodies)
+   (setq flets (nthcdr (length funcs) flets)))
  (:change-flets (newflets) (setq flets newflets))
  (:declare (args)
     (let (v)
@@ -946,21 +954,21 @@
 	 (reqn 0)
 	 (optn 0)
 	 (keyn 0)
+         (svar-base 0)
+         (opt-supplied-vars)
          (opt-vars (memq '&optional param))
          (rest-var (memq '&rest param))
 	 (key-forms (memq '&key param))
 	 (aux-vars (memq '&aux param))
 	 (key-vars)
+	 (key-supplied-vars)
          (req-vars nil)
 	 (opt-forms nil)
 	 (key-names nil)
 	 (key-inits nil)
-	 (key-base 0)
 	 (specially-bound nil)
 	 (allowotherkeys (memq '&allow-other-keys param))
-	 (unwind-save unwind-frames)
-	 (vname nil)
-	 (label2))
+	 (unwind-save unwind-frames))
      (setq req-vars
            (reverse 
 		  (nthcdr (length (cond (opt-vars)
@@ -987,14 +995,29 @@
            (push (send self :genlabel "ENT") labels)
    	   (inc i))
 	(if rest-var (setq labels (list (send self :genlabel "RST")))))
+;; extract optional supplied-p variables
+     (dolist (opt opt-vars)
+       (let (svar)
+         (when (and (listp opt) (cddr opt))
+           (setq svar (caddr opt))
+           (unless (and (symbolp (caddr opt)) (not (constantp svar)))
+             (send self :error "optional supplied variable")))
+         (push svar opt-supplied-vars)))
+     (nreverse opt-supplied-vars)
 ;; extract optional variable names
      (setq opt-vars (mapcar #'(lambda (x) (if (listp x) (car x) x)) opt-vars))
      (send self :create-frame)
 ;; parse keyword variables
      (if key-forms
-	 (let (init key var)
+	 (let (init key var svar)
             (dolist (k key-forms)
 		(cond ((listp k)
+			;; key-supplied-vars
+			(when (cddr k)
+                          (setq svar (caddr k))
+                          (unless (and (symbolp svar) (not (constantp svar)))
+                            (send self :error "keyword supplied variable")))
+			;; key-inits / key-names
 			(setq init (cadr k) k (car k))
 			(cond ((listp k)
 			       (setq key (car k) var (cadr k))
@@ -1011,10 +1034,12 @@
 					   *keyword-package*))))
 	  (setq key-names (cons key key-names)
 		key-vars  (cons var key-vars)
+		key-supplied-vars  (cons svar key-supplied-vars)
 		key-inits (cons init key-inits)))   ;end dolist
 	(nreverse key-names)
 	(nreverse key-vars)
 	(nreverse key-inits)
+	(nreverse key-supplied-vars)
 	;(format t ";key-names length=~d ~s~%" (length key-names)  key-names)
 	(if (>= (length key-names) 128) ;; KEYWORDPARAMETERLIMIT
 	    (send self :error "Too many keyword parameters>128 ~s" key-names))
@@ -1031,8 +1056,19 @@
      (dolist (v req-vars)		;for all required arguments
 	(send self :bind v 'arg i)
 	(inc i))
+     ;; initialize all supplied-p variables to t
+     (dolist (svar opt-supplied-vars)
+       (when svar
+         (send trans :load-t)
+         (send self :bind svar 'local (1- (send trans :offset-from-fp)))))
      (while (cdr labels)
 	(send trans :check-opt-arg i (car labels))
+        ;; set supplied-p variables to nil
+        (when (pop opt-supplied-vars)
+          (send trans :load-nil)
+          (send trans :store-local svar-base 0)
+          (inc svar-base))
+        ;; set init value
         (send self :eval (pop opt-forms))
 	(send trans :label (pop labels))
 	(send self :bind (pop opt-vars) 'local 
@@ -1047,16 +1083,33 @@
 				 (1- (send trans :offset-from-fp))))
 	((and (> optn 0) (null key-forms)) (send trans :check-rest-arg i)))
      (when key-forms
-	(setq key-base  (send trans :offset-from-fp))
-	(send trans :parse-key-params (coerce key-names vector)
-				      (+ reqn optn)
-				      keyn  allowotherkeys)
-	(dotimes (i keyn)
+       (let* ((key-base (send trans :offset-from-fp))
+              (svar-key-base key-base)
+              vname svar label2)
+         ;; reset vsp
+         (send trans :reset-vsp)
+         ;; initialize all supplied-p variables to t
+         (dolist (svar key-supplied-vars)
+           (when svar
+             (send trans :load-t)
+             (send self :bind svar 'local key-base)
+             (inc key-base)))
+         (send trans :parse-key-params (coerce key-names vector)
+               (+ reqn optn)
+               keyn allowotherkeys)
+         (dotimes (i keyn)
 	   (setq labels (send self :genlabel "KEY"))
 	   (send trans :check-key-arg i labels)
 	   ; go around evaluating default for a key-var
-	   (send self :eval (pop key-inits))
 	   (setq vname (pop key-vars))
+	   (setq svar (pop key-supplied-vars))
+	   ;; set supplied-p variables to nil
+	   (when svar
+             (send trans :load-nil)
+             (send trans :store-local svar-key-base 0)
+             (inc svar-key-base))
+	   (send self :eval (pop key-inits))
+	   ;; set default values
 	   (cond ((send self :special-variable-p vname)
 		  (setq label2 (send self :genlabel "KEY"))
 		  (send trans :jump label2)
@@ -1068,7 +1121,7 @@
 	         (t	;non-special
 		  (send self :bind vname 'local (+ key-base i))
 		  (send trans :store-local (+ key-base i) 0)
-		  (send trans :label labels)	)   )
+		  (send trans :label labels))))
 	)   )
 ;;; bind aux variables
      (dolist (av aux-vars)
