@@ -10,14 +10,14 @@
 (defvar *current-condition-handler*) ;; for next-handler
 
 (defmethod condition
-  (:init (&rest init-args &key msg &allow-other-keys)
+  (:init (&rest init-args &key message &allow-other-keys)
     ;; Initialize slots
     (do* ((key (pop init-args) (pop init-args))
           (val (pop init-args) (pop init-args)))
          ((null key))
       (send self :set-val (symbol-pname key) val))
     self)
-  (:msg (&optional val) (if val (setq msg val) msg)))
+  (:message (&optional val) (if val (setq message val) message)))
 
 (defmethod error
   (:callstack (&optional val) (if val (setq callstack val) callstack))
@@ -88,11 +88,11 @@
       (dotimes (i tms)
         (format os "~3D: at ~S~%" i (nth i stack))))))
 
-(defun print-error-msg (err &optional (os *error-output*))
+(defun print-error-message (err &optional (os *error-output*))
   (unless (derivedp err condition) (error type-error "condition class expected"))
-  (when (send err :msg)
+  (when (send err :message)
       (format os "~C[1;3~Cm~A~C[0m: ~A"
-              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (send err :msg))
+              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (send err :message))
       (if (and (derivedp err error) (send err :form))
           (format os " in ~S" (send err :form)))
       (terpri os)))
@@ -105,7 +105,7 @@
 (defun euserror (err)
   (when (send err :callstack)
     (print-callstack (send err :callstack) *max-callstack-depth*))
-  (print-error-msg err)
+  (print-error-message err)
   (let ((*replevel* (1+ *replevel*))
         (*reptype* "E"))
     ;; do not carry handlers through the error stack
@@ -138,10 +138,10 @@
 (defclass interruption-event :super condition)
 (defun sigint-handler (c)
   (unix::with-alarm-interrupt
-    (signals interruption-event :msg "keyboard interrupt")))
+    (signals interruption-event :message "keyboard interrupt")))
 
 (defun interruption-handler (c)
-  (print-error-msg c)
+  (print-error-message c)
   (let* ((*replevel* (1+ *replevel*))
          (*reptype* "B"))
     (while (catch *replevel* (reploop #'toplevel-prompt)))))

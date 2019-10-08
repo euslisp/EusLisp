@@ -858,7 +858,7 @@ static void initclasses()
   C_BIGNUM=speval(BIGNUM);
 
 /* conditions */
-  C_CONDITION=speval(basicclass("CONDITION",C_OBJECT,&conditioncp,1,"MSG"));
+  C_CONDITION=speval(basicclass("CONDITION",C_OBJECT,&conditioncp,1,"MESSAGE"));
   C_ERROR=speval(basicclass("ERROR",C_CONDITION,&errorcp,2,"CALLSTACK","FORM"));
   C_ARGUMENTERROR=speval(basicclass("ARGUMENT-ERROR",C_ERROR,&argumenterrorcp,0));
   C_PROGRAMERROR=speval(basicclass("PROGRAM-ERROR",C_ERROR,&programerrorcp,0));
