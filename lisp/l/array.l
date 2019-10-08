@@ -99,7 +99,7 @@
 	  (setq entity (instantiate element-type dim))
 	  (setq a entity)
 	  (setq dim (list dim)))
-	 (t
+         ((consp dim)
 	   (setq a (instantiate array))
 	   (let* ((i 0)
 		  (rank (length dim))
@@ -120,7 +120,8 @@
 	      (setf (array-displaced-index-offset a) displaced-index-offset)
 	      (do ((i 0 (1+ i)))
 		  ((>= i rank))
-		(setslot a array (+ i 5)  (elt dim i))))))
+		(setslot a array (+ i 5)  (elt dim i)))))
+         (t (error "integer or list expected")))
       (when initial-element  (fill entity initial-element))
       (when initial-contents
 	 (fill-initial-contents entity 0 dim initial-contents))
