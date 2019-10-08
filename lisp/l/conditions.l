@@ -120,12 +120,12 @@
 ;;; unix:signal handling
 ;;;
 
-(defclass unix::signal-received :super condition)
-(defclass unix::sigint-received :super unix::signal-received)
-(defclass unix::sigcont-received :super unix::signal-received)
+(defcondition unix::signal-received)
 (defmacro unix::install-signal-handler (sig obj &rest init-args)
   (let ((fname (intern (format nil "~A-SIGNALIZE-CONDITION" (symbol-pname sig)) *unix-package*)))
     `(progn
+       (unless (boundp ',obj)
+         (defcondition ,obj :super unix::signal-received))
        (defun ,fname (sig code) (signals ,obj ,@init-args))
        (unix:signal ,sig ',fname))))
 
