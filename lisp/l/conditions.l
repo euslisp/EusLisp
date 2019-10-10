@@ -3,7 +3,7 @@
 (in-package "LISP")
 
 (export '(defcondition install-handler remove-handler signals euserror
-          sigint-handler interruption-event handler-bind handler-case
+          sigint-handler interruption handler-bind handler-case
           next-handler))
 
 (defvar *current-condition*)
@@ -135,10 +135,10 @@
        ,@body
        (unix:setitimer 0 ,value ,interval))))
 
-(defclass interruption-event :super condition)
+(defcondition interruption)
 (defun sigint-handler (c)
   (unix::with-alarm-interrupt
-    (signals interruption-event :message "keyboard interrupt")))
+    (signals interruption :message "keyboard interrupt")))
 
 (defun interruption-handler (c)
   (print-error-message c)
@@ -146,7 +146,7 @@
          (*reptype* "B"))
     (while (catch *replevel* (reploop #'toplevel-prompt)))))
 
-(install-handler interruption-event 'interruption-handler)
+(install-handler interruption 'interruption-handler)
 
 ;; install handlers
 (unix:install-signal-handler unix::sigint unix::sigint-received)
