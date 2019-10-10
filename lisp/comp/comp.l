@@ -1248,7 +1248,6 @@
 	 (ins) (cccom)
 	 (file.c (merge-pathnames ".c" file))
 	 (file.h (merge-pathnames ".h" file))
-	 (file.q (merge-pathnames ".q" file))
 	 (file.o (if o o (merge-pathnames ".o" file)))
 	 (file.so (if o (merge-pathnames ".so" o)
 			(merge-pathnames ".so" file)))
@@ -1258,8 +1257,7 @@
       (unless (eq (unix:access (send (pathname file) :directory-string) unix::O_RDWR) t) ;; source directory is not writable
         (warn ";; ~A is write protected, use temporary compile directory to ~A~%" file (send o :directory-string))
         (setq file.c (merge-pathnames ".c" o)
-              file.h (merge-pathnames ".h" o)
-              file.q (merge-pathnames ".q" o)))
+              file.h (merge-pathnames ".h" o)))
       (when (null (probe-file file))
 	 (setq file (merge-pathnames ".l" file))
          (if (null (probe-file  file)) 
@@ -1480,8 +1478,6 @@
 	#+:linux	"so"
 	))
       (load pname)
-      (unix:unlink (namestring pname))
-      (setq pname (make-pathname :defaults fname :type "q"))
       (unix:unlink (namestring pname))
       funcs
       ))
