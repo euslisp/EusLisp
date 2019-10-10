@@ -251,11 +251,11 @@
 	        (cond ((symbolp input) (print (eval-dynamic input)))
 		    (t 
 		      (catch 'step-error
-			(let ((*error-handler*
-				'(lambda (&rest x)
-				    (format *error-output*
-					 "step evaluation error ~A~%" x)
-				    (throw 'step-error nil))))
+                        (handler-bind ((error
+                                        '(lambda (x)
+                                          (format *error-output*
+                                           "step evaluation error ~A~%" x)
+                                          (throw 'step-error nil))))
 	                    (print (eval input)))))))
 	  (t (format t ";; e?"))))
      (dec *tracelevel*)
@@ -367,7 +367,7 @@
 	      (print (elt obj command)))
 	     (t
 	       (catch 'inspect-eval
-		   (let ((*error-handler*
+                 (handler-bind ((error
 				'(lambda (ec form &optional msg1 msg2)
 				     (warn "error ~s ~s ~s" form msg1 msg2)
 				     (throw 'inspect-eval t))))
@@ -665,10 +665,10 @@ finds method-class pair which include name as substring of the method name"
 (defun reval (s)	;remote eval
       (let* ((*standard-input* (send s :instream))
 	     (*standard-output* (send s :outstream))
-	     (*error-output* *standard-output*)
-	     (*error-handler* 'remote-error))
-        (catch 'reval
-	   (print (eval (read s)) s))))
+	     (*error-output* *standard-output*))
+        (handler-bind ((error 'remote-error))
+          (catch 'reval
+            (print (eval (read s)) s)))))
 
 (defvar *server-streams* nil)
 

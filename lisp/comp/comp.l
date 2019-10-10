@@ -1554,8 +1554,7 @@
    (terpri *error-output*)
    (sys:alloc 60000)
    (setq lisp::*prompt-string* "euscomp$ ")
-   (let ((i 1) (l (length argv)) (arg) (flag)
-	 (*error-handler* 'lisp::euserror))
+   (let ((i 1) (l (length argv)) (arg) (flag))
       (cond ((< l 1) (apply #'eustop argv))
 	    ((< l 2)
 	      (format t

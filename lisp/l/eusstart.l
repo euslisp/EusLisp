@@ -25,7 +25,7 @@
   (export '(*print-case* *print-circle* *print-object* *print-structure*
 		*print-length* *print-level*
 		*readtable* *toplevel* *read-base* *print-base*
-		*error-handler* *evalhook* *debug* *exit-on-fatal-error*
+		*evalhook* *debug* *exit-on-fatal-error*
 		*unbound* *random-state* *features*
 		*package*
 		*standard-input* *standard-output*
