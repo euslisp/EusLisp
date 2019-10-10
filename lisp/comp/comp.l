@@ -1479,6 +1479,8 @@
 	))
       (load pname)
       (unix:unlink (namestring pname))
+      #+(or :linux :cygwin)
+      (unix:unlink (namestring (make-pathname :defaults fname :type "o")))
       funcs
       ))
 
