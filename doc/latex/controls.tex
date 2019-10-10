@@ -138,6 +138,7 @@ Also, if you had an error while executing {\em protected-form},
 
 \end{refdesc}
 
+
 \subsection{Iteration}
 
 \begin{refdesc}
@@ -268,6 +269,61 @@ T if {\em object} is an instance of compiled-code.
 In order to know the compiled-code is a function or a macro,
 send {\tt :type} message to the object, and {\tt function} or {\tt macro}
 is returned.}
+
+\end{refdesc}
+
+
+\subsection{Conditions}
+
+Conditions can be used to report exceptions to higher levels in the program and ask for handling before continuing.
+
+\begin{refdesc}
+
+\classdesc{condition}{object}{message}{
+  The most basic class for signaling conditions.}
+\methoddesc{:init}{\&rest init-args \&key message \&allow-other-keys}{
+  Loops through {\em init-args} setting instance slots to its respective key argument.
+  It can also handle slots added in child classes, and is designed to be called from child classes initialization.}
+\classdesc{error}{condition}{callstack form}{
+  The most basic class for signaling errors.}
+\classdesc{argument-error}{error}{}{}
+\classdesc{program-error}{error}{}{}
+\classdesc{name-error}{error}{}{}
+\classdesc{type-error}{error}{}{}
+\classdesc{value-error}{error}{}{}
+\classdesc{index-error}{error}{}{}
+\classdesc{io-error}{error}{}{}
+
+\vardesc{lisp::*condition-handler*}{
+  Holds the alist of conditions and handlers.}
+
+\vardesc{lisp::*current-condition*}{
+  Holds the condition being currently handled.}
+
+\macrodesc{defcondition}{name \&key slots (super 'condition)}{
+  Defines new conditions. Defines a new class with setter/getter methods for each slot in {\em slots} and a proper {\em :init} method.}
+
+\funcdesc{install-handler}{label handler}{
+  Introduces a callback function {\em handler} to be called when a condition derived from {\em label} is signalized.
+  {\em label} is a condition class and {\em handler} is a funcallable object which takes one parameter (the condition instance signalized).}
+
+\funcdesc{remove-handler}{label \&optional handler}{
+  Removes the last handler registered for condition {\em label}.
+  If {\em handler} is given, removes the last registered pair of ({\em label . handler}) instead.}
+
+\funcdesc{handler-bind}{(\&rest (label handler)) \&rest forms}{
+  Locally binds condition handlers and executes {\em forms}.
+  {\em label} is a condition class and {\em handler} is a funcallable object which takes one parameter (the condition instance signalized).}
+
+\macrodesc{handler-case}{form \&rest (label arg-list \&rest body)}{
+  If any condition matching {\em label} is signalized during execution of {\em form}, the execution is aborted and {\em body} is evaluated instead. {\em arg-list} is a one or zero length parameter list to hold the condition instance.}
+
+\funcdesc{signals}{obj \&rest init-args}{
+  Signalizes conditions. Returns the result of the first matching handler or {\it nil} if unhandled.
+  {\em obj} is a condition instance or a condition class to be initialized by {\em init-args}.}
+
+\funcdesc{next-handler}{\&optional (obj lisp::*current-condition*)}{
+  Can be called from inside a condition handler to call the next handler matching {\em obj}.}
 
 \end{refdesc}
 
