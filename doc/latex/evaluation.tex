@@ -3,35 +3,6 @@
 
 \subsection{Evaluators}
 
-In order to specify the behaviors upon an error and an interrupt(signal),
-set an appropriate function to each of the special variables
-{\bf *error-handler*} and {\bf *signal-handler*} in advance.
-There is no correctable or continue-able error.
-After analyzing errors you must abort the current execution by
-{\bf reset} or appropriate {\bf throw} to upper level catchers.
-{\bf reset} is equivalent to {\tt (throw 0 NIL)}, since EusLisp's top-level
-creates catch frame named {\tt 0}.
-
-Error handlers should be programmed as functions with three or four
-arguments:  {\em code msg1 form \&optional (msg2)}.
-{\em Code} is the error code which identifies system defined errors,
-such as 14 for 'mismatch argument' or 13 for 'undefined function'.
-These mappings are described in "c/eus.h".
-{\em msg1} and {\em msg1} are messages displayed to the user.
-{\em form} is the S-expression which caused the error.
-
-Signal handlers should be programmed as functions receiving
-two arguments: {\em sig} and {\em code}. 
-{\em Sig} is the signal number ranging from 1 to 31, and {\em code}
-is the minor signal code defined in signal-number dependent manners.
-
-\verb+^+D ({\em end-of-file}) at the top-level terminates eus session.
-This is useful when eus is programmed as a filter.
-
-{\bf Eval-dynamic} is the function to find the dynamic value bound
-to a symbol used as a let or lambda variable.
-This is useful for debugging.
-
 \begin{refdesc}
 
 \funcdesc{identity}{obj}{
@@ -75,7 +46,8 @@ If {\em func} is a symbol, its function definition is retrieved.}
 evaluates {\em form} once after binding {\em hookfunc} to {\bf *evalhook*}.}
 
 \funcdesc{eval-dynamic}{variable}{
-finds the value of {\em variable} (symbol) on the stack.}
+finds the dynamic value bound to {\em variable} (symbol) on the stack.
+Is useful for debugging.}
 
 \funcdesc{macroexpand}{form}{
 expands {\em form} if it is a macro call.
@@ -135,27 +107,43 @@ is evaluated.}
 prints warning-message given as {\em format-string} and {\em args} to
 *error-output*.}
 
-\funcdesc{error}{format-string \&rest args}{
-calls the current error-handler function bound to {\bf *error-handler*}.
-The default error-handler 'euserror' first
-prints arguments to {\bf *error-output*} using {\bf format},
-then enters a new top level session.
-The prompt shows you the depth of your error session.
-{\bf Throw}ing to the number, you can go back to the lower level error
-session.}
+\funcdesc{error}{message-or-class \&rest format-args}{
+Signals an error condition with message {\em message-or-class}.
+Other error conditions can be signalizing by designating an error class to {\em message-or-class}, in which case the second argument is required to designate the message.}
 
 \end{refdesc}
 
-In the multithread EusLisp, special variables are shared among threads
-and the same {\bf *error-handler*} is referenced by different threads.
-To avoid this inconvenience, multithread EusLisp provides
-the {\bf install-error-handler} function which installs different
-error handler for each thread.
+\newpage
+
+\subsection{Handling Errors and Unix Signals}
+
+Condition handlers can be used to specify the behaviors upon an error or an interruption signal (sigint). In EusLisp the following condition classes are defined, and the macro {\bf unix:install-signal-handler} helps introducing new conditions to unix signals. By default errors are handled by {\bf euserror} and interruption signals by {\bf lisp::interruption-handler}.
 
 \begin{refdesc}
 
-\funcdesc{lisp::install-error-handler}{handler}{
-installs the {\em handler} as the error handler of the current thread.}
+\classdesc{error}{condition}{callstack form}{
+  The most basic class for signaling errors.}
+\classdesc{argument-error}{error}{}{}
+\classdesc{program-error}{error}{}{}
+\classdesc{name-error}{error}{}{}
+\classdesc{type-error}{error}{}{}
+\classdesc{value-error}{error}{}{}
+\classdesc{index-error}{error}{}{}
+\classdesc{io-error}{error}{}{}
+
+\funcdesc{lisp::print-error-message}{err \&optional (os *error-output*)}{
+Formats the message of {\em err} object to the output stream {\em os}.}
+
+\classdesc{interruption}{condition}{}{}
+
+\classdesc{unix::signal-received}{condition}{}{}
+\classdesc{unix::sigint-received}{unix::signal-received}{}{}
+\classdesc{unix::sigcont-received}{unix::signal-received}{}{}
+
+\macrodesc{unix:install-signal-handler}{sig obj \&rest init-args}{
+Defines the condition {\em obj} and signalizes it every time the unix signal {\em sig} is received.
+The condition class is defined as a child of {\em unix::signal-received} and the instances signalized are initialized with {\em init-args}.}
+
 \end{refdesc}
 
 \newpage
@@ -242,7 +230,7 @@ is a function.
 % and you can edit the line interactively with control keys,
 % as in emacs. (can no more (?))
 
-\verb+^+D (EOF) terminates EusLisp normally.
+\verb+^+D (EOF) terminates the current reploop, going back to previous replevels or terminating the program itself on toplevel.
 To return abnormal termination code to upper level (usually a csh),
 use {\bf exit} with an appropriate condition code.
 
@@ -288,21 +276,15 @@ or user-saved euslisp.}
 \funcdesc{eustop}{\&rest argv}{
 is the default toplevel loop.}
 
-\funcdesc{eussig}{sig code}{
-is the default signal hander for SIGPIPE.
-{\bf eussig} prints signal number upon its arrival and enters
-another toplevel loop.}
-
-\funcdesc{sigint-handler}{sig code}{
+\funcdesc{sigint-handler}{c}{
 is the default signal handler for SIGINT (control-C).
-It enters a new top level session.}
+It signalizes an {\it interruption} condition, which by default enters a new top level session.}
 
-\funcdesc{euserror}{code message \&rest arg}{
-the default error handler that 
-prints {\em message} and enters a new error session.}
+\funcdesc{euserror}{err}{
+the default error handler that prints {\em err} callstack, message and enters a new error session.}
 
-\funcdesc{reset}{}{
-quits error loop and goes back to the outermost eustop session.}
+\funcdesc{reset}{\&optional (n 0)}{
+quits error loop and goes back to the {\em n}\textsuperscript{th} eustop session.}
 
 \funcdesc{exit}{\&optional termination-code}{
 terminates EusLisp process and returns {\em termination-code} (0..255)
@@ -694,6 +676,14 @@ execution of forms.}
 
 \macrodesc{time}{function}{
 begins measurement of time elapsed by {\em function}.}
+
+\funcdesc{lisp::print-callstack}{\&optional (stack (sys:list-callstack)) max (os *error-output*)}{
+formats the upmost {\em max} elements of the callstack {\em stack} into the output stream {\em os}.
+If {\em max} is {\it nil} formats all elements instead.}
+
+\funcdesc{sys:list-callstack}{\&optional max}{
+returns a list of the upmost {\em max} elements of the current callstack.
+If {\em max} is not provided return a list of all elements instead.}
 
 \funcdesc{sys:list-all-catchers}{}{
 returns a list of all {\bf catch} tags.}
