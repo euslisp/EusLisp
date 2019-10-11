@@ -33,8 +33,12 @@
                    slots))))
 
 (defun install-handler (label handler)
+  ;; ensure condition class
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
+  ;; ensure global scope
+  (when (and (consp handler) (eql (car handler) 'lambda-closure))
+    (setq handler `(lambda-closure ,(second handler) 0 0 ,@(nthcdr 4 handler))))
   (unless (functionp handler) type-error "function expected")
   (push (cons label handler) *condition-handler*)
   t)
