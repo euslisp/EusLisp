@@ -274,4 +274,49 @@ lambda-formかあるいはlambda-closureであったとき、Tを返す。
 
 \end{refdesc}
 
+\subsection{コンディション}
+
+コンディションシステムを用いることによってプログラムのより上位な層に情報を伝達つし、正しい対応を促すことができる。
+
+\begin{refdesc}
+
+\classdesc{condition}{object}{message}{
+コンディションの最も基本的なクラス。}
+\methoddesc{:init}{\&rest init-args \&key message \&allow-other-keys}{
+インスタンスのスロットを{\em init-args}に沿って初期化する。子クラスに導入されたスロットに対しても初期化を行えるため、子クラスの:initから呼ばれるように設計されている。}
+
+\vardesc{lisp::*condition-handler*}{
+コンディションとそれに対応するhandlerのalistを保持する。}
+
+\vardesc{lisp::*current-condition*}{
+現在処理されているコンディションを保持する。}
+
+\macrodesc{defcondition}{name \&key slots (super 'condition)}{
+新しいコンディションを定義する。{\em slots}に含まれる各スロットに対するsetter/getterと{\em :init}メソッドも一緒に定義される。}
+
+\funcdesc{install-handler}{label handler}{
+Callback関数{\em handler}を定義し、{\em label}を親クラスとするコンディションがsignalizeされたらその関数を実行する。
+{\em label}はconditionを親とするクラスであり、{\em handler}は一個のパラメータ(コンディションのインスタンス)を受け付ける関数である。}
+
+\funcdesc{remove-handler}{label \&optional handler}{
+コンディション{\em label}で登録された最後のhandlerを登録解除する。
+{\em handler}が与えられた場合、最後に登録された({\em label . handler})のペアを登録解除する。}
+
+\funcdesc{handler-bind}{(\&rest (label handler)) \&rest forms}{
+コンディション{\rm label}とハンドラー{\em handler}をロカルにbindし、{\em forms}を実行する。
+{\em label}はconditionを親とするクラスであり、{\em handler}は一個のパラメータ(コンディションのインスタンス)を受け付ける関数である。}
+
+\macrodesc{handler-case}{form \&rest (label arg-list \&rest body)}{
+{\em form}実行中に{\em label}を親クラスとするコンディションがsignalizeされれば、実行を停止し代わりに{\em body}を評価し、その値を返す。
+{\em arg-list}はコンディションインスタンスを保持する一個(あるいはゼロ個)のパラメータを持つリストである。}
+
+\funcdesc{signals}{obj \&rest init-args}{
+{\em obj}によって示されるコンディションをsignalizeする。最初にマッチングされたhandlerの返り値を返す。マッチングされたhandlerがないためにはnilを返す。
+{\em obj}はコンディションのインスタンスか、 {\em init-args}によって初期化されるコンディションクラスである。}
+
+\funcdesc{next-handler}{\&optional (obj lisp::*current-condition*)}{
+コンディションハンドラーの中から呼ぶことによって、{\em obj}にマッチングする次のhandlerを呼び出すことが可能である。}
+
+\end{refdesc}
+
 \newpage
