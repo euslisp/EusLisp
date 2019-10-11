@@ -282,22 +282,20 @@
 	      (>= (length argv) 2))
 	(apply #'compiler::comp-file-toplevel argv)
 	(exit 1))
-   ;; load files given in arguments
 ;   (format t "argv=~a~%" argv)
    (if *eustop-hook* (funcall *eustop-hook* *eustop-argument*))
-   (let (exp)
-      (dotimes (i (1- (length *eustop-argument*)))
-	 (setq exp (elt *eustop-argument* (1+ i)))
-;	 (print exp)
-	 (cond ((eq (elt exp 0) #\()	;)	
-		;; if exp is enclosed by parens, evaluate it.
-		(eval (read-from-string exp)))
-	       ((eq (elt exp 0) #\-)
-		;; if arg is prefixed by a dash, ignore.
-		)
-	       (t (load exp)))))
    ;; enter read-eval-loop session
    (catch :eusexit
+     ;; load files given in arguments
+     (catch 0
+       (dolist (exp (cdr *eustop-argument*))
+         (cond ((eq (elt exp 0) #\()	;)
+                ;; if exp is enclosed by parens, evaluate it.
+                (eval (read-from-string exp)))
+               ((eq (elt exp 0) #\-)
+                ;; if arg is prefixed by a dash, ignore.
+                )
+               (t (load exp)))))
        (while t
 	  (catch 0
 	      (let ((*replevel* 0) (*reptype* ""))
