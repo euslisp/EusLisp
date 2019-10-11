@@ -17,7 +17,7 @@
          ((null key))
       (send self :set-val (symbol-pname key) val))
     self)
-  (:message (&optional val) (if val (setq message val) message)))
+  (:message (&optional (val nil supplied-p)) (if supplied-p (setq message val) message)))
 
 (defmethod error
   (:callstack (&optional val) (if val (setq callstack val) callstack))
@@ -28,8 +28,8 @@
      (defclass ,name :slots ,slots :super ,super)
      (defmethod ,name
          (:init (&rest init-args) (send-super* :init init-args))
-         ,@(mapcar #'(lambda (s) `(,(intern (send s :pname) *keyword-package*) (&optional val)
-                                    (if val (send self :set-val ',s val) ,s)))
+         ,@(mapcar #'(lambda (s) `(,(intern (send s :pname) *keyword-package*) (&optional (val nil supplied-p))
+                                    (if supplied-p (send self :set-val ',s val) ,s)))
                    slots))))
 
 (defun install-handler (label handler)
