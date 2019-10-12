@@ -3,36 +3,6 @@
 
 \subsection{評価関数}
 
-エラーやシグナル(signal)に関する振る舞いを示すために、
-あらかじめそれぞれ特別の変数{\bf *error-handler*}と{\bf *signal-handler*}
-に適当な関数を設定する。
-修正あるいは続行できるエラーはない。
-エラーを解析後、現在の実行を{\bf reset}または上位レベルへの適当な{\bf throw}
-によって停止しなければならない。
-Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成しているので、
-{\bf reset}は、{\tt (throw 0 NIL)}と同等である。
-
-エラーハンドラーは、{\em code msg1 form \&optional (msg2)}
-という3つあるいは4つの引き数を持つ関数として定義しなければならない。
-{\em code}はエラーコードで、システムで定義されたエラーを示す。
-例えば、14が'引き数が合わない'、13が'関数が定義されていない'となる。
-これらの定義は、"c/eus.h"の中に定義されている。
-{\em msg1}と{\em msg2}は、ユーザーに示されるメッセージである。
-{\em form}は、エラーによって生じたs表現である。
-
-シグナルハンドラーは、{\em sig}と{\em code}の2つの引き数を受ける関数として
-定義されなければならない。
-{\em sig}は、1から30までのシグナル番号である。
-{\em code}は、シグナル番号の中に定義された補助番号である。
-
-最上位レベルでの\verb+^+D({\em end-of-file})は、Euslispの活動を停止させる。
-これは、Euslispをフィルターとしてプログラムされているとき
-役に立つ。
-
-{\bf eval-dynamic}は、letやlambda変数として使用されるsymbolに結び付く
-動的な変数を捜す関数である。
-デバッグするときに役に立つ。
-
 \begin{refdesc}
 
 \funcdesc{identity}{obj}{
@@ -77,7 +47,8 @@ closure関数を作る。
 {\em hookfun}を{\bf *evalhook*}に結び付けた後、{\em form}を一度評価する。}
 
 \funcdesc{eval-dynamic}{variable}{
-スタックにある{\em variable}(symbol)の値を捜す。}
+スタックにある{\em variable}(symbol)の値を捜す。
+デバッグするときに役に立つ。}
 
 \funcdesc{macroexpand}{form}{
 もし、{\em form}がマクロcallであるなら、それを展開する。
@@ -135,26 +106,43 @@ closure関数を作る。
 {\em format-string}と{\em args}で与えられる警告メッセージを
 {\bf *error-output*}に出力する。}
 
-\funcdesc{error}{format-string \&rest args}{
-{\bf *error-handler*}に結び付く現在のエラーハンドラー関数を呼び出す。
-デフォルトのエラーハンドラー'euserror'を{\bf *error-output*}に最初に出力し
-{\em format-string}と{\em args}を{\bf format}を用いて出力する。
-その後、新しい最上位レベルのセッション(session)に入る。
-プロンプトには、エラーセッションの深さを示す。
-{\bf throw}にその番号を与えることにより、低いエラーレベルのセッションへ戻ることができる。}
+\funcdesc{error}{message-or-class \&rest format-args}{
+{\em message-or-class}をメッセージに持つエラーコンディションをsignalizeする。
+{\em message-or-class}がクラスだった場合、それによってしめされるエラーコンディションをsignalizeする。そのとき、二番目のargumentはメッセージを指定しなければならない。}
 
 \end{refdesc}
 
-マルチスレッドEuslispにおいて、特殊変数はスレッド間で共有され、
-同じ{\bf *error-handler*}が異なったスレッドから参照される。
-この不自由を避けるために、マルチスレッドEuslispは{\bf install-error-handler}
-関数を備えている。その関数は、それぞれのスレッドに対して
-異なったエラーハンドラーをインストールする。
+\newpage
+
+\subsection{エラーとUnixシグナルをハンドリングする}
+
+コンディションハンドラーを用いることでエラーや中断シグナル(sigint)をハンドリングすることができる。
+EusLispでは以下のコンディションクラスが定義され、Unixシグナルに関するクラスを新しく導入したい場合にはマクロ{\bf unix:install-signal-handler}を使うと良い。デフォルトではエラーは{\bf euserror}に、中断シグナルは{\bf lisp::interruption-handler}によってハンドリングされる。
 
 \begin{refdesc}
 
-\funcdesc{lisp::install-error-handler}{handler}{
-{\em handler}を現在のスレッドのエラーハンドラーとしてインストールする。}
+\classdesc{error}{condition}{callstack form}{
+エラーの最も基本的なクラス。}
+\classdesc{argument-error}{error}{}{}
+\classdesc{program-error}{error}{}{}
+\classdesc{name-error}{error}{}{}
+\classdesc{type-error}{error}{}{}
+\classdesc{value-error}{error}{}{}
+\classdesc{index-error}{error}{}{}
+\classdesc{io-error}{error}{}{}
+
+\funcdesc{lisp::print-error-message}{err \&optional (os *error-output*)}{
+{\em err}のmessageをoutput stream {\em os}に出力する。}
+
+\classdesc{interruption}{condition}{}{}
+
+\classdesc{unix::signal-received}{condition}{}{}
+\classdesc{unix::sigint-received}{unix::signal-received}{}{}
+\classdesc{unix::sigcont-received}{unix::signal-received}{}{}
+
+\macrodesc{unix:install-signal-handler}{sig obj \&rest init-args}{
+コンディション{\em obj}を定義し、Unixシグナル{\em sig}を受信する度にそれをsignalizeする。
+定義されるコンディションは{\em unix::signal-received}の子クラスであり、signalizeされるインスタンスは{\em init-args}によって初期化される。}
 
 \end{refdesc}
 
@@ -248,21 +236,15 @@ euslispなど。}
 \funcdesc{eustop}{\&rest argv}{
 デフォルトの最上位ループ}
 
-\funcdesc{eussig}{sig code}{
-SIGPIPEのデフォルトシグナルハンドラー。
-{\bf eussig}は、SIGPIPEが到着したり他の最上位レベルループに入るとき
-シグナル番号を出力する。}
-
-\funcdesc{sigint-handler}{sig code}{
+\funcdesc{sigint-handler}{c}{
 SIGINT(control-C)のデフォルトシグナルハンドラー。
-このシグナルで新しい最上位セッションへ入る。}
+デフォルトで{\it interruption}コンディションをsignalizeする。}
 
-\funcdesc{euserror}{code message \&rest arg}{
-デフォルトのエラーハンドラーで、
-{\em message}を出力し、新しいエラーセッションへ入る。}
+\funcdesc{euserror}{err}{
+デフォルトのエラーハンドラーで、{\em err}のcallstackとmessageを出力し、新しいエラーセッションへ入る。}
 
-\funcdesc{reset}{}{
-エラーループから脱出して、最後の{\bf eustop}セッションへ戻る。}
+\funcdesc{reset}{\&optional (n 0)}{
+エラーループから脱出して、{\em n}番目の{\bf eustop}セッションへ戻る。}
 
 \funcdesc{exit}{\&optional termination-code}{
 Euslispプロセスを終了し、プロセスの状態コードとして{\em termination-code}
@@ -636,6 +618,14 @@ symbolをすべてリスト出力する。}
 
 \macrodesc{time}{function}{
 {\em function}によって経過した時間を測定し始める。}
+
+\funcdesc{lisp::print-callstack}{\&optional (stack (sys:list-callstack)) max (os *error-output*)}{
+Callstackの最高{\em max}個をoutput stream{\em os}に出力する。
+{\em max}が{\it nil}なら、callstackのすべてを出力する。}
+
+\funcdesc{sys:list-callstack}{\&optional max}{
+現在のcallstackの最高{\em max}個のリストを返す。
+{\em max}が与えられない場合には現在のcallstackのすべてを出力する。}
 
 \funcdesc{sys:list-all-catchers}{}{
 すべての{\bf catch}タグを返す。}
