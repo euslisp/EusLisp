@@ -36,6 +36,9 @@
   ;; ensure condition class
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
+  ;; ensure function
+  (unless (functionp handler)
+    (error type-error "function expected"))
   ;; ensure global scope
   (when (and (consp handler) (eql (car handler) 'lambda-closure))
     (setq handler `(lambda-closure ,(second handler) 0 0 ,@(nthcdr 4 handler))))
@@ -56,6 +59,8 @@
 
 (defmacro handler-case (form &rest cases)
   (flet ((expand-case (tag arglst &rest body)
+           (unless (or (null arglst) (and (consp arglst) (null (cdr arglst))))
+             (error argument-error "expected single parameter list"))
            `(,tag #'(lambda ,(if arglst arglst (list (gensym)))
                       ;; ignore?
                       (throw :handler-case
