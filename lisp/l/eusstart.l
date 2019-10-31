@@ -43,7 +43,7 @@
   (export '(quote eval apply funcall progn prog1 function))
   (export '(mapc mapcar mapcan setq if when cond while let let* 
 		unwind-protect catch throw macrolet flet labels block return-from
-		return resume reset go tagbody evalhook macroexpand2 eval-when
+		return unwind reset go tagbody evalhook macroexpand2 eval-when
 		the and or proclaim declare symbol-value symbol-function
 		makunbound defun defmacro find-symbol intern gensym
 		list-all-packages find-package 

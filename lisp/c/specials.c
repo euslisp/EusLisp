@@ -622,7 +622,7 @@ register pointer arg;
   ctx->fletfp=ffp;
   return(result);}
 
-pointer RESUME(ctx,n,argv)
+pointer UNWIND(ctx,n,argv)
 register context *ctx;
 int n;
 pointer *argv;
@@ -1362,7 +1362,7 @@ pointer mod;
   defmacro(ctx,"RETURN",mod,RETURN);
   defspecial(ctx,"TAGBODY",mod,TAGBODY);
   defspecial(ctx,"GO",mod,GO);
-  defun(ctx,"RESUME",mod,RESUME,NULL);
+  defun(ctx,"UNWIND",mod,UNWIND,NULL);
   defun(ctx,"RESET",mod,RESET,NULL);
   defun(ctx,"EVALHOOK",mod,EVALHOOK,NULL);
   defun(ctx,"MACROEXPAND2",mod,MACEXPAND2,NULL);
