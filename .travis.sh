@@ -41,7 +41,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew list jpeg &>/dev/null || brew install jpeg
     brew list libpng &>/dev/null || brew install libpng
     brew list mesalib-glw &>/dev/null || brew install mesalib-glw
-    brew list libbullet-dev &>/dev/null || brew install libbullet-dev
+    brew list bullet &>/dev/null || brew install bullet
     travis_time_end
 
 fi
