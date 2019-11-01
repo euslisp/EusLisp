@@ -38,10 +38,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     # skip if already installed
     # https://discourse.brew.sh/t/skip-ignore-brew-install-if-package-is-already-installed/633/2
     # brew install jpeg libpng mesalib-glw;
-    brew list jpeg &>/dev/null || brew install jpeg
-    brew list libpng &>/dev/null || brew install libpng
-    brew list mesalib-glw &>/dev/null || brew install mesalib-glw
-    brew list bullet &>/dev/null || brew install bullet
+    brew list jpeg &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install jpeg
+    brew list libpng &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install libpng
+    brew list mesalib-glw &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesalib-glw
+    brew list bullet &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install bullet
     travis_time_end
 
 fi
