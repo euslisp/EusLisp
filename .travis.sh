@@ -38,6 +38,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     # skip if already installed
     # https://discourse.brew.sh/t/skip-ignore-brew-install-if-package-is-already-installed/633/2
     # brew install jpeg libpng mesalib-glw;
+    # use HOMEBREW_NO_AUT_UPDATE to fix unexpected keyword error https://travis-ci.community/t/syntax-error-unexpected-keyword-rescue-expecting-keyword-end-in-homebrew/5623
     brew list jpeg &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install jpeg
     brew list libpng &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install libpng
     brew list mesalib-glw &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesalib-glw
