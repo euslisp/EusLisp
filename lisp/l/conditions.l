@@ -52,7 +52,7 @@
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
-     ,@(mapcar #'(lambda (bind) `(install-handler ,@bind)) (reverse bindings))
+     ,@(mapcar #'(lambda (bind) `(install-handler ,@bind)) bindings)
      ,@forms))
 
 (defmacro handler-case (form &rest cases)
