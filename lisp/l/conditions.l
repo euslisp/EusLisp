@@ -3,11 +3,9 @@
 (in-package "LISP")
 
 (export '(defcondition install-handler remove-handler signals euserror
-          sigint-handler interruption handler-bind handler-case
-          next-handler))
+          sigint-handler interruption handler-bind handler-case))
 
 (defvar *current-condition*)
-(defvar *current-condition-handler*) ;; for next-handler
 
 (defmethod condition
   (:init (&rest init-args &key message &allow-other-keys)
@@ -80,14 +78,6 @@
       (let ((*current-condition* obj)
             (*condition-handler* (remove handle *condition-handler* :test #'equal :count 1)))
         (return-from signals (funcall (cdr handle) obj))))))
-
-(defun next-handler (&optional (obj *current-condition*))
-  (do ((*current-condition-handler*
-        (cdr *current-condition-handler*)
-        (cdr *current-condition-handler*)))
-      ((null *current-condition-handler*))
-    (when (derivedp obj (caar *current-condition-handler*))
-      (return (funcall (cdar *current-condition-handler*) obj)))))
 
 (defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
   (let ((tms (if max
