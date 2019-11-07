@@ -74,11 +74,12 @@
   (if (classp obj) (setq obj (instantiate obj)))
   (if init-args (send* obj :init init-args))
   (unless (derivedp obj condition) (error type-error "condition class expected"))
-  (do ((*current-condition-handler* *condition-handler* (cdr *current-condition-handler*))
-       (*current-condition* obj))
-      ((null *current-condition-handler*))
-    (when (derivedp obj (caar *current-condition-handler*))
-      (return (funcall (cdar *current-condition-handler*) obj)))))
+  (dolist (handle *condition-handler*)
+    (when (derivedp obj (car handle))
+      ;; remove ongoing handler to avoid nested evaluation
+      (let ((*current-condition* obj)
+            (*condition-handler* (remove handle *condition-handler* :test #'equal :count 1)))
+        (return-from signals (funcall (cdr handle) obj))))))
 
 (defun next-handler (&optional (obj *current-condition*))
   (do ((*current-condition-handler*
