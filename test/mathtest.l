@@ -152,6 +152,13 @@
     (format *error-output* "~A ~A~%" (+ (expt 2 32) 1234) (abs (+ (expt 2 32) 1234)))
     ))
 
+(deftest compile-float-vector
+  ;; if (float-vector 792.732209445) translated to local[1]= makeflt(7.92732209e+02), it reduces precision
+  (warning-message 2 "#f(792.732209445) ~A~%" #f(792.732209445))
+  (warning-message 2 "(float-vector 792.732209445) ~A~%" (float-vector 792.732209445))
+  (assert (< (norm (v- #f(792.732209445) (float-vector 792.732209445))) 1.0e-7)
+	  (format nil "(norm (v- #f(792.732209445) (float-vector 792.732209445))) should be zero, but ~A~%" (norm (v- #f(792.732209445) (float-vector 792.732209445))))))
+
 (eval-when (load eval)
   (run-all-tests)
   (exit))
