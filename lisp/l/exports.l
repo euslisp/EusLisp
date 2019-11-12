@@ -20,7 +20,7 @@
   ;; type specifiers
   (export '(integer float fixnum number))
   (export '(*print-case* *print-circle* *print-object* *print-structure*
-		*print-length* *print-level*
+		*print-length* *print-level* *print-precision*
 		*readtable* *toplevel* *read-base* *print-base*
 		*error-handler* *evalhook* *debug*
 		*unbound* *random-state* *features*

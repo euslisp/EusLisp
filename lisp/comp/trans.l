@@ -168,13 +168,13 @@
 	     f))))
  (:load-t () (send self :push "T"))
  (:load-nil () (send self :push "NIL"))
-#-:x86_64
+ #-(or :x86_64 :aarch64)
  (:load-int (x) (send self :push (format nil "makeint(~d)" x)))
-#+:x86_64
+#+(or :x86_64 :aarch64)
  (:load-int (x) (send self :push (format nil "makeint((eusinteger_t)~dL)" x)))
-#-:x86_64
+#-(or :x86_64 :aarch64)
  (:load-float (x) (send self :push (format nil "makeflt(~8,8e)" x)))
-#+:x86_64
+#+(or :x86_64 :aarch64)
  (:load-float (x) (send self :push (format nil "makeflt(~22,22e)" x)))
 )
 
@@ -676,6 +676,8 @@ register context *ctx; int n; pointer *argv; pointer env;~%" entry)
     (format hfile "#define QUOTE_STRINGS_SIZE ~d~%" (length quotev))
     (format hfile "~astatic char *quote_strings[QUOTE_STRINGS_SIZE]={~%"
 	(if (memq :solaris2 *features*) "const " ""))
+    (let ((pre lisp::*print-precision*))
+    (setq lisp::*print-precision* (if (= lisp::sizeof-* 4) 9 17))
     (dolist (q quotev)
        (let* ((s (prin1-to-string q)) (len (length s)) (ch))
 	  (format hfile "    \"")
@@ -689,6 +691,7 @@ register context *ctx; int n; pointer *argv; pointer env;~%" entry)
 		   (t (write-byte (char s i) hfile))))
 	  (format hfile "\",~%")))
      (format hfile "  };~%")
+     (setq lisp::*print-precision* pre))
     )
  (:declare-ftab ()
     (if (> ftab-next 0)
