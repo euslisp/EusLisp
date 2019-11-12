@@ -23,11 +23,9 @@
 	*remote-port*
 	remote-error reval *server-streams* remote-port))
 
-(defmacro assert (pred &optional (message "") &rest args)
-    `(while (not ,pred)
-	(format *error-output* ,message ,@args)
-        (finish-output *error-output*)
-	(reploop "ass: " )))
+(defun assert (pred &optional (message "Assertation Error") &rest args)
+  (if (not pred)
+      (apply #'error message args)))
 
 (defun warning-message (color format &rest mesg)
    (format *error-output* "~C[3~Cm" #x1b (+ color 48))
