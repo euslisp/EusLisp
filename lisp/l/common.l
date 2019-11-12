@@ -395,7 +395,9 @@
 if pos is bigger than the length of list, item is nconc'ed at the tail"
    (cond ((null list) (list item))
 	 ((>= pos (length list)) (nconc list (list item)))
-	 ((= pos 0) (cons item list))
+	 ((= pos 0) (nreverse list)
+			(nconc list (list item))
+			(nreverse list))
 	 (t (let ((tail (cons item (nthcdr pos list))))
 		(rplacd (nthcdr  (1- pos) list) tail)
 		list))))
