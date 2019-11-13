@@ -30,7 +30,7 @@
                                     (if supplied-p (send self :set-val ',s val) ,s)))
                    slots))))
 
-(defun install-handler (label handler)
+(defun install-handler (label handler &key (recursive t))
   ;; ensure condition class
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
@@ -41,7 +41,10 @@
   (when (and (consp handler) (eql (car handler) 'lambda-closure))
     (setq handler `(lambda-closure ,(second handler) 0 0 ,@(nthcdr 4 handler))))
   (unless (functionp handler) type-error "function expected")
-  (push (cons label handler) *condition-handler*)
+  ;; use objects instead of alist?
+  (if recursive
+      (push (cons label (cons :recursive handler)) *condition-handler*)
+      (push (cons label handler) *condition-handler*))
   t)
 
 (defun remove-handler (label &optional handler)
@@ -52,7 +55,7 @@
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
-     ,@(mapcar #'(lambda (bind) `(install-handler ,@bind)) bindings)
+     ,@(mapcar #'(lambda (bind) `(install-handler ,@bind :recursive nil)) bindings)
      ,@forms))
 
 (defmacro handler-case (form &rest cases)
@@ -76,8 +79,13 @@
     (when (derivedp obj (car handle))
       ;; remove ongoing handler to avoid nested evaluation
       (let ((*current-condition* obj)
-            (*condition-handler* (remove handle *condition-handler* :test #'equal :count 1)))
-        (return-from signals (funcall (cdr handle) obj))))))
+            (*condition-handler* (copy-list *condition-handler*)))
+        (if (and (consp (cdr handle)) (eq (cadr handle) :recursive))
+            ;; recursive
+            (return-from signals (funcall (cddr handle) obj))
+            ;; non recursive
+            (let ((*condition-handler* (remove handle *condition-handler* :test #'equal :count 1)))
+              (return-from signals (funcall (cdr handle) obj))))))))
 
 (defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
   (let ((tms (if max
@@ -146,12 +154,12 @@
          (*reptype* "B"))
     (while (catch *replevel* (reploop #'toplevel-prompt)))))
 
-(install-handler interruption 'interruption-handler)
 
 ;; install handlers
+(install-handler error #'euserror)
+(install-handler interruption 'interruption-handler)
 (unix:install-signal-handler unix::sigint unix::sigint-received)
 (unix:install-signal-handler unix::sigcont unix::sigcont-received))
-(install-handler error #'euserror)
 (install-handler unix::sigint-received 'sigint-handler)
 (install-handler unix::sigcont-received
   '(lambda-closure nil 0 0 (c)
