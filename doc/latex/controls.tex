@@ -294,15 +294,16 @@ Conditions can be used to report exceptions to higher levels in the program and 
 \macrodesc{defcondition}{name \&key slots (super 'condition)}{
   Defines new conditions. Defines a new class with setter/getter methods for each slot in {\em slots} and a proper {\em :init} method.}
 
-\funcdesc{install-handler}{label handler}{
+\funcdesc{install-handler}{label handler \&key (recursive t)}{
   Introduces a callback function {\em handler} to be called when a condition derived from {\em label} is signalized.
-  {\em label} is a condition class and {\em handler} is a funcallable object which takes one parameter (the condition instance signalized).}
+  {\em label} is a condition class and {\em handler} is a funcallable object which takes one parameter (the condition instance signalized).
+  If {\em recursive} is nil, recursive calling of {\em handler} is disabled, and new conditions belonging to {\em label} signalized from within {\em handler} cause the next registered handler function to be executed.}
 
 \funcdesc{remove-handler}{label \&optional handler}{
   Removes the last handler registered for condition {\em label}.
   If {\em handler} is given, removes the last registered pair of ({\em label . handler}) instead.}
 
-\funcdesc{handler-bind}{(\&rest (label handler)) \&rest forms}{
+\funcdesc{handler-bind}{(\&rest (label handler \&key (recursive nil))) \&rest forms}{
   Locally binds condition handlers and executes {\em forms}.
   {\em label} is a condition class and {\em handler} is a funcallable object which takes one parameter (the condition instance signalized).}
 

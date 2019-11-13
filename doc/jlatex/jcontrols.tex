@@ -294,9 +294,11 @@ lambda-formかあるいはlambda-closureであったとき、Tを返す。
 \macrodesc{defcondition}{name \&key slots (super 'condition)}{
 新しいコンディションを定義する。{\em slots}に含まれる各スロットに対するsetter/getterと{\em :init}メソッドも一緒に定義される。}
 
-\funcdesc{install-handler}{label handler}{
+\funcdesc{install-handler}{label handler \&key (recursive t)}{
 Callback関数{\em handler}を定義し、{\em label}を親クラスとするコンディションがsignalizeされたらその関数を実行する。
-{\em label}はconditionを親とするクラスであり、{\em handler}は一個のパラメータ(コンディションのインスタンス)を受け付ける関数である。}
+{\em label}はconditionを親とするクラスであり、{\em handler}は一個のパラメータ(コンディションのインスタンス)を受け付ける関数である。
+{\em recursive}がnilの時、{\em handler}の再帰的呼び出しは行われず、{\em handler}実行中に新たな{\em label}に属するコンディションがsignalizeされればその次に登録されているハンドラーが呼び出される。
+}
 
 \funcdesc{remove-handler}{label \&optional handler}{
 コンディション{\em label}で登録された最後のhandlerを登録解除する。
