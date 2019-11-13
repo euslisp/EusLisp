@@ -325,7 +325,7 @@ va_dcl
   register context *ctx;
   register struct callframe *vf;
   pointer msg,form,callstack;
-  pointer errobj,arglst;
+  pointer errobj;
 
 #ifdef USE_STDARG
   va_start(args,ec);
@@ -428,11 +428,11 @@ va_dcl
   pointer_update(errobj->c.obj.iv[0],msg);
   pointer_update(errobj->c.obj.iv[1],callstack);
   pointer_update(errobj->c.obj.iv[2],form);
-  arglst=cons(ctx,errobj,NIL);
 
   Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
   if (errhandler!=NIL) {
-    ufuncall(ctx,errhandler,errhandler,arglst,ctx->bindfp,-1);}
+    vpush(errobj);
+    ufuncall(ctx,errhandler,errhandler,(pointer)(ctx->vsp-1),ctx->bindfp,1);}
 }
 
 #ifdef USE_STDARG
