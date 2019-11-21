@@ -622,23 +622,6 @@ register pointer arg;
   ctx->fletfp=ffp;
   return(result);}
 
-pointer UNWIND(ctx,n,argv)
-register context *ctx;
-int n;
-pointer *argv;
-{ ckarg2(1,2);
-  int depth=ckintval(argv[0]);
-  register struct callframe *vf=(struct callframe *)(ctx->callfp);
-  pointer result;
-  /* unwind stack */
-  for(;depth> 0 && vf->vlink; depth--, vf=vf->vlink) {};
-  ctx->callfp=vf;
-  unwind(ctx,(pointer *)ctx->callfp);
-  /* resume with value */
-  if (n==1) result=eval(ctx,vf->form);
-  else result=argv[1];
-  euslongjmp(*(vf->jbp),result);}
-
 pointer RESET(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1362,7 +1345,6 @@ pointer mod;
   defmacro(ctx,"RETURN",mod,RETURN);
   defspecial(ctx,"TAGBODY",mod,TAGBODY);
   defspecial(ctx,"GO",mod,GO);
-  defun(ctx,"UNWIND",mod,UNWIND,NULL);
   defun(ctx,"RESET",mod,RESET,NULL);
   defun(ctx,"EVALHOOK",mod,EVALHOOK,NULL);
   defun(ctx,"MACROEXPAND2",mod,MACEXPAND2,NULL);

@@ -1528,23 +1528,15 @@ int noarg;
   if (!ispointer(func)) error(E_NOFUNCTION);
 
   /*make a new stack frame*/
-  jmp_buf catchbuf;
   stackck;	/*stack overflow?*/
   breakck;	/*signal exists?*/
   vf->vlink=ctx->callfp;
-  vf->bf=ctx->bindfp;
-  vf->ff=ctx->fletfp;
-  vf->form=form;
-  vf->jbp=&catchbuf;
+  vf->form=form; 
   ctx->callfp=vf;
   ctx->vsp+=sizeof(struct callframe)/(sizeof(pointer));
   argp=ctx->vsp;
 
-  if ((result=(pointer)eussetjmp(catchbuf))!=0) {
-    ctx->bindfp=ctx->callfp->bf;
-    ctx->fletfp=ctx->callfp->ff;
-    return(result);}
-  else if (pisclosure(func)) {
+  if (pisclosure(func)) {
     clofunc=func;
     fn=func;
     if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_NOFUNCTION);

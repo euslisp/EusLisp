@@ -561,7 +561,6 @@ extern pointer THROW(context */*ctx*/, pointer /*arg*/);
 extern pointer MACROLET(context */*ctx*/, pointer /*arg*/);
 extern pointer FLET(context */*ctx*/, pointer /*arg*/);
 extern pointer LABELS(context */*ctx*/, pointer /*arg*/);
-extern pointer UNWIND(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer RESET(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer EVALHOOK(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer BLOCK(context */*ctx*/, pointer /*arg*/);
