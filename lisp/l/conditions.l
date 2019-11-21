@@ -116,10 +116,6 @@
   (print-error-message err)
   (let ((*replevel* (1+ *replevel*))
         (*reptype* "E"))
-    ;; do not carry handlers through the error stack
-    ;; i.e. restore previous global `*condition-handler*'
-    (let ((old (assoc '*condition-handler* (sys:list-all-special-bindings))))
-      (if old (setq *condition-handler* (cdr old))))
     (while (catch *replevel* (reploop #'toplevel-prompt))))
   (throw *replevel* t))
 
