@@ -18,6 +18,8 @@
   (:message (&optional (val nil supplied-p)) (if supplied-p (setq message val) message)))
 
 (defmethod error
+  (:init (&rest init-args &key (message "") (callstack (sys:list-callstack)) &allow-other-keys)
+    (send-super* :init :message message :callstack callstack init-args))
   (:callstack (&optional val) (if val (setq callstack val) callstack))
   (:form (&optional val) (if val (setq form val) form)))
 
@@ -72,8 +74,10 @@
          ,form))))
 
 (defun signals (obj &rest init-args)
-  (if (classp obj) (setq obj (instantiate obj)))
-  (if init-args (send* obj :init init-args))
+  (when (classp obj)
+    (setq obj (instantiate obj))
+    (send* obj :init init-args))
+  ;; init-args is not used if instantiated objects are given
   (unless (derivedp obj condition) (error type-error "condition class expected"))
   (dolist (handle *condition-handler*)
     (when (derivedp obj (car handle))
