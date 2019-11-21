@@ -85,14 +85,13 @@
 (defun apropos (strng &optional pack)
   (setq strng (string strng))
   (flet ((print-symbol-apropos (sym)
-	  (format t ";; ~S~A~A~A~%"
+	  (format t ";; ~S~A~A"
 		sym
 		(if (fboundp sym)
-		    (if (special-form-p sym)
-		        "  Special form"
-			(if (macro-function sym)
-			    "  Macro"
-			    "  Function"))
+                    (cond
+                      ((special-form-p sym) "  Special form")
+                      ((macro-function sym) "  Macro")
+                      (t "  Function"))
 		    "")
 	  (if  (boundp sym)
 		(case (send sym :vtype)
@@ -100,8 +99,9 @@
 		  (1  "  Global=")
 		  (2  "  Global Special=")
 		  (t  "  Thread Special="))
-	       "")
-	  (if (boundp sym)  (symbol-bound-value sym) ""))))
+                ""))
+	  (if (boundp sym)  (format t "~S" (symbol-bound-value sym)))
+          (format t "~%")))
      (cond (pack
             (do-symbols (sym pack)
               (when (substringp strng (string sym))
