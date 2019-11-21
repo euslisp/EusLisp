@@ -499,7 +499,9 @@ struct blockframe {
 struct catchframe {
   struct  catchframe *nextcatch;
   pointer label;
+  struct  bindframe *bf;	/*bind frame save*/
   struct  callframe *cf;	/*call frame save*/
+  struct  fletframe *ff;
   jmp_buf *jbp;
   };
 

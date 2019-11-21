@@ -525,8 +525,8 @@ pointer arg;
   if ((val=(pointer)eussetjmp(catchbuf))==0) val=progn(ctx,body);
   else if ((eusinteger_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
   ctx->callfp=ctx->catchfp->cf;
-  ctx->bindfp=ctx->callfp->bf;
-  ctx->fletfp=ctx->callfp->ff;
+  ctx->bindfp=ctx->catchfp->bf;
+  ctx->fletfp=ctx->catchfp->ff;
   ctx->vsp=(pointer *)ctx->catchfp;
   ctx->catchfp=(struct catchframe *)*ctx->vsp;
 #ifdef __RETURN_BARRIER

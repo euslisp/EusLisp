@@ -1097,7 +1097,7 @@ char *prompt;
   if ((val=(pointer)eussetjmp(brkjmp))==0) val=reploop(ctx,prompt);
   else if ((eusinteger_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
   ctx->callfp=ctx->catchfp->cf;
-  ctx->bindfp=ctx->callfp->bf;
+  ctx->bindfp=ctx->catchfp->bf;
   ctx->vsp=(pointer *)ctx->catchfp;
   ctx->catchfp=(struct catchframe *)*(ctx->vsp);
   return(val);}

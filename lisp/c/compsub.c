@@ -80,6 +80,6 @@ register context *ctx;
 { register struct catchframe *cfp=ctx->catchfp;
   ctx->vsp    = (pointer *)cfp;
   ctx->callfp = cfp->cf;
-  ctx->bindfp = cfp->cf->bf;
+  ctx->bindfp = cfp->bf;
   ctx->catchfp= cfp->nextcatch;}
 
