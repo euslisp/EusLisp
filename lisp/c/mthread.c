@@ -29,6 +29,8 @@ int mark_lock_thread;
 
 pointer get_free_thread()
 { register pointer port;
+  if (speval(QTHREADS)==NIL) {
+    error(E_USER,"No threads found. Please create with 'sys:make-thread'");}
   GC_REGION(sema_wait(&free_thread_sem););
   mutex_lock(&free_thread_lock);
     port=ccar(free_threads);
