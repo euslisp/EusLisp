@@ -98,7 +98,6 @@ cixpair bignumcp;
 /* conditions */
 cixpair conditioncp;
 cixpair errorcp;
-cixpair fatalerrorcp;
 /* errors */
 cixpair argumenterrorcp, programerrorcp, nameerrorcp;
 cixpair typeerrorcp, valueerrorcp, indexerrorcp, ioerrorcp;
