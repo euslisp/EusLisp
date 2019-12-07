@@ -5,6 +5,7 @@
 (export '(defcondition install-handler remove-handler signals euserror
           sigint-handler interruption handler-bind handler-case))
 
+(deflocal *condition-handler*)
 (defvar *current-condition*)
 
 (defmethod condition
