@@ -51,10 +51,14 @@
   t)
 
 (defun remove-handler (label &optional handler)
-  (setq *condition-handler*
-        (if handler
-            (remove (cons label handler) *condition-handler* :test #'equal :count 1)
-            (remove label *condition-handler* :key #'car :count 1))))
+  (let ((item
+         (if handler
+             (find (cons label handler) *condition-handler* :test #'equal)
+             (find label *condition-handler* :key #'car))))
+    (when item
+      (setq *condition-handler*
+            (remove item *condition-handler* :test #'equal :count 1))
+      t)))
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
