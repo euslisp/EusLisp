@@ -55,9 +55,6 @@
   ;; ensure condition class
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
-  ;; ensure global scope
-  (when (and (consp handler) (eql (car handler) 'lambda-closure))
-    (setq handler `(lambda-closure ,(second handler) 0 0 ,@(nthcdr 4 handler))))
   (push (cons label (instance condition-handler :init handler :recursive recursive))
         *condition-handler*)
   t)
