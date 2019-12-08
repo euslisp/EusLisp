@@ -24,6 +24,24 @@
   (:callstack (&optional val) (if val (setq callstack val) callstack))
   (:form (&optional val) (if val (setq form val) form)))
 
+(defclass condition-handler :slots (function recursive) :super propertied-object)
+(defmethod condition-handler
+  (:init (function &key recursive)
+    (unless (functionp function) (error type-error "function expected"))
+    ;; set slots
+    (send self :set-val "FUNCTION" function)
+    (send self :set-val "RECURSIVE" recursive)
+    ;; set name
+    (let ((name
+           (cond
+             ((symbolp function) function)
+             ((compiled-function-p function) (get function :name))
+             ((listp function) (second function)))))
+      (if name (setf (get self :name) name)))
+    self)
+  (:function (&optional val) (if val (setq function val) function))
+  (:recursive (&optional (val nil supplied-p)) (if supplied-p (setq recursive val) recursive)))
+
 (defmacro defcondition (name &key slots (super 'condition))
   `(progn
      (defclass ,name :slots ,slots :super ,super)
@@ -37,23 +55,20 @@
   ;; ensure condition class
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
-  ;; ensure function
-  (unless (functionp handler)
-    (error type-error "function expected"))
   ;; ensure global scope
   (when (and (consp handler) (eql (car handler) 'lambda-closure))
     (setq handler `(lambda-closure ,(second handler) 0 0 ,@(nthcdr 4 handler))))
-  (unless (functionp handler) type-error "function expected")
-  ;; use objects instead of alist?
-  (if recursive
-      (push (cons label (cons :recursive handler)) *condition-handler*)
-      (push (cons label handler) *condition-handler*))
+  (push (cons label (instance condition-handler :init handler :recursive recursive))
+        *condition-handler*)
   t)
 
 (defun remove-handler (label &optional handler)
   (let ((item
          (if handler
-             (find (cons label handler) *condition-handler* :test #'equal)
+             (find-if #'(lambda (val) (and (eql (car val) label)
+                                           (derivedp (cdr val) condition-handler)
+                                           (eql (send (cdr val) :function) handler)))
+                      *condition-handler*)
              (find label *condition-handler* :key #'car))))
     (when item
       (setq *condition-handler*
@@ -89,12 +104,10 @@
       ;; remove ongoing handler to avoid nested evaluation
       (let ((*current-condition* obj)
             (*condition-handler* (copy-list *condition-handler*)))
-        (if (and (consp (cdr handle)) (eq (cadr handle) :recursive))
-            ;; recursive
-            (return-from signals (funcall (cddr handle) obj))
-            ;; non recursive
+        (if (send (cdr handle) :recursive)
+            (return-from signals (funcall (send (cdr handle) :function) obj))
             (let ((*condition-handler* (remove handle *condition-handler* :test #'equal :count 1)))
-              (return-from signals (funcall (cdr handle) obj))))))))
+              (return-from signals (funcall (send (cdr handle) :function) obj))))))))
 
 (defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
   (let ((tms (if max
