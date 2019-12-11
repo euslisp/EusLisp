@@ -28,7 +28,9 @@
 (defmethod hash-table
  (:size () size)
  (:find (s)
-    (let* ((hash (abs (mod (funcall hash-function s) size))) (entry) (empty-pos))
+    (let* ((hash (abs (mod (funcall hash-function s) size)))
+           (first-hash hash)
+           (entry) (empty-pos))
       (while t
 	(setq entry (svref key hash))
 	(if (funcall test-function entry s) (return-from :find hash))
@@ -37,7 +39,11 @@
 	      (return-from :find (+ empty-pos size)))
 	(when (eq entry deleted)
 	      (if (null empty-pos) (setq empty-pos hash)))
-	(if (>= (inc hash) size) (setq hash 0)))
+	(if (>= (inc hash) size) (setq hash 0))
+	(when (eq hash first-hash)  ;; looped through all hash elements
+          (if empty-pos
+              (return-from :find (+ empty-pos size))
+              (error "hash-table is full"))))
       nil))
  (:get (s)
     (let ((entry (send self :find s)))
