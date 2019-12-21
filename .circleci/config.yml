@@ -1,0 +1,165 @@
+version: 2
+
+references:
+  setup-tex: &setup-tex
+    run:
+      name: Setup TeX
+      command: |-
+        sudo apt-get update
+        sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils
+  setup-eus: &setup-eus
+    run:
+      name: Setup EusLisp
+      command: |-
+        sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng-dev xfonts-100dpi xfonts-75dpi
+        echo 'export EUSDIR=`pwd`' >> $BASH_ENV
+        echo 'export ARCHDIR=Linux64' >>  $BASH_ENV
+        echo 'export PATH=${PATH}:${EUSDIR}/${ARCHDIR}/bin' >>  $BASH_ENV
+        echo 'export LD_LIBRARY_PATH=${EUSDIR}/${ARCHDIR}/lib' >>  $BASH_ENV
+        cat $BASH_ENV
+  compile-eus: &compile-eus
+    run:
+      name: Compile EusLisp
+      command: cd lisp; ln -sf Makefile.Linux64 Makefile; make
+
+jobs:
+  html:
+    machine: true
+    steps:
+      - checkout
+      - *setup-tex
+      - run:
+          name: Cleanup HTML
+          command: cd doc/html && rm *manual*.html *manual*.png
+      - run:
+          name: Compile HTML
+          command: cd doc/latex && make html
+      - run:
+          name: Compile jHTML
+          command: cd doc/jlatex && make html
+      - run:
+          command: |
+            mkdir -p /tmp/html
+            cp doc/html/*manual*.html /tmp/html
+            cp doc/html/*manual*.png /tmp/html
+      - store_artifacts:
+          path: /tmp/html
+      - persist_to_workspace:
+          root: doc
+          paths:
+            - html/manual*.html
+            - html/jmanual*.html
+            - html/manual*.png
+            - html/jmanual*.png
+
+  latex:
+    machine: true
+    steps:
+      - checkout
+      - *setup-tex
+      - *setup-eus
+      - *compile-eus
+      - run:
+          name: Cleanup LaTeX
+          command: cd doc/latex && make distclean
+      - run:
+          name: Compile LaTeX
+          command: |
+            cd doc/latex && make
+      - store_artifacts:
+          path: doc/latex/manual.pdf
+          destination: manual.pdf
+      - persist_to_workspace:
+          root: doc/latex
+          paths: manual.pdf
+  jlatex:
+    machine: true
+    steps:
+      - checkout
+      - *setup-tex
+      - *setup-eus
+      - *compile-eus
+      - run:
+          name: Cleanup jLaTeX
+          command: cd doc/jlatex && make distclean
+      - run:
+          name: Compile jLaTeX
+          command: |
+            cd doc/jlatex && make
+      - store_artifacts:
+          path: doc/jlatex/jmanual.pdf
+          destination: jmanual.pdf
+      - persist_to_workspace:
+          root: doc/jlatex/
+          paths: jmanual.pdf
+  rst:
+    machine: true
+    steps:
+      - checkout
+      - *setup-tex
+      - run:
+          name: Install Python3
+          command: pyenv global system 3.5.2
+      - run:
+          name: Install Pandoc
+          command: sudo apt-get install -y -qq pandoc
+      - run:
+          name: Compile reStructuredText(reST)
+          command: cd doc/latex && make rst
+      - run:
+          command: |
+            mkdir -p /tmp/rst/fig
+            cp doc/latex/*.rst /tmp/rst
+            cp doc/latex/fig/*.png /tmp/rst/fig
+            cp doc/latex/conf.py /tmp/rst
+      - run:
+          name: Install Sphinx
+          command: |
+            pip3 install --user sphinx
+            pip3 install --user sphinx_rtd_theme
+      - run:
+          name: Build reStructuredText(reST)
+          command: cd /tmp/rst && ~/.local/bin/sphinx-build . html
+      - store_artifacts:
+          path: /tmp/rst
+      - persist_to_workspace:
+          root: /tmp
+          paths: rst
+
+  artifacts:
+    docker:
+      - image: circleci/node:8.10.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: artifacts
+      - store_artifacts:
+          path: artifacts
+      - run:
+          command: |
+            echo "Check is PR commit : CIRCLE_BRANCH = $CIRCLE_BRANCH"
+            if [ "${CIRCLE_BRANCH}" == master ]; then exit 0; fi
+            echo "Check if there is commit in doc directory"
+            git diff origin/master --name-only --relative doc
+            if [ "`git diff origin/master  --name-only --relative doc`" == "" ]; then echo "No update in doc directory found, exitting... ";  circleci step halt; fi
+            echo "Found new commit on doc directory"
+      - run: cd .circleci/ && git clone https://github.com/themadcreator/circle-github-bot.git
+      - run: cd .circleci/circle-github-bot && npm install
+      - run: cd .circleci/circle-github-bot && npm run build
+      - run: .circleci/github-pr-update.js
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - latex
+      - jlatex
+      - html
+      - rst
+      - artifacts:
+          requires:
+            - latex
+            - jlatex
+            - html
+            - rst
+
