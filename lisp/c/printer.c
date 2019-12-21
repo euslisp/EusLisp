@@ -331,18 +331,24 @@ register pointer p;
     pointer_update(p->c.obj.iv[0],makeint(++ix));
     } }
   
-static int getprlength(ctx)
+static int getprlength(ctx, isnull)
 context *ctx;
+int *isnull;
 { register pointer x;
   x=Spevalof(PRLENGTH);
-  if (isint(x)) return(intval(x));
-  else return(65536);}
+  if (isint(x)) {
+    *isnull = 0;
+    return(intval(x));}
+  else {
+    *isnull = 1;
+    return(0);} }
 
 static pointer printvector(ctx,vec,f,leng,prlevel)
 register context *ctx;
 register pointer vec,f,leng;
 int prlevel;
-{ register eusinteger_t n,i=0,eltype,x,prlength=getprlength(ctx);
+{ register eusinteger_t n,i=0,eltype,x;
+  int nullprlen = 0, prlength=getprlength(ctx, &nullprlen);
   pointer sizesave;
 
   eltype=elmtypeof(vec);
@@ -366,21 +372,19 @@ int prlevel;
 	  printstr(ctx,n,vec->c.str.chars,f);  break;
     case ELM_INT:
 	  writestr(f,(byte *)"#i(",3);
-	  while (i<n && prlength>0) {
+	  while (i<n && (nullprlen || prlength-->0)) {
 	    printint(ctx,vec->c.ivec.iv[i++],f,intval(Spevalof(PRINTBASE)),
 			0,0);
-	    if(i<n) writech(f,' ');
-	    prlength--; }
-	  if (i<n) writestr(f,(byte *)"... ",4);
+	    if(i<n) writech(f,' '); }
+	  if (i<n) writestr(f,(byte *)"...",3);
           writech(f,')');
 	  break;
     case ELM_FLOAT:
 	  writestr(f,(byte *)"#f(",3);
-	  while (i<n && prlength>0) {
+	  while (i<n && (nullprlen || prlength-->0)) {
 	    printflt(vec->c.fvec.fv[i++],f);
-	    if(i<n) writech(f,' ');
-	    prlength--; }
-	  if (i<n) writestr(f,(byte *)"... ",4);
+	    if(i<n) writech(f,' '); }
+	  if (i<n) writestr(f,(byte *)"...",3);
           writech(f,')');
 	  break;
     case ELM_FOREIGN:
@@ -395,10 +399,10 @@ int prlevel;
 	    writech(f,' ');
 	    printint(ctx,(eusinteger_t)vec->c.vec.size,f,intval(Spevalof(PRINTBASE)),0,0);
 	    writech(f,' ');}
-	  while (i<n && prlength>0) {
+	  while (i<n && (nullprlen || prlength-->0)) {
 	    prin1(ctx,vec->c.vec.v[i++],f,prlevel);
 	    if (i<n) writech(f,' '); }
-	  if (i<n) writestr(f,(byte *)"... ",4);
+	  if (i<n) writestr(f,(byte *)"...",3);
 	  writech(f,')');}
   return(vec);}
 
@@ -476,7 +480,8 @@ register pointer x,f;
 register pointer fobj;
 register int prlevel;
 { register pointer rest=ccdr(x);
-  register int prlength=getprlength(ctx),shareix;
+  register int shareix;
+  int nullprlen = 0, prlength=getprlength(ctx, &nullprlen);
 
   if (fobj==QUOTE && islist(rest) && ccdr(rest)==NIL) {
     writech(f,'\'');
@@ -487,16 +492,14 @@ register int prlevel;
     prin1(ctx,ccar(rest),f,prlevel-1);
     return;}
   writech(f,'(');
-  prin1(ctx,fobj,f,prlevel);
-  x=rest;
   while (islist(x) && !s_marked(x)) {
-    if (--prlength<=0) { 
-      writestr(f,(byte *)" ...",4);
+    if (!nullprlen && prlength--<=0) {
+      writestr(f,(byte *)"...",3);
       x=NIL;   break;}
     else {
-      writech(f,' ');
       prin1(ctx,ccar(x),f,prlevel);
-      x=ccdr(x);} }
+      x=ccdr(x);
+      if (islist(x)) writech(f,' ');} }
   if (x!=NIL) { writestr(f,(byte *)" . ",3); prin1(ctx,x,f,prlevel);}
   writech(f,')'); }
 
@@ -507,14 +510,14 @@ register pointer fobj;
 int prlevel;
 { pointer klass, *varvec;
   register int i=0,s;
-  int prlength=getprlength(ctx);
+  int nullprlen = 0, prlength=getprlength(ctx, &nullprlen);
   
   writestr(f,(byte *)"#s(",3);
   klass=classof(x);
   printsym(ctx,klass->c.cls.name,f);
+  // structure name is always printed, and do not consume *print-length*
   s=objsize(x); varvec=klass->c.cls.vars->c.vec.v;
-  prlength--;
-  while (i<s && prlength>0) {
+  while (i<s && (nullprlen || prlength>0)) {
     writech(f,' ');
     printsym(ctx,varvec[i],f);
     writech(f,' ');
@@ -532,12 +535,13 @@ pointer fobj;
 int prlevel;
 { pointer klass;
   register int i=0,s;
-  int prlength=getprlength(ctx);
+  int nullprlen = 0, prlength=getprlength(ctx, &nullprlen);
+
   writestr(f,(byte *)"#J(",3);
   klass=classof(x);
   printsym(ctx,klass->c.cls.name,f);
   s=objsize(x);
-  while (i<s && prlength-->0) {
+  while (i<s && (nullprlen || prlength-->0)) {
     writech(f,' ');
     if (i==0) prin1(ctx,fobj,f,prlevel);
     else prin1(ctx,x->c.obj.iv[i],f,prlevel);
