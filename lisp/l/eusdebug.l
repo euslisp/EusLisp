@@ -253,9 +253,11 @@
 		      (catch 'step-error
                         (handler-bind ((error
                                         '(lambda (x)
-                                          (format *error-output*
-                                           "step evaluation error ~A~%" x)
-                                          (throw 'step-error nil))))
+                                          (let ((errmsg (with-output-to-string (str)
+                                                          (lisp::print-error-message x str))))
+                                            (format *error-output*
+                                                    "step evaluation error ~A~%" errmsg)
+                                            (throw 'step-error nil)))))
 	                    (print (eval input)))))))
 	  (t (format t ";; e?"))))
      (dec *tracelevel*)
@@ -368,9 +370,9 @@
 	     (t
 	       (catch 'inspect-eval
                  (handler-bind ((error
-				'(lambda (ec form &optional msg1 msg2)
-				     (warn "error ~s ~s ~s" form msg1 msg2)
-				     (throw 'inspect-eval t))))
+                                 '(lambda (x)
+                                   (lisp::print-error-message x)
+                                   (throw 'inspect-eval t))))
 		     (print (eval command)))))))))))
 
 (defmacro inspect (obj)
@@ -655,12 +657,11 @@ finds method-class pair which include name as substring of the method name"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar *remote-port*)
 
-(defun remote-error (code msg1 form &optional (msg2))
-      (format *error-output* "~A remote error: ~A" *program-name* msg1)
-      (if msg2 (format *error-output* " ~A" msg2))
-      (if form (format *error-output* " in ~s" form))
-      (terpri *error-output*)
-      (throw 'reval nil))
+(defun remote-error (err)
+  (let ((errmsg (with-output-to-string (str)
+                  (lisp::print-error-message err str))))
+    (format *error-output* "remote error: ~A" errmsg))
+  (throw 'reval nil))
 
 (defun reval (s)	;remote eval
       (let* ((*standard-input* (send s :instream))
