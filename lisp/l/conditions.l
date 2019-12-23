@@ -24,22 +24,22 @@
   (:callstack (&optional val) (if val (setq callstack val) callstack))
   (:form (&optional val) (if val (setq form val) form)))
 
-(defclass condition-handler :slots (function recursive) :super propertied-object)
+(defclass condition-handler :slots (fn recursive) :super propertied-object)
 (defmethod condition-handler
-  (:init (function &key recursive)
-    (unless (functionp function) (error type-error "function expected"))
+  (:init (fn &key recursive)
+    (unless (functionp fn) (error type-error "function expected"))
     ;; set slots
-    (send self :set-val "FUNCTION" function)
+    (send self :set-val "FN" fn)
     (send self :set-val "RECURSIVE" recursive)
     ;; set name
     (let ((name
            (cond
-             ((symbolp function) function)
-             ((compiled-function-p function) (get function :name))
-             ((listp function) (second function)))))
+             ((symbolp fn) fn)
+             ((compiled-function-p fn) (get fn :name))
+             ((listp fn) (second fn)))))
       (if name (setf (get self :name) name)))
     self)
-  (:function (&optional val) (if val (setq function val) function))
+  (:function (&optional val) (if val (setq fn val) fn))
   (:recursive (&optional (val nil supplied-p)) (if supplied-p (setq recursive val) recursive)))
 
 (defmacro defcondition (name &key slots (super 'condition))
