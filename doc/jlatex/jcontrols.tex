@@ -313,8 +313,12 @@ Callback関数{\em handler}を定義し、{\em label}を親クラスとするコ
 {\em arg-list}はコンディションインスタンスを保持する一個(あるいはゼロ個)のパラメータを持つリストである。}
 
 \funcdesc{signals}{obj \&rest init-args}{
-{\em obj}によって示されるコンディションをsignalizeする。最初にマッチングされたhandlerの返り値を返す。マッチングされたhandlerがないためにはnilを返す。
-{\em obj}はコンディションのインスタンスか、 {\em init-args}によって初期化されるコンディションクラスである。}
+{\em obj}によって示されるコンディションをsignalizeする。最初にマッチングされたhandlerの返り値を返す。マッチングされずどのhandlerも呼ばれない時にはnilを返す。
+{\em obj}はコンディションインスタンスか、 {\em init-args}によって初期化されるコンディションクラスである。}
+
+\funcdesc{invoke-next-handler}{obj \&optional (skip 0)}{
+  signalsと似ているが、呼び出し時にhandlerをスキップできる。(skip + 1)番目にマッチングされたhandlerの返り値を返す。どのhandlerも呼ばれない時にはnilを返す。
+{\em obj}は初期化されたコンディションインスタンスである。}
 
 \end{refdesc}
 
