@@ -2,8 +2,8 @@
 
 (in-package "LISP")
 
-(export '(defcondition install-handler remove-handler signals euserror
-          sigint-handler interruption handler-bind handler-case))
+(export '(defcondition install-handler remove-handler invoke-next-handler signals
+          euserror sigint-handler interruption handler-bind handler-case))
 
 (deflocal *condition-handler*)
 (defvar *current-condition*)
@@ -90,21 +90,33 @@
            ,(mapcar #'(lambda (cs) (apply #'expand-case cs)) cases)
          ,form))))
 
+(defun invoke-next-handler (obj &optional (skip 0))
+  (unless (derivedp obj condition)
+    (error type-error "condition class expected"))
+  (unless (and (integerp skip) (not (minusp skip)))
+    (error type-error "positive integer expected"))
+  (dolist (handle *condition-handler*)
+    (when (derivedp obj (car handle))
+      (if (<= skip 0)
+          ;; call handler
+          (let ((*current-condition* obj)
+                (*condition-handler* (copy-list *condition-handler*)))
+            (if (send (cdr handle) :recursive)
+                ;; recursive
+                (return-from invoke-next-handler (funcall (send (cdr handle) :function) obj))
+                ;; non-recursive: remove ongoing handler to avoid nested evaluation
+                (let ((*condition-handler* (remove handle *condition-handler* :test #'equal :count 1)))
+                  (return-from invoke-next-handler (funcall (send (cdr handle) :function) obj)))))
+          ;; decrease skip count
+          (decf skip)))))
+
 (defun signals (obj &rest init-args)
   (when (classp obj)
     (setq obj (instantiate obj))
     (send* obj :init init-args))
   ;; init-args is not used if instantiated objects are given
   (unless (derivedp obj condition) (error type-error "condition class expected"))
-  (dolist (handle *condition-handler*)
-    (when (derivedp obj (car handle))
-      ;; remove ongoing handler to avoid nested evaluation
-      (let ((*current-condition* obj)
-            (*condition-handler* (copy-list *condition-handler*)))
-        (if (send (cdr handle) :recursive)
-            (return-from signals (funcall (send (cdr handle) :function) obj))
-            (let ((*condition-handler* (remove handle *condition-handler* :test #'equal :count 1)))
-              (return-from signals (funcall (send (cdr handle) :function) obj))))))))
+  (invoke-next-handler obj))
 
 (defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
   (let ((tms (if max
