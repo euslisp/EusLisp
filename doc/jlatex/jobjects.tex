@@ -70,25 +70,24 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 \begin{refdesc}
 
-\longdescription{defclass}
-%{classname \&key \= :super object \hspace{85mm} [マクロ] \\
-{classname \&key \= :super object \` [マクロ] \\
-\> :slots (\{var $|$ (var [:type type] [:forward selectors])\}*) \\
-\> :metaclass metaclass \\
-\> :element-type t \\
-\> :size -1\\}
-{クラスを生成または再定義する。
+\longdescription{マクロ}{defclass}{classname \&key \= (super object) \\
+\> slots \hspace{40mm} {\rm ; (var \&optional type \&rest forward selectors)*} \\
+\> (metaclass metaclass) \\
+\> (element-type t) \\
+\> (size -1)}{
+クラスを生成または再定義する。
 異なったスーパークラスやスロットを持つクラスに再定義したとき、
 メソッドが新しいスロット配置を仮定するため、
 以前のクラスを継承する古いオブジェクトは予想できない振舞いをする。}
 
-\specialdesc{defmethod}{classname \{(selector lambda-list . body)\}*}{
+\specialdesc{defmethod}{classname \&rest (selector lambda-list \&rest body)}{
 {\em classname}の1つ以上のメソッドを定義する。
 それぞれの{\em selector}は、キーワードsymbolでなければならない。}
 
-\macdesc{defclassmethod}{classname \{(selector lambda-list . body)\}*}
+\macdesc{defclassmethod}{classname \&rest (selector lambda-list \&rest body)}
 
-\funcdesc{classp}{object}{{\em object}がクラスオブジェクトのときTを返す。
+\funcdesc{classp}{object}{
+{\em object}がクラスオブジェクトのときTを返す。
 そのオブジェクトは、クラス{\bf metaclass}かそのサブクラスの
 インスタンスである。}
 
@@ -101,19 +100,19 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 \funcdesc{delete-method}{class method-name}{
 {\em method-name}のメソッド定義を{\em class}から除く。}
 
+\funcdesc{find-method}{object selector}{
+{\em selector}に記述されたメソッドを{\em object}のクラスおよび
+そのスーパークラスの中から見つける。
+{\em object}が、{\em selector}に応じることができるかどうかを
+知るために使用される。}
+
 \funcdesc{class-hierarchy}{class}{
 {\em class}の下の継承構造を表示する。}
 
 \funcdesc{system:list-all-classes}{}{
 今まで定義されたクラスを全てリストアップする。}
 
-\funcdesc{system:find-method}{object selector}{
-{\em selector}に記述されたメソッドを{\em object}のクラスおよび
-そのスーパークラスの中から見つける。
-{\em object}が、{\em selector}に応じることができるかどうかを
-知るために使用される。}
-
-\funcdesc{system:method-cache}{\&optional flag}{
+\funcdesc{system::method-cache}{\&optional flag}{
 メソッドキャッシュのヒット率を調査し、
 ヒットとミスの2つの数値のリストを返す。
 もし{\em flag}がNILのとき、メソッドキャッシュは無効になる。
@@ -125,12 +124,12 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 \subsection{メッセージ送信}
 \begin{refdesc}
 
-\funcdesc{send}{object selector \{arg\}*}{
+\funcdesc{send}{object selector \&rest args}{
 {\em object}に{\em selector}と{\em arg}で構成されるメッセージを送信する。
 {\em object}は、何でもよいが数値はいけない。
 {\em selector}はキーワードとして評価されなければならない。}
 
-\funcdesc{send-message}{target search selector \{arg\}*}{
+\funcdesc{send-message}{target search selector \&rest args}{
 {\bf send-super}を実行するための低レベル命令である。}
 
 \macrodesc{send*}{object selector \&rest msg-list}{
@@ -201,10 +200,10 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 {\bf subclassp}と{\bf derivedp}関数は、クラス継承のなかを探索できない。
 したがって、一定時間内に型のチェックがいつも終了する。}
 
-\funcdesc{slot}{object class (index $|$ slot-name)}{
+\funcdesc{slot}{object class idex-or-name}{
 スロット値の名前かインデックスを返す。}
 
-\funcdesc{setslot}{object class (index $|$ slot-name) value}{
+\funcdesc{setslot}{object class index-or-name value}{
 {\bf setslot}は、内部処理関数でユーザーが使用できない。
 代りに、{\bf setf}と{\bf slot}の組み合せを使用する。}
 
@@ -213,9 +212,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 \subsection{基本クラス}
 
 \begin{refdesc}
-\classdesc{object}{}
-{}
-{objectは、最も基本のクラスである。それは、クラス継承の最上位に位置する。
+\classdesc{object}{}{}{
+objectは、最も基本のクラスである。それは、クラス継承の最上位に位置する。
 スロット変数が定義されていないため、{\bf object}はインスタンスを作るために
 使用しない。}
 
@@ -234,8 +232,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 この構文で書式の表示が得られる。（symbolや文字列でも構わない）
 この構文で述べることは、symbolに{\bf setq}し忘れたデータオブジェクトを
 把握することができる。
-ただし、表示された後にガーベージコレクションが起こらない限りである。
-}
+ただし、表示された後にガーベージコレクションが起こらない限りである。}
 
 \methoddesc{:slots}{}{
 変数名のリストおよびオブジェクトの全てのスロットと対になる値を返す。
@@ -246,9 +243,16 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 このオブジェクトから呼べる全てのメソッドのリストを返す。
 {\em subname}を指定すると、メソッド名のなかにそれを含むメソッドのみ返す。}
 
-\classdesc{propertied-object}{object}
-{plist}
-{property-listを持つオブジェクトを定義する。
+\methoddesc{:get-val}{variable-name}{
+{\em variable-name}に該当するスロットの値を返す。
+スロットが存在しない時、エラーを報告する。}
+
+\methoddesc{:set-val}{variable-name value}{
+{\em variable-name}に該当するスロットに{\em value}を代入する。
+スロットが存在しない時、エラーを報告する。}
+
+\classdesc{propertied-object}{object}{plist}{
+property-listを持つオブジェクトを定義する。
 他のCommon Lispと違って、
 EusLispは、たとえ、symbolでなかったとしても、property-listを持つ
 {\bf propertied-object}を継承するどんなオブジェクトも
@@ -267,70 +271,88 @@ lisp書式も可能である。
 symbolが{\tt indicator}として用いられたとき、内部パッケージを広く実行される
 等価性のチェックを確実にするためにキーワードの使用を推薦する。
 {\bf :plist}は、主な{\tt plist}を返す。}
+
 \methoddesc{:get}{indicator}{
 {\tt plist}のなかで{\em indicator}と結び付く値を返す。
 %%% change 2004.12.14 \verb+(send x :get :y) == (cdr (assoc :y (send x :plist)))+}
 \verb~(send x :get :y) == (cdr (assoc :y (send x :plist)))~}
+
 \methoddesc{:put}{indicator value}{
 {\tt plist}のなかで、{\em value}と{\em indicator}を結び付ける。}
+
 \methoddesc{:remprop}{indicator}{
 {\tt plist}から{\em indicator}とvalueの組を削除する。
 さらに、{\bf :get}を試すとvalueとしてNILを返す。}
+
 \methoddesc{:name}{\&optional name}{
 {\tt plist}のなかの{\tt :name}特性を定義し、取り出す。
 この特性は、表示のために使用される。}
+
 \methoddesc{:prin1}{\&optional stream \&rest mesg}{
 再読み込み可能な書式のオブジェクトを表示する。
 もしオブジェクトが{\tt :name}特性を持っているならば、
 オブジェクトのアドレスの後に特性を表示する。}
 
-\classdesc{metaclass}{propertied-object}
-{name super cix vars types forwards methods}
-{{\bf metaclass}は、複数クラスを定義する。独自のクラス変数を持つ複数クラスは、
+\classdesc{metaclass}{propertied-object}{name super cix vars types forwards methods}{
+{\bf metaclass}は、複数クラスを定義する。独自のクラス変数を持つ複数クラスは、
 それらのスーパークラスとして{\bf metaclass}を定義しなければならない。}
-\methoddesc{:new}{}
-{このクラスのインスタンスを生成し、全てのスロットをNILにした後、
+
+\methoddesc{:new}{}{
+このクラスのインスタンスを生成し、全てのスロットをNILにした後、
 それを返す。}
+
 \methoddesc{:super}{}{
 このクラスのスーパークラスオブジェクトを返す。
 一旦クラス定義したスーパークラスを変更することはできない。}
+
 \methoddesc{:methods}{}{
 このクラスで定義された全てのメソッドのリストを返す。
 そのリストは、メソッド名とパラメータと本体を組みにしたリスト
 によって構成されたリストである。}
+
 \methoddesc{:method}{name}{
 {\em name}で関連づけられたメソッド定義を返す。
 もし見つからなければ、NILを返す。}
+
 \methoddesc{:method-names}{subname}{
 メソッド名のなかに{\em subname}を含む全てのメソッド名のリストを返す。
 メソッドは、このクラスのなかのみ探索される。}
+
 \methoddesc{:all-methods}{}{
 このクラスとその全てのスーパークラスのなかで定義されているすべてのメソッドの
 リストを返す。
 言い替えると、このクラスのインスタンスは、これらのメソッドを
 実行することができる。}
+
 \methoddesc{:all-method-names}{subname}{
 {\em subname}と一致する全てのメソッド名のリストを返す。
 その探索は、このクラスから{\bf object}まで実行される。}
+
 \methoddesc{:slots}{}{
 スロット名のベクトルを返す。}
+
 \methoddesc{:name}{}{
 このクラスのsymbol名を返す。}
+
 \methoddesc{:cid}{}{
 このクラスと同一であることを示すために、このクラスのインスタンスすべてに
 割り当てられた整数を返す。
 これは、システム内部のクラステーブルへのインデックスで、
 このクラスの下に新しいサブクラスが定義されたとき、変更される。}
+
 \methoddesc{:subclasses}{}{
 このクラスの直接のサブクラスのリストを返す。}
+
 \methoddesc{:hierarchy}{}{
 このクラスの下に定義された全てのサブクラスのリストを返す。
 全てのクラス継承の広範囲なリストを得るためには、{\bf class-hierarchy}関数
 を呼び出す。}
+
 \funcdesc{find-method}{object selector}{
 {\em object}のクラスやそのスーパークラスのなかで、{\em selector}と一致する
 メソッドを探索する。
 この関数は、{\em object}のクラスが不確かで、その{\em object}が
 エラーなしにメッセージを受け取ってくれるかどうかを知りたい時に役立つ。}
+
 \end{refdesc}
 \newpage

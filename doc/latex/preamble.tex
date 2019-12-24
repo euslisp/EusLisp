@@ -1,0 +1,67 @@
+\newcommand{\desclist}[1]{
+\begin{list}{ }{\setlength{\rightmargin}{0mm}\topsep=0mm\partopsep=0mm}
+\item #1
+\end{list}
+\vspace{3mm}}
+
+\newcommand{\functiondescription}[4]{
+\index{#1}
+\textbf{#1} \em #2 \rm \hfill [#3] 
+%\if#4 \vspace{3mm} \\ \else \desclist{#4} \fi
+%\ifx#4 \vspace{3mm} \\ \else \desclist{#4} \fi
+ \desclist{\hspace{0mm}#4}
+}
+
+\newcommand{\bfx}[1]{\index{#1}{\bf #1}}
+\newcommand{\emx}[1]{\index{#1}{\em #1}}
+
+\newcommand{\longdescription}[4]{
+\index{#2}
+\begin{tabbing}
+{\bf #2} \rm \hspace{3mm} \= \`[#1] \\
+\> \it #3
+\end{tabbing}
+\rm
+\desclist{#4}
+}
+
+\newcommand{\funcdesc}[3]{\functiondescription{#1}{#2}{function}{#3}}
+\newcommand{\macrodesc}[3]{\functiondescription{#1}{#2}{macro}{#3}}
+\newcommand{\specialdesc}[3]{\functiondescription{#1}{#2}{special}{#3}}
+\newcommand{\methoddesc}[3]{\functiondescription{#1}{#2}{method}{#3}}
+\newcommand{\vardesc}[2]{\functiondescription{#1}{}{variable}{#2}}
+
+%\newcommand{\fundesc}[2]{\functiondescription{#1}{#2}{function}{
+%}}
+%\newcommand{\macdesc}[2]{\functiondescription{#1}{#2}{macro}{
+%}}
+%\newcommand{\spedesc}[2]{\functiondescription{#1}{#2}{special}{
+%}}
+%\newcommand{\metdesc}[2]{\functiondescription{#1}{#2}{method}{
+%}}
+\newcommand{\fundesc}[2]{\functiondescription{#1}{#2}{function}{\hspace{0mm}}}
+\newcommand{\macdesc}[2]{\functiondescription{#1}{#2}{macro}{\hspace{0mm}}}
+\newcommand{\spedesc}[2]{\functiondescription{#1}{#2}{special}{\hspace{0mm}}}
+\newcommand{\metdesc}[2]{\functiondescription{#1}{#2}{method}{\hspace{0mm}}}
+
+\newcommand{\constdesc}[2]{\functiondescription{#1}{}{constant}{#2}}
+
+\newcommand{\classdesc}[4]{	%class, super slots description
+\vspace{2mm} 
+\index{#1}
+\textbf{\large #1 } \hfill [class]  %super
+\begin{tabbing}
+\hspace{30mm} :super \hspace{5mm} \= \textbf{\ #2} \\
+\hspace{30mm} :slots \> #3 
+\end{tabbing}
+\vspace{4mm}
+\desclist{#4}}
+
+\newenvironment{refdesc}{
+ \vspace{5mm} \parindent=0mm \topsep=0mm \parskip=0mm \leftmargin=10mm}{
+             \parindent=10mm \topsep=3mm \parskip=1mm \leftmargin=0mm }
+
+
+%% fix for readthedocs
+\renewcommand{\label}[1]{} %% label is not supported on rtd
+

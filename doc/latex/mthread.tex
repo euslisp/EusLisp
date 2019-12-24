@@ -337,7 +337,8 @@ and returns it.
 evaluation by {\bf sys:thread} because the thread is not returned
 to the free thread pool until it finishes transferring the result.}
  
-\macrodesc{sys:plist}{\&rest forms}{evaluates {\em forms} by different
+\macrodesc{sys:plist}{\&rest forms}{
+evaluates {\em forms} by different
 threads in parallel and waits for the completion of all evaluation,
 and the list of results is returned.
 {\bf Sys:plist} may be regarded as {\em parallel-list} except that
@@ -356,9 +357,11 @@ Based on these primitives, higher level synchronization mechanisms,
 such as synchronized memory port and barrier synchronization, are realized.
 
 \begin{refdesc}
+
 \funcdesc{sys:make-mutex-lock}{}{
 makes a mutex-lock and returns it. A mutex-lock is represented by an
 integer-vector of six elements.}
+
 \funcdesc{sys:mutex-lock}{mlock}{
 locks the mutex lock {\em mlock}.
 If the {\em mlock} is already locked by another thread,
@@ -388,7 +391,8 @@ even an error occurs during the evaluation of {\em forms}.
 \end{verbatim}
 \end{quote}
 
-\funcdesc{sys:make-cond}{}{makes a condition variable object
+\funcdesc{sys:make-cond}{}{
+makes a condition variable object
 which is an integer vector of four elements.
 The returned condition variable is in unlocked state.}
 
@@ -396,15 +400,22 @@ The returned condition variable is in unlocked state.}
 waits for {\em condvar} to be signaled.
 If {\em condvar} has already been acquired by another thread,
 it releases {\em mlock} and waits for {\em condvar} to be signaled.}
-\funcdesc{sys:cond-signal}{condvar}{signals the {\em condvar} condition variable.}
-\funcdesc{sys:make-semaphore}{}{makes a semaphore object
-which is represented by an integer vector of twelve elements.}
-\funcdesc{sys:sema-post}{sem}{ signals {\em sem}.}
-\funcdesc{sys:sema-wait}{sem}{waits for the {\em sem} semaphore to be posted.}
+
+\funcdesc{sys:cond-signal}{condvar}{
+signals the {\em condvar} condition variable.}
+
+\funcdesc{sys:make-semaphore}{}{
+makes a semaphore object which is represented by an integer vector of twelve elements.}
+
+\funcdesc{sys:sema-post}{sem}{
+signals {\em sem}.}
+
+\funcdesc{sys:sema-wait}{sem}{
+waits for the {\em sem} semaphore to be posted.}
 
 \classdesc{sys:barrier-synch}{propertied-object}{
-threads n-threads count barrier-cond threads-lock count-lock}
-{represents a structure for barrier-synchronization. Threads waiting
+threads n-threads count barrier-cond threads-lock count-lock}{
+represents a structure for barrier-synchronization. Threads waiting
 for the synchronization are put in {\em threads} which is mutually excluded
 by {\em threads-lock}.
 When a {\bf barrier-synch} object is created,
@@ -419,12 +430,18 @@ The synchronization is implemented by the combination of
 the {\em count-lock} mutex-lock and the {\em barrier-cond}
 condition-variable.}
 
-\methoddesc{:init}{}{initializes this barrier-synch object. Two mutex-lock
-and one condition-variable are created.}
-\methoddesc{:add}{thr}{adds the {\em thr} thread in the {\em threads} list.}
-\methoddesc{:remove}{thr}{removes the {\em thr} thread of the {\em threads} list.}
-\methoddesc{:wait}{}{waits for all threads in the {\em threads} list
-to issue {\tt :wait}.}
+\methoddesc{:init}{}{
+initializes this barrier-synch object.
+Two mutex-lock and one condition-variable are created.}
+
+\methoddesc{:add}{thr}{
+adds the {\em thr} thread in the {\em threads} list.}
+
+\methoddesc{:remove}{thr}{
+removes the {\em thr} thread of the {\em threads} list.}
+
+\methoddesc{:wait}{}{
+waits for all threads in the {\em threads} list to issue {\tt :wait}.}
 
 \classdesc{sys:synch-memory-port}{propertied-object}{
 sema-in sema-out buf empty lock}{
@@ -433,13 +450,18 @@ which synchronizes for two threads
 to transfer datum via this object.
 Control transfer is implemented by using semaphores.}
 
-\methoddesc{:read}{}{reads datum buffered in this synch-memory-port.
+\methoddesc{:read}{}{
+reads datum buffered in this synch-memory-port.
 If it has not been written yet, the :read blocks.}
-\methoddesc{:write}{datum}{writes {\em datum} in the buffer.
+
+\methoddesc{:write}{datum}{
+writes {\em datum} in the buffer.
 Since only one word of buffer is available,
 if another datum has already been written and not yet read out,
 :write waits for the datum to be transferred by :read.}
-\methoddesc{:init}{}{initializes this synch-memory-port
-where two semaphores  are created and :write is made acceptable.}
+
+\methoddesc{:init}{}{
+initializes this synch-memory-port
+where two semaphores are created and :write is made acceptable.}
 
 \end{refdesc}

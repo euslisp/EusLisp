@@ -73,34 +73,40 @@ and {\bf send-super} and {\bf send self} are confused.
 
 \begin{refdesc}
 
-\longdescription{defclass}
-{classname \&key \= :super object \` [macro] \\
-\> :slots (\{var $|$ (var [:type type] [:forward selectors])\}*) \\
-\> :metaclass metaclass \\
-\> :element-type t \\
-\> :size -1\\}
-{creates or redefine a class.
+\longdescription{macro}{defclass}{classname \&key \= (super object) \\
+\> slots \hspace{40mm} {\rm ; (var \&optional type \&rest forward selectors)*} \\
+\> (metaclass metaclass) \\
+\> (element-type t) \\
+\> (size -1)}{
+creates or redefine a class.
 When a class is redefined to have different superclass or slot variables,
 old objects instantiated from the previous class definition will 
 behave unexpectedly, since method definitions assume the new slots
 disposition.}
 
-\specialdesc{defmethod}{classname \{(selector lambda-list . body)\}*}{
+\specialdesc{defmethod}{classname \&rest (selector lambda-list \&rest body)}{
 defines one or more methods of {\em classname}. Each {\em selector}
 must be a keyword symbol.}
 
-\macdesc{defclassmethod}{classname \{(selector lambda-list . body)\}*}
+\macdesc{defclassmethod}{classname \&rest (selector lambda-list \&rest body)}
 
-\funcdesc{classp}{object}{T if {\em object} is a class object, that is,
+\funcdesc{classp}{object}{
+T if {\em object} is a class object, that is,
 an instance of class {\bf metaclass} or its subclasses.}
 
 \funcdesc{subclassp}{class super}{
 Checks {\em class} is a subclass of {\em super}.}
 
-\funcdesc{vector-class-p}{x}{T if {\em x} is an instance of {\bf vector-class}.}
+\funcdesc{vector-class-p}{x}{
+T if {\em x} is an instance of {\bf vector-class}.}
 
 \funcdesc{delete-method}{class method-name}{
 The method definition is removed from the specified class.}
+
+\funcdesc{find-method}{object selector}{
+tries to find a method specified by {\em selector} in the class of {\em object}
+and in its superclass.
+This is used to know whether {\em object} can respond to {\em selector}.}
 
 \funcdesc{class-hierarchy}{class}{
 prints inheritance hierarchy below {\em class}.}
@@ -108,12 +114,7 @@ prints inheritance hierarchy below {\em class}.}
 \funcdesc{system:list-all-classes}{}{
 lists up all the classes defined so far.}
 
-\funcdesc{system:find-method}{object selector}{
-tries to find a method specified by {\em selector} in the class of {\em object}
-and in its superclass.
-This is used to know whether {\em object} can respond to {\em selector}.}
-
-\funcdesc{system:method-cache}{[flag]}{
+\funcdesc{system::method-cache}{\&optional flag}{
 Interrogates the hit ratio of the method cache,
 and returns a list of two numbers, hit and miss.
 If {\em flag} is NIL, method caching is disabled.
@@ -124,12 +125,12 @@ If non-nil flag is given, method cache is purged and caching is enabled.}
 \subsection{Message Sending}
 \begin{refdesc}
 
-\funcdesc{send}{object selector \{arg\}*}{
-send a message consisting of {\em selector} and {\em arg} to {\em object}.
+\funcdesc{send}{object selector \&rest args}{
+send a message consisting of {\em selector} and {\em args} to {\em object}.
 {\em object} can be anything but number.
 {\em selector} must be evaluated to be a keyword.}
 
-\funcdesc{send-message}{target search selector \{arg\}*}{
+\funcdesc{send-message}{target search selector \&rest args}{
 Low level primitive to implement {\bf send-super}.}
 
 \macrodesc{send*}{object selector \&rest msg-list}{
@@ -202,10 +203,10 @@ or {\em class}'s subclasses.
 {\bf subclassp} and {\bf derivedp} functions do not search in class hierarchy:
 type check always finishes within a constant time.}
 
-\funcdesc{slot}{object class (index $|$ slot-name)}{
+\funcdesc{slot}{object class idex-or-name}{
 Returns the named or indexed slot value.}
 
-\funcdesc{setslot}{object class (index $|$ slot-name) value}{
+\funcdesc{setslot}{object class index-or-name value}{
 {\bf Setslot} is a internal function and users should not use it.
 Use, instead, combination of {\bf setf} and {\bf slot}.}
 
@@ -214,9 +215,8 @@ Use, instead, combination of {\bf setf} and {\bf slot}.}
 \subsection{Basic Classes}
 
 \begin{refdesc}
-\classdesc{object}{}
-{}
-{Object is the most basic class that is located at the top of class hierarchy.
+\classdesc{object}{}{}{
+Object is the most basic class that is located at the top of class hierarchy.
 Since it defines no slot variables, it is no use to make an instance of
 {\bf object}.}
 
@@ -242,9 +242,19 @@ object.
 You can get the value of a specific slot by applying {\bf assoc} to this
 list, although you cannot alter them.}
 
-\classdesc{propertied-object}{object}
-{plist}
-{defines objects that have property list.
+\methoddesc{:methods}{\&optional subname}{
+returns a list of all methods callable by this object. If {\em subname} is given, returns only methods with names that include {\em subname}. }
+
+\methoddesc{:get-val}{variable-name}{
+returns the value of the slot designated by {\em variable-name}.
+If the object does not have the {\em variable-name} slot, an error is reported.}
+
+\methoddesc{:set-val}{variable-name value}{
+sets {\em value} in the {\em variable-name} slot of this object.
+If the object does not have the {\em variable-name} slot, an error is reported.}
+
+\classdesc{propertied-object}{object}{plist}{
+defines objects that have property list.
 Unlike other Common Lisp, 
 EusLisp allows any objects that inherit propertied-object to have property
 lists, even if they are not symbols.}
@@ -280,68 +290,68 @@ prints the object in the re-readable form.
 If the object has {\bf :name} property, it is printed after
 the address of the object.}
 
-\methoddesc{:slots}{}{
-returns a list of variable and value pairs of this object.}
-
-\methoddesc{:methods}{\&optional subname}{
-returns a list of all methods callable by this object. If {\em subname} is given, returns only methods with names that include {\em subname}. }
-
-\methoddesc{:get-val}{variable-name}{
-returns the value of the slot designated by {\it variable-name}.
-If the object does not have the variable-name slot, an error is reported.}
-
-\methoddesc{:set-val}{variable-name value}{
-sets {\it value} in the variable-name slot of this object.
-If the object does not have the variable-name slot, an error is reported.}
-
-\classdesc{metaclass}{propertied-object}
-{name super cix vars types forwards methods}
-{Metaclass defines classes. Classes that have own class variables
+\classdesc{metaclass}{propertied-object}{name super cix vars types forwards methods}{
+Metaclass defines classes. Classes that have own class variables
 should be defined with {\bf metaclass} as their superclass.}
-\methoddesc{:new}{}
-{creates an instance of this class and returns it
+
+\methoddesc{:new}{}{
+creates an instance of this class and returns it
 after filling all the slots with NIL.}
+
 \methoddesc{:super}{}{
 returns the super class object of this class.
 You cannot alter superclass once defclassed.}
+
 \methoddesc{:methods}{}{
 returns a list of all the methods defined in this class.
 The list is composed of lists each of which describes the name of
 the method, parameters, and body.}
+
 \methoddesc{:method}{name}{
 returns the method definition associated with {\em name}.
 If not found, NIL is returned.}
+
 \methoddesc{:method-names}{subname}{
 returns a list of all the method names each of which contains
 {\em subname} in its method name.
 Methods are searched only in this class.}
+
 \methoddesc{:all-methods}{}{
 returns a list of all methods that are defined in this class and
 its all the super classes.
 In other words, an instance of this class can execute each of these
 methods.}
+
 \methoddesc{:all-method-names}{subname}{
 returns a list of all the method names each of which matches with
 {\em subname}.
 The search is made from  this class up to {\bf object}.}
+
 \methoddesc{:slots}{}{
 returns the slot-name vector.}
-\methoddesc{:name}{}{returns the name symbol of this class.}
+
+\methoddesc{:name}{}{
+returns the name symbol of this class.}
+
 \methoddesc{:cid}{}{
 returns an integer that is assigned to every
 instance of this class to identify its class.
 This is an index to the system-internal class table, and is changed
 when a new subclass is defined under this class.}
+
 \methoddesc{:subclasses}{}{
 returns a list of the direct subclass of this class.}
+
 \methoddesc{:hierarchy}{}{
 returns a list of all the subclasses defined under this class.
 You can also call the {\bf class-hierarchy} function to get a comprehensive
 listing of all the class hierarchy.}
+
 \funcdesc{find-method}{object selector}{
 searches for the method identified by {\em selector} in {\em object}'s
 class and its super classes. This function is useful when object's
 class is uncertain and you want to know whether the object can handle
 the message without causing nomethod error.}
+
 \end{refdesc}
 \newpage

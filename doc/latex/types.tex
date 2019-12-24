@@ -5,25 +5,26 @@ Like other Lisps, it is data objects that are typed, not variables.
 Any variable can have any object as its value.
 Of course, it is possible to
 declare the type of object which is bound to a variable, but in many cases
-it is only advisary information to the compiler to generate faster code.
+it is only advisory information to the compiler to generate faster code.
 In EusLisp, it needs to distinguish pointers and objects.
 Numbers are immediately represented by pointers and all the others
-are represented by ojbects referenced by pointers.
+are represented by objects referenced by pointers.
  
 \subsection{Numbers}
 
 There are two kinds of numbers, that is, 
 integer and float (floating-point number), both are represented
 with 29 bits value and 1 bit sign.
-Thus, intergers range from -536,870,912 to 536,870,911.
-Floatings can represent plus/minus from 4.8E-38 to 3.8E38 with the
+Thus, integers range from -536,870,912 to 536,870,911.
+Floats can represent plus/minus from 4.8E-38 to 3.8E38 with the
 approximate accuracy of 6 digits in decimal, i.e.,
 floating-point epsilon is about 1/1,000,000.
 
-Numbers are always represented by pointers, and not by objects,
-this is the only exception of EusLisp's object orientation.
+Integer and float numbers are always represented by pointers, and not by objects,
+which is the only exception of EusLisp's object orientation.
 However, since numbers never waste heap memory, number crunching application
 runs efficiently without causing garbage collection.
+Other number types such as ratio and complex numbers are normal EusLisp objects.
 
 EusLisp does not have the character type,
 and characters are represented by integers.
@@ -397,7 +398,7 @@ Lambda form takes following syntax.
 (lambda (\= \{var\}* \\
 \>  [\&optional \{var $|$ (var [initform])\}*] \\
 \>  [\&rest form] \\
-\>  [\&key \= \{var $|$ (var [initform]) $|$ ((keyword var) [initform])\}* \\
+\>  [\&key \= \{var $|$ (var [initform]) $|$ ((:keyword var) [initform])\}* \\
 \> \> [\&allow-other-keys]] \\
 \>  [\&aux \{var $|$ (var [initform])\}*]) \\
  \hspace{10mm} \{declaration\}* \\

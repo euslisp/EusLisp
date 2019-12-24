@@ -27,7 +27,8 @@ adds two float-vectors.}
 \funcdesc{v-}{fltvec1 \&optional fltvec2  result}{
 subtract float-vectors. If fltvec2 is omitted, fltvec1 is negated.}
 
-\funcdesc{v.}{fltvec1 fltvec2}{computes the inner product of two float-vectors.}
+\funcdesc{v.}{fltvec1 fltvec2}{
+computes the inner product of two float-vectors.}
 
 \funcdesc{v*}{fltvec1 fltvec2 \&optional result}{
 computes the outer product of two float-vectors.}
@@ -53,7 +54,7 @@ from coordinates of vertices.}
 finds the greatest values for each dimension in {\em fltvec},
 and makes a float-vector from the values.}
 
-\funcdesc{minimal-box}{v-list minvec maxvec [err]}{
+\funcdesc{minimal-box}{v-list minvec maxvec \&optional err}{
 computes the minimal bounding box for a given vertex-list,
 and stores results in {\em minvec} and {\em maxvec}.
 If a floating number err is specified, the minimal box is grown
@@ -65,12 +66,18 @@ and each element of maxvec is increased by 1\%.
 \funcdesc{scale}{number fltvec \&optional result}{
 the scaler {\em number} is multiplied to the every element of fltvec.}
 
-\funcdesc{norm}{fltvec}{$|fltvec|$}
-\funcdesc{norm2}{fltvec}{$|fltvec|^2=({\bf v.} fltvec fltvec)$}
-\funcdesc{normalize-vector}{fltvec [result]}{
+\funcdesc{norm}{fltvec}{
+$|fltvec|$}
+
+\funcdesc{norm2}{fltvec}{
+$|fltvec|^2=({\bf v.} fltvec fltvec)$}
+
+\funcdesc{normalize-vector}{fltvec \&optional result}{
 normalizes {\em fltvec} to have the norm 1.0.}
+
 \funcdesc{distance}{fltvec1 fltvec2}{
 returns the distance $|fltvec-fltvec2|$ between two float-vectors.}
+
 \funcdesc{distance2}{fltvec1 fltvec2}{
 $|fltvec-fltvec2|^2$}
 
@@ -133,6 +140,7 @@ the {\bf coordinates} and {\bf cascaded-coords} classes
 detailed in the section \ref{Coordinates}.
 
 \begin{refdesc}
+
 \funcdesc{matrix}{\&rest elements}{
 makes a new matrix from {\em elements}.
 Row x Col = (number of elements) x (length of the 1st element).
@@ -150,17 +158,22 @@ and its elements are floats.}
 extracts a row vector out of matrix {\em mat}.
 {\bf matrix-row} is also used to set a vector in a particular row
 of a matrix using in conjunction with {\bf setf}.}
+
 \funcdesc{matrix-column}{mat column-index}{
 extracts a column vector out of {\em mat}.
 {\bf matrix-column} is also used to set a vector in a particular
 column of a matrix using in conjunction with {\bf setf}.}
+
 \funcdesc{m*}{matrix1 matrix2 \&optional result}{
 concatenates {\em matrix1} and {\em matrix2}.}
+
 \funcdesc{transpose}{matrix \&optional result}{
 transposes {\em matrix}, i.e. columns of {\em matrix} are exchanged with
 {\em rows}.}
+
 \funcdesc{unit-matrix}{dim}{
 makes an identity matrix of {\em dim} $\times$ {\em dim}.}
+
 \funcdesc{replace-matrix}{dest src}{
 replaces all the elements of dest matrix with ones of src matrix.}
 
@@ -172,6 +185,7 @@ makes a copy of {\em matrix}.}
 
 \funcdesc{transform}{matrix fltvector \&optional result}{
 multiplies {\em matrix} to {\em fltvector} from the left.}
+
 \funcdesc{transform}{fltvector matrix \&optional result}{
 multiplies {\em matrix} to {\em fltvector} from the right.}
 
@@ -224,6 +238,7 @@ extracts two tuples of Euler angles.}
 
 %\funcdesc{set-matrix-column}{mat column-index values}{
 %put values in the {\em column-index}th column of of matrix {\em mat}.}
+
 \end{refdesc}
 
 \subsection{LU decomposition}
@@ -250,7 +265,7 @@ Computation time for a 3*3 matrix is estimated to be 4 milli-sec.
 \funcdesc{lu-decompose}{matrix \&optional result}{
 performs lu-decomposition of {\em matrix}.}
 
-\funcdesc{lu-solve}{lu-mat perm-vector bvector [result]}{
+\funcdesc{lu-solve}{lu-mat perm-vector bvector \&optional result}{
 solves a linear simultaneous equations which has already been lu-decomposed.
 {\em perm-vector} should be the result returned by {\bf lu-decompose}.}
 
@@ -283,10 +298,9 @@ mainly for speed and generality.
 
 \begin{refdesc}
 
-\classdesc{coordinates}{propertied-object}
-{(pos :type float-vector \\
-\>  rot :type array)}
-{defines a coordinate system with a pair of a position vector and a 3x3
+\classdesc{coordinates}{propertied-object}{(pos :type float-vector \\
+                                         \> rot :type array)}{
+defines a coordinate system with a pair of a position vector and a 3x3
 rotation matrix.}
 
 \funcdesc{coordinates-p}{obj}{
@@ -304,13 +318,11 @@ the state of this coords occurs,
 this method should be called with the new rotation
 matrix and the position vector.
 This message may invoke another :update method to propagate the event.
-If newpos is not given, newrot is given as a instance of coordinate class.
-}
+If newpos is not given, newrot is given as a instance of coordinate class.}
 
 \methoddesc{:replace-coords}{newrot \&optional newpos}{
 changes the rot and pos slots to be updated without calling newcoords method.
-If newpos is not given, newrot is given as a instance of coordinate class.
-}
+If newpos is not given, newrot is given as a instance of coordinate class.}
 
 \metdesc{:coords}{}
 
@@ -324,7 +336,9 @@ forces the rotation matrix of this coords to be identity matrix, and pos
 vector to be all zero.}
 
 \metdesc{:worldpos}{}
+
 \metdesc{:worldrot}{}
+
 \methoddesc{:worldcoords}{}{
 Computes the position vector, the rotation matrix and the coordinates
 of this object represented in the world coordinates. The coordinates class
@@ -349,7 +363,7 @@ A vector in this local coords is transformed to the representation in the world.
 A vector in the world is inversely transformed to the representation in this
 local coordinate system.}
 
-\methoddesc{:transform}{ trans \&optional (wrt :local)}{
+\methoddesc{:transform}{trans \&optional (wrt :local)}{
 Transform this coords by the trans represented in wrt coords.
 Trans must be of type coordinates, and wrt must be one of keywords
 {\tt :local, :parent, :world} or an instance of coordinates.
@@ -397,7 +411,7 @@ This is an absolute version of :{\bf rotate} method.}
 \methoddesc{:inverse-transformation}{}{
 makes a new coords that is inverse to self.}
 
-\methoddesc{:transformation}{ coords (wrt :local)}{
+\methoddesc{:transformation}{coords (wrt :local)}{
 makes the transformation (an instance of coordinates) between this coords
 and the coords given as the argument.
 If {\em wrt}={\tt :local},
@@ -407,7 +421,7 @@ as an argument to :transform with {\em wrt}={\tt :local},
 this coords is transformed
 to be identical with the coords.}
 
-\methoddesc{:Euler}{ az1 ay az2}{
+\methoddesc{:Euler}{az1 ay az2}{
 sets rot with Euler angles, that are,
 rotation angles around z ({\em az1},
 y ({\em ay}) and again z {\em az2} axis of
@@ -425,24 +439,23 @@ a 3D position vector.
 If {\em mat44} is not given, this coordinates is converted to 4x4
 matrix representation.}
 
-\longdescription{:init}{\&key \= :pos \hspace{8mm} \= \#f(0 0 0)
- \`[method] \\
- \> :rot \> \#2f((1 0 0) (0 1 0) (0 0 1)) \\
- \> :rpy \> roll pitch yaw \\
- \> :Euler \> az ay az2 \\
- \> :axis \>  rotation-axis \\
- \> :angle \> rotation-angle \\
- \> :4X4   \> 4x4 matrix \\
- \> :coords \> another coordinates \\
- \> :properties \>  a list of (ind . value) pair \\
- \> :name \> name property \\}{
+\longdescription{method}{:init}{\&key \= (pos \#f(0 0 0)) \hspace{8mm} \= \\
+ \> (rot \#2f((1 0 0) (0 1 0) (0 0 1))) \\
+ \> rpy \>\> {\rm ; roll pitch yaw} \\
+ \> euler \>\> {\rm ; az ay az2} \\
+ \> axis \>\>  {\rm ; rotation-axis} \\
+ \> angle \>\> {\rm ; rotation-angle} \\
+ \> 4X4   \>\> {\rm ; 4x4 matrix} \\
+ \> coords \>\> {\rm ; another coordinates} \\
+ \> properties \>\> {\rm ; list of (ind . value) pair} \\
+ \> name \>\> {\rm ; name property}}{
 initializes this coordinates object and sets rot and pos.
 The meaning of each keyword follows:
 \begin{description}
 \item[:dimension] 2 or 3 (default is 3)
 \item[:pos] specifies a position vector (defaulted to \#f(0 0 0))
 \item[:rot] specifies a rotation matrix (defaulted to a unit-matrix)
-\item[:Euler] gives a sequence of three elements for Euler angles
+\item[:euler] gives a sequence of three elements for Euler angles
 \item[:rpy] gives a sequence of three elements for roll-pitch-yaw
 \item[:axis] rotation axis (:x,:y,:z or an arbitrary float-vector)
 \item[:angle] rotation angle (used with :axis)
@@ -467,12 +480,11 @@ argument. These pairs are copied in the plist of this coordinates.}
 
 \subsection{CascadedCoords}
 
-\classdesc{cascaded-coords}{coordinates}
-{(parent descendants worldcoords manager changed)}
-{defines a linked coordinates. {\bf Cascaded-coords} is often abbreviated
-as {\bfx cascoords}.}
+\classdesc{cascaded-coords}{coordinates}{(parent descendants worldcoords manager changed)}{
+defines a linked coordinates. {\bf Cascaded-coords} is often abbreviated
+as \bfx{cascoords}.}
 
-\methoddesc{:inheritance}{ }{
+\methoddesc{:inheritance}{}{
 returns the inheritance tree list describing all the descendants of the
 cascoords.
 If {\tt a} and {\tt b} are the direct descendants of this coords,
@@ -492,7 +504,7 @@ The orientation or location of childcoords in the world does not change.}
 informs this coords that the coordinates of parent has changed,
 and the re-computation of worldcoords is needed when it is requested later.}
 
-\methoddesc{:update}{ }{
+\methoddesc{:update}{}{
 is called by the {\bf :worldcoords} method
 to recompute the current worldcoord.}
 
@@ -502,11 +514,11 @@ by concatenating all the cascoords from the root to this coords.
 The result is held in this object and reused later.
 Thus, you should not modify the resulted coords.}
 
-\methoddesc{:worldpos}{}{returns rot of this coordinates represented in
-the world.}
+\methoddesc{:worldpos}{}{
+returns rot of this coordinates represented in the world.}
 
-\methoddesc{:worldrot}{}{returns pos of this coordinates represented in
-the world.}
+\methoddesc{:worldrot}{}{
+returns pos of this coordinates represented in the world.}
 
 \methoddesc{:transform-vector}{vec}{
 Regarding {\em vec} represented in this local coords,
@@ -521,31 +533,40 @@ makes an instance of coordinates which represents inverse transformation
 of this coord.}
 
 \metdesc{:transform}{trans  \&optional (wrt :local)}
+
 \metdesc{:translate}{fltvec \&optional (wrt :local)}
+
 \metdesc{:locate}{fltvec \&optional (wrt :local)}
+
 \metdesc{:rotate}{theta axis \&optional (wrt :local)}
+
 \methoddesc{:orient}{theta axis \&optional (wrt :local)}{
 Refer to the descriptions in class {\bf coordinates}.}
 
-\fundesc{make-coords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
+\fundesc{make-coords}{\&key pos rot rpy Euler angle axis 4X4 coords name}
 
-\fundesc{make-cascoords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
-\fundesc{coords}{\&key :pos :rot :rpy :Euler :angle :axis :4X4 :coords :name}
-\funcdesc{cascoords}{\&key :pos :rot :rpy :Euler :angle :axis
-:4X4 :coords :name}{
+\fundesc{make-cascoords}{\&key pos rot rpy Euler angle axis 4X4 coords name}
+
+\fundesc{coords}{\&key pos rot rpy Euler angle axis 4X4 coords name}
+
+\funcdesc{cascoords}{\&key pos rot rpy Euler angle axis 4X4 coords name}{
 All these functions make new coordinates or cascaded-coordinates.
 For the keyword parameter, see {\bf :init} method of class coordinates.}
+
 \funcdesc{transform-coords}{coords1 coords2 \&optional (coords3 (coords))}{
 Coords1 is applied (multiplied) to the coords2 from the left.
 The product is stored in coords3.}
+
 \funcdesc{transform-coords*}{\&rest coords}{
 concatenates transformations listed in {\em coords}.
 An instance of coordinates that represents the concatenated transformation
 is returned.}
+
 \funcdesc{wrt}{coords vec}{
 transforms {\em vec} into the representation in {\em coords}.
 The result is equivalent to
 {\tt (send {\em coords} :trans\-form-\-vec\-tor {\em vec})}.}
+
 \end{refdesc}
 
 \newpage

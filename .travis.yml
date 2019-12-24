@@ -55,17 +55,7 @@ matrix:
       dist: trusty
       sudo: required
       cache: apt
-      env: DOCKER_IMAGE=debian:jessie
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
       env: DOCKER_IMAGE=debian:stretch
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=osrf/debian_arm64:jessie
     - os: linux
       dist: trusty
       sudo: required
@@ -86,7 +76,7 @@ before_install: # Use this to prepare the system to install prerequisites or dep
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   # use stable rvm to avoid "shell_session_update: command not found" error on OSX.
   # https://github.com/travis-ci/travis-ci/issues/6307
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; command curl -sSL https://rvm.io/mpapis.asc | gpg --import -; then rvm get stable; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then set -x; gpg --version; gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB || command curl -sSL https://rvm.io/mpapis.asc | gpg --import -; rvm get stable; set +x; fi
   # Define some config vars
 install:
   - export CI_SOURCE_PATH=$(pwd)
@@ -96,7 +86,7 @@ install:
 script:
   - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $HOME:$HOME -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then  source ./.travis.sh; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then ./.travis.sh; fi
 after_failure:
   - echo "failure"
 after_success:
@@ -124,7 +114,7 @@ after_deploy:
   - git checkout -b $(git name-rev --name-only $(git rev-parse $TRAVIS_BRANCH) | sed 's@remotes/upstream/@@')
   # send doc to current repo
   - git rm -f doc/{latex,jlatex,html}/*.{pdf,ps,dvi,html,png}
-  - git add doc/{latex,jlatex}/*.{pdf,ps,dvi} doc/html/*.{html,png}
+  - git add doc/{latex,jlatex}/*.{pdf,ps,dvi,hlp} doc/html/*.{html,png}
   - git status
   - git branch
   - git commit -m "Build documents from $TRAVIS_TAG@$TRAVIS_COMMIT" doc/

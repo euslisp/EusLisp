@@ -38,8 +38,8 @@ use reader's escapes, $\backslash$ and $|...|$.
 
 \begin{refdesc}
 
-\funcdesc{symbolp}{object}{ returns T if {\em object} is an
-instance of CLASS symbol or its subclasses.}
+\funcdesc{symbolp}{object}{
+returns T if {\em object} is an instance of CLASS symbol or its subclasses.}
 
 \funcdesc{symbol-value}{symbol}{
 gets {\em symbol}'s special value. Lexical (local) variables' 
@@ -78,8 +78,10 @@ Checks if {\em symbol} has a globally bound value.
 Note that symbols used for local and object variables
 always have bound value and {\bf boundp} cannot test the bound state
 of these local variables.}
+
 \funcdesc{fboundp}{symbol}{
 Checks if {\em symbol} has a globally bound function definition.}
+
 \funcdesc{makunbound}{symbol}{
 {\em symbol} is forced to be unbound (to have no special value).
 Note that lexical (local) variables always have values assigned and
@@ -88,29 +90,29 @@ cannot be {\em makunbound}ed.}
 \funcdesc{get}{sym attribute}{
 retrieves {\em sym}'s value associated with {\em attribute} in its plist.
 {\tt = (cdr (assoc {\em attribute} (symbol-plist {\em sym})))}}
+
 \funcdesc{putprop}{sym val attribute}{
 Putprop should be replaced with the combination of {\bf setf} and {\bf get}.}
+
 \funcdesc{remprop}{sym attr}{
 removes attribute-value pair from {\em sym}'s property list.}
 
-\specialdesc{setq}{\{var value\}*}{
-assigns {\em value} to {\em var} which is either a symbol or a dotted-pair.
-{\em Var} is searched for in the name spaces of local variables,
+\specialdesc{setq}{\&rest forms}{
+for each form in {\em forms}, assigns the second element to the first element, which is either a symbol or a dotted-pair.
+The first element is searched for in the name spaces of local variables,
 object variables, and special variables in this order unless explicitly
 declared special.}
 
 \funcdesc{set}{sym val}{
 assigns {\em val} to the special value of {\em sym}.
-{\bf Set} cannot assign values to local or object
-variables.}
+{\bf Set} cannot assign values to local or object variables.}
 
-\specialdesc{defun}{symbol [documentation] lambda-list . body}{
+\specialdesc{defun}{symbol lambda-list \&rest body}{
 defines a global function to {\em symbol}.
-Use {\em flet} or {\em labels} for defining local functions.
-If no {\em documentation} is given, a default documentation string
-describing the lambda-list is entered.}
+First element in {\em body} can be a documentation string.
+Use {\em flet} or {\em labels} for defining local functions.}
 
-\specialdesc{defmacro}{symbol [documentation] lambda-list . body}{
+\specialdesc{defmacro}{symbol lambda-list \&rest body}{
 defines a global macro.
 EusLisp does not have facilities for defining locally scoped macros.}
 
@@ -135,6 +137,7 @@ constant value, issuing a warning message.}
 
 \funcdesc{keywordp}{obj}{
 T if {\em obj} is a symbol and its home package is {\bf KEYWORD}.}
+
 \funcdesc{constantp}{symbol}{
 T if the symbol is declared to be constant with defconstant macro.}
 
@@ -172,13 +175,13 @@ and it becomes external by {\bf export}. External symbols in different
 packages are referenced by prefixing the package name and a single colon,
 as {\tt x:*display*}, while referencing internal symbols in other packages
 requires double colons, as {\tt sys::free-threads}.
-In order to omit this package prefixing, a package may {\bfx import} symbols
+In order to omit this package prefixing, a package may \bfx{import} symbols
 from other packages.
-Moreover, {\bfx use-package} allows importing all external symbols
+Moreover, \bfx{use-package} allows importing all external symbols
 from another package at once.
 When symbols are exported or imported, symbol name conflicts can be detected,
 since every symbol in any packages must have the unique print name.
-{\bfx Shadow} allows creating a symbol with the same print name as the
+\bfx{Shadow} allows creating a symbol with the same print name as the
 existing symbol in a package by virtually removing the old symbol from 
 the package.
 
@@ -202,16 +205,25 @@ Also, a package records its name (string or symbol) and a list of nick names,
 and a list of other packages that the package is using.
 {\bf *Package*} is a special variable
 that holds the current package for read and print.
-If {\bfx *package*} is not {\tt user:},
+If \bfx{*package*} is not {\tt user:},
 top-level prompt changes to indicate the current package,
 like {\tt mypkg:eus}\$.
 
 \begin{refdesc}
-\constdesc{*lisp-package*}{ Lisp package.}
-\constdesc{*user-package*}{ User package.}
-\constdesc{*unix-package*}{ Unix package.}
-\constdesc{*system-package*}{ System Package.}
-\constdesc{*keyword-package*}{ Keyword Package.}
+\constdesc{*lisp-package*}{
+Lisp package.}
+
+\constdesc{*user-package*}{
+User package.}
+
+\constdesc{*unix-package*}{
+Unix package.}
+
+\constdesc{*system-package*}{
+System Package.}
+
+\constdesc{*keyword-package*}{
+Keyword Package.}
 
 \funcdesc{find-symbol}{string \&optional (package *package*)}{
 finds and locates the symbol which has {\em string} as its print name
@@ -298,15 +310,15 @@ visible in {\em pkg} as an internal symbol without package prefix.
 If there is already a symbol that has the same print name as {\em sym},
 then an ``name conflict" error is reported.}
 
-\macrodesc{do-symbols}{(var pkg) \&rest forms}{
+\macrodesc{do-symbols}{(var pkg \&optional result) \&rest forms}{
 repeats evaluatiing  forms for each binding of {\em var}
 to symbols (internal or external) in {\em pkg}.}
 
-\macrodesc{do-external-symbols}{(var pkg) \&rest forms}{
+\macrodesc{do-external-symbols}{(var pkg \&optional result) \&rest forms}{
 repeats evaluating forms for each binding of {\em var}
 to external symbols in {\em pkg}.}
 
-\macrodesc{do-all-symbols}{(var [result]) \&rest forms}{
+\macrodesc{do-all-symbols}{(var \&optional result) \&rest forms}{
 repeats evaluating forms for each binding of {\em var}
 to symbols in all packages.
 Note that forms may be evaluated more than once to a symbol if it

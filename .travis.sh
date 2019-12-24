@@ -4,20 +4,20 @@ set -e
 export DEBIAN_FRONTEND=noninteractive
 
 function travis_time_start {
-    TRAVIS_START_TIME=$(date +%s%N)
-    TRAVIS_TIME_ID=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
+    TRAVIS_START_TIME=$(date +%s)
+    TRAVIS_TIME_ID=$(cat /dev/urandom | LC_ALL=C LC_CTYPE=C tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
     TRAVIS_FOLD_NAME=$1
-    echo -e "\e[0Ktraivs_fold:start:$TRAVIS_FOLD_NAME"
-    echo -e "\e[0Ktraivs_time:start:$TRAVIS_TIME_ID"
+    echo -e "\e[0Ktravis_fold:start:$TRAVIS_FOLD_NAME"
+    echo -e "\e[0Ktravis_time:start:$TRAVIS_TIME_ID"
     set -x # enable debug information
 }
 function travis_time_end {
     set +x # disable debug information
     _COLOR=${1:-32}
-    TRAVIS_END_TIME=$(date +%s%N)
+    TRAVIS_END_TIME=$(date +%s)
     TIME_ELAPSED_SECONDS=$(( ($TRAVIS_END_TIME - $TRAVIS_START_TIME)/1000000000 ))
-    echo -e "traivs_time:end:$TRAVIS_TIME_ID:start=$TRAVIS_START_TIME,finish=$TRAVIS_END_TIME,duration=$(($TRAVIS_END_TIME - $TRAVIS_START_TIME))\n\e[0K"
-    echo -e "traivs_fold:end:$TRAVIS_FOLD_NAME"
+    echo -e "travis_time:end:$TRAVIS_TIME_ID:start=$TRAVIS_START_TIME,finish=$TRAVIS_END_TIME,duration=$(($TRAVIS_END_TIME - $TRAVIS_START_TIME))\n\e[0K"
+    echo -e "travis_fold:end:$TRAVIS_FOLD_NAME"
     echo -e "\e[0K\e[${_COLOR}mFunction $TRAVIS_FOLD_NAME takes $(( $TIME_ELAPSED_SECONDS / 60 )) min $(( $TIME_ELAPSED_SECONDS % 60 )) sec\e[0m"
 }
 
@@ -28,7 +28,7 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     travis_time_end
 
     travis_time_start setup.apt-get_install
-    ret=1; while [ $ret != 0 ]; do sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng-dev xfonts-100dpi xfonts-75dpi && ret=0 || echo "failed, retry"; done # msttcorefonts could not install on 14.04 travis
+    ret=1; while [ $ret != 0 ]; do sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng-dev xfonts-100dpi xfonts-75dpi pkg-config libbullet-dev && ret=0 || echo "failed, retry"; done # msttcorefonts could not install on 14.04 travis
     if [ "`uname -m`" == "x86_64" ] ; then sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils || echo "ok"; fi # 16.04 does ont have ptex bin
     travis_time_end
 
@@ -38,9 +38,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     # skip if already installed
     # https://discourse.brew.sh/t/skip-ignore-brew-install-if-package-is-already-installed/633/2
     # brew install jpeg libpng mesalib-glw;
-    brew list jpeg &>/dev/null || brew install jpeg
-    brew list libpng &>/dev/null || brew install libpng
-    brew list mesalib-glw &>/dev/null || brew install mesalib-glw
+    # use HOMEBREW_NO_AUT_UPDATE to fix unexpected keyword error https://travis-ci.community/t/syntax-error-unexpected-keyword-rescue-expecting-keyword-end-in-homebrew/5623
+    brew list jpeg &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install jpeg
+    brew list libpng &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install libpng
+    brew list mesalib-glw &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesalib-glw
+    brew list bullet &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install bullet
     travis_time_end
 
 fi
@@ -171,6 +173,9 @@ fi
     for test_l in irteus/test/*.l; do
 
         [[ ("`uname -m`" == "arm"* || "`uname -m`" == "aarch"*) && $test_l =~ geo.l|mathtest.l|interpolator.l|test-irt-motion.l|test-pointcloud.l|irteus-demo.l ]] && continue;
+        # skip collision test because bullet of 2.83 or later version is not released in trusty and jessie.
+        # https://github.com/euslisp/jskeus/blob/6cb08aa6c66fa8759591de25b7da68baf76d5f09/irteus/Makefile#L37
+        [[ ( "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ) && $test_l =~ test-collision.l ]] && continue;
 
         travis_time_start irteus.${test_l##*/}.test
 

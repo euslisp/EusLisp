@@ -32,7 +32,7 @@
   ;; LEO
   (export '(self class))
   ;; classnames, variable names are exported by 'basicclass'
-  (export '(string float-vector interger-vector bit-vector))
+  (export '(string float-vector integer-vector bit-vector))
   ;; feature constants
   (export '(vax sun apollo mips sun3 sun4 news sanyo bsd4_2 sunos4
 		sunos4.1 system5 coff alpha thread))

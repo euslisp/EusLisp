@@ -339,6 +339,7 @@ reader-writer lockは実現されてない。
 高レベルの同期機構が実現されている。
 
 \begin{refdesc}
+
 \funcdesc{sys:make-mutex-lock}{}{
 mutex-lockを作り、返す。
 mutex-lockは、6つの要素を持つ整数ベクトルで表現されている。}
@@ -381,15 +382,19 @@ mutex-lockとmutex-unlockは、組みで使用されなければならない。
 
 \funcdesc{sys:cond-signal}{condvar}{
 {\em condvar}で示されるcondition variableに信号を出す。}
+
 \funcdesc{sys:make-semaphore}{}{
 20の要素を持つ整数ベクトルによって表現されるセマフォオブジェクトを作る。}
-\funcdesc{sys:sema-post}{sem}{{\em sem}に信号を出す。}
+
+\funcdesc{sys:sema-post}{sem}{
+{\em sem}に信号を出す。}
+
 \funcdesc{sys:sema-wait}{sem}{
 {\em sem}に信号が来るまで待つ。}
 
 \classdesc{sys:barrier-synch}{propertied-object}{
-threads n-threads count barrier-cond threads-lock count-lock}
-{同期障壁のための構造を表現する。
+threads n-threads count barrier-cond threads-lock count-lock}{
+同期障壁のための構造を表現する。
 同期を待っているスレッドは、{\em thread-lock}によって
 相互に排除される{\em thread}に置かれる。
 {\bf barrier-synch}オブジェクトが生成されたとき、
@@ -404,12 +409,18 @@ threads n-threads count barrier-cond threads-lock count-lock}
 同期は、{\em count-lock}のmutex-lockと{\em barrier-cond}のcondition-variable
 の組み合わせによって実行される。}
 
-\methoddesc{:init}{}{このbarrier-synchオブジェクトを初期化する。
+\methoddesc{:init}{}{
+このbarrier-synchオブジェクトを初期化する。
 2つのmutex-lockと1つのcondition-variableが生成される。}
-\methoddesc{:add}{thr}{{\em threads}リストの中に{\em thr}スレッドが追加される。}
-\methoddesc{:remove}{thr}{{\em threads}リストの中から{\em thr}スレッドを削除する。}
-\methoddesc{:wait}{}{{\em threads}リストの中のすべてのスレッドに{\tt :wait}
-が配布されるのを待つ。}
+
+\methoddesc{:add}{thr}{
+{\em threads}リストの中に{\em thr}スレッドが追加される。}
+
+\methoddesc{:remove}{thr}{
+{\em threads}リストの中から{\em thr}スレッドを削除する。}
+
+\methoddesc{:wait}{}{
+{\em threads}リストの中のすべてのスレッドに{\tt :wait}が配布されるのを待つ。}
 
 \classdesc{sys:synch-memory-port}{propertied-object}{
 sema-in sema-out buf empty lock}{
@@ -427,7 +438,8 @@ sema-in sema-out buf empty lock}{
 もし他のデータが既に書かれておりまだ読まれていなかったならば、
 {\tt :write}は{\tt :read}によってそのデータが読み込まれるまで待つ。}
 
-\methoddesc{:init}{}{この{\bf sync-memory-port}を初期化する。
+\methoddesc{:init}{}{
+この{\bf sync-memory-port}を初期化する。
 これには2つのセマフォが生成され、{\tt :write}動作が可能な状態になっている。}
 
 \end{refdesc}

@@ -19,20 +19,21 @@ echo-streamとconcatenated-streamは利用できない。
 \funcdesc{streamp}{object}{
 {\em object}が{\bf stream}, {\bf io-stream}かそのサブクラスから
 作られているときTを返す。}
+
 \funcdesc{input-stream-p}{object}{
 {\em object}がストリームで読み込み可能であれば、Tを返す。}
+
 \funcdesc{output-stream-p}{object}{
 {\em object}がストリームで書き込み可能であれば、Tを返す。}
+
 \funcdesc{io-stream-p}{object}{
 {\em object}が読み書き可能なストリームであれば、Tを返す。}
 
-\longdescription{open}
-{path \&key \= :direction :input \` [関数]\\
-%{path \&key \= :direction :input \hspace{98mm} [関数]\\
- \> :if-exists :new-version \\
- \> :if-does-not-exist \\
- \> :permission \#o644 \\
- \> :buffer-size 512\\}{
+\longdescription{関数}{open}{path \&key \= (direction :input) \\
+ \> (if-exists :new-version) \\
+ \> (if-does-not-exist 'default) \\
+ \> (permission \#o644) \\
+ \> (buffer-size 512)}{
 {\bf open}は、{\em path}で指定されたファイルと結合されるストリームを作る。
 {\em path}は、文字列かパス名でよい。
 {\em :direction}は、{\tt :input, :output}または{\tt :io}のどれか
@@ -52,7 +53,7 @@ echo-streamとconcatenated-streamは利用できない。
 SunOS4は、同時に60ファイルのオープンを許可している。
 }
 
-\macrodesc{with-open-file}{(svar path . open-options) \&rest forms}{
+\macrodesc{with-open-file}{(svar path \&rest open-options) \&rest forms}{
 {\em path}という名のファイルが、{\em open-options}でオープンされ、
 そのストリームは{\em svar}にバインドされる。
 それから{\em forms}が評価される。
@@ -73,7 +74,7 @@ SunOS4は、同時に60ファイルのオープンを許可している。
 \funcdesc{make-string-input-stream}{string}{
 {\em string}から入力ストリームを作る。}
 
-\funcdesc{make-string-output-stream}{size}{
+\funcdesc{make-string-output-stream}{\&optional size}{
 {\em size}長さの文字列のために出力ストリームを作る。
 その長さは自動的に拡張される。そのため、{\em size}は初期化時に配置する
 文字列のための補助情報である。}
@@ -271,27 +272,30 @@ yesならTそしてnoならNILを返す。 それ以外は起こらない。}
 
 \begin{refdesc}
 
-\funcdesc{readtable-p}{x}{
+\funcdesc{readtablep}{x}{
 {\em x}がreadtableなら、Tを返す。}
+
 \funcdesc{copy-readtable}{\&optional from-readtable to-readtable}{
 {\em to-readtable}が書かれていなければ、新しいreadtableを作る。
 {\em from-readtable}のすべての情報が{\em to-readtable}に移される。
 含まれる情報は、syntax table, read-macro tableと
 dispatch-macro tableでそれぞれ256個の要素を持つ。}
 
-\funcdesc{set-syntax-from-char}
-{from-char to-char [from-readtable to-readtable]}
-{{\em from-readtable}の中の{\em from-char}のsyntaxとread-macro定義を
+\funcdesc{set-syntax-from-char}{from-char to-char \&optional to-readtable from-readtable}{
+{\em from-readtable}の中の{\em from-char}のsyntaxとread-macro定義を
 {\em to-readtable}の中の{\em to-char}にコピーする。}
 
-\funcdesc{set-macro-character}{char func [non-teminating-p readtable]}{
+\funcdesc{set-macro-character}{char func \&optional non-teminating-p readtable}{
 {\em char}のread-macro関数として{\em func}を定義する。}
-\funcdesc{get-macro-character}{char [readtable]}{
+
+\funcdesc{get-macro-character}{char \&optional readtable}{
 {\em char}のread-macro関数を返す。}
-\funcdesc{set-dispatch-macro-character}{dispchar char func [readtable]}{
+
+\funcdesc{set-dispatch-macro-character}{dispchar char func \&optional readtable}{
 {\em dispchar}と{\em char}の組み合せの
 dispatch read-macro関数として{\em func}を定義する。}
-\funcdesc{get-dispatch-macro-character}{dispchar char [readtable]}{
+
+\funcdesc{get-dispatch-macro-character}{dispchar char \&optional readtable}{
 {\em dispchar}と{\em char}の組み合せの
 dispatch read-macro関数を返す。}
 \end{refdesc}
@@ -356,8 +360,9 @@ dispatch read-macro関数を返す。}
 出力{\em stream}を空にする。}
 
 \fundesc{princ-to-string}{x \&optional (l 16)}
-\funcdesc{prin1-to-string}{x \&optional (l 16)}
-{文字列への出力ストリームを作り、{\em x}を書き込む。そして、
+
+\funcdesc{prin1-to-string}{x \&optional (l 16)}{
+文字列への出力ストリームを作り、{\em x}を書き込む。そして、
 {\bf get-output-stream-string}を実行する。}
 
 \funcdesc{format}{stream format-string \&rest args}{
@@ -371,28 +376,32 @@ $\sim$G(general float), $\sim$V(dynamic number parameter), $\sim$T(タブ)
        --->  "abc" |A#B| abc a#b     1.200
 \end{verbatim}
 
-\funcdesc{pprint}{obj \&optional (stream *standard-output*) (tab 0) (platen 75)}
-{{\em obj}の最後の空白を除いたものを整形表示する。.}
+\funcdesc{pprint}{obj \&optional (stream *standard-output*) (tab 0) (platen 75)}{
+{\em obj}の最後の空白を除いたものを整形表示する。.}
 
 \funcdesc{print-functions}{file \&rest fns}{
 {\em file}に{\em fns}の関数定義の"defun"書式を書き出す。}
 
 \fundesc{write-byte}{integer stream}
+
 \fundesc{write-word}{integer stream}
+
 \funcdesc{write-long}{integer stream}{
 {\em integer}を1, 2または4バイトにして書く。}
 
 \funcdesc{spaces}{n \&optional stream}{
 空白を{\em n}回出力する。}
+
 %\fundesc{warning}{color format \&rest mesg}
 
 \macrodesc{pf}{func \&optional stream *standard-output*)}{
 関数{\em func}を整形表示する。コンパイルされた関数は、印刷できない。}
 
-\funcdesc{pp-method}{class selector \&optional (stream *standard-output*)}
-{{\em class}クラスの中に定義された{\em selector}メソッドを整形表示する。}
-\funcdesc{tprint}{obj tab \&optional (indent 0) (platen 79) (cpos 0)}
-{表形式で{\em obj}を印刷する。}
+\funcdesc{pp-method}{class selector \&optional (stream *standard-output*)}{
+{\em class}クラスの中に定義された{\em selector}メソッドを整形表示する。}
+
+\funcdesc{tprint}{obj tab \&optional (indent 0) (platen 79) (cpos 0)}{
+表形式で{\em obj}を印刷する。}
 
 \funcdesc{print-size}{obj}{
 印刷のときの{\em obj}の大体の長さを返す。}
@@ -453,8 +462,8 @@ foreign stringへの書き込みは、
 {\bf replace}か{\bf setf}に{\bf aref}を組み合せることにより可能である。
 
 \begin{refdesc}
-\funcdesc{map-file}{filename \&key (:direction  :input) :length (:offset 0) (:share t)
-(:address 0)}{
+
+\funcdesc{map-file}{filename \&key (direction :input) length (offset 0) (share t) (address 0)}{
 {\em filename}という名のファイルをメモリ空間に配置する。
 {\em filename}は、ローカルファイル、NFSでマウントされたリモートファイル、
 または{\tt /dev}の中のメモリデバイスのどれでも可能である。
@@ -482,6 +491,7 @@ FIFOノードを作り、ノーマルファイルとしてオープンする。
 削除するためには、{\bf unix:msgctl}か{\bf ipcrm}コマンドが必要である。
 
 \begin{refdesc}
+
 \funcdesc{make-msgq-input-stream}{key \&optional (buffer-size 128)}{
 {\em key}で示すメッセージキューに繋がる入力ファイルストリームを返す。}
 
@@ -600,16 +610,17 @@ service名によって指定されたsymbolを通して参照される。
 
 \begin{refdesc}
 
-\funcdesc{make-socket-address}{\&key :domain :pathname :host :port :proto :service}{
+\funcdesc{make-socket-address}{\&key domain pathname host port proto service}{
 ソケットアドレスのオブジェクトを作る。}
 
-\funcdesc{make-socket-port}{sockaddr}{サーバー側のソケットポートを作る。
+\funcdesc{make-socket-port}{sockaddr}{
+サーバー側のソケットポートを作る。
 この関数は、クライアントとの接続を確立するために使用される。}
 
 \funcdesc{make-server-socket-stream}{sockport \&optional (size 100)}{
 クライアントからの接続要求を受けて、双方向ストリームを返す。}
 
-\funcdesc{make-client-socket-stream}{sockaddr \&optional (size 100)}{
+\funcdesc{make-client-socket-stream}{sockaddr \&optional (timeout 5) (size 512)}{
 サーバーのポートと接続をし、双方向ストリームを返す。}
 
 \funcdesc{open-server}{port remote-func}{
@@ -694,16 +705,17 @@ Euslispは、UNIXの上で動作している限り、ホスト・デバイス・
 {\em path}からファイルの型の部分を取り出す。
 {\em path}は、文字列あるいはパス名である。}
 
-\funcdesc{make-pathname}{\&key :host :device :directory :name :type :version
-defaults}{
+\funcdesc{make-pathname}{\&key host device directory name type version defaults}{
 {\em directiory},{\em name}と{\em type}から新しいパス名を作る。
 UNIX上では、他のパラメータは無視される。}
 
-\fundesc{merge-pathnames}{name
-\&optional (defaults *default-pathname-defaults*)}
+\fundesc{merge-pathnames}{name \&optional (defaults *default-pathname-defaults*)}
+
 \funcdesc{namestring}{path}{
 {\em path}の文字列表現を返す。}
+
 \fundesc{parse-namestring}{name}
+
 \funcdesc{truename}{path}{
 {\em path}で名前付けされているファイルの絶対パス名を見つける。}
 \end{refdesc}
@@ -714,13 +726,16 @@ UNIX上では、他のパラメータは無視される。}
 
 \funcdesc{probe-file}{path}{
 {\em path}という名のファイルがあるかどうかをチェックする。}
+
 \funcdesc{file-size}{path}{
 {\em path}という名のファイルのサイズをバイト数で返す。}
+
 \funcdesc{directory-p}{path}{
 {\em path}がディレクトリならば、Tを返す。
 そうでなかったとき（{\em path}が存在しなかったときを含める）
 はNILを返す。}
-\funcdesc{find-executable}{file}{U
+
+\funcdesc{find-executable}{file}{
 {\em file}という名のUNIXコマンドを探し、フルパス名で返す。
 {\bf find-executable}は、自分のpath-listから実行できるファイルを探す
 UNIXのwhichコマンドとほとんど同じ関数である。}

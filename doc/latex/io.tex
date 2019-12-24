@@ -17,21 +17,23 @@ Predefined streams are following:
 \begin{refdesc}
 
 \funcdesc{streamp}{object}{
-Any object created from {\bfx stream}, {\bfx io-stream},
+Any object created from \bfx{stream}, \bfx{io-stream},
 or their subclasses returns T.}
+
 \funcdesc{input-stream-p}{object}{
 T if {\em object} is a stream and capable of reading.}
+
 \funcdesc{output-stream-p}{object}{
 T if {\em object} is a stream and capable of writing.}
+
 \funcdesc{io-stream-p}{object}{
 T if {\em object} is a two-way stream.}
 
-\longdescription{open}
-{path \&key \= :direction :input \`[function]\\
- \> :if-exists :new-version \\
- \> :if-does-not-exist \\
- \> :permission \#o644 \\
- \> :buffer-size 512\\}{
+\longdescription{function}{open}{path \&key \= (direction :input) \\
+ \> (if-exists :new-version) \\
+ \> (if-does-not-exist 'default) \\
+ \> (permission \#o644) \\
+ \> (buffer-size 512)}{
 {\bf Open} makes a stream associated with a file designated by {\em path}.
 {\em path} may either be a string or a pathname.
 Direction should be one of {\bf :input, :output} or {\bf :io}.
@@ -48,10 +50,9 @@ For :input files, an error is reported when the file does not exist.
 To know the existence of a file, {\bf probe-file} can be used.
 Default value for {\bf buffer-size} is 512 bytes,
 and \#O644 for {\bf :permission}.
-SunOS4 allows to open as many as sixty files at the same time.
-}
+SunOS4 allows to open as many as sixty files at the same time.}
 
-\macrodesc{with-open-file}{(svar path . open-options) \&rest forms}{
+\macrodesc{with-open-file}{(svar path \&rest open-options) \&rest forms}{
 A file named {\em path} is opened with {\em open-options} and the
 stream is bound to {\em svar}.
 Then {\em forms} are evaluated.
@@ -60,7 +61,8 @@ or exits with {\bf throw}, {\bf return-from} or error.
 {\bf With-open-file} is a macro defined by {\bf unwind-protect} with {\bf close}
 in its clean-up forms.}
 
-\funcdesc{close}{stream}{closes the {\em stream}, and returns T if successful.
+\funcdesc{close}{stream}{
+closes the {\em stream}, and returns T if successful.
 The stream may have already been closed, in which case nil is returned.
 Streams are automatically closed by GC if there is no reference to
 that stream object.}
@@ -70,7 +72,7 @@ that stream object.}
 \funcdesc{make-string-input-stream}{string}{
 makes an input stream from a string.}
 
-\funcdesc{make-string-output-stream}{size}{
+\funcdesc{make-string-output-stream}{\&optional size}{
 makes an output stream to a string of {\em size} length.
 Actually, the length is automatically expanded, so {\em size} is only 
 advisory information to allocate string at initialization.}
@@ -254,7 +256,7 @@ reads one s-expression from {\em string}.
 Only the first s-expression can be read.
 If successive read operations need to be performed on a string
 containing more than one expression,
-use string-stream made by {\bfx make-string-input-stream}.}
+use string-stream made by \bfx{make-string-input-stream}.}
 
 \funcdesc{unread-char}{char \&optional stream}{
 puts the {\em char} back to the {\em stream}.
@@ -285,26 +287,30 @@ is the value of the global variable {\bf *readtable*}.
 
 \begin{refdesc}
 
-\funcdesc{readtable-p}{x}{T if {\em x} is an readtable.}
+\funcdesc{readtablep}{x}{
+T if {\em x} is an readtable.}
+
 \funcdesc{copy-readtable}{\&optional from-readtable to-readtable}{
 If no {\em to-readtable} is specified, a new one is created.
 All the information in {\em from-readtable} is transferd to {\em to-readtable}.
 The information included is, syntax table, read-macro table and
 dispatch-macro table, each of which has 256 elements.}
 
-\funcdesc{set-syntax-from-char}
-{to-char to-char [to-readtable from-readtable]}
-{copies syntax and read-macro definition of {\em from-char} in
+\funcdesc{set-syntax-from-char}{from-char to-char \&optional to-readtable from-readtable}{
+copies syntax and read-macro definition of {\em from-char} in
 {\em from-readtable} to that of {\em to-char} in {\em to-readtable}.}
 
-\funcdesc{set-macro-character}{char func [non-teminating-p readtable]}{
+\funcdesc{set-macro-character}{char func \&optional non-teminating-p readtable}{
 defines {\em func} as the read-macro function for {\em char}.}
-\funcdesc{get-macro-character}{char [readtable]}{
+
+\funcdesc{get-macro-character}{char \&optional readtable}{
 returns the read-macro function for {\em char}.}
-\funcdesc{set-dispatch-macro-character}{dispchar char func [readtable]}{
+
+\funcdesc{set-dispatch-macro-character}{dispchar char func \&optional readtable}{
 defines {\em func} as the dispatch read-macro function for 
 the combination of {\em dispchar} and {\em char}.}
-\funcdesc{get-dispatch-macro-character}{dispchar char [readtable]}{
+
+\funcdesc{get-dispatch-macro-character}{dispchar char \&optional readtable}{
 returns the dispatch read-macro function for 
 the combination of {\em dispchar} and {\em char}.}
 \end{refdesc}
@@ -361,14 +367,16 @@ Objects printed by {\bf princ} cannot be read back.
 For example, the output of {\tt (princ 'abc)} is identical with that of
 {\tt (princ "abc")} and the reader cannot distinguish between them.}
 
-\funcdesc{terpri}{\&optional stream}{outputs \#$\backslash$newline and
-flush {\em stream}.}
+\funcdesc{terpri}{\&optional stream}{
+outputs \#$\backslash$newline and flush {\em stream}.}
 
-\funcdesc{finish-output}{\&optional stream}{flushes output stream.}
+\funcdesc{finish-output}{\&optional stream}{
+flushes output stream.}
 
 \fundesc{princ-to-string}{x \&optional (l 16)}
-\funcdesc{prin1-to-string}{x \&optional (l 16)}
-{makes a string-output-stream, writes to it, and get-output-stream-string.}
+
+\funcdesc{prin1-to-string}{x \&optional (l 16)}{
+makes a string-output-stream, writes to it, and get-output-stream-string.}
 
 \funcdesc{format}{stream format-string \&rest args}{
 {\bf Format} only recognizes $\sim$A(ascii), $\sim$S(S-expression), $\sim$D(decimal),
@@ -381,14 +389,16 @@ $\sim$G(general float), $\sim$V(dynamic number parameter), $\sim$T(tab)
        --->  "abc" |A#B| abc a#b     1.200
 \end{verbatim}
 
-\funcdesc{pprint}{obj \&optional (stream *standard-output*) (tab 0) (platen 75)}
-{pretty-prints {\em obj}.}
+\funcdesc{pprint}{obj \&optional (stream *standard-output*) (tab 0) (platen 75)}{
+pretty-prints {\em obj}.}
 
 \funcdesc{print-functions}{file \&rest fns}{
 write the "defun" forms of function definitions of {\em fns} out to {\em file}.}
 
 \fundesc{write-byte}{integer stream}
+
 \fundesc{write-word}{integer stream}
+
 \funcdesc{write-long}{integer stream}{
 write {\em integer} as a one-, two- or four-byte binary.}
 
@@ -403,8 +413,8 @@ pretty-prints a function. Compiled function cannot be printed.}
 pretty-prints the method defined in {\em class} by the name of
 {\em selector}.}
 
-\funcdesc{tprint}{obj tab \&optional (indent 0) (platen 79) (cpos 0)}
-{print {\em obj} in tabular format.}
+\funcdesc{tprint}{obj tab \&optional (indent 0) (platen 79) (cpos 0)}{
+print {\em obj} in tabular format.}
 
 \funcdesc{print-size}{obj}{
 returns inexact length of obj when it is printed.}
@@ -468,12 +478,12 @@ Writing to a foreign string can be made by
 {\bf replace} or {\bf setf} in conjunction with {\bf aref}.
 
 \begin{refdesc}
-\funcdesc{map-file}{filename \&key (direction :input) length (offset 0) (share t)
-(address 0)}{
+
+\funcdesc{map-file}{filename \&key (direction :input) length (offset 0) (share t) (address 0)}{
 maps the file named {\em filename} to memory space.
 {\em Filename} can be either of a local file, an NFS-mounted remote file,
 or a memory device in {\tt /dev}.
-A {\bfx foreign-string}, whose elements can be accessed by {\bf aref},
+A \bfx{foreign-string}, whose elements can be accessed by {\bf aref},
 is returned.
 Writing data into a foreign-string mapped by {\tt map-file} with 
 {\em direction=:input} will result a segmentation fault.}
@@ -499,6 +509,7 @@ Explicit use of {\bf unix:msgctl} or {\bf ipcrm} command
 is needed to delete them.
 
 \begin{refdesc}
+
 \funcdesc{make-msgq-input-stream}{key \&optional (buffer-size 128)}{
 returns an input file-stream which is connected to a message-queue
 identified by {\em key}.}
@@ -623,13 +634,13 @@ Messages are transferred by the {\bf unix:sendto} and {\bf unix:recvfrom}.
 \funcdesc{make-socket-address}{\&key domain pathname host port proto service}{
 makes a sockaddr structure.}
 
-\funcdesc{make-socket-port}{sockaddr}{makes a server-side socket port
-which is used to establish a connection with a client.}
+\funcdesc{make-socket-port}{sockaddr}{
+makes a server-side socket port which is used to establish a connection with a client.}
 
 \funcdesc{make-server-socket-stream}{sockport \&optional (size 100)}{
 accepts a connection from a client and returns a two-way stream.}
 
-\funcdesc{make-client-socket-stream}{sockaddr \&optional (size 100)}{
+\funcdesc{make-client-socket-stream}{sockaddr \&optional (timeout 5) (size 512)}{
 connects to a server port and returns a two-way stream.}
 
 \funcdesc{open-server}{port remote-func}{
@@ -718,16 +729,17 @@ returns the file-name portion of {\em path}.
 extracts the file-type portion out of {\em path}.
 {\em path} can be either of string or pathname.}
 
-\funcdesc{make-pathname}{\&key host device directory name type version
-defaults}{
+\funcdesc{make-pathname}{\&key host device directory name type version defaults}{
 makes a new pathname from {\em directory}, {\em name} and {\em type}.
 On unix, other parameters are ignored.}
 
-\fundesc{merge-pathnames}{name
-\&optional (defaults *default-pathname-defaults*))}
+\fundesc{merge-pathnames}{name \&optional (defaults *default-pathname-defaults*)}
+
 \funcdesc{namestring}{path}{
 returns string representation of {\em path}.}
+
 \fundesc{parse-namestring}{name}
+
 \funcdesc{truename}{path}{
 tries to find the absolute pathname for the file named {\em path}.}
 
@@ -753,45 +765,48 @@ The inverse conversion is performed by {\em namestring}.}
 \end{refdesc}
 
 
-
-
-
 \subsection{File-name generation}
 
 \begin{refdesc}
 
-\funcdesc{digits-string}{n digits \&optional (base 10))}
-{generates a string representing the integer {\it n} in n columns of
+\funcdesc{digits-string}{n digits \&optional (base 10))}{
+generates a string representing the integer {\it n} in n columns of
 digits.
 Zeros are padded before the number if n is too small to represent
 in digits.}
 
-\funcdesc{sequential-file-name}{head num extension \&optional (digits 4))}
-{generates a filename string with an advancing number part.
+\funcdesc{sequential-file-name}{head num extension \&optional (digits 4))}{
+generates a filename string with an advancing number part.
 This is similar to gentemp, but differs in that an extension can be specified
 and the result is a string.}
 
-\funcdesc{timed-file-name}{head extension \&optional (dt (unix:localtime)))}
-{generates a filename string that consists of head, hour, minute, second,
+\funcdesc{timed-file-name}{head extension \&optional (dt (unix:localtime)))}{
+generates a filename string that consists of head, hour, minute, second,
 and extension. For example, (timed-file-name "img" "jpg") generates
 "img191015.jpg" at 7:10:15 pm.}
 
-\funcdesc{dated-file-name}{head extension \&optional (dt (unix:localtime)))}
-{generates a filename string formatted as
+\funcdesc{dated-file-name}{head extension \&optional (dt (unix:localtime)))}{
+generates a filename string formatted as
 "headyymmmdd.extension", where yy is the lower two digits of the year,
 mmm is the abbreviated month name, and dd is the date.}
 
 \end{refdesc}
-\newpage
+
 
 \subsection{File System Interface}
+
 \begin{refdesc}
 
-\funcdesc{probe-file}{path}{checks if a file named {\em path} exists.}
-\funcdesc{file-size}{path}{returns the size of the file named {\em path} 
-in bytes.}
-\funcdesc{directory-p}{path}{returns T if {\em path} is a directory,
+\funcdesc{probe-file}{path}{
+checks if a file named {\em path} exists.}
+
+\funcdesc{file-size}{path}{
+returns the size of the file named {\em path} in bytes.}
+
+\funcdesc{directory-p}{path}{
+returns T if {\em path} is a directory,
 NIL otherwise even {\em path} does not exist.}
+
 \funcdesc{find-executable}{file}{
 returns the full pathname for the Unix command named {\em file}.
 {\em Find-executable} provides almost the same functionality with 
@@ -803,11 +818,12 @@ when the {\em file} was last modified.
 String representation can be obtained by
 {\tt (unix:asctime (unix:localtime (file-write-date {\em file})))}}
 
-\fundesc{file-newer}{new old}{
+\funcdesc{file-newer}{new old}{
 returns T if the {\em new} file is modified more recently than
 the {\em old} file.}
 
-\funcdesc{object-file-p}{file}{returns T if the {\em file} is
+\funcdesc{object-file-p}{file}{
+returns T if the {\em file} is
 an object file by looking at the file's magic number in the header.}
 
 \funcdesc{directory}{\&optional (path ".")}{
@@ -819,6 +835,3 @@ prints file names in the specified directory.}
 \end{refdesc}
 
 \newpage
-
-      
-

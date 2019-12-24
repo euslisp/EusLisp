@@ -26,12 +26,12 @@ returns the length of {\em sequence}.
 For vectors, {\bf length} finishes in constant time, but
 time proportional to the length is required for a list.
 {\bf Length} never terminates if {\em sequence} is a circular list.
-Use {\bfx list-length}, instead.
+Use \bfx{list-length}, instead.
 If {\em sequence} is an array with a fill-pointer, {\bf length}
 returns the fill-pointer, not the entire size of the array entity.
 Use {\bf array-total-size} to know the entire size of those arrays.}
 
-\funcdesc{subseq}{sequence start [end]}{
+\funcdesc{subseq}{sequence start \&optional end}{
 makes a copy of the subsequence from {\em start}th through  ({\em end}-1)th inclusively
 out of {\em sequence}.
 {\em end} is defaulted to the length of {\em sequence}.}
@@ -51,8 +51,8 @@ same type as {\em sequence}.}
 {\bf Nreverse} is the destructive version of {\bf reverse}.
 {\bf Nreverse} does not allocate memory, while {\bf reverse} does.}
 
-\funcdesc{concatenate}{result-type {sequence*}}{
-concatenates all {\em sequence}s.
+\funcdesc{concatenate}{result-type \&rest sequences}{
+concatenates all {\em sequences}.
 Each {\em sequence} may be of any sequence type.
 Unlike {\bf append}, all the sequences including the last one are copied.
 {\em Result-type} should be a class such as cons, string,
@@ -72,13 +72,12 @@ Note that {\em sequence} is copied even if its type equals to {\em result-type}.
 \funcdesc{map}{result-type function seq \&rest more-seqs}{
 {\em function} is applied to a list of arguments taken from {\em seq}
 and {\em more-seqs} orderly, and the result is accumulated in a sequence
-of type {\em result-type}.}
+of type {\em result-type}. For example, you can write as follows: {\tt (map float-vector \#'(lambda (x) (* x x)) (float-vector 1 2 3))}}
 
-\funcdesc{fill}{sequence item \&key (:start 0) (:end (length sequence))}{
-fills {\em item} from {\em start}th through ({\em end}-1)th in {\em sequence}.
-}
+\funcdesc{fill}{sequence item \&key (start 0) (end (length sequence))}{
+fills {\em item} from {\em start}th through ({\em end}-1)th in {\em sequence}.}
 
-\funcdesc{replace}{dest source \&key :start1 :end1 :start2 :end2}{
+\funcdesc{replace}{dest source \&key start1 end1 start2 end2}{
 elements in {\em dest} sequence indexed between {\em start1} and {\em end1}
 are replaced with elements in {\em source} indexed between 
 {\em start2} and {\em end2}.
@@ -119,38 +118,40 @@ if the predicate returns non-nil (-if version), or nil (-if-not version).
 
 \begin{refdesc}
 
-\funcdesc{position}{item seq \&key :start :end :test :test-not :key (:count 1)}{
+\funcdesc{position}{item seq \&key start end test test-not key (count 1)}{
 finds {\em count}th appearance of {\em item} in {\em seq} and returns
 its index.
 The search begins from the {\em start}th element, ignoring elements before it.
 By default, the search is performed by {\bf eql}, which can be altered
 by the {\em test} or {\em test-not} parameter.}
 
-\fundesc{position-if}{predicate seq \&key :start :end :key}
+\fundesc{position-if}{predicate seq \&key start end key}
 
-\fundesc{position-if-not}{predicate seq \&key :start :end :key}
+\fundesc{position-if-not}{predicate seq \&key start end key}
 
-\funcdesc{find}{item seq \&key :start :end :test :test-not :key (:count 1)}{
+\funcdesc{find}{item seq \&key start end test test-not key (count 1)}{
 finds {\em count}th element between the {\em start}th element
 and the {\em end}th element in {\em seq}.
 The element found, which is eql to {\em item} if no {\em test} or
 {\em test-not} other than \#'eql is specified, is returned.}
 
-\funcdesc{find-if}{predicate seq \&key :start :end :key (:count 1)}{
+\funcdesc{find-if}{predicate seq \&key start end key (count 1)}{
 finds {\em count}th element in {\em seq} for which {\em pred}
 returns non nil.}
-\fundesc{find-if-not}{predicate seq \&key :start :end :key}
 
-\funcdesc{count}{item seq \&key :start :end :test :test-not :key}{
+\fundesc{find-if-not}{predicate seq \&key start end key}
+
+\funcdesc{count}{item seq \&key start end test test-not key}{
 counts the number of {\em item}s which appear between the {\em start}th element
 and the {\em end}th element in {\em seq}.}
 
-\funcdesc{count-if}{predicate seq \&key :start :end :key}{
+\funcdesc{count-if}{predicate seq \&key start end key}{
 count the number of elements in {\em seq} for which {\em pred} returns
 non nil.}
-\fundesc{count-if-not}{predicate seq \&key :start :end :key}
 
-\funcdesc{remove}{item seq \&key :start :end :test :test-not :key :count}{
+\fundesc{count-if-not}{predicate seq \&key start end key}
+
+\funcdesc{remove}{item seq \&key start end test test-not key count}{
 creates a new sequence which has eliminated {\em count} (defaulted to infinity)
 occurrences of of {\em item}(s) between the {\em start}th element
 and the {\em end}th element in {\em seq}.
@@ -158,26 +159,28 @@ If you are sure that there is only one occurrence of {\em item},
 {\em count=1} should be specified to avoid meaningless scan over the whole
 sequence.}
 
-\fundesc{remove-if}{predicate seq \&key :start :end :key :count}
-\fundesc{remove-if-not}{predicate seq \&key :start :end :key :count}
-\funcdesc{remove-duplicates}{seq \&key :start :end :key :test :test-not :count}{
+\fundesc{remove-if}{predicate seq \&key start end key count}
+
+\fundesc{remove-if-not}{predicate seq \&key start end key count}
+
+\funcdesc{remove-duplicates}{seq \&key start end key test test-not count}{
 removes duplicated items in {\em seq} and creates a new sequence.}
 
-\funcdesc{delete}{item seq \&key :start :end :test :test-not :key :count}{
+\funcdesc{delete}{item seq \&key start end test test-not key count}{
 is same with {\bf remove} except that {\bf delete} modifies {\em seq}
 destructively and does not create a new sequence.
 If you are sure that there is only one occurrence of {\em item},
 {\em count=1} should be specified to avoid meaningless scan over the whole
 sequence.}
 
-\fundesc{delete-if}{predicate seq \&key :start :end :key :count}
-\funcdesc{delete-if-not}{predicate seq \&key :start :end :key :count}{
+\fundesc{delete-if}{predicate seq \&key start end key count}
+
+\funcdesc{delete-if-not}{predicate seq \&key start end key count}{
 {\em count} for {\em remove}s and {\em delete}s is defaulted to 1,000,000.
 If you have a long sequence and you want to delete an element which
 appears only once, :count should be specified as 1.}
 
-\funcdesc{substitute}{newitem olditem seq
- \&key :start :end :test :test-not :key :count}{
+\funcdesc{substitute}{newitem olditem seq \&key start end test test-not key count}{
 returns a new sequence which has 
 substituted the {\em count} occurrence(s)
 of {\em olditem} in {\em seq} with {\em newitem}.
@@ -187,14 +190,17 @@ By default, all the {\em olditems} are substituted.}
 (substitute #\Space #\_ "Euslisp_euslisp") ;; => "Euslisp euslisp"
 \end{verbatim}
 
-\fundesc{substitute-if}{newitem predicate seq \&key :start :end :key :count}
-\fundesc{substitute-if-not}{newitem predicate seq \&key :start :end :key :count}
+\fundesc{substitute-if}{newitem predicate seq \&key start end key count}
 
-\funcdesc{nsubstitute}{newitem olditem seq \&key :start :end :test :test-not :key :count}
-{substitute the {\em count} occurrences of {\em olditem} in {\em seq} with {\em newitem}
+\fundesc{substitute-if-not}{newitem predicate seq \&key start end key count}
+
+\funcdesc{nsubstitute}{newitem olditem seq \&key start end test test-not key count}{
+substitute the {\em count} occurrences of {\em olditem} in {\em seq} with {\em newitem}
 destructively. By default, all the {\em olditem}s are substituted.}
-\fundesc{nsubstitute-if}{newitem predicate seq \&key :start :end :key :count}
-\fundesc{nsubstitute-if-not}{newitem predicate seq \&key :start :end :key :count}
+
+\fundesc{nsubstitute-if}{newitem predicate seq \&key start end key count}
+
+\fundesc{nsubstitute-if-not}{newitem predicate seq \&key start end key count}
 
 \end{refdesc}
 
@@ -203,32 +209,63 @@ destructively. By default, all the {\em olditem}s are substituted.}
 \subsection{Lists}
 
 \begin{refdesc}
+
 \funcdesc{listp}{object}{
 returns T if object is an instance of cons or NIL.}
+
 \funcdesc{consp}{object}{
 equivalent to (not (atom object)). (consp '()) is nil.}
+
 \funcdesc{car}{list}{
 returns the first element in {\em list}. {\bf car} of NIL is NIL.
 {\bf car} of atom is error.}
-\funcdesc{cdr}{list}{returns the list which removed the first element
+
+\funcdesc{cdr}{list}{
+returns the list which removed the first element
 of {\em list}. {\bf cdr} of NIL is NIL.
 {\bf cdr} of atom is error.}
-\fundesc{cadr}{list}
-\fundesc{cddr}{list}
-\fundesc{cdar}{list}
-\fundesc{caar}{list}
-\fundesc{caddr}{list}
-\fundesc{caadr}{list}
-\fundesc{caaar}{list}
-\fundesc{cdadr}{list}
-\fundesc{cdadr}{list}
-\fundesc{cdaar}{list}
-\fundesc{cdddr}{list}
-\fundesc{cdddr}{list}
-\fundesc{cddar}{list}
-\funcdesc{first}{list}{retrieves the first element in {\em list}.
-{\bfx second, third, fourth, fifth, sixth, seventh, eighth} are also 
+
+\funcdesc{cadr}{list}{
+{\tt (cadr list) = (car (cdr list))}}
+
+\funcdesc{cddr}{list}{
+{\tt (cddr list) = (cdr (cdr list))}}
+
+\funcdesc{cdar}{list}{
+{\tt (cdar list) = (cdr (car list))}}
+
+\funcdesc{caar}{list}{
+{\tt (caar list) = (car (car list))}}
+
+\funcdesc{caddr}{list}{
+{\tt (caddr list) = (car (cdr (cdr list)))}}
+
+\funcdesc{caadr}{list}{
+{\tt (caadr list) = (car (car (cdr list)))}}
+
+\funcdesc{cadar}{list}{
+{\tt (cadar list) = (car (cdr (car list)))}}
+
+\funcdesc{caaar}{list}{
+{\tt (caaar list) = (car (car (car list)))}}
+
+\funcdesc{cdadr}{list}{
+{\tt (cdadr list) = (cdr (car (cdr list)))}}
+
+\funcdesc{cdaar}{list}{
+{\tt (cdaar list) = (cdr (car (car list)))}}
+
+\funcdesc{cdddr}{list}{
+{\tt (cdddr list) = (cdr (cdr (cdr list)))}}
+
+\funcdesc{cddar}{list}{
+{\tt (cddar list) = (cdr (cdr (car list)))}}
+
+\funcdesc{first}{list}{
+retrieves the first element in {\em list}.
+\bfx{second, third, fourth, fifth, sixth, seventh, eighth} are als
 available.}
+
 \funcdesc{nth}{count list}{
 returns the {\em count}-th element in {\em list}.
 Note that {\tt (nth 1 list)} is equivalent to {\tt (second list)},
@@ -240,22 +277,23 @@ applies {\bf cdr} {\em count} times to {\em list}.}
 \funcdesc{last}{list}{
 the last cons is returned, not the last element.}
 
-\funcdesc{butlast}{list \&optional (n 1)}
-{ returns a list which does not contain the last {\em n} elements.}
+\funcdesc{butlast}{list \&optional (n 1)}{
+returns a list which does not contain the last {\em n} elements.}
 
 \funcdesc{cons}{car cdr}{
 makes a new cons whose car is {\em car} and cdr is {\em cdr}.}
 
-\funcdesc{list}{\{element\}*}{makes a list of {\em element}s.}
+\funcdesc{list}{\&rest elements}{
+makes a list of {\em elements}.}
 
-\funcdesc{list*}{\{element\}*}{
-makes a list of {\em element}s, but the last element is consed in cdr:
+\funcdesc{list*}{\&rest elements}{
+makes a list of {\em elements}, but the last element is consed in cdr:
 for example, {\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}.}
 
 \funcdesc{list-length}{list}{
 returns the length of the {\em list}. {\em List} can be circular.}
 
-\funcdesc{make-list}{size \&key (initial-element nil)}{
+\funcdesc{make-list}{size \&key initial-element}{
 makes a list whose length is {\em size} and elements are {\em initial-element}.}
 
 \funcdesc{rplaca}{cons a}{
@@ -269,15 +307,16 @@ Use of {\bf setf} to {\bf cdr} is recommended.}
 \funcdesc{memq}{item list}{
 resembles {\bf member}, but test is always done by {\bf eq}.}
 
-\funcdesc{member}{item list \&key :key (:test \#'eq) :test-not}
-{The {\em list} is searched for an element that satisfies the {\em test}.
+\funcdesc{member}{item list \&key key (test \#'eq) test-not}{
+the {\em list} is searched for an element that satisfies the {\em test}.
 If none is found, NIL is returned; otherwise, the tail of {\em list} beginning
 with the first element that satisfied the test is returned. The {\em list}
 is searched on the top level only.}
 
-\fundesc{assq}{item alist }
-\funcdesc{assoc}{item alist \&key :key (:test \#'eq) :test-not}
-{ searches the association list {\em alist}. The value returned is the
+\fundesc{assq}{item alist}
+
+\funcdesc{assoc}{item alist \&key key (test \#'eq) test-not}{
+searches the association list {\em alist}. The value returned is the
 first pair in the {\em alist} such that the {\em car} of the pair satisfies
 the {\em test}, or NIL if there is no such pair in the {\em alist}.}
 
@@ -293,11 +332,11 @@ made from {\em l1} and {\em l2}.}
 add the {\em key val} pair to {\em alist}, that is,
 {\tt (cons (cons key val) alist)}.}
 
-\funcdesc{append}{\{list\}*}{
+\funcdesc{append}{\&rest list}{
 appends {\em list} to form a new list.
 All the elements in {\em list}, except the last list, are copied.}
 
-\funcdesc{nconc}{\{list\}*}{
+\funcdesc{nconc}{\&rest list}{
 concatenates {\em list} destructively by replacing the last cdr of each
 {\em list}.}
 
@@ -327,25 +366,25 @@ passed to the member function.}
 The item is added at the head of the list if it is not included
 in the list.}
 
-\funcdesc{union}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{union}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 returns union set of two lists.}
-\funcdesc{subsetp}{list1 list2 \&key (test \#'eq) (test-not) (key \#'identity)}
-{tests if {\em list1} is a subset of {\em list2}, i.e. if each element
+
+\funcdesc{subsetp}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
+tests if {\em list1} is a subset of {\em list2}, i.e. if each element
 of {\em list1} is a member of {\em list2}.}
 
-\funcdesc{intersection}{list1 list2
- \&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{intersection}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 returns the intersection of two sets, {\em list1} and {\em list2}.}
 
-\funcdesc{set-difference}{list1 list2
-\&key (test \#'eq) (test-not) (key \#'identity)}{
+\funcdesc{set-difference}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 returns the list whose elements are only contained in {\em list1}
 and not in {\em list2}.}
-\funcdesc{set-exclusive-or}{list1 list2
- \&key (test \#'eq) (test-not) (key \#'identity)}{
+
+\funcdesc{set-exclusive-or}{list1 list2 \&key (test \#'eq) test-not (key \#'identity)}{
 returns the list of elements that appear only either in {\em list1} or {\em list2}.}
+
 \funcdesc{list-insert}{item pos list}{
-Insert {\em item} as the {\em pos}'th element in {\em list} destructively.
+insert {\em item} as the {\em pos}'th element in {\em list} destructively.
 If {\em pos} is bigger than the length of {\em list}, {\em item} is
 nconc'ed at the tail.
 For example, {\tt (list-insert 'x 2 '(a b c d)) = (a b x c d)}}
@@ -363,11 +402,11 @@ The results of application are ignored and {\em arg-list} is returned.}
 
 \funcdesc{mapcar}{func \&rest arg-list}{
 maps {\em func} to each element of {\em arg-list},
-and makes a list from all the results.
+and makes a list from all the results. For example, you can write as follows: {\tt (mapcar \#'(lambda (x) (* x x)) '(1 2 3))}.
 Before using {\bf mapcar}, try {\bf dolist}.}
 
-\funcdesc{mapcan}{func arg-list \&rest more-arg-lists}
-{maps {\em func} to each element of {\em arg-list},
+\funcdesc{mapcan}{func arg-list \&rest more-arg-lists}{
+maps {\em func} to each element of {\em arg-list},
 and makes a list from all the results by {\bf nconc}.
 {\bf Mapcan} is suitable for filtering (selecting) elements
 in {\em arg-list}, since nconc does nothing with NIL.}
@@ -406,26 +445,30 @@ available to set initial values of the array you make.
 
 \begin{refdesc}
 
-\constdesc{array-rank-limit}{7}
-\constdesc{array-dimension-limit}{\#x1fffffff, logically, but stricter
-limit is imposed by the physical or virtual memory size of the system.}
+\constdesc{array-rank-limit}{
+7. Is the maximum array rank supported.}
+
+\constdesc{array-dimension-limit}{
+\#x1fffffff, logically, but stricter limit is imposed
+by the physical or virtual memory size of the system.}
 
 \funcdesc{vectorp}{object}{
 An array is not a vector even if it is one dimensional.
 T is returned for vectors, integer-vectors, float-vectors, strings,
 bit-vectors or other user-defined vectors.}
+
 \funcdesc{vector}{\&rest elements}{
 makes a simple vector from {\em elements}.}
 
-\longdescription{make-array}{
-dims \&key \= (element-type vector) \` [function] \\
-\> (initial-contents nil) \\
-\> (initial-element nil) \\
-\> (fill-pointer nil)  \\
-\> (displaced-to nil) \\
+
+\longdescription{function}{make-array}{dims \&key \= (element-type vector) \\
+\> initial-contents \\
+\> initial-element \\
+\> fill-pointer  \\
+\> displaced-to \\
 \> (displaced-index-offset 0) \\
-\> (adjustable nil)}
-{makes a vector or array. 
+\> adjustable}{
+makes a vector or array. 
 {\em dims} is either an integer or a list.
 If {\em dims} is an integer, a simple-vector is created.}
 
@@ -433,7 +476,7 @@ If {\em dims} is an integer, a simple-vector is created.}
 returns {\em pos}th element of {\em vector}.
 {\em Vector} must be a simple general vector.}
 
-\funcdesc{aref}{vector \&rest (indices)}{
+\funcdesc{aref}{vector \&rest indices}{
 returns the element indexed by {\em indices}.
 {\bf Aref} is not very efficient
 because it needs to dispatch according to the type of {\em vector}.
@@ -452,13 +495,19 @@ Similar to  {\bf vector-push} except that
 the size of the array is automatically extended
 when {\em array}'s fill-pointer reaches  the end.}
 
-\funcdesc{arrayp}{obj}
-{T if {\em obj} is an instance of array or vector.}
+\funcdesc{arrayp}{obj}{
+T if {\em obj} is an instance of array or vector.}
 
-\funcdesc{array-total-size}{array}{returns the total number of elements
-of {\em array}.}
-\fundesc{fill-pointer}{array}
-\fundesc{array-rank}{array}
+\funcdesc{array-total-size}{array}{
+returns the total number of elements of {\em array}.}
+
+\funcdesc{fill-pointer}{array}{
+returns the fill-pointer of {\em array}.
+Returns NIL if {\em array} does not have any fill-pointer.}
+
+\funcdesc{array-rank}{array}{
+returns the rank of {\em array}.}
+
 \funcdesc{array-dimensions}{array}{
 returns a list of array-dimensions.}
 
@@ -469,12 +518,19 @@ dimension of {\em array}.}
 \funcdesc{bit}{bitvec index}{
 returns the {\em index}th element of {\em bitvec}.
 Use {\bf setf} and {\bf bit} to change an element of a bit-vector.}
+
 \fundesc{bit-and}{bits1 bits2 \&optional result}
+
 \fundesc{bit-ior}{bits1 bits2 \&optional result}
+
 \fundesc{bit-xor}{bits1 bits2 \&optional result}
+
 \fundesc{bit-eqv}{bits1 bits2 \&optional result}
+
 \fundesc{bit-nand}{bits1 bits2 \&optional result}
+
 \fundesc{bit-nor}{bits1 bits2 \&optional result}
+
 \funcdesc{bit-not}{bits1 \&optional result}{
 For bit vectors {\em bits1} and {\em bits2} of the same length,
 their boolean and, inclusive-or,
@@ -506,7 +562,7 @@ T if {\em ch} is \#$\backslash$A through \#$\backslash$Z.}
 \funcdesc{lower-case-p}{ch}{
 T if {\em ch} is  \#$\backslash$a through \#$\backslash$z.}
 
-\funcdesc{alphanumeric-p}{ch}{
+\funcdesc{alphanumericp}{ch}{
 T if {\em ch} is  \#$\backslash$0 through \#$\backslash$9,
 \#$\backslash$A through \#$\backslash$Z
 or \#$\backslash$a through \#$\backslash$z.}
@@ -525,7 +581,7 @@ extracts a character from {\em string}. Use {\bf schar} only if the
 type of {\em string} is definitely known and no type check is required.}
 
 \funcdesc{stringp}{object}{
-{\em string} is a vector of bytes (integers less than 256).}
+returns T if {\em object} is a vector of bytes (integers less than 256).}
 
 \funcdesc{string-upcase}{str \&key start end}{
 converts {\em str} to upper case string and returns a new string.}
@@ -558,11 +614,15 @@ In order to get string representation for more complex objects,
 use {\bf format} with NIL in the first argument.}
 
 \fundesc{string$<$}{str1 str2}
+
 \fundesc{string$<=$}{str1 str2}
+
 \fundesc{string$>$}{str1 str2}
+
 \fundesc{string$>=$}{str1 str2}
 
 \fundesc{string-left-trim}{bag str}
+
 \funcdesc{string-right-trim}{bag str}{
 {\em str} is scanned from the left(or right),
 and its elements are removed if
@@ -601,6 +661,7 @@ which is relatively slow when a large chunk of memory is accessed
 consecutively.
 
 \begin{refdesc}
+
 \funcdesc{make-foreign-string}{address length}{
 makes an instance of foreign-string located at {\em address} 
 and spanning for {\em length} bytes.
@@ -667,13 +728,13 @@ expanded to twice larger size.}
 \funcdesc{remhash}{key htab}{
 removes a hash entry designated by {\em key} in {\em htab}.}
 
-\funcdesc{maphash}{function htab }{
+\funcdesc{maphash}{function htab}{
 maps {\em function} to all the elements of {\em htab}.}
 
-\funcdesc{hash-table-p}{x}{T if {\em x} is an instance of class hash-table.}
+\funcdesc{hash-table-p}{x}{
+T if {\em x} is an instance of class hash-table.}
 
-\classdesc{hash-table}{object}
-{(key value count \\
+\classdesc{hash-table}{object}{(key value count \\
 \> hash-function test-function \\
 \> rehash-size empty deleted)}{
 defines hash table.
@@ -716,21 +777,29 @@ retrieves the oldest value in the queue, and removes it of the queue.
 If the queue is empty, it reports an error when error-p is non-nil,
 or returns NIL otherwise.}
 
-\methoddesc{:empty?}{}{returns T if the queue is empty.}
-\methoddesc{:length}{}{returns the length of the queue.}
+\methoddesc{:empty?}{}{
+returns T if the queue is empty.}
 
-\methoddesc{:trim}{s}{discard old entries to keep the size of this queue to s.}
-\methoddesc{:search}{item \&optional (test \#'equal)}{find element which
-  is equal to item. the search is performed by equal, which can be altered by test}
-\methoddesc{:delete}{item \&optional (test \#'equal) (count
-  1)}{eliminate count occurrences of item in this queue.}
-\methoddesc{:first}{}{returns the first entry (oldest value) of this queue.}
-\methoddesc{:last}{}{returns tha last entry (newest value) of this queue.}
+\methoddesc{:length}{}{
+returns the length of the queue.}
+
+\methoddesc{:trim}{s}{
+discard old entries to keep the size of this queue to s.}
+
+\methoddesc{:search}{item \&optional (test \#'equal)}{
+find element which is equal to item.
+the search is performed by equal, which can be altered by test}
+
+\methoddesc{:delete}{item \&optional (test \#'equal) (count 1)}{
+eliminate count occurrences of item in this queue.}
+
+\methoddesc{:first}{}{
+returns the first entry (oldest value) of this queue.}
+
+\methoddesc{:last}{}{
+returns tha last entry (newest value) of this queue.}
 
 \end{refdesc}
-
-
-
 
 \newpage
 

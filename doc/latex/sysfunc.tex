@@ -99,7 +99,7 @@ and are useful for dynamic debugging.
 starts garbage collection, and returns a list of the numbers
 of free words and total words allocated.}
 
-\functiondescription{sys:*gc-hook*}{}{variable}{
+\vardesc{sys:*gc-hook*}{
 Defines a function that is called upon the completion of a GC.}
 
 \funcdesc{sys:gctime}{}{
@@ -115,7 +115,7 @@ and returns the number of words really allocated.}
 relinquishes the current stack,
 and allocates a new stack of {\em size} words.}
 
-\functiondescription{sys:*gc-merge*}{}{variable}{
+\vardesc{sys:*gc-merge*}{
 is a memory management parameter.
 {\bf *gc-merge*} is the ratio the ratio of heap memory  which is
 left unmerged at GC.
@@ -126,7 +126,7 @@ The larger values, like 0.4, which specifies 40\% of free heap should be
 unmerged, favors for consing but do harm to instantiating
 bigger cells like float-vectors, edges, faces, etc.}
 
-\functiondescription{sys:*gc-margin*}{}{variable}{
+\vardesc{sys:*gc-margin*}{
 is a memory management parameter.
 {\bf *gc-margin} determines the ratio of
 free heap size versus the total heap.
@@ -141,7 +141,7 @@ It must be guaranteed that it is no longer referenced from any other objects.}
 \funcdesc{sys:reclaim-tree}{object}{
 reclaims all the objects except symbols traversable from {\em object}.}
 
-\funcdesc{sys:btrace}{num}{
+\funcdesc{sys::bktrace}{num}{
 prints the back-trace information of {\em num} depth on the Lisp stack.}
 
 \funcdesc{sys:memory-report}{\&optional strm}{
@@ -218,6 +218,7 @@ instead of {\tt unix:socket, unix:bind, unix:connect}, and so on.
 
 \subsubsection{Times}
 \begin{refdesc}
+
 \funcdesc{unix:ptimes}{}{
 a list of five elements, elapsed time, system time, user time,
 subprocess's system time, subprocess's user time, is returned.
@@ -234,7 +235,7 @@ Elements are second, minute, hour, day-of-a-month, month (zero-based), year (the
 
 {\tt ex.) unix:localtime => \#(10 27 12 8 10 116 2 312 nil (``JST'' ``JST''))}}
 
-\funcdesc{unix:asctime}{ tm\_intvector}{
+\funcdesc{unix:asctime}{tm\_intvector}{
 Converts localtime represented with an integer-vector into a string notation.\\
 {\tt (unix:asctime (unix:localtime))} returns a string representation of
 the current real time.}
@@ -243,20 +244,21 @@ the current real time.}
 
 \subsubsection{Process}
 \begin{refdesc}
+
 \funcdesc{unix:getpid}{}{
 returns the process id (16bit integer) of this process.}
 
 \funcdesc{unix:getppid}{}{
 returns the process id of the parent process.}
 
-\funcdesc{unix:getpgrp}{integer}{
+\funcdesc{unix:getpgrp}{}{
 returns the process group id.}
 
-\funcdesc{unix:setpgrp}{integer}{
+\funcdesc{unix:setpgrp}{}{
 sets a new process group id.}
 
-\funcdesc{unix:getuid}{}
-{gets user id of this process.}
+\funcdesc{unix:getuid}{}{
+gets user id of this process.}
 
 \funcdesc{unix:geteuid}{}{
 returns the effective user id of this process.}
@@ -290,11 +292,11 @@ replaces executing EusLisp with another program.}
 \funcdesc{unix:wait}{}{
 waits for the completion of one of subprocesses.}
 
-\funcdesc{unix:exit}{code}{
+\funcdesc{unix::exit}{code}{
 terminates execution and returns {\em code} as its completion status.
 Zero means normal termination.}
 
-\functiondescription{sys:*exit-hook*}{}{variable}{
+\vardesc{sys:*exit-hook*}{
 Defines a function that is called just before the process is exited.}
 
 \funcdesc{unix:getpriority}{which who}{
@@ -340,7 +342,7 @@ More comprehensive display is obtained by {\bf lisp:rusage}.}
 \end{verbatim}
 }
 
-\funcdesc{unix:system}{[command]}{
+\funcdesc{unix:system}{\&optional command}{
 executes {\em command} in a sub shell.
 {\em command} must be recognizable by Bourn-shell.}
 
@@ -365,7 +367,7 @@ suspends execution of this process for {\em time} micro-seconds
 \subsubsection{File Systems and I/O}
 \begin{refdesc}
 
-\funcdesc{unix:uread}{stream [buffer] [size]}{
+\funcdesc{unix:uread}{stream \&optional buffer size}{
 reads {\em size} bytes from {\em stream}.
 {\em stream} may either be a stream object or an integer representing fd.
 If {\em buffer} is given, the input is stored there.
@@ -379,32 +381,48 @@ writes {\em size} bytes of {\em string} to {\em stream}.
 If {\em size} is omitted, the full length of {\em string} is output.}
 
 \fundesc{unix:fcntl}{stream command argument}
+
 \fundesc{unix:ioctl}{stream command buffer}
+
 \fundesc{unix:ioctl\_}{stream command1 command2}
-\fundesc{unix:ioctl\_R}{stream command1 command2 buffer [size]}
-\fundesc{unix:ioctl\_W}{stream command1 command2 buffer [size]}
-\fundesc{unix:ioctl\_WR}{stream command1 command2 buffer [size]}
-\funcdesc{unix:close}{fd}{
+
+\fundesc{unix:ioctl\_R}{stream command1 command2 buffer \&optional size}
+
+\fundesc{unix:ioctl\_W}{stream command1 command2 buffer \&optional size}
+
+\fundesc{unix:ioctl\_WR}{stream command1 command2 buffer \&optional size}
+
+\funcdesc{unix:uclose}{fd}{
 close a file specifying its file descriptor {\em fd}.}
+
 \funcdesc{unix:dup}{fd}{
 returns the duplicated file descriptor for {\em fd}.}
-\funcdesc{unix:pipe}{}{creates a pipe.
-An io-stream for this pipe is returned.}
-\funcdesc{unix:lseek}{stream position [whence 0]}{
+
+\funcdesc{unix:pipe}{}{
+creates a pipe. An io-stream for this pipe is returned.}
+
+\funcdesc{unix:lseek}{stream position \&optional (whence 0)}{
 sets the file pointer for {\em stream} at {\em position} counted
 from {\em whence}.}
 
-\funcdesc{unix:link}{path1 path2}{makes a hard link.}
+\funcdesc{unix:link}{path1 path2}{
+makes a hard link.}
 
-\funcdesc{unix:unlink}{path}{removes a hard link to the file specified by {\em path}.
+\funcdesc{unix:unlink}{path}{
+removes a hard link to the file specified by {\em path}.
 If no reference to the file lefts, it is deleted.}
 
-\funcdesc{unix:mknod}{path mode}{makes inode in a file system.
+\funcdesc{unix:mknod}{path mode}{
+makes inode in a file system.
 {\em path} must be a string, not a pathname object.}
-\funcdesc{unix:mkdir}{path mode}{makes directory in a file system.
+
+\funcdesc{unix:mkdir}{path mode}{
+makes directory in a file system.
 {\em path} must be a string, not a pathname object.}
+
 \funcdesc{unix:access}{path mode}{
 checks the access rights to {\em path}.}
+
 \funcdesc{unix:stat}{path}{
 gets inode information of {\em path} and
 returns a list of integers  described below.}
@@ -423,39 +441,52 @@ returns a list of integers  described below.}
   st_mode	; file mode
 \end{verbatim}
 }
-\funcdesc{unix:chdir}{path}{changes the current working directory to {\em path}.}
-\funcdesc{unix:getwd}{}{gets current working directory.}
+
+\funcdesc{unix:chdir}{path}{
+changes the current working directory to {\em path}.}
+
+\funcdesc{unix:getwd}{}{
+gets current working directory.}
 
 \funcdesc{unix:chmod}{path integer}{
 changes access mode (permission) for {\em path}.}
+
 \funcdesc{unix:chown}{path integer}{
 changes the owner of the file {\em path}.}
 
-\funcdesc{unix:isatty}{(stream $|$ fd)}{
-returns T if {\em stream} is connected to a tty-type
+\funcdesc{unix:isatty}{stream-or-fd}{
+returns T if {\em stream-or-fd} is connected to a tty-type
 device (a serial port or a pseudo tty) .}
 
 \funcdesc{unix:msgget}{key mode}{
 creates or allocates a message queue which is addressed by {\em key}.}
-\fundesc{unix:msgsnd}{qid buf [mtype [flag]]}
-\fundesc{unix:msgrcv}{qid buf [size [mtype [flag]]]}
 
-\funcdesc{unix:socket}{domain type \&optional proto}{creates a socket
-whose name is defined in {\it domain} and whose abstract type is {\em type}.
-{\em type} should be one of 1 (SOCK\_STREAM),
-2 (SOCK\_DGRAM), 3 (SOCK\_RAW), 4 (SOCK\_RDM) and 5 (SOCK\_SEQPACKET).}
+\fundesc{unix:msgsnd}{qid buf \&optional msize mtype flag}
+
+\fundesc{unix:msgrcv}{qid buf \&optional mtype flag}
+
+\funcdesc{unix:socket}{domain type \&optional proto}{
+creates a socket whose name is defined in {\it domain} and whose abstract type is {\em type}.
+{\em type} should be one of
+1 (SOCK\_STREAM), 2 (SOCK\_DGRAM), 3 (SOCK\_RAW), 4 (SOCK\_RDM) and 5 (SOCK\_SEQPACKET).}
+
 \funcdesc{unix:bind}{socket name}{
 associates {\em name} to {\em socket}.
 {\em name} should be a unix path-name if the socket is defined in unix-domain.}
+
 \funcdesc{unix:connect}{socket addr}{
 connects {\em socket} to another socket specified by {\em addr}.}
+
 \funcdesc{unix:listen}{socket \&optional backlog}{
 begins to accept connection request on {\em socket}.
 {\em backlog} specifies the length of the queue waiting for the establishment
 of connection.}
-\funcdesc{unix:accept}{socket}{accepts the connection request on {\em socket}
+
+\funcdesc{unix:accept}{socket}{
+accepts the connection request on {\em socket}
 and returns a file-descriptor on which messages can be exchanged
 bidirectionally.}
+
 \funcdesc{unix:recvfrom}{socket \&optional mesg from flag}{
 receives a datagram message from {\em socket}.
 The socket must be assigned a name by {\bf unix:bind}.
@@ -463,6 +494,7 @@ The socket must be assigned a name by {\bf unix:bind}.
 If {\em mesg} is given, {\bf recvfrom} returns the number of bytes received.
 If it is omitted, a new string is created for the storage of the message
 and returned.}
+
 \funcdesc{unix:sendto}{socket addr mesg \&optional len flag}{
 sends a datagram message to another socket specified by {\em addr}.
 {\em Socket} must be a datagram-type socket which has no name assigned.
@@ -489,7 +521,8 @@ returns a string describing the error information for the error code
 \subsubsection{Signals}
 
 \begin{refdesc}
-\funcdesc{unix:signal}{signal func [option]}{
+
+\funcdesc{unix:signal}{signal func \&optional option}{
 installs the signal handler {\em func} for {\em signal}.
 In BSD4.2 systems, signals caught during system call processing
 cause the system call to be retried.
@@ -565,13 +598,15 @@ and one interval timer are available in a EusLisp process.
 On Solaris2, the main top-level runs in a separated thread.
 
 \begin{refdesc}
-\funcdesc{unix:thr-self}{}{returns the id (integer) of the thread currently
-running.}
 
-\funcdesc{unix:thr-getprio}{id}{returns the execution priority of the thread
-specified by {\em id}.}
-\funcdesc{unix:thr-setprio}{id newprio}{sets the execution priority of
-the thread specified by {\em id} to {\em newprio}.
+\funcdesc{unix:thr-self}{}{
+returns the id (integer) of the thread currently running.}
+
+\funcdesc{unix:thr-getprio}{id}{
+returns the execution priority of the thread specified by {\em id}.}
+
+\funcdesc{unix:thr-setprio}{id newprio}{
+sets the execution priority of the thread specified by {\em id} to {\em newprio}.
 The smaller numerical value of {\em newprio} means the higher priority.
 In other words,
 a thread with a numerically greater {\em newprio} gets less access to CPU.
@@ -581,6 +616,7 @@ the process's nice value, which is usually 0.}
 \funcdesc{unix:thr-getconcurrency}{}{
 returns the concurrency value (integer) which represents the number
 of threads that can run concurrently.}
+
 \funcdesc{unix:thr-setconcurrency}{concurrency}{
 The concurrency value is the number of LWP in the process.
 If the concurrency is 1, which is the default, many threads you created
@@ -603,13 +639,19 @@ Use of this function is discouraged.}
 
 \subsubsection{Low-Level Memory Management}
 \begin{refdesc}
+
 \funcdesc{unix:malloc}{integer}{
 allocates memory outside EusLisp memory space.}
+
 \funcdesc{unix:free}{integer}{
 deallocates a  memory block allocated by {\em unix:malloc}.}
+
 \fundesc{unix:valloc}{integer}
+
 \fundesc{unix:mmap}{address length protection share stream offset}
+
 \fundesc{unix:munmap}{address length}
+
 \fundesc{unix:vadvise}{integer}
 
 \end{refdesc}
@@ -631,35 +673,68 @@ Basically, BSD supports TIOC* io-controls and Sys5 supports TC*.
 
 \begin{refdesc}
 
-\funcdesc{unix:tiocgetp}{stream [sgttybuf]}{gets parameters.}
-\funcdesc{unix:tiocsetp}{stream sgttybuf}{sets parameters.}
-\fundesc{unix:tiocsetn}{stream [sgttybuf]}
-\fundesc{unix:tiocgetd}{stream [sgttybuf]}
-\funcdesc{unix:tiocflush}{stream}{flushes output buffer}
-\funcdesc{unix:tiocgpgrp}{stream integer}{gets process group id.}
-\funcdesc{unix:tiocspgrp}{stream integer}{sets process group id.}
+\funcdesc{unix:tiocgetp}{stream \&optional sgttybuf}{
+gets parameters.}
+
+\funcdesc{unix:tiocsetp}{stream sgttybuf}{
+sets parameters.}
+
+\fundesc{unix:tiocsetn}{stream \&optional sgttybuf}
+
+\fundesc{unix:tiocgetd}{stream \&optional sgttybuf}
+
+\funcdesc{unix:tiocflush}{stream}{
+flushes output buffer.}
+
+\funcdesc{unix:tiocgpgrp}{stream integer}{
+gets process group id.}
+
+\funcdesc{unix:tiocspgrp}{stream integer}{
+sets process group id.}
+
 \fundesc{unix:tiocoutq}{stream integer}
+
 \fundesc{unix:fionread}{stream integer}
+
 \fundesc{unix:tiocsetc}{stream buf}
+
 \fundesc{unix:tioclbis}{stream buf}
+
 \fundesc{unix:tioclbic}{stream buf}
+
 \fundesc{unix:tioclset}{stream buf}
+
 \fundesc{unix:tioclget}{stream buf}
 
-\funcdesc{unix:tcseta}{stream buffer}{sets terminal parameters immediately.}
-\funcdesc{unix:tcsets}{stream buffer}{sets terminal parameters.}
-\funcdesc{unix:tcsetsw}{stream buffer}{sets terminal parameters after all
+\funcdesc{unix:tcseta}{stream buffer}{
+sets terminal parameters immediately.}
+
+\funcdesc{unix:tcsets}{stream buffer}{
+sets terminal parameters.}
+
+\funcdesc{unix:tcsetsw}{stream buffer}{
+sets terminal parameters after all
 characters queued for output have been transmitted.}
-\funcdesc{unix:tcsetsf}{stream buffer}{sets terminal parameters after all
+
+\funcdesc{unix:tcsetsf}{stream buffer}{
+sets terminal parameters after all
 characters queued for output have been transmitted and all characters
 queued for input are discarded.}
+
 \fundesc{unix:tiocsetc}{stream buffer}
+
 \fundesc{unix:tcsetaf}{stream buffer}
+
 \fundesc{unix:tcsetaw}{stream buffer}
+
 \fundesc{unix:tcgeta}{stream buffer}
+
 \fundesc{unix:tcgets}{stream buffer}
+
 \fundesc{unix:tcgetattr}{stream buffer}
+
 \fundesc{unix:tcsetattr}{stream buffer}
+
 \end{refdesc}
 
 \subsubsection{Keyed Indexed Files}
@@ -672,6 +747,7 @@ On Sun, it should be compiled by {\tt cc -c -Dsun4 -Bstatic},
 and loaded into EusLisp by {\tt (load "clib/ndbm" :ld-option "-lc")}.
 
 \begin{refdesc}
+
 \funcdesc{dbm-open}{dbname mode flag}{
 {\bf Dbm-open} must be called first to create a data base file,
 and to begin read/write operations to the data base.
@@ -732,6 +808,7 @@ loaded when you add a little modification to the file.
 Similar function is available on emacs by M-X run-lisp command.
 
 \begin{refdesc}
+
 \funcdesc{cd}{\&optional (dir (unix:getenv "HOME"))}{
 changes the current working directory.}
 
@@ -760,7 +837,9 @@ namely, the io-stream's input comes from the stdout of the subprocess and the ou
 comes from the stdin. }
 
 
-\funcdesc{rusage}{}{prints resource usage of this process.}
+\funcdesc{rusage}{}{
+prints resource usage of this process.}
+
 \end{refdesc}
 
 \newpage
@@ -957,8 +1036,8 @@ For example, following struct definition is represented by the next defcstruct.
 
 \begin{refdesc}
 
-\macrodesc{load-foreign}{objfile \&key symbol-input symbol-output (symbol-file objfile) ld-option)}
-{loads an object module written in languages other than EusLisp.
+\macrodesc{load-foreign}{objfile \&key symbol-input symbol-output (symbol-file objfile) ld-option)}{
+loads an object module written in languages other than EusLisp.
 In Solaris2, {\bf load-foreign} just calls {\bf load} with a null string
 as its {\em :entry} parameter.
 A compiled-code object is returned.
@@ -1056,7 +1135,7 @@ subroutine is passed by call-by-reference.
 Therefore, even a simple integer or float type argument must be  put
 in a integer-vector or a float-vector before it is passed to Fortran.}
 
-\macrodesc{defun-c-callable}{funcname paramspec resulttype . body}{
+\macrodesc{defun-c-callable}{funcname paramspec resulttype \&rest body}{
 defines a EusLisp function that can be called from foreign language code.
 {\em funcname} is a symbol for which a EusLisp function is defined.
 {\em paramspec} is a list of type specifiers as in {\bf defforeign}.
@@ -1072,7 +1151,7 @@ called from C.
 The function defined by {\bf defun-c-callable} can be called from Lisp
 expressions, too.
 {\bf Defun-c-callable} returns {\em funcname}.
-It looks like a symbol, but it is not, but an instance of {\bfx foreign-pod}
+It looks like a symbol, but it is not, but an instance of \bfx{foreign-pod}
 which is a subclass of symbol.}
 
 
@@ -1088,14 +1167,12 @@ a multi-dimensional array.
 This is needed to pass a multi-dimensional or general array to a foreign function,
 although a simple vector can be passed directly.}
 
-\funcdesc{float2double}{float-vector [doublevector]}{
-converts a float-vector to double precision representation.
+\funcdesc{float2double}{float-vector \&optional doublevector}{
+converts {\em float-vector} to double precision representation.
 The result is of type float-vector but the length is twice as much as the
 first argument.}
 
-\funcdesc{double2float}{doublevector [float-vector]}{
-A vector of double precision numbers is converted to single precision
-float-vector.}
+\funcdesc{double2float}{doublevector \&optional float-vector}{
+A vector of double precision numbers is converted to single precision float-vector.}
 
 \end{refdesc}
-
