@@ -662,7 +662,7 @@ extern pointer SELF;
 extern pointer CLASS;
 extern pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 extern pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
-extern pointer TOPLEVEL,QEVALHOOK,ERRHANDLER;
+extern pointer TOPLEVEL,QEVALHOOK;
 extern pointer QGCHOOK, QEXITHOOK;
 extern pointer QUNBOUND,QDEBUG;
 extern pointer QTHREADS;
