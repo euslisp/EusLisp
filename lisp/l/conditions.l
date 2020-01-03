@@ -51,13 +51,19 @@
                                     (if supplied-p (send self :set-val ',s val) ,s)))
                    slots))))
 
-(defun install-handler (label handler &key (recursive t))
+(defun install-handler-raw (label handler &key recursive)
   ;; ensure condition class
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
   (push (cons label (instance condition-handler :init handler :recursive recursive))
         *condition-handler*)
   t)
+
+(defun install-handler (label handler &key (recursive t))
+  ;; ensure global scope
+  (when (and (consp handler) (eql (car handler) 'lambda-closure))
+    (setq handler `(lambda-closure ,(second handler) 0 0 ,@(nthcdr 4 handler))))
+  (install-handler-raw label handler :recursive recursive))
 
 (defun remove-handler (label &optional handler)
   (let ((item
@@ -74,7 +80,7 @@
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
-     ,@(mapcar #'(lambda (bind) `(install-handler ,@bind :recursive nil)) bindings)
+     ,@(mapcar #'(lambda (bind) `(install-handler-raw ,@bind :recursive nil)) bindings)
      ,@forms))
 
 (defmacro handler-case (form &rest cases)
