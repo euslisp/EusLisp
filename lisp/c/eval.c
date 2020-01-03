@@ -1529,7 +1529,7 @@ int noarg;
 
   /*make a new stack frame*/
   stackck;	/*stack overflow?*/
-  breakck;	/*signal exists?*/
+  // breakck;	/*signal exists?*/
   vf->vlink=ctx->callfp;
   vf->form=form; 
   ctx->callfp=vf;

@@ -382,7 +382,7 @@ pointer arg;
   if ((result=(pointer)eussetjmp(whilejmp))==0) {
     while (eval(ctx,cond)!=NIL) {
       GC_POINT;
-      breakck;
+      // breakck;
       progn(ctx,body);}
     result=NIL;}
   else if ((eusinteger_t)result==1) result=makeint(0);
