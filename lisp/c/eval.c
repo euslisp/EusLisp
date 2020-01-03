@@ -1529,7 +1529,8 @@ int noarg;
 
   /*make a new stack frame*/
   stackck;	/*stack overflow?*/
-  // breakck;	/*signal exists?*/
+  // Memory state is not stable enough to call arbitrary callbacks
+  if (ctx->intsig==2) sigbreak();	/*signal exists?*/
   vf->vlink=ctx->callfp;
   vf->form=form; 
   ctx->callfp=vf;
