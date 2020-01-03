@@ -1661,7 +1661,9 @@ register pointer argv[];
     timeout=timeout*1000000;
     to.tv_usec=timeout;
     GC_REGION(i=select(width, readfds, writefds, exceptfds,&to);)}
-  if (i<0) return(makeint(-errno));
+  if (i<0) {
+    if (errno==EINTR) breakck; /* signal received? */
+    return(makeint(-errno));}
   else return(makeint(i)); }
 
 pointer SELECT_READ(ctx,n,argv)
