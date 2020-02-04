@@ -57,6 +57,26 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
 fi
 
+### for multiarch compile test
+if [ "$QEMU" != "" ]; then
+    travis_time_start install.dpkg-dev
+    apt-get install -qq -y dpkg-dev
+    travis_time_end
+
+    echo "uname -a : $(uname -a)"
+    echo "uname -m : $(uname -m)"
+    echo "gcc -dumpmachine : $(gcc -dumpmachine)"
+    echo "gcc -dumpversion : $(gcc -dumpversion)"
+    echo "getconf LONG_BIT : $(getconf LONG_BIT)"
+
+    travis_time_start compile.euslisp
+    export EUSDIR=`pwd`
+    eval "$(dpkg-buildflags --export=sh)"
+    make -C lisp -f Makefile.Linux  eus0 eus1 eus2 eusg eusx eusgl eus
+    travis_time_end
+    exit 0
+fi
+
 travis_time_start install # Use this to install any prerequisites or dependencies necessary to run your build
 cd ${HOME}
 [ -e jskeus ] || git clone --depth 1 http://github.com/euslisp/jskeus jskeus
