@@ -185,9 +185,9 @@
 	      (setq id (LoadQueryFont *display* font))
 	      (if (= id 0)
 		  (prog1 0 (warn "can't load font ~S" font))
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
 		  (sys:peek (+ id 4) :long)
-#+(or :alpha :irix6 :x86_64 :aarch64)
+#+(or :alpha :irix6 :word-size=64)
 		  (sys:peek (+ id 8) :long)
 ))))
    
@@ -200,9 +200,9 @@
 		    direction font_ascent font_descent overall)
   (integer-vector (c-int font_ascent)
 		  (c-int font_descent)
-#-(or :i386 :alpha :x86_64 :arm)
+#-(or :i386 :alpha :x86_64 :arm :ppc)
 		%(overall [ 4 ] * 256 + overall [ 5 ])
-#+(or :i386 :alpha :x86_64 :arm)
+#+(or :i386 :alpha :x86_64 :arm :ppc)
 		%(overall [ 5 ] * 256 + overall [ 4 ])
 		)))
 	#| return = (ascent descent width) |#
@@ -228,9 +228,9 @@
 			bitunit 	; bitmap_mad 32?
 			(* width (/ bitunit 8)	; bytes_per_line 'width'?
 		)))
-      #-(or :x86_64 :aarch64)
+      #-(or :word-size=64)
       (make-foreign-string addr 64)
-      #+(or :x86_64 :aarch64)
+      #+(or :word-size=64)
       (make-foreign-string addr 88)
       ))
 
@@ -257,7 +257,7 @@
 (defparameter *blue-mask* #x00ff0000)
 
 
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
 (defun set-ximage (ximage data width height
 		   &optional (visual *visual*)
 			 (depth (visual-depth visual))
@@ -279,7 +279,7 @@
        (sys:poke *blue-mask*  ximage 48 :long)
     ximage)
 
-#+(or :x86_64 :aarch64)
+#+(or :word-size=64)
 (defun set-ximage (ximage data width height
 		   &optional (visual *visual*)
 			 (depth (visual-depth visual))
@@ -358,9 +358,9 @@
  (:gc () gcid)
  (:copy ()
    (let ((newgc (instance gcontext :create)))
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
      (CopyGC *display* gcid #xffffffff (send newgc :gc))
-#+(or :alpha :irix6 :x86_64 :aarch64)
+#+(or :alpha :irix6 :word-size=64)
      (CopyGC *display* gcid #xffffffffffffffff (send newgc :gc))
      newgc))
  (:function-to-value (f)

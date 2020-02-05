@@ -268,7 +268,7 @@ pointer *addr;
 #if sun3 ||( !alpha && system5 ) || sanyo
   labp->c.lab.unsolved=(pointer)addr;
 #endif
-#if sun4 || vax || news || mips || alpha || i386 || x86_64 || ARM
+#if sun4 || vax || news || mips || alpha || Linux
   { eusinteger_t i;
     i=(((eusinteger_t)addr)>>2);
     labp->c.lab.unsolved=makeint(i);}

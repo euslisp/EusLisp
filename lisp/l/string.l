@@ -136,10 +136,10 @@
      (if (numberp val)
 	 (sys:poke val self pos type)
 	 (let ((offset (cdr (assoc type
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
 		 '((:short . 2) (:long . 4) (:byte . 1) (:char . 1)
 		   (:int . 4) (:integer . 4) (:float . 4) (:double . 8))
-#+(or :alpha :irix6 :x86_64 :aarch64)
+#+(or :alpha :irix6 :word-size=64)
 		 '((:short . 2) (:long . 8) (:byte . 1) (:char . 1)
 		   (:int . 4) (:integer . 4) (:float . 4) (:double . 8))
 		 ))))

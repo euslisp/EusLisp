@@ -558,7 +558,7 @@ register int prlevel;
   if (isnum(x)) { printnum(ctx,x,f,intval(Spevalof(PRINTBASE)),0,0); return;}
   else if (x==UNBOUND) { writestr(f,(byte *)"***UNBOUND***",13); return;}
   /*pointed object*/
-#if vax || sun4 || news || mips || i386 || alpha || x86_64  || ARM
+#if vax || sun4 || news || mips || alpha || Linux
   if ((x<(pointer)(ctx->stack)) && ((pointer)(ctx->stacklimit)<x)){
 	printint(ctx,(eusinteger_t)x,f,intval(Spevalof(PRINTBASE)),0,0); return;}
 #endif
