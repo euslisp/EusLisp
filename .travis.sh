@@ -174,7 +174,7 @@ fi
     # run test in jskeus/irteus
     for test_l in irteus/test/*.l; do
 
-        [[ ("`uname -m`" == "arm"* || "`uname -m`" == "aarch"*) && $test_l =~ geo.l|mathtest.l|interpolator.l|test-irt-motion.l|test-pointcloud.l|irteus-demo.l ]] && continue;
+        [[ ("`uname -m`" == "arm"* || "`uname -m`" == "aarch"*) && $test_l =~ geo.l|mathtest.l|interpolator.l|test-irt-motion.l|test-pointcloud.l|irteus-demo.l|robot-model-usage.l ]] && continue;
         # skip collision test because bullet of 2.83 or later version is not released in trusty and jessie.
         # https://github.com/euslisp/jskeus/blob/6cb08aa6c66fa8759591de25b7da68baf76d5f09/irteus/Makefile#L37
         [[ ( "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ) && $test_l =~ test-collision.l ]] && continue;
