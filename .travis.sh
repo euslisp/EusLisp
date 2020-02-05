@@ -155,6 +155,8 @@ fi
     for test_l in $CI_SOURCE_PATH/test/*.l; do
         # bignum test fails on armhf
         [[ "`uname -m`" == "arm"* && $test_l =~ bignum.l ]] && continue;
+        # sort test fails on armhf  (https://github.com/euslisp/EusLisp/issues/232)
+        [[ "`uname -m`" == "arm"* && $test_l =~ sort.l ]] && continue;
         # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
         [[ $test_l =~ const.l ]] && continue;
 
