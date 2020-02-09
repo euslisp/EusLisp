@@ -49,7 +49,7 @@ static char *rcsid="@(#)$Id$";
 #include <sys/msg.h>
 #endif
 
-#if SunOS4_1 || (mips && !IRIX && !IRIX6)
+#if (SunOS4_1 || (mips && !IRIX && !IRIX6)) && !Linux
 /* Sun likes to change ioccom constants frequently. */
 #define IOC_VOID   _IOC_VOID
 #define IOC_IN     _IOC_IN
