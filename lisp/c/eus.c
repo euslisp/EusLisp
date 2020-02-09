@@ -951,6 +951,11 @@ static void initfeatures()
 #if aarch64
   p=cons(ctx,intern(ctx,"AARCH64",7,keywordpkg),p);
 #endif
+  {
+    char tmp[32];
+    sprintf(tmp, "WORD-SIZE=%d", sizeof(void*)*8);
+    p=cons(ctx,intern(ctx,tmp,strlen(tmp),keywordpkg),p);
+  }
 
   defvar(ctx,"*FEATURES*",p,lisppkg);
 
