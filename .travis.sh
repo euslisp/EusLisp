@@ -72,7 +72,7 @@ if [ "$QEMU" != "" ]; then
     travis_time_start compile.euslisp
     export EUSDIR=`pwd`
     eval "$(dpkg-buildflags --export=sh)"
-    make -C lisp -f Makefile.Linux  eus0 eus1 eus2 eusg eusx eusgl eus
+    make -C lisp -f Makefile.Linux  eus0 eus1 eus2 eusg eusx eusgl eus eusjpeg
     travis_time_end
     exit 0
 fi
