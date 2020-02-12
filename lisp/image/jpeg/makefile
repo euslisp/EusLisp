@@ -36,19 +36,20 @@ endif
 ifeq ($(ARCHDIR), LinuxARM)
 CC += -fPIC
 endif
+CC += -fsigned-char
 ARCH=$(ARCHDIR)
 LIBDIR=$(EUSDIR)/$(ARCH)/lib
 OBJDIR=$(EUSDIR)/$(ARCH)/obj
 OBJFILES= $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o
 $(LIBDIR)/jpegmemcd.$(LSFX):	$(OBJFILES)
-	$(LD) -o $(LIBDIR)/jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
+	$(LD) $(LDFLAGS) -o $(LIBDIR)/jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
 
 $(OBJDIR)/jpegmemcd.o:	jpegmemcd.c
-	$(CC) -c -o $@ $^
+	$(CC) $(CFLAGS) -c -o $@ $^
 $(OBJDIR)/jmemsrc.o:	jmemsrc.c
-	$(CC) -c -o $@ $^
+	$(CC) $(CFLAGS) -c -o $@ $^
 $(OBJDIR)/jmemdst.o:	jmemdst.c
-	$(CC) -c -o $@ $^
+	$(CC) $(CFLAGS) -c -o $@ $^
 clean:
 	rm -f $(OBJFILES) $(LIBDIR)/jpegmemcd.$(LSFX) eusjpeg.c eusjpeg.h
 
