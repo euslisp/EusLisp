@@ -46,14 +46,14 @@
 
     ;; random
     (assert (v= #i(123456 789012) *random-state*) "initial *random-state*")
-#+(or :alpha :irix6 :x86_64 :aarch64)
+#+(or :alpha :irix6 :word-size=64)
     (progn
       (assert (= 0 (random 10)) "random 10 (1)")
       (assert (= 3 (random 10)) "random 10 (2)")
       (assert (= 7 (random 10)) "random 10 (3)")
       (assert (= 2 (random 10)) "random 10 (4)")
       (assert (= 7 (random 10)) "random 10 (5)"))
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
     (progn
       (assert (= 3 (random 10)) "random 10 (1)")
       (assert (= 2 (random 10)) "random 10 (2)")
@@ -62,14 +62,14 @@
       (assert (= 1 (random 10)) "random 10 (5)"))
 
     (setq *random-state* #i(123456 789012))
-#+(or :alpha :irix6 :x86_64 :aarch64)
+#+(or :alpha :irix6 :word-size=64)
     (progn
       (assert (eps= 0.593532 (random 10.0) 0.01) "random 10.0 (1)")
       (assert (eps= 3.59535 (random 10.0) 0.01) "random 10.0 (2)")
       (assert (eps= 7.68644 (random 10.0) 0.01) "random 10.0 (3)")
       (assert (eps= 2.44015 (random 10.0) 0.01) "random 10.0 (4)")
       (assert (eps= 7.26136 (random 10.0) 0.01) "random 10.0 (5)"))
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
     (progn
       (assert (eps= 3.1918 (random 10.0) 0.01) "random 10.0 (1)")
       (assert (eps= 2.74391 (random 10.0) 0.01) "random 10.0 (2)")
@@ -82,9 +82,9 @@
     (assert (v= (make-random-state nil) #i(123456 789012)) "(make-random-state nil)")
     (assert (v= (make-random-state #i(11111 22222)) #i(11111 22222)) "(make-random-state #i(11111 22222))")
     (assert (not (v= (make-random-state t) #i(123456 789012))) "(make-random-state t)")
-#+(or :alpha :irix6 :x86_64 :aarch64)
+#+(or :alpha :irix6 :word-size=64)
     (assert (= 0 (random 10 (make-random-state #i(123456 789012)))) "(random 10 (make-random-state #i(123456 789012)))")
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
     (assert (= 3 (random 10 (make-random-state #i(123456 789012)))) "(random 10 (make-random-state #i(123456 789012)))")
 
     ;; normalize-vector

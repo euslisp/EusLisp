@@ -85,7 +85,7 @@
     (check-bignum #'equal #x1FFFFFFFFFFFFFFF #x2000000000000000 nil)
     (check-bignum #'equal #x2000000000000000 #x2000000000000001 nil)
 
-#+(or :alpha :irix6 :x86_64 :aarch64)
+#+(or :alpha :irix6 :word-size=64)
 (progn
     ;; bignum devide float / float devide bignum
     (check-bignum #'/ 10000000000000000000 1.0e+19 1.0)
@@ -100,7 +100,7 @@
     (check-bignum #'* 1.0e-19 -10000000000000000000 -1.0)
     )
 
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
 (progn
     ;; bignum devide float / float devide bignum
     (check-bignum #'/ 10000000000000000000 1.0e+19 1.0)
@@ -118,7 +118,7 @@
     ;;
     (check-bignum #'equal (elt #i(536870912) 0) #x20000000 t)
     (check-bignum #'equal (elt (integer-vector 536870912) 0) #x20000000 t)
-#+:x86_64
+#+:word-size=64
     (progn
       ;;(check-bignum #'equal (elt #i(2305843009213693952) 0) #x2000000000000000 t)
       (check-bignum #'equal (elt (integer-vector 2305843009213693952) 0) #x2000000000000000 t)
