@@ -653,7 +653,7 @@
 		0 0 bitmap-width  bitmap-height
 		2 2 1)
   )
- (:create (fname reciever method  &rest args
+ (:create (fname receiver method  &rest args
                  &key width height
                  &allow-other-keys)
     (let* (opos xsize ysize)
@@ -662,7 +662,7 @@
             (if (null width) (+ bitmap-width 4) width))
       (setq ysize
          (if (null height) (+ bitmap-height 4) height))
-      (send-super* :create fname reciever method 
+      (send-super* :create fname receiver method
 		:width xsize :height ysize args)
       (setf (bitmap-button-item-label self) fname)
       )
