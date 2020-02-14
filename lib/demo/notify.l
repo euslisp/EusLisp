@@ -40,7 +40,7 @@
 
 (defun notify-dispatch-step (handle-command-fcn rate-of-calling)
    ;; if it is time to check for an event, do so and then handle
-   ;; any event that may have occured.
+   ;; any event that may have occurred.
    ;; the rate-of-calling argument says how often to check for events
    ;;
    (cond ((<= (setq *notify-countdown* (1- *notify-countdown*)) 0)

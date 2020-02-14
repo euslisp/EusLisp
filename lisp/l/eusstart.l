@@ -219,7 +219,7 @@
 (in-package (find-package "LISP"))
 ; setup error handler
 ;	(defun system::error-handler (&rest mes)
-;	   (format t "~s~%error occured during boot strapping, bye!~%" mes)
+;	   (format t "~s~%error occurred during boot strapping, bye!~%" mes)
 ;	   (unix::uexit 1))
 (progn
 ;	   (setq lisp:*error-handler* 'system::error-handler)
