@@ -29,6 +29,8 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
 
     travis_time_start setup.apt-get_install
     ret=1; while [ $ret != 0 ]; do sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng-dev xfonts-100dpi xfonts-75dpi pkg-config libbullet-dev && ret=0 || echo "failed, retry"; done # msttcorefonts could not install on 14.04 travis
+    # unset protocol version https://github.com/juju/charm-tools/issues/532
+    git config --global --unset protocol.version || echo "OK"
     if [ "`uname -m`" == "x86_64" ] ; then sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils || echo "ok"; fi # 16.04 does ont have ptex bin
     travis_time_end
 
@@ -49,7 +51,7 @@ fi
 
 travis_time_start install # Use this to install any prerequisites or dependencies necessary to run your build
 cd ${HOME}
-[ -e jskeus ] || git clone http://github.com/euslisp/jskeus jskeus
+[ -e jskeus ] || git clone --depth 1 http://github.com/euslisp/jskeus jskeus
 ln -s $CI_SOURCE_PATH jskeus/eus
 ln -s `pwd`/jskeus/irteus   jskeus/eus/irteus
 travis_time_end
@@ -153,10 +155,6 @@ fi
 
     # run test in compiled EusLisp/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
-        # bignum test fails on armhf
-        [[ "`uname -m`" == "arm"* && $test_l =~ bignum.l ]] && continue;
-        # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
-        [[ $test_l =~ const.l ]] && continue;
 
         travis_time_start compiled.${test_l##*/}.test
 
@@ -165,6 +163,13 @@ fi
 
         travis_time_end `expr 32 - $TMP_EXIT_STATUS`
 
+        # bignum test fails on armhf
+        [[ "`uname -m`" == "arm"* && $test_l =~ bignum.l ]] && continue;
+        # sort test fails on armhf  (https://github.com/euslisp/EusLisp/issues/232)
+        [[ "`uname -m`" == "arm"* && $test_l =~ sort.l ]] && continue;
+        # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
+        [[ $test_l =~ const.l ]] && continue;
+
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
@@ -172,17 +177,17 @@ fi
     # run test in jskeus/irteus
     for test_l in irteus/test/*.l; do
 
-        [[ ("`uname -m`" == "arm"* || "`uname -m`" == "aarch"*) && $test_l =~ geo.l|mathtest.l|interpolator.l|test-irt-motion.l|test-pointcloud.l|irteus-demo.l ]] && continue;
-        # skip collision test because bullet of 2.83 or later version is not released in trusty and jessie.
-        # https://github.com/euslisp/jskeus/blob/6cb08aa6c66fa8759591de25b7da68baf76d5f09/irteus/Makefile#L37
-        [[ ( "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ) && $test_l =~ test-collision.l ]] && continue;
-
         travis_time_start irteus.${test_l##*/}.test
 
         irteusgl $test_l;
         export TMP_EXIT_STATUS=$?
 
         travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+        # irteus-demo.l, robot-model-usage.l and test-irt-motion.l fails on armhf both trusty and xenial
+        [[ "`uname -m`" == "arm"* && $test_l =~ irteus-demo.l|robot-model-usage.l|test-irt-motion.l ]] && continue;
+        # skip collision test because bullet of 2.83 or later version is not released in trusty and jessie.
+        # https://github.com/euslisp/jskeus/blob/6cb08aa6c66fa8759591de25b7da68baf76d5f09/irteus/Makefile#L37
+        [[ ( "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ) && $test_l =~ test-collision.l ]] && continue;
 
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;

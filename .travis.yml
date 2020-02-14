@@ -1,66 +1,23 @@
 # Travis Continuous Integration Configuration File
+os: linux
+dist: bionic
+sudo: required
+cache: apt
+services: docker
 matrix:
   include:
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=ubuntu:trusty
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=ubuntu:xenial
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=ubuntu:bionic
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=ubuntu:trusty ROS_DISTRO=indigo
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=ubuntu:xenial ROS_DISTRO=kinetic
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=ubuntu:bionic ROS_DISTRO=melodic
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=osrf/ubuntu_armhf:trusty
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=osrf/ubuntu_armhf:xenial
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=osrf/ubuntu_arm64:trusty
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=osrf/ubuntu_arm64:xenial
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=debian:stretch
-    - os: linux
-      dist: trusty
-      sudo: required
-      cache: apt
-      env: DOCKER_IMAGE=osrf/debian_arm64:stretch
+    - env: DOCKER_IMAGE=ubuntu:trusty
+    - env: DOCKER_IMAGE=ubuntu:xenial
+    - env: DOCKER_IMAGE=ubuntu:bionic
+    - env: DOCKER_IMAGE=ubuntu:trusty ROS_DISTRO=indigo
+    - env: DOCKER_IMAGE=ubuntu:xenial ROS_DISTRO=kinetic
+    - env: DOCKER_IMAGE=ubuntu:bionic ROS_DISTRO=melodic
+    - env: DOCKER_IMAGE=osrf/ubuntu_armhf:trusty
+    - env: DOCKER_IMAGE=osrf/ubuntu_armhf:xenial
+    - env: DOCKER_IMAGE=osrf/ubuntu_arm64:trusty
+    - env: DOCKER_IMAGE=osrf/ubuntu_arm64:xenial
+    - env: DOCKER_IMAGE=debian:stretch
+    - env: DOCKER_IMAGE=osrf/debian_arm64:stretch
     - os: osx
 env:
   global:
