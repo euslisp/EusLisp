@@ -65,6 +65,13 @@ else
 fi
 make
 
+travis_time_start script.eustag
+
+(cd eus/lisp/tool; make)
+
+travis_time_end
+
+
 travis_time_end
 
 if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" -a "$ROS_DISTRO" != "" ]; then
