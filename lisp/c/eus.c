@@ -756,14 +756,31 @@ static void initclasses()
   C_FCODE=speval(FCODE);
 /*15*/
 #if (WORD_SIZE == 64)
-  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,3,"ENV0","ENV1","ENV2");
+  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
+#if ARM // ARM uses entry2 in struct closure in eus.h
+		     4,"ENTRY2",
 #else
-  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,2,"ENV1","ENV2");
+		     3,
+#endif
+		     "ENV0","ENV1","ENV2");
+#else
+  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
+#if ARM // ARM uses entry2 in struct closure in eus.h
+		     3,"ENTRY2",
+#else
+		     2,
+#endif
+		     "ENV1","ENV2");
 #endif
   C_CLOSURE=speval(CLOSURE);
 /* 16    ---new for Solaris */
-  LDMODULE=basicclass("LOAD-MODULE",C_CODE, &ldmodulecp, 3,
-			"SYMBOL-TABLE","OBJECT-FILE", "HANDLE");
+  LDMODULE=basicclass("LOAD-MODULE",C_CODE, &ldmodulecp,
+#if ARM // ARM uses entry2 in struct ldmodule in eus.h
+		      4,"ENTRY2",
+#else
+		      3,
+#endif
+		      "SYMBOL-TABLE","OBJECT-FILE", "HANDLE");
   C_LDMOD=speval(LDMODULE);
 /*17*/
   LABREF=basicclass("LABEL-REFERENCE",C_OBJECT,&labrefcp,4,
