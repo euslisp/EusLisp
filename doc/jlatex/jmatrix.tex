@@ -167,10 +167,6 @@ $rowsize \times columnsize$の大きさの行列を作る。}
 \funcdesc{m*}{matrix1 matrix2 \&optional result}{
 {\em matrix1}と{\em matrix2}の積を返す。}
 
-\funcdesc{m*-complex}{cmatrix1 cmatrix2}{
-{\em cmatrix1}と{\em cmatrix2}の積を返す。\\
-{\em cmatrix} = (list {\em matrixRe} {\em matrixIm}) = {\em matrixRe} + {\em matrixIm}*j~~(j: 虚数単位)。}
-
 \funcdesc{transpose}{matrix \&optional result}{
 {\em matrix}の転置行列を返す。すなわち、{\em matrix}の列と行を入れ替える。}
 
@@ -275,32 +271,11 @@ LU分解された行列の行列式を求める。}
 \funcdesc{simultaneous-equation}{mat vec}{
 係数が{\em mat}で、定数が{\em vec}で記述される1次連立方程式を解く。}
 
-\funcdesc{solve-non-zero-vector-from-det0-matrix}{mat}{
-行列式が0の行列{\em mat}から非ゼロベクトル{\em v}を解く。ここで、{\em mat}*{\em v}={\em O}であり、det({\em mat})=0である。\\
-{\em mat}はdet({\em mat})=0を満たす実正方行列（すなわち、{\em mat}の逆行列は存在しない）。}
-
 \funcdesc{inverse-matrix}{mat}{
-実正方行列{\em mat}の逆行列を求める。}
-
-\funcdesc{inverse-matrix-complex}{cmat}{
-複素正方行列{\em cmat}の逆行列を求める。\\
-{\em cmat} = (list {\em matRe} {\em matIm}) = {\em matRe} + {\em matIm}*j~~(j: 虚数単位)。}
+正方行列{\em mat}の逆行列を求める。}
 
 \funcdesc{pseudo-inverse}{mat}{
 特異値分解を用いて擬似逆行列を求める。}
-
-\funcdesc{qr-decompose}{mat}{
-実正方行列{\em mat}の複素数の固有値を並べたfloat-vectorのリスト(list {\em lambdaRe} {\em lambdaIm})を求める。}
-
-\funcdesc{eigen-decompose}{mat}{
-実正方行列{\em mat}の固有値分解(list {\em lambda} {\em V})を求める。
-{\em lambda}は固有値（降順）を並べたfloat-vectorであり、{\em V}は対応する固有ベクトルを並べたmatrixである。
-{\em mat}*{\em V} = {\em V}*diag({\em lambda})。\\
-eigen-decomposeは実数の{\em lambda}と{\em V}のみ対応していることに留意する。}
-
-\funcdesc{eigen-decompose-complex}{mat}{
-実正方行列{\em mat}の固有値分解(list (list {\em lambdaRe} {\em lambdaIm}) (list {\em VRe} {\em VIm}))を求める。
-(list {\em lambdaRe} {\em lambdaIm})は複素数の固有値（降順）を並べたfloat-vectorのリストであり、(list {\em VRe} {\em VIm})は対応する複素数の固有ベクトルを並べたmatrixのリストである。}
 
 \end{refdesc}
 
