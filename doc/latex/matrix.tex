@@ -167,10 +167,6 @@ column of a matrix using in conjunction with {\bf setf}.}
 \funcdesc{m*}{matrix1 matrix2 \&optional result}{
 concatenates {\em matrix1} and {\em matrix2}.}
 
-\funcdesc{m*-complex}{cmatrix1 cmatrix2}{
-concatenates {\em cmatrix1} and {\em cmatrix2}.\\
-{\em cmatrix} = (list {\em matrixRe} {\em matrixIm}) = {\em matrixRe} + {\em matrixIm}*j~~(j is imaginary unit).}
-
 \funcdesc{transpose}{matrix \&optional result}{
 transposes {\em matrix}, i.e. columns of {\em matrix} are exchanged with
 {\em rows}.}
@@ -281,29 +277,11 @@ lu-decomposed.}
 solves a linear simultaneous equations whose coefficients are described in
 {\em mat} and constant values in {\em vec}.}
 
-\funcdesc{solve-non-zero-vector-from-det0-matrix}{mat}{
-solves non-zero-vector {\em v} from determinant-zero-matrix {\em mat}, when {\em mat}*{\em v}={\em O} and det({\em mat})=0.\\
-{\em mat} is the real square matrix which satisfies det({\em mat})=0 (i.e. inverse matrix of {\em mat} does NOT exist).}
-
 \funcdesc{inverse-matrix}{mat}{
-makes the inverse matrix of the real square matrix, {\em mat}.}
-
-\funcdesc{inverse-matrix-complex}{cmat}{
-makes the inverse matrix of the complex square matrix, {\em cmat}.\\
-{\em cmat} = (list {\em matRe} {\em matIm}) = {\em matRe} + {\em matIm}*j~~(j is imaginary unit).}
+makes the inverse matrix of the square matrix, {\em mat}.}
 
 \funcdesc{pseudo-inverse}{mat}{
 computes the pseudo inverse matrix using the singular value decomposition.}
-
-\funcdesc{qr-decompose}{mat}{
-returns the complex number eigenvalues float-vector list (list {\em lambdaRe} {\em lambdaIm}) from real square matrix {\em mat}.}
-
-\funcdesc{eigen-decompose}{mat}{
-returns the eigen decomposition (list {\em lambda} {\em V}) from real square matrix {\em mat}. {\em lambda} is the eigenvalues (in descending order) float-vector, and {\em V} is the eigenvectors matrix. {\em mat}*{\em V} = {\em V}*diag({\em lambda}).\\
-Note that eigen-decompose supports ONLY real number {\em lambda} and {\em V}.}
-
-\funcdesc{eigen-decompose-complex}{mat}{
-returns the eigen decomposition (list (list {\em lambdaRe} {\em lambdaIm}) (list {\em VRe} {\em VIm})) from real square matrix {\em mat}. (list {\em lambdaRe} {\em lambdaIm}) is the complex number eigenvalues (in descending order) float-vector list, and (list {\em VRe} {\em VIm}) is the complex number eigenvectors matrix list.}
 
 \end{refdesc}
 
