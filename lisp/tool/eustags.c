@@ -197,6 +197,11 @@ FILE	*inf,			/* ioptr for current input file		*/
 
 NODE	*head;			/* the head of the sorted binary tree	*/
 
+void init ();
+void find_entries (char *file);
+void free_tree (NODE *node);
+void put_entries (NODE *node);
+
 char *savestr();
 char *savenstr ();
 // char *rindex();
@@ -452,6 +457,7 @@ main(ac,av)
  * subscripted by the chars in "white" are set to TRUE.  Thus "_wht"
  * of a char is TRUE if it is the string "white", else FALSE.
  */
+void
 init()
 {
 
@@ -484,6 +490,11 @@ init()
  * This routine opens the specified file and calls the function
  * which finds the function and type definitions.
  */
+void TEX_funcs (FILE *fi);
+void Scheme_funcs (FILE *fi);
+void L_funcs (FILE *fi);
+void C_entries ();
+void
 find_entries (file)
      char *file;
 {
@@ -552,6 +563,9 @@ find_entries (file)
   name is the tag name,
   f is nonzero to use a pattern, zero to use line number instead. */
 
+void put_entries (NODE *node);
+void add_node (NODE *node, NODE *cur_node);
+void
 pfnote (name, f, linestart, linelen, lno, cno)
      char *name;
      logical f;			/* f == TRUE when function */
@@ -609,6 +623,7 @@ pfnote (name, f, linestart, linelen, lno, cno)
     add_node(np, head);
 }
 
+void
 free_tree(node)
      NODE *node;
 {
@@ -620,6 +635,7 @@ free_tree(node)
     }
 }
 
+void
 add_node(node, cur_node)
      NODE *node,*cur_node;
 {
@@ -664,6 +680,7 @@ add_node(node, cur_node)
     cur_node->right = node;
 }
 
+void
 put_entries(node)
      reg NODE *node;
 {
@@ -721,6 +738,7 @@ put_entries(node)
  the nodes in the subtree of the specified node.
  Works only if eflag is set, but called only in that case.  */
 
+int
 total_size_of_entries(node)
      reg NODE *node;
 {
@@ -782,6 +800,8 @@ long vmslinecharno;
   number = 0; \
 }
 
+void e_getline (long atchar);
+void
 C_entries ()
 {
   register int c;
@@ -901,9 +921,9 @@ C_entries ()
 		      if (linestart != linecharno)
 			{
 #ifdef VMS
-			  getline (vmslinestart);
+			  e_getline (vmslinestart);
 #else
-			  getline (linestart);
+			  e_getline (linestart);
 #endif
 			  strncpy (tok, token + (lb1.buffer - buf),
 				   tp-token+1);
@@ -941,6 +961,7 @@ C_entries ()
  * It updates the input line * so that the '(' will be
  * in it when it returns.
  */
+int
 consider_token (lpp, token, f, level)
      char **lpp, *token;
      int *f, level;
@@ -1061,7 +1082,8 @@ ret:
   return !bad && win;
 }
 
-getline (atchar)
+void
+e_getline (atchar)
      long atchar;
 {
   long saveftell = ftell (inf);
@@ -1075,7 +1097,10 @@ getline (atchar)
 
 char	*dbp;
 int	pfcnt;
+void getit ();
+void takeprec ();
 
+int
 PF_funcs(fi)
      FILE *fi;
 {
@@ -1168,6 +1193,7 @@ tail(cp)
   return (0);
 }
 
+void
 takeprec()
 {
   while (isspace(*dbp))
@@ -1187,6 +1213,7 @@ takeprec()
   while (isdigit(*dbp));
 }
 
+void
 getit()
 {
   register char *cp;
@@ -1212,6 +1239,8 @@ getit()
  * just look for (def or (DEF
  */
 
+void L_getit ();
+void
 L_funcs (fi)
      FILE *fi;
 {
@@ -1246,6 +1275,7 @@ L_funcs (fi)
     }
 }
 
+void
 L_getit()
 {
   register char *cp;
@@ -1271,7 +1301,8 @@ L_getit()
  * look for (set! xyzzy
  */
 
-static get_scheme ();
+void static get_scheme ();
+void
 Scheme_funcs (fi)
      FILE *fi;
 {
@@ -1310,6 +1341,7 @@ Scheme_funcs (fi)
     }
 }
 
+void
 static
 get_scheme()
 {
@@ -1362,6 +1394,9 @@ static char TEX_clgrp = '}';
  * TeX/LaTeX scanning loop.
  */
 
+void TEX_mode (FILE *f);
+void TEX_getit (char *name, int len);
+void
 TEX_funcs (fi)
     FILE *fi;
 {
@@ -1418,6 +1453,7 @@ TEX_funcs (fi)
 /* Figure out whether TeX's escapechar is '\\' or '!' and set grouping */
 /* chars accordingly. */
 
+void
 TEX_mode (f)
      FILE *f;
 {
@@ -1498,6 +1534,7 @@ TEX_decode_env (evarname, defenv)
    The name being defined actually starts at (NAME + LEN + 1).
    But we seem to include the TeX command in the tag name.  */
 
+void
 TEX_getit (name, len)
     char *name;
     int len;
@@ -1523,6 +1560,7 @@ TEX_getit (name, len)
 
 /* Keep the capital `T' in `Token' for dumb truncating compilers
    (this distinguishes it from `TEX_toktab' */
+int
 TEX_Token (cp)
     char *cp;
 {
@@ -1641,6 +1679,8 @@ index(sp, c)
 
 /* Print error message and exit.  */
 
+void error (char *s1, char *s2);
+void
 fatal (s1, s2)
      char *s1, *s2;
 {
@@ -1650,6 +1690,7 @@ fatal (s1, s2)
 
 /* Print error message.  `s1' is printf control string, `s2' is arg for it. */
 
+void
 error (s1, s2)
      char *s1, *s2;
 {
