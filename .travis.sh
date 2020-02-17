@@ -74,6 +74,42 @@ if [ "$QEMU" != "" ]; then
     eval "$(dpkg-buildflags --export=sh)"
     make -C lisp -f Makefile.Linux  eus0 eus1 eus2 eusg eusx eusgl eus eusjpeg
     travis_time_end
+
+    if [[ `gcc -dumpmachine | egrep "^(arm|aarch)"` != "" ]]; then
+        export ARCHDIR=LinuxARM
+    elif [[ `gcc -dumpmachine | egrep "^x86_64"` != "" ]]; then
+        export ARCHDIR=Linux64
+    else
+        export ARCHDIR=Linux
+    fi
+    export PATH=`pwd`/$ARCHDIR/bin:$PATH
+
+    export EXIT_STATUS=0;
+    set +e
+    # run test in EusLisp/test
+    for test_l in test/*.l; do
+
+        travis_time_start euslisp.${test_l##*/}.test
+
+        eusgl $test_l;
+        export TMP_EXIT_STATUS=$?
+
+        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+
+        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
+    done;
+    echo "Exit status : $EXIT_STATUS";
+
+    travis_time_start euslisp.eusjpeg.test
+
+    eusgl '(progn (load (format nil "~A/lisp/image/jpeg/eusjpeg.l" *eusdir*))(image::write-jpeg-file "test.jpg" (instance color-image24 :init 100 100)) (print *user*) (unix::exit))'
+
+    export TMP_EXIT_STATUS=$?
+
+    travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+    export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
+    echo "Exit status : $EXIT_STATUS";
+    [ $EXIT_STATUS == 0 ] || exit 1
     exit 0
 fi
 
