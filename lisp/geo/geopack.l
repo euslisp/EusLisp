@@ -413,7 +413,7 @@ Normal must be given if the sign of the angle is needed."
  (:boxtest (box &optional tolerance)
     (let* ((c (send self :box tolerance))
 	   (r (send box :intersection-p c)) )
-	;;(sys:reclaim-tree c) ;; segfaults if GC occured
+	;;(sys:reclaim-tree c) ;; segfaults if GC occurred
 	r))
  (:length () (distance pvert nvert))
  (:end-point (v)
