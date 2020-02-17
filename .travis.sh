@@ -155,6 +155,8 @@ fi
 
         travis_time_end `expr 32 - $TMP_EXIT_STATUS`
 
+        if [[ $TMP_EXIT_STATUS != 0 ]]; then echo "Failed running $test_l. Exiting with $TMP_EXIT_STATUS"; fi
+
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
@@ -168,14 +170,19 @@ fi
         eusgl "(let ((o (namestring (merge-pathnames \".o\" \"$test_l\"))) (so (namestring (merge-pathnames \".so\" \"$test_l\")))) (compile-file \"$test_l\" :o o) (if (probe-file so) (load so) (exit 1))))"
         export TMP_EXIT_STATUS=$?
 
-        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
-
+        export CONTINUE=0
         # bignum test fails on armhf
-        [[ "`uname -m`" == "arm"* && $test_l =~ bignum.l ]] && continue;
+        if [[ "`uname -m`" == "arm"* && $test_l =~ bignum.l ]]; then export CONTINUE=1; fi
         # sort test fails on armhf  (https://github.com/euslisp/EusLisp/issues/232)
-        [[ "`uname -m`" == "arm"* && $test_l =~ sort.l ]] && continue;
+        if [[ "`uname -m`" == "arm"* && $test_l =~ sort.l ]]; then export CONTINUE=1; fi
         # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
-        [[ $test_l =~ const.l ]] && continue;
+        if [[ $test_l =~ const.l ]]; then export CONTINUE=1; fi
+
+        if [[ $CONTINUE == 0 ]]; then travis_time_end `expr 32 - $TMP_EXIT_STATUS`; else travis_time_end 33; fi
+
+        if [[ $TMP_EXIT_STATUS != 0 ]]; then echo "Failed running $test_l. Exiting with $TMP_EXIT_STATUS"; fi
+
+        if [[ $CONTINUE != 0 ]]; then continue; fi
 
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
@@ -189,12 +196,18 @@ fi
         irteusgl $test_l;
         export TMP_EXIT_STATUS=$?
 
-        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+        export CONTINUE=0
         # irteus-demo.l, robot-model-usage.l and test-irt-motion.l fails on armhf both trusty and xenial
-        [[ "`uname -m`" == "arm"* && $test_l =~ irteus-demo.l|robot-model-usage.l|test-irt-motion.l ]] && continue;
+        if [[ "`uname -m`" == "arm"* && $test_l =~ irteus-demo.l|robot-model-usage.l|test-irt-motion.l ]]; then export CONTINUE=1; fi
         # skip collision test because bullet of 2.83 or later version is not released in trusty and jessie.
         # https://github.com/euslisp/jskeus/blob/6cb08aa6c66fa8759591de25b7da68baf76d5f09/irteus/Makefile#L37
-        [[ ( "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ) && $test_l =~ test-collision.l ]] && continue;
+        if [[ ( "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ) && $test_l =~ test-collision.l ]]; then export CONTINUE=1; fi
+
+        if [[ $CONTINUE == 0 ]]; then travis_time_end `expr 32 - $TMP_EXIT_STATUS`; else travis_time_end 33; fi
+
+        if [[ $TMP_EXIT_STATUS != 0 ]]; then echo "Failed running $test_l. Exiting with $TMP_EXIT_STATUS"; fi
+
+        if [[ $CONTINUE != 0 ]]; then continue; fi
 
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
