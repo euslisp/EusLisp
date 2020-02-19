@@ -31,7 +31,7 @@
 (nconc *features* '(:m68020))
 ;
 
-#+(or :alpha :irix6 :x86_64 :aarch64)
+#+(or :alpha :irix6 :word-size=64)
 (progn
   (defconstant sizeof-* 8)
   (defconstant sizeof-long 8)
@@ -50,7 +50,7 @@
   (defconstant pi 3.14159265358979323846)
   (defconstant pi/2 1.57079632679489661923)
   )
-#-(or :alpha :irix6 :x86_64 :aarch64)
+#-(or :alpha :irix6 :word-size=64)
 (progn
   (defconstant sizeof-* 4)
   (defconstant sizeof-long 4)
@@ -209,12 +209,12 @@
    (defconstant unix::O_CREAT #o1000)
    (defconstant unix::O_TRUNC #o2000)
    (defconstant unix::O_EXCL #o4000))
-#+(or :Solaris2 :irix :irix6)
+#+(or :Solaris2 :irix :irix6 :mips)
 (progn
    (defconstant unix::O_CREAT #x100)
    (defconstant unix::O_TRUNC #x200)
    (defconstant unix::O_EXCL  #x400) )
-#+(and :linux (not :darwin))
+#+(and :linux (not :darwin) (not :mips))
 (progn
    (defconstant unix::O_CREAT #o100)
    (defconstant unix::O_TRUNC #o1000)

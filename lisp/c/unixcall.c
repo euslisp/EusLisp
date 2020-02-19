@@ -49,7 +49,7 @@ static char *rcsid="@(#)$Id$";
 #include <sys/msg.h>
 #endif
 
-#if SunOS4_1 || (mips && !IRIX && !IRIX6)
+#if (SunOS4_1 || (mips && !IRIX && !IRIX6)) && !Linux
 /* Sun likes to change ioccom constants frequently. */
 #define IOC_VOID   _IOC_VOID
 #define IOC_IN     _IOC_IN
@@ -448,7 +448,7 @@ int n; pointer argv[];
   return(makeint(alarm(ckintval(argv[0]))));}
 
 
-#if sun3 || sun4 || news || sanyo  || alpha || i386 || x86_64 || ARM
+#if sun3 || sun4 || news || sanyo  || alpha || Linux
 #if !Solaris2
 pointer UALARM(ctx,n,argv)
 register context *ctx;
@@ -622,7 +622,7 @@ pointer *argv;
   }
 #endif
 
-#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64 || ARM
+#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || alpha || Linux
 pointer VFORK(ctx,n,argv)
 register context *ctx;
 int n;
@@ -1342,7 +1342,7 @@ pointer *argv;
   if (envval) return(makestring(envval,strlen(envval)));
   else return(NIL);}
 
-#if sun3 || sun4 || vax || mips || i386 || alpha || x86_64 || ARM
+#if sun3 || sun4 || vax || mips || alpha || Linux
 pointer PUTENV(ctx,n,argv)
 register context *ctx;
 int n;
@@ -2041,7 +2041,7 @@ pointer mod;
   defun(ctx,"GETTIMEOFDAY",mod,GETTIMEOFDAY,NULL);
   defun(ctx,"ALARM",mod,ALARM,NULL);
 
-#if sun3 || sun4 || news || sanyo || alpha || x86_64 || ARM /* why i386 does not exist? */
+#if sun3 || sun4 || news || sanyo || alpha || Linux
 #if !Solaris2
   defun(ctx,"UALARM",mod,UALARM,NULL);
 #endif
@@ -2116,7 +2116,7 @@ pointer mod;
   defun(ctx,"NTOHS",mod,N2HS,NULL);
 #endif
 
-#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || i386 || alpha || x86_64 || ARM
+#if sun3 || sun4 || vax || news || sanyo || (mips && !IRIX && !IRIX6) || alpha || Linux
   defun(ctx,"VFORK",mod,VFORK,NULL);
 #endif
   defun(ctx,"EXEC",mod,EXEC,NULL);
@@ -2125,7 +2125,7 @@ pointer mod;
   defun(ctx,"SETPRIORITY",mod,SETPRIORITY,NULL);
 #endif
 
-#if sun3 || sun4 || vax || mips || i386 || alpha || x86_64 || ARM
+#if sun3 || sun4 || vax || mips || alpha || Linux
   defun(ctx,"PUTENV",mod,PUTENV,NULL);
 #endif
 #if sun3 || sun4 && !Solaris2 || Linux || alpha || Cygwin

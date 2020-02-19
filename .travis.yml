@@ -18,6 +18,22 @@ matrix:
     - env: DOCKER_IMAGE=osrf/ubuntu_arm64:xenial
     - env: DOCKER_IMAGE=debian:stretch
     - env: DOCKER_IMAGE=osrf/debian_arm64:stretch
+    - env: QEMU=amd64 DOCKER_IMAGE=amd64/debian:unstable # amd64
+    - env: QEMU=aarch64 DOCKER_IMAGE=arm64v8/debian:buster # arm64
+    - env: QEMU=arm DOCKER_IMAGE=arm32v5/debian:jessie # armel
+    - env: QEMU=arm DOCKER_IMAGE=arm32v7/debian:jessie # armhf
+    # hppa
+    # hurd-i386
+    - env: QEMU=i386 DOCKER_IMAGE=i386/debian:unstable # i386
+    # ia64
+    # m68k
+    - env: QEMU=mips64el DOCKER_IMAGE=loongnix/debian:buster # mips64el
+    # mipsel
+    # - env: QEMU=ppc DOCKER_IMAGE=vicamo/debian:unstable-powerpc # powerpc / somehow failing loading eusgl
+    - env: QEMU=ppc64le DOCKER_IMAGE=ppc64le/debian:buster # ppc64
+    # riscv64
+    # sh4
+    # sparc64
     - os: osx
 env:
   global:
@@ -38,11 +54,13 @@ before_install: # Use this to prepare the system to install prerequisites or dep
 install:
   - export CI_SOURCE_PATH=$(pwd)
   - export REPOSITORY_NAME=${PWD##*/}
+  - if [[ "$QEMU" != "" ]]; then sudo apt-get install -y -qq qemu-user-static; ls /usr/bin/qemu-*-static; export QEMU_VOLUME="-v /usr/bin/qemu-$QEMU-static:/usr/bin/qemu-$QEMU-static" ; fi
+  - if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register; fi
   - if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
   - if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/euslisp/jskeus ${HOME}/jskeus; fi
 script:
-  - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i -v $HOME:$HOME -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
+  - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -i $QEMU_VOLUME -v $HOME:$HOME -e "QEMU=$QEMU" -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then ./.travis.sh; fi
 after_failure:
   - echo "failure"

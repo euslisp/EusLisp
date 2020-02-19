@@ -20,6 +20,10 @@
 ARCH=Linux
 include Makefile.generic1
 
+THREAD= -DTHREADED -DPTHREAD
+MFLAGS=
+XVERSION=X_V11R6_1
+
 #
 # Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
 #
@@ -28,42 +32,62 @@ include Makefile.generic1
 GCC_MAJOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\+\).*/\1/')
 GCC_MINOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\+\).*/\2/')
 # GCC_PATCH_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\.\([0-9]\)/\3/')
+ifneq (,$(findstring 64,$(shell gcc -dumpmachine)))
+ifeq ($(GCC_MAJOR_VERSION), 2)
+ ALIGN_FUNCTIONS="-malign-functions=8"
+else
+ ALIGN_FUNCTIONS=-falign-functions=8
+ GCC3=-DGCC3
+endif
+else
+ifeq ($(GCC_MAJOR_VERSION), 2)
+ ALIGN_FUNCTIONS="-malign-functions=4"
+else
+ ALIGN_FUNCTIONS=-falign-functions=4
+ GCC3=-DGCC3
+endif
+endif
 
 ADD_LDFLAGS=
 ifneq (,$(findstring t,$(shell if [ \( $(GCC_MAJOR_VERSION) -eq 4 -a $(GCC_MINOR_VERSION) -ge 5 \) -o  $(GCC_MAJOR_VERSION) -ge 5 ] ; then echo t ;fi )))
 ADD_LDFLAGS += -Wl,--no-as-needed
 endif
 
-CPU_OPTIMIZE=-march=i586
+# set CPU arch with -D
+MACHINE=$(shell uname -m)
+# need to set 'i486', for conditionals in c/*.[ch].
+ifneq ($(shell gcc -dumpmachine | grep "i.*86-linux"),)
+  MACHINE=i486
+endif
 
-# Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
-MACHINE=i486
+DEBUG= # -g
 
-# set OFLAGS either to -O or to -g.
-OFLAGS=-O
-# OFLAGS=-g
 
 # If you use libc.so.5, remove -DLIB6 option.
 # If you use old linux that does not know mallopt, add -OLD_LINUX option.
 
-#CFLAGS=-D$(MACHINE) -DLinux -DLIB6 -D_REENTRANT -DVERSION=\"$(VERSION)\" \
-#        $(CPU_OPTIMIZE) -DGCC \
-#	 -I$(EUSDIR)/include 
-CFLAGS=-D$(MACHINE) -DLinux  -D_REENTRANT -DVERSION=\"$(VERSION)\" \
-	-DLIB6  $(CPU_OPTIMIZE) -DGCC -falign-functions=4 \
-	-I$(EUSDIR)/include 
-PIC= -fpic
+CFLAGS:= $(CFLAGS) $(CPPFLAGS) $(WFLAGS) -D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+	-DLIB6 $(ALIGN_FUNCTIONS) -fsigned-char -fno-stack-protector \
+        $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
+	-DGCC $(GCC3) \
+	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/include
+
+# machine specific CFLAGS
+ifneq ($(shell gcc -dumpmachine | egrep "^(arm|aarch)"),)
+  ADD_LDFLAGS=-Wl,-z,execstack
+  CFLAGS+=-DARM -fPIC
+  ARCH=LinuxARM
+endif
+ifneq ($(shell gcc -dumpmachine | grep "^x86_64"),)
+  CFLAGS+=-fPIC
+  ARCH=Linux64
+endif
 
 # Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
 # /usr/ucb/cc cannot compile because of its incapability of recognizing
 # prototype declarations.
 CC=cc
-# CC=gcc
-
-#XVERSION=X_V11R2
-#XVERSION=X_V11R3
-#XVERSION=X_V11R4
-XVERSION=X_V11R6
+LD=ld
 
 #
 # L I B R A R I E S
@@ -78,24 +102,36 @@ XVERSION=X_V11R6
 # On Solaris, XLIB and EUSLIB are combined together into lib/libeusx.so.
 
 # Linux
-RAWLIB=-ldl  -lm
+RAWLIB=-ldl -lm -lpthread -lc
 XLIB= -L/usr/X11R6/lib -lX11
 
 # specify directories where euslisp's libraries are located.
-EUSLIB= -Xlinker  -L$(ADLIBDIR) 
-# GLLIB= -L$(ADLIBDIR) -ltk -lGLU -lGL -lXext -leusgl
-GLLIB= -L$(ADLIBDIR)  -L/usr/local/lib -lGLU -lGL -lXext -leusgl
+EUSRPATH=-R$(ADLIBDIR):$(EUSDIR)/lib/Linux
+EUSLIB= -Xlinker $(EUSRPATH) -L$(ADLIBDIR)
+GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
 
-# link-editor's default flags ?-rdynamic 
-SOFLAGS= -shared -build-id
-LDFLAGS= -rdynamic $(ADD_LDFLAGS)
-MTOBJECTS=
-MTCOBJECTS=
-MAPOPTION=-Xlinker -Map -Xlinker $(ADLIBDIR)/eusmap 
+# POSIX Thread
+THREADDEP=mthread_posix.c
+#THREADDEP=pthreads.c
+
+# If you don't like optimization, comment out the next line.
+OFLAGS=-O2
+
+# link-editor's default flags ?-rdynamic
+SOFLAGS:= $(LDFLAGS) -shared -Xlinker -build-id
+LD=gcc
+LDFLAGS:= $(LDFLAGS) -rdynamic -fno-stack-protector -z execstack $(ADD_LDFLAGS)
+MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
+#MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/pthreads.o
+MAPOPTION=  $(OBJDIR)/par.o
+
 
 #################################################################
 # end of the customizable section
 ################################################################
 
 include Makefile.generic2
+
+eusjpeg:
+	make -C image/jpeg/ ARCHDIR=$(ARCH) EUSDIR=$(EUSDIR)
 

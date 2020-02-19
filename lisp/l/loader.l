@@ -107,7 +107,7 @@
 	(cond ((member :vax *features*) (list #x07 #x01))
 	      ((member :irix *features*) (list #x7f #\E #\L #\F))
 	      ((member :irix6 *features*) (list #x7f #\E #\L #\F))
-	      ((member :mips *features*) (list #x62 #x1))
+	      ((and (member :mips *features*) (not (member :linux *features*))) (list #x62 #x1))
 	      ((member :Solaris2 *features*) (list #x7f #\E #\L #\F))
 	      ((member :darwin *features*) (list '(#xcf #xca #xce) '(#xfa #xfe #xfa) '(#xed #xba #xed) '(#xfe #x #xbe #xfe)))
 	      ((member :linux *features*) (list #x7f #\E #\L #\F))

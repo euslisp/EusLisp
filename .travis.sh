@@ -57,6 +57,64 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
 fi
 
+### for multiarch compile test
+if [ "$QEMU" != "" ]; then
+    travis_time_start install.dpkg-dev
+    apt-get install -qq -y dpkg-dev
+    travis_time_end
+
+    echo "uname -a : $(uname -a)"
+    echo "uname -m : $(uname -m)"
+    echo "gcc -dumpmachine : $(gcc -dumpmachine)"
+    echo "gcc -dumpversion : $(gcc -dumpversion)"
+    echo "getconf LONG_BIT : $(getconf LONG_BIT)"
+
+    travis_time_start compile.euslisp
+    export EUSDIR=`pwd`
+    eval "$(dpkg-buildflags --export=sh)"
+    make -C lisp -f Makefile.Linux  eus0 eus1 eus2 eusg eusx eusgl eus eusjpeg
+    travis_time_end
+
+    if [[ `gcc -dumpmachine | egrep "^(arm|aarch)"` != "" ]]; then
+        export ARCHDIR=LinuxARM
+    elif [[ `gcc -dumpmachine | egrep "^x86_64"` != "" ]]; then
+        export ARCHDIR=Linux64
+    else
+        export ARCHDIR=Linux
+    fi
+    export PATH=`pwd`/$ARCHDIR/bin:$PATH
+
+    export EXIT_STATUS=0;
+    set +e
+    # run test in EusLisp/test
+    for test_l in test/*.l; do
+
+        travis_time_start euslisp.${test_l##*/}.test
+
+        sed -i 's/\(i-max\ [0-9]000\)0*/\1/' $test_l
+
+        eusgl $test_l;
+        export TMP_EXIT_STATUS=$?
+
+        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+
+        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
+    done;
+    echo "Exit status : $EXIT_STATUS";
+
+    travis_time_start euslisp.eusjpeg.test
+
+    eusgl '(progn (load (format nil "~A/lisp/image/jpeg/eusjpeg.l" *eusdir*))(image::write-jpeg-file "test.jpg" (instance color-image24 :init 100 100)) (print *user*) (unix::exit))'
+
+    export TMP_EXIT_STATUS=$?
+
+    travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+    export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
+    echo "Exit status : $EXIT_STATUS";
+    [ $EXIT_STATUS == 0 ] || exit 1
+    exit 0
+fi
+
 travis_time_start install # Use this to install any prerequisites or dependencies necessary to run your build
 cd ${HOME}
 [ -e jskeus ] || git clone --depth 1 http://github.com/euslisp/jskeus jskeus

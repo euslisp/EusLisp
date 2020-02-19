@@ -168,12 +168,12 @@
               (glXChooseVisual x::*display* (x::DefaultScreen x::*display*)
                                 *attributelist*))
            (setq glcon (glXCreateContext x::*display* visualinfo shared-glcon GL_TRUE))
-#-(or :x86_64 :aarch64)
+#-(or :word-size=64)
 	   (send-super* :create
                         :depth (sys:peek (+ visualinfo 12) :long)
                         :visual (sys:peek visualinfo :long)
                         :title title args)
-#+(or :x86_64 :aarch64)
+#+(or :word-size=64)
 	   (send-super* :create
                         :depth (sys:peek (+ visualinfo 20) :integer)
                         :visual (sys:peek visualinfo :long)

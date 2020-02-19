@@ -168,13 +168,13 @@
 	     f))))
  (:load-t () (send self :push "T"))
  (:load-nil () (send self :push "NIL"))
-#-:x86_64
+#-(or :word-size=64)
  (:load-int (x) (send self :push (format nil "makeint(~d)" x)))
-#+:x86_64
+#+(or :word-size=64)
  (:load-int (x) (send self :push (format nil "makeint((eusinteger_t)~dL)" x)))
-#-:x86_64
+#-(or :word-size=64)
  (:load-float (x) (send self :push (format nil "makeflt(~8,8e)" x)))
-#+:x86_64
+#+(or :word-size=64)
  (:load-float (x) (send self :push (format nil "makeflt(~22,22e)" x)))
 )
 
@@ -457,7 +457,7 @@
 	   (send self :store "w")
 	   (when (memq op '(+ -))
 	      (format cfile
-		 "#if sun4 || vax || mips || i386 || alpha || x86_64 || ARM~%	w=(pointer)((eusinteger_t)w-2);~%#endif~%"))
+		 "#if sun4 || vax || mips || alpha || Linux~%	w=(pointer)((eusinteger_t)w-2);~%#endif~%"))
 	   (send self :push
 		 (format nil "(pointer)((eusinteger_t)~A ~A (eusinteger_t)w)"
 			 (send self :pop) 
