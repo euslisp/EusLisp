@@ -91,6 +91,8 @@ if [ "$QEMU" != "" ]; then
 
         travis_time_start euslisp.${test_l##*/}.test
 
+        sed -i 's/\(i-max\ [0-9]000\)0*/\1/' $test_l
+
         eusgl $test_l;
         export TMP_EXIT_STATUS=$?
 
