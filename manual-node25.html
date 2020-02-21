@@ -1,10 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
 
-<!--Converted with LaTeX2HTML 2008 (1.71)
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
 <HTML>
 <HEAD>
 <TITLE>PostgreSQL Database</TITLE>
@@ -13,7 +9,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="manual.css">
@@ -28,11 +25,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html976"
+<B> Next:</B> <A NAME="tex2html980"
   HREF="manual-node26.html">HTTP</A>
-<B>Up:</B> <A NAME="tex2html970"
+<B>Up:</B> <A NAME="tex2html974"
   HREF="manual-node15.html">EusLisp Extensions</A>
-<B> Previous:</B> <A NAME="tex2html964"
+<B> Previous:</B> <A NAME="tex2html968"
   HREF="manual-node24.html">XToolKit</A>
 <BR> <P>
 </DIV>
@@ -41,7 +38,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html977"
+<LI><A NAME="tex2html981"
   HREF="manual-node25.html#SECTION030101000000000000000">PostgreSQL</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -116,7 +113,7 @@ links to the databases via the <TT>libpq.so</TT> library.
 	Usually it works, but not always, because escapes are ignored.
 	So I defined input and output function for Postgres in 'symbol_io.c'.
 	There is also a Makefile for it.  Make symbol_io.so and copy it
-	to /usr/local/pgsql/lib.  Invoke psql, and type "isymbol_io.sql",
+	to /usr/local/pgsql/lib.  Invoke psql, and type "&#305;symbol_io.sql",
 	which will make postgres to load the lisp_symbol_io functions, and
 	and define the symbol type.
 	Call make-type-hashtab function once before any other database retrieval
@@ -148,8 +145,8 @@ The following codes put in another file will load this database module,
  <BR>
 <BR> <P>
 	<BR> 
-<A NAME="50969"></A>
-<BIG CLASS="XLARGE"><B>pgsql </B></BIG> [class]  <PRE><TT>
+<A NAME="52694"></A>
+<BIG CLASS="LARGE"><B>pgsql </B></BIG> [class]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 ... 
 </TT></PRE>
@@ -158,13 +155,15 @@ The following codes put in another file will load this database module,
 
 <DL COMPACT>
 <DT> 
-<DD><P>
+<DD>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="50986"></A>
+<P>
+
+<A NAME="52711"></A>
 <B>:init</B> <EM>key host port dbname user password </EM>[method]
 
 <DL COMPACT>
@@ -181,7 +180,7 @@ Default values to dbname and user are obtained from the USER environment variabl
 
 <P>
 
-<A NAME="50996"></A>
+<A NAME="52721"></A>
 <B>:type-conversion</B> <EM>flag </EM>[method]
 
 <DL COMPACT>
@@ -199,7 +198,7 @@ and symbol is interned in the current package.
 
 <P>
 
-<A NAME="51006"></A>
+<A NAME="52731"></A>
 <B>:exec</B> <EM>sql </EM>[method]
 
 <DL COMPACT>
@@ -214,7 +213,7 @@ retrieves the results in a synchronous manner.
 
 <P>
 
-<A NAME="51016"></A>
+<A NAME="52741"></A>
 <B>pq:table-fields</B> <EM>db table </EM>[function]
 
 <DL COMPACT>
@@ -233,7 +232,7 @@ such as text, int4, symbol, etc.
 
 <P>
 
-<A NAME="51027"></A>
+<A NAME="52752"></A>
 <B>pq:table-attributes</B> <EM>db table </EM>[function]
 
 <DL COMPACT>
@@ -249,7 +248,7 @@ etc.
 
 <P>
 
-<A NAME="51037"></A>
+<A NAME="52762"></A>
 <B>pq:query</B> <EM>db handler &amp;rest sql </EM>[function]
 
 <DL COMPACT>
@@ -268,7 +267,7 @@ the <I>format</I> function.
 
 <P>
 
-<A NAME="51049"></A>
+<A NAME="52774"></A>
 <B>pq:tables</B> <EM>db </EM>[function]
 
 <DL COMPACT>
@@ -281,7 +280,7 @@ the <I>format</I> function.
 
 <P>
 
-<A NAME="51059"></A>
+<A NAME="52784"></A>
 <B>pq:delimit-list</B> <EM>xlist delimiter </EM>[function]
 
 <DL COMPACT>
@@ -297,12 +296,13 @@ This function is useful to compose SQL commands.
 
 <P>
 
-<A NAME="51070"></A>
+<A NAME="52795"></A>
 <B>pq:select</B> <EM>db fields table &amp;key where limit limit-offset order-by </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  sends an SQL command composed by the argument, and retrieves the
+<DD> 
+ sends an SQL command composed by the argument, and retrieves the
 result in the synchronous manner.
 The following example
 gives a list of id, name and email selected from the address_book table
@@ -323,7 +323,7 @@ where the email ends with ".go.jp". Number of output lists are limited to
 
 <P>
 
-<A NAME="51080"></A>
+<A NAME="52805"></A>
 <B>pq:record-count</B> <EM>db table </EM>[function]
 
 <DL COMPACT>
@@ -343,17 +343,16 @@ returns the number of records in the table. db is a pgsql object.
 
 <DIV CLASS="navigation"><HR>
 <BR>
-<B> Next:</B> <A NAME="tex2html976"
+<B> Next:</B> <A NAME="tex2html980"
   HREF="manual-node26.html">HTTP</A>
-<B>Up:</B> <A NAME="tex2html970"
+<B>Up:</B> <A NAME="tex2html974"
   HREF="manual-node15.html">EusLisp Extensions</A>
-<B> Previous:</B> <A NAME="tex2html964"
+<B> Previous:</B> <A NAME="tex2html968"
   HREF="manual-node24.html">XToolKit</A>
 </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-Travis CI User
-2017-03-07
+This document was generated using the LaTeX2HTML translator on Fri Feb 21 21:08:19 JST 2020 from <a href="http://github.com/euslisp/EusLisp.git">EusLisp</a> version <a href="http://github.com/euslisp/EusLisp/commit/40051e5c92167535141b4985db384a7516d89b4f">40051e5c update to 9.27 (with changelog in (j)intro.tex, euslisp.hlp, (j)manual.{tex/pdf/dvi} (#421)</a>
 </ADDRESS>
 </BODY>
 </HTML>

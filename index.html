@@ -1,12 +1,402 @@
-<html>
-<title>EusLisp Manual</title>
-<body>
-<h1>EusLisp Manual</h1>
-<a href="manual.html"> English Manual</a><p>
-<a href="jmanual.html"> Japanese Manual</a><p>
-<hr>
-<a href="http://github.com/euslisp/EusLisp">github page</a>
-</body>
-</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
 
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>EusLisp version 9.27 リファレンスマニュアル -マルチスレッドとXToolKitの実現- ETL-TR-95-19 1995年6月 </TITLE>
+<META NAME="description" CONTENT="EusLisp version 9.27 リファレンスマニュアル -マルチスレッドとXToolKitの実現- ETL-TR-95-19 1995年6月 ">
+<META NAME="keywords" CONTENT="jmanual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jmanual.css">
+
+<LINK REL="next" HREF="jmanual-node1.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<BR>
+<B> Next:</B> <A NAME="tex2html34"
+  HREF="jmanual-node1.html">Contents</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<H1 ALIGN=CENTER><BIG CLASS="XHUGE"><B>EusLisp</B></BIG> 
+<BR><BIG CLASS="LARGE"><B>version 9.27</B></BIG> 
+<BR><BIG CLASS="XXLARGE"><B>リファレンスマニュアル</B></BIG> 
+<BR><BIG CLASS="LARGE">-マルチスレッドとXToolKitの実現-</BIG> 
+<BR>
+<BR>
+<BR>
+<BR>
+<BIG CLASS="LARGE">ETL-TR-95-19</BIG> 
+<BR><BIG CLASS="LARGE">1995年6月</BIG> 
+<BR></H1>
+<P ALIGN=CENTER><STRONG>通商産業省　工業技術院</STRONG>
+<BR><I>電子技術総合研究所 知能システム部</I>
+<BR><FONT SIZE=-1><BIG CLASS="LARGE">松井 俊浩, 原 功, 中垣 博文(九州電力)</BIG></FONT>
+</P>
+<HR>
+
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html35"
+  HREF="jmanual-node1.html">Contents</A>
+<LI><A NAME="tex2html36"
+  HREF="jmanual-node2.html">EusLisp 基本</A>
+<UL>
+<LI><A NAME="tex2html37"
+  HREF="jmanual-node3.html">はじめに</A>
+<UL>
+<LI><A NAME="tex2html38"
+  HREF="jmanual-node3.html#SECTION02011000000000000000">EusLispにおけるオブジェクト指向プログラミング</A>
+<LI><A NAME="tex2html39"
+  HREF="jmanual-node3.html#SECTION02012000000000000000">Euslispの特徴</A>
+<LI><A NAME="tex2html40"
+  HREF="jmanual-node3.html#SECTION02013000000000000000">Common Lispとの互換性</A>
+<LI><A NAME="tex2html41"
+  HREF="jmanual-node3.html#SECTION02014000000000000000">開発履歴</A>
+<LI><A NAME="tex2html42"
+  HREF="jmanual-node3.html#SECTION02015000000000000000">インストール</A>
+<LI><A NAME="tex2html43"
+  HREF="jmanual-node3.html#SECTION02016000000000000000">ライセンス</A>
+<LI><A NAME="tex2html44"
+  HREF="jmanual-node3.html#SECTION02017000000000000000">デモプログラム</A>
+</UL>
+<LI><A NAME="tex2html45"
+  HREF="jmanual-node4.html">データ型</A>
+<UL>
+<LI><A NAME="tex2html46"
+  HREF="jmanual-node4.html#SECTION02021000000000000000">数値</A>
+<LI><A NAME="tex2html47"
+  HREF="jmanual-node4.html#SECTION02022000000000000000">オブジェクト</A>
+<LI><A NAME="tex2html48"
+  HREF="jmanual-node4.html#SECTION02023000000000000000">クラス継承</A>
+<LI><A NAME="tex2html49"
+  HREF="jmanual-node4.html#SECTION02024000000000000000">型指定</A>
+</UL>
+<LI><A NAME="tex2html50"
+  HREF="jmanual-node5.html">書式と評価</A>
+<UL>
+<LI><A NAME="tex2html51"
+  HREF="jmanual-node5.html#SECTION02031000000000000000">アトム(atom)</A>
+<LI><A NAME="tex2html52"
+  HREF="jmanual-node5.html#SECTION02032000000000000000">スコープ</A>
+<LI><A NAME="tex2html53"
+  HREF="jmanual-node5.html#SECTION02033000000000000000">一般化変数</A>
+<LI><A NAME="tex2html54"
+  HREF="jmanual-node5.html#SECTION02034000000000000000">特殊書式</A>
+<LI><A NAME="tex2html55"
+  HREF="jmanual-node5.html#SECTION02035000000000000000">マクロ</A>
+<LI><A NAME="tex2html56"
+  HREF="jmanual-node5.html#SECTION02036000000000000000">関数</A>
+</UL>
+<LI><A NAME="tex2html57"
+  HREF="jmanual-node6.html">制御構造</A>
+<UL>
+<LI><A NAME="tex2html58"
+  HREF="jmanual-node6.html#SECTION02041000000000000000">条件文</A>
+<LI><A NAME="tex2html59"
+  HREF="jmanual-node6.html#SECTION02042000000000000000">逐次実行とLet</A>
+<LI><A NAME="tex2html60"
+  HREF="jmanual-node6.html#SECTION02043000000000000000">ローカル関数</A>
+<LI><A NAME="tex2html61"
+  HREF="jmanual-node6.html#SECTION02044000000000000000">ブロックとExit</A>
+<LI><A NAME="tex2html62"
+  HREF="jmanual-node6.html#SECTION02045000000000000000">繰返し</A>
+<LI><A NAME="tex2html63"
+  HREF="jmanual-node6.html#SECTION02046000000000000000">述語</A>
+</UL>
+<LI><A NAME="tex2html64"
+  HREF="jmanual-node7.html">オブジェクト指向プログラミング</A>
+<UL>
+<LI><A NAME="tex2html65"
+  HREF="jmanual-node7.html#SECTION02051000000000000000">クラスとメソッド</A>
+<LI><A NAME="tex2html66"
+  HREF="jmanual-node7.html#SECTION02052000000000000000">メッセージ送信</A>
+<LI><A NAME="tex2html67"
+  HREF="jmanual-node7.html#SECTION02053000000000000000">インスタンス管理</A>
+<LI><A NAME="tex2html68"
+  HREF="jmanual-node7.html#SECTION02054000000000000000">基本クラス</A>
+</UL>
+<LI><A NAME="tex2html69"
+  HREF="jmanual-node8.html">数値演算</A>
+<UL>
+<LI><A NAME="tex2html70"
+  HREF="jmanual-node8.html#SECTION02061000000000000000">数値演算定数</A>
+<LI><A NAME="tex2html71"
+  HREF="jmanual-node8.html#SECTION02062000000000000000">比較演算関数</A>
+<LI><A NAME="tex2html72"
+  HREF="jmanual-node8.html#SECTION02063000000000000000">整数とビット毎の操作関数</A>
+<LI><A NAME="tex2html73"
+  HREF="jmanual-node8.html#SECTION02064000000000000000">一般数値関数</A>
+<LI><A NAME="tex2html74"
+  HREF="jmanual-node8.html#SECTION02065000000000000000">基本関数</A>
+<LI><A NAME="tex2html75"
+  HREF="jmanual-node8.html#SECTION02066000000000000000">拡張された数字</A>
+</UL>
+<LI><A NAME="tex2html76"
+  HREF="jmanual-node9.html">symbolとパッケージ</A>
+<UL>
+<LI><A NAME="tex2html77"
+  HREF="jmanual-node9.html#SECTION02071000000000000000">symbol</A>
+<LI><A NAME="tex2html78"
+  HREF="jmanual-node9.html#SECTION02072000000000000000">パッケージ</A>
+</UL>
+<LI><A NAME="tex2html79"
+  HREF="jmanual-node10.html">列、行列とテーブル</A>
+<UL>
+<LI><A NAME="tex2html80"
+  HREF="jmanual-node10.html#SECTION02081000000000000000">一般列</A>
+<LI><A NAME="tex2html81"
+  HREF="jmanual-node10.html#SECTION02082000000000000000">リスト</A>
+<LI><A NAME="tex2html82"
+  HREF="jmanual-node10.html#SECTION02083000000000000000">ベクトルと行列</A>
+<LI><A NAME="tex2html83"
+  HREF="jmanual-node10.html#SECTION02084000000000000000">文字と文字列</A>
+<LI><A NAME="tex2html84"
+  HREF="jmanual-node10.html#SECTION02085000000000000000">Foreign String</A>
+<LI><A NAME="tex2html85"
+  HREF="jmanual-node10.html#SECTION02086000000000000000">ハッシュテーブル</A>
+<LI><A NAME="tex2html86"
+  HREF="jmanual-node10.html#SECTION02087000000000000000">キュー</A>
+</UL>
+<LI><A NAME="tex2html87"
+  HREF="jmanual-node11.html">ストリームと入出力</A>
+<UL>
+<LI><A NAME="tex2html88"
+  HREF="jmanual-node11.html#SECTION02091000000000000000">ストリーム</A>
+<LI><A NAME="tex2html89"
+  HREF="jmanual-node11.html#SECTION02092000000000000000">リーダ(reader)</A>
+<LI><A NAME="tex2html90"
+  HREF="jmanual-node11.html#SECTION02093000000000000000">プリンタ(printer)</A>
+<LI><A NAME="tex2html91"
+  HREF="jmanual-node11.html#SECTION02094000000000000000">プロセス間通信とネットワーク</A>
+<LI><A NAME="tex2html92"
+  HREF="jmanual-node11.html#SECTION02095000000000000000">非同期入出力</A>
+<LI><A NAME="tex2html93"
+  HREF="jmanual-node11.html#SECTION02096000000000000000">パス名</A>
+<LI><A NAME="tex2html94"
+  HREF="jmanual-node11.html#SECTION02097000000000000000">ファイルシステムインターフェース</A>
+</UL>
+<LI><A NAME="tex2html95"
+  HREF="jmanual-node12.html">評価</A>
+<UL>
+<LI><A NAME="tex2html96"
+  HREF="jmanual-node12.html#SECTION020101000000000000000">評価関数</A>
+<LI><A NAME="tex2html97"
+  HREF="jmanual-node12.html#SECTION020102000000000000000">最上位レベルの対話</A>
+<LI><A NAME="tex2html98"
+  HREF="jmanual-node12.html#SECTION020103000000000000000">コンパイル</A>
+<LI><A NAME="tex2html99"
+  HREF="jmanual-node12.html#SECTION020104000000000000000">プログラムロード</A>
+<LI><A NAME="tex2html100"
+  HREF="jmanual-node12.html#SECTION020105000000000000000">デバッグ補助</A>
+<LI><A NAME="tex2html101"
+  HREF="jmanual-node12.html#SECTION020106000000000000000">ダンプオブジェクト</A>
+<LI><A NAME="tex2html102"
+  HREF="jmanual-node12.html#SECTION020107000000000000000">プロセスイメージ保存</A>
+<LI><A NAME="tex2html103"
+  HREF="jmanual-node12.html#SECTION020108000000000000000">最上位レベルのカスタマイズ</A>
+<LI><A NAME="tex2html104"
+  HREF="jmanual-node12.html#SECTION020109000000000000000">その他の関数</A>
+</UL>
+</UL>
+<BR>
+<LI><A NAME="tex2html105"
+  HREF="jmanual-node13.html">EusLisp 拡張</A>
+<UL>
+<LI><A NAME="tex2html106"
+  HREF="jmanual-node14.html">システム関数</A>
+<UL>
+<LI><A NAME="tex2html107"
+  HREF="jmanual-node14.html#SECTION03011000000000000000">メモリ管理</A>
+<LI><A NAME="tex2html108"
+  HREF="jmanual-node14.html#SECTION03012000000000000000">UNIXシステムコール</A>
+<LI><A NAME="tex2html109"
+  HREF="jmanual-node14.html#SECTION03013000000000000000">UNIXプロセス</A>
+<LI><A NAME="tex2html110"
+  HREF="jmanual-node14.html#SECTION03014000000000000000">Ｃで書かれたLisp関数の追加</A>
+<LI><A NAME="tex2html111"
+  HREF="jmanual-node14.html#SECTION03015000000000000000">他言語インターフェース</A>
+<LI><A NAME="tex2html112"
+  HREF="jmanual-node14.html#SECTION03016000000000000000">VxWorks</A>
+</UL>
+<LI><A NAME="tex2html113"
+  HREF="jmanual-node15.html">マルチスレッド</A>
+<UL>
+<LI><A NAME="tex2html114"
+  HREF="jmanual-node15.html#SECTION03021000000000000000">マルチスレッドEuslispの設計</A>
+<LI><A NAME="tex2html115"
+  HREF="jmanual-node15.html#SECTION03022000000000000000">非同期プログラミングと並列プログラミングの構築</A>
+<LI><A NAME="tex2html116"
+  HREF="jmanual-node15.html#SECTION03023000000000000000">並列度の計測</A>
+<LI><A NAME="tex2html117"
+  HREF="jmanual-node15.html#SECTION03024000000000000000">スレッド生成</A>
+<LI><A NAME="tex2html118"
+  HREF="jmanual-node15.html#SECTION03025000000000000000">同期</A>
+</UL>
+<LI><A NAME="tex2html119"
+  HREF="jmanual-node16.html">幾何学関数</A>
+<UL>
+<LI><A NAME="tex2html120"
+  HREF="jmanual-node16.html#SECTION03031000000000000000">実数ベクトル(float-vector)</A>
+<LI><A NAME="tex2html121"
+  HREF="jmanual-node16.html#SECTION03032000000000000000">行列と変換</A>
+<LI><A NAME="tex2html122"
+  HREF="jmanual-node16.html#SECTION03033000000000000000">LU分解</A>
+<LI><A NAME="tex2html123"
+  HREF="jmanual-node16.html#SECTION03034000000000000000">座標系</A>
+<LI><A NAME="tex2html124"
+  HREF="jmanual-node16.html#SECTION03035000000000000000">連結座標系</A>
+<LI><A NAME="tex2html125"
+  HREF="jmanual-node16.html#SECTION03036000000000000000">変換行列とcoordinates classとの関係</A>
+</UL>
+<LI><A NAME="tex2html126"
+  HREF="jmanual-node17.html">幾何学モデリング</A>
+<UL>
+<LI><A NAME="tex2html127"
+  HREF="jmanual-node17.html#SECTION03041000000000000000">種々の幾何学関数</A>
+<LI><A NAME="tex2html128"
+  HREF="jmanual-node17.html#SECTION03042000000000000000">線とエッジ</A>
+<LI><A NAME="tex2html129"
+  HREF="jmanual-node17.html#SECTION03043000000000000000">平面と面</A>
+<LI><A NAME="tex2html130"
+  HREF="jmanual-node17.html#SECTION03044000000000000000">立体(body)</A>
+<LI><A NAME="tex2html131"
+  HREF="jmanual-node17.html#SECTION03045000000000000000">基本bodyの作成関数</A>
+<LI><A NAME="tex2html132"
+  HREF="jmanual-node17.html#SECTION03046000000000000000">bodyの合成関数</A>
+<LI><A NAME="tex2html133"
+  HREF="jmanual-node17.html#SECTION03047000000000000000">座標軸</A>
+<LI><A NAME="tex2html134"
+  HREF="jmanual-node17.html#SECTION03048000000000000000">立体の接触状態解析</A>
+<LI><A NAME="tex2html135"
+  HREF="jmanual-node17.html#SECTION03049000000000000000">多角形のVoronoi Diagram</A>
+</UL>
+<LI><A NAME="tex2html136"
+  HREF="jmanual-node18.html">視界とグラフィックス</A>
+<UL>
+<LI><A NAME="tex2html137"
+  HREF="jmanual-node18.html#SECTION03051000000000000000">視界(viewing)</A>
+<LI><A NAME="tex2html138"
+  HREF="jmanual-node18.html#SECTION03052000000000000000">投影</A>
+<LI><A NAME="tex2html139"
+  HREF="jmanual-node18.html#SECTION03053000000000000000">Viewport</A>
+<LI><A NAME="tex2html140"
+  HREF="jmanual-node18.html#SECTION03054000000000000000">Viewer</A>
+<LI><A NAME="tex2html141"
+  HREF="jmanual-node18.html#SECTION03055000000000000000">描画</A>
+<LI><A NAME="tex2html142"
+  HREF="jmanual-node18.html#SECTION03056000000000000000">アニメーション</A>
+</UL>
+<LI><A NAME="tex2html143"
+  HREF="jmanual-node19.html">Xwindow インターフェース</A>
+<UL>
+<LI><A NAME="tex2html144"
+  HREF="jmanual-node19.html#SECTION03061000000000000000">Xlibのグローバル変数とその他関数</A>
+<LI><A NAME="tex2html145"
+  HREF="jmanual-node19.html#SECTION03062000000000000000">Xwindow</A>
+<LI><A NAME="tex2html146"
+  HREF="jmanual-node19.html#SECTION03063000000000000000">Graphic Context</A>
+<LI><A NAME="tex2html147"
+  HREF="jmanual-node19.html#SECTION03064000000000000000">色とカラーマップ</A>
+</UL>
+<LI><A NAME="tex2html148"
+  HREF="jmanual-node20.html">XToolKit</A>
+<UL>
+<LI><A NAME="tex2html149"
+  HREF="jmanual-node20.html#SECTION03071000000000000000">Xイベント</A>
+<LI><A NAME="tex2html150"
+  HREF="jmanual-node20.html#SECTION03072000000000000000">パネル</A>
+<LI><A NAME="tex2html151"
+  HREF="jmanual-node20.html#SECTION03073000000000000000">パネルアイテム</A>
+<LI><A NAME="tex2html152"
+  HREF="jmanual-node20.html#SECTION03074000000000000000">キャンバス</A>
+<LI><A NAME="tex2html153"
+  HREF="jmanual-node20.html#SECTION03075000000000000000">テキストwindow</A>
+</UL>
+<LI><A NAME="tex2html154"
+  HREF="jmanual-node21.html">画像処理</A>
+<UL>
+<LI><A NAME="tex2html155"
+  HREF="jmanual-node21.html#SECTION03081000000000000000">ルックアップテーブル (LUT)</A>
+<LI><A NAME="tex2html156"
+  HREF="jmanual-node21.html#SECTION03082000000000000000">ピクセル画像</A>
+<LI><A NAME="tex2html157"
+  HREF="jmanual-node21.html#SECTION03083000000000000000">カラーピクセル画像</A>
+<LI><A NAME="tex2html158"
+  HREF="jmanual-node21.html#SECTION03084000000000000000">エッジ抽出</A>
+<LI><A NAME="tex2html159"
+  HREF="jmanual-node21.html#SECTION03085000000000000000">トラッキング</A>
+<LI><A NAME="tex2html160"
+  HREF="jmanual-node21.html#SECTION03086000000000000000">画像ファイル入出力</A>
+</UL>
+<LI><A NAME="tex2html161"
+  HREF="jmanual-node22.html">マニピュレータ</A>
+<UL>
+<LI><A NAME="tex2html162"
+  HREF="jmanual-node22.html#SECTION03091000000000000000">関節のモデル</A>
+<LI><A NAME="tex2html163"
+  HREF="jmanual-node22.html#SECTION03092000000000000000">多関節マニピュレータ</A>
+</UL>
+<LI><A NAME="tex2html164"
+  HREF="jmanual-node23.html">MARS: マルチ自律ロボットシミュレータ</A>
+<UL>
+<LI><A NAME="tex2html165"
+  HREF="jmanual-node23.html#SECTION030101000000000000000">始め方</A>
+<LI><A NAME="tex2html166"
+  HREF="jmanual-node23.html#SECTION030102000000000000000">システム概要</A>
+</UL>
+</UL>
+<BR>
+<LI><A NAME="tex2html167"
+  HREF="jmanual-node24.html">Bibliography</A>
+<LI><A NAME="tex2html168"
+  HREF="jmanual-node25.html">Index</A>
+<LI><A NAME="tex2html169"
+  HREF="jmanual-node26.html">About this document ...</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+This document was generated using the LaTeX2HTML translator on Fri Feb 21 21:08:42 JST 2020 from <a href="http://github.com/euslisp/EusLisp.git">EusLisp</a> version <a href="http://github.com/euslisp/EusLisp/commit/40051e5c92167535141b4985db384a7516d89b4f">40051e5c update to 9.27 (with changelog in (j)intro.tex, euslisp.hlp, (j)manual.{tex/pdf/dvi} (#421)</a>
+</ADDRESS>
+</BODY>
+</HTML>

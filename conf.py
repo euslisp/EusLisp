@@ -27,7 +27,7 @@ sh("export CURDIR=`pwd`; cd ../jlatex/; LATEX2HTMLDIR=$CURDIR/tmp/usr/share/late
 
 # copy result to docs and _build/html
 sh("cd ../../; ln -sf doc/html docs")
-sh("cp * _build/html/; echo 'ok'")
+sh("mkdir -p _build/html; cp * _build/html/; echo 'ok'")
 
 # custom settings conf.py
 master_doc = 'index'

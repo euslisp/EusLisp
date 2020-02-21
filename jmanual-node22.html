@@ -1,10 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
 
-<!--Converted with LaTeX2HTML 2008 (1.71)
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
 <HTML>
 <HEAD>
 <TITLE>マニピュレータ</TITLE>
@@ -13,7 +9,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="manual.css">
@@ -28,11 +25,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html896"
+<B> Next:</B> <A NAME="tex2html900"
   HREF="jmanual-node23.html">MARS: マルチ自律ロボットシミュレータ</A>
-<B>Up:</B> <A NAME="tex2html890"
+<B>Up:</B> <A NAME="tex2html894"
   HREF="jmanual-node13.html">EusLisp 拡張</A>
-<B> Previous:</B> <A NAME="tex2html884"
+<B> Previous:</B> <A NAME="tex2html888"
   HREF="jmanual-node21.html">画像処理</A>
 <BR> <P>
 </DIV>
@@ -41,9 +38,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html897"
+<LI><A NAME="tex2html901"
   HREF="jmanual-node22.html#SECTION03091000000000000000">関節のモデル</A>
-<LI><A NAME="tex2html898"
+<LI><A NAME="tex2html902"
   HREF="jmanual-node22.html#SECTION03092000000000000000">多関節マニピュレータ</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -87,16 +84,17 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <P>
 
  <BR>
-<BR> <A NAME="52113"></A>
+<BR> <A NAME="53876"></A>
 <PRE><TT>
-<B>defjoint</B> <I>joint-name &amp;key :shape  <I>body-object</I> [マクロ]
+<B>defjoint</B>   [マクロ] 
+<BR><I>joint-name &amp;key :shape  <I>body-object</I> 
 <BR>:color 		 <I>color-id</I>   ;0-15 for MMD 
 <BR>:parent 		 <I>parent-joint</I> 
 <BR>:axis 		 <I>rotational-axis</I> 		  ; :x, :y or :z 
 <BR>:offset 		 <I>trans-from-parent-joint</I> 
 <BR>:low-limit 		 <I>joint-angle-limit-low</I> 
-<BR>:high-limit 		 <I>joint-angle-limit-hight</I></I>
-</TT></PRE>
+<BR>:high-limit 		 <I>joint-angle-limit-hight</I>
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
@@ -121,9 +119,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <P>
 
  <BR>
-<BR> <A NAME="52133"></A>
+<BR> <A NAME="53897"></A>
 <PRE><TT>
-<B>defmanipulator</B> <I>manipulator-name &amp;key :class   <I>manipulator-class</I> [マクロ]
+<B>defmanipulator</B>   [マクロ] 
+<BR><I>manipulator-name &amp;key 
+<BR>:class   <I>manipulator-class</I> 
 <BR>:base 		 <I>base-joint</I> 
 <BR>:joints 		  <I>list-of-all-joints</I> 
 <BR>:hand 		 <I>handjoint</I> 
@@ -132,8 +132,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BR>:handcoords 		 <I>trans-from-hand-to-armsolcoords</I>
 <BR>:toolcoords 		 <I>trans-from-armsolcoords-to-toolcoords</I> 
 <BR>:open-direction 		 <I>finger-open-direction</I>
-<BR>:right-handed 		 <I>righty-or-lefty</I></I>
-</TT></PRE>
+<BR>:right-handed 		 <I>righty-or-lefty</I>
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
@@ -145,8 +145,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 	<BR> 
-<A NAME="52156"></A>
-<BIG CLASS="XLARGE"><B>rotational-joint </B></BIG> [クラス]  <PRE><TT>
+<A NAME="53921"></A>
+<BIG CLASS="LARGE"><B>rotational-joint </B></BIG> [クラス]  <PRE><TT>
   :super   <B>body</B> 
 <BR>  :slots 		 (axis offset high-limit low-limit) 
 </TT></PRE>
@@ -163,16 +163,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <P>
 	<BR> 
-<A NAME="52174"></A>
-<BIG CLASS="XLARGE"><B>manipulator </B></BIG> [クラス]  <PRE><TT>
+<A NAME="53939"></A>
+<BIG CLASS="LARGE"><B>manipulator </B></BIG> [クラス]  <PRE><TT>
   :super   <B>cascaded-coords</B> 
-<BR>  :slots 		 (base baseinverse joint angles right-handed hand handcoords
+<BR>  :slots 		 (base baseinverse joint
 <BR>
-right-finger left-finger openvec max-span
+angles right-handed hand handcoords right-finger left-finger
 <BR>
-toolcoords toolinverse armsolcoords toolinverse armsocoords
+openvec max-span toolcoords toolinverse armsolcoords
 <BR>
-approach grasp affix) 
+toolinverse armsocoords approach grasp affix) 
 </TT></PRE>
 <BR>
 <BR>
@@ -187,22 +187,23 @@ approach grasp affix)
 
 <P>
 
-<A NAME="52191"></A>
+<A NAME="53956"></A>
 <B>:newcoords</B> <EM>newrot &amp;optional newpos </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD>  
 関節角度が限度に収まっていれば座標系を
-<EM>newrot</EM>と<EM>newpos</EM>に更新する 
-
+<EM>newrot</EM>と<EM>newpos</EM>に更新する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52203"></A>
-<B>:armsolcoords </B> [メソッド]
+<P>
+
+<A NAME="53968"></A>
+<B>:armsolcoords</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
@@ -214,60 +215,66 @@ approach grasp affix)
 <BR>
 <BR>
 
-<A NAME="52213"></A>
+<P>
+
+<A NAME="53978"></A>
 <B>:tool</B> <EM>&amp;rest msg </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 工具座標系を返す、または変更する
-
+工具座標系を返す、または変更する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52223"></A>
+<P>
+
+<A NAME="53988"></A>
 <B>:set-tool</B> <EM>newtool &amp;optional offset copy </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 工具座標系<TT>toolcoords</TT>に<EM>newtool</EM>を設定する
-
+工具座標系<TT>toolcoords</TT>に<EM>newtool</EM>を設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52235"></A>
-<B>:reset-tool </B> [メソッド]
+<P>
+
+<A NAME="54000"></A>
+<B>:reset-tool</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 工具座標系を初期値に戻す
-
+工具座標系を初期値に戻す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52245"></A>
-<B>:worldcoords </B> [メソッド]
+<P>
+
+<A NAME="54010"></A>
+<B>:worldcoords</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 工具座標系の位置ベクトル、回転行列、座標系のワールド表現を求める
-
+工具座標系の位置ベクトル、回転行列、座標系のワールド表現を求める。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52255"></A>
-<B>:set-coords </B> [メソッド]
+<P>
+
+<A NAME="54020"></A>
+<B>:set-coords</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
@@ -279,104 +286,155 @@ approach grasp affix)
 <BR>
 <BR>
 
-<A NAME="52265"></A>
-<B>:config </B> <EM>&amp;optional (a newangles) </EM>[メソッド]
+<P>
+
+<A NAME="54030"></A>
+<B>:config</B> <EM>&amp;optional (a newangles) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 6つの関節角度を直接に設定する
-
+6つの関節角度を直接に設定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52275"></A>
-<B>:park </B> [メソッド]
+<P>
+
+<A NAME="54040"></A>
+<B>:park</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 初期姿勢に戻す
-
+初期姿勢に戻す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52285"></A>
+<P>
+
+<A NAME="54050"></A>
 <B>:hand</B> <EM>&amp;optional (h nil) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- ハンドオブジェクトを返す
-
+ハンドオブジェクトを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52295"></A>
+<P>
+
+<A NAME="54060"></A>
 <B>:handcoords</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- ハンド座標系の位置ベクトル、回転行列、座標系のワールド表現を求める
-
+ハンド座標系の位置ベクトル、回転行列、座標系のワールド表現を求める。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52305"></A>
+<P>
+
+<A NAME="54070"></A>
 <B>:span</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 現在の指の間隔を返す
-
+現在の指の間隔を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52315"></A>
+<P>
+
+<A NAME="54080"></A>
 <B>:open-fingers</B> <EM>s &amp;optional abs &amp;aux (current (send self :span)) </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 指幅を相対的、絶対的に指定する
-
+指幅を相対的、絶対的に指定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52325"></A>
+<P>
+
+<A NAME="54090"></A>
 <B>:close-fingers</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 指を完全に閉じる 
-
+指を完全に閉じる。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52335"></A>
+<P>
+
+<A NAME="54100"></A>
 <B>:angles</B> <EM>&amp;optional flag </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 現在の姿勢の関節角度のリストを返す
+現在の姿勢の関節角度のリストを返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="54110"></A>
+<B>:get-approach</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+現在アプローチしている対象を返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="54120"></A>
+<B>:set-approach</B> <EM>a </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+アプローチ対象<I>a</I>を設定する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="54131"></A>
+<B>:get-grasp</B> [メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+(:get-grasp () grasp-config)
 
 </DD>
 </DL>
@@ -385,59 +443,35 @@ approach grasp affix)
 
 <P>
 
-<A NAME="52345"></A>
-<B>:get-approach </B> [メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
- 現在アプローチしている対象を返す
-
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="52355"></A>
-<B>:set-approach </B> <EM>a </EM>[メソッド]
-
-<DL COMPACT>
-<DT> 
-<DD> 
- アプローチ対象<I>a</I>を設定する
-
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="52366"></A>
+<A NAME="54141"></A>
 <B>:set-grasp</B> <EM>g </EM>[メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 把握対象物<I>g</I>を指定する
-
+把握対象物<I>g</I>を指定する。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52377"></A>
+<P>
+
+<A NAME="54152"></A>
 <B>:get-affix</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
 <DD> 
- 把握している物体を返す
-
+把握している物体を返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="52387"></A>
+<P>
+
+<A NAME="54162"></A>
 <B>:affix</B> <EM>&amp;optional (grasp) </EM>[メソッド]
 
 <DL COMPACT>
@@ -451,7 +485,9 @@ approach grasp affix)
 <BR>
 <BR>
 
-<A NAME="52401"></A>
+<P>
+
+<A NAME="54176"></A>
 <B>:unfix</B> <EM>&amp;optional (margin 10.0) </EM>[メソッド]
 
 <DL COMPACT>
@@ -465,30 +501,33 @@ approach grasp affix)
 <BR>
 <BR>
 
-<A NAME="52414"></A>
+<P>
+
+<A NAME="54189"></A>
 <PRE><TT>
-<B>:create</B> <I>&amp;rest args [メソッド]
-<BR>&amp;key (:name nm) (:hand h) (:joints j)
-<BR>(:left-finger lf) (:right-finger rf)
-<BR>((:toolcoords tc) (make-coords))
-<BR>((:handcoords hc) (make-coords))
-<BR>((:base bs) (make-cascoords))
+<B>:create</B>   [メソッド] 
+<BR><I>&amp;rest args 
+<BR>&amp;key (name nm) (hand h) (joints j)
+<BR>(left-finger lf) (right-finger rf)
+<BR>((toolcoords tc) (make-coords))
+<BR>((handcoords hc) (make-coords))
+<BR>((base bs) (make-cascoords))
 <BR>(open-direction (floatvector 0 1 0))
-<BR>((:max-span mspan) 100.0)
-<BR>((:lefty lft) t)
-<BR>((:act a) nil)
-<BR>&amp;allow-other-keys</I>
-</TT></PRE>
+<BR>((max-span mspan) 100.0)
+<BR>((lefty lft) t)
+<BR>((act a) nil)
+<BR>&amp;allow-other-keys
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
-<DD>新しいマニピュレータオブジェクトを作成、初期化する
-
+<DD>新しいマニピュレータオブジェクトを作成、初期化する。
 </DD>
 </DL>
 <BR>
 <BR>
 
+<P>
              <P>
 <B>manipulator</B>オブジェクトは、
 <B>base、joints(J1...J6)、handcoords、toolcoords</B>
@@ -533,10 +572,10 @@ approach grasp affix)
 に示す。
 ワールドから手先への変換を<SPAN CLASS="MATH"><IMG
  WIDTH="14" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img110.png"
+ SRC="jmanual-img114.png"
  ALT="$ T$"></SPAN>とすると、<SPAN CLASS="MATH"><IMG
  WIDTH="14" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img110.png"
+ SRC="jmanual-img114.png"
  ALT="$ T$"></SPAN>および各部分変換は次のようにし
 て得られる。
 
@@ -562,7 +601,7 @@ T_{h} & = handcoords \\
  -->
 <SPAN CLASS="MATH"><IMG
  WIDTH="376" HEIGHT="208" BORDER="0"
- SRC="jmanual-img111.png"
+ SRC="jmanual-img115.png"
  ALT="\begin{displaymath}
 \begin{array}{ll}
 T &amp; = base \cdot J1 \cdot J2 \cdot \ldots ...
@@ -573,12 +612,12 @@ T &amp; = base \cdot J1 \cdot J2 \cdot \ldots ...
 <P>
 ここで、<SPAN CLASS="MATH"><IMG
  WIDTH="14" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img110.png"
+ SRC="jmanual-img114.png"
  ALT="$ T$"></SPAN>はワールド座標系から工具座標系まで変換する。
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="JointCoords"></A><A NAME="52110"></A>
+<DIV ALIGN="CENTER"><A NAME="JointCoords"></A><A NAME="53873"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 20:</STRONG>
 relation between coordinate systems in a manipulator</CAPTION>
@@ -586,7 +625,7 @@ relation between coordinate systems in a manipulator</CAPTION>
 <DIV ALIGN="CENTER">
 <IMG
  WIDTH="454" HEIGHT="442" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img112.png"
+ SRC="jmanual-img116.png"
  ALT="\includegraphics[height=100mm]{fig/eta3coords.ps}">
 
 </DIV>
@@ -643,17 +682,16 @@ EusLisp 7.27 with Xlib created on Thu Sep 17 14:33:30 1992
 
 <DIV CLASS="navigation"><HR>
 <BR>
-<B> Next:</B> <A NAME="tex2html896"
+<B> Next:</B> <A NAME="tex2html900"
   HREF="jmanual-node23.html">MARS: マルチ自律ロボットシミュレータ</A>
-<B>Up:</B> <A NAME="tex2html890"
+<B>Up:</B> <A NAME="tex2html894"
   HREF="jmanual-node13.html">EusLisp 拡張</A>
-<B> Previous:</B> <A NAME="tex2html884"
+<B> Previous:</B> <A NAME="tex2html888"
   HREF="jmanual-node21.html">画像処理</A>
 </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-Travis CI User
-2017-03-07
+This document was generated using the LaTeX2HTML translator on Fri Feb 21 21:08:42 JST 2020 from <a href="http://github.com/euslisp/EusLisp.git">EusLisp</a> version <a href="http://github.com/euslisp/EusLisp/commit/40051e5c92167535141b4985db384a7516d89b4f">40051e5c update to 9.27 (with changelog in (j)intro.tex, euslisp.hlp, (j)manual.{tex/pdf/dvi} (#421)</a>
 </ADDRESS>
 </BODY>
 </HTML>

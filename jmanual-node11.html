@@ -1,10 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
 
-<!--Converted with LaTeX2HTML 2008 (1.71)
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
 <HTML>
 <HEAD>
 <TITLE>ストリームと入出力</TITLE>
@@ -13,7 +9,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="manual.css">
@@ -28,11 +25,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html565"
+<B> Next:</B> <A NAME="tex2html569"
   HREF="jmanual-node12.html">評価</A>
-<B>Up:</B> <A NAME="tex2html559"
+<B>Up:</B> <A NAME="tex2html563"
   HREF="jmanual-node2.html">EusLisp 基本</A>
-<B> Previous:</B> <A NAME="tex2html553"
+<B> Previous:</B> <A NAME="tex2html557"
   HREF="jmanual-node10.html">列、行列とテーブル</A>
 <BR> <P>
 </DIV>
@@ -41,28 +38,28 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html566"
+<LI><A NAME="tex2html570"
   HREF="jmanual-node11.html#SECTION02091000000000000000">ストリーム</A>
-<LI><A NAME="tex2html567"
+<LI><A NAME="tex2html571"
   HREF="jmanual-node11.html#SECTION02092000000000000000">リーダ(reader)</A>
-<LI><A NAME="tex2html568"
+<LI><A NAME="tex2html572"
   HREF="jmanual-node11.html#SECTION02093000000000000000">プリンタ(printer)</A>
-<LI><A NAME="tex2html569"
+<LI><A NAME="tex2html573"
   HREF="jmanual-node11.html#SECTION02094000000000000000">プロセス間通信とネットワーク</A>
 <UL>
-<LI><A NAME="tex2html570"
+<LI><A NAME="tex2html574"
   HREF="jmanual-node11.html#SECTION02094100000000000000">共有メモリ</A>
-<LI><A NAME="tex2html571"
+<LI><A NAME="tex2html575"
   HREF="jmanual-node11.html#SECTION02094200000000000000">メッセージキューとFIFO</A>
-<LI><A NAME="tex2html572"
+<LI><A NAME="tex2html576"
   HREF="jmanual-node11.html#SECTION02094300000000000000">ソケット</A>
 </UL>
 <BR>
-<LI><A NAME="tex2html573"
+<LI><A NAME="tex2html577"
   HREF="jmanual-node11.html#SECTION02095000000000000000">非同期入出力</A>
-<LI><A NAME="tex2html574"
+<LI><A NAME="tex2html578"
   HREF="jmanual-node11.html#SECTION02096000000000000000">パス名</A>
-<LI><A NAME="tex2html575"
+<LI><A NAME="tex2html579"
   HREF="jmanual-node11.html#SECTION02097000000000000000">ファイルシステムインターフェース</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -104,7 +101,7 @@ echo-streamとconcatenated-streamは利用できない。
  <BR>
 <BR> <P>
 
-<A NAME="15469"></A>
+<A NAME="15887"></A>
 <B>streamp</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
@@ -117,7 +114,9 @@ echo-streamとconcatenated-streamは利用できない。
 <BR>
 <BR>
 
-<A NAME="15482"></A>
+<P>
+
+<A NAME="15900"></A>
 <B>input-stream-p</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
@@ -129,7 +128,9 @@ echo-streamとconcatenated-streamは利用できない。
 <BR>
 <BR>
 
-<A NAME="15493"></A>
+<P>
+
+<A NAME="15911"></A>
 <B>output-stream-p</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
@@ -141,7 +142,9 @@ echo-streamとconcatenated-streamは利用できない。
 <BR>
 <BR>
 
-<A NAME="15504"></A>
+<P>
+
+<A NAME="15922"></A>
 <B>io-stream-p</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
@@ -155,15 +158,15 @@ echo-streamとconcatenated-streamは利用できない。
 
 <P>
 
-<A NAME="15515"></A>
+<A NAME="15933"></A>
 <PRE><TT>
-<B>open</B> <I>path &amp;key :direction :input [関数]
-<BR>:if-exists :new-version 
-<BR>:if-does-not-exist 
-<BR>:permission #o644 
-<BR>:buffer-size 512
-<BR></I>
-</TT></PRE>
+<B>open</B>   [関数] 
+<BR><I>path &amp;key (direction :input) 
+<BR>(if-exists :new-version) 
+<BR>(if-does-not-exist 'default) 
+<BR>(permission #o644) 
+<BR>(buffer-size 512)
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
@@ -192,8 +195,8 @@ SunOS4は、同時に60ファイルのオープンを許可している。
 
 <P>
 
-<A NAME="15549"></A>
-<B>with-open-file</B> <EM>(svar path . open-options) &amp;rest forms </EM>[マクロ]
+<A NAME="15968"></A>
+<B>with-open-file</B> <EM>(svar path &amp;rest open-options) &amp;rest forms </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
@@ -213,7 +216,7 @@ SunOS4は、同時に60ファイルのオープンを許可している。
 
 <P>
 
-<A NAME="15569"></A>
+<A NAME="15988"></A>
 <B>close</B> <EM>stream </EM>[関数]
 
 <DL COMPACT>
@@ -230,7 +233,7 @@ SunOS4は、同時に60ファイルのオープンを許可している。
 
 <P>
 
-<A NAME="15581"></A>
+<A NAME="16000"></A>
 <B>make-string-input-stream</B> <EM>string </EM>[関数]
 
 <DL COMPACT>
@@ -244,8 +247,8 @@ SunOS4は、同時に60ファイルのオープンを許可している。
 
 <P>
 
-<A NAME="15592"></A>
-<B>make-string-output-stream</B> <EM>size </EM>[関数]
+<A NAME="16011"></A>
+<B>make-string-output-stream</B> <EM>&amp;optional size </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -260,7 +263,7 @@ SunOS4は、同時に60ファイルのオープンを許可している。
 
 <P>
 
-<A NAME="15604"></A>
+<A NAME="16023"></A>
 <B>get-output-stream-string</B> <EM>string-stream </EM>[関数]
 
 <DL COMPACT>
@@ -274,7 +277,7 @@ SunOS4は、同時に60ファイルのオープンを許可している。
 
 <P>
 
-<A NAME="15615"></A>
+<A NAME="16034"></A>
 <B>make-broadcast-stream</B> <EM>&amp;rest output-streams </EM>[関数]
 
 <DL COMPACT>
@@ -333,11 +336,11 @@ Readerのデフォルトマクロ文字は：
  -->
 <SPAN CLASS="MATH"><IMG
  WIDTH="10" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img29.png"
+ SRC="jmanual-img31.png"
  ALT="$ \backslash$"></SPAN></B>   単一文字エスケープ
 <BR><B><SPAN CLASS="MATH"><IMG
  WIDTH="24" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img30.png"
+ SRC="jmanual-img32.png"
  ALT="$ \vert...\vert$"></SPAN></B> 		  多重文字エスケープ
 <BR>
 </TT></PRE>
@@ -350,17 +353,17 @@ Readerのデフォルトマクロ文字は：
 エスケープは、それらを区別するのに必要である。
 '<SPAN CLASS="MATH"><IMG
  WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
+ SRC="jmanual-img6.png"
  ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN>ABC<SPAN CLASS="MATH"><IMG
  WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
+ SRC="jmanual-img6.png"
  ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN>, 'ABCと'abcは同一であるが、
 '<SPAN CLASS="MATH"><IMG
  WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
+ SRC="jmanual-img6.png"
  ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN>abc<SPAN CLASS="MATH"><IMG
  WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
+ SRC="jmanual-img6.png"
  ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN>と'abcは違うsymbolである。
 デフォルトとして、大文字のsymbolを入力したときでさえ、
 そのsymbolを表示するときは
@@ -374,7 +377,7 @@ EusLispのプリンタが内部の大文字表現から小文字に変換する�
 ':'がパッケージマーカーとして予約されているので、
 '<SPAN CLASS="MATH"><IMG
  WIDTH="71" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img32.png"
+ SRC="jmanual-img34.png"
  ALT="$ \vert g:pcube\vert$"></SPAN>のようにsymbolを構成するものとして使うとき、エスケープ化しなければ
 ならない。
 この制限は、文字':'の構文により強制されないが、
@@ -403,10 +406,10 @@ Cの様な関数呼出や行列参照も、lisp形式に変換される。
 相対表現や割り当てもまた、正しく扱われる。
 それで、<TT>%(a <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="22" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img6.png"
+ SRC="jmanual-img7.png"
  ALT="$ &lt;$"></SPAN> b)</TT>は<TT>(<SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="22" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img6.png"
+ SRC="jmanual-img7.png"
  ALT="$ &lt;$"></SPAN> a b)</TT>に変換され、
 <TT>%(a[0] = b[0] * c[0])</TT>は 
 <TT>(setf (aref a 0) (* (aref b 0) (aref c 0)))</TT>として得られる。
@@ -479,7 +482,7 @@ Cの様な関数呼出や行列参照も、lisp形式に変換される。
  -->
 <SPAN CLASS="MATH"><IMG
  WIDTH="10" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img29.png"
+ SRC="jmanual-img31.png"
  ALT="$ \backslash$"></SPAN></TT></STRONG></DT>
 <DD>文字
 </DD>
@@ -500,10 +503,10 @@ Cの様な関数呼出や行列参照も、lisp形式に変換される。
 </DD>
 <DT><STRONG><TT>#<SPAN CLASS="MATH"><IMG
  WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
+ SRC="jmanual-img6.png"
  ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN>...<SPAN CLASS="MATH"><IMG
  WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
+ SRC="jmanual-img6.png"
  ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN>#</TT></STRONG></DT>
 <DD>コメント; 入れ子可能
 </DD>
@@ -537,7 +540,7 @@ eofの発生を知りたかったり、snatch controlにシステムエラーを
  <BR>
 <BR> <P>
 
-<A NAME="15626"></A>
+<A NAME="16045"></A>
 <B>read</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) recursive-p </EM>[関数]
 
 <DL COMPACT>
@@ -551,7 +554,7 @@ s表現を1つ読み込む。
 
 <P>
 
-<A NAME="15636"></A>
+<A NAME="16055"></A>
 <B>read-delimited-list</B> <EM>delim-char &amp;optional stream recursive-p </EM>[関数]
 
 <DL COMPACT>
@@ -564,7 +567,7 @@ s表現を1つ読み込む。
  -->
 <SPAN CLASS="MATH"><IMG
  WIDTH="10" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img29.png"
+ SRC="jmanual-img31.png"
  ALT="$ \backslash$"></SPAN>]</TT>のような特殊文字で終る数列を読むために役立つ。
 </DD>
 </DL>
@@ -573,7 +576,7 @@ s表現を1つ読み込む。
 
 <P>
 
-<A NAME="15648"></A>
+<A NAME="16067"></A>
 <B>read-line</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[関数]
 
 <DL COMPACT>
@@ -584,7 +587,7 @@ s表現を1つ読み込む。
  -->
 <SPAN CLASS="MATH"><IMG
  WIDTH="10" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img29.png"
+ SRC="jmanual-img31.png"
  ALT="$ \backslash$"></SPAN>newline</TT>(改行)で終了する1行を読み込む。
 返された文字列には、最後の改行文字を含まない。
 </DD>
@@ -594,7 +597,7 @@ s表現を1つ読み込む。
 
 <P>
 
-<A NAME="15659"></A>
+<A NAME="16078"></A>
 <B>read-char</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[関数]
 
 <DL COMPACT>
@@ -608,7 +611,7 @@ s表現を1つ読み込む。
 
 <P>
 
-<A NAME="15669"></A>
+<A NAME="16088"></A>
 <B>read-from-string</B> <EM>string &amp;optional (eof-error-p t) (eof-value nil) </EM>[関数]
 
 <DL COMPACT>
@@ -625,7 +628,7 @@ s表現を1つ読み込む。
 
 <P>
 
-<A NAME="15682"></A>
+<A NAME="16101"></A>
 <B>unread-char</B> <EM>char &amp;optional stream </EM>[関数]
 
 <DL COMPACT>
@@ -640,7 +643,7 @@ s表現を1つ読み込む。
 
 <P>
 
-<A NAME="15694"></A>
+<A NAME="16113"></A>
 <B>peek-char</B> <EM>&amp;optional stream (eof-error-p t) (eof-value nil) </EM>[関数]
 
 <DL COMPACT>
@@ -656,14 +659,14 @@ s表現を1つ読み込む。
 
 <P>
 
-<A NAME="15708"></A>
+<A NAME="16127"></A>
 <B>y-or-n-p</B> <EM>&amp;optional format-string &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>format-string</EM>と<EM>args</EM>を画面に表示して、``yかnか''を尋ねる。
-答えが``y''または``n''で始まらない場合、質問を繰り返す。
+<EM>format-string</EM>と<EM>args</EM>を画面に表示して、&ldquo;yかnか&rdquo;を尋ねる。
+答えが&ldquo;y&rdquo;または&ldquo;n&rdquo;で始まらない場合、質問を繰り返す。
 yならTそしてnならNILを返す。 それ以外は起こらない。
 </DD>
 </DL>
@@ -672,14 +675,14 @@ yならTそしてnならNILを返す。 それ以外は起こらない。
 
 <P>
 
-<A NAME="15720"></A>
+<A NAME="16139"></A>
 <B>yes-or-no-p</B> <EM>&amp;optional stream </EM>[関数]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>format-string</EM>と<EM>args</EM>を画面に表示して、``yesかnoか''を尋ねる。
-答えが``yes''または``no''でない場合、質問を繰り返す。
+<EM>format-string</EM>と<EM>args</EM>を画面に表示して、&ldquo;yesかnoか&rdquo;を尋ねる。
+答えが&ldquo;yes&rdquo;または&ldquo;no&rdquo;でない場合、質問を繰り返す。
 yesならTそしてnoならNILを返す。 それ以外は起こらない。
 </DD>
 </DL>
@@ -696,8 +699,8 @@ yesならTそしてnoならNILを返す。 それ以外は起こらない。
  <BR>
 <BR> <P>
 
-<A NAME="15732"></A>
-<B>readtable-p</B> <EM>x </EM>[関数]
+<A NAME="16151"></A>
+<B>readtablep</B> <EM>x </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -708,7 +711,9 @@ yesならTそしてnoならNILを返す。 それ以外は起こらない。
 <BR>
 <BR>
 
-<A NAME="15743"></A>
+<P>
+
+<A NAME="16162"></A>
 <B>copy-readtable</B> <EM>&amp;optional from-readtable to-readtable </EM>[関数]
 
 <DL COMPACT>
@@ -725,12 +730,13 @@ dispatch-macro tableでそれぞれ256個の要素を持つ。
 
 <P>
 
-<A NAME="15756"></A>
-<B>set-syntax-from-char</B> <EM>from-char to-char [from-readtable to-readtable] </EM>[関数]
+<A NAME="16175"></A>
+<B>set-syntax-from-char</B> <EM>from-char to-char &amp;optional to-readtable from-readtable </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>from-readtable</EM>の中の<EM>from-char</EM>のsyntaxとread-macro定義を
+<DD> 
+<EM>from-readtable</EM>の中の<EM>from-char</EM>のsyntaxとread-macro定義を
 <EM>to-readtable</EM>の中の<EM>to-char</EM>にコピーする。
 </DD>
 </DL>
@@ -739,8 +745,8 @@ dispatch-macro tableでそれぞれ256個の要素を持つ。
 
 <P>
 
-<A NAME="15770"></A>
-<B>set-macro-character</B> <EM>char func [non-teminating-p readtable] </EM>[関数]
+<A NAME="16189"></A>
+<B>set-macro-character</B> <EM>char func &amp;optional non-teminating-p readtable </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -751,8 +757,10 @@ dispatch-macro tableでそれぞれ256個の要素を持つ。
 <BR>
 <BR>
 
-<A NAME="15782"></A>
-<B>get-macro-character</B> <EM>char [readtable] </EM>[関数]
+<P>
+
+<A NAME="16201"></A>
+<B>get-macro-character</B> <EM>char &amp;optional readtable </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -763,8 +771,10 @@ dispatch-macro tableでそれぞれ256個の要素を持つ。
 <BR>
 <BR>
 
-<A NAME="15793"></A>
-<B>set-dispatch-macro-character</B> <EM>dispchar char func [readtable] </EM>[関数]
+<P>
+
+<A NAME="16212"></A>
+<B>set-dispatch-macro-character</B> <EM>dispchar char func &amp;optional readtable </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -776,8 +786,10 @@ dispatch read-macro関数として<EM>func</EM>を定義する。
 <BR>
 <BR>
 
-<A NAME="15806"></A>
-<B>get-dispatch-macro-character</B> <EM>dispchar char [readtable] </EM>[関数]
+<P>
+
+<A NAME="16225"></A>
+<B>get-dispatch-macro-character</B> <EM>dispchar char &amp;optional readtable </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -849,7 +861,7 @@ dispatch read-macro関数を返す。
  <BR>
 <BR> <P>
 
-<A NAME="15818"></A>
+<A NAME="16237"></A>
 <B>print</B> <EM>obj &amp;optional stream </EM>[関数]
 
 <DL COMPACT>
@@ -863,7 +875,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15830"></A>
+<A NAME="16249"></A>
 <B>prin1</B> <EM>obj &amp;optional stream </EM>[関数]
 
 <DL COMPACT>
@@ -879,7 +891,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15841"></A>
+<A NAME="16260"></A>
 <B>princ</B> <EM>obj &amp;optional stream </EM>[関数]
 
 <DL COMPACT>
@@ -897,7 +909,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15855"></A>
+<A NAME="16274"></A>
 <B>terpri</B> <EM>&amp;optional stream </EM>[関数]
 
 <DL COMPACT>
@@ -908,7 +920,7 @@ dispatch read-macro関数を返す。
  -->
 <SPAN CLASS="MATH"><IMG
  WIDTH="10" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img29.png"
+ SRC="jmanual-img31.png"
  ALT="$ \backslash$"></SPAN>newline</TT>(改行)を出力して、
 <EM>stream</EM>を空にする。
 </DD>
@@ -918,7 +930,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15867"></A>
+<A NAME="16286"></A>
 <B>finish-output</B> <EM>&amp;optional stream </EM>[関数]
 
 <DL COMPACT>
@@ -932,7 +944,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15878"></A>
+<A NAME="16297"></A>
 <B>princ-to-string</B> <EM>x &amp;optional (l 16) </EM>[関数]
 
 <DL COMPACT>
@@ -943,12 +955,15 @@ dispatch read-macro関数を返す。
 <BR>
 <BR>
 
-<A NAME="15889"></A>
+<P>
+
+<A NAME="16308"></A>
 <B>prin1-to-string</B> <EM>x &amp;optional (l 16) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> 文字列への出力ストリームを作り、<EM>x</EM>を書き込む。そして、
+<DD> 
+文字列への出力ストリームを作り、<EM>x</EM>を書き込む。そして、
 <B>get-output-stream-string</B>を実行する。
 </DD>
 </DL>
@@ -957,7 +972,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15901"></A>
+<A NAME="16320"></A>
 <B>format</B> <EM>stream format-string &amp;rest args </EM>[関数]
 
 <DL COMPACT>
@@ -965,43 +980,43 @@ dispatch read-macro関数を返す。
 <DD> 
 <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>A(ascii), <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>S(S-表現), <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>D(10進数),
 <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>X(16進数), <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>O(8進数), <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>C(文字), <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>F(実数表現), <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>E(指数表現),
 <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>G(general float), <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>V(dynamic number parameter), <SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>T(タブ)
  と<SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="10" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img33.png"
+ SRC="jmanual-img35.png"
  ALT="$ \sim$"></SPAN>% (改行)のフォーマット識別子のみ認識する。
 
 </DD>
@@ -1016,12 +1031,13 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15911"></A>
+<A NAME="16330"></A>
 <B>pprint</B> <EM>obj &amp;optional (stream *standard-output*) (tab 0) (platen 75) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>obj</EM>の最後の空白を除いたものを整形表示する。.
+<DD> 
+<EM>obj</EM>の最後の空白を除いたものを整形表示する。.
 </DD>
 </DL>
 <BR>
@@ -1029,7 +1045,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15922"></A>
+<A NAME="16341"></A>
 <B>print-functions</B> <EM>file &amp;rest fns </EM>[関数]
 
 <DL COMPACT>
@@ -1043,7 +1059,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15934"></A>
+<A NAME="16353"></A>
 <B>write-byte</B> <EM>integer stream </EM>[関数]
 
 <DL COMPACT>
@@ -1054,7 +1070,9 @@ dispatch read-macro関数を返す。
 <BR>
 <BR>
 
-<A NAME="15945"></A>
+<P>
+
+<A NAME="16364"></A>
 <B>write-word</B> <EM>integer stream </EM>[関数]
 
 <DL COMPACT>
@@ -1065,7 +1083,9 @@ dispatch read-macro関数を返す。
 <BR>
 <BR>
 
-<A NAME="15956"></A>
+<P>
+
+<A NAME="16375"></A>
 <B>write-long</B> <EM>integer stream </EM>[関数]
 
 <DL COMPACT>
@@ -1079,7 +1099,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15967"></A>
+<A NAME="16386"></A>
 <B>spaces</B> <EM>n &amp;optional stream </EM>[関数]
 
 <DL COMPACT>
@@ -1093,7 +1113,7 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15978"></A>
+<A NAME="16397"></A>
 <B>pf</B> <EM>func &amp;optional stream *standard-output*) </EM>[マクロ]
 
 <DL COMPACT>
@@ -1107,23 +1127,13 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="15989"></A>
+<A NAME="16408"></A>
 <B>pp-method</B> <EM>class selector &amp;optional (stream *standard-output*) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>class</EM>クラスの中に定義された<EM>selector</EM>メソッドを整形表示する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="16001"></A>
-<B>tprint</B> <EM>obj tab &amp;optional (indent 0) (platen 79) (cpos 0) </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 表形式で<EM>obj</EM>を印刷する。
+<DD> 
+<EM>class</EM>クラスの中に定義された<EM>selector</EM>メソッドを整形表示する。
 </DD>
 </DL>
 <BR>
@@ -1131,7 +1141,21 @@ dispatch read-macro関数を返す。
 
 <P>
 
-<A NAME="16012"></A>
+<A NAME="16420"></A>
+<B>tprint</B> <EM>obj tab &amp;optional (indent 0) (platen 79) (cpos 0) </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+表形式で<EM>obj</EM>を印刷する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="16431"></A>
 <B>print-size</B> <EM>obj </EM>[関数]
 
 <DL COMPACT>
@@ -1157,7 +1181,7 @@ dispatch read-macro関数を返す。
 EusLispは、4種類のIPC機能（
 <B>共有メモリ, メッセージキュー, FIFO</B>や<B>ソケット</B>）を備えている。
 <A NAME="tex2html8"
-  HREF="jmanual-footnode.html#foot15432"><SUP><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="footnote.png"></SUP></A>一般的に、この命令により性能が悪くなる。
+  HREF="jmanual-footnode.html#foot15850"><SUP><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="footnote.png"></SUP></A>一般的に、この命令により性能が悪くなる。
 もし、マルチスレッド機能を使用するならば、
 <A HREF="jmanual-node15.html#mthread">12</A>節に記述されている同期関数も通信手段として
 用いることができる。
@@ -1209,9 +1233,10 @@ foreign stringへの書き込みは、
 <P>
 
  <BR>
-<BR> <A NAME="16023"></A>
-<B>map-file</B> <EM>filename &amp;key (:direction  :input) :length (:offset 0) (:share t)
-(:address 0) </EM>[関数]
+<BR> <P>
+
+<A NAME="16442"></A>
+<B>map-file</B> <EM>filename &amp;key (direction :input) length (offset 0) (share t) (address 0) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -1254,7 +1279,9 @@ FIFOノードを作り、ノーマルファイルとしてオープンする。
 <P>
 
  <BR>
-<BR> <A NAME="16040"></A>
+<BR> <P>
+
+<A NAME="16459"></A>
 <B>make-msgq-input-stream</B> <EM>key &amp;optional (buffer-size 128) </EM>[関数]
 
 <DL COMPACT>
@@ -1268,7 +1295,7 @@ FIFOノードを作り、ノーマルファイルとしてオープンする。
 
 <P>
 
-<A NAME="16051"></A>
+<A NAME="16470"></A>
 <B>make-msgq-output-stream</B> <EM>key &amp;optional (buffer-size 128) </EM>[関数]
 
 <DL COMPACT>
@@ -1403,8 +1430,8 @@ service名によって指定されたsymbolを通して参照される。
  <BR>
 <BR> <P>
 
-<A NAME="16062"></A>
-<B>make-socket-address</B> <EM>&amp;key :domain :pathname :host :port :proto :service </EM>[関数]
+<A NAME="16481"></A>
+<B>make-socket-address</B> <EM>&amp;key domain pathname host port proto service </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -1417,12 +1444,13 @@ service名によって指定されたsymbolを通して参照される。
 
 <P>
 
-<A NAME="16072"></A>
+<A NAME="16491"></A>
 <B>make-socket-port</B> <EM>sockaddr </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> サーバー側のソケットポートを作る。
+<DD> 
+サーバー側のソケットポートを作る。
 この関数は、クライアントとの接続を確立するために使用される。
 </DD>
 </DL>
@@ -1431,7 +1459,7 @@ service名によって指定されたsymbolを通して参照される。
 
 <P>
 
-<A NAME="16082"></A>
+<A NAME="16501"></A>
 <B>make-server-socket-stream</B> <EM>sockport &amp;optional (size 100) </EM>[関数]
 
 <DL COMPACT>
@@ -1445,8 +1473,8 @@ service名によって指定されたsymbolを通して参照される。
 
 <P>
 
-<A NAME="16092"></A>
-<B>make-client-socket-stream</B> <EM>sockaddr &amp;optional (size 100) </EM>[関数]
+<A NAME="16511"></A>
+<B>make-client-socket-stream</B> <EM>sockaddr &amp;optional (timeout 5) (size 512) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -1459,7 +1487,7 @@ service名によって指定されたsymbolを通して参照される。
 
 <P>
 
-<A NAME="16102"></A>
+<A NAME="16521"></A>
 <B>open-server</B> <EM>port remote-func </EM>[関数]
 
 <DL COMPACT>
@@ -1477,7 +1505,7 @@ service名によって指定されたsymbolを通して参照される。
 
 <P>
 
-<A NAME="16114"></A>
+<A NAME="16533"></A>
 <B>connect-server</B> <EM>host port </EM>[関数]
 
 <DL COMPACT>
@@ -1505,7 +1533,7 @@ service名によって指定されたsymbolを通して参照される。
  <BR>
 <BR> <P>
 
-<A NAME="16128"></A>
+<A NAME="16547"></A>
 <B>select-stream</B> <EM>stream-list timeout </EM>[関数]
 
 <DL COMPACT>
@@ -1529,7 +1557,7 @@ NILを返す。
 
 <P>
 
-<A NAME="16146"></A>
+<A NAME="16565"></A>
 <B>def-async</B> <EM>stream function </EM>[マクロ]
 
 <DL COMPACT>
@@ -1572,7 +1600,7 @@ Euslispは、UNIXの上で動作している限り、ホスト・デバイス・
  <BR>
 <BR> <P>
 
-<A NAME="16164"></A>
+<A NAME="16583"></A>
 <B>pathnamep</B> <EM>name </EM>[関数]
 
 <DL COMPACT>
@@ -1586,7 +1614,7 @@ Euslispは、UNIXの上で動作している限り、ホスト・デバイス・
 
 <P>
 
-<A NAME="16175"></A>
+<A NAME="16594"></A>
 <B>pathname</B> <EM>name </EM>[関数]
 
 <DL COMPACT>
@@ -1603,7 +1631,7 @@ Euslispは、UNIXの上で動作している限り、ホスト・デバイス・
 
 <P>
 
-<A NAME="16188"></A>
+<A NAME="16607"></A>
 <B>pathname-directory</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
@@ -1619,7 +1647,7 @@ Euslispは、UNIXの上で動作している限り、ホスト・デバイス・
 
 <P>
 
-<A NAME="16200"></A>
+<A NAME="16619"></A>
 <B>pathname-name</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
@@ -1634,7 +1662,7 @@ Euslispは、UNIXの上で動作している限り、ホスト・デバイス・
 
 <P>
 
-<A NAME="16212"></A>
+<A NAME="16631"></A>
 <B>pathname-type</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
@@ -1649,9 +1677,8 @@ Euslispは、UNIXの上で動作している限り、ホスト・デバイス・
 
 <P>
 
-<A NAME="16224"></A>
-<B>make-pathname</B> <EM>&amp;key :host :device :directory :name :type :version
-defaults </EM>[関数]
+<A NAME="16643"></A>
+<B>make-pathname</B> <EM>&amp;key host device directory name type version defaults </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -1665,9 +1692,8 @@ UNIX上では、他のパラメータは無視される。
 
 <P>
 
-<A NAME="16237"></A>
-<B>merge-pathnames</B> <EM>name
-&amp;optional (defaults *default-pathname-defaults*) </EM>[関数]
+<A NAME="16656"></A>
+<B>merge-pathnames</B> <EM>name &amp;optional (defaults *default-pathname-defaults*) </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -1677,7 +1703,9 @@ UNIX上では、他のパラメータは無視される。
 <BR>
 <BR>
 
-<A NAME="16248"></A>
+<P>
+
+<A NAME="16667"></A>
 <B>namestring</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
@@ -1689,7 +1717,9 @@ UNIX上では、他のパラメータは無視される。
 <BR>
 <BR>
 
-<A NAME="16259"></A>
+<P>
+
+<A NAME="16678"></A>
 <B>parse-namestring</B> <EM>name </EM>[関数]
 
 <DL COMPACT>
@@ -1700,7 +1730,9 @@ UNIX上では、他のパラメータは無視される。
 <BR>
 <BR>
 
-<A NAME="16270"></A>
+<P>
+
+<A NAME="16689"></A>
 <B>truename</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
@@ -1721,7 +1753,7 @@ UNIX上では、他のパラメータは無視される。
  <BR>
 <BR> <P>
 
-<A NAME="16281"></A>
+<A NAME="16700"></A>
 <B>probe-file</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
@@ -1733,7 +1765,9 @@ UNIX上では、他のパラメータは無視される。
 <BR>
 <BR>
 
-<A NAME="16292"></A>
+<P>
+
+<A NAME="16711"></A>
 <B>file-size</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
@@ -1745,7 +1779,9 @@ UNIX上では、他のパラメータは無視される。
 <BR>
 <BR>
 
-<A NAME="16303"></A>
+<P>
+
+<A NAME="16722"></A>
 <B>directory-p</B> <EM>path </EM>[関数]
 
 <DL COMPACT>
@@ -1759,12 +1795,14 @@ UNIX上では、他のパラメータは無視される。
 <BR>
 <BR>
 
-<A NAME="16315"></A>
+<P>
+
+<A NAME="16734"></A>
 <B>find-executable</B> <EM>file </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> U
+<DD> 
 <EM>file</EM>という名のUNIXコマンドを探し、フルパス名で返す。
 <B>find-executable</B>は、自分のpath-listから実行できるファイルを探す
 UNIXのwhichコマンドとほとんど同じ関数である。
@@ -1775,7 +1813,7 @@ UNIXのwhichコマンドとほとんど同じ関数である。
 
 <P>
 
-<A NAME="16327"></A>
+<A NAME="16746"></A>
 <B>file-write-date</B> <EM>file </EM>[関数]
 
 <DL COMPACT>
@@ -1791,7 +1829,7 @@ UNIXのwhichコマンドとほとんど同じ関数である。
 
 <P>
 
-<A NAME="16340"></A>
+<A NAME="16759"></A>
 <B>file-newer</B> <EM>new old </EM>[関数]
 
 <DL COMPACT>
@@ -1806,7 +1844,7 @@ Tを返す。
 
 <P>
 
-<A NAME="16352"></A>
+<A NAME="16771"></A>
 <B>object-file-p</B> <EM>file </EM>[関数]
 
 <DL COMPACT>
@@ -1821,7 +1859,7 @@ Tを返す。
 
 <P>
 
-<A NAME="16363"></A>
+<A NAME="16782"></A>
 <B>directory</B> <EM>&amp;optional (path ".") </EM>[関数]
 
 <DL COMPACT>
@@ -1835,7 +1873,7 @@ Tを返す。
 
 <P>
 
-<A NAME="16374"></A>
+<A NAME="16793"></A>
 <B>dir</B> <EM>&amp;optional (dir ".") </EM>[関数]
 
 <DL COMPACT>
@@ -1853,17 +1891,16 @@ Tを返す。
 
 <DIV CLASS="navigation"><HR>
 <BR>
-<B> Next:</B> <A NAME="tex2html565"
+<B> Next:</B> <A NAME="tex2html569"
   HREF="jmanual-node12.html">評価</A>
-<B>Up:</B> <A NAME="tex2html559"
+<B>Up:</B> <A NAME="tex2html563"
   HREF="jmanual-node2.html">EusLisp 基本</A>
-<B> Previous:</B> <A NAME="tex2html553"
+<B> Previous:</B> <A NAME="tex2html557"
   HREF="jmanual-node10.html">列、行列とテーブル</A>
 </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-Travis CI User
-2017-03-07
+This document was generated using the LaTeX2HTML translator on Fri Feb 21 21:08:42 JST 2020 from <a href="http://github.com/euslisp/EusLisp.git">EusLisp</a> version <a href="http://github.com/euslisp/EusLisp/commit/40051e5c92167535141b4985db384a7516d89b4f">40051e5c update to 9.27 (with changelog in (j)intro.tex, euslisp.hlp, (j)manual.{tex/pdf/dvi} (#421)</a>
 </ADDRESS>
 </BODY>
 </HTML>

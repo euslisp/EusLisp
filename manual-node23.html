@@ -1,10 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
 
-<!--Converted with LaTeX2HTML 2008 (1.71)
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
 <HTML>
 <HEAD>
 <TITLE>Xwindow Interface</TITLE>
@@ -13,7 +9,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="manual.css">
@@ -28,11 +25,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html936"
+<B> Next:</B> <A NAME="tex2html940"
   HREF="manual-node24.html">XToolKit</A>
-<B>Up:</B> <A NAME="tex2html930"
+<B>Up:</B> <A NAME="tex2html934"
   HREF="manual-node15.html">EusLisp Extensions</A>
-<B> Previous:</B> <A NAME="tex2html924"
+<B> Previous:</B> <A NAME="tex2html928"
   HREF="manual-node22.html">Manipulators</A>
 <BR> <P>
 </DIV>
@@ -41,13 +38,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html937"
+<LI><A NAME="tex2html941"
   HREF="manual-node23.html#SECTION03081000000000000000">Xlib global variables and misc functions</A>
-<LI><A NAME="tex2html938"
+<LI><A NAME="tex2html942"
   HREF="manual-node23.html#SECTION03082000000000000000">Xwindow</A>
-<LI><A NAME="tex2html939"
+<LI><A NAME="tex2html943"
   HREF="manual-node23.html#SECTION03083000000000000000">Graphic Context</A>
-<LI><A NAME="tex2html940"
+<LI><A NAME="tex2html944"
   HREF="manual-node23.html#SECTION03084000000000000000">Colors and Colormaps</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -60,7 +57,7 @@ Xwindow Interface</A>
 The Xwindow interface on EusLisp becomes available when EusLisp is
 invoked by the name of <TT>'eusx'</TT>.
 <A NAME="tex2html21"
-  HREF="manual-footnode.html#foot42602"><SUP><SPAN CLASS="arabic">3</SPAN></SUP></A>The "DISPLAY" environment variable should be properly set to your Xserver,
+  HREF="manual-footnode.html#foot43947"><SUP><SPAN CLASS="arabic">3</SPAN></SUP></A>The "DISPLAY" environment variable should be properly set to your Xserver,
 since eusx tries to connect to Xserver referencing
 the "DISPLAY" environment variable when it starts up.
 
@@ -111,136 +108,174 @@ propertied-object
 Xlib global variables and misc functions
 </H2>
 
+<P>
+
  <BR>
-<BR> <A NAME="43305"></A>
+<BR> <P>
+
+<A NAME="44653"></A>
 <B>x:*display*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> X's display ID (integer).
+<DD> 
+X's display ID (integer).
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43315"></A>
+<P>
+
+<A NAME="44663"></A>
 <B>x:*root*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> default root window object. 
+<DD> 
+default root window object.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43325"></A>
+<P>
+
+<A NAME="44673"></A>
 <B>x:*screen*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> default screen ID (integer).
+<DD> 
+default screen ID (integer).
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43335"></A>
+<P>
+
+<A NAME="44683"></A>
 <B>x:*visual*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> default visual ID (integer).
+<DD> 
+default visual ID (integer).
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43345"></A>
+<P>
+
+<A NAME="44693"></A>
 <B>x:*blackpixel*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> black pixel = 1
+<DD> 
+black pixel = 1
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43355"></A>
+<P>
+
+<A NAME="44703"></A>
 <B>x:*whitepixel*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> white pixel = 0
+<DD> 
+white pixel = 0
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43365"></A>
+<P>
+
+<A NAME="44713"></A>
 <B>x:*fg-pixel*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> default foreground pixel referenced at window creation,
+<DD> 
+default foreground pixel referenced at window creation,
 normally <TT>*blackpixel*</TT>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43376"></A>
+<P>
+
+<A NAME="44724"></A>
 <B>x:*bg-pixel*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> background pixel referenced at window creation,
-normally <TT>*whitepixel*</TT>
+<DD> 
+background pixel referenced at window creation,
+normally <TT>*whitepixel*</TT>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43387"></A>
+<P>
+
+<A NAME="44735"></A>
 <B>x:*color-map*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> the system's default color-map
+<DD> 
+the system's default color-map.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43397"></A>
+<P>
+
+<A NAME="44745"></A>
 <B>x:*defaultGC*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> the default gcontext referenced at pixmap creation.
+<DD> 
+the default gcontext referenced at pixmap creation.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43407"></A>
+<P>
+
+<A NAME="44755"></A>
 <B>x:*whitegc*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> GC whose foreground color is white.
+<DD> 
+GC whose foreground color is white.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43417"></A>
+<P>
+
+<A NAME="44765"></A>
 <B>x:*blackgc*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> GC whose foreground color is black.
+<DD> 
+GC whose foreground color is black.
 </DD>
 </DL>
 <BR>
@@ -248,310 +283,13 @@ normally <TT>*whitepixel*</TT>
 
 <P>
 
-<A NAME="43427"></A>
+<A NAME="44775"></A>
 <B>*gray-pixmap*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> the result of <TT>(make-gray-pixmap 0.5)</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43438"></A>
-<B>*gray25-pixmap*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> 16x16 pixmap,
-a quarter of pixels are <TT>*fg-pixel*</TT> and three quarters <TT>*bg-pixel*</TT>.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43450"></A>
-<B>*gray50-pixmap*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> 16x16 pixmap, a half of pixels are <TT>*fg-pixel*</TT>.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43461"></A>
-<B>*gray75-pixmap*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> 16x16 pixmap, three quarters of pixels are black.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43471"></A>
-<B>*gray25-gc*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> 25% gray GC made from  <TT>*gray25-pixmap*</TT>.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43482"></A>
-<B>*gray50-gc*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> 50% gray GC made from  <TT>*gray50-pixmap*</TT>.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43493"></A>
-<B>*gray75-gc*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> 75% gray GC made from  <TT>*gray75-pixmap*</TT>.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43504"></A>
-<B>*gray*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#b0b0b0"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43515"></A>
-<B>*bisque1*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#ffe4c4"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43526"></A>
-<B>*bisque2*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#eed5b7"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43537"></A>
-<B>*bisque3*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#cdb79e"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43548"></A>
-<B>*lightblue2*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#b2dfee"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43559"></A>
-<B>*lightpink1*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#ffaeb9"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43570"></A>
-<B>*maroon*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>"#b03060"</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43581"></A>
-<B>*max-intensity*</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> 65535
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43591"></A>
-<B>font-cour8</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-8-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43602"></A>
-<B>font-cour10</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-10-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43613"></A>
-<B>font-cour12</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-12-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43624"></A>
-<B>font-cour14</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-14-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43635"></A>
-<B>font-cour18</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-medium-r-*-18-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43646"></A>
-<B>font-courb12</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-bold-r-*-12-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43657"></A>
-<B>font-courb14</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-bold-r-*-14-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43668"></A>
-<B>font-courb18</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-courier-bold-r-*-18-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43679"></A>
-<B>font-helvetica-12</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-Helvetica-Medium-R-Normal-*-12-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43690"></A>
-<B>font-lucidasans-bold-12</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "lucidasans-bold-12")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43701"></A>
-<B>font-lucidasans-bold-14</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "lucidasans-bold-14")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43712"></A>
-<B>font-helvetica-bold-12</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-Helvetica-Bold-R-Normal-*-12-*")</TT>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43723"></A>
-<B>font-a14</B> [variable]
-
-<DL COMPACT>
-<DT> 
-<DD> <TT>(font-id "*-fixed-medium-r-normal-*-14-*")</TT>
+<DD> 
+the result of <TT>(make-gray-pixmap 0.5)</TT>.
 </DD>
 </DL>
 <BR>
@@ -559,25 +297,407 @@ a quarter of pixels are <TT>*fg-pixel*</TT> and three quarters <TT>*bg-pixel*</T
 
 <P>
 
-<A NAME="43734"></A>
+<A NAME="44786"></A>
+<B>*gray25-pixmap*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+16x16 pixmap, a quarter of pixels are <TT>*fg-pixel*</TT>
+and three quarters <TT>*bg-pixel*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44798"></A>
+<B>*gray50-pixmap*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+16x16 pixmap, a half of pixels are <TT>*fg-pixel*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44809"></A>
+<B>*gray75-pixmap*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+16x16 pixmap, three quarters of pixels are black.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44819"></A>
+<B>*gray25-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+25% gray GC made from  <TT>*gray25-pixmap*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44830"></A>
+<B>*gray50-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+50% gray GC made from  <TT>*gray50-pixmap*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44841"></A>
+<B>*gray75-gc*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+75% gray GC made from  <TT>*gray75-pixmap*</TT>.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44852"></A>
+<B>*gray*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>"#b0b0b0"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44863"></A>
+<B>*bisque1*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>"#ffe4c4"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44874"></A>
+<B>*bisque2*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>"#eed5b7"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44885"></A>
+<B>*bisque3*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>"#cdb79e"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44896"></A>
+<B>*lightblue2*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>"#b2dfee"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44907"></A>
+<B>*lightpink1*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>"#ffaeb9"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44918"></A>
+<B>*maroon*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>"#b03060"</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44929"></A>
+<B>*max-intensity*</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+65535
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44939"></A>
+<B>font-cour8</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-courier-medium-r-*-8-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44950"></A>
+<B>font-cour10</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-courier-medium-r-*-10-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44961"></A>
+<B>font-cour12</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-courier-medium-r-*-12-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44972"></A>
+<B>font-cour14</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-courier-medium-r-*-14-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44983"></A>
+<B>font-cour18</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-courier-medium-r-*-18-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="44994"></A>
+<B>font-courb12</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-courier-bold-r-*-12-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45005"></A>
+<B>font-courb14</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-courier-bold-r-*-14-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45016"></A>
+<B>font-courb18</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-courier-bold-r-*-18-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45027"></A>
+<B>font-helvetica-12</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-Helvetica-Medium-R-Normal-*-12-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45038"></A>
+<B>font-lucidasans-bold-12</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "lucidasans-bold-12")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45049"></A>
+<B>font-lucidasans-bold-14</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "lucidasans-bold-14")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45060"></A>
+<B>font-helvetica-bold-12</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-Helvetica-Bold-R-Normal-*-12-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45071"></A>
+<B>font-a14</B> [variable]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(font-id "*-fixed-medium-r-normal-*-14-*")</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45082"></A>
 <B>x:*xwindows*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> a list of all windows including subwindows
+<DD> 
+a list of all windows including subwindows
 created and maintained by EusLisp.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43744"></A>
+<P>
+
+<A NAME="45092"></A>
 <B>x:*xwindow-hash-tab*</B> [variable]
 
 <DL COMPACT>
 <DT> 
-<DD> a hash table to look up the xwindow object
-by its drawable ID.
+<DD> 
+a hash table to look up the xwindow object by its drawable ID.
 In the event structure obtained by <TT>x:nextevent</TT> is a window ID,
 and <TT>x:window-main-loop</TT> calls <TT>x:event-window</TT> to know
 the corresponding xwindow object using this table.
@@ -588,7 +708,7 @@ the corresponding xwindow object using this table.
 
 <P>
 
-<A NAME="43757"></A>
+<A NAME="45105"></A>
 <B>xflush</B> [function]
 
 <DL COMPACT>
@@ -602,13 +722,14 @@ of process switching.
 To flush the command buffer to see the effects of the commands,
 use <B>xflush</B> or send <B>:flush</B>
 message to  xwindow objects.
-
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43769"></A>
+<P>
+
+<A NAME="45117"></A>
 <B>find-xwindow</B> <EM>subname </EM>[function]
 
 <DL COMPACT>
@@ -616,8 +737,7 @@ message to  xwindow objects.
 <DD> 
 Each xwindow may have name specified at the creation time.
 Find-xwindow looks in the *xwindows* list and returns a list
-of windows that have 'subname' as a substring
-of its name. 
+of windows that have 'subname' as a substring of its name.
 </DD>
 </DL>
 <BR>
@@ -635,8 +755,8 @@ Xwindow</A>
  <BR>
 <BR> <P>
 	<BR> 
-<A NAME="43780"></A>
-<BIG CLASS="XLARGE"><B>Xobject </B></BIG> [class]  <PRE><TT>
+<A NAME="45128"></A>
+<BIG CLASS="LARGE"><B>Xobject </B></BIG> [class]  <PRE><TT>
   :super   <B>geometry:viewsurface</B> 
 <BR>  :slots 		 
 </TT></PRE>
@@ -654,8 +774,8 @@ Currently, no slots variables and methods are defined.
 
 <P>
 	<BR> 
-<A NAME="43798"></A>
-<BIG CLASS="XLARGE"><B>Xdrawable </B></BIG> [class]  <PRE><TT>
+<A NAME="45146"></A>
+<BIG CLASS="LARGE"><B>Xdrawable </B></BIG> [class]  <PRE><TT>
   :super   <B>Xobject</B> 
 <BR>  :slots 		 (drawable    ; drawable  ID 
 <BR>
@@ -682,7 +802,7 @@ and instantiation of this class has no effect.
 
 <P>
 
-<A NAME="43818"></A>
+<A NAME="45166"></A>
 <B>:init</B> <EM>id </EM>[method]
 
 <DL COMPACT>
@@ -696,29 +816,37 @@ the default GC of this drawable object.
 <BR>
 <BR>
 
-<A NAME="43831"></A>
+<P>
+
+<A NAME="45179"></A>
 <B>:drawable</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns drawable id.
+<DD> 
+returns drawable id.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43841"></A>
+<P>
+
+<A NAME="45189"></A>
 <B>:flush</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> flushes commands retained in the Xlib's buffer.
+<DD> 
+flushes commands retained in the Xlib's buffer.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43851"></A>
+<P>
+
+<A NAME="45199"></A>
 <B>:geometry</B> [method]
 
 <DL COMPACT>
@@ -732,7 +860,9 @@ width, height, border-width</EM> and <EM>visual's depth</EM>.
 <BR>
 <BR>
 
-<A NAME="43863"></A>
+<P>
+
+<A NAME="45211"></A>
 <B>:height</B> [method]
 
 <DL COMPACT>
@@ -744,7 +874,9 @@ returns the height (dots in y direction) of this drawable.
 <BR>
 <BR>
 
-<A NAME="43873"></A>
+<P>
+
+<A NAME="45221"></A>
 <B>:width</B> [method]
 
 <DL COMPACT>
@@ -756,7 +888,9 @@ returns width (dots in x direction) of this drawable.
 <BR>
 <BR>
 
-<A NAME="43883"></A>
+<P>
+
+<A NAME="45231"></A>
 <B>:gc</B> <EM>&amp;rest newgc </EM>[method]
 
 <DL COMPACT>
@@ -772,12 +906,15 @@ the current gc.
 <BR>
 <BR>
 
-<A NAME="43896"></A>
+<P>
+
+<A NAME="45244"></A>
 <B>:pos</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns an integer vector representing 
+<DD> 
+returns an integer vector representing 
 the position of this drawable.
 The position is always defined relative to the 
 parent window, and windows created as direct subwindows of the root
@@ -789,24 +926,15 @@ true position in the root.
 <BR>
 <BR>
 
-<A NAME="43906"></A>
+<P>
+
+<A NAME="45254"></A>
 <B>:x</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the <EM>x</EM> coordinate of this drawable relatively to
-the parent window.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="43917"></A>
-<B>:y</B> [method]
-
-<DL COMPACT>
-<DT> 
-<DD> returns the <EM>y</EM> coordinate of this drawable relatively to
+<DD> 
+returns the <EM>x</EM> coordinate of this drawable relatively to
 the parent window.
 </DD>
 </DL>
@@ -815,7 +943,22 @@ the parent window.
 
 <P>
 
-<A NAME="43928"></A>
+<A NAME="45265"></A>
+<B>:y</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the <EM>y</EM> coordinate of this drawable relatively to
+the parent window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45276"></A>
 <B>:copy-from</B> <EM>drw </EM>[method]
 
 <DL COMPACT>
@@ -830,15 +973,15 @@ The contents of <EM>drw</EM> is copied to this drawable.
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="xdraw"></A><A NAME="43246"></A>
+<DIV ALIGN="CENTER"><A NAME="xdraw"></A><A NAME="44594"></A>
 <TABLE>
 <CAPTION ALIGN="BOTTOM"><STRONG>Figure 16:</STRONG>
 drawing primitives</CAPTION>
 <TR><TD>
 <DIV ALIGN="CENTER">
 <IMG
- WIDTH="441" HEIGHT="272" ALIGN="BOTTOM" BORDER="0"
- SRC="manual-img124.png"
+ WIDTH="442" HEIGHT="272" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img125.png"
  ALT="\includegraphics[height=6cm]{fig/xdraw.ps}">
 
 </DIV></TD></TR>
@@ -847,22 +990,24 @@ drawing primitives</CAPTION>
 
 <P>
 
-<A NAME="43940"></A>
+<A NAME="45288"></A>
 <B>:point</B> <EM>x y &amp;optional (gc gccon) </EM>[method]
 
 <DL COMPACT>
 <DT> 
 <DD> 
 draws a point at <SPAN CLASS="MATH"><IMG
- WIDTH="41" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img125.png"
- ALT="$ (x, y)$"></SPAN> with optional <EM>gc</EM>.
+ WIDTH="41" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img126.png"
+ ALT="$(x, y)$"></SPAN> with optional <EM>gc</EM>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="43951"></A>
+<P>
+
+<A NAME="45299"></A>
 <B>:line</B> <EM>x1 y1 x2 y2 &amp;optional (gc gcon) </EM>[method]
 
 <DL COMPACT>
@@ -875,7 +1020,9 @@ with optional <EM>gc</EM>. <EM>x1, y1, x2,</EM> and<EM>y2</EM> must be integers.
 <BR>
 <BR>
 
-<A NAME="43966"></A>
+<P>
+
+<A NAME="45314"></A>
 <B>:rectangle</B> <EM>x y width height &amp;optional (gc gcon) </EM>[method]
 
 <DL COMPACT>
@@ -888,7 +1035,9 @@ and size is specified by <EM>width</EM> and <EM>height</EM>.
 <BR>
 <BR>
 
-<A NAME="43979"></A>
+<P>
+
+<A NAME="45327"></A>
 <B>:arc</B> <EM>x y width height angle1 angle2 &amp;optional (gc gcon) </EM>[method]
 
 <DL COMPACT>
@@ -902,7 +1051,9 @@ Angles should be given by radian.
 <BR>
 <BR>
 
-<A NAME="43992"></A>
+<P>
+
+<A NAME="45340"></A>
 <B>:fill-rectangle</B> <EM>x y width height &amp;optional (gc gcon) </EM>[method]
 
 <DL COMPACT>
@@ -916,20 +1067,21 @@ fills in a rectangular region.
 
 <P>
 
-<A NAME="44002"></A>
+<A NAME="45350"></A>
 <B>:fill-arc</B> <EM>x y width height angle1 angle2 &amp;optional (gc gcon) </EM>[method]
 
 <DL COMPACT>
 <DT> 
 <DD> 
 fills in an arc.
-
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44012"></A>
+<P>
+
+<A NAME="45360"></A>
 <B>:string</B> <EM>x y str &amp;optional (gc gcon) </EM>[method]
 
 <DL COMPACT>
@@ -942,7 +1094,9 @@ not filled.
 <BR>
 <BR>
 
-<A NAME="44024"></A>
+<P>
+
+<A NAME="45372"></A>
 <B>:image-string</B> <EM>x y str &amp;optional (gc gcon) </EM>[method]
 
 <DL COMPACT>
@@ -954,7 +1108,9 @@ displays an imagestring of <EM>str</EM>. Imagestring fills background.
 <BR>
 <BR>
 
-<A NAME="44035"></A>
+<P>
+
+<A NAME="45383"></A>
 <B>:getimage</B> <EM>&amp;key x y width height (mask #ffffffff) (format 2) </EM>[method]
 
 <DL COMPACT>
@@ -972,8 +1128,10 @@ as described in section <A HREF="manual-node21.html#PBMfile">18.6</A>.
 <BR>
 <BR>
 
-<A NAME="44048"></A>
-<B>:putimage</B> <EM>image &amp;key src-x src-y dst-x dst-y width height ((:gc g) gc) </EM>[method]
+<P>
+
+<A NAME="45396"></A>
+<B>:putimage</B> <EM>image &amp;key src-x src-y dst-x dst-y width height (gc gcon) </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -985,7 +1143,9 @@ puts <EM>image</EM> to the specified location in this drawable.
 <BR>
 <BR>
 
-<A NAME="44060"></A>
+<P>
+
+<A NAME="45408"></A>
 <B>:draw-line</B> <EM>from to </EM>[method]
 
 <DL COMPACT>
@@ -998,42 +1158,53 @@ and provided for the compatibility with other viewsurface classes.
 <BR>
 <BR>
 
-<A NAME="44071"></A>
+<P>
+
+<A NAME="45419"></A>
 <B>:line-width</B> <EM>&amp;optional dots </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets line-width of this drawable's
-default GC. Use of the <TT>:gc :line-width</TT> message is recommended.
+<DD> 
+sets line-width of this drawable's default GC.
+Use of the <TT>:gc :line-width</TT> message is recommended.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44082"></A>
+<P>
+
+<A NAME="45430"></A>
 <B>:line-style</B> <EM>&amp;optional dash </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets line-style of this drawable's
-default GC. Use of the <TT>:gc :line-style</TT> is preferable.
+<DD> 
+sets line-style of this drawable's default GC.
+Use of the <TT>:gc :line-style</TT> is preferable.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44093"></A>
+<P>
+
+<A NAME="45441"></A>
 <B>:color</B> <EM>&amp;optional c </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets color of this drawable.
+<DD> 
+sets color of this drawable.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44103"></A>
+<P>
+
+<A NAME="45451"></A>
 <B>:clear</B> [method]
 
 <DL COMPACT>
@@ -1045,8 +1216,10 @@ clears full screen. this method calls <TT>:clear-area</TT>
 <BR>
 <BR>
 
-<A NAME="44114"></A>
-<B>:clear-area</B> <EM>&amp;key :x  :y :width :height :gc </EM>[method]
+<P>
+
+<A NAME="45462"></A>
+<B>:clear-area</B> <EM>&amp;key x y width height gc </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -1059,8 +1232,8 @@ clears a rectangle using the <TT>:fill-rectangle</TT> method.
 
 <P>
 	<BR> 
-<A NAME="44126"></A>
-<BIG CLASS="XLARGE"><B>Xpixmap </B></BIG> [class]  <PRE><TT>
+<A NAME="45474"></A>
+<BIG CLASS="LARGE"><B>Xpixmap </B></BIG> [class]  <PRE><TT>
   :super   <B>Xdrawable</B> 
 <BR>  :slots 		 
 </TT></PRE>
@@ -1080,18 +1253,21 @@ or pixmap does not generate any event.
 
 <P>
 
-<A NAME="44143"></A>
+<A NAME="45491"></A>
 <B>:init</B> <EM>id </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> initializes this pixmap.
+<DD> 
+initializes this pixmap.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44153"></A>
+<P>
+
+<A NAME="45501"></A>
 <B>:create</B> <EM>&amp;key (width 500) (height 500) (depth 1) (gc *defaultgc*) </EM>[method]
 
 <DL COMPACT>
@@ -1104,7 +1280,9 @@ default GC.
 <BR>
 <BR>
 
-<A NAME="44166"></A>
+<P>
+
+<A NAME="45514"></A>
 <B>:create-from-bitmap-file</B> <EM>fname </EM>[method]
 
 <DL COMPACT>
@@ -1116,7 +1294,9 @@ creates a pixmap from a bitmap file.
 <BR>
 <BR>
 
-<A NAME="44176"></A>
+<P>
+
+<A NAME="45524"></A>
 <B>:write-to-bitmap-file</B> <EM>fname </EM>[method]
 
 <DL COMPACT>
@@ -1130,7 +1310,9 @@ method.
 <BR>
 <BR>
 
-<A NAME="44187"></A>
+<P>
+
+<A NAME="45535"></A>
 <B>:destroy</B> [method]
 
 <DL COMPACT>
@@ -1144,8 +1326,8 @@ destroys this pixmap and frees X resources.
 
 <P>
 	<BR> 
-<A NAME="44198"></A>
-<BIG CLASS="XLARGE"><B>Xwindow </B></BIG> [class]  <PRE><TT>
+<A NAME="45546"></A>
+<BIG CLASS="LARGE"><B>Xwindow </B></BIG> [class]  <PRE><TT>
   :super   <B>Xdrawable</B> 
 <BR>  :slots 		 (parent subwindows backing-pixmap event-forward) 
 </TT></PRE>
@@ -1155,7 +1337,7 @@ destroys this pixmap and frees X resources.
 <DL COMPACT>
 <DT> 
 <DD><B>Xwindow</B> defines visible rectangular regions of the screen.
-It is inherited not only by <A NAME="44220"></A><B>t</B>ext-window and <B>canvas</B> where
+It is inherited not only by <A NAME="45568"></A><B>text-window</B> and <B>canvas</B> where
 any graphics objects can be drawn, but also by many <B>panel-items</B>
 and <B>scroll-bars</B>, which look like graphics objects rather than windows.
 </DD>
@@ -1165,9 +1347,10 @@ and <B>scroll-bars</B>, which look like graphics objects rather than windows.
 
 <P>
 
-<A NAME="44222"></A>
+<A NAME="45570"></A>
 <PRE><TT>
-<B>:create</B> <I>&amp;key ( (:parent *root*) [method] 
+<B>:create</B>   [method] 
+<BR><I>&amp;key ((parent *root*) 
 <BR>(x 0) (y 0) (size 256) (width size) (height size) (border-width 2) 
 <BR>(save-under nil) (backing-store :always) (backing-pixmap nil)
 <BR>(border *fg-pixel*) (background *bg-pixel*) 
@@ -1175,8 +1358,8 @@ and <B>scroll-bars</B>, which look like graphics objects rather than windows.
 <BR>(title "WINDOW") (name title) 
 <BR>(font) 
 <BR>
-event-mask (:key :button :enterLeave :configure :motion)</I>
-</TT></PRE>
+event-mask (:key :button :enterLeave :configure :motion)
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
@@ -1214,7 +1397,7 @@ can be specified: <EM>:keyPress, :keyRelease, :ButtonPress, :ButtonRelease,
 :FocusChange, :PropertyChange, :ColormapChange</EM> and <TT>:OwnerGrabButton</TT>.
 <TT>:Key</TT> enables both <TT>:keyPress</TT> and <TT>:KeyRelease</TT>, and
 <TT>:button</TT> enables both <TT>:ButtonPress</TT> and <TT>:ButtonRelease</TT>.
-When an event is sent from the server, <A NAME="44267"></A><B>w</B>indow-main-loop analyzes
+When an event is sent from the server, <A NAME="45616"></A><B>window-main-loop</B> analyzes
 the event structure and send the <TT>:KeyPress, :KeyRelease, :buttonPress,
 :ButtonRelease, :EnterNotify, :LeaveNotify, :MotionNotify, :ConfigureNotify</TT>
 message to the window where the event occurred.
@@ -1225,29 +1408,35 @@ message to the window where the event occurred.
 
 <P>
 
-<A NAME="44269"></A>
+<A NAME="45618"></A>
 <B>:map</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> makes this xwindow and all the subwindows visible.
+<DD> 
+makes this xwindow and all the subwindows visible.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44279"></A>
+<P>
+
+<A NAME="45628"></A>
 <B>:unmap</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> makes this xwindow and all the subwindows invisible.
+<DD> 
+makes this xwindow and all the subwindows invisible.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44289"></A>
+<P>
+
+<A NAME="45638"></A>
 <B>:selectinput</B> <EM>event-mask </EM>[method]
 
 <DL COMPACT>
@@ -1262,12 +1451,15 @@ becomes to be reported to this window.
 <BR>
 <BR>
 
-<A NAME="44301"></A>
+<P>
+
+<A NAME="45650"></A>
 <B>:destroy</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> destroys this xwindow and frees X resource.
+<DD> 
+destroys this xwindow and frees X resource.
 The corresponding entries in <TT>*xwindows*</TT> and <TT>*xwindow-hash-tab*</TT>
 are also deleted so that this window object could be garbage-collected.
 All subwindows are also deleted by sending <TT>:destroy</TT>.
@@ -1278,18 +1470,23 @@ The <EM>drawable</EM> ID is set to NIL.
 <BR>
 <BR>
 
-<A NAME="44315"></A>
+<P>
+
+<A NAME="45664"></A>
 <B>:parent</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the parent window object.
+<DD> 
+returns the parent window object.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44325"></A>
+<P>
+
+<A NAME="45674"></A>
 <B>:subwindows</B> [method]
 
 <DL COMPACT>
@@ -1304,25 +1501,15 @@ subwindows of the subwindows are not.
 <BR>
 <BR>
 
-<A NAME="44335"></A>
+<P>
+
+<A NAME="45684"></A>
 <B>:associate</B> <EM>child </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> register the <EM>child</EM> window
-as a subwindow of this window.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="44346"></A>
-<B>:dissociate</B> <EM>child </EM>[method]
-
-<DL COMPACT>
-<DT> 
-<DD> removes the <EM>child</EM> window
-of the <EM>subwindows</EM> list.
+<DD> 
+register the <EM>child</EM> window as a subwindow of this window.
 </DD>
 </DL>
 <BR>
@@ -1330,7 +1517,21 @@ of the <EM>subwindows</EM> list.
 
 <P>
 
-<A NAME="44358"></A>
+<A NAME="45695"></A>
+<B>:dissociate</B> <EM>child </EM>[method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+removes the <EM>child</EM> window of the <EM>subwindows</EM> list.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45707"></A>
 <B>:title</B> <EM>title </EM>[method]
 
 <DL COMPACT>
@@ -1346,52 +1547,64 @@ the window manager.
 
 <P>
 
-<A NAME="44368"></A>
+<A NAME="45717"></A>
 <B>:attributes</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns an integer-vector representing
+<DD> 
+returns an integer-vector representing
 the attributes of this window.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44378"></A>
+<P>
+
+<A NAME="45727"></A>
 <B>:visual</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the visual resource id for this window.
+<DD> 
+returns the visual resource id for this window.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44388"></A>
+<P>
+
+<A NAME="45737"></A>
 <B>:screen</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the screen resource id for this window.
+<DD> 
+returns the screen resource id for this window.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44398"></A>
+<P>
+
+<A NAME="45747"></A>
 <B>:root</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the root window id.
+<DD> 
+returns the root window id.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44408"></A>
+<P>
+
+<A NAME="45757"></A>
 <B>:location</B> [method]
 
 <DL COMPACT>
@@ -1404,34 +1617,15 @@ of this window.
 <BR>
 <BR>
 
-<A NAME="44418"></A>
+<P>
+
+<A NAME="45767"></A>
 <B>:depth</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the depth (number of color planes) of this window.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="44428"></A>
-<B>:size</B> [method]
-
-<DL COMPACT>
-<DT> 
-<DD> returns the size (width and height) of this window.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="44438"></A>
-<B>:colormap</B> [method]
-
-<DL COMPACT>
-<DT> 
-<DD> returns colormap resource id for this window.
+<DD> 
+returns the depth (number of color planes) of this window.
 </DD>
 </DL>
 <BR>
@@ -1439,7 +1633,35 @@ of this window.
 
 <P>
 
-<A NAME="44448"></A>
+<A NAME="45777"></A>
+<B>:size</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the size (width and height) of this window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45787"></A>
+<B>:colormap</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns colormap resource id for this window.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="45797"></A>
 <B>:move</B> <EM>newx newy </EM>[method]
 
 <DL COMPACT>
@@ -1452,7 +1674,9 @@ The coordinates are given relative to the parent window.
 <BR>
 <BR>
 
-<A NAME="44459"></A>
+<P>
+
+<A NAME="45808"></A>
 <B>:resize</B> <EM>width height </EM>[method]
 
 <DL COMPACT>
@@ -1467,35 +1691,43 @@ result.
 <BR>
 <BR>
 
-<A NAME="44471"></A>
+<P>
+
+<A NAME="45820"></A>
 <B>:raise</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> brings this window upfront.
+<DD> 
+brings this window upfront.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44481"></A>
+<P>
+
+<A NAME="45830"></A>
 <B>:lower</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> pushes this window to the back.
+<DD> 
+pushes this window to the back.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44491"></A>
+<P>
+
+<A NAME="45840"></A>
 <B>:background</B> <EM>pixel </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> changes the background pixel value (the
-index in the color map) to <EM>pixel</EM>.
+<DD> 
+changes the background pixel value (the index in the color map) to <EM>pixel</EM>.
 The <EM>pixel</EM> value is also stored in the <EM>bg-color</EM> slot.
 <TT>:Clear</TT> operation is performed to fill the current background
 with the specified <EM>pixel</EM>.
@@ -1504,7 +1736,9 @@ with the specified <EM>pixel</EM>.
 <BR>
 <BR>
 
-<A NAME="44506"></A>
+<P>
+
+<A NAME="45855"></A>
 <B>:background-pixmap</B> <EM>pixmap </EM>[method]
 
 <DL COMPACT>
@@ -1516,41 +1750,52 @@ changes the background with given pixmap.
 <BR>
 <BR>
 
-<A NAME="44516"></A>
+<P>
+
+<A NAME="45865"></A>
 <B>:border</B> <EM>pixel </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets the color of the border to <EM>pixel</EM>.
+<DD> 
+sets the color of the border to <EM>pixel</EM>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44527"></A>
+<P>
+
+<A NAME="45876"></A>
 <B>:set-colormap</B> <EM>cmap </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets colormap.
+<DD> 
+sets colormap.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44537"></A>
+<P>
+
+<A NAME="45886"></A>
 <B>:clear</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> clears the entire xwindow.
+<DD> 
+clears the entire xwindow.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44547"></A>
-<B>:clear-area</B> <EM>&amp;key :x :y :width :height </EM>[method]
+<P>
+
+<A NAME="45896"></A>
+<B>:clear-area</B> <EM>&amp;key x y width height </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -1563,18 +1808,21 @@ clears the specified rectangular area of this xwindow.
 
 <P>
 
-<A NAME="44557"></A>
+<A NAME="45906"></A>
 <B>make-xwindow</B> <EM>&amp;rest args </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> makes x-window.
+<DD> 
+makes x-window.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44567"></A>
+<P>
+
+<A NAME="45916"></A>
 <B>init-xwindow</B> <EM>&amp;optional (display (getenv "DISPLAY")) </EM>[function]
 
 <DL COMPACT>
@@ -1601,8 +1849,8 @@ Graphic Context</A>
 
 <P>
 	<BR> 
-<A NAME="44582"></A>
-<BIG CLASS="XLARGE"><B>gcontext </B></BIG> [class]  <PRE><TT>
+<A NAME="45931"></A>
+<BIG CLASS="LARGE"><B>gcontext </B></BIG> [class]  <PRE><TT>
   :super   <B>Xobject</B> 
 <BR>  :slots 		 (gcid GCValues) 
 </TT></PRE>
@@ -1620,18 +1868,18 @@ In EusLisp, every xwindow has its default GC.
 
 <P>
 
-<A NAME="44599"></A>
+<A NAME="45948"></A>
 <PRE><TT>
-<B>:create</B> <I>&amp;key (drawable defaultRootWindow) [method]
+<B>:create</B>   [method] 
+<BR><I>&amp;key (drawable defaultRootWindow) 
 <BR>(foreground *fg-pixel* (background *bg-pixel*) 
 <BR>
 function plane-mask 
 <BR>
 line-width line-style cap-style join-style 
 <BR>
-font dash 
-<BR></I>
-</TT></PRE>
+font dash
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
@@ -1644,91 +1892,115 @@ created on the same screen.
 <BR>
 <BR>
 
-<A NAME="44611"></A>
+<P>
+
+<A NAME="45961"></A>
 <B>:gc</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns X's GC id.
+<DD> 
+returns X's GC id.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44621"></A>
+<P>
+
+<A NAME="45971"></A>
 <B>:free</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> frees this GC.
+<DD> 
+frees this GC.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44631"></A>
+<P>
+
+<A NAME="45981"></A>
 <B>:copy</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> makes a copy of this GC.
+<DD> 
+makes a copy of this GC.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44641"></A>
+<P>
+
+<A NAME="45991"></A>
 <B>:foreground</B> <EM>&amp;optional color </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> if <EM>color</EM> is given,
-it is set to the foreground color. <EM>Color</EM> is a pixel value.
+<DD> 
+if <EM>color</EM> is given, it is set to the foreground color.
+<EM>Color</EM> is a pixel value.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44653"></A>
+<P>
+
+<A NAME="46003"></A>
 <B>:background</B> <EM>&amp;optional color </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> if <EM>color</EM> is given,
-it is set to the background color. <EM>Color</EM> is a pixel value.
+<DD> 
+if <EM>color</EM> is given, it is set to the background color.
+<EM>Color</EM> is a pixel value.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44665"></A>
+<P>
+
+<A NAME="46015"></A>
 <B>:foreback</B> <EM>fore back </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets foreground and background colors at once.
+<DD> 
+sets foreground and background colors at once.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44675"></A>
+<P>
+
+<A NAME="46025"></A>
 <B>:planemask</B> <EM>&amp;optional plane-mask </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets plane-mask.
+<DD> 
+sets plane-mask.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44685"></A>
+<P>
+
+<A NAME="46035"></A>
 <B>:function</B> <EM>x </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets drawing function.
+<DD> 
+sets drawing function.
 <EM>X</EM> should either be one of the following numbers or keywords:
 <TT>0=Clear, 1=And, 2=AndReverse, 3=Copy, 4=AndInverted, 5=NoOp, 6=Xor, 7=Or,
 8=Nor, 9=Equiv, 
@@ -1743,13 +2015,16 @@ it is set to the background color. <EM>Color</EM> is a pixel value.
 <BR>
 <BR>
 
-<A NAME="44697"></A>
+<P>
+
+<A NAME="46047"></A>
 <B>:font</B> <EM>x </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets the font attribute of this GC. <EM>X</EM> is
-either a font-name or a font-ID.
+<DD> 
+sets the font attribute of this GC.
+<EM>X</EM> is either a font-name or a font-ID.
 If <EM>x</EM> is a font name (string), <TT>:font</TT> calls <TT>x:LoadQueryFont</TT>
 to decide the font-id. If not found, <TT>"no such font ..."</TT> is warned.
 If <EM>x</EM> is NIL (not given), the current font-ID of this GC is returned.
@@ -1758,68 +2033,86 @@ If <EM>x</EM> is NIL (not given), the current font-ID of this GC is returned.
 <BR>
 <BR>
 
-<A NAME="44713"></A>
+<P>
+
+<A NAME="46063"></A>
 <B>:line-width</B> <EM>x </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets the line width in pixel.
+<DD> 
+sets the line width in pixel.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44723"></A>
+<P>
+
+<A NAME="46073"></A>
 <B>:line-style</B> <EM>x </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets the line-style (solid, dashed, etc.).
+<DD> 
+sets the line-style (solid, dashed, etc.).
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44733"></A>
+<P>
+
+<A NAME="46083"></A>
 <B>:dash</B> <EM>&amp;rest x </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> Each component of <EM>X</EM> is an integer.
+<DD> 
+Each component of <EM>X</EM> is an integer.
 <TT>:Dash</TT> sets the dash pattern of the line-style.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44745"></A>
+<P>
+
+<A NAME="46095"></A>
 <B>:tile</B> <EM>pixmap </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets the tile of this GC to <EM>pixmap</EM>.
+<DD> 
+sets the tile of this GC to <EM>pixmap</EM>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44756"></A>
+<P>
+
+<A NAME="46106"></A>
 <B>:stipple</B> <EM>pixmap </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets the stipple of this GC to <EM>pixmap</EM>.
+<DD> 
+sets the stipple of this GC to <EM>pixmap</EM>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44767"></A>
+<P>
+
+<A NAME="46117"></A>
 <B>:get-attribute</B> <EM>attr </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> gets attribute.
+<DD> 
+gets attribute.
 <EM>Attr</EM> is one of <TT>:function, :plane-mask, :foreground,
 :background, :line-width, :line-style, :cap-style, :join-style,
 :fill-style, :fill-rule, :font</TT>.
@@ -1829,12 +2122,15 @@ An integer value representing the attribute is returned.
 <BR>
 <BR>
 
-<A NAME="44779"></A>
+<P>
+
+<A NAME="46129"></A>
 <PRE><TT>
-<B>:change-attributes</B> <I>&amp;key function plane-mask foreground background[method]
+<B>:change-attributes</B>   [method] 
+<BR><I>&amp;key function plane-mask foreground background 
 <BR>
-line-width line-style cap-style join-style font dash</I>
-</TT></PRE>
+line-width line-style cap-style join-style font dash
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
@@ -1848,7 +2144,7 @@ More than one attributes are changed at the same time.
 <P>
              <P>
 
-<A NAME="44790"></A>
+<A NAME="46141"></A>
 <B>font-id</B> <EM>fontname </EM>[function]
 
 <DL COMPACT>
@@ -1868,7 +2164,7 @@ is printed.
 
 <P>
 
-<A NAME="44806"></A>
+<A NAME="46157"></A>
 <B>textdots</B> <EM>str font-id </EM>[function]
 
 <DL COMPACT>
@@ -1890,9 +2186,10 @@ Colors and Colormaps</A>
 <P>
 
  <BR>
-<BR> <BR> 
-<A NAME="44818"></A>
-<BIG CLASS="XLARGE"><B>colormap </B></BIG> [class]  <PRE><TT>
+<BR> <P>
+	<BR> 
+<A NAME="46169"></A>
+<BIG CLASS="LARGE"><B>colormap </B></BIG> [class]  <PRE><TT>
   :super   <B>object</B> 
 <BR>  :slots 		 (cmapid planes pixels LUT-list) 
 </TT></PRE>
@@ -1978,34 +2275,41 @@ logical color indices into physical pixel values that the Xserver can recognize.
  <BR>
 <BR> <P>
 
-<A NAME="44835"></A>
+<A NAME="46186"></A>
 <B>:id</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the cmap id.
+<DD> 
+returns the cmap id.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44845"></A>
+<P>
+
+<A NAME="46196"></A>
 <B>:query</B> <EM>pix </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> gets RGB values for the specific pixel number.
+<DD> 
+gets RGB values for the specific pixel number.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44855"></A>
+<P>
+
+<A NAME="46206"></A>
 <B>:alloc</B> <EM>r g b </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> this method is the same as <TT>:store nil r g b</TT>.
+<DD> 
+this method is the same as <TT>:store nil r g b</TT>.
 A new color cell is allocated in this colormap and is assigned with the
 specified RGB values.
 </DD>
@@ -2013,18 +2317,23 @@ specified RGB values.
 <BR>
 <BR>
 
-<A NAME="44866"></A>
+<P>
+
+<A NAME="46217"></A>
 <B>:store</B> <EM>pix r g b </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> sets RGB values to the <EM>pix</EM>th color cell.
+<DD> 
+sets RGB values to the <EM>pix</EM>th color cell.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44877"></A>
+<P>
+
+<A NAME="46228"></A>
 <B>:store</B> <EM>pix color-name </EM>[method]
 
 <DL COMPACT>
@@ -2046,7 +2355,7 @@ If it is nil, a shared read-only color cell is allocated.
 
 <P>
 
-<A NAME="44889"></A>
+<A NAME="46240"></A>
 <B>:store-hls</B> <EM>pix hue lightness saturation </EM>[method]
 
 <DL COMPACT>
@@ -2063,18 +2372,21 @@ If <EM>pix</EM> is NIL, a shared read-only color cell is allocated.
 
 <P>
 
-<A NAME="44902"></A>
+<A NAME="46253"></A>
 <B>:destroy</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> destroys this colormap and frees resource.
+<DD> 
+destroys this colormap and frees resource.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="44912"></A>
+<P>
+
+<A NAME="46263"></A>
 <B>:pixel</B> <EM>LUT-name id </EM>[method]
 
 <DL COMPACT>
@@ -2089,7 +2401,7 @@ looks up in the LUT for the id'th entry and returns its pixel value.
 
 <P>
 
-<A NAME="44924"></A>
+<A NAME="46275"></A>
 <B>:allocate-private-colors</B> <EM>num </EM>[method]
 
 <DL COMPACT>
@@ -2103,8 +2415,8 @@ allocates <EM>num</EM> color cells in the private color map.
 
 <P>
 
-<A NAME="44935"></A>
-<B>:allocate-colors</B> <EM>rgb-list [private] </EM>[method]
+<A NAME="46286"></A>
+<B>:allocate-colors</B> <EM>rgb-list &amp;optional private </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -2119,8 +2431,8 @@ whose elements are pixel values is returned.
 
 <P>
 
-<A NAME="44946"></A>
-<B>:define-LUT</B> <EM>LUT-name rgb-list [private] </EM>[method]
+<A NAME="46297"></A>
+<B>:define-LUT</B> <EM>LUT-name rgb-list &amp;optional private </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -2135,8 +2447,8 @@ In order to define private color cells, set <EM>private</EM> to T.
 
 <P>
 
-<A NAME="44959"></A>
-<B>:define-gray-scale-LUT</B> <EM>LUT-name levels [private] </EM>[method]
+<A NAME="46310"></A>
+<B>:define-gray-scale-LUT</B> <EM>LUT-name levels &amp;optional private </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -2155,8 +2467,8 @@ for example, <TT>(send x:*color-map* :pixel 'gray8 2)</TT> returns 31.
 
 <P>
 
-<A NAME="44974"></A>
-<B>:define-rgb-LUT</B> <EM>LUT-name red green blue [private] </EM>[method]
+<A NAME="46325"></A>
+<B>:define-rgb-LUT</B> <EM>LUT-name red green blue &amp;optional private </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -2166,9 +2478,9 @@ For example, if red=green=blue=2, totally <!-- MATH
  $2^{2+2+2}=2^6=64$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="125" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
- SRC="manual-img126.png"
- ALT="$ 2^{2+2+2}=2^6=64$"></SPAN> color cells
+ WIDTH="124" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+ SRC="manual-img127.png"
+ ALT="$2^{2+2+2}=2^6=64$"></SPAN> color cells
 are allocated.
 </DD>
 </DL>
@@ -2177,9 +2489,8 @@ are allocated.
 
 <P>
 
-<A NAME="44985"></A>
-<B>:define-hls-LUT</B> <EM>LUT-name count hue low-brightness
-high-brightness saturation [private] </EM>[method]
+<A NAME="46336"></A>
+<B>:define-hls-LUT</B> <EM>LUT-name count hue low-brightness high-brightness saturation &amp;optional private </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -2196,8 +2507,8 @@ is also created.
 
 <P>
 
-<A NAME="45000"></A>
-<B>:define-rainbow-LUT</B> <EM>LUT-name count (hue-start 0) (hue-end 360) (brightness 0.5) (saturation 1.0) (private nil) </EM>[method]
+<A NAME="46351"></A>
+<B>:define-rainbow-LUT</B> <EM>LUT-name &amp;optional (count 32) (hue-start 0) (hue-end 360) (brightness 0.5) (saturation 1.0) private </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -2215,30 +2526,36 @@ A LUT named <EM>LUT-name</EM> is also created.
 
 <P>
 
-<A NAME="45016"></A>
+<A NAME="46367"></A>
 <B>:LUT-list</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns all LUT list defined in this colormap.
+<DD> 
+returns all LUT list defined in this colormap.
 Each entry in the list is a pair of the LUT-name and an integer vector.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="45026"></A>
+<P>
+
+<A NAME="46377"></A>
 <B>:LUT-names</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the name list of all LUT in this colormap.
+<DD> 
+returns the name list of all LUT in this colormap.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="45036"></A>
+<P>
+
+<A NAME="46387"></A>
 <B>:LUT</B> <EM>name </EM>[method]
 
 <DL COMPACT>
@@ -2252,23 +2569,13 @@ returns the integer-vector (LUT) identified by <EM>name</EM>.
 
 <P>
 
-<A NAME="45047"></A>
-<B>:size</B> <EM>LUT-name </EM>[method]
+<A NAME="46398"></A>
+<B>:size</B> <EM>LUT </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the length of <EM>LUT</EM>
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="45058"></A>
-<B>:planes</B> [method]
-
-<DL COMPACT>
-<DT> 
-<DD> returns planes of this colormap.
+<DD> 
+returns the length of <EM>LUT</EM>
 </DD>
 </DL>
 <BR>
@@ -2276,7 +2583,21 @@ returns the integer-vector (LUT) identified by <EM>name</EM>.
 
 <P>
 
-<A NAME="45068"></A>
+<A NAME="46409"></A>
+<B>:planes</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns planes of this colormap.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="46419"></A>
 <B>:set-window</B> <EM>xwin </EM>[method]
 
 <DL COMPACT>
@@ -2289,20 +2610,24 @@ This colormap is activated when the cursor enters in <EM>xwin</EM>.
 <BR>
 <BR>
 
-<A NAME="45080"></A>
-<B>:free</B> <EM>pixel | LUT </EM>[method]
+<P>
+
+<A NAME="46431"></A>
+<B>:free</B> <EM>pixel-or-LUT </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> frees a specific color cell
-addressed by pixel, or all the entries in LUT.
+<DD> 
+frees a specific color cell addressed by pixel, or all the entries in LUT.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="45090"></A>
-<B>:init</B> <EM>[cmapid] </EM>[method]
+<P>
+
+<A NAME="46441"></A>
+<B>:init</B> <EM>&amp;optional cmapid </EM>[method]
 
 <DL COMPACT>
 <DT> 
@@ -2314,12 +2639,15 @@ All the LUTs registered are discarded.
 <BR>
 <BR>
 
-<A NAME="45100"></A>
-<B>:create</B> <EM>&amp;key (planes 0) (colors 1) (visual *visual*) (contiguous nil) </EM>[method]
+<P>
+
+<A NAME="46451"></A>
+<B>:create</B> <EM>&amp;key (planes 0) (colors 1) (visual *visual*) contiguous </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> creates a new color map object.
+<DD> 
+creates a new color map object.
 </DD>
 </DL>
 <BR>
@@ -2327,8 +2655,8 @@ All the LUTs registered are discarded.
 
 <P>
 	<BR> 
-<A NAME="45111"></A>
-<BIG CLASS="XLARGE"><B>XColor </B></BIG> [class]  <PRE><TT>
+<A NAME="46462"></A>
+<BIG CLASS="LARGE"><B>XColor </B></BIG> [class]  <PRE><TT>
   :super   <B>cstruct</B> 
 <BR>  :slots 		 ((pixel        :integer) 
 <BR>(red          :short) 
@@ -2346,9 +2674,9 @@ All the LUTs registered are discarded.
 Use <B>setf</B> to assign value to each slots.
 The RGB values are sign extended and the greatest value is
 represented as <SPAN CLASS="MATH"><IMG
- WIDTH="25" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img127.png"
- ALT="$ -1$"></SPAN>.
+ WIDTH="24" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img128.png"
+ ALT="$-1$"></SPAN>.
 </DD>
 </DL>
 <BR>
@@ -2356,52 +2684,63 @@ represented as <SPAN CLASS="MATH"><IMG
 
 <P>
 
-<A NAME="45129"></A>
+<A NAME="46480"></A>
 <B>:red</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the red value of this XColor.
+<DD> 
+returns the red value of this XColor.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="45139"></A>
+<P>
+
+<A NAME="46490"></A>
 <B>:blue</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the blue value of this XColor.
+<DD> 
+returns the blue value of this XColor.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="45149"></A>
+<P>
+
+<A NAME="46500"></A>
 <B>:green</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the green value of this XColor.
+<DD> 
+returns the green value of this XColor.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="45159"></A>
+<P>
+
+<A NAME="46510"></A>
 <B>:rgb</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the list of red, green and blue values
-of this XColor.
+<DD> 
+returns the list of red, green and blue values of this XColor.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="45169"></A>
+<P>
+
+<A NAME="46520"></A>
 <B>:init</B> <EM>pix R G B &amp;optional (f 7) </EM>[method]
 
 <DL COMPACT>
@@ -2415,7 +2754,7 @@ initializes XColor.
 
 <P>
 
-<A NAME="45179"></A>
+<A NAME="46530"></A>
 <B>find-visual</B> <EM>type depth &amp;optional (screen 0) </EM>[function]
 
 <DL COMPACT>
@@ -2434,17 +2773,16 @@ Usually the <EM>depth</EM> should be either 1, 8 or 24.
              
 <DIV CLASS="navigation"><HR>
 <BR>
-<B> Next:</B> <A NAME="tex2html936"
+<B> Next:</B> <A NAME="tex2html940"
   HREF="manual-node24.html">XToolKit</A>
-<B>Up:</B> <A NAME="tex2html930"
+<B>Up:</B> <A NAME="tex2html934"
   HREF="manual-node15.html">EusLisp Extensions</A>
-<B> Previous:</B> <A NAME="tex2html924"
+<B> Previous:</B> <A NAME="tex2html928"
   HREF="manual-node22.html">Manipulators</A>
 </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-Travis CI User
-2017-03-07
+This document was generated using the LaTeX2HTML translator on Fri Feb 21 21:08:19 JST 2020 from <a href="http://github.com/euslisp/EusLisp.git">EusLisp</a> version <a href="http://github.com/euslisp/EusLisp/commit/40051e5c92167535141b4985db384a7516d89b4f">40051e5c update to 9.27 (with changelog in (j)intro.tex, euslisp.hlp, (j)manual.{tex/pdf/dvi} (#421)</a>
 </ADDRESS>
 </BODY>
 </HTML>

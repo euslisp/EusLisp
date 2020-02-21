@@ -1,10 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
 
-<!--Converted with LaTeX2HTML 2008 (1.71)
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
 <HTML>
 <HEAD>
 <TITLE>Sequences, Arrays and Tables</TITLE>
@@ -13,7 +9,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="manual.css">
@@ -28,11 +25,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html574"
+<B> Next:</B> <A NAME="tex2html578"
   HREF="manual-node11.html">Text Processing</A>
-<B>Up:</B> <A NAME="tex2html568"
+<B>Up:</B> <A NAME="tex2html572"
   HREF="manual-node2.html">EusLisp Basics</A>
-<B> Previous:</B> <A NAME="tex2html562"
+<B> Previous:</B> <A NAME="tex2html566"
   HREF="manual-node9.html">Symbols and Packages</A>
 <BR> <P>
 </DIV>
@@ -41,19 +38,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html575"
-  HREF="manual-node10.html#SECTION02081000000000000000">General Sequences</A>
-<LI><A NAME="tex2html576"
-  HREF="manual-node10.html#SECTION02082000000000000000">Lists</A>
-<LI><A NAME="tex2html577"
-  HREF="manual-node10.html#SECTION02083000000000000000">Vectors and Arrays</A>
-<LI><A NAME="tex2html578"
-  HREF="manual-node10.html#SECTION02084000000000000000">Characters and Strings</A>
 <LI><A NAME="tex2html579"
-  HREF="manual-node10.html#SECTION02085000000000000000">Foreign Strings</A>
+  HREF="manual-node10.html#SECTION02081000000000000000">General Sequences</A>
 <LI><A NAME="tex2html580"
-  HREF="manual-node10.html#SECTION02086000000000000000">Hash Tables</A>
+  HREF="manual-node10.html#SECTION02082000000000000000">Lists</A>
 <LI><A NAME="tex2html581"
+  HREF="manual-node10.html#SECTION02083000000000000000">Vectors and Arrays</A>
+<LI><A NAME="tex2html582"
+  HREF="manual-node10.html#SECTION02084000000000000000">Characters and Strings</A>
+<LI><A NAME="tex2html583"
+  HREF="manual-node10.html#SECTION02085000000000000000">Foreign Strings</A>
+<LI><A NAME="tex2html584"
+  HREF="manual-node10.html#SECTION02086000000000000000">Hash Tables</A>
+<LI><A NAME="tex2html585"
   HREF="manual-node10.html#SECTION02087000000000000000">Queue</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -85,7 +82,7 @@ since the class object is bound to the symbol.
  <BR>
 <BR> <P>
 
-<A NAME="10021"></A>
+<A NAME="10298"></A>
 <B>elt</B> <EM>sequence pos </EM>[function]
 
 <DL COMPACT>
@@ -103,7 +100,7 @@ object, bit, char, integer, or float.
 
 <P>
 
-<A NAME="10037"></A>
+<A NAME="10314"></A>
 <B>length</B> <EM>sequence </EM>[function]
 
 <DL COMPACT>
@@ -113,7 +110,7 @@ returns the length of <EM>sequence</EM>.
 For vectors, <B>length</B> finishes in constant time, but
 time proportional to the length is required for a list.
 <B>Length</B> never terminates if <EM>sequence</EM> is a circular list.
-Use <A NAME="10055"></A><B>l</B>ist-length, instead.
+Use <A NAME="10332"></A><B>list-length</B>, instead.
 If <EM>sequence</EM> is an array with a fill-pointer, <B>length</B>
 returns the fill-pointer, not the entire size of the array entity.
 Use <B>array-total-size</B> to know the entire size of those arrays.
@@ -124,8 +121,8 @@ Use <B>array-total-size</B> to know the entire size of those arrays.
 
 <P>
 
-<A NAME="10057"></A>
-<B>subseq</B> <EM>sequence start [end] </EM>[function]
+<A NAME="10334"></A>
+<B>subseq</B> <EM>sequence start &amp;optional end </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -140,7 +137,7 @@ out of <EM>sequence</EM>.
 
 <P>
 
-<A NAME="10072"></A>
+<A NAME="10349"></A>
 <B>copy-seq</B> <EM>sequence </EM>[function]
 
 <DL COMPACT>
@@ -158,7 +155,7 @@ containing recursive references.
 
 <P>
 
-<A NAME="10086"></A>
+<A NAME="10363"></A>
 <B>reverse</B> <EM>sequence </EM>[function]
 
 <DL COMPACT>
@@ -173,7 +170,7 @@ same type as <EM>sequence</EM>.
 
 <P>
 
-<A NAME="10098"></A>
+<A NAME="10375"></A>
 <B>nreverse</B> <EM>sequence </EM>[function]
 
 <DL COMPACT>
@@ -188,13 +185,13 @@ same type as <EM>sequence</EM>.
 
 <P>
 
-<A NAME="10112"></A>
-<B>concatenate</B> <EM>result-type sequence* </EM>[function]
+<A NAME="10389"></A>
+<B>concatenate</B> <EM>result-type &amp;rest sequences </EM>[function]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-concatenates all <EM>sequence</EM>s.
+concatenates all <EM>sequences</EM>.
 Each <EM>sequence</EM> may be of any sequence type.
 Unlike <B>append</B>, all the sequences including the last one are copied.
 <EM>Result-type</EM> should be a class such as cons, string,
@@ -206,7 +203,7 @@ vector, float-vector etc.
 
 <P>
 
-<A NAME="10127"></A>
+<A NAME="10403"></A>
 <B>coerce</B> <EM>sequence result-type </EM>[function]
 
 <DL COMPACT>
@@ -228,7 +225,7 @@ Note that <EM>sequence</EM> is copied even if its type equals to <EM>result-type
 
 <P>
 
-<A NAME="10145"></A>
+<A NAME="10421"></A>
 <B>map</B> <EM>result-type function seq &amp;rest more-seqs </EM>[function]
 
 <DL COMPACT>
@@ -236,7 +233,7 @@ Note that <EM>sequence</EM> is copied even if its type equals to <EM>result-type
 <DD> 
 <EM>function</EM> is applied to a list of arguments taken from <EM>seq</EM>
 and <EM>more-seqs</EM> orderly, and the result is accumulated in a sequence
-of type <EM>result-type</EM>.
+of type <EM>result-type</EM>. For example, you can write as follows: <TT>(map float-vector #'(lambda (x) (* x x)) (float-vector 1 2 3))</TT>
 </DD>
 </DL>
 <BR>
@@ -244,14 +241,13 @@ of type <EM>result-type</EM>.
 
 <P>
 
-<A NAME="10159"></A>
-<B>fill</B> <EM>sequence item &amp;key (:start 0) (:end (length sequence)) </EM>[function]
+<A NAME="10436"></A>
+<B>fill</B> <EM>sequence item &amp;key (start 0) (end (length sequence)) </EM>[function]
 
 <DL COMPACT>
 <DT> 
 <DD> 
 fills <EM>item</EM> from <EM>start</EM>th through (<EM>end</EM>-1)th in <EM>sequence</EM>.
-
 </DD>
 </DL>
 <BR>
@@ -259,8 +255,8 @@ fills <EM>item</EM> from <EM>start</EM>th through (<EM>end</EM>-1)th in <EM>sequ
 
 <P>
 
-<A NAME="10173"></A>
-<B>replace</B> <EM>dest source &amp;key :start1 :end1 :start2 :end2 </EM>[function]
+<A NAME="10450"></A>
+<B>replace</B> <EM>dest source &amp;key start1 end1 start2 end2 </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -279,7 +275,7 @@ its end is truncated to match with the shorter subsequence.
 
 <P>
 
-<A NAME="10193"></A>
+<A NAME="10470"></A>
 <B>sort</B> <EM>sequence compare &amp;optional key </EM>[function]
 
 <DL COMPACT>
@@ -291,12 +287,12 @@ Be careful with the sorting of a sequence which have same elements.
 For example, <TT>(sort '(1 1) #'&gt;)</TT> fails because comparisons
 between 1 and 1 in both direction fail.
 To avoid this problem, use functions like #'<SPAN CLASS="MATH"><IMG
- WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ WIDTH="28" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img14.png"
- ALT="$ &gt;=$"></SPAN> or #'<SPAN CLASS="MATH"><IMG
- WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ ALT="$&gt;=$"></SPAN> or #'<SPAN CLASS="MATH"><IMG
+ WIDTH="28" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img15.png"
- ALT="$ &lt;=$"></SPAN> for comparison.
+ ALT="$&lt;=$"></SPAN> for comparison.
 </DD>
 </DL>
 <BR>
@@ -304,7 +300,7 @@ To avoid this problem, use functions like #'<SPAN CLASS="MATH"><IMG
 
 <P>
 
-<A NAME="10206"></A>
+<A NAME="10483"></A>
 <B>merge</B> <EM>result-type seq1 seq2 pred &amp;key (key #'identity) </EM>[function]
 
 <DL COMPACT>
@@ -320,7 +316,7 @@ satisfy the comparison specified by <EM>pred</EM>.
 
 <P>
 
-<A NAME="10220"></A>
+<A NAME="10497"></A>
 <B>merge-list</B> <EM>list1 list2 pred key </EM>[function]
 
 <DL COMPACT>
@@ -351,8 +347,8 @@ if the predicate returns non-nil (-if version), or nil (-if-not version).
  <BR>
 <BR> <P>
 
-<A NAME="10233"></A>
-<B>position</B> <EM>item seq &amp;key :start :end :test :test-not :key (:count 1) </EM>[function]
+<A NAME="10510"></A>
+<B>position</B> <EM>item seq &amp;key start end test test-not key (count 1) </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -369,8 +365,8 @@ by the <EM>test</EM> or <EM>test-not</EM> parameter.
 
 <P>
 
-<A NAME="10250"></A>
-<B>position-if</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+<A NAME="10527"></A>
+<B>position-if</B> <EM>predicate seq &amp;key start end key </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -382,8 +378,8 @@ by the <EM>test</EM> or <EM>test-not</EM> parameter.
 
 <P>
 
-<A NAME="10261"></A>
-<B>position-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+<A NAME="10538"></A>
+<B>position-if-not</B> <EM>predicate seq &amp;key start end key </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -395,8 +391,8 @@ by the <EM>test</EM> or <EM>test-not</EM> parameter.
 
 <P>
 
-<A NAME="10272"></A>
-<B>find</B> <EM>item seq &amp;key :start :end :test :test-not :key (:count 1) </EM>[function]
+<A NAME="10549"></A>
+<B>find</B> <EM>item seq &amp;key start end test test-not key (count 1) </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -412,8 +408,8 @@ The element found, which is eql to <EM>item</EM> if no <EM>test</EM> or
 
 <P>
 
-<A NAME="10289"></A>
-<B>find-if</B> <EM>predicate seq &amp;key :start :end :key (:count 1) </EM>[function]
+<A NAME="10566"></A>
+<B>find-if</B> <EM>predicate seq &amp;key start end key (count 1) </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -425,8 +421,10 @@ returns non nil.
 <BR>
 <BR>
 
-<A NAME="10302"></A>
-<B>find-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+<P>
+
+<A NAME="10579"></A>
+<B>find-if-not</B> <EM>predicate seq &amp;key start end key </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -438,8 +436,8 @@ returns non nil.
 
 <P>
 
-<A NAME="10313"></A>
-<B>count</B> <EM>item seq &amp;key :start :end :test :test-not :key </EM>[function]
+<A NAME="10590"></A>
+<B>count</B> <EM>item seq &amp;key start end test test-not key </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -453,8 +451,8 @@ and the <EM>end</EM>th element in <EM>seq</EM>.
 
 <P>
 
-<A NAME="10327"></A>
-<B>count-if</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+<A NAME="10604"></A>
+<B>count-if</B> <EM>predicate seq &amp;key start end key </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -466,8 +464,10 @@ non nil.
 <BR>
 <BR>
 
-<A NAME="10339"></A>
-<B>count-if-not</B> <EM>predicate seq &amp;key :start :end :key </EM>[function]
+<P>
+
+<A NAME="10616"></A>
+<B>count-if-not</B> <EM>predicate seq &amp;key start end key </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -479,8 +479,8 @@ non nil.
 
 <P>
 
-<A NAME="10350"></A>
-<B>remove</B> <EM>item seq &amp;key :start :end :test :test-not :key :count </EM>[function]
+<A NAME="10627"></A>
+<B>remove</B> <EM>item seq &amp;key start end test test-not key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -498,8 +498,8 @@ sequence.
 
 <P>
 
-<A NAME="10367"></A>
-<B>remove-if</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[function]
+<A NAME="10644"></A>
+<B>remove-if</B> <EM>predicate seq &amp;key start end key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -509,8 +509,10 @@ sequence.
 <BR>
 <BR>
 
-<A NAME="10378"></A>
-<B>remove-if-not</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[function]
+<P>
+
+<A NAME="10655"></A>
+<B>remove-if-not</B> <EM>predicate seq &amp;key start end key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -520,8 +522,10 @@ sequence.
 <BR>
 <BR>
 
-<A NAME="10389"></A>
-<B>remove-duplicates</B> <EM>seq &amp;key :start :end :key :test :test-not :count </EM>[function]
+<P>
+
+<A NAME="10666"></A>
+<B>remove-duplicates</B> <EM>seq &amp;key start end key test test-not count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -534,8 +538,8 @@ removes duplicated items in <EM>seq</EM> and creates a new sequence.
 
 <P>
 
-<A NAME="10400"></A>
-<B>delete</B> <EM>item seq &amp;key :start :end :test :test-not :key :count </EM>[function]
+<A NAME="10677"></A>
+<B>delete</B> <EM>item seq &amp;key start end test test-not key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -552,8 +556,8 @@ sequence.
 
 <P>
 
-<A NAME="10415"></A>
-<B>delete-if</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[function]
+<A NAME="10692"></A>
+<B>delete-if</B> <EM>predicate seq &amp;key start end key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -563,8 +567,10 @@ sequence.
 <BR>
 <BR>
 
-<A NAME="10426"></A>
-<B>delete-if-not</B> <EM>predicate seq &amp;key :start :end :key :count </EM>[function]
+<P>
+
+<A NAME="10703"></A>
+<B>delete-if-not</B> <EM>predicate seq &amp;key start end key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -579,9 +585,8 @@ appears only once, :count should be specified as 1.
 
 <P>
 
-<A NAME="10439"></A>
-<B>substitute</B> <EM>newitem olditem seq
- &amp;key :start :end :test :test-not :key :count </EM>[function]
+<A NAME="10716"></A>
+<B>substitute</B> <EM>newitem olditem seq &amp;key start end test test-not key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -602,19 +607,8 @@ By default, all the <EM>olditems</EM> are substituted.
 
 <P>
 
-<A NAME="10454"></A>
-<B>substitute-if</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[function]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="10465"></A>
-<B>substitute-if-not</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[function]
+<A NAME="10731"></A>
+<B>substitute-if</B> <EM>newitem predicate seq &amp;key start end key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -626,20 +620,8 @@ By default, all the <EM>olditems</EM> are substituted.
 
 <P>
 
-<A NAME="10476"></A>
-<B>nsubstitute</B> <EM>newitem olditem seq &amp;key :start :end :test :test-not :key :count </EM>[function]
-
-<DL COMPACT>
-<DT> 
-<DD> substitute the <EM>count</EM> occurrences of <EM>olditem</EM> in <EM>seq</EM> with <EM>newitem</EM>
-destructively. By default, all the <EM>olditem</EM>s are substituted.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="10491"></A>
-<B>nsubstitute-if</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[function]
+<A NAME="10742"></A>
+<B>substitute-if-not</B> <EM>newitem predicate seq &amp;key start end key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -649,8 +631,38 @@ destructively. By default, all the <EM>olditem</EM>s are substituted.
 <BR>
 <BR>
 
-<A NAME="10502"></A>
-<B>nsubstitute-if-not</B> <EM>newitem predicate seq &amp;key :start :end :key :count </EM>[function]
+<P>
+
+<A NAME="10753"></A>
+<B>nsubstitute</B> <EM>newitem olditem seq &amp;key start end test test-not key count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+substitute the <EM>count</EM> occurrences of <EM>olditem</EM> in <EM>seq</EM> with <EM>newitem</EM>
+destructively. By default, all the <EM>olditem</EM>s are substituted.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10768"></A>
+<B>nsubstitute-if</B> <EM>newitem predicate seq &amp;key start end key count </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10779"></A>
+<B>nsubstitute-if-not</B> <EM>newitem predicate seq &amp;key start end key count </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -672,7 +684,9 @@ Lists</A>
 <P>
 
  <BR>
-<BR> <A NAME="10513"></A>
+<BR> <P>
+
+<A NAME="10790"></A>
 <B>listp</B> <EM>object </EM>[function]
 
 <DL COMPACT>
@@ -684,7 +698,9 @@ returns T if object is an instance of cons or NIL.
 <BR>
 <BR>
 
-<A NAME="10523"></A>
+<P>
+
+<A NAME="10800"></A>
 <B>consp</B> <EM>object </EM>[function]
 
 <DL COMPACT>
@@ -696,7 +712,9 @@ equivalent to (not (atom object)). (consp '()) is nil.
 <BR>
 <BR>
 
-<A NAME="10533"></A>
+<P>
+
+<A NAME="10810"></A>
 <B>car</B> <EM>list </EM>[function]
 
 <DL COMPACT>
@@ -709,12 +727,15 @@ returns the first element in <EM>list</EM>. <B>car</B> of NIL is NIL.
 <BR>
 <BR>
 
-<A NAME="10546"></A>
+<P>
+
+<A NAME="10823"></A>
 <B>cdr</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the list which removed the first element
+<DD> 
+returns the list which removed the first element
 of <EM>list</EM>. <B>cdr</B> of NIL is NIL.
 <B>cdr</B> of atom is error.
 </DD>
@@ -722,163 +743,193 @@ of <EM>list</EM>. <B>cdr</B> of NIL is NIL.
 <BR>
 <BR>
 
-<A NAME="10559"></A>
+<P>
+
+<A NAME="10836"></A>
 <B>cadr</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(cadr list) = (car (cdr list))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10570"></A>
+<P>
+
+<A NAME="10847"></A>
 <B>cddr</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(cddr list) = (cdr (cdr list))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10581"></A>
+<P>
+
+<A NAME="10858"></A>
 <B>cdar</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(cdar list) = (cdr (car list))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10592"></A>
+<P>
+
+<A NAME="10869"></A>
 <B>caar</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(caar list) = (car (car list))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10603"></A>
+<P>
+
+<A NAME="10880"></A>
 <B>caddr</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(caddr list) = (car (cdr (cdr list)))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10614"></A>
+<P>
+
+<A NAME="10891"></A>
 <B>caadr</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(caadr list) = (car (car (cdr list)))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10625"></A>
+<P>
+
+<A NAME="10902"></A>
+<B>cadar</B> <EM>list </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<TT>(cadar list) = (car (cdr (car list)))</TT>
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="10913"></A>
 <B>caaar</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(caaar list) = (car (car (car list)))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10636"></A>
+<P>
+
+<A NAME="10924"></A>
 <B>cdadr</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(cdadr list) = (cdr (car (cdr list)))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10647"></A>
-<B>cdadr</B> <EM>list </EM>[function]
+<P>
 
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="10658"></A>
+<A NAME="10935"></A>
 <B>cdaar</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(cdaar list) = (cdr (car (car list)))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10669"></A>
+<P>
+
+<A NAME="10946"></A>
 <B>cdddr</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(cdddr list) = (cdr (cdr (cdr list)))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10680"></A>
-<B>cdddr</B> <EM>list </EM>[function]
+<P>
 
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="10691"></A>
+<A NAME="10957"></A>
 <B>cddar</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+<TT>(cddar list) = (cdr (cdr (car list)))</TT>
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10702"></A>
+<P>
+
+<A NAME="10968"></A>
 <B>first</B> <EM>list </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> retrieves the first element in <EM>list</EM>.
-<A NAME="10714"></A><B>s</B>econd, third, fourth, fifth, sixth, seventh, eighth are also 
+<DD> 
+retrieves the first element in <EM>list</EM>.
+<A NAME="10980"></A><B>second, third, fourth, fifth, sixth, seventh, eighth</B> are als
 available.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="10716"></A>
+<P>
+
+<A NAME="10982"></A>
 <B>nth</B> <EM>count list </EM>[function]
 
 <DL COMPACT>
@@ -894,7 +945,7 @@ and to <TT>(elt list 1)</TT>.
 
 <P>
 
-<A NAME="10731"></A>
+<A NAME="10997"></A>
 <B>nthcdr</B> <EM>count list </EM>[function]
 
 <DL COMPACT>
@@ -908,7 +959,7 @@ applies <B>cdr</B> <EM>count</EM> times to <EM>list</EM>.
 
 <P>
 
-<A NAME="10744"></A>
+<A NAME="11010"></A>
 <B>last</B> <EM>list </EM>[function]
 
 <DL COMPACT>
@@ -922,12 +973,13 @@ the last cons is returned, not the last element.
 
 <P>
 
-<A NAME="10754"></A>
+<A NAME="11020"></A>
 <B>butlast</B> <EM>list &amp;optional (n 1) </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  returns a list which does not contain the last <EM>n</EM> elements.
+<DD> 
+returns a list which does not contain the last <EM>n</EM> elements.
 </DD>
 </DL>
 <BR>
@@ -935,7 +987,7 @@ the last cons is returned, not the last element.
 
 <P>
 
-<A NAME="10765"></A>
+<A NAME="11031"></A>
 <B>cons</B> <EM>car cdr </EM>[function]
 
 <DL COMPACT>
@@ -949,12 +1001,13 @@ makes a new cons whose car is <EM>car</EM> and cdr is <EM>cdr</EM>.
 
 <P>
 
-<A NAME="10777"></A>
-<B>list</B> <EM>{element}* </EM>[function]
+<A NAME="11043"></A>
+<B>list</B> <EM>&amp;rest elements </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> makes a list of <EM>element</EM>s.
+<DD> 
+makes a list of <EM>elements</EM>.
 </DD>
 </DL>
 <BR>
@@ -962,13 +1015,13 @@ makes a new cons whose car is <EM>car</EM> and cdr is <EM>cdr</EM>.
 
 <P>
 
-<A NAME="10788"></A>
-<B>list*</B> <EM>{element}* </EM>[function]
+<A NAME="11054"></A>
+<B>list*</B> <EM>&amp;rest elements </EM>[function]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-makes a list of <EM>element</EM>s, but the last element is consed in cdr:
+makes a list of <EM>elements</EM>, but the last element is consed in cdr:
 for example, <TT>(list* 1 2 3 '(4 5)) = (1 2 3 4 5)</TT>.
 </DD>
 </DL>
@@ -977,7 +1030,7 @@ for example, <TT>(list* 1 2 3 '(4 5)) = (1 2 3 4 5)</TT>.
 
 <P>
 
-<A NAME="10800"></A>
+<A NAME="11066"></A>
 <B>list-length</B> <EM>list </EM>[function]
 
 <DL COMPACT>
@@ -991,8 +1044,8 @@ returns the length of the <EM>list</EM>. <EM>List</EM> can be circular.
 
 <P>
 
-<A NAME="10812"></A>
-<B>make-list</B> <EM>size &amp;key (initial-element nil) </EM>[function]
+<A NAME="11078"></A>
+<B>make-list</B> <EM>size &amp;key initial-element </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1005,7 +1058,7 @@ makes a list whose length is <EM>size</EM> and elements are <EM>initial-element<
 
 <P>
 
-<A NAME="10824"></A>
+<A NAME="11090"></A>
 <B>rplaca</B> <EM>cons a </EM>[function]
 
 <DL COMPACT>
@@ -1020,7 +1073,7 @@ Use of <B>setf</B> to <B>car</B> is recommended.
 
 <P>
 
-<A NAME="10837"></A>
+<A NAME="11103"></A>
 <B>rplacd</B> <EM>cons d </EM>[function]
 
 <DL COMPACT>
@@ -1035,7 +1088,7 @@ Use of <B>setf</B> to <B>cdr</B> is recommended.
 
 <P>
 
-<A NAME="10850"></A>
+<A NAME="11116"></A>
 <B>memq</B> <EM>item list </EM>[function]
 
 <DL COMPACT>
@@ -1049,12 +1102,13 @@ resembles <B>member</B>, but test is always done by <B>eq</B>.
 
 <P>
 
-<A NAME="10862"></A>
-<B>member</B> <EM>item list &amp;key :key (:test #'eq) :test-not </EM>[function]
+<A NAME="11128"></A>
+<B>member</B> <EM>item list &amp;key key (test #'eq) test-not </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> The <EM>list</EM> is searched for an element that satisfies the <EM>test</EM>.
+<DD> 
+the <EM>list</EM> is searched for an element that satisfies the <EM>test</EM>.
 If none is found, NIL is returned; otherwise, the tail of <EM>list</EM> beginning
 with the first element that satisfied the test is returned. The <EM>list</EM>
 is searched on the top level only.
@@ -1065,8 +1119,8 @@ is searched on the top level only.
 
 <P>
 
-<A NAME="10876"></A>
-<B>assq</B> <EM>item alist  </EM>[function]
+<A NAME="11142"></A>
+<B>assq</B> <EM>item alist </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1076,12 +1130,15 @@ is searched on the top level only.
 <BR>
 <BR>
 
-<A NAME="10887"></A>
-<B>assoc</B> <EM>item alist &amp;key :key (:test #'eq) :test-not </EM>[function]
+<P>
+
+<A NAME="11153"></A>
+<B>assoc</B> <EM>item alist &amp;key key (test #'eq) test-not </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  searches the association list <EM>alist</EM>. The value returned is the
+<DD> 
+searches the association list <EM>alist</EM>. The value returned is the
 first pair in the <EM>alist</EM> such that the <EM>car</EM> of the pair satisfies
 the <EM>test</EM>, or NIL if there is no such pair in the <EM>alist</EM>.
 </DD>
@@ -1091,7 +1148,7 @@ the <EM>test</EM>, or NIL if there is no such pair in the <EM>alist</EM>.
 
 <P>
 
-<A NAME="10902"></A>
+<A NAME="11168"></A>
 <B>rassoc</B> <EM>item alist </EM>[function]
 
 <DL COMPACT>
@@ -1105,7 +1162,7 @@ returns the first pair in <EM>alist</EM> whose cdr is equal to <EM>item</EM>.
 
 <P>
 
-<A NAME="10914"></A>
+<A NAME="11180"></A>
 <B>pairlis</B> <EM>l1 l2 &amp;optional alist </EM>[function]
 
 <DL COMPACT>
@@ -1121,7 +1178,7 @@ made from <EM>l1</EM> and <EM>l2</EM>.
 
 <P>
 
-<A NAME="10929"></A>
+<A NAME="11195"></A>
 <B>acons</B> <EM>key val alist </EM>[function]
 
 <DL COMPACT>
@@ -1136,8 +1193,8 @@ add the <EM>key val</EM> pair to <EM>alist</EM>, that is,
 
 <P>
 
-<A NAME="10942"></A>
-<B>append</B> <EM>{list}* </EM>[function]
+<A NAME="11208"></A>
+<B>append</B> <EM>&amp;rest list </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1151,8 +1208,8 @@ All the elements in <EM>list</EM>, except the last list, are copied.
 
 <P>
 
-<A NAME="10954"></A>
-<B>nconc</B> <EM>{list}* </EM>[function]
+<A NAME="11220"></A>
+<B>nconc</B> <EM>&amp;rest list </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1166,7 +1223,7 @@ concatenates <EM>list</EM> destructively by replacing the last cdr of each
 
 <P>
 
-<A NAME="10966"></A>
+<A NAME="11232"></A>
 <B>subst</B> <EM>new old tree </EM>[function]
 
 <DL COMPACT>
@@ -1180,7 +1237,7 @@ substitutes every <EM>old</EM> in <EM>tree</EM> with <EM>new</EM>.
 
 <P>
 
-<A NAME="10979"></A>
+<A NAME="11245"></A>
 <B>flatten</B> <EM>complex-list </EM>[function]
 
 <DL COMPACT>
@@ -1197,7 +1254,7 @@ For example, <TT>(flatten '(a (b (c d) e))) = (a b c d e)</TT>
 
 <P>
 
-<A NAME="10992"></A>
+<A NAME="11258"></A>
 <B>push</B> <EM>item place </EM>[macro]
 
 <DL COMPACT>
@@ -1211,7 +1268,7 @@ pushes item into a stack (list) bound to <EM>place</EM>.
 
 <P>
 
-<A NAME="11003"></A>
+<A NAME="11269"></A>
 <B>pop</B> <EM>stack </EM>[macro]
 
 <DL COMPACT>
@@ -1226,7 +1283,7 @@ If <EM>stack</EM> is empty (nil), nil is returned.
 
 <P>
 
-<A NAME="11015"></A>
+<A NAME="11281"></A>
 <B>pushnew</B> <EM>item place &amp;key test test-not key </EM>[macro]
 
 <DL COMPACT>
@@ -1243,7 +1300,7 @@ passed to the member function.
 
 <P>
 
-<A NAME="11032"></A>
+<A NAME="11298"></A>
 <B>adjoin</B> <EM>item list </EM>[function]
 
 <DL COMPACT>
@@ -1258,8 +1315,8 @@ in the list.
 
 <P>
 
-<A NAME="11042"></A>
-<B>union</B> <EM>list1 list2 &amp;key (test #'eq) (test-not) (key #'identity) </EM>[function]
+<A NAME="11308"></A>
+<B>union</B> <EM>list1 list2 &amp;key (test #'eq) test-not (key #'identity) </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1270,12 +1327,15 @@ returns union set of two lists.
 <BR>
 <BR>
 
-<A NAME="11052"></A>
-<B>subsetp</B> <EM>list1 list2 &amp;key (test #'eq) (test-not) (key #'identity) </EM>[function]
+<P>
+
+<A NAME="11318"></A>
+<B>subsetp</B> <EM>list1 list2 &amp;key (test #'eq) test-not (key #'identity) </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> tests if <EM>list1</EM> is a subset of <EM>list2</EM>, i.e. if each element
+<DD> 
+tests if <EM>list1</EM> is a subset of <EM>list2</EM>, i.e. if each element
 of <EM>list1</EM> is a member of <EM>list2</EM>.
 </DD>
 </DL>
@@ -1284,9 +1344,8 @@ of <EM>list1</EM> is a member of <EM>list2</EM>.
 
 <P>
 
-<A NAME="11066"></A>
-<B>intersection</B> <EM>list1 list2
- &amp;key (test #'eq) (test-not) (key #'identity) </EM>[function]
+<A NAME="11332"></A>
+<B>intersection</B> <EM>list1 list2 &amp;key (test #'eq) test-not (key #'identity) </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1299,9 +1358,8 @@ returns the intersection of two sets, <EM>list1</EM> and <EM>list2</EM>.
 
 <P>
 
-<A NAME="11078"></A>
-<B>set-difference</B> <EM>list1 list2
-&amp;key (test #'eq) (test-not) (key #'identity) </EM>[function]
+<A NAME="11344"></A>
+<B>set-difference</B> <EM>list1 list2 &amp;key (test #'eq) test-not (key #'identity) </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1313,9 +1371,10 @@ and not in <EM>list2</EM>.
 <BR>
 <BR>
 
-<A NAME="11090"></A>
-<B>set-exclusive-or</B> <EM>list1 list2
- &amp;key (test #'eq) (test-not) (key #'identity) </EM>[function]
+<P>
+
+<A NAME="11356"></A>
+<B>set-exclusive-or</B> <EM>list1 list2 &amp;key (test #'eq) test-not (key #'identity) </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1326,13 +1385,15 @@ returns the list of elements that appear only either in <EM>list1</EM> or <EM>li
 <BR>
 <BR>
 
-<A NAME="11102"></A>
+<P>
+
+<A NAME="11368"></A>
 <B>list-insert</B> <EM>item pos list </EM>[function]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-Insert <EM>item</EM> as the <EM>pos</EM>'th element in <EM>list</EM> destructively.
+insert <EM>item</EM> as the <EM>pos</EM>'th element in <EM>list</EM> destructively.
 If <EM>pos</EM> is bigger than the length of <EM>list</EM>, <EM>item</EM> is
 nconc'ed at the tail.
 For example, <TT>(list-insert 'x 2 '(a b c d)) = (a b x c d)</TT>
@@ -1343,7 +1404,7 @@ For example, <TT>(list-insert 'x 2 '(a b c d)) = (a b x c d)</TT>
 
 <P>
 
-<A NAME="11119"></A>
+<A NAME="11385"></A>
 <B>copy-tree</B> <EM>tree </EM>[function]
 
 <DL COMPACT>
@@ -1360,7 +1421,7 @@ Actually, <B>copy-tree</B> is simply coded as <TT>(subst t t tree)</TT>.
 
 <P>
 
-<A NAME="11133"></A>
+<A NAME="11399"></A>
 <B>mapc</B> <EM>func arg-list &amp;rest more-arg-lists </EM>[function]
 
 <DL COMPACT>
@@ -1376,14 +1437,14 @@ The results of application are ignored and <EM>arg-list</EM> is returned.
 
 <P>
 
-<A NAME="11147"></A>
+<A NAME="11413"></A>
 <B>mapcar</B> <EM>func &amp;rest arg-list </EM>[function]
 
 <DL COMPACT>
 <DT> 
 <DD> 
 maps <EM>func</EM> to each element of <EM>arg-list</EM>,
-and makes a list from all the results.
+and makes a list from all the results. For example, you can write as follows: <TT>(mapcar #'(lambda (x) (* x x)) '(1 2 3))</TT>.
 Before using <B>mapcar</B>, try <B>dolist</B>.
 </DD>
 </DL>
@@ -1392,12 +1453,13 @@ Before using <B>mapcar</B>, try <B>dolist</B>.
 
 <P>
 
-<A NAME="11161"></A>
+<A NAME="11428"></A>
 <B>mapcan</B> <EM>func arg-list &amp;rest more-arg-lists </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> maps <EM>func</EM> to each element of <EM>arg-list</EM>,
+<DD> 
+maps <EM>func</EM> to each element of <EM>arg-list</EM>,
 and makes a list from all the results by <B>nconc</B>.
 <B>Mapcan</B> is suitable for filtering (selecting) elements
 in <EM>arg-list</EM>, since nconc does nothing with NIL.
@@ -1449,24 +1511,13 @@ available to set initial values of the array you make.
  <BR>
 <BR> <P>
 
-<A NAME="11176"></A>
+<A NAME="11443"></A>
 <B>array-rank-limit</B> [constant]
 
 <DL COMPACT>
 <DT> 
-<DD> 7
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="11186"></A>
-<B>array-dimension-limit</B> [constant]
-
-<DL COMPACT>
-<DT> 
-<DD> #x1fffffff, logically, but stricter
-limit is imposed by the physical or virtual memory size of the system.
+<DD> 
+7. Is the maximum array rank supported.
 </DD>
 </DL>
 <BR>
@@ -1474,7 +1525,22 @@ limit is imposed by the physical or virtual memory size of the system.
 
 <P>
 
-<A NAME="11196"></A>
+<A NAME="11453"></A>
+<B>array-dimension-limit</B> [constant]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+#x1fffffff, logically, but stricter limit is imposed
+by the physical or virtual memory size of the system.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11463"></A>
 <B>vectorp</B> <EM>object </EM>[function]
 
 <DL COMPACT>
@@ -1488,7 +1554,9 @@ bit-vectors or other user-defined vectors.
 <BR>
 <BR>
 
-<A NAME="11206"></A>
+<P>
+
+<A NAME="11473"></A>
 <B>vector</B> <EM>&amp;rest elements </EM>[function]
 
 <DL COMPACT>
@@ -1502,16 +1570,22 @@ makes a simple vector from <EM>elements</EM>.
 
 <P>
 
-<A NAME="11217"></A>
+<A NAME="11484"></A>
 <PRE><TT>
-<B>make-array</B> <I>dims &amp;key (element-type vector) [function] 
-<BR>(initial-contents nil) 
-<BR>(initial-element nil) 
-<BR>(fill-pointer nil)  
-<BR>(displaced-to nil) 
+<B>make-array</B>   [function] 
+<BR><I>dims &amp;key (element-type vector) 
+<BR>
+initial-contents 
+<BR>
+initial-element 
+<BR>
+fill-pointer  
+<BR>
+displaced-to 
 <BR>(displaced-index-offset 0) 
-<BR>(adjustable nil)</I>
-</TT></PRE>
+<BR>
+adjustable
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
@@ -1525,7 +1599,7 @@ If <EM>dims</EM> is an integer, a simple-vector is created.
 
 <P>
 
-<A NAME="11230"></A>
+<A NAME="11498"></A>
 <B>svref</B> <EM>vector pos </EM>[function]
 
 <DL COMPACT>
@@ -1540,8 +1614,8 @@ returns <EM>pos</EM>th element of <EM>vector</EM>.
 
 <P>
 
-<A NAME="11243"></A>
-<B>aref</B> <EM>vector &amp;rest (indices) </EM>[function]
+<A NAME="11511"></A>
+<B>aref</B> <EM>vector &amp;rest indices </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1558,7 +1632,7 @@ whenever possible.
 
 <P>
 
-<A NAME="11256"></A>
+<A NAME="11524"></A>
 <B>vector-push</B> <EM>val array </EM>[function]
 
 <DL COMPACT>
@@ -1576,7 +1650,7 @@ If it exceeds the array boundary, an error is reported.
 
 <P>
 
-<A NAME="11271"></A>
+<A NAME="11539"></A>
 <B>vector-push-extend</B> <EM>val array </EM>[function]
 
 <DL COMPACT>
@@ -1592,12 +1666,13 @@ when <EM>array</EM>'s fill-pointer reaches  the end.
 
 <P>
 
-<A NAME="11283"></A>
+<A NAME="11551"></A>
 <B>arrayp</B> <EM>obj </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> T if <EM>obj</EM> is an instance of array or vector.
+<DD> 
+T if <EM>obj</EM> is an instance of array or vector.
 </DD>
 </DL>
 <BR>
@@ -1605,41 +1680,50 @@ when <EM>array</EM>'s fill-pointer reaches  the end.
 
 <P>
 
-<A NAME="11294"></A>
+<A NAME="11562"></A>
 <B>array-total-size</B> <EM>array </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the total number of elements
-of <EM>array</EM>.
+<DD> 
+returns the total number of elements of <EM>array</EM>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="11305"></A>
+<P>
+
+<A NAME="11573"></A>
 <B>fill-pointer</B> <EM>array </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+returns the fill-pointer of <EM>array</EM>.
+Returns NIL if <EM>array</EM> does not have any fill-pointer.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="11316"></A>
+<P>
+
+<A NAME="11585"></A>
 <B>array-rank</B> <EM>array </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD>  
+<DD> 
+returns the rank of <EM>array</EM>.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="11327"></A>
+<P>
+
+<A NAME="11596"></A>
 <B>array-dimensions</B> <EM>array </EM>[function]
 
 <DL COMPACT>
@@ -1653,7 +1737,7 @@ returns a list of array-dimensions.
 
 <P>
 
-<A NAME="11337"></A>
+<A NAME="11606"></A>
 <B>array-dimension</B> <EM>array axis </EM>[function]
 
 <DL COMPACT>
@@ -1668,7 +1752,7 @@ dimension of <EM>array</EM>.
 
 <P>
 
-<A NAME="11350"></A>
+<A NAME="11619"></A>
 <B>bit</B> <EM>bitvec index </EM>[function]
 
 <DL COMPACT>
@@ -1681,7 +1765,9 @@ Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
 <BR>
 <BR>
 
-<A NAME="11364"></A>
+<P>
+
+<A NAME="11633"></A>
 <B>bit-and</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
 
 <DL COMPACT>
@@ -1692,7 +1778,9 @@ Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
 <BR>
 <BR>
 
-<A NAME="11375"></A>
+<P>
+
+<A NAME="11644"></A>
 <B>bit-ior</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
 
 <DL COMPACT>
@@ -1703,7 +1791,9 @@ Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
 <BR>
 <BR>
 
-<A NAME="11386"></A>
+<P>
+
+<A NAME="11655"></A>
 <B>bit-xor</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
 
 <DL COMPACT>
@@ -1714,7 +1804,9 @@ Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
 <BR>
 <BR>
 
-<A NAME="11397"></A>
+<P>
+
+<A NAME="11666"></A>
 <B>bit-eqv</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
 
 <DL COMPACT>
@@ -1725,7 +1817,9 @@ Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
 <BR>
 <BR>
 
-<A NAME="11408"></A>
+<P>
+
+<A NAME="11677"></A>
 <B>bit-nand</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
 
 <DL COMPACT>
@@ -1736,7 +1830,9 @@ Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
 <BR>
 <BR>
 
-<A NAME="11419"></A>
+<P>
+
+<A NAME="11688"></A>
 <B>bit-nor</B> <EM>bits1 bits2 &amp;optional result </EM>[function]
 
 <DL COMPACT>
@@ -1747,7 +1843,9 @@ Use <B>setf</B> and <B>bit</B> to change an element of a bit-vector.
 <BR>
 <BR>
 
-<A NAME="11430"></A>
+<P>
+
+<A NAME="11699"></A>
 <B>bit-not</B> <EM>bits1 &amp;optional result </EM>[function]
 
 <DL COMPACT>
@@ -1781,7 +1879,7 @@ use <B>pathname</B>s described in <A HREF="manual-node13.html#Pathnames">11.6</A
  <BR>
 <BR> <P>
 
-<A NAME="11442"></A>
+<A NAME="11711"></A>
 <B>digit-char-p</B> <EM>ch </EM>[function]
 
 <DL COMPACT>
@@ -1791,15 +1889,15 @@ T if <EM>ch</EM> is #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>0 through #<!-- MATH
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>0 through #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>9.
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>9.
 </DD>
 </DL>
 <BR>
@@ -1807,7 +1905,7 @@ T if <EM>ch</EM> is #<!-- MATH
 
 <P>
 
-<A NAME="11453"></A>
+<A NAME="11722"></A>
 <B>alpha-char-p</B> <EM>ch </EM>[function]
 
 <DL COMPACT>
@@ -1817,28 +1915,28 @@ T if <EM>ch</EM> is #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>A through #<!-- MATH
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>A through #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>Z or
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>Z or
 #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>a through #<!-- MATH
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>a through #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>z.
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>z.
 </DD>
 </DL>
 <BR>
@@ -1846,7 +1944,7 @@ T if <EM>ch</EM> is #<!-- MATH
 
 <P>
 
-<A NAME="11464"></A>
+<A NAME="11733"></A>
 <B>upper-case-p</B> <EM>ch </EM>[function]
 
 <DL COMPACT>
@@ -1856,15 +1954,15 @@ T if <EM>ch</EM> is #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>A through #<!-- MATH
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>A through #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>Z.
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>Z.
 </DD>
 </DL>
 <BR>
@@ -1872,7 +1970,7 @@ T if <EM>ch</EM> is #<!-- MATH
 
 <P>
 
-<A NAME="11475"></A>
+<A NAME="11744"></A>
 <B>lower-case-p</B> <EM>ch </EM>[function]
 
 <DL COMPACT>
@@ -1882,15 +1980,15 @@ T if <EM>ch</EM> is  #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>a through #<!-- MATH
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>a through #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>z.
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>z.
 </DD>
 </DL>
 <BR>
@@ -1898,8 +1996,8 @@ T if <EM>ch</EM> is  #<!-- MATH
 
 <P>
 
-<A NAME="11486"></A>
-<B>alphanumeric-p</B> <EM>ch </EM>[function]
+<A NAME="11755"></A>
+<B>alphanumericp</B> <EM>ch </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -1908,41 +2006,41 @@ T if <EM>ch</EM> is  #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>0 through #<!-- MATH
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>0 through #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>9,
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>9,
 #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>A through #<!-- MATH
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>A through #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>Z
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>Z
 or #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>a through #<!-- MATH
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>a through #<!-- MATH
  $\backslash$
  -->
 <SPAN CLASS="MATH"><IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img26.png"
- ALT="$ \backslash$"></SPAN>z.
+ WIDTH="12" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img27.png"
+ ALT="$\backslash$"></SPAN>z.
 </DD>
 </DL>
 <BR>
@@ -1950,7 +2048,7 @@ or #<!-- MATH
 
 <P>
 
-<A NAME="11497"></A>
+<A NAME="11766"></A>
 <B>char-upcase</B> <EM>ch </EM>[function]
 
 <DL COMPACT>
@@ -1964,7 +2062,7 @@ convert the case of <EM>ch</EM> to upper.
 
 <P>
 
-<A NAME="11508"></A>
+<A NAME="11777"></A>
 <B>char-downcase</B> <EM>ch </EM>[function]
 
 <DL COMPACT>
@@ -1978,7 +2076,7 @@ convert the case of <EM>ch</EM> to lower.
 
 <P>
 
-<A NAME="11519"></A>
+<A NAME="11788"></A>
 <B>char</B> <EM>string index </EM>[function]
 
 <DL COMPACT>
@@ -1992,7 +2090,7 @@ returns <EM>index</EM>th character in <EM>string</EM>.
 
 <P>
 
-<A NAME="11531"></A>
+<A NAME="11800"></A>
 <B>schar</B> <EM>string index </EM>[function]
 
 <DL COMPACT>
@@ -2007,13 +2105,13 @@ type of <EM>string</EM> is definitely known and no type check is required.
 
 <P>
 
-<A NAME="11544"></A>
+<A NAME="11813"></A>
 <B>stringp</B> <EM>object </EM>[function]
 
 <DL COMPACT>
 <DT> 
 <DD> 
-<EM>string</EM> is a vector of bytes (integers less than 256).
+returns T if <EM>object</EM> is a vector of bytes (integers less than 256).
 </DD>
 </DL>
 <BR>
@@ -2021,7 +2119,7 @@ type of <EM>string</EM> is definitely known and no type check is required.
 
 <P>
 
-<A NAME="11555"></A>
+<A NAME="11824"></A>
 <B>string-upcase</B> <EM>str &amp;key start end </EM>[function]
 
 <DL COMPACT>
@@ -2035,7 +2133,7 @@ converts <EM>str</EM> to upper case string and returns a new string.
 
 <P>
 
-<A NAME="11566"></A>
+<A NAME="11835"></A>
 <B>string-downcase</B> <EM>str &amp;key start end </EM>[function]
 
 <DL COMPACT>
@@ -2049,7 +2147,7 @@ converts <EM>str</EM> to lower case string and returns a new string.
 
 <P>
 
-<A NAME="11577"></A>
+<A NAME="11846"></A>
 <B>nstring-upcase</B> <EM>str </EM>[function]
 
 <DL COMPACT>
@@ -2063,7 +2161,7 @@ converts <EM>str</EM> to upper case string destructively.
 
 <P>
 
-<A NAME="11588"></A>
+<A NAME="11857"></A>
 <B>nstring-downcase</B> <EM>str &amp;key start end </EM>[function]
 
 <DL COMPACT>
@@ -2077,7 +2175,7 @@ converts <EM>str</EM> to lower case string destructively.
 
 <P>
 
-<A NAME="11599"></A>
+<A NAME="11868"></A>
 <B>string=</B> <EM>str1 str2 &amp;key start1 end1 start2 end2 </EM>[function]
 
 <DL COMPACT>
@@ -2092,7 +2190,7 @@ T if <EM>str1</EM> is equal to <EM>str2</EM>.
 
 <P>
 
-<A NAME="11612"></A>
+<A NAME="11881"></A>
 <B>string-equal</B> <EM>str1 str2 &amp;key start1 end1 start2 end2 </EM>[function]
 
 <DL COMPACT>
@@ -2107,7 +2205,7 @@ tests equality of <EM>str1</EM> and <EM>str2</EM>.
 
 <P>
 
-<A NAME="11625"></A>
+<A NAME="11894"></A>
 <B>string</B> <EM>object </EM>[function]
 
 <DL COMPACT>
@@ -2128,53 +2226,11 @@ use <B>format</B> with NIL in the first argument.
 
 <P>
 
-<A NAME="11640"></A>
+<A NAME="11909"></A>
 <B>string<SPAN CLASS="MATH"><IMG
- WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ WIDTH="16" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
  SRC="manual-img6.png"
- ALT="$ &lt;$"></SPAN></B> <EM>str1 str2 </EM>[function]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="11651"></A>
-<B>string<SPAN CLASS="MATH"><IMG
- WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img15.png"
- ALT="$ &lt;=$"></SPAN></B> <EM>str1 str2 </EM>[function]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="11662"></A>
-<B>string<SPAN CLASS="MATH"><IMG
- WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img13.png"
- ALT="$ &gt;$"></SPAN></B> <EM>str1 str2 </EM>[function]
-
-<DL COMPACT>
-<DT> 
-<DD>  
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="11673"></A>
-<B>string<SPAN CLASS="MATH"><IMG
- WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="manual-img14.png"
- ALT="$ &gt;=$"></SPAN></B> <EM>str1 str2 </EM>[function]
+ ALT="$&lt;$"></SPAN></B> <EM>str1 str2 </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -2186,7 +2242,55 @@ use <B>format</B> with NIL in the first argument.
 
 <P>
 
-<A NAME="11684"></A>
+<A NAME="11920"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="28" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img15.png"
+ ALT="$&lt;=$"></SPAN></B> <EM>str1 str2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11931"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img13.png"
+ ALT="$&gt;$"></SPAN></B> <EM>str1 str2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11942"></A>
+<B>string<SPAN CLASS="MATH"><IMG
+ WIDTH="28" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="manual-img14.png"
+ ALT="$&gt;=$"></SPAN></B> <EM>str1 str2 </EM>[function]
+
+<DL COMPACT>
+<DT> 
+<DD>  
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="11953"></A>
 <B>string-left-trim</B> <EM>bag str </EM>[function]
 
 <DL COMPACT>
@@ -2197,7 +2301,9 @@ use <B>format</B> with NIL in the first argument.
 <BR>
 <BR>
 
-<A NAME="11695"></A>
+<P>
+
+<A NAME="11964"></A>
 <B>string-right-trim</B> <EM>bag str </EM>[function]
 
 <DL COMPACT>
@@ -2216,7 +2322,7 @@ is returned.
 
 <P>
 
-<A NAME="11709"></A>
+<A NAME="11978"></A>
 <B>string-trim</B> <EM>bag str </EM>[function]
 
 <DL COMPACT>
@@ -2232,7 +2338,7 @@ in its both end is made and returned.
 
 <P>
 
-<A NAME="11722"></A>
+<A NAME="11991"></A>
 <B>substringp</B> <EM>sub string </EM>[function]
 
 <DL COMPACT>
@@ -2272,7 +2378,9 @@ consecutively.
 <P>
 
  <BR>
-<BR> <A NAME="11734"></A>
+<BR> <P>
+
+<A NAME="12003"></A>
 <B>make-foreign-string</B> <EM>address length </EM>[function]
 
 <DL COMPACT>
@@ -2330,7 +2438,7 @@ never change in a EusLisp process.
  <BR>
 <BR> <P>
 
-<A NAME="11747"></A>
+<A NAME="12016"></A>
 <B>sxhash</B> <EM>obj </EM>[function]
 
 <DL COMPACT>
@@ -2352,7 +2460,7 @@ the hash value of each slot, and the sum of them is returned.
 
 <P>
 
-<A NAME="11760"></A>
+<A NAME="12029"></A>
 <B>make-hash-table</B> <EM>&amp;key (size 30) (test #'eq) (rehash-size 2.0) </EM>[function]
 
 <DL COMPACT>
@@ -2366,7 +2474,7 @@ creates a hash table and returns it.
 
 <P>
 
-<A NAME="11770"></A>
+<A NAME="12039"></A>
 <B>gethash</B> <EM>key htab </EM>[function]
 
 <DL COMPACT>
@@ -2384,7 +2492,7 @@ expanded to twice larger size.
 
 <P>
 
-<A NAME="11784"></A>
+<A NAME="12053"></A>
 <B>remhash</B> <EM>key htab </EM>[function]
 
 <DL COMPACT>
@@ -2398,8 +2506,8 @@ removes a hash entry designated by <EM>key</EM> in <EM>htab</EM>.
 
 <P>
 
-<A NAME="11796"></A>
-<B>maphash</B> <EM>function htab  </EM>[function]
+<A NAME="12065"></A>
+<B>maphash</B> <EM>function htab </EM>[function]
 
 <DL COMPACT>
 <DT> 
@@ -2412,12 +2520,13 @@ maps <EM>function</EM> to all the elements of <EM>htab</EM>.
 
 <P>
 
-<A NAME="11808"></A>
+<A NAME="12077"></A>
 <B>hash-table-p</B> <EM>x </EM>[function]
 
 <DL COMPACT>
 <DT> 
-<DD> T if <EM>x</EM> is an instance of class hash-table.
+<DD> 
+T if <EM>x</EM> is an instance of class hash-table.
 </DD>
 </DL>
 <BR>
@@ -2425,8 +2534,8 @@ maps <EM>function</EM> to all the elements of <EM>htab</EM>.
 
 <P>
 	<BR> 
-<A NAME="11820"></A>
-<BIG CLASS="XLARGE"><B>hash-table </B></BIG> [class]  <PRE><TT>
+<A NAME="12089"></A>
+<BIG CLASS="LARGE"><B>hash-table </B></BIG> [class]  <PRE><TT>
   :super   <B>object</B> 
 <BR>  :slots 		 (key value count 
 <BR>
@@ -2453,7 +2562,7 @@ slots are empty or deleted in the <EM>key</EM> vector.
 
 <P>
 
-<A NAME="11850"></A>
+<A NAME="12119"></A>
 <B>:hash-function</B> <EM>newhash </EM>[method]
 
 <DL COMPACT>
@@ -2487,8 +2596,8 @@ and cadr gets the element that is queued most recently.
  <BR>
 <BR> <P>
 	<BR> 
-<A NAME="11865"></A>
-<BIG CLASS="XLARGE"><B>queue </B></BIG> [class]  <PRE><TT>
+<A NAME="12134"></A>
+<BIG CLASS="LARGE"><B>queue </B></BIG> [class]  <PRE><TT>
   :super   <B>cons</B> 
 <BR>  :slots 		 (car cdr) 
 </TT></PRE>
@@ -2505,7 +2614,7 @@ and cadr gets the element that is queued most recently.
 
 <P>
 
-<A NAME="11882"></A>
+<A NAME="12151"></A>
 <B>:init</B> [method]
 
 <DL COMPACT>
@@ -2519,7 +2628,7 @@ initializes the queue to have no elements.
 
 <P>
 
-<A NAME="11892"></A>
+<A NAME="12161"></A>
 <B>:enqueue</B> <EM>val </EM>[method]
 
 <DL COMPACT>
@@ -2533,7 +2642,7 @@ puts val in the queue as the most recent element.
 
 <P>
 
-<A NAME="11902"></A>
+<A NAME="12171"></A>
 <B>:dequeue</B> <EM>&amp;optional (error-p nil) </EM>[method]
 
 <DL COMPACT>
@@ -2549,23 +2658,13 @@ or returns NIL otherwise.
 
 <P>
 
-<A NAME="11912"></A>
+<A NAME="12181"></A>
 <B>:empty?</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns T if the queue is empty.
-</DD>
-</DL>
-<BR>
-<BR>
-
-<A NAME="11922"></A>
-<B>:length</B> [method]
-
-<DL COMPACT>
-<DT> 
-<DD> returns the length of the queue.
+<DD> 
+returns T if the queue is empty.
 </DD>
 </DL>
 <BR>
@@ -2573,58 +2672,84 @@ or returns NIL otherwise.
 
 <P>
 
-<A NAME="11932"></A>
+<A NAME="12191"></A>
+<B>:length</B> [method]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+returns the length of the queue.
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="12201"></A>
 <B>:trim</B> <EM>s </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> discard old entries to keep the size of this queue to s.
+<DD> 
+discard old entries to keep the size of this queue to s.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="11942"></A>
+<P>
+
+<A NAME="12211"></A>
 <B>:search</B> <EM>item &amp;optional (test #'equal) </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> find element which
-  is equal to item. the search is performed by equal, which can be altered by test
+<DD> 
+find element which is equal to item.
+the search is performed by equal, which can be altered by test
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="11952"></A>
-<B>:delete</B> <EM>item &amp;optional (test #'equal) (count
-  1) </EM>[method]
+<P>
+
+<A NAME="12221"></A>
+<B>:delete</B> <EM>item &amp;optional (test #'equal) (count 1) </EM>[method]
 
 <DL COMPACT>
 <DT> 
-<DD> eliminate count occurrences of item in this queue.
+<DD> 
+eliminate count occurrences of item in this queue.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="11962"></A>
+<P>
+
+<A NAME="12231"></A>
 <B>:first</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns the first entry (oldest value) of this queue.
+<DD> 
+returns the first entry (oldest value) of this queue.
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="11972"></A>
+<P>
+
+<A NAME="12241"></A>
 <B>:last</B> [method]
 
 <DL COMPACT>
 <DT> 
-<DD> returns tha last entry (newest value) of this queue.
+<DD> 
+returns tha last entry (newest value) of this queue.
 </DD>
 </DL>
 <BR>
@@ -2636,17 +2761,16 @@ or returns NIL otherwise.
 
 <DIV CLASS="navigation"><HR>
 <BR>
-<B> Next:</B> <A NAME="tex2html574"
+<B> Next:</B> <A NAME="tex2html578"
   HREF="manual-node11.html">Text Processing</A>
-<B>Up:</B> <A NAME="tex2html568"
+<B>Up:</B> <A NAME="tex2html572"
   HREF="manual-node2.html">EusLisp Basics</A>
-<B> Previous:</B> <A NAME="tex2html562"
+<B> Previous:</B> <A NAME="tex2html566"
   HREF="manual-node9.html">Symbols and Packages</A>
 </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-Travis CI User
-2017-03-07
+This document was generated using the LaTeX2HTML translator on Fri Feb 21 21:08:19 JST 2020 from <a href="http://github.com/euslisp/EusLisp.git">EusLisp</a> version <a href="http://github.com/euslisp/EusLisp/commit/40051e5c92167535141b4985db384a7516d89b4f">40051e5c update to 9.27 (with changelog in (j)intro.tex, euslisp.hlp, (j)manual.{tex/pdf/dvi} (#421)</a>
 </ADDRESS>
 </BODY>
 </HTML>

@@ -1,10 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//JP">
 
-<!--Converted with LaTeX2HTML 2008 (1.71)
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
 <HTML>
 <HEAD>
 <TITLE>オブジェクト指向プログラミング</TITLE>
@@ -13,7 +9,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="manual.css">
@@ -28,11 +25,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <DIV CLASS="navigation">
 <BR>
-<B> Next:</B> <A NAME="tex2html490"
+<B> Next:</B> <A NAME="tex2html493"
   HREF="jmanual-node8.html">数値演算</A>
-<B>Up:</B> <A NAME="tex2html484"
+<B>Up:</B> <A NAME="tex2html487"
   HREF="jmanual-node2.html">EusLisp 基本</A>
-<B> Previous:</B> <A NAME="tex2html478"
+<B> Previous:</B> <A NAME="tex2html481"
   HREF="jmanual-node6.html">制御構造</A>
 <BR> <P>
 </DIV>
@@ -41,13 +38,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html491"
-  HREF="jmanual-node7.html#SECTION02051000000000000000">クラスとメソッド</A>
-<LI><A NAME="tex2html492"
-  HREF="jmanual-node7.html#SECTION02052000000000000000">メッセージ送信</A>
-<LI><A NAME="tex2html493"
-  HREF="jmanual-node7.html#SECTION02053000000000000000">インスタンス管理</A>
 <LI><A NAME="tex2html494"
+  HREF="jmanual-node7.html#SECTION02051000000000000000">クラスとメソッド</A>
+<LI><A NAME="tex2html495"
+  HREF="jmanual-node7.html#SECTION02052000000000000000">メッセージ送信</A>
+<LI><A NAME="tex2html496"
+  HREF="jmanual-node7.html#SECTION02053000000000000000">インスタンス管理</A>
+<LI><A NAME="tex2html497"
   HREF="jmanual-node7.html#SECTION02054000000000000000">基本クラス</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -140,18 +137,16 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
  <BR>
 <BR> <P>
 
-<A NAME="3833"></A>
+<A NAME="3815"></A>
 <PRE><TT>
-<B>defclass</B> <I>classname &amp;key :super object [マクロ] 
-<BR>:slots ({var <SPAN CLASS="MATH"><IMG
- WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
- ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> (var [:type type] [:forward selectors])}*) 
-<BR>:metaclass metaclass 
-<BR>:element-type t 
-<BR>:size -1
-<BR></I>
-</TT></PRE>
+<B>defclass</B>   [マクロ] 
+<BR><I>classname &amp;key (super object) 
+<BR>
+slots   </I>; (var &amp;optional type &amp;rest forward selectors)*<I> 
+<BR>(metaclass metaclass) 
+<BR>(element-type t) 
+<BR>(size -1)
+</TT></PRE></I>
 
 <DL COMPACT>
 <DT> 
@@ -166,8 +161,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3844"></A>
-<B>defmethod</B> <EM>classname {(selector lambda-list . body)}* </EM>[特殊]
+<A NAME="3829"></A>
+<B>defmethod</B> <EM>classname &amp;rest (selector lambda-list &amp;rest body) </EM>[特殊]
 
 <DL COMPACT>
 <DT> 
@@ -181,8 +176,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3856"></A>
-<B>defclassmethod</B> <EM>classname {(selector lambda-list . body)}* </EM>[マクロ]
+<A NAME="3841"></A>
+<B>defclassmethod</B> <EM>classname &amp;rest (selector lambda-list &amp;rest body) </EM>[マクロ]
 
 <DL COMPACT>
 <DT> 
@@ -194,12 +189,13 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3867"></A>
+<A NAME="3852"></A>
 <B>classp</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
 <DT> 
-<DD> <EM>object</EM>がクラスオブジェクトのときTを返す。
+<DD> 
+<EM>object</EM>がクラスオブジェクトのときTを返す。
 そのオブジェクトは、クラス<B>metaclass</B>かそのサブクラスの
 インスタンスである。
 </DD>
@@ -209,7 +205,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3879"></A>
+<A NAME="3864"></A>
 <B>subclassp</B> <EM>class super </EM>[関数]
 
 <DL COMPACT>
@@ -223,7 +219,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3891"></A>
+<A NAME="3876"></A>
 <B>vector-class-p</B> <EM>x </EM>[関数]
 
 <DL COMPACT>
@@ -237,7 +233,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3903"></A>
+<A NAME="3888"></A>
 <B>delete-method</B> <EM>class method-name </EM>[関数]
 
 <DL COMPACT>
@@ -251,36 +247,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3915"></A>
-<B>class-hierarchy</B> <EM>class </EM>[関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-<EM>class</EM>の下の継承構造を表示する。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="3926"></A>
-<B>system:list-all-classes</B> [関数]
-
-<DL COMPACT>
-<DT> 
-<DD> 
-今まで定義されたクラスを全てリストアップする。
-</DD>
-</DL>
-<BR>
-<BR>
-
-<P>
-
-<A NAME="3936"></A>
-<B>system:find-method</B> <EM>object selector </EM>[関数]
+<A NAME="3900"></A>
+<B>find-method</B> <EM>object selector </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -296,8 +264,36 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3950"></A>
-<B>system:method-cache</B> <EM>&amp;optional flag </EM>[関数]
+<A NAME="3914"></A>
+<B>class-hierarchy</B> <EM>class </EM>[関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>class</EM>の下の継承構造を表示する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="3925"></A>
+<B>system:list-all-classes</B> [関数]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+今まで定義されたクラスを全てリストアップする。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="3935"></A>
+<B>system::method-cache</B> <EM>&amp;optional flag </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -322,8 +318,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
  <BR>
 <BR> <P>
 
-<A NAME="3962"></A>
-<B>send</B> <EM>object selector {arg}* </EM>[関数]
+<A NAME="3947"></A>
+<B>send</B> <EM>object selector &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -338,8 +334,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3977"></A>
-<B>send-message</B> <EM>target search selector {arg}* </EM>[関数]
+<A NAME="3962"></A>
+<B>send-message</B> <EM>target search selector &amp;rest args </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -352,7 +348,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="3988"></A>
+<A NAME="3973"></A>
 <B>send*</B> <EM>object selector &amp;rest msg-list </EM>[マクロ]
 
 <DL COMPACT>
@@ -368,7 +364,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4006"></A>
+<A NAME="3991"></A>
 <B>send-all</B> <EM>receivers selector &amp;rest mesg </EM>[関数]
 
 <DL COMPACT>
@@ -382,7 +378,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4017"></A>
+<A NAME="4002"></A>
 <B>send-super</B> <EM>selector &amp;rest msgs </EM>[マクロ]
 
 <DL COMPACT>
@@ -400,7 +396,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4030"></A>
+<A NAME="4015"></A>
 <B>send-super*</B> <EM>selector &amp;rest msg-list </EM>[マクロ]
 
 <DL COMPACT>
@@ -424,7 +420,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
  <BR>
 <BR> <P>
 
-<A NAME="4042"></A>
+<A NAME="4027"></A>
 <B>instantiate</B> <EM>class &amp;optional size </EM>[関数]
 
 <DL COMPACT>
@@ -439,7 +435,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4056"></A>
+<A NAME="4041"></A>
 <B>instance</B> <EM>class &amp;rest message </EM>[マクロ]
 
 <DL COMPACT>
@@ -453,7 +449,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4067"></A>
+<A NAME="4052"></A>
 <B>make-instance</B> <EM>class &amp;rest var-val-pairs </EM>[関数]
 
 <DL COMPACT>
@@ -470,7 +466,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4081"></A>
+<A NAME="4066"></A>
 <B>copy-object</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
@@ -493,7 +489,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4099"></A>
+<A NAME="4084"></A>
 <B>become</B> <EM>object class </EM>[関数]
 
 <DL COMPACT>
@@ -510,7 +506,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4111"></A>
+<A NAME="4096"></A>
 <B>replace-object</B> <EM>dest src </EM>[関数]
 
 <DL COMPACT>
@@ -524,7 +520,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4123"></A>
+<A NAME="4108"></A>
 <B>class</B> <EM>object </EM>[関数]
 
 <DL COMPACT>
@@ -539,7 +535,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4135"></A>
+<A NAME="4120"></A>
 <B>derivedp</B> <EM>object class </EM>[関数]
 
 <DL COMPACT>
@@ -556,11 +552,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4150"></A>
-<B>slot</B> <EM>object class (index <SPAN CLASS="MATH"><IMG
- WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
- ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> slot-name) </EM>[関数]
+<A NAME="4135"></A>
+<B>slot</B> <EM>object class idex-or-name </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -573,11 +566,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4160"></A>
-<B>setslot</B> <EM>object class (index <SPAN CLASS="MATH"><IMG
- WIDTH="340" HEIGHT="190" ALIGN="BOTTOM" BORDER="0"
- SRC="jmanual-img5.png"
- ALT="\includegraphics[width=7.5cm]{fig/threadobj.ps}"></SPAN> slot-name) value </EM>[関数]
+<A NAME="4145"></A>
+<B>setslot</B> <EM>object class index-or-name value </EM>[関数]
 
 <DL COMPACT>
 <DT> 
@@ -600,8 +590,8 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
  <BR>
 <BR> <BR> 
-<A NAME="4174"></A>
-<BIG CLASS="XLARGE"><B>object </B></BIG> [クラス]  <PRE><TT>
+<A NAME="4159"></A>
+<BIG CLASS="LARGE"><B>object </B></BIG> [クラス]  <PRE><TT>
   :super    
 <BR>  :slots 		 
 </TT></PRE>
@@ -620,7 +610,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4192"></A>
+<A NAME="4177"></A>
 <B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[メソッド]
 
 <DL COMPACT>
@@ -634,7 +624,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 使用することができる。
 オブジェクトは、もし<TT>#<SPAN CLASS="MATH"><IMG
  WIDTH="15" HEIGHT="22" ALIGN="MIDDLE" BORDER="0"
- SRC="jmanual-img6.png"
+ SRC="jmanual-img7.png"
  ALT="$ &lt;$"></SPAN></TT>で始まるなら、再読み込み可能である。
 そのクラス名・正確なアドレス・どのLispでも読み込可能な情報・<code>&gt;</code>をあとに
 従えて。
@@ -643,7 +633,6 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 この構文で述べることは、symbolに<B>setq</B>し忘れたデータオブジェクトを
 把握することができる。
 ただし、表示された後にガーベージコレクションが起こらない限りである。
-
 </DD>
 </DL>
 <BR>
@@ -651,7 +640,7 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 
 <P>
 
-<A NAME="4207"></A>
+<A NAME="4192"></A>
 <B>:slots</B> [メソッド]
 
 <DL COMPACT>
@@ -666,9 +655,54 @@ EusLispのオブジェクトは、record-likeオブジェクトかまたはベ�
 <BR>
 
 <P>
+
+<A NAME="4203"></A>
+<B>:methods</B> <EM>&amp;optional subname </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+このオブジェクトから呼べる全てのメソッドのリストを返す。
+<EM>subname</EM>を指定すると、メソッド名のなかにそれを含むメソッドのみ返す。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4214"></A>
+<B>:get-val</B> <EM>variable-name </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>variable-name</EM>に該当するスロットの値を返す。
+スロットが存在しない時、エラーを報告する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
+
+<A NAME="4225"></A>
+<B>:set-val</B> <EM>variable-name value </EM>[メソッド]
+
+<DL COMPACT>
+<DT> 
+<DD> 
+<EM>variable-name</EM>に該当するスロットに<EM>value</EM>を代入する。
+スロットが存在しない時、エラーを報告する。
+</DD>
+</DL>
+<BR>
+<BR>
+
+<P>
 	<BR> 
-<A NAME="4219"></A>
-<BIG CLASS="XLARGE"><B>propertied-object </B></BIG> [クラス]  <PRE><TT>
+<A NAME="4238"></A>
+<BIG CLASS="LARGE"><B>propertied-object </B></BIG> [クラス]  <PRE><TT>
   :super   <B>object</B> 
 <BR>  :slots 		 plist 
 </TT></PRE>
@@ -689,7 +723,7 @@ EusLispは、たとえ、symbolでなかったとしても、property-listを持
 
 <P>
 
-<A NAME="4237"></A>
+<A NAME="4256"></A>
 <B>:plist</B> <EM>&amp;optional plist </EM>[メソッド]
 
 <DL COMPACT>
@@ -709,7 +743,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4255"></A>
+<P>
+
+<A NAME="4274"></A>
 <B>:get</B> <EM>indicator </EM>[メソッド]
 
 <DL COMPACT>
@@ -722,7 +758,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4267"></A>
+<P>
+
+<A NAME="4286"></A>
 <B>:put</B> <EM>indicator value </EM>[メソッド]
 
 <DL COMPACT>
@@ -734,7 +772,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4280"></A>
+<P>
+
+<A NAME="4299"></A>
 <B>:remprop</B> <EM>indicator </EM>[メソッド]
 
 <DL COMPACT>
@@ -747,7 +787,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4293"></A>
+<P>
+
+<A NAME="4312"></A>
 <B>:name</B> <EM>&amp;optional name </EM>[メソッド]
 
 <DL COMPACT>
@@ -760,7 +802,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4305"></A>
+<P>
+
+<A NAME="4324"></A>
 <B>:prin1</B> <EM>&amp;optional stream &amp;rest mesg </EM>[メソッド]
 
 <DL COMPACT>
@@ -776,8 +820,8 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 
 <P>
 	<BR> 
-<A NAME="4317"></A>
-<BIG CLASS="XLARGE"><B>metaclass </B></BIG> [クラス]  <PRE><TT>
+<A NAME="4336"></A>
+<BIG CLASS="LARGE"><B>metaclass </B></BIG> [クラス]  <PRE><TT>
   :super   <B>propertied-object</B> 
 <BR>  :slots 		 name super cix vars types forwards methods 
 </TT></PRE>
@@ -793,19 +837,24 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4336"></A>
+<P>
+
+<A NAME="4355"></A>
 <B>:new</B> [メソッド]
 
 <DL COMPACT>
 <DT> 
-<DD> このクラスのインスタンスを生成し、全てのスロットをNILにした後、
+<DD> 
+このクラスのインスタンスを生成し、全てのスロットをNILにした後、
 それを返す。
 </DD>
 </DL>
 <BR>
 <BR>
 
-<A NAME="4346"></A>
+<P>
+
+<A NAME="4365"></A>
 <B>:super</B> [メソッド]
 
 <DL COMPACT>
@@ -818,7 +867,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4356"></A>
+<P>
+
+<A NAME="4375"></A>
 <B>:methods</B> [メソッド]
 
 <DL COMPACT>
@@ -832,7 +883,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4366"></A>
+<P>
+
+<A NAME="4385"></A>
 <B>:method</B> <EM>name </EM>[メソッド]
 
 <DL COMPACT>
@@ -845,7 +898,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4377"></A>
+<P>
+
+<A NAME="4396"></A>
 <B>:method-names</B> <EM>subname </EM>[メソッド]
 
 <DL COMPACT>
@@ -858,7 +913,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4388"></A>
+<P>
+
+<A NAME="4407"></A>
 <B>:all-methods</B> [メソッド]
 
 <DL COMPACT>
@@ -873,7 +930,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4398"></A>
+<P>
+
+<A NAME="4417"></A>
 <B>:all-method-names</B> <EM>subname </EM>[メソッド]
 
 <DL COMPACT>
@@ -886,7 +945,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4410"></A>
+<P>
+
+<A NAME="4429"></A>
 <B>:slots</B> [メソッド]
 
 <DL COMPACT>
@@ -898,7 +959,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4420"></A>
+<P>
+
+<A NAME="4439"></A>
 <B>:name</B> [メソッド]
 
 <DL COMPACT>
@@ -910,7 +973,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4430"></A>
+<P>
+
+<A NAME="4449"></A>
 <B>:cid</B> [メソッド]
 
 <DL COMPACT>
@@ -925,7 +990,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4440"></A>
+<P>
+
+<A NAME="4459"></A>
 <B>:subclasses</B> [メソッド]
 
 <DL COMPACT>
@@ -937,7 +1004,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4450"></A>
+<P>
+
+<A NAME="4469"></A>
 <B>:hierarchy</B> [メソッド]
 
 <DL COMPACT>
@@ -951,7 +1020,9 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
-<A NAME="4461"></A>
+<P>
+
+<A NAME="4480"></A>
 <B>find-method</B> <EM>object selector </EM>[関数]
 
 <DL COMPACT>
@@ -966,20 +1037,21 @@ symbolが<TT>indicator</TT>として用いられたとき、内部パッケー�
 <BR>
 <BR>
 
+<P>
+             
 
 <DIV CLASS="navigation"><HR>
 <BR>
-<B> Next:</B> <A NAME="tex2html490"
+<B> Next:</B> <A NAME="tex2html493"
   HREF="jmanual-node8.html">数値演算</A>
-<B>Up:</B> <A NAME="tex2html484"
+<B>Up:</B> <A NAME="tex2html487"
   HREF="jmanual-node2.html">EusLisp 基本</A>
-<B> Previous:</B> <A NAME="tex2html478"
+<B> Previous:</B> <A NAME="tex2html481"
   HREF="jmanual-node6.html">制御構造</A>
 </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-Travis CI User
-2017-03-07
+This document was generated using the LaTeX2HTML translator on Fri Feb 21 21:08:42 JST 2020 from <a href="http://github.com/euslisp/EusLisp.git">EusLisp</a> version <a href="http://github.com/euslisp/EusLisp/commit/40051e5c92167535141b4985db384a7516d89b4f">40051e5c update to 9.27 (with changelog in (j)intro.tex, euslisp.hlp, (j)manual.{tex/pdf/dvi} (#421)</a>
 </ADDRESS>
 </BODY>
 </HTML>
