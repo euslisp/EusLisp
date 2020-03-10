@@ -69,10 +69,15 @@ if [ "$QEMU" != "" ]; then
     echo "gcc -dumpversion : $(gcc -dumpversion)"
     echo "getconf LONG_BIT : $(getconf LONG_BIT)"
 
+    travis_time_start download.euslisp-debian
+    git clone http://salsa.debian.org/science-team/euslisp /tmp/euslisp-dfsg
+    for file in $(cat /tmp/euslisp-dfsg/debian/patches/series); do patch -p1 < /tmp/euslisp-dfsg/debian/patches/$file; done
+    travis_time_end
+
     travis_time_start compile.euslisp
     export EUSDIR=`pwd`
     eval "$(dpkg-buildflags --export=sh)"
-    make -C lisp -f Makefile.Linux  eus0 eus1 eus2 eusg eusx eusgl eus eusjpeg
+    make
     travis_time_end
 
     if [[ `gcc -dumpmachine | egrep "^(arm|aarch)"` != "" ]]; then
