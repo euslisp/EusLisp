@@ -91,7 +91,7 @@ register pointer argv[];
   eusfloat_t cz,u,v;
   eusfloat_t *p1, v1[3], *p2, v2[3], p2p1[3];
   eusfloat_t cross[3], cross2;
-  numunion nu;
+  volatile numunion nu;
 
   ckarg2(4,5);
   if (!isfltvector(argv[0])) error(E_FLOATVECTOR,NULL);
