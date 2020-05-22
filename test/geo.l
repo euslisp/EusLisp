@@ -3,6 +3,8 @@
 (init-unit-test)
 
 (in-package "GEO")
+;; redefined to use normalize-vector defined in irteus(?)
+;; this requrie to avoid outer circuit not found in (body+ c1 b d1 c2 d2 c3 d3 c4 d4)
 (defun face-normal-vector (vertices)
   (let* ((v1 (first vertices)) (v2) (vlist (rest vertices))
          (v (float-vector 0 0 0))
