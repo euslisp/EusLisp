@@ -38,6 +38,22 @@
     (assert (eps= (send f :distance (float-vector 200 0 100)) (norm #f(100 100))))
     ))
 
+;; test intersection3
+;; https://github.com/euslisp/jskeus/pull/561
+(deftest triangulation-intersection3 ()
+  (let ((l0 (make-line (float-vector -120.0 -30.0 0.0) (float-vector 15.0 0.0 0.0)))
+	(l1 (make-line (float-vector -15.0 120.0 0.0)  (float-vector -15.0 0.0 0.0)))
+        res-p res-n)
+    (setq res-p (geo::line-intersection3 (l0 . pvert) (l0 . nvert) (l1 . pvert) (l1 . nvert) 0.00001)) ;; -> (0.777778 1.05556)
+    (setq res-n (geo::line-intersection3 (l1 . pvert) (l1 . nvert) (l0 . pvert) (l0 . nvert) 0.00001)) ;; -> (1.05556 0.777778)
+    (warn ";;; intersection3 (res-p) ~A~%" res-p)
+    (warn ";;; intersection3 (res-n) ~A~%" res-n)
+
+    (assert (eps= (elt res-p 0) (elt res-n 1)))
+    (assert (eps= (elt res-p 1) (elt res-n 0)))
+    ))
+
+
 (eval-when (load eval)
   (run-all-tests)
   (exit))
