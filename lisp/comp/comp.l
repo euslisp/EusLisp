@@ -1232,6 +1232,8 @@
 	    )
 	(setq *coptflags* (format nil " -O~A" c-optimize))
 	(setq *coptflags* ""))
+#+(and :arm :word-size=32) ;; armhf does not work with -O2, see https://github.com/euslisp/EusLisp/pull/427
+   (setq *coptflags* " -O0")
    (setq *optimize* optimize
 	 *safety* safety
 	 *verbose* verbose)

@@ -49,10 +49,13 @@ else
    CPU_OPTIMIZE=-march=armv8-a
    ALIGN_FUNCTIONS=-falign-functions=8
    ADD_CFLAGS=-fPIC -Darmv8
+   OFLAGS=-O2
  else
-   CPU_OPTIMIZE=-march=$(MACHINE)
+   CPU_OPTIMIZE=
    ALIGN_FUNCTIONS=-falign-functions=4
-   ADD_CFLAGS=-fno-stack-protector -fpic
+   # armhf does not work with -O2, see https://github.com/euslisp/EusLisp/pull/427
+   ADD_CFLAGS=-fno-stack-protector -fpic -O0
+   OFLAGS=-O0
  endif
  GCC3=-DGCC3
 endif
@@ -105,8 +108,6 @@ GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
 THREADDEP=mthread_posix.c
 #THREADDEP=pthreads.c
 
-# If you don't like optimization, comment out the next line.
-OFLAGS=-O2
 
 # link-editor's default flags ?-rdynamic 
 SOFLAGS= -shared -Xlinker -build-id
