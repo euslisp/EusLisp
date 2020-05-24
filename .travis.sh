@@ -129,7 +129,13 @@ if [[ "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ]]; then
 else
     make eus-installed WFLAGS="-Werror=implicit-int -Werror=implicit-function-declaration -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=unused-result"
 fi
+travis_time_end
+
+travis_time_start script.make.jskeus
+
 make
+
+travis_time_end
 
 travis_time_start script.eustag
 
