@@ -737,6 +737,7 @@ extern int export_all;
 #define isint(p) (!((eusinteger_t)(p) & 3))
 #define isflt(p) (((eusinteger_t)(p) & 3)==1)
 #define isnum(p) (((eusinteger_t)(p) & 2)==0)
+#define numberp(p) (((isnum(p)) || (pisextnum(p)))) // predicates.c:NUMBERP
 #define ispointer(p) ((eusinteger_t)(p) & 2)
 #define makeint(v) ((pointer)(((eusinteger_t)v)<<2))
 #define bpointerof(p) ((bpointer)((eusinteger_t)(p)-2))
@@ -749,6 +750,7 @@ extern int export_all;
 #define	isint(p)	( (((eusinteger_t)(p)&3)==2) || (((eusinteger_t)(p)&0x3)==0x3) )
 #define isflt(p) (((eusinteger_t)(p) & 3)==1)
 #define isnum(p) (((eusinteger_t)(p) & 3))
+#define numberp(p) (((isnum(p)) || (pisextnum(p)))) // predicates.c:NUMBERP
 #define ispointer(p) (!((eusinteger_t)(p) & 3))
 // #define makeint(v) ((pointer)((((eusinteger_t)(v))<<2)+2)) // org
 #ifdef __cplusplus
