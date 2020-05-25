@@ -438,7 +438,7 @@
     (send self :push
 	  (format nil "(~A(w)?T:NIL)"
 	       (cdr (assoc pred '((symbolp . "issymbol") (consp . "iscons")
-				  (numberp . "isnum") (integerp . "isint")
+				  (numberp . "numberp") (integerp . "isint")
 				  (floatp . "isflt") (stringp . "isstring")
 				 ))))))
  (:if-nil (lab)
@@ -511,7 +511,7 @@
 ;;; type check
  (:type-checker (tn)
     (cdr (assq tn '((symbolp . "issymbol") (integerp . "isint")
-		    (numberp . "isnum")
+		    (numberp . "numberp")
 		    (floatp . "isflt") (atom . "!iscons")
 		    (consp . "iscons") (stringp . "isstring")))))
  (:if-type (type lab)

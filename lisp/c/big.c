@@ -364,6 +364,7 @@ eusinteger_t i;
   for (j=0; j<vlen; j++) newv->c.ivec.iv[j]=bn->c.ivec.iv[j];
   newv->c.ivec.iv[vlen]=i;
   pointer_update(x->c.bgnm.bv, newv);
+  x->c.bgnm.size=makeint(vlen+1);
   return(newv);
   }
 

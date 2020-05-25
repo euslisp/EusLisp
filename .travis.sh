@@ -99,6 +99,23 @@ if [ "$QEMU" != "" ]; then
         travis_time_end `expr 32 - $TMP_EXIT_STATUS`
 
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
+
+        travis_time_start compiled.${test_l##*/}.test
+
+        eusgl "(let ((o (namestring (merge-pathnames \".o\" \"$test_l\"))) (so (namestring (merge-pathnames \".so\" \"$test_l\")))) (compile-file \"$test_l\" :o o) (if (probe-file so) (load so) (exit 1))))"
+        export TMP_EXIT_STATUS=$?
+
+        export CONTINUE=0
+        # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
+        if [[ $test_l =~ const.l ]]; then export CONTINUE=1; fi
+
+        if [[ $CONTINUE == 0 ]]; then travis_time_end `expr 32 - $TMP_EXIT_STATUS`; else travis_time_end 33; fi
+
+        if [[ $TMP_EXIT_STATUS != 0 ]]; then echo "Failed running $test_l. Exiting with $TMP_EXIT_STATUS"; fi
+
+        if [[ $CONTINUE != 0 ]]; then continue; fi
+
+        export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
     done;
     echo "Exit status : $EXIT_STATUS";
 
@@ -129,7 +146,13 @@ if [[ "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ]]; then
 else
     make eus-installed WFLAGS="-Werror=implicit-int -Werror=implicit-function-declaration -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=unused-result"
 fi
+travis_time_end
+
+travis_time_start script.make.jskeus
+
 make
+
+travis_time_end
 
 travis_time_start script.eustag
 
@@ -237,10 +260,6 @@ fi
         export TMP_EXIT_STATUS=$?
 
         export CONTINUE=0
-        # bignum test fails on armhf
-        if [[ "`uname -m`" == "arm"* && $test_l =~ bignum.l ]]; then export CONTINUE=1; fi
-        # sort test fails on armhf  (https://github.com/euslisp/EusLisp/issues/232)
-        if [[ "`uname -m`" == "arm"* && $test_l =~ sort.l ]]; then export CONTINUE=1; fi
         # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
         if [[ $test_l =~ const.l ]]; then export CONTINUE=1; fi
 
@@ -263,8 +282,6 @@ fi
         export TMP_EXIT_STATUS=$?
 
         export CONTINUE=0
-        # irteus-demo.l, robot-model-usage.l and test-irt-motion.l fails on armhf both trusty and xenial
-        if [[ "`uname -m`" == "arm"* && $test_l =~ irteus-demo.l|robot-model-usage.l|test-irt-motion.l ]]; then export CONTINUE=1; fi
         # skip collision test because bullet of 2.83 or later version is not released in trusty and jessie.
         # https://github.com/euslisp/jskeus/blob/6cb08aa6c66fa8759591de25b7da68baf76d5f09/irteus/Makefile#L37
         if [[ ( "$DOCKER_IMAGE" == *"trusty"* || "$DOCKER_IMAGE" == *"jessie"* ) && $test_l =~ test-collision.l ]]; then export CONTINUE=1; fi
