@@ -46,11 +46,9 @@ ifeq ($(GCC_MAJOR_VERSION), 2)
  ADD_CFLAGS=-fno-stack-protector -fpic
 else
  ifeq ($(MACHINE), aarch64)
-   CPU_OPTIMIZE=-march=armv8-a
    ALIGN_FUNCTIONS=-falign-functions=8
    ADD_CFLAGS=-fPIC -Darmv8
  else
-   CPU_OPTIMIZE=-march=$(MACHINE)
    ALIGN_FUNCTIONS=-falign-functions=4
    ADD_CFLAGS=-fno-stack-protector -fpic
  endif
