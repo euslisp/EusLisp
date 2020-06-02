@@ -1,19 +1,85 @@
+// for eus.h
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include <setjmp.h>
+#include <errno.h>
+#include <sstream>
+
+#define class   eus_class
+#define throw   eus_throw
+#define export  eus_export
+#define vector  eus_vector
+#define string  eus_string
+#include <eus.h> // include eus.h just for eusfloat_t ...
+#undef class
+#undef throw
+#undef export
+#undef vector
+#undef string
 
 extern "C" {
+int int_test(int n, int i1, int i2, int i3, int i4) {
+  unsigned int ui;
+
+  //printf("int_test in c\n");
+  ui = *((unsigned int *)(&i1));
+  printf("%d: %8d %X\n", n, i1, ui);
+  ui = *((unsigned int *)(&i2));
+  printf("%d: %8d %X\n", n, i2, ui);
+  ui = *((unsigned int *)(&i3));
+  printf("%d: %8d %X\n", n, i3, ui);
+  ui = *((unsigned int *)(&i4));
+  printf("%d: %8d %X\n", n, i4, ui);
+
+  return -1;
+}
+
+int long_test(long n, long d1, long d2, long d3, long d4) {
+  unsigned long ul;
+
+  //printf("long_test in c\n");
+  ul = *((unsigned long *)(&d1));
+  printf("%d: %8d %X\n", n, d1, ul);
+  ul = *((unsigned long *)(&d2));
+  printf("%d: %8d %X\n", n, d2, ul);
+  ul = *((unsigned long *)(&d3));
+  printf("%d: %8d %X\n", n, d3, ul);
+  ul = *((unsigned long *)(&d4));
+  printf("%d: %8d %X\n", n, d4, ul);
+
+  return -1;
+}
+
+int eusinteger_test(int n, eusinteger_t i1, eusinteger_t i2, eusinteger_t i3, eusinteger_t i4) {
+  unsigned long ul;
+
+  //printf("eusinteger_test in c\n");
+  ul = *((unsigned int *)(&i1));
+  printf("%d: %8d %X\n", n, i1, ul);
+  ul = *((unsigned int *)(&i2));
+  printf("%d: %8d %X\n", n, i2, ul);
+  ul = *((unsigned int *)(&i3));
+  printf("%d: %8d %X\n", n, i3, ul);
+  ul = *((unsigned int *)(&i4));
+  printf("%d: %8d %X\n", n, i4, ul);
+
+  return -1;
+}
+
 int float_test(int n, float f1, float f2, float f3, float f4) {
   unsigned int ui;
 
   //printf("float_test in c\n");
   ui = *((unsigned int *)(&f1));
-  printf("%d: %8.8e %X\n", n, f1, ui);
+  printf("%d: %8.8e %X (%4.1f)\n", n, f1, ui, f1);
   ui = *((unsigned int *)(&f2));
-  printf("%d: %8.8e %X\n", n, f2, ui);
+  printf("%d: %8.8e %X (%4.1f)\n", n, f2, ui, f2);
   ui = *((unsigned int *)(&f3));
-  printf("%d: %8.8e %X\n", n, f3, ui);
+  printf("%d: %8.8e %X (%4.1f)\n", n, f3, ui, f3);
   ui = *((unsigned int *)(&f4));
-  printf("%d: %8.8e %X\n", n, f4, ui);
+  printf("%d: %8.8e %X (%4.1f)\n", n, f4, ui, f4);
 
   return -1;
 }
@@ -23,13 +89,29 @@ int double_test(long n, double d1, double d2, double d3, double d4) {
 
   //printf("double_test in c\n");
   ul = *((unsigned long *)(&d1));
-  printf("%ld: %16.16e %lX\n", n, d1, ul);
+  printf("%ld: %16.16e %lX (%4.1f)\n", n, d1, ul, d1);
   ul = *((unsigned long *)(&d2));
-  printf("%ld: %16.16e %lX\n", n, d2, ul);
+  printf("%ld: %16.16e %lX (%4.1f)\n", n, d2, ul, d2);
   ul = *((unsigned long *)(&d3));
-  printf("%ld: %16.16e %lX\n", n, d3, ul);
+  printf("%ld: %16.16e %lX (%4.1f)\n", n, d3, ul, d3);
   ul = *((unsigned long *)(&d4));
-  printf("%ld: %16.16e %lX\n", n, d4, ul);
+  printf("%ld: %16.16e %lX (%4.1f)\n", n, d4, ul, d4);
+
+  return -1;
+}
+
+int eusfloat_test(int n, eusfloat_t f1, eusfloat_t f2, eusfloat_t f3, eusfloat_t f4) {
+  unsigned int ui;
+
+  //printf("float_test in c\n");
+  ui = *((unsigned int *)(&f1));
+  printf("%d: %8.8e %X (%4.1f)\n", n, f1, ui, f1);
+  ui = *((unsigned int *)(&f2));
+  printf("%d: %8.8e %X (%4.1f)\n", n, f2, ui, f2);
+  ui = *((unsigned int *)(&f3));
+  printf("%d: %8.8e %X (%4.1f)\n", n, f3, ui, f3);
+  ui = *((unsigned int *)(&f4));
+  printf("%d: %8.8e %X (%4.1f)\n", n, f4, ui, f4);
 
   return -1;
 }
@@ -47,6 +129,17 @@ int iv_test(int n, int *src) {
 
 int lv_test(int n, long *src) {
   int i;
+  unsigned long *ul;
+  printf("size = %d\n", n);
+  for(i=0;i<n ;i++){
+    ul = (unsigned long *)(&(src[i]));
+    printf("%d: %ld %lX\n", i, src[i], *ul);
+  }
+  return -1;
+}
+
+int eiv_test(int n, eusinteger_t *src) {
+  eusinteger_t i;
   unsigned long *ul;
   printf("size = %d\n", n);
   for(i=0;i<n ;i++){
@@ -78,6 +171,17 @@ int dv_test(int n, double *src) {
   return -1;
 }
 
+int efv_test(int n, eusfloat_t *src) {
+  int i;
+  unsigned long *ul;
+  printf("size = %d\n", n);
+  for(i=0;i<n ;i++){
+    ul = (unsigned long *)(&(src[i]));
+    printf("%d: %e %lX\n", i, src[i], *ul);
+  }
+  return -1;
+}
+
 int str_test(int n, char *src) {
   int i;
   printf("size = %d\n", n);
@@ -87,7 +191,7 @@ int str_test(int n, char *src) {
   return -1;
 }
 
-int int_test(long l, int i, short s) {
+int int_long_short_test(long l, int i, short s) {
   printf("long  = %ld(%lX)\n",l,l);
   printf("int   = %d(%X)\n",i,i);
   printf("short = %d(%X)\n",s,s);
@@ -95,10 +199,11 @@ int int_test(long l, int i, short s) {
   return l + i + s;
 }
 
-float ret_float(double a, double b) {
+float ret_float(float a, float b) {
   float ret = (float) (a + b);
   unsigned int *ui;
   ui = (unsigned int *)&ret;
+  printf("// %f + %f -> %f\n", a, b, ret);
   printf("// return %e, %X\n", ret, *ui);
   return ret;
 }
@@ -107,7 +212,26 @@ double ret_double(double a, double b) {
   double ret = (a + b);
   unsigned long *ul;
   ul = (unsigned long *)&ret;
+  printf("// %f + %f -> %f\n", a, b, ret);
   printf("// return %e, %lX\n", ret, *ul);
+  return ret;
+}
+
+eusfloat_t ret_eusfloat(eusfloat_t a, eusfloat_t b) {
+  eusfloat_t ret = (a + b);
+  unsigned long *ul;
+  ul = (unsigned long *)&ret;
+  printf("// %f + %f -> %f\n", a, b, ret);
+  printf("// return %e, %lX\n", ret, *ul);
+  return ret;
+}
+
+int ret_int(int a, int b) {
+  int ret = a + b;
+  unsigned long *ul;
+  ul = (unsigned long *)&ret;
+  printf("// %d + %d -> %d\n", a, b, ret);
+  printf("// return %ld, %lX\n", ret, *ul);
   return ret;
 }
 
@@ -115,6 +239,16 @@ long ret_long(long a, long b) {
   long ret = a + b;
   unsigned long *ul;
   ul = (unsigned long *)&ret;
+  printf("// %d + %d -> %d\n", a, b, ret);
+  printf("// return %ld, %lX\n", ret, *ul);
+  return ret;
+}
+
+eusinteger_t ret_eusinteger(eusinteger_t a, eusinteger_t b) {
+  eusinteger_t ret = a + b;
+  unsigned long *ul;
+  ul = (unsigned long *)&ret;
+  printf("// %d + %d -> %d\n", a, b, ret);
   printf("// return %ld, %lX\n", ret, *ul);
   return ret;
 }
@@ -215,4 +349,13 @@ long get_size_of_long() {
 long get_size_of_int() {
   return (sizeof(int));
 }
+
+long get_size_of_eusinteger() {
+  return (sizeof(eusinteger_t));
 }
+
+long get_size_of_eusfloat() {
+  return (sizeof(eusfloat_t));
+}
+
+};
