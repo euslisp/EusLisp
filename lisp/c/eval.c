@@ -1018,10 +1018,10 @@ pointer args[];
     else if (p==K_STRING) {
       if (elmtypeof(lisparg)==ELM_FOREIGN) cargv[i++]=lisparg->c.ivec.iv[0];
       else  cargv[i++]=(eusinteger_t)(lisparg->c.str.chars);}
-    else if (p==K_FLOAT32) {
+    else if (p==K_FLOAT32 || (WORD_SIZE==32 && p==K_FLOAT)) {
       numbox.f=ckfltval(lisparg);
       cargv[i++]=(int)numbox.i.i1;}
-    else if (p==K_DOUBLE || p==K_FLOAT) {
+    else if (p==K_DOUBLE || (WORD_SIZE==64 && p==K_FLOAT)) {
       numbox.d=ckfltval(lisparg);
       cargv[i++]=numbox.i.i1; cargv[i++]=numbox.i.i2;}
     else error(E_USER,(pointer)"unknown type specifier");}
@@ -1049,7 +1049,7 @@ pointer args[];
 #endif    /* end of kanehiro's patch 2000.12.13 */
     else cargv[i++]=(eusinteger_t)(lisparg->c.obj.iv);}
   /**/
-  if (resulttype==K_FLOAT) {
+  if (resulttype==K_FLOAT || resulttype==K_FLOAT32) {
     if (i<=8) 
       f=(*ffunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7]);
