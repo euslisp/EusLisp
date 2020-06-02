@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
+extern "C" {
 int float_test(int n, float f1, float f2, float f3, float f4) {
   unsigned int ui;
 
@@ -90,7 +91,7 @@ int int_test(long l, int i, short s) {
   printf("long  = %ld(%lX)\n",l,l);
   printf("int   = %d(%X)\n",i,i);
   printf("short = %d(%X)\n",s,s);
-  
+
   return l + i + s;
 }
 
@@ -119,7 +120,7 @@ long ret_long(long a, long b) {
 }
 
 double test_testd(long i0, long i1, long i2,
-                  long i3, long i4, long i5, 
+                  long i3, long i4, long i5,
                   double d0, double d1, double d2, double d3,
                   double d4, double d5, double d6, double d7,
                   double d8, double d9,
@@ -132,12 +133,12 @@ double test_testd(long i0, long i1, long i2,
   printf("%lf %lf %lf %lf\n", d4, d5, d6, d7);
   printf("%lf %lf\n", d8, d9);
   printf("%ld %ld\n", i6, i7);
-  
+
   //return 0x1234;
   return 1.23456;
 }
 double test_testd2(long i0, long i1, long i2,
-                   long i3, long i4, long i5, 
+                   long i3, long i4, long i5,
                    double d0, double d1, double d2, double d3,
                    double d4, double d5, double d6, double d7,
                    double d8, double d9, double d10,
@@ -150,14 +151,14 @@ double test_testd2(long i0, long i1, long i2,
   printf("%lf %lf %lf %lf\n", d4, d5, d6, d7);
   printf("%lf %lf %lf\n", d8, d9, d10);
   printf("%ld %ld\n", i6, i7);
-  
+
   //return 0x1234;
   return 1.23456;
 }
 
 static long (*g)();
 static double (*gf) (long i0, long i1, long i2,
-                     long i3, long i4, long i5, 
+                     long i3, long i4, long i5,
                      double d0, double d1, double d2, double d3,
                      double d4, double d5, double d6, double d7,
                      double d8, double d9,
@@ -172,7 +173,7 @@ long set_ifunc(long (*f) ())
 long set_ffunc(double (*f) ())
 {
   gf = (double (*) (long i0, long i1, long i2,
-                    long i3, long i4, long i5, 
+                    long i3, long i4, long i5,
                     double d0, double d1, double d2, double d3,
                     double d4, double d5, double d6, double d7,
                     double d8, double d9,
@@ -213,4 +214,5 @@ long get_size_of_long() {
 
 long get_size_of_int() {
   return (sizeof(int));
+}
 }

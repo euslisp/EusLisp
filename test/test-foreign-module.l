@@ -15,7 +15,7 @@
   (defforeign ret-float *testmod* "ret_float" () :float32)
   (defforeign ret-double *testmod* "ret_double" () :float)
   (defforeign ret-long *testmod* "ret_long" () :integer)
-  
+
   (defforeign set-ifunc *testmod* "set_ifunc" (:integer) :integer)
   (defforeign set-ffunc *testmod* "set_ffunc" (:integer) :integer)
 
@@ -34,5 +34,3 @@
   (defforeign get-size-long    *testmod* "get_size_of_long" () :integer)
   (defforeign get-size-int     *testmod* "get_size_of_int" () :integer)
   )
-
-

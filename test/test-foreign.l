@@ -1,4 +1,4 @@
-(load "eus64-module.l")
+(load "test-foreign-module.l")
 (require :unittest "lib/llib/unittest.l")
 
 (init-unit-test)
@@ -9,7 +9,7 @@
   (format t "pointer size ~D ~D~%"
 	  lisp::sizeof-* (get-size-pointer))
   (assert (= lisp::sizeof-* (get-size-pointer)))
-  
+
   (format t "double size ~D ~D~%"
 	  lisp::sizeof-double (get-size-double))
   (assert (= lisp::sizeof-double (get-size-double)))
@@ -50,7 +50,7 @@ test-testd = 1.23456
   (assert (eps= 1.23456 ret))
 
   ;;
-  (setq f (piped-fork "irteusgl eus64-module.l '(progn (test-testd 100 101 102 103 104 105 1000.000000 1010.000000 1020.000000 1030.000000 1040.000000 1050.000000 1060.000000 1070.000000 2080.000000 2090.000000 206 207)(exit 0))'"))
+  (setq f (piped-fork "eusg test-foreign-module.l '(progn (test-testd 100 101 102 103 104 105 1000.000000 1010.000000 1020.000000 1030.000000 1040.000000 1050.000000 1060.000000 1070.000000 2080.000000 2090.000000 206 207)(exit 0))'"))
   (assert (string= (read-line f) "100 101 102"))
   (assert (string= (read-line f) "103 104 105"))
   (assert (string= (read-line f) "1000.000000 1010.000000 1020.000000 1030.000000"))
@@ -74,7 +74,7 @@ test-testd = 1.23456
   (float3-test 0 0.1 0.2 0.3 0.4)
 
   ;;
-  (setq f (piped-fork "irteusgl eus64-module.l '(progn (float-test 0 0.1 0.2 0.3 0.4)(exit 0))'"))
+  (setq f (piped-fork "eusg test-foreign-module.l '(progn (float-test 0 0.1 0.2 0.3 0.4)(exit 0))'"))
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.1)) ;; skip first 2 character
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.2))
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.3))
@@ -96,12 +96,12 @@ test-testd = 1.23456
   (double3-test 1 0.1 0.2 0.3 0.4)
 
   ;;
-  (setq f (piped-fork "irteusgl eus64-module.l '(progn (double-test 1 0.1 0.2 0.3 0.4)(exit 0))'"))
+  (setq f (piped-fork "eusg test-foreign-module.l '(progn (double-test 1 0.1 0.2 0.3 0.4)(exit 0))'"))
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.1)) ;; skip first 2 character
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.2))
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.3))
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.4))
-  (setq f (piped-fork "irteusgl eus64-module.l '(progn (double3-test 1 0.1 0.2 0.3 0.4)(exit 0))'"))
+  (setq f (piped-fork "eusg test-foreign-module.l '(progn (double3-test 1 0.1 0.2 0.3 0.4)(exit 0))'"))
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.1)) ;; skip first 2 character
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.2))
   (assert (eps= (read-from-string (subseq (read-line f) 2)) 0.3))
@@ -128,7 +128,7 @@ test-testd = 1.23456
   (lv-test (length iv) iv)
 
   ;;
-  (setq f (piped-fork "irteusgl eus64-module.l '(progn (setq iv (integer-vector 0 100 10000 1000000 100000000 10000000000))(lv-test (length iv) iv)(exit 0))'"))
+  (setq f (piped-fork "eusg test-foreign-module.l '(progn (setq iv (integer-vector 0 100 10000 1000000 100000000 10000000000))(lv-test (length iv) iv)(exit 0))'"))
   (assert (string= (read-line f) "size = 6"))
   (assert (string= (read-line f) "0: 0 0"))
   (assert (string= (read-line f) "1: 100 64"))
@@ -157,7 +157,7 @@ test-testd = 1.23456
   (dv-test (length fv) fv)
 
   ;;
-  (setq f (piped-fork "irteusgl eus64-module.l '(progn (setq fv (float-vector 0.1 0.2 0.3 0.5 0.7))(dv-test (length fv) fv)(exit 0))'"))
+  (setq f (piped-fork "eusg test-foreign-module.l '(progn (setq fv (float-vector 0.1 0.2 0.3 0.5 0.7))(dv-test (length fv) fv)(exit 0))'"))
   (assert (string= (read-line f) "size = 5"))
   (assert (string= (read-line f) "0: 1.000000e-01 3FB9999999999998"))
   (assert (string= (read-line f) "1: 2.000000e-01 3FC9999999999998"))
@@ -174,7 +174,7 @@ test-testd = 1.23456
   (format t "~%str-test(exec in eus)~%")
   (str-test (length str) str)
   ;;
-  (setq f (piped-fork "irteusgl eus64-module.l '(progn (setq str \"input : test64 string\")(str-test (length str) str)(exit 0))'"))
+  (setq f (piped-fork "eusg test-foreign-module.l '(progn (setq str \"input : test64 string\")(str-test (length str) str)(exit 0))'"))
   (assert (string= (read-line f) (format nil "size = ~d" (length str))))
   (dotimes (i (length str))
     (assert (string= (read-line f) (format nil "~d: ~c ~x" i (elt str i) (elt str i))))
