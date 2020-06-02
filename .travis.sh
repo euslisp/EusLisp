@@ -301,15 +301,6 @@ fi
 
 [ $EXIT_STATUS == 0 ] || exit 1
 
-travis_time_start eus64.test
-
-if [[ "$TRAVIS_OS_NAME" == "osx" || "`uname -m`" == "arm"* ]]; then
-    uname -a
-else
-    make -C eus/contrib/eus64-check/ || exit 1 # check eus64-check
-fi
-travis_time_end
-
 if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" ]; then
 
     travis_time_start script.doc
