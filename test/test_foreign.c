@@ -289,7 +289,24 @@ double test_testd2(long i0, long i1, long i2,
   //return 0x1234;
   return 1.23456;
 }
+eusfloat_t test_testf(long i0, long i1, long i2,
+		      long i3, long i4, long i5,
+		      eusfloat_t d0, eusfloat_t d1, eusfloat_t d2, eusfloat_t d3,
+		      eusfloat_t d4, eusfloat_t d5, eusfloat_t d6, eusfloat_t d7,
+		      eusfloat_t d8, eusfloat_t d9,
+		      long i6, long i7) {
+  printf("%ld %ld %ld\n", i0, i1, i2);
+  printf("%ld %ld %ld\n", i3, i4, i5);
+  //printf("%ld %ld %ld %ld\n",
+  //(long)d0, (long)d1, (long)d2, (long)d3);
+  printf("%lf %lf %lf %lf\n", d0, d1, d2, d3);
+  printf("%lf %lf %lf %lf\n", d4, d5, d6, d7);
+  printf("%lf %lf\n", d8, d9);
+  printf("%ld %ld\n", i6, i7);
 
+  //return 0x1234;
+  return 1.23456;
+}
 static long (*g)();
 static double (*gf) (long i0, long i1, long i2,
                      long i3, long i4, long i5,
