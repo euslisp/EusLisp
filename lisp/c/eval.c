@@ -1306,8 +1306,18 @@ pointer args[];
   if (resulttype==K_FLOAT || resulttype==K_FLOAT32) {
     union {
       eusfloat_t f;
-      eusinteger_t i;
+#if __ARM_ARCH==4
+      eusinteger_t i;    // ARM 32bit armel
+#else
+      eusfloat_t i;  // Intel 32bit x86
+#endif
     } n;
+#if __ARM_ARCH==4
+#else
+    eusinteger_t (*tmp_ifunc)() = ifunc;
+    double (*ifunc)();
+    ifunc=(double (*)())tmp_ifunc;
+#endif
     if (i<=8) 
       n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7]);
@@ -1343,6 +1353,7 @@ pointer args[];
 	         cargv[72],cargv[73],cargv[74],cargv[75],
 	         cargv[76],cargv[77],cargv[78],cargv[79]);
 #endif
+    fprintf(stderr, "%d %f\n", n.i, n.f);
     return(makeflt(n.f));}
   else {
     if (i<8) 
