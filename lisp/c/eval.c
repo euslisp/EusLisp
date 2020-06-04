@@ -981,7 +981,7 @@ pointer args[];
   }
 }
 
-#elif defined(ARM) /* not (defined(x86_64) || defined(aarch64))  */
+#elif defined(ARM) && defined(__ARM_ARCH_7A__) /* not (defined(x86_64) || defined(aarch64))  */
 
 extern int exec_function_i(void (*)(), int *, int *, int, int *);
 extern int exec_function_f(void (*)(), int *, int *, int, int *);
@@ -1242,8 +1242,7 @@ eusinteger_t (*ifunc)(); /* ???? */
 pointer code;
 int n;
 pointer args[];
-{ double (*ffunc)();
-  pointer paramtypes=code->c.fcode.paramtypes;
+{ pointer paramtypes=code->c.fcode.paramtypes;
   pointer resulttype=code->c.fcode.resulttype;
   pointer p,lisparg;
   eusinteger_t cargv[100];
@@ -1265,7 +1264,6 @@ pointer args[];
     ifunc = (eusinteger_t (*)())((((int)ifunc)&0xffff0000) | (intval(code->c.fcode.entry2)&0x0000ffff));    /* kanehiro's patch 2000.12.13 */
 #endif
   }
-  ffunc=(double (*)())ifunc;
   while (iscons(paramtypes)) {
     p=ccar(paramtypes); paramtypes=ccdr(paramtypes);
     lisparg=args[j++];
@@ -1306,11 +1304,15 @@ pointer args[];
     else cargv[i++]=(eusinteger_t)(lisparg->c.obj.iv);}
   /**/
   if (resulttype==K_FLOAT || resulttype==K_FLOAT32) {
+    union {
+      eusfloat_t f;
+      eusinteger_t i;
+    } n;
     if (i<=8) 
-      f=(*ffunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7]);
     else if (i<=32)
-      f=(*ffunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7],
 		 cargv[8],cargv[9],cargv[10],cargv[11],
 	         cargv[12],cargv[13],cargv[14],cargv[15],
@@ -1320,7 +1322,7 @@ pointer args[];
 	         cargv[28],cargv[29],cargv[30],cargv[31]);
 #if (sun3 || sun4 || mips || alpha)
     else if (i>32) 
-      f=(*ffunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7],
 		 cargv[8],cargv[9],cargv[10],cargv[11],
 	         cargv[12],cargv[13],cargv[14],cargv[15],
@@ -1341,7 +1343,7 @@ pointer args[];
 	         cargv[72],cargv[73],cargv[74],cargv[75],
 	         cargv[76],cargv[77],cargv[78],cargv[79]);
 #endif
-    return(makeflt(f));}
+    return(makeflt(n.f));}
   else {
     if (i<8) 
       i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
