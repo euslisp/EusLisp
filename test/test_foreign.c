@@ -210,8 +210,8 @@ float ret_float(float a, float b) {
 
 double ret_double(double a, double b) {
   double ret = (a + b);
-  unsigned long *ul;
-  ul = (unsigned long *)&ret;
+  unsigned long long *ul;
+  ul = (unsigned long long*)&ret;
   printf("// %f + %f -> %f\n", a, b, ret);
   printf("// return %e, %lX\n", ret, *ul);
   return ret;

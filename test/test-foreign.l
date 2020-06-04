@@ -70,7 +70,6 @@
 206 207
 test-testd = 1.23456
 ~%")
-  (when (not (and (memq :word-size=32 *features*) (memq :arm *features*)))
   (format t "exec in eus~%")
   (format t "test-testd = ~A~%"
         (setq ret (test-testd 100 101 102
@@ -79,7 +78,9 @@ test-testd = 1.23456
             1040.0 1050.0 1060.0 1070.0
             2080.0 2090.0
             206 207)))
+  (when (not (and (memq :word-size=32 *features*) (memq :arm *features*)))
   (assert (eps= 1.23456 ret))
+  )
 
   ;;
   (check-func 'test-testd)
@@ -90,7 +91,6 @@ test-testd = 1.23456
   (assert-read-line-string= f "1040.000000 1050.000000 1060.000000 1070.000000")
   (assert-read-line-string= f "2080.000000 2090.000000")
   (assert-read-line-string= f "206 207")
-  )
 
   (format t "exec in eus~%")
   (format t "test-testf = ~A~%"
@@ -227,13 +227,13 @@ test-testd = 1.23456
   (double3-test 1 0.1 0.2 0.3 0.4)
 
   ;;
-  (when (not (and (memq :word-size=32 *features*) (memq :arm *features*)))
   (check-func 'double-test)
   (setq f (piped-fork (format nil "eusg ~A/test/test-foreign.module_l '(progn (double-test 1 0.1 0.2 0.3 0.4)(exit 0))'" *eusdir*)))
   (assert-read-line-eps= f 0.1)
   (assert-read-line-eps= f 0.2)
   (assert-read-line-eps= f 0.3)
   (assert-read-line-eps= f 0.4)
+  (when (not (and (memq :word-size=32 *features*) (memq :arm *features*)))
   (check-func 'double3-test)
   (setq f (piped-fork (format nil "eusg ~A/test/test-foreign.module_l '(progn (double3-test 1 0.1 0.2 0.3 0.4)(exit 0))'" *eusdir*)))
   (assert-read-line-eps= f 0.1)
