@@ -1108,6 +1108,7 @@ __asm__ (".align 4\n"
 	 "blx	r6\n\t"
 	 // retval
 	 "vmov	r0, s0	@ <retval>\n\t"
+	 "vmov	r1, s1	@ <retval>\n\t"
 	 "adds	r7, r7, #72\n\t"
 	 "mov	sp, r7\n\t"
 	 "@ sp needed	@\n\t"
@@ -1166,10 +1167,12 @@ pointer args[];
       c=((eusinteger_t)numbox.i.i1) & 0x00000000FFFFFFFF;
       if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
     } else if (p==K_DOUBLE) {
-      numbox.f=ckfltval(lisparg);
-      //c=numbox.l;
-      c=((eusinteger_t)numbox.i.i1) & 0x00000000FFFFFFFF;
-      if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
+      numbox.d=(double)ckfltval(lisparg);
+      if(fcntr < NUM_FLT_ARGUMENTS) {
+	fargv[fcntr++] = numbox.i.i1; fargv[fcntr++] = numbox.i.i2;
+      } else {
+	vargv[vcntr++] = numbox.i.i1; vargv[vcntr++] = numbox.i.i2;
+      }
     } else error(E_USER,(pointer)"unknown type specifier");
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
       error(E_USER,(pointer)"too many number of arguments");
