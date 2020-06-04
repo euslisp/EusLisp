@@ -90,6 +90,8 @@ if [ "$QEMU" != "" ]; then
     make -C test
     for test_l in test/*.l; do
 
+        [[ "`uname -m`" == "ppc64le"* && $test_l =~ test-foreign.l ]] && continue;
+
         travis_time_start euslisp.${test_l##*/}.test
 
         sed -i 's/\(i-max\ [0-9]000\)0*/\1/' $test_l
