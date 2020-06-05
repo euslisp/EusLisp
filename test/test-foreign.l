@@ -227,12 +227,14 @@ test-testd = 1.23456
   (double3-test 1 0.1 0.2 0.3 0.4)
 
   ;;
+  (when (not (eq (read (unix::piped-fork "gcc -dumpmachine") nil 'arm-linux-gnueabi) 'arm-linux-gnueabi))
   (check-func 'double-test)
   (setq f (piped-fork (format nil "eusg ~A/test/test-foreign.module_l '(progn (double-test 1 0.1 0.2 0.3 0.4)(exit 0))'" *eusdir*)))
   (assert-read-line-eps= f 0.1)
   (assert-read-line-eps= f 0.2)
   (assert-read-line-eps= f 0.3)
   (assert-read-line-eps= f 0.4)
+  )
   (when (not (and (memq :word-size=32 *features*) (memq :arm *features*)))
   (check-func 'double3-test)
   (setq f (piped-fork (format nil "eusg ~A/test/test-foreign.module_l '(progn (double3-test 1 0.1 0.2 0.3 0.4)(exit 0))'" *eusdir*)))
