@@ -110,6 +110,25 @@ test-testd = 1.23456
   (assert-read-line-string= f "1040.000000 1050.000000 1060.000000 1070.000000")
   (assert-read-line-string= f "2080.000000 2090.000000")
   (assert-read-line-string= f "206 207")
+
+  (format t "exec in eus~%")
+  (format t "test-testfd = ~A~%"
+        (setq ret (test-testfd 100 101 102
+            103 104 105
+            1000.0 1010.0 1020.0 1030.0
+            1040.0 1050.0 1060.0 1070.0
+            2080.0 2090.0 2100.0 2110.0
+            206 207)))
+  (assert (= 123456 ret))
+  ;;
+  (check-func 'test-testfd)
+  (setq f (piped-fork (format nil "eusg ~A/test/test-foreign.module_l '(progn (test-testfd 100 101 102 103 104 105 1000.000000 1010.000000 1020.000000 1030.000000 1040.000000 1050.000000 1060.000000 1070.000000 2080.000000 2090.000000  2100.000000 2110.000000 206 207)(exit 0))'" *eusdir*)))
+  (assert-read-line-string= f "100 101 102")
+  (assert-read-line-string= f "103 104 105")
+  (assert-read-line-string= f "1000.000000 1010.000000 1020.000000 1030.000000")
+  (assert-read-line-string= f "1040.000000 1050.000000 1060.000000 1070.000000")
+  (assert-read-line-string= f "2080.000000 2090.000000 2100.000000 2110.000000")
+  (assert-read-line-string= f "206 207")
   )
 
 (deftest test-int-test
