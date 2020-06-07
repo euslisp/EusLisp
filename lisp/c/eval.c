@@ -986,6 +986,58 @@ pointer args[];
 extern int exec_function_i(void (*)(), int *, int *, int, int *);
 extern int exec_function_f(void (*)(), int *, int *, int, int *);
 
+#define exec_function_asm(FUNC)						\
+	 /* vargv -> stack */						\
+	 "movs	r3, #0\n\t"						\
+	 "str	r3, [r7, #60]\n\t"					\
+	 "b	."FUNC"_LPCK\n\t"					\
+	 "."FUNC"_LP:\n\t"						\
+	 "ldr	r3, [r7, #60]\n\t"	/* i 			*/	\
+	 /* https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/function-parameters-on-32-bit-arm */ \
+	 "lsl	r4, r3, #2\n\t"		/* r4 = i * 2		*/	\
+	 "ldr	r1, [r7, #80]\n\t"	/* vargv[0]		*/	\
+	 "add	r1, r1, r4\n\t"		/* vargv[i]		*/	\
+	 "add	r2, sp, r4\n\t"		/* stack[i]		*/	\
+	 "ldr	r0, [r1]\n\t"						\
+	 "str	r0, [r2]\n\t"		/* push stack		*/	\
+	 "adds	r3, r3, #1\n\t"		/* i++			*/	\
+	 "str	r3, [r7, #60]\n\t"					\
+	 "."FUNC"_LPCK:\n\t"						\
+	 "ldr	r2, [r7, #60]\n\t"					\
+	 "ldr	r3, [r7]\n\t"						\
+	 "cmp	r2, r3\n\t"						\
+	 "blt	."FUNC"_LP\n\t"						\
+	 /* fargv -> register */					\
+	 "ldr	r0, [r7,#4]\n\t"					\
+	 "vldr.32	s0, [r0]\n\t"					\
+	 "vldr.32	s1, [r0,#4]\n\t"				\
+	 "vldr.32	s2, [r0,#8]\n\t"				\
+	 "vldr.32	s3, [r0,#12]\n\t"				\
+	 "vldr.32	s4, [r0,#16]\n\t"				\
+	 "vldr.32	s5, [r0,#20]\n\t"				\
+	 "vldr.32	s6, [r0,#24]\n\t"				\
+	 "vldr.32	s7, [r0,#28]\n\t"				\
+	 "vldr.32	s8, [r0,#32]\n\t"				\
+	 "vldr.32	s9, [r0,#36]\n\t"				\
+	 "vldr.32	s10, [r0,#40]\n\t"				\
+	 "vldr.32	s11, [r0,#44]\n\t"				\
+	 "vldr.32	s12, [r0,#48]\n\t"				\
+	 "vldr.32	s13, [r0,#52]\n\t"				\
+	 "vldr.32	s14, [r0,#56]\n\t"				\
+	 "vldr.32	s15, [r0,#60]\n\t"				\
+	 /* iargv -> register */					\
+	 "ldr	r0, [r7,#8]\n\t"					\
+	 "ldr	r0, [r0]\n\t"						\
+	 "ldr	r1, [r7,#8]\n\t"					\
+	 "ldr	r1, [r1,#4]\n\t"					\
+	 "ldr	r2, [r7,#8]\n\t"					\
+	 "ldr	r2, [r2,#8]\n\t"					\
+	 "ldr	r3, [r7,#8]\n\t"					\
+	 "ldr	r3, [r3,#12]\n\t"					\
+	 /* funcall */							\
+	 "ldr	r6, [r7, #12]\n\t"					\
+	 "blx	r6\n\t"
+
 __asm__ (".align 4\n"
 	 ".global exec_function_i\n\t"
 	 ".type	exec_function_i, %function\n"
@@ -997,51 +1049,7 @@ __asm__ (".align 4\n"
 	 "str	r1, [r7, #8]\n\t"	// iargv
 	 "str	r2, [r7, #4]\n\t"	// fargv
 	 "str	r3, [r7]\n\t"		// vcntr
-	 // vargv -> stack
-	 "movs	r1, #0\n\t"
-	 "ldr	r2, [r7, #80]\n\t"	// vargv
-	 "b	.FUNCII_LPCK\n\t"
-	 ".FUNCII_LP:\n\t"
-	 "lsl	r0, r1, #2\n\t"
-	 "add	r3, r2, r0\n\t" // vargv[i]
-	 "add	r5, sp, r0\n\t" // stack[i] // using v4 cause segfault.
-	 "ldr	r0, [r3]\n\t"
-	 "str	r0, [r5]\n\t"  // push stack
-	 "adds	r1, r1, #1\n\t"
-	 ".FUNCII_LPCK:\n\t"
-	 "ldr	r5, [r7]\n\t"
-	 "cmp	r1, r5\n\t"
-	 "blt	.FUNCII_LP\n\t"
-	 // fargv -> register
-	 "ldr	r0, [r7,#4]\n\t"
-	 "vldr.32	s0, [r0]\n\t"
-	 "vldr.32	s1, [r0,#4]\n\t"
-	 "vldr.32	s2, [r0,#8]\n\t"
-	 "vldr.32	s3, [r0,#12]\n\t"
-	 "vldr.32	s4, [r0,#16]\n\t"
-	 "vldr.32	s5, [r0,#20]\n\t"
-	 "vldr.32	s6, [r0,#24]\n\t"
-	 "vldr.32	s7, [r0,#28]\n\t"
-	 "vldr.32	s8, [r0,#32]\n\t"
-	 "vldr.32	s9, [r0,#36]\n\t"
-	 "vldr.32	s10, [r0,#40]\n\t"
-	 "vldr.32	s11, [r0,#44]\n\t"
-	 "vldr.32	s12, [r0,#48]\n\t"
-	 "vldr.32	s13, [r0,#52]\n\t"
-	 "vldr.32	s14, [r0,#56]\n\t"
-	 "vldr.32	s15, [r0,#60]\n\t"
-	 // iargv -> register
-	 "ldr	r0, [r7,#8]\n\t"
-	 "ldr	r0, [r0]\n\t"
-	 "ldr	r1, [r7,#8]\n\t"
-	 "ldr	r1, [r1,#4]\n\t"
-	 "ldr	r2, [r7,#8]\n\t"
-	 "ldr	r2, [r2,#8]\n\t"
-	 "ldr	r3, [r7,#8]\n\t"
-	 "ldr	r3, [r3,#12]\n\t"
-	 // funcall
-	 "ldr	r6, [r7, #12]\n\t"
-	 "blx	r6\n\t"
+	 exec_function_asm("FUNCI")
 	 // retval
 	 "adds	r7, r7, #72\n\t"
 	 "mov	sp, r7\n\t"
@@ -1061,51 +1069,7 @@ __asm__ (".align 4\n"
 	 "str	r1, [r7, #8]\n\t"	// iargv
 	 "str	r2, [r7, #4]\n\t"	// fargv
 	 "str	r3, [r7]\n\t"		// vcntr
-	 // vargv -> stack
-	 "movs	r1, #0\n\t"
-	 "ldr	r2, [r7, #80]\n\t"	// vargv
-	 "b	.FUNCFF_LPCK\n\t"
-	 ".FUNCFF_LP:\n\t"
-	 "lsl	r0, r1, #2\n\t"
-	 "add	r3, r2, r0\n\t" // vargv[i]
-	 "add	r4, sp, r0\n\t" // stack[i]
-	 "ldr	r0, [r3]\n\t"
-	 "str	r0, [r4]\n\t"  // push stack
-	 "adds	r1, r1, #1\n\t"
-	 ".FUNCFF_LPCK:\n\t"
-	 "ldr	r5, [r7]\n\t"
-	 "cmp	r1, r5\n\t"
-	 "blt	.FUNCFF_LP\n\t"
-	 // fargv -> register
-	 "ldr	r0, [r7,#4]\n\t"
-	 "vldr.32	s0, [r0]\n\t"
-	 "vldr.32	s1, [r0,#4]\n\t"
-	 "vldr.32	s2, [r0,#8]\n\t"
-	 "vldr.32	s3, [r0,#12]\n\t"
-	 "vldr.32	s4, [r0,#16]\n\t"
-	 "vldr.32	s5, [r0,#20]\n\t"
-	 "vldr.32	s6, [r0,#24]\n\t"
-	 "vldr.32	s7, [r0,#28]\n\t"
-	 "vldr.32	s8, [r0,#32]\n\t"
-	 "vldr.32	s9, [r0,#36]\n\t"
-	 "vldr.32	s10, [r0,#40]\n\t"
-	 "vldr.32	s11, [r0,#44]\n\t"
-	 "vldr.32	s12, [r0,#48]\n\t"
-	 "vldr.32	s13, [r0,#52]\n\t"
-	 "vldr.32	s14, [r0,#56]\n\t"
-	 "vldr.32	s15, [r0,#60]\n\t"
-	 // iargv -> register
-	 "ldr	r0, [r7,#8]\n\t"
-	 "ldr	r0, [r0]\n\t"
-	 "ldr	r1, [r7,#8]\n\t"
-	 "ldr	r1, [r1,#4]\n\t"
-	 "ldr	r2, [r7,#8]\n\t"
-	 "ldr	r2, [r2,#8]\n\t"
-	 "ldr	r3, [r7,#8]\n\t"
-	 "ldr	r3, [r3,#12]\n\t"
-	 // funcall
-	 "ldr	r6, [r7, #12]\n\t"
-	 "blx	r6\n\t"
+	 exec_function_asm("FUNCF")
 	 // retval
 	 "vmov	r0, s0	@ <retval>\n\t"
 	 "vmov	r1, s1	@ <retval>\n\t"
