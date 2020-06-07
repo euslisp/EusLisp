@@ -1132,7 +1132,7 @@ pointer args[];
   eusinteger_t iargv[NUM_INT_ARGUMENTS];
   eusinteger_t fargv[NUM_FLT_ARGUMENTS];
   eusinteger_t vargv[NUM_EXTRA_ARGUMENTS];
-  int icntr = 0, fcntr = 0, vcntr = 0;
+  int icntr = 0, fcntr_d = 0, fcntr_f = 0, vcntr_8 = 0, vcntr_16 = 0;
 
   numunion nu;
   eusinteger_t j=0; /*lisp argument counter*//* ???? */
@@ -1151,33 +1151,58 @@ pointer args[];
       | (intval(code->c.fcode.entry2)&0x00000000ffffffff));
     /* R.Hanai 090726 */
   }
-
   while (iscons(paramtypes)) {
     p=ccar(paramtypes); paramtypes=ccdr(paramtypes);
     lisparg=args[j++];
     if (p==K_INTEGER) {
       c = isint(lisparg)?intval(lisparg):bigintval(lisparg);
-      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
+      if(icntr < NUM_INT_ARGUMENTS) {
+	iargv[icntr++] = c;
+      } else {
+	vargv[vcntr_8++] = c;
+	if ( vcntr_8 % 2 == 1 ) vcntr_16 += 2;
+	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
+      }
     }  else if (p==K_STRING) {
       if (elmtypeof(lisparg)==ELM_FOREIGN) c=lisparg->c.ivec.iv[0];
       else  c=(eusinteger_t)(lisparg->c.str.chars);
-      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
+      if(icntr < NUM_INT_ARGUMENTS) {
+	iargv[icntr++] = c;
+      } else {
+	vargv[vcntr_8++] = c;
+	if ( vcntr_8 % 2 == 1 ) vcntr_16 += 2;
+	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
+      }
     } else if (p==K_FLOAT32 || p==K_FLOAT) {
       numbox.f=(float)ckfltval(lisparg);
       c=((eusinteger_t)numbox.i.i1) & 0x00000000FFFFFFFF;
-      if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
+      // | s0 | s1 | s2 | s3 | s4 | s5 |
+      // |   d0    |   d1    |   d2    |
+      if(fcntr_f < NUM_FLT_ARGUMENTS) {
+	fargv[fcntr_f++] = c;
+	if ( fcntr_f % 2 == 1 ) fcntr_d += 2; // if *fcntr_f = s1, use d1
+	if ( fcntr_f % 2 == 0 ) fcntr_f = fcntr_d;
+      } else {
+	vargv[vcntr_8++] = c;
+	if ( vcntr_8 % 2 == 1 ) vcntr_16 += 2;
+	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
+      }
     } else if (p==K_DOUBLE) {
       numbox.d=(double)ckfltval(lisparg);
-      if(fcntr < NUM_FLT_ARGUMENTS) {
-	fargv[fcntr++] = numbox.i.i1; fargv[fcntr++] = numbox.i.i2;
+      if(fcntr_d < NUM_FLT_ARGUMENTS-1) {
+	fargv[fcntr_d++] = numbox.i.i1; fargv[fcntr_d++] = numbox.i.i2;
+	if ( fcntr_f % 2 == 0 ) fcntr_f = fcntr_d; // if *fcntr_f = s2, use d1
+	if(fcntr_d >= NUM_FLT_ARGUMENTS) fcntr_f = fcntr_d;
       } else {
-	vargv[vcntr++] = numbox.i.i1; vargv[vcntr++] = numbox.i.i2;
+	vargv[vcntr_16++] = numbox.i.i1; vargv[vcntr_16++] = numbox.i.i2;
+	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
       }
     } else error(E_USER,(pointer)"unknown type specifier");
-    if (vcntr >= NUM_EXTRA_ARGUMENTS) {
+    if (max(vcntr_8, vcntr_16) >= NUM_EXTRA_ARGUMENTS) {
       error(E_USER,(pointer)"too many number of arguments");
     }
   }
+  int vcntr = max(vcntr_8, vcntr_16);
   /* &rest arguments?  */
   while (j<n) {	/* j is the counter for the actual arguments*/
     lisparg=args[j++];
@@ -1187,7 +1212,7 @@ pointer args[];
     } else if (isflt(lisparg)) {
       numbox.d=ckfltval(lisparg);	/* i advances independently */
       c=numbox.l;
-      if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
+      if(fcntr_f < NUM_FLT_ARGUMENTS) fargv[fcntr_f++] = c; else vargv[vcntr++] = c;
     } else if (isvector(lisparg)) {
       if (elmtypeof(lisparg)==ELM_FOREIGN) c=lisparg->c.ivec.iv[0];
       else c=(eusinteger_t)(lisparg->c.str.chars);
