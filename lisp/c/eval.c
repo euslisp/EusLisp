@@ -1018,10 +1018,10 @@ pointer args[];
     else if (p==K_STRING) {
       if (elmtypeof(lisparg)==ELM_FOREIGN) cargv[i++]=lisparg->c.ivec.iv[0];
       else  cargv[i++]=(eusinteger_t)(lisparg->c.str.chars);}
-    else if (p==K_FLOAT32) {
+    else if (p==K_FLOAT32 || ((WORD_SIZE == 32) && (p==K_FLOAT)) ) {
       numbox.f=ckfltval(lisparg);
       cargv[i++]=(int)numbox.i.i1;}
-    else if (p==K_DOUBLE || p==K_FLOAT) {
+    else if (p==K_DOUBLE || ((WORD_SIZE == 64) && (p==K_FLOAT)) ) {
       numbox.d=ckfltval(lisparg);
       cargv[i++]=numbox.i.i1; cargv[i++]=numbox.i.i2;}
     else error(E_USER,(pointer)"unknown type specifier");}
