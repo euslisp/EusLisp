@@ -41,27 +41,28 @@
       )
     str2))
 
-(defun unittest-error (code msg1 form &optional (msg2))
-  (format *error-output* "~C[1;3~Cm~A unittest-error: ~A"
-	  #x1b (+ 1 48)   *program-name* msg1)
-  (if msg2 (format *error-output* " ~A" msg2))
-  (if form (format *error-output* " in ~s" form))
-  (format *error-output* ", exitting...~C[0m~%"  #x1b)
+(defun unittest-error (err)
+  (when (send err :callstack)
+    (lisp::print-callstack (send err :callstack) lisp::*max-callstack-depth*))
+  (lisp::print-error-message err)
+  (warning-message 1 " exitting...~%")
+
   (when (*unit-test* . result) ;; force put error code into all-test
     (push 'all-test (unit-test-result-tests (car (last (*unit-test* . result)))))
-    (push (list form msg1 code) (unit-test-result-failures (car (last (*unit-test* . result))))))
-  (when code
-    (format *error-output* "~C[3~Cm[ERROR] test ~A failed" #x1b 49 form)
-    (format *error-output* " ... (~A ~A)" msg1 code)
-    (format *error-output* ".~C[0m~%" #x1b))
+    (push (list (send err :form) (send err :message) (send (class err) :name))
+          (unit-test-result-failures (car (last (*unit-test* . result))))))
+  (format *error-output* "~C[3~Cm[ERROR] test ~A failed" #x1b 49 (send err :form))
+  (format *error-output* " ... (~A ~A)" (send err :message) (send (class err) :name))
+  (format *error-output* ".~C[0m~%" #x1b)
   (send *unit-test* :print-result :if-exists :overwrite)
   (if lisp::*exit-on-fatal-error* (exit 1)))
 
-(defun unittest-sigint-handler (sig code)
-  (format *error-output* "unittest-sigint-handler ~A~%" sig)
+(defun unittest-sigint-handler (c)
+  (format *error-output* "unittest-sigint-handler ~A~%" (send c :sig))
   (when (*unit-test* . result) ;; force put error code into all-test
     (push 'all-test (unit-test-result-tests (car (last (*unit-test* . result)))))
-    (push (list "" (format nil "signal-handler ~A" sig) code) (unit-test-result-failures (car (last (*unit-test* . result))))))
+    (push (list "" (format nil "signal-handler ~A" (send c :sig)) (send (class c) :name))
+          (unit-test-result-failures (car (last (*unit-test* . result))))))
   (send *unit-test* :print-result :if-exists :overwrite)
   (if lisp::*exit-on-fatal-error* (exit 1)))
 
@@ -218,9 +219,10 @@
     (if xml-fname (setq log-fname xml-fname))
 
     (setq lisp::*exit-on-fatal-error* t)
-    (lisp::install-error-handler 'unittest-error)
-    (unix:signal unix::sigint 'unittest-sigint-handler)
-    (unix:signal unix::sighup 'unittest-sigint-handler)
+    (unix:install-signal-handler unix::sighup unix::sighup-received)
+    (install-handler error 'unittest-error)
+    (install-handler unix::sigint-received 'unittest-sigint-handler)
+    (install-handler unix::sighup-received 'unittest-sigint-handler)
 
     (setq *unit-test* (instance unit-test-container :init :log-fname log-fname))
 
