@@ -382,8 +382,7 @@ pointer arg;
   if ((result=(pointer)eussetjmp(whilejmp))==0) {
     while (eval(ctx,cond)!=NIL) {
       GC_POINT;
-      // Memory state is not stable enough to call arbitrary callbacks
-      if (ctx->intsig==2) sigbreak();
+      // breakck;
       progn(ctx,body);}
     result=NIL;}
   else if ((eusinteger_t)result==1) result=makeint(0);

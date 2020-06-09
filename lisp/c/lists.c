@@ -222,10 +222,7 @@ nconc1:
   while (--n>=0) {
     c=argv[n];
     if (islist(c)) {
-      while (islist(ccdr(c))) {
-        // Memory state is not stable enough to call arbitrary callbacks
-        if (ctx->intsig==2) sigbreak();
-        c=ccdr(c);}
+      while (islist(ccdr(c))) { c=ccdr(c);}
       pointer_update(ccdr(c),a);
       a=argv[n];}
     }
