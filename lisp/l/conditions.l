@@ -3,7 +3,7 @@
 (in-package "LISP")
 
 (export '(defcondition install-handler remove-handler invoke-next-handler signals
-          euserror sigint-handler interruption handler-bind handler-case))
+          assertion-error euserror sigint-handler interruption handler-bind handler-case))
 
 (deflocal *condition-handler*)
 (defvar *current-condition*)
@@ -141,6 +141,13 @@
       (if (and (derivedp err error) (send err :form))
           (format os " in ~S" (send err :form)))
       (terpri os)))
+
+
+;;;
+;;; assertion error
+;;;
+
+(defcondition assertion-error :super error)
 
 
 ;;;

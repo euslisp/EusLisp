@@ -23,9 +23,9 @@
 	*remote-port*
 	remote-error reval *server-streams* remote-port))
 
-(defun assert (pred &optional (message "Assertation Error") &rest args)
+(defun assert (pred &optional (message "") &rest args)
   (if (not pred)
-      (apply #'error message args)))
+      (apply #'error assertion-error message args)))
 
 (defun warning-message (color format &rest mesg)
    (format *error-output* "~C[3~Cm" #x1b (+ color 48))
