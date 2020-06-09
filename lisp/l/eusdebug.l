@@ -23,9 +23,13 @@
 	*remote-port*
 	remote-error reval *server-streams* remote-port))
 
-(defun assert (pred &optional (message "") &rest args)
+(defun assert (pred &optional (message "assertion failed") &rest args)
   (if (not pred)
-      (apply #'error assertion-error message args)))
+      (handler-case (apply #'error assertion-error message args)
+        (assertion-error (err)
+          ;; set pred as the new form
+          (send err :form (cadr (send err :form)))
+          (signals err)))))
 
 (defun warning-message (color format &rest mesg)
    (format *error-output* "~C[3~Cm" #x1b (+ color 48))
