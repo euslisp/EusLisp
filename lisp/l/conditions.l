@@ -161,13 +161,13 @@
 ;;; unix:signal handling
 ;;;
 
-(defcondition unix::signal-received)
+(defcondition unix::signal-received :slots (sig code))
 (defmacro unix::install-signal-handler (sig obj &rest init-args)
   (let ((fname (intern (format nil "~A-SIGNALIZE-CONDITION" (symbol-pname sig)) *unix-package*)))
     `(progn
        (unless (boundp ',obj)
          (defcondition ,obj :super unix::signal-received))
-       (defun ,fname (sig code) (signals ,obj ,@init-args))
+       (defun ,fname (sig code) (signals ,obj :sig sig :code code ,@init-args))
        (unix:signal ,sig ',fname))))
 
 (defmacro unix::with-alarm-interrupt (&rest body)
