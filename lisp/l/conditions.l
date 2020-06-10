@@ -93,7 +93,7 @@
                         (progn ,@body))))))
     `(catch :handler-case
        (handler-bind
-           ,(mapcar #'(lambda (cs) (apply #'expand-case cs)) cases)
+           ,(mapcar #'(lambda (cs) (apply #'expand-case cs)) (reverse cases))
          ,form))))
 
 (defun invoke-next-handler (obj &optional (skip 0))
