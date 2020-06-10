@@ -41,30 +41,6 @@
       )
     str2))
 
-(defun unittest-error (err)
-  (when (send err :callstack)
-    (lisp::print-callstack (send err :callstack) lisp::*max-callstack-depth*))
-  (lisp::print-error-message err)
-  (warning-message 1 " exitting...~%")
-
-  (when (*unit-test* . result) ;; force put error code into all-test
-    (push 'all-test (unit-test-result-tests (car (last (*unit-test* . result)))))
-    (push (list (send err :form) (send err :message) (send (class err) :name))
-          (unit-test-result-failures (car (last (*unit-test* . result))))))
-  (format *error-output* "~C[3~Cm[ERROR] test ~A failed" #x1b 49 (send err :form))
-  (format *error-output* " ... (~A ~A)" (send err :message) (send (class err) :name))
-  (format *error-output* ".~C[0m~%" #x1b)
-  (send *unit-test* :print-result :if-exists :overwrite)
-  (if lisp::*exit-on-fatal-error* (exit 1)))
-
-(defun unittest-sigint-handler (c)
-  (format *error-output* "unittest-sigint-handler ~A~%" (send c :sig))
-  (when (*unit-test* . result) ;; force put error code into all-test
-    (push 'all-test (unit-test-result-tests (car (last (*unit-test* . result)))))
-    (push (list "" (format nil "signal-handler ~A" (send c :sig)) (send (class c) :name))
-          (unit-test-result-failures (car (last (*unit-test* . result))))))
-  (send *unit-test* :print-result :if-exists :overwrite)
-  (if lisp::*exit-on-fatal-error* (exit 1)))
 
 (defclass unit-test-result
   :super propertied-object
@@ -92,15 +68,22 @@
    (strm)
    (format strm "  <testcase name=\"~s\" status=~s time=\"~d\" classname=\"~s\">~%" name "run" time name)
    (dolist (ret failures)
-     (let ((test (elt ret 0))
-	   (msg  (elt ret 1))
-	   (trace (elt ret 2)))
-       (when trace
-	 (format strm "   <failure message=~s type=\"AssertionError\">~%" (escape-xml-string msg))
-	 (format strm "Test:~A~%" (escape-xml-string (prin1-to-string test)))
-	 (format strm "Trace:~A~%" (escape-xml-string (prin1-to-string trace)))
-	 (format strm "Message:~A~%" (escape-xml-string (prin1-to-string msg)))
-	 (format strm "   </failure>~%"))))
+     (let ((type (send (class ret) :name))
+           test msg)
+     (cond
+       ((derivedp ret error)
+        (setq test (prin1-to-string (send ret :form)))
+        (setq msg (send ret :message)))
+       ((derivedp ret unix::signal-received)
+        (setq test "")
+        (setq msg (format nil "signal-handler ~A" (send ret :sig)))))
+     (format strm "   <failure message=~S type=\"~A\">~%"
+             (escape-xml-string msg)
+             (escape-xml-string (prin1-to-string type)))
+     (format strm "Test:~A~%" (escape-xml-string test))
+     ;; (format strm "Trace:~A~%" (escape-xml-string (prin1-to-string trace)))
+     (format strm "Message:~A~%" (escape-xml-string (prin1-to-string msg)))
+     (format strm "   </failure>~%")))
    (format strm "  </testcase>~%")
    )
   )
@@ -127,12 +110,26 @@
    (test)
    (if result (push test (unit-test-result-tests (car result)))))
   (:increment-failure
-   (test msg trace)
-   (if result (push (list test msg trace) (unit-test-result-failures (car result))))
-   (when trace
-     (format *error-output* "~C[3~Cm[ERROR] test ~A failed" #x1b 49 test)
-     (format *error-output* " ... (~A ~A)" msg trace)
-     (format *error-output* ".~C[0m~%" #x1b)))
+   (failure)
+   (if result (push failure (unit-test-result-failures (car result))))
+   (cond
+     ((derivedp failure error)
+      (format *error-output* "~C[3~Cm[ERROR] test ~A failed" #x1b 49 (send failure :form))
+      (format *error-output* " ... (~A)" (send failure :message))
+      (format *error-output* ".~C[0m~%" #x1b))
+     ((derivedp failure unix::signal-received)
+      (format *error-output* "~C[3~Cm[ERROR] test interrupted with signal ~A" #x1b 49
+              (send failure :sig))
+      (format *error-output* " ... (~A)" (send (class failure) :name))
+      (format *error-output* ".~C[0m~%" #x1b))))
+  (:abort
+   ()
+   (warning-message 1 "exitting...~%")
+   (send *unit-test* :print-result :if-exists :overwrite)
+   (exit 1))
+  (:maybe-abort
+   ()
+   (when lisp::*exit-on-fatal-error* (send self :abort)))
   (:set-time-to-current-result
    (time) ;; msec
    (if result (setf (unit-test-result-time (car result)) (round time))))
@@ -141,7 +138,7 @@
    (push (instance unit-test-result :init func-sym) result))
   (:clear-result ()
    (setq result nil)
-   (send self :init-result 'all-test)
+   ;(send self :init-result 'all-test)
    ;(send self :increment-test 'all-test)
    )
   ;;
@@ -182,10 +179,26 @@
 
 (defmacro deftest (name &rest body)
   `(progn
-     ;; its not cool...
      (defun ,name ()
        (warning-message 2 "start testing [~A]~%" ',name)
-       ,@body)
+       (handler-case
+           (progn ,@body)
+         (assertion-error (err)
+           (send *unit-test* :increment-failure err))
+         (error (err)
+           (when (send err :callstack)
+             (lisp::print-callstack (send err :callstack) lisp::*max-callstack-depth*))
+           (lisp::print-error-message err)
+
+           (send *unit-test* :increment-failure err)
+           (send *unit-test* :maybe-abort))
+         (unix::sigint-received (c)
+           (send *unit-test* :increment-failure c)
+           (send *unit-test* :abort))
+         (unix::sighup-received (c)
+           (send *unit-test* :increment-failure c)
+           (send *unit-test* :abort))))
+
      (send *unit-test* :add-function ',name)
      ',name))
 
@@ -220,9 +233,6 @@
 
     (setq lisp::*exit-on-fatal-error* t)
     (unix:install-signal-handler unix::sighup unix::sighup-received)
-    (install-handler error 'unittest-error)
-    (install-handler unix::sigint-received 'unittest-sigint-handler)
-    (install-handler unix::sighup-received 'unittest-sigint-handler)
 
     (setq *unit-test* (instance unit-test-container :init :log-fname log-fname))
 
@@ -232,21 +242,6 @@
         `(prog1
            (defun-org ,name ,args ,@body)
            (trace ,name))))
-
-    (defmacro assert (pred &optional (message "") &rest args)
-      `(let (failure (ret ,pred))
-         ;; lisp::step could not work with macros..
-         ;;     (if (and (listp ',pred) (functionp (car ',pred)))
-         ;;	 (setq ret (lisp::step ,pred))
-         ;;       (setq ret ,pred))
-         ;;
-         (if (not ret)
-             ;; escape <> for xml
-             (send *unit-test* :increment-failure ',pred (format nil ,message ,@args)
-                   (escape-xml-string (subseq (send *error-output* :buffer) 0 (or (position 0 (send *error-output* :buffer)) (length (send *error-output* :buffer)))))))
-         ))
-
-
     t))
 
 (provide :unittest)
