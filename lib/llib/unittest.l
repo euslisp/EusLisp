@@ -156,6 +156,7 @@
    (let ((all-tests (apply #'+ (send-all result :num-tests)))
          (all-successes (apply #'+ (send-all result :num-successes)))
          (all-failures (apply #'+ (send-all result :num-failures))))
+     (terpri strm)
      (format strm "ALL RESULTS:~%")
      (format strm "  TEST-NUM: ~A~%" all-tests)
      (format strm "    PASSED:   ~A~%" all-successes)
