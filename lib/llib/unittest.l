@@ -115,12 +115,21 @@
    (if result (push failure (unit-test-result-failures (car result))))
    (cond
      ((derivedp failure error)
-      (format *error-output* "~C[3~Cm[ERROR] test ~A failed" #x1b 49 (send failure :form))
+      (if result
+          (format *error-output* "~C[3~Cm[ERROR] test ~A failed at ~A" #x1b 49
+              (unit-test-result-name (car result))
+              (send failure :form))
+          (format *error-output* "~C[3~Cm[ERROR] test failed at ~A" #x1b 49
+              (send failure :form)))
       (format *error-output* " ... (~A)" (send failure :message))
       (format *error-output* ".~C[0m~%" #x1b))
      ((derivedp failure unix::signal-received)
-      (format *error-output* "~C[3~Cm[ERROR] test interrupted with signal ~A" #x1b 49
-              (send failure :sig))
+      (if result
+          (format *error-output* "~C[3~Cm[ERROR] test ~A interrupted with signal ~A" #x1b 49
+                  (if result (unit-test-result-name (car result)) "")
+                  (send failure :sig))
+          (format *error-output* "~C[3~Cm[ERROR] test interrupted with signal ~A" #x1b 49
+                  (send failure :sig)))
       (format *error-output* " ... (~A)" (send (class failure) :name))
       (format *error-output* ".~C[0m~%" #x1b))))
   (:abort
