@@ -16,7 +16,7 @@
 (defun write-tmp-file (fname send-lst)
   `(with-open-file (test-file ,fname :direction :output :if-exists :supersede)
      (princ-line "(defun exit-on-error (&rest args) (exit 1))" test-file)
-     (princ-line "(lisp::install-error-handler 'exit-on-error)" test-file)
+     (princ-line "(install-handler error 'exit-on-error)" test-file)
      (princ-line "(require :argparse \"lib/llib/argparse.l\")" test-file)
      (terpri test-file)
      (princ-line "(setq argparse (instantiate argparse:argument-parser))" test-file)
