@@ -90,14 +90,15 @@
 
 (defclass unit-test-container
   :super propertied-object
-  :slots (result functions log-fname output-mode))
+  :slots (result functions log-fname output-mode exit-on-error))
 
 (defmethod unit-test-container
   (:init
-   (&key ((:log-fname fname)))
+   (&key ((:log-fname fname)) ((:exit-on-error eoe) t))
    (setq result nil)
    (setq functions nil)
    (setq log-fname fname)
+   (setq exit-on-error eoe)
    (when log-fname
      (warning-message 3 "output to ~A~%" log-fname)
      (setq output-mode :xml))
@@ -129,7 +130,7 @@
    (exit 1))
   (:maybe-abort
    ()
-   (when lisp::*exit-on-fatal-error* (send self :abort)))
+   (when exit-on-error (send self :abort)))
   (:set-time-to-current-result
    (time) ;; msec
    (if result (setf (unit-test-result-time (car result)) (round time))))
@@ -226,16 +227,16 @@
         (exit 1)))
   t)
 
-(defun init-unit-test (&key log-fname trace)
+(defun init-unit-test (&key log-fname trace (exit-on-error t))
   (let* ((p "--gtest_output=xml:")
          (s (find-if #'(lambda (tmpx) (substringp p tmpx)) lisp::*eustop-argument*))
          (xml-fname (if s (string-left-trim p s))))
     (if xml-fname (setq log-fname xml-fname))
-
-    (setq lisp::*exit-on-fatal-error* t)
     (unix:install-signal-handler unix::sighup unix::sighup-received)
 
-    (setq *unit-test* (instance unit-test-container :init :log-fname log-fname))
+    (setq *unit-test* (instance unit-test-container :init
+                                :log-fname log-fname
+                                :exit-on-error exit-on-error))
 
     (when trace
       (setf (symbol-function 'defun-org) (symbol-function 'defun))
