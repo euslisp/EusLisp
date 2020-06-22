@@ -1,0 +1,64 @@
+(unless (boundp '*testmod*)
+  (setq *testmod* (load-foreign "test_foreign.so"))
+  (defforeign int-test *testmod* "int_test" (:integer :integer :integer :integer :integer) :integer)
+  (defforeign long-test *testmod* "long_test" (:integer :integer :integer :integer :integer) :integer)
+  (defforeign eusinteger-test *testmod* "eusinteger_test" (:integer :integer :integer :integer :integer) :integer)
+  (defforeign float-test *testmod* "float_test" (:integer :float32 :float32 :float32 :float32) :integer)
+  (defforeign float1-test *testmod* "float_test" (:integer :float :float :float :float) :integer)
+  (defforeign float2-test *testmod* "float_test" (:integer :double :double :double :double) :integer)
+  (defforeign float3-test *testmod* "float_test" () :integer)
+  (defforeign eusfloat-test *testmod* "eusfloat_test" (:integer :float32 :float32 :float32 :float32) :integer)
+  (defforeign eusfloat1-test *testmod* "eusfloat_test" (:integer :float :float :float :float) :integer)
+  (defforeign eusfloat2-test *testmod* "eusfloat_test" (:integer :double :double :double :double) :integer)
+  (defforeign eusfloat3-test *testmod* "eusfloat_test" () :integer)
+  (defforeign double-test *testmod* "double_test" (:integer :double :double :double :double) :integer)
+  (defforeign double1-test *testmod* "double_test" (:integer :float :float :float :float) :integer)
+  (defforeign double2-test *testmod* "double_test" (:integer :float32 :float32 :float32 :float32) :integer)
+  (defforeign double3-test *testmod* "double_test" () :integer)
+  (defforeign iv-test *testmod* "iv_test" () :integer)
+  (defforeign lv-test *testmod* "lv_test" () :integer)
+  (defforeign eiv-test *testmod* "eiv_test" () :integer)
+  (defforeign fv-test *testmod* "fv_test" () :integer)
+  (defforeign dv-test *testmod* "dv_test" () :integer)
+  (defforeign efv-test *testmod* "efv_test" () :integer)
+  (defforeign str-test *testmod* "str_test" () :integer)
+  (defforeign int-test *testmod* "int_test" () :integer)
+  (defforeign ret-float *testmod* "ret_float" (:float32 :float32) :float32)
+  (defforeign ret-double *testmod* "ret_double" (:double :double) :float)
+  (defforeign ret-eusfloat *testmod* "ret_eusfloat" (:float :float) :float)
+  (defforeign ret-int *testmod* "ret_int" () :integer)
+  (defforeign ret-long *testmod* "ret_long" () :integer)
+  (defforeign ret-eusinteger *testmod* "ret_eusinteger" () :integer)
+
+  (defforeign set-ifunc *testmod* "set_ifunc" (:integer) :integer)
+  (defforeign set-ffunc *testmod* "set_ffunc" (:integer) :integer)
+
+  (defforeign test-testd *testmod* "test_testd" (:integer :integer :integer
+                                                          :integer :integer :integer
+                                                          :double :double :double :double
+                                                          :double :double :double :double
+                                                          :double :double
+                                                          :integer :integer) :float)
+  (defforeign test-testf *testmod* "test_testf" (:integer :integer :integer
+                                                          :integer :integer :integer
+                                                          :float :float :float :float
+                                                          :float :float :float :float
+                                                          :float :float
+                                                          :integer :integer) :float)
+  (defforeign test-testfd *testmod* "test_testfd" (:integer :integer :integer
+                                                            :integer :integer :integer
+                                                            :double :float32 :double :float32
+                                                            :float32 :double :double :float32
+                                                            :float32 :double :double :float32
+                                                            :integer :integer) :integer)
+  (defforeign call-ifunc *testmod* "call_ifunc" () :integer)
+  (defforeign call-ffunc *testmod* "call_ffunc" () :float)
+
+  (defforeign get-size-pointer *testmod* "get_size_of_pointer" () :integer)
+  (defforeign get-size-float32 *testmod* "get_size_of_float32" () :integer)
+  (defforeign get-size-double  *testmod* "get_size_of_double" ()  :integer)
+  (defforeign get-size-long    *testmod* "get_size_of_long" () :integer)
+  (defforeign get-size-int     *testmod* "get_size_of_int" () :integer)
+  (defforeign get-size-eusinteger   *testmod* "get_size_of_eusinteger" () :integer)
+  (defforeign get-size-eusfloat     *testmod* "get_size_of_eusfloat" () :integer)
+  )

@@ -1,0 +1,33 @@
+CC = c++
+CFLAGS = -O2 -DLinux -DGCC -I$(EUSDIR)/include
+LDFLAGS =
+OBJOPT = -o
+OUTOPT = -o
+LD = c++
+SOFLAGS = -shared
+EXELD = c++
+EXESFX =
+LSFX = so
+LPFX = lib
+
+ifneq (,$(findstring 64,$(shell gcc -dumpmachine)))
+ CFLAGS+=-falign-functions=8
+else
+ CFLAGS+=-falign-functions=4
+endif
+
+ifneq ($(shell gcc -dumpmachine | egrep "^(arm|aarch)"),)
+  LDFLAGS+=-Wl,-z,execstack
+  CFLAGS+=-DARM -fPIC
+endif
+ifneq ($(shell gcc -dumpmachine | grep "^x86_64"),)
+  CFLAGS+=-fPIC
+endif
+
+ifneq ($(shell gcc -dumpmachine | grep "i.*86-linux"),)
+CC += -m32
+LD += -m32
+EXELD += -m32
+endif
+
+

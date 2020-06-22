@@ -87,7 +87,10 @@ if [ "$QEMU" != "" ]; then
     export EXIT_STATUS=0;
     set +e
     # run test in EusLisp/test
+    make -C test
     for test_l in test/*.l; do
+
+        [[ "`uname -m`" == "ppc64le"* && $test_l =~ test-foreign.l ]] && continue;
 
         travis_time_start euslisp.${test_l##*/}.test
 
@@ -96,7 +99,15 @@ if [ "$QEMU" != "" ]; then
         eusgl $test_l;
         export TMP_EXIT_STATUS=$?
 
-        travis_time_end `expr 32 - $TMP_EXIT_STATUS`
+        export CONTINUE=0
+        # test-foreign.l only works for x86 / arm
+        if [[ $test_l =~ test-foreign.l  && ! "$(gcc -dumpmachine)" =~ "aarch".*|"arm".*|"x86_64".*|"i"[0-9]"86".* ]]; then export CONTINUE=1; fi
+
+        if [[ $CONTINUE == 0 ]]; then travis_time_end `expr 32 - $TMP_EXIT_STATUS`; else travis_time_end 33; fi
+
+        if [[ $TMP_EXIT_STATUS != 0 ]]; then echo "Failed running $test_l. Exiting with $TMP_EXIT_STATUS"; fi
+
+        if [[ $CONTINUE != 0 ]]; then export TMP_EXIT_STATUS=0; fi
 
         export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`;
 
@@ -105,7 +116,6 @@ if [ "$QEMU" != "" ]; then
         eusgl "(let ((o (namestring (merge-pathnames \".o\" \"$test_l\"))) (so (namestring (merge-pathnames \".so\" \"$test_l\")))) (compile-file \"$test_l\" :o o) (if (probe-file so) (load so) (exit 1))))"
         export TMP_EXIT_STATUS=$?
 
-        export CONTINUE=0
         # const.l does not compilable https://github.com/euslisp/EusLisp/issues/318
         if [[ $test_l =~ const.l ]]; then export CONTINUE=1; fi
 
@@ -235,6 +245,7 @@ if [[ "`uname -m`" == "aarch"* ]]; then
 fi
 
     # run test in EusLisp/test
+    make -C $CI_SOURCE_PATH/test
     for test_l in $CI_SOURCE_PATH/test/*.l; do
 
         travis_time_start euslisp.${test_l##*/}.test
@@ -298,15 +309,6 @@ fi
 
 
 [ $EXIT_STATUS == 0 ] || exit 1
-
-travis_time_start eus64.test
-
-if [[ "$TRAVIS_OS_NAME" == "osx" || "`uname -m`" == "arm"* ]]; then
-    uname -a
-else
-    make -C eus/contrib/eus64-check/ || exit 1 # check eus64-check
-fi
-travis_time_end
 
 if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" ]; then
 
