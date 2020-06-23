@@ -459,6 +459,24 @@
      ;; transpose
      (transpose-image-rows img)
      img))
+  (:string
+   (x y str &optional (fid x:font-courb24))
+   "Draw string to irtviewer. x:font-courb24 and x::font-helvetica-bold-12 are supported for fid."
+   (send self :makecurrent)
+   (glMatrixMode GL_PROJECTION)
+   (glPushMatrix)
+   (send self :2d-mode)
+   (unless (eq (get self :glxusexfont) fid)
+     (setf (get self :glxusexfont) fid)
+     (glxUseXfont fid 32 96 (+ 1000 32)))
+   (glRasterPos2i (round x) (- (send self :height) (round y)))
+   (glListBase 1000)
+   (glCallLists (length str) GL_UNSIGNED_BYTE str)
+   (send self :3d-mode)
+   (glMatrixMode GL_PROJECTION)
+   (glPopMatrix)
+   (glMatrixMode GL_MODELVIEW)
+   )
   )
 
 (defun geo::default-viewsurface (&rest args)
