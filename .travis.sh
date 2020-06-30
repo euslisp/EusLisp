@@ -170,9 +170,6 @@ travis_time_start script.eustag
 
 travis_time_end
 
-
-travis_time_end
-
 if [ "$TRAVIS_OS_NAME" == "linux" -a "`uname -m`" == "x86_64" -a "$ROS_DISTRO" != "" ]; then
 
     travis_time_start setup.ros
@@ -239,13 +236,23 @@ export DISPLAY=
 export EXIT_STATUS=0;
 set +e
 
+set -x # enable debug information
 # arm target (ubuntu_arm64/trusty) takes too long time (>50min) for test
-if [[ "`uname -m`" == "aarch"* ]]; then
-    sed -i 's@00000@0000@' $CI_SOURCE_PATH/test/object.l $CI_SOURCE_PATH/test/coords.l
+# osrf/ubuntu_arm64:trusty takes >50 min, reduce loop count for irteus-demo.l
+if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then
+    sed -i 's@00000@0@' $CI_SOURCE_PATH/test/object.l $CI_SOURCE_PATH/test/coords.l
+    sed -i 's@do-until-key-counter 10@do-until-key-counter 1@' irteus/test/irteus-demo.l;
+    sed -i 's/h7/ape/' irteus/test/test-cad.l
+    sed -i 's/(hanoi-program (length \*disks\*))/(subseq (hanoi-program (length \*disks\*)) 0 2)/' irteus/demo/hanoi-arm.l
+    sed -i 's/^\s*footstep-list/(subseq footstep-list 0 3)/' irteus/demo/walk-motion.l
 fi
+set +x # disable debug information
 
     # run test in EusLisp/test
+    travis_time_start script.make.test
     make -C $CI_SOURCE_PATH/test
+    travis_time_end
+
     for test_l in $CI_SOURCE_PATH/test/*.l; do
 
         travis_time_start euslisp.${test_l##*/}.test
