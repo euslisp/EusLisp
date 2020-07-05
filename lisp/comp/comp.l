@@ -212,12 +212,13 @@
 	    initcodes		;initialize codes in "eusmain"
 	    flets
 	    unwind-frames	;frames need to unwound when jumps
+	    symid symstr
 	    )))
 
 (eval-when (load eval)
 (defmethod compiler
  (:genlabel (head &optional (suffix ""))
-   (concatenate string (string (gensym head)) suffix))
+   (format nil "~A~A~A" symstr head (incf symid) suffix))
  (:gencname-tail 
   (&rest lnames)
   ;; NOTE: Deprecated. Use lisp::gencname-tail instead. (2017/10/19 furushchev)
@@ -1226,6 +1227,7 @@
 		 (verbose *verbose*)
 		 (entry (lisp::gencname-tail (pathname-name file)))
 		 (o))
+   (setq symstr (subseq entry 0 8))
    (if (and (integerp c-optimize)
 	    (> c-optimize 0)
 	    ;; (not (member :gcc *features*))
@@ -1429,7 +1431,8 @@
   (setq trans (instantiate  translator)
 	idtable (instance identifier-table :init)
         scope 0
-	closure-level 0)
+	closure-level 0
+	symid 0 symstr "")
   self)
    ) ; defmethod
 )    ; eval-when
