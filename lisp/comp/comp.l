@@ -212,13 +212,14 @@
 	    initcodes		;initialize codes in "eusmain"
 	    flets
 	    unwind-frames	;frames need to unwound when jumps
-	    symid symstr
+	    symstr
 	    )))
+(defvar *compiler-symid* 0)
 
 (eval-when (load eval)
 (defmethod compiler
  (:genlabel (head &optional (suffix ""))
-   (format nil "~A~A~A" symstr head (incf symid) suffix))
+   (format nil "~A~A~A~A" symstr head (incf *compiler-symid*) suffix))
  (:gencname-tail 
   (&rest lnames)
   ;; NOTE: Deprecated. Use lisp::gencname-tail instead. (2017/10/19 furushchev)
@@ -1432,7 +1433,7 @@
 	idtable (instance identifier-table :init)
         scope 0
 	closure-level 0
-	symid 0 symstr "")
+	symstr "")
   self)
    ) ; defmethod
 )    ; eval-when
