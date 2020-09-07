@@ -239,6 +239,7 @@
 (def-builtin-entry 'LISP::SYMBOL-BOUND-VALUE "SYMBNDVALUE")
 (def-builtin-entry 'LISP:SYMBOL-FUNCTION "SYMFUNC") 
 (def-builtin-entry 'LISP:MAKUNBOUND "MAKUNBOUND")
+(def-builtin-entry 'LISP:FMAKUNBOUND "FMAKUNBOUND")
 (def-builtin-entry 'LISP:SET "SETSPECIAL")
 (def-builtin-entry 'LISP:FIND-SYMBOL "FINDSYMBOL")
 (def-builtin-entry 'LISP:INTERN "INTERN")
