@@ -585,6 +585,7 @@ extern pointer SYMBNDVALUE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer SETFUNC(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer SYMFUNC(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer MAKUNBOUND(context */*ctx*/, int /*n*/, pointer */*argv*/);
+extern pointer FMAKUNBOUND(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern void set_special(context */*ctx*/, pointer /*var*/, pointer /*val*/);
 extern pointer SETSPECIAL(context */*ctx*/, int /*n*/, pointer */*argv*/);
 extern pointer DEFUN(context */*ctx*/, pointer /*arg*/);

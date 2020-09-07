@@ -1073,6 +1073,18 @@ pointer *argv;
   pointer_update(argv[0]->c.sym.speval,UNBOUND);
   return(T);}
 
+pointer FMAKUNBOUND(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ ckarg(1);
+  if (!issymbol(argv[0])) error(E_NOSYMBOL);
+#ifdef SPEC_DEBUG
+  printf( "FMAKEUNBOUND:" ); hoge_print( argv[0] );
+#endif
+  pointer_update(argv[0]->c.sym.spefunc,UNBOUND);
+  return(T);}
+
 void set_special(ctx, var, val)
 context *ctx;
 pointer var, val;
@@ -1361,6 +1373,7 @@ pointer mod;
   defun(ctx,"SYMBOL-BOUND-VALUE",mod,SYMBNDVALUE,NULL);
   defun(ctx,"SYMBOL-FUNCTION",mod,SYMFUNC,NULL);
   defun(ctx,"MAKUNBOUND",mod,MAKUNBOUND,NULL);
+  defun(ctx,"FMAKUNBOUND",mod,FMAKUNBOUND,NULL);
   defun(ctx,"SET",mod,SETSPECIAL,NULL);
   defspecial(ctx,"DEFUN",mod,DEFUN);
   defspecial(ctx,"DEFMACRO",mod,DEFMACRO);
