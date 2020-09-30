@@ -25,6 +25,7 @@ matrix:
     # hppa
     # hurd-i386
     - env: QEMU=i386 DOCKER_IMAGE=i386/debian:unstable # i386
+    - env: QEMU=i386 DOCKER_IMAGE=i386/debian:buster # i386
     # ia64
     # m68k
     - env: QEMU=mips64el DOCKER_IMAGE=loongnix/debian:buster # mips64el
@@ -35,6 +36,8 @@ matrix:
     # sh4
     # sparc64
     - os: osx
+  allow_failures:
+    - env: QEMU=i386 DOCKER_IMAGE=i386/debian:unstable # i386 fails due to invalid signature https://github.com/debuerreotype/docker-debian-artifacts/issues/101
 env:
   global:
     - MAKEFLAGS='-j4'

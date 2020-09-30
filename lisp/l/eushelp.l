@@ -170,7 +170,8 @@
           (if (eq type *type-METHOD*)
               (sethash name (help-item-mhash (gethash class *help-hash*)) (instance help-item :init type fname seek args class))
 	      (sethash name *help-hash* (instance help-item :init type fname seek args)))
-	  )))
+	  )
+    (close fp)))
 
 (in-package "USER")
 (use-package "HELP")
