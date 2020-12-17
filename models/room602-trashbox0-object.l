@@ -6,7 +6,7 @@
 (defclass room602-trashbox0-object
   :super cascaded-link
   :slots (sensors
-         handle0
+         handle0 handle1
          ))
 (defmethod room602-trashbox0-object
   (:init
@@ -92,8 +92,10 @@
 
 
      ;; definition of :handle
-     (setq handle0 (make-cascoords :pos (float-vector 0.0 0.0 0.0) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "handle0"))
+     (setq handle0 (make-cascoords :pos (float-vector -200.0 0.0 500.0) :rot #2f((-0.000204 1.0 0.000204) (1.110223e-16 -0.000204 1.0) (1.0 0.000204 4.148277e-08)) :name "rear"))
      (send blink0 :assoc handle0)
+     (setq handle1 (make-cascoords :pos (float-vector 200.0 0.0 500.0) :rot #2f((-0.000204 -1.0 0.000204) (0.0 -0.000204 -1.0) (1.0 -0.000204 4.148277e-08)) :name "front"))
+     (send blink0 :assoc handle1)
 
      ;; init-ending 
      (setq links (list blink0))
@@ -104,8 +106,9 @@
 
      self))
 
-  (:handle (&rest args) (forward-message-to-all (list  handle0) args))
-  (:handle-handle0 (&rest args) (forward-message-to handle0 args))
+  (:handle (&rest args) (forward-message-to-all (list  handle0 handle1) args))
+  (:handle-rear (&rest args) (forward-message-to handle0 args))
+  (:handle-front (&rest args) (forward-message-to handle1 args))
   (:attention (&rest args) (forward-message-to-all (list ) args))
   (:button (&rest args) (forward-message-to-all (list ) args))
   )
