@@ -168,6 +168,7 @@
               (glXChooseVisual x::*display* (x::DefaultScreen x::*display*)
                                 *attributelist*))
            (setq glcon (glXCreateContext x::*display* visualinfo shared-glcon GL_TRUE))
+           (unless x::drawable
 #-(or :word-size=64)
 	   (send-super* :create
                         :depth (sys:peek (+ visualinfo 12) :long)
@@ -178,6 +179,7 @@
                         :depth (sys:peek (+ visualinfo 20) :integer)
                         :visual (sys:peek visualinfo :long)
                         :title title args)
+           )
 
            (glXMakeCurrent x::*display* x::drawable glcon)
 
@@ -256,7 +258,12 @@
       (glMaterialfv GL_FRONT_AND_BACK GL_EMISSION emission)
       (glMaterialfv GL_FRONT_AND_BACK GL_SHININESS (float-vector shininess))
       )
-  (:color (color-vector)
+  (:color (&optional color-vector)
+          "Returns color, if color-vector is given it set color"
+        (unless color-vector
+          (let ((v (float-vector 0 0 0 0)))
+            (glgetfloatv GL_CURRENT_COLOR v)
+            (return-from :color (subseq v 0 3))))
 	(if (derivedp color-vector linecolor)
 	    (setf color-vector (linecolor-color color-vector)))
 	  (case (length color-vector)
@@ -266,6 +273,22 @@
 		 (glcolor4fv color-vector))
 		(t
 		 (error ":color"))))
+  (:line-width
+   (&optional x)
+   "Returns line width, if x is given, it set line width"
+   (if x (glLineWidth (float x))
+     (let ((tmp (float-vector 0)))
+       (glGetFloatv GL_LINE_WIDTH tmp)
+       (elt tmp 0))
+     ))
+  (:point-size
+   (&optional x)
+   "Returns point size, if x is given, it set point size"
+   (if x (glPointSize (float x))
+     (let ((tmp (float-vector 0)))
+       (glGetFloatv GL_POINT_SIZE tmp)
+       (elt tmp 0))
+     ))
   (:window ()
 	   x::drawable #|window|# )
   (:3d-mode ()
@@ -353,23 +376,34 @@
 	 (glEnd)
 	 (send self :3d-mode)
 	 (send self :pop-mode))
-  (:3d-point (pos)
-	    (glDisable GL_DEPTH_TEST)
-	    (glDisable GL_LIGHTING)
-	    (glBegin GL_POINTS)
-	    (glVertex3fv pos)
-	    (glEnd)
-	    (glEnable GL_DEPTH_TEST)
-	    (glEnable GL_LIGHTING))
-  (:3d-line (start end)
-	    ;;(glDisable GL_DEPTH_TEST)
-	    (glDisable GL_LIGHTING)
-	    (glBegin GL_LINES)
+  (:3d-point (pos &key (depth-test t) (lighting t))
+             "Draw 3D point"
+	     (if depth-test (glDisable GL_DEPTH_TEST))
+	     (if lighting (glDisable GL_LIGHTING))
+	     (glBegin GL_POINTS)
+	     (glVertex3fv pos)
+	     (glEnd)
+	     (if depth-test (glEnable GL_DEPTH_TEST))
+	     (if lighting (glEnable GL_LIGHTING)))
+  (:3d-line (start end &key (depth-test t) (lighting t))
+            "Draw 3D line from start to end"
+	    (if depth-test (glDisable GL_DEPTH_TEST))
+	    (if lighting (glDisable GL_LIGHTING))
+	    (glBegin GL_LINE_STRIP)
 	    (glVertex3fv start)
 	    (glVertex3fv end)
 	    (glEnd)
-	    ;;(glEnable GL_DEPTH_TEST)
-	    (glEnable GL_LIGHTING))
+	    (if depth-test (glEnable GL_DEPTH_TEST))
+	    (if lighting (glEnable GL_LIGHTING)))
+  (:3d-lines (points &key (depth-test t) (lighting t))
+             "Draw 3D lines that connecting points"
+	     (if depth-test (glDisable GL_DEPTH_TEST))
+	     (if lighting (glDisable GL_LIGHTING))
+	     (glBegin GL_LINE_STRIP)
+	     (dolist (p points) (glVertex3fv p))
+	     (glEnd)
+	     (if depth-test (glEnable GL_DEPTH_TEST))
+	     (if lighting (glEnable GL_LIGHTING)))
   (:draw-faces (faces)
 	       (mapc #'(lambda (f)
 			 (draw-face f nil nil))
@@ -384,6 +418,65 @@
 	      (glEnd)
 	      (send self :3d-mode)
 	      (send self :pop-mode))
+  (:makecurrent () (gl::glxMakeCurrent x::*display* x::drawable glcon))
+  (:redraw (&rest args) (send self :flush))
+  (:flush
+   ()
+   "send glflush"
+   (send self :makecurrent)
+   (send self :glflush)
+   (send-super :flush)
+   )
+  ;;
+  (:write-to-image-file
+   (file &key (x 0) (y 0)
+	 (width x::width)
+	 (height x::height))
+   "Write current view to file name"
+   (let* ((glimg (send self :getglimage
+		       :x x :y y :width (1- width) :height height)))
+     (image::write-image-file file glimg)
+     ))
+  (:getglimage
+   (&key (x 0) (y 0)
+	 (width x::width)
+	 (height x::height)
+	 ((:imagebuf imgbuf) (make-string (* width height 3)))
+         (depthbuf) (readbuffer GL_FRONT))
+   "Get current view to a image object. It returns color-image24 object."
+   (let ((img (instance image::color-image24 :init width height imgbuf)))
+     (send self :makecurrent)
+     (glReadBuffer readbuffer)
+     (glPixelStorei GL_PACK_ALIGNMENT 1)
+     (glReadPixels x y width height GL_RGB GL_UNSIGNED_BYTE imgbuf)
+     #-(or :x86_64 :aarch64)
+     (if depthbuf (glReadPixels x y width height GL_DEPTH_COMPONENT GL_FLOAT depthbuf))
+     #+(or :x86_64 :aarch64)
+     (when depthbuf
+       (let ((fv (user::dvector2float-bytestring depthbuf)))
+	 (glReadPixels x y width height GL_DEPTH_COMPONENT GL_FLOAT fv)
+	 (user::float-bytestring2dvector fv depthbuf)))
+     ;; transpose
+     (transpose-image-rows img)
+     img))
+  (:string
+   (x y str &optional (fid x:font-courb24))
+   "Draw string to irtviewer. x:font-courb24 and x::font-helvetica-bold-12 are supported for fid."
+   (send self :makecurrent)
+   (glMatrixMode GL_PROJECTION)
+   (glPushMatrix)
+   (send self :2d-mode)
+   (unless (eq (get self :glxusexfont) fid)
+     (setf (get self :glxusexfont) fid)
+     (glxUseXfont fid 32 96 (+ 1000 32)))
+   (glRasterPos2i (round x) (- (send self :height) (round y)))
+   (glListBase 1000)
+   (glCallLists (length str) GL_UNSIGNED_BYTE str)
+   (send self :3d-mode)
+   (glMatrixMode GL_PROJECTION)
+   (glPopMatrix)
+   (glMatrixMode GL_MODELVIEW)
+   )
   )
 
 (defun geo::default-viewsurface (&rest args)
@@ -397,6 +490,58 @@
 		    (aref to 0) (aref to 1)))
   (:draw-rectangle (point width height)
 	   (send self :rectangle (elt point 0) (elt point 1) width height))
+  )
+
+;; glviewsurface without xwindows
+(export '(glpixmapsurface))
+(defclass glpixmapsurface
+  :super glviewsurface
+  :slots ())
+(defmethod glpixmapsurface
+  (:create (&rest args &key (size 256) ((:width w) size) ((:height h) size) &allow-other-keys)
+    (let (xpix)
+      (setq visualinfo
+            (glXChooseVisual x::*display* (x::DefaultScreen x::*display*)
+                             *attributelist*))
+      (when (= 0 visualinfo)
+        (x::Sync x::*display* 0)
+        (warn "glXChooseVisual error, visp ~A~%" visualinfo)
+        (return-from :create nil))
+#-(or :word-size=64)
+      (setq xpix (x::CreatePixmap x::*display* (x::DefaultRootWindow x::*display*) w h (sys:peek (+ visualinfo 12) :long)))
+#+(or :word-size=64)
+      (setq xpix (x::CreatePixmap x::*display* (x::DefaultRootWindow x::*display*) w h (sys:peek (+ visualinfo 20) :integer)))
+      (when (= 0 xpix)
+        (x::Sync x::*display* 0)
+        (warn "XCreatePixmap error, xpix ~A~%" xpix)
+        (return-from :create nil))
+      (setq x::drawable (glXCreateGLXpixmap x::*display* visualinfo xpix))
+      (when (= 0 x::drawable)
+        (x::Sync x::*display* 0)
+        (warn "glXCreateGlXpixmap error, drawable ~A~%" x::drawable)
+        (return-from :create nil))
+      ;; call glviewsurface
+      (send-super* :create args)))
+  ;
+  (:getglimage
+   (&rest args &key (readbuffer GL_BACK) &allow-other-keys)
+   "Get current view to a image object. It returns color-image24 object."
+   (send-super* :getglimage :readbuffer readbuffer args)) ;; glpixmapsurface need to read from GL_BACK
+  (:resize (w h)
+   (setq x::width w x::height h)
+#-(or :word-size=64)
+   (setq xpix (x::CreatePixmap x::*display* (x::DefaultRootWindow x::*display*) w h (sys:peek (+ visualinfo 12) :long)))
+#+(or :word-size=64)
+   (setq xpix (x::CreatePixmap x::*display* (x::DefaultRootWindow x::*display*) w h (sys:peek (+ visualinfo 20) :integer)))
+   (send self :flush)
+   )
+  (:flush
+   ()
+   "send glflush"
+   (send self :makecurrent)
+   (send self :glflush)
+   ;;(send-super :flush) do not call super flush
+   )
   )
 
 ;; overwrite :draw-one and :draw-faces method of class viewer
