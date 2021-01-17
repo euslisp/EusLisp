@@ -695,8 +695,9 @@ hedron is an icosahedron or a gdome of lower level"
 		     	     (cdr (gethash (cadr e) newverts))
 			     (cdr (gethash (caddr e) newverts))))
 	 (push (subdivide-facet (fac . normal) vlist1 vlist2) faces))
-      (setq gdome (instance *body-class* :init :faces (flatten faces)))
-      (send gdome :csg (list (list :gdome hedron)))
+      (setq gdome (instance *body-class* :init
+			    :primitive (list :gdome hedron)
+			    :faces (flatten faces)))
       gdome ) )
 
 ;;
@@ -725,8 +726,9 @@ hedron is an icosahedron or a gdome of lower level"
               ;; (push (assoc fv vlist) fvlist)
 		(push (assoc fv vlist :test #'equal) fvlist)		)
            (push (make-face-from-vertices (nreverse fvlist)) faces)) )
-     (setq bod (instance *body-class* :init :faces (nreverse faces)))
-     (send bod :csg (list (cons :body-from-vertices face-vertices)))
+     (setq bod (instance *body-class* :init
+			 :primitive (cons :body-from-vertices face-vertices)
+			 :faces (nreverse faces)))
      bod) )
 
 
