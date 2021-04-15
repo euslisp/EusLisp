@@ -294,16 +294,15 @@ Conditions can be used to report exceptions to higher levels in the program and 
 \macrodesc{defcondition}{name \&key slots (super 'condition)}{
   Defines new conditions. Defines a new class with setter/getter methods for each slot in {\em slots} and a proper {\em :init} method.}
 
-\funcdesc{install-handler}{label handler \&key (recursive t)}{
+\funcdesc{install-handler}{label handler}{
   Introduces a callback function {\em handler} to be called when a condition derived from {\em label} is signalized.
-  {\em label} is a condition class and {\em handler} is a funcallable object which takes one parameter (the condition instance signalized).
-  If {\em recursive} is nil, recursive calling of {\em handler} is disabled, and new conditions belonging to {\em label} signalized from within {\em handler} cause the next registered handler function to be executed.}
+  {\em label} is a condition class and {\em handler} is a funcallable object which takes one parameter (the condition instance signalized).}
 
 \funcdesc{remove-handler}{label \&optional handler}{
   Removes the last handler registered for condition {\em label}.
   If {\em handler} is given, removes the last registered pair of ({\em label . handler}) instead.}
 
-\funcdesc{handler-bind}{(\&rest (label handler \&key (recursive nil))) \&rest forms}{
+\funcdesc{handler-bind}{(\&rest (label handler)) \&rest forms}{
   Locally binds condition handlers and executes {\em forms}.
   {\em label} is a condition class and {\em handler} is a funcallable object which takes one parameter (the condition instance signalized).}
 
@@ -314,9 +313,8 @@ Conditions can be used to report exceptions to higher levels in the program and 
   Signalizes conditions. Returns the result of the first matching handler or {\it nil} if unhandled.
   {\em obj} is a condition instance or a condition class to be initialized by {\em init-args}.}
 
-\funcdesc{invoke-next-handler}{obj \&optional (skip 0)}{
-  Similar to {\it signals}, but allows to skip handlers. Returns the result of the $(skip + 1)$ matching handler or {\it nil} if unhandled.
-  {\em obj} must be an initialized condition instance.}
+\funcdesc{invoke-next-handler}{obj}{
+  Can be used from within a condition handler to call the next handler matching the the {\it obj} condition. {\it obj} must be an initialized condition instance. Returns the result of the matching handler or {\it nil} if unhandled.}
 
 \end{refdesc}
 

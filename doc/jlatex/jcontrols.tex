@@ -294,17 +294,15 @@ lambda-formかあるいはlambda-closureであったとき、Tを返す。
 \macrodesc{defcondition}{name \&key slots (super 'condition)}{
 新しいコンディションを定義する。{\em slots}に含まれる各スロットに対するsetter/getterと{\em :init}メソッドも一緒に定義される。}
 
-\funcdesc{install-handler}{label handler \&key (recursive t)}{
+\funcdesc{install-handler}{label handler}{
 Callback関数{\em handler}を定義し、{\em label}を親クラスとするコンディションがsignalizeされたらその関数を実行する。
-{\em label}はconditionを親とするクラスであり、{\em handler}は一個のパラメータ(コンディションのインスタンス)を受け付ける関数である。
-{\em recursive}がnilの時、{\em handler}の再帰的呼び出しは行われず、{\em handler}実行中に新たな{\em label}に属するコンディションがsignalizeされればその次に登録されているハンドラーが呼び出される。
-}
+{\em label}はconditionを親とするクラスであり、{\em handler}は一個のパラメータ(コンディションのインスタンス)を受け付ける関数である。}
 
 \funcdesc{remove-handler}{label \&optional handler}{
 コンディション{\em label}で登録された最後のhandlerを登録解除する。
 {\em handler}が与えられた場合、最後に登録された({\em label . handler})のペアを登録解除する。}
 
-\funcdesc{handler-bind}{(\&rest (label handler \&key (recursive nil))) \&rest forms}{
+\funcdesc{handler-bind}{(\&rest (label handler)) \&rest forms}{
 コンディション{\rm label}とハンドラー{\em handler}をロカルにbindし、{\em forms}を実行する。
 {\em label}はconditionを親とするクラスであり、{\em handler}は一個のパラメータ(コンディションのインスタンス)を受け付ける関数である。}
 
@@ -313,12 +311,11 @@ Callback関数{\em handler}を定義し、{\em label}を親クラスとするコ
 {\em arg-list}はコンディションインスタンスを保持する一個(あるいはゼロ個)のパラメータを持つリストである。}
 
 \funcdesc{signals}{obj \&rest init-args}{
-{\em obj}によって示されるコンディションをsignalizeする。最初にマッチングされたhandlerの返り値を返す。マッチングされずどのhandlerも呼ばれない時にはnilを返す。
+{\em obj}によって示されるコンディションをsignalizeする。最初にマッチングされたhandlerの返り値を返す。マッチングされずにどのhandlerも呼ばれない場合はnilを返す。
 {\em obj}はコンディションインスタンスか、 {\em init-args}によって初期化されるコンディションクラスである。}
 
-\funcdesc{invoke-next-handler}{obj \&optional (skip 0)}{
-  signalsと似ているが、呼び出し時にhandlerをスキップできる。(skip + 1)番目にマッチングされたhandlerの返り値を返す。どのhandlerも呼ばれない時にはnilを返す。
-{\em obj}は初期化されたコンディションインスタンスである。}
+\funcdesc{invoke-next-handler}{obj}{
+  コンディションハンドラーの中から呼ばれた場合、コンディションインタンス{\em obj}と次にマッチングされたhandlerの返り値を返す。マッチングされずにどのhandlerも呼ばれない場合はnilを返す。}
 
 \end{refdesc}
 

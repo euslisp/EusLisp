@@ -6,7 +6,7 @@
           assertion-error euserror sigint-handler interruption handler-bind handler-case))
 
 (deflocal *condition-handler*)
-(defvar *current-condition*)
+(defvar *current-condition-handler*)
 
 (defmethod condition
   (:init (&rest init-args &key message &allow-other-keys)
@@ -24,13 +24,12 @@
   (:callstack (&optional val) (if val (setq callstack val) callstack))
   (:form (&optional val) (if val (setq form val) form)))
 
-(defclass condition-handler :slots (fn recursive) :super propertied-object)
+(defclass condition-handler :slots (fn) :super propertied-object)
 (defmethod condition-handler
-  (:init (fn &key recursive)
+  (:init (fn)
     (unless (functionp fn) (error type-error "function expected"))
     ;; set slots
     (send self :set-val "FN" fn)
-    (send self :set-val "RECURSIVE" recursive)
     ;; set name
     (let ((name
            (cond
@@ -39,8 +38,7 @@
              ((listp fn) (second fn)))))
       (if name (setf (get self :name) name)))
     self)
-  (:function (&optional val) (if val (setq fn val) fn))
-  (:recursive (&optional (val nil supplied-p)) (if supplied-p (setq recursive val) recursive)))
+  (:function (&optional val) (if val (setq fn val) fn)))
 
 (defmacro defcondition (name &key slots (super 'condition))
   `(progn
@@ -51,19 +49,19 @@
                                     (if supplied-p (send self :set-val ',s val) ,s)))
                    slots))))
 
-(defun install-handler-raw (label handler &key recursive)
+(defun install-handler-raw (label handler)
   ;; ensure condition class
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
-  (push (cons label (instance condition-handler :init handler :recursive recursive))
+  (push (cons label (instance condition-handler :init handler))
         *condition-handler*)
   t)
 
-(defun install-handler (label handler &key (recursive t))
+(defun install-handler (label handler)
   ;; ensure global scope
   (when (and (consp handler) (eql (car handler) 'lambda-closure))
     (setq handler `(lambda-closure ,(second handler) 0 0 ,@(nthcdr 4 handler))))
-  (install-handler-raw label handler :recursive recursive))
+  (install-handler-raw label handler))
 
 (defun remove-handler (label &optional handler)
   (let ((item
@@ -80,7 +78,7 @@
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
-     ,@(mapcar #'(lambda (bind) `(install-handler-raw ,@bind :recursive nil)) bindings)
+     ,@(mapcar #'(lambda (bind) `(install-handler-raw ,@bind)) bindings)
      ,@forms))
 
 (defmacro handler-case (form &rest cases)
@@ -96,25 +94,15 @@
            ,(mapcar #'(lambda (cs) (apply #'expand-case cs)) (reverse cases))
          ,form))))
 
-(defun invoke-next-handler (obj &optional (skip 0))
+(defun invoke-next-handler (obj)
   (unless (derivedp obj condition)
     (error type-error "condition class expected"))
-  (unless (and (integerp skip) (not (minusp skip)))
-    (error type-error "positive integer expected"))
-  (dolist (handle *condition-handler*)
+  (dolist (handle *current-condition-handler*)
     (when (derivedp obj (car handle))
-      (if (<= skip 0)
-          ;; call handler
-          (let ((*current-condition* obj)
-                (*condition-handler* (copy-list *condition-handler*)))
-            (if (send (cdr handle) :recursive)
-                ;; recursive
-                (return-from invoke-next-handler (funcall (send (cdr handle) :function) obj))
-                ;; non-recursive: remove ongoing handler to avoid nested evaluation
-                (let ((*condition-handler* (remove handle *condition-handler* :test #'equal :count 1)))
-                  (return-from invoke-next-handler (funcall (send (cdr handle) :function) obj)))))
-          ;; decrease skip count
-          (decf skip)))))
+      ;; call handler
+      (let ((*current-condition-handler*
+             (remove handle *current-condition-handler* :test #'equal :count 1)))
+        (return-from invoke-next-handler (funcall (send (cdr handle) :function) obj))))))
 
 (defun signals (obj &rest init-args)
   (when (classp obj)
@@ -122,7 +110,12 @@
     (send* obj :init init-args))
   ;; init-args is not used if instantiated objects are given
   (unless (derivedp obj condition) (error type-error "condition class expected"))
-  (invoke-next-handler obj))
+  (dolist (handle *condition-handler*)
+    (when (derivedp obj (car handle))
+      ;; call handler
+      (let ((*current-condition-handler*
+             (remove handle (copy-list *condition-handler*) :test #'equal :count 1)))
+        (return-from signals (funcall (send (cdr handle) :function) obj))))))
 
 (defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
   (let ((tms (if max
