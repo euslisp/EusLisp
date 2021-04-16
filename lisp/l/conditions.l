@@ -114,7 +114,9 @@
     (when (derivedp obj (car handle))
       ;; call handler
       (let ((*current-condition-handler*
-             (remove handle (copy-list *condition-handler*) :test #'equal :count 1)))
+             (if *current-condition-handler*
+                 (remove handle *current-condition-handler* :test #'equal :count 1)
+                 (remove handle (copy-list *condition-handler*) :test #'equal :count 1))))
         (return-from signals (funcall (send (cdr handle) :function) obj))))))
 
 (defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
