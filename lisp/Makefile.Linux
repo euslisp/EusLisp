@@ -74,7 +74,7 @@ CFLAGS:= $(CFLAGS) $(CPPFLAGS) $(WFLAGS) -D$(MACHINE) -DLinux -D_REENTRANT -DVER
 
 # machine specific CFLAGS
 ifneq ($(shell gcc -dumpmachine | egrep "^(arm|aarch)"),)
-  ADD_LDFLAGS=-Wl,-z,execstack
+  ADD_LDFLAGS+=-Wl,-z,execstack
   CFLAGS+=-DARM -fPIC
   ARCH=LinuxARM
 endif
