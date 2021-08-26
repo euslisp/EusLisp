@@ -81,18 +81,27 @@
      ,@(mapcar #'(lambda (bind) `(install-handler-raw ,@bind)) bindings)
      ,@forms))
 
+(defun get-handler-frame (&optional (name "HANDLER-CASE-"))
+  (let ((handler-frame (symbol-pname (gensym name))))
+    (while (find-symbol handler-frame *keyword-package*)
+      (setq handler-frame (symbol-pname (gensym name))))
+    (intern handler-frame *keyword-package*)))
+
 (defmacro handler-case (form &rest cases)
-  (flet ((expand-case (tag arglst &rest body)
-           (unless (or (null arglst) (and (consp arglst) (null (cdr arglst))))
-             (error argument-error "expected single parameter list"))
-           `(,tag #'(lambda ,(if arglst arglst (list (gensym)))
-                      ;; ignore?
-                      (throw :handler-case
-                        (progn ,@body))))))
-    `(catch :handler-case
-       (handler-bind
-           ,(mapcar #'(lambda (cs) (apply #'expand-case cs)) (reverse cases))
-         ,form))))
+  (let ((handler-frame (get-handler-frame)))
+    (flet ((expand-case (tag arglst &rest body)
+             (unless (or (null arglst) (and (consp arglst) (null (cdr arglst))))
+               (error argument-error "expected single parameter list"))
+             `(,tag #'(lambda ,(if arglst arglst (list (gensym)))
+                        ;; ignore?
+                        (throw ,handler-frame
+                          (progn ,@body))))))
+      `(prog1
+           (catch ,handler-frame
+             (handler-bind
+                 ,(mapcar #'(lambda (cs) (apply #'expand-case cs)) (reverse cases))
+               ,form))
+         (send *keyword-package* :unintern ,handler-frame)))))
 
 (defun invoke-next-handler (obj)
   (unless (derivedp obj condition)
