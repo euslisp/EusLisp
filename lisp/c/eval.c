@@ -980,14 +980,261 @@ pointer args[];
     } else error(E_USER,(pointer)"result type?"); 
   }
 }
-#else /* not x86_64 */
+
+#elif defined(ARM) && defined(__ARM_ARCH_7A__) /* not (defined(x86_64) || defined(aarch64))  */
+
+extern int exec_function_i(void (*)(), int *, int *, int, int *);
+extern int exec_function_f(void (*)(), int *, int *, int, int *);
+
+#define exec_function_asm(FUNC)						\
+	 /* vargv -> stack */						\
+	 "movs	r3, #0\n\t"						\
+	 "str	r3, [r7, #60]\n\t"					\
+	 "b	."FUNC"_LPCK\n\t"					\
+	 "."FUNC"_LP:\n\t"						\
+	 "ldr	r3, [r7, #60]\n\t"	/* i 			*/	\
+	 /* https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/function-parameters-on-32-bit-arm */ \
+	 "lsl	r4, r3, #2\n\t"		/* r4 = i * 2		*/	\
+	 "ldr	r1, [r7, #80]\n\t"	/* vargv[0]		*/	\
+	 "add	r1, r1, r4\n\t"		/* vargv[i]		*/	\
+	 "add	r2, sp, r4\n\t"		/* stack[i]		*/	\
+	 "ldr	r0, [r1]\n\t"						\
+	 "str	r0, [r2]\n\t"		/* push stack		*/	\
+	 "adds	r3, r3, #1\n\t"		/* i++			*/	\
+	 "str	r3, [r7, #60]\n\t"					\
+	 "."FUNC"_LPCK:\n\t"						\
+	 "ldr	r2, [r7, #60]\n\t"					\
+	 "ldr	r3, [r7]\n\t"						\
+	 "cmp	r2, r3\n\t"						\
+	 "blt	."FUNC"_LP\n\t"						\
+	 /* fargv -> register */					\
+	 "ldr	r0, [r7,#4]\n\t"					\
+	 "vldr.32	s0, [r0]\n\t"					\
+	 "vldr.32	s1, [r0,#4]\n\t"				\
+	 "vldr.32	s2, [r0,#8]\n\t"				\
+	 "vldr.32	s3, [r0,#12]\n\t"				\
+	 "vldr.32	s4, [r0,#16]\n\t"				\
+	 "vldr.32	s5, [r0,#20]\n\t"				\
+	 "vldr.32	s6, [r0,#24]\n\t"				\
+	 "vldr.32	s7, [r0,#28]\n\t"				\
+	 "vldr.32	s8, [r0,#32]\n\t"				\
+	 "vldr.32	s9, [r0,#36]\n\t"				\
+	 "vldr.32	s10, [r0,#40]\n\t"				\
+	 "vldr.32	s11, [r0,#44]\n\t"				\
+	 "vldr.32	s12, [r0,#48]\n\t"				\
+	 "vldr.32	s13, [r0,#52]\n\t"				\
+	 "vldr.32	s14, [r0,#56]\n\t"				\
+	 "vldr.32	s15, [r0,#60]\n\t"				\
+	 /* iargv -> register */					\
+	 "ldr	r0, [r7,#8]\n\t"					\
+	 "ldr	r0, [r0]\n\t"						\
+	 "ldr	r1, [r7,#8]\n\t"					\
+	 "ldr	r1, [r1,#4]\n\t"					\
+	 "ldr	r2, [r7,#8]\n\t"					\
+	 "ldr	r2, [r2,#8]\n\t"					\
+	 "ldr	r3, [r7,#8]\n\t"					\
+	 "ldr	r3, [r3,#12]\n\t"					\
+	 /* funcall */							\
+	 "ldr	r6, [r7, #12]\n\t"					\
+	 "blx	r6\n\t"
+
+__asm__ (".align 4\n"
+	 ".global exec_function_i\n\t"
+	 ".type	exec_function_i, %function\n"
+	 "exec_function_i:\n\t"
+	 "push	{r7, lr}\n\t"
+	 "sub	sp, sp, #136\n\t"
+	 "add	r7, sp, #64\n\t"
+	 "str	r0, [r7, #12]\n\t"	// fc
+	 "str	r1, [r7, #8]\n\t"	// iargv
+	 "str	r2, [r7, #4]\n\t"	// fargv
+	 "str	r3, [r7]\n\t"		// vcntr
+	 exec_function_asm("FUNCI")
+	 // retval
+	 "adds	r7, r7, #72\n\t"
+	 "mov	sp, r7\n\t"
+	 "@ sp needed	@\n\t"
+	  "pop	{r7, pc}\n\t"
+	 ".size	exec_function_i, .-exec_function_i\n\t"
+	 );
+
+__asm__ (".align 4\n"
+	 ".global exec_function_f\n\t"
+	 ".type	exec_function_f, %function\n"
+	 "exec_function_f:\n\t"
+	 "push	{r7, lr}\n\t"
+	 "sub	sp, sp, #136\n\t"
+	 "add	r7, sp, #64\n\t"
+	 "str	r0, [r7, #12]\n\t"	// fc
+	 "str	r1, [r7, #8]\n\t"	// iargv
+	 "str	r2, [r7, #4]\n\t"	// fargv
+	 "str	r3, [r7]\n\t"		// vcntr
+	 exec_function_asm("FUNCF")
+	 // retval
+	 "vmov	r0, s0	@ <retval>\n\t"
+	 "vmov	r1, s1	@ <retval>\n\t"
+	 "adds	r7, r7, #72\n\t"
+	 "mov	sp, r7\n\t"
+	 "@ sp needed	@\n\t"
+	  "pop	{r7, pc}\n\t"
+	 ".size	exec_function_f, .-exec_function_f\n\t"
+	 );
+
+#define NUM_INT_ARGUMENTS 4
+#define NUM_FLT_ARGUMENTS 16
+#define NUM_EXTRA_ARGUMENTS 16
+
 pointer call_foreign(ifunc,code,n,args)
 eusinteger_t (*ifunc)(); /* ???? */
 pointer code;
 int n;
 pointer args[];
-{ double (*ffunc)();
+{
   pointer paramtypes=code->c.fcode.paramtypes;
+  pointer resulttype=code->c.fcode.resulttype;
+  pointer p,lisparg;
+  eusinteger_t iargv[NUM_INT_ARGUMENTS];
+  eusinteger_t fargv[NUM_FLT_ARGUMENTS];
+  eusinteger_t vargv[NUM_EXTRA_ARGUMENTS];
+  int icntr = 0, fcntr_d = 0, fcntr_f = 0, vcntr_8 = 0, vcntr_16 = 0;
+
+  numunion nu;
+  eusinteger_t j=0; /*lisp argument counter*//* ???? */
+  eusinteger_t c=0;
+  union {
+    double d;
+    float f;
+    long l;
+    struct {
+      int i1,i2;} i;
+    } numbox;
+  double f;
+
+  if (code->c.fcode.entry2 != NIL) {
+    ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffffffff00000000)
+      | (intval(code->c.fcode.entry2)&0x00000000ffffffff));
+    /* R.Hanai 090726 */
+  }
+  while (iscons(paramtypes)) {
+    p=ccar(paramtypes); paramtypes=ccdr(paramtypes);
+    lisparg=args[j++];
+    if (p==K_INTEGER) {
+      c = isint(lisparg)?intval(lisparg):bigintval(lisparg);
+      if(icntr < NUM_INT_ARGUMENTS) {
+	iargv[icntr++] = c;
+      } else {
+	vargv[vcntr_8++] = c;
+	if ( vcntr_8 % 2 == 1 ) vcntr_16 += 2;
+	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
+      }
+    }  else if (p==K_STRING) {
+      if (elmtypeof(lisparg)==ELM_FOREIGN) c=lisparg->c.ivec.iv[0];
+      else  c=(eusinteger_t)(lisparg->c.str.chars);
+      if(icntr < NUM_INT_ARGUMENTS) {
+	iargv[icntr++] = c;
+      } else {
+	vargv[vcntr_8++] = c;
+	if ( vcntr_8 % 2 == 1 ) vcntr_16 += 2;
+	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
+      }
+    } else if (p==K_FLOAT32 || p==K_FLOAT) {
+      numbox.f=(float)ckfltval(lisparg);
+      c=((eusinteger_t)numbox.i.i1) & 0x00000000FFFFFFFF;
+      // | s0 | s1 | s2 | s3 | s4 | s5 |
+      // |   d0    |   d1    |   d2    |
+      if(fcntr_f < NUM_FLT_ARGUMENTS) {
+	fargv[fcntr_f++] = c;
+	if ( fcntr_f % 2 == 1 ) fcntr_d += 2; // if *fcntr_f = s1, use d1
+	if ( fcntr_f % 2 == 0 ) fcntr_f = fcntr_d;
+      } else {
+	vargv[vcntr_8++] = c;
+	if ( vcntr_8 % 2 == 1 ) vcntr_16 += 2;
+	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
+      }
+    } else if (p==K_DOUBLE) {
+      numbox.d=(double)ckfltval(lisparg);
+      if(fcntr_d < NUM_FLT_ARGUMENTS-1) {
+	fargv[fcntr_d++] = numbox.i.i1; fargv[fcntr_d++] = numbox.i.i2;
+	if ( fcntr_f % 2 == 0 ) fcntr_f = fcntr_d; // if *fcntr_f = s2, use d1
+	if(fcntr_d >= NUM_FLT_ARGUMENTS) fcntr_f = fcntr_d;
+      } else {
+	vargv[vcntr_16++] = numbox.i.i1; vargv[vcntr_16++] = numbox.i.i2;
+	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
+      }
+    } else error(E_USER,(pointer)"unknown type specifier");
+    if (max(vcntr_8, vcntr_16) >= NUM_EXTRA_ARGUMENTS) {
+      error(E_USER,(pointer)"too many number of arguments");
+    }
+  }
+  int vcntr = max(vcntr_8, vcntr_16);
+  /* &rest arguments?  */
+  while (j<n) {	/* j is the counter for the actual arguments*/
+    lisparg=args[j++];
+    if (isint(lisparg)) {
+      c=intval(lisparg);
+      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
+    } else if (isflt(lisparg)) {
+      numbox.d=ckfltval(lisparg);	/* i advances independently */
+      c=numbox.l;
+      if(fcntr_f < NUM_FLT_ARGUMENTS) fargv[fcntr_f++] = c; else vargv[vcntr++] = c;
+    } else if (isvector(lisparg)) {
+      if (elmtypeof(lisparg)==ELM_FOREIGN) c=lisparg->c.ivec.iv[0];
+      else c=(eusinteger_t)(lisparg->c.str.chars);
+      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
+    } else if (isbignum(lisparg)){
+      if (bigsize(lisparg)==1){
+	eusinteger_t *xv = bigvec(lisparg);
+	c=(eusinteger_t)xv[0];
+        if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
+      }else{
+	fprintf(stderr, "bignum size!=1\n");
+      }
+    } else {
+      c=(eusinteger_t)(lisparg->c.obj.iv);
+      if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
+    }
+    if (vcntr >= NUM_EXTRA_ARGUMENTS) {
+      error(E_USER,(pointer)"too many number of arguments");
+    }
+  }
+  /**/
+  if (resulttype==K_FLOAT || resulttype==K_FLOAT32) {
+    numbox.l = exec_function_f((void (*)())ifunc, iargv, fargv, vcntr, vargv);
+    f = (double)numbox.f;
+    return(makeflt(f));
+  } else {
+    c = exec_function_i((void (*)())ifunc, iargv, fargv, vcntr, vargv);
+    if (resulttype==K_INTEGER) {
+      return(mkbigint(c));
+    } else if (resulttype==K_STRING) {
+      p=makepointer(c-2*sizeof(pointer));
+      if (isvector(p)) return(p);
+      else error(E_USER,(pointer)"illegal foreign string");
+    } else if (iscons(resulttype)) {
+      /* (:string [10]) (:foreign-string [20]) */
+      if (ccar(resulttype)==K_STRING) { /* R.Hanai 09/07/25 */
+        resulttype=ccdr(resulttype);
+        if (resulttype!=NIL) j=ckintval(ccar(resulttype));
+	else j=strlen((char *)c);
+	return(makestring((char *)c, j));
+      } else if (ccar(resulttype)==K_FOREIGN_STRING) { /* R.Hanai 09/07/25 */
+        resulttype=ccdr(resulttype);
+        if (resulttype!=NIL) j=ckintval(ccar(resulttype));
+	else j=strlen((char *)c);
+	return(make_foreign_string(c, j)); }
+      error(E_USER,(pointer)"unknown result type");
+    } else error(E_USER,(pointer)"result type?");
+  }
+}
+
+#else /* not  ARM nor (defined(x86_64) || defined(aarch64))  */
+
+pointer call_foreign(ifunc,code,n,args)
+eusinteger_t (*ifunc)(); /* ???? */
+pointer code;
+int n;
+pointer args[];
+{ pointer paramtypes=code->c.fcode.paramtypes;
   pointer resulttype=code->c.fcode.resulttype;
   pointer p,lisparg;
   eusinteger_t cargv[100];
@@ -1009,7 +1256,6 @@ pointer args[];
     ifunc = (eusinteger_t (*)())((((int)ifunc)&0xffff0000) | (intval(code->c.fcode.entry2)&0x0000ffff));    /* kanehiro's patch 2000.12.13 */
 #endif
   }
-  ffunc=(double (*)())ifunc;
   while (iscons(paramtypes)) {
     p=ccar(paramtypes); paramtypes=ccdr(paramtypes);
     lisparg=args[j++];
@@ -1018,10 +1264,10 @@ pointer args[];
     else if (p==K_STRING) {
       if (elmtypeof(lisparg)==ELM_FOREIGN) cargv[i++]=lisparg->c.ivec.iv[0];
       else  cargv[i++]=(eusinteger_t)(lisparg->c.str.chars);}
-    else if (p==K_FLOAT32) {
+    else if (p==K_FLOAT32 || (WORD_SIZE==32 && p==K_FLOAT)) {
       numbox.f=ckfltval(lisparg);
       cargv[i++]=(int)numbox.i.i1;}
-    else if (p==K_DOUBLE || p==K_FLOAT) {
+    else if (p==K_DOUBLE || (WORD_SIZE==64 && p==K_FLOAT)) {
       numbox.d=ckfltval(lisparg);
       cargv[i++]=numbox.i.i1; cargv[i++]=numbox.i.i2;}
     else error(E_USER,(pointer)"unknown type specifier");}
@@ -1049,12 +1295,26 @@ pointer args[];
 #endif    /* end of kanehiro's patch 2000.12.13 */
     else cargv[i++]=(eusinteger_t)(lisparg->c.obj.iv);}
   /**/
-  if (resulttype==K_FLOAT) {
+  if (resulttype==K_FLOAT || resulttype==K_FLOAT32) {
+    union {
+      eusfloat_t f;
+#if __ARM_ARCH==4
+      eusinteger_t i;    // ARM 32bit armel
+#else
+      eusfloat_t i;  // Intel 32bit x86
+#endif
+    } n;
+#if __ARM_ARCH==4
+#else
+    eusinteger_t (*tmp_ifunc)() = ifunc;
+    double (*ifunc)();
+    ifunc=(double (*)())tmp_ifunc;
+#endif
     if (i<=8) 
-      f=(*ffunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7]);
     else if (i<=32)
-      f=(*ffunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7],
 		 cargv[8],cargv[9],cargv[10],cargv[11],
 	         cargv[12],cargv[13],cargv[14],cargv[15],
@@ -1064,7 +1324,7 @@ pointer args[];
 	         cargv[28],cargv[29],cargv[30],cargv[31]);
 #if (sun3 || sun4 || mips || alpha)
     else if (i>32) 
-      f=(*ffunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7],
 		 cargv[8],cargv[9],cargv[10],cargv[11],
 	         cargv[12],cargv[13],cargv[14],cargv[15],
@@ -1085,7 +1345,8 @@ pointer args[];
 	         cargv[72],cargv[73],cargv[74],cargv[75],
 	         cargv[76],cargv[77],cargv[78],cargv[79]);
 #endif
-    return(makeflt(f));}
+    fprintf(stderr, "%d %f\n", n.i, n.f);
+    return(makeflt(n.f));}
   else {
     if (i<8) 
       i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],

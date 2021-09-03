@@ -91,6 +91,7 @@ register pointer argv[];
   eusfloat_t cz,u,v;
   eusfloat_t *p1, v1[3], *p2, v2[3], p2p1[3];
   eusfloat_t cross[3], cross2;
+  pointer up,vp;
   numunion nu;
 
   ckarg2(4,5);
@@ -115,7 +116,8 @@ register pointer argv[];
 
   u=determinant3(p2p1,v2,cross)/cross2;
   v=determinant3(p2p1,v1,cross)/cross2;
-  return(cons(ctx,makeflt(u),cons(ctx,makeflt(v),NIL))); }
+  up=makeflt(u); vp=makeflt(v);
+  return(cons(ctx,up,cons(ctx,vp,NIL))); }
 
 
 /*
