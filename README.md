@@ -1,4 +1,4 @@
-## [EusLisp] [![Build Status](https://travis-ci.com/euslisp/EusLisp.png?branch=master)](https://travis-ci.com/euslisp/EusLisp) [![Documentation Status](https://readthedocs.org/projects/euslisp/badge/?version=latest)](https://euslisp.readthedocs.io/en/latest/?badge=latest)
+## [EusLisp] [![Build Status](https://app.travis-ci.com/euslisp/EusLisp.svg?branch=master)](https://app.travis-ci.com/euslisp/EusLisp) [![Documentation Status](https://readthedocs.org/projects/euslisp/badge/?version=latest)](https://euslisp.readthedocs.io/en/latest/?badge=latest)
 
 EusLisp was originally developed by [Dr. Toshihiro Matsui at AIST](http://staff.aist.go.jp/t.matsui/ )
 
