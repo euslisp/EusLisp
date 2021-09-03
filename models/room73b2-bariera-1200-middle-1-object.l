@@ -21,12 +21,12 @@
      ;; definition of :room73b2-bariera-1200-middle-1-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 60.0 1185.0 2500.0) (float-vector -4.547474e-13 1185.0 2500.0) (float-vector 0.0 15.0 2500.0) (float-vector 60.0 15.0 2500.0)))
-         (instance face :init :vertices (list (float-vector -4.547474e-13 1185.0 0.0) (float-vector 60.0 1185.0 0.0) (float-vector 60.0 15.0 0.0) (float-vector 0.0 15.0 0.0)))
-         (instance face :init :vertices (list (float-vector 60.0 1185.0 2500.0) (float-vector 60.0 1185.0 0.0) (float-vector -4.547474e-13 1185.0 0.0) (float-vector -4.547474e-13 1185.0 2500.0)))
+         (instance face :init :vertices (list (float-vector 60.0 1185.0 2500.0) (float-vector 0.0 1185.0 2500.0) (float-vector 0.0 15.0 2500.0) (float-vector 60.0 15.0 2500.0)))
+         (instance face :init :vertices (list (float-vector 0.0 1185.0 0.0) (float-vector 60.0 1185.0 0.0) (float-vector 60.0 15.0 0.0) (float-vector 0.0 15.0 0.0)))
+         (instance face :init :vertices (list (float-vector 60.0 1185.0 2500.0) (float-vector 60.0 1185.0 0.0) (float-vector 0.0 1185.0 0.0) (float-vector 0.0 1185.0 2500.0)))
          (instance face :init :vertices (list (float-vector 60.0 15.0 2500.0) (float-vector 60.0 15.0 0.0) (float-vector 60.0 1185.0 0.0) (float-vector 60.0 1185.0 2500.0)))
          (instance face :init :vertices (list (float-vector 0.0 15.0 2500.0) (float-vector 0.0 15.0 0.0) (float-vector 60.0 15.0 0.0) (float-vector 60.0 15.0 2500.0)))
-         (instance face :init :vertices (list (float-vector -4.547474e-13 1185.0 2500.0) (float-vector -4.547474e-13 1185.0 0.0) (float-vector 0.0 15.0 0.0) (float-vector 0.0 15.0 2500.0)))
+         (instance face :init :vertices (list (float-vector 0.0 1185.0 2500.0) (float-vector 0.0 1185.0 0.0) (float-vector 0.0 15.0 0.0) (float-vector 0.0 15.0 2500.0)))
        ))
        (instance faceset :init :faces (list
          (instance face :init :vertices (list (float-vector 390.0 0.0 -29.0) (float-vector 390.0 0.0 -35.0) (float-vector 385.981 15.0 -35.0) (float-vector 385.981 15.0 -29.0)))

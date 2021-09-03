@@ -335,9 +335,9 @@
      (send blink2 :assoc handle1)
      (setq handle2 (make-cascoords :pos (float-vector 294.739 95.0 937.191) :rot #2f((-0.939693 -0.34202 -2.775558e-17) (2.775558e-17 -1.110223e-16 1.0) (-0.34202 0.939693 1.110223e-16)) :name "drawer-middle-left"))
      (send blink3 :assoc handle2)
-     (setq handle3 (make-cascoords :pos (float-vector 305.0 -2.273737e-13 699.0) :rot #2f((-0.866025 0.5 0.0) (0.0 0.0 1.0) (0.5 0.866025 0.0)) :name "drawer-lower1"))
+     (setq handle3 (make-cascoords :pos (float-vector 305.0 0.0 699.0) :rot #2f((-0.866025 0.5 0.0) (0.0 0.0 1.0) (0.5 0.866025 0.0)) :name "drawer-lower1"))
      (send blink4 :assoc handle3)
-     (setq handle4 (make-cascoords :pos (float-vector 305.0 -2.273737e-13 359.0) :rot #2f((-0.866025 0.5 0.0) (0.0 0.0 1.0) (0.5 0.866025 0.0)) :name "drawer-lower2"))
+     (setq handle4 (make-cascoords :pos (float-vector 305.0 0.0 359.0) :rot #2f((-0.866025 0.5 0.0) (0.0 0.0 1.0) (0.5 0.866025 0.0)) :name "drawer-lower2"))
      (send blink5 :assoc handle4)
 
      ;; init-ending 
