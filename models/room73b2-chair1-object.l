@@ -21,11 +21,11 @@
      ;; definition of :room73b2-chair1-bodyset2
      (setq bc (list
        (instance faceset :init :faces (list
-         (instance face :init :vertices (list (float-vector 56.6312 18.4006 45.0) (float-vector 35.0 -48.1734 45.0) (float-vector -35.0 -48.1734 45.0) (float-vector -56.6312 18.4006 45.0) (float-vector -2.273737e-13 59.5456 45.0)))
-         (instance face :init :vertices (list (float-vector 35.0 -48.1734 95.0) (float-vector 56.6312 18.4006 95.0) (float-vector -2.273737e-13 59.5456 95.0) (float-vector -56.6312 18.4006 95.0) (float-vector -35.0 -48.1734 95.0)))
+         (instance face :init :vertices (list (float-vector 56.6312 18.4006 45.0) (float-vector 35.0 -48.1734 45.0) (float-vector -35.0 -48.1734 45.0) (float-vector -56.6312 18.4006 45.0) (float-vector 0.0 59.5456 45.0)))
+         (instance face :init :vertices (list (float-vector 35.0 -48.1734 95.0) (float-vector 56.6312 18.4006 95.0) (float-vector 0.0 59.5456 95.0) (float-vector -56.6312 18.4006 95.0) (float-vector -35.0 -48.1734 95.0)))
          (instance face :init :vertices (list (float-vector 56.6312 18.4006 45.0) (float-vector 56.6312 18.4006 95.0) (float-vector 35.0 -48.1734 95.0) (float-vector 35.0 -48.1734 45.0)))
-         (instance face :init :vertices (list (float-vector -2.273737e-13 59.5456 45.0) (float-vector -2.273737e-13 59.5456 95.0) (float-vector 56.6312 18.4006 95.0) (float-vector 56.6312 18.4006 45.0)))
-         (instance face :init :vertices (list (float-vector -56.6312 18.4006 45.0) (float-vector -56.6312 18.4006 95.0) (float-vector -2.273737e-13 59.5456 95.0) (float-vector -2.273737e-13 59.5456 45.0)))
+         (instance face :init :vertices (list (float-vector 0.0 59.5456 45.0) (float-vector 0.0 59.5456 95.0) (float-vector 56.6312 18.4006 95.0) (float-vector 56.6312 18.4006 45.0)))
+         (instance face :init :vertices (list (float-vector -56.6312 18.4006 45.0) (float-vector -56.6312 18.4006 95.0) (float-vector 0.0 59.5456 95.0) (float-vector 0.0 59.5456 45.0)))
          (instance face :init :vertices (list (float-vector -35.0 -48.1734 45.0) (float-vector -35.0 -48.1734 95.0) (float-vector -56.6312 18.4006 95.0) (float-vector -56.6312 18.4006 45.0)))
          (instance face :init :vertices (list (float-vector 35.0 -48.1734 45.0) (float-vector 35.0 -48.1734 95.0) (float-vector -35.0 -48.1734 95.0) (float-vector -35.0 -48.1734 45.0)))
        ))
