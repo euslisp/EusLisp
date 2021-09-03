@@ -28,6 +28,8 @@ endif
 else
 CC += -fPIC
 endif
+else
+CC += -fPIC
 endif
 ifeq ($(ARCHDIR), Darwin)
 CC += -I/opt/local/lib/jpeg6b/include -I/opt/local/include
@@ -42,7 +44,7 @@ LIBDIR=$(EUSDIR)/$(ARCH)/lib
 OBJDIR=$(EUSDIR)/$(ARCH)/obj
 OBJFILES= $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o
 $(LIBDIR)/jpegmemcd.$(LSFX):	$(OBJFILES)
-	$(LD) $(LDFLAGS) -o $(LIBDIR)/jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
+	$(LD) -fPIC $(LDFLAGS) -o $(LIBDIR)/jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
 
 $(OBJDIR)/jpegmemcd.o:	jpegmemcd.c
 	$(CC) $(CFLAGS) -c -o $@ $^
