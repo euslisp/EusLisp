@@ -60,7 +60,7 @@ fi
 ### for multiarch compile test
 if [ "$QEMU" != "" ]; then
     travis_time_start install.dpkg-dev
-    apt-get install -qq -y dpkg-dev
+    apt-get install -qq -y dpkg-dev patchutils
     travis_time_end
 
     echo "uname -a : $(uname -a)"
