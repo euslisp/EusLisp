@@ -60,7 +60,7 @@ fi
 ### for multiarch compile test
 if [ "$QEMU" != "" ]; then
     travis_time_start install.dpkg-dev
-    apt-get install -qq -y dpkg-dev
+    apt-get install -qq -y dpkg-dev patchutils
     travis_time_end
 
     echo "uname -a : $(uname -a)"
@@ -69,10 +69,23 @@ if [ "$QEMU" != "" ]; then
     echo "gcc -dumpversion : $(gcc -dumpversion)"
     echo "getconf LONG_BIT : $(getconf LONG_BIT)"
 
+    travis_time_start download.euslisp-debian
+    git clone http://salsa.debian.org/science-team/euslisp /tmp/euslisp-dfsg
+    for file in $(cat /tmp/euslisp-dfsg/debian/patches/series); do
+        # skip patch already applied by https://github.com/euslisp/EusLisp/pull/441
+        if [[ $file =~  fix-for-reprotest.patch ]]; then
+            filterdiff -p1 -x 'lisp/image/jpeg/makefile' -x 'lisp/comp/comp.l' < /tmp/euslisp-dfsg/debian/patches/$file > /tmp/euslisp-dfsg/debian/patches/$file-fix
+            file=$file-fix
+        fi
+        echo $file
+        patch -p1 < /tmp/euslisp-dfsg/debian/patches/$file
+    done
+    travis_time_end
+
     travis_time_start compile.euslisp
     export EUSDIR=`pwd`
     eval "$(dpkg-buildflags --export=sh)"
-    make -C lisp -f Makefile.Linux  eus0 eus1 eus2 eusg eusx eusgl eus eusjpeg
+    make
     travis_time_end
 
     if [[ `gcc -dumpmachine | egrep "^(arm|aarch)"` != "" ]]; then
