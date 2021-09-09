@@ -1387,6 +1387,8 @@
 				       "; sh4-linux-gcc -shared -o ")
 				      ((memq :ia32 *features*)
 				       "; ld -melf_i386 -shared -build-id -o ")
+				      ((memq :i386 *features*)
+				       "; gcc -shared -Xlinker -build-id -o ")
 				      (t
 				       "; ld -shared -build-id -o "))
 				(namestring file.so)
