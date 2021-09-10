@@ -29,7 +29,7 @@
         (assertion-error (err)
           ;; set pred as the new form
           (send err :form (cadr (send err :form)))
-          (signals err)))))
+          (invoke-next-handler err)))))
 
 (defun warning-message (color format &rest mesg)
    (format *error-output* "~C[3~Cm" #x1b (+ color 48))
