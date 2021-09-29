@@ -174,12 +174,11 @@
 
 (defcondition unix::signal-received :slots (sig code))
 (defmacro unix::install-signal-handler (sig obj &rest init-args)
-  (let ((fname (intern (format nil "~A-SIGNALIZE-CONDITION" (symbol-pname sig)) *unix-package*)))
-    `(progn
-       (unless (boundp ',obj)
-         (defcondition ,obj :super unix::signal-received))
-       (defun ,fname (sig code) (signals ,obj :sig sig :code code ,@init-args))
-       (unix:signal ,sig ',fname))))
+  `(progn
+     (defcondition ,obj :super unix::signal-received)
+     (unix:signal ,sig
+       ;; ensure global scope
+       ',`(lambda-closure nil 0 0 (sig code) (signals ,obj :sig sig :code code ,@init-args)))))
 
 (defmacro unix::with-alarm-interrupt (&rest body)
   (let ((interval (gensym)) (value (gensym)))
