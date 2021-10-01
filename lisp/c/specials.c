@@ -796,7 +796,7 @@ pointer arg;
 #ifdef SPEC_DEBUG
   printf( "GO:" ); hoge_print( arg );
 #endif
-  tag=carof(arg,"GO TAG?");
+  tag=carof(arg,E_MISMATCHARG);
   while (ctx->blkfp!=NULL) {
     if (ctx->blkfp->kind==TAGBODYFRAME &&
 	(body=(pointer)assq(tag,ctx->blkfp->name))!=NIL) {
