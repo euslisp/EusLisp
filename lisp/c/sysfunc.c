@@ -694,12 +694,14 @@ int max;
   int i;
   vf=(struct callframe *)(ctx->callfp);
   // list whole stack for negative max values
-  for (i=0; vf->vlink && max; vf=vf->vlink, i++, max--) {
-    vpush(vf->form);
+  for (i=0; vf->vlink && max; vf=vf->vlink) {
+    if (vf->form) {
+      vpush(vf->form);
+      // calculate max based on collected elements, rather than transversed frames
+      i++; max--;}
     // Check for recursive stacks
     if ((pointer)vf == (pointer)vf->vlink) {
       fprintf(stderr,";; recursive callstack detected in %p\n", (pointer)vf);
-      i++;
       break;}}
   return(stacknlist(ctx,i));}
 
