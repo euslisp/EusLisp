@@ -106,6 +106,9 @@
 (defun invoke-next-handler (obj)
   (unless (derivedp obj condition)
     (error type-error "condition class expected"))
+  (when (null *current-condition-handler*)
+    ;; no active handler; use signals instead
+    (return-from invoke-next-handler (signals obj)))
   (dolist (handle *current-condition-handler*)
     (when (derivedp obj (car handle))
       ;; call handler
