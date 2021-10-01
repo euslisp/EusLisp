@@ -308,6 +308,8 @@ register pointer *p;
   while (ctx->catchfp>(struct catchframe *)p) ctx->catchfp=ctx->catchfp->nextcatch;
   /*unwind flet frames*/
   while (ctx->fletfp>(struct fletframe *)p) ctx->fletfp=ctx->fletfp->dynlink;
+  /*unwind call frames*/
+  while (ctx->callfp>(struct callframe *)p) ctx->callfp=ctx->callfp->vlink;
   }
 
 #ifdef USE_STDARG
