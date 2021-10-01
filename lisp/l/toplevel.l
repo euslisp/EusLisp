@@ -272,10 +272,16 @@
 	(setq *tc* (unix:tcgets *standard-input*)) 
         (new-history *history-max*))
       )
+   ;; setup global variables
    (if argv (setq *symbol-input* (find-executable (elt argv 0))))
    (setq *user* (unix:getenv "USER"))
    (setq *eustop-argument* argv)
    (setq *prompt-string* (pathname-name *program-name*))
+   ;; install signal handlers
+   (unix:install-signal-handler unix::sigint unix::sigint-received)
+   (unix:install-signal-handler unix::sigcont unix::sigcont-received)
+   (install-handler unix::sigint-received 'sigint-handler)
+   (install-handler unix::sigcont-received 'sigcont-handler)
    ;; load .eusrc file from the home directory
    (let ((rcfile  (unix:getenv "EUSRC")))
       (unless rcfile
