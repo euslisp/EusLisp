@@ -1136,12 +1136,11 @@ pointer argv[];
 { pointer str,sym,pkg;
   ckarg2(1,2);
   str=argv[0];
+  if (!isstring(str)) error(E_NOSTRING);
   if (n==2) {
     pkg=findpkg(argv[1]);
-    if (pkg==NULL)  error(E_NOPACKAGE);}
+    if (pkg==NULL)  error(E_NOPACKAGE,argv[1]);}
   else pkg=Spevalof(PACKAGE);
-  if (!ispackage(pkg)) error(E_NOPACKAGE);
-  if (!isstring(str)) error(E_NOSTRING);
 #ifdef SPEC_DEBUG
   printf( "FINDSYMBOL:" );
   { int i;
@@ -1163,9 +1162,11 @@ register pointer argv[];
   int x;
   ckarg2(1,3);
   str=argv[0];
-  if (n>=2) pkg=findpkg(argv[1]);
-  else pkg=Spevalof(PACKAGE);
   if (!isstring(str)) error(E_NOSTRING);
+  if (n>=2) {
+    pkg=findpkg(argv[1]);
+    if (pkg==NULL)  error(E_NOPACKAGE,argv[1]);}
+  else pkg=Spevalof(PACKAGE);
 #ifdef SPEC_DEBUG
   printf( "INTERN:" );
   { int i;
@@ -1250,9 +1251,10 @@ register pointer argv[];
   printf( "\n" );
 #endif
   sym=argv[0];
-  if (n==2)  pkg = findpkg(argv[1]);
+  if (n==2) {
+    pkg = findpkg(argv[1]);
+    if (pkg==NULL) error(E_NOPACKAGE,argv[1]);}
   else pkg=Spevalof(PACKAGE);
-  if (!ispackage(pkg)) error(E_NOPACKAGE);
   if (issymbol(sym)) export(sym,pkg);
   else if (iscons(sym)) 
     while (iscons(sym)) {
