@@ -16,6 +16,7 @@
 	*prompt*
 	*prompt-string*
 	*history* *try-unix*
+	sigcont-handler
 	skip-blank read-list-from-line
 	*eustop-hook*
 	*toplevel-hook*
@@ -57,6 +58,12 @@
 (eval-when (load eval)
 
 (defun count-up-timer () (incf *timer-job-count*))
+
+;; compile from toplevel.l to function properly
+;; (access to *replevel* on compile-time?)
+(defun sigcont-handler (c)
+  (when (memq *replevel* (sys::list-all-catchers))
+    (reset *replevel*)))
 
 (defun skip-blank (s &optional (eof (gensym)))
    (let ((ch (read-char s nil eof)))
