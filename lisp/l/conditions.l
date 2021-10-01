@@ -202,7 +202,7 @@
 (install-handler error #'euserror)
 (install-handler interruption 'interruption-handler)
 (unix:install-signal-handler unix::sigint unix::sigint-received)
-(unix:install-signal-handler unix::sigcont unix::sigcont-received))
+(unix:install-signal-handler unix::sigcont unix::sigcont-received)
 (install-handler unix::sigint-received 'sigint-handler)
 (install-handler unix::sigcont-received
   '(lambda-closure nil 0 0 (c)
