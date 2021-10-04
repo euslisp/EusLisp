@@ -320,8 +320,16 @@ searches the association list {\em alist}. The value returned is the
 first pair in the {\em alist} such that the {\em car} of the pair satisfies
 the {\em test}, or NIL if there is no such pair in the {\em alist}.}
 
-\funcdesc{rassoc}{item alist}{
+\funcdesc{assoc-if}{pred alist \&key key}{
+searches the association list {\em alist}. The value returned is the
+first pair in the {\em alist} such that the {\em car} of the pair satisfies
+the {\em pred}, or NIL if there is no such pair in the {\em alist}.}
+
+\funcdesc{rassoc}{item alist \&key key (test \#'eq) test-not}{
 returns the first pair in {\em alist} whose cdr is equal to {\em item}.}
+
+\funcdesc{rassoc-if}{pred alist \&key key}{
+returns the first pair in {\em alist} whose cdr is satisfies {\em pred}.}
 
 \funcdesc{pairlis}{l1 l2 \&optional alist}{
 makes a list of pairs consing corresponding elements in {\em l1} and {\em l2}.

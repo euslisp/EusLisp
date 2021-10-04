@@ -319,12 +319,17 @@ atomであってはならない。
 
 \funcdesc{assoc}{item alist \&key key (test \#'eq) test-not}{
 {\em alist}の要素の{\bf car}が{\em :test}の条件にあった最初のものを返す。
-合わなければ、NILを返す。
-{\em :test}のデフォルトは{\tt \#'eq}である。
-{\tt (assoc '2 '((1 d t y)(2 g h t)(3 e x g))=(2 g h t)}}
+合わなければ、NILを返す。}
 
-\funcdesc{rassoc}{item alist}{
+\funcdesc{assoc-if}{pred alist \&key key}{
+{\em alist}の要素の{\bf car}が{\em pred}の条件にあった最初のものを返す。
+合わなければ、NILを返す。}
+
+\funcdesc{rassoc}{item alist \&key key (test \#'eq) test-not}{
 {\bf cdr}が{\em item}に等しい{\em alist}のなかの最初の組を返す。}
+
+\funcdesc{rassoc-if}{pred alist \&key key}{
+{\bf cdr}が{\em pred}にあった{\em alist}のなかの最初の組を返す。}
 
 \funcdesc{pairlis}{l1 l2 \&optional alist}{
 {\em l1}と{\em l2}の中の一致する要素を対にしたリストを作る。
