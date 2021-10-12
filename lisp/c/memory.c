@@ -784,7 +784,7 @@ void gc()
   int i, r;
   context *ctx=euscontexts[thr_self()];
 
-  if (debug)  fprintf(stderr,"\n;; gc: thread=%d ",thr_self());
+  if (debug || speval(QGCDEBUG)!=NIL)  fprintf(stderr,"\n;; gc: thread=%d ",thr_self());
   // breakck;
   gccount++;
   times(&tbuf1);
@@ -815,17 +815,24 @@ void gc()
   mutex_unlock(&mark_lock);
 /*  mutex_unlock(&alloc_lock); */
 #endif
-  if (debug) {
+  if (debug || speval(QGCDEBUG)!=NIL) {
     fprintf(stderr," free/total=%ld/%ld stack=%d ",
             freeheap,totalheap,(int)(myctx->vsp - myctx->stack));
-    fprintf(stderr," mark=%ld sweep=%ld\n", marktime,sweeptime);
+    fprintf(stderr," marktime=%ldms sweeptime=%ldms\n",
+            marktime*1000/sysconf(_SC_CLK_TCK),
+            sweeptime*1000/sysconf(_SC_CLK_TCK));
   }
+/* Too unstable to call arbitrary lisp functions here
+   if for example gc is called during an allocation, any new attempt
+   to allocate memory during the function will cause a dead lock.
+
   if (speval(QGCHOOK)!=NIL) {
     pointer gchook=speval(QGCHOOK);
     vpush(makeint(freeheap)); vpush(makeint(totalheap));
     ufuncall(ctx,gchook,gchook,(pointer)(ctx->vsp-2),ctx->bindfp,2);
     ctx->vsp -= 2;
     }
+*/
   // breakck;
 }
 #endif
