@@ -718,13 +718,29 @@ pointer LISTALLBLOCKS(ctx,n,argv)
 register context *ctx;
 int n;
 pointer *argv;
-{ pointer blocks=NIL;
-  struct blockframe *bfp=ctx->blkfp;
+{ struct blockframe *bfp=ctx->blkfp;
   int i=0;
   while (bfp) {
     if (bfp->kind==BLOCKFRAME) {
       vpush(bfp->name);
       i++;}
+    bfp=bfp->lexklink;}
+  return(stacknlist(ctx,i));}
+
+pointer LISTALLTAGS(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ struct blockframe *bfp=ctx->blkfp;
+  int i=0;
+  while (bfp) {
+    if (bfp->kind==TAGBODYFRAME) {
+      pointer body=bfp->name;
+      while (body!=NIL) {
+        vpush(ccar(ccar(body)));
+        body=ccdr(body);
+        i++;}
+    }
     bfp=bfp->lexklink;}
   return(stacknlist(ctx,i));}
 
@@ -842,6 +858,7 @@ pointer mod;
   defun(ctx,"LIST-ALL-REFERENCES",mod,LISTALLREFERENCES,NULL);
   defun(ctx,"LIST-CALLSTACK",mod,LISTCALLSTACK,NULL);
   defun(ctx,"LIST-ALL-BLOCKS",mod,LISTALLBLOCKS,NULL);
+  defun(ctx,"LIST-ALL-TAGS",mod,LISTALLTAGS,NULL);
   defun(ctx,"LIST-ALL-CATCHERS",mod,LISTALLCATCHERS,NULL);
   defun(ctx,"LIST-ALL-BINDINGS",mod,LISTBINDINGS,NULL);
   defun(ctx,"LIST-ALL-SPECIAL-BINDINGS",mod,LISTSPECIALBINDINGS,NULL);
