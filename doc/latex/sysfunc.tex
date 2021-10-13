@@ -47,9 +47,6 @@ like three dimensional float-vectors.
 
 {\bf SYS:GC} invokes garbage collector explicitly, returning a list of two integers,
 numbers of free words and total words (not bytes) allocated in the heap.
-{\bf SYS:*GC-HOOK*} is a variable to hold a function that is called upon the
-completion of a GC.  The hook function should receive two arguments
-representing the sizes of the free heap and the total heap.
 
 If "fatal error: stack overflow" is reported during  execution,
 and you are convinced that the error is not caused by a infinite loop
@@ -99,13 +96,10 @@ and are useful for dynamic debugging.
 starts garbage collection, and returns a list of the numbers
 of free words and total words allocated.}
 
-\vardesc{sys:*gc-hook*}{
-Defines a function that is called upon the completion of a GC.}
-
 \funcdesc{sys:gctime}{}{
 returns a list of three integers: the count of gc invoked,
-the time elapsed for marking cells (in 1/60 sec. unit),
-and the time elapsed for reclamation (unmarking and merging).}
+the time elapsed for marking cells, and the time elapsed for reclamation (unmarking and merging).
+The time is given in tick counts.}
 
 \funcdesc{sys:alloc}{size}{
 allocates at least {\em size} words of memory in the heap,
@@ -114,6 +108,9 @@ and returns the number of words really allocated.}
 \funcdesc{sys:newstack}{size}{
 relinquishes the current stack,
 and allocates a new stack of {\em size} words.}
+
+\vardesc{sys:*gc-debug*}{
+Print debug messages every time the GC is called.}
 
 \vardesc{sys:*gc-merge*}{
 is a memory management parameter.
