@@ -43,11 +43,14 @@
 (defmacro defcondition (name &key slots (super 'condition))
   `(progn
      (defclass ,name :slots ,slots :super ,super)
-     (defmethod ,name
-         (:init (&rest init-args) (send-super* :init init-args))
-         ,@(mapcar #'(lambda (s) `(,(intern (send s :pname) *keyword-package*) (&optional (val nil supplied-p))
-                                    (if supplied-p (send self :set-val ',s val) ,s)))
-                   slots))))
+     ,(if slots
+          `(defmethod ,name
+               ,@(mapcar
+                  #'(lambda (s)
+                      `(,(intern (send s :pname) *keyword-package*) (&optional (val nil supplied-p))
+                         (if supplied-p (send self :set-val ',s val) ,s)))
+                  slots)))
+     ',name))
 
 (defun install-handler-raw (label handler)
   ;; ensure condition class
