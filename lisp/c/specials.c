@@ -15,7 +15,7 @@ static char *rcsid="@(#)$Id$";
 #include "eus.h"
 extern pointer MACRO,LAMBDA,LAMCLOSURE;
 extern pointer K_FUNCTION_DOCUMENTATION;
-extern struct bindframe  *declare();
+extern pointer declare();
 
 #ifdef EVAL_DEBUG
 extern int evaldebug;
@@ -146,7 +146,11 @@ pointer arg;
   else if (ccar(arg)==LAMCLOSURE) return(arg);
   else if (ccar(arg)==LAMBDA) {
     arg=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),ccdr(arg));
-    arg=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),arg);
+    if (ctx->bindfp==NULL)
+      // don't pass *unbound* to the REPL
+      arg=cons(ctx,makeint(0),arg);
+    else
+      arg=cons(ctx,ctx->bindfp,arg);
     arg=cons(ctx,funcname,arg);
     return(cons(ctx,LAMCLOSURE,arg));}
   else error(E_NOFUNCTION);}
@@ -368,7 +372,7 @@ register context *ctx;
 pointer arg;
 { pointer cond,body,*spsave=ctx->vsp,result;
   struct blockframe *myblock;
-  struct bindframe *bfp=ctx->bindfp;
+  pointer bfp=ctx->bindfp;
   jmp_buf whilejmp;
   int i;
 
@@ -413,7 +417,7 @@ pointer PARLET(ctx,args)	/*let special form*/
 register context *ctx;
 pointer args;
 { pointer vlist,vlistsave,var,init,body,result,decl,*spsave=ctx->vsp,*vinits;
-  register struct bindframe *env, *bfsave=ctx->bindfp, *declenv;
+  pointer env, bfsave=ctx->bindfp, declenv;
   struct specialbindframe *sbfps=ctx->sbindfp;
   int i=0,vcount=0;
 #if defined(PARLET_DEBUG) || defined(DEBUG_COUNT)
@@ -468,7 +472,7 @@ pointer SEQLET(ctx,args)	/* let* special form*/
 register context *ctx;
 pointer args;
 { pointer vlist,var,init,body,result,decl,*spsave=ctx->vsp;
-  register struct bindframe *bf=ctx->bindfp, *env;
+  pointer bf=ctx->bindfp, env;
   struct specialbindframe *sbfps=ctx->sbindfp;
 
 #ifdef SPEC_DEBUG
@@ -671,7 +675,7 @@ register context *ctx;
 register pointer arg;		/*must be called via ufuncall*/
 { pointer name,result,*spsave=ctx->vsp;
   struct blockframe *myblock;
-  struct bindframe *bfp=ctx->bindfp;
+  pointer bfp=ctx->bindfp;
   jmp_buf blkjmp;
 #ifdef SPEC_DEBUG
   printf( "BLOCK:" ); hoge_print(arg);
@@ -740,7 +744,7 @@ pointer arg;
   if (islist(arg)) cleanupform=ccdr(arg); else cleanupform=NIL;
   cleaner=cons(ctx,NIL,cleanupform);
   cleaner=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),cleaner);
-  cleaner=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),cleaner);
+  cleaner=cons(ctx,ctx->bindfp,cleaner);
   cleaner=cons(ctx,NIL,cleaner);
   cleaner=cons(ctx,LAMCLOSURE,cleaner);
   /*(LAMDA-CLOSURE bindfp fletfp () . body) */
@@ -762,7 +766,7 @@ pointer arg;
   jmp_buf tagjmp;
   struct blockframe *tagblock;
   pointer *spsave=ctx->vsp, *tagspsave;
-  struct bindframe *bfpsave=ctx->bindfp;
+  pointer bfpsave=ctx->bindfp;
 #ifdef SPEC_DEBUG
   printf( "TAGBODY:" ); hoge_print(arg);
 #endif

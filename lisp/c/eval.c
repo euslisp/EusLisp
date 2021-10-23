@@ -33,8 +33,8 @@ pointer  varvec,obj;
 pointer getval(ctx,sym)
 register context *ctx;
 register pointer sym;
-{ register struct bindframe *bf=ctx->bindfp;
-  register pointer var,val;
+{ register pointer var,val;
+  pointer bf=ctx->bindfp;
   pointer  *vaddr;
   int vt;
   if (sym->c.sym.vtype>=V_SPECIAL) {
@@ -48,16 +48,16 @@ register pointer sym;
   if (sym->c.sym.vtype==V_CONSTANT) return(sym->c.sym.speval);
   GC_POINT;
   while (bf!=NULL) {
-    var=bf->sym;
-    val=bf->val;
+    var=bf->c.bfp.symbol;
+    val=bf->c.bfp.value;
     if (sym==var) {		/*found in bind-frame*/
       if (val==UNBOUND) goto getspecial;
       return(val);}
     else if (var->cix==vectorcp.cix) {
       vaddr=getobjv(sym,var,val);
       if (vaddr) return(*vaddr);}
-    if (bf==bf->lexblink) break;
-    bf=bf->lexblink;}
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;}
   /*get special value from the symbol cell*/
   /*if (sym->c.sym.vtype==V_GLOBAL) goto getspecial;*/
 getspecial:
@@ -68,8 +68,8 @@ getspecial:
 pointer setval(ctx,sym,val)
 register context *ctx;
 register pointer sym,val;
-{ register struct bindframe *bf=ctx->bindfp;
-  register pointer var;
+{ register pointer var;
+  pointer bf=ctx->bindfp;
   pointer  *vaddr;
   int vt;
   if (sym->c.sym.vtype>=V_SPECIAL) {
@@ -77,14 +77,16 @@ register pointer sym,val;
     pointer_update(ctx->specials->c.vec.v[vt],val);
     return(val);}
   while (bf!=NULL) {
-    var=bf->sym;
+    var=bf->c.bfp.symbol;
     if (sym==var) {
-      if (bf->val==UNBOUND) goto setspecial;
-      pointer_update(bf->val,val); return(val);}
+      if (bf->c.bfp.value==UNBOUND) goto setspecial;
+      pointer_update(bf->c.bfp.value,val); return(val);}
     else if (var->cix==vectorcp.cix) {
-      vaddr=getobjv(sym,var,bf->val);
+      vaddr=getobjv(sym,var,bf->c.bfp.value);
       if (vaddr) {pointer_update(*vaddr,val); return(val);}}
-    bf=bf->lexblink; GC_POINT;}
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;
+    GC_POINT;}
   /* no local var found. try global binding */
   if (sym->c.sym.vtype==V_CONSTANT) error(E_SETCONST,sym);
   if (sym->c.sym.vtype==V_GLOBAL) goto setspecial;
@@ -177,34 +179,30 @@ register struct specialbindframe *limit;
       ctx->special_bind_count--;}
     ctx->sbindfp=sbfp;}}
 
-struct bindframe *fastbind(ctx,var,val,lex)
+pointer fastbind(ctx,var,val,lex)
 register context *ctx;
 register pointer var,val;
-struct bindframe *lex;
-{ register struct bindframe *bf;
-  bf=(struct bindframe *)(ctx->vsp);
-  ctx->vsp += sizeof(struct bindframe)/sizeof(eusinteger_t);
-  bf->lexblink=lex;
-  bf->dynblink=ctx->bindfp;
-  bf->sym=var;
-  bf->val=val;
+pointer lex;
+{ pointer bf;
+  bf = makebindframe(var,val,ctx->bindfp);
+  vpush(bf);
   ctx->bindfp=bf;	/*update bindfp*/
   return(bf);	 }
 
-struct bindframe *vbind(ctx,var,val,lex,declscope)
+pointer vbind(ctx,var,val,lex,declscope)
 register context *ctx;
 register pointer var,val;
-struct bindframe *lex,*declscope;
-{ register struct bindframe *p;
+pointer lex,declscope;
+{ pointer p;
   if (!issymbol(var)) error(E_NOSYMBOL);
   if (var->c.sym.vtype==V_CONSTANT) error(E_ILLVARIABLE,var);
   p=ctx->bindfp;
-  while (p>declscope) {
-    if (p->sym==var) 
-      if (p->val==UNBOUND) { bindspecial(ctx,var,val); return(ctx->bindfp);}
-      else error(E_MULTIDECL);
-    if (p==p->lexblink) break;
-    p=p->lexblink;}
+  // while (p>declscope) {
+  //   if (p->sym==var)
+  //     if (p->val==UNBOUND) { bindspecial(ctx,var,val); return(ctx->bindfp);}
+  //     else error(E_MULTIDECL);
+  //   if (p==p->lexblink) break;
+  //   p=p->lexblink;}
   /*not found in declare scope*/
   if (var->c.sym.vtype>= /* V_SPECIAL */  V_GLOBAL ) {
 	/* For defun-c-callable in eusforeign.l to create a foreign-pod,
@@ -217,10 +215,10 @@ struct bindframe *lex,*declscope;
     return(ctx->bindfp);}
   return(fastbind(ctx,var,val,lex));}
 
-struct bindframe *declare(ctx,decllist,env)
+pointer declare(ctx,decllist,env)
 register context *ctx;
 pointer decllist;
-struct bindframe *env;
+pointer env;
 { register pointer decl,var;
 
   while (iscons(decllist)) {
@@ -267,12 +265,12 @@ int noarg,allowotherkeys;
     n++;} 
   return(suppliedbits);}
 
-struct bindframe *bindkeyparams(ctx,formal,argp,noarg,env,bf)
+pointer bindkeyparams(ctx,formal,argp,noarg,env,bf)
 register context *ctx;
 pointer formal;
 pointer *argp;
 int noarg;
-struct bindframe *env,*bf;
+pointer env,bf;
 { pointer fvar,initform,svar;
   register pointer fkeyvar,akeyvar;
   pointer keys[KEYWORDPARAMETERLIMIT],
@@ -355,12 +353,12 @@ struct bindframe *env,*bf;
 pointer funlambda(ctx,fn,formal,body,argp,env,noarg)
 register context *ctx;
 pointer fn,formal,body,*argp;
-struct bindframe *env;
+pointer env;
 int noarg;
 { pointer ftype,fvar,result,decl,aval,initform,fkeyvar,akeyvar;
   pointer *vspsave= ctx->vsp;
   struct specialbindframe *sbfps=ctx->sbindfp;
-  struct bindframe *bf=ctx->bindfp;
+  pointer bf=ctx->bindfp;
   struct blockframe *myblock;
   int n=0,keyno=0,i;
   jmp_buf funjmp;
@@ -1487,7 +1485,7 @@ pointer ufuncall(ctx,form,fn,args,env,noarg)
 register context *ctx;
 pointer form,fn;
 register pointer args;	/*or 'pointer *' */
-struct bindframe *env;
+pointer env;
 int noarg;
 { pointer func,formal,aval,ftype,result,*argp,hook;
   register struct callframe *vf=(struct callframe *)(ctx->vsp);
@@ -1599,11 +1597,12 @@ int noarg;
     if (ftype->c.sym.homepkg==keywordpkg) fn=ftype;	/*blockname=selector*/
     else if (ftype==LAMCLOSURE) {
       fn=ccar(func); func=ccdr(func);
-      env=(struct bindframe *)intval(ccar(func));
-      if (env < (struct bindframe *)ctx->stack ||
-	  (struct bindframe *)ctx->stacklimit < env) env=0;
+      if (ccar(func)==NULL || isbindframe(ccar(func)))
+        env=ccar(func);
+      else if (ckintval(ccar(func))==0)
+        env=NULL;
+      else error(E_USER,(pointer)"illegal bind-frame");
       func=ccdr(func);
-      /* ctx->fletfp=(struct fletframe *)intval(ccar(func)); */
       fenv=(struct fletframe *)intval(ccar(func)); 
       func=ccdr(func);}
     else if (ftype!=LAMBDA && ftype!=MACRO) error(E_NOFUNCTION);
@@ -1690,7 +1689,7 @@ pointer env;
   else {
     c=ccdr(form);
     if (c!=NIL && issymbol(c)) return(*ovafptr(eval(ctx,ccar(form)),c));
-    else return(ufuncall(ctx,form,ccar(form),(pointer)c,(struct bindframe *)env,-1));}
+    else return(ufuncall(ctx,form,ccar(form),(pointer)c,(pointer)env,-1));}
   }
 
 pointer progn(ctx,forms)

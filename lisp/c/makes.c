@@ -547,6 +547,17 @@ pointer n,v,nxt;
   l->c.lab.next=nxt;
   l->c.lab.unsolved=NIL;
   return(l);}  
+
+pointer makebindframe(sym,val,nxt)
+pointer sym,val,nxt;
+{ pointer bf;
+  bf=alloc(wordsizeof(struct bindframe), ELM_FIXED, bindframecp.cix,
+	  wordsizeof(struct bindframe));
+  // if (nxt==NULL) nxt=NIL;
+  bf->c.bfp.symbol=sym;
+  bf->c.bfp.value=val;
+  bf->c.bfp.next=nxt;
+  return(bf);}
 
 /****************************************************************
 /* extended numbers
@@ -792,7 +803,7 @@ struct fletframe *scp,*link;
     vpush(makeint(0));
   ffp->name=nm;
   p=cons(ctx,makeint(hide_ptr((pointer)scp)),def);
-  p=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),p);
+  p=cons(ctx,ctx->bindfp,p);
   p=cons(ctx,nm,p);
   ffp->fclosure=cons(ctx,LAMCLOSURE,p);
   ffp->scope=scp;

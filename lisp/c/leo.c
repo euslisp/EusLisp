@@ -254,7 +254,7 @@ register pointer argv[];
 { register pointer receiver,klass,selector,meth,result;
   register pointer *spsave=ctx->vsp, *altargv;
   pointer curclass, component;
-  struct bindframe *bf,*bfsave=ctx->bindfp;
+  pointer bf,bfsave=ctx->bindfp;
   struct specialbindframe *sbfpsave=ctx->sbindfp;
   int sbcount=ctx->special_bind_count;
   int i,argoffset;
@@ -319,7 +319,7 @@ register pointer argv[];
 { register pointer receiver,klass,selector,meth,result;
   register pointer *spsave=ctx->vsp,*altargv;
   pointer curclass, component;
-  struct bindframe *bf,*bfsave=ctx->bindfp;
+  pointer bf,bfsave=ctx->bindfp;
   struct specialbindframe *sbfpsave=ctx->sbindfp;
   int argoffset;
 
@@ -366,7 +366,7 @@ int n;
 pointer argv[];
 /* (send-message obj search selector [args]) */
 { pointer receiver,search,selector,meth,form,result,*spsave, curclass;
-  struct bindframe *bf,*bfsave=ctx->bindfp;
+  pointer bf,bfsave=ctx->bindfp;
   struct specialbindframe *sbfpsave=ctx->sbindfp;
 
   if (n<3) error(E_MISMATCHARG);

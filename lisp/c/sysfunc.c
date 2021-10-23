@@ -761,14 +761,13 @@ pointer LISTBINDINGS(ctx,n,argv)
 register context *ctx;
 int n;
 pointer *argv;
-{ struct bindframe *bfp=ctx->bindfp, *nextbfp;
+{ pointer bf=ctx->bindfp;
   int i=0;
-  while (bfp) {
-    vpush(cons(ctx,bfp->sym,bfp->val));
+  while (bf) {
+    vpush(cons(ctx,bf->c.bfp.symbol,bf->c.bfp.value));
     i++;
-    nextbfp=bfp->dynblink;
-    if (nextbfp==NULL) nextbfp=bfp->lexblink;
-    bfp=nextbfp;}
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;}
   return(stacknlist(ctx,i));}
 
 pointer LISTSPECIALBINDINGS(ctx,n,argv)

@@ -81,6 +81,7 @@ cixpair fcodecp;
 /*cixpair modulecp; */
 cixpair ldmodulecp;
 cixpair closurecp;
+cixpair bindframecp;
 cixpair labrefcp;
 cixpair threadcp;
 cixpair arraycp;
@@ -146,7 +147,7 @@ int nextcix;
 /*class cells*/
 pointer C_CONS, C_OBJECT, C_SYMBOL, C_PACKAGE;
 pointer C_STREAM, C_FILESTREAM, C_IOSTREAM, C_CODE, C_FCODE, C_LDMOD;
-pointer C_VECTOR, C_METACLASS, C_CLOSURE, C_LABREF;
+pointer C_VECTOR, C_METACLASS, C_CLOSURE, C_BINDFRAME, C_LABREF;
 pointer C_THREAD;
 pointer C_VCLASS, C_FLTVECTOR, C_INTVECTOR, C_STRING, C_BITVECTOR;
 pointer C_FOREIGNCODE,C_ARRAY,C_READTABLE;
@@ -155,7 +156,8 @@ pointer C_CONDITION, C_ERROR;
 
 /*class names*/
 pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
-	CODE,FCODE, LDMODULE, PKGCLASS,METACLASS,CLOSURE,LABREF;
+	CODE,FCODE, LDMODULE, PKGCLASS,METACLASS,CLOSURE,BINDFRAME;
+pointer LABREF;
 pointer THREAD;
 pointer VECTOR,VECCLASS,FLTVECTOR,INTVECTOR,OBJECT,READTABLE;
 pointer FOREIGNCODE,ARRAY,BITVECTOR;
@@ -577,6 +579,8 @@ static void initclassid()
   fltvectorcp.cix=19; fltvectorcp.sub=19;
   intvectorcp.cix=20; intvectorcp.sub=20;
   stringcp.cix=21; stringcp.sub=21;
+
+  bindframecp.cix=22; bindframecp.sub=22;
 }
 
 static void initpackage()
@@ -840,6 +844,12 @@ static void initclasses()
   builtinclass[nextbclass].cls=C_STRING;
   builtinclass[nextbclass++].cp= &stringcp;
 
+/*22*/
+  BINDFRAME=basicclass("BIND-FRAME",C_OBJECT,&bindframecp,3,
+		    "SYMBOL","VALUE","NEXT");
+  C_BINDFRAME=speval(BINDFRAME);
+
+/* derived classes */
   BITVECTOR=defvector(ctx,"BIT-VECTOR",C_VECTOR,ELM_BIT, 0); /* alpha */
   C_BITVECTOR=speval(BITVECTOR);
   builtinclass[nextbclass].cls=C_BITVECTOR;

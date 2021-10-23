@@ -294,6 +294,11 @@ struct iostream {
     pointer plist;
     pointer in,out;};
 
+struct bindframe {	/*to achieve lexical binding in the interpreter*/
+  pointer symbol;	/*symbol*/
+  pointer value;	/*bound value*/
+  pointer next; 	/*link to next frame*/};
+
 struct labref {		/*used for reading labeled forms: #n#,#n=*/
     pointer label;
     pointer value;
@@ -413,6 +418,7 @@ typedef
       struct fcode fcode;
       struct ldmodule ldmod;
       struct closure clo;
+      struct bindframe bfp;
       struct labref lab;
       struct arrayheader ary;
       struct vector vec;
@@ -480,11 +486,6 @@ struct callframe {
   pointer form;
   };
 
-struct bindframe {	/*to achieve lexical binding in the interpreter*/
-  struct  bindframe *dynblink, *lexblink;	/*links to upper level*/
-  pointer sym;		/*symbol*/
-  pointer val;};	/*bound value*/
-
 struct specialbindframe {	/*special value binding frame*/
   struct  specialbindframe *sblink;
   pointer sym;		/*pointer to the symbol word(dynval or dynfunc)*/
@@ -499,7 +500,7 @@ struct blockframe {
 struct catchframe {
   struct  catchframe *nextcatch;
   pointer label;
-  struct  bindframe *bf;	/*bind frame save*/
+  pointer bf;	/*bind frame save*/
   struct  callframe *cf;	/*call frame save*/
   struct  fletframe *ff;
   jmp_buf *jbp;
@@ -532,7 +533,7 @@ typedef struct {
 #endif
 	struct	callframe	*callfp;
 	struct	catchframe	*catchfp;
-	struct	bindframe	*bindfp;
+	pointer			bindfp;
 	struct	specialbindframe *sbindfp;
 	struct	blockframe	*blkfp;
 	struct	protectframe	*protfp;
@@ -630,6 +631,7 @@ extern cixpair fcodecp;
 /*cixpair modulecp; */
 extern cixpair ldmodulecp;
 extern cixpair closurecp;
+extern cixpair bindframecp;
 extern cixpair labrefcp;
 extern cixpair threadcp;
 extern cixpair arraycp;
@@ -868,6 +870,8 @@ extern eusinteger_t intval(pointer p);
 #define ispackage(p) (ispointer(p) && pispackage(p))
 #define pisclosure(p) (closurecp.cix<=(p)->cix && (p)->cix<=closurecp.sub)
 #define isclosure(p) (ispointer(p) && pisclosure(p))
+#define pisbindframe(p) (bindframecp.cix<=(p)->cix && (p)->cix<=bindframecp.sub)
+#define isbindframe(p) (ispointer(p) && pisbindframe(p))
 #define pislabref(p) (labrefcp.cix<=(p)->cix && (p)->cix<=labrefcp.sub)
 #define islabref(p) (ispointer(p) && pislabref(p))
 /* extended numbers */
@@ -1034,24 +1038,24 @@ extern "C" {
 extern pointer eval(context *, pointer);
 extern pointer eval2(context *, pointer, pointer);
 extern pointer ufuncall(context *, pointer, pointer, pointer,
-			 struct bindframe *, int);
+                        pointer /*bindframe*/, int);
 extern pointer funlambda(context *, pointer, pointer, pointer, pointer *,
-			 struct bindframe *, int);
+			 pointer /*bindframe*/, int);
 extern pointer funcode(context *, pointer, pointer, int);
 extern pointer progn(context *, pointer);
 extern pointer csend(context *, ...);
 extern pointer getval(context *, pointer);
 extern pointer setval(context *, pointer, pointer);
 extern pointer getfunc(context *, pointer);
-extern struct  bindframe *declare(context *, pointer, struct bindframe *);
-extern struct  bindframe *vbind(context *, pointer, pointer,
-				 struct bindframe *, struct bindframe*);
-extern struct  bindframe *fastbind(context *, pointer, pointer,
-				struct bindframe *);
+extern pointer declare(context *, pointer, pointer /*bindframe*/);
+extern pointer vbind(context *, pointer, pointer,
+                      pointer /*bindframe*/, pointer /*bindframe*/);
+extern pointer fastbind(context *, pointer, pointer,
+                         pointer /*bindframe*/);
 extern void bindspecial(context *, pointer, pointer);
 extern void unbindspecial(context *, struct specialbindframe *);
-extern struct bindframe *bindkeyparams(context *, pointer, pointer *,
-			int, struct bindframe *, struct bindframe *);
+extern pointer bindkeyparams(context *, pointer, pointer *,
+                             int, pointer /*bindframe*/, pointer /*bindframe*/);
 
 extern pointer Getstring();
 extern pointer findpkg();
