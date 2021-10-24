@@ -576,9 +576,9 @@ pointer nm,def,scp,nxt;
   ctx->fletfp=ff;
   return(ff);}
 
-pointer makemacrolet(ctx,nm,def,scp,nxt)
+pointer makemacrolet(ctx,nm,def,nxt)
 register context *ctx;
-pointer nm,def,scp,nxt;
+pointer nm,def,nxt;
 { pointer ff;
   ff=alloc(wordsizeof(struct fletframe), ELM_FIXED, fletframecp.cix,
 	  wordsizeof(struct fletframe));

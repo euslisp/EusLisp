@@ -568,7 +568,7 @@ register pointer arg;
   macs=ccar(arg);
   while (iscons(macs)) {
     mac=ccar(macs); macs=ccdr(macs);
-    makemacrolet(ctx,ccar(mac),ccdr(mac),ffp,ctx->fletfp);}
+    makemacrolet(ctx,ccar(mac),ccdr(mac),ctx->fletfp);}
   result=progn(ctx,ccdr(arg));
   ctx->fletfp=ffp;
   return(result);}

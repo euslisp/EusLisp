@@ -357,7 +357,7 @@ extern pointer compfun(context */*ctx*/, pointer /*sym*/, pointer /*mod*/, point
 extern pointer compmacro(context */*ctx*/, pointer /*sym*/, pointer /*mod*/, pointer (*/*entry*/)(), pointer /*doc*/);
 extern struct blockframe *makeblock(context */*ctx*/, pointer /*kind*/, pointer /*name*/, jmp_buf */*jbuf*/, struct blockframe */*link*/);
 extern pointer makeflet(context */*ctx*/, pointer /*nm*/, pointer /*def*/, pointer /*scp*/, pointer /*nxt*/);
-extern pointer makemacrolet(context */*ctx*/, pointer /*nm*/, pointer /*def*/, pointer /*scp*/, pointer /*nxt*/);
+extern pointer makemacrolet(context */*ctx*/, pointer /*nm*/, pointer /*def*/, pointer /*nxt*/);
 extern void mkcatchframe(context */*ctx*/, pointer /*lab*/, jmp_buf */*jbuf*/);extern void allocate_stack(context */*ctx*/, int /*n*/);
 extern context *makelispcontext(int /*bs_size*/);
 extern void deletecontext(int /*id*/, context */*ctx*/);
