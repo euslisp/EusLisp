@@ -297,7 +297,7 @@ struct iostream {
 struct bindframe {	/*to achieve lexical binding in the interpreter*/
   pointer symbol;	/*symbol*/
   pointer value;	/*bound value*/
-  pointer next; 	/*link to next frame*/};
+  pointer next;}; 	/*link to next frame*/
 
 struct  fletframe {
   pointer name;
@@ -308,7 +308,7 @@ struct labref {		/*used for reading labeled forms: #n#,#n=*/
     pointer label;
     pointer value;
     pointer unsolved;
-    pointer next; };
+    pointer next;};
 
 struct vector {
     pointer size;
