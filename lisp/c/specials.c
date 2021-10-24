@@ -139,21 +139,7 @@ pointer arg;
   printf( "FUNCTION_CLOSURE:" );
   hoge_print( arg );
 #endif
-  arg=ccar(arg);
-  if (issymbol(arg)) { funcname=arg; arg=getfunc(ctx,arg);}
-  else funcname=NIL;
-  if (iscode(arg)) return(arg);
-  else if (ccar(arg)==LAMCLOSURE) return(arg);
-  else if (ccar(arg)==LAMBDA) {
-    arg=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),ccdr(arg));
-    if (ctx->bindfp==NULL)
-      // don't pass *unbound* to the REPL
-      arg=cons(ctx,makeint(0),arg);
-    else
-      arg=cons(ctx,ctx->bindfp,arg);
-    arg=cons(ctx,funcname,arg);
-    return(cons(ctx,LAMCLOSURE,arg));}
-  else error(E_NOFUNCTION);}
+  return getfunc_closure(ctx,ccar(arg));}
 
 pointer MACEXPAND2(ctx,n,argv)
 register context *ctx;

@@ -107,6 +107,25 @@ register pointer f;	/*must be a symbol*/
   else {	/*global function definition is taken, context changes*/
     return(f->c.sym.spefunc);}}
 
+pointer getfunc_closure(ctx,f)
+register context *ctx;
+register pointer f;
+{ pointer funcname;
+  if (issymbol(f)) { funcname=f; f=getfunc(ctx,f);}
+  else funcname=NIL;
+  if (iscode(f)) return(f);
+  else if (ccar(f)==LAMCLOSURE) return(f);
+  else if (ccar(f)==LAMBDA) {
+    f=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),ccdr(f));
+    if (ctx->bindfp==NULL)
+      // don't pass *unbound* to the REPL
+      f=cons(ctx,makeint(0),f);
+    else
+      f=cons(ctx,ctx->bindfp,f);
+    f=cons(ctx,funcname,f);
+    return(cons(ctx,LAMCLOSURE,f));}
+  else error(E_NOFUNCTION);}
+
 /* called from compiled code*/
 pointer get_sym_func(s)
 pointer s;

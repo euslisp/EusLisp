@@ -387,7 +387,7 @@ va_dcl
   if (ctx->callfp) form=ctx->callfp->form; else form=NIL;
 
   /* call user's error handler function */
-  errhandler=getfunc(ctx, intern(ctx,"SIGNALS",7,lisppkg));
+  errhandler=getfunc_closure(ctx, intern(ctx,"SIGNALS",7,lisppkg));
 
   switch((unsigned int)ec) {
     // ARGUMENT ERROR
