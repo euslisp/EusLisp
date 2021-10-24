@@ -557,7 +557,7 @@ pointer MACROLET(ctx,arg)
 register context *ctx;
 register pointer arg;
 { register pointer macs, mac;
-  register struct fletframe *ffp=ctx->fletfp;
+  pointer ffp=ctx->fletfp;
   pointer result;
 #ifdef SPEC_DEBUG
   printf( "MACROLET:" ); hoge_print(arg);
@@ -575,7 +575,7 @@ pointer FLET(ctx,arg)
 register context *ctx;
 register pointer arg;
 { register pointer fns, fn;
-  register struct fletframe *ffp=ctx->fletfp;
+  pointer ffp=ctx->fletfp;
   pointer result;
 #ifdef SPEC_DEBUG
   printf( "FLET:" ); hoge_print(arg);
@@ -593,7 +593,7 @@ pointer LABELS(ctx,arg)
 register context *ctx;
 register pointer arg;
 { register pointer fns, fn;
-  register struct fletframe *ffp=ctx->fletfp, *ffpp;
+  pointer ffp=ctx->fletfp, ffpp;
   pointer result;
 #ifdef SPEC_DEBUG
   printf( "LABELS:" ); hoge_print(arg);
@@ -605,9 +605,9 @@ register pointer arg;
     makeflet(ctx,ccar(fn),ccdr(fn),ctx->fletfp,ctx->fletfp);}
   fns=ccar(arg); ffpp=ctx->fletfp;
   while (iscons(fns)) {	/*allow mutual references between labels functions*/
-    fn=ffpp->fclosure;
-    fn=ccdr(fn); fn=ccdr(fn); fn=ccdr(fn); ccar(fn)=makeint(hide_ptr((pointer)(ctx->fletfp)));
-    fns=ccdr(fns); ffpp=ffpp->lexlink;}
+    fn=ffpp->c.ffp.fclosure;
+    fn=ccdr(fn); fn=ccdr(fn); fn=ccdr(fn); ccar(fn)=ctx->fletfp;
+    fns=ccdr(fns); ffpp=ffpp->c.ffp.next;}
   result=progn(ctx,ccdr(arg));
   ctx->fletfp=ffp;
   return(result);}
@@ -729,7 +729,7 @@ pointer arg;
   protform=ccar(arg);
   if (islist(arg)) cleanupform=ccdr(arg); else cleanupform=NIL;
   cleaner=cons(ctx,NIL,cleanupform);
-  cleaner=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),cleaner);
+  cleaner=cons(ctx,ctx->fletfp,cleaner);
   cleaner=cons(ctx,ctx->bindfp,cleaner);
   cleaner=cons(ctx,NIL,cleaner);
   cleaner=cons(ctx,LAMCLOSURE,cleaner);

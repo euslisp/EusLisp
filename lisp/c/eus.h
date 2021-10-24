@@ -299,6 +299,11 @@ struct bindframe {	/*to achieve lexical binding in the interpreter*/
   pointer value;	/*bound value*/
   pointer next; 	/*link to next frame*/};
 
+struct  fletframe {
+  pointer name;
+  pointer fclosure;
+  pointer next;};
+
 struct labref {		/*used for reading labeled forms: #n#,#n=*/
     pointer label;
     pointer value;
@@ -419,6 +424,7 @@ typedef
       struct ldmodule ldmod;
       struct closure clo;
       struct bindframe bfp;
+      struct fletframe ffp;
       struct labref lab;
       struct arrayheader ary;
       struct vector vec;
@@ -502,7 +508,7 @@ struct catchframe {
   pointer label;
   pointer bf;	/*bind frame save*/
   struct  callframe *cf;	/*call frame save*/
-  struct  fletframe *ff;
+  pointer ff;	/*fletframe*/
   jmp_buf *jbp;
   };
 
@@ -510,13 +516,6 @@ struct protectframe {
   struct protectframe *protlink;
   pointer cleaner;	/*cleanup form closure*/
   };
-
-struct  fletframe {
-  pointer name;
-  pointer fclosure;
-  struct  fletframe *scope;
-  struct  fletframe *lexlink;
-  struct  fletframe *dynlink;};
 
 #define MAXMETHCACHE 256 /*must be power to 2*/
 
@@ -537,7 +536,7 @@ typedef struct {
 	struct	specialbindframe *sbindfp;
 	struct	blockframe	*blkfp;
 	struct	protectframe	*protfp;
-	struct  fletframe	*fletfp, *newfletfp;
+	pointer	fletfp, newfletfp;
 	pointer lastalloc;
 	pointer threadobj;
 	struct  methdef		*methcache;
@@ -632,6 +631,7 @@ extern cixpair fcodecp;
 extern cixpair ldmodulecp;
 extern cixpair closurecp;
 extern cixpair bindframecp;
+extern cixpair fletframecp;
 extern cixpair labrefcp;
 extern cixpair threadcp;
 extern cixpair arraycp;
@@ -872,6 +872,8 @@ extern eusinteger_t intval(pointer p);
 #define isclosure(p) (ispointer(p) && pisclosure(p))
 #define pisbindframe(p) (bindframecp.cix<=(p)->cix && (p)->cix<=bindframecp.sub)
 #define isbindframe(p) (ispointer(p) && pisbindframe(p))
+#define pisfletframe(p) (fletframecp.cix<=(p)->cix && (p)->cix<=fletframecp.sub)
+#define isfletframe(p) (ispointer(p) && pisfletframe(p))
 #define pislabref(p) (labrefcp.cix<=(p)->cix && (p)->cix<=labrefcp.sub)
 #define islabref(p) (ispointer(p) && pislabref(p))
 /* extended numbers */

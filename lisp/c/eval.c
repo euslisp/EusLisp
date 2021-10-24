@@ -99,10 +99,10 @@ register pointer sym,val;
 pointer getfunc(ctx,f)
 register context *ctx;
 register pointer f;	/*must be a symbol*/
-{ register struct fletframe *ffp=ctx->fletfp;
-  while (ffp!=NULL) {
-    if (ffp->name==f) {  return(ffp->fclosure);}
-    else ffp=ffp->lexlink;}
+{ pointer ffp=ctx->fletfp;
+  while (ffp!=NULL && isfletframe(ffp)) {
+    if (ffp->c.ffp.name==f) {  return(ffp->c.ffp.fclosure);}
+    else ffp=ffp->c.ffp.next;}
   if (f->c.sym.spefunc==UNBOUND) error(E_UNDEF,f);
   else {	/*global function definition is taken, context changes*/
     return(f->c.sym.spefunc);}}
@@ -116,7 +116,13 @@ register pointer f;
   if (iscode(f)) return(f);
   else if (ccar(f)==LAMCLOSURE) return(f);
   else if (ccar(f)==LAMBDA) {
-    f=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),ccdr(f));
+    // flet-frame
+    if (ctx->fletfp==NULL)
+      // don't pass *unbound* to the REPL
+      f=cons(ctx,makeint(0),ccdr(f));
+    else
+      f=cons(ctx,ctx->fletfp,ccdr(f));
+    // bind-frame
     if (ctx->bindfp==NULL)
       // don't pass *unbound* to the REPL
       f=cons(ctx,makeint(0),f);
@@ -1511,7 +1517,7 @@ int noarg;
   struct specialbindframe *sbfps=ctx->sbindfp;
   register int n=0,i;
   register pointer (*subr)();
-  struct fletframe *oldfletfp=ctx->fletfp, *fenv;
+  pointer oldfletfp=ctx->fletfp, fenv;
   GC_POINT;
   /* evalhook */
   if (Spevalof(QEVALHOOK)!=NIL &&  ehbypass==0) {
@@ -1616,13 +1622,19 @@ int noarg;
     if (ftype->c.sym.homepkg==keywordpkg) fn=ftype;	/*blockname=selector*/
     else if (ftype==LAMCLOSURE) {
       fn=ccar(func); func=ccdr(func);
+      // bind-frame
       if (ccar(func)==NULL || isbindframe(ccar(func)))
         env=ccar(func);
       else if (ckintval(ccar(func))==0)
         env=NULL;
       else error(E_USER,(pointer)"illegal bind-frame");
       func=ccdr(func);
-      fenv=(struct fletframe *)intval(ccar(func)); 
+      // flet-frame
+      if (ccar(func)==NULL || isfletframe(ccar(func)))
+        fenv=ccar(func);
+      else if (ckintval(ccar(func))==0)
+        fenv=NULL;
+      else error(E_USER,(pointer)"illegal flet-frame");
       func=ccdr(func);}
     else if (ftype!=LAMBDA && ftype!=MACRO) error(E_NOFUNCTION);
     else env=NULL /*0 ????*/; 

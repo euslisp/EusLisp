@@ -558,6 +558,36 @@ pointer sym,val,nxt;
   bf->c.bfp.value=val;
   bf->c.bfp.next=nxt;
   return(bf);}
+
+pointer makeflet(ctx,nm,def,scp,nxt)
+register context *ctx;
+pointer nm,def,scp,nxt;
+{ pointer p,ff;
+  ff=alloc(wordsizeof(struct fletframe), ELM_FIXED, fletframecp.cix,
+	  wordsizeof(struct fletframe));
+  p=cons(ctx,scp,def);  // fletframe scope
+  p=cons(ctx,ctx->bindfp,p);  // bindframe scope
+  p=cons(ctx,nm,p);  // name
+  p=cons(ctx,LAMCLOSURE,p);
+  ff->c.ffp.name=nm;
+  ff->c.ffp.fclosure=p;
+  ff->c.ffp.next=nxt;
+  vpush(ff);
+  ctx->fletfp=ff;
+  return(ff);}
+
+pointer makemacrolet(ctx,nm,def,scp,nxt)
+register context *ctx;
+pointer nm,def,scp,nxt;
+{ pointer ff;
+  ff=alloc(wordsizeof(struct fletframe), ELM_FIXED, fletframecp.cix,
+	  wordsizeof(struct fletframe));
+  ff->c.ffp.name=nm;
+  ff->c.ffp.fclosure=cons(ctx,MACRO,def);
+  ff->c.ffp.next=nxt;
+  vpush(ff);
+  ctx->fletfp=ff;
+  return(ff);}
 
 /****************************************************************
 /* extended numbers
@@ -791,41 +821,6 @@ struct blockframe *link;
   blk->jbp=jbuf;
   ctx->blkfp=blk;
   return(blk);}
-
-struct fletframe *makeflet(ctx,nm,def,scp,link)
-register context *ctx;
-pointer nm,def;
-struct fletframe *scp,*link;
-{ register struct fletframe *ffp=(struct fletframe *)(ctx->vsp);
-  register pointer p;
-  size_t i;
-  for (i=0; i<sizeof(struct fletframe)/sizeof(pointer); i++)
-    vpush(makeint(0));
-  ffp->name=nm;
-  p=cons(ctx,makeint(hide_ptr((pointer)scp)),def);
-  p=cons(ctx,ctx->bindfp,p);
-  p=cons(ctx,nm,p);
-  ffp->fclosure=cons(ctx,LAMCLOSURE,p);
-  ffp->scope=scp;
-  ffp->lexlink=link; ffp->dynlink=ctx->fletfp;	/*dynlink is not used*/
-  ctx->fletfp=ffp;
-  return(ffp);}
-
-struct fletframe *makemacrolet(ctx,nm,def,scp,link)
-register context *ctx;
-pointer nm,def;
-struct fletframe *scp,*link;
-{ register struct fletframe *ffp=(struct fletframe *)(ctx->vsp);
-  register pointer p;
-  int i;
-  for (i=0; i<sizeof(struct fletframe)/sizeof(pointer); i++)
-    vpush(makeint(0));
-  ffp->name=nm;
-  ffp->fclosure=cons(ctx,MACRO,def);
-  ffp->scope=scp;
-  ffp->lexlink=link; ffp->dynlink=ctx->fletfp;	/*dynlink is not used*/
-  ctx->fletfp=ffp;
-  return(ffp);}
 
 void mkcatchframe(ctx,lab,jbuf)
 context *ctx;

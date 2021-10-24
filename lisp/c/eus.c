@@ -82,6 +82,7 @@ cixpair fcodecp;
 cixpair ldmodulecp;
 cixpair closurecp;
 cixpair bindframecp;
+cixpair fletframecp;
 cixpair labrefcp;
 cixpair threadcp;
 cixpair arraycp;
@@ -147,7 +148,7 @@ int nextcix;
 /*class cells*/
 pointer C_CONS, C_OBJECT, C_SYMBOL, C_PACKAGE;
 pointer C_STREAM, C_FILESTREAM, C_IOSTREAM, C_CODE, C_FCODE, C_LDMOD;
-pointer C_VECTOR, C_METACLASS, C_CLOSURE, C_BINDFRAME, C_LABREF;
+pointer C_VECTOR, C_METACLASS, C_CLOSURE, C_BINDFRAME, C_FLETFRAME, C_LABREF;
 pointer C_THREAD;
 pointer C_VCLASS, C_FLTVECTOR, C_INTVECTOR, C_STRING, C_BITVECTOR;
 pointer C_FOREIGNCODE,C_ARRAY,C_READTABLE;
@@ -156,7 +157,7 @@ pointer C_CONDITION, C_ERROR;
 
 /*class names*/
 pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
-	CODE,FCODE, LDMODULE, PKGCLASS,METACLASS,CLOSURE,BINDFRAME;
+	CODE,FCODE, LDMODULE, PKGCLASS,METACLASS,CLOSURE,BINDFRAME,FLETFRAME;
 pointer LABREF;
 pointer THREAD;
 pointer VECTOR,VECCLASS,FLTVECTOR,INTVECTOR,OBJECT,READTABLE;
@@ -307,8 +308,8 @@ register pointer *p;
   while (ctx->blkfp>(struct blockframe *)p) ctx->blkfp=ctx->blkfp->dynklink;
   /*unwind catch frames*/
   while (ctx->catchfp>(struct catchframe *)p) ctx->catchfp=ctx->catchfp->nextcatch;
-  /*unwind flet frames*/
-  while (ctx->fletfp>(struct fletframe *)p) ctx->fletfp=ctx->fletfp->dynlink;
+  // /*unwind flet frames*/
+  // while (ctx->fletfp>(struct fletframe *)p) ctx->fletfp=ctx->fletfp->dynlink;
   /*unwind call frames*/
   while (ctx->callfp>(struct callframe *)p) ctx->callfp=ctx->callfp->vlink;
   }
@@ -581,6 +582,7 @@ static void initclassid()
   stringcp.cix=21; stringcp.sub=21;
 
   bindframecp.cix=22; bindframecp.sub=22;
+  fletframecp.cix=23; fletframecp.sub=23;
 }
 
 static void initpackage()
@@ -848,6 +850,11 @@ static void initclasses()
   BINDFRAME=basicclass("BIND-FRAME",C_OBJECT,&bindframecp,3,
 		    "SYMBOL","VALUE","NEXT");
   C_BINDFRAME=speval(BINDFRAME);
+
+/*23*/
+  FLETFRAME=basicclass("FLET-FRAME",C_OBJECT,&fletframecp,3,
+		    "NAME","FCLOSURE","NEXT");
+  C_FLETFRAME=speval(FLETFRAME);
 
 /* derived classes */
   BITVECTOR=defvector(ctx,"BIT-VECTOR",C_VECTOR,ELM_BIT, 0); /* alpha */
