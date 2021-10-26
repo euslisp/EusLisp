@@ -359,6 +359,7 @@ pointer arg;
 { pointer cond,body,*spsave=ctx->vsp,result;
   struct blockframe *myblock;
   pointer bfp=ctx->bindfp;
+  pointer ffp=ctx->fletfp;
   jmp_buf whilejmp;
   int i;
 
@@ -379,6 +380,7 @@ pointer arg;
   ctx->blkfp=myblock->dynklink;
   ctx->vsp=spsave;
   ctx->bindfp=bfp;
+  ctx->fletfp=ffp;
   return(result);}
 
 pointer COND(ctx,arg)
@@ -662,6 +664,7 @@ register pointer arg;		/*must be called via ufuncall*/
 { pointer name,result,*spsave=ctx->vsp;
   struct blockframe *myblock;
   pointer bfp=ctx->bindfp;
+  pointer ffp=ctx->fletfp;
   jmp_buf blkjmp;
 #ifdef SPEC_DEBUG
   printf( "BLOCK:" ); hoge_print(arg);
@@ -676,6 +679,7 @@ register pointer arg;		/*must be called via ufuncall*/
   ctx->blkfp=myblock->dynklink;
   /*restorations of bindfp and callfp are caller's responsibility???*/
   ctx->bindfp=bfp;
+  ctx->fletfp=ffp;
   ctx->vsp=spsave;
   return(result);}
 
@@ -753,6 +757,7 @@ pointer arg;
   struct blockframe *tagblock;
   pointer *spsave=ctx->vsp, *tagspsave;
   pointer bfpsave=ctx->bindfp;
+  pointer ffpsave=ctx->fletfp;
 #ifdef SPEC_DEBUG
   printf( "TAGBODY:" ); hoge_print(arg);
 #endif
@@ -769,6 +774,7 @@ repeat:
     {
     ctx->vsp=tagspsave;
     ctx->bindfp=bfpsave;
+    ctx->fletfp=ffpsave;
     while (iscons(forms)) {
       GC_POINT;
       p=ccar(forms);

@@ -302,14 +302,15 @@ register pointer *p;
     ufuncall(ctx,cleanup,cleanup,NULL,NULL,0);}
 	/*an error may occur if catch, throw or return-from or access to
 	  special variables are taken in clean up forms*/
-	/*unwind specially bound variables*/
+  // unwind context before euslongjmp
+  // bind-frames are unwinded by the binder itself (e.g. PARLET) or at the eussetjmp catcher
+  // flet-frames are unwinded at the end of ufuncall evaluation or at the eussetjmp catcher
+  /*unwind specially bound variables*/
   unbindspecial(ctx,(struct specialbindframe *)p);
   /*unwind block frames*/
   while (ctx->blkfp>(struct blockframe *)p) ctx->blkfp=ctx->blkfp->dynklink;
   /*unwind catch frames*/
   while (ctx->catchfp>(struct catchframe *)p) ctx->catchfp=ctx->catchfp->nextcatch;
-  // /*unwind flet frames*/
-  // while (ctx->fletfp>(struct fletframe *)p) ctx->fletfp=ctx->fletfp->dynlink;
   /*unwind call frames*/
   while (ctx->callfp>(struct callframe *)p) ctx->callfp=ctx->callfp->vlink;
   }

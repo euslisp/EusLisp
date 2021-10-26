@@ -81,5 +81,6 @@ register context *ctx;
   ctx->vsp    = (pointer *)cfp;
   ctx->callfp = cfp->cf;
   ctx->bindfp = cfp->bf;
+  ctx->fletfp = cfp->ff;
   ctx->catchfp= cfp->nextcatch;}
 
