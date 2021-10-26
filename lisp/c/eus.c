@@ -257,7 +257,10 @@ char *errmsg[100]={
 	"float vector expected",
 	"integer vector expected",
 	"bit vector expected",
+	"bind-frame expected",
+	"flet-frame expected",
 	"type mismatch",
+
 /* VALUE ERROR */
 	"",
 	"illegal rotation axis",
@@ -408,7 +411,7 @@ va_dcl
       case E_NOFUNCTION: case E_STREAM: case E_NOSTRING: case E_NOINT:
       case E_NONUMBER: case E_NOCLASS: case E_NOOBJECT: case E_NOSEQ:
       case E_NOARRAY: case E_NOVECTOR: case E_FLOATVECTOR: case E_NOINTVECTOR:
-      case E_BITVECTOR: case E_TYPEMISMATCH: 
+      case E_BITVECTOR: case E_NOBINDFRAME: case E_NOFLETFRAME: case E_TYPEMISMATCH:
         errobj=makeobject(C_TYPEERROR);  break;
     // VALUE ERROR
       case E_VALUE_ERROR: case E_ROTAXIS: case E_CHARRANGE: case E_CIRCULAR:

@@ -1625,16 +1625,16 @@ int noarg;
       // bind-frame
       if (ccar(func)==NULL || isbindframe(ccar(func)))
         env=ccar(func);
-      else if (ckintval(ccar(func))==0)
+      else if (isint(ccar(func)) && intval(ccar(func))==0)
         env=NULL;
-      else error(E_USER,(pointer)"illegal bind-frame");
+      else error(E_NOBINDFRAME);
       func=ccdr(func);
       // flet-frame
       if (ccar(func)==NULL || isfletframe(ccar(func)))
         fenv=ccar(func);
-      else if (ckintval(ccar(func))==0)
+      else if (isint(ccar(func)) && intval(ccar(func))==0)
         fenv=NULL;
-      else error(E_USER,(pointer)"illegal flet-frame");
+      else error(E_NOFLETFRAME);
       func=ccdr(func);}
     else if (ftype!=LAMBDA && ftype!=MACRO) error(E_NOFUNCTION);
     else env=NULL /*0 ????*/; 
