@@ -761,13 +761,38 @@ pointer LISTBINDINGS(ctx,n,argv)
 register context *ctx;
 int n;
 pointer *argv;
-{ pointer bf=ctx->bindfp;
+{ pointer bf;
   int i=0;
+  if (n==0) {
+    bf=ctx->bindfp;}
+  if (n==1) {
+    if (isbindframe(argv[0])) bf=argv[0];
+    else if (isint(argv[0]) && intval(argv[0])==0) return(NIL);
+    else error(E_NOBINDFRAME);}
   while (bf) {
     vpush(cons(ctx,bf->c.bfp.symbol,bf->c.bfp.value));
     i++;
     if (bf==bf->c.bfp.next) break;
     bf=bf->c.bfp.next;}
+  return(stacknlist(ctx,i));}
+
+pointer LISTFUNCTIONBINDINGS(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ pointer ff;
+  int i=0;
+  if (n==0) {
+    ff=ctx->fletfp;}
+  if (n==1) {
+    if (isfletframe(argv[0])) ff=argv[0];
+    else if (isint(argv[0]) && intval(argv[0])==0) return(NIL);
+    else error(E_NOFLETFRAME);}
+  while (ff) {
+    vpush(cons(ctx,ff->c.ffp.name,ff->c.ffp.fclosure));
+    i++;
+    if (ff==ff->c.ffp.next) break;
+    ff=ff->c.ffp.next;}
   return(stacknlist(ctx,i));}
 
 pointer LISTSPECIALBINDINGS(ctx,n,argv)
@@ -860,6 +885,7 @@ pointer mod;
   defun(ctx,"LIST-ALL-TAGS",mod,LISTALLTAGS,NULL);
   defun(ctx,"LIST-ALL-CATCHERS",mod,LISTALLCATCHERS,NULL);
   defun(ctx,"LIST-ALL-BINDINGS",mod,LISTBINDINGS,NULL);
+  defun(ctx,"LIST-ALL-FUNCTION-BINDINGS",mod,LISTFUNCTIONBINDINGS,NULL);
   defun(ctx,"LIST-ALL-SPECIAL-BINDINGS",mod,LISTSPECIALBINDINGS,NULL);
   defun(ctx,"LIST-ALL-CLASSES",mod,LISTALLCLASSES,NULL);
   defun(ctx,"EXPORT-ALL-SYMBOLS", mod, EXPORTALL,NULL);
