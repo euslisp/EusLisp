@@ -565,8 +565,16 @@ pointer nm,def,scp,nxt;
 { pointer p,ff;
   ff=alloc(wordsizeof(struct fletframe), ELM_FIXED, fletframecp.cix,
 	  wordsizeof(struct fletframe));
-  p=cons(ctx,scp,def);  // fletframe scope
-  p=cons(ctx,ctx->bindfp,p);  // bindframe scope
+  // fletframe scope
+  if (scp==NULL)
+    p=cons(ctx,makeint(0),def);
+  else
+    p=cons(ctx,scp,def);
+  // bindframe scope
+  if (ctx->bindfp==NULL)
+    p=cons(ctx,makeint(0),p);
+  else
+    p=cons(ctx,ctx->bindfp,p);
   p=cons(ctx,nm,p);  // name
   p=cons(ctx,LAMCLOSURE,p);
   ff->c.ffp.name=nm;
