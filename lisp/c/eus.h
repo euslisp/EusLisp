@@ -536,7 +536,7 @@ typedef struct {
 	struct	specialbindframe *sbindfp;
 	struct	blockframe	*blkfp;
 	struct	protectframe	*protfp;
-	pointer	fletfp, newfletfp;
+	pointer	fletfp;
 	pointer lastalloc;
 	pointer threadobj;
 	struct  methdef		*methcache;
@@ -1143,5 +1143,4 @@ extern sema_t   free_thread_sem;
 }
 #endif
 
-extern eusinteger_t hide_ptr (pointer p);
 

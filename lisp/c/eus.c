@@ -288,8 +288,6 @@ char *errmsg[100]={
 	"E_END",
 	};
 
-static pointer brkloop();
-
 void unwind(ctx,p)
 register context *ctx;
 register pointer *p;
@@ -1101,24 +1099,6 @@ eusinteger_t addr;
   if (debug) { fprintf(stderr, ";; eusint exit: intsig=%d\n",ctx->intsig);}
 }
 
-static pointer brkloop(ctx, prompt)
-context *ctx;
-char *prompt;
-{ jmp_buf brkjmp;
-  pointer val;
-  int i;
-  mkcatchframe(ctx,T,&brkjmp);
-  Spevalof(QSTDOUT)=STDOUT;
-  Spevalof(QSTDIN)=STDIN;
-  Spevalof(QERROUT)=ERROUT;
-  if ((val=(pointer)eussetjmp(brkjmp))==0) val=reploop(ctx,prompt);
-  else if ((eusinteger_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
-  ctx->callfp=ctx->catchfp->cf;
-  ctx->bindfp=ctx->catchfp->bf;
-  ctx->vsp=(pointer *)ctx->catchfp;
-  ctx->catchfp=(struct catchframe *)*(ctx->vsp);
-  return(val);}
-
 void sigbreak()
 { pointer sighandler,*vspsave;
   context *ctx=euscontexts[thr_self()];
@@ -1137,7 +1117,6 @@ void sigbreak()
     ctx->vsp=vspsave;  }
   else {
     fprintf(stderr,"signal=%d to thread %d, \n",is, thr_self());
-    /*    brkloop(ctx,"B: "); */
     return; }}
   
 
@@ -1465,5 +1444,3 @@ eusinteger_t intval(pointer p) {
   else return (((eusinteger_t)i)>>2);
 }
 #endif
-
-eusinteger_t hide_ptr (pointer p) { return (eusinteger_t)p; }

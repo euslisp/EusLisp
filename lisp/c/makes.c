@@ -883,7 +883,6 @@ int bs_size;
   cntx->blkfp=NULL;
   cntx->protfp=NULL;
   cntx->fletfp=NULL;
-  cntx->newfletfp=NULL;
   cntx->lastalloc=NULL;
   cntx->alloc_big_count=0;
   cntx->alloc_small_count=0;
