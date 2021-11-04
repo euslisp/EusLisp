@@ -336,7 +336,7 @@ extern pointer makefvector(int /*s*/);
 extern pointer defvector(context */*ctx*/, char */*name*/, pointer /*super*/, int /*elm*/, int /*size*/);
 extern pointer makematrix(context */*ctx*/, int /*row*/, int /*column*/);
 extern pointer makemodule(context */*ctx*/, int /*size*/);
-extern pointer makeclosure(pointer /*code*/, pointer /*quote*/, pointer (*/*f*/)(), pointer /*e0*/, pointer */*e1*/, pointer */*e2*/);
+extern pointer makeclosure(pointer /*code*/, pointer /*quote*/, pointer (*/*f*/)(), pointer /*e0*/, pointer /*e1*/);
 extern pointer makereadtable(context */*ctx*/);
 extern pointer makelabref(pointer /*n*/, pointer /*v*/, pointer /*nxt*/);
 extern pointer makebindframe(pointer /*sym*/, pointer /*val*/, pointer /*nxt*/);

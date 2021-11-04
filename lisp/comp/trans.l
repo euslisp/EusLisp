@@ -72,7 +72,21 @@
     (when push
 	  (format cfile "	local[~d]= ~A;~%" pushcount push)
 	  (inc pushcount))
-    (setq push nil)) )
+    (setq push nil))
+ (:create-frame (size &optional comment)
+    (send self :clearpush)
+    (prog1 pushcount
+      (format cfile "	local[~d]= makevector(C_VECTOR,~d);" pushcount size)
+      (if comment (format cfile " /*~A*/" comment))
+      (terpri cfile)
+      (inc pushcount)
+      (send self :reset-vsp)))
+ (:clearpush-frame (bindframe count)
+    (when push
+	  (format cfile "	local[~d]->c.vec.v[~d]= ~A;~%"
+                  bindframe count push))
+    (setq push nil))
+)
 
 (defmethod translator
  (:quote-entry (q) 
@@ -153,17 +167,24 @@
    (inc pushcount keyn))
  (:check-key-arg (n lab)
    (format cfile "	if (n & (1<<~A)) goto ~A;~%" n lab))
- (:getbase (n argp) 
-   (cond ((= n 0) (if argp "argv" "local"))
+ (:getbase (n argp &optional bindframe)
+   (cond ((= n 0)
+          (cond
+            (bindframe
+             (format nil "local[~d]->c.vec.v" bindframe))
+            (argp "argv")
+            (t "local")))
 	 (t
 	   (let* ((f "env->"))
 	     (while (> n 1)
 		(setq f (concatenate string f
 			 "c.clo.env0->"))
 		(dec n))
+             (unless bindframe
+               (warn "; empty bindframe in closure reference!~%"))
 	     (setq f (concatenate string f
-			(if argp "c.clo.env1"
-				 "c.clo.env2")))
+                           (format nil "c.clo.env1->c.vec.v[~d]->c.vec.v" 
+                                   (or bindframe -1))))
 	     f))))
  (:load-t () (send self :push "T"))
  (:load-nil () (send self :push "NIL"))
@@ -183,12 +204,12 @@
 )
 
 (defmethod translator
- (:load-arg (n level)
+ (:load-arg (n level &optional bindframe)
     (send self :push 
-	       (format nil "~A[~d]" (send self :getbase level 'arg) n)))
- (:load-local (n level)
+	       (format nil "~A[~d]" (send self :getbase level 'arg bindframe) n)))
+ (:load-local (n level &optional bindframe)
     (send self :push
-	       (format nil "~A[~d]" (send self :getbase level nil) n)))
+          (format nil "~A[~d]" (send self :getbase level nil bindframe) n)))
  (:load-obj (n level)
     (send self :push
 		(format nil "~A[0]->c.obj.iv[~d]"
@@ -196,10 +217,10 @@
  (:load-global (ent)
     (send self :push (format nil "loadglobal(fqv[~d])"
 				 (send self :quote-entry ent))))
- (:store-arg (n level)
-    (send self :store (format nil "~A[~d]" (send self :getbase level 'arg) n)))
- (:store-local (offset level)
-    (send self :store (format nil "~A[~d]" (send self :getbase level nil) offset)))
+ (:store-arg (n level &optional bindframe)
+    (send self :store (format nil "~A[~d]" (send self :getbase level 'arg bindframe) n)))
+ (:store-local (offset level &optional bindframe)
+    (send self :store (format nil "~A[~d]" (send self :getbase level nil bindframe) offset)))
  (:store-obj (var level)
 #+:rgc	     
 	     (let ((p1 (send self :getbase level 'arg))
@@ -573,7 +594,9 @@
  (:return ()
     (send self :clearpush)
     (format cfile "	ctx->vsp=local; return(local[0]);}~%")
-    (if (not (= (dec pushcount) 0)) (warn ":return pushcount is ~d " pushcount)))
+    (when (not (= (dec pushcount) 0))
+      (warn ":return pushcount is ~d~%" pushcount)
+      (setq pushcount 0)))
  (:del-frame (spe loc)	;number of special bindings and local variables
     (send self :store "w")
     (send self :discard (+ (* 3 spe) loc))
@@ -628,11 +651,14 @@
     (if need-unwind
 	(format cfile  "	unwind(ctx,local+~d);~%" k))
     (inc pushcount))
-  (:closure (lab)
-    (send self :clearpush)
+ (:closure (lab env)
+    (if env
+        (send self :store "w")  ; store to w before increasing the pushcount
+        (send self :clearpush)) ; clear other pending values
     (send self :reset-vsp)
     (send self :push
-	  (format nil "makeclosure(codevec,quotevec,~A,env,argv,local)" lab)))
+      (format nil "makeclosure(codevec,quotevec,~A,env,~A)"
+              lab (if env "w" "NULL"))))
  (:defun (sym cname doc)
     (send self :clearpush)
     (send self :reset-vsp)

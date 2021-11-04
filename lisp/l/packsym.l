@@ -28,14 +28,9 @@
     (if (= vtype 0) (error type-error "attempted to set constant ~a" self))
     (setq value val))
  (:constant (c &optional (doc nil))
-    (when (= vtype 0)
-       (eval-when (eval load)
-	    (format *error-output*
-		"multiple defconstant for ~s: ~s --> ~s~%" self value c))
-       (eval-when (compile)
-            (unless (equal value c)
-                 (format *error-output*
-		    "multiple defconstant for ~s: ~s --> ~s~%" self value c))))
+    (when (and (= vtype 0) (not (equal value c)))
+      (format *error-output*
+              "multiple defconstant for ~s: ~s --> ~s~%" self value c))
     (if doc (putprop self doc :variable-documentation))
     (setq vtype 0
 	  value c)

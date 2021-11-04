@@ -469,7 +469,10 @@ markagain:
 #ifdef MARK_DEBUG
   printf( "mark: markon 0x%lx\n", bp );
 #endif
-  if (pisclosure(p)) goto markloop;	/*avoid marking contents of closure*/
+  if (pisclosure(p)) {
+    // mark local frame vector
+    gcpush(p->c.clo.env1);
+    goto markloop;}
   marking=p;
 /*  printf("%x, %x, %d, %d, %d\n", p, bp, bp->h.elmtype, bp->h.bix, buddysize[bp->h.bix] );*/
   if (bp->h.elmtype==ELM_FIXED) {	/*contents are all pointers*/

@@ -795,19 +795,19 @@ static void initclasses()
 #if (WORD_SIZE == 64)
   CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
 #if ARM // ARM uses entry2 in struct closure in eus.h
-		     4,"ENTRY2",
-#else
-		     3,
-#endif
-		     "ENV0","ENV1","ENV2");
-#else
-  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
-#if ARM // ARM uses entry2 in struct closure in eus.h
 		     3,"ENTRY2",
 #else
 		     2,
 #endif
-		     "ENV1","ENV2");
+		     "ENV0","ENV1");
+#else
+  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
+#if ARM // ARM uses entry2 in struct closure in eus.h
+		     2,"ENTRY2",
+#else
+		     1,
+#endif
+		     "ENV1");
 #endif
   C_CLOSURE=speval(CLOSURE);
 /* 16    ---new for Solaris */

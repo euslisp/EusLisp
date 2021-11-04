@@ -271,8 +271,7 @@ struct closure {
     pointer entry2;     /* some archtecture did not set code on 4 byte alignment */
 #endif
     pointer env0;	/*upper closure link*/
-    pointer *env1;	/*argument pointer:	argv*/
-    pointer *env2;};	/*local variable frame:	local*/
+    pointer env1;};	/*local frame (argframe, bindframe, fletframe)*/
 
 struct stream {
     pointer plist;
@@ -1109,7 +1108,7 @@ extern pointer reader(context *, pointer, pointer);
 extern pointer prinx(context *, pointer, pointer);
 
 /*for compiled code*/
-extern pointer makeclosure(pointer,pointer,pointer(*)(),pointer, pointer*, pointer*);
+extern pointer makeclosure(pointer,pointer,pointer(*)(),pointer, pointer);
 extern pointer fcall();
 extern pointer xcar(pointer), xcdr(pointer), xcadr(pointer);
 extern pointer *ovafptr(pointer,pointer);

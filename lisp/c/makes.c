@@ -506,8 +506,8 @@ int size;
   mod->c.ldmod.handle=NIL;
   return(mod);}
 
-pointer makeclosure(code,quote,f,e0,e1,e2)
-pointer code,quote,e0,*e1,*e2;
+pointer makeclosure(code,quote,f,e0,e1)
+pointer code,quote,e0,e1;
 pointer (*f)();
 { register pointer clo;
   clo=allocobj(CLOSURE, closure, closurecp.cix);
@@ -520,7 +520,6 @@ pointer (*f)();
 #endif
   clo->c.clo.env0=e0;
   clo->c.clo.env1=e1; /*makeint((int)e1>>2);*/
-  clo->c.clo.env2=e2; /*makeint((int)e2>>2);*/
   return(clo);}
 
 pointer makereadtable(ctx)
