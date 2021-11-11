@@ -45,10 +45,12 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
 fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     travis_time_start setup.install
+    # https://apple.stackexchange.com/questions/393481/homebrew-cask-download-failure-ssl-certificate-problem-certificate-has-expired
     # skip if already installed
     # https://discourse.brew.sh/t/skip-ignore-brew-install-if-package-is-already-installed/633/2
     # brew install jpeg libpng mesalib-glw;
-    # use HOMEBREW_NO_AUT_UPDATE to fix unexpected keyword error https://travis-ci.community/t/syntax-error-unexpected-keyword-rescue-expecting-keyword-end-in-homebrew/5623
+    echo insecure >> ~/.curlrc
+    export HOMEBREW_CURLRC=1
     brew list jpeg &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install jpeg
     brew list libpng &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install libpng
     brew list mesalib-glw &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesalib-glw
@@ -70,6 +72,7 @@ if [ "$QEMU" != "" ]; then
     echo "getconf LONG_BIT : $(getconf LONG_BIT)"
 
     travis_time_start download.euslisp-debian
+    export GIT_SSL_NO_VERIFY=1
     git clone http://salsa.debian.org/science-team/euslisp /tmp/euslisp-dfsg
     for file in $(cat /tmp/euslisp-dfsg/debian/patches/series); do
         # skip patch already applied by https://github.com/euslisp/EusLisp/pull/441
