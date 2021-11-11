@@ -15,7 +15,8 @@
 
 (defun write-tmp-file (fname send-lst)
   `(with-open-file (test-file ,fname :direction :output :if-exists :supersede)
-     (princ-line "(lisp::install-error-handler #'(lambda (&rest args) (exit 1)))" test-file)
+     (princ-line "(defun exit-on-error (&rest args) (exit 1))" test-file)
+     (princ-line "(lisp::install-error-handler 'exit-on-error)" test-file)
      (princ-line "(require :argparse \"lib/llib/argparse.l\")" test-file)
      (terpri test-file)
      (princ-line "(setq argparse (instantiate argparse:argument-parser))" test-file)
@@ -42,7 +43,8 @@
         (resf (tmp "tmp-argparse-result-" name)))
     `(deftest ,name
        ,(write-tmp-file testf send-lst)
-       (assert (= 0 (unix:system ,(format nil "eus ~A ~A 2>/dev/null 1>~A" testf command resf))))
+       (assert (= 0 (unix:system ,(format nil "~A ~A ~A 2>/dev/null 1>~A"
+                                          *program-name* testf command resf))))
        (let ((alst (read-file ,resf)))
          ,@(mapcar #'(lambda (res)
                        `(assert (and (assoc ,(car res) alst)
@@ -54,7 +56,8 @@
         (resf (tmp "tmp-argparse-result-" name)))
     `(deftest ,name
        ,(write-tmp-file testf send-lst)
-       (assert (= 0 (unix:system ,(format nil "eus ~A --help 2>/dev/null 1>~A" testf resf))))
+       (assert (= 0 (unix:system ,(format nil "~A ~A --help 2>/dev/null 1>~A"
+                                          *program-name* testf resf))))
        (let ((str1 ,result)
              (str2 (string-right-trim '(#\Space #\Newline) (read-binary-file ,resf))))
          (assert (string= str1 str2))))))
@@ -63,7 +66,8 @@
   (let ((testf (tmp "tmp-argparse-test-" name)))
     `(deftest ,name
        ,(write-tmp-file testf send-lst)
-       (assert (= 256 (unix:system ,(format nil "eus ~A ~A 2>/dev/null 1>/dev/null" testf command)))))))
+       (assert (= 256 (unix:system ,(format nil "~A ~A ~A 2>/dev/null 1>/dev/null"
+                                            *program-name* testf command)))))))
 
 
 ;; HELP TESTS
@@ -336,7 +340,7 @@ optional arguments:
   (:add-argument "-cc" :help "Callback with compiled function"
                  :action #'print)
   (:add-argument "-ccf" :help "Callback with compiled function"
-                 :action #'lisp-implementation-version)
+                 :action #'lisp-implementation-type)
   (:add-argument "--count" :action :count)
   (:add-argument '("--append" "-a") :action :append :read t :choices (list 1 2 3))
   (:add-argument "--const" :const 10 :action :store-const))
@@ -530,7 +534,7 @@ optional arguments:
   (:add-argument "-cc" :help "Callback with compiled function"
                  :action #'print)
   (:add-argument "-ccf" :help "Callback with compiled function"
-                 :action #'lisp-implementation-version)
+                 :action #'lisp-implementation-type)
   (:add-argument "--count" :action :count)
   (:add-argument '("--append" "-a") :action :append :read t :choices (list 1 2 3))
   (:add-argument "--const" :const 10 :action :store-const))
@@ -538,7 +542,7 @@ optional arguments:
 (defargparse-test parse-overall.2
   "--arg=a --req=3 --def=2 -ff --dest=b -ccf --count"
   ((:arg "a") (:req 3) (:def 2) (:remap "b") (:flag nil) (:flag-false nil)
-   (:ca nil) (:cf nil) (:cc nil) (:ccf #.(lisp-implementation-version)) (:count 1)
+   (:ca nil) (:cf nil) (:cc nil) (:ccf #.(lisp-implementation-type)) (:count 1)
    (:append nil) (:const nil))
   (:init :description "Program Description" :prog "test.l")
   (:add-argument "--arg" :help "The 'arg' argument" :required t)
@@ -554,7 +558,7 @@ optional arguments:
   (:add-argument "-cc" :help "Callback with compiled function"
                  :action #'print)
   (:add-argument "-ccf" :help "Callback with compiled function"
-                 :action #'lisp-implementation-version)
+                 :action #'lisp-implementation-type)
   (:add-argument "--count" :action :count)
   (:add-argument '("--append" "-a") :action :append :read t :choices (list 1 2 3))
   (:add-argument "--const" :const 10 :action :store-const))
