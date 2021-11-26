@@ -123,6 +123,8 @@ jobs:
           export TRAVIS_OS=osx
           export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
           export LC_CTYPE=C
+          (cd ${HOME}; git clone --depth 1 http://github.com/euslisp/jskeus jskeus)
+          (cd ${HOME}/jskeus; patch -f -p1 < ${CI_SOURCE_PATH}/.github/workflows/fix-dylib-location.patch || echo "OK")
           bash -x ./.travis.sh
       - name: Cleanup some brew downloads
         run: cd ${{ steps.brew-cache.outputs.dir }} && ls -lsS | head -n 10 | awk '{ print $10 }' | xargs rm -rf
