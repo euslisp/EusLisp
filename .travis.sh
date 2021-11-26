@@ -60,6 +60,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew list jpeg &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install jpeg
     brew list libpng &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install libpng
     brew list mesalib-glw &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesalib-glw
+    brew list mesa-glu &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesa-glu
     brew list bullet &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install bullet
     travis_time_end
 
