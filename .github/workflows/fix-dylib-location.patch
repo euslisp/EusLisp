@@ -1,0 +1,33 @@
+diff --git a/irteus/irtgl.l b/irteus/irtgl.l
+index 4c417e61..afd606bc 100644
+--- a/irteus/irtgl.l
++++ b/irteus/irtgl.l
+@@ -51,6 +51,8 @@
+    (cond
+     ((probe-file "/opt/local/lib/libGL.dylib")
+      (setq gl-lib ( load-foreign "/opt/local/lib/libGL.dylib")))
++    ((probe-file "/usr/local/lib/libGL.dylib")
++     (setq gl-lib ( load-foreign "/usr/local/lib/libGL.dylib")))
+     (t
+      (setq gl-lib ( load-foreign "/opt/X11/lib/libGL.dylib")))))
+ #+:cygwin
+diff --git a/irteus/irtx.l b/irteus/irtx.l
+index 6a6761d4..4477b6ce 100644
+--- a/irteus/irtx.l
++++ b/irteus/irtx.l
+@@ -76,9 +76,12 @@
+ (let (x-lib pname)
+ #+:darwin
+ #+:darwin
+- (if (probe-file "/opt/local/lib/libX11.dylib")
+-     (setq pname "/opt/local/lib/libX11.dylib")
+-   (setq pname "/opt/X11/lib/libX11.dylib"))
++ (cond ((probe-file "/opt/local/lib/libX11.dylib")
++        (setq pname "/opt/local/lib/libX11.dylib"))
++       ((probe-file "/usr/local/lib/libX11.dylib")
++        (setq pname "/usr/local/lib/libX11.dylib"))
++       (t
++        (setq pname "/opt/X11/lib/libX11.dylib")))
+ #+:cygwin
+   (if (probe-file "/usr/bin/cygX11-6.dll")
+       (setq pname "/usr/bin/cygX11-6.dll")

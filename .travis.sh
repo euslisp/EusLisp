@@ -9,7 +9,7 @@ function travis_time_start {
     else
         TRAVIS_START_TIME=$(date +%s%N)
     fi
-    TRAVIS_TIME_ID=$(cat /dev/urandom | LC_ALL=C LC_CTYPE=C tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
+    TRAVIS_TIME_ID=$(head /dev/urandom | base64 | head -c 8)
     TRAVIS_FOLD_NAME=$1
     echo -e "\e[0Ktravis_fold:start:$TRAVIS_FOLD_NAME"
     echo -e "\e[0Ktravis_time:start:$TRAVIS_TIME_ID"
@@ -35,6 +35,12 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y sudo;  else sudo apt-get update; fi
     travis_time_end
 
+    travis_time_start setup.tzdata
+    # set non interactive tzdata https://stackoverflow.com/questions/8671308/non-interactive-method-for-dpkg-reconfigure-tzdata
+    # set DEBIAN_FRONTEND=noninteractive
+    echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
+    travis_time_end
+
     travis_time_start setup.apt-get_install
     ret=1; while [ $ret != 0 ]; do sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng-dev xfonts-100dpi xfonts-75dpi pkg-config libbullet-dev && ret=0 || echo "failed, retry"; done # msttcorefonts could not install on 14.04 travis
     # unset protocol version https://github.com/juju/charm-tools/issues/532
@@ -54,6 +60,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew list jpeg &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install jpeg
     brew list libpng &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install libpng
     brew list mesalib-glw &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesalib-glw
+    brew list mesa-glu &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesa-glu
     brew list bullet &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install bullet
     travis_time_end
 
