@@ -1,0 +1,128 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+env:
+  DISPLAY: '0:0'
+
+jobs:
+  linux:
+    strategy:
+      matrix:
+        include:
+          - DOCKER_IMAGE: ubuntu:trusty
+          - DOCKER_IMAGE: ubuntu:xenial
+          - DOCKER_IMAGE: ubuntu:bionic
+          - DOCKER_IMAGE: ubuntu:focal
+          - DOCKER_IMAGE: debian:stretch
+          - DOCKER_IMAGE: ubuntu:trusty
+            ROS_DISTRO: indigo
+          - DOCKER_IMAGE: ubuntu:xenial
+            ROS_DISTRO: kinetic
+          - DOCKER_IMAGE: ubuntu:bionic
+            ROS_DISTRO: meodic
+          - DOCKER_IMAGE: ubuntu:focal
+            ROS_DISTRO: noetic
+          - DOCKER_IMAGE: osrf/ubuntu_armhf:trusty
+          - DOCKER_IMAGE: osrf/ubuntu_armhf:xenial
+          - DOCKER_IMAGE: osrf/ubuntu_arm64:trusty
+          - DOCKER_IMAGE: osrf/ubuntu_arm64:xenial
+          - DOCKER_IMAGE: osrf/ubuntu_arm64:bionic
+          - DOCKER_IMAGE: osrf/ubuntu_arm64:focal
+          - DOCKER_IMAGE: osrf/debian_arm64:stretch
+          - DOCKER_IMAGE: amd64/debian:unstable
+            #
+          - QEMU: amd64
+            DOCKER_IMAGE: amd64/debian:unstable # amd64
+          - QEMU: aarch64
+            DOCKER_IMAGE: arm64v8/debian:buster # arm64
+          - QEMU: arm
+            DOCKER_IMAGE: arm32v5/debian:jessie # armel
+          - QEMU: arm
+            DOCKER_IMAGE: arm32v7/debian:jessie # armhf
+            # hppa
+            # hurd-i386
+          - QEMU: i386
+            DOCKER_IMAGE: i386/debian:unstable # i386
+          - QEMU: i386
+            DOCKER_IMAGE: i386/debian:buster # i386
+            # ia64
+            # m68k
+          - QEMU: mips64el
+            DOCKER_IMAGE: loongnix/debian:buster # mips64el
+            # mipsel
+          # - QEMU: ppc
+          #   DOCKER_IMAGE: vicamo/debian:unstable-powerpc # powerpc / somehow failing loading eusgl
+          - QEMU: ppc64le
+            DOCKER_IMAGE: ppc64le/debian:buster # ppc64
+          # riscv64
+          # sh4
+          # sparc64
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    name: linux
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run test
+        shell: bash
+        run: |
+          set -x
+          export CI_SOURCE_PATH=$(pwd)
+          export REPOSITORY_NAME=${PWD##*/}
+          export TRAVIS_BRANCH=${GITHUB_REF#refs/heads/}
+          export TRAVIS_OS_NAME=linux
+          export DOCKER_IMAGE=${{matrix.DOCKER_IMAGE}}
+          export ROS_DISTRO=${{matrix.ROS_DISTRO}}
+          export QEMU=${{matrix.QEMU}}
+          export MAKEFLAGS="-j4"
+          if [[ "$QEMU" != "" ]]; then sudo apt-get install -y -qq qemu-user-static; ls /usr/bin/qemu-*-static; export QEMU_VOLUME="-v /usr/bin/qemu-$QEMU-static:/usr/bin/qemu-$QEMU-static" ; fi
+          if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register; fi
+          if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
+          if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/euslisp/jskeus ${HOME}/jskeus; fi
+          echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
+          docker run --rm $QEMU_VOLUME -v $HOME:$HOME -e "QEMU=$QEMU" -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"
+
+
+  osx:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get brew cache directory
+        id: brew-cache
+        run: echo "::set-output name=dir::$(brew --cache)/downloads"
+      - name: Brew cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.brew-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/workflows/Brewfile') }}
+      - name: Brew config
+        run: |
+          cd .github/workflows/
+          brew config
+      - name: Run test
+        shell: bash
+        run: |
+          set -x
+          export CI_SOURCE_PATH=$(pwd)
+          export REPOSITORY_NAME=${PWD##*/}
+          export TRAVIS_BRANCH=${GITHUB_REF#refs/heads/}
+          export TRAVIS_OS_NAME=osx
+          export MAKEFLAGS="-j4"
+          export CI_SOURCE_PATH=$(pwd)
+          export REPOSITORY_NAME=${PWD##*/}
+          export TRAVIS_BRANCH=${GITHUB_REF#refs/heads/}
+          export TRAVIS_OS=osx
+          export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+          export LC_CTYPE=C
+          bash -x ./.travis.sh
+      - name: Cleanup some brew downloads
+        run: cd ${{ steps.brew-cache.outputs.dir }} && ls -lsS | head -n 10 | awk '{ print $10 }' | xargs rm -rf
