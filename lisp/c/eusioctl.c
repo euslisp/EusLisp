@@ -7,6 +7,7 @@
 static char *rcsid="@(#)$Id$";
 #include <ctype.h>
 #include <sys/termios.h>
+#include <sys/ioctl.h>
 #ifndef Darwin
 #include <termio.h>
 #endif
