@@ -87,7 +87,7 @@ jobs:
           if [[ "$QEMU" != "" ]]; then sudo apt-get install -y -qq qemu-user-static; ls /usr/bin/qemu-*-static; export QEMU_VOLUME="-v /usr/bin/qemu-$QEMU-static:/usr/bin/qemu-$QEMU-static" ; fi
           if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register; fi
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
-          if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/euslisp/jskeus ${HOME}/jskeus; fi
+          if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/k-okada/jskeus ${HOME}/jskeus -b armhf_focal; fi
           echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
           docker run --rm $QEMU_VOLUME -v $HOME:$HOME -e "QEMU=$QEMU" -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"
 
