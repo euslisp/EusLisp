@@ -1005,6 +1005,8 @@
      ;recursive-scope==T for labels, NIL for flet
      (let (entry newcomp newcomps flets-exchange fletframe vlist)
        (setq fletframe (send self :create-frame 'flet (length funcs) "flet"))
+       (if (not recursive-scope)	; copy compiler before binding the functions
+           (setq newcomp (send self :copy-compiler)))
         (dolist (fn funcs)
 	    (setq entry (send self :genlabel "FLET"))
 	    (send self :closure entry "flet env")
@@ -1018,8 +1020,9 @@
 	          flets)
 	    (send fletframe :local 1)
 	    (push (car flets) vlist)
-	    (setq newcomp (send self :copy-compiler))
-	    (push newcomp newcomps)
+	    (when recursive-scope
+              (setq newcomp (send self :copy-compiler))
+              (push newcomp newcomps))
 	    (send self :add-closure (list entry (cons 'lambda (cdr fn))
 				    newcomp)))
 
