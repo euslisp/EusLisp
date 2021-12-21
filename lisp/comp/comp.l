@@ -806,11 +806,9 @@
             (setq var (if (listp init-form) (car init-form) init-form))
             (send self :eval (if (listp init-form) (cadr init-form) nil))
             (setq offset (1- (send trans :offset-from-fp)))
-            (cond
-              ((send self :special-variable-p var)
-               (send bindframe :local 1)		;a trick
-               (push (cons var offset) vlist))
-              (t (push (send self :bind var bindframe 'local offset) vlist)))))
+            (if (send self :special-variable-p var)
+                  (push (list var offset) vlist)
+                (push (send self :bind var bindframe 'local offset) vlist))))
         (setq vlist (nreverse vlist))
         ;; bind frame vector
         (dotimes (i (length vlist))
@@ -822,14 +820,13 @@
                   (setq (v . bindframe) (bindframe . offset)
                         (v . offset) i))
                 (progn
-                  (send trans :load-local (cdr v) 0)
-                  (send trans :clearpush-frame (bindframe . offset) i)
-                  (push (cons (car v) i) special-list)))))
+                  (send bindframe :local 1)	;a trick
+                  (push v special-list)))))
         ;; all the evaluation have finished, bind specials
 	(dolist (spe special-list)
-	   (setq offset (send trans :offset-from-fp))
-	   (send trans :load-local (cdr spe) 0 (bindframe . offset))
-	   (push (send self :bind (car spe) bindframe 'local offset) vlist))
+          (let ((offset (send trans :offset-from-fp)))
+            (send trans :load-local (cadr spe) 0)
+            (send self :bind (car spe) bindframe 'local offset)))
 	(setq scope (send idtable :level))
         (send trans :reset-vsp)
         ;; eval body
