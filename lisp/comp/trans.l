@@ -210,10 +210,10 @@
  (:load-local (n level &optional bindframe)
     (send self :push
           (format nil "~A[~d]" (send self :getbase level nil bindframe) n)))
- (:load-obj (n level)
+ (:load-obj (n level &optional bindframe)
     (send self :push
 		(format nil "~A[0]->c.obj.iv[~d]"
-			    (send self :getbase level 'arg) n)))
+			    (send self :getbase level 'arg bindframe) n)))
  (:load-global (ent)
     (send self :push (format nil "loadglobal(fqv[~d])"
 				 (send self :quote-entry ent))))
@@ -221,15 +221,15 @@
     (send self :store (format nil "~A[~d]" (send self :getbase level 'arg bindframe) n)))
  (:store-local (offset level &optional bindframe)
     (send self :store (format nil "~A[~d]" (send self :getbase level nil bindframe) offset)))
- (:store-obj (var level)
+ (:store-obj (var level &optional bindframe)
 #+:rgc	     
-	     (let ((p1 (send self :getbase level 'arg))
+	     (let ((p1 (send self :getbase level 'arg bindframe))
 		   (p2 var))
 	       (send self :store (format nil "noticeCollector1(~A[0]->c.obj.iv[~d]);~%	~A[0]->c.obj.iv[~d]"
 					 p1 p2 p1 p2)))
 #-:rgc	     
     (send self :store (format nil "~A[0]->c.obj.iv[~d]"
-				(send self :getbase level 'arg) var)))
+				(send self :getbase level 'arg bindframe) var)))
  (:store-global (var)
     (format cfile "	storeglobal(fqv[~d],~A);~%"
 		  (send self :quote-entry var) (send self :pop)))
