@@ -347,7 +347,7 @@
 	  ((eq (v . binding) 'special)
 	   (send frame :special 1)
 	   (case binding
-	     (local  (if keyvarp (send frame :local 1)))
+	     ((local let) (if keyvarp (send frame :local 1)))
 	     (arg (send trans :load-arg offset 0))
 	     (t (send self :error "illegal binding")))
 	   (push offset unwind-frames)
@@ -771,27 +771,22 @@
      result-type))
  (:let* (bodies)	;sequential let
    (let ((local-list (pop bodies)) (unwind-save unwind-frames)
-          bindframe vlist)
+          bindframe (i 0))
 	(setq bindframe (send self :create-frame 'local (length local-list) "seqlet"))
         ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
           (send self :declare (cdr (pop bodies))))
-        ;; eval to locals
+        ;; eval & bind
 	(dolist (init-form local-list)
-          (let ((var (if (listp init-form) (car init-form) init-form))
-                offset)
+          (let ((var (if (listp init-form) (car init-form) init-form)))
             (send self :eval (if (listp init-form) (cadr init-form) nil))
-            (setq offset (1- (send trans :offset-from-fp)))
-            (push (send self :bind var bindframe 'local offset) vlist)))
-        (setq vlist (nreverse vlist))
-        ;; bind frame vector
-        (dotimes (i (length vlist))
-          (let ((v (nth i vlist)))
-            (send self :load-var v)
-            (send trans :clearpush-frame (bindframe . offset) i)
-            (setq (v . bindframe) (bindframe . offset)
-                  (v . offset) i)))
-        (send trans :reset-vsp)
+            (if (send self :special-variable-p var)
+                (let ((offset (1- (send trans :offset-from-fp))))
+                  (send self :bind var bindframe 'local offset))
+                (let ((v (send self :bind var bindframe 'let i)))
+                  (setq (v . bindframe) (bindframe . offset))
+                  (send self :store-var v)))
+            (incf i)))
         ;; eval body
 	(send self :progn bodies)
 	;; unwind/restore
