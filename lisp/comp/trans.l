@@ -651,14 +651,14 @@
     (if need-unwind
 	(format cfile  "	unwind(ctx,local+~d);~%" k))
     (inc pushcount))
- (:closure (lab env)
-    (if env
+ (:closure (lab env0 env1)
+    (if env1
         (send self :store "w")  ; store to w before increasing the pushcount
         (send self :clearpush)) ; clear other pending values
     (send self :reset-vsp)
     (send self :push
-      (format nil "makeclosure(codevec,quotevec,~A,env,~A)"
-              lab (if env "w" "NULL"))))
+      (format nil "makeclosure(codevec,quotevec,~A,~A,~A)"
+              lab (if env0 "env" "NIL") (if env1 "w" "NIL"))))
  (:defun (sym cname doc)
     (send self :clearpush)
     (send self :reset-vsp)

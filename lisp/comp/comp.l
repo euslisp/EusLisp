@@ -922,7 +922,7 @@
               (send trans :store-local (f . offset) 0 (frame . offset))))))
 
       ;; makeclosure
-      (send trans :closure form (not (not frame)))))
+      (send trans :closure form (plusp closure-level) (not (not frame)))))
  (:unwind-protect (prot cleanup)
     (let ((cleaner (send self :genlabel "UWP"))
 	  (newcomp))
