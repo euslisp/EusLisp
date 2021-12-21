@@ -189,6 +189,7 @@
 (defclass stack-frame :super object
 		      :slots
                       (type	; 'arg, 'local, or 'flet
+                       level	; closure level of the frame
                        offset	; offset of the frame on the local stack
                        specials	; number of special variables on the stack
                        locals))	; number of local variables on the stack
@@ -196,6 +197,7 @@
 
 (eval-when (load eval)
 (defmethod stack-frame
+ (:level (&optional (lvl nil)) (if lvl (setq level lvl)) level)
  (:offset (&optional (off nil)) (if off (setq offset off)) offset)
  (:special (&optional (i 0)) (setq specials (+ specials i)))
  (:local (&optional (i 0)) (setq locals (+ locals i)))
@@ -211,7 +213,7 @@
 (defclass compiler :super object 
 	   :slots
 	   (idtable		;identifier-table
-	    closure-level	;currunt closure level
+	    closure-level	;current closure level
 	    scope		;current variable scope (for sequential let)
 	    frames		;list of the number of special bindings
 	    fletframes		;list of function frames
@@ -344,6 +346,7 @@
      v))
  (:create-frame (type &optional size comment)
     (let ((frame (instance stack-frame :init type)))
+      (setq (frame . level) closure-level)
       (when size
         (setq (frame . offset) (send trans :create-frame size comment))
         (send frame :local 1))
@@ -887,10 +890,11 @@
     (send self :eval val)
     (send trans :throw))
  (:closure (form &optional comment)
-    (let ((bindframes (remove-if #'(lambda (f) (not (f . offset))) frames))
-          (argframes (remove-if #'(lambda (f) (not (f . offset))) argframes))
-          (fletframes (remove-if #'(lambda (f) (not (f . offset))) fletframes))
-          frame)
+    (let* ((fn #'(lambda (f) (and (f . offset) (= (f . level) closure-level))))
+           (bindframes (remove-if-not fn frames))
+           (argframes (remove-if-not fn argframes))
+           (fletframes (remove-if-not fn fletframes))
+           frame)
       (when (or argframes bindframes fletframes)
         ;; create a new vector which holds every and each of the
         ;; argument, bind and flet frames
