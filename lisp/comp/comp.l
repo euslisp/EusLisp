@@ -1088,6 +1088,7 @@
 	 (reqn 0)
 	 (optn 0)
 	 (keyn 0)
+	 (auxn 0)
          (svar-base 0)
          (opt-supplied-vars)
          (opt-vars (memq '&optional param))
@@ -1124,8 +1125,14 @@
 				opt-vars)
 	   key-forms	(cdr key-forms)
 	   keyn		(length key-forms))
-     (when allowotherkeys
-	(setq key-forms (subseq key-forms 0 (dec keyn))))
+     (when key-forms
+       (cond
+         (allowotherkeys
+          (setq key-forms (subseq key-forms 0 (dec keyn (length allowotherkeys)))))
+         (aux-vars
+          (setq key-forms (subseq key-forms 0 (dec keyn (length aux-vars)))))))
+     (setq aux-vars (cdr aux-vars)
+           auxn (length aux-vars))
 ;; prepare labels for the init-forms of optional variables
      (if opt-vars
 	(while (<= i optn)	;optn+1 labels
@@ -1140,7 +1147,7 @@
            (unless (and (symbolp (caddr opt)) (not (constantp svar)))
              (send self :error "optional supplied variable")))
          (push svar opt-supplied-vars)))
-     (nreverse opt-supplied-vars)
+     (setq opt-supplied-vars (nreverse opt-supplied-vars))
 ;; extract optional variable names
      (setq opt-vars (mapcar #'(lambda (x) (if (listp x) (car x) x)) opt-vars))
      (setq argframe (send self :create-frame 'arg))
@@ -1173,10 +1180,10 @@
 		key-vars  (cons var key-vars)
 		key-supplied-vars  (cons svar key-supplied-vars)
 		key-inits (cons init key-inits)))   ;end dolist
-	(nreverse key-names)
-	(nreverse key-vars)
-	(nreverse key-inits)
-	(nreverse key-supplied-vars)
+	(setq key-names (nreverse key-names))
+	(setq key-vars (nreverse key-vars))
+	(setq key-inits (nreverse key-inits))
+	(setq key-supplied-vars (nreverse key-supplied-vars))
 	;(format t ";key-names length=~d ~s~%" (length key-names)  key-names)
 	(if (>= (length key-names) 128) ;; KEYWORDPARAMETERLIMIT
 	    (send self :error "Too many keyword parameters>128 ~s" key-names))
