@@ -27,6 +27,8 @@ jobs:
             ROS_DISTRO: noetic
           - DOCKER_IMAGE: osrf/ubuntu_armhf:trusty
           - DOCKER_IMAGE: osrf/ubuntu_armhf:xenial
+          - DOCKER_IMAGE: osrf/ubuntu_armhf:bionic
+          - DOCKER_IMAGE: osrf/ubuntu_armhf:focal
           - DOCKER_IMAGE: osrf/ubuntu_arm64:trusty
           - DOCKER_IMAGE: osrf/ubuntu_arm64:xenial
           - DOCKER_IMAGE: osrf/ubuntu_arm64:bionic
@@ -82,10 +84,12 @@ jobs:
           export ROS_DISTRO=${{matrix.ROS_DISTRO}}
           export QEMU=${{matrix.QEMU}}
           export MAKEFLAGS="-j4"
+          if [[ "$DOCKER_IMAGE" == *"armhf"* ]]; then sudo add-apt-repository -y ppa:canonical-server/server-backports; fi # install qemu 6.0 to fix segfault / https://askubuntu.com/a/1344079
+          if [[ "$QEMU" != "" || "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt update -y -qq; fi
           if [[ "$QEMU" != "" ]]; then sudo apt-get install -y -qq qemu-user-static; ls /usr/bin/qemu-*-static; export QEMU_VOLUME="-v /usr/bin/qemu-$QEMU-static:/usr/bin/qemu-$QEMU-static" ; fi
           if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register; fi
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
-          if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/euslisp/jskeus ${HOME}/jskeus; fi
+          if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/k-okada/jskeus ${HOME}/jskeus -b armhf_focal; fi
           echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
           docker run --rm $QEMU_VOLUME -v $HOME:$HOME -e "QEMU=$QEMU" -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"
 

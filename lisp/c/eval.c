@@ -1111,8 +1111,8 @@ pointer args[];
   double f;
 
   if (code->c.fcode.entry2 != NIL) {
-    ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffffffff00000000)
-      | (intval(code->c.fcode.entry2)&0x00000000ffffffff));
+    ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffff0000)
+      | (intval(code->c.fcode.entry2)&0x0000ffff));
     /* R.Hanai 090726 */
   }
   while (iscons(paramtypes)) {

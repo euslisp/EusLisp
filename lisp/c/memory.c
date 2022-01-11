@@ -83,6 +83,7 @@ register int k;
   set_heap_range((unsigned int)cp,
       (unsigned int)cp + (s+2)*sizeof(pointer)+(sizeof(pointer)-1));
 #endif
+  if (cp==NULL) return(ERR);	/*can't allocate new memory*/
 #if Linux || Cygwin || Darwin
   if (minmemory > (char *)cp) minmemory = (char *)cp;
   if (maxmemory < (char *)sbrk(0)) maxmemory = (char *)sbrk(0);
@@ -91,7 +92,6 @@ register int k;
   maxmemory=(char *)sbrk(0);
 #endif
   if (QDEBUG && debug) fprintf(stderr,";; maxmemory=%p\n",maxmemory);
-  if (cp==NULL) return(ERR);	/*can't allocate new memory*/
 #if alpha
   if( chunklist == NULL ) {
     top_addr = (eusinteger_t)cp;

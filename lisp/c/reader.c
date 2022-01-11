@@ -640,8 +640,8 @@ char token[];
   subchar=to_upper(ch);
   macrofunc=Spevalof(QREADTABLE)->c.rdtab.dispatch->c.vec.v[subchar];
   if (macrofunc==NIL) error(E_USER,(pointer)"no # macro defined");
-  if (isint(macrofunc)) {	/*internal macro*/
-    intmac=(pointer (*)())(intval(macrofunc));
+  if (isint(macrofunc)||isbignum(macrofunc)) {	/*internal macro*/
+    intmac=(pointer (*)())(bigintval(macrofunc));
     result=(*intmac)(ctx,f,val,subchar,token);}
   else {
     vpush(f); vpush(makeint(subchar)); vpush(makeint(val));
@@ -991,8 +991,8 @@ register pointer ins;
       case ch_termmacro: case ch_nontermacro:
 	      macrofunc=Spevalof(QREADTABLE)->c.rdtab.macro->c.vec.v[ch];
 	      if (macrofunc==NIL) error(E_USER,(pointer)"no char macro defined");
-	      if (isint(macrofunc)) {	/*internal macro*/
-		intmac=(pointer (*)())(intval(macrofunc));
+	      if (isint(macrofunc)||isbignum(macrofunc)) {	/*internal macro*/
+		intmac=(pointer (*)())(bigintval(macrofunc));
 	        result=(*intmac)(ctx,ins,ch,token);}
 	      else {
 	        vpush(ins); vpush(makeint(ch));

@@ -29,7 +29,7 @@ int main(argc,argv)
 int argc;
 char *argv[];
 {
-  char *lispfn, cfn[128], hfn[128], tempfn[128], catcom[256], entryname[128];
+  char *lispfn, cfn[128], hfn[128], tempfn[128], catcom[512], entryname[128];
   FILE *in, *out;
   char *s, *d, ch;
   int i,j,k, string_count;
