@@ -82,6 +82,7 @@ jobs:
           export ROS_DISTRO=${{matrix.ROS_DISTRO}}
           export QEMU=${{matrix.QEMU}}
           export MAKEFLAGS="-j4"
+          if [[ "$QEMU" != "" || "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get update -y -qq; fi
           if [[ "$QEMU" != "" ]]; then sudo apt-get install -y -qq qemu-user-static; ls /usr/bin/qemu-*-static; export QEMU_VOLUME="-v /usr/bin/qemu-$QEMU-static:/usr/bin/qemu-$QEMU-static" ; fi
           if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register; fi
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
