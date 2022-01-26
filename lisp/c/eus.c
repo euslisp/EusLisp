@@ -1278,6 +1278,8 @@ register context *ctx;
 #endif
   }
 
+#pragma GCC push_options
+#pragma GCC optimize ("no-tree-dce") /* dummy malloc(4*1024*1024) requried for some platform(ex ppc64le) since qemu ubuntu6.19, DCE(Dummy Code Elimination) remove this malloc/cfree code, so this line tells compile not to remove them */
 int main(argc,argv)
 int argc;
 char *argv[];
@@ -1343,6 +1345,7 @@ char *argv[];
 
   exit(stat);
   }
+#pragma GCC pop_options
 
 #if (WORD_SIZE == 64)
 pointer makeint(eusinteger_t v) {
