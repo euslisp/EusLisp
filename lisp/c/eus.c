@@ -1188,9 +1188,17 @@ int mainargc;
 char *mainargv[32];
 
 
+#pragma GCC push_options
+#pragma GCC optimize ("no-tree-dce") /* DCE(Dummy Code Elimination) remove this malloc/cfree code, so this line tells compile not to remove them */
 void mainthread(ctx)
 register context *ctx;
 { 
+  /* following two lines are just to speed up frequent sbreak at the beginning
+     of the execution and prevent returning 0 when calling malloc in the first time. */
+  unsigned char *m;
+  m=(unsigned char *)malloc(4*1024*1024);
+  cfree(m);
+
   euscontexts[thr_self()]=ctx;
 
   /*initialize system*/
@@ -1343,6 +1351,7 @@ char *argv[];
 
   exit(stat);
   }
+#pragma GCC pop_options
 
 #if (WORD_SIZE == 64)
 pointer makeint(eusinteger_t v) {
