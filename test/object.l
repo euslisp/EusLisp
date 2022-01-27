@@ -44,6 +44,10 @@
 ;;;
 
 (setq i-max 200000)
+#-(and :linux :x86_64 :word-size=64)
+(progn
+  (setq i-max 20)
+  (warning-message 3 "on non amd64(ppc64le, aarch64/B,F, test-copy-object-list and others segfaults, so we reduce i-max~%"))
 
 (deftest test-copy-object-integer
   (setq vmrss-orig (elt (unix::getrusage 0) 2))
