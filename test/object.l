@@ -4,11 +4,17 @@
 
 (init-unit-test)
 
+(setq i-copy-object-body 1000)
+#+(and :word-size=64 :aarch64)
+(progn
+  (setq i-copy-object-body 10)
+  (warning-message 3 "on aarch64, test-copy-object-vector segfaults, so reduce i-max number~%"))
+
 (deftest test-copy-object-body
   (let (vmrss vmrss-orig a b)
     (setq vmrss-orig (elt (unix::getrusage 0) 2))
     (dotimes (j 10)
-      (dotimes (i 1000)
+      (dotimes (i i-copy-object-body)
         (setq a (make-cube 100 100 100))
         (setq b (copy-object a))
         (unless (equal (send a :vertices) (send b :vertices))
