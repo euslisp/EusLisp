@@ -17,10 +17,12 @@
 
 #if (WORD_SIZE == 64)
 typedef long eusinteger_t;
+typedef unsigned long eusunsignedinteger_t;
 typedef double eusfloat_t;
 #define WORDSHIFT 3
 #else
 typedef int eusinteger_t;
+typedef unsigned int eusunsignedinteger_t;
 typedef float eusfloat_t;
 #define WORDSHIFT 2
 #endif
@@ -761,11 +763,11 @@ extern pointer makeint(eusinteger_t v);
 }
 #endif
 
-#define bpointerof(p) ((bpointer)((eusinteger_t)(p)))
+#define bpointerof(p) ((bpointer)((eusunsignedinteger_t)(p)))
 #ifdef RGC
-#define nextbuddy(p) ((bpointer)((eusinteger_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
+#define nextbuddy(p) ((bpointer)((eusunsignedinteger_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
 #else
-#define nextbuddy(p) ((bpointer)((eusinteger_t)(p)+(buddysize[p->h.bix]*sizeof(pointer))))
+#define nextbuddy(p) ((bpointer)((eusunsignedinteger_t)(p)+(buddysize[p->h.bix]*sizeof(pointer))))
 #endif
 #ifndef __USE_MARK_BITMAP
 #define marked(p)  (p->h.mark)
