@@ -472,6 +472,10 @@ markagain:
   if (pisclosure(p)) goto markloop;	/*avoid marking contents of closure*/
   marking=p;
 /*  printf("%x, %x, %d, %d, %d\n", p, bp, bp->h.elmtype, bp->h.bix, buddysize[bp->h.bix] );*/
+  if ((bp->h.elmtype==ELM_FIXED || bp->h.elmtype==ELM_POINTER) && bp->h.bix > MAXBUDDY) {
+    fprintf(stderr, ";; bp->h.bix is larger than size of buddysize array\n;; p:%p, bp:%p, elm:%d, bix:%d(%d), s=%ld\n", p, bp, bp->h.elmtype, bp->h.bix, MAXBUDDY, buddysize[bp->h.bix]);
+    return;
+  }
   if (bp->h.elmtype==ELM_FIXED) {	/*contents are all pointers*/
     s=buddysize[bp->h.bix]-1;
     while (lgcsp+s>gcsplimit) { 
