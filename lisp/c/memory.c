@@ -88,7 +88,9 @@ register int k;
     return(ERR);       /*can't allocate new memory*/
   }
 #if Linux || Cygwin || Darwin
+#if !(defined(aarch64)) /* aarch64 uses _end for minmemory */
   if (minmemory > (char *)cp) minmemory = (char *)cp;
+#endif
   if (maxmemory < (char *)sbrk(0)) maxmemory = (char *)sbrk(0);
   if (maxmemory < (char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1)) maxmemory = ((char *)cp+(s+2)*sizeof(pointer)+(sizeof(pointer)-1));
 #else
@@ -418,7 +420,9 @@ pointer *gcstack, *gcsplimit, *gcsp;
 #define out_of_heap(p) ((int)p<(int)_end || (pointer)0x20000000<p)
 #else /* Solaris2 */
 #if Linux || Cygwin || Darwin
-#if (WORD_SIZE == 64)
+#if (WORD_SIZE == 64) && defined(aarch64)
+#define out_of_heap(p) ((unsigned long)p<(unsigned long)_end || (pointer)maxmemory <p)
+#elif (WORD_SIZE == 64)
 #define out_of_heap(p) ((unsigned long)p<(unsigned long)minmemory || (pointer)maxmemory <p)
 #else
 #define out_of_heap(p) ((unsigned int)p<(unsigned int)minmemory || (pointer)maxmemory <p)
