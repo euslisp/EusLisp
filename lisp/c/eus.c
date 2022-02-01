@@ -492,11 +492,7 @@ void initmemory_rgc()
     buddysize[i]=buddysize[i-2]+buddysize[i-1];	/*fibonacci*/
     buddy[i].bp=0;}		/*no cells are connected*/
   buddy[MAXBUDDY].bp=(bpointer)(-1);	/*sentinel for alloc*/
-#if (WORD_SIZE == 64)
-  buddysize[MAXBUDDY]= 0x7fffffffffffffff;	/*cell size limit*/
-#else
   buddysize[MAXBUDDY]= 0x7fffffff;	/*cell size limit*/
-#endif
 
   {
     unsigned int tmp;
@@ -543,7 +539,7 @@ static void initclassid()
 }
 
 static void initpackage()
-{ register int i;
+{ register size_t i;
   register context *ctx=mainctx;
 
   /* GENESIS: First, VECTOR must exist!*/
@@ -1189,6 +1185,10 @@ register context *ctx;
 { 
   euscontexts[thr_self()]=ctx;
 
+  unsigned char *m;
+  m=(unsigned char *)malloc(4*1024*1024);
+  fprintf(stderr, "dymmy malloc in mainthread %p\n", m);
+  cfree(m);
   /*initialize system*/
 #ifndef RGC
   initmemory();
@@ -1254,7 +1254,7 @@ register context *ctx;
 #ifdef RGC
 //  signal(SIGSEGV, (void (*)())eusint); /* for debugging. R.Hanai */
 #else
-  signal(SIGSEGV, (void (*)())eusint);
+  signal(SIGSEGV, (void (*)())eusint); //###### OK
 #endif
   signal(SIGBUS,  (void (*)())eusint);
 
@@ -1299,6 +1299,7 @@ char *argv[];
   /* following two lines are just to speed up frequent sbreak at the beginning
      of the execution. These lines may be deleted without any harm.*/
   m=(unsigned char *)malloc(4*1024*1024);
+  fprintf(stderr, "dymmy malloc %p\n", m);
   cfree(m);
 
 #if vxworks
