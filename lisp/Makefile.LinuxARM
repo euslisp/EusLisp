@@ -47,7 +47,7 @@ ifeq ($(GCC_MAJOR_VERSION), 2)
 else
  ifeq ($(MACHINE), aarch64)
    ALIGN_FUNCTIONS=-falign-functions=8
-   ADD_CFLAGS=-fPIC -Darmv8 -mno-omit-leaf-frame-pointer -mno-strict-align
+   ADD_CFLAGS=-fPIC -Darmv8 -mno-omit-leaf-frame-pointer -mno-strict-align -fno-guess-branch-probability
  else
    ALIGN_FUNCTIONS=-falign-functions=4
    ADD_CFLAGS=-fno-stack-protector -fpic
