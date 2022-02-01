@@ -17,12 +17,14 @@
 
 #if (WORD_SIZE == 64)
 typedef long eusinteger_t;
-typedef unsigned long eusunsignedinteger_t;
+//OK typedef unsigned long eusunsignedinteger_t;
+typedef long eusunsignedinteger_t;
 typedef double eusfloat_t;
 #define WORDSHIFT 3
 #else
 typedef int eusinteger_t;
-typedef unsigned int eusunsignedinteger_t;
+//OK typedef unsigned int eusunsignedinteger_t;
+typedef int eusunsignedinteger_t;
 typedef float eusfloat_t;
 #define WORDSHIFT 2
 #endif
@@ -187,7 +189,7 @@ struct cellheader {
   unsigned extra:1;
   unsigned bix:6;		/*5 bits are enough*/
 #endif
-  short	   cix;};	/*8 bits may be enough*/
+  short	   cix;} /* OK __attribute__ ((__packed__)) */;	/*8 bits may be enough*/
 
 /****************************************************************/
 /* struct definition for lisp object cell
@@ -423,7 +425,7 @@ typedef
       struct complex cmplx;
       struct bignum  bgnm;
       } c;
-    } cell;
+} /** OK __attribute__ ((__packed__)) */ cell;
 
 typedef 
   union numunion {
