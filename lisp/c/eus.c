@@ -472,11 +472,7 @@ static void initmemory()
     buddysize[i]=buddysize[i-2]+buddysize[i-1];	/*fibonacci*/
     buddy[i].bp=0;}		/*no cells are connected*/
   buddy[MAXBUDDY].bp=(bpointer)(-1);	/*sentinel for alloc*/
-#if (WORD_SIZE == 64)
-  buddysize[MAXBUDDY]= 0x7fffffffffffffff;	/*cell size limit*/
-#else
   buddysize[MAXBUDDY]= 0x7fffffff;	/*cell size limit*/
-#endif
 
   /*allocate enough memory for initialization*/
   newchunk(20);
