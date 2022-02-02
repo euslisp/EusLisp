@@ -44,7 +44,7 @@ int n;
 pointer argv[];
 { pointer in,form;
   ckarg(1);
-  in=openfile(ctx,(char *)argv[0]->c.str.chars,O_RDONLY,0,256*64);
+  in=openfile(ctx,(char *)argv[0]->c.str.chars,O_RDONLY,0,256);
   vpush(in);
   if (in==0) error(E_OPENFILE);
   form=reader(ctx,in,NIL);
