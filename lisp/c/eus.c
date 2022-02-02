@@ -547,7 +547,7 @@ static void initclassid()
 }
 
 static void initpackage()
-{ register int i;
+{ register size_t i;
   register context *ctx=mainctx;
 
   /* GENESIS: First, VECTOR must exist!*/

@@ -785,7 +785,7 @@ pointer nm,def;
 struct fletframe *scp,*link;
 { register struct fletframe *ffp=(struct fletframe *)(ctx->vsp);
   register pointer p;
-  int i;
+  size_t i;
   for (i=0; i<sizeof(struct fletframe)/sizeof(pointer); i++)
     vpush(makeint(0));
   ffp->name=nm;
