@@ -1233,7 +1233,7 @@
 	    (> c-optimize 0)
 	    ;; (not (member :gcc *features*))
 	    )
-	(setq *coptflags* (format nil " -O~A" c-optimize))
+	(setq *coptflags* (format nil " -O0"));;~A" c-optimize))
 	(setq *coptflags* ""))
    (setq *optimize* optimize
 	 *safety* safety
