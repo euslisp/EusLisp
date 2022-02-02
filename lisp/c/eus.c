@@ -38,7 +38,7 @@ int _end;
 eusinteger_t mypid;
 char *progname;
 #if (WORD_SIZE == 64)
-eusinteger_t setjmp_val;
+euspointer_t setjmp_val;
 #endif
 
 /* heap management */
