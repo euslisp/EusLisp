@@ -284,15 +284,15 @@ register pointer mod,ftype;
 pointer (*f)();
 /*actually, f is a pointer to a function returning a pointer*/
 { register pointer cd;
-  eusunsignedinteger_t fentaddr;
+  eusinteger_t fentaddr;
   cd=allocobj(CODE, code, codecp.cix);
   cd->c.code.codevec=mod->c.code.codevec;
   cd->c.code.quotevec=mod->c.code.quotevec;
   cd->c.code.subrtype=ftype;
-  fentaddr= (eusunsignedinteger_t)f>>2;
+  fentaddr= (eusinteger_t)f>>2;
   cd->c.code.entry=makeint(fentaddr);
 #if ARM
-  cd->c.code.entry2=makeint(((eusunsignedinteger_t)f)&0x3);
+  cd->c.code.entry2=makeint(((eusinteger_t)f)&0x3);
 #endif
   return(cd);}
 
@@ -323,7 +323,7 @@ register int newcix;
   for (cp=chunklist; cp!=0; cp=cp->nextchunk) {
     s=buddysize[cp->chunkbix];
     p= &cp->rootcell;
-    tail=(bpointer)((eusunsignedinteger_t)p+(s<<WORDSHIFT));
+    tail=(bpointer)((eusinteger_t)p+(s<<WORDSHIFT));
     while (p<tail) {
       if (p->h.cix>=newcix) p->h.cix++;
 #ifdef BIX_DEBUG
@@ -785,7 +785,7 @@ pointer nm,def;
 struct fletframe *scp,*link;
 { register struct fletframe *ffp=(struct fletframe *)(ctx->vsp);
   register pointer p;
-  size_t i;
+  int i;
   for (i=0; i<sizeof(struct fletframe)/sizeof(pointer); i++)
     vpush(makeint(0));
   ffp->name=nm;
