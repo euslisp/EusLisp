@@ -78,7 +78,7 @@ register int k;
   if (k<DEFAULTCHUNKINDEX) k=DEFAULTCHUNKINDEX;
   if (QDEBUG && debug) fprintf(stderr,";; newchunk: k=%d\n",k);
   s=buddysize[k];
-  cp=(struct chunk *)((long)malloc((s+2)*sizeof(pointer)+(sizeof(pointer)-1)) & ~(sizeof(pointer)-1));
+  cp=(struct chunk *)((unsigned long)malloc((s+2)*sizeof(pointer)+(sizeof(pointer)-1)) & ~(sizeof(pointer)-1));
 #if defined(RGC)
   set_heap_range((unsigned int)cp,
       (unsigned int)cp + (s+2)*sizeof(pointer)+(sizeof(pointer)-1));
@@ -476,10 +476,6 @@ markagain:
     fprintf(stderr, ";; bp->h.bix is larger than size of buddysize array\n;; p:%p, bp:%p, elm:%d, bix:%d(%d), s=%ld\n", p, bp, bp->h.elmtype, bp->h.bix, MAXBUDDY, buddysize[bp->h.bix]);
     return;
   }
-  if ((bp->h.elmtype==ELM_FIXED || bp->h.elmtype==ELM_POINTER) && buddysize[bp->h.bix] > 100000 ) {
-    fprintf(stderr, ";; p:%p, bp:%p, elm:%d, bix:%d, s=%ld\n", p, bp, bp->h.elmtype, bp->h.bix, buddysize[bp->h.bix] );
-    return ;
-  }
   if (bp->h.elmtype==ELM_FIXED) {	/*contents are all pointers*/
     s=buddysize[bp->h.bix]-1;
     while (lgcsp+s>gcsplimit) { 
@@ -561,9 +557,9 @@ void markall()
       for (p=ctx->stack; p<ctx->vsp; p++) {
 	mark_state=(long)p;
 #if (WORD_SIZE == 64)
-	if ((((eusunsignedinteger_t)(*p) & 7L)==0L) && 
+	if ((((eusinteger_t)(*p) & 7L)==0L) && 
 #else
-	if ((((eusunsignedinteger_t)(*p) & 3)==0) && 
+	if ((((eusinteger_t)(*p) & 3)==0) && 
 #endif
 	    ((ctx->stack>(pointer *)*p) || ((pointer *)*p>ctx->stacklimit)))
 		{ mark(*p); } ;}
@@ -682,7 +678,7 @@ register int gcmerge;
 #endif
   s=buddysize[cp->chunkbix];
   p= &cp->rootcell;
-  tail=(bpointer)((eusunsignedinteger_t)p+(s<<WORDSHIFT));/* ???? */
+  tail=(bpointer)((eusinteger_t)p+(s<<WORDSHIFT));/* ???? */
 #ifdef SWEEP_DEBUG
   printf( "sweep:%d:top=0x%lx, tail=0x%lx\n", count, p, tail );
 #endif
