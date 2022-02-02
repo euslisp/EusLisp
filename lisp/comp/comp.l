@@ -1326,7 +1326,7 @@
                            ((memq :x86_64 *features*)
                             " -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
                            ((memq :aarch64 *features*)
-                            " -Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                            " -Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 -fno-if-conversion  -fno-if-conversion2 -fno-inline-functions-called-once -fno-delayed-branch ")
                            ((memq :arm *features*)
                             " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
                            ((memq :word-size=64 *features*)
