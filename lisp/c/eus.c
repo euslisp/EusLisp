@@ -953,7 +953,7 @@ static void initfeatures()
 #endif
   {
     char tmp[32];
-    sprintf(tmp, "WORD-SIZE=%d", sizeof(void*)*8);
+    sprintf(tmp, "WORD-SIZE=%zd", sizeof(void*)*8);
     p=cons(ctx,intern(ctx,tmp,strlen(tmp),keywordpkg),p);
   }
 
