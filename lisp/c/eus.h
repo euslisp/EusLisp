@@ -17,10 +17,12 @@
 
 #if (WORD_SIZE == 64)
 typedef long eusinteger_t;
+typedef unsigned long euspointer_t;
 typedef double eusfloat_t;
 #define WORDSHIFT 3
 #else
 typedef int eusinteger_t;
+typedef unsigned int euspointer_t;
 typedef float eusfloat_t;
 #define WORDSHIFT 2
 #endif
@@ -70,9 +72,9 @@ typedef float eusfloat_t;
 #endif
 
 #if (WORD_SIZE == 64)
-extern eusinteger_t setjmp_val;
-#define eussetjmp(buf) (_setjmp(buf)?setjmp_val:(eusinteger_t)0)
-#define euslongjmp(buf,val) (setjmp_val=(eusinteger_t)(val),_longjmp(buf,1))
+extern euspointer_t setjmp_val;
+#define eussetjmp(buf) (_setjmp(buf)?setjmp_val:(euspointer_t)0)
+#define euslongjmp(buf,val) (setjmp_val=(euspointer_t)(val),_longjmp(buf,1))
 #else
 #if (Solaris2 || vxworks)
 #define eussetjmp(buf) (eusinteger_t)setjmp(buf)
@@ -745,14 +747,14 @@ extern int export_all;
 
 #if vax || sun4 || news || mips || alpha || Linux
 
-#define makepointer(bp) ((pointer)((eusinteger_t)(bp)))
-// #define isint(p) (((eusinteger_t)(p) & 3)==2) // org
-#define	isint(p)	( (((eusinteger_t)(p)&3)==2) || (((eusinteger_t)(p)&0x3)==0x3) )
-#define isflt(p) (((eusinteger_t)(p) & 3)==1)
-#define isnum(p) (((eusinteger_t)(p) & 3))
+#define makepointer(bp) ((pointer)(bp))
+// #define isint(p) (((euspointer_t)(p) & 3)==2) // org
+#define	isint(p)	( (((euspointer_t)(p)&3)==2) || (((euspointer_t)(p)&0x3)==0x3) )
+#define isflt(p) (((euspointer_t)(p) & 3)==1)
+#define isnum(p) (((euspointer_t)(p) & 3))
 #define numberp(p) (((isnum(p)) || (pisextnum(p)))) // predicates.c:NUMBERP
-#define ispointer(p) (!((eusinteger_t)(p) & 3))
-// #define makeint(v) ((pointer)((((eusinteger_t)(v))<<2)+2)) // org
+#define ispointer(p) (!((euspointer_t)(p) & 3))
+// #define makeint(v) ((pointer)((((euspointer_t)(v))<<2)+2)) // org
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -761,11 +763,11 @@ extern pointer makeint(eusinteger_t v);
 }
 #endif
 
-#define bpointerof(p) ((bpointer)((eusinteger_t)(p)))
+#define bpointerof(p) ((bpointer)((euspointer_t)(p)))
 #ifdef RGC
-#define nextbuddy(p) ((bpointer)((eusinteger_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
+#define nextbuddy(p) ((bpointer)((euspointer_t)(p)+(buddysize[(p->h.bix)&TAGMASK]*sizeof(pointer))))
 #else
-#define nextbuddy(p) ((bpointer)((eusinteger_t)(p)+(buddysize[p->h.bix]*sizeof(pointer))))
+#define nextbuddy(p) ((bpointer)((euspointer_t)(p)+(buddysize[p->h.bix]*sizeof(pointer))))
 #endif
 #ifndef __USE_MARK_BITMAP
 #define marked(p)  (p->h.mark)

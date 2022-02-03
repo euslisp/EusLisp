@@ -382,7 +382,7 @@ int rwlock_destroy( rwlock_t *rwlp )
 int rw_rdlock( rwlock_t *rwlp )
 {
     pthread_mutex_lock( &(rwlp->lock) );
-    while( rwlp->readers == -1 )
+    while( rwlp->readers == (unsigned int)-1 )
       pthread_cond_wait( &(rwlp->r_cond), &(rwlp->lock) );
     rwlp->readers++;
     pthread_mutex_unlock( &(rwlp->lock) );
@@ -404,7 +404,7 @@ int rw_wrlock( rwlock_t *rwlp )
 int rw_unlock( rwlock_t *rwlp )
 {
     pthread_mutex_lock( &(rwlp->lock) );
-    if( rwlp->readers == -1 )
+    if( rwlp->readers == (unsigned int)-1 )
       rwlp->readers = 0;
     else
       rwlp->readers--;

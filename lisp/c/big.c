@@ -518,7 +518,7 @@ pointer x;
     if (xv[i] != 0) {
       yv[i]= (-xv[i]) & MASK;	goto ONE;}
     i++;}
-  if (xv[i] == MSB) { /* 0x80000000 */
+  if ((unsigned long)xv[i] == MSB) { /* 0x80000000 */
     yv[i]= 0;
     stretch_big(y, 1);
     yv=bigvec(y);
