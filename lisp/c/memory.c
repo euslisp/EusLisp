@@ -78,11 +78,15 @@ register int k;
   if (k<DEFAULTCHUNKINDEX) k=DEFAULTCHUNKINDEX;
   if (QDEBUG && debug) fprintf(stderr,";; newchunk: k=%d\n",k);
   s=buddysize[k];
-  cp=(struct chunk *)((long)malloc((s+2)*sizeof(pointer)+(sizeof(pointer)-1)) & ~(sizeof(pointer)-1));
+  cp=(struct chunk *)((euspointer_t)malloc((s+2)*sizeof(pointer)+(sizeof(pointer)-1)) & ~(sizeof(pointer)-1));
 #if defined(RGC)
   set_heap_range((unsigned int)cp,
       (unsigned int)cp + (s+2)*sizeof(pointer)+(sizeof(pointer)-1));
 #endif
+  if (cp==NULL) {
+    fprintf(stderr, ";; can not allocate newchunk(%d)\n", k);
+    return(ERR);       /*can't allocate new memory*/
+  }
 #if Linux || Cygwin || Darwin
   if (minmemory > (char *)cp) minmemory = (char *)cp;
   if (maxmemory < (char *)sbrk(0)) maxmemory = (char *)sbrk(0);
@@ -91,7 +95,6 @@ register int k;
   maxmemory=(char *)sbrk(0);
 #endif
   if (QDEBUG && debug) fprintf(stderr,";; maxmemory=%p\n",maxmemory);
-  if (cp==NULL) return(ERR);	/*can't allocate new memory*/
 #if alpha
   if( chunklist == NULL ) {
     top_addr = (eusinteger_t)cp;
@@ -168,7 +171,7 @@ register struct buddyfree *buddy;
   bnext=b1->b.nextbcell;
   buddy[k].bp= bnext;	/*remove first element*/
   buddy[k].count--;
-  b2= (bpointer)((long)b1+buddysize[k-1]*sizeof(pointer));
+  b2= (bpointer)((euspointer_t)b1+buddysize[k-1]*sizeof(pointer));
   if (k==2) {	/*b1 and b2 are of the same size*/
     b1->b.nextbcell=b2;
     b2->b.nextbcell=buddy[k-1].bp;
@@ -511,8 +514,8 @@ register pointer *oldsp;
 
 int mark_state;
 context *mark_ctx;
-long mark_stack_root;
-long mark_buddy_q;
+euspointer_t mark_stack_root;
+euspointer_t mark_buddy_q;
 
 void markall()
 { register pointer *p,*spsave;
@@ -544,15 +547,15 @@ void markall()
 #endif
       mark(ctx->threadobj);
       mark_state=4;
-      mark_stack_root=(long)ctx->stack;
+      mark_stack_root=(euspointer_t)ctx->stack;
 
       /* mark from thread's stack */
       for (p=ctx->stack; p<ctx->vsp; p++) {
-	mark_state=(long)p;
+	mark_state=(euspointer_t)p;
 #if (WORD_SIZE == 64)
-	if ((((eusinteger_t)(*p) & 7L)==0L) && 
+	if ((((euspointer_t)(*p) & 7L)==0L) &&
 #else
-	if ((((eusinteger_t)(*p) & 3)==0) && 
+	if ((((euspointer_t)(*p) & 3)==0) &&
 #endif
 	    ((ctx->stack>(pointer *)*p) || ((pointer *)*p>ctx->stacklimit)))
 		{ mark(*p); } ;}
@@ -561,7 +564,7 @@ void markall()
       /* mark free list already acquired in local buddy list */
       for (j=1; j<MAXTHRBUDDY; j++) {
 	q=ctx->thr_buddy[j].bp;
-        mark_buddy_q=(long)q;
+        mark_buddy_q=(euspointer_t)q;
 	while (q) { markon(q);
 #ifdef MARK_DEBUG
 		    printf( "markall:%d: markon 0x%ld\n", count, q );

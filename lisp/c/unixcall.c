@@ -369,6 +369,7 @@ pointer argv[];
   struct sigaction sv;
   register pointer a=argv[1],oldval;
   extern void eusint();	
+  unsigned long int j;
 
   ckarg2(1,3);
   s=min(ckintval(argv[0]),NSIG-1);
@@ -380,7 +381,7 @@ pointer argv[];
 #if Linux || Cygwin
 
 #if LIB6 && !Darwin
-  for (i=0; i< _SIGSET_NWORDS; i++)   sv.sa_mask.__val[i]=0; 
+  for (j=0; j< _SIGSET_NWORDS; j++)   sv.sa_mask.__val[j]=0;
 #else
   /* old type sigmask */
   sv.sa_mask=0;
