@@ -4,7 +4,7 @@
 
 \begin{refdesc}
 
-\classdesc{argument-parser}{propertied-object}{value action const choices check flagp read required)}{
+\classdesc{argument-parser}{propertied-object}{flaglst docstring parsed-p}{
 コマンドライン引数のパーサを定義する。}
 
 \methoddesc{:init}{\&key prog description epilog (add-help t)}{
@@ -18,9 +18,10 @@
 引数は{\tt '("--bar" "-b")}等のリストで与えることも可能である。
 
 {\tt action} はプログラムに引数が渡されたときの挙動を指定する。
-現在サポートされている{\tt action} は {\tt :value}, {\tt :store},{\tt :store-true},
-{\tt :store-false}, {\tt :store-const},  {\tt :append}である。
-{\tt help} はヘルプドキュメントを指定する。}
+現在サポートされている{\tt action} は {\tt :store}, {\tt :store-true},
+{\tt :store-false}, {\tt :store-const}, {\tt :append}, そしてカスタム関数である。
+{\tt help} はヘルプドキュメントを指定する。
+ほとんどのパラメータはhttps://docs.python.org/3/library/argparse.htmlに習って設計されている。}
 
 \methoddesc{:parse-args}{}{
 {\tt lisp::*eustop-argument*} を用いてコマンドライン引数をパースする。
@@ -54,6 +55,15 @@ bar: t
 $ eus argparse-example.l --foo=100 --bar
 foo: 100
 bar: t
+$ eus argparse-example.l -h
+usage: [-h] [--foo=FOO] [-b]
+
+Program Description (optional)
+
+optional arguments:
+  -h, --help	show this help message and exit
+  --foo=FOO	the foo description (default: 10)
+  -b, --bar	the bar description
 \end{verbatim}
 
 \end{refdesc}
