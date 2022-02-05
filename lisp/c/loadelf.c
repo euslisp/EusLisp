@@ -160,7 +160,7 @@ pointer initnames;
   void *dlhandle;
   char namebuf[256];
 
-  dlhandle=dlopen(0,RTLD_LAZY);
+  dlhandle=dlopen(0,RTLD_LAZY|RTLD_GLOBAL);
   if (dlhandle==NULL) { 
     fprintf(stderr, "cannot dlopen self\n"); exit(2);}
   module_count=0;
@@ -386,7 +386,7 @@ pointer *argv;
     else entry=(char *)get_string(argv[1]);}
   else entry=NULL;
 
-  dlhandle=(eusinteger_t)dlopen(binfn, RTLD_LAZY);/* ???? */
+  dlhandle=(eusinteger_t)dlopen(binfn, RTLD_LAZY|RTLD_GLOBAL);/* ???? */
   if (dlhandle == 0) {
     fprintf(stderr,"BINLOAD cannot dlopen: %s\n", dlerror());
     return(NIL);}

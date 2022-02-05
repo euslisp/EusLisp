@@ -82,6 +82,8 @@ if [ "$QEMU" != "" ]; then
     export GIT_SSL_NO_VERIFY=1
     git clone http://salsa.debian.org/science-team/euslisp /tmp/euslisp-dfsg
     for file in $(cat /tmp/euslisp-dfsg/debian/patches/series); do
+        # skip patches already applied by https://github.com/euslisp/EusLisp/pull/482
+        [[ $file =~ use-rtld-global-loadelf.patch|fix-arm-ldflags.patch|fix-library-not-linked-against-libc.patch|fix-manpage-has-bad-whatis-entry-on-man-pages.patch ]] && continue;
         # skip patch already applied by https://github.com/euslisp/EusLisp/pull/441
         if [[ $file =~  fix-for-reprotest.patch ]]; then
             filterdiff -p1 -x 'lisp/image/jpeg/makefile' -x 'lisp/comp/comp.l' < /tmp/euslisp-dfsg/debian/patches/$file > /tmp/euslisp-dfsg/debian/patches/$file-fix
