@@ -75,51 +75,51 @@ $external_labels{$key} = "$URL/" . q|jmanual-node3.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/cite_CLOS:Keene/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_CLtL/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_CLtL2/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Eus4/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Eus5/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Eus6/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Eus7/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Hirukawa:1991a/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Hirukawa:1991b/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Hirukawa:1991c/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_MTEus1/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_MTEus2/;
-$external_labels{$key} = "$URL/" . q|jmanual-node24.html|; 
+$external_labels{$key} = "$URL/" . q|jmanual-node25.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/compiler/;

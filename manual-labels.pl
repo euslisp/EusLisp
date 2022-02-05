@@ -67,27 +67,27 @@ $external_labels{$key} = "$URL/" . q|manual-node16.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/cite_CLOS:Keene/;
-$external_labels{$key} = "$URL/" . q|manual-node27.html|; 
+$external_labels{$key} = "$URL/" . q|manual-node28.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_CLtL/;
-$external_labels{$key} = "$URL/" . q|manual-node27.html|; 
+$external_labels{$key} = "$URL/" . q|manual-node28.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_CLtL2/;
-$external_labels{$key} = "$URL/" . q|manual-node27.html|; 
+$external_labels{$key} = "$URL/" . q|manual-node28.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Eus4/;
-$external_labels{$key} = "$URL/" . q|manual-node27.html|; 
+$external_labels{$key} = "$URL/" . q|manual-node28.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_Hirukawa:1991a/;
-$external_labels{$key} = "$URL/" . q|manual-node27.html|; 
+$external_labels{$key} = "$URL/" . q|manual-node28.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/cite_MTEus1/;
-$external_labels{$key} = "$URL/" . q|manual-node27.html|; 
+$external_labels{$key} = "$URL/" . q|manual-node28.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/compiler/;
