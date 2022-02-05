@@ -1,0 +1,69 @@
+\section{その他の機能}
+
+\subsection{Argument Parser}
+
+\begin{refdesc}
+
+\classdesc{argument-parser}{propertied-object}{flaglst docstring parsed-p}{
+コマンドライン引数のパーサを定義する。}
+
+\methoddesc{:init}{\&key prog description epilog (add-help t)}{
+プログラム名，自動生成されるヘルプテキストの前後に表示するテキストから，
+オブジェクトを生成する。}
+
+\methoddesc{:add-argument}{flags \&key (action :store) const default choices check read required help dest}{
+コマンドライン引数を定義する。
+
+{\tt flag} は {\tt "--foo"} や {\tt  "-b"} の引数オプションを定義する。
+引数は{\tt '("--bar" "-b")}等のリストで与えることも可能である。
+
+{\tt action} はプログラムに引数が渡されたときの挙動を指定する。
+現在サポートされている{\tt action} は {\tt :store}, {\tt :store-true},
+{\tt :store-false}, {\tt :store-const}, {\tt :append}, そしてカスタム関数である。
+{\tt help} はヘルプドキュメントを指定する。
+ほとんどのパラメータはhttps://docs.python.org/3/library/argparse.htmlに習って設計されている。}
+
+\methoddesc{:parse-args}{}{
+{\tt lisp::*eustop-argument*} を用いてコマンドライン引数をパースする。
+このメソッドは{\tt argument-parser} インスタンスに引数オプション名メ
+ソッドを与える前に呼ばなければならない。}
+
+{\tt argument-parser}のサンプルプログラムを以下に示す。
+
+\begin{verbatim}
+(require :argparse "argparse.l")
+
+(defvar argparse (instance argparse:argument-parser :init
+                           :description "Program Description (optional)"))
+(send argparse :add-argument "--foo" :default 10 :read t
+      :help "the foo description")
+(send argparse :add-argument '("--bar" "-b") :action :store-true
+      :help "the bar description")
+
+(send argparse :parse-args)
+(format t "foo: ~A~%" (send argparse :foo))
+(format t "bar: ~A~%" (send argparse :bar))
+(exit)
+\end{verbatim}
+
+このサンプルプログラムを実行したときの出力は以下のようになる。
+
+\begin{verbatim}
+$ eus argparse-example.l
+foo: 10
+bar: t
+$ eus argparse-example.l --foo=100 --bar
+foo: 100
+bar: t
+$ eus argparse-example.l -h
+usage: [-h] [--foo=FOO] [-b]
+
+Program Description (optional)
+
+optional arguments:
+  -h, --help	show this help message and exit
+  --foo=FOO	the foo description (default: 10)
+  -b, --bar	the bar description
+\end{verbatim}
+
+\end{refdesc}

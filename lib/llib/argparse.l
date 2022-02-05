@@ -167,7 +167,7 @@
 
 (defclass argument-parser
   :super propertied-object
-  :slots (flaglst docstring))
+  :slots (flaglst docstring parsed-p))
 (defmethod argument-parser
   (:init (&key prog description epilog (add-help t))
     (setq docstring (instance argparse-docstring :init
@@ -209,7 +209,7 @@
                   ((not (argparse-argument-flagp arg)) name)))
       ;; add method
       (if (keywordp name)
-          (eval `(defmethod argument-parser (,name () (send (get self ,name) :value)))))
+          (eval `(defmethod argument-parser (,name () (if (not parsed-p) (warning-message 1 "Not parsed! Call :parse-args!~%")) (send (get self ,name) :value)))))
       ;; return name
       name))
   (:parse-args ()
@@ -248,4 +248,6 @@
                   (cli-error "Argument ~S not found!~%" flag)))))
         ;; check required arguments
         (when required-args
-          (cli-error "Argument ~A is required!" (caar (last required-args))))))))
+          (cli-error "Argument ~A is required!" (caar (last required-args))))))
+    ;; set parsed-p
+    (setq parsed-p t)))

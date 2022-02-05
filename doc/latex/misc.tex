@@ -1,0 +1,70 @@
+\section{Miscellaneous}
+
+\subsection{Argument Parser}
+
+\begin{refdesc}
+
+\classdesc{argument-parser}{propertied-object}{flaglst docstring parsed-p}{
+command line argument parser.}
+
+\methoddesc{:init}{\&key prog description epilog (add-help t)}{
+instantiates argument-parser class object from the name of the program,
+description text to display before the argument help and text to
+display after them as an epilog.}
+
+\methoddesc{:add-argument}{flags \&key (action :store) const default choices check read required help dest}{
+defines the command-line argument to be parsed.
+
+{\tt flag} specify the options strings such as {\tt "--foo"} or {\tt
+  "-b"}. It also takes list values i.e. {\tt '("--bar" "-b")}.
+
+{\tt action} defines the behavior when this argument is passed to the
+program. Current supported actions are {\tt :store}, {\tt :store-true},
+{\tt :store-false}, {\tt :store-const}, {\tt :append}, and custom functions.
+{\tt help} defines the help document text.
+Most of the arguments are designed according to https://docs.python.org/3/library/argparse.html.}
+
+\methoddesc{:parse-args}{}{
+parses command line argument from {\tt lisp::*eustop-argument*}. This
+method must be called before sending an argument name method to {\tt
+ argument-parser} instance.}
+
+The following shows an example of {\tt argument-parser}.
+
+\begin{verbatim}
+(require :argparse "argparse.l")
+
+(defvar argparse (instance argparse:argument-parser :init
+                           :description "Program Description (optional)"))
+(send argparse :add-argument "--foo" :default 10 :read t
+      :help "the foo description")
+(send argparse :add-argument '("--bar" "-b") :action :store-true
+      :help "the bar description")
+
+(send argparse :parse-args)
+(format t "foo: ~A~%" (send argparse :foo))
+(format t "bar: ~A~%" (send argparse :bar))
+(exit)
+\end{verbatim}
+
+The following is an output of the example program above.
+
+\begin{verbatim}
+$ eus argparse-example.l
+foo: 10
+bar: t
+$ eus argparse-example.l --foo=100 --bar
+foo: 100
+bar: t
+$ eus argparse-example.l -h
+usage: [-h] [--foo=FOO] [-b]
+
+Program Description (optional)
+
+optional arguments:
+  -h, --help	show this help message and exit
+  --foo=FOO	the foo description (default: 10)
+  -b, --bar	the bar description
+\end{verbatim}
+
+\end{refdesc}
