@@ -91,7 +91,7 @@ GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext -leusgl
 THREADDEP=mthread_posix.c
 #THREADDEP=pthreads.c
 
-ifeq ($(shell /bin/uname -m), x86_64)
+ifeq ($(shell gcc -dumpmachine | sed 's/\(.*\)-.*-.*/\1/'), x86_64)
 CC += -m32 -DUSE_MULTI_LIB
 LD += -melf_i386
 endif
