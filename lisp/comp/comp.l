@@ -1200,7 +1200,8 @@
                           (+ reqn optn keyn auxn
                              (if rest-var 1 0)
                              (count-if #'identity opt-supplied-vars)
-                             (count-if #'identity key-supplied-vars))))
+                             (count-if #'identity key-supplied-vars))
+                          "argv"))
 ;; (print "bind")
      (setq i 0)
      (dolist (v req-vars)		;for all required arguments
