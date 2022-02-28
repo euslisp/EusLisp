@@ -148,8 +148,8 @@
            (format cfile "	if (n~A~d) maerror();~%"
 			   (if (= opt 0) "!=" "<") req))) )
  (:check-opt-arg (m lab)
-   (format cfile "	if (n>=~d) { local[~d]=(argv[~d]); goto ~A;}~%"
-		 (1+ m) pushcount m lab)) 
+   (format cfile "	if (n>=~d) { ~A=(argv[~d]); goto ~A;}~%"
+           (1+ m) (send self :pop) m lab))
  (:check-rest-arg (m)
    (if (> *safety* 0)
        (format cfile "	if (n>~d) maerror();~%" m)) )
@@ -157,14 +157,13 @@
    (send self :clearpush)
    (send self :reset-vsp)
    (send self :push (format nil "minilist(ctx,&argv[n],n-~d)"  pcnt)))
- (:parse-key-params (keyvec req+opt keyn allowotherkeys)
+ (:parse-key-params (keyvec req+opt bindframe offset allowotherkeys)
    (send self :clearpush)
    (format cfile
-	   "	n=parsekeyparams(fqv[~d], &argv[~d], n-~d, local+~d, ~A);~%"
+	   "	n=parsekeyparams(fqv[~d], &argv[~d], n-~d, ~A+~d, ~A);~%"
 	   (send self :quote-entry keyvec) req+opt req+opt
-	   pushcount
-	   (if allowotherkeys 1 0))
-   (inc pushcount keyn))
+           (send self :getbase 0 nil bindframe) offset
+	   (if allowotherkeys 1 0)))
  (:check-key-arg (n lab)
    (format cfile "	if (n & (1<<~A)) goto ~A;~%" n lab))
  (:getbase (n argp &optional bindframe)
@@ -181,7 +180,7 @@
 			 "c.clo.env0->"))
 		(dec n))
              (unless bindframe
-               (warn "; empty bindframe in closure reference!~%"))
+               (error value-error "; empty bindframe in closure reference!~%"))
 	     (setq f (concatenate string f
                            (format nil "c.clo.env1->c.vec.v[~d]->c.vec.v" 
                                    (or bindframe -1))))
@@ -595,7 +594,7 @@
     (send self :clearpush)
     (format cfile "	ctx->vsp=local; return(local[0]);}~%")
     (when (not (= (dec pushcount) 0))
-      (warn ":return pushcount is ~d~%" pushcount)
+      (error value-error ":return pushcount is ~d~%" pushcount)
       (setq pushcount 0)))
  (:del-frame (spe loc)	;number of special bindings and local variables
     (send self :store "w")
