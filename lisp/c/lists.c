@@ -366,15 +366,19 @@ pointer NBUTLAST(ctx,n,argv)
 register context *ctx;
 register int n;
 pointer argv[];
-{ register pointer a=argv[0], b;
-  register int count=0;
+{ ckarg2(1,2);
+  register pointer a=argv[0], b;
+  register int count=0, l=0;
   register pointer *vspsave=ctx->vsp;
   if (n==2) n=ckintval(argv[1]);
   else n=1;
   if (!iscons(a)) {
     if (a==NIL) return(NIL);
     else error(E_NOLIST); }
-  if (n<0) error(E_USER,(pointer)"The second argument must be non-negative number");
+  if (n<0) error(E_STARTEND);
+  while (islist(a)) { l++; a=ccdr(a);}
+  a=argv[0];
+  if (n>=l) return(NIL);
   while (iscons(a)) { ckpush(a); a=ccdr(a); count++;}
   n=min(count,n);
   b= *(ctx->vsp - n - 1);
