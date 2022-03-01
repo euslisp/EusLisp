@@ -377,6 +377,7 @@
  (:char ()
     (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
+      	(format cfile "	  if (!isstring(~A)) error(E_NOSTRING);~%" vec)
 	(format cfile "	  w=makeint(~A->c.str.chars[i]);}~%" vec))
     (send self :push "w"))
  (:setchar ()
