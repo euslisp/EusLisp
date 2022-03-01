@@ -1242,9 +1242,11 @@ register pointer argv[];
   printf( "\n" );
 #endif
   p=argv[0]->c.sym.plist;
-  while (iscons(p))
+  while (iscons(p)) {
+    if (!iscons(ccar(p))) error(E_NOLIST);
     if (ccar(ccar(p))==attr) return(ccdr(ccar(p)));
     else p=ccdr(p);
+  }
   if (n==3) return(argv[2]); else return(NIL);}
 
 pointer EXPORT (ctx,n,argv)	/*further name conflict checks should be
