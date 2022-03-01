@@ -106,7 +106,7 @@
 
 (defun check-arg (req n &optional (fn "car/cdr"))
    (if (null (= req n))
-       (warn "mismatch arg for " fn)))
+       (error "mismatch arg for ~A" fn)))
 
 (defun def-function-type (type funcs)
    (dolist (f funcs) (putprop f type 'function-result-type)))
@@ -347,7 +347,7 @@
        (if (> nospecials 0)
            (if flag
 	       (send trans :unbind-special (f . specials))
-	       (send self :warning "no special object variables allowed")))
+	       (send self :error "no special object variables allowed")))
        (if flag (send trans :del-frame (f . specials) (f . locals)))
        (send idtable :pop-frame)
        (setq scope (send idtable :level))))
@@ -845,7 +845,7 @@
  (:enter-block (lab)
    (let ((spsave (send trans :offset-from-fp))
 	 (blklab (send self :genlabel "BLK")))
-      (if (null (symbolp lab)) (send self :warning "no symbolic block label"))
+      (if (null (symbolp lab)) (send self :error "no symbolic block label"))
       (push (list lab blklab closure-level spsave) blocks)
       blklab))
  (:leave-block () (setq blocks (cdr blocks)))
@@ -955,7 +955,7 @@
 		     (dolist (id (cdr decl))
 			(setq v (send self :enter-variable id))
 			(send v :type (car decl))))
-		   (t  (send self :warning "unknown declaration" decl))))
+		   (t  (send self :error "unknown declaration" decl))))
 	  ))))
  (:lambda (param forms)
    (let ((labels nil)
