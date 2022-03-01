@@ -309,7 +309,7 @@
 	'ovaf
 	(send (send self :variable var) :binding)))
  (:var-bindframe (var)
-   (if (= closure-level (var . level))
+   (if (or (var . bindframe) (= closure-level (var . level)))
        (var . bindframe)
        (labels ((find-frame (frame-list)
                   (find-if #'(lambda (frame) (= (frame . level) (var . level))) frame-list))
