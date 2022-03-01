@@ -1032,7 +1032,7 @@
         ;; bind fletframe vector
         (dotimes (i (length vlist))
           (let ((f (nth i vlist)))
-            (send trans :load-local (third f) (fourth f))
+            (send trans :load-local (third f) (- closure-level (fourth f)))
             (send trans :store-local i 0 (fletframe . offset))
             (setf (third f) i
                   (sixth f) (fletframe . offset))))
