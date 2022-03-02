@@ -1069,7 +1069,11 @@ register pointer argv[];
     while (i-->0 && islist(a)) a=ccdr(a);
     if (islist(a)) {pointer_update(ccar(a),argv[2]);return(argv[2]);}
     else error(E_SEQINDEX);}
-  else { vset(a,i,argv[2]); return(argv[2]);}}
+  else if (isvector(a)) { vset(a,i,argv[2]); return(argv[2]);}
+  else if (isarray(a) && a->c.ary.rank==makeint(1)) {
+    vset(a->c.ary.entity,i,argv[2]);
+    return(argv[2]);}
+  else error(E_USER,(pointer)"no sequence");}
 
 
 void sequence(ctx,mod)
