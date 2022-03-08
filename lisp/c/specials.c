@@ -215,7 +215,7 @@ register pointer *argv;
 }
   printf( "\n" );
 #endif
-  if(!iscons(argv[1])) error(E_NOLIST);
+  if(!(iscons(argv[1]) || argv[1]==NIL)) error(E_NOLIST);
   while (islist(argv[1])) {
     i=1;
     while (i<n) {
