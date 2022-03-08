@@ -924,11 +924,9 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 ;;
 (eval-when (load eval)
 (defun keywordp (sym)
-   (declare (type symbol sym))
    (and (symbolp sym) (eq (sym . homepkg) *keyword-package*)))
 
 (defun constantp (obj)
-   (declare (type symbol obj))
    (if (symbolp obj)
 	(if (or (keywordp obj) (eq (obj . vtype) 0)) t nil)
 	(if (listp obj)
@@ -948,11 +946,9 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 (defun vector-class-p (p) (derivedp p vectorclass))
 (defun compiled-function-p (x) (derivedp  x compiled-code))
 (defun input-stream-p (obj)
-  (declare (stream obj))
   (or (and (derivedp obj stream)  (eq (obj . direction) :input))
       (derivedp obj io-stream)))
 (defun output-stream-p (obj)
-  (declare (stream obj))
   (or (and (derivedp obj stream)  (eq (obj . direction) :output))
       (derivedp obj io-stream)))
 (defun io-stream-p (obj) (derivedp obj io-stream))

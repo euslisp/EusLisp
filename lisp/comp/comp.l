@@ -86,7 +86,6 @@
        r))
 
 (defun object-variable-type (klass var)
-   (declare (type metaclass klass))
    (when (not (classp klass))
 	 (if  (class-symbolp klass)
 	      (setq klass (symbol-value klass))
@@ -720,14 +719,14 @@
    (let ((local-list (pop bodies)) (unwind-save unwind-frames))
 	(send self :create-frame)
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
-	   (send self :declare (cdr (pop bodies))))
+          (send self :declare (cdr (pop bodies))))
 	(dolist (init-form local-list)
 	   (send self :eval (if (listp init-form) (cadr init-form) nil))
 	   (send self :bind
 		      	(if (listp init-form) (car init-form) init-form)
 			'local (1- (send trans :offset-from-fp))) )
 	(send self :progn bodies)
-        (setq unwind-frames unwind-save)
+	(setq unwind-frames unwind-save)
 	(send self :delete-frame t)))
  (:let (bodies)	;parallel let
    (let ((local-list (pop bodies)) var special-list offset
@@ -928,7 +927,8 @@
    (setq flets (nthcdr (length funcs) flets)))
  (:change-flets (newflets) (setq flets newflets))
  (:declare (args)
-    (let (v)
+    ;; bind statements and return type declared variables
+    (let (v acc)
       (declare (type identifier v))
       (dolist (decl args)
         (case (car decl)
@@ -939,13 +939,15 @@
 	  (type 
 	     (dolist (id (cddr decl))
 		(setq v (send self :enter-variable id))
-		(send v :type (cadr decl))))
+		(send v :type (cadr decl))
+		(push id acc)))
 	  (ftype
 	     (def-function-type (cadr decl) (cddr decl)))
 	  ((integer :integer fixnum :fixnum :float float)
 	     (dolist (id (cdr decl))
 		(setq v (send self :enter-variable id))
-		(send v :type (car decl))))
+		(send v :type (car decl))
+		(push id acc)))
 	  (optimize (setq *optimize* (cadr decl)))
 	  (safety (setq *safety* (cadr decl)))
 	  (space (setq *space* (cadr decl)))
@@ -954,9 +956,10 @@
 	  (t (cond ((class-symbolp (car decl))
 		     (dolist (id (cdr decl))
 			(setq v (send self :enter-variable id))
-			(send v :type (car decl))))
-		   (t  (send self :error "unknown declaration" decl))))
-	  ))))
+			(send v :type (car decl))
+			(push id acc)))
+		   (t  (send self :error "unknown declaration" decl))))))
+      (nreverse acc)))
  (:lambda (param forms)
    (let ((labels nil)
 	 (i 0)
@@ -975,6 +978,8 @@
 	 (opt-forms nil)
 	 (key-names nil)
 	 (key-inits nil)
+	 (key-base 0)
+	 (decl-vars nil)
 	 (specially-bound nil)
 	 (allowotherkeys (memq '&allow-other-keys param))
 	 (unwind-save unwind-frames))
@@ -1055,7 +1060,7 @@
         ) )
 ;; declaration
      (while (and forms (consp (car forms)) (eq (caar forms) 'declare))
-	(send self :declare (cdr (pop forms))))
+	(setq decl-vars (append decl-vars (send self :declare (cdr (pop forms))))))
 ;; (print "declaration")
      (send trans :check-req-arg  reqn (+ optn
 					 (if rest-var 1
@@ -1138,6 +1143,12 @@
 	(send self :bind (if (listp av) (car av) av)
 			 'local 
 			 (1- (send trans :offset-from-fp))))
+;;; type check declaration variables
+     (dolist (id decl-vars)
+       (let ((v (send self :variable id)))
+         (unless (eql (v . binding) 'unknown)
+           (send self :load-var id)
+           (send trans :type-check-declare (v . type)))))
 ;;; evaluate lambda body
      (send self :progn forms)
      (setq unwind-frames unwind-save)
