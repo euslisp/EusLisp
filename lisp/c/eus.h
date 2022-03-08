@@ -859,6 +859,7 @@ extern eusinteger_t intval(pointer p);
 #define isfltvector(p) (ispointer(p) && (elmtypeof(p)==ELM_FLOAT))
 #define isptrvector(p) (ispointer(p) && (elmtypeof(p)==ELM_POINTER))
 #define isintvector(p) (ispointer(p) && (elmtypeof(p)==ELM_INT))
+#define isbitvector(p) (ispointer(p) && (elmtypeof(p)==ELM_BIT))
 #define pisclass(p) (metaclasscp.cix<=(p)->cix && (p)->cix<=metaclasscp.sub)
 #define isclass(p) (ispointer(p) && pisclass(p))
 #define pisvecclass(p) (vecclasscp.cix<=(p)->cix && (p)->cix<=vecclasscp.sub)
