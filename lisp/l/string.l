@@ -67,7 +67,6 @@
 (defun make-string (size) (instantiate string size))
 
 (defun string-left-trim (bag str)
-   (declare  (string str))
    (let ((n 0))
 	(declare (type integer n))
 	(setq str (true-string str))
@@ -75,7 +74,6 @@
 	(subseq str n (length str))))
 
 (defun string-right-trim (bag str)
-   (declare  (string str))
    (let ((leng (length str)))
 	(setq str (true-string str))
 	(while (position (char str (1- leng)) bag) (dec leng))
