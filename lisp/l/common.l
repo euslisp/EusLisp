@@ -71,7 +71,6 @@
 		(cadr lisp-implementation-version)
                 (caddr lisp-implementation-version)
                 ))
-(setq euserror nil)
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; basic macros
