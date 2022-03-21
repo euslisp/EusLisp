@@ -254,7 +254,8 @@
 
 (defun reploop (prompt &optional (repstream *terminal-io*)
 			 (ttyp (unix:isatty repstream)))
-   (let ((*prompt* prompt))
+   (let ((*prompt* prompt)
+         (*current-condition-handler* nil))
       (if *use-top-selector*
           (reploop-select repstream ttyp)
           (reploop-non-select repstream ttyp))) )
