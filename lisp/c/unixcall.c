@@ -91,6 +91,7 @@ extern time_t timezone, altzone;	/*long*/
 #endif
 extern int daylight;
 
+extern pointer K_ISATTY;
 extern pointer eussigvec[NSIG];
 
 extern eusinteger_t coerceintval(pointer);
@@ -1448,7 +1449,8 @@ pointer argv[];
   a=argv[0];
   if (isiostream(a)) a=a->c.iostream.in;
   if (isfilestream(a)) fd=intval(a->c.fstream.fd);
-  else fd=ckintval(a);
+  else if (isint(a)) fd=intval(a);
+  else return csend(ctx,a,K_ISATTY,0);
   /*
 #if Cygwin
   if (getenv("EMACS") && (strcmp (getenv("EMACS"), "t")) == 0 ) return(T); 
