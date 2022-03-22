@@ -447,8 +447,8 @@
                     (cons "iscons")
                     (list "islist(w) || w==NIL")
                     (number "numberp")
-                    (integer "isint")
-                    (float "isflt")
+                    (integer "numberp") ;; don't use `isint' for backward compability
+                    (float "numberp")  ;; don't use `isflt' for backward compability
                     (string "isstring")
                     (array "isarray(w) || isvector(w)")
                     (vector "isvector")
