@@ -67,7 +67,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 fi
 
 ### for multiarch compile test
-if [ "$QEMU" != "" ]; then
+if [[ "$QEMU" != "" && "$DOCKER_IMAGE" != "arm64v8/ubuntu:"* ]]; then
     travis_time_start install.dpkg-dev
     apt-get install -qq -y dpkg-dev patchutils
     travis_time_end
