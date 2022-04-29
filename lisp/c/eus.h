@@ -647,7 +647,7 @@ extern int nextbclass;
 
 
 /*symbol management*/
-extern pointer pkglist,lisppkg,keywordpkg,userpkg,syspkg,unixpkg,xpkg;
+extern pointer pkglist,lisppkg,keywordpkg,userpkg,syspkg,unixpkg,xpkg,glpkg;
 extern pointer NIL,PACKAGE,T,QUOTE;
 extern pointer FUNCTION;
 extern pointer QDECLARE,QSPECIAL;
