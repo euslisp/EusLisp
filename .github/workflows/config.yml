@@ -92,6 +92,53 @@ jobs:
           echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
           docker run --rm $QEMU_VOLUME -v $HOME:$HOME -e "QEMU=$QEMU" -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"
 
+  # test for non X11/GL environment, i.e. embedded environment
+  linux-nox:
+    runs-on: ubuntu-latest
+    container: ubuntu:20.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup environmnet
+        shell: bash
+        run: |
+          set -xe
+          apt update -y -qq && apt install -y -qq make gcc g++ libjpeg-dev
+          dpkg --get-selections | egrep -e '(x11|gl)' || echo "OK"   ## show selected X/GL
+          dpkg --get-selections | egrep -q -e '(x11|gl)' && exit 1   ## exit 1, when X/GL found
+          exit 0
+      - name: Compile eusg
+        shell: bash
+        run: |
+          set -xe
+          export EUSDIR=$(pwd)
+          export ARCHDIR=Linux64
+          cd lisp
+          ln -sf Makefile.$ARCHDIR Makefile
+          make eus0 eus1 eus2 eusg
+      - name: Run test
+        shell: bash
+        run: |
+          export EUSDIR=$(pwd)
+          export ARCHDIR=Linux64
+          export PATH=$EUSDIR/$ARCHDIR/bin:$EUSDIR/$ARCHDIR/lib:$PATH
+          export LD_LIBRARY_PATH=$EUSDIR/$ARCHDIR/lib:$EUSDIR/$ARCHDIR/bin:$LD_LIBRARY_PATH
+          set -xe
+          (cd test; make)
+          export EXIT_STATUS=0; for test_l in test/*.l; do eusg $test_l; export TMP_EXIT_STATUS=$?; export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`; done; [ $EXIT_STATUS == 0 ] || exit 1
+      - name: Check jskeus
+        shell: bash
+        run: |
+          export EUSDIR=$(pwd)
+          export ARCHDIR=Linux64
+          export PATH=$EUSDIR/$ARCHDIR/bin:$EUSDIR/$ARCHDIR/lib:$PATH
+          export LD_LIBRARY_PATH=$EUSDIR/$ARCHDIR/lib:$EUSDIR/$ARCHDIR/bin:$LD_LIBRARY_PATH
+          set -xe
+          apt install -y -qq git
+          git clone --depth 1 https://github.com/euslisp/jskeus
+          eusg lib/llib/unittest.l '(progn (init-unit-test)(load "jskeus/irteus/irtrobot.l"))'
+          eusg lib/llib/unittest.l '(progn (init-unit-test)(load "jskeus/irteus/irtsensor.l"))'
 
   osx:
     runs-on: macos-latest
