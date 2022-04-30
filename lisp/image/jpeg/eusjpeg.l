@@ -93,6 +93,7 @@
 	nil)
     )
 
+#|
 (defun catalog-jpeg-files (&optional (dir "."))
    (let ((xwins) (pictures) (pic) (xx))
      (dolist (f (directory dir))
@@ -107,6 +108,7 @@
 		(push xx xwins)) )
       (list xwins pictures)     )
    )
+|#
 
 (provide :jpeg "#(@)$Id$")
 
