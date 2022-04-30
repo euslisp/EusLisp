@@ -9,7 +9,7 @@
 
 #pragma init (init_object_module)
 
-pointer glpkg;
+extern pointer glpkg;
 
 extern pointer sysmod;
 
@@ -69,8 +69,6 @@ register context *ctx;
 int n;
 pointer argv[];
 {
-  glpkg=     makepkg(ctx,makestring("GL",2),NIL,rawcons(ctx,lisppkg,NIL));
-
   defoglforeign(ctx,"glAccum");
   defoglforeign(ctx,"glAlphaFunc");
   defoglforeign(ctx,"glBegin");
