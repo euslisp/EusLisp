@@ -1,0 +1,42 @@
+diff --git a/debian/patches/load-lib-from-eusdir-arch-lib.patch b/debian/patches/load-lib-from-eusdir-arch-lib.patch
+index 09d30a0..7b0e48c 100644
+--- a/debian/patches/load-lib-from-eusdir-arch-lib.patch
++++ b/debian/patches/load-lib-from-eusdir-arch-lib.patch
+@@ -67,6 +67,18 @@ diff --git a/lib/eusrt.l b/lib/eusrt.l
+ index 8415575..f533b0b 100644
+ --- a/lib/eusrt.l
+ +++ b/lib/eusrt.l
++@@ -45,6 +45,11 @@
++ ;;
++ (unless (find-symbol "*XLIB*") ; for SunOS4 with .so bug
++ 	(in-package "IMAGE")
+++	(let ((libmod (find "libeusgeo" lisp::*loaded-modules*
+++			    :key #'lisp::load-module-file-name :test #'equal))
+++	      (modules `("pixword" "RGBHLS" "convolve" "piximage" "pbmfile" "image_correlation")))
+++	  (nconc sys::*load-entries*
+++		 (sys::list-module-initializers libmod modules)))
++ 	(sys::exec-module-init "pixword")
++ 	(sys::exec-module-init "RGBHLS")
++ 	(sys::exec-module-init "convolve")
+ @@ -46,7 +46,36 @@
+  ;; initilize Xlib interface
+  (when (and 
+@@ -105,18 +117,6 @@ index 8415575..f533b0b 100644
+  #+(and :thread :x11r6.1)
+  	(InitThreads)
+  	)
+-@@ -86,6 +113,11 @@
+- ;;
+- 	(unless (find-symbol "*XLIB*") ; for SunOS4 with .so bug
+- 		(in-package "IMAGE")
+-+		(let ((libmod (find "libeusgeo" lisp::*loaded-modules*
+-+				    :key #'lisp::load-module-file-name :test #'equal))
+-+		      (modules `("pixword" "RGBHLS" "convolve" "piximage" "pbmfile" "image_correlation")))
+-+		  (nconc sys::*load-entries*
+-+			 (sys::list-module-initializers libmod modules)))
+- 		(sys::exec-module-init "pixword")
+- 		(sys::exec-module-init "RGBHLS")
+- 		(sys::exec-module-init "convolve")
+ diff --git a/lib/eusglrt.l b/lib/eusglrt.l
+ index ac6a3b5..60fea6c 100644
+ --- a/lib/eusglrt.l

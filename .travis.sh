@@ -89,6 +89,9 @@ if [[ "$QEMU" != "" && "$DOCKER_IMAGE" != "arm64v8/ubuntu:"* ]]; then
             filterdiff -p1 -x 'lisp/image/jpeg/makefile' -x 'lisp/comp/comp.l' < /tmp/euslisp-dfsg/debian/patches/$file > /tmp/euslisp-dfsg/debian/patches/$file-fix
             file=$file-fix
         fi
+        if [[ $file =~  load-lib-from-eusdir-arch-lib.patch ]]; then
+            patch -d /tmp/euslisp-dfsg/debian/patches/ -p3 < .github/workflows/fix-load-lib-from-eusdir-arch-lib.patch
+        fi
         echo $file
         patch -p1 < /tmp/euslisp-dfsg/debian/patches/$file
     done
