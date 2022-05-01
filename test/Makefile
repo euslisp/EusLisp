@@ -1,4 +1,4 @@
-GCC_MACHINE=$(shell gcc -dumpmachine)
+GCC_MACHINE=$(shell $(CXX) -dumpmachine)
 $(info "-- GCC_MACHINE = ${GCC_MACHINE}")
 OS=$(shell uname -s | sed 's/[^A-Za-z1-9].*//')
 $(info "--      OS = ${OS}")
@@ -25,11 +25,11 @@ OBJ=$(basename $(SRC)).o
 LIB=$(basename $(SRC)).$(LSFX)
 
 $(LIB): $(OBJ)
-	$(LD) $(SOFLAGS) $(OUTOPT)$(LIB) $(OBJ) $(LDFLAGS)
+	$(CXX) $(SOFLAGS) $(OUTOPT)$(LIB) $(OBJ) $(LDFLAGS)
 	@echo "Try make test"
 
 $(OBJ): $(SRC)
-	$(CC) $(CFLAGS) -DCOMPILE_LIB -c $(SRC) $(OBJOPT)$(OBJ)
+	$(CXX) $(CFLAGS) -DCOMPILE_LIB -c $(SRC) $(OBJOPT)$(OBJ)
 
 clean:
 	rm -f $(LIB) $(OBJ)
