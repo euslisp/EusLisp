@@ -35,9 +35,9 @@ char *argv[];
   int i,j,k, string_count;
   
   lispfn=argv[1];
-  sprintf(tempfn, "/tmp/%s.c.%d", lispfn, getpid());
+  sprintf(tempfn, "%s.c.%d", lispfn, getpid());
   sprintf(cfn, "%s.c", lispfn);
-  sprintf(hfn, "/tmp/%s.h.%d", lispfn, getpid());
+  sprintf(hfn, "%s.h.%d", lispfn, getpid());
   in=fopen(lispfn, "r");
   out=fopen(tempfn, "w");
 
