@@ -61,7 +61,7 @@ ADD_LDFLAGS += -Wl,--no-as-needed
 endif
 
 # set CPU arch with -D
-MACHINE=$(shell uname -m)
+MACHINE=$(shell $(CC) -dumpmachine | sed 's/\([^-]*\).*/\1/')
 # need to set 'i486', for conditionals in c/*.[ch].
 ifneq ($(shell $(CC) -dumpmachine | grep "i.*86-linux"),)
   MACHINE=i486
