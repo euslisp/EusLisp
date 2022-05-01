@@ -141,6 +141,71 @@ jobs:
           eusg lib/llib/unittest.l '(progn (init-unit-test)(load "jskeus/irteus/irtrobot.l"))'
           eusg lib/llib/unittest.l '(progn (init-unit-test)(load "jskeus/irteus/irtsensor.l"))'
 
+  # test for non X11/GL environment, i.e. embedded environment
+  linux-nox-crosscompile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup environmnet
+        shell: bash
+        run: |
+          set -xe
+          sudo apt update -y -qq
+          # remove unused packages
+          sudo dpkg -r --force-depends nginx || echo "OK"
+          sudo apt purge -y -qq build-essential gcc-9 gcc-10 || echo "OK"
+          sudo apt purge -y -qq libx11* x11* libgl1* libglx* || echo "OK"
+          sudo apt autoremove -y -qq || echo "OK"
+          # install deb environment
+          sudo apt install -y -qq make binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu g++-aarch64-linux-gnu qemu-user-static
+          exit 0
+      - name: Check environmnet
+        shell: bash
+        run: |
+          set -xe
+          dpkg --get-selections | egrep -e '(cc|ld)' || echo "OK"   ## show selected X/GL
+          dpkg --get-selections | egrep -e '(x11|gl)' || echo "OK"   ## show selected X/GL
+          #dpkg --get-selections | egrep -q -e '(x11|gl)' && exit 1   ## exit 1, when X/GL found
+          exit 0
+      - name: Compile eusg
+        shell: bash
+        run: |
+          set -xe
+          export EUSDIR=$(pwd)
+          export CC=aarch64-linux-gnu-gcc
+          export LD=aarch64-linux-gnu-ld
+          export CXX=aarch64-linux-gnu-g++
+          export QEMU_LD_PREFIX=/usr/aarch64-linux-gnu/
+          cd lisp
+          ln -sf Makefile.Linux Makefile
+          CC=$CC LD=$LD make eus0 eus1 eus2 eusg
+          (cd $EUSDIR/test; CXX=$CXX make)
+      - name: Run test
+        shell: bash
+        run: |
+          export EUSDIR=$(pwd)
+          export ARCHDIR=LinuxARM
+          export PATH=$EUSDIR/$ARCHDIR/bin:$EUSDIR/$ARCHDIR/lib:$PATH
+          export LD_LIBRARY_PATH=$EUSDIR/$ARCHDIR/lib:$EUSDIR/$ARCHDIR/bin:$LD_LIBRARY_PATH
+          export QEMU_LD_PREFIX=/usr/aarch64-linux-gnu/
+          set -xe
+          export EXIT_STATUS=0; for test_l in test/*.l; do eusg $test_l; export TMP_EXIT_STATUS=$?; export EXIT_STATUS=`expr $TMP_EXIT_STATUS + $EXIT_STATUS`; done; [ $EXIT_STATUS == 0 ] || exit 1
+      - name: Check jskeus
+        shell: bash
+        run: |
+          export EUSDIR=$(pwd)
+          export ARCHDIR=LinuxARM
+          export PATH=$EUSDIR/$ARCHDIR/bin:$EUSDIR/$ARCHDIR/lib:$PATH
+          export LD_LIBRARY_PATH=$EUSDIR/$ARCHDIR/lib:$EUSDIR/$ARCHDIR/bin:$LD_LIBRARY_PATH
+          export QEMU_LD_PREFIX=/usr/aarch64-linux-gnu/
+          set -xe
+          sudo apt install -y -qq git
+          git clone --depth 1 https://github.com/euslisp/jskeus
+          eusg lib/llib/unittest.l '(progn (init-unit-test)(load "jskeus/irteus/irtrobot.l"))'
+          eusg lib/llib/unittest.l '(progn (init-unit-test)(load "jskeus/irteus/irtsensor.l"))'
+
   osx:
     runs-on: macos-latest
     timeout-minutes: 60
