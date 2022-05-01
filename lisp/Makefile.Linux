@@ -119,8 +119,7 @@ THREADDEP=mthread_posix.c
 OFLAGS=-O2
 
 # link-editor's default flags ?-rdynamic
-SOFLAGS:= $(LDFLAGS) -shared -Xlinker -build-id
-LD=gcc
+SOFLAGS:= $(LDFLAGS) -shared -build-id
 LDFLAGS:= $(LDFLAGS) -rdynamic -fno-stack-protector -z execstack $(ADD_LDFLAGS)
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 #MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/pthreads.o
