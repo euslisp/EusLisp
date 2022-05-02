@@ -18,7 +18,7 @@ else
  LD = gcc -dynamiclib
 endif
 
-ifeq ($(shell uname -m), x86_64)
+ifeq ($(shell $(CC) -dumpmachine | sed 's/\([^-]*\).*/\1/'), x86_64)
 ifneq ($(ARCHDIR), Linux64)
 ifneq ($(ARCHDIR), Darwin)
 CC += -m32
