@@ -124,7 +124,7 @@ register pointer o,v;
   c=classof(o);
   vaddr=getobjv(v,c->c.cls.vars,o);
   if (vaddr) return(vaddr);
-  else error(E_NOSLOT,o,v);}
+  else error(E_NOSLOT,v);}
 
 /***** special variable binding *****/
 
