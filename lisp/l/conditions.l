@@ -54,6 +54,7 @@
 
 (defun install-handler-raw (label handler)
   ;; ensure condition class
+  (if (eq label t) (setq label condition))
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
   (push (cons label (instance condition-handler :init handler))
