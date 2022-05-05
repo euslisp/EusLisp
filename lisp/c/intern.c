@@ -45,8 +45,9 @@ register pointer symvec;
     if (++hash>=size) hash=0;}
     while (1);}
 
-static pointer extendsymvec(symvec)
+static pointer extendsymvec(symvec, count)
 pointer symvec;
+int* count;
 { register pointer newsymvec,sym;
   bpointer bp;
   register int i,newsize,size,hash;
@@ -58,10 +59,12 @@ pointer symvec;
     newsize=buddysize[bp->h.bix+1]-2;
 #endif
     newsymvec=makevector(C_VECTOR,newsize);
+    *count=0;
     for (i=0; i<newsize; i++) newsymvec->c.vec.v[i]=makeint(0); /*empty mark*/
     for (i=0; i<size; i++) {	/*rehash all symbols*/
       sym=symvec->c.vec.v[i];
       if (issymbol(sym)) {
+        ++(*count);
         hash=rehash(sym->c.sym.pname) % newsize;
         while (newsymvec->c.vec.v[hash]!=makeint(0)) {	/*find an empty slot*/
           if (++hash>=newsize) hash=0;}
@@ -74,8 +77,8 @@ pointer symvec;
 pointer export(sym,pkg)
 pointer sym,pkg;
 { register pointer symvec=pkg->c.pkg.symvector;	/*external symbol table*/
-  register int size, newsymcount;
-  int  hash;
+  register int size;
+  int hash, newsymcount;
   pointer usedby,usedbylist=pkg->c.pkg.used_by;
   pointer pnam,s;
 
@@ -93,11 +96,13 @@ pointer sym,pkg;
   while (1) {
     if (symvec->c.vec.v[hash]==sym) return(sym);
     if (isint(symvec->c.vec.v[hash])) {
+      newsymcount=intval(pkg->c.pkg.symcount);
+      if(intval(symvec->c.vec.v[hash]) == 0)  // only increase count if empty
+          newsymcount+=1;
       pointer_update(symvec->c.vec.v[hash],sym);
-      newsymcount=intval(pkg->c.pkg.symcount)+1;
+      if (newsymcount > (size / 2))
+          pointer_update(pkg->c.pkg.symvector, extendsymvec(symvec, &newsymcount));
       pkg->c.pkg.symcount=makeint(newsymcount);
-      if (newsymcount > (size / 2)) 
-          pointer_update(pkg->c.pkg.symvector, extendsymvec(symvec));
       return(sym);}
     else if (++hash>=size) hash=0;}
   }
@@ -123,17 +128,19 @@ pointer pkg;	/*destination package*/
   newsym=makesymbol(ctx,id,l,pkg);
   /*put it in the package*/
   while (issymbol(symvec->c.vec.v[hash]))  if (++hash>=size) hash=0;
+  l=intval(pkg->c.pkg.intsymcount);
+  if (intval(symvec->c.vec.v[hash]) == 0)  // only increase count if empty
+    l+=1;
   pointer_update(symvec->c.vec.v[hash],newsym);
   if (pkg==keywordpkg) {
     newsym->c.sym.vtype=V_CONSTANT;
     pointer_update(newsym->c.sym.speval,newsym);
     export(newsym,pkg);}
-  l=intval(pkg->c.pkg.intsymcount)+1;
-  pkg->c.pkg.intsymcount=makeint(l);
   if (l>(size/2)) { /*extend hash table*/
     vpush(newsym);
-    pointer_update(pkg->c.pkg.intsymvector,extendsymvec(symvec));
+    pointer_update(pkg->c.pkg.intsymvector,extendsymvec(symvec, &l));
     vpop();}
+  pkg->c.pkg.intsymcount=makeint(l);
   /* export all the symbols to avoid incompatibility with old EusLisp*/
   if (export_all) export(newsym, pkg);
 #ifdef SAFETY
