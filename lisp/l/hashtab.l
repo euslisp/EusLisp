@@ -122,6 +122,8 @@
     (dotimes (i size)
 	(setf (aref key i) empty
 	      (aref value i) nil))
+    (setq count 0)
+    (setq fill-count 0)
     self)
  (:prin1 (&optional (strm t) &rest mesgs)
     (send-super* :prin1 strm
