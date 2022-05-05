@@ -150,8 +150,10 @@
       (if (>= intsymcount size)  (error "can not enter ~a into this package, maximum symbol size is ~a" sym size))
       (while (symbolp (svref intsymvector hash))
 	(if (>= (setq hash (1+ hash)) size) (setq hash 0)))
+      (if (= (elt intsymvector hash) 0)
+          (setq intsymcount (1+ intsymcount)))
       (svset intsymvector hash sym)
-      (setq intsymcount (1+ intsymcount))
+      ;; TODO: expand if necessary
       sym))
  (:find (s)	;find symbol just in this package
     (declare (symbol s))
@@ -179,12 +181,10 @@
 	  (setq (sym . homepkg) nil))
       (setq pos (send self :find sym))
       (when pos
-	(svset intsymvector pos 1)		;deleted mark
-	(setq intsymcount (1- intsymcount)))
+	(svset intsymvector pos 1))		;deleted mark
       (setq pos (send self :find-external sym))
       (when pos
-	(svset symvector pos 1)		;deleted mark
-	(setq symcount (1- symcount)))
+	(svset symvector pos 1))		;deleted mark
     ))
  (:find-external (s)
     (declare (symbol s))
