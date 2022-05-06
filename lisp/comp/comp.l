@@ -1315,180 +1315,182 @@
 	   (setq o (pathname o))
 	   (setq o (merge-pathnames o file))
 	   (setq o (merge-pathnames ".o" o)))
-   (let ((name nil) (c nil) (form nil)
-	 (ins) (cccom)
-	 (file.c (merge-pathnames ".c" file))
-	 (file.h (merge-pathnames ".h" file))
-	 (file.o (if o o (merge-pathnames ".o" file)))
-	 (file.so (if o (merge-pathnames ".so" o)
-			(merge-pathnames ".so" file)))
-	 (file.dll (if o (merge-pathnames ".dll" o)
-		         (merge-pathnames ".dll" file)))
-	 (cpack *package*))
-      (unless (eq (unix:access (send (pathname file) :directory-string) unix::O_RDWR) t) ;; source directory is not writable
-        (warn ";; ~A is write protected, use temporary compile directory to ~A~%" file (send o :directory-string))
-        (setq file.c (merge-pathnames ".c" o)
-              file.h (merge-pathnames ".h" o)))
-      (when (null (probe-file file))
-	 (setq file (merge-pathnames ".l" file))
-         (if (null (probe-file  file)) 
-	     (error io-error "file ~A not found~%" file)))
-      (warn "compiling file: ~A~%" (namestring file))
-      (setq ins (open file))
-      (setq *defun-list* nil)
-      (when *multipass-optimize*
-	(while t
-	  (setq form (read ins nil '$eof$))
-	  (if (eq form '$eof$) (return nil))
-	  (send self :toplevel form t t))
-	(unix:lseek ins 0))
-      (nreverse *defun-list*)
-      (send trans :init-file file file.c file.h entry)
-      (send idtable :init-frames)
-      (setq frames nil
-	    scope 0
- 	    blocks nil
-	    initcodes nil)
-      (while t
-	 (setq form (read ins nil '$eof$))
-	 (if (eq form '$eof$) (return nil))
-	 (send self :toplevel form t))
-      (setq initcodes (reverse initcodes))
-      (send trans :eusmain entry)
-      (dolist (form initcodes) (send self :toplevel-execution form))
-      (send trans :load-nil)
-      (send trans :return)
-      (send self :compile-closures)
-      (send trans :declare-ftab)
-      (send trans :ftab-initializer)
-      (let ((symvec (cpack . symvector)) (symcnt (cpack . symcount)))
-	(setq (cpack . symvector) (make-array 0)
-	      (cpack . symcount) 1)
-	;; write every symbol in this package as internal symbols
-	;; (warn "writing quote vector file in ~s~%" *package*)
-	(send trans :write-quote-vector)
-	(setq (cpack . symvector) symvec
-	      (cpack . symcount) symcnt))
-      (send trans :close)
-      (close ins)
-      (setq cccom
-	 (concatenate
-		   string
-		   *cc*
-		   " -c"
-		   (if o (concatenate string " -o " (namestring o)))
-		   (cond ((memq :sun3 *features*) " -Dsun3 -w")
-		   	 ((memq :sun4 *features*) " -Dsun4 -w")
-;		   	 ((memq :mips *features*) " -Dmips -G 0 -w")
-;		   	 ((memq :irix *features*) " -Dmips -DIRIX -signed -w")
-		   	 ((memq :irix *features*) " -Dmips -DIRIX -w ")
-		   	 ((memq :irix6 *features*) " -Dmips -DIRIX6 -woff all")
-		   	 ((memq :vax *features*)  " -Dvax -J")
-		   	 ((memq :news *features*)  " -Dnews")
-		   	 ((memq :sanyo *features*)  " -Dsanyo")
-		   	 ((memq :darwin *features*)
-			  (if (memq :x86_64 *features*)
-			      " -DDarwin -Dx86_64 -DLinux -w -falign-functions=8 "
-			    " -DDarwin -Di386 -DLinux -w -falign-functions=4 "))
-		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
-			  (cond
-                           ((memq :x86_64 *features*)
-                            " -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
-                           ((memq :aarch64 *features*)
-                            " -Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
-                           ((memq :arm *features*)
-                            " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
-                           ((memq :word-size=64 *features*)
-                            " -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
-                           (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -fno-stack-protector -DGCC3 ")))
-		   	 ((memq :linux *features*)
-			  (if (memq :x86_64 *features*)
-				" -Dx86_64 -DLinux -Wimplicit -malign-functions=8 "
-				" -Di386 -DLinux -Wimplicit -malign-functions=4 "))
-			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
-			 ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DX_V11R6_1 -falign-functions=4")
-			 ((memq :i386  *features*) " -Di386")
-			 (t (warn "cpu type is not properly set")))
-		   (cond ((memq :sunos4 *features*) " -DSunOS4 -Bstatic")
-			 ((memq :sunos4.1 *features*) " -DSunOS4_1")
-			 ((memq :Solaris2 *features*) " -DSolaris2")
-			 (t ""))
-		   (if (memq :gcc *features*) " -DGCC -fsigned-char " )
-		   (if (memq :thread *features*) " -DTHREADED" )
-		   (if (memq :pthread *features*) " -DPTHREAD" )
-		   (if (memq :rgc *features*) " -DRGC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD" )
-		   (if pic
-		       (cond ((memq :SunOS4.1 *features*) " -fpic")
-			     ((memq :cygwin *features*) "")
-			     ((memq :Gcc *features*) " -fpic ")
-			     ((memq :Solaris2 *features*) " -K pic")
-			     ((memq :linux *features*) " -fpic")
-			     ((memq :irix *features*) " -KPIC")
-			     ((memq :irix6 *features*) " -KPIC")
-			     ((memq :alpha *features*) " -fpic")
-			     (t " -pic"))
-		       )
-		   cc-option
-		   " -I" (namestring *eusdir*) "include"
-		   *coptflags* *cflags*
-		   " "     (namestring file.c)
-		   (if (and (memq :sunos4.1 *features*)  pic)
-			(concatenate string
-				"; ld -o "
-				(namestring file.so)
-				" "
-				(namestring file.o))
-			)
-		   (if (and (or (memq :irix *features*)
-				(memq :irix6 *features*)) pic)
-			(concatenate string
-				"; ld -shared -o "
-				(namestring file.so)
-				" "
-				(namestring file.o))
-			)
-		   (if (and (memq :linux *features*)  pic)
-			(concatenate string
-				     (cond 
-				      ((memq :darwin *features*)
-				       "; gcc -dynamiclib -flat_namespace -undefined suppress -o ")
-				      ((memq :sh4 *features*)
-				       "; sh4-linux-gcc -shared -o ")
-				      ((memq :ia32 *features*)
-				       "; ld -melf_i386 -shared -build-id -o ")
-				      ((memq :i386 *features*)
-				       "; gcc -shared -Xlinker -build-id -o ")
-				      (t
-				       "; ld -shared -build-id -o "))
-				(namestring file.so)
-				" "
-				(namestring file.o))
-			"")
-		   (if (and (memq :alpha *features*)  pic)
-			(concatenate string
-				"; ld -shared -update_registry so_locations -expect_unresolved '*' -g0 -O1 -o "
-				(namestring file.so)
-				" "
-				(namestring file.o))
-			"")
-		   (if (and (memq :cygwin *features*)
-			    (not *kernel*))
-			(concatenate string
-				"; gcc -shared -g -falign-functions=4 -Wl,--export-all-symbols -Wl,--unresolved-symbols=ignore-all -Wl,--enable-runtime-pseudo-reloc -o "
-				(namestring file.dll) " "
-				(namestring file.o) " "
-				*eusdir* (unix:getenv "ARCHDIR")
-				"/bin/"
-				"eusgl.a "
-				"-lm -lpthread "
-				))
-		))
-      (when cc
-         (warn "~A" cccom)
-         (unix:system cccom))
-      (dolist (f *defun-list*) (remprop f 'user-function-entry))
-      (terpri *error-output*)
-     ))
+   (unwind-protect
+     (let ((name nil) (c nil) (form nil)
+           (ins) (cccom)
+           (file.c (merge-pathnames ".c" file))
+           (file.h (merge-pathnames ".h" file))
+           (file.o (if o o (merge-pathnames ".o" file)))
+           (file.so (if o (merge-pathnames ".so" o)
+                  (merge-pathnames ".so" file)))
+           (file.dll (if o (merge-pathnames ".dll" o)
+                       (merge-pathnames ".dll" file)))
+           (cpack *package*))
+        (unless (eq (unix:access (send (pathname file) :directory-string) unix::O_RDWR) t) ;; source directory is not writable
+          (warn ";; ~A is write protected, use temporary compile directory to ~A~%" file (send o :directory-string))
+          (setq file.c (merge-pathnames ".c" o)
+                file.h (merge-pathnames ".h" o)))
+        (when (null (probe-file file))
+           (setq file (merge-pathnames ".l" file))
+           (if (null (probe-file  file))
+               (error io-error "file ~A not found~%" file)))
+        (warn "compiling file: ~A~%" (namestring file))
+        (setq ins (open file))
+        (setq *defun-list* nil)
+        (when *multipass-optimize*
+          (while t
+            (setq form (read ins nil '$eof$))
+            (if (eq form '$eof$) (return nil))
+            (send self :toplevel form t t))
+          (unix:lseek ins 0))
+        (nreverse *defun-list*)
+        (send trans :init-file file file.c file.h entry)
+        (send idtable :init-frames)
+        (setq frames nil
+              scope 0
+              blocks nil
+              initcodes nil)
+        (while t
+           (setq form (read ins nil '$eof$))
+           (if (eq form '$eof$) (return nil))
+           (send self :toplevel form t))
+        (setq initcodes (reverse initcodes))
+        (send trans :eusmain entry)
+        (dolist (form initcodes) (send self :toplevel-execution form))
+        (send trans :load-nil)
+        (send trans :return)
+        (send self :compile-closures)
+        (send trans :declare-ftab)
+        (send trans :ftab-initializer)
+        (let ((symvec (cpack . symvector)) (symcnt (cpack . symcount)))
+          (setq (cpack . symvector) (make-array 0)
+                (cpack . symcount) 1)
+          ;; write every symbol in this package as internal symbols
+          ;; (warn "writing quote vector file in ~s~%" *package*)
+          (send trans :write-quote-vector)
+          (setq (cpack . symvector) symvec
+                (cpack . symcount) symcnt))
+        (send trans :close)
+        (close ins)
+        (setq cccom
+           (concatenate
+                 string
+                 *cc*
+                 " -c"
+                 (if o (concatenate string " -o " (namestring o)))
+                 (cond ((memq :sun3 *features*) " -Dsun3 -w")
+                      ((memq :sun4 *features*) " -Dsun4 -w")
+;                     ((memq :mips *features*) " -Dmips -G 0 -w")
+;                     ((memq :irix *features*) " -Dmips -DIRIX -signed -w")
+                      ((memq :irix *features*) " -Dmips -DIRIX -w ")
+                      ((memq :irix6 *features*) " -Dmips -DIRIX6 -woff all")
+                      ((memq :vax *features*)  " -Dvax -J")
+                      ((memq :news *features*)  " -Dnews")
+                      ((memq :sanyo *features*)  " -Dsanyo")
+                      ((memq :darwin *features*)
+                    (if (memq :x86_64 *features*)
+                        " -DDarwin -Dx86_64 -DLinux -w -falign-functions=8 "
+                      " -DDarwin -Di386 -DLinux -w -falign-functions=4 "))
+                      ((and (memq :linux *features*)  (memq :gcc3 *features*))
+                    (cond
+                             ((memq :x86_64 *features*)
+                              " -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                             ((memq :aarch64 *features*)
+                              " -Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                             ((memq :arm *features*)
+                              " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
+                             ((memq :word-size=64 *features*)
+                              " -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                             (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -fno-stack-protector -DGCC3 ")))
+                      ((memq :linux *features*)
+                    (if (memq :x86_64 *features*)
+                      " -Dx86_64 -DLinux -Wimplicit -malign-functions=8 "
+                      " -Di386 -DLinux -Wimplicit -malign-functions=4 "))
+                   ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
+                   ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DX_V11R6_1 -falign-functions=4")
+                   ((memq :i386  *features*) " -Di386")
+                   (t (warn "cpu type is not properly set")))
+                 (cond ((memq :sunos4 *features*) " -DSunOS4 -Bstatic")
+                   ((memq :sunos4.1 *features*) " -DSunOS4_1")
+                   ((memq :Solaris2 *features*) " -DSolaris2")
+                   (t ""))
+                 (if (memq :gcc *features*) " -DGCC -fsigned-char " )
+                 (if (memq :thread *features*) " -DTHREADED" )
+                 (if (memq :pthread *features*) " -DPTHREAD" )
+                 (if (memq :rgc *features*) " -DRGC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD" )
+                 (if pic
+                     (cond ((memq :SunOS4.1 *features*) " -fpic")
+                       ((memq :cygwin *features*) "")
+                       ((memq :Gcc *features*) " -fpic ")
+                       ((memq :Solaris2 *features*) " -K pic")
+                       ((memq :linux *features*) " -fpic")
+                       ((memq :irix *features*) " -KPIC")
+                       ((memq :irix6 *features*) " -KPIC")
+                       ((memq :alpha *features*) " -fpic")
+                       (t " -pic"))
+                     )
+                 cc-option
+                 " -I" (namestring *eusdir*) "include"
+                 *coptflags* *cflags*
+                 " "     (namestring file.c)
+                 (if (and (memq :sunos4.1 *features*)  pic)
+                  (concatenate string
+                      "; ld -o "
+                      (namestring file.so)
+                      " "
+                      (namestring file.o))
+                  )
+                 (if (and (or (memq :irix *features*)
+                      (memq :irix6 *features*)) pic)
+                  (concatenate string
+                      "; ld -shared -o "
+                      (namestring file.so)
+                      " "
+                      (namestring file.o))
+                  )
+                 (if (and (memq :linux *features*)  pic)
+                  (concatenate string
+                           (cond
+                            ((memq :darwin *features*)
+                             "; gcc -dynamiclib -flat_namespace -undefined suppress -o ")
+                            ((memq :sh4 *features*)
+                             "; sh4-linux-gcc -shared -o ")
+                            ((memq :ia32 *features*)
+                             "; ld -melf_i386 -shared -build-id -o ")
+                            ((memq :i386 *features*)
+                             "; gcc -shared -Xlinker -build-id -o ")
+                            (t
+                             "; ld -shared -build-id -o "))
+                      (namestring file.so)
+                      " "
+                      (namestring file.o))
+                  "")
+                 (if (and (memq :alpha *features*)  pic)
+                  (concatenate string
+                      "; ld -shared -update_registry so_locations -expect_unresolved '*' -g0 -O1 -o "
+                      (namestring file.so)
+                      " "
+                      (namestring file.o))
+                  "")
+                 (if (and (memq :cygwin *features*)
+                      (not *kernel*))
+                  (concatenate string
+                      "; gcc -shared -g -falign-functions=4 -Wl,--export-all-symbols -Wl,--unresolved-symbols=ignore-all -Wl,--enable-runtime-pseudo-reloc -o "
+                      (namestring file.dll) " "
+                      (namestring file.o) " "
+                      *eusdir* (unix:getenv "ARCHDIR")
+                      "/bin/"
+                      "eusgl.a "
+                      "-lm -lpthread "
+                      ))
+              ))
+        (when cc
+           (warn "~A" cccom)
+           (unix:system cccom))
+        (dolist (f *defun-list*) (remprop f 'user-function-entry))
+        (terpri *error-output*)
+       )
+     (send trans :clear-external-functions)))
  (:specials () (mapcar 'car (send idtable :frame 0)))
  (:copy-compiler ()
     (let ((newcomp) (initcode-save initcodes) (closure-save function-closures))
