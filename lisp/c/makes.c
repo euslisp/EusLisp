@@ -17,6 +17,7 @@ static char *rcsid="@(#)$Id$";
 #endif
 
 extern pointer LAMCLOSURE, MACRO, K_FUNCTION_DOCUMENTATION;
+extern pointer C_BINDFRAME, C_FLETFRAME;
 
 /****************************************************************/
 /* boxing and unboxing
@@ -551,20 +552,18 @@ pointer n,v,nxt;
 pointer makebindframe(sym,val,nxt)
 pointer sym,val,nxt;
 { pointer bf;
-  bf=alloc(wordsizeof(struct bindframe), ELM_FIXED, bindframecp.cix,
-	  wordsizeof(struct bindframe));
+  bf=makeobject(C_BINDFRAME);
   // if (nxt==NULL) nxt=NIL;
-  bf->c.bfp.symbol=sym;
-  bf->c.bfp.value=val;
-  bf->c.bfp.next=nxt;
+  bf->c.obj.iv[0]=sym;
+  bf->c.obj.iv[1]=val;
+  bf->c.obj.iv[2]=nxt;
   return(bf);}
 
 pointer makeflet(ctx,nm,def,scp,nxt)
 register context *ctx;
 pointer nm,def,scp,nxt;
 { pointer p,ff;
-  ff=alloc(wordsizeof(struct fletframe), ELM_FIXED, fletframecp.cix,
-	  wordsizeof(struct fletframe));
+  ff=makeobject(C_FLETFRAME);
   // fletframe scope
   if (scp==NULL)
     p=cons(ctx,makeint(0),def);
@@ -577,9 +576,9 @@ pointer nm,def,scp,nxt;
     p=cons(ctx,ctx->bindfp,p);
   p=cons(ctx,nm,p);  // name
   p=cons(ctx,LAMCLOSURE,p);
-  ff->c.ffp.name=nm;
-  ff->c.ffp.fclosure=p;
-  ff->c.ffp.next=nxt;
+  ff->c.obj.iv[0]=nm;
+  ff->c.obj.iv[1]=p;
+  ff->c.obj.iv[2]=nxt;
   vpush(ff);
   ctx->fletfp=ff;
   return(ff);}
@@ -588,11 +587,10 @@ pointer makemacrolet(ctx,nm,def,nxt)
 register context *ctx;
 pointer nm,def,nxt;
 { pointer ff;
-  ff=alloc(wordsizeof(struct fletframe), ELM_FIXED, fletframecp.cix,
-	  wordsizeof(struct fletframe));
-  ff->c.ffp.name=nm;
-  ff->c.ffp.fclosure=cons(ctx,MACRO,def);
-  ff->c.ffp.next=nxt;
+  ff=makeobject(C_FLETFRAME);
+  ff->c.obj.iv[0]=nm;
+  ff->c.obj.iv[1]=cons(ctx,MACRO,def);
+  ff->c.obj.iv[2]=nxt;
   vpush(ff);
   ctx->fletfp=ff;
   return(ff);}

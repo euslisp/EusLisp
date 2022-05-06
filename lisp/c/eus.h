@@ -294,16 +294,6 @@ struct iostream {
     pointer plist;
     pointer in,out;};
 
-struct bindframe {	/*to achieve lexical binding in the interpreter*/
-  pointer symbol;	/*symbol*/
-  pointer value;	/*bound value*/
-  pointer next;}; 	/*link to next frame*/
-
-struct  fletframe {
-  pointer name;
-  pointer fclosure;
-  pointer next;};
-
 struct labref {		/*used for reading labeled forms: #n#,#n=*/
     pointer label;
     pointer value;
@@ -423,8 +413,6 @@ typedef
       struct fcode fcode;
       struct ldmodule ldmod;
       struct closure clo;
-      struct bindframe bfp;
-      struct fletframe ffp;
       struct labref lab;
       struct arrayheader ary;
       struct vector vec;

@@ -48,16 +48,17 @@ register pointer sym;
   if (sym->c.sym.vtype==V_CONSTANT) return(sym->c.sym.speval);
   GC_POINT;
   while (bf!=NULL) {
-    var=bf->c.bfp.symbol;
-    val=bf->c.bfp.value;
+    var=bf->c.obj.iv[0];
+    val=bf->c.obj.iv[1];
     if (sym==var) {		/*found in bind-frame*/
       if (val==UNBOUND) goto getspecial;
       return(val);}
     else if (var->cix==vectorcp.cix) {
       vaddr=getobjv(sym,var,val);
       if (vaddr) return(*vaddr);}
-    if (bf==bf->c.bfp.next) break;
-    bf=bf->c.bfp.next;}
+    if (bf==bf->c.obj.iv[2] /* next */) break;
+    bf=bf->c.obj.iv[2];
+  }
   /*get special value from the symbol cell*/
   /*if (sym->c.sym.vtype==V_GLOBAL) goto getspecial;*/
 getspecial:
@@ -77,15 +78,15 @@ register pointer sym,val;
     pointer_update(ctx->specials->c.vec.v[vt],val);
     return(val);}
   while (bf!=NULL) {
-    var=bf->c.bfp.symbol;
+    var=bf->c.obj.iv[0];
     if (sym==var) {
-      if (bf->c.bfp.value==UNBOUND) goto setspecial;
-      pointer_update(bf->c.bfp.value,val); return(val);}
+      if (bf->c.obj.iv[1]==UNBOUND) goto setspecial;
+      pointer_update(bf->c.obj.iv[1],val); return(val);}
     else if (var->cix==vectorcp.cix) {
-      vaddr=getobjv(sym,var,bf->c.bfp.value);
+      vaddr=getobjv(sym,var,bf->c.obj.iv[1]);
       if (vaddr) {pointer_update(*vaddr,val); return(val);}}
-    if (bf==bf->c.bfp.next) break;
-    bf=bf->c.bfp.next;
+    if (bf==bf->c.obj.iv[2] /*next*/) break;
+    bf=bf->c.obj.iv[2];
     GC_POINT;}
   /* no local var found. try global binding */
   if (sym->c.sym.vtype==V_CONSTANT) error(E_SETCONST,sym);
@@ -101,8 +102,8 @@ register context *ctx;
 register pointer f;	/*must be a symbol*/
 { pointer ffp=ctx->fletfp;
   while (ffp!=NULL && isfletframe(ffp)) {
-    if (ffp->c.ffp.name==f) {  return(ffp->c.ffp.fclosure);}
-    else ffp=ffp->c.ffp.next;}
+    if (ffp->c.obj.iv[0]==f) {  return(ffp->c.obj.iv[1]);}
+    else ffp=ffp->c.obj.iv[2];}
   if (f->c.sym.spefunc==UNBOUND) error(E_UNDEF,f);
   else {	/*global function definition is taken, context changes*/
     return(f->c.sym.spefunc);}}

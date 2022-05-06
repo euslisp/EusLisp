@@ -607,9 +607,9 @@ register pointer arg;
     makeflet(ctx,ccar(fn),ccdr(fn),ctx->fletfp,ctx->fletfp);}
   fns=ccar(arg); ffpp=ctx->fletfp;
   while (iscons(fns)) {	/*allow mutual references between labels functions*/
-    fn=ffpp->c.ffp.fclosure;
+    fn=ffpp->c.obj.iv[1];
     fn=ccdr(fn); fn=ccdr(fn); fn=ccdr(fn); ccar(fn)=ctx->fletfp;
-    fns=ccdr(fns); ffpp=ffpp->c.ffp.next;}
+    fns=ccdr(fns); ffpp=ffpp->c.obj.iv[2];}
   result=progn(ctx,ccdr(arg));
   ctx->fletfp=ffp;
   return(result);}

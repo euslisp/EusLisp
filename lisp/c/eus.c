@@ -157,8 +157,7 @@ pointer C_CONDITION, C_ERROR;
 
 /*class names*/
 pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
-	CODE,FCODE, LDMODULE, PKGCLASS,METACLASS,CLOSURE,BINDFRAME,FLETFRAME;
-pointer LABREF;
+	CODE,FCODE, LDMODULE, PKGCLASS,METACLASS,CLOSURE,LABREF;
 pointer THREAD;
 pointer VECTOR,VECCLASS,FLTVECTOR,INTVECTOR,OBJECT,READTABLE;
 pointer FOREIGNCODE,ARRAY,BITVECTOR;
@@ -582,9 +581,6 @@ static void initclassid()
   fltvectorcp.cix=19; fltvectorcp.sub=19;
   intvectorcp.cix=20; intvectorcp.sub=20;
   stringcp.cix=21; stringcp.sub=21;
-
-  bindframecp.cix=22; bindframecp.sub=22;
-  fletframecp.cix=23; fletframecp.sub=23;
 }
 
 static void initpackage()
@@ -848,16 +844,6 @@ static void initclasses()
   builtinclass[nextbclass].cls=C_STRING;
   builtinclass[nextbclass++].cp= &stringcp;
 
-/*22*/
-  BINDFRAME=basicclass("BIND-FRAME",C_OBJECT,&bindframecp,3,
-		    "SYMBOL","VALUE","NEXT");
-  C_BINDFRAME=speval(BINDFRAME);
-
-/*23*/
-  FLETFRAME=basicclass("FLET-FRAME",C_OBJECT,&fletframecp,3,
-		    "NAME","FCLOSURE","NEXT");
-  C_FLETFRAME=speval(FLETFRAME);
-
 /* derived classes */
   BITVECTOR=defvector(ctx,"BIT-VECTOR",C_VECTOR,ELM_BIT, 0); /* alpha */
   C_BITVECTOR=speval(BITVECTOR);
@@ -873,6 +859,12 @@ static void initclasses()
   C_COMPLEX=speval(COMPLEX);
   BIGNUM=basicclass("BIGNUM", C_EXTNUM, &bignumcp, 2, "SIZE", "BV");
   C_BIGNUM=speval(BIGNUM);
+
+/* bind frames */
+  C_BINDFRAME=speval(basicclass("BIND-FRAME",C_OBJECT,&bindframecp,3,
+                                "SYMBOL","VALUE","NEXT"));
+  C_FLETFRAME=speval(basicclass("FLET-FRAME",C_OBJECT,&fletframecp,3,
+                                "NAME","FCLOSURE","NEXT"));
 
 /* conditions */
   C_CONDITION=speval(basicclass("CONDITION",C_OBJECT,&conditioncp,1,"MESSAGE"));
