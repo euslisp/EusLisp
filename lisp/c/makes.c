@@ -564,6 +564,7 @@ register context *ctx;
 pointer nm,def,scp,nxt;
 { pointer p,ff;
   ff=makeobject(C_FLETFRAME);
+  vpush(ff);
   // fletframe scope
   if (scp==NULL)
     p=cons(ctx,makeint(0),def);
@@ -579,7 +580,6 @@ pointer nm,def,scp,nxt;
   ff->c.obj.iv[0]=nm;
   ff->c.obj.iv[1]=p;
   ff->c.obj.iv[2]=nxt;
-  vpush(ff);
   ctx->fletfp=ff;
   return(ff);}
 
