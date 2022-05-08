@@ -362,7 +362,7 @@
  (:create-frame (type &optional size comment)
     (let ((frame (instance stack-frame :init type)))
       (setq (frame . level) closure-level)
-      (when size
+      (when (and size (> size 0))
         (setq (frame . offset) (send trans :create-frame size comment))
         (send frame :local 1))
       (case type
