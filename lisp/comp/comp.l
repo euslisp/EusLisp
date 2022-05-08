@@ -773,20 +773,18 @@
      result-type))
  (:let* (bodies)	;sequential let
    (let ((local-list (pop bodies)) (unwind-save unwind-frames)
-          bindframe (i 0))
-	(setq bindframe (send self :create-frame 'local (length local-list) "seqlet"))
+          bindframe)
+	(setq bindframe (send self :create-frame 'local))
         ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
           (send self :declare (cdr (pop bodies))))
         ;; eval & bind
 	(dolist (init-form local-list)
-          (let ((var (if (listp init-form) (car init-form) init-form)))
+          (let ((var (if (listp init-form) (car init-form) init-form))
+                offset)
             (send self :eval (if (listp init-form) (cadr init-form) nil))
-            (if (send self :special-variable-p var)
-                (let ((offset (1- (send trans :offset-from-fp))))
-                  (send self :bind var bindframe 'local offset))
-                (send self :bind var bindframe 'let i :store t))
-            (incf i)))
+            (setq offset (1- (send trans :offset-from-fp)))
+            (send self :bind var bindframe 'local offset)))
         ;; eval body
 	(send self :progn bodies)
 	;; unwind/restore
@@ -795,7 +793,7 @@
  (:let (bodies)	;parallel let
    (let ((local-list (pop bodies)) (unwind-save unwind-frames)
           bindframe special-list vlist)
-	(setq bindframe (send self :create-frame 'local (length local-list) "parlet"))
+	(setq bindframe (send self :create-frame 'local))
         ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
 	   (send self :declare (cdr (pop bodies))))
@@ -810,25 +808,17 @@
                   (push (list var offset) vlist)
                 (push (send self :bind var bindframe 'local offset) vlist))))
         (setq vlist (nreverse vlist))
-        ;; bind frame vector
-        (dotimes (i (length vlist))
-          (let ((v (nth i vlist)))
-            (if (derivedp v identifier)
-                (progn
-                  (send self :load-var v)
-                  (send trans :clearpush-frame (bindframe . offset) i)
-                  (setq (v . bindframe) (bindframe . offset)
-                        (v . offset) i))
-                (progn
-                  (send bindframe :local 1)	;a trick
-                  (push v special-list)))))
+        ;; collect specials
+        (dolist (v vlist)
+          (unless (derivedp v identifier)
+            (send bindframe :local 1)	;a trick
+            (push v special-list)))
         ;; all the evaluation have finished, bind specials
 	(dolist (spe special-list)
           (let ((offset (send trans :offset-from-fp)))
             (send trans :load-local (cadr spe) 0)
             (send self :bind (car spe) bindframe 'local offset)))
 	(setq scope (send idtable :level))
-        (send trans :reset-vsp)
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
@@ -1003,8 +993,8 @@
          )))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
-     (let (entry newcomp newcomps flets-exchange fletframe vlist)
-       (setq fletframe (send self :create-frame 'flet (length funcs) "flet"))
+     (let (entry newcomp newcomps flets-exchange fletframe)
+       (setq fletframe (send self :create-frame 'flet))
        (if (not recursive-scope)	; copy compiler before binding the functions
            (setq newcomp (send self :copy-compiler)))
         (dolist (fn funcs)
@@ -1019,7 +1009,6 @@
 	           nil)		;fletframe
 	          flets)
 	    (send fletframe :local 1)
-	    (push (car flets) vlist)
 	    (when recursive-scope
               (setq newcomp (send self :copy-compiler))
               (push newcomp newcomps))
@@ -1028,14 +1017,6 @@
 
         (if recursive-scope
 	    (send-all newcomps :change-flets flets))
-        (setq vlist (nreverse vlist))
-        ;; bind fletframe vector
-        (dotimes (i (length vlist))
-          (let ((f (nth i vlist)))
-            (send trans :load-local (third f) (- closure-level (fourth f)))
-            (send trans :store-local i 0 (fletframe . offset))
-            (setf (third f) i
-                  (sixth f) (fletframe . offset))))
 
         (send self :progn bodies)
         (setq flets (nthcdr (length funcs) flets))
@@ -1196,12 +1177,7 @@
 					 (if rest-var 1
 					     (if key-forms keyn 0))))
 ;; create argument frame
-     (setq argframe (send self :create-frame 'arg
-                          (+ reqn optn keyn auxn
-                             (if rest-var 1 0)
-                             (count-if #'identity opt-supplied-vars)
-                             (count-if #'identity key-supplied-vars))
-                          "argv"))
+     (setq argframe (send self :create-frame 'arg))
 ;; (print "bind")
      (setq i 0)
      (dolist (v req-vars)		;for all required arguments
