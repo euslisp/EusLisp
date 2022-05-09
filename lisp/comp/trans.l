@@ -273,7 +273,7 @@
        (if (null entry) (setq entry (get sym 'builtin-function-entry)))
        (send self :clearpush)
        (send self :reset-vsp)
-       (unless (functionp sym)
+       (if (and (not (functionp sym)) (not avant-mode))
          (format *error-output* "; ~C[34;7m~S~C[0;34m is assumed to be undefined function~C[0m~%"
                  #x1b sym #x1b #x1b))
        (if entry
