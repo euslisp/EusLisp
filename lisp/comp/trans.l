@@ -167,6 +167,7 @@
  (:check-key-arg (n lab)
    (format cfile "	if (n & (1<<~A)) goto ~A;~%" n lab))
  (:getbase (n argp &optional bindframe)
+   (if (not (numberp bindframe)) (setq bindframe nil))
    (cond ((= n 0)
           (cond
             (bindframe
@@ -180,7 +181,7 @@
 			 "c.clo.env0->"))
 		(dec n))
              (unless bindframe
-               (error value-error "; empty bindframe in closure reference!~%"))
+               (warn "; empty bindframe in closure reference!~%"))
 	     (setq f (concatenate string f
                            (format nil "c.clo.env1->c.vec.v[~d]->c.vec.v" 
                                    (or bindframe -1))))
@@ -594,7 +595,7 @@
     (send self :clearpush)
     (format cfile "	ctx->vsp=local; return(local[0]);}~%")
     (when (not (= (dec pushcount) 0))
-      (error value-error ":return pushcount is ~d~%" pushcount)
+      (warn ":return pushcount is ~d~%" pushcount)
       (setq pushcount 0)))
  (:del-frame (spe loc)	;number of special bindings and local variables
     (send self :store "w")

@@ -214,6 +214,7 @@
 	   :slots
 	   (idtable		;identifier-table
 	    closure-level	;current closure level
+	    closure-vars	;closure variable counter
 	    scope		;current variable scope (for sequential let)
 	    frames		;list of the number of special bindings
 	    fletframes		;list of function frames
@@ -224,6 +225,7 @@
 	    initcodes		;initialize codes in "eusmain"
 	    flets		;list of flet frames
 	    unwind-frames	;frames need to unwound when jumps
+	    avant-mode		;pre-evaluation mode flag
 	    symstr
 	    )))
 (defvar *compiler-symid* 0)
@@ -419,6 +421,8 @@
    (case (var . binding)
     ((special) (send trans :load-global (var . name)))
     ((local let lambda)
+	(if (and avant-mode (not (var . bindframe)) (> closure-level (var . level)))
+            (setq (var . bindframe) t))
 	(send trans :load-local (var . offset) (- closure-level (var . level))
               (send self :var-bindframe var)))
     ((param arg)
@@ -791,7 +795,7 @@
 	(setq unwind-frames unwind-save)
 	(send self :delete-frame 'local t)))
  (:let (bodies)	;parallel let
-   (let ((local-list (pop bodies)) (unwind-save unwind-frames)
+   (let ((local-list (pop bodies)) (unwind-save unwind-frames) (closure-save closure-vars)
           bindframe special-list vlist)
 	(setq bindframe (send self :create-frame 'local))
         ;; handle declarations
@@ -819,10 +823,35 @@
             (send trans :load-local (cadr spe) 0)
             (send self :bind (car spe) bindframe 'local offset)))
 	(setq scope (send idtable :level))
+        ;; pre-evaluate body
+        (let ((cfile (trans . cfile))
+              (push (trans . push))
+              (pushcount (trans . pushcount)))
+          (setq avant-mode t)
+          (setq (trans . cfile) nil)
+          (send self :progn bodies)
+          (setq (trans . cfile) cfile)
+          (setq (trans . push) push)
+          (setq (trans . pushcount) pushcount)
+          (setq avant-mode nil))
+        ;; bind frame vector
+        (setq vlist
+          (remove-if-not #'(lambda (v) (and (derivedp v identifier) (v . bindframe))) vlist))
+        (when vlist
+          (send trans :reset-vsp)
+          (setq (bindframe . offset) (send trans :create-frame (length vlist) "parlet"))
+          (send bindframe :local 1))
+        (dolist (v vlist)
+          (send self :load-var v)
+          (send trans :clearpush-frame (bindframe . offset) closure-vars)
+          (setq (v . bindframe) (bindframe . offset)
+                (v . offset) closure-vars)
+          (inc closure-vars))
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
 	(setq unwind-frames unwind-save)
+        (setq closure-vars closure-save)
 	(send self :delete-frame 'local t)))
  (:cond (clauses)
     (let (clause pred next t-found  (exit (send self :genlabel "CON")))
@@ -985,12 +1014,19 @@
 					(- closure-level (fourth flet-def))
                                         (sixth flet-def))
 	       (send trans :getfunc fn)))
-       (let ((entry (send self :genlabel "CLO"))  ; #'(lambda (...) ...)
-            (newcomp))
-          (send self :closure entry "lambda-closure")
-         (setq newcomp (send self :copy-compiler))
-         (send self :add-closure (list entry fn newcomp))
-         )))
+       (let (entry newcomp)  ; #'(lambda (...) ...)
+         (if avant-mode
+             (progn
+               (when avant-mode
+                 (setq newcomp (send self :copy-compiler))
+                 (setq (newcomp . idtable) idtable)
+                 (send newcomp :lambda (cadr fn) (cddr fn))
+                 (send trans :discard 1)))
+             (progn
+               (setq entry (send self :genlabel "CLO"))
+               (send self :closure entry "lambda-closure")
+               (setq newcomp (send self :copy-compiler))
+               (send self :add-closure (list entry fn newcomp)))))))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
      (let (entry newcomp newcomps flets-exchange fletframe)
@@ -1645,6 +1681,7 @@
 	idtable (instance identifier-table :init)
         scope 0
 	closure-level 0
+	closure-vars 0
 	symstr "")
   self)
    ) ; defmethod
