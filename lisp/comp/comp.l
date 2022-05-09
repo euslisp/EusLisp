@@ -333,8 +333,9 @@
           ((proclaimed-constant-p var)
            (send idtable :enter result))
 	  (t
-	   (format *error-output* "; ~C[34;7m~S~C[0;34m is assumed to be global~C[0m~%"
-			#x1b var #x1b #x1b)
+	   (unless avant-mode
+             (format *error-output* "; ~C[34;7m~S~C[0;34m is assumed to be global~C[0m~%"
+			#x1b var #x1b #x1b))
 	   (send idtable :enter result)) )
 	result))
  (:var-binding (var)
@@ -1687,7 +1688,7 @@
            (warn "~A" cccom)
            (unix:system cccom))
         (dolist (f *defun-list*) (remprop f 'user-function-entry))
-        (terpri *error-output*)
+        (unless avant-mode (terpri *error-output*))
        )
      (send trans :clear-external-functions)))
  (:specials () (mapcar 'car (send idtable :frame 0)))
