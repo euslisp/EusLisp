@@ -46,15 +46,19 @@
 		 (incf ftab-next))
 	  index)))
 
+(defun maybe-format (fstream format-string &rest args)
+  (unless avant-mode
+    (apply #'format fstream format-string args)))
+
 (defmethod translator
  (:label (l)
    (send self :clearpush)
-   (format cfile "~A:~%" l))
+   (maybe-format cfile "~A:~%" l))
  (:comment (&rest c)
-   (princ "/*" cfile)
-   (while c (princ (pop c) cfile))
-   (princ "*/" cfile)
-   (terpri cfile))
+   (maybe-format cfile "/*")
+   (while c (if cfile (princ (pop c) cfile)))
+   (maybe-format cfile "*/")
+   (if cfile (terpri cfile)))
 #+:rgc
  (:nonpop ()
    (if push push
@@ -64,27 +68,27 @@
 	    (progn (dec pushcount) (format nil "local[~d]" pushcount))))
  (:store (dest)
    (if (or (null push) (not (equal push dest)))
-       (format cfile "	~A = ~A;~%" dest (send self :pop))
+       (maybe-format cfile "	~A = ~A;~%" dest (send self :pop))
        (setq push nil)))
  (:push (src)
     (send self :clearpush)
     (setq push src))
  (:clearpush ()		;flush out reserved push
     (when push
-	  (format cfile "	local[~d]= ~A;~%" pushcount push)
+	  (maybe-format cfile "	local[~d]= ~A;~%" pushcount push)
 	  (inc pushcount))
     (setq push nil))
  (:create-frame (size &optional comment)
     (send self :clearpush)
     (prog1 pushcount
-      (format cfile "	local[~d]= makevector(C_VECTOR,~d);" pushcount size)
-      (if comment (format cfile " /*~A*/" comment))
-      (terpri cfile)
+      (maybe-format cfile "	local[~d]= makevector(C_VECTOR,~d);" pushcount size)
+      (if comment (maybe-format cfile " /*~A*/" comment))
+      (if cfile (terpri cfile))
       (inc pushcount)
       (send self :reset-vsp)))
  (:clearpush-frame (bindframe count)
     (when push
-	  (format cfile "	local[~d]->c.vec.v[~d]= ~A;~%"
+	  (maybe-format cfile "	local[~d]->c.vec.v[~d]= ~A;~%"
                   bindframe count push))
     (setq push nil))
 )
@@ -112,11 +116,11 @@
  (:offset-from-fp ()
     (send self :clearpush)
     pushcount)
- (:reset-vsp () (format cfile "	ctx->vsp=local+~d;~%" pushcount))
+ (:reset-vsp () (maybe-format cfile "	ctx->vsp=local+~d;~%" pushcount))
  (:bind-special (id)
     (send self :store "w")
     (send self :reset-vsp)
-    (format cfile "	bindspecial(ctx,fqv[~d],w);~%" 
+    (maybe-format cfile "	bindspecial(ctx,fqv[~d],w);~%"
 		  (send self :quote-entry id))
 ;    (send self :reset-fsp)
     (inc pushcount 3)			;3 longs for special bind frame
@@ -124,7 +128,7 @@
  (:unbind-special (count)
     (send self :clearpush)
     (send self :reset-vsp)
-    (format cfile "	unbindx(ctx,~d);~%" count)
+    (maybe-format cfile "	unbindx(ctx,~d);~%" count)
 ;    (send self :reset-fsp)
     )
  (:pushenv () 
@@ -132,42 +136,42 @@
     (send self :push "env")
     (send self :clearpush))
  (:enter (cname lname)
-    (terpri cfile)
+    (if cfile (terpri cfile))
     (send self :comment lname)
     (setq pushcount 0)		;reset pushcount
 				;because a4(vfp) changes here 
-    (format cfile "static pointer ~A(ctx,n,argv,env)~%" cname)
-    (format cfile "register context *ctx;~%")
-    (format cfile "register int n; register pointer argv[]; pointer env;~%")
-    (format cfile "{ register pointer *local=ctx->vsp, w, *fqv=qv;~%")
-    (format cfile "  numunion nu;~%")
+    (maybe-format cfile "static pointer ~A(ctx,n,argv,env)~%" cname)
+    (maybe-format cfile "register context *ctx;~%")
+    (maybe-format cfile "register int n; register pointer argv[]; pointer env;~%")
+    (maybe-format cfile "{ register pointer *local=ctx->vsp, w, *fqv=qv;~%")
+    (maybe-format cfile "  numunion nu;~%")
     )
  (:check-req-arg (req opt)	;check number of required arguments
-   (if (> *safety* 1) (format cfile "	breakck;~%"))
+   (if (> *safety* 1) (maybe-format cfile "	breakck;~%"))
    (if (> *safety* 0) 
        (if (>= req 0)
-           (format cfile "	if (n~A~d) maerror();~%"
+           (maybe-format cfile "	if (n~A~d) maerror();~%"
 			   (if (= opt 0) "!=" "<") req))) )
  (:check-opt-arg (m lab)
-   (format cfile "	if (n>=~d) { local[~d]=(argv[~d]); goto ~A;}~%"
+   (maybe-format cfile "	if (n>=~d) { local[~d]=(argv[~d]); goto ~A;}~%"
            (1+ m) pushcount m lab))
  (:check-rest-arg (m)
    (if (> *safety* 0)
-       (format cfile "	if (n>~d) maerror();~%" m)) )
+       (maybe-format cfile "	if (n>~d) maerror();~%" m)) )
  (:rest (pcnt)
    (send self :clearpush)
    (send self :reset-vsp)
    (send self :push (format nil "minilist(ctx,&argv[n],n-~d)"  pcnt)))
  (:parse-key-params (keyvec req+opt keyn allowotherkeys)
    (send self :clearpush)
-   (format cfile
+   (maybe-format cfile
 	   "	n=parsekeyparams(fqv[~d], &argv[~d], n-~d, local+~d, ~A);~%"
 	   (send self :quote-entry keyvec) req+opt req+opt
            pushcount
 	   (if allowotherkeys 1 0))
    (inc pushcount keyn))
  (:check-key-arg (n lab)
-   (format cfile "	if (n & (1<<~A)) goto ~A;~%" n lab))
+   (maybe-format cfile "	if (n & (1<<~A)) goto ~A;~%" n lab))
  (:getbase (n argp &optional bindframe)
    (if (not (numberp bindframe)) (setq bindframe nil))
    (cond ((= n 0)
@@ -233,7 +237,7 @@
     (send self :store (format nil "~A[0]->c.obj.iv[~d]"
 				(send self :getbase level 'arg bindframe) var)))
  (:store-global (var)
-    (format cfile "	storeglobal(fqv[~d],~A);~%"
+    (maybe-format cfile "	storeglobal(fqv[~d],~A);~%"
 		  (send self :quote-entry var) (send self :pop)))
  (:load-ovaf (var)
     (send self :push
@@ -273,9 +277,9 @@
          (format *error-output* "; ~C[34;7m~S~C[0;34m is assumed to be undefined function~C[0m~%"
                  #x1b sym #x1b #x1b))
        (if entry
-	   (format cfile "	w=(pointer)~A(ctx,~d,local+~d); /*~A*/~%"
+	   (maybe-format cfile "	w=(pointer)~A(ctx,~d,local+~d); /*~A*/~%"
 		     entry n (- pushcount n) sym)
-	   (format cfile "	w=(*ftab[~d])(ctx,~d,local+~d,&ftab[~d],fqv[~d]); /*~A*/~%"
+	   (maybe-format cfile "	w=(*ftab[~d])(ctx,~d,local+~d,&ftab[~d],fqv[~d]); /*~A*/~%"
 			(ftab-index sym)
 			n (- pushcount n)
 			(ftab-index sym)
@@ -287,7 +291,7 @@
     ;closure object on the top of stack
     (send self :store "w")	;closure
     (send self :reset-vsp)
-    (format cfile "	w=~a(ctx,~d,local+~d,w);~%" entry argc (- pushcount argc))
+    (maybe-format cfile "	w=~a(ctx,~d,local+~d,w);~%" entry argc (- pushcount argc))
     (send self :discard argc)
     (send self :push "w"))
  (:getfunc (sym)
@@ -305,8 +309,8 @@
  (:check-cons-nil ()  ; check if stack-top is cons or nil.
     (if (equal push "w")
 	(send self :pop)
-	(format cfile "	w=~a;~%" (send self :pop)))
-    (format cfile "	if (!iscons(w) && w!=NIL) error(E_NOLIST);~%")
+	(maybe-format cfile "	w=~a;~%" (send self :pop)))
+    (maybe-format cfile "	if (!iscons(w) && w!=NIL) error(E_NOLIST);~%")
     (send self :push "w"))
  (:car ()
     (if  (< *optimize* 2)
@@ -384,68 +388,68 @@
     (send self :reset-vsp)
     (send self :push (format nil "cons(ctx,~A,w)" (send self :pop))))
  (:svref ()		; reference to a simple general vector element
-    (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
+    (maybe-format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
-	(format cfile "	  w=(~A->c.vec.v[i]);}~%" vec))
+	(maybe-format cfile "	  w=(~A->c.vec.v[i]);}~%" vec))
     (send self :push "w"))
  (:svset ()		; store to a simple general vector
     (send self :store "w")	;value
-    (format cfile "	{ register eusinteger_t i; register pointer v;~%")
-    (format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
+    (maybe-format cfile "	{ register eusinteger_t i; register pointer v;~%")
+    (maybe-format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
 						 (send self :pop))
 #+:rgc
-    (format cfile "	  noticeCollector(v->c.vec.v[i], w);~%")
-    (format cfile "	  v->c.vec.v[i]=w;}~%")
+    (maybe-format cfile "	  noticeCollector(v->c.vec.v[i], w);~%")
+    (maybe-format cfile "	  v->c.vec.v[i]=w;}~%")
     (send self :push "w"))
  (:char ()
-    (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
+    (maybe-format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
-      	(format cfile "	  if (!isstring(~A)) error(E_NOSTRING);~%" vec)
-	(format cfile "	  w=makeint(~A->c.str.chars[i]);}~%" vec))
+        (maybe-format cfile "	  if (!isstring(~A)) error(E_NOSTRING);~%" vec)
+        (maybe-format cfile "	  w=makeint(~A->c.str.chars[i]);}~%" vec))
     (send self :push "w"))
  (:setchar ()
     (send self :store "w")	;value
-    (format cfile "	{ register eusinteger_t i; register pointer v;~%")
-    (format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
+    (maybe-format cfile "	{ register eusinteger_t i; register pointer v;~%")
+    (maybe-format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
 						 (send self :pop))
-    (format cfile "	  v->c.str.chars[i]=intval(w);}~%")
+    (maybe-format cfile "	  v->c.str.chars[i]=intval(w);}~%")
     (send self :push "w"))
  (:bit ()
-    (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
+    (maybe-format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
-	(format cfile "	  w=makeint(~A->c.str.chars[i/8]&(1<<(i&7))?1:0);}~%" vec))
+	(maybe-format cfile "	  w=makeint(~A->c.str.chars[i/8]&(1<<(i&7))?1:0);}~%" vec))
     (send self :push "w"))
  (:setbit ()
     (send self :store "w")	;value
-    (format cfile "	{ register eusinteger_t i; register byte *v;~%")
-    (format cfile "	  i=intval(~A); v=~A->c.str.chars;~%" (send self :pop)
+    (maybe-format cfile "	{ register eusinteger_t i; register byte *v;~%")
+    (maybe-format cfile "	  i=intval(~A); v=~A->c.str.chars;~%" (send self :pop)
 						 (send self :pop))
-    (format cfile "	  if (((eusinteger_t)w)&4) v[i/8]|=(1<<(intval(i)&7));~%")
-    (format cfile "	  else v[i/8]&= ~~(1<<(intval(i)&7));}~%")
+    (maybe-format cfile "	  if (((eusinteger_t)w)&4) v[i/8]|=(1<<(intval(i)&7));~%")
+    (maybe-format cfile "	  else v[i/8]&= ~~(1<<(intval(i)&7));}~%")
     (send self :push "w"))
  (:vref (type)		; reference to a simple vector element
-    (format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
+    (maybe-format cfile "	{ register eusinteger_t i=intval(~A);~%" (send self :pop))
     (let ((vec (send self :pop)))
       (case type
-	  (character (format cfile "	  w=makeint(~A->c.str.chars[i]);}~%" vec))
-	  (integer   (format cfile "	  w=makeint(~A->c.ivec.iv[i]);}~%" vec))
-	  (float     (format cfile "	  w=makeflt(~A->c.fvec.fv[i]);}~%" vec))
-	  (pointer   (format cfile "	  w=(~A->c.vec.v[i]);}~%" vec))
+	  (character (maybe-format cfile "	  w=makeint(~A->c.str.chars[i]);}~%" vec))
+	  (integer   (maybe-format cfile "	  w=makeint(~A->c.ivec.iv[i]);}~%" vec))
+	  (float     (maybe-format cfile "	  w=makeflt(~A->c.fvec.fv[i]);}~%" vec))
+	  (pointer   (maybe-format cfile "	  w=(~A->c.vec.v[i]);}~%" vec))
 	  (T  (send self :error "unknown vector element type")))
       (send self :push "w")))
  (:vset (type)		; store to a vector element whose type is apparent
     (send self :store "w")	;value
-    (format cfile "	{ register eusinteger_t i; register pointer v;~%")
-    (format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
+    (maybe-format cfile "	{ register eusinteger_t i; register pointer v;~%")
+    (maybe-format cfile "	  i=intval(~A); v=~A;~%" (send self :pop)
 						 (send self :pop))
     (case type
-	(character (format cfile "	  v->c.str.chars[i]=intval(w);}~%"))
-	(integer   (format cfile "	  v->c.ivec.iv[i]=intval(w);}~%"))
-	(float     (format cfile "	  v->c.fvec.fv[i]=fltval(w);}~%"))
+	(character (maybe-format cfile "	  v->c.str.chars[i]=intval(w);}~%"))
+	(integer   (maybe-format cfile "	  v->c.ivec.iv[i]=intval(w);}~%"))
+	(float     (maybe-format cfile "	  v->c.fvec.fv[i]=fltval(w);}~%"))
 	(pointer   
 	 #+:rgc
-		   (format cfile "	  noticeCollector(v->c.vec.v[i], w);~%")
-		   (format cfile "	  v->c.vec.v[i]=w;}~%"))
+		   (maybe-format cfile "	  noticeCollector(v->c.vec.v[i], w);~%")
+		   (maybe-format cfile "	  v->c.vec.v[i]=w;}~%"))
 	(T  (send self :error "unknown vector element type")))
     (send self :push "w"))
  (:nullx ()
@@ -504,26 +508,26 @@
              (send self :store "w")
              (case type
                ((list array)
-                (format cfile "	if (!(~A)) error(~A);~%" ckfn errc))
+                (maybe-format cfile "	if (!(~A)) error(~A);~%" ckfn errc))
                (t
-                (format cfile "	if (!~A(w)) error(~A);~%" ckfn errc))))
+                (maybe-format cfile "	if (!~A(w)) error(~A);~%" ckfn errc))))
            (setq push nil))))
  (:if-nil (lab)
-    (format cfile "	if (~A==NIL) goto ~A;~%" (send self :pop) lab))
+    (maybe-format cfile "	if (~A==NIL) goto ~A;~%" (send self :pop) lab))
  (:if-t (lab)
-    (format cfile "	if (~A!=NIL) goto ~A;~%" (send self :pop) lab))
+    (maybe-format cfile "	if (~A!=NIL) goto ~A;~%" (send self :pop) lab))
  (:if-eq (lab)
-    (format cfile "	if (~A==~A) goto ~A;~%" (send self :pop)
+    (maybe-format cfile "	if (~A==~A) goto ~A;~%" (send self :pop)
 						(send self :pop) lab))
  (:if-neq (lab)
-    (format cfile "	if (~A!=~A) goto ~A;~%" (send self :pop)
+    (maybe-format cfile "	if (~A!=~A) goto ~A;~%" (send self :pop)
 						(send self :pop) lab))
 ;;; integer arithmetics, machine architecture dependent
  (:int-op2 (op)		;+,-,*,logand,logior
     (cond ((memq op '(+ - logand logior))
 	   (send self :store "w")
 	   (when (memq op '(+ -))
-	      (format cfile
+	      (maybe-format cfile
 		 "#if sun4 || vax || mips || alpha || Linux~%	w=(pointer)((eusinteger_t)w-2);~%#endif~%"))
 	   (send self :push
 		 (format nil "(pointer)((eusinteger_t)~A ~A (eusinteger_t)w)"
@@ -531,11 +535,11 @@
 			 (cdr (assq op '((+ . "+") (- . "-") (logand . "&")
 						(logior . "|")))))))
 	  (t
-	    (format cfile "	{ eusinteger_t i,j;~%")
-	    (format cfile 
+	    (maybe-format cfile "	{ eusinteger_t i,j;~%")
+	    (maybe-format cfile
 		"		j=intval(~A); i=intval(~A);~%"
 		(send self :pop) (send self :pop))
-	    (format cfile
+	    (maybe-format cfile
 		"		local[~d]=(makeint(i ~A j));}~%"
 		pushcount
 		(cdr (assq op '((+ . "+") (- . "-") (logand . "&")
@@ -553,22 +557,22 @@
 	  ((eq comparator '=) (send self :if-eq lab))
 	  ((eq type 'int)
 	    (send self :store "w")
-	    (format cfile "	if ((eusinteger_t)~A ~A (eusinteger_t)w) goto ~A;~%"
+	    (maybe-format cfile "	if ((eusinteger_t)~A ~A (eusinteger_t)w) goto ~A;~%"
 			   (send self :pop) comparator lab))
 	  ((eq type 'float)
-	    (format cfile "	{ double left,right;~%")
-	    (format cfile 
+	    (maybe-format cfile "	{ double left,right;~%")
+	    (maybe-format cfile
 		"		right=fltval(~A); left=fltval(~A);~%"
 		(send self :pop) (send self :pop))
-	    (format cfile "	if (left ~A right) goto ~A;}~%" comparator lab))
+	    (maybe-format cfile "	if (left ~A right) goto ~A;}~%" comparator lab))
 	 (t (send self :error "illegal compare"))))
 ;;; floating arithemtics
  (:flt-op2 (op)
-    (format cfile "	{ double x,y;~%")
-    (format cfile 
+    (maybe-format cfile "	{ double x,y;~%")
+    (maybe-format cfile
 	"		y=fltval(~A); x=fltval(~A);~%"
 	(send self :pop) (send self :pop))
-    (format cfile
+    (maybe-format cfile
 	"		local[~d]=(makeflt(x ~A y));}~%"
 	pushcount
 	(cdr (assq op '((+ . +) (- . -) (* . *) (/ . /)))))
@@ -583,19 +587,19 @@
 		    (consp . "iscons") (stringp . "isstring")))))
  (:if-type (type lab)
     (send self :store "w")
-    (format cfile "	if (~A(w)) goto ~A;~%"
+    (maybe-format cfile "	if (~A(w)) goto ~A;~%"
 		  (send self :type-checker type) lab))
  (:if-not-type (type lab)
     (send self :store "w")
-    (format cfile "	if (!~A(w)) goto ~A;~%"
+    (maybe-format cfile "	if (!~A(w)) goto ~A;~%"
 		  (send self :type-checker type) lab))
 ;;;
  (:jump (lab)
     (send self :clearpush)
-    (format cfile "	goto ~A;~%" lab))
+    (maybe-format cfile "	goto ~A;~%" lab))
  (:return ()
     (send self :clearpush)
-    (format cfile "	ctx->vsp=local; return(local[0]);}~%")
+    (maybe-format cfile "	ctx->vsp=local; return(local[0]);}~%")
     (when (and (not (= (dec pushcount) 0)) (not avant-mode))
       (error value-error ":return pushcount is ~d~%" pushcount)))
  (:del-frame (spe loc)	;number of special bindings and local variables
@@ -603,12 +607,12 @@
     (send self :discard (+ (* 3 spe) loc))
     (send self :push "w"))
   (:entercatch (exit)
-    (format cfile "	{jmp_buf jb;~%")
+    (maybe-format cfile "	{jmp_buf jb;~%")
     (send self :store "w")
     (send self :reset-vsp)
-    (format cfile
+    (maybe-format cfile
 	    "	mkcatchframe(ctx,w,(jmp_buf *)jb);~%")
-    (format cfile
+    (maybe-format cfile
     "	if ((w=(pointer)eussetjmp(jb))!=0) { /*fsp=vsp;*/ goto ~A;}~%"
          exit)
 ;    (send self :reset-fsp)
@@ -616,19 +620,19 @@
  (:exitcatch (exlab)
     (send self :store "w")
     (send self :label exlab)
-    (format cfile "	if (w==(pointer)(1)) w=makeint(0);~%")
-    (format cfile "	restorecatch(ctx);};~%")
+    (maybe-format cfile "	if (w==(pointer)(1)) w=makeint(0);~%")
+    (maybe-format cfile "	restorecatch(ctx);};~%")
 ;    (send self :reset-fsp)
     (dec pushcount 6)
     (send self :push "w"))	;result of catch
  (:throw ()
     (send self :store "w")	;result
     (send self :reset-vsp)
-    (format cfile "	throw(ctx,vpop(),w);~%")
-    (format cfile "	error(E_NOCATCHER,NULL);~%"))
+    (maybe-format cfile "	throw(ctx,vpop(),w);~%")
+    (maybe-format cfile "	error(E_NOCATCHER,NULL);~%"))
  (:bind-cleaner ()
     (send self :store "w")	;must be a closure
-    (format cfile
+    (maybe-format cfile
 	    "	local[~d]=(pointer)(ctx->protfp); local[~d]=w;
 	ctx->protfp=(struct protectframe *)(local+~d);~%"
 	    pushcount (1+ pushcount) pushcount)
@@ -636,21 +640,21 @@
  (:call-cleaner (cleaner)
     (send self :store "w")
     (send self :reset-vsp)
-    (format cfile "	~A(ctx,0,local+~d,ctx->protfp->cleaner);~%" cleaner pushcount)
-    (format cfile "	ctx->protfp=ctx->protfp->protlink;~%")
+    (maybe-format cfile "	~A(ctx,0,local+~d,ctx->protfp->cleaner);~%" cleaner pushcount)
+    (maybe-format cfile "	ctx->protfp=ctx->protfp->protlink;~%")
     (dec pushcount 2)
     (send self :push "w"))
  (:return-from (k need-unwind)	
     (send self :store "w")		;save result
     (send self :reset-vsp)
     (if need-unwind
-	(format cfile  "	unwind(ctx,local+~d);~%" k))
-    (format cfile "	local[~d]=w;~%" k)
+	(maybe-format cfile  "	unwind(ctx,local+~d);~%" k))
+    (maybe-format cfile "	local[~d]=w;~%" k)
     (inc pushcount))
  (:go-tag (k need-unwind)
     (send self :reset-vsp)
     (if need-unwind
-	(format cfile  "	unwind(ctx,local+~d);~%" k))
+	(maybe-format cfile  "	unwind(ctx,local+~d);~%" k))
     (inc pushcount))
  (:closure (lab env0 env1)
     (if env1
@@ -663,7 +667,7 @@
  (:defun (sym cname doc)
     (send self :clearpush)
     (send self :reset-vsp)
-    (format cfile
+    (maybe-format cfile
 	    "	compfun(ctx,fqv[~d],module,~A,fqv[~d]);~%" 
 	    (send self :quote-entry sym)
 	    cname
@@ -671,7 +675,7 @@
  (:defmacro (sym label doc)
     (send self :clearpush)
     (send self :reset-vsp)
-    (format cfile
+    (maybe-format cfile
 	    "	compmacro(ctx,fqv[~d],module,~A,fqv[~d]);~%" 
 	    (send self :quote-entry sym)
 	    label
@@ -682,14 +686,14 @@
 ;   addcmethod(module,cfunc,sel,klass)
     (send self :clearpush)
     (send self :reset-vsp)
-    (format cfile
+    (maybe-format cfile
 	    "	addcmethod(ctx,module,~A,fqv[~d],fqv[~d],~A);~%"
 	    label
 	    (send self :quote-entry sel)
 	    (send self :quote-entry klass)
 	    (send self :quote-fqv-entry doc)	))
  (:declare-forward-function (name)
-    (format hfile "static pointer ~A();~%" name))
+    (maybe-format hfile "static pointer ~A();~%" name))
  (:quote ()  quotev)
  (:copy-translator ()
     (let ((newtrans))
@@ -706,76 +710,76 @@
 	  quotev nil
 	  external-functions nil
 	  ftab-next 0)
-    (format cfile "/* ~a :  entry=~a */~%" (namestring cname) entry)
-    (format cfile "/* compiled by ~a */~%" (lisp:lisp-implementation-version))
-    (format cfile "#include \"eus.h\"~%")	;should specify -I opt.
+    (maybe-format cfile "/* ~a :  entry=~a */~%" (namestring cname) entry)
+    (maybe-format cfile "/* compiled by ~a */~%" (lisp:lisp-implementation-version))
+    (maybe-format cfile "#include \"eus.h\"~%")	;should specify -I opt.
     #+:rgc
-    (format cfile "#include \"collector.h\"~%")
-    (format cfile "#include \"~A.~A\"~%" (pathname-name hname) (pathname-type hname))
+    (maybe-format cfile "#include \"collector.h\"~%")
+    (maybe-format cfile "#include \"~A.~A\"~%" (pathname-name hname) (pathname-type hname))
 #-:alpha
-    (format cfile "#pragma init (register_~a)~%" entry)
-    (format cfile "extern double fabs();~%")
-    (format cfile "extern pointer fcallx();~%")
-    (format cfile "static void init_ftab();~%")
+    (maybe-format cfile "#pragma init (register_~a)~%" entry)
+    (maybe-format cfile "extern double fabs();~%")
+    (maybe-format cfile "extern pointer fcallx();~%")
+    (maybe-format cfile "static void init_ftab();~%")
     (cond
        ((> *optimize* 2)
-	(format cfile "#define loadglobal(s) s->c.sym.speval~%")
+	(maybe-format cfile "#define loadglobal(s) s->c.sym.speval~%")
 	#+:rgc
-	(format cfile "#define storeglobal(s,val) {noticeCollector(s->c.sym.speval,(val)); s->c.sym.speval=(val)~%")
+	(maybe-format cfile "#define storeglobal(s,val) {noticeCollector(s->c.sym.speval,(val)); s->c.sym.speval=(val)~%")
 	#-:rgc
-	(format cfile "#define storeglobal(s,val) s->c.sym.speval=(val)~%"))
-       (t (format cfile "extern pointer loadglobal(),storeglobal();~%")))
-    (format cfile "static pointer module,*qv,codevec,quotevec;~%")
+	(maybe-format cfile "#define storeglobal(s,val) s->c.sym.speval=(val)~%"))
+       (t (maybe-format cfile "extern pointer loadglobal(),storeglobal();~%")))
+    (maybe-format cfile "static pointer module,*qv,codevec,quotevec;~%")
     (if (memq 'lisp::solaris2 *features*)
-	(format cfile "static pointer ___~a();~%" entry)
-	(format cfile "extern pointer ___~a();~%" entry))
-    (format cfile "extern pointer build_quote_vector();~%")
-    (format cfile "static int register_~a()~%" entry)
-    (format cfile "  { add_module_initializer(~s, ___~a);}~%~%"
+	(maybe-format cfile "static pointer ___~a();~%" entry)
+	(maybe-format cfile "extern pointer ___~a();~%" entry))
+    (maybe-format cfile "extern pointer build_quote_vector();~%")
+    (maybe-format cfile "static int register_~a()~%" entry)
+    (maybe-format cfile "  { add_module_initializer(~s, ___~a);}~%~%"
 		(concatenate string "___" (pathname-name source-name))
 		 entry)
     (dolist (f *defun-list*)
-      (format cfile "static pointer ~a();~%" (get f 'user-function-entry)))
+      (maybe-format cfile "static pointer ~a();~%" (get f 'user-function-entry)))
     )
  (:eusmain (entry)
-      (format cfile "~%/* initializer*/~%pointer ___~A(ctx,n,argv,env)
+      (maybe-format cfile "~%/* initializer*/~%pointer ___~A(ctx,n,argv,env)
 register context *ctx; int n; pointer *argv; pointer env;~%" entry)
-    (format cfile "{ register pointer *local=ctx->vsp, w, *fqv;~%  register int i;~%")
-    (format cfile "  numunion nu;~%")
-    (format cfile "  module=argv[0];~%")
-    (format cfile "  quotevec=build_quote_vector(ctx,QUOTE_STRINGS_SIZE, quote_strings);~%")
-    (format cfile "  module->c.code.quotevec=quotevec;~%")
-    (format cfile "  codevec=module->c.code.codevec;~%")
-    (format cfile "  fqv=qv=quotevec->c.vec.v;~%")
-    (format cfile "  init_ftab();~%")
+    (maybe-format cfile "{ register pointer *local=ctx->vsp, w, *fqv;~%  register int i;~%")
+    (maybe-format cfile "  numunion nu;~%")
+    (maybe-format cfile "  module=argv[0];~%")
+    (maybe-format cfile "  quotevec=build_quote_vector(ctx,QUOTE_STRINGS_SIZE, quote_strings);~%")
+    (maybe-format cfile "  module->c.code.quotevec=quotevec;~%")
+    (maybe-format cfile "  codevec=module->c.code.codevec;~%")
+    (maybe-format cfile "  fqv=qv=quotevec->c.vec.v;~%")
+    (maybe-format cfile "  init_ftab();~%")
     )
  (:write-quote-vector ()
-    (format hfile "#define QUOTE_STRINGS_SIZE ~d~%" (length quotev))
-    (format hfile "~astatic char *quote_strings[QUOTE_STRINGS_SIZE]={~%"
+    (maybe-format hfile "#define QUOTE_STRINGS_SIZE ~d~%" (length quotev))
+    (maybe-format hfile "~astatic char *quote_strings[QUOTE_STRINGS_SIZE]={~%"
 	(if (memq :solaris2 *features*) "const " ""))
     (dolist (q quotev)
        (let* ((s (prin1-to-string q)) (len (length s)) (ch))
-	  (format hfile "    \"")
+	  (maybe-format hfile "    \"")
 	  (dotimes (i len)
 	     (cond ((eql (char s i) #\\)	;escaped
 		    (write-byte #\\ hfile) (write-byte #\\ hfile))
 	           ((eql (char s i) #\")	;double quote
-		    (format hfile "\\\""))
+		    (maybe-format hfile "\\\""))
 		   ((eql (char s i) #\newline)
-		    (format hfile "\\n"))
+		    (maybe-format hfile "\\n"))
 		   (t (write-byte (char s i) hfile))))
-	  (format hfile "\",~%")))
-     (format hfile "  };~%")
+	  (maybe-format hfile "\",~%")))
+     (maybe-format hfile "  };~%")
     )
  (:declare-ftab ()
     (if (> ftab-next 0)
-        (format hfile "static pointer (*ftab[~d])();~%~%" ftab-next)))
+        (maybe-format hfile "static pointer (*ftab[~d])();~%~%" ftab-next)))
  (:ftab-initializer ()
-    (format cfile "static void init_ftab()~%{")
+    (maybe-format cfile "static void init_ftab()~%{")
     (when (> ftab-next 0)
-        (format cfile "  register int i;~%")
-	(format cfile "  for (i=0; i<~d; i++) ftab[i]=fcallx;~%" ftab-next))
-    (format cfile "}~%") 
+        (maybe-format cfile "  register int i;~%")
+	(maybe-format cfile "  for (i=0; i<~d; i++) ftab[i]=fcallx;~%" ftab-next))
+    (maybe-format cfile "}~%")
     (send self :clear-external-functions))
  (:clear-external-functions ()
     (dolist (ef external-functions)
