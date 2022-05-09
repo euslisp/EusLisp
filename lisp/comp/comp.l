@@ -776,23 +776,42 @@
 	      (and (null var-val) (null duped) (send self :load-var var)))
      result-type))
  (:let* (bodies)	;sequential let
-   (let ((local-list (pop bodies)) (unwind-save unwind-frames)
-          bindframe)
+   (let ((local-list (pop bodies)) (unwind-save unwind-frames) (closure-save closure-vars)
+          bindframe vlist)
 	(setq bindframe (send self :create-frame 'local))
         ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
           (send self :declare (cdr (pop bodies))))
-        ;; eval & bind
+        ;; eval to locals
 	(dolist (init-form local-list)
           (let ((var (if (listp init-form) (car init-form) init-form))
                 offset)
             (send self :eval (if (listp init-form) (cadr init-form) nil))
             (setq offset (1- (send trans :offset-from-fp)))
-            (send self :bind var bindframe 'local offset)))
+            (push (send self :bind var bindframe 'local offset) vlist)))
+        ;; pre-evaluate body
+        (let ((trans (send trans :copy-translator)))
+          (setq avant-mode t)
+          (unwind-protect (send self :progn bodies)
+            (setq avant-mode nil)))
+        ;; bind frame vector
+        (setq vlist
+          (remove-if-not #'(lambda (v) (v . bindframe)) vlist))
+        (when vlist
+          (send trans :reset-vsp)
+          (setq (bindframe . offset) (send trans :create-frame (length vlist) "seqlet"))
+          (send bindframe :local 1))
+        (dolist (v vlist)
+          (send self :load-var v)
+          (send trans :clearpush-frame (bindframe . offset) closure-vars)
+          (setq (v . bindframe) (bindframe . offset)
+                (v . offset) closure-vars)
+          (inc closure-vars))
         ;; eval body
 	(send self :progn bodies)
-	;; unwind/restore
-	(setq unwind-frames unwind-save)
+        ;; unwind/restore
+        (setq unwind-frames unwind-save)
+        (setq closure-vars closure-save)
 	(send self :delete-frame 'local t)))
  (:let (bodies)	;parallel let
    (let ((local-list (pop bodies)) (unwind-save unwind-frames) (closure-save closure-vars)
