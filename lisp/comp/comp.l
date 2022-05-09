@@ -824,16 +824,10 @@
             (send self :bind (car spe) bindframe 'local offset)))
 	(setq scope (send idtable :level))
         ;; pre-evaluate body
-        (let ((cfile (trans . cfile))
-              (push (trans . push))
-              (pushcount (trans . pushcount)))
+        (let ((trans (send trans :copy-translator)))
           (setq avant-mode t)
-          (setq (trans . cfile) nil)
-          (send self :progn bodies)
-          (setq (trans . cfile) cfile)
-          (setq (trans . push) push)
-          (setq (trans . pushcount) pushcount)
-          (setq avant-mode nil))
+          (unwind-protect (send self :progn bodies)
+            (setq avant-mode nil)))
         ;; bind frame vector
         (setq vlist
           (remove-if-not #'(lambda (v) (and (derivedp v identifier) (v . bindframe))) vlist))

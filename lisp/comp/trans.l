@@ -30,7 +30,7 @@
 	   (t s))))
 
 (defclass translator :super object
-		     :slots (cfile hfile push pushcount quotev))
+		     :slots (cfile hfile push pushcount quotev avant-mode))
 
 (eval-when (load eval)
 
@@ -180,8 +180,8 @@
 		(setq f (concatenate string f
 			 "c.clo.env0->"))
 		(dec n))
-             (unless bindframe
-               (warn "; empty bindframe in closure reference!~%"))
+             (when (and (not bindframe) (not avant-mode))
+               (error value-error "; empty bindframe in closure reference!~%"))
 	     (setq f (concatenate string f
                            (format nil "c.clo.env1->c.vec.v[~d]->c.vec.v" 
                                    (or bindframe -1))))
@@ -594,9 +594,8 @@
  (:return ()
     (send self :clearpush)
     (format cfile "	ctx->vsp=local; return(local[0]);}~%")
-    (when (not (= (dec pushcount) 0))
-      (warn ":return pushcount is ~d~%" pushcount)
-      (setq pushcount 0)))
+    (when (and (not (= (dec pushcount) 0)) (not avant-mode))
+      (error value-error ":return pushcount is ~d~%" pushcount)))
  (:del-frame (spe loc)	;number of special bindings and local variables
     (send self :store "w")
     (send self :discard (+ (* 3 spe) loc))
@@ -690,6 +689,13 @@
  (:declare-forward-function (name)
     (format hfile "static pointer ~A();~%" name))
  (:quote ()  quotev)
+ (:copy-translator ()
+    (let ((newtrans))
+      (setq newtrans (copy-object self))
+      (setq (newtrans . cfile) nil)
+      (setq (newtrans . hfile) nil)
+      (setq (newtrans . avant-mode) t)
+      newtrans))
  (:init () 
     (setq push nil
 	  pushcount 0  ))
