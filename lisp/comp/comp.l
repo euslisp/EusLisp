@@ -148,6 +148,31 @@
      self))
 )
 
+;	function identifier
+;
+(eval-when (load compile eval)
+(defclass function-identifier :super object
+  :slots (name entry binding level offset bindframe body))
+)
+;; binding = (constant, local, global, special)
+
+(eval-when (load eval)
+(defmethod function-identifier
+ (:init (sym bin off &optional lev ent frame)
+    (setq name sym
+          binding bin
+          offset off
+          level lev
+          entry ent
+          bindframe frame)
+     self)
+  (:init-body (sym bin &optional bd)
+    (setq name sym
+          binding bin
+          body bd)
+     self))
+)
+
 ;	identifier table
 ;
 (eval-when (load compile eval)
@@ -262,32 +287,34 @@
 	      (send self :eval `(apply (function ,(car form)) ,(cdr form))))
 	  (t
 	    (let* ((fdef (send self :get-function (car form)))
-	           (ftype (second fdef)))
+	           (ftype (fdef . binding)))
 	      (case ftype
 		(lambda  (send self :funcall (car form) (cdr form)))
 		(special (send self :special-form (car form) (cdr form)))
 		(macro   (send self :eval (macroexpand form)))
-		(macrolet (send self :eval (eval `(,(third fdef) ,@(cdr form)))))
+		(macrolet (send self :eval (eval `(,(fdef . body) ,@(cdr form)))))
 		(closure (send self :call-closure fdef (cdr form)))
 		(t (send self :error "unknown func type" form))) ))))
  (:get-function (fn)
-   (if (not (symbolp fn)) (send self :error "symbol expected for a func. name"))
-   (let ((fdef (assq fn flets)))
+   (if (not (symbolp fn)) (send self :error "symbol expected for a function name"))
+   (let ((fdef (find-if #'(lambda (x) (eql (x . name) fn)) flets)))
       (if fdef
 	  fdef
 	  (cond ((fboundp fn)
 		 (setq fdef (symbol-function fn))
 		 (if (compiled-function-p fdef)
-		     (list fn (cdr (assq (compiled-code-type fdef)
+                     (instance function-identifier :init-body
+                               fn (cdr (assq (compiled-code-type fdef)
 				         '((0 . lambda) (1 . macro) (2 . special))))
-			   fdef)
-		     (cons fn fdef)))
-		(t (list fn 'lambda))))))
+                               fdef)
+		     (instance function-identifier :init-body
+                               fn (car fdef) (cdr fdef))))
+		(t (instance function-identifier :init-body fn 'lambda))))))
  (:call-closure (fdef args)
    (if *debug*   (print (list :call-closure fdef args)))
    (dolist (a args) (send self :eval a))
-   (send trans :load-local (third fdef) (- closure-level (fourth fdef)) (sixth fdef))
-   (send trans :call-closure (fifth fdef) (length args)))
+   (send trans :load-local (fdef . offset) (- closure-level (fdef . level)) (fdef . bindframe))
+   (send trans :call-closure (fdef . entry) (length args)))
  (:variable (var)	;var must be a symbol, ovaf is not allowed here.
    (let ((result (send idtable :get var scope)))
         (if result (return-from :variable result))
@@ -1007,10 +1034,10 @@
  (:function (fn)
    (if (symbolp fn)		; #'FUNC
        (let ((flet-def (send self :get-function fn)))
-	   (if (eq (second flet-def) 'closure)
-	       (send trans :load-local (third flet-def)
-					(- closure-level (fourth flet-def))
-                                        (sixth flet-def))
+	   (if (eq (flet-def . binding) 'closure)
+	       (send trans :load-local (flet-def . offset)
+					(- closure-level (flet-def . level))
+                                        (flet-def . bindframe))
 	       (send trans :getfunc fn)))
        (let (entry newcomp)  ; #'(lambda (...) ...)
          (if avant-mode
@@ -1026,27 +1053,24 @@
                (send self :add-closure (list entry fn newcomp)))))))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
-     (let (entry newcomp newcomps flets-exchange fletframe)
+     (let (newcomp newcomps fletframe)
        (setq fletframe (send self :create-frame 'flet))
        (if (not recursive-scope)	; copy compiler before binding the functions
            (setq newcomp (send self :copy-compiler)))
         (dolist (fn funcs)
+          (let (entry offset)
 	    (setq entry (send self :genlabel "FLET"))
 	    (send self :closure entry "flet env")
-	    (push (list
-	           (car fn)	;func name
-	           'closure	;func bind type
-	           (1- (send trans :offset-from-fp))	;offset
-	           closure-level
-	           entry
-	           nil)		;fletframe
+            (setq offset (1- (send trans :offset-from-fp)))
+            (push (instance function-identifier :init
+                            (car fn) 'closure offset closure-level entry)
 	          flets)
 	    (send fletframe :local 1)
 	    (when recursive-scope
               (setq newcomp (send self :copy-compiler))
               (push newcomp newcomps))
 	    (send self :add-closure (list entry (cons 'lambda (cdr fn))
-				    newcomp)))
+                                   newcomp))))
 
         (if recursive-scope
 	    (send-all newcomps :change-flets flets))
@@ -1057,7 +1081,8 @@
         (send trans :del-frame (fletframe . specials) (fletframe . locals))))
  (:macrolet (funcs bodies)
    (dolist (fn funcs)
-     (push (list (car fn) 'macrolet `(lambda ,@(cdr fn)))
+     (push (instance function-identifier :init-body
+                     (car fn) 'macrolet `(lambda ,@(cdr fn)))
            flets))
    (send self :progn bodies)
    (setq flets (nthcdr (length funcs) flets)))
