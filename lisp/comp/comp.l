@@ -1112,7 +1112,6 @@
 	 (optn 0)
 	 (keyn 0)
 	 (auxn 0)
-         (svar-base 0)
          (opt-supplied-vars)
          (opt-vars (memq '&optional param))
          (rest-var (memq '&rest param))
@@ -1223,67 +1222,37 @@
 ;; (print "bind")
      (setq i 0)
      (dolist (v req-vars)		;for all required arguments
-	(send trans :load-arg i 0)
-        (if (send self :special-variable-p v)
-            (let ((offset (1- (send trans :offset-from-fp))))
-              (send self :bind v argframe 'local offset))
-            (send self :bind v argframe 'arg i :store t))
-	(inc i))
+       (send self :bind v argframe 'arg i)
+       (inc i))
      (while (cdr labels)
        (let ((var (pop opt-vars))
-             (svar (pop opt-supplied-vars))
-             var-spebase svar-spebase)
+             (svar (pop opt-supplied-vars)))
          (when svar	; initialize supplied-p to t
            (send trans :load-t)
-           (if (send self :special-variable-p svar)
-               (progn
-                 (setq svar-spebase (1- (send trans :offset-from-fp)))
-                 (send argframe :local 1))
-               (setq svar (send self :bind svar argframe 'lambda (+ i svar-base) :store t)))
-           (inc svar-base))
-         (if (send self :special-variable-p var)
-             (let ((offset (send trans :offset-from-fp)))
-               (send trans :load-local offset 0)
-               (setq var-spebase offset)
-               (send argframe :local 1))
-             (progn
-               (setq var (send self :bind var argframe 'lambda (+ i svar-base)))
-               (setq (var . bindframe) (argframe . offset))
-               (send self :load-var var)))
+           (setq svar (send self :bind svar argframe 'local (1- (send trans :offset-from-fp)))))
          (send trans :check-opt-arg i (car labels))
          (when svar	; set supplied-p to nil
            (send trans :load-nil)
-           (if svar-spebase
-               (send trans :store-local svar-base 0)
-               (send self :store-var svar)))
+           (send self :store-var svar))
          ;; set init value
          (send self :eval (pop opt-forms))
-         (if (derivedp var identifier) (send self :store-var var))
          (send trans :label (pop labels))
-         (when var-spebase
-           (send trans :load-local var-spebase 0)
-           (send self :bind var argframe 'local var-spebase))
-         (when svar-spebase
-           (send trans :load-local svar-spebase 0)
-           (send self :bind svar argframe 'local svar-spebase))
+         (send self :bind var argframe 'local (1- (send trans :offset-from-fp)))
          (inc i)))
      (when labels
         (send trans :label (pop labels)))
      (cond 
      	(rest-var
 	 (send trans :rest (+ reqn optn))
-         (send self :bind rest-var argframe 'lambda (+ i svar-base) :store t)
-         (inc i))
+         (send self :bind rest-var argframe 'local (1- (send trans :offset-from-fp))))
 	((and (> optn 0) (null key-forms)) (send trans :check-rest-arg i)))
      (when key-forms
-       (let ((key-base (+ i svar-base))
-             svar-spebase)
+       (let ((key-base (send trans :offset-from-fp)))
          (send trans :reset-vsp)
          ;; bind given arguments
          (send trans :parse-key-params (coerce key-names vector)
                (+ reqn optn)
-               (argframe . offset) (+ i svar-base) allowotherkeys)
-         (inc i keyn)
+               keyn allowotherkeys)
          ;; bind defaults / supplied arguments
          (dotimes (j keyn)
            (let ((var (pop key-vars))
@@ -1291,39 +1260,27 @@
 	   (setq labels (send self :genlabel "KEY"))
            (when svar	; set supplied-p variables to t
              (send trans :load-t)
-             (if (send self :special-variable-p svar)
-                 (progn
-                   (setq svar-spebase (1- (send trans :offset-from-fp)))
-                   (send argframe :local 1))
-                 (setq svar (send self :bind svar argframe 'lambda (+ i svar-base) :store t)))
-             (inc svar-base))
+             (setq svar (send self :bind svar argframe 'local (1- (send trans :offset-from-fp)))))
 	   (send trans :check-key-arg j labels)
 	   (when svar	; set supplied-p variables to nil
              (send trans :load-nil)
-             (if svar-spebase
-                 (send trans :store-local svar-base 0)
-                 (send self :store-var svar)))
+             (send self :store-var svar))
 	   ;; set default values
 	   (send self :eval (pop key-inits))
 	   (cond ((send self :special-variable-p var)
-                  (send trans :store-local (+ key-base j) 0 (argframe . offset))
+                  (send trans :store-local (+ key-base j) 0)
 		  (send trans :label labels)
-	          (send trans :load-local (+ key-base j) 0 (argframe . offset))
-		  (send self :bind var argframe 'local (+ key-base j)))
+	          (send trans :load-local (+ key-base j) 0)
+		  (send self :bind var argframe 'local (+ key-base j) :keyvarp t))
 	         (t	;non-special
-		  (send self :bind var argframe 'lambda (+ key-base j) :store t)
-		  (send trans :label labels)))
-           (when svar-spebase
-             (send trans :load-local svar-spebase 0)
-             (send self :bind svar argframe 'local svar-spebase))))
+		  (send self :bind var argframe 'local (+ key-base j) :store t)
+		  (send trans :label labels)))))
 	)   )
 ;;; bind aux variables
      (dolist (av aux-vars)
 	(if (consp av) (send self :eval (cadr av)) (send trans :load-nil))
-	(send self :bind (if (listp av) (car av) av) argframe 'lambda
-              (+ i svar-base)
-              :store t)
-        (inc i))
+	(send self :bind (if (listp av) (car av) av) argframe 'local
+              (1- (send trans :offset-from-fp))))
 ;;; type check declaration variables
      (dolist (id decl-vars)
        (let ((v (send self :variable id)))

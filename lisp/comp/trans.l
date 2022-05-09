@@ -149,8 +149,8 @@
            (format cfile "	if (n~A~d) maerror();~%"
 			   (if (= opt 0) "!=" "<") req))) )
  (:check-opt-arg (m lab)
-   (format cfile "	if (n>=~d) { ~A=(argv[~d]); goto ~A;}~%"
-           (1+ m) (send self :pop) m lab))
+   (format cfile "	if (n>=~d) { local[~d]=(argv[~d]); goto ~A;}~%"
+           (1+ m) pushcount m lab))
  (:check-rest-arg (m)
    (if (> *safety* 0)
        (format cfile "	if (n>~d) maerror();~%" m)) )
@@ -158,13 +158,14 @@
    (send self :clearpush)
    (send self :reset-vsp)
    (send self :push (format nil "minilist(ctx,&argv[n],n-~d)"  pcnt)))
- (:parse-key-params (keyvec req+opt bindframe offset allowotherkeys)
+ (:parse-key-params (keyvec req+opt keyn allowotherkeys)
    (send self :clearpush)
    (format cfile
-	   "	n=parsekeyparams(fqv[~d], &argv[~d], n-~d, ~A+~d, ~A);~%"
+	   "	n=parsekeyparams(fqv[~d], &argv[~d], n-~d, local+~d, ~A);~%"
 	   (send self :quote-entry keyvec) req+opt req+opt
-           (send self :getbase 0 nil bindframe) offset
-	   (if allowotherkeys 1 0)))
+           pushcount
+	   (if allowotherkeys 1 0))
+   (inc pushcount keyn))
  (:check-key-arg (n lab)
    (format cfile "	if (n & (1<<~A)) goto ~A;~%" n lab))
  (:getbase (n argp &optional bindframe)
