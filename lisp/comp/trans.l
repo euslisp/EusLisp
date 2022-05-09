@@ -30,12 +30,13 @@
 	   (t s))))
 
 (defclass translator :super object
-		     :slots (cfile hfile push pushcount quotev avant-mode))
+		     :slots (cfile hfile push pushcount quotev))
 
 (eval-when (load eval)
 
 (defparameter ftab-next 0)
 (defparameter external-functions nil)
+(defparameter avant-mode nil)
 
 (defun ftab-index (sym)
    (let ((index (get sym :ftab-index)))
@@ -694,7 +695,6 @@
       (setq newtrans (copy-object self))
       (setq (newtrans . cfile) nil)
       (setq (newtrans . hfile) nil)
-      (setq (newtrans . avant-mode) t)
       newtrans))
  (:init () 
     (setq push nil

@@ -214,7 +214,6 @@
 	   :slots
 	   (idtable		;identifier-table
 	    closure-level	;current closure level
-	    closure-vars	;closure variable counter
 	    scope		;current variable scope (for sequential let)
 	    frames		;list of the number of special bindings
 	    fletframes		;list of function frames
@@ -225,7 +224,6 @@
 	    initcodes		;initialize codes in "eusmain"
 	    flets		;list of flet frames
 	    unwind-frames	;frames need to unwound when jumps
-	    avant-mode		;pre-evaluation mode flag
 	    symstr
 	    )))
 (defvar *compiler-symid* 0)
@@ -776,7 +774,7 @@
 	      (and (null var-val) (null duped) (send self :load-var var)))
      result-type))
  (:let* (bodies)	;sequential let
-   (let ((local-list (pop bodies)) (unwind-save unwind-frames) (closure-save closure-vars)
+   (let ((local-list (pop bodies)) (unwind-save unwind-frames)
           bindframe vlist)
 	(setq bindframe (send self :create-frame 'local))
         ;; handle declarations
@@ -790,10 +788,9 @@
             (setq offset (1- (send trans :offset-from-fp)))
             (push (send self :bind var bindframe 'local offset) vlist)))
         ;; pre-evaluate body
-        (let ((trans (send trans :copy-translator)))
-          (setq avant-mode t)
-          (unwind-protect (send self :progn bodies)
-            (setq avant-mode nil)))
+        (let ((trans (send trans :copy-translator))
+              (avant-mode t))
+          (send self :progn bodies))
         ;; bind frame vector
         (setq vlist
           (remove-if-not #'(lambda (v) (v . bindframe)) vlist))
@@ -801,20 +798,19 @@
           (send trans :reset-vsp)
           (setq (bindframe . offset) (send trans :create-frame (length vlist) "seqlet"))
           (send bindframe :local 1))
-        (dolist (v vlist)
-          (send self :load-var v)
-          (send trans :clearpush-frame (bindframe . offset) closure-vars)
-          (setq (v . bindframe) (bindframe . offset)
-                (v . offset) closure-vars)
-          (inc closure-vars))
+        (dotimes (i (length vlist))
+          (let ((v (nth i vlist)))
+            (send self :load-var v)
+            (send trans :clearpush-frame (bindframe . offset) i)
+            (setq (v . bindframe) (bindframe . offset)
+                  (v . offset) i)))
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
         (setq unwind-frames unwind-save)
-        (setq closure-vars closure-save)
 	(send self :delete-frame 'local t)))
  (:let (bodies)	;parallel let
-   (let ((local-list (pop bodies)) (unwind-save unwind-frames) (closure-save closure-vars)
+   (let ((local-list (pop bodies)) (unwind-save unwind-frames)
           bindframe special-list vlist)
 	(setq bindframe (send self :create-frame 'local))
         ;; handle declarations
@@ -843,10 +839,9 @@
             (send self :bind (car spe) bindframe 'local offset)))
 	(setq scope (send idtable :level))
         ;; pre-evaluate body
-        (let ((trans (send trans :copy-translator)))
-          (setq avant-mode t)
-          (unwind-protect (send self :progn bodies)
-            (setq avant-mode nil)))
+        (let ((trans (send trans :copy-translator))
+              (avant-mode t))
+          (send self :progn bodies))
         ;; bind frame vector
         (setq vlist
           (remove-if-not #'(lambda (v) (and (derivedp v identifier) (v . bindframe))) vlist))
@@ -854,17 +849,16 @@
           (send trans :reset-vsp)
           (setq (bindframe . offset) (send trans :create-frame (length vlist) "parlet"))
           (send bindframe :local 1))
-        (dolist (v vlist)
-          (send self :load-var v)
-          (send trans :clearpush-frame (bindframe . offset) closure-vars)
-          (setq (v . bindframe) (bindframe . offset)
-                (v . offset) closure-vars)
-          (inc closure-vars))
+        (dotimes (i (length vlist))
+          (let ((v (nth i vlist)))
+            (send self :load-var v)
+            (send trans :clearpush-frame (bindframe . offset) i)
+            (setq (v . bindframe) (bindframe . offset)
+                  (v . offset) i)))
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
 	(setq unwind-frames unwind-save)
-        (setq closure-vars closure-save)
 	(send self :delete-frame 'local t)))
  (:cond (clauses)
     (let (clause pred next t-found  (exit (send self :genlabel "CON")))
@@ -1030,11 +1024,10 @@
        (let (entry newcomp)  ; #'(lambda (...) ...)
          (if avant-mode
              (progn
-               (when avant-mode
-                 (setq newcomp (send self :copy-compiler))
-                 (setq (newcomp . idtable) idtable)
-                 (send newcomp :lambda (cadr fn) (cddr fn))
-                 (send trans :discard 1)))
+               (setq newcomp (send self :copy-compiler))
+               (setq (newcomp . idtable) idtable)
+               (send newcomp :lambda (cadr fn) (cddr fn))
+               (send trans :discard 1))
              (progn
                (setq entry (send self :genlabel "CLO"))
                (send self :closure entry "lambda-closure")
@@ -1694,7 +1687,6 @@
 	idtable (instance identifier-table :init)
         scope 0
 	closure-level 0
-	closure-vars 0
 	symstr "")
   self)
    ) ; defmethod
