@@ -379,6 +379,25 @@
          (send idtable :create-frame)
          (setq scope (send idtable :level))))
       frame))
+ (:bind-frame (frame body vlist &optional comment)
+    ;; pre-evaluate body
+    (let ((trans (send trans :copy-translator))
+          (avant-mode t))
+      (send self :progn body))
+    ;; bind frame vector
+    (setq vlist
+      (remove-if-not #'(lambda (v) (and (derivedp v identifier) (v . bindframe))) vlist))
+    (when vlist
+      (send trans :reset-vsp)
+      (setq (frame . offset) (send trans :create-frame (length vlist) comment))
+      (send frame :local 1))
+    (dotimes (i (length vlist))
+      (let ((v (nth i vlist)))
+        (send self :load-var v)
+        (send trans :clearpush-frame (frame . offset) i)
+        (setq (v . bindframe) (frame . offset)
+              (v . offset) i)))
+    frame)
  (:delete-frame (type flag)
     (let* ((f
             (case type
@@ -789,23 +808,8 @@
             (send self :eval (if (listp init-form) (cadr init-form) nil))
             (setq offset (1- (send trans :offset-from-fp)))
             (push (send self :bind var bindframe 'local offset) vlist)))
-        ;; pre-evaluate body
-        (let ((trans (send trans :copy-translator))
-              (avant-mode t))
-          (send self :progn bodies))
-        ;; bind frame vector
-        (setq vlist
-          (remove-if-not #'(lambda (v) (v . bindframe)) vlist))
-        (when vlist
-          (send trans :reset-vsp)
-          (setq (bindframe . offset) (send trans :create-frame (length vlist) "seqlet"))
-          (send bindframe :local 1))
-        (dotimes (i (length vlist))
-          (let ((v (nth i vlist)))
-            (send self :load-var v)
-            (send trans :clearpush-frame (bindframe . offset) i)
-            (setq (v . bindframe) (bindframe . offset)
-                  (v . offset) i)))
+        ;; bind closure variables
+        (send self :bind-frame bindframe bodies (nreverse vlist) "seqlet")
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
@@ -840,23 +844,8 @@
             (send trans :load-local (cadr spe) 0)
             (send self :bind (car spe) bindframe 'local offset)))
 	(setq scope (send idtable :level))
-        ;; pre-evaluate body
-        (let ((trans (send trans :copy-translator))
-              (avant-mode t))
-          (send self :progn bodies))
-        ;; bind frame vector
-        (setq vlist
-          (remove-if-not #'(lambda (v) (and (derivedp v identifier) (v . bindframe))) vlist))
-        (when vlist
-          (send trans :reset-vsp)
-          (setq (bindframe . offset) (send trans :create-frame (length vlist) "parlet"))
-          (send bindframe :local 1))
-        (dotimes (i (length vlist))
-          (let ((v (nth i vlist)))
-            (send self :load-var v)
-            (send trans :clearpush-frame (bindframe . offset) i)
-            (setq (v . bindframe) (bindframe . offset)
-                  (v . offset) i)))
+        ;; bind closure variables
+        (send self :bind-frame bindframe bodies vlist "parlet")
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
@@ -1297,23 +1286,8 @@
          (unless (eql (v . binding) 'unknown)
            (send self :load-var id)
            (send trans :type-check-declare (v . type)))))
-;;; pre-evaluate lambda body
-     (let ((trans (send trans :copy-translator))
-           (avant-mode t))
-       (send self :progn forms))
-;;; bind frame vector
-     (setq vlist
-           (remove-if-not #'(lambda (v) (v . bindframe)) vlist))
-     (when vlist
-       (send trans :reset-vsp)
-       (setq (argframe . offset) (send trans :create-frame (length vlist) "argv"))
-       (send argframe :local 1))
-     (dotimes (i (length vlist))
-       (let ((v (nth i vlist)))
-         (send self :load-var v)
-         (send trans :clearpush-frame (argframe . offset) i)
-         (setq (v . bindframe) (argframe . offset)
-               (v . offset) i)))
+;;; bind closure variables
+     (send self :bind-frame argframe forms (nreverse vlist) "argv")
 ;;; evaluate lambda body
      (send self :progn forms)
 ;;; unwind/restore
