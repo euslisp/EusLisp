@@ -696,10 +696,14 @@
     (maybe-format hfile "static pointer ~A();~%" name))
  (:quote ()  quotev)
  (:copy-translator ()
-    (let ((newtrans))
-      (setq newtrans (copy-object self))
-      (setq (newtrans . cfile) nil)
-      (setq (newtrans . hfile) nil)
+    (let ((newtrans) (cfile-save cfile) (hfile-save hfile))
+      (unwind-protect
+           (progn
+             (setq cfile nil)
+             (setq hfile nil)
+             (setq newtrans (copy-object self)))
+        (setq cfile cfile-save)
+        (setq hfile hfile-save))
       newtrans))
  (:init () 
     (setq push nil
