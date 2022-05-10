@@ -482,6 +482,8 @@
 	(send trans :load-arg (var . offset) (- closure-level (var . level))
               (send self :var-bindframe var)))
     ((object)
+	(if (and avant-mode (not (var . bindframe)) (> closure-level (var . level)))
+          (setq ((send idtable :get 'self) . bindframe) t))
 	(send trans :load-obj (var . offset) (- closure-level (var . level))
               (send self :var-bindframe var)))
     (unknown 
