@@ -1060,6 +1060,7 @@
              (progn
                (setq newcomp (send self :copy-compiler))
                (setq (newcomp . idtable) idtable)
+               (setq (newcomp . flets) flets)
                (send newcomp :lambda (cadr fn) (cddr fn))
                (send trans :discard 1))
              (progn
@@ -1096,30 +1097,45 @@
                   (newcomp (send self :copy-compiler))
                   (avant-mode t))
               (setq (newcomp . flets) flets-tmp)
-              (send newcomp :lambda (cadr (fn . body)) (cddr (fn . body)))))
-          (setq flist (remove-if-not #'(lambda (v) (v . bindframe)) (reverse flets-tmp))))
+              (send newcomp :lambda (cadr (fn . body)) (cddr (fn . body))))))
 
+        ;; pre-evaluate body
+        (let ((trans (send trans :copy-translator))
+              (flets-save flets)
+              (avant-mode t))
+          (setq flets flets-tmp)
+          (unwind-protect (send self :progn bodies)
+            (setq flets flets-save)))
+
+        ;; bind frames
+        (setq flist (remove-if-not #'(lambda (v) (v . bindframe)) (reverse flets-tmp)))
         (if recursive-scope
-            (setq fletframe (send self :create-frame 'flet (length flist) "flet"))
-            (setq fletframe (send self :create-frame 'flet)))
+            ;; when recursive setup the bindframe beforehand
+            (setq fletframe (send self :create-frame 'flet (length flist) "flet")))
 
         (dolist (fn (reverse flets-tmp))
           (send self :closure (fn . entry) "flet env")
           (setq (fn . offset) (1- (send trans :offset-from-fp)))
-          (send fletframe :local 1)
           (send self :add-closure (list (fn . entry) (fn . body) (fn . comp))))
 
-        (when recursive-scope
-          (dotimes (i (length flist))
-            (let ((fn (nth i flist)))
-              (send trans :load-local (fn . offset) (- closure-level (fn . level)))
-              (send trans :store-local i 0 (fletframe . offset))
-              (setq (fn . bindframe) (fletframe . offset)
-                    (fn . offset) i))))
+        (unless recursive-scope
+          ;; when not recursive setup the bindframe after the closure declaration
+          (setq fletframe (send self :create-frame 'flet (length flist) "flet")))
 
+        (send fletframe :local (length flets-tmp))
+
+        (dotimes (i (length flist))
+          (let ((fn (nth i flist)))
+            (send trans :load-local (fn . offset) (- closure-level (fn . level)))
+            (send trans :store-local i 0 (fletframe . offset))
+            (setq (fn . bindframe) (fletframe . offset)
+                  (fn . offset) i)))
+
+        ;; evaluate body
         (setq flets (append flets-tmp flets))
         (if recursive-scope (send-all newcomps :change-flets flets))
         (send self :progn bodies)
+        ;; unwind/restore
         (setq flets (nthcdr (length flets-tmp) flets))
         (send self :delete-frame 'flet nil)
         (send trans :del-frame (fletframe . specials) (fletframe . locals))))
