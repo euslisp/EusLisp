@@ -977,15 +977,22 @@
       ;; makeclosure
       (send trans :closure form (plusp closure-level) (not (not frame)))))
  (:unwind-protect (prot cleanup)
-    (let ((cleaner (send self :genlabel "UWP"))
-	  (newcomp))
-      (push (send trans :offset-from-fp) unwind-frames)
-      (send self :closure cleaner "unwind protect")	;make cleanup closure
-	 (setq newcomp (send self :copy-compiler))
-	 (send self :add-closure
-		    (list cleaner 
-			  (cons 'lambda	(cons nil cleanup))
-			  newcomp))
+    (let (cleaner newcomp)
+      (if avant-mode
+          (progn
+            (setq newcomp (send self :copy-compiler))
+            (setq (newcomp . idtable) idtable)
+            (send newcomp :lambda nil cleanup)
+            (send trans :discard 1))
+          (progn
+            (setq cleaner (send self :genlabel "UWP"))
+            (push (send trans :offset-from-fp) unwind-frames)
+            (send self :closure cleaner "unwind protect")	;make cleanup closure
+            (setq newcomp (send self :copy-compiler))
+            (send self :add-closure
+                  (list cleaner
+                        (cons 'lambda	(cons nil cleanup))
+                        newcomp))))
       (send trans :bind-cleaner)
       (send self :eval prot)
       (send trans :call-cleaner cleaner)
