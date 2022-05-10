@@ -323,7 +323,9 @@
    (send trans :call-closure (fdef . entry) (length args)))
  (:variable (var)	;var must be a symbol, ovaf is not allowed here.
    (let ((result (send idtable :get var scope)))
-        (if result (return-from :variable result))
+        (if (and result
+                 (not (and (> closure-level (result . level)) (eq (result . bindframe) t))))
+            (return-from :variable result))
 	(setq result (instance identifier :init var 'special 0 0))
         (cond
 	  ((proclaimed-special-p  var)
