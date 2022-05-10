@@ -393,6 +393,13 @@
                (setq (v . bindframe) (frame . offset))
                (send self :store-var v))))
      v))
+ (:bind-identifier (v frame &key store keyvarp)
+    (unless (derivedp v identifier)
+	(error type-error "identifier expected"))
+    (unless (send idtable :find (v . name))
+      (send idtable :enter v))
+    (send self :bind (v . name) frame (v . binding) (v . offset)
+          :store store :keyvarp keyvarp))
  (:create-frame (type &optional size comment)
     (let ((frame (instance stack-frame :init type)))
       (setq (frame . level) closure-level)
@@ -830,27 +837,49 @@
 		     (send self :store-ovaf (car var) (cdr var))))
 	      (and (null var-val) (null duped) (send self :load-var var)))
      result-type))
- (:let* (bodies)	;sequential let
-   (let ((local-list (pop bodies)) (unwind-save unwind-frames)
-          bindframe vlist)
-	(setq bindframe (send self :create-frame 'local))
+ (:let* (bodies &optional (rec t))	;sequential let
+   (let ((unwind-save unwind-frames) (i 0)
+         local-list bindframe vlist)
+        (when rec
+          (let ((trans (send trans :copy-translator))
+                (newcomp (send self :copy-compiler nil))
+                (avant-mode t))
+            (setq vlist (send newcomp :let* bodies nil))))
+        (setq local-list (pop bodies))
+        (setq bindframe (send self :create-frame 'local
+                              (count-if #'(lambda (x) (x . bindframe)) vlist)
+                              "seqlet"))
         ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
           (send self :declare (cdr (pop bodies))))
-        ;; eval to locals
+        ;; eval and bind
 	(dolist (init-form local-list)
-          (let ((var (if (listp init-form) (car init-form) init-form))
-                offset)
+          (let ((var (if (listp init-form) (car init-form) init-form)))
             (send self :eval (if (listp init-form) (cadr init-form) nil))
-            (setq offset (1- (send trans :offset-from-fp)))
-            (push (send self :bind var bindframe 'local offset) vlist)))
-        ;; bind closure variables
-        (send self :bind-frame bindframe bodies (nreverse vlist) "seqlet")
+            (if rec
+                ;; in recursive mode: bind frame variables
+                (let ((v (find var vlist :key #'(lambda (x) (x . name)))))
+                  (if (not v) (send self :error "variable not found"))
+                  (if (v . bindframe)
+                      (progn
+                        (send trans :clearpush-frame (bindframe . offset) i)
+                        (setq (v . binding) 'let
+                              (v . bindframe) (bindframe . offset)
+                              (v . offset) i)
+                        (inc i))
+                      (let ((offset (1- (send trans :offset-from-fp))))
+                        (setq (v . offset) offset)))
+                  (send self :bind-identifier v bindframe))
+                ;; in avant mode: collect variables
+                (let ((offset (1- (send trans :offset-from-fp))))
+                  (push (send self :bind var bindframe 'local offset) vlist)))))
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
         (setq unwind-frames unwind-save)
-	(send self :delete-frame 'local t)))
+	(send self :delete-frame 'local t)
+	;; return value
+	vlist))
  (:let (bodies)	;parallel let
    (let ((local-list (pop bodies)) (unwind-save unwind-frames)
           bindframe special-list vlist)
@@ -1717,12 +1746,12 @@
        )
      (send trans :clear-external-functions)))
  (:specials () (mapcar 'car (send idtable :frame 0)))
- (:copy-compiler ()
+ (:copy-compiler (&optional (closurep t))
     (let ((newcomp) (initcode-save initcodes) (closure-save function-closures))
        (setq initcodes nil
 	     function-closures nil)
        (setq newcomp (copy-object self))
-       (send newcomp :closure-level 1)
+       (if closurep (send newcomp :closure-level 1))
        (setq initcodes initcode-save
 	     function-closures closure-save)
        newcomp))
