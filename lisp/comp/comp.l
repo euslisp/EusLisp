@@ -398,12 +398,11 @@
       (send idtable :enter v))
     (send self :bind (v . name) frame (v . binding) (v . offset) :keyvarp keyvarp))
  (:bind-closure-variable (v binding frame i &key (store t))
-    (if store
-        (send trans :clearpush-frame (frame . offset) i))
     (setq (v . binding) binding
           (v . bindframe) (frame . offset)
           (v . offset) i)
-    (send self :bind-identifier v frame))
+    (send self :bind-identifier v frame)
+    (if store (send self :store-var v)))
  (:create-frame (type &optional size comment)
     (let ((frame (instance stack-frame :init type)))
       (setq (frame . level) closure-level)
