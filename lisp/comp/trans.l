@@ -438,7 +438,7 @@
 	  (integer   (maybe-format cfile "	  w=makeint(~A->c.ivec.iv[i]);}~%" vec))
 	  (float     (maybe-format cfile "	  w=makeflt(~A->c.fvec.fv[i]);}~%" vec))
 	  (pointer   (maybe-format cfile "	  w=(~A->c.vec.v[i]);}~%" vec))
-	  (T  (send self :error "unknown vector element type")))
+	  (T  (send self :error "unknown vector element type ~S" type)))
       (send self :push "w")))
  (:vset (type)		; store to a vector element whose type is apparent
     (send self :store "w")	;value
@@ -453,7 +453,7 @@
 	 #+:rgc
 		   (maybe-format cfile "	  noticeCollector(v->c.vec.v[i], w);~%")
 		   (maybe-format cfile "	  v->c.vec.v[i]=w;}~%"))
-	(T  (send self :error "unknown vector element type")))
+	(T  (send self :error "unknown vector element type ~S" type)))
     (send self :push "w"))
  (:nullx ()
     (send self :push (format nil "((~A)==NIL?T:NIL)" (send self :pop))))
@@ -572,7 +572,7 @@
 		"		right=fltval(~A); left=fltval(~A);~%"
 		(send self :pop) (send self :pop))
 	    (maybe-format cfile "	if (left ~A right) goto ~A;}~%" comparator lab))
-	 (t (send self :error "illegal compare"))))
+	 (t (send self :error "illegal compare ~S" type))))
 ;;; floating arithemtics
  (:flt-op2 (op)
     (maybe-format cfile "	{ double x,y;~%")

@@ -94,7 +94,7 @@
        (setq var (svref (klass . types) var))
        (let ((index (position var (klass . vars))))
           (if (null index) 
-	      (send comp :error "no such obj var" var)
+	      (send comp :error "no such obj var ~S" var)
 	      (setq var (svref (klass . types) index)))))
    (if (consp var) (car var) var))
 
@@ -296,7 +296,7 @@
 		(macro   (send self :eval (macroexpand form)))
 		(macrolet (send self :eval (eval `(,(fdef . body) ,@(cdr form)))))
 		(closure (send self :call-closure fdef (cdr form)))
-		(t (send self :error "unknown func type" form))) ))))
+		(t (send self :error "unknown func type ~S" form))) ))))
  (:get-function (fn)
    (if (not (symbolp fn)) (send self :error "symbol expected for a function name"))
    (let ((fdef (find-if #'(lambda (x) (eql (x . name) fn)) flets)))
@@ -370,7 +370,7 @@
 				      id 'unknown closure-level nil))
 	 (send idtable :enter v)
          (when (or (proclaimed-special-p id) (proclaimed-global-p id))
-	    (if (constantp id) (send self :error "not variable" id))
+	    (if (constantp id) (send self :error "not variable ~S" id))
             (send v :binding 'special)
 	    ))
       v))
@@ -418,7 +418,7 @@
          (push frame frames))
         (flet
          (push frame fletframes))
-        ;; (t (send self :error "unknow frame type" type))
+        ;; (t (send self :error "unknow frame type ~S" type))
         )
       (case type
         ((arg local)
@@ -450,7 +450,7 @@
               (arg (pop argframes))
               (local (pop frames))
               (flet (pop fletframes))
-              (t (send self :error "unknown frame type" type))))
+              (t (send self :error "unknown frame type ~S" type))))
            (nospecials (f . specials)))
        (declare (type stack-frame f))
        (if (> nospecials 0)
@@ -471,7 +471,7 @@
 	   (setq index (position var (object-variable-names form-type)))
 	   (if (numberp index)
 	       (send trans :load-indexed-ov index)
-	       (send self  :error "no such object variable" form var))
+	       (send self  :error "no such object variable ~S ~S" form var))
 	   (object-variable-type form-type index))
 	  (t (send trans :load-ovaf var)
 	     t)) ))
@@ -499,7 +499,7 @@
 	(send trans :load-obj (var . offset) (- closure-level (var . level))
               (send self :var-bindframe var)))
     (unknown 
-	(send self :error "declared but unknown variable" (var . name)))
+	(send self :error "declared but unknown variable ~S" (var . name)))
     )
    (send var :type))
  (:store-ovaf (form varname)
@@ -734,7 +734,7 @@
 	((defmethod) (send self :warning "defmethod must be at toplevel") t)
 	((eval-when) (send self :warning
 			  "eval-when must appear at toplevel, ignored") t)
-	(t (send self :error "Compiling method is not yet implemented." fn))))
+	(t (send self :error "Compiling method is not yet implemented for ~S" fn))))
    )	;defmethod
 )	;eval-when
 
@@ -838,7 +838,7 @@
 		  (send self :store-var var)
 		  (progn	;ovaf?
 		     (if (not (symbolp (cdr var)))
-			 (send self :error "illegal ovaf" var))
+			 (send self :error "illegal ovaf ~S" var))
 		     (send self :store-ovaf (car var) (cdr var))))
 	      (and (null var-val) (null duped) (send self :load-var var)))
      result-type))
@@ -1039,7 +1039,7 @@
       (send self :leave-block))
  (:return-from (lab val)
    (let ((blklab (assq lab blocks)) (need-unwind) (offset))
-      (if (null blklab) (send self :error "no such block" lab))
+      (if (null blklab) (send self :error "no such block ~S" lab))
       (send self :eval val)
       (if (> closure-level (third blklab))
 	  (send self :error "return-from in a closure cannot be compiled"))
@@ -1064,7 +1064,7 @@
       (setq tags oldtags)))
  (:go (lab)
    (let ((tag (assq lab tags)) (offset) (need-unwind))
-      (if (null tag) (send self :error "no such tag to go" lab))
+      (if (null tag) (send self :error "no such tag ~S" lab))
       (setq offset (third  tag))
       (setq need-unwind (and unwind-frames (>= (first unwind-frames) offset)))
       (send trans :go-tag offset need-unwind)
@@ -1201,7 +1201,7 @@
 			(setq v (send self :enter-variable id))
 			(send v :type (car decl))
 			(push id acc)))
-		   (t  (send self :error "unknown declaration" decl))))))
+		   (t  (send self :error "unknown declaration ~S" decl))))))
       (nreverse acc)))
  (:lambda (param forms &optional (rec t))
    (let ((labels nil)
