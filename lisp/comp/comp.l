@@ -48,7 +48,6 @@
 (defvar trans)
 (defvar *multipass-optimize* t)
 
-
 (defun ovafp (form) (and (cdr form) (symbolp (cdr form))))
 
 (defun class-symbolp (x)
@@ -1096,38 +1095,31 @@
         (if (not recursive-scope)	; copy compiler before binding the functions
            (setq newcomp (send self :copy-compiler)))
         (dolist (fn funcs)
-         (if avant-mode
-             (progn
-               (setq newcomp (send self :copy-compiler))
-               (setq (newcomp . idtable) idtable)
-               (send newcomp :lambda (cadr fn) (cddr fn))
-               (send trans :discard 1))
-             (let ((entry (send self :genlabel "FLET"))
-                   (offset (1- (send trans :offset-from-fp)))
-                   (body (cons 'lambda (cdr fn))))
-               (when recursive-scope
-                 (setq newcomp (send self :copy-compiler))
-                 (push newcomp newcomps))
-               (push (instance function-identifier :init
-                               (car fn) 'closure offset closure-level entry body newcomp)
-                     flets-tmp))))
+          (let ((entry (send self :genlabel "FLET"))
+                (offset (1- (send trans :offset-from-fp)))
+                (body (cons 'lambda (cdr fn))))
+            (when recursive-scope
+              (setq newcomp (send self :copy-compiler))
+              (push newcomp newcomps))
+            (push (instance function-identifier :init
+                            (car fn) 'closure offset closure-level entry body newcomp)
+                  flets-tmp)))
 
-        (when recursive-scope
-          ;; pre-evaluate closures
+        ;; pre-evaluate closures
+        (let ((trans (send trans :copy-translator))
+              (newcomp (send self :copy-compiler))
+              (avant-mode t))
+          (setq (newcomp . flets) (append flets-tmp flets))
+          (setq (newcomp . idtable) idtable)
           (dolist (fn flets-tmp)
-            (let ((trans (send trans :copy-translator))
-                  (newcomp (send self :copy-compiler))
-                  (avant-mode t))
-              (setq (newcomp . flets) flets-tmp)
-              (send newcomp :lambda (cadr (fn . body)) (cddr (fn . body))))))
+            (send newcomp :lambda (cadr (fn . body)) (cddr (fn . body)))))
 
         ;; pre-evaluate body
         (let ((trans (send trans :copy-translator))
-              (flets-save flets)
+              (newcomp (send self :copy-compiler nil))
               (avant-mode t))
-          (setq flets flets-tmp)
-          (unwind-protect (send self :progn bodies)
-            (setq flets flets-save)))
+          (setq (newcomp . flets) (append flets-tmp flets))
+          (send newcomp :progn bodies))
 
         ;; bind frames
         (setq flist (remove-if-not #'(lambda (v) (v . bindframe)) (reverse flets-tmp)))
@@ -1135,12 +1127,13 @@
             ;; when recursive setup the bindframe beforehand
             (setq fletframe (send self :create-frame 'flet (length flist) "flet")))
 
-        (dolist (fn (reverse flets-tmp))
-          (send self :closure (fn . entry) "flet env")
-          (setq (fn . offset) (1- (send trans :offset-from-fp)))
-          (send self :add-closure (list (fn . entry) (fn . body) (fn . comp))))
+        (if (not avant-mode)
+          (dolist (fn (reverse flets-tmp))
+            (send self :closure (fn . entry) "flet env")
+            (setq (fn . offset) (1- (send trans :offset-from-fp)))
+            (send self :add-closure (list (fn . entry) (fn . body) (fn . comp)))))
 
-        (unless recursive-scope
+        (if (not recursive-scope)
           ;; when not recursive setup the bindframe after the closure declaration
           (setq fletframe (send self :create-frame 'flet (length flist) "flet")))
 
