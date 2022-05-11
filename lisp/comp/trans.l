@@ -80,12 +80,12 @@
     (setq push nil))
  (:create-frame (size &optional comment)
     (send self :clearpush)
+    (send self :reset-vsp)
     (prog1 pushcount
       (maybe-format cfile "	local[~d]= makevector(C_VECTOR,~d);" pushcount size)
       (if comment (maybe-format cfile " /*~A*/" comment))
       (if cfile (terpri cfile))
-      (inc pushcount)
-      (send self :reset-vsp)))
+      (inc pushcount)))
  (:clearpush-frame (bindframe count)
     (when push
 	  (maybe-format cfile "	local[~d]->c.vec.v[~d]= ~A;~%"
