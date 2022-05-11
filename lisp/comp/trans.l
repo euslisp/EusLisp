@@ -488,7 +488,9 @@
                     (stream "isstream")
                     (metaclass "isclass")
                     (package "ispackage")
-                    (t (warn "unknown type declaration: ~A~%" type) nil)))
+                    (t
+                     (unless (eq type t) (warn "unknown type declaration: ~A~%" type))
+                     nil)))
             (errc (case type
                     (symbol "E_NOSYMBOL")
                     (cons "E_NOLIST")
@@ -505,7 +507,9 @@
                     (stream "E_STREAM")
                     (metaclass "E_NOCLASS, w")
                     (package "E_NOPACKAGE, w")
-                    (t (warn "unknown type declaration: ~A~%" type) nil))))
+                    (t
+                     (unless (eq type t) (warn "unknown type declaration: ~A~%" type))
+                     nil))))
        (if (and ckfn errc)
            (progn
              (send self :store "w")
