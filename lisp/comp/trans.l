@@ -155,6 +155,9 @@
  (:check-opt-arg (m lab)
    (maybe-format cfile "	if (n>=~d) { local[~d]=(argv[~d]); goto ~A;}~%"
            (1+ m) pushcount m lab))
+ (:check-opt-arg-frame (m lab)
+   (format cfile "	if (n>=~d) { ~A=(argv[~d]); goto ~A;}~%"
+           (1+ m) (send self :pop) m lab))
  (:check-rest-arg (m)
    (if (> *safety* 0)
        (maybe-format cfile "	if (n>~d) maerror();~%" m)) )

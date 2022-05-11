@@ -374,7 +374,7 @@
             (send v :binding 'special)
 	    ))
       v))
- (:bind (id frame binding offset &key store keyvarp)
+ (:bind (id frame binding offset &key keyvarp)
     (unless (symbolp id)
 	(error type-error "symbol expected for function argument" id))
     (let ((v (send self :enter-variable id)))
@@ -390,18 +390,21 @@
 	  (t
 	     (if (eq binding 'local) (send frame :local 1))
 	     (setq (v . binding) binding
-		   (v . offset) offset)
-             (when store
-               (setq (v . bindframe) (frame . offset))
-               (send self :store-var v))))
+		   (v . offset) offset)))
      v))
- (:bind-identifier (v frame &key store keyvarp)
+ (:bind-identifier (v frame &key keyvarp)
     (unless (derivedp v identifier)
 	(error type-error "identifier expected"))
     (unless (send idtable :find (v . name))
       (send idtable :enter v))
-    (send self :bind (v . name) frame (v . binding) (v . offset)
-          :store store :keyvarp keyvarp))
+    (send self :bind (v . name) frame (v . binding) (v . offset) :keyvarp keyvarp))
+ (:bind-closure-variable (v binding frame i &key (store t))
+    (if store
+        (send trans :clearpush-frame (frame . offset) i))
+    (setq (v . binding) binding
+          (v . bindframe) (frame . offset)
+          (v . offset) i)
+    (send self :bind-identifier v frame))
  (:create-frame (type &optional size comment)
     (let ((frame (instance stack-frame :init type)))
       (setq (frame . level) closure-level)
@@ -841,38 +844,26 @@
      result-type))
  (:let* (bodies &optional (rec t))	;sequential let
    (let ((unwind-save unwind-frames) (i 0)
-         local-list bindframe vlist)
+         local-list bindframe vlist closure-vlist)
         (when rec
           (let ((trans (send trans :copy-translator))
                 (newcomp (send self :copy-compiler nil))
                 (avant-mode t))
-            (setq vlist (send newcomp :let* bodies nil))))
+            (setq closure-vlist (send newcomp :let* bodies nil))))
         (setq local-list (pop bodies))
-        (setq bindframe (send self :create-frame 'local
-                              (count-if #'(lambda (x) (x . bindframe)) vlist)
-                              "seqlet"))
+        (setq bindframe (send self :create-frame 'local (length closure-vlist) "seqlet"))
         ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
           (send self :declare (cdr (pop bodies))))
         ;; eval and bind
 	(dolist (init-form local-list)
-          (let ((var (if (listp init-form) (car init-form) init-form)))
+          (let* ((var (if (listp init-form) (car init-form) init-form))
+                 (cvar (and rec (find var closure-vlist :key #'(lambda (x) (x . name))))))
             (send self :eval (if (listp init-form) (cadr init-form) nil))
-            (if rec
-                ;; in recursive mode: bind frame variables
-                (let ((v (find var vlist :key #'(lambda (x) (x . name)))))
-                  (if (not v) (send self :error "variable not found"))
-                  (if (v . bindframe)
-                      (progn
-                        (send trans :clearpush-frame (bindframe . offset) i)
-                        (setq (v . binding) 'let
-                              (v . bindframe) (bindframe . offset)
-                              (v . offset) i)
-                        (inc i))
-                      (let ((offset (1- (send trans :offset-from-fp))))
-                        (setq (v . offset) offset)))
-                  (send self :bind-identifier v bindframe))
-                ;; in avant mode: collect variables
+            (if cvar
+                (progn
+                  (send self :bind-closure-variable cvar 'let bindframe i)
+                  (inc i))
                 (let ((offset (1- (send trans :offset-from-fp))))
                   (push (send self :bind var bindframe 'local offset) vlist)))))
         ;; eval body
@@ -881,7 +872,7 @@
         (setq unwind-frames unwind-save)
 	(send self :delete-frame 'local t)
 	;; return value
-	vlist))
+	(remove-if-not #'(lambda (v) (v . bindframe)) (nreverse vlist))))
  (:let (bodies)	;parallel let
    (let ((local-list (pop bodies)) (unwind-save unwind-frames)
           bindframe special-list vlist)
@@ -1212,7 +1203,7 @@
 			(push id acc)))
 		   (t  (send self :error "unknown declaration" decl))))))
       (nreverse acc)))
- (:lambda (param forms)
+ (:lambda (param forms &optional (rec t))
    (let ((labels nil)
 	 (i 0)
 	 (reqn 0)
@@ -1235,7 +1226,12 @@
 	 (specially-bound nil)
 	 (allowotherkeys (memq '&allow-other-keys param))
 	 (unwind-save unwind-frames)
-         argframe vlist)
+         (cvar-i 0) argframe vlist closure-vlist)
+     (when rec
+       (let ((trans (send trans :copy-translator))
+             (newcomp (send self :copy-compiler nil))
+             (avant-mode t))
+         (setq closure-vlist (send newcomp :lambda param forms nil))))
      (setq req-vars
            (reverse 
 		  (nthcdr (length (cond (opt-vars)
@@ -1325,36 +1321,66 @@
 					 (if rest-var 1
 					     (if key-forms keyn 0))))
 ;; create argument frame
-     (setq argframe (send self :create-frame 'arg))
+     (setq argframe (send self :create-frame 'arg (length closure-vlist) "argv"))
 ;; (print "bind")
      (setq i 0)
-     (dolist (v req-vars)		;for all required arguments
-       (push (send self :bind v argframe 'arg i) vlist)
+     (dolist (v req-vars)              ;for all required arguments
+       (let ((cvar (and rec (find v closure-vlist :key #'(lambda (x) (x . name))))))
+         (if cvar
+             (progn
+               (send trans :load-arg i 0)
+               (send self :bind-closure-variable cvar (cvar . binding) argframe cvar-i)
+               (inc cvar-i))
+             (push (send self :bind v argframe 'arg i) vlist)))
        (inc i))
      (while (cdr labels)
        (let ((var (pop opt-vars))
              (svar (pop opt-supplied-vars)))
          (when svar	; initialize supplied-p to t
            (send trans :load-t)
-           (setq svar (send self :bind svar argframe 'local (1- (send trans :offset-from-fp))))
+           (let ((c-svar (and rec (find svar closure-vlist :key #'(lambda (x) (x . name))))))
+             (if c-svar
+                 (progn
+                   (send self :bind-closure-variable c-svar 'lambda argframe cvar-i)
+                   (inc cvar-i)
+                   (setq svar c-svar))
+                 (let ((offset (1- (send trans :offset-from-fp))))
+                   (setq svar (send self :bind svar argframe 'local offset)))))
            (push svar vlist))
-         (send trans :check-opt-arg i (car labels))
+         (let ((cvar (and rec (find var closure-vlist :key #'(lambda (x) (x . name))))))
+           (if cvar
+               (progn
+                 (send self :bind-closure-variable cvar 'lambda argframe cvar-i
+                       :store nil)
+                 (inc cvar-i)
+                 (send self :load-var cvar)
+                 (send trans :check-opt-arg-frame i (car labels))
+                 (setq var cvar))
+               (send trans :check-opt-arg i (car labels))))
          (when svar	; set supplied-p to nil
            (send trans :load-nil)
            (send self :store-var svar))
          ;; set init value
          (send self :eval (pop opt-forms))
+         (if (derivedp var identifier)
+             (send self :store-var var))
          (send trans :label (pop labels))
-         (push (send self :bind var argframe 'local (1- (send trans :offset-from-fp)))
-               vlist)
+         (unless (derivedp var identifier)
+           (let ((offset (1- (send trans :offset-from-fp))))
+             (push (send self :bind var argframe 'local offset) vlist)))
          (inc i)))
      (when labels
         (send trans :label (pop labels)))
      (cond 
      	(rest-var
 	 (send trans :rest (+ reqn optn))
-         (push (send self :bind rest-var argframe 'local (1- (send trans :offset-from-fp)))
-               vlist))
+         (let ((cvar (and rec (find rest-var closure-vlist :key #'(lambda (x) (x . name))))))
+           (if cvar
+               (progn
+                 (send self :bind-closure-variable cvar 'lambda argframe cvar-i)
+                 (inc cvar-i))
+               (let ((offset (1- (send trans :offset-from-fp))))
+                 (push (send self :bind rest-var argframe 'local offset) vlist)))))
 	((and (> optn 0) (null key-forms)) (send trans :check-rest-arg i)))
      (when key-forms
        (let ((key-base (send trans :offset-from-fp)))
@@ -1370,7 +1396,14 @@
 	   (setq labels (send self :genlabel "KEY"))
            (when svar	; set supplied-p variables to t
              (send trans :load-t)
-             (setq svar (send self :bind svar argframe 'local (1- (send trans :offset-from-fp))))
+             (let ((c-svar (and rec (find svar closure-vlist :key #'(lambda (x) (x . name))))))
+               (if c-svar
+                   (progn
+                     (send self :bind-closure-variable c-svar 'lambda argframe cvar-i)
+                     (inc cvar-i)
+                     (setq svar c-svar))
+                   (let ((offset (1- (send trans :offset-from-fp))))
+                     (setq svar (send self :bind svar argframe 'local offset)))))
              (push svar vlist))
 	   (send trans :check-key-arg j labels)
 	   (when svar	; set supplied-p variables to nil
@@ -1385,31 +1418,41 @@
 		  (push (send self :bind var argframe 'local (+ key-base j) :keyvarp t)
                         vlist))
 	         (t	;non-special
-		  (push (send self :bind var argframe 'local (+ key-base j) :store t)
-                        vlist)
-		  (send trans :label labels)))))
+		  (setq var (send self :bind var argframe 'local (+ key-base j)))
+		  (send self :store-var var)
+		  (push var vlist)
+		  (send trans :label labels)
+                  (let ((cvar (and rec (find (var . name) closure-vlist
+                                             :key #'(lambda (x) (x . name))))))
+                    (when cvar
+                      (send self :load-var var)
+                      (send self :bind-closure-variable cvar 'lambda argframe cvar-i)
+                      (inc cvar-i)))))))
 	)   )
 ;;; bind aux variables
      (dolist (av aux-vars)
 	(if (consp av) (send self :eval (cadr av)) (send trans :load-nil))
-        (let ((offset (1- (send trans :offset-from-fp))))
-          (push
-           (send self :bind (if (listp av) (car av) av) argframe 'local offset)
-           vlist)))
+        (let* ((var (if (listp av) (car av) av))
+               (cvar (and rec (find var closure-vlist :key #'(lambda (x) (x . name))))))
+          (if cvar
+              (progn
+                (send self :bind-closure-variable cvar 'lambda  argframe cvar-i)
+                (inc cvar-i))
+               (let ((offset (1- (send trans :offset-from-fp))))
+                 (push (send self :bind var argframe 'local offset) vlist)))))
 ;;; type check declaration variables
      (dolist (id decl-vars)
        (let ((v (send self :variable id)))
          (unless (eql (v . binding) 'unknown)
            (send self :load-var id)
            (send trans :type-check-declare (v . type)))))
-;;; bind closure variables
-     (send self :bind-frame argframe forms (nreverse vlist) "argv")
 ;;; evaluate lambda body
      (send self :progn forms)
 ;;; unwind/restore
      (setq unwind-frames unwind-save)
      (send self :delete-frame 'arg t)
-  ))
+;;; return value
+     (remove-if-not #'(lambda (v) (v . bindframe)) (nreverse vlist))))
  (:lambda-block (name arglist bodies cname)
    (let ((ctime (unix:runtime))
 	 blklabel)
