@@ -1425,8 +1425,13 @@
                   (let ((cvar (and rec (find (var . name) closure-vlist
                                              :key #'(lambda (x) (x . name))))))
                     (when cvar
+                      ;; `:bind-closure-variable' only adds new entries
+                      ;; manually reassign values instead
                       (send self :load-var var)
-                      (send self :bind-closure-variable cvar 'lambda argframe cvar-i)
+                      (send trans :clearpush-frame (argframe . offset) cvar-i)
+                      (setq (var . binding) 'lambda
+                            (var . bindframe) (argframe . offset)
+                            (var . offset) cvar-i)
                       (inc cvar-i)))))))
 	)   )
 ;;; bind aux variables
