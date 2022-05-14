@@ -1004,7 +1004,7 @@
             (setq newcomp (send self :copy-compiler))
             (setq (newcomp . idtable) idtable)
             (setq (newcomp . flets) flets)
-            (send newcomp :lambda nil cleanup)
+            (send newcomp :lambda nil cleanup nil)
             (send trans :discard 1))
           (progn
             (setq cleaner (send self :genlabel "UWP"))
@@ -1083,7 +1083,7 @@
                (setq newcomp (send self :copy-compiler))
                (setq (newcomp . idtable) idtable)
                (setq (newcomp . flets) flets)
-               (send newcomp :lambda (cadr fn) (cddr fn))
+               (send newcomp :lambda (cadr fn) (cddr fn) nil)
                (send trans :discard 1))
              (progn
                (setq entry (send self :genlabel "CLO"))
@@ -1113,7 +1113,7 @@
           (setq (newcomp . flets) (append flets-tmp flets))
           (setq (newcomp . idtable) idtable)
           (dolist (fn flets-tmp)
-            (send newcomp :lambda (cadr (fn . body)) (cddr (fn . body)))))
+            (send newcomp :lambda (cadr (fn . body)) (cddr (fn . body)) nil)))
 
         ;; pre-evaluate body
         (let ((trans (send trans :copy-translator))
