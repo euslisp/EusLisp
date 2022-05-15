@@ -1005,24 +1005,33 @@
             (send trans :store-local (f . offset) 0 (frame . offset)))))
       ;; makeclosure
       (send trans :closure form (plusp closure-level) (not (not frame)))))
+ (:lambda-preevaluation (fn)
+    (let* ((param (cadr fn))
+           (forms (cddr fn))
+           (newcomp (send self :copy-compiler)))
+      (setq (newcomp . idtable) idtable)
+      (setq (newcomp . flets) flets)
+      (flet ((lambda-closure-frames ()
+               (send newcomp :lambda param forms nil)
+               (when (listp closure-frames)
+                 (dolist (v closure-frames)
+                   (pushnew fn (identifier-clist v))))))
+        (if closure-frames
+            (lambda-closure-frames)
+            (let ((closure-frames t))
+              (lambda-closure-frames)))
+        (send trans :discard 1))))
  (:unwind-protect (prot cleanup)
-    (let (cleaner newcomp)
+    (let ((fn (cons 'lambda (cons nil cleanup)))
+          cleaner newcomp)
       (if avant-mode
-          (progn
-            (setq newcomp (send self :copy-compiler))
-            (setq (newcomp . idtable) idtable)
-            (setq (newcomp . flets) flets)
-            (send newcomp :lambda nil cleanup nil)
-            (send trans :discard 1))
+          (send self :lambda-preevaluation fn)
           (progn
             (setq cleaner (send self :genlabel "UWP"))
             (push (send trans :offset-from-fp) unwind-frames)
-            (send self :closure cleaner "unwind protect")	;make cleanup closure
+            (send self :closure cleaner "unwind protect" (send idtable :get-cframes fn))	;make cleanup closure
             (setq newcomp (send self :copy-compiler))
-            (send self :add-closure
-                  (list cleaner
-                        (cons 'lambda	(cons nil cleanup))
-                        newcomp))))
+            (send self :add-closure (list cleaner fn newcomp))))
       (send trans :bind-cleaner)
       (send self :eval prot)
       (send trans :call-cleaner cleaner)
@@ -1087,23 +1096,7 @@
 	       (send trans :getfunc fn)))
        (let (entry newcomp)  ; #'(lambda (...) ...)
          (if avant-mode
-             (progn
-               (setq newcomp (send self :copy-compiler))
-               (setq (newcomp . idtable) idtable)
-               (setq (newcomp . flets) flets)
-               (if closure-frames
-                   (progn
-                     (send newcomp :lambda (cadr fn) (cddr fn) nil)
-                     (when (listp closure-frames)
-                       (dolist (v closure-frames)
-                         (pushnew fn (identifier-clist v)))))
-                   (progn
-                     (let ((closure-frames t))
-                       (send newcomp :lambda (cadr fn) (cddr fn) nil)
-                       (when (listp closure-frames)
-                         (dolist (v closure-frames)
-                           (pushnew fn (identifier-clist v)))))))
-               (send trans :discard 1))
+             (send self :lambda-preevaluation fn)
              (progn
                (setq entry (send self :genlabel "CLO"))
                (send self :closure entry "lambda-closure" (send idtable :get-cframes fn))
