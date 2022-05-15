@@ -1003,6 +1003,7 @@
           (progn
             (setq newcomp (send self :copy-compiler))
             (setq (newcomp . idtable) idtable)
+            (setq (newcomp . flets) flets)
             (send newcomp :lambda nil cleanup)
             (send trans :discard 1))
           (progn
