@@ -251,6 +251,7 @@
 	   :slots
 	   (idtable		;identifier-table
 	    closure-level	;current closure level
+	    current-cframes	;current closure bind frames
 	    scope		;current variable scope (for sequential let)
 	    frames		;list of the number of special bindings
 	    fletframes		;list of function frames
@@ -495,19 +496,28 @@
             (when (and avant-mode (> closure-level (var . level)))
               (unless (listp closure-frames) (setq closure-frames nil))
               (pushnew pushvar closure-frames)
-              (unless (pushvar . bindframe) (setq (pushvar . bindframe) t)))))
+              (unless (pushvar . bindframe) (setq (pushvar . bindframe) t))))
+          (check-cframe (&optional (pushvar var))
+            (when (and (not avant-mode) (= (- closure-level (var . level)) 1)
+                       (numberp (pushvar . bindframe)))
+              (unless (find (pushvar . bindframe) current-cframes)
+                (send self :error ";; unbound bindframe detected when loading variable ~S"
+                      (var . name))))))
      (case (var . binding)
       ((special) (send trans :load-global (var . name)))
       ((local let lambda)
           (push-cframe)
+          (check-cframe)
           (send trans :load-local (var . offset) (- closure-level (var . level))
                 (send self :var-bindframe var)))
       ((param arg)
           (push-cframe)
+          (check-cframe)
           (send trans :load-arg (var . offset) (- closure-level (var . level))
                 (send self :var-bindframe var)))
       ((object)
           (push-cframe (send idtable :get 'self))
+          (check-cframe (send idtable :get 'self))
           (send trans :load-obj (var . offset) (- closure-level (var . level))
                 (send self :var-bindframe var)))
       (unknown
@@ -1026,12 +1036,12 @@
           cleaner newcomp)
       (if avant-mode
           (send self :lambda-preevaluation fn)
-          (progn
+          (let ((cframes (send idtable :get-cframes fn)))
             (setq cleaner (send self :genlabel "UWP"))
             (push (send trans :offset-from-fp) unwind-frames)
-            (send self :closure cleaner "unwind protect" (send idtable :get-cframes fn))	;make cleanup closure
+            (send self :closure cleaner "unwind protect" cframes)	;make cleanup closure
             (setq newcomp (send self :copy-compiler))
-            (send self :add-closure (list cleaner fn newcomp))))
+            (send self :add-closure (list cleaner fn newcomp cframes))))
       (send trans :bind-cleaner)
       (send self :eval prot)
       (send trans :call-cleaner cleaner)
@@ -1097,11 +1107,11 @@
        (let (entry newcomp)  ; #'(lambda (...) ...)
          (if avant-mode
              (send self :lambda-preevaluation fn)
-             (progn
+             (let ((cframes (send idtable :get-cframes fn)))
                (setq entry (send self :genlabel "CLO"))
-               (send self :closure entry "lambda-closure" (send idtable :get-cframes fn))
+               (send self :closure entry "lambda-closure" cframes)
                (setq newcomp (send self :copy-compiler))
-               (send self :add-closure (list entry fn newcomp)))))))
+               (send self :add-closure (list entry fn newcomp cframes)))))))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
      (let (newcomp newcomps flets-tmp flist fletframe)
@@ -1142,9 +1152,10 @@
 
         (if (not avant-mode)
           (dolist (fn (reverse flets-tmp))
-            (send self :closure (fn . entry) "flet env")
-            (setq (fn . offset) (1- (send trans :offset-from-fp)))
-            (send self :add-closure (list (fn . entry) (fn . body) (fn . comp)))))
+            (let ((cframes (send idtable :get-cframes (fn . body))))
+              (send self :closure (fn . entry) "flet env" cframes)
+              (setq (fn . offset) (1- (send trans :offset-from-fp)))
+              (send self :add-closure (list (fn . entry) (fn . body) (fn . comp) cframes)))))
 
         (if (not recursive-scope)
           ;; when not recursive setup the bindframe after the closure declaration
@@ -1557,7 +1568,12 @@
    )
  (:compile-closures ()
    (dolist (aclosure (reverse function-closures))
-      (send (caddr aclosure) :compile-a-closure (car aclosure) (cadr aclosure)))
+     (let ((entry (first aclosure))
+           (def (second aclosure))
+           (newcomp (third aclosure))
+           (cframes (fourth aclosure)))
+       (setq (newcomp . current-cframes) cframes)
+       (send newcomp :compile-a-closure entry def)))
    (setq function-closures nil))
  (:toplevel-eval (form)
    (setq function-closures nil)
