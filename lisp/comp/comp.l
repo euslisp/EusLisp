@@ -508,7 +508,7 @@
             (when (and (not avant-mode) (= (- closure-level (var . level)) 1)
                        (numberp (pushvar . bindframe)))
               (unless (find (pushvar . bindframe) current-cframes)
-                (warn ";; unbound bindframe detected when loading variable ~S~%"
+                (send self :error ";; unbound bindframe detected when loading variable ~S"
                       (var . name))))))
      (case (var . binding)
       ;; special variables are accessed through :load-global, so we don't need 
