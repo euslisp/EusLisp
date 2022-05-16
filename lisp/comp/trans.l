@@ -47,6 +47,7 @@
 	  index)))
 
 (defun maybe-format (fstream format-string &rest args)
+  ;; suppress all output in pre-evaluation mode
   (unless avant-mode
     (apply #'format fstream format-string args)))
 

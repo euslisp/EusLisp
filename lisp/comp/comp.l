@@ -47,6 +47,7 @@
 (defvar comp nil "$Id$")
 (defvar trans)
 (defvar *multipass-optimize* t)
+;; define as a variable so we can `(let ((closure-frames ...)))' it
 (defvar closure-frames nil)
 
 (defun ovafp (form) (and (cdr form) (symbolp (cdr form))))
@@ -154,7 +155,6 @@
 (defclass function-identifier :super object
   :slots (name entry binding level offset bindframe body comp))
 )
-;; binding = (constant, local, global, special)
 
 (eval-when (load eval)
 (defmethod function-identifier
@@ -192,6 +192,9 @@
 	   (setq r (assq id (svref frames lev)))
 	   (if r (return-from :get (cdr r)) (dec lev)))))
  (:get-cframes (fn clevel &optional (lev level))
+    ;; collect the binding offset of all variables which are used inside a function
+    ;; we only need to consider the current closure-level since other levels are
+    ;; accessed through the env0, not env1
     (let (acc)
        (while (>= lev 0)
          (dolist (var (svref frames lev))
@@ -411,12 +414,14 @@
       (send idtable :enter v))
     (send self :bind (v . name) frame (v . binding) (v . offset) :keyvarp keyvarp))
  (:bind-closure-variable (v binding frame i &key (store t))
+    ;; rewrite the variable reference to point to the binding frame instead
     (setq (v . binding) binding
           (v . bindframe) (frame . offset)
           (v . offset) i)
     (send self :bind-identifier v frame)
     (if store (send self :store-var v)))
  (:create-frame (type &optional size comment)
+    ;; create a vector to store closure variables in the heap
     (let ((frame (instance stack-frame :init type)))
       (setq (frame . level) closure-level)
       (when (and size (> size 0))
@@ -493,17 +498,21 @@
    (unless (derivedp var identifier)
      (setq var (send self :variable var)))
    (flet ((push-cframe (&optional (pushvar var))
+            ;; collect referenced variables during pre-evaluation mode
             (when (and avant-mode (> closure-level (var . level)))
               (unless (listp closure-frames) (setq closure-frames nil))
               (pushnew pushvar closure-frames)
               (unless (pushvar . bindframe) (setq (pushvar . bindframe) t))))
           (check-cframe (&optional (pushvar var))
+            ;; compile-time check to see if we are not missing any frame references
             (when (and (not avant-mode) (= (- closure-level (var . level)) 1)
                        (numberp (pushvar . bindframe)))
               (unless (find (pushvar . bindframe) current-cframes)
                 (warn ";; unbound bindframe detected when loading variable ~S~%"
                       (var . name))))))
      (case (var . binding)
+      ;; special variables are accessed through :load-global, so we don't need 
+      ;; to add or manage them in bind frames
       ((special) (send trans :load-global (var . name)))
       ((local let lambda)
           (push-cframe)
@@ -516,6 +525,8 @@
           (send trans :load-arg (var . offset) (- closure-level (var . level))
                 (send self :var-bindframe var)))
       ((object)
+          ;; we only need to ensure access to the `self' variable in closures,
+          ;; all other slots are derived from there
           (push-cframe (send idtable :get 'self))
           (check-cframe (send idtable :get 'self))
           (send trans :load-obj (var . offset) (- closure-level (var . level))
@@ -867,6 +878,13 @@
    (let ((unwind-save unwind-frames) (i 0)
          local-list bindframe vlist closure-vlist)
         (when rec
+          ;; in let* we need to sequentially bind variables directly into the frame.
+          ;; if we try to sequentially bind to locals and then assign to the frame,
+          ;; we won't be able to catch closure references within the assignment values
+          ;; e.g. (let* ((a 0) (b #'(lambda () a))) ...)
+          ;; to do this, we pre-execute the whole method and extract a list with all of
+          ;; the referenced variables. This list is then used to create a frame of
+          ;; appropriate size and bind the variables directly as they appear
           (let ((trans (send trans :copy-translator))
                 (newcomp (send self :copy-compiler nil))
                 (avant-mode t))
@@ -999,6 +1017,15 @@
     (send self :eval val)
     (send trans :throw))
  (:closure (form &optional comment cframes)
+    ;; the closure environment is represented as a vector with each of the referenced frames
+    ;; each frame itself is also represented as a vector and shared between closure instances,
+    ;; ensuring cross read and write access to the variables.
+    ;; the reference frames are judged by pre-evaluating the code and collecting variable
+    ;; references, which are then passed to this method through the `cframes' argument.
+    ;; TODO: fletframes currently only have scope based evaluation:
+    ;; if one closure in a given scope has a reference to a fletframe, all of the closures
+    ;; in that scope will bear that reference as well.
+
     (let* ((fn #'(lambda (f) (and (f . offset) (= (f . level) closure-level))))
            (fletframes (remove-if-not fn fletframes))
            frame)
@@ -1006,6 +1033,8 @@
         ;; create a new vector which holds all necessary frames
         (let ((size (max (if cframes (apply #'max cframes) 0)
                          (if fletframes ((car fletframes) . offset) 0))))
+          ;; TODO: in order to avoid having to remap the variables bindframe, we create a
+          ;; vector which simulates the local stack, but only populates the required fields.
           (setq frame (send self :create-frame nil (1+ size) comment))
           (dolist (f cframes)
             (send trans :load-local f 0)
@@ -1016,6 +1045,8 @@
       ;; makeclosure
       (send trans :closure form (plusp closure-level) (not (not frame)))))
  (:lambda-preevaluation (fn &optional newcomp)
+    ;; pre-evaluate a closure definition and collect all referenced variables.
+    ;; then, add the reference function to each variable's `clist'
     (let ((param (cadr fn))
           (forms (cddr fn)))
       (unless newcomp
@@ -1027,6 +1058,9 @@
                (when (listp closure-frames)
                  (dolist (v closure-frames)
                    (pushnew fn (identifier-clist v))))))
+        ;; we need to collect references recursively: #'(lambda () #'(lambda () a))
+        ;; but don't want to carry them sequentially: #'(lambda () 1) #'(lambda () a)
+        ;; to do that, we only overwrite the `closure-frames' on the first evaluation
         (if closure-frames
             (lambda-closure-frames)
             (let ((closure-frames t))
@@ -1246,6 +1280,8 @@
 	 (unwind-save unwind-frames)
          (cvar-i 0) argframe vlist closure-vlist)
      (when rec
+       ;; an in let*, we need to sequentially bind variables directly to the frame
+       ;; so we pre-evaluate the whole method, and then create/populate the frame
        (let ((trans (send trans :copy-translator))
              (newcomp (send self :copy-compiler nil))
              (avant-mode t))
