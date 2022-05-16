@@ -1015,12 +1015,13 @@
             (send trans :store-local (f . offset) 0 (frame . offset)))))
       ;; makeclosure
       (send trans :closure form (plusp closure-level) (not (not frame)))))
- (:lambda-preevaluation (fn)
-    (let* ((param (cadr fn))
-           (forms (cddr fn))
-           (newcomp (send self :copy-compiler)))
-      (setq (newcomp . idtable) idtable)
-      (setq (newcomp . flets) flets)
+ (:lambda-preevaluation (fn &optional newcomp)
+    (let ((param (cadr fn))
+          (forms (cddr fn)))
+      (unless newcomp
+        (setq newcomp (send self :copy-compiler))
+        (setq (newcomp . idtable) idtable)
+        (setq (newcomp . flets) flets))
       (flet ((lambda-closure-frames ()
                (send newcomp :lambda param forms nil)
                (when (listp closure-frames)
@@ -1135,7 +1136,7 @@
           (setq (newcomp . flets) (append flets-tmp flets))
           (setq (newcomp . idtable) idtable)
           (dolist (fn flets-tmp)
-            (send newcomp :lambda (cadr (fn . body)) (cddr (fn . body)) nil)))
+            (send self :lambda-preevaluation (fn . body) newcomp)))
 
         ;; pre-evaluate body
         (let ((trans (send trans :copy-translator))
