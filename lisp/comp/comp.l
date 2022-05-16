@@ -1449,6 +1449,7 @@
                       (send trans :clearpush-frame (argframe . offset) cvar-i)
                       (setq (var . binding) 'lambda
                             (var . bindframe) (argframe . offset)
+                            (var . clist) (cvar . clist)
                             (var . offset) cvar-i)
                       (inc cvar-i)))))))
 	)   )
