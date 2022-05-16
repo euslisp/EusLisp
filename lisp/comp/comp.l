@@ -191,12 +191,12 @@
 	(while (>= lev 0)
 	   (setq r (assq id (svref frames lev)))
 	   (if r (return-from :get (cdr r)) (dec lev)))))
- (:get-cframes (fn &optional (lev level))
+ (:get-cframes (fn clevel &optional (lev level))
     (let (acc)
        (while (>= lev 0)
          (dolist (var (svref frames lev))
            (setq var (cdr var))
-           (when (and var (= (var . level) closure-level)
+           (when (and var (= (var . level) clevel)
                       (find fn (var . clist) :test #'equal))
              (pushnew (var . bindframe) acc)))
          (dec lev))
@@ -501,7 +501,7 @@
             (when (and (not avant-mode) (= (- closure-level (var . level)) 1)
                        (numberp (pushvar . bindframe)))
               (unless (find (pushvar . bindframe) current-cframes)
-                (send self :error ";; unbound bindframe detected when loading variable ~S"
+                (warn ";; unbound bindframe detected when loading variable ~S~%"
                       (var . name))))))
      (case (var . binding)
       ((special) (send trans :load-global (var . name)))
@@ -1037,7 +1037,7 @@
           cleaner newcomp)
       (if avant-mode
           (send self :lambda-preevaluation fn)
-          (let ((cframes (send idtable :get-cframes fn)))
+          (let ((cframes (send idtable :get-cframes fn closure-level)))
             (setq cleaner (send self :genlabel "UWP"))
             (push (send trans :offset-from-fp) unwind-frames)
             (send self :closure cleaner "unwind protect" cframes)	;make cleanup closure
@@ -1108,7 +1108,7 @@
        (let (entry newcomp)  ; #'(lambda (...) ...)
          (if avant-mode
              (send self :lambda-preevaluation fn)
-             (let ((cframes (send idtable :get-cframes fn)))
+             (let ((cframes (send idtable :get-cframes fn closure-level)))
                (setq entry (send self :genlabel "CLO"))
                (send self :closure entry "lambda-closure" cframes)
                (setq newcomp (send self :copy-compiler))
@@ -1153,7 +1153,7 @@
 
         (if (not avant-mode)
           (dolist (fn (reverse flets-tmp))
-            (let ((cframes (send idtable :get-cframes (fn . body))))
+            (let ((cframes (send idtable :get-cframes (fn . body) closure-level)))
               (send self :closure (fn . entry) "flet env" cframes)
               (setq (fn . offset) (1- (send trans :offset-from-fp)))
               (send self :add-closure (list (fn . entry) (fn . body) (fn . comp) cframes)))))
