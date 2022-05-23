@@ -761,11 +761,11 @@
 	((progn) (send self :progn args) t)
 	((function) (send self :function (car args)) t)
 	((the) (send self :eval (cadr args)) (coerce-type (car args)))
-	((defun) (send self :warning "defun must be at toplevel") t)
-	((defmacro) (send self :warning "defmacro must be at toplevel") t)
-	((defmethod) (send self :warning "defmethod must be at toplevel") t)
+	((defun) (send self :warning "defun must be at toplevel~%") t)
+	((defmacro) (send self :warning "defmacro must be at toplevel~%") t)
+	((defmethod) (send self :warning "defmethod must be at toplevel~%") t)
 	((eval-when) (send self :warning
-			  "eval-when must appear at toplevel, ignored") t)
+			  "eval-when must appear at toplevel, ignored~%") t)
 	(t (send self :error "Compiling method is not yet implemented for ~S" fn))))
    )	;defmethod
 )	;eval-when
