@@ -817,8 +817,8 @@ extern eusinteger_t intval(pointer p);
 #endif
 
 /*predicates to test object type*/
-#define pislist(p)  (p->cix<=conscp.sub)
-#define piscons(p)  (p->cix<=conscp.sub)
+#define pislist(p)  (conscp.cix<=(p)->cix && (p)->cix<=conscp.sub)
+#define piscons(p)  (conscp.cix<=(p)->cix && (p)->cix<=conscp.sub)
 #define pispropobj(p) (propobjcp.cix<=(p)->cix && (p)->cix<=propobjcp.sub)
 #define ispropobj(p) (ispointer(p) && pispropobj(p))
 #define pissymbol(p) (symbolcp.cix<=(p)->cix && (p)->cix<=symbolcp.sub)
