@@ -592,7 +592,7 @@ register pointer org;
   cpx += 2;
   switch (etype) {
     case ELM_FIXED:
-	    clone->c.obj.iv[1]=copyobj(ctx,x);
+	    if (s>1) clone->c.obj.iv[1]=copyobj(ctx,x);
 	    if (s>0) clone->c.obj.iv[0]=copyobj(ctx,org->c.obj.iv[0]);
 	    for (i=2; i<s; i++) clone->c.obj.iv[i]=copyobj(ctx,org->c.obj.iv[i]);
 	    break;
