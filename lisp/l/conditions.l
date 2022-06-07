@@ -52,7 +52,7 @@
                   slots)))
      ',name))
 
-(defun install-handler-raw (label handler)
+(defun install-handler (label handler)
   ;; ensure condition class
   (if (eq label t) (setq label condition))
   (unless (and (classp label) (derivedp (instantiate label) condition))
@@ -60,12 +60,6 @@
   (push (cons label (instance condition-handler :init handler))
         *condition-handler*)
   t)
-
-(defun install-handler (label handler)
-  ;; ensure global scope
-  (when (and (consp handler) (eql (car handler) 'lambda-closure))
-    (setq handler `(lambda-closure ,(second handler) 0 0 ,@(nthcdr 4 handler))))
-  (install-handler-raw label handler))
 
 (defun remove-handler (label &optional handler)
   (let ((item
@@ -82,7 +76,7 @@
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
-     ,@(mapcar #'(lambda (bind) `(install-handler-raw ,@bind)) bindings)
+     ,@(mapcar #'(lambda (bind) `(install-handler ,@bind)) bindings)
      ,@forms))
 
 (defun get-handler-frame (&optional (name "HANDLER-CASE-"))
@@ -184,8 +178,7 @@
   `(progn
      (defcondition ,obj :super unix::signal-received)
      (unix:signal ,sig
-       ;; ensure global scope
-       ',`(lambda-closure nil 0 0 (sig code) (signals ,obj :sig sig :code code ,@init-args)))))
+                  #'(lambda (sig code) (signals ,obj :sig sig :code code ,@init-args)))))
 
 (defmacro unix::with-alarm-interrupt (&rest body)
   (let ((interval (gensym)) (value (gensym)))
