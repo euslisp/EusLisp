@@ -536,6 +536,7 @@ void markall()
   printf( "markall:%d: mark(SYSTEM_OBJECTS)\n", count );
 #endif
   mark(sysobj);		/*mark internally reachable objects*/
+  mark(eussigobj);	/*mark unix signal callbacks*/
   mark_state=2;
 #ifdef MARK_DEBUG
   printf( "markall:%d: mark(PACKAGE_LIST)\n", count );

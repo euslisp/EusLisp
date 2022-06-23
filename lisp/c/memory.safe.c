@@ -169,6 +169,7 @@ markall()
   register context *ctx;
   markctx=euscontexts[thr_self()];
   mark(sysobj);		/*mark internally reachable objects*/
+  mark(eussigobj);	/*mark unix signal callbacks*/
   mark(pkglist);	/*mark all packages*/
   for (i=0; i<MAXTHREAD; i++) {
     /*mark everything reachable from stacks in euscontexts*/

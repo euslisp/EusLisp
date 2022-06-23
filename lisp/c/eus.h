@@ -591,6 +591,7 @@ extern long alloccount[MAXBUDDY];
 /* System internal objects are connected to sysobj list
 /* to protect from garbage-collection */
 extern pointer sysobj;
+extern pointer eussigobj;
 extern pointer lastalloc;
 
 /* thread euscontexts */

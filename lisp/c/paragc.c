@@ -21,6 +21,7 @@ static pmarkall()
   register context *ctx;
   thread_t tid[512];
   thr_create(0, 150*1024, pmark, sysobj, THR_BOUND, &tid[j++]);
+  thr_create(0, 150*1024, pmark, eussigobj, THR_BOUND, &tid[j++]);
 /*  p=pkglist;
   while (p!=NIL) {
     thr_create(0, 150*1024, pmark, ccar(p), THR_BOUND, &tid[j++]);

@@ -52,6 +52,7 @@ extern pointer *gcstack, *gcsp, *gcsplimit;
 /* to protect from being garbage-collected */
 
 pointer sysobj;
+pointer eussigobj;
 
 /* context */
 context *mainctx;
@@ -601,6 +602,7 @@ static void initpackage()
   NIL->c.sym.speval=NIL;
   NIL->c.sym.plist=NIL;
   sysobj=NIL;
+  eussigobj=NIL;
   pkglist->c.cons.cdr=NIL;
   lisppkg->c.pkg.use=NIL;
   lisppkg->c.pkg.names->c.cons.cdr=NIL;

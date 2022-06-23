@@ -93,6 +93,7 @@ extern int daylight;
 
 extern pointer K_ISATTY;
 extern pointer eussigvec[NSIG];
+extern pointer eussigobj;
 
 extern eusinteger_t coerceintval(pointer);
 
@@ -378,6 +379,10 @@ pointer argv[];
   if (n==1) return(oldval);
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(eusinteger_t)eusint; eussigvec[s]=a;}
+  // update eussigobj value
+  eussigobj = NIL;
+  for (i=0; i<NSIG; i++) eussigobj=cons(ctx,eussigvec[i],eussigobj);
+  // install handlers
   sv.sa_handler= (void (*)())f;
 #if Linux || Cygwin
 
@@ -411,6 +416,7 @@ pointer argv[];
   struct sigvec sv;
   register pointer a=argv[1],oldval;
   extern void eusint();
+  int i;
 
   ckarg2(1,3);
   s=min(ckintval(argv[0]),NSIG-1);
@@ -418,6 +424,10 @@ pointer argv[];
   if (n==1) return(oldval);
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(eusinteger_t)eusint; eussigvec[s]=a;}/* ???? */
+  // update eussigobj value
+  eussigobj = NIL;
+  for (i=0; i<NSIG; i++) eussigobj=cons(ctx,eussigvec[i],eussigobj);
+  // install handlers
   sv.sv_handler=(void (*)())f;
   sv.sv_mask=0;	/*sigmask(s)???;*/
 /*news doesn't have system5 compatible signal handling option*/

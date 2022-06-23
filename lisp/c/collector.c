@@ -525,6 +525,7 @@ static void scan_global_roots()
 {
   int i;
   pointerpush(sysobj);
+  pointerpush(eussigobj);
   pointerpush(pkglist);
   /* minimize scanning time for class table */
   pointerpush(rgc_classtable);

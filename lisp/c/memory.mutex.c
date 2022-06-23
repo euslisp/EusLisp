@@ -368,6 +368,7 @@ markall()
 
   mark_state=1;
   mark(sysobj);		/*mark internally reachable objects*/
+  mark(eussigobj);	/*mark unix signal callbacks*/
   mark_state=2;
   mark(pkglist);	/*mark all packages*/
   for (i=0; i<MAXTHREAD; i++) {
