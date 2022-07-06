@@ -101,6 +101,24 @@
                ,form))
          (send *keyword-package* :unintern ,handler-frame)))))
 
+(defmacro atomic (form &rest cases)
+  (flet ((expand-case (place index tag arglst &rest body)
+           (unless (or (null arglst) (and (consp arglst) (null (cdr arglst))))
+             (error argument-error "expected single parameter list"))
+           (if (null arglst) (setq arglst (list (gensym))))
+           `(,tag #'(lambda ,arglst
+                      (setf (elt ,place ,index) ,(car arglst))
+                      ,@body))))
+    (let ((holder (gensym))
+          (i (length cases)))
+      `(let ((,holder (make-list ,(length cases) :initial-element nil)))
+         (prog1
+             (handler-bind
+                 ,(mapcar #'(lambda (cs) (apply #'expand-case holder (decf i) cs))
+                          (reverse cases))
+               ,form)
+           (mapc #'signals (remove nil ,holder)))))))
+
 (defun invoke-next-handler (obj)
   (unless (derivedp obj condition)
     (error type-error "condition class expected"))
