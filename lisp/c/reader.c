@@ -726,6 +726,7 @@ char token[];
 /*    sym=findsymbol((char *)&token[colon],leng-colon, pkg->c.pkg.symvector, &hash);*/
     if (sym) return(sym);
     else {
+      if (read_suppress) return(UNBOUND);
       pkgstr=makestring(token,leng);
       // fprintf(stderr,"%s ",token);
       vpush(pkgstr);
