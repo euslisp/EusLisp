@@ -61,6 +61,15 @@
         *condition-handler*)
   t)
 
+(defun install-error-handler (handler)
+  (warning-message 1
+    ";; `lisp::install-error-handler' is obsolete. Try to use `install-handler' instead.~%")
+  (install-handler error
+      #'(lambda (err)
+          (when (send err :callstack)
+            (print-callstack (send err :callstack) *max-callstack-depth*))
+          (funcall handler 0 (send err :message) (send err :form)))))
+
 (defun remove-handler (label &optional handler)
   (let ((item
          (if handler
