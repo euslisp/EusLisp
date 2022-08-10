@@ -643,12 +643,17 @@ Callstackの最高{\em max}個をoutput stream{\em os}に出力する。
 リストする。そうでなければ、{\em aclass}のインスタンスあるいはサブクラス
 が集められる。}
 
-\funcdesc{sys:list-all-bindings}{}{
-バインドされるスタックを探し、
-アクセス可能な値すべてをリストで返す。}
+\funcdesc{sys:list-all-bindings}{\&optional bindframe}{
+{\em bindframe}でバインドされているすべてのローカル変数の名前と値のリストを返す。
+{\em bindframe}が与えられない場合には現在のcallstackでバインドされているすべてのローカル変数の名前と値のリストを返す。}
 
 \funcdesc{sys:list-all-special-bindings}{}{
-スタックを捜し、値をすべてリストアップする。}
+callstackでバインドされているすべてのスペシャル変数の名前と値のリストを返す。}
+
+\funcdesc{sys:list-all-function-bindings}{\&optional fletframe}{
+{\em fletframe}でバインドされているすべてのローカル関数のリストを返す。
+{\em fletframe}が与えられない場合には現在のcallstackでバインドされているすべてのローカル関数のリストを返す。}
+
 
 \end{refdesc}
 

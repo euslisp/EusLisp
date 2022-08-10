@@ -699,11 +699,18 @@ scans in the overall heap, and collects all the instances of the specified class
 If {\em scan-sub} is NIL, then instances of exactly the {\em aclass} are
 listed, otherwise, instances of {\em aclass} or its subclasses are collected.}
 
-\funcdesc{sys:list-all-bindings}{}{
-scans bind stack, and returns a list of all the accessible value bindings.}
+\funcdesc{sys:list-all-bindings}{\&optional bindframe}{
+returns a list of all value bindings in {\em bindframe}.
+If {\em bindframe} is not provided, returns a list of all value bindings
+in the current stack.}
 
 \funcdesc{sys:list-all-special-bindings}{}{
-scans the stack and list up all value bindings.}
+return a list of all the special value bindings in the current stack.}
+
+\funcdesc{sys:list-all-function-bindings}{\&optional fletframe}{
+returns a list of all function bindings in {\em fletframe}.
+If {\em fletframe} is not provided, returns a list of all function bindings
+in the current stack.}
 
 \end{refdesc}
 
