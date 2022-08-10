@@ -788,7 +788,12 @@ void gc()
   int i, r;
   context *ctx=euscontexts[thr_self()];
 
-  if (debug || speval(QGCDEBUG)!=NIL)  fprintf(stderr,"\n;; gc: thread=%d ",thr_self());
+  if (speval(QGCHOOK)!=NIL) {
+      fprintf(stderr, ";; `sys:*gc-hook*' has been deprecated! Use `sys:*gc-debug*' instead.\n");
+  }
+  if (debug || speval(QGCDEBUG)!=NIL) {
+      fprintf(stderr,"\n;; gc: thread=%d ",thr_self());
+  }
   // breakck;
   gccount++;
   times(&tbuf1);
@@ -829,13 +834,6 @@ void gc()
 /* Too unstable to call arbitrary lisp functions here
    if for example gc is called during an allocation, any new attempt
    to allocate memory during the function will cause a dead lock.
-
-  if (speval(QGCHOOK)!=NIL) {
-    pointer gchook=speval(QGCHOOK);
-    vpush(makeint(freeheap)); vpush(makeint(totalheap));
-    ufuncall(ctx,gchook,gchook,(pointer)(ctx->vsp-2),ctx->bindfp,2);
-    ctx->vsp -= 2;
-    }
 */
   // breakck;
 }

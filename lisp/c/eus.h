@@ -653,7 +653,7 @@ extern pointer CLASS;
 extern pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 extern pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
 extern pointer TOPLEVEL,QEVALHOOK,QEXITHOOK;
-extern pointer QUNBOUND,QDEBUG,QGCDEBUG;
+extern pointer QUNBOUND,QDEBUG,QGCHOOK,QGCDEBUG;
 extern pointer QTHREADS;
 extern pointer QEQ,QEQUAL,QNOT;
 extern pointer QAND, QOR, QNOT;

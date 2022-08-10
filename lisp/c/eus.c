@@ -128,7 +128,7 @@ pointer CLASS;
 pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
 pointer TOPLEVEL,QEVALHOOK,QEXITHOOK,FATALERROR;
-pointer QUNBOUND,QDEBUG,QGCDEBUG;
+pointer QUNBOUND,QDEBUG,QGCHOOK,QGCDEBUG;
 pointer QTHREADS;	/* system:*threads* */
 pointer QPARAGC;
 pointer QVERSION;
@@ -719,6 +719,7 @@ static void initsymbols()
   QTHREADS=defvar(ctx, "*THREADS*", NIL, syspkg);
   QPARAGC=defvar(ctx, "*PARALLEL-GC*", NIL, syspkg);
   QGCDEBUG=defvar(ctx,"*GC-DEBUG*",NIL,syspkg);
+  QGCHOOK=defvar(ctx,"*GC-HOOK*",NIL,syspkg);
   QEXITHOOK=defvar(ctx,"*EXIT-HOOK*",NIL,syspkg);
   FATALERROR=defvar(ctx,"*EXIT-ON-FATAL-ERROR*",NIL,lisppkg);
 
