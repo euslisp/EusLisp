@@ -162,7 +162,7 @@ FLTGT1:
     fright=fleft; }
   return(T); 
 RATGT:
-  error(E_USER,(pointer)"sorry, comparison of ratios are not yet implemented");
+  error(E_TYPE_ERROR,(pointer)"comparison of ratios is not implemented");
   }
 
 pointer LESSP(ctx,n,argv)
@@ -226,7 +226,7 @@ FLTLT1:
     fright=fleft; }
   return(T); 
 RATLT:
-  error(E_USER,(pointer)"sorry, comparison of ratios are not yet implemented");
+  error(E_TYPE_ERROR,(pointer)"comparison of ratios is not implemented");
   }
 
 pointer GREQP(ctx,n,argv)	
@@ -290,7 +290,7 @@ FLTGE1:
     fright=fleft; }
   return(T); 
 RATGE:
-  error(E_USER,(pointer)"sorry, comparison of ratios are not yet implemented");
+  error(E_TYPE_ERROR,(pointer)"comparison of ratios is not implemented");
   }
 
 pointer LSEQP(ctx,n,argv)	/*less-or-equalp*/
@@ -354,7 +354,7 @@ FLTLE1:
     fright=fleft; }
   return(T); 
 RATLE:
-  error(E_USER,(pointer)"sorry, comparison of ratios are not yet implemented");
+  error(E_TYPE_ERROR,(pointer)"comparison of ratios is not implemented");
   }
 
 pointer MOD(ctx,n,argv)
@@ -511,11 +511,11 @@ pointer r;
   q=r->c.ratio.denominator;
   if (isint(p)) num=intval(p);
   else if (isbignum(p)) num=big_to_float(p);
-  else error(E_USER,(pointer)"illegal ratio numerator");
+  else error(E_TYPE_ERROR,(pointer)"integer or bignum exptected for ratio numerator");
 
   if (isint(q)) den=intval(q);
   else if (isbignum(q)) den=big_to_float(q);
-  else error(E_USER,(pointer)"illegal ratio denominator");
+  else error(E_TYPE_ERROR,(pointer)"integer or bignum exptected for ratio denominator");
 
   return(num/den);}
 
@@ -683,7 +683,7 @@ BIGMINUS1:
 	b=normalize_bignum(b);
 	if (isint(b)) { vpop(); is=intval(b); goto IMINUS;}
 	}
-     else if (isratio(a)) error(E_USER,(pointer)"BIG-RATIO not supported");
+     else if (isratio(a)) error(E_TYPE_ERROR,(pointer)"BIG-RATIO not supported");
      else error(E_NONUMBER);}
     return(b);}
 
@@ -786,7 +786,7 @@ BIGTIMES1:
       if (isint(b)) { is=intval(b); vpop(); goto ITIMES;}
       }
     else if (pisratio(a)) {
-      error(E_USER,(pointer)"sorry, big * ratio is not yet implemented.");}
+      error(E_TYPE_ERROR,(pointer)"big ratio multiplication is not implemented");}
     else error(E_NONUMBER);
     }
   ctx->lastalloc= vpop();
@@ -1404,7 +1404,7 @@ register pointer argv[];
     if (state==NIL) { goto MAKERANDSTATENIL; }
     else if (state==T) {
       if (time(&tm)==-1){
-        error(E_USER,(pointer)"failed to fetch time"); }
+        error(E_PROGRAM_ERROR,(pointer)"failed to fetch time"); }
       srand((unsigned int)tm);
       randvec->c.ivec.iv[0] = rand();
       randvec->c.ivec.iv[1] = rand();

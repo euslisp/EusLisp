@@ -593,7 +593,7 @@ pointer expr;
 	if (r!=NIL) return(T);
         else expr=ccdr(expr);}
       return(NIL);}}
-  error(E_USER,(pointer)"AND/OR/NOT expected in #+ or #-", expr);}
+  error(E_VALUE_ERROR,(pointer)"AND/OR/NOT expected in #+ or #-", expr);}
 
 static pointer read_cond_plus(ctx,f)	/* #+ */
 register context *ctx;
@@ -658,7 +658,7 @@ char token[];
   macrofunc=Spevalof(QREADTABLE)->c.rdtab.dispatch->c.vec.v[subchar];
   if (macrofunc==NIL) {
     if (read_suppress) return(read1(ctx,f));
-    error(E_USER,(pointer)"no # macro defined");}
+    error(E_NAME_ERROR,(pointer)"no # macro defined");}
   if (isint(macrofunc)) {	/*internal macro*/
     intmac=(pointer (*)())(intval(macrofunc));
     result=(*intmac)(ctx,f,val,subchar,token);}
@@ -779,7 +779,7 @@ int len;
       else if (k>='A' && k<='Z') k=k-'A'+10;
       else if (k>='a' && k<='z') k=k-'a'+10;
       else if (k=='.') continue;
-      else error(E_USER,(pointer)"illegal integer consituent char");
+      else error(E_CHARRANGE);
       mul_int_big(base,b);
       add_int_big(k,b);  }
     if (sign<0) complement_big(b);
@@ -924,7 +924,7 @@ int colon;
 	unreadch(ins,ch); goto step10;
       case ch_white:
 	unreadch(ins,ch); goto step10;
-      default: error(E_USER,(pointer)"unknown char type");}
+      default: error(E_IO_ERROR,(pointer)"unknown char type");}
  step9:
     escaped=1;
     if (i>=MAXTOKENLENGTH) error(E_LONGSTRING);
@@ -1011,7 +1011,7 @@ register pointer ins;
       case ch_white: goto step1;
       case ch_termmacro: case ch_nontermacro:
 	      macrofunc=Spevalof(QREADTABLE)->c.rdtab.macro->c.vec.v[ch];
-	      if (macrofunc==NIL) error(E_USER,(pointer)"no char macro defined");
+	      if (macrofunc==NIL) error(E_NAME_ERROR,(pointer)"no char macro defined");
 	      if (isint(macrofunc)) {	/*internal macro*/
 		intmac=(pointer (*)())(intval(macrofunc));
 	        result=(*intmac)(ctx,ins,ch,token);}

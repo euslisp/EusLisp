@@ -72,7 +72,7 @@ pointer argv[];
   if (n==0) return(makeint((ctx->stacklimit+100-ctx->stack)));
   else {
     newsize=ckintval(argv[0]);
-    if (newsize>1024*1024*256) error(E_USER,(pointer)"too big stack"); /*max 256MW*/
+    if (newsize>1024*1024*256) error(E_PROGRAM_ERROR,(pointer)"too big stack"); /*max 256MW*/
     allocate_stack(ctx,newsize);
     euslongjmp(topjbuf,newsize);}
   }
@@ -516,7 +516,7 @@ pointer argv[];
 	  vpush(makepointer(b));
           if (ctx->vsp >= ctx->stacklimit) {
 	    sweepall();
-	    error(E_USER,(pointer)"not enough stack space");}} }
+	    error(E_PROGRAM_ERROR,(pointer)"not enough stack space");}} }
       b=nextbuddy(b);} }
   sweepall();
 #if THREADED
@@ -565,7 +565,7 @@ pointer argv[];
 	  vpush(p);
           if (ctx->vsp>=ctx->stacklimit) {
 	    sweepall();
-	    error(E_USER,(pointer)"not enough stack space");}	  }
+	    error(E_PROGRAM_ERROR,(pointer)"not enough stack space");}	  }
   next_buddy:
       b=nextbuddy(b);} }
   sweepall();
@@ -634,7 +634,7 @@ pointer argv[];
   if (size==K_FLOAT) return(makeflt(u->f));
   if (size==K_DOUBLE) return(makeflt(u->d));
   if (size==K_POINTER) return(mkbigint((eusinteger_t)(u->p))); /* ???? */
-  else error(E_USER,(pointer)"unknown access mode");}
+  else error(E_PROGRAM_ERROR,(pointer)"unknown access mode");}
 
 pointer POKE(ctx,n,argv)
 register context *ctx;
@@ -680,7 +680,7 @@ pointer argv[];
   else if (size==K_FLOAT) u->f=ckfltval(val);
   else if (size==K_DOUBLE) u->d=ckfltval(val);
   else if (size==K_POINTER) u->p=(void*)ckintval(val);
-  else error(E_USER,(pointer)"unknown access mode");
+  else error(E_PROGRAM_ERROR,(pointer)"unknown access mode");
   return(val);}
 
 /****************************************************************/
@@ -860,7 +860,7 @@ pointer argv[];
   if (n==0) con=ctx;
   else {
     x=ckintval(argv[0]);
-    if (x<0 || x>MAXTHREAD) error(E_USER,(pointer)"no such thread");
+    if (x<0 || x>MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
     if (x==0) con=ctx;
     else con=euscontexts[x];}
   p=con->specials;  

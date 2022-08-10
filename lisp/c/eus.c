@@ -221,7 +221,7 @@ char *errmsg[100]={
 	"keyword expected for arguments",
 	"no such keyword",
 	"multiple variable declaration",
-/* ARGUMENT ERROR */
+/* PROGRAM ERROR */
 	"",
 	"string is too long",
 	"class table overflow",

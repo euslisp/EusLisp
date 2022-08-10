@@ -628,7 +628,7 @@ pointer *argv;
   printf( "\n" );
 #endif
  throw(ctx,makeint(0),T);
-  error(E_USER,(pointer)"cannot reset");}
+  error(E_NOCATCHER,makeint(0));}
 
 pointer EVALHOOK(ctx,n,argv)
 register context *ctx;
@@ -800,7 +800,7 @@ pointer arg;
       euslongjmp(*(ctx->blkfp->jbp),body);}/* ???? */
       /* euslongjmp(*(ctx->blkfp->jbp),body);} *//* ??? eus_rbar */
     ctx->blkfp=ctx->blkfp->lexklink;}
-  error(E_USER,(pointer)"go tag not found");}
+  error(E_PROGRAM_ERROR,(pointer)"go tag not found");}
 
 pointer EVALWHEN(ctx,arg)
 register context *ctx;

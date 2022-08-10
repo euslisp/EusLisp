@@ -180,7 +180,9 @@ register context *ctx;
 register int count;
 { register pointer s;
   register struct specialbindframe *sbfp=ctx->sbindfp;
-  if (ctx->special_bind_count<count) error(E_USER,(pointer)"inconsistent special binding");
+  if (ctx->special_bind_count<count) {
+      error(E_PROGRAM_ERROR,(pointer)"inconsistent special binding");
+  }
   ctx->special_bind_count -= count;
   while (count-- >0) {
     s=sbfp->sym;
@@ -331,7 +333,7 @@ pointer env,bf;
 	if (islist(formal)) {
 	  fkeyvar=ccar(formal); formal=ccdr(formal);
 	  if (fkeyvar==AUX) break;
-	  else  error(E_USER,(pointer)"something after &allow-other-keys"); }
+	  else  error(E_ARGUMENT_ERROR,(pointer)"something after &allow-other-keys"); }
 	break;}
       else if (fkeyvar==AUX) break;
       else {
@@ -348,7 +350,7 @@ pointer env,bf;
       supplied[nokeys]=svar;
       nokeys++;
       if (nokeys>=KEYWORDPARAMETERLIMIT) {
-	error(E_USER, (pointer)"too many keyword parameters >=128");
+	error(E_PROGRAM_ERROR, (pointer)"too many keyword parameters >=128");
 	}
       }	
   n=0;
@@ -518,7 +520,7 @@ pointer args[];
       if (elmtypeof(lisparg)==ELM_FOREIGN)
         cargv[i++].ival=lisparg->c.ivec.iv[0];
       else cargv[i++].ival=(eusinteger_t)(lisparg->c.str.chars);
-    else error(E_USER,(pointer)"unknown type specifier");}
+    else error(E_TYPE_ERROR,(pointer)"unknown type specifier");}
   /* &rest arguments?  */
   while (i<n) {	/* i is the counter for the actual arguments*/
     lisparg=args[i];
@@ -537,7 +539,7 @@ pointer args[];
     else if (resulttype==K_STRING) {
       p=makepointer(i-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string"); }
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string"); }
     else if (iscons(resulttype)) {
 	/* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)==K_STRING) {
@@ -550,8 +552,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)i);
 	return(make_foreign_string(i, j)); }
-      error(E_USER,(pointer)"unknown result type"); }
-    else error(E_USER,(pointer)"result type?"); 
+      error(E_TYPE_ERROR,(pointer)"unknown result type"); }
+    else error(E_TYPE_ERROR,(pointer)"unknown result type"); 
     }}
 
 #else /* IRIX6 */
@@ -599,7 +601,7 @@ pointer args[];
         cargs[i].ival=lisparg->c.ivec.iv[0];
       else cargs[i].ival=(eusinteger_t)(lisparg->c.str.chars);
       offset[i++]=m++;}
-    else error(E_USER,(pointer)"unknown type specifier");}
+    else error(E_TYPE_ERROR,(pointer)"unknown type specifier");}
   /* &rest arguments?  */
   while (i<n) {	/* i is the counter for the actual arguments*/
     lisparg=args[i];
@@ -631,7 +633,7 @@ pointer args[];
     else if (resulttype==K_STRING) {
       p=makepointer(i-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string"); }
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string"); }
     else if (iscons(resulttype)) {
 	/* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)=K_STRING) {
@@ -644,8 +646,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)i);
 	return(make_foreign_string(i, j)); }
-      error(E_USER,(pointer)"unknown result type"); }
-    else error(E_USER,(pointer)"result type?"); 
+      error(E_TYPE_ERROR,(pointer)"unknown result type"); }
+    else error(E_TYPE_ERROR,(pointer)"unknown result type");
     }}
 
 #else /* IRIX */
@@ -953,9 +955,9 @@ pointer args[];
       numbox.d=ckfltval(lisparg);
       c=numbox.l;
       if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
-    } else error(E_USER,(pointer)"unknown type specifier");
+    } else error(E_TYPE_ERROR,(pointer)"unknown type specifier");
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_ARGUMENT_ERROR,(pointer)"too many number of arguments");
     }
   }
   /* &rest arguments?  */
@@ -985,7 +987,7 @@ pointer args[];
       if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     }
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_ARGUMENT_ERROR,(pointer)"too many number of arguments");
     }
   }
   /**/
@@ -1004,7 +1006,7 @@ pointer args[];
     } else if (resulttype==K_STRING) {
       p=makepointer(c-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string");
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string");
     } else if (iscons(resulttype)) {
       /* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)==K_STRING) { /* R.Hanai 09/07/25 */
@@ -1017,8 +1019,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)c);
 	return(make_foreign_string(c, j)); }
-      error(E_USER,(pointer)"unknown result type"); 
-    } else error(E_USER,(pointer)"result type?"); 
+      error(E_TYPE_ERROR,(pointer)"unknown result type"); 
+    } else error(E_TYPE_ERROR,(pointer)"unknown result type"); 
   }
 }
 
@@ -1202,9 +1204,9 @@ pointer args[];
 	vargv[vcntr_16++] = numbox.i.i1; vargv[vcntr_16++] = numbox.i.i2;
 	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
       }
-    } else error(E_USER,(pointer)"unknown type specifier");
+    } else error(E_TYPE_ERROR,(pointer)"unknown type specifier");
     if (max(vcntr_8, vcntr_16) >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_ARGUMENT_ERROR,(pointer)"too many number of arguments");
     }
   }
   int vcntr = max(vcntr_8, vcntr_16);
@@ -1235,7 +1237,7 @@ pointer args[];
       if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     }
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_ARGUMENT_ERROR,(pointer)"too many number of arguments");
     }
   }
   /**/
@@ -1250,7 +1252,7 @@ pointer args[];
     } else if (resulttype==K_STRING) {
       p=makepointer(c-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string");
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string");
     } else if (iscons(resulttype)) {
       /* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)==K_STRING) { /* R.Hanai 09/07/25 */
@@ -1263,8 +1265,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)c);
 	return(make_foreign_string(c, j)); }
-      error(E_USER,(pointer)"unknown result type");
-    } else error(E_USER,(pointer)"result type?");
+      error(E_TYPE_ERROR,(pointer)"unknown result type");
+    } else error(E_TYPE_ERROR,(pointer)"unknown result type");
   }
 }
 
@@ -1311,7 +1313,7 @@ pointer args[];
     else if (p==K_DOUBLE || (WORD_SIZE==64 && p==K_FLOAT)) {
       numbox.d=ckfltval(lisparg);
       cargv[i++]=numbox.i.i1; cargv[i++]=numbox.i.i2;}
-    else error(E_USER,(pointer)"unknown type specifier");}
+    else error(E_TYPE_ERROR,(pointer)"unknown type specifier");}
   /* &rest arguments?  */
   while (j<n) {	/* j is the counter for the actual arguments*/
     lisparg=args[j++];
@@ -1428,7 +1430,7 @@ pointer args[];
     else if (resulttype==K_STRING) {
       p=makepointer(i-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string"); }
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string"); }
     else if (iscons(resulttype)) {
 	/* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)=K_STRING) {
@@ -1441,8 +1443,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)i);
 	return(make_foreign_string(i, j)); }
-      error(E_USER,(pointer)"unknown result type"); }
-    else error(E_USER,(pointer)"result type?"); 
+      error(E_TYPE_ERROR,(pointer)"unknown result type"); }
+    else error(E_TYPE_ERROR,(pointer)"unknown result type");
     }}
 #endif /* x86_64 */
 #endif /* IRIX */
@@ -1589,7 +1591,7 @@ int noarg;
 #if !Solaris2 && !SunOS4_1 && !Linux && !IRIX && !IRIX6 && !alpha && !Cygwin
     if ((char *)subr>maxmemory) {
 	prinx(ctx,clofunc, STDOUT);
-	error(E_USER,(pointer)"garbage closure, fatal bug!"); }
+	error(E_VALUE_ERROR,(pointer)"invalid closure"); }
 #endif
     if (noarg<0) {
 	while (iscons(args)) {

@@ -315,7 +315,7 @@ register pointer argv[];
     set=(sigset_t *)argv[0]->c.ivec.iv;
     sigaddset(set, signum);
     return(argv[0]);}
-  else error(E_USER,(pointer)"integer/bit vector expected for sigaddset");
+  else error(E_TYPE_ERROR,(pointer)"integer/bit vector expected for sigaddset");
   }
 
 pointer SIGDELSET(ctx,n,argv)
@@ -331,7 +331,7 @@ register pointer argv[];
     set=(sigset_t *)argv[0]->c.ivec.iv;
     sigdelset(set, signum);
     return(argv[0]);}
-  else error(E_USER,(pointer)"integer/bit vector expected for sigaddset");
+  else error(E_TYPE_ERROR,(pointer)"integer/bit vector expected for sigaddset");
   }
 
 pointer SIGPROCMASK(ctx,n,argv)
@@ -352,7 +352,7 @@ pointer argv[];
     stat=sigprocmask(how, set, oset);
     if (stat==0) return(T); else return(makeint(-errno));
     }
-  else error(E_USER,(pointer)"integer/bit vector expected for sigprocmask");
+  else error(E_TYPE_ERROR,(pointer)"integer/bit vector expected for sigprocmask");
   }
 
 pointer KILL(ctx,n,argv)
@@ -1498,7 +1498,7 @@ register pointer argv[];
 
   ckarg(2);
   s=ckintval(argv[0]);	/*socket id*/
-  if (!isstring(argv[1])) error(E_USER,(pointer)"socket address expected");
+  if (!isstring(argv[1])) error(E_NOSTRING);
   sa= (struct sockaddr *)(argv[1]->c.str.chars);
   if (sa->sa_family==AF_UNIX) l=strlen(sa->sa_data)+2;
   else l=sizeof(struct sockaddr_in);
@@ -1513,7 +1513,7 @@ pointer argv[];
   struct sockaddr *sa;
   ckarg(2);
   s=ckintval(argv[0]);		/*socket id*/
-  if (!isstring(argv[1])) error(E_USER,(pointer)"socket address expected");
+  if (!isstring(argv[1])) error(E_NOSTRING);
   sa= (struct sockaddr *)(argv[1]->c.str.chars);
   if (sa->sa_family==AF_UNIX) l=strlen(sa->sa_data)+2;
   else l=sizeof(struct sockaddr_in);
@@ -1631,7 +1631,7 @@ eusinteger_t *checkbitvec(pointer a, long *size)
   case ELM_BYTE: case ELM_CHAR:
 		*size=vecsize(a) * 8; return(a->c.ivec.iv);
   case ELM_FOREIGN: *size=vecsize(a) * 8; return((eusinteger_t *)a->c.foreign.chars);
-  default: error(E_USER,(pointer)"bit-vector expected");
+  default: error(E_BITVECTOR);
   }
 }
 

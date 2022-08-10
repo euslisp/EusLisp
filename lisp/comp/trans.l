@@ -498,7 +498,7 @@
                     (list "E_NOLIST")
                     (number "E_NONUMBER")
                     (integer "E_NOINT")
-                    (float "E_USER, (pointer)\"float expected\"")
+                    (float "E_TYPE_ERROR, (pointer)\"float expected\"")
                     (string "E_NOSTRING")
                     (array "E_NOARRAY")
                     (vector "E_NOVECTOR")

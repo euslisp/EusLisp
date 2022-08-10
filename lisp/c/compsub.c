@@ -32,7 +32,7 @@ const char* compver;
    if (!checkversion(compver, loadver)) {
        fprintf(stderr, ";; compile time version: %s\n", compver);
        fprintf(stderr, ";; load time version: %s\n", loadver);
-       error(E_USER, (pointer)"compiler version mismatch");
+       error(E_PROGRAM_ERROR, (pointer)"compiler version mismatch");
    }
 #endif
 }

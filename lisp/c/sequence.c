@@ -385,7 +385,7 @@ pointer resulttype;
 			  r->c.ivec.iv[n/32]|=(coerceintval(vpop()) & 1)<<(n%32);
 #endif
 		        return(r);
-      case ELM_FOREIGN: error(E_USER,(pointer)"cannot coerce to foreign string"); } } } 
+      case ELM_FOREIGN: error(E_TYPE_ERROR,(pointer)"cannot coerce to foreign string"); } } } 
 
 pointer CONCATENATE(ctx,n,argv)
 register context *ctx;
@@ -1055,7 +1055,7 @@ pointer argv[];
   else if (isvector(a)) return((pointer)vref(a,i));
   else if (isarray(a) && a->c.ary.rank==makeint(1))
     return((pointer)vref(a->c.ary.entity, i));
-  else error(E_USER,(pointer)"no sequence");}
+  else error(E_NOSEQ);}
 
 pointer SETELT(ctx,n,argv)
 register context *ctx;
@@ -1073,7 +1073,7 @@ register pointer argv[];
   else if (isarray(a) && a->c.ary.rank==makeint(1)) {
     vset(a->c.ary.entity,i,argv[2]);
     return(argv[2]);}
-  else error(E_USER,(pointer)"no sequence");}
+  else error(E_NOSEQ);}
 
 
 void sequence(ctx,mod)

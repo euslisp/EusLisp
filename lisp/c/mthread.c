@@ -30,7 +30,7 @@ int mark_lock_thread;
 pointer get_free_thread()
 { register pointer port;
   if (speval(QTHREADS)==NIL) {
-    error(E_USER,"No threads found. Please create with 'sys:make-thread'");}
+    error(E_PROGRAM_ERROR,"No threads found. Please create with 'sys:make-thread'");}
   GC_REGION(sema_wait(&free_thread_sem););
   mutex_lock(&free_thread_lock);
     port=ccar(free_threads);
@@ -131,7 +131,7 @@ pointer argv[];
 #if alpha || PTHREAD
     if( thr_create(0, c_stack_size, thread_main, newport, 0, &tid ) != 0 ) {
       deletecontext(tid, ctx);
-      error(E_USER,(pointer)"Number of threads reached limit (64)");
+      error(E_PROGRAM_ERROR,(pointer)"Number of threads reached limit (64)");
       }
     newport->c.thrp.id=makeint(tid);	/* ???? critical region problem */
 #else
@@ -139,7 +139,7 @@ pointer argv[];
 		newport, THR_SUSPENDED, &tid);
     if (tid>=MAXTHREAD) {
       deletecontext(tid, ctx);
-      error(E_USER,(pointer)"Number of threads reached limit (64)");
+      error(E_PROGRAM_ERROR,(pointer)"Number of threads reached limit (64)");
       }
     newport->c.thrp.id=makeint(tid);
     thr_continue(tid);
@@ -205,7 +205,7 @@ pointer argv[];
     result=port->c.thrp.result;
     sema_post((sema_t *)port->c.thrp.reqsem->c.ivec.iv);	/*ack result transfer*/
     return(result);}
-  else error(E_USER,(pointer)"wait thread for idle thread");}
+  else error(E_VALUE_ERROR,(pointer)"trying to wait for an idle thread");}
 
 pointer FREE_THREADS(ctx,n,argv)
 context *ctx;

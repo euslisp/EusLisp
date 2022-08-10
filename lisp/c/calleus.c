@@ -103,7 +103,7 @@ register eusinteger_t cargv[]; /*arguments vector passed from C function*/
   printf("calleus : fsym.resulttype = %lX (%lX,%lX)\n",
          fs->resulttype, (long *)fs, &(fs->resulttype)); 
 #endif
-  if (!isforeignpod(fsym)) error(E_USER,(pointer)"not a foreign pod");
+  if (!isforeignpod(fsym)) error(E_TYPE_ERROR,(pointer)"not a foreign pod");
   param=fs->paramtypes;
   resulttype=fs->resulttype;
   while (islist(param)) {
@@ -126,7 +126,7 @@ register eusinteger_t cargv[]; /*arguments vector passed from C function*/
       f = nu.f32val;
       vpush(makeflt(f));
     } else if (islist(p)) {
-      if (ccar(p)!=K_STRING) error(E_USER,(pointer)":string key expected");
+      if (ccar(p)!=K_STRING) error(E_TYPE_ERROR,(pointer)":string key expected");
       p=ccdr(p);
       if (p==NIL) {
         if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
@@ -140,7 +140,7 @@ register eusinteger_t cargv[]; /*arguments vector passed from C function*/
       if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
       c -= 2*sizeof(pointer);
       vpush((pointer)c);
-    } else error(E_USER,(pointer)"unknown param type spec");
+    } else error(E_TYPE_ERROR,(pointer)"unknown param type spec");
     argc++;
   }
 #if 0
@@ -184,7 +184,7 @@ register int a2, a3, a4, a5, a6, a7, a8;
   ctx=euscontexts[thr_self()];
   argv=ctx->vsp;
   fs=(struct foreignpod *)fsym;
-  if (!isforeignpod(fsym)) error(E_USER,(pointer)"not a foreign pod");
+  if (!isforeignpod(fsym)) error(E_TYPE_ERROR,(pointer)"not a foreign pod");
   param=fs->paramtypes;
   resulttype=fs->resulttype;
   while (islist(param)) {
@@ -194,7 +194,7 @@ register int a2, a3, a4, a5, a6, a7, a8;
       dp=(double *)&cargv[i];  f= *dp;
       vpush(makeflt(f)); i+=2;}
     else if (islist(p)) {
-      if (ccar(p)!=K_STRING) error(E_USER,(pointer)":string key expected");
+      if (ccar(p)!=K_STRING) error(E_TYPE_ERROR,(pointer)":string key expected");
       p=ccdr(p);
       if (p==NIL) {
 	vpush(makestring((char *)cargv[i],strlen((char *)cargv[i]))); i++;} 
@@ -209,7 +209,7 @@ register int a2, a3, a4, a5, a6, a7, a8;
 	c=cargv[i++]-2*sizeof(pointer);
 #endif
 	vpush((pointer)c);}
-    else error(E_USER,(pointer)"unknown param type spec");
+    else error(E_TYPE_ERROR,(pointer)"unknown param type spec");
     argc++;}
   result=ufuncall(ctx,fsym,fsym,(pointer)argv,NULL,argc);
   ctx->vsp = argv;

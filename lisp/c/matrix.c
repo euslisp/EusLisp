@@ -1018,7 +1018,7 @@ pointer *argv;
     if (size<=2) error(E_VECINDEX);
     x=a->c.fvec.fv[0]; y=a->c.fvec.fv[1]; z=a->c.fvec.fv[2];
     norm = sqrt(x*x + y*y + z*z);
-    if (fabs(norm)<0.00001) return(NIL); /*error(E_USER,(pointer)"too small axis vector");*/
+    if (fabs(norm)<0.00001) return(NIL); /*error(E_VALUE_ERROR,(pointer)"too small axis vector");*/
     x = x/norm; y = y/norm; z= z/norm;
     xv = x*x*vers; yv = y*y*vers; zv = z*z*vers;
     xyv = x*y*vers; yzv = y*z*vers; zxv = z*x*vers;

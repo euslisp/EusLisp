@@ -648,7 +648,7 @@ pointer argv[];
   mutex_unlock(&mark_lock);
 #endif
   ctx->vsp=spsave;
-  if (b==(pointer)ERR) error(E_USER,(pointer)"too big to copy");
+  if (b==(pointer)ERR) error(E_PROGRAM_ERROR,(pointer)"too big to copy");
   else return(b);
   }
 
@@ -661,8 +661,8 @@ register pointer argv[];
   if (isnum(argv[0])) error(E_NOOBJECT);
   if (isvecclass(argv[1])) {
     e1=elmtypeof(argv[0]); e2=intval(argv[1]->c.vcls.elmtype);
-    if (e1==ELM_FIXED) error(E_USER,(pointer)"a record type object cannot become a vector");
-    if (e1==ELM_POINTER && e1!=e2) error(E_USER,(pointer)"element type mismatch");
+    if (e1==ELM_FIXED) error(E_TYPE_ERROR,(pointer)"a record type object cannot become a vector");
+    if (e1==ELM_POINTER && e1!=e2) error(E_TYPE_ERROR,(pointer)"element type mismatch");
     /*chage length field*/
     n=vecsize(argv[0]);
     switch(e1) {
@@ -696,7 +696,7 @@ register pointer argv[];
     else error(E_ARRAYINDEX);
     return(argv[0]);
     }
-  else error(E_USER,(pointer)"vector class or number expected");
+  else error(E_TYPE_ERROR,(pointer)"vector class or number expected");
   }
 
 pointer REPLACEOBJECT(ctx,n,argv)

@@ -713,7 +713,7 @@ int special_index()
   mutex_lock(&spex_lock);
   x= next_special_index++;
   mutex_unlock(&spex_lock);
-  if (x>=MAX_SPECIALS) { error(E_USER,(pointer)"too many special variables >=512"); }
+  if (x>=MAX_SPECIALS) { error(E_PROGRAM_ERROR,(pointer)"too many special variables >=512"); }
   return(x);}
 #else
 int next_special_index=3;
@@ -722,7 +722,7 @@ int special_index()
 { int x;
 
   x= next_special_index++;
-  if (x>=MAX_SPECIALS) { error(E_USER,(pointer)"too many special variables >=512"); }
+  if (x>=MAX_SPECIALS) { error(E_PROGRAM_ERROR,(pointer)"too many special variables >=512"); }
 
   return(x);}
 #endif
