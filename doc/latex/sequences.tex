@@ -363,6 +363,9 @@ makes a list of {\em elements}.}
 makes a list of {\em elements}, but the last element is consed in cdr:
 for example, {\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}.}
 
+\funcdesc{values}{\&rest elements}{
+alias for {\em list}.}
+
 \funcdesc{list-length}{list}{
 returns the length of the {\em list}. {\em List} can be circular.}
 
@@ -660,12 +663,33 @@ convert the case of {\em ch} to upper.}
 \funcdesc{char-downcase}{ch}{
 convert the case of {\em ch} to lower.}
 
+\funcdesc{char=}{ch1 ch2 \&rest more-characters}{
+alias for {\em =}.}
+
+\funcdesc{char/=}{ch1 ch2 \&rest more-characters}{
+alias for {\em /=}.}
+
+\funcdesc{char$>$}{ch1 ch2 \&rest more-characters}{
+alias for {\em $>$}.}
+
+\funcdesc{char$<$}{ch1 ch2 \&rest more-characters}{
+alias for {\em $<$}.}
+
+\funcdesc{char$>=$}{ch1 ch2 \&rest more-characters}{
+alias for {\em $>=$}.}
+
+\funcdesc{char$<=$}{ch1 ch2 \&rest more-characters}{
+alias for {\em $<=$}.}
+
 \funcdesc{char}{string index}{
 returns {\em index}th character in {\em string}.}
 
 \funcdesc{schar}{string index}{
 extracts a character from {\em string}. Use {\bf schar} only if the
 type of {\em string} is definitely known and no type check is required.}
+
+\funcdesc{setchar}{string index ch}{
+set {\em index}th character in {\em string} to {\em ch}.}
 
 \funcdesc{stringp}{object}{
 returns T if {\em object} is a vector of bytes (integers less than 256).}
@@ -700,18 +724,28 @@ If object is number its string representation is returned
 In order to get string representation for more complex objects,
 use {\bf format} with NIL in the first argument.}
 
-\fundesc{string$<$}{str1 str2}
+\funcdesc{string$<$}{str1 str2}{
+T if {\em str1} is less than {\em str2} according to strcmp.}
 
-\fundesc{string$<=$}{str1 str2}
+\funcdesc{string$<=$}{str1 str2}{
+T if {\em str1} is less than or equal to {\em str2} according to strcmp.}
 
-\fundesc{string$>$}{str1 str2}
+\funcdesc{string$>$}{str1 str2}{
+T if {\em str1} is greater than {\em str2} according to strcmp.}
 
-\fundesc{string$>=$}{str1 str2}
+\funcdesc{string$>=$}{str1 str2}{
+T if {\em str1} is greater than or equal to {\em str2} according to strcmp.}
 
-\fundesc{string-left-trim}{bag str}
+\fundesc{string-left-trim}{bag str}{
+{\em str} is scanned from the left,
+and its elements are removed if
+it is included in the {\em bag} list.
+Once a character other than the ones in the {\em bag} is found,
+further scan is aborted and the rest of {\em str}
+is returned.}
 
 \funcdesc{string-right-trim}{bag str}{
-{\em str} is scanned from the left(or right),
+{\em str} is scanned from the right,
 and its elements are removed if
 it is included in the {\em bag} list.
 Once a character other than the ones in the {\em bag} is found,
@@ -719,9 +753,9 @@ further scan is aborted and the rest of {\em str}
 is returned.}
 
 \funcdesc{string-trim}{bag str}{
-{\em Bag} is a sequence of character codes.
+{\em bag} is a sequence of character codes.
 A new copy of {\em str} which does not contain characters specified in {\em bag}
-in its both end is made and returned.}
+in its both ends is made and returned.}
 
 \funcdesc{substringp}{sub string}{
 T if string {\em sub} is contained in {\em string} as a substring.

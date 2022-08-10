@@ -351,12 +351,15 @@ atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 {\tt car}が{\em car}で{\tt cdr}が{\em cdr}であるような新しいconsを作る。}
 
 \funcdesc{list}{\&rest elements}{
-makes a list of {\em elements}.}
+{\em element}を要素とするリストを返す。}
 
 \funcdesc{list*}{\&rest elements}{
 {\em element}を要素とするリストを作る。しかし、最後の要素は{\bf cons}されるため、
 atomであってはならない。
 例えば、{\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}である。}
+
+\funcdesc{values}{\&rest elements}{
+{\em list}のalias.}
 
 \funcdesc{list-length}{list}{
 {\em list}の長さを返す。{\em list}は、環状リストでも良い。}
@@ -656,6 +659,24 @@ EusLispには、文字型がない。
 \funcdesc{char-downcase}{ch}{
 {\em ch}を小文字に変換する。}
 
+\funcdesc{char=}{ch1 ch2 \&rest more-characters}{
+{\em =}のalias.}
+
+\funcdesc{char/=}{ch1 ch2 \&rest more-characters}{
+{\em /=}のalias.}
+
+\funcdesc{char$>$}{ch1 ch2 \&rest more-characters}{
+{\em $>$}のalias.}
+
+\funcdesc{char$<$}{ch1 ch2 \&rest more-characters}{
+{\em $<$}のalias.}
+
+\funcdesc{char$>=$}{ch1 ch2 \&rest more-characters}{
+{\em $>=$}のalias.}
+
+\funcdesc{char$<=$}{ch1 ch2 \&rest more-characters}{
+{\em $<=$}のalias.}
+
 \funcdesc{char}{string index}{
 {\em string}の{\em index}番目の文字を返す。}
 
@@ -663,6 +684,9 @@ EusLispには、文字型がない。
 {\em string}から文字を抜き出す。
 {\em string}の型が明確に解っていて、型チェックを要しないときのみ、{\bf schar}
 を使うこと。}
+
+\funcdesc{setchar}{string index ch}{
+{\em string}の{\em index}番目の文字を{\em ch}にする。}
 
 \funcdesc{stringp}{object}{
 {\em object}がバイト(256より小さい正の整数)のベクトルなら、Tを返す。}
@@ -698,18 +722,26 @@ EusLispには、文字型がない。
 もっと複雑なオブジェクトから文字列表現を得るためには、
 最初の引数をNILにした{\bf format}関数を用いること。}
 
-\fundesc{string$<$}{str1 str2}
+\fundesc{string$<$}{str1 str2}{
+strcmpによる{\em str1}の値が{\em str2}より低い時、Tを返す。}
 
-\fundesc{string$<=$}{str1 str2}
+\fundesc{string$<=$}{str1 str2}{
+strcmpによる{\em str1}の値が{\em str2}より低い、もしくは等しい時、Tを返す。}
 
-\fundesc{string$>$}{str1 str2}
+\fundesc{string$>$}{str1 str2}{
+strcmpによる{\em str1}の値が{\em str2}より高い時、Tを返す。}
 
-\fundesc{string$>=$}{str1 str2}
+\fundesc{string$>=$}{str1 str2}{
+strcmpによる{\em str1}の値が{\em str2}より高い、もしくは等しい時、Tを返す。}
 
-\fundesc{string-left-trim}{bag str}
+\fundesc{string-left-trim}{bag str}{
+{\em str}は、左から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
+その要素を削除する。
+一旦{\em bag}に含まれない文字が見つかると、その後の探索は中止され、
+{\em str}の残りが返される。}
 
 \funcdesc{string-right-trim}{bag str}{
-{\em str}は、左（右）から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
+{\em str}は、右から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
 その要素を削除する。
 一旦{\em bag}に含まれない文字が見つかると、その後の探索は中止され、
 {\em str}の残りが返される。}
