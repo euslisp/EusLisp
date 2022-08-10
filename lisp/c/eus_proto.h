@@ -116,6 +116,7 @@ extern pointer STR_GT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer STR_GE(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern void charstring(context */*ctx*/, pointer /*mod*/);
 /* compsub.c */
+extern void checkcompversion(const char* /*compver*/);
 extern int maerror(void);
 extern pointer loadglobal(pointer /*s*/);
 extern pointer storeglobal(pointer /*s*/, pointer /*v*/);

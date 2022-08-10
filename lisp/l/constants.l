@@ -95,6 +95,7 @@
   (setq (tio . outstream) *standard-output*))
 
 (send *system-package* :nicknames '("SI" "SYS"))
+(send (find-package "COMPILER") :nicknames '("COMP"))
 
 
 #+:ustation

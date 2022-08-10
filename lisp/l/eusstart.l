@@ -327,7 +327,6 @@
 	(symbol-function 'unix::runtime))
 ;; toplevel needs the compiler package
 ;;	(format t ";;; Loading compiler modules.~%")
-	(make-package "COMPILER" :nicknames '("COMP"))
 ;;
 	(system::exec-module-init "tty" "l/tty.l")
 	(system::exec-module-init "history" "l/history.l")

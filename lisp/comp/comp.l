@@ -1782,6 +1782,7 @@
                  (if (memq :thread *features*) " -DTHREADED" )
                  (if (memq :pthread *features*) " -DPTHREAD" )
                  (if (memq :rgc *features*) " -DRGC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD" )
+                 (format nil " -DCOMPTIMEVERSION=\\\"~A\\\"" compiler-implementation-version)
                  (if pic
                      (cond ((memq :SunOS4.1 *features*) " -fpic")
                        ((memq :cygwin *features*) "")
@@ -1932,9 +1933,11 @@
 	)
      srcfile  ))
 	 
+(defun compiler-implementation-version ()
+  (format nil "EusLisp compiler version ~A" compiler-implementation-version))
 
 (defun comp-file-toplevel (&rest argv)
-   (warn "EusLisp compiler version 1.54   June/1986 ... May/1996")
+   (warn (compiler-implementation-version))
    (terpri *error-output*)
    (sys:alloc 60000)
    (setq lisp::*prompt-string* "euscomp$ ")

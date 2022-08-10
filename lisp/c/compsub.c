@@ -11,6 +11,32 @@ static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
+
+int checkversion(compver, loadver)
+const char* compver;
+const char* loadver;
+{
+    unsigned compmajor=0, compminor=0;
+    unsigned loadmajor=0, loadminor=0;
+    sscanf(compver, "%u.%u", &compmajor, &compminor);
+    sscanf(loadver, "%u.%u", &loadmajor, &loadminor);
+    // check if the major version is equal
+    return (compmajor == loadmajor);
+}
+
+void checkcompversion(compver)
+const char* compver;
+{
+#if defined(COMPILERVERSION)
+   char* loadver = COMPILERVERSION;
+   if (!checkversion(compver, loadver)) {
+       fprintf(stderr, ";; compile time version: %s\n", compver);
+       fprintf(stderr, ";; load time version: %s\n", loadver);
+       error(E_USER, (pointer)"compiler version mismatch");
+   }
+#endif
+}
+
 int maerror()
 { error(E_MISMATCHARG);}
 

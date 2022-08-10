@@ -115,7 +115,7 @@ context *euscontexts[MAXTHREAD];
 
 
 /*symbol management*/
-pointer pkglist,lisppkg,keywordpkg,userpkg,syspkg,unixpkg,xpkg;
+pointer pkglist,lisppkg,keywordpkg,userpkg,compilerpkg,syspkg,unixpkg,xpkg;
 pointer NIL,PACKAGE,T,QUOTE;
 pointer FUNCTION;
 pointer QDECLARE,QSPECIAL;
@@ -131,7 +131,7 @@ pointer TOPLEVEL,QEVALHOOK,QEXITHOOK,FATALERROR;
 pointer QUNBOUND,QDEBUG,QGCHOOK,QGCDEBUG;
 pointer QTHREADS;	/* system:*threads* */
 pointer QPARAGC;
-pointer QVERSION;
+pointer QVERSION,QCOMPILERVERSION;
 pointer QEQ,QEQUAL,QNOT, QAND, QOR;
 
 /* keywords */
@@ -614,6 +614,7 @@ static void initpackage()
   /*default packages*/
   keywordpkg=makepkg(ctx,makestring("KEYWORD",7),NIL,NIL);
   userpkg=   makepkg(ctx,makestring("USER",4),NIL,rawcons(ctx,lisppkg,NIL));
+  compilerpkg= makepkg(ctx,makestring("COMPILER",8),NIL,rawcons(ctx,lisppkg,NIL));
   syspkg=    makepkg(ctx,makestring("SYSTEM",6),NIL,rawcons(ctx,lisppkg,NIL));
   unixpkg=   makepkg(ctx,makestring("UNIX",4),NIL,rawcons(ctx,lisppkg,NIL));
   xpkg=      makepkg(ctx,makestring("X",1),NIL,rawcons(ctx,lisppkg,NIL));
@@ -904,8 +905,10 @@ static void initfeatures()
   p=stacknlist(ctx,4);
   QVERSION=defvar(ctx, "LISP-IMPLEMENTATION-VERSION", p,lisppkg);
 
-  /*make features*/
+  p=makestring(COMPILERVERSION,strlen(COMPILERVERSION));
+  QCOMPILERVERSION=defvar(ctx, "COMPILER-IMPLEMENTATION-VERSION", p, compilerpkg);
 
+  /*make features*/
   p=NIL;
 #if vax
   p=cons(ctx,intern(ctx,"VAX",3,keywordpkg),p);
