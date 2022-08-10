@@ -348,7 +348,7 @@ pointer env,bf;
       supplied[nokeys]=svar;
       nokeys++;
       if (nokeys>=KEYWORDPARAMETERLIMIT) {
-	error(E_USER, "Too many keyword parameters >%d",KEYWORDPARAMETERLIMIT);
+	error(E_USER, (pointer)"too many keyword parameters >=128");
 	}
       }	
   n=0;
