@@ -27,6 +27,7 @@
 	cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr caddddr
 	flatten list-insert list-delete adjoin union intersection
 	set-difference set-exclusive-or rotate-list last copy-tree
+	supermember superassoc
 	copy-list nreconc acons member assoc assoc-if assoc-if-not
         rassoc rassoc-if rassoc-if-not subsetp maplist mapcon))
 
@@ -473,6 +474,9 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 	(unless (member l2 list1 :test test :test-not test-not :key key)
 	   (push l2 result2)))
      (nconc result1 result2)))
+
+(alias 'supermember 'system::raw-member)
+(alias 'superassoc 'system::raw-assoc)
 
 (defun rotate-list (l) (append (cdr l) (list (car l))))
 (defun last (x &optional (n 1))
