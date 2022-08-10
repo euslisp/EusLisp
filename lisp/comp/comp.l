@@ -17,12 +17,14 @@
 (eval-when (load eval)
 	(export '(compile compile-file comfile identifier
 		  compile-file-if-src-newer))
-	(export '(*safety* *space* *verbose* *optimize* *speed* *cc*)) )
+	(export '(*safety* *space* *verbose* *optimize* *speed* *cc*
+		  *type-check-declare*)))
 
 (defun compiled-code-p (x) (derivedp x compiled-code))
 
 (eval-when (load eval)
 
+(defparameter *type-check-declare* nil)
 (defparameter *coptflags* "")
 (defparameter *cflags* "")
 (defparameter *defun-list* nil)
@@ -1501,13 +1503,14 @@
                (let ((offset (1- (send trans :offset-from-fp))))
                  (push (send self :bind var argframe 'local offset) vlist)))))
 ;;; type check declaration variables
-     (dolist (dvar decl-vars)
-       (let* ((id (car dvar))
-              (tp (cdr dvar))
-              (v (send self :variable id)))
-         (unless (eql (v . binding) 'unknown)
-           (send self :load-var id)
-           (send trans :type-check-declare tp))))
+     (when *type-check-declare*
+       (dolist (dvar decl-vars)
+         (let* ((id (car dvar))
+                (tp (cdr dvar))
+                (v (send self :variable id)))
+           (unless (eql (v . binding) 'unknown)
+             (send self :load-var id)
+             (send trans :type-check-declare tp)))))
 ;;; evaluate lambda body
      (send self :progn forms)
 ;;; unwind/restore
