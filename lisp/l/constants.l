@@ -306,7 +306,7 @@
 ;     (structure (si::putprop ,s ,v 'structure-documentation))
 ;     (type (si::putprop ,s ,v 'type-documentation))
 ;     (setf (si::putprop ,s ,v 'setf-documentation))
-;     (t (error "~S is an illegal documentation type." ,d))))
+;     (t (error value-error "~S is an illegal documentation type." ,d))))
 
 (defsetf matrix-row (x y) (val) `(set-matrix-row ,x ,y ,val))
 (defsetf matrix-column (x y) (val) `(set-matrix-column ,x ,y ,val))

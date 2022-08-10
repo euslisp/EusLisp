@@ -108,7 +108,7 @@
 
 (defun check-arg (req n &optional (fn "car/cdr"))
    (if (null (= req n))
-       (error "mismatch arg for ~A" fn)))
+       (error argument-error "mismatch arg for ~A" fn)))
 
 (defun def-function-type (type funcs)
    (dolist (f funcs) (putprop f type 'function-result-type)))

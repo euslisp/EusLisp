@@ -140,7 +140,7 @@
 	     (if (position #\space exec)
 		 (unix:system exec)
 		 (apply #'unix:exec exec args))
-	     (error "exec") (exit 1))
+	     (error program-error "exec") (exit 1))
             (t (if *debug* (format t ";; child_pid=~D~%" pid))))
       (setq ios (instance io-stream :init
 			(send stdout :instream) (send stdin :outstream)))

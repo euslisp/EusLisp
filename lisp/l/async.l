@@ -58,7 +58,7 @@
 
   (:lock-slots ()
     (if (not (eql (unix:thr-self) main-thread))
-      (error "not the main thread"))
+      (error program-error "not the main thread"))
     (sys:mutex-lock lock-of-slots)
     (when (sys:mutex-trylock entrance-lock)
       (dolist (thr sub-threads)
@@ -67,7 +67,7 @@
 
   (:unlock-slots ()
     (if (not (eql (unix:thr-self) main-thread))
-      (error "not the main thread"))
+      (error program-error "not the main thread"))
     (sys:mutex-lock lock-of-slots)
     (dolist (thr sub-threads)
       (unix:thr-continue thr))

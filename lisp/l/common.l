@@ -481,7 +481,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 (defun rotate-list (l) (append (cdr l) (list (car l))))
 (defun last (x &optional (n 1))
   (unless (and (integerp n) (>= n 0))
-    (error "last &optional n must be a non negative integer"))
+    (error value-error "last &optional n must be a non negative integer"))
   (nthcdr (max (- (length x) n) 0) x))
 (defun copy-tree (x) (subst t t x))
 (defun copy-list (x) (nreverse (reverse x)))
@@ -1103,7 +1103,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
                  ',access-fn))
 	(t
 	 (unless (= (list-length (cadr rest)) 1)
-		 (error "(store-variable) expected."))
+		 (error value-error "(store-variable) expected."))
          `(progn (putprop ',access-fn ',rest 'setf-lambda)
                  (remprop ',access-fn 'setf-update-fn)
                  (remprop ',access-fn 'setf-method)
@@ -1145,11 +1145,11 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 		  newvalue (cdr place)))
 ;	((get (car place) 'setf-method)
 ;	 (apply (get (car form) 'setf-method) (cdr place)))
-	(t (error "SETF?")))))
+	(t (error value-error "SETF?")))))
 
 (defun setf-expand (l)
   (cond ((endp l) nil)
-        ((endp (cdr l)) (error "~S is an illegal SETF form." l))
+        ((endp (cdr l)) (error argument-error "~S is an illegal SETF form." l))
         (t
          (cons (setf-expand-1 (car l) (cadr l))
                (setf-expand (cddr l))))))
@@ -1158,7 +1158,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 ;;; SETF macro.
 (defmacro setf (&rest rest)
   (cond ((endp rest) nil)
-        ((endp (cdr rest)) (error "~S is an illegal SETF form." rest))
+        ((endp (cdr rest)) (error argument-error "~S is an illegal SETF form." rest))
         ((endp (cddr rest)) (setf-expand-1 (car rest) (cadr rest)))
         (t (cons 'progn (setf-expand rest)))))
 

@@ -121,7 +121,7 @@
 	      (do ((i 0 (1+ i)))
 		  ((>= i rank))
 		(setslot a array (+ i 5)  (elt dim i)))))
-         (t (error "integer or list expected")))
+         (t (error type-error "integer or list expected")))
       (when initial-element  (fill entity initial-element))
       (when initial-contents
 	 (fill-initial-contents entity 0 dim initial-contents))
