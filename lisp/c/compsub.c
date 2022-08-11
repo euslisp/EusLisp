@@ -27,6 +27,11 @@ const char* loadver;
 void checkcompversion(compver)
 const char* compver;
 {
+    if (compver==NULL) {
+        error(E_PROGRAM_ERROR,
+              (pointer)"COMPTIMEVERSION not defined. Did you compile with an older EusLisp version?");
+    }
+
 #if defined(COMPILERVERSION)
    char* loadver = COMPILERVERSION;
    if (!checkversion(compver, loadver)) {
@@ -34,6 +39,9 @@ const char* compver;
        fprintf(stderr, ";; load time version: %s\n", loadver);
        error(E_PROGRAM_ERROR, (pointer)"compiler version mismatch");
    }
+#else
+   error(E_PROGRAM_ERROR,
+         (pointer)"COMPILERVERSION not defined. Is this an older EusLisp version?");
 #endif
 }
 
