@@ -276,7 +276,63 @@ lambda-formかあるいはlambda-closureであったとき、Tを返す。
 
 \subsection{コンディション}
 
-コンディションシステムを用いることによってプログラムのより上位な層に情報を伝達つし、正しい対応を促すことができる。
+コンディションシステムを用いることによって情報をプログラムの上層に伝達し、正しい対応を促すことができる。
+コンディションは{\em signals}関数によってレイズされ、予め登録されたハンドラーによって処理される。
+グローバルなハンドラーは{\em install-handler}によって登録され、そしてローカルなハンドラーは{\em handler-bind} (resumption semantics)、あるいは{\em handler-case} (termination semantics)によって登録される。
+
+\begin{verbatim}
+(defcondition foo)
+(install-handler foo #'(lambda (c) 2))
+
+(list 1 (signals foo) 3)
+--> (1 2 3)
+
+(handler-bind ((foo #'(lambda (c) 20)))
+  (list 1 (signals foo) 3))
+--> (1 20 3)
+
+(handler-case (list 1 (signals foo) 3)
+   (foo () 200))
+--> 200
+\end{verbatim}
+
+コンディションがレイズされた時、そのコンディションにマッチする一番新しいハンドラーが実行される。
+ただし、callback中に{\em invoke-next-handler}を呼び出すことで以前のハンドラーを実行することもできる。
+
+\begin{verbatim}
+(defcondition foo)
+(install-handler foo #'(lambda (c) (print "FOO")))
+(install-handler foo
+  #'(lambda (c)
+      (print "Start")
+      (invoke-next-handler c)
+      (print "Done")))
+
+(signals foo)
+"Start"
+"FOO"
+"Done"
+\end{verbatim}
+
+コンディションのハンドリングを延期したい時、{\em lisp::atomic}を使うこともできる。
+
+\begin{verbatim}
+(defcondition foo)
+(install-handler foo #'(lambda (c) (print "FOO")))
+(defun bar (n)
+  (if (= n 3) (signals foo))
+  (print n))
+
+(lisp::atomic (dotimes (i 5) (bar i))
+  (foo () (print "In a second...")))
+0
+1
+2
+"In a second..."
+3
+4
+"FOO"
+\end{verbatim}
 
 \begin{refdesc}
 
@@ -316,6 +372,10 @@ Callback関数{\em handler}を定義し、{\em label}を親クラスとするコ
 
 \funcdesc{invoke-next-handler}{obj}{
   コンディションハンドラーの中から呼ばれた場合、コンディションインタンス{\em obj}と次にマッチングされたhandlerの返り値を返す。マッチングされずにどのhandlerも呼ばれない場合はnilを返す。}
+
+\macrodesc{lisp::atomic}{form \&rest (label arg-list \&rest body)}{
+{\em label}のコンディションに中断されることなく{\em body}を実行する。
+{\em form}実行中に{\em label}を親クラスとするコンディションがsignalizeされれば、{\em body}をその場で実行し、そして{\em form}の評価が終わったときにはそのコンディションをもう一度レイズする。}
 
 \end{refdesc}
 

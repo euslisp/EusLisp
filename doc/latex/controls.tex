@@ -276,6 +276,64 @@ is returned.}
 \subsection{Conditions}
 
 Conditions can be used to report exceptions to higher levels in the program and ask for handling before continuing.
+Conditions are signalized using the {\em signals} function, and are handled through callbacks registered either globaly with {\em install-handler} or locally with {\em handler-bind} (resumption semantics) or {\em handler-case} (termination semantics).
+
+\begin{verbatim}
+(defcondition foo)
+(install-handler foo #'(lambda (c) 2))
+
+(list 1 (signals foo) 3)
+--> (1 2 3)
+
+(handler-bind ((foo #'(lambda (c) 20)))
+  (list 1 (signals foo) 3))
+--> (1 20 3)
+
+(handler-case (list 1 (signals foo) 3)
+   (foo () 200))
+--> 200
+\end{verbatim}
+
+When a signal is raised, the most recently registered handler is always prioritized.
+However, it is also possible to interact with previous handlers by calling
+{\em invoke-next-handler} at any point of the callback execution.
+
+\begin{verbatim}
+(defcondition foo)
+(install-handler foo #'(lambda (c) (print "FOO")))
+(install-handler foo
+  #'(lambda (c)
+      (print "Start")
+      (invoke-next-handler c)
+      (print "Done")))
+
+(signals foo)
+"Start"
+"FOO"
+"Done"
+\end{verbatim}
+
+The function {\em lisp::atomic} also allows to locally postpone
+a handler evaluation, possibly with some additional callback.
+
+\begin{verbatim}
+(defcondition foo)
+(install-handler foo #'(lambda (c) (print "FOO")))
+(defun bar (n)
+  (if (= n 3) (signals foo))
+  (print n))
+
+(lisp::atomic (dotimes (i 5) (bar i))
+  (foo () (print "In a second...")))
+0
+1
+2
+"In a second..."
+3
+4
+"FOO"
+\end{verbatim}
+
 
 \begin{refdesc}
 
@@ -314,7 +372,11 @@ Conditions can be used to report exceptions to higher levels in the program and 
   {\em obj} is a condition instance or a condition class to be initialized by {\em init-args}.}
 
 \funcdesc{invoke-next-handler}{obj}{
-  Can be used from within a condition handler to call the next handler matching the the {\it obj} condition. {\it obj} must be an initialized condition instance. Returns the result of the matching handler or {\it nil} if unhandled.}
+  Can be used from within a condition handler to call the next handler matching the {\it obj} condition. {\it obj} must be an initialized condition instance. Returns the result of the matching handler or {\it nil} if unhandled.}
+
+\macrodesc{lisp::atomic}{form \&rest (label arg-list \&rest body)}{
+  Executes {\em form} without being interrupted by conditions matching {\em label}.
+  If a condition matching {\em label} is signalized during the execution of {\em form}, the callback defined in {\em body} is executed in-place and the condition is re-signalized after the evaluation finishes.}
 
 \end{refdesc}
 
