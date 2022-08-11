@@ -23,7 +23,7 @@
 
 ;; (export '(unix eus common ieee-floating-point sparc m68020))
 
-(nconc *features* '(:unix :eus :common))
+(nconc *features* '(:unix :eus :common :condition :closure))
 #+(or :sun :mips :linux :cygwin)
 (nconc *features* '(:ieee-floating-point))
 #+:sun4

@@ -298,8 +298,6 @@
 	(exit 1))
 ;   (format t "argv=~a~%" argv)
    (if *eustop-hook* (funcall *eustop-hook* *eustop-argument*))
-   ;; print temporary eus10 warning
-   (warning-message 3 "Welcome to eus10 beta. Please report any bugs at https://github.com/Affonso-Gui/EusLisp/issues or directly to affonso@jsk.imi.i.u-tokyo.ac.jp~%")
    ;; enter read-eval-loop session
    (catch :eusexit
      ;; load files given in arguments
