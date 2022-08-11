@@ -388,6 +388,40 @@ closureの中の{\bf return-from}特殊書式と{\bf unwind-protect}の中のcle
 コンパイルされたコードを解析するためには中間Cプログラムを見るかあるいは
 {\bf adb}を使用する。
 
+\subsubsection{クロージャコンパイル}
+
+クロージャが生成されるとき、コンパイラはスタック・メモリに存在する現在のローカル・バインディングをヒープ・メモリに移動させなければならない。これによって、クロージャが元のスコープの外からでも安定して実行できるようになる。
+
+しかし、ローカル・バインディングをすべてヒープに保存するのは最適ではない。そのため、コンパイラはルックアヘッドを用いて必要最小限の参照のみをヒープに移動している。
+
+例えば、次のようなコードをみてみよう。
+\begin{verbatim}
+(let ((a 1) (b 2) (c 3))
+  (setq fn1 #'(lambda () (1+ a))))
+\end{verbatim}
+
+コンパイルされたコードは次のとおりとなる。クロージャで使用される唯一のローカル変数である{\em a}の値を保持するため、サイズ 1 のベクトルをallocationしている。二番目に生成されるベクトルは参照ベクトルをまとめるもので、複数のクロージャが同じバインドを共有するときに重要となる。二番目のベクトルのサイズは、allocation時のスタックのサイズに等しい。これは、クロージャの内部と外部で同じインデックスを維持するための便宜上のものであり、最適化の余地もまだある。
+
+\begin{verbatim}
+	local[0]= makeint((eusinteger_t)1L);
+	local[1]= makeint((eusinteger_t)2L);
+	local[2]= makeint((eusinteger_t)3L);
+	ctx->vsp=local+3;
+	ctx->vsp=local+3;
+	local[3]= makevector(C_VECTOR,1); /*parlet*/
+	local[3]->c.vec.v[0]= local[0];
+	ctx->vsp=local+4;
+	local[4]= makevector(C_VECTOR,4); /*lambda-closure*/
+	local[4]->c.vec.v[3] = local[3];
+	w = local[4];
+	ctx->vsp=local+4;
+	local[4]= makeclosure(codevec,quotevec,testCLO1,NIL,w);
+	storeglobal(fqv[0],local[4]);
+	w = local[4];
+	local[0]= NIL;
+	ctx->vsp=local; return(local[0]);
+\end{verbatim}
+
 \begin{refdesc}
 
 \functiondescription{euscomp}{\&rest filename}{UNIXコマンド}{
@@ -421,13 +455,18 @@ Euslispコンパイラを呼びだす。}
 \vardesc{compiler:*optimize*}{
 コンパイラの最適化レベルを制御する。}
 
+\vardesc{compiler:*safety*}{
+安全性レベルを制御する。}
+
 \vardesc{compiler:*verbose*}{
 non-NILが設定されたとき、コンパイルされている関数名やメソッド名そして
 コンパイルに要した時間を表示する。}
 
-\vardesc{compiler:*safety*}{
-安全性レベルを制御する。}
+\vardesc{compiler:*type-check-declare*}{
+non-NILが設定されたとき、コンパイルされたコードではdeclareされた変数のタイプを積極的にチェックする。}
 
+\funcdesc{compiler::compiler-implementation-version}{}{
+コンパイラのバーションを表すストリングを返す。``EusLisp compiler version 1.54''}
 \end{refdesc}
 
 \newpage

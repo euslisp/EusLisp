@@ -335,12 +335,12 @@ Euscomp does optimization for arithmetic operation and vector access.
 Sometimes proper type declarations are needed to inform
 the compiler applicability of optimization.
 
-{\bf Compile-function} compiles functions one by one.
+{\bf Compile} compiles functions one by one.
 {\bf Compile-file}  compiles an entire source file.
-During the execution of {\bf Compile-file}, each form in a file
+During the execution of {\bf compile-file}, each form in a file
 is read and evaluated.
 This may change the current EusLisp environment.
-For examples, {\bf defparameter}
+For example, {\bf defparameter}
 may set a new value to a symbol and {\bf defun} may substitute the existing
 compiled function with its non-compiled version.
 To avoid these unexpected effects, use the {\bf eval-when} special form
@@ -428,6 +428,40 @@ unwind-protect is not always correctly compiled.
 In order to analyze compiled code, see the intermediate C program
 or use {\tt adb}.
 
+\subsubsection{Closure Compilation}
+
+When a closure is created, the compiler must move the current local bindings present in stack memory to heap memory. This allows for the stable execution of closures even from outside their original scope: the bindings remain valid while being referenced by the closure object, and are collected by the garbage collector when the reference ends.
+
+However, it is not optimal to move all of the local bindings to the heap. In order to deal with that, the compiler adopts a look-ahead technique to only keep the minimal required references in the heap.
+
+For example, when considering the following code:
+\begin{verbatim}
+(let ((a 1) (b 2) (c 3))
+  (setq fn1 #'(lambda () (1+ a))))
+\end{verbatim}
+
+The generated code is as follows. Note how a vector of size 1 is allocated to hold the value of variable {\em a}, the only binding used in the closure. The second generated vector is used by the compiler to bundle and administer all of the other binding vectors, in a way that is shareable among different closure objects. The size of this second vector is set to the current size of the stack at the allocation time. This is done for practical reasons in order to keep the same reference index both inside and outside the closure, still having room for optimization.
+
+\begin{verbatim}
+	local[0]= makeint((eusinteger_t)1L);
+	local[1]= makeint((eusinteger_t)2L);
+	local[2]= makeint((eusinteger_t)3L);
+	ctx->vsp=local+3;
+	ctx->vsp=local+3;
+	local[3]= makevector(C_VECTOR,1); /*parlet*/
+	local[3]->c.vec.v[0]= local[0];
+	ctx->vsp=local+4;
+	local[4]= makevector(C_VECTOR,4); /*lambda-closure*/
+	local[4]->c.vec.v[3] = local[3];
+	w = local[4];
+	ctx->vsp=local+4;
+	local[4]= makeclosure(codevec,quotevec,testCLO1,NIL,w);
+	storeglobal(fqv[0],local[4]);
+	w = local[4];
+	local[0]= NIL;
+	ctx->vsp=local; return(local[0]);
+\end{verbatim}
+
 \begin{refdesc}
 
 \functiondescription{euscomp}{\&rest filename}{unix-command}{
@@ -461,13 +495,18 @@ the ".o" suffix.}
 \vardesc{compiler:*optimize*}{
 controls optimization level.}
 
+\vardesc{compiler:*safety*}{
+controls safety level.}
+
 \vardesc{compiler:*verbose*}{
 When set to non-nil, the name of a function or a method being compiled,
 and the time required for the compilation are displayed.}
 
-\vardesc{compiler:*safety*}{
-controls safety level.}
+\vardesc{compiler:*type-check-declare*}{
+When set to non-nil, will add type checks for declared variables on the compiled code.}
 
+\funcdesc{compiler::compiler-implementation-version}{}{
+Returns a string detailing the compiler version. ``EusLisp compiler version 1.54''}
 \end{refdesc}
 
 \newpage
