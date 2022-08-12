@@ -325,25 +325,26 @@
    (error () 'bad))
   good)
 
-(define-ansi-test handler-case.17
-  (let ((i 0))
-    (values
-     (handler-case
-      (handler-case (error "foo")
-                    (error () (incf i) (error "bar")))
-      (error () 'good))
-     i))
-  good 1)
+;; in euslisp `invoke-next-handler' is used for re-raising
+;; (define-ansi-test handler-case.17
+;;   (let ((i 0))
+;;     (values
+;;      (handler-case
+;;       (handler-case (error "foo")
+;;                     (error () (incf i) (error "bar")))
+;;       (error () 'good))
+;;      i))
+;;   good 1)
 
-(define-ansi-test handler-case.18
-  (let ((i 0))
-    (values
-     (handler-case
-      (handler-case (error "foo")
-                    (error (c) (incf i) (error c)))
-      (error () 'good))
-     i))
-  good 1)
+;; (define-ansi-test handler-case.18
+;;   (let ((i 0))
+;;     (values
+;;      (handler-case
+;;       (handler-case (error "foo")
+;;                     (error (c) (incf i) (error c)))
+;;       (error () 'good))
+;;      i))
+;;   good 1)
 
 ;; (define-ansi-test handler-case.20
 ;;   (handler-case
