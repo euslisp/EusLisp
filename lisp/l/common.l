@@ -417,15 +417,21 @@
 if pos is bigger than the length of list, item is nconc'ed at the tail"
    (cond ((null list) (list item))
 	 ((>= pos (length list)) (nconc list (list item)))
-	 ((= pos 0) (cons item list))
+	 ((= pos 0)
+          (rplacd list (cons (car list) (cdr list)))
+          (rplaca list item))
 	 (t (let ((tail (cons item (nthcdr pos list))))
 		(rplacd (nthcdr  (1- pos) list) tail)
 		list))))
 
 (defun list-delete (lst n)	"(lst n) delete nth element of lst"
-   (if (= n 0) 
-	(setq lst (cdr lst))
-	(rplacd (nthcdr (1- n) lst) (nthcdr (1+ n) lst))  )
+   (cond ((null lst) nil)
+         ((>= n (length lst)) nil)
+         ((= n 0)
+          (rplaca lst (cadr lst))
+          (rplacd lst (cddr lst)))
+         (t
+          (rplacd (nthcdr (1- n) lst) (nthcdr (1+ n) lst))))
    lst)
 
 (defun adjoin (item list &key (test #'eq) (test-not) (key #'identity))
