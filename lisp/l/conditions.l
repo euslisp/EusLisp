@@ -71,16 +71,20 @@
           (funcall handler 0 (send err :message) (send err :form)))))
 
 (defun remove-handler (label &optional handler)
-  (let ((item
+  (let* ((*condition-handler*
+          ;; always use global scope value
+          (or
+           (cdr (assoc '*condition-handler* (sys:list-all-special-bindings)))
+           *condition-handler*))
+        (pos
          (if handler
-             (find-if #'(lambda (val) (and (eql (car val) label)
-                                           (derivedp (cdr val) condition-handler)
-                                           (eql (send (cdr val) :function) handler)))
-                      *condition-handler*)
-             (find label *condition-handler* :key #'car))))
-    (when item
-      (setq *condition-handler*
-            (remove item *condition-handler* :test #'equal :count 1))
+             (position-if #'(lambda (val) (and (eql (car val) label)
+                                               (derivedp (cdr val) condition-handler)
+                                               (eql (send (cdr val) :function) handler)))
+                          *condition-handler*)
+             (position label *condition-handler* :key #'car))))
+    (when pos
+      (list-delete *condition-handler* pos)
       t)))
 
 (defmacro handler-bind (bindings &rest forms)
