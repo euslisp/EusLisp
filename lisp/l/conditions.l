@@ -52,13 +52,27 @@
                   slots)))
      ',name))
 
-(defun install-handler (label handler)
+(defun install-handler-raw (label handler)
   ;; ensure condition class
   (if (eq label t) (setq label condition))
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
   (push (cons label (instance condition-handler :init handler))
         *condition-handler*)
+  t)
+
+(defun install-handler (label handler)
+  (if (eq label t) (setq label condition))
+  (unless (and (classp label) (derivedp (instantiate label) condition))
+    (error type-error "condition class expected"))
+  ;; force registration on global scope
+  (let ((handler-list
+         (cdr (assoc '*condition-handler* (sys:list-all-special-bindings))))
+        (item
+         (cons label (instance condition-handler :init handler))))
+    (when handler-list
+      (list-insert item 0 handler-list))
+    (push item *condition-handler*))
   t)
 
 (defun install-error-handler (handler)
@@ -92,7 +106,7 @@
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
-     ,@(mapcar #'(lambda (bind) `(install-handler ,@bind)) bindings)
+     ,@(mapcar #'(lambda (bind) `(install-handler-raw ,@bind)) bindings)
      ,@forms))
 
 (defun get-handler-frame (&optional (name "HANDLER-CASE-"))
