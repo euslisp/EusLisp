@@ -268,7 +268,6 @@ char *errmsg[100]={
 	"searching a circular list",
 /* INDEX ERROR */
 	"",
-	"illegal start/end index",
 	"array dimension mismatch",
 	"array index out of range",
 	"vector dimension mismatch",
@@ -417,7 +416,7 @@ va_dcl
       case E_VALUE_ERROR: case E_ROTAXIS: case E_CHARRANGE: case E_CIRCULAR:
         errobj=makeobject(C_VALUEERROR);  break;
     // INDEX ERROR
-      case E_INDEX_ERROR: case E_STARTEND: case E_ARRAYDIMENSION: case E_ARRAYINDEX:
+      case E_INDEX_ERROR: case E_ARRAYDIMENSION: case E_ARRAYINDEX:
       case E_VECSIZE: case E_VECINDEX: case E_SEQINDEX:
         errobj=makeobject(C_INDEXERROR);  break;
     // IO ERROR

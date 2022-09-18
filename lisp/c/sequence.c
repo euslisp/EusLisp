@@ -126,11 +126,11 @@ pointer argv[];
   s=ckintval(argv[1]);
   if (n==3) {
     e=ckintval(argv[2]);
-    if (e<s) error(E_STARTEND);}
+    if (e<s) error(E_VALUE_ERROR,(pointer)"end index cannot be smaller than start index");}
   if (a==NIL)return(NIL);
   else if (islist(a)) {
     while (islist(a) && i++<s) a=ccdr(a);
-    if (!islist(a)) error(E_STARTEND);
+    if (!islist(a)) error(E_SEQINDEX);
     i=0;
     if (n==3) {
       while (s<e) { 

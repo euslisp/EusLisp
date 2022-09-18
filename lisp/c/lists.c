@@ -110,7 +110,7 @@ register pointer *argv;
   register pointer a=argv[1];
   ckarg(2);
   i=ckintval(argv[0]);
-  if (i<0) error(E_NOINT);
+  if (i<0) error(E_SEQINDEX);
   while (i-->0 && islist(a)) a=ccdr(a);
   if (islist(a)) return(ccar(a));
   else if (a==NIL) return(NIL);
@@ -125,7 +125,7 @@ register pointer *argv;
   ckarg(2);
   i=ckintval(argv[0]);
   a=argv[1];
-  if (i<0) error(E_NOINT);
+  if (i<0) error(E_SEQINDEX);
   if (a==NIL) return(NIL);
   else if (!islist(a)) error(E_NOLIST);
   while (i-->0 && islist(a)) a=ccdr(a);
@@ -356,7 +356,7 @@ pointer argv[];
   if (!iscons(a)) {
     if (a==NIL) return(NIL);
     else error(E_NOLIST); }
-  if (n<0) error(E_VALUE_ERROR,(pointer)"The second argument must be non-negative number");
+  if (n<0) error(E_VALUE_ERROR,(pointer)"second argument must be non-negative number");
   while (iscons(a)) { ckpush(ccar(a)); a=ccdr(a); count++;}
   n=min(count,n);
   ctx->vsp -= n;
@@ -375,7 +375,7 @@ pointer argv[];
   if (!iscons(a)) {
     if (a==NIL) return(NIL);
     else error(E_NOLIST); }
-  if (n<0) error(E_STARTEND);
+  if (n<0) error(E_SEQINDEX);
   while (islist(a)) { l++; a=ccdr(a);}
   a=argv[0];
   if (n>=l) return(NIL);
