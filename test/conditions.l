@@ -76,11 +76,94 @@
                (handler-case (signals _condition.signals.4 :test 'good)
                  (_condition.signals.4 (c) (send c :test))))))
 
+(deftest signals.5
+  (defcondition _condition.signals.5 :slots (val))
+  (assert (eql :ok
+               (handler-case
+                   (handler-case
+                     (signals _condition.signals.5 :val 3)
+                     (_condition.signals.5 (c)
+                       (decf (_condition.signals.5-val c))
+                       (if (> (send c :val) 0)
+                           (signals c)
+                           :ok)))
+                 (_condition.signals.5 (c) :not-ok)))))
+
+(deftest invoke-next-handler.1
+  (defcondition _condition.invoke-next-handler.1)
+  (assert (null
+           (handler-case (signals _condition.invoke-next-handler.1)
+             (_condition.invoke-next-handler.1 (c)
+               (invoke-next-handler c))))))
+
+(deftest invoke-next-handler.2
+  (defcondition _condition.invoke-next-handler.2)
+  (assert (eql :ok
+               (handler-bind ((_condition.invoke-next-handler.2 #'(lambda (c) :ok)))
+                 (handler-case (signals _condition.invoke-next-handler.2)
+                   (_condition.invoke-next-handler.2 (c)
+                     (invoke-next-handler c)))))))
+
+(deftest invoke-next-handler.3
+  (defcondition _condition.invoke-next-handler.3)
+  (assert (null (invoke-next-handler (instance _condition.invoke-next-handler.3))))
+  (install-handler _condition.invoke-next-handler.3 #'(lambda (c) :ok))
+  (assert (eql :ok (invoke-next-handler (instance _condition.invoke-next-handler.3))))
+  (assert (remove-handler _condition.invoke-next-handler.3)))
+
+(deftest install-handler.1
+  (defcondition _condition.install-handler.1)
+  (install-handler _condition.install-handler.1 #'(lambda (c) :ok))
+  (assert (eql :ok (signals _condition.install-handler.1)))
+  (assert (remove-handler _condition.install-handler.1)))
+
+(deftest install-handler.2
+  (defcondition _condition.install-handler.2)
+  (install-handler _condition.install-handler.2 #'identity)
+  (let ((c (instance _condition.install-handler.2 :init)))
+    (assert (eq c (signals c))))
+  (assert (remove-handler _condition.install-handler.2)))
+
+(deftest install-handler.3
+  (defcondition _condition.install-handler.3)
+  (handler-bind ((_condition.install-handler.3 #'(lambda (c) :not-ok)))
+    (assert (eql :not-ok (signals _condition.install-handler.3)))
+    (install-handler _condition.install-handler.3 #'(lambda (c) :ok))
+    (assert (eql :ok (signals _condition.install-handler.3))))
+  (assert (remove-handler _condition.install-handler.3)))
+
+(deftest remove-handler.1
+  (defcondition _condition.remove-handler.1)
+  (assert (not (remove-handler _condition.remove-handler.1))))
+
+(deftest remove-handler.2
+  (defcondition _condition.remove-handler.2)
+  (install-handler _condition.remove-handler.2 #'identity)
+  (assert (remove-handler _condition.remove-handler.2 #'identity))
+  (assert (not (remove-handler _condition.remove-handler.2))))
+
+(deftest remove-handler.3
+  (defcondition _condition.remove-handler.3)
+  (handler-bind ((_condition.remove-handler.3 #'identity))
+      (assert (not (remove-handler _condition.remove-handler.3))))
+  (assert (not (remove-handler _condition.remove-handler.3))))
+
+(deftest remove-handler.4
+  (defcondition _condition.remove-handler.4)
+  (install-handler _condition.remove-handler.4 #'(lambda (c) (list 1 2 3)))
+  (handler-bind ((_condition.remove-handler.4
+                  #'(lambda (c) (cons 0 (invoke-next-handler c)))))
+    (assert (equal (list 0 1 2 3) (signals _condition.remove-handler.4)))
+    (assert (remove-handler _condition.remove-handler.4))
+    (assert (equal (list 0) (signals _condition.remove-handler.4))))
+  (assert (not (remove-handler _condition.remove-handler.4))))
+
 ;;;; adapted from ansi-test/tests/conditions/error.lsp
 (defun frob-simple-condition (c expected-fmt &rest expected-args)
   "Check that condition message matches the expected formatting"
   (and (derivedp c condition)
-       (string= (send c :message) expected-fmt)))
+       (string= (send c :message)
+                (apply #'format nil expected-fmt expected-args))))
 
 (defun frob-simple-error (c expected-fmt &rest expected-args)
   (and (derivedp c error)
@@ -109,12 +192,12 @@
      (error (c) (frob-simple-error c fmt))))
   t)
 
-;; (define-ansi-test error.4
-;;   (let ((fmt "Error: ~A"))
-;;     (handler-case
-;;      (error fmt 10)
-;;      (error (c) (frob-simple-error c fmt 10))))
-;;   t)
+(define-ansi-test error.4
+  (let ((fmt "Error: ~A"))
+    (handler-case
+     (error fmt 10)
+     (error (c) (frob-simple-error c fmt 10))))
+  t)
 
 (define-ansi-test error.6
   (handler-case
@@ -281,9 +364,9 @@
   (handler-case 'foo (condition () 'bar))
   foo)
 
-;; (define-ansi-test handler-case.8
-;;  (handler-case 'foo (t () 'bar))
-;;  foo)
+(define-ansi-test handler-case.8
+ (handler-case 'foo (t () 'bar))
+ foo)
 
 (define-ansi-test handler-case.9
   (handler-case (values 1 2 3 4 5 6 7 8) (condition () nil))
