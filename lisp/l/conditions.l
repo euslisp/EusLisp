@@ -65,13 +65,16 @@
   (if (eq label t) (setq label condition))
   (unless (and (classp label) (derivedp (instantiate label) condition))
     (error type-error "condition class expected"))
-  ;; force registration on global scope
+  ;; recursively force registration on all previous scopes
   (let ((handler-list
-         (cdr (assoc '*condition-handler* (sys:list-all-special-bindings))))
+         (remove-if-not #'(lambda (val) (eql val '*condition-handler*))
+                        (sys:list-all-special-bindings)
+                        :key #'car))
         (item
          (cons label (instance condition-handler :init handler))))
     (when handler-list
-      (list-insert item 0 handler-list))
+      (dolist (val handler-list)
+        (list-insert item 0 (cdr val))))
     (push item *condition-handler*))
   t)
 
@@ -85,24 +88,35 @@
           (funcall handler 0 (send err :message) (send err :form)))))
 
 (defun remove-handler (label &optional handler)
-  (let* ((handler-list
-          ;; always use global scope value
-          (cdr (assoc '*condition-handler* (sys:list-all-special-bindings))))
-        (pos
-         (if handler
-             (position-if #'(lambda (val) (and (eql (car val) label)
-                                               (derivedp (cdr val) condition-handler)
-                                               (eql (send (cdr val) :function) handler)))
-                          (or handler-list *condition-handler*))
-             (position label (or handler-list *condition-handler*) :key #'car))))
-    (when (and handler-list pos)
-      (let ((local-pos
-             (position (nth pos handler-list) *condition-handler* :test #'eq)))
-        (when local-pos
-          (list-delete *condition-handler* local-pos))))
+  (let* ((handler-special
+          ;; recursively force deletion on all previous scopes
+          ;; start with oldest scope
+          (reverse
+           (remove-if-not #'(lambda (val) (eql val '*condition-handler*))
+                          (sys:list-all-special-bindings)
+                          :key #'car)))
+         (handler-list
+          (append (mapcar #'cdr handler-special) (list *condition-handler*)))
+         (global-handler
+          (car handler-list))
+         (pos
+          (if handler
+              (position-if #'(lambda (val) (and (eql (car val) label)
+                                                (derivedp (cdr val) condition-handler)
+                                                (eql (send (cdr val) :function) handler)))
+                           global-handler)
+              (position label global-handler :key #'car))))
     (when pos
-      (list-delete (or handler-list *condition-handler*) pos)
-      t)))
+      (let ((item (nth pos global-handler))
+            res)
+        (dolist (val handler-list)
+          (let ((local-pos
+                 (position item val :test #'eq)))
+            (when local-pos
+              (list-delete val local-pos)
+              (setq res t))))
+        ;; return the deletion result of the innnermost scope (i.e. local scope)
+        res))))
 
 (defmacro handler-bind (bindings &rest forms)
   `(let ((*condition-handler* (copy-list *condition-handler*)))
