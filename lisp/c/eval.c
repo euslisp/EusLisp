@@ -1450,6 +1450,28 @@ pointer args[];
 #endif /* IRIX */
 #endif /* IRIX6 */
   
+pointer catchfuncode(ctx,func,args,noarg)
+register context *ctx;
+register pointer func,args;
+register int noarg;
+{
+    // create a NULL catcher around each evaluation of compiled code
+    // this ensures that no continuations are allowed in the C lang level,
+    // even if the user locally overwrites the error handler
+    pointer tag,val;
+    jmp_buf catchbuf;
+    mkcatchframe(ctx,NULL,&catchbuf);
+    if ((val=(pointer)eussetjmp(catchbuf))==0) {
+        val=funcode(ctx,func,args,noarg);}
+    else if ((eusinteger_t)val==1) {
+        val=NIL;
+    }
+
+    ctx->vsp=(pointer *)ctx->catchfp;
+    ctx->catchfp=(struct catchframe *)*ctx->vsp;
+    return(val);
+}
+
 pointer funcode(ctx,func,args,noarg)
 register context *ctx;
 register pointer func,args;
@@ -1610,7 +1632,7 @@ int noarg;
 
   else if (piscode(func)) {	/*call subr*/
     GC_POINT;
-    result=funcode(ctx,func,args,noarg);
+    result=catchfuncode(ctx,func,args,noarg);
     ctx->vsp=(pointer *)vf;
     ctx->callfp= vf->vlink;
     ctx->fletfp=oldfletfp;

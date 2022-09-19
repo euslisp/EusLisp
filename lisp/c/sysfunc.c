@@ -752,8 +752,9 @@ pointer *argv;
   struct catchframe *cfp=ctx->catchfp;
   int i=0;
   while (cfp) {
-    vpush(cfp->label);
-    i++;
+    if (cfp->label) {
+      vpush(cfp->label);
+      i++;}
     cfp=cfp->nextcatch;}
   return(stacknlist(ctx,i));}
 
