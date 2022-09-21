@@ -29,7 +29,7 @@
   (:init (fn)
     (unless (functionp fn) (error type-error "function expected"))
     ;; set slots
-    (send self :set-val "FN" fn)
+    (setq (self . fn) fn)
     ;; set name
     (let ((name
            (cond
@@ -48,7 +48,7 @@
                ,@(mapcar
                   #'(lambda (s)
                       `(,(intern (send s :pname) *keyword-package*) (&optional (val nil supplied-p))
-                         (if supplied-p (send self :set-val ',s val) ,s)))
+                         (if supplied-p (setq (self . ,s) val) (self . ,s))))
                   slots)))
      ',name))
 
