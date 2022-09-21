@@ -656,13 +656,17 @@
     (send self :store "w")		;save result
     (send self :reset-vsp)
     (if need-unwind
-	(maybe-format cfile  "	unwind(ctx,local+~d);~%" k))
+        (if (zerop k)
+            (maybe-format cfile  "	unwind(ctx,local-1);~%")
+            (maybe-format cfile  "	unwind(ctx,local+~d);~%" (1- k))))
     (maybe-format cfile "	local[~d]=w;~%" k)
     (inc pushcount))
  (:go-tag (k need-unwind)
     (send self :reset-vsp)
     (if need-unwind
-	(maybe-format cfile  "	unwind(ctx,local+~d);~%" k))
+        (if (zerop k)
+            (maybe-format cfile  "	unwind(ctx,local-1);~%")
+            (maybe-format cfile  "	unwind(ctx,local+~d);~%" (1- k))))
     (inc pushcount))
  (:closure (lab env0 env1)
     (if env1
