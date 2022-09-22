@@ -341,11 +341,11 @@
             (when (and (not avant-mode) (= (- closure-level (fdef . level)) 1)
                        (numberp (fdef . bindframe)))
               (unless (find (fdef . bindframe) current-fframes)
-                (send self :error ";; unbound fletframe detected when loading function ~S"
-                      (fdef . name)))
+                (send self :error ";; unbound fletframe detected when loading function ~S: ~A"
+                      (fdef . name) (fdef . bindframe)))
               (unless (< (fdef . cbindframe) current-csize)
-                (send self :error ";; invalid fletframe index detected when loading function ~S"
-                      (fdef . name))))
+                (send self :error ";; invalid fletframe index detected when loading function ~S: ~A"
+                      (fdef . name) (fdef . cbindframe))))
             fdef)
 	  (cond ((fboundp fn)
 		 (setq fdef (symbol-function fn))
@@ -552,11 +552,11 @@
             (when (and (not avant-mode) (= (- closure-level (var . level)) 1)
                        (numberp (pushvar . bindframe)))
               (unless (find (pushvar . bindframe) current-cframes)
-                (send self :error ";; unbound bindframe detected when loading variable ~S"
-                      (var . name)))
+                (send self :error ";; unbound bindframe detected when loading variable ~S: ~A"
+                      (var . name) (pushvar . bindframe)))
               (unless (< (send self :var-bindframe pushvar) current-csize)
-                (send self :error ";; invalid bindframe index detected when loading variable ~S"
-                      (var . name))))))
+                (send self :error ";; invalid bindframe index detected when loading variable ~S: ~A"
+                      (var . name) (send self :var-bindframe pushvar))))))
      (case (var . binding)
       ;; special variables are accessed through :load-global, so we don't need 
       ;; to add or manage them in bind frames
