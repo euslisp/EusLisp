@@ -134,7 +134,7 @@
 ;
 (eval-when (load compile eval)
 (defclass identifier :super object
-		     :slots (name type binding level offset bindframe clist))
+		     :slots (name type binding level offset bindframe cbindframe clist))
 )
 ;; binding = (constant, local, global, special)
 
@@ -156,7 +156,7 @@
 ;
 (eval-when (load compile eval)
 (defclass function-identifier :super object
-  :slots (name entry binding level offset bindframe body comp clist))
+  :slots (name entry binding level offset bindframe cbindframe body comp clist))
 )
 
 (eval-when (load eval)
@@ -200,12 +200,18 @@
     ;; accessed through the env0, not env1
     (let (acc)
        (while (>= lev 0)
+         ;; collect closure frames
          (dolist (var (svref frames lev))
            (setq var (cdr var))
            (when (and var (= (var . level) clevel)
                       (find fn (var . clist) :test #'equal))
              (pushnew (var . bindframe) acc)))
          (dec lev))
+       ;; update cbindframe offset value on the current level
+       (dolist (var (svref frames level))
+         (setq var (cdr var))
+         ;; force nil when not found
+         (setq (var . cbindframe) (position (var . bindframe) acc)))
        acc))
  (:enter (id &optional (lev level))
     (svset frames lev (cons (cons (id . name) id) (svref frames lev)))
@@ -348,7 +354,10 @@
  (:call-closure (fdef args)
    (if *debug*   (print (list :call-closure fdef args)))
    (dolist (a args) (send self :eval a))
-   (send trans :load-local (fdef . offset) (- closure-level (fdef . level)) (fdef . bindframe))
+   (send trans :load-local (fdef . offset) (- closure-level (fdef . level))
+         (if (and (fdef . cbindframe) (> closure-level (fdef . level)))
+             (fdef . cbindframe)
+             (fdef . bindframe)))
    (send trans :call-closure (fdef . entry) (length args)))
  (:get-flet-cframes (fn clevel &optional (function-table flets))
    ;; collect the binding offset of all flets used inside a function
@@ -383,18 +392,22 @@
 	'ovaf
 	(send (send self :variable var) :binding)))
  (:var-bindframe (var)
-   (if (or (var . bindframe) (= closure-level (var . level)))
-       (var . bindframe)
-       (labels ((find-frame (frame-list)
-                  (find-if #'(lambda (frame) (= (frame . level) (var . level))) frame-list))
-                (find-offset (frame-list)
-                  (let ((fr (find-frame frame-list)))
-                    (if fr (fr . offset)))))
-         (case (var . binding)
-           ((local let)
-            (find-offset frames))
-           ((param arg object lambda)
-            (find-offset argframes))))))
+   (cond
+     ((and (var . cbindframe) (> closure-level (var . level)))
+      (var . cbindframe))
+     ((or (var . bindframe) (= closure-level (var . level)))
+      (var . bindframe))
+     (t
+      (labels ((find-frame (frame-list)
+                 (find-if #'(lambda (frame) (= (frame . level) (var . level))) frame-list))
+               (find-offset (frame-list)
+                 (let ((fr (find-frame frame-list)))
+                   (if fr (fr . offset)))))
+        (case (var . binding)
+          ((local let)
+           (find-offset frames))
+          ((param arg object lambda)
+           (find-offset argframes)))))))
  (:special-variable-p (id)
     (let ((v (send idtable :find id)))
 	(if (null v)
@@ -1049,17 +1062,18 @@
     (let (frame)
       (when (or cframes fframes)
         ;; create a new vector which holds all necessary frames
-        (let ((size (max (if cframes (apply #'max cframes) 0)
-                         (if fframes (apply #'max fframes) 0))))
-          ;; TODO: in order to avoid having to remap the variables bindframe, we create a
-          ;; vector which simulates the local stack, but only populates the required fields.
-          (setq frame (send self :create-frame nil (1+ size) comment))
-          (dolist (f cframes)
-            (send trans :load-local f 0)
-            (send trans :store-local f 0 (frame . offset)))
-          (dolist (f fframes)
-            (send trans :load-local f 0)
-            (send trans :store-local f 0 (frame . offset)))))
+        (let ((size (+ (length cframes) (length fframes))))
+          (setq frame (send self :create-frame nil size comment))
+          ;; pack from variables and then function frames
+          (dotimes (i (length cframes))
+            (let ((f (nth i cframes)))
+              (send trans :load-local f 0)
+              (send trans :store-local i 0 (frame . offset))))
+          (dotimes (i (length fframes))
+            (let ((f (nth i fframes))
+                  (j (+ i (length cframes))))
+              (send trans :load-local f 0)
+              (send trans :store-local j 0 (frame . offset))))))
       ;; makeclosure
       (send trans :closure form (plusp closure-level) (not (not frame)))))
  (:lambda-preevaluation (fn &optional newcomp)
@@ -1182,7 +1196,7 @@
                (send self :add-closure (list entry fn newcomp cframes fframes)))))))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
-     (let (newcomp newcomps flets-tmp flist fletframe)
+     (let (newcomp newcomps flets-tmp flist fletframe (cframe-length 0))
         (if (not recursive-scope)	; copy compiler before binding the functions
            (setq newcomp (send self :copy-compiler)))
         (dolist (fn funcs)
@@ -1222,6 +1236,7 @@
           (dolist (fn (reverse flets-tmp))
             (let ((cframes (send idtable :get-cframes (fn . body) closure-level))
                   (fframes (send self :get-flet-cframes (fn . body) closure-level)))
+              (setq cframe-length (length cframes))
               (when recursive-scope
                 ;; append the current frame if any references are found
                 (when (send self :get-flet-cframes
@@ -1243,6 +1258,7 @@
             (send trans :load-local (fn . offset) (- closure-level (fn . level)))
             (send trans :store-local i 0 (fletframe . offset))
             (setq (fn . bindframe) (fletframe . offset)
+                  (fn . cbindframe) (+ cframe-length i)
                   (fn . offset) i)))
 
         ;; evaluate body
