@@ -267,6 +267,7 @@
 	    closure-level	;current closure level
 	    current-cframes	;current closure bind frames
 	    current-fframes	;current closure flet frames
+	    current-csize	;current closure env1 size
 	    scope		;current variable scope (for sequential let)
 	    frames		;list of the number of special bindings
 	    fletframes		;list of function frames
@@ -341,6 +342,9 @@
                        (numberp (fdef . bindframe)))
               (unless (find (fdef . bindframe) current-fframes)
                 (send self :error ";; unbound fletframe detected when loading function ~S"
+                      (fdef . name)))
+              (unless (< (fdef . cbindframe) current-csize)
+                (send self :error ";; invalid fletframe index detected when loading function ~S"
                       (fdef . name))))
             fdef)
 	  (cond ((fboundp fn)
@@ -549,6 +553,9 @@
                        (numberp (pushvar . bindframe)))
               (unless (find (pushvar . bindframe) current-cframes)
                 (send self :error ";; unbound bindframe detected when loading variable ~S"
+                      (var . name)))
+              (unless (< (send self :var-bindframe pushvar) current-csize)
+                (send self :error ";; invalid bindframe index detected when loading variable ~S"
                       (var . name))))))
      (case (var . binding)
       ;; special variables are accessed through :load-global, so we don't need 
@@ -1675,6 +1682,7 @@
            (fframes (fifth aclosure)))
        (setq (newcomp . current-cframes) cframes)
        (setq (newcomp . current-fframes) fframes)
+       (setq (newcomp . current-csize) (+ (length cframes) (length fframes)))
        (send newcomp :compile-a-closure entry def)))
    (setq function-closures nil))
  (:toplevel-eval (form)
