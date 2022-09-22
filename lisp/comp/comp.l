@@ -1222,6 +1222,11 @@
           (dolist (fn (reverse flets-tmp))
             (let ((cframes (send idtable :get-cframes (fn . body) closure-level))
                   (fframes (send self :get-flet-cframes (fn . body) closure-level)))
+              (when recursive-scope
+                ;; append the current frame if any references are found
+                (when (send self :get-flet-cframes
+                            (fn . body) closure-level flist)
+                  (pushnew (fletframe . offset) fframes)))
               (send self :closure (fn . entry) "flet env" cframes fframes)
               (setq (fn . offset) (1- (send trans :offset-from-fp)))
               (send self :add-closure
