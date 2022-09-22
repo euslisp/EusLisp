@@ -51,6 +51,7 @@
 (defvar *multipass-optimize* t)
 ;; define as a variable so we can `(let ((closure-frames ...)))' it
 (defvar closure-frames nil)
+(defvar closure-function-frames nil)
 
 (defun ovafp (form) (and (cdr form) (symbolp (cdr form))))
 
@@ -155,7 +156,7 @@
 ;
 (eval-when (load compile eval)
 (defclass function-identifier :super object
-  :slots (name entry binding level offset bindframe body comp))
+  :slots (name entry binding level offset bindframe body comp clist))
 )
 
 (eval-when (load eval)
@@ -318,9 +319,13 @@
    (let ((fdef (find-if #'(lambda (x) (eql (x . name) fn)) flets)))
       (if fdef
 	  (progn
-            (if (and avant-mode (not (fdef . bindframe)) (fdef . level)
-                     (> closure-level (fdef . level)))
-                (setq (fdef . bindframe) t))
+            (when (and avant-mode (fdef . level)
+                       (> closure-level (fdef . level)))
+              (unless (listp closure-function-frames)
+                (setq closure-function-frames nil))
+              (pushnew fdef closure-function-frames)
+              (unless (fdef . bindframe)
+                (setq (fdef . bindframe) t)))
             fdef)
 	  (cond ((fboundp fn)
 		 (setq fdef (symbol-function fn))
@@ -337,6 +342,14 @@
    (dolist (a args) (send self :eval a))
    (send trans :load-local (fdef . offset) (- closure-level (fdef . level)) (fdef . bindframe))
    (send trans :call-closure (fdef . entry) (length args)))
+ (:get-flet-cframes (fn clevel &optional (function-table flets))
+   ;; collect the binding offset of all flets used inside a function
+   (let (acc)
+     (dolist (f function-table)
+       (when (and f (= (f . level) clevel)
+                  (find fn (f . clist) :test #'equal))
+         (pushnew (f . bindframe) acc)))
+     acc))
  (:variable (var)	;var must be a symbol, ovaf is not allowed here.
    (let ((result (send idtable :get var scope)))
         (if (and result
@@ -1018,32 +1031,27 @@
     (send self :eval lab)
     (send self :eval val)
     (send trans :throw))
- (:closure (form &optional comment cframes)
+ (:closure (form &optional comment cframes fframes)
     ;; the closure environment is represented as a vector with each of the referenced frames
     ;; each frame itself is also represented as a vector and shared between closure instances,
     ;; ensuring cross read and write access to the variables.
     ;; the reference frames are judged by pre-evaluating the code and collecting variable
     ;; references, which are then passed to this method through the `cframes' argument.
-    ;; TODO: fletframes currently only have scope based evaluation:
-    ;; if one closure in a given scope has a reference to a fletframe, all of the closures
-    ;; in that scope will bear that reference as well.
 
-    (let* ((fn #'(lambda (f) (and (f . offset) (= (f . level) closure-level))))
-           (fletframes (remove-if-not fn fletframes))
-           frame)
-      (when (or cframes fletframes)
+    (let (frame)
+      (when (or cframes fframes)
         ;; create a new vector which holds all necessary frames
         (let ((size (max (if cframes (apply #'max cframes) 0)
-                         (if fletframes ((car fletframes) . offset) 0))))
+                         (if fframes (apply #'max fframes) 0))))
           ;; TODO: in order to avoid having to remap the variables bindframe, we create a
           ;; vector which simulates the local stack, but only populates the required fields.
           (setq frame (send self :create-frame nil (1+ size) comment))
           (dolist (f cframes)
             (send trans :load-local f 0)
             (send trans :store-local f 0 (frame . offset)))
-          (dolist (f fletframes)
-            (send trans :load-local (f . offset) 0)
-            (send trans :store-local (f . offset) 0 (frame . offset)))))
+          (dolist (f fframes)
+            (send trans :load-local f 0)
+            (send trans :store-local f 0 (frame . offset)))))
       ;; makeclosure
       (send trans :closure form (plusp closure-level) (not (not frame)))))
  (:lambda-preevaluation (fn &optional newcomp)
@@ -1059,24 +1067,38 @@
                (send newcomp :lambda param forms nil)
                (when (listp closure-frames)
                  (dolist (v closure-frames)
-                   (pushnew fn (identifier-clist v))))))
+                   (pushnew fn (identifier-clist v))))
+               (when (listp closure-function-frames)
+                 (dolist (f closure-function-frames)
+                   (pushnew fn (function-identifier-clist f))))))
         ;; we need to collect references recursively: #'(lambda () #'(lambda () a))
         ;; but don't want to carry them sequentially: #'(lambda () 1) #'(lambda () a)
         ;; to do that, we only overwrite the `closure-frames' on the first evaluation
-        (if closure-frames
-            (lambda-closure-frames)
-            (let ((closure-frames t))
-              (lambda-closure-frames)))
+        (cond
+          ((and closure-frames closure-function-frames)
+           (lambda-closure-frames))
+          ((and closure-frames (not closure-function-frames))
+           (let ((closure-function-frames t))
+             (lambda-closure-frames)))
+          ((and (not closure-frames) closure-function-frames)
+           (let ((closure-frames t))
+             (lambda-closure-frames)))
+          (t ;; both null
+           (let ((closure-frames t)
+                 (closure-function-frames t))
+             (lambda-closure-frames))))
         (send trans :discard 1))))
  (:unwind-protect (prot cleanup)
     (let ((fn (cons 'lambda (cons nil cleanup)))
           cleaner newcomp)
       (if avant-mode
           (send self :lambda-preevaluation fn)
-          (let ((cframes (send idtable :get-cframes fn closure-level)))
+          (let ((cframes (send idtable :get-cframes fn closure-level))
+                (fframes (send self :get-flet-cframes fn closure-level)))
             (setq cleaner (send self :genlabel "UWP"))
             (push (send trans :offset-from-fp) unwind-frames)
-            (send self :closure cleaner "unwind protect" cframes)	;make cleanup closure
+            ;; make cleanup closure
+            (send self :closure cleaner "unwind protect" cframes fframes)
             (setq newcomp (send self :copy-compiler))
             (send self :add-closure (list cleaner fn newcomp cframes))))
       (send trans :bind-cleaner)
@@ -1144,9 +1166,10 @@
        (let (entry newcomp)  ; #'(lambda (...) ...)
          (if avant-mode
              (send self :lambda-preevaluation fn)
-             (let ((cframes (send idtable :get-cframes fn closure-level)))
+             (let ((cframes (send idtable :get-cframes fn closure-level))
+                   (fframes (send self :get-flet-cframes fn closure-level)))
                (setq entry (send self :genlabel "CLO"))
-               (send self :closure entry "lambda-closure" cframes)
+               (send self :closure entry "lambda-closure" cframes fframes)
                (setq newcomp (send self :copy-compiler))
                (send self :add-closure (list entry fn newcomp cframes)))))))
  (:flet (funcs bodies recursive-scope)
@@ -1189,8 +1212,9 @@
 
         (if (not avant-mode)
           (dolist (fn (reverse flets-tmp))
-            (let ((cframes (send idtable :get-cframes (fn . body) closure-level)))
-              (send self :closure (fn . entry) "flet env" cframes)
+            (let ((cframes (send idtable :get-cframes (fn . body) closure-level))
+                  (fframes (send self :get-flet-cframes (fn . body) closure-level)))
+              (send self :closure (fn . entry) "flet env" cframes fframes)
               (setq (fn . offset) (1- (send trans :offset-from-fp)))
               (send self :add-closure (list (fn . entry) (fn . body) (fn . comp) cframes)))))
 
