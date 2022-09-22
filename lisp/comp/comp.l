@@ -258,6 +258,7 @@
 	   (idtable		;identifier-table
 	    closure-level	;current closure level
 	    current-cframes	;current closure bind frames
+	    current-fframes	;current closure flet frames
 	    scope		;current variable scope (for sequential let)
 	    frames		;list of the number of special bindings
 	    fletframes		;list of function frames
@@ -326,6 +327,13 @@
               (pushnew fdef closure-function-frames)
               (unless (fdef . bindframe)
                 (setq (fdef . bindframe) t)))
+
+            ;; compile-time check to see if we are not missing any frame references
+            (when (and (not avant-mode) (= (- closure-level (fdef . level)) 1)
+                       (numberp (fdef . bindframe)))
+              (unless (find (fdef . bindframe) current-fframes)
+                (send self :error ";; unbound fletframe detected when loading function ~S"
+                      (fdef . name))))
             fdef)
 	  (cond ((fboundp fn)
 		 (setq fdef (symbol-function fn))
@@ -1100,7 +1108,7 @@
             ;; make cleanup closure
             (send self :closure cleaner "unwind protect" cframes fframes)
             (setq newcomp (send self :copy-compiler))
-            (send self :add-closure (list cleaner fn newcomp cframes))))
+            (send self :add-closure (list cleaner fn newcomp cframes fframes))))
       (send trans :bind-cleaner)
       (send self :eval prot)
       (send trans :call-cleaner cleaner)
@@ -1171,7 +1179,7 @@
                (setq entry (send self :genlabel "CLO"))
                (send self :closure entry "lambda-closure" cframes fframes)
                (setq newcomp (send self :copy-compiler))
-               (send self :add-closure (list entry fn newcomp cframes)))))))
+               (send self :add-closure (list entry fn newcomp cframes fframes)))))))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
      (let (newcomp newcomps flets-tmp flist fletframe)
@@ -1216,7 +1224,8 @@
                   (fframes (send self :get-flet-cframes (fn . body) closure-level)))
               (send self :closure (fn . entry) "flet env" cframes fframes)
               (setq (fn . offset) (1- (send trans :offset-from-fp)))
-              (send self :add-closure (list (fn . entry) (fn . body) (fn . comp) cframes)))))
+              (send self :add-closure
+                    (list (fn . entry) (fn . body) (fn . comp) cframes fframes)))))
 
         (if (not recursive-scope)
           ;; when not recursive setup the bindframe after the closure declaration
@@ -1638,8 +1647,10 @@
      (let ((entry (first aclosure))
            (def (second aclosure))
            (newcomp (third aclosure))
-           (cframes (fourth aclosure)))
+           (cframes (fourth aclosure))
+           (fframes (fifth aclosure)))
        (setq (newcomp . current-cframes) cframes)
+       (setq (newcomp . current-fframes) fframes)
        (send newcomp :compile-a-closure entry def)))
    (setq function-closures nil))
  (:toplevel-eval (form)
