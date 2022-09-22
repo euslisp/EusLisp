@@ -208,10 +208,12 @@
              (pushnew (var . bindframe) acc)))
          (dec lev))
        ;; update cbindframe offset value on the current level
-       (dolist (var (svref frames level))
-         (setq var (cdr var))
-         ;; force nil when not found
-         (setq (var . cbindframe) (position (var . bindframe) acc)))
+       (dotimes (lev (1+ level))
+         (dolist (var (svref frames lev))
+           (let* ((var (cdr var))
+                  (pos (position (var . bindframe) acc)))
+             (if pos
+                 (setq (var . cbindframe) pos)))))
        acc))
  (:enter (id &optional (lev level))
     (svset frames lev (cons (cons (id . name) id) (svref frames lev)))
@@ -359,13 +361,15 @@
              (fdef . cbindframe)
              (fdef . bindframe)))
    (send trans :call-closure (fdef . entry) (length args)))
- (:get-flet-cframes (fn clevel &optional (function-table flets))
+ (:get-flet-cframes (fn clevel cstart &optional (function-table flets))
    ;; collect the binding offset of all flets used inside a function
-   (let (acc)
+   (let ((i 0) acc)
      (dolist (f function-table)
        (when (and f (= (f . level) clevel)
                   (find fn (f . clist) :test #'equal))
-         (pushnew (f . bindframe) acc)))
+         (pushnew (f . bindframe) acc)
+         (setq (f . cbindframe) (+ i cstart))
+         (inc i)))
      acc))
  (:variable (var)	;var must be a symbol, ovaf is not allowed here.
    (let ((result (send idtable :get var scope)))
@@ -1115,8 +1119,8 @@
           cleaner newcomp)
       (if avant-mode
           (send self :lambda-preevaluation fn)
-          (let ((cframes (send idtable :get-cframes fn closure-level))
-                (fframes (send self :get-flet-cframes fn closure-level)))
+          (let* ((cframes (send idtable :get-cframes fn closure-level))
+                 (fframes (send self :get-flet-cframes fn closure-level (length cframes))))
             (setq cleaner (send self :genlabel "UWP"))
             (push (send trans :offset-from-fp) unwind-frames)
             ;; make cleanup closure
@@ -1188,15 +1192,15 @@
        (let (entry newcomp)  ; #'(lambda (...) ...)
          (if avant-mode
              (send self :lambda-preevaluation fn)
-             (let ((cframes (send idtable :get-cframes fn closure-level))
-                   (fframes (send self :get-flet-cframes fn closure-level)))
+             (let* ((cframes (send idtable :get-cframes fn closure-level))
+                    (fframes (send self :get-flet-cframes fn closure-level (length cframes))))
                (setq entry (send self :genlabel "CLO"))
                (send self :closure entry "lambda-closure" cframes fframes)
                (setq newcomp (send self :copy-compiler))
                (send self :add-closure (list entry fn newcomp cframes fframes)))))))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
-     (let (newcomp newcomps flets-tmp flist fletframe (cframe-length 0))
+     (let (newcomp newcomps flets-tmp flist fletframe)
         (if (not recursive-scope)	; copy compiler before binding the functions
            (setq newcomp (send self :copy-compiler)))
         (dolist (fn funcs)
@@ -1234,13 +1238,13 @@
 
         (if (not avant-mode)
           (dolist (fn (reverse flets-tmp))
-            (let ((cframes (send idtable :get-cframes (fn . body) closure-level))
-                  (fframes (send self :get-flet-cframes (fn . body) closure-level)))
-              (setq cframe-length (length cframes))
+            (let* ((cframes (send idtable :get-cframes (fn . body) closure-level))
+                   (fframes (send self :get-flet-cframes
+                                  (fn . body) closure-level (length cframes))))
               (when recursive-scope
                 ;; append the current frame if any references are found
                 (when (send self :get-flet-cframes
-                            (fn . body) closure-level flist)
+                            (fn . body) closure-level (length cframes) flist)
                   (pushnew (fletframe . offset) fframes)))
               (send self :closure (fn . entry) "flet env" cframes fframes)
               (setq (fn . offset) (1- (send trans :offset-from-fp)))
@@ -1258,7 +1262,6 @@
             (send trans :load-local (fn . offset) (- closure-level (fn . level)))
             (send trans :store-local i 0 (fletframe . offset))
             (setq (fn . bindframe) (fletframe . offset)
-                  (fn . cbindframe) (+ cframe-length i)
                   (fn . offset) i)))
 
         ;; evaluate body
