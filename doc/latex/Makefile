@@ -36,7 +36,7 @@ TEXFILES=$(filter-out manual.tex, $(wildcard *.tex))
 RSTFILES=$(TEXFILES:%.tex=%.rst)
 %.rst : %.tex
 	python3 latex.py -2 -L preamble.tex $< > /tmp/tmp_$^
-	pandoc /tmp/tmp_$^ -o $@ -V documentclass=ltjarticle --latex-engine=lualatex
+	pandoc /tmp/tmp_$^ -o $@ -V documentclass=ltjarticle
 	sed -i 's@.. figure:: \(.*\).ps@.. figure:: \1.png@g' $@  # use png for figures
 
 PSFILES=$(wildcard fig/*.ps)
@@ -53,7 +53,7 @@ manual.rst: latex.py $(RSTFILES) $(PNGFILES)
 	sed -i 's@\\part{\(.*\)}@.. toctree:: \1@' /tmp/manual.tex  # convert \part in tex to bypass pandoc
 	sed -i ':a;/^[^%].*\\\\$$/{N;s/\\\\\n//;ba}' /tmp/manual.tex # concatinate title/author multi lines
 	sed -i '/^\\vspace{10mm}$$/d' /tmp/manual.tex # remove vspace{10mm} within title to pass pandoc
-	pandoc --no-wrap -s /tmp/manual.tex -o manual.rst -V documentclass=ltjarticle --latex-engine=lualatex
+	pandoc --wrap=none -s /tmp/manual.tex -o manual.rst -V documentclass=ltjarticle
 	sed -i 's@..include:: \(.*\)@   \1@' manual.rst # restore ..include for rst
 	sed -i 's@.. toctree:: \(.*\)@.. toctree::\n   :maxdepth: 1\n   :caption: \1@' manual.rst  # restore ..toctree for rst
 	sed -i 's@** Featuring@**\nFeaturing@' manual.rst # add newline before Featuring in title
