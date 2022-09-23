@@ -339,12 +339,12 @@
 
             ;; compile-time check to see if we are not missing any frame references
             (when (and (not avant-mode) (= (- closure-level (fdef . level)) 1)
-                       (numberp (fdef . bindframe)))
+                       (fdef . bindframe))
               (unless (find (fdef . bindframe) current-fframes)
-                (send self :error ";; unbound fletframe detected when loading function ~S: ~A"
+                (send self :error "unbound fletframe detected when loading function ~S: ~A"
                       (fdef . name) (fdef . bindframe)))
-              (unless (< (fdef . cbindframe) current-csize)
-                (send self :error ";; invalid fletframe index detected when loading function ~S: ~A"
+              (unless (< (send self :flet-bindframe fdef) current-csize)
+                (send self :error "invalid fletframe index detected when loading function ~S: ~A"
                       (fdef . name) (fdef . cbindframe))))
             fdef)
 	  (cond ((fboundp fn)
@@ -361,20 +361,27 @@
    (if *debug*   (print (list :call-closure fdef args)))
    (dolist (a args) (send self :eval a))
    (send trans :load-local (fdef . offset) (- closure-level (fdef . level))
-         (if (and (fdef . cbindframe) (> closure-level (fdef . level)))
-             (fdef . cbindframe)
-             (fdef . bindframe)))
+         (send self :flet-bindframe fdef))
    (send trans :call-closure (fdef . entry) (length args)))
  (:get-flet-cframes (fn clevel cstart &optional (function-table flets))
    ;; collect the binding offset of all flets used inside a function
-   (let ((i 0) acc)
+   (let (acc)
      (dolist (f function-table)
        (when (and f (= (f . level) clevel)
                   (find fn (f . clist) :test #'equal))
-         (pushnew (f . bindframe) acc)
-         (setq (f . cbindframe) (+ i cstart))
-         (inc i)))
+         (pushnew (f . bindframe) acc)))
+     ;; update cbindframe offset value
+     ;; this value is only used at the base level
+     ;; it is recalculated on each closure definition (`:compile-closures')
+     (dolist (f function-table)
+       (let ((pos (position (f . bindframe) acc)))
+         (if pos
+             (setq (f . cbindframe) (+ cstart pos)))))
      acc))
+ (:flet-bindframe (fdef)
+   (if (and (fdef . cbindframe) (> closure-level (fdef . level)))
+       (fdef . cbindframe)
+       (fdef . bindframe)))
  (:variable (var)	;var must be a symbol, ovaf is not allowed here.
    (let ((result (send idtable :get var scope)))
         (if (and result
@@ -1194,7 +1201,7 @@
 	   (if (eq (flet-def . binding) 'closure)
 	       (send trans :load-local (flet-def . offset)
 					(- closure-level (flet-def . level))
-                                        (flet-def . bindframe))
+                                        (send self :flet-bindframe flet-def))
 	       (send trans :getfunc fn)))
        (let (entry newcomp)  ; #'(lambda (...) ...)
          (if avant-mode
@@ -1245,7 +1252,7 @@
 
         (if (not avant-mode)
           (dolist (fn (reverse flets-tmp))
-            (let* ((cframes (send idtable :get-cframes (fn . body) closure-level))
+            (let* ((cframes (send (newcomp . idtable) :get-cframes (fn . body) closure-level))
                    (fframes (send self :get-flet-cframes
                                   (fn . body) closure-level (length cframes))))
               (when recursive-scope
@@ -1270,6 +1277,13 @@
             (send trans :store-local i 0 (fletframe . offset))
             (setq (fn . bindframe) (fletframe . offset)
                   (fn . offset) i)))
+
+        ;; reset cbindframes to force re-evaluation
+        ;; this is needed to ensure that each closure has an
+        ;; unique and compatible mapping
+        (dolist (fdef flets-tmp)
+          (when (fdef . cbindframe)
+            (setq (fdef . cbindframe) t)))
 
         ;; evaluate body
         (setq flets (append flets-tmp flets))
@@ -1675,14 +1689,21 @@
    )
  (:compile-closures ()
    (dolist (aclosure (reverse function-closures))
-     (let ((entry (first aclosure))
-           (def (second aclosure))
-           (newcomp (third aclosure))
-           (cframes (fourth aclosure))
-           (fframes (fifth aclosure)))
+     (let* ((entry (first aclosure))
+            (def (second aclosure))
+            (newcomp (third aclosure))
+            (cframes (fourth aclosure))
+            (fframes (fifth aclosure))
+            (cbind (append cframes fframes)))
        (setq (newcomp . current-cframes) cframes)
        (setq (newcomp . current-fframes) fframes)
-       (setq (newcomp . current-csize) (+ (length cframes) (length fframes)))
+       (setq (newcomp . current-csize) (length cbind))
+       ;; recalculate function cbindings
+       (setq (newcomp . flets) (copy-object (newcomp . flets)))
+       (dolist (fdef (newcomp . flets))
+         ;; only reassign the most recent level
+         (when (eq (fdef . cbindframe) t)
+           (setq (fdef . cbindframe) (position (fdef . bindframe) cbind))))
        (send newcomp :compile-a-closure entry def)))
    (setq function-closures nil))
  (:toplevel-eval (form)
