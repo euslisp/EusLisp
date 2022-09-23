@@ -27,6 +27,6 @@ html:
 	rm -f ../html/jmanual*.
 	TRANSPARENT_COLOR="#ffffff" charset="UTF-8" latex2html -dir ../html/ -transparent -local_icons -split +3 -auto_prefix -init_file ../latex/.latex2html-init -iso_language JP -address "This document was generated using the LaTeX2HTML translator on `date` from <a href=\"http://github.com/euslisp/EusLisp.git\">EusLisp</a> version <a href=\"http://github.com/euslisp/EusLisp/commit/`git rev-parse --verify HEAD`\">`git log -1  --oneline`</a>" -html_version="4.0,unicode" jmanual
 	(cd ../html; sed -i 's@"jmanual.css"@"manual.css"@' j*.html)
-	(cd ../html; for imgfile in jmanual-img*.png; do pngtopnm $$imgfile > /tmp/$$imgfile.pnm; pnmtopng -transparent white /tmp/$$imgfile.pnm > $$imgfile; done)
+	#(cd ../html; for imgfile in jmanual-img*.png; do pngtopnm $$imgfile > /tmp/$$imgfile.pnm; pnmtopng -transparent white /tmp/$$imgfile.pnm > $$imgfile; done)
 
 
