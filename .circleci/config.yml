@@ -24,7 +24,8 @@ references:
 
 jobs:
   html:
-    machine: true
+    machine:
+      image: ubuntu-2004:2022.07.1
     steps:
       - checkout
       - *setup-tex
@@ -53,7 +54,8 @@ jobs:
             - html/jmanual*.png
 
   latex:
-    machine: true
+    machine:
+      image: ubuntu-2004:2022.07.1
     steps:
       - checkout
       - *setup-tex
@@ -73,7 +75,8 @@ jobs:
           root: doc/latex
           paths: manual.pdf
   jlatex:
-    machine: true
+    machine:
+      image: ubuntu-2004:2022.07.1
     steps:
       - checkout
       - *setup-tex
@@ -93,7 +96,8 @@ jobs:
           root: doc/jlatex/
           paths: jmanual.pdf
   rst:
-    machine: true
+    machine:
+      image: ubuntu-2004:2022.07.1
     steps:
       - checkout
       - *setup-tex
