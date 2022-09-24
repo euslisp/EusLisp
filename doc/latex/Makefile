@@ -25,7 +25,10 @@ distclean: clean
 
 html:
 	rm -f ../html/manual*.{old,html,png,svg,pl} ../html/manual-images.*
+	for psfile in fig/*.ps; do ps2eps -f -B $$psfile; done
+	sed -i.eps.bak s/\\.ps/\\.eps/g *.tex
 	TRANSPARENT_COLOR="#ffffff" latex2html -dir ../html/ -transparent -local_icons -split +3 -auto_prefix -iso_language JP -address "This document was generated using the LaTeX2HTML translator on `date` from <a href=\"http://github.com/euslisp/EusLisp.git\">EusLisp</a> version <a href=\"http://github.com/euslisp/EusLisp/commit/`git rev-parse --verify HEAD`\">`git log -1  --oneline`</a>" -html_version="4.0,unicode" manual
+	for backup in *.eps.bak; do mv $$backup $$(basename $$backup .eps.bak); done
 	#(cd ../html; for imgfile in manual-img*.png; do pngtopnm $$imgfile > /tmp/$$imgfile.pnm; pnmtopng -transparent white /tmp/$$imgfile.pnm > $$imgfile; done)
 
 latex.py:
