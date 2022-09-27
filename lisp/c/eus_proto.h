@@ -636,6 +636,7 @@ extern pointer LISTSPECIALBINDINGS(context */*ctx*/, int /*n*/, pointer */*argv*
 extern pointer LISTALLCLASSES(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer EXPORTALL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer NEXT_SPECIAL_INDEX(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer UNWIND(context* /*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer THREAD_SPECIALS(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern void sysfunc(context */*ctx*/, pointer /*mod*/);
 /* unixcall.c */

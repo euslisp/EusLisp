@@ -850,6 +850,26 @@ pointer argv[];
   x=special_index();	/*generate a new special value index*/
   return(makeint(x));}
 
+pointer UNWIND(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ ckarg2(1,2);
+  int i=0;
+  int j=ckintval(argv[0]);
+  pointer val=NIL;
+  if (n>1) val=argv[1];
+  struct catchframe *cfp=ctx->catchfp;
+  while (cfp) {
+      if (!(cfp->label)) {
+          i++;
+          if (i > j) {
+              unwind(ctx,(pointer *)cfp);
+              euslongjmp(*(cfp->jbp),val);}}
+      cfp=cfp->nextcatch;}
+  error(E_NOCATCHER);
+}
+
 pointer THREAD_SPECIALS(ctx,n,argv)
 context *ctx;
 int n;
@@ -910,6 +930,7 @@ pointer mod;
   defun(ctx,"LIST-ALL-CLASSES",mod,LISTALLCLASSES,NULL);
   defun(ctx,"EXPORT-ALL-SYMBOLS", mod, EXPORTALL,NULL);
   defun(ctx,"NEXT-SPECIAL-INDEX", mod, NEXT_SPECIAL_INDEX,NULL);
+  defun(ctx,"UNWIND", mod, UNWIND,NULL);
   defun(ctx,"THREAD-SPECIALS", mod, THREAD_SPECIALS,NULL);
   defun(ctx,"DISPOSE-HOOK", mod, DISPOSE_HOOK,NULL);
 
