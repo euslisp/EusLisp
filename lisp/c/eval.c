@@ -1467,6 +1467,7 @@ register int noarg;
         val=NIL;
     }
 
+    // callframes and fletframes are unwinded in funcall
     ctx->vsp=(pointer *)ctx->catchfp;
     ctx->catchfp=(struct catchframe *)*ctx->vsp;
     return(val);

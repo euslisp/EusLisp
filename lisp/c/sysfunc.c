@@ -850,22 +850,24 @@ pointer argv[];
   x=special_index();	/*generate a new special value index*/
   return(makeint(x));}
 
-pointer UNWIND(ctx,n,argv)
+pointer UNWIND(ctx,arg)
 register context *ctx;
-int n;
-pointer *argv;
-{ ckarg2(1,2);
+pointer arg;
+{ if (!islist(arg)) error(E_MISMATCHARG);
+  if (ccdr(ccdr(arg))!=NIL) error(E_MISMATCHARG);
   int i=0;
-  int j=ckintval(argv[0]);
-  pointer val=NIL;
-  if (n>1) val=argv[1];
+  int j=ckintval(ccar(arg));
+  pointer val=ccar(ccdr(arg));
   struct catchframe *cfp=ctx->catchfp;
   while (cfp) {
       if (!(cfp->label)) {
           i++;
           if (i > j) {
               unwind(ctx,(pointer *)cfp);
-              euslongjmp(*(cfp->jbp),val);}}
+              ctx->callfp = cfp->cf;
+              ctx->bindfp = cfp->bf;
+              ctx->fletfp = cfp->ff;
+              euslongjmp(*(cfp->jbp), eval(ctx,val));}}
       cfp=cfp->nextcatch;}
   error(E_NOCATCHER);
 }
@@ -930,7 +932,7 @@ pointer mod;
   defun(ctx,"LIST-ALL-CLASSES",mod,LISTALLCLASSES,NULL);
   defun(ctx,"EXPORT-ALL-SYMBOLS", mod, EXPORTALL,NULL);
   defun(ctx,"NEXT-SPECIAL-INDEX", mod, NEXT_SPECIAL_INDEX,NULL);
-  defun(ctx,"UNWIND", mod, UNWIND,NULL);
+  defspecial(ctx,"UNWIND",mod, UNWIND);
   defun(ctx,"THREAD-SPECIALS", mod, THREAD_SPECIALS,NULL);
   defun(ctx,"DISPOSE-HOOK", mod, DISPOSE_HOOK,NULL);
 
