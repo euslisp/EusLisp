@@ -143,7 +143,7 @@ jobs:
             git diff origin/master --name-only --relative doc
             if [ "`git diff origin/master  --name-only --relative doc`" == "" ]; then echo "No update in doc directory found, exitting... ";  circleci step halt; fi
             echo "Found new commit on doc directory"
-      - run: cd .circleci/ && git clone https://github.com/themadcreator/circle-github-bot.git
+      - run: cd .circleci/ && git clone https://github.com/k-okada/circle-github-bot.git
       - run: cd .circleci/circle-github-bot && npm install
       - run: cd .circleci/circle-github-bot && npm run build
       - run: .circleci/github-pr-update.js
