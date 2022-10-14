@@ -83,7 +83,7 @@
    (string-left-trim bag (string-right-trim bag str)))
 
 (defun nstring-downcase (str &key (start 0) (end (length str)))
-   (declare (type integer start end) (string str))
+   (declare (string str))
    (if (not (stringp str)) (error type-error "string expected"))
    (while (< start end)
 	(setchar str start (char-downcase (char str start)))
@@ -91,7 +91,7 @@
    str)
 
 (defun nstring-upcase (str &key (start 0) (end (length str)))
-   (declare (type integer start end))
+   (declare (string str))
    (if (not (stringp str)) (error type-error "string expected"))
    (while (< start end)
 	(setchar str start (char-upcase (char str start)))
