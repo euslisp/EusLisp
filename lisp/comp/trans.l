@@ -478,8 +478,8 @@
                     (cons "iscons")
                     (list "islist(w) || w==NIL")
                     (number "numberp")
-                    (integer "numberp") ;; don't use `isint' for backward compability
-                    (float "numberp")  ;; don't use `isflt' for backward compability
+                    (integer "isint")
+                    (float "isflt")
                     (string "isstring")
                     (array "isarray(w) || isvector(w)")
                     (vector "isvector")
