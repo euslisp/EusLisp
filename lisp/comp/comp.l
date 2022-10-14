@@ -930,7 +930,7 @@
      result-type))
  (:let* (bodies &optional (rec t))	;sequential let
    (let ((unwind-save unwind-frames) (i 0)
-         local-list bindframe vlist closure-vlist)
+         local-list bindframe vlist closure-vlist decl-vars)
         (when rec
           ;; in let* we need to sequentially bind variables directly into the frame.
           ;; if we try to sequentially bind to locals and then assign to the frame,
@@ -947,7 +947,7 @@
         (setq bindframe (send self :create-frame 'local (length closure-vlist) "seqlet"))
         ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
-          (send self :declare (cdr (pop bodies))))
+          (setq decl-vars (append decl-vars (send self :declare (cdr (pop bodies))))))
         ;; eval and bind
 	(dolist (init-form local-list)
           (let* ((var (if (listp init-form) (car init-form) init-form))
@@ -959,6 +959,8 @@
                   (inc i))
                 (let ((offset (1- (send trans :offset-from-fp))))
                   (push (send self :bind var bindframe 'local offset) vlist)))))
+        ;; set/check declarations
+        (send self :check-declare-variables decl-vars)
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
@@ -968,11 +970,11 @@
 	(remove-if-not #'(lambda (v) (v . bindframe)) (nreverse vlist))))
  (:let (bodies)	;parallel let
    (let ((local-list (pop bodies)) (unwind-save unwind-frames)
-          bindframe special-list vlist)
+          bindframe special-list vlist decl-vars)
 	(setq bindframe (send self :create-frame 'local))
         ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
-	   (send self :declare (cdr (pop bodies))))
+          (setq decl-vars (append decl-vars (send self :declare (cdr (pop bodies))))))
         ;; eval to locals
 	(dolist (init-form local-list)
           (let (var offset)
@@ -997,6 +999,8 @@
 	(setq scope (send idtable :level))
         ;; bind closure variables
         (send self :bind-frame bindframe bodies vlist "parlet")
+        ;; set/check declarations
+        (send self :check-declare-variables decl-vars)
         ;; eval body
 	(send self :progn bodies)
         ;; unwind/restore
@@ -1335,6 +1339,16 @@
 			(push (cons id (v . type)) acc)))
 		   (t  (send self :error "unknown declaration ~S" decl))))))
       (nreverse acc)))
+ (:check-declare-variables (decl-vars)
+    (dolist (dvar decl-vars)
+      (let* ((id (car dvar))
+             (tp (cdr dvar))
+             (v (send self :variable id)))
+        (if (eq (send v :type) t) (send v :type tp))
+        (when *type-check-declare*
+          (unless (eql (v . binding) 'unknown)
+            (send self :load-var id)
+            (send trans :type-check-declare tp))))))
  (:lambda (param forms &optional (rec t))
    (let ((labels nil)
 	 (i 0)
@@ -1360,12 +1374,14 @@
 	 (unwind-save unwind-frames)
          (cvar-i 0) argframe vlist closure-vlist)
      (when rec
-       ;; an in let*, we need to sequentially bind variables directly to the frame
+       ;; as in let*, we need to sequentially bind variables directly to the frame
        ;; so we pre-evaluate the whole method, and then create/populate the frame
-       (let ((trans (send trans :copy-translator))
-             (newcomp (send self :copy-compiler nil))
-             (avant-mode t))
-         (setq closure-vlist (send newcomp :lambda param forms nil))))
+       (let* ((trans (send trans :copy-translator))
+              (newcomp (send self :copy-compiler nil))
+              (avant-mode t)
+              (preevaluation-result (send newcomp :lambda param forms nil)))
+           (setq closure-vlist (car preevaluation-result))
+           (send self :check-declare-variables (cadr preevaluation-result))))
      (setq req-vars
            (reverse 
 		  (nthcdr (length (cond (opt-vars)
@@ -1580,22 +1596,17 @@
                 (inc cvar-i))
                (let ((offset (1- (send trans :offset-from-fp))))
                  (push (send self :bind var argframe 'local offset) vlist)))))
-;;; type check declaration variables
-     (when *type-check-declare*
-       (dolist (dvar decl-vars)
-         (let* ((id (car dvar))
-                (tp (cdr dvar))
-                (v (send self :variable id)))
-           (unless (eql (v . binding) 'unknown)
-             (send self :load-var id)
-             (send trans :type-check-declare tp)))))
+;;; set/check declaration types
+     (send self :check-declare-variables decl-vars)
 ;;; evaluate lambda body
      (send self :progn forms)
 ;;; unwind/restore
      (setq unwind-frames unwind-save)
      (send self :delete-frame 'arg t)
 ;;; return value
-     (remove-if-not #'(lambda (v) (v . bindframe)) (nreverse vlist))))
+     (list
+      (remove-if-not #'(lambda (v) (v . bindframe)) (nreverse vlist))
+      decl-vars)))
  (:lambda-block (name arglist bodies cname)
    (let ((ctime (unix:runtime))
 	 blklabel)
