@@ -329,7 +329,6 @@ va_dcl
   register struct callframe *vf;
   pointer msg,form,callstack;
   pointer errobj;
-  pointer result;
 
 #ifdef USE_STDARG
   va_start(args,ec);
@@ -436,13 +435,7 @@ va_dcl
   Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
   if (errhandler!=NIL) {
     vpush(errobj);
-    result=ufuncall(ctx,errhandler,errhandler,(pointer)(ctx->vsp-1),ctx->bindfp,1);}
-  else {
-    result=NIL;
-  }
-  // the NULL catcher is introduced by catchfuncode, in order to ensure
-  // that errors follow the termination semantics in the C lang level
-  throw(ctx,NULL,result);
+    ufuncall(ctx,errhandler,errhandler,(pointer)(ctx->vsp-1),ctx->bindfp,1);}
 }
 
 #ifdef USE_STDARG

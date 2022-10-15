@@ -373,7 +373,6 @@
 (def-builtin-entry 'SYS:LIST-ALL-CLASSES "LISTALLCLASSES")
 (def-builtin-entry 'SYS::EXPORT-ALL-SYMBOLS "EXPORTALL")
 (def-builtin-entry 'SYS::NEXT-SPECIAL-INDEX "NEXT_SPECIAL_INDEX")
-(def-builtin-entry 'SYS::UNWIND "UNWIND")
 (def-builtin-entry 'SYS::THREAD-SPECIALS "THREAD_SPECIALS")
 (def-builtin-entry 'SYS::DISPOSE-HOOK "DISPOSE_HOOK")
 
