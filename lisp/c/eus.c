@@ -341,8 +341,8 @@ va_dcl
 
   ctx=euscontexts[thr_self()];
 
-  /* get call stack */
-  callstack=list_callstack(ctx,-1);
+  // variable arguments are not guarded from gc!!
+  // push them as required
 
   /* error(errstr) must be error(E_USER,errstr) */
   if ((int)ec < E_END) errstr=errmsg[(int)ec];
@@ -367,8 +367,9 @@ va_dcl
       case E_NOSLOT: case E_NOPACKAGE: case E_NOMETHOD:
       case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
       case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
+        vpush(va_arg(args,pointer));
         dest=(pointer)mkstream(ctx,K_OUT,makebuffer(64));
-        prinx(ctx,va_arg(args,pointer),dest);
+        prinx(ctx,vpop(),dest);
         msgstr=(char*)malloc(2+ strlen(errstr) + intval(dest->c.stream.count));
         strcpy(msgstr,errstr);
         strcat(msgstr,(char*)" ");
@@ -379,17 +380,26 @@ va_dcl
 	break;
     case E_REPL:
       errobj = (pointer)va_arg(args,pointer);
+      msg = (pointer)va_arg(args,pointer);
+      vpush(errobj);
+      break;
     case E_ARGUMENT_ERROR: case E_PROGRAM_ERROR: case E_NAME_ERROR: case E_TYPE_ERROR:
     case E_VALUE_ERROR: case E_INDEX_ERROR: case E_IO_ERROR: case E_USER:
       errstr = (char*)va_arg(args,pointer);
     default:
       msg=makestring(errstr,strlen(errstr));}
 
-  /* get form */
-  if (ctx->callfp) form=ctx->callfp->form; else form=NIL;
+  vpush(msg);
+  va_end(args);
 
   /* call user's error handler function */
   errhandler=getfunc_closure(ctx, intern(ctx,"SIGNALS",7,lisppkg));
+
+  /* get call stack */
+  callstack=list_callstack(ctx,-1);
+
+  /* get form */
+  if (ctx->callfp) form=ctx->callfp->form; else form=NIL;
 
   switch((unsigned int)ec) {
     // ARGUMENT ERROR
