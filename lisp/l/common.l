@@ -501,7 +501,9 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
   (system::raw-assoc nil alist key nil nil nil pred nil))
 (defun assoc-if-not (pred alist &key key)
   (system::raw-assoc nil alist key nil nil nil nil pred))
-(defun rassoc (item alist &key key test test-not)
+(defun rassoc (item alist &key key (test #'equal) test-not)
+  ;; in common lisp the default test is #'eq, but in euslisp
+  ;; we are using #'equal for backward compability (jsk_recognition/2735)
   (system::raw-assoc item alist key test test-not t nil nil))
 (defun rassoc-if (pred alist &key key)
   (system::raw-assoc nil alist key nil nil t pred nil))
