@@ -1758,6 +1758,7 @@ pointer csend(context *ctx, ...)
   while (i++ < cnt) vpush(va_arg(ap,pointer));
   GC_POINT;
   res=(pointer)SEND(ctx,cnt+2, spsave);
+  va_end(ap);
   ctx->vsp=spsave;
   return(res);}
 
@@ -1781,6 +1782,7 @@ va_dcl
   while (i++ < cnt) vpush(va_arg(ap,pointer));
   GC_POINT;
   res=(pointer)SEND(ctx,cnt+2, spsave);
+  va_end(ap);
   ctx->vsp=spsave;
 #ifdef SAFETY
   take_care(res);

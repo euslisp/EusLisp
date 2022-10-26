@@ -463,6 +463,10 @@ va_dcl
   int n,i,svcount;
   context *ctx=mainctx;
 
+  // C_VECTOR is only guarded from gc after it is
+  // assigned to speval(VECTOR) in initclasses()
+  vpush(C_VECTOR);
+
 #ifdef USE_STDARG
   va_start(ap, name);
 #else
@@ -473,6 +477,7 @@ va_dcl
 #endif
   super=va_arg(ap,pointer);
   cixp=va_arg(ap,cixpair *); n=va_arg(ap,int);
+  vpush(super);
   
   /*class name symbols are defined in lisp package*/
   classsym=intern(ctx,(char *)name,strlen(name),lisppkg);
@@ -502,7 +507,7 @@ va_dcl
   nextbclass++;
   cixp->cix=intval(class->c.cls.cix);
   cixp->sub=classtab[cixp->cix].subcix;
-  ctx->vsp-=3;
+  ctx->vsp-=5;
   va_end(ap);
   return(classsym);}
 
