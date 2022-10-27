@@ -97,26 +97,26 @@ register pointer sym,val;
   }
 
 
-pointer getfunc(ctx,f)
+pointer getfunc_noexcept(ctx,f)
 register context *ctx;
 register pointer f;	/*must be a symbol*/
 { pointer ffp=ctx->fletfp;
   while (ffp!=NULL && isfletframe(ffp)) {
     if (ffp->c.obj.iv[0]==f) {  return(ffp->c.obj.iv[1]);}
     else ffp=ffp->c.obj.iv[2];}
-  if (f->c.sym.spefunc==UNBOUND) error(E_UNDEF,f);
-  else {	/*global function definition is taken, context changes*/
-    return(f->c.sym.spefunc);}}
+  return(f->c.sym.spefunc);}
 
-pointer getfunc_closure(ctx,f)
+pointer getfunc_closure_noexcept(ctx,f)
 register context *ctx;
 register pointer f;
 { pointer funcname;
-  if (issymbol(f)) { funcname=f; f=getfunc(ctx,f);}
+  if (issymbol(f)) { funcname=f; f=getfunc_noexcept(ctx,f);}
   else funcname=NIL;
+  if (f==UNBOUND) return(f);
   if (iscode(f)) return(f);
   else if (ccar(f)==LAMCLOSURE) return(f);
   else if (ccar(f)==LAMBDA) {
+    vpush(funcname);
     // flet-frame
     if (ctx->fletfp==NULL)
       // don't pass *unbound* to the REPL
@@ -129,9 +129,24 @@ register pointer f;
       f=cons(ctx,makeint(0),f);
     else
       f=cons(ctx,ctx->bindfp,f);
-    f=cons(ctx,funcname,f);
+    f=cons(ctx,vpop(),f);  // funcname
     return(cons(ctx,LAMCLOSURE,f));}
-  else error(E_NOFUNCTION);}
+  else return(NIL);}
+
+pointer getfunc(ctx,f)
+register context *ctx;
+register pointer f;	/*must be a symbol*/
+{ pointer fn=getfunc_noexcept(ctx,f);
+  if (fn==UNBOUND) error(E_UNDEF, f);
+  return(fn);}
+
+pointer getfunc_closure(ctx,f)
+register context *ctx;
+register pointer f;
+{ pointer fn=getfunc_closure_noexcept(ctx,f);
+  if (fn==UNBOUND) error(E_UNDEF, f);
+  if (fn==NIL) error(E_NOFUNCTION);
+  return(fn);}
 
 /* called from compiled code*/
 pointer get_sym_func(s)

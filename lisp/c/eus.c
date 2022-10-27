@@ -393,7 +393,7 @@ va_dcl
   va_end(args);
 
   /* call user's error handler function */
-  errhandler=getfunc_closure(ctx, intern(ctx,"SIGNALS",7,lisppkg));
+  errhandler=getfunc_closure_noexcept(ctx, intern(ctx,"SIGNALS",7,lisppkg));
 
   /* get call stack */
   callstack=list_callstack(ctx,-1);
@@ -443,7 +443,7 @@ va_dcl
   pointer_update(errobj->c.obj.iv[2],form);
 
   Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
-  if (errhandler!=NIL) {
+  if (errhandler!=NIL && errhandler!=UNBOUND) {
     vpush(errobj);
     ufuncall(ctx,errhandler,errhandler,(pointer)(ctx->vsp-1),ctx->bindfp,1);}
 }

@@ -173,6 +173,7 @@ extern pointer getval(context */*ctx*/, pointer /*sym*/);
 extern pointer setval(context */*ctx*/, pointer /*sym*/, pointer /*val*/);
 extern pointer getfunc(context */*ctx*/, pointer /*f*/);
 extern pointer getfunc_closure(context */*ctx*/, pointer /*f*/);
+extern pointer getfunc_closure_noexcept(context */*ctx*/, pointer /*f*/);
 extern pointer get_sym_func(pointer /*s*/);
 extern void setfunc(pointer /*sym*/, pointer /*func*/);
 extern pointer *ovafptr(pointer /*o*/, pointer /*v*/);
