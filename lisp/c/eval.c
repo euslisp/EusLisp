@@ -212,7 +212,7 @@ register context *ctx;
 register pointer var,val;
 pointer lex;
 { pointer bf;
-  bf = makebindframe(var,val,ctx->bindfp);
+  bf = makebindframe(ctx,var,val,ctx->bindfp);
   vpush(bf);
   ctx->bindfp=bf;	/*update bindfp*/
   return(bf);	 }

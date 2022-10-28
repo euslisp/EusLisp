@@ -244,7 +244,7 @@ eusinteger_t labx;
   pointer  unsol, *unsolp, result,newlab;
 
   if (findlabel(labx)!=NIL)  error(E_READLABEL,makeint(labx));	/*already defined*/
-  newlab=(pointer)makelabref(makeint(labx),UNBOUND,oblabels[thr_self()]->c.lab.next);
+  newlab=(pointer)makelabref(ctx,makeint(labx),UNBOUND,oblabels[thr_self()]->c.lab.next);
   pointer_update(oblabels[thr_self()]->c.lab.next,newlab);
   result=read1(ctx,f);
 

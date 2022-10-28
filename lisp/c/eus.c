@@ -184,7 +184,7 @@ pointer OPTIONAL,REST,KEY,AUX,MACRO,LAMBDA,LAMCLOSURE,COMCLOSURE;
 pointer PRCIRCLE,PROBJECT,PRSTRUCTURE,PRCASE,PRLENGTH,PRLEVEL;
 pointer RANDSTATE,FEATURES,READBASE,PRINTBASE,QREADTABLE,QTERMIO;
 pointer GCMERGE,GCMARGIN, QLDENT;
-pointer K_PRIN1, K_ISATTY;
+pointer K_PRIN1, K_ISATTY, K_NAME;
 pointer K_FUNCTION_DOCUMENTATION, K_VARIABLE_DOCUMENTATION,
 	K_CLASS_DOCUMENTATION, K_METHOD_DOCUMENTATION, K_CLASS;
 pointer QLOADED_MODULES;
@@ -693,6 +693,7 @@ static void initsymbols()
   K_ALLOWOTHERKEYS=defkeyword(ctx,"ALLOW-OTHER-KEYS");
   K_PRIN1=defkeyword(ctx,"PRIN1");
   K_ISATTY=defkeyword(ctx,"ISATTY");
+  K_NAME=defkeyword(ctx,"NAME");
   K_CLASS=defkeyword(ctx,"CLASS");
   K_FUNCTION_DOCUMENTATION=defkeyword(ctx,"FUNCTION-DOCUMENTATION");
   K_CLASS_DOCUMENTATION=defkeyword(ctx,"CLASS-DOCUMENTATION");
@@ -896,7 +897,7 @@ static void initclasses()
   C_IOERROR=speval(basicclass("IO-ERROR",C_ERROR,&ioerrorcp,0));
 
   for (i=0;i<MAXTHREAD;i++) {
-    oblabels[i]=(pointer)makelabref(makeint(-1),UNBOUND,NIL);
+    oblabels[i]=(pointer)makelabref(ctx,makeint(-1),UNBOUND,NIL);
     sysobj=cons(ctx,oblabels[i],sysobj);
   }
 }
