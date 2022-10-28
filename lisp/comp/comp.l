@@ -351,7 +351,7 @@
 		 (setq fdef (symbol-function fn))
 		 (if (compiled-function-p fdef)
                      (instance function-identifier :init-body
-                               fn (cdr (assq (compiled-code-type fdef)
+                               fn (cdr (assq (fdef . type)
 				         '((0 . lambda) (1 . macro) (2 . special))))
                                fdef)
 		     (instance function-identifier :init-body
