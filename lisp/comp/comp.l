@@ -1293,6 +1293,7 @@
         (setq flets (append flets-tmp flets))
         (if recursive-scope (send-all newcomps :change-flets flets))
         (send self :progn bodies)
+        (if (not recursive-scope) (send newcomp :change-flets flets))
         ;; unwind/restore
         (setq flets (nthcdr (length flets-tmp) flets))
         (send self :delete-frame 'flet nil)
