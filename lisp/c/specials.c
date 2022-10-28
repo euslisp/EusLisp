@@ -1281,8 +1281,10 @@ register pointer sym,val,attr;
     if (ccar(ccar(p))==attr) { pointer_update(ccdr(ccar(p)),val); return(val);}
     else p=ccdr(p);
   /* no such a property; create it */
+  vpush(sym);
   p=cons(ctx,attr,val);
   pointer_update(sym->c.sym.plist,cons(ctx,p,sym->c.sym.plist));
+  vpop();  // sym
   return(val);}
 
 pointer PUTPROP(ctx,n,argv)	/*(putprop sym val attr)*/

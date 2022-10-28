@@ -207,27 +207,29 @@ register pointer namestr,nicks,uses;
   /*check pkg name collision*/
   namestr=Getstring(namestr);
   if (findpkg(namestr)) error(E_PKGNAME,namestr);
-  vpush(namestr); vpush(nicks); vpush(uses);
-  i=0;
+  vpush(nicks); vpush(uses); vpush(namestr);
+  i=1;  // package name is the first in the nickname list
   while (islist(nicks)) {
     if (findpkg(ccar(nicks))) error(E_PKGNAME,ccar(nicks));
     vpush(Getstring(ccar(nicks))); i++;
     nicks=ccdr(nicks);}
   nicks=stackrawlist(ctx,i);	/*list up package nicknames*/
+  vpush(nicks);
   i=0;
   while (islist(uses)) {
     if ((p=findpkg(ccar(uses)))) { vpush(p); i++; uses=ccdr(uses);}
     else error(E_PKGNAME,ccar(uses));}
   uses=stackrawlist(ctx,i);
+  vpush(uses);
   pkg=allocobj(PKGCLASS,package, packagecp.cix);
   pkg->c.pkg.names=pkg->c.pkg.symvector=pkg->c.pkg.intsymvector=NULL;
   pkg->c.pkg.symcount=pkg->c.pkg.intsymcount=makeint(0);
-  pkg->c.pkg.use=uses;
   pkg->c.pkg.plist=NIL;
   pkg->c.pkg.shadows=NIL;
   pkg->c.pkg.used_by=NIL;
+  pkg->c.pkg.use=vpop();  // uses
+  pkg->c.pkg.names=vpop();  // nicks
   vpush(pkg);
-  pkg->c.pkg.names=rawcons(ctx,namestr,nicks);
   symvec=makevector(C_VECTOR,SYMBOLHASH);
   for (i=0; i<SYMBOLHASH; i++) symvec->c.vec.v[i]=makeint(0);
   pkg->c.pkg.symvector=symvec;
@@ -236,18 +238,18 @@ register pointer namestr,nicks,uses;
   pkg->c.pkg.intsymvector=symvec;
   pkglist=rawcons(ctx,pkg,pkglist);
   ctx->lastalloc=pkg;
-  ctx->vsp -= 4;
+  ctx->vsp -= 3;
   return(pkg);}
 
 pointer mkstream(ctx,dir,string)
 register context *ctx;
 pointer dir,string;
 { register pointer s;
-  vpush(string);
+  vpush(dir); vpush(string);
   s=allocobj(STREAM, stream, streamcp.cix);
-  s->c.stream.direction=dir;
   s->c.stream.count=s->c.stream.tail=makeint(0);
-  s->c.stream.buffer=vpop();
+  s->c.stream.buffer=vpop();  // string
+  s->c.stream.direction=vpop();  // dir
   s->c.stream.plist=NIL;
   return(s);}
 
@@ -257,13 +259,13 @@ pointer dir,string,fname;
 int fno;
 { register pointer s;
   if (dir!=K_IN && dir!=K_OUT) error(E_IODIRECTION);
-  vpush(string); vpush(fname);
+  vpush(dir); vpush(string); vpush(fname);
   s=allocobj(FILESTREAM, filestream, filestreamcp.cix);
-  s->c.fstream.direction=dir;
   s->c.fstream.count=s->c.fstream.tail=makeint(0);
-  s->c.fstream.fname=vpop();
-  s->c.fstream.buffer=vpop();
   s->c.fstream.fd=makeint(fno);
+  s->c.fstream.fname=vpop();  // fname
+  s->c.fstream.buffer=vpop(); // string
+  s->c.fstream.direction=vpop();  // dir
   s->c.fstream.plist=NIL;
   return(s);}
 
@@ -274,10 +276,9 @@ register pointer in,out;
   if (!isstream(in) || !isstream(out)) error(E_STREAM);
   vpush(in); vpush(out);
   ios=allocobj(IOSTREAM, iostream, iostreamcp.cix);
-  ios->c.iostream.out=out;
-  ios->c.iostream.in=in;
+  ios->c.iostream.out=vpop();  // out
+  ios->c.iostream.in=vpop();  // in
   ios->c.iostream.plist=NIL;
-  ctx->vsp -= 2;
   return(ios);}
 
 pointer makecode(ctx,mod,f,ftype,name)
@@ -383,19 +384,21 @@ int tag;
   extern pointer makeobject();
 
   /* make metaclass cell */
-  vpush(vars); vpush(types);
+  vpush(name); vpush(superobj); vpush(vars);
+  vpush(types); vpush(forwards); vpush(metaclass);
   if (metaclass && isclass(metaclass)) class=makeobject(metaclass);
   else {
     if (tag==0)
       class=allocobj(METACLASS, _class, metaclasscp.cix);
     else 
-      class=allocobj(VECCLASS, vecclass, vecclasscp.cix);} 
-  class->c.cls.name=name;
-  class->c.cls.super=superobj;
+      class=allocobj(VECCLASS, vecclass, vecclasscp.cix);}
+  vpop();  // metaclass
+  class->c.cls.forwards=vpop();  // forwards
+  class->c.cls.types=vpop();  // types
+  class->c.cls.vars=vpop();  // vars
+  class->c.cls.super=vpop();  // superobj
+  class->c.cls.name=vpop();  // name
   class->c.cls.methods=NIL;
-  class->c.cls.vars=vars;
-  class->c.cls.types=types;
-  class->c.cls.forwards=forwards;
   class->c.cls.plist=NIL;
   if (tag) {	/*vector type class*/
     class->c.vcls.elmtype=makeint(tag);
@@ -404,7 +407,6 @@ int tag;
 /*  name->c.sym.vtype=V_SPECIAL;  */
   name->c.sym.vtype=V_GLOBAL; 
   enterclass(class);	/*determine cix and fill it in the cix slot*/
-  vpop(); vpop();
   return(class);  }
 
 pointer makeobject(class)
@@ -494,7 +496,7 @@ int size;
   elmtypeof(cvec)=ELM_BYTE;
   vpush(cvec);
   mod=allocobj(LDMODULE, ldmodule, ldmodulecp.cix);
-  mod->c.ldmod.codevec=vpop();
+  mod->c.ldmod.codevec=vpop();  // cvec
   mod->c.ldmod.quotevec=NIL;
   mod->c.ldmod.entry=NIL;
 #if ARM
@@ -524,17 +526,15 @@ pointer (*f)();
 
 pointer makereadtable(ctx)
 register context *ctx;
-{ pointer rdtable,rdsyntax,rdmacro,rddispatch;
-  vpush((rdsyntax=makebuffer(256)));
-  vpush((rdmacro=makevector(C_VECTOR,256)));
-  rddispatch=makevector(C_VECTOR,256);
+{ pointer rdtable;
+  vpush(makebuffer(256));  // rdsyntax
+  vpush(makevector(C_VECTOR,256));  // rdmacro
+  vpush(makevector(C_VECTOR,256));  // rddispatch
   rdtable=allocobj(READTABLE, readtable, readtablecp.cix);
-  vpush(rdtable);
-  rdtable->c.rdtab.dispatch=rddispatch;
-  rdtable->c.rdtab.macro=rdmacro;
-  rdtable->c.rdtab.syntax=rdsyntax;
+  rdtable->c.rdtab.dispatch=vpop();  // rddispatch
+  rdtable->c.rdtab.macro=vpop();  // rdmacro
+  rdtable->c.rdtab.syntax=vpop();  // rdsyntax
   rdtable->c.rdtab.plist=NIL;
-  ctx->vsp -= 3;
   return(rdtable);}
 
 pointer makelabref(n,v,nxt)
