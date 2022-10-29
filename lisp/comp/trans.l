@@ -34,9 +34,21 @@
 
 (eval-when (load eval)
 
+;; the `avant-mode' variable is set during pre-evaluation
+;; in the compiler class, this is used to allocate closure frames
+;; in the translator class, this is used to prevent file output
+(defparameter avant-mode nil)
+
+;; the ftab is used to call functions by symbol
+;; it is used when the function has no builtin definition and
+;; when the function definition is not found in the current file
 (defparameter ftab-next 0)
 (defparameter external-functions nil)
-(defparameter avant-mode nil)
+
+(defun maybe-format (fstream format-string &rest args)
+  ;; suppress all output in pre-evaluation mode
+  (unless avant-mode
+    (apply #'format fstream format-string args)))
 
 (defun ftab-index (sym)
    (let ((index (get sym :ftab-index)))
@@ -44,12 +56,9 @@
 	  (prog1 (setf (get sym :ftab-index) ftab-next)
 		 (push sym external-functions)
 		 (incf ftab-next))
-	  index)))
-
-(defun maybe-format (fstream format-string &rest args)
-  ;; suppress all output in pre-evaluation mode
-  (unless avant-mode
-    (apply #'format fstream format-string args)))
+          (prog1 index
+            (unless (< index ftab-next)
+              (error value-error "invalid ftab-index found in ~S: ~A~%" sym index))))))
 
 (defmethod translator
  (:label (l)

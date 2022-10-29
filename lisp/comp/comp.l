@@ -49,7 +49,12 @@
 (defvar comp nil "$Id$")
 (defvar trans)
 (defvar *multipass-optimize* t)
-;; define as a variable so we can `(let ((closure-frames ...)))' it
+
+;; `closure-frames' collects variables referenced during preevaluation
+;; `closure-function-frames' collects functions called during preevaluation
+;; this allows to allocate minimal size frames for each closure
+;; both values are locally overwritten at each function invocation,
+;; the global value should never need to be modified
 (defvar closure-frames nil)
 (defvar closure-function-frames nil)
 
@@ -332,6 +337,8 @@
             (when (and avant-mode closure-function-frames
                        (fdef . level)
                        (> closure-level (fdef . level)))
+              (unless (assoc 'closure-function-frames (sys:list-all-special-bindings))
+                (send self :error "attempting to set global closure-function-frames value"))
               (unless (listp closure-function-frames)
                 (setq closure-function-frames nil))
               (pushnew fdef closure-function-frames)
@@ -552,6 +559,8 @@
    (flet ((push-cframe (&optional (pushvar var))
             ;; collect referenced variables during pre-evaluation mode
             (when (and avant-mode closure-frames (> closure-level (var . level)))
+              (unless (assoc 'closure-frames (sys:list-all-special-bindings))
+                (send self :error "attempting to set global closure-frames value"))
               (unless (listp closure-frames) (setq closure-frames nil))
               (pushnew pushvar closure-frames)
               (unless (pushvar . bindframe) (setq (pushvar . bindframe) t))))
@@ -1646,6 +1655,10 @@
 	     (if (and (stringp (car bodies))  (cdr bodies))
 		 (pop bodies)
 		 (format nil "~s" arglist)))
+       (when closure-frames
+         (send self :error "closure-frames should always be nil at the toplevel"))
+       (when closure-function-frames
+         (send self :error "closure-function-frames should always be nil at the toplevel"))
        (send self :lambda-block name arglist bodies cname)
        (send self :add-initcode (list fun-macro cname name doc))))
  (:defmethod (methods) 
