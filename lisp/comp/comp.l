@@ -329,7 +329,8 @@
    (let ((fdef (find-if #'(lambda (x) (eql (x . name) fn)) flets)))
       (if fdef
 	  (progn
-            (when (and avant-mode (fdef . level)
+            (when (and avant-mode closure-function-frames
+                       (fdef . level)
                        (> closure-level (fdef . level)))
               (unless (listp closure-function-frames)
                 (setq closure-function-frames nil))
@@ -550,7 +551,7 @@
      (setq var (send self :variable var)))
    (flet ((push-cframe (&optional (pushvar var))
             ;; collect referenced variables during pre-evaluation mode
-            (when (and avant-mode (> closure-level (var . level)))
+            (when (and avant-mode closure-frames (> closure-level (var . level)))
               (unless (listp closure-frames) (setq closure-frames nil))
               (pushnew pushvar closure-frames)
               (unless (pushvar . bindframe) (setq (pushvar . bindframe) t))))
