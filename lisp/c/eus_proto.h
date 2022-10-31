@@ -3,6 +3,7 @@ extern "C" {
 #endif
 /* arith.c */
 extern pointer NUMEQUAL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer NUMNEQUAL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer GREATERP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer LESSP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer GREQP(context */*ctx*/, int /*n*/, pointer /*argv*/*);

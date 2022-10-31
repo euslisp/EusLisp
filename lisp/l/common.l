@@ -363,8 +363,10 @@
 ; more list functions
 ;
 (eval-when (load eval)
-   (defun alias (new old) (setslot new symbol 'function
-				   (symbol-function old)))
+   (defun alias (new old)
+     (prog1 (setslot new symbol 'function
+                     (symbol-function old))
+       (putprop new old 'compiler::function-alias)))
    (alias 'list-length 'length)
    (alias 'values 'list)
    )

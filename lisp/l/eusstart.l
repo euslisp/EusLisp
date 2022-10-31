@@ -323,8 +323,7 @@
 (system::exec-module-init "coordinates" "l/coordinates.l")
 
 (in-package "LISP")
-(setf (symbol-function 'get-internal-run-time)
-	(symbol-function 'unix::runtime))
+(alias 'get-internal-run-time 'unix::runtime)
 ;; toplevel needs the compiler package
 ;;	(format t ";;; Loading compiler modules.~%")
 ;;
@@ -349,7 +348,7 @@
 	)
 	(export '(compile comfile compile-file compile-file-if-src-newer
                   gc alloc runtime))
-	(setf (symbol-function 'exit) (symbol-function 'unix::exit))    
+	(alias 'exit 'unix::exit)
 ;;
 ;(when (substringp "P" (string-upcase (pathname-name *program-name*)))
 	(in-package "SYSTEM")

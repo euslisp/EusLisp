@@ -153,7 +153,7 @@
 ;;
 
 #+(or :linux :solaris2 :cygwin :alpha)
-   (setf (symbol-function 'directory) (symbol-function 'unix::readdir))
+   (alias 'directory 'unix::readdir)
 #-(or :linux :solaris2 :cygwin :alpha)
  (defun directory (&optional (dir "."))
    (let ((fnlist) (ls) (eof (cons nil nil)) (fn))
