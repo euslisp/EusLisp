@@ -1295,9 +1295,7 @@
         ;; reset cbindframes to force re-evaluation
         ;; this is needed to ensure that each closure has an
         ;; unique and compatible mapping
-        (dolist (fdef flets-tmp)
-          (when (fdef . cbindframe)
-            (setq (fdef . cbindframe) t)))
+        (send self :reset-flets-cbindframe flets-tmp)
 
         ;; evaluate body
         (setq flets (append flets-tmp flets))
@@ -1305,6 +1303,7 @@
         (send self :progn bodies)
         (if (not recursive-scope) (send newcomp :change-flets flets))
         ;; unwind/restore
+        (send self :reset-flets-cbindframe flets-tmp)
         (setq flets (nthcdr (length flets-tmp) flets))
         (send self :delete-frame 'flet nil)
         (send trans :del-frame (fletframe . specials) (fletframe . locals))))
@@ -1316,6 +1315,10 @@
    (send self :progn bodies)
    (setq flets (nthcdr (length funcs) flets)))
  (:change-flets (newflets) (setq flets newflets))
+ (:reset-flets-cbindframe (flets-tmp)
+   (dolist (fdef flets-tmp)
+     (when (fdef . cbindframe)
+       (setq (fdef . cbindframe) t))))
  (:declare (args)
     ;; bind statements and return type declared variables
     (let (v acc)
