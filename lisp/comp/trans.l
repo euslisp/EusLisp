@@ -679,9 +679,12 @@
     (inc pushcount))
  (:closure (lab env0 env1)
     (if env1
-        (send self :store "w")  ; store to w before increasing the pushcount
-        (send self :clearpush)) ; clear other pending values
-    (send self :reset-vsp)
+        (progn
+          (send self :reset-vsp)   ; use the push-count before decrease
+          (send self :store "w"))  ; store to w before increasing the pushcount
+        (progn
+          (send self :clearpush)   ; clear other pending values
+          (send self :reset-vsp))) ; use the push-count after increase
     (send self :push
       (format nil "makeclosure(codevec,quotevec,~A,~A,~A)"
               lab (if env0 "env" "NIL") (if env1 "w" "NIL"))))
