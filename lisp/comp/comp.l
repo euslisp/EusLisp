@@ -346,14 +346,17 @@
                 (setq (fdef . bindframe) t)))
 
             ;; compile-time check to see if we are not missing any frame references
-            (when (and (not avant-mode) (= (- closure-level (fdef . level)) 1)
+            (when (and (not avant-mode) (> closure-level (fdef . level))
                        (fdef . bindframe))
-              (unless (find (fdef . bindframe) current-fframes)
-                (send self :error "unbound fletframe detected when loading function ~S: ~A"
-                      (fdef . name) (fdef . bindframe)))
-              (unless (< (send self :flet-bindframe fdef) current-csize)
-                (send self :error "invalid fletframe index detected when loading function ~S: ~A"
-                      (fdef . name) (fdef . cbindframe))))
+              (let* ((c-index (- closure-level (fdef . level)))
+                     (c-fframes (car (nthcdr (1- c-index) current-fframes)))
+                     (c-csize (car (nthcdr (1- c-index) current-csize))))
+                (unless (find (fdef . bindframe) c-fframes)
+                  (send self :error "unbound fletframe detected when loading function ~S: ~A"
+                        (fdef . name) (fdef . bindframe)))
+                (unless (< (send self :flet-bindframe fdef) c-csize)
+                  (send self :error "invalid fletframe index detected when loading function ~S: ~A"
+                        (fdef . name) (fdef . cbindframe)))))
             fdef)
 	  (cond ((fboundp fn)
 		 (setq fdef (symbol-function fn))
@@ -566,14 +569,17 @@
               (unless (pushvar . bindframe) (setq (pushvar . bindframe) t))))
           (check-cframe (&optional (pushvar var))
             ;; compile-time check to see if we are not missing any frame references
-            (when (and (not avant-mode) (= (- closure-level (var . level)) 1)
+            (when (and (not avant-mode) (> closure-level (var . level))
                        (numberp (pushvar . bindframe)))
-              (unless (find (pushvar . bindframe) current-cframes)
-                (send self :error ";; unbound bindframe detected when loading variable ~S: ~A"
-                      (var . name) (pushvar . bindframe)))
-              (unless (< (send self :var-bindframe pushvar) current-csize)
-                (send self :error ";; invalid bindframe index detected when loading variable ~S: ~A"
-                      (var . name) (send self :var-bindframe pushvar))))))
+              (let* ((c-index (- closure-level (var . level)))
+                     (c-cframes (car (nthcdr (1- c-index) current-cframes)))
+                     (c-csize (car (nthcdr (1- c-index) current-csize))))
+                (unless (find (pushvar . bindframe) c-cframes)
+                  (send self :error ";; unbound bindframe detected when loading variable ~S: ~A"
+                        (var . name) (pushvar . bindframe)))
+                (unless (< (send self :var-bindframe pushvar) c-csize)
+                  (send self :error ";; invalid bindframe index detected when loading variable ~S: ~A"
+                        (var . name) (send self :var-bindframe pushvar)))))))
      (case (var . binding)
       ;; special variables are accessed through :load-global, so we don't need 
       ;; to add or manage them in bind frames
@@ -1724,9 +1730,9 @@
             (cframes (fourth aclosure))
             (fframes (fifth aclosure))
             (cbind (append cframes fframes)))
-       (setq (newcomp . current-cframes) cframes)
-       (setq (newcomp . current-fframes) fframes)
-       (setq (newcomp . current-csize) (length cbind))
+       (setq (newcomp . current-cframes) (cons cframes (newcomp . current-cframes)))
+       (setq (newcomp . current-fframes) (cons fframes (newcomp . current-fframes)))
+       (setq (newcomp . current-csize) (cons (length cbind) (newcomp . current-csize)))
        ;; recalculate function cbindings
        (setq (newcomp . flets) (copy-object (newcomp . flets)))
        (dolist (fdef (newcomp . flets))
