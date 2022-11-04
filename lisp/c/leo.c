@@ -597,11 +597,11 @@ register pointer org;
 	    for (i=2; i<s; i++) clone->c.obj.iv[i]=copyobj(ctx,org->c.obj.iv[i]);
 	    break;
     case ELM_POINTER:
-	    clone->c.vec.v[0]=copyobj(ctx,x);
+	    if (s>0) clone->c.vec.v[0]=copyobj(ctx,x);
 	    for (i=1; i<s; i++) clone->c.vec.v[i]=copyobj(ctx,org->c.vec.v[i]);
 	    break;
     default:
-	    clone->c.vec.v[0]=x; /*copyobj(ctx,x) fails */
+	    if (s>0) clone->c.vec.v[0]=x; /*copyobj(ctx,x) fails */
 	    for (i=1; i<s; i++) clone->c.ivec.iv[i]=org->c.ivec.iv[i];
 	    break;}
 #ifdef SAFETY
