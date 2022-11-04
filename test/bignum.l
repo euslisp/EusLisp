@@ -1,5 +1,4 @@
-;(setq sys::*gc-hook* #'(lambda (a b) (format t "GC! free:~A  total:~A~%" a b)))
-(setq sys::*gc-hook* #'(lambda (a b) ()))
+;;(setq sys::*gc-debug* t)
 
 (require :unittest "lib/llib/unittest.l")
 
