@@ -346,7 +346,9 @@
                 (setq (fdef . bindframe) t)))
 
             ;; compile-time check to see if we are not missing any frame references
-            (when (and (not avant-mode) (> closure-level (fdef . level))
+            (when (and (not avant-mode)
+                       (fdef . level)
+                       (> closure-level (fdef . level))
                        (fdef . bindframe))
               (let* ((c-index (- closure-level (fdef . level)))
                      (c-fframes (car (nthcdr (1- c-index) current-fframes)))
