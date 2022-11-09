@@ -862,6 +862,8 @@ extern eusinteger_t intval(pointer p);
 #define isbindframe(p) (ispointer(p) && pisbindframe(p))
 #define pisfletframe(p) (fletframecp.cix<=(p)->cix && (p)->cix<=fletframecp.sub)
 #define isfletframe(p) (ispointer(p) && pisfletframe(p))
+#define pisthread(p) (threadcp.cix<=(p)->cix && (p)->cix<=threadcp.sub)
+#define isthread(p) (ispointer(p) && pisthread(p))
 #define pislabref(p) (labrefcp.cix<=(p)->cix && (p)->cix<=labrefcp.sub)
 #define islabref(p) (ispointer(p) && pislabref(p))
 /* extended numbers */

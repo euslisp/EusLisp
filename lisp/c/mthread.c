@@ -197,7 +197,8 @@ int n;
 pointer argv[];
 { register pointer port, result;
   ckarg(1);
-  port=argv[0];
+  if (isthread(argv[0])) port=argv[0];
+  else error(E_TYPE_ERROR,(pointer)"thread object expected");
   if (port->c.thrp.wait!=NIL &&
 	(/* port->c.thrp.idle==NIL */ 1 || 
 	 port->c.thrp.reqsem->c.ivec.iv[0]>0)) {
