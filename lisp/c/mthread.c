@@ -154,6 +154,7 @@ int n;
 pointer argv[];
 { register pointer port, args;
   register int i;
+  if (n<1) error(E_MISMATCHARG);
   port=get_free_thread();
   port->c.thrp.requester=makeint(thr_self());
   port->c.thrp.func=argv[0];
@@ -177,6 +178,7 @@ int n;
 pointer argv[];
 { register pointer port, args;
   register int i;
+  if (n<1) error(E_MISMATCHARG);
   port=get_free_thread();
   port->c.thrp.requester=makeint(thr_self());
   port->c.thrp.func=argv[0];
@@ -227,6 +229,7 @@ context *ctx;
 int n;
 pointer argv[];
 { register pointer m;
+  ckarg2(0,1);
   m=makevector(C_INTVECTOR, (sizeof(mutex_t)+sizeof(eusinteger_t)-1)/sizeof(eusinteger_t));
 #if alpha 
   pthread_mutex_init((mutex_t *)m->c.ivec.iv,pthread_mutexattr_default);
@@ -335,7 +338,8 @@ pointer SEMA_POST(ctx,n,argv)
 context *ctx;
 int n;
 register pointer argv[];
-{ if (!isintvector(argv[0])) error(E_NOINTVECTOR);
+{ ckarg(1);
+  if (!isintvector(argv[0])) error(E_NOINTVECTOR);
   sema_post((sema_t *)argv[0]->c.ivec.iv);
   return(T);}
 
@@ -343,7 +347,8 @@ pointer SEMA_WAIT(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];
-{ if (!isintvector(argv[0])) error(E_NOINTVECTOR);
+{ ckarg(1);
+  if (!isintvector(argv[0])) error(E_NOINTVECTOR);
   GC_REGION(sema_wait((sema_t *)argv[0]->c.ivec.iv););
   return(T);}
 
@@ -351,7 +356,8 @@ pointer SEMA_TRYWAIT(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];
-{ if (!isintvector(argv[0])) error(E_NOINTVECTOR);
+{ ckarg(1);
+  if (!isintvector(argv[0])) error(E_NOINTVECTOR);
   if (sema_trywait((sema_t *)argv[0]->c.ivec.iv)==0) return(T);
   else  return(NIL);}
 
@@ -447,9 +453,11 @@ pointer argv[];
   unsigned int thread_id;
   pointer result;
   struct thread_arg *ta;
-  pointer func=argv[0], arg=argv[1];
+  pointer func, arg;
 
   ckarg2(2,3);
+  func=argv[0];
+  arg=argv[1];
   if (n==3) stack_size=ckintval(argv[2]);
   else stack_size=1024*64;
 
