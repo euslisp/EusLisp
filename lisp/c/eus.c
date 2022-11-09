@@ -799,7 +799,7 @@ static void initclasses()
   C_ARRAY=speval(ARRAY);
 /*12 */
   THREAD=basicclass("THREAD", C_PROPOBJ, &threadcp,
-			10, "ID", "REQUESTER", "REQUEST-SEM", "DONE-SEM",
+			11, "ID", "REQUESTER", "REQUEST-SEM", "RUN-SEM", "DONE-SEM",
 			   "FUNC", "ARGS", "RESULT", "CONTEXT",
 			   "IDLE", "WAIT");
   C_THREAD=speval(THREAD);
