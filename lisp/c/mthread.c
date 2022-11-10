@@ -112,8 +112,9 @@ pointer argv[];
   int i,count;
   unsigned int tid;
 
-  ckarg2(1,3);
-  count=ckintval(argv[0]);
+  ckarg2(0,3);
+  if (n>=1) count=ckintval(argv[0]);
+  else count=1;
   if (n>=2) stack_size=ckintval(argv[1]);
   else stack_size=32*1024;	/* default stack=32K word */
   if (n==3) c_stack_size=ckintval(argv[2]);
