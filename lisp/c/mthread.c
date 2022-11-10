@@ -403,7 +403,7 @@ pointer argv[];
 { int stat;
   ckarg(1);
 #if SunOS4_1 || alpha || PTHREAD
-  fprintf(stderr, "thr_setconcurrency is not supprted!\n");
+  fprintf(stderr, "thr_setconcurrency is not supported!\n");
   stat = 0;
 #else
   stat=thr_setconcurrency(ckintval(argv[0]));
@@ -418,7 +418,7 @@ pointer argv[];
 { int concurrency;
   ckarg(0);
 #if SunOS4_1 || alpha || PTHREAD
-  fprintf(stderr, "thr_getconcurrency is not supprted!\n");
+  fprintf(stderr, "thr_getconcurrency is not supported!\n");
   concurrency = 0;
 #else
   concurrency=thr_getconcurrency();
@@ -462,7 +462,7 @@ pointer argv[];
   else stack_size=1024*64;
 
   newctx=(context *)makelispcontext(stack_size);
-  fprintf(stderr,"creater newcontext=%p\n", newctx);
+  fprintf(stderr,"create newcontext=%p\n", newctx);
   ta=(struct thread_arg *)malloc(sizeof(struct thread_arg));
   ta->form=ctx->callfp->form;
   ta->newctx=newctx;

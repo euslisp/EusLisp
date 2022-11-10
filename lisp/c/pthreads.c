@@ -75,7 +75,7 @@ int thr_kill(int tid, int sig)
 int thr_join(int tid, int *depature, void **status)
 {
   if ( *depature  != NULL){
-    fprintf(stderr,"Warrning in thr_join: argument 'depature' must be NULL.\n");
+    fprintf(stderr,"Warning in thr_join: argument 'depature' must be NULL.\n");
      *depature == -1;
     }
     return(pthread_join(thread_table[tid][0], status));
