@@ -157,6 +157,19 @@ register int k;
   return(k);
   }
 
+int fillchunk(k)
+register int k;
+{ numunion nu;
+  float gcm;
+  int j;
+  gcm=min(5.0,fltval(speval(GCMARGIN)));
+  while (freeheap<(totalheap*gcm)) {
+    j=newchunk(k);
+    if (j==ERR) return(j);
+  }
+  return(j);
+}
+
 void splitheap(k,buddy)	/*heart of the allocator*/
 register int k;
 register struct buddyfree *buddy;
@@ -217,7 +230,6 @@ register int req;	/*index to buddy: must be greater than 0*/
 { register int i, k;
   register bpointer b,b2;
   numunion nu;
-  pointer gcm;
 
 #if THREADED
   mutex_lock(&alloc_lock); 
@@ -230,9 +242,11 @@ register int req;	/*index to buddy: must be greater than 0*/
     if (k>=MAXBUDDY) {		/*no bigger free cell*/
       if (buddysize[req]<totalheap/8) {	/*relatively small cell is requested;*/
         gc();			/* then try garbage collection*/
-	gcm=speval(GCMARGIN);
-        while (freeheap < (totalheap*min(5.0,fltval(gcm))))
-	  newchunk(req); /*still not enough space*/
+        if (fillchunk(req) == ERR) {
+#if THREADED
+          mutex_unlock(&alloc_lock);
+#endif
+          error(E_ALLOCATION);}
         for (k=req; buddy[k].bp==0; ) k++;}
       if (k>=MAXBUDDY) {
         k=newchunk(req);
@@ -289,13 +303,12 @@ register int req;	/*index to buddy: must be greater than 0*/
 			freeheap, totalheap, fltval(speval(GCMARGIN))); */
 	    gc(); collected=1;
 	    goto alloc_again;}
-          while (freeheap<(totalheap*min(5.0,fltval(speval(GCMARGIN))))) {
-	    j=newchunk(DEFAULTCHUNKINDEX); /*still not enough space*/
-	    if (j==ERR) { 
+          j=fillchunk(DEFAULTCHUNKINDEX);
+          if (j==ERR) {
 #if THREADED
 	      mutex_unlock(&alloc_lock); 
 #endif
-	      error(E_ALLOCATION);}} }
+	      error(E_ALLOCATION);} }
 	if (j>=MAXBUDDY) {	/*hard fragmentation seen*/
 	  j=newchunk(DEFAULTCHUNKINDEX);
 	  if (j==ERR) { 
