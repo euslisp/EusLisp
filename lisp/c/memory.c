@@ -162,7 +162,7 @@ register int k;
 { numunion nu;
   float gcm;
   int j;
-  gcm=min(5.0,fltval(speval(GCMARGIN)));
+  gcm=min(0.9,fltval(speval(GCMARGIN)));
   while (freeheap<(totalheap*gcm)) {
     j=newchunk(k);
     if (j==ERR) return(j);
