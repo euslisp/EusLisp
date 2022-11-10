@@ -59,6 +59,11 @@ struct chunk *chunklist=NULL;
 long gccount,marktime,sweeptime;
 long alloccount[MAXBUDDY];
 
+/* counter to control new memory allocation when performance is low */
+/* see https://github.com/jsk-ros-pkg/jsk_roseus/issues/728 */
+long gc_consecutive_count;
+#define GC_CONSECUTIVE_COUNT_LIMIT 2
+
 /*disposal processing*/
 #define MAXDISPOSE 256
 static  pointer dispose[MAXDISPOSE];
@@ -167,6 +172,7 @@ register int k;
     j=newchunk(k);
     if (j==ERR) return(j);
   }
+  gc_consecutive_count=0;
   return(j);
 }
 
@@ -302,6 +308,12 @@ register int req;	/*index to buddy: must be greater than 0*/
 	    /* fprintf(stderr, "GC: free=%d total=%d, margin=%f\n",
 			freeheap, totalheap, fltval(speval(GCMARGIN))); */
 	    gc(); collected=1;
+            if (gc_consecutive_count > GC_CONSECUTIVE_COUNT_LIMIT) {
+              if (fillchunk(DEFAULTCHUNKINDEX) == ERR) {
+#if THREADED
+                mutex_unlock(&alloc_lock);
+#endif
+                error(E_ALLOCATION);}}
 	    goto alloc_again;}
           j=fillchunk(DEFAULTCHUNKINDEX);
           if (j==ERR) {
@@ -786,6 +798,7 @@ void gc()
 { if (debug)  fprintf(stderr,"\n;; gc:");
   // breakck;
   gccount++;
+  gc_consecutive_count++;
   markall();
   sweepall();
   if (debug) {
@@ -809,6 +822,7 @@ void gc()
   }
   // breakck;
   gccount++;
+  gc_consecutive_count++;
   times(&tbuf1);
 
 #if THREADED
