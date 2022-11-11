@@ -860,7 +860,7 @@ pointer argv[];
   if (n==0) con=ctx;
   else {
     x=ckintval(argv[0]);
-    if (x<0 || x>MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
+    if (x<0 || x>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
     if (x==0) con=ctx;
     else con=euscontexts[x];}
   p=con->specials;  

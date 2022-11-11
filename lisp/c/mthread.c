@@ -384,9 +384,12 @@ pointer THR_SETPRIO(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ int stat;
+{ int stat,tid,prio;
   ckarg(2);
-  stat=thr_setprio(ckintval(argv[0]),ckintval(argv[1]));
+  tid=ckintval(argv[0]);
+  prio=ckintval(argv[1]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
+  stat=thr_setprio(tid,prio);
   if (stat) return(makeint(-errno));
   else return(T);}
 
@@ -394,9 +397,11 @@ pointer THR_GETPRIO(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ int stat,prio;
+{ int stat,tid,prio;
   ckarg(1);
-  stat=thr_getprio(ckintval(argv[0]), &prio);
+  tid=ckintval(argv[0]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
+  stat=thr_getprio(tid, &prio);
   if (stat) return(makeint(-errno));
   else return(makeint(prio));}
 
@@ -404,7 +409,7 @@ pointer THR_SETCONCURRENCY(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ int stat;
+{ int stat,tid;
   ckarg(1);
 #if SunOS4_1 || alpha || PTHREAD
   fprintf(stderr, "thr_setconcurrency is not supported!\n");
@@ -491,6 +496,7 @@ pointer argv[];
   ckarg(2);
   tid=ckintval(argv[0]);
   sig=ckintval(argv[1]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
   if (euscontexts[tid]) { thr_kill(tid,sig); return(T);}
   else return(NIL);}
 
@@ -505,6 +511,7 @@ pointer argv[];
   return(NIL);
 #else
   tid=ckintval(argv[0]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
   if (euscontexts[tid]) {
     if (thr_suspend(tid)==0) return(T);
     else return(makeint(-errno));}
@@ -523,6 +530,7 @@ pointer argv[];
   return(NIL);
 #else
   tid=ckintval(argv[0]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
   if (euscontexts[tid]) {
     if (thr_continue(tid)==0) return(T);
     else return(makeint(-errno));}
