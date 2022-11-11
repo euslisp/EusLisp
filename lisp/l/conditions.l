@@ -217,6 +217,8 @@
   (when (send err :callstack)
     (print-callstack (send err :callstack) *max-callstack-depth*))
   (print-error-message err)
+  (if (not (zerop (unix:thr-self)))
+      (throw 0 nil))
   (let ((*replevel* (1+ *replevel*))
         (*reptype* "E"))
     (while (catch *replevel* (reploop #'toplevel-prompt))))

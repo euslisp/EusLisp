@@ -693,6 +693,7 @@ int max;
 { register struct callframe *vf;
   int i;
   vf=(struct callframe *)(ctx->callfp);
+  if(vf==NULL) return(NIL);
   // list whole stack for negative max values
   for (i=0; vf->vlink && max; vf=vf->vlink) {
     if (vf->form) {
