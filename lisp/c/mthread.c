@@ -131,17 +131,20 @@ pointer argv[];
     mutex_unlock(&qthread_lock);
 #if alpha || PTHREAD
     if( thr_create(0, c_stack_size, thread_main, newport, 0, &tid ) != 0 ) {
-      deletecontext(tid, ctx);
-      error(E_PROGRAM_ERROR,(pointer)"Number of threads reached limit (64)");
+      deletecontext(tid, newctx);
+      if (tid>=MAXTHREAD) {
+        error(E_PROGRAM_ERROR,(pointer)"Number of threads reached limit (64)");}
+      error(E_PROGRAM_ERROR,(pointer)"Could not create a new thread");
       }
     newport->c.thrp.id=makeint(tid);	/* ???? critical region problem */
 #else
-    thr_create(0, c_stack_size, (void *(*)(void *))thread_main,
-		newport, THR_SUSPENDED, &tid);
-    if (tid>=MAXTHREAD) {
-      deletecontext(tid, ctx);
-      error(E_PROGRAM_ERROR,(pointer)"Number of threads reached limit (64)");
-      }
+    if ( thr_create(0, c_stack_size, (void *(*)(void *))thread_main,
+                    newport, THR_SUSPENDED, &tid) != 0) {
+      deletecontext(tid, newctx);
+      if (tid>=MAXTHREAD) {
+        error(E_PROGRAM_ERROR,(pointer)"Number of threads reached limit (64)");}
+      error(E_PROGRAM_ERROR,(pointer)"Could not create a new thread");
+    }
     newport->c.thrp.id=makeint(tid);
     thr_continue(tid);
 #endif
@@ -471,7 +474,9 @@ pointer argv[];
   ta->arg=arg;
   stat=thr_create(0, stack_size, (void (*)(void *))newthread,
 		  ta,0,&thread_id);
-  if (stat) result=makeint(-errno);
+  if (stat) {
+    deletecontext(thread_id, newctx);
+    result=makeint(-errno);}
   else 
     result=makeint(thread_id);
   return(result);

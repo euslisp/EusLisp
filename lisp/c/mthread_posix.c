@@ -91,8 +91,9 @@ int thr_create(void *base, size_t size, void (*func)(void *), void *args, long f
     int i, stat;
     struct thr_arg *arg;
 
-    for( i = 0; i < MAXTHREAD && thread_table[i].using; i++ )
-      ;
+    for( i = 0; i < MAXTHREAD && thread_table[i].using; i++ );
+    *tid = i;
+
     if( i >= MAXTHREAD )
       return -1;
 
@@ -106,7 +107,6 @@ int thr_create(void *base, size_t size, void (*func)(void *), void *args, long f
     stat = pthread_create( &thread_table[i].tid, NULL, (void*(*)(void *))thr_startup, arg );
     if( stat == 0 )
       thread_table[i].using = 1;
-    *tid = i;
     thr_create_lock=0;
     return( stat );
 }
