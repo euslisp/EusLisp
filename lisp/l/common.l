@@ -154,10 +154,11 @@
   (let ((endvar (gensym "DOTIMES")))
      `(let ((,(car vars) 0) (,endvar ,(cadr vars)))
 	(declare (integer ,(car vars) ,endvar))
-	(while (< ,(car vars) ,endvar)
+	(or
+         (while (< ,(car vars) ,endvar)
 	       ,@forms
 	       (setq ,(car vars) (1+ ,(car vars))))
-	,(caddr vars)))) 
+         ,(caddr vars)))))
 
 (defmacro dolist (vars &rest forms)
    (let ((lists (gensym "DOLIST")) (decl (car forms)))
@@ -166,10 +167,11 @@
 	 (setq decl nil))
      `(let ((,(car vars) nil) (,lists ,(cadr vars)))
 	,decl
-	(while ,lists
+	(or
+         (while ,lists
 	   (setq ,(car vars) (pop ,lists))
 	   ,@forms)
-	,(caddr vars)))) 
+         ,(caddr vars)))))
 
 (defmacro do-symbols (vars &rest forms)
    (let* ((symbols (gensym "DOSYM"))
@@ -185,11 +187,12 @@
 	   (,i 0)
 	   (,svec (,pkgv . intsymvector))
 	   (,size (length ,svec)))
-	(while (< ,i ,size)
+	(or
+         (while (< ,i ,size)
 	   (setq ,v (elt ,svec ,i))
 	   (inc ,i)
 	   (when (symbolp ,v) . ,forms))
-	,(caddr vars))))
+         ,(caddr vars)))))
 
 (defmacro do-external-symbols (vars &rest forms)
    (let* ((symbols (gensym "DOEXTSYM"))
@@ -205,11 +208,12 @@
 	   (,i 0)
 	   (,svec (,pkgv . symvector))
 	   (,size (length ,svec)))
-	(while (< ,i ,size)
+	(or
+         (while (< ,i ,size)
 	   (setq ,v (elt ,svec ,i))
 	   (inc ,i)
 	   (when (symbolp ,v) . ,forms))
-	,(caddr vars))))
+         ,(caddr vars)))))
 
 (defmacro do-all-symbols (var &rest forms)
    (let ((apackage (gensym "DOALLSYM")))
