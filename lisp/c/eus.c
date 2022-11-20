@@ -128,6 +128,7 @@ pointer CLASS;
 pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
 pointer TOPLEVEL,QEVALHOOK,QEXITHOOK,FATALERROR;
+pointer SIGNALS;
 pointer QUNBOUND,QDEBUG,QGCHOOK,QGCDEBUG;
 pointer QTHREADS;	/* system:*threads* */
 pointer QPARAGC;
@@ -393,7 +394,7 @@ va_dcl
   va_end(args);
 
   /* call user's error handler function */
-  errhandler=getfunc_closure_noexcept(ctx, intern(ctx,"SIGNALS",7,lisppkg));
+  errhandler=getfunc_closure_noexcept(ctx, SIGNALS);
 
   /* get call stack */
   callstack=list_callstack(ctx,-1);
@@ -738,6 +739,7 @@ static void initsymbols()
   QGCHOOK=defvar(ctx,"*GC-HOOK*",NIL,syspkg);
   QEXITHOOK=defvar(ctx,"*EXIT-HOOK*",NIL,syspkg);
   FATALERROR=defvar(ctx,"*EXIT-ON-FATAL-ERROR*",NIL,lisppkg);
+  SIGNALS=intern(ctx,"SIGNALS",7,lisppkg);
 
   /*init character macro table*/
   for (i=0; i<256; i++) charmacro[i]=sharpmacro[i]=NIL;
