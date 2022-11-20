@@ -203,10 +203,10 @@ register pointer argv[];
 #if THREADED
   mutex_lock(&mark_lock);
   mark_locking="SUPEREQUAL";
+#endif
   result=superequal(argv[0],argv[1]);
+#if THREADED
   mutex_unlock(&mark_lock);
-#else
-  result=superequal(argv[0],argv[1]);
 #endif
   if (result==UNBOUND) error(E_CIRCULAR);
   else return(result);}

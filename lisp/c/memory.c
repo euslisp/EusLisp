@@ -385,7 +385,7 @@ int e,cid;
 #endif
   }
 #if THREADED
-    rw_rdlock(&gc_lock);
+    // rw_rdlock(&gc_lock);
 #endif
 #ifdef DEBUG
     fflush( stdout );
@@ -403,7 +403,7 @@ int e,cid;
     for (i=0; i<ss; i++) b->b.c[i]=0;
     tb[req].count--;
 #if THREADED
-    rw_unlock(&gc_lock);
+    // rw_unlock(&gc_lock);
 #endif
     }
   b->h.elmtype=e;
@@ -828,12 +828,17 @@ void gc()
 #if THREADED
 /*  mutex_lock(&alloc_lock);  is not needed since gc is assumed to be called
     from alloc_small or alloc_big and they have already locked alloc_lock.*/
+  rw_wrlock(&gc_lock);
+/*  the mark flag is also used in other parts of the code to judge equivalency
+    of pointers (superequal, copy-object, print-circle). To avoid dead-locks
+    when one of the above functions invokes the gc, return immediately and
+    allocate more memory instead. */
   r = mutex_trylock(&mark_lock);
   if ( r != 0 ) {
     if (debug) fprintf(stderr, ";; gc:mutex_lock %d ", r);
+    rw_unlock(&gc_lock);
     return;
   }
-  rw_wrlock(&gc_lock);
   suspend_all_threads();
 #endif
 
@@ -847,8 +852,8 @@ void gc()
 
 #if THREADED
   resume_all_threads();
-  rw_unlock(&gc_lock);
   mutex_unlock(&mark_lock);
+  rw_unlock(&gc_lock);
 /*  mutex_unlock(&alloc_lock); */
 #endif
   if (debug || speval(QGCDEBUG)!=NIL) {

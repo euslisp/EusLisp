@@ -22,7 +22,14 @@ pointer GEESEE(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ gc();
+{
+#if THREADED
+  mutex_lock(&alloc_lock);
+#endif
+  gc();
+#if THREADED
+  mutex_unlock(&alloc_lock);
+#endif
   return(cons(ctx,makeint(freeheap),
 	      cons(ctx,makeint(totalheap),NIL)));}
 
