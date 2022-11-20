@@ -896,10 +896,13 @@ static void initclasses()
   C_INDEXERROR=speval(basicclass("INDEX-ERROR",C_ERROR,&indexerrorcp,0));
   C_IOERROR=speval(basicclass("IO-ERROR",C_ERROR,&ioerrorcp,0));
 
+  /*populate sysobj*/
   for (i=0;i<MAXTHREAD;i++) {
     oblabels[i]=(pointer)makelabref(ctx,makeint(-1),UNBOUND,NIL);
     sysobj=cons(ctx,oblabels[i],sysobj);
   }
+  /*populate eussigobj*/
+  for (i=0; i<NSIG; i++) eussigobj=cons(ctx,eussigvec[i],eussigobj);
 }
 
 static void initfeatures()

@@ -372,6 +372,7 @@ pointer argv[];
   register pointer a=argv[1],oldval;
   extern void eusint();	
   unsigned long int j;
+  pointer p;
 
   ckarg2(1,3);
   s=min(ckintval(argv[0]),NSIG-1);
@@ -380,8 +381,9 @@ pointer argv[];
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(eusinteger_t)eusint; eussigvec[s]=a;}
   // update eussigobj value
-  eussigobj = NIL;
-  for (i=0; i<NSIG; i++) eussigobj=cons(ctx,eussigvec[i],eussigobj);
+  p = eussigobj;
+  for (i=0; i<s; i++) { p=ccdr(p);}
+  pointer_update(ccar(p), eussigvec[s]);
   // install handlers
   sv.sa_handler= (void (*)())f;
 #if Linux || Cygwin
@@ -425,8 +427,9 @@ pointer argv[];
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(eusinteger_t)eusint; eussigvec[s]=a;}/* ???? */
   // update eussigobj value
-  eussigobj = NIL;
-  for (i=0; i<NSIG; i++) eussigobj=cons(ctx,eussigvec[i],eussigobj);
+  p = eussigobj;
+  for (i=0; i<s; i++) { p=ccdr(p);}
+  pointer_update(ccar(p), eussigvec[s]);
   // install handlers
   sv.sv_handler=(void (*)())f;
   sv.sv_mask=0;	/*sigmask(s)???;*/
