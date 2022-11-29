@@ -48,16 +48,16 @@ register pointer sym;
   if (sym->c.sym.vtype==V_CONSTANT) return(sym->c.sym.speval);
   GC_POINT;
   while (bf!=NULL) {
-    var=bf->c.obj.iv[0];
-    val=bf->c.obj.iv[1];
+    var=bf->c.bfp.sym;
+    val=bf->c.bfp.val;
     if (sym==var) {		/*found in bind-frame*/
       if (val==UNBOUND) goto getspecial;
       return(val);}
     else if (var->cix==vectorcp.cix) {
       vaddr=getobjv(sym,var,val);
       if (vaddr) return(*vaddr);}
-    if (bf==bf->c.obj.iv[2] /* next */) break;
-    bf=bf->c.obj.iv[2];
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;
   }
   /*get special value from the symbol cell*/
   /*if (sym->c.sym.vtype==V_GLOBAL) goto getspecial;*/
@@ -78,15 +78,15 @@ register pointer sym,val;
     pointer_update(ctx->specials->c.vec.v[vt],val);
     return(val);}
   while (bf!=NULL) {
-    var=bf->c.obj.iv[0];
+    var=bf->c.bfp.sym;
     if (sym==var) {
-      if (bf->c.obj.iv[1]==UNBOUND) goto setspecial;
-      pointer_update(bf->c.obj.iv[1],val); return(val);}
+      if (bf->c.bfp.val==UNBOUND) goto setspecial;
+      pointer_update(bf->c.bfp.val,val); return(val);}
     else if (var->cix==vectorcp.cix) {
-      vaddr=getobjv(sym,var,bf->c.obj.iv[1]);
+      vaddr=getobjv(sym,var,bf->c.bfp.val);
       if (vaddr) {pointer_update(*vaddr,val); return(val);}}
-    if (bf==bf->c.obj.iv[2] /*next*/) break;
-    bf=bf->c.obj.iv[2];
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;
     GC_POINT;}
   /* no local var found. try global binding */
   if (sym->c.sym.vtype==V_CONSTANT) error(E_SETCONST,sym);
@@ -102,8 +102,8 @@ register context *ctx;
 register pointer f;	/*must be a symbol*/
 { pointer ffp=ctx->fletfp;
   while (ffp!=NULL && isfletframe(ffp)) {
-    if (ffp->c.obj.iv[0]==f) {  return(ffp->c.obj.iv[1]);}
-    else ffp=ffp->c.obj.iv[2];}
+    if (ffp->c.ffp.name==f) {  return(ffp->c.ffp.fclosure);}
+    else ffp=ffp->c.ffp.next;}
   return(f->c.sym.spefunc);}
 
 pointer getfunc_closure_noexcept(ctx,f)

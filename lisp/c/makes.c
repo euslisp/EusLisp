@@ -563,9 +563,9 @@ pointer sym,val,nxt;
   vpush(sym), vpush(val), vpush(nxt);
   bf=makeobject(C_BINDFRAME);
   // if (nxt==NULL) nxt=NIL;
-  bf->c.obj.iv[2]=vpop();  // nxt
-  bf->c.obj.iv[1]=vpop();  // val
-  bf->c.obj.iv[0]=vpop();  // sym
+  bf->c.bfp.next=vpop();  // nxt
+  bf->c.bfp.val=vpop();  // val
+  bf->c.bfp.sym=vpop();  // sym
   return(bf);}
 
 pointer makeflet(ctx,nm,def,scp,nxt)
@@ -587,11 +587,11 @@ pointer nm,def,scp,nxt;
   p=cons(ctx,LAMCLOSURE,p);
   vpush(p);
   ff=makeobject(C_FLETFRAME);
-  ff->c.obj.iv[1]=vpop();  // p
-  ff->c.obj.iv[2]=vpop();  // nxt
+  ff->c.ffp.fclosure=vpop();  // p
+  ff->c.ffp.next=vpop();  // nxt
   vpop();  // scp
   vpop();  // def
-  ff->c.obj.iv[0]=vpop();  // nm
+  ff->c.ffp.name=vpop();  // nm
   vpush(ff);
   ctx->fletfp=ff;
   return(ff);}
@@ -604,9 +604,9 @@ pointer nm,def,nxt;
   p=cons(ctx,MACRO,def);
   vpush(p);
   ff=makeobject(C_FLETFRAME);
-  ff->c.obj.iv[1]=vpop();  // p
-  ff->c.obj.iv[2]=vpop();  // nxt
-  ff->c.obj.iv[0]=vpop();  // nm
+  ff->c.ffp.fclosure=vpop();  // p
+  ff->c.ffp.next=vpop();  // nxt
+  ff->c.ffp.name=vpop();  // nm
   vpush(ff);
   ctx->fletfp=ff;
   return(ff);}

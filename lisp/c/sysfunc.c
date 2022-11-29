@@ -778,10 +778,10 @@ pointer *argv;
     else if (isint(argv[0]) && intval(argv[0])==0) return(NIL);
     else error(E_NOBINDFRAME);}
   while (bf) {
-    vpush(cons(ctx,bf->c.obj.iv[0],bf->c.obj.iv[1]));
+    vpush(cons(ctx,bf->c.bfp.sym,bf->c.bfp.val));
     i++;
-    if (bf==bf->c.obj.iv[2]) break;
-    bf=bf->c.obj.iv[2];}
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;}
   return(stacknlist(ctx,i));}
 
 pointer LISTFUNCTIONBINDINGS(ctx,n,argv)
@@ -797,10 +797,10 @@ pointer *argv;
     else if (isint(argv[0]) && intval(argv[0])==0) return(NIL);
     else error(E_NOFLETFRAME);}
   while (ff) {
-    vpush(cons(ctx,ff->c.obj.iv[0],ff->c.obj.iv[1]));
+    vpush(cons(ctx,ff->c.ffp.name,ff->c.ffp.fclosure));
     i++;
-    if (ff==ff->c.obj.iv[2]) break;
-    ff=ff->c.obj.iv[2];}
+    if (ff==ff->c.ffp.next) break;
+    ff=ff->c.ffp.next;}
   return(stacknlist(ctx,i));}
 
 pointer LISTFUNCTIONBINDINGS(ctx,n,argv)

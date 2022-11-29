@@ -367,6 +367,16 @@ struct threadport {
   pointer idle;
   pointer wait;};
 
+struct bindframe {
+  pointer sym;
+  pointer val;
+  pointer next;};
+
+struct fletframe {
+  pointer name;
+  pointer fclosure;
+  pointer next;};
+
 /* extended numbers */
 struct ratio {
   pointer numerator;
@@ -422,6 +432,8 @@ typedef
       struct vecclass vcls;
       struct readtable rdtab;
       struct threadport thrp;
+      struct bindframe bfp;
+      struct fletframe ffp;
       struct ratio ratio;
       struct complex cmplx;
       struct bignum  bgnm;
