@@ -1222,13 +1222,24 @@ pointer argv[];
     return(makesymbol(ctx,(char *)buf,strlen(buf),NIL));
 }
 
+pointer getprop(ctx,sym,attr,retval)
+register context *ctx;
+register pointer sym,attr,retval;
+{ register pointer p;
+  p=sym->c.sym.plist;
+  while (iscons(p)) {
+    if (!iscons(ccar(p))) error(E_NOLIST);
+    if (ccar(ccar(p))==attr) return(ccdr(ccar(p)));
+    else p=ccdr(p);
+  }
+  return(retval);}
+
 pointer GETPROP(ctx,n,argv)
 register context *ctx;
 int n;
 register pointer argv[];
-{ register pointer p,attr=argv[1];
-  ckarg2(2,3);
-  if (!ispropobj(argv[0]) || !ispropobj(attr)) error(E_NOSYMBOL);
+{ ckarg2(2,3);
+  if (!ispropobj(argv[0]) || !ispropobj(argv[1])) error(E_NOSYMBOL);
 #ifdef SPEC_DEBUG
   printf( "GETPROP:" );
   { int i;
@@ -1237,13 +1248,7 @@ register pointer argv[];
 }
   printf( "\n" );
 #endif
-  p=argv[0]->c.sym.plist;
-  while (iscons(p)) {
-    if (!iscons(ccar(p))) error(E_NOLIST);
-    if (ccar(ccar(p))==attr) return(ccdr(ccar(p)));
-    else p=ccdr(p);
-  }
-  if (n==3) return(argv[2]); else return(NIL);}
+  return(getprop(ctx,argv[0],argv[1],n>=3?argv[2]:NIL));}
 
 pointer EXPORT (ctx,n,argv)	/*further name conflict checks should be
 				  performed by EusLisp*/
@@ -1291,8 +1296,7 @@ pointer PUTPROP(ctx,n,argv)	/*(putprop sym val attr)*/
 register context *ctx;
 int n;
 register pointer argv[];
-{ register pointer p,pp;
-  ckarg(3);
+{ ckarg(3);
   if (!ispropobj(argv[0]) || !ispropobj(argv[2])) error(E_NOSYMBOL);
 #ifdef SPEC_DEBUG
   printf( "PUTPROP:" );

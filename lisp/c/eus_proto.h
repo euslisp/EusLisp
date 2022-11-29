@@ -599,6 +599,7 @@ extern pointer FINDSYMBOL(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer INTERN(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer gensym(context */*ctx*/);
 extern pointer GENSYM(context */*ctx*/, int /*n*/, pointer /*argv*/*);
+extern pointer getprop(context */*ctx*/, pointer /*sym*/, pointer /*attr*/, pointer /*retval*/);
 extern pointer GETPROP(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer EXPORT(context */*ctx*/, int /*n*/, pointer /*argv*/*);
 extern pointer putprop(context */*ctx*/, pointer /*sym*/, pointer /*val*/, pointer /*attr*/);
