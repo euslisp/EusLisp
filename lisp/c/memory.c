@@ -166,7 +166,7 @@ int fillchunk(k)
 register int k;
 { numunion nu;
   float gcm;
-  int j;
+  int j=0;
   gcm=min(0.9,fltval(speval(GCMARGIN)));
   while (freeheap<(totalheap*gcm)) {
     j=newchunk(k);
