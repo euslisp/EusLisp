@@ -187,13 +187,14 @@
 ;
 (eval-when (load compile eval)
 (defclass closure-identifier :super object
-  :slots (entry def newcomp cframes fframes))
+  :slots (name entry def newcomp cframes fframes))
 )
 
 (eval-when (load eval)
 (defmethod closure-identifier
-  (:init (ent form cmp cf ff)
-    (setq entry ent
+  (:init (sym ent form cmp cf ff)
+    (setq name sym
+          entry ent
           def form
           newcomp cmp
           cframes cf
@@ -210,7 +211,7 @@
         ;; only reassign the most recent level
         (when (eq (fdef . cbindframe) t)
           (setq (fdef . cbindframe) (position (fdef . bindframe) cbind))))
-      (send newcomp :compile-a-closure entry def))))
+      (send newcomp :compile-a-closure name entry def))))
 )
 
 ;	identifier table
@@ -1146,7 +1147,7 @@
               (send trans :store-local j 0 (frame . offset))))))
       ;; makeclosure
       (send trans :closure form (plusp closure-level) (not (not frame)))))
- (:lambda-preevaluation (fn &optional newcomp)
+ (:lambda-preevaluation (fn &optional name newcomp)
     ;; pre-evaluate a closure definition and collect all referenced variables.
     ;; then, add the reference function to each variable's `clist'
     (let ((param (cadr fn))
@@ -1156,7 +1157,9 @@
         (setq (newcomp . idtable) idtable)
         (setq (newcomp . flets) flets))
       (flet ((lambda-closure-frames ()
+               (send newcomp :enter-block name)
                (send newcomp :lambda param forms nil)
+               (send newcomp :leave-block)
                (when (listp closure-frames)
                  (dolist (v closure-frames)
                    (pushnew fn (identifier-clist v))))
@@ -1192,7 +1195,7 @@
             ;; make cleanup closure
             (send self :closure cleaner "unwind protect" cframes fframes)
             (setq newcomp (send self :copy-compiler))
-            (send self :add-closure cleaner fn newcomp cframes fframes)))
+            (send self :add-closure nil cleaner fn newcomp cframes fframes)))
       (send trans :bind-cleaner)
       (send self :eval prot)
       (send trans :call-cleaner cleaner)
@@ -1263,7 +1266,7 @@
                (setq entry (send self :genlabel "CLO"))
                (send self :closure entry "lambda-closure" cframes fframes)
                (setq newcomp (send self :copy-compiler))
-               (send self :add-closure entry fn newcomp cframes fframes))))))
+               (send self :add-closure nil entry fn newcomp cframes fframes))))))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
      (let (newcomp newcomps flets-tmp flist fletframe)
@@ -1287,7 +1290,7 @@
           (setq (newcomp . flets) (append flets-tmp flets))
           (setq (newcomp . idtable) idtable)
           (dolist (fn flets-tmp)
-            (send self :lambda-preevaluation (fn . body) newcomp)))
+            (send self :lambda-preevaluation (fn . body) (fn . name) newcomp)))
 
         ;; pre-evaluate body
         (let ((trans (send trans :copy-translator))
@@ -1315,7 +1318,7 @@
               (send self :closure (fn . entry) "flet env" cframes fframes)
               (setq (fn . offset) (1- (send trans :offset-from-fp)))
               (send self :add-closure
-                    (fn . entry) (fn . body) (fn . newcomp) cframes fframes))))
+                    (fn . name) (fn . entry) (fn . body) (fn . newcomp) cframes fframes))))
 
         (if (not recursive-scope)
           ;; when not recursive setup the bindframe after the closure declaration
@@ -1740,19 +1743,22 @@
 (eval-when (load eval)
 (defmethod compiler
  (:add-initcode (form) (setq initcodes (cons form initcodes)))
- (:add-closure (entry def newcomp cframes fframes)
-   (let ((clo (instance closure-identifier :init entry def newcomp cframes fframes)))
+ (:add-closure (name entry def newcomp cframes fframes)
+   (let ((clo (instance closure-identifier :init name entry def newcomp cframes fframes)))
      (setq function-closures (cons clo function-closures))))
  (:closure-level (increment)  (inc closure-level increment))
- (:compile-a-closure (entry def)
-   (if *debug* (format t ";closure: ~s~%" def))
-   (let* ((param (cadr def)) (bodies (cddr def)))
+ (:compile-a-closure (name entry def)
+   (if *debug* (format t ";closure: ~s: ~s~%" name def))
+   (let* ((param (cadr def)) (bodies (cddr def)) blklabel)
       (setq function-closures nil)
       (send trans :declare-forward-function entry)
       (send trans :enter entry "closure or cleaner")
 ;      (send trans :pushenv)
+      (setq blklabel (send self :enter-block name))
       (send self :lambda param bodies)
+      (send trans :label blklabel)
       (send trans :return)
+      (send self :leave-block)
       (send self :compile-closures)
      )
    )
