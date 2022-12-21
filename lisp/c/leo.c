@@ -555,7 +555,7 @@ register pointer org;
   register int i,s;
   int etype;
 
-  if (isnum(org) || issymbol(org) || isclass(org)) return(org);
+  if (org==NULL || isnum(org) || issymbol(org) || isclass(org)) return(org);
   /* eus_rbar *//* if ((org==0) || isnum(org) || issymbol(org) || isclass(org)) return(org); */
   x=org->c.obj.iv[1];
   if (p_marked(org)) return(cpvec[intval(x)]);
@@ -614,7 +614,7 @@ register pointer obj;
 { pointer x,klass;
   register int i,s;
 
-  if (isnum(obj) || pissymbol(obj) || pisclass(obj)) return;
+  if (obj==NULL || isnum(obj) || pissymbol(obj) || pisclass(obj)) return;
   x=obj->c.obj.iv[1];
   if (p_marked(obj)) {
     pointer_update(obj->c.obj.iv[1],cpvec[intval(x)+1]);
