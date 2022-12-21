@@ -161,7 +161,7 @@
 ;
 (eval-when (load compile eval)
 (defclass function-identifier :super object
-  :slots (name entry binding level offset bindframe cbindframe body comp clist))
+  :slots (name entry binding level offset bindframe cbindframe body newcomp clist))
 )
 
 (eval-when (load eval)
@@ -173,7 +173,7 @@
           level lev
           entry ent
           body bd
-          comp cmp
+          newcomp cmp
           bindframe nil)
      self)
   (:init-body (sym bin &optional bd)
@@ -181,6 +181,36 @@
           binding bin
           body bd)
      self))
+)
+
+;	closure identifier
+;
+(eval-when (load compile eval)
+(defclass closure-identifier :super object
+  :slots (entry def newcomp cframes fframes))
+)
+
+(eval-when (load eval)
+(defmethod closure-identifier
+  (:init (ent form cmp cf ff)
+    (setq entry ent
+          def form
+          newcomp cmp
+          cframes cf
+          fframes ff)
+     self)
+  (:compile ()
+    (let ((cbind (append cframes fframes)))
+      (setq (newcomp . current-cframes) (cons cframes (newcomp . current-cframes)))
+      (setq (newcomp . current-fframes) (cons fframes (newcomp . current-fframes)))
+      (setq (newcomp . current-csize) (cons (length cbind) (newcomp . current-csize)))
+      ;; recalculate function cbindings
+      (setq (newcomp . flets) (copy-object (newcomp . flets)))
+      (dolist (fdef (newcomp . flets))
+        ;; only reassign the most recent level
+        (when (eq (fdef . cbindframe) t)
+          (setq (fdef . cbindframe) (position (fdef . bindframe) cbind))))
+      (send newcomp :compile-a-closure entry def))))
 )
 
 ;	identifier table
@@ -1162,7 +1192,7 @@
             ;; make cleanup closure
             (send self :closure cleaner "unwind protect" cframes fframes)
             (setq newcomp (send self :copy-compiler))
-            (send self :add-closure (list cleaner fn newcomp cframes fframes))))
+            (send self :add-closure cleaner fn newcomp cframes fframes)))
       (send trans :bind-cleaner)
       (send self :eval prot)
       (send trans :call-cleaner cleaner)
@@ -1233,7 +1263,7 @@
                (setq entry (send self :genlabel "CLO"))
                (send self :closure entry "lambda-closure" cframes fframes)
                (setq newcomp (send self :copy-compiler))
-               (send self :add-closure (list entry fn newcomp cframes fframes)))))))
+               (send self :add-closure entry fn newcomp cframes fframes))))))
  (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
      (let (newcomp newcomps flets-tmp flist fletframe)
@@ -1285,7 +1315,7 @@
               (send self :closure (fn . entry) "flet env" cframes fframes)
               (setq (fn . offset) (1- (send trans :offset-from-fp)))
               (send self :add-closure
-                    (list (fn . entry) (fn . body) (fn . comp) cframes fframes)))))
+                    (fn . entry) (fn . body) (fn . newcomp) cframes fframes))))
 
         (if (not recursive-scope)
           ;; when not recursive setup the bindframe after the closure declaration
@@ -1710,7 +1740,9 @@
 (eval-when (load eval)
 (defmethod compiler
  (:add-initcode (form) (setq initcodes (cons form initcodes)))
- (:add-closure (clo) (setq function-closures (cons clo function-closures)))
+ (:add-closure (entry def newcomp cframes fframes)
+   (let ((clo (instance closure-identifier :init entry def newcomp cframes fframes)))
+     (setq function-closures (cons clo function-closures))))
  (:closure-level (increment)  (inc closure-level increment))
  (:compile-a-closure (entry def)
    (if *debug* (format t ";closure: ~s~%" def))
@@ -1726,22 +1758,7 @@
    )
  (:compile-closures ()
    (dolist (aclosure (reverse function-closures))
-     (let* ((entry (first aclosure))
-            (def (second aclosure))
-            (newcomp (third aclosure))
-            (cframes (fourth aclosure))
-            (fframes (fifth aclosure))
-            (cbind (append cframes fframes)))
-       (setq (newcomp . current-cframes) (cons cframes (newcomp . current-cframes)))
-       (setq (newcomp . current-fframes) (cons fframes (newcomp . current-fframes)))
-       (setq (newcomp . current-csize) (cons (length cbind) (newcomp . current-csize)))
-       ;; recalculate function cbindings
-       (setq (newcomp . flets) (copy-object (newcomp . flets)))
-       (dolist (fdef (newcomp . flets))
-         ;; only reassign the most recent level
-         (when (eq (fdef . cbindframe) t)
-           (setq (fdef . cbindframe) (position (fdef . bindframe) cbind))))
-       (send newcomp :compile-a-closure entry def)))
+     (send aclosure :compile))
    (setq function-closures nil))
  (:toplevel-eval (form)
    (setq function-closures nil)
