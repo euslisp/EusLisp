@@ -441,8 +441,15 @@ Euslispコンパイラを呼びだす。}
 モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
 {\em :pic}は、Tに設定すべきである。}
 
-\funcdesc{compile}{funcname}{
+\funcdesc{compile}{\&rest funcnames}{
 関数をコンパイルする。{\bf compile}は、最初に関数定義をテンポラリファイルに
+出力する。そのファイルは、{\bf compile-file}によってコンパイルされ、
+それから{\bf load}によってロードされる。
+テンポラリファイルは削除される。}
+
+\funcdesc{compile-method}{obj meth}{
+オプジェクトインスタンスやクラス{\em obj}のメソッド{\em meth}をコンパイルする。
+{\bf compile-method}は、最初にメソッド定義をテンポラリファイルに
 出力する。そのファイルは、{\bf compile-file}によってコンパイルされ、
 それから{\bf load}によってロードされる。
 テンポラリファイルは削除される。}

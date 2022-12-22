@@ -481,9 +481,15 @@ levels.
 {\em :Pic} should be set T, unless the module is hard-linked in the
 EusLisp core during the make stage.}
 
-\funcdesc{compile}{funcname}{
+\funcdesc{compile}{\&rest funcnames}{
 compiles a function.
-{\bf Compile} first prints the function definition into a temporary file.
+{\bf Compile} first prints the function definitions into a temporary file.
+The file is compiled by {\bf compile-file} and then is loaded by {\bf load}.
+Temporary files are deleted.}
+
+\funcdesc{compile-method}{obj meth}{
+compiles the method {\em meth} of the class or object instance {\em obj}.
+{\bf Compile-method} first prints the method definition into a temporary file.
 The file is compiled by {\bf compile-file} and then is loaded by {\bf load}.
 Temporary files are deleted.}
 
