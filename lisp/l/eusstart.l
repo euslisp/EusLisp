@@ -339,6 +339,7 @@
 	(system::exec-module-init "builtins" "comp/builtins.l")
 	(in-package "LISP")
 	(import '(comp:comfile
+                  comp:compile-method
 		  comp:compile-file
 		  comp:compile-file-if-src-newer
 		  sys:gc
@@ -346,7 +347,7 @@
 		 ;; unix::exit
 		  ))
 	)
-	(export '(compile comfile compile-file compile-file-if-src-newer
+	(export '(compile compile-method comfile compile-file compile-file-if-src-newer
                   gc alloc runtime))
 	(alias 'exit 'unix::exit)
 ;;

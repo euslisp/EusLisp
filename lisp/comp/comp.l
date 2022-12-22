@@ -15,7 +15,7 @@
 (in-package "COMPILER")
 
 (eval-when (load eval)
-	(export '(compile compile-file comfile identifier
+	(export '(compile compile-method compile-file comfile identifier
 		  compile-file-if-src-newer))
 	(export '(*safety* *space* *verbose* *optimize* *speed* *cc*
 		  *type-check-declare*)))
@@ -2053,27 +2053,48 @@
 (defun compile-file (file &rest keys)
     (send* comp :compile-file file keys))
 
+(defun compile-tmp (fname)
+  (let (pname)
+    (compile-file fname)
+    (unix:unlink fname)
+    (setq pname (make-pathname :defaults fname :type "c"))
+    (unix:unlink (namestring pname))
+    (setq pname (make-pathname :defaults fname :type "h"))
+    (unix:unlink (namestring pname))
+    (setq pname (make-pathname :defaults fname :type
+                               #-(or :linux :cygwin) "o"
+                               #+:cygwin       "dll"
+                               #+:linux	"so"
+                               ))
+    (load pname)
+    (unix:unlink (namestring pname))
+    #+(or :linux :cygwin)
+    (unix:unlink (namestring (make-pathname :defaults fname :type "o")))
+    pname))
+
 (defun compile (&rest funcs)
     (let ((fname (format nil "eus~d~A.l" (unix:getpid)
-			(symbol-name (gensym "C")))) (pname))
+			(symbol-name (gensym "C")))))
+      (setq funcs (remove-if #'compiled-function-p funcs :key #'symbol-function))
       (apply #'dump-function fname funcs)
-      (compile-file fname)
-      (unix:unlink fname)
-      (setq pname (make-pathname :defaults fname :type "c"))
-      (unix:unlink (namestring pname))
-      (setq pname (make-pathname :defaults fname :type "h"))
-      (unix:unlink (namestring pname))
-      (setq pname (make-pathname :defaults fname :type
-        #-(or :linux :cygwin) "o"
-        #+:cygwin       "dll"
-	#+:linux	"so"
-	))
-      (load pname)
-      (unix:unlink (namestring pname))
-      #+(or :linux :cygwin)
-      (unix:unlink (namestring (make-pathname :defaults fname :type "o")))
-      funcs
-      ))
+      (compile-tmp fname)
+      funcs))
+
+(defun compile-method (obj meth)
+  (let ((fname (format nil "eus~d~A.l" (unix:getpid)
+                       (symbol-name (gensym "C"))))
+        (kls (if (classp obj) obj (class obj)))
+        (body (if (classp obj)
+                  (assoc meth (send obj :methods))
+                  (cadr (find-method obj meth)))))
+    (cond
+      ((not body) nil)
+      ((compiled-function-p (second body)) t)
+      (t
+       (with-open-file (f fname :direction :output)
+         (format f "~S~%" `(defmethod ,(send kls :name) ,body)))
+       (compile-tmp fname)
+       meth))))
 
 (defun compile-file-if-src-newer (srcfile &optional (objdir "./")
 					  &rest args)
