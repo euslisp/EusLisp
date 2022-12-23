@@ -248,7 +248,7 @@
                                 :exit-on-error exit-on-error))
 
     (when trace
-      (setf (symbol-function 'defun-org) (symbol-function 'defun))
+      (alias 'defun-org 'defun)
       (defmacro defun (name args &rest body)
         `(prog1
            (defun-org ,name ,args ,@body)
