@@ -116,6 +116,9 @@
    (if (null (= req n))
        (error argument-error "mismatch arg for ~A" fn)))
 
+(defun function-alias (sym)
+  (or (get sym 'function-alias) sym))
+
 (defun def-function-type (type funcs)
    (dolist (f funcs) (putprop f type 'function-result-type)))
 
@@ -668,6 +671,7 @@
 (eval-when (load eval)
 (defmethod compiler
  (:funcall (sym args)
+    (setq sym (function-alias sym))
     (let ((argcount (length args)) (arg-type-list nil) (entry))
 	(declare (type integer argcount))
 	(if (null (memq sym '(slot setslot)))
@@ -840,7 +844,7 @@
 (eval-when (load eval)
 (defmethod compiler
  (:special-form (fn args)
-    (case fn
+    (case (function-alias fn)
 	((quote) (send trans :load-quote (car args)) t)
 	((setq) (send self :setq args))
 	((if) (send self :if args) t)
@@ -1768,7 +1772,7 @@
    (setq function-closures nil))
  (:toplevel-eval (form)
    (setq function-closures nil)
-   (let* ((fn (car form)))
+   (let* ((fn (function-alias (car form))))
      (case fn
 	((defun defmacro)
 	 (send self :defun fn (cadr form) (caddr form) (cdddr form))

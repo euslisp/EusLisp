@@ -284,8 +284,6 @@
     (let ((entry))
        (setq entry (get sym 'user-function-entry))
        (if (null entry) (setq entry (get sym 'builtin-function-entry)))
-       (if (and (null entry) (get sym 'function-alias))
-           (setq entry (get (get sym 'function-alias) 'builtin-function-entry)))
        (send self :clearpush)
        (send self :reset-vsp)
        (if (and (not (functionp sym)) (not avant-mode))
