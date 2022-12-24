@@ -2084,21 +2084,25 @@
       (compile-tmp fname)
       funcs))
 
-(defun compile-method (obj meth)
+(defun compile-method (obj &rest meths)
   (let ((fname (format nil "eus~d~A.l" (unix:getpid)
                        (symbol-name (gensym "C"))))
         (kls (if (classp obj) obj (class obj)))
-        (body (if (classp obj)
-                  (assoc meth (send obj :methods))
-                  (cadr (find-method obj meth)))))
-    (cond
-      ((not body) nil)
-      ((compiled-function-p (second body)) t)
-      (t
-       (with-open-file (f fname :direction :output)
-         (format f "~S~%" `(defmethod ,(send kls :name) ,body)))
-       (compile-tmp fname)
-       meth))))
+        body)
+    (labels ((get-method (meth)
+               (if (classp obj)
+                   (assoc meth (send obj :methods))
+                   (cadr (find-method obj meth))))
+             (to-compile (def)
+               (and (consp def) (not (compiled-function-p (second def))))))
+
+      (setq body (mapcar #'get-method meths))
+      (setq body (remove-if-not #'to-compile body))
+      (when body
+        (with-open-file (f fname :direction :output)
+          (format f "~S~%" `(defmethod ,(send kls :name) ,@body)))
+        (compile-tmp fname)
+        (mapcar #'car body)))))
 
 (defun compile-file-if-src-newer (srcfile &optional (objdir "./")
 					  &rest args)
