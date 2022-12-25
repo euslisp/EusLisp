@@ -2050,7 +2050,7 @@
 	   (setq dump
 	    (case (car def)
 		(lambda `(defun ,funmac . ,(cdr def)))
-		(macro  `(defun ,funmac . ,(cdr def)))))
+		(macro  `(defmacro ,funmac . ,(cdr def)))))
 	  (pprint dump f) ))) )
 
 (defun comfile (&rest files) (dolist (f files) (send comp :compile-file f)))
