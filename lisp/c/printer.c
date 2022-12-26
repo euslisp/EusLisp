@@ -312,7 +312,7 @@ register context *ctx;
 register pointer p;
 { register int i,s;
 
-  if (isnum(p) || (pissymbol(p) && p->c.sym.homepkg != NIL) ) return;
+  if (p==NULL || isnum(p) || (pissymbol(p) && p->c.sym.homepkg != NIL) ) return;
   if (!p_marked(p)) {
     p_mark_on(p);
     if (pissymbol(p)) return;
@@ -599,7 +599,7 @@ register int prlevel;
 static void printunmark(p)
 register pointer p;
 { register int i,s;
-  if (isnum(p)) return;
+  if (p==NULL || isnum(p)) return;
   if (!s_marked(p) && !p_marked(p)) return;
   if (s_marked(p))
     if (p_marked(p)) fprintf(stderr,"smarked?\n");
