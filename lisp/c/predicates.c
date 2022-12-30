@@ -165,6 +165,7 @@ register pointer x,y;
   register eusinteger_t *cx,*cy;
   if (x==y) return(T);
   if (isnum(x) || isnum(y)) return(NIL);
+  if (x==NULL || y==NULL) return(NIL);
   if (x->cix != y->cix) return(NIL);	/*different class*/
   if (pissymbol(x)) return(NIL);
   xe=elmtypeof(x);
