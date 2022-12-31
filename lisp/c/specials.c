@@ -1043,7 +1043,7 @@ register pointer *argv;
 #ifdef SPEC_DEBUG
   printf( "SETFUNC:" ); hoge_print_sub(argv[0]); hoge_print(argv[1]);
 #endif
-  setfunc(argv[0],argv[1]);
+  pointer_update(argv[0]->c.sym.spefunc,argv[1]);
   return(argv[1]);}
 
 pointer SYMFUNC(ctx,n,argv)

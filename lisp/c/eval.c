@@ -155,11 +155,6 @@ pointer s;
   if ((f=s->c.sym.spefunc)==UNBOUND) error(E_UNDEF,s);
   else return(f);}
 
-
-void setfunc(sym,func)
-register pointer sym,func;
-{ pointer_update(sym->c.sym.spefunc,func);}
-
 pointer *ovafptr(o,v)
 register pointer o,v;
 { register pointer c,*vaddr;

@@ -308,7 +308,7 @@
     (send self :discard argc)
     (send self :push "w"))
  (:getfunc (sym)
-    (send self :push (format nil "(pointer)get_sym_func(fqv[~d])"
+    (send self :push (format nil "(pointer)getfunc_closure(ctx,fqv[~d])"
 				(send self :quote-entry sym))))
 )
 
