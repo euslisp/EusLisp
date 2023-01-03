@@ -552,27 +552,36 @@ register context *ctx;
 register pointer org;
 { register pointer clone;
   pointer klass,x;
-  register int i,s;
+  register int i,s,off;
   int etype;
 
   if (org==NULL || isnum(org) || issymbol(org) || isclass(org)) return(org);
   /* eus_rbar *//* if ((org==0) || isnum(org) || issymbol(org) || isclass(org)) return(org); */
-  x=org->c.obj.iv[1];
+  klass=classof(org);
+  if (isvecclass(klass)) off=1;
+  else off=0;
+
+  x=org->c.obj.iv[off];
   if (p_marked(org)) return(cpvec[intval(x)]);
   p_mark_on(org);
-  klass=classof(org);
   if (isvecclass(klass)) {
     etype=elmtypeof(org);
     s=vecsize(org);
-    clone=makevector(klass,s);
-    elmtypeof(clone)=etype;
     switch(etype) {
       case ELM_BIT: s=(s+WORD_SIZE-1)/WORD_SIZE; break;
       case ELM_BYTE: case ELM_CHAR: s=(s+sizeof(eusinteger_t))/sizeof(eusinteger_t); break;
-	case ELM_FOREIGN: s=1; break; }}
+	case ELM_FOREIGN: s=1; break; }
+    if (s==0) {
+      p_mark_off(org);
+      return(org);}
+    clone=makevector(klass,vecsize(org));
+    elmtypeof(clone)=etype;}
   else {
     etype=ELM_FIXED;
     s=objsize(org);
+    if (s==0) {
+      p_mark_off(org);
+      return(org);}
     clone=(pointer)makeobject(klass);}
 
   if (ctx->vsp>ctx->stacklimit)
@@ -580,21 +589,21 @@ register pointer org;
       fprintf(stderr,"cannot copy\n"); euslongjmp(cpyjmp,ERR);}
 #ifdef RGC /* R.Hanai */
   if (etype == ELM_FIXED || etype == ELM_POINTER) {
-    pointer_update(org->c.obj.iv[1],makeint(cpx));
+    pointer_update(org->c.obj.iv[off],makeint(cpx));
   } else {
-    org->c.obj.iv[1] = makeint(cpx);
+    org->c.obj.iv[off] = makeint(cpx);
   }
 #else
-  pointer_update(org->c.obj.iv[1],makeint(cpx));
+  pointer_update(org->c.obj.iv[off],makeint(cpx));
 #endif
   vpush(clone);
   vpush(x);
   cpx += 2;
   switch (etype) {
     case ELM_FIXED:
-	    if (s>1) clone->c.obj.iv[1]=copyobj(ctx,x);
-	    if (s>0) clone->c.obj.iv[0]=copyobj(ctx,org->c.obj.iv[0]);
-	    for (i=2; i<s; i++) clone->c.obj.iv[i]=copyobj(ctx,org->c.obj.iv[i]);
+	    if (off) error(E_PROGRAM_ERROR,(pointer)"object class expected");
+	    if (s>0) clone->c.obj.iv[0]=copyobj(ctx,x);
+	    for (i=1; i<s; i++) clone->c.obj.iv[i]=copyobj(ctx,org->c.obj.iv[i]);
 	    break;
     case ELM_POINTER:
 	    if (s>0) clone->c.vec.v[0]=copyobj(ctx,x);
@@ -612,12 +621,15 @@ register pointer org;
 void copyunmark(obj)
 register pointer obj;
 { pointer x,klass;
-  register int i,s;
+  register int i,s,off;
 
   if (obj==NULL || isnum(obj) || pissymbol(obj) || pisclass(obj)) return;
-  x=obj->c.obj.iv[1];
+  klass=classof(obj);
+  if (isvecclass(klass)) off=1;
+  else off=0;
+  x=obj->c.obj.iv[off];
   if (p_marked(obj)) {
-    pointer_update(obj->c.obj.iv[1],cpvec[intval(x)+1]);
+    pointer_update(obj->c.obj.iv[off],cpvec[intval(x)+1]);
     p_mark_off(obj);
     if (pisvector(obj)) {
       if (elmtypeof(obj)<ELM_POINTER) return;
