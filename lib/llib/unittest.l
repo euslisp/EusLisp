@@ -116,10 +116,10 @@
    (cond
      ((derivedp failure error)
       (if result
-          (format *error-output* "~C[3~Cm[ERROR] test ~A failed at ~A" #x1b 49
+          (format *error-output* "~C[3~Cm[ERROR] test ~A failed at ~S" #x1b 49
               (unit-test-result-name (car result))
               (send failure :form))
-          (format *error-output* "~C[3~Cm[ERROR] test failed at ~A" #x1b 49
+          (format *error-output* "~C[3~Cm[ERROR] test failed at ~S" #x1b 49
               (send failure :form)))
       (format *error-output* " ... (~A)" (send failure :message))
       (format *error-output* ".~C[0m~%" #x1b))
