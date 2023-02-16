@@ -334,7 +334,8 @@ register pointer argv[];
     if (islist(target)) {	/*ignore non-pair elements*/
       if (rassoc==NIL) temp=ccar(target);
       else temp=ccdr(target);
-      if (key!=NIL) temp=call1(ctx,key,temp);
+      if (key==NIL) temp=ccar(target);
+      else temp=call1(ctx,key,target);
       if (ifnottest!=NIL) compare=(call1(ctx,ifnottest,temp)==NIL);
       else if (iftest!=NIL) compare=(call1(ctx,iftest,temp)!=NIL);
       else if (testnot!=NIL) compare=(call2(ctx,testnot,item,temp)==NIL);
