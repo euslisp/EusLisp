@@ -1012,7 +1012,11 @@ pointer argv[];
   else if (isvector(seq)) {
     COMPTYPE=elmtypeof(seq);
     if (COMPTYPE==ELM_CHAR || COMPTYPE==ELM_BYTE) width=1;
-    else if (COMPTYPE==ELM_BIT || COMPTYPE==ELM_FOREIGN) error(E_NOVECTOR);
+    else if (COMPTYPE==ELM_BIT || COMPTYPE==ELM_FOREIGN) {
+#if THREADED
+      mutex_unlock(&qsort_lock);
+#endif
+      error(E_NOVECTOR);}
     else width=sizeof(eusinteger_t);
     qsort(seq->c.vec.v,vecsize(seq),width,(int (*)())compar);}
 #if THREADED
