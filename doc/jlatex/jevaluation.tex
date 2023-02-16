@@ -145,6 +145,18 @@ EusLispでは以下のコンディションクラスが定義され、Unixシグ
 コンディション{\em obj}を定義し、Unixシグナル{\em sig}を受信する度にそれをsignalizeする。
 定義されるコンディションは{\em unix::signal-received}の子クラスであり、signalizeされるインスタンスは{\em init-args}によって初期化される。}
 
+互換性のため、以下の処理方法も定義されている。
+
+\funcdesc{eussig}{sig code}{
+SIGPIPEのデフォルトシグナルハンドラー。
+{\bf *signal-handlers*}に格納されているハンドラーを実行した後、シグナル番号を出力し新たなREPLレベルに入る。}
+
+\vardesc{*signal-handlers*}{
+{\bf eussig}に用いられるハンドラー関数を格納するベクトル.}
+
+\vardesc{*error-handler*}{
+NILでない時、エラーをハンドリングする関数を指定する。その関数は４つの引数を受け取る:エラー番号、メッセージ、評価されていたexpression、そしてオプショナルな追加メッセージ。}
+
 \end{refdesc}
 
 \newpage

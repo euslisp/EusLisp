@@ -145,6 +145,19 @@ Formats the message of {\em err} object to the output stream {\em os}.}
 Defines the condition {\em obj} and signalizes it every time the unix signal {\em sig} is received.
 The condition class is defined as a child of {\em unix::signal-received} and the instances signalized are initialized with {\em init-args}.}
 
+The following handling methods are also defined for backward compatibility.
+
+\funcdesc{eussig}{sig code}{
+Is the default signal hander for SIGPIPE.
+After evaluating the corresponding handler function stored in {\bf *signal-handlers*}, prints the signal number and enters another toplevel loop.}
+
+\vardesc{*signal-handlers*}{
+Vector with all the handlers used by {\bf eussig}.}
+
+\vardesc{*error-handler*}{
+If non-nil, specifies a handling function to be called when an error occurs.
+The handling function takes four arguments: the error code (number), the error message, the error form (evaluated expression), and an optional message with additional information.}
+
 \end{refdesc}
 
 \newpage
