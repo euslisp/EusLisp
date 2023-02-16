@@ -22,7 +22,7 @@
   (export '(*print-case* *print-circle* *print-object* *print-structure*
 		*print-length* *print-level*
 		*readtable* *toplevel* *read-base* *print-base*
-		*evalhook* *debug*
+		*error-handler* *evalhook* *debug*
 		*unbound* *random-state* *features*
 		*package*
 		*standard-input* *standard-output*

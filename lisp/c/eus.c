@@ -127,7 +127,7 @@ pointer SELF;
 pointer CLASS;
 pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
-pointer TOPLEVEL,QEVALHOOK,QEXITHOOK,FATALERROR;
+pointer TOPLEVEL,QEVALHOOK,QEXITHOOK,ERRHANDLER,FATALERROR;
 pointer SIGNALS;
 pointer QUNBOUND,QDEBUG,QGCHOOK,QGCDEBUG;
 pointer QTHREADS;	/* system:*threads* */
@@ -392,6 +392,25 @@ va_dcl
 
   vpush(msg);
   va_end(args);
+
+  /* try calling legacy handler when set */
+  if (Spevalof(ERRHANDLER)!=NIL) {
+    int argc;
+    errhandler=Spevalof(ERRHANDLER);
+    Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
+    vpush(makeint((unsigned int)ec));
+    vpush(msg);
+    if (ctx->callfp) vpush(ctx->callfp->form); else vpush(NIL);
+    switch((unsigned int)ec) {
+      case E_UNBOUND: case E_UNDEF: case E_NOCLASS: case E_PKGNAME:
+      case E_NOSLOT: case E_NOPACKAGE: case E_NOMETHOD:
+      case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
+      case E_EXTSYMBOL: case E_SYMBOLCONFLICT: case E_USER:
+	vpush(NIL); argc=4; break;
+    default: argc=3; break;}
+    ufuncall(ctx,errhandler,errhandler,(pointer)(ctx->vsp-argc),ctx->bindfp,argc);
+    ctx->vsp-=argc;
+    return NIL;}
 
   /* call user's error handler function */
   errhandler=getfunc_closure_noexcept(ctx, SIGNALS);
@@ -715,6 +734,7 @@ static void initsymbols()
   PRLEVEL=deflocal(ctx,"*PRINT-LEVEL*",NIL,lisppkg);
   QREADTABLE=deflocal(ctx,"*READTABLE*",NIL,lisppkg);
   TOPLEVEL=defvar(ctx,"*TOPLEVEL*",NIL,lisppkg);
+  ERRHANDLER=deflocal(ctx,"*ERROR-HANDLER*",NIL,lisppkg);
   QEVALHOOK=deflocal(ctx,"*EVALHOOK*",NIL,lisppkg);
   QUNBOUND=intern(ctx,"*UNBOUND*",9,lisppkg);
   RANDSTATE=deflocal(ctx,"*RANDOM-STATE*",UNBOUND,lisppkg);
