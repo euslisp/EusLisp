@@ -3,6 +3,7 @@
 (in-package "LISP")
 
 (export '(defcondition install-handler remove-handler invoke-next-handler signals
+          eussig *signal-handlers*
           assertion-error euserror sigint-handler interruption handler-bind handler-case))
 
 (deflocal *condition-handler*)
@@ -252,6 +253,24 @@
   (let* ((*replevel* (1+ *replevel*))
          (*reptype* "B"))
     (while (catch *replevel* (reploop #'toplevel-prompt)))))
+
+
+;;
+;; old handlers for backward compatibility
+;;
+(defvar *signal-handlers* (make-sequence vector 32))
+
+(defun eussig (sig &rest code &aux (handler (aref *signal-handlers* sig)))
+   (cond (handler (funcall handler sig code))
+	 (t
+	   (if (fboundp 'unix:ualarm)
+	       (unix:ualarm 0 0)
+	       (unix:alarm 0))
+	  (warning-message 1 "signal ~s ~s~%" sig code)
+	  (let* ((*replevel* (1+ *replevel*))
+		 (*reptype* "S"))
+	      (catch *replevel*
+                (reploop #'toplevel-prompt))))))
 
 
 ;; install handlers

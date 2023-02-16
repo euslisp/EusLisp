@@ -283,6 +283,7 @@
    (unix:install-signal-handler unix::sigcont unix::sigcont-received)
    (install-handler unix::sigint-received 'sigint-handler)
    (install-handler unix::sigcont-received 'sigcont-handler)
+   (unix:signal unix::sigpipe 'eussig)
    ;; load .eusrc file from the home directory
    (let ((rcfile  (unix:getenv "EUSRC")))
       (unless rcfile
