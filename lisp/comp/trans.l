@@ -308,6 +308,10 @@
     (send self :discard argc)
     (send self :push "w"))
  (:getfunc (sym)
+    ;; getfunc_closure allocates new cons cells
+    ;; properly set vsp before calling
+    (send self :clearpush)
+    (send self :reset-vsp)
     (send self :push (format nil "(pointer)getfunc_closure(ctx,fqv[~d])"
 				(send self :quote-entry sym))))
 )

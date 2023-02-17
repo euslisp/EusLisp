@@ -133,6 +133,8 @@ register pointer f;
     return(cons(ctx,LAMCLOSURE,f));}
   else return(NIL);}
 
+// getfunc returns a function callable (lambda or compiled code)
+// without considering the local binding environment
 pointer getfunc(ctx,f)
 register context *ctx;
 register pointer f;	/*must be a symbol*/
@@ -140,6 +142,8 @@ register pointer f;	/*must be a symbol*/
   if (fn==UNBOUND) error(E_UNDEF, f);
   return(fn);}
 
+// getfunc_closure returns a function callable (lambda-closure or compiled code)
+// considering the local binding environment
 pointer getfunc_closure(ctx,f)
 register context *ctx;
 register pointer f;
