@@ -826,38 +826,26 @@ static void initclasses()
 			   "IDLE", "WAIT");
   C_THREAD=speval(THREAD);
 /*13*/
+#if ARM // ARM uses entry2
+  CODE=basicclass("COMPILED-CODE",C_PROPOBJ,&codecp,5,"CODEVECTOR","QUOTEVECTOR",
+		  "TYPE","ENTRY","ENTRY2");
+#else
   CODE=basicclass("COMPILED-CODE",C_PROPOBJ,&codecp,4,"CODEVECTOR","QUOTEVECTOR",
 		  "TYPE","ENTRY");
+#endif
   C_CODE=speval(CODE);
 /*14*/
-  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,3,"ENTRY2","PARAMTYPES","RESULTTYPE"); /* kanehiro's patch 2000.12.13 */
+#if ARM // foreign code always has entry2 (kanehiro's patch 2000.12.13)
+  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,2,"PARAMTYPES","RESULTTYPE");
+#else
+  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,3,"ENTRY2","PARAMTYPES","RESULTTYPE");
+#endif
   C_FCODE=speval(FCODE);
 /*15*/
-#if (WORD_SIZE == 64)
-  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
-#if ARM // ARM uses entry2 in struct closure in eus.h
-		     3,"ENTRY2",
-#else
-		     2,
-#endif
-		     "ENV0","ENV1");
-#else
-  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
-#if ARM // ARM uses entry2 in struct closure in eus.h
-		     2,"ENTRY2",
-#else
-		     1,
-#endif
-		     "ENV1");
-#endif
+  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,2,"ENV0","ENV1");
   C_CLOSURE=speval(CLOSURE);
 /* 16    ---new for Solaris */
-  LDMODULE=basicclass("LOAD-MODULE",C_CODE, &ldmodulecp,
-#if ARM // ARM uses entry2 in struct ldmodule in eus.h
-		      4,"ENTRY2",
-#else
-		      3,
-#endif
+  LDMODULE=basicclass("LOAD-MODULE",C_CODE, &ldmodulecp,3,
 		      "SYMBOL-TABLE","OBJECT-FILE", "HANDLE");
   C_LDMOD=speval(LDMODULE);
 /*17*/

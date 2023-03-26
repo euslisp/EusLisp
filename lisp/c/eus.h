@@ -244,7 +244,7 @@ struct fcode {		/*foreign function code*/
     pointer quotevec;
     pointer subrtype;
     pointer entry;
-  pointer entry2;    /* kanehiro's patch 2000.12.13 */
+    pointer entry2;    /* foreign code always has entry2 (kanehiro's patch 2000.12.13) */
     pointer paramtypes;
     pointer resulttype;};
 
