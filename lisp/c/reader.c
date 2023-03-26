@@ -471,7 +471,7 @@ register context *ctx;
 register pointer f;
 eusinteger_t val;
 int subchar;
-{ char ch;
+{ Char ch;
   ch=readch(f); return(makeint(ch));}
 
 static pointer read_sharp_comment(ctx,f,val,subchar)	/* #| ... |# */
@@ -501,7 +501,7 @@ int subchar;
 { register int i=0,j,c,p,q;
   pointer b;
   eusinteger_t *bv,x;
-  char ch, buf[WORD_SIZE];
+  Char ch, buf[WORD_SIZE];
 
   ch=readch(f);
   while (i<WORD_SIZE && isxdigit(ch)) { buf[i++] = ch; ch=readch(f);}
@@ -533,7 +533,7 @@ eusinteger_t val;
 int subchar;
 { if (read_suppress) return(read1(ctx,f));
   register int i=0;
-  char buf[WORD_SIZE/2], ch;
+  Char buf[WORD_SIZE/2], ch;
   ch=readch(f); val=0;
   while (i<WORD_SIZE/2 && ch>='0' && ch<'8') { buf[i++] = ch; ch=readch(f);}
   unreadch(f,ch); buf[i]=0;
@@ -554,7 +554,7 @@ eusinteger_t val;
 int subchar;
 char token[];
 { register int i=0;
-  char ch;
+  Char ch;
   ch=readch(f);
   while (syntaxtype(ch)==ch_constituent) {
     token[i++]=to_upper(ch); ch=readch(f);}
@@ -736,10 +736,10 @@ char token[];
 /* news does not have strtol routine! */
 #if news || sanyo
 int strtol(str,ptr,base)
-register char *str,**ptr;
+register Char *str,**ptr;
 register int base;
 { long val=0,sign=1;
-  char ch;
+  Char ch;
   while (isspace(*str)) str++;
   ch= *str;
   if (ch=='+') str++; else if (ch=='-') { str++; sign= -1;}
