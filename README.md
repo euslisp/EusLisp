@@ -34,10 +34,10 @@ $ ln -sf Makefile.Linux64 Makefile
 $ make eus0 eus1 eus2 eusg eusx eusgl eus
 ```
 
-For cygwin sytem, set ARCHDIR=Cygwin and ln -sf Makefile.Cygwin Makefile<br>
+For cygwin system, set ARCHDIR=Cygwin and ln -sf Makefile.Cygwin Makefile<br>
 For 32bit Linux system, set ARCHDIR=Linux and ln -sf Makefile.Linux.thread Makefile
 
-### Documnets
+### Documents
 
 See online [manual](http://euslisp.github.io/EusLisp/manual.html). (Japanese translation [manual](http://euslisp.github.io/EusLisp/jmanual.html))
 
