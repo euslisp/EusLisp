@@ -139,15 +139,11 @@
 
 (defmacro defparameter (var init &optional (doc nil))
    (unless (symbolp var) (error type-error "symbol expected"))
-   `(progn
-	(send ',var :global ,init ,doc)
-	',var))
+   `(send ',var :global ,init ,doc))
 
 (defmacro defconstant (sym val &optional doc)
    (unless (symbolp sym) (error type-error "symbol expected"))
-   `(progn
-	(send ',sym :constant ,val ,doc)
-	',sym))
+   `(send ',sym :constant ,val ,doc) )
   
 
 (defmacro dotimes (vars &rest forms)
