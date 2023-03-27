@@ -803,25 +803,6 @@ pointer *argv;
     ff=ff->c.ffp.next;}
   return(stacknlist(ctx,i));}
 
-pointer LISTFUNCTIONBINDINGS(ctx,n,argv)
-register context *ctx;
-int n;
-pointer *argv;
-{ pointer ff;
-  int i=0;
-  if (n==0) {
-    ff=ctx->fletfp;}
-  if (n==1) {
-    if (isfletframe(argv[0])) ff=argv[0];
-    else if (isint(argv[0]) && intval(argv[0])==0) return(NIL);
-    else error(E_NOFLETFRAME);}
-  while (ff) {
-    vpush(cons(ctx,ff->c.ffp.name,ff->c.ffp.fclosure));
-    i++;
-    if (ff==ff->c.ffp.next) break;
-    ff=ff->c.ffp.next;}
-  return(stacknlist(ctx,i));}
-
 pointer LISTSPECIALBINDINGS(ctx,n,argv)
 register context *ctx;
 int n;
