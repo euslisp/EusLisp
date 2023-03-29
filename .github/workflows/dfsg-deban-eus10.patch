@@ -1,0 +1,46 @@
+diff --git a/debian/patches/fix-for-blhc.patch b/debian/patches/fix-for-blhc.patch
+index 2d34fab..eec84b2 100644
+--- a/debian/patches/fix-for-blhc.patch
++++ b/debian/patches/fix-for-blhc.patch
+@@ -23,12 +23,12 @@ index abf7b7b..01bc54f 100644
+  (defparameter *defun-list* nil)
+  (defparameter *verbose* nil)
+  (defparameter *optimize* 2)
+-@@ -1261,7 +1261,7 @@
+- 	 (setq file (merge-pathnames ".l" file))
+-          (if (null (probe-file  file)) 
+- 	     (error "file ~A not found~%" file)))
+--      (warn "compiling file: ~A~%" (namestring file))
+-+      ;; (warn "compiling file: ~A~%" (namestring file))
+-       (setq ins (open file))
+-       (setq *defun-list* nil)
+-       (when *multipass-optimize*
++@@ -1855,7 +1855,7 @@
++            (setq file (merge-pathnames ".l" file))
++            (if (null (probe-file  file))
++                (error io-error "file ~A not found~%" file)))
++-        (warn "compiling file: ~A~%" (namestring file))
+++        ;; (warn "compiling file: ~A~%" (namestring file))
++         (setq ins (open file))
++         (setq *defun-list* nil)
++         (when *multipass-optimize*
+diff --git a/debian/patches/fix-for-hardening.patch b/debian/patches/fix-for-hardening.patch
+index f32285e..ad7e358 100644
+--- a/debian/patches/fix-for-hardening.patch
++++ b/debian/patches/fix-for-hardening.patch
+@@ -22,6 +22,7 @@ index 247bfa3..4b8e968 100644
+  
+ -CFLAGS= $(WFLAGS) -fPIC -D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+ +CFLAGS:= $(CFLAGS) $(CPPFLAGS) $(WFLAGS) -fPIC -D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" \
++	-DCOMPILERVERSION=\"$(COMPILERVERSION)\" \
+  	-DLIB6 $(ALIGN_FUNCTIONS) \
+          $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
+  	-DGCC $(GCC3) \
+@@ -78,6 +79,7 @@ index ec1665b..1de89b1 100644
+  
+ -CFLAGS=$(WFLAGS) -D$(MACHINE) -DLinux -DARM -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+ +CFLAGS:= $(CFLAGS) $(CPPFLAGS) $(WFLAGS) -D$(MACHINE) -DLinux -DARM -D_REENTRANT -DVERSION=\"$(VERSION)\" \
++	-DCOMPILERVERSION=\"$(COMPILERVERSION)\" \
+  	-DLIB6 $(ALIGN_FUNCTIONS) $(ADD_CFLAGS) \
+          $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
+  	-DGCC $(GCC3) \
