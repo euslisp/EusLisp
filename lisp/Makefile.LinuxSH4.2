@@ -38,7 +38,7 @@ CC_NATIVE=gcc
 #
 # for Linux
 
-GCC_VERSION=$(shell $(CC) -dumpversion | sed s/\\..\*//)
+GCC_VERSION=$(shell $(CC) -dumpfullversion -dumpversion | sed s/\\..\*//)
 ifeq ($(GCC_VERSION), 2)
  CPU_OPTIMIZE=-m486
  ALIGN_FUNCTIONS=-malign-functions=4

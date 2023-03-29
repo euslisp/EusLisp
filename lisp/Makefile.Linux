@@ -25,14 +25,21 @@ MFLAGS=
 XVERSION=X_V11R6_1
 
 #
+# set CC/LD if not defined, used for cross compile
+#
+CC ?= cc
+LD ?= ld
+
+
+#
 # Select CFLAGS and XVERSION according to the version of SunOS and Xlib.
 #
 # for Linux
 
-GCC_MAJOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\+\).*/\1/')
-GCC_MINOR_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\+\).*/\2/')
-# GCC_PATCH_VERSION=$(shell gcc -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\.\([0-9]\)/\3/')
-ifneq (,$(findstring 64,$(shell gcc -dumpmachine)))
+GCC_MAJOR_VERSION=$(shell $(CC) -dumpfullversion -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\+\).*/\1/')
+GCC_MINOR_VERSION=$(shell $(CC) -dumpfullversion -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\+\).*/\2/')
+# GCC_PATCH_VERSION=$(shell gcc -dumpfullversion -dumpversion | sed -e 's/\([0-9]\)\.\([0-9]\)\.\([0-9]\)/\3/')
+ifneq (,$(findstring 64,$(shell $(CC) -dumpmachine)))
 ifeq ($(GCC_MAJOR_VERSION), 2)
  ALIGN_FUNCTIONS="-malign-functions=8"
 else
@@ -54,9 +61,9 @@ ADD_LDFLAGS += -Wl,--no-as-needed
 endif
 
 # set CPU arch with -D
-MACHINE=$(shell uname -m)
+MACHINE=$(shell $(CC) -dumpmachine | sed 's/\([^-]*\).*/\1/')
 # need to set 'i486', for conditionals in c/*.[ch].
-ifneq ($(shell gcc -dumpmachine | grep "i.*86-linux"),)
+ifneq ($(shell $(CC) -dumpmachine | grep "i.*86-linux"),)
   MACHINE=i486
 endif
 
@@ -73,21 +80,15 @@ CFLAGS:= $(CFLAGS) $(CPPFLAGS) $(WFLAGS) -D$(MACHINE) -DLinux -D_REENTRANT -DVER
 	        -I/usr/include -I/usr/X11R6/include -I$(EUSDIR)/include
 
 # machine specific CFLAGS
-ifneq ($(shell gcc -dumpmachine | egrep "^(arm|aarch)"),)
+ifneq ($(shell $(CC) -dumpmachine | egrep "^(arm|aarch)"),)
   ADD_LDFLAGS+=-Wl,-z,execstack
   CFLAGS+=-DARM -fPIC
   ARCH=LinuxARM
 endif
-ifneq ($(shell gcc -dumpmachine | grep "^x86_64"),)
+ifneq ($(shell $(CC) -dumpmachine | grep "^x86_64"),)
   CFLAGS+=-fPIC
   ARCH=Linux64
 endif
-
-# Use gcc for C-compiling on SunOS4. Sun's cc is ok on Solaris.
-# /usr/ucb/cc cannot compile because of its incapability of recognizing
-# prototype declarations.
-CC=cc
-LD=ld
 
 #
 # L I B R A R I E S
@@ -118,8 +119,7 @@ THREADDEP=mthread_posix.c
 OFLAGS=-O2
 
 # link-editor's default flags ?-rdynamic
-SOFLAGS:= $(LDFLAGS) -shared -Xlinker -build-id
-LD=gcc
+SOFLAGS:= $(LDFLAGS) -shared -build-id
 LDFLAGS:= $(LDFLAGS) -rdynamic -fno-stack-protector -z execstack $(ADD_LDFLAGS)
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 #MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/pthreads.o

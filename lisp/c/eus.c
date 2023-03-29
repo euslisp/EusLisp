@@ -106,7 +106,7 @@ context *euscontexts[MAXTHREAD];
 
 
 /*symbol management*/
-pointer pkglist,lisppkg,keywordpkg,userpkg,syspkg,unixpkg,xpkg;
+pointer pkglist,lisppkg,keywordpkg,userpkg,syspkg,unixpkg,xpkg,glpkg;
 pointer NIL,PACKAGE,T,QUOTE;
 pointer FUNCTION;
 pointer QDECLARE,QSPECIAL;
@@ -578,6 +578,7 @@ static void initpackage()
   syspkg=    makepkg(ctx,makestring("SYSTEM",6),NIL,rawcons(ctx,lisppkg,NIL));
   unixpkg=   makepkg(ctx,makestring("UNIX",4),NIL,rawcons(ctx,lisppkg,NIL));
   xpkg=      makepkg(ctx,makestring("X",1),NIL,rawcons(ctx,lisppkg,NIL));
+  glpkg=     makepkg(ctx,makestring("GL",2),NIL,rawcons(ctx,lisppkg,NIL));
   }
 
 static void initsymbols()

@@ -35,7 +35,9 @@
 (defparameter *kernel* nil)
 ;(defparameter *cc* (if (member :gcc *features*) "gcc" "cc"))
 (defparameter *cc* 
-  (cond ((member :sh4 *features*)
+  (cond ((unix::getenv "CC")
+	 (unix::getenv "CC"))
+	((member :sh4 *features*)
 	 "sh4-linux-gcc -g")
 	((member :ia32 *features*) 
 	 "gcc -g -m32")
@@ -1381,6 +1383,8 @@
 		   (if (and (memq :linux *features*)  pic)
 			(concatenate string
 				     (cond 
+				      ((unix::getenv "LD")
+				       (format nil "; ~A -shared -o " (unix::getenv "LD")))
 				      ((memq :darwin *features*)
 				       "; gcc -dynamiclib -flat_namespace -undefined suppress -o ")
 				      ((memq :sh4 *features*)

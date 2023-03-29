@@ -41,6 +41,23 @@
 (in-package "IMAGE")
 (use-package "GEOMETRY") 
 
+;; pixel-image
+;;
+(unless (find-symbol "*XLIB*") ; for SunOS4 with .so bug
+	(in-package "IMAGE")
+	(sys::exec-module-init "pixword")
+	(sys::exec-module-init "RGBHLS")
+	(sys::exec-module-init "convolve")
+	(sys::exec-module-init "piximage")
+	(sys::exec-module-init "pbmfile")
+	(sys::exec-module-init "image_correlation")
+
+;;        (sys::exec-module-init "eusedge" nil)
+;;        (sys::exec-module-init  "edgeobj" nil)
+;;        (if (fboundp 'init-step2) (init-step2 line-edge-segment curved-edge-segment boundary region))
+	)
+   (in-package "USER")
+   (use-package "IMAGE")
 (in-package "X")
 ;; (shadow 'gc)
 ;; initilize Xlib interface
@@ -82,23 +99,7 @@
 		  (x::window-main-thread))
 	    )
 	)
-;; pixel-image 
-;;
-	(unless (find-symbol "*XLIB*") ; for SunOS4 with .so bug
-		(in-package "IMAGE")
-		(sys::exec-module-init "pixword")
-		(sys::exec-module-init "RGBHLS")
-		(sys::exec-module-init "convolve")
-		(sys::exec-module-init "piximage")
-		(sys::exec-module-init "pbmfile")
-		(sys::exec-module-init "image_correlation")
-;;
-;	        (sys::exec-module-init "eusedge" nil)
-;	        (sys::exec-module-init  "edgeobj" nil)
-;	        (if (fboundp 'init-step2) (init-step2 line-edge-segment curved-edge-segment boundary region))
-		)
 	   (in-package "USER")
-	   (use-package "IMAGE")
    )
 
 ;; opengl or Mesa

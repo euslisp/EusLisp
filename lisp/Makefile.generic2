@@ -142,6 +142,15 @@ DOC=$(DOCDIR)/arith.tex $(DOCDIR)/controls.tex $(DOCDIR)/evaluation.tex \
 # make dependency
 #
 
+ifeq ($(EUSLISP_WITHOUT_DISPLAY), 1)
+$(info "Compile euslisp with EUSLISP_WITHOUT_DISPAY")
+all:
+	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
+	 make -f $(MAKEFILE) $(MFLAGS) eus1; \
+         make -f $(MAKEFILE) $(MFLAGS) eus2; \
+         make -f $(MAKEFILE) $(MFLAGS) eusg;)
+else
+$(info "Compile ALL euslisp")
 all:
 	(make -f $(MAKEFILE) $(MFLAGS) eus0; \
 	 make -f $(MAKEFILE) $(MFLAGS) eus1; \
@@ -150,6 +159,7 @@ all:
          make -f $(MAKEFILE) $(MFLAGS) eusx; \
          make -f $(MAKEFILE) $(MFLAGS) eusgl; \
          make -f $(MAKEFILE) $(MFLAGS) eus)
+endif
 
 eus:	$(BINDIR)/eus
 
@@ -311,7 +321,7 @@ $(XCOBJECTS):
 $(GLCOBJECTS):
 	(cd $(GLDIR); \
 	 $(CC) -c -o $@ $(CFLAGS) $(OFLAGS) $(GLINCLUDE) $(@F:.o=.c))
-$(GCCLS): 
+$(GCCLS): $(TOOLDIR)/gccls.c
 	(cd $(TOOLDIR); \
 	$(CC) -o $(BINDIR)/gccls gccls.c ;\
 	cd $(EUSDIR) )
