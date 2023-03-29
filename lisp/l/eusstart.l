@@ -349,7 +349,7 @@
                   gc alloc runtime))
 	(setf (symbol-function 'exit) (symbol-function 'unix::exit))    
 ;;
-;(when (substringp "P" (string-upcase *program-name*))
+;(when (substringp "P" (string-upcase (pathname-name *program-name*)))
 	(in-package "SYSTEM")
 	(system::exec-module-init "par" "l/par.l")
 ;;
@@ -368,9 +368,10 @@
 ;; load geometric package
 ;;
 
-(when (or (substringp "G" (string-upcase *program-name*))
-	  (substringp "X" (string-upcase *program-name*))
-	  (substringp "COMP" (string-upcase *program-name*)))
+(when (let ((*program-name* (string-upcase (pathname-name *program-name*))))
+        (or (substringp "G" *program-name*)
+            (substringp "X" *program-name*)
+            (substringp "COMP" *program-name*)))
 ;;	(format t "Loading geometry modules.~%")
 	(sys:alloc 80000)
 	(sys:alloc 50000)
