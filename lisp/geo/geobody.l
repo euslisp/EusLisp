@@ -116,14 +116,14 @@
     ;(send-all (send self :primitive-bodies) :translate-vertices trans self)
     self)
  (:rotate-vertices (rad axis)
-	;move all vertices with respect to this coordinates
-	;without moving coordinates.
+    ;move all vertices with respect to this coordinates
+    ;without moving coordinates.
     (let (rotmat)
-	(if (float-vector-p axis) (setq rotmat (rotation-matrix rad axis)))
-        (dolist (v model-vertices)
-	   (if (float-vector-p axis)
-	       (transform rotmat v v)
-	       (rotate-vector v rad axis v))))
+      (if (float-vector-p axis) (setq rotmat (rotation-matrix rad axis)))
+      (dolist (v model-vertices)
+        (if (float-vector-p axis)
+            (transform rotmat v v)
+            (rotate-vector v rad axis v))))
     (send self :update)
 ;    (send-all (send self :primitive-bodies) :rotate-vertices rad axis self)
     self)
