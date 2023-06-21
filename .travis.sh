@@ -32,6 +32,13 @@ function travis_time_end {
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then 
 
     travis_time_start setup.apt-get_update
+    if [[ "$DOCKER_IMAGE" == *"stretch" || "$DOCKER_IMAGE" == *"jessie" ]] ; then
+        cat /etc/apt/sources.list
+        sed -i s@httpredir.debian.org@archive.debian.org@ /etc/apt/sources.list;
+        sed -i s@deb.debian.org@archive.debian.org@ /etc/apt/sources.list;
+        sed -i s@security.debian.org/debian-security@archive.debian.org/debian-security@ /etc/apt/sources.list
+        sed -i '/-updates/ s/^#*/#/' /etc/apt/sources.list
+    fi
     if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y sudo;  else sudo apt-get update; fi
     travis_time_end
 
