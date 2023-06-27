@@ -119,7 +119,7 @@
 	;move all vertices with respect to this coordinates
 	;without moving coordinates.
     (let (rotmat)
-	(if (float-vector-p axis) (setq rotmat (rotation rad axis)))
+	(if (float-vector-p axis) (setq rotmat (rotation-matrix rad axis)))
         (dolist (v model-vertices)
 	   (if (float-vector-p axis)
 	       (transform rotmat v v)
