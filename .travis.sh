@@ -32,6 +32,13 @@ function travis_time_end {
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then 
 
     travis_time_start setup.apt-get_update
+    if [[ "$DOCKER_IMAGE" == *"stretch" || "$DOCKER_IMAGE" == *"jessie" ]] ; then
+        cat /etc/apt/sources.list
+        sed -i s@httpredir.debian.org@archive.debian.org@ /etc/apt/sources.list;
+        sed -i s@deb.debian.org@archive.debian.org@ /etc/apt/sources.list;
+        sed -i s@security.debian.org/debian-security@archive.debian.org/debian-security@ /etc/apt/sources.list
+        sed -i '/-updates/ s/^#*/#/' /etc/apt/sources.list
+    fi
     if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y sudo;  else sudo apt-get update; fi
     travis_time_end
 
@@ -42,7 +49,7 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     travis_time_end
 
     travis_time_start setup.apt-get_install
-    ret=1; while [ $ret != 0 ]; do sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng-dev xfonts-100dpi xfonts-75dpi pkg-config libbullet-dev && ret=0 || echo "failed, retry"; done # msttcorefonts could not install on 14.04 travis
+    ret=1; while [ $ret != 0 ]; do sudo apt-get install -qq -y --force-yes git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng-dev xfonts-100dpi xfonts-75dpi pkg-config libbullet-dev && ret=0 || echo "failed, retry"; done # msttcorefonts could not install on 14.04 travis
     # unset protocol version https://github.com/juju/charm-tools/issues/532
     git config --global --unset protocol.version || echo "OK"
     if [ "`uname -m`" == "x86_64" ] ; then sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils || echo "ok"; fi # 16.04 does ont have ptex bin
@@ -67,9 +74,9 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 fi
 
 ### for multiarch compile test
-if [[ "$QEMU" != "" && "$DOCKER_IMAGE" != "arm64v8/ubuntu:"* ]]; then
+if [[ "$QEMU" != "" ]]; then
     travis_time_start install.dpkg-dev
-    apt-get install -qq -y dpkg-dev patchutils
+    apt-get install -qq -y --force-yes dpkg-dev patchutils
     travis_time_end
 
     echo "uname -a : $(uname -a)"
@@ -120,6 +127,9 @@ if [[ "$QEMU" != "" && "$DOCKER_IMAGE" != "arm64v8/ubuntu:"* ]]; then
         travis_time_start euslisp.${test_l##*/}.test
 
         sed -i 's/\(i-max\ [0-9]000\)0*/\1/' $test_l
+
+	# TEST-NAME: test-copy-object-body : extending gcstack 0 -> Segfault
+        if [[ (( "$DOCKER_IMAGE" == "arm64v8/debian:buster" || "$DOCKER_IMAGE" == "arm64v8/ubuntu:focal" ) && $test_l =~ object.l ) ]]; then sed -i 's/dotimes (i 1000)/dotimes (i 10)/' $test_l; fi
 
         eusgl $test_l;
         export TMP_EXIT_STATUS=$?

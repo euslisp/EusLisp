@@ -64,7 +64,7 @@ jobs:
           # sparc64
       fail-fast: false
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     timeout-minutes: 60
 
     name: linux
@@ -86,7 +86,7 @@ jobs:
           export MAKEFLAGS="-j4"
           if [[ "$QEMU" != "" || "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get update -y -qq; fi
           if [[ "$QEMU" != "" ]]; then sudo apt-get install -y -qq qemu-user-static; ls /usr/bin/qemu-*-static; export QEMU_VOLUME="-v /usr/bin/qemu-$QEMU-static:/usr/bin/qemu-$QEMU-static" ; fi
-          if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register; fi
+          if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/euslisp/jskeus ${HOME}/jskeus; fi
           echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
