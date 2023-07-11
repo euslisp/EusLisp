@@ -15,14 +15,16 @@
 (in-package "COMPILER")
 
 (eval-when (load eval)
-	(export '(compile compile-file comfile identifier
+	(export '(compile compile-method compile-file comfile identifier
 		  compile-file-if-src-newer))
-	(export '(*safety* *space* *verbose* *optimize* *speed* *cc*)) )
+	(export '(*safety* *space* *verbose* *optimize* *speed* *cc*
+		  *type-check-declare*)))
 
 (defun compiled-code-p (x) (derivedp x compiled-code))
 
 (eval-when (load eval)
 
+(defparameter *type-check-declare* nil)
 (defparameter *coptflags* "")
 (defparameter *cflags* "")
 (defparameter *defun-list* nil)
@@ -48,6 +50,13 @@
 (defvar trans)
 (defvar *multipass-optimize* t)
 
+;; `closure-frames' collects variables referenced during preevaluation
+;; `closure-function-frames' collects functions called during preevaluation
+;; this allows to allocate minimal size frames for each closure
+;; both values are locally overwritten at each function invocation,
+;; the global value should never need to be modified
+(defvar closure-frames nil)
+(defvar closure-function-frames nil)
 
 (defun ovafp (form) (and (cdr form) (symbolp (cdr form))))
 
@@ -68,6 +77,11 @@
    (= (var . vtype) 2)
    )
 
+(defun proclaimed-constant-p (var)
+  (declare (type symbol var))
+  (= (var . vtype) 0)
+  )
+
 (defun object-variable-names (klass-name)
    (let (klass varvec i r)
      (if (symbolp klass-name)
@@ -81,16 +95,15 @@
        r))
 
 (defun object-variable-type (klass var)
-   (declare (type metaclass klass))
    (when (not (classp klass))
 	 (if  (class-symbolp klass)
 	      (setq klass (symbol-value klass))
-	      (error "class expected for type check")))
+	      (error type-error "class expected for type check")))
    (if (numberp var)
        (setq var (svref (klass . types) var))
        (let ((index (position var (klass . vars))))
           (if (null index) 
-	      (send comp :error "no such obj var" var)
+	      (send comp :error "no such obj var ~S" var)
 	      (setq var (svref (klass . types) index)))))
    (if (consp var) (car var) var))
 
@@ -101,7 +114,10 @@
 
 (defun check-arg (req n &optional (fn "car/cdr"))
    (if (null (= req n))
-       (warn "mismatch arg for " fn)))
+       (error argument-error "mismatch arg for ~A" fn)))
+
+(defun function-alias (sym)
+  (or (get sym 'function-alias) sym))
 
 (defun def-function-type (type funcs)
    (dolist (f funcs) (putprop f type 'function-result-type)))
@@ -126,7 +142,7 @@
 ;
 (eval-when (load compile eval)
 (defclass identifier :super object
-		     :slots (name type binding level offset))
+		     :slots (name type binding level offset bindframe cbindframe clist))
 )
 ;; binding = (constant, local, global, special)
 
@@ -142,6 +158,63 @@
 	  level lev
 	  offset off)
      self))
+)
+
+;	function identifier
+;
+(eval-when (load compile eval)
+(defclass function-identifier :super object
+  :slots (name entry binding level offset bindframe cbindframe body newcomp clist))
+)
+
+(eval-when (load eval)
+(defmethod function-identifier
+ (:init (sym bin off &optional lev ent bd cmp)
+    (setq name sym
+          binding bin
+          offset off
+          level lev
+          entry ent
+          body bd
+          newcomp cmp
+          bindframe nil)
+     self)
+  (:init-body (sym bin &optional bd)
+    (setq name sym
+          binding bin
+          body bd)
+     self))
+)
+
+;	closure identifier
+;
+(eval-when (load compile eval)
+(defclass closure-identifier :super object
+  :slots (name entry def newcomp cframes fframes))
+)
+
+(eval-when (load eval)
+(defmethod closure-identifier
+  (:init (sym ent form cmp cf ff)
+    (setq name sym
+          entry ent
+          def form
+          newcomp cmp
+          cframes cf
+          fframes ff)
+     self)
+  (:compile ()
+    (let ((cbind (append cframes fframes)))
+      (setq (newcomp . current-cframes) (cons cframes (newcomp . current-cframes)))
+      (setq (newcomp . current-fframes) (cons fframes (newcomp . current-fframes)))
+      (setq (newcomp . current-csize) (cons (length cbind) (newcomp . current-csize)))
+      ;; recalculate function cbindings
+      (setq (newcomp . flets) (copy-object (newcomp . flets)))
+      (dolist (fdef (newcomp . flets))
+        ;; only reassign the most recent level
+        (when (eq (fdef . cbindframe) t)
+          (setq (fdef . cbindframe) (position (fdef . bindframe) cbind))))
+      (send newcomp :compile-a-closure name entry def))))
 )
 
 ;	identifier table
@@ -160,6 +233,27 @@
 	(while (>= lev 0)
 	   (setq r (assq id (svref frames lev)))
 	   (if r (return-from :get (cdr r)) (dec lev)))))
+ (:get-cframes (fn clevel &optional (lev level))
+    ;; collect the binding offset of all variables which are used inside a function
+    ;; we only need to consider the current closure-level since other levels are
+    ;; accessed through the env0, not env1
+    (let (acc)
+       (while (>= lev 0)
+         ;; collect closure frames
+         (dolist (var (svref frames lev))
+           (setq var (cdr var))
+           (when (and var (= (var . level) clevel)
+                      (find fn (var . clist) :test #'equal))
+             (pushnew (var . bindframe) acc)))
+         (dec lev))
+       ;; update cbindframe offset value on the current level
+       (dotimes (lev (1+ level))
+         (dolist (var (svref frames lev))
+           (let* ((var (cdr var))
+                  (pos (position (var . bindframe) acc)))
+             (if pos
+                 (setq (var . cbindframe) pos)))))
+       acc))
  (:enter (id &optional (lev level))
     (svset frames lev (cons (cons (id . name) id) (svref frames lev)))
     id)
@@ -183,15 +277,21 @@
 
 (eval-when (load compile eval)
 (defclass stack-frame :super object
-		      :slots (offset specials locals))
+		      :slots
+                      (type	; 'arg, 'local, or 'flet
+                       level	; closure level of the frame
+                       offset	; offset of the frame on the local stack
+                       specials	; number of special variables on the stack
+                       locals))	; number of local variables on the stack
 )
 
 (eval-when (load eval)
 (defmethod stack-frame
+ (:level (&optional (lvl nil)) (if lvl (setq level lvl)) level)
  (:offset (&optional (off nil)) (if off (setq offset off)) offset)
  (:special (&optional (i 0)) (setq specials (+ specials i)))
  (:local (&optional (i 0)) (setq locals (+ locals i)))
- (:init () (setq offset nil specials 0 locals 0) self))
+ (:init (tp) (setq type tp specials 0 locals 0) self))
 )
 
 
@@ -203,14 +303,19 @@
 (defclass compiler :super object 
 	   :slots
 	   (idtable		;identifier-table
-	    closure-level	;currunt closure level
+	    closure-level	;current closure level
+	    current-cframes	;current closure bind frames
+	    current-fframes	;current closure flet frames
+	    current-csize	;current closure env1 size
 	    scope		;current variable scope (for sequential let)
 	    frames		;list of the number of special bindings
+	    fletframes		;list of function frames
+	    argframes		;list of argument frames
 	    blocks		;block labels
 	    tags		;tagbody go labels
 	    function-closures	; (function ...) list
 	    initcodes		;initialize codes in "eusmain"
-	    flets
+	    flets		;list of flet frames
 	    unwind-frames	;frames need to unwound when jumps
 	    symstr
 	    )))
@@ -250,49 +355,121 @@
 	      (send self :eval `(apply (function ,(car form)) ,(cdr form))))
 	  (t
 	    (let* ((fdef (send self :get-function (car form)))
-	           (ftype (second fdef)))
+	           (ftype (fdef . binding)))
 	      (case ftype
 		(lambda  (send self :funcall (car form) (cdr form)))
 		(special (send self :special-form (car form) (cdr form)))
 		(macro   (send self :eval (macroexpand form)))
+		(macrolet (send self :eval (eval `(,(fdef . body) ,@(cdr form)))))
 		(closure (send self :call-closure fdef (cdr form)))
-		(t (send self :error "unknown func type" form))) ))))
+		(t (send self :error "unknown func type ~S" form))) ))))
  (:get-function (fn)
-   (if (not (symbolp fn)) (send self :error "symbol expected for a func. name"))
-   (let ((fdef (assq fn flets)))
+   (if (not (symbolp fn)) (send self :error "symbol expected for a function name"))
+   (let ((fdef (find-if #'(lambda (x) (eql (x . name) fn)) flets)))
       (if fdef
-	  fdef
+	  (progn
+            (when (and avant-mode closure-function-frames
+                       (fdef . level)
+                       (> closure-level (fdef . level)))
+              (unless (assoc 'closure-function-frames (sys:list-all-special-bindings))
+                (send self :error "attempting to set global closure-function-frames value"))
+              (unless (listp closure-function-frames)
+                (setq closure-function-frames nil))
+              (pushnew fdef closure-function-frames)
+              (unless (fdef . bindframe)
+                (setq (fdef . bindframe) t)))
+
+            ;; compile-time check to see if we are not missing any frame references
+            (when (and (not avant-mode)
+                       (fdef . level)
+                       (> closure-level (fdef . level))
+                       (fdef . bindframe))
+              (let* ((c-index (- closure-level (fdef . level)))
+                     (c-fframes (car (nthcdr (1- c-index) current-fframes)))
+                     (c-csize (car (nthcdr (1- c-index) current-csize))))
+                (unless (find (fdef . bindframe) c-fframes)
+                  (send self :error "unbound fletframe detected when loading function ~S: ~A"
+                        (fdef . name) (fdef . bindframe)))
+                (unless (< (send self :flet-bindframe fdef) c-csize)
+                  (send self :error "invalid fletframe index detected when loading function ~S: ~A"
+                        (fdef . name) (fdef . cbindframe)))))
+            fdef)
 	  (cond ((fboundp fn)
 		 (setq fdef (symbol-function fn))
 		 (if (compiled-function-p fdef)
-		     (list fn (cdr (assq (compiled-code-type fdef)
+                     (instance function-identifier :init-body
+                               fn (cdr (assq (fdef . type)
 				         '((0 . lambda) (1 . macro) (2 . special))))
-			   fdef)
-		     (cons fn fdef)))
-		(t (list fn 'lambda))))))
+                               fdef)
+		     (instance function-identifier :init-body
+                               fn (car fdef) (cdr fdef))))
+		(t (instance function-identifier :init-body fn 'lambda))))))
  (:call-closure (fdef args)
    (if *debug*   (print (list :call-closure fdef args)))
    (dolist (a args) (send self :eval a))
-   (send trans :load-local (third fdef) (- closure-level (fourth fdef)))
-   (send trans :call-closure (fifth fdef) (length args)))
+   (send trans :load-local (fdef . offset) (- closure-level (fdef . level))
+         (send self :flet-bindframe fdef))
+   (send trans :call-closure (fdef . entry) (length args)))
+ (:get-flet-cframes (fn clevel cstart &optional (function-table flets))
+   ;; collect the binding offset of all flets used inside a function
+   (let (acc)
+     (dolist (f function-table)
+       (when (and f (= (f . level) clevel)
+                  (find fn (f . clist) :test #'equal))
+         (pushnew (f . bindframe) acc)))
+     ;; update cbindframe offset value
+     ;; this value is only used at the base level
+     ;; it is recalculated on each closure definition (`:compile-closures')
+     (dolist (f function-table)
+       (let ((pos (position (f . bindframe) acc)))
+         (if pos
+             (setq (f . cbindframe) (+ cstart pos)))))
+     acc))
+ (:flet-bindframe (fdef)
+   (if (and (fdef . cbindframe) (> closure-level (fdef . level)))
+       (fdef . cbindframe)
+       (fdef . bindframe)))
  (:variable (var)	;var must be a symbol, ovaf is not allowed here.
    (let ((result (send idtable :get var scope)))
-        (if result (return-from :variable result))
+        (if (and result
+                 (or avant-mode
+                     (not (and (> closure-level (result . level)) (eq (result . bindframe) t)))))
+            (return-from :variable result))
 	(setq result (instance identifier :init var 'special 0 0))
         (cond
 	  ((proclaimed-special-p  var)
 	   (send idtable :enter-special result) )
 	  ((proclaimed-global-p var)
 	   (send idtable :enter-special result))	;Jan, 96
+          ((proclaimed-constant-p var)
+           (send idtable :enter result))
 	  (t
-	   (format *error-output* "; ~C[34;7m~S~C[0;34m is assumed to be global~C[0m~%"
-			#x1b var #x1b #x1b)
+	   (unless avant-mode
+             (format *error-output* "; ~C[34;7m~S~C[0;34m is assumed to be global~C[0m~%"
+			#x1b var #x1b #x1b))
 	   (send idtable :enter result)) )
 	result))
  (:var-binding (var)
    (if  (consp var)
 	'ovaf
 	(send (send self :variable var) :binding)))
+ (:var-bindframe (var)
+   (cond
+     ((and (var . cbindframe) (> closure-level (var . level)))
+      (var . cbindframe))
+     ((or (var . bindframe) (= closure-level (var . level)))
+      (var . bindframe))
+     (t
+      (labels ((find-frame (frame-list)
+                 (find-if #'(lambda (frame) (= (frame . level) (var . level))) frame-list))
+               (find-offset (frame-list)
+                 (let ((fr (find-frame frame-list)))
+                   (if fr (fr . offset)))))
+        (case (var . binding)
+          ((local let)
+           (find-offset frames))
+          ((param arg object lambda)
+           (find-offset argframes)))))))
  (:special-variable-p (id)
     (let ((v (send idtable :find id)))
 	(if (null v)
@@ -306,43 +483,99 @@
 				      id 'unknown closure-level nil))
 	 (send idtable :enter v)
          (when (or (proclaimed-special-p id) (proclaimed-global-p id))
-	    (if (constantp id) (send self :error "not variable" id))
+	    (if (constantp id) (send self :error "not variable ~S" id))
             (send v :binding 'special)
 	    ))
       v))
- (:bind (id binding offset &optional (keyvarp nil))
+ (:bind (id frame binding offset &key keyvarp)
     (unless (symbolp id)
-	(error "symbol expected for function argument" id))
+	(error type-error "symbol expected for function argument" id))
     (let ((v (send self :enter-variable id)))
         (declare (type identifier v))
 	(cond
 	  ((eq (v . binding) 'special)
-	   (send (car frames) :special 1)
+	   (send frame :special 1)
 	   (case binding
-	     (local  (if keyvarp (send (car frames) :local 1)))
-	     (arg (send trans :load-arg offset 0))
-	     (t (send self :error "illegal binding")))
+	     (local (if keyvarp (send frame :local 1)))
+	     (arg (send trans :load-arg offset 0)))
 	   (push offset unwind-frames)
 	   (send trans :bind-special id))
 	  (t
-	     (if (eq binding 'local) (send (car frames) :local 1))
+	     (if (eq binding 'local) (send frame :local 1))
 	     (setq (v . binding) binding
 		   (v . offset) offset)))
      v))
- (:create-frame ()
-    (push (instance stack-frame :init) frames)
-    (send idtable :create-frame)
-    (setq scope (send idtable :level)))
- (:delete-frame (flag)
-    (let* ((f (pop frames)) (nospecials (f . specials)))
+ (:bind-identifier (v frame &key keyvarp)
+    (unless (derivedp v identifier)
+	(error type-error "identifier expected"))
+    (unless (send idtable :find (v . name))
+      (send idtable :enter v))
+    (send self :bind (v . name) frame (v . binding) (v . offset) :keyvarp keyvarp))
+ (:bind-closure-variable (v binding frame i &key (store t))
+    ;; rewrite the variable reference to point to the binding frame instead
+    (setq (v . binding) binding
+          (v . bindframe) (frame . offset)
+          (v . offset) i)
+    (send self :bind-identifier v frame)
+    (if store (send self :store-var v)))
+ (:create-frame (type &optional size comment)
+    ;; create a vector to store closure variables in the heap
+    (let ((frame (instance stack-frame :init type)))
+      (setq (frame . level) closure-level)
+      (when (and size (> size 0))
+        (setq (frame . offset) (send trans :create-frame size comment))
+        (send frame :local 1))
+      (case type
+        (arg
+         (push frame argframes))
+        (local
+         (push frame frames))
+        (flet
+         (push frame fletframes))
+        ;; (t (send self :error "unknow frame type ~S" type))
+        )
+      (case type
+        ((arg local)
+         (send idtable :create-frame)
+         (setq scope (send idtable :level))))
+      frame))
+ (:bind-frame (frame body vlist &optional comment)
+    ;; pre-evaluate body
+    (let ((trans (send trans :copy-translator))
+          (avant-mode t))
+      (send self :progn body))
+    ;; bind frame vector
+    (setq vlist
+      (remove-if-not #'(lambda (v) (and (derivedp v identifier) (v . bindframe))) vlist))
+    (when vlist
+      (send trans :reset-vsp)
+      (setq (frame . offset) (send trans :create-frame (length vlist) comment))
+      (send frame :local 1))
+    (dotimes (i (length vlist))
+      (let ((v (nth i vlist)))
+        (send self :load-var v)
+        (send trans :clearpush-frame (frame . offset) i)
+        (setq (v . bindframe) (frame . offset)
+              (v . offset) i)))
+    frame)
+ (:delete-frame (type flag)
+    (let* ((f
+            (case type
+              (arg (pop argframes))
+              (local (pop frames))
+              (flet (pop fletframes))
+              (t (send self :error "unknown frame type ~S" type))))
+           (nospecials (f . specials)))
        (declare (type stack-frame f))
        (if (> nospecials 0)
            (if flag
 	       (send trans :unbind-special (f . specials))
-	       (send self :warning "no special object variables allowed")))
+	       (send self :error "no special object variables allowed")))
        (if flag (send trans :del-frame (f . specials) (f . locals)))
-       (send idtable :pop-frame)
-       (setq scope (send idtable :level))))
+       (case type
+         ((arg local)
+          (send idtable :pop-frame)
+          (setq scope (send idtable :level))))))
  (:load-ovaf (form var)
     (let ((form-type (send self :eval form)) (index 0))
        (if (null (memq form-type '(integer fixnum float number t nil)))
@@ -352,7 +585,7 @@
 	   (setq index (position var (object-variable-names form-type)))
 	   (if (numberp index)
 	       (send trans :load-indexed-ov index)
-	       (send self  :error "no such object variable" form var))
+	       (send self  :error "no such object variable ~S ~S" form var))
 	   (object-variable-type form-type index))
 	  (t (send trans :load-ovaf var)
 	     t)) ))
@@ -360,18 +593,52 @@
    (when (consp var)
 	(send self :load-ovaf (car var) (cdr var))
 	(return-from :load-var t))
-   (setq var (send self :variable var))
-   (case (var . binding)
-    ((special) (send trans :load-global (var . name)))
-    ((local let lambda)
-	(send trans :load-local (var . offset) (- closure-level (var . level))))
-    ((param arg)
-	(send trans :load-arg (var . offset) (- closure-level (var . level))))
-    ((object)
-	(send trans :load-obj (var . offset) (- closure-level (var . level))))
-    (unknown 
-	(send self :error "declared but unknown variable" (var . name)))
-    )
+   (unless (derivedp var identifier)
+     (setq var (send self :variable var)))
+   (flet ((push-cframe (&optional (pushvar var))
+            ;; collect referenced variables during pre-evaluation mode
+            (when (and avant-mode closure-frames (> closure-level (var . level)))
+              (unless (assoc 'closure-frames (sys:list-all-special-bindings))
+                (send self :error "attempting to set global closure-frames value"))
+              (unless (listp closure-frames) (setq closure-frames nil))
+              (pushnew pushvar closure-frames)
+              (unless (pushvar . bindframe) (setq (pushvar . bindframe) t))))
+          (check-cframe (&optional (pushvar var))
+            ;; compile-time check to see if we are not missing any frame references
+            (when (and (not avant-mode) (> closure-level (var . level))
+                       (numberp (pushvar . bindframe)))
+              (let* ((c-index (- closure-level (var . level)))
+                     (c-cframes (car (nthcdr (1- c-index) current-cframes)))
+                     (c-csize (car (nthcdr (1- c-index) current-csize))))
+                (unless (find (pushvar . bindframe) c-cframes)
+                  (send self :error ";; unbound bindframe detected when loading variable ~S: ~A"
+                        (var . name) (pushvar . bindframe)))
+                (unless (< (send self :var-bindframe pushvar) c-csize)
+                  (send self :error ";; invalid bindframe index detected when loading variable ~S: ~A"
+                        (var . name) (send self :var-bindframe pushvar)))))))
+     (case (var . binding)
+      ;; special variables are accessed through :load-global, so we don't need 
+      ;; to add or manage them in bind frames
+      ((special) (send trans :load-global (var . name)))
+      ((local let lambda)
+          (push-cframe)
+          (check-cframe)
+          (send trans :load-local (var . offset) (- closure-level (var . level))
+                (send self :var-bindframe var)))
+      ((param arg)
+          (push-cframe)
+          (check-cframe)
+          (send trans :load-arg (var . offset) (- closure-level (var . level))
+                (send self :var-bindframe var)))
+      ((object)
+          ;; we only need to ensure access to the `self' variable in closures,
+          ;; all other slots are derived from there
+          (push-cframe (send idtable :get 'self))
+          (check-cframe (send idtable :get 'self))
+          (send trans :load-obj (var . offset) (- closure-level (var . level))
+                (send self :var-bindframe var)))
+      (unknown
+          (send self :error "declared but unknown variable ~S" (var . name)))))
    (send var :type))
  (:store-ovaf (form varname)
    (let ((form-type (send self :eval form)))
@@ -385,20 +652,26 @@
 		t)
 	   (send trans :store-ovaf varname))))
  (:store-var (var)
-   (setq var (send self :variable var))
+   (unless (derivedp var identifier)
+     (setq var (send self :variable var)))
    (case (var . binding)
     ((special) (send trans :store-global (var . name)))
     ((local let lambda)
-     (send trans :store-local (var . offset) (- closure-level (var . level))))
-    ((param arg) (send trans :store-arg (var . offset)
-				        (- closure-level (var . level))))
-    ((object) (send trans :store-obj (var . offset)
-				     (- closure-level (var . level)))))))
+     (send trans :store-local (var . offset) (- closure-level (var . level))
+           (send self :var-bindframe var)))
+    ((param arg)
+     (send trans :store-arg (var . offset) (- closure-level (var . level))
+           (send self :var-bindframe var)))
+    ((object)
+     (send trans :store-obj (var . offset) (- closure-level (var . level))
+           (send self :var-bindframe var)))))
+ ) ; defmethod
 ) ;eval-when
 
 (eval-when (load eval)
 (defmethod compiler
  (:funcall (sym args)
+    (setq sym (function-alias sym))
     (let ((argcount (length args)) (arg-type-list nil) (entry))
 	(declare (type integer argcount))
 	(if (null (memq sym '(slot setslot)))
@@ -571,7 +844,7 @@
 (eval-when (load eval)
 (defmethod compiler
  (:special-form (fn args)
-    (case fn
+    (case (function-alias fn)
 	((quote) (send trans :load-quote (car args)) t)
 	((setq) (send self :setq args))
 	((if) (send self :if args) t)
@@ -589,17 +862,18 @@
 	((go) (send self :go (car args)) t)
 	((flet) (send self :flet (car args) (cdr args) nil) t)
 	((labels) (send self :flet (car args) (cdr args) t) t)
+	((macrolet) (send self :macrolet (car args) (cdr args)) t)
 	((unwind-protect)
 		(send self :unwind-protect (car args) (cdr args)) t)
 	((progn) (send self :progn args) t)
 	((function) (send self :function (car args)) t)
 	((the) (send self :eval (cadr args)) (coerce-type (car args)))
-	((defun) (send self :warning "defun must be at toplevel") t)
-	((defmacro) (send self :warning "defmacro must be at toplevel") t)
-	((defmethod) (send self :warning "defmethod must be at toplevel") t)
+	((defun) (send self :warning "defun must be at toplevel~%") t)
+	((defmacro) (send self :warning "defmacro must be at toplevel~%") t)
+	((defmethod) (send self :warning "defmethod must be at toplevel~%") t)
 	((eval-when) (send self :warning
-			  "eval-when must appear at toplevel, ignored") t)
-	(t (send self :error "Compiling method is not yet implemented." fn))))
+			  "eval-when must appear at toplevel, ignored~%") t)
+	(t (send self :error "Compiling method is not yet implemented for ~S" fn))))
    )	;defmethod
 )	;eval-when
 
@@ -703,48 +977,88 @@
 		  (send self :store-var var)
 		  (progn	;ovaf?
 		     (if (not (symbolp (cdr var)))
-			 (send self :error "illegal ovaf" var))
+			 (send self :error "illegal ovaf ~S" var))
 		     (send self :store-ovaf (car var) (cdr var))))
 	      (and (null var-val) (null duped) (send self :load-var var)))
      result-type))
- (:let* (bodies)	;sequential let
-   (let ((local-list (pop bodies)) (unwind-save unwind-frames))
-	(send self :create-frame)
+ (:let* (bodies &optional (rec t))	;sequential let
+   (let ((unwind-save unwind-frames) (i 0)
+         local-list bindframe vlist closure-vlist decl-vars)
+        (when rec
+          ;; in let* we need to sequentially bind variables directly into the frame.
+          ;; if we try to sequentially bind to locals and then assign to the frame,
+          ;; we won't be able to catch closure references within the assignment values
+          ;; e.g. (let* ((a 0) (b #'(lambda () a))) ...)
+          ;; to do this, we pre-execute the whole method and extract a list with all of
+          ;; the referenced variables. This list is then used to create a frame of
+          ;; appropriate size and bind the variables directly as they appear
+          (let ((trans (send trans :copy-translator))
+                (newcomp (send self :copy-compiler nil))
+                (avant-mode t))
+            (setq closure-vlist (send newcomp :let* bodies nil))))
+        (setq local-list (pop bodies))
+        (setq bindframe (send self :create-frame 'local (length closure-vlist) "seqlet"))
+        ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
-	   (send self :declare (cdr (pop bodies))))
+          (setq decl-vars (append decl-vars (send self :declare (cdr (pop bodies))))))
+        ;; eval and bind
 	(dolist (init-form local-list)
-	   (send self :eval (if (listp init-form) (cadr init-form) nil))
-	   (send self :bind
-		      	(if (listp init-form) (car init-form) init-form)
-			'local (1- (send trans :offset-from-fp))) )
+          (let* ((var (if (listp init-form) (car init-form) init-form))
+                 (cvar (and rec (find var closure-vlist :key #'(lambda (x) (x . name))))))
+            (send self :eval (if (listp init-form) (cadr init-form) nil))
+            (if cvar
+                (progn
+                  (send self :bind-closure-variable cvar 'let bindframe i)
+                  (inc i))
+                (let ((offset (1- (send trans :offset-from-fp))))
+                  (push (send self :bind var bindframe 'local offset) vlist)))))
+        ;; set/check declarations
+        (send self :check-declare-variables decl-vars)
+        ;; eval body
 	(send self :progn bodies)
+        ;; unwind/restore
         (setq unwind-frames unwind-save)
-	(send self :delete-frame t)))
+	(send self :delete-frame 'local t)
+	;; return value
+	(remove-if-not #'(lambda (v) (v . bindframe)) (nreverse vlist))))
  (:let (bodies)	;parallel let
-   (let ((local-list (pop bodies)) var special-list offset
-	 (unwind-save unwind-frames))
-	(send self :create-frame)
+   (let ((local-list (pop bodies)) (unwind-save unwind-frames)
+          bindframe special-list vlist decl-vars)
+	(setq bindframe (send self :create-frame 'local))
+        ;; handle declarations
         (while (and bodies (consp (car bodies)) (eq (caar bodies) 'declare))
-	   (send self :declare (cdr (pop bodies))))
+          (setq decl-vars (append decl-vars (send self :declare (cdr (pop bodies))))))
+        ;; eval to locals
 	(dolist (init-form local-list)
-	   (setq scope (1- (send idtable :level)))
-	   (setq var (if (listp init-form) (pop init-form) init-form))
-	   (send self :eval (if (listp init-form) (car init-form) nil))
-	   (setq offset (1- (send trans :offset-from-fp)))
-	   (cond
-		((send self :special-variable-p var)
-		   (send (car frames) :local 1)		;a trick
-		   (push (list var offset) special-list))
-		(t (send self :bind var 'local offset))))
-	;all the evaluation have finished, bind specials
+          (let (var offset)
+            (setq scope (1- (send idtable :level)))
+            (setq var (if (listp init-form) (car init-form) init-form))
+            (send self :eval (if (listp init-form) (cadr init-form) nil))
+            (setq offset (1- (send trans :offset-from-fp)))
+            (if (send self :special-variable-p var)
+                  (push (list var offset) vlist)
+                (push (send self :bind var bindframe 'local offset) vlist))))
+        (setq vlist (nreverse vlist))
+        ;; collect specials
+        (dolist (v vlist)
+          (unless (derivedp v identifier)
+            (send bindframe :local 1)	;a trick
+            (push v special-list)))
+        ;; all the evaluation have finished, bind specials
 	(dolist (spe special-list)
-	   (setq offset (send trans :offset-from-fp))
-	   (send trans :load-local (cadr spe) 0)
-	   (send self :bind (car spe) 'local offset))
+          (let ((offset (send trans :offset-from-fp)))
+            (send trans :load-local (cadr spe) 0)
+            (send self :bind (car spe) bindframe 'local offset)))
 	(setq scope (send idtable :level))
+        ;; bind closure variables
+        (send self :bind-frame bindframe bodies vlist "parlet")
+        ;; set/check declarations
+        (send self :check-declare-variables decl-vars)
+        ;; eval body
 	(send self :progn bodies)
+        ;; unwind/restore
 	(setq unwind-frames unwind-save)
-	(send self :delete-frame t)))
+	(send self :delete-frame 'local t)))
  (:cond (clauses)
     (let (clause pred next t-found  (exit (send self :genlabel "CON")))
 	(while clauses
@@ -813,16 +1127,79 @@
     (send self :eval lab)
     (send self :eval val)
     (send trans :throw))
+ (:closure (form &optional comment cframes fframes)
+    ;; the closure environment is represented as a vector with each of the referenced frames
+    ;; each frame itself is also represented as a vector and shared between closure instances,
+    ;; ensuring cross read and write access to the variables.
+    ;; the reference frames are judged by pre-evaluating the code and collecting variable
+    ;; references, which are then passed to this method through the `cframes' argument.
+
+    (let (frame)
+      (when (or cframes fframes)
+        ;; create a new vector which holds all necessary frames
+        (let ((size (+ (length cframes) (length fframes))))
+          (setq frame (send self :create-frame nil size comment))
+          ;; pack from variables and then function frames
+          (dotimes (i (length cframes))
+            (let ((f (nth i cframes)))
+              (send trans :load-local f 0)
+              (send trans :store-local i 0 (frame . offset))))
+          (dotimes (i (length fframes))
+            (let ((f (nth i fframes))
+                  (j (+ i (length cframes))))
+              (send trans :load-local f 0)
+              (send trans :store-local j 0 (frame . offset))))))
+      ;; makeclosure
+      (send trans :closure form (plusp closure-level) (not (not frame)))))
+ (:lambda-preevaluation (fn &optional name newcomp)
+    ;; pre-evaluate a closure definition and collect all referenced variables.
+    ;; then, add the reference function to each variable's `clist'
+    (let ((param (cadr fn))
+          (forms (cddr fn)))
+      (unless newcomp
+        (setq newcomp (send self :copy-compiler))
+        (setq (newcomp . idtable) idtable)
+        (setq (newcomp . flets) flets))
+      (flet ((lambda-closure-frames ()
+               (send newcomp :enter-block name)
+               (send newcomp :lambda param forms nil)
+               (send newcomp :leave-block)
+               (when (listp closure-frames)
+                 (dolist (v closure-frames)
+                   (pushnew fn (identifier-clist v))))
+               (when (listp closure-function-frames)
+                 (dolist (f closure-function-frames)
+                   (pushnew fn (function-identifier-clist f))))))
+        ;; we need to collect references recursively: #'(lambda () #'(lambda () a))
+        ;; but don't want to carry them sequentially: #'(lambda () 1) #'(lambda () a)
+        ;; to do that, we only overwrite the `closure-frames' on the first evaluation
+        (cond
+          ((and closure-frames closure-function-frames)
+           (lambda-closure-frames))
+          ((and closure-frames (not closure-function-frames))
+           (let ((closure-function-frames t))
+             (lambda-closure-frames)))
+          ((and (not closure-frames) closure-function-frames)
+           (let ((closure-frames t))
+             (lambda-closure-frames)))
+          (t ;; both null
+           (let ((closure-frames t)
+                 (closure-function-frames t))
+             (lambda-closure-frames))))
+        (send trans :discard 1))))
  (:unwind-protect (prot cleanup)
-    (let ((cleaner (send self :genlabel "UWP"))
-	  (newcomp))
-      (push (send trans :offset-from-fp) unwind-frames)
-      (send trans :closure cleaner)	;make cleanup closure
-	 (setq newcomp (send self :copy-compiler))
-	 (send self :add-closure
-		    (list cleaner 
-			  (cons 'lambda	(cons nil cleanup))
-			  newcomp))
+    (let ((fn (cons 'lambda (cons nil cleanup)))
+          cleaner newcomp)
+      (if avant-mode
+          (send self :lambda-preevaluation fn)
+          (let* ((cframes (send idtable :get-cframes fn closure-level))
+                 (fframes (send self :get-flet-cframes fn closure-level (length cframes))))
+            (setq cleaner (send self :genlabel "UWP"))
+            (push (send trans :offset-from-fp) unwind-frames)
+            ;; make cleanup closure
+            (send self :closure cleaner "unwind protect" cframes fframes)
+            (setq newcomp (send self :copy-compiler))
+            (send self :add-closure nil cleaner fn newcomp cframes fframes)))
       (send trans :bind-cleaner)
       (send self :eval prot)
       (send trans :call-cleaner cleaner)
@@ -836,7 +1213,7 @@
  (:enter-block (lab)
    (let ((spsave (send trans :offset-from-fp))
 	 (blklab (send self :genlabel "BLK")))
-      (if (null (symbolp lab)) (send self :warning "no symbolic block label"))
+      (if (null (symbolp lab)) (send self :error "no symbolic block label"))
       (push (list lab blklab closure-level spsave) blocks)
       blklab))
  (:leave-block () (setq blocks (cdr blocks)))
@@ -847,7 +1224,7 @@
       (send self :leave-block))
  (:return-from (lab val)
    (let ((blklab (assq lab blocks)) (need-unwind) (offset))
-      (if (null blklab) (send self :error "no such block" lab))
+      (if (null blklab) (send self :error "no such block ~S" lab))
       (send self :eval val)
       (if (> closure-level (third blklab))
 	  (send self :error "return-from in a closure cannot be compiled"))
@@ -872,7 +1249,7 @@
       (setq tags oldtags)))
  (:go (lab)
    (let ((tag (assq lab tags)) (offset) (need-unwind))
-      (if (null tag) (send self :error "no such tag to go" lab))
+      (if (null tag) (send self :error "no such tag ~S" lab))
       (setq offset (third  tag))
       (setq need-unwind (and unwind-frames (>= (first unwind-frames) offset)))
       (send trans :go-tag offset need-unwind)
@@ -880,40 +1257,116 @@
  (:function (fn)
    (if (symbolp fn)		; #'FUNC
        (let ((flet-def (send self :get-function fn)))
-	   (if (eq (second flet-def) 'closure)
-	       (send trans :load-local (third flet-def)
-					(- closure-level (fourth flet-def)))
+	   (if (eq (flet-def . binding) 'closure)
+	       (send trans :load-local (flet-def . offset)
+					(- closure-level (flet-def . level))
+                                        (send self :flet-bindframe flet-def))
 	       (send trans :getfunc fn)))
-       (let ((entry (send self :genlabel "CLO"))  ; #'(lambda (...) ...)
-	     (newcomp))
-          (send trans :closure entry)
-	  (setq newcomp (send self :copy-compiler))
-	  (send self :add-closure (list entry fn newcomp))
-         )))
- (:flet (funcs bodies recursive-scope &aux (flets-save flets))
+       (let (entry newcomp)  ; #'(lambda (...) ...)
+         (if avant-mode
+             (send self :lambda-preevaluation fn)
+             (let* ((cframes (send idtable :get-cframes fn closure-level))
+                    (fframes (send self :get-flet-cframes fn closure-level (length cframes))))
+               (setq entry (send self :genlabel "CLO"))
+               (send self :closure entry "lambda-closure" cframes fframes)
+               (setq newcomp (send self :copy-compiler))
+               (send self :add-closure nil entry fn newcomp cframes fframes))))))
+ (:flet (funcs bodies recursive-scope)
      ;recursive-scope==T for labels, NIL for flet
-     (let (entry newcomp newcomps flets-exchange)
+     (let (newcomp newcomps flets-tmp flist fletframe)
+        (if (not recursive-scope)	; copy compiler before binding the functions
+           (setq newcomp (send self :copy-compiler)))
         (dolist (fn funcs)
-	    (setq entry (send self :genlabel "FLET"))
-	    (send trans :closure entry)	;makeclosure
-	    (push (list (car fn)	;func name
-			'closure	;func bind type
-			(1- (send trans :offset-from-fp))
-			closure-level
-			entry)
-		  flets)
-	    (setq newcomp (send self :copy-compiler))
-	    (push newcomp newcomps)
-	    (send self :add-closure (list entry (cons 'lambda (cdr fn))
-				    newcomp)))
+          (let ((entry (send self :genlabel "FLET"))
+                (offset (1- (send trans :offset-from-fp)))
+                (body (cons 'lambda (cdr fn))))
+            (when recursive-scope
+              (setq newcomp (send self :copy-compiler))
+              (push newcomp newcomps))
+            (push (instance function-identifier :init
+                            (car fn) 'closure offset closure-level entry body newcomp)
+                  flets-tmp)))
+
+        ;; pre-evaluate closures
+        (let ((trans (send trans :copy-translator))
+              (newcomp (send self :copy-compiler))
+              (avant-mode t))
+          (setq (newcomp . flets) (append flets-tmp flets))
+          (setq (newcomp . idtable) idtable)
+          (dolist (fn flets-tmp)
+            (send self :lambda-preevaluation (fn . body) (fn . name) newcomp)))
+
+        ;; pre-evaluate body
+        (let ((trans (send trans :copy-translator))
+              (newcomp (send self :copy-compiler nil))
+              (avant-mode t))
+          (setq (newcomp . flets) (append flets-tmp flets))
+          (send newcomp :progn bodies))
+
+        ;; bind frames
+        (setq flist (remove-if-not #'(lambda (v) (v . bindframe)) (reverse flets-tmp)))
         (if recursive-scope
-	    (send-all newcomps :change-flets flets))
+            ;; when recursive setup the bindframe beforehand
+            (setq fletframe (send self :create-frame 'flet (length flist) "flet")))
+
+        (if (not avant-mode)
+          (dolist (fn (reverse flets-tmp))
+            (let* ((cframes (send (newcomp . idtable) :get-cframes (fn . body) closure-level))
+                   (fframes (send self :get-flet-cframes
+                                  (fn . body) closure-level (length cframes))))
+              (when recursive-scope
+                ;; append the current frame if any references are found
+                (when (send self :get-flet-cframes
+                            (fn . body) closure-level (length cframes) flist)
+                  (pushnew (fletframe . offset) fframes)))
+              (send self :closure (fn . entry) "flet env" cframes fframes)
+              (setq (fn . offset) (1- (send trans :offset-from-fp)))
+              (send self :add-closure
+                    (fn . name) (fn . entry) (fn . body) (fn . newcomp) cframes fframes))))
+
+        (if (not recursive-scope)
+          ;; when not recursive setup the bindframe after the closure declaration
+          (setq fletframe (send self :create-frame 'flet (length flist) "flet")))
+
+        (send fletframe :local (length flets-tmp))
+
+        (dotimes (i (length flist))
+          (let ((fn (nth i flist)))
+            (send trans :load-local (fn . offset) (- closure-level (fn . level)))
+            (send trans :store-local i 0 (fletframe . offset))
+            (setq (fn . bindframe) (fletframe . offset)
+                  (fn . offset) i)))
+
+        ;; reset cbindframes to force re-evaluation
+        ;; this is needed to ensure that each closure has an
+        ;; unique and compatible mapping
+        (send self :reset-flets-cbindframe flets-tmp)
+
+        ;; evaluate body
+        (setq flets (append flets-tmp flets))
+        (if recursive-scope (send-all newcomps :change-flets flets))
         (send self :progn bodies)
-        (setq flets (nthcdr (length funcs) flets))
-        (send trans :del-frame 0 (length funcs))))
+        (if (not recursive-scope) (send newcomp :change-flets flets))
+        ;; unwind/restore
+        (send self :reset-flets-cbindframe flets-tmp)
+        (setq flets (nthcdr (length flets-tmp) flets))
+        (send self :delete-frame 'flet nil)
+        (send trans :del-frame (fletframe . specials) (fletframe . locals))))
+ (:macrolet (funcs bodies)
+   (dolist (fn funcs)
+     (push (instance function-identifier :init-body
+                     (car fn) 'macrolet `(lambda ,@(cdr fn)))
+           flets))
+   (send self :progn bodies)
+   (setq flets (nthcdr (length funcs) flets)))
  (:change-flets (newflets) (setq flets newflets))
+ (:reset-flets-cbindframe (flets-tmp)
+   (dolist (fdef flets-tmp)
+     (when (fdef . cbindframe)
+       (setq (fdef . cbindframe) t))))
  (:declare (args)
-    (let (v)
+    ;; bind statements and return type declared variables
+    (let (v acc)
       (declare (type identifier v))
       (dolist (decl args)
         (case (car decl)
@@ -924,13 +1377,15 @@
 	  (type 
 	     (dolist (id (cddr decl))
 		(setq v (send self :enter-variable id))
-		(send v :type (cadr decl))))
+		(send v :type (cadr decl))
+		(push (cons id (v . type)) acc)))
 	  (ftype
 	     (def-function-type (cadr decl) (cddr decl)))
 	  ((integer :integer fixnum :fixnum :float float)
 	     (dolist (id (cdr decl))
 		(setq v (send self :enter-variable id))
-		(send v :type (car decl))))
+		(send v :type (car decl))
+		(push (cons id (v . type)) acc)))
 	  (optimize (setq *optimize* (cadr decl)))
 	  (safety (setq *safety* (cadr decl)))
 	  (space (setq *space* (cadr decl)))
@@ -939,30 +1394,53 @@
 	  (t (cond ((class-symbolp (car decl))
 		     (dolist (id (cdr decl))
 			(setq v (send self :enter-variable id))
-			(send v :type (car decl))))
-		   (t  (send self :warning "unknown declaration" decl))))
-	  ))))
- (:lambda (param forms)
+			(send v :type (car decl))
+			(push (cons id (v . type)) acc)))
+		   (t  (send self :error "unknown declaration ~S" decl))))))
+      (nreverse acc)))
+ (:check-declare-variables (decl-vars)
+    (dolist (dvar decl-vars)
+      (let* ((id (car dvar))
+             (tp (cdr dvar))
+             (v (send self :variable id)))
+        (if (eq (send v :type) t) (send v :type tp))
+        (when *type-check-declare*
+          (unless (eql (v . binding) 'unknown)
+            (send self :load-var id)
+            (send trans :type-check-declare tp))))))
+ (:lambda (param forms &optional (rec t))
    (let ((labels nil)
 	 (i 0)
 	 (reqn 0)
 	 (optn 0)
 	 (keyn 0)
+	 (auxn 0)
+         (opt-supplied-vars)
          (opt-vars (memq '&optional param))
          (rest-var (memq '&rest param))
 	 (key-forms (memq '&key param))
 	 (aux-vars (memq '&aux param))
 	 (key-vars)
+	 (key-supplied-vars)
          (req-vars nil)
 	 (opt-forms nil)
 	 (key-names nil)
 	 (key-inits nil)
 	 (key-base 0)
+	 (decl-vars nil)
 	 (specially-bound nil)
 	 (allowotherkeys (memq '&allow-other-keys param))
 	 (unwind-save unwind-frames)
-	 (vname nil)
-	 (label2))
+         (cvar-i 0) argframe vlist closure-vlist)
+     (when rec
+       ;; as in let*, we need to sequentially bind variables directly to the frame
+       ;; so we pre-evaluate the whole method, and then create/populate the frame
+       (let* ((trans (send trans :copy-translator))
+              (newcomp (send self :copy-compiler nil))
+              (avant-mode t)
+              (preevaluation-result (send newcomp :lambda param forms nil)))
+           (setq closure-vlist (car preevaluation-result))
+           (send self :check-declare-variables (cadr preevaluation-result))))
      (setq req-vars
            (reverse 
 		  (nthcdr (length (cond (opt-vars)
@@ -981,22 +1459,42 @@
 				opt-vars)
 	   key-forms	(cdr key-forms)
 	   keyn		(length key-forms))
-     (when allowotherkeys
-	(setq key-forms (subseq key-forms 0 (dec keyn))))
+     (when key-forms
+       (cond
+         (allowotherkeys
+          (setq key-forms (subseq key-forms 0 (dec keyn (length allowotherkeys)))))
+         (aux-vars
+          (setq key-forms (subseq key-forms 0 (dec keyn (length aux-vars)))))))
+     (setq aux-vars (cdr aux-vars)
+           auxn (length aux-vars))
 ;; prepare labels for the init-forms of optional variables
      (if opt-vars
 	(while (<= i optn)	;optn+1 labels
            (push (send self :genlabel "ENT") labels)
    	   (inc i))
 	(if rest-var (setq labels (list (send self :genlabel "RST")))))
+;; extract optional supplied-p variables
+     (dolist (opt opt-vars)
+       (let (svar)
+         (when (and (listp opt) (cddr opt))
+           (setq svar (caddr opt))
+           (unless (and (symbolp (caddr opt)) (not (constantp svar)))
+             (send self :error "optional supplied variable")))
+         (push svar opt-supplied-vars)))
+     (setq opt-supplied-vars (nreverse opt-supplied-vars))
 ;; extract optional variable names
      (setq opt-vars (mapcar #'(lambda (x) (if (listp x) (car x) x)) opt-vars))
-     (send self :create-frame)
 ;; parse keyword variables
      (if key-forms
-	 (let (init key var)
+	 (let (init key var svar)
             (dolist (k key-forms)
 		(cond ((listp k)
+			;; key-supplied-vars
+			(when (cddr k)
+                          (setq svar (caddr k))
+                          (unless (and (symbolp svar) (not (constantp svar)))
+                            (send self :error "keyword supplied variable")))
+			;; key-inits / key-names
 			(setq init (cadr k) k (car k))
 			(cond ((listp k)
 			       (setq key (car k) var (cadr k))
@@ -1009,80 +1507,165 @@
 						   *keyword-package*))) ))
 		      (t (setq init nil
 			       var k
+			       svar nil
 			       key (intern (symbol-name var)
 					   *keyword-package*))))
 	  (setq key-names (cons key key-names)
 		key-vars  (cons var key-vars)
+		key-supplied-vars  (cons svar key-supplied-vars)
 		key-inits (cons init key-inits)))   ;end dolist
-	(nreverse key-names)
-	(nreverse key-vars)
-	(nreverse key-inits)
+	(setq key-names (nreverse key-names))
+	(setq key-vars (nreverse key-vars))
+	(setq key-inits (nreverse key-inits))
+	(setq key-supplied-vars (nreverse key-supplied-vars))
 	;(format t ";key-names length=~d ~s~%" (length key-names)  key-names)
 	(if (>= (length key-names) 128) ;; KEYWORDPARAMETERLIMIT
 	    (send self :error "Too many keyword parameters>128 ~s" key-names))
         ) )
 ;; declaration
      (while (and forms (consp (car forms)) (eq (caar forms) 'declare))
-	(send self :declare (cdr (pop forms))))
+	(setq decl-vars (append decl-vars (send self :declare (cdr (pop forms))))))
 ;; (print "declaration")
      (send trans :check-req-arg  reqn (+ optn
 					 (if rest-var 1
 					     (if key-forms keyn 0))))
+;; create argument frame
+     (setq argframe (send self :create-frame 'arg (length closure-vlist) "argv"))
 ;; (print "bind")
      (setq i 0)
-     (dolist (v req-vars)		;for all required arguments
-	(send self :bind v 'arg i)
-	(inc i))
+     (dolist (v req-vars)              ;for all required arguments
+       (let ((cvar (and rec (find v closure-vlist :key #'(lambda (x) (x . name))))))
+         (if cvar
+             (progn
+               (send trans :load-arg i 0)
+               (send self :bind-closure-variable cvar (cvar . binding) argframe cvar-i)
+               (inc cvar-i))
+             (push (send self :bind v argframe 'arg i) vlist)))
+       (inc i))
      (while (cdr labels)
-	(send trans :check-opt-arg i (car labels))
-        (send self :eval (pop opt-forms))
-	(send trans :label (pop labels))
-	(send self :bind (pop opt-vars) 'local 
-				 (1- (send trans :offset-from-fp)))
-	(inc i))
+       (let ((var (pop opt-vars))
+             (svar (pop opt-supplied-vars)))
+         (when svar	; initialize supplied-p to t
+           (send trans :load-t)
+           (let ((c-svar (and rec (find svar closure-vlist :key #'(lambda (x) (x . name))))))
+             (if c-svar
+                 (progn
+                   (send self :bind-closure-variable c-svar 'lambda argframe cvar-i)
+                   (inc cvar-i)
+                   (setq svar c-svar))
+                 (let ((offset (1- (send trans :offset-from-fp))))
+                   (setq svar (send self :bind svar argframe 'local offset)))))
+           (push svar vlist))
+         (let ((cvar (and rec (find var closure-vlist :key #'(lambda (x) (x . name))))))
+           (if cvar
+               (progn
+                 (send self :bind-closure-variable cvar 'lambda argframe cvar-i
+                       :store nil)
+                 (inc cvar-i)
+                 (send self :load-var cvar)
+                 (send trans :check-opt-arg-frame i (car labels))
+                 (setq var cvar))
+               (send trans :check-opt-arg i (car labels))))
+         (when svar	; set supplied-p to nil
+           (send trans :load-nil)
+           (send self :store-var svar))
+         ;; set init value
+         (send self :eval (pop opt-forms))
+         (if (derivedp var identifier)
+             (send self :store-var var))
+         (send trans :label (pop labels))
+         (unless (derivedp var identifier)
+           (let ((offset (1- (send trans :offset-from-fp))))
+             (push (send self :bind var argframe 'local offset) vlist)))
+         (inc i)))
      (when labels
         (send trans :label (pop labels)))
      (cond 
      	(rest-var
 	 (send trans :rest (+ reqn optn))
-         (send self :bind rest-var 'local
-				 (1- (send trans :offset-from-fp))))
+         (let ((cvar (and rec (find rest-var closure-vlist :key #'(lambda (x) (x . name))))))
+           (if cvar
+               (progn
+                 (send self :bind-closure-variable cvar 'lambda argframe cvar-i)
+                 (inc cvar-i))
+               (let ((offset (1- (send trans :offset-from-fp))))
+                 (push (send self :bind rest-var argframe 'local offset) vlist)))))
 	((and (> optn 0) (null key-forms)) (send trans :check-rest-arg i)))
      (when key-forms
-	(setq key-base  (send trans :offset-from-fp))
-	(send trans :parse-key-params (coerce key-names vector)
-				      (+ reqn optn)
-				      keyn  allowotherkeys)
-	(dotimes (i keyn)
+       (let ((key-base (send trans :offset-from-fp)))
+         (send trans :reset-vsp)
+         ;; bind given arguments
+         (send trans :parse-key-params (coerce key-names vector)
+               (+ reqn optn)
+               keyn allowotherkeys)
+         ;; bind defaults / supplied arguments
+         (dotimes (j keyn)
+           (let ((var (pop key-vars))
+                 (svar (pop key-supplied-vars)))
 	   (setq labels (send self :genlabel "KEY"))
-	   (send trans :check-key-arg i labels)
-	   ; go around evaluating default for a key-var
+           (when svar	; set supplied-p variables to t
+             (send trans :load-t)
+             (let ((c-svar (and rec (find svar closure-vlist :key #'(lambda (x) (x . name))))))
+               (if c-svar
+                   (progn
+                     (send self :bind-closure-variable c-svar 'lambda argframe cvar-i)
+                     (inc cvar-i)
+                     (setq svar c-svar))
+                   (let ((offset (1- (send trans :offset-from-fp))))
+                     (setq svar (send self :bind svar argframe 'local offset)))))
+             (push svar vlist))
+	   (send trans :check-key-arg j labels)
+	   (when svar	; set supplied-p variables to nil
+             (send trans :load-nil)
+             (send self :store-var svar))
+	   ;; set default values
 	   (send self :eval (pop key-inits))
-	   (setq vname (pop key-vars))
-	   (cond ((send self :special-variable-p vname)
-		  (setq label2 (send self :genlabel "KEY"))
-		  (send trans :jump label2)
+	   (cond ((send self :special-variable-p var)
+                  (send trans :store-local (+ key-base j) 0)
 		  (send trans :label labels)
-		  (send trans :adjust 1)
-	          (send trans :load-local (+ i key-base) 0)
-		  (send trans :label label2)
-		  (send self :bind vname 'local (+ key-base i) t) )
+	          (send trans :load-local (+ key-base j) 0)
+		  (push (send self :bind var argframe 'local (+ key-base j) :keyvarp t)
+                        vlist))
 	         (t	;non-special
-		  (send self :bind vname 'local (+ key-base i))
-		  (send trans :store-local (+ key-base i) 0)
-		  (send trans :label labels)	)   )
+		  (setq var (send self :bind var argframe 'local (+ key-base j)))
+		  (send self :store-var var)
+		  (push var vlist)
+		  (send trans :label labels)
+                  (let ((cvar (and rec (find (var . name) closure-vlist
+                                             :key #'(lambda (x) (x . name))))))
+                    (when cvar
+                      ;; `:bind-closure-variable' only adds new entries
+                      ;; manually reassign values instead
+                      (send self :load-var var)
+                      (send trans :clearpush-frame (argframe . offset) cvar-i)
+                      (setq (var . binding) 'lambda
+                            (var . bindframe) (argframe . offset)
+                            (var . clist) (cvar . clist)
+                            (var . offset) cvar-i)
+                      (inc cvar-i)))))))
 	)   )
 ;;; bind aux variables
      (dolist (av aux-vars)
-	(if (consp av) (send self :eval (cadr av)) (send self :eval nil))
-	(send self :bind (if (listp av) (car av) av)
-			 'local 
-			 (1- (send trans :offset-from-fp))))
+	(if (consp av) (send self :eval (cadr av)) (send trans :load-nil))
+        (let* ((var (if (listp av) (car av) av))
+               (cvar (and rec (find var closure-vlist :key #'(lambda (x) (x . name))))))
+          (if cvar
+              (progn
+                (send self :bind-closure-variable cvar 'lambda  argframe cvar-i)
+                (inc cvar-i))
+               (let ((offset (1- (send trans :offset-from-fp))))
+                 (push (send self :bind var argframe 'local offset) vlist)))))
+;;; set/check declaration types
+     (send self :check-declare-variables decl-vars)
 ;;; evaluate lambda body
      (send self :progn forms)
+;;; unwind/restore
      (setq unwind-frames unwind-save)
-     (send self :delete-frame t)
-  ))
+     (send self :delete-frame 'arg t)
+;;; return value
+     (list
+      (remove-if-not #'(lambda (v) (v . bindframe)) (nreverse vlist))
+      decl-vars)))
  (:lambda-block (name arglist bodies cname)
    (let ((ctime (unix:runtime))
 	 blklabel)
@@ -1120,6 +1703,10 @@
 	     (if (and (stringp (car bodies))  (cdr bodies))
 		 (pop bodies)
 		 (format nil "~s" arglist)))
+       (when closure-frames
+         (send self :error "closure-frames should always be nil at the toplevel"))
+       (when closure-function-frames
+         (send self :error "closure-function-frames should always be nil at the toplevel"))
        (send self :lambda-block name arglist bodies cname)
        (send self :add-initcode (list fun-macro cname name doc))))
  (:defmethod (methods) 
@@ -1129,7 +1716,7 @@
 	 (objvars (object-variable-names myclass))
 	 (i 0) (v nil) doc)
       (setq methods (cdr methods))
-      (send self :create-frame)	;enter object variables
+      (send self :create-frame 'local)	;enter object variables
       (dolist (ovar objvars)
 	 (setq v (send self :enter-variable ovar)
 	 	 (v . binding) 'object
@@ -1152,7 +1739,7 @@
          (send self :add-initcode
 		 (list 'defmethod myclass selector entry doc) ))
       (setq myclass nil)
-      (send self :delete-frame nil)
+      (send self :delete-frame 'local nil)
       ))
    ) ;defmethod
 )    ;eval-when
@@ -1160,27 +1747,32 @@
 (eval-when (load eval)
 (defmethod compiler
  (:add-initcode (form) (setq initcodes (cons form initcodes)))
- (:add-closure (clo) (setq function-closures (cons clo function-closures)))
+ (:add-closure (name entry def newcomp cframes fframes)
+   (let ((clo (instance closure-identifier :init name entry def newcomp cframes fframes)))
+     (setq function-closures (cons clo function-closures))))
  (:closure-level (increment)  (inc closure-level increment))
- (:compile-a-closure (entry def)
-   (if *debug* (format t ";closure: ~s~%" def))
-   (let* ((param (cadr def)) (bodies (cddr def)))
+ (:compile-a-closure (name entry def)
+   (if *debug* (format t ";closure: ~s: ~s~%" name def))
+   (let* ((param (cadr def)) (bodies (cddr def)) blklabel)
       (setq function-closures nil)
       (send trans :declare-forward-function entry)
       (send trans :enter entry "closure or cleaner")
 ;      (send trans :pushenv)
+      (setq blklabel (send self :enter-block name))
       (send self :lambda param bodies)
+      (send trans :label blklabel)
       (send trans :return)
+      (send self :leave-block)
       (send self :compile-closures)
      )
    )
  (:compile-closures ()
    (dolist (aclosure (reverse function-closures))
-      (send (caddr aclosure) :compile-a-closure (car aclosure) (cadr aclosure)))
+     (send aclosure :compile))
    (setq function-closures nil))
  (:toplevel-eval (form)
    (setq function-closures nil)
-   (let* ((fn (car form)))
+   (let* ((fn (function-alias (car form))))
      (case fn
 	((defun defmacro)
 	 (send self :defun fn (cadr form) (caddr form) (cdddr form))
@@ -1244,189 +1836,190 @@
 	   (setq o (pathname o))
 	   (setq o (merge-pathnames o file))
 	   (setq o (merge-pathnames ".o" o)))
-   (let ((name nil) (c nil) (form nil)
-	 (ins) (cccom)
-	 (file.c (merge-pathnames ".c" file))
-	 (file.h (merge-pathnames ".h" file))
-	 (file.q (merge-pathnames ".q" file))
-	 (file.o (if o o (merge-pathnames ".o" file)))
-	 (file.so (if o (merge-pathnames ".so" o)
-			(merge-pathnames ".so" file)))
-	 (file.dll (if o (merge-pathnames ".dll" o)
-		         (merge-pathnames ".dll" file)))
-	 (cpack *package*))
-      (unless (eq (unix:access (send (pathname file) :directory-string) unix::O_RDWR) t) ;; source directory is not writable
-        (warn ";; ~A is write protected, use temporary compile directory to ~A~%" file (send o :directory-string))
-        (setq file.c (merge-pathnames ".c" o)
-              file.h (merge-pathnames ".h" o)
-              file.q (merge-pathnames ".q" o)))
-      (when (null (probe-file file))
-	 (setq file (merge-pathnames ".l" file))
-         (if (null (probe-file  file)) 
-	     (error "file ~A not found~%" file)))
-      (warn "compiling file: ~A~%" (namestring file))
-      (setq ins (open file))
-      (setq *defun-list* nil)
-      (when *multipass-optimize*
-	(while t
-	  (setq form (read ins nil '$eof$))
-	  (if (eq form '$eof$) (return nil))
-	  (send self :toplevel form t t))
-	(unix:lseek ins 0))
-      (nreverse *defun-list*)
-      (send trans :init-file file file.c file.h entry)
-      (send idtable :init-frames)
-      (setq frames nil
-	    scope 0
- 	    blocks nil
-	    initcodes nil)
-      (while t
-	 (setq form (read ins nil '$eof$))
-	 (if (eq form '$eof$) (return nil))
-	 (send self :toplevel form t))
-      (setq initcodes (reverse initcodes))
-      (send trans :eusmain entry)
-      (dolist (form initcodes) (send self :toplevel-execution form))
-      (send trans :load-nil)
-      (send trans :return)
-      (send self :compile-closures)
-      (send trans :declare-ftab)
-      (send trans :ftab-initializer)
-      (let ((symvec (cpack . symvector)) (symcnt (cpack . symcount)))
-	(setq (cpack . symvector) (make-array 0)
-	      (cpack . symcount) 1)
-	;; write every symbol in this package as internal symbols
-	;; (warn "writing quote vector file in ~s~%" *package*)
-	(send trans :write-quote-vector)
-	(setq (cpack . symvector) symvec
-	      (cpack . symcount) symcnt))
-      (send trans :close)
-      (close ins)
-      (setq cccom
-	 (concatenate
-		   string
-		   *cc*
-		   " -c"
-		   (if o (concatenate string " -o " (namestring o)))
-		   (cond ((memq :sun3 *features*) " -Dsun3 -w")
-		   	 ((memq :sun4 *features*) " -Dsun4 -w")
-;		   	 ((memq :mips *features*) " -Dmips -G 0 -w")
-;		   	 ((memq :irix *features*) " -Dmips -DIRIX -signed -w")
-		   	 ((memq :irix *features*) " -Dmips -DIRIX -w ")
-		   	 ((memq :irix6 *features*) " -Dmips -DIRIX6 -woff all")
-		   	 ((memq :vax *features*)  " -Dvax -J")
-		   	 ((memq :news *features*)  " -Dnews")
-		   	 ((memq :sanyo *features*)  " -Dsanyo")
-		   	 ((memq :darwin *features*)
-			  (if (memq :x86_64 *features*)
-			      " -DDarwin -Dx86_64 -DLinux -w -falign-functions=8 "
-			    " -DDarwin -Di386 -DLinux -w -falign-functions=4 "))
-		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
-			  (cond
-                           ((memq :x86_64 *features*)
-                            " -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
-                           ((memq :aarch64 *features*)
-                            " -Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
-                           ((memq :arm *features*)
-                            " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
-                           ((memq :word-size=64 *features*)
-                            " -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
-                           (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -fno-stack-protector -DGCC3 ")))
-		   	 ((memq :linux *features*)
-			  (if (memq :x86_64 *features*)
-				" -Dx86_64 -DLinux -Wimplicit -malign-functions=8 "
-				" -Di386 -DLinux -Wimplicit -malign-functions=4 "))
-			 ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
-			 ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DX_V11R6_1 -falign-functions=4")
-			 ((memq :i386  *features*) " -Di386")
-			 (t (warn "cpu type is not properly set")))
-		   (cond ((memq :sunos4 *features*) " -DSunOS4 -Bstatic")
-			 ((memq :sunos4.1 *features*) " -DSunOS4_1")
-			 ((memq :Solaris2 *features*) " -DSolaris2")
-			 (t ""))
-		   (if (memq :gcc *features*) " -DGCC -fsigned-char " )
-		   (if (memq :thread *features*) " -DTHREADED" )
-		   (if (memq :pthread *features*) " -DPTHREAD" )
-		   (if (memq :rgc *features*) " -DRGC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD" )
-		   (if pic
-		       (cond ((memq :SunOS4.1 *features*) " -fpic")
-			     ((memq :cygwin *features*) "")
-			     ((memq :Gcc *features*) " -fpic ")
-			     ((memq :Solaris2 *features*) " -K pic")
-			     ((memq :linux *features*) " -fpic")
-			     ((memq :irix *features*) " -KPIC")
-			     ((memq :irix6 *features*) " -KPIC")
-			     ((memq :alpha *features*) " -fpic")
-			     (t " -pic"))
-		       )
-		   cc-option
-		   " -I" (namestring *eusdir*) "include"
-		   *coptflags* *cflags*
-		   " "     (namestring file.c)
-		   (if (and (memq :sunos4.1 *features*)  pic)
-			(concatenate string
-				"; ld -o "
-				(namestring file.so)
-				" "
-				(namestring file.o))
-			)
-		   (if (and (or (memq :irix *features*)
-				(memq :irix6 *features*)) pic)
-			(concatenate string
-				"; ld -shared -o "
-				(namestring file.so)
-				" "
-				(namestring file.o))
-			)
-		   (if (and (memq :linux *features*)  pic)
-			(concatenate string
-				     (cond 
-				      ((memq :darwin *features*)
-				       "; gcc -dynamiclib -flat_namespace -undefined suppress -o ")
-				      ((memq :sh4 *features*)
-				       "; sh4-linux-gcc -shared -o ")
-				      ((memq :ia32 *features*)
-				       "; ld -melf_i386 -shared -build-id -o ")
-				      ((memq :i386 *features*)
-				       "; gcc -shared -Xlinker -build-id -o ")
-				      (t
-				       "; ld -shared -build-id -o "))
-				(namestring file.so)
-				" "
-				(namestring file.o))
-			"")
-		   (if (and (memq :alpha *features*)  pic)
-			(concatenate string
-				"; ld -shared -update_registry so_locations -expect_unresolved '*' -g0 -O1 -o "
-				(namestring file.so)
-				" "
-				(namestring file.o))
-			"")
-		   (if (and (memq :cygwin *features*)
-			    (not *kernel*))
-			(concatenate string
-				"; gcc -shared -g -falign-functions=4 -Wl,--export-all-symbols -Wl,--unresolved-symbols=ignore-all -Wl,--enable-runtime-pseudo-reloc -o "
-				(namestring file.dll) " "
-				(namestring file.o) " "
-				*eusdir* (unix:getenv "ARCHDIR")
-				"/bin/"
-				"eusgl.a "
-				"-lm -lpthread "
-				))
-		))
-      (when cc
-         (warn "~A" cccom)
-         (unix:system cccom))
-      (dolist (f *defun-list*) (remprop f 'user-function-entry))
-      (terpri *error-output*)
-     ))
+   (unwind-protect
+     (let ((name nil) (c nil) (form nil)
+           (ins) (cccom)
+           (file.c (merge-pathnames ".c" file))
+           (file.h (merge-pathnames ".h" file))
+           (file.o (if o o (merge-pathnames ".o" file)))
+           (file.so (if o (merge-pathnames ".so" o)
+                  (merge-pathnames ".so" file)))
+           (file.dll (if o (merge-pathnames ".dll" o)
+                       (merge-pathnames ".dll" file)))
+           (cpack *package*))
+        (unless (eq (unix:access (send (pathname file) :directory-string) unix::O_RDWR) t) ;; source directory is not writable
+          (warn ";; ~A is write protected, use temporary compile directory to ~A~%" file (send o :directory-string))
+          (setq file.c (merge-pathnames ".c" o)
+                file.h (merge-pathnames ".h" o)))
+        (when (null (probe-file file))
+           (setq file (merge-pathnames ".l" file))
+           (if (null (probe-file  file))
+               (error io-error "file ~A not found~%" file)))
+        (warn "compiling file: ~A~%" (namestring file))
+        (setq ins (open file))
+        (setq *defun-list* nil)
+        (when *multipass-optimize*
+          (while t
+            (setq form (read ins nil '$eof$))
+            (if (eq form '$eof$) (return nil))
+            (send self :toplevel form t t))
+          (unix:lseek ins 0))
+        (nreverse *defun-list*)
+        (send trans :init-file file file.c file.h entry)
+        (send idtable :init-frames)
+        (setq frames nil
+              scope 0
+              blocks nil
+              initcodes nil)
+        (while t
+           (setq form (read ins nil '$eof$))
+           (if (eq form '$eof$) (return nil))
+           (send self :toplevel form t))
+        (setq initcodes (reverse initcodes))
+        (send trans :eusmain entry)
+        (dolist (form initcodes) (send self :toplevel-execution form))
+        (send trans :load-nil)
+        (send trans :return)
+        (send self :compile-closures)
+        (send trans :declare-ftab)
+        (send trans :ftab-initializer)
+        (let ((symvec (cpack . symvector)) (symcnt (cpack . symcount)))
+          (setq (cpack . symvector) (make-array 0)
+                (cpack . symcount) 1)
+          ;; write every symbol in this package as internal symbols
+          ;; (warn "writing quote vector file in ~s~%" *package*)
+          (send trans :write-quote-vector)
+          (setq (cpack . symvector) symvec
+                (cpack . symcount) symcnt))
+        (send trans :close)
+        (close ins)
+        (setq cccom
+           (concatenate
+                 string
+                 *cc*
+                 " -c"
+                 (if o (concatenate string " -o " (namestring o)))
+                 (cond ((memq :sun3 *features*) " -Dsun3 -w")
+                      ((memq :sun4 *features*) " -Dsun4 -w")
+;                     ((memq :mips *features*) " -Dmips -G 0 -w")
+;                     ((memq :irix *features*) " -Dmips -DIRIX -signed -w")
+                      ((memq :irix *features*) " -Dmips -DIRIX -w ")
+                      ((memq :irix6 *features*) " -Dmips -DIRIX6 -woff all")
+                      ((memq :vax *features*)  " -Dvax -J")
+                      ((memq :news *features*)  " -Dnews")
+                      ((memq :sanyo *features*)  " -Dsanyo")
+                      ((memq :darwin *features*)
+                    (if (memq :x86_64 *features*)
+                        " -DDarwin -Dx86_64 -DLinux -w -falign-functions=8 "
+                      " -DDarwin -Di386 -DLinux -w -falign-functions=4 "))
+                      ((and (memq :linux *features*)  (memq :gcc3 *features*))
+                    (cond
+                             ((memq :x86_64 *features*)
+                              " -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                             ((memq :aarch64 *features*)
+                              " -Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                             ((memq :arm *features*)
+                              " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
+                             ((memq :word-size=64 *features*)
+                              " -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                             (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -fno-stack-protector -DGCC3 ")))
+                      ((memq :linux *features*)
+                    (if (memq :x86_64 *features*)
+                      " -Dx86_64 -DLinux -Wimplicit -malign-functions=8 "
+                      " -Di386 -DLinux -Wimplicit -malign-functions=4 "))
+                   ((memq :alpha *features*) " -Dalpha -Dsystem5 -D_REENTRANT -w")
+                   ((memq :cygwin *features*) " -DCygwin -D_REENTRANT -DX_V11R6_1 -falign-functions=4")
+                   ((memq :i386  *features*) " -Di386")
+                   (t (warn "cpu type is not properly set")))
+                 (cond ((memq :sunos4 *features*) " -DSunOS4 -Bstatic")
+                   ((memq :sunos4.1 *features*) " -DSunOS4_1")
+                   ((memq :Solaris2 *features*) " -DSolaris2")
+                   (t ""))
+                 (if (memq :gcc *features*) " -DGCC -fsigned-char " )
+                 (if (memq :thread *features*) " -DTHREADED" )
+                 (if (memq :pthread *features*) " -DPTHREAD" )
+                 (if (memq :rgc *features*) " -DRGC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD" )
+                 (format nil " -DCOMPTIMEVERSION=\\\"~A\\\"" compiler-implementation-version)
+                 (if pic
+                     (cond ((memq :SunOS4.1 *features*) " -fpic")
+                       ((memq :cygwin *features*) "")
+                       ((memq :Gcc *features*) " -fpic ")
+                       ((memq :Solaris2 *features*) " -K pic")
+                       ((memq :linux *features*) " -fpic")
+                       ((memq :irix *features*) " -KPIC")
+                       ((memq :irix6 *features*) " -KPIC")
+                       ((memq :alpha *features*) " -fpic")
+                       (t " -pic"))
+                     )
+                 cc-option
+                 " -I" (namestring *eusdir*) "include"
+                 *coptflags* *cflags*
+                 " "     (namestring file.c)
+                 (if (and (memq :sunos4.1 *features*)  pic)
+                  (concatenate string
+                      "; ld -o "
+                      (namestring file.so)
+                      " "
+                      (namestring file.o))
+                  )
+                 (if (and (or (memq :irix *features*)
+                      (memq :irix6 *features*)) pic)
+                  (concatenate string
+                      "; ld -shared -o "
+                      (namestring file.so)
+                      " "
+                      (namestring file.o))
+                  )
+                 (if (and (memq :linux *features*)  pic)
+                  (concatenate string
+                           (cond
+                            ((memq :darwin *features*)
+                             "; gcc -dynamiclib -flat_namespace -undefined suppress -o ")
+                            ((memq :sh4 *features*)
+                             "; sh4-linux-gcc -shared -o ")
+                            ((memq :ia32 *features*)
+                             "; ld -melf_i386 -shared -build-id -o ")
+                            ((memq :i386 *features*)
+                             "; gcc -shared -Xlinker -build-id -o ")
+                            (t
+                             "; ld -shared -build-id -o "))
+                      (namestring file.so)
+                      " "
+                      (namestring file.o))
+                  "")
+                 (if (and (memq :alpha *features*)  pic)
+                  (concatenate string
+                      "; ld -shared -update_registry so_locations -expect_unresolved '*' -g0 -O1 -o "
+                      (namestring file.so)
+                      " "
+                      (namestring file.o))
+                  "")
+                 (if (and (memq :cygwin *features*)
+                      (not *kernel*))
+                  (concatenate string
+                      "; gcc -shared -g -falign-functions=4 -Wl,--export-all-symbols -Wl,--unresolved-symbols=ignore-all -Wl,--enable-runtime-pseudo-reloc -o "
+                      (namestring file.dll) " "
+                      (namestring file.o) " "
+                      *eusdir* (unix:getenv "ARCHDIR")
+                      "/bin/"
+                      "eusgl.a "
+                      "-lm -lpthread "
+                      ))
+              ))
+        (when cc
+           (warn "~A" cccom)
+           (unix:system cccom))
+        (dolist (f *defun-list*) (remprop f 'user-function-entry))
+        (unless avant-mode (terpri *error-output*))
+       )
+     (send trans :clear-external-functions)))
  (:specials () (mapcar 'car (send idtable :frame 0)))
- (:copy-compiler ()
+ (:copy-compiler (&optional (closurep t))
     (let ((newcomp) (initcode-save initcodes) (closure-save function-closures))
        (setq initcodes nil
 	     function-closures nil)
        (setq newcomp (copy-object self))
-       (send newcomp :closure-level 1)
+       (if closurep (send newcomp :closure-level 1))
        (setq initcodes initcode-save
 	     function-closures closure-save)
        newcomp))
@@ -1451,40 +2044,73 @@
 (eval-when (load eval)
 
 (defun dump-function (file &rest names)
-   (with-open-file (f file :direction :output)
+  (let (acc)
+    (with-open-file (f file :direction :output)
       (dolist (funmac names)
 	 (let ((def (symbol-function funmac)) dump)
-	   (setq dump
-	    (case (car def)
-		(lambda `(defun ,funmac . ,(cdr def)))
-		(macro  `(defun ,funmac . ,(cdr def)))))
-	  (pprint dump f) ))) )
+           (when (consp def)
+             (setq dump
+                   (case (car def)
+                     (lambda `(defun ,funmac . ,(cdr def)))
+                     (macro  `(defmacro ,funmac . ,(cdr def)))
+                     (t (error value-error "unknown function type: ~A" (car def)))))
+             (pprint dump f)
+             (push funmac acc)))))
+    (nreverse acc)))
+
+(defun dump-method (file obj &rest methods)
+  (let (acc)
+    (with-open-file (f file :direction :output)
+      (dolist (meth methods)
+        (let ((def (if (classp obj)
+                       (let ((body (assoc meth (send obj :methods))))
+                         (if body (list obj body)))
+                       (find-method obj meth))))
+          (when def
+            (multiple-value-bind (cls body) def
+              (when (and (consp body) (not (compiled-function-p (second body))))
+                (pprint `(defmethod ,(send cls :name) ,body) f)
+                (push meth acc)))))))
+    (nreverse acc)))
 
 (defun comfile (&rest files) (dolist (f files) (send comp :compile-file f)))
 (defun compile-file (file &rest keys)
     (send* comp :compile-file file keys))
 
+(defun compile-tmp (fname)
+  (let (pname)
+    (compile-file fname)
+    (unix:unlink fname)
+    (setq pname (make-pathname :defaults fname :type "c"))
+    (unix:unlink (namestring pname))
+    (setq pname (make-pathname :defaults fname :type "h"))
+    (unix:unlink (namestring pname))
+    (setq pname (make-pathname :defaults fname :type
+                               #-(or :linux :cygwin) "o"
+                               #+:cygwin       "dll"
+                               #+:linux	"so"
+                               ))
+    (load pname)
+    (unix:unlink (namestring pname))
+    #+(or :linux :cygwin)
+    (unix:unlink (namestring (make-pathname :defaults fname :type "o")))
+    pname))
+
 (defun compile (&rest funcs)
-    (let ((fname (format nil "eus~d~A.l" (unix:getpid)
-			(symbol-name (gensym "C")))) (pname))
-      (apply #'dump-function fname funcs)
-      (compile-file fname)
-      (unix:unlink fname)
-      (setq pname (make-pathname :defaults fname :type "c"))
-      (unix:unlink (namestring pname))
-      (setq pname (make-pathname :defaults fname :type "h"))
-      (unix:unlink (namestring pname))
-      (setq pname (make-pathname :defaults fname :type
-        #-(or :linux :cygwin) "o"
-        #+:cygwin       "dll"
-	#+:linux	"so"
-	))
-      (load pname)
-      (unix:unlink (namestring pname))
-      (setq pname (make-pathname :defaults fname :type "q"))
-      (unix:unlink (namestring pname))
-      funcs
-      ))
+  (let* ((fname (format nil "eus~d~A.l" (unix:getpid)
+                        (symbol-name (gensym "C"))))
+         (res (apply #'dump-function fname funcs)))
+    (when res
+      (compile-tmp fname)
+      res)))
+
+(defun compile-method (obj &rest meths)
+  (let* ((fname (format nil "eus~d~A.l" (unix:getpid)
+                        (symbol-name (gensym "C"))))
+         (res (apply #'dump-method fname obj meths)))
+    (when res
+      (compile-tmp fname)
+      res)))
 
 (defun compile-file-if-src-newer (srcfile &optional (objdir "./")
 					  &rest args)
@@ -1497,14 +2123,15 @@
 	)
      srcfile  ))
 	 
+(defun compiler-implementation-version ()
+  (format nil "EusLisp compiler version ~A" compiler-implementation-version))
 
 (defun comp-file-toplevel (&rest argv)
-   (warn "EusLisp compiler version 1.54   June/1986 ... May/1996")
+   (warn (compiler-implementation-version))
    (terpri *error-output*)
    (sys:alloc 60000)
    (setq lisp::*prompt-string* "euscomp$ ")
-   (let ((i 1) (l (length argv)) (arg) (flag)
-	 (*error-handler* 'lisp::euserror))
+   (let ((i 1) (l (length argv)) (arg) (flag))
       (cond ((< l 1) (apply #'eustop argv))
 	    ((< l 2)
 	      (format t

@@ -3,13 +3,12 @@
 (init-unit-test)
 
 (defmacro check-min-max (op ans &rest args)
-  `(let (ret tret)
-     (format *error-output* "check: (apply ~A ~A)~%" ,op ',args)
-     (lisp::install-error-handler #'(lambda (&rest args) (throw :min-max-test :min-max-error)))
-     (setq tret (catch :min-max-test
-                  (setq ret (funcall ,op ,@args))))
-     (lisp::install-error-handler 'unittest-error) ;; revert error-handler
-     (assert (equal ,ans tret)
+  `(let (ret)
+     (format *error-output* "check: ~A~%" '(funcall ,op ,@args))
+     (setq ret
+           (handler-case (funcall ,op ,@args)
+             (error () :min-max-error)))
+     (assert (equal ,ans ret)
      )))
 
 (deftest test-max

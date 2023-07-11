@@ -636,7 +636,7 @@
 	(unless (probe-file fname)
 	    (setq fname (format nil "~A/lib/bitmaps/~A" *eusdir* fname))
 	    (if (null (probe-file fname))
-		(error "bitmap file ~S not found." fname)))
+		(error io-error "bitmap file ~S not found." fname)))
         (ReadBitmapFile *display* (defaultrootwindow *display*)
                  fname width height bitmap x_hot y_hot)
         (setq bitmap-width (c-int width))

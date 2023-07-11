@@ -277,8 +277,6 @@ pointer argv[];
 /* bit vector
 /****************************************************************/
 
-#define isbitvector(p) (isvector(p) && (elmtypeof(p)==ELM_BIT))
-
 pointer BIT(ctx,n,argv)
 register context *ctx;
 int n;

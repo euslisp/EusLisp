@@ -63,22 +63,22 @@
 				(setq  mode (+ mode unix::O_CREAT unix::O_TRUNC)))
 		   (:overwrite	(inc mode unix::O_CREAT))
 		   ((nil :error)(setq mode (+ mode unix::O_CREAT unix::O_EXCL)))
-		   (t (error "unknown if-exist flag")))
+		   (t (error value-error "unknown if-exist flag")))
 		(case if-does-not-exist
 		   (:error (setq mode (logand mode (lognot unix::O_CREAT))))
 		   (:create (setq mode (logior mode unix::O_CREAT)))
 		   (default (if (not (memq if-exists '(:overwrite :append)))
 			        (setq mode (logior mode unix::O_CREAT))))
 		   (nil)
-		   (t (error "unknown if-does-not-exist flag")))
+		   (t (error value-error "unknown if-does-not-exist flag")))
 		(setq strm (sys::openfile fname mode permission buffer-size)) )
-	   (t (error "unknown stream direction")) )
+	   (t (error value-error "unknown stream direction")) )
 ;     (format t "mode=~d permission=~d buffer-size=~d~%"
 ;		 mode permission buffer-size)
       (when (numberp strm)
 	    (if (null if-does-not-exist)
 	        (return-from open nil)
-	        (error (concatenate string "cannot open " fname))))
+	        (error io-error "cannot open ~A" fname)))
       strm ) )  )
 
 (eval-when (load eval)
@@ -261,7 +261,7 @@
       (if (and  (pathname-directory fname)
 		(eql (first (pathname-directory fname))  :root))
 	  (if (null (setq load-result (try-load fname)))
-	      (error "file ~s not found" fname)
+	      (error io-error "file ~s not found" fname)
 	      load-result)
 	  (progn
 	     (dolist (p (union *loader-current-directory* *load-path*
@@ -269,7 +269,7 @@
 	        (setq path (concatenate-pathnames  p fname))
 		(setq load-result (try-load path))
 		(if load-result (return-from load load-result)))
-	      (error "file ~s not found" fname)))   )) )
+	      (error io-error "file ~s not found" fname)))   )) )
 
 (defun load-files (&rest files)
    (dolist (f files)  (load f :verbose t))
@@ -312,7 +312,7 @@
 	  (setq size2
 		(unix:uread (send f :infd) buf size))
 	  (if (/= size size2)
-	      (error "cannot read binary file"))
+	      (error io-error "cannot read binary file"))
 	  )
       buf))
 
@@ -408,7 +408,7 @@
     (setq f (namestring f))
     (if (probe-file f)
 	(elt (unix:stat (namestring f)) 7)
-	(error "file ~s not found" f)
+	(error io-error "file ~s not found" f)
 	))
 
 (defun directory-p (f &aux stat)

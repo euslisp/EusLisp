@@ -206,11 +206,11 @@
          (defvar *output-format* :html)))
 
   (unless (fboundp 'defclass-org)
-    (setf (symbol-function 'defclass-org) (symbol-function 'defclass)))
+    (alias 'defclass-org 'defclass))
   (unless (fboundp 'defmethod-org)
-    (setf (symbol-function 'defmethod-org) (symbol-function 'defmethod)))
+    (alias 'defmethod-org 'defmethod))
   (unless (fboundp 'defun-org)
-    (setf (symbol-function 'defun-org) (symbol-function 'defun)))
+    (alias 'defun-org 'defun))
   (defmacro require (&rest args) (format *error-output* ";; skip require ~A ..." args))
   (defmacro defclass (cls &rest args &key element-type super slots documentation (doc documentation) &allow-other-keys)
     `(progn

@@ -42,10 +42,10 @@
 ;; specials.c
   (export '(quote eval apply funcall progn prog1 function))
   (export '(mapc mapcar mapcan setq if when cond while let let* 
-		unwind-protect catch throw flet labels block return-from
+		unwind-protect catch throw macrolet flet labels block return-from
 		return reset go tagbody evalhook macroexpand2 eval-when
 		the and or proclaim declare symbol-value symbol-function
-		makunbound defun defmacro find-symbol intern gensym
+		makunbound fmakunbound defun defmacro find-symbol intern gensym
 		list-all-packages find-package 
 		sxhash get export putprop))
 ;; makepackage ??
@@ -89,7 +89,7 @@
 	  NTH  NTHCDR  CONS  RPLACA  RPLACA2  RPLACD  RPLACD2
 	  APPEND  NCONC  SUBST  NSUBST
 	  ATOM  EQ  EQL  NULL  NOT  LIST  LIST*  EQUAL  SUPEREQUAL
-	  MEMQ  MEMBER  SUPERMEMBER  ASSQ  ASSOC  SUPERASSOC
+	  MEMQ  MEMBER  ASSQ  ASSOC
 	  BUTLAST  NBUTLAST  SYMBOLP  STRINGP  LISTP  CONSP
 	  ENDP  NUMBERP  INTEGERP  FLOATP  BOUNDP  FBOUNDP  STREAMP))
 
@@ -124,6 +124,7 @@
   (export '(
 	  SIGADDSET SIGDELSET SIGPROCMASK
 	  KILL  SIGNAL  #| EXIT |# GETPID 
+	  INSTALL-SIGNAL-HANDLER
 	  UREAD  WRITE  UCLOSE
 	  IOCTL  LSEEK  MALLOC  FREE  SOCKET  BIND  CONNECT  LISTEN
 	  ACCEPT  SENDTO  RECVFROM  GETPEERNAME))
@@ -171,12 +172,13 @@
 
   (export '( GC  GCTIME RGCCOUNT RGCTIME RGCALLOCATED
 	  *GC-MERGE* *GC-MARGIN*
-	  *GC-HOOK* *EXIT-HOOK*
+	  *GC-HOOK* *GC-DEBUG* *EXIT-HOOK*
 	  ALLOC  NEWSTACK  RECLAIM  RECLAIM-TREE
 	  OBJECT-SIZE  MEMORY-REPORT  CLEAR-MEMORY-REPORT
 	  ROOM  LIST-ALL-CHUNKS  LIST-ALL-INSTANCES  ADDRESS  PEEK  POKE
-	  LIST-ALL-REFERENCES  LIST-ALL-CATCHERS  LIST-ALL-BINDINGS
-	  LIST-ALL-SPECIAL-BINDINGS  LIST-ALL-CLASSES))
+	  LIST-ALL-REFERENCES  LIST-ALL-BLOCKS  LIST-ALL-TAGS  LIST-ALL-CATCHERS
+	  LIST-ALL-BINDINGS  LIST-ALL-FUNCTION-BINDINGS  LIST-ALL-SPECIAL-BINDINGS
+	  LIST-ALL-CLASSES  LIST-CALLSTACK))
 
   (export '*threads*)
 
@@ -263,10 +265,10 @@
 
 (if (unix::isatty 0)
 (defun system::exec-module-init (name &optional (file))
-   (let ((func (cadr (superassoc name system::*load-entries* nil #'equal nil))))
+   (let ((func (cadr (system::raw-assoc name system::*load-entries* nil #'equal nil nil nil nil))))
       (if (null func)
-	  (setq func (cadr (superassoc (concatenate string "___" name)
-				system::*load-entries* nil #'equal nil))))
+	  (setq func (cadr (system::raw-assoc (concatenate string "___" name)
+				system::*load-entries* nil #'equal nil nil nil nil))))
       (cond (func
 	      (format *error-output* ";; ~a " name)
 	      (finish-output *error-output*)
@@ -280,10 +282,10 @@
 	        t)
 	    (t (format *error-output* ";; ~a-undefined " name) nil))))
 (defun system::exec-module-init (name &optional (file))
-   (let ((func (cadr (superassoc name system::*load-entries* nil #'equal nil))))
+   (let ((func (cadr (system::raw-assoc name system::*load-entries* nil #'equal nil nil nil nil))))
       (if (null func)
-	  (setq func (cadr (superassoc (concatenate string "___" name)
-				system::*load-entries* nil #'equal nil))))
+	  (setq func (cadr (system::raw-assoc (concatenate string "___" name)
+				system::*load-entries* nil #'equal nil nil nil nil))))
       (cond (func
 	      (funcall func func)
 	      t)
@@ -314,17 +316,16 @@
 (system::exec-module-init "eusdebug" "l/eusdebug.l")
 (system::exec-module-init "eusforeign" "l/eusforeign.l")
 (system::exec-module-init "extnum" "l/extnum.l")
+(system::exec-module-init "conditions" "l/conditions.l")
 (unless (find-package "GEOMETRY")
 	(make-package "GEOMETRY" :nicknames '("GEO"))
 	(in-package "GEOMETRY"))
 (system::exec-module-init "coordinates" "l/coordinates.l")
 
 (in-package "LISP")
-(setf (symbol-function 'get-internal-run-time)
-	(symbol-function 'unix::runtime))
+(alias 'get-internal-run-time 'unix::runtime)
 ;; toplevel needs the compiler package
 ;;	(format t ";;; Loading compiler modules.~%")
-	(make-package "COMPILER" :nicknames '("COMP"))
 ;;
 	(system::exec-module-init "tty" "l/tty.l")
 	(system::exec-module-init "history" "l/history.l")
@@ -338,6 +339,7 @@
 	(system::exec-module-init "builtins" "comp/builtins.l")
 	(in-package "LISP")
 	(import '(comp:comfile
+                  comp:compile-method
 		  comp:compile-file
 		  comp:compile-file-if-src-newer
 		  sys:gc
@@ -345,9 +347,9 @@
 		 ;; unix::exit
 		  ))
 	)
-	(export '(compile comfile compile-file compile-file-if-src-newer
+	(export '(compile compile-method comfile compile-file compile-file-if-src-newer
                   gc alloc runtime))
-	(setf (symbol-function 'exit) (symbol-function 'unix::exit))    
+	(alias 'exit 'unix::exit)
 ;;
 ;(when (substringp "P" (string-upcase (pathname-name *program-name*)))
 	(in-package "SYSTEM")

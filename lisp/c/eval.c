@@ -33,8 +33,8 @@ pointer  varvec,obj;
 pointer getval(ctx,sym)
 register context *ctx;
 register pointer sym;
-{ register struct bindframe *bf=ctx->bindfp;
-  register pointer var,val;
+{ register pointer var,val;
+  pointer bf=ctx->bindfp;
   pointer  *vaddr;
   int vt;
   if (sym->c.sym.vtype>=V_SPECIAL) {
@@ -48,16 +48,17 @@ register pointer sym;
   if (sym->c.sym.vtype==V_CONSTANT) return(sym->c.sym.speval);
   GC_POINT;
   while (bf!=NULL) {
-    var=bf->sym;
-    val=bf->val;
+    var=bf->c.bfp.sym;
+    val=bf->c.bfp.val;
     if (sym==var) {		/*found in bind-frame*/
       if (val==UNBOUND) goto getspecial;
       return(val);}
     else if (var->cix==vectorcp.cix) {
       vaddr=getobjv(sym,var,val);
       if (vaddr) return(*vaddr);}
-    if (bf==bf->lexblink) break;
-    bf=bf->lexblink;}
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;
+  }
   /*get special value from the symbol cell*/
   /*if (sym->c.sym.vtype==V_GLOBAL) goto getspecial;*/
 getspecial:
@@ -68,8 +69,8 @@ getspecial:
 pointer setval(ctx,sym,val)
 register context *ctx;
 register pointer sym,val;
-{ register struct bindframe *bf=ctx->bindfp;
-  register pointer var;
+{ register pointer var;
+  pointer bf=ctx->bindfp;
   pointer  *vaddr;
   int vt;
   if (sym->c.sym.vtype>=V_SPECIAL) {
@@ -77,14 +78,16 @@ register pointer sym,val;
     pointer_update(ctx->specials->c.vec.v[vt],val);
     return(val);}
   while (bf!=NULL) {
-    var=bf->sym;
+    var=bf->c.bfp.sym;
     if (sym==var) {
-      if (bf->val==UNBOUND) goto setspecial;
-      pointer_update(bf->val,val); return(val);}
+      if (bf->c.bfp.val==UNBOUND) goto setspecial;
+      pointer_update(bf->c.bfp.val,val); return(val);}
     else if (var->cix==vectorcp.cix) {
-      vaddr=getobjv(sym,var,bf->val);
+      vaddr=getobjv(sym,var,bf->c.bfp.val);
       if (vaddr) {pointer_update(*vaddr,val); return(val);}}
-    bf=bf->lexblink; GC_POINT;}
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;
+    GC_POINT;}
   /* no local var found. try global binding */
   if (sym->c.sym.vtype==V_CONSTANT) error(E_SETCONST,sym);
   if (sym->c.sym.vtype==V_GLOBAL) goto setspecial;
@@ -94,16 +97,60 @@ register pointer sym,val;
   }
 
 
+pointer getfunc_noexcept(ctx,f)
+register context *ctx;
+register pointer f;	/*must be a symbol*/
+{ pointer ffp=ctx->fletfp;
+  while (ffp!=NULL && isfletframe(ffp)) {
+    if (ffp->c.ffp.name==f) {  return(ffp->c.ffp.fclosure);}
+    else ffp=ffp->c.ffp.next;}
+  return(f->c.sym.spefunc);}
+
+pointer getfunc_closure_noexcept(ctx,f)
+register context *ctx;
+register pointer f;
+{ pointer funcname;
+  if (issymbol(f)) { funcname=f; f=getfunc_noexcept(ctx,f);}
+  else funcname=NIL;
+  if (f==UNBOUND) return(f);
+  if (iscode(f)) return(f);
+  else if (ccar(f)==LAMCLOSURE) return(f);
+  else if (ccar(f)==LAMBDA) {
+    vpush(funcname);
+    // flet-frame
+    if (ctx->fletfp==NULL)
+      // don't pass *unbound* to the REPL
+      f=cons(ctx,makeint(0),ccdr(f));
+    else
+      f=cons(ctx,ctx->fletfp,ccdr(f));
+    // bind-frame
+    if (ctx->bindfp==NULL)
+      // don't pass *unbound* to the REPL
+      f=cons(ctx,makeint(0),f);
+    else
+      f=cons(ctx,ctx->bindfp,f);
+    f=cons(ctx,vpop(),f);  // funcname
+    return(cons(ctx,LAMCLOSURE,f));}
+  else return(NIL);}
+
+// getfunc returns a function callable (lambda or compiled code)
+// without considering the local binding environment
 pointer getfunc(ctx,f)
 register context *ctx;
 register pointer f;	/*must be a symbol*/
-{ register struct fletframe *ffp=ctx->fletfp;
-  while (ffp!=NULL) {
-    if (ffp->name==f) {  return(ffp->fclosure);}
-    else ffp=ffp->lexlink;}
-  if (f->c.sym.spefunc==UNBOUND) error(E_UNDEF,f);
-  else {	/*global function definition is taken, context changes*/
-    return(f->c.sym.spefunc);}}
+{ pointer fn=getfunc_noexcept(ctx,f);
+  if (fn==UNBOUND) error(E_UNDEF, f);
+  return(fn);}
+
+// getfunc_closure returns a function callable (lambda-closure or compiled code)
+// considering the local binding environment
+pointer getfunc_closure(ctx,f)
+register context *ctx;
+register pointer f;
+{ pointer fn=getfunc_closure_noexcept(ctx,f);
+  if (fn==UNBOUND) error(E_UNDEF, f);
+  if (fn==NIL) error(E_NOFUNCTION);
+  return(fn);}
 
 /* called from compiled code*/
 pointer get_sym_func(s)
@@ -112,19 +159,14 @@ pointer s;
   if ((f=s->c.sym.spefunc)==UNBOUND) error(E_UNDEF,s);
   else return(f);}
 
-
-void setfunc(sym,func)
-register pointer sym,func;
-{ pointer_update(sym->c.sym.spefunc,func);}
-
 pointer *ovafptr(o,v)
 register pointer o,v;
 { register pointer c,*vaddr;
-  if (!ispointer(o)) error(E_NOOBJ,o,v);
+  if (!ispointer(o)) error(E_NOOBJECT);
   c=classof(o);
   vaddr=getobjv(v,c->c.cls.vars,o);
   if (vaddr) return(vaddr);
-  else error(E_NOOBJVAR,o,v);}
+  else error(E_NOSLOT,v);}
 
 /***** special variable binding *****/
 
@@ -152,7 +194,9 @@ register context *ctx;
 register int count;
 { register pointer s;
   register struct specialbindframe *sbfp=ctx->sbindfp;
-  if (ctx->special_bind_count<count) error(E_USER,(pointer)"inconsistent special binding");
+  if (ctx->special_bind_count<count) {
+      error(E_PROGRAM_ERROR,(pointer)"inconsistent special binding");
+  }
   ctx->special_bind_count -= count;
   while (count-- >0) {
     s=sbfp->sym;
@@ -177,34 +221,30 @@ register struct specialbindframe *limit;
       ctx->special_bind_count--;}
     ctx->sbindfp=sbfp;}}
 
-struct bindframe *fastbind(ctx,var,val,lex)
+pointer fastbind(ctx,var,val,lex)
 register context *ctx;
 register pointer var,val;
-struct bindframe *lex;
-{ register struct bindframe *bf;
-  bf=(struct bindframe *)(ctx->vsp);
-  ctx->vsp += sizeof(struct bindframe)/sizeof(eusinteger_t);
-  bf->lexblink=lex;
-  bf->dynblink=ctx->bindfp;
-  bf->sym=var;
-  bf->val=val;
+pointer lex;
+{ pointer bf;
+  bf = makebindframe(ctx,var,val,ctx->bindfp);
+  vpush(bf);
   ctx->bindfp=bf;	/*update bindfp*/
   return(bf);	 }
 
-struct bindframe *vbind(ctx,var,val,lex,declscope)
+pointer vbind(ctx,var,val,lex,declscope)
 register context *ctx;
 register pointer var,val;
-struct bindframe *lex,*declscope;
-{ register struct bindframe *p;
+pointer lex,declscope;
+{ pointer p;
   if (!issymbol(var)) error(E_NOSYMBOL);
-  if (var->c.sym.vtype==V_CONSTANT) error(E_NOVARIABLE,var);
+  if (var->c.sym.vtype==V_CONSTANT) error(E_ILLVARIABLE,var);
   p=ctx->bindfp;
-  while (p>declscope) {
-    if (p->sym==var) 
-      if (p->val==UNBOUND) { bindspecial(ctx,var,val); return(ctx->bindfp);}
-      else error(E_MULTIDECL);
-    if (p==p->lexblink) break;
-    p=p->lexblink;}
+  // while (p>declscope) {
+  //   if (p->sym==var)
+  //     if (p->val==UNBOUND) { bindspecial(ctx,var,val); return(ctx->bindfp);}
+  //     else error(E_MULTIDECL);
+  //   if (p==p->lexblink) break;
+  //   p=p->lexblink;}
   /*not found in declare scope*/
   if (var->c.sym.vtype>= /* V_SPECIAL */  V_GLOBAL ) {
 	/* For defun-c-callable in eusforeign.l to create a foreign-pod,
@@ -217,15 +257,15 @@ struct bindframe *lex,*declscope;
     return(ctx->bindfp);}
   return(fastbind(ctx,var,val,lex));}
 
-struct bindframe *declare(ctx,decllist,env)
+pointer declare(ctx,decllist,env)
 register context *ctx;
 pointer decllist;
-struct bindframe *env;
+pointer env;
 { register pointer decl,var;
 
   while (iscons(decllist)) {
     decl=ccar(decllist); decllist=ccdr(decllist);
-    if (!iscons(decl)) error(E_DECLARE);
+    if (!iscons(decl)) error(E_NOLIST);
     if (ccar(decl)==QSPECIAL) {	/*special binding*/
       decl=ccdr(decl);
       while (iscons(decl)) {
@@ -267,26 +307,30 @@ int noarg,allowotherkeys;
     n++;} 
   return(suppliedbits);}
 
-struct bindframe *bindkeyparams(ctx,formal,argp,noarg,env,bf)
+pointer bindkeyparams(ctx,formal,argp,noarg,env,bf)
 register context *ctx;
 pointer formal;
 pointer *argp;
 int noarg;
-struct bindframe *env,*bf;
-{ pointer fvar,initform;
+pointer env,bf;
+{ pointer fvar,initform,svar;
   register pointer fkeyvar,akeyvar;
   pointer keys[KEYWORDPARAMETERLIMIT],
 	  vars[KEYWORDPARAMETERLIMIT],
-	  inits[KEYWORDPARAMETERLIMIT];
+	  inits[KEYWORDPARAMETERLIMIT],
+	  supplied[KEYWORDPARAMETERLIMIT];
   register int nokeys=0,i,n,allowotherkeys=0;
 
   /*parse lambda list and make keyword tables*/
   while (iscons(formal)) {
-      fkeyvar=ccar(formal); formal=ccdr(formal);
+      fkeyvar=ccar(formal); formal=ccdr(formal); svar=UNBOUND;
       if (iscons(fkeyvar)) {
 	fvar=ccar(fkeyvar);
         initform=ccdr(fkeyvar);
-	if (iscons(initform)) initform=ccar(initform); else initform=NIL;
+        if (iscons(initform)) {
+          if (ccdr(initform)!=NIL) svar=ccar(ccdr(initform));
+          initform=ccar(initform);}
+        else initform=NIL;
 	if (iscons(fvar)) {
 	  fkeyvar=ccar(fvar); fvar=ccdr(fvar);
 	  if (!iscons(fvar)) error(E_KEYPARAM);
@@ -303,7 +347,7 @@ struct bindframe *env,*bf;
 	if (islist(formal)) {
 	  fkeyvar=ccar(formal); formal=ccdr(formal);
 	  if (fkeyvar==AUX) break;
-	  else  error(E_USER,(pointer)"something after &allow-other-keys"); }
+	  else  error(E_ARGUMENT_ERROR,(pointer)"something after &allow-other-keys"); }
 	break;}
       else if (fkeyvar==AUX) break;
       else {
@@ -317,9 +361,10 @@ struct bindframe *env,*bf;
       keys[nokeys]=fkeyvar;
       vars[nokeys]=fvar;
       inits[nokeys]=initform;
+      supplied[nokeys]=svar;
       nokeys++;
       if (nokeys>=KEYWORDPARAMETERLIMIT) {
-	error(E_USER, "Too many keyword parameters >%d",KEYWORDPARAMETERLIMIT);
+	error(E_PROGRAM_ERROR, (pointer)"too many keyword parameters >=128");
 	}
       }	
   n=0;
@@ -334,24 +379,28 @@ struct bindframe *env,*bf;
       if (i<nokeys) {
 	if (inits[i]!=UNBOUND) {
           env=vbind(ctx,vars[i],argp[n],env,bf);
-	  inits[i]=UNBOUND;} }
+          if (supplied[i]!=UNBOUND) env=vbind(ctx,supplied[i],T,env,bf);
+          inits[i]=UNBOUND; supplied[i]=UNBOUND;}
+        else if (supplied[i]!=UNBOUND) {
+          env=vbind(ctx,supplied[i],NIL,env,bf); supplied[i]=UNBOUND;}}
       else if (!allowotherkeys) error(E_NOKEYPARAM,akeyvar);
       n++;  }
   i=0;
   while (i<nokeys) {
     if (inits[i]!=UNBOUND) env=vbind(ctx,vars[i],eval(ctx,inits[i]),env,bf);
+    if (supplied[i]!=UNBOUND) env=vbind(ctx,supplied[i],NIL,env,bf);
     i++;}
   return(env);}
 
 pointer funlambda(ctx,fn,formal,body,argp,env,noarg)
 register context *ctx;
 pointer fn,formal,body,*argp;
-struct bindframe *env;
+pointer env;
 int noarg;
 { pointer ftype,fvar,result,decl,aval,initform,fkeyvar,akeyvar;
   pointer *vspsave= ctx->vsp;
   struct specialbindframe *sbfps=ctx->sbindfp;
-  struct bindframe *bf=ctx->bindfp;
+  pointer bf=ctx->bindfp;
   struct blockframe *myblock;
   int n=0,keyno=0,i;
   jmp_buf funjmp;
@@ -385,11 +434,19 @@ bindopt:
       if (fvar==AUX) goto bindaux;
       if (n<noarg) { /*an actual arg is supplied*/
         aval=argp[n];
-        if (iscons(fvar)) fvar=ccar(fvar);}
+        if (iscons(fvar)) {
+          initform=ccdr(fvar);
+          fvar=ccar(fvar);
+        if (iscons(initform) && ccdr(initform)!=NIL){ /* supplied-p */
+          env=vbind(ctx,ccar(ccdr(initform)),T,env,bf);}}}
       else if (iscons(fvar)) {
         initform=ccdr(fvar);
         fvar=ccar(fvar);
-        if (iscons(initform)) {GC_POINT;aval=eval(ctx,ccar(initform));}
+        if (iscons(initform)) {
+          GC_POINT;
+          aval=eval(ctx,ccar(initform));
+         if (ccdr(initform)!=NIL) { /* supplied-p */
+           env=vbind(ctx,ccar(ccdr(initform)),NIL,env,bf);}}
         else aval=NIL;}
       else aval=NIL;
       env=vbind(ctx,fvar,aval,env,bf);
@@ -477,7 +534,7 @@ pointer args[];
       if (elmtypeof(lisparg)==ELM_FOREIGN)
         cargv[i++].ival=lisparg->c.ivec.iv[0];
       else cargv[i++].ival=(eusinteger_t)(lisparg->c.str.chars);
-    else error(E_USER,(pointer)"unknown type specifier");}
+    else error(E_TYPE_ERROR,(pointer)"unknown type specifier");}
   /* &rest arguments?  */
   while (i<n) {	/* i is the counter for the actual arguments*/
     lisparg=args[i];
@@ -496,7 +553,7 @@ pointer args[];
     else if (resulttype==K_STRING) {
       p=makepointer(i-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string"); }
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string"); }
     else if (iscons(resulttype)) {
 	/* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)==K_STRING) {
@@ -509,8 +566,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)i);
 	return(make_foreign_string(i, j)); }
-      error(E_USER,(pointer)"unknown result type"); }
-    else error(E_USER,(pointer)"result type?"); 
+      error(E_TYPE_ERROR,(pointer)"unknown result type"); }
+    else error(E_TYPE_ERROR,(pointer)"unknown result type"); 
     }}
 
 #else /* IRIX6 */
@@ -558,7 +615,7 @@ pointer args[];
         cargs[i].ival=lisparg->c.ivec.iv[0];
       else cargs[i].ival=(eusinteger_t)(lisparg->c.str.chars);
       offset[i++]=m++;}
-    else error(E_USER,(pointer)"unknown type specifier");}
+    else error(E_TYPE_ERROR,(pointer)"unknown type specifier");}
   /* &rest arguments?  */
   while (i<n) {	/* i is the counter for the actual arguments*/
     lisparg=args[i];
@@ -590,7 +647,7 @@ pointer args[];
     else if (resulttype==K_STRING) {
       p=makepointer(i-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string"); }
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string"); }
     else if (iscons(resulttype)) {
 	/* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)=K_STRING) {
@@ -603,8 +660,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)i);
 	return(make_foreign_string(i, j)); }
-      error(E_USER,(pointer)"unknown result type"); }
-    else error(E_USER,(pointer)"result type?"); 
+      error(E_TYPE_ERROR,(pointer)"unknown result type"); }
+    else error(E_TYPE_ERROR,(pointer)"unknown result type");
     }}
 
 #else /* IRIX */
@@ -912,9 +969,9 @@ pointer args[];
       numbox.d=ckfltval(lisparg);
       c=numbox.l;
       if(fcntr < NUM_FLT_ARGUMENTS) fargv[fcntr++] = c; else vargv[vcntr++] = c;
-    } else error(E_USER,(pointer)"unknown type specifier");
+    } else error(E_TYPE_ERROR,(pointer)"unknown type specifier");
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_ARGUMENT_ERROR,(pointer)"too many number of arguments");
     }
   }
   /* &rest arguments?  */
@@ -944,7 +1001,7 @@ pointer args[];
       if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     }
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_ARGUMENT_ERROR,(pointer)"too many number of arguments");
     }
   }
   /**/
@@ -963,7 +1020,7 @@ pointer args[];
     } else if (resulttype==K_STRING) {
       p=makepointer(c-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string");
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string");
     } else if (iscons(resulttype)) {
       /* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)==K_STRING) { /* R.Hanai 09/07/25 */
@@ -976,8 +1033,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)c);
 	return(make_foreign_string(c, j)); }
-      error(E_USER,(pointer)"unknown result type"); 
-    } else error(E_USER,(pointer)"result type?"); 
+      error(E_TYPE_ERROR,(pointer)"unknown result type"); 
+    } else error(E_TYPE_ERROR,(pointer)"unknown result type"); 
   }
 }
 
@@ -1161,9 +1218,9 @@ pointer args[];
 	vargv[vcntr_16++] = numbox.i.i1; vargv[vcntr_16++] = numbox.i.i2;
 	if ( vcntr_8 % 2 == 0 ) vcntr_8 = vcntr_16;
       }
-    } else error(E_USER,(pointer)"unknown type specifier");
+    } else error(E_TYPE_ERROR,(pointer)"unknown type specifier");
     if (max(vcntr_8, vcntr_16) >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_ARGUMENT_ERROR,(pointer)"too many number of arguments");
     }
   }
   int vcntr = max(vcntr_8, vcntr_16);
@@ -1194,7 +1251,7 @@ pointer args[];
       if(icntr < NUM_INT_ARGUMENTS) iargv[icntr++] = c; else vargv[vcntr++] = c;
     }
     if (vcntr >= NUM_EXTRA_ARGUMENTS) {
-      error(E_USER,(pointer)"too many number of arguments");
+      error(E_ARGUMENT_ERROR,(pointer)"too many number of arguments");
     }
   }
   /**/
@@ -1209,7 +1266,7 @@ pointer args[];
     } else if (resulttype==K_STRING) {
       p=makepointer(c-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string");
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string");
     } else if (iscons(resulttype)) {
       /* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)==K_STRING) { /* R.Hanai 09/07/25 */
@@ -1222,8 +1279,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)c);
 	return(make_foreign_string(c, j)); }
-      error(E_USER,(pointer)"unknown result type");
-    } else error(E_USER,(pointer)"result type?");
+      error(E_TYPE_ERROR,(pointer)"unknown result type");
+    } else error(E_TYPE_ERROR,(pointer)"unknown result type");
   }
 }
 
@@ -1270,7 +1327,7 @@ pointer args[];
     else if (p==K_DOUBLE || (WORD_SIZE==64 && p==K_FLOAT)) {
       numbox.d=ckfltval(lisparg);
       cargv[i++]=numbox.i.i1; cargv[i++]=numbox.i.i2;}
-    else error(E_USER,(pointer)"unknown type specifier");}
+    else error(E_TYPE_ERROR,(pointer)"unknown type specifier");}
   /* &rest arguments?  */
   while (j<n) {	/* j is the counter for the actual arguments*/
     lisparg=args[j++];
@@ -1387,7 +1444,7 @@ pointer args[];
     else if (resulttype==K_STRING) {
       p=makepointer(i-2*sizeof(pointer));
       if (isvector(p)) return(p);
-      else error(E_USER,(pointer)"illegal foreign string"); }
+      else error(E_VALUE_ERROR,(pointer)"illegal foreign string"); }
     else if (iscons(resulttype)) {
 	/* (:string [10]) (:foreign-string [20]) */
       if (ccar(resulttype)=K_STRING) {
@@ -1400,8 +1457,8 @@ pointer args[];
         if (resulttype!=NIL) j=ckintval(ccar(resulttype));
 	else j=strlen((char *)i);
 	return(make_foreign_string(i, j)); }
-      error(E_USER,(pointer)"unknown result type"); }
-    else error(E_USER,(pointer)"result type?"); 
+      error(E_TYPE_ERROR,(pointer)"unknown result type"); }
+    else error(E_TYPE_ERROR,(pointer)"unknown result type");
     }}
 #endif /* x86_64 */
 #endif /* IRIX */
@@ -1450,19 +1507,19 @@ register int noarg;
 	      else return((*subr)(ctx,noarg,args,0));
 	      break;
       case (eusinteger_t)SUBR_MACRO:/* ???? */
-	      if (noarg>=0) error(E_ILLFUNC);
+	      if (noarg>=0) error(E_NOFUNCTION);
 	      while (iscons(args)) { vpush(ccar(args)); args=ccdr(args); n++;}
           GC_POINT;
           tmp = (*subr)(ctx,n,argp);
           GC_POINT;
 	      return(eval(ctx,tmp));
       case (eusinteger_t)SUBR_SPECIAL: /* ???? */
-	      if (noarg>=0) error(E_ILLFUNC);
+	      if (noarg>=0) error(E_NOFUNCTION);
 	      else return((*subr)(ctx,args));
 /*      case (int)SUBR_ENTRY:
 	      func=(*subr)(func);
 	      return(makeint(func)); */
-      default: error(E_ILLFUNC); break;}
+      default: error(E_NOFUNCTION); break;}
   }
 
 pointer clofunc;
@@ -1470,14 +1527,14 @@ pointer ufuncall(ctx,form,fn,args,env,noarg)
 register context *ctx;
 pointer form,fn;
 register pointer args;	/*or 'pointer *' */
-struct bindframe *env;
+pointer env;
 int noarg;
 { pointer func,formal,aval,ftype,result,*argp,hook;
   register struct callframe *vf=(struct callframe *)(ctx->vsp);
   struct specialbindframe *sbfps=ctx->sbindfp;
   register int n=0,i;
   register pointer (*subr)();
-  struct fletframe *oldfletfp=ctx->fletfp, *fenv;
+  pointer oldfletfp=ctx->fletfp, fenv;
   GC_POINT;
   /* evalhook */
   if (Spevalof(QEVALHOOK)!=NIL &&  ehbypass==0) {
@@ -1508,7 +1565,7 @@ int noarg;
   else {
     if (islist(fn)) env=ctx->bindfp;
     func=fn;}
-  if (!ispointer(func)) error(E_ILLFUNC);
+  if (!ispointer(func)) error(E_NOFUNCTION);
 
   /*make a new stack frame*/
   stackck;	/*stack overflow?*/
@@ -1522,7 +1579,7 @@ int noarg;
   if (pisclosure(func)) {
     clofunc=func;
     fn=func;
-    if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_ILLFUNC);
+    if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_NOFUNCTION);
 #if (WORD_SIZE == 64)
     subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3L /*0xfffffffc ????*/);
 #else
@@ -1548,7 +1605,7 @@ int noarg;
 #if !Solaris2 && !SunOS4_1 && !Linux && !IRIX && !IRIX6 && !alpha && !Cygwin
     if ((char *)subr>maxmemory) {
 	prinx(ctx,clofunc, STDOUT);
-	error(E_USER,(pointer)"garbage closure, fatal bug!"); }
+	error(E_VALUE_ERROR,(pointer)"invalid closure"); }
 #endif
     if (noarg<0) {
 	while (iscons(args)) {
@@ -1578,20 +1635,27 @@ int noarg;
   else if (piscons(func)) {
     ftype=ccar(func);
     func=ccdr(func);
-    if (!issymbol(ftype)) error(E_LAMBDA);
+    if (!issymbol(ftype)) error(E_NOFUNCTION);
     if (ftype->c.sym.homepkg==keywordpkg) fn=ftype;	/*blockname=selector*/
     else if (ftype==LAMCLOSURE) {
       fn=ccar(func); func=ccdr(func);
-      env=(struct bindframe *)intval(ccar(func));
-      if (env < (struct bindframe *)ctx->stack ||
-	  (struct bindframe *)ctx->stacklimit < env) env=0;
+      // bind-frame
+      if (ccar(func)==NULL || isbindframe(ccar(func)))
+        env=ccar(func);
+      else if (isint(ccar(func)) && intval(ccar(func))==0)
+        env=NULL;
+      else error(E_NOBINDFRAME);
       func=ccdr(func);
-      /* ctx->fletfp=(struct fletframe *)intval(ccar(func)); */
-      fenv=(struct fletframe *)intval(ccar(func)); 
+      // flet-frame
+      if (ccar(func)==NULL || isfletframe(ccar(func)))
+        fenv=ccar(func);
+      else if (isint(ccar(func)) && intval(ccar(func))==0)
+        fenv=NULL;
+      else error(E_NOFLETFRAME);
       func=ccdr(func);}
-    else if (ftype!=LAMBDA && ftype!=MACRO) error(E_LAMBDA);
+    else if (ftype!=LAMBDA && ftype!=MACRO) error(E_NOFUNCTION);
     else env=NULL /*0 ????*/; 
-    formal=carof(func,E_LAMBDA);
+    formal=carof(func,E_NOFUNCTION);
     func=ccdr(func);
     if (noarg<0) {	/*spread args on stack*/
       noarg=0;
@@ -1602,7 +1666,7 @@ int noarg;
 	vpush(aval); noarg++;}}
     else {
       argp=(pointer *)args;
-      if (ftype==MACRO) error(E_ILLFUNC);}
+      if (ftype==MACRO) error(E_NOFUNCTION);}
     GC_POINT;
     if (ftype==LAMCLOSURE) { ctx->fletfp=fenv; }
     result=funlambda(ctx,fn,formal,func,argp,env,noarg);
@@ -1616,7 +1680,7 @@ int noarg;
     /* check return barrier */
 #endif
     return(result);}
-  else error(E_ILLFUNC);
+  else error(E_NOFUNCTION);
   }
 
 pointer eval(ctx,form)
@@ -1673,7 +1737,7 @@ pointer env;
   else {
     c=ccdr(form);
     if (c!=NIL && issymbol(c)) return(*ovafptr(eval(ctx,ccar(form)),c));
-    else return(ufuncall(ctx,form,ccar(form),(pointer)c,(struct bindframe *)env,-1));}
+    else return(ufuncall(ctx,form,ccar(form),(pointer)c,(pointer)env,-1));}
   }
 
 pointer progn(ctx,forms)
@@ -1708,6 +1772,7 @@ pointer csend(context *ctx, ...)
   while (i++ < cnt) vpush(va_arg(ap,pointer));
   GC_POINT;
   res=(pointer)SEND(ctx,cnt+2, spsave);
+  va_end(ap);
   ctx->vsp=spsave;
   return(res);}
 
@@ -1731,6 +1796,7 @@ va_dcl
   while (i++ < cnt) vpush(va_arg(ap,pointer));
   GC_POINT;
   res=(pointer)SEND(ctx,cnt+2, spsave);
+  va_end(ap);
   ctx->vsp=spsave;
 #ifdef SAFETY
   take_care(res);

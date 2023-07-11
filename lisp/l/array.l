@@ -76,7 +76,7 @@
 		(inc offset)
 		(inc increments)
 		(if (> increments major-dimension)
-		    (error "array dimension mismatch")))))
+		    (error index-error "array dimension mismatch")))))
       vec))
 
 (defun make-array (dim &key (element-type vector)
@@ -99,14 +99,14 @@
 	  (setq entity (instantiate element-type dim))
 	  (setq a entity)
 	  (setq dim (list dim)))
-	 (t
+         ((consp dim)
 	   (setq a (instantiate array))
 	   (let* ((i 0)
 		  (rank (length dim))
 		  (total-size (apply #'* dim)))
-	      (if (> rank 7) (error "array rank limit over"))
+	      (if (> rank 7) (error program-error "array rank limit over"))
 	      (unless (every #'integerp dim)
-		  (error "integer expected for array dimensions"))
+		  (error type-error "integer expected for array dimensions"))
 	      (setq entity
 		    (cond ((vectorp displaced-to) displaced-to)
 		          ((arrayp displaced-to)  (array-entity displaced-to))
@@ -120,7 +120,8 @@
 	      (setf (array-displaced-index-offset a) displaced-index-offset)
 	      (do ((i 0 (1+ i)))
 		  ((>= i rank))
-		(setslot a array (+ i 5)  (elt dim i))))))
+		(setslot a array (+ i 5)  (elt dim i)))))
+         (t (error type-error "integer or list expected")))
       (when initial-element  (fill entity initial-element))
       (when initial-contents
 	 (fill-initial-contents entity 0 dim initial-contents))
@@ -134,7 +135,7 @@
       tsize))
 
 (defun fill-pointer (a)
-    (if (arrayp a) (a . fill-pointer) (error "not an array"))	)
+    (if (arrayp a) (a . fill-pointer) (error type-error "array expected"))	)
 (defun array-rank (a) (a . rank))
     
 (defun array-dimensions (a)
@@ -148,7 +149,7 @@
 (defun array-vector (a)
    (cond ((vectorp a)  a)
          ((arrayp a) (array-entity a))
-	 (t (error "not array"))))
+	 (t (error type-error "array expected"))))
 
 (defun row-major-aref (a index)
    (aref (array-entity a) index))

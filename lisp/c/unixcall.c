@@ -91,7 +91,9 @@ extern time_t timezone, altzone;	/*long*/
 #endif
 extern int daylight;
 
+extern pointer K_ISATTY;
 extern pointer eussigvec[NSIG];
+extern pointer eussigobj;
 
 extern eusinteger_t coerceintval(pointer);
 
@@ -313,7 +315,7 @@ register pointer argv[];
     set=(sigset_t *)argv[0]->c.ivec.iv;
     sigaddset(set, signum);
     return(argv[0]);}
-  else error(E_USER,(pointer)"integer/bit vector expected for sigaddset");
+  else error(E_TYPE_ERROR,(pointer)"integer/bit vector expected for sigaddset");
   }
 
 pointer SIGDELSET(ctx,n,argv)
@@ -329,7 +331,7 @@ register pointer argv[];
     set=(sigset_t *)argv[0]->c.ivec.iv;
     sigdelset(set, signum);
     return(argv[0]);}
-  else error(E_USER,(pointer)"integer/bit vector expected for sigaddset");
+  else error(E_TYPE_ERROR,(pointer)"integer/bit vector expected for sigaddset");
   }
 
 pointer SIGPROCMASK(ctx,n,argv)
@@ -350,7 +352,7 @@ pointer argv[];
     stat=sigprocmask(how, set, oset);
     if (stat==0) return(T); else return(makeint(-errno));
     }
-  else error(E_USER,(pointer)"integer/bit vector expected for sigprocmask");
+  else error(E_TYPE_ERROR,(pointer)"integer/bit vector expected for sigprocmask");
   }
 
 pointer KILL(ctx,n,argv)
@@ -370,6 +372,7 @@ pointer argv[];
   register pointer a=argv[1],oldval;
   extern void eusint();	
   unsigned long int j;
+  pointer p;
 
   ckarg2(1,3);
   s=min(ckintval(argv[0]),NSIG-1);
@@ -377,6 +380,11 @@ pointer argv[];
   if (n==1) return(oldval);
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(eusinteger_t)eusint; eussigvec[s]=a;}
+  // update eussigobj value
+  p = eussigobj;
+  for (i=0; i<s; i++) { p=ccdr(p);}
+  pointer_update(ccar(p), eussigvec[s]);
+  // install handlers
   sv.sa_handler= (void (*)())f;
 #if Linux || Cygwin
 
@@ -410,6 +418,7 @@ pointer argv[];
   struct sigvec sv;
   register pointer a=argv[1],oldval;
   extern void eusint();
+  int i;
 
   ckarg2(1,3);
   s=min(ckintval(argv[0]),NSIG-1);
@@ -417,6 +426,11 @@ pointer argv[];
   if (n==1) return(oldval);
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(eusinteger_t)eusint; eussigvec[s]=a;}/* ???? */
+  // update eussigobj value
+  p = eussigobj;
+  for (i=0; i<s; i++) { p=ccdr(p);}
+  pointer_update(ccar(p), eussigvec[s]);
+  // install handlers
   sv.sv_handler=(void (*)())f;
   sv.sv_mask=0;	/*sigmask(s)???;*/
 /*news doesn't have system5 compatible signal handling option*/
@@ -1373,12 +1387,13 @@ register context *ctx;
 int n;
 pointer *argv;
 { ckarg(1);
-  struct timespec treq;
-  GC_REGION(treq.tv_sec=ckintval(argv[0]));;
+  struct timespec treq,trem;
+  GC_REGION(treq.tv_sec=ckintval(argv[0]));
   treq.tv_nsec = 0;
-  if (nanosleep(&treq, NULL)<0) return(NIL);
+  while (nanosleep(&treq, &trem)<0) {
+    breakck;	/*signal exists?*/
+    treq=trem;}
   return(T);}
-
 
 #if sun3 || sun4 && !Solaris2 || Linux || alpha || Cygwin
 pointer USLEEP(ctx,n,argv)
@@ -1386,10 +1401,12 @@ register context *ctx;
 int n;
 pointer *argv;
 { ckarg(1);
-  struct timespec treq;
+  struct timespec treq,trem;
   GC_REGION(treq.tv_sec  =  ckintval(argv[0])/1000000;
             treq.tv_nsec = (ckintval(argv[0])%1000000)*1000);
-  if (nanosleep(&treq, NULL)<0) return(NIL);
+  while (nanosleep(&treq, &trem)<0) {
+    breakck;
+    treq=trem;}
   return(T);}
 #endif
 
@@ -1445,7 +1462,8 @@ pointer argv[];
   a=argv[0];
   if (isiostream(a)) a=a->c.iostream.in;
   if (isfilestream(a)) fd=intval(a->c.fstream.fd);
-  else fd=ckintval(a);
+  else if (isint(a)) fd=intval(a);
+  else return csend(ctx,a,K_ISATTY,0);
   /*
 #if Cygwin
   if (getenv("EMACS") && (strcmp (getenv("EMACS"), "t")) == 0 ) return(T); 
@@ -1483,7 +1501,7 @@ register pointer argv[];
 
   ckarg(2);
   s=ckintval(argv[0]);	/*socket id*/
-  if (!isstring(argv[1])) error(E_USER,(pointer)"socket address expected");
+  if (!isstring(argv[1])) error(E_NOSTRING);
   sa= (struct sockaddr *)(argv[1]->c.str.chars);
   if (sa->sa_family==AF_UNIX) l=strlen(sa->sa_data)+2;
   else l=sizeof(struct sockaddr_in);
@@ -1498,7 +1516,7 @@ pointer argv[];
   struct sockaddr *sa;
   ckarg(2);
   s=ckintval(argv[0]);		/*socket id*/
-  if (!isstring(argv[1])) error(E_USER,(pointer)"socket address expected");
+  if (!isstring(argv[1])) error(E_NOSTRING);
   sa= (struct sockaddr *)(argv[1]->c.str.chars);
   if (sa->sa_family==AF_UNIX) l=strlen(sa->sa_data)+2;
   else l=sizeof(struct sockaddr_in);
@@ -1616,7 +1634,7 @@ eusinteger_t *checkbitvec(pointer a, long *size)
   case ELM_BYTE: case ELM_CHAR:
 		*size=vecsize(a) * 8; return(a->c.ivec.iv);
   case ELM_FOREIGN: *size=vecsize(a) * 8; return((eusinteger_t *)a->c.foreign.chars);
-  default: error(E_USER,(pointer)"bit-vector expected");
+  default: error(E_BITVECTOR);
   }
 }
 
@@ -1658,7 +1676,9 @@ register pointer argv[];
     timeout=timeout*1000000;
     to.tv_usec=timeout;
     GC_REGION(i=select(width, readfds, writefds, exceptfds,&to);)}
-  if (i<0) return(makeint(-errno));
+  if (i<0) {
+    if (errno==EINTR) breakck; /* signal received? */
+    return(makeint(-errno));}
   else return(makeint(i)); }
 
 pointer SELECT_READ(ctx,n,argv)

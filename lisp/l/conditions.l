@@ -1,0 +1,279 @@
+(eval-when (load eval)
+
+(in-package "LISP")
+
+(export '(defcondition install-handler remove-handler invoke-next-handler signals
+          eussig *signal-handlers*
+          assertion-error euserror sigint-handler interruption handler-bind handler-case))
+
+(deflocal *condition-handler*)
+(defvar *current-condition-handler*)
+
+(defmethod condition
+  (:init (&rest init-args &key message &allow-other-keys)
+    ;; Initialize slots
+    (do* ((key (pop init-args) (pop init-args))
+          (val (pop init-args) (pop init-args)))
+         ((null key))
+      (send self :set-val (symbol-pname key) val))
+    self)
+  (:message (&optional (val nil supplied-p)) (if supplied-p (setq message val) message)))
+
+(defmethod error
+  (:init (&rest init-args &key (message "") (callstack (sys:list-callstack)) &allow-other-keys)
+    (send-super* :init :message message :callstack callstack init-args))
+  (:callstack (&optional val) (if val (setq callstack val) callstack))
+  (:form (&optional val) (if val (setq form val) form)))
+
+(defclass condition-handler :slots (fn) :super propertied-object)
+(defmethod condition-handler
+  (:init (fn)
+    (unless (functionp fn) (error type-error "function expected"))
+    ;; set slots
+    (setq (self . fn) fn)
+    ;; set name
+    (let ((name
+           (cond
+             ((symbolp fn) fn)
+             ((compiled-function-p fn) (get fn :name))
+             ((listp fn) (second fn)))))
+      (if name (setf (get self :name) name)))
+    self)
+  (:function (&optional val) (if val (setq fn val) fn)))
+
+(defmacro defcondition (name &key slots (super 'condition))
+  `(progn
+     (defclass ,name :slots ,slots :super ,super)
+     ,(if slots
+          `(defmethod ,name
+               ,@(mapcar
+                  #'(lambda (s)
+                      `(,(intern (send s :pname) *keyword-package*) (&optional (val nil supplied-p))
+                         (if supplied-p (setq (self . ,s) val) (self . ,s))))
+                  slots)))
+     ',name))
+
+(defun install-handler-raw (label handler)
+  ;; ensure condition class
+  (if (eq label t) (setq label condition))
+  (unless (and (classp label) (derivedp (instantiate label) condition))
+    (error type-error "condition class expected"))
+  (push (cons label (instance condition-handler :init handler))
+        *condition-handler*)
+  t)
+
+(defun install-handler (label handler)
+  (if (eq label t) (setq label condition))
+  (unless (and (classp label) (derivedp (instantiate label) condition))
+    (error type-error "condition class expected"))
+  ;; recursively force registration on all previous scopes
+  (let ((handler-list
+         (remove-if-not #'(lambda (val) (eql val '*condition-handler*))
+                        (sys:list-all-special-bindings)
+                        :key #'car))
+        (item
+         (cons label (instance condition-handler :init handler))))
+    (when handler-list
+      (dolist (val handler-list)
+        (list-insert item 0 (cdr val))))
+    (push item *condition-handler*))
+  t)
+
+(defun install-error-handler (handler)
+  (warning-message 1
+    ";; `lisp::install-error-handler' is obsolete. Try to use `install-handler' instead.~%")
+  (install-handler error
+      #'(lambda (err)
+          (when (send err :callstack)
+            (print-callstack (send err :callstack) *max-callstack-depth*))
+          (funcall handler 0 (send err :message) (send err :form)))))
+
+(defun remove-handler (label &optional handler)
+  (let* ((handler-special
+          ;; recursively force deletion on all previous scopes
+          ;; start with oldest scope
+          (reverse
+           (remove-if-not #'(lambda (val) (eql val '*condition-handler*))
+                          (sys:list-all-special-bindings)
+                          :key #'car)))
+         (handler-list
+          (append (mapcar #'cdr handler-special) (list *condition-handler*)))
+         (global-handler
+          (car handler-list))
+         (pos
+          (if handler
+              (position-if #'(lambda (val) (and (eql (car val) label)
+                                                (derivedp (cdr val) condition-handler)
+                                                (eql (send (cdr val) :function) handler)))
+                           global-handler)
+              (position label global-handler :key #'car))))
+    (when pos
+      (let ((item (nth pos global-handler))
+            res)
+        (dolist (val handler-list)
+          (let ((local-pos
+                 (position item val :test #'eq)))
+            (when local-pos
+              (list-delete val local-pos)
+              (setq res t))))
+        ;; return the deletion result of the innnermost scope (i.e. local scope)
+        res))))
+
+(defmacro handler-bind (bindings &rest forms)
+  `(let ((*condition-handler* (copy-list *condition-handler*)))
+     ,@(mapcar #'(lambda (bind) `(install-handler-raw ,@bind)) bindings)
+     ,@forms))
+
+(defmacro handler-case (form &rest cases)
+  (let ((handler-frame (gensym "HANDLER-CASE-")))
+    (flet ((expand-case (tag arglst &rest body)
+             (unless (or (null arglst) (and (consp arglst) (null (cdr arglst))))
+               (error argument-error "expected single parameter list"))
+             `(,tag #'(lambda ,(if arglst arglst (list (gensym)))
+                        ;; ignore?
+                        (throw ',handler-frame
+                          (progn ,@body))))))
+      `(catch ',handler-frame
+         (handler-bind
+             ,(mapcar #'(lambda (cs) (apply #'expand-case cs)) (reverse cases))
+           ,form)))))
+
+(defmacro atomic (form &rest cases)
+  (flet ((expand-case (place index tag arglst &rest body)
+           (unless (or (null arglst) (and (consp arglst) (null (cdr arglst))))
+             (error argument-error "expected single parameter list"))
+           (if (null arglst) (setq arglst (list (gensym))))
+           `(,tag #'(lambda ,arglst
+                      (setf (elt ,place ,index) ,(car arglst))
+                      ,@body))))
+    (let ((holder (gensym))
+          (i (length cases)))
+      `(let ((,holder (make-list ,(length cases) :initial-element nil)))
+         (prog1
+             (handler-bind
+                 ,(mapcar #'(lambda (cs) (apply #'expand-case holder (decf i) cs))
+                          (reverse cases))
+               ,form)
+           (mapc #'signals (remove nil ,holder)))))))
+
+(defun invoke-next-handler (obj)
+  (unless (derivedp obj condition)
+    (error type-error "condition class expected"))
+  (when (null *current-condition-handler*)
+    ;; no active handler; use signals instead
+    (return-from invoke-next-handler (signals obj)))
+  (dolist (handle *current-condition-handler*)
+    (when (derivedp obj (car handle))
+      ;; call handler
+      (let ((*current-condition-handler*
+             (remove handle *current-condition-handler* :test #'equal :count 1)))
+        (return-from invoke-next-handler (funcall (send (cdr handle) :function) obj))))))
+
+(defun signals (obj &rest init-args)
+  (when (classp obj)
+    (setq obj (instantiate obj))
+    (send* obj :init init-args))
+  ;; init-args is not used if instantiated objects are given
+  (unless (derivedp obj condition) (error type-error "condition class expected"))
+  (dolist (handle *condition-handler*)
+    (when (derivedp obj (car handle))
+      ;; call handler
+      (let ((*current-condition-handler*
+             (if *current-condition-handler*
+                 (remove handle *current-condition-handler* :test #'equal :count 1)
+                 (remove handle (copy-list *condition-handler*) :test #'equal :count 1))))
+        (return-from signals (funcall (send (cdr handle) :function) obj))))))
+
+(defun print-callstack (&optional (stack (sys:list-callstack)) max (os *error-output*))
+  (let ((tms (if max
+                 (min max (length stack))
+                 (length stack))))
+    (when (plusp tms)
+      (format os "Call Stack~A:~%" (if max (format nil " (max depth ~A)" max) ""))
+      (dotimes (i tms)
+        (format os "~3D: at ~S~%" i (nth i stack))))))
+
+(defun print-error-message (err &optional (os *error-output*))
+  (unless (derivedp err condition) (error type-error "condition class expected"))
+  (when (send err :message)
+      (format os "~C[1;3~Cm~A~C[0m: ~A"
+              #x1b (+ 1 48) (string-upcase (metaclass-name (class err))) #x1b (send err :message))
+      (if (and (derivedp err error) (send err :form))
+          (format os " in ~S" (send err :form)))
+      (terpri os)))
+
+
+;;;
+;;; assertion error
+;;;
+
+(defcondition assertion-error :super error)
+
+
+;;;
+;;; error handling
+;;;
+
+(defun euserror (err)
+  (when (send err :callstack)
+    (print-callstack (send err :callstack) *max-callstack-depth*))
+  (print-error-message err)
+  (if (not (zerop (unix:thr-self)))
+      (throw 0 nil))
+  (let ((*replevel* (1+ *replevel*))
+        (*reptype* "E"))
+    (while (catch *replevel* (reploop #'toplevel-prompt))))
+  (throw *replevel* t))
+
+
+;;;
+;;; unix:signal handling
+;;;
+
+(defcondition unix::signal-received :slots (sig code))
+(defmacro unix::install-signal-handler (sig obj &rest init-args)
+  `(progn
+     (defcondition ,obj :super unix::signal-received)
+     (unix:signal ,sig
+                  #'(lambda (sig code) (signals ,obj :sig sig :code code ,@init-args)))))
+
+(defmacro unix::with-alarm-interrupt (&rest body)
+  (let ((interval (gensym)) (value (gensym)))
+    `(multiple-value-bind ,(list interval value) (unix:setitimer 0 0 0)
+       ,@body
+       (unix:setitimer 0 ,value ,interval))))
+
+(defcondition interruption)
+(defun sigint-handler (c)
+  (unix::with-alarm-interrupt
+    (signals interruption :message "keyboard interrupt")))
+
+(defun interruption-handler (c)
+  (print-error-message c)
+  (let* ((*replevel* (1+ *replevel*))
+         (*reptype* "B"))
+    (while (catch *replevel* (reploop #'toplevel-prompt)))))
+
+
+;;
+;; old handlers for backward compatibility
+;;
+(defvar *signal-handlers* (make-sequence vector 32))
+
+(defun eussig (sig &rest code &aux (handler (aref *signal-handlers* sig)))
+   (cond (handler (funcall handler sig code))
+	 (t
+	   (if (fboundp 'unix:ualarm)
+	       (unix:ualarm 0 0)
+	       (unix:alarm 0))
+	  (warning-message 1 "signal ~s ~s~%" sig code)
+	  (let* ((*replevel* (1+ *replevel*))
+		 (*reptype* "S"))
+	      (catch *replevel*
+                (reploop #'toplevel-prompt))))))
+
+
+;; install handlers
+(install-handler error #'euserror)
+(install-handler interruption 'interruption-handler)
+)

@@ -529,22 +529,22 @@ b --> #*0000010000
 \begin{center}
 {\large
 \begin{tabular}{|l l l|} \hline 
-and & flet & quote \\
-block & function & return-from\\
-catch & go & setq \\
-cond & if & tagbody \\
-declare & labels & the \\
-defmacro & let & throw \\
-defmethod & let* & unwind-protect \\
-defun & progn & while \\
-eval-when & or & \\
+and & flet & progn \\
+block & function & quote\\
+catch & go & return-from\\
+cond & if & setq\\
+declare & labels & tagbody\\
+defmacro & let & the\\
+defmethod & let* & throw\\
+defun & macrolet & unwind-protect\\
+eval-when & or & while\\
 \hline
 \end{tabular} }
 \end{center}
 \end{table}
 
 全ての特殊書式は、表\ref{SpecialForms}にリストされている。
-{\bf macrolet, compiler-let,}や{\bf progv}は、該当しない。
+{\bf symbol-macrolet, compiler-let,}や{\bf progv}は、該当しない。
 特殊書式は、文脈の評価および制御フローの管理のための
 基本的な言語構造である。
 インタプリタとコンパイラは、これらの構造をそれぞれ正しく処理する
@@ -596,7 +596,18 @@ lambda-listは、lambda書式のためにパラメータの列を記す。
 {\bf \&optional, \&rest, \&key }や{\bf \&aux} はそれぞれ、lambda-list
 のなかに特殊な意味を持っていて、これらのsymbolは、変数名として使用
 することはできない。
-\&optionalや\&keyパラメータのsupplied-p変数は、サポートされていない。
+\&optionalや\&keyパラメータのsupplied-p変数は、version 10よりサポートされている。
+
+\begin{verbatim}
+(defun foo (&optional (a nil a-p))
+  (list a a-p))
+(foo 1)
+--> (1 t)
+(foo nil)
+--> (nil t)
+(foo)
+--> (nil nil)
+\end{verbatim}
 
 lambda書式は、普通のリストデータと区別できないため、
 {\bf function}特殊書式を用いて、インタプリタやコンパイラに関数として
@@ -638,26 +649,32 @@ lambda書式は、普通のリストデータと区別できないため、
 (vector-sum #(1 2 3 4)) --> 10 
 \end{verbatim}
 
-EusLispのclosureは、不定な大きさを持つことができない。
-すなわち、closureはその外側の大きさで可能な大きさまで持つことができる。
-これはclosureが'generators'のプログラミングのために使用されないことを意味する。
-次のプログラムは何もしない。
+\subsection{クロージャ}
+
+クロージャは生成時のlexicalスコープを継承する関数である。
+オブジェクトと同じくローカルな変数や関数のバインドを保持、アクセスすることができる。
+ただし、EusLispのオブジェクト指向とは異なり、クロージャのメンバーは外部からアクセスできない
+(privateメンバーとして機能する)。
 
 \begin{verbatim}
-(proclaim '(special gen))
 (let ((index 0))
    (setq gen #'(lambda () (setq index (1+ index)))))
 (funcall gen)
+--> 1
+(funcall gen)
+--> 2
 \end{verbatim}
 
-しかしながら、その同じ目的がオブジェクト指向プログラミングで実現できる。
-なぜなら、オブジェクトはそれ自身の固定変数を持つことができるためである。
+同じ目的のオブジェクト指向プログラミングを以下で示す。
 \begin{verbatim}
-(defclass generator object (index))
+(defclass generator :super object :slots (index))
 (defmethod generator
  (:next () (setq index (1+ index)))
  (:init (&optional (start 0)) (setq index start) self))
 (defvar gen (instance generator :init 0))
 (send gen :next)
+--> 1
+(send gen :next)
+--> 2
 \end{verbatim}
 \newpage

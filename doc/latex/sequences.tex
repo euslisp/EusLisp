@@ -261,10 +261,83 @@ of {\em list}. {\bf cdr} of NIL is NIL.
 \funcdesc{cddar}{list}{
 {\tt (cddar list) = (cdr (cdr (car list)))}}
 
+\funcdesc{caaddr}{list}{
+{\tt (caddr list) = (car (car (cdr (cdr list)))}}
+
+\funcdesc{caaadr}{list}{
+{\tt (caadr list) = (car (car (car (cdr list)))}}
+
+\funcdesc{caadar}{list}{
+{\tt (cadar list) = (car (car (cdr (car list)))}}
+
+\funcdesc{caaaar}{list}{
+{\tt (caaar list) = (car (car (car (car list)))}}
+
+\funcdesc{cadadr}{list}{
+{\tt (cdadr list) = (car (cdr (car (cdr list)))}}
+
+\funcdesc{cadaar}{list}{
+{\tt (cdaar list) = (car (cdr (car (car list)))}}
+
+\funcdesc{cadddr}{list}{
+{\tt (cdddr list) = (car (cdr (cdr (cdr list)))}}
+
+\funcdesc{caddar}{list}{
+{\tt (cddar list) = (car (cdr (cdr (car list)))}}
+
+\funcdesc{cdaddr}{list}{
+{\tt (caddr list) = (cdr (car (cdr (cdr list)))}}
+
+\funcdesc{cdaadr}{list}{
+{\tt (caadr list) = (cdr (car (car (cdr list)))}}
+
+\funcdesc{cdadar}{list}{
+{\tt (cadar list) = (cdr (car (cdr (car list)))}}
+
+\funcdesc{cdaaar}{list}{
+{\tt (caaar list) = (cdr (car (car (car list)))}}
+
+\funcdesc{cddadr}{list}{
+{\tt (cdadr list) = (cdr (cdr (car (cdr list)))}}
+
+\funcdesc{cddaar}{list}{
+{\tt (cdaar list) = (cdr (cdr (car (car list)))}}
+
+\funcdesc{cddddr}{list}{
+{\tt (cdddr list) = (cdr (cdr (cdr (cdr list)))}}
+
+\funcdesc{cdddar}{list}{
+{\tt (cddar list) = (cdr (cdr (cdr (car list)))}}
+
 \funcdesc{first}{list}{
-retrieves the first element in {\em list}.
-\bfx{second, third, fourth, fifth, sixth, seventh, eighth} are als
-available.}
+retrieves the first element in {\em list}.}
+
+\funcdesc{second}{list}{
+retrieves the second element in {\em list}.}
+
+\funcdesc{third}{list}{
+retrieves the third element in {\em list}.}
+
+\funcdesc{fourth}{list}{
+retrieves the fourth element in {\em list}.}
+
+\funcdesc{fifth}{list}{
+retrieves the fifth element in {\em list}.}
+
+\funcdesc{sixth}{list}{
+retrieves the sixth element in {\em list}.}
+
+\funcdesc{seventh}{list}{
+retrieves the seventh element in {\em list}.}
+
+\funcdesc{eighth}{list}{
+retrieves the eighth element in {\em list}.}
+
+\funcdesc{ninth}{list}{
+retrieves the ninth element in {\em list}.}
+
+\funcdesc{tenth}{list}{
+retrieves the tenth element in {\em list}.}
 
 \funcdesc{nth}{count list}{
 returns the {\em count}-th element in {\em list}.
@@ -274,8 +347,8 @@ and to {\tt (elt list 1)}.}
 \funcdesc{nthcdr}{count list}{
 applies {\bf cdr} {\em count} times to {\em list}.}
 
-\funcdesc{last}{list}{
-the last cons is returned, not the last element.}
+\funcdesc{last}{list \&optional (n 1)}{
+the last {\em n} conses is returned, not the last element.}
 
 \funcdesc{butlast}{list \&optional (n 1)}{
 returns a list which does not contain the last {\em n} elements.}
@@ -289,6 +362,9 @@ makes a list of {\em elements}.}
 \funcdesc{list*}{\&rest elements}{
 makes a list of {\em elements}, but the last element is consed in cdr:
 for example, {\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}.}
+
+\funcdesc{values}{\&rest elements}{
+alias for {\em list}.}
 
 \funcdesc{list-length}{list}{
 returns the length of the {\em list}. {\em List} can be circular.}
@@ -320,8 +396,22 @@ searches the association list {\em alist}. The value returned is the
 first pair in the {\em alist} such that the {\em car} of the pair satisfies
 the {\em test}, or NIL if there is no such pair in the {\em alist}.}
 
-\funcdesc{rassoc}{item alist}{
+\funcdesc{assoc-if}{pred alist \&key key}{
+returns the first pair in {\em alist} whose {\em car} satisfies
+the {\em pred}, or NIL if there is no such pair.}
+
+\funcdesc{assoc-if-not}{pred alist \&key key}{
+returns the first pair in {\em alist} whose {\em car} DOES NOT satisfies
+the {\em pred}, or NIL if there is no such pair.}
+
+\funcdesc{rassoc}{item alist \&key key (test \#'equal) test-not}{
 returns the first pair in {\em alist} whose cdr is equal to {\em item}.}
+
+\funcdesc{rassoc-if}{pred alist \&key key}{
+returns the first pair in {\em alist} whose cdr satisfies {\em pred}.}
+
+\funcdesc{rassoc-if-not}{pred alist \&key key}{
+returns the first pair in {\em alist} whose cdr DOES NOT satisfies {\em pred}.}
 
 \funcdesc{pairlis}{l1 l2 \&optional alist}{
 makes a list of pairs consing corresponding elements in {\em l1} and {\em l2}.
@@ -388,6 +478,11 @@ insert {\em item} as the {\em pos}'th element in {\em list} destructively.
 If {\em pos} is bigger than the length of {\em list}, {\em item} is
 nconc'ed at the tail.
 For example, {\tt (list-insert 'x 2 '(a b c d)) = (a b x c d)}}
+
+\funcdesc{list-delete}{lst n}{
+deletes the item at the {\em n}'th position in {\em lst} destructively.
+If {\em n} is bigger than the length of {\em lst}, no items are deleted.
+For example, {\tt (list-delete '(a b c d) 2) = (a b d)}}
 
 \funcdesc{copy-tree}{tree}{
 returns the copy of {\em tree} which may be a nested list
@@ -573,12 +668,33 @@ convert the case of {\em ch} to upper.}
 \funcdesc{char-downcase}{ch}{
 convert the case of {\em ch} to lower.}
 
+\funcdesc{char=}{ch1 ch2 \&rest more-characters}{
+alias for {\em =}.}
+
+\funcdesc{char/=}{ch1 ch2 \&rest more-characters}{
+alias for {\em /=}.}
+
+\funcdesc{char$>$}{ch1 ch2 \&rest more-characters}{
+alias for {\em $>$}.}
+
+\funcdesc{char$<$}{ch1 ch2 \&rest more-characters}{
+alias for {\em $<$}.}
+
+\funcdesc{char$>=$}{ch1 ch2 \&rest more-characters}{
+alias for {\em $>=$}.}
+
+\funcdesc{char$<=$}{ch1 ch2 \&rest more-characters}{
+alias for {\em $<=$}.}
+
 \funcdesc{char}{string index}{
 returns {\em index}th character in {\em string}.}
 
 \funcdesc{schar}{string index}{
 extracts a character from {\em string}. Use {\bf schar} only if the
 type of {\em string} is definitely known and no type check is required.}
+
+\funcdesc{setchar}{string index ch}{
+set {\em index}th character in {\em string} to {\em ch}.}
 
 \funcdesc{stringp}{object}{
 returns T if {\em object} is a vector of bytes (integers less than 256).}
@@ -613,18 +729,28 @@ If object is number its string representation is returned
 In order to get string representation for more complex objects,
 use {\bf format} with NIL in the first argument.}
 
-\fundesc{string$<$}{str1 str2}
+\funcdesc{string$<$}{str1 str2}{
+T if {\em str1} is less than {\em str2} according to strcmp.}
 
-\fundesc{string$<=$}{str1 str2}
+\funcdesc{string$<=$}{str1 str2}{
+T if {\em str1} is less than or equal to {\em str2} according to strcmp.}
 
-\fundesc{string$>$}{str1 str2}
+\funcdesc{string$>$}{str1 str2}{
+T if {\em str1} is greater than {\em str2} according to strcmp.}
 
-\fundesc{string$>=$}{str1 str2}
+\funcdesc{string$>=$}{str1 str2}{
+T if {\em str1} is greater than or equal to {\em str2} according to strcmp.}
 
-\fundesc{string-left-trim}{bag str}
+\fundesc{string-left-trim}{bag str}{
+{\em str} is scanned from the left,
+and its elements are removed if
+it is included in the {\em bag} list.
+Once a character other than the ones in the {\em bag} is found,
+further scan is aborted and the rest of {\em str}
+is returned.}
 
 \funcdesc{string-right-trim}{bag str}{
-{\em str} is scanned from the left(or right),
+{\em str} is scanned from the right,
 and its elements are removed if
 it is included in the {\em bag} list.
 Once a character other than the ones in the {\em bag} is found,
@@ -632,9 +758,9 @@ further scan is aborted and the rest of {\em str}
 is returned.}
 
 \funcdesc{string-trim}{bag str}{
-{\em Bag} is a sequence of character codes.
+{\em bag} is a sequence of character codes.
 A new copy of {\em str} which does not contain characters specified in {\em bag}
-in its both end is made and returned.}
+in its both ends is made and returned.}
 
 \funcdesc{substringp}{sub string}{
 T if string {\em sub} is contained in {\em string} as a substring.
@@ -714,7 +840,7 @@ For a string, shifted sum of each character code is returned.
 For any other objects, {\bf sxhash} is recursively called to calculate
 the hash value of each slot, and the sum of them is returned.}
 
-\funcdesc{make-hash-table}{\&key (size 30) (test \#'eq) (rehash-size 2.0)}{
+\funcdesc{make-hash-table}{\&key (size 10) (test \#'eq) (rehash-size 1.7)}{
 creates a hash table and returns it.}
 
 
@@ -734,12 +860,12 @@ maps {\em function} to all the elements of {\em htab}.}
 \funcdesc{hash-table-p}{x}{
 T if {\em x} is an instance of class hash-table.}
 
-\classdesc{hash-table}{object}{(key value count \\
+\classdesc{hash-table}{object}{(key value count fill-count \\
 \> hash-function test-function \\
 \> rehash-size empty deleted)}{
 defines hash table.
 {\em Key} and {\em value} are simple-vectors of the same {\em size}.
-{\em Count} is the number of filled slots in {\em key} and {\em value}.
+{\em Count} and {\em fill-count} are used to administer the number of filled slots.
 {\em Hash-function} is defaulted to {\bf sxhash} and
 {\em test-function} to {\bf eq}.
 {\em Empty} and {\em deleted} are uninterned symbols to indicate

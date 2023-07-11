@@ -92,7 +92,7 @@ int cid;		/*class id*/
   if (k>=MAXBUDDY) {		/*no enough room*/
     if (bbreq->size<totalheap/8) {	/*relatively small cell is requested;*/
       gc();			/* then try garbage collection*/
-      while (freeheap<(totalheap*min(5.0,fltval(spevalof(GCMARGIN)))))
+      while (freeheap<(totalheap*min(0.9,fltval(spevalof(GCMARGIN)))))
 	newchunk(req); /*still not enough space*/
       for (k=req; buddy[k].bp==0; ) k++;}
     if (k>=MAXBUDDY) {
@@ -169,6 +169,7 @@ markall()
   register context *ctx;
   markctx=euscontexts[thr_self()];
   mark(sysobj);		/*mark internally reachable objects*/
+  mark(eussigobj);	/*mark unix signal callbacks*/
   mark(pkglist);	/*mark all packages*/
   for (i=0; i<MAXTHREAD; i++) {
     /*mark everything reachable from stacks in euscontexts*/

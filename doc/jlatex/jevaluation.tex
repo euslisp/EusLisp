@@ -3,41 +3,11 @@
 
 \subsection{評価関数}
 
-エラーやシグナル(signal)に関する振る舞いを示すために、
-あらかじめそれぞれ特別の変数{\bf *error-handler*}と{\bf *signal-handler*}
-に適当な関数を設定する。
-修正あるいは続行できるエラーはない。
-エラーを解析後、現在の実行を{\bf reset}または上位レベルへの適当な{\bf throw}
-によって停止しなければならない。
-Euslispの最上位レベルで{\tt 0}と名付けられたcatch frameを作成しているので、
-{\bf reset}は、{\tt (throw 0 NIL)}と同等である。
-
-エラーハンドラーは、{\em code msg1 form \&optional (msg2)}
-という3つあるいは4つの引き数を持つ関数として定義しなければならない。
-{\em code}はエラーコードで、システムで定義されたエラーを示す。
-例えば、14が'引き数が合わない'、13が'関数が定義されていない'となる。
-これらの定義は、"c/eus.h"の中に定義されている。
-{\em msg1}と{\em msg2}は、ユーザーに示されるメッセージである。
-{\em form}は、エラーによって生じたs表現である。
-
-シグナルハンドラーは、{\em sig}と{\em code}の2つの引き数を受ける関数として
-定義されなければならない。
-{\em sig}は、1から30までのシグナル番号である。
-{\em code}は、シグナル番号の中に定義された補助番号である。
-
-最上位レベルでの\verb+^+D({\em end-of-file})は、Euslispの活動を停止させる。
-これは、Euslispをフィルターとしてプログラムされているとき
-役に立つ。
-
-{\bf eval-dynamic}は、letやlambda変数として使用されるsymbolに結び付く
-動的な変数を捜す関数である。
-デバッグするときに役に立つ。
-
 \begin{refdesc}
 
 \funcdesc{identity}{obj}{
 {\em obj}自身を返す。
-{\bf idnetity}と{\bf quote}との違いに注意すること。
+{\bf identity}と{\bf quote}との違いに注意すること。
 {\bf identity}が関数であるのに対して{\bf quote}は、特殊書式(special form)
 である。
 したがって、{\tt (identity 'abc)}は{\tt abc}と評価されるが、
@@ -77,7 +47,8 @@ closure関数を作る。
 {\em hookfun}を{\bf *evalhook*}に結び付けた後、{\em form}を一度評価する。}
 
 \funcdesc{eval-dynamic}{variable}{
-スタックにある{\em variable}(symbol)の値を捜す。}
+スタックにある{\em variable}(symbol)の値を捜す。
+デバッグするときに役に立つ。}
 
 \funcdesc{macroexpand}{form}{
 もし、{\em form}がマクロcallであるなら、それを展開する。
@@ -135,26 +106,56 @@ closure関数を作る。
 {\em format-string}と{\em args}で与えられる警告メッセージを
 {\bf *error-output*}に出力する。}
 
-\funcdesc{error}{format-string \&rest args}{
-{\bf *error-handler*}に結び付く現在のエラーハンドラー関数を呼び出す。
-デフォルトのエラーハンドラー'euserror'を{\bf *error-output*}に最初に出力し
-{\em format-string}と{\em args}を{\bf format}を用いて出力する。
-その後、新しい最上位レベルのセッション(session)に入る。
-プロンプトには、エラーセッションの深さを示す。
-{\bf throw}にその番号を与えることにより、低いエラーレベルのセッションへ戻ることができる。}
+\funcdesc{error}{message-or-class \&rest format-args}{
+{\em message-or-class}をメッセージに持つエラーコンディションをsignalizeする。
+{\em message-or-class}がクラスだった場合、それによってしめされるエラーコンディションをsignalizeする。そのとき、二番目のargumentはメッセージを指定しなければならない。}
 
 \end{refdesc}
 
-マルチスレッドEuslispにおいて、特殊変数はスレッド間で共有され、
-同じ{\bf *error-handler*}が異なったスレッドから参照される。
-この不自由を避けるために、マルチスレッドEuslispは{\bf install-error-handler}
-関数を備えている。その関数は、それぞれのスレッドに対して
-異なったエラーハンドラーをインストールする。
+\newpage
+
+\subsection{エラーとUnixシグナルをハンドリングする}
+
+コンディションハンドラーを用いることでエラーや中断シグナル(sigint)をハンドリングすることができる。
+EusLispでは以下のコンディションクラスが定義され、Unixシグナルに関するクラスを新しく導入したい場合にはマクロ{\bf unix:install-signal-handler}を使うと良い。デフォルトではエラーは{\bf euserror}に、中断シグナルは{\bf lisp::interruption-handler}によってハンドリングされる。
 
 \begin{refdesc}
 
-\funcdesc{lisp::install-error-handler}{handler}{
-{\em handler}を現在のスレッドのエラーハンドラーとしてインストールする。}
+\classdesc{error}{condition}{callstack form}{
+エラーの最も基本的なクラス。}
+\classdesc{argument-error}{error}{}{}
+\classdesc{program-error}{error}{}{}
+\classdesc{name-error}{error}{}{}
+\classdesc{type-error}{error}{}{}
+\classdesc{value-error}{error}{}{}
+\classdesc{index-error}{error}{}{}
+\classdesc{io-error}{error}{}{}
+\classdesc{assertion-error}{error}{}{}
+
+\funcdesc{lisp::print-error-message}{err \&optional (os *error-output*)}{
+{\em err}のmessageをoutput stream {\em os}に出力する。}
+
+\classdesc{interruption}{condition}{}{}
+
+\classdesc{unix::signal-received}{condition}{}{}
+\classdesc{unix::sigint-received}{unix::signal-received}{}{}
+\classdesc{unix::sigcont-received}{unix::signal-received}{}{}
+
+\macrodesc{unix:install-signal-handler}{sig obj \&rest init-args}{
+コンディション{\em obj}を定義し、Unixシグナル{\em sig}を受信する度にそれをsignalizeする。
+定義されるコンディションは{\em unix::signal-received}の子クラスであり、signalizeされるインスタンスは{\em init-args}によって初期化される。}
+
+互換性のため、以下の処理方法も定義されている。
+
+\funcdesc{eussig}{sig code}{
+SIGPIPEのデフォルトシグナルハンドラー。
+{\bf *signal-handlers*}に格納されているハンドラーを実行した後、シグナル番号を出力し新たなREPLレベルに入る。}
+
+\vardesc{*signal-handlers*}{
+{\bf eussig}に用いられるハンドラー関数を格納するベクトル.}
+
+\vardesc{*error-handler*}{
+NILでない時、エラーをハンドリングする関数を指定する。その関数は４つの引数を受け取る:エラー番号、メッセージ、評価されていたexpression、そしてオプショナルな追加メッセージ。}
 
 \end{refdesc}
 
@@ -248,21 +249,15 @@ euslispなど。}
 \funcdesc{eustop}{\&rest argv}{
 デフォルトの最上位ループ}
 
-\funcdesc{eussig}{sig code}{
-SIGPIPEのデフォルトシグナルハンドラー。
-{\bf eussig}は、SIGPIPEが到着したり他の最上位レベルループに入るとき
-シグナル番号を出力する。}
-
-\funcdesc{sigint-handler}{sig code}{
+\funcdesc{sigint-handler}{c}{
 SIGINT(control-C)のデフォルトシグナルハンドラー。
-このシグナルで新しい最上位セッションへ入る。}
+デフォルトで{\it interruption}コンディションをsignalizeする。}
 
-\funcdesc{euserror}{code message \&rest arg}{
-デフォルトのエラーハンドラーで、
-{\em message}を出力し、新しいエラーセッションへ入る。}
+\funcdesc{euserror}{err}{
+デフォルトのエラーハンドラーで、{\em err}のcallstackとmessageを出力し、新しいエラーセッションへ入る。}
 
-\funcdesc{reset}{}{
-エラーループから脱出して、最後の{\bf eustop}セッションへ戻る。}
+\funcdesc{reset}{\&optional (n 0)}{
+エラーループから脱出して、{\em n}番目の{\bf eustop}セッションへ戻る。}
 
 \funcdesc{exit}{\&optional termination-code}{
 Euslispプロセスを終了し、プロセスの状態コードとして{\em termination-code}
@@ -405,6 +400,40 @@ closureの中の{\bf return-from}特殊書式と{\bf unwind-protect}の中のcle
 コンパイルされたコードを解析するためには中間Cプログラムを見るかあるいは
 {\bf adb}を使用する。
 
+\subsubsection{クロージャコンパイル}
+
+クロージャが生成されるとき、コンパイラはスタック・メモリに存在する現在のローカル・バインディングをヒープ・メモリに移動させなければならない。これによって、クロージャが元のスコープの外からでも安定して実行できるようになる。
+
+しかし、ローカル・バインディングをすべてヒープに保存するのは最適ではない。そのため、コンパイラはルックアヘッドを用いて必要最小限の参照のみをヒープに移動している。
+
+例えば、次のようなコードをみてみよう。
+\begin{verbatim}
+(let ((a 1) (b 2) (c 3))
+  (setq fn1 #'(lambda () (1+ a))))
+\end{verbatim}
+
+コンパイルされたコードは次のとおりとなる。クロージャで使用される唯一のローカル変数である{\em a}の値を保持するため、サイズ 1 のベクトルをallocationしている。二番目に生成されるベクトルは参照ベクトルをまとめるもので、複数のクロージャが同じバインドを共有するときに重要となる。二番目のベクトルのサイズは、allocation時のスタックのサイズに等しい。これは、クロージャの内部と外部で同じインデックスを維持するための便宜上のものであり、最適化の余地もまだある。
+
+\begin{verbatim}
+	local[0]= makeint((eusinteger_t)1L);
+	local[1]= makeint((eusinteger_t)2L);
+	local[2]= makeint((eusinteger_t)3L);
+	ctx->vsp=local+3;
+	ctx->vsp=local+3;
+	local[3]= makevector(C_VECTOR,1); /*parlet*/
+	local[3]->c.vec.v[0]= local[0];
+	ctx->vsp=local+4;
+	local[4]= makevector(C_VECTOR,4); /*lambda-closure*/
+	local[4]->c.vec.v[3] = local[3];
+	w = local[4];
+	ctx->vsp=local+4;
+	local[4]= makeclosure(codevec,quotevec,testCLO1,NIL,w);
+	storeglobal(fqv[0],local[4]);
+	w = local[4];
+	local[0]= NIL;
+	ctx->vsp=local; return(local[0]);
+\end{verbatim}
+
 \begin{refdesc}
 
 \functiondescription{euscomp}{\&rest filename}{UNIXコマンド}{
@@ -424,8 +453,15 @@ Euslispコンパイラを呼びだす。}
 モジュールが作成中にEuslispのコアにハードリンクされていないかぎり、
 {\em :pic}は、Tに設定すべきである。}
 
-\funcdesc{compile}{funcname}{
+\funcdesc{compile}{\&rest funcnames}{
 関数をコンパイルする。{\bf compile}は、最初に関数定義をテンポラリファイルに
+出力する。そのファイルは、{\bf compile-file}によってコンパイルされ、
+それから{\bf load}によってロードされる。
+テンポラリファイルは削除される。}
+
+\funcdesc{compile-method}{obj \&rest meths}{
+オプジェクトインスタンスやクラス{\em obj}のメソッド{\em meths}をコンパイルする。
+{\bf compile-method}は、最初にメソッド定義をテンポラリファイルに
 出力する。そのファイルは、{\bf compile-file}によってコンパイルされ、
 それから{\bf load}によってロードされる。
 テンポラリファイルは削除される。}
@@ -438,13 +474,18 @@ Euslispコンパイラを呼びだす。}
 \vardesc{compiler:*optimize*}{
 コンパイラの最適化レベルを制御する。}
 
+\vardesc{compiler:*safety*}{
+安全性レベルを制御する。}
+
 \vardesc{compiler:*verbose*}{
 non-NILが設定されたとき、コンパイルされている関数名やメソッド名そして
 コンパイルに要した時間を表示する。}
 
-\vardesc{compiler:*safety*}{
-安全性レベルを制御する。}
+\vardesc{compiler:*type-check-declare*}{
+non-NILが設定されたとき、コンパイルされたコードではdeclareされた変数のタイプを積極的にチェックする。}
 
+\funcdesc{compiler::compiler-implementation-version}{}{
+コンパイラのバーションを表すストリングを返す。``EusLisp compiler version 1.54''}
 \end{refdesc}
 
 \newpage
@@ -637,8 +678,22 @@ symbolをすべてリスト出力する。}
 \macrodesc{time}{function}{
 {\em function}によって経過した時間を測定し始める。}
 
+\funcdesc{lisp::print-callstack}{\&optional (stack (sys:list-callstack)) max (os *error-output*)}{
+Callstackの最高{\em max}個をoutput stream{\em os}に出力する。
+{\em max}が{\it nil}なら、callstackのすべてを出力する。}
+
+\funcdesc{sys:list-callstack}{\&optional max}{
+現在のcallstackの最高{\em max}個のリストを返す。
+{\em max}が与えられない場合には現在のcallstackのすべてを出力する。}
+
 \funcdesc{sys:list-all-catchers}{}{
 すべての{\bf catch}タグを返す。}
+
+\funcdesc{sys:list-all-blocks}{}{
+すべての{\bf block}タグを返す。}
+
+\funcdesc{sys:list-all-tags}{}{
+すべての{\bf tagbody}タグを返す。}
 
 \funcdesc{sys:list-all-instances}{aclass \&optional scan-sub}{
 すべてのヒープの中から{\em aclass}で指定されるインスタンスをすべて
@@ -647,12 +702,17 @@ symbolをすべてリスト出力する。}
 リストする。そうでなければ、{\em aclass}のインスタンスあるいはサブクラス
 が集められる。}
 
-\funcdesc{sys:list-all-bindings}{}{
-バインドされるスタックを探し、
-アクセス可能な値すべてをリストで返す。}
+\funcdesc{sys:list-all-bindings}{\&optional bindframe}{
+{\em bindframe}でバインドされているすべてのローカル変数の名前と値のリストを返す。
+{\em bindframe}が与えられない場合には現在のcallstackでバインドされているすべてのローカル変数の名前と値のリストを返す。}
 
 \funcdesc{sys:list-all-special-bindings}{}{
-スタックを捜し、値をすべてリストアップする。}
+callstackでバインドされているすべてのスペシャル変数の名前と値のリストを返す。}
+
+\funcdesc{sys:list-all-function-bindings}{\&optional fletframe}{
+{\em fletframe}でバインドされているすべてのローカル関数のリストを返す。
+{\em fletframe}が与えられない場合には現在のcallstackでバインドされているすべてのローカル関数のリストを返す。}
+
 
 \end{refdesc}
 

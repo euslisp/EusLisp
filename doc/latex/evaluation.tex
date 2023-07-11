@@ -3,35 +3,6 @@
 
 \subsection{Evaluators}
 
-In order to specify the behaviors upon an error and an interrupt(signal),
-set an appropriate function to each of the special variables
-{\bf *error-handler*} and {\bf *signal-handler*} in advance.
-There is no correctable or continue-able error.
-After analyzing errors you must abort the current execution by
-{\bf reset} or appropriate {\bf throw} to upper level catchers.
-{\bf reset} is equivalent to {\tt (throw 0 NIL)}, since EusLisp's top-level
-creates catch frame named {\tt 0}.
-
-Error handlers should be programmed as functions with three or four
-arguments:  {\em code msg1 form \&optional (msg2)}.
-{\em Code} is the error code which identifies system defined errors,
-such as 14 for 'mismatch argument' or 13 for 'undefined function'.
-These mappings are described in "c/eus.h".
-{\em msg1} and {\em msg1} are messages displayed to the user.
-{\em form} is the S-expression which caused the error.
-
-Signal handlers should be programmed as functions receiving
-two arguments: {\em sig} and {\em code}. 
-{\em Sig} is the signal number ranging from 1 to 31, and {\em code}
-is the minor signal code defined in signal-number dependent manners.
-
-\verb+^+D ({\em end-of-file}) at the top-level terminates eus session.
-This is useful when eus is programmed as a filter.
-
-{\bf Eval-dynamic} is the function to find the dynamic value bound
-to a symbol used as a let or lambda variable.
-This is useful for debugging.
-
 \begin{refdesc}
 
 \funcdesc{identity}{obj}{
@@ -75,7 +46,8 @@ If {\em func} is a symbol, its function definition is retrieved.}
 evaluates {\em form} once after binding {\em hookfunc} to {\bf *evalhook*}.}
 
 \funcdesc{eval-dynamic}{variable}{
-finds the value of {\em variable} (symbol) on the stack.}
+finds the dynamic value bound to {\em variable} (symbol) on the stack.
+Is useful for debugging.}
 
 \funcdesc{macroexpand}{form}{
 expands {\em form} if it is a macro call.
@@ -135,27 +107,57 @@ is evaluated.}
 prints warning-message given as {\em format-string} and {\em args} to
 *error-output*.}
 
-\funcdesc{error}{format-string \&rest args}{
-calls the current error-handler function bound to {\bf *error-handler*}.
-The default error-handler 'euserror' first
-prints arguments to {\bf *error-output*} using {\bf format},
-then enters a new top level session.
-The prompt shows you the depth of your error session.
-{\bf Throw}ing to the number, you can go back to the lower level error
-session.}
+\funcdesc{error}{message-or-class \&rest format-args}{
+Signals an error condition with message {\em message-or-class}.
+Other error conditions can be signalizing by designating an error class to {\em message-or-class}, in which case the second argument is required to designate the message.}
 
 \end{refdesc}
 
-In the multithread EusLisp, special variables are shared among threads
-and the same {\bf *error-handler*} is referenced by different threads.
-To avoid this inconvenience, multithread EusLisp provides
-the {\bf install-error-handler} function which installs different
-error handler for each thread.
+\newpage
+
+\subsection{Handling Errors and Unix Signals}
+
+Condition handlers can be used to specify the behaviors upon an error or an interruption signal (sigint). In EusLisp the following condition classes are defined, and the macro {\bf unix:install-signal-handler} helps introducing new conditions to unix signals. By default errors are handled by {\bf euserror} and interruption signals by {\bf lisp::interruption-handler}.
 
 \begin{refdesc}
 
-\funcdesc{lisp::install-error-handler}{handler}{
-installs the {\em handler} as the error handler of the current thread.}
+\classdesc{error}{condition}{callstack form}{
+  The most basic class for signaling errors.}
+\classdesc{argument-error}{error}{}{}
+\classdesc{program-error}{error}{}{}
+\classdesc{name-error}{error}{}{}
+\classdesc{type-error}{error}{}{}
+\classdesc{value-error}{error}{}{}
+\classdesc{index-error}{error}{}{}
+\classdesc{io-error}{error}{}{}
+\classdesc{assertion-error}{error}{}{}
+
+\funcdesc{lisp::print-error-message}{err \&optional (os *error-output*)}{
+Formats the message of {\em err} object to the output stream {\em os}.}
+
+\classdesc{interruption}{condition}{}{}
+
+\classdesc{unix::signal-received}{condition}{}{}
+\classdesc{unix::sigint-received}{unix::signal-received}{}{}
+\classdesc{unix::sigcont-received}{unix::signal-received}{}{}
+
+\macrodesc{unix:install-signal-handler}{sig obj \&rest init-args}{
+Defines the condition {\em obj} and signalizes it every time the unix signal {\em sig} is received.
+The condition class is defined as a child of {\em unix::signal-received} and the instances signalized are initialized with {\em init-args}.}
+
+The following handling methods are also defined for backward compatibility.
+
+\funcdesc{eussig}{sig code}{
+Is the default signal hander for SIGPIPE.
+After evaluating the corresponding handler function stored in {\bf *signal-handlers*}, prints the signal number and enters another toplevel loop.}
+
+\vardesc{*signal-handlers*}{
+Vector with all the handlers used by {\bf eussig}.}
+
+\vardesc{*error-handler*}{
+If non-nil, specifies a handling function to be called when an error occurs.
+The handling function takes four arguments: the error code (number), the error message, the error form (evaluated expression), and an optional message with additional information.}
+
 \end{refdesc}
 
 \newpage
@@ -242,7 +244,7 @@ is a function.
 % and you can edit the line interactively with control keys,
 % as in emacs. (can no more (?))
 
-\verb+^+D (EOF) terminates EusLisp normally.
+\verb+^+D (EOF) terminates the current reploop, going back to previous replevels or terminating the program itself on toplevel.
 To return abnormal termination code to upper level (usually a csh),
 use {\bf exit} with an appropriate condition code.
 
@@ -288,21 +290,15 @@ or user-saved euslisp.}
 \funcdesc{eustop}{\&rest argv}{
 is the default toplevel loop.}
 
-\funcdesc{eussig}{sig code}{
-is the default signal hander for SIGPIPE.
-{\bf eussig} prints signal number upon its arrival and enters
-another toplevel loop.}
-
-\funcdesc{sigint-handler}{sig code}{
+\funcdesc{sigint-handler}{c}{
 is the default signal handler for SIGINT (control-C).
-It enters a new top level session.}
+It signalizes an {\it interruption} condition, which by default enters a new top level session.}
 
-\funcdesc{euserror}{code message \&rest arg}{
-the default error handler that 
-prints {\em message} and enters a new error session.}
+\funcdesc{euserror}{err}{
+the default error handler that prints {\em err} callstack, message and enters a new error session.}
 
-\funcdesc{reset}{}{
-quits error loop and goes back to the outermost eustop session.}
+\funcdesc{reset}{\&optional (n 0)}{
+quits error loop and goes back to the {\em n}\textsuperscript{th} eustop session.}
 
 \funcdesc{exit}{\&optional termination-code}{
 terminates EusLisp process and returns {\em termination-code} (0..255)
@@ -352,12 +348,12 @@ Euscomp does optimization for arithmetic operation and vector access.
 Sometimes proper type declarations are needed to inform
 the compiler applicability of optimization.
 
-{\bf Compile-function} compiles functions one by one.
+{\bf Compile} compiles functions one by one.
 {\bf Compile-file}  compiles an entire source file.
-During the execution of {\bf Compile-file}, each form in a file
+During the execution of {\bf compile-file}, each form in a file
 is read and evaluated.
 This may change the current EusLisp environment.
-For examples, {\bf defparameter}
+For example, {\bf defparameter}
 may set a new value to a symbol and {\bf defun} may substitute the existing
 compiled function with its non-compiled version.
 To avoid these unexpected effects, use the {\bf eval-when} special form
@@ -445,6 +441,40 @@ unwind-protect is not always correctly compiled.
 In order to analyze compiled code, see the intermediate C program
 or use {\tt adb}.
 
+\subsubsection{Closure Compilation}
+
+When a closure is created, the compiler must move the current local bindings present in stack memory to heap memory. This allows for the stable execution of closures even from outside their original scope: the bindings remain valid while being referenced by the closure object, and are collected by the garbage collector when the reference ends.
+
+However, it is not optimal to move all of the local bindings to the heap. In order to deal with that, the compiler adopts a look-ahead technique to only keep the minimal required references in the heap.
+
+For example, when considering the following code:
+\begin{verbatim}
+(let ((a 1) (b 2) (c 3))
+  (setq fn1 #'(lambda () (1+ a))))
+\end{verbatim}
+
+The generated code is as follows. Note how a vector of size 1 is allocated to hold the value of variable {\em a}, the only binding used in the closure. The second generated vector is used by the compiler to bundle and administer all of the other binding vectors, in a way that is shareable among different closure objects. The size of this second vector is set to the current size of the stack at the allocation time. This is done for practical reasons in order to keep the same reference index both inside and outside the closure, still having room for optimization.
+
+\begin{verbatim}
+	local[0]= makeint((eusinteger_t)1L);
+	local[1]= makeint((eusinteger_t)2L);
+	local[2]= makeint((eusinteger_t)3L);
+	ctx->vsp=local+3;
+	ctx->vsp=local+3;
+	local[3]= makevector(C_VECTOR,1); /*parlet*/
+	local[3]->c.vec.v[0]= local[0];
+	ctx->vsp=local+4;
+	local[4]= makevector(C_VECTOR,4); /*lambda-closure*/
+	local[4]->c.vec.v[3] = local[3];
+	w = local[4];
+	ctx->vsp=local+4;
+	local[4]= makeclosure(codevec,quotevec,testCLO1,NIL,w);
+	storeglobal(fqv[0],local[4]);
+	w = local[4];
+	local[0]= NIL;
+	ctx->vsp=local; return(local[0]);
+\end{verbatim}
+
 \begin{refdesc}
 
 \functiondescription{euscomp}{\&rest filename}{unix-command}{
@@ -464,9 +494,15 @@ levels.
 {\em :Pic} should be set T, unless the module is hard-linked in the
 EusLisp core during the make stage.}
 
-\funcdesc{compile}{funcname}{
+\funcdesc{compile}{\&rest funcnames}{
 compiles a function.
-{\bf Compile} first prints the function definition into a temporary file.
+{\bf Compile} first prints the function definitions into a temporary file.
+The file is compiled by {\bf compile-file} and then is loaded by {\bf load}.
+Temporary files are deleted.}
+
+\funcdesc{compile-method}{obj \&rest meths}{
+compiles the methods {\em meths} of the class or object instance {\em obj}.
+{\bf Compile-method} first prints the method definition into a temporary file.
 The file is compiled by {\bf compile-file} and then is loaded by {\bf load}.
 Temporary files are deleted.}
 
@@ -478,13 +514,18 @@ the ".o" suffix.}
 \vardesc{compiler:*optimize*}{
 controls optimization level.}
 
+\vardesc{compiler:*safety*}{
+controls safety level.}
+
 \vardesc{compiler:*verbose*}{
 When set to non-nil, the name of a function or a method being compiled,
 and the time required for the compilation are displayed.}
 
-\vardesc{compiler:*safety*}{
-controls safety level.}
+\vardesc{compiler:*type-check-declare*}{
+When set to non-nil, will add type checks for declared variables on the compiled code.}
 
+\funcdesc{compiler::compiler-implementation-version}{}{
+Returns a string detailing the compiler version. ``EusLisp compiler version 1.54''}
 \end{refdesc}
 
 \newpage
@@ -695,19 +736,40 @@ execution of forms.}
 \macrodesc{time}{function}{
 begins measurement of time elapsed by {\em function}.}
 
+\funcdesc{lisp::print-callstack}{\&optional (stack (sys:list-callstack)) max (os *error-output*)}{
+formats the upmost {\em max} elements of the callstack {\em stack} into the output stream {\em os}.
+If {\em max} is {\it nil} formats all elements instead.}
+
+\funcdesc{sys:list-callstack}{\&optional max}{
+returns a list of the upmost {\em max} elements of the current callstack.
+If {\em max} is not provided return a list of all elements instead.}
+
 \funcdesc{sys:list-all-catchers}{}{
 returns a list of all {\bf catch} tags.}
+
+\funcdesc{sys:list-all-blocks}{}{
+returns a list of all {\bf block} tags.}
+
+\funcdesc{sys:list-all-tags}{}{
+returns a list of all {\bf tagbody} tags.}
 
 \funcdesc{sys:list-all-instances}{aclass \&optional scan-sub}{
 scans in the overall heap, and collects all the instances of the specified class.
 If {\em scan-sub} is NIL, then instances of exactly the {\em aclass} are
 listed, otherwise, instances of {\em aclass} or its subclasses are collected.}
 
-\funcdesc{sys:list-all-bindings}{}{
-scans bind stack, and returns a list of all the accessible value bindings.}
+\funcdesc{sys:list-all-bindings}{\&optional bindframe}{
+returns a list of all value bindings in {\em bindframe}.
+If {\em bindframe} is not provided, returns a list of all value bindings
+in the current stack.}
 
 \funcdesc{sys:list-all-special-bindings}{}{
-scans the stack and list up all value bindings.}
+return a list of all the special value bindings in the current stack.}
+
+\funcdesc{sys:list-all-function-bindings}{\&optional fletframe}{
+returns a list of all function bindings in {\em fletframe}.
+If {\em fletframe} is not provided, returns a list of all function bindings
+in the current stack.}
 
 \end{refdesc}
 

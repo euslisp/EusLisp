@@ -1,5 +1,5 @@
 ;;;;
-;;;;	euslisp toplevel loop and error/signal handler
+;;;;	euslisp toplevel loop
 ;;;;
 ;;;;	Copyright 1987,1991, Toshihiro MATSUI, Electrotechnical Laboratory
 ;;;	1987-Oct
@@ -16,15 +16,14 @@
 	*prompt*
 	*prompt-string*
 	*history* *try-unix*
-	skip-blank read-list-from-line sigint-handler *signal-handlers*
+	sigcont-handler
+	skip-blank read-list-from-line
 	*eustop-hook*
 	*toplevel-hook*
 	*top-selector*
 	*timer-job*
 	*top-selector-interval*
 	evaluate-stream  reploop
-	eussig
-	euserror
 	eustop reset
 	toplevel-prompt
 	))
@@ -59,6 +58,12 @@
 (eval-when (load eval)
 
 (defun count-up-timer () (incf *timer-job-count*))
+
+;; compile from toplevel.l to function properly
+;; (access to *replevel* on compile-time?)
+(defun sigcont-handler (c)
+  (when (memq *replevel* (sys::list-all-catchers))
+    (reset *replevel*)))
 
 (defun skip-blank (s &optional (eof (gensym)))
    (let ((ch (read-char s nil eof)))
@@ -97,56 +102,34 @@
 	  (if (eq *input-line* eof) (return-from read-list-from-line eof))
 	  (make-string-input-stream *input-line*)))))
 
-
-(defun sigint-handler (sig code)
-   (warning-message 1 "interrupt")
-   (if (fboundp 'unix:ualarm)
-       (unix:ualarm 0 0)
-       (unix:alarm 0))
-   (let* ((*replevel* (1+ *replevel*))
-	  (*reptype* "B"))
-      (catch *replevel* (reploop #'toplevel-prompt))))
-
-(defvar *signal-handlers* (make-sequence vector 32))
-
-(defun eussig (sig &rest code &aux (handler (aref *signal-handlers* sig)))
-   (cond (handler (funcall handler sig code))
-	 (t 
-	   (if (fboundp 'unix:ualarm)
-	       (unix:ualarm 0 0)
-	       (unix:alarm 0))
-	  (warning-message 1 "signal ~s ~s~%" sig code)
-	  (let* ((*replevel* (1+ *replevel*))
-		 (*reptype* "S"))
-	      (catch *replevel*
-		  (reploop #'toplevel-prompt))))))
-
 (defun evaluate-stream (input)
   (let* ((eof (cons nil nil))
 	 (command (read input nil eof))
 	 (arglist) (arg) result)
-  (cond	((eq command eof) )
+    (flet ((normal-eval (comm)
+             (setq - comm)
+             (setq result (eval comm))))
+      (cond
+	((eq command eof) )
 	((symbolp command)
 ;;	 (if *history* (add-history (input . buffer)))
 	 (cond ((fboundp command)
 		(setq arglist nil)
 		(while (not (eq (setq arg (read input nil eof)) eof))
 		    (push arg arglist))
-		(setq - (cons command (nreverse arglist)))
-		(setq result (eval -)))
-	       ((and (boundp command)
-		     (eq (read input nil eof) eof))
-		(setq - command)
-		(setq result (eval command)))
+		(if (and (null arglist) (boundp command))
+                    (normal-eval command) ;; eval symbol if bound and w/o args
+                    (normal-eval (cons command (nreverse arglist)))))
+	       ((boundp command)
+                (normal-eval command))
 	       ((find-package (string command)) (in-package (string command)))
-	       (*try-unix*
-		(setq - (list 'unix:system (input . buffer)))
-		(setq result (unix:system (input . buffer)) ) )
-	       (t (warn "?~%")) ))
+	       ((and *try-unix*
+		  ;; try normal-eval when unix command is not found (errno 127)
+		  (not (equal (normal-eval (list 'unix:system (input . buffer))) #x7f00))))
+	       (t (normal-eval command)) ))
    	(t
 ;;	 (if *history* (add-history (input . buffer)))
-	 (setq - command)
-	 (setq result (eval command)) ))
+	 (normal-eval command) )))
    result))
 
 (defun toplevel-prompt (strm)
@@ -226,8 +209,7 @@
 (defun reploop-non-select (&optional (repstream *terminal-io*)
 			 (ttyp (unix:isatty repstream)))
 ;read-eval-print loop
-  (let* ((*error-handler* 'euserror)
-	 (eof (gensym))
+  (let* ((eof (gensym))
 	 (input) (local-bindings) (special-bindings))
      (if (> *replevel* 0)
 	 (setq  local-bindings (sys:list-all-bindings)
@@ -248,8 +230,7 @@
 
 (defun reploop-select (&optional (repstream *terminal-io*)
 			 (ttyp (unix:isatty repstream))) 
-  (let* ((*error-handler* 'euserror)
-	 (eof (gensym))
+  (let* ((eof (gensym))
 	 (input) (local-bindings) (special-bindings))
      (if ttyp (prompt repstream))
      (if (> *replevel* 0)
@@ -273,50 +254,36 @@
 
 (defun reploop (prompt &optional (repstream *terminal-io*)
 			 (ttyp (unix:isatty repstream)))
-   (let ((*prompt* prompt))
+   (let ((*prompt* prompt)
+         (*current-condition-handler* nil))
       (if *use-top-selector*
           (reploop-select repstream ttyp)
           (reploop-non-select repstream ttyp))) )
-    
-
-(defun euserror (code msg1 form &optional (msg2))
-  (if (and msg2 (zerop (length msg1))) (setq msg1 msg2 msg2 nil))
-#+(or :solaris2 :SunOS4.1 :thread)
-   (format *error-output* "~C[1;3~Cm~A ~d error: ~A"
-		#x1b (+ 1 48) *program-name*
-		(unix::thr-self) msg1)	; thr-self is in unix pkg
-#-(or :solaris2 :SunOS4.1 :thread)
-   (format *error-output* "~C[1;3~Cm~A error: ~A"
-		#x1b (+ 1 48)   *program-name* msg1)
-   (if msg2 (format *error-output* " ~A" msg2))
-   (if form (format *error-output* " in ~s" form))
-   (format *error-output* "~C[0m~%"  #x1b)
-   (let ((*replevel* (1+ *replevel*))
-	 (*reptype* "E"))
-      (catch *replevel* (reploop #'toplevel-prompt)))
-   (throw *replevel* nil))
 
 ;;;
 ;;; default toplevel
 ;;;
-
 (defun eustop (&rest argv)
    (when (unix:isatty *standard-input*)
       (warning-message 4 "~%~A" (lisp-implementation-version))
       (terpri *error-output*) 
-      (unix:signal unix::sigint 'sigint-handler
-				2)	; not restart
-      (unix:signal unix::sigpipe 'eussig)
       ; setup for history
 #+(or :sun :linux :alpha :solaris2 :mips)
       (when (fboundp 'unix:tcgets)
 	(setq *tc* (unix:tcgets *standard-input*)) 
         (new-history *history-max*))
       )
+   ;; setup global variables
    (if argv (setq *symbol-input* (find-executable (elt argv 0))))
    (setq *user* (unix:getenv "USER"))
    (setq *eustop-argument* argv)
    (setq *prompt-string* (pathname-name *program-name*))
+   ;; install signal handlers
+   (unix:install-signal-handler unix::sigint unix::sigint-received)
+   (unix:install-signal-handler unix::sigcont unix::sigcont-received)
+   (install-handler unix::sigint-received 'sigint-handler)
+   (install-handler unix::sigcont-received 'sigcont-handler)
+   (unix:signal unix::sigpipe 'eussig)
    ;; load .eusrc file from the home directory
    (let ((rcfile  (unix:getenv "EUSRC")))
       (unless rcfile
@@ -330,22 +297,20 @@
 	      (>= (length argv) 2))
 	(apply #'compiler::comp-file-toplevel argv)
 	(exit 1))
-   ;; load files given in arguments
 ;   (format t "argv=~a~%" argv)
    (if *eustop-hook* (funcall *eustop-hook* *eustop-argument*))
-   (let (exp)
-      (dotimes (i (1- (length *eustop-argument*)))
-	 (setq exp (elt *eustop-argument* (1+ i)))
-;	 (print exp)
-	 (cond ((eq (elt exp 0) #\()	;)	
-		;; if exp is enclosed by parens, evaluate it.
-		(eval (read-from-string exp)))
-	       ((eq (elt exp 0) #\-)
-		;; if arg is prefixed by a dash, ignore.
-		)
-	       (t (load exp)))))
    ;; enter read-eval-loop session
    (catch :eusexit
+     ;; load files given in arguments
+     (catch 0
+       (dolist (exp (cdr *eustop-argument*))
+         (cond ((eq (elt exp 0) #\()	;)
+                ;; if exp is enclosed by parens, evaluate it.
+                (eval (read-from-string exp)))
+               ((eq (elt exp 0) #\-)
+                ;; if arg is prefixed by a dash, ignore.
+                )
+               (t (load exp)))))
        (while t
 	  (catch 0
 	      (let ((*replevel* 0) (*reptype* ""))

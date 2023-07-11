@@ -22,11 +22,14 @@
 	case classcase otherwise
 	string alias
 	caaar caadr cadar cdaar cdadr cddar cdddr
-	fourth fifth sixth seventh eighth 
-	cadddr cddddr cadddr caaddr cdaddr caddddr
+	fourth fifth sixth seventh eighth ninth tenth
+	caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr
+	cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr caddddr
 	flatten list-insert list-delete adjoin union intersection
 	set-difference set-exclusive-or rotate-list last copy-tree
-	copy-list nreconc rassoc acons member assoc subsetp maplist mapcon))
+	supermember superassoc
+	copy-list nreconc acons member assoc assoc-if assoc-if-not
+        rassoc rassoc-if rassoc-if-not subsetp maplist mapcon))
 
 (export '(find find-if find-if-not position position-if position-if-not
 	count count-if count-if-not member-if member-if-not 
@@ -69,7 +72,6 @@
 		(cadr lisp-implementation-version)
                 (caddr lisp-implementation-version)
                 ))
-(setq euserror nil)
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; basic macros
@@ -122,7 +124,7 @@
    (list 'setf var h))
 
 (defmacro defvar (var &optional (init nil) (doc nil))
-   (unless (symbolp var) (error 20))
+   (unless (symbolp var) (error type-error "symbol expected"))
   `(when (eql (send ',var :vtype) 1) 
 	(send ',var :vtype 2)
         (if (not (boundp ',var))
@@ -130,17 +132,17 @@
 	',var))
 
 (defmacro deflocal (var &optional (init nil) (doc nil))
-   (unless (symbolp var) (error 20))
+   (unless (symbolp var) (error type-error "symbol expected"))
    `(progn
 	(send ',var :special ,init ,doc)
 	',var))
 
 (defmacro defparameter (var init &optional (doc nil))
-   (unless (symbolp var) (error 20))
+   (unless (symbolp var) (error type-error "symbol expected"))
    `(send ',var :global ,init ,doc))
 
 (defmacro defconstant (sym val &optional doc)
-   (unless (symbolp sym) (error 20))
+   (unless (symbolp sym) (error type-error "symbol expected"))
    `(send ',sym :constant ,val ,doc) )
   
 
@@ -148,10 +150,11 @@
   (let ((endvar (gensym "DOTIMES")))
      `(let ((,(car vars) 0) (,endvar ,(cadr vars)))
 	(declare (integer ,(car vars) ,endvar))
-	(while (< ,(car vars) ,endvar)
+	(or
+         (while (< ,(car vars) ,endvar)
 	       ,@forms
 	       (setq ,(car vars) (1+ ,(car vars))))
-	,(caddr vars)))) 
+         ,(caddr vars)))))
 
 (defmacro dolist (vars &rest forms)
    (let ((lists (gensym "DOLIST")) (decl (car forms)))
@@ -160,10 +163,11 @@
 	 (setq decl nil))
      `(let ((,(car vars) nil) (,lists ,(cadr vars)))
 	,decl
-	(while ,lists
+	(or
+         (while ,lists
 	   (setq ,(car vars) (pop ,lists))
 	   ,@forms)
-	,(caddr vars)))) 
+         ,(caddr vars)))))
 
 (defmacro do-symbols (vars &rest forms)
    (let* ((symbols (gensym "DOSYM"))
@@ -179,11 +183,12 @@
 	   (,i 0)
 	   (,svec (,pkgv . intsymvector))
 	   (,size (length ,svec)))
-	(while (< ,i ,size)
+	(or
+         (while (< ,i ,size)
 	   (setq ,v (elt ,svec ,i))
 	   (inc ,i)
 	   (when (symbolp ,v) . ,forms))
-	,(caddr vars))))
+         ,(caddr vars)))))
 
 (defmacro do-external-symbols (vars &rest forms)
    (let* ((symbols (gensym "DOEXTSYM"))
@@ -199,11 +204,12 @@
 	   (,i 0)
 	   (,svec (,pkgv . symvector))
 	   (,size (length ,svec)))
-	(while (< ,i ,size)
+	(or
+         (while (< ,i ,size)
 	   (setq ,v (elt ,svec ,i))
 	   (inc ,i)
 	   (when (symbolp ,v) . ,forms))
-	,(caddr vars))))
+         ,(caddr vars)))))
 
 (defmacro do-all-symbols (var &rest forms)
    (let ((apackage (gensym "DOALLSYM")))
@@ -230,14 +236,17 @@
    `(block nil
      (let
       ,(mapcar
-	  #'(lambda (v) (list (car v) (cadr v)))
+	  #'(lambda (v) (if (consp v)
+                            (list (car v) (cadr v))
+                            v))
 	  vars)
       ,decl
       (tagbody
 	 ,tag
 	 (if ,(car endtest) (return (progn . ,(cdr endtest))))
 	 ,@body
-	 (psetq . ,(mapcan #'(lambda (v) (if (cddr v) (list (car v) (caddr v))))
+	 (psetq . ,(mapcan #'(lambda (v) (if (and (consp v) (cddr v))
+                                             (list (car v) (caddr v))))
 		       vars))
 	 (go ,tag))) )))
 
@@ -249,14 +258,17 @@
    `(block nil
      (let*
       ,(mapcar
-	  #'(lambda (v) (list (car v) (cadr v)))
+	  #'(lambda (v) (if (consp v)
+                            (list (car v) (cadr v))
+                            v))
 	  vars)
       ,decl
       (tagbody
 	 ,tag
 	 (if ,(car endtest) (return (progn . ,(cdr endtest))))
 	 ,@body
-	 (setq . ,(mapcan #'(lambda (v) (if (cddr v) (list (car v) (caddr v))))
+	 (setq . ,(mapcan #'(lambda (v) (if (and (consp v) (cddr v))
+                                            (list (car v) (caddr v))))
 		       vars))
 	(go ,tag))) )))
 
@@ -320,17 +332,19 @@
 ;; string
 
 (defun string (x)
-  (if (stringp x) x
-      (if (symbolp x) (copy-seq (x . pname))
-	  (if (numberp x) (format nil "~d" x)
-	      (error x)))))
+  (cond ((stringp x) x)
+	((symbolp x) (copy-seq (symbol-pname x)))
+	((numberp x) (princ-to-string x))
+	(t (error type-error "cannot coerce to string ~a" x))))
 
 ;
 ; more list functions
 ;
 (eval-when (load eval)
-   (defun alias (new old) (setslot new symbol 'function
-				   (symbol-function old)))
+   (defun alias (new old)
+     (prog1 (setslot new symbol 'function
+                     (symbol-function old))
+       (putprop new old 'compiler::function-alias)))
    (alias 'list-length 'length)
    (alias 'values 'list)
    )
@@ -346,19 +360,31 @@
 (alias 'first 'car)
 (alias 'second 'cadr)
 (alias 'third 'caddr)
-(defun fourth (x) (cadr (cddr x)))
-(defun fifth  (x) (caddr (cddr x)))
-(defun sixth  (x) (caddr (cdddr x)))
-(defun seventh  (x) (caddr (cddddr x)))
+(defun fourth  (x) (cadr (cddr x)))
+(defun fifth   (x) (caddr (cddr x)))
+(defun sixth   (x) (caddr (cdddr x)))
+(defun seventh (x) (caddr (cddddr x)))
 (defun eighth  (x) (cadddr (cddddr x)))
-#|
-(defun cadddr (x) (car (cdddr x)))
-|#
-(defun cddddr (x) (cddr (cddr x)))
-(defun cadddr (x) (cadr (cddr x)))
+(defun ninth   (x) (car (cddddr (cddddr x))))
+(defun tenth   (x) (cadr (cddddr (cddddr x))))
+(defun caaaar (x) (caar (caar x)))
+(defun caaadr (x) (caar (cadr x)))
+(defun caadar (x) (caar (cdar x)))
 (defun caaddr (x) (caar (cddr x)))
+(defun cadaar (x) (cadr (caar x)))
+(defun cadadr (x) (cadr (cadr x)))
+(defun caddar (x) (cadr (cdar x)))
+(defun cadddr (x) (cadr (cddr x)))
+(defun cdaaar (x) (cdar (caar x)))
+(defun cdaadr (x) (cdar (cadr x)))
+(defun cdadar (x) (cdar (cdar x)))
 (defun cdaddr (x) (cdar (cddr x)))
+(defun cddaar (x) (cddr (caar x)))
+(defun cddadr (x) (cddr (cadr x)))
+(defun cdddar (x) (cddr (cdar x)))
+(defun cddddr (x) (cddr (cddr x)))
 (defun caddddr (x) (cadr (cdddr x)))
+
 (defun flatten (l &optional accumulator)
   (cond
    ((null l) accumulator)
@@ -371,15 +397,21 @@
 if pos is bigger than the length of list, item is nconc'ed at the tail"
    (cond ((null list) (list item))
 	 ((>= pos (length list)) (nconc list (list item)))
-	 ((= pos 0) (cons item list))
+	 ((= pos 0)
+          (rplacd list (cons (car list) (cdr list)))
+          (rplaca list item))
 	 (t (let ((tail (cons item (nthcdr pos list))))
 		(rplacd (nthcdr  (1- pos) list) tail)
 		list))))
 
 (defun list-delete (lst n)	"(lst n) delete nth element of lst"
-   (if (= n 0) 
-	(setq lst (cdr lst))
-	(rplacd (nthcdr (1- n) lst) (nthcdr (1+ n) lst))  )
+   (cond ((null lst) nil)
+         ((>= n (length lst)) nil)
+         ((= n 0)
+          (rplaca lst (cadr lst))
+          (rplacd lst (cddr lst)))
+         (t
+          (rplacd (nthcdr (1- n) lst) (nthcdr (1+ n) lst))))
    lst)
 
 (defun adjoin (item list &key (test #'eq) (test-not) (key #'identity))
@@ -429,21 +461,34 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 	   (push l2 result2)))
      (nconc result1 result2)))
 
+(alias 'supermember 'system::raw-member)
+(alias 'superassoc 'system::raw-assoc)
+
 (defun rotate-list (l) (append (cdr l) (list (car l))))
-(defun last (x)
-  (while (consp (cdr x)) (setq x (cdr x)))
-  x)
+(defun last (x &optional (n 1))
+  (unless (and (integerp n) (>= n 0))
+    (error value-error "last &optional n must be a non negative integer"))
+  (nthcdr (max (- (length x) n) 0) x))
 (defun copy-tree (x) (subst t t x))
 (defun copy-list (x) (nreverse (reverse x)))
 (defun nreconc (x y) (nconc (nreverse x) y))
-(defun rassoc (item alist)
-  (dolist (a alist)
-     (if (equal item (cdr a)) (return-from rassoc a))))
 (defun acons (key datum alist) (cons (cons key datum) alist))
 (defun member (item list &key key test test-not)
-   (supermember item list key test test-not))
+   (system::raw-member item list key test test-not))
 (defun assoc (item alist &key key test test-not)
-   (superassoc item alist key test test-not))
+  (system::raw-assoc item alist key test test-not nil nil nil))
+(defun assoc-if (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil nil pred nil))
+(defun assoc-if-not (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil nil nil pred))
+(defun rassoc (item alist &key key (test #'equal) test-not)
+  ;; in common lisp the default test is #'eq, but in euslisp
+  ;; we are using #'equal for backward compability (jsk_recognition/2735)
+  (system::raw-assoc item alist key test test-not t nil nil))
+(defun rassoc-if (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil t pred nil))
+(defun rassoc-if-not (pred alist &key key)
+  (system::raw-assoc nil alist key nil nil t nil pred))
 (defun subsetp (sub super &key key test test-not)
    (every #'(lambda (s) (member s super :key key :test test :test-not test-not))
 	  sub))
@@ -536,7 +581,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 
 (defun make-list (leng &key initial-element)
   (let (r)
-   (unless (integerp leng) (error "integer required for length of make-list"))
+   (unless (integerp leng) (error type-error "integer required for length of make-list"))
    (dotimes (i leng r)
 	(push initial-element r))))
 
@@ -758,7 +803,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
      (dolist (v varlist)
 	(cond ((consp v)
 		(if (member (car v) variables)
-		    (error "duplicated object variable name"))
+		    (error name-error "duplicated object variable name"))
 		(push (car v) variables)
 		(setq p (position :type v))
 		(push (if p (elt v (1+ p)) t) types)
@@ -766,11 +811,11 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 		(push (if p (elt v (1+ p)) nil) forwards))
 	      ((symbolp v)
 		(if (member v variables)
-		    (error "duplicated object variable name"))
+		    (error name-error "duplicated object variable name"))
 		(push v variables)
 		(push t types)
 		(push nil forwards))
-	      (t (error "variable name expected for :slots"))))
+	      (t (error name-error "variable name expected for :slots"))))
      (setq variables (coerce (nreverse variables) vector)
 	   types (coerce (nreverse types) vector)
 	   forwards (coerce (nreverse forwards) vector))
@@ -845,7 +890,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 	    (readtable-macro to) (instantiate vector 256)
 	    (readtable-dispatch-macro to) (instantiate vector 256)))
    (if (or (null (readtablep from)) (null (readtablep to))) 
-       (error "readtable expected"))
+       (error type-error "readtable expected"))
    (replace (readtable-syntax to) (readtable-syntax from))
    (replace (readtable-macro to) (readtable-macro from))
    (replace (readtable-dispatch-macro to) (readtable-dispatch-macro from))
@@ -870,11 +915,9 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 ;;
 (eval-when (load eval)
 (defun keywordp (sym)
-   (declare (type symbol sym))
    (and (symbolp sym) (eq (sym . homepkg) *keyword-package*)))
 
 (defun constantp (obj)
-   (declare (type symbol obj))
    (if (symbolp obj)
 	(if (or (keywordp obj) (eq (obj . vtype) 0)) t nil)
 	(if (listp obj)
@@ -894,11 +937,9 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 (defun vector-class-p (p) (derivedp p vectorclass))
 (defun compiled-function-p (x) (derivedp  x compiled-code))
 (defun input-stream-p (obj)
-  (declare (stream obj))
   (or (and (derivedp obj stream)  (eq (obj . direction) :input))
       (derivedp obj io-stream)))
 (defun output-stream-p (obj)
-  (declare (stream obj))
   (or (and (derivedp obj stream)  (eq (obj . direction) :output))
       (derivedp obj io-stream)))
 (defun io-stream-p (obj) (derivedp obj io-stream))
@@ -949,15 +990,15 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 
 (eval-when (load eval)
 (defun reduce (func seq &key (start 0) (end (length seq))
-			     from-end initial-value)
+			     from-end (initial-value nil initial-value-p))
    (let ((length (- end start)))
       (when from-end (setq seq (reverse seq)))
       (cond
-	 ((and (= length 1) (null initial-value)) (elt seq start))
+	 ((and (= length 1) (null initial-value-p)) (elt seq start))
 	 ((= length 0)
-	  (if initial-value initial-value (funcall func)))
+	  (if initial-value-p initial-value (funcall func)))
 	 (t
-	   (unless initial-value
+	   (unless initial-value-p
 		(setq initial-value
 		      (funcall func (elt seq start) (elt seq (inc start))))
 		(dec length 2) (inc start))
@@ -1042,15 +1083,15 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
                  (putprop ',access-fn
                              ,(when (not (endp (cdr rest)))
                                     (unless (stringp (cadr rest))
-                                            (error "A doc-string expected."))
+                                            (error type-error "doc-string expected"))
                                     (unless (endp (cddr rest))
-                                            (error "Extra arguments."))
+                                            (error argument-error "extra arguments"))
                                     (cadr rest))
                              'setf-documentation)
                  ',access-fn))
 	(t
 	 (unless (= (list-length (cadr rest)) 1)
-		 (error "(store-variable) expected."))
+		 (error value-error "(store-variable) expected."))
          `(progn (putprop ',access-fn ',rest 'setf-lambda)
                  (remprop ',access-fn 'setf-update-fn)
                  (remprop ',access-fn 'setf-method)
@@ -1092,11 +1133,11 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 		  newvalue (cdr place)))
 ;	((get (car place) 'setf-method)
 ;	 (apply (get (car form) 'setf-method) (cdr place)))
-	(t (error "SETF?")))))
+	(t (error value-error "SETF?")))))
 
 (defun setf-expand (l)
   (cond ((endp l) nil)
-        ((endp (cdr l)) (error "~S is an illegal SETF form." l))
+        ((endp (cdr l)) (error argument-error "~S is an illegal SETF form." l))
         (t
          (cons (setf-expand-1 (car l) (cadr l))
                (setf-expand (cddr l))))))
@@ -1105,7 +1146,7 @@ if pos is bigger than the length of list, item is nconc'ed at the tail"
 ;;; SETF macro.
 (defmacro setf (&rest rest)
   (cond ((endp rest) nil)
-        ((endp (cdr rest)) (error "~S is an illegal SETF form." rest))
+        ((endp (cdr rest)) (error argument-error "~S is an illegal SETF form." rest))
         ((endp (cddr rest)) (setf-expand-1 (car rest) (cadr rest)))
         (t (cons 'progn (setf-expand rest)))))
 

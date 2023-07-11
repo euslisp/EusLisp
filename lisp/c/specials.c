@@ -15,7 +15,7 @@ static char *rcsid="@(#)$Id$";
 #include "eus.h"
 extern pointer MACRO,LAMBDA,LAMCLOSURE;
 extern pointer K_FUNCTION_DOCUMENTATION;
-extern struct bindframe  *declare();
+extern pointer declare();
 
 #ifdef EVAL_DEBUG
 extern int evaldebug;
@@ -139,17 +139,7 @@ pointer arg;
   printf( "FUNCTION_CLOSURE:" );
   hoge_print( arg );
 #endif
-  arg=ccar(arg);
-  if (issymbol(arg)) { funcname=arg; arg=getfunc(ctx,arg);}
-  else funcname=NIL;
-  if (iscode(arg)) return(arg);
-  else if (ccar(arg)==LAMCLOSURE) return(arg);
-  else if (ccar(arg)==LAMBDA) {
-    arg=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),ccdr(arg));
-    arg=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),arg);
-    arg=cons(ctx,funcname,arg);
-    return(cons(ctx,LAMCLOSURE,arg));}
-  else error(E_ILLFUNC);}
+  return getfunc_closure(ctx,ccar(arg));}
 
 pointer MACEXPAND2(ctx,n,argv)
 register context *ctx;
@@ -180,10 +170,10 @@ register pointer argv[];
 #endif // ARM
     if (mac->c.code.subrtype!=(pointer)SUBR_MACRO) return(argv[0]);
 #if ARM
-    expander=makecode(mac,(pointer (*)())addr,SUBR_FUNCTION);
+    expander=makecode(ctx,mac,(pointer (*)())addr,SUBR_FUNCTION,NULL);
     pointer_update(expander->c.code.entry2,mac->c.code.entry2)
 #else
-    expander=makecode(mac,(pointer (*)())mac->c.code.entry,SUBR_FUNCTION);
+    expander=makecode(ctx,mac,(pointer (*)())mac->c.code.entry,SUBR_FUNCTION,NULL);
 #endif
     pointer_update(expander->c.code.entry,mac->c.code.entry);}
   else if (carof(mac,E_NOLIST)==MACRO) expander=cons(ctx,LAMBDA,ccdr(mac));
@@ -215,6 +205,7 @@ register pointer *argv;
 }
   printf( "\n" );
 #endif
+  if(!(iscons(argv[1]) || argv[1]==NIL)) error(E_NOLIST);
   while (islist(argv[1])) {
     i=1;
     while (i<n) {
@@ -367,7 +358,8 @@ register context *ctx;
 pointer arg;
 { pointer cond,body,*spsave=ctx->vsp,result;
   struct blockframe *myblock;
-  struct bindframe *bfp=ctx->bindfp;
+  pointer bfp=ctx->bindfp;
+  pointer ffp=ctx->fletfp;
   jmp_buf whilejmp;
   int i;
 
@@ -379,12 +371,16 @@ pointer arg;
   myblock=(struct blockframe *)
 		makeblock(ctx,BLOCKFRAME,NIL,&whilejmp,ctx->blkfp); /* ???? */
   if ((result=(pointer)eussetjmp(whilejmp))==0) {
-    while (eval(ctx,cond)!=NIL) {GC_POINT;progn(ctx,body);}
+    while (eval(ctx,cond)!=NIL) {
+      GC_POINT;
+      breakck;
+      progn(ctx,body);}
     result=NIL;}
   else if ((eusinteger_t)result==1) result=makeint(0);
   ctx->blkfp=myblock->dynklink;
   ctx->vsp=spsave;
   ctx->bindfp=bfp;
+  ctx->fletfp=ffp;
   return(result);}
 
 pointer COND(ctx,arg)
@@ -409,7 +405,7 @@ pointer PARLET(ctx,args)	/*let special form*/
 register context *ctx;
 pointer args;
 { pointer vlist,vlistsave,var,init,body,result,decl,*spsave=ctx->vsp,*vinits;
-  register struct bindframe *env, *bfsave=ctx->bindfp, *declenv;
+  pointer env, bfsave=ctx->bindfp, declenv;
   struct specialbindframe *sbfps=ctx->sbindfp;
   int i=0,vcount=0;
 #if defined(PARLET_DEBUG) || defined(DEBUG_COUNT)
@@ -464,7 +460,7 @@ pointer SEQLET(ctx,args)	/* let* special form*/
 register context *ctx;
 pointer args;
 { pointer vlist,var,init,body,result,decl,*spsave=ctx->vsp;
-  register struct bindframe *bf=ctx->bindfp, *env;
+  pointer bf=ctx->bindfp, env;
   struct specialbindframe *sbfps=ctx->sbindfp;
 
 #ifdef SPEC_DEBUG
@@ -559,11 +555,29 @@ register pointer arg;
   throw(ctx,tag,result);
   error(E_NOCATCHER,tag);}
 
+pointer MACROLET(ctx,arg)
+register context *ctx;
+register pointer arg;
+{ register pointer macs, mac;
+  pointer ffp=ctx->fletfp;
+  pointer result;
+#ifdef SPEC_DEBUG
+  printf( "MACROLET:" ); hoge_print(arg);
+#endif
+  GC_POINT;
+  macs=ccar(arg);
+  while (iscons(macs)) {
+    mac=ccar(macs); macs=ccdr(macs);
+    makemacrolet(ctx,ccar(mac),ccdr(mac),ctx->fletfp);}
+  result=progn(ctx,ccdr(arg));
+  ctx->fletfp=ffp;
+  return(result);}
+
 pointer FLET(ctx,arg)
 register context *ctx;
 register pointer arg;
 { register pointer fns, fn;
-  register struct fletframe *ffp=ctx->fletfp;
+  pointer ffp=ctx->fletfp;
   pointer result;
 #ifdef SPEC_DEBUG
   printf( "FLET:" ); hoge_print(arg);
@@ -581,7 +595,7 @@ pointer LABELS(ctx,arg)
 register context *ctx;
 register pointer arg;
 { register pointer fns, fn;
-  register struct fletframe *ffp=ctx->fletfp, *ffpp;
+  pointer ffp=ctx->fletfp, ffpp;
   pointer result;
 #ifdef SPEC_DEBUG
   printf( "LABELS:" ); hoge_print(arg);
@@ -593,9 +607,9 @@ register pointer arg;
     makeflet(ctx,ccar(fn),ccdr(fn),ctx->fletfp,ctx->fletfp);}
   fns=ccar(arg); ffpp=ctx->fletfp;
   while (iscons(fns)) {	/*allow mutual references between labels functions*/
-    fn=ffpp->fclosure;
-    fn=ccdr(fn); fn=ccdr(fn); fn=ccdr(fn); ccar(fn)=makeint(hide_ptr((pointer)(ctx->fletfp)));
-    fns=ccdr(fns); ffpp=ffpp->lexlink;}
+    fn=ffpp->c.ffp.fclosure;
+    fn=ccdr(fn); fn=ccdr(fn); fn=ccdr(fn); ccar(fn)=ctx->fletfp;
+    fns=ccdr(fns); ffpp=ffpp->c.ffp.next;}
   result=progn(ctx,ccdr(arg));
   ctx->fletfp=ffp;
   return(result);}
@@ -614,7 +628,7 @@ pointer *argv;
   printf( "\n" );
 #endif
  throw(ctx,makeint(0),T);
-  error(E_USER,(pointer)"cannot reset");}
+  error(E_NOCATCHER,makeint(0));}
 
 pointer EVALHOOK(ctx,n,argv)
 register context *ctx;
@@ -649,7 +663,8 @@ register context *ctx;
 register pointer arg;		/*must be called via ufuncall*/
 { pointer name,result,*spsave=ctx->vsp;
   struct blockframe *myblock;
-  struct bindframe *bfp=ctx->bindfp;
+  pointer bfp=ctx->bindfp;
+  pointer ffp=ctx->fletfp;
   jmp_buf blkjmp;
 #ifdef SPEC_DEBUG
   printf( "BLOCK:" ); hoge_print(arg);
@@ -664,6 +679,7 @@ register pointer arg;		/*must be called via ufuncall*/
   ctx->blkfp=myblock->dynklink;
   /*restorations of bindfp and callfp are caller's responsibility???*/
   ctx->bindfp=bfp;
+  ctx->fletfp=ffp;
   ctx->vsp=spsave;
   return(result);}
 
@@ -717,8 +733,8 @@ pointer arg;
   protform=ccar(arg);
   if (islist(arg)) cleanupform=ccdr(arg); else cleanupform=NIL;
   cleaner=cons(ctx,NIL,cleanupform);
-  cleaner=cons(ctx,makeint(hide_ptr((pointer)(ctx->fletfp))),cleaner);
-  cleaner=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),cleaner);
+  cleaner=cons(ctx,ctx->fletfp,cleaner);
+  cleaner=cons(ctx,ctx->bindfp,cleaner);
   cleaner=cons(ctx,NIL,cleaner);
   cleaner=cons(ctx,LAMCLOSURE,cleaner);
   /*(LAMDA-CLOSURE bindfp fletfp () . body) */
@@ -740,7 +756,8 @@ pointer arg;
   jmp_buf tagjmp;
   struct blockframe *tagblock;
   pointer *spsave=ctx->vsp, *tagspsave;
-  struct bindframe *bfpsave=ctx->bindfp;
+  pointer bfpsave=ctx->bindfp;
+  pointer ffpsave=ctx->fletfp;
 #ifdef SPEC_DEBUG
   printf( "TAGBODY:" ); hoge_print(arg);
 #endif
@@ -757,6 +774,7 @@ repeat:
     {
     ctx->vsp=tagspsave;
     ctx->bindfp=bfpsave;
+    ctx->fletfp=ffpsave;
     while (iscons(forms)) {
       GC_POINT;
       p=ccar(forms);
@@ -774,7 +792,7 @@ pointer arg;
 #ifdef SPEC_DEBUG
   printf( "GO:" ); hoge_print( arg );
 #endif
-  tag=carof(arg,"GO TAG?");
+  tag=carof(arg,E_MISMATCHARG);
   while (ctx->blkfp!=NULL) {
     if (ctx->blkfp->kind==TAGBODYFRAME &&
 	(body=(pointer)assq(tag,ctx->blkfp->name))!=NIL) {
@@ -782,7 +800,7 @@ pointer arg;
       euslongjmp(*(ctx->blkfp->jbp),body);}/* ???? */
       /* euslongjmp(*(ctx->blkfp->jbp),body);} *//* ??? eus_rbar */
     ctx->blkfp=ctx->blkfp->lexklink;}
-  error(E_USER,(pointer)"go tag not found");}
+  error(E_PROGRAM_ERROR,(pointer)"go tag not found");}
 
 pointer EVALWHEN(ctx,arg)
 register context *ctx;
@@ -826,7 +844,7 @@ pointer arg;
 pointer AND(ctx,arg)	/*special form (should be macro)*/
 register context *ctx;
 register pointer arg;
-{ register pointer r;
+{ register pointer r = T;
 #ifdef SPEC_DEBUG
   printf( "AND:" ); hoge_print( arg );
 #endif
@@ -865,7 +883,7 @@ pointer argv[];
   GC_POINT;
   while (i<n) {
     decl=argv[i++];
-    if (!islist(decl)) error(E_DECLFORM);
+    if (!islist(decl)) error(E_NOLIST);
     if (ccar(decl)==QSPECIAL) {
       decl=ccdr(decl);
       while (islist(decl)) {
@@ -1025,7 +1043,7 @@ register pointer *argv;
 #ifdef SPEC_DEBUG
   printf( "SETFUNC:" ); hoge_print_sub(argv[0]); hoge_print(argv[1]);
 #endif
-  setfunc(argv[0],argv[1]);
+  pointer_update(argv[0]->c.sym.spefunc,argv[1]);
   return(argv[1]);}
 
 pointer SYMFUNC(ctx,n,argv)
@@ -1049,6 +1067,18 @@ pointer *argv;
   printf( "MAKEUNBOUND:" ); hoge_print( argv[0] );
 #endif
   pointer_update(argv[0]->c.sym.speval,UNBOUND);
+  return(T);}
+
+pointer FMAKUNBOUND(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ ckarg(1);
+  if (!issymbol(argv[0])) error(E_NOSYMBOL);
+#ifdef SPEC_DEBUG
+  printf( "FMAKEUNBOUND:" ); hoge_print( argv[0] );
+#endif
+  pointer_update(argv[0]->c.sym.spefunc,UNBOUND);
   return(T);}
 
 void set_special(ctx, var, val)
@@ -1114,12 +1144,11 @@ pointer argv[];
 { pointer str,sym,pkg;
   ckarg2(1,2);
   str=argv[0];
+  if (!isstring(str)) error(E_NOSTRING);
   if (n==2) {
     pkg=findpkg(argv[1]);
-    if (pkg==NULL)  error(E_NOPACKAGE);}
+    if (pkg==NULL)  error(E_NOPACKAGE,argv[1]);}
   else pkg=Spevalof(PACKAGE);
-  if (!ispackage(pkg)) error(E_NOPACKAGE);
-  if (!isstring(str)) error(E_NOSTRING);
 #ifdef SPEC_DEBUG
   printf( "FINDSYMBOL:" );
   { int i;
@@ -1141,9 +1170,11 @@ register pointer argv[];
   int x;
   ckarg2(1,3);
   str=argv[0];
-  if (n>=2) pkg=findpkg(argv[1]);
-  else pkg=Spevalof(PACKAGE);
   if (!isstring(str)) error(E_NOSTRING);
+  if (n>=2) {
+    pkg=findpkg(argv[1]);
+    if (pkg==NULL)  error(E_NOPACKAGE,argv[1]);}
+  else pkg=Spevalof(PACKAGE);
 #ifdef SPEC_DEBUG
   printf( "INTERN:" );
   { int i;
@@ -1173,25 +1204,42 @@ pointer argv[];
   }
     printf( "\n" );
 #endif
-
-    if (n==1) {
-    n--;
+    ckarg2(0,1);
+    if (n==0) return(gensym(ctx));
+    char* prefix;
+    int counter;
     if (isstring(argv[0])) {
       if (intval(argv[0]->c.str.length)>50) error(E_LONGSTRING);
-      genhead=argv[0];}
-    else if (isint(argv[0])) genindex=intval(argv[0]);
+      prefix=argv[0]->c.str.chars;
+      counter=genindex++;}
+    else if (isint(argv[0])) {
+      prefix=genhead->c.str.chars;
+      counter=intval(argv[0]);}
     else error(E_NOSTRING);
-    }
-  ckarg(0);
-  return(gensym(ctx));}
+
+    byte buf[64];
+    sprintf((char *)buf,"%s%d",prefix,counter);
+    return(makesymbol(ctx,(char *)buf,strlen(buf),NIL));
+}
+
+pointer getprop(ctx,sym,attr,retval)
+register context *ctx;
+register pointer sym,attr,retval;
+{ register pointer p;
+  p=sym->c.sym.plist;
+  while (iscons(p)) {
+    if (!iscons(ccar(p))) error(E_NOLIST);
+    if (ccar(ccar(p))==attr) return(ccdr(ccar(p)));
+    else p=ccdr(p);
+  }
+  return(retval);}
 
 pointer GETPROP(ctx,n,argv)
 register context *ctx;
 int n;
 register pointer argv[];
-{ register pointer p,attr=argv[1];
-  ckarg2(2,3);
-  if (!ispropobj(argv[0]) || !ispropobj(attr)) error(E_NOSYMBOL);
+{ ckarg2(2,3);
+  if (!ispropobj(argv[0]) || !ispropobj(argv[1])) error(E_NOSYMBOL);
 #ifdef SPEC_DEBUG
   printf( "GETPROP:" );
   { int i;
@@ -1200,11 +1248,7 @@ register pointer argv[];
 }
   printf( "\n" );
 #endif
-  p=argv[0]->c.sym.plist;
-  while (iscons(p))
-    if (ccar(ccar(p))==attr) return(ccdr(ccar(p)));
-    else p=ccdr(p);
-  if (n==3) return(argv[2]); else return(NIL);}
+  return(getprop(ctx,argv[0],argv[1],n>=3?argv[2]:NIL));}
 
 pointer EXPORT (ctx,n,argv)	/*further name conflict checks should be
 				  performed by EusLisp*/
@@ -1222,9 +1266,10 @@ register pointer argv[];
   printf( "\n" );
 #endif
   sym=argv[0];
-  if (n==2)  pkg = findpkg(argv[1]);
+  if (n==2) {
+    pkg = findpkg(argv[1]);
+    if (pkg==NULL) error(E_NOPACKAGE,argv[1]);}
   else pkg=Spevalof(PACKAGE);
-  if (!ispackage(pkg)) error(E_NOPACKAGE);
   if (issymbol(sym)) export(sym,pkg);
   else if (iscons(sym)) 
     while (iscons(sym)) {
@@ -1241,16 +1286,17 @@ register pointer sym,val,attr;
     if (ccar(ccar(p))==attr) { pointer_update(ccdr(ccar(p)),val); return(val);}
     else p=ccdr(p);
   /* no such a property; create it */
+  vpush(sym);
   p=cons(ctx,attr,val);
   pointer_update(sym->c.sym.plist,cons(ctx,p,sym->c.sym.plist));
+  vpop();  // sym
   return(val);}
 
 pointer PUTPROP(ctx,n,argv)	/*(putprop sym val attr)*/
 register context *ctx;
 int n;
 register pointer argv[];
-{ register pointer p,pp;
-  ckarg(3);
+{ ckarg(3);
   if (!ispropobj(argv[0]) || !ispropobj(argv[2])) error(E_NOSYMBOL);
 #ifdef SPEC_DEBUG
   printf( "PUTPROP:" );
@@ -1309,6 +1355,7 @@ pointer mod;
   defspecial(ctx,"UNWIND-PROTECT",mod,UNWINDPROTECT);
   defspecial(ctx,"CATCH",mod,CATCH);
   defspecial(ctx,"THROW",mod,THROW);
+  defspecial(ctx,"MACROLET",mod,MACROLET);
   defspecial(ctx,"FLET",mod,FLET);
   defspecial(ctx,"LABELS",mod,LABELS);
   defspecial(ctx,"BLOCK",mod,BLOCK);
@@ -1330,6 +1377,7 @@ pointer mod;
   defun(ctx,"SYMBOL-BOUND-VALUE",mod,SYMBNDVALUE,NULL);
   defun(ctx,"SYMBOL-FUNCTION",mod,SYMFUNC,NULL);
   defun(ctx,"MAKUNBOUND",mod,MAKUNBOUND,NULL);
+  defun(ctx,"FMAKUNBOUND",mod,FMAKUNBOUND,NULL);
   defun(ctx,"SET",mod,SETSPECIAL,NULL);
   defspecial(ctx,"DEFUN",mod,DEFUN);
   defspecial(ctx,"DEFMACRO",mod,DEFMACRO);

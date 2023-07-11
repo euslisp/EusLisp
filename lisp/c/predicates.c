@@ -165,6 +165,7 @@ register pointer x,y;
   register eusinteger_t *cx,*cy;
   if (x==y) return(T);
   if (isnum(x) || isnum(y)) return(NIL);
+  if (x==NULL || y==NULL) return(NIL);
   if (x->cix != y->cix) return(NIL);	/*different class*/
   if (pissymbol(x)) return(NIL);
   xe=elmtypeof(x);
@@ -203,10 +204,10 @@ register pointer argv[];
 #if THREADED
   mutex_lock(&mark_lock);
   mark_locking="SUPEREQUAL";
+#endif
   result=superequal(argv[0],argv[1]);
+#if THREADED
   mutex_unlock(&mark_lock);
-#else
-  result=superequal(argv[0],argv[1]);
 #endif
   if (result==UNBOUND) error(E_CIRCULAR);
   else return(result);}

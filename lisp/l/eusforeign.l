@@ -117,7 +117,7 @@
 	 (cond ((numberp fentry))
 	       ((system::find-entry fentry fmod)
 		(setq fentry (system::find-entry2 fentry fmod)))
-	       (t (error "no such foreign entry ~s" fentry)))
+	       (t (error name-error "no such foreign entry ~s" fentry)))
    (instance foreign-code :init fentry param result))
 
 ;;;
@@ -405,7 +405,7 @@
 		       )
 	      ))
 #-(or :sun3 :sun4 :i386 :x86_64)
-	 (error "not yet implemented for this processor")
+	 (error program-error "not yet implemented for this processor")
       (cond 
 	 ((listp func)
 	   (if (eq (car func) 'lisp:lambda-closure)
@@ -503,7 +503,7 @@
 		  s (cddr sl)
 		  element_size (byte-size typespec))
 	    (unless (keywordp typespec)
-		(error "keyword expected for cstruct type"))
+		(error argument-error "keyword expected for cstruct type"))
 	    (when (eq (car s) '*)
 		(setq typespec :pointer
 		      element_size lisp::sizeof-*)	;pointer
@@ -530,16 +530,16 @@
      (car slotlist)))
  (:offset (id &optional index)
     (let ((slot (send self :slot id)))
-	(unless slot  (error "no such cstruct slot ~s" id))
+	(unless slot  (error name-error "no such cstruct slot ~s" id))
 	(cond (index
-		(if (>= index (elt slot 2)) (error "index out of range"))
+		(if (>= index (elt slot 2)) (error index-error "index out of range"))
 		(+ (elt slot 4) (* index  (elt slot 3))) )
 	      (t  (elt slot 4)))))
  (:access (id &optional index)
     (let ((slot (send self :slot id)) (offset))
-	(unless slot  (error "no such cstruct slot"))
+	(unless slot  (error name-error "no such cstruct slot"))
 	(cond (index
-		(if (>= index (elt slot 2)) (error "index out of range"))
+		(if (>= index (elt slot 2)) (error index-error "index out of range"))
 		(setq offset (+ (elt slot 4) (* index  (elt slot 3))) ))
 	      (t (setq offset  (elt slot 4))))
 	(list (elt slot 1) offset)))
@@ -625,7 +625,7 @@
 						 (+ ,offset
 						    (* i ,element_size))
 						 ,element_type))))))
-	      (t (error "illegal type specifier")))
+	      (t (error type-error "illegal type specifier")))
 	(push getter accessors)
 	(push setter accessors)
 	(push setter-fn accessors)

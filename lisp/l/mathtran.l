@@ -29,7 +29,7 @@
 	   (cond
 	     ((consp sy)
 		(multiple-value-setq (sy form) (expr sy))
-		(if form (error "illegal math expression for % macro"))
+		(if form (error io-error "illegal math expression for % macro"))
 		(values sy exp))
 	     ((consp (first exp))	;function call or array ref.
 		(setf arglist (pop exp))
@@ -115,7 +115,7 @@
 	       `(let* ,letpairs  . ,exp)
 	       (first exp)))))
    (multiple-value-setq (result exp) (rel-expr exp))
-   (if exp (error "illegal expression in % macro"))
+   (if exp (error io-error "illegal expression in % macro"))
    (reconstruct-form result) ))
 
 (defun infix2prefix (file &optional char)

@@ -84,11 +84,11 @@
  (:shininess (&optional shi)
       (cond ((null shi)  shininess)
 	    ((numberp shi) (setq shininess shi))
-	    (t (error "number expected for colormaterial :shininess"))))
+	    (t (error type-error "number expected for colormaterial :shininess"))))
  (:transparency (&optional trans)
       (cond ((null trans)  transparency)
 	    ((numberp trans) (setq transparency trans))
-	    (t (error "number expected for colormaterial :transparency"))))
+	    (t (error type-error "number expected for colormaterial :transparency"))))
  (:opengl ()
       (glMaterialfv GL_FRONT_AND_BACK GL_AMBIENT ambient)
       (glMaterialfv GL_FRONT_AND_BACK GL_DIFFUSE diffuse)
@@ -668,7 +668,7 @@
 	(7
 	 (glLightfv GL_LIGHT7 GL_POSITION (float-vector x y z 0.0)))
 	(t
-	 (error (format nil "unkown light number ~a" light)))))
+	 (error value-error "unkown light number ~a" light))))
 
 
 

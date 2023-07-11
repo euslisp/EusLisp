@@ -16,13 +16,14 @@
 	most-negative-float 
 	least-positive-float
 	least-negative-float
+	char= char< char> char<= char>= char/=
 	quit bye
         ))
 (export '(af_unix af_inet sock_stream sock_dgram))
 
 ;; (export '(unix eus common ieee-floating-point sparc m68020))
 
-(nconc *features* '(:unix :eus :common))
+(nconc *features* '(:unix :eus :common :condition :closure))
 #+(or :sun :mips :linux :cygwin)
 (nconc *features* '(:ieee-floating-point))
 #+:sun4
@@ -94,6 +95,7 @@
   (setq (tio . outstream) *standard-output*))
 
 (send *system-package* :nicknames '("SI" "SYS"))
+(send (find-package "COMPILER") :nicknames '("COMP"))
 
 
 #+:ustation
@@ -304,7 +306,7 @@
 ;     (structure (si::putprop ,s ,v 'structure-documentation))
 ;     (type (si::putprop ,s ,v 'type-documentation))
 ;     (setf (si::putprop ,s ,v 'setf-documentation))
-;     (t (error "~S is an illegal documentation type." ,d))))
+;     (t (error value-error "~S is an illegal documentation type." ,d))))
 
 (defsetf matrix-row (x y) (val) `(set-matrix-row ,x ,y ,val))
 (defsetf matrix-column (x y) (val) `(set-matrix-column ,x ,y ,val))
@@ -337,14 +339,12 @@
 
 (defconstant *default-readtable* (copy-readtable))
 
-(setf (symbol-function 'char=) (symbol-function '=))
-(setf (symbol-function 'char<) (symbol-function '<))
-(setf (symbol-function 'char>) (symbol-function '>))
-(setf (symbol-function 'char<=) (symbol-function '<=))
-(setf (symbol-function 'char>=) (symbol-function '>=))
-(setf (symbol-function 'char/=) (symbol-function '/=))
+(alias 'char= '=)
+(alias 'char< '<)
+(alias 'char> '>)
+(alias 'char<= '<=)
+(alias 'char>= '>=)
+(alias 'char/= '/=)
 
-(setf (symbol-function 'quit) (symbol-function 'unix::exit))
-(setf (symbol-function 'bye) (symbol-function 'unix::exit))
-
-
+(alias 'quit 'unix::exit)
+(alias 'bye 'unix::exit)

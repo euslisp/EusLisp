@@ -26,6 +26,8 @@ static char *rcsid="@(#)$Id$";
 
 #define syntaxtype(ch) ((enum ch_type)(current_syntax[thr_self()][ch]))
 
+int read_suppress = FALSE;
+
 extern pointer FEATURES,READBASE,QREADTABLE;
 extern pointer QNOT, QAND, QOR;	/*eval_read_cond, Jan/1995*/
 
@@ -238,10 +240,11 @@ static pointer readlabdef(ctx,f,labx)
 context *ctx;
 pointer f;	/*stream*/
 eusinteger_t labx;
-{ pointer  unsol, *unsolp, result,newlab;
+{ if (read_suppress) return(read1(ctx,f));
+  pointer  unsol, *unsolp, result,newlab;
 
   if (findlabel(labx)!=NIL)  error(E_READLABEL,makeint(labx));	/*already defined*/
-  newlab=(pointer)makelabref(makeint(labx),UNBOUND,oblabels[thr_self()]->c.lab.next);
+  newlab=(pointer)makelabref(ctx,makeint(labx),UNBOUND,oblabels[thr_self()]->c.lab.next);
   pointer_update(oblabels[thr_self()]->c.lab.next,newlab);
   result=read1(ctx,f);
 
@@ -280,7 +283,8 @@ register context *ctx;
 pointer f;
 eusinteger_t val;
 int subchar;
-{ register pointer obj,element;
+{ if (read_suppress) return(NIL);
+  register pointer obj,element;
   obj=findlabel(val);
   if (obj==NIL) error(E_READLABEL,makeint(val));	/*undefined label*/
   if ((element=obj->c.lab.value)==UNBOUND) return(obj);
@@ -299,7 +303,7 @@ register int size;
   register int i=0;
   Char ch;
   ch=nextch(ctx,f);
-  if (size>0) {
+  if (size>0 && !read_suppress) {
     result=makevector(C_VECTOR,size);
     vpush(result);
     while ((ch!=')') && (ch!=EOF) && (i<size)) {
@@ -314,7 +318,7 @@ register int size;
       while (i<size) {pointer_update(result->c.vec.v[i],element);i++;}
     else {
       while (ch!=')' && ch!=EOF) ch=nextch(ctx,f);
-      error(E_READ); }
+      error(E_NODELIMITER); }
     return(result);}
   else {
     while ((ch!=')') && (ch!=EOF)) {
@@ -340,7 +344,7 @@ register pointer s;
   register pointer rvec;
   Char ch;
   ch=nextch(ctx,s);
-  if (ch!='(') error(E_READFVECTOR);
+  if (ch!='(') error(E_NODELIMITER);
   ch=nextch(ctx,s);
   while (ch!=')' && ch!=EOF) {
     unreadch(s,ch);
@@ -366,12 +370,12 @@ register pointer s;
   numunion nu;
 
   ch=nextch(ctx,s);
-  if (ch!='(') error(E_READFVECTOR);
+  if (ch!='(') error(E_NODELIMITER);
   ch=nextch(ctx,s);
   while (ch!=')' && ch!=EOF) {
     unreadch(s,ch);
     elm=read1(ctx,s);
-    if (!isnum(elm)) error(E_READFVECTOR);
+    if (!isnum(elm)) error(E_NONUMBER);
     if (isint(elm)) { f=intval(elm); elm=makeflt(f);}
     ckpush(elm);
     i++;
@@ -390,15 +394,18 @@ register pointer s;	/*input stream*/
   Char ch;
 
   ch=nextch(ctx,s);
-  if (ch!='(') error(E_READOBJECT);
+  if (ch!='(') error(E_NODELIMITER);
+  ch=nextch(ctx,s);
+  if (ch==')') error(E_NOCLASS, NULL);
+  unreadch(s,ch);
   name=read1(ctx,s);
-  if (!issymbol(name)) error(E_READOBJECT);
+  if (!issymbol(name)) error(E_NOSYMBOL);
   klass=speval(name);
   if (klass==UNBOUND) error(E_NOCLASS,name);
-  if (!isclass(klass)) error(E_READOBJECT);
+  if (!isclass(klass)) error(E_NOCLASS);
   if (isvecclass(klass)) {
     elem=read1(ctx,s);
-    if (!isint(elem)) error(E_READOBJECT);	/*vector size*/
+    if (!isint(elem)) error(E_NOINT);	/*vector size*/
     sz=intval(elem);
     result=makevector(klass,sz);
     i=1;}
@@ -422,16 +429,20 @@ register pointer s;	/*input stream*/
 static pointer readstructure(ctx,s)
 register context *ctx;
 register pointer s;	/*input stream*/
-{ register pointer name, klass, slot, elem, result, varvec, *slotp;
+{ if (read_suppress) return(read1(ctx,s));
+  register pointer name, klass, slot, elem, result, varvec, *slotp;
   Char ch;
 
   ch=nextch(ctx,s);
-  if (ch!='(') error(E_READOBJECT);
+  if (ch!='(') error(E_NODELIMITER);
+  ch=nextch(ctx,s);
+  if (ch==')') error(E_NOCLASS, NULL);
+  unreadch(s,ch);
   name=read1(ctx,s);
-  if (!issymbol(name)) error(E_READOBJECT);
+  if (!issymbol(name)) error(E_NOSYMBOL);
   klass=speval(name);
   if (klass==UNBOUND) error(E_NOCLASS,name);
-  if (!isclass(klass)) error(E_READOBJECT);
+  if (!isclass(klass)) error(E_NOCLASS);
   if (isvecclass(klass)) { error(E_NOCLASS,name);}
   else if (isclass(klass)) result=(pointer)makeobject(klass);
   else error(E_NOCLASS,name);
@@ -460,7 +471,7 @@ register context *ctx;
 register pointer f;
 eusinteger_t val;
 int subchar;
-{ char ch;
+{ Char ch;
   ch=readch(f); return(makeint(ch));}
 
 static pointer read_sharp_comment(ctx,f,val,subchar)	/* #| ... |# */
@@ -490,7 +501,7 @@ int subchar;
 { register int i=0,j,c,p,q;
   pointer b;
   eusinteger_t *bv,x;
-  char ch, buf[WORD_SIZE];
+  Char ch, buf[WORD_SIZE];
 
   ch=readch(f);
   while (i<WORD_SIZE && isxdigit(ch)) { buf[i++] = ch; ch=readch(f);}
@@ -520,8 +531,9 @@ register context *ctx;
 pointer f;
 eusinteger_t val;
 int subchar;
-{ register int i=0;
-  char buf[WORD_SIZE/2], ch;
+{ if (read_suppress) return(read1(ctx,f));
+  register int i=0;
+  Char buf[WORD_SIZE/2], ch;
   ch=readch(f); val=0;
   while (i<WORD_SIZE/2 && ch>='0' && ch<'8') { buf[i++] = ch; ch=readch(f);}
   unreadch(f,ch); buf[i]=0;
@@ -542,7 +554,7 @@ eusinteger_t val;
 int subchar;
 char token[];
 { register int i=0;
-  char ch;
+  Char ch;
   ch=readch(f);
   while (syntaxtype(ch)==ch_constituent) {
     token[i++]=to_upper(ch); ch=readch(f);}
@@ -555,6 +567,7 @@ pointer f;
 { pointer p;
   p=read1(ctx,f);
 /*  if (debug) prinx(ctx,p,Spevalof(QSTDOUT)); */
+  if (read_suppress) return(UNBOUND);
   return(eval(ctx,p));}
 
 static pointer eval_read_cond(ctx,expr)
@@ -580,7 +593,7 @@ pointer expr;
 	if (r!=NIL) return(T);
         else expr=ccdr(expr);}
       return(NIL);}}
-  error(E_USER,(pointer)"AND/OR/NOT expected in #+ or #-", expr);}
+  error(E_VALUE_ERROR,(pointer)"AND/OR/NOT expected in #+ or #-", expr);}
 
 static pointer read_cond_plus(ctx,f)	/* #+ */
 register context *ctx;
@@ -588,8 +601,10 @@ register pointer f;
 { register pointer flag,result;
   flag=read1(ctx,f);
   vpush(flag);
-  result=read1(ctx,f);
-  if (eval_read_cond(ctx,flag)==NIL) result=(pointer)UNBOUND;
+  if (eval_read_cond(ctx,flag)==NIL) {
+    read_suppress=TRUE; read1(ctx,f);
+    result=(pointer)UNBOUND;}
+  else result=read1(ctx,f);
   vpop();
   return(result);}
 
@@ -599,8 +614,10 @@ register pointer f;
 { register pointer flag,result;
   flag=read1(ctx,f);
   vpush(flag);
-  result=read1(ctx,f);
-  if (eval_read_cond(ctx,flag)!=NIL) result=(pointer)UNBOUND;
+  if (eval_read_cond(ctx,flag)!=NIL) {
+    read_suppress=TRUE; read1(ctx,f);
+    result=(pointer)UNBOUND;}
+  else result=read1(ctx,f);
   vpop();
   return(result);}
 
@@ -639,7 +656,9 @@ char token[];
     if (ch==EOF) return(UNBOUND);}
   subchar=to_upper(ch);
   macrofunc=Spevalof(QREADTABLE)->c.rdtab.dispatch->c.vec.v[subchar];
-  if (macrofunc==NIL) error(E_USER,(pointer)"no # macro defined");
+  if (macrofunc==NIL) {
+    if (read_suppress) return(read1(ctx,f));
+    error(E_NAME_ERROR,(pointer)"no # macro defined");}
   if (isint(macrofunc)) {	/*internal macro*/
     intmac=(pointer (*)())(intval(macrofunc));
     result=(*intmac)(ctx,f,val,subchar,token);}
@@ -694,6 +713,7 @@ char token[];
       doublecolon=0;
       pkg=(pointer)searchpkg((byte *)token,colon);}
     if (pkg==(pointer)NULL) {
+      if (read_suppress) return(NIL);
       if (doublecolon) colon--;
       pkgstr=makestring(token,colon);
       vpush(pkgstr);
@@ -706,8 +726,9 @@ char token[];
 /*    sym=findsymbol((char *)&token[colon],leng-colon, pkg->c.pkg.symvector, &hash);*/
     if (sym) return(sym);
     else {
+      if (read_suppress) return(UNBOUND);
       pkgstr=makestring(token,leng);
-	fprintf(stderr,"%s ",token);
+      // fprintf(stderr,"%s ",token);
       vpush(pkgstr);
       error(E_EXTSYMBOL,pkgstr);}
   } }
@@ -715,10 +736,10 @@ char token[];
 /* news does not have strtol routine! */
 #if news || sanyo
 int strtol(str,ptr,base)
-register char *str,**ptr;
+register Char *str,**ptr;
 register int base;
 { long val=0,sign=1;
-  char ch;
+  Char ch;
   while (isspace(*str)) str++;
   ch= *str;
   if (ch=='+') str++; else if (ch=='-') { str++; sign= -1;}
@@ -758,7 +779,7 @@ int len;
       else if (k>='A' && k<='Z') k=k-'A'+10;
       else if (k>='a' && k<='z') k=k-'a'+10;
       else if (k=='.') continue;
-      else error(E_USER,(pointer)"illegal integer consituent char");
+      else error(E_CHARRANGE);
       mul_int_big(base,b);
       add_int_big(k,b);  }
     if (sign<0) complement_big(b);
@@ -796,9 +817,9 @@ char token[];
       else if (syntaxtype(ch)==ch_white) {
 	result=read1(ctx,f);
 	ch=nextch(ctx,f);
-	if (ch!=delim_char) error(E_READ);
+	if (ch!=delim_char) error(E_NODELIMITER);
 	break;}
-      else error(E_READ);}
+      else error(E_NODELIMITER);}
     else { unreadch(f,ch);  element=read1(ctx,f);}
     if (element!=UNBOUND && element!=(pointer)EOF) ckpush(element);
     ch=nextch(ctx,f);}
@@ -903,7 +924,7 @@ int colon;
 	unreadch(ins,ch); goto step10;
       case ch_white:
 	unreadch(ins,ch); goto step10;
-      default: error(E_USER,(pointer)"unknown char type");}
+      default: error(E_IO_ERROR,(pointer)"unknown char type");}
  step9:
     escaped=1;
     if (i>=MAXTOKENLENGTH) error(E_LONGSTRING);
@@ -937,7 +958,7 @@ int colon;
         /*float or symbol*/
         while (is_digit(token[j],base)) j++;
         c=to_upper(token[j]);
-        if (c=='E' || c=='D' || c=='F' || c=='L') {
+        if (c=='E' || c=='D' || c=='F' || c=='L' || c=='S') {
 	  c=j;  j++;
           if ((token[j]=='+') || (token[j]=='-')) j++;
           while (is_digit(token[j],base)) j++;
@@ -955,7 +976,7 @@ int colon;
       else if (j==i) return(readint(ctx,token,i));
       else {
         c=to_upper(token[j]);
-        if (c=='E' || c=='D' || c=='F' || c=='L') {
+        if (c=='E' || c=='D' || c=='F' || c=='L' || c=='S') {
 	  c=j;  j++;
           if ((token[j]=='+') || (token[j]=='-')) j++;
           while (is_digit(token[j],base)) j++;
@@ -990,7 +1011,7 @@ register pointer ins;
       case ch_white: goto step1;
       case ch_termmacro: case ch_nontermacro:
 	      macrofunc=Spevalof(QREADTABLE)->c.rdtab.macro->c.vec.v[ch];
-	      if (macrofunc==NIL) error(E_USER,(pointer)"no char macro defined");
+	      if (macrofunc==NIL) error(E_NAME_ERROR,(pointer)"no char macro defined");
 	      if (isint(macrofunc)) {	/*internal macro*/
 		intmac=(pointer (*)())(intval(macrofunc));
 	        result=(*intmac)(ctx,ins,ch,token);}
@@ -1018,6 +1039,7 @@ register context *ctx;
 register pointer f,recursivep;
 { register pointer val;
   Char ch;
+  read_suppress=FALSE;
   current_syntax[thr_self()]=Spevalof(QREADTABLE)->c.rdtab.syntax->c.str.chars;
   ch=nextch(ctx,f);
   if (ch==EOF) return((pointer)EOF);

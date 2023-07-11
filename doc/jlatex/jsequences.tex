@@ -256,14 +256,83 @@ atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 \funcdesc{cddar}{list}{
 {\tt (cddar list) = (cdr (cdr (car list)))}}
 
-\funcdesc{first}{list}{
-{\em list}の最初の要素を取り出す。
-{\bf second, third, fourth, fifth, sixth, seventh, eighth}もまた定義されている。{\tt (first list) = (car list)}}
+\funcdesc{caaddr}{list}{
+{\tt (caddr list) = (car (car (cdr (cdr list)))}}
 
-%\funcdesc{second}{list}{{\tt (second list) = (cadr list)}}
-%\funcdesc{third}{list}{{\tt (third list) = (caddr list)}}
-%\funcdesc{fourth}{list}{{\tt (fourth list) = (car (cdddr list))}}
-%\funcdesc{fifth}{list}{{\tt (fifth list) = (cadr (cdddr list))}}
+\funcdesc{caaadr}{list}{
+{\tt (caadr list) = (car (car (car (cdr list)))}}
+
+\funcdesc{caadar}{list}{
+{\tt (cadar list) = (car (car (cdr (car list)))}}
+
+\funcdesc{caaaar}{list}{
+{\tt (caaar list) = (car (car (car (car list)))}}
+
+\funcdesc{cadadr}{list}{
+{\tt (cdadr list) = (car (cdr (car (cdr list)))}}
+
+\funcdesc{cadaar}{list}{
+{\tt (cdaar list) = (car (cdr (car (car list)))}}
+
+\funcdesc{cadddr}{list}{
+{\tt (cdddr list) = (car (cdr (cdr (cdr list)))}}
+
+\funcdesc{caddar}{list}{
+{\tt (cddar list) = (car (cdr (cdr (car list)))}}
+
+\funcdesc{cdaddr}{list}{
+{\tt (caddr list) = (cdr (car (cdr (cdr list)))}}
+
+\funcdesc{cdaadr}{list}{
+{\tt (caadr list) = (cdr (car (car (cdr list)))}}
+
+\funcdesc{cdadar}{list}{
+{\tt (cadar list) = (cdr (car (cdr (car list)))}}
+
+\funcdesc{cdaaar}{list}{
+{\tt (caaar list) = (cdr (car (car (car list)))}}
+
+\funcdesc{cddadr}{list}{
+{\tt (cdadr list) = (cdr (cdr (car (cdr list)))}}
+
+\funcdesc{cddaar}{list}{
+{\tt (cdaar list) = (cdr (cdr (car (car list)))}}
+
+\funcdesc{cddddr}{list}{
+{\tt (cdddr list) = (cdr (cdr (cdr (cdr list)))}}
+
+\funcdesc{cdddar}{list}{
+{\tt (cddar list) = (cdr (cdr (cdr (car list)))}}
+
+\funcdesc{first}{list}{
+{\em list}の最初の要素を取り出す。}
+
+\funcdesc{second}{list}{
+{\em list}の2番目の要素を取り出す。}
+
+\funcdesc{third}{list}{
+{\em list}の3番目の要素を取り出す。}
+
+\funcdesc{fourth}{list}{
+{\em list}の4番目の要素を取り出す。}
+
+\funcdesc{fifth}{list}{
+{\em list}の5番目の要素を取り出す。}
+
+\funcdesc{sixth}{list}{
+{\em list}の6番目の要素を取り出す。}
+
+\funcdesc{seventh}{list}{
+{\em list}の7番目の要素を取り出す。}
+
+\funcdesc{eighth}{list}{
+{\em list}の8番目の要素を取り出す。}
+
+\funcdesc{ninth}{list}{
+{\em list}の9番目の要素を取り出す。}
+
+\funcdesc{tenth}{list}{
+{\em list}の10番目の要素を取り出す。}
 
 \funcdesc{nth}{count list}{
 {\em list}内の{\em count}番目の要素を返す。
@@ -272,8 +341,8 @@ atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 \funcdesc{nthcdr}{count list}{
 {\em list}に{\bf cdr}を{\em count}回適用した後のリストを返す。}
 
-\funcdesc{last}{list}{
-{\em list}の最後の要素でなく、最後のconsを返す。}
+\funcdesc{last}{list \&optional (n 1)}{
+{\em list}の最後の要素でなく、最後の{\em n}個のconsを返す。}
 
 \funcdesc{butlast}{list \&optional (n 1)}{
 {\em list}の最後から{\em n}個の要素を削除したリストを返す。}
@@ -282,12 +351,15 @@ atomの{\bf cdr}はエラーとなる。{\tt (cdr '(1 2 3)) = (2 3)}}
 {\tt car}が{\em car}で{\tt cdr}が{\em cdr}であるような新しいconsを作る。}
 
 \funcdesc{list}{\&rest elements}{
-makes a list of {\em elements}.}
+{\em element}を要素とするリストを返す。}
 
 \funcdesc{list*}{\&rest elements}{
 {\em element}を要素とするリストを作る。しかし、最後の要素は{\bf cons}されるため、
 atomであってはならない。
 例えば、{\tt (list* 1 2 3 '(4 5)) = (1 2 3 4 5)}である。}
+
+\funcdesc{values}{\&rest elements}{
+{\em list}のalias.}
 
 \funcdesc{list-length}{list}{
 {\em list}の長さを返す。{\em list}は、環状リストでも良い。}
@@ -319,12 +391,24 @@ atomであってはならない。
 
 \funcdesc{assoc}{item alist \&key key (test \#'eq) test-not}{
 {\em alist}の要素の{\bf car}が{\em :test}の条件にあった最初のものを返す。
-合わなければ、NILを返す。
-{\em :test}のデフォルトは{\tt \#'eq}である。
-{\tt (assoc '2 '((1 d t y)(2 g h t)(3 e x g))=(2 g h t)}}
+合わなければ、NILを返す。}
 
-\funcdesc{rassoc}{item alist}{
+\funcdesc{assoc-if}{pred alist \&key key}{
+{\em alist}の要素の{\bf car}が{\em pred}の条件にあった最初のものを返す。
+なければ、NILを返す。}
+
+\funcdesc{assoc-if-not}{pred alist \&key key}{
+{\em alist}の要素の{\bf car}が{\em pred}の条件に{\bf あわない}最初のものを返す。
+なければ、NILを返す。}
+
+\funcdesc{rassoc}{item alist \&key key (test \#'equal) test-not}{
 {\bf cdr}が{\em item}に等しい{\em alist}のなかの最初の組を返す。}
+
+\funcdesc{rassoc-if}{pred alist \&key key}{
+{\bf cdr}が{\em pred}にあった{\em alist}のなかの最初の組を返す。}
+
+\funcdesc{rassoc-if-not}{pred alist \&key key}{
+{\bf cdr}が{\em pred}に{\bf あわない}{\em alist}のなかの最初の組を返す。}
 
 \funcdesc{pairlis}{l1 l2 \&optional alist}{
 {\em l1}と{\em l2}の中の一致する要素を対にしたリストを作る。
@@ -391,6 +475,12 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 もし{\em pos}が{\em list}の長さより大きいなら、{\em item}は最後に
 {\bf nconc}される。
 {\tt (list-insert 'x 2 '(a b c d)) = (a b x c d)}}
+
+\funcdesc{list-delete}{lst n}{
+{\em lst}の{\em n}番目の要素を削除する
+（元のリストを変化させる）。
+もし{\em n}が{\em lst}の長さより大きいなら、{\em lst}は変更されない。
+{\tt (list-delete 'x 2 '(a b c d)) = (a b d)}}
 
 \funcdesc{copy-tree}{tree}{
 入れこリストである{\em tree}のコピーを返す。
@@ -575,6 +665,24 @@ EusLispには、文字型がない。
 \funcdesc{char-downcase}{ch}{
 {\em ch}を小文字に変換する。}
 
+\funcdesc{char=}{ch1 ch2 \&rest more-characters}{
+{\em =}のalias.}
+
+\funcdesc{char/=}{ch1 ch2 \&rest more-characters}{
+{\em /=}のalias.}
+
+\funcdesc{char$>$}{ch1 ch2 \&rest more-characters}{
+{\em $>$}のalias.}
+
+\funcdesc{char$<$}{ch1 ch2 \&rest more-characters}{
+{\em $<$}のalias.}
+
+\funcdesc{char$>=$}{ch1 ch2 \&rest more-characters}{
+{\em $>=$}のalias.}
+
+\funcdesc{char$<=$}{ch1 ch2 \&rest more-characters}{
+{\em $<=$}のalias.}
+
 \funcdesc{char}{string index}{
 {\em string}の{\em index}番目の文字を返す。}
 
@@ -582,6 +690,9 @@ EusLispには、文字型がない。
 {\em string}から文字を抜き出す。
 {\em string}の型が明確に解っていて、型チェックを要しないときのみ、{\bf schar}
 を使うこと。}
+
+\funcdesc{setchar}{string index ch}{
+{\em string}の{\em index}番目の文字を{\em ch}にする。}
 
 \funcdesc{stringp}{object}{
 {\em object}がバイト(256より小さい正の整数)のベクトルなら、Tを返す。}
@@ -617,18 +728,26 @@ EusLispには、文字型がない。
 もっと複雑なオブジェクトから文字列表現を得るためには、
 最初の引数をNILにした{\bf format}関数を用いること。}
 
-\fundesc{string$<$}{str1 str2}
+\fundesc{string$<$}{str1 str2}{
+strcmpによる{\em str1}の値が{\em str2}より低い時、Tを返す。}
 
-\fundesc{string$<=$}{str1 str2}
+\fundesc{string$<=$}{str1 str2}{
+strcmpによる{\em str1}の値が{\em str2}より低い、もしくは等しい時、Tを返す。}
 
-\fundesc{string$>$}{str1 str2}
+\fundesc{string$>$}{str1 str2}{
+strcmpによる{\em str1}の値が{\em str2}より高い時、Tを返す。}
 
-\fundesc{string$>=$}{str1 str2}
+\fundesc{string$>=$}{str1 str2}{
+strcmpによる{\em str1}の値が{\em str2}より高い、もしくは等しい時、Tを返す。}
 
-\fundesc{string-left-trim}{bag str}
+\fundesc{string-left-trim}{bag str}{
+{\em str}は、左から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
+その要素を削除する。
+一旦{\em bag}に含まれない文字が見つかると、その後の探索は中止され、
+{\em str}の残りが返される。}
 
 \funcdesc{string-right-trim}{bag str}{
-{\em str}は、左（右）から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
+{\em str}は、右から探索され、もし{\em bag}リスト内の文字を含んでいるなら、
 その要素を削除する。
 一旦{\em bag}に含まれない文字が見つかると、その後の探索は中止され、
 {\em str}の残りが返される。}
@@ -730,7 +849,7 @@ stringなら、それぞれの文字コードの合計をシフトしたもの�
 その他どんなオブジェクトでも、{\bf sxhash}はそれぞれのスロットのハッシュ値を
 再帰的呼出しで計算し、それらの合計を返す。}
 
-\funcdesc{make-hash-table}{\&key (size 30) (test \#'eq) (rehash-size 2.0)}{
+\funcdesc{make-hash-table}{\&key (size 10) (test \#'eq) (rehash-size 1.7)}{
 hash-tableを作り、返す。}
 
 
@@ -750,12 +869,12 @@ hash-tableに新しい値が登録され、そのテーブルの埋まったス�
 \funcdesc{hash-table-p}{x}{
 もし{\em x}がhash-tableクラスのインスタンスなら、Tを返す。}
 
-\classdesc{hash-table}{object}{(key value count \\
+\classdesc{hash-table}{object}{(key value count fill-count \\
 \> hash-function test-function \\
 \> rehash-size empty deleted)}{
 hash-tableを定義する。
 {\em key}と{\em value}は大きさが等しい一次元ベクトルである。
-{\em count}は、{\em key}や{\em value}が埋まっている数である。
+{\em count}と{\em fill-count}は、{\em key}や{\em value}の埋まり具合を管理するために使われる。
 {\em hash-function}のデフォルトは{\bf sxhash}である。
 {\em test-function}のデフォルトは{\bf eq}である。
 {\em empty}と{\em deleted}は、{\em key}ベクトルのなかで空または削除された

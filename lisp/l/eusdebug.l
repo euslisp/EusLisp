@@ -23,11 +23,13 @@
 	*remote-port*
 	remote-error reval *server-streams* remote-port))
 
-(defmacro assert (pred &optional (message "") &rest args)
-    `(while (not ,pred)
-	(format *error-output* ,message ,@args)
-        (finish-output *error-output*)
-	(reploop "ass: " )))
+(defun assert (pred &optional (message "assertion failed") &rest args)
+  (if (not pred)
+      (handler-case (apply #'error assertion-error message args)
+        (assertion-error (err)
+          ;; set pred as the new form
+          (send err :form (cadr (send err :form)))
+          (invoke-next-handler err)))))
 
 (defun warning-message (color format &rest mesg)
    (format *error-output* "~C[3~Cm" #x1b (+ color 48))
@@ -87,14 +89,13 @@
 (defun apropos (strng &optional pack)
   (setq strng (string strng))
   (flet ((print-symbol-apropos (sym)
-	  (format t ";; ~S~A~A~A~%"
+	  (format t ";; ~S~A~A"
 		sym
 		(if (fboundp sym)
-		    (if (special-form-p sym)
-		        "  Special form"
-			(if (macro-function sym)
-			    "  Macro"
-			    "  Function"))
+                    (cond
+                      ((special-form-p sym) "  Special form")
+                      ((macro-function sym) "  Macro")
+                      (t "  Function"))
 		    "")
 	  (if  (boundp sym)
 		(case (send sym :vtype)
@@ -102,8 +103,9 @@
 		  (1  "  Global=")
 		  (2  "  Global Special=")
 		  (t  "  Thread Special="))
-	       "")
-	  (if (boundp sym)  (symbol-bound-value sym) ""))))
+                ""))
+	  (if (boundp sym)  (format t "~S" (symbol-bound-value sym)))
+          (format t "~%")))
      (cond (pack
             (do-symbols (sym pack)
               (when (substringp strng (string sym))
@@ -169,7 +171,7 @@
       (catch *replevel* (reploop prompt)	 )))
 
 (defun setbreak (func)
-   (unless (fboundp func) (error "no func def. for setbreak"))
+   (unless (fboundp func) (error name-error "no func def. for setbreak"))
    (when (not (get func 'broken-function))
       (setf (get func 'broken-function) (symbol-function func)
     	    (symbol-function func)
@@ -253,11 +255,13 @@
 	        (cond ((symbolp input) (print (eval-dynamic input)))
 		    (t 
 		      (catch 'step-error
-			(let ((*error-handler*
-				'(lambda (&rest x)
-				    (format *error-output*
-					 "step evaluation error ~A~%" x)
-				    (throw 'step-error nil))))
+                        (handler-bind ((error
+                                        '(lambda (x)
+                                          (let ((errmsg (with-output-to-string (str)
+                                                          (lisp::print-error-message x str))))
+                                            (format *error-output*
+                                                    "step evaluation error ~A~%" errmsg)
+                                            (throw 'step-error nil)))))
 	                    (print (eval input)))))))
 	  (t (format t ";; e?"))))
      (dec *tracelevel*)
@@ -369,10 +373,10 @@
 	      (print (elt obj command)))
 	     (t
 	       (catch 'inspect-eval
-		   (let ((*error-handler*
-				'(lambda (ec form &optional msg1 msg2)
-				     (warn "error ~s ~s ~s" form msg1 msg2)
-				     (throw 'inspect-eval t))))
+                 (handler-bind ((error
+                                 '(lambda (x)
+                                   (lisp::print-error-message x)
+                                   (throw 'inspect-eval t))))
 		     (print (eval command)))))))))))
 
 (defmacro inspect (obj)
@@ -406,7 +410,7 @@
 		    (setf (get ',func :call-count) 0 
 		          (get ',func :elapsed-time) 0))))
 	   ((or (not (fboundp ',func)) (macro-function ',func))
-	    (error "not a function"))
+	    (error type-error "function expected"))
 	   (t
 	    (let ((fdef (symbol-function ',func)) )
 		(setf (get ',func :call-count) 0 
@@ -657,20 +661,19 @@ finds method-class pair which include name as substring of the method name"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar *remote-port*)
 
-(defun remote-error (code msg1 form &optional (msg2))
-      (format *error-output* "~A remote error: ~A" *program-name* msg1)
-      (if msg2 (format *error-output* " ~A" msg2))
-      (if form (format *error-output* " in ~s" form))
-      (terpri *error-output*)
-      (throw 'reval nil))
+(defun remote-error (err)
+  (let ((errmsg (with-output-to-string (str)
+                  (lisp::print-error-message err str))))
+    (format *error-output* "remote error: ~A" errmsg))
+  (throw 'reval nil))
 
 (defun reval (s)	;remote eval
       (let* ((*standard-input* (send s :instream))
 	     (*standard-output* (send s :outstream))
-	     (*error-output* *standard-output*)
-	     (*error-handler* 'remote-error))
-        (catch 'reval
-	   (print (eval (read s)) s))))
+	     (*error-output* *standard-output*))
+        (handler-bind ((error 'remote-error))
+          (catch 'reval
+            (print (eval (read s)) s)))))
 
 (defvar *server-streams* nil)
 

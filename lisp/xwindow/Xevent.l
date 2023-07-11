@@ -411,14 +411,13 @@ instead of 12th of motoinNotify events."
 
 (defmacro wml (&rest forms) `(window-main-loop . ,forms))
 
-(defun wmlerror (code msg1 form &optional (msg2))
+(defun wmlerror (err)
 #+(or :solaris2 :SunOS4.1 :pthread)
    (format *error-output* "~A ~d error: ~A" *program-name*
-		(unix::thr-self) msg1)	; thr-self is in unix pkg
+		(unix::thr-self) (get err :msg))  ; thr-self is in unix pkg
 #-(or :solaris2 :SunOS4.1 :pthread)
-   (format *error-output* "~A error: ~A" *program-name* msg1)
-   (if msg2 (format *error-output* " ~A" msg2))
-   (if form (format *error-output* " in ~s" form))
+   (format *error-output* "~A error: ~A" *program-name* (get err :msg))
+   (if (get err :form) (format *error-output* " in ~s" (get err :form)))
    (terpri *error-output*)
    (throw :window-main-loop-again nil))
 
@@ -426,7 +425,7 @@ instead of 12th of motoinNotify events."
 (progn
   (defun window-main-thread2 ()
      (let ((num-events 0))
-       (lisp::install-error-handler  #'wmlerror)
+       (install-handler error #'wmlerror)
        (sync *display* 1)
        (catch :window-main-loop
           (while t

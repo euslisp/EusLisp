@@ -97,13 +97,11 @@ cshのコマンド{\tt limit}で、システムのスタックサイズを増加
 ガーベージコレクションを実行する。割り当てられている中で空いているワード数および全体のワード数
 のリストを返す。}
 
-\vardesc{sys:*gc-hook*}{
-ガーベージコレクションを実行する時に呼ばれる関数を定義する。}
-
 \funcdesc{sys:gctime}{}{
 3つの整数のリストを返す。1つは、ＧＣを呼び出した回数。
-2つは、セルをマーキングするために使用した時間（1ユニットに1/60秒）。
-3つが、矯正（マーキングを外し、マージする）のために使用した時間。}
+2つは、セルをマーキングするために使用した時間。
+3つが、矯正（マーキングを外し、マージする）のために使用した時間。
+時間はtick回数で与えられる。}
 
 \funcdesc{sys:alloc}{size}{
 ヒープに少なくとも{\em size}ワードのメモリを配置し、
@@ -111,6 +109,9 @@ cshのコマンド{\tt limit}で、システムのスタックサイズを増加
 
 \funcdesc{sys:newstack}{size}{
 現在のスタックを廃棄し、{\em size}ワードの新しいスタックを配置する。}
+
+\vardesc{sys:*gc-debug*}{
+ガーベージコレクションを実行する度にデバッグメッセージをプリントする。}
 
 \vardesc{sys:*gc-merge*}{
 メモリ管理用のパラメータ。
@@ -508,8 +509,9 @@ Tを返す。}
 
 \begin{refdesc}
 
-\funcdesc{unix:signal}{signal func \&optional option}{
-{\em signal}に対してシグナルハンドラー{\em func}をインストールする。
+\funcdesc{unix:signal}{signal \&optional func option}{
+{\em func}が与えていればそれを{\em signal}に対するシグナルハンドラーとしてインストールする。
+そうでなければ{\em signal}に対するシグナルハンドラーを返す。
 BSD4.2システムにおいて、システムコール処理の間に捕まえたシグナルは、
 システムコールのリトライに起因する。
 これは、もしその処理がシステムコールの呼び出しを発行するならば、
@@ -525,10 +527,12 @@ BSD4.2システムにおいて、システムコール処理の間に捕まえ�
 
 \funcdesc{unix:alarm}{time}{
 {\em time}秒後にアラーム時計シグナル(SIGALRM 14)を送る。
-{\em time}=0で{\bf unix:alarm}を呼び出すと、アラーム時計をリセットする。}
+{\em time}=0で{\bf unix:alarm}を呼び出すと、アラーム時計をリセットする。
+既にスケジューリングされているalarmがある時はその実行までの秒数を、ない場合には0を返す。}
 
-\funcdesc{unix:ualarm}{time}{
+\funcdesc{unix:ualarm}{time interval}{
 {\em time}がマイクロ秒単位であることを除いて{\bf unix:alarm}と同じである。
+{\em time}は1000000を超えてはならない。
 {\bf ualarm}は、Solaris2あるいはSystem5系のシステムに実現されていない。}
 
 \funcdesc{unix:getitimer}{timer}{

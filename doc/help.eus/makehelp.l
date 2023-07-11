@@ -30,6 +30,7 @@
 			      "sequences"
 			      "io"
 			      "evaluation"
+			      "types"
 			      "sysfunc"
 			      "matrix"
 			      "geometry"
@@ -37,6 +38,8 @@
 			      "voronoi"
 			      "graphics"
 			      "xwindow"
+			      "xtoolkit"
+			      "mthread"
 			      "image"
 			      "manipulator"))
 (defvar *eus-jtex-list* (list "jintro"
@@ -56,6 +59,8 @@
 			      "jvoronoi"
 			      "jgraphics"
 			      "jxwindow"
+			      "jxtoolkit"
+			      "jmthread"
 			      "jimage"
 			      "jmanipulator"))
 

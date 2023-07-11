@@ -16,7 +16,8 @@ static char *rcsid="@(#)$Id$";
 #define nextbuddy(p) ((bpointer)((eusinteger_t)p+(buddysize[p->h.bix]*sizeof(pointer))))
 #endif
 
-extern pointer LAMCLOSURE, K_FUNCTION_DOCUMENTATION;
+extern pointer LAMCLOSURE, MACRO, K_NAME, K_FUNCTION_DOCUMENTATION;
+extern pointer C_BINDFRAME, C_FLETFRAME;
 
 /****************************************************************/
 /* boxing and unboxing
@@ -206,27 +207,29 @@ register pointer namestr,nicks,uses;
   /*check pkg name collision*/
   namestr=Getstring(namestr);
   if (findpkg(namestr)) error(E_PKGNAME,namestr);
-  vpush(namestr); vpush(nicks); vpush(uses);
-  i=0;
+  vpush(nicks); vpush(uses); vpush(namestr);
+  i=1;  // package name is the first in the nickname list
   while (islist(nicks)) {
     if (findpkg(ccar(nicks))) error(E_PKGNAME,ccar(nicks));
     vpush(Getstring(ccar(nicks))); i++;
     nicks=ccdr(nicks);}
   nicks=stackrawlist(ctx,i);	/*list up package nicknames*/
+  vpush(nicks);
   i=0;
   while (islist(uses)) {
     if ((p=findpkg(ccar(uses)))) { vpush(p); i++; uses=ccdr(uses);}
     else error(E_PKGNAME,ccar(uses));}
   uses=stackrawlist(ctx,i);
+  vpush(uses);
   pkg=allocobj(PKGCLASS,package, packagecp.cix);
   pkg->c.pkg.names=pkg->c.pkg.symvector=pkg->c.pkg.intsymvector=NULL;
   pkg->c.pkg.symcount=pkg->c.pkg.intsymcount=makeint(0);
-  pkg->c.pkg.use=uses;
   pkg->c.pkg.plist=NIL;
   pkg->c.pkg.shadows=NIL;
   pkg->c.pkg.used_by=NIL;
+  pkg->c.pkg.use=vpop();  // uses
+  pkg->c.pkg.names=vpop();  // nicks
   vpush(pkg);
-  pkg->c.pkg.names=rawcons(ctx,namestr,nicks);
   symvec=makevector(C_VECTOR,SYMBOLHASH);
   for (i=0; i<SYMBOLHASH; i++) symvec->c.vec.v[i]=makeint(0);
   pkg->c.pkg.symvector=symvec;
@@ -235,18 +238,18 @@ register pointer namestr,nicks,uses;
   pkg->c.pkg.intsymvector=symvec;
   pkglist=rawcons(ctx,pkg,pkglist);
   ctx->lastalloc=pkg;
-  ctx->vsp -= 4;
+  ctx->vsp -= 3;
   return(pkg);}
 
 pointer mkstream(ctx,dir,string)
 register context *ctx;
 pointer dir,string;
 { register pointer s;
-  vpush(string);
+  vpush(dir); vpush(string);
   s=allocobj(STREAM, stream, streamcp.cix);
-  s->c.stream.direction=dir;
   s->c.stream.count=s->c.stream.tail=makeint(0);
-  s->c.stream.buffer=vpop();
+  s->c.stream.buffer=vpop();  // string
+  s->c.stream.direction=vpop();  // dir
   s->c.stream.plist=NIL;
   return(s);}
 
@@ -256,13 +259,13 @@ pointer dir,string,fname;
 int fno;
 { register pointer s;
   if (dir!=K_IN && dir!=K_OUT) error(E_IODIRECTION);
-  vpush(string); vpush(fname);
+  vpush(dir); vpush(string); vpush(fname);
   s=allocobj(FILESTREAM, filestream, filestreamcp.cix);
-  s->c.fstream.direction=dir;
   s->c.fstream.count=s->c.fstream.tail=makeint(0);
-  s->c.fstream.fname=vpop();
-  s->c.fstream.buffer=vpop();
   s->c.fstream.fd=makeint(fno);
+  s->c.fstream.fname=vpop();  // fname
+  s->c.fstream.buffer=vpop(); // string
+  s->c.fstream.direction=vpop();  // dir
   s->c.fstream.plist=NIL;
   return(s);}
 
@@ -273,18 +276,19 @@ register pointer in,out;
   if (!isstream(in) || !isstream(out)) error(E_STREAM);
   vpush(in); vpush(out);
   ios=allocobj(IOSTREAM, iostream, iostreamcp.cix);
-  ios->c.iostream.out=out;
-  ios->c.iostream.in=in;
+  ios->c.iostream.out=vpop();  // out
+  ios->c.iostream.in=vpop();  // in
   ios->c.iostream.plist=NIL;
-  ctx->vsp -= 2;
   return(ios);}
 
-pointer makecode(mod,f,ftype)
-register pointer mod,ftype;
+pointer makecode(ctx,mod,f,ftype,name)
+register context *ctx;
+register pointer mod,ftype,name;
 pointer (*f)();
 /*actually, f is a pointer to a function returning a pointer*/
 { register pointer cd;
   eusinteger_t fentaddr;
+  vpush(mod); vpush(ftype); vpush(name);
   cd=allocobj(CODE, code, codecp.cix);
   cd->c.code.codevec=mod->c.code.codevec;
   cd->c.code.quotevec=mod->c.code.quotevec;
@@ -294,6 +298,8 @@ pointer (*f)();
 #if ARM
   cd->c.code.entry2=makeint(((eusinteger_t)f)&0x3);
 #endif
+  if (name!=NULL) putprop(ctx,cd,name,K_NAME);
+  ctx->vsp-=3;
   return(cd);}
 
 
@@ -380,19 +386,21 @@ int tag;
   extern pointer makeobject();
 
   /* make metaclass cell */
-  vpush(vars); vpush(types);
+  vpush(name); vpush(superobj); vpush(vars);
+  vpush(types); vpush(forwards); vpush(metaclass);
   if (metaclass && isclass(metaclass)) class=makeobject(metaclass);
   else {
     if (tag==0)
       class=allocobj(METACLASS, _class, metaclasscp.cix);
     else 
-      class=allocobj(VECCLASS, vecclass, vecclasscp.cix);} 
-  class->c.cls.name=name;
-  class->c.cls.super=superobj;
+      class=allocobj(VECCLASS, vecclass, vecclasscp.cix);}
+  vpop();  // metaclass
+  class->c.cls.forwards=vpop();  // forwards
+  class->c.cls.types=vpop();  // types
+  class->c.cls.vars=vpop();  // vars
+  class->c.cls.super=vpop();  // superobj
+  class->c.cls.name=vpop();  // name
   class->c.cls.methods=NIL;
-  class->c.cls.vars=vars;
-  class->c.cls.types=types;
-  class->c.cls.forwards=forwards;
   class->c.cls.plist=NIL;
   if (tag) {	/*vector type class*/
     class->c.vcls.elmtype=makeint(tag);
@@ -401,7 +409,6 @@ int tag;
 /*  name->c.sym.vtype=V_SPECIAL;  */
   name->c.sym.vtype=V_GLOBAL; 
   enterclass(class);	/*determine cix and fill it in the cix slot*/
-  vpop(); vpop();
   return(class);  }
 
 pointer makeobject(class)
@@ -491,7 +498,7 @@ int size;
   elmtypeof(cvec)=ELM_BYTE;
   vpush(cvec);
   mod=allocobj(LDMODULE, ldmodule, ldmodulecp.cix);
-  mod->c.ldmod.codevec=vpop();
+  mod->c.ldmod.codevec=vpop();  // cvec
   mod->c.ldmod.quotevec=NIL;
   mod->c.ldmod.entry=NIL;
 #if ARM
@@ -503,8 +510,12 @@ int size;
   mod->c.ldmod.handle=NIL;
   return(mod);}
 
-pointer makeclosure(code,quote,f,e0,e1,e2)
-pointer code,quote,e0,*e1,*e2;
+// makeclosure() is generated by the compiler and
+// exclusively used in compiled code
+// stack management is a responsability of the caller,
+// which is also currently generated by the compiler
+pointer makeclosure(code,quote,f,e0,e1)
+pointer code,quote,e0,e1;
 pointer (*f)();
 { register pointer clo;
   clo=allocobj(CLOSURE, closure, closurecp.cix);
@@ -517,34 +528,88 @@ pointer (*f)();
 #endif
   clo->c.clo.env0=e0;
   clo->c.clo.env1=e1; /*makeint((int)e1>>2);*/
-  clo->c.clo.env2=e2; /*makeint((int)e2>>2);*/
   return(clo);}
 
 pointer makereadtable(ctx)
 register context *ctx;
-{ pointer rdtable,rdsyntax,rdmacro,rddispatch;
-  vpush((rdsyntax=makebuffer(256)));
-  vpush((rdmacro=makevector(C_VECTOR,256)));
-  rddispatch=makevector(C_VECTOR,256);
+{ pointer rdtable;
+  vpush(makebuffer(256));  // rdsyntax
+  vpush(makevector(C_VECTOR,256));  // rdmacro
+  vpush(makevector(C_VECTOR,256));  // rddispatch
   rdtable=allocobj(READTABLE, readtable, readtablecp.cix);
-  vpush(rdtable);
-  rdtable->c.rdtab.dispatch=rddispatch;
-  rdtable->c.rdtab.macro=rdmacro;
-  rdtable->c.rdtab.syntax=rdsyntax;
+  rdtable->c.rdtab.dispatch=vpop();  // rddispatch
+  rdtable->c.rdtab.macro=vpop();  // rdmacro
+  rdtable->c.rdtab.syntax=vpop();  // rdsyntax
   rdtable->c.rdtab.plist=NIL;
-  ctx->vsp -= 3;
   return(rdtable);}
 
-pointer makelabref(n,v,nxt)
+pointer makelabref(ctx,n,v,nxt)
+register context *ctx;
 pointer n,v,nxt;
 { pointer l;
+  vpush(n); vpush(v); vpush(nxt);
   l=alloc(wordsizeof(struct labref), ELM_FIXED, labrefcp.cix,
 	  wordsizeof(struct labref));
-  l->c.lab.label=n;
-  l->c.lab.value=v;
-  l->c.lab.next=nxt;
+  l->c.lab.next=vpop();  // nxt
+  l->c.lab.value=vpop();  // v
+  l->c.lab.label=vpop();  // n
   l->c.lab.unsolved=NIL;
   return(l);}  
+
+pointer makebindframe(ctx,sym,val,nxt)
+register context *ctx;
+pointer sym,val,nxt;
+{ pointer bf;
+  vpush(sym), vpush(val), vpush(nxt);
+  bf=makeobject(C_BINDFRAME);
+  // if (nxt==NULL) nxt=NIL;
+  bf->c.bfp.next=vpop();  // nxt
+  bf->c.bfp.val=vpop();  // val
+  bf->c.bfp.sym=vpop();  // sym
+  return(bf);}
+
+pointer makeflet(ctx,nm,def,scp,nxt)
+register context *ctx;
+pointer nm,def,scp,nxt;
+{ pointer p,ff;
+  vpush(nm); vpush(def); vpush(scp); vpush(nxt);
+  // fletframe scope
+  if (scp==NULL)
+    p=cons(ctx,makeint(0),def);
+  else
+    p=cons(ctx,scp,def);
+  // bindframe scope
+  if (ctx->bindfp==NULL)
+    p=cons(ctx,makeint(0),p);
+  else
+    p=cons(ctx,ctx->bindfp,p);
+  p=cons(ctx,nm,p);  // name
+  p=cons(ctx,LAMCLOSURE,p);
+  vpush(p);
+  ff=makeobject(C_FLETFRAME);
+  ff->c.ffp.fclosure=vpop();  // p
+  ff->c.ffp.next=vpop();  // nxt
+  vpop();  // scp
+  vpop();  // def
+  ff->c.ffp.name=vpop();  // nm
+  vpush(ff);
+  ctx->fletfp=ff;
+  return(ff);}
+
+pointer makemacrolet(ctx,nm,def,nxt)
+register context *ctx;
+pointer nm,def,nxt;
+{ pointer p,ff;
+  vpush(nm); vpush(nxt);
+  p=cons(ctx,MACRO,def);
+  vpush(p);
+  ff=makeobject(C_FLETFRAME);
+  ff->c.ffp.fclosure=vpop();  // p
+  ff->c.ffp.next=vpop();  // nxt
+  ff->c.ffp.name=vpop();  // nm
+  vpush(ff);
+  ctx->fletfp=ff;
+  return(ff);}
 
 /****************************************************************
 /* extended numbers
@@ -640,7 +705,7 @@ pointer mod,pkg;
 pointer (*f)();
 { pointer sym;
   sym=intern(ctx,name,strlen(name),pkg);
-  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_FUNCTION));
+  pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,f,SUBR_FUNCTION,sym));
   return(sym);}
 
 pointer defmacro(ctx,name,mod,f)
@@ -651,7 +716,7 @@ pointer (*f)();
 { register pointer sym,pkg;
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
-  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_MACRO));
+  pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,f,SUBR_MACRO,sym));
   return(sym);}
 
 #if Solaris2 || PTHREAD
@@ -665,7 +730,7 @@ int special_index()
   mutex_lock(&spex_lock);
   x= next_special_index++;
   mutex_unlock(&spex_lock);
-  if (x>=MAX_SPECIALS) { error(E_USER,(pointer)"too many special variables >=512"); }
+  if (x>=MAX_SPECIALS) { error(E_PROGRAM_ERROR,(pointer)"too many special variables >=512"); }
   return(x);}
 #else
 int next_special_index=3;
@@ -674,7 +739,7 @@ int special_index()
 { int x;
 
   x= next_special_index++;
-  if (x>=MAX_SPECIALS) { error(E_USER,(pointer)"too many special variables >=512"); }
+  if (x>=MAX_SPECIALS) { error(E_PROGRAM_ERROR,(pointer)"too many special variables >=512"); }
 
   return(x);}
 #endif
@@ -687,7 +752,7 @@ pointer (*f)();
 { register pointer sym,pkg;
   pkg=Spevalof(PACKAGE);
   sym=intern(ctx,name,strlen(name),pkg);
-  pointer_update(sym->c.sym.spefunc,makecode(mod,f,SUBR_SPECIAL));
+  pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,f,SUBR_SPECIAL,sym));
   return(sym);}
 
 pointer defconst(ctx,name,val,pkg)
@@ -747,7 +812,7 @@ pointer compfun(ctx,sym,mod,entry,doc)
 register context *ctx;
 register pointer sym,mod,doc;
 pointer (*entry)();
-{ pointer_update(sym->c.sym.spefunc,makecode(mod,entry,SUBR_FUNCTION));
+{ pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,entry,SUBR_FUNCTION,sym));
   if (doc!=NIL) putprop(ctx,sym,doc,K_FUNCTION_DOCUMENTATION); 
   return(sym);}
 
@@ -755,7 +820,7 @@ pointer compmacro(ctx,sym,mod,entry,doc)
 register context *ctx;
 register pointer sym,mod,doc;
 pointer (* entry)();
-{ pointer_update(sym->c.sym.spefunc,makecode(mod,entry,SUBR_MACRO));
+{ pointer_update(sym->c.sym.spefunc,makecode(ctx,mod,entry,SUBR_MACRO,sym));
   if (doc!=NIL) putprop(ctx,sym, doc, K_FUNCTION_DOCUMENTATION); 
   return(sym);}
 
@@ -778,25 +843,6 @@ struct blockframe *link;
   blk->jbp=jbuf;
   ctx->blkfp=blk;
   return(blk);}
-
-struct fletframe *makeflet(ctx,nm,def,scp,link)
-register context *ctx;
-pointer nm,def;
-struct fletframe *scp,*link;
-{ register struct fletframe *ffp=(struct fletframe *)(ctx->vsp);
-  register pointer p;
-  size_t i;
-  for (i=0; i<sizeof(struct fletframe)/sizeof(pointer); i++)
-    vpush(makeint(0));
-  ffp->name=nm;
-  p=cons(ctx,makeint(hide_ptr((pointer)scp)),def);
-  p=cons(ctx,makeint(hide_ptr((pointer)(ctx->bindfp))),p);
-  p=cons(ctx,nm,p);
-  ffp->fclosure=cons(ctx,LAMCLOSURE,p);
-  ffp->scope=scp;
-  ffp->lexlink=link; ffp->dynlink=ctx->fletfp;	/*dynlink is not used*/
-  ctx->fletfp=ffp;
-  return(ffp);}
 
 void mkcatchframe(ctx,lab,jbuf)
 context *ctx;
@@ -859,9 +905,7 @@ int bs_size;
   cntx->blkfp=NULL;
   cntx->protfp=NULL;
   cntx->fletfp=NULL;
-  cntx->newfletfp=NULL;
   cntx->lastalloc=NULL;
-  cntx->errhandler=NULL;
   cntx->alloc_big_count=0;
   cntx->alloc_small_count=0;
   cntx->special_bind_count=0;

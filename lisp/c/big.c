@@ -630,7 +630,7 @@ eusinteger_t c;
 pointer x;
 { int i, size;
   eusinteger_t *xv, r;
-  if (c == 0) error(E_USER,(pointer)"divide by zero in bignum div");
+  if (c == 0) error(E_VALUE_ERROR,(pointer)"divide by zero in bignum div");
   size=bigsize(x); xv=bigvec(x);
   /* divide from MSB */ 
   r = xv[size-1] % c;
@@ -718,7 +718,7 @@ pointer x, y;
       if (j==ysize-1) {
         while (hi>0) {
           k++;
-          if (k>=xsize+ysize) error(E_USER,(pointer)"bignum mult overflow");
+          if (k>=xsize+ysize) error(E_PROGRAM_ERROR,(pointer)"bignum mult overflow");
           zv[k] += hi;
 	  if (zv[k] & MSB) { zv[k] &= MASK; hi=1; }
           else hi=0;}

@@ -228,6 +228,7 @@ struct package {
     };
 
 struct code {
+    pointer plist;
     pointer codevec;
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
@@ -238,15 +239,17 @@ struct code {
     };
 
 struct fcode {		/*foreign function code*/
+    pointer plist;
     pointer codevec;
     pointer quotevec;
     pointer subrtype;
     pointer entry;
-  pointer entry2;    /* kanehiro's patch 2000.12.13 */
+    pointer entry2;    /* foreign code always has entry2 (kanehiro's patch 2000.12.13) */
     pointer paramtypes;
     pointer resulttype;};
 
 struct ldmodule {	/*foreign language object module*/
+    pointer plist;
     pointer codevec;
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
@@ -259,6 +262,7 @@ struct ldmodule {	/*foreign language object module*/
     pointer handle;};	/* dl's handle */
 
 struct closure {
+    pointer plist;
     pointer codevec;
     pointer quotevec;
     pointer subrtype;	/*function,macro,special*/
@@ -267,8 +271,7 @@ struct closure {
     pointer entry2;     /* some archtecture did not set code on 4 byte alignment */
 #endif
     pointer env0;	/*upper closure link*/
-    pointer *env1;	/*argument pointer:	argv*/
-    pointer *env2;};	/*local variable frame:	local*/
+    pointer env1;};	/*local frame (argframe, bindframe, fletframe)*/
 
 struct stream {
     pointer plist;
@@ -294,7 +297,7 @@ struct labref {		/*used for reading labeled forms: #n#,#n=*/
     pointer label;
     pointer value;
     pointer unsolved;
-    pointer next; };
+    pointer next;};
 
 struct vector {
     pointer size;
@@ -364,6 +367,16 @@ struct threadport {
   pointer idle;
   pointer wait;};
 
+struct bindframe {
+  pointer sym;
+  pointer val;
+  pointer next;};
+
+struct fletframe {
+  pointer name;
+  pointer fclosure;
+  pointer next;};
+
 /* extended numbers */
 struct ratio {
   pointer numerator;
@@ -419,6 +432,8 @@ typedef
       struct vecclass vcls;
       struct readtable rdtab;
       struct threadport thrp;
+      struct bindframe bfp;
+      struct fletframe ffp;
       struct ratio ratio;
       struct complex cmplx;
       struct bignum  bgnm;
@@ -476,11 +491,6 @@ struct callframe {
   pointer form;
   };
 
-struct bindframe {	/*to achieve lexical binding in the interpreter*/
-  struct  bindframe *dynblink, *lexblink;	/*links to upper level*/
-  pointer sym;		/*symbol*/
-  pointer val;};	/*bound value*/
-
 struct specialbindframe {	/*special value binding frame*/
   struct  specialbindframe *sblink;
   pointer sym;		/*pointer to the symbol word(dynval or dynfunc)*/
@@ -495,9 +505,9 @@ struct blockframe {
 struct catchframe {
   struct  catchframe *nextcatch;
   pointer label;
-  struct  bindframe *bf;	/*bind frame save*/
+  pointer bf;	/*bind frame save*/
   struct  callframe *cf;	/*call frame save*/
-  struct  fletframe *ff;
+  pointer ff;	/*fletframe*/
   jmp_buf *jbp;
   };
 
@@ -505,13 +515,6 @@ struct protectframe {
   struct protectframe *protlink;
   pointer cleaner;	/*cleanup form closure*/
   };
-
-struct  fletframe {
-  pointer name;
-  pointer fclosure;
-  struct  fletframe *scope;
-  struct  fletframe *lexlink;
-  struct  fletframe *dynlink;};
 
 #define MAXMETHCACHE 256 /*must be power to 2*/
 
@@ -528,13 +531,12 @@ typedef struct {
 #endif
 	struct	callframe	*callfp;
 	struct	catchframe	*catchfp;
-	struct	bindframe	*bindfp;
+	pointer			bindfp;
 	struct	specialbindframe *sbindfp;
 	struct	blockframe	*blkfp;
 	struct	protectframe	*protfp;
-	struct  fletframe	*fletfp, *newfletfp;
+	pointer	fletfp;
 	pointer lastalloc;
-	pointer errhandler;
 	pointer threadobj;
 	struct  methdef		*methcache;
 	struct  buddyfree	*thr_buddy;
@@ -601,6 +603,7 @@ extern long alloccount[MAXBUDDY];
 /* System internal objects are connected to sysobj list
 /* to protect from garbage-collection */
 extern pointer sysobj;
+extern pointer eussigobj;
 extern pointer lastalloc;
 
 /* thread euscontexts */
@@ -627,6 +630,8 @@ extern cixpair fcodecp;
 /*cixpair modulecp; */
 extern cixpair ldmodulecp;
 extern cixpair closurecp;
+extern cixpair bindframecp;
+extern cixpair fletframecp;
 extern cixpair labrefcp;
 extern cixpair threadcp;
 extern cixpair arraycp;
@@ -659,9 +664,8 @@ extern pointer SELF;
 extern pointer CLASS;
 extern pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 extern pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
-extern pointer TOPLEVEL,QEVALHOOK,ERRHANDLER;
-extern pointer QGCHOOK, QEXITHOOK;
-extern pointer QUNBOUND,QDEBUG;
+extern pointer TOPLEVEL,QEVALHOOK,QEXITHOOK;
+extern pointer QUNBOUND,QDEBUG,QGCHOOK,QGCDEBUG;
 extern pointer QTHREADS;
 extern pointer QEQ,QEQUAL,QNOT;
 extern pointer QAND, QOR, QNOT;
@@ -689,6 +693,7 @@ extern pointer C_THREAD;
 extern pointer C_VCLASS, C_FLTVECTOR, C_INTVECTOR, C_STRING, C_BITVECTOR;
 extern pointer C_FOREIGNCODE,C_ARRAY,C_READTABLE;
 extern pointer C_EXTNUM, C_RATIO, C_COMPLEX, C_BIGNUM;
+extern pointer C_CONDITION, C_ERROR;
 
 /*class names*/
 extern pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
@@ -713,14 +718,12 @@ extern int export_all;
 /****************************************************************/
 
 #ifdef RGC
-#define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error(E_DUMMY5,(pointer)(err)))
-#define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error(E_DUMMY5,(pointer)(err)))
 #define alloc rgc_alloc
 #else
-#define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error(E_DUMMY3,(pointer)(err)))
-#define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error(E_DUMMY3,(pointer)(err)))
 #define alloc gc_alloc
 #endif
+#define carof(p,err) (islist(p)?(p)->c.cons.car:(pointer)error((enum errorcode)(err)))
+#define cdrof(p,err) (islist(p)?(p)->c.cons.cdr:(pointer)error((enum errorcode)(err)))
 #define ccar(p) ((p)->c.cons.car)
 #define ccdr(p) ((p)->c.cons.cdr)
 #define cixof(p) ((p)->cix)
@@ -827,8 +830,8 @@ extern eusinteger_t intval(pointer p);
 #endif
 
 /*predicates to test object type*/
-#define pislist(p)  (p->cix<=conscp.sub)
-#define piscons(p)  (p->cix<=conscp.sub)
+#define pislist(p)  (conscp.cix<=(p)->cix && (p)->cix<=conscp.sub)
+#define piscons(p)  (conscp.cix<=(p)->cix && (p)->cix<=conscp.sub)
 #define pispropobj(p) (propobjcp.cix<=(p)->cix && (p)->cix<=propobjcp.sub)
 #define ispropobj(p) (ispointer(p) && pispropobj(p))
 #define pissymbol(p) (symbolcp.cix<=(p)->cix && (p)->cix<=symbolcp.sub)
@@ -858,6 +861,7 @@ extern eusinteger_t intval(pointer p);
 #define isfltvector(p) (ispointer(p) && (elmtypeof(p)==ELM_FLOAT))
 #define isptrvector(p) (ispointer(p) && (elmtypeof(p)==ELM_POINTER))
 #define isintvector(p) (ispointer(p) && (elmtypeof(p)==ELM_INT))
+#define isbitvector(p) (ispointer(p) && (elmtypeof(p)==ELM_BIT))
 #define pisclass(p) (metaclasscp.cix<=(p)->cix && (p)->cix<=metaclasscp.sub)
 #define isclass(p) (ispointer(p) && pisclass(p))
 #define pisvecclass(p) (vecclasscp.cix<=(p)->cix && (p)->cix<=vecclasscp.sub)
@@ -866,6 +870,12 @@ extern eusinteger_t intval(pointer p);
 #define ispackage(p) (ispointer(p) && pispackage(p))
 #define pisclosure(p) (closurecp.cix<=(p)->cix && (p)->cix<=closurecp.sub)
 #define isclosure(p) (ispointer(p) && pisclosure(p))
+#define pisbindframe(p) (bindframecp.cix<=(p)->cix && (p)->cix<=bindframecp.sub)
+#define isbindframe(p) (ispointer(p) && pisbindframe(p))
+#define pisfletframe(p) (fletframecp.cix<=(p)->cix && (p)->cix<=fletframecp.sub)
+#define isfletframe(p) (ispointer(p) && pisfletframe(p))
+#define pisthread(p) (threadcp.cix<=(p)->cix && (p)->cix<=threadcp.sub)
+#define isthread(p) (ispointer(p) && pisthread(p))
 #define pislabref(p) (labrefcp.cix<=(p)->cix && (p)->cix<=labrefcp.sub)
 #define islabref(p) (ispointer(p) && pislabref(p))
 /* extended numbers */
@@ -936,74 +946,86 @@ enum errorcode {
   E_DUMMY10,
 #define E_FATAL 10
 /* followings are not fatal errors */
-  E_SETCONST,		/*11 attempt to set to constant*/
+
+/* ARGUMENT ERROR */
+  E_ARGUMENT_ERROR,
+  E_MISMATCHARG,
+  E_PARAMETER,
+  E_KEYPARAM,
+  E_NOKEYPARAM,
+  E_MULTIDECL,
+
+/* PROGRAM ERROR */
+  E_PROGRAM_ERROR,
+  E_LONGSTRING,
+  E_CLASSOVER,
+  E_DECLARE,
+  E_NOCATCHER,
+  E_NOBLOCK,
+
+/* NAME ERROR */
+  E_NAME_ERROR,
   E_UNBOUND,
   E_UNDEF,
-  E_MISMATCHARG,
-  E_ILLFUNC,
-  E_ILLCH,
-  E_READ,
-  E_WRITE,
-  E_LONGSTRING,		/*19: string too long*/
-  E_NOSYMBOL,		/*20: symbol expected*/
-  E_NOLIST,		/*list expected*/
-  E_LAMBDA,		/*illegal lambda form*/
-  E_PARAMETER,		/*illegal lambda parameter syntax*/  
-  E_NOCATCHER,		/*no catch block */
-  E_NOBLOCK,		/*no block to return*/
-  E_STREAM,		/*stream expected*/
-  E_IODIRECTION,	/*io stream direction keyword*/
-  E_NOINT,		/*integer value expected*/
-  E_NOSTRING,		/*string expected*/
-  E_OPENFILE,		/*30: error in open*/
-  E_EOF,		/*EOF encountered*/
-  E_NONUMBER,		/*number expected*/
-  E_CLASSOVER,		/*class table overflow*/
-  E_NOCLASS,		/*class expected*/
-  E_NOVECTOR,		/*vector expected*/
-  E_VECSIZE,		/*error of vector size*/
-  E_DUPOBJVAR,		/*duplicated object variable name*/
-  E_INSTANTIATE,	/*38: cannot make an instance*/
-  E_ARRAYINDEX,
-  E_NOMETHOD,		/*40*/
-  E_CIRCULAR,
-  E_SHARPMACRO,		/*unknown sharp macro*/
-  E_ALIST,		/*list expected for an element of an alist*/
-  E_NOMACRO,		/*macro expected*/
-  E_NOPACKAGE,		/*no such package */
-  E_PKGNAME,		/*the package already exists*/
-  E_NOOBJ,		/*invalid form*/
-  E_NOOBJVAR,		/*48: not an object variable*/
-  E_NOSEQ,		/*sequence(list,string,vector) expected*/
-  E_STARTEND,		/*illegal subsequence index*/
-  E_NOSUPER,		/*no superclass*/
-  E_FORMATSTRING,	/*invalid format string character*/
-  E_FLOATVECTOR,	/*float vector expected*/
-  E_CHARRANGE,		/*0..255*/
-  E_VECINDEX,		/*vector index mismatch*/
-  E_NOOBJECT,		/*other than numbers expected*/
-  E_TYPEMISMATCH,	/*the: type mismatch*/
-  E_DECLARE,		/*illegal declaration*/
-  E_DECLFORM,		/*invalid declaration form*/
-  E_NOVARIABLE,		/*constant is used in let or lambda*/
-  E_ROTAXIS,		/*illegal rotation axis spec*/
-  E_MULTIDECL,
-  E_READLABEL,		/*illegal #n= or #n# label*/
-  E_READFVECTOR,	/*error of #f( expression*/
-  E_READOBJECT,		/*error in #V or #J format*/
-  E_SOCKET,		/*error of socket address*/
-  E_NOARRAY,		/*array expected*/
-  E_ARRAYDIMENSION,	/*array dimension mismatch*/
-  E_KEYPARAM,		/*keyword parameter expected*/
-  E_NOKEYPARAM,		/*no such keyword*/
-  E_NOINTVECTOR,	/*integer vector expected*/
-  E_SEQINDEX,		/*sequence index out of range*/
-  E_BITVECTOR,		/*not a bit vector*/
-  E_EXTSYMBOL,		/*no such external symbol*/
-  E_SYMBOLCONFLICT,	/*symbol conflict in a package*/
+  E_NOPACKAGE,
+  E_NOMETHOD,
+  E_NOSLOT,
+  E_EXTSYMBOL,
+  E_ILLVARIABLE,
+  E_PKGNAME,
+  E_SYMBOLCONFLICT,
 
-/* the following error is added by APT */
+/* TYPE ERROR */
+  E_TYPE_ERROR,
+  E_SETCONST,
+  E_NOSYMBOL,
+  E_NOLIST,
+  E_NOFUNCTION,
+  E_STREAM,
+  E_NOSTRING,
+  E_NOINT,
+  E_NONUMBER,
+  E_NOCLASS,
+  E_NOOBJECT,
+  E_NOSEQ,
+  E_NOARRAY,
+  E_NOVECTOR,
+  E_FLOATVECTOR,
+  E_NOINTVECTOR,
+  E_BITVECTOR,
+  E_NOBINDFRAME,
+  E_NOFLETFRAME,
+  E_TYPEMISMATCH,
+
+/* VALUE ERROR */
+  E_VALUE_ERROR,
+  E_ROTAXIS,
+  E_CHARRANGE,
+  E_CIRCULAR,
+
+/* INDEX ERROR */
+  E_INDEX_ERROR,
+  E_ARRAYDIMENSION,
+  E_ARRAYINDEX,
+  E_VECSIZE,
+  E_VECINDEX,
+  E_SEQINDEX,
+
+/* IO ERROR */
+  E_IO_ERROR,
+  E_IODIRECTION,
+  E_OPENFILE,
+  E_EOF,
+  E_ILLCH,
+  E_NODELIMITER,
+  E_FORMATSTRING,
+  E_READLABEL,
+
+/* custom error */
     E_USER,
+
+/* error from the lisp REPL */
+    E_REPL,
 
 /*  E_END must locate at the end of the error list */
     E_END
@@ -1021,24 +1043,24 @@ extern "C" {
 extern pointer eval(context *, pointer);
 extern pointer eval2(context *, pointer, pointer);
 extern pointer ufuncall(context *, pointer, pointer, pointer,
-			 struct bindframe *, int);
+                        pointer /*bindframe*/, int);
 extern pointer funlambda(context *, pointer, pointer, pointer, pointer *,
-			 struct bindframe *, int);
+			 pointer /*bindframe*/, int);
 extern pointer funcode(context *, pointer, pointer, int);
 extern pointer progn(context *, pointer);
 extern pointer csend(context *, ...);
 extern pointer getval(context *, pointer);
 extern pointer setval(context *, pointer, pointer);
 extern pointer getfunc(context *, pointer);
-extern struct  bindframe *declare(context *, pointer, struct bindframe *);
-extern struct  bindframe *vbind(context *, pointer, pointer,
-				 struct bindframe *, struct bindframe*);
-extern struct  bindframe *fastbind(context *, pointer, pointer,
-				struct bindframe *);
+extern pointer declare(context *, pointer, pointer /*bindframe*/);
+extern pointer vbind(context *, pointer, pointer,
+                      pointer /*bindframe*/, pointer /*bindframe*/);
+extern pointer fastbind(context *, pointer, pointer,
+                         pointer /*bindframe*/);
 extern void bindspecial(context *, pointer, pointer);
 extern void unbindspecial(context *, struct specialbindframe *);
-extern struct bindframe *bindkeyparams(context *, pointer, pointer *,
-			int, struct bindframe *, struct bindframe *);
+extern pointer bindkeyparams(context *, pointer, pointer *,
+                             int, pointer /*bindframe*/, pointer /*bindframe*/);
 
 extern pointer Getstring();
 extern pointer findpkg();
@@ -1050,7 +1072,7 @@ extern pointer makebuffer(int);
 extern pointer makevector(pointer, int);
 extern pointer makeclass(context *, pointer, pointer, pointer,pointer, pointer,
 			int, pointer);
-extern pointer makecode(pointer, pointer(*)(), pointer);
+extern pointer makecode(context *, pointer, pointer(*)(), pointer, pointer);
 extern pointer makematrix(context *, int, int);
 extern pointer makeobject(pointer);
 extern pointer rawcons(context *, pointer, pointer);
@@ -1100,7 +1122,7 @@ extern pointer reader(context *, pointer, pointer);
 extern pointer prinx(context *, pointer, pointer);
 
 /*for compiled code*/
-extern pointer makeclosure(pointer,pointer,pointer(*)(),pointer, pointer*, pointer*);
+extern pointer makeclosure(pointer,pointer,pointer(*)(),pointer, pointer);
 extern pointer fcall();
 extern pointer xcar(pointer), xcdr(pointer), xcadr(pointer);
 extern pointer *ovafptr(pointer,pointer);
@@ -1124,5 +1146,4 @@ extern sema_t   free_thread_sem;
 }
 #endif
 
-extern eusinteger_t hide_ptr (pointer p);
 

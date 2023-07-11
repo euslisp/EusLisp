@@ -20,7 +20,7 @@
     self)
  (:warning (format &rest mesgs)
 	(apply #'warn format mesgs))
- (:error (&rest mesgs) (send* self :warning mesgs) (reploop "err: "))
+ (:error (&rest mesgs) (apply #'error mesgs))
  (:slots ()
     (let ((vars (metaclass-vars (class self))) (slots nil))
 	(dotimes (i (length vars))

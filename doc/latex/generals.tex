@@ -542,15 +542,15 @@ In order to define special setf methods for particular objects,
 \begin{center}
 {\large
 \begin{tabular}{|l l l|} \hline 
-and & flet & quote \\
-block & function & return-from\\
-catch & go & setq \\
-cond & if & tagbody \\
-declare & labels & the \\
-defmacro & let & throw \\
-defmethod & let* & unwind-protect \\
-defun & progn & while \\
-eval-when & or & \\
+and & flet & progn \\
+block & function & quote\\
+catch & go & return-from\\
+cond & if & setq\\
+declare & labels & tagbody\\
+defmacro & let & the\\
+defmethod & let* & throw\\
+defun & macrolet & unwind-protect\\
+eval-when & or & while\\
 \hline
 \end{tabular} }
 \end{center}
@@ -558,7 +558,7 @@ eval-when & or & \\
 \end{table}
 
 All the special forms are listed in Table \ref{SpecialForms}.
-{\bf macrolet, compiler-let,} and {\bf progv} have not been implemented.
+{\bf symbol-macrolet, compiler-let,} and {\bf progv} have not been implemented.
 Special forms are essential language constructs for the management of
 evaluation contexts and control flows.
 The interpreter and compiler have special knowledge to
@@ -611,7 +611,19 @@ Lambda-list specifies the sequence of parameters to the lambda form.
 Each of {\bf \&optional, \&rest, \&key } and {\bf \&aux} has special
 meaning in lambda-lists, and these symbols cannot be used as variable
 names.
-Supplied-p variables for \&optional or \&key parameters are not supported.
+Supplied-p variables for \&optional or \&key parameters are also supported starting
+from version 10.
+
+\begin{verbatim}
+(defun foo (&optional (a nil a-p))
+  (list a a-p))
+(foo 1)
+--> (1 t)
+(foo nil)
+--> (nil t)
+(foo)
+--> (nil nil)
+\end{verbatim}
 
 Since a lambda form is indistinguishable from normal list data,
 {\bf function} special form must be used to inform the interpreter and
@@ -652,26 +664,32 @@ Here is another example of what is called a funarg problem:
 (vector-sum #(1 2 3 4)) --> 10 
 \end{verbatim}
 
-EusLisp's closure cannot have indefinite extent:
-i.e. a closure can only survive as long as its outer extent is in effect.
-This means that a closure cannot be used for programming of ``generators".
-The following program does not work.
+\subsection{Closures}
+
+Closures are functions which inherit the lexical scope in which they were created.
+In many ways they behave similarly to classes, with local variable and function bindings.
+However, differently from EusLisp classes, all bindings in a closure can only be accessed
+internally (i.e. are ``private'').
 
 \begin{verbatim}
-(proclaim '(special gen))
 (let ((index 0))
    (setq gen #'(lambda () (setq index (1+ index)))))
 (funcall gen)
+--> 1
+(funcall gen)
+--> 2
 \end{verbatim}
 
-However, the same purpose is accomplished by object oriented programming,
-because an object can hold its own static variables:
+A similar example using classes is shown below.
 \begin{verbatim}
-(defclass generator object (index))
+(defclass generator :super object :slots (index))
 (defmethod generator
  (:next () (setq index (1+ index)))
  (:init (&optional (start 0)) (setq index start) self))
 (defvar gen (instance generator :init 0))
 (send gen :next)
+--> 1
+(send gen :next)
+--> 2
 \end{verbatim}
 \newpage

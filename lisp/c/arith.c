@@ -162,7 +162,7 @@ FLTGT1:
     fright=fleft; }
   return(T); 
 RATGT:
-  error(E_USER,(pointer)"sorry, comparison of ratios are not yet implemented");
+  error(E_TYPE_ERROR,(pointer)"comparison of ratios is not implemented");
   }
 
 pointer LESSP(ctx,n,argv)
@@ -226,7 +226,7 @@ FLTLT1:
     fright=fleft; }
   return(T); 
 RATLT:
-  error(E_USER,(pointer)"sorry, comparison of ratios are not yet implemented");
+  error(E_TYPE_ERROR,(pointer)"comparison of ratios is not implemented");
   }
 
 pointer GREQP(ctx,n,argv)	
@@ -290,7 +290,7 @@ FLTGE1:
     fright=fleft; }
   return(T); 
 RATGE:
-  error(E_USER,(pointer)"sorry, comparison of ratios are not yet implemented");
+  error(E_TYPE_ERROR,(pointer)"comparison of ratios is not implemented");
   }
 
 pointer LSEQP(ctx,n,argv)	/*less-or-equalp*/
@@ -354,7 +354,7 @@ FLTLE1:
     fright=fleft; }
   return(T); 
 RATLE:
-  error(E_USER,(pointer)"sorry, comparison of ratios are not yet implemented");
+  error(E_TYPE_ERROR,(pointer)"comparison of ratios is not implemented");
   }
 
 pointer MOD(ctx,n,argv)
@@ -388,7 +388,7 @@ pointer argv[];
     return(makeflt(x-1.0)); }
   else if (isbignum(a)) {
     a=copy_big(a); sub_int_big(1,a); return(normalize_bignum(a));}
-  else error(E_NOINT);
+  else error(E_NONUMBER);
   }
 
 
@@ -408,7 +408,7 @@ pointer argv[];
     return(makeflt(x+1.0)); }
   else if (isbignum(a)) {
     a=copy_big(a); add_int_big(1,a); return(a);}
-  else error(E_NOINT);
+  else error(E_NONUMBER);
   }
 
 /* extended numbers */
@@ -511,11 +511,11 @@ pointer r;
   q=r->c.ratio.denominator;
   if (isint(p)) num=intval(p);
   else if (isbignum(p)) num=big_to_float(p);
-  else error(E_USER,(pointer)"illegal ratio numerator");
+  else error(E_TYPE_ERROR,(pointer)"integer or bignum exptected for ratio numerator");
 
   if (isint(q)) den=intval(q);
   else if (isbignum(q)) den=big_to_float(q);
-  else error(E_USER,(pointer)"illegal ratio denominator");
+  else error(E_TYPE_ERROR,(pointer)"integer or bignum exptected for ratio denominator");
 
   return(num/den);}
 
@@ -683,7 +683,7 @@ BIGMINUS1:
 	b=normalize_bignum(b);
 	if (isint(b)) { vpop(); is=intval(b); goto IMINUS;}
 	}
-     else if (isratio(a)) error(E_USER,(pointer)"BIG-RATIO not supported");
+     else if (isratio(a)) error(E_TYPE_ERROR,(pointer)"BIG-RATIO not supported");
      else error(E_NONUMBER);}
     return(b);}
 
@@ -703,6 +703,8 @@ register pointer argv[];
   for (i=0; i<n; i++) fprintf(stderr, "%x ", argv[i]);
   fprintf(stderr, "\n"); */
   
+  if (n==0) return(makeint(1));
+
   i=1;  
   a=argv[0];
   if (isint(a)) { is=intval(a); goto ITIMES;}
@@ -784,7 +786,7 @@ BIGTIMES1:
       if (isint(b)) { is=intval(b); vpop(); goto ITIMES;}
       }
     else if (pisratio(a)) {
-      error(E_USER,(pointer)"sorry, big * ratio is not yet implemented.");}
+      error(E_TYPE_ERROR,(pointer)"big ratio multiplication is not implemented");}
     else error(E_NONUMBER);
     }
   ctx->lastalloc= vpop();
@@ -816,9 +818,7 @@ pointer argv[];
   else if (pisbignum(a)) { rs=copy_big(a); goto bquo;}
   else error(E_NONUMBER);
 
-  if (n==1) {
-    fs=fltval(a);
-    return(makeflt(1.0/fs));}
+  if (n==1) return(makeflt(1.0/is));
 
   while (i<n) {
     a=argv[i];
@@ -1160,6 +1160,8 @@ pointer LOGAND(context *ctx, int n, pointer argv[])
   eusinteger_t *rbv, *bbv, *pbv;
   pointer b,p,r=argv[0];
 
+  if (n==0) return(makeint(~0));
+
   if (isbignum(r)) {
     r=copy_big(r); rsize=bigsize(r); rbv=bigvec(r);
     p=argv[i++];
@@ -1374,11 +1376,11 @@ pointer argv[];
 #else
   register unsigned int val,target,mask=~0;
 #endif
-  ckarg(4);
+  ckarg2(3,4);
   val=ckintval(argv[0]);
   target=ckintval(argv[1]);
   pos=ckintval(argv[2]);
-  width=ckintval(argv[3]);
+  if (n==4) width=ckintval(argv[3]);
   mask=mask<<(WORD_SIZE-(pos+width));
   mask=mask>>(WORD_SIZE-width); 
   val &= mask;
@@ -1402,7 +1404,7 @@ register pointer argv[];
     if (state==NIL) { goto MAKERANDSTATENIL; }
     else if (state==T) {
       if (time(&tm)==-1){
-        error(E_USER,(pointer)"failed to fetch time"); }
+        error(E_PROGRAM_ERROR,(pointer)"failed to fetch time"); }
       srand((unsigned int)tm);
       randvec->c.ivec.iv[0] = rand();
       randvec->c.ivec.iv[1] = rand();

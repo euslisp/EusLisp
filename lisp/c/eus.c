@@ -52,6 +52,7 @@ extern pointer *gcstack, *gcsp, *gcsplimit;
 /* to protect from being garbage-collected */
 
 pointer sysobj;
+pointer eussigobj;
 
 /* context */
 context *mainctx;
@@ -81,6 +82,8 @@ cixpair fcodecp;
 /*cixpair modulecp; */
 cixpair ldmodulecp;
 cixpair closurecp;
+cixpair bindframecp;
+cixpair fletframecp;
 cixpair labrefcp;
 cixpair threadcp;
 cixpair arraycp;
@@ -95,6 +98,12 @@ cixpair extnumcp;
 cixpair ratiocp;
 cixpair complexcp;
 cixpair bignumcp;
+/* conditions */
+cixpair conditioncp;
+cixpair errorcp;
+/* errors */
+cixpair argumenterrorcp, programerrorcp, nameerrorcp;
+cixpair typeerrorcp, valueerrorcp, indexerrorcp, ioerrorcp;
 
 
 struct built_in_cid  builtinclass[64];
@@ -106,7 +115,7 @@ context *euscontexts[MAXTHREAD];
 
 
 /*symbol management*/
-pointer pkglist,lisppkg,keywordpkg,userpkg,syspkg,unixpkg,xpkg;
+pointer pkglist,lisppkg,keywordpkg,userpkg,compilerpkg,syspkg,unixpkg,xpkg;
 pointer NIL,PACKAGE,T,QUOTE;
 pointer FUNCTION;
 pointer QDECLARE,QSPECIAL;
@@ -118,12 +127,12 @@ pointer SELF;
 pointer CLASS;
 pointer STDIN,STDOUT,ERROUT,QSTDIN,QSTDOUT,QERROUT;
 pointer QINTEGER,QFIXNUM,QFLOAT,QNUMBER;
-pointer TOPLEVEL,QEVALHOOK,ERRHANDLER,FATALERROR;
-pointer QGCHOOK, QEXITHOOK;
-pointer QUNBOUND,QDEBUG;
+pointer TOPLEVEL,QEVALHOOK,QEXITHOOK,ERRHANDLER,FATALERROR;
+pointer SIGNALS;
+pointer QUNBOUND,QDEBUG,QGCHOOK,QGCDEBUG;
 pointer QTHREADS;	/* system:*threads* */
 pointer QPARAGC;
-pointer QVERSION;
+pointer QVERSION,QCOMPILERVERSION;
 pointer QEQ,QEQUAL,QNOT, QAND, QOR;
 
 /* keywords */
@@ -141,11 +150,12 @@ int nextcix;
 /*class cells*/
 pointer C_CONS, C_OBJECT, C_SYMBOL, C_PACKAGE;
 pointer C_STREAM, C_FILESTREAM, C_IOSTREAM, C_CODE, C_FCODE, C_LDMOD;
-pointer C_VECTOR, C_METACLASS, C_CLOSURE, C_LABREF;
+pointer C_VECTOR, C_METACLASS, C_CLOSURE, C_BINDFRAME, C_FLETFRAME, C_LABREF;
 pointer C_THREAD;
 pointer C_VCLASS, C_FLTVECTOR, C_INTVECTOR, C_STRING, C_BITVECTOR;
 pointer C_FOREIGNCODE,C_ARRAY,C_READTABLE;
 pointer C_EXTNUM, C_RATIO, C_BIGNUM, C_COMPLEX;
+pointer C_CONDITION, C_ERROR;
 
 /*class names*/
 pointer QCONS,STRING,STREAM,FILESTREAM,IOSTREAM,SYMBOL,	
@@ -154,6 +164,10 @@ pointer THREAD;
 pointer VECTOR,VECCLASS,FLTVECTOR,INTVECTOR,OBJECT,READTABLE;
 pointer FOREIGNCODE,ARRAY,BITVECTOR;
 pointer EXTNUM, RATIO, COMPLEX, BIGNUM;
+
+/*error classes*/
+pointer C_ARGUMENTERROR, C_PROGRAMERROR, C_NAMEERROR;
+pointer C_TYPEERROR, C_VALUEERROR, C_INDEXERROR, C_IOERROR;
 
 /*toplevel & evaluation control*/
 int intsig,intcode;
@@ -171,7 +185,7 @@ pointer OPTIONAL,REST,KEY,AUX,MACRO,LAMBDA,LAMCLOSURE,COMCLOSURE;
 pointer PRCIRCLE,PROBJECT,PRSTRUCTURE,PRCASE,PRLENGTH,PRLEVEL;
 pointer RANDSTATE,FEATURES,READBASE,PRINTBASE,QREADTABLE,QTERMIO;
 pointer GCMERGE,GCMARGIN, QLDENT;
-pointer K_PRIN1;
+pointer K_PRIN1, K_ISATTY, K_NAME;
 pointer K_FUNCTION_DOCUMENTATION, K_VARIABLE_DOCUMENTATION,
 	K_CLASS_DOCUMENTATION, K_METHOD_DOCUMENTATION, K_CLASS;
 pointer QLOADED_MODULES;
@@ -189,6 +203,7 @@ jmp_buf topjbuf;
 */
 
 char *errmsg[100]={
+/* FATAL ERROR */
 	"",				/*0*/
 	"stack overflow",		/*1 errcode=1..10 are fatal errors*/
 	"allocation",			/*2*/
@@ -199,77 +214,82 @@ char *errmsg[100]={
 	"",				/*7*/
 	"",				/*8*/
 	"",				/*9*/
+/* ARGUMENT ERROR */
 	"",				/*10	end of fatal error*/
-	"attempt to set to constant",	/*11 E_SETCONST */
-	"unbound variable",		/*12 E_UNBOUND  */
-	"undefined function",		/*13 E_UNDEF    */
-	"mismatch argument",		/*14 E_MISMATCHARG */
-	"illegal function",		/*15 E_ILLFUNC */
-	"illegal character",		/*16 E_ILLCH */
-	"illegal delimiter",		/*17 E_READ */
-	"write?",			/*18 E_WRITE*/
-	"too long string",		/*19 E_LONGSTRING */
-	"symbol expected",
-	"list expected",
-	"illegal lambda form",
-        "illegal lambda parameter syntax",
-	"no catcher found",
-	"no such block",
-	"stream expected",
-	"illegal stream direction keyword",
-	"integer expected",
-	"string expected",
-	"error in open file",
-	"EOF hit",
-	"number expected",
-	"class table overflow",
-	"class expected",
-	"vector expected",
-	"array size must be positive",
-	"duplicated object variable name",
-	"cannot make instance",
-	"array index out of range",		/*  E_ARRAYINDEX */
-	"cannot find method",
-	"circular list",
-	"unknown sharp macro",
-	"list expected for an element of an alist",
-	"macro expected",
-	"no such package",
-	"package name",
-	"invalid lisp object form",
-	"no such object variable",
-	"sequence expected",
-	"illegal start/end index",
-	"no super class",
-	"invalid format string",
-	"float vector expected",
-	"char code out of range",
-	"vector dimension mismatch",
-	"object expected",
-	"type mismatch",
-	"declaration is not allowed here",
-	"illegal declaration form",
-	"cannot be used for a variable",
-	"illegal rotation axis",
-	"multiple variable declaration",
-	"illegal #n= or #n= label",
-	"illegal #f( expression",
-	"illegal #v or #j expression", 
-	"invalid socket address",
-	"array expected",
-	"array dimension mismatch",
+	"",
+	"mismatch argument",
+	"illegal parameter syntax",
 	"keyword expected for arguments",
 	"no such keyword",
-	"integer vector expected",
-	"sequence index out of range",
-	"not a bit vector",
-	"no such external symbol",
-	"symbol conflict",
+	"multiple variable declaration",
+/* PROGRAM ERROR */
 	"",
+	"string is too long",
+	"class table overflow",
+	"declaration is not allowed here",
+	"no catcher found",
+	"no such block",
+/* NAME ERROR */
+	"",
+	"unbound variable",
+	"undefined function",
+	"no such package",
+	"cannot find method",
+	"cannot find slot",
+	"no such external symbol",
+	"cannot be used for a variable",
+	"package already exists",
+	"symbol conflict",
+/* TYPE ERROR */
+	"",
+	"attempt to set to constant",
+	"symbol expected",
+	"list expected",
+	"function expected",
+	"stream expected",
+	"string expected",
+	"integer expected",
+	"number expected",
+	"class expected",
+	"object expected",
+	"sequence expected",
+	"array expected",
+	"vector expected",
+	"float vector expected",
+	"integer vector expected",
+	"bit vector expected",
+	"bind-frame expected",
+	"flet-frame expected",
+	"type mismatch",
+
+/* VALUE ERROR */
+	"",
+	"illegal rotation axis",
+	"char code out of range",
+	"searching a circular list",
+/* INDEX ERROR */
+	"",
+	"array dimension mismatch",
+	"array index out of range",
+	"vector dimension mismatch",
+	"vector index out of range",
+        "sequence index out of range",
+/* IO ERROR */
+	"",
+	"illegal stream direction",
+	"error in open file",
+	"EOF hit",
+	"illegal character",
+	"delimiter expected",
+	"invalid format string",
+	"illegal #n= or #n# label",
+/* USER ERROR */
+	"",
+/* REPL ERROR */
+        "",
+/* END ERROR */
 	"E_END",
 	};
-
-static pointer brkloop();
 
 void unwind(ctx,p)
 register context *ctx;
@@ -283,14 +303,17 @@ register pointer *p;
     ufuncall(ctx,cleanup,cleanup,NULL,NULL,0);}
 	/*an error may occur if catch, throw or return-from or access to
 	  special variables are taken in clean up forms*/
-	/*unwind specially bound variables*/
+  // unwind context before euslongjmp
+  // bind-frames are unwinded by the binder itself (e.g. PARLET) or at the eussetjmp catcher
+  // flet-frames are unwinded at the end of ufuncall evaluation or at the eussetjmp catcher
+  /*unwind specially bound variables*/
   unbindspecial(ctx,(struct specialbindframe *)p);
   /*unwind block frames*/
   while (ctx->blkfp>(struct blockframe *)p) ctx->blkfp=ctx->blkfp->dynklink;
   /*unwind catch frames*/
   while (ctx->catchfp>(struct catchframe *)p) ctx->catchfp=ctx->catchfp->nextcatch;
-  /*unwind flet frames*/
-  while (ctx->fletfp>(struct fletframe *)p) ctx->fletfp=ctx->fletfp->dynlink;
+  /*unwind call frames*/
+  while (ctx->callfp>(struct callframe *)p) ctx->callfp=ctx->callfp->vlink;
   }
 
 #ifdef USE_STDARG
@@ -303,11 +326,10 @@ va_dcl
   va_list args;
   pointer errhandler;
   register char *errstr;
-  register int argc;
   register context *ctx;
   register struct callframe *vf;
-  pointer msg;
-  int i, n;
+  pointer msg,form,callstack;
+  pointer errobj;
 
 #ifdef USE_STDARG
   va_start(args,ec);
@@ -320,18 +342,8 @@ va_dcl
 
   ctx=euscontexts[thr_self()];
 
-  /* print call stack */
-  n=intval(Spevalof(MAXCALLSTACKDEPTH));
-  if (n > 0) {
-    fprintf( stderr, "Call Stack (max depth: %d):\n", n );
-    vf=(struct callframe *)(ctx->callfp);
-    for (i = 0; vf->vlink != NULL && i < n; ++i, vf = vf->vlink) {
-      fprintf( stderr, "  %d: at ", i );
-      prinx(ctx, vf->form, ERROUT);
-      flushstream(ERROUT);
-      fprintf( stderr, "\n" ); }
-    if (vf->vlink != NULL) {
-      fprintf (stderr, "  And more...\n"); }}
+  // variable arguments are not guarded from gc!!
+  // push them as required
 
   /* error(errstr) must be error(E_USER,errstr) */
   if ((int)ec < E_END) errstr=errmsg[(int)ec];
@@ -348,58 +360,113 @@ va_dcl
 	fprintf(stderr, "exiting\n"); exit(ec);}
     else throw(ctx,makeint(0),NIL);}
 
-  /* get extra message */
+  /* get message */
+  pointer dest;
+  char *msgstr;
     switch((unsigned int)ec) {
       case E_UNBOUND: case E_UNDEF: case E_NOCLASS: case E_PKGNAME:
-      case E_NOOBJ: case E_NOOBJVAR: case E_NOPACKAGE: case E_NOMETHOD:
+      case E_NOSLOT: case E_NOPACKAGE: case E_NOMETHOD:
       case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
-      case E_NOVARIABLE: case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
-      case E_USER:
-	msg = va_arg(args,pointer);	break;
-    }
+      case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
+        vpush(va_arg(args,pointer));
+        dest=(pointer)mkstream(ctx,K_OUT,makebuffer(64));
+        prinx(ctx,vpop(),dest);
+        msgstr=(char*)malloc(2+ strlen(errstr) + intval(dest->c.stream.count));
+        strcpy(msgstr,errstr);
+        strcat(msgstr,(char*)" ");
+        strcat(msgstr,makestring((char *)dest->c.stream.buffer->c.str.chars,
+                                 intval(dest->c.stream.count))->c.str.chars);
+        msg=makestring(msgstr,strlen(msgstr));
+        free(msgstr);
+	break;
+    case E_REPL:
+      errobj = (pointer)va_arg(args,pointer);
+      msg = (pointer)va_arg(args,pointer);
+      vpush(errobj);
+      break;
+    case E_ARGUMENT_ERROR: case E_PROGRAM_ERROR: case E_NAME_ERROR: case E_TYPE_ERROR:
+    case E_VALUE_ERROR: case E_INDEX_ERROR: case E_IO_ERROR: case E_USER:
+      errstr = (char*)va_arg(args,pointer);
+    default:
+      msg=makestring(errstr,strlen(errstr));}
 
-  /* call user's error handler function */
-  errhandler=ctx->errhandler;
-  if (errhandler==NIL || errhandler==NULL)  errhandler=Spevalof(ERRHANDLER);
-  Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
-  if (errhandler!=NIL) {
+  vpush(msg);
+  va_end(args);
+
+  /* try calling legacy handler when set */
+  if (Spevalof(ERRHANDLER)!=NIL) {
+    int argc;
+    errhandler=Spevalof(ERRHANDLER);
+    Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
     vpush(makeint((unsigned int)ec));
-    vpush(makestring(errstr,strlen(errstr)));
+    vpush(msg);
     if (ctx->callfp) vpush(ctx->callfp->form); else vpush(NIL);
     switch((unsigned int)ec) {
       case E_UNBOUND: case E_UNDEF: case E_NOCLASS: case E_PKGNAME:
-      case E_NOOBJ: case E_NOOBJVAR: case E_NOPACKAGE: case E_NOMETHOD:
+      case E_NOSLOT: case E_NOPACKAGE: case E_NOMETHOD:
       case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
-      case E_NOVARIABLE: case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
-	vpush(msg); argc=4; break;
-      case E_USER:
-	vpush(makestring((char*)msg,strlen((char*)msg))); argc=4; break;
+      case E_EXTSYMBOL: case E_SYMBOLCONFLICT: case E_USER:
+	vpush(NIL); argc=4; break;
     default: argc=3; break;}
     ufuncall(ctx,errhandler,errhandler,(pointer)(ctx->vsp-argc),ctx->bindfp,argc);
     ctx->vsp-=argc;
-    }
+    return NIL;}
 
-  /*default error handler*/
-  flushstream(ERROUT);
-  fprintf(stderr,"%s: ERROR th=%d %s ",progname,thr_self(),errstr);
-  switch((int)ec) {
-      case E_UNBOUND: case E_UNDEF: case E_NOCLASS: case E_PKGNAME:
-      case E_NOOBJ: case E_NOOBJVAR: case E_NOPACKAGE: case E_NOMETHOD:
-      case E_NOKEYPARAM: case E_READLABEL: case E_ILLCH: case E_NOCATCHER:
-      case E_NOVARIABLE: case E_EXTSYMBOL: case E_SYMBOLCONFLICT:
-	prinx(ctx,msg,ERROUT); flushstream(ERROUT); break;
-    }
-  if( ec == E_USER ) {
-    fprintf( stderr,"%s",(char*)msg ); flushstream(ERROUT); }
-  else if (ispointer(msg)) {prinx(ctx,msg,ERROUT); flushstream(ERROUT); }
-  if (ctx->callfp) {
-    fprintf(stderr," in ");
-    prinx(ctx,ctx->callfp->form,ERROUT);
-    flushstream(ERROUT);}
-  /*enter break loop*/
-  brkloop(ctx,"E: ");
-  throw(ctx,makeint(0),T);	/*throw to toplevel*/
+  /* call user's error handler function */
+  errhandler=getfunc_closure_noexcept(ctx, SIGNALS);
+
+  /* get call stack */
+  callstack=list_callstack(ctx,-1);
+
+  /* get form */
+  if (ctx->callfp) form=ctx->callfp->form; else form=NIL;
+
+  switch((unsigned int)ec) {
+    // ARGUMENT ERROR
+      case E_ARGUMENT_ERROR: case E_MISMATCHARG: case E_PARAMETER:
+      case E_KEYPARAM: case E_NOKEYPARAM: case E_MULTIDECL: 
+        errobj=makeobject(C_ARGUMENTERROR);  break;
+    // PROGRAM ERROR
+      case E_PROGRAM_ERROR: case E_LONGSTRING: case E_CLASSOVER:
+      case E_DECLARE: case E_NOCATCHER: case E_NOBLOCK: 
+        errobj=makeobject(C_PROGRAMERROR);  break;
+    // NAME ERROR
+      case E_NAME_ERROR: case E_UNBOUND: case E_UNDEF: case E_NOPACKAGE:
+      case E_NOMETHOD: case E_NOSLOT: case E_EXTSYMBOL: case E_ILLVARIABLE:
+      case E_PKGNAME: case E_SYMBOLCONFLICT: 
+        errobj=makeobject(C_NAMEERROR);  break;
+    // TYPE ERROR
+      case E_TYPE_ERROR: case E_SETCONST: case E_NOSYMBOL: case E_NOLIST:
+      case E_NOFUNCTION: case E_STREAM: case E_NOSTRING: case E_NOINT:
+      case E_NONUMBER: case E_NOCLASS: case E_NOOBJECT: case E_NOSEQ:
+      case E_NOARRAY: case E_NOVECTOR: case E_FLOATVECTOR: case E_NOINTVECTOR:
+      case E_BITVECTOR: case E_NOBINDFRAME: case E_NOFLETFRAME: case E_TYPEMISMATCH:
+        errobj=makeobject(C_TYPEERROR);  break;
+    // VALUE ERROR
+      case E_VALUE_ERROR: case E_ROTAXIS: case E_CHARRANGE: case E_CIRCULAR:
+        errobj=makeobject(C_VALUEERROR);  break;
+    // INDEX ERROR
+      case E_INDEX_ERROR: case E_ARRAYDIMENSION: case E_ARRAYINDEX:
+      case E_VECSIZE: case E_VECINDEX: case E_SEQINDEX:
+        errobj=makeobject(C_INDEXERROR);  break;
+    // IO ERROR
+      case E_IO_ERROR: case E_IODIRECTION: case E_OPENFILE: case E_EOF:
+      case E_ILLCH: case E_NODELIMITER: case E_FORMATSTRING: case E_READLABEL: 
+        errobj=makeobject(C_IOERROR);  break;
+    // USER ERROR
+      case E_USER:
+        errobj=makeobject(C_ERROR);  break;
   }
+
+  pointer_update(errobj->c.obj.iv[0],msg);
+  pointer_update(errobj->c.obj.iv[1],callstack);
+  pointer_update(errobj->c.obj.iv[2],form);
+
+  Spevalof(QEVALHOOK)=NIL;	/* reset eval hook */
+  if (errhandler!=NIL && errhandler!=UNBOUND) {
+    vpush(errobj);
+    ufuncall(ctx,errhandler,errhandler,(pointer)(ctx->vsp-1),ctx->bindfp,1);}
+}
 
 #ifdef USE_STDARG
 pointer basicclass(char *name, ...)
@@ -416,6 +483,10 @@ va_dcl
   int n,i,svcount;
   context *ctx=mainctx;
 
+  // C_VECTOR is only guarded from gc after it is
+  // assigned to speval(VECTOR) in initclasses()
+  vpush(C_VECTOR);
+
 #ifdef USE_STDARG
   va_start(ap, name);
 #else
@@ -426,6 +497,7 @@ va_dcl
 #endif
   super=va_arg(ap,pointer);
   cixp=va_arg(ap,cixpair *); n=va_arg(ap,int);
+  vpush(super);
   
   /*class name symbols are defined in lisp package*/
   classsym=intern(ctx,(char *)name,strlen(name),lisppkg);
@@ -455,7 +527,7 @@ va_dcl
   nextbclass++;
   cixp->cix=intval(class->c.cls.cix);
   cixp->sub=classtab[cixp->cix].subcix;
-  ctx->vsp-=3;
+  ctx->vsp-=5;
   va_end(ap);
   return(classsym);}
 
@@ -564,6 +636,7 @@ static void initpackage()
   NIL->c.sym.speval=NIL;
   NIL->c.sym.plist=NIL;
   sysobj=NIL;
+  eussigobj=NIL;
   pkglist->c.cons.cdr=NIL;
   lisppkg->c.pkg.use=NIL;
   lisppkg->c.pkg.names->c.cons.cdr=NIL;
@@ -575,6 +648,7 @@ static void initpackage()
   /*default packages*/
   keywordpkg=makepkg(ctx,makestring("KEYWORD",7),NIL,NIL);
   userpkg=   makepkg(ctx,makestring("USER",4),NIL,rawcons(ctx,lisppkg,NIL));
+  compilerpkg= makepkg(ctx,makestring("COMPILER",8),NIL,rawcons(ctx,lisppkg,NIL));
   syspkg=    makepkg(ctx,makestring("SYSTEM",6),NIL,rawcons(ctx,lisppkg,NIL));
   unixpkg=   makepkg(ctx,makestring("UNIX",4),NIL,rawcons(ctx,lisppkg,NIL));
   xpkg=      makepkg(ctx,makestring("X",1),NIL,rawcons(ctx,lisppkg,NIL));
@@ -638,6 +712,8 @@ static void initsymbols()
   K_FOREIGN_STRING=defkeyword(ctx,"FOREIGN-STRING");
   K_ALLOWOTHERKEYS=defkeyword(ctx,"ALLOW-OTHER-KEYS");
   K_PRIN1=defkeyword(ctx,"PRIN1");
+  K_ISATTY=defkeyword(ctx,"ISATTY");
+  K_NAME=defkeyword(ctx,"NAME");
   K_CLASS=defkeyword(ctx,"CLASS");
   K_FUNCTION_DOCUMENTATION=defkeyword(ctx,"FUNCTION-DOCUMENTATION");
   K_CLASS_DOCUMENTATION=defkeyword(ctx,"CLASS-DOCUMENTATION");
@@ -679,9 +755,11 @@ static void initsymbols()
   QLDENT=defvar(ctx,"*LOAD-ENTRIES*", NIL, syspkg);
   QTHREADS=defvar(ctx, "*THREADS*", NIL, syspkg);
   QPARAGC=defvar(ctx, "*PARALLEL-GC*", NIL, syspkg);
+  QGCDEBUG=defvar(ctx,"*GC-DEBUG*",NIL,syspkg);
   QGCHOOK=defvar(ctx,"*GC-HOOK*",NIL,syspkg);
   QEXITHOOK=defvar(ctx,"*EXIT-HOOK*",NIL,syspkg);
   FATALERROR=defvar(ctx,"*EXIT-ON-FATAL-ERROR*",NIL,lisppkg);
+  SIGNALS=intern(ctx,"SIGNALS",7,lisppkg);
 
   /*init character macro table*/
   for (i=0; i<256; i++) charmacro[i]=sharpmacro[i]=NIL;
@@ -743,43 +821,31 @@ static void initclasses()
   C_ARRAY=speval(ARRAY);
 /*12 */
   THREAD=basicclass("THREAD", C_PROPOBJ, &threadcp,
-			10, "ID", "REQUESTER", "REQUEST-SEM", "DONE-SEM",
+			11, "ID", "REQUESTER", "REQUEST-SEM", "RUN-SEM", "DONE-SEM",
 			   "FUNC", "ARGS", "RESULT", "CONTEXT",
 			   "IDLE", "WAIT");
   C_THREAD=speval(THREAD);
 /*13*/
-  CODE=basicclass("COMPILED-CODE",C_OBJECT,&codecp,4,"CODEVECTOR","QUOTEVECTOR",
+#if ARM // ARM uses entry2
+  CODE=basicclass("COMPILED-CODE",C_PROPOBJ,&codecp,5,"CODEVECTOR","QUOTEVECTOR",
+		  "TYPE","ENTRY","ENTRY2");
+#else
+  CODE=basicclass("COMPILED-CODE",C_PROPOBJ,&codecp,4,"CODEVECTOR","QUOTEVECTOR",
 		  "TYPE","ENTRY");
+#endif
   C_CODE=speval(CODE);
 /*14*/
-  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,3,"ENTRY2","PARAMTYPES","RESULTTYPE"); /* kanehiro's patch 2000.12.13 */
+#if ARM // foreign code always has entry2 (kanehiro's patch 2000.12.13)
+  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,2,"PARAMTYPES","RESULTTYPE");
+#else
+  FCODE=basicclass("FOREIGN-CODE",C_CODE,&fcodecp,3,"ENTRY2","PARAMTYPES","RESULTTYPE");
+#endif
   C_FCODE=speval(FCODE);
 /*15*/
-#if (WORD_SIZE == 64)
-  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
-#if ARM // ARM uses entry2 in struct closure in eus.h
-		     4,"ENTRY2",
-#else
-		     3,
-#endif
-		     "ENV0","ENV1","ENV2");
-#else
-  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,
-#if ARM // ARM uses entry2 in struct closure in eus.h
-		     3,"ENTRY2",
-#else
-		     2,
-#endif
-		     "ENV1","ENV2");
-#endif
+  CLOSURE=basicclass("CLOSURE",C_CODE,&closurecp,2,"ENV0","ENV1");
   C_CLOSURE=speval(CLOSURE);
 /* 16    ---new for Solaris */
-  LDMODULE=basicclass("LOAD-MODULE",C_CODE, &ldmodulecp,
-#if ARM // ARM uses entry2 in struct ldmodule in eus.h
-		      4,"ENTRY2",
-#else
-		      3,
-#endif
+  LDMODULE=basicclass("LOAD-MODULE",C_CODE, &ldmodulecp,3,
 		      "SYMBOL-TABLE","OBJECT-FILE", "HANDLE");
   C_LDMOD=speval(LDMODULE);
 /*17*/
@@ -807,6 +873,7 @@ static void initclasses()
   builtinclass[nextbclass].cls=C_STRING;
   builtinclass[nextbclass++].cp= &stringcp;
 
+/* derived classes */
   BITVECTOR=defvector(ctx,"BIT-VECTOR",C_VECTOR,ELM_BIT, 0); /* alpha */
   C_BITVECTOR=speval(BITVECTOR);
   builtinclass[nextbclass].cls=C_BITVECTOR;
@@ -822,10 +889,30 @@ static void initclasses()
   BIGNUM=basicclass("BIGNUM", C_EXTNUM, &bignumcp, 2, "SIZE", "BV");
   C_BIGNUM=speval(BIGNUM);
 
+/* bind frames */
+  C_BINDFRAME=speval(basicclass("BIND-FRAME",C_OBJECT,&bindframecp,3,
+                                "SYMBOL","VALUE","NEXT"));
+  C_FLETFRAME=speval(basicclass("FLET-FRAME",C_OBJECT,&fletframecp,3,
+                                "NAME","FCLOSURE","NEXT"));
+
+/* conditions */
+  C_CONDITION=speval(basicclass("CONDITION",C_OBJECT,&conditioncp,1,"MESSAGE"));
+  C_ERROR=speval(basicclass("ERROR",C_CONDITION,&errorcp,2,"CALLSTACK","FORM"));
+  C_ARGUMENTERROR=speval(basicclass("ARGUMENT-ERROR",C_ERROR,&argumenterrorcp,0));
+  C_PROGRAMERROR=speval(basicclass("PROGRAM-ERROR",C_ERROR,&programerrorcp,0));
+  C_NAMEERROR=speval(basicclass("NAME-ERROR",C_ERROR,&nameerrorcp,0));
+  C_TYPEERROR=speval(basicclass("TYPE-ERROR",C_ERROR,&typeerrorcp,0));
+  C_VALUEERROR=speval(basicclass("VALUE-ERROR",C_ERROR,&valueerrorcp,0));
+  C_INDEXERROR=speval(basicclass("INDEX-ERROR",C_ERROR,&indexerrorcp,0));
+  C_IOERROR=speval(basicclass("IO-ERROR",C_ERROR,&ioerrorcp,0));
+
+  /*populate sysobj*/
   for (i=0;i<MAXTHREAD;i++) {
-    oblabels[i]=(pointer)makelabref(makeint(-1),UNBOUND,NIL);
+    oblabels[i]=(pointer)makelabref(ctx,makeint(-1),UNBOUND,NIL);
     sysobj=cons(ctx,oblabels[i],sysobj);
   }
+  /*populate eussigobj*/
+  for (i=0; i<NSIG; i++) eussigobj=cons(ctx,eussigvec[i],eussigobj);
 }
 
 static void initfeatures()
@@ -846,8 +933,10 @@ static void initfeatures()
   p=stacknlist(ctx,4);
   QVERSION=defvar(ctx, "LISP-IMPLEMENTATION-VERSION", p,lisppkg);
 
-  /*make features*/
+  p=makestring(COMPILERVERSION,strlen(COMPILERVERSION));
+  QCOMPILERVERSION=defvar(ctx, "COMPILER-IMPLEMENTATION-VERSION", p, compilerpkg);
 
+  /*make features*/
   p=NIL;
 #if vax
   p=cons(ctx,intern(ctx,"VAX",3,keywordpkg),p);
@@ -1039,24 +1128,6 @@ eusinteger_t addr;
   if (debug) { fprintf(stderr, ";; eusint exit: intsig=%d\n",ctx->intsig);}
 }
 
-static pointer brkloop(ctx, prompt)
-context *ctx;
-char *prompt;
-{ jmp_buf brkjmp;
-  pointer val;
-  int i;
-  mkcatchframe(ctx,T,&brkjmp);
-  Spevalof(QSTDOUT)=STDOUT;
-  Spevalof(QSTDIN)=STDIN;
-  Spevalof(QERROUT)=ERROUT;
-  if ((val=(pointer)eussetjmp(brkjmp))==0) val=reploop(ctx,prompt);
-  else if ((eusinteger_t)val==1) val=makeint(0);	/*longjmp cannot return 0*/
-  ctx->callfp=ctx->catchfp->cf;
-  ctx->bindfp=ctx->catchfp->bf;
-  ctx->vsp=(pointer *)ctx->catchfp;
-  ctx->catchfp=(struct catchframe *)*(ctx->vsp);
-  return(val);}
-
 void sigbreak()
 { pointer sighandler,*vspsave;
   context *ctx=euscontexts[thr_self()];
@@ -1075,7 +1146,6 @@ void sigbreak()
     ctx->vsp=vspsave;  }
   else {
     fprintf(stderr,"signal=%d to thread %d, \n",is, thr_self());
-    /*    brkloop(ctx,"B: "); */
     return; }}
   
 
@@ -1403,5 +1473,3 @@ eusinteger_t intval(pointer p) {
   else return (((eusinteger_t)i)>>2);
 }
 #endif
-
-eusinteger_t hide_ptr (pointer p) { return (eusinteger_t)p; }

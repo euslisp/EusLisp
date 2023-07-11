@@ -312,7 +312,6 @@
 (defun reploop (prompt)		;read-eval-print loop
   (let* ((result)
 	 (ttyp (unix:isatty *terminal-io*))
-	 (*error-handler* 'euserror)
 	 (eof (gensym))
 	 (command) (input)
 	 (arg) (arglist) (local-bindings) (special-bindings))

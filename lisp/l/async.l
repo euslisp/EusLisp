@@ -58,7 +58,7 @@
 
   (:lock-slots ()
     (if (not (eql (unix:thr-self) main-thread))
-      (error "not the main thread"))
+      (error program-error "not the main thread"))
     (sys:mutex-lock lock-of-slots)
     (when (sys:mutex-trylock entrance-lock)
       (dolist (thr sub-threads)
@@ -67,7 +67,7 @@
 
   (:unlock-slots ()
     (if (not (eql (unix:thr-self) main-thread))
-      (error "not the main thread"))
+      (error program-error "not the main thread"))
     (sys:mutex-lock lock-of-slots)
     (dolist (thr sub-threads)
       (unix:thr-continue thr))
@@ -77,7 +77,7 @@
 (defmacro def-async-method (class-name &rest methods)
   (let ((class (symbol-value class-name)))
     (if (not (subclassp class asynchronous-object))
-      (error "not a class of asynchronous object"))
+      (error type-error "not a class of asynchronous object"))
     (dolist (method methods)
       (send-msg class :add-async-method (car method)))
     `(defmethod ,class-name

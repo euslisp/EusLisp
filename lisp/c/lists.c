@@ -110,7 +110,7 @@ register pointer *argv;
   register pointer a=argv[1];
   ckarg(2);
   i=ckintval(argv[0]);
-  if (i<0) error(E_NOINT);
+  if (i<0) error(E_SEQINDEX);
   while (i-->0 && islist(a)) a=ccdr(a);
   if (islist(a)) return(ccar(a));
   else if (a==NIL) return(NIL);
@@ -125,7 +125,7 @@ register pointer *argv;
   ckarg(2);
   i=ckintval(argv[0]);
   a=argv[1];
-  if (i<0) error(E_NOINT);
+  if (i<0) error(E_SEQINDEX);
   if (a==NIL) return(NIL);
   else if (!islist(a)) error(E_NOLIST);
   while (i-->0 && islist(a)) a=ccdr(a);
@@ -282,19 +282,6 @@ pointer MEMBER(ctx,n,argv)
 register context *ctx;
 int n;
 register pointer argv[];
-{ pointer item=argv[0],list=argv[1],result;
-  ckarg(2);
-  while (islist(list)) {
-    result=equal(ccar(list),item);
-    if (result==T) return(list);
-    else if (result==UNBOUND) error(E_CIRCULAR);
-    else list=ccdr(list);}
-  return(NIL);}
-
-pointer SUPERMEMBER(ctx,n,argv)
-register context *ctx;
-int n;
-register pointer argv[];
 { register pointer item=argv[0],list=argv[1];
   pointer key=argv[2],test=argv[3],testnot=argv[4];
   register pointer target;
@@ -322,7 +309,7 @@ register pointer item,alist;
     if (iscons(temp)) {
       if (ccar(temp)==item) return(temp);
       else alist=ccdr(alist);}
-    else error(E_ALIST);}
+    else error(E_NOLIST);}
   return(NIL);}
 
 pointer ASSQ(ctx,n,argv)
@@ -336,33 +323,22 @@ pointer ASSOC(ctx,n,argv)
 register context *ctx;
 int n;
 register pointer argv[];
-{ register pointer item=argv[0],alist=argv[1],temp,compare;
-  ckarg(2);
-  while (islist(alist)) {
-    temp=ccar(alist);
-    if (islist(temp)) {
-      compare=equal(item,ccar(temp));
-      if (compare==T) return(temp);
-      else if (compare==UNBOUND) error(E_CIRCULAR);
-      else alist=ccdr(alist);}
-    else error(E_ALIST);}
-  return(NIL);}
-
-pointer SUPERASSOC(ctx,n,argv)
-register context *ctx;
-int n;
-register pointer argv[];
 { register pointer item=argv[0],alist=argv[1];
   pointer key=argv[2],test=argv[3],testnot=argv[4];
+  pointer rassoc=argv[5], iftest=argv[6], ifnottest=argv[7];
   register pointer temp,target;
   register eusinteger_t compare;
-  ckarg(5);
+  ckarg(8);
   while (islist(alist)) {
     target=ccar(alist);
     if (islist(target)) {	/*ignore non-pair elements*/
+      if (rassoc==NIL) temp=ccar(target);
+      else temp=ccdr(target);
       if (key==NIL) temp=ccar(target);
       else temp=call1(ctx,key,target);
-      if (testnot!=NIL) compare=(call2(ctx,testnot,item,temp)==NIL);
+      if (ifnottest!=NIL) compare=(call1(ctx,ifnottest,temp)==NIL);
+      else if (iftest!=NIL) compare=(call1(ctx,iftest,temp)!=NIL);
+      else if (testnot!=NIL) compare=(call2(ctx,testnot,item,temp)==NIL);
       else if (test==NIL || test==QEQ) compare=(item==temp);
       else if (test==QEQUAL) compare=(equal(item,temp)==T);
       else compare=(call2(ctx,test,item,temp)!=NIL);
@@ -381,7 +357,7 @@ pointer argv[];
   if (!iscons(a)) {
     if (a==NIL) return(NIL);
     else error(E_NOLIST); }
-  if (n<0) error(E_USER,(pointer)"The second argument must be non-negative number");
+  if (n<0) error(E_VALUE_ERROR,(pointer)"second argument must be non-negative number");
   while (iscons(a)) { ckpush(ccar(a)); a=ccdr(a); count++;}
   n=min(count,n);
   ctx->vsp -= n;
@@ -391,15 +367,19 @@ pointer NBUTLAST(ctx,n,argv)
 register context *ctx;
 register int n;
 pointer argv[];
-{ register pointer a=argv[0], b;
-  register int count=0;
+{ ckarg2(1,2);
+  register pointer a=argv[0], b;
+  register int count=0, l=0;
   register pointer *vspsave=ctx->vsp;
   if (n==2) n=ckintval(argv[1]);
   else n=1;
   if (!iscons(a)) {
     if (a==NIL) return(NIL);
     else error(E_NOLIST); }
-  if (n<0) error(E_USER,(pointer)"The second argument must be non-negative number");
+  if (n<0) error(E_SEQINDEX);
+  while (islist(a)) { l++; a=ccdr(a);}
+  a=argv[0];
+  if (n>=l) return(NIL);
   while (iscons(a)) { ckpush(a); a=ccdr(a); count++;}
   n=min(count,n);
   b= *(ctx->vsp - n - 1);
@@ -436,10 +416,8 @@ register pointer mod;
   defun(ctx,"LIST",mod,LIST,NULL);
   defun(ctx,"LIST*",mod,LIST_STAR,NULL);
   defun(ctx,"MEMQ",mod,MEMQ,NULL);
-  defun(ctx,"MEMBER",mod,MEMBER,NULL);
-  defun(ctx,"SUPERMEMBER",mod,SUPERMEMBER,NULL);
   defun(ctx,"ASSQ",mod,ASSQ,NULL);
-  defun(ctx,"ASSOC",mod,ASSOC,NULL);
-  defun(ctx,"SUPERASSOC",mod,SUPERASSOC,NULL);
+  defunpkg(ctx,"RAW-MEMBER",mod,MEMBER,syspkg);
+  defunpkg(ctx,"RAW-ASSOC",mod,ASSOC,syspkg);
   }
 

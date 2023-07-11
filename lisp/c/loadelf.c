@@ -88,7 +88,9 @@ char *name;
 pointer (*entry)();
 { 
   /* printf("%s %x is added in the module_initializer list\n", name, entry); */
-  if (module_count>=MAX_SYSTEM_MODULES)  error(E_USER,(pointer)"too many system modules");
+  if (module_count>=MAX_SYSTEM_MODULES) {
+      error(E_PROGRAM_ERROR,(pointer)"too many system modules");
+  }
   module_initializers[module_count].module_name= name;
   module_initializers[module_count].entry_func=  entry;
   module_count++;}
@@ -206,7 +208,7 @@ pointer *argv;
   char namebuf[256];
 
   ckarg(2);
-  if (!isldmod(argv[0])) error(E_USER,(pointer)"not a LOAD-MODULE");
+  if (!isldmod(argv[0])) error(E_TYPE_ERROR,(pointer)"not a LOAD-MODULE");
   if (!iscons(argv[1])) error(E_NOLIST);
 #if (WORD_SIZE == 64)
   dlhandle=(void *)((eusinteger_t)(argv[0]->c.ldmod.handle) & ~3L);
@@ -215,7 +217,7 @@ pointer *argv;
 #endif
   initnames=argv[1];
   module_count=0;
-  if (dlhandle==NULL) error(E_USER,(pointer)"This module was not loaded");
+  if (dlhandle==NULL) error(E_PROGRAM_ERROR,(pointer)"This module was not loaded");
 
   while (iscons(initnames)) {
     initfunc= dlsym(dlhandle, (char *)ccar(initnames)->c.str.chars);
@@ -311,7 +313,7 @@ pointer argv[];
   ckarg2(1,2);
   if (n==2) mod=argv[1];
   else mod=sysmod;
-  if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
+  if (!isldmod(mod)) error(E_TYPE_ERROR,(pointer)"not a LOAD-MODULE");
   entry_string=(char *)get_string(argv[0]);
 #if (WORD_SIZE == 64)
   entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L), entry_string);
@@ -332,7 +334,7 @@ pointer argv[];
   ckarg2(1,2);
   if (n==2) mod=argv[1];
   else mod=sysmod;
-  if (!isldmod(mod)) error(E_USER,(pointer)"not a LOAD-MODULE");
+  if (!isldmod(mod)) error(E_TYPE_ERROR,(pointer)"not a LOAD-MODULE");
   entry_string=(char *)get_string(argv[0]);
 #if (WORD_SIZE == 64)
   entry=(pointer)dlsym((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L), entry_string);
@@ -357,7 +359,7 @@ pointer *argv;
 { register pointer mod=argv[0];
   register int stat;
   ckarg(1);
-  if (!isldmod(mod)) error(E_USER,(pointer)"not a compiled-module");
+  if (!isldmod(mod)) error(E_TYPE_ERROR,(pointer)"not a compiled-module");
 #if (WORD_SIZE == 64)
   stat=dlclose((void *)((eusinteger_t)(mod->c.ldmod.handle) & ~3L));
 #else
@@ -422,7 +424,7 @@ pointer SAVE(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ error(E_USER,(pointer)"SAVE is not supported on Solaris");}
+{ error(E_PROGRAM_ERROR,(pointer)"SAVE is not supported on Solaris");}
 
 
 void loadsave(ctx,mod)

@@ -372,7 +372,7 @@
 			(:XorReverse . 11) (:CopyInverted . 12)
 			(:OrInverted . 13) (:Nand . 14)
 			(:Set . 15))))))
-    (unless (integerp f) (error "not integer or keyword for :function"))
+    (unless (integerp f) (error type-error "not integer or keyword for :function"))
     f)
  (:function (x)
 "0=Clear,	1=And,		2=AndReverse,	3=Copy

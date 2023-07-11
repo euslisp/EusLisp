@@ -15,7 +15,7 @@
 	"constants"
 	"stream" "string" "loader" "pprint" "process"
 	"hashtab" "array" "mathtran" "eusdebug" "eusforeign" "extnum"
-	"par" 
+	"conditions" "par"
 	;; TOPLEVEL
 	"tty" "history" "toplevel"
 	;; C O M P I L E R

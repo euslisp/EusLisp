@@ -186,14 +186,6 @@ static int mark_a_little(int m_unit)
     markon(bp); /* mark it first to avoid endless marking */
 
     if(pisclosure(p)){
-      /*
-        if (p->c.clo.env1>minmemory && p->c.clo.env1<maxmemory)
-        fprintf(stderr, "Mark: closure %x's env1 points into heap %x\n", 
-        p, p->c.clo.env1);
-        if (p->c.clo.env2>minmemory && p->c.clo.env2<maxmemory)
-        fprintf(stderr, "Mark: closure %x's env2 points into heap %x\n", 
-        p, p->c.clo.env2);
-      */
       goto markloop; /* avoid marking contents of closure */
     }
     if(bp->h.elmtype == ELM_FIXED){ /* contents are all pointers */
@@ -533,6 +525,7 @@ static void scan_global_roots()
 {
   int i;
   pointerpush(sysobj);
+  pointerpush(eussigobj);
   pointerpush(pkglist);
   /* minimize scanning time for class table */
   pointerpush(rgc_classtable);

@@ -138,7 +138,7 @@ pointer (*cfunc)();
   class=speval(class);
   if (class==UNBOUND || !isclass(class)) error(E_NOCLASS,class);
   addmethod(ctx,cons(ctx,sel,
-			cons(ctx,makecode(mod,cfunc,SUBR_FUNCTION),NIL)),
+                     cons(ctx,makecode(ctx,mod,cfunc,SUBR_FUNCTION,sel),NIL)),
 		class,doc);}
 
 pointer DEFMETHOD(ctx,arg)	/*special form*/
@@ -254,7 +254,7 @@ register pointer argv[];
 { register pointer receiver,klass,selector,meth,result;
   register pointer *spsave=ctx->vsp, *altargv;
   pointer curclass, component;
-  struct bindframe *bf,*bfsave=ctx->bindfp;
+  pointer bf,bfsave=ctx->bindfp;
   struct specialbindframe *sbfpsave=ctx->sbindfp;
   int sbcount=ctx->special_bind_count;
   int i,argoffset;
@@ -319,7 +319,7 @@ register pointer argv[];
 { register pointer receiver,klass,selector,meth,result;
   register pointer *spsave=ctx->vsp,*altargv;
   pointer curclass, component;
-  struct bindframe *bf,*bfsave=ctx->bindfp;
+  pointer bf,bfsave=ctx->bindfp;
   struct specialbindframe *sbfpsave=ctx->sbindfp;
   int argoffset;
 
@@ -366,7 +366,7 @@ int n;
 pointer argv[];
 /* (send-message obj search selector [args]) */
 { pointer receiver,search,selector,meth,form,result,*spsave, curclass;
-  struct bindframe *bf,*bfsave=ctx->bindfp;
+  pointer bf,bfsave=ctx->bindfp;
   struct specialbindframe *sbfpsave=ctx->sbindfp;
 
   if (n<3) error(E_MISMATCHARG);
@@ -428,7 +428,7 @@ pointer argv[];
     take_care(x);
 #endif
     return(x);}
-  else error(E_INSTANTIATE);}
+  else error(E_NOCLASS);}
 
 pointer METHCACHE(ctx,n,argv)
 register context *ctx;
@@ -477,6 +477,7 @@ register pointer obj,klass,varid;
   register pointer vvec;
   extern pointer equal();
 
+  if (isnum(obj)) error(E_NOOBJECT);
   if (!isclass(klass)) error(E_NOCLASS,klass);
   objcix=obj->cix;
   klasscix=intval(klass->c.cls.cix);
@@ -493,9 +494,9 @@ register pointer obj,klass,varid;
 	if (equal(vvec->c.vec.v[index]->c.sym.pname, varid)==T) break;
 	else index++;}
     else error(E_NOINT);
-    if (index>=vecsize(vvec)) error(E_NOOBJVAR,varid);
+    if (index>=vecsize(vvec)) error(E_NOSLOT,varid);
     return(index);}
-  else error(E_NOOBJVAR,varid);}
+  else error(E_NOSLOT,varid);}
 
 pointer SLOT(ctx,n,argv)
 register context *ctx;
@@ -551,27 +552,36 @@ register context *ctx;
 register pointer org;
 { register pointer clone;
   pointer klass,x;
-  register int i,s;
+  register int i,s,off;
   int etype;
 
-  if (isnum(org) || issymbol(org) || isclass(org)) return(org);
+  if (org==NULL || isnum(org) || issymbol(org) || isclass(org)) return(org);
   /* eus_rbar *//* if ((org==0) || isnum(org) || issymbol(org) || isclass(org)) return(org); */
-  x=org->c.obj.iv[1];
+  klass=classof(org);
+  if (isvecclass(klass)) off=1;
+  else off=0;
+
+  x=org->c.obj.iv[off];
   if (p_marked(org)) return(cpvec[intval(x)]);
   p_mark_on(org);
-  klass=classof(org);
   if (isvecclass(klass)) {
     etype=elmtypeof(org);
     s=vecsize(org);
-    clone=makevector(klass,s);
-    elmtypeof(clone)=etype;
     switch(etype) {
       case ELM_BIT: s=(s+WORD_SIZE-1)/WORD_SIZE; break;
       case ELM_BYTE: case ELM_CHAR: s=(s+sizeof(eusinteger_t))/sizeof(eusinteger_t); break;
-	case ELM_FOREIGN: s=1; break; }}
+	case ELM_FOREIGN: s=1; break; }
+    if (s==0) {
+      p_mark_off(org);
+      return(org);}
+    clone=makevector(klass,vecsize(org));
+    elmtypeof(clone)=etype;}
   else {
     etype=ELM_FIXED;
     s=objsize(org);
+    if (s==0) {
+      p_mark_off(org);
+      return(org);}
     clone=(pointer)makeobject(klass);}
 
   if (ctx->vsp>ctx->stacklimit)
@@ -579,28 +589,28 @@ register pointer org;
       fprintf(stderr,"cannot copy\n"); euslongjmp(cpyjmp,ERR);}
 #ifdef RGC /* R.Hanai */
   if (etype == ELM_FIXED || etype == ELM_POINTER) {
-    pointer_update(org->c.obj.iv[1],makeint(cpx));
+    pointer_update(org->c.obj.iv[off],makeint(cpx));
   } else {
-    org->c.obj.iv[1] = makeint(cpx);
+    org->c.obj.iv[off] = makeint(cpx);
   }
 #else
-  pointer_update(org->c.obj.iv[1],makeint(cpx));
+  pointer_update(org->c.obj.iv[off],makeint(cpx));
 #endif
   vpush(clone);
   vpush(x);
   cpx += 2;
   switch (etype) {
     case ELM_FIXED:
-	    clone->c.obj.iv[1]=copyobj(ctx,x);
-	    if (s>0) clone->c.obj.iv[0]=copyobj(ctx,org->c.obj.iv[0]);
-	    for (i=2; i<s; i++) clone->c.obj.iv[i]=copyobj(ctx,org->c.obj.iv[i]);
+	    if (off) error(E_PROGRAM_ERROR,(pointer)"object class expected");
+	    if (s>0) clone->c.obj.iv[0]=copyobj(ctx,x);
+	    for (i=1; i<s; i++) clone->c.obj.iv[i]=copyobj(ctx,org->c.obj.iv[i]);
 	    break;
     case ELM_POINTER:
-	    clone->c.vec.v[0]=copyobj(ctx,x);
+	    if (s>0) clone->c.vec.v[0]=copyobj(ctx,x);
 	    for (i=1; i<s; i++) clone->c.vec.v[i]=copyobj(ctx,org->c.vec.v[i]);
 	    break;
     default:
-	    clone->c.vec.v[0]=x; /*copyobj(ctx,x) fails */
+	    if (s>0) clone->c.vec.v[0]=x; /*copyobj(ctx,x) fails */
 	    for (i=1; i<s; i++) clone->c.ivec.iv[i]=org->c.ivec.iv[i];
 	    break;}
 #ifdef SAFETY
@@ -611,12 +621,15 @@ register pointer org;
 void copyunmark(obj)
 register pointer obj;
 { pointer x,klass;
-  register int i,s;
+  register int i,s,off;
 
-  if (isnum(obj) || pissymbol(obj) || pisclass(obj)) return;
-  x=obj->c.obj.iv[1];
+  if (obj==NULL || isnum(obj) || pissymbol(obj) || pisclass(obj)) return;
+  klass=classof(obj);
+  if (isvecclass(klass)) off=1;
+  else off=0;
+  x=obj->c.obj.iv[off];
   if (p_marked(obj)) {
-    pointer_update(obj->c.obj.iv[1],cpvec[intval(x)+1]);
+    pointer_update(obj->c.obj.iv[off],cpvec[intval(x)+1]);
     p_mark_off(obj);
     if (pisvector(obj)) {
       if (elmtypeof(obj)<ELM_POINTER) return;
@@ -647,7 +660,7 @@ pointer argv[];
   mutex_unlock(&mark_lock);
 #endif
   ctx->vsp=spsave;
-  if (b==(pointer)ERR) error(E_USER,(pointer)"too big to copy");
+  if (b==(pointer)ERR) error(E_PROGRAM_ERROR,(pointer)"too big to copy");
   else return(b);
   }
 
@@ -660,8 +673,8 @@ register pointer argv[];
   if (isnum(argv[0])) error(E_NOOBJECT);
   if (isvecclass(argv[1])) {
     e1=elmtypeof(argv[0]); e2=intval(argv[1]->c.vcls.elmtype);
-    if (e1==ELM_FIXED) error(E_USER,(pointer)"a record type object cannot become a vector");
-    if (e1==ELM_POINTER && e1!=e2) error(E_USER,(pointer)"element type mismatch");
+    if (e1==ELM_FIXED) error(E_TYPE_ERROR,(pointer)"a record type object cannot become a vector");
+    if (e1==ELM_POINTER && e1!=e2) error(E_TYPE_ERROR,(pointer)"element type mismatch");
     /*chage length field*/
     n=vecsize(argv[0]);
     switch(e1) {
@@ -695,7 +708,7 @@ register pointer argv[];
     else error(E_ARRAYINDEX);
     return(argv[0]);
     }
-  else error(E_USER,(pointer)"vector class or number expected");
+  else error(E_TYPE_ERROR,(pointer)"vector class or number expected");
   }
 
 pointer REPLACEOBJECT(ctx,n,argv)

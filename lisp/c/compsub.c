@@ -11,6 +11,40 @@ static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
+
+int checkversion(compver, loadver)
+const char* compver;
+const char* loadver;
+{
+    unsigned compmajor=0, compminor=0;
+    unsigned loadmajor=0, loadminor=0;
+    sscanf(compver, "%u.%u", &compmajor, &compminor);
+    sscanf(loadver, "%u.%u", &loadmajor, &loadminor);
+    // check if the major version is equal
+    return (compmajor == loadmajor);
+}
+
+void checkcompversion(compver)
+const char* compver;
+{
+    if (compver==NULL) {
+        error(E_PROGRAM_ERROR,
+              (pointer)"COMPTIMEVERSION not defined. Did you compile with an older EusLisp version?");
+    }
+
+#if defined(COMPILERVERSION)
+   char* loadver = COMPILERVERSION;
+   if (!checkversion(compver, loadver)) {
+       fprintf(stderr, ";; compile time version: %s\n", compver);
+       fprintf(stderr, ";; load time version: %s\n", loadver);
+       error(E_PROGRAM_ERROR, (pointer)"compiler version mismatch");
+   }
+#else
+   error(E_PROGRAM_ERROR,
+         (pointer)"COMPILERVERSION not defined. Is this an older EusLisp version?");
+#endif
+}
+
 int maerror()
 { error(E_MISMATCHARG);}
 
@@ -81,5 +115,6 @@ register context *ctx;
   ctx->vsp    = (pointer *)cfp;
   ctx->callfp = cfp->cf;
   ctx->bindfp = cfp->bf;
+  ctx->fletfp = cfp->ff;
   ctx->catchfp= cfp->nextcatch;}
 

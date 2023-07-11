@@ -29,6 +29,8 @@ int mark_lock_thread;
 
 pointer get_free_thread()
 { register pointer port;
+  if (speval(QTHREADS)==NIL) {
+    error(E_PROGRAM_ERROR,"No threads found. Please create with 'sys:make-thread'");}
   GC_REGION(sema_wait(&free_thread_sem););
   mutex_lock(&free_thread_lock);
     port=ccar(free_threads);
@@ -110,8 +112,9 @@ pointer argv[];
   int i,count;
   unsigned int tid;
 
-  ckarg2(1,3);
-  count=ckintval(argv[0]);
+  ckarg2(0,3);
+  if (n>=1) count=ckintval(argv[0]);
+  else count=1;
   if (n>=2) stack_size=ckintval(argv[1]);
   else stack_size=32*1024;	/* default stack=32K word */
   if (n==3) c_stack_size=ckintval(argv[2]);
@@ -128,17 +131,20 @@ pointer argv[];
     mutex_unlock(&qthread_lock);
 #if alpha || PTHREAD
     if( thr_create(0, c_stack_size, thread_main, newport, 0, &tid ) != 0 ) {
-      deletecontext(tid, ctx);
-      error(E_USER,(pointer)"Number of threads reached limit (64)");
+      deletecontext(tid, newctx);
+      if (tid>=MAXTHREAD) {
+        error(E_PROGRAM_ERROR,(pointer)"Number of threads reached limit (64)");}
+      error(E_PROGRAM_ERROR,(pointer)"Could not create a new thread");
       }
     newport->c.thrp.id=makeint(tid);	/* ???? critical region problem */
 #else
-    thr_create(0, c_stack_size, (void *(*)(void *))thread_main,
-		newport, THR_SUSPENDED, &tid);
-    if (tid>=MAXTHREAD) {
-      deletecontext(tid, ctx);
-      error(E_USER,(pointer)"Number of threads reached limit (64)");
-      }
+    if ( thr_create(0, c_stack_size, (void *(*)(void *))thread_main,
+                    newport, THR_SUSPENDED, &tid) != 0) {
+      deletecontext(tid, newctx);
+      if (tid>=MAXTHREAD) {
+        error(E_PROGRAM_ERROR,(pointer)"Number of threads reached limit (64)");}
+      error(E_PROGRAM_ERROR,(pointer)"Could not create a new thread");
+    }
     newport->c.thrp.id=makeint(tid);
     thr_continue(tid);
 #endif
@@ -152,6 +158,7 @@ int n;
 pointer argv[];
 { register pointer port, args;
   register int i;
+  if (n<1) error(E_MISMATCHARG);
   port=get_free_thread();
   port->c.thrp.requester=makeint(thr_self());
   port->c.thrp.func=argv[0];
@@ -175,6 +182,7 @@ int n;
 pointer argv[];
 { register pointer port, args;
   register int i;
+  if (n<1) error(E_MISMATCHARG);
   port=get_free_thread();
   port->c.thrp.requester=makeint(thr_self());
   port->c.thrp.func=argv[0];
@@ -195,7 +203,8 @@ int n;
 pointer argv[];
 { register pointer port, result;
   ckarg(1);
-  port=argv[0];
+  if (isthread(argv[0])) port=argv[0];
+  else error(E_TYPE_ERROR,(pointer)"thread object expected");
   if (port->c.thrp.wait!=NIL &&
 	(/* port->c.thrp.idle==NIL */ 1 || 
 	 port->c.thrp.reqsem->c.ivec.iv[0]>0)) {
@@ -203,7 +212,7 @@ pointer argv[];
     result=port->c.thrp.result;
     sema_post((sema_t *)port->c.thrp.reqsem->c.ivec.iv);	/*ack result transfer*/
     return(result);}
-  else error(E_USER,(pointer)"wait thread for idle thread");}
+  else error(E_VALUE_ERROR,(pointer)"trying to wait for an idle thread");}
 
 pointer FREE_THREADS(ctx,n,argv)
 context *ctx;
@@ -224,6 +233,7 @@ context *ctx;
 int n;
 pointer argv[];
 { register pointer m;
+  ckarg2(0,1);
   m=makevector(C_INTVECTOR, (sizeof(mutex_t)+sizeof(eusinteger_t)-1)/sizeof(eusinteger_t));
 #if alpha 
   pthread_mutex_init((mutex_t *)m->c.ivec.iv,pthread_mutexattr_default);
@@ -332,7 +342,8 @@ pointer SEMA_POST(ctx,n,argv)
 context *ctx;
 int n;
 register pointer argv[];
-{ if (!isintvector(argv[0])) error(E_NOINTVECTOR);
+{ ckarg(1);
+  if (!isintvector(argv[0])) error(E_NOINTVECTOR);
   sema_post((sema_t *)argv[0]->c.ivec.iv);
   return(T);}
 
@@ -340,7 +351,8 @@ pointer SEMA_WAIT(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];
-{ if (!isintvector(argv[0])) error(E_NOINTVECTOR);
+{ ckarg(1);
+  if (!isintvector(argv[0])) error(E_NOINTVECTOR);
   GC_REGION(sema_wait((sema_t *)argv[0]->c.ivec.iv););
   return(T);}
 
@@ -348,7 +360,8 @@ pointer SEMA_TRYWAIT(ctx,n,argv)
 context *ctx;
 int n;
 pointer argv[];
-{ if (!isintvector(argv[0])) error(E_NOINTVECTOR);
+{ ckarg(1);
+  if (!isintvector(argv[0])) error(E_NOINTVECTOR);
   if (sema_trywait((sema_t *)argv[0]->c.ivec.iv)==0) return(T);
   else  return(NIL);}
 
@@ -371,9 +384,12 @@ pointer THR_SETPRIO(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ int stat;
+{ int stat,tid,prio;
   ckarg(2);
-  stat=thr_setprio(ckintval(argv[0]),ckintval(argv[1]));
+  tid=ckintval(argv[0]);
+  prio=ckintval(argv[1]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
+  stat=thr_setprio(tid,prio);
   if (stat) return(makeint(-errno));
   else return(T);}
 
@@ -381,9 +397,11 @@ pointer THR_GETPRIO(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ int stat,prio;
+{ int stat,tid,prio;
   ckarg(1);
-  stat=thr_getprio(ckintval(argv[0]), &prio);
+  tid=ckintval(argv[0]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
+  stat=thr_getprio(tid, &prio);
   if (stat) return(makeint(-errno));
   else return(makeint(prio));}
 
@@ -391,10 +409,10 @@ pointer THR_SETCONCURRENCY(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ int stat;
+{ int stat,tid;
   ckarg(1);
 #if SunOS4_1 || alpha || PTHREAD
-  fprintf(stderr, "thr_setconcurrency is not supprted!\n");
+  fprintf(stderr, "thr_setconcurrency is not supported!\n");
   stat = 0;
 #else
   stat=thr_setconcurrency(ckintval(argv[0]));
@@ -409,7 +427,7 @@ pointer argv[];
 { int concurrency;
   ckarg(0);
 #if SunOS4_1 || alpha || PTHREAD
-  fprintf(stderr, "thr_getconcurrency is not supprted!\n");
+  fprintf(stderr, "thr_getconcurrency is not supported!\n");
   concurrency = 0;
 #else
   concurrency=thr_getconcurrency();
@@ -444,14 +462,16 @@ pointer argv[];
   unsigned int thread_id;
   pointer result;
   struct thread_arg *ta;
-  pointer func=argv[0], arg=argv[1];
+  pointer func, arg;
 
   ckarg2(2,3);
+  func=argv[0];
+  arg=argv[1];
   if (n==3) stack_size=ckintval(argv[2]);
   else stack_size=1024*64;
 
   newctx=(context *)makelispcontext(stack_size);
-  fprintf(stderr,"creater newcontext=%p\n", newctx);
+  fprintf(stderr,"create newcontext=%p\n", newctx);
   ta=(struct thread_arg *)malloc(sizeof(struct thread_arg));
   ta->form=ctx->callfp->form;
   ta->newctx=newctx;
@@ -459,7 +479,9 @@ pointer argv[];
   ta->arg=arg;
   stat=thr_create(0, stack_size, (void (*)(void *))newthread,
 		  ta,0,&thread_id);
-  if (stat) result=makeint(-errno);
+  if (stat) {
+    deletecontext(thread_id, newctx);
+    result=makeint(-errno);}
   else 
     result=makeint(thread_id);
   return(result);
@@ -474,6 +496,7 @@ pointer argv[];
   ckarg(2);
   tid=ckintval(argv[0]);
   sig=ckintval(argv[1]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
   if (euscontexts[tid]) { thr_kill(tid,sig); return(T);}
   else return(NIL);}
 
@@ -488,6 +511,7 @@ pointer argv[];
   return(NIL);
 #else
   tid=ckintval(argv[0]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
   if (euscontexts[tid]) {
     if (thr_suspend(tid)==0) return(T);
     else return(makeint(-errno));}
@@ -506,6 +530,7 @@ pointer argv[];
   return(NIL);
 #else
   tid=ckintval(argv[0]);
+  if (tid<0 || tid>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
   if (euscontexts[tid]) {
     if (thr_continue(tid)==0) return(T);
     else return(makeint(-errno));}

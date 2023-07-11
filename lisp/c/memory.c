@@ -59,6 +59,11 @@ struct chunk *chunklist=NULL;
 long gccount,marktime,sweeptime;
 long alloccount[MAXBUDDY];
 
+/* counter to control new memory allocation when performance is low */
+/* see https://github.com/jsk-ros-pkg/jsk_roseus/issues/728 */
+long gc_consecutive_count;
+#define GC_CONSECUTIVE_COUNT_LIMIT 2
+
 /*disposal processing*/
 #define MAXDISPOSE 256
 static  pointer dispose[MAXDISPOSE];
@@ -157,6 +162,20 @@ register int k;
   return(k);
   }
 
+int fillchunk(k)
+register int k;
+{ numunion nu;
+  float gcm;
+  int j=0;
+  gcm=min(0.9,fltval(speval(GCMARGIN)));
+  while (freeheap<(totalheap*gcm)) {
+    j=newchunk(k);
+    if (j==ERR) return(j);
+  }
+  gc_consecutive_count=0;
+  return(j);
+}
+
 void splitheap(k,buddy)	/*heart of the allocator*/
 register int k;
 register struct buddyfree *buddy;
@@ -217,7 +236,6 @@ register int req;	/*index to buddy: must be greater than 0*/
 { register int i, k;
   register bpointer b,b2;
   numunion nu;
-  pointer gcm;
 
 #if THREADED
   mutex_lock(&alloc_lock); 
@@ -230,9 +248,11 @@ register int req;	/*index to buddy: must be greater than 0*/
     if (k>=MAXBUDDY) {		/*no bigger free cell*/
       if (buddysize[req]<totalheap/8) {	/*relatively small cell is requested;*/
         gc();			/* then try garbage collection*/
-	gcm=speval(GCMARGIN);
-        while (freeheap < (totalheap*min(5.0,fltval(gcm))))
-	  newchunk(req); /*still not enough space*/
+        if (fillchunk(req) == ERR) {
+#if THREADED
+          mutex_unlock(&alloc_lock);
+#endif
+          error(E_ALLOCATION);}
         for (k=req; buddy[k].bp==0; ) k++;}
       if (k>=MAXBUDDY) {
         k=newchunk(req);
@@ -288,14 +308,19 @@ register int req;	/*index to buddy: must be greater than 0*/
 	    /* fprintf(stderr, "GC: free=%d total=%d, margin=%f\n",
 			freeheap, totalheap, fltval(speval(GCMARGIN))); */
 	    gc(); collected=1;
+            if (gc_consecutive_count > GC_CONSECUTIVE_COUNT_LIMIT) {
+              if (fillchunk(DEFAULTCHUNKINDEX) == ERR) {
+#if THREADED
+                mutex_unlock(&alloc_lock);
+#endif
+                error(E_ALLOCATION);}}
 	    goto alloc_again;}
-          while (freeheap<(totalheap*min(5.0,fltval(speval(GCMARGIN))))) {
-	    j=newchunk(DEFAULTCHUNKINDEX); /*still not enough space*/
-	    if (j==ERR) { 
+          j=fillchunk(DEFAULTCHUNKINDEX);
+          if (j==ERR) {
 #if THREADED
 	      mutex_unlock(&alloc_lock); 
 #endif
-	      error(E_ALLOCATION);}} }
+	      error(E_ALLOCATION);} }
 	if (j>=MAXBUDDY) {	/*hard fragmentation seen*/
 	  j=newchunk(DEFAULTCHUNKINDEX);
 	  if (j==ERR) { 
@@ -360,7 +385,7 @@ int e,cid;
 #endif
   }
 #if THREADED
-    rw_rdlock(&gc_lock);
+    // rw_rdlock(&gc_lock);
 #endif
 #ifdef DEBUG
     fflush( stdout );
@@ -378,7 +403,7 @@ int e,cid;
     for (i=0; i<ss; i++) b->b.c[i]=0;
     tb[req].count--;
 #if THREADED
-    rw_unlock(&gc_lock);
+    // rw_unlock(&gc_lock);
 #endif
     }
   b->h.elmtype=e;
@@ -469,7 +494,10 @@ markagain:
 #ifdef MARK_DEBUG
   printf( "mark: markon 0x%lx\n", bp );
 #endif
-  if (pisclosure(p)) goto markloop;	/*avoid marking contents of closure*/
+  if (pisclosure(p)) {
+    // mark local frame vector
+    gcpush(p->c.clo.env1);
+    goto markloop;}
   marking=p;
 /*  printf("%x, %x, %d, %d, %d\n", p, bp, bp->h.elmtype, bp->h.bix, buddysize[bp->h.bix] );*/
   if (bp->h.elmtype==ELM_FIXED) {	/*contents are all pointers*/
@@ -533,6 +561,7 @@ void markall()
   printf( "markall:%d: mark(SYSTEM_OBJECTS)\n", count );
 #endif
   mark(sysobj);		/*mark internally reachable objects*/
+  mark(eussigobj);	/*mark unix signal callbacks*/
   mark_state=2;
 #ifdef MARK_DEBUG
   printf( "markall:%d: mark(PACKAGE_LIST)\n", count );
@@ -767,15 +796,17 @@ void resume_all_threads()
 #if vxworks
 void gc()
 { if (debug)  fprintf(stderr,"\n;; gc:");
-  breakck;
+  // breakck;
   gccount++;
+  gc_consecutive_count++;
   markall();
   sweepall();
   if (debug) {
     fprintf(stderr," free/total=%d/%d stack=%d ",
         	freeheap,totalheap,markctx->vsp-markctx->stack);
     }
-  breakck;  }
+  // breakck;
+}
 #else 
 
 void gc()
@@ -783,20 +814,31 @@ void gc()
   int i, r;
   context *ctx=euscontexts[thr_self()];
 
-  if (debug)  fprintf(stderr,"\n;; gc: thread=%d ",thr_self());
-  breakck;
+  if (speval(QGCHOOK)!=NIL) {
+      fprintf(stderr, ";; `sys:*gc-hook*' has been deprecated! Use `sys:*gc-debug*' instead.\n");
+  }
+  if (debug || speval(QGCDEBUG)!=NIL) {
+      fprintf(stderr,"\n;; gc: thread=%d ",thr_self());
+  }
+  // breakck;
   gccount++;
+  gc_consecutive_count++;
   times(&tbuf1);
 
 #if THREADED
 /*  mutex_lock(&alloc_lock);  is not needed since gc is assumed to be called
     from alloc_small or alloc_big and they have already locked alloc_lock.*/
+  rw_wrlock(&gc_lock);
+/*  the mark flag is also used in other parts of the code to judge equivalency
+    of pointers (superequal, copy-object, print-circle). To avoid dead-locks
+    when one of the above functions invokes the gc, return immediately and
+    allocate more memory instead. */
   r = mutex_trylock(&mark_lock);
   if ( r != 0 ) {
     if (debug) fprintf(stderr, ";; gc:mutex_lock %d ", r);
+    rw_unlock(&gc_lock);
     return;
   }
-  rw_wrlock(&gc_lock);
   suspend_all_threads();
 #endif
 
@@ -810,22 +852,22 @@ void gc()
 
 #if THREADED
   resume_all_threads();
-  rw_unlock(&gc_lock);
   mutex_unlock(&mark_lock);
+  rw_unlock(&gc_lock);
 /*  mutex_unlock(&alloc_lock); */
 #endif
-  if (debug) {
+  if (debug || speval(QGCDEBUG)!=NIL) {
     fprintf(stderr," free/total=%ld/%ld stack=%d ",
             freeheap,totalheap,(int)(myctx->vsp - myctx->stack));
-    fprintf(stderr," mark=%ld sweep=%ld\n", marktime,sweeptime);
+    fprintf(stderr," marktime=%ldms sweeptime=%ldms\n",
+            marktime*1000/sysconf(_SC_CLK_TCK),
+            sweeptime*1000/sysconf(_SC_CLK_TCK));
   }
-  if (speval(QGCHOOK)!=NIL) {
-    pointer gchook=speval(QGCHOOK);
-    vpush(makeint(freeheap)); vpush(makeint(totalheap));
-    ufuncall(ctx,gchook,gchook,(pointer)(ctx->vsp-2),ctx->bindfp,2);
-    ctx->vsp -= 2;
-    }
-  breakck;
+/* Too unstable to call arbitrary lisp functions here
+   if for example gc is called during an allocation, any new attempt
+   to allocate memory during the function will cause a dead lock.
+*/
+  // breakck;
 }
 #endif
 

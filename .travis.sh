@@ -88,6 +88,7 @@ if [[ "$QEMU" != "" ]]; then
     travis_time_start download.euslisp-debian
     export GIT_SSL_NO_VERIFY=1
     git clone http://salsa.debian.org/science-team/euslisp /tmp/euslisp-dfsg
+    patch -d /tmp/euslisp-dfsg -f -p1 < .github/workflows/dfsg-deban-eus10.patch
     for file in $(cat /tmp/euslisp-dfsg/debian/patches/series); do
         # skip patches already applied by https://github.com/euslisp/EusLisp/pull/482
         [[ $file =~ use-rtld-global-loadelf.patch|fix-arm-ldflags.patch|fix-library-not-linked-against-libc.patch|fix-manpage-has-bad-whatis-entry-on-man-pages.patch ]] && continue;

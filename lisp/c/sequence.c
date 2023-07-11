@@ -126,11 +126,11 @@ pointer argv[];
   s=ckintval(argv[1]);
   if (n==3) {
     e=ckintval(argv[2]);
-    if (e<s) error(E_STARTEND);}
+    if (e<s) error(E_VALUE_ERROR,(pointer)"end index cannot be smaller than start index");}
   if (a==NIL)return(NIL);
   else if (islist(a)) {
     while (islist(a) && i++<s) a=ccdr(a);
-    if (!islist(a)) error(E_STARTEND);
+    if (!islist(a)) error(E_SEQINDEX);
     i=0;
     if (n==3) {
       while (s<e) { 
@@ -385,7 +385,7 @@ pointer resulttype;
 			  r->c.ivec.iv[n/32]|=(coerceintval(vpop()) & 1)<<(n%32);
 #endif
 		        return(r);
-      case ELM_FOREIGN: error(E_USER,(pointer)"cannot coerce to foreign string"); } } } 
+      case ELM_FOREIGN: error(E_TYPE_ERROR,(pointer)"cannot coerce to foreign string"); } } } 
 
 pointer CONCATENATE(ctx,n,argv)
 register context *ctx;
@@ -675,7 +675,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
+    pushcount+=pushsequence(ctx,seq,start,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer REMOVE_DUPLICATES(ctx,n,argv)
@@ -767,7 +767,12 @@ pointer argv[];
 	lastindex++;} }
     else error(E_SEQINDEX);
     start++; }
-  if (isvector(result)) result->c.vec.size=makeint(lastindex);
+  if (isvector(result)) {
+    end=vecsize(seq);
+    while (start<end) {
+      fastvset(seq,lastindex,fastvref(seq,start));
+      lastindex++; start++;}
+    result->c.vec.size=makeint(lastindex);}
   return(result);}
 
 pointer SUBSTITUTE(ctx,n,argv)
@@ -809,7 +814,7 @@ register pointer argv[];
     while (pushcount-->0) seq=cons(ctx,vpop(),seq);
     return(seq);}
   else {
-    pushcount+=pushsequence(ctx,seq,end,MAX_SEQUENCE_COUNT);
+    pushcount+=pushsequence(ctx,seq,pushcount,MAX_SEQUENCE_COUNT);
     return(makesequence(ctx,pushcount,classof(seq)));}}
 
 pointer NSUBSTITUTE(ctx,n,argv)
@@ -1007,7 +1012,11 @@ pointer argv[];
   else if (isvector(seq)) {
     COMPTYPE=elmtypeof(seq);
     if (COMPTYPE==ELM_CHAR || COMPTYPE==ELM_BYTE) width=1;
-    else if (COMPTYPE==ELM_BIT || COMPTYPE==ELM_FOREIGN) error(E_NOVECTOR);
+    else if (COMPTYPE==ELM_BIT || COMPTYPE==ELM_FOREIGN) {
+#if THREADED
+      mutex_unlock(&qsort_lock);
+#endif
+      error(E_NOVECTOR);}
     else width=sizeof(eusinteger_t);
     qsort(seq->c.vec.v,vecsize(seq),width,(int (*)())compar);}
 #if THREADED
@@ -1050,7 +1059,7 @@ pointer argv[];
   else if (isvector(a)) return((pointer)vref(a,i));
   else if (isarray(a) && a->c.ary.rank==makeint(1))
     return((pointer)vref(a->c.ary.entity, i));
-  else error(E_USER,(pointer)"no sequence");}
+  else error(E_NOSEQ);}
 
 pointer SETELT(ctx,n,argv)
 register context *ctx;
@@ -1064,7 +1073,11 @@ register pointer argv[];
     while (i-->0 && islist(a)) a=ccdr(a);
     if (islist(a)) {pointer_update(ccar(a),argv[2]);return(argv[2]);}
     else error(E_SEQINDEX);}
-  else { vset(a,i,argv[2]); return(argv[2]);}}
+  else if (isvector(a)) { vset(a,i,argv[2]); return(argv[2]);}
+  else if (isarray(a) && a->c.ary.rank==makeint(1)) {
+    vset(a->c.ary.entity,i,argv[2]);
+    return(argv[2]);}
+  else error(E_NOSEQ);}
 
 
 void sequence(ctx,mod)

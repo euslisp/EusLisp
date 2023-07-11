@@ -47,9 +47,6 @@ like three dimensional float-vectors.
 
 {\bf SYS:GC} invokes garbage collector explicitly, returning a list of two integers,
 numbers of free words and total words (not bytes) allocated in the heap.
-{\bf SYS:*GC-HOOK*} is a variable to hold a function that is called upon the
-completion of a GC.  The hook function should receive two arguments
-representing the sizes of the free heap and the total heap.
 
 If "fatal error: stack overflow" is reported during  execution,
 and you are convinced that the error is not caused by a infinite loop
@@ -99,13 +96,10 @@ and are useful for dynamic debugging.
 starts garbage collection, and returns a list of the numbers
 of free words and total words allocated.}
 
-\vardesc{sys:*gc-hook*}{
-Defines a function that is called upon the completion of a GC.}
-
 \funcdesc{sys:gctime}{}{
 returns a list of three integers: the count of gc invoked,
-the time elapsed for marking cells (in 1/60 sec. unit),
-and the time elapsed for reclamation (unmarking and merging).}
+the time elapsed for marking cells, and the time elapsed for reclamation (unmarking and merging).
+The time is given in tick counts.}
 
 \funcdesc{sys:alloc}{size}{
 allocates at least {\em size} words of memory in the heap,
@@ -114,6 +108,9 @@ and returns the number of words really allocated.}
 \funcdesc{sys:newstack}{size}{
 relinquishes the current stack,
 and allocates a new stack of {\em size} words.}
+
+\vardesc{sys:*gc-debug*}{
+Print debug messages every time the GC is called.}
 
 \vardesc{sys:*gc-merge*}{
 is a memory management parameter.
@@ -518,12 +515,13 @@ returns a string describing the error information for the error code
 \end{refdesc}
 
 
-\subsubsection{Signals}
+\subsubsection{Unix Signals}
 
 \begin{refdesc}
 
-\funcdesc{unix:signal}{signal func \&optional option}{
-installs the signal handler {\em func} for {\em signal}.
+\funcdesc{unix:signal}{signal \&optional func option}{
+if {\em func} is given install it as the signal handler for {\em signal}.
+Otherwise returns the installed handler function for {\em signal}.
 In BSD4.2 systems, signals caught during system call processing
 cause the system call to be retried.
 This means that if the process is issuing a read system call,
@@ -540,10 +538,13 @@ suspends execution of this process until a signal arrives.}
 
 \funcdesc{unix:alarm}{time}{
 sends an alarm clock signal (SIGALRM 14) after {\em time} seconds.
-Calling {\bf unix:alarm} with {\em time}=0 resets the alarm clock.}
+Calling {\bf unix:alarm} with {\em time}=0 resets the alarm clock.
+Returns the number of seconds remaining until any previously scheduled alarm,
+or zero if there was no previously scheduled alarm.}
 
-\funcdesc{unix:ualarm}{time}{
+\funcdesc{unix:ualarm}{time interval}{
 same as {\bf unix:alarm} except that the unit of {\em time} is micro seconds.
+{\em time} cannot be greater than 1000000.
 {\bf ualarm} is not available on Solaris2 or on other Sys5 based systems.}
 
 \funcdesc{unix:getitimer}{timer}{
@@ -559,7 +560,7 @@ and the interval. Both are floating-point numbers.}
 
 \funcdesc{unix:setitimer}{timer value interval}{
 sets {\em value} and {\em interval} in {\em timer}.
-{\em timer} is eiterh  0 ({\tt ITIMER\_REAL}), 1 ({\tt ITIMER\_VIRTUAL}),
+{\em timer} is either  0 ({\tt ITIMER\_REAL}), 1 ({\tt ITIMER\_VIRTUAL}),
 or 2({\tt ITIMER\_PROF}).
 {\tt ITIMER\_REAL} delivers SIGALRM when {\em value} expires.
 {\tt ITIMER\_VIRTUAL} delivers SIGVTALRM, and 

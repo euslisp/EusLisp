@@ -44,7 +44,7 @@ pointer argv[];
   else if (isfilestream(s)) {
     if (closestream(s)<0) return(NIL);
     return(T);}
-  else error(E_USER,(pointer)"file stream expected");}
+  else error(E_TYPE_ERROR,(pointer)"file stream expected");}
 
 pointer getoutstream(ctx,n,strm)
 context *ctx;
@@ -232,7 +232,7 @@ pointer argv[];
       byte *newcb = malloc(buflength+READLINE_BUF_LENGTH);
       if (newcb == NULL) {
         free(cb);
-        error(E_USER, (pointer)"Memory allocation error by read-line");
+        error(E_PROGRAM_ERROR, (pointer)"Memory allocation error by read-line");
         break;
       }
       memcpy(newcb, cb, buflength);
@@ -370,7 +370,7 @@ pointer argv[];
   if (n>=3) nontermp=argv[2];
   if (n==4) rdtable=argv[3];
   else rdtable=Spevalof(QREADTABLE);
-  if (!isreadtable(rdtable)) error(E_USER,(pointer)"readtable expected");
+  if (!isreadtable(rdtable)) error(E_IO_ERROR,(pointer)"readtable expected");
   pointer_update(rdtable->c.rdtab.macro->c.vec.v[ch],argv[1]);
   if (argv[1]==NIL) rdtable->c.rdtab.syntax->c.str.chars[ch]=(byte)chartype[ch];
   else if (nontermp==NIL) rdtable->c.rdtab.syntax->c.str.chars[ch]=(int)ch_termmacro;
@@ -385,7 +385,7 @@ pointer argv[];
   ckarg2(1,2);
   if (n==2) rdtable=argv[1];
   else rdtable=Spevalof(QREADTABLE);
-  if (!isreadtable(rdtable)) error(E_USER,(pointer)"readtable expected");
+  if (!isreadtable(rdtable)) error(E_IO_ERROR,(pointer)"readtable expected");
   return(rdtable->c.rdtab.macro->c.vec.v[max(0,min(255,ckintval(argv[0])))]);}
 
 pointer SETDISPMACRO(ctx,n,argv)
@@ -400,7 +400,7 @@ register pointer argv[];
   if (ch<0 || 256<ch) error(E_CHARRANGE);
   if (n==4) rdtable=argv[3];
   else rdtable=Spevalof(QREADTABLE);
-  if (!isreadtable(rdtable)) error(E_USER,(pointer)"readtable expected");
+  if (!isreadtable(rdtable)) error(E_IO_ERROR,(pointer)"readtable expected");
   pointer_update(rdtable->c.rdtab.dispatch->c.vec.v[ch],/*(pointer (*)())*/argv[2]);
   return(T);}
 
@@ -416,7 +416,7 @@ pointer argv[];
   if (ch<0 || 256<ch) error(E_CHARRANGE);
   if (n==3) rdtable=argv[2];
   else rdtable=Spevalof(QREADTABLE);
-  if (!isreadtable(rdtable)) error(E_USER,(pointer)"readtable expected");
+  if (!isreadtable(rdtable)) error(E_IO_ERROR,(pointer)"readtable expected");
   func=rdtable->c.rdtab.dispatch->c.vec.v[ch];
   return(func);}
 
@@ -545,12 +545,12 @@ pointer argv[];
 	case '%': case '&':	/*newline*/
 	  for (j=0; j<=param[0]; j++) writech(dest,'\n');
 	  if (argv[0]!=NIL) 
-	    if (flushstream(dest)!=0) error(E_USER,(pointer)"cannot flush stream");
+	    if (flushstream(dest)!=0) error(E_IO_ERROR,(pointer)"cannot flush stream");
 	  break;
 	case '~':	/*tilda*/
 	  writech(dest,'~'); break;
 	case 'T': 	/*tabulate*/
-	  writech(dest,9); break;;
+	  writech(dest,9); break;
 	default:	break;
         }  
       }
@@ -567,23 +567,28 @@ pointer SIGERROR(ctx,n,argv)
 register context *ctx;
 register int n;
 register pointer *argv;
-{ register int i;
-  pointer  msg;
+{ register int i=0;
+  pointer  msg, errobj;
   pointer *argb=ctx->vsp;
-  if (isstring(argv[0])) {
-     vpush(NIL);
-     for (i=0; i<n; i++) vpush(argv[i]);
-     msg=XFORMAT(ctx,n+1,argb);
-     error(E_USER,(pointer)(msg->c.str.chars),argv[1]);}
-  else error((enum errorcode)(ckintval(argv[0])),argv[1]);}
 
-pointer INSTALL_ERRHANDLER(ctx,n,argv)
-register context *ctx;
-register int n;
-register pointer *argv;
-{ ckarg(1);
-  ctx->errhandler=argv[0];
-  return(argv[0]);}
+  if (n==0) error(E_MISMATCHARG);
+  if (isclass(argv[0])) {
+    /* ensure is derived from error class */
+    int objcix,klasscix;
+    objcix=intval(argv[0]->c.cls.cix);
+    klasscix=intval(C_ERROR->c.cls.cix);
+    if (!(objcix>=klasscix) || !(objcix<=classtab[klasscix].subcix)) {
+      error(E_TYPE_ERROR, "error class expected");}
+    i++;
+    errobj=makeobject(argv[0]);}
+  else {
+    errobj=makeobject(C_ERROR);}
+  if (isstring(argv[i])) {
+     vpush(NIL);
+     for (; i<n; i++) vpush(argv[i]);
+     msg=XFORMAT(ctx,n+1,argb);}
+  else error(E_NOSTRING);
+  error(E_REPL,errobj,msg);}
 
 
 void lispio(ctx,mod)
@@ -617,6 +622,5 @@ pointer mod;
   defunpkg(ctx,"RESET-READTABLE",mod,RESETREADTABLE,syspkg);
   defun(ctx,"FORMAT",mod,XFORMAT,NULL);
   defun(ctx,"ERROR",mod,SIGERROR,NULL);
-  defun(ctx,"INSTALL-ERROR-HANDLER",mod,INSTALL_ERRHANDLER,NULL);
   }
 

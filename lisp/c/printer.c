@@ -312,7 +312,7 @@ register context *ctx;
 register pointer p;
 { register int i,s;
 
-  if (isnum(p) || (pissymbol(p) && p->c.sym.homepkg != NIL) ) return;
+  if (p==NULL || isnum(p) || (pissymbol(p) && p->c.sym.homepkg != NIL) ) return;
   if (!p_marked(p)) {
     p_mark_on(p);
     if (pissymbol(p)) return;
@@ -550,7 +550,7 @@ register context *ctx;
 register pointer x;
 register pointer f;
 register int prlevel;
-{ register pointer fobj;
+{ register pointer fobj,tmp;
   register int shareix=0;
   numunion nu;
 
@@ -586,13 +586,20 @@ register int prlevel;
     else if (Spevalof(PROBJECT)!=NIL)    prinxobj(ctx,x,f,fobj,prlevel-1);
     else if (pisarray(x) && (classof(x)==C_ARRAY))  printarray(ctx,x,f,prlevel-1);
     else if (Spevalof(PRSTRUCTURE)!=NIL) printstructure(ctx,x,f,fobj,prlevel-1);
+    else if (Spevalof(PRCIRCLE)!=NIL) {
+      // force NIL to avoid deadlocks (EusLisp/#465)
+      // TODO: consider :prin1 objects in the initial printmark
+      tmp=Spevalof(PRCIRCLE);
+      pointer_update(Spevalof(PRCIRCLE),NIL);
+      csend(ctx,x,K_PRIN1,1,f);
+      pointer_update(Spevalof(PRCIRCLE),tmp)}
     else csend(ctx,x,K_PRIN1,1,f);
     }    }
 
 static void printunmark(p)
 register pointer p;
 { register int i,s;
-  if (isnum(p)) return;
+  if (p==NULL || isnum(p)) return;
   if (!s_marked(p) && !p_marked(p)) return;
   if (s_marked(p))
     if (p_marked(p)) fprintf(stderr,"smarked?\n");

@@ -22,7 +22,14 @@ pointer GEESEE(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ gc();
+{
+#if THREADED
+  mutex_lock(&alloc_lock);
+#endif
+  gc();
+#if THREADED
+  mutex_unlock(&alloc_lock);
+#endif
   return(cons(ctx,makeint(freeheap),
 	      cons(ctx,makeint(totalheap),NIL)));}
 
@@ -72,7 +79,7 @@ pointer argv[];
   if (n==0) return(makeint((ctx->stacklimit+100-ctx->stack)));
   else {
     newsize=ckintval(argv[0]);
-    if (newsize>1024*1024*256) error(E_USER,(pointer)"too big stack"); /*max 256MW*/
+    if (newsize>1024*1024*256) error(E_PROGRAM_ERROR,(pointer)"too big stack"); /*max 256MW*/
     allocate_stack(ctx,newsize);
     euslongjmp(topjbuf,newsize);}
   }
@@ -516,7 +523,7 @@ pointer argv[];
 	  vpush(makepointer(b));
           if (ctx->vsp >= ctx->stacklimit) {
 	    sweepall();
-	    error(E_USER,(pointer)"not enough stack space");}} }
+	    error(E_PROGRAM_ERROR,(pointer)"not enough stack space");}} }
       b=nextbuddy(b);} }
   sweepall();
 #if THREADED
@@ -565,7 +572,7 @@ pointer argv[];
 	  vpush(p);
           if (ctx->vsp>=ctx->stacklimit) {
 	    sweepall();
-	    error(E_USER,(pointer)"not enough stack space");}	  }
+	    error(E_PROGRAM_ERROR,(pointer)"not enough stack space");}	  }
   next_buddy:
       b=nextbuddy(b);} }
   sweepall();
@@ -634,7 +641,7 @@ pointer argv[];
   if (size==K_FLOAT) return(makeflt(u->f));
   if (size==K_DOUBLE) return(makeflt(u->d));
   if (size==K_POINTER) return(mkbigint((eusinteger_t)(u->p))); /* ???? */
-  else error(E_USER,(pointer)"unknown access mode");}
+  else error(E_PROGRAM_ERROR,(pointer)"unknown access mode");}
 
 pointer POKE(ctx,n,argv)
 register context *ctx;
@@ -680,13 +687,71 @@ pointer argv[];
   else if (size==K_FLOAT) u->f=ckfltval(val);
   else if (size==K_DOUBLE) u->d=ckfltval(val);
   else if (size==K_POINTER) u->p=(void*)ckintval(val);
-  else error(E_USER,(pointer)"unknown access mode");
+  else error(E_PROGRAM_ERROR,(pointer)"unknown access mode");
   return(val);}
 
 /****************************************************************/
 /* stack frame access
 /* 1988-Apr-26
 /****************************************************************/
+pointer list_callstack(ctx,max)
+register context *ctx;
+int max;
+{ register struct callframe *vf;
+  int i;
+  vf=(struct callframe *)(ctx->callfp);
+  if(vf==NULL) return(NIL);
+  // list whole stack for negative max values
+  for (i=0; vf->vlink && max; vf=vf->vlink) {
+    if (vf->form) {
+      vpush(vf->form);
+      // calculate max based on collected elements, rather than transversed frames
+      i++; max--;}
+    // Check for recursive stacks
+    if ((pointer)vf == (pointer)vf->vlink) {
+      fprintf(stderr,";; recursive callstack detected in %p\n", (pointer)vf);
+      break;}}
+  return(stacknlist(ctx,i));}
+
+pointer LISTCALLSTACK(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ int i,max=-1;
+  ckarg2(0,1);
+  if(n) max=max(0,intval(argv[0]));
+  return(list_callstack(ctx,max));}
+
+pointer LISTALLBLOCKS(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ struct blockframe *bfp=ctx->blkfp;
+  int i=0;
+  while (bfp) {
+    if (bfp->kind==BLOCKFRAME) {
+      vpush(bfp->name);
+      i++;}
+    bfp=bfp->lexklink;}
+  return(stacknlist(ctx,i));}
+
+pointer LISTALLTAGS(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ struct blockframe *bfp=ctx->blkfp;
+  int i=0;
+  while (bfp) {
+    if (bfp->kind==TAGBODYFRAME) {
+      pointer body=bfp->name;
+      while (body!=NIL) {
+        vpush(ccar(ccar(body)));
+        body=ccdr(body);
+        i++;}
+    }
+    bfp=bfp->lexklink;}
+  return(stacknlist(ctx,i));}
+
 pointer LISTALLCATCHERS(ctx,n,argv)
 register context *ctx;
 int n;
@@ -704,14 +769,38 @@ pointer LISTBINDINGS(ctx,n,argv)
 register context *ctx;
 int n;
 pointer *argv;
-{ struct bindframe *bfp=ctx->bindfp, *nextbfp;
+{ pointer bf;
   int i=0;
-  while (bfp) {
-    vpush(cons(ctx,bfp->sym,bfp->val));
+  if (n==0) {
+    bf=ctx->bindfp;}
+  if (n==1) {
+    if (isbindframe(argv[0])) bf=argv[0];
+    else if (isint(argv[0]) && intval(argv[0])==0) return(NIL);
+    else error(E_NOBINDFRAME);}
+  while (bf) {
+    vpush(cons(ctx,bf->c.bfp.sym,bf->c.bfp.val));
     i++;
-    nextbfp=bfp->dynblink;
-    if (nextbfp==NULL) nextbfp=bfp->lexblink;
-    bfp=nextbfp;}
+    if (bf==bf->c.bfp.next) break;
+    bf=bf->c.bfp.next;}
+  return(stacknlist(ctx,i));}
+
+pointer LISTFUNCTIONBINDINGS(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ pointer ff;
+  int i=0;
+  if (n==0) {
+    ff=ctx->fletfp;}
+  if (n==1) {
+    if (isfletframe(argv[0])) ff=argv[0];
+    else if (isint(argv[0]) && intval(argv[0])==0) return(NIL);
+    else error(E_NOFLETFRAME);}
+  while (ff) {
+    vpush(cons(ctx,ff->c.ffp.name,ff->c.ffp.fclosure));
+    i++;
+    if (ff==ff->c.ffp.next) break;
+    ff=ff->c.ffp.next;}
   return(stacknlist(ctx,i));}
 
 pointer LISTSPECIALBINDINGS(ctx,n,argv)
@@ -760,7 +849,7 @@ pointer argv[];
   if (n==0) con=ctx;
   else {
     x=ckintval(argv[0]);
-    if (x<0 || x>MAXTHREAD) error(E_USER,(pointer)"no such thread");
+    if (x<0 || x>=MAXTHREAD) error(E_INDEX_ERROR,(pointer)"no such thread");
     if (x==0) con=ctx;
     else con=euscontexts[x];}
   p=con->specials;  
@@ -799,8 +888,12 @@ pointer mod;
 /*  defun(ctx,"MALLOC_DEBUG",mod,MALLOC_DEBUG,NULL);
 /*  defun(ctx,"MALLOC_VERIFY",mod,MALLOC_VERIFY,NULL); */
   defun(ctx,"LIST-ALL-REFERENCES",mod,LISTALLREFERENCES,NULL);
+  defun(ctx,"LIST-CALLSTACK",mod,LISTCALLSTACK,NULL);
+  defun(ctx,"LIST-ALL-BLOCKS",mod,LISTALLBLOCKS,NULL);
+  defun(ctx,"LIST-ALL-TAGS",mod,LISTALLTAGS,NULL);
   defun(ctx,"LIST-ALL-CATCHERS",mod,LISTALLCATCHERS,NULL);
   defun(ctx,"LIST-ALL-BINDINGS",mod,LISTBINDINGS,NULL);
+  defun(ctx,"LIST-ALL-FUNCTION-BINDINGS",mod,LISTFUNCTIONBINDINGS,NULL);
   defun(ctx,"LIST-ALL-SPECIAL-BINDINGS",mod,LISTSPECIALBINDINGS,NULL);
   defun(ctx,"LIST-ALL-CLASSES",mod,LISTALLCLASSES,NULL);
   defun(ctx,"EXPORT-ALL-SYMBOLS", mod, EXPORTALL,NULL);
