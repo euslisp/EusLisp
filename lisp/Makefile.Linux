@@ -54,7 +54,28 @@ ADD_LDFLAGS += -Wl,--no-as-needed
 endif
 
 # set CPU arch with -D
-MACHINE=$(shell uname -m)
+GCC_MACHINE=$(shell gcc -dumpmachine)
+$(info "-- GCC_MACHINE = ${GCC_MACHINE}")
+ifneq ($(GCC_MACHINE),)
+ ifneq (,$(findstring x86_64-linux-gnu,$(GCC_MACHINE)))
+   MACHINE=x86_64
+ endif
+ ifneq (,$(findstring i686-linux-gnu,$(GCC_MACHINE)))
+   MACHINE=i686
+ endif
+ ifneq (,$(findstring aarch64-linux-gnu,$(GCC_MACHINE)))
+   MACHINE=aarch64
+ endif
+ ifneq (,$(findstring arm-linux-gnu,$(GCC_MACHINE)))
+   MACHINE=arm
+ endif
+ ifneq (,$(findstring powerpc64le-linux-gnu,$(GCC_MACHINE)))
+   MACHINE=ppc64le
+ endif
+ ifneq (,$(findstring mips64el-linux-gnu,$(GCC_MACHINE)))
+   MACHINE=mips64
+ endif
+endif
 # need to set 'i486', for conditionals in c/*.[ch].
 ifneq ($(shell gcc -dumpmachine | grep "i.*86-linux"),)
   MACHINE=i486
