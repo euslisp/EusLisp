@@ -608,7 +608,7 @@
 
 (defun write-buffer (fname buf &optional (len (length buf)))
    (with-open-file (f fname :direction :output)
-      (unix:write f buf len)))
+      (unix:write f buf 0 len)))  ;; unix:write changed to accept the third arg=offset.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
