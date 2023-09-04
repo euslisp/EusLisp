@@ -632,6 +632,7 @@ To get viewing or viewsurface object in the viewer, send :viewing or
 				 args))) )
       (setq vw (find-viewer name))
       (unless vw (setq vw (instantiate viewer)))
+#+:xwindow
       (if (and (boundp 'x::*display*) (numberp x::*display*)
 		alternate (not (derivedp alternate x::xdrawable)))
 	 (setq alternate
