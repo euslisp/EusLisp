@@ -39,6 +39,12 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
         sed -i s@security.debian.org/debian-security@archive.debian.org/debian-security@ /etc/apt/sources.list
         sed -i '/-updates/ s/^#*/#/' /etc/apt/sources.list
     fi
+    if [[ "$DOCKER_IMAGE" == *"buster" ]] ; then
+        cat /etc/apt/sources.list
+        sed -i 's@deb.debian.org/debian buster@archive.debian.org/debian buster@' /etc/apt/sources.list;
+        sed -i '/-updates/ s/^#*/#/' /etc/apt/sources.list
+        cat /etc/apt/sources.list
+    fi
     if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y sudo;  else sudo apt-get update; fi
     travis_time_end
 
