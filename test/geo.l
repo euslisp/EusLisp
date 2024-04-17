@@ -84,6 +84,19 @@
       ))
   )
 
+;; test to check https://github.com/euslisp/EusLisp/issues/499
+(deftest rotate-vertices ()
+  (let ((a (make-cube 10 20 30)) v0 v1)
+    (setq v0 (copy-object (send a :vertices)))
+    (send a :rotate-vertices pi/2 #f(0 0 1))
+    (setq v1 (send a :vertices))
+    (dotimes (i (length v0))
+      (assert (eps= (elt (elt v0 i) 0) (elt (elt v1 i) 1)))
+      (assert (eps= (elt (elt v0 i) 1) (- (elt (elt v1 i) 0))))
+      (assert (eps= (elt (elt v0 i) 2) (elt (elt v1 i) 2)))
+      )
+    ))
+
 (eval-when (load eval)
   (run-all-tests)
   (exit))

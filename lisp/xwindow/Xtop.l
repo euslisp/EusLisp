@@ -232,6 +232,9 @@
 	(setq font-helvetica-12 (font-id "*-Helvetica-Medium-R-Normal-*-12-*"))
 	(setq font-a14 (font-id "*-fixed-medium-r-normal-*-14-*"))
 
+	(when (zerop font-cour12)  ;; If we can not find font-cour12, use default value for all element
+	  (setq font-cour12 (font-id "*-*-*-*-*-*-*-*")))
+
 	(when (zerop font-cour12)  ;; this is default gc
 	  (setq *display* 0)
 	  (warning-message 1 "~%Xserver connection failed due to missing font server, please try after computer restarts~%")

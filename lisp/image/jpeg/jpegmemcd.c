@@ -11,8 +11,17 @@
 #include <stdio.h>
 #include "jpeglib.h"
 #include <setjmp.h>
+
+#if JPEG_LIB_VERSION >= 80 || defined(MEM_SRCDST_SUPPORTED)
+#define jpeg_memio_dest(cinfo, outbuffer, outsize) \
+  jpeg_mem_dest((j_compress_ptr)cinfo, (unsigned char **)outbuffer, (unsigned long *)outsize)
+
+#define jpeg_memio_src(cinfo, inbuffer, insize) \
+  jpeg_mem_src((j_decompress_ptr)cinfo, (const unsigned char *)inbuffer, (unsigned long)insize)
+#else
 GLOBAL(void) jpeg_memio_dest (j_compress_ptr cinfo, JOCTET *jpegimgbuf, long *size);
 GLOBAL(void) jpeg_memio_src (j_decompress_ptr cinfo, JOCTET *buf, long size);
+#endif
 
 
 int JPEG_compress(JSAMPLE *image_buffer, long width, long height,
