@@ -6,7 +6,7 @@ references:
       name: Setup TeX
       command: |-
         sudo apt-get update
-        sudo apt-get install -qq -y texlive-latex-base ptex-bin latex2html nkf poppler-utils
+        sudo apt-get install -qq -y texlive-latex-base texlive-binaries texlive-lang-japanese latex2html nkf poppler-utils
   setup-eus: &setup-eus
     run:
       name: Setup EusLisp
@@ -24,7 +24,8 @@ references:
 
 jobs:
   html:
-    machine: true
+    machine:
+      image: ubuntu-2004:2022.07.1
     steps:
       - checkout
       - *setup-tex
@@ -41,7 +42,7 @@ jobs:
           command: |
             mkdir -p /tmp/html
             cp doc/html/*manual*.html /tmp/html
-            cp doc/html/*manual*.png /tmp/html
+            cp doc/html/*manual*.svg /tmp/html
       - store_artifacts:
           path: /tmp/html
       - persist_to_workspace:
@@ -49,11 +50,12 @@ jobs:
           paths:
             - html/manual*.html
             - html/jmanual*.html
-            - html/manual*.png
-            - html/jmanual*.png
+            - html/manual*.svg
+            - html/jmanual*.svg
 
   latex:
-    machine: true
+    machine:
+      image: ubuntu-2004:2022.07.1
     steps:
       - checkout
       - *setup-tex
@@ -73,7 +75,8 @@ jobs:
           root: doc/latex
           paths: manual.pdf
   jlatex:
-    machine: true
+    machine:
+      image: ubuntu-2004:2022.07.1
     steps:
       - checkout
       - *setup-tex
@@ -93,13 +96,11 @@ jobs:
           root: doc/jlatex/
           paths: jmanual.pdf
   rst:
-    machine: true
+    machine:
+      image: ubuntu-2004:2022.07.1
     steps:
       - checkout
       - *setup-tex
-      - run:
-          name: Install Python3
-          command: pyenv global system 3.5.2
       - run:
           name: Install Pandoc
           command: sudo apt-get install -y -qq pandoc
@@ -142,7 +143,7 @@ jobs:
             git diff origin/master --name-only --relative doc
             if [ "`git diff origin/master  --name-only --relative doc`" == "" ]; then echo "No update in doc directory found, exitting... ";  circleci step halt; fi
             echo "Found new commit on doc directory"
-      - run: cd .circleci/ && git clone https://github.com/themadcreator/circle-github-bot.git
+      - run: cd .circleci/ && git clone https://github.com/k-okada/circle-github-bot.git
       - run: cd .circleci/circle-github-bot && npm install
       - run: cd .circleci/circle-github-bot && npm run build
       - run: .circleci/github-pr-update.js
