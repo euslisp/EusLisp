@@ -64,7 +64,7 @@ jobs:
           # sparc64
       fail-fast: false
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     timeout-minutes: 60
 
     name: linux
@@ -86,12 +86,44 @@ jobs:
           export MAKEFLAGS="-j4"
           if [[ "$QEMU" != "" || "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get update -y -qq; fi
           if [[ "$QEMU" != "" ]]; then sudo apt-get install -y -qq qemu-user-static; ls /usr/bin/qemu-*-static; export QEMU_VOLUME="-v /usr/bin/qemu-$QEMU-static:/usr/bin/qemu-$QEMU-static" ; fi
-          if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register; fi
+          if [[ "$QEMU" != "" ]]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/euslisp/jskeus ${HOME}/jskeus; fi
           echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
           docker run --rm $QEMU_VOLUME -v $HOME:$HOME -e "QEMU=$QEMU" -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"
 
+  debian-unstable:
+    strategy:
+      matrix:
+        include:
+          - DOCKER_IMAGE: amd64/debian:unstable-slim
+            ARCH: Linux64
+          - DOCKER_IMAGE: arm32v7/debian:unstable-slim
+            ARCH: LinuxARM
+          - DOCKER_IMAGE: arm64v8/debian:unstable-slim
+            ARCH: LinuxARM
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    name: debian-unstale
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run test
+        shell: bash
+        run: |
+          export DOCKER_IMAGE=${{matrix.DOCKER_IMAGE}}
+          export ARCH=${{matrix.ARCH}}
+          set -x
+          sudo apt update -qq
+          # Install the qemu packages
+          # This step will execute the registering scripts
+          if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then \
+            sudo apt install -y -qq qemu binfmt-support qemu-user-static; \
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes; \
+          fi
+          docker run --rm -v $(pwd):/ws/euslisp -e "ARCH=$ARCH" -t "$DOCKER_IMAGE" bash -c "set -x; set -e; apt update -qq; apt install -y -qq make gcc libgl-dev libglu1-mesa-dev libjpeg-dev libpng-dev libpq-dev libx11-dev libxext-dev; ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0; CC='gcc -Werror' ARCHDIR=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/image/jpeg; exit 0"
 
   osx:
     runs-on: macos-latest

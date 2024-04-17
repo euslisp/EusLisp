@@ -87,7 +87,11 @@ extern int errno;
 #include <time.h>
 //extern char *tzname[2];
 #if !Cygwin /* extern timezone */
+#if defined __USE_MISC || defined __USE_XOPEN
+extern long int timezone;
+#else
 extern time_t timezone, altzone;	/*long*/
+#endif
 #endif
 extern int daylight;
 

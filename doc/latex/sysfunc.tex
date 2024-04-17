@@ -20,7 +20,7 @@ the heap can extend dynamically by getting new chunks from UNIX.
 The expansion occurs either automatically on the fly
 or on user's explicit demand by calling {\bf system:alloc} function.
 When it is managed automatically, free memory size is kept
-about 25\% of total heap size. % by default,
+about 25\% of total heap size.
 This ratio can be changed by setting a value between 0.1 and 0.9 to
 the {\bf sys:*gc-margin*} parameter.
 
@@ -810,7 +810,10 @@ Similar function is available on emacs by M-X run-lisp command.
 \begin{refdesc}
 
 \funcdesc{cd}{\&optional (dir (unix:getenv "HOME"))}{
-changes the current working directory.}
+changes the current working directory. If {\em dir} is a symbol, {\em dir} is not evaluated and converted to string.}
+
+\funcdesc{pwd}{}{
+gets current working directory.}
 
 \funcdesc{ez}{\&optional key}{
 enters display editor ez, and reads Lisp forms from it, and evaluates
