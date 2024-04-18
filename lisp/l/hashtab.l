@@ -12,6 +12,7 @@
 			((key :type vector)
 			 (value :type vector)
 			 (size :type :integer)
+			 (fill-count :type :integer)
 			 (count :type :integer)
 			 (hash-function)
 			 (test-function)
@@ -45,11 +46,13 @@
  (:enter (sym val)
     (let ((entry (send self :find sym)))
       (when (>= entry size)	;new entry?
-	 (when (> count (/ size rehash-size))
+	 (when (> fill-count (/ size rehash-size))
 	     (send self :extend)
 	     (setq entry (send self :find sym))  )
+	 (setq entry (- entry size))
 	 (inc count)
-	 (setq entry (- entry size)))
+	 (if (eq (svref key entry) empty)
+	     (inc fill-count)))
       (svset key entry sym)
       (svset value entry val)
       val))
@@ -74,6 +77,7 @@
 	    x size
 	    size altsize
 	    altsize x
+	    fill-count 0
 	    count 0)
       (dotimes (i altsize)
 	 (setq x (svref altkey i))
@@ -118,6 +122,8 @@
     (dotimes (i size)
 	(setf (aref key i) empty
 	      (aref value i) nil))
+    (setq count 0)
+    (setq fill-count 0)
     self)
  (:prin1 (&optional (strm t) &rest mesgs)
     (send-super* :prin1 strm
@@ -133,6 +139,7 @@
 	  empty (gensym "EMPTY")
 	  deleted (gensym "DEL")
 	  not-found nofound
+	  fill-count 0
 	  count 0
 	  rehash-size rehash)
     (dotimes (i s) (svset key i empty))
