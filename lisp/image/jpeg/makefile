@@ -61,3 +61,6 @@ $(OBJDIR)/jmemdst.o:	jmemdst.c
 clean:
 	rm -f $(OBJFILES) $(LIBDIR)/jpegmemcd.$(LSFX) eusjpeg.c eusjpeg.h
 
+install: $(LIBDIR)/jpegmemcd.$(LSFX)
+	install -d $(DESTDIR)/usr/lib/
+	install -m 644 $(LIBDIR)/jpegmemcd.$(LSFX) $(DESTDIR)/usr/lib/
