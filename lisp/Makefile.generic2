@@ -358,16 +358,31 @@ doc/latex/manual.dvi:	$(DOC)
 	(cd doc/latex; jlatex manual ; makeindex manual.idx ; jlatex manual)
 
 install:
-	(rm -f $(PUBBINDIR)/eus $(PUBBINDIR)/eusx $(PUBBINDIR)/euscomp;\
-	 cp $(BINDIR)/eus $(PUBBINDIR);\
-	 cp $(BINDIR)/eusx $(PUBBINDIR);\
-	 ln -sf eus $(PUBBINDIR)/euscomp)
+	install -d $(DESTDIR)$(PUBDIR)/lib
+	install -t $(DESTDIR)$(PUBDIR)/lib $(ADLIBDIR)/$(LIBEUSX)  $(ADLIBDIR)/$(LIBEUSGEO)  $(ADLIBDIR)/$(LIBEUSGL)
+	install -d $(DESTDIR)$(PUBDIR)/bin
+	install -t $(DESTDIR)$(PUBDIR)/bin $(BINDIR)/eus $(BINDIR)/eus0 $(BINDIR)/eus1 $(BINDIR)/eus2 $(BINDIR)/eusg $(BINDIR)/eusx $(BINDIR)/eusgl
+	ln -sf eus $(DESTDIR)$(PUBDIR)/bin/euscomp
+	install -d $(DESTDIR)$(PUBDIR)/share/man/man1/
+	install -t $(DESTDIR)$(PUBDIR)/share/man/man1/ $(EUSDIR)/doc/man/eus.1
+	ln -sf eus.1 $(DESTDIR)$(PUBDIR)/share/man/man1/eus0.1
+	ln -sf eus.1 $(DESTDIR)$(PUBDIR)/share/man/man1/eus1.1
+	ln -sf eus.1 $(DESTDIR)$(PUBDIR)/share/man/man1/eus2.1
+	ln -sf eus.1 $(DESTDIR)$(PUBDIR)/share/man/man1/eusg.1
+	ln -sf eus.1 $(DESTDIR)$(PUBDIR)/share/man/man1/eusx.1
+	ln -sf eus.1 $(DESTDIR)$(PUBDIR)/share/man/man1/eusgl.1
+	ln -sf eus.1 $(DESTDIR)$(PUBDIR)/share/man/man1/euscomp.1
+	install -d $(DESTDIR)$(PUBDIR)/share/doc/euslisp-doc
+	install -t $(DESTDIR)$(PUBDIR)/share/doc/euslisp-doc $(EUSDIR)/doc/*/*.pdf
+
 clean:
 	-rm -fr $(EUSDIR)/data/* 
-	-rm -f $(OBJDIR)/* $(ADLIBDIR)/libeus* $(BINDIR)/* $(LDIR)/constants.l.[co]\
+	-rm -f $(OBJDIR)/* $(ADLIBDIR)/eusmap $(ADLIBDIR)/libeus* $(BINDIR)/* $(LDIR)/constants.l.[co]\
 		$(LDIR)/eusstart.l.[co] $(COMPDIR)/builtins.l.[co] so_locations
 	-sh tool/clean-ch.sh
-	-rm -f $(CDIR)/makedate.c
+	-rm -f $(CDIR)/makedate.c $(EUSDIR)/include
+	-rmdir --ignore-fail-on-non-empty $(OBJDIR) $(ADLIBDIR) $(BINDIR)
+	-rmdir --ignore-fail-on-non-empty $(EUSDIR)/$(ARCH)
 
 eustag : 
 	$(BINDIR)/eustags \
