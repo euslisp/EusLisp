@@ -102,6 +102,10 @@ jobs:
             ARCH: LinuxARM
           - DOCKER_IMAGE: arm64v8/debian:unstable-slim
             ARCH: LinuxARM
+          - DOCKER_IMAGE: s390x/debian:unstable-slim
+            ARCH: Linux
+          - DOCKER_IMAGE: riscv64/debian:unstable-slim
+            ARCH: Linux
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -119,10 +123,8 @@ jobs:
           sudo apt update -qq
           # Install the qemu packages
           # This step will execute the registering scripts
-          if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then \
-            sudo apt install -y -qq qemu binfmt-support qemu-user-static; \
-            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes; \
-          fi
+          sudo apt install -y -qq qemu binfmt-support qemu-user-static
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker run --rm -v $(pwd):/ws/euslisp -e "ARCH=$ARCH" -t "$DOCKER_IMAGE" \
             bash -c " \
                set -x; set -e; \
