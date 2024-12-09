@@ -113,10 +113,10 @@ register pointer p;
 #if Solaris2
   if ((eusinteger_t)p<(eusinteger_t)_end) return(NULL);
 #elif sun3 || sun4 || news || (i386 && (!Cygwin && !Darwin)) || alpha || mips /* Cygwin does not have edata */
-  if ((eusinteger_t)p<(eusinteger_t)edata) return(NULL);
+  if ((eusinteger_t)p<(eusinteger_t)edata) return((int)NULL);
 #endif
 #if sun4 || vax || i386 
-  if ((&ctx->stack[0]<=p) && (p<= &ctx->stack[MAXSTACK])) return(NULL);
+  if (((pointer)(&ctx->stack[0])<=p) && (p<= (pointer)(&ctx->stack[MAXSTACK]))) return((int)NULL);
 #endif
   if (issymbol(p)) return((long int)NULL);
 #if (WORD_SIZE == 64)
