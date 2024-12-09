@@ -490,7 +490,7 @@ int subchar;
 { register int i=0,j,c,p,q;
   pointer b;
   eusinteger_t *bv,x;
-  char ch, buf[WORD_SIZE];
+  char ch, buf[WORD_SIZE+1];
 
   ch=readch(f);
   while (i<WORD_SIZE && isxdigit(ch)) { buf[i++] = ch; ch=readch(f);}
