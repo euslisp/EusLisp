@@ -139,6 +139,15 @@ jobs:
                apt install -y -qq make gcc libgl-dev libglu1-mesa-dev libjpeg-dev libpng-dev libpq-dev libx11-dev libxext-dev; \
                CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0; \
                CC='gcc -Werror' ARCHDIR=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/image/jpeg; \
+               if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then exit 0; fi ; \
+               CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0 eus1 eus2 eusg eusx eusgl; \
+               apt install -y -qq curl dpkg-dev; \
+               curl -sLo /usr/local/bin/shunit2 https://raw.githubusercontent.com/kward/shunit2/master/shunit2; \
+               chmod +x /usr/local/bin/shunit2 ; \
+               export ARCHDIR=$ARCH; export EUSDIR=/ws/euslisp; export PATH=\$EUSDIR/\$ARCHDIR/bin:\$PATH; \
+               cd \$EUSDIR; \
+               curl -sLo euslisp-all-test https://salsa.debian.org/science-team/euslisp/-/raw/master/debian/tests/euslisp-all-test; \
+               bash ./euslisp-all-test; \
                exit 0"
 
   osx:
