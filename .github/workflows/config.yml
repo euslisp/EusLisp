@@ -53,7 +53,7 @@ jobs:
             # ia64
             # m68k
           - QEMU: mips64el
-            DOCKER_IMAGE: loongnix/debian:buster # mips64el
+            DOCKER_IMAGE: loongnix/debian:buster # --platform is mips64le but qemu is mips64el
             # mipsel
           # - QEMU: ppc
           #   DOCKER_IMAGE: vicamo/debian:unstable-powerpc # powerpc / somehow failing loading eusgl
@@ -90,6 +90,7 @@ jobs:
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then sudo apt-get install -y -qq qemu-user-static; fi
           if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then git clone http://github.com/euslisp/jskeus ${HOME}/jskeus; fi
           if [[ "$QEMU" != "" ]]; then export PLATFORM_OPTION="--platform linux/$QEMU"; fi
+          if [[ "$QEMU" == "mips64el" ]]; then export PLATFORM_OPTION="--platform linux/mips64le"; fi
           echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
           docker run $PLATFORM_OPTION --rm $QEMU_VOLUME -v $HOME:$HOME -e "QEMU=$QEMU" -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"
 
