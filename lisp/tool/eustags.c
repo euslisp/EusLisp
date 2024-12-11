@@ -94,6 +94,8 @@ what you give them.   Help stamp out software-hoarding!  */
 
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 
 /* Define the symbol ETAGS to make the program "etags",
  which makes emacs-style tag tables by default.
@@ -204,11 +206,19 @@ void put_entries (NODE *node);
 
 char *savestr();
 char *savenstr ();
-// char *rindex();
-//char *index();
+char *_rindex();
+char *_index();
 char *concat ();
 void initbuffer ();
 long readline ();
+
+int total_size_of_entries ();
+int PF_funcs ();
+int xmalloc ();
+int consider_token ();
+int tail ();
+int TEX_Token ();
+int xrealloc ();
 
 /* A `struct linebuffer' is a structure which holds a line of text.
  `readline' reads a line from a stream into a linebuffer
@@ -241,7 +251,7 @@ system (buf)
 #endif /* VMS */
 #endif /* 0 */
 
-main(ac,av)
+int main(ac,av)
      int	ac;
      char	*av[];
 {
@@ -265,7 +275,7 @@ main(ac,av)
   eflag = 0;
 #else
   {
-    char *subname = rindex (progname, '/');
+    char *subname = _rindex (progname, '/');
     if (subname++ == NULL)
       subname = progname;
     eflag = ! strcmp(subname, "ctags");
@@ -507,7 +517,7 @@ find_entries (file)
       return;
     }
   curfile = savestr(file);
-  cp = rindex(file, '.');
+  cp = _rindex(file, '.');
   /* .tex, .aux or .bbl implies LaTeX source code */
   if (cp && (!strcmp (cp + 1, "tex") || !strcmp (cp + 1, "aux")
 	     || !strcmp (cp + 1, "bbl")))
@@ -590,13 +600,13 @@ pfnote (name, f, linestart, linelen, lno, cno)
   /* Change name "main" to M<thisfilename>. */
   if (!eflag && !xflag && !strcmp(name, "main"))
     {
-      fp = rindex(curfile, '/');
+      fp = _rindex(curfile, '/');
       if (fp == 0)
 	fp = curfile;
       else
 	fp++;
       altname = concat ("M", fp, "");
-      fp = rindex(altname, '.');
+      fp = _rindex(altname, '.');
       if (fp && fp[2] == 0)
 	*fp = 0;
       name = altname;
@@ -1178,6 +1188,7 @@ PF_funcs(fi)
   return (pfcnt);
 }
 
+int
 tail(cp)
      char *cp;
 {
@@ -1428,7 +1439,7 @@ TEX_funcs (fi)
 	  charno += readline (&lb, fi) + 1;
 	  dbp = lb.buffer;
 	  lasthit = dbp;
-	  while (dbp = index (dbp, TEX_esc)) /* Look at each escape in line */
+	  while (dbp = _index (dbp, TEX_esc)) /* Look at each escape in line */
 	    {
 	      register int i;
 
@@ -1487,7 +1498,7 @@ TEX_decode_env (evarname, defenv)
      char *defenv;
 {
   register char *env, *p;
-  extern char *savenstr (), *index ();
+  extern char *savenstr (), *_index ();
 
   struct TEX_tabent *tab;
   int size, i;
@@ -1501,7 +1512,7 @@ TEX_decode_env (evarname, defenv)
 
   /* Allocate a token table */
   for (size = 1, p=env; p;)
-    if ((p = index (p, ':')) && *(++p))
+    if ((p = _index (p, ':')) && *(++p))
       size++;
   tab = (struct TEX_tabent *) xmalloc (size * sizeof (struct TEX_tabent));
 
@@ -1509,7 +1520,7 @@ TEX_decode_env (evarname, defenv)
   /* zero-length strings (leading ':', "::" and trailing ':') */
   for (i = 0; *env;)
     {
-      p = index (env, ':');
+      p = _index (env, ':');
       if (!p)			/* End of environment string. */
 	p = env + strlen (env);
       if (p - env > 0)
@@ -1644,7 +1655,7 @@ savenstr(cp, len)
  */
 
 char *
-rindex(sp, c)
+_rindex(sp, c)
      char *sp, c;
 {
   char *r;
@@ -1666,7 +1677,7 @@ rindex(sp, c)
  */
 
 char *
-index(sp, c)
+_index(sp, c)
      register char *sp, c;
 {
   do
@@ -1722,7 +1733,7 @@ int
 xmalloc (size)
      int size;
 {
-  int result = malloc (size);
+  int result = (int)malloc (size);
   if (!result)
     fatal ("virtual memory exhausted", 0);
   return result;
@@ -1733,7 +1744,7 @@ xrealloc (ptr, size)
      char *ptr;
      int size;
 {
-  int result = realloc (ptr, size);
+  int result = (int)realloc (ptr, size);
   if (!result)
     fatal ("virtual memory exhausted");
   return result;
