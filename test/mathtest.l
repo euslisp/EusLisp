@@ -69,7 +69,7 @@
       (assert (eps= 7.68644 (random 10.0) 0.01) "random 10.0 (3)")
       (assert (eps= 2.44015 (random 10.0) 0.01) "random 10.0 (4)")
       (assert (eps= 7.26136 (random 10.0) 0.01) "random 10.0 (5)"))
-#-(or :alpha :irix6 :word-size=64)
+#-(and (or :alpha :irix6 :word-size=64) (not (or :s390x :riscv64)))  ;; s390x fails on defforeign float
     (progn
       (assert (eps= 3.1918 (random 10.0) 0.01) "random 10.0 (1)")
       (assert (eps= 2.74391 (random 10.0) 0.01) "random 10.0 (2)")

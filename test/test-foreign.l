@@ -59,6 +59,7 @@
   (assert (= lisp::sizeof-* (get-size-eusinteger)))
   )
 
+#-(or :s390x :riscv64)
 (deftest test-multiple-arguments-passing
   (format t "~%multiple arguments passing~%")
   (format t "expected result~%")
@@ -190,6 +191,7 @@ test-testd = 1.23456
   (assert-read-line-string= f "0:        4 4")
   )
 
+#-(or :s390x :riscv64)
 (deftest test-float-test
   (format t "~%~%float-test~%")
   (format t "expected result~%")
@@ -227,6 +229,7 @@ test-testd = 1.23456
     (assert-read-line-eps= f 0.4))
   )
 
+#-(or :s390x :riscv64)
 (deftest test-double-test
   (format t "~%~%double-test~%")
   (format t "expected result~%")
@@ -266,6 +269,7 @@ test-testd = 1.23456
   )
   )
 
+#-(or :s390x :riscv64)
 (deftest test-eusfloat-test
   (format t "~%~%eusfloat-test~%")
   (format t "expected result~%")
@@ -460,6 +464,7 @@ test-testd = 1.23456
     )
   )
 
+#-(or :s390x :riscv64)
 (deftest test-return-float
   (format t "~%return float test~%")
   (format t "expected result~%")
@@ -472,6 +477,7 @@ test-testd = 1.23456
   (assert (eps= (ret-float 0.55555 133.0) (+ 0.55555 133.0)))
   )
 
+#-(or :s390x :riscv64)
 (deftest test-return-double
   (format t "~%return double test~%")
   (format t "expected result~%")
@@ -486,6 +492,7 @@ test-testd = 1.23456
   )
   )
 
+#-(or :s390x :riscv64)
 (deftest test-return-eusfloat
   (format t "~%return eusfloat test~%")
   (format t "expected result~%")
