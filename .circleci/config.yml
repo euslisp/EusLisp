@@ -5,12 +5,14 @@ references:
     run:
       name: Setup TeX
       command: |-
+        export DEBIAN_FRONTEND=noninteractive
         sudo apt-get update
         sudo apt-get install -qq -y texlive-latex-base texlive-binaries texlive-lang-japanese latex2html nkf poppler-utils
   setup-eus: &setup-eus
     run:
       name: Setup EusLisp
       command: |-
+        export DEBIAN_FRONTEND=noninteractive
         sudo apt-get install -qq -y git make gcc g++ libjpeg-dev libxext-dev libx11-dev libgl1-mesa-dev libglu1-mesa-dev libpq-dev libpng-dev xfonts-100dpi xfonts-75dpi
         echo 'export EUSDIR=`pwd`' >> $BASH_ENV
         echo 'export ARCHDIR=Linux64' >>  $BASH_ENV
@@ -25,7 +27,7 @@ references:
 jobs:
   html:
     machine:
-      image: ubuntu-2004:2022.07.1
+      image: default
     steps:
       - checkout
       - *setup-tex
@@ -55,7 +57,7 @@ jobs:
 
   latex:
     machine:
-      image: ubuntu-2004:2022.07.1
+      image: default
     steps:
       - checkout
       - *setup-tex
@@ -76,7 +78,7 @@ jobs:
           paths: manual.pdf
   jlatex:
     machine:
-      image: ubuntu-2004:2022.07.1
+      image: default
     steps:
       - checkout
       - *setup-tex
@@ -97,13 +99,15 @@ jobs:
           paths: jmanual.pdf
   rst:
     machine:
-      image: ubuntu-2004:2022.07.1
+      image: default
     steps:
       - checkout
       - *setup-tex
       - run:
           name: Install Pandoc
-          command: sudo apt-get install -y -qq pandoc
+          command: |
+            export DEBIAN_FRONTEND=noninteractive
+            sudo apt-get install -y -qq pandoc
       - run:
           name: Compile reStructuredText(reST)
           command: cd doc/latex && make rst
