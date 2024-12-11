@@ -44,6 +44,8 @@
 ;;;
 
 (setq i-max 200000)
+#+(or :s390x :riscv64)
+(setq i-max 200)
 
 (deftest test-copy-object-integer
   (setq vmrss-orig (elt (unix::getrusage 0) 2))

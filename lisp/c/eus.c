@@ -951,6 +951,12 @@ static void initfeatures()
 #if aarch64
   p=cons(ctx,intern(ctx,"AARCH64",7,keywordpkg),p);
 #endif
+#if s390x
+  p=cons(ctx,intern(ctx,"S390X",5,keywordpkg),p);
+#endif
+#if riscv64
+  p=cons(ctx,intern(ctx,"RISCV64",7,keywordpkg),p);
+#endif
   {
     char tmp[32];
     sprintf(tmp, "WORD-SIZE=%zd", sizeof(void*)*8);
