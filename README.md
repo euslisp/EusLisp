@@ -12,7 +12,12 @@ EusLisp is an integrated programming system for the research on intelligent robo
 
 ### Installation
 
-#### Binary Installation (Recommended)
+#### Binary Installation
+
+Since Debian 11(Bullseye) / Ubuntu 22.04(jammy), euslisp/jskeus is distributed under official repository.
+See https://packages.debian.org/source/euslisp and https://launchpad.net/ubuntu/+source/euslisp
+
+#### Binary Installation for ROS Users
 
 Please check http://github.com/euslisp/jskeus for easy binary installation and how to run current
 demo programs. Most of programs in EusLisp/lib/ EusLisp/contrib/ directories are outdated.
