@@ -27,19 +27,10 @@ jobs:
             ROS_DISTRO: noetic
           - DOCKER_IMAGE: osrf/ubuntu_armhf:trusty
           - DOCKER_IMAGE: osrf/ubuntu_armhf:xenial
-          # - DOCKER_IMAGE: osrf/ubuntu_arm64:trusty  # deprecated
-          - DOCKER_IMAGE: osrf/ubuntu_arm64:xenial
-          - QEMU: aarch64
-            DOCKER_IMAGE: arm64v8/ubuntu:bionic
-          - QEMU: aarch64
-            DOCKER_IMAGE: arm64v8/ubuntu:focal
-          - DOCKER_IMAGE: osrf/debian_arm64:stretch
           - DOCKER_IMAGE: amd64/debian:unstable
             #
           - QEMU: amd64
             DOCKER_IMAGE: amd64/debian:unstable # amd64
-          - QEMU: aarch64
-            DOCKER_IMAGE: arm64v8/debian:buster # arm64
           - QEMU: arm
             DOCKER_IMAGE: arm32v5/debian:jessie # armel
           - QEMU: arm
@@ -52,8 +43,9 @@ jobs:
             DOCKER_IMAGE: i386/debian:buster # i386
             # ia64
             # m68k
-          - QEMU: mips64el
-            DOCKER_IMAGE: loongnix/debian:buster # --platform is mips64le but qemu is mips64el
+          # - QEMU: mips64el
+          #   DOCKER_IMAGE: loongnix/debian:buster # --platform is mips64le but qemu is mips64el
+            # mips64el is dropped https://github.com/debuerreotype/docker-debian-artifacts/issues/170
             # mipsel
           # - QEMU: ppc
           #   DOCKER_IMAGE: vicamo/debian:unstable-powerpc # powerpc / somehow failing loading eusgl
@@ -94,6 +86,39 @@ jobs:
           echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
           docker run $PLATFORM_OPTION --rm $QEMU_VOLUME -v $HOME:$HOME -e "QEMU=$QEMU" -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"
 
+  linux-arm:
+    strategy:
+      matrix:
+        include:
+          - DOCKER_IMAGE: arm64v8/ubuntu:jammy
+          - DOCKER_IMAGE: arm64v8/ubuntu:noble
+          - DOCKER_IMAGE: arm64v8/debian:sid
+      fail-fast: false
+
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 60
+
+    name: linux-arm
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run test
+        shell: bash
+        run: |
+          set -x
+          export CI_SOURCE_PATH=$(pwd)
+          export REPOSITORY_NAME=${PWD##*/}
+          export TRAVIS_BRANCH=${GITHUB_REF#refs/heads/}
+          export TRAVIS_OS_NAME=linux
+          export DOCKER_IMAGE=${{matrix.DOCKER_IMAGE}}
+          export ROS_DISTRO=${{matrix.ROS_DISTRO}}
+          export QEMU=${{matrix.QEMU}}
+          export MAKEFLAGS="-j4"
+          git clone http://github.com/euslisp/jskeus ${HOME}/jskeus
+          echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME on $QEMU_VOLUME"
+          docker run --rm $QEMU_VOLUME -v $HOME:$HOME -e "TRAVIS_OS_NAME=$TRAVIS_OS_NAME" -e "CI_SOURCE_PATH=$CI_SOURCE_PATH" -e "HOME=$HOME" -e "MAKEFLAGS=$MAKEFLAGS" -e "DOCKER_IMAGE=$DOCKER_IMAGE" -t $DOCKER_IMAGE sh -c "cd $CI_SOURCE_PATH; ./.travis.sh"
+
   debian-unstable:
     strategy:
       matrix:
@@ -113,6 +138,7 @@ jobs:
           - DOCKER_IMAGE: riscv64/debian:unstable-slim
             DOCKER_PLATFORM: riscv64
             ARCH: Linux
+      fail-fast: false
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -130,7 +156,7 @@ jobs:
           sudo apt update -qq
           # Install the qemu packages
           # This step will execute the registering scripts
-          sudo apt install -y -qq qemu binfmt-support qemu-user-static
+          sudo apt install -y -qq qemu-system binfmt-support qemu-user-static
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker run --rm --platform linux/${{matrix.DOCKER_PLATFORM}} -v $(pwd):/ws/euslisp -e "ARCH=$ARCH" -t "$DOCKER_IMAGE" \
             bash -c " \
