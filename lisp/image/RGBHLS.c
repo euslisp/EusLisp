@@ -9,7 +9,7 @@ static char *rcsid= "@(#)$Id: RGBHLS.c,v 1.1.1.1 2003/11/20 07:46:30 eus Exp $";
 #include "../c/eus.h"
 
 #pragma init (init_object_module)
-pointer RGBHLS();
+pointer RGBHLS(context *,int,pointer*);
 
 static void init_object_module()
   { add_module_initializer("RGBHLS", RGBHLS);}

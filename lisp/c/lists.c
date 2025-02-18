@@ -8,7 +8,7 @@ static char *rcsid="@(#)$Id$";
 
 #include "eus.h"
 
-extern pointer equal();
+extern pointer equal(pointer, pointer);
 extern pointer call1(context *, pointer, pointer);
 extern pointer call2(context *, pointer, pointer, pointer);
 

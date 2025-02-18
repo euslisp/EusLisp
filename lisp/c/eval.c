@@ -1411,7 +1411,7 @@ pointer funcode(ctx,func,args,noarg)
 register context *ctx;
 register pointer func,args;
 register int noarg;
-{ register pointer (*subr)();
+{ register pointer (*subr)(context*,int,pointer*);
   register pointer *argp=ctx->vsp;
   register int n=0;
   register eusinteger_t addr;
@@ -1431,7 +1431,7 @@ register int noarg;
 #endif
   }
 #endif
-  subr=(pointer (*)())(addr);
+  subr=(pointer (*)(context*,int,pointer*))(addr);
 #ifdef FUNCODE_DEBUG
   printf( "funcode:func = " ); hoge_print( func );
   printf( "funcode:args = " ); hoge_print( args );
@@ -1447,7 +1447,7 @@ register int noarg;
 		else return((*subr)(ctx,n,argp));}
 	      else if (pisfcode(func))
 		return(call_foreign((eusinteger_t (*)())subr,func,noarg,(pointer *)args));
-	      else return((*subr)(ctx,noarg,args,0));
+	      else return(((pointer (*)(context*,int,pointer,int))subr)(ctx,noarg,args,0));
 	      break;
       case (eusinteger_t)SUBR_MACRO:/* ???? */
 	      if (noarg>=0) error(E_ILLFUNC);
@@ -1458,7 +1458,7 @@ register int noarg;
 	      return(eval(ctx,tmp));
       case (eusinteger_t)SUBR_SPECIAL: /* ???? */
 	      if (noarg>=0) error(E_ILLFUNC);
-	      else return((*subr)(ctx,args));
+	      else return(((pointer (*)(context*,pointer))subr)(ctx,args));
 /*      case (int)SUBR_ENTRY:
 	      func=(*subr)(func);
 	      return(makeint(func)); */
@@ -1476,7 +1476,7 @@ int noarg;
   register struct callframe *vf=(struct callframe *)(ctx->vsp);
   struct specialbindframe *sbfps=ctx->sbindfp;
   register int n=0,i;
-  register pointer (*subr)();
+  register pointer (*subr)(context*,int,pointer*,pointer);
   struct fletframe *oldfletfp=ctx->fletfp, *fenv;
   GC_POINT;
   /* evalhook */
@@ -1524,9 +1524,9 @@ int noarg;
     fn=func;
     if (fn->c.code.subrtype!=SUBR_FUNCTION) error(E_ILLFUNC);
 #if (WORD_SIZE == 64)
-    subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3L /*0xfffffffc ????*/);
+    subr=(pointer (*)(context*,int,pointer*,pointer))((eusinteger_t)(fn->c.code.entry) & ~3L /*0xfffffffc ????*/);
 #else
-    subr=(pointer (*)())((eusinteger_t)(fn->c.code.entry) & ~3 /*0xfffffffc ????*/);
+    subr=(pointer (*)(context*,int,pointer*,pointer))((eusinteger_t)(fn->c.code.entry) & ~3 /*0xfffffffc ????*/);
 #endif
 #if ARM
     register eusinteger_t addr;
@@ -1543,7 +1543,7 @@ int noarg;
       addr = addr | (intval(fn->c.code.entry2)&0x0000ffff);
 #endif
     }
-    subr=(pointer (*)())(addr);
+    subr=(pointer (*)(context*,int,pointer*,pointer))(addr);
 #endif
 #if !Solaris2 && !SunOS4_1 && !Linux && !IRIX && !IRIX6 && !alpha && !Cygwin
     if ((char *)subr>maxmemory) {
@@ -1554,7 +1554,7 @@ int noarg;
 	while (iscons(args)) {
 	  vpush(eval(ctx,ccar(args))); args=ccdr(args); n++; GC_POINT;}
 	result=(*subr)(ctx,n,argp,func);}	/*call func with env*/
-      else result=(*subr)(ctx,noarg,args,func);
+      else result=(*subr)(ctx,noarg,(pointer*)args,func);
     /*recover call frame and stack pointer*/
     ctx->vsp=(pointer *)vf;
     ctx->callfp= vf->vlink;

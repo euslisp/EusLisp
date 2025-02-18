@@ -21,7 +21,7 @@ static char *rcsid="@(#)$Id$";
 #define	ltz(x)	((x)<0)
 #define	gez(x)	((x)>=0)
 
-extern pointer makebig();
+extern pointer makebig(int);
 
 #if (WORD_SIZE == 64)
 

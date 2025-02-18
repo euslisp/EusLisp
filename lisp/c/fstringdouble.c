@@ -4,7 +4,7 @@
 
 #include "eus.h"
 #if (WORD_SIZE == 64)
-extern pointer makefvector();
+extern pointer makefvector(int);
 /*
   string converted by DV2FSTRING convert to float-vector(vector of 64bit float)
   float-bytestring2dvector str [ fvec ]

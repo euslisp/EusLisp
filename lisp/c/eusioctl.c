@@ -283,7 +283,7 @@ register pointer mod;
 #endif
   defunpkg(ctx,"TCGETA",mod,IOCTL_TCGETA,unixpkg);
   defunpkg(ctx,"TCSETA",mod,IOCTL_TCSETA,unixpkg);
-  defunpkg(ctx,"TCSETAW",mod,IOCTL_TCSETAW,unixpkg);
+  defunpkg(ctx,"TCSETAW",mod,(pointer(*)(context*,int,pointer*))IOCTL_TCSETAW,unixpkg);
   defunpkg(ctx,"TCSETAF",mod,IOCTL_TCSETAF,unixpkg);
 #endif
   defunpkg(ctx,"TCGETATTR",mod,TCGETATTR,unixpkg);

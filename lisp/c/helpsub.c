@@ -7,7 +7,7 @@ static char *rcsid="@(#)$Id$";
 #include "eus.h"
 
 #pragma init (init_object_module)
-extern pointer helpsub();
+extern pointer helpsub(context*,int,pointer*);
 static void init_object_module()
   { add_module_initializer("helpsub", helpsub);}
 

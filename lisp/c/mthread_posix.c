@@ -50,7 +50,7 @@ int thr_setprio(int tid, int prio)
 
 struct thr_arg {
     int tid;
-    void (*func)();
+    void (*func)(void*);
     void *args;
 };
 

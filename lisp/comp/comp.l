@@ -1344,7 +1344,7 @@
 			 ((memq :sunos4.1 *features*) " -DSunOS4_1")
 			 ((memq :Solaris2 *features*) " -DSolaris2")
 			 (t ""))
-		   (if (memq :gcc *features*) " -DGCC -fsigned-char " )
+		   (if (memq :gcc *features*) " -DGCC -Wno-old-style-definition -fsigned-char " )
 		   (if (memq :thread *features*) " -DTHREADED" )
 		   (if (memq :pthread *features*) " -DPTHREAD" )
 		   (if (memq :rgc *features*) " -DRGC -D__USE_POLLING -D__HEAP_EXPANDABLE -D__GC_SEPARATE_THREAD" )

@@ -16,10 +16,10 @@ pointer fcallx(ctx,n,argv,fslot,sym)
 register context *ctx;
 int n;
 pointer *argv,sym;
-pointer (**fslot)();
+pointer (**fslot)(context*,int,pointer*);
 { eusinteger_t x;
   pointer fn;
-  pointer (*subr)();
+  pointer (*subr)(context*,int,pointer*);
 
   fn=getfunc(ctx,sym);
 
@@ -38,7 +38,7 @@ pointer (**fslot)();
 #endif
     }
 #endif
-    subr=(pointer (*)())(x);
+    subr=(pointer (*)(context*,int,pointer*))(x);
     *fslot= subr;
     return((*subr)(ctx,n,argv));
     }

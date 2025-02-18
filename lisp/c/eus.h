@@ -1050,7 +1050,7 @@ extern pointer makebuffer(int);
 extern pointer makevector(pointer, int);
 extern pointer makeclass(context *, pointer, pointer, pointer,pointer, pointer,
 			int, pointer);
-extern pointer makecode(pointer, pointer(*)(), pointer);
+extern pointer makecode(pointer, pointer(*)(context*,int,pointer*), pointer);
 extern pointer makematrix(context *, int, int);
 extern pointer makeobject(pointer);
 extern pointer rawcons(context *, pointer, pointer);
@@ -1100,7 +1100,7 @@ extern pointer reader(context *, pointer, pointer);
 extern pointer prinx(context *, pointer, pointer);
 
 /*for compiled code*/
-extern pointer makeclosure(pointer,pointer,pointer(*)(),pointer, pointer*, pointer*);
+extern pointer makeclosure(pointer,pointer,pointer(*)(context*,int,pointer*,pointer),pointer, pointer*, pointer*);
 extern pointer fcall();
 extern pointer xcar(pointer), xcdr(pointer), xcadr(pointer);
 extern pointer *ovafptr(pointer,pointer);

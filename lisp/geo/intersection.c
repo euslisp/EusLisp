@@ -10,7 +10,7 @@
 
 #include "../c/eus.h"
 #pragma init (init_object_module)
-extern pointer intersection();
+extern pointer intersection(context *,int,pointer*);
 
 static void init_object_module()
   { add_module_initializer("intersection", intersection);}
@@ -129,7 +129,7 @@ register pointer argv[];
 /*	Copyright(1986) Toshihiro MATSUI
 */
 
-extern pointer makefvector();
+extern pointer makefvector(int);
 
 #define clipcode(x,y,z)  (((x)<-(z))?1:(((x)>(z))?2:0))\
                          + (((y)<-(z))?4:(((y)>(z))?8:0))

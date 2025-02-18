@@ -25,7 +25,7 @@ register context *ctx;
 int n;
 register pointer argv[];
 { pointer s;
-  extern pointer openfile();
+  extern pointer openfile(context*,char*,int,int,int);
   s=openfile(ctx,(char*)get_string(argv[0]), ckintval(argv[1]),
 	     ckintval(argv[2]),ckintval(argv[3]));
   if (s==0) return(makeint(errno));
@@ -454,7 +454,7 @@ pointer argv[];
   int fargc,fargx;
   int wcount, osf;
   numunion nu;
-  extern double fabs();
+  extern double fabs(double);
 
   if (n<2) error(E_MISMATCHARG);
   dest=argv[0]; a=argv[1];

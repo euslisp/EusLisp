@@ -31,10 +31,10 @@ extern pointer QNOT, QAND, QOR;	/*eval_read_cond, Jan/1995*/
 
 static pointer read1(context *, pointer);
 static pointer read2(context *, pointer, int, int, int, char*, int);
-extern pointer makelabref();
+extern pointer makelabref(pointer,pointer,pointer);
 
-extern void mul_int_big();
-extern pointer normalize_bignum();
+extern void mul_int_big(eusinteger_t,pointer);
+extern pointer normalize_bignum(pointer);
 
 /* the following two global variables are hazardous to multi-threads */
 /* These should be eliminated in the next release. */
@@ -630,7 +630,7 @@ char token[];
 { register eusinteger_t val=0;
   register int i=0,subchar;
   pointer macrofunc,result;
-  pointer (*intmac)();
+  pointer (*intmac)(context*,pointer,eusinteger_t,int,char*);
 
   ch=readch(f);
   if (ch==EOF) return(UNBOUND);
@@ -641,7 +641,7 @@ char token[];
   macrofunc=Spevalof(QREADTABLE)->c.rdtab.dispatch->c.vec.v[subchar];
   if (macrofunc==NIL) error(E_USER,(pointer)"no # macro defined");
   if (isint(macrofunc)) {	/*internal macro*/
-    intmac=(pointer (*)())(intval(macrofunc));
+    intmac=(pointer (*)(context*,pointer,eusinteger_t,int,char*))(intval(macrofunc));
     result=(*intmac)(ctx,f,val,subchar,token);}
   else {
     vpush(f); vpush(makeint(subchar)); vpush(makeint(val));
@@ -851,7 +851,7 @@ context *ctx;
 char *token;
 int slash;
 { int num, denom, g;
-  extern pointer makeratio();
+  extern pointer makeratio(int,int);
   num=strtol(token,NULL,intval(Spevalof(READBASE)));
   denom=strtol(&token[slash+1],NULL,intval(Spevalof(READBASE)));
   g=gcd(num, denom);
@@ -875,7 +875,7 @@ int colon;
   int ch;
   pointer readcase; 
   numunion nu;
-  extern double atof();
+  extern double atof(const char*);
   
   readcase=Spevalof(QREADTABLE)->c.rdtab.readcase;
 
@@ -971,7 +971,7 @@ register pointer ins;
 { register enum ch_type ctype;
   register int firstch;
   register pointer macrofunc,result;
-  pointer (*intmac)();
+  pointer (*intmac)(context*,pointer,int,char*);
   int colon;
 /*  Char ch; */
   int ch;
@@ -992,7 +992,7 @@ register pointer ins;
 	      macrofunc=Spevalof(QREADTABLE)->c.rdtab.macro->c.vec.v[ch];
 	      if (macrofunc==NIL) error(E_USER,(pointer)"no char macro defined");
 	      if (isint(macrofunc)) {	/*internal macro*/
-		intmac=(pointer (*)())(intval(macrofunc));
+		intmac=(pointer (*)(context*,pointer,int,char*))(intval(macrofunc));
 	        result=(*intmac)(ctx,ins,ch,token);}
 	      else {
 	        vpush(ins); vpush(makeint(ch));
