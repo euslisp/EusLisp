@@ -687,6 +687,20 @@ pointer argv[];
 /* stack frame access
 /* 1988-Apr-26
 /****************************************************************/
+pointer LISTALLBLOCKS(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
+{ pointer blocks=NIL;
+  struct blockframe *bfp=ctx->blkfp;
+  int i=0;
+  while (bfp) {
+    if (bfp->kind==BLOCKFRAME) {
+      vpush(bfp->name);
+      i++;}
+    bfp=bfp->lexklink;}
+  return(stacknlist(ctx,i));}
+
 pointer LISTALLCATCHERS(ctx,n,argv)
 register context *ctx;
 int n;
@@ -799,6 +813,7 @@ pointer mod;
 /*  defun(ctx,"MALLOC_DEBUG",mod,MALLOC_DEBUG,NULL);
 /*  defun(ctx,"MALLOC_VERIFY",mod,MALLOC_VERIFY,NULL); */
   defun(ctx,"LIST-ALL-REFERENCES",mod,LISTALLREFERENCES,NULL);
+  defun(ctx,"LIST-ALL-BLOCKS",mod,LISTALLBLOCKS,NULL);
   defun(ctx,"LIST-ALL-CATCHERS",mod,LISTALLCATCHERS,NULL);
   defun(ctx,"LIST-ALL-BINDINGS",mod,LISTBINDINGS,NULL);
   defun(ctx,"LIST-ALL-SPECIAL-BINDINGS",mod,LISTSPECIALBINDINGS,NULL);
