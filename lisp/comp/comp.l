@@ -24,7 +24,7 @@
 (eval-when (load eval)
 
 (defparameter *coptflags* "")
-(defparameter *cflags* "")
+(defparameter *cflags* (format nil " ~A" (or (unix::getenv "CFLAGS") "")))
 (defparameter *defun-list* nil)
 (defparameter *verbose* nil)
 (defparameter *optimize* 2)
@@ -1264,7 +1264,6 @@
 	 (setq file (merge-pathnames ".l" file))
          (if (null (probe-file  file)) 
 	     (error "file ~A not found~%" file)))
-      (warn "compiling file: ~A~%" (namestring file))
       (setq ins (open file))
       (setq *defun-list* nil)
       (when *multipass-optimize*
