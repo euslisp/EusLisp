@@ -1311,10 +1311,10 @@ pointer args[];
     ifunc=(double (*)())tmp_ifunc;
 #endif
     if (i<=8) 
-      n.i=((double (*)(eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t))ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7]);
     else if (i<=32)
-      n.i=((double (*)(eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t))ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7],
 		 cargv[8],cargv[9],cargv[10],cargv[11],
 	         cargv[12],cargv[13],cargv[14],cargv[15],
@@ -1324,7 +1324,7 @@ pointer args[];
 	         cargv[28],cargv[29],cargv[30],cargv[31]);
 #if (sun3 || sun4 || mips || alpha)
     else if (i>32) 
-      n.i=((double (*)(eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t))ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      n.i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7],
 		 cargv[8],cargv[9],cargv[10],cargv[11],
 	         cargv[12],cargv[13],cargv[14],cargv[15],
@@ -1349,10 +1349,10 @@ pointer args[];
     return(makeflt(n.f));}
   else {
     if (i<8) 
-      i=((eusinteger_t (*)(eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t))ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	       cargv[4],cargv[5],cargv[6],cargv[7]);
     else if (i<=32)
-      i=((eusinteger_t (*)(eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t))ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7],
 		 cargv[8],cargv[9],cargv[10],cargv[11],
 	         cargv[12],cargv[13],cargv[14],cargv[15],
@@ -1362,7 +1362,7 @@ pointer args[];
 	         cargv[28],cargv[29],cargv[30],cargv[31]);
 #if (sun3 || sun4 || mips || alpha)
     else if (i>32) 
-      i=((eusinteger_t (*)(eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t,eusinteger_t))ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
+      i=(*ifunc)(cargv[0],cargv[1],cargv[2],cargv[3],
 	         cargv[4],cargv[5],cargv[6],cargv[7],
 		 cargv[8],cargv[9],cargv[10],cargv[11],
 	         cargv[12],cargv[13],cargv[14],cargv[15],

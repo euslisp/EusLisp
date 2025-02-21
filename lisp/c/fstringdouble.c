@@ -196,7 +196,7 @@ pointer argv[];
 }
 #endif
 #ifdef i386
-extern pointer makefvector(int);
+extern pointer makefvector();
 /*
   string converted by FV2DSTRING convert to float-vector(vector of 32bit float)
   double-bytestring2fvector str [ fvec ]
