@@ -957,6 +957,9 @@ static void initfeatures()
 #if riscv64
   p=cons(ctx,intern(ctx,"RISCV64",7,keywordpkg),p);
 #endif
+#if loongarch64
+  p=cons(ctx,intern(ctx,"LOONGARCH64",11,keywordpkg),p);
+#endif
   {
     char tmp[32];
     sprintf(tmp, "WORD-SIZE=%zd", sizeof(void*)*8);
