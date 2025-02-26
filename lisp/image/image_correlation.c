@@ -13,7 +13,7 @@
 #define imgvec(img,x,y) (&((img)->imgary[(y)*(img)->twidth + x]))
 
 #pragma init (init_object_module)
-pointer image_correlation();
+pointer image_correlation(context *,int,pointer*);
 
 static void init_object_module()
   { add_module_initializer("image_correlation", image_correlation);}

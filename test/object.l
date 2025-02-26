@@ -44,7 +44,7 @@
 ;;;
 
 (setq i-max 200000)
-#+(or :s390x :riscv64)
+#+(or :s390x :riscv64 :loongarch64)
 (setq i-max 200)
 
 (deftest test-copy-object-integer

@@ -109,7 +109,7 @@ typedef struct _rwlock {
 /* lwp functions are redefined to mthread functions by H.Nakagaki */
 extern unsigned int thr_self();
 extern int thr_getprio(int tid, int *prio);
-extern int thr_create(void *, size_t, void (*)(), void *, long, int *);
+extern int thr_create(void *, size_t, void (*)(void *), void *, long, int *);
 extern int thr_setprio(int, int);
 extern int thr_continue(int);
 extern int thr_suspend(int);

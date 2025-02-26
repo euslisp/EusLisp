@@ -26,7 +26,7 @@ static char *rcsid="@(#)$Id$";
 #include "../c/eus.h"
 
 extern int errno;
-extern pointer openfile();
+extern pointer openfile(context*, char*, int, int, int);
 extern pointer makemodule(context *, int);
 
 /****************************************************************/
@@ -78,14 +78,14 @@ pointer argv[];
 #define MAX_SYSTEM_MODULES 100
 int module_count=0;
 struct {
-    pointer (*entry_func)();
+    pointer (*entry_func)(context*,int,pointer*);
     char *module_name;}
   module_initializers[MAX_SYSTEM_MODULES];
 
 
 void add_module_initializer(name, entry)
 char *name;
-pointer (*entry)();
+pointer (*entry)(context*,int,pointer*);
 { 
   /* printf("%s %x is added in the module_initializer list\n", name, entry); */
   if (module_count>=MAX_SYSTEM_MODULES)  error(E_USER,(pointer)"too many system modules");
@@ -347,7 +347,10 @@ pointer argv[];
 
 extern pointer sysmod;
 
-pointer SYSMOD()
+pointer SYSMOD(ctx,n,argv)
+register context *ctx;
+int n;
+pointer *argv;
 { return(sysmod);}
 
 pointer UNBINLOAD(ctx,n,argv)

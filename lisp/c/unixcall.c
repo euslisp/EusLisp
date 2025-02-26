@@ -372,7 +372,7 @@ pointer argv[];
 { register int s,i;eusinteger_t f;
   struct sigaction sv;
   register pointer a=argv[1],oldval;
-  extern void eusint();	
+  extern void eusint(int,int,int,eusinteger_t);
   unsigned long int j;
 
   ckarg2(1,3);
@@ -381,7 +381,7 @@ pointer argv[];
   if (n==1) return(oldval);
   if (isint(a)) { f=max(1,intval(a)); eussigvec[s]=NIL;}
   else { f=(eusinteger_t)eusint; eussigvec[s]=a;}
-  sv.sa_handler= (void (*)())f;
+  sv.sa_handler= (void (*)(int))f;
 #if Linux || Cygwin
 
 #if LIB6 && !Darwin
@@ -413,7 +413,7 @@ pointer argv[];
 { register int s;eusinteger_t f;
   struct sigvec sv;
   register pointer a=argv[1],oldval;
-  extern void eusint();
+  extern void eusint(int,int,int,eusinteger_t);
 
   ckarg2(1,3);
   s=min(ckintval(argv[0]),NSIG-1);
@@ -1315,13 +1315,13 @@ register pointer argv[];
 { int stat;
   eusinteger_t s;
 /*  extern int eusint(); */
-  extern void eusint();	/* ???? */
+  extern void eusint(int,int,int,eusinteger_t);	/* ???? */
 
   s=(eusinteger_t)signal(SIGCHLD,SIG_DFL);/* ???? */
   if (n==0) stat=system("csh");
   else if (isstring(argv[0])) stat=system((char *)argv[0]->c.str.chars);
-  else { signal(SIGCHLD,(void (*)())s); error(E_NOSTRING);}
-  signal(SIGCHLD,(void (*)())s);
+  else { signal(SIGCHLD,(void (*)(int))s); error(E_NOSTRING);}
+  signal(SIGCHLD,(void (*)(int))s);
   return(makeint(stat));}
 
 pointer GETWD(ctx,n,argv)

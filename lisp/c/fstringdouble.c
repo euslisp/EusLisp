@@ -4,7 +4,7 @@
 
 #include "eus.h"
 #if (WORD_SIZE == 64)
-extern pointer makefvector();
+extern pointer makefvector(int);
 /*
   string converted by DV2FSTRING convert to float-vector(vector of 64bit float)
   float-bytestring2dvector str [ fvec ]
@@ -196,7 +196,7 @@ pointer argv[];
 }
 #endif
 #ifdef i386
-extern pointer makefvector();
+extern pointer makefvector(int);
 /*
   string converted by FV2DSTRING convert to float-vector(vector of 32bit float)
   double-bytestring2fvector str [ fvec ]

@@ -126,6 +126,22 @@ jobs:
           - DOCKER_IMAGE: amd64/debian:unstable-slim
             DOCKER_PLATFORM: amd64
             ARCH: Linux64
+            EXPERIMENTAL: true
+          - DOCKER_IMAGE: i386/debian:unstable-slim
+            DOCKER_PLATFORM: i386
+            ARCH: Linux
+            EXPERIMENTAL: true
+          - DOCKER_IMAGE: arm32v7/debian:unstable-slim
+            DOCKER_PLATFORM: arm
+            ARCH: LinuxARM
+            EXPERIMENTAL: true
+          - DOCKER_IMAGE: arm64v8/debian:unstable-slim
+            DOCKER_PLATFORM: aarch64
+            ARCH: LinuxARM
+            EXPERIMENTAL: true
+          - DOCKER_IMAGE: amd64/debian:unstable-slim
+            DOCKER_PLATFORM: amd64
+            ARCH: Linux64
           - DOCKER_IMAGE: arm32v7/debian:unstable-slim
             DOCKER_PLATFORM: arm
             ARCH: LinuxARM
@@ -161,11 +177,13 @@ jobs:
           docker run --rm --platform linux/${{matrix.DOCKER_PLATFORM}} -v $(pwd):/ws/euslisp -e "ARCH=$ARCH" -t "$DOCKER_IMAGE" \
             bash -c " \
                set -x; set -e; \
+               [[ \"${{matrix.EXPERIMENTAL}}\" != \"true\" ]] || echo \"deb http://deb.debian.org/debian experimental main\" | tee -a /etc/apt/sources.list; \
                apt update -qq; \
+               [[ \"${{matrix.EXPERIMENTAL}}\" != \"true\" ]] || apt -t=experimental -y -qq install g++ gcc; \
                apt install -y -qq make gcc libgl-dev libglu1-mesa-dev libjpeg-dev libpng-dev libpq-dev libx11-dev libxext-dev; \
                CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0; \
                CC='gcc -Werror' ARCHDIR=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/image/jpeg; \
-               if [[ "$DOCKER_IMAGE" == *"arm"* ]]; then exit 0; fi ; \
+               if [[ \"$DOCKER_IMAGE\" =~ (\"arm\"|\"s390x\") ]]; then exit 0; fi ; \
                CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0 eus1 eus2 eusg eusx eusgl; \
                apt install -y -qq curl dpkg-dev; \
                curl -sLo /usr/local/bin/shunit2 https://raw.githubusercontent.com/kward/shunit2/master/shunit2; \

@@ -33,7 +33,7 @@ char *fname;
 int dir,acsmode,size;
 { int fd,flag;
   pointer s,si,so,fnamep;
-  extern pointer mkiostream();
+  extern pointer mkiostream(context*,pointer,pointer);
   fd=open(fname, dir, acsmode);
   if (fd<0) return(NULL);
   fnamep=makestring(fname,strlen(fname));

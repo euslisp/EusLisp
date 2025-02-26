@@ -251,9 +251,9 @@
          (format *error-output* "; ~C[34;7m~S~C[0;34m is assumed to be undefined function~C[0m~%"
                  #x1b sym #x1b #x1b))
        (if entry
-	   (format cfile "	w=(pointer)~A(ctx,~d,local+~d); /*~A*/~%"
+	   (format cfile "	{pointer (*f)(context*,int,pointer*); f = (pointer(*)(context*,int,pointer*))~A; w=(pointer)f(ctx,~d,local+~d);} /*~A*/~%"
 		     entry n (- pushcount n) sym)
-	   (format cfile "	w=(*ftab[~d])(ctx,~d,local+~d,&ftab[~d],fqv[~d]); /*~A*/~%"
+	   (format cfile "	w=(*ftab[~d])(ctx,~d,local+~d,(pointer(**)(context*,int,pointer*))&ftab[~d],fqv[~d]); /*~A*/~%"
 			(ftab-index sym)
 			n (- pushcount n)
 			(ftab-index sym)
@@ -593,7 +593,7 @@
     (send self :clearpush)
     (send self :reset-vsp)
     (format cfile
-	    "	compfun(ctx,fqv[~d],module,~A,fqv[~d]);~%" 
+	    "	compfun(ctx,fqv[~d],module,(pointer (*)(context*,int,pointer*))~A,fqv[~d]);~%"
 	    (send self :quote-entry sym)
 	    cname
 	    (send self :quote-entry doc)) )
@@ -618,7 +618,7 @@
 	    (send self :quote-entry klass)
 	    (send self :quote-fqv-entry doc)	))
  (:declare-forward-function (name)
-    (format hfile "static pointer ~A();~%" name))
+    (format hfile "static pointer ~A(context*,int,pointer*,pointer);~%" name))
  (:quote ()  quotev)
  (:init () 
     (setq push nil
@@ -637,8 +637,8 @@
     (format cfile "#include \"~A.~A\"~%" (pathname-name hname) (pathname-type hname))
 #-:alpha
     (format cfile "#pragma init (register_~a)~%" entry)
-    (format cfile "extern double fabs();~%")
-    (format cfile "extern pointer fcallx();~%")
+    (format cfile "extern double fabs(double);~%")
+    (format cfile "extern pointer fcallx(context*,int,pointer*,pointer(**)(context*,int,pointer*),pointer);~%")
     (format cfile "static void init_ftab();~%")
     (cond
        ((> *optimize* 2)
@@ -647,18 +647,18 @@
 	(format cfile "#define storeglobal(s,val) {noticeCollector(s->c.sym.speval,(val)); s->c.sym.speval=(val)~%")
 	#-:rgc
 	(format cfile "#define storeglobal(s,val) s->c.sym.speval=(val)~%"))
-       (t (format cfile "extern pointer loadglobal(),storeglobal();~%")))
+       (t (format cfile "extern pointer loadglobal(pointer),storeglobal(pointer,pointer);~%")))
     (format cfile "static pointer module,*qv,codevec,quotevec;~%")
     (if (memq 'lisp::solaris2 *features*)
-	(format cfile "static pointer ___~a();~%" entry)
-	(format cfile "extern pointer ___~a();~%" entry))
-    (format cfile "extern pointer build_quote_vector();~%")
+	(format cfile "static pointer ___~a(context*,int,pointer*,pointer);~%" entry)
+	(format cfile "extern pointer ___~a(context*,int,pointer*,pointer);~%" entry))
+    (format cfile "extern pointer build_quote_vector(context*,int,char**);~%")
     (format cfile "static int register_~a()~%" entry)
-    (format cfile "  { add_module_initializer(~s, ___~a);}~%~%"
+    (format cfile "  { add_module_initializer(~s, (pointer (*)(context*,int,pointer*))___~a);}~%~%"
 		(concatenate string "___" (pathname-name source-name))
 		 entry)
     (dolist (f *defun-list*)
-      (format cfile "static pointer ~a();~%" (get f 'user-function-entry)))
+      (format cfile "static pointer ~a(context*,int,pointer*,pointer);~%" (get f 'user-function-entry)))
     )
  (:eusmain (entry)
       (format cfile "~%/* initializer*/~%pointer ___~A(ctx,n,argv,env)
@@ -692,7 +692,7 @@ register context *ctx; int n; pointer *argv; pointer env;~%" entry)
     )
  (:declare-ftab ()
     (if (> ftab-next 0)
-        (format hfile "static pointer (*ftab[~d])();~%~%" ftab-next)))
+        (format hfile "static pointer (*ftab[~d])(context*,int,pointer*,pointer(**)(context*,int,pointer*),pointer);~%~%" ftab-next)))
  (:ftab-initializer ()
     (format cfile "static void init_ftab()~%{")
     (when (> ftab-next 0)

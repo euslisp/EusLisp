@@ -55,9 +55,9 @@ char *argv[];
   fprintf(out, "extern void eval_c_strings();\n");
   fprintf(out, "extern void add_module_initializer();\n");
 #endif
-  fprintf(out, "extern void %s();\n", entryname);
-  fprintf(out, "static void init_object_module()\n");
-  fprintf(out, "  {add_module_initializer(\"%s\", (pointer (*)())%s);}\n", entryname, entryname);
+  fprintf(out, "extern void %s(context*);\n", entryname);
+  fprintf(out, "static void init_object_module(void)\n");
+  fprintf(out, "  {add_module_initializer(\"%s\", (pointer (*)(context*,int,pointer*))%s);}\n", entryname, entryname);
   fprintf(out, "const static char *sexp_strings[NUM_LINES]={\n");
 
   string_count=1;

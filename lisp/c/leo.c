@@ -90,7 +90,7 @@ extern pointer K_CLASS;
 void addmethod(ctx,meth,class,doc)
 register context *ctx;
 register pointer meth,class,doc;
-{ extern pointer putprop(), assq();
+{ extern pointer putprop(context*,pointer,pointer,pointer), assq(pointer,pointer);
   register pointer selector,methods,classes,medoc,medoc2;
   register int i,j;
   vpush(meth);
@@ -133,7 +133,7 @@ purgecache:
 void addcmethod(ctx,mod,cfunc,sel,class,doc)
 register context *ctx;
 pointer sel,mod,class,doc;
-pointer (*cfunc)();
+pointer (*cfunc)(context*,int,pointer*);
 { if (!issymbol(class)) error(E_NOCLASS,class);
   class=speval(class);
   if (class==UNBOUND || !isclass(class)) error(E_NOCLASS,class);
@@ -164,7 +164,7 @@ int n;
 pointer argv[];
 { pointer a;
   int s;
-  extern pointer makeobject();
+  extern pointer makeobject(pointer);
   a=argv[0];
   if (isvecclass(a)) {
     s=intval(a->c.vcls.size);
@@ -475,7 +475,7 @@ register pointer obj,klass,varid;
 { 
   register int objcix,klasscix,index;
   register pointer vvec;
-  extern pointer equal();
+  extern pointer equal(pointer,pointer);
 
   if (!isclass(klass)) error(E_NOCLASS,klass);
   objcix=obj->cix;

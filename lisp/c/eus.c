@@ -163,7 +163,7 @@ int ehbypass;
 pointer charmacro[256];
 pointer sharpmacro[256];
 
-extern pointer defvector();
+extern pointer defvector(context *, char *, pointer, int, int);
 static pointer reploop(context *, char *);
 
 pointer ALLOWOTHERKEYS,K_ALLOWOTHERKEYS;
@@ -269,7 +269,7 @@ char *errmsg[100]={
 	"E_END",
 	};
 
-static pointer brkloop();
+static pointer brkloop(context*,char*);
 
 void unwind(ctx,p)
 register context *ctx;
@@ -957,6 +957,9 @@ static void initfeatures()
 #if riscv64
   p=cons(ctx,intern(ctx,"RISCV64",7,keywordpkg),p);
 #endif
+#if loongarch64
+  p=cons(ctx,intern(ctx,"LOONGARCH64",11,keywordpkg),p);
+#endif
   {
     char tmp[32];
     sprintf(tmp, "WORD-SIZE=%zd", sizeof(void*)*8);
@@ -1145,7 +1148,7 @@ register context *ctx;
   int i,j;
   char *eusdir, *eusrt;
   char fname[1024];
-  extern pointer SRCLOAD();
+  extern pointer SRCLOAD(context*,int,pointer*);
 
   /* reset stack pointer and frame pointers*/
   j=(int)eussetjmp(topjbuf);  
@@ -1266,15 +1269,15 @@ register context *ctx;
   ctx->vsp=ctx->stack;
   configure_eus(ctx); 
 
-  signal(SIGCHLD, (void (*)())eusint);
-  signal(SIGFPE,  (void (*)())eusint);
-  signal(SIGPIPE, (void (*)())eusint);
+  signal(SIGCHLD, (void (*)(int))eusint);
+  signal(SIGFPE,  (void (*)(int))eusint);
+  signal(SIGPIPE, (void (*)(int))eusint);
 #ifdef RGC
-//  signal(SIGSEGV, (void (*)())eusint); /* for debugging. R.Hanai */
+//  signal(SIGSEGV, (void (*)(int))eusint); /* for debugging. R.Hanai */
 #else
-  signal(SIGSEGV, (void (*)())eusint);
+  signal(SIGSEGV, (void (*)(int))eusint);
 #endif
-  signal(SIGBUS,  (void (*)())eusint);
+  signal(SIGBUS,  (void (*)(int))eusint);
 
   toplevel(ctx,mainargc,mainargv);
 

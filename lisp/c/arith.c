@@ -18,14 +18,14 @@ static char *rcsid="@(#)$Id$";
 extern int ffsl(long int i); // #include <string.h> // ffsl
 
 extern pointer RANDSTATE;
-extern int gcd();
-extern pointer makeratio();
+extern int gcd(int,int);
+extern pointer makeratio(int,int);
 
-extern pointer copy_big(), big_plus(), big_minus();
-extern void    sub_int_big(), add_int_big();
-extern pointer add_big_big(), big_times();
-extern pointer makebig(), makebig1(), makebig2(), extend_big(pointer,int);
-extern pointer normalize_bignum();
+extern pointer copy_big(pointer), big_plus(pointer,pointer), big_minus(pointer);
+extern void    sub_int_big(eusinteger_t,pointer), add_int_big(eusinteger_t,pointer);
+extern pointer add_big_big(pointer,pointer), big_times(pointer,pointer);
+extern pointer makebig(int), makebig1(long), makebig2(long,long), extend_big(pointer,int);
+extern pointer normalize_bignum(pointer);
 extern eusfloat_t big_to_float(pointer);
 extern pointer eusfloat_to_big(float);
 extern eusinteger_t big_sign(pointer);
@@ -1426,7 +1426,7 @@ register pointer argv[];
   eusinteger_t imax,irandval;
   eusfloat_t fmax,frandval;
   double randval;
-  double erand48();
+  double erand48(unsigned short*);
 #if news || sanyo
   long random();
 #endif

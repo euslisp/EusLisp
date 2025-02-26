@@ -3,7 +3,7 @@
 #include "../c/eus.h"
 
 #pragma init (init_object_module)
-pointer convolve();
+pointer convolve(context *,int,pointer*);
 static void init_object_module()
   { add_module_initializer("convolve", convolve);}
 

@@ -120,8 +120,8 @@ int n;
 pointer argv[];
 { register pointer a=argv[0],r;
   register eusinteger_t s,e,i=0,count;
-  pointer fastvref();
-  void fastvset();
+  pointer fastvref(pointer,int);
+  void fastvset(pointer,int,pointer);
   ckarg2(2,3);
   s=ckintval(argv[1]);
   if (n==3) {
@@ -1000,7 +1000,7 @@ pointer argv[];
     xsp=ctx->vsp;
     while (islist(work)) { ckpush(ccar(work)); work=ccdr(work); n++;}
     COMPTYPE=ELM_FIXED;
-    qsort(xsp,n,sizeof(pointer),(int (*)())compar);
+    qsort(xsp,n,sizeof(pointer),(int (*)(const void*,const void*))compar);
     work=seq;
     for (i=0; i<n; i++) { pointer_update(ccar(work),*xsp++); work=ccdr(work);}
     ctx->vsp-=n;}
@@ -1009,7 +1009,7 @@ pointer argv[];
     if (COMPTYPE==ELM_CHAR || COMPTYPE==ELM_BYTE) width=1;
     else if (COMPTYPE==ELM_BIT || COMPTYPE==ELM_FOREIGN) error(E_NOVECTOR);
     else width=sizeof(eusinteger_t);
-    qsort(seq->c.vec.v,vecsize(seq),width,(int (*)())compar);}
+    qsort(seq->c.vec.v,vecsize(seq),width,(int (*)(const void*,const void*))compar);}
 #if THREADED
   mutex_unlock(&qsort_lock);
 #endif

@@ -15,9 +15,9 @@ static char *rcsid="@(#)$Id$";
 #include "math.h"
 #include "eus.h"
 
-extern double sin(), cos(), sqrt(), atan2();
-extern pointer makefvector(),defkeyword();
-extern pointer makematrix();
+extern double sin(double), cos(double), sqrt(double), atan2(double,double);
+extern pointer makefvector(int),defkeyword(context*,char*);
+extern pointer makematrix(context*,int,int);
 
 static pointer K_X,K_Y,K_Z,MK_X,MK_Y,MK_Z;
 

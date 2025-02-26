@@ -14,7 +14,7 @@ static char *rcsid="@(#)$Id$";
 extern long freeheap,totalheap;
 extern struct chunk *chunklist;
 extern long gccount,marktime,sweeptime;
-extern pointer stacknlist(),stacklist();
+extern pointer stacknlist(context*,int),stacklist(context*);
 extern jmp_buf topjbuf;
 extern long alloccount[MAXBUDDY];
 

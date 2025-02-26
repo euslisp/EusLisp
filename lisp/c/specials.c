@@ -15,7 +15,7 @@ static char *rcsid="@(#)$Id$";
 #include "eus.h"
 extern pointer MACRO,LAMBDA,LAMCLOSURE;
 extern pointer K_FUNCTION_DOCUMENTATION;
-extern struct bindframe  *declare();
+extern struct bindframe  *declare(context*, pointer, struct bindframe*);
 
 #ifdef EVAL_DEBUG
 extern int evaldebug;
@@ -180,10 +180,10 @@ register pointer argv[];
 #endif // ARM
     if (mac->c.code.subrtype!=(pointer)SUBR_MACRO) return(argv[0]);
 #if ARM
-    expander=makecode(mac,(pointer (*)())addr,SUBR_FUNCTION);
+    expander=makecode(mac,(pointer (*)(context*,int,pointer*))addr,SUBR_FUNCTION);
     pointer_update(expander->c.code.entry2,mac->c.code.entry2)
 #else
-    expander=makecode(mac,(pointer (*)())mac->c.code.entry,SUBR_FUNCTION);
+    expander=makecode(mac,(pointer (*)(context*,int,pointer*))mac->c.code.entry,SUBR_FUNCTION);
 #endif
     pointer_update(expander->c.code.entry,mac->c.code.entry);}
   else if (carof(mac,E_NOLIST)==MACRO) expander=cons(ctx,LAMBDA,ccdr(mac));
@@ -1081,7 +1081,7 @@ pointer DEFUN(ctx,arg)
 register context *ctx;
 pointer arg;
 { pointer funcname;
-  extern pointer putprop();
+  extern pointer putprop(context*,pointer,pointer,pointer);
 #ifdef SPEC_DEBUG
   printf( "DEFUN:" ); hoge_print( arg );
 #endif
@@ -1324,7 +1324,7 @@ pointer mod;
   QAND=defspecial(ctx,"AND",mod,AND);
   QOR=defspecial(ctx,"OR",mod,OR);
   defun(ctx,"PROCLAIM",mod,PROCLAIM,NULL);
-  defspecial(ctx,"DECLARE",mod,DECLARE);
+  defspecial(ctx,"DECLARE",mod,(pointer(*)(context*,pointer))DECLARE);
   defun(ctx,"SETFUNC",mod,SETFUNC,NULL);
   defun(ctx,"SYMBOL-VALUE",mod,SYMVALUE,NULL);
   defun(ctx,"SYMBOL-BOUND-VALUE",mod,SYMBNDVALUE,NULL);
