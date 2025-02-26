@@ -4,7 +4,7 @@
 
 ;; check because ldmodule have #if ARM for objname, handle
 (deftest test-load
-  (let ((libpath (format nil "~A/~A/lib/libeusgeo.so" *eusdir*
+  (let ((libpath (find-if #'probe-file (list (format nil "~A/~A/lib/libeusgeo.so" *eusdir*
                          (cond ((member :solaris2 *features*)  "SunOS5")
                                ((member :irix *features*) "IRIX")
                                ((member :irix6 *features*) "IRIX6")
@@ -22,7 +22,8 @@
                                ((member :Windows95 *features*) "Win95")
                                ((member :WindowsNT *features*) "WinNT")
                                ((member :alpha *features*) "Alpha")
-                               ((member :cygwin *features*) "Cygwin"))))
+                               ((member :cygwin *features*) "Cygwin")))
+			  (format nil "/usr/lib/~A/euslisp/libeusgeo.so" lisp::*deb-host-multiarch*))))
         libmod)
     (format *error-output* "loading ~A~%" libpath)
     (setq libmod (load libpath :entry nil))

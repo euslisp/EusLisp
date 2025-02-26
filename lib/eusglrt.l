@@ -22,7 +22,37 @@
 ;;      )
 ;; irix
    (push :GL *features*)
-   (sys::exec-module-init "oglforeign" "opengl/src/loadgl.l")
+   (let ((libeusgl (find-if #'(lambda (f) (probe-file f))
+			    (list (concatenate string *eusdir*
+					       (format nil "~A/lib/libeusgl.so"
+						       (cond ((member :solaris2 *features*)  "SunOS5")
+							     ((member :irix *features*) "IRIX")
+							     ((member :irix6 *features*) "IRIX6")
+							     ((member :darwin *features*) "Darwin")
+							     ((member :sh4 *features*) "LinuxSH4")
+							     ((member :linux *features*)
+							      (cond
+							       ((member :x86_64 *features*)
+								"Linux64")
+							       ((member :arm *features*)
+								"LinuxARM")
+							       (t "Linux")))
+							     ((member :SunOS4.1 *features*) "SunOS4")
+							     ((member :Windows *features*) "Windows")
+							     ((member :Windows95 *features*) "Win95")
+							     ((member :WindowsNT *features*) "WinNT")
+							     ((member :alpha *features*) "Alpha")
+							     ((member :cygwin *features*) "Cygwin"))))
+				  (format nil "/usr/lib/~A/euslisp/libeusgl.so" lisp::*deb-host-multiarch*)))))
+     (if (eq (unix::access libeusgl) t)
+	 (let ((libmod (load libeusgl :entry nil))
+	       (modules `("oglforeign" "gldecl" "glconst" "glforeign" "gluconst" "gluforeign" "glxconst"
+			  "glxforeign" "eglforeign" "eglfunc" "glutil" "gltexture" "glprim"
+			  "gleus" "glview" "toiv")))
+	   (nconc sys::*load-entries*
+		  (sys::list-module-initializers libmod modules))
+	   (sys::exec-module-init "oglforeign"))
+       (sys::exec-module-init "oglforeign" "opengl/src/loadgl.l")))
    (in-package "GL")
    (use-package "GEOMETRY")
    (unless (find-symbol "*LIBGL*") ; for SunOS4 with .so bug
