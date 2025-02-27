@@ -142,6 +142,7 @@ pointer argv[];
   if (n==1) clock=coerceintval(argv[0]);
   else clock=time(0);
   tms=localtime_r((time_t *)&clock,&res); /* localtime-->localtime_r */
+  if (tms == NULL) tms = &res;
   timevec=makevector(C_VECTOR,10);
   vpush(timevec);
 
