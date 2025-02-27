@@ -903,7 +903,7 @@ static void initfeatures()
 #if Linux
   p=cons(ctx,intern(ctx,"LINUX",5,keywordpkg),p);
 #endif
-#if Linux_ppc
+#if defined(Linux_ppc) || defined(__PPC__)
   p=cons(ctx,intern(ctx,"PPC",3,keywordpkg),p);
 #endif
 #if USE_MULTI_LIB
