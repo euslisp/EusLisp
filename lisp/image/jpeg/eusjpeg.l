@@ -17,7 +17,28 @@
 
 (eval-when (load eval)
   (let ((m
-         (load-foreign (format nil "~A/~A/lib/jpegmemcd" *eusdir* (unix:getenv "ARCHDIR")))))
+         (load-foreign
+          (find-if #'probe-file
+		   (list (format nil "~A/~A/lib/jpegmemcd.so" *eusdir*
+				 (cond ((member :solaris2 *features*)  "SunOS5")
+				       ((member :irix *features*) "IRIX")
+				       ((member :irix6 *features*) "IRIX6")
+				       ((member :darwin *features*) "Darwin")
+				       ((member :sh4 *features*) "LinuxSH4")
+				       ((member :linux *features*)
+					(cond
+					 ((member :x86_64 *features*)
+					  "Linux64")
+					 ((member :arm *features*)
+					  "LinuxARM")
+					 (t "Linux")))
+				       ((member :SunOS4.1 *features*) "SunOS4")
+				       ((member :Windows *features*) "Windows")
+				       ((member :Windows95 *features*) "Win95")
+				       ((member :WindowsNT *features*) "WinNT")
+				       ((member :alpha *features*) "Alpha")
+				       ((member :cygwin *features*) "Cygwin")))
+	  (format nil "/usr/lib/~A/euslisp/jpegmemcd.so" lisp::*deb-host-multiarch*))))))
     (defforeign jpeg_header m "JPEG_header" () :integer)
     (defforeign jpeg_decompress m "JPEG_decompress" () :integer)
     (defforeign jpeg_compress m "JPEG_compress" () :integer)))

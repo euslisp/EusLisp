@@ -97,6 +97,7 @@
                ((probe-file "/usr/lib/libpq.so") (load "/usr/lib/libpq.so"))
                ((probe-file "/usr/lib/x86_64-linux-gnu/libpq.so") (load "/usr/lib/x86_64-linux-gnu/libpq.so"))
                ((probe-file "/usr/lib/i386-linux-gnu/libpq.so") (load "/usr/lib/i386-linux-gnu/libpq.so"))
+	       ((probe-file (format nil "/usr/lib/~A/libpq.so" lisp::*deb-host-multiarch*)) (load (format nil "/usr/lib/~A/libpq.so" lisp::*deb-host-multiarch*)))
                (t nil)))
 #+:cygwin
 (setq *libpq* (cond

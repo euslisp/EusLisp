@@ -46,7 +46,36 @@
 ;; initilize Xlib interface
 (when (and 
        (or (substringp "sx" (pathname-name *program-name*)) (substringp "gl" (pathname-name *program-name*)))
-	(sys::exec-module-init "xforeign" "xwindow/loadx.l")
+       (let ((libeusx (find-if #'(lambda (f) (probe-file f))
+			       (list (concatenate string *eusdir*
+						  (format nil "~A/lib/libeusx.so"
+							  (cond ((member :solaris2 *features*)  "SunOS5")
+								((member :irix *features*) "IRIX")
+								((member :irix6 *features*) "IRIX6")
+								((member :darwin *features*) "Darwin")
+								((member :sh4 *features*) "LinuxSH4")
+								((member :linux *features*)
+								 (cond
+								  ((member :x86_64 *features*)
+								   "Linux64")
+								  ((member :arm *features*)
+								   "LinuxARM")
+								  (t "Linux")))
+								((member :SunOS4.1 *features*) "SunOS4")
+								((member :Windows *features*) "Windows")
+								((member :Windows95 *features*) "Win95")
+								((member :WindowsNT *features*) "WinNT")
+								((member :alpha *features*) "Alpha")
+								((member :cygwin *features*) "Cygwin"))))
+				     (format nil "/usr/lib/~A/euslisp/libeusx.so" lisp::*deb-host-multiarch*)))))
+	 (if (eq (unix::access libeusx) t)
+	     (let ((libmod (load libeusx :entry nil))
+		   (modules `("xforeign" "Xdecl" "Xeus" "Xevent" "Xgraphics" "Xcolor" "Xpanel"
+			      "Xitem" "Xtext" "Xmenu" "Xscroll" "Xcanvas" "Xtop" "Xapplwin")))
+	       (nconc sys::*load-entries*
+		      (sys::list-module-initializers libmod modules))
+	       (sys::exec-module-init "xforeign"))
+	   (sys::exec-module-init "xforeign" "xwindow/loadx.l")))
 #+(and :thread :x11r6.1)
 	(InitThreads)
 	)
@@ -86,6 +115,11 @@
 ;;
 	(unless (find-symbol "*XLIB*") ; for SunOS4 with .so bug
 		(in-package "IMAGE")
+		(let ((libmod (find "libeusgeo" lisp::*loaded-modules*
+				    :key #'lisp::load-module-file-name :test #'equal))
+		      (modules `("pixword" "RGBHLS" "convolve" "piximage" "pbmfile" "image_correlation")))
+		  (nconc sys::*load-entries*
+			 (sys::list-module-initializers libmod modules)))
 		(sys::exec-module-init "pixword")
 		(sys::exec-module-init "RGBHLS")
 		(sys::exec-module-init "convolve")

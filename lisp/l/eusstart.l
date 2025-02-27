@@ -377,7 +377,38 @@
 	(sys:alloc 50000)
 	(in-package "GEOMETRY")
 #-:SunOS4.1
-	(sys::exec-module-init "intersection" nil)
+	(unless (sys::exec-module-init "intersection" nil)
+	  (let ((libeusgeo (find-if #'(lambda (f) (probe-file f))
+				    (list (concatenate string *eusdir*
+						       (format nil "~A/lib/libeusgeo.so"
+							       (cond ((member :solaris2 *features*)  "SunOS5")
+								     ((member :irix *features*) "IRIX")
+								     ((member :irix6 *features*) "IRIX6")
+								     ((member :darwin *features*) "Darwin")
+								     ((member :sh4 *features*) "LinuxSH4")
+								     ((member :linux *features*)
+								      (cond
+								       ((member :x86_64 *features*)
+									"Linux64")
+								       ((member :arm *features*)
+									"LinuxARM")
+								       (t "Linux")))
+								     ((member :SunOS4.1 *features*) "SunOS4")
+								     ((member :Windows *features*) "Windows")
+								     ((member :Windows95 *features*) "Win95")
+								     ((member :WindowsNT *features*) "WinNT")
+								     ((member :alpha *features*) "Alpha")
+								     ((member :cygwin *features*) "Cygwin"))))
+					  (format nil "/usr/lib/~A/euslisp/libeusgeo.so" lisp::*deb-host-multiarch*)))))
+	    (when (eq (unix::access libeusgeo) t)
+	      (let ((libmod (load libeusgeo :entry nil))
+		    (modules `("intersection" "geoclasses" "geopack" "geobody"
+			       "primt" "compose" "polygon" "viewing" "viewport"
+			       "viewsurface" "hid" "shadow" "bodyrel"
+				"dda")))
+		(nconc sys::*load-entries*
+		       (sys::list-module-initializers libmod modules))
+		(sys::exec-module-init "intersection" nil)))))
 #+:SunOS4.1
 	(unless (sys::exec-module-init "intersection" nil)
 	  (let ((libeusgeo (concatenate string *eusdir* 
