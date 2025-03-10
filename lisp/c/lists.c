@@ -360,8 +360,8 @@ register pointer argv[];
   while (islist(alist)) {
     target=ccar(alist);
     if (islist(target)) {	/*ignore non-pair elements*/
-      if (key==NIL) temp=ccar(target);
-      else temp=call1(ctx,key,target);
+      temp=ccar(target);
+      if (key!=NIL) temp=call1(ctx,key,temp);
       if (testnot!=NIL) compare=(call2(ctx,testnot,item,temp)==NIL);
       else if (test==NIL || test==QEQ) compare=(item==temp);
       else if (test==QEQUAL) compare=(equal(item,temp)==T);
