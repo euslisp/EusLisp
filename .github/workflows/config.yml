@@ -200,12 +200,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Get brew cache directory
         id: brew-cache
         run: echo "::set-output name=dir::$(brew --cache)/downloads"
       - name: Brew cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.brew-cache.outputs.dir }}
           key: ${{ runner.os }}-${{ hashFiles('.github/workflows/Brewfile') }}
