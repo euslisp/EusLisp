@@ -181,6 +181,7 @@ jobs:
                apt update -qq; \
                [[ \"${{matrix.EXPERIMENTAL}}\" != \"true\" ]] || apt -t=experimental -y -qq install g++ gcc; \
                apt install -y -qq make gcc libgl-dev libglu1-mesa-dev libjpeg-dev libpng-dev libpq-dev libx11-dev libxext-dev; \
+               export GNUMAKEFLAGS='--trace --shuffle=reverse'; \
                CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0; \
                CC='gcc -Werror' ARCHDIR=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/image/jpeg; \
                if [[ \"$DOCKER_IMAGE\" =~ (\"arm\"|\"s390x\") ]]; then exit 0; fi ; \
