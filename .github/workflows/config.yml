@@ -181,6 +181,7 @@ jobs:
                apt update -qq; \
                [[ \"${{matrix.EXPERIMENTAL}}\" != \"true\" ]] || apt -t=experimental -y -qq install g++ gcc; \
                apt install -y -qq make gcc libgl-dev libglu1-mesa-dev libjpeg-dev libpng-dev libpq-dev libx11-dev libxext-dev; \
+               export GNUMAKEFLAGS='--trace --shuffle=reverse'; \
                CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0; \
                CC='gcc -Werror' ARCHDIR=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/image/jpeg; \
                if [[ \"$DOCKER_IMAGE\" =~ (\"arm\"|\"s390x\") ]]; then exit 0; fi ; \
@@ -199,12 +200,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Get brew cache directory
         id: brew-cache
         run: echo "::set-output name=dir::$(brew --cache)/downloads"
       - name: Brew cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.brew-cache.outputs.dir }}
           key: ${{ runner.os }}-${{ hashFiles('.github/workflows/Brewfile') }}
@@ -224,6 +225,7 @@ jobs:
           export LC_CTYPE=C
           (cd ${HOME}; git clone --depth 1 http://github.com/euslisp/jskeus jskeus)
           (cd ${HOME}/jskeus; patch -f -p1 < ${CI_SOURCE_PATH}/.github/workflows/fix-dylib-location.patch || echo "OK")
+          sed -i '.bak' 's/history/_history/' ${CI_SOURCE_PATH}/lisp/l/eusstart.l
           bash -x ./.travis.sh
       - name: Cleanup some brew downloads
         run: cd ${{ steps.brew-cache.outputs.dir }} && ls -lsS | head -n 10 | awk '{ print $10 }' | xargs rm -rf
