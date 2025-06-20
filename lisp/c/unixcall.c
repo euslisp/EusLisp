@@ -8,9 +8,10 @@
 /*	1988-Dec	ioctl		
 /*	1990-Mar	VxWorks
 /*	Copyright(c) 1988 MATSUI Toshihiro, Electrotechnical Laboratory.
+/*	2015		WRITE accepts offset as the third argument
 /****************************************************************/
 
-static char *rcsid="@(#)$Id$";
+static char *rcsid="@(#)$Id: unixcall.c,v 1.1.1.1 2016/06/26 06:57:53 toshihiro Exp $";
 
 /* SunOS's gettimeofday used to accept only one argument.
 #ifdef Solaris2
@@ -757,10 +758,10 @@ register int n;
 pointer *argv;
 /* (unix:write fd string [count]) 
    (unix:write stream string [count]) */
-{ register pointer strm,buf;
-  register int size,fd;
+{ pointer strm,buf;
+  int start, size, fd;
   byte *bufp;
-  ckarg2(2,3);
+  ckarg2(2,4);
   strm=argv[0];
   if (isiostream(strm)) strm=strm->c.iostream.out;
   if (isfilestream(strm)) {
@@ -774,9 +775,14 @@ pointer *argv;
     bufp=buf->c.foreign.chars;
   else if (isstring(buf)) bufp=buf->c.str.chars;
   else error(E_NOSTRING);
+  // changed to accept offset as the third arg by T. Matsui, 2015
   size=strlength(buf);
-  if (n==3) size=min(size,ckintval(argv[2])); 
-  size=write(fd,bufp,size);
+  if (n==2) start=0;
+  else {
+    start=ckintval(argv[2]);
+    if (n==3) size= size-start;
+    else size=min(size-start, ckintval(argv[3])); }
+  size=write(fd,bufp+start,size);
   return(makeint(size));}
 
 
@@ -1329,13 +1335,14 @@ pointer GETWD(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ char buf[256];
+{ char buf[256], *r;
   ckarg(0);
 #if Solaris2 || Linux || Cygwin
-  char *r = getcwd(buf,256);
+  r = getcwd(buf,256);
 #else
-  getwd(buf);
+  r=getwd(buf);
 #endif
+  if (r == NULL) error(E_LONGSTRING);
   return(makestring(buf,strlen(buf)));}
 
 pointer GETENV(ctx,n,argv)
