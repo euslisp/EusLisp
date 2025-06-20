@@ -343,7 +343,7 @@
 	       ((eq (elt exp 0) #\-)
 		;; if arg is prefixed by a dash, ignore.
 		)
-	       (t (load exp)))))
+	       (t (funcall #'load exp)))))
    ;; enter read-eval-loop session
    (catch :eusexit
        (while t
