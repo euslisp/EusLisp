@@ -196,7 +196,18 @@ jobs:
                exit 0"
 
   osx:
-    runs-on: macos-13  # https://github.com/actions/runner-images/blob/main/images/macos/macos-13-Readme.md
+    strategy:
+      matrix:
+        include:
+          # https://github.com/actions/runner-images/tree/main/images/macos
+          # Note: To test macOS-14 with Intel architecture,
+          # you need to use the paid macOS-14-large runner, as macOS-14 is grouped with ARM-based runners.
+          # https://docs.github.com/en/actions/concepts/runners/about-larger-runners
+          - runs-on: macos-13  # Intel (x64)
+          - runs-on: macos-14  # ARM64 (Apple Silicon)
+          - runs-on: macos-15  # ARM64 (Apple Silicon)
+      fail-fast: false
+    runs-on: ${{ matrix.runs-on }}
     timeout-minutes: 60
     steps:
       - name: Checkout
