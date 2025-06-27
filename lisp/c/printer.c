@@ -296,7 +296,7 @@ context *ctx;
   writestr(f,(byte *)"#<",2);
   printsym(ctx,class->c.cls.name,f);
   writech(f,' ');
-  printhex(obj,f);
+  printhex((int)(intptr_t)obj,f);
   writech(f,'>');}
 
 static void printpkg(p,f)
@@ -359,7 +359,7 @@ int prlevel;
 	  break;
     case ELM_BYTE:
 	  writestr(f,(byte *)"#<bytecode ",11);
-	  printhex(vec,f);
+	  printhex((int)(intptr_t)vec,f);
 	  writech(f,'>');
 	  break;
     case ELM_CHAR:
@@ -385,7 +385,7 @@ int prlevel;
 	  break;
     case ELM_FOREIGN:
 	  writestr(f,(byte *)"#u",2);
-	  printstr(ctx,vecsize(vec),vec->c.ivec.iv[0],f);
+	  printstr(ctx,vecsize(vec),(byte *)vec->c.ivec.iv[0],f);
 	  break;
     default:
 	  if (classof(vec)==C_VECTOR)  writestr(f,(byte *)"#(",2);

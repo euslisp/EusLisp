@@ -1302,7 +1302,7 @@ char *argv[];
   unsigned char *m;
 
 #ifdef Darwin
-  _end = sbrk(0);
+  _end = (int)(intptr_t)sbrk(0);
 #endif
 
   mypid=getpid();

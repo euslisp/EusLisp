@@ -42,11 +42,17 @@ endif
 
 # Pentium's arch returns 'i586', which is ignored by conditionals in c/*.[ch].
 OS_VERSION=$(shell sw_vers -productVersion | sed s/\.[^.]*$$//)
+UNAME_MACHINE=$(shell uname -m)
 ifeq ($(OS_VERSION), 10.5) 
  MACHINE=i386
 else
- MACHINE=x86_64
- ALIGN_FUNCTIONS=-falign-functions=8 -fPIC
+ ifeq ($(UNAME_MACHINE), arm64)
+  MACHINE=aarch64
+  ALIGN_FUNCTIONS=-falign-functions=8 -fPIC
+ else
+  MACHINE=x86_64
+  ALIGN_FUNCTIONS=-falign-functions=8 -fPIC
+ endif
 endif
 DEBUG= -g
 
