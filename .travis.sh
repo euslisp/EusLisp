@@ -54,7 +54,7 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
         sed -i '/-updates/ s/^#*/#/' /etc/apt/sources.list
         cat /etc/apt/sources.list
     fi
-    if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y sudo;  else sudo apt-get update; fi
+    if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y --force-yes sudo;  else sudo apt-get update; fi
     travis_time_end
 
     travis_time_start setup.tzdata
