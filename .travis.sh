@@ -84,6 +84,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew list mesalib-glw &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesalib-glw
     brew list mesa-glu &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install mesa-glu
     brew list bullet &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install bullet
+    brew list xquartz &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install xquartz
     travis_time_end
 
 fi
