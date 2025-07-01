@@ -32,14 +32,14 @@ char *xentry;
   entry=(eusinteger_t)dlsym((eusinteger_t)dlhandle, xentry);
   if ( !entry ) {
     dlhandle=(eusinteger_t)dlopen("cygGLU-1.dll", RTLD_LAZY);
-    entry=(eusinteger_t)dlsym(dlhandle, xentry);}
+    entry=(eusinteger_t)dlsym((void *)dlhandle, xentry);}
   if ( !entry ) {
     dlhandle=(eusinteger_t)dlopen(0, RTLD_LAZY);
-    entry=(eusinteger_t)dlsym(dlhandle, xentry);}
+    entry=(eusinteger_t)dlsym((void *)dlhandle, xentry);}
 #elif Darwin
   eusinteger_t dlhandle;
   dlhandle=(eusinteger_t)dlopen(0, RTLD_LAZY);
-  entry=(eusinteger_t)dlsym(dlhandle, xentry);
+  entry=(eusinteger_t)dlsym((void *)dlhandle, xentry);
 #else
 #if (WORD_SIZE == 64)
   entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3L), xentry);

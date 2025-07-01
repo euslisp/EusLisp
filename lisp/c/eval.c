@@ -714,7 +714,11 @@ __asm__ (".align 8\n"
 
 #if aarch64
 __asm__ (".align 8\n"
+#if Darwin
+         "_exec_function_i:\n\t"
+#else
          "exec_function_i:\n\t"
+#endif
 	 "sub	sp, sp, #192\n\t" // 128(8x16) + 64
 	 "stp	x29, x30, [sp, 128]\n\t"
 	 "add	x29, sp, 128\n\t"
@@ -726,18 +730,18 @@ __asm__ (".align 8\n"
 	 // vargv -> stack
 	 "mov	x1, 0\n\t"
 	 "ldr	x2, [x29, 24]\n\t"
-	 "b	.FUNCII_LPCK\n\t"
-	 ".FUNCII_LP:\n\t"
+	 "b	1f\n\t"
+	 "2:\n\t"
 	 "lsl	x0, x1, 3\n\t"
 	 "add	x3, x2, x0\n\t" // vargv[i]
 	 "add	x4, sp, x0\n\t" // stack[i]
 	 "ldr	x0, [x3]\n\t"
 	 "str	x0, [x4]\n\t" // push stack
 	 "add	x1, x1, 1\n\t"
-	 ".FUNCII_LPCK:\n\t"
+	 "1:\n\t"
 	 "ldr	x5, [x29, 32]\n\t"
 	 "cmp	x1, x5\n\t"
-	 "blt	.FUNCII_LP\n\t"
+	 "blt	2b\n\t"
 	 // fargv -> register
 	 "ldr	x0, [x29, 40]\n\t" // fargv
 	 "ldr	d0, [x0]\n\t"
@@ -782,7 +786,11 @@ __asm__ (".align 8\n"
 	 );
 
 __asm__ (".align 8\n"
+#if Darwin
+         "_exec_function_f:\n\t"
+#else
          "exec_function_f:\n\t"
+#endif
 	 "sub	sp, sp, #192\n\t" // 128(8x16) + 64
 	 "stp	x29, x30, [sp, 128]\n\t"
 	 "add	x29, sp, 128\n\t"
@@ -794,18 +802,18 @@ __asm__ (".align 8\n"
 	 // vargv -> stack
 	 "mov	x1, 0\n\t"
 	 "ldr	x2, [x29, 24]\n\t"
-	 "b	.FUNCFF_LPCK\n\t"
-	 ".FUNCFF_LP:\n\t"
+	 "b	3f\n\t"
+	 "4:\n\t"
 	 "lsl	x0, x1, 3\n\t"
 	 "add	x3, x2, x0\n\t" // vargv[i]
 	 "add	x4, sp, x0\n\t" // stack[i]
 	 "ldr	x0, [x3]\n\t"
 	 "str	x0, [x4]\n\t" // push stack
 	 "add	x1, x1, 1\n\t"
-	 ".FUNCFF_LPCK:\n\t"
+	 "3:\n\t"
 	 "ldr	x5, [x29, 32]\n\t"
 	 "cmp	x1, x5\n\t"
-	 "blt	.FUNCFF_LP\n\t"
+	 "blt	4b\n\t"
 	 // fargv -> register
 	 "ldr	x0, [x29, 40]\n\t" // fargv
 	 "ldr	d0, [x0]\n\t"
