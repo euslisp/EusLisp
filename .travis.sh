@@ -32,7 +32,16 @@ function travis_time_end {
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then 
 
     travis_time_start setup.apt-get_update
-    if [[ "$DOCKER_IMAGE" == *"stretch" || "$DOCKER_IMAGE" == *"jessie" ]] ; then
+    if [[ "$DOCKER_IMAGE" == *"jessie" ]] ; then
+        # Jessie is EOL, rewrite sources.list and configure apt
+        # http://archive.debian.org/debian-archive/
+        DIST_NAME="jessie"
+        echo "Rewriting /etc/apt/sources.list for ${DIST_NAME}"
+        echo "deb http://archive.debian.org/debian/ ${DIST_NAME} main" > /etc/apt/sources.list
+        echo "deb http://archive.debian.org/debian-security/ ${DIST_NAME}/updates main" >> /etc/apt/sources.list
+        printf 'Acquire::AllowInsecureRepositories "true";\nAcquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99-force-apt-update
+    fi
+    if [[ "$DOCKER_IMAGE" == *"stretch" ]] ; then
         cat /etc/apt/sources.list
         sed -i s@httpredir.debian.org@archive.debian.org@ /etc/apt/sources.list;
         sed -i s@deb.debian.org@archive.debian.org@ /etc/apt/sources.list;
@@ -45,7 +54,7 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
         sed -i '/-updates/ s/^#*/#/' /etc/apt/sources.list
         cat /etc/apt/sources.list
     fi
-    if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y sudo;  else sudo apt-get update; fi
+    if [ ! -e /usr/bin/sudo ] ; then apt-get update && apt-get install -y --force-yes sudo;  else sudo apt-get update; fi
     travis_time_end
 
     travis_time_start setup.tzdata
