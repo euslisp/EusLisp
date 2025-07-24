@@ -443,6 +443,14 @@ register int s;
   v->c.vec.size=makeint(s);
   return(v);}
 
+pointer makeivector(s)
+register int s;
+{ register pointer v;
+  register bpointer b;
+  v=alloc(s+1,ELM_INT, intvectorcp.cix,s+1);
+  v->c.vec.size=makeint(s);
+  return(v);}
+
 pointer defvector(ctx,name,super,elm,size)	/*define vector class*/
 register context *ctx;
 char *name;
