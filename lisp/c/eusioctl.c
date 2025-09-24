@@ -9,7 +9,15 @@ static char *rcsid="@(#)$Id$";
 #include <sys/termios.h>
 #include <sys/ioctl.h>
 #ifndef Darwin
-#include <termio.h>
+#include <features.h>
+#if defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 42))
+  #warning "Since glibc 2.42, termio.h is no longer supported. Dropping TCGETA TCSETA TCSETAW TCSETAF"
+  #define USE_TERMIOS
+  #include <termios.h>
+#else
+  #define USE_TERMIO
+  #include <termio.h>
+#endif
 #endif
 /*  #include <sgtty.h>  */
 
@@ -200,6 +208,7 @@ pointer argv[];
 { return(ioctl_struct(n,argv,TCSETSF,sizeof(struct termios)));}
 #endif
 
+#ifdef USE_TERMIO
 pointer IOCTL_TCGETA(ctx,n,argv)
 register context *ctx;
 int n;
@@ -222,6 +231,7 @@ pointer IOCTL_TCSETAW(n,argv)
 int n;
 pointer argv[];
 { return(ioctl_struct(n,argv,TCSETAW,sizeof(struct termio)));}
+#endif
 #endif
 
 pointer TCGETATTR(ctx,n,argv)
@@ -281,10 +291,12 @@ register pointer mod;
   defunpkg(ctx,"TCSETSW",mod,IOCTL_TCSETSW,unixpkg);
   defunpkg(ctx,"TCSETSF",mod,IOCTL_TCSETSF,unixpkg);
 #endif
+#ifdef USE_TERMIO
   defunpkg(ctx,"TCGETA",mod,IOCTL_TCGETA,unixpkg);
   defunpkg(ctx,"TCSETA",mod,IOCTL_TCSETA,unixpkg);
   defunpkg(ctx,"TCSETAW",mod,(pointer(*)(context*,int,pointer*))IOCTL_TCSETAW,unixpkg);
   defunpkg(ctx,"TCSETAF",mod,IOCTL_TCSETAF,unixpkg);
+#endif
 #endif
   defunpkg(ctx,"TCGETATTR",mod,TCGETATTR,unixpkg);
   defunpkg(ctx,"TCSETATTR",mod,TCSETATTR,unixpkg);
