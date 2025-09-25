@@ -68,7 +68,7 @@ DEBUG= -g
 # If you use libc.so.5, remove -DLIB6 option.
 # In order to include thread library, libc.so.6 is preferrable.
 
-CFLAGS=$(WFLAGS) -D$(MACHINE) -DLinux -DARM -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+CFLAGS:= $(CFLAGS) $(CPPFLAGS) $(WFLAGS) -D$(MACHINE) -DLinux -DARM -D_REENTRANT -DVERSION=\"$(VERSION)\" \
 	-DLIB6 $(ALIGN_FUNCTIONS) $(ADD_CFLAGS) \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	-DGCC $(GCC3) \
@@ -97,7 +97,8 @@ RAWLIB=-ldl -lm -lpthread -lc
 XLIB= -L/usr/X11R6/lib -lX11
 
 # specify directories where euslisp's libraries are located.
-EUSLIB= -Xlinker -R$(ADLIBDIR):$(EUSDIR)/lib/LinuxARM -L$(ADLIBDIR)
+EUSRPATH=-R$(ADLIBDIR):$(EUSDIR)/lib/LinuxARM
+EUSLIB= -Xlinker $(EUSRPATH) -L$(ADLIBDIR)
 GLLIB= -L$(ADLIBDIR) -lGLU -lGL -lXext
 
 # POSIX Thread 
@@ -107,9 +108,10 @@ THREADDEP=mthread_posix.c
 # If you don't like optimization, comment out the next line.
 OFLAGS=-O2
 
-# link-editor's default flags ?-rdynamic 
-SOFLAGS= -shared -Xlinker -build-id
-LDFLAGS= -rdynamic -fno-stack-protector -Wl,-z,execstack $(ADD_LDFLAGS)
+# link-editor's default flags ?-rdynamic
+SOFLAGS:= $(LDFLAGS) -shared -Xlinker -build-id
+LD=gcc
+LDFLAGS:= $(LDFLAGS) -rdynamic -fno-stack-protector -Wl,-z,execstack $(ADD_LDFLAGS)
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 #MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/pthreads.o
 MAPOPTION=$(OBJDIR)/par.o

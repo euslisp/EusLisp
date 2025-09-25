@@ -313,7 +313,7 @@ $(GLCOBJECTS):
 	 $(CC) -c -o $@ $(CFLAGS) $(OFLAGS) $(GLINCLUDE) $(@F:.o=.c))
 $(GCCLS): MKDIR
 	(cd $(TOOLDIR); \
-	$(CC) -o $(BINDIR)/gccls gccls.c ;\
+	$(CC) $(LDFLAGS) -o $(BINDIR)/gccls $(CFLAGS) gccls.c ;\
 	cd $(EUSDIR) )
 $(LCOBJECTS): $(GCCLS)
 	(cd $(LDIR); $(BINDIR)/gccls constants.l; \

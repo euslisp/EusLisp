@@ -53,11 +53,11 @@ $(LIBDIR)/jpegmemcd.$(LSFX):	$(OBJFILES)
 	$(LD) -fPIC $(LDFLAGS) -o $(LIBDIR)/jpegmemcd.$(LSFX) $(OBJDIR)/jpegmemcd.o $(OBJDIR)/jmemsrc.o $(OBJDIR)/jmemdst.o -ljpeg
 
 $(OBJDIR)/jpegmemcd.o:	jpegmemcd.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $^
 $(OBJDIR)/jmemsrc.o:	jmemsrc.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $^
 $(OBJDIR)/jmemdst.o:	jmemdst.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $^
 clean:
 	rm -f $(OBJFILES) $(LIBDIR)/jpegmemcd.$(LSFX) eusjpeg.c eusjpeg.h
 

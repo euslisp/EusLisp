@@ -46,7 +46,7 @@ MACHINE=x86_64
 DEBUG= -g
 WFLAGS= -Wno-old-style-definition #-Wall -Wno-unused -Wno-switch -Wno-return-type
 
-CFLAGS= $(WFLAGS) -fPIC -D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+CFLAGS:= $(CFLAGS) $(CPPFLAGS) $(WFLAGS) -fPIC -D$(MACHINE) -DLinux -D_REENTRANT -DVERSION=\"$(VERSION)\" \
 	-DLIB6 $(ALIGN_FUNCTIONS) \
         $(DEBUG) $(CPU_OPTIMIZE) $(THREAD) -D$(XVERSION) \
 	-DGCC $(GCC3) \
@@ -83,8 +83,9 @@ THREADDEP=mthread_posix.c
 OFLAGS= -O2
 
 # link-editor's default flags ?-rdynamic 
-SOFLAGS= -shared -build-id
-LDFLAGS= -rdynamic -fno-stack-protector -z execstack $(ADD_LDFLAGS)
+SOFLAGS:= $(LDFLAGS) -shared
+LD=gcc
+LDFLAGS:= $(LDFLAGS) -rdynamic -fno-stack-protector -z execstack $(ADD_LDFLAGS)
 MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/mthread_posix.o
 #MTCOBJECTS= $(OBJDIR)/mthread.o $(OBJDIR)/pthreads.o
 MAPOPTION=  $(OBJDIR)/par.o
