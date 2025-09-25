@@ -199,7 +199,7 @@ $(ADLIBDIR)/$(LIBEUSGEO):	$(GEOOBJECTS) $(GEOCOBJECTS)  \
 		$(IMGCOBJECTS) $(IMGOBJECTS))
 $(ADLIBDIR)/$(LIBEUSGL):	$(GLCOBJECTS) $(GLOBJECTS)
 	( $(LD) $(SOFLAGS) -o $(ADLIBDIR)/$(LIBEUSGL) \
-		$(GLCOBJECTS) $(GLOBJECTS))
+		$(OBJDIR)/oglforeign.c.o $(OBJDIR)/eglfunc.o $(GLOBJECTS))
 
 $(CDIR)/makedate.c: $(filter-out $(CDIR)/makedate.c, $(shell echo $(CDIR)/*.c)) \
 		    $(LDIR)/*.l $(GEODIR)/*.l $(COMPDIR)/*.l \
@@ -234,7 +234,7 @@ $(BINDIR)/eusg:	 $(BINDIR)/eus2 $(MTOBJECTS) $(ADLIBDIR)/$(LIBEUSGEO)
 	($(CC) -o $(BINDIR)/eusg $(LDFLAGS)  \
 	 	$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS) $(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
-		$(COMPOBJECTS) $(EUSLIB) $(GEOLIB) $(RAWLIB) ; \
+		$(COMPOBJECTS) $(RAWLIB) ; \
 	cd $(BINDIR); rm -f euscomp; ln -sf eusg euscomp)
 
 $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
@@ -246,7 +246,7 @@ $(BINDIR)/eusx:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) \
 		$(LOBJECTS)   $(LCOBJECTS) $(COMPOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
-		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB);)
+		$(RAWLIB);)
 
 $(BINDIR)/eus:	 $(BINDIR)/eusx $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LCOBJECTS)  $(COMPOBJECTS) \
@@ -257,7 +257,7 @@ $(BINDIR)/eus:	 $(BINDIR)/eusx $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
 		$(MAPOPTION) \
-		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(XLIB)  $(RAWLIB) \
+		$(XLIB) $(RAWLIB) \
 		>$(ADLIBDIR)/eusmap ; \
 	cd $(BINDIR); rm -f euscomp eusx; \
 	ln -sf eus euscomp; ln -sf eus eusx; )
@@ -278,7 +278,7 @@ $(BINDIR)/eusgl:	 $(NOKOBJECTS) $(KOBJECTS) $(KSOBJECTS) $(LOBJECTS) \
 		$(LOBJECTS) $(LCOBJECTS)  $(COMPOBJECTS) \
 		$(MTCOBJECTS) $(RGCOBJECTS) $(MTOBJECTS) \
 		$(MAPOPTION) \
-		$(EUSLIB) $(EUSXLIB) $(GEOLIB) $(GLLIB) $(XLIB) $(RAWLIB)\
+		$(OBJDIR)/util.o $(GLLIB) $(XLIB) $(RAWLIB) \
 		>$(ADLIBDIR)/eusmap ;)
 
 $(BINDIR)/raweus.so:	$(NOKOBJECTS) $(KOBJECTS)  $(LOBJECTS) \
@@ -313,7 +313,7 @@ $(GLCOBJECTS):
 	 $(CC) -c -o $@ $(CFLAGS) $(OFLAGS) $(GLINCLUDE) $(@F:.o=.c))
 $(GCCLS): MKDIR
 	(cd $(TOOLDIR); \
-	$(CC) -o $(BINDIR)/gccls gccls.c ;\
+	$(CC) $(LDFLAGS) -o $(BINDIR)/gccls $(CFLAGS) gccls.c ;\
 	cd $(EUSDIR) )
 $(LCOBJECTS): $(GCCLS)
 	(cd $(LDIR); $(BINDIR)/gccls constants.l; \
@@ -336,7 +336,7 @@ $(XOBJECTS) $(XTKOBJECTS): $(OBJDIR)/compile_xwindow.log
 $(OBJDIR)/compile_xwindow.log: $(BINDIR)/eusg $(patsubst $(OBJDIR)/%.o,$(XWINDOWDIR)/%.l,$(XOBJECTS)) $(patsubst $(OBJDIR)/%.o,$(XWINDOWDIR)/%.l,$(XTKOBJECTS))
 	(cd $(XWINDOWDIR); $(BINDIR)/euscomp <../$(TOOLDIR)/compile_xwindow.l > $(OBJDIR)/compile_xwindow.log)
 $(GLOBJECTS): $(OBJDIR)/compile_gl.log
-$(OBJDIR)/compile_gl.log: $(BINDIR)/eusx $(patsubst $(OBJDIR)/%.o,$(GLDIR)/%.l,$(GLOBJECTS))
+$(OBJDIR)/compile_gl.log: $(BINDIR)/eus $(patsubst $(OBJDIR)/%.o,$(GLDIR)/%.l,$(GLOBJECTS))
 	($(BINDIR)/eusx <$(TOOLDIR)/compile_gl.l > $(OBJDIR)/compile_gl.log)
 $(XWINDOWDIR)/Xlibfuncs.o:	$(XWINDOWDIR)/Xlibfuncs.c
 	(cd $(XWINDOWDIR) ; \

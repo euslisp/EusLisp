@@ -1264,6 +1264,7 @@ register context *ctx;
   Spevalof(PACKAGE)=userpkg; 
 
   defvar(ctx,"*PROGRAM-NAME*",makestring(progname,strlen(progname)),lisppkg);
+  defvar(ctx,"*DEB-HOST-MULTIARCH*",makestring("@@DEB_HOST_MULTIARCH@@",strlen("@@DEB_HOST_MULTIARCH@@")),lisppkg);
 
   /* exec_module_initializers(); */
   ctx->vsp=ctx->stack;
