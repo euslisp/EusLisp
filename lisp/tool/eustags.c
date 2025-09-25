@@ -150,7 +150,7 @@ struct	nd_st {			/* sorting structure			*/
 	struct	nd_st	*left,*right;	/* left and right sons		*/
 };
 
-long	ftell();
+long	ftell(FILE *);
 typedef	struct	nd_st	NODE;
 
 int number; /* tokens found so far on line starting with # (including #) */
@@ -204,21 +204,22 @@ void find_entries (char *file);
 void free_tree (NODE *node);
 void put_entries (NODE *node);
 
-char *savestr();
-char *savenstr ();
-char *_rindex();
-char *_index();
-char *concat ();
-void initbuffer ();
-long readline ();
+struct linebuffer;  /* Forward declaration of 'struct linebuffer' */
+char *savestr(char *cp);
+char *savenstr (char *cp, int len);
+char *_rindex(char *sp, char c);
+char *_index(char *sp, char c);
+char *concat (char *s1, char *s2, char *s3);
+void initbuffer (struct linebuffer *);
+long readline (struct linebuffer *, register FILE *);
 
-int total_size_of_entries ();
-int PF_funcs ();
-int xmalloc ();
-int consider_token ();
-int tail ();
-int TEX_Token ();
-int xrealloc ();
+int total_size_of_entries (NODE *node);
+int PF_funcs (FILE *fi);
+int xmalloc (int size);
+int consider_token (char **lpp, char *token, int *f, int level);
+int tail (char *cp);
+int TEX_Token (char *cp);
+int xrealloc (char *ptr, int size);
 
 /* A `struct linebuffer' is a structure which holds a line of text.
  `readline' reads a line from a stream into a linebuffer
@@ -1395,7 +1396,7 @@ struct TEX_tabent *TEX_toktab = NULL; /* Table with tag tokens */
 static char *TEX_defenv =
   ":chapter:section:subsection:subsubsection:eqno:label:ref:cite:bibitem:typeout";
 
-struct TEX_tabent *TEX_decode_env (); 
+struct TEX_tabent *TEX_decode_env (char *evarname, char *defenv);
 
 static char TEX_esc = '\\';
 static char TEX_opgrp = '{';
@@ -1498,7 +1499,7 @@ TEX_decode_env (evarname, defenv)
      char *defenv;
 {
   register char *env, *p;
-  extern char *savenstr (), *_index ();
+  extern char *savenstr (char *cp, int len), *_index (char *sp, char c);
 
   struct TEX_tabent *tab;
   int size, i;
