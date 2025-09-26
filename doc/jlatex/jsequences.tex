@@ -396,7 +396,11 @@ atomやいろんな深さのリストを含んだ{\em complex-list}を、
 入れこリストである{\em tree}のコピーを返す。
 しかし、環状参照はできない。環状リストは、
 {\bf copy-object}でコピーできる。
-実際に、{\bf copy-tree}は{\tt (subst t t tree)}と簡単に記述される。}
+実際に、{\bf copy-tree}は{\tt (subst t t tree)}と簡単に記述される。
+なお{\bf copy-tree}は{\em list}しかコピーできず、
+{\em integer-vector, float-vector}などは{\bf copy-seq}を使用しないとコピーできず、
+{\em interger-vector, float-vector}などを含む{\em list}は{\bf copy-object}を
+使用しないとディープコピーできない。}
 
 \funcdesc{mapc}{func arg-list \&rest more-arg-lists}{
 {\em arg-list}や{\em more-arg-lists}それぞれのN番目($N=0,1,\cdots$)の要素からなるリストに
