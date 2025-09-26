@@ -211,16 +211,28 @@ pointer GETRUSAGE(ctx,n,argv)
 register context *ctx;
 int n; pointer argv[];
 { register int who,i;
-  long rusage[18];
+  struct rusage usage;
   eusfloat_t utime,stime;
   register pointer r=NIL;
   numunion nu;
-
   ckarg(1); who=ckintval(argv[0]);
-  getrusage(who,(struct rusage *)rusage);
-  utime=rusage[0]+rusage[1]*1.0e-6;
-  stime=rusage[2]+rusage[3]*1.0e-6;
-  for (i=17; i>=4; i--) r=cons(ctx,makeint(rusage[i]),r);
+  getrusage(who,&usage);
+  utime=usage.ru_utime.tv_sec+usage.ru_utime.tv_usec*1.0e-6;
+  stime=usage.ru_stime.tv_sec+usage.ru_stime.tv_usec*1.0e-6;
+  r = cons(ctx, makeint(usage.ru_nivcsw), r); // 4
+  r = cons(ctx, makeint(usage.ru_nvcsw), r); // 5
+  r = cons(ctx, makeint(usage.ru_nsignals), r); // 6
+  r = cons(ctx, makeint(usage.ru_msgrcv), r); // 7
+  r = cons(ctx, makeint(usage.ru_msgsnd), r); // 8
+  r = cons(ctx, makeint(usage.ru_oublock), r); // 9
+  r = cons(ctx, makeint(usage.ru_inblock), r); // 10
+  r = cons(ctx, makeint(usage.ru_nswap), r); // 11
+  r = cons(ctx, makeint(usage.ru_majflt), r); // 12
+  r = cons(ctx, makeint(usage.ru_minflt), r); // 13
+  r = cons(ctx, makeint(usage.ru_isrss), r); // 14
+  r = cons(ctx, makeint(usage.ru_idrss), r); // 15
+  r = cons(ctx, makeint(usage.ru_ixrss), r); // 16
+  r = cons(ctx, makeint(usage.ru_maxrss), r); // 17
   r=cons(ctx,makeflt(stime),r); r=cons(ctx,makeflt(utime),r);
   /*(utime stime maxrss ixrss idrss isrss page-reclaims page-faults swap
 	inblock outblock msgsnd msgrcv nsignals
