@@ -256,7 +256,11 @@ struct ldmodule {	/*foreign language object module*/
 #endif
     pointer symtab;
     pointer objname;
-    pointer handle;};	/* dl's handle */
+    pointer handle;
+#if ARM
+    pointer handle2;     /* some archtecture did not set code on 4 byte alignment */
+#endif
+    };
 
 struct closure {
     pointer codevec;

@@ -776,11 +776,15 @@ static void initclasses()
 /* 16    ---new for Solaris */
   LDMODULE=basicclass("LOAD-MODULE",C_CODE, &ldmodulecp,
 #if ARM // ARM uses entry2 in struct ldmodule in eus.h
-		      4,"ENTRY2",
+		      5,"ENTRY2",
 #else
 		      3,
 #endif
-		      "SYMBOL-TABLE","OBJECT-FILE", "HANDLE");
+		      "SYMBOL-TABLE","OBJECT-FILE", "HANDLE"
+#if ARM
+		      ,"HANDLE2"
+#endif
+		      );
   C_LDMOD=speval(LDMODULE);
 /*17*/
   LABREF=basicclass("LABEL-REFERENCE",C_OBJECT,&labrefcp,4,
@@ -971,7 +975,15 @@ static void initfeatures()
   /*system function module*/
   sysmod=makemodule(ctx,0);
   sysmod->c.ldmod.codevec=makeint(0);
-  sysmod->c.ldmod.handle=makeint((eusinteger_t)dlopen(0, RTLD_LAZY)>>2);
+  void *handle = dlopen(0, RTLD_LAZY);
+  sysmod->c.ldmod.handle=makeint((eusinteger_t)handle>>2);
+#if ARM
+#if (WORD_SIZE == 64)
+  sysmod->c.ldmod.handle2=makeint((eusinteger_t)handle&0x00000000ffffffff);
+#else
+  sysmod->c.ldmod.handle2=makeint((eusinteger_t)handle&0x0000ffff);
+#endif
+#endif
   sysobj=cons(ctx,sysmod, sysobj);
   }
 
