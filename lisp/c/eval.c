@@ -1003,7 +1003,7 @@ extern int exec_function_f(void (*)(), int *, int *, int, int *);
 	 "ldr	r3, [r7, #60]\n\t"	/* i 			*/	\
 	 /* https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/function-parameters-on-32-bit-arm */ \
 	 "lsl	r4, r3, #2\n\t"		/* r4 = i * 2		*/	\
-	 "ldr	r1, [r7, #80]\n\t"	/* vargv[0]		*/	\
+	 "ldr	r1, [r7, #16]\n\t"	/* vargv[0]		*/	\
 	 "add	r1, r1, r4\n\t"		/* vargv[i]		*/	\
 	 "add	r2, sp, r4\n\t"		/* stack[i]		*/	\
 	 "ldr	r0, [r1]\n\t"						\
@@ -1057,6 +1057,8 @@ __asm__ (".align 4\n"
 	 "str	r1, [r7, #8]\n\t"	// iargv
 	 "str	r2, [r7, #4]\n\t"	// fargv
 	 "str	r3, [r7]\n\t"		// vcntr
+	 "ldr	r0, [r7, #96]\n\t"	// get 5th argument (vargv)
+	 "str	r0, [r7, #16]\n\t"	// store vargv to #16
 	 exec_function_asm("FUNCI")
 	 // retval
 	 "adds	r7, r7, #72\n\t"
@@ -1077,6 +1079,8 @@ __asm__ (".align 4\n"
 	 "str	r1, [r7, #8]\n\t"	// iargv
 	 "str	r2, [r7, #4]\n\t"	// fargv
 	 "str	r3, [r7]\n\t"		// vcntr
+	 "ldr	r0, [r7, #96]\n\t"	// get 5th argument (vargv)
+	 "str	r0, [r7, #16]\n\t"	// store vargv to #16
 	 exec_function_asm("FUNCF")
 	 // retval
 	 "vmov	r0, s0	@ <retval>\n\t"
