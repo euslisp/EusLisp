@@ -432,13 +432,13 @@
 		(setq r
 		    (if type-conversion
 		        (case (aref types i)
-			 ((:text :char)	;copy is necessary
+			 ((:text :char :bpchar)	;copy is necessary
 				;because the result passed from postgress
 				;is taken in libpq's memory.
 				     (copy-seq r))
 			 (:date (read-ISO-date r))
 			 (:time (read-ISO-time r))
-			 ((:datetime :timespan :timespan)
+			 ((:datetime :timespan :timestamp)
 				     (read-ISO-datetime  r))
 			 (:array (pgsql-field r)) ;; an array is read as a list
 			 (t (pgsql-field  r)))
@@ -543,6 +543,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun table-type (db type)
+  (select db (list "typname" "oid" "typtype") "pg_type"
+        :where (list '= 'typname (string type))))
+
+
 ;; (table-fields db table) returns a list of descriptions of fields
 ;; of the table.  Each description consists of filed-number (1,2,3,...),
 ;; filed-name and datatype.
@@ -624,7 +629,7 @@
 
 (defun where (expression)
    (cond ((stringp expression) (format nil "'~a'" expression))
-	 ((atom expression) (format nil "~a" expression))
+	 ((atom expression) (format nil "~a" (string expression)))
 	 ((consp expression)
 	  (format nil "(~a)"
 	      (delimit-list (mapcar #'where (cdr expression))
@@ -711,5 +716,206 @@
 (defun record-count (db table)
   (caar (select db "count(*)" table)))
 
-(provide :pgsql "@(#)$Id$")
+;;;
+;;; pgsql2
+;;; Define a table as a class
+;;;
+
+(export '(table tabla-class pgtable
+	  make-table-class define-table-class
+	  pgval-string))
+
+(defun pgval-string (type val)		;; generate string that pg accepts as a value
+   ;; (if *debug* (format *error-output* "pgval-string: ~a ~a~%" type val))
+   (case type
+	(:int4 (format nil "~a"
+	    (if (member val '("NIL" "nil" "" nil) :test #'equal) "NULL" val)) )
+	(:_int4 (format nil "'{~a}'" (delimit-list val ", " )))
+	(:bool (format nil "~a" 
+		  (if (member val '(t "T" "t" "true" "TRUE" "YES" "yes") :test #'equal)
+			    "TRUE" "FALSE")) )
+	((:date :datetime :timestamp :time)
+	    (classcase val
+		(string  (if (or (member  val '("" "NULL") :test #'equal)
+				 (eq (char val 0) #\0))
+		      "NULL"
+		      (format nil "'~a'" val)) )
+		(interval-time  (if (< (send val :year) 10)
+			"NULL"
+			(format nil "'~a'" 
+				(send val (if (eq type :date) :iso-date-string :iso-string)))) )
+		(symbol "NULL")
+		(cons "NULL")) )
+	(t (format nil "'~a'"
+	 	(if (member val '(nil "" "NIL" "nil") :test #'equal)
+		    ""
+		     val))) )
+    ) 
+  )
+
+
+(defclass table-class :super metaclass
+   :slots (tablename db pkey field-list 
+		omit-list	;fields that should not be named in the insert/update list
+				;like a sequence
+		oid attributes))
+
+;;
+;; pgtable is an object that holds values of a record in one list.
+;; exptecting subclasses to have direct value slots.
+;;
+(defclass pgtable :super propertied-object
+	:metaclass table-class
+	:slots ((values :type cons)
+		(pkey-val)
+		(rcount)
+		))
+
+(defclassmethod pgtable
+ (:init (dbobj tablenm pk fs)
+    (setq db dbobj
+	  tablename tablenm
+	  pkey pk
+	  field-list fs) 
+;    (dolist (f field-list)
+;	(send self :type (second f) (intern (string-upcase (third f)) *keyword-package*)) )
+    (setq oid (caar (send db :exec "select oid from pg_class where relname='~a'" tablename)))
+    self)
+ (:db () db)
+ (:pkey () pkey)
+ (:tablename () tablename)
+ (:fields () field-list)
+ (:type (v) (third (assoc v field-list :key #'second)))
+ (:commma-fields (&optional (flag nil)) (delimit-list (mapcar #'second field-list) ", " flag))
+ (:omit-list () omit-list)
+ (:omit (x) (push x omit-list))
+ )
+
+(defmethod pgtable
+  (:init (key)
+	(setq pkey-val key)
+	(setq values (make-list (length (send self :fields))))
+	(send self :read key)
+	self)
+  (:db () (table-class-db (class self)) )
+  (:fields () (table-class-field-list (class self)) )
+  (:type (v) (send (class self) :type v))
+  (:pkey () (table-class-pkey (class self)) )
+  (:pkey-val (&optional x) (if x (setq pkey-val x)) pkey-val)
+  (:tablename () (table-class-tablename (class self)) )
+  (:exec (&rest queries) (send* (table-class-db (class self)) :exec queries))
+  (:values () values)
+  (:comma-values (&optional (flag nil))
+	(delimit-list values ", " flag))
+  (:types () (mapcar #'third (send self :fields)))
+  (:vars () (mapcar #'second (send self :fields)))
+  (:varpos (var) 
+     (let ((vpos (position var (table-class-field-list (class self)) :key #'second)))
+	(unless vpos (error "no such table field" var))
+	vpos))
+  (:omit-list () (send (class self) :omit-list))
+  (:getf (v) ;get field -- don't mix with :GET of propertied-object (get sym prop)
+     (elt values (send self :varpos v))	
+     )
+  (:setf (var val) ; set field
+     (let ((vpos (send self :varpos var)))
+	(unless  values (error "null values var"))
+	(setf (elt values vpos) val) 
+	(if (eq var (send self :pkey)) (setq pkey-val val))
+	val) )
+  (:read (&optional (key pkey-val))	; read a record from DB and store in my slots
+     (setq pkey-val key)
+     (let ((vals) (db-vals))
+	   (setq db-vals (pq:query (send self :db) nil
+		(format nil "select * from ~a where ~a='~a'"
+		   (table-class-tablename (class self))
+		   (table-class-pkey (class self))
+		   key))  	)
+	   (setq rcount (length db-vals))
+	   (send self :set-slots (car db-vals))
+      self) )
+  (:set-slots (srec) ;selected record
+     (cond (srec
+	    (setq values srec)
+	    (let ((vals values))
+		(dolist (x (table-class-field-list (class self)))
+		    (send self :setf (second x) (pop vals))    ) 
+		self) )
+	   (t nil)))
+  (:where (clause)
+      (let ((srec (pq:query (send self :db) nil
+		(format nil "select * from ~a where ~a"
+			(send self :tablename) clause)))
+	    )
+	(setq rcount (length srec))
+	(send self :set-slots (car srec)) ) )
+  (:var-list ()
+	(delimit-list (set-difference (mapcar #'second (send self :fields))
+		(send self :omit-list))
+		 ", "))
+  (:value-list ()
+    (let ((rlist) (vals values) (omits (send self :omit-list)))
+	(dolist (f (send self :fields))
+	   (if (member (second f) omits)
+		(pop vals)
+		(push (pgval-string (third f) (pop vals)) rlist) ) )
+	(delimit-list (nreverse rlist) ", ")))
+  (:update ()
+        (send self :exec "update ~a set (~a) = (~a) where ~a='~a'"
+	  (send self :tablename)
+	  (send self :var-list)
+	  (send self :value-list)
+	  (send self :pkey) pkey-val)
+     )
+  (:insert ()
+	(send (send self :db) :exec
+	  "insert into ~a (~a) values (~a)" (send self :tablename)
+		(send self :var-list)
+		(send self :value-list))
+	self)
+ )
+
+
+;; define a table class according to the field definitions of a postgresql table.
+(defun make-table-class (db table pkey)	; table is string, pkey is a quoted symbol
+   (let* ((class-name (intern (concatenate string (string-upcase table) "-TABLE")))
+	  (slot-name) (slot-names)
+	  (fields (pq:table-fields  db table))
+	  (tclass (make-class class-name :super pq::pgtable
+			;; :slots (mapcar #'second fields)
+		))
+	  (vcount 0))
+      (send class-name :global tclass)
+      (dolist (f fields)
+	(setq slot-name (second f))
+	(push slot-name slot-names)
+	; type name as a keyword
+	(setf (third f) (intern (string-upcase (string (third f))) *keyword-package*))
+	; method name as a keyword
+	(setq method-name (intern (string-upcase slot-name) *keyword-package*))
+	(send tclass :add-method
+	    (if (eq pkey slot-name)
+		    `(,method-name
+			(&optional x) (when x (send self :setf ',slot-name x) (setq pkey-val x)) (elt values ,vcount))
+		    `(,method-name
+			(&optional x)
+			   (when x (send self :setf ',slot-name x)) (elt values ,vcount) ) )
+		)
+	(incf vcount)
+     ;; (setq slot-names (nreverse slot-names))
+     (send tclass :init db (string-downcase table)
+		pkey fields)
+     ))
+;;
+;; define-table  --> define xxx-table class
+;; database connection is needed at this define time
+
+(defmacro define-table-class (db table pkey)	;; pkey will be found automatically in the future
+  `(make-table-class ,db ',table ',pkey)
+  )
+
+
+(provide :pgsql "@(#)$Id: pgsql.l,v 1.8 2015/07/07 21:29:08 toshihiro Exp $")
+
+
 
