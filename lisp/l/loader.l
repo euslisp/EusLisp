@@ -266,7 +266,7 @@
 	  (progn
 	     (dolist (p (union *loader-current-directory* *load-path*
 			       :test #'string=))
-	        (setq path (concatenate-pathnames  p fname))
+	        (setq path (merge-pathnames fname p))
 		(setq load-result (try-load path))
 		(if load-result (return-from load load-result)))
 	      (error "file ~s not found" fname)))   )) )
