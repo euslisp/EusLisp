@@ -149,7 +149,7 @@
 	(while (< ,(car vars) ,endvar)
 	       ,@forms
 	       (setq ,(car vars) (1+ ,(car vars))))
-	,(caddr vars)))) 
+	,@(cddr vars))))
 
 (defmacro dolist (vars &rest forms)
    (let ((lists (gensym "DOLIST")) (decl (car forms)))
@@ -161,7 +161,7 @@
 	(while ,lists
 	   (setq ,(car vars) (pop ,lists))
 	   ,@forms)
-	,(caddr vars)))) 
+	,@(cddr vars))))
 
 (defmacro do-symbols (vars &rest forms)
    (let* ((symbols (gensym "DOSYM"))
@@ -181,7 +181,7 @@
 	   (setq ,v (elt ,svec ,i))
 	   (inc ,i)
 	   (when (symbolp ,v) . ,forms))
-	,(caddr vars))))
+	,@(cddr vars))))
 
 (defmacro do-external-symbols (vars &rest forms)
    (let* ((symbols (gensym "DOEXTSYM"))
@@ -201,7 +201,7 @@
 	   (setq ,v (elt ,svec ,i))
 	   (inc ,i)
 	   (when (symbolp ,v) . ,forms))
-	,(caddr vars))))
+	,@(cddr vars))))
 
 (defmacro do-all-symbols (var &rest forms)
    (let ((apackage (gensym "DOALLSYM")))
