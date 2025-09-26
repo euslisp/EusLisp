@@ -1050,7 +1050,7 @@ __asm__ (".align 4\n"
 	 ".global exec_function_i\n\t"
 	 ".type	exec_function_i, %function\n"
 	 "exec_function_i:\n\t"
-	 "push	{r7, lr}\n\t"
+	 "push	{r3, r4, r5, r6, r7, lr}\n\t"
 	 "sub	sp, sp, #136\n\t"
 	 "add	r7, sp, #64\n\t"
 	 "str	r0, [r7, #12]\n\t"	// fc
@@ -1062,7 +1062,7 @@ __asm__ (".align 4\n"
 	 "adds	r7, r7, #72\n\t"
 	 "mov	sp, r7\n\t"
 	 "@ sp needed	@\n\t"
-	  "pop	{r7, pc}\n\t"
+	  "pop	{r3, r4, r5, r6, r7, pc}\n\t"
 	 ".size	exec_function_i, .-exec_function_i\n\t"
 	 );
 
@@ -1070,7 +1070,7 @@ __asm__ (".align 4\n"
 	 ".global exec_function_f\n\t"
 	 ".type	exec_function_f, %function\n"
 	 "exec_function_f:\n\t"
-	 "push	{r7, lr}\n\t"
+	 "push	{r3, r4, r5, r6, r7, lr}\n\t"
 	 "sub	sp, sp, #136\n\t"
 	 "add	r7, sp, #64\n\t"
 	 "str	r0, [r7, #12]\n\t"	// fc
@@ -1084,7 +1084,7 @@ __asm__ (".align 4\n"
 	 "adds	r7, r7, #72\n\t"
 	 "mov	sp, r7\n\t"
 	 "@ sp needed	@\n\t"
-	  "pop	{r7, pc}\n\t"
+	  "pop	{r3, r4, r5, r6, r7, pc}\n\t"
 	 ".size	exec_function_f, .-exec_function_f\n\t"
 	 );
 
@@ -1119,8 +1119,13 @@ pointer args[];
   double f;
 
   if (code->c.fcode.entry2 != NIL) {
+#if (WORD_SIZE == 64)
     ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffffffff00000000)
       | (intval(code->c.fcode.entry2)&0x00000000ffffffff));
+#else
+    ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffff0000)
+      | (intval(code->c.fcode.entry2)&0x0000ffff));
+#endif
     /* R.Hanai 090726 */
   }
   while (iscons(paramtypes)) {
