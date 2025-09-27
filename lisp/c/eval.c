@@ -1315,13 +1315,13 @@ pointer args[];
   if (resulttype==K_FLOAT || resulttype==K_FLOAT32) {
     union {
       eusfloat_t f;
-#if __ARM_ARCH==4
+#if __ARM_ARCH==4 || __ARM_ARCH==5
       eusinteger_t i;    // ARM 32bit armel
 #else
       eusfloat_t i;  // Intel 32bit x86
 #endif
     } n;
-#if __ARM_ARCH==4
+#if __ARM_ARCH==4 || __ARM_ARCH==5
     typedef eusinteger_t ifunc_ret_type;
 #else
     typedef double ifunc_ret_type;
