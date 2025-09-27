@@ -433,7 +433,17 @@ char *xentry;
      dlhandle=(eusinteger_t)dlopen("libX11.dylib", RTLD_LAZY);
    entry=(eusinteger_t)dlsym((void *)dlhandle, xentry);
 #else
-  entry=(eusinteger_t)dlsym((void *)((eusinteger_t)(sysmod->c.ldmod.handle) & ~3), xentry);
+  eusinteger_t dlhandle = (eusinteger_t)(sysmod->c.ldmod.handle) & ~3;
+#if ARM
+  if ( sysmod->c.ldmod.handle2 != NIL ) {
+#if (WORD_SIZE == 64)
+    dlhandle = (dlhandle & 0xffffffff00000000) | (intval(sysmod->c.ldmod.handle2) & 0x00000000ffffffff);
+#else
+    dlhandle = (dlhandle & 0xffff0000) | (intval(sysmod->c.ldmod.handle2) & 0x0000ffff);
+#endif
+  }
+#endif
+  entry=(eusinteger_t)dlsym((void *)(dlhandle), xentry);
 #endif
   if (entry){
     xsym=intern(ctx,lname, len-1, xpkg);

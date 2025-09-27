@@ -501,6 +501,9 @@ int size;
   mod->c.ldmod.symtab=NIL;
   mod->c.ldmod.objname=NIL;
   mod->c.ldmod.handle=NIL;
+#if ARM
+  mod->c.ldmod.handle2=NIL;
+#endif
   return(mod);}
 
 pointer makeclosure(code,quote,f,e0,e1,e2)
