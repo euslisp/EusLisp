@@ -132,7 +132,7 @@ pointer LOCALTIME(ctx,n,argv)
 register context *ctx;
 int n;
 pointer argv[];
-{ long clock;
+{ time_t clock;  /* sizoef time(0) is machine dependent and may differ from long */
   struct tm *tms;
   pointer timevec;
   pointer *tv;
@@ -203,6 +203,9 @@ register pointer argv[];
 #else
   atp=asctime_r(tms,at,ASCTIME_STRLEN);	/* asctime --> asctime_r */
 #endif
+  if (atp == NULL) {
+    error(E_USER,(pointer)strerror(errno));
+  }
   return(makestring(atp,strlen(atp)));}
 
 #if !Solaris2
