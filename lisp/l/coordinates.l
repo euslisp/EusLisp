@@ -103,6 +103,15 @@
 	    (transform-coords (send (send self :parentcoords)
 				    :inverse-transformation) cc cc)
 	    (send self :newcoords cc))))
+  (:align-to (c c2 &aux cc)
+     (unless (coordinates-p c) (error "coordinates expected for self-reference"))
+     (unless (coordinates-p c2) (error "coordinates expected for target"))
+     (setq cc (send c2 :copy-worldcoords))
+     (transform-coords cc
+                       (send (send c :copy-worldcoords) :inverse-transformation)
+                       cc)
+     (send self :transform cc :world)
+     self)
   (:rotate-vector (v) (transform rot v))
   (:transform-vector  (v)
    ;vector v given in the local coords is converted to world representation
