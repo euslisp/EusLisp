@@ -62,6 +62,14 @@
 
 )
 
+(deftest test-asctime
+  ;; asctime segfaults on arm32:sid
+  (unix::asctime (unix::localtime)) ;; check if asctime works
+  (assert (string=
+	   (unix::asctime #(41 26 15 27 8 125 6 269 nil ("JST" "JST")))
+	   (format nil "Sat Sep 27 15:26:41 2025~%")))
+)
+
 (eval-when (load eval)
   (run-all-tests)
   (exit))

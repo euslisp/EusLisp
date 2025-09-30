@@ -11,21 +11,26 @@ function travis_time_start {
     fi
     TRAVIS_TIME_ID=$(head /dev/urandom | base64 | head -c 8)
     TRAVIS_FOLD_NAME=$1
-    echo -e "\e[0Ktravis_fold:start:$TRAVIS_FOLD_NAME"
-    echo -e "\e[0Ktravis_time:start:$TRAVIS_TIME_ID"
+    echo -e "::group::$TRAVIS_FOLD_NAME"
+    # echo -e "\e[0Ktravis_fold:start:$TRAVIS_FOLD_NAME"
+    # echo -e "\e[0Ktravis_time:start:$TRAVIS_TIME_ID"
     set -x # enable debug information
 }
 function travis_time_end {
     set +x # disable debug information
     _COLOR=${1:-32}
+    if [ "$_COLOR" -le 30 ]; then
+	_COLOR=31  # red
+    fi
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         TRAVIS_END_TIME=$(( $(date +%s)*1000000000 ))
     else
         TRAVIS_END_TIME=$(date +%s%N)
     fi
     TIME_ELAPSED_SECONDS=$(( ($TRAVIS_END_TIME - $TRAVIS_START_TIME)/1000000000 ))
-    echo -e "travis_time:end:$TRAVIS_TIME_ID:start=$TRAVIS_START_TIME,finish=$TRAVIS_END_TIME,duration=$(($TRAVIS_END_TIME - $TRAVIS_START_TIME))\n\e[0K"
-    echo -e "travis_fold:end:$TRAVIS_FOLD_NAME"
+    echo -e "::endgroup::"
+    # echo -e "travis_time:end:$TRAVIS_TIME_ID:start=$TRAVIS_START_TIME,finish=$TRAVIS_END_TIME,duration=$(($TRAVIS_END_TIME - $TRAVIS_START_TIME))\n\e[0K"
+    # echo -e "travis_fold:end:$TRAVIS_FOLD_NAME"
     echo -e "\e[0K\e[${_COLOR}mFunction $TRAVIS_FOLD_NAME takes $(( $TIME_ELAPSED_SECONDS / 60 )) min $(( $TIME_ELAPSED_SECONDS % 60 )) sec\e[0m"
 }
 

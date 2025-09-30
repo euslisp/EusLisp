@@ -1003,7 +1003,7 @@ extern int exec_function_f(void (*)(), int *, int *, int, int *);
 	 "ldr	r3, [r7, #60]\n\t"	/* i 			*/	\
 	 /* https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/function-parameters-on-32-bit-arm */ \
 	 "lsl	r4, r3, #2\n\t"		/* r4 = i * 2		*/	\
-	 "ldr	r1, [r7, #80]\n\t"	/* vargv[0]		*/	\
+	 "ldr	r1, [r7, #16]\n\t"	/* vargv[0]		*/	\
 	 "add	r1, r1, r4\n\t"		/* vargv[i]		*/	\
 	 "add	r2, sp, r4\n\t"		/* stack[i]		*/	\
 	 "ldr	r0, [r1]\n\t"						\
@@ -1050,19 +1050,21 @@ __asm__ (".align 4\n"
 	 ".global exec_function_i\n\t"
 	 ".type	exec_function_i, %function\n"
 	 "exec_function_i:\n\t"
-	 "push	{r7, lr}\n\t"
+	 "push	{r3, r4, r5, r6, r7, lr}\n\t"
 	 "sub	sp, sp, #136\n\t"
 	 "add	r7, sp, #64\n\t"
 	 "str	r0, [r7, #12]\n\t"	// fc
 	 "str	r1, [r7, #8]\n\t"	// iargv
 	 "str	r2, [r7, #4]\n\t"	// fargv
 	 "str	r3, [r7]\n\t"		// vcntr
+	 "ldr	r0, [r7, #96]\n\t"	// get 5th argument (vargv)
+	 "str	r0, [r7, #16]\n\t"	// store vargv to #16
 	 exec_function_asm("FUNCI")
 	 // retval
 	 "adds	r7, r7, #72\n\t"
 	 "mov	sp, r7\n\t"
 	 "@ sp needed	@\n\t"
-	  "pop	{r7, pc}\n\t"
+	  "pop	{r3, r4, r5, r6, r7, pc}\n\t"
 	 ".size	exec_function_i, .-exec_function_i\n\t"
 	 );
 
@@ -1070,13 +1072,15 @@ __asm__ (".align 4\n"
 	 ".global exec_function_f\n\t"
 	 ".type	exec_function_f, %function\n"
 	 "exec_function_f:\n\t"
-	 "push	{r7, lr}\n\t"
+	 "push	{r3, r4, r5, r6, r7, lr}\n\t"
 	 "sub	sp, sp, #136\n\t"
 	 "add	r7, sp, #64\n\t"
 	 "str	r0, [r7, #12]\n\t"	// fc
 	 "str	r1, [r7, #8]\n\t"	// iargv
 	 "str	r2, [r7, #4]\n\t"	// fargv
 	 "str	r3, [r7]\n\t"		// vcntr
+	 "ldr	r0, [r7, #96]\n\t"	// get 5th argument (vargv)
+	 "str	r0, [r7, #16]\n\t"	// store vargv to #16
 	 exec_function_asm("FUNCF")
 	 // retval
 	 "vmov	r0, s0	@ <retval>\n\t"
@@ -1084,7 +1088,7 @@ __asm__ (".align 4\n"
 	 "adds	r7, r7, #72\n\t"
 	 "mov	sp, r7\n\t"
 	 "@ sp needed	@\n\t"
-	  "pop	{r7, pc}\n\t"
+	  "pop	{r3, r4, r5, r6, r7, pc}\n\t"
 	 ".size	exec_function_f, .-exec_function_f\n\t"
 	 );
 
@@ -1119,8 +1123,13 @@ pointer args[];
   double f;
 
   if (code->c.fcode.entry2 != NIL) {
+#if (WORD_SIZE == 64)
     ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffffffff00000000)
       | (intval(code->c.fcode.entry2)&0x00000000ffffffff));
+#else
+    ifunc = (eusinteger_t (*)())((((eusinteger_t)ifunc)&0xffff0000)
+      | (intval(code->c.fcode.entry2)&0x0000ffff));
+#endif
     /* R.Hanai 090726 */
   }
   while (iscons(paramtypes)) {
@@ -1306,13 +1315,13 @@ pointer args[];
   if (resulttype==K_FLOAT || resulttype==K_FLOAT32) {
     union {
       eusfloat_t f;
-#if __ARM_ARCH==4
+#if __ARM_ARCH==4 || __ARM_ARCH==5
       eusinteger_t i;    // ARM 32bit armel
 #else
       eusfloat_t i;  // Intel 32bit x86
 #endif
     } n;
-#if __ARM_ARCH==4
+#if __ARM_ARCH==4 || __ARM_ARCH==5
     typedef eusinteger_t ifunc_ret_type;
 #else
     typedef double ifunc_ret_type;
