@@ -203,10 +203,11 @@ jobs:
       matrix:
         include:
           # https://github.com/actions/runner-images/tree/main/images/macos
-          # Note: To test macOS-x with Intel architecture,
-          # you need to use the paid macOS-x-large runner, as macOS-x is grouped with ARM-based runners.
-          # https://docs.github.com/en/actions/concepts/runners/about-larger-runners
-          - runs-on: macos-13  # Intel (x64)
+          # Note: macos-13 is deprecated and will be retired by December 4, 2025
+          # https://github.blog/changelog/2025-09-19-github-actions-macos-13-runner-image-is-closing-down/
+          # Using macos-15-intel for Intel x86_64 architecture testing
+          # macos-latest (ARM-based Apple Silicon) for general testing
+          - runs-on: macos-15-intel  # Intel (x64) - replacement for deprecated macos-13
           - runs-on: macos-14  # ARM64 (Apple Silicon)
           - runs-on: macos-15  # ARM64 (Apple Silicon)
       fail-fast: false
