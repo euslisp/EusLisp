@@ -335,6 +335,7 @@ extern pointer makeclass(context */*ctx*/, pointer /*name*/, pointer /*superobj*
 extern pointer makeobject(pointer /*class*/);
 extern pointer makevector(pointer /*vclass*/, int /*size*/);
 extern pointer makefvector(int /*s*/);
+extern pointer makeivector(int /*s*/);
 extern pointer defvector(context */*ctx*/, char */*name*/, pointer /*super*/, int /*elm*/, int /*size*/);
 extern pointer makematrix(context */*ctx*/, int /*row*/, int /*column*/);
 extern pointer makemodule(context */*ctx*/, int /*size*/);
