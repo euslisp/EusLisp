@@ -393,7 +393,10 @@ For example, {\tt (list-insert 'x 2 '(a b c d)) = (a b x c d)}}
 returns the copy of {\em tree} which may be a nested list
 but cannot have circular reference. Circular lists can be copied by
 {\bf copy-object}.
-Actually, {\bf copy-tree} is simply coded as {\tt (subst t t tree)}.}
+Actually, {\bf copy-tree} is simply coded as {\tt (subst t t tree)}.
+Be careful that {\bf copy-tree} only return the copy of {\em list}.
+and you need to use {\bf copy-seq} to copy {\em integer-vector, float-vector}, etc.,
+or {\bf copy-object} to deep-copy {\em list} with {\em integer-vector, float-vector} etc.}
 
 \funcdesc{mapc}{func arg-list \&rest more-arg-lists}{
 applies {\em func} to a list of N-th elements in {\em arg-list} and each of
