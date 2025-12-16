@@ -6,7 +6,8 @@
 
 (in-package "LISP")
 (export '(hash-table make-hash-table gethash sethash remhash hash-table-p
-	maphash clrhash queue))
+          maphash clrhash queue heapify heap-extract-min heap-insert make-heap heap-sort
+          priority-queue))
 
 (defclass hash-table :slots
 			((key :type vector)
@@ -255,5 +256,86 @@
  (:last () (car cdr))
  )
   
+(defun heap-val (heap i key) (declare (fixnum i)) (funcall key (aref heap i)))
+(defun heap-parent (i) (declare (fixnum i)) (floor (/ (- i 1) 2)))
+(defun heap-left (i) (declare (fixnum i)) (the fixnum (+ 1 i i)))
+(defun heap-right (i) (declare (fixnum i)) (the fixnum (+ 2 i i)))
+
+(defun heapify (heap i key)
+  "Assume that the children of i are heaps, but that heap[i] may be
+  larger than its children.  If it is, move heap[i] down where it belongs."
+  (let ((l (heap-left i))
+        (r (heap-right i))
+        (N (- (length heap) 1))
+        smallest)
+    (setf smallest (if (and (<= l N) (<= (heap-val heap l key)
+                                         (heap-val heap i key)))
+                       l i))
+    (if (and (<= r N) (<= (heap-val heap r key) (heap-val heap smallest key)))
+        (setf smallest r))
+    (when (/= smallest i)
+      ;;(rotatef (aref heap i) (aref heap smallest))
+      (let ((tmp (elt heap i)))
+        (setf (aref heap i) (aref heap smallest))
+        (setf (aref heap smallest) tmp))
+      (heapify heap smallest key))))
+
+(defun heap-extract-min (heap key)
+  "Pop the best (lowest valued) item off the heap."
+  (let ((min (aref heap 0)))
+    (setf (aref heap 0) (aref heap (- (length heap) 1)))
+    (decf (fill-pointer heap))
+    (heapify heap 0 key)
+    min))
+
+(defun heap-insert (heap item key)
+  "Put an item into a heap."
+  ;; Note that ITEM is the value to be inserted, and KEY is a function
+  ;; that extracts the numeric value from the item.
+  (vector-push-extend nil heap)
+  (let ((i (- (length heap) 1))
+        (val (funcall key item)))
+    (while (and (> i 0) (>= (heap-val heap (heap-parent i) key) val))
+      (setf (aref heap i) (aref heap (heap-parent i))
+            i (heap-parent i)))
+    (setf (aref heap i) item)))
+
+(defun make-heap (&optional (size 100))
+  (make-array (list size) :fill-pointer 0 :adjustable t))
+
+(defun heap-sort (numbers &key (key #'identity))
+  "Return a sorted list, with elements that are < according to key first."
+  ;; Mostly for testing the heap implementation
+  ;; There are more efficient ways of sorting (even of heap-sorting)
+  (let ((heap (make-heap))
+        (result nil))
+    ;;    (for each n in numbers do
+    (dolist (n numbers)
+      (heap-insert heap n key))
+    (while (> (length heap) 0)
+      (push (heap-extract-min heap key) result))
+    (nreverse result)))
+
+
+(defclass priority-queue
+  :super propertied-object
+  :slots (heap key-func))
+
+(defmethod priority-queue
+  (:init (&key (key #'identity))
+    (setq heap (make-heap)
+          key-func key))
+  (:push (x &optional key)
+    (when (null key)
+      (setq key key-func))
+    (heap-insert heap x key))
+  (:pop (&optional key)
+    (when (null key)
+      (setq key key-func))
+    (heap-extract-min heap key))
+  (:length () (length heap))
+  (:empty () (= (send self :length) 0))
+  (:top () (elt heap 0)))
+
 (provide :hashtab "@(#)$Id: hashtab.l,v 1.1.1.1 2003/11/20 07:46:31 eus Exp $")
 
