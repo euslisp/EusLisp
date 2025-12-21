@@ -45,7 +45,7 @@
 		unwind-protect catch throw flet labels block return-from
 		return reset go tagbody evalhook macroexpand2 eval-when
 		the and or proclaim declare symbol-value symbol-function
-		makunbound defun defmacro find-symbol intern gensym
+		makunbound fmakunbound defun defmacro find-symbol intern gensym
 		list-all-packages find-package 
 		sxhash get export putprop))
 ;; makepackage ??
