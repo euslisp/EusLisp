@@ -166,10 +166,11 @@ pointer initnames;
   module_count=0;
   while (iscons(initnames)) {
     /* printf("%s ", ccar(initnames)->c.str.chars); */
-    initfunc= dlsym(dlhandle, (char *)ccar(initnames)->c.str.chars);
-    if (initfunc==NULL) {
-      sprintf(namebuf,"___%s",ccar(initnames)->c.str.chars);
-      initfunc=dlsym(dlhandle, namebuf);}
+    /* First try with ___ prefix to avoid symbol conflicts with system libraries (e.g., libedit's history) */
+    sprintf(namebuf, "___%s", ccar(initnames)->c.str.chars);
+    initfunc = dlsym(dlhandle, namebuf);
+    if (initfunc == NULL) {
+      initfunc = dlsym(dlhandle, (char *)ccar(initnames)->c.str.chars);}
 
     if (initfunc) {
       /* printf(" ok\n"); */
@@ -218,10 +219,11 @@ pointer *argv;
   if (dlhandle==NULL) error(E_USER,(pointer)"This module was not loaded");
 
   while (iscons(initnames)) {
-    initfunc= dlsym(dlhandle, (char *)ccar(initnames)->c.str.chars);
-    if (initfunc==NULL) {
-      sprintf(namebuf,"___%s",ccar(initnames)->c.str.chars);
-      initfunc=dlsym(dlhandle, namebuf);}
+    /* First try with ___ prefix to avoid symbol conflicts with system libraries */
+    sprintf(namebuf, "___%s", ccar(initnames)->c.str.chars);
+    initfunc = dlsym(dlhandle, namebuf);
+    if (initfunc == NULL) {
+      initfunc = dlsym(dlhandle, (char *)ccar(initnames)->c.str.chars);}
 
     if (initfunc) {
       modname=ccar(initnames);
