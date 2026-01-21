@@ -264,7 +264,8 @@
 	      (error "file ~s not found" fname)
 	      load-result)
 	  (progn
-	     (dolist (p (union *loader-current-directory* *load-path*
+	     (dolist (p (union *loader-current-directory*
+				(mapcar #'namestring *load-path*)
 			       :test #'string=))
 	        (setq path (concatenate-pathnames  p fname))
 		(setq load-result (try-load path))
