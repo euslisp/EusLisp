@@ -337,6 +337,7 @@ long set_ifunc(long (*f) ())
 {
   g = f;
   printf("set_ifunc, g = %lX\n", g);
+  return 0;
 }
 
 long set_ffunc(double (*f) ())
@@ -348,6 +349,7 @@ long set_ffunc(double (*f) ())
                     double d8, double d9,
                     long i6, long i7))f;
   printf("set_ffunc, gf = %lX\n", gf);
+  return 0;
 }
 
 long call_ifunc() {

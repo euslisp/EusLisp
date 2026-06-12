@@ -148,6 +148,12 @@
 	(setf (symbol-function (intern (string-upcase fname)))
 	      (make-foreign-code fname nil :integer ,mod))))
 
+; mprotect(addr, len, prot) -- used to make trampoline pages executable on x86_64 Linux
+; wrapped in when because mprotect may not be in sysmod on non-Linux platforms (e.g. macOS)
+#+:x86_64
+(when (system::find-entry "mprotect" (sys::sysmod))
+  (defforeign c-mprotect (sys::sysmod) "mprotect" (:integer :integer :integer) :integer))
+
 ;(eval-when (compile)
 ;  (defclass foreign-pod :super symbol :slots (podcode paramtypes resulttype)))
 
@@ -370,6 +376,11 @@
 		    :start1 100)
            (if *debug* (format t "PODCODE ADDR: ~x~%" (+ 16 (sys:address podcode))))
 	   podcode)
+#+:x86_64
+   (when (fboundp 'c-mprotect)
+     (let* ((addr (sys:address podcode))
+            (page-addr (* (floor (/ addr 4096)) 4096)))
+       (c-mprotect page-addr (* 2 4096) 7)))
 #+:sh4 
 (progn
 	(setq podcode (byte-string
