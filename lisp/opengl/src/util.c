@@ -250,6 +250,117 @@ void tess_vertex_cb(i)
     glTexCoord2dv(((struct tessinfo *)i)->tcoord);
 }
 
+/*
+ * eus_tess_* : offline (no-drawing) GLU polygon-with-holes tessellation,
+ * used by kxreus to replace its own slow hand-written hole-bridging +
+ * ear-clipping triangulation (see irteus/irtgeo.l face-to-triangle /
+ * face-to-tessel-triangle / geo::face-to-triangle-make-simple).
+ * Mirrors tess_vertex_cb's calling convention exactly, but instead of
+ * drawing with glVertex3dv/glBegin/glEnd, it records the tessellated
+ * output (vertices, grouped into GL_TRIANGLES/GL_TRIANGLE_FAN/
+ * GL_TRIANGLE_STRIP "batches" matching what GLU_BEGIN/GLU_END bracket)
+ * into fixed-size static buffers that Lisp code reads back afterward.
+ */
+#define EUS_TESS_MAX_VERTS   200000
+#define EUS_TESS_MAX_BATCHES 8192
+
+static GLdouble eus_tess_vbuf[EUS_TESS_MAX_VERTS][3];
+static int      eus_tess_nverts = 0;
+static int      eus_tess_batch_mode[EUS_TESS_MAX_BATCHES];
+static int      eus_tess_batch_start[EUS_TESS_MAX_BATCHES];
+static int      eus_tess_batch_count[EUS_TESS_MAX_BATCHES];
+static int      eus_tess_nbatches = 0;
+static int      eus_tess_cur_batch = -1;
+static int      eus_tess_error = 0;
+
+eusinteger_t eus_tess_reset()
+{
+  eus_tess_nverts = 0;
+  eus_tess_nbatches = 0;
+  eus_tess_cur_batch = -1;
+  eus_tess_error = 0;
+  return 0;
+}
+
+void eus_tess_begin_cb(mode)
+  eusinteger_t mode;
+{
+  if (eus_tess_nbatches < EUS_TESS_MAX_BATCHES) {
+    eus_tess_cur_batch = eus_tess_nbatches++;
+    eus_tess_batch_mode[eus_tess_cur_batch] = (int)mode;
+    eus_tess_batch_start[eus_tess_cur_batch] = eus_tess_nverts;
+    eus_tess_batch_count[eus_tess_cur_batch] = 0;
+  }
+}
+
+void eus_tess_vertex_cb(i)
+  eusinteger_t i;
+{
+  if (eus_tess_nverts < EUS_TESS_MAX_VERTS && eus_tess_cur_batch >= 0) {
+    GLdouble *v = ((struct tessinfo *)i)->vert;
+    eus_tess_vbuf[eus_tess_nverts][0] = v[0];
+    eus_tess_vbuf[eus_tess_nverts][1] = v[1];
+    eus_tess_vbuf[eus_tess_nverts][2] = v[2];
+    eus_tess_nverts++;
+    eus_tess_batch_count[eus_tess_cur_batch]++;
+  }
+}
+
+void eus_tess_end_cb()
+{
+  /* no-op: batch boundaries are already tracked via eus_tess_begin_cb */
+}
+
+void eus_tess_error_cb(errcode)
+  eusinteger_t errcode;
+{
+  eus_tess_error = (int)errcode;
+}
+
+eusinteger_t eus_tess_get_error()
+{
+  return (eusinteger_t)eus_tess_error;
+}
+
+eusinteger_t eus_tess_num_batches()
+{
+  return (eusinteger_t)eus_tess_nbatches;
+}
+
+eusinteger_t eus_tess_batch_mode_at(b)
+  eusinteger_t b;
+{
+  if (b < 0 || b >= eus_tess_nbatches) return -1;
+  return (eusinteger_t)eus_tess_batch_mode[b];
+}
+
+eusinteger_t eus_tess_batch_start_at(b)
+  eusinteger_t b;
+{
+  if (b < 0 || b >= eus_tess_nbatches) return -1;
+  return (eusinteger_t)eus_tess_batch_start[b];
+}
+
+eusinteger_t eus_tess_batch_count_at(b)
+  eusinteger_t b;
+{
+  if (b < 0 || b >= eus_tess_nbatches) return -1;
+  return (eusinteger_t)eus_tess_batch_count[b];
+}
+
+void eus_tess_get_vertexfv(idx, v)
+  eusinteger_t idx;
+  eusfloat_t   v[3];
+{
+  if (idx >= 0 && idx < eus_tess_nverts) {
+    v[0] = (eusfloat_t)eus_tess_vbuf[idx][0];
+    v[1] = (eusfloat_t)eus_tess_vbuf[idx][1];
+    v[2] = (eusfloat_t)eus_tess_vbuf[idx][2];
+  } else {
+    v[0] = v[1] = v[2] = 0.0;
+  }
+}
+
 void glDepthRangefv(clamp)
   eusfloat_t clamp[2];
 {

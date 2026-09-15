@@ -93,7 +93,10 @@ jobs:
         include:
           - DOCKER_IMAGE: arm64v8/ubuntu:jammy
           - DOCKER_IMAGE: arm64v8/ubuntu:noble
-          - DOCKER_IMAGE: arm32v5/debian:sid
+          # armel (arm32v5) has been dropped from Debian unstable entirely
+          # (no binary-armel packages on deb.debian.org or ports.debian.org
+          # any more), so arm32v5/debian:sid can no longer install anything.
+          # armel is still covered on the frozen jessie image in the `linux` job.
           - DOCKER_IMAGE: arm32v7/debian:sid
           - DOCKER_IMAGE: arm64v8/debian:sid
       fail-fast: false
@@ -185,7 +188,7 @@ jobs:
                [[ \"${{matrix.EXPERIMENTAL}}\" != \"true\" ]] || apt -t=experimental -y -qq install g++ gcc; \
                apt install -y -qq make gcc libgl-dev libglu1-mesa-dev libjpeg-dev libpng-dev libpq-dev libx11-dev libxext-dev; \
                export GNUMAKEFLAGS='--trace --shuffle=reverse'; \
-               CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0; \
+               n=0; until CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0; do n=\$((n+1)); if [ \$n -ge 3 ]; then exit 1; fi; echo 'eus0 build crashed, likely a transient QEMU user-mode emulation fault on this cross-arch job -- retrying'; done; \
                CC='gcc -Werror' ARCHDIR=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/image/jpeg; \
                if [[ \"$DOCKER_IMAGE\" =~ (\"arm\"|\"s390x\") ]]; then exit 0; fi ; \
                CFLAGS='-Werror=implicit-function-declaration' ARCH=$ARCH EUSDIR=/ws/euslisp make -C /ws/euslisp/lisp/ -f Makefile.$ARCH eus0 eus1 eus2 eusg eusx eusgl; \

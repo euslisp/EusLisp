@@ -34,15 +34,37 @@
 (defparameter *pic* t)
 (defparameter *kernel* nil)
 ;(defparameter *cc* (if (member :gcc *features*) "gcc" "cc"))
-(defparameter *cc* 
+(defparameter *cc*
   (cond ((member :sh4 *features*)
 	 "sh4-linux-gcc -g")
-	((member :ia32 *features*) 
+	((member :ia32 *features*)
 	 "gcc -g -m32")
 	((member :gcc *features*)
 	   "gcc -g")
 	((member :alpha *features*) "cc -ieee_with_inexact" )
 	(t "cc")))
+
+;; Modern GCC defaulting to -std=gnu23 treats an empty "()" C parameter
+;; list as "(void)" instead of "unspecified arguments" (pre-C23 K&R
+;; semantics), which breaks fcall.c's `pointer (*subr)();`
+;; function-pointer idiom used throughout the EusLisp C sources
+;; ("too many arguments to function 'subr'; expected 0, have 3").
+;; -std=gnu17 restores the old semantics and fixes that -- but GCC
+;; before ~8 (e.g. the ubuntu:trusty/xenial/bionic, debian:stretch
+;; images CI still tests against) doesn't recognize -std=gnu17 at all
+;; ("unrecognized command line option"), so the flag can't just be
+;; hardcoded; it must only be added when the compiler actually accepts
+;; it. Detected once here (a marker file, not unix::system's raw
+;; return value, since its exit-status encoding isn't consistent
+;; across platforms) and reused everywhere -std=gnu17 was needed.
+(defparameter *cc-gnu17-flag*
+  (let ((marker (format nil "/tmp/.eus-cc-gnu17-test-~A" (unix::getpid))))
+    (unix::system
+     (format nil "echo 'int main(){return 0;}' | ~A -std=gnu17 -xc -o /dev/null - >/dev/null 2>&1 && touch ~A"
+	     *cc* marker))
+    (if (probe-file marker)
+	(progn (unix::system (format nil "rm -f ~A" marker)) " -std=gnu17 ")
+      " ")))
 
 (defvar comp nil "$Id$")
 (defvar trans)
@@ -1323,13 +1345,13 @@
 		   	 ((and (memq :linux *features*)  (memq :gcc3 *features*))
 			  (cond
                            ((memq :x86_64 *features*)
-                            " -Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                            (concatenate string *cc-gnu17-flag* "-Dx86_64 -DLinux -Wimplicit -falign-functions=8 -DGCC3 "))
                            ((memq :aarch64 *features*)
-                            " -Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                            (concatenate string *cc-gnu17-flag* "-Daarch64 -fPIC -Darmv8 -DARM -DLinux -Wimplicit -falign-functions=8 -DGCC3 "))
                            ((memq :arm *features*)
-                            " -DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 ")
+                            (concatenate string *cc-gnu17-flag* "-DARM -DLinux -Wimplicit -falign-functions=4 -DGCC3 "))
                            ((memq :word-size=64 *features*)
-                            " -DLinux -Wimplicit -falign-functions=8 -DGCC3 ")
+                            (concatenate string *cc-gnu17-flag* "-DLinux -Wimplicit -falign-functions=8 -DGCC3 "))
                            (t " -Di386 -DLinux -Wimplicit -falign-functions=4 -fno-stack-protector -DGCC3 ")))
 		   	 ((memq :linux *features*)
 			  (if (memq :x86_64 *features*)

@@ -584,6 +584,18 @@ pointer argv[];
   defoglforeign(ctx,"glClearIndexfv");
   defoglforeign(ctx,"alloctessinfo");
   defoglforeign(ctx,"tess_vertex_cb");
+  /* kxreus: offline (no-drawing) GLU tessellation collector, see util.c */
+  defoglforeign(ctx,"eus_tess_reset");
+  defoglforeign(ctx,"eus_tess_begin_cb");
+  defoglforeign(ctx,"eus_tess_vertex_cb");
+  defoglforeign(ctx,"eus_tess_end_cb");
+  defoglforeign(ctx,"eus_tess_error_cb");
+  defoglforeign(ctx,"eus_tess_get_error");
+  defoglforeign(ctx,"eus_tess_num_batches");
+  defoglforeign(ctx,"eus_tess_batch_mode_at");
+  defoglforeign(ctx,"eus_tess_batch_start_at");
+  defoglforeign(ctx,"eus_tess_batch_count_at");
+  defoglforeign(ctx,"eus_tess_get_vertexfv");
   defoglforeign(ctx,"glDepthRangefv");
 #if (WORD_SIZE == 64)
   defoglforeign(ctx,"glPointSized");
