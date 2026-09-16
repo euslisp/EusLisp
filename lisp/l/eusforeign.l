@@ -293,84 +293,142 @@
 	   podcode)
 |#
 #+:x86_64
-	(let ((calleus-offset 0))
-	   (setq podcode (byte-string
-                #x48 #x83 #xec #x78
-                #x48 #x89 #x3c #x24
-                #x48 #x89 #x74 #x24 #x08
-                #x48 #x89 #x54 #x24 #x10
-                #x48 #x89 #x4c #x24 #x18
-                #x4c #x89 #x44 #x24 #x20
-                #x4c #x89 #x4c #x24 #x28
-                #xf2 #x0f #x11 #x44 #x24 #x30
-                #xf2 #x0f #x11 #x4c #x24 #x38
-                #xf2 #x0f #x11 #x54 #x24 #x40
-                #xf2 #x0f #x11 #x5c #x24 #x48
-                #xf2 #x0f #x11 #x64 #x24 #x50
-                #xf2 #x0f #x11 #x6c #x24 #x58
-                #xf2 #x0f #x11 #x74 #x24 #x60
-                #xf2 #x0f #x11 #x7c #x24 #x68
-		#x48 #xbf ;;#x00 #x00 #x00 #x00 ;; mov $addr, %rdi
-		     (ldb self-address 0 8)
-		     (ldb self-address 8 8)
-		     (ldb self-address 16 8)
-		     (ldb self-address 24 8)
-		     (ldb self-address 32 8)
-		     (ldb self-address 40 8)
-		     (ldb self-address 48 8)
-		     (ldb self-address 56 8)
-                #x48 #x89 #xe6
-                #xb8 #x00 #x00 #x00 #x00
-                #xe8 #x00 #x00 #x00 #x00
-                #x48 #x83 #xc4 #x78
-		#xc3                     ;; retq
-                #x90 #x90 #x90 #x90
-                #x90 #x90 #x90 #x90 #x90
-		))
-           (if (or (eq :float result) (eq :float32 result))
-	       (replace podcode
-			(list #x48 #x89 #x04 #x24
-                              #xf2 #x0f #x10 #x04 #x24
-                              #x48 #x83 #xc4 #x78
-                              #xc3) :start1 104))
-;; /* development version of pod-code for x86_64 written by Y.Kakiuchi */
-;; 000:  48 83 ec 78             sub    $0x78,%rsp
-;; 004:  48 89 3c 24             mov    %rdi,(%rsp)
-;; 008:  48 89 74 24 08          mov    %rsi,0x8(%rsp)
-;; 00d:  48 89 54 24 10          mov    %rdx,0x10(%rsp)
-;  012:  48 89 4c 24 18          mov    %rcx,0x18(%rsp)
-;; 017:  4c 89 44 24 20          mov    %r8,0x20(%rsp)
-;; 01c:  4c 89 4c 24 28          mov    %r9,0x28(%rsp)
-;; 021:  f2 0f 11 44 24 30       movsd  %xmm0,0x30(%rsp)
-;; 027:  f2 0f 11 4c 24 38       movsd  %xmm1,0x38(%rsp)
-;; 02d:  f2 0f 11 54 24 40       movsd  %xmm2,0x40(%rsp)
-;; 033:  f2 0f 11 5c 24 48       movsd  %xmm3,0x48(%rsp)
-;; 039:  f2 0f 11 64 24 50       movsd  %xmm4,0x50(%rsp)
-;; 03f:  f2 0f 11 6c 24 58       movsd  %xmm5,0x58(%rsp)
-;; 045:  f2 0f 11 74 24 60       movsd  %xmm6,0x60(%rsp)
-;; 04b:  f2 0f 11 7c 24 68       movsd  %xmm7,0x68(%rsp)
-;; 051:  48 bf 77 ef cd ab 77    mov    $0xabcdef77abcdef77,%rdi
-;; 058:  ef cd ab
-;; 05b:  48 89 e6                mov    %rsp,%rsi
-;; 05e:  b8 00 00 00 00          mov    $0x0,%eax
-;; 063:  e8 a0 01 00 00          callq  4007b8 <calleus>
-;;; return integer
-;; 068:  48 83 c4 78             add    $0x78,%rsp
-;; 06c:  c3                      retq
-;;; return float
-;; 068:  48 89 04 24             mov    %rax,(%rsp)
-;; 06c:  f2 0f 10 04 24          movsd  (%rsp),%xmm0
-;; 071:  48 83 c4 78             add    $0x78,%rsp
-;; 075:  c3                      retq
-	   (setq calleus-offset (- *calleus* (+ (sys:address podcode) 16 100 4)))
-	   (replace podcode
-		    (list
-			(ldb calleus-offset 0 8) (ldb calleus-offset 8 8)
-			(ldb calleus-offset 16 8)  (ldb calleus-offset 24 8))
-		    :start1 100)
+;; development version of pod-code for x86_64 written by Y.Kakiuchi;
+;; self/*calleus* embedded as absolute 64bit immediates (movabs +
+;; call *%reg) rather than a pc-relative call. A pc-relative call's
+;; 32bit displacement can't reach a *calleus* (in eus's own .text/lib)
+;; that lands more than +-2GB from this pod-code object (in the Lisp
+;; heap) in the process's address space -- entirely possible with
+;; ASLR on a modern 64bit Linux -- which silently truncates the
+;; displacement and calls a bogus address. See the aarch64 stub above,
+;; which never had a pc-relative option to begin with (AArch64's BL
+;; only has a +-128MB range) and uses the same absolute-address
+;; approach.
+	(let* ((sa self-address)
+	       (ca *calleus*))
+	   (setq podcode
+	     (apply #'byte-string
+	       (append
+		 (list
+                    #x48 #x83 #xec #x78                 ;; sub  $0x78, %rsp
+                    #x48 #x89 #x3c #x24                 ;; mov  %rdi, (%rsp)
+                    #x48 #x89 #x74 #x24 #x08             ;; mov  %rsi, 0x8(%rsp)
+                    #x48 #x89 #x54 #x24 #x10             ;; mov  %rdx, 0x10(%rsp)
+                    #x48 #x89 #x4c #x24 #x18             ;; mov  %rcx, 0x18(%rsp)
+                    #x4c #x89 #x44 #x24 #x20             ;; mov  %r8,  0x20(%rsp)
+                    #x4c #x89 #x4c #x24 #x28             ;; mov  %r9,  0x28(%rsp)
+                    #xf2 #x0f #x11 #x44 #x24 #x30         ;; movsd %xmm0, 0x30(%rsp)
+                    #xf2 #x0f #x11 #x4c #x24 #x38         ;; movsd %xmm1, 0x38(%rsp)
+                    #xf2 #x0f #x11 #x54 #x24 #x40         ;; movsd %xmm2, 0x40(%rsp)
+                    #xf2 #x0f #x11 #x5c #x24 #x48         ;; movsd %xmm3, 0x48(%rsp)
+                    #xf2 #x0f #x11 #x64 #x24 #x50         ;; movsd %xmm4, 0x50(%rsp)
+                    #xf2 #x0f #x11 #x6c #x24 #x58         ;; movsd %xmm5, 0x58(%rsp)
+                    #xf2 #x0f #x11 #x74 #x24 #x60         ;; movsd %xmm6, 0x60(%rsp)
+                    #xf2 #x0f #x11 #x7c #x24 #x68         ;; movsd %xmm7, 0x68(%rsp)
+                    #x48 #xbf                             ;; movabs $self-address, %rdi
+                    (ldb sa 0 8) (ldb sa 8 8) (ldb sa 16 8) (ldb sa 24 8)
+                    (ldb sa 32 8) (ldb sa 40 8) (ldb sa 48 8) (ldb sa 56 8)
+                    #x48 #x89 #xe6                       ;; mov  %rsp, %rsi   (cargv pointer)
+                    #xb8 #x00 #x00 #x00 #x00             ;; mov  $0x0, %eax
+                    #x48 #xb8                             ;; movabs $calleus, %rax
+                    (ldb ca 0 8) (ldb ca 8 8) (ldb ca 16 8) (ldb ca 24 8)
+                    (ldb ca 32 8) (ldb ca 40 8) (ldb ca 48 8) (ldb ca 56 8)
+                    #xff #xd0)                            ;; call *%rax
+		 (if (or (eq :float result) (eq :float32 result))
+		     (list
+			#x48 #x89 #x04 #x24               ;; mov   %rax, (%rsp)
+			#xf2 #x0f #x10 #x04 #x24          ;; movsd (%rsp), %xmm0
+			#x48 #x83 #xc4 #x78               ;; add   $0x78, %rsp
+			#xc3)                             ;; ret
+		     (list
+			#x48 #x83 #xc4 #x78               ;; add   $0x78, %rsp
+			#xc3)))))                          ;; ret
            (if *debug* (format t "PODCODE ADDR: ~x~%" (+ 16 (sys:address podcode))))
+	   ;; i386/x86_64 Linux historically grants heap pages execute
+	   ;; permission via the kernel's READ_IMPLIES_EXEC personality
+	   ;; quirk, triggered by this binary's non-NX (execstack) marking
+	   ;; -- but that's a property of the *kernel* honoring it, not of
+	   ;; this process, and isn't guaranteed on every host a container
+	   ;; like this one might run under (e.g. CI running an old
+	   ;; ubuntu:trusty *userland* on a current, possibly hardened,
+	   ;; *host* kernel). Explicitly mprotect PROT_EXEC rather than
+	   ;; relying on that, same as aarch64 (which never had the
+	   ;; READ_IMPLIES_EXEC option to begin with) already has to.
+	   (mprotect-exec (sys:address podcode) (+ 16 (length podcode)))
 	   podcode)
-#+:sh4 
+#+:aarch64
+;; AArch64 (ARM64, AAPCS64) pod-code trampoline.
+;; Unlike the i386/x86_64 stubs, self-address and the *calleus* entry
+;; point are embedded as absolute 64bit immediates (movz/movk, 16 bits
+;; at a time) instead of a pc-relative call, so no relocation/offset
+;; bookkeeping is needed once the byte-string is built.
+;; AAPCS64 has 8 integer argument registers (x0-x7), unlike x86_64's 6
+;; (SysV: rdi,rsi,rdx,rcx,r8,r9), so the cargv[] layout this trampoline
+;; builds differs from the i386/x86_64 stubs; calleus.c's aarch64 branch
+;; (EUS_MAX_IREGS) is written to match:
+;;   cargv[0..7]  <- x0..x7   (8 integer/pointer args)
+;;   cargv[8..15] <- d0..d7   (8 float/double args)
+;;   cargv[16..]  == original incoming sp (any stack-passed args)
+;; x30 (LR) is saved below cargv (at [sp,#0], cargv itself starts at
+;; [sp,#16]) rather than inside it: blr has no free cargv slot to steal
+;; the way the i386/x86_64 stubs do (6+8=14 leaves 2 spare slots before
+;; their 16-slot vargv boundary; aarch64's 8+8=16 leaves none), and
+;; cargv[16] must land exactly on the incoming sp so it lines up with
+;; any genuine stack-passed arguments (aarch64 calls, unlike x86's
+;; `call`, push nothing on the stack, so the incoming sp itself is
+;; already the first stack argument's address).
+	(let* ((sa self-address)
+	       (ca *calleus*)
+	       (w0 (logior #xd2800000 (ash (ldb sa 0 16) 5)))    ;; movz x0, sa[ 0:16]
+	       (w1 (logior #xf2a00000 (ash (ldb sa 16 16) 5)))   ;; movk x0, sa[16:32], lsl #16
+	       (w2 (logior #xf2c00000 (ash (ldb sa 32 16) 5)))   ;; movk x0, sa[32:48], lsl #32
+	       (w3 (logior #xf2e00000 (ash (ldb sa 48 16) 5)))   ;; movk x0, sa[48:64], lsl #48
+	       (w4 (logior #xd2800009 (ash (ldb ca 0 16) 5)))    ;; movz x9, ca[ 0:16]
+	       (w5 (logior #xf2a00009 (ash (ldb ca 16 16) 5)))   ;; movk x9, ca[16:32], lsl #16
+	       (w6 (logior #xf2c00009 (ash (ldb ca 32 16) 5)))   ;; movk x9, ca[32:48], lsl #32
+	       (w7 (logior #xf2e00009 (ash (ldb ca 48 16) 5)))   ;; movk x9, ca[48:64], lsl #48
+	       (w32 #'(lambda (w) (list (ldb w 0 8) (ldb w 8 8) (ldb w 16 8) (ldb w 24 8)))))
+	  (setq podcode
+	    (apply #'byte-string
+	      (append
+		(list
+		   #xff #x43 #x02 #xd1     ;; sub  sp, sp, #0x90
+		   #xfe #x03 #x00 #xf9     ;; str  x30, [sp, #0]     (LR save)
+		   #xe0 #x0b #x00 #xf9     ;; str  x0,  [sp, #16]    (cargv[0])
+		   #xe1 #x0f #x00 #xf9     ;; str  x1,  [sp, #24]
+		   #xe2 #x13 #x00 #xf9     ;; str  x2,  [sp, #32]
+		   #xe3 #x17 #x00 #xf9     ;; str  x3,  [sp, #40]
+		   #xe4 #x1b #x00 #xf9     ;; str  x4,  [sp, #48]
+		   #xe5 #x1f #x00 #xf9     ;; str  x5,  [sp, #56]
+		   #xe6 #x23 #x00 #xf9     ;; str  x6,  [sp, #64]
+		   #xe7 #x27 #x00 #xf9     ;; str  x7,  [sp, #72]    (cargv[7])
+		   #xe0 #x2b #x00 #xfd     ;; str  d0,  [sp, #80]    (cargv[8])
+		   #xe1 #x2f #x00 #xfd     ;; str  d1,  [sp, #88]
+		   #xe2 #x33 #x00 #xfd     ;; str  d2,  [sp, #96]
+		   #xe3 #x37 #x00 #xfd     ;; str  d3,  [sp, #104]
+		   #xe4 #x3b #x00 #xfd     ;; str  d4,  [sp, #112]
+		   #xe5 #x3f #x00 #xfd     ;; str  d5,  [sp, #120]
+		   #xe6 #x43 #x00 #xfd     ;; str  d6,  [sp, #128]
+		   #xe7 #x47 #x00 #xfd)    ;; str  d7,  [sp, #136]   (cargv[15])
+		(funcall w32 w0) (funcall w32 w1) (funcall w32 w2) (funcall w32 w3)
+		(list #xe1 #x43 #x00 #x91) ;; add  x1, sp, #16   (cargv pointer)
+		(funcall w32 w4) (funcall w32 w5) (funcall w32 w6) (funcall w32 w7)
+		(list
+		   #x20 #x01 #x3f #xd6     ;; blr  x9       (call calleus)
+		   #xfe #x03 #x40 #xf9)    ;; ldr  x30, [sp, #0]
+		(if (or (eq :float result) (eq :float32 result))
+		    (list #x00 #x00 #x67 #x9e) ;; fmov d0, x0  (reinterpret result as double)
+		    nil)
+		(list
+		   #xff #x43 #x02 #x91     ;; add  sp, sp, #0x90
+		   #xc0 #x03 #x5f #xd6)))) ;; ret
+	  ;; the podcode byte-string lives in the ordinary (non-executable)
+	  ;; Lisp heap; aarch64 Linux, unlike i386/x86_64, does not grant
+	  ;; heap pages execute permission by default, so mark this
+	  ;; object's page(s) PROT_EXEC before it can be jumped into.
+	  (mprotect-exec (sys:address podcode) (+ 16 (length podcode)))
+	  podcode)
+#+:sh4
 (progn
 	(setq podcode (byte-string
 		       #xe6 #x2f;;	e6 2f       	mov.l	r14,@-r15
@@ -404,7 +462,7 @@
 		       #x09 #x00;;	09 00       	nop
 		       )
 	      ))
-#-(or :sun3 :sun4 :i386 :x86_64)
+#-(or :sun3 :sun4 :i386 :x86_64 :aarch64)
 	 (error "not yet implemented for this processor")
       (cond 
 	 ((listp func)

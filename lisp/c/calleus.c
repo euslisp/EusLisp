@@ -25,6 +25,11 @@
 /****************************************************************/
 static char *rcsid="@(#)$Id$";
 #include "eus.h"
+#ifdef Linux
+#include <sys/mman.h>
+#include <unistd.h>
+#include <errno.h>
+#endif
 
 struct foreignpod {
 #if vax || sun4 || news || mips || alpha || Linux
@@ -65,14 +70,25 @@ union NUMCONVBUF {
   float f32val;
 };
 
+// x86_64 (SysV ABI) has 6 integer argument registers; aarch64 (AAPCS64)
+// has 8. cargv[0..EUS_MAX_IREGS-1] holds those; cargv[EUS_MAX_IREGS..15]
+// holds the (up to 8) float/double argument registers; cargv[16..] holds
+// any remaining stack-passed arguments, in declaration order. The
+// defun-c-callable pod-code trampoline (see eusforeign.l) that builds
+// cargv[] for a given architecture must agree with this layout.
+#if defined aarch64
+#define EUS_MAX_IREGS 8
+#else
+#define EUS_MAX_IREGS 6
+#endif
+
 eusinteger_t
 calleus(fsym,cargv)
 register pointer fsym;	    /*foreign-symbol*/
 register eusinteger_t cargv[]; /*arguments vector passed from C function*/
-// cargv[0-5] integer, pointer
-// cargv[6-13] float, double
-// skip cargv[14](stack pointer), cargv[15] (stack alignment)
-// cargv[16.. ] integer, pointer, float, double
+// cargv[0..EUS_MAX_IREGS-1] integer, pointer
+// cargv[EUS_MAX_IREGS..15] float, double
+// cargv[16.. ] integer, pointer, float, double (stack-passed)
 // using TYPE
 // byte, char, short, long, integer, pointer, int32
 // float32, float, double,
@@ -85,7 +101,7 @@ register eusinteger_t cargv[]; /*arguments vector passed from C function*/
   eusinteger_t c;
   int argc=0 /* ,j */;
   eusinteger_t *iargv = cargv;
-  eusinteger_t *fargv = &(cargv[6]);
+  eusinteger_t *fargv = &(cargv[EUS_MAX_IREGS]);
   eusinteger_t *vargv = &(cargv[16]);
   int icount = 0, fcount = 0, vcount = 0;
   //numunion nu;
@@ -93,7 +109,7 @@ register eusinteger_t cargv[]; /*arguments vector passed from C function*/
   
 #if 0
   printf("calleus : fsym.cix = %lX (%lX,%lX)\n", fsym->cix, fsym, &(fsym->cix));
-#endif    
+#endif
   ctx=euscontexts[thr_self()];
   argv=ctx->vsp;
   fs=(struct foreignpod *)fsym;
@@ -109,11 +125,11 @@ register eusinteger_t cargv[]; /*arguments vector passed from C function*/
   while (islist(param)) {
     p=ccar(param); param=ccdr(param);
     if (p==K_INTEGER) {
-      if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+      if(icount < EUS_MAX_IREGS)  c = iargv[icount++]; else c = vargv[vcount++];
       vpush(makeint(c));
 #if 0
     } else if (p==K_INT32) {
-      if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+      if(icount < EUS_MAX_IREGS)  c = iargv[icount++]; else c = vargv[vcount++];
       vpush(makeint(c & 0x00000000FFFFFFFF));
 #endif
     } else if (p==K_FLOAT) {
@@ -129,15 +145,15 @@ register eusinteger_t cargv[]; /*arguments vector passed from C function*/
       if (ccar(p)!=K_STRING) error(E_USER,(pointer)":string key expected");
       p=ccdr(p);
       if (p==NIL) {
-        if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+        if(icount < EUS_MAX_IREGS)  c = iargv[icount++]; else c = vargv[vcount++];
 	vpush(makestring((char *)c,strlen((char *)c)));
       } else {
 	p=ccar(p); //c=ckintval(p);
-        if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+        if(icount < EUS_MAX_IREGS)  c = iargv[icount++]; else c = vargv[vcount++];
         vpush(makestring((char *)c, ckintval(p)));
       }
     } else if (p==K_STRING)  {
-      if(icount < 6)  c = iargv[icount++]; else c = vargv[vcount++];
+      if(icount < EUS_MAX_IREGS)  c = iargv[icount++]; else c = vargv[vcount++];
       c -= 2*sizeof(pointer);
       vpush((pointer)c);
     } else error(E_USER,(pointer)"unknown param type spec");
@@ -222,6 +238,49 @@ register int a2, a3, a4, a5, a6, a7, a8;
   else return(intval(result)); }
 #endif // x86_64
 
+#ifdef Linux
+/* Unlike i386/x86_64, AArch64 Linux does not grant execute permission
+ * to heap (brk/anonymous) pages for backward-compat reasons (no
+ * READ_IMPLIES_EXEC personality quirk), so a defun-c-callable pod-code
+ * byte-string -- which lives in the ordinary (non-executable) Lisp
+ * heap -- cannot simply be jumped into on aarch64. mprotect-exec marks
+ * the page(s) backing an object PROT_EXEC in addition to PROT_READ and
+ * PROT_WRITE so the trampoline built by defun-c-callable can run.
+ *
+ * On aarch64 this alone is not enough: the CPU's instruction cache is
+ * not coherent with the data cache, so after *writing* the pod-code
+ * bytes (ordinary stores, through the data cache) the core that later
+ * *fetches* them as instructions can still see stale/partial data
+ * unless the corresponding cache lines are explicitly cleaned and the
+ * instruction cache invalidated (__builtin___clear_cache, a GCC/Clang
+ * builtin that emits the right dc cvau/ic ivau/dsb/isb sequence for
+ * the target). Without it, executing freshly-written pod-code is
+ * undefined behaviour per the architecture, even though it may appear
+ * to work in casual testing.
+ *
+ * Called from eusforeign.l's foreign-pod :init method (aarch64
+ * unconditionally; x86_64 too, since a container's host kernel isn't
+ * guaranteed to grant the legacy READ_IMPLIES_EXEC behaviour its own
+ * -z execstack marking would otherwise rely on). */
+pointer MPROTECT_EXEC(ctx,n,argv)
+register context *ctx;
+int n;
+pointer argv[];
+{ eusinteger_t addr, len, ps, base, end;
+  ckarg(2);
+  addr=ckintval(argv[0]);
+  len=ckintval(argv[1]);
+  ps=sysconf(_SC_PAGESIZE);
+  base=addr & ~(ps-1);
+  end=(addr+len+ps-1) & ~(ps-1);
+  if (mprotect((void *)base,(size_t)(end-base),PROT_READ|PROT_WRITE|PROT_EXEC)<0)
+      return(makeint(-errno));
+#if defined aarch64
+  __builtin___clear_cache((char *)addr,(char *)(addr+len));
+#endif
+  return(T);}
+#endif
+
 void foreign(ctx,mod)
 register context *ctx;
 pointer mod;
@@ -236,5 +295,8 @@ pointer mod;
   C_FOREIGN=Spevalof(FOREIGN);
   i=(eusinteger_t)calleus;
   defvar(ctx,"*CALLEUS*",makeint(i),lisppkg);
+#ifdef Linux
+  defun(ctx,"MPROTECT-EXEC",mod,MPROTECT_EXEC,NULL);
+#endif
   pointer_update(Spevalof(PACKAGE), pkgsave);
   }
